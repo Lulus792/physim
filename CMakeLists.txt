@@ -11,7 +11,11 @@ option(PHYSIM_TESTING "Build tests" ON)
 
 # --------------- Library ---------------
 add_library(physim 
-  src/units.cpp  
+  #${CMAKE_CURRENT_SOURCE_DIR}/src
+  src/energie.cpp
+  src/kinematics.cpp
+  src/particles.cpp
+  src/units.cpp
 )
 
 target_include_directories(physim PUBLIC 
@@ -79,6 +83,7 @@ if (BUILD_TESTING)
   add_executable(physim_tests
     tests/test_units.cpp
     tests/test_main.cpp
+    tests/test_kinematic.cpp
   )
 
   target_link_libraries(physim_tests PRIVATE physim)

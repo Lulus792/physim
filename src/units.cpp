@@ -1,7 +1,7 @@
 
 #include "../include/units.hpp"
 
-Ekin& Ekin::classical_mechanic(mass m, velocity v) {
-  this->unit = 0.5 * m * v * v;
+si::Ekin& si::Ekin::classical_mechanic(mass_t m, velocity_t v) {
+  this->unit = 0.5 * m.u * v.u * v.u;
   return *this;
 }

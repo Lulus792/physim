@@ -3,17 +3,17 @@
 #include "units.hpp"
 #include <type_traits>
 
-static energie kinetic_energie(mass m, velocity v) {
-  return 0.5 * m * v * v;
+static energie_t kinetic_energie(mass_t m, velocity_t v) {
+  return energie_t{0.5 * m.u * v.u * v.u};
 }
 
-static momentum calculation(mass m, velocity v) {
-    return m * v;
+static double calculation(mass_t m, velocity_t v) {
+    return m.u * v.u;
 }
 
 class TestUnit {
 private:
-  Unit<double> u;
+  si::Unit<double> u;
 
 public:
   void default_construct_is_zero() {
@@ -21,18 +21,18 @@ public:
   }
 
   void construct_from_value() {
-    Unit<double> tmp(10.0);
+    si::Unit<double> tmp(10.0);
     EXPECT_NEAR(*tmp, 10.0, 1e-12);
   }
 
   void call_operator_assigns_from_invocable() {
-    EXPECT_NEAR(*u(calculation, 10.0, 10.0), 100.0, 1e-12);
+    EXPECT_NEAR(*u(calculation, mass_t{10.0}, velocity_t{10.0}), 100.0, 1e-12);
   } 
 
   void compile_time_properties() {
-    EXPECT_TRUE((std::is_default_constructible_v<Unit<double>>));
-    EXPECT_TRUE((std::is_copy_constructible_v<Unit<double>>));
-    EXPECT_TRUE((std::is_move_constructible_v<Unit<double>>));
+    EXPECT_TRUE((std::is_default_constructible_v<si::Unit<double>>));
+    EXPECT_TRUE((std::is_copy_constructible_v<si::Unit<double>>));
+    EXPECT_TRUE((std::is_move_constructible_v<si::Unit<double>>));
   }
 };
 
@@ -43,7 +43,7 @@ TEST_METHOD(TestUnit, compile_time_properties)
 
 class TestEkin {
 private:
-  Ekin e;
+  si::Ekin e;
 
 public:
   void default_construct_is_zero() {
@@ -51,22 +51,22 @@ public:
   }
 
   void construct_from_value() {
-    Ekin tmp(10.0);
+    si::Ekin tmp(energie_t{10.0});
     EXPECT_NEAR(*tmp, 10.0, 1e-12);
   }
 
   void call_operator_assigns_from_invocable() {
-    EXPECT_NEAR(*e(kinetic_energie, 10.0, 10.0), 500.0, 1e-12);
+    EXPECT_NEAR(*e(kinetic_energie, mass_t{10.0}, velocity_t{10.0}), 500.0, 1e-12);
   }
 
   void compile_time_properties() {
-    EXPECT_TRUE((std::is_default_constructible_v<Ekin>));
-    EXPECT_TRUE((std::is_copy_constructible_v<Ekin>));
-    EXPECT_TRUE((std::is_move_constructible_v<Ekin>));
+    EXPECT_TRUE((std::is_default_constructible_v<si::Ekin>));
+    EXPECT_TRUE((std::is_copy_constructible_v<si::Ekin>));
+    EXPECT_TRUE((std::is_move_constructible_v<si::Ekin>));
   }
 
   void test_classical_mechanic() {
-    EXPECT_NEAR(*e.classical_mechanic(10.0, 10.0), 500.0, 1e-12);
+    EXPECT_NEAR(*e.classical_mechanic(mass_t{10.0}, velocity_t{10.0}), 500.0, 1e-12);
   }
 };
 
