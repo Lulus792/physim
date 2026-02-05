@@ -14,8 +14,6 @@ add_library(physim
   #${CMAKE_CURRENT_SOURCE_DIR}/src
   src/energie.cpp
   src/kinematics.cpp
-  src/particles.cpp
-  src/units.cpp
 )
 
 target_include_directories(physim PUBLIC 
