@@ -1,0 +1,5 @@
+# default
+* @physim/maintainers
+
+# core simulation code
+/src/ @physim/maintainers
