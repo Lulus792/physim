@@ -28,6 +28,7 @@
 #include <string_view>
 #include <utility>
 #include <vector>
+#include <type_traits>
 
 namespace tests {
 
@@ -78,6 +79,9 @@ namespace tests {
   inline void reset_current_test_failures() { failures_in_current_test() = 0; }
 
   inline int current_test_failure() { return failures_in_current_test(); }
+
+  template<class U>
+  using uncvref_t = std::remove_cv_t<std::remove_reference_t<U>>;
 } // namespace tests
 
 // --- token concatenation helpers (2-step expansion) ---
@@ -175,4 +179,16 @@ namespace tests {
     FIXTURE fx;                                                               \
     fx.METHOD();                                                              \
   }
+
+#define ASSERT_SAME_TYPE(a, b) \
+  static_assert( \
+      std::is_same_v<tests::uncvref_t<decltype(a)>, tests::uncvref_t<decltype(b)>>, \
+      "ASSERT_SAME_TYPE failed: types differ" \
+  )
+
+#define ASSERT_TYPE(expr, Expected) \
+  static_assert( \
+      std::is_same_v<tests::uncvref_t<decltype(expr)>, Expected>, \
+      "ASSERT_TYPE failed: expression has unexpected type" \
+  )
 

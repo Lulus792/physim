@@ -20,36 +20,48 @@
 
 #pragma once
 
-#include "energie.hpp"
-#include "units.hpp"
+#include <physim/matrix.hpp>
+#include <physim/energie.hpp>
 
 #include <functional>
 
 namespace si {
 
-typedef struct particle_t {
-  ekin_t ekin{};
-  epot_t epot{};
+template<size_t M, size_t N>
+struct particle_t {
+  matrix_t<ekin_t, M, N> ekin{};
+  matrix_t<epot_t, M, N> epot{};
   mass_t m{};
-  velocity_t v{};
-  momentum_t p{};
+  matrix_t<velocity_t, M, N> v{};
+  matrix_t<momentum_t, M, N> p{};
 
   particle_t() = default;
-  explicit particle_t(ekin_t _ekin, epot_t _epot, mass_t _m, velocity_t _v, momentum_t _p)
-      : ekin(_ekin), epot(_epot), m(_m), v(_v), p(_p) {}
-
+  explicit particle_t(
+      matrix_t<ekin_t, M, N> _ekin, 
+      matrix_t<epot_t, M, N> _epot, 
+      mass_t _m, 
+      matrix_t<velocity_t, M, N> _v, 
+      matrix_t<momentum_t, M, N> _p
+  ) : ekin(_ekin), epot(_epot), m(_m), v(_v), p(_p) {}
 
   inline void momentum() { this->p = this->m * this->v; }
   inline void ekin_CM() { this->ekin.classical_mechanic(this->m, this->v); }
 
   template<class F, class ...Args>
   requires  std::invocable<F, Args...> &&
+            std::assignable_from<double&, std::invoke_result_t<F&, Args...>>
+  void set_v(F&& f, Args&&... args) {
+    this->v = si::velocity_t{ std::invoke(std::forward<F>(f), std::forward<Args>(args)...) };
+  }
+
+  template<class F, class ...Args>
+  requires  std::invocable<F, Args...> &&
             std::assignable_from<si::velocity_t&, std::invoke_result_t<F&, Args...>>
   void set_v(F&& f, Args&&... args) {
-  this->v = std::invoke(std::forward<F>(f), std::forward<Args>(args)...);
-}
+    this->v = std::invoke(std::forward<F>(f), std::forward<Args>(args)...);
+  }
   
-} particle_t;
+};
 
 } // namespace si
 

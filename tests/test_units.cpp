@@ -18,9 +18,15 @@
  * along with physim. If not, see <https:://www.gnu.org/license/#GPL>
  */
 
-#include <physim/physim.hpp>
-#include "test_support.h"
-#include <type_traits>
+#include <physim/units.hpp>
+#include <test_support.h>
+
+using t = si::unit_t<si::Dim<3, 3, 3>>;
+using _t = si::unit_t<si::Dim<-3, -3, -3>>;
+using res = si::unit_t<si::Dim<0, 0, 0>>;
+template<> struct si::Canon<si::Dim<3, 3, 3>> { using type = t; };
+template<> struct si::Canon<si::Dim<-3, -3, -3>> { using type = _t; };
+template<> struct si::Canon<si::Dim<0, 0, 0>> { using type = res; };
 
 class TestUnit {
 private:
@@ -47,35 +53,101 @@ TEST_METHOD(TestUnit, default_construct_is_zero)
 TEST_METHOD(TestUnit, construct_from_value)
 TEST_METHOD(TestUnit, compile_time_properties)
 
-class TestEkin {
+class TestUnitComplete {
 private:
-  si::ekin_t e{};
+  si::mass_t m1{ 10.0 };
+  si::mass_t m2{ 10.0 };
+  si::velocity_t v1{ 10.0 };
+  si::velocity_t v2{ 10.0 };
+  si::momentum_t p{ 100.0 };
 
 public:
-  void default_construct_is_zero() {
-    EXPECT_NEAR(e.raw(), 0.0, 1e-12);
+
+  void type_match() {
+    ASSERT_SAME_TYPE(m1, m2);
+    ASSERT_SAME_TYPE(v1, v2);
   }
 
-  void construct_from_value() {
-    si::ekin_t tmp(10.0);
-    EXPECT_NEAR(tmp.raw(), 10.0, 1e-12);
+  void add_return_type_match() {
+    ASSERT_TYPE(m1 + m2, si::mass_t);
+    ASSERT_TYPE(v1 + v2, si::velocity_t);
+  }
+  
+  void sub_return_type_match() {
+    ASSERT_TYPE(m1 - m2, si::mass_t);
+    ASSERT_TYPE(v1 - v2, si::velocity_t);
   }
 
-  void compile_time_properties() {
-    EXPECT_TRUE((std::is_default_constructible_v<si::ekin_t>));
-    EXPECT_TRUE((std::is_copy_constructible_v<si::ekin_t>));
-    EXPECT_TRUE((std::is_move_constructible_v<si::ekin_t>));
+  void mul_return_type_match() {
+    ASSERT_TYPE(m1 * v1, si::momentum_t);
+    ASSERT_TYPE(m2 * v2, si::momentum_t);
   }
 
-  void test_classical_mechanic() {
-    EXPECT_NEAR(
-        e.classical_mechanic(si::mass_t { 10.0 }, si::velocity_t { 10.0 })->raw(),
-        500.0,
-        1e-12);
+  void div_return_type_match() {
+    ASSERT_TYPE(p / m1, si::velocity_t);
+  }
+
+  void add_type() {
+    EXPECT_NEAR((m1 + m2).raw(), 20.0, 1e-12);
+    EXPECT_NEAR((v1 + v2).raw(), 20.0, 1e-12);
+  }
+
+  void sub_type() {
+    EXPECT_NEAR((m1 - m2).raw(), 0.0, 1e-12);
+    EXPECT_NEAR((v1 - v2).raw(), 0.0, 1e-12);
+  }
+
+  void mul_type() {
+    EXPECT_NEAR((m1 * m2).raw(), 100.0, 1e-12);
+    EXPECT_NEAR((v1 * v2).raw(), 100.0, 1e-12);
+  }
+
+  void div_type() {
+    EXPECT_NEAR((m1 / m2).raw(), 1.0, 1e-12);
+    EXPECT_NEAR((v1 / v2).raw(), 1.0, 1e-12);
+  }
+
+  void add_double() {
+    EXPECT_NEAR((m1 + 10.0).raw(), 20.0, 1e-12);
+    EXPECT_NEAR((10.0 + m1).raw(), 20.0, 1e-12);
+  }
+
+  void sub_double() {
+    EXPECT_NEAR((m1 - 10.0).raw(), 0.0, 1e-12);
+    EXPECT_NEAR((10.0 - m1).raw(), 0.0, 1e-12);
+  }
+
+  void mul_double() {
+    EXPECT_NEAR((m1 * 10.0).raw(), 100.0, 1e-12);
+    EXPECT_NEAR((10.0 * m1).raw(), 100.0, 1e-12);
+  }
+
+  void div_double() {
+    EXPECT_NEAR((m1 / 10.0).raw(), 1.0, 1e-12);
+    EXPECT_NEAR((10.0 / m1).raw(), 1.0, 1e-12);
+  }
+
+  void create_type() {
+    t var1{};
+    _t var2{};
+    ASSERT_TYPE(var1, t);
+    EXPECT_NEAR(var1.raw(), 0, 1e-12);
+    ASSERT_TYPE((var1 * var2), res);
   }
 };
 
-TEST_METHOD(TestEkin, default_construct_is_zero)
-TEST_METHOD(TestEkin, construct_from_value)
-TEST_METHOD(TestEkin, test_classical_mechanic)
-TEST_METHOD(TestEkin, compile_time_properties)
+TEST_METHOD(TestUnitComplete, type_match);
+TEST_METHOD(TestUnitComplete, add_return_type_match);
+TEST_METHOD(TestUnitComplete, sub_return_type_match);
+TEST_METHOD(TestUnitComplete, mul_return_type_match);
+TEST_METHOD(TestUnitComplete, div_return_type_match);
+TEST_METHOD(TestUnitComplete, add_type);
+TEST_METHOD(TestUnitComplete, sub_type);
+TEST_METHOD(TestUnitComplete, mul_type);
+TEST_METHOD(TestUnitComplete, div_type);
+TEST_METHOD(TestUnitComplete, add_double);
+TEST_METHOD(TestUnitComplete, sub_double);
+TEST_METHOD(TestUnitComplete, mul_double);
+TEST_METHOD(TestUnitComplete, div_double);
+TEST_METHOD(TestUnitComplete, create_type);
+

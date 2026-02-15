@@ -18,8 +18,8 @@
  * along with physim. If not, see <https:://www.gnu.org/license/#GPL>
  */
 
-#include <physim/physim.hpp>
-#include "test_support.h"
+#include <physim/collision.hpp>
+#include <test_support.h>
 
 class TestCollision {
 private:

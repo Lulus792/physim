@@ -30,11 +30,7 @@ typedef struct ekin_t : energie_t {
 } ekin_t;
 
 typedef struct epot_t : energie_t {
-  energie_t epot{};
-
-  epot_t() = default;
-  epot_t(double _epot) : epot(_epot) {}
-  epot_t(energie_t _epot) : epot(_epot) {}
+  using energie_t::unit_t;
 } epot_t;
 
 

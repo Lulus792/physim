@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <stdexcept>
+
 namespace si {
 
 template<int M, int L, int T> 
@@ -38,6 +40,10 @@ struct unit_t {
   double u;
   constexpr explicit unit_t(double _u = 0.0) noexcept : u(_u) {}
   constexpr double raw() const noexcept { return u; }
+  constexpr unit_t &operator=(double value) {
+    u = value;
+    return *this;
+  }
 };
 
 using mass_t          = unit_t<Dim< 1, 0, 0>>;
@@ -104,6 +110,9 @@ operator*(unit_t<D> rhs, double lhs) noexcept {
 template<class D1, class D2>
 constexpr typename Canon<DimDiv<D1, D2>>::type
 operator/(unit_t<D1> rhs, unit_t<D2> lhs) noexcept {
+  if (lhs == 0) {
+    throw std::runtime_error("Division by zero");
+  }
   using R = typename Canon<DimDiv<D1, D2>>::type;
   return R(rhs.raw() / lhs.raw());
 }
@@ -111,6 +120,9 @@ operator/(unit_t<D1> rhs, unit_t<D2> lhs) noexcept {
 template<class D>
 constexpr typename Canon<D>::type
 operator/(double rhs, unit_t<D> lhs) noexcept {
+  if (lhs == 0) {
+    throw std::runtime_error("Division by zero");
+  }
   using R = typename Canon<D>::type;
   return R(rhs / lhs.raw());
 }
@@ -118,6 +130,9 @@ operator/(double rhs, unit_t<D> lhs) noexcept {
 template<class D>
 constexpr typename Canon<D>::type
 operator/(unit_t<D> rhs, double lhs) noexcept {
+  if (lhs == 0) {
+    throw std::runtime_error("Division by zero");
+  }
   using R = typename Canon<D>::type;
   return R(rhs.raw() / lhs);
 }
@@ -164,6 +179,31 @@ constexpr typename Canon<D>::type
 operator-(unit_t<D> rhs, double lhs) noexcept {
   using R = typename Canon<D>::type;
   return R(rhs.raw() - lhs);
+}
+
+// --- Comparision with double ---
+template<class D>
+constexpr bool operator==(unit_t<D> rhs, unit_t<D> lhs) {
+  if (rhs.raw() == lhs.raw()) {
+    return true;
+  }
+  return false;
+}
+
+template<class D>
+constexpr bool operator==(unit_t<D> rhs, double lhs) noexcept {
+  if (rhs.raw() == lhs) {
+    return true;
+  }
+  return false;
+}
+
+template<class D>
+constexpr bool operator==(double lhs, unit_t<D> rhs) noexcept {
+  if (rhs.raw() == lhs) {
+    return true;
+  }
+  return false;
 }
 
 } // namespace si

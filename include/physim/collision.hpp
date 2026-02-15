@@ -18,13 +18,21 @@
  * along with physim. If not, see <https:://www.gnu.org/license/#GPL>
  */
 
-#include "particles.hpp"
+#include <physim/particles.hpp>
 
 namespace si {
 
 namespace collision {
 
-void _1D_collision_particle(particle_t *p1, particle_t *p2);
+matrix_t<velocity_t, 1, 1> v_after_1D_collision_particle(
+    particle_t<1, 1> *p1, 
+    particle_t<1, 1> *p2);
+
+void _1D_collision_particle(particle_t<1, 1> *p1, particle_t<1, 1> *p2);
+
+void _2D_collision_particle(particle_t<2, 2> *p1, particle_t<2, 2> *p2);
+
+void _3D_collision_particle(particle_t<3, 3> *p1, particle_t<3, 3> *p2);
 
 } // namespace collision
 
