@@ -26,19 +26,19 @@ private:
   si::ekin_t _ekin;
   si::epot_t _epot;
   si::mass_t _m;
-  si::velocity_t _v;
-  si::momentum_t _p;
-  si::particle_t p1{};
-  si::particle_t p2{};
+  matrix_t<si::velocity_t, 1, 1> _v;
+  matrix_t<si::momentum_t, 1, 1> _p;
+  si::particle_t<1, 1> p1{};
+  si::particle_t<1, 1> p2{};
 
 public:
   TestCollision() {
     _ekin = si::ekin_t{500.0};
     _epot = si::epot_t{};
     _m = si::mass_t{10.0};
-    _v = si::velocity_t{10.0};
-    _p = si::momentum_t{100};
-    p1 = si::particle_t(
+    _v.flat(true, 10.0 );
+    _p.flat(true, 100.0 );
+    p1.set(
       _ekin,
       _epot,
       _m,
@@ -51,13 +51,13 @@ public:
   void test_1D_collision() {
     si::collision::_1D_collision_particle(&p1, &p2);
     // p1
-    EXPECT_NEAR(p1.v.raw(), 10.0, 1e-9);
-    EXPECT_NEAR(p1.p.raw(), 100.0, 1e-9);
+    EXPECT_NEAR(p1.v(1, 1).raw(), 10.0, 1e-9);
+    EXPECT_NEAR(p1.p(1, 1).raw(), 100.0, 1e-9);
     EXPECT_NEAR(p1.ekin.raw(), 500.0, 1e-9);
 
     // p2
-    EXPECT_NEAR(p2.v.raw(), 10.0, 1e-9);
-    EXPECT_NEAR(p2.p.raw(), 100.0, 1e-9);
+    EXPECT_NEAR(p2.v(1, 1).raw(), 10.0, 1e-9);
+    EXPECT_NEAR(p2.p(1, 1).raw(), 100.0, 1e-9);
     EXPECT_NEAR(p2.ekin.raw(), 500.0, 1e-9);
   }
 };

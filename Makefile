@@ -52,10 +52,7 @@ test:
 
 # Optional: local install into build-installed/
 install:
-	$(call cmake_configure,
-	-DCMAKE_BUILD_TYPE=Release 
-	-DPHYSIM_TESTIN=OFF 
-	-DPHYSIM_INSTALL_PREFIX="$(abspath $(INST_DIR))")
+	$(call cmake_configure,-DCMAKE_BUILD_TYPE=Release	-DPHYSIM_TESTING=OFF	-DPHYSIM_INSTALL_PREFIX="$(abspath $(INST_DIR))")
 	$(call cmake_build,)
 	cmake --install "$(BUILD_DIR)"
 

@@ -20,8 +20,3 @@
 
 #include <physim/energie.hpp>
 
-si::ekin_t *si::ekin_t::classical_mechanic(si::mass_t m, si::velocity_t v) {
-  this->u = (0.5 * m * v * v).raw();
-  return this;
-}
-

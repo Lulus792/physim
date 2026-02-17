@@ -20,17 +20,23 @@
 
 #pragma once
 
-#include "units.hpp"
+#include <physim/unit.hpp> 
+#include <physim/matrix.hpp>
 
 namespace si {
 
-typedef struct ekin_t : energie_t {
-  using energie_t::unit_t;
-  ekin_t *classical_mechanic(si::mass_t m, si::velocity_t v);
+typedef struct ekin_t : energy_t {
+  using energy_t::unit_t;
+
+  template<std::size_t M, std::size_t N>
+  ekin_t *classical_mechanic(si::mass_t m, matrix_t<si::velocity_t, M, N> v) {
+    this->u = (0.5 * m * cx::powc<2>(v.frobenius_norm())).raw();
+    return this;
+  }
 } ekin_t;
 
-typedef struct epot_t : energie_t {
-  using energie_t::unit_t;
+typedef struct epot_t : energy_t {
+  using energy_t::unit_t;
 } epot_t;
 
 

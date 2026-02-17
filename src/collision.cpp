@@ -31,16 +31,16 @@ void si::collision::_1D_collision_particle(
     si::particle_t<1, 1> *p1, 
     si::particle_t<1, 1> *p2) {
   // p1:
-  p1->set_v(si::collision::v_after_1D_collision_particle, p1, p2); 
+  p1->v.set(si::collision::v_after_1D_collision_particle, p1, p2); 
   p1->momentum();
   p1->ekin_CM();
 
   // p2:
-  p2->set_v(si::collision::v_after_1D_collision_particle, p2, p1);
+  p2->v.set(si::collision::v_after_1D_collision_particle, p2, p1);
   p2->momentum();
   p2->ekin_CM();
 }
-
+/*
 void si::collision::_2D_collision_particle(
     si::particle_t<2, 2> *p1, si::particle_t<2, 2> *p2) {
 
@@ -49,5 +49,5 @@ void si::collision::_2D_collision_particle(
 void si::collision::_3D_collision_particle(
     si::particle_t<3, 3> *p1, si::particle_t<3, 3> *p2) {
 
-}
+}*/
 

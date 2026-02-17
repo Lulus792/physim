@@ -19,10 +19,10 @@ endif()
 
 # --------------- Library ---------------
 add_library(physim 
+  src/unit.cpp
+  src/particles.cpp
   src/energie.cpp
   src/collision.cpp
-  src/energie.cpp
-  src/units.cpp
 )
 
 add_library(physim::physim ALIAS physim)

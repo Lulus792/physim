@@ -24,6 +24,9 @@
 #include <cstddef>
 #include <utility>
 #include <stdexcept>
+#include <functional>
+
+#include <physim/utilitys.hpp>
 
 template<class U, std::size_t _row, std::size_t _col>
 struct matrix_t {
@@ -33,23 +36,80 @@ struct matrix_t {
 
   std::array<U, _row*_col> mat{};
 
-  constexpr U& operator()(std::size_t r, std::size_t c) noexcept { return mat[r * col + c]; }
-  constexpr const U& operator()(std::size_t r, std::size_t c) const noexcept { 
+  matrix_t() noexcept {
+    this->flat();
+  }
+  matrix_t(const U value) noexcept {
+    this->flat(value);
+  }
+
+  constexpr U &operator()(std::size_t r, std::size_t c) noexcept { return mat[r * col + c]; }
+  constexpr const U &operator()(std::size_t r, std::size_t c) const noexcept { 
     return mat[r * col + c]; 
   }
-  
+
+  constexpr matrix_t &operator=(matrix_t A) {
+    this->mat = A.mat;
+    return *this;
+  }
+
+  template<class Func, class... Args>
+  requires (
+    std::same_as<
+      std::invoke_result_t<Func, Args...>,
+      matrix_t>
+  )
+  void set(Func&& f, Args&&... args) {
+    this->mat = std::invoke(std::forward<Func>(f),
+        std::forward<Args>(args)...).mat;
+  }
+
+  // --- Norm ---
+  constexpr U frobenius_norm() {
+    U sum = U{ 0 };
+
+    for (std::size_t i = 0; i < _row * _col; ++i) {
+      sum += this->mat[i] * this->mat[i];
+    }
+    return cx::nth_root<2>(sum);
+  }
+
+  constexpr matrix_t &flat(const U value = 0) noexcept {
+    for (std::size_t i = 0; i < _row * _col; ++i) {
+      this->mat[i] = value;
+    }
+    return *this;
+  }
+
+  template<class Value>
+  matrix_t &flat(const bool conversion, const Value v = 0) noexcept {
+    if (conversion) {
+      this->flat(U{ v });
+    } else {
+      this->flat(v);
+    }
+    return *this;
+  } 
 };
 
 // ---- type utilities ----
-
 template<class U1, class U2>
 using mul_elem_result_t = decltype(std::declval<U1>() * std::declval<U2>());
 
 template<class U1, class U2>
+using div_elem_result_t = decltype(std::declval<U1>() / std::declval<U2>());
+
+template<class U1, class U2>
 using add_elem_result_t = decltype(std::declval<U1>() + std::declval<U2>());
+
+template<class U1, class U2>
+using sub_elem_result_t = decltype(std::declval<U1>() - std::declval<U2>());
 
 template<class U1, class U2, std::size_t M, std::size_t N>
 using matmul_result_t = matrix_t<mul_elem_result_t<U1, U2>, M, N>;
+
+template<class U1, class U2, std::size_t M, std::size_t N>
+using matdiv_result_t = matrix_t<div_elem_result_t<U1, U2>, M, N>;
 
 // ---- Concepts ----
 template<class U>
@@ -75,7 +135,7 @@ concept MatmulElementOK =
 
 // --- Operator ---
 template<class U, std::size_t row, std::size_t col>
-constexpr bool operator==(matrix_t<U, row, col> &A, matrix_t<U, row, col> &B) noexcept {
+constexpr bool operator==(matrix_t<U, row, col> A, matrix_t<U, row, col> B) noexcept {
   for (std::size_t i = 0; i < row * col; ++i) {
     if (A.mat[i] != B.mat[i]) {
       return false;
@@ -89,7 +149,7 @@ constexpr bool operator==(matrix_t<U, row, col> &A, matrix_t<U, row, col> &B) no
 template<class U1, class U2, std::size_t M, std::size_t K, std::size_t N>
 requires MatmulElementOK<U1, U2>
 constexpr matmul_result_t<U1, U2, M, N>
-operator*(const matrix_t<U1, M, K> &A, const matrix_t<U2, K, N> &B) noexcept {
+operator*(const matrix_t<U1, M, K> A, const matrix_t<U2, K, N> B) noexcept {
   using U = mul_elem_result_t<U1, U2>; 
   matrix_t<U, M, N> C{};
   
@@ -107,11 +167,33 @@ operator*(const matrix_t<U1, M, K> &A, const matrix_t<U2, K, N> &B) noexcept {
   return C;
 }
 
+// --- Matrix Addition ---
+template<class U, std::size_t M, std::size_t N>
+constexpr matrix_t<U, M, N>
+operator+(const matrix_t<U, M, N> A, const matrix_t<U, M, N> B) {
+  matrix_t<U, M, N> C{};
+  for (std::size_t i = 0; i < M * N; ++i) {
+    C.mat[i] = A.mat[i] + B.mat[i];
+  }
+  return C;
+}
+
+// --- Matrix Subtraction ---
+template<class U, std::size_t M, std::size_t N>
+constexpr matrix_t<U, M, N>
+operator-(const matrix_t<U, M, N> A, const matrix_t<U, M, N> B) {
+  matrix_t<U, M, N> C{};
+  for (std::size_t i = 0; i < M * N; ++i) {
+    C.mat[i] = A.mat[i] - B.mat[i];
+  }
+  return C;
+}
+
 // --- Scalar multiplication ---
 template<class U, std::size_t row, std::size_t col, class S>
 requires ScalarMul<U, S>
 constexpr matmul_result_t<U, S, row, col>
-operator*(const matrix_t<U, row, col> &A, const S &scalar) {
+operator*(const matrix_t<U, row, col> A, const S scalar) noexcept {
   matmul_result_t<U, S, row, col> B{};
   for (std::size_t i = 0; i < row * col; ++i) {
     B.mat[i] = A.mat[i] * scalar;
@@ -122,7 +204,7 @@ operator*(const matrix_t<U, row, col> &A, const S &scalar) {
 template<class U, std::size_t row, std::size_t col, class S>
 requires ScalarMul<S, U>
 constexpr matmul_result_t<U, S, row, col>
-operator*(const S &scalar, const matrix_t<U, row, col> &A) {
+operator*(const S scalar, const matrix_t<U, row, col> A) noexcept {
   matmul_result_t<U, S, row, col> B{};
   for (std::size_t i = 0; i < row * col; ++i) {
     B.mat[i] = scalar * A.mat[i];
@@ -133,12 +215,12 @@ operator*(const S &scalar, const matrix_t<U, row, col> &A) {
 // --- Scalar division ---
 template<class U, std::size_t row, std::size_t col, class S>
 requires ScalarDiv<U, S>
-constexpr matmul_result_t<U, S, row, col>
-operator/(const matrix_t<U, row, col> &A, const S &scalar) {
+constexpr matdiv_result_t<U, S, row, col>
+operator/(const matrix_t<U, row, col> A, const S scalar) {
   if (scalar == 0) {
     throw std::runtime_error("Division by zero");
   }
-  matmul_result_t<U, S, row, col> B{};
+  matdiv_result_t<U, S, row, col> B{};
   for (std::size_t i = 0; i < row * col; ++i) {
     B.mat[i] = A.mat[i] / scalar;
   }
