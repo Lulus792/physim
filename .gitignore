@@ -1,4 +1,1 @@
 build/*
-.cache/*
-compile_commands.json
-build-installed/*
