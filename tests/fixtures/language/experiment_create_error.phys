@@ -1,0 +1,11 @@
+let c = Channel("value", Unit(0, 0, 0, 0, 0, 0, 0, 1, "1"), "value")
+let values = [[1, 2], [3]]
+func create():
+    let temporary = values
+    assert(false)
+func reset():
+    c.sample(1)
+func step(dt: Float64):
+    c.sample(dt)
+func scene():
+    return

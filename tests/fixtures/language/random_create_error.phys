@@ -1,0 +1,9 @@
+let invalid = randomUniform(0, 1)
+func create():
+    return
+func reset():
+    return
+func step(dt: Float64):
+    return
+func scene():
+    return

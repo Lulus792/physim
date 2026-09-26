@@ -1,0 +1,63 @@
+let numbers = [3, 1, 4, 1, 2]
+assert(numbers.min().unwrap() == 1)
+assert(numbers.max().unwrap() == 4)
+assert(numbers == [3, 1, 4, 1, 2])
+let emptyNumbers: [Int64] = []
+assert(emptyNumbers.min() == nil)
+assert(emptyNumbers.max() == nil)
+assert([2.5, -1.0, 3.0].min().unwrap() == -1.0)
+assert([2.5, -1.0, 3.0].max().unwrap() == 3.0)
+assert(["z", "a", "ä"].min().unwrap() == "a")
+assert(["z", "a", "ä"].max().unwrap() == "ä")
+
+struct Item:
+    let priority: Int64
+    let name: String
+
+func byPriority(a: Item, b: Item) -> Bool:
+    return a.priority < b.priority
+
+let items = [Item(priority: 2, name: "first high"),
+             Item(priority: 1, name: "first low"),
+             Item(priority: 2, name: "second high"),
+             Item(priority: 1, name: "second low")]
+assert(items.min(by: byPriority).unwrap().name == "first low")
+assert(items.max(by: byPriority).unwrap().name == "first high")
+assert(items[0].name == "first high")
+let emptyItems: [Item] = []
+assert(emptyItems.min(by: byPriority) == nil)
+assert(emptyItems.max(by: byPriority) == nil)
+
+func beforeOffset(offset: Int64) -> func(Int64, Int64) -> Bool:
+    return func(a: Int64, b: Int64) -> Bool:
+        return a + offset < b + offset
+assert(numbers.min(by: beforeOffset(10)).unwrap() == 1)
+assert(numbers.max(by: beforeOffset(10)).unwrap() == 4)
+
+struct Order:
+    let descending: Bool
+    func before(a: Int64, b: Int64) -> Bool:
+        if self.descending:
+            return a > b
+        return a < b
+let order = Order(true)
+assert(numbers.min(by: order.before).unwrap() == 4)
+assert(numbers.max(by: order.before).unwrap() == 1)
+
+var calls = 0
+func counted(a: Int64, b: Int64) -> Bool:
+    calls += 1
+    return a < b
+assert(emptyNumbers.min(by: counted) == nil)
+assert([7].max(by: counted).unwrap() == 7)
+assert(calls == 0)
+
+func fails(a: Int64, b: Int64) -> Bool:
+    return 1 / 0 == 0
+func tryMin() -> Int64:
+    return numbers.min(by: fails).unwrap()
+func tryMax() -> Int64:
+    return numbers.max(by: fails).unwrap()
+assert(attempt(tryMin()) == nil)
+assert(attempt(tryMax()) == nil)
+assert(numbers == [3, 1, 4, 1, 2])

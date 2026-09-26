@@ -1,0 +1,68 @@
+let empty = ""
+assert(empty.sorted() == [])
+assert(empty.min() == nil && empty.max() == nil)
+
+let text = "züa🌍a"
+assert(text.sorted() == ["a", "a", "z", "ü", "🌍"])
+assert(text.min().unwrap() == "a")
+assert(text.max().unwrap() == "🌍")
+assert(text == "züa🌍a")
+
+func longer(a: String, b: String) -> Bool:
+    return a.utf8.count > b.utf8.count
+
+assert(text.sorted(by: longer) == ["🌍", "ü", "z", "a", "a"])
+assert(text.min(by: longer).unwrap() == "🌍")
+assert(text.max(by: longer).unwrap() == "z")
+assert(empty.sorted(by: longer) == [])
+assert(empty.min(by: longer) == nil && empty.max(by: longer) == nil)
+
+struct WidthOrder:
+    let descending: Bool
+    func before(a: String, b: String) -> Bool:
+        if self.descending:
+            return a.utf8.count > b.utf8.count
+        return a.utf8.count < b.utf8.count
+
+assert(text.sorted(by: WidthOrder(true).before) == ["🌍", "ü", "z", "a", "a"])
+
+func local(value: String) -> [String]:
+    func before(a: String, b: String) -> Bool:
+        return a.utf8.count < b.utf8.count
+    return value.sorted(by: before)
+
+assert(local(text) == ["z", "a", "a", "ü", "🌍"])
+
+func offsetComparator(offset: Int64) -> func(String, String) -> Bool:
+    return func(a: String, b: String) -> Bool:
+        return a.utf8.count + offset > b.utf8.count + offset
+
+assert(text.sorted(by: offsetComparator(2)) == ["🌍", "ü", "z", "a", "a"])
+
+var mutableText = "üa🌍"
+func mutatingOrder(a: String, b: String) -> Bool:
+    mutableText = "changed"
+    return a.utf8.count > b.utf8.count
+
+assert(mutableText.sorted(by: mutatingOrder) == ["🌍", "ü", "a"])
+assert(mutableText == "changed")
+
+var sourceCalls = 0
+func source() -> String:
+    sourceCalls += 1
+    return "a🌍"
+
+assert(source().sorted() == ["a", "🌍"])
+assert(source().min().unwrap() == "a")
+assert(source().max().unwrap() == "🌍")
+assert(sourceCalls == 3)
+
+func fail(a: String, b: String) -> Bool:
+    let missing: [String] = []
+    let invalid = missing[0]
+    return false
+
+assert(attempt(text.sorted(by: fail)) == nil)
+assert(attempt(text.min(by: fail)) == nil)
+assert(attempt(text.max(by: fail)) == nil)
+assert(text == "züa🌍a")

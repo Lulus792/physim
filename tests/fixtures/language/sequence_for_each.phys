@@ -1,0 +1,84 @@
+var numbers: [Int64] = []
+var letters: [String] = []
+var calls = 0
+var factories = 0
+
+func recordNumber(value: Int64):
+    numbers.append(value)
+    calls += 1
+
+func recordLetter(value: String):
+    letters.append(value)
+    calls += 1
+
+func makeNumberAction() -> func(Int64) -> Void:
+    factories += 1
+    return recordNumber
+
+let source = [3, 1, 4]
+source.forEach(makeNumberAction())
+assert(numbers == [3, 1, 4] && calls == 3 && factories == 1)
+let emptyNumbers: [Int64] = []
+emptyNumbers.forEach(makeNumberAction())
+assert(calls == 3 && factories == 2)
+
+let text = "aü🌍B"
+text.forEach(recordLetter)
+assert(letters == ["a", "ü", "🌍", "B"] && calls == 7)
+"".forEach(recordLetter)
+assert(calls == 7)
+
+struct Recorder:
+    let offset: Int64
+    func add(value: Int64):
+        numbers.append(value + self.offset)
+
+source.forEach(Recorder(10).add)
+assert(numbers == [3, 1, 4, 13, 11, 14])
+
+func local(values: [Int64]):
+    func add(value: Int64):
+        numbers.append(value)
+    values.forEach(add)
+
+local([5])
+assert(numbers == [3, 1, 4, 13, 11, 14, 5])
+
+func makeOffset(offset: Int64) -> func(Int64) -> Void:
+    return func(value: Int64):
+        numbers.append(value + offset)
+
+let pair = [2]
+pair.forEach(makeOffset(20))
+assert(numbers == [3, 1, 4, 13, 11, 14, 5, 22])
+
+var mutableSource = [1, 2, 3]
+func mutateNumber(value: Int64):
+    mutableSource = [9]
+    numbers.append(value)
+
+mutableSource.forEach(mutateNumber)
+assert(numbers == [3, 1, 4, 13, 11, 14, 5, 22, 1, 2, 3])
+assert(mutableSource == [9])
+
+var mutableText = "aü"
+func mutateText(value: String):
+    mutableText = "changed"
+    letters.append(value)
+
+mutableText.forEach(mutateText)
+assert(letters == ["a", "ü", "🌍", "B", "a", "ü"])
+assert(mutableText == "changed")
+
+func failOnSecond(value: String):
+    if value == "ü":
+        let missing: [String] = []
+        let invalid = missing[0]
+    letters.append(value)
+
+func tryFailure() -> Int64:
+    text.forEach(failOnSecond)
+    return 1
+
+assert(attempt(tryFailure()) == nil)
+assert(letters == ["a", "ü", "🌍", "B", "a", "ü", "a"])

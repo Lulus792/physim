@@ -1,0 +1,18 @@
+foreach(required COMPILER WORK)
+  if(NOT DEFINED ${required})
+    message(FATAL_ERROR "Missing ${required}")
+  endif()
+endforeach()
+file(MAKE_DIRECTORY "${WORK}")
+file(WRITE "${WORK}/arguments.phys" "let text = \"x\".trimmingCharacters(in: 1)\n")
+execute_process(COMMAND "${COMPILER}" --check "${WORK}/arguments.phys"
+  RESULT_VARIABLE result ERROR_VARIABLE diagnostic TIMEOUT 15)
+if(NOT result EQUAL 1 OR NOT diagnostic MATCHES "String trimmingCharacters expects in: CharacterSet.whitespacesAndNewlines")
+  message(FATAL_ERROR "String trimmingCharacters accepted an unsupported set: ${result}\n${diagnostic}")
+endif()
+file(WRITE "${WORK}/old_method.phys" "let text = \"x\".trimmed()\n")
+execute_process(COMMAND "${COMPILER}" --check "${WORK}/old_method.phys"
+  RESULT_VARIABLE result ERROR_VARIABLE diagnostic TIMEOUT 15)
+if(NOT result EQUAL 1 OR NOT diagnostic MATCHES "Unknown method for this receiver type")
+  message(FATAL_ERROR "String trimmed was not removed: ${result}\n${diagnostic}")
+endif()

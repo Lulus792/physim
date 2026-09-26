@@ -1,0 +1,42 @@
+let values = [1, 2, 3, 4]
+assert(values.prefix(2) == [1, 2])
+assert(values.suffix(2) == [3, 4])
+assert(values.dropFirst() == [2, 3, 4])
+assert(values.dropLast() == [1, 2, 3])
+assert(values.dropFirst(2) == [3, 4])
+assert(values.dropLast(2) == [1, 2])
+assert(values.prefix(0) == [] && values.suffix(0) == [])
+assert(values.dropFirst(0) == values && values.dropLast(0) == values)
+assert(values.prefix(10) == values && values.suffix(10) == values)
+assert(values.dropFirst(10) == [] && values.dropLast(10) == [])
+assert(attempt(values.prefix(-1)) == nil)
+assert(attempt(values.suffix(-1)) == nil)
+assert(attempt(values.dropFirst(-1)) == nil)
+assert(attempt(values.dropLast(-1)) == nil)
+
+var words = ["alpha", "beta", "gamma"]
+let chosen = words.suffix(2)
+words[1] = "changed"
+assert(chosen == ["beta", "gamma"])
+assert(words == ["alpha", "changed", "gamma"])
+
+var nested = [["a", "b"], ["c", "d"]]
+let first = nested.prefix(1)
+nested[0].append("e")
+assert(first == [["a", "b"]] && nested[0] == ["a", "b", "e"])
+
+var calls = 0
+func receiver() -> Int64:
+    calls += 1
+    return 1
+func amount() -> Int64:
+    calls += 10
+    return 1
+let selected = nested[receiver()].dropFirst(amount())
+assert(calls == 11 && selected == ["d"])
+
+let empty: [String] = []
+assert(empty.prefix(3) == [])
+assert(empty.suffix(3) == [])
+assert(empty.dropFirst() == [])
+assert(empty.dropLast() == [])

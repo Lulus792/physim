@@ -1,0 +1,2 @@
+let values = Array(repeating: 2, count: -1)
+print(values.count)

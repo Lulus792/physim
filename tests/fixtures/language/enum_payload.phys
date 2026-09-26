@@ -1,0 +1,125 @@
+enum Reading:
+    case missing
+    case sample(value: Float64, valid: Bool)
+    case note(text: String)
+
+struct Packet:
+    let reading: Reading
+
+func isEmptyRng(value: Rng?) -> Bool:
+    return value == nil
+
+func score(reading: Reading) -> Float64:
+    switch reading:
+        case Reading.missing:
+            return 0.0
+        case Reading.sample(value, valid):
+            if valid:
+                return value
+            return -1.0
+        case Reading.note(text):
+            if text == "ok":
+                return 1.0
+            return 0.0
+
+func isSample(reading: Reading) -> Bool:
+    switch reading:
+        case Reading.sample:
+            return true
+        default:
+            return false
+
+func sampleBand(reading: Reading) -> Int64:
+    switch reading:
+        case Reading.sample(-2.0..<0.0, true):
+            return -1
+        case Reading.sample(0.0...1.0, true):
+            return 1
+        case Reading.sample(2.0..<3.0, false):
+            return 2
+        default:
+            return 0
+
+enum Toggle:
+    case pair(left: Bool, right: Bool)
+    case maybe(value: Bool?)
+    case labeled(text: String, valid: Bool)
+    case mixed(valid: Bool, answer: Bool?)
+    case empty
+
+func toggleCode(value: Toggle) -> Int64:
+    switch value:
+        case Toggle.pair(true, true):
+            return 1
+        case Toggle.pair(true, false):
+            return 2
+        case Toggle.pair(false, true):
+            return 3
+        case Toggle.pair(false, false):
+            return 4
+        case Toggle.maybe(nil):
+            return 5
+        case Toggle.maybe(Optional.some(true)):
+            return 6
+        case Toggle.maybe(Optional.some(false)):
+            return 7
+        case Toggle.labeled(text, true):
+            return text.count
+        case Toggle.labeled(text, false):
+            return -text.count
+        case Toggle.mixed(true, _):
+            return 9
+        case Toggle.mixed(false, nil):
+            return 10
+        case Toggle.mixed(false, Optional.some(true)):
+            return 11
+        case Toggle.mixed(false, Optional.some(false)):
+            return 12
+        case Toggle.empty:
+            return 8
+
+assert(toggleCode(Toggle.pair(true, true)) == 1)
+assert(toggleCode(Toggle.pair(true, false)) == 2)
+assert(toggleCode(Toggle.pair(false, true)) == 3)
+assert(toggleCode(Toggle.pair(false, false)) == 4)
+assert(toggleCode(Toggle.maybe(nil)) == 5)
+assert(toggleCode(Toggle.maybe(Optional.some(true))) == 6)
+assert(toggleCode(Toggle.maybe(Optional.some(false))) == 7)
+assert(toggleCode(Toggle.labeled("ok", true)) == 2)
+assert(toggleCode(Toggle.labeled("ok", false)) == -2)
+assert(toggleCode(Toggle.mixed(true, nil)) == 9)
+assert(toggleCode(Toggle.mixed(true, Optional.some(false))) == 9)
+assert(toggleCode(Toggle.mixed(false, nil)) == 10)
+assert(toggleCode(Toggle.mixed(false, Optional.some(true))) == 11)
+assert(toggleCode(Toggle.mixed(false, Optional.some(false))) == 12)
+assert(toggleCode(Toggle.empty) == 8)
+
+let a = Reading.sample(2.5, true)
+let b = Reading.sample(valid: false, value: 9.0)
+let c = Reading.note("ok")
+assert(a == Reading.sample(2.5, true))
+assert(a != b)
+assert(c == Reading.note("ok"))
+assert(score(a) == 2.5)
+assert(score(b) == -1.0)
+assert(score(c) == 1.0)
+assert(score(Reading.missing) == 0.0)
+assert(isSample(a))
+assert(!isSample(c))
+assert(sampleBand(Reading.sample(-1.0, true)) == -1)
+assert(sampleBand(Reading.sample(-0.0, true)) == 1)
+assert(sampleBand(Reading.sample(1.0, true)) == 1)
+assert(sampleBand(Reading.sample(2.5, false)) == 2)
+assert(sampleBand(Reading.sample(3.0, false)) == 0)
+let values: [Reading] = [a, b, c]
+assert(values.count == 3)
+assert(values == [a, b, c])
+let packet = Packet(reading: a)
+assert(score(packet.reading) == 2.5)
+assert(packet == Packet(reading: a))
+let maybe: Reading? = Optional.some(c)
+assert(maybe != nil)
+assert(maybe == Optional.some(c))
+assert(score(maybe.unwrap()) == 1.0)
+let noRng: Rng? = nil
+assert(isEmptyRng(noRng))

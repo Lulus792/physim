@@ -1,0 +1,80 @@
+// Rigid box on an off-centre distance joint. SI, velocity solve before drift.
+let zero = Vec3(0,0,0)
+let size = Vec3(0.3,0.8,0.3)
+let pivot = Vec3(0,2,0)
+let initialPosition = Vec3(0,0.6,0)
+let initialRotation = Quat.axisAngle(Vec3(0,0,1),0.35)
+let anchor = Vec3(0,0.4,0)
+let gravity = Vec3(0,-9.81,0)
+let world = Body.sphere(0,0.05)
+let length = (initialPosition + initialRotation.rotate(anchor) - pivot).length()
+let joint = DistanceJoint(anchor,pivot,length,0.2)
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let speed = Unit(1,0,-1,0,0,0,0,1,"m/s")
+let angularSpeed = Unit(0,0,-1,0,0,0,0,1,"rad/s")
+let one = Unit(0,0,0,0,0,0,0,1,"1")
+let joules = Unit(2,1,-2,0,0,0,0,1,"J")
+let impulseUnit = Unit(1,1,-1,0,0,0,0,1,"N s")
+let px = Channel("position.x",metres,"Centre x")
+let py = Channel("position.y",metres,"Centre y")
+let pz = Channel("position.z",metres,"Centre z")
+let vx = Channel("velocity.x",speed,"Centre velocity x")
+let vy = Channel("velocity.y",speed,"Centre velocity y")
+let qz = Channel("orientation.z",one,"Quaternion z")
+let qw = Channel("orientation.w",one,"Quaternion w")
+let wz = Channel("angularVelocity.z",angularSpeed,"Angular velocity z")
+let energy = Channel("energy",joules,"Kinetic plus gravitational potential energy; stabilization may add energy")
+let drift = Channel("joint.drift",metres,"Anchor distance minus rest length after position step")
+let ix = Channel("joint.impulse.x",impulseUnit,"Constraint impulse on box x")
+let iy = Channel("joint.impulse.y",impulseUnit,"Constraint impulse on box y")
+let lengthError = Channel("joint.lengthError",metres,"Length error before velocity solve")
+let velocityError = Channel("joint.velocityError",speed,"Velocity residual including stabilization")
+var body = Body.box(1,size)
+var solution = joint.resolve(body,world,0.005)
+
+func anchorPoint() -> Vec3:
+    return body.position + body.orientation.rotate(anchor)
+
+func measure():
+    px.sample(body.position.x)
+    py.sample(body.position.y)
+    pz.sample(body.position.z)
+    vx.sample(body.velocity.x)
+    vy.sample(body.velocity.y)
+    qz.sample(body.orientation.z)
+    qw.sample(body.orientation.w)
+    wz.sample(body.angularVelocity.z)
+    energy.sample(body.kineticEnergy() + 9.81 * body.position.y)
+    drift.sample((anchorPoint() - pivot).length() - joint.length)
+    ix.sample(solution.impulse.x)
+    iy.sample(solution.impulse.y)
+    lengthError.sample(solution.lengthError)
+    velocityError.sample(solution.velocityError)
+
+func create():
+    metadata("model=rigid joint pendulum\nmass_kg=1\ngravity_m_s2=9.81\nstabilization=0.2\nintegrator=gravity impulse, joint velocity solve, body drift\ncontact=none\nenergy=not exactly conserved; refine dt")
+
+func reset():
+    var initial = Body.box(1,size)
+    initial.setState(initialPosition,Vec3(0.5,0,0),initialRotation,Vec3(0,0,0.4))
+    solution = joint.resolve(initial,world,0.005)
+    body = solution.bodyA
+    measure()
+
+func step(dt: Float64):
+    var next = body
+    next.applyImpulse(gravity * dt,next.position)
+    let nextSolution = joint.resolve(next,world,dt)
+    next = nextSolution.bodyA
+    next.step(zero,zero,dt)
+    body = next
+    solution = nextSolution
+    measure()
+
+func scene():
+    box(body.position,size,body.orientation,1407107711,1)
+    line(pivot,anchorPoint(),0.012,3234254847,2)
+    point(pivot,0.05,4073026303,3)
+    point(anchorPoint(),0.03,4287541247,4)
+    arrow(body.position,body.position + body.velocity * 0.3,0.01,1842320639,5)
+    label(Vec3(-0.7,2.2,0),"Distanzgelenk · lokaler Körperanker",3234254847,6)

@@ -1,0 +1,7 @@
+file(REMOVE "${OUTPUT}/pendulum.psrun" "${OUTPUT}/report-summary.csv" "${OUTPUT}/report-manifest.txt" "${OUTPUT}/report-plot.svg")
+file(REMOVE "${OUTPUT}/pendulum-rk45.psrun" "${OUTPUT}/pendulum-verlet.psrun")
+file(REMOVE "${OUTPUT}/report-derived.csv")
+file(REMOVE "${OUTPUT}/report.psreport")
+file(REMOVE "${OUTPUT}/report.inputs.csv")
+file(REMOVE "${OUTPUT}/scalar-search-report.inputs.csv" "${OUTPUT}/scalar-search-report.psreport")
+file(REMOVE "${OUTPUT}/box-floor.psrun")

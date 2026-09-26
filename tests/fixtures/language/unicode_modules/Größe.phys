@@ -1,0 +1,7 @@
+struct Würfel:
+    var kante: Int64
+    func verdoppelt() -> Int64:
+        return self.kante * 2
+
+func erzeugen(kante: Int64) -> Würfel:
+    return Würfel(kante)

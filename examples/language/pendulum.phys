@@ -1,0 +1,50 @@
+// Same symplectic integrator and vacuum parameters as the C pendulum reference.
+let length: Float64 = 1.5
+let gravity: Float64 = 9.80665
+let radians = Unit(0, 0, 0, 0, 0, 0, 0, 1, "rad")
+let angularRate = Unit(0, 0, -1, 0, 0, 0, 0, 1, "rad/s")
+let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
+let joules = Unit(2, 1, -2, 0, 0, 0, 0, 1, "J")
+let angleChannel = Channel("angle", radians, "True pendulum angle")
+let rateChannel = Channel("angular_velocity", angularRate, "Angular velocity")
+let xChannel = Channel("position.x", metres, "Horizontal position")
+let yChannel = Channel("position.y", metres, "Vertical position")
+let energyChannel = Channel("energy", joules, "Kinetic plus gravitational potential energy")
+let sensorChannel = Channel("sensor.angle", radians, "Angle without sensor noise")
+struct PendulumState:
+    let phase: Vec2
+    func advanced(dt: Float64) -> PendulumState:
+        return PendulumState(self.phase.symplectic(-gravity / length * sin(self.phase.x), dt))
+    mutating func advance(dt: Float64):
+        self = self.advanced(dt)
+var states = [PendulumState(Vec2(0.45, 0))]
+
+func measure():
+    for value in states:
+        let state = value.phase
+        angleChannel.sample(state.x)
+        rateChannel.sample(state.y)
+        xChannel.sample(length * sin(state.x))
+        yChannel.sample(-length * cos(state.x))
+        energyChannel.sample(0.5 * length * length * state.y * state.y + gravity * length * (1 - cos(state.x)))
+        sensorChannel.sample(state.x)
+
+func create():
+    metadata("model=point pendulum, vacuum\nlength_m=1.5\nmass_kg=1\ngravity_m_s2=9.80665\nintegrator=symplectic Euler\nsensor_noise_rad=0")
+
+func reset():
+    states = []
+    states.append(PendulumState(Vec2(0.45, 0)))
+    measure()
+
+func step(dt: Float64):
+    states[0].advance(dt)
+    measure()
+
+func scene():
+    let state = states[0].phase
+    let origin = Vec3(0, 0, 0)
+    let bob = Vec3(length * sin(state.x), -length * cos(state.x), 0)
+    line(origin, bob, 0, 3049576703, 1)
+    sphere(origin, 0.045, 3874354175, 2)
+    sphere(bob, 0.12, 1407107839, 3)

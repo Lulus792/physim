@@ -1,0 +1,18 @@
+// Uniform motion: 1.5 m/s along X, without forces or collisions.
+let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
+let position = Channel("position.x", metres, "Position along X")
+var x: Float64 = 0
+
+func create():
+    metadata("model=uniform motion\nvelocity_m_s=1.5\nintegrator=exact")
+
+func reset():
+    x = 0
+    position.sample(x)
+
+func step(dt: Float64):
+    x += 1.5 * dt
+    position.sample(x)
+
+func scene():
+    sphere(Vec3(x, 0, 0), 0.15, 1688924159, 1)

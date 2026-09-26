@@ -1,0 +1,52 @@
+var global: Int64
+global = 6
+
+func choose(flag: Bool) -> String:
+    var result: String
+    if flag:
+        result = "yes"
+    else:
+        result = "no"
+    return result
+
+assert(choose(true) == "yes")
+assert(choose(false) == "no")
+
+func collect() -> [String]:
+    var values: [String]
+    values = ["a"]
+    values.append("b")
+    values.append("c")
+    return values
+
+assert(collect() == ["a", "b", "c"])
+
+struct Label:
+    let text: String
+
+func makeLabel() -> Label:
+    var label: Label
+    label = Label(choose(true))
+    label = Label(label.text + "!")
+    return label
+
+assert(makeLabel() == Label("yes!"))
+
+func fromLoop() -> Int64:
+    var answer: Int64
+    var index = 0
+    while index < 3:
+        answer = global + index
+        index += 1
+    return answer
+
+assert(fromLoop() == 8)
+
+func capture() -> Int64:
+    var value: Int64
+    value = 12
+    let read = func() -> Int64:
+        return value
+    return read()
+
+assert(capture() == 12)

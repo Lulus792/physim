@@ -1,0 +1,4 @@
+import Value
+
+func calculate(value: Int64) -> Int64:
+    return Value.offset(value) * 2

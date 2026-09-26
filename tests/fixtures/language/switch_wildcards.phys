@@ -1,0 +1,28 @@
+enum Reading:
+    case missing
+    case sample(values: [String], valid: Bool, code: Int64)
+
+func category(reading: Reading) -> String:
+    switch reading:
+        case Reading.sample(_, valid, _) if valid:
+            return "valid"
+        case Reading.sample(_, _, _):
+            return "invalid"
+        case Reading.missing:
+            return "missing"
+
+func present(value: [String]?) -> Bool:
+    switch value:
+        case nil:
+            return false
+        case Optional.some(_):
+            return true
+
+let first = Reading.sample(["a", "b"], true, 7)
+let second = Reading.sample(["c"], false, 9)
+assert(category(first) == "valid")
+assert(category(second) == "invalid")
+assert(category(Reading.missing) == "missing")
+assert(present(Optional.some(["item"])))
+let empty: [String]? = nil
+assert(!present(empty))

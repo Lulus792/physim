@@ -1,0 +1,14 @@
+enum Event:
+    case empty
+    case number(value: Int64)
+    func isEmpty() -> Bool:
+        return self == Event.empty
+    static func sample(value: Int64) -> Event:
+        return Event.number(value)
+
+enum Code:
+    case good = 200
+    case accepted
+    case missing = 404
+    func isGood() -> Bool:
+        return self == Code.good

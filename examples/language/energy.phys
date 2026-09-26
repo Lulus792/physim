@@ -1,0 +1,23 @@
+// Compile this standalone program with PhysimLanguage.cmake.
+func kineticEnergy(mass: Float64, speed: Float64) -> Float64:
+    return 0.5 * mass * speed * speed
+
+func classify(energy: Float64) -> Int64:
+    if energy < 1.0:
+        return 0
+    else if energy < 10.0:
+        return 1
+    else:
+        return 2
+
+let energy = kineticEnergy(speed: 3.0, mass: 2.0)
+let category = classify(energy)
+var total: Int64 = 0
+for sample in 0..<10:
+    total = total + sample
+assert(energy == 9.0)
+assert(category == 1)
+assert(total == 45)
+print(energy)
+print(category)
+print(total)

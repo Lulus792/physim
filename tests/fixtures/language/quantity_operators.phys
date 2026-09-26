@@ -1,0 +1,40 @@
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let centimetres = Unit(1,0,0,0,0,0,0,0.01,"cm")
+let first = Quantity(2,metres)
+let second = Quantity(50,centimetres)
+
+let sum = first + second
+assert(abs(sum.value - 2.5) < 0.000001)
+assert(sum.unit.isCompatible(metres))
+let difference = first - second
+assert(abs(difference.value - 1.5) < 0.000001)
+let reverse = second + first
+assert(abs(reverse.value - 250.0) < 0.000001)
+let chain = (first + second) - Quantity(1,metres)
+assert(abs(chain.value - 1.5) < 0.000001)
+let scaled = sum * 2
+assert(abs(scaled.value - 5.0) < 0.000001)
+let scaledReverse = 2 * sum
+assert(abs(scaledReverse.value - 5.0) < 0.000001)
+let halved = sum / 2
+assert(abs(halved.value - 1.25) < 0.000001)
+assert((+sum).value == sum.value)
+assert((-sum).value == -sum.value)
+assert(halved.unit.isCompatible(metres))
+var accumulated = first
+accumulated += second
+assert(abs(accumulated.value - 2.5) < 0.000001)
+accumulated -= second
+assert(abs(accumulated.value - 2.0) < 0.000001)
+accumulated *= 2
+assert(accumulated.value == 4)
+accumulated /= 2
+assert(accumulated.value == 2)
+
+var calls = 0
+func make(value: Float64) -> Quantity:
+    calls += 1
+    return Quantity(value,metres)
+let once = make(3) + make(4)
+assert(calls == 2)
+assert(once.value == 7)

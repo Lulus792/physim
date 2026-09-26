@@ -1,0 +1,15 @@
+enum State:
+    case idle
+    case paused
+    case running
+
+func category(value: State) -> Int64:
+    switch value:
+        case State.idle, State.paused:
+            return 0
+        case State.running:
+            return 1
+
+assert(category(State.idle) == 0)
+assert(category(State.paused) == 0)
+assert(category(State.running) == 1)

@@ -1,0 +1,5 @@
+func readEarly() -> Int64:
+    var value: Int64
+    return value
+
+readEarly()

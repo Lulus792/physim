@@ -1,0 +1,65 @@
+// Bitwise Int64 operations use full 64-bit patterns and ordered evaluation.
+assert((0x55 & 0x0F) == 0x05)
+assert((0x55 | 0x0F) == 0x5F)
+assert((0x55 ^ 0x0F) == 0x5A)
+assert(~0 == -1 && ~(-1) == 0)
+assert((1 << 63) == -0x8000000000000000)
+assert((-1 << 1) == -2)
+assert((-8 >> 2) == -2)
+assert((-0x8000000000000000 >> 63) == -1)
+assert((1 >> 63) == 0)
+assert((1 << 0) == 1 && (1 >> 0) == 1)
+assert((1 + 2 << 3) == 24)
+assert((16 >> 1 + 1) == 4)
+assert((1 | 2 & 4) == 1)
+assert((1 ^ 3 & 2) == 3)
+assert((0b101010 & 0o17) == 0b1010)
+assert(0B1111 == 0O17 && 0o10 == 8)
+assert((0b1 << 62) == 0o400000000000000000000)
+assert(-0b1000000000000000000000000000000000000000000000000000000000000000 == -0x8000000000000000)
+let radixFloat: Float64 = 0o17
+assert(radixFloat == 15.0)
+assert((0b1010_0101 & 0x0F_FF) == 0o2_45)
+assert(1_2.5_0e+1_0 == 125_000_000_000.0)
+assert(-9_223_372_036_854_775_808 == -0x8000_0000_0000_0000)
+let separatedFloat: Float64 = 1_2_5
+assert(separatedFloat == 125.0)
+
+var visits = 0
+func next() -> Int64:
+    visits += 1
+    return visits
+assert((next() << next()) == 4)
+assert(visits == 2)
+
+struct Box<T>:
+    let value: T
+let box: Box<Box<Int64>> = Box(Box(3))
+assert((box.value.value << 2) == 12)
+
+var mask = 0x55
+mask &= 0x0F
+assert(mask == 0x05)
+mask |= 0x80
+assert(mask == 0x85)
+mask ^= 0xFF
+assert(mask == 0x7A)
+mask <<= 1
+assert(mask == 0xF4)
+mask >>= 2
+assert(mask == 0x3D)
+
+var values = [1, 2]
+values[0] <<= 4
+values[1] |= 4
+assert(values == [16, 6])
+
+struct Holder:
+    var bits: Int64
+var holder = Holder(1)
+holder.bits ^= 3
+assert(holder.bits == 2)
+
+let tight: Box<Box<Int64>>=Box(Box(4))
+let single: Box<Int64>=Box(5)
+assert(tight.value.value == 4 && single.value == 5)

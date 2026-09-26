@@ -1,0 +1,9 @@
+func analyze():
+    report("Invalid handle reference")
+    let run = Dataset(0)
+    let time = run.series("time")
+    let x = run.series("position.x")
+    let velocity = x.derivative(time)
+    velocity.release()
+    let copy = velocity
+    assert(copy.mean() > 0)

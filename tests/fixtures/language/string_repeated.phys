@@ -1,0 +1,15 @@
+let marker = "ä😀"
+assert(String(repeating: marker, count: 0) == "")
+assert(String(repeating: marker, count: 1) == marker)
+assert(String(repeating: marker, count: 3) == "ä😀ä😀ä😀")
+assert(String(repeating: marker, count: 3).count == 6)
+assert(String(repeating: "", count: 100) == "")
+assert(String(repeating: "a", count: Int64.max(2, 3)) == "aaa")
+
+struct Counter:
+    let value: Int64
+
+    func repeated(count: Int64) -> Int64:
+        return self.value * count
+
+assert(Counter(value: 7).repeated(count: 3) == 21)

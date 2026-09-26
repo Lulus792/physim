@@ -1,0 +1,58 @@
+enum Envelope:
+    case empty
+    case numbers(items: [Int64])
+    case pair(left: [Int64], right: [Int64])
+    case packet(value: Packet)
+    case nested(child: Envelope?)
+
+struct Packet:
+    let items: [Int64]
+
+func same<T: Equatable>(a: T, b: T) -> Bool:
+    return a == b
+
+func count(value: Envelope) -> Int64:
+    switch value:
+        case Envelope.empty:
+            return 0
+        case Envelope.numbers(items):
+            return items.count
+        case Envelope.pair(left, right):
+            return left.count + right.count
+        case Envelope.packet(packet):
+            return packet.items.count
+        case Envelope.nested(child):
+            if let inner = child:
+                return count(inner)
+            return 0
+
+let numbers = Envelope.numbers([2, 3, 5])
+assert(count(numbers) == 3)
+assert(numbers == Envelope.numbers([2, 3, 5]))
+assert(same(numbers, Envelope.numbers([2, 3, 5])))
+let copy = numbers
+assert(count(copy) == 3)
+let pair = Envelope.pair(right: [11, 13], left: [7])
+assert(count(pair) == 3)
+assert(pair == Envelope.pair([7], [11, 13]))
+assert(pair != numbers)
+let packet = Envelope.packet(Packet(items: [7, 11]))
+assert(count(packet) == 2)
+let nested = Envelope.nested(Optional.some(packet))
+assert(count(nested) == 2)
+assert(nested == Envelope.nested(Optional.some(packet)))
+let absent = Envelope.nested(nil)
+assert(count(absent) == 0)
+let all: [Envelope] = [numbers, pair, packet, nested, absent]
+assert(all.count == 5)
+assert(count(all[3]) == 2)
+assert(all == [numbers, pair, packet, nested, absent])
+let optional: Envelope? = Optional.some(numbers)
+assert(count(optional.unwrap()) == 3)
+assert(optional == Optional.some(numbers))
+assert(Packet(items: [1, 2]) == Packet(items: [1, 2]))
+assert([1, 2] == [1, 2])
+assert(["a", "b"] == ["a", "b"])
+assert(["a"] != ["a", "b"])
+assert([Vec2(1, 2)] == [Vec2(1, 2)])
+assert(same(Packet(items: [1, 2]), Packet(items: [1, 2])))

@@ -1,0 +1,53 @@
+assert(attempt(12 / 3).unwrap() == 4)
+assert(attempt(1 / 0) == nil)
+assert(attempt(Int64("bad")) == nil)
+assert(attempt(Float64("1e309")) == nil)
+assert(attempt([1, 2][5]) == nil)
+
+let words = ["alpha", "beta"]
+assert(attempt(words[4]) == nil)
+assert(words == ["alpha", "beta"])
+let copied = attempt(words[1]).unwrap()
+assert(copied == "beta")
+
+var calls = 0
+func failAfterOwning() -> String:
+    calls += 1
+    let local = ["owned", "values"]
+    return local[99]
+
+assert(attempt(failAfterOwning()) == nil)
+assert(calls == 1)
+assert(attempt(failAfterOwning()) == nil)
+assert(calls == 2)
+for iteration in 0..<300:
+    assert(attempt(failAfterOwning()) == nil)
+assert(calls == 302)
+
+let nested = attempt(Int64.parse("17"))
+assert(nested != nil)
+assert(nested.unwrap().unwrap() == 17)
+assert(attempt(Int64.parse("bad")) != nil)
+
+func nestedFailure() -> Int64:
+    let inner = attempt(Int64("bad"))
+    return inner.unwrap()
+
+assert(attempt(nestedFailure()) == nil)
+assert(attempt(5 + 2).unwrap() == 7)
+
+func recurse(depth: Int64) -> Int64:
+    if depth < 300:
+        return recurse(depth + 1)
+    return depth
+
+assert(attempt(recurse(0)) == nil)
+assert(attempt(9).unwrap() == 9)
+
+func recover(value: Int64) -> Int64:
+    guard let quotient = attempt(100 / value) else:
+        return 0
+    return quotient
+
+assert(recover(4) == 25)
+assert(recover(0) == 0)

@@ -1,0 +1,88 @@
+var transforms = 0
+var factories = 0
+
+func byteWidth(value: String) -> Int64:
+    transforms += 1
+    return value.utf8.count
+
+func makeTransform() -> func(String) -> Int64:
+    factories += 1
+    return byteWidth
+
+let source = "aü🌍B"
+assert(source.map(makeTransform()) == [1, 2, 4, 1])
+assert(transforms == 4 && factories == 1)
+assert(source == "aü🌍B")
+assert("".map(makeTransform()) == [])
+assert(transforms == 4 && factories == 2)
+
+func duplicate(value: String) -> String:
+    return value + value
+
+assert(source.map(duplicate) == ["aa", "üü", "🌍🌍", "BB"])
+
+struct Label:
+    let text: String
+
+func wrap(value: String) -> Label:
+    return Label(value)
+
+assert(source.map(wrap) == [Label("a"), Label("ü"), Label("🌍"), Label("B")])
+
+func singleton(value: String) -> [String]:
+    return [value]
+
+assert(source.map(singleton) == [["a"], ["ü"], ["🌍"], ["B"]])
+
+func makeSuffix(base: String) -> func(Int64) -> String:
+    return func(number: Int64) -> String:
+        return base + String(number)
+
+let functions = source.map(makeSuffix)
+assert(functions[1](5) == "ü5" && functions[2](7) == "🌍7")
+
+enum Tagged:
+    case text(value: String)
+
+assert(source.map(Tagged.text) == [Tagged.text("a"), Tagged.text("ü"),
+                                    Tagged.text("🌍"), Tagged.text("B")])
+
+let scalarSize = func(value: String) -> Int64:
+    return value.utf8.count
+assert(source.map(scalarSize) == [1, 2, 4, 1])
+
+struct Prefix:
+    let text: String
+    func add(value: String) -> String:
+        return self.text + value
+
+assert(source.map(Prefix("x").add) == ["xa", "xü", "x🌍", "xB"])
+
+func local(value: String) -> [String]:
+    let prefix = "local "
+    func describe(scalar: String) -> String:
+        return prefix + scalar
+    return value.map(describe)
+
+assert(local(source) == ["local a", "local ü", "local 🌍", "local B"])
+
+let many = String(repeating: "ü", count: 129)
+assert(many.map(duplicate).count == 129)
+assert(many.map(duplicate)[128] == "üü")
+
+var mutableSource = "aü"
+func mutate(value: String) -> String:
+    mutableSource = "changed"
+    return value + "!"
+
+assert(mutableSource.map(mutate) == ["a!", "ü!"])
+assert(mutableSource == "changed")
+
+func failOnSecond(value: String) -> String:
+    if value == "ü":
+        let missing: [String] = []
+        return missing[0]
+    return value + "!"
+
+assert(attempt(source.map(failOnSecond)) == nil)
+assert(source == "aü🌍B")

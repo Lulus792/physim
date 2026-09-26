@@ -1,0 +1,17 @@
+func analyze():
+    report("Auftrieb · schwimmende Kugel")
+    for index in 0..<inputCount():
+        let run = Dataset(index)
+        let time = run.series("time")
+        let position = run.series("position.y")
+        let fraction = run.series("submerged.fraction")
+        let balance = run.series("energy.balance")
+        let positionPlot = position.plot(time, "Höhe über Wasseroberfläche", "position.y")
+        let fractionPlot = fraction.plot(time, "Eingetauchter Anteil", "submerged.fraction")
+        let energyPlot = balance.plot(time, "Energiebilanz", "energy.balance")
+        if index == 0:
+            positionPlot.export("position")
+            fractionPlot.export("submersion")
+            energyPlot.export("energy")
+            position.export(time, "position")
+        run.close()

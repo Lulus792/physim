@@ -1,0 +1,81 @@
+var cleared = [1, 2, 3]
+let snapshot = cleared
+cleared.removeAll()
+assert(cleared == [])
+assert(snapshot == [1, 2, 3])
+cleared.removeAll()
+assert(cleared.isEmpty)
+
+var calls = 0
+func odd(value: Int64) -> Bool:
+    calls += 1
+    return value % 2 == 1
+var numbers = [1, 2, 3, 4, 5, 6]
+let oldNumbers = numbers
+numbers.removeAll(where: odd)
+assert(numbers == [2, 4, 6])
+assert(oldNumbers == [1, 2, 3, 4, 5, 6])
+assert(calls == 6)
+var noNumbers: [Int64] = []
+noNumbers.removeAll(where: odd)
+assert(calls == 6)
+var allRemoved = [1, 3]
+allRemoved.removeAll(where: odd)
+assert(allRemoved.isEmpty)
+var noneRemoved = [2, 4]
+noneRemoved.removeAll(where: odd)
+assert(noneRemoved == [2, 4])
+assert(calls == 10)
+
+struct Item:
+    let priority: Int64
+    let name: String
+func isLow(item: Item) -> Bool:
+    return item.priority == 1
+var items = [Item(priority: 2, name: "first"),
+             Item(priority: 1, name: "drop"),
+             Item(priority: 2, name: "second")]
+let oldItems = items
+items.removeAll(where: isLow)
+assert(items == [Item(priority: 2, name: "first"),
+                 Item(priority: 2, name: "second")])
+assert(oldItems[1].name == "drop")
+
+func below(threshold: Int64) -> func(Int64) -> Bool:
+    return func(value: Int64) -> Bool:
+        return value < threshold
+numbers.removeAll(where: below(4))
+assert(numbers == [4, 6])
+
+struct Limit:
+    let value: Int64
+    func accepts(item: Int64) -> Bool:
+        return item > self.value
+let limit = Limit(4)
+numbers.removeAll(where: limit.accepts)
+assert(numbers == [4])
+
+struct Holder:
+    var rows: [[Int64]]
+var holder = Holder([[1, 2, 3, 4]])
+var indexCalls = 0
+func rowIndex() -> Int64:
+    indexCalls += 1
+    return 0
+holder.rows[rowIndex()].removeAll(where: odd)
+assert(indexCalls == 1)
+assert(holder.rows[0] == [2, 4])
+holder.rows[rowIndex()].removeAll()
+assert(indexCalls == 2)
+assert(holder.rows[0].isEmpty)
+
+var failure = [1, 2, 3, 4]
+func failsAtThree(value: Int64) -> Bool:
+    if value == 3:
+        return 1 / 0 == 0
+    return value % 2 == 1
+func tryRemove() -> Int64:
+    failure.removeAll(where: failsAtThree)
+    return 1
+assert(attempt(tryRemove()) == nil)
+assert(failure == [1, 2, 3, 4])

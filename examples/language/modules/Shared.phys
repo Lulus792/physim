@@ -1,0 +1,14 @@
+enum Decision:
+    case yes
+    case no
+
+struct Pair:
+    let first: Int64
+    let second: Int64
+    static func repeated(value: Int64) -> Pair:
+        return Pair(value, value)
+
+let answer = 42
+let samples = [1, 2, 3]
+func identity(value: Int64) -> Int64:
+    return value

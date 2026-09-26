@@ -1,0 +1,36 @@
+func oscillator(time: Float64, state: [Float64]) -> [Float64]:
+    assert(state.count == 2)
+    return [state[1], -state[0]]
+
+func driven(time: Float64, state: [Float64]) -> [Float64]:
+    return [time * state[0]]
+
+func zero(time: Float64, state: [Float64]) -> [Float64]:
+    var derivative: [Float64] = []
+    for value in state:
+        derivative.append(0.0)
+    return derivative
+
+let initial = [1.0, 0.0]
+let euler = eulerStep(derivative: oscillator, state: initial, time: 0, dt: 0.1)
+assert(euler.count == 2)
+assert(euler[0] == 1)
+assert(abs(euler[1] + 0.1) < 1e-14)
+assert(initial == [1.0, 0.0])
+
+var state = initial
+for step in 0..<1000:
+    state = rk4Step(oscillator, state, Float64(step) * 0.001, 0.001)
+assert(abs(state[0] - cos(1)) < 1e-12)
+assert(abs(state[1] + sin(1)) < 1e-12)
+
+var drivenState = [1.0]
+for step in 0..<100:
+    drivenState = rk4Step(driven, drivenState, Float64(step) * 0.01, 0.01)
+assert(abs(drivenState[0] - exp(0.5)) < 1e-10)
+
+var large: [Float64] = []
+for i in 0..<32:
+    large.append(Float64(i))
+let unchanged = rk4Step(zero, large, 0, 0.1)
+assert(unchanged == large)

@@ -1,0 +1,6 @@
+struct Item:
+    var value: Int64
+func invalid():
+    var item: Item
+    item.value = 2
+invalid()

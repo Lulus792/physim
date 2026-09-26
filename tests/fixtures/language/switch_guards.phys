@@ -1,0 +1,143 @@
+enum Event:
+    case idle
+    case number(value: Int64)
+    case words(items: [String])
+
+var probes = 0
+var sources = 0
+
+func positive(value: Int64) -> Bool:
+    probes += 1
+    return value > 0
+
+func make() -> Event:
+    sources += 1
+    return Event.number(5)
+
+func classify(event: Event) -> Int64:
+    switch event:
+        case Event.number(value) if positive(value):
+            return 1
+        case Event.number:
+            return 0
+        case Event.words(items) if items.count > 1:
+            return 2
+        case Event.words:
+            return 3
+        case Event.idle:
+            return 4
+
+func sum(events: [Event]) -> Int64:
+    var total = 0
+    for event in events:
+        switch event:
+            case Event.idle:
+                continue
+            case Event.number(value) if value > 0:
+                total += value
+            case Event.number:
+                break
+            case Event.words:
+                total += 1
+    return total
+
+func select<T>(event: Event, yes: T, no: T) -> T:
+    switch event:
+        case Event.number(value) if value > 0:
+            return yes
+        default:
+            return no
+
+assert(classify(Event.number(5)) == 1)
+assert(classify(Event.number(0)) == 0)
+assert(classify(Event.words(["a"])) == 3)
+assert(classify(Event.words(["a", "b"])) == 2)
+assert(classify(Event.idle) == 4)
+assert(classify(make()) == 1)
+assert(probes == 3)
+assert(sources == 1)
+assert(sum([Event.number(2), Event.idle, Event.number(0), Event.words(["x"])]) == 3)
+assert(select(Event.number(1), 7, 9) == 7)
+assert(select(Event.number(0), 7, 9) == 9)
+
+enum Reading:
+    case sample(code: Int64, label: String, valid: Bool, weight: Float64)
+    case empty
+
+func describeReading(reading: Reading) -> Int64:
+    switch reading:
+        case Reading.sample(5, "ready", true, 2.5):
+            return 1
+        case Reading.sample(5, label, _, _) if label == "other":
+            return 2
+        case Reading.sample(code, _, _, _):
+            return code
+        case Reading.empty:
+            return 0
+
+assert(describeReading(Reading.sample(5, "ready", true, 2.5)) == 1)
+assert(describeReading(Reading.sample(5, "other", false, 1.0)) == 2)
+assert(describeReading(Reading.sample(7, "ready", true, 2.5)) == 7)
+assert(describeReading(Reading.empty) == 0)
+
+enum Packet:
+    case message(text: String?)
+    case empty
+
+func describePacket(packet: Packet) -> Int64:
+    switch packet:
+        case Packet.message(nil):
+            return 1
+        case Packet.message(text):
+            return text.unwrap().count
+        case Packet.empty:
+            return 0
+
+assert(describePacket(Packet.message(nil)) == 1)
+assert(describePacket(Packet.message(Optional.some("hello"))) == 5)
+assert(describePacket(Packet.empty) == 0)
+
+func classifyRange(event: Event) -> Int64:
+    switch event:
+        case Event.number(1...5):
+            return 1
+        case Event.number(6..<9):
+            return 2
+        case Event.number(value):
+            return value
+        case Event.words:
+            return 3
+        case Event.idle:
+            return 4
+
+assert(classifyRange(Event.number(1)) == 1)
+assert(classifyRange(Event.number(5)) == 1)
+assert(classifyRange(Event.number(6)) == 2)
+assert(classifyRange(Event.number(8)) == 2)
+assert(classifyRange(Event.number(9)) == 9)
+assert(classifyRange(Event.idle) == 4)
+
+enum Signal:
+    case note(payload: String??)
+    case idle
+
+func signalLength(signal: Signal) -> Int64:
+    switch signal:
+        case Signal.note(Optional.some(Optional.some("ready"))):
+            return 50
+        case Signal.note(Optional.some(Optional.some(text))):
+            return text.count
+        case Signal.note(nil):
+            return 0
+        case Signal.note(payload):
+            return 1
+        case Signal.idle:
+            return -1
+
+let signal = Signal.note(Optional.some(Optional.some("ready")))
+assert(signalLength(signal) == 50)
+assert(signalLength(Signal.note(Optional.some(Optional.some("other")))) == 5)
+assert(signalLength(Signal.note(nil)) == 0)
+assert(signalLength(Signal.note(Optional.some(nil))) == 1)
+assert(signalLength(Signal.idle) == -1)
+assert(signal != Signal.idle)

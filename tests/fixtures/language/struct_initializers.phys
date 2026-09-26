@@ -1,0 +1,356 @@
+import Factory
+
+var calls = 0
+
+struct Limited:
+    let value: Int64
+    let history: [Int64]
+    static func init(input: Int64) -> Limited:
+        calls += 1
+        var bounded = input
+        if bounded < 0:
+            bounded = 0
+        return Limited(bounded, [calls])
+
+let first = Limited(3)
+let second = Limited(input: -4)
+assert(first.value == 3 && second.value == 0 && calls == 2)
+assert(first.history == [1] && second.history == [2])
+let direct = Limited.init(input: 5)
+assert(direct.value == 5 && calls == 3)
+
+struct WithDefault:
+    let value: Int64
+    let generation: Int64 = calls
+    static func init(input: Int64) -> WithDefault:
+        calls += 1
+        return WithDefault(input)
+let defaulted = WithDefault(9)
+assert(defaulted.value == 9 && defaulted.generation == 4 && calls == 4)
+
+struct Wrapped<T>:
+    let item: T
+    let history: [T]
+    static func init(value: T) -> Wrapped<T>:
+        return Wrapped(value, [value])
+
+let inferred = Wrapped(7)
+let explicit = Wrapped<Int64>(8)
+let directGeneric = Wrapped<Int64>.init(value: 9)
+assert(inferred.item == 7 && inferred.history == [7])
+assert(explicit.item == 8 && explicit.history == [8])
+assert(directGeneric.item == 9 && directGeneric.history == [9])
+
+struct EmptyBox<T>:
+    let items: [T]
+    static func init() -> EmptyBox<T>:
+        return EmptyBox([])
+let empty: EmptyBox<Int64> = EmptyBox()
+assert(empty.items == [])
+
+let remote = Factory.Remote(2)
+assert(remote.value == 12)
+assert(Factory.Remote.init(input: 3).value == 13)
+assert(Factory.Remote(input: "imported").value == 8)
+
+struct Overloaded:
+    let value: Int64
+    static func init() -> Overloaded:
+        return Overloaded(0)
+    static func init(input: Int64) -> Overloaded:
+        return Overloaded(input)
+    static func init(input: Int64, offset: Int64) -> Overloaded:
+        return Overloaded(input + offset)
+assert(Overloaded().value == 0)
+assert(Overloaded(4).value == 4)
+assert(Overloaded(input: 4, offset: 5).value == 9)
+assert(Overloaded.init(input: 2).value == 2)
+
+struct Labeled:
+    let value: Int64
+    static func init(positive: Int64) -> Labeled:
+        return Labeled(positive)
+    static func init(negative: Int64) -> Labeled:
+        return Labeled(-negative)
+assert(Labeled(positive: 3).value == 3)
+assert(Labeled.init(negative: 4).value == -4)
+
+struct Typed:
+    let value: String
+    static func init(value: Int64) -> Typed:
+        return Typed("integer")
+    static func init(value: Float64) -> Typed:
+        return Typed("float")
+    static func init(value: String) -> Typed:
+        return Typed(value)
+    static func init(value: Bool) -> Typed:
+        return Typed("boolean")
+let integerValue: Int64 = 7
+let floatValue: Float64 = 7.5
+assert(Typed(7).value == "integer")
+assert(Typed(value: integerValue).value == "integer")
+assert(Typed(7.5).value == "float")
+assert(Typed(value: floatValue).value == "float")
+assert(Typed("text").value == "text")
+assert(Typed(value: true).value == "boolean")
+assert(Typed(Float64(7)).value == "float")
+assert(Typed.init(value: "direct").value == "direct")
+assert(Typed(value: 1 + 2).value == "integer")
+assert(Typed(value: "a" + "b").value == "ab")
+let optionalInteger: Int64? = nil
+let optionalFloat: Float64? = nil
+assert(Typed(optionalInteger ?? 3).value == "integer")
+assert(Typed(optionalFloat ?? 3).value == "float")
+
+struct FloatOrText:
+    let value: String
+    static func init(value: Float64) -> FloatOrText:
+        return FloatOrText("float")
+    static func init(value: String) -> FloatOrText:
+        return FloatOrText(value)
+assert(FloatOrText(1).value == "float")
+
+struct ContextChoice:
+    let tag: Int64
+    static func init(value: Int64?) -> ContextChoice:
+        return ContextChoice(1)
+    static func init(value: [Int64]) -> ContextChoice:
+        return ContextChoice(2)
+assert(ContextChoice(nil).tag == 1)
+assert(ContextChoice([]).tag == 2)
+assert(ContextChoice(value: [1, 2]).tag == 2)
+
+struct SomeChoice:
+    let tag: Int64
+    static func init(value: Int64?) -> SomeChoice:
+        return SomeChoice(1)
+    static func init(value: String?) -> SomeChoice:
+        return SomeChoice(2)
+assert(SomeChoice(Optional.some(3)).tag == 1)
+assert(SomeChoice(value: Optional.some(value: "x")).tag == 2)
+assert(SomeChoice(Optional.some(1 + 2)).tag == 1)
+assert(SomeChoice(Optional.some("a" + "b")).tag == 2)
+
+struct NumericSomeChoice:
+    let tag: Int64
+    static func init(value: Int64?) -> NumericSomeChoice:
+        return NumericSomeChoice(1)
+    static func init(value: Float64?) -> NumericSomeChoice:
+        return NumericSomeChoice(2)
+assert(NumericSomeChoice(Optional.some(4)).tag == 1)
+assert(NumericSomeChoice(Optional.some(4.5)).tag == 2)
+
+struct PairTyped:
+    let value: String
+    static func init(left: Int64, right: String) -> PairTyped:
+        return PairTyped("integer first")
+    static func init(right: Int64, left: String) -> PairTyped:
+        return PairTyped("string first")
+assert(PairTyped(left: 1, right: "x").value == "integer first")
+assert(PairTyped(right: 2, left: "x").value == "string first")
+
+struct NumberBox<T>:
+    let value: T
+    static func init(value: T) -> NumberBox<T>:
+        return NumberBox(value)
+    static func init(value: T, copy: Bool) -> NumberBox<T>:
+        assert(copy || !copy)
+        return NumberBox(value)
+assert(NumberBox(7).value == 7)
+assert(NumberBox(value: 8, copy: true).value == 8)
+assert(NumberBox<Int64>.init(value: 9, copy: false).value == 9)
+
+struct GenericTyped<T>:
+    let value: T
+    static func init(value: T) -> GenericTyped<T>:
+        return GenericTyped(value)
+    static func init(value: Float64) -> GenericTyped<T>:
+        return GenericTyped(Int64(value))
+assert(GenericTyped<Int64>(value: 5).value == 5)
+assert(GenericTyped<Int64>(value: 6.0).value == 6)
+assert(GenericTyped<Int64>.init(value: 7.0).value == 7)
+assert(GenericTyped(value: 8).value == 8)
+let contextTyped: GenericTyped<Int64> = GenericTyped(value: 9.0)
+assert(contextTyped.value == 9)
+
+struct ArrayOverload<T>:
+    let value: T
+    static func init(value: T) -> ArrayOverload<T>:
+        return ArrayOverload(value)
+    static func init(value: [T]) -> ArrayOverload<T>:
+        return ArrayOverload(value[0])
+    static func init(value: T?) -> ArrayOverload<T>:
+        return ArrayOverload(value.unwrap())
+let arrayValues = [3, 4]
+assert(ArrayOverload(value: arrayValues).value == 3)
+assert(ArrayOverload(value: [3, 4]).value == 3)
+assert(ArrayOverload<Int64>(value: arrayValues).value == 3)
+let optionalValue: Int64? = Optional.some(5)
+assert(ArrayOverload(value: optionalValue).value == 5)
+assert(ArrayOverload(value: Optional.some(6)).value == 6)
+
+struct Nested<T>:
+    let value: T
+struct NestedOverload<T>:
+    let value: T
+    static func init(value: T) -> NestedOverload<T>:
+        return NestedOverload(value)
+    static func init(value: Nested<T>) -> NestedOverload<T>:
+        return NestedOverload(value.value)
+let nestedValue = Nested(12)
+assert(NestedOverload(value: nestedValue).value == 12)
+assert(NestedOverload<Int64>(value: nestedValue).value == 12)
+
+struct GenericContextChoice<T>:
+    let tag: Int64
+    static func init(value: T?) -> GenericContextChoice<T>:
+        return GenericContextChoice(1)
+    static func init(value: [T]) -> GenericContextChoice<T>:
+        return GenericContextChoice(2)
+let genericNilChoice: GenericContextChoice<Int64> = GenericContextChoice(nil)
+let genericEmptyChoice: GenericContextChoice<Int64> = GenericContextChoice([])
+let genericFloatChoice: GenericContextChoice<Float64> = GenericContextChoice([1, 2])
+assert(genericNilChoice.tag == 1 && genericEmptyChoice.tag == 2)
+assert(genericFloatChoice.tag == 2)
+assert(GenericContextChoice(value: [1, 2]).tag == 2)
+assert(GenericContextChoice(value: [1, 2.5]).tag == 2)
+assert(GenericContextChoice(value: Optional.some(3)).tag == 1)
+let genericNestedSome: GenericContextChoice<[Int64]> = GenericContextChoice(Optional.some([1, 2]))
+assert(genericNestedSome.tag == 1)
+
+struct GenericSomeValue<T>:
+    let tag: Int64
+    static func init(value: T) -> GenericSomeValue<T>:
+        return GenericSomeValue(1)
+    static func init(value: String) -> GenericSomeValue<T>:
+        return GenericSomeValue(2)
+assert(GenericSomeValue(Optional.some(7)).tag == 1)
+assert(GenericSomeValue([1, 2]).tag == 1)
+
+struct DeferredChoice<T>:
+    let tag: Int64
+    static func init(value: T, other: T) -> DeferredChoice<T>:
+        return DeferredChoice(1)
+    static func init(value: T?, other: T) -> DeferredChoice<T>:
+        return DeferredChoice(2)
+assert(DeferredChoice(value: nil, other: 1).tag == 2)
+
+struct NumericInference<T>:
+    let first: T
+    let second: T
+    static func init(first: T, second: T) -> NumericInference<T>:
+        return NumericInference(first, second)
+let inferredNumeric = NumericInference(first: 1, second: 2.5)
+assert(inferredNumeric.first == 1.0 && inferredNumeric.second == 2.5)
+assert(NumericInference(1, 2.5).first == 1.0)
+let reversedNumeric = NumericInference(second: 3.5, first: 2)
+assert(reversedNumeric.first == 2.0 && reversedNumeric.second == 3.5)
+let integerVariable: Int64 = 4
+let integerNumeric = NumericInference(first: integerVariable, second: 5)
+assert(integerNumeric.first == 4 && integerNumeric.second == 5)
+
+struct NumericNested<T>:
+    let value: T
+    static func init(optional: T?, value: T) -> NumericNested<T>:
+        assert(optional.hasValue)
+        return NumericNested(value)
+    static func init(array: [T], value: T) -> NumericNested<T>:
+        assert(array.count == 1)
+        return NumericNested(value)
+assert(NumericNested(optional: Optional.some(1), value: 2.5).value == 2.5)
+assert(NumericNested(optional: Optional.some(-1), value: 2.5).value == 2.5)
+assert(NumericNested(array: [1], value: 3.5).value == 3.5)
+assert(NumericNested(value: 4.5, optional: Optional.some(2)).value == 4.5)
+assert(NumericNested(value: 5.5, array: [3]).value == 5.5)
+
+struct NumericWrapped<T>:
+    let payload: T
+    static func init(source: Nested<T>, payload: T) -> NumericWrapped<T>:
+        return NumericWrapped(payload)
+assert(NumericWrapped(source: Nested(1), payload: 2.5).payload == 2.5)
+
+struct MethodGeneric:
+    let text: String
+    static func init<T: Scalar>(value: T) -> MethodGeneric:
+        return MethodGeneric(String(value))
+assert(MethodGeneric(3).text == "3")
+assert(MethodGeneric.init<Float64>(value: 2.5).text == "2.5")
+assert(MethodGeneric<Float64>(value: 3.5).text == "3.5")
+
+struct MethodGenericOverload:
+    let tag: Int64
+    static func init(value: Int64) -> MethodGenericOverload:
+        return MethodGenericOverload(1)
+    static func init<U: Numeric>(value: U) -> MethodGenericOverload:
+        return MethodGenericOverload(2)
+assert(MethodGenericOverload(value: 3).tag == 1)
+assert(MethodGenericOverload(value: 3.5).tag == 2)
+assert(MethodGenericOverload<Float64>(value: 3).tag == 2)
+assert(MethodGenericOverload.init<Float64>(value: 4).tag == 2)
+
+struct MethodGenericShapes:
+    let tag: Int64
+    static func init<U>(value: U?) -> MethodGenericShapes:
+        return MethodGenericShapes(1)
+    static func init<U>(value: [U]) -> MethodGenericShapes:
+        return MethodGenericShapes(2)
+let methodOptional: Int64? = Optional.some(1)
+assert(MethodGenericShapes(value: methodOptional).tag == 1)
+assert(MethodGenericShapes(value: Optional.some(2)).tag == 1)
+assert(MethodGenericShapes(value: [1, 2]).tag == 2)
+
+struct MethodGenericBox<T>:
+    let value: T
+    static func init<U: Scalar>(value: T, evidence: U) -> MethodGenericBox<T>:
+        return MethodGenericBox(value)
+assert(MethodGenericBox<Int64>(value: 4, evidence: 5.5).value == 4)
+assert(MethodGenericBox<Int64>.init<Float64>(value: 6, evidence: 7.5).value == 6)
+assert(MethodGenericBox(value: 8, evidence: 9.5).value == 8)
+
+struct MethodGenericNested<T>:
+    let value: T
+    static func init<U>(value: T?, evidence: U) -> MethodGenericNested<T>:
+        return MethodGenericNested(value.unwrap())
+assert(MethodGenericNested(value: Optional.some(10), evidence: 11.5).value == 10)
+
+assert(Factory.Remote(raw: 3, offset: 20).value == 23)
+assert(Factory.Remote.init(raw: 5, offset: 30).value == 35)
+assert(Factory.Remote(numeric: 2.5).value == 2)
+assert(Factory.RemoteBox(value: arrayValues).value == 3)
+assert(Factory.RemoteBox<Int64>(value: 6).value == 6)
+
+let limitedFactory: func(Int64) -> Limited = Limited.init
+assert(limitedFactory(6).value == 6)
+func applyLimited(factory: func(Int64) -> Limited, value: Int64) -> Limited:
+    return factory(value)
+assert(applyLimited(Limited.init, 8).history.count == 1)
+let limitedFactories = [limitedFactory, Limited.init]
+assert(limitedFactories[1](9).value == 9)
+let optionalLimitedFactory: (func(Int64) -> Limited)? = Optional.some(Limited.init)
+assert(optionalLimitedFactory.unwrap()(10).value == 10)
+let inferredLimitedFactory = Limited.init
+assert(inferredLimitedFactory(7).value == 7)
+let emptyFactory: func() -> Overloaded = Overloaded.init
+let oneFactory: func(Int64) -> Overloaded = Overloaded.init
+let twoFactory: func(Int64, Int64) -> Overloaded = Overloaded.init
+assert(emptyFactory().value == 0)
+assert(oneFactory(8).value == 8)
+assert(twoFactory(8, 3).value == 11)
+let typedFactory: func(Float64) -> Typed = Typed.init
+assert(typedFactory(1.5).value == "float")
+let wrappedFactory: func(Int64) -> Wrapped<Int64> = Wrapped<Int64>.init
+assert(wrappedFactory(12).item == 12)
+let remoteFactory: func(Int64) -> Factory.Remote = Factory.Remote.init
+assert(remoteFactory(4).value == 14)
+let genericMethodFactory: func(Float64) -> MethodGeneric = MethodGeneric.init<Float64>
+assert(genericMethodFactory(2.5).text == "2.5")
+let genericOverloadFactory: func(Float64) -> MethodGenericOverload = MethodGenericOverload.init<Float64>
+assert(genericOverloadFactory(3.5).tag == 2)
+let optionalShapeFactory: func(Int64?) -> MethodGenericShapes = MethodGenericShapes.init<Int64>
+let arrayShapeFactory: func([Int64]) -> MethodGenericShapes = MethodGenericShapes.init<Int64>
+assert(optionalShapeFactory(Optional.some(2)).tag == 1)
+assert(arrayShapeFactory([2, 3]).tag == 2)
+let genericBoxFactory: func(Int64, Float64) -> MethodGenericBox<Int64> = MethodGenericBox<Int64>.init<Float64>
+assert(genericBoxFactory(4, 5.5).value == 4)
+let remoteNumericFactory: func(Float64) -> Factory.Remote = Factory.Remote.init<Float64>
+assert(remoteNumericFactory(4.5).value == 4)

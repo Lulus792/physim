@@ -1,0 +1,72 @@
+var calls = 0
+var factories = 0
+
+func isGlobe(value: String) -> Bool:
+    calls += 1
+    return value == "🌍"
+
+func makePredicate() -> func(String) -> Bool:
+    factories += 1
+    return isGlobe
+
+let source = "aü🌍B"
+assert(source.contains(where: makePredicate()))
+assert(calls == 3 && factories == 1)
+calls = 0
+assert(!source.allSatisfy(makePredicate()))
+assert(calls == 1 && factories == 2)
+calls = 0
+assert(!"aü".contains(where: makePredicate()))
+assert(calls == 2 && factories == 3)
+calls = 0
+assert("🌍🌍".allSatisfy(makePredicate()))
+assert(calls == 2 && factories == 4)
+calls = 0
+assert(!"".contains(where: makePredicate()))
+assert("".allSatisfy(makePredicate()))
+assert(calls == 0 && factories == 6)
+
+struct Matcher:
+    let selected: String
+    func matches(value: String) -> Bool:
+        return value == self.selected
+
+assert(source.contains(where: Matcher("ü").matches))
+assert(!source.allSatisfy(Matcher("ü").matches))
+
+func locally(value: String) -> Bool:
+    let selected = "🌍"
+    func matches(scalar: String) -> Bool:
+        return scalar == selected
+    return value.contains(where: matches)
+
+assert(locally(source))
+
+let notB = func(value: String) -> Bool:
+    return value != "B"
+assert(!source.allSatisfy(notB))
+assert("aü🌍".allSatisfy(notB))
+
+var mutableSource = "a🌍X"
+func mutate(value: String) -> Bool:
+    mutableSource = "changed"
+    return value == "X"
+
+assert(mutableSource.contains(where: mutate))
+assert(mutableSource == "changed")
+
+func failOnSecond(value: String) -> Bool:
+    if value == "ü":
+        let missing: [String] = []
+        return missing[0] == "x"
+    return false
+
+assert(attempt(source.contains(where: failOnSecond)) == nil)
+assert(attempt(source.allSatisfy(failOnSecond)) == Optional.some(false))
+
+func failFirst(value: String) -> Bool:
+    let missing: [String] = []
+    return missing[0] == value
+
+assert(attempt(source.allSatisfy(failFirst)) == nil)
+assert(source == "aü🌍B")

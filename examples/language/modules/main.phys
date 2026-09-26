@@ -1,0 +1,20 @@
+import Shared
+import Left
+import Right
+import Physics.Scale
+import Physics.Value as DirectValue
+
+let pair: Shared.Pair = Shared.Pair.repeated(21)
+assert(pair.first + pair.second == Shared.answer)
+assert(Shared.samples.count == 3)
+assert(Shared.Decision.yes != Shared.Decision.no)
+func decisionNumber(value: Shared.Decision) -> Int64:
+    switch value:
+        case Shared.Decision.yes:
+            return 1
+        case Shared.Decision.no:
+            return 0
+assert(decisionNumber(Shared.Decision.yes) == 1)
+assert(Left.calculate(41) == Right.calculate(43))
+assert(Scale.calculate(3) == 10)
+assert(DirectValue.offset(4) == 6)

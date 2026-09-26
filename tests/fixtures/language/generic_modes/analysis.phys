@@ -1,0 +1,20 @@
+import Shared
+
+func analyze():
+    var letters: [String] = []
+    for letter in "x🌍":
+        letters.append(letter)
+    assert(letters == ["x", "🌍"])
+    assert("x🌍".reversed() == "🌍x")
+    let values = Shared.identity([1.0, 2.0])
+    assert(values.count == 2)
+    let holder = Shared.Holder(0)
+    assert(holder.echo(values)[1] == 2.0)
+    assert(Shared.Holder.copy<[Float64]>([3.0, 4.0])[0] == 3.0)
+    let box = Shared.Box<[Float64]>(values)
+    assert(box.read()[0] == 1.0)
+    let inferred = Shared.Box(values)
+    assert(inferred.read()[1] == 2.0)
+    assert(Shared.bounded(3.5) == 3.5)
+    assert(Shared.NumericBox(4.5).value == 4.5)
+    report("Generic analysis")

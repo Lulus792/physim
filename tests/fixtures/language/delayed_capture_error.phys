@@ -1,0 +1,7 @@
+func invalid() -> Int64:
+    var value: Int64
+    let reader = func() -> Int64:
+        return value
+    value = 5
+    return reader()
+invalid()

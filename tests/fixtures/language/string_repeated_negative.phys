@@ -1,0 +1,2 @@
+let result = String(repeating: "x", count: -1)
+print(result)

@@ -1,0 +1,52 @@
+var values = [10, 20, 30]
+let snapshot = values
+values.swapAt(0, 2)
+assert(values == [30, 20, 10] && snapshot == [10, 20, 30])
+values.swapAt(1, 1)
+assert(values == [30, 20, 10])
+values.swapAt(0, 2)
+assert(values == snapshot)
+
+var words = ["alpha", "beta", "gamma"]
+let savedWords = words
+words.swapAt(0, 2)
+assert(words == ["gamma", "beta", "alpha"])
+assert(savedWords == ["alpha", "beta", "gamma"])
+
+struct Holder:
+    var rows: [[String]]
+var holder = Holder([["left", "right"], ["up", "down"]])
+let original = holder
+holder.rows[0].swapAt(0, 1)
+assert(holder.rows[0] == ["right", "left"])
+assert(original.rows[0] == ["left", "right"])
+
+var calls = 0
+func row() -> Int64:
+    calls += 1
+    return 1
+func firstIndex() -> Int64:
+    calls += 10
+    return 0
+func secondIndex() -> Int64:
+    calls += 100
+    return 1
+holder.rows[row()].swapAt(firstIndex(), secondIndex())
+assert(calls == 111)
+assert(holder.rows[1] == ["down", "up"])
+
+func invalidSwap(index: Int64) -> Bool:
+    values.swapAt(0, index)
+    return true
+assert(attempt(invalidSwap(-1)) == nil)
+assert(attempt(invalidSwap(3)) == nil)
+assert(values == snapshot)
+
+var empty: [Int64] = []
+func invalidEmpty() -> Bool:
+    empty.swapAt(0, 0)
+    return true
+assert(attempt(invalidEmpty()) == nil)
+var single = [7]
+single.swapAt(0, 0)
+assert(single == [7])

@@ -1,0 +1,13 @@
+foreach(required COMPILER WORK)
+  if(NOT DEFINED ${required})
+    message(FATAL_ERROR "Missing ${required}")
+  endif()
+endforeach()
+file(MAKE_DIRECTORY "${WORK}")
+set(source "${WORK}/duplicate.phys")
+file(WRITE "${source}" "switch \"ä\":\n    case \"ä\", \"\\u{e4}\":\n        print(1)\n    default:\n        print(0)\n")
+execute_process(COMMAND "${COMPILER}" --check "${source}"
+  RESULT_VARIABLE result ERROR_VARIABLE diagnostic TIMEOUT 15)
+if(NOT result EQUAL 1 OR NOT diagnostic MATCHES "Duplicate switch case")
+  message(FATAL_ERROR "Unicode escape was not detected as the same switch case: ${result}\n${diagnostic}")
+endif()

@@ -1,0 +1,217 @@
+var sources = 0
+var guards = 0
+
+func make() -> [Int64]?:
+    sources += 1
+    return Optional.some([1, 2])
+
+func large(items: [Int64]) -> Bool:
+    guards += 1
+    return items.count > 2
+
+func describe(value: [Int64]?) -> Int64:
+    switch value:
+        case nil:
+            return -1
+        case Optional.some(items) if large(items):
+            return 3
+        case Optional.some(items):
+            var copy = items
+            copy.append(4)
+            assert(items == [1, 2] && copy == [1, 2, 4])
+            return items.count
+
+func present(value: Int64?) -> Bool:
+    switch value:
+        case Optional.some:
+            return true
+        case nil:
+            return false
+
+func matched(value: Int64?) -> Bool:
+    switch value:
+        case nil, Optional.some:
+            return true
+
+func unwrapOr<T>(value: T?, fallback: T) -> T:
+    switch value:
+        case Optional.some(item):
+            return item
+        case nil:
+            return fallback
+
+let original = make()
+assert(describe(original) == 2 && sources == 1 && guards == 1)
+assert(original.unwrap() == [1, 2])
+assert(describe(nil) == -1 && guards == 1)
+assert(present(Optional.some(7)) && !present(nil))
+assert(matched(Optional.some(7)) && matched(nil))
+assert(unwrapOr(Optional.some([3]), [9]) == [3])
+let missing: [Int64]? = nil
+assert(unwrapOr(missing, [9]) == [9])
+
+let nested: Int64?? = Optional.some(nil)
+switch nested:
+    case nil:
+        assert(false)
+    case Optional.some(inner):
+        assert(inner == nil)
+
+func classifyNumber(value: Int64?) -> Int64:
+    switch value:
+        case nil:
+            return 0
+        case Optional.some(5):
+            return 1
+        case Optional.some(-5):
+            return -1
+        case Optional.some(1...4):
+            return 4
+        case Optional.some(6..<9):
+            return 8
+        case Optional.some(number):
+            return number
+
+func classifyText(value: String?) -> Int64:
+    switch value:
+        case nil:
+            return 0
+        case Optional.some("ready"):
+            return 1
+        case Optional.some(text):
+            return text.count
+
+assert(classifyNumber(nil) == 0)
+assert(classifyNumber(Optional.some(5)) == 1)
+assert(classifyNumber(Optional.some(-5)) == -1)
+assert(classifyNumber(Optional.some(2)) == 4)
+assert(classifyNumber(Optional.some(8)) == 8)
+assert(classifyNumber(Optional.some(9)) == 9)
+assert(classifyText(nil) == 0)
+assert(classifyText(Optional.some("ready")) == 1)
+assert(classifyText(Optional.some("other")) == 5)
+
+func classifyDecimal(value: Float64?) -> Int64:
+    switch value:
+        case nil:
+            return 0
+        case Optional.some(1.5):
+            return 1
+        case Optional.some(2.5):
+            return 3
+        case Optional.some(_):
+            return 2
+
+assert(classifyDecimal(nil) == 0)
+assert(classifyDecimal(Optional.some(1.5)) == 1)
+assert(classifyDecimal(Optional.some(2.5)) == 3)
+assert(classifyDecimal(Optional.some(3.5)) == 2)
+
+func classifyDecimalRange(value: Float64?) -> Int64:
+    switch value:
+        case nil:
+            return 0
+        case Optional.some(-2.0..<0.0):
+            return -1
+        case Optional.some(0.0...1.0):
+            return 1
+        case Optional.some(2.0..<3.0):
+            return 2
+        case Optional.some(_):
+            return 3
+
+assert(classifyDecimalRange(nil) == 0)
+assert(classifyDecimalRange(Optional.some(-1.0)) == -1)
+assert(classifyDecimalRange(Optional.some(-0.0)) == 1)
+assert(classifyDecimalRange(Optional.some(1.0)) == 1)
+assert(classifyDecimalRange(Optional.some(2.5)) == 2)
+assert(classifyDecimalRange(Optional.some(3.0)) == 3)
+
+func classifyNested(value: Int64??) -> Int64:
+    switch value:
+        case nil:
+            return 0
+        case Optional.some(nil):
+            return 1
+        case Optional.some(inner):
+            return inner.unwrap()
+
+assert(classifyNested(nil) == 0)
+assert(classifyNested(Optional.some(nil)) == 1)
+assert(classifyNested(Optional.some(Optional.some(7))) == 7)
+
+func classifyOverlap(value: Int64?) -> Int64:
+    switch value:
+        case nil:
+            return 0
+        case Optional.some(1...5):
+            return 1
+        case Optional.some(4...8):
+            return 2
+        case Optional.some(number):
+            return number
+
+assert(classifyOverlap(Optional.some(4)) == 1)
+assert(classifyOverlap(Optional.some(7)) == 2)
+assert(classifyOverlap(Optional.some(9)) == 9)
+
+func classifyDepth(value: Int64???) -> Int64:
+    switch value:
+        case nil:
+            return 0
+        case Optional.some(nil):
+            return 1
+        case Optional.some(Optional.some(nil)):
+            return 2
+        case Optional.some(Optional.some(Optional.some(1...4))):
+            return 40
+        case Optional.some(Optional.some(Optional.some(5))):
+            return 50
+        case Optional.some(Optional.some(inner)):
+            return inner.unwrap()
+
+assert(classifyDepth(nil) == 0)
+assert(classifyDepth(Optional.some(nil)) == 1)
+assert(classifyDepth(Optional.some(Optional.some(nil))) == 2)
+assert(classifyDepth(Optional.some(Optional.some(Optional.some(3)))) == 40)
+assert(classifyDepth(Optional.some(Optional.some(Optional.some(5)))) == 50)
+assert(classifyDepth(Optional.some(Optional.some(Optional.some(7)))) == 7)
+
+func classifyNestedBool(value: Bool??) -> Int64:
+    switch value:
+        case nil:
+            return 0
+        case Optional.some(nil):
+            return 1
+        case Optional.some(Optional.some(true)):
+            return 2
+        case Optional.some(Optional.some(false)):
+            return 3
+
+assert(classifyNestedBool(nil) == 0)
+assert(classifyNestedBool(Optional.some(nil)) == 1)
+assert(classifyNestedBool(Optional.some(Optional.some(true))) == 2)
+assert(classifyNestedBool(Optional.some(Optional.some(false))) == 3)
+
+func nestedText(value: String??) -> Int64:
+    switch value:
+        case Optional.some(Optional.some(text)) if text.count > 5:
+            return -1
+        case Optional.some(Optional.some(text)):
+            return text.count
+        default:
+            return 0
+
+let nestedMessage: String?? = Optional.some(Optional.some("hello"))
+assert(nestedText(nestedMessage) == 5)
+assert(nestedMessage.unwrap().unwrap() == "hello")
+
+func nestedPresent(value: Int64??) -> Bool:
+    switch value:
+        case Optional.some(Optional.some):
+            return true
+        default:
+            return false
+
+assert(nestedPresent(Optional.some(Optional.some(3))))
+assert(!nestedPresent(Optional.some(nil)))

@@ -1,0 +1,116 @@
+struct Samples:
+    var values: [Float64]
+    static func filled(value: Float64, count: Int64) -> Samples:
+        return Samples(Samples.repeated(value, count))
+    static func repeated(value: Float64, count: Int64) -> [Float64]:
+        if count == 0:
+            return []
+        return Samples.repeated(value, count - 1) + [value]
+    func count() -> Int64:
+        return self.values.count
+    func sum() -> Float64:
+        var total = 0.0
+        for value in self.values:
+            total += value
+        return total
+    func scaled(factor: Float64) -> Samples:
+        var result = self
+        for index in 0..<result.count():
+            result.values[index] *= factor
+        return result
+    func append(value: Float64) -> Samples:
+        var result = self
+        result.values.append(value)
+        return result
+    func prefix(count: Int64) -> [Float64]:
+        return self.values[0..<count]
+    func recursive(depth: Int64) -> Float64:
+        if depth == 0:
+            return self.sum()
+        return self.recursive(depth - 1)
+let original = Samples([1.0, 2.0, 3.0])
+assert(Samples.filled(count: 3, value: 2).sum() == 6)
+for iteration in 0..<1000:
+    let filled = Samples.filled(2, 4)
+    assert(filled.sum() == 8)
+let changed = original.scaled(factor: 2).append(8)
+assert(original.sum() == 6.0 && changed.sum() == 20.0)
+assert(changed.count() == 4 && changed.prefix(2)[1] == 4.0)
+assert(original.recursive(20) == 6.0)
+struct Empty:
+    func answer() -> Int64:
+        return 42
+assert(Empty().answer() == 42)
+struct Alternative:
+    let value: Int64
+    func count() -> Int64:
+        return self.value
+assert(Alternative(9).count() == 9)
+var order = 0
+func receiver() -> Samples:
+    order = order * 10 + 1
+    return original
+func argument() -> Float64:
+    order = order * 10 + 2
+    return 2
+assert(receiver().scaled(argument()).sum() == 12.0 && order == 12)
+for iteration in 0..<1000:
+    let temporary = original.scaled(2).scaled(0.5)
+    assert(temporary.sum() == 6.0)
+struct Counter:
+    var value: Int64
+    mutating func add(amount: Int64) -> Int64:
+        self.value += amount
+        return self.value
+    mutating func repeat(depth: Int64):
+        if depth == 0:
+            return
+        self.add(1)
+        self.repeat(depth - 1)
+var counter = Counter(1)
+let originalCounter = counter
+assert(counter.add(2) == 3 && counter.value == 3 && originalCounter.value == 1)
+counter.repeat(10)
+assert(counter.value == 13)
+struct Bucket:
+    var values: [Int64]
+    mutating func append(value: Int64):
+        self.values.append(value)
+    mutating func replace(values: [Int64]) -> Bucket:
+        let previous = self
+        self = Bucket(values)
+        return previous
+    mutating func take() -> [Int64]:
+        let previous = self.values
+        self.values = []
+        return previous
+var bucket = Bucket([1])
+let bucketCopy = bucket
+bucket.append(2)
+let replaced = bucket.replace([3, 4])
+assert(replaced.values[1] == 2 && bucketCopy.values.count == 1)
+let taken = bucket.take()
+assert(taken[0] == 3 && taken[1] == 4 && bucket.values.count == 0)
+struct Group:
+    var bucket: Bucket
+var group = Group(Bucket([5]))
+group.bucket.append(6)
+assert(group.bucket.values[1] == 6)
+var groups = [group]
+let beforeGroups = groups
+var indices = 0
+func selected() -> Int64:
+    indices += 1
+    return 0
+func replacement() -> Int64:
+    groups = [Group(Bucket([99]))]
+    return 7
+groups[selected()].bucket.append(replacement())
+assert(indices == 1 && groups[0].bucket.values[0] == 5)
+assert(groups[0].bucket.values[2] == 7 && beforeGroups[0].bucket.values.count == 2)
+for iteration in 0..<1000:
+    var local = Bucket([1, 2])
+    local.append(3)
+    let old = local.replace(local.values)
+    let values = local.take()
+    assert(old.values.count == 3 && values[2] == 3 && local.values.count == 0)

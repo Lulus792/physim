@@ -1,0 +1,4 @@
+func invalid():
+    var value: Int64
+    value += 1
+invalid()

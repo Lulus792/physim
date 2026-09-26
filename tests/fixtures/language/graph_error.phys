@@ -1,0 +1,47 @@
+let zero = Vec3(0,0,0)
+let body = Body.sphere(1,0.5)
+let solver = ContactSolver.defaults()
+let plane = Contacts.spherePlane(body,0.5,zero,Vec3(0,1,0))
+let joint = DistanceJoint(zero,Vec3(1,0,0),1,0.2)
+func create():
+    return
+func reset():
+    return
+func step(dt: Float64):
+    if dt == 1:
+        let bad = joint.constraint(-1,0)
+    else if dt == 2:
+        let bad = plane.constraint(0,0,0)
+    else if dt == 3:
+        let bad = joint.constraint(0,128)
+    else if dt == 4:
+        let bad = solver.solve([body],[],[joint.constraint(0,1)],0.01)
+    else if dt == 5:
+        let bad = solver.solve([body],[],[],0)
+    else if dt == 6:
+        let bad = solver.solve([body],[],[DistanceJoint(zero,zero,1,0.2).constraint(0,-1)],0.01)
+    else if dt == 7:
+        var bodies: [Body] = []
+        for i in 0..<129:
+            bodies.append(body)
+        let bad = solver.solve(bodies,[],[],0.01)
+    else if dt == 8:
+        var contacts: [ContactConstraint] = []
+        for i in 0..<513:
+            contacts.append(plane.constraint(0,0,-1))
+        let bad = solver.solve([body],contacts,[],0.01)
+    else if dt == 9:
+        var joints: [JointConstraint] = []
+        for i in 0..<257:
+            joints.append(joint.constraint(0,-1))
+        let bad = solver.solve([body],[],joints,0.01)
+    else if dt == 10:
+        let bad = solver.solve([body],[],[],0.01).body(-1)
+    else if dt == 11:
+        let bad = solver.solve([body],[],[],0.01).body(1)
+    else if dt == 12:
+        let bad = solver.solve([body],[],[],0.01).contactImpulse(0)
+    else:
+        let bad = solver.solve([body],[],[],0.01).jointImpulse(0)
+func scene():
+    return

@@ -1,0 +1,77 @@
+let zero = Vec3(0,0,0)
+let identity = Quat(0,0,0,1)
+var a = Body.sphere(1,1)
+var b = a
+b.setState(Vec3(10,0,0),zero,identity,zero)
+let hit: Sweep = Sweep.spheres(a,1,Vec3(20,0,0),b,1,zero)
+assert(hit.hit && abs(hit.fraction() - 0.4) < 1e-14)
+let contacts = hit.contacts()
+assert(contacts.count == 1 && contacts.normal(0).x == 1 && abs(contacts.point(0).x - 9) < 1e-12)
+let reverse = Sweep.spheres(bodyB: a, radiusB: 1, displacementB: Vec3(20,0,0),
+                           bodyA: b, radiusA: 1, displacementA: zero)
+assert(reverse.hit && reverse.fraction() == hit.fraction() && reverse.contacts().normal(0).x == -1)
+assert(a.position.x == 0 && b.position.x == 10)
+let moving = Sweep.spheres(a,1,Vec3(15,0,0),b,1,Vec3(5,0,0))
+assert(moving.hit && abs(moving.fraction() - 0.8) < 1e-14)
+let miss = Sweep.spheres(a,1,zero,b,1,zero)
+assert(!miss.hit && miss.contacts().count == 0)
+assert(Sweep.spheres(a,1,Vec3(8,0,0),b,1,zero).fraction() == 1)
+b.setState(Vec3(10,2,0),zero,identity,zero)
+assert(abs(Sweep.spheres(a,1,Vec3(20,0,0),b,1,zero).fraction() - 0.5) < 1e-14)
+b.setState(Vec3(10,2.001,0),zero,identity,zero)
+assert(!Sweep.spheres(a,1,Vec3(20,0,0),b,1,zero).hit)
+b.setState(Vec3(1,0,0),zero,identity,zero)
+let overlap = Sweep.spheres(a,1,Vec3(-10,0,0),b,1,zero)
+assert(overlap.hit && overlap.fraction() == 0 && overlap.contacts().penetration(0) == 1)
+b.setState(Vec3(1e12,0,0),zero,identity,zero)
+assert(abs(Sweep.spheres(a,1,Vec3(2e12,0,0),b,1,zero).fraction() - (1e12 - 2) / 2e12) < 1e-16)
+
+// Move to the event, use its contact, then integrate the remaining time.
+a.setState(Vec3(0,10,0),Vec3(0,-20,0),identity,zero)
+let plane = Sweep.spherePlane(a,1,a.velocity,zero,Vec3(0,1,0))
+assert(plane.hit && plane.fraction() == 0.45 && plane.contacts().normal(0).y == -1)
+a.step(zero,zero,plane.fraction())
+let result = plane.contacts().resolve(a,Body.sphere(0,1),ContactSolver(64,1,0,0,0,1))
+a = result.bodyA
+a.step(zero,zero,1 - plane.fraction())
+assert(abs(a.position.y - 12) < 1e-12 && abs(a.kineticEnergy() - 200) < 1e-12)
+let separating = Sweep.spherePlane(a,1,Vec3(0,1,0),zero,Vec3(0,1,0))
+assert(!separating.hit)
+var copies = [plane]
+let saved = copies
+copies[0] = miss
+assert(saved[0].hit && !copies[0].hit)
+
+a.setState(zero,zero,identity,zero)
+b.setState(Vec3(10,0,0),zero,identity,zero)
+let current: Aabb = Aabb.sphere(a,1)
+let target = Aabb.sphere(b,1)
+assert(current.minimum.x < -1 && current.maximum.x > 1)
+assert(Aabb.pairs([current,target]).count == 0)
+let swept = Aabb.sweptSphere(a,1,Vec3(20,0,0))
+assert(swept.minimum.x < -1 && swept.maximum.x > 21)
+let pairs: [CollisionPair] = Aabb.pairs(bounds: [swept,target])
+assert(pairs.count == 1 && pairs[0].bodyA == 0 && pairs[0].bodyB == 1)
+assert(Aabb.pairs([]).count == 0)
+var box = Body.box(1,Vec3(2,4,6))
+box.setState(zero,zero,Quat.axisAngle(Vec3(0,0,1),1.5707963267948966),zero)
+let bounds = Aabb.box(box,Vec3(2,4,6))
+assert(bounds.minimum.x <= -2 && bounds.maximum.x >= 2 && bounds.minimum.y <= -1 && bounds.maximum.z >= 3)
+struct Query:
+    let bounds: Aabb
+    let sweep: Sweep
+    let pair: CollisionPair
+let query = Query(swept,hit,pairs[0])
+assert(query.sweep.hit && query.pair.bodyB == 1)
+
+// Complete worst-case output remains an ordinary independent array value.
+var many: [Aabb] = []
+for i in 0..<1024:
+    many.append(current)
+var all = Aabb.pairs(many)
+let preserved = all
+assert(all.count == 523776 && all[0].bodyA == 0 && all[0].bodyB == 1)
+assert(all[all.count - 1].bodyA == 1022 && all[all.count - 1].bodyB == 1023)
+all[0] = all[all.count - 1]
+assert(preserved[0].bodyA == 0 && all[0].bodyA == 1022)
+print("sweep and broad phase checks passed")

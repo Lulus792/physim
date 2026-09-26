@@ -1,0 +1,25 @@
+var evaluations = 0
+
+func counted(value: Int64) -> Int64:
+    evaluations += 1
+    return value
+
+let plain = "plain"
+assert(plain == "plain")
+assert("count \(counted(7))" == "count 7")
+assert(evaluations == 1)
+assert("flags \(true) \(false)" == "flags true false")
+assert("number \(1.5)" == "number 1.5")
+assert("\(1)\(2)" == "12")
+assert("nested \("value \(counted(3))")" == "nested value 3")
+assert(evaluations == 2)
+assert("escaped \\(" == "escaped \\" + "(")
+assert("unicode \u{00E9} \("ok")" == "unicode é ok")
+
+let multiline = """first
+\(counted(4))
+last"""
+assert(multiline == "first\n4\nlast")
+assert(evaluations == 3)
+
+print("string interpolation checks passed")

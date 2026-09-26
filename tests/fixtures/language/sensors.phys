@@ -1,0 +1,77 @@
+let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
+let centimetres = Unit(1, 0, 0, 0, 0, 0, 0, 0.01, "cm")
+let config: SensorConfig = SensorConfig(metres, 10, 0, 0, 0, 0, Distribution.constant(0), 0, 0, 0)
+assert(Distribution.constant(3).mean() == 3)
+assert(Distribution.constant(3).standardDeviation() == 0)
+assert(Distribution.normal(2, 3).standardDeviation() == 3)
+assert(Distribution.uniform(-1, 1).mean() == 0)
+assert(abs(Distribution.uniform(-1, 1).standardDeviation() - 1 / sqrt(3)) < 1e-15)
+var sensor = Sensor(config, -1)
+let first: Measurement = sensor.read(truth: Quantity(250, centimetres), time: 0)
+assert(first.isValid() && first.isDue() && !first.isDropped())
+assert(first.value.value == 2.5 && first.value.unit.isCompatible(metres))
+assert(first.index == 0 && first.skipped == 0 && first.time == 0)
+assert(first.standardUncertainty == 0 && first.state == 1)
+assert(sensor.nextTime() == 0.1)
+let early = sensor.read(0.05, Quantity(3, metres))
+assert(!early.isDue() && !early.isValid() && !early.isDropped())
+assert(early.value.value == 0 && early.standardUncertainty == 0 && early.state == 0)
+assert(sensor.nextTime() == 0.1)
+var copy = sensor
+let late = sensor.read(0.35, Quantity(3, metres))
+assert(late.isValid() && late.index == 3 && late.skipped == 2 && late.time == 0.35)
+assert(copy.nextTime() == 0.1 && sensor.nextTime() == 0.4)
+sensor.reset(-1)
+assert(sensor.nextTime() == 0)
+assert(sensor.read(0, Quantity(2, metres)).value.value == 2)
+
+let noisy = SensorConfig(metres, 10, 0, 0.005, 0.01, 0.002,
+                        Distribution.normal(0, 0.02), 0.2, 0.003, 0.001)
+var a = Sensor(noisy, -9223372036854775808)
+var b = a
+var different = Sensor(noisy, 1)
+var valid = 0
+var dropped = 0
+var differences = 0
+for i in 0..<100:
+    let time = Float64(i) / 10
+    let truth = Quantity(2, metres)
+    let x = a.read(time, truth)
+    let y = b.read(time, truth)
+    let z = different.read(time, truth)
+    assert(x.state == y.state && x.value.value == y.value.value)
+    assert(x.index == i && x.skipped == 0)
+    if x.isValid():
+        valid += 1
+        assert(abs(x.standardUncertainty - sqrt(0.003 * 0.003 + 0.002 * 0.002 + 0.02 * 0.02 + 0.005 * 0.005 / 12)) < 1e-15)
+    else:
+        dropped += 1
+        assert(x.isDropped() && x.isDue() && x.value.value == 0 && x.standardUncertainty == 0)
+    if x.state != z.state || x.value.value != z.value.value:
+        differences += 1
+assert(valid > 50 && dropped > 0 && differences > 50)
+
+struct Group:
+    var sensors: [Sensor]
+    mutating func measure(time: Float64) -> Measurement:
+        return self.sensors[0].read(time, Quantity(4, metres))
+var groups = [Group([Sensor(config, 42)])]
+var original = groups
+assert(groups[0].measure(0).value.value == 4)
+assert(original[0].sensors[0].nextTime() == 0)
+assert(groups[0].sensors[0].nextTime() == 0.1)
+var calls = 0
+func index() -> Int64:
+    calls += 1
+    return 0
+func truth() -> Quantity:
+    calls += 10
+    groups[0].sensors[0].reset(1)
+    return Quantity(5, metres)
+let sample = groups[index()].sensors[index()].read(truth: truth(), time: 0.2)
+assert(calls == 12 && sample.value.value == 5 && sample.index == 2 && sample.skipped == 1)
+assert(groups[0].sensors[0].nextTime() > 0.2)
+let configs = [config, noisy]
+let distributions = [Distribution.uniform(1, 2), Distribution.normal(0, 1)]
+let measurements = [first, late, sample]
+assert(configs.count == 2 && distributions[0].mean() == 1.5 && measurements[2].value.value == 5)

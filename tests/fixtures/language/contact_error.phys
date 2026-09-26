@@ -1,0 +1,36 @@
+let zero = Vec3(0,0,0)
+let a = Body.sphere(1,0.5)
+let b = Body.box(0,Vec3(1,1,1))
+func create():
+    return
+func reset():
+    return
+func step(dt: Float64):
+    if dt == 1:
+        let invalid = ContactSolver(0,0,0,0,0,0)
+    else if dt == 2:
+        let invalid = ContactSolver(64,2,0,0,0,0)
+    else if dt == 3:
+        let invalid = Contacts.spherePlane(a,0.5,zero,Vec3(0,2,0))
+    else if dt == 4:
+        let empty = Contacts.spherePlane(a,0.5,Vec3(0,-2,0),Vec3(0,1,0))
+        let invalid = empty.point(0)
+    else if dt == 5:
+        let contacts = Contacts.spherePlane(a,0.5,zero,Vec3(0,1,0))
+        let invalid = contacts.normal(-1)
+    else if dt == 6:
+        let contacts = Contacts.spherePlane(a,0.5,zero,Vec3(0,1,0))
+        let result = contacts.resolve(a,b,ContactSolver.defaults())
+        let invalid = result.impulse(result.count)
+    else if dt == 7:
+        let invalid = Contacts.boxes(a,Vec3(0,1,1),b,Vec3(1,1,1))
+    else if dt == 8:
+        let invalid = Contacts.spheres(a,-1,a,1)
+    else if dt == 9:
+        let empty = Contacts.spherePlane(a,0.5,Vec3(0,-2,0),Vec3(0,1,0))
+        let invalid = empty.resolveSingle(a,b,1,0)
+    else:
+        let contact = Contacts.spherePlane(a,0.5,zero,Vec3(0,1,0))
+        let invalid = contact.resolveSingle(a,b,2,0)
+func scene():
+    return

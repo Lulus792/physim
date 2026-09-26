@@ -1,0 +1,44 @@
+enum Reading:
+    case missing
+    case sample(text: String)
+
+    func description() -> String:
+        switch self:
+            case Reading.missing:
+                return "missing"
+            case Reading.sample(text):
+                return text
+
+    mutating func clear():
+        self = Reading.missing
+
+    static func from(text: String) -> Reading:
+        return Reading.sample(text: text)
+
+    func echo<T: Scalar>(value: T) -> T:
+        return value
+
+    func copy() -> Reading:
+        return self
+
+var reading = Reading.from(text: "measured")
+assert(reading.description() == "measured")
+var readings = [reading]
+let saved = reading.copy()
+assert(readings[0].description() == "measured")
+assert(saved.description() == "measured")
+assert(reading.echo(value: 17) == 17)
+assert(reading.echo(value: "echo") == "echo")
+reading.clear()
+assert(reading == Reading.missing)
+assert(readings[0].description() == "measured")
+
+enum State:
+    case idle = 1
+    case running
+    static func active() -> State:
+        return State.running
+    func code() -> Int64:
+        return self.rawValue
+
+assert(State.active().code() == 2)

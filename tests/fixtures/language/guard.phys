@@ -1,0 +1,45 @@
+var evaluations = 0
+
+func next() -> Int64?:
+    evaluations += 1
+    return Optional.some(5)
+
+func readNumber() -> Int64:
+    guard let value = next() else:
+        return -1
+    return value + 2
+
+func adjust(source: Int64?) -> Int64:
+    guard var value: Int64 = source else:
+        return -1
+    value += 3
+    return value
+
+func shadow(value: Int64?) -> Int64:
+    guard let value = value else:
+        return -1
+    return value
+
+func first(source: [String]?) -> String:
+    guard let values = source else:
+        return "missing"
+    return values[0]
+
+func select(flag: Bool, code: Int64) -> Int64:
+    guard flag else:
+        if code == 0:
+            return -1
+        else:
+            return -2
+    return code
+
+assert(readNumber() == 7 && evaluations == 1)
+assert(adjust(nil) == -1)
+assert(adjust(Optional.some(4)) == 7)
+assert(shadow(Optional.some(6)) == 6 && shadow(nil) == -1)
+assert(first(nil) == "missing")
+assert(first(Optional.some(["kept", "other"])) == "kept")
+assert(select(true, 3) == 3)
+assert(select(false, 0) == -1 && select(false, 2) == -2)
+
+print("guard checks passed")

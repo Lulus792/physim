@@ -1,0 +1,93 @@
+name: C17 build and validation
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  windows:
+    runs-on: windows-2022
+    strategy:
+      fail-fast: false
+      matrix:
+        toolset: [v143, ClangCL]
+        configuration: [Debug, Release]
+    steps:
+      - uses: actions/checkout@v4
+      - name: UI dependency
+        shell: pwsh
+        run: ./tools/bootstrap-windows.ps1
+      - name: Configure
+        run: cmake -S . -B build -A x64 -T ${{ matrix.toolset }} -DPHYSIM_BUILD_BENCHMARKS=ON
+      - name: Build
+        run: cmake --build build --config ${{ matrix.configuration }} --parallel
+      - name: Test
+        run: ctest --test-dir build -C ${{ matrix.configuration }} --output-on-failure
+      - name: Relocated SDK and all templates
+        run: cmake -DBUILD_DIR=build -DCONFIG=${{ matrix.configuration }} -P tools/verify-sdk.cmake
+      - name: Archive SDK verification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sdk-windows-${{ matrix.toolset }}-${{ matrix.configuration }}
+          path: |
+            build/SDK Test*/verification.log
+            build/SDK Test*/PASSED.txt
+          if-no-files-found: ignore
+      - name: Record verified Release workloads
+        if: matrix.toolset == 'v143' && matrix.configuration == 'Release'
+        run: python tools/benchmark.py build/bin/physim-benchmark.exe --output build/benchmark-results --samples 100000 --repeats 5
+      - name: Archive performance evidence
+        if: always() && matrix.toolset == 'v143' && matrix.configuration == 'Release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-release-benchmark
+          path: build/benchmark-results
+          if-no-files-found: ignore
+      # GPU tests run locally on Windows with PHYSIM_GRAPHICS_TESTS=ON.
+      # The hosted Windows worker has no guaranteed OpenGL 3.3 driver.
+  linux:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [gcc, clang]
+    env:
+      CC: ${{ matrix.compiler }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Platform dependencies
+        run: sudo apt-get update && sudo apt-get install -y ninja-build libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxi-dev libxfixes-dev libxss-dev libxtst-dev libwayland-dev libxkbcommon-dev libegl1-mesa-dev libgl1-mesa-dev xvfb openbox
+      - name: SDL3 pinned source
+        run: |
+          git clone --depth 1 --branch release-3.2.30 https://github.com/libsdl-org/SDL.git build-sdl-source
+          cmake -S build-sdl-source -B build-sdl -G Ninja -DCMAKE_BUILD_TYPE=Release -DSDL_TESTS=OFF -DCMAKE_INSTALL_PREFIX="$PWD/build-sdl-install"
+          cmake --build build-sdl --parallel
+          cmake --install build-sdl
+      - name: Configure
+        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DPHYSIM_SANITIZERS=ON -DPHYSIM_GRAPHICS_TESTS=ON -DPHYSIM_BUILD_BENCHMARKS=ON -DCMAKE_PREFIX_PATH="$PWD/build-sdl-install"
+      - name: Build
+        run: cmake --build build --parallel
+      - name: Test
+        run: ctest --test-dir build --output-on-failure -LE display
+      - name: Relocated SDK and all templates
+        run: cmake -DBUILD_DIR=build -DCONFIG=Debug -P tools/verify-sdk.cmake
+      - name: Archive SDK verification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sdk-linux-${{ matrix.compiler }}
+          path: |
+            build/SDK Test*/verification.log
+            build/SDK Test*/PASSED.txt
+          if-no-files-found: ignore
+      - name: GPU and window tests
+        env:
+          ASAN_OPTIONS: detect_leaks=0
+          LIBGL_ALWAYS_SOFTWARE: "1"
+        # A window manager is needed for the real maximize/restore workflow.
+        run: xvfb-run -a -s '-screen 0 1920x1080x24' sh -c 'openbox > /tmp/physim-openbox.log 2>&1 & ctest --test-dir build --output-on-failure -L display'
+      - name: App workflow with paths containing spaces and Unicode
+        env:
+          ASAN_OPTIONS: detect_leaks=0
+          LIBGL_ALWAYS_SOFTWARE: "1"
+        run: |
+          for example in pendulum projectile collision box_floor spring uncertain_projectile box_collision buoyancy; do
+            xvfb-run -a ./build/bin/physim --self-test "$PWD/build/App Test ä $example" "$example"
+          done

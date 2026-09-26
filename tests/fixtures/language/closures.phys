@@ -1,0 +1,157 @@
+func makeAdder(base: Int64) -> func(Int64) -> Int64:
+    let add = func(value: Int64) -> Int64:
+        return base + value
+    return add
+
+let addThree = makeAdder(3)
+assert(addThree(4) == 7)
+
+func direct(base: Int64) -> func(Int64) -> Int64:
+    return func(value: Int64) -> Int64:
+        return base + value
+
+assert(direct(6)(2) == 8)
+
+let square = func(value: Int64) -> Int64:
+    return value * value
+assert(square(5) == 25)
+
+func makePrefix(prefix: String) -> func(String) -> String:
+    let join = func(value: String) -> String:
+        return prefix + value
+    return join
+
+let join = makePrefix("owned ")
+assert(join("text") == "owned text")
+let joins = [join]
+assert(joins[0]("copy") == "owned copy")
+
+func makeSnapshot() -> func(Int64) -> Int64:
+    var offset = 4
+    let captured = func(value: Int64) -> Int64:
+        return value + offset
+    offset = 9
+    return captured
+
+let snapshot = makeSnapshot()
+assert(snapshot(1) == 5)
+
+func makeNested(base: Int64) -> func(Int64) -> func(Int64) -> Int64:
+    let outer = func(first: Int64) -> func(Int64) -> Int64:
+        let inner = func(second: Int64) -> Int64:
+            return base + first + second
+        return inner
+    return outer
+
+let nested = makeNested(2)(3)
+assert(nested(4) == 9)
+
+let optional: (func(String) -> String)? = Optional.some(join)
+assert(optional.unwrap()("optional") == "owned optional")
+
+struct Owner:
+    let base: Int64
+    func make() -> func(Int64) -> Int64:
+        let closure = func(value: Int64) -> Int64:
+            return self.base + value
+        return closure
+
+let ownerFunction = Owner(7).make()
+assert(ownerFunction(2) == 9)
+
+func makeNestedText(base: String) -> func(String) -> func(String) -> String:
+    let outer = func(first: String) -> func(String) -> String:
+        let inner = func(second: String) -> String:
+            return base + first + second
+        return inner
+    return outer
+
+let nestedText = makeNestedText("a")("b")
+assert(nestedText("c") == "abc")
+
+func preserve<T>(value: T) -> func() -> T:
+    let closure = func() -> T:
+        return value
+    return closure
+
+let preserved = preserve("generic")
+assert(preserved() == "generic")
+
+func makeNamed(prefix: String) -> func(String) -> String:
+    func add(value: String) -> String:
+        return prefix + value
+    assert(add(value: "probe") == prefix + "probe")
+    return add
+
+let named = makeNamed("local ")
+assert(named("function") == "local function")
+
+func makeFactorial() -> func(Int64) -> Int64:
+    func factorial(value: Int64) -> Int64:
+        if value <= 1:
+            return 1
+        return value * factorial(value: value - 1)
+    return factorial
+
+let factorial = makeFactorial()
+assert(factorial(6) == 720)
+
+func makeNestedNamed(prefix: String) -> func(String) -> String:
+    func add(value: String) -> String:
+        return prefix + value
+    let wrapper = func(value: String) -> String:
+        return add(value)
+    return wrapper
+
+let nestedNamed = makeNestedNamed("nested ")
+assert(nestedNamed("function") == "nested function")
+
+func chain(base: Int64) -> func(Int64) -> Int64:
+    func first(value: Int64) -> Int64:
+        return base + value
+    func second(value: Int64) -> Int64:
+        return first(value: value) * 2
+    return second
+
+assert(chain(3)(4) == 14)
+
+func mixed(base: Int64) -> func(Int64) -> Int64:
+    let outer = func(offset: Int64) -> func(Int64) -> Int64:
+        func inner(value: Int64) -> Int64:
+            return base + offset + value
+        return inner
+    return outer(3)
+
+assert(mixed(2)(4) == 9)
+
+func makeGenericLocal(prefix: String) -> func(String) -> String:
+    func format<T>(value: T) -> String:
+        return prefix + String(value)
+    assert(format(value: 4) == prefix + "4")
+    let text: func(String) -> String = format<String>
+    return text
+
+let genericLocal = makeGenericLocal("generic ")
+assert(genericLocal("function") == "generic function")
+
+func localGenericFactorial() -> Int64:
+    let unit = 1
+    func factorial<T: Numeric>(value: T) -> T:
+        if value <= 1:
+            return unit
+        return value * factorial<T>(value: value - 1)
+    return factorial<Int64>(value: 5)
+
+assert(localGenericFactorial() == 120)
+
+func wrappedGenericLocal(prefix: String) -> func(Int64) -> String:
+    func format<T>(value: T) -> String:
+        return prefix + String(value)
+    let wrapped = func(value: Int64) -> String:
+        return format<Int64>(value: value)
+    return wrapped
+
+assert(wrappedGenericLocal("value ")(7) == "value 7")
+let anotherGenericLocal = makeGenericLocal("another ")
+assert(anotherGenericLocal("instance") == "another instance")
+assert(genericLocal("instance") == "generic instance")

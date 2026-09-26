@@ -1,0 +1,5 @@
+func analyze():
+    report("Invalid series quantile")
+    let one = Unit(0,0,0,0,0,0,0,1,"1")
+    let series = Series.fromValues([1.0,2.0],one,"measurements")
+    let invalid = series.quantile(1.1)

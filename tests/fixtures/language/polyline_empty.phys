@@ -1,0 +1,9 @@
+// No Vec3 annotation or constructor: the SDK signature supplies the element type.
+func create():
+    return
+func reset():
+    return
+func step(dt: Float64):
+    return
+func scene():
+    polyline([], 0, 0, 0)

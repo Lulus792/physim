@@ -1,0 +1,26 @@
+// Combine C and Physim run results with the same channel and unit.
+func analyze():
+    report("Horizontal endpoints across runs")
+    let one = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
+    let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
+    var indices: [Float64] = []
+    var endpoints: [Float64] = []
+    for index in 0..<inputCount():
+        let run = Dataset(index)
+        let position = run.series("position.x")
+        if position.count() > 0:
+            indices.append(Float64(index))
+            endpoints.append(position.value(position.count() - 1))
+        run.close()
+    assert(endpoints.count > 0, message: "No usable position.x endpoints")
+    let x = Series.fromValues(indices, one, "run")
+    let y = x.alignedValues(endpoints, metres, "position.x endpoint")
+    let plot = y.plot(x, "Endpoint comparison", "position.x")
+    plot.export("endpoints")
+    y.export(x, "endpoints")
+    let distribution = y.histogram("Endpoint distribution", 8)
+    distribution.export("distribution")
+    let summary = Table("Batch summary", ["Count", "Mean endpoint"], [one, metres])
+    summary.row("selected runs", [Quantity(Float64(y.count()), one),
+        Quantity(y.mean(), metres)])
+    summary.export("summary")

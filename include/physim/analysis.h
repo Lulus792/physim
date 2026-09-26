@@ -1,0 +1,31 @@
+#ifndef PHYSIM_ANALYSIS_H
+#define PHYSIM_ANALYSIS_H
+#include "data.h"
+typedef struct {
+    uint64_t count;
+    double mean, m2, min, max;
+} ps_statistics;
+void ps_statistics_push(ps_statistics *stats, double value);
+double ps_statistics_stddev(const ps_statistics *stats);
+ps_result ps_derivative(const double *x, const double *y, size_t n, double *out);
+double ps_trapezoid(const double *x, const double *y, size_t n);
+typedef struct {
+    uint32_t struct_size, abi_version;
+    const char *name;
+    ps_result (*run)(const char *input_run, const char *output_prefix);
+    /* Optional tail extension of ABI 2. The runner checks struct_size before
+     * reading it. Receives 0..8 explicit paths, in selection order, no resampling.
+     * Zero inputs are for self-generated analyses; modules may reject them.
+     * Input strings are borrowed for the duration of this synchronous call. */
+    ps_result (*run_many)(const char *const *input_runs, size_t count, const char *output_prefix);
+} ps_analysis_api;
+#define PS_ANALYSIS_API_BASE_SIZE offsetof(ps_analysis_api, run_many)
+#define PS_ANALYSIS_MAX_INPUTS 8u
+typedef const ps_analysis_api *(*ps_analysis_entry)(void);
+/* Streaming statistics, bounded preview SVG and CSV table. Prefix is a filename
+ * prefix. Energy deviation uses energy.balance when present, otherwise energy;
+ * the manifest records energy_metric_channel. Sources are expected to use SI.
+ * Associated measurement .status channels mask statistics (only status=1).
+ * Empty statistics and the standard deviation for n<2 are blank in CSV. */
+ps_result ps_analyze_run(const char *input_run, const char *output_prefix);
+#endif

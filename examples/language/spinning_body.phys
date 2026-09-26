@@ -1,0 +1,66 @@
+// Free rigid box driven by an off-centre force. SI; no contacts or gravity.
+let size = Vec3(0.8, 0.5, 0.3)
+let force = Vec3(0.4, -1, 0.2)
+let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
+let speed = Unit(1, 0, -1, 0, 0, 0, 0, 1, "m/s")
+let angularSpeed = Unit(0, 0, -1, 0, 0, 0, 0, 1, "rad/s")
+let one = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
+let joules = Unit(2, 1, -2, 0, 0, 0, 0, 1, "J")
+let px = Channel("position.x", metres, "Centre x")
+let py = Channel("position.y", metres, "Centre y")
+let pz = Channel("position.z", metres, "Centre z")
+let vx = Channel("velocity.x", speed, "Centre velocity x")
+let vy = Channel("velocity.y", speed, "Centre velocity y")
+let vz = Channel("velocity.z", speed, "Centre velocity z")
+let qx = Channel("orientation.x", one, "Quaternion x")
+let qy = Channel("orientation.y", one, "Quaternion y")
+let qz = Channel("orientation.z", one, "Quaternion z")
+let qw = Channel("orientation.w", one, "Quaternion w")
+let wx = Channel("angularVelocity.x", angularSpeed, "Angular velocity x")
+let wy = Channel("angularVelocity.y", angularSpeed, "Angular velocity y")
+let wz = Channel("angularVelocity.z", angularSpeed, "Angular velocity z")
+let energy = Channel("energy", joules, "Translational plus rotational kinetic energy")
+let pointSpeed = Channel("point.velocity.x", speed, "Velocity at force application point")
+var body = Body.box(2, size)
+
+func applicationPoint() -> Vec3:
+    let frame = Mat4.trs(body.position, body.orientation, Vec3(1, 1, 1))
+    return frame.transformPoint(Vec3(0.3, 0.1, -0.2))
+
+func measure():
+    px.sample(body.position.x)
+    py.sample(body.position.y)
+    pz.sample(body.position.z)
+    vx.sample(body.velocity.x)
+    vy.sample(body.velocity.y)
+    vz.sample(body.velocity.z)
+    qx.sample(body.orientation.x)
+    qy.sample(body.orientation.y)
+    qz.sample(body.orientation.z)
+    qw.sample(body.orientation.w)
+    wx.sample(body.angularVelocity.x)
+    wy.sample(body.angularVelocity.y)
+    wz.sample(body.angularVelocity.z)
+    energy.sample(body.kineticEnergy())
+    pointSpeed.sample(body.pointVelocity(applicationPoint()).x)
+
+func create():
+    metadata("model=driven rigid box\nmass_kg=2\nintegrator=symplectic translation, explicit gyroscopic rotation\nforce_n=0.4,-1,0.2\nforce_point_body_m=0.3,0.1,-0.2\ncontact=none\ngravity=none")
+
+func reset():
+    body = Body.box(2, size)
+    body.setState(Vec3(-1, 1, 0), Vec3(0.5, 0.2, -0.1),
+                  Quat.axisAngle(Vec3(1, 2, 3), 0.2), Vec3(0.2, 0.3, 0.5))
+    body.applyImpulse(Vec3(0.1, 0, 0.2), body.position + Vec3(0, 0.2, 0))
+    measure()
+
+func step(dt: Float64):
+    body.step(force, body.forceTorque(force, applicationPoint()), dt)
+    measure()
+
+func scene():
+    // Translucent box keeps vectors at interior/back-facing points visible.
+    box(body.position, size, body.orientation, 1407107711, 1)
+    let point = applicationPoint()
+    arrow(point, point + force * 0.6, 0.012, 4073026303, 2)
+    arrow(body.position, body.position + body.angularVelocity * 0.5, 0.01, 2443822591, 3)

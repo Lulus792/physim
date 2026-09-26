@@ -1,0 +1,32 @@
+import Shared
+let scalar = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
+let channel = Channel("value", scalar, "Generic value")
+
+func create():
+    assert(Shared.identity<Int64>(1) == 1)
+    assert(Shared.bounded(2) == 2)
+
+func reset():
+    var letters: [String] = []
+    for letter in "aü":
+        letters.append(letter)
+    assert(letters == ["a", "ü"])
+    assert("aü".reversed() == "üa")
+    assert(Shared.identity([1, 2]).count == 2)
+    var holder = Shared.Holder(0)
+    assert(holder.echo<[Int64]>([3, 4])[1] == 4)
+    assert(holder.advance([5, 6])[0] == 5)
+    assert(holder.value == 1)
+    let box = Shared.Box<[Int64]>([7, 8])
+    assert(box.read()[1] == 8)
+    let inferred = Shared.Box([9, 10])
+    assert(inferred.read()[0] == 9)
+    assert(Shared.NumericBox(11).value == 11)
+    channel.sample(1)
+
+func step(dt: Float64):
+    assert(Shared.identity(dt) == dt)
+    channel.sample(dt)
+
+func scene():
+    assert(Shared.identity(true))

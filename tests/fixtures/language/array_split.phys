@@ -1,0 +1,43 @@
+let values = [0, 1, 0, 0, 2, 0]
+assert(values.split(separator: 0) == [[1], [2]])
+assert(values.split(separator: 0, omittingEmptySubsequences: false) ==
+       [[], [1], [], [2], []])
+assert(values.split(separator: 0, maxSplits: 1) == [[1], [0, 2, 0]])
+assert(values.split(separator: 0, maxSplits: 2) == [[1], [2]])
+assert(values.split(separator: 0, maxSplits: 0) == [values])
+assert([0, 1, 0, 2, 0].split(separator: 0, maxSplits: 1) == [[1], [2, 0]])
+let empty: [Int64] = []
+assert(empty.split(separator: 0) == [])
+assert(empty.split(separator: 0, omittingEmptySubsequences: false) == [[]])
+assert(attempt(values.split(separator: 0, maxSplits: -1)) == nil)
+
+let nested = [[1], [], [2], [], [3]]
+assert(nested.split(separator: []) == [[[1]], [[2]], [[3]]])
+struct Mark:
+    let value: Int64
+let marks = [Mark(1), Mark(0), Mark(2)]
+let groups = marks.split(separator: Mark(0))
+assert(groups.count == 2 && groups[0][0].value == 1 && groups[1][0].value == 2)
+
+var words = ["a", "|", "b"]
+let wordGroups = words.split(separator: "|")
+words[0] = "changed"
+assert(wordGroups == [["a"], ["b"]])
+assert([0.0, -0.0, 2.0].split(separator: 0.0) == [[2.0]])
+
+var order = 0
+func source() -> [Int64]:
+    order = order * 10 + 1
+    return [1, 0, 2]
+func divider() -> Int64:
+    order = order * 10 + 2
+    return 0
+func limit() -> Int64:
+    order = order * 10 + 3
+    return 1
+func omit() -> Bool:
+    order = order * 10 + 4
+    return true
+assert(source().split(separator: divider(), maxSplits: limit(),
+                      omittingEmptySubsequences: omit()) == [[1], [2]])
+assert(order == 1234)

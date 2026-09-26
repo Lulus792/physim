@@ -1,0 +1,176 @@
+// C reference: examples/collision/main.c, including its air/custom/friction variants.
+let radius = 0.2
+let mass = 1.0
+let speed = parameter("speed", 0.6, 0.000001, 1000, "Initial speed of each sphere in m/s")
+let mediumMode = parameter("mediumMode", 0, 0, 3, "0 vacuum, 1 air, 2 water, 3 custom")
+let dragMode = parameter("dragMode", 2, 0, 2, "0 none, 1 Stokes, 2 quadratic")
+let friction = parameter("friction", 0, 0, 10, "Coulomb friction coefficient")
+let spin = parameter("spin", 0, -1000, 1000, "Initial angular speed of sphere A in rad/s")
+let ccdMode = parameter("ccdMode", -1, -1, 1, "-1 automatic, 0 discrete, 1 continuous")
+let customDensity = parameter("customDensity", 5, 0, 100000, "Custom medium density in kg/m^3")
+let customViscosity = parameter("customViscosity", 0.005, 0, 100000, "Custom medium viscosity in Pa s")
+let continuous = ccdMode == 1 || (ccdMode == -1 && mediumMode == 0)
+let zero = Vec3(0, 0, 0)
+let identity = Quat(0, 0, 0, 1)
+let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
+let velocityUnit = Unit(1, 0, -1, 0, 0, 0, 0, 1, "m/s")
+let joules = Unit(2, 1, -2, 0, 0, 0, 0, 1, "J")
+let angularVelocity = Unit(0, 0, -1, 0, 0, 0, 0, 1, "rad/s")
+let momentum = Unit(1, 1, -1, 0, 0, 0, 0, 1, "kg m/s")
+let force = Unit(1, 1, -2, 0, 0, 0, 0, 1, "N")
+let ax = Channel("a.position", metres, "Sphere A X")
+let bx = Channel("b.position", metres, "Sphere B X")
+let av = Channel("a.velocity", velocityUnit, "Sphere A X velocity")
+let bv = Channel("b.velocity", velocityUnit, "Sphere B X velocity")
+let energy = Channel("energy", joules, "Total translational and rotational kinetic energy")
+let az = Channel("a.spin_z", angularVelocity, "Sphere A world angular velocity Z")
+let bz = Channel("b.spin_z", angularVelocity, "Sphere B world angular velocity Z")
+let px = Channel("momentum.x", momentum, "Total linear momentum X")
+let py = Channel("momentum.y", momentum, "Total linear momentum Y")
+let drag = Channel("a.drag_force_x", force, "Force applied during this step, zero at initial sample")
+let impulse = Channel("a.contact_impulse_x", momentum, "Contact impulse this step, zero otherwise")
+var a = Body.sphere(mass, radius)
+var b = Body.sphere(mass, radius)
+var impulseA = zero
+var forceA = zero
+var forceB = zero
+var lastContact = zero
+var hadContact = false
+
+func selectedMedium() -> Medium:
+    if mediumMode == 0:
+        return Medium.vacuum()
+    if mediumMode == 1:
+        return Medium.air()
+    if mediumMode == 2:
+        return Medium.water()
+    return Medium(customDensity, customViscosity)
+
+func dragForce(velocity: Vec3) -> Vec3:
+    if dragMode == 0:
+        return zero
+    let medium = selectedMedium()
+    if dragMode == 1:
+        return medium.stokesDrag(velocity, radius)
+    return quadraticDrag(velocity, medium.density, radius, 0.47)
+
+func measure():
+    ax.sample(a.position.x)
+    bx.sample(b.position.x)
+    av.sample(a.velocity.x)
+    bv.sample(b.velocity.x)
+    energy.sample(a.kineticEnergy() + b.kineticEnergy())
+    az.sample(a.angularVelocity.z)
+    bz.sample(b.angularVelocity.z)
+    px.sample(mass * (a.velocity.x + b.velocity.x))
+    py.sample(mass * (a.velocity.y + b.velocity.y))
+    drag.sample(forceA.x)
+    impulse.sample(impulseA.x)
+
+func create():
+    assert(mediumMode == 0 || mediumMode == 1 || mediumMode == 2 || mediumMode == 3)
+    assert(dragMode == 0 || dragMode == 1 || dragMode == 2)
+    assert(ccdMode == -1 || ccdMode == 0 || ccdMode == 1)
+    assert(!continuous || mediumMode == 0)
+    let medium = selectedMedium()
+    var mediumName = "vacuum"
+    if mediumMode == 1:
+        mediumName = "air at 15 C, sea level"
+    else if mediumMode == 2:
+        mediumName = "water at 20 C"
+    else if mediumMode == 3:
+        mediumName = "custom medium"
+    var dragName = "quadratic"
+    if dragMode == 0:
+        dragName = "none"
+    else if dragMode == 1:
+        dragName = "Stokes"
+    var contactName = "discrete"
+    var ccdName = "none"
+    if continuous:
+        contactName = "continuous"
+        ccdName = "linear sphere sweep + remaining time"
+    metadata("model=two homogeneous rigid spheres\nintegrator=symplectic Euler + quaternion rotation\ncontact=" + contactName + " single normal impulse + Coulomb tangent impulse + position projection\ngravity=none\nbuoyancy=none\nrotational_drag=none\nccd=" + ccdName + "\ninitial_speed_m_s=" + String(speed) + "\nmedium=" + mediumName + "\ndensity_kg_m3=" + String(medium.density) + "\nviscosity_pa_s=" + String(medium.viscosity) + "\ndrag=" + dragName + "\nfluid_velocity_m_s=0,0,0\nmass_kg=1\nradius_m=0.2\nrestitution=1\nfriction=" + String(friction) + "\na_initial_spin_rad_s=" + String(spin) + "\nCd=0.47")
+
+func reset():
+    a = Body.sphere(mass, radius)
+    b = Body.sphere(mass, radius)
+    a.setState(Vec3(-1, -0.5, 0), Vec3(speed, 0, 0), identity, Vec3(0, 0, spin))
+    b.setState(Vec3(1, -0.5, 0), Vec3(-speed, 0, 0), identity, zero)
+    impulseA = zero
+    forceA = zero
+    forceB = zero
+    lastContact = zero
+    hadContact = false
+    measure()
+
+func step(dt: Float64):
+    var nextA = a
+    var nextB = b
+    var nextImpulse = zero
+    var nextContact = lastContact
+    var nextHadContact = hadContact
+    var nextForceA = forceA
+    var nextForceB = forceB
+    if continuous:
+        let hit = Sweep.spheres(nextA, radius, nextA.velocity * dt,
+                                nextB, radius, nextB.velocity * dt)
+        var first = dt
+        if hit.hit:
+            first = dt * hit.fraction()
+        if first > 0:
+            nextA.step(zero, zero, first)
+            nextB.step(zero, zero, first)
+        if hit.hit:
+            let contact = hit.contacts()
+            let response = contact.resolveSingle(nextA, nextB, 1, friction)
+            nextA = response.bodyA
+            nextB = response.bodyB
+            nextImpulse = response.impulse(0)
+            nextContact = contact.point(0)
+            nextHadContact = true
+            let remaining = dt - first
+            if remaining > 0:
+                nextA.step(zero, zero, remaining)
+                nextB.step(zero, zero, remaining)
+    else:
+        nextForceA = dragForce(nextA.velocity)
+        nextForceB = dragForce(nextB.velocity)
+        nextA.step(nextForceA, zero, dt)
+        nextB.step(nextForceB, zero, dt)
+        let contacts = Contacts.spheres(nextA, radius, nextB, radius)
+        if contacts.count == 1:
+            let response = contacts.resolveSingle(nextA, nextB, 1, friction)
+            nextA = response.bodyA
+            nextB = response.bodyB
+            nextImpulse = response.impulse(0)
+            nextContact = contacts.point(0)
+            nextHadContact = true
+    a = nextA
+    b = nextB
+    impulseA = nextImpulse
+    forceA = nextForceA
+    forceB = nextForceB
+    lastContact = nextContact
+    hadContact = nextHadContact
+    measure()
+
+func scene():
+    sphere(a.position, radius, 0x53dec2ff, 10)
+    line(a.position, a.position + a.orientation.rotate(Vec3(0, radius * 1.45, 0)),
+         0.009, 0xffffffff, 11)
+    arrow(a.position, a.position + a.velocity, 0.006, 0x53dec2ff, 12)
+    if forceA.length() > 1e-9:
+        arrow(a.position, a.position + forceA, 0.008, 0xef879eff, 13)
+    label(a.position, "Kugel A", 0x53dec2ff, 14)
+    sphere(b.position, radius, 0xf2c572ff, 20)
+    line(b.position, b.position + b.orientation.rotate(Vec3(0, radius * 1.45, 0)),
+         0.009, 0xffffffff, 21)
+    arrow(b.position, b.position + b.velocity, 0.006, 0xf2c572ff, 22)
+    if forceB.length() > 1e-9:
+        arrow(b.position, b.position + forceB, 0.008, 0xef879eff, 23)
+    label(b.position, "Kugel B", 0xf2c572ff, 24)
+    if hadContact:
+        point(lastContact, 0.035, 0xff8eafff, 0)
+        label(lastContact, "Letzter Kontakt", 0xff8eafff, 100)
+    label(Vec3(0, 0.6, 0), "Pfeile: v [1 m pro m/s], F [1 m pro N]", 0xb9c0cdff, 101)

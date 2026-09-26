@@ -1,0 +1,9 @@
+func analyze():
+    report("Uniform motion")
+    let run: Dataset = Dataset(0)
+    let time: Series = run.series("time")
+    let position: Series = run.series("position.x")
+    let velocity: Series = position.derivative(time)
+    let plot: Plot = velocity.plot(time, "Velocity", "dx/dt")
+    velocity.export(time, "velocity")
+    run.close()

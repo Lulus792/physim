@@ -1,0 +1,83 @@
+var transforms = 0
+var factories = 0
+
+func double(value: Int64) -> Int64:
+    transforms += 1
+    return value * 2
+
+func makeTransform() -> func(Int64) -> Int64:
+    factories += 1
+    return double
+
+let source = [1, 2, 3]
+let doubled = source.map(makeTransform())
+assert(doubled == [2, 4, 6])
+assert(source == [1, 2, 3])
+assert(transforms == 3 && factories == 1)
+let empty: [Int64] = []
+assert(empty.map(makeTransform()).count == 0)
+assert(transforms == 3 && factories == 2)
+
+func stringify(value: Int64) -> String:
+    return "item " + String(value)
+
+let words = source.map(stringify)
+assert(words == ["item 1", "item 2", "item 3"])
+let manyWords = Array(repeating: 7, count: 129).map(stringify)
+assert(manyWords.count == 129 && manyWords[0] == "item 7" &&
+       manyWords[128] == "item 7")
+let textLength = func(value: String) -> Int64:
+    return value.count
+assert(words.map(textLength) == [6, 6, 6])
+
+struct Label:
+    let text: String
+
+func label(value: Int64) -> Label:
+    return Label(String(value))
+
+let labels = source.map(label)
+assert(labels == [Label("1"), Label("2"), Label("3")])
+
+func singleton(value: Int64) -> [Int64]:
+    return [value]
+
+let nested = source.map(singleton)
+assert(nested == [[1], [2], [3]])
+
+enum Tagged:
+    case text(value: String)
+
+let tags = words.map(Tagged.text)
+assert(tags == [Tagged.text("item 1"), Tagged.text("item 2"),
+                Tagged.text("item 3")])
+
+func makeIncrement(base: Int64) -> func(Int64) -> Int64:
+    return func(value: Int64) -> Int64:
+        return base + value
+
+let functions = source.map(makeIncrement)
+assert(functions[0](5) == 6 && functions[2](5) == 8)
+
+struct Offset:
+    let amount: Int64
+    func add(value: Int64) -> Int64:
+        return self.amount + value
+
+assert(source.map(Offset(4).add) == [5, 6, 7])
+
+func mapLocally(values: [Int64]) -> [String]:
+    let prefix = "local "
+    func describe(value: Int64) -> String:
+        return prefix + String(value)
+    return values.map(describe)
+
+assert(mapLocally(source) == ["local 1", "local 2", "local 3"])
+
+var mutableSource = [1, 2]
+func appendAndReturn(value: Int64) -> Int64:
+    mutableSource.append(9)
+    return value + 1
+
+assert(mutableSource.map(appendAndReturn) == [2, 3])
+assert(mutableSource == [1, 2, 9, 9])

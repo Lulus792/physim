@@ -1,0 +1,77 @@
+struct State:
+    var mode: Mode
+    var count: Int64
+enum Mode:
+    case idle
+    case running
+    case complete
+func advance(state: State) -> State:
+    var result = state
+    if state.mode == Mode.idle:
+        result.mode = Mode.running
+    else:
+        if state.mode == Mode.running:
+            result.count = result.count + 1
+            if result.count == 3:
+                result.mode = Mode.complete
+    return result
+var state = State(Mode.idle, 0)
+let initial = state
+while state.mode != Mode.complete:
+    state = advance(state)
+assert(state.count == 3)
+assert(initial.mode == Mode.idle)
+assert(initial.count == 0)
+func code(mode: Mode) -> Int64:
+    switch mode:
+        case Mode.idle:
+            return 10
+        case Mode.running:
+            return 20
+        case Mode.complete:
+            return 30
+assert(code(Mode.idle) == 10)
+assert(code(Mode.running) == 20)
+assert(code(Mode.complete) == 30)
+var evaluations = 0
+func select() -> Mode:
+    evaluations = evaluations + 1
+    return Mode.running
+var selected = 0
+switch select():
+    case Mode.idle:
+        selected = 1
+    default:
+        selected = 2
+assert(evaluations == 1)
+assert(selected == 2)
+
+var visits = 0
+for i in 0..<4:
+    switch Mode.running:
+        case Mode.running:
+            if i == 0:
+                continue
+            switch Mode.idle:
+                case Mode.idle:
+                    break
+                default:
+                    assert(false)
+            visits = visits + 1
+            break
+            visits = 999
+        default:
+            assert(false)
+    visits = visits + 10
+assert(visits == 33)
+
+switch Mode.idle:
+    case Mode.idle:
+        var loops = 0
+        while true:
+            loops = loops + 1
+            break
+        assert(loops == 1)
+    default:
+        assert(false)
+print("enum checks passed")

@@ -1,0 +1,62 @@
+var numbers = [1, 2, 3, 4]
+let original = numbers
+assert(numbers.removeFirst() == 1)
+assert(numbers == [2, 3, 4])
+assert(numbers.removeLast() == 4)
+assert(numbers == [2, 3])
+assert(original == [1, 2, 3, 4])
+numbers.removeFirst(0)
+numbers.removeLast(0)
+assert(numbers == [2, 3])
+numbers.removeFirst(1)
+assert(numbers == [3])
+numbers.removeLast(1)
+assert(numbers.isEmpty)
+
+var words = ["alpha", "beta", "gamma", "delta"]
+let oldWords = words
+let firstWord = words.removeFirst()
+let lastWord = words.removeLast()
+assert(firstWord == "alpha" && lastWord == "delta")
+assert(words == ["beta", "gamma"])
+assert(oldWords == ["alpha", "beta", "gamma", "delta"])
+words.removeLast(2)
+assert(words.isEmpty)
+assert(firstWord == "alpha" && lastWord == "delta")
+
+var nested = [[1], [2], [3]]
+let oldNested = nested
+let firstNested = nested.removeFirst()
+let lastNested = nested.removeLast()
+assert(firstNested == [1] && lastNested == [3])
+assert(nested == [[2]])
+assert(oldNested == [[1], [2], [3]])
+
+struct Holder:
+    var rows: [[Int64]]
+var holder = Holder([[1, 2, 3, 4]])
+var visits = 0
+func index() -> Int64:
+    visits += 1
+    return 0
+assert(holder.rows[index()].removeFirst() == 1)
+holder.rows[index()].removeLast(2)
+assert(visits == 2)
+assert(holder.rows[0] == [2])
+
+var empty: [Int64] = []
+func tryFirst() -> Int64:
+    return empty.removeFirst()
+func tryLast() -> Int64:
+    return empty.removeLast()
+func tryNegative() -> Int64:
+    empty.removeFirst(-1)
+    return 1
+func tryTooMany() -> Int64:
+    empty.removeLast(1)
+    return 1
+assert(attempt(tryFirst()) == nil)
+assert(attempt(tryLast()) == nil)
+assert(attempt(tryNegative()) == nil)
+assert(attempt(tryTooMany()) == nil)
+assert(empty.isEmpty)

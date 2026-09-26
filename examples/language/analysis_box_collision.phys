@@ -1,0 +1,18 @@
+func analyze():
+    report("Boxstoß · Position und Geschwindigkeit")
+    for index in 0..<inputCount():
+        let run = Dataset(index)
+        let time = run.series("time")
+        let positionA = run.series("position.x")
+        let positionB = run.series("b.position.x")
+        let velocityA = run.series("velocity.x")
+        let velocityB = run.series("b.velocity.x")
+        let positions = positionA.plot(time, "Boxpositionen", "x")
+        positions.curve(time, positionB, "Box B")
+        let velocities = velocityA.plot(time, "Boxgeschwindigkeiten", "v")
+        velocities.curve(time, velocityB, "Box B")
+        if index == 0:
+            positions.export("position")
+            velocities.export("velocity-plot")
+            velocityA.export(time, "velocity")
+        run.close()

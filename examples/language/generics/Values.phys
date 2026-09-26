@@ -1,0 +1,90 @@
+func choose<T>(left: T, right: T) -> T:
+    return left
+
+func wrap<T>(value: T) -> T?:
+    return Optional.some(value)
+
+func unwrap<T>(value: T?) -> T:
+    return value.unwrap()
+
+func keep<A, B>(left: A, right: B) -> A:
+    return left
+
+func repeat<T>(value: T, count: Int64) -> T:
+    let copy: T = value
+    if count == 0:
+        return copy
+    return repeat(copy, count - 1)
+
+func first<T>(values: [T]) -> T:
+    return values[0]
+
+func keepArray<T>(values: [T], sample: T) -> [T]:
+    return values
+
+func keepOptional<T>(value: T?, sample: T) -> T?:
+    return value
+
+struct Slot:
+    var count: Int64
+    func echo<T>(value: T) -> T:
+        return value
+    func echoAgain<T>(value: T) -> T:
+        return self.echo(value)
+    mutating func take<T>(value: T) -> T:
+        self.count += 1
+        return value
+    static func copy<T>(value: T) -> T:
+        return value
+    static func repeat<T>(value: T, count: Int64) -> T:
+        if count == 0:
+            return value
+        return Slot.repeat(value, count - 1)
+    func keepOptional<T>(value: T?, sample: T) -> T?:
+        return value
+    static func keepArray<T>(values: [T], sample: T) -> [T]:
+        return values
+
+struct Box<T>:
+    var value: T
+    func get() -> T:
+        return self.value
+    mutating func replace(value: T) -> T:
+        let previous = self.value
+        self.value = value
+        return previous
+    func echo<U>(other: U) -> U:
+        return other
+    static func wrap(value: T) -> Box<T>:
+        return Box<T>(value)
+
+struct Pair<A, B>:
+    let first: A
+    let second: B
+
+struct Node<T>:
+    let value: T
+    let next: Node<T>?
+
+func unbox<T>(box: Box<T>) -> T:
+    return box.value
+
+func add<T: Numeric>(left: T, right: T) -> T:
+    return left + right
+
+func same<T: Equatable>(left: T, right: T) -> Bool:
+    return left == right
+
+func doubled<T: Vector>(value: T) -> T:
+    return value + value
+
+struct ConstrainedBox<T: Scalar>:
+    let value: T
+    func get() -> T:
+        return self.value
+    func echo<U: Numeric & Equatable>(item: U) -> U:
+        return item
+
+enum Phase:
+    case idle
+    case active

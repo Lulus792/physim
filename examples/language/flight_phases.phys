@@ -1,0 +1,31 @@
+enum FlightPhase:
+    case rising
+    case falling
+    case landed
+
+func classify(height: Float64, speed: Float64) -> FlightPhase:
+    if height <= 0 && speed < 0:
+        return FlightPhase.landed
+    if speed > 0:
+        return FlightPhase.rising
+    return FlightPhase.falling
+
+var phase = FlightPhase.rising
+var height: Float64 = 0
+var speed: Float64 = 5
+var time: Float64 = 0
+let dt = 0.01
+let gravity = 9.80665
+while phase != FlightPhase.landed:
+    height = height + speed * dt - 0.5 * gravity * dt * dt
+    speed = speed - gravity * dt
+    time = time + dt
+    phase = classify(height, speed)
+assert(time > 1.01 && time < 1.03)
+assert(height <= 0)
+switch phase:
+    case FlightPhase.landed:
+        print("Landed")
+    default:
+        assert(false)
+print(time)

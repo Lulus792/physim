@@ -1,0 +1,24 @@
+let numbers = Array(repeating: 7, count: 3)
+assert(numbers == [7, 7, 7])
+assert(Array(repeating: 7, count: 0) == [])
+assert(Array(repeating: 7, count: 1) == [7])
+
+let words = Array(repeating: "ä😀", count: 2)
+assert(words == ["ä😀", "ä😀"])
+var changed = words
+changed.append("neu")
+assert(words == ["ä😀", "ä😀"])
+
+let nested = Array(repeating: [1, 2], count: 2)
+assert(nested == [[1, 2], [1, 2]])
+var changedNested = nested
+changedNested[0].append(3)
+assert(nested == [[1, 2], [1, 2]])
+assert(changedNested == [[1, 2, 3], [1, 2]])
+
+struct Pair:
+    let name: String
+    let value: Int64
+
+let records = Array(repeating: Pair(name: "one", value: 1), count: 2)
+assert(records == [Pair(name: "one", value: 1), Pair(name: "one", value: 1)])

@@ -1,0 +1,27 @@
+func rootTarget(x: Float64) -> Float64:
+    return x * x - 2
+
+func minimumTarget(x: Float64) -> Float64:
+    return (x - 3) * (x - 3) + 1
+
+let root: ScalarResult = rootBisectReported(rootTarget, 1, 2, 1e-12, 0, 100)
+assert(abs(root.x - sqrt(2)) < 1e-11)
+assert(abs(root.value) < 1e-10)
+assert(root.lower <= root.x)
+assert(root.x <= root.upper)
+assert(root.iterations > 0)
+assert(root.evaluations == root.iterations + 2)
+
+let minimum = minimizeGoldenReported(minimumTarget, 0, 6, 1e-8, 0, 100)
+assert(abs(minimum.x - 3) < 1e-7)
+assert(abs(minimum.value - 1) < 1e-12)
+assert(minimum.lower <= minimum.x)
+assert(minimum.x <= minimum.upper)
+assert(minimum.iterations > 0)
+assert(minimum.evaluations == minimum.iterations + 2)
+
+let results = [root, minimum]
+assert(results.count == 2)
+assert(results[0].evaluations == root.evaluations)
+let optional: ScalarResult? = Optional.some(minimum)
+assert(optional.hasValue)

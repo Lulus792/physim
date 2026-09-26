@@ -1,0 +1,2 @@
+Compiler: MSVC-19.38.33145.0 | Configuration: Release
+OpenGL 3.3.0 NVIDIA 595.79 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2

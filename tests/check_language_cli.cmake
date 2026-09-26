@@ -1,0 +1,210 @@
+if(NOT DEFINED COMPILER OR NOT DEFINED WORK OR NOT DEFINED EXAMPLE)
+  message(FATAL_ERROR "Missing compiler, work directory or example")
+endif()
+file(MAKE_DIRECTORY "${WORK}/Sprachtest ä")
+set(source "${WORK}/Sprachtest ä/Quelle mit Leerzeichen.phys")
+file(WRITE "${source}" "func f(c: SensorConfig):\n    let s = Sensor.forRun(c,0)\n")
+foreach(mode --emit-c --emit-analysis)
+  execute_process(COMMAND "${COMPILER}" "${mode}" "${source}"
+    RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+  if(result EQUAL 0 OR NOT output STREQUAL "" OR
+     NOT error MATCHES "Host API requires|unavailable in this module kind")
+    message(FATAL_ERROR "Run-seeded sensors need an experiment host: ${result}\n${error}")
+  endif()
+ endforeach()
+ file(WRITE "${source}" "let seed = runSeed()\n")
+ foreach(mode --emit-c --emit-analysis)
+   execute_process(COMMAND "${COMPILER}" "${mode}" "${source}"
+     RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+   if(result EQUAL 0 OR NOT output STREQUAL "" OR
+      NOT error MATCHES "Host API requires|unavailable in this module kind")
+     message(FATAL_ERROR "runSeed requires an experiment host: ${mode}\n${error}")
+   endif()
+ endforeach()
+file(WRITE "${source}" "let unit = Unit(0,0,0,0,0,0,0,1,\"1\")\nlet values = Series.fromValues([1.0,2.0],unit,\"values\")\n")
+foreach(mode --emit-c --emit-experiment)
+  execute_process(COMMAND "${COMPILER}" "${mode}" "${source}"
+    RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+  if(result EQUAL 0 OR NOT output STREQUAL "" OR
+     NOT error MATCHES "Host API requires|unavailable in this module kind")
+    message(FATAL_ERROR "Synthetic series require an analysis host: ${mode}\n${error}")
+  endif()
+endforeach()
+file(WRITE "${source}" "polyline([], 0, 0, 0)\n")
+foreach(mode --emit-c --emit-analysis)
+  execute_process(COMMAND "${COMPILER}" "${mode}" "${source}"
+    RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+  if(result EQUAL 0 OR NOT output STREQUAL "" OR
+     NOT error MATCHES "Host API requires|unavailable in this module kind")
+    message(FATAL_ERROR "Polyline must reject non-experiment hosts: ${result}\n${error}")
+  endif()
+endforeach()
+file(WRITE "${source}" "var values: [[Float64]] = [[1, 2], []]\nvalues[0][1] += 3\n")
+execute_process(COMMAND "${COMPILER}" --check "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(NOT result EQUAL 0 OR NOT output MATCHES "check passed")
+  message(FATAL_ERROR "Array semantic checking failed: ${result}\n${error}")
+endif()
+execute_process(COMMAND "${COMPILER}" --emit-c "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(NOT result EQUAL 0 OR NOT output MATCHES "psrt_array_build_begin" OR
+   NOT output MATCHES "Physim language 0.167.0" OR NOT error STREQUAL "")
+  message(FATAL_ERROR "Array emission failed: ${result}\n${error}")
+endif()
+configure_file("${EXAMPLE}" "${source}" COPYONLY)
+execute_process(COMMAND "${COMPILER}" --check "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(NOT result EQUAL 0 OR NOT output MATCHES "check passed" OR NOT error STREQUAL "")
+  message(FATAL_ERROR "Valid source failed: ${result}\n${output}\n${error}")
+endif()
+file(WRITE "${source}" "let mass = 2.0\nmass = 3.0\n")
+execute_process(COMMAND "${COMPILER}" --check "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(NOT result EQUAL 1 OR NOT error MATCHES ":2:1: error: Assignment requires a mutable var binding")
+  message(FATAL_ERROR "Wrong semantic diagnostic: ${result}\n${output}\n${error}")
+endif()
+execute_process(COMMAND "${COMPILER}" --emit-c "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(NOT result EQUAL 1 OR NOT output STREQUAL "" OR NOT error MATCHES ":2:1: error:")
+  message(FATAL_ERROR "Type errors must prevent C emission: ${result}\n${output}\n${error}")
+endif()
+file(WRITE "${source}" "func wrong(x: Int64) -> Float64:\n    return 0\nlet x = rootBisect(wrong, 0, 1, 1e-9, 0, 10)\n")
+execute_process(COMMAND "${COMPILER}" --check "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(NOT result EQUAL 1 OR NOT error MATCHES ":3:[0-9]+: error: Scalar callback requires func")
+  message(FATAL_ERROR "Scalar callback signature must be checked: ${result}\n${error}")
+endif()
+file(WRITE "${source}" "func wrong(time: Float64, state: Float64) -> [Float64]:\n    return [state]\nlet x = rk4Step(wrong, [1.0], 0, 0.1)\n")
+execute_process(COMMAND "${COMPILER}" --check "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(NOT result EQUAL 1 OR NOT error MATCHES ":3:[0-9]+: error: ODE callback requires func")
+  message(FATAL_ERROR "ODE callback signature must be checked: ${result}\n${error}")
+endif()
+file(WRITE "${source}" "func target(x: Float64) -> Float64:\n    return x * x - 2\nfunc analyze():\n    let x = rootBisect(target, 1, 2, 1e-9, 0, 100)\n")
+execute_process(COMMAND "${COMPILER}" --emit-analysis "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(NOT result EQUAL 0 OR NOT output MATCHES "static double pscb_[0-9]+" OR
+   NOT output MATCHES "psrt_root_bisect" OR NOT error STREQUAL "")
+  message(FATAL_ERROR "Analysis callback bridge emission failed: ${result}\n${error}")
+endif()
+file(WRITE "${source}" "if true {\n    return\n}\n")
+execute_process(COMMAND "${COMPILER}" --check "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(NOT result EQUAL 1 OR NOT error MATCHES ":1:9: error: Expected ':'")
+  message(FATAL_ERROR "Wrong syntax diagnostic: ${result}\n${error}")
+endif()
+execute_process(COMMAND "${COMPILER}" --check "${WORK}/missing-source.phys"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(NOT result EQUAL 2 OR NOT error MATCHES "Cannot open source")
+  message(FATAL_ERROR "Wrong I/O diagnostic: ${result}\n${error}")
+endif()
+string(REPEAT " " 1048577 oversized)
+file(WRITE "${source}" "${oversized}")
+execute_process(COMMAND "${COMPILER}" --check "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(NOT result EQUAL 2 OR NOT error MATCHES "exceeds 1 MiB")
+  message(FATAL_ERROR "Source limit was not enforced: ${result}\n${error}")
+endif()
+file(WRITE "${source}" "")
+execute_process(COMMAND "${COMPILER}" --check "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(NOT result EQUAL 0)
+  message(FATAL_ERROR "Empty module failed: ${result}\n${error}")
+endif()
+execute_process(COMMAND "${COMPILER}" --version RESULT_VARIABLE result
+  OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(NOT result EQUAL 0 OR NOT output MATCHES "physimc 0.1.0-dev; Physim language 0.167.0")
+  message(FATAL_ERROR "Version query failed")
+endif()
+execute_process(COMMAND "${COMPILER}" --unknown RESULT_VARIABLE result
+  OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(NOT result EQUAL 2 OR NOT error MATCHES "Usage:")
+  message(FATAL_ERROR "Invalid invocation was not rejected")
+endif()
+message(STATUS "Compiler CLI: source, diagnostics, UTF-8 paths, limits and exit codes passed")
+
+foreach(mode --emit-c --emit-experiment)
+  file(WRITE "${source}" "func create():\n    let t = Table(\"T\", [], [])\nfunc reset():\n    return\nfunc step(dt: Float64):\n    return\nfunc scene():\n    return\n")
+  execute_process(COMMAND "${COMPILER}" "${mode}" "${source}"
+    RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+  if(result EQUAL 0 OR NOT output STREQUAL "" OR NOT error MATCHES "Analysis handles require|Host API requires|unavailable in this module kind")
+    message(FATAL_ERROR "Report tables must require an analysis host: ${mode}\n${error}")
+  endif()
+endforeach()
+
+file(WRITE "${source}" "let x = randomUniform(0, 1)\n")
+execute_process(COMMAND "${COMPILER}" --emit-c "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(result EQUAL 0 OR NOT output STREQUAL "" OR NOT error MATCHES "Host API requires")
+  message(FATAL_ERROR "Standalone random draws must require an experiment host: ${error}")
+endif()
+file(WRITE "${source}" "func analyze():\n    let x = randomNormal(0, 1)\n")
+execute_process(COMMAND "${COMPILER}" --emit-analysis "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(result EQUAL 0 OR NOT output STREQUAL "" OR NOT error MATCHES "unavailable in this module kind")
+  message(FATAL_ERROR "Analysis random draws must not borrow an experiment RNG: ${error}")
+endif()
+file(WRITE "${source}" "var rng = Rng(42)\nlet x = rng.sample(Distribution.normal(0, 1))\n")
+execute_process(COMMAND "${COMPILER}" --emit-c "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(NOT result EQUAL 0 OR NOT output MATCHES "psrt_rng_sample" OR NOT error STREQUAL "")
+  message(FATAL_ERROR "Explicit standalone random stream emission failed: ${result}\n${error}")
+endif()
+file(WRITE "${source}" "func analyze():\n    var rng = Rng(42)\n    let x = rng.sample(Distribution.normal(0, 1))\n")
+execute_process(COMMAND "${COMPILER}" --emit-analysis "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(NOT result EQUAL 0 OR NOT output MATCHES "psrt_rng_sample" OR NOT error STREQUAL "")
+  message(FATAL_ERROR "Explicit analysis random stream emission failed: ${result}\n${error}")
+endif()
+file(WRITE "${source}" "let rng = Rng.forRun(1)\n")
+foreach(mode --emit-c --emit-analysis)
+  execute_process(COMMAND "${COMPILER}" "${mode}" "${source}"
+    RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+  if(result EQUAL 0 OR NOT output STREQUAL "" OR
+     NOT error MATCHES "Host API requires|unavailable in this module kind")
+    message(FATAL_ERROR "Run-derived random streams need an experiment host: ${mode}\n${error}")
+  endif()
+endforeach()
+
+file(WRITE "${source}" "func create():\n    return\nfunc reset():\n    return\nfunc step(dt: Float64):\n    return\nfunc scene():\n    return\n")
+execute_process(COMMAND "${COMPILER}" --emit-experiment "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(NOT result EQUAL 0 OR NOT output MATCHES "PSRT_EXPERIMENT_ADAPTER" OR output MATCHES "int main")
+  message(FATAL_ERROR "Experiment emission failed: ${result}\n${error}")
+endif()
+file(APPEND "${source}" "print(1)\n")
+execute_process(COMMAND "${COMPILER}" --emit-experiment "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(result EQUAL 0 OR NOT output STREQUAL "" OR NOT error MATCHES "print is unavailable")
+  message(FATAL_ERROR "Experiment print must be rejected: ${result}\n${error}")
+endif()
+file(WRITE "${source}" "metadata(\"model=test\")\n")
+execute_process(COMMAND "${COMPILER}" --emit-c "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(result EQUAL 0 OR NOT output STREQUAL "" OR NOT error MATCHES "Host API requires")
+  message(FATAL_ERROR "Standalone host call must be rejected: ${result}\n${error}")
+endif()
+file(WRITE "${source}" "func step(dt: Int64):\n    return\n")
+execute_process(COMMAND "${COMPILER}" --emit-experiment "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(result EQUAL 0 OR NOT output STREQUAL "")
+  message(FATAL_ERROR "Invalid experiment callbacks must prevent emission")
+endif()
+file(WRITE "${source}" "func analyze():\n    report(\"Reference\")\n")
+execute_process(COMMAND "${COMPILER}" --emit-analysis "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(NOT result EQUAL 0 OR NOT output MATCHES "PSRT_FN_ANALYZE" OR output MATCHES "int main")
+  message(FATAL_ERROR "Analysis emission failed: ${result}\n${error}")
+endif()
+file(APPEND "${source}" "metadata(\"wrong host\")\n")
+execute_process(COMMAND "${COMPILER}" --emit-analysis "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(result EQUAL 0 OR NOT output STREQUAL "" OR NOT error MATCHES "unavailable in this module kind")
+  message(FATAL_ERROR "Analysis must reject experiment API: ${result}\n${error}")
+endif()
+file(WRITE "${source}" "func analyze(value: Float64):\n    return\n")
+execute_process(COMMAND "${COMPILER}" --emit-analysis "${source}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 15)
+if(result EQUAL 0 OR NOT output STREQUAL "" OR NOT error MATCHES "Analysis requires")
+  message(FATAL_ERROR "Analysis must validate its callback: ${result}\n${error}")
+endif()

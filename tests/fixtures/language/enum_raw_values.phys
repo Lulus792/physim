@@ -1,0 +1,29 @@
+enum Status:
+    case ready = -2
+    case waiting
+    case done = 5
+    case archived
+
+enum Edge:
+    case low = -0x8000000000000000
+    case high = 0x7FFFFFFFFFFFFFFF
+
+enum Mixed:
+    case first
+    case second = +5
+    case third
+
+assert(Status.ready.rawValue == -2)
+assert(Status.waiting.rawValue == -1)
+assert(Status.done.rawValue == 5)
+assert(Status.archived.rawValue == 6)
+assert(Status.fromRawValue(-2).unwrap() == Status.ready)
+assert(Status.fromRawValue(rawValue: -1).unwrap() == Status.waiting)
+assert(Status.fromRawValue(4) == nil)
+assert(Status.fromRawValue(6).unwrap() == Status.archived)
+assert(Edge.low.rawValue == -9223372036854775808)
+assert(Edge.high.rawValue == 9223372036854775807)
+assert(Edge.fromRawValue(-9223372036854775808).unwrap() == Edge.low)
+assert(Edge.fromRawValue(9223372036854775807).unwrap() == Edge.high)
+assert(Mixed.first.rawValue == 0)
+assert(Mixed.third.rawValue == 6)

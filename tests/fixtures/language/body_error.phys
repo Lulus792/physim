@@ -1,0 +1,22 @@
+let zero = Vec3(0, 0, 0)
+var body = Body.sphere(2, 0.5)
+func create():
+    return
+func reset():
+    body = Body.sphere(2, 0.5)
+func step(dt: Float64):
+    if dt == 1:
+        body = Body.sphere(-1, 1)
+    else if dt == 2:
+        body = Body.box(1, Vec3(1, 0, 1))
+    else if dt == 3:
+        body.step(zero, zero, 0)
+    else if dt == 4:
+        body.setState(zero, zero, Quat(0, 0, 0, 2), zero)
+    else if dt == 5:
+        body = Body.sphere(0, 1)
+        body.setState(zero, Vec3(1, 0, 0), Quat(0, 0, 0, 1), zero)
+    else:
+        body.applyImpulse(Vec3(1e308, 0, 0), Vec3(0, 1e308, 0))
+func scene():
+    sphere(body.position, 0.5, 1407107839, 1)

@@ -1,0 +1,3 @@
+enum Remote<T>:
+    case absent
+    case present(value: T)

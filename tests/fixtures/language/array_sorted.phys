@@ -1,0 +1,34 @@
+let empty: [Int64] = []
+assert(empty.sorted() == [])
+let source = [3, -1, 3, -9223372036854775808, 0]
+assert(source.sorted() == [-9223372036854775808, -1, 0, 3, 3])
+assert(source == [3, -1, 3, -9223372036854775808, 0])
+
+let floats = [3.5, -0.0, -2.25, 3.5]
+assert(floats.sorted() == [-2.25, -0.0, 3.5, 3.5])
+let words = ["ä", "z", "a", "😀", "A"]
+assert(words.sorted() == ["A", "a", "z", "ä", "😀"])
+assert(words == ["ä", "z", "a", "😀", "A"])
+
+var mutable = [5, 1, 4, 1]
+let snapshot = mutable
+mutable.sort()
+assert(mutable == [1, 1, 4, 5])
+assert(snapshot == [5, 1, 4, 1])
+
+struct Holder:
+    var rows: [[String]]
+var holder = Holder([["c", "a", "b"]])
+let saved = holder
+var indexCalls = 0
+func rowIndex() -> Int64:
+    indexCalls += 1
+    return 0
+holder.rows[rowIndex()].sort()
+assert(indexCalls == 1)
+assert(holder.rows[0] == ["a", "b", "c"])
+assert(saved.rows[0] == ["c", "a", "b"])
+
+func ordered(input: [Float64]) -> [Float64]:
+    return input.sorted()
+assert(ordered([3.0, 1.0, 2.0]) == [1.0, 2.0, 3.0])

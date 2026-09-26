@@ -1,0 +1,5 @@
+func analyze():
+    report("Out of range series values")
+    let one = Unit(0,0,0,0,0,0,0,1,"1")
+    let series = Series.fromValues([1.0,2.0],one,"measurements")
+    let values = series.values(1,2)

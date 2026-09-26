@@ -1,0 +1,40 @@
+let empty = ""
+assert(empty.first == nil && empty.last == nil)
+
+let one = "🌍"
+assert(one.first.unwrap() == "🌍")
+assert(one.last.unwrap() == "🌍")
+
+let text = "aü🌍B"
+assert(text.first.unwrap() == "a")
+assert(text.last.unwrap() == "B")
+
+let marks = "é"
+assert(marks.first.unwrap() == "e")
+assert(marks.last.unwrap() == "́")
+
+var mutableText = "ü🌍"
+let heldFirst = mutableText.first
+let heldLast = mutableText.last
+mutableText = "changed"
+assert(heldFirst.unwrap() == "ü")
+assert(heldLast.unwrap() == "🌍")
+assert(mutableText.first.unwrap() == "c")
+assert(mutableText.last.unwrap() == "d")
+
+var sourceCalls = 0
+func source() -> String:
+    sourceCalls += 1
+    return "a🌍"
+
+assert(source().first.unwrap() == "a")
+assert(source().last.unwrap() == "🌍")
+assert(sourceCalls == 2)
+
+func endpoints(value: String) -> [String]:
+    if value.isEmpty:
+        return []
+    return [value.first.unwrap(), value.last.unwrap()]
+
+assert(endpoints("ü🌍") == ["ü", "🌍"])
+assert(endpoints("") == [])

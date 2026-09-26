@@ -1,0 +1,26 @@
+let zero = Vec3(0,0,0)
+let body = Body.sphere(1,1)
+func create():
+    return
+func reset():
+    return
+func step(dt: Float64):
+    if dt == 1:
+        let bad = Sweep.spherePlane(body,1,zero,Vec3(0,-2,0),Vec3(0,1,0)).fraction()
+    else if dt == 2:
+        let bad = Sweep.spheres(body,-1,zero,body,1,zero)
+    else if dt == 3:
+        let bad = Sweep.spherePlane(body,1,zero,zero,Vec3(0,2,0))
+    else if dt == 4:
+        let bad = Aabb.box(body,Vec3(0,1,1))
+    else if dt == 5:
+        let bad = Aabb.sweptSphere(body,-1,zero)
+    else if dt == 6:
+        var bounds: [Aabb] = []
+        for i in 0..<1025:
+            bounds.append(Aabb.sphere(body,1))
+        let bad = Aabb.pairs(bounds)
+    else:
+        let bad = Aabb.pairs([])[0]
+func scene():
+    return

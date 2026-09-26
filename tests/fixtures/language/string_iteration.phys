@@ -1,0 +1,54 @@
+var scalars: [String] = []
+for scalar in "Aü🌍":
+    scalars.append(scalar)
+assert(scalars == ["A", "ü", "🌍"])
+
+var emptyCount = 0
+for scalar in "":
+    emptyCount += 1
+assert(emptyCount == 0)
+
+var filtered: [String] = []
+for scalar in "Aü🌍B":
+    if scalar == "ü":
+        continue
+    if scalar == "🌍":
+        break
+    filtered.append(scalar)
+assert(filtered == ["A"])
+
+var text = "ab"
+var snapshot: [String] = []
+for scalar in text:
+    text = "changed"
+    snapshot.append(scalar)
+assert(snapshot == ["a", "b"] && text == "changed")
+
+var calls = 0
+func makeText() -> String:
+    calls += 1
+    return "x€"
+var result: [String] = []
+for scalar in makeText():
+    result.append(scalar)
+assert(calls == 1 && result == ["x", "€"])
+
+var pairs: [String] = []
+for left in "aß":
+    for right in "1🌍":
+        pairs.append(left + right)
+assert(pairs == ["a1", "a🌍", "ß1", "ß🌍"])
+
+let original = "Aü🌍"
+let reverse = original.reversed()
+assert(reverse == "🌍üA" && original == "Aü🌍")
+assert(reverse.reversed() == original)
+assert("".reversed() == "" && "ß".reversed() == "ß")
+var reversedScalars: [String] = []
+for scalar in original.reversed():
+    reversedScalars.append(scalar)
+assert(reversedScalars == ["🌍", "ü", "A"])
+
+func reverseText(value: String) -> String:
+    return value.reversed()
+assert(reverseText("ab€") == "€ba")

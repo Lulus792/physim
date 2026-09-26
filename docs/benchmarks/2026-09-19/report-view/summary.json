@@ -1,0 +1,74 @@
+{
+  "write_16_channels": {
+    "median_seconds": 1.6727741,
+    "min_seconds": 1.6532678,
+    "max_seconds": 1.7124084,
+    "units": 100000,
+    "scratch_bytes": 0,
+    "compiler": "MSVC-19.38.33145.0",
+    "configuration": "Release"
+  },
+  "read_validate_16_channels": {
+    "median_seconds": 0.2518914,
+    "min_seconds": 0.2443556,
+    "max_seconds": 0.2655957,
+    "units": 100000,
+    "scratch_bytes": 0,
+    "compiler": "MSVC-19.38.33145.0",
+    "configuration": "Release"
+  },
+  "analysis_snapshot": {
+    "median_seconds": 0.2877522,
+    "min_seconds": 0.2821251,
+    "max_seconds": 0.3085498,
+    "units": 100000,
+    "scratch_bytes": 13600000,
+    "compiler": "MSVC-19.38.33145.0",
+    "configuration": "Release"
+  },
+  "series_statistics": {
+    "median_seconds": 0.0123713,
+    "min_seconds": 0.0101243,
+    "max_seconds": 0.013012,
+    "units": 100000,
+    "scratch_bytes": 13600000,
+    "compiler": "MSVC-19.38.33145.0",
+    "configuration": "Release"
+  },
+  "series_derivative": {
+    "median_seconds": 0.0188051,
+    "min_seconds": 0.0178229,
+    "max_seconds": 0.0219514,
+    "units": 100000,
+    "scratch_bytes": 14400000,
+    "compiler": "MSVC-19.38.33145.0",
+    "configuration": "Release"
+  },
+  "report_preview_8_curves": {
+    "median_seconds": 0.2274961,
+    "min_seconds": 0.2198696,
+    "max_seconds": 0.2346793,
+    "units": 800000,
+    "scratch_bytes": 14400000,
+    "compiler": "MSVC-19.38.33145.0",
+    "configuration": "Release"
+  },
+  "report_curve_copy": {
+    "median_seconds": 0.1214728,
+    "min_seconds": 0.1128704,
+    "max_seconds": 0.1283222,
+    "units": 80000,
+    "scratch_bytes": 0,
+    "compiler": "MSVC-19.38.33145.0",
+    "configuration": "Release"
+  },
+  "report_curve_view": {
+    "median_seconds": 0.0004734,
+    "min_seconds": 0.0004447,
+    "max_seconds": 0.0009379,
+    "units": 80000,
+    "scratch_bytes": 0,
+    "compiler": "MSVC-19.38.33145.0",
+    "configuration": "Release"
+  }
+}

@@ -1,0 +1,75 @@
+var checks = 0
+var factories = 0
+
+func isUmlaut(value: String) -> Bool:
+    checks += 1
+    return value == "ü"
+
+func makePredicate() -> func(String) -> Bool:
+    factories += 1
+    return isUmlaut
+
+let source = "aü🌍üB"
+assert(source.first(where: makePredicate()).unwrap() == "ü")
+assert(checks == 2 && factories == 1)
+checks = 0
+assert(source.last(where: makePredicate()).unwrap() == "ü")
+assert(checks == 2 && factories == 2)
+checks = 0
+assert(source.firstIndex(where: makePredicate()).unwrap() == 1)
+assert(checks == 2 && factories == 3)
+checks = 0
+assert(source.lastIndex(where: makePredicate()).unwrap() == 3)
+assert(checks == 2 && factories == 4)
+
+checks = 0
+assert("".first(where: isUmlaut) == nil)
+assert("".last(where: isUmlaut) == nil)
+assert("".firstIndex(where: isUmlaut) == nil)
+assert("".lastIndex(where: isUmlaut) == nil)
+assert(checks == 0)
+assert("abc".first(where: isUmlaut) == nil)
+assert("abc".last(where: isUmlaut) == nil)
+assert("abc".firstIndex(where: isUmlaut) == nil)
+assert("abc".lastIndex(where: isUmlaut) == nil)
+
+struct Matcher:
+    let selected: String
+    func matches(value: String) -> Bool:
+        return value == self.selected
+
+assert(source.first(where: Matcher("🌍").matches).unwrap() == "🌍")
+assert(source.lastIndex(where: Matcher("🌍").matches).unwrap() == 2)
+
+func locally(value: String) -> String?:
+    let selected = "B"
+    func matches(scalar: String) -> Bool:
+        return scalar == selected
+    return value.last(where: matches)
+
+assert(locally(source).unwrap() == "B")
+
+let isA = func(value: String) -> Bool:
+    return value == "a"
+assert(source.firstIndex(where: isA).unwrap() == 0)
+assert(source.last(where: isA).unwrap() == "a")
+
+var mutableSource = "aü🌍"
+func mutate(value: String) -> Bool:
+    mutableSource = "changed"
+    return value == "a"
+
+assert(mutableSource.lastIndex(where: mutate).unwrap() == 0)
+assert(mutableSource == "changed")
+
+func failOnUmlaut(value: String) -> Bool:
+    if value == "ü":
+        let missing: [String] = []
+        return missing[0] == "x"
+    return false
+
+assert(attempt(source.first(where: failOnUmlaut)) == nil)
+assert(attempt(source.last(where: failOnUmlaut)) == nil)
+assert(attempt(source.firstIndex(where: failOnUmlaut)) == nil)
+assert(attempt(source.lastIndex(where: failOnUmlaut)) == nil)
+assert(source == "aü🌍üB")

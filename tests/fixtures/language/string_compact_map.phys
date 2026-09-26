@@ -1,0 +1,97 @@
+var transforms = 0
+var factories = 0
+
+func keepWide(value: String) -> String?:
+    transforms += 1
+    if value.utf8.count == 1:
+        return nil
+    return Optional.some(value + value)
+
+func makeTransform() -> func(String) -> String?:
+    factories += 1
+    return keepWide
+
+let source = "aü🌍B"
+assert(source.compactMap(makeTransform()) == ["üü", "🌍🌍"])
+assert(transforms == 4 && factories == 1)
+assert(source == "aü🌍B")
+assert("".compactMap(makeTransform()) == [])
+assert(transforms == 4 && factories == 2)
+
+func none(value: String) -> Int64?:
+    return nil
+assert(source.compactMap(none).isEmpty)
+
+func width(value: String) -> Int64?:
+    if value == "B":
+        return nil
+    return Optional.some(value.utf8.count)
+assert(source.compactMap(width) == [1, 2, 4])
+
+struct Label:
+    let text: String
+
+func label(value: String) -> Label?:
+    if value == "a":
+        return nil
+    return Optional.some(Label(value))
+
+assert(source.compactMap(label) == [Label("ü"), Label("🌍"), Label("B")])
+
+func nested(value: String) -> String??:
+    if value == "a":
+        return nil
+    if value == "ü":
+        return Optional.some(nil)
+    return Optional.some(Optional.some(value))
+
+let nestedValues = source.compactMap(nested)
+assert(nestedValues.count == 3)
+assert(nestedValues[0] == nil)
+assert(nestedValues[1].unwrap() == "🌍")
+
+struct Selection:
+    let selected: String
+    func keep(value: String) -> String?:
+        if value == self.selected:
+            return Optional.some(value)
+        return nil
+
+assert(source.compactMap(Selection("ü").keep) == ["ü"])
+
+func local(value: String) -> [String]:
+    let selected = "🌍"
+    func keep(scalar: String) -> String?:
+        if scalar == selected:
+            return Optional.some(scalar)
+        return nil
+    return value.compactMap(keep)
+
+assert(local(source) == ["🌍"])
+
+let keepB = func(value: String) -> String?:
+    if value == "B":
+        return Optional.some(value)
+    return nil
+assert(source.compactMap(keepB) == ["B"])
+
+let many = String(repeating: "ü", count: 129)
+assert(many.compactMap(keepWide).count == 129)
+assert(many.compactMap(keepWide)[128] == "üü")
+
+var mutableSource = "aü"
+func mutate(value: String) -> String?:
+    mutableSource = "changed"
+    return Optional.some(value)
+
+assert(mutableSource.compactMap(mutate) == ["a", "ü"])
+assert(mutableSource == "changed")
+
+func failOnSecond(value: String) -> String?:
+    if value == "ü":
+        let missing: [String] = []
+        return Optional.some(missing[0])
+    return Optional.some(value)
+
+assert(attempt(source.compactMap(failOnSecond)) == nil)
+assert(source == "aü🌍B")

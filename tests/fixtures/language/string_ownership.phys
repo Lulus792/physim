@@ -1,0 +1,116 @@
+func join(left: String, right: String) -> String:
+    return left + right
+
+var greeting = "Grü"
+greeting = join(greeting, "ße")
+assert(greeting == "Grüße")
+let words = [greeting, greeting + "!", ""]
+assert(words.count == 3)
+assert(words[0] == "Grüße" && words[1] == "Grüße!")
+assert(words.contains(join("Gr", "üße")))
+let sliced = words[0..<2]
+assert(sliced[1] == "Grüße!")
+let optional: String? = Optional.some(join("m", "/s"))
+assert(optional.unwrap() == "m/s")
+
+struct Label:
+    let text: String
+let label = Label(greeting + " Welt")
+assert(label.text == "Grüße Welt")
+
+let unicode = "A€🌍Z"
+assert(unicode.count == 4 && unicode.utf8.count == 9 && !unicode.isEmpty)
+assert("".isEmpty && "".count == 0 && "".utf8.count == 0)
+assert(unicode[0] == "A" && unicode[1] == "€" && unicode[2] == "🌍")
+assert(unicode[1..<3] == "€🌍" && unicode[1...2] == "€🌍")
+assert(unicode[..<2] == "A€" && unicode[2...] == "🌍Z")
+assert(unicode[... by 2] == "A🌍" && unicode[0..<4 by 3] == "AZ")
+assert(unicode[4..<4].isEmpty)
+assert((join("€", "🌍"))[1] == "🌍")
+assert(words[0][2] == "ü" && label.text[0..<5] == "Grüße")
+assert(greeting.contains("üß") && greeting.firstIndex(of: "üß").unwrap() == 2)
+assert(unicode.contains("€🌍") && unicode.firstIndex(of: "🌍").unwrap() == 2)
+assert(greeting.firstIndex(of: join("ß", "e")).unwrap() == 3)
+assert(greeting.firstIndex(of: "missing") == nil && !greeting.contains("missing"))
+assert("".contains("") && "".firstIndex(of: "").unwrap() == 0)
+assert(!"".contains("a") && "".firstIndex(of: "a") == nil)
+assert("Grüße Grüße".lastIndex(of: "Grüße").unwrap() == 6)
+assert(greeting.lastIndex(of: "üß").unwrap() == 2)
+assert(unicode.lastIndex(of: "🌍").unwrap() == 2)
+assert(greeting.lastIndex(of: "missing") == nil)
+assert(greeting.lastIndex(of: "").unwrap() == greeting.count)
+assert("".lastIndex(of: "").unwrap() == 0)
+assert(greeting.hasPrefix("Grü") && greeting.hasSuffix("ße"))
+assert(unicode.hasPrefix("A€") && unicode.hasSuffix("🌍Z"))
+assert(greeting.hasPrefix("") && greeting.hasSuffix(""))
+assert("".hasPrefix("") && "".hasSuffix(""))
+assert(!greeting.hasPrefix("rü") && !greeting.hasSuffix("Grü"))
+assert(!"".hasPrefix("a") && !"".hasSuffix("a"))
+let replaced = greeting.replacingOccurrences(of: "üß", with: "U")
+assert(replaced == "GrUe" && greeting == "Grüße")
+assert("aaaa".replacingOccurrences(of: "aa", with: "b") == "bb")
+assert("A€🌍Z".replacingOccurrences(of: "", with: ".") == ".A.€.🌍.Z.")
+assert("abc".replacingOccurrences(of: "b", with: "") == "ac")
+assert("abc".replacingOccurrences(of: "z", with: "X") == "abc")
+assert("".replacingOccurrences(of: "", with: "🌍") == "🌍")
+assert(join("a", "b").replacingOccurrences(of: join("a", "b"), with: "x") == "x")
+func normalized() -> String:
+    return "a€a".replacingOccurrences(of: "a", with: "🌍")
+let ownedReplacement = normalized()
+let replacementCopies = [ownedReplacement, ownedReplacement + "!"]
+assert(replacementCopies[0] == "🌍€🌍" && replacementCopies[1] == "🌍€🌍!")
+let pieces = "A€🌍€Z".split(separator: "€")
+assert(pieces == ["A", "🌍", "Z"])
+assert("::A::".split(separator: "::") == ["A"])
+assert("::A::".split(separator: "::", omittingEmptySubsequences: false) == ["", "A", ""])
+assert("".split(separator: ",") == [])
+assert("".split(separator: ",", omittingEmptySubsequences: false) == [""])
+assert("a,,b".split(separator: ",") == ["a", "b"])
+assert("a,,b".split(separator: ",", maxSplits: 1) == ["a", ",b"])
+assert("a,,b".split(separator: ",", maxSplits: 2,
+                     omittingEmptySubsequences: false) == ["a", "", "b"])
+assert("a,,b".split(separator: ",", maxSplits: 0) == ["a,,b"])
+assert(",a,b".split(separator: ",", maxSplits: 1) == ["a", "b"])
+assert("a,,b,c".split(separator: ",", maxSplits: 2) == ["a", "b", "c"])
+assert("A€🌍".split(separator: "", maxSplits: 1) == ["A", "€🌍"])
+assert("A€🌍".split(separator: "", maxSplits: 0) == ["A€🌍"])
+assert(attempt("a,b".split(separator: ",", maxSplits: -1)) == nil)
+var splitCalls = 0
+func splitPart() -> String:
+    splitCalls = splitCalls * 10 + 1
+    return ","
+func splitLimit() -> Int64:
+    splitCalls = splitCalls * 10 + 2
+    return 1
+func splitOmit() -> Bool:
+    splitCalls = splitCalls * 10 + 3
+    return true
+assert("a,,b".split(separator: splitPart(), maxSplits: splitLimit(),
+                    omittingEmptySubsequences: splitOmit()) == ["a", ",b"])
+assert(splitCalls == 123)
+assert("".split(separator: "").count == 0)
+assert("A€🌍".split(separator: "") == ["A", "€", "🌍"])
+func fields() -> [String]:
+    return "x,y".split(separator: ",")
+let ownedFields = fields()
+assert(ownedFields.count == 2 && ownedFields[0] == "x" && ownedFields[1] == "y")
+assert(pieces.joined(separator: "€") == "A€🌍€Z")
+assert(["", "A", ""].joined(separator: "::") == "::A::")
+assert(["a", "b", "c"].joined(separator: "") == "abc")
+let noFields: [String] = []
+assert(noFields.joined(separator: ",") == "")
+assert(["🌍"].joined(separator: ",") == "🌍")
+func combined() -> String:
+    return ["Gr", "ü", "ße"].joined(separator: "")
+assert(combined() == greeting)
+assert("x,y".split(separator: ",").joined(separator: ";") == "x;y")
+assert(String(-9223372036854775808) == "-9223372036854775808")
+assert(String(true) == "true" && String(false) == "false")
+assert(String(-0.0) == "-0" && Float64(String(0.1)) == 0.1)
+assert(String(greeting) == greeting)
+assert(Int64("+0042") == 42)
+assert(Int64("-9223372036854775808") == -9223372036854775808)
+assert(Float64("-.5") == -0.5 && Float64("1e-300") > 0)
+
+let unit = Unit(1, 0, -1, 0, 0, 0, 0, 1, join("m", "/s"))
+assert(unit.isCompatible(Unit(1, 0, -1, 0, 0, 0, 0, 1, "metres per second")))

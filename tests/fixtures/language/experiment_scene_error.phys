@@ -1,0 +1,10 @@
+let c = Channel("value", Unit(0, 0, 0, 0, 0, 0, 0, 1, "1"), "value")
+func create():
+    return
+func reset():
+    c.sample(1)
+func step(dt: Float64):
+    c.sample(dt)
+func scene():
+    sphere(Vec3(0, 0, 0), 1, 4294967295, 1)
+    sphere(Vec3(1, 0, 0), 1, 4294967295, 1)

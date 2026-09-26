@@ -1,0 +1,20 @@
+let text = "\u{41}\u{e4}\u{1F600}"
+assert(text == "Aä😀")
+assert(text.count == 3)
+assert("\u{1}".count == 1)
+
+let multiline = """erste\u{A}zweite\u{1F600}"""
+assert(multiline == "erste\nzweite😀")
+
+func classify(value: String) -> Int64:
+    switch value:
+        case "\u{e4}":
+            return 1
+        case "\u{1F600}":
+            return 2
+        default:
+            return 0
+
+assert(classify("ä") == 1)
+assert(classify("😀") == 2)
+assert(classify("a") == 0)

@@ -1,0 +1,140 @@
+// Conditional bindings evaluate the source once and copy one optional level.
+var calls: Int64 = 0
+func read(present: Bool) -> [Int64]?:
+    calls += 1
+    if present:
+        return Optional.some([calls,42])
+    return nil
+
+var source = Optional.some([1,2])
+if let values = source:
+    source = nil
+    assert(values[0] == 1 && values[1] == 2)
+else:
+    assert(false)
+assert(source == nil)
+if var values = read(true):
+    assert(calls == 1)
+    values.append(7)
+    assert(values[2] == 7)
+else:
+    assert(false)
+if let missing = read(false):
+    assert(false)
+else if let found = read(true):
+    assert(found[0] == 3 && calls == 3)
+else:
+    assert(false)
+assert(calls == 3)
+if let zero = Optional.some(0):
+    assert(zero == 0)
+else:
+    assert(false)
+if let flag = Optional.some(false):
+    assert(!flag)
+else:
+    assert(false)
+if let empty: [Int64] = Optional.some([]):
+    assert(empty.count == 0)
+else:
+    assert(false)
+
+let value: Float64? = Optional.some(2.5)
+if let value = value:
+    assert(value == 2.5)
+    if let value = Optional.some(7):
+        assert(value == 7)
+    assert(value == 2.5)
+assert(value.unwrap() == 2.5)
+if let value: Float64 = nil:
+    assert(false)
+else:
+    assert(value.unwrap() == 2.5)
+if let number: Float64 = Optional.some(1):
+    assert(number == 1.0)
+else:
+    assert(false)
+if let inner: Int64? = Optional.some(nil):
+    assert(inner == nil)
+else:
+    assert(false)
+
+struct Reading:
+    var samples: [Float64]
+    mutating func append(value: Float64):
+        self.samples.append(value)
+let retained = Optional.some(Reading([1.0]))
+if var reading = retained:
+    reading.append(2)
+    assert(reading.samples.count == 2)
+assert(retained.unwrap().samples.count == 1)
+func choose(value: [Int64]?) -> [Int64]:
+    if let values = value:
+        return values
+    else:
+        return [9]
+assert(choose(Optional.some([7]))[0] == 7 && choose(nil)[0] == 9)
+
+// Linked traversal: each iteration owns its current node independently of head.
+struct Node:
+    let value: Int64
+    let next: Node?
+var head: Node? = nil
+for i in 0..<20000:
+    head = Optional.some(Node(i,head))
+var total: Int64 = 0
+while let node = head:
+    head = node.next
+    if node.value % 2 == 0:
+        continue
+    total += node.value
+assert(total == 100000000 && head == nil)
+
+var iterations: Int64 = 0
+func next() -> [Int64]?:
+    iterations += 1
+    if iterations > 1000:
+        return nil
+    return Optional.some([iterations])
+var sum: Int64 = 0
+while var values = next():
+    values.append(values[0])
+    sum += values[1]
+assert(iterations == 1001 && sum == 500500)
+iterations = 0
+while let values = next():
+    if values[0] == 7:
+        break
+assert(iterations == 7)
+while let missing: Int64 = nil:
+    assert(false)
+
+// Nested loop and switch break targets must retain the outer bound value.
+enum Mode:
+    case stop
+    case other
+if let rows = Optional.some([[1],[2]]):
+    for i in 0..<2:
+        while let row = Optional.some(rows[i]):
+            switch Mode.stop:
+                case Mode.stop:
+                    break
+                case Mode.other:
+                    assert(false)
+            assert(row[0] == i + 1)
+            break
+    assert(rows.count == 2)
+
+func loopReturn() -> [Int64]:
+    while let value = Optional.some([6]):
+        return value
+    return []
+assert(loopReturn()[0] == 6)
+for i in 0..<300000:
+    if let rows = Optional.some([[i],[2]]):
+        if i % 2 == 0:
+            continue
+        assert(rows[0][0] == i)
+        if i == 299999:
+            break
+print("conditional binding checks passed")

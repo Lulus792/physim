@@ -1,0 +1,15 @@
+let scalar = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
+let speed = Channel("speed", scalar, "Selected parameter value")
+let initialSpeed = parameter("initialSpeed", 2.0, -10.0, 10.0, "Initial speed")
+
+func create():
+    metadata("model=parameter experiment")
+
+func reset():
+    speed.sample(initialSpeed)
+
+func step(dt: Float64):
+    speed.sample(initialSpeed)
+
+func scene():
+    return

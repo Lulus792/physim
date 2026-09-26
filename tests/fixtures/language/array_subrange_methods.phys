@@ -1,0 +1,73 @@
+var numbers = [1, 2, 3, 4, 5]
+let original = numbers
+numbers.removeSubrange(1..<4)
+assert(numbers == [1, 5] && original == [1, 2, 3, 4, 5])
+numbers.replaceSubrange(1..<1, with: [2, 3, 4])
+assert(numbers == original)
+numbers.replaceSubrange(1...3, with: [7])
+assert(numbers == [1, 7, 5])
+numbers.removeSubrange(2..<2)
+assert(numbers == [1, 7, 5])
+numbers.removeSubrange(0...2)
+assert(numbers == [])
+
+var words = ["alpha", "beta", "gamma", "delta"]
+let saved = words
+words.replaceSubrange(1..<3, with: words)
+assert(words == ["alpha", "alpha", "beta", "gamma", "delta", "delta"])
+assert(saved == ["alpha", "beta", "gamma", "delta"])
+words.removeSubrange(1..<5)
+assert(words == ["alpha", "delta"] && saved.count == 4)
+
+struct Holder:
+    var rows: [[String]]
+var holder = Holder([["a", "b", "c"], ["d", "e", "f"]])
+let snapshot = holder
+holder.rows[0].replaceSubrange(1..<2, with: ["x", "y"])
+assert(holder.rows[0] == ["a", "x", "y", "c"])
+holder.rows[1].removeSubrange(0..<2)
+assert(holder.rows[1] == ["f"] && snapshot.rows[1] == ["d", "e", "f"])
+
+var calls = 0
+func row() -> Int64:
+    calls += 1
+    return 0
+func start() -> Int64:
+    calls += 10
+    return 1
+func end() -> Int64:
+    calls += 100
+    return 3
+func replacement() -> [String]:
+    calls += 1000
+    return ["z"]
+holder.rows[row()].replaceSubrange(start()..<end(), with: replacement())
+assert(calls == 1111 && holder.rows[0] == ["a", "z", "c"])
+
+func invalidRemove(startIndex: Int64, endIndex: Int64) -> Bool:
+    words.removeSubrange(startIndex..<endIndex)
+    return true
+assert(attempt(invalidRemove(-1, 1)) == nil)
+assert(attempt(invalidRemove(2, 1)) == nil)
+assert(attempt(invalidRemove(0, 3)) == nil)
+assert(words == ["alpha", "delta"])
+
+func invalidReplace(startIndex: Int64, endIndex: Int64) -> Bool:
+    words.replaceSubrange(startIndex..<endIndex, with: ["broken"])
+    return true
+assert(attempt(invalidReplace(3, 3)) == nil)
+assert(words == ["alpha", "delta"])
+var replacementCalls = 0
+func countedReplacement() -> [String]:
+    replacementCalls += 1
+    return ["unused"]
+func invalidBeforeReplacement() -> Bool:
+    words.replaceSubrange(0..<3, with: countedReplacement())
+    return true
+assert(attempt(invalidBeforeReplacement()) == nil)
+assert(replacementCalls == 0 && words == ["alpha", "delta"])
+
+var empty: [Int64] = []
+empty.removeSubrange(0..<0)
+empty.replaceSubrange(0..<0, with: [8])
+assert(empty == [8])

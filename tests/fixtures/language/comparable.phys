@@ -1,0 +1,41 @@
+func earlier<T: Comparable>(a: T, b: T) -> T:
+    if a <= b:
+        return a
+    return b
+
+func ordered<T: Comparable>(values: [T]) -> [T]:
+    return values.sorted()
+
+struct Interval<T: Comparable>:
+    let lower: T
+    let upper: T
+    func contains(value: T) -> Bool:
+        return self.lower <= value && value <= self.upper
+
+enum Choice<T: Comparable>:
+    case value(item: T)
+    case empty
+
+assert(earlier(3, 5) == 3)
+assert(earlier(2.5, -1.0) == -1.0)
+assert(earlier("ü", "🌍") == "ü")
+assert(earlier<String>("same", "same") == "same")
+assert(ordered([3, 1, 2]) == [1, 2, 3])
+assert(ordered(["z", "a", "ü"]) == ["a", "z", "ü"])
+assert(Interval<Int64>(2, 4).contains(3))
+assert(!Interval<Int64>(2, 4).contains(5))
+assert(Interval<String>("a", "z").contains("m"))
+assert(!Interval<String>("a", "z").contains("🌍"))
+let choice = Choice<String>.value("name")
+switch choice:
+    case Choice<String>.value(item):
+        assert(item == "name")
+    case Choice<String>.empty:
+        assert(false)
+
+assert("a" < "b")
+assert("a" <= "a")
+assert("b" > "a")
+assert("b" >= "b")
+assert("ü" < "🌍")
+assert(!("ä" < "z"))

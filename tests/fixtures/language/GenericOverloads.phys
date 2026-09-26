@@ -1,0 +1,5 @@
+func pick(value: Int64) -> String:
+    return "number"
+
+func pick<T: Scalar>(value: T) -> String:
+    return "generic"

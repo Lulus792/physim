@@ -1,0 +1,31 @@
+func analyze():
+    report("Invalid selection or table")
+    let run = Dataset(0)
+    let time = run.series("time")
+    let value = run.series("value")
+    let status = run.series("status")
+    let one = Unit(0,0,0,0,0,0,0,1,"1")
+    let metres = Unit(1,0,0,0,0,0,0,1,"m")
+    if inputCount() == 1:
+        let invalid = Series.select([],status,1)
+    else if inputCount() == 2:
+        let invalid = Series.select([value],time,1)
+    else if inputCount() == 3:
+        let a = Series.select([time,value],status,1)
+        let b = Series.select([time,value],status,1)
+        let invalid = a[1].plot(b[0],"Wrong alignment","x")
+    else if inputCount() == 4:
+        let invalid = Table("Mismatch",["One","Two"],[one])
+    else if inputCount() == 5:
+        let table = Table("Units",["Length"],[metres])
+        table.row("Invalid",[Quantity(1,one)])
+    else if inputCount() == 6:
+        let table = Table("Rows",["Value"],[one])
+        for i in 0...256:
+            table.row("Row",[Quantity(Float64(i),one)])
+    else if inputCount() == 7:
+        for i in 0...8:
+            let table = Table("Table",["Value"],[one])
+    else:
+        let table = Table("Export",["Value"],[one])
+        table.export("../outside")

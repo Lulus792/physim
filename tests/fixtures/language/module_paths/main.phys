@@ -1,0 +1,5 @@
+import Common.Helpers
+import Shared.Scale as Direct
+
+assert(Helpers.adjust(3) == 12)
+assert(Direct.factor == 4)

@@ -1,0 +1,101 @@
+// Two linked spheres falling onto a plane. Contact and joint velocities are
+// solved together after gravity impulses and before the position step.
+let zero = Vec3(0,0,0)
+let identity = Quat(0,0,0,1)
+let gravity = Vec3(0,-9.81,0)
+let radius = 0.25
+let solver = ContactSolver(128,0.1,0.5,0.5,0.00001,0.8)
+let link = DistanceJoint(zero,zero,1,0.2).constraint(0,1)
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let speed = Unit(1,0,-1,0,0,0,0,1,"m/s")
+let one = Unit(0,0,0,0,0,0,0,1,"1")
+let joules = Unit(2,1,-2,0,0,0,0,1,"J")
+let impulse = Unit(1,1,-1,0,0,0,0,1,"N s")
+let px = Channel("position.x",metres,"Body A x")
+let py = Channel("position.y",metres,"Body A y")
+let bx = Channel("bodyB.x",metres,"Body B x")
+let by = Channel("bodyB.y",metres,"Body B y")
+let vx = Channel("velocity.x",speed,"Body A velocity x")
+let vy = Channel("velocity.y",speed,"Body A velocity y")
+let bvx = Channel("bodyB.velocity.x",speed,"Body B velocity x")
+let bvy = Channel("bodyB.velocity.y",speed,"Body B velocity y")
+let energy = Channel("energy",joules,"Kinetic plus gravitational energy; friction and stabilization change energy")
+let count = Channel("contacts",one,"Number of contact constraints in last solve")
+let ci = Channel("contact.impulse.y",impulse,"Sum of contact impulses on A bodies")
+let ji = Channel("joint.impulse.y",impulse,"Joint impulse on body A")
+let normalError = Channel("contact.error",speed,"Normal velocity residual before projection")
+let projectionError = Channel("contact.projectionError",metres,"Unmet contact translation correction")
+let jointVelocity = Channel("joint.velocityError",speed,"Joint velocity residual before projection")
+let jointLength = Channel("joint.lengthError",metres,"Joint length error after projection, before drift")
+
+func initialBodies() -> [Body]:
+    var a = Body.sphere(1,radius)
+    var b = a
+    a.setState(Vec3(0,1,0),Vec3(0.5,0,0),identity,zero)
+    b.setState(Vec3(0.6,1.8,0),Vec3(0.5,0,0),identity,zero)
+    return [a,b]
+
+func contactConstraints(values: [Body]) -> [ContactConstraint]:
+    var contacts: [ContactConstraint] = []
+    for i in 0..<values.count:
+        let floor = Contacts.spherePlane(values[i],radius,zero,Vec3(0,1,0))
+        for p in 0..<floor.count:
+            contacts.append(floor.constraint(p,i,-1))
+    let pair = Contacts.spheres(values[0],radius,values[1],radius)
+    for p in 0..<pair.count:
+        contacts.append(pair.constraint(p,0,1))
+    return contacts
+
+var bodies = initialBodies()
+var solution = solver.solve(bodies,contactConstraints(bodies),[link],0.005)
+
+func measure():
+    let a = bodies[0]
+    let b = bodies[1]
+    px.sample(a.position.x)
+    py.sample(a.position.y)
+    bx.sample(b.position.x)
+    by.sample(b.position.y)
+    vx.sample(a.velocity.x)
+    vy.sample(a.velocity.y)
+    bvx.sample(b.velocity.x)
+    bvy.sample(b.velocity.y)
+    energy.sample(a.kineticEnergy() + b.kineticEnergy() + 9.81 * (a.position.y + b.position.y))
+    count.sample(Float64(solution.contactCount))
+    var total = 0.0
+    for i in 0..<solution.contactCount:
+        total = total + solution.contactImpulse(i).y
+    ci.sample(total)
+    ji.sample(solution.jointImpulse(0).y)
+    normalError.sample(solution.maxNormalError)
+    projectionError.sample(solution.maxProjectionError)
+    jointVelocity.sample(solution.maxJointVelocityError)
+    jointLength.sample(solution.maxJointLengthError)
+
+func create():
+    metadata("model=coupled spheres\nsolver=shared contact and distance joint iterations\niterations=128\nfriction=0.5\nrestitution=0.1\nstabilization=0.2\nstep=gravity impulse, graph solve, body drift\ncontact=discrete; no CCD")
+
+func reset():
+    let initial = initialBodies()
+    solution = solver.solve(initial,contactConstraints(initial),[link],0.005)
+    bodies = solution.bodies()
+    measure()
+
+func step(dt: Float64):
+    var next = bodies
+    for i in 0..<next.count:
+        next[i].applyImpulse(gravity * dt,next[i].position)
+    let solved = solver.solve(next,contactConstraints(next),[link],dt)
+    next = solved.bodies()
+    for i in 0..<next.count:
+        next[i].step(zero,zero,dt)
+    bodies = next
+    solution = solved
+    measure()
+
+func scene():
+    sphere(bodies[0].position,radius,1407107839,1)
+    sphere(bodies[1].position,radius,4073026303,2)
+    line(bodies[0].position,bodies[1].position,0.012,3234254847,3)
+    plane(zero,Vec2(6,6),identity,910447359,4)
+    label(Vec3(-0.4,2.1,0),"Gekoppelte Körper · Kontakt + Gelenk",3234254847,5)

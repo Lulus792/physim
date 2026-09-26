@@ -1,0 +1,70 @@
+// Distance joints solve velocities. Adopting the returned bodies is explicit.
+let zero = Vec3(0,0,0)
+let identity = Quat(0,0,0,1)
+var a = Body.sphere(2,1)
+var b = Body.sphere(1,1)
+a.setState(zero,Vec3(-1,0,0),identity,zero)
+b.setState(Vec3(2,0,0),Vec3(2,0,0),identity,zero)
+let joint: DistanceJoint = DistanceJoint(length: 2, stabilization: 0, anchorB: zero, anchorA: zero)
+assert(joint.length == 2 && joint.stabilization == 0 && joint.anchorA.length() == 0)
+let solved: JointResult = joint.resolve(bodyB: b, dt: 0.01, bodyA: a)
+assert(solved.bodyA.velocity.length() < 1e-12 && solved.bodyB.velocity.length() < 1e-12)
+assert(abs(solved.impulse.x - 2) < 1e-12 && solved.velocityError < 1e-12)
+assert(solved.lengthError == 0 && solved.bodyA.position.x == 0 && solved.bodyB.position.x == 2)
+assert(a.velocity.x == -1 && b.velocity.x == 2)
+
+let fixed = Body.sphere(0,1)
+var box = Body.box(1,Vec3(2,2,2))
+box.setState(zero,Vec3(1,0,0),Quat.axisAngle(Vec3(0,0,1),1.5707963267948966),zero)
+let offset = DistanceJoint(Vec3(1,0,0),Vec3(2,1,0),2,0)
+let rotation = offset.resolve(box,fixed,0.01)
+assert(abs(rotation.impulse.x + 0.4) < 1e-12)
+assert(abs(rotation.bodyA.velocity.x - 0.6) < 1e-12)
+assert(abs(rotation.bodyA.angularVelocity.z - 0.6) < 1e-12)
+assert(rotation.velocityError < 1e-12)
+
+// Local B anchors include the fixed body's translation and orientation.
+var transformed = fixed
+transformed.setState(Vec3(2,0,0),zero,Quat.axisAngle(Vec3(0,0,1),1.5707963267948966),zero)
+let localB = DistanceJoint(Vec3(1,0,0),Vec3(1,0,0),2,0)
+let equivalent = localB.resolve(box,transformed,0.01)
+assert((equivalent.impulse - rotation.impulse).length() < 1e-12)
+assert(equivalent.bodyB.position.x == 2 && equivalent.bodyB.mass == 0)
+
+var sphere = Body.sphere(1,1)
+sphere.setState(Vec3(2,0,0),zero,identity,zero)
+let stretched = DistanceJoint(zero,zero,1,0.2)
+let correction = stretched.resolve(sphere,fixed,0.1)
+assert(correction.lengthError == 1 && abs(correction.bodyA.velocity.x + 2) < 1e-12)
+assert(correction.bodyA.position.x == 2 && correction.velocityError < 1e-12)
+var copies = [correction]
+let saved = copies
+copies[0] = rotation
+assert(saved[0].lengthError == 1 && copies[0].bodyA.angularVelocity.z > 0)
+struct Link:
+    let constraint: DistanceJoint
+    let result: JointResult
+let record = Link(stretched,correction)
+assert(record.constraint.anchorB.length() == 0 && record.result.lengthError == 1)
+
+var staticA = fixed
+staticA.setState(Vec3(2,0,0),zero,identity,zero)
+let unmet = stretched.resolve(staticA,fixed,0.1)
+assert(unmet.impulse.length() == 0 && abs(unmet.velocityError - 2) < 1e-12)
+
+func orbitError(dt: Float64, steps: Int64) -> Float64:
+    var moving = Body.sphere(1,0.1)
+    moving.setState(Vec3(1,0,0),Vec3(0,1,0),identity,zero)
+    var maximum = 0.0
+    for i in 0..<steps:
+        let result = stretched.resolve(moving,fixed,dt)
+        moving = result.bodyA
+        moving.step(zero,zero,dt)
+        let error = abs(moving.position.length() - 1)
+        if error > maximum:
+            maximum = error
+    return maximum
+let coarse = orbitError(0.02,100)
+let fine = orbitError(0.01,200)
+assert(coarse > 0 && fine > 0 && fine < coarse * 0.3 && coarse < 0.002)
+print("distance joint checks passed")

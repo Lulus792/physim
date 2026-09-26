@@ -1,0 +1,44 @@
+// Three independent particles in uniform gravity, with value-copy initial state.
+struct Particle:
+    var position: Vec3
+    var velocity: Vec3
+    static func atRest(position: Vec3) -> Particle:
+        return Particle(position, Vec3(0, 0, 0))
+    func advanced(acceleration: Vec3, dt: Float64) -> Particle:
+        return Particle(self.position + self.velocity * dt + 0.5 * acceleration * dt * dt,
+                        self.velocity + acceleration * dt)
+    mutating func advance(acceleration: Vec3, dt: Float64):
+        self = self.advanced(acceleration, dt)
+let initial = [
+    Particle(Vec3(0, 0, 0), Vec3(1, 5, 0)),
+    Particle(Vec3(2, 1, 0), Vec3(-2, 3, 1)),
+    Particle(Vec3(-1, 4, 2), Vec3(0, 2, -1)),
+]
+var particles = initial
+let acceleration = Vec3(0, -9.80665, 0)
+let dt = 0.01
+for step in 0..<100:
+    for index in 0..<particles.count:
+        particles[index].advance(acceleration, dt)
+for index in 0..<particles.count:
+    let reference = initial[index].position + initial[index].velocity + 0.5 * acceleration
+    assert((particles[index].position - reference).length() < 1e-10)
+    assert((particles[index].velocity - initial[index].velocity - acceleration).length() < 1e-10)
+assert(initial[0].position == Vec3(0, 0, 0))
+var totalVelocity = Vec3(0, 0, 0)
+for particle in particles:
+    totalVelocity += particle.velocity
+assert((totalVelocity - Vec3(-1, 10 - 3 * 9.80665, 0)).length() < 1e-10)
+// Add a new particle and retire the oldest while preserving the completed run.
+let completed = particles
+particles.append(Particle.atRest(Vec3(0, 0, 0)))
+let retired = particles.remove(at: 0)
+assert(retired.position == completed[0].position)
+assert(particles.count == 3 && completed.count == 3)
+assert(particles[0].position == completed[1].position)
+assert(particles[2].position == Vec3(0, 0, 0))
+// Work with the two surviving particles as an independent group.
+var survivors = particles[0..<2]
+assert(survivors.count == 2)
+survivors[0].position = Vec3(100, 100, 100)
+assert(particles[0].position == completed[1].position)

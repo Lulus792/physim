@@ -1,0 +1,85 @@
+var calls = 0
+
+func source(value: String?) -> String?:
+    calls += 1
+    return value
+
+func classifyOptional(value: String?) -> Int64:
+    switch value:
+        case nil:
+            return 0
+        case Optional.some("a"..<"m"):
+            return 1
+        case Optional.some("m"..."z"):
+            return 2
+        case Optional.some(text):
+            return text.count
+
+assert(classifyOptional(nil) == 0)
+assert(classifyOptional(Optional.some("a")) == 1)
+assert(classifyOptional(Optional.some("l")) == 1)
+assert(classifyOptional(Optional.some("m")) == 2)
+assert(classifyOptional(Optional.some("z")) == 2)
+assert(classifyOptional(Optional.some("🌍")) == 1)
+assert(classifyOptional(source(Optional.some("beta"))) == 1 && calls == 1)
+
+func classifyOverlap(value: String?) -> Int64:
+    switch value:
+        case Optional.some("a"..."m"):
+            return 1
+        case Optional.some("m"..."z"):
+            return 2
+        default:
+            return 0
+
+assert(classifyOverlap(Optional.some("m")) == 1)
+assert(classifyOverlap(Optional.some("n")) == 2)
+assert(classifyOverlap(nil) == 0)
+
+func classifyNested(value: String??) -> Int64:
+    switch value:
+        case nil:
+            return 0
+        case Optional.some(nil):
+            return 1
+        case Optional.some(Optional.some("ü"..."🌍")):
+            return 2
+        case Optional.some(Optional.some(text)):
+            return text.count
+
+assert(classifyNested(nil) == 0)
+assert(classifyNested(Optional.some(nil)) == 1)
+assert(classifyNested(Optional.some(Optional.some("ü"))) == 2)
+assert(classifyNested(Optional.some(Optional.some("🌍"))) == 2)
+assert(classifyNested(Optional.some(Optional.some("cat"))) == 3)
+
+enum Message:
+    case text(value: String)
+    case nested(value: String?)
+    case empty
+
+func classifyMessage(message: Message) -> Int64:
+    switch message:
+        case Message.text("a"..<"m"):
+            return 1
+        case Message.text("m"..."z"):
+            return 2
+        case Message.text(value):
+            return value.count
+        case Message.nested(nil):
+            return 0
+        case Message.nested(Optional.some("ü"..."🌍")):
+            return 3
+        case Message.nested(Optional.some(value)):
+            return value.count
+        case Message.empty:
+            return -1
+
+assert(classifyMessage(Message.text("a")) == 1)
+assert(classifyMessage(Message.text("m")) == 2)
+assert(classifyMessage(Message.text("🌍")) == 1)
+assert(classifyMessage(Message.nested(nil)) == 0)
+assert(classifyMessage(Message.nested(Optional.some("ü"))) == 3)
+assert(classifyMessage(Message.nested(Optional.some("🌍"))) == 3)
+assert(classifyMessage(Message.nested(Optional.some("cat"))) == 3)
+assert(classifyMessage(Message.empty) == -1)

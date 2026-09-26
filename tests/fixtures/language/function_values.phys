@@ -1,0 +1,280 @@
+import FunctionValuesLibrary
+
+func twice(x: Float64) -> Float64:
+    return x * 2
+
+func square(x: Float64) -> Float64:
+    return x * x
+
+func apply(function: func(Float64) -> Float64, value: Float64) -> Float64:
+    return function(value)
+
+func choose(squareIt: Bool) -> func(Float64) -> Float64:
+    if squareIt:
+        return square
+    return twice
+
+func preserve<T>(value: T) -> T:
+    return value
+
+func mapValue<T>(function: func(T) -> T, value: T) -> T:
+    return function(value)
+
+let selected: func(Float64) -> Float64 = twice
+assert(selected(3) == 6)
+assert(apply(square, 3) == 9)
+assert(choose(true)(4) == 16)
+let preserved = preserve(twice)
+assert(preserved(6) == 12)
+assert(mapValue(twice, 3.0) == 6)
+let integerIdentity: func(Int64) -> Int64 = preserve<Int64>
+assert(integerIdentity(12) == 12)
+let stringIdentity: func(String) -> String = preserve<String>
+let genericText = stringIdentity("owned generic")
+assert(genericText == "owned generic")
+let importedIdentity: func(String) -> String = FunctionValuesLibrary.same<String>
+assert(importedIdentity("module") == "module")
+let functions = [twice, square]
+assert(functions[0](5) == 10)
+let optional: (func(Float64) -> Float64)? = Optional.some(square)
+assert(optional.hasValue)
+assert(optional.unwrap()(3) == 9)
+
+let imported = FunctionValuesLibrary.shifted
+assert(imported(2) == 3)
+assert(FunctionValuesLibrary.selected(3) == 4)
+
+func textCopy(value: String) -> String:
+    return value
+
+let copy: func(String) -> String = textCopy
+let text = copy("owned")
+assert(text == "owned")
+
+var notifications = 0
+func notify() -> Void:
+    notifications += 1
+
+let handler: func() -> Void = notify
+handler()
+assert(notifications == 1)
+
+struct Operation:
+    let run: func(Float64) -> Float64
+
+let operation = Operation(square)
+assert(operation.run(4) == 16)
+
+struct Transform<T>:
+    let run: func(T) -> T
+
+let transform = Transform(twice)
+assert(transform.run(7) == 14)
+
+struct NumericTools:
+    let value: Float64
+    static func triple(value: Float64) -> Float64:
+        return value * 3
+
+let triple: func(Float64) -> Float64 = NumericTools.triple
+assert(triple(4) == 12)
+assert(apply(NumericTools.triple, 2) == 6)
+assert(preserve(NumericTools.triple)(3) == 9)
+
+struct IdentityTools<T>:
+    let value: T
+    static func identity(value: T) -> T:
+        return value
+    static func echo<U>(value: U) -> U:
+        return value
+
+let identity: func(Float64) -> Float64 = IdentityTools<Float64>.identity
+assert(identity(9) == 9)
+let nestedIdentity: func(Int64) -> Int64 = IdentityTools<Float64>.echo<Int64>
+assert(nestedIdentity(11) == 11)
+
+struct GenericMethods:
+    let value: Int64
+    static func echo<T>(value: T) -> T:
+        return value
+
+let methodIdentity: func(Int64) -> Int64 = GenericMethods.echo<Int64>
+assert(methodIdentity(10) == 10)
+
+let negate: func(Float64) -> Float64 = FunctionValuesLibrary.RemoteTools.negate
+assert(negate(4) == -4)
+let remoteIdentity: func(Float64) -> Float64 = FunctionValuesLibrary.RemoteIdentity<Float64>.same
+assert(remoteIdentity(8) == 8)
+let remoteEcho: func(Int64) -> Int64 = FunctionValuesLibrary.RemoteIdentity<Float64>.echo<Int64>
+assert(remoteEcho(13) == 13)
+
+enum Mode:
+    case normal
+    static func offset(value: Float64) -> Float64:
+        return value + 5
+
+let offset: func(Float64) -> Float64 = Mode.offset
+assert(offset(2) == 7)
+
+struct Adder:
+    var base: Float64
+    func add(value: Float64) -> Float64:
+        return self.base + value
+
+var original = Adder(3)
+let bound: func(Float64) -> Float64 = original.add
+original.base = 7
+assert(bound(2) == 5)
+let boundFunctions = [bound, Adder(10).add]
+assert(boundFunctions[0](1) == 4)
+assert(boundFunctions[1](1) == 11)
+
+func makeBound() -> func(Float64) -> Float64:
+    let local = Adder(9)
+    return local.add
+
+let escaped = makeBound()
+assert(escaped(2) == 11)
+
+struct Prefix:
+    let text: String
+    func join(value: String) -> String:
+        return self.text + value
+    func echo<T>(value: T) -> T:
+        return value
+
+let joined: func(String) -> String = Prefix("owned ").join
+assert(joined("receiver") == "owned receiver")
+let joinedCopies = [joined]
+assert(joinedCopies[0]("copy") == "owned copy")
+let optionalJoined: (func(String) -> String)? = Optional.some(joined)
+assert(optionalJoined.unwrap()("optional") == "owned optional")
+let boundGeneric: func(Int64) -> Int64 = Prefix("captured").echo<Int64>
+assert(boundGeneric(42) == 42)
+
+enum Sign:
+    case positive
+    case negative
+    func apply(value: Int64) -> Int64:
+        switch self:
+            case Sign.positive:
+                return value
+            case Sign.negative:
+                return -value
+
+let negative: func(Int64) -> Int64 = Sign.negative.apply
+assert(negative(5) == -5)
+
+enum Message:
+    case text(content: String)
+    func render() -> String:
+        switch self:
+            case Message.text(content):
+                return content
+
+let render: func() -> String = Message.text(content: "owned enum").render
+assert(render() == "owned enum")
+
+struct Counter:
+    var value: Int64
+    mutating func advance(amount: Int64) -> Int64:
+        self.value += amount
+        return self.value
+    mutating func echo<T>(value: T) -> T:
+        self.value += 1
+        return value
+
+var sourceCounter = Counter(10)
+let advancing: func(Int64) -> Int64 = sourceCounter.advance
+let advancingCopy = advancing
+assert(advancing(2) == 12)
+assert(advancingCopy(3) == 15)
+assert(advancing(1) == 16)
+assert(sourceCounter.value == 10)
+let otherCounter = sourceCounter.advance
+assert(otherCounter(1) == 11)
+assert(advancing(1) == 17)
+let counterFunctions = [advancing]
+assert(counterFunctions[0](1) == 18)
+let optionalCounter: (func(Int64) -> Int64)? = Optional.some(advancing)
+assert(optionalCounter.unwrap()(1) == 19)
+assert(advancing(1) == 20)
+let echoCounter: func(String) -> String = sourceCounter.echo<String>
+assert(echoCounter("generic") == "generic")
+
+struct TextAccumulator:
+    var text: String
+    mutating func append(suffix: String) -> String:
+        self.text = self.text + suffix
+        return self.text
+
+func makeAppender() -> func(String) -> String:
+    let local = TextAccumulator("start")
+    return local.append
+
+let appendText = makeAppender()
+let appendCopy = appendText
+assert(appendText(" one") == "start one")
+assert(appendCopy(" two") == "start one two")
+assert(appendText(" three") == "start one two three")
+
+enum SwitchState:
+    case off
+    case on
+    mutating func toggle() -> Bool:
+        switch self:
+            case SwitchState.off:
+                self = SwitchState.on
+                return true
+            case SwitchState.on:
+                self = SwitchState.off
+                return false
+
+let toggle: func() -> Bool = SwitchState.off.toggle
+let toggleCopy = toggle
+assert(toggle())
+assert(!toggleCopy())
+assert(toggle())
+
+struct ArrayAccumulator:
+    var values: [Int64]
+    mutating func add(value: Int64) -> Int64:
+        self.values.append(value)
+        return self.values.count
+
+let originalArray = ArrayAccumulator([4])
+let addToArray = originalArray.add
+let addToArrayCopy = addToArray
+assert(addToArray(5) == 2)
+assert(addToArrayCopy(6) == 3)
+assert(originalArray.values.count == 1)
+
+enum OwnedState:
+    case text(content: String)
+    mutating func replace(content: String) -> String:
+        self = OwnedState.text(content: content)
+        switch self:
+            case OwnedState.text(content):
+                return content
+
+let replaceText = OwnedState.text(content: "old").replace
+let replaceTextCopy = replaceText
+assert(replaceText("new") == "new")
+assert(replaceTextCopy("next") == "next")
+
+let constructMessage: func(String) -> Message = Message.text
+let constructedMessage = constructMessage("constructed")
+assert(constructedMessage.render() == "constructed")
+let messageConstructors = [constructMessage]
+let optionalConstructor: (func(String) -> Message)? = Optional.some(constructMessage)
+assert(messageConstructors[0]("array").render() == "array")
+assert(optionalConstructor.unwrap()("optional").render() == "optional")
+
+enum Entry:
+    case pair(number: Int64, text: String)
+
+let makeEntry: func(Int64, String) -> Entry = Entry.pair
+let entry = makeEntry(4, "owned fields")
+switch entry:
+    case Entry.pair(number, text):
+        assert(number == 4 && text == "owned fields")

@@ -1,0 +1,5 @@
+func describe(value: Int64) -> String:
+    return "remote integer " + String(value)
+
+func describe(value: String) -> String:
+    return "remote text " + value

@@ -1,0 +1,60 @@
+var calls = 0
+
+func next() -> Int64:
+    calls += 1
+    return calls
+
+struct Snapshot:
+    let serial: Int64 = next()
+    let label: String = "default"
+    var values: [Int64] = [1, 2]
+
+let first = Snapshot()
+let second = Snapshot(label: "custom")
+assert(first.serial == 1 && second.serial == 2 && calls == 2)
+assert(first.label == "default" && second.label == "custom")
+assert(first.values == [1, 2] && second.values == [1, 2])
+var copy = first
+copy.values.append(3)
+assert(first.values == [1, 2] && copy.values == [1, 2, 3])
+let manual = Snapshot(serial: 42)
+assert(manual.serial == 42 && calls == 2)
+
+struct Ordered:
+    let defaulted: Int64 = next()
+    let supplied: Int64
+let ordered = Ordered(supplied: next())
+assert(ordered.supplied == 3 && ordered.defaulted == 4 && calls == 4)
+
+var seed = 10
+struct Seeded:
+    let value: Int64 = seed
+func makeSeeded() -> Seeded:
+    let seed = 99
+    return Seeded()
+assert(makeSeeded().value == 10)
+
+struct Nested:
+    let snapshot: Snapshot = Snapshot()
+let nested = Nested()
+assert(nested.snapshot.serial == 5 && calls == 5)
+assert(nested.snapshot.values == [1, 2])
+
+struct Pair:
+    let required: Int64
+    let optional: Int64 = 9
+assert(Pair(4).optional == 9)
+assert(Pair(4, 7).optional == 7)
+
+struct Holder<T>:
+    let value: T
+    let history: [T] = []
+
+let inferred = Holder(5)
+let explicit = Holder<Int64>(7)
+assert(inferred.value == 5 && inferred.history == [])
+assert(explicit.value == 7 && explicit.history == [])
+
+struct Finite:
+    let value: Int64 = Finite(value: 8).value
+assert(Finite().value == 8)

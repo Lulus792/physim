@@ -1,0 +1,42 @@
+// Constant-gravity vacuum model; exact kinematic step, no ground collision.
+struct Motion:
+    var position: Vec3
+    var velocity: Vec3
+let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
+let seconds = Unit(0, 0, 1, 0, 0, 0, 0, 1, "s")
+let kilograms = Unit(0, 1, 0, 0, 0, 0, 0, 1, "kg")
+let speed = metres.divided(right: seconds, symbol: "m/s")
+let energyUnit = kilograms.multiplied(right: speed.powered(exponent: 2, symbol: "m²/s²"), symbol: "J")
+let cx = Channel("position.x", metres, "Horizontal position")
+let cy = Channel("position.y", metres, "Vertical position")
+let cvx = Channel("velocity.x", speed, "Horizontal velocity")
+let cvy = Channel("velocity.y", speed, "Vertical velocity")
+let ce = Channel("energy", energyUnit, "Mechanical energy")
+let gravity = Quantity(9.80665, metres.divided(seconds.powered(2, "s²"), "m/s²"))
+let g: Float64 = gravity.value
+var state = Motion(Vec3(-2, 0, 0), Vec3(2, 5, 0))
+
+func measure():
+    cx.sample(state.position.x)
+    cy.sample(state.position.y)
+    cvx.sample(state.velocity.x)
+    cvy.sample(state.velocity.y)
+    ce.sample(0.5 * state.velocity.dot(state.velocity) + g * state.position.y)
+
+func create():
+    metadata("model=projectile, vacuum\nmass_kg=1\ngravity_m_s2=9.80665\nintegrator=exact constant acceleration")
+
+func reset():
+    state = Motion(Vec3(-2, 0, 0), Vec3(2, 5, 0))
+    measure()
+
+func step(dt: Float64):
+    let acceleration = Vec3(0, -g, 0)
+    state.position += state.velocity * dt + 0.5 * acceleration * dt * dt
+    state.velocity += acceleration * dt
+    measure()
+
+func scene():
+    sphere(state.position, 0.1, 1407107839, 1)
+    let tip = state.position + state.velocity * 0.15
+    line(state.position, tip, 0.01, 4073026303, 2)

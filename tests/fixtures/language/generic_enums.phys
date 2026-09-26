@@ -1,0 +1,140 @@
+import Library
+
+enum Choice<T>:
+    case none
+    case some(value: T)
+    func isSome() -> Bool:
+        switch self:
+            case Choice<T>.none:
+                return false
+            case Choice<T>.some(value):
+                return true
+    func unwrapOr(fallback: T) -> T:
+        switch self:
+            case Choice<T>.none:
+                return fallback
+            case Choice<T>.some(value):
+                return value
+    mutating func reset():
+        self = Choice.none
+    static func wrap(value: T) -> Choice<T>:
+        return Choice<T>.some(value: value)
+    func echo<U>(value: U) -> U:
+        return value
+
+func sameChoice<T>(value: Choice<T>) -> Choice<T>:
+    return value
+
+let empty: Choice<Int64> = Choice<Int64>.none
+let filled: Choice<Int64> = Choice<Int64>.some(value: 7)
+let constructChoice: func(Int64) -> Choice<Int64> = Choice<Int64>.some
+let constructedChoice = constructChoice(11)
+assert(constructedChoice.unwrapOr(fallback: 0) == 11)
+let inferredConstructor: func(String) -> Choice<String> = Choice.some
+assert(inferredConstructor("function value").unwrapOr(fallback: "") == "function value")
+let inferred = Choice.some(value: 42)
+let contextual: Choice<Float64> = Choice.some(value: 1)
+let contextualNone: Choice<Float64> = Choice.none
+assert(empty != filled)
+assert(inferred.unwrapOr(fallback: 0) == 42)
+assert(contextual.unwrapOr(fallback: 0.0) == 1.0)
+assert(!contextualNone.isSome())
+assert(!empty.isSome())
+assert(filled.isSome())
+assert(filled.unwrapOr(fallback: 0) == 7)
+switch filled:
+    case Choice<Int64>.none:
+        assert(false)
+    case Choice<Int64>.some(1...6):
+        assert(false)
+    case Choice<Int64>.some(7):
+        assert(true)
+    case Choice<Int64>.some(value):
+        assert(false)
+let boundCheck: func() -> Bool = filled.isSome
+assert(boundCheck())
+let staticWrap: func(Int64) -> Choice<Int64> = Choice<Int64>.wrap
+assert(staticWrap(8).unwrapOr(fallback: 0) == 8)
+assert(filled.echo<String>(value: "method") == "method")
+assert(sameChoice(filled).unwrapOr(fallback: 0) == 7)
+var change = Choice<Int64>.wrap(value: 9)
+assert(change.unwrapOr(fallback: 0) == 9)
+change.reset()
+assert(!change.isSome())
+let words: Choice<[String]> = Choice<[String]>.some(value: ["one", "two"])
+let copiedWords = words
+assert(copiedWords.unwrapOr(fallback: []).count == 2)
+let choices = [filled, empty]
+assert(choices[0].isSome() && !choices[1].isSome())
+let optionalChoice: Choice<Int64>? = Optional.some(filled)
+assert(optionalChoice.unwrap().unwrapOr(fallback: 0) == 7)
+
+let remote: Library.Remote<String> = Library.Remote<String>.present(value: "imported")
+let importedConstructor: func(String) -> Library.Remote<String> = Library.Remote.present
+assert(importedConstructor("stored") != Library.Remote<String>.absent)
+let inferredRemote = Library.Remote.present(value: "inferred import")
+let absentRemote: Library.Remote<String> = Library.Remote.absent
+assert(inferredRemote != absentRemote)
+switch remote:
+    case Library.Remote<String>.absent:
+        assert(false)
+    case Library.Remote<String>.present(value):
+        assert(value == "imported")
+switch remote:
+    case Library.Remote<String>.absent:
+        assert(false)
+    case Library.Remote<String>.present("imported"):
+        assert(true)
+    case Library.Remote<String>.present(value):
+        assert(false)
+
+enum Code<T>:
+    case okay = 1
+    case failed = 2
+
+let code = Code<Int64>.okay
+assert(code.rawValue == 1)
+let decoded = Code<Int64>.fromRawValue(rawValue: 2)
+assert(decoded.hasValue)
+assert(decoded.unwrap() == Code<Int64>.failed)
+
+enum Chain<T>:
+    case end
+    case link(value: T, next: Chain<T>?)
+
+let tail = Chain<Int64>.end
+let head = Chain<Int64>.link(value: 1, next: Optional.some(tail))
+switch head:
+    case Chain<Int64>.end:
+        assert(false)
+    case Chain<Int64>.link(1...3, next):
+        assert(next.hasValue)
+    case Chain<Int64>.link(value, next):
+        assert(false)
+
+switch head:
+    case Chain<Int64>.end:
+        assert(false)
+    case Chain<Int64>.link(1, Optional.some(remaining)):
+        assert(remaining == tail)
+    case Chain<Int64>.link(value, next):
+        assert(false)
+
+let remoteNumber: Library.Remote<Int64> = Library.Remote<Int64>.present(value: 4)
+switch remoteNumber:
+    case Library.Remote<Int64>.absent:
+        assert(false)
+    case Library.Remote<Int64>.present(2...5):
+        assert(true)
+    case Library.Remote<Int64>.present(value):
+        assert(false)
+
+let remoteOptional: Library.Remote<String?> =
+    Library.Remote<String?>.present(value: Optional.some("note"))
+switch remoteOptional:
+    case Library.Remote<String?>.absent:
+        assert(false)
+    case Library.Remote<String?>.present(Optional.some(text)):
+        assert(text == "note")
+    case Library.Remote<String?>.present(value):
+        assert(false)

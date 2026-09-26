@@ -1,0 +1,40 @@
+assert(Int64.abs(-42) == 42)
+assert(Int64.abs(0) == 0)
+assert(Int64.abs(9223372036854775807) == 9223372036854775807)
+assert(Int64.min(-9223372036854775808, 9223372036854775807) == -9223372036854775808)
+assert(Int64.max(-9223372036854775808, 9223372036854775807) == 9223372036854775807)
+assert(Int64.clamp(5, 0, 3) == 3)
+assert(Int64.clamp(-5, 0, 3) == 0)
+assert(Int64.clamp(value: 2, lower: 0, upper: 3) == 2)
+assert(Int64.min(right: -3, left: 4) == -3)
+var calls = 0
+func next(value: Int64) -> Int64:
+    calls += 1
+    return value
+assert(Int64.max(next(2), next(3)) == 3)
+assert(calls == 2)
+calls = 0
+func mark(value: Int64) -> Int64:
+    calls = calls * 10 + value
+    return value
+assert(Int64.min(right: mark(2), left: mark(1)) == 1)
+assert(calls == 21)
+let minimum: Int64 = -9223372036854775808
+assert(minimum.isMultiple(of: -1))
+assert(minimum.isMultiple(of: 2))
+assert(!minimum.isMultiple(of: 3))
+assert((0).isMultiple(of: 0))
+assert((0).isMultiple(of: minimum))
+assert(!(1).isMultiple(of: 0))
+assert((12).isMultiple(of: 3))
+assert((-12).isMultiple(of: -3))
+assert(!(13).isMultiple(of: 3))
+assert(minimum.signum() == -1)
+assert((0).signum() == 0)
+assert((9223372036854775807).signum() == 1)
+calls = 0
+assert(mark(6).isMultiple(of: mark(3)))
+assert(calls == 63)
+calls = 0
+assert(mark(-4).signum() == -1)
+assert(calls == -4)

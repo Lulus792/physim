@@ -1,0 +1,61 @@
+var checks = 0
+var factories = 0
+
+func keepVowels(value: String) -> Bool:
+    checks += 1
+    return value == "a" || value == "ü" || value == "🌍"
+
+func makePredicate() -> func(String) -> Bool:
+    factories += 1
+    return keepVowels
+
+let source = "aüX🌍ba"
+assert(source.filter(makePredicate()) == "aü🌍a")
+assert(checks == 6 && factories == 1)
+assert(source == "aüX🌍ba")
+
+checks = 0
+assert("".filter(keepVowels) == "")
+assert(checks == 0)
+assert("Xb".filter(keepVowels) == "")
+assert("aü🌍".filter(keepVowels) == "aü🌍")
+
+struct Selection:
+    let selected: String
+    func keep(value: String) -> Bool:
+        return value == self.selected
+
+assert(source.filter(Selection("a").keep) == "aa")
+
+func local(value: String) -> String:
+    let selected = "ü"
+    func keep(scalar: String) -> Bool:
+        return scalar == selected
+    return value.filter(keep)
+
+assert(local(source) == "ü")
+
+let keepGlobe = func(value: String) -> Bool:
+    return value == "🌍"
+assert(source.filter(keepGlobe) == "🌍")
+
+let many = String(repeating: "ü", count: 129) + "X"
+assert(many.filter(keepVowels).count == 129)
+assert(many.filter(keepVowels).utf8.count == 258)
+
+var mutableSource = "aüX"
+func mutate(value: String) -> Bool:
+    mutableSource = "changed"
+    return value != "X"
+
+assert(mutableSource.filter(mutate) == "aü")
+assert(mutableSource == "changed")
+
+func failOnSecond(value: String) -> Bool:
+    if value == "ü":
+        let missing: [String] = []
+        return missing[0] == "x"
+    return true
+
+assert(attempt(source.filter(failOnSecond)) == nil)
+assert(source == "aüX🌍ba")

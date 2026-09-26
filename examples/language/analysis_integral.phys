@@ -1,0 +1,16 @@
+// Reconstruct position by integrating a numerical derivative.
+// The residual is a discretization diagnostic, not an exact inverse identity.
+func analyze():
+    report("Derivative and integral consistency")
+    let run = Dataset(0)
+    let time = run.series("time")
+    let position = run.series("position.x")
+    let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
+    let velocity = position.derivative(time)
+    let reconstructed = velocity.integral(time, position.value(0), metres)
+    let residual = reconstructed.subtracting(position)
+    let graph = position.plot(time, "Position reconstruction", "original")
+    graph.curve(time, reconstructed, "integrated derivative")
+    residual.plot(time, "Discretization residual", "reconstructed minus original")
+    residual.export(time, "residual")
+    graph.export("reconstruction")

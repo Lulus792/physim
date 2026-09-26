@@ -1,0 +1,17 @@
+struct Remote:
+    let value: Int64
+    static func init(input: Int64) -> Remote:
+        return Remote(input + 10)
+    static func init(input: String) -> Remote:
+        return Remote(input.count)
+    static func init(raw: Int64, offset: Int64) -> Remote:
+        return Remote(raw + offset)
+    static func init<U: Numeric>(numeric: U) -> Remote:
+        return Remote(Int64(numeric))
+
+struct RemoteBox<T>:
+    let value: T
+    static func init(value: T) -> RemoteBox<T>:
+        return RemoteBox(value)
+    static func init(value: [T]) -> RemoteBox<T>:
+        return RemoteBox(value[0])

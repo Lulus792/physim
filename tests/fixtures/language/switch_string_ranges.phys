@@ -1,0 +1,47 @@
+var sourceCalls = 0
+var guardCalls = 0
+
+func source(value: String) -> String:
+    sourceCalls += 1
+    return value
+
+func reject() -> Bool:
+    guardCalls += 1
+    return false
+
+func classify(value: String) -> Int64:
+    switch value:
+        case ""..."":
+            return 1
+        case "a"..<"d", "d"..."d":
+            return 2
+        case "ü"..."🌍":
+            return 3
+        default:
+            return 4
+
+assert(classify("") == 1)
+assert(classify("a") == 2)
+assert(classify("c") == 2)
+assert(classify("d") == 2)
+assert(classify("e") == 4)
+assert(classify("ü") == 3)
+assert(classify("🌍") == 3)
+assert(classify("🐱") == 4)
+
+func guarded(value: String) -> Int64:
+    switch value:
+        case "a"..."z" if reject():
+            return 1
+        case "m":
+            return 2
+        default:
+            return 3
+
+assert(guarded(source("m")) == 2)
+assert(sourceCalls == 1 && guardCalls == 1)
+assert(guarded(source("ü")) == 3)
+assert(sourceCalls == 2 && guardCalls == 1)
+
+let result = classify(source("b"))
+assert(result == 2 && sourceCalls == 3)

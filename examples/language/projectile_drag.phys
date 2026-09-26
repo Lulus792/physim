@@ -1,0 +1,59 @@
+// Same 1 kg projectile, quadratic air drag and RK4 stages as the C example.
+let gravity = 9.80665
+let air = Medium.air()
+let dragCoefficient = parameter("dragCoefficient", 0.47, 0.0, 2.0, "Quadratic drag coefficient")
+let crossSection = 0.01
+let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
+let speed = Unit(1, 0, -1, 0, 0, 0, 0, 1, "m/s")
+let joules = Unit(2, 1, -2, 0, 0, 0, 0, 1, "J")
+let cx = Channel("position.x", metres, "x")
+let cy = Channel("position.y", metres, "y")
+let cvx = Channel("velocity.x", speed, "vx")
+let cvy = Channel("velocity.y", speed, "vy")
+let ce = Channel("energy", joules, "Mechanical energy")
+var state = Vec4(-2, 0, 2, 5)
+var trail = [Vec3(-2, 0, 0)]
+var ticks = 0
+
+func slope(value: Vec4) -> Vec4:
+    let drag = air.dragForce(Vec3(value.z, value.w, 0), dragCoefficient, crossSection)
+    return Vec4(value.z, value.w, drag.x, -gravity + drag.y)
+
+func measure():
+    cx.sample(state.x)
+    cy.sample(state.y)
+    cvx.sample(state.z)
+    cvy.sample(state.w)
+    ce.sample(0.5 * (state.z * state.z + state.w * state.w) + gravity * state.y)
+
+func create():
+    metadata("model=projectile, gravity and quadratic drag, no ground\nmass_kg=1\nmedium=air\ndensity_kg_m3=1.225\nCd=0.47\narea_m2=0.01\nintegrator=RK4")
+
+func reset():
+    state = Vec4(-2, 0, 2, 5)
+    trail = [Vec3(-2, 0, 0)]
+    ticks = 0
+    measure()
+
+func step(dt: Float64):
+    let k1 = slope(state)
+    let k2 = slope(state + 0.5 * dt * k1)
+    let k3 = slope(state + 0.5 * dt * k2)
+    let k4 = slope(state + dt * k3)
+    state += dt / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
+    measure()
+    ticks += 1
+    if ticks % 10 == 0:
+        if trail.count == 64:
+            trail.remove(at: 0)
+        trail.append(Vec3(state.x, state.y, 0))
+
+func scene():
+    let position = Vec3(state.x, state.y, 0)
+    let tip = position + Vec3(state.z * 0.15, state.w * 0.15, 0)
+    sphere(position, 0.1, 1407107839, 1)
+    arrow(position, tip, 0, 4073026303, 2)
+    if trail.count >= 2:
+        polyline(trail, 0.008, 1670033407, 3)
+    point(Vec3(-2, 0, 0), 0.03, 3807048447, 4)
+    label(position, "Wurfkoerper", 3807048447, 5)

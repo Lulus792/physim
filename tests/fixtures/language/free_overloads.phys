@@ -1,0 +1,51 @@
+import Overloads
+
+func describe(value: Int64) -> String:
+    return "integer " + String(value)
+
+func describe(value: String) -> String:
+    return "text " + value
+
+func measure(values: [Int64]) -> Int64:
+    return values.count
+
+func measure(values: [String]) -> Int64:
+    return values.count + 10
+
+func scale(value: Int64) -> Int64:
+    return value * 2
+
+func scale(value: Float64) -> Float64:
+    return value * 3.0
+
+func select(left: Int64) -> Int64:
+    return left + 1
+
+func select(right: Int64) -> Int64:
+    return right + 2
+
+assert(describe(3) == "integer 3")
+assert(describe("x") == "text x")
+assert(measure([1, 2]) == 2)
+assert(measure(["a"]) == 11)
+assert(scale(4) == 8)
+assert(scale(2.0) == 6.0)
+assert(describe(scale(4)) == "integer 8")
+assert(select(left: 4) == 5)
+assert(select(right: 4) == 6)
+
+let integerDescription: func(Int64) -> String = describe
+let textDescription: func(String) -> String = describe
+assert(integerDescription(7) == "integer 7")
+assert(textDescription("y") == "text y")
+
+func apply(function: func(Int64) -> String, value: Int64) -> String:
+    return function(value)
+
+assert(apply(describe, 8) == "integer 8")
+
+assert(Overloads.describe(9) == "remote integer 9")
+assert(Overloads.describe("z") == "remote text z")
+assert(describe(Overloads.describe(3)) == "text remote integer 3")
+let remoteDescription: func(Int64) -> String = Overloads.describe
+assert(remoteDescription(5) == "remote integer 5")

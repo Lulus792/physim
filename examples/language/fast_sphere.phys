@@ -1,0 +1,97 @@
+// Linear CCD for one sphere between two static walls, no acceleration.
+// Resolve each incoming event and recompute the remaining displacement.
+let zero = Vec3(0,0,0)
+let radius = 0.12
+let leftWall = Vec3(-1.5,0,0)
+let rightWall = Vec3(1.5,0,0)
+let world = Body.sphere(0,radius)
+let solver = ContactSolver(64,1,0,0,0,1)
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let speed = Unit(1,0,-1,0,0,0,0,1,"m/s")
+let one = Unit(0,0,0,0,0,0,0,1,"1")
+let joules = Unit(2,1,-2,0,0,0,0,1,"J")
+let impulseUnit = Unit(1,1,-1,0,0,0,0,1,"N s")
+let px = Channel("position.x",metres,"Sphere centre x")
+let vx = Channel("velocity.x",speed,"Sphere velocity x")
+let energy = Channel("energy",joules,"Kinetic energy; elastic frictionless impacts")
+let hits = Channel("impacts",one,"Impacts during this step")
+let impulse = Channel("impulse.x",impulseUnit,"Sum of wall impulses in this step")
+let fraction = Channel("first.fraction",one,"First impact as fraction of whole step; 1 when no impact")
+let total = Channel("total.impacts",one,"Cumulative impacts")
+var body = Body.sphere(1,radius)
+var totalHits: Int64 = 0
+
+func create():
+    metadata("model=fast sphere between walls\nradius_m=0.12\nspeed_m_s=80\nwall_x_m=-1.5,1.5\nrestitution=1\nfriction=0\nacceleration=none\nccd=linear sphere-plane sweep, event response, remaining time\nmax_events_per_step=16")
+
+func reset():
+    body = Body.sphere(1,radius)
+    body.setState(Vec3(0,0.6,0),Vec3(80,0,0),Quat(0,0,0,1),zero)
+    totalHits = 0
+    px.sample(body.position.x)
+    vx.sample(body.velocity.x)
+    energy.sample(body.kineticEnergy())
+    hits.sample(0)
+    impulse.sample(0)
+    fraction.sample(1)
+    total.sample(0)
+
+func step(dt: Float64):
+    assert(dt > 0)
+    var next = body
+    var remaining = dt
+    var events: Int64 = 0
+    var totalImpulse = 0.0
+    var firstFraction = 1.0
+    for event in 0..<17:
+        if remaining <= 0:
+            break
+        let left = Sweep.spherePlane(next,radius,next.velocity * remaining,leftWall,Vec3(1,0,0))
+        let right = Sweep.spherePlane(next,radius,next.velocity * remaining,rightWall,Vec3(-1,0,0))
+        var found = false
+        var first = 1.0
+        var contact = left.contacts()
+        // Touching at t=0 is also reported while separating; only incoming
+        // wall events are meaningful for this nonpenetrating, force-free model.
+        if left.hit && next.velocity.dot(left.contacts().normal(0)) > 0:
+            found = true
+            first = left.fraction()
+        if right.hit && next.velocity.dot(right.contacts().normal(0)) > 0:
+            if !found || right.fraction() < first:
+                found = true
+                first = right.fraction()
+                contact = right.contacts()
+        if !found:
+            next.step(zero,zero,remaining)
+            remaining = 0
+        else:
+            assert(events < 16)
+            let travel = remaining * first
+            if travel > 0:
+                next.step(zero,zero,travel)
+            let response = contact.resolve(next,world,solver)
+            next = response.bodyA
+            totalImpulse = totalImpulse + response.impulse(0).x
+            remaining = remaining - travel
+            if events == 0:
+                firstFraction = (dt - remaining) / dt
+            events = events + 1
+    // A too-large dt fails instead of silently discarding unprocessed time.
+    assert(remaining == 0)
+    body = next
+    totalHits = totalHits + events
+    px.sample(body.position.x)
+    vx.sample(body.velocity.x)
+    energy.sample(body.kineticEnergy())
+    hits.sample(Float64(events))
+    impulse.sample(totalImpulse)
+    fraction.sample(firstFraction)
+    total.sample(Float64(totalHits))
+
+func scene():
+    sphere(body.position,radius,1407107839,1)
+    plane(Vec3(-1.5,0.6,0),Vec2(1.2,1.5),Quat.axisAngle(Vec3(0,0,1),-1.5707963267948966),910447231,2)
+    plane(Vec3(1.5,0.6,0),Vec2(1.2,1.5),Quat.axisAngle(Vec3(0,0,1),1.5707963267948966),910447231,3)
+    arrow(body.position,body.position + body.velocity * 0.006,0.012,4073026303,4)
+    line(Vec3(-1.38,0.6,0),Vec3(1.38,0.6,0),0.004,3234254719,5)
+    label(Vec3(-0.9,1.5,0),"80 m/s · Sweep + Restzeit",3234254847,6)

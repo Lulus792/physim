@@ -1,0 +1,3 @@
+import Shared
+func calculate(value: Int64) -> Int64:
+    return Shared.identity(value) - 1

@@ -1,0 +1,18 @@
+func analyze():
+    report("Kugelstoß · Position und Geschwindigkeit")
+    for index in 0..<inputCount():
+        let run = Dataset(index)
+        let time = run.series("time")
+        let positionA = run.series("a.position")
+        let positionB = run.series("b.position")
+        let velocityA = run.series("a.velocity")
+        let velocityB = run.series("b.velocity")
+        let positions = positionA.plot(time, "Kugelpositionen", "x")
+        positions.curve(time, positionB, "Kugel B")
+        let velocities = velocityA.plot(time, "Kugelgeschwindigkeiten", "v")
+        velocities.curve(time, velocityB, "Kugel B")
+        if index == 0:
+            positions.export("position")
+            velocities.export("velocity-plot")
+            velocityA.export(time, "velocity")
+        run.close()

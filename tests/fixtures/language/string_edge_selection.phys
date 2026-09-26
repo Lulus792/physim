@@ -1,0 +1,42 @@
+let text = "Aä🙂Z"
+assert(text.count == 4)
+assert(text.prefix(2) == "Aä")
+assert(text.suffix(2) == "🙂Z")
+assert(text.dropFirst() == "ä🙂Z")
+assert(text.dropLast() == "Aä🙂")
+assert(text.dropFirst(2) == "🙂Z")
+assert(text.dropLast(2) == "Aä")
+assert(text.prefix(0) == "" && text.suffix(0) == "")
+assert(text.dropFirst(0) == text && text.dropLast(0) == text)
+assert(text.prefix(10) == text && text.suffix(10) == text)
+assert(text.dropFirst(10) == "" && text.dropLast(10) == "")
+assert(attempt(text.prefix(-1)) == nil)
+assert(attempt(text.suffix(-1)) == nil)
+assert(attempt(text.dropFirst(-1)) == nil)
+assert(attempt(text.dropLast(-1)) == nil)
+
+let combining = "a\u{0301}b"
+assert(combining.count == 3)
+assert(combining.prefix(1) == "a")
+assert(combining.suffix(2) == "\u{0301}b")
+
+var changed = "Grüße"
+let selected = changed.suffix(2)
+changed = "anders"
+assert(selected == "ße" && changed == "anders")
+
+var calls = 0
+func source() -> String:
+    calls += 1
+    return "é🙂Z"
+func amount() -> Int64:
+    calls += 10
+    return 2
+let result = source().dropLast(amount())
+assert(calls == 11 && result == "é")
+
+let empty = ""
+assert(empty.prefix(3) == "")
+assert(empty.suffix(3) == "")
+assert(empty.dropFirst() == "")
+assert(empty.dropLast() == "")

@@ -1,0 +1,9 @@
+func analyze():
+    report("Series quantiles")
+    let one = Unit(0,0,0,0,0,0,0,1,"1")
+    let series = Series.fromValues([4.0,1.0,3.0,2.0],one,"measurements")
+    assert(series.quantile(0.0) == 1.0)
+    assert(series.quantile(0.25) == 1.75)
+    assert(series.quantile(0.5) == 2.5)
+    assert(series.quantile(0.75) == 3.25)
+    assert(series.quantile(1.0) == 4.0)

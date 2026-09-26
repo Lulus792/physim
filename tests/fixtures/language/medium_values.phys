@@ -1,0 +1,22 @@
+let air = Medium.air()
+let water = Medium.water()
+let vacuum = Medium.vacuum()
+let custom = Medium(density: 1.225, viscosity: 0.0000181)
+assert(abs(air.density - 1.225) < 0.000001)
+assert(abs(air.viscosity - 0.0000181) < 0.000000001)
+assert(abs(water.density - 998.2) < 0.000001)
+assert(vacuum.density == 0)
+assert(custom.density == air.density)
+
+func horizontalDrag(medium: Medium, speed: Float64) -> Float64:
+    return medium.dragForce(Vec3(speed, 0, 0), 0.47, 0.01).x
+
+let force = horizontalDrag(air, 2)
+assert(abs(force + 0.011515) < 0.000000001)
+assert(horizontalDrag(vacuum, 2) == 0)
+assert(vacuum.dragForce(Vec3(1e308, 0, 0), 0.47, 0.01).x == 0)
+let stokes = custom.stokesDrag(Vec3(2, 0, 0), 0.5)
+let expectedStokes = -6 * 3.141592653589793 * custom.viscosity * 0.5 * 2
+assert(abs(stokes.x - expectedStokes) < 0.000000000001)
+assert(stokes.y == 0 && stokes.z == 0)
+assert(vacuum.stokesDrag(Vec3(2, 0, 0), 0.5).x == 0)

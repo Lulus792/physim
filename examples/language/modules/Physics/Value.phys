@@ -1,0 +1,2 @@
+func offset(value: Int64) -> Int64:
+    return value + 2

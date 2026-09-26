@@ -1,0 +1,184 @@
+// Missing values are explicit and never confused with a numeric zero.
+func positive(value: Float64) -> Float64?:
+    if value > 0:
+        return Optional.some(value: value)
+    return nil
+
+let missing: Float64? = nil
+assert(!missing.hasValue && missing == nil && nil == missing)
+assert(missing.valueOr(fallback: 0) == 0.0)
+let present = positive(2.5)
+assert(present.hasValue && present != nil && nil != present)
+assert(present.unwrap() == 2.5 && positive(-1) == nil)
+assert(missing == missing && missing != present)
+assert(present == Optional.some(2.5) && present != Optional.some(3.0))
+assert(Optional.some(0) != Optional.some(1))
+let promoted: Float64? = Optional.some(2)
+assert(promoted.unwrap() == 2.0)
+assert(1 + Optional.some(2.5).unwrap() == 3.5)
+let zero = Optional.some(0)
+assert(zero.hasValue && zero.unwrap() == 0)
+let noFlag: Bool? = nil
+let flag = Optional.some(false)
+assert(noFlag == nil && flag != nil && !flag.unwrap())
+assert(flag == Optional.some(false) && flag != Optional.some(true))
+let name: String? = Optional.some("Physim")
+assert(name.valueOr("missing") == "Physim")
+assert((name ?? "missing") == "Physim")
+let noName: String? = nil
+assert((noName ?? "fallback") == "fallback")
+let inferredFallback: String = nil ?? "typed"
+assert(inferredFallback == "typed")
+assert(name == Optional.some("Physim") && name != Optional.some("physim"))
+
+// Receiver and fallback evaluate exactly once, in that order, even when present.
+var order: Int64 = 0
+func first() -> Int64?:
+    order = order * 10 + 1
+    return Optional.some(7)
+func second() -> Int64:
+    order = order * 10 + 2
+    return 9
+assert(first().valueOr(second()) == 7 && order == 12)
+order = 0
+assert((first() ?? second()) == 7 && order == 1)
+order = 0
+let noInteger: Int64? = nil
+assert((noInteger ?? second()) == 9 && order == 2)
+let leftFlag: Bool? = Optional.some(false)
+assert((leftFlag ?? true || true) == false)
+var chainCalls = 0
+func absentAgain() -> Int64?:
+    chainCalls += 1
+    return nil
+assert((first() ?? absentAgain() ?? 5) == 7 && chainCalls == 0)
+assert((noInteger ?? absentAgain() ?? 5) == 5 && chainCalls == 1)
+order = 12
+func compareLeft() -> Int64?:
+    order = order * 10 + 1
+    return Optional.some(4)
+func compareRight() -> Int64?:
+    order = order * 10 + 2
+    return Optional.some(4)
+assert(compareLeft() == compareRight() && order == 1212)
+
+var values: [Int64?] = [nil,Optional.some(3),nil]
+let saved = values
+values[1] = nil
+values.append(Optional.some(9))
+assert(saved[1].unwrap() == 3 && values[1] == nil)
+assert(values.remove(at: 3).unwrap() == 9)
+let slice = saved[1..<3]
+assert(slice[0].unwrap() == 3 && slice[1] == nil)
+let outerMissing: [Int64?]? = nil
+let optionalArray: [Int64?]? = Optional.some(saved)
+assert(outerMissing == nil && optionalArray.unwrap()[1].unwrap() == 3)
+var extracted = optionalArray.unwrap()
+extracted[1] = Optional.some(8)
+assert(optionalArray.unwrap()[1].unwrap() == 3)
+let emptyArray: [Int64]? = Optional.some([])
+assert(emptyArray.hasValue && emptyArray.unwrap().count == 0)
+let noArray: [Int64]? = nil
+var fallbackArray = noArray.valueOr([5,6])
+var keptArray = Optional.some([1,2]).valueOr([3,4])
+let lazyArray = noArray ?? [7,8]
+assert(lazyArray == [7,8])
+let presentArray: [Int64]? = Optional.some([1,2])
+var keptLazyArray = presentArray ?? [3,4]
+assert(keptLazyArray == [1,2])
+keptLazyArray[0] = 9
+assert(presentArray.unwrap()[0] == 1)
+fallbackArray[0] = 9
+keptArray.append(7)
+assert(fallbackArray[1] == 6 && keptArray[0] == 1 && keptArray[2] == 7)
+
+let absent: Int64?? = nil
+let innerAbsent: Int64?? = Optional.some(nil)
+let bothPresent: Int64?? = Optional.some(Optional.some(4))
+assert(absent == nil && innerAbsent != nil && innerAbsent.unwrap() == nil)
+assert(bothPresent.unwrap().unwrap() == 4)
+assert(absent.valueOr(nil) == nil)
+assert((absent ?? nil) == nil)
+assert(((innerAbsent ?? Optional.some(6)) ?? 7) == 7)
+assert(((absent ?? Optional.some(6)) ?? 7) == 6)
+enum State:
+    case ready
+    case done
+let state: State? = Optional.some(State.ready)
+assert(state.unwrap() == State.ready)
+assert(state == Optional.some(State.ready) && state != Optional.some(State.done))
+
+struct Reading:
+    var position: Vec3?
+    var samples: [Float64]?
+    mutating func clear():
+        self.position = nil
+        self.samples = nil
+    func x() -> Float64?:
+        if self.position.hasValue:
+            return Optional.some(self.position.unwrap().x)
+        return nil
+
+var reading = Reading(Optional.some(Vec3(1,2,3)),Optional.some([1.0,2.0]))
+let original = reading
+let chosenReading = Optional.some(original) ?? Reading(nil, nil)
+assert(chosenReading.samples.unwrap().count == 2)
+reading.clear()
+assert(reading.x() == nil && original.x().unwrap() == 1.0)
+var readings = [original]
+readings[0].clear()
+assert(readings[0].samples == nil && original.samples.unwrap().count == 2)
+
+// Optional recursive fields are finite, immutable values rather than cycles.
+struct Node:
+    let value: Int64
+    let next: Node?
+var list: Node? = nil
+for i in 0..<20000:
+    list = Optional.some(Node(i,list))
+let listCopy = list
+var sum: Int64 = 0
+while list.hasValue:
+    let node = list.unwrap()
+    sum += node.value
+    list = node.next
+assert(sum == 199990000 && list == nil)
+assert(listCopy.unwrap().value == 19999)
+
+// Unwrapping owns an independent copy, including solver storage and matrix arrays.
+let world = Body.sphere(0,1)
+let contacts: [ContactConstraint] = []
+let joints: [JointConstraint] = []
+var optionalResult: ConstraintResult? = Optional.some(ContactSolver.defaults().solve([world],contacts,joints,0.01))
+let result = optionalResult.unwrap()
+optionalResult = nil
+assert(result.bodyCount == 1 && result.body(0).mass == 0)
+let transform: Mat4? = Optional.some(Mat4.translation(Vec3(1,2,3)))
+assert(transform.unwrap().transformPoint(Vec3(0,0,0)) == Vec3(1,2,3))
+let optionalVector = Optional.some(Vec3(1,2,3))
+assert(optionalVector == Optional.some(Vec3(1,2,3)))
+assert(optionalVector != Optional.some(Vec3(1,2,4)))
+
+// A missing measurement stays separate from its public zero placeholder.
+func validValue(measurement: Measurement) -> Quantity?:
+    if measurement.isValid():
+        return Optional.some(measurement.value)
+    return nil
+let metre = Unit(1,0,0,0,0,0,0,1,"m")
+var sensor = Sensor(SensorConfig(metre,10,0,0,0,0,Distribution.constant(0),0,0,0),42)
+assert(validValue(sensor.read(0,Quantity(0,metre))).unwrap().value == 0.0)
+assert(validValue(sensor.read(0,Quantity(7,metre))) == nil)
+
+// More than the memory budget cumulatively: temporaries must be released each turn.
+for i in 0..<300000:
+    let nested: [[Int64]?]? = Optional.some([Optional.some([i]),nil])
+    let copied = nested ?? []
+    let empty: [Int64]? = nil
+    let selected = empty ?? [i]
+    assert(copied.count == 2 && selected[0] == i)
+    if i % 2 == 0:
+        continue
+    assert(nested.unwrap()[0].unwrap()[0] == i)
+    if i == 299999:
+        break
+print("optional value checks passed")

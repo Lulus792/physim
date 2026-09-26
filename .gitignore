@@ -1,0 +1,8 @@
+/build*/
+/runs/
+/projects/
+/third_party/SDL3*/
+/third_party/SDL3*.zip
+*.psrun
+*.user
+*.pdb

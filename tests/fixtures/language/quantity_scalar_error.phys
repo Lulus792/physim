@@ -1,0 +1,2 @@
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let bad = Quantity(1,metres) / 0

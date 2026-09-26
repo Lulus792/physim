@@ -1,0 +1,6 @@
+let names = ["alpha", "beta"]
+assert(names.firstIndex(of: "gamma") == nil)
+assert(names.lastIndex(of: "gamma") == nil)
+let inferred = names.firstIndex(of: "beta")
+assert(inferred.hasValue)
+assert(["alpha", "beta", "alpha"].lastIndex(of: "alpha").unwrap() == 2)

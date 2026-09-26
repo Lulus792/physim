@@ -1,0 +1,33 @@
+// Explicit random streams are value types and work without an experiment host.
+let uniform = Distribution.uniform(0, 1)
+let normal = Distribution.normal(5, 2)
+var first = Rng(seed: 42)
+var second = Rng(42)
+for i in 0..<1000:
+    assert(first.sample(uniform) == second.sample(uniform))
+
+// Copying a stream copies its position, then both copies advance independently.
+var copy = first
+let expected = first.sample(normal)
+assert(copy.sample(normal) == expected)
+assert(first.sample(normal) == copy.sample(normal))
+
+// Degenerate distributions leave the stream at its current position.
+var unchanged = first
+assert(first.sample(Distribution.constant(7)) == 7)
+assert(first.sample(Distribution.uniform(3, 3)) == 3)
+assert(first.sample(Distribution.normal(4, 0)) == 4)
+assert(first.sample(uniform) == unchanged.sample(uniform))
+
+first.reseed(42)
+var replay = Rng(42)
+assert(first.sample(normal) == replay.sample(normal))
+
+struct StreamBox:
+    let stream: Rng
+let box = StreamBox(first)
+var stored: [Rng] = [box.stream]
+var optional: Rng? = Optional.some(stored[0])
+var extracted = optional.unwrap()
+assert(stored[0].sample(uniform) == extracted.sample(uniform))
+print("explicit random streams passed")

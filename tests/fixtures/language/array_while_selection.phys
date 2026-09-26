@@ -1,0 +1,79 @@
+var checks = 0
+var factories = 0
+
+func beforeThree(value: Int64) -> Bool:
+    checks += 1
+    return value < 3
+
+func makePredicate() -> func(Int64) -> Bool:
+    factories += 1
+    return beforeThree
+
+let source = [1, 2, 3, 1, 0]
+assert(source.prefix(while: makePredicate()) == [1, 2])
+assert(checks == 3 && factories == 1)
+checks = 0
+assert(source.drop(while: makePredicate()) == [3, 1, 0])
+assert(checks == 3 && factories == 2)
+assert(source == [1, 2, 3, 1, 0])
+assert(source.prefix(2) == [1, 2])
+
+let empty: [Int64] = []
+checks = 0
+assert(empty.prefix(while: beforeThree).isEmpty)
+assert(empty.drop(while: beforeThree).isEmpty)
+assert(checks == 0)
+assert([1, 2].prefix(while: beforeThree) == [1, 2])
+assert([1, 2].drop(while: beforeThree).isEmpty)
+assert([3, 1].prefix(while: beforeThree).isEmpty)
+assert([3, 1].drop(while: beforeThree) == [3, 1])
+
+let short = func(value: String) -> Bool:
+    return value.count < 3
+let words = ["a", "bb", "long", "x"]
+assert(words.prefix(while: short) == ["a", "bb"])
+assert(words.drop(while: short) == ["long", "x"])
+
+struct Label:
+    let text: String
+
+func shortLabel(value: Label) -> Bool:
+    return value.text.count < 3
+
+let labels = [Label("a"), Label("bb"), Label("long"), Label("x")]
+assert(labels.prefix(while: shortLabel) == [Label("a"), Label("bb")])
+assert(labels.drop(while: shortLabel) == [Label("long"), Label("x")])
+
+struct Threshold:
+    let minimum: Int64
+    func before(value: Int64) -> Bool:
+        return value < self.minimum
+
+assert(source.prefix(while: Threshold(3).before) == [1, 2])
+assert(source.drop(while: Threshold(3).before) == [3, 1, 0])
+
+func local(values: [Int64]) -> [Int64]:
+    let limit = 3
+    func before(value: Int64) -> Bool:
+        return value < limit
+    return values.drop(while: before)
+
+assert(local(source) == [3, 1, 0])
+
+var mutableSource = [1, 2, 3]
+func mutate(value: Int64) -> Bool:
+    mutableSource.append(9)
+    return value < 2
+
+assert(mutableSource.drop(while: mutate) == [2, 3])
+assert(mutableSource == [1, 2, 3, 9, 9])
+
+func failOnSecond(value: String) -> Bool:
+    if value == "bb":
+        let missing: [String] = []
+        return missing[0] == "x"
+    return true
+
+assert(attempt(words.prefix(while: failOnSecond)) == nil)
+assert(attempt(words.drop(while: failOnSecond)) == nil)
+assert(words == ["a", "bb", "long", "x"])

@@ -1,0 +1,88 @@
+// Same model and integration order as examples/box_floor/main.c. SI, no CCD.
+let size = Vec3(0.8,0.5,0.6)
+let material = Material(1.0 / (size.x * size.y * size.z), 0.1, 0.6)
+let mass = material.density * size.x * size.y * size.z
+let gravity = 9.81
+let zero = Vec3(0,0,0)
+let up = Vec3(0,1,0)
+let defaults = ContactSolver.defaults()
+let solver = material.contactSolver(64,defaults.bounceThreshold,
+    defaults.penetrationSlop,defaults.correctionFraction)
+let ground = Body.box(0,Vec3(8,0.1,8))
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let speed = Unit(1,0,-1,0,0,0,0,1,"m/s")
+let joules = Unit(2,1,-2,0,0,0,0,1,"J")
+let angularSpeed = Unit(0,0,-1,0,0,0,0,1,"rad/s")
+let impulse = Unit(1,1,-1,0,0,0,0,1,"N s")
+let one = Unit(0,0,0,0,0,0,0,1,"1")
+let px = Channel("position.x",metres,"Center X")
+let py = Channel("position.y",metres,"Center Y")
+let pz = Channel("position.z",metres,"Center Z")
+let vy = Channel("velocity.y",speed,"Vertical center velocity")
+let energy = Channel("energy",joules,"Kinetic plus gravitational potential, plane Y=0")
+let kinetic = Channel("kinetic.energy",joules,"Translation plus rotation")
+let angular = Channel("angular.speed",angularSpeed,"World angular speed magnitude")
+let count = Channel("contacts",one,"Contact vertices before position projection")
+let impulseY = Channel("contact.impulse.y",impulse,"Total upward impulse this step")
+let clearance = Channel("clearance",metres,"Lowest vertex height after projection")
+let residual = Channel("contact.error",speed,"Normal solver residual before projection")
+
+func initialBody() -> Body:
+    var result = Body.box(mass,size)
+    result.setState(Vec3(0,1.5,0),Vec3(0.7,0,0.2),
+        Quat.axisAngle(Vec3(1,0,1),0.22),Vec3(0,0.3,0.15))
+    return result
+
+var body = initialBody()
+var contacts = Contacts.boxPlane(body,size,zero,up)
+var solution = contacts.resolve(body,ground,solver)
+
+func measure():
+    let e = body.kineticEnergy()
+    let q = body.orientation
+    let support = (abs(q.rotate(Vec3(size.x*0.5,0,0)).y) +
+        abs(q.rotate(Vec3(0,size.y*0.5,0)).y) + abs(q.rotate(Vec3(0,0,size.z*0.5)).y))
+    var totalImpulse = 0.0
+    for i in 0..<solution.count:
+        totalImpulse += solution.impulse(i).y
+    px.sample(body.position.x)
+    py.sample(body.position.y)
+    pz.sample(body.position.z)
+    vy.sample(body.velocity.y)
+    energy.sample(e + mass*gravity*body.position.y)
+    kinetic.sample(e)
+    angular.sample(body.angularVelocity.length())
+    count.sample(Float64(contacts.count))
+    impulseY.sample(totalImpulse)
+    clearance.sample(body.position.y-support)
+    residual.sample(solution.maxNormalError)
+
+func create():
+    metadata("model=oriented box-plane contacts\nmedium=vacuum\nccd=none\nsolver=accumulated normal impulses and projected Coulomb cone, single body pair\nintegrator=symplectic Euler + explicit gyroscopic rotation\nmass_kg=1\nsize_m=0.8,0.5,0.6\ngravity_m_s2=9.81\niterations=64\nrestitution=0.1\nfriction=0.6\nbounce_threshold_m_s=0.5\npenetration_slop_m=0.00001\ncorrection_fraction=0.8")
+
+func reset():
+    body = initialBody()
+    contacts = Contacts.boxPlane(body,size,zero,up)
+    solution = contacts.resolve(body,ground,solver)
+    measure()
+
+func step(dt: Float64):
+    var next = body
+    next.step(Vec3(0,-mass*gravity,0),zero,dt)
+    let nextContacts = Contacts.boxPlane(next,size,zero,up)
+    let nextSolution = nextContacts.resolve(next,ground,solver)
+    body = nextSolution.bodyA
+    contacts = nextContacts
+    solution = nextSolution
+    measure()
+
+func scene():
+    box(body.position,size,body.orientation,1890709247,1)
+    plane(zero,Vec2(8,8),Quat(0,0,0,1),910447359,2)
+    arrow(body.position,body.position+body.velocity,0.008,1842320639,3)
+    arrow(body.position,body.position+Vec3(0,-mass*gravity*0.05,0),0.008,4070987775,4)
+    for i in 0..<contacts.count:
+        let p = contacts.point(i)
+        point(Vec3(p.x,0.015,p.z),0.025,4287541247,0)
+    label(body.position,"Box · Kontaktpunkte rosa",1890709247,5)
+    label(Vec3(-1,0.8,0),"v: 1 m pro m/s · Gewicht: 0.05 m pro N",3234254847,6)

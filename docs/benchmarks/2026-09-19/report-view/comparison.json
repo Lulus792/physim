@@ -1,0 +1,30 @@
+{
+  "write_16_channels": {
+    "duration_ratio": 0.9564660001033787,
+    "passed": true
+  },
+  "read_validate_16_channels": {
+    "duration_ratio": 0.947229719134355,
+    "passed": true
+  },
+  "analysis_snapshot": {
+    "duration_ratio": 0.9247376930485646,
+    "passed": true
+  },
+  "series_statistics": {
+    "duration_ratio": 0.9733210599194361,
+    "passed": true
+  },
+  "series_derivative": {
+    "duration_ratio": 0.8902538902538902,
+    "passed": true
+  },
+  "report_preview_8_curves": {
+    "duration_ratio": 0.9902626134414241,
+    "passed": true
+  },
+  "report_curve_copy": {
+    "duration_ratio": 1.010969183087151,
+    "passed": true
+  }
+}

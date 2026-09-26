@@ -1,0 +1,47 @@
+let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
+let seconds = Unit(0, 0, 1, 0, 0, 0, 0, 1, "s")
+let centimetres = Unit(1, 0, 0, 0, 0, 0, 0, 0.01, "cm")
+let one = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
+let distance: Quantity = Quantity(3, metres)
+assert(distance.adding(Quantity(50, centimetres)).value == 3.5)
+assert(distance.subtracting(Quantity(50, centimetres)).value == 2.5)
+assert(distance.converted(centimetres).value == 300)
+assert(distance.unit.isCompatible(metres))
+let velocity = distance.divided(Quantity(2, seconds), "m/s")
+assert(velocity.value == 1.5)
+assert(velocity.multiplied(Quantity(2, seconds), "m").converted(metres).value == 3)
+struct Measurement:
+    var quantity: Quantity
+    mutating func add(value: Quantity):
+        self.quantity = self.quantity.adding(value)
+var measurements = [Measurement(distance)]
+let saved = measurements
+measurements[0].add(Quantity(100, centimetres))
+assert(measurements[0].quantity.value == 4 && saved[0].quantity.value == 3)
+var values: [Quantity] = [distance]
+values.append(velocity)
+assert(values.remove(at: 1).value == 1.5 && values[0].value == 3)
+assert(metres.isCompatible(centimetres))
+assert(!metres.isCompatible(seconds))
+let speed = metres.divided(seconds, "m/s")
+assert(speed.isCompatible(Unit(1, 0, -1, 0, 0, 0, 0, 1, "speed")))
+let area = centimetres.powered(symbol: "cm²", exponent: 2)
+assert(abs(area.convert(10000, metres.multiplied(metres, "m²")) - 1) < 1e-12)
+assert(seconds.powered(-1, "Hz").multiplied(seconds, "1").isCompatible(one))
+assert(centimetres.powered(0, "1").convert(2, one) == 2)
+assert(abs(centimetres.divided(seconds, "cm/s").convert(100, speed) - 1) < 1e-12)
+// The receiver and named arguments execute once, in source order.
+var order = 0
+func receiver() -> Unit:
+    order = order * 10 + 1
+    return metres
+func symbol() -> String:
+    order = order * 10 + 2
+    return "m²"
+func operand() -> Unit:
+    order = order * 10 + 3
+    return metres
+let ordered = receiver().multiplied(symbol: symbol(), right: operand())
+assert(order == 123 && ordered.isCompatible(metres.powered(2, "m²")))
+let boundaries = [metres.powered(127, "upper"), metres.powered(-128, "lower")]
+assert(boundaries[0].multiplied(boundaries[1], "inverse").isCompatible(metres.powered(-1, "1/m")))

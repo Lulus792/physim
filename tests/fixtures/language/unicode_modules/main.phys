@@ -1,0 +1,4 @@
+import Größe
+
+let würfel = Größe.erzeugen(kante: 7)
+assert(würfel.verdoppelt() == 14)

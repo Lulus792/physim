@@ -1,0 +1,16 @@
+let scalar = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
+let speed = Channel("speed", scalar, "Selected parameter product")
+let initialSpeed = parameter("initialSpeed", 2.0, -10.0, 10.0, "Initial speed")
+let gain = parameter("gain", 1.0, 0.0, 10.0, "Fixed gain")
+
+func create():
+    metadata("model=parameter pair")
+
+func reset():
+    speed.sample(initialSpeed * gain)
+
+func step(dt: Float64):
+    speed.sample(initialSpeed * gain)
+
+func scene():
+    return

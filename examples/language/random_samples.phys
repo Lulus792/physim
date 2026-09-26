@@ -1,0 +1,25 @@
+// Draws use the runner seed; resetting replays the same sequence.
+let scalar = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
+let uniformChannel = Channel("uniform", scalar, "Uniform sample between -2 and 3")
+let normalChannel = Channel("normal", scalar, "Normal sample with mean 5 and standard deviation 0.25")
+var lastUniform = 0.0
+
+func draw():
+    // Degenerate distributions consume no generator draws.
+    assert(randomUniform(7, 7) == 7.0)
+    assert(randomNormal(9, 0) == 9.0)
+    lastUniform = randomUniform(min: -2, max: 3)
+    uniformChannel.sample(lastUniform)
+    normalChannel.sample(randomNormal(standardDeviation: 0.25, mean: 5))
+
+func create():
+    metadata("model=random distribution samples\nuniform_min=-2\nuniform_max=3\nnormal_mean=5\nnormal_stddev=0.25\nrng=runner seeded PCG32; draw order uniform then normal")
+
+func reset():
+    draw()
+
+func step(dt: Float64):
+    draw()
+
+func scene():
+    sphere(Vec3(lastUniform, 0, 0), 0.1, 1407107839, 1)

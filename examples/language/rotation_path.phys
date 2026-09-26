@@ -1,0 +1,22 @@
+// Move an orientation smoothly through 120 degrees about world Z.
+// A fixed local X tilt is applied before the animated world-space rotation.
+let identity = Quat(0, 0, 0, 1)
+let angle = 2.0943951023931953
+let destination = Quat.axisAngle(Vec3(0, 0, 1), angle)
+let localTilt = Quat.axisAngle(Vec3(1, 0, 0), 0.4)
+let initialDirection = Vec3(0, 1, 0)
+let tiltedDirection = localTilt.rotate(initialDirection)
+for index in 0...100:
+    let fraction = Float64(index) / 100
+    let worldRotation = identity.slerp(end: destination, fraction: fraction)
+    let orientation = worldRotation.multiplied(right: localTilt)
+    let direction = orientation.rotate(initialDirection)
+    let phase = angle * fraction
+    let reference = Vec3(
+        cos(phase) * tiltedDirection.x - sin(phase) * tiltedDirection.y,
+        sin(phase) * tiltedDirection.x + cos(phase) * tiltedDirection.y,
+        tiltedDirection.z)
+    assert((direction - reference).length() < 1e-12)
+    assert(abs(direction.length() - 1) < 1e-12)
+    let restored = ((orientation.normalized()).conjugated()).rotate(direction)
+    assert((restored - initialDirection).length() < 1e-12)

@@ -1,0 +1,9 @@
+func analyze():
+    report("Several aligned columns")
+    let second = Unit(0,0,1,0,0,0,0,1,"s")
+    let metre = Unit(1,0,0,0,0,0,0,1,"m")
+    let speedUnit = metre.divided(second,"m/s")
+    let time = Series.fromValues([0.0, 1.0, 2.0],second,"time")
+    let distance = time.alignedValues([0.0, 2.0, 5.0],metre,"distance")
+    let speed = time.alignedValues([1.0, 2.0, 3.0],speedUnit,"speed")
+    Series.exportColumns([time,distance,speed],"three")

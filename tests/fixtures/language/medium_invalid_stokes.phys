@@ -1,0 +1,2 @@
+let water = Medium.water()
+let invalid = water.stokesDrag(Vec3(2, 0, 0), 0)

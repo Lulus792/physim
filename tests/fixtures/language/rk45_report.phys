@@ -1,0 +1,50 @@
+func oscillator(time: Float64, state: [Float64]) -> [Float64]:
+    return [state[1], -state[0]]
+
+func multiscale(time: Float64, state: [Float64]) -> [Float64]:
+    return [-state[0], -state[1]]
+
+let initial = [1.0, 0.0]
+let result: OdeResult = rk45IntegrateReported(oscillator, initial, 0, 1,
+                                               1e-11, 1e-11, 100000,
+                                               0.1, 1e-14, 0.1)
+assert(initial == [1.0, 0.0])
+assert(result.state.count == 2)
+assert(abs(result.state[0] - cos(1)) < 1e-8)
+assert(abs(result.state[1] + sin(1)) < 1e-8)
+assert(result.acceptedSteps > 0)
+assert(result.rejectedSteps >= 0)
+assert(result.evaluations == 7 * (result.acceptedSteps + result.rejectedSteps))
+assert(result.reachedTime == 1)
+assert(result.nextStep > 0)
+assert(result.errorNorm >= 0)
+
+let copy = result
+var moved = copy.state
+moved[0] = 0
+assert(abs(result.state[0] - cos(1)) < 1e-8)
+let results = [result]
+assert(results.count == 1)
+assert(results[0].acceptedSteps == result.acceptedSteps)
+let optional: OdeResult? = Optional.some(result)
+assert(optional.hasValue)
+
+let backward = rk45IntegrateReported(oscillator, result.state, 1, 0,
+                                      1e-11, 1e-11, 100000, 0.1, 1e-14, 0.1)
+assert(abs(backward.state[0] - 1) < 1e-8)
+assert(abs(backward.state[1]) < 1e-8)
+assert(backward.reachedTime == 0)
+assert(backward.nextStep < 0)
+
+let scales = [1e-6, 1e6]
+let tolerances = [1e-14, 1e-2]
+let mixed = rk45IntegrateWithTolerancesReported(multiscale, scales, 0, 5,
+                                                tolerances, 0, 100000,
+                                                0.2, 1e-14, 0.2)
+assert(abs(mixed.state[0] - 1e-6 * exp(-5)) < 1e-10)
+assert(abs(mixed.state[1] - 1e6 * exp(-5)) < 1e-2)
+assert(mixed.acceptedSteps > 0)
+assert(mixed.evaluations == 7 * (mixed.acceptedSteps + mixed.rejectedSteps))
+assert(mixed.reachedTime == 5)
+assert(scales == [1e-6, 1e6])
+assert(tolerances == [1e-14, 1e-2])

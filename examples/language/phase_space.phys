@@ -1,0 +1,23 @@
+// Two independent harmonic oscillators, omega=2 rad/s, mass=1 kg.
+// Components are (position.x, position.y, velocity.x, velocity.y).
+func slope(state: Vec4) -> Vec4:
+    return Vec4(state.z, state.w, -4 * state.x, -4 * state.y)
+
+func advance(state: Vec4, dt: Float64) -> Vec4:
+    let k1 = slope(state)
+    let k2 = slope(state + 0.5 * dt * k1)
+    let k3 = slope(state + 0.5 * dt * k2)
+    let k4 = slope(state + dt * k3)
+    return state + dt / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
+
+var state = Vec4(1, 0, 0, 2)
+let dt = 0.001
+for index in 0..<1000:
+    state = advance(state, dt)
+    let energy = 0.5 * (state.z * state.z + state.w * state.w) +
+        2 * (state.x * state.x + state.y * state.y)
+    assert(abs(energy - 4) < 1e-10)
+
+// Analytic solution after one second, including both velocity components.
+let reference = Vec4(cos(2), sin(2), -2 * sin(2), 2 * cos(2))
+assert((state - reference).length() < 1e-10)

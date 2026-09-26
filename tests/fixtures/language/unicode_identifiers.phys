@@ -1,0 +1,14 @@
+struct Größe:
+    var höhe: Float64
+    func fläche(breite: Float64) -> Float64:
+        return self.höhe * breite
+
+func verdoppeln(π: Int64) -> Int64:
+    return π * 2
+
+let kiste = Größe(3.0)
+assert(kiste.fläche(breite: 4.0) == 12.0)
+assert(verdoppeln(π: 7) == 14)
+let é = 1
+let é = 2
+assert(é + é == 3)

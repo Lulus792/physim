@@ -1,0 +1,104 @@
+// C reference: examples/box_collision/main.c, including its inelastic and oblique variants.
+let size = Vec3(0.8, 0.6, 0.6)
+let mass = 1.0
+let angle = parameter("angle", 0, -6.283185307179586, 6.283185307179586,
+    "Initial rotation of box B around Z in rad")
+let offset = parameter("offset", 0, -10, 10, "Initial Y offset of box B in m")
+let restitution = parameter("restitution", 1, 0, 1, "Coefficient of restitution")
+let friction = parameter("friction", 0, 0, 10, "Coulomb friction coefficient")
+let zero = Vec3(0, 0, 0)
+let identity = Quat(0, 0, 0, 1)
+let defaults = ContactSolver.defaults()
+let solver = ContactSolver(128, restitution, friction, defaults.bounceThreshold, 0, 1)
+let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
+let speed = Unit(1, 0, -1, 0, 0, 0, 0, 1, "m/s")
+let joules = Unit(2, 1, -2, 0, 0, 0, 0, 1, "J")
+let angularSpeed = Unit(0, 0, -1, 0, 0, 0, 0, 1, "rad/s")
+let momentum = Unit(1, 1, -1, 0, 0, 0, 0, 1, "kg m/s")
+let one = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
+let ax = Channel("position.x", metres, "Box A X")
+let ay = Channel("position.y", metres, "Box A Y")
+let az = Channel("position.z", metres, "Box A Z")
+let av = Channel("velocity.x", speed, "Box A velocity X")
+let energy = Channel("energy", joules, "Total translational and rotational kinetic energy")
+let bx = Channel("b.position.x", metres, "Box B X")
+let bv = Channel("b.velocity.x", speed, "Box B velocity X")
+let aSpin = Channel("a.spin", angularSpeed, "Box A angular speed")
+let bSpin = Channel("b.spin", angularSpeed, "Box B angular speed")
+let px = Channel("momentum.x", momentum, "Total linear momentum X")
+let py = Channel("momentum.y", momentum, "Total linear momentum Y")
+let pz = Channel("momentum.z", momentum, "Total linear momentum Z")
+let count = Channel("contacts", one, "Contact points detected this step")
+let impulseX = Channel("a.impulse.x", momentum, "Impulse on A this step, not force")
+let error = Channel("contact.error", speed, "Normal solver residual before projection")
+var a = Body.box(mass, size)
+var b = Body.box(mass, size)
+var contacts = Contacts.boxes(a, size, b, size)
+var solution = contacts.resolve(a, b, solver)
+var lastContacts = contacts
+var lastSolution = solution
+
+func measure():
+    var impulse = 0.0
+    for i in 0..<solution.count:
+        impulse += solution.impulse(i).x
+    ax.sample(a.position.x)
+    ay.sample(a.position.y)
+    az.sample(a.position.z)
+    av.sample(a.velocity.x)
+    energy.sample(a.kineticEnergy() + b.kineticEnergy())
+    bx.sample(b.position.x)
+    bv.sample(b.velocity.x)
+    aSpin.sample(a.angularVelocity.length())
+    bSpin.sample(b.angularVelocity.length())
+    px.sample(mass * (a.velocity.x + b.velocity.x))
+    py.sample(mass * (a.velocity.y + b.velocity.y))
+    pz.sample(mass * (a.velocity.z + b.velocity.z))
+    count.sample(Float64(contacts.count))
+    impulseX.sample(impulse)
+    error.sample(solution.maxNormalError)
+
+func create():
+    metadata("model=two homogeneous oriented rigid boxes\nmedium=vacuum\ngravity=none\ncontact=15-axis SAT + clipped face / closest edge manifold\nsolver=projected pair impulses, Coulomb friction, translation projection\nintegrator=symplectic Euler + quaternion rotation\nccd=none\nbody_graph=none\nmass_kg=1\nsize_m=0.8,0.6,0.6\na_initial_position_m=-1,0,0\nb_initial_position_m=1," + String(offset) + ",0\na_initial_velocity_m_s=0.6,0,0\nb_initial_velocity_m_s=-0.6,0,0\nb_angle_z_rad=" + String(angle) + "\ninitial_spin_rad_s=0\nrestitution=" + String(restitution) + "\nfriction=" + String(friction) + "\niterations=128\nbounce_threshold_m_s=" + String(defaults.bounceThreshold) + "\npenetration_slop_m=0\ncorrection_fraction=1")
+
+func reset():
+    a = Body.box(mass, size)
+    b = Body.box(mass, size)
+    a.setState(Vec3(-1, 0, 0), Vec3(0.6, 0, 0), identity, zero)
+    b.setState(Vec3(1, offset, 0), Vec3(-0.6, 0, 0),
+        Quat.axisAngle(Vec3(0, 0, 1), angle), zero)
+    contacts = Contacts.boxes(a, size, b, size)
+    solution = contacts.resolve(a, b, solver)
+    lastContacts = contacts
+    lastSolution = solution
+    measure()
+
+func step(dt: Float64):
+    var nextA = a
+    var nextB = b
+    nextA.step(zero, zero, dt)
+    nextB.step(zero, zero, dt)
+    let nextContacts = Contacts.boxes(nextA, size, nextB, size)
+    let nextSolution = nextContacts.resolve(nextA, nextB, solver)
+    a = nextSolution.bodyA
+    b = nextSolution.bodyB
+    contacts = nextContacts
+    solution = nextSolution
+    if contacts.count > 0:
+        lastContacts = contacts
+        lastSolution = solution
+    measure()
+
+func scene():
+    box(a.position, size, a.orientation, 0x53dec2ff, 10)
+    arrow(a.position, a.position + a.velocity, 0.009, 0x53dec2ff, 11)
+    label(a.position + Vec3(0, 0.48, 0), "Box A", 0x53dec2ff, 12)
+    box(b.position, size, b.orientation, 0xf2c572ff, 20)
+    arrow(b.position, b.position + b.velocity, 0.009, 0xf2c572ff, 21)
+    label(b.position + Vec3(0, 0.48, 0), "Box B", 0xf2c572ff, 22)
+    for i in 0..<lastContacts.count:
+        let p = lastContacts.point(i)
+        point(p, 0.025, 0xff8eafff, 0)
+        arrow(p, p + lastSolution.impulse(i), 0.006, 0xff8eafff, 0)
+    label(Vec3(-1, -0.95, 0), "Geschwindigkeit: 1 m pro m/s", 0xb9c0cdff, 100)
+    label(Vec3(-1, -1.15, 0), "Rosa: letzter Stoß, J [1 m pro Ns]", 0xff8eafff, 101)

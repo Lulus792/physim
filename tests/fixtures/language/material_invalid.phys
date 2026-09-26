@@ -1,0 +1,1 @@
+let invalid = Material(1000, 1.1, 0.6)

@@ -1,0 +1,70 @@
+var checks = 0
+var factories = 0
+
+func beforeGlobe(value: String) -> Bool:
+    checks += 1
+    return value != "🌍"
+
+func makePredicate() -> func(String) -> Bool:
+    factories += 1
+    return beforeGlobe
+
+let source = "aü🌍B"
+assert(source.prefix(while: makePredicate()) == "aü")
+assert(checks == 3 && factories == 1)
+checks = 0
+assert(source.drop(while: makePredicate()) == "🌍B")
+assert(checks == 3 && factories == 2)
+assert(source == "aü🌍B")
+assert(source.prefix(2) == "aü")
+
+checks = 0
+assert("".prefix(while: beforeGlobe) == "")
+assert("".drop(while: beforeGlobe) == "")
+assert(checks == 0)
+assert("ab".prefix(while: beforeGlobe) == "ab")
+assert("ab".drop(while: beforeGlobe) == "")
+assert("🌍B".prefix(while: beforeGlobe) == "")
+assert("🌍B".drop(while: beforeGlobe) == "🌍B")
+
+struct Boundary:
+    let stop: String
+    func before(value: String) -> Bool:
+        return value != self.stop
+
+assert(source.prefix(while: Boundary("🌍").before) == "aü")
+assert(source.drop(while: Boundary("🌍").before) == "🌍B")
+
+func local(value: String) -> String:
+    let stop = "🌍"
+    func before(scalar: String) -> Bool:
+        return scalar != stop
+    return value.drop(while: before)
+
+assert(local(source) == "🌍B")
+
+let beforeB = func(value: String) -> Bool:
+    return value != "B"
+assert(source.prefix(while: beforeB) == "aü🌍")
+
+let many = String(repeating: "ü", count: 65) + "🌍B"
+assert(many.prefix(while: beforeGlobe).count == 65)
+assert(many.drop(while: beforeGlobe) == "🌍B")
+
+var mutableSource = "ab🌍x"
+func mutate(value: String) -> Bool:
+    mutableSource = "changed"
+    return value != "🌍"
+
+assert(mutableSource.drop(while: mutate) == "🌍x")
+assert(mutableSource == "changed")
+
+func failOnSecond(value: String) -> Bool:
+    if value == "ü":
+        let missing: [String] = []
+        return missing[0] == "x"
+    return true
+
+assert(attempt(source.prefix(while: failOnSecond)) == nil)
+assert(attempt(source.drop(while: failOnSecond)) == nil)
+assert(source == "aü🌍B")

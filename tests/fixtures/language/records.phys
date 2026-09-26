@@ -1,0 +1,63 @@
+// Forward field types, nested value semantics and immutable identity fields.
+struct Particle:
+    let id: Int64
+    var position: Position
+    var velocity: Position
+    let label: String
+
+struct Position:
+    var x: Float64
+    var y: Float64
+
+func advance(initial: Particle, dt: Float64) -> Particle:
+    var updated = initial
+    updated.position.x = updated.position.x + updated.velocity.x * dt
+    updated.position.y = updated.position.y + updated.velocity.y * dt
+    return updated
+
+var state = Particle(label: "Körper", velocity: Position(2, 4),
+                     id: 7, position: Position(x: 1, y: 2))
+let next = advance(state, 0.5)
+assert(state.position.x == 1.0)
+assert(next.position.x == 2.0)
+assert(next.position.y == 4.0)
+assert(next.id == 7)
+assert(next.label == "Körper")
+assert(1 + next.position.x == 3.0)
+assert(1 + advance(state, 0.5).position.x == 3.0)
+var copy = state
+copy.position.x = 99
+assert(state.position.x == 1.0)
+state = next
+assert(state.position.x == 2.0)
+state.position = Position(8, 9)
+assert(state.position.x == 8.0)
+assert(next.position.x == 2.0)
+if true:
+    var state = next
+    state.position.y = 50
+    assert(state.position.y == 50.0)
+assert(state.position.y == 9.0)
+
+var counter = 0
+func tick() -> Int64:
+    counter = counter + 1
+    return counter
+struct Pair:
+    let first: Int64
+    let second: Int64
+let pair = Pair(second: tick(), first: tick())
+assert(pair.first == 2)
+assert(pair.second == 1)
+assert(counter == 2)
+
+// Nominal type and variable may have the same spelling in different scopes.
+func shadow():
+    let Position = 3
+    assert(Position == 3)
+shadow()
+for i in 0..<3:
+    var local = Position(1, 2)
+    local.x = local.x + 1
+    assert(local.x == 2.0)
+print("record checks passed")

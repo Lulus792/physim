@@ -1,0 +1,32 @@
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let config = SensorConfig(metres,10,0,0,0,0,Distribution.constant(0),0,0,0)
+struct Group:
+    var sensors: [Sensor]
+var groups = [Group([Sensor(config,0)])]
+var failed = false
+func create():
+    return
+func reset():
+    if failed:
+        // A failing read must not publish its receiver snapshot, even through arrays.
+        assert(groups[0].sensors[0].nextTime() == 0.1)
+    groups = [Group([Sensor(config,0)])]
+    let sample = groups[0].sensors[0].read(0,Quantity(1,metres))
+    failed = false
+func step(dt: Float64):
+    failed = true
+    let retained = Optional.some(groups)
+    let copy = retained.unwrap()
+    if dt == 4:
+        let missing: [Group]? = nil
+        let bad = missing.unwrap()
+        return
+    if dt == 1:
+        let sample = groups[0].sensors[0].read(-1,Quantity(1,metres))
+    else:
+        if dt == 2:
+            let sample = groups[0].sensors[0].read(0.1,Quantity(1,Unit(0,0,1,0,0,0,0,1,"s")))
+        else:
+            let sample = groups[0].sensors[0].read(1e20,Quantity(1,metres))
+func scene():
+    return

@@ -1,0 +1,14 @@
+let titles = ["Horizontal position", "Derived velocity"]
+func analyze():
+    report("Position and derived velocity")
+    for index in 0..<inputCount():
+        let run: Dataset = Dataset(index)
+        let time: Series = run.series("time")
+        let position = run.series("position.x")
+        let velocity = position.derivative(time)
+        let positionPlot: Plot = position.plot(time, titles[0], "position.x")
+        let velocityPlot = velocity.plot(time, titles[1], "dx/dt")
+        if index == 0:
+            velocity.export(time, "velocity")
+            positionPlot.export("position")
+        run.close()

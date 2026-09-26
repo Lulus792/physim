@@ -1,0 +1,76 @@
+let zero = Vec3(0,0,0)
+let identity = Quat(0,0,0,1)
+var a = Body.sphere(1,0.5)
+var b = a
+a.setState(Vec3(0,0.5,0),Vec3(0,-1,0),identity,zero)
+b.setState(Vec3(0,1.5,0),Vec3(0,-1,0),identity,zero)
+let initial = [a,b]
+let floor = Contacts.spherePlane(a,0.5,zero,Vec3(0,1,0))
+let contact: ContactConstraint = floor.constraint(index: 0, bodyB: -1, bodyA: 0)
+let joint = DistanceJoint(zero,zero,1,0.2)
+let link: JointConstraint = joint.constraint(0,1)
+assert(contact.bodyA == 0 && contact.bodyB == -1 && contact.normal.y == -1)
+assert(contact.point.y == 0 && contact.penetration == 0 && link.joint.length == 1)
+let solver = ContactSolver(128,0,0,0.5,0,1)
+let result: ConstraintResult = solver.solve(dt: 0.01, joints: [link], contacts: [contact], bodies: initial)
+assert(result.bodyCount == 2 && result.contactCount == 1 && result.jointCount == 1)
+assert(abs(result.body(0).velocity.y) < 1e-12 && abs(result.body(1).velocity.y) < 1e-12)
+assert(abs(result.contactImpulse(0).y - 2) < 1e-12 && abs(result.jointImpulse(0).y + 1) < 1e-12)
+assert(result.maxNormalError < 1e-12 && result.maxJointVelocityError < 1e-12)
+assert(result.maxProjectionError == 0 && result.maxJointLengthError == 0)
+assert(initial[0].velocity.y == -1 && initial[1].velocity.y == -1)
+var adopted = result.bodies()
+adopted[0].applyImpulse(Vec3(1,0,0),adopted[0].position)
+assert(adopted[0].velocity.x == 1 && result.body(0).velocity.x == 0)
+let bounce = ContactSolver(128,1,0,0.5,0,1).solve(initial,[contact],[link],0.01)
+assert(abs(bounce.body(0).velocity.y - 1) < 1e-12 && abs(bounce.body(1).velocity.y - 1) < 1e-12)
+assert(abs(bounce.contactImpulse(0).y - 4) < 1e-12)
+let limited = ContactSolver(1,0,0,0.5,0,1).solve(initial,[contact],[link],0.01)
+assert(abs(limited.maxNormalError - 0.5) < 1e-12)
+
+// Owned results survive array/record copies, function returns and replacement.
+struct Snapshot:
+    var result: ConstraintResult
+func snapshot() -> Snapshot:
+    return Snapshot(solver.solve(initial,[contact],[link],0.01))
+var state = snapshot()
+let saved = state
+var history = [state]
+let oldHistory = history
+state.result = bounce
+history[0].result = bounce
+assert(saved.result.body(0).velocity.y < 1e-12 && state.result.body(0).velocity.y > 0.99)
+assert(oldHistory[0].result.body(0).velocity.y < 1e-12 && history[0].result.body(0).velocity.y > 0.99)
+for i in 0..<2000:
+    state = snapshot()
+    history[0] = state
+assert(history[0].result.maxJointVelocityError < 1e-12)
+let empty = solver.solve([],[],[],0.01)
+assert(empty.bodyCount == 0 && empty.bodies().count == 0 && empty.jointCount == 0)
+let unconstrained = solver.solve(initial,[],[],0.01)
+assert(unconstrained.body(0).velocity.y == -1 && unconstrained.contactCount == 0)
+let fixed = DistanceJoint(zero,Vec3(0,2.5,0),1,0.1).constraint(0,-1)
+let conflict = DistanceJoint(zero,Vec3(0,2.5,0),2,0.1).constraint(0,-1)
+let inconsistent = solver.solve(initial,[],[fixed,conflict],0.1)
+assert(abs(inconsistent.maxJointVelocityError - 1) < 1e-12)
+
+// Exercise all capacities together; redundant constraints must remain bounded.
+var many: [Body] = []
+var contacts: [ContactConstraint] = []
+var joints: [JointConstraint] = []
+for i in 0..<128:
+    var body = Body.sphere(1,0.5)
+    let position = Vec3(0,Float64(i) * 2,0)
+    body.setState(position,Vec3(1,-1,0),identity,zero)
+    many.append(body)
+    let plane = Contacts.spherePlane(body,0.5,position - Vec3(0,0.5,0),Vec3(0,1,0))
+    for c in 0..<4:
+        contacts.append(plane.constraint(0,i,-1))
+    let local = DistanceJoint(zero,position + Vec3(1,0,0),1,0.2)
+    for j in 0..<2:
+        joints.append(local.constraint(i,-1))
+let capacity = solver.solve(many,contacts,joints,0.01)
+assert(capacity.bodyCount == 128 && capacity.contactCount == 512 && capacity.jointCount == 256)
+for i in 0..<128:
+    assert(capacity.body(i).velocity.length() < 1e-12)
+print("constraint graph checks passed")

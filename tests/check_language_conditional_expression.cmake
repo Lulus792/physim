@@ -1,0 +1,21 @@
+foreach(required COMPILER WORK)
+  if(NOT DEFINED ${required})
+    message(FATAL_ERROR "Missing ${required}")
+  endif()
+endforeach()
+file(MAKE_DIRECTORY "${WORK}")
+
+function(reject name source expected)
+  file(WRITE "${WORK}/${name}.phys" "${source}")
+  execute_process(COMMAND "${COMPILER}" --check "${WORK}/${name}.phys"
+    RESULT_VARIABLE result ERROR_VARIABLE diagnostic TIMEOUT 15)
+  if(NOT result EQUAL 1 OR NOT diagnostic MATCHES "${expected}")
+    message(FATAL_ERROR "Invalid conditional expression ${name} was accepted or misdiagnosed: ${result}\n${diagnostic}")
+  endif()
+endfunction()
+
+reject(condition_type "let value = 1 ? 2 : 3\n" "Expression type does not match required type")
+reject(branch_type "let value = true ? 2 : \"three\"\n" "Expression type does not match required type")
+reject(missing_colon "let value = true ? 2\n" "Expected ':' in conditional expression")
+reject(missing_value "let value = true ? 2 :\n" "Expected expression")
+reject(void_branch "let value = true ? print(1) : print(2)\n" "Conditional branches must produce a value")

@@ -1,0 +1,43 @@
+let names = ["Run 1", "Run 2", "Run 3", "Run 4", "Run 5", "Run 6", "Run 7", "Run 8"]
+func standardDeviation(series: Series, unit: Unit) -> Quantity?:
+    if series.count() < 2:
+        return nil
+    return Optional.some(Quantity(series.stddev(),unit))
+
+func analyze():
+    report("Valid sensor measurements and uncertainty")
+    let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
+    let one = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
+    let counts = Table("Availability", ["Valid", "Total rows"], [one, one])
+    let statistics = Table("Valid horizontal measurements",
+        ["Count", "Mean error", "Error stddev", "Mean uncertainty"],
+        [one, metres, metres, metres])
+    for index in 0..<inputCount():
+        let run = Dataset(index)
+        let time = run.series("time")
+        let model = run.series("position.x")
+        let nominal = run.series("nominal.x")
+        let measured = run.series("sensor.x")
+        let uncertainty = run.series("sensor.x.u")
+        let status = run.series("sensor.x.status")
+        let columns = Series.select([time, model, measured, uncertainty], status, 1)
+        let count = columns[0].count()
+        counts.row(names[index], [Quantity(Float64(count), one), Quantity(Float64(time.count()), one)])
+        let position = model.plot(time, "Horizontal position", "Model")
+        position.curve(time, nominal, "Nominal")
+        if count > 0:
+            // Scatter marks never draw interpolated lines across missing measurements.
+            position.points(columns[0], columns[2], "Valid sensor measurements")
+            let error = columns[2].subtracting(columns[1])
+            let distribution = error.histogram("Measurement error", 24)
+            if let deviation = standardDeviation(error,metres):
+                statistics.row(names[index], [Quantity(Float64(count), one),
+                    Quantity(error.mean(), metres), deviation,
+                    Quantity(columns[3].mean(), metres)])
+            if index == 0:
+                columns[2].export(columns[0], "sensor")
+        if index == 0:
+            position.export("position")
+        run.close()
+    counts.export("availability")
+    statistics.export("statistics")

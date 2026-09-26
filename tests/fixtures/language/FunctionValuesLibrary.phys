@@ -1,0 +1,21 @@
+var offset: Float64 = 1
+
+func shifted(value: Float64) -> Float64:
+    return value + offset
+
+let selected: func(Float64) -> Float64 = shifted
+
+func same<T>(value: T) -> T:
+    return value
+
+struct RemoteTools:
+    let value: Float64
+    static func negate(value: Float64) -> Float64:
+        return -value
+
+struct RemoteIdentity<T>:
+    let value: T
+    static func same(value: T) -> T:
+        return value
+    static func echo<U>(value: U) -> U:
+        return value

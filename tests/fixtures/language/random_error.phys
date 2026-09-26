@@ -1,0 +1,16 @@
+var badScene = false
+func create():
+    return
+func reset():
+    badScene = false
+func step(dt: Float64):
+    if dt == 1:
+        let invalid = randomUniform(2, 1)
+    else:
+        if dt == 2:
+            let invalid = randomNormal(0, -1)
+        else:
+            badScene = true
+func scene():
+    if badScene:
+        let invalid = randomNormal(0, 1)

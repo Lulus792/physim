@@ -1,0 +1,1 @@
+let impossible = Int64.abs(-9223372036854775808)

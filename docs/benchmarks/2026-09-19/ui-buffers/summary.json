@@ -1,0 +1,68 @@
+{
+  "empty": {
+    "image_sha256": "3bdeb301a17f2253562ebd28d312ae4a34ab6e76f617eaa3b9e5a8b7454273cd",
+    "allocations": 0,
+    "total_seconds": {
+      "median": 5.59e-05,
+      "p95": 0.0001631,
+      "p99": 0.0004238
+    },
+    "conversion_seconds": {
+      "median": 2.6e-06,
+      "p95": 4.1e-06,
+      "p99": 4.9e-06
+    },
+    "upload_seconds": {
+      "median": 7.5e-06,
+      "p95": 1.42e-05,
+      "p99": 9.04e-05
+    },
+    "vertex_bytes": 160,
+    "index_bytes": 120,
+    "retained_bytes": 8192
+  },
+  "dense": {
+    "image_sha256": "7b0cbe9e314eb33413da3242d0630b897fdce46ac22882e5f4a48deb80a66917",
+    "allocations": 0,
+    "total_seconds": {
+      "median": 0.0013863,
+      "p95": 0.0037603,
+      "p99": 0.0047037
+    },
+    "conversion_seconds": {
+      "median": 0.0012152999999999999,
+      "p95": 0.0030425,
+      "p99": 0.004142
+    },
+    "upload_seconds": {
+      "median": 6.815e-05,
+      "p95": 0.0001705,
+      "p99": 0.0006586
+    },
+    "vertex_bytes": 254560,
+    "index_bytes": 167160,
+    "retained_bytes": 524288
+  },
+  "plot": {
+    "image_sha256": "4c23f7a35da7d83e11c3d7db6e98fcbbef46393b0e6cd6ba5e96feb1f31485d4",
+    "allocations": 0,
+    "total_seconds": {
+      "median": 0.011679450000000001,
+      "p95": 0.0169018,
+      "p99": 0.0225318
+    },
+    "conversion_seconds": {
+      "median": 0.010927,
+      "p95": 0.0160014,
+      "p99": 0.0212795
+    },
+    "upload_seconds": {
+      "median": 0.000515,
+      "p95": 0.0012763,
+      "p99": 0.003468
+    },
+    "vertex_bytes": 1967760,
+    "index_bytes": 786912,
+    "retained_bytes": 3145728
+  }
+}

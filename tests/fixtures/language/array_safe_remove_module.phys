@@ -1,0 +1,187 @@
+let one = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
+let remaining = Channel("queue.remaining", one, "Remaining entries")
+var queue: [String] = []
+var observed = 0
+
+func observe(value: String):
+    observed += value.count
+
+func isBeta(value: String) -> Bool:
+    return value == "beta"
+
+func byLength(a: String, b: String) -> Bool:
+    return a.count < b.count
+
+func keepAlpha(value: String) -> String?:
+    if value == "alpha":
+        return Optional.some(value)
+    return nil
+
+func duplicate(value: String) -> [String]:
+    return [value, value]
+
+func beforeBeta(value: String) -> Bool:
+    return value != "beta"
+
+func beforeM(value: String) -> Bool:
+    return value != "m"
+
+func scalarWidth(value: String) -> Int64:
+    return value.utf8.count
+
+func keepNotM(value: String) -> String?:
+    if value == "m":
+        return nil
+    return Optional.some(value)
+
+func appendScalar(text: String, value: String) -> String:
+    return text + value
+
+func earlier<T: Comparable>(a: T, b: T) -> T:
+    if a < b:
+        return a
+    return b
+
+func classifyInitial(value: String) -> Int64:
+    switch value:
+        case "a"..<"n":
+            return 1
+        case "n"..."z":
+            return 2
+        default:
+            return 0
+
+func classifyOptionalInitial(value: String?) -> Int64:
+    switch value:
+        case nil:
+            return 0
+        case Optional.some("a"..<"n"):
+            return 1
+        case Optional.some(text):
+            return text.count
+
+func classifyNestedPresence(value: Bool??) -> Int64:
+    switch value:
+        case nil:
+            return 0
+        case Optional.some(nil):
+            return 1
+        case Optional.some(Optional.some(true)):
+            return 2
+        case Optional.some(Optional.some(false)):
+            return 3
+
+enum Decision:
+    case flag(value: Bool)
+    case empty
+
+func classifyDecision(value: Decision) -> Int64:
+    switch value:
+        case Decision.flag(true):
+            return 1
+        case Decision.flag(false):
+            return 2
+        case Decision.empty:
+            return 0
+
+func create():
+    queue = ["alpha", "beta"]
+    assert(earlier("alpha", "beta") == "alpha")
+    assert(earlier(3, 5) == 3)
+    assert(queue.count.isMultiple(of: 2))
+    assert(queue.count.signum() == 1)
+    assert("a,,b".split(separator: ",", maxSplits: 1,
+                        omittingEmptySubsequences: true) == ["a", ",b"])
+    assert([0, 1, 0, 0, 2].split(separator: 0, maxSplits: 1) == [[1], [0, 2]])
+    assert(queue.starts(with: ["alpha"]))
+    assert(queue.elementsEqual(["alpha", "beta"]))
+    assert(classifyInitial(queue[0].first.unwrap()) == 1)
+    assert(classifyOptionalInitial(Optional.some(queue[0].first.unwrap())) == 1)
+    assert(classifyOptionalInitial(nil) == 0)
+    assert(classifyNestedPresence(Optional.some(Optional.some(true))) == 2)
+    assert(classifyDecision(Decision.flag(true)) == 1)
+    assert(queue[0].first.unwrap() == "a")
+    assert(queue[0].last.unwrap() == "a")
+    assert(queue[0].sorted() == ["a", "a", "h", "l", "p"])
+    assert(queue[0].sorted(by: byLength) == ["a", "l", "p", "h", "a"])
+    assert(queue[0].min().unwrap() == "a")
+    assert(queue[0].max().unwrap() == "p")
+    assert(queue[0].min(by: byLength).unwrap() == "a")
+    assert(queue[0].max(by: byLength).unwrap() == "a")
+    observed = 0
+    queue.forEach(observe)
+    queue[0].forEach(observe)
+    assert(observed == 14)
+    assert(queue.compactMap(keepAlpha) == ["alpha"])
+    assert(queue.flatMap(duplicate) == ["alpha", "alpha", "beta", "beta"])
+    assert(queue.prefix(while: beforeBeta) == ["alpha"])
+    assert(queue.drop(while: beforeBeta) == ["beta"])
+    assert(queue.first(where: isBeta).unwrap() == "beta")
+    assert(queue.last(where: isBeta).unwrap() == "beta")
+    assert(queue.firstIndex(where: isBeta).unwrap() == 1)
+    assert(queue.lastIndex(where: isBeta).unwrap() == 1)
+    assert(queue.sorted(by: byLength) == ["beta", "alpha"])
+    assert(queue.min(by: byLength).unwrap() == "beta")
+    assert(queue.max(by: byLength).unwrap() == "alpha")
+    assert(queue.min().unwrap() == "alpha")
+    assert(queue.max().unwrap() == "beta")
+    queue.sort(by: byLength)
+    assert(queue == ["beta", "alpha"])
+    queue.append(contentsOf: ["gamma"])
+    queue.insert(contentsOf: ["zero"], at: 0)
+    assert(queue == ["zero", "beta", "alpha", "gamma"])
+    queue.swapAt(0, 3)
+    assert(queue == ["gamma", "beta", "alpha", "zero"])
+    assert(queue[0].prefix(while: beforeM) == "ga")
+    assert(queue[0].drop(while: beforeM) == "mma")
+    assert(queue[0].filter(beforeM) == "gaa")
+    assert(queue[0].contains(where: isBeta) == false)
+    assert(queue[0].allSatisfy(beforeM) == false)
+    assert(queue[0].first(where: beforeM).unwrap() == "g")
+    assert(queue[0].lastIndex(where: beforeM).unwrap() == 4)
+    assert(queue[0].map(scalarWidth) == [1, 1, 1, 1, 1])
+    assert(queue[0].compactMap(keepNotM) == ["g", "a", "a"])
+    assert(queue[0].flatMap(duplicate) == ["g", "g", "a", "a", "m", "m",
+                                           "m", "m", "a", "a"])
+    assert(queue[0].reduce("", appendScalar) == "gamma")
+    queue.removeSubrange(1..<3)
+    assert(queue == ["gamma", "zero"])
+    queue.replaceSubrange(1..<1, with: ["middle"])
+    assert(queue == ["gamma", "middle", "zero"])
+    assert(queue.prefix(2) == ["gamma", "middle"])
+    assert(queue.suffix(2) == ["middle", "zero"])
+    assert(queue.dropFirst() == ["middle", "zero"])
+    assert(queue.dropLast() == ["gamma", "middle"])
+    assert(queue[0].prefix(2) == "ga")
+    assert(queue[2].suffix(2) == "ro")
+    assert(queue[0].dropFirst(2) == "mma")
+    assert(queue[1].dropLast() == "middl")
+    queue = ["beta", "alpha"]
+    assert(queue.removeFirst() == "beta")
+    queue = ["beta", "alpha"]
+    assert(queue.removeLast() == "alpha")
+    queue = ["beta", "alpha"]
+    queue.removeFirst(1)
+    assert(queue == ["alpha"])
+    queue = ["beta", "alpha"]
+    queue.removeLast(1)
+    assert(queue == ["beta"])
+    queue = ["beta", "alpha"]
+    queue.removeAll(where: isBeta)
+    assert(queue == ["alpha"])
+    queue.removeAll()
+    assert(queue.isEmpty)
+    queue = ["alpha", "beta"]
+
+func reset():
+    queue = ["alpha", "beta"]
+    remaining.sample(2)
+
+func step(dt: Float64):
+    if queue.popLast() == nil:
+        remaining.sample(-1)
+    else:
+        remaining.sample(Float64(queue.count))
+
+func scene():
+    sphere(Vec3(Float64(queue.count), 0, 0), 0.1, 1688924159, 1)

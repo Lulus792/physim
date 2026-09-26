@@ -1,0 +1,5 @@
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let seconds = Unit(0,0,1,0,0,0,0,1,"s")
+func duration() -> Quantity:
+    return Quantity(2,seconds)
+let bad = Quantity(1,metres) + duration()

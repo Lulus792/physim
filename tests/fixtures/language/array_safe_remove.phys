@@ -1,0 +1,49 @@
+var values = [10, 20, 30]
+let snapshot = values
+assert(attempt(values.remove(at: -1)) == nil)
+assert(attempt(values.remove(at: 3)) == nil)
+assert(values == snapshot)
+assert(attempt(values.remove(at: 1)).unwrap() == 20)
+assert(values == [10, 30])
+assert(snapshot == [10, 20, 30])
+assert(values.popLast().unwrap() == 30)
+assert(values.popLast().unwrap() == 10)
+assert(values.popLast() == nil)
+assert(values == [])
+
+var words = ["alpha", "beta", "gamma"]
+let removed = attempt(words.remove(at: 1))
+assert(removed.unwrap() == "beta")
+assert(words == ["alpha", "gamma"])
+let last = words.popLast()
+assert(last.unwrap() == "gamma")
+assert(words == ["alpha"])
+
+var nested = [[1, 2], [3, 4]]
+let saved = nested.popLast().unwrap()
+nested[0].append(5)
+assert(saved == [3, 4])
+assert(nested == [[1, 2, 5]])
+
+var optionalValues: [Int64?] = [nil, Optional.some(7)]
+let outer = attempt(optionalValues.remove(at: 0))
+assert(outer != nil)
+assert(outer.unwrap() == nil)
+assert(optionalValues.popLast().unwrap().unwrap() == 7)
+assert(optionalValues.popLast() == nil)
+
+var indexCalls = 0
+func index() -> Int64:
+    indexCalls += 1
+    return 0
+
+var groups = [[1], [2]]
+assert(groups[index()].popLast().unwrap() == 1)
+assert(indexCalls == 1)
+assert(groups == [[], [2]])
+
+func takeLast() -> String:
+    var local = ["survives"]
+    return local.popLast().unwrap()
+
+assert(takeLast() == "survives")

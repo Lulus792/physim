@@ -1,0 +1,45 @@
+let values = [10, 20, 30]
+assert(attempt(values[0]).unwrap() == 10)
+assert(attempt(values[2]).unwrap() == 30)
+assert(attempt(values[-1]) == nil)
+assert(attempt(values[3]) == nil)
+let empty: [Int64] = []
+assert(attempt(empty[0]) == nil)
+
+var names = ["alpha", "beta"]
+let held = attempt(names[1])
+names.remove(at: 1)
+assert(held.unwrap() == "beta")
+assert(names.count == 1)
+
+let nested = [[1, 2], [3]]
+let saved = attempt(nested[0]).unwrap()
+assert(saved == [1, 2])
+
+let optionalValues: [Int64?] = [nil, Optional.some(3)]
+let outer = attempt(optionalValues[0])
+assert(outer != nil)
+assert(outer.unwrap() == nil)
+assert(attempt(optionalValues[1]).unwrap().unwrap() == 3)
+assert(attempt(optionalValues[2]) == nil)
+
+func firstOrZero(items: [Int64]) -> Int64:
+    guard let first = attempt(items[0]) else:
+        return 0
+    return first
+
+assert(firstOrZero(values) == 10)
+assert(firstOrZero(empty) == 0)
+
+var sourceCalls = 0
+var indexCalls = 0
+func source() -> [String]:
+    sourceCalls += 1
+    return ["once"]
+
+func index() -> Int64:
+    indexCalls += 1
+    return 0
+
+assert(attempt(source()[index()]).unwrap() == "once")
+assert(sourceCalls == 1 && indexCalls == 1)

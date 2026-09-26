@@ -1,0 +1,84 @@
+var transforms = 0
+var factories = 0
+
+func expand(value: String) -> [String]:
+    transforms += 1
+    if value == "ü":
+        return []
+    return [value, value + "!"]
+
+func makeTransform() -> func(String) -> [String]:
+    factories += 1
+    return expand
+
+let source = "aü🌍B"
+assert(source.flatMap(makeTransform()) ==
+       ["a", "a!", "🌍", "🌍!", "B", "B!"])
+assert(transforms == 4 && factories == 1)
+assert(source == "aü🌍B")
+assert("".flatMap(makeTransform()) == [])
+assert(transforms == 4 && factories == 2)
+
+func none(value: String) -> [Int64]:
+    return []
+assert(source.flatMap(none).isEmpty)
+
+func widths(value: String) -> [Int64]:
+    return [value.utf8.count, value.utf8.count]
+assert(source.flatMap(widths) == [1, 1, 2, 2, 4, 4, 1, 1])
+
+struct Label:
+    let text: String
+
+func labels(value: String) -> [Label]:
+    return [Label(value), Label(value + "!")]
+
+assert(source.flatMap(labels).count == 8)
+assert(source.flatMap(labels)[4] == Label("🌍"))
+
+func nested(value: String) -> [[String]]:
+    if value == "B":
+        return []
+    return [[value]]
+
+assert(source.flatMap(nested) == [["a"], ["ü"], ["🌍"]])
+
+struct Prefix:
+    let text: String
+    func words(value: String) -> [String]:
+        return [self.text + value]
+
+assert(source.flatMap(Prefix("x").words) == ["xa", "xü", "x🌍", "xB"])
+
+func local(value: String) -> [String]:
+    let prefix = "local "
+    func words(scalar: String) -> [String]:
+        return [prefix + scalar]
+    return value.flatMap(words)
+
+assert(local(source) == ["local a", "local ü", "local 🌍", "local B"])
+
+let twice = func(value: String) -> [String]:
+    return [value, value]
+assert(source.flatMap(twice) == ["a", "a", "ü", "ü", "🌍", "🌍", "B", "B"])
+
+let many = String(repeating: "🌍", count: 65)
+assert(many.flatMap(twice).count == 130)
+assert(many.flatMap(twice)[129] == "🌍")
+
+var mutableSource = "aü"
+func mutate(value: String) -> [String]:
+    mutableSource = "changed"
+    return [value]
+
+assert(mutableSource.flatMap(mutate) == ["a", "ü"])
+assert(mutableSource == "changed")
+
+func failOnSecond(value: String) -> [String]:
+    if value == "ü":
+        let missing: [String] = []
+        return [missing[0]]
+    return [value]
+
+assert(attempt(source.flatMap(failOnSecond)) == nil)
+assert(source == "aü🌍B")

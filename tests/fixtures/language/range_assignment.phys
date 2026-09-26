@@ -1,0 +1,69 @@
+var values = [10, 20, 30, 40]
+let original = values
+values[1..<3] = [5, 6, 7]
+assert(values.count == 5 && values[0] == 10 && values[1] == 5 && values[3] == 7 && values[4] == 40)
+assert(original.count == 4 && original[1] == 20)
+values[1...2] = []
+assert(values.count == 3 && values[0] == 10 && values[1] == 7 && values[2] == 40)
+values[3..<3] = [50]
+assert(values.count == 4 && values[3] == 50)
+values[0..<2] = values
+assert(values.count == 6 && values[0] == 10 && values[1] == 7 && values[4] == 40)
+
+var empty: [Int64] = []
+empty[0..<0] = [1, 2]
+assert(empty.count == 2 && empty[1] == 2)
+
+var nested = [[1, 2], [3], [4, 5]]
+let nested_original = nested
+nested[1..<2] = [[8], [9, 10]]
+assert(nested.count == 4 && nested[1][0] == 8 && nested[2][1] == 10)
+assert(nested_original.count == 3 && nested_original[1][0] == 3)
+nested[2][0..<1] = [11, 12]
+assert(nested[2].count == 3 && nested[2][0] == 11 && nested[2][2] == 10)
+
+struct Holder:
+    var rows: [[Int64]]
+var holder = Holder([[1], [2, 3]])
+holder.rows[1][0..<1] = [7, 8]
+assert(holder.rows[1].count == 3 && holder.rows[1][0] == 7 && holder.rows[1][2] == 3)
+
+var visits = 0
+func lower() -> Int64:
+    visits += 1
+    return 1
+func upper() -> Int64:
+    visits += 10
+    return 2
+func replacement() -> [Int64]:
+    visits += 100
+    return [99]
+values[lower()..<upper()] = replacement()
+assert(visits == 111 && values[1] == 99)
+
+var transactional = [1, 2, 3]
+func changingUpper() -> Int64:
+    transactional[2] = 88
+    return 2
+func changingReplacement() -> [Int64]:
+    transactional[2] = 99
+    return [7]
+transactional[1..<changingUpper()] = changingReplacement()
+assert(transactional.count == 3 && transactional[0] == 1 && transactional[1] == 7 && transactional[2] == 3)
+
+let source = [10, 20, 30, 40]
+assert(source[..<2].count == 2 && source[..<2][1] == 20)
+assert(source[...1].count == 2 && source[...1][1] == 20)
+assert(source[2..<].count == 2 && source[2..<][0] == 30)
+assert(source[2...].count == 2 && source[2...][1] == 40)
+assert(source[..<].count == 4 && source[...].count == 4)
+var writable = source
+writable[..<2] = [5]
+assert(writable.count == 3 && writable[0] == 5 && writable[1] == 30)
+writable[1..<] = [6, 7, 8]
+assert(writable.count == 4 && writable[3] == 8)
+writable[...] = []
+assert(writable.count == 0 && writable[...].count == 0)
+writable[0...] = [9]
+assert(writable.count == 1 && writable[0] == 9)
+assert(source.count == 4 && source[0] == 10)

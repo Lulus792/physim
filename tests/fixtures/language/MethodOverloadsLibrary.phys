@@ -1,0 +1,14 @@
+struct Remote:
+    let factor: Int64
+
+    func multiply(value: Int64) -> Int64:
+        return self.factor * value
+
+    func multiply(value: Float64) -> Float64:
+        return Float64(self.factor) * value
+
+    static func make(value: Int64) -> Remote:
+        return Remote(value)
+
+    static func make(value: String) -> Remote:
+        return Remote(value.count)

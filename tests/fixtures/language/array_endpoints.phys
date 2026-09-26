@@ -1,0 +1,96 @@
+let empty: [Int64] = []
+assert(empty.isEmpty && empty.first == nil && empty.last == nil)
+
+let values = [10, 20, 30]
+assert(!values.isEmpty && values.first.unwrap() == 10)
+assert(values.last.unwrap() == 30)
+
+var words = ["alpha", "beta"]
+let heldFirst = words.first
+let heldLast = words.last
+words.remove(at: 0)
+words.append("gamma")
+assert(heldFirst.unwrap() == "alpha")
+assert(heldLast.unwrap() == "beta")
+assert(words.first.unwrap() == "beta")
+assert(words.last.unwrap() == "gamma")
+
+let nested = [[1, 2], [3]]
+let saved = nested.last.unwrap()
+var edited = nested
+edited[1].append(4)
+assert(saved == [3])
+assert(nested.last.unwrap() == [3])
+assert(edited.last.unwrap() == [3, 4])
+
+let optionalValues: [Int64?] = [nil, Optional.some(7)]
+assert(optionalValues.first != nil)
+assert(optionalValues.first.unwrap() == nil)
+assert(optionalValues.last.unwrap().unwrap() == 7)
+func isNil(value: Int64?) -> Bool:
+    return value == nil
+let matchingNil = optionalValues.first(where: isNil)
+assert(matchingNil != nil && matchingNil.unwrap() == nil)
+
+var sourceCalls = 0
+func source() -> [String]:
+    sourceCalls += 1
+    return ["once"]
+
+assert(source().first.unwrap() == "once")
+assert(source().last.unwrap() == "once")
+assert(sourceCalls == 2)
+
+struct Pair:
+    let name: String
+    let score: Int64
+
+let records = [Pair(name: "one", score: 1)]
+assert(records.first.unwrap().name == "one")
+assert(records.last.unwrap().score == 1)
+
+var predicateCalls = 0
+func atLeastTwo(text: String) -> Bool:
+    predicateCalls += 1
+    return text.count >= 2
+
+let names = ["a", "bb", "ccc"]
+let match = names.first(where: atLeastTwo)
+assert(match.unwrap() == "bb")
+assert(predicateCalls == 2)
+predicateCalls = 0
+assert(names.last(where: atLeastTwo).unwrap() == "ccc")
+assert(predicateCalls == 1)
+predicateCalls = 0
+assert(names.firstIndex(where: atLeastTwo).unwrap() == 1)
+assert(predicateCalls == 2)
+predicateCalls = 0
+assert(names.lastIndex(where: atLeastTwo).unwrap() == 2)
+assert(predicateCalls == 1)
+predicateCalls = 0
+assert(["a"].first(where: atLeastTwo) == nil)
+assert(predicateCalls == 1)
+predicateCalls = 0
+assert(["a"].last(where: atLeastTwo) == nil)
+assert(predicateCalls == 1)
+predicateCalls = 0
+assert(["a"].firstIndex(where: atLeastTwo) == nil)
+assert(predicateCalls == 1)
+predicateCalls = 0
+assert(["a"].lastIndex(where: atLeastTwo) == nil)
+assert(predicateCalls == 1)
+predicateCalls = 0
+let noNames: [String] = []
+assert(noNames.first(where: atLeastTwo) == nil)
+assert(noNames.last(where: atLeastTwo) == nil)
+assert(noNames.firstIndex(where: atLeastTwo) == nil)
+assert(noNames.lastIndex(where: atLeastTwo) == nil)
+assert(predicateCalls == 0)
+
+var mutableNames = ["short", "longer"]
+let heldMatch = mutableNames.first(where: atLeastTwo)
+mutableNames.remove(at: 0)
+assert(heldMatch.unwrap() == "short")
+let heldLastMatch = mutableNames.last(where: atLeastTwo)
+mutableNames.remove(at: 0)
+assert(heldLastMatch.unwrap() == "longer")

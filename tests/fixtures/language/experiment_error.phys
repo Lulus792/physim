@@ -1,0 +1,21 @@
+let c = Channel("value", Unit(0, 0, 0, 0, 0, 0, 0, 1, "1"), "value")
+struct State:
+    var values: [Float64]
+    mutating func change():
+        self.values.append(99)
+    mutating func fail(dt: Float64):
+        self.change()
+        self.values[0] = 99
+        let temporary = [self.values, self.values][0...0]
+        c.sample(1 / (dt - dt))
+var state = State([1.0])
+func create():
+    return
+func reset():
+    assert(state.values.count == 1 && state.values[0] == 1.0)
+    state = State([1.0])
+    c.sample(state.values[0])
+func step(dt: Float64):
+    state.fail(dt)
+func scene():
+    sphere(Vec3(0, 0, 0), 1, 4294967295, 1)

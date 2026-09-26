@@ -1,0 +1,21 @@
+var angle = 0.0
+func create():
+    metadata("model=scene shapes\nrotation_axis=0,0,1\nangular_speed_rad_s=1")
+func reset():
+    angle = 0.0
+func step(dt: Float64):
+    angle = angle + dt
+func scene():
+    let rotation = Quat.axisAngle(Vec3(0, 0, 1), angle)
+    let white: Int64 = 4294967295
+    box(Vec3(0, 0, 0), Vec3(2, 1, 0.5), rotation, 1407107839, 1)
+    plane(Vec3(0, -1, 0), Vec2(6, 4), Quat(0, 0, 0, 1), 3049576576, 2)
+    arrow(Vec3(0, 0, 0), rotation.rotate(Vec3(2, 0, 0)), 0.02, white, 3)
+    point(Vec3(-2, 0, 0), 0.04, white, 4)
+    label(Vec3(0, 1.5, 0), "Rotation · Box", white, 5)
+    sphere(Vec3(2, 0, 0), 0.2, 3874354175, 6)
+    line(Vec3(-2, 0, 0), Vec3(2, 0, 0), 0.01, white, 7)
+    var path = [Vec3(-1, 0, 1), Vec3(0, 1, 1), Vec3(1, 0, 1)]
+    polyline(id: 8, points: path[0..<3], color: white, radius: 0.015)
+    // The scene keeps its own points after the source array changes.
+    path[0] = Vec3(99, 99, 99)

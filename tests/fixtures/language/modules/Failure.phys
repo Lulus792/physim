@@ -1,0 +1,2 @@
+func fail() -> Int64:
+    return 1 / 0

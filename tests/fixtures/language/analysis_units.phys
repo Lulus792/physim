@@ -1,0 +1,8 @@
+func analyze():
+    report("Dimension mismatch reference")
+    let run = Dataset(0)
+    let time = run.series("time")
+    let x = run.series("position.x")
+    let velocity = x.derivative(time)
+    let graph = x.plot(time, "Position", "x")
+    graph.curve(time, velocity, "incompatible velocity")

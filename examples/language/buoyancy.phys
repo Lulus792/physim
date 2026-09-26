@@ -1,0 +1,94 @@
+// Guided floating sphere; the geometry and RK4 model match examples/buoyancy/main.c.
+let radius = 0.1
+let fluidDensity = 1000.0
+let bodyDensity = 500.0
+let gravity = 9.81
+let initialHeight = 0.04
+let damping = 1.2
+let fullVolume = Submersion.sphere(radius, -radius).volume
+let mass = bodyDensity * fullVolume
+
+let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
+let speed = Unit(1, 0, -1, 0, 0, 0, 0, 1, "m/s")
+let cubicMetres = Unit(3, 0, 0, 0, 0, 0, 0, 1, "m^3")
+let one = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
+let newtons = Unit(1, 1, -2, 0, 0, 0, 0, 1, "N")
+let joules = Unit(2, 1, -2, 0, 0, 0, 0, 1, "J")
+let positionChannel = Channel("position.y", metres, "Sphere center above water surface y=0")
+let velocityChannel = Channel("velocity.y", speed, "Vertical velocity")
+let volumeChannel = Channel("submerged.volume", cubicMetres, "Displaced water volume")
+let fractionChannel = Channel("submerged.fraction", one, "Immersed volume / full sphere volume")
+let buoyancyChannel = Channel("force.buoyancy.y", newtons, "Archimedes force")
+let weightChannel = Channel("force.weight.y", newtons, "Weight, negative Y")
+let dampingChannel = Channel("force.damping.y", newtons, "Empirical -c*fraction*v")
+let totalChannel = Channel("force.total.y", newtons, "Sum of buoyancy, weight and damping")
+let energyChannel = Channel("energy", joules, "Kinetic plus body/reservoir potential, U(0)=0")
+let workChannel = Channel("energy.dissipated", joules, "Integrated damping work")
+let balanceChannel = Channel("energy.balance", joules, "Mechanical plus dissipated energy")
+let offsetChannel = Channel("buoyancy.offset.y", metres, "Displaced-fluid centroid relative to center")
+var state = Vec3(initialHeight, 0, 0)
+
+func potential(height: Float64) -> Float64:
+    let h = max(-radius, min(radius, height))
+    let h2 = h * h
+    let r2 = radius * radius
+    var integral = 3.141592653589793 * (2 * radius * r2 * h / 3 - r2 * h2 / 2 + h2 * h2 / 12)
+    if height < -radius:
+        integral += fullVolume * (height + radius)
+    return mass * gravity * height - fluidDensity * gravity * integral
+
+func derivative(value: Vec3) -> Vec3:
+    let submerged = Submersion.sphere(radius, value.x)
+    let up = buoyancyForce(fluidDensity, submerged.volume, Vec3(0, -gravity, 0)).y
+    let drag = -damping * (submerged.volume / fullVolume) * value.y
+    return Vec3(value.y, (up + drag) / mass - gravity, -drag * value.y)
+
+func measure():
+    let submerged = Submersion.sphere(radius, state.x)
+    let fraction = submerged.volume / fullVolume
+    let up = buoyancyForce(fluidDensity, submerged.volume, Vec3(0, -gravity, 0)).y
+    let drag = -damping * fraction * state.y
+    let energy = 0.5 * mass * state.y * state.y + potential(state.x)
+    positionChannel.sample(state.x)
+    velocityChannel.sample(state.y)
+    volumeChannel.sample(submerged.volume)
+    fractionChannel.sample(fraction)
+    buoyancyChannel.sample(up)
+    weightChannel.sample(-mass * gravity)
+    dampingChannel.sample(drag)
+    totalChannel.sample(up - mass * gravity + drag)
+    energyChannel.sample(energy)
+    workChannel.sample(state.z)
+    balanceChannel.sample(energy + state.z)
+    offsetChannel.sample(submerged.centroidOffset)
+
+func create():
+    metadata("model=hydrostatic floating sphere\nintegrator=RK4\nradius_m=0.10000000000000001\nbody_density_kg_m3=500\nfluid_density_kg_m3=1000\ngravity_m_s2=9.8100000000000005\ninitial_height_m=0.040000000000000001\ndamping_ns_m=1.2\nsurface_y_m=0\ndamping_model=-c*immersed_volume_fraction*v\nenergy=body plus ideal hydrostatic reservoir, U(0)=0\nconstraints=prescribed vertical guide\nfluid=uniform infinite reservoir\nexcluded=waves, surface tension, added mass, rotational drag, floor contact")
+
+func reset():
+    state = Vec3(initialHeight, 0, 0)
+    measure()
+
+func step(dt: Float64):
+    let k1 = derivative(state)
+    let k2 = derivative(state + 0.5 * dt * k1)
+    let k3 = derivative(state + 0.5 * dt * k2)
+    let k4 = derivative(state + dt * k3)
+    state += (dt / 6) * (k1 + 2 * k2 + 2 * k3 + k4)
+    measure()
+
+func scene():
+    for i in -4...4:
+        let p = Float64(i) * 0.1
+        line(Vec3(-0.4, 0, p), Vec3(0.4, 0, p), 0.001, 0x4d9dc5ff, 1 + (i + 4) * 2)
+        line(Vec3(p, 0, -0.4), Vec3(p, 0, 0.4), 0.001, 0x4d9dc5ff, 2 + (i + 4) * 2)
+    let center = Vec3(0, state.x, 0)
+    sphere(center, radius, 0xf2c572ff, 20)
+    point(Vec3(0, state.x + Submersion.sphere(radius, state.x).centroidOffset, radius + 0.005), 0.006, 0x6dcf94ff, 21)
+    arrow(Vec3(-0.16, state.x, 0), Vec3(-0.16, state.x + 0.006 * buoyancyForce(fluidDensity, Submersion.sphere(radius, state.x).volume, Vec3(0, -gravity, 0)).y, 0), 0.003, 0x6dcf94ff, 30)
+    arrow(Vec3(0.16, state.x, 0), Vec3(0.16, state.x - 0.006 * mass * gravity, 0), 0.003, 0xff8eafff, 31)
+    let drag = -damping * (Submersion.sphere(radius, state.x).volume / fullVolume) * state.y
+    arrow(Vec3(0.23, state.x, 0), Vec3(0.23, state.x + 0.006 * drag, 0), 0.003, 0xbab1f4ff, 32)
+    label(Vec3(-0.4, 0.35, 0), "Auftrieb · schwimmende Kugel", 0xe6edf3ff, 40)
+    label(Vec3(-0.4, -0.28, 0), "Grün: Auftrieb · Rosa: Gewicht · Violett: Dämpfer", 0xc0c6cfff, 41)
+    label(Vec3(-0.4, -0.34, 0), "Kräfte: 0.006 m pro N · Wasseroberfläche: y=0", 0xc0c6cfff, 42)

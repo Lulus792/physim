@@ -1,0 +1,29 @@
+// Independent streams are derived from the runner seed and stream IDs.
+let scalar = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
+let firstChannel = Channel("stream1", scalar, "First independent random stream")
+let secondChannel = Channel("stream2", scalar, "Second independent random stream")
+var first = Rng(0)
+var second = Rng(0)
+let distribution = Distribution.uniform(0, 1)
+
+func draw():
+    firstChannel.sample(first.sample(distribution))
+    secondChannel.sample(second.sample(distribution))
+
+func create():
+    return
+
+func reset():
+    let seed = runSeed()
+    var explicit = Rng(seed ^ 1)
+    var derived = Rng.forRun(1)
+    assert(explicit.sample(distribution) == derived.sample(distribution))
+    first.reseedForRun(1)
+    second = Rng.forRun(2)
+    draw()
+
+func step(dt: Float64):
+    draw()
+
+func scene():
+    return

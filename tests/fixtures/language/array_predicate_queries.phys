@@ -1,0 +1,54 @@
+var calls = 0
+var factories = 0
+
+func positive(value: Int64) -> Bool:
+    calls += 1
+    return value > 0
+
+func makePredicate() -> func(Int64) -> Bool:
+    factories += 1
+    return positive
+
+let values = [-2, 0, 3, 4]
+assert(values.contains(where: makePredicate()))
+assert(calls == 3 && factories == 1)
+assert(!values.allSatisfy(makePredicate()))
+assert(calls == 4 && factories == 2)
+assert([3, 4].allSatisfy(makePredicate()))
+assert(calls == 6 && factories == 3)
+let empty: [Int64] = []
+assert(!empty.contains(where: makePredicate()))
+assert(empty.allSatisfy(makePredicate()))
+assert(calls == 6 && factories == 5)
+
+func greaterThan(minimum: Int64) -> func(Int64) -> Bool:
+    return func(value: Int64) -> Bool:
+        return value > minimum
+
+assert(values.contains(where: greaterThan(3)))
+assert(!values.allSatisfy(greaterThan(0)))
+
+struct Limit:
+    let value: Int64
+    func accepts(item: Int64) -> Bool:
+        return item <= self.value
+
+let limit = Limit(3)
+assert([1, 2, 4].contains(where: limit.accepts))
+assert(![1, 2, 4].allSatisfy(limit.accepts))
+
+var mutable = [1, 2, 3]
+func changeCopy(value: Int64) -> Bool:
+    mutable.append(9)
+    return value == 3
+
+assert(mutable.contains(where: changeCopy))
+assert(mutable == [1, 2, 3, 9, 9, 9])
+
+func queryLocally(items: [String]) -> Bool:
+    func long(value: String) -> Bool:
+        return value.count > 1
+    return items.allSatisfy(long)
+
+assert(queryLocally(["ab", "cd"]))
+assert(!queryLocally(["ab", "x"]))

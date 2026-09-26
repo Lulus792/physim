@@ -1,0 +1,6 @@
+func analyze():
+    report("Unaligned columns")
+    let one = Unit(0,0,0,0,0,0,0,1,"1")
+    let first = Series.fromValues([1.0,2.0],one,"first")
+    let second = Series.fromValues([3.0,4.0],one,"second")
+    Series.exportColumns([first,second],"unaligned")

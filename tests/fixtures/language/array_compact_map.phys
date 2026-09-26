@@ -1,0 +1,107 @@
+var transforms = 0
+var factories = 0
+
+func odd(value: Int64) -> Int64?:
+    transforms += 1
+    if value % 2 == 0:
+        return nil
+    return Optional.some(value * 10)
+
+func makeTransform() -> func(Int64) -> Int64?:
+    factories += 1
+    return odd
+
+let source = [1, 2, 3, 4]
+assert(source.compactMap(makeTransform()) == [10, 30])
+assert(source == [1, 2, 3, 4])
+assert(transforms == 4 && factories == 1)
+let empty: [Int64] = []
+assert(empty.compactMap(makeTransform()).isEmpty)
+assert(transforms == 4 && factories == 2)
+
+func noValue(value: Int64) -> String?:
+    return nil
+
+assert(source.compactMap(noValue) == [])
+
+func name(value: Int64) -> String?:
+    if value == 2:
+        return nil
+    return Optional.some("item " + String(value))
+
+assert(source.compactMap(name) == ["item 1", "item 3", "item 4"])
+let manyNames = Array(repeating: 7, count: 129).compactMap(name)
+assert(manyNames.count == 129 && manyNames[128] == "item 7")
+
+let even = func(value: Int64) -> Int64?:
+    if value % 2 == 0:
+        return Optional.some(value)
+    return nil
+
+assert(source.compactMap(even) == [2, 4])
+
+struct Label:
+    let text: String
+
+func label(value: Int64) -> Label?:
+    if value == 4:
+        return nil
+    return Optional.some(Label(String(value)))
+
+assert(source.compactMap(label) == [Label("1"), Label("2"), Label("3")])
+
+func singleton(value: Int64) -> [Int64]?:
+    if value % 2 == 0:
+        return nil
+    return Optional.some([value])
+
+assert(source.compactMap(singleton) == [[1], [3]])
+
+func nested(value: Int64) -> Int64??:
+    if value == 1:
+        return nil
+    if value == 2:
+        return Optional.some(nil)
+    return Optional.some(Optional.some(value))
+
+let nestedValues = source.compactMap(nested)
+assert(nestedValues.count == 3)
+assert(nestedValues[0] == nil)
+assert(nestedValues[1].unwrap() == 3)
+assert(nestedValues[2].unwrap() == 4)
+
+struct Threshold:
+    let minimum: Int64
+    func keep(value: Int64) -> Int64?:
+        if value < self.minimum:
+            return nil
+        return Optional.some(value)
+
+assert(source.compactMap(Threshold(3).keep) == [3, 4])
+
+func local(values: [Int64]) -> [String]:
+    let prefix = "local "
+    func keep(value: Int64) -> String?:
+        if value == 1:
+            return nil
+        return Optional.some(prefix + String(value))
+    return values.compactMap(keep)
+
+assert(local(source) == ["local 2", "local 3", "local 4"])
+
+var mutableSource = [1, 2]
+func appendAndKeep(value: Int64) -> Int64?:
+    mutableSource.append(9)
+    return Optional.some(value)
+
+assert(mutableSource.compactMap(appendAndKeep) == [1, 2])
+assert(mutableSource == [1, 2, 9, 9])
+
+func failOnSecond(value: Int64) -> String?:
+    if value == 2:
+        let missing: [String] = []
+        return Optional.some(missing[0])
+    return Optional.some("kept")
+
+assert(attempt(source.compactMap(failOnSecond)) == nil)
+assert(source == [1, 2, 3, 4])

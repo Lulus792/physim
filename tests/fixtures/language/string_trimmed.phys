@@ -1,0 +1,16 @@
+let padded = "\u{A0}\t Grüße \u{3000}"
+assert(padded.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) == "Grüße")
+assert(padded == "\u{A0}\t Grüße \u{3000}")
+assert("\u{85}\u{2028}\u{3000}".trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) == "")
+assert("  a \n b  ".trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) == "a \n b")
+assert("\u{200B}x\u{200B}".trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) == "\u{200B}x\u{200B}")
+assert("\u{FEFF}x\u{FEFF}".trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) == "\u{FEFF}x\u{FEFF}")
+assert(String(repeating: " x ".trimmingCharacters(in: CharacterSet.whitespacesAndNewlines), count: 2) == "xx")
+
+struct TextBox:
+    let size: Int64
+
+    func trimmed() -> Int64:
+        return self.size
+
+assert(TextBox(size: 7).trimmed() == 7)

@@ -1,0 +1,52 @@
+let empty: [Int64] = []
+assert(empty.reversed().count == 0)
+let single = [42]
+assert(single.reversed()[0] == 42)
+
+let source = [1, 2, 3, 4]
+let reverse = source.reversed()
+assert(reverse == [4, 3, 2, 1])
+assert(source == [1, 2, 3, 4])
+assert(reverse.reversed() == source)
+
+let nested = [["alpha", "beta"], ["gamma"]]
+let nestedReverse = nested.reversed()
+assert(nestedReverse == [["gamma"], ["alpha", "beta"]])
+var changed = nestedReverse
+changed[0][0] = "changed"
+assert(nestedReverse[0][0] == "gamma" && nested[1][0] == "gamma")
+
+func reversedNames(input: [String]) -> [String]:
+    return input.reversed()
+let names = reversedNames(["one", "two", "three"])
+assert(names == ["three", "two", "one"])
+
+var calls = 0
+func makeNumbers() -> [Int64]:
+    calls += 1
+    return [5, 6]
+assert(makeNumbers().reversed() == [6, 5])
+assert(calls == 1)
+
+var mutable = [1, 2, 3]
+let beforeMutation = mutable
+mutable.reverse()
+assert(mutable == [3, 2, 1] && beforeMutation == [1, 2, 3])
+mutable.reverse()
+assert(mutable == beforeMutation)
+var emptyMutable: [Int64] = []
+emptyMutable.reverse()
+assert(emptyMutable.count == 0)
+
+struct Holder:
+    var rows: [[String]]
+var holder = Holder([["one", "two", "three"]])
+let saved = holder
+var indexCalls = 0
+func rowIndex() -> Int64:
+    indexCalls += 1
+    return 0
+holder.rows[rowIndex()].reverse()
+assert(indexCalls == 1)
+assert(holder.rows[0] == ["three", "two", "one"])
+assert(saved.rows[0] == ["one", "two", "three"])

@@ -1,0 +1,30 @@
+// Standalone reference: exact step for constant acceleration, SI units.
+struct Vector2:
+    var x: Float64
+    var y: Float64
+
+struct Motion:
+    var position: Vector2
+    var velocity: Vector2
+
+func step(initial: Motion, acceleration: Vector2, dt: Float64) -> Motion:
+    var result = initial
+    result.position.x = initial.position.x + initial.velocity.x * dt + 0.5 * acceleration.x * dt * dt
+    result.position.y = initial.position.y + initial.velocity.y * dt + 0.5 * acceleration.y * dt * dt
+    result.velocity.x = initial.velocity.x + acceleration.x * dt
+    result.velocity.y = initial.velocity.y + acceleration.y * dt
+    return result
+
+let initial = Motion(position: Vector2(0, 0), velocity: Vector2(2, 10))
+let acceleration = Vector2(0, -9.80665)
+var state = initial
+for frame in 0..<100:
+    state = step(state, acceleration, 0.01)
+
+assert(initial.position.y == 0.0)
+assert(state.position.x > 1.999999999 && state.position.x < 2.000000001)
+assert(state.position.y > 5.096674999 && state.position.y < 5.096675001)
+assert(state.velocity.y > 0.193349999 && state.velocity.y < 0.193350001)
+print(state.position.x)
+print(state.position.y)
+print(state.velocity.y)

@@ -1,0 +1,81 @@
+var combineCalls = 0
+var combineFactories = 0
+var initialCalls = 0
+
+func sum(total: Int64, value: Int64) -> Int64:
+    combineCalls += 1
+    return total + value
+
+func makeCombine() -> func(Int64, Int64) -> Int64:
+    combineFactories += 1
+    return sum
+
+func initial() -> Int64:
+    initialCalls += 1
+    return 10
+
+let source = [1, 2, 3]
+assert(source.reduce(initial(), makeCombine()) == 16)
+assert(combineCalls == 3 && combineFactories == 1 && initialCalls == 1)
+let empty: [Int64] = []
+assert(empty.reduce(initial(), makeCombine()) == 10)
+assert(combineCalls == 3 && combineFactories == 2 && initialCalls == 2)
+
+func collect(values: [Int64], value: Int64) -> [Int64]:
+    return values + [value]
+
+let copied = source.reduce([], collect)
+assert(copied == [1, 2, 3])
+assert(source == [1, 2, 3])
+
+func appendText(text: String, value: Int64) -> String:
+    return text + String(value)
+
+assert(source.reduce("n=", appendText) == "n=123")
+
+struct Journal:
+    let text: String
+
+func addEntry(journal: Journal, value: Int64) -> Journal:
+    return Journal(journal.text + String(value))
+
+assert(source.reduce(Journal(""), addEntry) == Journal("123"))
+
+struct Scaled:
+    let multiplier: Int64
+    func add(total: Int64, value: Int64) -> Int64:
+        return total + value * self.multiplier
+
+assert(source.reduce(0, Scaled(2).add) == 12)
+
+func localReduce(values: [Int64]) -> Int64:
+    let offset = 1
+    func add(total: Int64, value: Int64) -> Int64:
+        return total + value + offset
+    return values.reduce(0, add)
+
+assert(localReduce(source) == 9)
+
+func offsetCombine(offset: Int64) -> func(Int64, Int64) -> Int64:
+    return func(total: Int64, value: Int64) -> Int64:
+        return total + value + offset
+
+assert(source.reduce(0, offsetCombine(1)) == 9)
+
+func product(total: Float64, value: Int64) -> Float64:
+    return total * Float64(value)
+
+assert(source.reduce(1.0, product) == 6.0)
+
+func textLength(total: Int64, value: String) -> Int64:
+    return total + value.count
+
+assert(["a", "bb", "ccc"].reduce(0, textLength) == 6)
+
+var mutableSource = [1, 2]
+func mutateSource(total: Int64, value: Int64) -> Int64:
+    mutableSource.append(9)
+    return total + value
+
+assert(mutableSource.reduce(0, mutateSource) == 3)
+assert(mutableSource == [1, 2, 9, 9])

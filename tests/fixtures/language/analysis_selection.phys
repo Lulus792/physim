@@ -1,0 +1,36 @@
+struct Columns:
+    var values: [Series]
+func selected(time: Series, value: Series, status: Series) -> [Series]:
+    return Series.select(columns: [time, value], accepted: 1, selector: status)
+func analyze():
+    report("Selection and table reference")
+    let run = Dataset(0)
+    let time = run.series("time")
+    let value = run.series("value")
+    let status = run.series("status")
+    var stored = Columns(selected(time, value, status))
+    var copy = stored
+    copy.values[0] = status
+    assert(stored.values[0].count() == 171 && copy.values[0].count() == 513)
+    let empty = Series.select([time, value], status, 99)
+    assert(empty.count == 2 && empty[0].count() == 0 && empty[1].count() == 0)
+    let selectedTime = stored.values[0]
+    let selectedValue = stored.values[1]
+    let plot = value.plot(time, "Selected data", "All values")
+    plot.points(selectedTime, selectedValue, "Status 1")
+    let metres = Unit(1,0,0,0,0,0,0,1,"m")
+    let centimetres = Unit(1,0,0,0,0,0,0,0.01,"cm")
+    let one = Unit(0,0,0,0,0,0,0,1,"1")
+    let table = Table(title: "Kennzahlen · Auswahl", units: [one, metres, metres],
+                      labels: ["Count", "Mean", "Standard deviation"])
+    let tableCopy = table
+    tableCopy.row(values: [Quantity(Float64(selectedValue.count()), one),
+                          Quantity(selectedValue.mean() * 100, centimetres),
+                          Quantity(selectedValue.stddev(), metres)], label: "Valid")
+    time.release()
+    value.release()
+    assert(selectedValue.count() == 171)
+    selectedValue.export(selectedTime, "selected")
+    table.export("statistics")
+    plot.export("selected")
+    run.close()

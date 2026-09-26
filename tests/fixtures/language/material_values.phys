@@ -1,0 +1,15 @@
+let material = Material(density: 1000, restitution: 0.2, friction: 0.6)
+assert(material.density == 1000)
+assert(material.restitution == 0.2)
+assert(material.friction == 0.6)
+
+func bodyMass(value: Material, volume: Float64) -> Float64:
+    return value.density * volume
+assert(bodyMass(material, 0.001) == 1)
+
+let defaults = ContactSolver.defaults()
+let solver = material.contactSolver(64, defaults.bounceThreshold,
+    defaults.penetrationSlop, defaults.correctionFraction)
+assert(solver.iterations == 64)
+assert(solver.restitution == material.restitution)
+assert(solver.friction == material.friction)

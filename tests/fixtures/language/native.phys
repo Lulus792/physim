@@ -1,0 +1,133 @@
+var calls: Int64 = 0
+var assertionCalls = 0
+func assertionReason() -> String:
+    assertionCalls += 1
+    return "unused"
+assert(true, assertionReason())
+assert(assertionCalls == 1, message: "Assertion arguments must be evaluated")
+var compounded = 10
+compounded += 5
+compounded -= 3
+compounded *= 4
+compounded /= 5
+compounded %= 4
+assert(compounded == 1)
+var compoundValue = 5
+var compoundCalls = 0
+func compoundOperand() -> Int64:
+    compoundCalls += 1
+    compoundValue = 100
+    return 2
+compoundValue += compoundOperand()
+assert(compoundCalls == 1 && compoundValue == 7)
+struct CompoundState:
+    var value: Vec3
+var compoundState = CompoundState(Vec3(1, 2, 3))
+compoundState.value += Vec3(2, 2, 2)
+compoundState.value *= 2
+compoundState.value.y /= 4
+assert(compoundState.value == Vec3(6, 2, 10))
+var compoundSum = 0
+for compoundIndex in 0..<5:
+    compoundSum += compoundIndex
+assert(compoundSum == 10)
+func next() -> Int64:
+    calls = calls + 1
+    return calls
+
+func pair(first: Int64, second: Int64) -> Int64:
+    return first * 10 + second
+
+// Argument evaluation follows source order, even when labels reorder parameters.
+assert(pair(second: next(), first: next()) == 21)
+assert(calls == 2)
+assert(next() * 10 + next() == 34)
+assert(calls == 4)
+assert(false && next() == 5 || true)
+assert(true || next() == 5)
+assert(calls == 4)
+
+func factorial(n: Int64) -> Int64:
+    if n < 2:
+        return 1
+    else:
+        return n * factorial(n - 1)
+assert(factorial(10) == 3628800)
+
+func isOdd(n: Int64) -> Bool:
+    if n == 0:
+        return false
+    return isEven(n - 1)
+func isEven(n: Int64) -> Bool:
+    if n == 0:
+        return true
+    return isOdd(n - 1)
+assert(isEven(18))
+
+var sum = 0
+for i in 0..<10:
+    if i == 2:
+        continue
+    if i == 7:
+        break
+    sum = sum + i
+assert(sum == 19)
+while sum > 0:
+    sum = sum - 1
+    if sum > 3:
+        continue
+    if sum == 2:
+        break
+assert(sum == 2)
+
+let lo = -9223372036854775808
+let hi = 9223372036854775807
+assert(lo + hi == -1)
+assert(lo - lo == 0)
+assert(lo * 1 == lo)
+assert(lo * 0 == 0)
+assert(lo % -1 == 0)
+assert(-7 / 3 == -2)
+assert(-7 % 3 == -1)
+var seen = 0
+for i in hi...hi:
+    seen = seen + 1
+    continue
+for i in hi..<hi:
+    seen = 999
+for i in 3...1:
+    seen = 999
+assert(seen == 1)
+for i in lo..<lo + 2:
+    seen = seen + 1
+assert(seen == 3)
+for i in 0...2:
+    for j in 0..<2:
+        seen = seen + 1
+assert(seen == 9)
+
+func text() -> String:
+    return "Grüße \"Physim\" \\ \t"
+assert(text() == "Grüße \"Physim\" \\ \t")
+assert("different" != text())
+let original = 9
+if true:
+    let original = 3
+    assert(original == 3)
+assert(original == 9)
+
+func energy(mass: Float64, speed: Float64) -> Float64:
+    return 0.5 * mass * speed * speed
+assert(energy(speed: 3, mass: 2) == 9.0)
+assert((1 + 2.5) * 2 == 7.0)
+assert(00012 == 12)
+assert(00012.5 == 12.5)
+assert(-9223372036854775808.0 < 0.0)
+func done():
+    assert(true)
+    return
+done()
+print("native checks passed")
+print(true)
+print(42)
+print(0.5)

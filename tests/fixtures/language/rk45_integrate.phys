@@ -1,0 +1,44 @@
+func oscillator(time: Float64, state: [Float64]) -> [Float64]:
+    return [state[1], -state[0]]
+
+func driven(time: Float64, state: [Float64]) -> [Float64]:
+    return [time * state[0]]
+
+func multiscale(time: Float64, state: [Float64]) -> [Float64]:
+    return [-state[0], -state[1]]
+
+let initial = [1.0, 0.0]
+let after = rk45Integrate(derivative: oscillator, state: initial, start: 0, end: 20,
+                          absoluteTolerance: 1e-11, relativeTolerance: 1e-11,
+                          maxSteps: 100000)
+assert(abs(after[0] - cos(20)) < 1e-8)
+assert(abs(after[1] + sin(20)) < 1e-8)
+assert(initial == [1.0, 0.0])
+
+let back = rk45Integrate(oscillator, after, 20, 0, 1e-11, 1e-11, 100000)
+assert(abs(back[0] - 1) < 1e-8)
+assert(abs(back[1]) < 1e-8)
+
+let drivenState = rk45Integrate(driven, [1.0], 2, 3, 1e-11, 1e-11, 100000)
+assert(abs(drivenState[0] - exp(2.5)) < 1e-8)
+let same = rk45Integrate(driven, drivenState, 3, 3, 1e-11, 1e-11, 1)
+assert(same == drivenState)
+
+let configured = rk45IntegrateWithSteps(derivative: driven, state: [1.0],
+                                        start: 2, end: 3, absoluteTolerance: 1e-11,
+                                        relativeTolerance: 1e-11, maxSteps: 100000,
+                                        initialStep: 0.25, minimumStep: 1e-14,
+                                        maximumStep: 0.25)
+assert(abs(configured[0] - exp(2.5)) < 1e-8)
+let configuredBack = rk45IntegrateWithSteps(driven, configured, 3, 2,
+                                             1e-11, 1e-11, 100000, 0.25, 1e-14, 0.25)
+assert(abs(configuredBack[0] - 1) < 1e-8)
+
+let tolerances = [1e-14, 1e-2]
+let scales = [1e-6, 1e6]
+let mixed = rk45IntegrateWithTolerances(multiscale, scales, 0, 5, tolerances,
+                                         0, 100000, 0.2, 1e-14, 0.2)
+assert(abs(mixed[0] - 1e-6 * exp(-5)) < 1e-10)
+assert(abs(mixed[1] - 1e6 * exp(-5)) < 1e-2)
+assert(scales == [1e-6, 1e6])
+assert(tolerances == [1e-14, 1e-2])

@@ -1,0 +1,20 @@
+let one = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
+let value = Channel("attempt.value", one, "Recovered value")
+var count: Int64 = 0
+
+func create():
+    assert(attempt(1 / 0) == nil)
+
+func reset():
+    count = 0
+    value.sample(0)
+
+func step(dt: Float64):
+    if dt > 1:
+        assert(false)
+    let recovered = attempt(Int64("bad")).valueOr(2)
+    count += recovered
+    value.sample(Float64(count))
+
+func scene():
+    sphere(Vec3(Float64(count), 0, 0), 0.1, 1688924159, 1)

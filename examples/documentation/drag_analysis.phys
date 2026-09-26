@@ -1,0 +1,9 @@
+func analyze():
+    report("Projectile with quadratic air drag")
+    let run: Dataset = Dataset(0)
+    let time: Series = run.series("time")
+    let position: Series = run.series("position.x")
+    let horizontalVelocity: Series = position.derivative(time)
+    let plot: Plot = horizontalVelocity.plot(time, "Horizontal velocity", "dx/dt")
+    horizontalVelocity.export(time, "horizontal_velocity")
+    run.close()

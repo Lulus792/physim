@@ -1,0 +1,16 @@
+assert(min(2.5, -1.0) == -1.0)
+assert(max(2.5, -1.0) == 2.5)
+assert(min(left: -3.0, right: 4.0) == -3.0)
+assert(max(left: -3.0, right: 4.0) == 4.0)
+assert(clamp(5.0, -1.0, 3.0) == 3.0)
+assert(clamp(-2.0, -1.0, 3.0) == -1.0)
+assert(clamp(1.0, -1.0, 3.0) == 1.0)
+assert(clamp(1.0, 1.0, 1.0) == 1.0)
+
+var evaluations = 0
+func counted(value: Float64) -> Float64:
+    evaluations += 1
+    return value
+
+assert(clamp(upper: counted(3.0), value: counted(5.0), lower: counted(-1.0)) == 3.0)
+assert(evaluations == 3)

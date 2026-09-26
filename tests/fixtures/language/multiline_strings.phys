@@ -1,0 +1,42 @@
+let empty = """"""
+assert(empty.isEmpty)
+let text = """Grüße
+"zweite" Zeile
+Ende"""
+assert(text == "Grüße\n\"zweite\" Zeile\nEnde")
+assert(text.count == 25)
+let escaped = """Anfang\nEnde"""
+assert(escaped == "Anfang\nEnde")
+let quoted = """eins "" zwei"""
+assert(quoted == "eins \"\" zwei")
+
+func classify(value: String) -> Int64:
+    switch value:
+        case """oben
+unten""":
+            return 1
+        default:
+            return 0
+
+assert(classify("oben\nunten") == 1)
+assert(classify("oben unten") == 0)
+
+func makeText() -> String:
+    let value = """innen
+zweite Zeile"""
+    return value
+
+assert(makeText() == "innen\nzweite Zeile")
+
+func lineKind(value: String) -> Int64:
+    switch value:
+        case """a
+b""":
+            return 1
+        case """a\rb""":
+            return 2
+        default:
+            return 0
+
+assert(lineKind("a\nb") == 1)
+assert(lineKind("a\rb") == 2)

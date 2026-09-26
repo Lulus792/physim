@@ -1,0 +1,3 @@
+func analyze():
+    report("Invalid columns")
+    Series.exportColumns([],"empty")

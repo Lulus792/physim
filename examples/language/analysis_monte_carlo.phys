@@ -1,0 +1,22 @@
+// A complete seeded Monte Carlo report without a C analysis module.
+func analyze():
+    report("Monte Carlo standard normal sample")
+    let one = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
+    let normal = Distribution.normal(0, 1)
+    var rng = Rng(1234)
+    var draws: [Float64] = []
+    var indices: [Float64] = []
+    for index in 0..<1024:
+        indices.append(Float64(index))
+        draws.append(rng.sample(normal))
+    let x = Series.fromValues(indices, one, "draw")
+    let y = x.alignedValues(draws, one, "sample")
+    assert(x.count() == 1024 && y.count() == 1024)
+    let trace = y.plot(x, "Draw sequence", "sample")
+    trace.export("trace")
+    y.export(x, "draws")
+    let distribution = y.histogram("Sample distribution", 24)
+    distribution.export("histogram")
+    let summary = Table("Monte Carlo summary", ["Mean", "Stddev"], [one, one])
+    summary.row("seed 1234", [Quantity(y.mean(), one), Quantity(y.stddev(), one)])
+    summary.export("summary")

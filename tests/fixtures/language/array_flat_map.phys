@@ -1,0 +1,89 @@
+var transforms = 0
+var factories = 0
+
+func expand(value: Int64) -> [Int64]:
+    transforms += 1
+    if value == 2:
+        return []
+    return [value, value * 10]
+
+func makeTransform() -> func(Int64) -> [Int64]:
+    factories += 1
+    return expand
+
+let source = [1, 2, 3]
+assert(source.flatMap(makeTransform()) == [1, 10, 3, 30])
+assert(source == [1, 2, 3])
+assert(transforms == 3 && factories == 1)
+let empty: [Int64] = []
+assert(empty.flatMap(makeTransform()).isEmpty)
+assert(transforms == 3 && factories == 2)
+
+func none(value: Int64) -> [String]:
+    return []
+
+assert(source.flatMap(none) == [])
+
+func describe(value: Int64) -> [String]:
+    if value == 2:
+        return []
+    return ["item " + String(value), "again " + String(value)]
+
+assert(source.flatMap(describe) == ["item 1", "again 1", "item 3", "again 3"])
+let manyDescriptions = Array(repeating: 7, count: 65).flatMap(describe)
+assert(manyDescriptions.count == 130 && manyDescriptions[129] == "again 7")
+
+struct Label:
+    let text: String
+
+func labels(value: Int64) -> [Label]:
+    return [Label("first " + String(value)), Label("last " + String(value))]
+
+assert(source.flatMap(labels) == [Label("first 1"), Label("last 1"),
+                                  Label("first 2"), Label("last 2"),
+                                  Label("first 3"), Label("last 3")])
+
+func nested(value: Int64) -> [[Int64]]:
+    if value == 2:
+        return []
+    return [[value], [value * 2]]
+
+assert(source.flatMap(nested) == [[1], [2], [3], [6]])
+
+struct Prefix:
+    let text: String
+    func words(value: Int64) -> [String]:
+        return [self.text + String(value)]
+
+assert(source.flatMap(Prefix("number ").words) ==
+       ["number 1", "number 2", "number 3"])
+
+func local(values: [Int64]) -> [String]:
+    let prefix = "local "
+    func words(value: Int64) -> [String]:
+        return [prefix + String(value)]
+    return values.flatMap(words)
+
+assert(local(source) == ["local 1", "local 2", "local 3"])
+
+let twice = func(value: Int64) -> [Int64]:
+    return [value, value]
+
+assert(source.flatMap(twice) == [1, 1, 2, 2, 3, 3])
+
+var mutableSource = [1, 2]
+func appendAndReturn(value: Int64) -> [Int64]:
+    mutableSource.append(9)
+    return [value]
+
+assert(mutableSource.flatMap(appendAndReturn) == [1, 2])
+assert(mutableSource == [1, 2, 9, 9])
+
+func failOnSecond(value: Int64) -> [String]:
+    if value == 2:
+        let missing: [String] = []
+        return [missing[0]]
+    return ["kept"]
+
+assert(attempt(source.flatMap(failOnSecond)) == nil)
+assert(source == [1, 2, 3])

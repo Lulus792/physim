@@ -1,0 +1,48 @@
+import GenericOverloads
+
+func describe(value: Int64) -> String:
+    return "integer " + String(value)
+
+func describe<T: Scalar>(value: T) -> String:
+    return "scalar"
+
+func describe<T>(values: [T]) -> String:
+    return "array " + String(values.count)
+
+assert(describe(4) == "integer 4")
+assert(describe(true) == "scalar")
+assert(describe("text") == "scalar")
+assert(describe([1, 2]) == "array 2")
+assert(describe<Bool>(true) == "scalar")
+let concreteDescription: func(Int64) -> String = describe
+assert(concreteDescription(6) == "integer 6")
+let scalarDescription: func(Bool) -> String = describe<Bool>
+let arrayDescription: func([Int64]) -> String = describe<Int64>
+assert(scalarDescription(false) == "scalar")
+assert(arrayDescription([3, 4]) == "array 2")
+
+func repeat<T>(value: T, times: Int64) -> T:
+    return value
+
+func repeat<T>(values: [T]) -> Int64:
+    return values.count
+
+assert(repeat(value: 7, times: 3) == 7)
+assert(repeat([1, 2, 3]) == 3)
+
+func empty<T>(count: Int64) -> [T]:
+    return []
+
+func empty(value: String) -> Int64:
+    return value.count
+
+let emptyIntegers: [Int64] = empty(0)
+assert(emptyIntegers.count == 0)
+assert(empty("a") == 1)
+
+assert(GenericOverloads.pick(5) == "number")
+assert(GenericOverloads.pick("x") == "generic")
+let remoteDescription: func(Int64) -> String = GenericOverloads.pick
+assert(remoteDescription(7) == "number")
+let remoteGeneric: func(Bool) -> String = GenericOverloads.pick<Bool>
+assert(remoteGeneric(true) == "generic")

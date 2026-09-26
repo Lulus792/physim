@@ -1,0 +1,84 @@
+func descending(a: Int64, b: Int64) -> Bool:
+    return a > b
+
+let source = [3, 1, 2, 1]
+assert(source.sorted(by: descending) == [3, 2, 1, 1])
+assert(source == [3, 1, 2, 1])
+
+func beforeOffset(offset: Int64) -> func(Int64, Int64) -> Bool:
+    return func(a: Int64, b: Int64) -> Bool:
+        return a + offset < b + offset
+assert(source.sorted(by: beforeOffset(10)) == [1, 1, 2, 3])
+
+struct Order:
+    let descending: Bool
+    func before(a: Int64, b: Int64) -> Bool:
+        if self.descending:
+            return a > b
+        return a < b
+let order = Order(true)
+assert(source.sorted(by: order.before) == [3, 2, 1, 1])
+var mutable = source
+mutable.sort(by: descending)
+assert(mutable == [3, 2, 1, 1])
+assert(source == [3, 1, 2, 1])
+
+struct Item:
+    let priority: Int64
+    let name: String
+
+func byPriority(a: Item, b: Item) -> Bool:
+    return a.priority < b.priority
+
+let items = [Item(priority: 2, name: "a"), Item(priority: 1, name: "b"),
+             Item(priority: 2, name: "c"), Item(priority: 1, name: "d")]
+let ordered = items.sorted(by: byPriority)
+assert(ordered == [Item(priority: 1, name: "b"), Item(priority: 1, name: "d"),
+                   Item(priority: 2, name: "a"), Item(priority: 2, name: "c")])
+assert(items[0].name == "a")
+
+var records = items
+records.sort(by: byPriority)
+assert(records == ordered)
+assert(items[0].name == "a")
+
+func allEqual(a: Item, b: Item) -> Bool:
+    return false
+assert(items.sorted(by: allEqual) == items)
+let empty: [Item] = []
+assert(empty.sorted(by: byPriority) == [])
+
+var calls = 0
+func counted(a: Int64, b: Int64) -> Bool:
+    calls += 1
+    return a < b
+let noNumbers: [Int64] = []
+assert(noNumbers.sorted(by: counted) == [])
+assert([7].sorted(by: counted) == [7])
+assert(calls == 0)
+
+struct Holder:
+    var rows: [[Int64]]
+var holder = Holder([[3, 1, 2]])
+var indexCalls = 0
+func rowIndex() -> Int64:
+    indexCalls += 1
+    return 0
+holder.rows[rowIndex()].sort(by: descending)
+assert(indexCalls == 1)
+assert(holder.rows[0] == [3, 2, 1])
+
+var failureSource = [3, 2, 1]
+func failsAtTwo(a: Int64, b: Int64) -> Bool:
+    if a == 2 || b == 2:
+        return 1 / 0 == 0
+    return a < b
+func tryMutatingSort() -> Int64:
+    failureSource.sort(by: failsAtTwo)
+    return 1
+func trySorted() -> [Int64]:
+    return failureSource.sorted(by: failsAtTwo)
+assert(attempt(tryMutatingSort()) == nil)
+assert(failureSource == [3, 2, 1])
+assert(attempt(trySorted()) == nil)
+assert(failureSource == [3, 2, 1])

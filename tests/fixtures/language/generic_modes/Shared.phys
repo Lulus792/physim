@@ -1,0 +1,23 @@
+func identity<T>(value: T) -> T:
+    return value
+
+struct Holder:
+    var value: Int64
+    func echo<T>(item: T) -> T:
+        return item
+    mutating func advance<T>(item: T) -> T:
+        self.value += 1
+        return item
+    static func copy<T>(item: T) -> T:
+        return item
+
+struct Box<T>:
+    let value: T
+    func read() -> T:
+        return self.value
+
+func bounded<T: Numeric>(value: T) -> T:
+    return value
+
+struct NumericBox<T: Numeric>:
+    let value: T

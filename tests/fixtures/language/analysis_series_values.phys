@@ -1,0 +1,10 @@
+func analyze():
+    report("Array access to series values")
+    let one = Unit(0,0,0,0,0,0,0,1,"1")
+    let series = Series.fromValues([1.0,2.0,3.0,4.0],one,"measurements")
+    assert(series.values(1,2) == [2.0,3.0])
+    assert(series.values(0,0) == [])
+    assert(series.values(4,0) == [])
+    let snapshot = series.values(0,4)
+    series.release()
+    assert(snapshot == [1.0,2.0,3.0,4.0])

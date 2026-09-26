@@ -1,0 +1,77 @@
+// Vacuum projectile with a random initial velocity and independent indexed sensors.
+let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
+let one = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
+let seconds = Unit(0, 0, 1, 0, 0, 0, 0, 1, "s")
+let config = SensorConfig(unit: metres, rateHz: 100, startTime: 0,
+                          resolution: 0.005, offset: 0.01, driftPerSecond: 0.002,
+                          noise: Distribution.normal(0, 0.02), dropoutProbability: 0.2,
+                          uncertaintyAbsolute: 0.003, uncertaintyRelative: 0.001)
+var sensors = [Sensor(config, 0), Sensor(config, 0)]
+let xChannel = Channel("position.x", metres, "Physical horizontal position")
+let yChannel = Channel("position.y", metres, "Physical vertical position")
+let sxChannel = Channel("sensor.x", metres, "Use only when sensor.x.status is 1")
+let syChannel = Channel("sensor.y", metres, "Use only when sensor.y.status is 1")
+let xsChannel = Channel("sensor.x.status", one, "0:not due, 1:valid, 2:dropped")
+let ysChannel = Channel("sensor.y.status", one, "0:not due, 1:valid, 2:dropped")
+let uxChannel = Channel("sensor.x.u", metres, "Standard uncertainty of a valid x measurement")
+let uyChannel = Channel("sensor.y.u", metres, "Standard uncertainty of a valid y measurement")
+let timeChannel = Channel("sensor.time", seconds, "Actual sampling call time")
+let skippedChannel = Channel("sensor.skipped", one, "Skipped scheduled slots")
+let indexChannel = Channel("sensor.index", one, "Scheduled index; status determines validity")
+let velocityChannel = Channel("velocity.x", metres.divided(seconds, "m/s"), "Sampled initial velocity")
+let nominalXChannel = Channel("nominal.x", metres, "Nominal position at mean initial velocity")
+let nominalYChannel = Channel("nominal.y", metres, "Nominal vertical position")
+let energyChannel = Channel("energy", Unit(2, 1, -2, 0, 0, 0, 0, 1, "J"), "Mechanical energy, 1 kg")
+var time = 0.0
+var velocity = 3.0
+var position = Vec3(-2, 0, 0)
+var lastMeasured: Vec3? = nil
+
+func measure():
+    position = Vec3(-2 + velocity * time, 5 * time - 0.5 * 9.80665 * time * time, 0)
+    let x = sensors[0].read(time, Quantity(position.x, metres))
+    let y = sensors[1].read(time, Quantity(position.y, metres))
+    xChannel.sample(position.x)
+    yChannel.sample(position.y)
+    sxChannel.sample(x.value.value)
+    syChannel.sample(y.value.value)
+    xsChannel.sample(Float64(x.state))
+    ysChannel.sample(Float64(y.state))
+    uxChannel.sample(x.standardUncertainty)
+    uyChannel.sample(y.standardUncertainty)
+    timeChannel.sample(time)
+    skippedChannel.sample(Float64(x.skipped))
+    indexChannel.sample(Float64(x.index))
+    velocityChannel.sample(velocity)
+    nominalXChannel.sample(-2 + 3 * time)
+    nominalYChannel.sample(position.y)
+    let vy = 5 - 9.80665 * time
+    energyChannel.sample(0.5 * (velocity * velocity + vy * vy) + 9.80665 * position.y)
+    if x.isValid() && y.isValid():
+        lastMeasured = Optional.some(Vec3(x.value.value, y.value.value, 0))
+
+func create():
+    metadata("model=uncertain vacuum projectile; analytical trajectory\ngravity_m_s2=9.80665\ninitial_vx=normal(3,0.15); recorded in velocity.x\nsensor_rate_hz=100\nsensor_noise=normal(0,0.02)\nsensor_resolution_m=0.005\nsensor_offset_m=0.01\nsensor_drift_m_s=0.002\nsensor_dropout=0.2\nsensor_u_absolute_m=0.003\nsensor_u_relative=0.001\nsensor_seed_x=run seed XOR 17\nsensor_seed_y=run seed XOR 29\nsensor_status=0:not_due,1:valid,2:dropped; invalid values are zero placeholders")
+
+func reset():
+    time = 0.0
+    velocity = randomNormal(3, 0.15)
+    sensors[0].resetForRun(17)
+    sensors[1] = Sensor.forRun(config, 29)
+    lastMeasured = nil
+    measure()
+
+func step(dt: Float64):
+    time += dt
+    measure()
+
+func scene():
+    sphere(position, 0.09, 1407107839, 1)
+    if let measured = lastMeasured:
+        point(measured, 0.04, 4073026303, 2)
+        line(position, measured, 0.004, 4073026303, 3)
+        // Cross arms keep the measurement visible when it lies inside the model sphere.
+        let horizontal = Vec3(0.18, 0, 0)
+        let vertical = Vec3(0, 0.18, 0)
+        line(measured - horizontal, measured + horizontal, 0.008, 4073026303, 4)
+        line(measured - vertical, measured + vertical, 0.008, 4073026303, 5)

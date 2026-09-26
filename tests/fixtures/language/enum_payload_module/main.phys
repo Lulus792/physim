@@ -1,0 +1,19 @@
+import Types
+
+func read(event: Types.Event) -> Int64:
+    switch event:
+        case Types.Event.empty:
+            return 0
+        case Types.Event.number(value):
+            return value
+
+assert(read(Types.Event.number(7)) == 7)
+assert(read(Types.Event.empty) == 0)
+assert(Types.Event.number(7) == Types.Event.number(7))
+assert(Types.Event.number(7) != Types.Event.empty)
+assert(Types.Code.good.rawValue == 200)
+assert(Types.Code.accepted.rawValue == 201)
+assert(Types.Code.fromRawValue(404).unwrap() == Types.Code.missing)
+assert(Types.Event.empty.isEmpty())
+assert(!Types.Event.sample(value: 7).isEmpty())
+assert(Types.Code.good.isGood())

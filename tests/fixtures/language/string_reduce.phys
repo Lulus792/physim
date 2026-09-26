@@ -1,0 +1,84 @@
+var calls = 0
+var factories = 0
+var initialCalls = 0
+
+func addWidth(total: Int64, value: String) -> Int64:
+    calls += 1
+    return total + value.utf8.count
+
+func makeCombine() -> func(Int64, String) -> Int64:
+    factories += 1
+    return addWidth
+
+func initial() -> Int64:
+    initialCalls += 1
+    return 10
+
+let source = "aü🌍B"
+assert(source.reduce(initial(), makeCombine()) == 18)
+assert(calls == 4 && factories == 1 && initialCalls == 1)
+assert("".reduce(initial(), makeCombine()) == 10)
+assert(calls == 4 && factories == 2 && initialCalls == 2)
+
+func collect(values: [String], value: String) -> [String]:
+    return values + [value]
+
+assert(source.reduce([], collect) == ["a", "ü", "🌍", "B"])
+assert(source == "aü🌍B")
+
+func appendText(text: String, value: String) -> String:
+    return text + value
+
+assert(source.reduce("prefix:", appendText) == "prefix:aü🌍B")
+assert("".reduce("initial", appendText) == "initial")
+
+func lastScalar(previous: String, value: String) -> String:
+    return value
+
+assert(source.reduce("", lastScalar) == "B")
+
+struct Journal:
+    let text: String
+
+func addEntry(journal: Journal, value: String) -> Journal:
+    return Journal(journal.text + value)
+
+assert(source.reduce(Journal(""), addEntry) == Journal("aü🌍B"))
+
+struct Weight:
+    let multiplier: Int64
+    func add(total: Int64, value: String) -> Int64:
+        return total + value.utf8.count * self.multiplier
+
+assert(source.reduce(0, Weight(2).add) == 16)
+
+func local(value: String) -> String:
+    let prefix = "local "
+    func append(total: String, scalar: String) -> String:
+        return total + scalar
+    return value.reduce(prefix, append)
+
+assert(local(source) == "local aü🌍B")
+
+func offsetCombine(offset: Int64) -> func(Int64, String) -> Int64:
+    return func(total: Int64, value: String) -> Int64:
+        return total + value.utf8.count + offset
+
+assert(source.reduce(0, offsetCombine(1)) == 12)
+
+var mutableSource = "aü"
+func mutate(total: Int64, value: String) -> Int64:
+    mutableSource = "changed"
+    return total + value.utf8.count
+
+assert(mutableSource.reduce(0, mutate) == 3)
+assert(mutableSource == "changed")
+
+func failOnSecond(total: String, value: String) -> String:
+    if value == "ü":
+        let missing: [String] = []
+        return missing[0]
+    return total + value
+
+assert(attempt(source.reduce("", failOnSecond)) == nil)
+assert(source == "aü🌍B")

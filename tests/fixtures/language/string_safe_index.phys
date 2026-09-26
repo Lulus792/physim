@@ -1,0 +1,34 @@
+let text = "Aä🙂Z"
+assert(text.count == 4)
+assert(attempt(text[0]).unwrap() == "A")
+assert(attempt(text[1]).unwrap() == "ä")
+assert(attempt(text[2]).unwrap() == "🙂")
+assert(attempt(text[3]).unwrap() == "Z")
+assert(attempt(text[-1]) == nil)
+assert(attempt(text[4]) == nil)
+assert(attempt(""[0]) == nil)
+
+let held = attempt(text[2])
+assert(held.unwrap() == "🙂")
+assert(text == "Aä🙂Z")
+
+func firstOrEmpty(value: String) -> String:
+    guard let first = attempt(value[0]) else:
+        return ""
+    return first
+
+assert(firstOrEmpty("öabc") == "ö")
+assert(firstOrEmpty("") == "")
+
+var sourceCalls = 0
+var indexCalls = 0
+func source() -> String:
+    sourceCalls += 1
+    return "é"
+
+func index() -> Int64:
+    indexCalls += 1
+    return 0
+
+assert(attempt(source()[index()]).unwrap() == "é")
+assert(sourceCalls == 1 && indexCalls == 1)

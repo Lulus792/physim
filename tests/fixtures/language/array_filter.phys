@@ -1,0 +1,70 @@
+var predicateCalls = 0
+var predicateFactories = 0
+
+func positive(value: Int64) -> Bool:
+    predicateCalls += 1
+    return value > 0
+
+func makePredicate() -> func(Int64) -> Bool:
+    predicateFactories += 1
+    return positive
+
+let original = [-2, 0, 1, 3]
+let selected = original.filter(makePredicate())
+assert(selected == [1, 3])
+assert(original == [-2, 0, 1, 3])
+assert(predicateFactories == 1 && predicateCalls == 4)
+let empty: [Int64] = []
+assert(empty.filter(makePredicate()).count == 0)
+assert(predicateFactories == 2 && predicateCalls == 4)
+
+func atLeast(minimum: Int64) -> func(Int64) -> Bool:
+    return func(value: Int64) -> Bool:
+        return value >= minimum
+
+let captured = original.filter(atLeast(1))
+assert(captured == [1, 3])
+
+struct Threshold:
+    let minimum: Int64
+    func accepts(value: Int64) -> Bool:
+        return value >= self.minimum
+
+let threshold = Threshold(2)
+assert(original.filter(threshold.accepts) == [3])
+
+func filterLocally(values: [Int64]) -> [Int64]:
+    let minimum = 1
+    func keep(value: Int64) -> Bool:
+        return value >= minimum
+    return values.filter(keep)
+
+assert(filterLocally(original) == [1, 3])
+
+let longText = func(value: String) -> Bool:
+    return value.count > 1
+let words = ["", "a", "two", "three"]
+let longWords = words.filter(longText)
+assert(longWords == ["two", "three"])
+assert(words == ["", "a", "two", "three"])
+let manyWords = Array(repeating: "word", count: 129).filter(longText)
+assert(manyWords.count == 129 && manyWords[128] == "word")
+
+struct Label:
+    let text: String
+
+func named(value: Label) -> Bool:
+    return value.text.count > 1
+
+let labels = [Label("a"), Label("long")]
+let chosen = labels.filter(named)
+assert(chosen == [Label("long")])
+
+var mutableSource = [1, 2, 3]
+func mutateSource(value: Int64) -> Bool:
+    mutableSource.append(9)
+    return value % 2 == 1
+
+let snapshot = mutableSource.filter(mutateSource)
+assert(snapshot == [1, 3])
+assert(mutableSource == [1, 2, 3, 9, 9, 9])

@@ -1,0 +1,128 @@
+// Matrices act on column vectors. A.multiplied(B) applies B first.
+func near(a: Float64, b: Float64):
+    assert(abs(a - b) <= 1e-10 * (1 + abs(b)))
+
+func near3(a: Vec3, b: Vec3):
+    near(a.x,b.x)
+    near(a.y,b.y)
+    near(a.z,b.z)
+
+func near4(a: Vec4, b: Vec4):
+    near(a.x,b.x)
+    near(a.y,b.y)
+    near(a.z,b.z)
+    near(a.w,b.w)
+
+func matrix3(a: Mat3, b: Mat3):
+    for row in 0..<3:
+        for column in 0..<3:
+            near(a.element(row,column),b.element(row,column))
+
+func matrix4(a: Mat4, b: Mat4):
+    for row in 0..<4:
+        for column in 0..<4:
+            near(a.element(column: column,row: row),b.element(row,column))
+
+let x = Vec3(1,0,0)
+let y = Vec3(0,1,0)
+let z = Vec3(0,0,1)
+let zero = Vec3(0,0,0)
+let unit = Vec3(1,1,1)
+let identity3 = Mat3.identity()
+let identity4 = Mat4.identity()
+let a = Mat3(column2: Vec3(2,6,5),column0: Vec3(1,0,1),column1: Vec3(2,3,4))
+near(a.element(0,1),2)
+near(a.element(2,1),4)
+near3(a.applied(Vec3(1,2,3)),Vec3(11,24,24))
+matrix3(a.multiplied(identity3),a)
+matrix3(a.transposed().transposed(),a)
+matrix3(a.multiplied(a.inverse(pivotTolerance: 0)),identity3)
+matrix3(a.inverse(1e-14).multiplied(a),identity3)
+let permutation = Mat3(y,z,x)
+matrix3(permutation.multiplied(permutation.transposed()),identity3)
+near3(permutation.applied(Vec3(2,3,4)),Vec3(4,2,3))
+
+let translation = Vec3(3,-2,5)
+let rotation = Quat.axisAngle(z,1.5707963267948966)
+let scale = Vec3(2,3,4)
+let transform = Mat4.trs(scale: scale,translation: translation,rotation: rotation)
+let composed = Mat4.translation(translation).multiplied(Mat4.rotation(rotation)).multiplied(Mat4.scale(scale))
+matrix4(transform,composed)
+near3(transform.transformPoint(Vec3(1,2,3)),Vec3(-3,0,17))
+near3(transform.transformDirection(Vec3(1,2,3)),Vec3(-6,2,12))
+near4(transform.applied(Vec4(1,2,3,1)),Vec4(-3,0,17,1))
+near4(transform.applied(Vec4(1,2,3,0)),Vec4(-6,2,12,0))
+matrix4(transform.multiplied(transform.inverse(0)),identity4)
+matrix4(transform.transposed().transposed(),transform)
+near3(transform.inverse(0).transformPoint(transform.transformPoint(x)),x)
+// A normal uses inverse-transpose, not the direction transform.
+let normal = transform.transformNormal(Vec3(1,1,0))
+near3(normal,Vec3(-2 / sqrt(13),3 / sqrt(13),0))
+near(normal.dot(transform.transformDirection(Vec3(1,-1,0))),0)
+near(normal.length(),1)
+near3(Mat4.scale(Vec3(-2,3,4)).transformNormal(x),Vec3(-1,0,0))
+// A collapsed scale is a valid forward map but not invertible.
+near3(Mat4.scale(Vec3(0,2,3)).transformPoint(Vec3(9,1,1)),Vec3(0,2,3))
+
+// Explicit columns permit projective matrices. Point transform divides by w.
+let projective = Mat4(Vec4(1,0,0,0),Vec4(0,1,0,0),Vec4(0,0,1,1),Vec4(0,0,0,1))
+near3(projective.transformPoint(Vec3(2,4,1)),Vec3(1,2,0.5))
+near4(projective.applied(Vec4(2,4,1,1)),Vec4(2,4,1,2))
+matrix4(projective.multiplied(projective.inverse(0)),identity4)
+
+// Rotated inertia tensor and physical point/force conversion share the same basis.
+let localInertia = Mat3(Vec3(2,0,0),Vec3(0,3,0),Vec3(0,0,5))
+let basis = Mat3(rotation.rotate(x),rotation.rotate(y),rotation.rotate(z))
+let worldInertia = basis.multiplied(localInertia).multiplied(basis.transposed())
+matrix3(worldInertia,Mat3(Vec3(3,0,0),Vec3(0,2,0),Vec3(0,0,5)))
+let angularVelocity = Vec3(2,-1,3)
+near(0.5 * angularVelocity.dot(worldInertia.applied(angularVelocity)),29.5)
+var body = Body.box(2,Vec3(0.8,0.5,0.3))
+body.setState(translation,zero,rotation,zero)
+let rigid = Mat4.trs(body.position,body.orientation,unit)
+let localPoint = Vec3(0.3,0.1,-0.2)
+let point = rigid.transformPoint(localPoint)
+let force = rigid.transformDirection(Vec3(1,2,0))
+near3(point,body.position + body.orientation.rotate(localPoint))
+near3(body.forceTorque(force,point),(point - body.position).cross(force))
+
+// Values survive returns, records, nested arrays and copy-on-write replacement.
+struct Frame:
+    var world: Mat4
+    let basis: Mat3
+    func local(point: Vec3) -> Vec3:
+        return self.world.inverse(0).transformPoint(point)
+func frames() -> [[Frame]]:
+    return [[Frame(transform,basis)],[Frame(identity4,identity3)]]
+var groups = frames()
+let original = groups
+groups[0][0].world = identity4
+near3(original[0][0].local(point),transform.inverse(0).transformPoint(point))
+matrix4(groups[0][0].world,identity4)
+matrix4(original[0][0].world,transform)
+for i in 0..<200:
+    let angle = Float64(i) * 0.031
+    let q = Quat.axisAngle(Vec3(1,2,3),angle)
+    let t = Mat4.trs(Vec3(angle,2 * angle,-angle),q,Vec3(1,2,3))
+    let p = Vec3(0.2,-0.3,0.5)
+    near3(t.transformPoint(p),Vec3(angle,2 * angle,-angle) + q.rotate(Vec3(0.2,-0.6,1.5)))
+    near3(t.inverse(0).transformPoint(t.transformPoint(p)),p)
+    matrix4(t.multiplied(t.inverse(0)),identity4)
+    groups = [[Frame(t,identity3)]]
+matrix4(original[0][0].world,transform)
+// Direct arrays exercise descriptors for both matrix primitive types.
+var bases: [Mat3] = [identity3,basis]
+let savedBases = bases
+bases[0] = localInertia
+bases.append(worldInertia)
+matrix3(savedBases[0],identity3)
+matrix3(bases.remove(at: 2),worldInertia)
+var transforms: [Mat4] = [identity4,transform,projective]
+let savedTransforms = transforms
+transforms[1] = identity4
+let tail = savedTransforms[1..<3]
+matrix4(tail[0],transform)
+matrix4(tail[1],projective)
+matrix4(transforms[1],identity4)
+matrix4(savedTransforms[1],transform)
+print("matrix and coordinate frame checks passed")

@@ -1,0 +1,29 @@
+var rootCalls = 0
+var minimumCalls = 0
+
+func rootTarget(x: Float64) -> Float64:
+    rootCalls += 1
+    return x * x - 2
+
+func minimumTarget(x: Float64) -> Float64:
+    minimumCalls += 1
+    return (x - 3) * (x - 3) + 1
+
+func linearTarget(x: Float64) -> Float64:
+    return x - 1.5
+
+var selectedRoot: func(Float64) -> Float64 = rootTarget
+let root = rootBisect(function: selectedRoot, lower: 1, upper: 2,
+                      absoluteTolerance: 1e-12, relativeTolerance: 0,
+                      maxIterations: 100)
+assert(abs(root - 1.4142135623730951) < 1e-11)
+assert(rootCalls > 2)
+selectedRoot = linearTarget
+let linearRoot = rootBisect(selectedRoot, 1, 2, 1e-12, 0, 100)
+assert(abs(linearRoot - 1.5) < 1e-11)
+
+let minimum = minimizeGolden(function: minimumTarget, lower: 0, upper: 6,
+                             absoluteTolerance: 1e-8, relativeTolerance: 0,
+                             maxIterations: 100)
+assert(abs(minimum - 3) < 1e-7)
+assert(minimumCalls > 2)

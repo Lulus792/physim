@@ -1,0 +1,119 @@
+import MethodOverloadsLibrary
+
+struct Formatter:
+    let prefix: String
+
+    func format(value: Int64) -> String:
+        return self.prefix + String(value)
+
+    func format(value: String) -> String:
+        return self.prefix + value
+
+    static func format(value: Bool) -> String:
+        return String(value)
+
+    static func format(value: Float64) -> String:
+        return String(value)
+
+    func describe(value: Int64) -> String:
+        return "integer"
+
+    func describe<T: Scalar>(value: T) -> String:
+        return "scalar"
+
+    static func choose(value: Int64) -> String:
+        return "integer"
+
+    static func choose<T: Scalar>(value: T) -> String:
+        return "scalar"
+
+let formatter = Formatter("item=")
+assert(formatter.format(3) == "item=3")
+assert(formatter.format("a") == "item=a")
+assert(Formatter.format(true) == "true")
+assert(Formatter.format(2.5) == "2.5")
+assert(formatter.describe(4) == "integer")
+assert(formatter.describe(false) == "scalar")
+assert(formatter.describe<Bool>(true) == "scalar")
+assert(Formatter.choose(3) == "integer")
+assert(Formatter.choose(false) == "scalar")
+let integerFormat: func(Int64) -> String = formatter.format
+let textFormat: func(String) -> String = formatter.format
+let boolFormat: func(Bool) -> String = Formatter.format
+let floatFormat: func(Float64) -> String = Formatter.format
+assert(integerFormat(7) == "item=7")
+assert(textFormat("b") == "item=b")
+assert(boolFormat(false) == "false")
+assert(floatFormat(1.5) == "1.5")
+let genericDescription: func(Bool) -> String = formatter.describe<Bool>
+let genericChoice: func(Bool) -> String = Formatter.choose<Bool>
+assert(genericDescription(true) == "scalar")
+assert(genericChoice(true) == "scalar")
+
+struct Counter:
+    var total: Int64
+
+    func add(value: Int64) -> Int64:
+        return self.total + value
+
+    mutating func add(value: Bool) -> Int64:
+        if value:
+            self.total += 1
+        return self.total
+
+var counter = Counter(2)
+assert(counter.add(3) == 5)
+assert(counter.add(true) == 3)
+assert(counter.total == 3)
+
+struct Box<T>:
+    let value: T
+
+    func identify(item: T) -> String:
+        return "same"
+
+    func identify<U: Scalar>(item: U) -> String:
+        return "generic"
+
+let box = Box<Int64>(4)
+assert(box.identify(5) == "same")
+assert(box.identify("x") == "generic")
+
+struct NumericChoice:
+    func value(input: Float64) -> Float64:
+        return input
+
+    func value(input: Int64) -> Int64:
+        return input
+
+assert(NumericChoice().value(1) == 1)
+assert(NumericChoice().value(1.5) == 1.5)
+
+enum Level:
+    case low
+    case high
+
+    func label(value: Int64) -> String:
+        return "number " + String(value)
+
+    func label(value: String) -> String:
+        return "text " + value
+
+    static func make(value: Int64) -> Level:
+        return Level.low
+
+    static func make(value: String) -> Level:
+        return Level.high
+
+assert(Level.low.label(5) == "number 5")
+assert(Level.high.label("x") == "text x")
+assert(Level.make(1) == Level.low)
+assert(Level.make("x") == Level.high)
+
+let remote = MethodOverloadsLibrary.Remote(3)
+assert(remote.multiply(4) == 12)
+assert(remote.multiply(2.0) == 6.0)
+let remoteFloat: func(Float64) -> Float64 = remote.multiply
+assert(remoteFloat(1.5) == 4.5)
+assert(MethodOverloadsLibrary.Remote.make(5).factor == 5)
+assert(MethodOverloadsLibrary.Remote.make("ab").factor == 2)

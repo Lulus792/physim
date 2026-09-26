@@ -1,0 +1,39 @@
+var evaluations = 0
+
+func counted(value: Int64) -> Int64:
+    evaluations += 1
+    return value
+
+func label(flag: Bool) -> String:
+    return flag ? "left" : "right"
+
+func select<T>(condition: Bool, first: T, second: T) -> T:
+    return condition ? first : second
+
+assert((true ? counted(4) : counted(9)) == 4)
+assert(evaluations == 1)
+assert((false ? counted(4) : counted(9)) == 9)
+assert(evaluations == 2)
+assert((false ? 1 : true ? 2 : 3) == 2)
+assert((true || false ? 5 : 6) == 5)
+let floatValue = true ? 1 : 2.5
+assert(floatValue == 1.0)
+let maybeFlag: Bool? = nil
+assert((maybeFlag ?? false ? 1 : 2) == 2)
+
+let text = true ? label(true) + "!" : label(false)
+assert(text == "left!")
+let words = false ? ["a", "b"] : ["c"]
+assert(words.count == 1 && words[0] == "c")
+let emptyFirst = true ? [] : [1, 2]
+assert(emptyFirst.count == 0)
+assert(select(false, "first", "second") == "second")
+assert(select(true, [1, 2], [3]) == [1, 2])
+
+let absent: Int64? = nil
+let optional: Int64? = true ? absent : Optional.some(7)
+assert(optional == nil)
+let present: Int64? = false ? nil : Optional.some(7)
+assert(present == Optional.some(7))
+
+print("conditional expression checks passed")

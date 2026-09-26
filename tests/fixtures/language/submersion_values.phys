@@ -1,0 +1,12 @@
+func volume(value: Submersion) -> Float64:
+    return value.volume
+
+let dry = Submersion.sphere(2, 3)
+let half = Submersion.sphere(radius: 2, centerHeight: 0)
+let full = Submersion.sphere(2, -2)
+let copied = [dry, half, full]
+assert(dry.volume == 0 && dry.centroidOffset == 0)
+assert(abs(volume(copied[1]) - 16 * 3.141592653589793 / 3) < 0.000000000001)
+assert(abs(half.centroidOffset + 0.75) < 0.000000000001)
+assert(abs(full.volume - 32 * 3.141592653589793 / 3) < 0.000000000001)
+assert(full.centroidOffset == 0)
