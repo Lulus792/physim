@@ -216,8 +216,8 @@ Linux Clang. Beide Prüfungen erzeugen gültige Eingaben, spielen sie erneut ab
 und bestehen 10.000 Durchläufe mit zusätzlicher Codeabdeckung ohne Fehlerfund.
 Der Apple-Silicon-Job scheitert mit Apple Clang aus Xcode 16.4 am Linken, weil
 `libclang_rt.fuzzer_osx.a` in der Toolchain fehlt. Für die Fuzzer-Prüfung wird nun
-Homebrew LLVM 20 auf beiden Mac-Architekturen verwendet. Normale App- und
-Sanitizer-Builds verwenden weiter Apple Clang.
+Homebrew LLVM 20 auf beiden Mac-Architekturen verwendet. Normale App-Builds
+verwenden weiter Apple Clang.
 
 Im [Lauf zu `0d10940`](https://github.com/PhysicSimulator/physim/actions/runs/36493259775)
 besteht die Fuzzer-Kampagne mit LLVM 20 auf macOS Intel. Auf
@@ -229,14 +229,23 @@ bestehen damit beide Mac-Fuzzer-Kampagnen einschließlich 10.000 Durchläufen.
 Die direkte Linux-Clang-Sanitizer-Suite zu `c92dbd3` besteht 492 von 493 Tests.
 UBSan findet im Clipboard-Test einen `memcmp`-Aufruf mit Nullzeiger bei Länge null.
 Der Vergleich behandelt leere Texte nun vor dem Speichervergleich; lokal bestehen
-die Clipboard-Prüfungen mit MSVC Debug und Clang Release. Der Mac-ARM-Lauf desselben
+die Clipboard-Prüfungen mit MSVC Debug und Clang Release. Im Lauf zu `f6cedbf`
+bestehen alle 493 Sanitizer-Tests ohne Fenster unter Linux GCC und Clang.
+Der Mac-ARM-Lauf zu `c92dbd3`
 Stands besteht 479 von 482 Sanitizer-Tests. Beim erneuten Laden von Modulen melden
 zwei Fälle doppelt registrierte ASan-Globals; `template_ids` bricht in der
 ASan-Registrierung ab. Diese Mac-Sanitizer-Ursache bleibt in Untersuchung.
 Eine zusätzliche Minimalprüfung lädt zwei instrumentierte Module je 32-mal,
 kontrolliert das Zurücksetzen veränderter Globals und verlangt anschließend
 einen erkannten globalen Pufferüberlauf. Lokal besteht sie mit MSVC unter
-`build/native/sanitizer probe ä edntxgm2`; der Mac-Nachweis steht noch aus.
+`build/native/sanitizer probe ä edntxgm2`. Im
+[Lauf zu `4339411`](https://github.com/PhysicSimulator/physim/actions/runs/36495445390)
+besteht sie auch mit Apple Clang auf Intel, reproduziert aber auf Apple Silicon
+die doppelte Registrierung von `probe_globals`. Die archivierte Assemblerdatei
+zeigt dort `__mod_term_func` für den ASan-Destruktor. Die LLVM-Umstellung auf
+[`__cxa_atexit`](https://reviews.llvm.org/D121327) vermeidet diese veraltete
+Darstellung. Die macOS-Sanitizer-CI verwendet nun LLVM 20 und LLD wie der Fuzzer;
+der vollständige Nachweis mit dieser Toolchain steht noch aus.
 
 Die korrigierte UI-Größenprüfung besteht im direkten Grafikschritt unter Linux
 GCC zu `0d10940`. Im vorherigen GCC-Lauf zu `49efcbb` besteht der UI-Benchmark,

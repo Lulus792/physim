@@ -20,15 +20,19 @@ jobs:
       PHYSIM_CC: clang
     steps:
       - uses: actions/checkout@v4
-      - name: Direct sanitizer instrumentation and module reload
-        if: ${{ !inputs.package_only }}
-        run: python3 tests/test_sanitizer_build.py --compiler clang --work build/native
-      - name: Direct libFuzzer campaign
+      - name: LLVM sanitizer toolchain
         if: ${{ !inputs.package_only }}
         env:
           HOMEBREW_NO_AUTO_UPDATE: "1"
+        run: brew install llvm@20 lld@20
+      - name: Direct sanitizer instrumentation and module reload
+        if: ${{ !inputs.package_only }}
         run: |
-          brew install llvm@20 lld@20
+          export PATH="$(brew --prefix llvm@20)/bin:$(brew --prefix lld@20)/bin:$PATH"
+          python3 tests/test_sanitizer_build.py --compiler clang --work build/native
+      - name: Direct libFuzzer campaign
+        if: ${{ !inputs.package_only }}
+        run: |
           PATH="$(brew --prefix lld@20)/bin:$PATH" python3 tools/build.py --fuzzer --compiler "$(brew --prefix llvm@20)/bin/clang"
           python3 tests/test_native_fuzzer.py --bin build/native/Debug-fuzzer/bin --work build/native
       - name: SDL3 pinned source
@@ -61,6 +65,7 @@ jobs:
       - name: Direct sanitizer tests
         if: ${{ !inputs.package_only }}
         run: |
+          export PATH="$(brew --prefix llvm@20)/bin:$(brew --prefix lld@20)/bin:$PATH"
           python3 tools/build.py --compiler clang --sanitizers --no-app --test
       - name: Archive native macOS package
         if: ${{ !cancelled() && !inputs.package_only }}

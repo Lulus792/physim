@@ -129,12 +129,12 @@ class Builder:
                 resource = Path(run([self.cc, "-print-resource-dir"], env, capture=True).strip())
                 if not (resource / "lib/darwin/libclang_rt.fuzzer_osx.a").is_file():
                     raise RuntimeError("This Clang installation has no libFuzzer runtime; install LLVM (for example brew install llvm@20) and pass its bin/clang with --compiler.")
-                # Apple ld rejects some LLVM sanitizer relocations on arm64.
-                # Use LLVM's Mach-O linker for the instrumented fuzzer tools.
-                self.linker = shutil.which("ld64.lld", path=str(Path(self.cc).parent) + os.pathsep + env.get("PATH", ""))
-                if not self.linker:
-                    raise RuntimeError("macOS libFuzzer builds require ld64.lld; install lld@20 and add its bin directory to PATH.")
         self.sanitizers = getattr(args, "sanitizers", False)
+        if MAC and self.sanitizers:
+            # Apple ld rejects some LLVM sanitizer relocations on arm64.
+            self.linker = shutil.which("ld64.lld", path=str(Path(self.cc).parent) + os.pathsep + env.get("PATH", ""))
+            if not self.linker:
+                raise RuntimeError("macOS sanitizer builds require ld64.lld; install llvm@20 and lld@20 and add their bin directories to PATH.")
         if self.sanitizers and WINDOWS:
             if Path(self.cc).stem.lower() == "clang-cl":
                 resource = Path(run([self.cc, "/clang:-print-resource-dir"], env, capture=True).strip())

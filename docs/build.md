@@ -582,12 +582,27 @@ kopiert die zum gewählten Compiler gehörenden ASan-DLLs neben die Programme.
 Sanitizer-Builds verwenden `/MD` auch in Debug, da ClangCL ASan die Debug-CRT
 nicht unterstützt; Debugsymbole und deaktivierte Optimierung bleiben erhalten.
 
-**Linux und macOS, alle Tests ohne Fenster:**
+**Linux, alle Tests ohne Fenster:**
 
 ```sh
 python3 tests/test_sanitizer_build.py --work build/native
 python3 tools/build.py --sanitizers --test --sdl "$PWD/build-sdl-install"
 ```
+
+**macOS, LLVM für die Sanitizer installieren und alle Tests ohne Fenster starten:**
+
+```sh
+brew install llvm@20 lld@20
+export PATH="$(brew --prefix llvm@20)/bin:$(brew --prefix lld@20)/bin:$PATH"
+python3 tests/test_sanitizer_build.py --compiler clang --work build/native
+python3 tools/build.py --compiler clang --sanitizers --test --sdl "$PWD/build-sdl-install"
+```
+
+Apple Clang aus Xcode 16.4 erzeugt für ASan noch `__mod_term_func`. Auf Apple
+Silicon scheitert damit bereits die gezielte Modul-Wiederladeprüfung. LLVM 20
+registriert die Destruktoren über `__cxa_atexit`; LLD verarbeitet außerdem seine
+instrumentierten ARM-Objekte. Diese Toolchain wird für die Sanitizer-Prüfung
+verwendet. Die normalen macOS-App-Builds bleiben mit Apple Clang geprüft.
 
 Mit `--no-app` statt `--sdl ...` entfallen SDL und die App-spezifischen Tests.
 `--compiler gcc`, `--compiler clang` beziehungsweise `--compiler clang-cl`
