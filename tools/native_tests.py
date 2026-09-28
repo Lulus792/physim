@@ -196,7 +196,8 @@ def language_case(case, builder, libraries, source, work):
             result = execute_case([str(compiler), check.get("mode", "--check"), str(path)], work=check_work,
                                   env=builder.env, timeout=15, exit_code=check["exit_code"],
                                   stdout=check.get("stdout"), stderr_pattern=check.get("stderr_pattern"),
-                                  stderr=check.get("stderr"), stdout_patterns=check.get("stdout_patterns", ()))
+                                  stderr=check.get("stderr"), stdout_patterns=check.get("stdout_patterns", ()),
+                                  stdout_captures=check.get("stdout_captures", ()))
             result["name"] = check["name"]
             steps.append(result)
     failures = [step for step in steps if step["status"] != "passed"]
@@ -206,7 +207,7 @@ def language_case(case, builder, libraries, source, work):
 
 
 def execute_case(command, *, work: Path, env, timeout: float, exit_code=0,
-                 stdout=None, stderr_pattern=None, stderr=None, stdout_patterns=()):
+                 stdout=None, stderr_pattern=None, stderr=None, stdout_patterns=(), stdout_captures=()):
     """Keep expected failures distinct from crashes, timeouts and launch failures."""
     started = time.monotonic()
     result = {"command": [str(p) for p in command], "status": "failed"}
@@ -227,6 +228,11 @@ def execute_case(command, *, work: Path, env, timeout: float, exit_code=0,
             result["reason"] = "Expected output pattern was missing"
         else:
             result["status"] = "passed"
+            for capture in stdout_captures:
+                match = re.search(capture["pattern"], output)
+                if match is None or match.group(1).strip() != capture["expected"]:
+                    result.update(status="failed", reason="First output capture did not match the expected text")
+                    break
     except subprocess.TimeoutExpired as error:
         result.update(status="timeout", reason=f"Exceeded {timeout} seconds",
                       stdout=(error.stdout or b"").decode("utf-8", errors="replace"),

@@ -2925,6 +2925,1199 @@
         }
       ],
       "runtime_source": "tests/fixtures/language/comparable.phys"
+    },
+    {
+      "name": "conditional_expression",
+      "checks": [
+        {
+          "name": "condition_type",
+          "source": "let value = 1 ? 2 : 3\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "branch_type",
+          "source": "let value = true ? 2 : \"three\"\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "missing_colon",
+          "source": "let value = true ? 2\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expected ':' in conditional expression"
+        },
+        {
+          "name": "missing_value",
+          "source": "let value = true ? 2 :\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expected expression"
+        },
+        {
+          "name": "void_branch",
+          "source": "let value = true ? print(1) : print(2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Conditional branches must produce a value"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/conditional_expression.phys"
+    },
+    {
+      "name": "guard",
+      "checks": [
+        {
+          "name": "missing_else",
+          "source": "func f() -> Int64:\n    guard true:\n        return 1\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expected 'else' after guard condition"
+        },
+        {
+          "name": "non_return",
+          "source": "func f() -> Int64:\n    guard true else:\n        print(1)\n    return 2\n",
+          "exit_code": 1,
+          "stderr_pattern": "Guard else must return on every path"
+        },
+        {
+          "name": "non_bool",
+          "source": "func f() -> Int64:\n    guard 1 else:\n        return 0\n    return 2\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "non_optional",
+          "source": "func f() -> Int64:\n    guard let x = 1 else:\n        return 0\n    return x\n",
+          "exit_code": 1,
+          "stderr_pattern": "Conditional binding requires an optional value"
+        },
+        {
+          "name": "outside_function",
+          "source": "guard true else:\n    print(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Guard is only allowed inside a function"
+        },
+        {
+          "name": "binding_in_else",
+          "source": "func f(value: Int64?) -> Int64:\n    guard let x = value else:\n        print(x)\n        return 0\n    return x\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown name or use before declaration"
+        },
+        {
+          "name": "incomplete_return",
+          "source": "func f(flag: Bool) -> Int64:\n    guard flag else:\n        if flag:\n            return 0\n    return 1\n",
+          "exit_code": 1,
+          "stderr_pattern": "Guard else must return on every path"
+        },
+        {
+          "name": "escape",
+          "source": "func f() -> Int64:\n    while true:\n        guard false else:\n            if true:\n                break\n            return 0\n        return 1\n    return 2\n",
+          "exit_code": 1,
+          "stderr_pattern": "Guard else cannot break or continue the enclosing flow"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/guard.phys"
+    },
+    {
+      "name": "attempt",
+      "checks": [
+        {
+          "name": "missing",
+          "source": "let x = attempt()\n",
+          "exit_code": 1,
+          "stderr_pattern": "attempt expects exactly one positional value expression"
+        },
+        {
+          "name": "extra",
+          "source": "let x = attempt(1, 2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "attempt expects exactly one positional value expression"
+        },
+        {
+          "name": "labeled",
+          "source": "let x = attempt(value: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "attempt expects exactly one positional value expression"
+        },
+        {
+          "name": "void_value",
+          "source": "let x = attempt(print(1))\n",
+          "exit_code": 1,
+          "stderr_pattern": "attempt requires a value expression"
+        },
+        {
+          "name": "type_arguments",
+          "source": "let x = attempt<Int64>(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/attempt.phys"
+    },
+    {
+      "name": "delayed_initialization",
+      "checks": [
+        {
+          "name": "untyped",
+          "source": "var value\n",
+          "exit_code": 1,
+          "stderr_pattern": "requires 'var' and a type annotation"
+        },
+        {
+          "name": "immutable",
+          "source": "let value: Int64\n",
+          "exit_code": 1,
+          "stderr_pattern": "requires 'var' and a type annotation"
+        },
+        {
+          "name": "void",
+          "source": "var value: Void\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown or unsupported type"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/delayed_initialization.phys"
+    },
+    {
+      "name": "switch_scalars",
+      "checks": [
+        {
+          "name": "int_missing_default",
+          "source": "switch 1:\n    case 1:\n        print(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Int64 switch requires default"
+        },
+        {
+          "name": "bool_missing_case",
+          "source": "switch true:\n    case true:\n        print(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Bool switch must cover true and false or provide default"
+        },
+        {
+          "name": "bool_guard_only",
+          "source": "switch true:\n    case true if true:\n        print(1)\n    case false:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Bool switch must cover true and false or provide default"
+        },
+        {
+          "name": "int_variable",
+          "source": "let chosen = 2\nswitch chosen:\n    case chosen:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Int64 switch case must be an integer literal"
+        },
+        {
+          "name": "bool_integer",
+          "source": "switch true:\n    case 1:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Bool switch case must be true or false"
+        },
+        {
+          "name": "int_bool",
+          "source": "switch 1:\n    case true:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Int64 switch case must be an integer literal"
+        },
+        {
+          "name": "int_duplicate",
+          "source": "switch 0:\n    case 0, +0:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "int_hex_duplicate",
+          "source": "switch 10:\n    case 10, 0xA:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "range_literal_overlap",
+          "source": "switch 2:\n    case 1...3, 2:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "range_overlap",
+          "source": "switch 3:\n    case 1...3:\n        print(1)\n    case 3..<5:\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "range_empty_closed",
+          "source": "switch 3:\n    case 3...2:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Int64 switch range must contain at least one value"
+        },
+        {
+          "name": "range_empty_open",
+          "source": "switch 3:\n    case 3..<3:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Int64 switch range must contain at least one value"
+        },
+        {
+          "name": "range_empty_min",
+          "source": "switch 0:\n    case -0x8000000000000000..< -0x8000000000000000:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Int64 switch range must contain at least one value"
+        },
+        {
+          "name": "range_variable",
+          "source": "let lower = 1\nswitch 3:\n    case lower...3:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Int64 switch case must be an integer literal"
+        },
+        {
+          "name": "range_missing_default",
+          "source": "switch 3:\n    case 1...5:\n        print(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Int64 switch requires default"
+        },
+        {
+          "name": "bool_duplicate",
+          "source": "switch false:\n    case false:\n        print(1)\n    case false:\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "int_overflow",
+          "source": "switch 0:\n    case 9223372036854775808:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Integer literal is outside Int64 range"
+        },
+        {
+          "name": "int_hex_overflow",
+          "source": "switch 0:\n    case 0x8000000000000000:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Integer literal is outside Int64 range"
+        },
+        {
+          "name": "string_missing_default",
+          "source": "switch \"x\":\n    case \"x\":\n        print(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String switch requires default"
+        },
+        {
+          "name": "string_invalid",
+          "source": "let value = \"x\"\nswitch value:\n    case value:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String switch case must be a string literal"
+        },
+        {
+          "name": "string_duplicate",
+          "source": "switch \"x\":\n    case \"x\", \"x\":\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "string_multiline_duplicate",
+          "source": "switch \"line\\nnext\":\n    case \"line\\nnext\", \"\"\"line\nnext\"\"\":\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "float_missing_default",
+          "source": "switch 1.0:\n    case 1.0:\n        print(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Float64 switch requires default"
+        },
+        {
+          "name": "float_variable",
+          "source": "let chosen = 1.5\nswitch chosen:\n    case chosen:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Float64 switch case must be a numeric literal"
+        },
+        {
+          "name": "float_wrong_type",
+          "source": "switch 1.5:\n    case true:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Float64 switch case must be a numeric literal"
+        },
+        {
+          "name": "float_range_variable",
+          "source": "let lower = 1.0\nswitch 1.5:\n    case lower...3.0:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Float64 switch case must be a numeric literal"
+        },
+        {
+          "name": "float_range_empty_closed",
+          "source": "switch 1.5:\n    case 2.0...1.0:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Float64 switch range must contain at least one value"
+        },
+        {
+          "name": "float_range_empty_open",
+          "source": "switch 1.5:\n    case 1.0..<1.0:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Float64 switch range must contain at least one value"
+        },
+        {
+          "name": "float_range_overlap",
+          "source": "switch 1.5:\n    case 1.0...2.0:\n        print(1)\n    case 2.0..<3.0:\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "float_range_literal_overlap",
+          "source": "switch 1.5:\n    case 1.0..<2.0, 1.5:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "float_range_signed_zero_overlap",
+          "source": "switch 0.0:\n    case -1.0...-0.0:\n        print(1)\n    case 0.0:\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "float_range_nonfinite",
+          "source": "switch 1.0:\n    case 0.0...1e999:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Non-finite Float64 pattern literal"
+        },
+        {
+          "name": "float_same_value",
+          "source": "switch 1.5:\n    case 1.5:\n        print(1)\n    case 1.50:\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "float_signed_zero",
+          "source": "switch 0.0:\n    case -0.0, 0.0:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "float_integer_equivalent",
+          "source": "switch 3.0:\n    case 3:\n        print(1)\n    case 3.0:\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "float_nonfinite",
+          "source": "switch 1.0:\n    case 1e999:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Non-finite Float64 pattern literal"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/switch_scalars.phys"
+    },
+    {
+      "name": "switch_string_ranges",
+      "checks": [
+        {
+          "name": "reversed",
+          "source": "let value = \"m\"\nswitch value:\n    case \"z\"...\"a\":\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String switch range must contain at least one value"
+        },
+        {
+          "name": "empty_open",
+          "source": "let value = \"m\"\nswitch value:\n    case \"a\"..<\"a\":\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String switch range must contain at least one value"
+        },
+        {
+          "name": "nonliteral",
+          "source": "let value = \"m\"\nswitch value:\n    case value...\"z\":\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String switch range requires two string literals"
+        },
+        {
+          "name": "wrong_type",
+          "source": "let value = \"m\"\nswitch value:\n    case \"a\"...3:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String switch range requires two string literals"
+        },
+        {
+          "name": "overlap_same",
+          "source": "let value = \"m\"\nswitch value:\n    case \"a\"...\"m\", \"m\"...\"z\":\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "overlap_later",
+          "source": "let value = \"m\"\nswitch value:\n    case \"a\"...\"z\":\n        print(1)\n    case \"m\":\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "escaped_duplicate",
+          "source": "let value = \"m\"\nswitch value:\n    case \"a\"...\"z\":\n        print(1)\n    case \"\\u{6d}\":\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/switch_string_ranges.phys"
+    },
+    {
+      "name": "switch_string_payload_ranges",
+      "checks": [
+        {
+          "name": "optional_empty",
+          "source": "let value: String? = Optional.some(\"m\")\nswitch value:\n    case Optional.some(\"a\"..<\"a\"):\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String switch range must contain at least one value"
+        },
+        {
+          "name": "optional_nonliteral",
+          "source": "let value: String? = Optional.some(\"m\")\nswitch value:\n    case Optional.some(value...\"z\"):\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String switch range requires two string literals"
+        },
+        {
+          "name": "optional_covered",
+          "source": "let value: String? = Optional.some(\"m\")\nswitch value:\n    case Optional.some(\"a\"...\"z\"):\n        print(1)\n    case Optional.some(\"m\"):\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "optional_escaped_covered",
+          "source": "let value: String? = Optional.some(\"m\")\nswitch value:\n    case Optional.some(\"a\"...\"z\"):\n        print(1)\n    case Optional.some(\"\\u{6d}\"):\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "enum_reversed",
+          "source": "enum Message:\n    case text(value: String)\nlet value = Message.text(\"m\")\nswitch value:\n    case Message.text(\"z\"...\"a\"):\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String switch range must contain at least one value"
+        },
+        {
+          "name": "enum_covered",
+          "source": "enum Message:\n    case text(value: String)\nlet value = Message.text(\"m\")\nswitch value:\n    case Message.text(\"a\"...\"z\"):\n        print(1)\n    case Message.text(\"m\"...\"n\"):\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "optional_open_not_covering",
+          "source": "let value: String? = Optional.some(\"m\")\nswitch value:\n    case Optional.some(\"a\"..<\"m\"):\n        print(1)\n    case Optional.some(\"m\"):\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 0
+        },
+        {
+          "name": "optional_guard",
+          "source": "let value: String? = Optional.some(\"m\")\nswitch value:\n    case Optional.some(\"a\"...\"z\") if false:\n        print(1)\n    case Optional.some(\"m\"):\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 0
+        },
+        {
+          "name": "enum_open_not_covering",
+          "source": "enum Message:\n    case text(value: String)\nlet value = Message.text(\"m\")\nswitch value:\n    case Message.text(\"a\"..<\"m\"):\n        print(1)\n    case Message.text(\"m\"):\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 0
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/switch_string_payload_ranges.phys"
+    },
+    {
+      "name": "switch_optionals",
+      "checks": [
+        {
+          "name": "missing_case",
+          "source": "let value: Int64? = nil\nswitch value:\n    case nil:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Optional switch must cover nil and some or provide default"
+        },
+        {
+          "name": "guard_only",
+          "source": "let value: Int64? = nil\nswitch value:\n    case nil if true:\n        print(0)\n    case Optional.some:\n        print(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Optional switch must cover nil and some or provide default"
+        },
+        {
+          "name": "duplicate_nil",
+          "source": "let value: Int64? = nil\nswitch value:\n    case nil, nil:\n        print(0)\n    default:\n        print(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "duplicate_some",
+          "source": "let value: Int64? = nil\nswitch value:\n    case Optional.some:\n        print(1)\n    case Optional.some(item):\n        print(item)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "invalid_value",
+          "source": "let value: Int64? = nil\nswitch value:\n    case true:\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Optional switch case must be nil or Optional.some"
+        },
+        {
+          "name": "missing_binding",
+          "source": "let value: Int64? = nil\nswitch value:\n    case Optional.some():\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Optional.some pattern requires one positional value"
+        },
+        {
+          "name": "combined_binding",
+          "source": "let value: Int64? = nil\nswitch value:\n    case Optional.some(item), nil:\n        print(item)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Optional.some pattern requires one positional value and its own arm"
+        },
+        {
+          "name": "nonliteral_value",
+          "source": "let value: Int64? = nil\nswitch value:\n    case Optional.some(1 + 1):\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Payload pattern requires a matching scalar literal, Int64, Float64 or String range or nil for an optional field"
+        },
+        {
+          "name": "literal_incomplete",
+          "source": "let value: Int64? = nil\nswitch value:\n    case nil:\n        print(0)\n    case Optional.some(1):\n        print(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Optional switch must cover nil and some or provide default"
+        },
+        {
+          "name": "literal_after_full",
+          "source": "let value: Int64? = nil\nswitch value:\n    case Optional.some:\n        print(0)\n    case Optional.some(1):\n        print(1)\n    default:\n        print(2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "duplicate_literal",
+          "source": "let value: Int64? = nil\nswitch value:\n    case Optional.some(1):\n        print(0)\n    case Optional.some(1):\n        print(1)\n    default:\n        print(2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "literal_wrong_type",
+          "source": "let value: Int64? = nil\nswitch value:\n    case Optional.some(\"one\"):\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Payload pattern requires a matching scalar literal, Int64, Float64 or String range or nil for an optional field"
+        },
+        {
+          "name": "nil_nonoptional",
+          "source": "let value: Int64? = nil\nswitch value:\n    case Optional.some(nil):\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Payload pattern requires a matching scalar literal, Int64, Float64 or String range or nil for an optional field"
+        },
+        {
+          "name": "duplicate_nested_nil",
+          "source": "let value: Int64?? = nil\nswitch value:\n    case Optional.some(nil):\n        print(1)\n    case Optional.some(nil):\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "nested_nil_incomplete",
+          "source": "let value: Int64?? = nil\nswitch value:\n    case nil:\n        print(0)\n    case Optional.some(nil):\n        print(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Optional switch must cover nil and some or provide default"
+        },
+        {
+          "name": "float_same_value",
+          "source": "let value: Float64? = nil\nswitch value:\n    case Optional.some(1.5):\n        print(1)\n    case Optional.some(1.50):\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "float_rounded_value",
+          "source": "let value: Float64? = nil\nswitch value:\n    case Optional.some(0.1):\n        print(1)\n    case Optional.some(0.10000000000000001):\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "float_signed_zero",
+          "source": "let value: Float64? = nil\nswitch value:\n    case Optional.some(-0.0):\n        print(1)\n    case Optional.some(0.0):\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "float_nonfinite",
+          "source": "let value: Float64? = nil\nswitch value:\n    case Optional.some(1e999):\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Non-finite Float64 pattern literal"
+        },
+        {
+          "name": "float_range_covered_literal",
+          "source": "let value: Float64? = nil\nswitch value:\n    case Optional.some(1.0...2.0):\n        print(1)\n    case Optional.some(1.5):\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "float_range_covered_range",
+          "source": "let value: Float64? = nil\nswitch value:\n    case Optional.some(1.0...3.0):\n        print(1)\n    case Optional.some(1.5..<2.5):\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "float_range_empty",
+          "source": "let value: Float64? = nil\nswitch value:\n    case Optional.some(1.0..<1.0):\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Float64 switch range must contain at least one value"
+        },
+        {
+          "name": "float_range_variable",
+          "source": "let lower = 1.0\nlet value: Float64? = nil\nswitch value:\n    case Optional.some(lower...2.0):\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Float64 switch case must be a numeric literal"
+        },
+        {
+          "name": "float_range_nonfinite",
+          "source": "let value: Float64? = nil\nswitch value:\n    case Optional.some(0.0...1e999):\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Non-finite Float64 pattern literal"
+        },
+        {
+          "name": "range_covered_literal",
+          "source": "let value: Int64? = nil\nswitch value:\n    case Optional.some(1...5):\n        print(1)\n    case Optional.some(3):\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "range_covered_range",
+          "source": "let value: Int64? = nil\nswitch value:\n    case Optional.some(1...5):\n        print(1)\n    case Optional.some(2..<5):\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "range_incomplete",
+          "source": "let value: Int64? = nil\nswitch value:\n    case nil:\n        print(0)\n    case Optional.some(1...5):\n        print(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Optional switch must cover nil and some or provide default"
+        },
+        {
+          "name": "range_variable",
+          "source": "let lower = 1\nlet value: Int64? = nil\nswitch value:\n    case Optional.some(lower...5):\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Int64 switch case must be an integer literal"
+        },
+        {
+          "name": "range_empty",
+          "source": "let value: Int64? = nil\nswitch value:\n    case Optional.some(5..<5):\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Int64 switch range must contain at least one value"
+        },
+        {
+          "name": "range_wrong_type",
+          "source": "let value: String? = nil\nswitch value:\n    case Optional.some(1...5):\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String switch range requires two string literals"
+        },
+        {
+          "name": "nested_missing_value",
+          "source": "let value: Int64?? = nil\nswitch value:\n    case Optional.some(Optional.some()):\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Optional.some payload pattern requires one positional value"
+        },
+        {
+          "name": "nested_wrong_type",
+          "source": "let value: Int64?? = nil\nswitch value:\n    case Optional.some(Optional.some(\"bad\")):\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Payload pattern requires a matching scalar literal"
+        },
+        {
+          "name": "nested_covered",
+          "source": "let value: Int64?? = nil\nswitch value:\n    case Optional.some(Optional.some):\n        print(1)\n    case Optional.some(Optional.some(5)):\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "nested_binding_covers_tag",
+          "source": "let value: Int64?? = nil\nswitch value:\n    case Optional.some(Optional.some(inner)):\n        print(inner)\n    case Optional.some(Optional.some):\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "nested_range_covered",
+          "source": "let value: Int64?? = nil\nswitch value:\n    case Optional.some(Optional.some(1...5)):\n        print(1)\n    case Optional.some(Optional.some(3)):\n        print(2)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "nested_incomplete",
+          "source": "let value: Int64?? = nil\nswitch value:\n    case nil:\n        print(0)\n    case Optional.some(nil):\n        print(1)\n    case Optional.some(Optional.some(5)):\n        print(2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Optional switch must cover nil and some or provide default"
+        },
+        {
+          "name": "nested_bool_missing_false",
+          "source": "let value: Bool?? = nil\nswitch value:\n    case nil:\n        print(0)\n    case Optional.some(nil):\n        print(1)\n    case Optional.some(Optional.some(true)):\n        print(2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Optional switch must cover nil and some or provide default"
+        },
+        {
+          "name": "nested_bool_guarded_true",
+          "source": "let value: Bool?? = nil\nswitch value:\n    case nil:\n        print(0)\n    case Optional.some(nil):\n        print(1)\n    case Optional.some(Optional.some(true)) if true:\n        print(2)\n    case Optional.some(Optional.some(false)):\n        print(3)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Optional switch must cover nil and some or provide default"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/switch_optionals.phys"
+    },
+    {
+      "name": "enum_payload",
+      "checks": [
+        {
+          "name": "wrong_type",
+          "source": "enum Event:\n    case quiet\n    case value(number: Int64, flag: Bool)\nlet x = Event.value(1, 2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "missing_field",
+          "source": "enum Event:\n    case quiet\n    case value(number: Int64, flag: Bool)\nlet x = Event.value(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Missing enum payload fields"
+        },
+        {
+          "name": "duplicate_field",
+          "source": "enum Event:\n    case quiet\n    case value(number: Int64, flag: Bool)\nlet x = Event.value(number: 1, number: 2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Enum payload field supplied more than once"
+        },
+        {
+          "name": "missing_binding",
+          "source": "enum Event:\n    case quiet\n    case value(number: Int64, flag: Bool)\nswitch Event.value(1, true):\n    case Event.quiet:\n        assert(true)\n    case Event.value(number):\n        assert(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Missing enum payload bindings"
+        },
+        {
+          "name": "literal_incomplete",
+          "source": "enum Event:\n    case quiet\n    case value(number: Int64, flag: Bool)\nswitch Event.value(1, true):\n    case Event.quiet:\n        assert(true)\n    case Event.value(1, true):\n        assert(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Switch must cover every enum case"
+        },
+        {
+          "name": "literal_after_full",
+          "source": "enum Event:\n    case quiet\n    case value(number: Int64, flag: Bool)\nswitch Event.value(1, true):\n    case Event.quiet:\n        assert(true)\n    case Event.value:\n        assert(true)\n    case Event.value(1, true):\n        assert(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "duplicate_literal",
+          "source": "enum Event:\n    case quiet\n    case value(number: Int64, flag: Bool)\nswitch Event.value(1, true):\n    case Event.value(1, flag):\n        assert(flag)\n    case Event.value(1, true):\n        assert(true)\n    default:\n        assert(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "literal_expression",
+          "source": "enum Event:\n    case quiet\n    case value(number: Int64, flag: Bool)\nswitch Event.value(1, true):\n    case Event.quiet:\n        assert(true)\n    case Event.value(1 + 1, true):\n        assert(true)\n    case Event.value:\n        assert(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Payload pattern requires a matching scalar literal, Int64, Float64 or String range or nil for an optional field"
+        },
+        {
+          "name": "nil_nonoptional",
+          "source": "enum Event:\n    case quiet\n    case value(number: Int64, flag: Bool)\nswitch Event.value(1, true):\n    case Event.value(nil, true):\n        assert(true)\n    default:\n        assert(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Payload pattern requires a matching scalar literal, Int64, Float64 or String range or nil for an optional field"
+        },
+        {
+          "name": "float_integer_equivalent",
+          "source": "enum Value:\n    case number(value: Float64)\nswitch Value.number(1.0):\n    case Value.number(1):\n        assert(true)\n    case Value.number(1.0):\n        assert(false)\n    default:\n        assert(false)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "float_range_covered_literal",
+          "source": "enum Value:\n    case number(value: Float64)\nswitch Value.number(1.5):\n    case Value.number(1.0...2.0):\n        assert(true)\n    case Value.number(1.5):\n        assert(false)\n    default:\n        assert(false)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "float_range_covered_range",
+          "source": "enum Value:\n    case number(value: Float64)\nswitch Value.number(1.5):\n    case Value.number(1.0...3.0):\n        assert(true)\n    case Value.number(1.5..<2.5):\n        assert(false)\n    default:\n        assert(false)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "float_range_empty",
+          "source": "enum Value:\n    case number(value: Float64)\nswitch Value.number(1.5):\n    case Value.number(2.0..<2.0):\n        assert(true)\n    default:\n        assert(false)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Float64 switch range must contain at least one value"
+        },
+        {
+          "name": "range_covered_literal",
+          "source": "enum Event:\n    case quiet\n    case value(number: Int64, flag: Bool)\nswitch Event.value(3, true):\n    case Event.value(1...5, _):\n        assert(true)\n    case Event.value(3, true):\n        assert(false)\n    default:\n        assert(false)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "range_covered_range",
+          "source": "enum Event:\n    case quiet\n    case value(number: Int64, flag: Bool)\nswitch Event.value(3, true):\n    case Event.value(1...5, _):\n        assert(true)\n    case Event.value(2..<5, _):\n        assert(false)\n    default:\n        assert(false)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "range_incomplete",
+          "source": "enum Event:\n    case quiet\n    case value(number: Int64, flag: Bool)\nswitch Event.value(3, true):\n    case Event.quiet:\n        assert(true)\n    case Event.value(1...5, _):\n        assert(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Switch must cover every enum case"
+        },
+        {
+          "name": "nested_covered",
+          "source": "enum Signal:\n    case note(value: Int64??)\nswitch Signal.note(nil):\n    case Signal.note(Optional.some(Optional.some)):\n        assert(true)\n    case Signal.note(Optional.some(Optional.some(5))):\n        assert(false)\n    default:\n        assert(false)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        },
+        {
+          "name": "nested_binding_scope",
+          "source": "enum Signal:\n    case note(value: Int64??)\nswitch Signal.note(Optional.some(Optional.some(5))):\n    case Signal.note(Optional.some(Optional.some(inner))):\n        assert(inner == 5)\n    default:\n        assert(false)\nassert(inner == 5)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown name"
+        },
+        {
+          "name": "finite_pair_missing",
+          "source": "enum Toggle:\n    case pair(left: Bool, right: Bool)\n    case maybe(value: Bool?)\n    case empty\nswitch Toggle.pair(true, true):\n    case Toggle.pair(true, true):\n        print(1)\n    case Toggle.pair(true, false):\n        print(2)\n    case Toggle.pair(false, true):\n        print(3)\n    case Toggle.maybe:\n        print(4)\n    case Toggle.empty:\n        print(5)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Switch must cover every enum case"
+        },
+        {
+          "name": "finite_pair_guarded",
+          "source": "enum Toggle:\n    case pair(left: Bool, right: Bool)\n    case maybe(value: Bool?)\n    case empty\nswitch Toggle.pair(true, true):\n    case Toggle.pair(true, true) if true:\n        print(1)\n    case Toggle.pair(true, false):\n        print(2)\n    case Toggle.pair(false, true):\n        print(3)\n    case Toggle.pair(false, false):\n        print(4)\n    case Toggle.maybe:\n        print(5)\n    case Toggle.empty:\n        print(6)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Switch must cover every enum case"
+        },
+        {
+          "name": "finite_optional_missing_false",
+          "source": "enum Toggle:\n    case pair(left: Bool, right: Bool)\n    case maybe(value: Bool?)\n    case empty\nswitch Toggle.maybe(nil):\n    case Toggle.pair:\n        print(1)\n    case Toggle.maybe(nil):\n        print(2)\n    case Toggle.maybe(Optional.some(true)):\n        print(3)\n    case Toggle.empty:\n        print(4)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Switch must cover every enum case"
+        },
+        {
+          "name": "unbounded_field_not_covered",
+          "source": "enum Value:\n    case number(value: Int64, flag: Bool)\nswitch Value.number(1, true):\n    case Value.number(1, true):\n        print(1)\n    case Value.number(1, false):\n        print(2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Switch must cover every enum case"
+        },
+        {
+          "name": "binding_scope",
+          "source": "enum Event:\n    case quiet\n    case value(number: Int64, flag: Bool)\nswitch Event.value(1, true):\n    case Event.quiet:\n        assert(true)\n    case Event.value(number, flag):\n        assert(flag)\nassert(number == 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown name"
+        },
+        {
+          "name": "wildcard_not_binding",
+          "source": "enum Event:\n    case quiet\n    case value(number: Int64, flag: Bool)\nswitch Event.value(1, true):\n    case Event.quiet:\n        assert(true)\n    case Event.value(_, flag):\n        assert(flag)\n        print(_)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown name"
+        },
+        {
+          "name": "direct_recursion",
+          "source": "enum Loop:\n    case direct(next: Loop)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Recursive enum values have infinite size"
+        },
+        {
+          "name": "void_field",
+          "source": "enum Event:\n    case invalid(value: Void)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown or unsupported type in this compiler stage"
+        },
+        {
+          "name": "opaque_equality",
+          "source": "enum Opaque:\n    case value(state: Rng)\nfunc equal(a: Opaque, b: Opaque) -> Bool:\n    return a == b\n",
+          "exit_code": 1,
+          "stderr_pattern": "Equality requires values of the same type"
+        },
+        {
+          "name": "equatable_constraint",
+          "source": "enum Opaque:\n    case value(state: Rng)\nfunc same<T: Equatable>(value: T) -> T:\n    return value\nfunc use(value: Opaque) -> Opaque:\n    return same(value)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Type argument must satisfy Equatable constraint"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/enum_payload.phys"
+    },
+    {
+      "name": "enum_raw_values",
+      "checks": [
+        {
+          "name": "duplicate",
+          "source": "enum Code:\n    case a = 1\n    case b = 1\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate enum raw value"
+        },
+        {
+          "name": "hex_duplicate",
+          "source": "enum Code:\n    case a = 10\n    case b = 0xA\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate enum raw value"
+        },
+        {
+          "name": "implicit_duplicate",
+          "source": "enum Code:\n    case a = 1\n    case b\n    case c = 2\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate enum raw value"
+        },
+        {
+          "name": "implicit_overflow",
+          "source": "enum Code:\n    case a = 9223372036854775807\n    case b\n",
+          "exit_code": 1,
+          "stderr_pattern": "Implicit enum raw value exceeds Int64 range"
+        },
+        {
+          "name": "out_of_range",
+          "source": "enum Code:\n    case a = 9223372036854775808\n",
+          "exit_code": 1,
+          "stderr_pattern": "Integer literal is outside Int64 range"
+        },
+        {
+          "name": "hex_out_of_range",
+          "source": "enum Code:\n    case a = 0x8000000000000000\n",
+          "exit_code": 1,
+          "stderr_pattern": "Integer literal is outside Int64 range"
+        },
+        {
+          "name": "expression",
+          "source": "enum Code:\n    case a = 1 + 2\n",
+          "exit_code": 1,
+          "stderr_pattern": "Enum raw value must be an Int64 literal"
+        },
+        {
+          "name": "payload",
+          "source": "enum Code:\n    case a(value: Int64) = 1\n",
+          "exit_code": 1,
+          "stderr_pattern": "Enum raw values cannot be combined with payload fields"
+        },
+        {
+          "name": "no_raw_property",
+          "source": "enum Code:\n    case a\nlet x = Code.a.rawValue\n",
+          "exit_code": 1,
+          "stderr_pattern": "Enum does not define raw values"
+        },
+        {
+          "name": "no_raw_factory",
+          "source": "enum Code:\n    case a\nlet x = Code.fromRawValue(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Enum does not define raw values"
+        },
+        {
+          "name": "factory_type",
+          "source": "enum Code:\n    case a = 1\nlet x = Code.fromRawValue(1.0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "reserved",
+          "source": "enum Code:\n    case fromRawValue = 1\n",
+          "exit_code": 1,
+          "stderr_pattern": "Enum raw value case name is reserved"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/enum_raw_values.phys"
+    },
+    {
+      "name": "switch_patterns",
+      "checks": [
+        {
+          "name": "duplicate",
+          "source": "enum State:\n    case idle\n    case paused\n    case running\nfunc category(value: State) -> Int64:\n    switch value:\n        case State.idle, State.idle:\n            return 0\n        default:\n            return 1\n",
+          "exit_code": 1,
+          "stderr_pattern": ":7:[0-9]+: error: Duplicate switch case"
+        },
+        {
+          "name": "cross",
+          "source": "enum State:\n    case idle\n    case paused\n    case running\nfunc category(value: State) -> Int64:\n    switch value:\n        case State.idle, State.paused:\n            return 0\n        case State.running, State.paused:\n            return 1\n",
+          "exit_code": 1,
+          "stderr_pattern": "error: Duplicate switch case"
+        },
+        {
+          "name": "incomplete",
+          "source": "enum State:\n    case idle\n    case paused\n    case running\nfunc category(value: State) -> Int64:\n    switch value:\n        case State.idle, State.paused:\n            return 0\n",
+          "exit_code": 1,
+          "stderr_pattern": "error: Switch must cover every enum case"
+        },
+        {
+          "name": "invalid",
+          "source": "enum State:\n    case idle\n    case paused\n    case running\nfunc category(value: State) -> Int64:\n    switch value:\n        case State.idle, State.running == State.running:\n            return 0\n        default:\n            return 1\n",
+          "exit_code": 1,
+          "stderr_pattern": "error:"
+        },
+        {
+          "name": "guard_type",
+          "source": "enum State:\n    case idle\n    case paused\n    case running\nfunc category(value: State) -> Int64:\n    switch value:\n        case State.idle if 1:\n            return 0\n        default:\n            return 1\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "guard_incomplete",
+          "source": "enum State:\n    case idle\n    case paused\n    case running\nfunc category(value: State) -> Int64:\n    switch value:\n        case State.idle if true:\n            return 0\n        case State.paused, State.running:\n            return 1\n",
+          "exit_code": 1,
+          "stderr_pattern": "Switch must cover every enum case"
+        },
+        {
+          "name": "guard_unreachable",
+          "source": "enum State:\n    case idle\n    case paused\n    case running\nfunc category(value: State) -> Int64:\n    switch value:\n        case State.idle:\n            return 0\n        case State.idle if true:\n            return 1\n        default:\n            return 2\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/switch_patterns.phys"
+    },
+    {
+      "name": "int_math_errors",
+      "checks": [
+        {
+          "name": "wrong_type",
+          "source": "let x = Int64.abs(1.5)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "missing_arg",
+          "source": "let x = Int64.min(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Missing library arguments"
+        },
+        {
+          "name": "internal_name",
+          "source": "let x = intAbs(-1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown function or value is not callable"
+        },
+        {
+          "name": "multiple_missing",
+          "source": "let n = 2\nlet x = n.isMultiple()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Int64.isMultiple expects one of: argument"
+        },
+        {
+          "name": "multiple_label",
+          "source": "let n = 2\nlet x = n.isMultiple(by: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Int64.isMultiple expects one of: argument"
+        },
+        {
+          "name": "multiple_type",
+          "source": "let n = 2\nlet x = n.isMultiple(of: 1.5)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "signum_argument",
+          "source": "let n = 2\nlet x = n.signum(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Int64.signum expects no arguments"
+        }
+      ]
+    },
+    {
+      "name": "numeric_parse",
+      "checks": [
+        {
+          "name": "missing",
+          "source": "let x = Int64.parse()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Numeric parse expects one String argument"
+        },
+        {
+          "name": "extra",
+          "source": "let x = Float64.parse(\"1\", \"2\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "Numeric parse expects one String argument"
+        },
+        {
+          "name": "wrong_label",
+          "source": "let x = Int64.parse(value: \"1\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "Numeric parse expects one String argument"
+        },
+        {
+          "name": "wrong_type",
+          "source": "let x = Float64.parse(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "type_arguments",
+          "source": "let x = Int64.parse<Int64>(\"1\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/numeric_parse.phys"
+    },
+    {
+      "name": "sequence_for_each",
+      "checks": [
+        {
+          "name": "non_sequence",
+          "source": "1.forEach(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "forEach requires an Array or String value"
+        },
+        {
+          "name": "array_missing",
+          "source": "let values = [1]\nvalues.forEach()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array forEach expects one positional function"
+        },
+        {
+          "name": "string_named",
+          "source": "func use(value: String):\n    print(value)\n\"a\".forEach(body: use)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String forEach expects one positional function"
+        },
+        {
+          "name": "array_extra",
+          "source": "func use(value: Int64):\n    print(value)\nlet values = [1]\nvalues.forEach(use, use)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array forEach expects one positional function"
+        },
+        {
+          "name": "string_non_function",
+          "source": "\"a\".forEach(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String forEach body must be func"
+        },
+        {
+          "name": "array_wrong_element",
+          "source": "func use(value: String):\n    print(value)\nlet values = [1]\nvalues.forEach(use)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array forEach body must be func"
+        },
+        {
+          "name": "string_wrong_element",
+          "source": "func use(value: Int64):\n    print(value)\n\"a\".forEach(use)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String forEach body must be func"
+        },
+        {
+          "name": "array_wrong_result",
+          "source": "func use(value: Int64) -> Int64:\n    return value\nlet values = [1]\nvalues.forEach(use)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array forEach body must be func"
+        },
+        {
+          "name": "string_wrong_arity",
+          "source": "func use(a: String, b: String):\n    print(a)\n\"a\".forEach(use)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String forEach body must be func"
+        },
+        {
+          "name": "explicit_type",
+          "source": "func use(value: Int64):\n    print(value)\nlet values = [1]\nvalues.forEach<Int64>(use)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/sequence_for_each.phys"
+    },
+    {
+      "name": "multiline_strings_crlf",
+      "checks": [
+        {
+          "name": "mixed_newlines",
+          "source": "let text = \"\"\"a\nb\rc\"\"\"\nassert(text == \"a\\nb\\nc\")\nlet escaped = \"\"\"\\r\"\"\"\n",
+          "mode": "--emit-c",
+          "exit_code": 0,
+          "stderr": "",
+          "stdout_patterns": [
+            "13,0\\};"
+          ],
+          "stdout_captures": [
+            {
+              "pattern": "static const unsigned char pslit_[0-9]+\\[\\] = \\{([^}]*)\\}",
+              "expected": "97,10,98,10,99,0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "unicode_escapes",
+      "checks": [
+        {
+          "name": "duplicate",
+          "source": "switch \"ä\":\n    case \"ä\", \"\\u{e4}\":\n        print(1)\n    default:\n        print(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate switch case"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/unicode_escapes.phys"
     }
   ],
   "programs": [
@@ -2985,6 +4178,94 @@
       "source": "tests/fixtures/language/array_safe_remove_module.phys",
       "mode": "--emit-experiment",
       "harness": "tests/test_language_array_safe_remove_module.c"
+    },
+    {
+      "name": "delayed_initialization_error",
+      "source": "tests/fixtures/language/delayed_initialization_error.phys",
+      "exit_code": 70,
+      "stderr_pattern": "delayed_initialization_error\\.phys:3:12: runtime error: Local used before initialization"
+    },
+    {
+      "name": "delayed_global_error",
+      "source": "tests/fixtures/language/delayed_global_error.phys",
+      "exit_code": 70,
+      "stderr_pattern": "delayed_global_error\\.phys:2:7: runtime error: Global used before initialization"
+    },
+    {
+      "name": "delayed_compound_error",
+      "source": "tests/fixtures/language/delayed_compound_error.phys",
+      "exit_code": 70,
+      "stderr_pattern": "delayed_compound_error\\.phys:3:5: runtime error: Local used before initialization"
+    },
+    {
+      "name": "delayed_field_error",
+      "source": "tests/fixtures/language/delayed_field_error.phys",
+      "exit_code": 70,
+      "stderr_pattern": "delayed_field_error\\.phys:5:10: runtime error: Local used before initialization"
+    },
+    {
+      "name": "delayed_capture_error",
+      "source": "tests/fixtures/language/delayed_capture_error.phys",
+      "exit_code": 70,
+      "stderr_pattern": "delayed_capture_error\\.phys:4:[0-9]+: runtime error: Local used before initialization"
+    },
+    {
+      "name": "int_abs_overflow",
+      "source": "tests/fixtures/language/int_abs_overflow.phys",
+      "exit_code": 70,
+      "stderr_pattern": "int_abs_overflow\\.phys:1:[0-9]+: runtime error: Int64 absolute value overflow"
+    },
+    {
+      "name": "int_clamp_bounds",
+      "source": "tests/fixtures/language/int_clamp_bounds.phys",
+      "exit_code": 70,
+      "stderr_pattern": "int_clamp_bounds\\.phys:1:[0-9]+: runtime error: Clamp lower bound exceeds upper bound"
+    },
+    {
+      "name": "int_math_runtime",
+      "source": "tests/fixtures/language/int_math.phys"
+    },
+    {
+      "name": "multiline_strings_runtime",
+      "source": "tests/fixtures/language/multiline_strings.phys"
+    },
+    {
+      "name": "switch_guards_runtime",
+      "source": "tests/fixtures/language/switch_guards.phys"
+    },
+    {
+      "name": "range_assignment_runtime",
+      "source": "tests/fixtures/language/range_assignment.phys"
+    },
+    {
+      "name": "strided_ranges_runtime",
+      "source": "tests/fixtures/language/strided_ranges.phys"
+    },
+    {
+      "name": "function_values_runtime",
+      "source": "tests/fixtures/language/function_values.phys"
+    },
+    {
+      "name": "closures_runtime",
+      "source": "tests/fixtures/language/closures.phys"
+    },
+    {
+      "name": "enum_owned_payload_runtime",
+      "source": "tests/fixtures/language/enum_owned_payload.phys"
+    },
+    {
+      "name": "enum_payload_module_runtime",
+      "source": "tests/fixtures/language/enum_payload_module/main.phys"
+    },
+    {
+      "name": "unicode_modules_runtime",
+      "source": "tests/fixtures/language/unicode_modules/main.phys"
+    },
+    {
+      "name": "attempt_module",
+      "source": "tests/fixtures/language/attempt_module.phys",
+      "mode": "--emit-experiment",
+      "harness": "tests/test_language_attempt_module.c"
     }
   ],
   "workflows": [

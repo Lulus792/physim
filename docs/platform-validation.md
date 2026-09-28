@@ -165,7 +165,16 @@ Die jüngste Erweiterung umfasst 152 Tests, davon 142 ohne SDL. Alle 108 Spracht
 bestehen lokal mit MSVC Debug und Clang Release, außerdem alle 100 betroffenen
 CTest-Prüfungen. Neu sind neun Diagnosegruppen zu Generics, Überladungen und
 Strukturinitialisierern, acht Laufzeitprogramme und ein Ablauf mit generischen
-Experiment-/Analysemodulen. Dieser Satz benötigt noch seinen eigenen CI-Nachweis.
+Experiment-/Analysemodulen. In [CI-Lauf 36475496512](https://github.com/PhysicSimulator/physim/actions/runs/36475496512)
+zum Commit `0a937f8` besteht der direkte Build- und Testschritt unter Linux mit
+GCC/Clang, auf macOS Apple Silicon und unter Windows mit MSVC Debug sowie ClangCL
+Debug/Release. MSVC Release und macOS Intel sind zum Prüfzeitpunkt noch offen.
+
+Die Erweiterung um Kontrollfluss, optionale Werte, Enums, Unicode und weitere
+Laufzeitfehler erhöht den Katalog auf 200 Tests, davon 190 ohne SDL. Alle 156
+Sprachtests bestehen lokal mit MSVC Debug und Clang Release; die 147 zugehörigen
+CTest-Prüfungen bestehen ebenfalls. Sie enthält auch das `attempt`-Experimentmodul
+mit Fehlerbehandlung und erneutem Reset. Der CI-Nachweis für diesen Satz steht aus.
 Weitere Sprach-, Runner- und Grafikabläufe sind noch an CTest gebunden.
 
 ## Weitere Änderungen prüfen

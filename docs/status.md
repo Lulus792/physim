@@ -87,7 +87,20 @@ Ausgabedateien. Damit umfasst der direkte Katalog 152 Tests, davon 142 ohne SDL.
 Alle 108 Sprachtests bestehen lokal mit MSVC Debug und Clang Release; alle 100
 betroffenen CTest-Prüfungen bestehen ebenfalls. Der Läufertest prüft außerdem,
 dass Emissions-, Build-, Prozessfehler und fehlende Dateien Folgeschritte verhindern.
-Der plattformübergreifende Nachweis dieser jüngsten Erweiterung steht noch aus.
+Dieser Stand besteht im direkten CI-Schritt unter Linux mit GCC/Clang, auf macOS
+mit Apple Silicon sowie unter Windows mit MSVC Debug und ClangCL Debug/Release.
+MSVC Release und macOS Intel sind zum dokumentierten Prüfzeitpunkt noch offen.
+
+Weitere 16 Gruppen übernehmen Kontrollfluss, optionale Werte, Enums, verzögerte
+Initialisierung, Unicode, Zahlkonvertierung und Ganzzahlfehler in den direkten Läufer.
+32 zusätzliche Programme prüfen auch Closures, Bereichszuweisungen, importierte
+Enums und die Erholung des `attempt`-Experimentmoduls nach einem Fehler. Erwartete
+Laufzeitfehler müssen Exitcode 70 und ihre genaue Quelldiagnose liefern. Die
+Byteprüfung mehrzeiliger Strings vergleicht weiterhin das erste erzeugte Literal;
+ein späteres passendes Literal kann ein falsches erstes Ergebnis nicht verdecken.
+Der direkte Katalog umfasst jetzt 200 Tests, davon 190 ohne SDL. Alle 156 Sprachtests
+bestehen lokal mit MSVC Debug und Clang Release, ebenso die 147 zugehörigen
+CTest-Prüfungen. Der CI-Nachweis dieser Erweiterung steht noch aus.
 
 | Bereich | Implementiert | Noch offen |
 | --- | --- | --- |

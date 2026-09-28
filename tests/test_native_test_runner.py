@@ -35,6 +35,10 @@ def main():
     assert check("print('first second')", stderr="", stdout_patterns=("first", "second"))["status"] == "passed"
     assert check("print('first')", stdout_patterns=("first", "second"))["status"] == "failed"
     assert check("import sys; print('warning', file=sys.stderr)", stderr="")["status"] == "failed"
+    captures = (dict(pattern=r"literal\{([^}]*)\}", expected="97,10,0"),)
+    assert check("print('literal{ 97,10,0 } literal{13,0}')", stdout_captures=captures)["status"] == "passed"
+    assert check("print('literal{13,0} literal{97,10,0}')", stdout_captures=captures)["status"] == "failed"
+    assert check("print('no literal')", stdout_captures=captures)["status"] == "failed"
     assert check("import time; time.sleep(60)", timeout=.2)["status"] == "timeout"
     assert runner.execute_case([str(directory / "missing-program")], work=directory,
                                env=os.environ, timeout=1)["status"] == "failed"
