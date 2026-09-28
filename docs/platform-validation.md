@@ -93,6 +93,56 @@ SDL wird für diese CI-Prüfung zuvor mit seinem eigenen CMake-Buildsystem gebau
 Der direkte Physim-Build ist daher noch keine vollständige Abnahme des Ziels,
 CMake aus der gesamten Entwicklung und Auslieferung zu entfernen.
 
+## Direkte SDK- und App-Pakete
+
+Für `d9f920e` hat der Schritt **Native SDK package and relocation** im
+[Paketprüflauf](https://github.com/PhysicSimulator/physim/actions/runs/36470030478)
+auf allen vorgesehenen Plattformen bestanden:
+
+| Umgebung | Nachweis |
+| --- | --- |
+| Windows MSVC Release | [Job 109089656019](https://github.com/PhysicSimulator/physim/actions/runs/36470030478/job/109089656019) |
+| Windows ClangCL Release | [Job 109089656123](https://github.com/PhysicSimulator/physim/actions/runs/36470030478/job/109089656123) |
+| Ubuntu 24.04 GCC | [Job 109089655982](https://github.com/PhysicSimulator/physim/actions/runs/36470030478/job/109089655982) |
+| Ubuntu 24.04 Clang | [Job 109089655923](https://github.com/PhysicSimulator/physim/actions/runs/36470030478/job/109089655923) |
+| macOS 15 Apple Silicon | [Job 109089655991](https://github.com/PhysicSimulator/physim/actions/runs/36470030478/job/109089655991) |
+| macOS 15 Intel | [Job 109089655751](https://github.com/PhysicSimulator/physim/actions/runs/36470030478/job/109089655751) |
+
+Der direkte Installer verwendet kein CMake. Die SDK-Prüfung verschiebt das Paket,
+prüft seine Inhaltsprüfsummen, bindet alle öffentlichen Header einzeln ein und
+kompiliert einen unabhängigen Prüfer gegen die installierte Kernbibliothek.
+Alle acht mitgelieferten C-Beispielmodule und 15 neu übersetzte Sprachprogramme
+werden ausgeführt. Anschließend baut `physim-build` alle acht C-Vorlagen und ein
+Physim-Projekt aus den installierten Quellen neu. Der Prüfer kontrolliert die
+Messdateien mit jeweils 201 Zeilen und die erzeugten Berichte.
+
+Linux und beide Macs bestehen zusätzlich vollständige C-/Physim-App-Abläufe aus
+dem verschobenen SDK. Beide Mac-Jobs erzeugen daraus eine `.app`, prüfen deren
+Ad-hoc-Signatur und führen die App-Abläufe erneut aus diesem Paket aus.
+Windows besteht die Grafikabläufe lokal auf der RTX 2080 Ti; die gehosteten
+Windows-Paketprüfungen verwenden die Kommandozeilenprogramme.
+
+Die heruntergeladenen Linux-/Mac-Archive wurden zusätzlich auf Dateiintegrität,
+ausführbare Dateirechte, Architektur und SDK-Inhalt geprüft. Mac-Bundles enthalten
+die relative SDK-Verknüpfung und SDL. Artefakte im Lauf:
+`physim-native-windows-v143`, `physim-native-windows-ClangCL`,
+`physim-native-linux-gcc`, `physim-native-linux-clang`,
+`physim-native-macos-15`, `physim-native-macos-15-intel`.
+Die Mac-/Linux-CI-Pakete sind Debug-Builds; Windows verwendet Release.
+Weitere Betriebssystemversionen, Clean-Machine-Abnahme und öffentliche
+Mac-Notarisierung bleiben offen.
+
+## Direkter Testläufer
+
+`tools/native_tests.py` übernimmt 51 bestehende C-Referenztests mit unveränderten
+Prüfbedingungen. Alle 51 bestehen lokal mit MSVC Debug; die 41 SDL-freien Fälle
+bestehen zusätzlich mit Clang Release. Enthalten sind auch die bestehenden
+Protokoll-, Messdatei- und Berichtsmutationen. Ein eigener Test prüft Fehlercodes,
+erwartete Diagnosen, Zeitüberschreitungen und den vollständigen Ergebnisbericht
+nach einzelnen Build-/Testfehlern. Die neue CI-Matrix führt diesen Satz ebenfalls
+aus; ein plattformübergreifender Abschlussnachweis dafür steht noch aus.
+Weitere Sprach-, Runner- und Grafikabläufe sind noch an CTest gebunden.
+
 ## Weitere Änderungen prüfen
 
 Jeder Push startet die [CI](https://github.com/PhysicSimulator/physim/actions/workflows/ci.yml).

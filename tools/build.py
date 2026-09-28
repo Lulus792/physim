@@ -9,6 +9,7 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -119,12 +120,12 @@ class Builder:
         self.ar = shutil.which("lib" if self.msvc else "ar", path=env.get("PATH"))
         if not self.ar:
             raise RuntimeError("Static library tool not found (lib.exe / ar).")
-        self.includes = [ROOT / "include", ROOT / "src", ROOT / "app"]
+        self.includes = [ROOT / "include", ROOT / "src", ROOT / "app", ROOT / "third_party/zlib-1.3.2"]
         self.sdl_library: Path | None = None
         self.runtime: Path | None = None
         if not args.no_app:
             prefix = args.sdl.resolve() if args.sdl else ROOT / ("third_party/SDL3-3.2.30" if WINDOWS else "build-sdl-install")
-            self.includes.extend([ROOT / "third_party", ROOT / "third_party/zlib-1.3.2", prefix / "include"])
+            self.includes.extend([ROOT / "third_party", prefix / "include"])
             if not (prefix / "include/SDL3/SDL.h").is_file():
                 raise RuntimeError("SDL3 headers not found. Pass --sdl with an SDL3 installation prefix.")
             if WINDOWS:
@@ -253,6 +254,8 @@ class Builder:
         platform = self.archive("physim-platform", ["src/platform.c", "src/protocol.c"])
         language = self.archive("physim-language", [f"src/language/{name}.c" for name in LANGUAGE])
         batch = self.archive("physim-batch", ["src/batch.c"])
+        zlib = self.archive("physim-zlib", [f"third_party/zlib-1.3.2/{name}.c" for name in ZLIB], ("Z_PREFIX",))
+        libraries = {"core": core, "platform": platform, "language": language, "batch": batch, "zlib": zlib}
         products.append(self.executable("physimc", ["src/language/main.c", "src/language/loader.c"], [language]))
         products.append(self.executable("physim-runner", ["runners/experiment.c"], [platform, core]))
         products.append(self.executable("physim-analysis-runner", ["runners/analysis.c"], [platform, core]))
@@ -262,17 +265,19 @@ class Builder:
         products.append(self.executable("pendulum_analysis", ["examples/pendulum/analysis.c"], [core], module=True))
         if not self.args.no_app:
             project = self.archive("physim-project", [f"app/{name}.c" for name in PROJECT])
-            zlib = self.archive("physim-zlib", [f"third_party/zlib-1.3.2/{name}.c" for name in ZLIB], ("Z_PREFIX",))
+            libraries["project"] = project
             products.append(self.executable("physim-build", ["app/build_main.c"], [project, platform, core], sdl=True))
             products.append(self.executable("physim", [f"app/{name}.c" for name in APP],
                             [project, batch, platform, language, zlib, core], sdl=True,
                             defines=("Z_PREFIX", f'PS_SOURCE_DIR="{ROOT.as_posix()}"')))
             products.append(self.runtime)
         if self.args.test:
-            for name in ("core", "numerics", "mechanics"):
-                program = self.executable(f"physim-{name}-tests", [f"tests/test_{name}.c"], [platform, core])
-                run([str(program)], self.env, directory=self.directory)
-            print("Core, numerics and mechanics reference tests passed.")
+            spec = importlib.util.spec_from_file_location("native_tests", Path(__file__).with_name("native_tests.py"))
+            tests = importlib.util.module_from_spec(spec)
+            sys.modules[spec.name] = tests
+            sys.dont_write_bytecode = True
+            spec.loader.exec_module(tests)
+            tests.run_suite(self, libraries, ROOT, self.args.test_filter)
         print(f"Build complete: {self.bin}")
         if self.args.install:
             self.install(products, self.args.install.resolve())
@@ -336,10 +341,13 @@ def main() -> int:
     parser.add_argument("--sdl", type=Path, help="SDL3 installation prefix")
     parser.add_argument("--no-app", action="store_true", help="Build the library, language compiler and runners without SDL")
     parser.add_argument("--jobs", type=int, default=min(os.cpu_count() or 1, 8))
-    parser.add_argument("--test", action="store_true", help="Run core, numerics and mechanics reference tests")
+    parser.add_argument("--test", action="store_true", help="Run migrated C reference tests without CTest")
+    parser.add_argument("--test-filter", default="*", help="Select native test names using a glob (with --test)")
     parser.add_argument("--rebuild", action="store_true", help="Recompile and relink all selected targets")
     parser.add_argument("--install", type=Path, help="Install an SDK and portable app to a new directory")
     args = parser.parse_args()
+    if args.test_filter != "*" and not args.test:
+        parser.error("--test-filter requires --test")
     if args.jobs < 1 or args.jobs > 64:
         parser.error("--jobs must be between 1 and 64")
     args.build_dir = args.build_dir or ROOT / "build" / "native" / args.config

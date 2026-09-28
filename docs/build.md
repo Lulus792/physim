@@ -103,8 +103,30 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt die drei Referenzprogramme für Core, Numerik und Mechanik aus.
-Die vollständige Testsuite verwendet noch die folgenden CMake-Abläufe.
+`--test` führt derzeit 51 übernommene C-Referenztests aus, mit `--no-app` die
+41 Prüfungen ohne SDL-Abhängigkeit. Sie decken unter anderem Mathematik, Numerik,
+Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
+App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
+Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.
+
+```sh
+# Nur die direkt unterstützten Sprachkern-Tests ausführen:
+python3 tools/build.py --test --test-filter 'language_*'
+# Fehlerbehandlung des Testläufers selbst prüfen:
+python3 tests/test_native_test_runner.py --work build/native
+```
+
+Jeder Lauf schreibt nach `build/native/<Konfiguration>/test-results/run-<Kennung>`.
+`results.json` enthält für jeden Test Kommando, Ergebnis, Dauer und Ausgabe.
+Unterordner isolieren temporäre Testdateien. Erwartete Fehler müssen den passenden
+Exitcode und gegebenenfalls den vorgegebenen Text liefern. Ein fehlgeschlagener
+Test oder Testbuild verhindert die Ausführung späterer Fälle nicht; der gesamte
+Aufruf endet dennoch mit einem Fehlercode. Zeitüberschreitungen werden als Fehler
+gespeichert. Ein Filter ohne Treffer ist ebenfalls ein Fehler.
+
+Die weiteren Sprach-, Runner- und Grafikabläufe der vollständigen Testsuite
+verwenden noch die folgenden CMake-Abläufe. Die 51 Prüfungen ersetzen noch nicht
+die gesamte Suite.
 
 ### SDK und portable Pakete ohne CMake
 

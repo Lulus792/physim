@@ -43,6 +43,18 @@ Bei dieser Prüfung wurde die Windows-Compilererkennung für unterschiedlich
 geschriebene Umgebungsvariablennamen korrigiert; die Windows-API übernimmt jetzt
 die Suche nach `ProgramFiles(x86)` unabhängig von der Großschreibung.
 
+Der direkte Testläufer übernimmt jetzt 51 vorhandene C-Referenztests ohne CTest;
+41 davon benötigen kein SDL. Der vollständige übernommene Satz besteht lokal
+mit MSVC Debug, die 41 SDL-freien Fälle zusätzlich mit Clang Release,
+einschließlich Protokoll-/Messdatei-/Berichtsmutationen und der
+erwarteten Sprach-Laufzeitfehler. Die Prüfbedingungen der C-Tests bleiben erhalten.
+Eigene Unterordner isolieren ihre Dateien; JSON-Berichte halten Kommando, Ausgabe,
+Dauer und Status fest. Fehler stoppen nachfolgende Fälle nicht, führen aber zu
+einem fehlgeschlagenen Gesamtlauf. Der Test des Läufers prüft erwartete Exitcodes,
+Diagnosetexte, Timeout, fehlende Programme, Buildfehler und unvollständige Erfolge.
+Die übrigen Sprach-, Runner- und Grafikabläufe bleiben bis zu ihrer eigenen
+Übernahme an CTest gebunden.
+
 | Bereich | Implementiert | Noch offen |
 | --- | --- | --- |
 | Eigene Sprache | verbindliches Ziel als vollständige C-Alternative, C17-Lexer/Parser mit `:`-/Einrückungsblöcken, skalare und nominale Struktur-/Enumtypen mit typisierten und besitzenden Nutzdaten sowie optionale Werte mit Wertsemantik und struktureller Gleichheit, normale/mutierende/statische Strukturmethoden, eigene Struct-Initialisierer mit Überladung nach Parameterform und Parametertyp auch bei generischen Typen, `physimc --check`/`--emit-c`/`--emit-experiment`/`--emit-analysis`, C17-Backend/CMake für Programme und erste Experiment-/Analysemodule, Vec2/Vec3/Vec4, Quaternionen und Mat3/Mat4, Einheiten/Kanäle, explizite PCG32-Wertströme, starre Körper mit Impulsen/Quaternionrotation, Kontaktpaare mit Reibung/Rückprall, Distanzgelenke mit lokalen Ankern, gemeinsamer Körpergruppen-Solver mit besitzenden Ergebniswerten, lineare Kugel-Sweeps und Hüllquader-Kandidatenpaare, gemeinsamer Integrator, Messdaten/Szene, Dataset-/Series-/Plot-/Table-Handles einschließlich erzeugter Datenreihen, gemeinsame Messstatusauswahl, Statistik/Diagramme/Tabellen/Exporte, abgefangene Laufzeitfehler mit Quelldiagnosen, erste App-Vorlagen mit Editor/Build und Quellsnapshots | vollständiger semantischer Sprachvertrag, weitere Werttypen und Fallmuster, Überladungsauflösung für weitere Ausdrücke, erweiterte Module, vollständige Experiment- und Analysebindungen, vollständige Integration beider Editoren, vollständiger Sprachausbau und zwei getestete Dokumentationsteile (LANG-001 bis LANG-007) |
