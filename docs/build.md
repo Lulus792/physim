@@ -103,7 +103,7 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt derzeit 491 Tests aus, mit `--no-app` die
+`--test` führt derzeit 491 Tests ohne Fenster aus, mit `--no-app` die
 480 Prüfungen ohne SDL-Abhängigkeit. Die 51 C-Referenztests decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
@@ -142,7 +142,7 @@ ausgelösten C-Compilerfehler sowie unveränderte C-Quellen und Programme nach
 abgelehnter Quellübersetzung. Der letzte vollständige Programmstand muss weiterhin
 ausführbar sein; Prüfsummen vor und nach dem Fehler stehen im Ergebnisbericht.
 
-`tests/native_integration_cases.json` beschreibt weitere 54 Prüfungen mit 84
+`tests/native_integration_cases.json` beschreibt weitere 54 Prüfungen ohne Fenster mit 84
 Ausführungsschritten. Sie bauen 63 Physim-Programme/-Module und 71 C-Module/-Prüfer
 und verwenden 14 bereits gebaute Programme und Beispielmodule sowie den aktuellen
 Python-Interpreter. Die vorhandenen
@@ -181,6 +181,42 @@ python3 tools/build.py --test --test-filter '*_reference' --test-filter '*_isola
 python3 tests/test_native_test_runner.py --work build/native
 ```
 
+### Fenster- und Grafiktests direkt ausführen
+
+`--test-display` führt zusätzlich 34 Fenster- und Grafikabläufe aus. Dafür sind
+eine grafische Sitzung, SDL und ein geeigneter OpenGL-Treiber erforderlich.
+Die beiden Testgruppen werden getrennt gestartet; `--test-display` lässt sich
+nicht mit `--no-app` oder `--test` kombinieren.
+
+```sh
+# Linux/macOS in einer grafischen Desktop-Sitzung:
+python3 tools/build.py --test-display
+# Nur kleine und große Menüs sowie Dokumentwiederherstellung prüfen:
+python3 tools/build.py --test-display --test-filter 'toolbar_*' --test-filter documents_recovery
+```
+
+Unter Windows dieselben Befehle mit `python` ausführen. Für Linux-CI mit Mesa,
+Xvfb und Openbox (die Pakete `xvfb` und `openbox` müssen installiert sein):
+
+```sh
+LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a -s '-screen 0 1920x1080x24' sh -c \
+  'openbox > /tmp/physim-openbox.log 2>&1 & python3 tools/build.py --test-display'
+```
+
+Die Abläufe prüfen Menüs und Tabs bei zwei Fenstergrößen, Dokumentbearbeitung,
+Wiederherstellung nach Abbrüchen, Workspace- und Projekteinstellungen,
+Diagramme, Stapelläufe, Sprachvorschauen und 13 vollständige Sprachprojekte.
+Der gewählte Compiler wird auch für die von der App angelegten Projekte verwendet.
+Diagrammtests dekodieren zusätzlich die PNG-Exporte und vergleichen Pixel,
+Farben, Legenden und beschnittene Linien, Balken und Punktmengen.
+Jeder Ablauf erhält einen frischen Ordner mit Leerzeichen und Umlaut.
+`app-steps.json` enthält die einzelnen App-Aufrufe, Rückgabecodes und Ausgaben;
+Screenshots und gespeicherte Projekte bleiben daneben erhalten.
+Die bisherigen 13 CMake-Workflow-Skripte sind durch einen gemeinsamen Python-Prüfer
+ersetzt. Die CTest-Einstiegspunkte verwenden denselben Prüfer und Katalog.
+
+### Ergebnisberichte
+
 Jeder Lauf schreibt nach `build/native/<Konfiguration>/test-results/run-<Kennung>`.
 `results.json` enthält für jeden Test Kommando, Ergebnis, Dauer und Ausgabe.
 Unterordner isolieren temporäre Testdateien. Erwartete Fehler müssen den passenden
@@ -189,9 +225,9 @@ Test oder Testbuild verhindert die Ausführung späterer Fälle nicht; der gesam
 Aufruf endet dennoch mit einem Fehlercode. Zeitüberschreitungen werden als Fehler
 gespeichert. Ein Filter ohne Treffer ist ebenfalls ein Fehler.
 
-Die verbleibenden Grafikabläufe und Leistungsmessungen der vollständigen Testsuite
-verwenden noch die folgenden CMake-Abläufe. Die 491 Prüfungen ersetzen noch nicht
-die gesamte Suite.
+Die drei Leistungsmessungen (`benchmark_smoke`, `benchmark_driver`, `ui_rendering`)
+verwenden noch die folgenden CMake-Abläufe. Die 491 Prüfungen ohne Fenster und
+34 Grafikabläufe ersetzen noch nicht die gesamte Suite.
 
 ### SDK und portable Pakete ohne CMake
 

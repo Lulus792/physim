@@ -409,6 +409,11 @@ beide Befehle erneut ausführen. `--test` führt die bisher auf den direkten
 Buildweg übertragenen Tests aus. Der SDL-Quellbuild aus der Linux- und
 macOS-Anleitung verwendet weiterhin CMake.
 
+Fenster- und Grafiktests lassen sich in einer grafischen Desktop-Sitzung separat
+mit `python3 tools/build.py --test-display` starten (Windows: `python` statt
+`python3`). Einzelne Abläufe, Voraussetzungen und Linux-CI-Befehle stehen in der
+[Buildanleitung](docs/build.md#fenster--und-grafiktests-direkt-ausführen).
+
 ## Ohne Oberfläche
 
 Optional unter Linux und macOS nur Bibliothek und Kommandozeilenprogramme bauen

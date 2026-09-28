@@ -283,13 +283,13 @@ class Builder:
                             [project, batch, platform, language, zlib, core], sdl=True,
                             defines=("Z_PREFIX", f'PS_SOURCE_DIR="{ROOT.as_posix()}"')))
             products.append(self.runtime)
-        if self.args.test:
+        if self.args.test or self.args.test_display:
             spec = importlib.util.spec_from_file_location("native_tests", Path(__file__).with_name("native_tests.py"))
             tests = importlib.util.module_from_spec(spec)
             sys.modules[spec.name] = tests
             sys.dont_write_bytecode = True
             spec.loader.exec_module(tests)
-            tests.run_suite(self, libraries, ROOT, self.args.test_filter)
+            tests.run_suite(self, libraries, ROOT, self.args.test_filter, display=self.args.test_display)
         print(f"Build complete: {self.bin}")
         if self.args.install:
             self.install(products, self.args.install.resolve())
@@ -353,13 +353,17 @@ def main() -> int:
     parser.add_argument("--sdl", type=Path, help="SDL3 installation prefix")
     parser.add_argument("--no-app", action="store_true", help="Build the library, language compiler and runners without SDL")
     parser.add_argument("--jobs", type=int, default=min(os.cpu_count() or 1, 8))
-    parser.add_argument("--test", action="store_true", help="Run migrated C reference tests without CTest")
-    parser.add_argument("--test-filter", action="append", help="Select native test names using a glob; repeat to combine groups (with --test)")
+    test_mode = parser.add_mutually_exclusive_group()
+    test_mode.add_argument("--test", action="store_true", help="Run tests without windows or CTest")
+    test_mode.add_argument("--test-display", action="store_true", help="Run window and graphics tests (requires a graphical desktop)")
+    parser.add_argument("--test-filter", action="append", help="Select test names using a glob; repeat to combine groups (with --test or --test-display)")
     parser.add_argument("--rebuild", action="store_true", help="Recompile and relink all selected targets")
     parser.add_argument("--install", type=Path, help="Install an SDK and portable app to a new directory")
     args = parser.parse_args()
-    if args.test_filter and not args.test:
-        parser.error("--test-filter requires --test")
+    if args.test_filter and not (args.test or args.test_display):
+        parser.error("--test-filter requires --test or --test-display")
+    if args.test_display and args.no_app:
+        parser.error("--test-display requires the app; remove --no-app")
     if args.jobs < 1 or args.jobs > 64:
         parser.error("--jobs must be between 1 and 64")
     args.build_dir = args.build_dir or ROOT / "build" / "native" / args.config

@@ -1,7 +1,7 @@
 """Direct test catalog and runner. No CMake files are read or executed.
 
-These cases reuse existing C and language regressions and their expectations.
-Further language workflow wrappers and display workflows are migrated separately.
+These cases reuse existing C, language and display regressions and their expectations.
+Window workflows run separately so ordinary test runs need no graphical session.
 """
 from dataclasses import dataclass
 from fnmatch import fnmatchcase
@@ -25,6 +25,7 @@ class Case:
     arguments: tuple[str, ...] = ()
     defines: tuple[str, ...] = ()
     app: bool = False
+    display: bool = False
     timeout: int = 60
     exit_code: int = 0
     stdout: str | None = None
@@ -129,7 +130,8 @@ def catalog():
         if not record["steps"] or not record["targets"]:
             raise RuntimeError(f"Empty integration test: {record['name']}")
         artifacts = {name: integrations["artifacts"][name] for name in record["targets"]}
-        cases.append(Case(record["name"], (), app=record.get("app", False), integration={**record, "artifacts": artifacts}))
+        cases.append(Case(record["name"], (), app=record.get("app", False), display=record.get("display", False),
+                          integration={**record, "artifacts": artifacts}))
     names = [case.name for case in cases]
     if len(set(names)) != len(names):
         raise RuntimeError("Duplicate native test names")
@@ -456,9 +458,10 @@ def execute_case(command, *, work: Path, env, timeout: float, exit_code=0,
     return result
 
 
-def run_suite(builder, libraries, source: Path, pattern="*"):
+def run_suite(builder, libraries, source: Path, pattern="*", *, display=False):
     patterns = [pattern] if isinstance(pattern, str) else pattern or ["*"]
     cases = [case for case in catalog() if (not case.app or not builder.args.no_app)
+             and case.display == display
              and any(fnmatchcase(case.name, item) for item in patterns)]
     if not cases:
         raise RuntimeError(f"No native tests match {pattern!r} in this configuration")

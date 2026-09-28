@@ -134,9 +134,12 @@ Mac-Notarisierung bleiben offen.
 
 ## Direkter Testläufer
 
-Der direkte Katalog umfasst **491 Tests**, davon 480 ohne SDL. Sieben neue Prüfungen
+Der direkte Katalog umfasst **491 Tests ohne Fenster**, davon 480 ohne SDL,
+und zusätzlich **34 Fenster- und Grafiktests** unter `--test-display`.
+Sieben zuvor übertragene Prüfungen
 für Tutorialquellen, API-Referenz, PNG-Dekodierung und Projektbuild bestehen lokal
-mit MSVC Debug, Clang Release und über CTest. Ihr CI-Nachweis steht noch aus.
+mit MSVC Debug, Clang Release und über CTest. Zum Stand `a051ea0` besteht auch der
+direkte Build- und Testschritt in allen acht CI-Kombinationen.
 Die vorherige Erweiterung übernimmt 21 Runner-, Physik- und Dokumentationsabläufe.
 Alle 21 bestehen lokal mit
 MSVC Debug und Clang Release; alle 47 gemeinsamen CTest-Integrationsprüfungen
@@ -148,7 +151,22 @@ acht CI-Kombinationen. Der anschließende Build ohne Tests scheitert dort an der
 Argumentprüfung für `--test-filter`; der direkte CI-Schritt ist daher fehlgeschlagen.
 Die Korrektur besteht lokal für normale Builds mit MSVC und Clang. Ein zusätzlicher
 Regressionstest prüft normale Builds, SDK-Installation und Testfilter über den
-Kommandozeileneinstieg. Der erneute CI-Nachweis der Korrektur steht aus.
+Kommandozeileneinstieg. Die Korrektur ist mit dem direkten CI-Schritt zu `a051ea0`
+auf allen acht Kombinationen bestätigt.
+
+Alle 34 neuen Grafikabläufe sind lokal mit MSVC Debug auf der RTX 2080 Ti geprüft.
+Der erste Lauf bestand 30 Fälle; nach Korrektur der UTF-8-Ausgabe und der Vorbereitung
+zweier Testordner bestanden die vier betroffenen Fälle ebenfalls. Die Prüfungen
+behalten Menü-, Dokument-, Wiederherstellungs-, Projekteinstellungs- und Sprachabläufe
+bei. Beide Diagrammtests prüfen zusätzlich alle PNG-Exporte mit unabhängigen
+Pixelvergleichen. Acht ausgewählte Abläufe bestehen außerdem mit der Clang-Release-App:
+Auftrieb, Diagramme, Stapelläufe, Dokumentbuild, Projekteinstellungen,
+Dokumentwiederherstellung, Autosave und der vollständige Sprachablauf.
+Die Projekt-Buildprotokolle bestätigen dabei Clang als Compiler.
+Drei zusätzliche CTest-Vergleiche für `toolbar_small`, `plot_workflow` und
+`language_mixed_workflow` bestehen mit den neu gebauten MSVC-Debug-Programmen.
+Der direkte Grafiknachweis auf Linux und beiden macOS-Architekturen steht noch aus;
+die CI enthält dafür nun eigene Schritte mit denselben 34 Fällen.
 
 Die Pendelreferenzen prüfen jeweils 4001 Messpunkte, Energiedrift und Periodendauer
 gegen eine analytische Referenz. MSVC und Clang liefern für RK4 eine Periodendauer
@@ -185,11 +203,12 @@ GCC/Clang sowie macOS auf Apple Silicon/Intel.
 | `8516187` | 228 Tests | Alle acht Kombinationen: [Lauf 36478529900](https://github.com/PhysicSimulator/physim/actions/runs/36478529900) |
 | `2b3b6e7` | 437 Tests | Alle acht Kombinationen: [Lauf 36480859045](https://github.com/PhysicSimulator/physim/actions/runs/36480859045) |
 | `b95e119` | 463 Tests | Alle acht Kombinationen: [Lauf 36482481623](https://github.com/PhysicSimulator/physim/actions/runs/36482481623) |
+| `a051ea0` | 491 Tests, Build ohne Testfilter korrigiert | Alle acht Kombinationen: [Lauf 36485408557](https://github.com/PhysicSimulator/physim/actions/runs/36485408557) |
 
 Die ursprünglichen 51 C-Tests bestanden auch lokal mit MSVC Debug; die 41 SDL-freien
 Fälle zusätzlich mit Clang Release. Der vollständige Satz mit 134 Tests bestand
-lokal mit MSVC Debug. Verbleibende Grafikabläufe und Leistungsmessungen sind noch an
-CTest gebunden.
+lokal mit MSVC Debug. Die drei Leistungsmessungen einschließlich des Render-Benchmarks
+sind noch an CTest gebunden.
 
 ## Weitere Änderungen prüfen
 

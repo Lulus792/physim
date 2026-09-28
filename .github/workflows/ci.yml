@@ -44,6 +44,9 @@ jobs:
           "build/native/Moved App ä/Physim.app/Contents/MacOS/physim" --self-test "$PWD/build/native/Bundled C ä" pendulum
           "build/native/Moved App ä/Physim.app/Contents/MacOS/physim" --self-test "$PWD/build/native/Bundled Language ä" language_full
           ditto -c -k --sequesterRsrc --keepParent "build/native/Moved App ä/Physim.app" "build/Physim-native-${{ matrix.runner }}.zip"
+      - name: Direct window and graphics tests
+        if: ${{ !inputs.package_only }}
+        run: python3 tools/build.py --compiler clang --test-display
       - name: Archive native macOS package
         if: ${{ !cancelled() && !inputs.package_only }}
         uses: actions/upload-artifact@v4
@@ -94,6 +97,9 @@ jobs:
           name: macos-${{ matrix.runner }}
           path: |
             build/native/*/test-results/**/results.json
+            build/native/*/test-results/**/app-steps.json
+            build/native/*/test-results/*/toolbar_*/**/*.bmp
+            build/native-integrations/toolbar_*/**/*.bmp
             build/native/Native SDK*/verification.log
             build/native/Native SDK*/PASSED.txt
             build/SDK Test*/verification.log
@@ -167,6 +173,9 @@ jobs:
           name: sdk-windows-${{ matrix.toolset }}-${{ matrix.configuration }}
           path: |
             build/native/*/test-results/**/results.json
+            build/native/*/test-results/**/app-steps.json
+            build/native/*/test-results/*/toolbar_*/**/*.bmp
+            build/native-integrations/toolbar_*/**/*.bmp
             build/native/Native SDK*/verification.log
             build/native/Native SDK*/PASSED.txt
             build/SDK Test*/verification.log
@@ -217,6 +226,10 @@ jobs:
           python3 tools/build.py --compiler "${{ matrix.compiler }}" --install build/native/SDK
           xvfb-run -a python3 tools/verify-native-sdk.py --sdk build/native/SDK --work build/native --compiler "${{ matrix.compiler }}" --app-tests
           tar -czf "build/Physim-native-linux-${{ matrix.compiler }}.tar.gz" -C build/native SDK
+      - name: Direct window and graphics tests
+        env:
+          LIBGL_ALWAYS_SOFTWARE: "1"
+        run: xvfb-run -a -s '-screen 0 1920x1080x24' sh -c 'openbox > /tmp/physim-native-openbox.log 2>&1 & python3 tools/build.py --compiler "${{ matrix.compiler }}" --test-display'
       - name: Archive native Linux package
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
@@ -271,6 +284,9 @@ jobs:
           name: linux-ui-${{ matrix.compiler }}
           path: |
             build/native/*/test-results/**/results.json
+            build/native/*/test-results/**/app-steps.json
+            build/native/*/test-results/*/toolbar_*/**/*.bmp
+            build/native-integrations/toolbar_*/**/*.bmp
             build/native/Native SDK*/verification.log
             build/native/Native SDK*/PASSED.txt
             build/toolbar-*/*.bmp

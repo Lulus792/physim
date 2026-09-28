@@ -180,7 +180,29 @@ unveränderte Builds, Headeränderungen, gesperrte und verschobene Projektordner
 Alle sieben bestehen mit MSVC Debug, Clang Release und über CTest. Der direkte
 Katalog umfasst nun 491 Tests beziehungsweise 480 ohne SDL. Der Test des Läufers
 prüft zusätzlich Zeilenenden und falsche Tutorialblöcke sowie Unicode-Pfade für
-Python-Aufrufe. Der CI-Nachweis dieser Erweiterung und der CLI-Korrektur steht aus.
+Python-Aufrufe. Zum Commit `a051ea0` bestehen diese Erweiterung und die CLI-Korrektur
+im direkten Build- und Testschritt aller acht CI-Kombinationen.
+
+Die 34 bisherigen Fenster- und Grafikabläufe laufen nun ebenfalls ohne CMake
+über `tools/build.py --test-display`. 13 CMake-Hilfsskripte sind durch einen
+gemeinsamen Python-Prüfer ersetzt. Die 491 Prüfungen ohne Fenster bleiben unter
+`--test` verfügbar; beide Gruppen lassen sich mit wiederholten Filtern eingrenzen.
+Die Grafikgruppe umfasst Menüs in zwei Fenstergrößen, Dokumente, Autosave und
+Wiederherstellung, Workspace-/Projekteinstellungen, Diagramme, Stapelläufe,
+Sprachvorschauen und 13 vollständige Sprachprojekte. Beide Diagrammabläufe prüfen
+die dekodierten PNG-Pixel zusätzlich mit dem unabhängigen Python-Prüfer.
+Quellen, Backups, beschädigte Sicherungen, Projektprofile und unbekannte
+Projektfelder werden nach den App-Aufrufen mit ihren erwarteten Inhalten verglichen.
+Alle 34 Abläufe sind lokal mit MSVC Debug erfolgreich geprüft. Acht ausgewählte
+Abläufe bestehen außerdem mit der Clang-Release-App; deren neue Projekte werden
+ebenfalls mit Clang gebaut. Der Prüfer protokolliert einzelne Aufrufe samt Ausgaben
+auch bei Zeitüberschreitung. Der Testläufer prüft zusätzlich die Auswahl der
+Fenstergruppe, widersprüchliche CLI-Optionen, Unicode-Ausgaben, fehlende
+Erfolgsmarkierungen und veränderte Dateien. Drei CTest-Vergleiche für Menübedienung,
+Diagramme und ein gemischtes C-/Physim-Projekt bestehen ebenfalls.
+Linux und beide macOS-Architekturen
+erhalten eigene direkte Grafikschritte in der CI; deren Nachweis steht noch aus.
+Die drei Benchmarks bleiben vorerst an CMake gebunden.
 
 | Bereich | Implementiert | Noch offen |
 | --- | --- | --- |

@@ -32,6 +32,7 @@ def main():
     # and SDK installation without tests, which must accept an absent filter.
     common = ["build.py", "--build-dir", str(directory / "cli build")]
     accepted = [([], None), (["--install", str(directory / "sdk")], None),
+                (["--test-display"], None), (["--test-display", "--test-filter", "toolbar_*"], ["toolbar_*"]),
                 (["--test"], None), (["--test", "--test-filter", "*"], ["*"]),
                 (["--test", "--test-filter", "first_*", "--test-filter", "second_*"],
                  ["first_*", "second_*"])]
@@ -55,6 +56,15 @@ def main():
                     assert error.code == 2
             assert "--test-filter requires --test" in diagnostic.getvalue()
             builder.assert_not_called()
+        for arguments in (["--test-display", "--no-app"], ["--test", "--test-display"]):
+            builder.reset_mock()
+            with patch.object(sys, "argv", common + arguments), contextlib.redirect_stderr(io.StringIO()):
+                try:
+                    build_cli.main()
+                    raise AssertionError("Conflicting test modes were accepted")
+                except SystemExit as error:
+                    assert error.code == 2
+            builder.assert_not_called()
 
     tutorial_spec = importlib.util.spec_from_file_location("tutorial_sources", source / "tests/check_tutorial_sources.py")
     tutorial_checker = importlib.util.module_from_spec(tutorial_spec)
@@ -74,6 +84,44 @@ def main():
             raise AssertionError("Mismatched tutorial source was accepted")
         except RuntimeError as error:
             assert "example.phys" in str(error)
+
+    display_spec = importlib.util.spec_from_file_location("display_workflow", source / "tests/check_display_workflow.py")
+    display_checker = importlib.util.module_from_spec(display_spec)
+    display_spec.loader.exec_module(display_checker)
+    display_names = {*display_checker.SIMPLE, *display_checker.SPECIAL,
+                     *(f"language_{mode}_workflow" for mode in display_checker.LANGUAGE_MODES)}
+    assert {case.name for case in runner.catalog() if case.display} == display_names
+    assert all(case.app for case in runner.catalog() if case.display)
+    flow = display_checker.Workflow(Path(sys.executable), directory, source, False)
+    flow.env["PYTHONIOENCODING"] = "utf-8"
+    captured = io.StringIO()
+    with contextlib.redirect_stdout(captured), contextlib.redirect_stderr(captured):
+        flow.run("-c", "print('Grüße β')", marker="Grüße β")
+        for program, marker in (("raise SystemExit(7)", None), ("print('wrong marker')", "PASSED")):
+            try:
+                flow.run("-c", program, marker=marker)
+                raise AssertionError("Failed app workflow was accepted")
+            except RuntimeError:
+                pass
+    assert "Grüße β" in captured.getvalue()
+    steps = json.loads((directory / "app-steps.json").read_text(encoding="utf-8"))
+    assert [step["exit_code"] for step in steps] == [0, 7, 0]
+    try:
+        flow.run("-c", "import time; print('before timeout', flush=True); time.sleep(10)", timeout=.5)
+        raise AssertionError("App timeout was accepted")
+    except RuntimeError:
+        pass
+    steps = json.loads((directory / "app-steps.json").read_text(encoding="utf-8"))
+    assert steps[-1]["status"] == "timeout" and "before timeout" in steps[-1]["stdout"]
+    persisted = directory / "persisted α.txt"
+    display_checker.write(persisted, "original β\n")
+    display_checker.exact(persisted, "original β\n")
+    display_checker.write(persisted, "changed β\n")
+    try:
+        display_checker.exact(persisted, "original β\n")
+        raise AssertionError("Changed persisted contents were accepted")
+    except RuntimeError:
+        pass
 
     def check(code, **options):
         return runner.execute_case([sys.executable, "-c", code], work=directory,
@@ -389,6 +437,7 @@ def main():
         runner.Case("exit_error", (), arguments=("-c", "raise SystemExit(7)")),
         runner.Case("later_success", (), arguments=("-c", "print('still ran')")),
         runner.Case("app_only", (), app=True),
+        runner.Case("display_only", (), arguments=("-c", "print('window group')"), display=True),
     ]
 
     class FixtureBuilder:
@@ -428,6 +477,11 @@ def main():
         raise AssertionError("Omitted CLI filter did not run all tests")
     except RuntimeError as error:
         assert "2 native tests failed" in str(error)
+    before = set((directory / "test-results").glob("*/results.json"))
+    runner.run_suite(FixtureBuilder(), {"platform": None, "core": None}, source, None, display=True)
+    after = set((directory / "test-results").glob("*/results.json"))
+    displayed = json.loads((after - before).pop().read_text(encoding="utf-8"))
+    assert len(displayed) == 1 and displayed[0]["name"] == "display_only", "Display selection mixed test groups"
     print("Native test runner: expected exits, diagnostics, timeouts, launch/build failures and complete reports passed")
 
 
