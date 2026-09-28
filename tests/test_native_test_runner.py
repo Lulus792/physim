@@ -32,6 +32,9 @@ def main():
     assert check(error_program)["status"] == "failed"
     assert check(error_program, exit_code=70, stdout="wrong\n")["status"] == "failed"
     assert check(error_program, exit_code=70, stderr_pattern="missing diagnostic")["status"] == "failed"
+    assert check("print('first second')", stderr="", stdout_patterns=("first", "second"))["status"] == "passed"
+    assert check("print('first')", stdout_patterns=("first", "second"))["status"] == "failed"
+    assert check("import sys; print('warning', file=sys.stderr)", stderr="")["status"] == "failed"
     assert check("import time; time.sleep(60)", timeout=.2)["status"] == "timeout"
     assert runner.execute_case([str(directory / "missing-program")], work=directory,
                                env=os.environ, timeout=1)["status"] == "failed"
@@ -71,6 +74,26 @@ def main():
         assert result["status"] == "failed"
         assert [step["status"] for step in result["steps"]] == ["failed", "passed"]
         assert len(invocations) == 3
+    finally:
+        runner.execute_case = execute
+
+    # A runtime-error fixture only passes with the required exit and source
+    # diagnostic. The expected failure must not be applied to the emitter.
+    def runtime_process(command, **options):
+        code = "print('generated source')" if "--emit-c" in command else error_program
+        return execute([sys.executable, "-c", code], **options)
+
+    class RuntimeBuilder(LanguageBuilder):
+        def executable(self, *args, **options):
+            return Path(sys.executable)
+
+    runner.execute_case = runtime_process
+    try:
+        case = runner.Case("runtime_error", (), libraries=(), language_source="fixture.phys",
+                           exit_code=70, stdout="cleaned\n", stderr_pattern="source:4: error")
+        result = runner.language_case(case, RuntimeBuilder(), {}, source, directory)
+        assert result["status"] == "passed"
+        assert [step["exit_code"] for step in result["steps"]] == [0, 70]
     finally:
         runner.execute_case = execute
 

@@ -582,6 +582,1502 @@
           "stderr_pattern": "Explicit type arguments require a generic function or method"
         }
       ]
+    },
+    {
+      "name": "array_contents",
+      "checks": [
+        {
+          "name": "immutable_append",
+          "source": "let x = [1]\nx.append(contentsOf: [2])\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array method requires a mutable var binding"
+        },
+        {
+          "name": "immutable_insert",
+          "source": "let x = [1]\nx.insert(contentsOf: [2], at: 0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array method requires a mutable var binding"
+        },
+        {
+          "name": "wrong_append_label",
+          "source": "var x = [1]\nx.append(using: [2])\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array method expects exactly one positional argument"
+        },
+        {
+          "name": "wrong_insert_label",
+          "source": "var x = [1]\nx.insert(using: [2], at: 0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array insert expects value and at:"
+        },
+        {
+          "name": "wrong_append_type",
+          "source": "var x = [1]\nx.append(contentsOf: [\"bad\"])\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "wrong_insert_type",
+          "source": "var x = [1]\nx.insert(contentsOf: [\"bad\"], at: 0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "wrong_insert_index",
+          "source": "var x = [1]\nx.insert(contentsOf: [2], at: true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/array_contents.phys"
+    },
+    {
+      "name": "array_edge_removal",
+      "checks": [
+        {
+          "name": "non_array",
+          "source": "var x = 1\nx.removeFirst()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array edge removal requires an array value"
+        },
+        {
+          "name": "immutable_first",
+          "source": "let x = [1]\nx.removeFirst()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array edge removal requires a mutable var binding"
+        },
+        {
+          "name": "immutable_last",
+          "source": "let x = [1]\nx.removeLast(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array edge removal requires a mutable var binding"
+        },
+        {
+          "name": "labeled_count",
+          "source": "var x = [1]\nx.removeFirst(count: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array edge removal expects zero or one positional count"
+        },
+        {
+          "name": "extra_count",
+          "source": "var x = [1]\nx.removeLast(1, 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array edge removal expects zero or one positional count"
+        },
+        {
+          "name": "wrong_count",
+          "source": "var x = [1]\nx.removeFirst(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/array_edge_removal.phys"
+    },
+    {
+      "name": "array_edge_selection",
+      "checks": [
+        {
+          "name": "nonarray",
+          "source": "let a = 1\nlet b = a.prefix(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Edge selection requires an array or String value"
+        },
+        {
+          "name": "prefix_missing",
+          "source": "let a = [1]\nlet b = a.prefix()\n",
+          "exit_code": 1,
+          "stderr_pattern": "prefix and suffix require one positional count"
+        },
+        {
+          "name": "suffix_missing",
+          "source": "let a = [1]\nlet b = a.suffix()\n",
+          "exit_code": 1,
+          "stderr_pattern": "prefix and suffix require one positional count"
+        },
+        {
+          "name": "extra",
+          "source": "let a = [1]\nlet b = a.dropFirst(1, 2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "dropFirst and dropLast accept zero or one"
+        },
+        {
+          "name": "label",
+          "source": "let a = [1]\nlet b = a.dropLast(count: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "dropFirst and dropLast accept zero or one"
+        },
+        {
+          "name": "type",
+          "source": "let a = [1]\nlet b = a.prefix(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "type_args",
+          "source": "let a = [1]\nlet b = a.suffix<Int64>(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/array_edge_selection.phys"
+    },
+    {
+      "name": "array_extrema",
+      "checks": [
+        {
+          "name": "non_array",
+          "source": "let x = 1\nlet y = x.min()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array extrema require"
+        },
+        {
+          "name": "unsupported_element",
+          "source": "let x = [Vec2(1,2)]\nlet y = x.max()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array extrema require"
+        },
+        {
+          "name": "wrong_label",
+          "source": "func less(a: Int64, b: Int64) -> Bool:\n    return a < b\nlet x = [2,1]\nlet y = x.min(using: less)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array extrema expect by: comparator"
+        },
+        {
+          "name": "extra_comparator",
+          "source": "func less(a: Int64, b: Int64) -> Bool:\n    return a < b\nlet x = [2,1]\nlet y = x.max(by: less, by: less)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array extrema expect by: comparator"
+        },
+        {
+          "name": "non_function",
+          "source": "let x = [2,1]\nlet y = x.min(by: true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array comparator must be func"
+        },
+        {
+          "name": "wrong_result",
+          "source": "func key(a: Int64, b: Int64) -> Int64:\n    return a\nlet x = [2,1]\nlet y = x.max(by: key)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array comparator must be func"
+        },
+        {
+          "name": "wrong_element",
+          "source": "func less(a: String, b: String) -> Bool:\n    return a == b\nlet x = [2,1]\nlet y = x.min(by: less)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array comparator must be func"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/array_extrema.phys"
+    },
+    {
+      "name": "array_remove_all",
+      "checks": [
+        {
+          "name": "non_array",
+          "source": "var x = 1\nx.removeAll()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array removeAll requires an array value"
+        },
+        {
+          "name": "immutable",
+          "source": "let x = [1]\nx.removeAll()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array removeAll requires a mutable var binding"
+        },
+        {
+          "name": "immutable_where",
+          "source": "func remove(x: Int64) -> Bool:\n    return true\nlet x = [1]\nx.removeAll(where: remove)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array removeAll requires a mutable var binding"
+        },
+        {
+          "name": "wrong_label",
+          "source": "func remove(x: Int64) -> Bool:\n    return true\nvar x = [1]\nx.removeAll(using: remove)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array removeAll expects where: predicate"
+        },
+        {
+          "name": "extra_argument",
+          "source": "func remove(x: Int64) -> Bool:\n    return true\nvar x = [1]\nx.removeAll(where: remove, where: remove)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array removeAll expects where: predicate"
+        },
+        {
+          "name": "non_function",
+          "source": "var x = [1]\nx.removeAll(where: true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array removeAll predicate must be func"
+        },
+        {
+          "name": "wrong_element",
+          "source": "func remove(x: String) -> Bool:\n    return true\nvar x = [1]\nx.removeAll(where: remove)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array removeAll predicate must be func"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/array_remove_all.phys"
+    },
+    {
+      "name": "array_repeated",
+      "checks": [
+        {
+          "name": "missing_count",
+          "source": "let values = Array(repeating: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array\\(repeating:count:\\) expects a value and Int64 count"
+        },
+        {
+          "name": "wrong_label",
+          "source": "let values = Array(repeating: 1, times: 2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array\\(repeating:count:\\) expects a value and Int64 count"
+        },
+        {
+          "name": "wrong_type",
+          "source": "let values = Array(repeating: 1, count: true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "old_method",
+          "source": "let values = [1].repeated(count: 2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown method for this receiver type"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/array_repeated.phys"
+    },
+    {
+      "name": "array_safe_remove",
+      "checks": [
+        {
+          "name": "immutable",
+          "source": "let a = [1]\nlet x = a.popLast()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Safe removal requires a mutable var binding"
+        },
+        {
+          "name": "nonarray",
+          "source": "var a = 1\nlet x = a.popLast()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Safe removal requires an array value"
+        },
+        {
+          "name": "pop_argument",
+          "source": "var a = [1]\nlet x = a.popLast(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array popLast expects no arguments"
+        },
+        {
+          "name": "type_args",
+          "source": "var a = [1]\nlet x = a.popLast<Int64>()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        },
+        {
+          "name": "old_remove_name",
+          "source": "var a = [1]\nlet x = a.removeIfPresent(at: 0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown method for this receiver type"
+        },
+        {
+          "name": "old_get_name",
+          "source": "let a = [1]\nlet x = a.get(at: 0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown method for this receiver type"
+        },
+        {
+          "name": "old_appending_name",
+          "source": "let a = [1]\nlet x = a.appending(2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown method for this receiver type"
+        },
+        {
+          "name": "old_removing_name",
+          "source": "let a = [1]\nlet x = a.removing(at: 0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown method for this receiver type"
+        },
+        {
+          "name": "old_inserting_name",
+          "source": "let a = [1]\nlet x = a.inserting(2, at: 0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown method for this receiver type"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/array_safe_remove.phys"
+    },
+    {
+      "name": "array_sorted",
+      "checks": [
+        {
+          "name": "non_array",
+          "source": "let x = 1\nlet y = x.sorted()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array sorting requires"
+        },
+        {
+          "name": "unsupported_element",
+          "source": "let x = [Vec2(1,2)]\nlet y = x.sorted()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array sorting requires"
+        },
+        {
+          "name": "immutable_sort",
+          "source": "let x = [2,1]\nx.sort()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array sort requires a mutable var binding"
+        },
+        {
+          "name": "extra_argument",
+          "source": "let x = [2,1]\nlet y = x.sorted(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array sorting expects by: comparator"
+        },
+        {
+          "name": "wrong_label",
+          "source": "func less(a: Int64, b: Int64) -> Bool:\n    return a < b\nlet x = [2,1]\nlet y = x.sorted(using: less)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array sorting expects by: comparator"
+        },
+        {
+          "name": "extra_comparator",
+          "source": "func less(a: Int64, b: Int64) -> Bool:\n    return a < b\nlet x = [2,1]\nlet y = x.sorted(by: less, by: less)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array sorting expects by: comparator"
+        },
+        {
+          "name": "non_function",
+          "source": "let x = [2,1]\nlet y = x.sorted(by: true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array comparator must be func"
+        },
+        {
+          "name": "wrong_result",
+          "source": "func key(a: Int64, b: Int64) -> Int64:\n    return a\nlet x = [2,1]\nlet y = x.sorted(by: key)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array comparator must be func"
+        },
+        {
+          "name": "wrong_element",
+          "source": "func less(a: String, b: String) -> Bool:\n    return a == b\nlet x = [2,1]\nlet y = x.sorted(by: less)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array comparator must be func"
+        },
+        {
+          "name": "immutable_sort_by",
+          "source": "func less(a: Int64, b: Int64) -> Bool:\n    return a < b\nlet x = [2,1]\nx.sort(by: less)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array sort requires a mutable var binding"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/array_sorted.phys"
+    },
+    {
+      "name": "array_subrange_methods",
+      "checks": [
+        {
+          "name": "remove_immutable",
+          "source": "let a = [1, 2]\na.removeSubrange(0..<1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array subrange method requires a mutable var binding"
+        },
+        {
+          "name": "replace_immutable",
+          "source": "let a = [1, 2]\na.replaceSubrange(0..<1, with: [3])\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array subrange method requires a mutable var binding"
+        },
+        {
+          "name": "nonarray",
+          "source": "var a = 1\na.removeSubrange(0..<1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array subrange method requires an array value"
+        },
+        {
+          "name": "remove_scalar",
+          "source": "var a = [1, 2]\na.removeSubrange(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array removeSubrange expects one bounded range"
+        },
+        {
+          "name": "replace_scalar",
+          "source": "var a = [1, 2]\na.replaceSubrange(0, with: [3])\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array replaceSubrange expects a bounded range and with: array"
+        },
+        {
+          "name": "remove_extra",
+          "source": "var a = [1, 2]\na.removeSubrange(0..<1, 2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array removeSubrange expects one bounded range"
+        },
+        {
+          "name": "remove_label",
+          "source": "var a = [1, 2]\na.removeSubrange(bounds: 0..<1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array removeSubrange expects one bounded range"
+        },
+        {
+          "name": "replace_missing",
+          "source": "var a = [1, 2]\na.replaceSubrange(0..<1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array replaceSubrange expects a bounded range and with: array"
+        },
+        {
+          "name": "replace_label",
+          "source": "var a = [1, 2]\na.replaceSubrange(0..<1, using: [3])\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array replaceSubrange expects a bounded range and with: array"
+        },
+        {
+          "name": "replace_type",
+          "source": "var a = [1, 2]\na.replaceSubrange(0..<1, with: [true])\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "strided",
+          "source": "var a = [1, 2]\na.removeSubrange(0..<2 by 2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array removeSubrange expects one bounded range"
+        },
+        {
+          "name": "type_args",
+          "source": "var a = [1, 2]\na.removeSubrange<Int64>(0..<1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/array_subrange_methods.phys"
+    },
+    {
+      "name": "array_swap_at",
+      "checks": [
+        {
+          "name": "immutable",
+          "source": "let a = [1, 2]\na.swapAt(0, 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array swapAt requires a mutable var binding"
+        },
+        {
+          "name": "nonarray",
+          "source": "var a = 1\na.swapAt(0, 0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array swapAt requires an array value"
+        },
+        {
+          "name": "missing",
+          "source": "var a = [1, 2]\na.swapAt(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array swapAt expects two positional indices"
+        },
+        {
+          "name": "extra",
+          "source": "var a = [1, 2]\na.swapAt(0, 1, 2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array swapAt expects two positional indices"
+        },
+        {
+          "name": "label",
+          "source": "var a = [1, 2]\na.swapAt(first: 0, 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array swapAt expects two positional indices"
+        },
+        {
+          "name": "type_args",
+          "source": "var a = [1, 2]\na.swapAt<Int64>(0, 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        },
+        {
+          "name": "type",
+          "source": "var a = [1, 2]\na.swapAt(0, true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/array_swap_at.phys"
+    },
+    {
+      "name": "array_while_selection",
+      "checks": [
+        {
+          "name": "prefix_non_array",
+          "source": "let value = 1\nlet result = value.prefix(while: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "prefix\\(while:\\) requires an Array or String value"
+        },
+        {
+          "name": "drop_non_array",
+          "source": "let value = 1\nlet result = value.drop(while: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "drop\\(while:\\) requires an Array or String value"
+        },
+        {
+          "name": "prefix_missing",
+          "source": "let values = [1]\nlet result = values.prefix()\n",
+          "exit_code": 1,
+          "stderr_pattern": "prefix and suffix require one positional count"
+        },
+        {
+          "name": "drop_missing",
+          "source": "let values = [1]\nlet result = values.drop()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array drop expects while: predicate"
+        },
+        {
+          "name": "drop_wrong_label",
+          "source": "func keep(value: Int64) -> Bool:\n    return true\nlet values = [1]\nlet result = values.drop(where: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array drop expects while: predicate"
+        },
+        {
+          "name": "prefix_extra",
+          "source": "func keep(value: Int64) -> Bool:\n    return true\nlet values = [1]\nlet result = values.prefix(while: keep, while: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array prefix expects while: predicate"
+        },
+        {
+          "name": "drop_non_function",
+          "source": "let values = [1]\nlet result = values.drop(while: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array while predicate must be func"
+        },
+        {
+          "name": "prefix_wrong_element",
+          "source": "func keep(value: String) -> Bool:\n    return true\nlet values = [1]\nlet result = values.prefix(while: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array while predicate must be func"
+        },
+        {
+          "name": "drop_wrong_arity",
+          "source": "func keep(a: Int64, b: Int64) -> Bool:\n    return true\nlet values = [1]\nlet result = values.drop(while: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array while predicate must be func"
+        },
+        {
+          "name": "prefix_wrong_result",
+          "source": "func keep(value: Int64) -> Int64:\n    return value\nlet values = [1]\nlet result = values.prefix(while: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array while predicate must be func"
+        },
+        {
+          "name": "drop_explicit_type",
+          "source": "func keep(value: Int64) -> Bool:\n    return true\nlet values = [1]\nlet result = values.drop<Int64>(while: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/array_while_selection.phys"
+    },
+    {
+      "name": "string_compact_map",
+      "checks": [
+        {
+          "name": "non_sequence",
+          "source": "let value = 1\nlet result = value.compactMap(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array compactMap requires an array value"
+        },
+        {
+          "name": "missing",
+          "source": "let result = \"abc\".compactMap()\n",
+          "exit_code": 1,
+          "stderr_pattern": "String compactMap expects one positional transform"
+        },
+        {
+          "name": "named",
+          "source": "func change(value: String) -> String?:\n    return nil\nlet result = \"abc\".compactMap(transform: change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String compactMap expects one positional transform"
+        },
+        {
+          "name": "extra",
+          "source": "func change(value: String) -> String?:\n    return nil\nlet result = \"abc\".compactMap(change, change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String compactMap expects one positional transform"
+        },
+        {
+          "name": "non_function",
+          "source": "let result = \"abc\".compactMap(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String compactMap transform must be func"
+        },
+        {
+          "name": "wrong_element",
+          "source": "func change(value: Int64) -> String?:\n    return nil\nlet result = \"abc\".compactMap(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String compactMap transform must be func"
+        },
+        {
+          "name": "wrong_arity",
+          "source": "func change(a: String, b: String) -> String?:\n    return nil\nlet result = \"abc\".compactMap(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String compactMap transform must be func"
+        },
+        {
+          "name": "non_optional_result",
+          "source": "func change(value: String) -> String:\n    return value\nlet result = \"abc\".compactMap(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String compactMap transform must be func"
+        },
+        {
+          "name": "explicit_type",
+          "source": "func change(value: String) -> String?:\n    return nil\nlet result = \"abc\".compactMap<String>(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/string_compact_map.phys"
+    },
+    {
+      "name": "string_edge_selection",
+      "checks": [
+        {
+          "name": "prefix_missing",
+          "source": "let a = \"abc\"\nlet b = a.prefix()\n",
+          "exit_code": 1,
+          "stderr_pattern": "prefix and suffix require one positional count"
+        },
+        {
+          "name": "suffix_missing",
+          "source": "let a = \"abc\"\nlet b = a.suffix()\n",
+          "exit_code": 1,
+          "stderr_pattern": "prefix and suffix require one positional count"
+        },
+        {
+          "name": "extra",
+          "source": "let a = \"abc\"\nlet b = a.dropFirst(1, 2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "dropFirst and dropLast accept zero or one"
+        },
+        {
+          "name": "label",
+          "source": "let a = \"abc\"\nlet b = a.dropLast(count: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "dropFirst and dropLast accept zero or one"
+        },
+        {
+          "name": "type",
+          "source": "let a = \"abc\"\nlet b = a.prefix(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "type_args",
+          "source": "let a = \"abc\"\nlet b = a.suffix<Int64>(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/string_edge_selection.phys"
+    },
+    {
+      "name": "string_filter",
+      "checks": [
+        {
+          "name": "non_sequence",
+          "source": "let value = 1\nlet result = value.filter(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array filter requires an array value"
+        },
+        {
+          "name": "missing",
+          "source": "let value = \"abc\"\nlet result = value.filter()\n",
+          "exit_code": 1,
+          "stderr_pattern": "String filter expects one positional predicate"
+        },
+        {
+          "name": "named",
+          "source": "func keep(value: String) -> Bool:\n    return true\nlet result = \"abc\".filter(where: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String filter expects one positional predicate"
+        },
+        {
+          "name": "extra",
+          "source": "func keep(value: String) -> Bool:\n    return true\nlet result = \"abc\".filter(keep, keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String filter expects one positional predicate"
+        },
+        {
+          "name": "non_function",
+          "source": "let result = \"abc\".filter(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String filter predicate must be func"
+        },
+        {
+          "name": "wrong_element",
+          "source": "func keep(value: Int64) -> Bool:\n    return true\nlet result = \"abc\".filter(keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String filter predicate must be func"
+        },
+        {
+          "name": "wrong_arity",
+          "source": "func keep(a: String, b: String) -> Bool:\n    return true\nlet result = \"abc\".filter(keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String filter predicate must be func"
+        },
+        {
+          "name": "wrong_result",
+          "source": "func keep(value: String) -> String:\n    return value\nlet result = \"abc\".filter(keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String filter predicate must be func"
+        },
+        {
+          "name": "explicit_type",
+          "source": "func keep(value: String) -> Bool:\n    return true\nlet result = \"abc\".filter<String>(keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/string_filter.phys"
+    },
+    {
+      "name": "string_flat_map",
+      "checks": [
+        {
+          "name": "non_sequence",
+          "source": "let value = 1\nlet result = value.flatMap(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array flatMap requires an array value"
+        },
+        {
+          "name": "missing",
+          "source": "let result = \"abc\".flatMap()\n",
+          "exit_code": 1,
+          "stderr_pattern": "String flatMap expects one positional transform"
+        },
+        {
+          "name": "named",
+          "source": "func change(value: String) -> [String]:\n    return []\nlet result = \"abc\".flatMap(transform: change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String flatMap expects one positional transform"
+        },
+        {
+          "name": "extra",
+          "source": "func change(value: String) -> [String]:\n    return []\nlet result = \"abc\".flatMap(change, change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String flatMap expects one positional transform"
+        },
+        {
+          "name": "non_function",
+          "source": "let result = \"abc\".flatMap(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String flatMap transform must be func"
+        },
+        {
+          "name": "wrong_element",
+          "source": "func change(value: Int64) -> [String]:\n    return []\nlet result = \"abc\".flatMap(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String flatMap transform must be func"
+        },
+        {
+          "name": "wrong_arity",
+          "source": "func change(a: String, b: String) -> [String]:\n    return []\nlet result = \"abc\".flatMap(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String flatMap transform must be func"
+        },
+        {
+          "name": "non_array_result",
+          "source": "func change(value: String) -> String:\n    return value\nlet result = \"abc\".flatMap(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String flatMap transform must be func"
+        },
+        {
+          "name": "explicit_type",
+          "source": "func change(value: String) -> [String]:\n    return []\nlet result = \"abc\".flatMap<String>(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/string_flat_map.phys"
+    },
+    {
+      "name": "string_index",
+      "checks": [
+        {
+          "name": "index_write",
+          "source": "var text = \"abc\"\ntext[0] = \"A\"\n",
+          "exit_code": 1,
+          "stderr_pattern": "String indices and slices are immutable"
+        },
+        {
+          "name": "range_write",
+          "source": "var text = \"abc\"\ntext[0..<2] = \"AB\"\n",
+          "exit_code": 1,
+          "stderr_pattern": "String indices and slices are immutable"
+        },
+        {
+          "name": "stepped_write",
+          "source": "var text = \"abc\"\ntext[0..<3 by 2] = \"AC\"\n",
+          "exit_code": 1,
+          "stderr_pattern": "String indices and slices are immutable"
+        },
+        {
+          "name": "noninteger_index",
+          "source": "let text = \"abc\"\nlet value = text[1.5]\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "count_write",
+          "source": "var text = \"abc\"\ntext.count = 2\n",
+          "exit_code": 1,
+          "stderr_pattern": "Assignment requires a mutable var binding"
+        },
+        {
+          "name": "bytes_write",
+          "source": "var text = \"abc\"\ntext.utf8.count = 2\n",
+          "exit_code": 1,
+          "stderr_pattern": "Assignment requires a mutable var binding"
+        },
+        {
+          "name": "empty_write",
+          "source": "var text = \"abc\"\ntext.isEmpty = true\n",
+          "exit_code": 1,
+          "stderr_pattern": "Assignment requires a mutable var binding"
+        },
+        {
+          "name": "contains_number",
+          "source": "let text = \"abc\"\nlet found = text.contains(2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "contains_named",
+          "source": "let text = \"abc\"\nlet found = text.contains(of: \"a\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "String contains expects exactly one positional argument"
+        },
+        {
+          "name": "first_index_positional",
+          "source": "let text = \"abc\"\nlet found = text.firstIndex(\"a\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "String firstIndex expects of: value"
+        },
+        {
+          "name": "last_index_positional",
+          "source": "let text = \"abc\"\nlet found = text.lastIndex(\"a\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "String lastIndex expects of: value"
+        },
+        {
+          "name": "last_index_number",
+          "source": "let text = \"abc\"\nlet found = text.lastIndex(of: 2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "prefix_named",
+          "source": "let text = \"abc\"\nlet found = text.hasPrefix(of: \"a\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "String hasPrefix expects exactly one positional argument"
+        },
+        {
+          "name": "suffix_number",
+          "source": "let text = \"abc\"\nlet found = text.hasSuffix(2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "replace_positional",
+          "source": "let text = \"abc\"\nlet found = text.replacingOccurrences(\"a\", \"b\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "String replacingOccurrences expects of: search, with: replacement"
+        },
+        {
+          "name": "replace_missing",
+          "source": "let text = \"abc\"\nlet found = text.replacingOccurrences(of: \"a\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "String replacingOccurrences expects of: search, with: replacement"
+        },
+        {
+          "name": "replace_number",
+          "source": "let text = \"abc\"\nlet found = text.replacingOccurrences(of: 1, with: \"b\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "replace_result_number",
+          "source": "let text = \"abc\"\nlet found = text.replacingOccurrences(of: \"a\", with: 2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "split_positional",
+          "source": "let text = \"a,b\"\nlet parts = text.split(\",\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "String split expects separator:"
+        },
+        {
+          "name": "split_missing",
+          "source": "let text = \"a,b\"\nlet parts = text.split()\n",
+          "exit_code": 1,
+          "stderr_pattern": "String split expects separator:"
+        },
+        {
+          "name": "split_number",
+          "source": "let text = \"a,b\"\nlet parts = text.split(separator: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "joined_positional",
+          "source": "let parts = [\"a\", \"b\"]\nlet text = parts.joined(\",\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "String array joined expects separator: value"
+        },
+        {
+          "name": "joined_number",
+          "source": "let parts = [\"a\", \"b\"]\nlet text = parts.joined(separator: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "joined_wrong_array",
+          "source": "let parts = [1, 2]\nlet text = parts.joined(separator: \"-\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "joined requires a \\[String\\] value"
+        }
+      ]
+    },
+    {
+      "name": "string_interpolation",
+      "checks": [
+        {
+          "name": "non_scalar",
+          "source": "let x = \"value \\(Vec2(1,2))\"\n",
+          "exit_code": 1,
+          "stderr_pattern": "String interpolation requires Bool, Int64, Float64 or String"
+        },
+        {
+          "name": "missing_close",
+          "source": "let x = \"value \\(1 + 2\"\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unterminated string"
+        },
+        {
+          "name": "empty_expression",
+          "source": "let x = \"value \\()\"\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expected expression"
+        },
+        {
+          "name": "missing_expression_end",
+          "source": "let x = \"value \\(1 2)\"\n",
+          "exit_code": 1,
+          "stderr_pattern": "after interpolated expression"
+        },
+        {
+          "name": "unknown_name",
+          "source": "let x = \"value \\(missing)\"\n",
+          "exit_code": 1,
+          "stderr_pattern": ":1:18: error: Unknown name"
+        },
+        {
+          "name": "multiline_location",
+          "source": "let x = \"\"\"a\n\\(missing)\n\"\"\"\n",
+          "exit_code": 1,
+          "stderr_pattern": ":2:3: error: Unknown name"
+        },
+        {
+          "name": "lf",
+          "source": "let text = \"\"\"a\n\\(1)\nb\"\"\"\nassert(text == \"a\\n1\\nb\")\n",
+          "mode": "--emit-c",
+          "exit_code": 0,
+          "stderr": "",
+          "stdout_patterns": [
+            "97,10,0\\};",
+            "10,98,0\\};"
+          ]
+        },
+        {
+          "name": "crlf",
+          "source": "let text = \"\"\"a\r\n\\(1)\r\nb\"\"\"\r\nassert(text == \"a\\n1\\nb\")\r\n",
+          "mode": "--emit-c",
+          "exit_code": 0,
+          "stderr": "",
+          "stdout_patterns": [
+            "97,10,0\\};",
+            "10,98,0\\};"
+          ]
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/string_interpolation.phys"
+    },
+    {
+      "name": "string_map",
+      "checks": [
+        {
+          "name": "non_sequence",
+          "source": "let value = 1\nlet result = value.map(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array map requires an array value"
+        },
+        {
+          "name": "missing",
+          "source": "let result = \"abc\".map()\n",
+          "exit_code": 1,
+          "stderr_pattern": "String map expects one positional transform"
+        },
+        {
+          "name": "named",
+          "source": "func change(value: String) -> String:\n    return value\nlet result = \"abc\".map(transform: change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String map expects one positional transform"
+        },
+        {
+          "name": "extra",
+          "source": "func change(value: String) -> String:\n    return value\nlet result = \"abc\".map(change, change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String map expects one positional transform"
+        },
+        {
+          "name": "non_function",
+          "source": "let result = \"abc\".map(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String map transform must be func"
+        },
+        {
+          "name": "wrong_element",
+          "source": "func change(value: Int64) -> String:\n    return String(value)\nlet result = \"abc\".map(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String map transform must be func"
+        },
+        {
+          "name": "wrong_arity",
+          "source": "func change(a: String, b: String) -> String:\n    return a\nlet result = \"abc\".map(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String map transform must be func"
+        },
+        {
+          "name": "void_result",
+          "source": "func change(value: String):\n    print(value)\nlet result = \"abc\".map(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String map transform must be func"
+        },
+        {
+          "name": "explicit_type",
+          "source": "func change(value: String) -> String:\n    return value\nlet result = \"abc\".map<String>(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/string_map.phys"
+    },
+    {
+      "name": "string_predicate_queries",
+      "checks": [
+        {
+          "name": "non_sequence",
+          "source": "let value = 1\nlet result = value.contains(where: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array predicate query requires an array value"
+        },
+        {
+          "name": "contains_missing",
+          "source": "let result = \"abc\".contains(where: )\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expected expression"
+        },
+        {
+          "name": "contains_wrong_label",
+          "source": "func keep(value: String) -> Bool:\n    return true\nlet result = \"abc\".contains(predicate: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String contains expects exactly one positional argument"
+        },
+        {
+          "name": "contains_extra",
+          "source": "func keep(value: String) -> Bool:\n    return true\nlet result = \"abc\".contains(where: keep, where: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String contains expects where: predicate"
+        },
+        {
+          "name": "all_missing",
+          "source": "let result = \"abc\".allSatisfy()\n",
+          "exit_code": 1,
+          "stderr_pattern": "String allSatisfy expects one positional predicate"
+        },
+        {
+          "name": "all_named",
+          "source": "func keep(value: String) -> Bool:\n    return true\nlet result = \"abc\".allSatisfy(where: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String allSatisfy expects one positional predicate"
+        },
+        {
+          "name": "contains_non_function",
+          "source": "let result = \"abc\".contains(where: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String predicate query requires func"
+        },
+        {
+          "name": "all_wrong_element",
+          "source": "func keep(value: Int64) -> Bool:\n    return true\nlet result = \"abc\".allSatisfy(keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String predicate query requires func"
+        },
+        {
+          "name": "contains_wrong_arity",
+          "source": "func keep(a: String, b: String) -> Bool:\n    return true\nlet result = \"abc\".contains(where: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String predicate query requires func"
+        },
+        {
+          "name": "all_wrong_result",
+          "source": "func keep(value: String) -> String:\n    return value\nlet result = \"abc\".allSatisfy(keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String predicate query requires func"
+        },
+        {
+          "name": "explicit_type",
+          "source": "func keep(value: String) -> Bool:\n    return true\nlet result = \"abc\".contains<String>(where: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/string_predicate_queries.phys"
+    },
+    {
+      "name": "string_predicate_search",
+      "checks": [
+        {
+          "name": "non_sequence",
+          "source": "let value = 1\nlet result = value.first(where: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array predicate query requires an array value"
+        },
+        {
+          "name": "wrong_label",
+          "source": "func keep(value: String) -> Bool:\n    return true\nlet result = \"abc\".last(predicate: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown method"
+        },
+        {
+          "name": "extra",
+          "source": "func keep(value: String) -> Bool:\n    return true\nlet result = \"abc\".first(where: keep, where: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String predicate search expects where: predicate"
+        },
+        {
+          "name": "non_function",
+          "source": "let result = \"abc\".first(where: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String predicate query requires func"
+        },
+        {
+          "name": "wrong_element",
+          "source": "func keep(value: Int64) -> Bool:\n    return true\nlet result = \"abc\".lastIndex(where: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String predicate query requires func"
+        },
+        {
+          "name": "wrong_arity",
+          "source": "func keep(a: String, b: String) -> Bool:\n    return true\nlet result = \"abc\".firstIndex(where: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String predicate query requires func"
+        },
+        {
+          "name": "wrong_result",
+          "source": "func keep(value: String) -> String:\n    return value\nlet result = \"abc\".last(where: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String predicate query requires func"
+        },
+        {
+          "name": "explicit_type",
+          "source": "func keep(value: String) -> Bool:\n    return true\nlet result = \"abc\".first<String>(where: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/string_predicate_search.phys"
+    },
+    {
+      "name": "string_reduce",
+      "checks": [
+        {
+          "name": "non_sequence",
+          "source": "let value = 1\nlet result = value.reduce(0, 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "reduce requires an Array or String value"
+        },
+        {
+          "name": "missing_combine",
+          "source": "let result = \"abc\".reduce(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String reduce expects initial value and positional combine function"
+        },
+        {
+          "name": "named",
+          "source": "func sum(total: Int64, value: String) -> Int64:\n    return total + value.utf8.count\nlet result = \"abc\".reduce(initial: 0, combine: sum)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String reduce expects initial value and positional combine function"
+        },
+        {
+          "name": "extra",
+          "source": "func sum(total: Int64, value: String) -> Int64:\n    return total + value.utf8.count\nlet result = \"abc\".reduce(0, sum, sum)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String reduce expects initial value and positional combine function"
+        },
+        {
+          "name": "non_function",
+          "source": "let result = \"abc\".reduce(0, 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String reduce combine must be func"
+        },
+        {
+          "name": "wrong_element",
+          "source": "func combine(total: Int64, value: Int64) -> Int64:\n    return total\nlet result = \"abc\".reduce(0, combine)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String reduce combine must be func"
+        },
+        {
+          "name": "wrong_accumulator",
+          "source": "func combine(total: String, value: String) -> Int64:\n    return 1\nlet result = \"abc\".reduce(0, combine)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String reduce combine must be func"
+        },
+        {
+          "name": "wrong_arity",
+          "source": "func combine(value: String) -> Int64:\n    return 0\nlet result = \"abc\".reduce(0, combine)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String reduce combine must be func"
+        },
+        {
+          "name": "void_result",
+          "source": "func combine(total: Int64, value: String):\n    print(value)\nlet result = \"abc\".reduce(0, combine)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String reduce combine must be func"
+        },
+        {
+          "name": "wrong_initial",
+          "source": "func sum(total: Int64, value: String) -> Int64:\n    return total + value.utf8.count\nlet result = \"abc\".reduce(\"bad\", sum)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "explicit_type",
+          "source": "func sum(total: Int64, value: String) -> Int64:\n    return total + value.utf8.count\nlet result = \"abc\".reduce<Int64>(0, sum)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/string_reduce.phys"
+    },
+    {
+      "name": "string_repeated",
+      "checks": [
+        {
+          "name": "missing_count",
+          "source": "let text = String(repeating: \"a\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "String\\(repeating:count:\\) expects"
+        },
+        {
+          "name": "wrong_label",
+          "source": "let text = String(repeating: \"a\", times: 2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String\\(repeating:count:\\) expects"
+        },
+        {
+          "name": "wrong_type",
+          "source": "let text = String(repeating: \"a\", count: true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "wrong_repeating_type",
+          "source": "let text = String(repeating: 3, count: 2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "old_method_name",
+          "source": "let text = \"a\".repeated(count: 2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown method for this receiver type"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/string_repeated.phys"
+    },
+    {
+      "name": "string_split",
+      "checks": [
+        {
+          "name": "missing",
+          "source": "let text = \"a,b\"\nlet parts = text.split()\n",
+          "exit_code": 1,
+          "stderr_pattern": "String split expects separator:"
+        },
+        {
+          "name": "label",
+          "source": "let text = \"a,b\"\nlet parts = text.split(by: \",\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "String split expects separator:"
+        },
+        {
+          "name": "max_type",
+          "source": "let text = \"a,b\"\nlet parts = text.split(separator: \",\", maxSplits: true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "omit_type",
+          "source": "let text = \"a,b\"\nlet parts = text.split(separator: \",\", omittingEmptySubsequences: 2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "duplicate",
+          "source": "let text = \"a,b\"\nlet parts = text.split(separator: \",\", omittingEmptySubsequences: true, omittingEmptySubsequences: false)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String split expects separator:"
+        }
+      ]
+    },
+    {
+      "name": "string_trimmed",
+      "checks": [
+        {
+          "name": "arguments",
+          "source": "let text = \"x\".trimmingCharacters(in: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String trimmingCharacters expects in: CharacterSet.whitespacesAndNewlines"
+        },
+        {
+          "name": "old_method",
+          "source": "let text = \"x\".trimmed()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown method for this receiver type"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/string_trimmed.phys"
+    },
+    {
+      "name": "string_while_selection",
+      "checks": [
+        {
+          "name": "prefix_non_sequence",
+          "source": "let value = 1\nlet result = value.prefix(while: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "prefix\\(while:\\) requires an Array or String value"
+        },
+        {
+          "name": "drop_non_sequence",
+          "source": "let value = 1\nlet result = value.drop(while: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "drop\\(while:\\) requires an Array or String value"
+        },
+        {
+          "name": "drop_missing",
+          "source": "let value = \"abc\"\nlet result = value.drop()\n",
+          "exit_code": 1,
+          "stderr_pattern": "String drop expects while: predicate"
+        },
+        {
+          "name": "drop_wrong_label",
+          "source": "func keep(value: String) -> Bool:\n    return true\nlet value = \"abc\"\nlet result = value.drop(where: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String drop expects while: predicate"
+        },
+        {
+          "name": "prefix_extra",
+          "source": "func keep(value: String) -> Bool:\n    return true\nlet value = \"abc\"\nlet result = value.prefix(while: keep, while: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String prefix expects while: predicate"
+        },
+        {
+          "name": "drop_non_function",
+          "source": "let value = \"abc\"\nlet result = value.drop(while: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String while predicate must be func"
+        },
+        {
+          "name": "prefix_wrong_element",
+          "source": "func keep(value: Int64) -> Bool:\n    return true\nlet value = \"abc\"\nlet result = value.prefix(while: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String while predicate must be func"
+        },
+        {
+          "name": "drop_wrong_arity",
+          "source": "func keep(a: String, b: String) -> Bool:\n    return true\nlet value = \"abc\"\nlet result = value.drop(while: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String while predicate must be func"
+        },
+        {
+          "name": "prefix_wrong_result",
+          "source": "func keep(value: String) -> String:\n    return value\nlet text = \"abc\"\nlet result = text.prefix(while: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String while predicate must be func"
+        },
+        {
+          "name": "drop_explicit_type",
+          "source": "func keep(value: String) -> Bool:\n    return true\nlet text = \"abc\"\nlet result = text.drop<String>(while: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/string_while_selection.phys"
+    }
+  ],
+  "programs": [
+    {
+      "name": "array_repeated_negative",
+      "source": "tests/fixtures/language/array_repeated_negative.phys",
+      "exit_code": 70,
+      "stderr_pattern": "array_repeated_negative.phys:1:[0-9]+: runtime error: Array repetition count must be nonnegative"
+    },
+    {
+      "name": "string_repeated_negative",
+      "source": "tests/fixtures/language/string_repeated_negative.phys",
+      "exit_code": 70,
+      "stderr_pattern": "string_repeated_negative.phys:1:[0-9]+: runtime error: String repetition count must be nonnegative"
+    },
+    {
+      "name": "array_concat_runtime",
+      "source": "tests/fixtures/language/array_concat.phys"
+    },
+    {
+      "name": "array_insert_runtime",
+      "source": "tests/fixtures/language/array_insert.phys"
+    },
+    {
+      "name": "array_contains_runtime",
+      "source": "tests/fixtures/language/array_contains.phys"
+    },
+    {
+      "name": "array_first_index_strings_runtime",
+      "source": "tests/fixtures/language/array_first_index_strings.phys"
+    },
+    {
+      "name": "array_reversed_runtime",
+      "source": "tests/fixtures/language/array_reversed.phys"
+    },
+    {
+      "name": "array_sort_by_runtime",
+      "source": "tests/fixtures/language/array_sort_by.phys"
+    },
+    {
+      "name": "array_safe_index_runtime",
+      "source": "tests/fixtures/language/array_safe_index.phys"
+    },
+    {
+      "name": "string_safe_index_runtime",
+      "source": "tests/fixtures/language/string_safe_index.phys"
+    },
+    {
+      "name": "string_iteration_runtime",
+      "source": "tests/fixtures/language/string_iteration.phys"
+    },
+    {
+      "name": "string_ownership_runtime",
+      "source": "tests/fixtures/language/string_ownership.phys"
+    },
+    {
+      "name": "array_safe_remove_module",
+      "source": "tests/fixtures/language/array_safe_remove_module.phys",
+      "mode": "--emit-experiment",
+      "harness": "tests/test_language_array_safe_remove_module.c"
     }
   ]
 }

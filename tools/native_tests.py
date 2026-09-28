@@ -29,6 +29,8 @@ class Case:
     stderr_pattern: str | None = None
     language_source: str | None = None
     language_checks: tuple = ()
+    language_mode: str = "--emit-c"
+    language_harness: str | None = None
 
 
 def catalog():
@@ -83,9 +85,20 @@ def catalog():
     if corpus.get("format") != 1:
         raise RuntimeError("Unsupported native language test corpus")
     for group in corpus["groups"]:
-        cases.append(Case("language_" + group["name"] + "_runtime", (), ("core",),
-                          language_source=group["runtime_source"]))
+        if not group["checks"]:
+            raise RuntimeError(f"Language group has no checks: {group['name']}")
+        if "runtime_source" in group:
+            cases.append(Case("language_" + group["name"] + "_runtime", (), ("core",),
+                              language_source=group["runtime_source"]))
         cases.append(Case("language_" + group["name"], (), language_checks=tuple(group["checks"])))
+    for program in corpus.get("programs", []):
+        cases.append(Case("language_" + program["name"], (), ("core",),
+                          language_source=program["source"], language_mode=program.get("mode", "--emit-c"),
+                          language_harness=program.get("harness"), exit_code=program.get("exit_code", 0),
+                          stdout=program.get("stdout"), stderr_pattern=program.get("stderr_pattern")))
+    names = [case.name for case in cases]
+    if len(set(names)) != len(names):
+        raise RuntimeError("Duplicate native test names")
     return cases
 
 
@@ -94,7 +107,7 @@ def language_case(case, builder, libraries, source, work):
     compiler = builder.bin / ("physimc.exe" if sys.platform == "win32" else "physimc")
     steps = []
     if case.language_source:
-        emitted = execute_case([str(compiler), "--emit-c", str(source / case.language_source)],
+        emitted = execute_case([str(compiler), case.language_mode, str(source / case.language_source)],
                                work=work, env=builder.env, timeout=30)
         code = emitted.pop("stdout", "")
         steps.append(emitted)
@@ -110,9 +123,17 @@ def language_case(case, builder, libraries, source, work):
                 pending.replace(generated)
             try:
                 program = builder.executable("physim-test-" + case.name, [str(generated)],
-                                             [libraries[name] for name in case.libraries], language=True)
-                steps.append(execute_case([str(program)], work=work, env=builder.env,
-                                          timeout=case.timeout))
+                                             [libraries[name] for name in case.libraries], language=True,
+                                             module=bool(case.language_harness))
+                command = [str(program)]
+                if case.language_harness:
+                    harness = builder.executable("physim-test-" + case.name + "-harness",
+                                                 [case.language_harness],
+                                                 [libraries["platform"], libraries["core"]])
+                    command.insert(0, str(harness))
+                steps.append(execute_case(command, work=work, env=builder.env, timeout=case.timeout,
+                                          exit_code=case.exit_code, stdout=case.stdout,
+                                          stderr_pattern=case.stderr_pattern))
             except (OSError, RuntimeError) as error:
                 steps.append({"status": "build_failed", "reason": str(error)})
         else:
@@ -121,9 +142,10 @@ def language_case(case, builder, libraries, source, work):
         for check in case.language_checks:
             path = work / (check["name"] + ".phys")
             path.write_text(check["source"], encoding="utf-8", newline="\n")
-            result = execute_case([str(compiler), "--check", str(path)], work=work,
+            result = execute_case([str(compiler), check.get("mode", "--check"), str(path)], work=work,
                                   env=builder.env, timeout=15, exit_code=check["exit_code"],
-                                  stdout=check.get("stdout"), stderr_pattern=check["stderr_pattern"])
+                                  stdout=check.get("stdout"), stderr_pattern=check.get("stderr_pattern"),
+                                  stderr=check.get("stderr"), stdout_patterns=check.get("stdout_patterns", ()))
             result["name"] = check["name"]
             steps.append(result)
     failures = [step for step in steps if step["status"] != "passed"]
@@ -133,7 +155,7 @@ def language_case(case, builder, libraries, source, work):
 
 
 def execute_case(command, *, work: Path, env, timeout: float, exit_code=0,
-                 stdout=None, stderr_pattern=None):
+                 stdout=None, stderr_pattern=None, stderr=None, stdout_patterns=()):
     """Keep expected failures distinct from crashes, timeouts and launch failures."""
     started = time.monotonic()
     result = {"command": [str(p) for p in command], "status": "failed"}
@@ -148,6 +170,10 @@ def execute_case(command, *, work: Path, env, timeout: float, exit_code=0,
             result["reason"] = "Standard output did not match the expected text"
         elif stderr_pattern is not None and not re.search(stderr_pattern, error):
             result["reason"] = "Expected diagnostic was missing"
+        elif stderr is not None and error != stderr:
+            result["reason"] = "Standard error did not match the expected text"
+        elif any(not re.search(pattern, output) for pattern in stdout_patterns):
+            result["reason"] = "Expected output pattern was missing"
         else:
             result["status"] = "passed"
     except subprocess.TimeoutExpired as error:

@@ -147,7 +147,17 @@ Die folgende Erweiterung ergänzt elf Sprach-Laufzeitprogramme und elf Gruppen m
 86 Diagnosefällen. Der Katalog umfasst damit 73 Tests, davon 63 ohne SDL.
 Die 29 Sprachtests bestehen lokal mit MSVC Debug und Clang Release; elf bestehende
 CTest-Einstiegspunkte bestehen mit dem gemeinsamen JSON-Katalog ebenfalls.
-Ein CI-Nachweis für diese Erweiterung steht noch aus.
+Diese Erweiterung besteht im direkten Build- und Testschritt aller acht
+Plattformkombinationen in [CI-Lauf 36473305112](https://github.com/PhysicSimulator/physim/actions/runs/36473305112)
+zum Commit `199a8f7`. Der Nachweis gilt für diesen Schritt, nicht automatisch für
+alle nachfolgenden Prüfungen des CI-Laufs.
+
+Die nächste Erweiterung umfasst insgesamt 134 direkte Tests, davon 124 ohne SDL.
+Alle 134 bestehen lokal mit MSVC Debug; die 90 Sprachtests bestehen zusätzlich
+mit Clang Release. Alle 82 betroffenen CTest-Prüfungen bestehen ebenfalls. Enthalten sind
+36 Array-/Stringgruppen mit 299 Compilerprüfungen und 47 ausgeführte Programme,
+einschließlich zweier erwarteter Laufzeitfehler und eines Experimentmoduls.
+Für diesen erweiterten Satz steht der plattformübergreifende CI-Nachweis noch aus.
 Weitere Sprach-, Runner- und Grafikabläufe sind noch an CTest gebunden.
 
 ## Weitere Änderungen prüfen

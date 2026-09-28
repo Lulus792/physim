@@ -63,7 +63,19 @@ CTest-Diagnoseprüfungen bestehen mit demselben JSON-Katalog weiterhin. Der Buil
 prüft erzeugte C-Quellen unter Unicodepfaden und hält ihre Objektdateien im Buildordner.
 Der Testläufer prüft außerdem, dass fehlgeschlagene Übersetzung keinen alten Code
 ausführt und ein Diagnosefehler spätere Fälle nicht unterdrückt. Die neuen
-Sprachgruppen benötigen noch ihren eigenen plattformübergreifenden CI-Nachweis.
+Sprachgruppen bestehen inzwischen im direkten Build- und Testschritt aller acht
+Plattformkombinationen zum Commit `199a8f7`.
+
+Die folgende Erweiterung übernimmt alle verbleibenden Array-/String-Diagnosegruppen,
+weitere vorhandene Laufzeitprogramme und das Experimentmodul für sicheres Entfernen
+von Arrayelementen. Der direkte Katalog enthält damit 134 Tests, davon 124 ohne SDL.
+36 Gruppen prüfen 297 abgelehnte Programme sowie zwei Ausgaben mit LF-/CRLF-Eingabe;
+47 Programme prüfen normales Verhalten, zwei erwartete Laufzeitfehler und den
+Modulablauf einschließlich Reset, Szene und Freigabe. Alle 134 direkten Tests bestehen
+lokal mit MSVC Debug, die 90 Sprachtests zusätzlich mit Clang Release. Alle 82
+betroffenen CTest-Prüfungen bestehen ebenfalls. Die Einstiegspunkte verwenden denselben
+Katalog; die Umwandlung bereits vorhandener CRLF-Zeilenenden wurde für CMake unter
+Windows korrigiert. Der Plattformnachweis für diese Erweiterung steht noch aus.
 
 | Bereich | Implementiert | Noch offen |
 | --- | --- | --- |
