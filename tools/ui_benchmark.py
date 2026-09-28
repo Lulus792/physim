@@ -44,9 +44,13 @@ def main():
         "percentiles": "nearest rank",
     }
     root = Path(__file__).resolve().parent.parent
+    sources = [root / "tools/build.py", root / "tools/benchmark_build.h",
+               root / "tools/ui_benchmark.c", Path(__file__).resolve()]
+    if (root / "CMakeLists.txt").is_file():
+        sources.append(root / "CMakeLists.txt")
     metadata["working_tree_source_sha256"] = {
-        str(path.relative_to(root)): digest(path) for path in sorted(
-            [root / "CMakeLists.txt", root / "tools/ui_benchmark.c", Path(__file__).resolve()]
+        path.relative_to(root).as_posix(): digest(path) for path in sorted(
+            sources
             + [p for p in (root / "app").iterdir() if p.suffix in (".c", ".h", ".inc")])
     }
     (output / "metadata.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")

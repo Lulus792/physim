@@ -8,15 +8,14 @@ Der Benchmark verändert keine Simulations-, Speicher- oder Recovery-Einstellung
 Er ist optional und benötigt keine Oberfläche oder zusätzlichen C-Bibliotheken.
 
 ```powershell
-cmake -S . -B build-perf -DPHYSIM_BUILD_APP=OFF -DPHYSIM_BUILD_BENCHMARKS=ON
-cmake --build build-perf --config Release --parallel
-ctest --test-dir build-perf -C Release -R benchmark_smoke --output-on-failure
+python tools/build.py --no-app --benchmarks --config Release --build-dir build-perf --test --test-filter 'benchmark_*'
 python tools/benchmark.py build-perf/bin/physim-benchmark.exe --output build-perf/results --samples 100000 --repeats 5
 ```
 
-Unter Linux zusätzlich `-DCMAKE_BUILD_TYPE=Release` konfigurieren, `--config Release`
-weglassen und den Programmnamen ohne `.exe` verwenden. Der Python-Wrapper benötigt
-Python 3.9 oder neuer und nur die Standardbibliothek. Ohne Python funktioniert
+Unter Linux und macOS dieselben Befehle mit `python3` statt `python` und den
+Programmnamen ohne `.exe` verwenden. Der direkte Build benötigt Python 3.10+
+und einen C17-Compiler; SDL, CMake und Ninja werden nicht benötigt.
+Der Python-Wrapper verwendet nur die Standardbibliothek. Nach dem Build funktioniert
 `physim-benchmark 100000 5` direkt; es schreibt CSV auf stdout und Diagnosen auf stderr.
 
 ## Messfälle und Referenzen
@@ -50,6 +49,9 @@ Der Wrapper archiviert Rohdaten, stderr, Median/Minimum/Maximum, Scratchvolumen,
 OS/CPU-Identifikation, Compiler, Buildkonfiguration sowie den SHA-256-Fingerabdruck
 der ausführbaren Datei. Zusätzlich erfasst er Hashes des aktuellen Quellstands;
 diese ersetzen keinen Buildnachweis. Vor einer Abnahmemessung stets neu bauen.
+Die Compilerkennung kommt unmittelbar vom übersetzenden Compiler. Die neue
+Kennung kann von älteren CMake-Messungen abweichen; in diesem Fall eine neue
+Baseline erstellen. Quellpfade in den Metadaten verwenden auf allen Plattformen `/`.
 Alle Wiederholungen einschließlich der ersten bleiben enthalten. Es werden keine
 OS-Caches geleert; die Leser laufen nach dem Schreiben mit typischerweise warmem Cache.
 

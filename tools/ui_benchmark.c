@@ -1,4 +1,5 @@
 /* Real SDL/Nuklear/OpenGL UI workloads. No physics or source projects are run. */
+#include "benchmark_build.h"
 #include "platform.h"
 #include "ui.h"
 #include <math.h>

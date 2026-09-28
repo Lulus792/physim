@@ -1,6 +1,6 @@
 # Umsetzungsstand
 
-Stand: erster Entwicklungsdurchstich, ergänzt am 2026-09-28. Der Projektplan ist die Roadmap;
+Stand: erster Entwicklungsdurchstich, ergänzt am 2026-09-29. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
 Aktueller [Plattformnachweis](platform-validation.md): Ubuntu 24.04 mit GCC und Clang
@@ -202,7 +202,31 @@ Erfolgsmarkierungen und veränderte Dateien. Drei CTest-Vergleiche für Menübed
 Diagramme und ein gemischtes C-/Physim-Projekt bestehen ebenfalls.
 Linux und beide macOS-Architekturen
 erhalten eigene direkte Grafikschritte in der CI; deren Nachweis steht noch aus.
-Die drei Benchmarks bleiben vorerst an CMake gebunden.
+Die drei Benchmarks waren zu diesem Stand noch an CMake gebunden.
+
+`benchmark_smoke`, `benchmark_driver` und `ui_rendering` sind ebenfalls auf den
+direkten Katalog übertragen. `--benchmarks` baut die optionalen Messprogramme;
+die Tests bauen sie bei Bedarf automatisch. Compilerkennung und Profil stammen
+aus dem C-Programm. Messmetadaten erfassen den direkten Builder und benötigen
+keine CMake-Konfiguration. Der Regressionstest prüft dies in einem eigenen
+Quellordner ohne CMake-Datei und kontrolliert weiterhin ungültige Eingaben,
+veränderte Baselines, Regressionen und erhaltene Fehlerausgaben.
+Alle drei Prüfungen bestehen mit MSVC Debug und Clang Release sowie über CTest.
+Die beiden Prüfungen ohne Fenster bestehen zusätzlich im SDL-freien MSVC-Release-Build.
+Die drei UI-Referenzbilder stimmen zwischen MSVC und Clang bytegenau überein;
+nach dem Aufwärmen entstehen keine neuen Zeichenpuffer-Allokationen.
+Der Katalog umfasst nun 493 Prüfungen ohne Fenster (482 ohne SDL) und 35 Grafikabläufe.
+Der direkte Buildtest prüft außerdem den Neubau nach Änderungen privater Toolheader.
+Die vollständige Ablösung der CMake-CI einschließlich Sanitizer- und SDK-Abnahmen
+bleibt offen.
+
+Die Grafik-CI zum Stand `a621b5b` besteht auf macOS Apple Silicon. Linux GCC und
+Clang bestehen jeweils 33 von 34 Abläufen; nur der zuerst gestartete Auftriebstest
+endet nach 150 Sekunden ohne App-Ausgabe im Timeout. Die Ursache ist noch nicht
+belegt. Der Linux-Aufruf wartet jetzt ausdrücklich auf einen lebenden Fenstermanager;
+zusätzliche App-Testprotokolle zeigen Initialisierung und Phasenwechsel und bleiben
+auch bei Timeout erhalten. Die Bereitschaftsprüfung wird gegen fehlende, ungültige
+und veraltete Fenstermanager-Einträge geprüft. Die erneute Linux-CI steht aus.
 
 | Bereich | Implementiert | Noch offen |
 | --- | --- | --- |

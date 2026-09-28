@@ -21,7 +21,7 @@ def main():
     spec.loader.exec_module(module)
     args.work.mkdir(parents=True, exist_ok=True)
     source = Path(tempfile.mkdtemp(prefix="bootstrap source ä ", dir=args.work)).resolve()
-    for name in ("src", "include", "app", "tests"):
+    for name in ("src", "include", "app", "tests", "tools"):
         (source / name).mkdir()
     shutil.copyfile(repo / "app/utf8.manifest", source / "app/utf8.manifest")
     (source / "include/value.h").write_text("#define VALUE 1\n", encoding="utf-8")
@@ -105,8 +105,16 @@ def main():
                 raise AssertionError("Concurrent build was allowed")
         except RuntimeError:
             pass
+    tool_header = source / "tools/version.h"
+    (source / "tools/probe.c").write_text('#include "version.h"\nint main(void) { return TOOL_VERSION; }\n', encoding="utf-8")
+    for code in (0, 77):
+        tool_header.write_text(f"#define TOOL_VERSION {code}\n", encoding="utf-8")
+        with module.build_lock(options.build_dir):
+            builder = module.Builder(options, env)
+            tool_program = builder.executable("tool-header-probe", ["tools/probe.c"], [])
+        assert subprocess.run([str(tool_program)]).returncode == code, "Tool header change was not rebuilt"
     assert not list(source.rglob("CMake*"))
-    assert {p.name for p in source.iterdir()} == {"src", "include", "app", "tests", "build"}
+    assert {p.name for p in source.iterdir()} == {"src", "include", "app", "tests", "tools", "build"}
     print("Direct build: Unicode/generated paths, incremental headers, failure recovery, artifact integrity and lock passed")
 
 

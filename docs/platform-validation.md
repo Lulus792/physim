@@ -134,8 +134,8 @@ Mac-Notarisierung bleiben offen.
 
 ## Direkter Testläufer
 
-Der direkte Katalog umfasst **491 Tests ohne Fenster**, davon 480 ohne SDL,
-und zusätzlich **34 Fenster- und Grafiktests** unter `--test-display`.
+Der direkte Katalog umfasst **493 Tests ohne Fenster**, davon 482 ohne SDL,
+und zusätzlich **35 Fenster- und Grafiktests** unter `--test-display`.
 Sieben zuvor übertragene Prüfungen
 für Tutorialquellen, API-Referenz, PNG-Dekodierung und Projektbuild bestehen lokal
 mit MSVC Debug, Clang Release und über CTest. Zum Stand `a051ea0` besteht auch der
@@ -165,8 +165,22 @@ Dokumentwiederherstellung, Autosave und der vollständige Sprachablauf.
 Die Projekt-Buildprotokolle bestätigen dabei Clang als Compiler.
 Drei zusätzliche CTest-Vergleiche für `toolbar_small`, `plot_workflow` und
 `language_mixed_workflow` bestehen mit den neu gebauten MSVC-Debug-Programmen.
-Der direkte Grafiknachweis auf Linux und beiden macOS-Architekturen steht noch aus;
-die CI enthält dafür nun eigene Schritte mit denselben 34 Fällen.
+Im [CI-Lauf zu `a621b5b`](https://github.com/PhysicSimulator/physim/actions/runs/36488141869)
+besteht der direkte Grafikschritt auf macOS Apple Silicon. Linux GCC und Clang
+bestehen jeweils 33 von 34 Fällen; der erste Auftriebstest endet nach 150 Sekunden
+ohne App-Ausgabe im Timeout. Die Ursache ist noch offen. Der Linux-Aufruf wartet
+nun vor dem App-Start auf den Fenstermanager; zusätzliche App-Testprotokolle halten
+Initialisierung und Phasenwechsel auch bei Zeitüberschreitung fest. Die erneute
+Linux-CI und der Grafiknachweis für macOS Intel stehen zum Prüfzeitpunkt aus.
+
+Die drei ergänzten Benchmark-Prüfungen bestehen lokal mit MSVC Debug, Clang Release
+und über CTest. Der SDL-freie MSVC-Release-Build besteht beide Prüfungen ohne Fenster.
+Die Referenzbilder für leere Ansicht, viele Bedienelemente und acht Kurven sind
+zwischen den beiden Compilern bytegleich. In allen drei Messfällen entstehen nach
+dem Aufwärmen keine weiteren Zeichenpuffer-Allokationen. Die bisherigen Prüfungen
+für Export, Größenwechsel, Referenzwerte und Vergleichsfehler bleiben erhalten.
+Dies sind Funktionsprüfungen; die parallel zu Builds gemessenen Zeiten sind keine
+Performance-Baseline. Der CI-Nachweis der neuen Benchmarks steht noch aus.
 
 Die Pendelreferenzen prüfen jeweils 4001 Messpunkte, Energiedrift und Periodendauer
 gegen eine analytische Referenz. MSVC und Clang liefern für RK4 eine Periodendauer
@@ -207,8 +221,8 @@ GCC/Clang sowie macOS auf Apple Silicon/Intel.
 
 Die ursprünglichen 51 C-Tests bestanden auch lokal mit MSVC Debug; die 41 SDL-freien
 Fälle zusätzlich mit Clang Release. Der vollständige Satz mit 134 Tests bestand
-lokal mit MSVC Debug. Die drei Leistungsmessungen einschließlich des Render-Benchmarks
-sind noch an CTest gebunden.
+lokal mit MSVC Debug. Die CMake-CI bleibt bis zur vollständigen Übertragung und
+Abnahme ihrer Sanitizer- und SDK-Prüfungen erhalten.
 
 ## Weitere Änderungen prüfen
 

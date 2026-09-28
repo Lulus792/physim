@@ -148,6 +148,8 @@ class Builder:
         self.headers = digest_files(headers)
         self.test_headers = digest_files(sorted(p for p in (ROOT / "tests").rglob("*")
                                                 if p.suffix in (".h", ".inc") and p.is_file()))
+        self.tool_headers = digest_files(sorted(p for p in (ROOT / "tools").rglob("*")
+                                                if p.suffix in (".h", ".inc") and p.is_file()))
         self.toolchain = digest_files([Path(self.cc), Path(self.ar)])
         self.environment = {k: env.get(k, "") for k in
                             ("INCLUDE", "LIB", "CL", "_CL_", "CPATH", "C_INCLUDE_PATH", "SDKROOT", "MACOSX_DEPLOYMENT_TARGET")}
@@ -205,6 +207,8 @@ class Builder:
                 command.append("-DNDEBUG")
             command += [str(path), "-o", str(temporary)]
         headers = self.headers + (self.test_headers if path.is_relative_to(ROOT / "tests") else "")
+        if path.is_relative_to(ROOT / "tools"):
+            headers += self.tool_headers
         changed = self.execute(output, command, [path], headers)
         if changed:
             print(f"Compiled {source}", flush=True)
@@ -240,7 +244,7 @@ class Builder:
                         "/PDBALTPATH:" + output.with_suffix(".pdb").name,
                         "user32.lib", "shell32.lib", "advapi32.lib"]
             inputs += [manifest]
-            if name == "physim":
+            if name in ("physim", "physim-ui-benchmark"):
                 command.append("dwmapi.lib")
             if module:
                 command.insert(1, "/LD")
@@ -258,6 +262,16 @@ class Builder:
                 os.replace(temporary.with_suffix(".pdb"), output.with_suffix(".pdb"))
             print(f"Linked {output.name}", flush=True)
         return output
+
+    def benchmark(self, name, libraries):
+        if name == "physim-benchmark":
+            return self.executable(name, ["tools/benchmark.c"], [libraries["platform"], libraries["core"]])
+        if name == "physim-ui-benchmark":
+            return self.executable(name, ["tools/ui_benchmark.c", "app/graphics.c", "app/ui_geometry.c",
+                                         "app/ui_backend.c", "app/ui_sdl.c", "app/png.c"],
+                                   [libraries["platform"], libraries["zlib"], libraries["core"]],
+                                   sdl=True, defines=("Z_PREFIX",))
+        raise RuntimeError(f"Unknown benchmark target: {name}")
 
     def build(self):
         products = []
@@ -283,6 +297,10 @@ class Builder:
                             [project, batch, platform, language, zlib, core], sdl=True,
                             defines=("Z_PREFIX", f'PS_SOURCE_DIR="{ROOT.as_posix()}"')))
             products.append(self.runtime)
+        if self.args.benchmarks:
+            self.benchmark("physim-benchmark", libraries)
+            if not self.args.no_app:
+                self.benchmark("physim-ui-benchmark", libraries)
         if self.args.test or self.args.test_display:
             spec = importlib.util.spec_from_file_location("native_tests", Path(__file__).with_name("native_tests.py"))
             tests = importlib.util.module_from_spec(spec)
@@ -353,6 +371,7 @@ def main() -> int:
     parser.add_argument("--sdl", type=Path, help="SDL3 installation prefix")
     parser.add_argument("--no-app", action="store_true", help="Build the library, language compiler and runners without SDL")
     parser.add_argument("--jobs", type=int, default=min(os.cpu_count() or 1, 8))
+    parser.add_argument("--benchmarks", action="store_true", help="Build performance tools; --no-app omits the OpenGL benchmark")
     test_mode = parser.add_mutually_exclusive_group()
     test_mode.add_argument("--test", action="store_true", help="Run tests without windows or CTest")
     test_mode.add_argument("--test-display", action="store_true", help="Run window and graphics tests (requires a graphical desktop)")

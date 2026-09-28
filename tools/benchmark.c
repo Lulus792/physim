@@ -1,3 +1,4 @@
+#include "benchmark_build.h"
 #include "physim/report.h"
 #include "platform.h"
 #include <math.h>

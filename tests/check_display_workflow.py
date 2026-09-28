@@ -56,6 +56,7 @@ class Workflow:
     def __init__(self, app, work, root, small, compiler=None):
         self.app, self.work, self.root = app, work, root
         self.env = dict(os.environ)
+        self.env["PHYSIM_TEST_TRACE"] = "1"
         self.env.pop("PHYSIM_TEST_SMALL", None)
         if small:
             self.env["PHYSIM_TEST_SMALL"] = "1"
@@ -74,6 +75,8 @@ class Workflow:
             def output(value):
                 return value.decode("utf-8", errors="replace") if isinstance(value, bytes) else value or ""
             step.update(status="timeout", stdout=output(error.stdout), stderr=output(error.stderr))
+            print(step["stdout"], end="", flush=True)
+            print(step["stderr"], end="", file=sys.stderr, flush=True)
             raise RuntimeError(f"App exceeded {timeout} seconds: {command}") from error
         except OSError as error:
             step.update(status="launch_failed", reason=str(error))

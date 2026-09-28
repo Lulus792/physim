@@ -1059,6 +1059,12 @@
     },
     "physim": {
       "prebuilt": "physim"
+    },
+    "physim-benchmark": {
+      "benchmark": "physim-benchmark"
+    },
+    "physim-ui-benchmark": {
+      "benchmark": "physim-ui-benchmark"
     }
   },
   "tests": [
@@ -3820,6 +3826,70 @@
           "timeout": 240,
           "files": [
             "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "benchmark_smoke",
+      "benchmark": true,
+      "targets": [
+        "physim-benchmark"
+      ],
+      "steps": [
+        {
+          "program": "physim-benchmark",
+          "arguments": [
+            "257",
+            "2"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "benchmark_driver",
+      "benchmark": true,
+      "targets": [
+        "python",
+        "physim-benchmark"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_benchmark.py",
+            "{root}/tools/benchmark.py",
+            "{physim-benchmark}"
+          ],
+          "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "ui_rendering",
+      "benchmark": true,
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim-ui-benchmark"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tools/ui_benchmark.py",
+            "{physim-ui-benchmark}",
+            "--output",
+            "{work}/measurements",
+            "--smoke"
+          ],
+          "timeout": 130,
+          "files": [
+            "measurements/metadata.json",
+            "measurements/summary.json",
+            "measurements/native/frames.csv"
           ]
         }
       ]

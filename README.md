@@ -383,8 +383,9 @@ Ein zusätzlicher [direkter Buildweg](docs/build.md#physim-direkt-ohne-cmake-bau
 baut Physim selbst einschließlich Oberfläche über Python und den C17-Compiler,
 ohne CMake oder Ninja für Physim aufzurufen. Er verwendet eine vorhandene
 SDL-Installation. Auch [SDK- und App-Pakete](docs/build.md#sdk-und-portable-pakete-ohne-cmake)
-lassen sich direkt erzeugen. Die vollständige Testsuite läuft weiterhin über
-den oben beschriebenen CMake-Build.
+lassen sich direkt erzeugen. Der direkte Testkatalog umfasst auch die Fenster-
+und Benchmark-Prüfungen. Die bisherigen CMake-Abläufe bleiben vorerst für den
+Vergleich sowie ihre Sanitizer- und SDK-Prüfungen verfügbar.
 
 Nach der Installation der Werkzeuge und SDL aus der jeweiligen Plattformanleitung
 im Physim-Repository ausführen. Zusätzlich ist Python ab 3.10 erforderlich;
@@ -442,7 +443,8 @@ absichtlich exklusiv angelegt: für erneute Läufe einen neuen Namen verwenden.
 ## Struktur
 
 Reproduzierbare Messfälle für Speicherung, Analyse und Berichtskurven lassen sich
-mit `PHYSIM_BUILD_BENCHMARKS=ON` bauen. Aufruf, Referenzprüfungen und Vergleichsschwellen:
+mit `python3 tools/build.py --config Release --benchmarks` bauen (Windows: `python`).
+Aufruf, Referenzprüfungen und Vergleichsschwellen:
 [Leistungsmessung](docs/performance.md).
 Die [UI-Messstrecke](docs/ui-rendering.md) prüft außerdem wiederverwendbare
 Zeichenpuffer, Größenwechsel und PNG-Exporte mit identischen Vergleichsbildern.

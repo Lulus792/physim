@@ -2243,6 +2243,9 @@ int main(int argc, char **argv) {
             }
         }
     }
+    bool trace_test = SDL_getenv("PHYSIM_TEST_TRACE") != NULL;
+    if (trace_test)
+        fprintf(stderr, "APP TEST TRACE: initializing SDL\n");
     SDL_SetMainReady();
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         fprintf(stderr, "SDL: %s\n", SDL_GetError());
@@ -2287,6 +2290,8 @@ int main(int argc, char **argv) {
         SDL_Quit();
         return ok ? 0 : 1;
     }
+    if (trace_test)
+        fprintf(stderr, "APP TEST TRACE: window and OpenGL ready\n");
     SDL_SetWindowMinimumSize(window, 1080, 740);
     app *a = calloc(1, sizeof *a);
     if (!a) {
@@ -2522,6 +2527,8 @@ int main(int argc, char **argv) {
     } else if (argc > 1 && !smoke) {
         open_workspace_path(a, argv[1]);
     }
+    if (trace_test)
+        fprintf(stderr, "APP TEST TRACE: initial stage %d, status %s\n", test_stage, a->status);
     unsigned frames = 0;
     while (!a->quitting) {
         nk_input_begin(a->ui);
@@ -3538,6 +3545,9 @@ int main(int argc, char **argv) {
                 a->quitting = true;
             }
         }
+        if (trace_test && test_stage != checked_stage)
+            fprintf(stderr, "APP TEST TRACE: stage %d -> %d, status %s\n",
+                    checked_stage, test_stage, a->status);
         if (exit_code && !previous_exit_code)
             fprintf(stderr, "First workflow failure at stage %d (next %d): %s "
                             "(tab=%d, selected=%u, samples=%llu, report=%d, query=%s)\n",

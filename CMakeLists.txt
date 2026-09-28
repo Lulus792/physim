@@ -1008,9 +1008,7 @@ if(PHYSIM_BUILD_BENCHMARKS)
     if(WIN32)
       target_link_libraries(physim-ui-benchmark PRIVATE dwmapi)
     endif()
-    target_compile_definitions(physim-ui-benchmark PRIVATE
-      PS_BENCH_COMPILER="${CMAKE_C_COMPILER_ID}-${CMAKE_C_COMPILER_VERSION}"
-      PS_BENCH_CONFIG="$<CONFIG>")
+    target_compile_definitions(physim-ui-benchmark PRIVATE PS_BENCH_CONFIG="$<CONFIG>")
     if(WIN32)
       add_custom_command(TARGET physim-ui-benchmark POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:SDL3::SDL3> $<TARGET_FILE_DIR:physim-ui-benchmark>)
     endif()
@@ -1018,26 +1016,8 @@ if(PHYSIM_BUILD_BENCHMARKS)
   endif()
   add_executable(physim-benchmark tools/benchmark.c)
   target_link_libraries(physim-benchmark PRIVATE physim_platform)
-  target_compile_definitions(physim-benchmark PRIVATE
-    PS_BENCH_COMPILER="${CMAKE_C_COMPILER_ID}-${CMAKE_C_COMPILER_VERSION}"
-    PS_BENCH_CONFIG="$<CONFIG>")
+  target_compile_definitions(physim-benchmark PRIVATE PS_BENCH_CONFIG="$<CONFIG>")
   ps_warnings(physim-benchmark)
-  add_test(NAME benchmark_smoke COMMAND physim-benchmark 257 2)
-  set_tests_properties(benchmark_smoke PROPERTIES LABELS benchmark TIMEOUT 60)
-  find_package(Python3 3.9 COMPONENTS Interpreter QUIET)
-  if(Python3_Interpreter_FOUND)
-    add_test(NAME benchmark_driver COMMAND ${Python3_EXECUTABLE}
-      ${CMAKE_SOURCE_DIR}/tests/test_benchmark.py ${CMAKE_SOURCE_DIR}/tools/benchmark.py
-      $<TARGET_FILE:physim-benchmark>)
-    set_tests_properties(benchmark_driver PROPERTIES LABELS benchmark TIMEOUT 120)
-    if(PHYSIM_BUILD_APP AND PHYSIM_GRAPHICS_TESTS)
-      add_test(NAME ui_rendering COMMAND ${CMAKE_COMMAND}
-        -DPYTHON=${Python3_EXECUTABLE} -DDRIVER=${CMAKE_SOURCE_DIR}/tools/ui_benchmark.py
-        -DBENCHMARK=$<TARGET_FILE:physim-ui-benchmark> -DROOT=${CMAKE_BINARY_DIR}/ui-rendering
-        -P ${CMAKE_SOURCE_DIR}/tests/ui_rendering.cmake)
-      set_tests_properties(ui_rendering PROPERTIES LABELS "display;benchmark" TIMEOUT 120 RUN_SERIAL TRUE)
-    endif()
-  endif()
 endif()
 foreach(memory_test memory memory_owners)
   add_executable(physim-${memory_test}-tests tests/test_${memory_test}.c)

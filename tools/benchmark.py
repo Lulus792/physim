@@ -45,11 +45,13 @@ def main():
         "command": [str(executable), str(args.samples), str(args.repeats)],
     }
     root = Path(__file__).resolve().parent.parent
-    sources = [root / "CMakeLists.txt", Path(__file__).resolve()]
+    sources = [root / "tools/build.py", Path(__file__).resolve()]
+    if (root / "CMakeLists.txt").is_file():
+        sources.append(root / "CMakeLists.txt")
     for folder in ("src", "include", "tools", "app", "runners", "tests"):
         sources.extend(p for p in (root / folder).rglob("*") if p.suffix in (".c", ".h"))
     metadata["working_tree_source_sha256"] = {
-        str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest()
+        p.relative_to(root).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
         for p in sorted(set(sources))
     }
     (output / "metadata.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")

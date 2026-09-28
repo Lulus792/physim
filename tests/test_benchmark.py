@@ -1,6 +1,8 @@
 """Exercise evidence preservation and comparison failures with the real workload."""
 import json
+import hashlib
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -24,6 +26,14 @@ with tempfile.TemporaryDirectory(prefix="benchmark-driver-", dir=workspace) as d
     invoke("baseline")
     metadata_path = root / "baseline" / "metadata.json"
     original = metadata_path.read_bytes()
+    metadata = json.loads(original)
+    sources = metadata["working_tree_source_sha256"]
+    for name in ("tools/build.py", "tools/benchmark_build.h"):
+        assert sources[name] == hashlib.sha256((driver.parent.parent / name).read_bytes()).hexdigest()
+    baseline = json.loads((root / "baseline/summary.json").read_text())
+    for item in baseline.values():
+        assert item["configuration"] in ("", "Debug", "Release", "RelWithDebInfo", "MinSizeRel")
+        assert item["compiler"].startswith(("MSVC-", "ClangCL-", "Clang-", "AppleClang-", "GCC-"))
     invoke("baseline", expected=1)
     assert metadata_path.read_bytes() == original
     invoke("invalid", "--samples", "1", expected=2)
@@ -44,4 +54,14 @@ with tempfile.TemporaryDirectory(prefix="benchmark-driver-", dir=workspace) as d
     metadata_path.write_text(json.dumps(metadata))
     result = invoke("incompatible", "--baseline", str(root / "baseline"), expected=1)
     assert "Incompatible baseline: samples" in result.stderr
+    # The driver must work in a source tree without any CMake configuration.
+    independent = root / "without cmake"
+    (independent / "tools").mkdir(parents=True)
+    for name in ("benchmark.py", "build.py", "benchmark.c", "benchmark_build.h"):
+        shutil.copy2(driver.parent / name, independent / "tools" / name)
+    driver = independent / "tools/benchmark.py"
+    invoke("without-cmake")
+    independent_meta = json.loads((root / "without-cmake/metadata.json").read_text())
+    assert "CMakeLists.txt" not in independent_meta["working_tree_source_sha256"]
+    assert "tools/build.py" in independent_meta["working_tree_source_sha256"]
 print("Benchmark driver: evidence, validation and regression gate verified")

@@ -35,14 +35,16 @@ beginnt mit leeren Ausgabebefehlen und füllt Vertex-/Indexdaten neu. Der Export
 ## Wiederholbare Messung
 
 ```powershell
-cmake -S . -B build-ui-perf -DPHYSIM_BUILD_APP=ON -DPHYSIM_BUILD_BENCHMARKS=ON -DPHYSIM_GRAPHICS_TESTS=ON
-cmake --build build-ui-perf --config Release --parallel
+python tools/build.py --benchmarks --config Release --build-dir build-ui-perf --test-display --test-filter ui_rendering
 python tools/ui_benchmark.py build-ui-perf/bin/physim-ui-benchmark.exe --output build-ui-perf/results
 ```
 
-Der neue Ausgabeordner muss noch nicht existieren. Python benötigt nur die
-Standardbibliothek. Unter Linux den Release-Build mit `-DCMAKE_BUILD_TYPE=Release`
-konfigurieren und `.exe` weglassen. Dort kann der Aufruf unter Xvfb/Openbox erfolgen,
+Der neue Ausgabeordner darf noch nicht existieren. Der direkte Build benötigt
+Python 3.10+, einen C17-Compiler und eine vorhandene SDL-Installation; Python
+verwendet nur die Standardbibliothek. Unter Linux und macOS dieselben Befehle
+mit `python3` statt `python` und ohne `.exe` ausführen. Bei SDL außerhalb des
+Standardpfads zusätzlich `--sdl /pfad/zur/installation` an den Builder übergeben.
+Unter Linux kann der Aufruf unter Xvfb/Openbox erfolgen,
 wie die bestehenden Grafiktests. Der native Aufruf
 `physim-ui-benchmark neuer-ordner` funktioniert auch ohne Python.
 

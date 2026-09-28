@@ -202,6 +202,12 @@ def integration_steps(record, builder, libraries, source, work, steps):
             if not program.is_file():
                 steps.append({"status": "build_failed", "reason": f"Missing integration artifact: {program}"})
                 return
+        elif "benchmark" in artifact:
+            try:
+                program = builder.benchmark(artifact["benchmark"], libraries)
+            except (OSError, RuntimeError) as error:
+                steps.append({"status": "build_failed", "reason": str(error)})
+                return
         elif "source" in artifact:
             mode = artifact["mode"]
             program = build_language_program("integration-" + name, source / artifact["source"], mode,

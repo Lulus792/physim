@@ -103,8 +103,8 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt derzeit 491 Tests ohne Fenster aus, mit `--no-app` die
-480 Prüfungen ohne SDL-Abhängigkeit. Die 51 C-Referenztests decken Mathematik, Numerik,
+`--test` führt derzeit 493 Tests ohne Fenster aus, mit `--no-app` die
+482 Prüfungen ohne SDL-Abhängigkeit. Die 51 C-Referenztests decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
 Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.
@@ -142,8 +142,8 @@ ausgelösten C-Compilerfehler sowie unveränderte C-Quellen und Programme nach
 abgelehnter Quellübersetzung. Der letzte vollständige Programmstand muss weiterhin
 ausführbar sein; Prüfsummen vor und nach dem Fehler stehen im Ergebnisbericht.
 
-`tests/native_integration_cases.json` beschreibt weitere 54 Prüfungen ohne Fenster mit 84
-Ausführungsschritten. Sie bauen 63 Physim-Programme/-Module und 71 C-Module/-Prüfer
+`tests/native_integration_cases.json` beschreibt weitere 56 Prüfungen ohne Fenster mit 86
+Ausführungsschritten. Sie bauen 63 Physim-Programme/-Module und 72 C-Module/-Prüfer
 und verwenden 14 bereits gebaute Programme und Beispielmodule sowie den aktuellen
 Python-Interpreter. Die vorhandenen
 C-Prüfer vergleichen unter anderem Pendelintegratoren, Kollisionen, Auftrieb,
@@ -183,7 +183,7 @@ python3 tests/test_native_test_runner.py --work build/native
 
 ### Fenster- und Grafiktests direkt ausführen
 
-`--test-display` führt zusätzlich 34 Fenster- und Grafikabläufe aus. Dafür sind
+`--test-display` führt zusätzlich 35 Fenster- und Grafikabläufe aus. Dafür sind
 eine grafische Sitzung, SDL und ein geeigneter OpenGL-Treiber erforderlich.
 Die beiden Testgruppen werden getrennt gestartet; `--test-display` lässt sich
 nicht mit `--no-app` oder `--test` kombinieren.
@@ -196,12 +196,17 @@ python3 tools/build.py --test-display --test-filter 'toolbar_*' --test-filter do
 ```
 
 Unter Windows dieselben Befehle mit `python` ausführen. Für Linux-CI mit Mesa,
-Xvfb und Openbox (die Pakete `xvfb` und `openbox` müssen installiert sein):
+Xvfb und Openbox (die Pakete `xvfb`, `openbox` und `x11-utils` müssen installiert sein):
 
 ```sh
 LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a -s '-screen 0 1920x1080x24' sh -c \
-  'openbox > /tmp/physim-openbox.log 2>&1 & python3 tools/build.py --test-display'
+  'openbox > /tmp/physim-openbox.log 2>&1 & python3 tools/wait-window-manager.py && python3 tools/build.py --test-display'
 ```
+
+Vor dem App-Start prüft der Aufruf den lebenden Fenstermanager anhand der
+[EWMH-Eigenschaft `_NET_SUPPORTING_WM_CHECK`](https://specifications.freedesktop.org/wm/1.5/ar01s03.html).
+Der App-Prüfer setzt außerdem `PHYSIM_TEST_TRACE=1`, damit Start und Testphasen
+bei einem Timeout in `app-steps.json` und der Fehlerausgabe sichtbar bleiben.
 
 Die Abläufe prüfen Menüs und Tabs bei zwei Fenstergrößen, Dokumentbearbeitung,
 Wiederherstellung nach Abbrüchen, Workspace- und Projekteinstellungen,
@@ -225,9 +230,30 @@ Test oder Testbuild verhindert die Ausführung späterer Fälle nicht; der gesam
 Aufruf endet dennoch mit einem Fehlercode. Zeitüberschreitungen werden als Fehler
 gespeichert. Ein Filter ohne Treffer ist ebenfalls ein Fehler.
 
-Die drei Leistungsmessungen (`benchmark_smoke`, `benchmark_driver`, `ui_rendering`)
-verwenden noch die folgenden CMake-Abläufe. Die 491 Prüfungen ohne Fenster und
-34 Grafikabläufe ersetzen noch nicht die gesamte Suite.
+Die drei Benchmark-Prüfungen (`benchmark_smoke`, `benchmark_driver`, `ui_rendering`)
+sind ebenfalls übertragen. Der direkte Katalog enthält damit 493 Prüfungen ohne
+Fenster und 35 Grafikabläufe. Die vorhandene CMake-CI bleibt für den Vergleich
+und ihre bisherigen Sanitizer-/SDK-Prüfungen erhalten; ihre vollständige Ablösung
+und der plattformübergreifende Nachweis des erweiterten Katalogs stehen noch aus.
+
+### Benchmarks direkt bauen
+
+`--benchmarks` baut die optionalen Programme `physim-benchmark` und
+`physim-ui-benchmark`. Mit `--no-app` entsteht nur der Benchmark ohne Fenster.
+Die zugehörigen Tests bauen ihre benötigten Programme auch ohne diese Option.
+
+```sh
+python3 tools/build.py --config Release --benchmarks
+python3 tools/build.py --config Release --test --test-filter 'benchmark_*'
+python3 tools/build.py --config Release --test-display --test-filter ui_rendering
+```
+
+Unter Windows `python` statt `python3` verwenden. Messbefehle, Vergleichsgrenzen
+und Bedingungen für belastbare Laufzeiten stehen unter
+[Leistungsmessung](performance.md) und [UI-Zeichenpuffer](ui-rendering.md).
+Compilerkennung und Buildprofil stammen aus dem übersetzten C-Programm.
+Die Messskripte erfassen außerdem den direkten Builder und die Quellen als
+Prüfsummen und benötigen keine `CMakeLists.txt`.
 
 ### SDK und portable Pakete ohne CMake
 

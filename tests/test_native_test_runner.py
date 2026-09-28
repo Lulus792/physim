@@ -25,13 +25,24 @@ def main():
     sys.dont_write_bytecode = True
     spec.loader.exec_module(runner)
 
+    wm_spec = importlib.util.spec_from_file_location("wait_window_manager", source / "tools/wait-window-manager.py")
+    wm = importlib.util.module_from_spec(wm_spec)
+    wm_spec.loader.exec_module(wm)
+    for replies, expected in ((["not found"], False), (["window id # 0x0"], False),
+                              (["window id # 0x100", "no such window"], False),
+                              (["window id # 0x100", "window id # 0x200"], False),
+                              (["window id # 0x100", "window id # 0x100"], True)):
+        with patch.object(wm, "property_text", side_effect=replies):
+            assert wm.ready() == expected
+
     build_spec = importlib.util.spec_from_file_location("build_cli", source / "tools/build.py")
     build_cli = importlib.util.module_from_spec(build_spec)
     build_spec.loader.exec_module(build_cli)
     # Exercise argument validation through main(), including ordinary builds
     # and SDK installation without tests, which must accept an absent filter.
     common = ["build.py", "--build-dir", str(directory / "cli build")]
-    accepted = [([], None), (["--install", str(directory / "sdk")], None),
+    accepted = [([], None), (["--benchmarks"], None), (["--benchmarks", "--no-app"], None),
+                (["--install", str(directory / "sdk")], None),
                 (["--test-display"], None), (["--test-display", "--test-filter", "toolbar_*"], ["toolbar_*"]),
                 (["--test"], None), (["--test", "--test-filter", "*"], ["*"]),
                 (["--test", "--test-filter", "first_*", "--test-filter", "second_*"],
@@ -90,7 +101,7 @@ def main():
     display_spec.loader.exec_module(display_checker)
     display_names = {*display_checker.SIMPLE, *display_checker.SPECIAL,
                      *(f"language_{mode}_workflow" for mode in display_checker.LANGUAGE_MODES)}
-    assert {case.name for case in runner.catalog() if case.display} == display_names
+    assert {case.name for case in runner.catalog() if case.display and not case.integration.get("benchmark")} == display_names
     assert all(case.app for case in runner.catalog() if case.display)
     flow = display_checker.Workflow(Path(sys.executable), directory, source, False)
     flow.env["PYTHONIOENCODING"] = "utf-8"
@@ -352,7 +363,7 @@ def main():
 
     # Integration workflows combine language modules, C variants and verifiers.
     # No dependent verifier may run after a failed build or missing artifact.
-    for scenario in ("success", "emission", "c_module", "verifier", "prebuilt", "runtime", "missing_output"):
+    for scenario in ("success", "emission", "c_module", "verifier", "prebuilt", "benchmark", "runtime", "missing_output"):
         integration_work = directory / ("integration_" + scenario)
         integration_work.mkdir()
         prebuilt = integration_work / ("runner.exe" if sys.platform == "win32" else "runner")
@@ -364,7 +375,7 @@ def main():
             "module": dict(source="fixture.phys", mode="--emit-experiment"),
             "reference": dict(sources=["reference.c"], libraries=["core"], module=True, defines=["PROBE=1"]),
             "verifier": dict(sources=["verifier.c"], libraries=["core"]),
-            "runner": dict(prebuilt="runner")}, steps=[
+            "runner": dict(prebuilt="runner"), "benchmark": dict(benchmark="physim-benchmark")}, steps=[
                 dict(program="verifier", arguments=["{module}", "{reference}", "{work}/result.dat", "{root}/tests/fixture.c"],
                      timeout=10, stdout_patterns=["verified"], files=["result.dat"]),
                 dict(program="runner", arguments=["{work}/result.dat"], timeout=10, stdout="finished\n")])
@@ -373,6 +384,13 @@ def main():
             def __init__(self):
                 self.directory = integration_work
                 self.bin = integration_work
+            def benchmark(self, name, libraries):
+                assert name == "physim-benchmark"
+                if scenario == "benchmark":
+                    raise RuntimeError("Benchmark build failed")
+                program = integration_work / name
+                program.write_bytes(b"benchmark")
+                return program
             def executable(self, name, sources, libraries, **options):
                 builds.append(name)
                 if name == "integration-reference":
@@ -411,7 +429,7 @@ def main():
             assert len(commands) == (3 if scenario == "success" else 2 if scenario in ("runtime", "missing_output") else 1)
             if scenario == "success":
                 artifacts = [step for step in result["steps"] if "artifact" in step]
-                assert len(artifacts) == 4 and all(len(step["sha256"]) == 64 for step in artifacts)
+                assert len(artifacts) == 5 and all(len(step["sha256"]) == 64 for step in artifacts)
         finally:
             runner.execute_case = execute
 
