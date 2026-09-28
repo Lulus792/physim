@@ -264,7 +264,7 @@ def main():
             "reference": dict(sources=["reference.c"], libraries=["core"], module=True, defines=["PROBE=1"]),
             "verifier": dict(sources=["verifier.c"], libraries=["core"]),
             "runner": dict(prebuilt="runner")}, steps=[
-                dict(program="verifier", arguments=["{module}", "{reference}", "{work}/result.dat"],
+                dict(program="verifier", arguments=["{module}", "{reference}", "{work}/result.dat", "{root}/tests/fixture.c"],
                      timeout=10, stdout_patterns=["verified"], files=["result.dat"]),
                 dict(program="runner", arguments=["{work}/result.dat"], timeout=10, stdout="finished\n")])
 
@@ -291,7 +291,8 @@ def main():
             if "--emit-experiment" in command:
                 code = "raise SystemExit(1)" if scenario == "emission" else "print('generated module')"
             elif Path(command[0]).name == "integration-verifier":
-                assert len(command) == 4 and "files ä" in command[-1]
+                assert len(command) == 5 and "files ä" in command[-2]
+                assert Path(command[-1]) == source / "tests/fixture.c"
                 code = "print('verified')"
                 if scenario == "runtime":
                     code += "; raise SystemExit(7)"
@@ -346,6 +347,18 @@ def main():
         raise AssertionError("Empty test selection returned success")
     except RuntimeError as error:
         assert "No native tests match" in str(error)
+    before = set((directory / "test-results").glob("*/results.json"))
+    runner.run_suite(FixtureBuilder(), {"platform": None, "core": None}, source,
+                     ["later_*", "*success", "no-such-test"])
+    after = set((directory / "test-results").glob("*/results.json"))
+    assert len(after - before) == 1
+    combined = json.loads((after - before).pop().read_text(encoding="utf-8"))
+    assert len(combined) == 1 and combined[0]["name"] == "later_success", "Overlapping filters ran a test twice"
+    try:
+        runner.run_suite(FixtureBuilder(), {"platform": None, "core": None}, source, None)
+        raise AssertionError("Omitted CLI filter did not run all tests")
+    except RuntimeError as error:
+        assert "2 native tests failed" in str(error)
     print("Native test runner: expected exits, diagnostics, timeouts, launch/build failures and complete reports passed")
 
 

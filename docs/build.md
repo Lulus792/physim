@@ -103,8 +103,8 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt derzeit 463 Tests aus, mit `--no-app` die
-453 Prüfungen ohne SDL-Abhängigkeit. Die 51 C-Referenztests decken Mathematik, Numerik,
+`--test` führt derzeit 484 Tests aus, mit `--no-app` die
+474 Prüfungen ohne SDL-Abhängigkeit. Die 51 C-Referenztests decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
 Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.
@@ -142,8 +142,8 @@ ausgelösten C-Compilerfehler sowie unveränderte C-Quellen und Programme nach
 abgelehnter Quellübersetzung. Der letzte vollständige Programmstand muss weiterhin
 ausführbar sein; Prüfsummen vor und nach dem Fehler stehen im Ergebnisbericht.
 
-`tests/native_integration_cases.json` beschreibt weitere 26 Prüfungen mit 48
-Ausführungsschritten. Sie bauen 59 Physim-Programme/-Module und 26 C-Module/-Prüfer
+`tests/native_integration_cases.json` beschreibt weitere 47 Prüfungen mit 76
+Ausführungsschritten. Sie bauen 63 Physim-Programme/-Module und 70 C-Module/-Prüfer
 und verwenden zwölf bereits gebaute Runner und Beispielmodule. Die vorhandenen
 C-Prüfer vergleichen unter anderem Pendelintegratoren, Kollisionen, Auftrieb,
 Sensoren, Kontakte, Gelenke, gekoppelte Körper und schnelle Kugeln mit den
@@ -155,10 +155,19 @@ Jeder Ablauf erhält einen eigenen Arbeitsordner mit Leerzeichen und Umlaut.
 Buildfehler stoppen abhängige Schritte; Ergebnisberichte erfassen außerdem die
 Pfade und SHA-256-Prüfsummen aller verwendeten Programme und Module.
 Der verbleibende CTest-Einstieg verwendet dieselben Aufrufe und Erwartungen.
+Die Runner-Prüfungen schließen Handshake, Pause/Einzelschritt/Fortsetzen, falsche
+Modul-ABI, Abstürze, Endlosschleifen und das Beenden paralleler Kindprozesse ein.
+Weitere Referenzen vergleichen Energie und Periode des Pendels für RK4, RK45 und
+Verlet sowie abgeleitete Daten und Berichte. Vor jedem Vergleich erzeugt der
+jeweilige Ablauf seine Messdaten im eigenen Arbeitsordner. Gemeinsam genutzte
+CTest-Messdateien und ein gesonderter Bereinigungsschritt entfallen damit.
+Auch die C- und Physim-Beispiele aus der Dokumentation werden ausgeführt.
 
 ```sh
 # Nur die direkt unterstützten Sprachtests ausführen:
 python3 tools/build.py --test --test-filter 'language_*'
+# Mehrere Testgruppen gemeinsam auswählen, ohne doppelte Ausführung:
+python3 tools/build.py --test --test-filter '*_reference' --test-filter '*_isolation'
 # Fehlerbehandlung des Testläufers selbst prüfen:
 python3 tests/test_native_test_runner.py --work build/native
 ```
@@ -172,7 +181,7 @@ Aufruf endet dennoch mit einem Fehlercode. Zeitüberschreitungen werden als Fehl
 gespeichert. Ein Filter ohne Treffer ist ebenfalls ein Fehler.
 
 Die weiteren Sprach-, Runner- und Grafikabläufe der vollständigen Testsuite
-verwenden noch die folgenden CMake-Abläufe. Die 463 Prüfungen ersetzen noch nicht
+verwenden noch die folgenden CMake-Abläufe. Die 484 Prüfungen ersetzen noch nicht
 die gesamte Suite.
 
 ### SDK und portable Pakete ohne CMake

@@ -151,7 +151,23 @@ Der direkte Katalog umfasst jetzt 463 Tests beziehungsweise 453 ohne SDL.
 Alle 419 direkten Sprachtests bestehen lokal mit MSVC Debug und Clang Release;
 die 26 neuen CTest-Einstiegspunkte bestehen ebenfalls. Der Testläufer prüft außerdem,
 dass Emissions-/C-Buildfehler, fehlende Module und fehlende Ausgaben abhängige
-Schritte stoppen. Der CI-Nachweis dieser Erweiterung steht noch aus.
+Schritte stoppen. Zum Commit `b95e119` besteht der direkte CI-Schritt auf Linux
+mit GCC/Clang, beiden macOS-Architekturen sowie Windows mit MSVC Debug und ClangCL
+Debug/Release; MSVC Release ist zum Prüfzeitpunkt noch offen.
+
+Weitere 21 Abläufe übernehmen Runner-Isolation, parallele Läufe, physikalische
+Referenzen und ausführbare Dokumentationsbeispiele. Die bestehenden C-Prüfer
+kontrollieren weiterhin Abstürze, Endlosschleifen, ABI-Ablehnung, Prozessende,
+Wiederherstellung von Laufdaten und das Beenden paralleler Kindprozesse.
+Pendel- und Box-Prüfungen erzeugen ihre Messdaten jetzt im eigenen Arbeitsordner,
+führen bei Bedarf die Analyse aus und prüfen anschließend die Ergebnisse.
+Die gemeinsame CTest-Vorbereitung und globale Messdatei-Abhängigkeiten entfallen.
+Der direkte Katalog umfasst damit 484 Tests, davon 474 ohne SDL. Alle 21 neuen
+Abläufe bestehen mit MSVC Debug und Clang Release; die 47 gemeinsamen
+CTest-Integrationsprüfungen bestehen ebenfalls mit aktuell gebauten Runnern.
+Mehrfaches `--test-filter` kombiniert Testgruppen ohne doppelte Ausführung;
+der Läufertest prüft außerdem den ungefilterten Aufruf und Quellenpfade für
+archivierte Experimentquellen. Der CI-Nachweis der neuen Abläufe steht noch aus.
 
 | Bereich | Implementiert | Noch offen |
 | --- | --- | --- |

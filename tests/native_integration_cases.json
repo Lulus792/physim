@@ -541,6 +541,499 @@
     },
     "physim-batch": {
       "prebuilt": "physim-batch"
+    },
+    "physim-collision-ccd-tests": {
+      "sources": [
+        "tests/verify_collision_ccd.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "collision_fast_ccd": {
+      "sources": [
+        "examples/collision/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PS_COLLISION_SPEED=100.0",
+        "PS_COLLISION_CCD=1"
+      ]
+    },
+    "collision_fast_discrete": {
+      "sources": [
+        "examples/collision/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PS_COLLISION_SPEED=100.0",
+        "PS_COLLISION_CCD=0"
+      ]
+    },
+    "physim-box-collision-tests": {
+      "sources": [
+        "tests/verify_box_collision.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "physim-template-id-tests": {
+      "sources": [
+        "tests/test_template_ids.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "physim-sensor-tests": {
+      "sources": [
+        "tests/verify_sensor.c"
+      ],
+      "libraries": [
+        "batch",
+        "platform",
+        "core"
+      ]
+    },
+    "sensor_ideal": {
+      "sources": [
+        "examples/uncertain_projectile/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PS_SENSOR_IDEAL=1"
+      ]
+    },
+    "sensor_dropped": {
+      "sources": [
+        "examples/uncertain_projectile/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PS_SENSOR_DROPOUT=1"
+      ]
+    },
+    "physim-batch-tests": {
+      "sources": [
+        "tests/test_batch.c"
+      ],
+      "libraries": [
+        "batch",
+        "platform",
+        "core"
+      ]
+    },
+    "fixture_1": {
+      "sources": [
+        "tests/fixture.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "FIXTURE_MODE=1"
+      ]
+    },
+    "fixture_2": {
+      "sources": [
+        "tests/fixture.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "FIXTURE_MODE=2"
+      ]
+    },
+    "batch_fixture": {
+      "sources": [
+        "tests/batch_fixture.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "physim-batch-parallel-tests": {
+      "sources": [
+        "tests/test_batch_parallel.c"
+      ],
+      "libraries": [
+        "batch",
+        "platform",
+        "core"
+      ]
+    },
+    "batch_parallel_0": {
+      "sources": [
+        "tests/batch_parallel_fixture.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PARALLEL_FIXTURE_MODE=0"
+      ]
+    },
+    "batch_parallel_1": {
+      "sources": [
+        "tests/batch_parallel_fixture.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PARALLEL_FIXTURE_MODE=1"
+      ]
+    },
+    "batch_parallel_2": {
+      "sources": [
+        "tests/batch_parallel_fixture.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PARALLEL_FIXTURE_MODE=2"
+      ]
+    },
+    "batch_parallel_3": {
+      "sources": [
+        "tests/batch_parallel_fixture.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PARALLEL_FIXTURE_MODE=3"
+      ]
+    },
+    "physim-floating-tests": {
+      "sources": [
+        "tests/verify_floating.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "buoyancy_equilibrium": {
+      "sources": [
+        "examples/buoyancy/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PS_FLOAT_DAMPING=0",
+        "PS_FLOAT_HEIGHT=0"
+      ]
+    },
+    "buoyancy_neutral": {
+      "sources": [
+        "examples/buoyancy/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PS_FLOAT_DAMPING=0",
+        "PS_FLOAT_DENSITY=1000",
+        "PS_FLOAT_HEIGHT=-0.5"
+      ]
+    },
+    "buoyancy_sink": {
+      "sources": [
+        "examples/buoyancy/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PS_FLOAT_DAMPING=0",
+        "PS_FLOAT_DENSITY=1500",
+        "PS_FLOAT_HEIGHT=-0.5"
+      ]
+    },
+    "buoyancy_rise": {
+      "sources": [
+        "examples/buoyancy/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PS_FLOAT_DAMPING=0",
+        "PS_FLOAT_HEIGHT=-0.5"
+      ]
+    },
+    "physim-spring-tests": {
+      "sources": [
+        "tests/verify_spring.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "spring_undamped": {
+      "sources": [
+        "examples/spring/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PS_SPRING_DAMPING=0"
+      ]
+    },
+    "spring_critical": {
+      "sources": [
+        "examples/spring/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PS_SPRING_DAMPING=8"
+      ]
+    },
+    "spring_over": {
+      "sources": [
+        "examples/spring/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PS_SPRING_DAMPING=12"
+      ]
+    },
+    "physim-collision-tests": {
+      "sources": [
+        "tests/verify_collision.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "physim-integration-tests": {
+      "sources": [
+        "tests/test_integration.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "fixture_3": {
+      "sources": [
+        "tests/fixture.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "FIXTURE_MODE=3"
+      ]
+    },
+    "physim-analysis-tests": {
+      "sources": [
+        "tests/test_analysis_runner.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "analysis_fixture_1": {
+      "sources": [
+        "tests/analysis_fixture.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "FIXTURE_MODE=1"
+      ]
+    },
+    "analysis_fixture_2": {
+      "sources": [
+        "tests/analysis_fixture.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "FIXTURE_MODE=2"
+      ]
+    },
+    "analysis_fixture_3": {
+      "sources": [
+        "tests/analysis_fixture.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "FIXTURE_MODE=3"
+      ]
+    },
+    "analysis_fixture_4": {
+      "sources": [
+        "tests/analysis_fixture.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "FIXTURE_MODE=4"
+      ]
+    },
+    "physim-comparison-tests": {
+      "sources": [
+        "tests/test_comparison.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "physim-vacuum-tutorial-tests": {
+      "sources": [
+        "tests/test_vacuum_tutorial.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "documentation_vacuum_main": {
+      "sources": [
+        "examples/documentation/vacuum_main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "documentation_vacuum_analysis": {
+      "sources": [
+        "examples/documentation/vacuum_analysis.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "physim-language-vacuum-analysis": {
+      "source": "examples/documentation/vacuum_analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "physim-documentation-example-tests": {
+      "sources": [
+        "tests/test_documentation_example.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "documentation_main": {
+      "sources": [
+        "examples/documentation/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "documentation_analysis": {
+      "sources": [
+        "examples/documentation/analysis.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "physim-language-documentation-main": {
+      "source": "examples/documentation/language_main.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-documentation-analysis": {
+      "source": "examples/documentation/language_analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "physim-box-tests": {
+      "sources": [
+        "tests/verify_box.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "physim-reference-tests": {
+      "sources": [
+        "tests/verify_pendulum.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "physim-derived-tests": {
+      "sources": [
+        "tests/verify_derived.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "physim-language-scalar-search-analysis": {
+      "source": "tests/fixtures/language/scalar_search_analysis.phys",
+      "mode": "--emit-analysis"
     }
   },
   "tests": [
@@ -1510,6 +2003,592 @@
           "absent_files": [
             "rejected-3"
           ]
+        }
+      ]
+    },
+    {
+      "name": "collision_ccd_reference",
+      "targets": [
+        "physim-collision-ccd-tests",
+        "physim-runner",
+        "collision_fast_ccd",
+        "collision_fast_discrete"
+      ],
+      "steps": [
+        {
+          "program": "physim-collision-ccd-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{collision_fast_ccd}",
+            "{collision_fast_discrete}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "box_collision_reference",
+      "targets": [
+        "physim-box-collision-tests",
+        "physim-runner",
+        "box_collision",
+        "box_collision_inelastic",
+        "box_collision_oblique"
+      ],
+      "steps": [
+        {
+          "program": "physim-box-collision-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{box_collision}",
+            "{box_collision_inelastic}",
+            "{box_collision_oblique}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "template_ids",
+      "targets": [
+        "physim-template-id-tests",
+        "pendulum",
+        "projectile",
+        "collision",
+        "box_floor",
+        "spring",
+        "uncertain_projectile",
+        "box_collision",
+        "buoyancy"
+      ],
+      "steps": [
+        {
+          "program": "physim-template-id-tests",
+          "arguments": [
+            "{pendulum}",
+            "{projectile}",
+            "{collision}",
+            "{box_floor}",
+            "{spring}",
+            "{uncertain_projectile}",
+            "{box_collision}",
+            "{buoyancy}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "sensor_reference",
+      "targets": [
+        "physim-sensor-tests",
+        "physim-runner",
+        "uncertain_projectile",
+        "sensor_ideal",
+        "sensor_dropped",
+        "physim-analysis-runner",
+        "pendulum_analysis"
+      ],
+      "steps": [
+        {
+          "program": "physim-sensor-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{uncertain_projectile}",
+            "{sensor_ideal}",
+            "{sensor_dropped}",
+            "{physim-analysis-runner}",
+            "{pendulum_analysis}",
+            "{work}"
+          ],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "batch_reference",
+      "targets": [
+        "physim-batch-tests",
+        "physim-runner",
+        "uncertain_projectile",
+        "fixture_1",
+        "fixture_2",
+        "batch_fixture"
+      ],
+      "steps": [
+        {
+          "program": "physim-batch-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{uncertain_projectile}",
+            "{work}",
+            "{fixture_1}",
+            "{fixture_2}",
+            "{batch_fixture}"
+          ],
+          "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "batch_parallel",
+      "targets": [
+        "physim-batch-parallel-tests",
+        "physim-runner",
+        "batch_parallel_0",
+        "batch_parallel_1",
+        "batch_parallel_2",
+        "batch_parallel_3",
+        "physim-batch"
+      ],
+      "steps": [
+        {
+          "program": "physim-batch-parallel-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{work}",
+            "{batch_parallel_0}",
+            "{batch_parallel_1}",
+            "{batch_parallel_2}",
+            "{batch_parallel_3}",
+            "{physim-batch}",
+            "{root}/tests/batch_parallel_fixture.c"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "floating_reference",
+      "targets": [
+        "physim-floating-tests",
+        "physim-runner",
+        "buoyancy",
+        "buoyancy_equilibrium",
+        "buoyancy_neutral",
+        "buoyancy_sink",
+        "buoyancy_rise",
+        "physim-analysis-runner",
+        "pendulum_analysis"
+      ],
+      "steps": [
+        {
+          "program": "physim-floating-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{buoyancy}",
+            "{buoyancy_equilibrium}",
+            "{buoyancy_neutral}",
+            "{buoyancy_sink}",
+            "{buoyancy_rise}",
+            "{physim-analysis-runner}",
+            "{pendulum_analysis}"
+          ],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "spring_reference",
+      "targets": [
+        "physim-spring-tests",
+        "physim-runner",
+        "spring",
+        "spring_undamped",
+        "spring_critical",
+        "spring_over",
+        "physim-analysis-runner",
+        "pendulum_analysis"
+      ],
+      "steps": [
+        {
+          "program": "physim-spring-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{spring}",
+            "{spring_undamped}",
+            "{spring_critical}",
+            "{spring_over}",
+            "{physim-analysis-runner}",
+            "{pendulum_analysis}"
+          ],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "collision_reference",
+      "targets": [
+        "physim-collision-tests",
+        "physim-runner",
+        "collision",
+        "collision_air",
+        "collision_custom",
+        "collision_friction"
+      ],
+      "steps": [
+        {
+          "program": "physim-collision-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{collision}",
+            "{collision_air}",
+            "{collision_custom}",
+            "{collision_friction}"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "runner_isolation",
+      "targets": [
+        "physim-integration-tests",
+        "physim-runner",
+        "pendulum",
+        "fixture_1",
+        "fixture_2",
+        "fixture_3"
+      ],
+      "steps": [
+        {
+          "program": "physim-integration-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{pendulum}",
+            "{fixture_1}",
+            "{fixture_2}",
+            "{fixture_3}"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "analysis_isolation",
+      "targets": [
+        "physim-analysis-tests",
+        "physim-analysis-runner",
+        "analysis_fixture_1",
+        "analysis_fixture_2",
+        "analysis_fixture_3",
+        "analysis_fixture_4"
+      ],
+      "steps": [
+        {
+          "program": "physim-analysis-tests",
+          "arguments": [
+            "{physim-analysis-runner}",
+            "{analysis_fixture_1}",
+            "{analysis_fixture_2}",
+            "{analysis_fixture_3}",
+            "{analysis_fixture_4}"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "run_comparison",
+      "targets": [
+        "physim-comparison-tests",
+        "physim-analysis-runner",
+        "pendulum_analysis"
+      ],
+      "steps": [
+        {
+          "program": "physim-comparison-tests",
+          "arguments": [
+            "{physim-analysis-runner}",
+            "{pendulum_analysis}"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "documentation_vacuum_tutorial",
+      "targets": [
+        "physim-vacuum-tutorial-tests",
+        "documentation_vacuum_main",
+        "physim-language-projectile",
+        "documentation_vacuum_analysis",
+        "physim-language-vacuum-analysis"
+      ],
+      "steps": [
+        {
+          "program": "physim-vacuum-tutorial-tests",
+          "arguments": [
+            "{documentation_vacuum_main}",
+            "{physim-language-projectile}",
+            "{documentation_vacuum_analysis}",
+            "{physim-language-vacuum-analysis}",
+            "{work}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "documentation_example",
+      "targets": [
+        "physim-documentation-example-tests",
+        "documentation_main",
+        "documentation_analysis"
+      ],
+      "steps": [
+        {
+          "program": "physim-documentation-example-tests",
+          "arguments": [
+            "{documentation_main}",
+            "{documentation_analysis}",
+            "{work}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "documentation_language_example",
+      "targets": [
+        "physim-documentation-example-tests",
+        "physim-language-documentation-main",
+        "physim-language-documentation-analysis"
+      ],
+      "steps": [
+        {
+          "program": "physim-documentation-example-tests",
+          "arguments": [
+            "{physim-language-documentation-main}",
+            "{physim-language-documentation-analysis}",
+            "{work}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "box_floor_reference",
+      "targets": [
+        "physim-runner",
+        "physim-box-tests",
+        "box_floor"
+      ],
+      "steps": [
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{box_floor}",
+            "{work}/box-floor.psrun",
+            "--steps",
+            "2000",
+            "--dt",
+            "0.005"
+          ],
+          "timeout": 60,
+          "files": [
+            "box-floor.psrun"
+          ],
+          "stdout_patterns": [
+            "2001 samples written"
+          ]
+        },
+        {
+          "program": "physim-box-tests",
+          "arguments": [
+            "{work}/box-floor.psrun"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "pendulum_reference",
+      "targets": [
+        "physim-runner",
+        "physim-reference-tests",
+        "pendulum"
+      ],
+      "steps": [
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{pendulum}",
+            "{work}/pendulum.psrun",
+            "--steps",
+            "4000"
+          ],
+          "timeout": 60,
+          "files": [
+            "pendulum.psrun"
+          ],
+          "stdout_patterns": [
+            "4001 samples written"
+          ]
+        },
+        {
+          "program": "physim-reference-tests",
+          "arguments": [
+            "{work}/pendulum.psrun"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "derived_reference",
+      "targets": [
+        "physim-runner",
+        "physim-analysis-runner",
+        "physim-derived-tests",
+        "pendulum",
+        "pendulum_analysis"
+      ],
+      "steps": [
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{pendulum}",
+            "{work}/pendulum.psrun",
+            "--steps",
+            "4000"
+          ],
+          "timeout": 60,
+          "files": [
+            "pendulum.psrun"
+          ],
+          "stdout_patterns": [
+            "4001 samples written"
+          ]
+        },
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{pendulum_analysis}",
+            "{work}/pendulum.psrun",
+            "{work}/report"
+          ],
+          "timeout": 60,
+          "files": [
+            "report-derived.csv",
+            "report.psreport"
+          ]
+        },
+        {
+          "program": "physim-derived-tests",
+          "arguments": [
+            "{work}/pendulum.psrun",
+            "{work}/report-derived.csv",
+            "{work}/report.psreport"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "language_scalar_search_analysis",
+      "targets": [
+        "physim-runner",
+        "physim-analysis-runner",
+        "pendulum",
+        "physim-language-scalar-search-analysis"
+      ],
+      "steps": [
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{pendulum}",
+            "{work}/pendulum.psrun",
+            "--steps",
+            "4000"
+          ],
+          "timeout": 60,
+          "files": [
+            "pendulum.psrun"
+          ],
+          "stdout_patterns": [
+            "4001 samples written"
+          ]
+        },
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{physim-language-scalar-search-analysis}",
+            "{work}/pendulum.psrun",
+            "{work}/scalar-search-report"
+          ],
+          "timeout": 60,
+          "files": [
+            "scalar-search-report.psreport"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pendulum_rk45_reference",
+      "targets": [
+        "physim-runner",
+        "physim-reference-tests",
+        "pendulum_rk45"
+      ],
+      "steps": [
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{pendulum_rk45}",
+            "{work}/pendulum-rk45.psrun",
+            "--steps",
+            "4000"
+          ],
+          "timeout": 60,
+          "files": [
+            "pendulum-rk45.psrun"
+          ],
+          "stdout_patterns": [
+            "4001 samples written"
+          ]
+        },
+        {
+          "program": "physim-reference-tests",
+          "arguments": [
+            "{work}/pendulum-rk45.psrun",
+            "rk45"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "pendulum_verlet_reference",
+      "targets": [
+        "physim-runner",
+        "physim-reference-tests",
+        "pendulum_verlet"
+      ],
+      "steps": [
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{pendulum_verlet}",
+            "{work}/pendulum-verlet.psrun",
+            "--steps",
+            "4000"
+          ],
+          "timeout": 60,
+          "files": [
+            "pendulum-verlet.psrun"
+          ],
+          "stdout_patterns": [
+            "4001 samples written"
+          ]
+        },
+        {
+          "program": "physim-reference-tests",
+          "arguments": [
+            "{work}/pendulum-verlet.psrun",
+            "verlet"
+          ],
+          "timeout": 60
         }
       ]
     }

@@ -189,7 +189,7 @@ def integration_steps(record, builder, libraries, source, work, steps):
     """Build the exact modules and C verifiers before any dependent workflow runs."""
     work = work / "files ä"
     work.mkdir()
-    paths = {"work": str(work)}
+    paths = {"work": str(work), "root": str(source)}
     for name, artifact in record["artifacts"].items():
         if "prebuilt" in artifact:
             suffix = ((".dll" if sys.platform == "win32" else ".so") if artifact.get("module")
@@ -455,8 +455,9 @@ def execute_case(command, *, work: Path, env, timeout: float, exit_code=0,
 
 
 def run_suite(builder, libraries, source: Path, pattern="*"):
+    patterns = [pattern] if isinstance(pattern, str) else pattern or ["*"]
     cases = [case for case in catalog() if (not case.app or not builder.args.no_app)
-             and fnmatchcase(case.name, pattern)]
+             and any(fnmatchcase(case.name, item) for item in patterns)]
     if not cases:
         raise RuntimeError(f"No native tests match {pattern!r} in this configuration")
     root = builder.directory / "test-results"

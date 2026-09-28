@@ -354,7 +354,7 @@ def main() -> int:
     parser.add_argument("--no-app", action="store_true", help="Build the library, language compiler and runners without SDL")
     parser.add_argument("--jobs", type=int, default=min(os.cpu_count() or 1, 8))
     parser.add_argument("--test", action="store_true", help="Run migrated C reference tests without CTest")
-    parser.add_argument("--test-filter", default="*", help="Select native test names using a glob (with --test)")
+    parser.add_argument("--test-filter", action="append", help="Select native test names using a glob; repeat to combine groups (with --test)")
     parser.add_argument("--rebuild", action="store_true", help="Recompile and relink all selected targets")
     parser.add_argument("--install", type=Path, help="Install an SDK and portable app to a new directory")
     args = parser.parse_args()

@@ -134,14 +134,20 @@ Mac-Notarisierung bleiben offen.
 
 ## Direkter Testläufer
 
-Der direkte Katalog umfasst **463 Tests**, davon 453 ohne SDL. Alle 419 direkten
-Sprachtests bestehen lokal mit MSVC Debug und Clang Release. Die jüngste Erweiterung
-übernimmt 26 Integrationsprüfungen für C-/Physim-Modelle, Auswertung und Parameter.
-Ihre 26 CTest-Einstiegspunkte bestehen mit demselben Katalog ebenfalls.
-Die 203 zuvor übernommenen nativen Sprachprogramme, zwei Prüfungen für Quelldiagnosen
-und erhaltene Buildausgaben sowie vier Tests des Speicherprüfzusatzes bestehen
-inzwischen auch im direkten CI-Schritt aller acht Plattformkombinationen.
-Der CI-Nachweis der neuen 26 Integrationsprüfungen steht noch aus.
+Der direkte Katalog umfasst **484 Tests**, davon 474 ohne SDL. Die jüngste Erweiterung
+übernimmt 21 Runner-, Physik- und Dokumentationsabläufe. Alle 21 bestehen lokal mit
+MSVC Debug und Clang Release; alle 47 gemeinsamen CTest-Integrationsprüfungen
+bestehen ebenfalls. Für den CTest-Vergleich wurden die vorhandenen Runner neu
+gebaut, nachdem zwei Crash-Tests mit veralteten Programmen fehlgeschlagen waren.
+Die 419 direkten Sprachtests bestanden bereits zum vorherigen Stand `b95e119` mit
+beiden Compilern. Der CI-Nachweis der neuen 21 Abläufe steht noch aus.
+
+Die Pendelreferenzen prüfen jeweils 4001 Messpunkte, Energiedrift und Periodendauer
+gegen eine analytische Referenz. MSVC und Clang liefern für RK4 eine Periodendauer
+von 2,48880586925 s bei einer Referenz von 2,48880587159 s. Die Prüfung abgeleiteter
+Daten vergleicht vollständiges CSV und Bericht; der maximale Geschwindigkeitsfehler
+beträgt dabei rund 5,59e-5 m/s. Crash-, Hang- und Batch-Prüfer kontrollieren zusätzlich
+Prozessende, Datenwiederherstellung und das Aufräumen paralleler Kindprozesse.
 
 Die Analyseprüfungen vergleichen den vollständigen CSV-Inhalt und verlangen,
 dass ungültige Exporte keine CSV-Datei anlegen. Der Läufertest prüft erwartete
@@ -170,6 +176,7 @@ GCC/Clang sowie macOS auf Apple Silicon/Intel.
 | `0923b6e` | 222 Tests | Alle acht Kombinationen: [Lauf 36477404252](https://github.com/PhysicSimulator/physim/actions/runs/36477404252) |
 | `8516187` | 228 Tests | Alle acht Kombinationen: [Lauf 36478529900](https://github.com/PhysicSimulator/physim/actions/runs/36478529900) |
 | `2b3b6e7` | 437 Tests | Alle acht Kombinationen: [Lauf 36480859045](https://github.com/PhysicSimulator/physim/actions/runs/36480859045) |
+| `b95e119` | 463 Tests | Linux GCC/Clang, macOS Apple Silicon/Intel, Windows MSVC Debug und ClangCL Debug/Release: [Lauf 36482481623](https://github.com/PhysicSimulator/physim/actions/runs/36482481623). MSVC Release ist zum Prüfzeitpunkt noch offen. |
 
 Die ursprünglichen 51 C-Tests bestanden auch lokal mit MSVC Debug; die 41 SDL-freien
 Fälle zusätzlich mit Clang Release. Der vollständige Satz mit 134 Tests bestand
