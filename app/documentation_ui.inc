@@ -76,7 +76,8 @@ static const documentation_topic documentation_topics[] = {
     {"Eigenes Experiment in Physim", "docs/language-tutorial.md", false},
     {"Wurfparabel: C & Physim", "docs/projectile-tutorial.md", false},
     {"Wurf mit Luftwiderstand", "docs/projectile-drag-tutorial.md", false},
-    {"Mehrlaufanalyse in Physim", "docs/language-analysis-tutorial.md", false}};
+    {"Mehrlaufanalyse in Physim", "docs/language-analysis-tutorial.md", false},
+    {"Plattformprüfung", "docs/platform-validation.md", false}};
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27
 #define DOCUMENTATION_MEASUREMENT_TOPIC 28

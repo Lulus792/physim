@@ -3188,6 +3188,9 @@ int main(int argc, char **argv) {
                 remove(a->result_path);
                 test_stage = 8;
             } else if (test_stage == 8) {
+                /* Compiler warnings may keep the log open after a successful build. */
+                a->show_log = false;
+                a->show_search = false;
                 test_key(a, SDLK_1);
                 test_key(a, SDLK_F);
                 test_key(a, SDLK_L);
