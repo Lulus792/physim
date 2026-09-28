@@ -129,7 +129,7 @@ def catalog():
         if not record["steps"] or not record["targets"]:
             raise RuntimeError(f"Empty integration test: {record['name']}")
         artifacts = {name: integrations["artifacts"][name] for name in record["targets"]}
-        cases.append(Case(record["name"], (), integration={**record, "artifacts": artifacts}))
+        cases.append(Case(record["name"], (), app=record.get("app", False), integration={**record, "artifacts": artifacts}))
     names = [case.name for case in cases]
     if len(set(names)) != len(names):
         raise RuntimeError("Duplicate native test names")
@@ -189,9 +189,11 @@ def integration_steps(record, builder, libraries, source, work, steps):
     """Build the exact modules and C verifiers before any dependent workflow runs."""
     work = work / "files ä"
     work.mkdir()
-    paths = {"work": str(work), "root": str(source)}
+    paths = {"work": str(work), "root": str(source), "cc": getattr(builder, "cc", "")}
     for name, artifact in record["artifacts"].items():
-        if "prebuilt" in artifact:
+        if artifact.get("interpreter") == "python":
+            program = Path(sys.executable)
+        elif "prebuilt" in artifact:
             suffix = ((".dll" if sys.platform == "win32" else ".so") if artifact.get("module")
                       else ".exe" if sys.platform == "win32" else "")
             program = builder.bin / (artifact["prebuilt"] + suffix)

@@ -1108,23 +1108,7 @@ add_test(NAME scene_view COMMAND physim-scene-view-tests)
 add_executable(physim-template-id-tests tests/test_template_ids.c)
 target_link_libraries(physim-template-id-tests PRIVATE physim_platform)
 ps_warnings(physim-template-id-tests)
-find_package(Python3 3.9 COMPONENTS Interpreter QUIET)
-if(Python3_Interpreter_FOUND)
-  if(TARGET physim-build)
-    add_test(NAME native_project_build COMMAND ${Python3_EXECUTABLE}
-      ${CMAKE_SOURCE_DIR}/tests/test_native_build.py
-      --builder $<TARGET_FILE:physim-build> --sdk ${CMAKE_SOURCE_DIR}
-      --compiler $<TARGET_FILE:physimc> --runner $<TARGET_FILE:physim-runner>
-      --analysis-runner $<TARGET_FILE:physim-analysis-runner> --work ${CMAKE_BINARY_DIR}/native-project-tests
-      --cc ${CMAKE_C_COMPILER})
-    set_tests_properties(native_project_build PROPERTIES TIMEOUT 600)
-  endif()
-  add_test(NAME documentation_reference COMMAND ${Python3_EXECUTABLE}
-    ${CMAKE_SOURCE_DIR}/tools/generate-reference.py --check)
-  add_test(NAME png_decode COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tests/verify_png.py ${CMAKE_BINARY_DIR})
-  set_tests_properties(png PROPERTIES FIXTURES_SETUP png_files)
-  set_tests_properties(png_decode PROPERTIES FIXTURES_REQUIRED png_files)
-endif()
+find_package(Python3 3.10 COMPONENTS Interpreter QUIET)
 add_executable(physim-plot-view-tests tests/test_plot_view.c app/plot_view.c)
 target_include_directories(physim-plot-view-tests PRIVATE app)
 target_link_libraries(physim-plot-view-tests PRIVATE physim_core)
@@ -1393,14 +1377,6 @@ target_link_libraries(physim-documentation-example-tests PRIVATE physim_core phy
 ps_warnings(physim-documentation-example-tests)
 add_dependencies(physim-documentation-example-tests physim-language-documentation-main
   physim-language-documentation-analysis)
-add_test(NAME documentation_language_source COMMAND ${CMAKE_COMMAND}
-  -DROOT=${CMAKE_SOURCE_DIR} -P ${CMAKE_SOURCE_DIR}/tests/check_language_tutorial.cmake)
-add_test(NAME documentation_language_analysis_source COMMAND ${CMAKE_COMMAND}
-  -DROOT=${CMAKE_SOURCE_DIR} -P ${CMAKE_SOURCE_DIR}/tests/check_language_analysis_tutorial.cmake)
-add_test(NAME documentation_vacuum_source COMMAND ${CMAKE_COMMAND}
-  -DROOT=${CMAKE_SOURCE_DIR} -P ${CMAKE_SOURCE_DIR}/tests/check_vacuum_tutorial.cmake)
-add_test(NAME documentation_projectile_drag_source COMMAND ${CMAKE_COMMAND}
-  -DROOT=${CMAKE_SOURCE_DIR} -P ${CMAKE_SOURCE_DIR}/tests/check_projectile_drag_tutorial.cmake)
 add_executable(physim-scene-tests tests/test_scene.c)
 target_link_libraries(physim-scene-tests PRIVATE physim_platform)
 ps_warnings(physim-scene-tests)

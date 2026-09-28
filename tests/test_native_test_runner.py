@@ -1,12 +1,15 @@
 """Check failure handling and reporting of the CMake-independent test runner."""
 import argparse
+import contextlib
 import importlib.util
+import io
 import json
 import os
 from pathlib import Path
 import sys
 import tempfile
 from types import SimpleNamespace
+from unittest.mock import patch
 
 
 def main():
@@ -21,6 +24,56 @@ def main():
     sys.modules[spec.name] = runner
     sys.dont_write_bytecode = True
     spec.loader.exec_module(runner)
+
+    build_spec = importlib.util.spec_from_file_location("build_cli", source / "tools/build.py")
+    build_cli = importlib.util.module_from_spec(build_spec)
+    build_spec.loader.exec_module(build_cli)
+    # Exercise argument validation through main(), including ordinary builds
+    # and SDK installation without tests, which must accept an absent filter.
+    common = ["build.py", "--build-dir", str(directory / "cli build")]
+    accepted = [([], None), (["--install", str(directory / "sdk")], None),
+                (["--test"], None), (["--test", "--test-filter", "*"], ["*"]),
+                (["--test", "--test-filter", "first_*", "--test-filter", "second_*"],
+                 ["first_*", "second_*"])]
+    with patch.object(build_cli, "Builder") as builder, \
+            patch.object(build_cli, "compiler_environment", return_value={}):
+        for arguments, filters in accepted:
+            builder.reset_mock()
+            with patch.object(sys, "argv", common + arguments):
+                assert build_cli.main() == 0
+            assert builder.call_args.args[0].test_filter == filters
+            builder.return_value.build.assert_called_once_with()
+        for pattern in ("*", "language_*"):
+            builder.reset_mock()
+            diagnostic = io.StringIO()
+            with patch.object(sys, "argv", common + ["--test-filter", pattern]), \
+                    contextlib.redirect_stderr(diagnostic):
+                try:
+                    build_cli.main()
+                    raise AssertionError("Test filter without --test was accepted")
+                except SystemExit as error:
+                    assert error.code == 2
+            assert "--test-filter requires --test" in diagnostic.getvalue()
+            builder.assert_not_called()
+
+    tutorial_spec = importlib.util.spec_from_file_location("tutorial_sources", source / "tests/check_tutorial_sources.py")
+    tutorial_checker = importlib.util.module_from_spec(tutorial_spec)
+    tutorial_spec.loader.exec_module(tutorial_checker)
+    tutorial_work = directory / "tutorial ä"
+    tutorial_work.mkdir()
+    record = dict(document="guide.md", sources=[dict(path="example.phys", language="physim")])
+    sample = 'print("Grüße")\n'
+    (tutorial_work / "example.phys").write_text(sample, encoding="utf-8", newline="\n")
+    for ending in ("\n", "\r\n", "\r"):
+        (tutorial_work / "guide.md").write_bytes(("```physim\n" + sample + "```\n").replace("\n", ending).encode("utf-8"))
+        tutorial_checker.verify(tutorial_work, record)
+    for bad in ('```physim\nprint("changed")\n```', '```c\n' + sample + '```', sample):
+        (tutorial_work / "guide.md").write_text(bad, encoding="utf-8")
+        try:
+            tutorial_checker.verify(tutorial_work, record)
+            raise AssertionError("Mismatched tutorial source was accepted")
+        except RuntimeError as error:
+            assert "example.phys" in str(error)
 
     def check(code, **options):
         return runner.execute_case([sys.executable, "-c", code], work=directory,
@@ -314,12 +367,28 @@ def main():
         finally:
             runner.execute_case = execute
 
+    # Interpreter steps must use the current Python and preserve compiler/source
+    # paths containing spaces and Unicode, without attempting to compile them.
+    python_work = directory / "python integration ä"
+    python_work.mkdir()
+    python_builder = LanguageBuilder()
+    python_builder.cc = "compiler path ä"
+    record = dict(artifacts={"python": dict(interpreter="python")}, steps=[dict(
+        program="python", timeout=10,
+        arguments=["-c", "import sys; from pathlib import Path; assert sys.argv[1] == 'compiler path ä'; "
+                   "assert Path(sys.argv[2]).is_file(); print('python integration passed')", "{cc}", "{root}/tests/fixture.c"],
+        stdout="python integration passed\n")])
+    result = runner.language_case(runner.Case("python", (), integration=record), python_builder, {}, source, python_work)
+    assert result["status"] == "passed"
+    assert result["steps"][-1]["command"][0] == sys.executable
+
     # A failed build and failed test must not suppress later cases or leave a
     # success-only summary. Use real child processes for the executable cases.
     runner.catalog = lambda: [
         runner.Case("build_error", ("missing.c",)),
         runner.Case("exit_error", (), arguments=("-c", "raise SystemExit(7)")),
         runner.Case("later_success", (), arguments=("-c", "print('still ran')")),
+        runner.Case("app_only", (), app=True),
     ]
 
     class FixtureBuilder:

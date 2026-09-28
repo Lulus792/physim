@@ -134,13 +134,21 @@ Mac-Notarisierung bleiben offen.
 
 ## Direkter Testläufer
 
-Der direkte Katalog umfasst **484 Tests**, davon 474 ohne SDL. Die jüngste Erweiterung
-übernimmt 21 Runner-, Physik- und Dokumentationsabläufe. Alle 21 bestehen lokal mit
+Der direkte Katalog umfasst **491 Tests**, davon 480 ohne SDL. Sieben neue Prüfungen
+für Tutorialquellen, API-Referenz, PNG-Dekodierung und Projektbuild bestehen lokal
+mit MSVC Debug, Clang Release und über CTest. Ihr CI-Nachweis steht noch aus.
+Die vorherige Erweiterung übernimmt 21 Runner-, Physik- und Dokumentationsabläufe.
+Alle 21 bestehen lokal mit
 MSVC Debug und Clang Release; alle 47 gemeinsamen CTest-Integrationsprüfungen
 bestehen ebenfalls. Für den CTest-Vergleich wurden die vorhandenen Runner neu
 gebaut, nachdem zwei Crash-Tests mit veralteten Programmen fehlgeschlagen waren.
 Die 419 direkten Sprachtests bestanden bereits zum vorherigen Stand `b95e119` mit
-beiden Compilern. Der CI-Nachweis der neuen 21 Abläufe steht noch aus.
+beiden Compilern. Zum Stand `7e38cf1` bestehen alle 484 damaligen Tests in allen
+acht CI-Kombinationen. Der anschließende Build ohne Tests scheitert dort an der
+Argumentprüfung für `--test-filter`; der direkte CI-Schritt ist daher fehlgeschlagen.
+Die Korrektur besteht lokal für normale Builds mit MSVC und Clang. Ein zusätzlicher
+Regressionstest prüft normale Builds, SDK-Installation und Testfilter über den
+Kommandozeileneinstieg. Der erneute CI-Nachweis der Korrektur steht aus.
 
 Die Pendelreferenzen prüfen jeweils 4001 Messpunkte, Energiedrift und Periodendauer
 gegen eine analytische Referenz. MSVC und Clang liefern für RK4 eine Periodendauer
@@ -176,11 +184,11 @@ GCC/Clang sowie macOS auf Apple Silicon/Intel.
 | `0923b6e` | 222 Tests | Alle acht Kombinationen: [Lauf 36477404252](https://github.com/PhysicSimulator/physim/actions/runs/36477404252) |
 | `8516187` | 228 Tests | Alle acht Kombinationen: [Lauf 36478529900](https://github.com/PhysicSimulator/physim/actions/runs/36478529900) |
 | `2b3b6e7` | 437 Tests | Alle acht Kombinationen: [Lauf 36480859045](https://github.com/PhysicSimulator/physim/actions/runs/36480859045) |
-| `b95e119` | 463 Tests | Linux GCC/Clang, macOS Apple Silicon/Intel, Windows MSVC Debug und ClangCL Debug/Release: [Lauf 36482481623](https://github.com/PhysicSimulator/physim/actions/runs/36482481623). MSVC Release ist zum Prüfzeitpunkt noch offen. |
+| `b95e119` | 463 Tests | Alle acht Kombinationen: [Lauf 36482481623](https://github.com/PhysicSimulator/physim/actions/runs/36482481623) |
 
 Die ursprünglichen 51 C-Tests bestanden auch lokal mit MSVC Debug; die 41 SDL-freien
 Fälle zusätzlich mit Clang Release. Der vollständige Satz mit 134 Tests bestand
-lokal mit MSVC Debug. Weitere Sprach-, Runner- und Grafikabläufe sind noch an
+lokal mit MSVC Debug. Verbleibende Grafikabläufe und Leistungsmessungen sind noch an
 CTest gebunden.
 
 ## Weitere Änderungen prüfen

@@ -1,0 +1,66 @@
+{
+  "documentation_language_source": {
+    "document": "docs/language-tutorial.md",
+    "sources": [
+      {
+        "path": "examples/documentation/language_main.phys",
+        "language": "physim"
+      },
+      {
+        "path": "examples/documentation/language_analysis.phys",
+        "language": "physim"
+      }
+    ]
+  },
+  "documentation_language_analysis_source": {
+    "document": "docs/language-analysis-tutorial.md",
+    "sources": [
+      {
+        "path": "examples/language/analysis_batch_endpoints.phys",
+        "language": "physim"
+      }
+    ]
+  },
+  "documentation_vacuum_source": {
+    "document": "docs/projectile-tutorial.md",
+    "sources": [
+      {
+        "path": "examples/documentation/vacuum_main.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/vacuum_analysis.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/language/projectile.phys",
+        "language": "physim"
+      },
+      {
+        "path": "examples/documentation/vacuum_analysis.phys",
+        "language": "physim"
+      }
+    ]
+  },
+  "documentation_projectile_drag_source": {
+    "document": "docs/projectile-drag-tutorial.md",
+    "sources": [
+      {
+        "path": "examples/projectile/main.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/language/projectile_drag.phys",
+        "language": "physim"
+      },
+      {
+        "path": "examples/documentation/drag_analysis.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/drag_analysis.phys",
+        "language": "physim"
+      }
+    ]
+  }
+}

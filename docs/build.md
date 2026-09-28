@@ -103,8 +103,8 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt derzeit 484 Tests aus, mit `--no-app` die
-474 Prüfungen ohne SDL-Abhängigkeit. Die 51 C-Referenztests decken Mathematik, Numerik,
+`--test` führt derzeit 491 Tests aus, mit `--no-app` die
+480 Prüfungen ohne SDL-Abhängigkeit. Die 51 C-Referenztests decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
 Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.
@@ -142,9 +142,10 @@ ausgelösten C-Compilerfehler sowie unveränderte C-Quellen und Programme nach
 abgelehnter Quellübersetzung. Der letzte vollständige Programmstand muss weiterhin
 ausführbar sein; Prüfsummen vor und nach dem Fehler stehen im Ergebnisbericht.
 
-`tests/native_integration_cases.json` beschreibt weitere 47 Prüfungen mit 76
-Ausführungsschritten. Sie bauen 63 Physim-Programme/-Module und 70 C-Module/-Prüfer
-und verwenden zwölf bereits gebaute Runner und Beispielmodule. Die vorhandenen
+`tests/native_integration_cases.json` beschreibt weitere 54 Prüfungen mit 84
+Ausführungsschritten. Sie bauen 63 Physim-Programme/-Module und 71 C-Module/-Prüfer
+und verwenden 14 bereits gebaute Programme und Beispielmodule sowie den aktuellen
+Python-Interpreter. Die vorhandenen
 C-Prüfer vergleichen unter anderem Pendelintegratoren, Kollisionen, Auftrieb,
 Sensoren, Kontakte, Gelenke, gekoppelte Körper und schnelle Kugeln mit den
 Physim-Modellen. Sie prüfen Messdateien, Szenen, Analyseberichte, Einheiten,
@@ -163,6 +164,14 @@ jeweilige Ablauf seine Messdaten im eigenen Arbeitsordner. Gemeinsam genutzte
 CTest-Messdateien und ein gesonderter Bereinigungsschritt entfallen damit.
 Auch die C- und Physim-Beispiele aus der Dokumentation werden ausgeführt.
 
+Vier zusätzliche Prüfungen vergleichen elf Codeblöcke der Tutorials mit den
+getesteten Quelldateien. Eine weitere kontrolliert die erzeugte API-Referenz.
+Der PNG-Ablauf erzeugt seine Bilder selbst und prüft deren dekodierte Pixel.
+Der Projektbuild-Test baut und startet C- und Physim-Projekte und prüft unveränderte
+Builds, Headeränderungen, Fehlererholung, die Buildsperre und verschobene Ordner.
+Diese Python-Prüfungen verwenden in beiden Buildwegen denselben Katalog; für
+die vollständige CTest-Suite muss Python ab 3.10 installiert sein.
+
 ```sh
 # Nur die direkt unterstützten Sprachtests ausführen:
 python3 tools/build.py --test --test-filter 'language_*'
@@ -180,8 +189,8 @@ Test oder Testbuild verhindert die Ausführung späterer Fälle nicht; der gesam
 Aufruf endet dennoch mit einem Fehlercode. Zeitüberschreitungen werden als Fehler
 gespeichert. Ein Filter ohne Treffer ist ebenfalls ein Fehler.
 
-Die weiteren Sprach-, Runner- und Grafikabläufe der vollständigen Testsuite
-verwenden noch die folgenden CMake-Abläufe. Die 484 Prüfungen ersetzen noch nicht
+Die verbleibenden Grafikabläufe und Leistungsmessungen der vollständigen Testsuite
+verwenden noch die folgenden CMake-Abläufe. Die 491 Prüfungen ersetzen noch nicht
 die gesamte Suite.
 
 ### SDK und portable Pakete ohne CMake

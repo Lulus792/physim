@@ -151,9 +151,8 @@ Der direkte Katalog umfasst jetzt 463 Tests beziehungsweise 453 ohne SDL.
 Alle 419 direkten Sprachtests bestehen lokal mit MSVC Debug und Clang Release;
 die 26 neuen CTest-Einstiegspunkte bestehen ebenfalls. Der Testläufer prüft außerdem,
 dass Emissions-/C-Buildfehler, fehlende Module und fehlende Ausgaben abhängige
-Schritte stoppen. Zum Commit `b95e119` besteht der direkte CI-Schritt auf Linux
-mit GCC/Clang, beiden macOS-Architekturen sowie Windows mit MSVC Debug und ClangCL
-Debug/Release; MSVC Release ist zum Prüfzeitpunkt noch offen.
+Schritte stoppen. Zum Commit `b95e119` besteht der direkte CI-Schritt in allen
+acht Kombinationen aus Betriebssystem, Compiler und Konfiguration.
 
 Weitere 21 Abläufe übernehmen Runner-Isolation, parallele Läufe, physikalische
 Referenzen und ausführbare Dokumentationsbeispiele. Die bestehenden C-Prüfer
@@ -167,7 +166,21 @@ Abläufe bestehen mit MSVC Debug und Clang Release; die 47 gemeinsamen
 CTest-Integrationsprüfungen bestehen ebenfalls mit aktuell gebauten Runnern.
 Mehrfaches `--test-filter` kombiniert Testgruppen ohne doppelte Ausführung;
 der Läufertest prüft außerdem den ungefilterten Aufruf und Quellenpfade für
-archivierte Experimentquellen. Der CI-Nachweis der neuen Abläufe steht noch aus.
+archivierte Experimentquellen. Zum Commit `7e38cf1` bestehen alle 484 Tests in
+allen acht CI-Kombinationen. Der anschließende Build ohne Tests scheiterte jedoch
+an einer fehlerhaften Prüfung des nun optionalen Testfilters. Diese Prüfung ist
+korrigiert; Regressionen erfassen normale Builds, SDK-Installation, ungefilterte
+Tests und wiederholte Filter. Normale Builds bestehen lokal mit MSVC und Clang.
+
+Weitere sieben Prüfungen übernehmen Tutorialquellen, API-Referenz, PNG-Dekodierung
+und den direkten Projektbuild. Vier alte CMake-Skripte entfallen; beide Testwege
+lesen denselben Katalog mit elf Tutorialquellen. Der PNG-Test erzeugt seine
+Eingaben selbst. Der Projektbuild-Test prüft auch Compiler-/Linkerfehler,
+unveränderte Builds, Headeränderungen, gesperrte und verschobene Projektordner.
+Alle sieben bestehen mit MSVC Debug, Clang Release und über CTest. Der direkte
+Katalog umfasst nun 491 Tests beziehungsweise 480 ohne SDL. Der Test des Läufers
+prüft zusätzlich Zeilenenden und falsche Tutorialblöcke sowie Unicode-Pfade für
+Python-Aufrufe. Der CI-Nachweis dieser Erweiterung und der CLI-Korrektur steht aus.
 
 | Bereich | Implementiert | Noch offen |
 | --- | --- | --- |

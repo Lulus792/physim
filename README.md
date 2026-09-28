@@ -90,7 +90,8 @@ liegt die entsprechende Anwendung unter `build/bin/physim.exe`.
 
 Voraussetzungen für den Entwicklungsbuild: Windows 10 ab 1903 / Windows 11, Visual
 Studio 2022 mit **Desktopentwicklung mit C++** (enthält den C-Compiler und Windows SDK),
-CMake ab 3.24 sowie einen Grafiktreiber mit **OpenGL 3.3 Core**. Für eigene Experimente
+CMake ab 3.24, Python ab 3.10 für die vollständigen Tests sowie einen Grafiktreiber
+mit **OpenGL 3.3 Core**. Für eigene Experimente
 benötigt die App einen C17-Compiler; CMake ist dafür nicht erforderlich.
 
 ```powershell

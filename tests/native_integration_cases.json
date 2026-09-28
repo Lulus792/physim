@@ -1034,6 +1034,28 @@
     "physim-language-scalar-search-analysis": {
       "source": "tests/fixtures/language/scalar_search_analysis.phys",
       "mode": "--emit-analysis"
+    },
+    "python": {
+      "interpreter": "python"
+    },
+    "physim-build": {
+      "prebuilt": "physim-build"
+    },
+    "physimc": {
+      "prebuilt": "physimc"
+    },
+    "physim-png-tests": {
+      "sources": [
+        "tests/test_png.c",
+        "app/png.c"
+      ],
+      "libraries": [
+        "zlib",
+        "core"
+      ],
+      "defines": [
+        "Z_PREFIX"
+      ]
     }
   },
   "tests": [
@@ -2589,6 +2611,159 @@
             "verlet"
           ],
           "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "documentation_language_source",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tutorial_sources.py",
+            "documentation_language_source",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "documentation_language_analysis_source",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tutorial_sources.py",
+            "documentation_language_analysis_source",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "documentation_vacuum_source",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tutorial_sources.py",
+            "documentation_vacuum_source",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "documentation_projectile_drag_source",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tutorial_sources.py",
+            "documentation_projectile_drag_source",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "documentation_reference",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tools/generate-reference.py",
+            "--check"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "png_decode",
+      "targets": [
+        "physim-png-tests",
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "physim-png-tests",
+          "arguments": [
+            "{work}/png-reference.png"
+          ],
+          "timeout": 60,
+          "files": [
+            "png-reference.png",
+            "png-reference.png.noise.png",
+            "png-reference.png.edge-0.png",
+            "png-reference.png.edge-1.png",
+            "png-reference.png.edge-2.png"
+          ]
+        },
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/verify_png.py",
+            "{work}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "native_project_build",
+      "app": true,
+      "targets": [
+        "python",
+        "physim-build",
+        "physimc",
+        "physim-runner",
+        "physim-analysis-runner"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_native_build.py",
+            "--builder",
+            "{physim-build}",
+            "--sdk",
+            "{root}",
+            "--compiler",
+            "{physimc}",
+            "--runner",
+            "{physim-runner}",
+            "--analysis-runner",
+            "{physim-analysis-runner}",
+            "--work",
+            "{work}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 600
         }
       ]
     }

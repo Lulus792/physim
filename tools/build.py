@@ -358,7 +358,7 @@ def main() -> int:
     parser.add_argument("--rebuild", action="store_true", help="Recompile and relink all selected targets")
     parser.add_argument("--install", type=Path, help="Install an SDK and portable app to a new directory")
     args = parser.parse_args()
-    if args.test_filter != "*" and not args.test:
+    if args.test_filter and not args.test:
         parser.error("--test-filter requires --test")
     if args.jobs < 1 or args.jobs > 64:
         parser.error("--jobs must be between 1 and 64")
