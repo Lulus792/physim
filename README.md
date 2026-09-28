@@ -238,9 +238,10 @@ ctest --test-dir build --output-on-failure
 ```
 
 Für die App zusätzlich SDL3 ab 3.2 als CMake-Paket installieren. Eine Anleitung zum
-gepinnten SDL-Quellbuild enthält [docs/build.md](docs/build.md). Die Linux-CI ist im
-Repository definiert. Ein lokaler Linux-Lauf wurde auf diesem Windows-Rechner
-bislang nicht durchgeführt; hier ist keine WSL-Distribution installiert.
+gepinnten SDL-Quellbuild enthält [docs/build.md](docs/build.md). Ubuntu 24.04 mit GCC
+hat Build, 276 Tests ohne Fenster, 35 Grafik-/Fenstertests unter Xvfb/Mesa, das
+installierte SDK und alle acht vollständigen C-App-Abläufe bestanden.
+[Prüfstand und verbleibende Plattformgrenzen](docs/platform-validation.md).
 
 ## Ohne Oberfläche
 

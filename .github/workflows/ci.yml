@@ -93,9 +93,14 @@ jobs:
           ASAN_OPTIONS: detect_leaks=0
           LIBGL_ALWAYS_SOFTWARE: "1"
         run: |
-          for example in pendulum projectile collision box_floor spring uncertain_projectile box_collision buoyancy; do
-            xvfb-run -a ./build/bin/physim --self-test "$PWD/build/App Test ä $example" "$example"
-          done
+          xvfb-run -a -s '-screen 0 1920x1080x24' bash -c '
+            openbox > /tmp/physim-app-openbox.log 2>&1 &
+            result=0
+            for example in pendulum projectile collision box_floor spring uncertain_projectile box_collision buoyancy; do
+              ./build/bin/physim --self-test "$PWD/build/App Test ä $example" "$example" || result=1
+            done
+            exit "$result"
+          '
       - name: Archive Linux UI evidence
         if: always()
         uses: actions/upload-artifact@v4

@@ -2594,6 +2594,7 @@ int main(int argc, char **argv) {
         autosave_tick(a, ps_clock());
         documents_autosave_tick(a, ps_clock());
         const char *capture = NULL;
+        int checked_stage = test_stage, previous_exit_code = exit_code;
         if (syntax_preview_test) {
             if (ps_clock() - test_started > 15) {
                 exit_code = 1;
@@ -3510,6 +3511,11 @@ int main(int argc, char **argv) {
                 a->quitting = true;
             }
         }
+        if (exit_code && !previous_exit_code)
+            fprintf(stderr, "First workflow failure at stage %d (next %d): %s "
+                            "(tab=%d, selected=%u, samples=%llu, report=%d, query=%s)\n",
+                    checked_stage, test_stage, a->status, a->tab, a->selected_count,
+                    (unsigned long long)a->data.total, a->show_report, a->library_query);
         int w, h;
         SDL_GetWindowSize(window, &w, &h);
         draw_ui(a, w, h);
