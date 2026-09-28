@@ -20,6 +20,9 @@ jobs:
       PHYSIM_CC: clang
     steps:
       - uses: actions/checkout@v4
+      - name: Direct sanitizer instrumentation and module reload
+        if: ${{ !inputs.package_only }}
+        run: python3 tests/test_sanitizer_build.py --compiler clang --work build/native
       - name: Direct libFuzzer campaign
         if: ${{ !inputs.package_only }}
         env:
@@ -58,7 +61,6 @@ jobs:
       - name: Direct sanitizer tests
         if: ${{ !inputs.package_only }}
         run: |
-          python3 tests/test_sanitizer_build.py --compiler clang --work build/native
           python3 tools/build.py --compiler clang --sanitizers --no-app --test
       - name: Archive native macOS package
         if: ${{ !cancelled() && !inputs.package_only }}
@@ -111,6 +113,7 @@ jobs:
           path: |
             build/native/fuzzer run*/**
             build/native/sanitizer probe*/results.json
+            build/native/sanitizer probe*/module.s
             build/native/*/test-results/**/results.json
             build/native/*/test-results/**/app-steps.json
             build/native/*/test-results/*/ui_rendering/**/measurements/**

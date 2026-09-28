@@ -66,8 +66,10 @@ beider grafischer Abläufe. Die CI-Abnahme ist noch offen.
 
 Die neuen Sanitizer-Prüfungen decken zusätzliche Probleme auf: Der Nullzeiger-
 Vergleich im Clipboard-Test ist korrigiert. Die ASan-Registrierung beim erneuten
-Laden von Modulen auf macOS bleibt zu untersuchen. Die Intel-Mac-Fuzzerkampagne
-besteht mit LLVM 20; für Apple Silicon verwendet der Build nun zusätzlich LLD.
+Laden von Modulen auf macOS bleibt zu untersuchen. Eine gezielte Prüfung
+wiederholt den Modulwechsel und kontrolliert den Speicherschutz nach dem
+erneuten Laden; lokal besteht sie mit MSVC. Beide Mac-Fuzzerkampagnen bestehen
+im CI-Lauf zu `f6cedbf` mit LLVM 20 und LLD.
 Der sporadische Linux-Startfehler wird durch feinere SDL-/Fenster-/GL-Protokolle
 weiter eingegrenzt.
 

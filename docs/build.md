@@ -596,6 +596,11 @@ Instrumentierung; danach muss ASan einen echten Heap-Pufferüberlauf erkennen.
 Unter Linux/macOS muss außerdem UBSan einen vorzeichenbehafteten Ganzzahlüberlauf
 erkennen. Die Ausgaben und Exitcodes stehen unter
 `build/native/sanitizer probe <Kennung>/results.json`.
+Zwei instrumentierte Module werden außerdem abwechselnd jeweils 32-mal geladen,
+verändert und entladen. Jede Wiederöffnung muss ihren ursprünglichen Zustand
+herstellen. Anschließend muss ASan einen Zugriff hinter ein globales Array im
+erneut geladenen Modul erkennen. Auf macOS wird auch die vom Compiler erzeugte
+Assemblerdatei archiviert, um Registrierung und Abmeldung der Globals zu prüfen.
 
 **Linux, Fensterabläufe mit Instrumentierung:**
 

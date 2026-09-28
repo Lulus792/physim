@@ -86,8 +86,9 @@ bestehen Windows ClangCL und Linux Clang bereits die vollständige Kampagnenprü
 Der erste Apple-Silicon-Lauf scheiterte an der fehlenden libFuzzer-Bibliothek in
 Apple Clang. Mit LLVM 20 besteht die Kampagne auf macOS Intel. Auf Apple Silicon
 wies Apples Linker die instrumentierten Objekte mit `invalid r_symbolnum=1` ab.
-Der direkte Fuzzer-Build verwendet dort nun LLVMs `ld64.lld`; der erneute
-Apple-Silicon-Nachweis steht noch aus.
+Der direkte Fuzzer-Build verwendet dort nun LLVMs `ld64.lld`. Im
+[Lauf zu `f6cedbf`](https://github.com/PhysicSimulator/physim/actions/runs/36494602802)
+bestehen beide Mac-Architekturen die vollständige Kampagnenprüfung.
 Der bisherige CMake-Einstieg
 `PHYSIM_BUILD_FUZZERS=ON` bleibt bis zum Abschluss des Vergleichs verfügbar.
 

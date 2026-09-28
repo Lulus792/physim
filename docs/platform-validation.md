@@ -216,13 +216,15 @@ Linux Clang. Beide Prüfungen erzeugen gültige Eingaben, spielen sie erneut ab
 und bestehen 10.000 Durchläufe mit zusätzlicher Codeabdeckung ohne Fehlerfund.
 Der Apple-Silicon-Job scheitert mit Apple Clang aus Xcode 16.4 am Linken, weil
 `libclang_rt.fuzzer_osx.a` in der Toolchain fehlt. Für die Fuzzer-Prüfung wird nun
-Homebrew LLVM 20 auf beiden Mac-Architekturen verwendet. Der erneute Mac-Nachweis
-steht noch aus; normale App- und Sanitizer-Builds verwenden weiter Apple Clang.
+Homebrew LLVM 20 auf beiden Mac-Architekturen verwendet. Normale App- und
+Sanitizer-Builds verwenden weiter Apple Clang.
 
-Im selben Lauf besteht die Fuzzer-Kampagne mit LLVM 20 auf macOS Intel. Auf
+Im [Lauf zu `0d10940`](https://github.com/PhysicSimulator/physim/actions/runs/36493259775)
+besteht die Fuzzer-Kampagne mit LLVM 20 auf macOS Intel. Auf
 Apple Silicon meldet Apples Linker `invalid r_symbolnum=1` für instrumentierte
 Objekte. Der direkte Fuzzer-Build verwendet nun LLVMs Mach-O-Linker `ld64.lld`;
-der erneute Nachweis steht aus.
+im [Lauf zu `f6cedbf`](https://github.com/PhysicSimulator/physim/actions/runs/36494602802)
+bestehen damit beide Mac-Fuzzer-Kampagnen einschließlich 10.000 Durchläufen.
 
 Die direkte Linux-Clang-Sanitizer-Suite zu `c92dbd3` besteht 492 von 493 Tests.
 UBSan findet im Clipboard-Test einen `memcmp`-Aufruf mit Nullzeiger bei Länge null.
@@ -231,6 +233,10 @@ die Clipboard-Prüfungen mit MSVC Debug und Clang Release. Der Mac-ARM-Lauf dess
 Stands besteht 479 von 482 Sanitizer-Tests. Beim erneuten Laden von Modulen melden
 zwei Fälle doppelt registrierte ASan-Globals; `template_ids` bricht in der
 ASan-Registrierung ab. Diese Mac-Sanitizer-Ursache bleibt in Untersuchung.
+Eine zusätzliche Minimalprüfung lädt zwei instrumentierte Module je 32-mal,
+kontrolliert das Zurücksetzen veränderter Globals und verlangt anschließend
+einen erkannten globalen Pufferüberlauf. Lokal besteht sie mit MSVC unter
+`build/native/sanitizer probe ä edntxgm2`; der Mac-Nachweis steht noch aus.
 
 Die korrigierte UI-Größenprüfung besteht im direkten Grafikschritt unter Linux
 GCC zu `0d10940`. Im vorherigen GCC-Lauf zu `49efcbb` besteht der UI-Benchmark,
@@ -247,8 +253,9 @@ unabhängig von den ausgelieferten Bibliotheken neu gebaut. Ein SDL-freies
 MSVC-Release-SDK besteht die vollständige erweiterte Prüfung unter
 `build/native/Native SDK ä cnycd4y3`. Das Clang-Release-SDK besteht zusätzlich
 neun Projektbuilds und beide grafischen Abläufe unter
-`build/native/Native SDK ä elwayubq`. Der entsprechende Plattform-CI-Vergleich
-steht noch aus.
+`build/native/Native SDK ä elwayubq`. Im Lauf zu `f6cedbf` besteht der erweiterte
+direkte SDK-Schritt bereits unter Linux GCC/Clang, macOS Apple Silicon und
+Windows ClangCL Release. Die übrigen Plattformjobs laufen noch.
 
 Die Pendelreferenzen prüfen jeweils 4001 Messpunkte, Energiedrift und Periodendauer
 gegen eine analytische Referenz. MSVC und Clang liefern für RK4 eine Periodendauer
