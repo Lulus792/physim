@@ -6,6 +6,8 @@ Further language workflow wrappers and display workflows are migrated separately
 from dataclasses import dataclass
 from fnmatch import fnmatchcase
 import hashlib
+import contextlib
+import io
 import json
 from pathlib import Path
 import re
@@ -33,6 +35,8 @@ class Case:
     language_harness: str | None = None
     language_module_paths: tuple[str, ...] = ()
     language_workflow: dict | None = None
+    language_native: dict | None = None
+    language_probe: str | None = None
 
 
 def catalog():
@@ -103,13 +107,27 @@ def catalog():
         if not workflow["modules"] or not workflow["steps"]:
             raise RuntimeError(f"Empty language workflow: {workflow['name']}")
         cases.append(Case("language_" + workflow["name"], (), language_workflow=workflow))
+    runtime = json.loads((Path(__file__).resolve().parent.parent / "tests/native_runtime_cases.json").read_text(encoding="utf-8"))
+    if runtime.get("format") != 1 or not runtime["programs"]:
+        raise RuntimeError("Unsupported or empty native runtime test corpus")
+    for program in runtime["programs"]:
+        cases.append(Case("language_native_" + program["name"], (), ("core",), language_native=program))
+    for probe in ("source_map", "failed_emission"):
+        cases.append(Case("language_native_" + probe, (), ("core",), language_probe=probe))
+    for leak in (False, True):
+        for trap in (False, True):
+            defines = tuple(name for name, enabled in (("PHYSIM_MEMORY_PROBE_LEAK", leak),
+                                                       ("PHYSIM_MEMORY_PROBE_TRAP", trap)) if enabled)
+            cases.append(Case("language_native_memory_" + ("leak" if leak else "clean") + ("_trap" if trap else ""),
+                              ("tests/test_language_memory_balance.c",), libraries=(), defines=defines,
+                              exit_code=99 if leak else 70 if trap else 0, stdout=""))
     names = [case.name for case in cases]
     if len(set(names)) != len(names):
         raise RuntimeError("Duplicate native test names")
     return cases
 
 
-def build_language_program(name, fixture, mode, module, builder, libraries, work, steps, *, module_paths=()):
+def build_language_program(name, fixture, mode, module, builder, libraries, work, steps, *, module_paths=(), memory_balance=False):
     """Record emission/build failures before callers can run a stale artifact."""
     compiler = builder.bin / ("physimc.exe" if sys.platform == "win32" else "physimc")
     arguments = [str(compiler), mode]
@@ -123,6 +141,9 @@ def build_language_program(name, fixture, mode, module, builder, libraries, work
         return None
     generated = builder.directory / "generated" / name / "main.c"
     generated.parent.mkdir(parents=True, exist_ok=True)
+    if memory_balance:
+        harness = Path(__file__).resolve().parent.parent / "tests/language_memory_balance.h"
+        code = "#define main ps_test_main\n" + code + "\n" + harness.read_text(encoding="utf-8")
     content = code.encode("utf-8")
     emitted["generated_source"] = str(generated)
     emitted["source_sha256"] = hashlib.sha256(content).hexdigest()
@@ -145,6 +166,74 @@ def write_language_fixture(directory, filename, content):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8", newline="\n")
     return path
+
+
+def prepare_native_fixture(record, source, work):
+    content = ((source / record["source_file"]).read_text(encoding="utf-8")
+               if "source_file" in record else record["source"])
+    for token, repeat in record.get("repeat_tokens", {}).items():
+        content = content.replace(token, repeat["text"] * repeat["count"])
+    return write_language_fixture(work, record["name"] + ".phys", content)
+
+
+def native_probe(case, builder, libraries, source, work, steps):
+    if case.language_probe == "source_map":
+        fixture = write_language_fixture(work / "sources ä", "source_map_probe.phys", "func mapped():\n    let value = 1\nmapped()\n")
+        compiler = builder.bin / ("physimc.exe" if sys.platform == "win32" else "physimc")
+        emitted = execute_case([str(compiler), "--emit-c", str(fixture)], work=work, env=builder.env,
+                               timeout=30, stderr="", stdout_patterns=(r"#line 1 ", r"#line 2 "))
+        steps.append(emitted)
+        if emitted["status"] != "passed":
+            return
+        code = emitted.pop("stdout")
+        insertion = code.index("\n", code.index("#line 1 ")) + 1
+        generated = builder.directory / "generated" / case.name / "source_map_probe.c"
+        generated.parent.mkdir(parents=True, exist_ok=True)
+        generated.write_text(code[:insertion] + "#error PHYSIM_SOURCE_MAP_PROBE\n" + code[insertion:], encoding="utf-8")
+        diagnostic = io.StringIO()
+        failed = False
+        try:
+            with contextlib.redirect_stdout(diagnostic):
+                builder.compile(str(generated), language=True)
+        except RuntimeError:
+            failed = True
+        output = diagnostic.getvalue()
+        # Check the actual compiler diagnostic, including line 1. The command's
+        # .c path or an unrelated build error must not satisfy this probe.
+        mapped = re.search(r"source_map_probe\.phys(?:\(1(?:,\d+)?\)|:1(?::\d+)?):[^\n]*PHYSIM_SOURCE_MAP_PROBE", output)
+        steps.append({"status": "passed" if failed and mapped else "failed",
+                      "compiler_output": output, "generated_source": str(generated),
+                      "reason": "" if failed and mapped else "C compiler did not report the injected error at Physim line 1"})
+        return
+    if case.language_probe != "failed_emission":
+        raise RuntimeError(f"Unknown native language probe: {case.language_probe}")
+    fixture = prepare_native_fixture(dict(name="preserved", source_file="tests/fixtures/language/native.phys"), source, work / "sources ä")
+    original_source = fixture.read_bytes()
+    program = build_language_program(case.name, fixture, "--emit-c", False, builder, libraries, work, steps)
+    if program is None:
+        return
+    generated = builder.directory / "generated" / case.name / "main.c"
+    original = {path: hashlib.sha256(path.read_bytes()).hexdigest() for path in (generated, program)}
+    failure_steps = []
+    try:
+        fixture.write_text("let immutable = 1\nimmutable = 2\n", encoding="utf-8")
+        rejected = build_language_program(case.name, fixture, "--emit-c", False, builder, libraries, work, failure_steps)
+    finally:
+        fixture.write_bytes(original_source)
+    expected = (rejected is None and len(failure_steps) == 1 and failure_steps[0].get("exit_code") == 1
+                and failure_steps[0].get("stdout") == ""
+                and re.search(r"preserved\.phys:2:1: error: Assignment requires a mutable var binding",
+                              failure_steps[0].get("stderr", "")))
+    after = {path: hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else None for path in original}
+    preserved = original == after
+    debris = list(generated.parent.glob("*.pending*")) + list(generated.parent.glob("*.tmp"))
+    steps.append({"status": "passed" if expected and preserved and not debris else "failed",
+                  "rejected_emission": failure_steps,
+                  "artifacts": [{"path": str(p), "before_sha256": d, "after_sha256": after[p]} for p, d in original.items()],
+                  "reason": "" if expected and preserved and not debris else "Failed emission must preserve complete C and executable without pending files"})
+    if steps[-1]["status"] == "passed":
+        steps.append(execute_case([str(program)], work=work, env=builder.env, timeout=10,
+                                  stdout="native checks passed\ntrue\n42\n0.5\n", stderr=""))
 
 
 def check_workflow_outputs(step, work):
@@ -202,7 +291,19 @@ def language_case(case, builder, libraries, source, work):
     started = time.monotonic()
     compiler = builder.bin / ("physimc.exe" if sys.platform == "win32" else "physimc")
     steps = []
-    if case.language_workflow:
+    if case.language_probe:
+        native_probe(case, builder, [libraries[name] for name in case.libraries], source, work, steps)
+    elif case.language_native:
+        record = case.language_native
+        fixture = prepare_native_fixture(record, source, work / "sources ä")
+        program = build_language_program(case.name, fixture, "--emit-c", False, builder,
+                                         [libraries[name] for name in case.libraries], work, steps,
+                                         memory_balance=record.get("memory_balance", False))
+        if program is not None:
+            steps.append(execute_case([str(program)], work=work, env=builder.env, timeout=10,
+                                      exit_code=record["exit_code"], stdout=record.get("stdout"),
+                                      stderr=record.get("stderr"), stderr_pattern=record.get("stderr_pattern")))
+    elif case.language_workflow:
         workflow = case.language_workflow
         paths = {"work": str(work)}
         for module in workflow["modules"]:
@@ -313,7 +414,7 @@ def run_suite(builder, libraries, source: Path, pattern="*"):
         work = directory / case.name
         work.mkdir()
         try:
-            if case.language_source or case.language_checks or case.language_workflow:
+            if case.language_source or case.language_checks or case.language_workflow or case.language_native or case.language_probe:
                 result = language_case(case, builder, libraries, source, work)
             else:
                 program = builder.executable("physim-test-" + case.name, list(case.sources),

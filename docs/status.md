@@ -111,8 +111,7 @@ Der direkte Katalog enthält jetzt 222 Tests, davon 212 ohne SDL. Alle 178 Sprac
 bestehen lokal mit MSVC Debug und Clang Release; die 163 zugehörigen CTest-Prüfungen
 bestehen ebenfalls. Der Läufertest erkennt falsche Inhalte, ungültiges UTF-8,
 fehlende Dateien und unerwünschte Ausgaben. Der direkte CI-Schritt zum Commit
-`0923b6e` besteht auf Linux mit GCC/Clang, beiden macOS-Architekturen sowie Windows
-mit MSVC Debug und ClangCL Debug/Release; MSVC Release ist noch offen.
+`0923b6e` besteht in allen acht CI-Plattformkombinationen.
 
 Compiler-CLI und Modulimporte laufen nun ebenfalls direkt. 52 Compileraufrufe
 prüfen Host-Beschränkungen, Unicodepfade, Diagnosepositionen, Größenbegrenzung,
@@ -122,7 +121,21 @@ Programme prüfen Importe, zusätzliche Suchpfade und einen Fehler aus einer
 importierten Funktion. Der direkte Katalog umfasst 228 Tests, davon 218 ohne SDL.
 Alle 184 Sprachtests bestehen lokal mit MSVC Debug und Clang Release; die 169
 zugehörigen CTest-Prüfungen bestehen ebenfalls mit den gemeinsamen Erwartungen.
-Der CI-Nachweis dieser Erweiterung steht noch aus.
+Der direkte Build- und Testschritt dieser Erweiterung besteht zum Commit
+`8516187` in allen acht CI-Plattformkombinationen.
+
+Der direkte Läufer übernimmt jetzt auch alle 203 Programme des bisherigen nativen
+Sprachtests. Der gemeinsame Katalog erhält 29 erfolgreiche Läufe und 174 erwartete
+Laufzeitfehler; 56 Programme prüfen zusätzlich die Speicherfreigabe nach normalem
+Ende und Fehlerabbruch. Vier C-Proben prüfen den Speicherzusatz selbst, einschließlich
+absichtlich gesetzter Restbytes. Testheader werden in der Buildabhängigkeit erfasst.
+Zwei weitere Fälle prüfen die Physim-Zeile in C-Compilerdiagnosen und den Erhalt
+des letzten vollständigen C-Codes und Programms nach einer abgelehnten Quelle.
+Damit enthält der direkte Katalog 437 Tests beziehungsweise 427 ohne SDL.
+Alle 209 neuen Fälle bestehen mit MSVC Debug und Clang Release; der bisherige
+CTest-Sprachtest besteht mit denselben Quellen und Erwartungen. Die Tests des
+Läufers weisen falsche Diagnosezeilen, geänderte Ausgaben, temporäre Restdateien
+und unpassende Compilerfehler ab. Der CI-Nachweis dieser Erweiterung steht noch aus.
 
 | Bereich | Implementiert | Noch offen |
 | --- | --- | --- |

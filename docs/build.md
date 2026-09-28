@@ -103,8 +103,8 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt derzeit 228 Tests aus, mit `--no-app` die
-218 Prüfungen ohne SDL-Abhängigkeit. Die 51 C-Referenztests decken Mathematik, Numerik,
+`--test` führt derzeit 437 Tests aus, mit `--no-app` die
+427 Prüfungen ohne SDL-Abhängigkeit. Die 51 C-Referenztests decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
 Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.
@@ -130,6 +130,18 @@ Zusätzliche Modulsuchpfade werden auch beim Übersetzen ausführbarer Programme
 übergeben. Die Importprüfungen kontrollieren lokale Priorität, die Reihenfolge
 der Suchpfade, doppelte Abhängigkeiten und zyklische Imports.
 
+Der Katalog `tests/native_runtime_cases.json` übernimmt außerdem alle 203 Programme
+des bisherigen nativen Sprachtests: 29 erfolgreiche Läufe und 174 erwartete
+Laufzeitfehler. Bei 56 Programmen kontrolliert derselbe C-Prüfzusatz in beiden
+Buildwegen, dass keine belegten Bytes nach Programmende oder Fehlerabbruch bleiben.
+Vier weitere C-Tests prüfen diesen Zusatz mit normalen Rückgaben, Fehlerabbrüchen
+und absichtlich gesetzten Restbytes. Änderungen an Testheadern bauen die betroffenen
+Testprogramme neu.
+Zwei zusätzliche Prüfungen verlangen die richtige Physim-Zeile in einem absichtlich
+ausgelösten C-Compilerfehler sowie unveränderte C-Quellen und Programme nach
+abgelehnter Quellübersetzung. Der letzte vollständige Programmstand muss weiterhin
+ausführbar sein; Prüfsummen vor und nach dem Fehler stehen im Ergebnisbericht.
+
 ```sh
 # Nur die direkt unterstützten Sprachtests ausführen:
 python3 tools/build.py --test --test-filter 'language_*'
@@ -146,7 +158,7 @@ Aufruf endet dennoch mit einem Fehlercode. Zeitüberschreitungen werden als Fehl
 gespeichert. Ein Filter ohne Treffer ist ebenfalls ein Fehler.
 
 Die weiteren Sprach-, Runner- und Grafikabläufe der vollständigen Testsuite
-verwenden noch die folgenden CMake-Abläufe. Die 228 Prüfungen ersetzen noch nicht
+verwenden noch die folgenden CMake-Abläufe. Die 437 Prüfungen ersetzen noch nicht
 die gesamte Suite.
 
 ### SDK und portable Pakete ohne CMake

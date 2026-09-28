@@ -1,0 +1,1318 @@
+{
+  "format": 1,
+  "programs": [
+    {
+      "name": "native",
+      "source_file": "tests/fixtures/language/native.phys",
+      "exit_code": 0,
+      "stdout": "native checks passed\ntrue\n42\n0.5\n",
+      "stderr": ""
+    },
+    {
+      "name": "records",
+      "source_file": "tests/fixtures/language/records.phys",
+      "exit_code": 0,
+      "stdout": "record checks passed\n",
+      "stderr": ""
+    },
+    {
+      "name": "enums",
+      "source_file": "tests/fixtures/language/enums.phys",
+      "exit_code": 0,
+      "stdout": "enum checks passed\n",
+      "stderr": ""
+    },
+    {
+      "name": "conversions",
+      "source_file": "tests/fixtures/language/conversions.phys",
+      "exit_code": 0,
+      "stdout": "conversion checks passed\n",
+      "stderr": ""
+    },
+    {
+      "name": "sdk",
+      "source_file": "tests/fixtures/language/sdk.phys",
+      "exit_code": 0,
+      "stdout": "sdk checks passed\n",
+      "stderr": ""
+    },
+    {
+      "name": "longliteral",
+      "source": "let text = \"{longtext}\"\nassert(text == \"{longtext}\")\nlet n: Float64 = {longzero}1\nassert(n == 1.0)\n",
+      "repeat_tokens": {
+        "{longtext}": {
+          "text": "x",
+          "count": 70000
+        },
+        "{longzero}": {
+          "text": "0",
+          "count": 70000
+        }
+      },
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "add",
+      "source": "let x = 9223372036854775807\nprint(x + 1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "add\\.phys:[0-9]+:[0-9]+: runtime error:.*addition overflow"
+    },
+    {
+      "name": "sub",
+      "source": "let x = -9223372036854775808\nprint(x - 1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "sub\\.phys:[0-9]+:[0-9]+: runtime error:.*subtraction overflow"
+    },
+    {
+      "name": "mul",
+      "source": "let x = -9223372036854775808\nprint(x * -1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "mul\\.phys:[0-9]+:[0-9]+: runtime error:.*multiplication overflow"
+    },
+    {
+      "name": "neg",
+      "source": "let x = -9223372036854775808\nprint(-x)\n",
+      "exit_code": 70,
+      "stderr_pattern": "neg\\.phys:[0-9]+:[0-9]+: runtime error:.*negation overflow"
+    },
+    {
+      "name": "divzero",
+      "source": "var x = 0\nprint(1 / x)\n",
+      "exit_code": 70,
+      "stderr_pattern": "divzero\\.phys:[0-9]+:[0-9]+: runtime error:.*Division by zero"
+    },
+    {
+      "name": "divoverflow",
+      "source": "let x = -9223372036854775808\nprint(x / -1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "divoverflow\\.phys:[0-9]+:[0-9]+: runtime error:.*division overflow"
+    },
+    {
+      "name": "modzero",
+      "source": "var x = 0\nprint(1 % x)\n",
+      "exit_code": 70,
+      "stderr_pattern": "modzero\\.phys:[0-9]+:[0-9]+: runtime error:.*Remainder by zero"
+    },
+    {
+      "name": "floatzero",
+      "source": "var x = 0.0\nprint(1.0 / x)\n",
+      "exit_code": 70,
+      "stderr_pattern": "floatzero\\.phys:[0-9]+:[0-9]+: runtime error:.*Division by zero"
+    },
+    {
+      "name": "floatoverflow",
+      "source": "var x = 1e308\nprint(x * x)\n",
+      "exit_code": 70,
+      "stderr_pattern": "floatoverflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Non-finite Float64"
+    },
+    {
+      "name": "literal",
+      "source": "print(1e999)\n",
+      "exit_code": 70,
+      "stderr_pattern": "literal\\.phys:[0-9]+:[0-9]+: runtime error:.*Non-finite Float64"
+    },
+    {
+      "name": "globalread",
+      "source": "func read() -> Int64:\n    return later\nlet early = read()\nlet later = 1\n",
+      "exit_code": 70,
+      "stderr_pattern": "globalread\\.phys:[0-9]+:[0-9]+: runtime error:.*Global used before initialization"
+    },
+    {
+      "name": "globalwrite",
+      "source": "func write():\n    later = 2\nwrite()\nvar later = 1\n",
+      "exit_code": 70,
+      "stderr_pattern": "globalwrite\\.phys:[0-9]+:[0-9]+: runtime error:.*Global used before initialization"
+    },
+    {
+      "name": "fieldread",
+      "source": "struct Value:\n    var x: Int64\nfunc read() -> Int64:\n    return later.x\nlet early = read()\nvar later = Value(1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "fieldread\\.phys:[0-9]+:[0-9]+: runtime error:.*Global used before initialization"
+    },
+    {
+      "name": "fieldwrite",
+      "source": "struct Value:\n    var x: Int64\nfunc write():\n    later.x = 2\nwrite()\nvar later = Value(1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "fieldwrite\\.phys:[0-9]+:[0-9]+: runtime error:.*Global used before initialization"
+    },
+    {
+      "name": "recursion",
+      "source": "func recurse():\n    recurse()\nrecurse()\n",
+      "exit_code": 70,
+      "stderr_pattern": "recursion\\.phys:[0-9]+:[0-9]+: runtime error:.*recursion limit"
+    },
+    {
+      "name": "assertion",
+      "source": "assert(false)\n",
+      "exit_code": 70,
+      "stderr_pattern": "assertion\\.phys:[0-9]+:[0-9]+: runtime error:.*Assertion failed"
+    },
+    {
+      "name": "assertionmessage",
+      "source": "let reason = \"trajectory \" + \"diverged\"\nassert(false, message: reason)\n",
+      "exit_code": 70,
+      "stderr_pattern": "assertionmessage\\.phys:[0-9]+:[0-9]+: runtime error:.*trajectory diverged"
+    },
+    {
+      "name": "uniterror",
+      "source": "let m = Unit(1, 0, 0, 0, 0, 0, 0, 1, \"m\")\nlet s = Unit(0, 0, 1, 0, 0, 0, 0, 1, \"s\")\nfunc dynamicUnit() -> Unit:\n    return s\nprint(m.convert(1, dynamicUnit()))\n",
+      "exit_code": 70,
+      "stderr_pattern": "uniterror\\.phys:[0-9]+:[0-9]+: runtime error:.*Incompatible unit conversion"
+    },
+    {
+      "name": "domainerror",
+      "source": "print(sqrt(-1))\n",
+      "exit_code": 70,
+      "stderr_pattern": "domainerror\\.phys:[0-9]+:[0-9]+: runtime error:.*Non-finite Float64"
+    },
+    {
+      "name": "mathlogdomain",
+      "source": "print(log(-1))\n",
+      "exit_code": 70,
+      "stderr_pattern": "mathlogdomain\\.phys:[0-9]+:[0-9]+: runtime error:.*Non-finite Float64"
+    },
+    {
+      "name": "mathpowdomain",
+      "source": "print(pow(-1,0.5))\n",
+      "exit_code": 70,
+      "stderr_pattern": "mathpowdomain\\.phys:[0-9]+:[0-9]+: runtime error:.*Non-finite Float64"
+    },
+    {
+      "name": "mathexpoverflow",
+      "source": "print(exp(1000))\n",
+      "exit_code": 70,
+      "stderr_pattern": "mathexpoverflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Non-finite Float64"
+    },
+    {
+      "name": "mathatan2zero",
+      "source": "print(atan2(0,0))\n",
+      "exit_code": 70,
+      "stderr_pattern": "mathatan2zero\\.phys:[0-9]+:[0-9]+: runtime error:.*atan2 requires a nonzero x or y"
+    },
+    {
+      "name": "mathhypotoverflow",
+      "source": "print(hypot(1.7e308,1.7e308))\n",
+      "exit_code": 70,
+      "stderr_pattern": "mathhypotoverflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Non-finite Float64"
+    },
+    {
+      "name": "conversionupper",
+      "source": "print(Int64(9223372036854775808.0))\n",
+      "exit_code": 70,
+      "stderr_pattern": "conversionupper\\.phys:[0-9]+:[0-9]+: runtime error:.*conversion out of range"
+    },
+    {
+      "name": "conversionlower",
+      "source": "print(Int64(-9223372036854777856.0))\n",
+      "exit_code": 70,
+      "stderr_pattern": "conversionlower\\.phys:[0-9]+:[0-9]+: runtime error:.*conversion out of range"
+    },
+    {
+      "name": "conversionroundtrip",
+      "source": "print(Int64(Float64(9223372036854775807)))\n",
+      "exit_code": 70,
+      "stderr_pattern": "conversionroundtrip\\.phys:[0-9]+:[0-9]+: runtime error:.*conversion out of range"
+    },
+    {
+      "name": "vectorzero",
+      "source": "let v = Vec3(1, 2, 3) / 0\n",
+      "exit_code": 70,
+      "stderr_pattern": "vectorzero\\.phys:[0-9]+:[0-9]+: runtime error:.*Division by zero"
+    },
+    {
+      "name": "vectoroverflow",
+      "source": "let v = Vec2(1e308, 0) * 2\n",
+      "exit_code": 70,
+      "stderr_pattern": "vectoroverflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Non-finite Float64"
+    },
+    {
+      "name": "vectorlength",
+      "source": "let v = (Vec3(1.7e308, 1.7e308, 1.7e308)).length()\n",
+      "exit_code": 70,
+      "stderr_pattern": "vectorlength\\.phys:[0-9]+:[0-9]+: runtime error:.*Non-finite Float64"
+    },
+    {
+      "name": "vectordot",
+      "source": "let v = (Vec3(1e308, 0, 0)).dot(Vec3(2, 0, 0))\n",
+      "exit_code": 70,
+      "stderr_pattern": "vectordot\\.phys:[0-9]+:[0-9]+: runtime error:.*Non-finite Float64"
+    },
+    {
+      "name": "bitwise",
+      "source_file": "tests/fixtures/language/bitwise.phys",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "bitshiftnegative",
+      "source": "let value = 1 << -1\n",
+      "exit_code": 70,
+      "stderr_pattern": "bitshiftnegative\\.phys:[0-9]+:[0-9]+: runtime error:.*Bit shift count must be between 0 and 63"
+    },
+    {
+      "name": "bitshiftlarge",
+      "source": "let value = -1 >> 64\n",
+      "exit_code": 70,
+      "stderr_pattern": "bitshiftlarge\\.phys:[0-9]+:[0-9]+: runtime error:.*Bit shift count must be between 0 and 63"
+    },
+    {
+      "name": "enum_methods",
+      "source_file": "tests/fixtures/language/enum_methods.phys",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "unicode_identifiers",
+      "source_file": "tests/fixtures/language/unicode_identifiers.phys",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "numeric_bounds",
+      "source_file": "tests/fixtures/language/numeric_bounds.phys",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "clampinverted",
+      "source": "let value = clamp(0.0, 2.0, 1.0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "clampinverted\\.phys:[0-9]+:[0-9]+: runtime error:.*Clamp lower bound exceeds upper bound"
+    },
+    {
+      "name": "switch_wildcards",
+      "source_file": "tests/fixtures/language/switch_wildcards.phys",
+      "memory_balance": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "bezier_curve",
+      "source_file": "tests/fixtures/language/bezier_curve.phys",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "beziernegative",
+      "source": "let c = Bezier3(Vec3(0,0,0),Vec3(1,0,0),Vec3(1,1,0),Vec3(1,1,1))\nlet p = c.position(-0.1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "beziernegative\\.phys:[0-9]+:[0-9]+: runtime error:.*Bezier parameter must be between 0 and 1"
+    },
+    {
+      "name": "bezierupper",
+      "source": "let c = Bezier3(Vec3(0,0,0),Vec3(1,0,0),Vec3(1,1,0),Vec3(1,1,1))\nlet p = c.splitRight(1.1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "bezierupper\\.phys:[0-9]+:[0-9]+: runtime error:.*Bezier parameter must be between 0 and 1"
+    },
+    {
+      "name": "beziertangentoverflow",
+      "source": "let c = Bezier3(Vec3(1e308,0,0),Vec3(-1e308,0,0),Vec3(0,0,0),Vec3(0,0,0))\nlet p = c.tangent(0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "beziertangentoverflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Bezier evaluation exceeds numeric range"
+    },
+    {
+      "name": "linear_solve",
+      "source_file": "tests/fixtures/language/linear_solve.phys",
+      "memory_balance": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "linearsingular",
+      "source": "let x = linearSolve([1.0,2.0,2.0,4.0],[3.0,6.0],0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "linearsingular\\.phys:[0-9]+:[0-9]+: runtime error:.*Linear system is singular"
+    },
+    {
+      "name": "linearshape",
+      "source": "let x = linearSolve([1.0,2.0,3.0],[1.0,2.0],0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "linearshape\\.phys:[0-9]+:[0-9]+: runtime error:.*Linear solve requires an n by n matrix"
+    },
+    {
+      "name": "linearempty",
+      "source": "let a: [Float64] = []\nlet x = linearSolve(a,a,0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "linearempty\\.phys:[0-9]+:[0-9]+: runtime error:.*Linear solve requires an n by n matrix"
+    },
+    {
+      "name": "linearupper",
+      "source": "var rhs: [Float64] = []\nfor i in 0..<33:\n    rhs.append(1.0)\nlet coefficients: [Float64] = []\nlet x = linearSolve(coefficients,rhs,0)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "linearupper\\.phys:[0-9]+:[0-9]+: runtime error:.*Linear solve requires an n by n matrix"
+    },
+    {
+      "name": "lineartolerance",
+      "source": "let x = linearSolve([1.0],[2.0],-0.1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "lineartolerance\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid linear solve values or pivot tolerance"
+    },
+    {
+      "name": "linearnumeric",
+      "source": "let x = linearSolve([1e-300],[1e300],0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "linearnumeric\\.phys:[0-9]+:[0-9]+: runtime error:.*Linear solve exceeds numeric range"
+    },
+    {
+      "name": "scalar_search",
+      "source_file": "tests/fixtures/language/scalar_search.phys",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "scalarbracket",
+      "source": "func target(x: Float64) -> Float64:\n    return x * x - 2\nlet x = rootBisect(target, 2, 3, 1e-9, 0, 100)\n",
+      "exit_code": 70,
+      "stderr_pattern": "scalarbracket\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid bisection bracket or tolerances"
+    },
+    {
+      "name": "scalarlimit",
+      "source": "func target(x: Float64) -> Float64:\n    return x * x - 2\nlet x = rootBisect(target, 1, 2, 1e-30, 0, 1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "scalarlimit\\.phys:[0-9]+:[0-9]+: runtime error:.*Scalar search did not converge"
+    },
+    {
+      "name": "scalariterations",
+      "source": "func target(x: Float64) -> Float64:\n    return x * x - 2\nlet x = minimizeGolden(target, 1, 2, 1e-9, 0, 0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "scalariterations\\.phys:[0-9]+:[0-9]+: runtime error:.*Scalar search requires 1 to 100000 iterations"
+    },
+    {
+      "name": "scalar_report",
+      "source_file": "tests/fixtures/language/scalar_report.phys",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "scalarreportbracket",
+      "source": "func target(x: Float64) -> Float64:\n    return x * x - 2\nlet result = rootBisectReported(target, 2, 3, 1e-9, 0, 100)\n",
+      "exit_code": 70,
+      "stderr_pattern": "scalarreportbracket\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid bisection bracket or tolerances"
+    },
+    {
+      "name": "scalarreportcallback",
+      "source": "func target(x: Float64) -> Float64:\n    assert(false)\n    return x\nlet result = minimizeGoldenReported(target, 0, 2, 1e-9, 0, 100)\n",
+      "exit_code": 70,
+      "stderr_pattern": "scalarreportcallback\\.phys:[0-9]+:[0-9]+: runtime error:.*Assertion failed"
+    },
+    {
+      "name": "ode_step",
+      "source_file": "tests/fixtures/language/ode_step.phys",
+      "memory_balance": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "odeempty",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return state\nlet state: [Float64] = []\nlet next = eulerStep(derivative,state,0,0.1)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "odeempty\\.phys:[0-9]+:[0-9]+: runtime error:.*ODE step requires 1 to 32 state values"
+    },
+    {
+      "name": "odeupper",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return state\nvar state: [Float64] = []\nfor i in 0..<33:\n    state.append(1.0)\nlet next = rk4Step(derivative,state,0,0.1)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "odeupper\\.phys:[0-9]+:[0-9]+: runtime error:.*ODE step requires 1 to 32 state values"
+    },
+    {
+      "name": "odebadstep",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return state\nlet next = eulerStep(derivative,[1.0],0,0)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "odebadstep\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid ODE state, time or positive step size"
+    },
+    {
+      "name": "odeshape",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return [1.0]\nlet next = rk4Step(derivative,[1.0,0.0],0,0.1)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "odeshape\\.phys:[0-9]+:[0-9]+: runtime error:.*ODE derivative has wrong state dimension"
+    },
+    {
+      "name": "odeinner",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    assert(false)\n    return state\nlet next = rk4Step(derivative,[1.0],0,0.1)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "odeinner\\.phys:[0-9]+:[0-9]+: runtime error:.*Assertion failed"
+    },
+    {
+      "name": "odenumeric",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return [1e308]\nlet next = eulerStep(derivative,[1e308],0,1)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "odenumeric\\.phys:[0-9]+:[0-9]+: runtime error:.*ODE step produced a non-finite value"
+    },
+    {
+      "name": "rk45_integrate",
+      "source_file": "tests/fixtures/language/rk45_integrate.phys",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "rk45empty",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return state\nlet state: [Float64] = []\nlet next = rk45Integrate(derivative,state,0,1,1e-9,1e-7,100)\n",
+      "exit_code": 70,
+      "stderr_pattern": "rk45empty\\.phys:[0-9]+:[0-9]+: runtime error:.*RK45 integration requires 1 to 32 state values"
+    },
+    {
+      "name": "rk45upper",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return state\nvar state: [Float64] = []\nfor i in 0..<33:\n    state.append(1.0)\nlet next = rk45Integrate(derivative,state,0,1,1e-9,1e-7,100)\n",
+      "exit_code": 70,
+      "stderr_pattern": "rk45upper\\.phys:[0-9]+:[0-9]+: runtime error:.*RK45 integration requires 1 to 32 state values"
+    },
+    {
+      "name": "rk45budget",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return state\nlet next = rk45Integrate(derivative,[1.0],0,1,1e-9,1e-7,0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "rk45budget\\.phys:[0-9]+:[0-9]+: runtime error:.*RK45 trial step budget is out of range"
+    },
+    {
+      "name": "rk45badoptions",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return state\nlet next = rk45Integrate(derivative,[1.0],0,1,-1,1e-7,100)\n",
+      "exit_code": 70,
+      "stderr_pattern": "rk45badoptions\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid integration argument or option"
+    },
+    {
+      "name": "rk45badsteps",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return state\nlet next = rk45IntegrateWithSteps(derivative,[1.0],0,1,1e-9,1e-7,100,0.1,0.2,0.1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "rk45badsteps\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid integration argument or option"
+    },
+    {
+      "name": "rk45zerostep",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return state\nlet next = rk45IntegrateWithSteps(derivative,[1.0],0,1,1e-9,1e-7,100,0,1e-14,1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "rk45zerostep\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid integration argument or option"
+    },
+    {
+      "name": "rk45limit",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return state\nlet next = rk45Integrate(derivative,[1.0],0,2,1e-11,1e-11,1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "rk45limit\\.phys:[0-9]+:[0-9]+: runtime error:.*Trial step budget exhausted"
+    },
+    {
+      "name": "rk45shape",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return [1.0]\nlet next = rk45Integrate(derivative,[1.0,0.0],0,1,1e-9,1e-7,100)\n",
+      "exit_code": 70,
+      "stderr_pattern": "rk45shape\\.phys:[0-9]+:[0-9]+: runtime error:.*ODE derivative has wrong state dimension"
+    },
+    {
+      "name": "rk45inner",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    assert(false)\n    return state\nlet next = rk45Integrate(derivative,[1.0],0,1,1e-9,1e-7,100)\n",
+      "exit_code": 70,
+      "stderr_pattern": "rk45inner\\.phys:[0-9]+:[0-9]+: runtime error:.*Assertion failed"
+    },
+    {
+      "name": "rk45toleranceshape",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return state\nlet next = rk45IntegrateWithTolerances(derivative,[1.0,2.0],0,1,[1e-9],1e-7,100,0.1,1e-14,1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "rk45toleranceshape\\.phys:[0-9]+:[0-9]+: runtime error:.*RK45 component tolerances require one value per state component"
+    },
+    {
+      "name": "rk45tolerancevalue",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return state\nlet next = rk45IntegrateWithTolerances(derivative,[1.0],0,1,[0.0],1e-7,100,0.1,1e-14,1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "rk45tolerancevalue\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid component absolute tolerance"
+    },
+    {
+      "name": "rk45_report",
+      "source_file": "tests/fixtures/language/rk45_report.phys",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "rk45reportbudget",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return state\nlet result = rk45IntegrateReported(derivative,[1.0],0,1,1e-9,1e-7,0,0.1,1e-14,1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "rk45reportbudget\\.phys:[0-9]+:[0-9]+: runtime error:.*RK45 trial step budget is out of range"
+    },
+    {
+      "name": "rk45reportcallback",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    assert(false)\n    return state\nlet result = rk45IntegrateReported(derivative,[1.0],0,1,1e-9,1e-7,100,0.1,1e-14,1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "rk45reportcallback\\.phys:[0-9]+:[0-9]+: runtime error:.*Assertion failed"
+    },
+    {
+      "name": "rk45reporttoleranceshape",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return state\nlet result = rk45IntegrateWithTolerancesReported(derivative,[1.0,2.0],0,1,[1e-9],1e-7,100,0.1,1e-14,1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "rk45reporttoleranceshape\\.phys:[0-9]+:[0-9]+: runtime error:.*RK45 component tolerances require one value per state component"
+    },
+    {
+      "name": "rk45reporttolerancevalue",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return state\nlet result = rk45IntegrateWithTolerancesReported(derivative,[1.0],0,1,[0.0],1e-7,100,0.1,1e-14,1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "rk45reporttolerancevalue\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid component absolute tolerance"
+    },
+    {
+      "name": "verlet_step",
+      "source_file": "tests/fixtures/language/verlet_step.phys",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "verletempty",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return state\nlet phase: [Float64] = []\nlet next = verletStep(derivative,phase,0,0.1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "verletempty\\.phys:[0-9]+:[0-9]+: runtime error:.*Verlet phase requires paired position and velocity values"
+    },
+    {
+      "name": "verletodd",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return state\nlet next = verletStep(derivative,[1.0,0.0,0.0],0,0.1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "verletodd\\.phys:[0-9]+:[0-9]+: runtime error:.*Verlet phase requires paired position and velocity values"
+    },
+    {
+      "name": "verletupper",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return state\nvar phase: [Float64] = []\nfor i in 0..<66:\n    phase.append(1.0)\nlet next = verletStep(derivative,phase,0,0.1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "verletupper\\.phys:[0-9]+:[0-9]+: runtime error:.*Verlet phase requires paired position and velocity values"
+    },
+    {
+      "name": "verletbadstep",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return state\nlet next = verletStep(derivative,[1.0,0.0],0,0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "verletbadstep\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid Verlet phase, time or nonzero step size"
+    },
+    {
+      "name": "verletshape",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    return [1.0]\nlet next = verletStep(derivative,[1.0,2.0,0.0,0.0],0,0.1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "verletshape\\.phys:[0-9]+:[0-9]+: runtime error:.*Verlet acceleration has wrong state dimension"
+    },
+    {
+      "name": "verletinner",
+      "source": "func derivative(time: Float64, state: [Float64]) -> [Float64]:\n    assert(false)\n    return state\nlet next = verletStep(derivative,[1.0,0.0],0,0.1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "verletinner\\.phys:[0-9]+:[0-9]+: runtime error:.*Assertion failed"
+    },
+    {
+      "name": "matrixindex3",
+      "source": "let v = Mat3.identity().element(-1,0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "matrixindex3\\.phys:[0-9]+:[0-9]+: runtime error:.*Mat3 row and column"
+    },
+    {
+      "name": "matrixindex4",
+      "source": "let v = Mat4.identity().element(0,9223372036854775807)\n",
+      "exit_code": 70,
+      "stderr_pattern": "matrixindex4\\.phys:[0-9]+:[0-9]+: runtime error:.*Mat4 row and column"
+    },
+    {
+      "name": "matrixsingular3",
+      "source": "let v = Vec3(0,0,0)\nlet m = Mat3(v,v,v).inverse(0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "matrixsingular3\\.phys:[0-9]+:[0-9]+: runtime error:.*Matrix operation is singular"
+    },
+    {
+      "name": "matrixsingular4",
+      "source": "let m = Mat4.scale(Vec3(1,0,1)).inverse(0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "matrixsingular4\\.phys:[0-9]+:[0-9]+: runtime error:.*Matrix operation is singular"
+    },
+    {
+      "name": "matrixtolerance",
+      "source": "let m = Mat3.identity().inverse(1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "matrixtolerance\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid matrix operation arguments"
+    },
+    {
+      "name": "matrixrotation",
+      "source": "let m = Mat4.rotation(Quat(0,0,0,0))\n",
+      "exit_code": 70,
+      "stderr_pattern": "matrixrotation\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid matrix operation arguments"
+    },
+    {
+      "name": "matrixdirection",
+      "source": "let m = Mat4(Vec4(1,0,0,0),Vec4(0,1,0,0),Vec4(0,0,1,1),Vec4(0,0,0,1))\nlet v = m.transformDirection(Vec3(1,2,3))\n",
+      "exit_code": 70,
+      "stderr_pattern": "matrixdirection\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid matrix operation arguments"
+    },
+    {
+      "name": "matrixnormal",
+      "source": "let m = Mat4(Vec4(1,0,0,0),Vec4(0,1,0,0),Vec4(0,0,1,1),Vec4(0,0,0,1))\nlet v = m.transformNormal(Vec3(1,2,3))\n",
+      "exit_code": 70,
+      "stderr_pattern": "matrixnormal\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid matrix operation arguments"
+    },
+    {
+      "name": "matrixnormalzero",
+      "source": "let v = Mat4.identity().transformNormal(Vec3(0,0,0))\n",
+      "exit_code": 70,
+      "stderr_pattern": "matrixnormalzero\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid matrix operation arguments"
+    },
+    {
+      "name": "matrixpointzero",
+      "source": "let m = Mat4(Vec4(1,0,0,0),Vec4(0,1,0,0),Vec4(0,0,1,1),Vec4(0,0,0,1))\nlet v = m.transformPoint(Vec3(1,2,-1))\n",
+      "exit_code": 70,
+      "stderr_pattern": "matrixpointzero\\.phys:[0-9]+:[0-9]+: runtime error:.*Matrix operation is singular"
+    },
+    {
+      "name": "matrixmultiplyoverflow",
+      "source": "let m = Mat4.scale(Vec3(1e308,1,1))\nlet v = m.multiplied(m)\n",
+      "exit_code": 70,
+      "stderr_pattern": "matrixmultiplyoverflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Non-finite"
+    },
+    {
+      "name": "matrixapplyoverflow",
+      "source": "let m = Mat3(Vec3(1e308,0,0),Vec3(0,1,0),Vec3(0,0,1))\nlet v = m.applied(Vec3(2,0,0))\n",
+      "exit_code": 70,
+      "stderr_pattern": "matrixapplyoverflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Non-finite"
+    },
+    {
+      "name": "matrixinverseoverflow",
+      "source": "let m = Mat4.scale(Vec3(1e-320,1,1)).inverse(0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "matrixinverseoverflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Matrix operation exceeds numeric range"
+    },
+    {
+      "name": "optionalvalues",
+      "source_file": "examples/language/optional_values.phys",
+      "memory_balance": true,
+      "exit_code": 0,
+      "stdout": "optional value checks passed\n",
+      "stderr": ""
+    },
+    {
+      "name": "optionalunwrap",
+      "source": "let x: [Int64]? = nil\nlet y = x.unwrap()\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "optionalunwrap\\.phys:[0-9]+:[0-9]+: runtime error:.*Cannot unwrap nil optional"
+    },
+    {
+      "name": "optionalnested",
+      "source": "let x: Int64?? = Optional.some(nil)\nlet y = x.unwrap().unwrap()\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "optionalnested\\.phys:[0-9]+:[0-9]+: runtime error:.*Cannot unwrap nil optional"
+    },
+    {
+      "name": "optionalfallback",
+      "source": "func fail() -> [Int64]:\n    let own = Optional.some([[1],[2]])\n    let x: Int64? = nil\n    let n = x.unwrap()\n    return [n]\nlet x = Optional.some([1]).valueOr(fail())\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "optionalfallback\\.phys:[0-9]+:[0-9]+: runtime error:.*Cannot unwrap nil optional"
+    },
+    {
+      "name": "optionalargument",
+      "source": "func fail() -> [Int64]:\n    let own = Optional.some([[1],[2]])\n    assert(false)\n    return [1]\nlet x = Optional.some(fail())\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "optionalargument\\.phys:[0-9]+:[0-9]+: runtime error:.*Assertion failed"
+    },
+    {
+      "name": "optionalbudget",
+      "source": "struct Node:\n    let matrix: Mat4\n    let next: Node?\nvar root: Node? = nil\nfor i in 0..<1000000:\n    root = Optional.some(Node(Mat4.identity(),root))\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "optionalbudget\\.phys:[0-9]+:[0-9]+: runtime error:.*memory budget"
+    },
+    {
+      "name": "optionalswitcherror",
+      "source": "func fail(items: [[Int64]]) -> Bool:\n    assert(items.count == 2)\n    assert(false)\n    return true\nlet value = Optional.some([[1],[2]])\nswitch value:\n    case Optional.some(items) if fail(items):\n        print(1)\n    default:\n        print(0)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "optionalswitcherror\\.phys:[0-9]+:[0-9]+: runtime error:.*Assertion failed"
+    },
+    {
+      "name": "optionalbindings",
+      "source_file": "examples/language/optional_bindings.phys",
+      "memory_balance": true,
+      "exit_code": 0,
+      "stdout": "conditional binding checks passed\n",
+      "stderr": ""
+    },
+    {
+      "name": "optionalbindingerror",
+      "source": "if var rows = Optional.some([[1],[2]]):\n    rows[0].append(3)\n    while let values = Optional.some(rows):\n        assert(false)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "optionalbindingerror\\.phys:[0-9]+:[0-9]+: runtime error:.*Assertion failed"
+    },
+    {
+      "name": "optionalbindingcondition",
+      "source": "func next() -> [Int64]?:\n    let retained = Optional.some([1])\n    assert(false)\n    return nil\nwhile let value = next():\n    print(1)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "optionalbindingcondition\\.phys:[0-9]+:[0-9]+: runtime error:.*Assertion failed"
+    },
+    {
+      "name": "arrays",
+      "source_file": "tests/fixtures/language/arrays.phys",
+      "memory_balance": true,
+      "exit_code": 0,
+      "stdout": "array checks passed\n",
+      "stderr": ""
+    },
+    {
+      "name": "arraynegative",
+      "source": "let a = [1, 2]\nprint(a[-1])\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arraynegative\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index"
+    },
+    {
+      "name": "arrayupper",
+      "source": "let a = [1, 2]\nprint(a[2])\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayupper\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index"
+    },
+    {
+      "name": "arrayreturnerror",
+      "source": "func f() -> [Int64]:\n    let a = [1, 2]\n    assert(false)\n    return a\nlet a = f()\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayreturnerror\\.phys:[0-9]+:[0-9]+: runtime error:.*Assertion failed"
+    },
+    {
+      "name": "particles",
+      "source_file": "examples/language/particles.phys",
+      "memory_balance": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "structdefaulterror",
+      "source": "func fail() -> Int64:\n    assert(false)\n    return 0\nstruct S:\n    let owned: [Int64] = [1, 2]\n    let failed: Int64 = fail()\nlet value = S()\n",
+      "exit_code": 70,
+      "stderr_pattern": "structdefaulterror\\.phys:[0-9]+:[0-9]+: runtime error:.*Assertion failed"
+    },
+    {
+      "name": "arraybudget",
+      "source": "struct Node:\n    var children: [Node]\nvar root = Node([])\nfor i in 0..<1000000:\n    root = Node([root])\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arraybudget\\.phys:[0-9]+:[0-9]+: runtime error:.*Array memory budget"
+    },
+    {
+      "name": "arraypartial",
+      "source": "func f(i: Int64) -> [Int64]:\n    let a = [1, 2]\n    assert(i == 0)\n    return a\nlet a = [f(0), f(1)]\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arraypartial\\.phys:[0-9]+:[0-9]+: runtime error:.*Assertion failed"
+    },
+    {
+      "name": "arrayiterationerror",
+      "source": "for row in [[1, 2], [3]]:\n    let copy = [row]\n    assert(false)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayiterationerror\\.phys:[0-9]+:[0-9]+: runtime error:.*Assertion failed"
+    },
+    {
+      "name": "arraymethods",
+      "source_file": "tests/fixtures/language/arraymethods.phys",
+      "memory_balance": true,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "arraymethoderror",
+      "source": "struct S:\n    let a: [Int64]\n    func fail():\n        let copy = self\n        assert(false)\nS([1]).fail()\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arraymethoderror\\.phys:[0-9]+:[0-9]+: runtime error:.*Assertion failed"
+    },
+    {
+      "name": "arraymethodrecursion",
+      "source": "struct S:\n    let a: [Int64]\n    func recurse():\n        self.recurse()\nS([1]).recurse()\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arraymethodrecursion\\.phys:[0-9]+:[0-9]+: runtime error:.*recursion limit"
+    },
+    {
+      "name": "mutating",
+      "source": "struct Counter:\n    var n: Int64\n    mutating func add(value: Int64) -> Int64:\n        self.n += value\n        return self.n\n    mutating func reset():\n        self = Counter(0)\n        return\nstruct Group:\n    var counter: Counter\nvar group = Group(Counter(1))\nlet before = group\nassert(group.counter.add(2) == 3)\nassert(group.counter.n == 3 && before.counter.n == 1)\ngroup.counter.reset()\nassert(group.counter.n == 0)\n",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "sensors",
+      "source_file": "tests/fixtures/language/sensors.phys",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "sensorconfig",
+      "source": "let m = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet c = SensorConfig(m,0,0,0,0,0,Distribution.constant(0),0,0,0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "sensorconfig\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid sensor configuration"
+    },
+    {
+      "name": "sensorunit",
+      "source": "let m = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet config = SensorConfig(m,10,0,0,0,0,Distribution.constant(0),0,0,0)\nvar s = Sensor(config,0)\nlet q = Quantity(1, Unit(0,0,1,0,0,0,0,1,\"s\"))\nlet x = s.read(0,q)\n",
+      "exit_code": 70,
+      "stderr_pattern": "sensorunit\\.phys:[0-9]+:[0-9]+: runtime error:.*Sensor read failed"
+    },
+    {
+      "name": "sensortime",
+      "source": "let m = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet config = SensorConfig(m,10,0,0,0,0,Distribution.constant(0),0,0,0)\nvar s = Sensor(config,0)\nlet q = Quantity(1,m)\nlet first = s.read(1,q)\nlet x = s.read(0,q)\n",
+      "exit_code": 70,
+      "stderr_pattern": "sensortime\\.phys:[0-9]+:[0-9]+: runtime error:.*Sensor read failed"
+    },
+    {
+      "name": "sensorrange",
+      "source": "let m = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet config = SensorConfig(m,10,0,0,0,0,Distribution.constant(0),0,0,0)\nvar s = Sensor(config,0)\nlet x = s.read(1e20,Quantity(1,m))\n",
+      "exit_code": 70,
+      "stderr_pattern": "sensorrange\\.phys:[0-9]+:[0-9]+: runtime error:.*Sensor read failed"
+    },
+    {
+      "name": "distributioninvalid",
+      "source": "let d = Distribution.uniform(1,0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "distributioninvalid\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid distribution parameters"
+    },
+    {
+      "name": "units",
+      "source_file": "tests/fixtures/language/units.phys",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "unitmultiplyoverflow",
+      "source": "let u = Unit(127, 0, 0, 0, 0, 0, 0, 1, \"m127\")\nlet x = u.multiplied(u, \"bad\")\n",
+      "exit_code": 70,
+      "stderr_pattern": "unitmultiplyoverflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Unit exponent exceeds"
+    },
+    {
+      "name": "unitdivideoverflow",
+      "source": "let u = Unit(-128, 0, 0, 0, 0, 0, 0, 1, \"m-128\")\nlet m = Unit(1, 0, 0, 0, 0, 0, 0, 1, \"m\")\nlet x = u.divided(m, \"bad\")\n",
+      "exit_code": 70,
+      "stderr_pattern": "unitdivideoverflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Unit exponent exceeds"
+    },
+    {
+      "name": "unitpoweroverflow",
+      "source": "let u = Unit(1, 0, 0, 0, 0, 0, 0, 1, \"m\")\nlet x = u.powered(128, \"bad\")\n",
+      "exit_code": 70,
+      "stderr_pattern": "unitpoweroverflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Unit exponent exceeds"
+    },
+    {
+      "name": "unitpowerwide",
+      "source": "let u = Unit(0, 0, 0, 0, 0, 0, 0, 1, \"1\")\nlet x = u.powered(9223372036854775807, \"bad\")\n",
+      "exit_code": 70,
+      "stderr_pattern": "unitpowerwide\\.phys:[0-9]+:[0-9]+: runtime error:.*Unit power exceeds"
+    },
+    {
+      "name": "unitscaleoverflow",
+      "source": "let u = Unit(1, 0, 0, 0, 0, 0, 0, 1e200, \"huge\")\nlet x = u.powered(2, \"bad\")\n",
+      "exit_code": 70,
+      "stderr_pattern": "unitscaleoverflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Unit scale is not positive and finite"
+    },
+    {
+      "name": "unitscaleunderflow",
+      "source": "let u = Unit(1, 0, 0, 0, 0, 0, 0, 1e-200, \"tiny\")\nlet x = u.multiplied(u, \"bad\")\n",
+      "exit_code": 70,
+      "stderr_pattern": "unitscaleunderflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Unit scale is not positive and finite"
+    },
+    {
+      "name": "quantitydimension",
+      "source": "let m = Unit(1, 0, 0, 0, 0, 0, 0, 1, \"m\")\nlet s = Unit(0, 0, 1, 0, 0, 0, 0, 1, \"s\")\nfunc dynamicUnit() -> Unit:\n    return s\nlet q = Quantity(1, m).adding(Quantity(1, dynamicUnit()))\n",
+      "exit_code": 70,
+      "stderr_pattern": "quantitydimension\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid quantity operation"
+    },
+    {
+      "name": "quantityzero",
+      "source": "let u = Unit(0, 0, 0, 0, 0, 0, 0, 1, \"1\")\nlet q = Quantity(1, u).divided(Quantity(0, u), \"1\")\n",
+      "exit_code": 70,
+      "stderr_pattern": "quantityzero\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid quantity operation"
+    },
+    {
+      "name": "quantityoverflow",
+      "source": "let u = Unit(0, 0, 0, 0, 0, 0, 0, 1, \"1\")\nlet q = Quantity(1e308, u).adding(Quantity(1e308, u))\n",
+      "exit_code": 70,
+      "stderr_pattern": "quantityoverflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Quantity result or scale is not representable"
+    },
+    {
+      "name": "quantityunderflow",
+      "source": "let u = Unit(0, 0, 0, 0, 0, 0, 0, 1, \"1\")\nlet q = Quantity(1e-200, u).multiplied(Quantity(1e-200, u), \"1\")\n",
+      "exit_code": 70,
+      "stderr_pattern": "quantityunderflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Quantity result or scale is not representable"
+    },
+    {
+      "name": "arrayappenderror",
+      "source": "var a = [[1]]\nfunc fail() -> [Int64]:\n    let owned = [[2]]\n    assert(false)\n    return owned[0]\na.append(fail())\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayappenderror\\.phys:[0-9]+:[0-9]+: runtime error:.*Assertion failed"
+    },
+    {
+      "name": "arrayappendindex",
+      "source": "var a = [[1]]\na[1].append(2)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayappendindex\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index"
+    },
+    {
+      "name": "arrayremovemethod",
+      "source": "var a: [[Int64]] = []\nlet removed = a.remove(at: 0)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayremovemethod\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index"
+    },
+    {
+      "name": "arrayslicenegative",
+      "source": "let a = [[1]][-1..<0]\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayslicenegative\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "arrayslicereversed",
+      "source": "let a = [[1], [2]][1..<0]\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayslicereversed\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "arraysliceupper",
+      "source": "let a = [[1]][0..<2]\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arraysliceupper\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "arraysliceclosed",
+      "source": "let a = [[1]][0...1]\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arraysliceclosed\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "arrayslicemax",
+      "source": "let a = [[1]][0...9223372036854775807]\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayslicemax\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "arraysliceempty",
+      "source": "let empty: [[Int64]] = []\nlet a = empty[0...0]\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arraysliceempty\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "arraysliceerror",
+      "source": "let a = [[1], [2]][0...0]\nassert(false)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arraysliceerror\\.phys:[0-9]+:[0-9]+: runtime error:.*Assertion failed"
+    },
+    {
+      "name": "arrayrangereversed",
+      "source": "var a = [[1], [2]]\nfunc rhs() -> [[Int64]]:\n    assert(false)\n    return [[3]]\na[1..<0] = rhs()\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayrangereversed\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "arrayrangeupper",
+      "source": "var a = [[1]]\na[0..<2] = [[3]]\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayrangeupper\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "arrayrangeclosed",
+      "source": "var a = [[1]]\na[0...1] = [[3]]\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayrangeclosed\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "arrayrangeempty",
+      "source": "var a: [[Int64]] = []\na[0...0] = [[3]]\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayrangeempty\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "arrayrangeerror",
+      "source": "var a = [[1], [2]]\na[0...0] = [[3]]\nassert(false)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayrangeerror\\.phys:[0-9]+:[0-9]+: runtime error:.*Assertion failed"
+    },
+    {
+      "name": "arrayopenupper",
+      "source": "let a = [[1]][..<2]\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayopenupper\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "arrayopenlower",
+      "source": "let a = [[1]][2..<]\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayopenlower\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "arrayopenclosed",
+      "source": "let a = [[1]][...1]\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayopenclosed\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "arrayopenassign",
+      "source": "var a = [[1]]\nfunc rhs() -> [[Int64]]:\n    assert(false)\n    return [[2]]\na[2..<] = rhs()\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayopenassign\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "strideloopzero",
+      "source": "for i in 0..<5 by 0:\n    print(i)\n",
+      "exit_code": 70,
+      "stderr_pattern": "strideloopzero\\.phys:[0-9]+:[0-9]+: runtime error:.*Range step must not be zero"
+    },
+    {
+      "name": "strideslicezero",
+      "source": "let a = [[1], [2]][... by 0]\n",
+      "exit_code": 70,
+      "stderr_pattern": "strideslicezero\\.phys:[0-9]+:[0-9]+: runtime error:.*Range step must be positive"
+    },
+    {
+      "name": "stridescatterzero",
+      "source": "var a = [[1], [2]]\na[... by 0] = [[3], [4]]\n",
+      "exit_code": 70,
+      "stderr_pattern": "stridescatterzero\\.phys:[0-9]+:[0-9]+: runtime error:.*Range step must be positive"
+    },
+    {
+      "name": "stridescattercount",
+      "source": "var a = [[1], [2], [3]]\na[... by 2] = [[4]]\n",
+      "exit_code": 70,
+      "stderr_pattern": "stridescattercount\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "arrayremovenegative",
+      "source": "var a = [[1]]\na.remove(at: -1)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayremovenegative\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "arrayremoveupper",
+      "source": "var a = [[1]]\na.remove(at: 1)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayremoveupper\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "arrayremoveempty",
+      "source": "var empty: [[Int64]] = []\nempty.remove(at: 0)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayremoveempty\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "stringindexnegative",
+      "source": "let text = \"Grüße\"\nlet ch = text[-1]\n",
+      "exit_code": 70,
+      "stderr_pattern": "stringindexnegative\\.phys:[0-9]+:[0-9]+: runtime error:.*String index, slice or size out of range"
+    },
+    {
+      "name": "stringindexupper",
+      "source": "let text = \"Grüße\"\nlet ch = text[5]\n",
+      "exit_code": 70,
+      "stderr_pattern": "stringindexupper\\.phys:[0-9]+:[0-9]+: runtime error:.*String index, slice or size out of range"
+    },
+    {
+      "name": "stringsliceclosed",
+      "source": "let text = \"Grüße\"\nlet part = text[0...5]\n",
+      "exit_code": 70,
+      "stderr_pattern": "stringsliceclosed\\.phys:[0-9]+:[0-9]+: runtime error:.*String index, slice or size out of range"
+    },
+    {
+      "name": "stringstepzero",
+      "source": "let text = \"Grüße\"\nlet part = text[... by 0]\n",
+      "exit_code": 70,
+      "stderr_pattern": "stringstepzero\\.phys:[0-9]+:[0-9]+: runtime error:.*Range step must be positive"
+    },
+    {
+      "name": "arrayinsertnegative",
+      "source": "var a = [[1]]\na.insert([2], at: -1)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayinsertnegative\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "arrayinsertupper",
+      "source": "var a = [[1]]\na.insert([2], at: 2)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayinsertupper\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "arrayinsertingupper",
+      "source": "var a = [[1]]\na.insert([2], at: 2)\n",
+      "memory_balance": true,
+      "exit_code": 70,
+      "stderr_pattern": "arrayinsertingupper\\.phys:[0-9]+:[0-9]+: runtime error:.*Array index, size or ownership limit exceeded"
+    },
+    {
+      "name": "textintinvalid",
+      "source": "let x = Int64(\"1.2\")\n",
+      "exit_code": 70,
+      "stderr_pattern": "textintinvalid\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid Int64 text"
+    },
+    {
+      "name": "textintoverflow",
+      "source": "let x = Int64(\"9223372036854775808\")\n",
+      "exit_code": 70,
+      "stderr_pattern": "textintoverflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Int64 text out of range"
+    },
+    {
+      "name": "textfloatinvalid",
+      "source": "let x = Float64(\"NaN\")\n",
+      "exit_code": 70,
+      "stderr_pattern": "textfloatinvalid\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid Float64 text"
+    },
+    {
+      "name": "textfloatoverflow",
+      "source": "let x = Float64(\"1e9999\")\n",
+      "exit_code": 70,
+      "stderr_pattern": "textfloatoverflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Float64 text out of range"
+    },
+    {
+      "name": "vector4zero",
+      "source": "let v = Vec4(1, 2, 3, 4) / 0\n",
+      "exit_code": 70,
+      "stderr_pattern": "vector4zero\\.phys:[0-9]+:[0-9]+: runtime error:.*Division by zero"
+    },
+    {
+      "name": "vector4overflow",
+      "source": "let v = Vec4(0, 0, 0, 1e308) * 2\n",
+      "exit_code": 70,
+      "stderr_pattern": "vector4overflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Non-finite Float64"
+    },
+    {
+      "name": "vector4length",
+      "source": "let v = (Vec4(1e308, 1e308, 1e308, 1e308)).length()\n",
+      "exit_code": 70,
+      "stderr_pattern": "vector4length\\.phys:[0-9]+:[0-9]+: runtime error:.*Non-finite Float64"
+    },
+    {
+      "name": "vector4dot",
+      "source": "let v = (Vec4(0, 0, 0, 1e308)).dot(Vec4(0, 0, 0, 2))\n",
+      "exit_code": 70,
+      "stderr_pattern": "vector4dot\\.phys:[0-9]+:[0-9]+: runtime error:.*Non-finite Float64"
+    },
+    {
+      "name": "phase_space",
+      "source_file": "examples/language/phase_space.phys",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "rotation_path",
+      "source_file": "examples/language/rotation_path.phys",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "quatzero",
+      "source": "let q = (Quat(0, 0, 0, 0)).normalized()\n",
+      "exit_code": 70,
+      "stderr_pattern": "quatzero\\.phys:[0-9]+:[0-9]+: runtime error:.*finite nonzero quaternion"
+    },
+    {
+      "name": "quatstartzero",
+      "source": "let q = (Quat(0, 0, 0, 0)).slerp(Quat(0, 0, 0, 1), 0.5)\n",
+      "exit_code": 70,
+      "stderr_pattern": "quatstartzero\\.phys:[0-9]+:[0-9]+: runtime error:.*finite nonzero quaternion"
+    },
+    {
+      "name": "quatendzero",
+      "source": "let q = (Quat(0, 0, 0, 1)).slerp(Quat(0, 0, 0, 0), 0.5)\n",
+      "exit_code": 70,
+      "stderr_pattern": "quatendzero\\.phys:[0-9]+:[0-9]+: runtime error:.*finite nonzero quaternion"
+    },
+    {
+      "name": "quatfractionlow",
+      "source": "let q = (Quat(0, 0, 0, 1)).slerp(Quat(0, 0, 0, 1), -0.1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "quatfractionlow\\.phys:[0-9]+:[0-9]+: runtime error:.*interpolation fraction"
+    },
+    {
+      "name": "quatfractionhigh",
+      "source": "let q = (Quat(0, 0, 0, 1)).slerp(Quat(0, 0, 0, 1), 1.1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "quatfractionhigh\\.phys:[0-9]+:[0-9]+: runtime error:.*interpolation fraction"
+    },
+    {
+      "name": "quatoverflow",
+      "source": "let q = (Quat(0, 0, 0, 1e308)).multiplied(Quat(0, 0, 0, 2))\n",
+      "exit_code": 70,
+      "stderr_pattern": "quatoverflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Non-finite Float64"
+    },
+    {
+      "name": "springinvalid",
+      "source": "let v = springForce(Vec3(1, 0, 0), Vec3(0, 0, 0), Vec3(0, 0, 0), Vec3(0, 0, 0), -1, 1, 0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "springinvalid\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid force parameters"
+    },
+    {
+      "name": "springsingular",
+      "source": "let v = springForce(Vec3(0, 0, 0), Vec3(0, 0, 0), Vec3(0, 0, 0), Vec3(0, 0, 0), 1, 1, 0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "springsingular\\.phys:[0-9]+:[0-9]+: runtime error:.*Spring endpoints coincide"
+    },
+    {
+      "name": "draginvalid",
+      "source": "let v = stokesDrag(Vec3(1, 0, 0), 1, 0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "draginvalid\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid force parameters"
+    },
+    {
+      "name": "buoyancyinvalid",
+      "source": "let v = buoyancyForce(-1, 1, Vec3(0, -1, 0))\n",
+      "exit_code": 70,
+      "stderr_pattern": "buoyancyinvalid\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid force parameters"
+    },
+    {
+      "name": "forceoverflow",
+      "source": "let v = buoyancyForce(1e308, 1e308, Vec3(0, -10, 0))\n",
+      "exit_code": 70,
+      "stderr_pattern": "forceoverflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Non-finite force result"
+    },
+    {
+      "name": "compoundoverflow",
+      "source": "var x = 9223372036854775807\nx += 1\n",
+      "exit_code": 70,
+      "stderr_pattern": "compoundoverflow\\.phys:[0-9]+:[0-9]+: runtime error:.*addition overflow"
+    },
+    {
+      "name": "compoundglobal",
+      "source": "func f():\n    later += 1\nf()\nvar later = 1\n",
+      "exit_code": 70,
+      "stderr_pattern": "compoundglobal\\.phys:[0-9]+:[0-9]+: runtime error:.*Global used before initialization"
+    }
+  ]
+}

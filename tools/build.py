@@ -146,6 +146,8 @@ class Builder:
         # Conservative dependency tracking: changing any included project/SDL header
         # rebuilds all objects. Source edits still rebuild just the affected objects.
         self.headers = digest_files(headers)
+        self.test_headers = digest_files(sorted(p for p in (ROOT / "tests").rglob("*")
+                                                if p.suffix in (".h", ".inc") and p.is_file()))
         self.toolchain = digest_files([Path(self.cc), Path(self.ar)])
         self.environment = {k: env.get(k, "") for k in
                             ("INCLUDE", "LIB", "CL", "_CL_", "CPATH", "C_INCLUDE_PATH", "SDKROOT", "MACOSX_DEPLOYMENT_TARGET")}
@@ -202,7 +204,8 @@ class Builder:
             if not debug:
                 command.append("-DNDEBUG")
             command += [str(path), "-o", str(temporary)]
-        changed = self.execute(output, command, [path], self.headers)
+        headers = self.headers + (self.test_headers if path.is_relative_to(ROOT / "tests") else "")
+        changed = self.execute(output, command, [path], headers)
         if changed:
             print(f"Compiled {source}", flush=True)
         return output

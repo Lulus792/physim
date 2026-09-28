@@ -135,6 +135,81 @@ def main():
     finally:
         runner.execute_case = execute
 
+    # Source-map checks must reject unrelated build failures, wrong source lines,
+    # and successful compilation even when the expected words appear in output.
+    for scenario in ("msvc", "clang", "wrong_line", "wrong_file", "success", "unrelated"):
+        map_work = directory / ("map_" + scenario)
+        map_work.mkdir()
+
+        class MapBuilder(LanguageBuilder):
+            def __init__(self):
+                self.directory = map_work
+            def compile(self, path, **options):
+                assert "#line 1 \"source_map_probe.phys\"\n#error PHYSIM_SOURCE_MAP_PROBE\n" in Path(path).read_text()
+                location = "source_map_probe.phys(1)" if scenario == "msvc" else "source_map_probe.phys:1:2"
+                if scenario == "wrong_line":
+                    location = "source_map_probe.phys:2:2"
+                elif scenario == "wrong_file":
+                    location = "source_map_probe.c:1:2"
+                print("unrelated compiler error" if scenario == "unrelated" else location + ": error: PHYSIM_SOURCE_MAP_PROBE")
+                if scenario != "success":
+                    raise RuntimeError("C compilation rejected the probe")
+
+        def mapped_process(command, **options):
+            code = '#line 1 "source_map_probe.phys"\n#line 2 "source_map_probe.phys"\n'
+            return execute([sys.executable, "-c", "print(" + repr(code) + ", end='')"], **options)
+
+        runner.execute_case = mapped_process
+        try:
+            result = runner.language_case(runner.Case("map", (), libraries=(), language_probe="source_map"),
+                                          MapBuilder(), {}, source, map_work)
+            assert result["status"] == ("passed" if scenario in ("msvc", "clang") else "failed")
+        finally:
+            runner.execute_case = execute
+
+    # Verify preservation rejects modified artifacts and temporary debris as
+    # well as incorrect failures. The rejected source must never reach C build.
+    for scenario in ("preserved", "changed_c", "changed_binary", "pending", "wrong_error", "crashed"):
+        preserve_work = directory / scenario
+        preserve_work.mkdir()
+        build_calls = []
+
+        class PreserveBuilder(LanguageBuilder):
+            def __init__(self):
+                self.directory = preserve_work
+            def executable(self, *args, **options):
+                build_calls.append(args)
+                binary = preserve_work / "complete.exe"
+                binary.write_bytes(b"complete program")
+                return binary
+
+        def preserve_process(command, **options):
+            if "--emit-c" not in command:
+                code = "print('native checks passed\\ntrue\\n42\\n0.5')"
+            elif "immutable = 2" not in Path(command[-1]).read_text(encoding="utf-8"):
+                code = "print('complete C')"
+            else:
+                generated = preserve_work / "generated/preserve/main.c"
+                if scenario == "changed_c":
+                    generated.write_bytes(b"truncated C")
+                elif scenario == "changed_binary":
+                    (preserve_work / "complete.exe").write_bytes(b"truncated binary")
+                elif scenario == "pending":
+                    generated.with_suffix(".pending.c").write_bytes(b"partial")
+                diagnostic = "unrelated failure" if scenario == "wrong_error" else "preserved.phys:2:1: error: Assignment requires a mutable var binding"
+                code = "import sys; print(" + repr(diagnostic) + ", file=sys.stderr); sys.exit(" + ("7" if scenario == "crashed" else "1") + ")"
+            return execute([sys.executable, "-c", code], **options)
+
+        runner.execute_case = preserve_process
+        try:
+            result = runner.language_case(runner.Case("preserve", (), libraries=(), language_probe="failed_emission"),
+                                          PreserveBuilder(), {}, source, preserve_work)
+            assert result["status"] == ("passed" if scenario == "preserved" else "failed")
+            assert len(build_calls) == 1
+            assert (preserve_work / "sources ä/preserved.phys").read_text(encoding="utf-8") == (source / "tests/fixtures/language/native.phys").read_text(encoding="utf-8")
+        finally:
+            runner.execute_case = execute
+
     # Workflow success requires every build, process, diagnostic and output.
     # A missing artifact or failed module must stop dependent runner steps.
     workflow = dict(modules=[dict(name="module", source="fixture.phys", mode="--emit-experiment")],

@@ -21,7 +21,7 @@ def main():
     spec.loader.exec_module(module)
     args.work.mkdir(parents=True, exist_ok=True)
     source = Path(tempfile.mkdtemp(prefix="bootstrap source ä ", dir=args.work)).resolve()
-    for name in ("src", "include", "app"):
+    for name in ("src", "include", "app", "tests"):
         (source / name).mkdir()
     shutil.copyfile(repo / "app/utf8.manifest", source / "app/utf8.manifest")
     (source / "include/value.h").write_text("#define VALUE 1\n", encoding="utf-8")
@@ -88,6 +88,17 @@ def main():
             raise AssertionError("Source outside repository/build directory was accepted")
         except RuntimeError as error:
             assert "outside the repository/build directory" in str(error)
+    # Test-only headers must invalidate their test programs too, including
+    # allocator/memory guards that are not in public include directories.
+    test_header = source / "tests/guard.h"
+    test_source = source / "tests/guard.c"
+    test_source.write_text('#include "guard.h"\nint main(void) { return TEST_EXIT; }\n', encoding="utf-8")
+    for code in (0, 99):
+        test_header.write_text(f"#define TEST_EXIT {code}\n", encoding="utf-8")
+        with module.build_lock(options.build_dir):
+            builder = module.Builder(options, env)
+            test_program = builder.executable("test-header-probe", [str(test_source)], [])
+        assert subprocess.run([str(test_program)]).returncode == code, "Test header change was not rebuilt"
     with module.build_lock(options.build_dir):
         try:
             with module.build_lock(options.build_dir):
@@ -95,7 +106,7 @@ def main():
         except RuntimeError:
             pass
     assert not list(source.rglob("CMake*"))
-    assert {p.name for p in source.iterdir()} == {"src", "include", "app", "build"}
+    assert {p.name for p in source.iterdir()} == {"src", "include", "app", "tests", "build"}
     print("Direct build: Unicode/generated paths, incremental headers, failure recovery, artifact integrity and lock passed")
 
 
