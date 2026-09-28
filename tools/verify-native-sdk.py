@@ -29,6 +29,8 @@ def main():
     metadata = json.loads((sdk / "physim-sdk.json").read_text(encoding="utf-8"))
     if metadata.get("format") != 1 or metadata.get("platform") != sys.platform:
         raise RuntimeError("Expected a native SDK for this platform")
+    if (sdk / "cmake").exists() or any(sdk.rglob("CMakeLists.txt")) or any(sdk.rglob("*.cmake")):
+        raise RuntimeError("Native SDK must not contain legacy CMake build files")
     for name, digest in metadata["files"].items():
         path = (sdk / name).resolve()
         if sdk not in path.parents or hashlib.sha256(path.read_bytes()).hexdigest() != digest:
@@ -168,8 +170,9 @@ def main():
                 if any((project / name).read_bytes() != data for name, data in before.items()):
                     raise RuntimeError("Project build changed its source files")
             if args.app_tests:
-                for example in ("pendulum", "language_full"):
+                for example in native.EXAMPLES + ["language_full"]:
                     checked([sdk / "bin" / ("physim" + suffix), "--self-test", root / ("App " + example), example])
+                    print(f"Installed SDK GUI workflow: {example} passed", flush=True)
         elif args.app_tests:
             raise RuntimeError("App tests require an SDK with the app")
     (root / "PASSED.txt").write_text(
@@ -177,7 +180,7 @@ def main():
         "fifteen language programs, 27 rebuilt language modules, nine language experiments with both general analyses, "
         "specialized sensor analysis and six C/Physim combinations passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
-        ("C and Physim GUI workflows passed.\n" if args.app_tests else ""), encoding="utf-8")
+        ("Eight C template GUI workflows and the complete Physim language GUI workflow passed.\n" if args.app_tests else ""), encoding="utf-8")
     print(f"Native SDK verified: {root}")
 
 

@@ -1,4 +1,4 @@
-"""Create a relocatable, ad-hoc signed Physim.app from a completed macOS build."""
+"""Create a relocatable, ad-hoc signed Physim.app from a native macOS SDK."""
 import argparse
 from pathlib import Path
 import plistlib
@@ -9,11 +9,8 @@ import sys
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    source = parser.add_mutually_exclusive_group(required=True)
-    source.add_argument("--build", type=Path, help="Existing CMake build")
-    source.add_argument("--sdk", type=Path, help="SDK installed with tools/build.py --install (no CMake)")
+    parser.add_argument("--sdk", type=Path, required=True, help="SDK installed with tools/build.py --install")
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--config", default="Release")
     args = parser.parse_args()
     if sys.platform != "darwin":
         parser.error("Packaging requires macOS and its codesign tool")
@@ -22,19 +19,15 @@ def main():
         parser.error("Output must be a new .app directory")
     contents = app / "Contents"
     resources = contents / "Resources"
-    if args.sdk:
-        sdk = args.sdk.resolve()
-        if sdk in app.parents or not (sdk / "bin/physim").is_file() or not (sdk / "include/physim/core.h").is_file():
-            parser.error("Pass an installed SDK containing the app, outside the output bundle")
-        shutil.copytree(sdk, resources)
-        # The signed bundle has a different layout and binary hashes than the SDK.
-        (resources / "physim-sdk.json").unlink(missing_ok=True)
-    else:
-        subprocess.run(["cmake", "--install", str(args.build.resolve()), "--config", args.config,
-                        "--prefix", str(resources)], check=True)
+    sdk = args.sdk.resolve()
+    if sdk in app.parents or not (sdk / "bin/physim").is_file() or not (sdk / "include/physim/core.h").is_file():
+        parser.error("Pass an installed SDK containing the app, outside the output bundle")
+    shutil.copytree(sdk, resources)
+    # The signed bundle has a different layout and binary hashes than the SDK.
+    (resources / "physim-sdk.json").unlink(missing_ok=True)
     binaries = contents / "MacOS"
     shutil.move(resources / "bin", binaries)
-    # Preserve the SDK's bin/ contract for its command-line/CMake consumers.
+    # Preserve the SDK's bin/ contract for command-line consumers.
     (resources / "bin").symlink_to("../MacOS", target_is_directory=True)
     info = {
         "CFBundleDevelopmentRegion": "de",

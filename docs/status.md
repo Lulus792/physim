@@ -31,7 +31,8 @@ Die Linux-/Mac-Prüfung schließt vollständige C- und Physim-App-Abläufe ein.
 [Nachweise und genaue Abdeckung](platform-validation.md#direkter-build-von-physim).
 Der direkte Testkatalog umfasst alle 528 übernommenen Prüfungen: 493 ohne Fenster
 und 35 Fenster-/Grafiktests. Ohne SDL bleiben 482 Prüfungen verfügbar. Die bisherigen
-CMake-Abläufe dienen noch dem abschließenden Vergleich. Der SDL-Quellbuild
+Repository-Dateien für CMake bleiben noch zum abschließenden Vergleich erhalten.
+Die CI verwendet jetzt ausschließlich den direkten Physim-Build. Der SDL-Quellbuild
 verwendet weiterhin dessen eigenes Buildsystem.
 
 Der direkte Build unterstützt inzwischen auch Sanitizer. Lokal erkennt MSVC den
@@ -39,9 +40,8 @@ absichtlich eingebauten Speicherfehler und besteht zehn instrumentierte Core-,
 Speicher-, Berichts-, Mutations- und Sprachspeichertests. Unter Windows bestehen
 die Probe und diese zehn Prüfungen in der CI mit MSVC und ClangCL. Unter Linux
 GCC und Clang bestehen zu `f6cedbf` alle 493 Prüfungen ohne Fenster und alle
-35 Grafikprüfungen mit ASan/UBSan. Auf macOS Apple Silicon bestehen zu `69ddae7`
-alle 482 SDL-freien Prüfungen mit LLVM 20 und LLD; die Intel-Suite läuft noch.
-CMake bleibt bis zum Abschluss dieses Vergleichs verfügbar.
+35 Grafikprüfungen mit ASan/UBSan. Auf macOS Apple Silicon und Intel bestehen zu
+`69ddae7` alle 482 SDL-freien Prüfungen mit LLVM 20 und LLD.
 
 Auch der optionale IPC-libFuzzer hat jetzt einen direkten Buildmodus
 `--fuzzer`. Kernbibliothek und Harness erhalten Clangs Abdeckungsinstrumentierung
@@ -77,7 +77,7 @@ erneuten Laden; lokal besteht sie mit MSVC und in der CI mit Apple Clang auf Int
 Auf Apple Silicon reproduziert sie den Fehler mit Apples veralteter ASan-
 Destruktorausgabe. Mit LLVM 20 und LLD besteht diese Minimalprüfung im Lauf zu
 `69ddae7` auf beiden Mac-Architekturen. Die vollständige Suite besteht dort auf
-Apple Silicon mit 482 Prüfungen; die Intel-Suite läuft noch.
+Apple Silicon und Intel mit jeweils 482 Prüfungen.
 Beide Mac-Fuzzerkampagnen bestehen
 im CI-Lauf zu `f6cedbf` mit LLVM 20 und LLD.
 Der sporadische Linux-Startfehler wird durch feinere SDL-/Fenster-/GL-Protokolle
@@ -111,8 +111,20 @@ erhaltenem C-Code/Programm und anschließende Fehlerkorrektur. Der gemeinsame
 Beispielkatalog besteht außerdem die vollständige Prüfung eines verschobenen
 MSVC-Release-SDKs (`build/native/example-sdk-check/Native SDK ä yfndauk_`).
 Die Sprach- und Tutorialanleitungen verwenden nun die direkten Buildbefehle. Die neue
-Beispielprüfung wird in allen acht CI-Kombinationen ausgeführt; ihr Plattformnachweis
-steht noch aus.
+Beispielprüfung besteht im Lauf zu `87c8ae8` in allen acht CI-Kombinationen.
+
+Die CI baut und prüft Physim jetzt vollständig über den direkten Builder; die
+doppelten CMake-/CTest-Schritte entfallen. Neue SDKs enthalten keine
+`CMakeLists.txt` oder CMake-Anbindungen mehr, und die SDK-Prüfung kontrolliert das.
+`--app-tests` übernimmt alle acht C-Vorlagen plus den vollständigen Sprachablauf;
+Linux prüft alle C-Vorlagen zusätzlich mit der instrumentierten App. Mac-Pakete
+entstehen ausschließlich aus dem nativen SDK und werden nach dem Verschieben
+erneut auf ihre Signatur geprüft. Die plattformübergreifende Abnahme dieses
+gesamten CI-Ablaufs steht noch aus. Lokal besteht das neue MSVC-Release-SDK die
+vollständige Prüfung einschließlich aller neun grafischen Abläufe unter
+`build/native/direct-only-verification/Native SDK ä sv58dunt`. Der direkte
+Release-Benchmark besteht mit 100.000 Samples und fünf Wiederholungen unter
+`build/native-ci-benchmark-results`. SDL verwendet weiterhin sein eigenes Buildsystem.
 
 ## Bisherige Umsetzungsschritte des direkten Builders
 

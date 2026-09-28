@@ -45,9 +45,8 @@ nach. Gleichzeitige Builds im selben Ausgabeordner werden abgewiesen.
 Quellen mit zeitabhängigen Makros wie `__TIME__` können bei jedem Build erneut
 übersetzt werden, weil sich ihr vorverarbeiteter Inhalt ändert.
 
-Die nachfolgenden CMake-Anleitungen betreffen den bisherigen Bau von Physim selbst
-und die SDK-Anbindung. Der direkte Buildweg ist unten beschrieben; die vollständige
-Ablösung einschließlich Paketierung und gesamter Testsuite bleibt ein eigenes Ziel.
+Physim selbst, seine Tests und SDK-Pakete verwenden ebenfalls den direkten Builder.
+Der SDL-Quellbuild benötigt weiterhin dessen eigenes Buildsystem.
 
 ## Physim direkt ohne CMake bauen
 
@@ -232,9 +231,9 @@ gespeichert. Ein Filter ohne Treffer ist ebenfalls ein Fehler.
 
 Die drei Benchmark-Prüfungen (`benchmark_smoke`, `benchmark_driver`, `ui_rendering`)
 sind ebenfalls übertragen. Der direkte Katalog enthält damit 493 Prüfungen ohne
-Fenster und 35 Grafikabläufe. Die vorhandene CMake-CI bleibt für den Vergleich
-und ihre bisherigen Sanitizer-/SDK-Prüfungen erhalten; ihre vollständige Ablösung
-und der plattformübergreifende Nachweis des erweiterten Katalogs stehen noch aus.
+Fenster und 35 Grafikabläufe. Die CI verwendet diesen Katalog, die direkte
+Sanitizer-Prüfung und die Prüfung des verschobenen SDKs. Die ausgeführten
+Plattformnachweise stehen in [Plattformprüfung](platform-validation.md).
 
 ### Benchmarks direkt bauen
 
@@ -328,9 +327,8 @@ ditto -c -k --sequesterRsrc --keepParent build/Physim-native.app build/Physim-ma
 ```
 
 Das `.app`-Paket enthält SDL und das SDK und wird lokal ad hoc signiert und geprüft.
-Developer-ID-Signierung und Apple-Notarisierung bleiben offen. `--sdk` verwendet
-keinen CMake-Aufruf; `--build` im Paketskript unterstützt weiterhin bestehende
-CMake-Buildverzeichnisse.
+Developer-ID-Signierung und Apple-Notarisierung bleiben offen. Das Paketskript
+übernimmt ausschließlich ein mit `tools/build.py --install` erzeugtes SDK.
 
 Die SDK-Prüfung kopiert und verschiebt das Paket in einen Pfad mit Leerzeichen
 und Umlaut. Sie prüft alle mitgelieferten Module, öffentliche Header einzeln,
@@ -339,16 +337,16 @@ Runnern und Mess-/Berichtsdateien. Zusätzlich werden die installierten Core-Que
 alle acht C-Vorlagen samt Analyse sowie 27 Sprachmodule unabhängig neu gebaut.
 Neun Sprachexperimente laufen mit beiden allgemeinen Sprach-Auswertungen;
 hinzu kommen die spezielle Sensoranalyse und sechs C-/Physim-Kombinationen.
-`--app-tests` ergänzt zwei vollständige
-App-Abläufe und benötigt eine grafische Sitzung. Unter Windows führen die
+`--app-tests` ergänzt neun vollständige App-Abläufe: alle acht C-Vorlagen und
+das reine Physim-Sprachprojekt. Es benötigt eine grafische Sitzung. Unter Windows führen die
 gehosteten CI-Worker diese Grafikabläufe nicht aus; sie werden lokal geprüft.
-Die mitgelieferten CMake-Anbindungsdateien bleiben vorerst für bestehende
-SDK-Verbraucher erhalten; der neue Ablauf verwendet sie nicht.
+Das SDK enthält keine CMake-Anbindungsdateien oder `CMakeLists.txt` mehr.
+Nutzerprojekte verwenden `physim.project` und den mitgelieferten `physim-build`.
 
 ## Toolchains
 
-Windows: CMake 3.24+, Visual Studio 2022 mit C/C++-Desktop-Workload und Windows SDK.
-Linux: GCC oder Clang, CMake 3.24+, Make/Ninja. Der Core braucht nur libc, libm
+Windows: Python 3.10+, Visual Studio 2022 mit C/C++-Desktop-Workload und Windows SDK.
+Linux: Python 3.10+ und GCC oder Clang. Der Core braucht nur libc, libm
 und die jeweilige Betriebssystemschicht. SDL3 und Nuklear werden nur für die App benötigt.
 Die App setzt einen OpenGL-3.3-Core-Treiber voraus. Grafiktests auf Linux-Servern
 können Mesa mit Xvfb verwenden; der CI-Workflow konfiguriert dies. Für den echten
@@ -364,20 +362,20 @@ git clone --depth 1 --branch release-3.2.30 https://github.com/libsdl-org/SDL.gi
 cmake -S build-sdl-source -B build-sdl -DCMAKE_BUILD_TYPE=Release -DSDL_TESTS=OFF -DCMAKE_INSTALL_PREFIX="$PWD/build-sdl-install"
 cmake --build build-sdl --parallel
 cmake --install build-sdl
-cmake -S . -B build -DCMAKE_PREFIX_PATH="$PWD/build-sdl-install" -DCMAKE_BUILD_TYPE=Debug
-cmake --build build --parallel
-ctest --test-dir build --output-on-failure
+python3 tools/build.py --sdl "$PWD/build-sdl-install" --test
+./build/native/Debug/bin/physim
 ```
 
 SDL benötigt systemabhängig X11-/Wayland-Entwicklungspakete. Der CI-Workflow zeigt
-die Ubuntu-Pakete. Bibliothek und Runner können mit `PHYSIM_BUILD_APP=OFF` unabhängig
+die Ubuntu-Pakete. CMake ab 3.24 und Make oder Ninja werden nur für SDL benötigt.
+Bibliothek und Runner können mit `python3 tools/build.py --no-app` unabhängig
 von sämtlichen UI-Paketen gebaut werden.
 
 macOS verwendet Apple Clang, die Xcode Command Line Tools und OpenGL 4.1 Core.
 Die obigen Befehle bauen jeweils für die Architektur des Macs (Apple Silicon oder
-Intel). Für Fensterprüfungen beim Konfigurieren `-DPHYSIM_GRAPHICS_TESTS=ON`
-ergänzen und die Tests in einer angemeldeten grafischen Sitzung ausführen.
-Die App startet mit `./build/bin/physim`. Für Speichern, Suche und Editorbefehle
+Intel). Fensterprüfungen mit `python3 tools/build.py --test-display`
+in einer angemeldeten grafischen Sitzung ausführen.
+Die App startet mit `./build/native/Debug/bin/physim`. Für Speichern, Suche und Editorbefehle
 gilt auf macOS **Cmd** anstelle von **Ctrl**. Die aktuellen Plattformnachweise
 stehen in [Plattformprüfung](platform-validation.md).
 
@@ -412,7 +410,8 @@ python3 tools/verify-native-sdk.py --sdk build/SDK-check --work build/sdk-checks
 
 Unter Windows `python` statt `python3` verwenden. `--compiler` wählt bei Bedarf
 für beide Befehle denselben Compiler. Der Prüfer übernimmt Debug/Release aus
-den SDK-Metadaten. `--app-tests` ergänzt zwei grafische Abläufe und benötigt
+den SDK-Metadaten. `--app-tests` ergänzt alle acht C-Vorlagen und das reine
+Physim-Sprachprojekt als vollständige grafische Abläufe und benötigt
 eine Desktop-Sitzung.
 
 Das Skript kopiert und verschiebt das SDK in einen Pfad mit Leerzeichen und
@@ -435,8 +434,7 @@ Die physikalischen Referenztests bleiben zusätzlich erforderlich.
 Unter `build/sdk-checks/Native SDK ä <Kennung>/` bleiben `verification.log`,
 erzeugte Dateien und bei Erfolg `PASSED.txt` erhalten. Wiederholungen verwenden
 neue Ordner. Die CI führt diese Prüfung unter Windows, Linux und macOS aus.
-Der bisherige Vergleich über `cmake -DBUILD_DIR=build -DCONFIG=Release -P tools/verify-sdk.cmake`
-bleibt bis zur Abnahme der erweiterten direkten Prüfung verfügbar.
+Die Prüfung weist SDKs mit verbliebenen CMake-Builddateien zurück.
 
 ### Fachliche und technische Prüfungen
 
@@ -517,16 +515,12 @@ bleibt bis zur Abnahme der erweiterten direkten Prüfung verfügbar.
   Auswahl, Öffnen und Dateifilter werden über SDL-Maus-/Tastaturereignisse geprüft.
   `PHYSIM_TEST_LONG=1` verlängert die Testsimulation auf 20 s, etwa für mehrere Pendelperioden.
 
-`cmake -S . -B build -DPHYSIM_GRAPHICS_TESTS=ON` nimmt Grafiktest und Fenstersmoke
-und Dokumentationsfenster sowie Autosave-Neustarttests und den Monte-Carlo-App-Test
-in CTest auf, zusätzlich zu Speicherverwaltung, Mathematik und weiteren Kernprüfungen.
-Die konkrete Testliste der gewählten Konfiguration zeigt `ctest -N`.
-Standardmäßig ist diese Option aus, sodass
-Core-/Runner-Tests ohne Display laufen. Die Grafiktests wurden lokal mit NVIDIA
-OpenGL 3.3 ausgeführt. Der Windows-CI-Job prüft Build und Core/Runner; Linux-CI soll
-Grafik unter Xvfb/Mesa prüfen. Das CTest-Label `display` erfasst die Tests,
-die ein Fenster benötigen: `ctest -LE display` prüft ohne Anzeige, `ctest -L display`
-unter Xvfb mit Openbox prüft die Fensterabläufe. Die CI läuft bei jedem Push in
+`python3 tools/build.py --test-display` prüft Grafik, Fenster, Dokumentation,
+Autosave-Neustart und Monte Carlo in einer grafischen Sitzung (Windows: `python`).
+`--test` führt die Prüfungen ohne Fenster aus. `--test-filter` begrenzt beide
+Varianten auf benannte Fälle oder Suchmuster. Die Grafiktests wurden lokal mit
+NVIDIA OpenGL 3.3 ausgeführt. Die Windows-CI prüft ohne Fenster; Linux verwendet
+Xvfb, Mesa und Openbox, macOS eine grafische Sitzung. Die CI läuft bei jedem Push in
 beiden Repositories. Den konkreten Prüfstand zeigt
 [GitHub Actions](https://github.com/PhysicSimulator/physim/actions/workflows/ci.yml).
 Auf dem lokalen Windows-Rechner ist keine WSL-Distribution installiert.
@@ -699,10 +693,10 @@ Die Sprachvorlagen lassen sich mit dem vollständigen App-Test prüfen. Jeder Te
 benötigt einen neuen, noch nicht belegten Projektordner:
 
 ```powershell
-.\build\bin\physim.exe --self-test D:/PhysimTest/Sprachpendel language_pendulum
-.\build\bin\physim.exe --self-test D:/PhysimTest/Sprachwurf language_projectile
-.\build\bin\physim.exe --self-test D:/PhysimTest/Sprachworkflow language_full
-.\build\bin\physim.exe --self-test D:/PhysimTest/Gemischt language_mixed
+.\build\native\Debug\bin\physim.exe --self-test D:/PhysimTest/Sprachpendel language_pendulum
+.\build\native\Debug\bin\physim.exe --self-test D:/PhysimTest/Sprachwurf language_projectile
+.\build\native\Debug\bin\physim.exe --self-test D:/PhysimTest/Sprachworkflow language_full
+.\build\native\Debug\bin\physim.exe --self-test D:/PhysimTest/Gemischt language_mixed
 ```
 
 Der Elternordner muss existieren. Die Tests prüfen den absichtlichen Typfehler,
@@ -715,14 +709,13 @@ die Korrektur, den Sprachbericht mit zwei Diagrammen, Exporte und den unverände
 Analyse-Quellsnapshot sowie beide Sprachdateien nach erneutem Projektöffnen.
 `language_mixed` prüft denselben Analyseablauf mit einem C-Pendel als Experiment.
 
-Die reproduzierbare IPC-Mutationskampagne ist als CTest `protocol_mutations`
+Die reproduzierbare IPC-Mutationskampagne ist als Prüfung `protocol_mutations`
 registriert. Ablauf, Invarianten und Reproduktion stehen in [fuzzing.md](fuzzing.md).
 
 ```powershell
-cmake --build build --config Release --parallel
-cmake --install build --config Release --prefix build/package
-cd build
-cpack -C Release
+python tools/build.py --config Release --install build/package
+python tools/verify-native-sdk.py --sdk build/package --work build/package-checks
+Compress-Archive -Path build/package -DestinationPath build/Physim-Windows.zip
 ```
 
 Das Paket enthält die App, Runner, Beispielmodule, SDK-Quellen und Header, Vorlagen,
@@ -731,10 +724,11 @@ eingerichtet sein. Ein Clean-Machine-Test und Linux-Distributionspakete sind noc
 
 ### macOS-App-Paket
 
-Auf einem Mac mit abgeschlossenem Build erzeugt dieser Befehl ein neues App-Paket:
+Auf einem Mac erzeugen diese Befehle ein SDK und daraus ein neues App-Paket:
 
 ```sh
-python3 tools/package-macos.py --build build --config Release --output build/Physim.app
+python3 tools/build.py --config Release --install build/native/SDK
+python3 tools/package-macos.py --sdk build/native/SDK --output build/Physim.app
 open build/Physim.app
 ```
 
@@ -747,4 +741,4 @@ Developer ID und Notarisierung fehlen noch die Apple-Entwicklerzugänge.
 Die macOS-CI verschiebt das Paket in einen Pfad mit Leerzeichen und Umlaut und
 prüft daraus vollständige C- und Physim-Sprachprojekte.
 Erfolgreich geprüfte Pakete stehen im jeweiligen CI-Lauf als
-`physim-app-macos-15` (Apple Silicon) oder `physim-app-macos-15-intel` bereit.
+`physim-native-macos-15` (Apple Silicon) oder `physim-native-macos-15-intel` bereit.

@@ -1,6 +1,6 @@
 # Plattformprüfung
 
-Stand: 28. September 2026. Diese Nachweise gelten für die genannten Umgebungen
+Stand: 29. September 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
 ## Linux
@@ -61,8 +61,9 @@ lokalisierte Zahlenkonvertierung, macOS-Systemschriften und OpenGL 4.1 Core.
 Die lokale Ad-hoc-Signatur wird geprüft; Developer-ID-Signierung und Notarisierung
 für eine öffentliche Verteilung sind noch offen. Die CI prüft vollständige C- und
 Physim-Sprachprojekte aus dem verschobenen Paket.
-Die geprüften ZIP-Dateien stehen im Paketlauf als `physim-app-macos-15`
-(Apple Silicon) und `physim-app-macos-15-intel` bereit.
+Die geprüften ZIP-Dateien stehen im damaligen Paketlauf als `physim-app-macos-15`
+(Apple Silicon) und `physim-app-macos-15-intel` bereit. Neue direkte Builds verwenden
+`physim-native-macos-15` beziehungsweise `physim-native-macos-15-intel`.
 Die CI-Pakete sind Debug-Entwicklungsstände. Weitere macOS-Versionen, echte
 Mac-Grafikhardware und Installation auf einem frischen Mac bleiben separate
 Abnahmen; die gehosteten Grafiktests verwenden Apples Software Renderer.
@@ -248,8 +249,8 @@ Darstellung. Die macOS-Sanitizer-CI verwendet nun LLVM 20 und LLD wie der Fuzzer
 im [Lauf zu `69ddae7`](https://github.com/PhysicSimulator/physim/actions/runs/36495859541)
 besteht die vollständige Minimalprüfung auf Apple Silicon und Intel, einschließlich
 der 64 Modulöffnungen und des erkannten globalen Pufferüberlaufs nach erneutem
-Laden. Auf Apple Silicon bestehen außerdem alle 482 SDL-freien Sanitizer-Tests
-und der vollständige Plattformjob. Die Intel-Sanitizer-Suite läuft noch.
+Laden. Auf beiden Architekturen bestehen außerdem alle 482 SDL-freien
+Sanitizer-Tests sowie die direkten Build-, SDK- und Grafikschritte.
 
 Die korrigierte UI-Größenprüfung besteht im direkten Grafikschritt unter Linux
 GCC zu `0d10940`. Im vorherigen GCC-Lauf zu `49efcbb` besteht der UI-Benchmark,
@@ -320,15 +321,24 @@ GCC/Clang sowie macOS auf Apple Silicon/Intel.
 | `2b3b6e7` | 437 Tests | Alle acht Kombinationen: [Lauf 36480859045](https://github.com/PhysicSimulator/physim/actions/runs/36480859045) |
 | `b95e119` | 463 Tests | Alle acht Kombinationen: [Lauf 36482481623](https://github.com/PhysicSimulator/physim/actions/runs/36482481623) |
 | `a051ea0` | 491 Tests, Build ohne Testfilter korrigiert | Alle acht Kombinationen: [Lauf 36485408557](https://github.com/PhysicSimulator/physim/actions/runs/36485408557) |
+| `87c8ae8` | 493 Tests, zusätzlich 15 Sprachprogramme und 27 Module mit Prüfung inkrementeller Builds und Fehlerkorrektur | Alle acht Kombinationen: [Lauf 36499326457](https://github.com/PhysicSimulator/physim/actions/runs/36499326457) |
 
 Die ursprünglichen 51 C-Tests bestanden auch lokal mit MSVC Debug; die 41 SDL-freien
 Fälle zusätzlich mit Clang Release. Der vollständige Satz mit 134 Tests bestand
-lokal mit MSVC Debug. Die CMake-CI bleibt bis zur vollständigen Übertragung und
-Abnahme ihrer Sanitizer- und SDK-Prüfungen erhalten.
+lokal mit MSVC Debug.
+
+Die CI wird nach diesen Vergleichen vollständig auf den direkten Physim-Build
+umgestellt. Die 528 Tests, Sanitizer, SDK-Prüfung, Fuzzer und Benchmarks bleiben
+enthalten. Die SDK-Grafikprüfung übernimmt zusätzlich alle acht C-Vorlagen;
+Linux prüft sie auch mit der instrumentierten App. Mac-Pakete entstehen nur aus
+dem nativen SDK und werden nach dem Signieren verschoben und erneut geprüft.
+Neue SDKs enthalten keine CMake-Builddateien. Der Nachweis dieses umgestellten
+Gesamtablaufs steht noch aus; die alten Repository-Builddateien bleiben bis dahin
+als Vergleich erhalten. SDL wird in der CI weiterhin mit seinem CMake-Build gebaut.
 
 ## Weitere Änderungen prüfen
 
 Jeder Push startet die [CI](https://github.com/PhysicSimulator/physim/actions/workflows/ci.yml).
 Die jeweiligen Jobs und Artefakte zeigen den geprüften Commit. Linux-Screenshots
-und das letzte CTest-Protokoll werden als `linux-ui-gcc` beziehungsweise
-`linux-ui-clang` archiviert. SDK-Protokolle liegen in eigenen Artefakten.
+und direkte Ergebnisberichte werden als `linux-ui-gcc` beziehungsweise
+`linux-ui-clang` archiviert. Diese Artefakte enthalten auch SDK-Protokolle.

@@ -52,11 +52,13 @@ jobs:
           build/native/Debug/bin/physim --self-test "$PWD/build/Native C ä" pendulum
           build/native/Debug/bin/physim --self-test "$PWD/build/Native Language ä" language_full
       - name: Native SDK package and relocation
-        if: ${{ !inputs.package_only }}
         run: |
           python3 tools/build.py --compiler clang --install build/native/SDK
           python3 tools/verify-native-sdk.py --sdk build/native/SDK --work build/native --compiler clang --app-tests
-          python3 tools/package-macos.py --sdk build/native/SDK --output "build/native/Moved App ä/Physim.app"
+          python3 tools/package-macos.py --sdk build/native/SDK --output build/native/Physim.app
+          mkdir -p "build/native/Moved App ä"
+          mv build/native/Physim.app "build/native/Moved App ä/Physim.app"
+          codesign --verify --deep --strict "build/native/Moved App ä/Physim.app"
           "build/native/Moved App ä/Physim.app/Contents/MacOS/physim" --self-test "$PWD/build/native/Bundled C ä" pendulum
           "build/native/Moved App ä/Physim.app/Contents/MacOS/physim" --self-test "$PWD/build/native/Bundled Language ä" language_full
           ditto -c -k --sequesterRsrc --keepParent "build/native/Moved App ä/Physim.app" "build/Physim-native-${{ matrix.runner }}.zip"
@@ -69,48 +71,12 @@ jobs:
           export PATH="$(brew --prefix llvm@20)/bin:$(brew --prefix lld@20)/bin:$PATH"
           python3 tools/build.py --compiler clang --sanitizers --no-app --test
       - name: Archive native macOS package
-        if: ${{ !cancelled() && !inputs.package_only }}
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: physim-native-${{ matrix.runner }}
           path: build/Physim-native-${{ matrix.runner }}.zip
           if-no-files-found: ignore
-      - name: Configure
-        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DPHYSIM_GRAPHICS_TESTS=ON -DPHYSIM_BUILD_BENCHMARKS=ON -DCMAKE_PREFIX_PATH="$PWD/build-sdl-install"
-      - name: Build
-        id: macos_build
-        run: |
-          if [ "${{ inputs.package_only }}" = "true" ]; then
-            cmake --build build --parallel --target physim physimc physim-runner physim-analysis-runner physim-batch pendulum projectile collision box_floor spring uncertain_projectile box_collision buoyancy pendulum_analysis
-          else
-            cmake --build build --parallel
-          fi
-      - name: Test
-        if: ${{ !inputs.package_only }}
-        run: ctest --test-dir build --output-on-failure -LE display
-      - name: Relocated SDK and all templates
-        if: ${{ !cancelled() && !inputs.package_only && steps.macos_build.outcome == 'success' }}
-        run: cmake -DBUILD_DIR=build -DCONFIG=Debug -P tools/verify-sdk.cmake
-      - name: GPU and window tests
-        if: ${{ !cancelled() && !inputs.package_only && steps.macos_build.outcome == 'success' }}
-        run: ctest --test-dir build --output-on-failure -L display
-      - name: App workflow with paths containing spaces and Unicode
-        if: ${{ !cancelled() && !inputs.package_only && steps.macos_build.outcome == 'success' }}
-        run: |
-          result=0
-          for example in pendulum projectile collision box_floor spring uncertain_projectile box_collision buoyancy; do
-            ./build/bin/physim --self-test "$PWD/build/App Test ä $example" "$example" || result=1
-          done
-          exit "$result"
-      - name: Relocated macOS app bundle
-        if: ${{ !cancelled() && steps.macos_build.outcome == 'success' }}
-        run: |
-          python3 tools/package-macos.py --build build --config Debug --output build/Physim.app
-          mkdir -p "build/Moved Mac ä"
-          mv build/Physim.app "build/Moved Mac ä/Physim.app"
-          "build/Moved Mac ä/Physim.app/Contents/MacOS/physim" --self-test "$PWD/build/Bundled C ä" pendulum
-          "build/Moved Mac ä/Physim.app/Contents/MacOS/physim" --self-test "$PWD/build/Bundled Language ä" language_full
-          ditto -c -k --sequesterRsrc --keepParent "build/Moved Mac ä/Physim.app" "build/Physim-${{ matrix.runner }}.zip"
       - name: Archive macOS evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -127,19 +93,8 @@ jobs:
             build/native-integrations/toolbar_*/**/*.bmp
             build/native/Native SDK*/verification.log
             build/native/Native SDK*/PASSED.txt
-            build/SDK Test*/verification.log
-            build/SDK Test*/PASSED.txt
-            build/toolbar-*/*.bmp
-            build/App Test*/*.bmp
-            build/Bundled*/*.bmp
-            build/Testing/Temporary/LastTest.log
-          if-no-files-found: ignore
-      - name: Archive tested macOS app
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: physim-app-${{ matrix.runner }}
-          path: build/Physim-${{ matrix.runner }}.zip
+            build/native/Native SDK*/App */*.bmp
+            build/native/Bundled*/*.bmp
           if-no-files-found: ignore
   windows:
     if: ${{ !inputs.package_only }}
@@ -202,14 +157,6 @@ jobs:
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
           python tools/build.py --compiler $compiler --sanitizers --no-app --test --test-filter 'memory*' --test-filter core --test-filter report --test-filter run_mutations --test-filter protocol_mutations --test-filter 'language_native_memory_*'
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
-      - name: Configure
-        run: cmake -S . -B build -A x64 -T ${{ matrix.toolset }} -DPHYSIM_BUILD_BENCHMARKS=ON
-      - name: Build
-        run: cmake --build build --config ${{ matrix.configuration }} --parallel
-      - name: Test
-        run: ctest --test-dir build -C ${{ matrix.configuration }} --output-on-failure
-      - name: Relocated SDK and all templates
-        run: cmake -DBUILD_DIR=build -DCONFIG=${{ matrix.configuration }} -P tools/verify-sdk.cmake
       - name: Archive SDK verification
         if: always()
         uses: actions/upload-artifact@v4
@@ -225,12 +172,15 @@ jobs:
             build/native-integrations/toolbar_*/**/*.bmp
             build/native/Native SDK*/verification.log
             build/native/Native SDK*/PASSED.txt
-            build/SDK Test*/verification.log
-            build/SDK Test*/PASSED.txt
           if-no-files-found: ignore
       - name: Record verified Release workloads
         if: matrix.toolset == 'v143' && matrix.configuration == 'Release'
-        run: python tools/benchmark.py build/bin/physim-benchmark.exe --output build/benchmark-results --samples 100000 --repeats 5
+        shell: pwsh
+        run: |
+          python tools/build.py --compiler cl --config Release --benchmarks
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python tools/benchmark.py build/native/Release/bin/physim-benchmark.exe --output build/benchmark-results --samples 100000 --repeats 5
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
       - name: Archive performance evidence
         if: always() && matrix.toolset == 'v143' && matrix.configuration == 'Release'
         uses: actions/upload-artifact@v4
@@ -238,7 +188,7 @@ jobs:
           name: windows-release-benchmark
           path: build/benchmark-results
           if-no-files-found: ignore
-      # GPU tests run locally on Windows with PHYSIM_GRAPHICS_TESTS=ON.
+      # GPU tests run locally on Windows with tools/build.py --test-display.
       # The hosted Windows worker has no guaranteed OpenGL 3.3 driver.
   linux:
     if: ${{ !inputs.package_only }}
@@ -303,43 +253,17 @@ jobs:
           name: physim-native-linux-${{ matrix.compiler }}
           path: build/Physim-native-linux-${{ matrix.compiler }}.tar.gz
           if-no-files-found: ignore
-      - name: Configure
-        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DPHYSIM_SANITIZERS=ON -DPHYSIM_GRAPHICS_TESTS=ON -DPHYSIM_BUILD_BENCHMARKS=ON -DCMAKE_PREFIX_PATH="$PWD/build-sdl-install"
-      - name: Build
-        id: linux_build
-        run: cmake --build build --parallel
-      - name: Test
-        run: ctest --test-dir build --output-on-failure -LE display
-      - name: Relocated SDK and all templates
-        if: ${{ !cancelled() && steps.linux_build.outcome == 'success' }}
-        run: cmake -DBUILD_DIR=build -DCONFIG=Debug -P tools/verify-sdk.cmake
-      - name: Archive SDK verification
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: sdk-linux-${{ matrix.compiler }}
-          path: |
-            build/SDK Test*/verification.log
-            build/SDK Test*/PASSED.txt
-          if-no-files-found: ignore
-      - name: GPU and window tests
-        if: ${{ !cancelled() && steps.linux_build.outcome == 'success' }}
-        env:
-          ASAN_OPTIONS: detect_leaks=0
-          LIBGL_ALWAYS_SOFTWARE: "1"
-        # A window manager is needed for the real maximize/restore workflow.
-        run: xvfb-run -a -s '-screen 0 1920x1080x24' sh -c 'openbox > /tmp/physim-openbox.log 2>&1 & ctest --test-dir build --output-on-failure -L display'
-      - name: App workflow with paths containing spaces and Unicode
-        if: ${{ !cancelled() && steps.linux_build.outcome == 'success' }}
+      - name: Sanitized app workflows for all C templates
         env:
           ASAN_OPTIONS: detect_leaks=0
           LIBGL_ALWAYS_SOFTWARE: "1"
         run: |
           xvfb-run -a -s '-screen 0 1920x1080x24' bash -c '
-            openbox > /tmp/physim-app-openbox.log 2>&1 &
+            openbox > build/native-templates-openbox.log 2>&1 &
+            python3 tools/wait-window-manager.py || exit 1
             result=0
             for example in pendulum projectile collision box_floor spring uncertain_projectile box_collision buoyancy; do
-              ./build/bin/physim --self-test "$PWD/build/App Test ä $example" "$example" || result=1
+              ./build/native/Debug-sanitized/bin/physim --self-test "$PWD/build/native/Sanitized App ä $example" "$example" || result=1
             done
             exit "$result"
           '
@@ -352,6 +276,7 @@ jobs:
             build/native/fuzzer run*/**
             build/native-openbox.log
             build/native-sanitizer-openbox.log
+            build/native-templates-openbox.log
             build/native/*/test-results/**/*.strace
             build/native/sanitizer probe*/results.json
             build/native/*/test-results/**/results.json
@@ -361,7 +286,6 @@ jobs:
             build/native-integrations/toolbar_*/**/*.bmp
             build/native/Native SDK*/verification.log
             build/native/Native SDK*/PASSED.txt
-            build/toolbar-*/*.bmp
-            build/App Test*/*.bmp
-            build/Testing/Temporary/LastTest.log
+            build/native/Native SDK*/App */*.bmp
+            build/native/Sanitized App*/*.bmp
           if-no-files-found: ignore

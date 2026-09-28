@@ -411,7 +411,7 @@ class Builder:
     def install(self, products: list[Path], output: Path):
         if output.exists():
             raise RuntimeError("Installation requires a new output directory.")
-        for name in ("include", "examples", "docs", "src", "cmake", "third_party"):
+        for name in ("include", "examples", "docs", "src", "third_party"):
             source = (ROOT / name).resolve()
             if source == output or source in output.parents:
                 raise RuntimeError("Installation must be outside the SDK source directories.")
@@ -433,15 +433,12 @@ class Builder:
             shutil.copy2(product, destination)
         for directory in ("include", "examples", "docs"):
             shutil.copytree(ROOT / directory, staging / directory,
-                            ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "build", "runs"))
+                            ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "build", "runs", "CMakeLists.txt", "*.cmake"))
         for name in CORE:
             destination = staging / "src" / (name + ".c")
             destination.parent.mkdir(exist_ok=True)
             shutil.copy2(ROOT / "src" / (name + ".c"), destination)
         shutil.copy2(ROOT / "src/report_internal.h", staging / "src/report_internal.h")
-        (staging / "cmake").mkdir()
-        for name in ("PhysimExperiment.cmake", "PhysimLanguage.cmake", "PhysimEmitC.cmake"):
-            shutil.copy2(ROOT / "cmake" / name, staging / "cmake" / name)
         (staging / "licenses").mkdir()
         for source, name in (("third_party/Nuklear-LICENSE", "Nuklear-LICENSE"),
                              ("third_party/zlib-1.3.2/LICENSE", "zlib-LICENSE.txt"),
