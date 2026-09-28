@@ -27,6 +27,19 @@ APP = "main ui_backend ui_sdl ui_geometry graphics documentation library prefere
 PROJECT = "project_file text_document autosave parameter_catalog".split()
 ZLIB = "adler32 crc32 deflate trees zutil".split()
 EXAMPLES = "pendulum projectile collision box_floor spring uncertain_projectile box_collision buoyancy".split()
+LANGUAGE_PROGRAMS = "energy motion flight_phases sampling phase_space rotation_path particles rigid_body contacts distance_joints constraint_graph sweeps coordinate_frames optional_values optional_bindings".split()
+LANGUAGE_EXPERIMENTS = ("pendulum pendulum_rk4 pendulum_integrator pendulum_rk45 pendulum_verlet "
+    "projectile projectile_drag collision box_collision buoyancy random_samples scene_shapes "
+    "spring sensors uncertain_projectile spinning_body box_contacts joint_pendulum coupled_bodies fast_sphere").split()
+LANGUAGE_ANALYSES = "analysis analysis_collision analysis_box_collision analysis_buoyancy analysis_sensors analysis_integral".split()
+
+
+def language_examples():
+    """Names, emission modes and paths relative to the installed examples directory."""
+    return ([(name, "--emit-c", f"language/{name}.phys") for name in LANGUAGE_PROGRAMS] +
+            [(name, "--emit-experiment", f"language/{name}.phys") for name in LANGUAGE_EXPERIMENTS] +
+            [(name, "--emit-analysis", f"language/{name}.phys") for name in LANGUAGE_ANALYSES] +
+            [("drag_analysis", "--emit-analysis", "documentation/drag_analysis.phys")])
 
 
 def run(args: list[str], env: dict[str, str], *, capture: bool = False, directory: Path | None = None) -> str:
@@ -325,6 +338,28 @@ class Builder:
                                    sdl=True, defines=("Z_PREFIX",))
         raise RuntimeError(f"Unknown benchmark target: {name}")
 
+    def build_language_examples(self, compiler: Path, core: Path) -> list[Path]:
+        generated = self.directory / "examples"
+        generated.mkdir(exist_ok=True)
+        products = []
+        for name, mode, relative in language_examples():
+            # Check the compiler exit before replacing the last complete C source.
+            command = [str(compiler), mode, str(ROOT / "examples" / relative)]
+            result = subprocess.run(command, cwd=ROOT, env=self.env, capture_output=True, timeout=30)
+            if result.stderr:
+                print(result.stderr.decode("utf-8", errors="replace"), end="", file=sys.stderr, flush=True)
+            if result.returncode:
+                raise RuntimeError(f"Example translation failed ({result.returncode}): {relative}")
+            path = generated / (name + ".c")
+            data = result.stdout
+            if not path.is_file() or path.read_bytes() != data:
+                pending = path.with_suffix(".pending.c")
+                pending.write_bytes(data)
+                os.replace(pending, path)
+            products.append(self.executable("language-" + name, [str(path)], [core],
+                                            module=mode != "--emit-c", language=True))
+        return products
+
     def build(self):
         products = []
         core = self.archive("physim-core", [f"src/{name}.c" for name in CORE])
@@ -340,7 +375,10 @@ class Builder:
         batch = self.archive("physim-batch", ["src/batch.c"])
         zlib = self.archive("physim-zlib", [f"third_party/zlib-1.3.2/{name}.c" for name in ZLIB], ("Z_PREFIX",))
         libraries = {"core": core, "platform": platform, "language": language, "batch": batch, "zlib": zlib}
-        products.append(self.executable("physimc", ["src/language/main.c", "src/language/loader.c"], [language]))
+        compiler = self.executable("physimc", ["src/language/main.c", "src/language/loader.c"], [language])
+        products.append(compiler)
+        if getattr(self.args, "examples", False):
+            products.extend(self.build_language_examples(compiler, core))
         products.append(self.executable("physim-runner", ["runners/experiment.c"], [platform, core]))
         products.append(self.executable("physim-analysis-runner", ["runners/analysis.c"], [platform, core]))
         products.append(self.executable("physim-batch", ["runners/batch.c"], [batch, platform, core]))
@@ -433,6 +471,7 @@ def main() -> int:
     parser.add_argument("--benchmarks", action="store_true", help="Build performance tools; --no-app omits the OpenGL benchmark")
     parser.add_argument("--sanitizers", action="store_true", help="Validate with AddressSanitizer (also UndefinedBehaviorSanitizer on Linux/macOS)")
     parser.add_argument("--fuzzer", action="store_true", help="Build only the Clang libFuzzer IPC harness and seed generator, with sanitizers and without SDL")
+    parser.add_argument("--examples", action="store_true", help="Also build all standalone Physim language examples and experiment/analysis modules")
     test_mode = parser.add_mutually_exclusive_group()
     test_mode.add_argument("--test", action="store_true", help="Run tests without windows or CTest")
     test_mode.add_argument("--test-display", action="store_true", help="Run window and graphics tests (requires a graphical desktop)")
@@ -445,8 +484,8 @@ def main() -> int:
     if args.test_display and args.no_app:
         parser.error("--test-display requires the app; remove --no-app")
     if args.fuzzer:
-        if args.test or args.test_display or args.install or args.benchmarks:
-            parser.error("--fuzzer builds a separate developer tool; omit --test, --test-display, --install and --benchmarks")
+        if args.test or args.test_display or args.install or args.benchmarks or args.examples:
+            parser.error("--fuzzer builds a separate developer tool; omit --test, --test-display, --install, --benchmarks and --examples")
         args.no_app = True
         args.sanitizers = True
     if args.sanitizers and args.install:

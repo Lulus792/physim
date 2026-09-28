@@ -85,9 +85,10 @@ physim-analysis-runner ANALYSEMODUL --runs AUSGABEPRAEFIX C_LAUF.psrun SPRACH_LA
 `AUSGABEPRAEFIX` bezeichnet den Anfang der Ergebnisdateien, etwa
 `vergleich.psreport` und `vergleich-endpoints.csv`. Die Elternverzeichnisse
 müssen existieren; die Ausgabedateien dürfen noch nicht vorhanden sein.
-Der Build aus dem Quellbaum lautet
-`cmake --build build --target physim-language-analysis-batch-endpoints`.
-`ctest --test-dir build -R '^language_analysis$' --output-on-failure` prüft den
-gemischten C-/Sprachlauf samt Bericht. Für die allgemeine Form von
+`python3 tools/build.py --no-app --test --test-filter language_analysis` baut das
+Modul im Quellbaum und prüft den gemischten C-/Sprachlauf samt Bericht
+(Windows: `python`). Das Modul heißt im Buildordner
+`bin/integration-physim-language-analysis-batch-endpoints.so` (Windows: `.dll`).
+Für die allgemeine Form von
 `Dataset`, `Series`, `Plot` und `Table` siehe die
 [Sprachbibliotheksreferenz](reference/language-library.md).

@@ -47,7 +47,8 @@ jobs:
           python3 tools/build.py --compiler clang --test
           python3 tests/test_bootstrap_build.py --compiler clang --work build/native
           python3 tests/test_native_test_runner.py --work build/native
-          python3 tools/build.py --compiler clang
+          python3 tools/build.py --compiler clang --examples
+          python3 tests/test_language_examples.py --bin build/native/Debug/bin --work build/native --compiler clang
           build/native/Debug/bin/physim --self-test "$PWD/build/Native C ä" pendulum
           build/native/Debug/bin/physim --self-test "$PWD/build/Native Language ä" language_full
       - name: Native SDK package and relocation
@@ -171,7 +172,9 @@ jobs:
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
           python tests/test_native_test_runner.py --work build/native
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
-          python tools/build.py --compiler $compiler --config ${{ matrix.configuration }}
+          python tools/build.py --compiler $compiler --config ${{ matrix.configuration }} --examples
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python tests/test_language_examples.py --bin build/native/${{ matrix.configuration }}/bin --work build/native --compiler $compiler --config ${{ matrix.configuration }}
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
       - name: Native SDK package and relocation
         if: matrix.configuration == 'Release'
@@ -267,7 +270,8 @@ jobs:
           python3 tools/build.py --compiler "${{ matrix.compiler }}" --test
           python3 tests/test_bootstrap_build.py --compiler "${{ matrix.compiler }}" --work build/native
           python3 tests/test_native_test_runner.py --work build/native
-          python3 tools/build.py --compiler "${{ matrix.compiler }}"
+          python3 tools/build.py --compiler "${{ matrix.compiler }}" --examples
+          python3 tests/test_language_examples.py --bin build/native/Debug/bin --work build/native --compiler "${{ matrix.compiler }}"
           xvfb-run -a build/native/Debug/bin/physim --self-test "$PWD/build/Native C ä" pendulum
           xvfb-run -a build/native/Debug/bin/physim --self-test "$PWD/build/Native Language ä" language_full
       - name: Native SDK package and relocation

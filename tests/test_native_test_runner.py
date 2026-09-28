@@ -44,7 +44,7 @@ def main():
     # and SDK installation without tests, which must accept an absent filter.
     common = ["build.py", "--build-dir", str(directory / "cli build")]
     accepted = [([], None), (["--benchmarks"], None), (["--benchmarks", "--no-app"], None),
-                (["--sanitizers", "--test"], None), (["--fuzzer"], None),
+                (["--sanitizers", "--test"], None), (["--fuzzer"], None), (["--examples", "--no-app"], None),
                 (["--install", str(directory / "sdk")], None),
                 (["--test-display"], None), (["--test-display", "--test-filter", "toolbar_*"], ["toolbar_*"]),
                 (["--test"], None), (["--test", "--test-filter", "*"], ["*"]),
@@ -75,7 +75,8 @@ def main():
         for arguments in (["--test-display", "--no-app"], ["--test", "--test-display"],
                           ["--sanitizers", "--install", str(directory / "sdk")],
                           ["--fuzzer", "--test"], ["--fuzzer", "--test-display"],
-                          ["--fuzzer", "--benchmarks"], ["--fuzzer", "--install", str(directory / "sdk")]):
+                          ["--fuzzer", "--benchmarks"], ["--fuzzer", "--examples"],
+                          ["--fuzzer", "--install", str(directory / "sdk")]):
             builder.reset_mock()
             with patch.object(sys, "argv", common + arguments), contextlib.redirect_stderr(io.StringIO()):
                 try:

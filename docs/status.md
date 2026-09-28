@@ -39,8 +39,9 @@ absichtlich eingebauten Speicherfehler und besteht zehn instrumentierte Core-,
 Speicher-, Berichts-, Mutations- und Sprachspeichertests. Unter Windows bestehen
 die Probe und diese zehn Prüfungen in der CI mit MSVC und ClangCL. Unter Linux
 GCC und Clang bestehen zu `f6cedbf` alle 493 Prüfungen ohne Fenster und alle
-35 Grafikprüfungen mit ASan/UBSan. Die vollständige macOS-Sanitizer-Prüfung mit
-LLVM 20 läuft noch. CMake bleibt bis zum Abschluss dieses Vergleichs verfügbar.
+35 Grafikprüfungen mit ASan/UBSan. Auf macOS Apple Silicon bestehen zu `69ddae7`
+alle 482 SDL-freien Prüfungen mit LLVM 20 und LLD; die Intel-Suite läuft noch.
+CMake bleibt bis zum Abschluss dieses Vergleichs verfügbar.
 
 Auch der optionale IPC-libFuzzer hat jetzt einen direkten Buildmodus
 `--fuzzer`. Kernbibliothek und Harness erhalten Clangs Abdeckungsinstrumentierung
@@ -70,19 +71,22 @@ Linux GCC/Clang, macOS Apple Silicon/Intel und Windows MSVC/ClangCL Release.
 Die neuen Sanitizer-Prüfungen decken zusätzliche Probleme auf: Der Nullzeiger-
 Vergleich im Clipboard-Test ist korrigiert; alle 493 Sanitizer-Tests ohne Fenster
 bestehen unter Linux GCC und Clang im Lauf zu `f6cedbf`. Die ASan-Registrierung beim erneuten
-Laden von Modulen auf macOS bleibt zu untersuchen. Eine gezielte Prüfung
+Laden von Modulen auf macOS wurde auf Apples Destruktorausgabe eingegrenzt. Eine gezielte Prüfung
 wiederholt den Modulwechsel und kontrolliert den Speicherschutz nach dem
 erneuten Laden; lokal besteht sie mit MSVC und in der CI mit Apple Clang auf Intel.
 Auf Apple Silicon reproduziert sie den Fehler mit Apples veralteter ASan-
 Destruktorausgabe. Mit LLVM 20 und LLD besteht diese Minimalprüfung im Lauf zu
-`69ddae7` auf beiden Mac-Architekturen; die vollständige Sanitizer-Suite läuft noch.
+`69ddae7` auf beiden Mac-Architekturen. Die vollständige Suite besteht dort auf
+Apple Silicon mit 482 Prüfungen; die Intel-Suite läuft noch.
 Beide Mac-Fuzzerkampagnen bestehen
 im CI-Lauf zu `f6cedbf` mit LLVM 20 und LLD.
 Der sporadische Linux-Startfehler wird durch feinere SDL-/Fenster-/GL-Protokolle
 weiter eingegrenzt. Die CI zeichnet beim ersten Fensterablauf zusätzlich
 Systemaufrufe auf. Der betroffene Test behält seine Zeitgrenze und wird bei
-einem Fehler nicht automatisch wiederholt; die Linux-Abnahme dieser neuen
-Diagnose und ihrer Prozessbereinigung steht noch aus.
+einem Fehler nicht automatisch wiederholt. Zu `1790d87` bestehen die neue
+Trace-/Prozessbereinigungsprüfung und alle 35 normalen Grafiktests mit GCC und
+Clang; mit Clang bestehen auch alle 35 instrumentierten Grafiktests. Der zuvor
+beobachtete sporadische Startfehler ist damit noch nicht als behoben nachgewiesen.
 
 Der direkte Builder kann nun außerdem ein SDK in einen neuen Ordner installieren.
 Es enthält die App, Werkzeuge, alle acht C-Beispielmodule, Analysemodul, öffentliche
@@ -97,6 +101,18 @@ zum Bauen des vollständigen Repositorys bleibt in dessen eigener README.
 Bei dieser Prüfung wurde die Windows-Compilererkennung für unterschiedlich
 geschriebene Umgebungsvariablennamen korrigiert; die Windows-API übernimmt jetzt
 die Suche nach `ProgramFiles(x86)` unabhängig von der Großschreibung.
+
+Der direkte Build übernimmt mit `--examples` außerdem die 15 eigenständigen
+Sprachprogramme und 27 Module des bisherigen CMake-Beispielprojekts. Lokal bestehen
+MSVC Debug und Clang Release: alle Programme laufen, das Energiebeispiel liefert
+die erwarteten Werte und das Sprachpendel erzeugt über Runner und Analyse einen
+Bericht. Ein isolierter Test prüft unveränderte Ausgaben, Sprachfehler mit
+erhaltenem C-Code/Programm und anschließende Fehlerkorrektur. Der gemeinsame
+Beispielkatalog besteht außerdem die vollständige Prüfung eines verschobenen
+MSVC-Release-SDKs (`build/native/example-sdk-check/Native SDK ä yfndauk_`).
+Die Sprach- und Tutorialanleitungen verwenden nun die direkten Buildbefehle. Die neue
+Beispielprüfung wird in allen acht CI-Kombinationen ausgeführt; ihr Plattformnachweis
+steht noch aus.
 
 ## Bisherige Umsetzungsschritte des direkten Builders
 

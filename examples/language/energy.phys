@@ -1,4 +1,4 @@
-// Compile this standalone program with PhysimLanguage.cmake.
+// Build with: python3 tools/build.py --no-app --examples
 func kineticEnergy(mass: Float64, speed: Float64) -> Float64:
     return 0.5 * mass * speed * speed
 

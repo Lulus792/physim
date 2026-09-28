@@ -94,8 +94,7 @@ def main():
             check_modules("bundled-" + name, sdk / "bin" / (name + module_suffix),
                           sdk / "bin" / ("pendulum_analysis" + module_suffix))
 
-        programs = "energy motion flight_phases sampling phase_space rotation_path particles rigid_body contacts distance_joints constraint_graph sweeps coordinate_frames optional_values optional_bindings".split()
-        for name in programs:
+        for name in native.LANGUAGE_PROGRAMS:
             source = consumer / (name + ".c")
             checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
                      sdk / "examples/language" / (name + ".phys")], output=source)
@@ -118,16 +117,9 @@ def main():
             check_modules("source-c-" + name, experiment, c_analysis)
 
         modules = {}
-        experiments = ("pendulum pendulum_rk4 pendulum_integrator pendulum_rk45 pendulum_verlet "
-                       "projectile projectile_drag collision box_collision buoyancy random_samples scene_shapes "
-                       "spring sensors uncertain_projectile spinning_body box_contacts joint_pendulum "
-                       "coupled_bodies fast_sphere").split()
-        analyses = ("analysis analysis_collision analysis_box_collision analysis_buoyancy "
-                    "analysis_sensors analysis_integral").split()
-        inputs = [(name, "--emit-experiment", f"language/{name}.phys") for name in experiments]
-        inputs += [(name, "--emit-analysis", f"language/{name}.phys") for name in analyses]
-        inputs.append(("drag_analysis", "--emit-analysis", "documentation/drag_analysis.phys"))
-        for name, mode, relative in inputs:
+        for name, mode, relative in native.language_examples():
+            if mode == "--emit-c":
+                continue
             source = consumer / (name + ".c")
             checked([sdk / "bin" / ("physimc" + suffix), mode, sdk / "examples" / relative], output=source)
             modules[name] = builder.executable("language-" + name, [source.name], [rebuilt_core],

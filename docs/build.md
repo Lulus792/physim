@@ -255,6 +255,32 @@ Compilerkennung und Buildprofil stammen aus dem übersetzten C-Programm.
 Die Messskripte erfassen außerdem den direkten Builder und die Quellen als
 Prüfsummen und benötigen keine `CMakeLists.txt`.
 
+### Sprachbeispiele ohne CMake bauen
+
+`--examples` baut zusätzlich die 15 eigenständigen Sprachprogramme und alle
+27 Experiment-/Analysemodule aus dem bisherigen Sprachbeispielprojekt. Der
+Beispielbuild und die SDK-Prüfung lesen denselben Katalog. SDL ist dafür nicht nötig.
+
+```sh
+python3 tools/build.py --no-app --examples
+./build/native/Debug/bin/language-energy
+python3 tests/test_language_examples.py --bin build/native/Debug/bin --work build/native
+```
+
+Unter Windows `python` und `./build/native/Debug/bin/language-energy.exe` verwenden.
+Der Prüfer führt alle 15 Programme aus, kontrolliert die Ausgabe des Energiebeispiels
+und startet Sprachpendel und Analyse über die echten Runner. In einem eigenen
+Unicodepfad prüft er unveränderte Builds, den Erhalt von C-Code und Programm nach
+einem Sprachfehler sowie einen erfolgreichen Neubau nach dessen Korrektur.
+Für Release zusätzlich `--config Release` in Build und Prüfer angeben sowie
+`--bin build/native/Release/bin` verwenden. `--compiler` wählt in beiden Befehlen
+denselben Compiler.
+
+Programme liegen als `language-<Name>` in `bin/`, Module mit `.dll` unter Windows
+beziehungsweise `.so` unter Linux/macOS. Generiertes C bleibt unter `examples/`
+im Buildordner; die Beispielquellen werden nicht verändert. `--examples --install`
+nimmt die zusätzlichen Programme und Module auch ins SDK auf.
+
 ### SDK und portable Pakete ohne CMake
 
 Der direkte Build erzeugt auch die acht C-Beispielmodule und das Analysemodul.

@@ -1699,9 +1699,13 @@ Der Build erzeugt `bin/physimc` (Windows: `physimc.exe`); das Werkzeug wird auch
 in das SDK installiert. Die Dateiendung der Sprachbeispiele ist `.phys`.
 
 ```powershell
-cmake --build build-language --config Release --target physimc
-.\build-language\bin\physimc.exe --check examples/language/energy.phys
+python tools/build.py --no-app --config Release
+.\build\native\Release\bin\physimc.exe --check examples/language/energy.phys
 ```
+
+Unter Linux/macOS `python3` und `./build/native/Release/bin/physimc` verwenden.
+In einem entpackten SDK ist der Compiler bereits unter `bin/physimc` vorhanden
+(Windows: `bin/physimc.exe`); dort entfällt der Repository-Build.
 
 `--check` liest eine Datei binär, prüft Syntax und die oben unterstützte Semantik
 und führt nichts aus. Diagnosen haben das Format `Datei:Zeile:Spalte: error: Meldung`.
@@ -1710,7 +1714,7 @@ Speicher- oder Quelldateigrößenfehlern. `--help` und `--version` sind verfügb
 Die CLI begrenzt Eingaben auf 1 MiB und Syntaxbäume auf 65536 Knotenslots;
 Parser- und Prüfungsbudgets gelten zusätzlich. UTF-8-Pfade mit Leerzeichen und
 Umlauten, Syntax-/Typdiagnosen, Rückgabecodes, leere Dateien und zu große Eingaben
-werden vom CTest `language_cli` geprüft.
+werden von der Prüfung `language_cli` im direkten Testkatalog geprüft.
 
 `physimc --emit-c quelle.phys` prüft dieselben Regeln und schreibt C17 auf stdout.
 Bei Syntax-/Typfehlern wird kein C ausgegeben. Ein Ausgabefehler kann eine unvollständige
@@ -1724,25 +1728,32 @@ auf die Sprachquelle; `PSRT_AT` liefert zusätzlich die genaue
 Spalte bei Laufzeitfehlern. Ein absichtlich ausgelöster C-Compilerfehler wird
 im nativen Sprachtest an der ursprünglichen `.phys`-Datei nachgewiesen.
 
-Für normale Builds übernimmt `cmake/PhysimLanguage.cmake` die gesamte Übersetzung.
-`physim_add_program(ziel quelle.phys)` generiert C in eine temporäre Datei,
-übernimmt sie erst bei erfolgreicher Prüfung und kompiliert sie anschließend
-mit dem C17-Compiler. Sprachfehler brechen den Build mit ursprünglicher Quelldiagnose
-ab. Das vorherige vollständige generierte C bleibt erhalten. Abhängigkeiten umfassen
-Sprachquelle, Compiler und Generierungsskript. In einem installierten SDK wird
-`bin/physimc` gefunden; im Entwicklungsbaum kann `PHYSIM_COMPILER` gesetzt werden.
+Der direkte Repository-Build mit `--examples` übersetzt alle 15 eigenständigen
+Sprachbeispiele sowie 27 Experiment-/Analysemodule. Generiertes C liegt ausschließlich
+im Buildordner unter `examples/` und wird erst nach erfolgreicher Sprachprüfung
+ersetzt. Unveränderte Quellen und Programme bleiben erhalten. Sprachfehler brechen
+mit der ursprünglichen Quelldiagnose ab; der letzte vollständige C-Code und das
+zugehörige Programm bleiben verfügbar. Nutzerprojekte in der App verwenden F5
+und ihre automatisch gepflegte `physim.project`.
 
-Geprüftes Windows-Beispiel aus dem Repository-Verzeichnis:
+Windows, aus dem Repository-Verzeichnis:
 
 ```powershell
-cmake -S examples/language -B build-language-example -DPHYSIM_COMPILER=D:/Physim/build-language/bin/physimc.exe
-cmake --build build-language-example --config Release
-.\build-language-example\Release\energy.exe
+python tools/build.py --no-app --config Release --examples
+.\build\native\Release\bin\language-energy.exe
 ```
 
-Den Compilerpfad bei einem anderen Checkout entsprechend anpassen. Das Beispiel
-gibt `9`, `1` und `45` aus und prüft diese Ergebnisse vorher mit `assert`.
-Bei Ninja/Make liegt die erzeugte `energy` direkt im Beispiel-Buildverzeichnis.
+Linux und macOS:
+
+```sh
+python3 tools/build.py --no-app --config Release --examples
+./build/native/Release/bin/language-energy
+```
+
+Das Beispiel gibt `9`, `1` und `45` aus und prüft diese Ergebnisse mit `assert`.
+Diese Beispiele benötigen weder SDL noch CMake; Python ab 3.10 und ein C17-Compiler
+genügen. Die Programme heißen `language-<Beispiel>`, Module tragen zusätzlich
+`.dll` unter Windows beziehungsweise `.so` unter Linux/macOS.
 
 ## Laufzeitvertrag des skalaren C17-Backends
 
@@ -1759,7 +1770,7 @@ Bei Ninja/Make liegt die erzeugte `energy` direkt im Beispiel-Buildverzeichnis.
 - `Float64` verlangt IEEE-754-Binary64. Nicht endliche Literale oder Ergebnisse
   und Division durch ±0 sind Laufzeitfehler. Unterlauf zu subnormalen Zahlen oder
   null ist zulässig. Literale werden unabhängig von der Prozesslocale mit
-  festem C-Dezimalpunkt gelesen. Die CMake-Anbindung
+  festem C-Dezimalpunkt gelesen. Der direkte Build
   schaltet Fast-Math/FMA-Kontraktion aus beziehungsweise verwendet `/fp:strict`.
 - Bereiche werten ihre Grenzen genau einmal aus und steigen ohne Angabe einer
   Schrittweite in Schritten von eins. `for i in start..<end by step` und die
@@ -1785,7 +1796,7 @@ Bei Ninja/Make liegt die erzeugte `energy` direkt im Beispiel-Buildverzeichnis.
 Referenzen prüfen Auswertungsreihenfolge, benannte Argumente mit Seiteneffekten,
 Kurzschlusslogik, Rekursion, Schleifen/Int64-Grenzen, Strings, Schattenvariablen
 und Fließkommarechnung. Negative Programme prüfen die Laufzeitdiagnosen und
-Status 70. Die CMake-Anbindung wird auch nach einem absichtlich eingebauten
+Status 70. Der direkte Beispielbuild wird auch nach einem absichtlich eingebauten
 Typfehler auf Buildabbruch und Erhalt des vorherigen generierten C geprüft.
 Zusätzliche Strukturreferenzen prüfen nominale Typen, verschachtelte Kopien,
 Feldmutabilität, Übergabe/Rückgabe, Konstruktorreihenfolge, zyklische und zu große
@@ -1794,7 +1805,7 @@ weitere Werttypen bleiben offen.
 
 ## Experimentmodule und gemeinsame Bibliothek
 
-In der App unter **Öffnen oder anlegen** eine der Vorlagen **Pendel · Physim-Sprache**
+In der App unter **Datei → Neues Projekt** eine der Vorlagen **Pendel · Physim-Sprache**
 oder **Wurf mit Luftwiderstand · Physim-Sprache** auswählen. Das Projekt enthält `main.phys`
 und je nach **Sprache der Auswertung** `analysis.c` oder `analysis.phys`.
 Die Auswertungssprache lässt sich beim Anlegen unabhängig von der Experimentvorlage
@@ -1806,22 +1817,22 @@ Sprachschlüsselwörter ein und fügt mit Tab vier Leerzeichen ein. Blöcke blei
 mit `:` und Einrückung definiert. Speichern, Backups und Autosave gelten für
 beide Quellen. Eine automatische Übersetzung bestehender C-Projekte gibt es nicht.
 
-Mit `PHYSIM_BUILD_APP=ON` und `PHYSIM_GRAPHICS_TESTS=ON` registriert CTest die
-App-Abläufe `language_full_workflow` und `language_mixed_workflow`. Sie prüfen ein
+Der direkte Testkatalog enthält die App-Abläufe `language_full_workflow` und
+`language_mixed_workflow`. Sie prüfen ein
 reines Sprachprojekt beziehungsweise ein C-Experiment mit Sprach-Auswertung:
 absichtlicher Compilerfehler mit Quelldiagnose, Korrektur und nativer Build,
 Run/Pause/Step/Stop, Analysebericht mit Exporten, Quellsnapshots und erneutes
-Öffnen. Beide laufen einzeln unter dem Label `display`, verwenden ein kleines
+Öffnen. Beide laufen mit `--test-display`, verwenden ein kleines
 Fenster und legen neue Projektordner mit Leerzeichen und Umlaut an. Die
 Testordner samt Screenshots bleiben zur Untersuchung erhalten.
 
 ```powershell
-ctest --test-dir build -C Debug -R "language_(full|mixed)_workflow" --output-on-failure
+python tools/build.py --test-display --test-filter language_full_workflow --test-filter language_mixed_workflow
 ```
 
 `physim.project` wählt über `experiment=main.phys` die Sprache; `experiment=main.c`
 bleibt unterstützt. Andere Experimentdateinamen werden derzeit abgewiesen.
-Die CMake-Projektanbindung liest dieselbe Angabe. Jeder gestartete Lauf archiviert
+Der mitgelieferte `physim-build` liest dieselbe Angabe. Jeder gestartete Lauf archiviert
 den Originalquelltext als `.experiment.phys`; Batchläufe verwenden `experiment.phys`.
 Simulation, Datenbibliothek und die bestehende C-Auswertung verarbeiten beide
 Sprachen über dieselbe ABI. Für die Auswertung wählt `analysis=analysis.phys` in
@@ -1830,9 +1841,10 @@ der Projektbeschreibung die eigene Sprache. Analysequellen werden als
 Speichern/Backups, Autosave und Tab als vier Leerzeichen für Sprachdateien.
 
 `physimc --emit-experiment quelle.phys` erzeugt C17 für die bestehende Experiment-ABI.
-In CMake baut `physim_add_experiment(ziel quelle.phys)` daraus ein natives Modul.
-`examples/language/CMakeLists.txt` enthält vollständige Beispiele; im installierten
-SDK werden Compiler, Header und gemeinsame C-Bibliothek automatisch eingebunden.
+Die App baut daraus über `physim-build` ein natives Modul; Compiler, Header und
+gemeinsame C-Bibliothek stammen aus dem SDK. Die mitgelieferten Sprachmodule
+lassen sich im Repository außerdem mit `python3 tools/build.py --no-app --examples`
+bauen (Windows: `python`).
 Die vier erforderlichen Funktionen sind:
 
 ```text

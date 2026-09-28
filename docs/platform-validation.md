@@ -234,7 +234,7 @@ bestehen alle 493 Sanitizer-Tests ohne Fenster unter Linux GCC und Clang.
 Der Mac-ARM-Lauf zu `c92dbd3`
 Stands besteht 479 von 482 Sanitizer-Tests. Beim erneuten Laden von Modulen melden
 zwei Fälle doppelt registrierte ASan-Globals; `template_ids` bricht in der
-ASan-Registrierung ab. Diese Mac-Sanitizer-Ursache bleibt in Untersuchung.
+ASan-Registrierung ab. Die folgende Minimalprüfung grenzt die Ursache ein.
 Eine zusätzliche Minimalprüfung lädt zwei instrumentierte Module je 32-mal,
 kontrolliert das Zurücksetzen veränderter Globals und verlangt anschließend
 einen erkannten globalen Pufferüberlauf. Lokal besteht sie mit MSVC unter
@@ -248,7 +248,8 @@ Darstellung. Die macOS-Sanitizer-CI verwendet nun LLVM 20 und LLD wie der Fuzzer
 im [Lauf zu `69ddae7`](https://github.com/PhysicSimulator/physim/actions/runs/36495859541)
 besteht die vollständige Minimalprüfung auf Apple Silicon und Intel, einschließlich
 der 64 Modulöffnungen und des erkannten globalen Pufferüberlaufs nach erneutem
-Laden. Die vollständige Experiment-Sanitizer-Suite mit dieser Toolchain läuft noch.
+Laden. Auf Apple Silicon bestehen außerdem alle 482 SDL-freien Sanitizer-Tests
+und der vollständige Plattformjob. Die Intel-Sanitizer-Suite läuft noch.
 
 Die korrigierte UI-Größenprüfung besteht im direkten Grafikschritt unter Linux
 GCC zu `0d10940`. Im vorherigen GCC-Lauf zu `49efcbb` besteht der UI-Benchmark,
@@ -264,8 +265,12 @@ einschließlich Prozess-, Socket- und Warteaufrufen. Der bestehende Timeout blei
 aktiv; `--kill-on-exit` beendet beim Abbruch auch die verfolgten Prozesse.
 Eine zusätzliche Linux-Läuferprüfung kontrolliert echte Traceausgabe und das
 Ende eines gestarteten Kindprozesses. Der gemeinsame Läufertest besteht lokal
-unter Windows (`build/native-trace-runner-windows.log`); die neuen Linux-Zweige
-müssen noch in der CI laufen.
+unter Windows (`build/native-trace-runner-windows.log`). Im
+[Lauf zu `1790d87`](https://github.com/PhysicSimulator/physim/actions/runs/36497491668)
+bestehen die neuen Linux-Zweige mit GCC und Clang sowie alle 35 normalen
+Grafiktests mit aktivierter Aufzeichnung des ersten Ablaufs. Mit Clang bestehen
+auch alle 35 instrumentierten Grafiktests. Diese erfolgreichen Läufe allein
+belegen keine Behebung des sporadischen Startfehlers.
 
 Die direkte SDK-Prüfung umfasst jetzt auch alle zuvor nur im CMake-SDK-Vergleich
 gebauten Sprachmodule: 27 Module, neun Sprachexperimente mit beiden allgemeinen
@@ -276,8 +281,8 @@ MSVC-Release-SDK besteht die vollständige erweiterte Prüfung unter
 `build/native/Native SDK ä cnycd4y3`. Das Clang-Release-SDK besteht zusätzlich
 neun Projektbuilds und beide grafischen Abläufe unter
 `build/native/Native SDK ä elwayubq`. Im Lauf zu `f6cedbf` besteht der erweiterte
-direkte SDK-Schritt bereits unter Linux GCC/Clang, macOS Apple Silicon und
-Windows ClangCL Release. Die übrigen Plattformjobs laufen noch.
+direkte SDK-Schritt unter Linux GCC/Clang, macOS Apple Silicon/Intel und
+Windows MSVC/ClangCL Release.
 
 Die Pendelreferenzen prüfen jeweils 4001 Messpunkte, Energiedrift und Periodendauer
 gegen eine analytische Referenz. MSVC und Clang liefern für RK4 eine Periodendauer

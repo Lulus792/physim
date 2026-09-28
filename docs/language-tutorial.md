@@ -79,10 +79,9 @@ verfügbaren Dataset-, Series- und Plot-Funktionen.
 3. Öffne **Auswerten**, wähle den neuen Lauf und starte die Analyse. Im Diagramm liegt die abgeleitete Geschwindigkeit bei 1,5 m/s.
 4. Vergleiche die Positionswerte bei einer und zwei Sekunden mit 1,5 m und 3 m. Der Lauf bleibt im Projektordner unter `runs/` erhalten.
 
-Im Quellbaum baut `cmake --build build --target
-physim-language-documentation-main physim-language-documentation-analysis` dieselben
-Module. `ctest --test-dir build -R documentation_language_example
---output-on-failure` führt einen vollständigen Referenztest aus: 200 Schritte
+Im Quellbaum baut `python3 tools/build.py --no-app --test --test-filter
+documentation_language_example` dieselben Module und führt den vollständigen
+Referenztest aus (Windows: `python`): 200 Schritte
 mit `dt = 0.01` und Seed 42, 201 gespeicherte Positionen, Reset, Szene und
 Bericht. Der Test prüft die analytische Position und die abgeleitete
 Geschwindigkeit gegen 1,5 m/s. Die C-Fassung durchläuft denselben Test.

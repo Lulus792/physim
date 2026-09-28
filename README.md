@@ -21,7 +21,7 @@ Eine eigene, statisch typisierte und nativ kompilierte Sprache als vollständige
 Alternative zu C für Experimente und Auswertung ist verbindlich geplant.
 Lexer, Parser mit Python-artigen `:`-/Einrückungsblöcken und eine erste statische
 Prüfung für skalare Typen, eigene Strukturen, einfache Enums, Namen und Funktionen sind implementiert. `physimc` und
-die CMake-Anbindung übersetzen erste eigenständige Programme über C17 zu nativen
+der direkte Build übersetzen eigenständige Programme über C17 zu nativen
 Executables und erste Experimentmodule für den bestehenden Runner. Pendel und
 Vakuumwurf mit Messkanälen und Szene liegen unter `examples/language`.
 Die App bietet Sprachvorlagen für Pendel, Wurf mit Luftwiderstand,
