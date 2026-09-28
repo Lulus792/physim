@@ -7,14 +7,19 @@
 #include "platform.h"
 #include "plot_view.h"
 #include "parameter_catalog.h"
+#include "project_file.h"
 #include "report_image.h"
 #include "scene_view.h"
 #include "preferences.h"
+#include "workspace_state.h"
+#include "workspace_tree.h"
+#include "text_document.h"
 #include "protocol.h"
 #include "ui.h"
 #include "language/lexer.h"
 #include <ctype.h>
 #include <errno.h>
+#include <float.h>
 #include <math.h>
 #include <stdarg.h>
 #include <stdlib.h>
@@ -43,6 +48,20 @@ static void nk_end_disabled(struct nk_context *ctx) {
 #define EXE_EXT ""
 #endif
 #define PREVIEW 2048
+#define WORKSPACE_DOCUMENTS 16
+typedef struct {
+    ps_text_document file;
+    char path[4096]; /* User-facing path; file.path resolves symbolic links for saving. */
+    struct nk_text_edit edit;
+    bool dirty;
+    char error[192];
+    ps_autosave *recovery;
+    bool recovery_conflict, draft_blocked, draft_present;
+    char *draft_text;
+    size_t draft_length;
+    double draft_due;
+    char draft_error[192];
+} workspace_document;
 typedef struct {
     char path[4096];
     SDL_AtomicInt done;
@@ -75,14 +94,27 @@ typedef struct {
     ps_vec3 camera_target;
     struct nk_text_edit experiment, analysis;
     char root[4096], bin[4096], project[4096], project_input[4096], last_run[4096], report[4096];
-    char workspace[4096], workspace_preview_path[4096], workspace_preview[65536];
+    char build_directory[4096];
+    char workspace[4096], workspace_preview_path[4096];
+    workspace_document documents[WORKSPACE_DOCUMENTS];
+    unsigned document_count, document_active;
+    char document_drafts_directory[4096];
+    uint64_t source_revision, build_revision;
+    int document_pending; /* 1: close, 2: reload; discard requires an explicit choice. */
+    struct nk_rect document_bounds[10], document_list_bounds[WORKSPACE_DOCUMENTS];
     char manager_parent[4096], manager_name[256];
     int manager_template, manager_experiment_language;
     char workspace_additions[32][4096];
     unsigned workspace_addition_count;
-    char workspace_entries[128][4096];
-    unsigned workspace_entry_count;
+    ps_workspace_tree workspace_tree;
+    char workspace_tree_error[192];
+    char workspace_tree_test_path[4096];
+    struct nk_rect workspace_tree_test_bounds;
     bool workspace_open, project_manager, dialog_pending;
+    ps_workspace_state last_workspace;
+    char workspace_state_path[4096], workspace_state_error[192];
+    bool workspace_state_writable;
+    struct nk_rect workspace_restore_bounds;
     enum nk_collapse_states workspace_disclosure;
     char log[65536], status[256], find[128], replace[128];
     int tab, analysis_tab, example, profile, plot_channel;
@@ -100,6 +132,10 @@ typedef struct {
     char autosave_error[192];
     struct nk_rect recovery_bounds[2];
     struct nk_rect navigation_bounds[3];
+    struct nk_rect toolbar_bounds[4], toolbar_item_bounds[6];
+    int toolbar_menu; /* 0: closed, 1: File, 2: View. One popup supports direct switching. */
+    struct nk_rect toolbar_popup_bounds;
+    struct nk_rect window_control_bounds[3], window_drag_bounds;
     enum nk_collapse_states view_disclosure;
     ps_document *documentation;
     SDL_Window *doc_window;
@@ -146,7 +182,7 @@ typedef struct {
     unsigned library_visible_count;
     ps_process job, runner;
     ps_parameter_catalog parameters;
-    bool parameters_dirty;
+    bool project_settings_dirty;
     char parameter_output[8192];
     size_t parameter_output_used;
     bool parameter_output_overflow;
@@ -206,6 +242,9 @@ enum { PS_DIALOG_OPEN_FOLDER = 1, PS_DIALOG_ADD_FILE, PS_DIALOG_ADD_FOLDER,
        PS_DIALOG_MANAGER_PARENT };
 static void choose_workspace_path(app *a, int mode);
 static void create_managed_project(app *a);
+static bool open_workspace_path(app *a, const char *path);
+static void restore_workspace(app *a);
+static void forget_workspace(app *a);
 static const char *experiment_source(const app *a) {
     return a->language_experiment ? "main.phys" : "main.c";
 }
@@ -303,7 +342,6 @@ static bool exists(const char *path) {
     fclose(f);
     return true;
 }
-static const char *cmake_program(void) { return exists(PS_CMAKE) ? PS_CMAKE : "cmake"; }
 static bool copy_file_mode(const char *src, const char *dst, const char *mode) {
     FILE *in = fopen(src, "rb");
     if (!in)
@@ -419,52 +457,25 @@ static bool save_editor(struct nk_text_edit *edit, const char *path) {
         return false;
     return SDL_RenamePath(tmp, path);
 }
-static bool save_project_parameters(app *a) {
-    char path[4096], temporary[4096], line[1024];
+static bool save_project_settings(app *a) {
+    char path[4096];
     join(path, sizeof path, a->project, "physim.project");
-    int n = snprintf(temporary, sizeof temporary, "%s.tmp", path);
-    if (n < 0 || (size_t)n >= sizeof temporary)
-        return false;
-    FILE *original = fopen(path, "rb");
-    if (!original)
-        return false;
-    FILE *updated = fopen(temporary, "wb");
-    if (!updated) {
-        fclose(original);
+    ps_project_settings settings = {.release = a->profile != 0, .timestep = a->dt,
+                                   .parameters = a->parameters};
+    if (!ps_project_seed_parse(a->seed, &settings.seed)) return false;
+    return ps_project_settings_save(path, &settings) == PS_DOCUMENT_OK;
+}
+static bool simulation_settings_valid(app *a) {
+    uint64_t seed;
+    if (!ps_project_timestep_valid(a->dt)) {
+        status(a, "Zeitschritt: positiven, endlichen Wert bis 1 Sekunde eingeben.");
         return false;
     }
-    bool ok = true;
-    bool last_had_newline = true;
-    while (fgets(line, sizeof line, original)) {
-        last_had_newline = strchr(line, '\n') != NULL;
-        if (!last_had_newline && !feof(original)) {
-            ok = false;
-            break;
-        }
-        if (strncmp(line, "parameter.", 10) && fputs(line, updated) == EOF) {
-            ok = false;
-            break;
-        }
+    if (!ps_project_seed_parse(a->seed, &seed)) {
+        status(a, "Zufallsseed: ganze Zahl von 0 bis 18446744073709551615 eingeben.");
+        return false;
     }
-    if (ferror(original))
-        ok = false;
-    if (fclose(original))
-        ok = false;
-    if (ok && !last_had_newline && fputc('\n', updated) == EOF)
-        ok = false;
-    for (uint32_t i = 0; ok && i < a->parameters.count; i++) {
-        double value;
-        if (ps_parameter_catalog_value(&a->parameters, i, &value) != PS_OK ||
-            fprintf(updated, "parameter.%s=%.17g\n", a->parameters.entries[i].name, value) < 0)
-            ok = false;
-    }
-    if (fclose(updated))
-        ok = false;
-    if (ok)
-        ok = SDL_RenamePath(temporary, path);
-    if (!ok)
-        SDL_RemovePath(temporary);
-    return ok;
+    return true;
 }
 static bool test_editor_failed_import(app *a) {
     char path[4096];
@@ -499,6 +510,9 @@ static bool test_editor_failed_import(app *a) {
 static void save_project(app *a) {
     if (!a->loaded || a->recovery)
         return;
+    if (!a->dirty && !a->analysis_dirty && !a->project_settings_dirty)
+        return;
+    if (!simulation_settings_valid(a)) return;
     char *saved[2] = {copy_editor_text(&a->experiment), copy_editor_text(&a->analysis)};
     if (!saved[0] || !saved[1]) {
         free(saved[0]);
@@ -508,13 +522,13 @@ static void save_project(app *a) {
     }
     char p[4096];
     join(p, sizeof p, a->project, experiment_source(a));
-    bool ok = save_editor(&a->experiment, p);
+    bool ok = !a->dirty || save_editor(&a->experiment, p);
     join(p, sizeof p, a->project, analysis_source(a));
-    ok = save_editor(&a->analysis, p) && ok;
-    if (ok && a->parameters_dirty)
-        ok = save_project_parameters(a);
+    ok = (!a->analysis_dirty || save_editor(&a->analysis, p)) && ok;
+    if (ok && a->project_settings_dirty)
+        ok = save_project_settings(a);
     if (ok) {
-        a->dirty = a->analysis_dirty = a->parameters_dirty = false;
+        a->dirty = a->analysis_dirty = a->project_settings_dirty = false;
         for (unsigned i = 0; i < 2; i++) {
             free(a->saved_source[i]);
             a->saved_source[i] = saved[i];
@@ -533,6 +547,21 @@ static void save_project(app *a) {
         status(a, "Speichern fehlgeschlagen; vorhandene Dateien und Backups pruefen.");
     free(saved[0]);
     free(saved[1]);
+}
+static void invalidate_build(app *a) {
+    ++a->source_revision;
+    a->built = false;
+}
+static void select_build_profile(app *a, int profile) {
+    if (!a->loaded || (profile != 0 && profile != 1) || a->profile == profile) return;
+    a->profile = profile;
+    a->project_settings_dirty = true;
+    invalidate_build(a);
+}
+#include "document_actions.inc"
+static bool build_inputs_current(const app *a) {
+    return a->source_revision == a->build_revision && !a->dirty && !a->analysis_dirty &&
+           !documents_dirty(a);
 }
 static bool idle(app *a) {
     return !a->job.running && !a->runner.running && !a->data.thread && !a->report_thread &&
@@ -553,7 +582,7 @@ static void clear_project(app *a) {
     }
     a->project[0] = a->last_run[0] = a->report[0] = 0;
     a->loaded = a->built = a->dirty = a->analysis_dirty = false;
-    a->parameters_dirty = false;
+    a->project_settings_dirty = false;
     memset(&a->parameters, 0, sizeof a->parameters);
     a->language_experiment = a->language_analysis = false;
     a->selected_count = a->channel_count = 0;
@@ -564,53 +593,21 @@ static void clear_project(app *a) {
     a->loaded_report_path[0] = a->result_error[0] = 0;
     memset(&a->data, 0, sizeof a->data);
 }
-static SDL_EnumerationResult SDLCALL workspace_list_entry(void *userdata, const char *dirname,
-                                                           const char *fname) {
-    app *a = userdata;
-    if (a->workspace_entry_count == 128)
-        return SDL_ENUM_FAILURE;
-    char *entry = a->workspace_entries[a->workspace_entry_count];
-    int n = snprintf(entry, sizeof a->workspace_entries[0], "%s/%s", dirname, fname);
-    if (n > 0 && n < (int)sizeof a->workspace_entries[0])
-        a->workspace_entry_count++;
-    return SDL_ENUM_CONTINUE;
-}
 static void refresh_workspace_entries(app *a) {
-    a->workspace_entry_count = 0;
-    if (a->workspace_open)
-        SDL_EnumerateDirectory(a->workspace, workspace_list_entry, a);
-    for (unsigned i = 0; i < a->workspace_addition_count && a->workspace_entry_count < 128; i++)
-        snprintf(a->workspace_entries[a->workspace_entry_count++],
-                 sizeof a->workspace_entries[0], "%s", a->workspace_additions[i]);
-}
-static void preview_workspace_path(app *a, const char *path) {
-    SDL_PathInfo info;
-    if (!SDL_GetPathInfo(path, &info)) {
-        status(a, "Datei oder Ordner ist nicht mehr vorhanden.");
-        refresh_workspace_entries(a);
+    a->workspace_tree_error[0] = 0;
+    if (!a->workspace_open) {
+        ps_workspace_tree_destroy(&a->workspace_tree);
         return;
     }
-    snprintf(a->workspace_preview_path, sizeof a->workspace_preview_path, "%s", path);
-    a->tab = 8;
-    if (info.type == SDL_PATHTYPE_DIRECTORY) {
-        snprintf(a->workspace_preview, sizeof a->workspace_preview,
-                 "Ordner ausgewählt. Er kann über „Ordner öffnen“ als Workspace geöffnet werden.");
-        return;
-    }
-    FILE *file = fopen(path, "rb");
-    if (!file) {
-        snprintf(a->workspace_preview, sizeof a->workspace_preview,
-                 "Datei konnte nicht gelesen werden.");
-        return;
-    }
-    size_t length = fread(a->workspace_preview, 1, sizeof a->workspace_preview - 1, file);
-    bool read_error = ferror(file) != 0;
-    fclose(file);
-    if (read_error || memchr(a->workspace_preview, 0, length)) {
-        snprintf(a->workspace_preview, sizeof a->workspace_preview,
-                 "Binärdatei oder Lesefehler: keine Textvorschau.");
-    } else
-        a->workspace_preview[length] = 0;
+    const char *roots[33] = {a->workspace};
+    for (unsigned i = 0; i < a->workspace_addition_count; i++)
+        roots[i + 1] = a->workspace_additions[i];
+    ps_result r = ps_workspace_tree_refresh(&a->workspace_tree, roots,
+                                           a->workspace_addition_count + 1);
+    if (r != PS_OK)
+        snprintf(a->workspace_tree_error, sizeof a->workspace_tree_error,
+                 "Dateibaum nicht vollständig geladen (%s). Betroffene Ordner sind markiert.",
+                 ps_result_string(r));
 }
 static void open_project(app *a) {
     bool leaving_manager = a->project_manager;
@@ -620,54 +617,20 @@ static void open_project(app *a) {
         status(a, "Zuerst den laufenden Job beenden.");
         return;
     }
-    if (a->dirty || a->analysis_dirty || a->parameters_dirty)
+    if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
         save_project(a);
-    if (a->dirty || a->analysis_dirty || a->parameters_dirty)
+    if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
         return;
+    if (!documents_save_all(a)) return;
     char p[4096];
     join(p, sizeof p, a->project_input, "physim.project");
-    FILE *f = fopen(p, "r");
-    if (!f) {
-        status(a, "Kein Physim-Projekt in diesem Ordner.");
+    ps_project_settings project_settings;
+    if (ps_project_settings_read(p, &project_settings) != PS_DOCUMENT_OK) {
+        status(a, "Projektdatei fehlt oder ist ungültig. Quellen und Einstellungen bleiben erhalten.");
         return;
     }
-    char line[1024];
-    bool valid = fgets(line, sizeof line, f) && !strcmp(line, "physim_project=1\n");
-    bool language = false, seen_experiment = false, analysis_language = false, seen_analysis = false;
-    ps_parameter_catalog restored_parameters = {0};
-    while (valid && fgets(line, sizeof line, f)) {
-        if (!strchr(line, '\n') && !feof(f)) {
-            valid = false;
-            break;
-        }
-        line[strcspn(line, "\r\n")] = 0;
-        if (!strncmp(line, "experiment=", 11)) {
-            valid = !seen_experiment &&
-                    (!strcmp(line + 11, "main.c") || !strcmp(line + 11, "main.phys"));
-            language = !strcmp(line + 11, "main.phys");
-            seen_experiment = true;
-        } else if (!strncmp(line, "analysis=", 9)) {
-            valid = !seen_analysis &&
-                    (!strcmp(line + 9, "analysis.c") || !strcmp(line + 9, "analysis.phys"));
-            analysis_language = !strcmp(line + 9, "analysis.phys");
-            seen_analysis = true;
-        } else if (!strncmp(line, "parameter.", 10)) {
-            char *equals = strchr(line + 10, '=');
-            valid = equals != NULL;
-            if (valid) {
-                *equals = 0;
-                valid = ps_parameter_catalog_restore(&restored_parameters, line + 10,
-                                                     equals + 1);
-            }
-        }
-    }
-    if (ferror(f))
-        valid = false;
-    fclose(f);
-    if (!valid) {
-        status(a, "Unbekanntes Projektformat.");
-        return;
-    }
+    bool language = project_settings.language_experiment;
+    bool analysis_language = project_settings.language_analysis;
     struct nk_text_edit experiment, analysis;
     nk_textedit_init_default(&experiment);
     nk_textedit_init_default(&analysis);
@@ -694,6 +657,7 @@ static void open_project(app *a) {
         status(a, "Projekt konnte nicht geladen werden: Speicher erschöpft.");
         return;
     }
+    documents_clear(a);
     for (unsigned i = 0; i < 2; i++) {
         free(a->saved_source[i]);
         a->saved_source[i] = saved[i];
@@ -711,13 +675,16 @@ static void open_project(app *a) {
     a->workspace_addition_count = 0;
     refresh_workspace_entries(a);
     a->project_manager = false;
-    a->workspace_preview_path[0] = a->workspace_preview[0] = 0;
+    a->workspace_preview_path[0] = 0;
     if (leaving_manager || a->tab == 8)
         a->tab = 0;
     a->loaded = true;
     a->built = false;
-    a->parameters = restored_parameters;
-    a->parameters_dirty = false;
+    a->parameters = project_settings.parameters;
+    a->profile = project_settings.release ? 1 : 0;
+    a->dt = project_settings.timestep;
+    snprintf(a->seed, sizeof a->seed, "%llu", (unsigned long long)project_settings.seed);
+    a->project_settings_dirty = false;
     a->batch_sweep = false;
     a->batch_sweep_ready = false;
     a->batch_sweep_parameter = 0;
@@ -748,10 +715,11 @@ static void open_project(app *a) {
     check_recovery(a);
 }
 static void new_project(app *a) {
+    if (!documents_save_all(a)) return;
     if (!idle(a) || a->library_thread || a->recovery)
         return;
     char p[4096], src[4096];
-    const char *reserved[] = {"main.c", "main.phys", "analysis.c", "analysis.phys", "CMakeLists.txt", "physim.project",
+    const char *reserved[] = {"main.c", "main.phys", "analysis.c", "analysis.phys", "physim.project",
                               ".physim-autosave"};
     for (size_t i = 0; i < sizeof reserved / sizeof reserved[0]; i++) {
         join(p, sizeof p, a->project_input, reserved[i]);
@@ -796,26 +764,20 @@ static void new_project(app *a) {
         status(a, "Analysevorlage fehlt.");
         return;
     }
-    join(p, sizeof p, a->project_input, "CMakeLists.txt");
-    FILE *f = fopen(p, "wx");
-    if (!f) {
-        status(a, "CMakeLists.txt existiert oder ist nicht schreibbar.");
-        return;
-    }
-    fputs("cmake_minimum_required(VERSION 3.24)\nproject(PhysimExperiment LANGUAGES "
-          "C)\ninclude(\"${PHYSIM_SDK}/cmake/PhysimExperiment.cmake\")\n",
-          f);
-    fclose(f);
     join(p, sizeof p, a->project_input, "physim.project");
-    f = fopen(p, "wx");
+    FILE *f = fopen(p, "wx");
     if (!f) {
         status(a, "Projektbeschreibung konnte nicht geschrieben werden.");
         return;
     }
-    fprintf(f, "physim_project=1\nexperiment=%s\nanalysis=%s\nmodules=core,units,mechanics,"
-               "data,analysis\n", language ? "main.phys" : "main.c",
-               analysis_language ? "analysis.phys" : "analysis.c");
-    fclose(f);
+    bool written = fprintf(f, "physim_project=1\nexperiment=%s\nanalysis=%s\nmodules=core,units,mechanics,"
+               "data,analysis\nprofile=Debug\nsimulation.dt=0.005\nsimulation.seed=42\n", language ? "main.phys" : "main.c",
+               analysis_language ? "analysis.phys" : "analysis.c") > 0;
+    if (fclose(f)) written = false;
+    if (!written) {
+        status(a, "Projektbeschreibung konnte nicht vollständig gespeichert werden.");
+        return;
+    }
     join(p, sizeof p, a->project_input, "runs");
     ps_make_directory(p);
     open_project(a);
@@ -857,23 +819,27 @@ static void build_project(app *a) {
         return;
     if (!a->loaded || !idle(a))
         return;
+    if (!documents_save_all(a)) return;
     save_project(a);
-    if (a->dirty || a->analysis_dirty || a->parameters_dirty)
+    if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
         return;
-    char build[4096], sdk[4200], compiler[4200];
-    join(build, sizeof build, a->project, "build");
-    snprintf(sdk, sizeof sdk, "-DPHYSIM_SDK=%s", a->root);
-    snprintf(compiler, sizeof compiler, "-DPHYSIM_COMPILER=%s/physimc" EXE_EXT, a->bin);
-    const char *args[] = {cmake_program(), "-S", a->project, "-B", build, sdk,
-                          a->language_experiment || a->language_analysis ? compiler : NULL, NULL};
+    char builder[4096], compiler[4096];
+    join(a->build_directory, sizeof a->build_directory, a->project,
+         a->profile ? "build/Release" : "build/Debug");
+    join(builder, sizeof builder, a->bin, "physim-build" EXE_EXT);
+    join(compiler, sizeof compiler, a->bin, "physimc" EXE_EXT);
+    const char *args[] = {builder, "--project", a->project, "--sdk", a->root,
+                         "--output", a->build_directory, "--physimc", compiler,
+                         "--profile", a->profile ? "Release" : "Debug", NULL};
     a->built = false;
     a->diagnostic_count = 0;
     a->diagnostic_used = 0;
+    a->build_revision = a->source_revision;
     if (ps_process_start(&a->job, args, a->project)) {
-        a->job_kind = 1;
-        status(a, "CMake erkennt den Compiler und konfiguriert das Projekt ...");
+        a->job_kind = 2;
+        status(a, "Physim baut Experiment und Analyse ...");
     } else
-        status(a, "CMake konnte nicht gestartet werden. CMake und C17-Compiler installieren.");
+        status(a, "Physim-Build konnte nicht gestartet werden. Installation prüfen.");
 }
 static bool command(app *a, uint32_t type) {
     unsigned char frame[32], payload[4];
@@ -913,7 +879,7 @@ static bool record_limits(const char *prefix, const ps_process_limits *limits) {
 static bool discover_parameters(app *a) {
     char runner[4096], module[4096];
     join(runner, sizeof runner, a->bin, "physim-runner" EXE_EXT);
-    join(module, sizeof module, a->project, "build/bin/experiment" MODULE_EXT);
+    join(module, sizeof module, a->build_directory, "experiment" MODULE_EXT);
     const char *args[] = {runner, module, "--describe", NULL};
     ps_process_limits limits = {(uint64_t)a->runner_memory_mib * UINT64_C(1048576), 30};
     a->parameter_output[0] = 0;
@@ -928,9 +894,10 @@ static bool discover_parameters(app *a) {
 static void start_run(app *a) {
     if (a->recovery)
         return;
-    if (a->parameters_dirty)
+    if (!simulation_settings_valid(a)) return;
+    if (a->project_settings_dirty)
         save_project(a);
-    if (a->parameters_dirty)
+    if (a->project_settings_dirty)
         return;
     if (!a->built || !idle(a) || a->dirty) {
         status(a, "Zuerst das gespeicherte Projekt erfolgreich bauen.");
@@ -943,7 +910,7 @@ static void start_run(app *a) {
         return;
     }
     join(runner, sizeof runner, a->bin, "physim-runner" EXE_EXT);
-    join(module, sizeof module, a->project, "build/bin/experiment" MODULE_EXT);
+    join(module, sizeof module, a->build_directory, "experiment" MODULE_EXT);
     unique_path(a, a->last_run, sizeof a->last_run, ".psrun");
     snprintf(dt, sizeof dt, "%.17g", a->dt);
     char parameter_arguments[PS_MAX_PARAMETERS][128];
@@ -1123,7 +1090,7 @@ static void analyze(app *a, bool csv) {
     }
     char runner[4096], module[4096], source[4096], snapshot_path[4096];
     join(runner, sizeof runner, a->bin, "physim-analysis-runner" EXE_EXT);
-    join(module, sizeof module, a->project, "build/bin/analysis" MODULE_EXT);
+    join(module, sizeof module, a->build_directory, "analysis" MODULE_EXT);
     unique_path(a, a->report, sizeof a->report, csv ? ".csv" : "-analysis");
     unsigned count = !csv && a->selected_count ? a->selected_count : 1;
     const char *input = !csv && a->selected_count ? a->selected_runs[0] : a->last_run;
@@ -1222,32 +1189,23 @@ static void pump(app *a) {
         if (!ps_process_poll(&a->job)) {
             int code = a->job.exit_code;
             ps_process_close(&a->job);
-            if (!code && a->job_kind == 1) {
-                char build[4096];
-                join(build, sizeof build, a->project, "build");
-                const char *args[] = {
-                    PS_CMAKE,     "--build", build, "--config", a->profile ? "Release" : "Debug",
-                    "--parallel", "4",       NULL};
-                if (ps_process_start(&a->job, args, a->project)) {
-                    a->job_kind = 2;
-                    status(a, "Compiler baut Experiment und Analyse ...");
-                } else
-                    status(a, "Build-Prozess konnte nicht gestartet werden.");
-            } else if (!code && a->job_kind == 2) {
+            if (!code && a->job_kind == 2) {
                 if (!a->diagnostic_count)
                     a->show_log = false;
-                if (a->dirty || a->analysis_dirty)
+                if (!build_inputs_current(a))
                     status(a, "Build fertig; Editor wurde waehrenddessen geaendert. Erneut bauen.");
                 else if (!discover_parameters(a))
                     status(a, "Build fertig; Parameterabfrage konnte nicht gestartet werden.");
             } else if (a->job_kind == 5) {
                 a->built = !code && !a->job.timed_out && !a->parameter_output_overflow &&
                            ps_parameter_catalog_parse(&a->parameters, a->parameter_output) &&
-                           !a->dirty && !a->analysis_dirty;
+                           build_inputs_current(a);
                 if (a->built)
                     a->batch_sweep_ready = false;
                 status(a, a->built ? "Build und Parameterabfrage erfolgreich. Experiment bereit."
-                                   : "Parameterabfrage fehlgeschlagen. Details im Protokoll; erneut bauen.");
+                          : !build_inputs_current(a)
+                              ? "Dateien oder Buildprofil wurden während des Builds geändert. Erneut bauen."
+                              : "Parameterabfrage fehlgeschlagen. Details im Protokoll; erneut bauen.");
             } else if (!code && (a->job_kind == 3 || a->job_kind == 4)) {
                 refresh_library(a);
                 status(a, "Auswertung abgeschlossen; Ergebnisse im runs-Ordner.");
@@ -1719,11 +1677,11 @@ static void find_text(app *a, struct nk_text_edit *edit, bool replace) {
             nk_textedit_text(edit, a->replace, (int)strlen(a->replace));
             if (edit == &a->experiment) {
                 a->dirty = true;
-                a->built = false;
-            } else {
+                invalidate_build(a);
+            } else if (edit == &a->analysis) {
                 a->analysis_dirty = true;
-                a->built = false;
-            }
+                invalidate_build(a);
+            } else document_changed(a, edit);
         }
     } else
         status(a, "Suchtext nicht gefunden.");
@@ -1759,7 +1717,8 @@ static bool language_keyword(const char *word, size_t length) {
 /* Overlay lexical colors on the ordinary Nuklear editor; selection and cursor stay native.
  * Only the visible lines generate draw commands; scanning preserves multiline comments. */
 static void syntax_text(app *a, struct nk_text_edit *edit, struct nk_rect bounds) {
-    bool language = edit == &a->experiment ? a->language_experiment : a->language_analysis;
+    int kind = document_language(a, edit);
+    bool language = kind == 1;
     struct nk_context *ui = a->ui;
     const struct nk_user_font *font = ui->style.font;
     struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
@@ -1790,7 +1749,11 @@ static void syntax_text(app *a, struct nk_text_edit *edit, struct nk_rect bounds
         }
         size_t begin = at;
         struct nk_color color = nk_rgb(211, 224, 237);
-        if (triple_string ||
+        if (kind < 0) {
+            nk_rune rune;
+            int n = nk_utf_decode(text + at, &rune, (int)(size - at));
+            at += (size_t)(n > 0 ? n : 1);
+        } else if (triple_string ||
             (language && at + 2 < size && text[at] == '"' && text[at + 1] == '"' &&
              text[at + 2] == '"')) {
             color = nk_rgb(232, 192, 121);
@@ -1899,6 +1862,8 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
     uint32_t hash =
         ps_crc32((const unsigned char *)nk_str_get_const(&edit->string), (size_t)before);
     struct nk_rect editor_bounds = nk_widget_bounds(ui);
+    if (active_document(a) && edit == &active_document(a)->edit)
+        a->document_bounds[6] = editor_bounds;
     struct nk_color transparent = nk_rgba(0, 0, 0, 0);
     nk_style_push_color(ui, &ui->style.edit.text_normal, transparent);
     nk_style_push_color(ui, &ui->style.edit.text_hover, transparent);
@@ -1914,11 +1879,11 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
         hash != ps_crc32((const unsigned char *)nk_str_get_const(&edit->string), (size_t)after)) {
         if (edit == &a->experiment) {
             a->dirty = true;
-            a->built = false;
-        } else {
+            invalidate_build(a);
+        } else if (edit == &a->analysis) {
             a->analysis_dirty = true;
-            a->built = false;
-        }
+            invalidate_build(a);
+        } else document_changed(a, edit);
     }
     nk_layout_row_end(ui);
     struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
@@ -1988,9 +1953,9 @@ static void create_managed_project(app *a) {
         status(a, "Zuerst den laufenden Job beenden.");
         return;
     }
-    if (a->dirty || a->analysis_dirty || a->parameters_dirty)
+    if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
         save_project(a);
-    if (a->dirty || a->analysis_dirty || a->parameters_dirty)
+    if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
         return;
     if (!a->manager_name[0] || !strcmp(a->manager_name, ".") ||
         !strcmp(a->manager_name, "..") || strpbrk(a->manager_name, "/\\")) {
@@ -2014,24 +1979,26 @@ static void create_managed_project(app *a) {
                      ? language_templates[a->manager_template] : a->manager_template;
     new_project(a);
 }
-static void open_workspace_path(app *a, const char *path) {
+static bool open_workspace_path(app *a, const char *path) {
     SDL_PathInfo info;
     if (!path || !SDL_GetPathInfo(path, &info) || info.type != SDL_PATHTYPE_DIRECTORY) {
         status(a, "Ordner konnte nicht geöffnet werden.");
-        return;
+        return false;
     }
     if (!idle(a) || a->library_thread || a->recovery) {
         status(a, "Zuerst den laufenden Job beenden.");
-        return;
+        return false;
     }
-    if (a->dirty || a->analysis_dirty || a->parameters_dirty)
+    if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
         save_project(a);
-    if (a->dirty || a->analysis_dirty || a->parameters_dirty)
-        return;
+    if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
+        return false;
     if (strlen(path) >= sizeof a->workspace) {
         status(a, "Ordnerpfad ist zu lang.");
-        return;
+        return false;
     }
+    if (!documents_save_all(a)) return false;
+    documents_clear(a);
     clear_project(a);
     snprintf(a->workspace, sizeof a->workspace, "%s", path);
     snprintf(a->project_input, sizeof a->project_input, "%s", path);
@@ -2039,7 +2006,7 @@ static void open_workspace_path(app *a, const char *path) {
     a->workspace_disclosure = NK_MAXIMIZED;
     a->project_manager = false;
     a->tab = 0;
-    a->workspace_preview_path[0] = a->workspace_preview[0] = 0;
+    a->workspace_preview_path[0] = 0;
     a->workspace_addition_count = 0;
     refresh_workspace_entries(a);
     char manifest[4096];
@@ -2048,7 +2015,10 @@ static void open_workspace_path(app *a, const char *path) {
         open_project(a);
     else
         status(a, "Ordner geöffnet. Kein Physim-Projekt erkannt; Dateien können angesehen werden.");
+    return true;
 }
+
+#include "workspace_actions.inc"
 
 static Uint32 workspace_dialog_event;
 static const int dialog_open_folder = PS_DIALOG_OPEN_FOLDER;
@@ -2143,9 +2113,18 @@ static void test_mouse(app *a, struct nk_rect rect, bool down) {
 #include "batch_tests.inc"
 #include "plot_tests.inc"
 #include "settings_tests.inc"
+#include "workspace_tree_tests.inc"
+#include "document_tests.inc"
+#include "document_recovery_tests.inc"
+#include "toolbar_tests.inc"
+#include "project_settings_tests.inc"
+#include "workspace_tests.inc"
 // clang-format on
 int main(int argc, char **argv) {
     bool workspace_test = argc > 1 && !strcmp(argv[1], "--workspace-test");
+    bool workspace_state_test = argc > 1 && !strcmp(argv[1], "--workspace-state-test");
+    if (workspace_state_test && argc != 4)
+        return 1;
     if (workspace_test && argc != 3)
         return 2;
     bool syntax_preview_test = argc > 1 && !strcmp(argv[1], "--syntax-preview-test");
@@ -2306,6 +2285,10 @@ int main(int argc, char **argv) {
         return 1;
     }
     a->window = window;
+    if (SDL_SetWindowHitTest(window, window_hit_test, a))
+        SDL_SetWindowBordered(window, false);
+    else
+        fprintf(stderr, "Integrierter Fensterkopf: %s\n", SDL_GetError());
     a->preferences = PS_PREFERENCES_DEFAULT;
     a->doc_jump_block = -1;
     a->doc_previous = -1;
@@ -2388,12 +2371,15 @@ int main(int argc, char **argv) {
     status(a, "Bereit. Ordner öffnen oder ein neues Projekt anlegen.");
     bool smoke = argc > 1 && !strcmp(argv[1], "--smoke");
     bool self_test = settings_test || plot_test || batch_test || docs_test || recovery_test ||
-                     workspace_test || syntax_preview_test ||
+                     workspace_test || workspace_state_test || syntax_preview_test ||
                      (argc > 2 && !strcmp(argv[1], "--self-test"));
     if (self_test && SDL_getenv("PHYSIM_TEST_SMALL"))
         SDL_SetWindowSize(window, 1080, 740);
-    if (argc < 2 || strncmp(argv[1], "--", 2))
+    if (argc < 2 || strncmp(argv[1], "--", 2)) {
         preferences_start(a, NULL);
+        workspace_state_start(a, NULL);
+        document_drafts_start(a, NULL);
+    }
     int test_stage = 0, exit_code = 0;
     double test_started = ps_clock(), paused_time = 0;
     unsigned doc_input_events = 0, doc_input_bytes = 0;
@@ -2412,6 +2398,11 @@ int main(int argc, char **argv) {
             a->loaded = true;
             a->language_experiment = true;
             test_stage = 120;
+        }
+    } else if (workspace_state_test) {
+        if (!workspace_test_start(a, argv[2], argv[3])) {
+            exit_code = 1;
+            a->quitting = true;
         }
     } else if (workspace_test) {
         if (a->workspace_open || a->loaded || a->project_input[0] ||
@@ -2556,23 +2547,16 @@ int main(int argc, char **argv) {
             }
             if (e.type == SDL_EVENT_QUIT ||
                 (e.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED && event_window == a->window)) {
-                if (a->dirty || a->analysis_dirty || a->parameters_dirty)
+                if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
                     save_project(a);
-                if (!a->dirty && !a->analysis_dirty && !a->parameters_dirty)
+                if (!a->dirty && !a->analysis_dirty && !a->project_settings_dirty && documents_save_all(a))
                     a->quitting = true;
             }
             if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && !a->recovery) {
-                if (((a->language_experiment && a->tab == 0 && a->experiment.active) ||
-                     (a->language_analysis && a->tab == 2 && a->analysis_tab == 1 && a->analysis.active)) &&
-                    e.key.key == SDLK_TAB && !(e.key.mod & (SDL_KMOD_CTRL | SDL_KMOD_ALT))) {
-                    for (unsigned space = 0; space < 4; space++)
-                        nk_input_unicode(a->ui, ' ');
-                    continue;
-                }
                 if (scene_shortcut(a, &e.key)) continue;
                 if (!e.key.repeat && (e.key.mod & SDL_KMOD_CTRL)) {
                     if (e.key.key >= SDLK_1 && e.key.key <= SDLK_3)
-                        a->tab = (int)(e.key.key - SDLK_1);
+                        select_workspace_tab(a, (int)(e.key.key - SDLK_1));
                     if (e.key.key == SDLK_4)
                         open_library(a);
                     if (e.key.key == SDLK_F) {
@@ -2587,7 +2571,9 @@ int main(int argc, char **argv) {
                         open_settings(a);
                 }
                 if (e.key.key == SDLK_S && (e.key.mod & SDL_KMOD_CTRL))
-                    save_project(a);
+                    save_active_document(a);
+                if (e.key.key == SDLK_W && (e.key.mod & SDL_KMOD_CTRL) && a->tab == 8)
+                    document_request(a, 1);
                 if (e.key.key == SDLK_F5)
                     build_project(a);
                 if (e.key.key == SDLK_F1 && !e.key.repeat)
@@ -2606,6 +2592,7 @@ int main(int argc, char **argv) {
             nk_input_end(a->doc_ui);
         pump(a);
         autosave_tick(a, ps_clock());
+        documents_autosave_tick(a, ps_clock());
         const char *capture = NULL;
         if (syntax_preview_test) {
             if (ps_clock() - test_started > 15) {
@@ -2618,6 +2605,14 @@ int main(int argc, char **argv) {
                 printf("UNICODE EDITOR PREVIEW: %s\n", exit_code ? "FAILED" : "PASSED");
                 a->quitting = true;
             }
+        } else if (workspace_state_test) {
+            if (ps_clock() - test_started >
+                (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17)
+                     ? 120 : 15)) {
+                exit_code = 1;
+                a->quitting = true;
+            } else
+                workspace_test_frame(a, argv[3], &test_stage, &exit_code, &capture);
         } else if (workspace_test) {
             if (ps_clock() - test_started > 15) {
                 exit_code = 1;
@@ -2640,7 +2635,7 @@ int main(int argc, char **argv) {
                     refresh_workspace_entries(a);
                     add_workspace_path(a, path);
                     preview_workspace_path(a, path);
-                    if (a->tab != 8 || !strstr(a->workspace_preview, "Workspace text"))
+                    if (a->tab != 8 || !(active_document(a) && strstr(active_document(a)->file.saved, "Workspace text")))
                         exit_code = 1;
                     test_stage = 102;
                 }
@@ -2788,7 +2783,7 @@ int main(int argc, char **argv) {
                         } else {
                             snprintf(a->parameters.selected[0],
                                      sizeof a->parameters.selected[0], "0.6");
-                            a->parameters_dirty = true;
+                            a->project_settings_dirty = true;
                         }
                     }
                     if (test_example == 18) {
@@ -2809,7 +2804,7 @@ int main(int argc, char **argv) {
                             exit_code = 1;
                             a->quitting = true;
                         } else {
-                            a->parameters_dirty = true;
+                            a->project_settings_dirty = true;
                         }
                     }
                     if (test_example == 19) {
@@ -2826,7 +2821,7 @@ int main(int argc, char **argv) {
                             exit_code = 1;
                             a->quitting = true;
                         } else {
-                            a->parameters_dirty = true;
+                            a->project_settings_dirty = true;
                         }
                     }
                     capture = "editor.bmp";
@@ -3529,7 +3524,7 @@ int main(int argc, char **argv) {
                                        strcmp(capture, "batch-documentation.bmp") == 0);
         if (capture && !doc_capture) {
             char path[4096];
-            join(path, sizeof path, a->project, capture);
+            join(path, sizeof path, workspace_state_test ? argv[2] : a->project, capture);
             if (!ps_graphics_capture(graphics, path))
                 exit_code = 1;
         }
@@ -3550,8 +3545,12 @@ int main(int argc, char **argv) {
             a->quitting = true;
         SDL_Delay(5);
     }
-    if (a->dirty || a->analysis_dirty || a->parameters_dirty)
+    if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
         save_project(a);
+    if (workspace_state_save(a) != PS_OK) {
+        fprintf(stderr, "%s\n", a->workspace_state_error);
+        exit_code = 1;
+    }
     if (a->preferences_writable && a->preferences_path[0]) {
         preferences_capture(a);
         ps_result saved = ps_preferences_write(a->preferences_path, &a->preferences);
@@ -3612,8 +3611,11 @@ int main(int argc, char **argv) {
     free(a->saved_source[0]);
     free(a->saved_source[1]);
     ps_autosave_destroy(a->recovery);
+    ps_workspace_tree_destroy(&a->workspace_tree);
+    documents_clear(a);
     documentation_window_destroy(a);
     nk_sdl_shutdown(a->ui);
+    SDL_SetWindowHitTest(window, NULL, NULL);
     free(a);
     ps_graphics_destroy(graphics);
     SDL_DestroyWindow(window);

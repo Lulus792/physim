@@ -1,7 +1,6 @@
-# Designrichtung: leerer Workspace und globale Helferleiste
+# Designrichtung: kompakte Menüs und Arbeitsbereich-Tabs
 
-Verbindliche Produktentscheidung, 2026-09-21: Das bisherige Apple-inspirierte
-Start- und Navigationskonzept wird ersetzt. Physim soll sich beim Einstieg im
+Verbindliche Produktentscheidung, 2026-09-21: Physim soll sich beim Einstieg im
 Arbeitsablauf an Visual Studio Code orientieren: zuerst eine leere
 Arbeitsumgebung, danach öffnet der Nutzer einen Ordner oder fügt Inhalte hinzu.
 
@@ -9,6 +8,14 @@ Die Orientierung an Visual Studio Code betrifft den Workspace- und
 Navigationsfluss, nicht eine vollständige Kopie seiner Oberfläche. Physims
 Editor, Simulation, 3D-Ansicht und Auswertung bleiben eigenständige
 Arbeitsbereiche.
+
+Aktualisierte Produktentscheidung, 2026-09-28: Die globale Bedienung folgt einer
+kompakten, an Apple-Apps orientierten Menüzeile. Die großen Werkzeugschaltflächen
+entfallen. **Entwickeln**, **Simulieren** und **Auswerten** stehen als horizontale
+Tabs direkt darunter über die gesamte Fensterbreite, mit drei gleich großen
+Bereichen. Menü und Fensterknöpfe bilden einen gemeinsamen Fensterkopf ohne
+zusätzliche Betriebssystem-Titelzeile.
+Der leere Workspace-Start und der getrennte Projektmanager bleiben bestehen.
 
 ## Verbindliches Zielbild
 
@@ -23,18 +30,30 @@ Arbeitsbereiche.
 - Ein vorhandener Ordner darf zunächst als Workspace geöffnet werden, auch wenn
   er noch keine `physim.project`-Datei enthält.
 
-### 2. Globale Helferleiste
+### 2. Kompakte Menüzeile und Tabs
 
-Oben im Fenster gibt es eine dauerhaft sichtbare Helferleiste, die in allen
-Arbeitsbereichen verfügbar bleibt. Sie enthält mindestens:
+Oben im Fenster gibt es eine dauerhaft sichtbare, flache Menüzeile, die in allen
+Arbeitsbereichen verfügbar bleibt. Ihre Aktionen sind zusammengefasst:
 
-- **Ordner öffnen**
-- **Datei oder Ordner hinzufügen**
-- **Neues Projekt**
-- **Dokumentation/Hilfe**
-- **Einstellungen**
+- **Datei:** Ordner öffnen, Datei oder Ordner hinzufügen, neues Projekt, speichern.
+- **Ansicht:** Protokoll, Dateibaum aktualisieren, Läufe und Berichte, Monte Carlo.
+- **Hilfe** und **Einstellungen:** kompakte direkte Zugänge.
 
-Die Leiste ist die zentrale Stelle für globale Aktionen. Arbeitsbereich-
+Darunter liegen drei schmale, gleich breite Tabs über die gesamte Fensterbreite.
+Ihre Auswahlfläche ist leicht eingerückt, abgerundet und neutral grau.
+Die Menüzeile hat einen durchgehenden Hintergrund; ihre Beschriftungen
+haben im Ruhezustand keine eigenen Buttonflächen. Nur Hover und Auswahl werden
+abgerundet hervorgehoben. Geöffnete Menüs bleiben hervorgehoben; ein Klick auf ein anderes
+Menü wechselt unmittelbar dorthin. Bei offenem Menü genügt auch das Bewegen des
+Mauszeigers zwischen Datei und Ansicht. Popup-Einträge teilen eine gemeinsame
+Fläche, mit rechts ausgerichteten Tastenkürzeln und Markierung beim Überfahren.
+Referenzen: Apples [Menüleiste](https://developer.apple.com/design/human-interface-guidelines/the-menu-bar)
+und [Ansichtsumschalter](https://developer.apple.com/design/human-interface-guidelines/segmented-controls).
+Das normale App-Fenster erhält abgerundete
+äußere Ecken über den Windows-Compositor. Die Menüzeile sitzt direkt am oberen Fensterrand;
+der freie Bereich neben den Menüs dient zum Verschieben des Fensters.
+Die Tab-Reihe ersetzt die Arbeitsbereich-Schaltflächen der Seitenleiste; diese
+beginnt mit dem Workspace. Die Menüzeile ist die zentrale Stelle für globale Aktionen. Arbeitsbereich-
 spezifische Aktionen wie Build, Simulation oder Analyse bleiben im jeweiligen
 Kontext und werden nicht unpriorisiert in die globale Leiste verschoben.
 
@@ -94,14 +113,23 @@ Die neue Designrichtung gilt als umgesetzt, wenn:
 4. **Neues Projekt** einen getrennten Projektmanager öffnet;
 5. das Öffnen eines bestehenden Ordners und das Erstellen eines neuen Projekts
    getrennte, nachvollziehbare Abläufe sind;
-6. die globale Helferleiste in Entwickeln, Simulieren und Auswerten verfügbar
-   bleibt;
+6. die kompakte Menüzeile in Entwickeln, Simulieren und Auswerten verfügbar
+   bleibt und die drei Bereiche direkt darunter als Tabs erreichbar sind;
 7. bestehende Physim-Projekte weiterhin direkt geöffnet und bearbeitet werden
    können;
 8. leere, nicht erkannte oder unvollständige Ordner eine verständliche nächste
    Aktion anbieten, statt nur mit einem Projektformatfehler abzubrechen.
 
 ## Abgrenzung
+
+Zusätzliches Endziel vom 2026-09-28, konkretisiert: Alle Projektdateien bleiben im
+selben Projektordner. Physim erzeugt und pflegt seine eigene Projektdatei;
+Buildprodukte und Zwischenergebnisse liegen gesammelt unter `build/`.
+Laufdaten und Sicherungen bleiben ebenfalls beim Projekt. Nutzerprojekte benötigen keine
+`CMakeLists.txt` und keine CMake-Installation; Physim verwaltet Compileraufrufe
+und Abhängigkeiten selbst. Langfristig soll die gesamte Buildverwaltung ohne
+CMake auskommen. Die verbindlichen Migrations- und Abnahmekriterien stehen im
+[Projektplan](../Physim_Projektplan.md#2-verbindliche-produktziele).
 
 Das Ziel ist eine klare Workspace-zentrierte App-Shell. Es ist nicht das Ziel,
 Physim zu einer allgemeinen C-IDE für beliebige Softwareprojekte auszubauen.

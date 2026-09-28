@@ -1,0 +1,20 @@
+#ifndef PHYSIM_WORKSPACE_STATE_H
+#define PHYSIM_WORKSPACE_STATE_H
+#include "physim/core.h"
+enum { PS_WORKSPACE_PATH = 4096, PS_WORKSPACE_ADDITIONS = 32 };
+typedef struct {
+    char root[PS_WORKSPACE_PATH];
+    char additions[PS_WORKSPACE_ADDITIONS][PS_WORKSPACE_PATH];
+    uint32_t count;
+} ps_workspace_state;
+/* Private app format. Paths are absolute UTF-8; an empty root represents no
+ * saved workspace. Read is transactional. Missing files return PS_EOF.
+ * Replacement uses a closed, exclusive sibling file; failed writes preserve
+ * the previous file. Concurrent instances use the last completed write. */
+ps_result ps_workspace_state_read(const char *path, ps_workspace_state *out);
+ps_result ps_workspace_state_write(const char *path, const ps_workspace_state *state);
+/* Resolve a relative path against the current directory without requiring the
+ * target to exist. Windows drive-relative and root-relative paths are rejected.
+ * The output is unchanged on error. */
+ps_result ps_workspace_absolute(const char *path, char out[PS_WORKSPACE_PATH]);
+#endif

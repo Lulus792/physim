@@ -15,6 +15,19 @@ static void test_batch_frame(app *a, int *stage, int *code, const char **capture
             a->quitting = true;
             break;
         }
+        test_mouse(a, a->toolbar_bounds[1], true);
+        *stage = 112;
+        break;
+    case 112:
+        test_mouse(a, a->toolbar_bounds[1], false);
+        *stage = 113;
+        break;
+    case 113:
+        if (a->toolbar_menu != 2 || a->batch_navigation_bounds.w <= 0) {
+            *code = 1;
+            a->quitting = true;
+            break;
+        }
         test_mouse(a, a->batch_navigation_bounds, true);
         *stage = 91;
         break;

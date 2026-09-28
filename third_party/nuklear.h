@@ -13586,18 +13586,21 @@ static int stbtt__GetGlyphShapeTT(const stbtt_fontinfo *info, int glyph_index, s
             /*  now start the new one */
             start_off = !(flags & 1);
             if (start_off) {
+               /* Physim: a one-point contour wraps to itself, not the next
+                * contour (or the end of the allocated point array). */
+               int next = i == ttUSHORT(endPtsOfContours+j*2) ? i : i+1;
                /*  if we start off with an off-curve point, then when we need to find a point on the curve */
                /*  where we can start, and we need to save some state for when we wraparound. */
                scx = x;
                scy = y;
-               if (!(vertices[off+i+1].type & 1)) {
+               if (!(vertices[off+next].type & 1)) {
                   /*  next point is also a curve point, so interpolate an on-point curve */
-                  sx = (x + (stbtt_int32) vertices[off+i+1].x) >> 1;
-                  sy = (y + (stbtt_int32) vertices[off+i+1].y) >> 1;
+                  sx = (x + (stbtt_int32) vertices[off+next].x) >> 1;
+                  sy = (y + (stbtt_int32) vertices[off+next].y) >> 1;
                } else {
                   /*  otherwise just use the next point as our start point */
-                  sx = (stbtt_int32) vertices[off+i+1].x;
-                  sy = (stbtt_int32) vertices[off+i+1].y;
+                  sx = (stbtt_int32) vertices[off+next].x;
+                  sy = (stbtt_int32) vertices[off+next].y;
                   ++i; /*  we're using point i+1 as the starting point, so skip it */
                }
             } else {
@@ -28746,7 +28749,8 @@ nk_do_edit(nk_flags *state, struct nk_command_buffer *out,
         /* tab handler */
         {int tab = nk_input_is_key_pressed(in, NK_KEY_TAB);
         if (tab && (flags & NK_EDIT_ALLOW_TAB)) {
-            nk_textedit_text(edit, "    ", 4);
+            /* Physim: one indentation is one undo step, including selection replacement. */
+            nk_textedit_paste(edit, "    ", 4);
             cursor_follow = nk_true;
         }}
     }

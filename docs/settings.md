@@ -1,6 +1,6 @@
 # Einstellungen und Fensteraufteilung
 
-**Einstellungen** oben rechts oder **Ctrl+,** öffnet die persönliche Darstellung.
+**Einstellungen** in der oberen Menüzeile oder **Ctrl+,** öffnet die persönliche Darstellung.
 Ein Wechsel hierhin lässt Editorinhalte, Simulation und Analyse im Hintergrund bestehen.
 Das geöffnete Protokoll wird während der Einstellungsansicht vorübergehend eingeklappt,
 damit die Bedienelemente auch im kleinen Fenster Platz haben.
@@ -103,3 +103,7 @@ in den Einstellungen. Die ursprüngliche Datei bleibt bis zum ausdrücklichen
 Übernehmen erhalten. Ein Stromausfall während des Dateiaustauschs ist nicht abgesichert.
 App-Tests verwenden eigene Dateien im Testordner und berühren die persönlichen
 Einstellungen nicht.
+
+Der letzte Workspace wird separat in `workspace.bin` gespeichert. Hauptordner und
+zusätzliche Pfade lassen sich auf dem leeren Startbildschirm ausdrücklich wieder
+öffnen oder vergessen. [Workspace wieder öffnen](workspace.md)

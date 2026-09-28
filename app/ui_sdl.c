@@ -9,17 +9,18 @@
 #include <windows.h>
 #include <dwmapi.h>
 #endif
-/* Keep native resizing, snapping and caption buttons, but blend the caption
- * into the same canvas as the renderer. Unsupported attributes are harmless
- * on Windows 10, where the dark-caption fallback remains available. */
+/* Ask the compositor for rounded outer corners, including the integrated main
+ * window header. Windows keeps maximized/snapped windows flush with the screen. */
 static void window_chrome(SDL_Window *window) {
 #ifdef _WIN32
     HWND hwnd = (HWND)SDL_GetPointerProperty(SDL_GetWindowProperties(window),
                                              SDL_PROP_WINDOW_WIN32_HWND_POINTER, NULL);
     if (hwnd) {
         BOOL dark = TRUE;
+        DWORD corners = 2; /* DWMWCP_ROUND; ignored on Windows versions before 11. */
         COLORREF background = RGB(20, 21, 24), text = RGB(237, 238, 242);
         DwmSetWindowAttribute(hwnd, 20 /* immersive dark mode */, &dark, sizeof dark);
+        DwmSetWindowAttribute(hwnd, 33 /* corner preference */, &corners, sizeof corners);
         DwmSetWindowAttribute(hwnd, 34 /* border color */, &background, sizeof background);
         DwmSetWindowAttribute(hwnd, 35 /* caption color */, &background, sizeof background);
         DwmSetWindowAttribute(hwnd, 36 /* text color */, &text, sizeof text);

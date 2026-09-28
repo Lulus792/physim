@@ -1,7 +1,13 @@
 # Umsetzungsstand
 
-Stand: erster Entwicklungsdurchstich, ergänzt am 2026-09-24. Der Projektplan ist die Roadmap;
+Stand: erster Entwicklungsdurchstich, ergänzt am 2026-09-28. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
+
+Projektdateien speichern jetzt zusätzlich den Zeitschritt und den vollständigen
+64-Bit-Seed. Die App prüft beide vor Speichern und Laufstart. Modelltests bestehen
+mit MSVC, Clang und AddressSanitizer auf Windows. Der App-Test prüft Neustart,
+Release-Build, Ablehnung eines überlaufenden Seeds und einen echten Runnerlauf
+mit 0,125 Sekunden und Seed 18446744073709551615 einschließlich der Messdatei.
 
 | Bereich | Implementiert | Noch offen |
 | --- | --- | --- |
@@ -12,7 +18,7 @@ dieses Dokument unterscheidet implementierten Code von noch offenen Produktziele
 | Einheiten | SI-Dimensionen, Konvertierung, Einheitenalgebra, Quantity-Rechnung und Dimensionsprüfung von Datenreihen | benutzerdefinierte Anzeigeeinheiten in der GUI |
 | Runner | versionierte Modul-ABI, Handshake, Pause/Step/Run/Stop, Heartbeat, Crash-/Hang-Isolation | Ressourcenlimits, eigener Logkanal, echtes OS-Sandboxing |
 | Daten | CRC-Chunks, Streaming, Recovery, CSV, Seed-/Modellmetadaten | Index, mehr Datentypen, komprimierte Blöcke, Schemaerweiterung |
-| App | leerer Workspace-Einstieg, globale Helferleiste, einfacher Projektmanager und Textvorschau, drei Arbeitsbereiche, integrierte Offline-Dokumentation, Systemtypografie, Einstellungen mit Code-Schriftgröße und Autosave-Intervall, gespeicherte Darstellung/Fenstergröße/Maximierung, vergrößerbare Seitenleiste und Protokoll, Vorlagen, Editor, Hintergrundbuild, Diagramme | vollständiger Dateibaum und Dokumentverwaltung, Workspace-Persistenz, freies Docking, weitere Panelzustände, UI-weite Schriftvergrößerung, helle/kontrastreiche Themes, vollständige Barrierefreiheit |
+| App | leerer Workspace-Einstieg mit gespeicherter Ordnerauswahl und bewusster Wiederöffnung, kompakte Menüleiste, Projektmanager, aufklappbarer Dateibaum und bis zu 16 editierbare Textdokumente mit separaten Autosaves, drei Arbeitsbereiche, integrierte Offline-Dokumentation, Systemtypografie, Einstellungen mit Code-Schriftgröße und Autosave-Intervall, gespeicherte Darstellung/Fenstergröße/Maximierung, vergrößerbare Seitenleiste und Protokoll, Vorlagen, Editor, direkter Projektbuild ohne CMake mit Ausgaben unter `build/`, Diagramme | vollständige Ablösung von CMake für Physim selbst, mehrere benannte Workspaces und Wiederherstellung von Dokumentansichten, freies Docking, weitere Panelzustände, UI-weite Schriftvergrößerung, helle/kontrastreiche Themes, vollständige Barrierefreiheit |
 | Editor | C- und Physim-Dateien bearbeiten, sprachspezifische Syntaxfarben, Zeilennummern, Debug/Release, anklickbare Compilerdiagnosen, öffentlicher Header-Browser | Completion |
 | Szene | OpenGL 3.3 Core, Tiefenpuffer, MSAA, alle acht Grundprimitive, orientierte Boxen/Ebenen, RGBA-Transparenz mit Dreieckssortierung, UTF-8-Labels, Wurf-Flugbahn, Grid/Achsen, Kamera, Ansichten und Sichtbarkeit und Mausklickauswahl einzelner Szeneneinträge mit optionalen Objekt-IDs | artefaktfreie Transparenz bei sich durchdringenden Flächen, Szenenhierarchie, Zeitleiste |
 | Analyse | eigener C-Editor/Runner, Dataset-/Series-Handles, blockweise Transformationen mit Einheitenprüfung, eigene Ergebnisplots/-tabellen, Linien/Punkte/Histogramme mit Zoom am Mauszeiger, Verschieben, separaten Ausschnitten und Achsenoffsets, PNG-/SVG-Export des sichtbaren Ausschnitts, CSV/SVG und verlustfrei komprimiertes PNG mit vier Größen von 1200 × 850 bis 4800 × 3400 Pixeln, Statistik, Ableitung, Integral, gleitendes Mittel, Periode, Energieabweichung, Auswahl und Vergleich von bis zu acht Läufen, gemeinsame Statusauswahl von Datenreihen, lineares Resampling, Nearest/Previous im SDK und Differenzkurven, frühere Berichte öffnen | weitere Interpolationsverfahren/Transformationen |
@@ -23,6 +29,138 @@ dieses Dokument unterscheidet implementierten Code von noch offenen Produktziele
 Keine Kennzeichnung als stabile 1.0 und keine Behauptung, dass alle 25 Starttickets
 oder die Phasen 0–10 bereits abgenommen sind. Die offene Arbeit bleibt nachvollziehbar
 an den Kriterien des ursprünglichen Projektplans orientiert.
+
+Die globale Leiste verwendet jetzt kompakte Menüs für **Datei** und **Ansicht**
+sowie direkte Zugänge zu Hilfe und Einstellungen. Die Arbeitsbereiche liegen
+als 30 Pixel hohe, gleich breite Tabs über die gesamte Fensterbreite direkt darunter.
+Die Tab-Auswahl hat eine abgerundete, leicht eingerückte, neutral graue Fläche.
+Die Menüzeile hat einen einheitlichen Hintergrund ohne einzelne Buttonflächen
+im Ruhezustand. Nur Hover und das offene Menü werden hervorgehoben.
+Ein gemeinsames Popup ermöglicht den direkten
+Wechsel in beide Richtungen sowie zu Hilfe und Einstellungen mit einem Klick.
+Bei offenem Menü wechselt auch das Bewegen des Mauszeigers zwischen Datei und
+Ansicht das Popup. Menüeinträge sind bündig ausgerichtet, Tastenkürzel stehen
+rechts; die Einträge erhalten nur beim Überfahren eine eigene Farbfläche.
+Windows 11 zeichnet abgerundete äußere Ecken im normalen Fenstermodus.
+Menüwechsel und Darstellung wurden per SDL-Test und echter Windows-Eingabe geprüft.
+Menüs und Fensterknöpfe teilen sich den 32 Pixel hohen Fensterkopf; die zusätzliche
+native Titelzeile entfällt. SDL-Hit-Testing ermöglicht Verschieben und Größenänderung.
+Die großen Seitenleisten-Schaltflächen entfallen; der gemeinsame Kopfbereich ist
+64 Pixel hoch. UI-Tests prüfen
+Menüaktionen, deaktivierte Einträge, Tab-Wechsel und Tastaturbedienung bei
+1080 × 740 und 1440 × 940. Einstellungen, Dokumentationsfenster und die
+Workspace-Abläufe bestehen weiterhin. Maximieren, Wiederherstellen, Minimieren und
+Schließen über die integrierten Fensterknöpfe sowie die Größenänderungs- und
+Verschieberegionen sind ebenfalls geprüft. Zusätzlich wurden Verschieben,
+Größenänderung, Darstellung und Schließen mit echten Windows-Mauseingaben geprüft.
+Der Wiederherstellungsdialog behält
+seine eigenen Fensterknöpfe und verwendet denselben sicheren Schließpfad.
+
+Der Workspace besitzt einen aufklappbaren Dateibaum. Verzeichnisse werden beim
+Öffnen gelesen und vor Dateien sortiert; Aktualisieren erhält aufgeklappte Pfade
+je Wurzeleintrag. Die frühere Grenze von 128 flachen Einträgen wurde durch eine
+sichtbar begrenzte Baumansicht mit bis zu 8192 Einträgen und 64 Ebenen ersetzt.
+Zusätzliche Wurzeleinträge behalten ihre Plätze, fehlende Pfade und Lesefehler
+werden angezeigt. Bis zu 16 UTF-8-Textdateien mit jeweils höchstens 256 KiB
+öffnen sich als unabhängige editierbare Dokumente mit Suche und Ersetzen.
+Binärdateien, ungültiges UTF-8 und größere Dateien werden abgewiesen.
+Speichern prüft externe Änderungen und erhält die vorherige Datei als Backup.
+Schließen und Neuladen bieten bei Änderungen Speichern, Verwerfen und Abbrechen.
+Workspace-Wechsel, Build und normales Beenden speichern offene Dokumente;
+ein Konflikt blockiert den Übergang und zeigt das betroffene Dokument.
+Projektquellen verwenden weiterhin ihre bestehenden Editoren.
+Modell- und App-Tests für Dokumente bestehen unter MSVC Debug bei beiden
+Fenstergrößen. Allgemeine Dokumente haben jetzt eigene Autosaves außerhalb des
+Workspace im persönlichen App-Datenverzeichnis. Beim erneuten Öffnen derselben
+Datei werden Wiederherstellen, Verwerfen und Schließen ohne Auswahl unterstützt.
+Externe Änderungen werden vor dem Wiederherstellen angezeigt; beschädigte
+Sicherungen bleiben erhalten und pausieren nur Autosave der betroffenen Datei.
+Explizites Verwerfen aktiviert Autosave wieder. Das Intervall folgt den Einstellungen.
+Der Prozess-Test beendet den Schreiber ohne normalen Speicher-/Aufräumpfad und
+prüft zwei unabhängige Dokumente, zeitgesteuerte Sicherung, Änderungen gleicher
+Länge, alle Wiederherstellungsentscheidungen und unveränderte Quelldateien.
+Die Modelltests prüfen zusätzlich fremde Pfade im Cache, beschädigte Daten,
+leere Entwürfe und Erhalt der vorherigen Sicherung bei fehlgeschlagenem Schreiben.
+Eine nach dem Öffnen beschädigte Sicherung bleibt auch beim normalen Speichern
+erhalten. Explizites Zurücksetzen und das vollständige Rückgängigmachen eines
+wiederhergestellten Entwurfs werden ebenfalls geprüft.
+Pfadänderungen/gelöschte Quellen und automatisches Öffnen der Dokumente nach
+Neustart bleiben offen.
+
+Die Dokument-Wiederherstellung besteht in separaten Prozessen mit MSVC Debug,
+Clang Debug und MSVC AddressSanitizer. Letzterer prüft zusätzlich den gesamten
+Dokumentablauf einschließlich Entfernen und Verschieben offener Editorzustände.
+Dabei wurde ein Heap-Lesezugriff außerhalb der Grenzen im eingebundenen
+TrueType-Parser beim Laden der Systemschrift gefunden und behoben: Konturen
+mit einem einzelnen Kurvenkontrollpunkt bleiben jetzt innerhalb ihrer Grenzen.
+Der synthetische `font_shape`-Test besteht unter MSVC Debug und AddressSanitizer.
+Zusätzliche Dokumentänderungen und das Neuladen extern geänderter Dateien machen
+den Build ungültig. Eine Änderungsnummer bindet den erfolgreichen Build samt
+Parameterabfrage an den ursprünglichen Bearbeitungsstand und das Buildprofil.
+Zwischenzeitliches Speichern kann einen veralteten Build nicht wieder freigeben.
+Der neue App-Test `documents_build` baut ein Projekt mit zusätzlichem Header und
+prüft Änderungen während Konfiguration und Parameterabfrage, erfolgreiche
+Neubauten sowie die Startsperre nach Bearbeiten und externem Neuladen.
+Beim fehlgeschlagenen Speichern aus dem Schließen-Dialog bleibt die Auswahl
+zwischen Speichern, Verwerfen und Abbrechen erhalten. Tab-Einrückung mit vier
+Leerzeichen ist jetzt in allen Editoren ein einzelner Undo-/Redo-Schritt.
+Nachweis unter Windows: Dokumentabläufe und der echte Buildtest bestehen mit
+MSVC Debug und Clang Debug; Clang prüft zusätzlich beide Menügrößen und die
+Dokument-/Clipboard-Modelle (7/7). Beide Modelltests bestehen auch mit MSVC
+AddressSanitizer. Die bestehenden Unicode- und Mehrzeilen-Sprachvorschauen
+bestehen unter MSVC. Linux bleibt offen.
+
+Zusätzliches verbindliches Ziel, konkretisiert: Alle Projektdateien bleiben im
+Projektordner; Buildprodukte liegen gesammelt unter `build/`. Die App erzeugt
+`physim.project` und keine `CMakeLists.txt`. `physim-build` übernimmt direkte
+Compileraufrufe, Headerabhängigkeiten über vorverarbeitete Quellen, getrennte
+Debug-/Release-Ausgaben und den Schutz vor gleichzeitigen Builds. Der neue Weg
+verwendet keine CMake-Installation für Nutzerprojekte. Vorhandene CMake-Dateien
+bleiben unberührt. Projekt-Autosaves, Backups und Laufdaten behalten ihre bisherigen
+Pfade im Projekt. Allgemeine Dokument-Sicherungen liegen weiterhin im App-Datenbereich.
+Langfristig soll auch Physim selbst ohne CMake gebaut werden. Das bleibt offen,
+ebenso wie der Nachweis des neuen Projektbuilders auf Linux und auf einem frischen Windows-System.
+Nachweis unter Windows: Der native Builder und echte Runner bestehen mit MSVC
+und Clang für C- und Physim-Projekte in Debug/Release. Geprüft sind unveränderte
+Builds, transitive Headeränderungen, Compiler-/Linkerfehler mit erhaltenen Modulen,
+gesperrte Buildordner, ungültige Projektdateien, Unicodepfade, Projektverschiebung
+und ignorierte alte CMake-Konfigurationen. Die App-Abläufe für reine Physim- und
+gemischte Projekte, Änderungen während des Builds, Laufserien, Autosaves sowie
+beide Menügrößen bestehen ebenfalls. Neue Projektbuilds schreiben ausschließlich
+in den jeweiligen `build/`-Unterordner; saubere Quellen werden beim Bauen nicht
+erneut gespeichert und erzeugen damit keine unnötigen Sicherungskopien.
+
+Die Projektdatei wird von App und Builder über einen gemeinsamen Leser geprüft.
+Das Buildprofil wird mit den Experimentparametern gespeichert und beim erneuten
+Öffnen wiederhergestellt; Projekte ohne Profileintrag verwenden Debug. Der
+Builder verwendet das gespeicherte Profil, wenn kein `--profile` angegeben ist.
+Der Schreiber erhält Kommentare, zusätzliche Einträge und die vorhandenen
+Zeilenenden, prüft die Daten vor dem Ersetzen und legt bei Änderungen eine
+Sicherung der Projektdatei an. Unveränderte gespeicherte Einstellungen werden
+nicht erneut geschrieben. Der Modelltest besteht mit MSVC, Clang und MSVC
+AddressSanitizer; der App-Test prüft Neustart, Release-Build, Wechsel zu Debug,
+Parameterauswahl sowie erhaltene Erweiterungseinträge und unveränderte Quellen.
+Der Modelltest deckt 200 Dateien, verschachtelte und doppelt eingebundene Ordner,
+Sortierung, Aktualisieren, fehlende Pfade, ungültige Eingaben sowie Eintrags- und
+Tiefengrenzen ab. Er besteht unter MSVC Debug, Clang Debug und MSVC mit
+AddressSanitizer (RelWithDebInfo). Der App-Test öffnet und schließt Ordner per
+SDL-Mausereignissen, liest eine verschachtelte Datei und prüft zusätzliche Wurzeln.
+Die Baumansicht samt griechischen Zeichen in der Vorschau wurde bei 1080 × 740
+visuell geprüft. Der Linux-Lauf bleibt ausstehend.
+
+Die App speichert jetzt beim normalen Beenden den Hauptordner und bis zu 32
+zusätzliche Pfade. **Letzten Workspace öffnen** stellt sie nach einem leeren
+Start ausdrücklich wieder her; **Eintrag vergessen** entfernt die Auswahl.
+Die separate versionierte Datei prüft Größenlimits, absolute UTF-8-Pfade und CRC.
+Fehlende Pfade bleiben erhalten, beschädigte Dateien werden bis zum ausdrücklichen
+Zurücksetzen nicht überschrieben. Mehrere benannte Workspaces und die
+Wiederherstellung einzelner Dokumentansichten sind weiterhin offen.
+Die gezielten Tests bestehen unter Windows mit MSVC Debug und Clang Debug.
+Sie prüfen Dateigrenzen und beschädigte Inhalte sowie separate App-Prozesse für
+Speichern, Öffnen per UI-Klick, fehlende Pfade, Vergessen und leeren Neustart.
+Die bisherigen Workspace-, Einstellungs- und Autosave-Abläufe bestehen ebenfalls;
+die neue Startansicht wurde bei 1080 × 740 visuell geprüft. Ein Linux-Lauf dieser
+Erweiterung steht aus.
 
 Sprachvertrag 0.167.0 ergänzt die Swift-benannten Arraymethoden
 `starts(with:)` und `elementsEqual(_:)` für gleich typisierte Arrays mit
@@ -1119,10 +1257,10 @@ Ordner, schreibgeschützte Textvorschau, zusätzliche Datei-/Ordnerpfade und ein
 getrennter Projektmanager mit Zielordner, Name, Vorlage und beiden Sprachen.
 Der lokale `workspace_workflow` prüft leeren Start, Ordner ohne Projekt,
 Dateivorschau, Projekterzeugung und Rückkehr zum allgemeinen Workspace.
-Noch offen sind eine vollständige Dateibaum-Navigation, mehrere editierbare
-Dokumente, längerfristige Workspace-Persistenz, sichere Behandlung sehr großer
-oder ungültiger Textdateien und die manuelle Abnahme des nativen Auswahldialogs
-auf Windows und Linux. Die [Designrichtung](design-direction.md) ist daher noch
+Dateibaum, mehrere editierbare Dokumente, Workspace-Persistenz und Prüfungen
+für große oder ungültige Textdateien sind inzwischen ergänzt; siehe den aktuellen
+Stand oben. Offen bleibt die manuelle Abnahme des nativen Auswahldialogs auf
+Windows und Linux. Die [Designrichtung](design-direction.md) ist daher noch
 nicht vollständig abgenommen.
 
 Der erste durchgängige Sprachlernweg steht in

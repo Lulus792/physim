@@ -5,7 +5,10 @@
 Öffne **Protokoll / Ctrl+L** und beginne beim ersten Fehler. Ein Folgefehler kann
 durch denselben fehlenden Namen oder Syntaxfehler entstehen. Klicke eine
 Quelldiagnose an, korrigiere die Stelle und drücke erneut F5.
-Für Experimente werden CMake und ein C17-Compiler benötigt, auch im portablen Paket.
+Für Experimente wird ein C17-Compiler benötigt, auch im portablen Paket.
+Unter Windows findet Physim die Visual Studio C++ Build Tools mit Windows SDK
+automatisch; unter Linux verwendet es `cc`. `PHYSIM_CC` wählt einen anderen
+Compiler. Der Projektbuild benötigt keine CMake-Installation.
 Nach einem SDK-Update müssen Experiment und Analyse neu gebaut werden; aktuell
 gilt API/ABI 3. Ein altes Binärmodul kann trotz unveränderter Quellen inkompatibel sein.
 

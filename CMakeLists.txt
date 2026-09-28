@@ -81,10 +81,23 @@ if(PHYSIM_BUILD_APP)
     list(APPEND CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/third_party/SDL3-3.2.30")
   endif()
   find_package(SDL3 3.2 CONFIG REQUIRED)
-  add_executable(physim app/main.c app/parameter_catalog.c app/ui_backend.c app/ui_sdl.c app/ui_geometry.c app/graphics.c app/documentation.c app/library.c app/autosave.c app/preferences.c app/plot_view.c app/report_image.c app/png.c)
+  add_library(physim_project STATIC app/project_file.c app/text_document.c app/autosave.c app/parameter_catalog.c)
+  target_include_directories(physim_project PUBLIC app)
+  target_link_libraries(physim_project PUBLIC physim_core SDL3::SDL3)
+  ps_warnings(physim_project)
+  add_executable(physim-build app/build_main.c)
+  target_link_libraries(physim-build PRIVATE physim_platform physim_project)
+  if(WIN32)
+    target_link_libraries(physim-build PRIVATE advapi32)
+    add_custom_command(TARGET physim-build POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:SDL3::SDL3> $<TARGET_FILE_DIR:physim-build>)
+  endif()
+  ps_warnings(physim-build)
+  install(TARGETS physim-build RUNTIME DESTINATION bin)
+  add_executable(physim app/main.c app/ui_backend.c app/ui_sdl.c app/ui_geometry.c app/graphics.c app/documentation.c app/library.c app/preferences.c app/workspace_state.c app/workspace_tree.c app/plot_view.c app/report_image.c app/png.c)
   target_include_directories(physim PRIVATE third_party)
-  target_link_libraries(physim PRIVATE physim_core physim_platform physim_batch physim_zlib SDL3::SDL3)
-  target_compile_definitions(physim PRIVATE PS_SOURCE_DIR="${CMAKE_SOURCE_DIR}" PS_CMAKE="${CMAKE_COMMAND}")
+  target_link_libraries(physim PRIVATE physim_core physim_platform physim_batch physim_zlib physim_project SDL3::SDL3)
+  target_compile_definitions(physim PRIVATE PS_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
+  add_dependencies(physim physim-build)
   if(PHYSIM_SANITIZERS AND NOT MSVC)
     target_compile_options(physim PRIVATE -fsanitize=address,undefined -fno-omit-frame-pointer)
     target_link_options(physim PRIVATE -fsanitize=address,undefined)
@@ -104,6 +117,12 @@ if(PHYSIM_BUILD_APP)
   endif()
 endif()
 enable_testing()
+if(TARGET physim_project)
+  add_executable(physim-project-file-tests tests/test_project_file.c)
+  target_link_libraries(physim-project-file-tests PRIVATE physim_project)
+  ps_warnings(physim-project-file-tests)
+  add_test(NAME project_file COMMAND physim-project-file-tests ${CMAKE_BINARY_DIR})
+endif()
 add_executable(physim-parameter-catalog-tests tests/test_parameter_catalog.c app/parameter_catalog.c)
 target_include_directories(physim-parameter-catalog-tests PRIVATE app)
 target_link_libraries(physim-parameter-catalog-tests PRIVATE physim_core)
@@ -1075,6 +1094,11 @@ if(PHYSIM_BUILD_APP)
   target_link_libraries(physim-editor-clipboard-tests PRIVATE physim_core SDL3::SDL3)
   ps_warnings(physim-editor-clipboard-tests)
   add_test(NAME editor_clipboard COMMAND physim-editor-clipboard-tests)
+  add_executable(physim-font-shape-tests tests/test_font_shape.c)
+  target_include_directories(physim-font-shape-tests PRIVATE app third_party)
+  target_link_libraries(physim-font-shape-tests PRIVATE physim_core SDL3::SDL3)
+  ps_warnings(physim-font-shape-tests)
+  add_test(NAME font_shape COMMAND physim-font-shape-tests)
 endif()
 option(PHYSIM_BUILD_BENCHMARKS "Build reproducible performance workloads" OFF)
 if(PHYSIM_BUILD_BENCHMARKS)
@@ -1197,6 +1221,14 @@ add_test(NAME template_ids COMMAND physim-template-id-tests
   $<TARGET_FILE:box_collision> $<TARGET_FILE:buoyancy>)
 find_package(Python3 3.9 COMPONENTS Interpreter QUIET)
 if(Python3_Interpreter_FOUND)
+  if(TARGET physim-build)
+    add_test(NAME native_project_build COMMAND ${Python3_EXECUTABLE}
+      ${CMAKE_SOURCE_DIR}/tests/test_native_build.py
+      --builder $<TARGET_FILE:physim-build> --sdk ${CMAKE_SOURCE_DIR}
+      --compiler $<TARGET_FILE:physimc> --runner $<TARGET_FILE:physim-runner>
+      --analysis-runner $<TARGET_FILE:physim-analysis-runner> --work ${CMAKE_BINARY_DIR}/native-project-tests)
+    set_tests_properties(native_project_build PROPERTIES TIMEOUT 600)
+  endif()
   add_test(NAME documentation_reference COMMAND ${Python3_EXECUTABLE}
     ${CMAKE_SOURCE_DIR}/tools/generate-reference.py --check)
   add_test(NAME png_decode COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tests/verify_png.py ${CMAKE_BINARY_DIR})
@@ -1269,8 +1301,28 @@ if(PHYSIM_BUILD_APP)
   target_link_libraries(physim-preferences-tests PRIVATE physim_core SDL3::SDL3)
   ps_warnings(physim-preferences-tests)
   add_test(NAME preferences COMMAND physim-preferences-tests ${CMAKE_BINARY_DIR})
+  add_executable(physim-workspace-state-tests tests/test_workspace_state.c app/workspace_state.c app/autosave.c)
+  target_include_directories(physim-workspace-state-tests PRIVATE app include)
+  target_link_libraries(physim-workspace-state-tests PRIVATE physim_core SDL3::SDL3)
+  ps_warnings(physim-workspace-state-tests)
+  add_test(NAME workspace_state COMMAND physim-workspace-state-tests ${CMAKE_BINARY_DIR})
+  add_executable(physim-workspace-tree-tests tests/test_workspace_tree.c app/workspace_tree.c app/autosave.c)
+  target_include_directories(physim-workspace-tree-tests PRIVATE app include)
+  target_link_libraries(physim-workspace-tree-tests PRIVATE physim_core SDL3::SDL3)
+  ps_warnings(physim-workspace-tree-tests)
+  add_test(NAME workspace_tree COMMAND physim-workspace-tree-tests ${CMAKE_BINARY_DIR})
+  add_executable(physim-text-document-tests tests/test_text_document.c app/text_document.c app/autosave.c)
+  target_include_directories(physim-text-document-tests PRIVATE app include)
+  target_link_libraries(physim-text-document-tests PRIVATE physim_core SDL3::SDL3)
+  ps_warnings(physim-text-document-tests)
+  add_test(NAME text_document COMMAND physim-text-document-tests ${CMAKE_BINARY_DIR})
 endif()
 if(PHYSIM_BUILD_APP AND PHYSIM_GRAPHICS_TESTS)
+  add_test(NAME project_settings_workflow COMMAND ${CMAKE_COMMAND}
+    -DAPP=$<TARGET_FILE:physim> -DROOT=${CMAKE_BINARY_DIR}/project-settings
+    -P ${CMAKE_SOURCE_DIR}/tests/project_settings_workflow.cmake)
+  set_tests_properties(project_settings_workflow PROPERTIES TIMEOUT 180 RUN_SERIAL TRUE LABELS display
+    ENVIRONMENT "PHYSIM_TEST_SMALL=1")
   foreach(mode language_full language_mixed language_projectile language_sensors language_body language_contact language_joint language_graph language_sweep language_spring language_buoyancy language_collision language_box_collision)
     add_test(NAME ${mode}_workflow COMMAND ${CMAKE_COMMAND}
       -DAPP=$<TARGET_FILE:physim> -DROOT=${CMAKE_BINARY_DIR}/language-ui -DMODE=${mode}
@@ -1291,6 +1343,39 @@ if(PHYSIM_BUILD_APP AND PHYSIM_GRAPHICS_TESTS)
   set_tests_properties(batch_workflow PROPERTIES TIMEOUT 180 RUN_SERIAL TRUE ENVIRONMENT "PHYSIM_TEST_SMALL=1")
   add_test(NAME window_smoke COMMAND physim --smoke)
   add_test(NAME workspace_workflow COMMAND physim --workspace-test ${CMAKE_BINARY_DIR}/workspace-ui)
+  add_test(NAME workspace_state_workflow COMMAND ${CMAKE_COMMAND}
+    -DAPP=$<TARGET_FILE:physim> -DROOT=${CMAKE_BINARY_DIR}/workspace-state-ui
+    -P ${CMAKE_SOURCE_DIR}/tests/workspace_state_workflow.cmake)
+  set_tests_properties(workspace_state_workflow PROPERTIES TIMEOUT 150 RUN_SERIAL TRUE
+    LABELS display ENVIRONMENT "PHYSIM_TEST_SMALL=1")
+  add_test(NAME workspace_tree_workflow COMMAND ${CMAKE_COMMAND}
+    -DAPP=$<TARGET_FILE:physim> -DROOT=${CMAKE_BINARY_DIR}/workspace-tree-ui
+    -P ${CMAKE_SOURCE_DIR}/tests/workspace_tree_workflow.cmake)
+  set_tests_properties(workspace_tree_workflow PROPERTIES TIMEOUT 30 RUN_SERIAL TRUE
+    LABELS display ENVIRONMENT "PHYSIM_TEST_SMALL=1")
+  foreach(size small large)
+    add_test(NAME toolbar_${size} COMMAND ${CMAKE_COMMAND}
+      -DAPP=$<TARGET_FILE:physim> -DROOT=${CMAKE_BINARY_DIR}/toolbar-${size}
+      -P ${CMAKE_SOURCE_DIR}/tests/toolbar_workflow.cmake)
+    set_tests_properties(toolbar_${size} PROPERTIES TIMEOUT 30 RUN_SERIAL TRUE LABELS display)
+  endforeach()
+  set_tests_properties(toolbar_small PROPERTIES ENVIRONMENT "PHYSIM_TEST_SMALL=1")
+  foreach(size small large)
+    add_test(NAME documents_${size} COMMAND ${CMAKE_COMMAND}
+      -DAPP=$<TARGET_FILE:physim> -DROOT=${CMAKE_BINARY_DIR}/documents-${size}
+      -P ${CMAKE_SOURCE_DIR}/tests/document_workflow.cmake)
+    set_tests_properties(documents_${size} PROPERTIES TIMEOUT 30 RUN_SERIAL TRUE LABELS display)
+  endforeach()
+  set_tests_properties(documents_small PROPERTIES ENVIRONMENT "PHYSIM_TEST_SMALL=1")
+  add_test(NAME documents_recovery COMMAND ${CMAKE_COMMAND}
+    -DAPP=$<TARGET_FILE:physim> -DROOT=${CMAKE_BINARY_DIR}/documents-recovery
+    -P ${CMAKE_SOURCE_DIR}/tests/document_recovery_workflow.cmake)
+  set_tests_properties(documents_recovery PROPERTIES TIMEOUT 150 RUN_SERIAL TRUE LABELS display
+    ENVIRONMENT "PHYSIM_TEST_SMALL=1")
+  add_test(NAME documents_build COMMAND ${CMAKE_COMMAND}
+    -DAPP=$<TARGET_FILE:physim> -DROOT=${CMAKE_BINARY_DIR}/documents-build
+    -P ${CMAKE_SOURCE_DIR}/tests/document_build_workflow.cmake)
+  set_tests_properties(documents_build PROPERTIES TIMEOUT 140 RUN_SERIAL TRUE LABELS display)
   set_tests_properties(workspace_workflow PROPERTIES TIMEOUT 30 RUN_SERIAL TRUE LABELS display
     ENVIRONMENT "PHYSIM_TEST_SMALL=1")
   add_test(NAME language_editor_unicode_preview COMMAND physim --syntax-preview-test

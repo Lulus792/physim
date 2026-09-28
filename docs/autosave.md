@@ -10,7 +10,35 @@ Ctrl+S und Build/F5 speichern weiterhin die eigentlichen Quelldateien; vor dem
 Ersetzen einer vorhandenen Quelldatei wird deren bisheriger Inhalt als `.bak` kopiert.
 Beim regulären Schließen oder Projektwechsel speichert die App geänderte Quellen.
 
-## Nach einem Abbruch
+## Zusätzliche Textdokumente
+
+Andere geöffnete Textdateien werden mit demselben eingestellten Intervall einzeln
+gesichert. Diese Entwürfe liegen im persönlichen Physim-Datenverzeichnis unter
+`document-drafts`, außerhalb des Workspace. Autosave legt im Quellordner keine
+zusätzlichen Dateien an und verändert die Originale nicht.
+
+Öffne nach einem Abbruch dieselbe Datei erneut. **Entwurf laden** übernimmt die
+Sicherung in den Editor; erst **Speichern / Ctrl+S** verändert die Datei.
+**Sicherung verwerfen** behält den gespeicherten Dateiinhalt. Schließen ohne
+Auswahl bewahrt den Entwurf für das nächste Öffnen.
+
+Bei externen Änderungen erscheint vor dem Laden ein Konflikthinweis. Entscheidest
+du dich für den Entwurf, ersetzt das nächste Speichern den zuvor angezeigten
+Dateistand; dieser bleibt als Backup erhalten. Weitere externe Änderungen nach
+dem Öffnen blockieren das Speichern. Eine automatische Zusammenführung gibt es nicht.
+
+Eine unlesbare Sicherung pausiert Autosave für die betroffene Datei. Die Datei
+bleibt bearbeitbar. **Unlesbare Sicherung verwerfen** entfernt sie ausdrücklich
+und gibt Autosave wieder frei. Ein Fehler beim Schreiben oder Entfernen wird im
+Dokument angezeigt; andere geöffnete Dateien werden weiter gesichert.
+
+Die Sicherung enthält Entwurf, letzten gespeicherten Inhalt, vollständigen
+kanonischen Dateipfad, Formatkennung und Zeitstempel im geprüften Autosave-Container.
+Sie wird über den Dateipfad zugeordnet. Verschobene oder gelöschte Quellen werden
+noch nicht automatisch in der Sicherungsablage gefunden; offene Dokumente werden
+beim Neustart ebenfalls noch nicht automatisch wieder geöffnet.
+
+## Projektquellen nach einem Abbruch
 
 Öffne denselben Projektordner erneut. Liegt eine Sicherung mit abweichendem Inhalt
 vor, zeigt Physim zuerst die Wiederherstellung:

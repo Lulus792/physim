@@ -39,7 +39,17 @@ selection and undo. Paste input must not alias the editor buffer. Existing Nukle
 undo-history size limits still apply. `app/ui_sdl.c` passes bytes and limits a paste
 to 262144 bytes. The copy callback retains upstream scalar-count semantics.
 Regression target: `physim-editor-clipboard-tests`; SDL integration: `--renderer-test`.
-Patched header SHA-256: 616a4465a61e12a89e1d21348d4aec1be31aacb093fde40e18c94c16602c744f.
+Local patch (2026-09-28): the Tab handler uses the same transactional insertion
+to insert four spaces as one undo record, including selection replacement.
+Both project editors and additional documents use this handler. The
+`documents_small` and `documents_large` SDL tests cover Tab, undo and redo.
+Local patch (2026-09-28): a singleton off-curve TrueType contour wraps to its
+own point instead of reading the next contour or beyond the temporary vertex
+array. AddressSanitizer found this during system-font baking; the synthetic
+`font_shape` test covers one contour and adjacent singleton contours without
+requiring an installed font. The affected routine is also present in the
+[upstream stb_truetype source](https://github.com/nothings/stb/blob/master/stb_truetype.h).
+Patched header SHA-256: 95cbb20e766bed5a42bb7abb32e3bcf0a55eefebe3498a3f277ddde88f14a913.
 
 `nuklear_sdl3_renderer.h` is retained as the upstream `demo/sdl3_renderer` reference;
 it is no longer compiled into Physim. Input and clipboard handling in `app/ui_sdl.c`

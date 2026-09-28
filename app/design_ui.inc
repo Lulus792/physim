@@ -185,13 +185,23 @@ static void camera_inspector(app *a) {
         nk_label(ui, "Zeitschritt in Sekunden", NK_TEXT_LEFT);
         nk_layout_row_dynamic(ui, 32, 1);
         nk_begin_disabled(ui, a->runner.running);
-        nk_property_double(ui, "dt", .0001, &a->dt, .1, .001, .0001f);
+        double previous_dt = a->dt;
+        char previous_seed[sizeof a->seed];
+        snprintf(previous_seed, sizeof previous_seed, "%s", a->seed);
+        nk_property_double(ui, "dt", DBL_MIN, &a->dt, 1, .001, .0001f);
         nk_layout_row_dynamic(ui, 24, 1);
         nk_label(ui, "Zufallsseed", NK_TEXT_LEFT);
         nk_layout_row_dynamic(ui, 32, 1);
         nk_edit_string_zero_terminated(ui, NK_EDIT_FIELD, a->seed, sizeof a->seed,
                                        nk_filter_decimal);
         nk_end_disabled(ui);
+        if (a->loaded && (previous_dt != a->dt || strcmp(previous_seed, a->seed)))
+            a->project_settings_dirty = true;
+        uint64_t parsed_seed;
+        if (!ps_project_seed_parse(a->seed, &parsed_seed)) {
+            nk_layout_row_dynamic(ui, 52, 1);
+            nk_label_wrap(ui, "Seed: ganze Zahl von 0 bis 18446744073709551615 eingeben.");
+        }
         if (a->built && a->parameters.count &&
             nk_tree_push(ui, NK_TREE_TAB, "Experimentparameter", NK_MINIMIZED)) {
             nk_begin_disabled(ui, a->runner.running);
@@ -211,11 +221,11 @@ static void camera_inspector(app *a) {
                 nk_edit_string_zero_terminated(ui, NK_EDIT_FIELD, a->parameters.selected[i],
                                                sizeof a->parameters.selected[i], nk_filter_default);
                 if (strcmp(previous, a->parameters.selected[i]))
-                    a->parameters_dirty = true;
+                    a->project_settings_dirty = true;
                 if (nk_button_label(ui, "Standard")) {
                     snprintf(a->parameters.selected[i], sizeof a->parameters.selected[i], "%.17g",
                              parameter->default_value);
-                    a->parameters_dirty = true;
+                    a->project_settings_dirty = true;
                 }
                 double selected;
                 if (ps_parameter_catalog_value(&a->parameters, i, &selected) != PS_OK) {
@@ -230,9 +240,31 @@ static void camera_inspector(app *a) {
         nk_tree_pop(ui);
     }
 }
+#include "document_ui.inc"
+#include "workspace_tree_ui.inc"
+#include "window_header.inc"
+#include "toolbar_ui.inc"
 static void draw_ui(app *a, int width, int height) {
     struct nk_context *ui = a->ui;
     if (a->recovery) {
+        nk_style_push_vec2(ui, &ui->style.window.padding, nk_vec2(0, 5));
+        nk_style_push_vec2(ui, &ui->style.window.spacing, nk_vec2(0, 0));
+        nk_style_push_float(ui, &ui->style.window.rounding, 0);
+        if (nk_begin(ui, "recovery-header", nk_rect(0, 0, (float)width, 38), NK_WINDOW_NO_SCROLLBAR)) {
+            nk_layout_row_begin(ui, NK_STATIC, 28, 4);
+            nk_layout_row_push(ui, (float)width - 138);
+            a->window_drag_bounds = nk_widget_bounds(ui);
+            nk_label(ui, "   Physim  ·  Wiederherstellung", NK_TEXT_LEFT);
+            for (unsigned i = 0; i < 3; i++) {
+                nk_layout_row_push(ui, 46);
+                window_control(a, i);
+            }
+            nk_layout_row_end(ui);
+        }
+        nk_end(ui);
+        nk_style_pop_float(ui);
+        nk_style_pop_vec2(ui);
+        nk_style_pop_vec2(ui);
         float panel_width = 640, panel_height = 420;
         if (nk_begin(ui, "recovery",
                      nk_rect(((float)width - panel_width) / 2, ((float)height - panel_height) / 2,
@@ -270,46 +302,18 @@ static void draw_ui(app *a, int width, int height) {
         nk_end(ui);
         return;
     }
-    float w = (float)width, h = (float)height, top = 106;
+    float w = (float)width, h = (float)height, top = 72;
     bool expanded_log = a->show_log && a->tab != 6;
     float footer = expanded_log ? (float)a->preferences.log_height : 52.f;
     panel_resize(a, w, h, top, footer);
     float side = (float)a->preferences.sidebar_width;
     footer = expanded_log ? (float)a->preferences.log_height : 52.f;
     float content = h - top - footer - 8;
-    if (nk_begin(ui, "header", nk_rect(8, 8, w - 16, 90), NK_WINDOW_NO_SCROLLBAR)) {
-        nk_layout_row_begin(ui, NK_DYNAMIC, 26, 3);
-        nk_layout_row_push(ui, .16f);
-        nk_style_push_font(ui, a->font_title);
-        nk_label(ui, "Physim", NK_TEXT_LEFT);
-        nk_style_pop_font(ui);
-        nk_layout_row_push(ui, .55f);
-        nk_label(ui, a->workspace_open ? a->workspace : "Kein Ordner geöffnet", NK_TEXT_LEFT);
-        nk_layout_row_push(ui, .29f);
-        nk_label_colored(ui,
-                         a->runner.running ? (a->paused ? "Pausiert" : "Simulation läuft")
-                         : a->batch_thread ? "Laufserie läuft"
-                         : a->job.running  ? "Wird verarbeitet …"
-                                           : "Bereit",
-                         NK_TEXT_RIGHT, muted());
-        nk_layout_row_end(ui);
-        nk_layout_row_dynamic(ui, 31, 6);
-        if (nk_button_label(ui, "Ordner öffnen"))
-            choose_workspace_path(a, PS_DIALOG_OPEN_FOLDER);
-        nk_begin_disabled(ui, !a->workspace_open);
-        if (nk_button_label(ui, "Datei hinzufügen"))
-            choose_workspace_path(a, PS_DIALOG_ADD_FILE);
-        if (nk_button_label(ui, "Ordner hinzufügen"))
-            choose_workspace_path(a, PS_DIALOG_ADD_FOLDER);
-        nk_end_disabled(ui);
-        if (nk_button_label(ui, "Neues Projekt")) {
-            a->project_manager = true;
-            a->workspace_preview_path[0] = 0;
-        }
-        if (nk_button_label(ui, "Hilfe · F1"))
-            open_documentation(a, 1);
-        if (nk_button_label(ui, "Einstellungen"))
-            open_settings(a);
+    nk_style_push_vec2(ui, &ui->style.window.padding, nk_vec2(0, 0));
+    nk_style_push_vec2(ui, &ui->style.window.spacing, nk_vec2(0, 0));
+    nk_style_push_float(ui, &ui->style.window.rounding, 0);
+    if (nk_begin(ui, "header", nk_rect(0, 0, w, 64), NK_WINDOW_NO_SCROLLBAR)) {
+        toolbar_view(a);
         struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
         struct nk_rect previous_clip = canvas->clip;
         nk_push_scissor(canvas, nk_rect(0, 0, w, h));
@@ -323,42 +327,21 @@ static void draw_ui(app *a, int width, int height) {
         nk_push_scissor(canvas, previous_clip);
     }
     nk_end(ui);
+    nk_style_pop_float(ui);
+    nk_style_pop_vec2(ui);
+    nk_style_pop_vec2(ui);
     if (nk_begin(ui, "sidebar", nk_rect(8, top, side, content), 0)) {
-        nk_layout_row_dynamic(ui, 22, 1);
-        nk_label_colored(ui, "Arbeitsbereiche", NK_TEXT_LEFT, muted());
-        nk_layout_row_dynamic(ui, 38, 1);
-        const char *tabs[] = {"Entwickeln", "Simulieren", "Auswerten"};
-        for (int i = 0; i < 3; i++) {
-            a->navigation_bounds[i] = nk_widget_bounds(ui);
-            if (action_button(ui, tabs[i], a->tab == i))
-                a->tab = i;
-        }
         {
             if (nk_tree_state_push(ui, NK_TREE_TAB, "Workspace", &a->workspace_disclosure)) {
                 if (a->workspace_open) {
-                    nk_layout_row_dynamic(ui, 24, 1);
-                    nk_label(ui, workspace_name(a->workspace), NK_TEXT_LEFT);
-                    nk_layout_row_dynamic(ui, 28, 1);
-                    if (nk_button_label(ui, "Dateiliste aktualisieren"))
-                        refresh_workspace_entries(a);
-                    for (unsigned i = 0; i < a->workspace_entry_count; i++) {
-                        SDL_PathInfo entry_info;
-                        const char *path = a->workspace_entries[i];
-                        bool folder = SDL_GetPathInfo(path, &entry_info) &&
-                                      entry_info.type == SDL_PATHTYPE_DIRECTORY;
-                        char label[280];
-                        snprintf(label, sizeof label, "%s  %s", folder ? "▸" : "·",
-                                 workspace_name(path));
-                        nk_layout_row_dynamic(ui, 27, 1);
-                        if (nk_button_label(ui, label))
-                            preview_workspace_path(a, path);
-                    }
+                    workspace_tree_view(a);
                 } else {
                     nk_layout_row_dynamic(ui, 45, 1);
                     nk_label_wrap(ui, "Öffne einen Ordner, um seine Dateien hier zu sehen.");
                 }
                 nk_tree_state_pop(ui);
             }
+            document_list_view(a);
             if (a->loaded) {
                 nk_layout_row_dynamic(ui, 32, 1);
                 if (action_button(ui, "Läufe & Berichte", a->tab == 4))
@@ -392,10 +375,8 @@ static void draw_ui(app *a, int width, int height) {
                     if (nk_tree_push(ui, NK_TREE_TAB, "Build-Einstellungen", NK_MINIMIZED)) {
                         nk_layout_row_dynamic(ui, 32, 1);
                         const char *profiles[] = {"Debug", "Release"};
-                        int old = a->profile;
-                        a->profile = nk_combo(ui, profiles, 2, a->profile, 28, nk_vec2(180, 110));
-                        if (old != a->profile)
-                            a->built = false;
+                        select_build_profile(a, nk_combo(ui, profiles, 2, a->profile, 28,
+                                                       nk_vec2(180, 110)));
                         nk_tree_pop(ui);
                     }
                     nk_layout_row_dynamic(ui, 48, 1);
@@ -503,17 +484,8 @@ static void draw_ui(app *a, int width, int height) {
                 create_managed_project(a);
             if (nk_button_label(ui, "Zurück zum Workspace"))
                 a->project_manager = false;
-        } else if (a->tab == 8 && a->workspace_preview_path[0]) {
-            nk_layout_row_dynamic(ui, 36, 1);
-            nk_style_push_font(ui, a->font_title);
-            nk_label(ui, workspace_name(a->workspace_preview_path), NK_TEXT_LEFT);
-            nk_style_pop_font(ui);
-            nk_layout_row_dynamic(ui, 28, 1);
-            nk_label_colored(ui, a->workspace_preview_path, NK_TEXT_LEFT, muted());
-            nk_layout_row_dynamic(ui, fmaxf(120, content - 150), 1);
-            nk_edit_string_zero_terminated(ui, NK_EDIT_BOX | NK_EDIT_READ_ONLY,
-                                           a->workspace_preview,
-                                           sizeof a->workspace_preview, nk_filter_default);
+        } else if (a->tab == 8 && active_document(a)) {
+            document_view(a, content);
         } else if (a->tab == 6)
             settings_view(a);
         else if (a->tab == 4 && a->loaded)
@@ -535,16 +507,26 @@ static void draw_ui(app *a, int width, int height) {
                     choose_workspace_path(a, PS_DIALOG_OPEN_FOLDER);
                 if (nk_button_label(ui, "Neues Projekt"))
                     a->project_manager = true;
-            } else if (a->workspace_preview_path[0]) {
-                nk_layout_row_dynamic(ui, 28, 1);
-                nk_label(ui, a->workspace_preview_path, NK_TEXT_LEFT);
-                nk_layout_row_dynamic(ui, fmaxf(120, content - 180), 1);
-                nk_edit_string_zero_terminated(ui, NK_EDIT_BOX | NK_EDIT_READ_ONLY,
-                                               a->workspace_preview,
-                                               sizeof a->workspace_preview, nk_filter_default);
+                if (a->last_workspace.root[0]) {
+                    nk_layout_row_dynamic(ui, 32, 1);
+                    nk_label_colored(ui, a->last_workspace.root, NK_TEXT_LEFT, muted());
+                    nk_layout_row_static(ui, 36, 260, 2);
+                    a->workspace_restore_bounds = nk_widget_bounds(ui);
+                    if (nk_button_label(ui, "Letzten Workspace öffnen"))
+                        restore_workspace(a);
+                    if (nk_button_label(ui, "Eintrag vergessen"))
+                        forget_workspace(a);
+                }
+                if (a->workspace_state_error[0]) {
+                    nk_layout_row_dynamic(ui, 64, 1);
+                    nk_label_wrap(ui, a->workspace_state_error);
+                    nk_layout_row_static(ui, 36, 260, 1);
+                    if (nk_button_label(ui, "Workspace zurücksetzen"))
+                        forget_workspace(a);
+                }
             } else {
                 nk_layout_row_dynamic(ui, 64, 1);
-                nk_label_wrap(ui, "Kein Physim-Projekt erkannt. Wähle links eine Datei für die Vorschau oder lege über die Helferleiste ein Projekt an.");
+                nk_label_wrap(ui, "Kein Physim-Projekt erkannt. Wähle links eine Textdatei zum Bearbeiten oder lege über Datei ein Projekt an.");
             }
         } else if (a->tab == 0 || (a->tab == 2 && a->analysis_tab == 1)) {
             bool analysis = a->tab == 2;

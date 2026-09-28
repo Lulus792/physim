@@ -17,6 +17,26 @@ Der wichtigste Grundsatz lautet:
 
 ## 2. Verbindliche Produktziele
 
+### Ergänzung vom 2026-09-28: von der App verwaltete Projekte
+
+- Nutzerprojekte benötigen keine `CMakeLists.txt`. Eine von Physim automatisch
+  erzeugte und gepflegte Projektdatei beschreibt Quellen, Sprachen, Buildprofil
+  und die weiteren Projekteinstellungen.
+- Alle Projektdateien bleiben zusammen im Projektordner. Automatisch erzeugte
+  Builddateien und Zwischenergebnisse liegen gesammelt in `build/`; Quellen und
+  die eigene Projektdatei bleiben übersichtlich. Laufdaten und Sicherungen bleiben
+  ebenfalls beim Projekt. Keine zusätzliche generierte CMake-Konfiguration.
+- Physim übernimmt Compilererkennung, Aufruf, Abhängigkeiten und inkrementelle
+  Builds selbst. Für Nutzerprojekte entfällt CMake als Voraussetzung vollständig.
+- Langfristiges Endziel ist eine eigene Buildverwaltung auch für Physim selbst,
+  sodass insgesamt auf CMake verzichtet werden kann. Bestehende CMake-Verweise
+  in diesem Plan beschreiben bis zur Ablösung den bisherigen Umsetzungsweg.
+- Bestehende Projekte müssen kontrolliert übernommen werden; Nutzerdateien und
+  vorhandene Ergebnisse dürfen bei der Umstellung nicht verloren gehen.
+- Abnahme: neues Projekt, C-/Physim-Build, Simulation, Analyse, erneutes Öffnen
+  und Projektverschiebung funktionieren ohne CMake-Installation; ein Vergleich
+  des Projektordners bestätigt, dass Builddateien nur unter `build/` hinzukommen.
+
 ### 2.1 Muss-Ziele der ersten stabilen Version
 
 - Physim läuft unter Windows und Linux.

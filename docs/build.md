@@ -1,5 +1,51 @@
 # Bauen und testen
 
+## Projekte in der App bauen
+
+Physim erzeugt `physim.project` beim Anlegen und pflegt die Projekteinstellungen.
+F5 startet den mitgelieferten `physim-build`, der C- und Physim-Quellen direkt über
+den C17-Compiler in Experiment- und Analysemodule übersetzt. Eine `CMakeLists.txt`
+oder CMake-Installation wird dafür nicht benötigt. Bestehende CMake-Dateien
+werden nicht gelesen, überschrieben oder automatisch gelöscht.
+
+Das unter **Build-Einstellungen** gewählte Profil wird beim Speichern, Bauen oder
+normalen Beenden als `profile=Debug` beziehungsweise `profile=Release` in der
+Projektdatei gespeichert. Beim erneuten Öffnen wird es zusammen mit den
+Experimentparametern wiederhergestellt. Ältere Projektdateien ohne Profileintrag
+verwenden Debug. Auch `physim-build` liest dieses Profil; ein explizites
+`--profile` überschreibt es für den jeweiligen Aufruf.
+App und Builder verwenden denselben Leser für das Projektformat. Doppelte oder
+ungültige bekannte Einträge werden abgewiesen. Kommentare und zusätzliche
+Projekteinträge bleiben beim Speichern erhalten; ein unverändertes Speichern
+schreibt die Projektdatei nicht erneut. Geänderte Projektdateien werden mit
+Sicherungskopie und Prüfung auf Änderungen während des Schreibvorgangs ersetzt.
+
+Auch Zeitschritt und Zufallsseed werden als `simulation.dt` und `simulation.seed`
+in der Projektdatei gespeichert und beim Öffnen wiederhergestellt. Ohne diese
+Einträge gelten 0,005 Sekunden und Seed 42. Der Zeitschritt muss eine positive,
+normale endliche Gleitkommazahl bis einschließlich einer Sekunde sein. Seeds
+werden als Dezimalzahl von 0 bis 18446744073709551615 akzeptiert. Ungültige Werte
+blockieren Speichern und Laufstart. Änderungen dieser Laufwerte benötigen
+keinen neuen Modulbuild; jeder Lauf archiviert die verwendeten Werte.
+
+Unter Windows werden Visual Studio 2022 C++ Build Tools und ein Windows SDK
+automatisch gefunden; eine Developer-Konsole ist nicht nötig. Unter Linux wird
+`cc` verwendet. Die Umgebungsvariable `PHYSIM_CC` kann einen anderen Compiler
+angeben, etwa `clang-cl.exe` unter Windows oder `clang` unter Linux.
+
+Der Projektordner behält seine Quellen, `physim.project` und Ergebnisse in `runs/`.
+`build/Debug` und `build/Release` enthalten Module, generiertes C, Objektdateien,
+Debugsymbole und den Buildzustand. Physim vergleicht vorverarbeitete Quellen,
+um auch Änderungen an indirekt eingebundenen Headern zu erkennen. Unveränderte
+Objekte und Module werden wiederverwendet. Ein fehlgeschlagener Compiler- oder
+Linkeraufruf veröffentlicht keine neuen Module; der nächste Build holt das Linken
+nach. Gleichzeitige Builds im selben Ausgabeordner werden abgewiesen.
+Quellen mit zeitabhängigen Makros wie `__TIME__` können bei jedem Build erneut
+übersetzt werden, weil sich ihr vorverarbeiteter Inhalt ändert.
+
+Die nachfolgenden CMake-Anleitungen betreffen den Bau von Physim selbst und die
+bisherige SDK-Anbindung. Deren vollständige Ablösung bleibt ein eigenes Ziel.
+
 ## Toolchains
 
 Windows: CMake 3.24+, Visual Studio 2022 mit C/C++-Desktop-Workload und Windows SDK.

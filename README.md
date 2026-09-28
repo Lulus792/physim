@@ -26,6 +26,10 @@ Auswertung für beide Körper. Weitere Sprachbeispiele für gekoppelte Körper, 
 Gelenke und schnelle Kugeln liegen unter `examples/language`. Editor, Build, Quelldiagnosen und der
 Simulations-/Auswertungsablauf sind für Sprachprojekte verfügbar.
 Beim Anlegen lässt sich auch für die Auswertung die Physim-Sprache auswählen.
+Nutzerprojekte werden über die automatisch gepflegte `physim.project` gebaut.
+Der mitgelieferte Buildprozess startet den Compiler direkt und sammelt erzeugte
+Dateien unter `build/Debug` oder `build/Release` im Projektordner. Dafür sind keine
+`CMakeLists.txt` und keine CMake-Installation nötig; ein C17-Compiler bleibt erforderlich.
 Die erste Vorlage liest Positionen, berechnet Ableitungen und erzeugt Diagramme
 sowie CSV-/SVG-Exporte. Ein Beispiel liegt in `examples/language/analysis.phys`.
 Die Auftriebsvorlage verwendet `Submersion.sphere` und besitzt eine eigene
@@ -103,7 +107,7 @@ Weitere Vorlagen sind Wurf, Kugelstoß, Box auf Ebene, Feder–Masse–Dämpfer,
 Wurf mit Unsicherheit, **Boxstoß** und **Auftrieb**. Die [Mechanikanleitung](docs/mechanics.md)
 erklärt den elastischen und schrägen Stoß orientierter Boxen und ihre Messkanäle.
 
-1. App starten. In der globalen Leiste **Neues Projekt** öffnen, Zielordner und Namen eingeben, **Pendel** als Vorlage wählen und **Projekt anlegen** drücken. Ein bestehendes Projekt lässt sich über **Ordner öffnen** laden.
+1. App starten. **Datei → Neues Projekt** öffnen, Zielordner und Namen eingeben, **Pendel** als Vorlage wählen und **Projekt anlegen** drücken. Ein bestehendes Projekt lässt sich über **Datei → Ordner öffnen** laden.
 2. `main.c` enthält Länge, Masse, Winkel, Luftdichte, Sensorrauschen und Integrator.
 3. **Build / F5** speichert die Quellen und baut Experiment und Analyse im Hintergrund.
 4. Unter **Simulieren** starten. Pause, Einzelschritt und Stop steuern den Runner.
@@ -171,7 +175,24 @@ Module bitte neu bauen. Bestehende `.psrun`-Messdaten bleiben lesbar.
 
 ## Oberfläche
 
-**Einstellungen** oben rechts oder **Ctrl+,** öffnet Code-Schriftgröße,
+Die kompakte Menüzeile bündelt globale Werkzeuge unter **Datei** und **Ansicht**;
+**Hilfe** und **Einstellungen** sind direkt erreichbar. Die Arbeitsbereiche
+**Entwickeln**, **Simulieren** und **Auswerten** liegen als schmale, gleich breite Tabs
+über die gesamte Fensterbreite direkt darunter. Die Menüzeile ist zusammen mit den
+Fensterknöpfen in den oberen Fensterkopf integriert.
+
+Beim normalen Beenden merkt sich Physim den Hauptordner und hinzugefügte Dateien
+und Ordner. **Letzten Workspace öffnen** stellt diese Auswahl beim nächsten Start
+auf Wunsch wieder her. [Workspace und Wiederöffnung](docs/workspace.md)
+Die Seitenleiste zeigt einen aufklappbaren Dateibaum mit sortierten Ordnern,
+verschachtelten Dateien und zusätzlichen Wurzeleinträgen. Aktualisieren erhält
+aufgeklappte Zweige; fehlende Pfade und Anzeigegrenzen werden gekennzeichnet.
+Bis zu 16 UTF-8-Textdateien lassen sich parallel bearbeiten, suchen, ersetzen
+und mit Schutz vor externen Änderungen speichern. Ihre automatischen Sicherungen
+liegen außerhalb des Workspace und werden beim erneuten Öffnen der Datei zur
+[Wiederherstellung](docs/autosave.md) angeboten.
+
+**Einstellungen** in der Menüzeile oder **Ctrl+,** öffnet Code-Schriftgröße,
 Autosave-Intervall und Darstellungsoptionen. Seitenleiste und Protokoll lassen sich
 an ihren Trennlinien vergrößern; Fenstergröße, Maximierung und Darstellung bleiben
 bei normalem Beenden für den nächsten Start erhalten.

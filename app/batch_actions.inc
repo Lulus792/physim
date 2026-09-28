@@ -11,9 +11,9 @@ static int batch_worker(void *user) {
     return 0;
 }
 static void start_batch(app *a) {
-    if (a->parameters_dirty)
+    if (a->project_settings_dirty)
         save_project(a);
-    if (a->parameters_dirty)
+    if (a->project_settings_dirty)
         return;
     if (a->recovery || !idle(a) || !a->built || a->dirty) {
         status(a, "Zuerst den gespeicherten Experimentcode erfolgreich bauen.");
@@ -34,7 +34,7 @@ static void start_batch(app *a) {
     ps_batch_options *o = &a->batch_options;
     memset(o, 0, sizeof *o);
     join(o->runner, sizeof o->runner, a->bin, "physim-runner" EXE_EXT);
-    join(o->module, sizeof o->module, a->project, "build/bin/experiment" MODULE_EXT);
+    join(o->module, sizeof o->module, a->build_directory, "experiment" MODULE_EXT);
     join(o->source, sizeof o->source, a->project, experiment_source(a));
     unique_path(a, o->directory, sizeof o->directory, "-batch");
     snprintf(o->channel, sizeof o->channel, "%s", a->batch_channel);
