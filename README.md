@@ -207,7 +207,8 @@ Die Gestaltungsrichtung folgt Apples Prinzipien für klare Hierarchie, zurückha
 Farben und schrittweise sichtbare Details. Die App verwendet eine ruhige dunkle
 Oberfläche, Systemschrift für Bedienelemente und eine separate Codeschrift im Editor.
 Kamera und Sichtbarkeit liegen im Inspector; das Protokoll lässt sich einklappen.
-Windows nutzt lokal vorhandenes Segoe UI und Consolas, Linux DejaVu, jeweils mit
+Windows nutzt lokal vorhandenes Segoe UI und Consolas, Linux DejaVu und macOS
+Helvetica und Menlo, jeweils mit
 Fallback. Diese Systemschriften werden nicht mit dem Paket verteilt.
 
 Ctrl+1/2/3 wechselt den Arbeitsbereich, Ctrl+4 öffnet Läufe und Berichte,
@@ -238,16 +239,18 @@ ctest --test-dir build --output-on-failure
 ```
 
 Für die App zusätzlich SDL3 ab 3.2 als CMake-Paket installieren. Eine Anleitung zum
-gepinnten SDL-Quellbuild enthält [docs/build.md](docs/build.md). Ubuntu 24.04 mit GCC
+gepinnten SDL-Quellbuild enthält [docs/build.md](docs/build.md). Ubuntu 24.04 mit GCC und Clang
 hat Build, 276 Tests ohne Fenster, 35 Grafik-/Fenstertests unter Xvfb/Mesa, das
 installierte SDK und alle acht vollständigen C-App-Abläufe bestanden.
 [Prüfstand und verbleibende Plattformgrenzen](docs/platform-validation.md).
 
 ## macOS
 
-Apple Silicon und Intel werden als Zielplattformen unterstützt und in eigenen
-CI-Jobs geprüft. Die vollständige Plattformabnahme läuft noch; der aktuelle
-Nachweis steht in [Plattformprüfung](docs/platform-validation.md).
+macOS 15 auf Apple Silicon und Intel hat jeweils 311 CTest-Prüfungen, das
+verschobene SDK und acht vollständige C-App-Abläufe bestanden. Die `.app`-Pakete
+sind zusätzlich nach dem Verschieben mit C- und Physim-Projekten geprüft.
+Nachweise, Downloads und verbleibende Abnahmen stehen in
+[Plattformprüfung](docs/platform-validation.md).
 
 Für den Entwicklungsbuild werden die Xcode Command Line Tools
 (`xcode-select --install`), CMake und SDL 3.2.30 benötigt. Die

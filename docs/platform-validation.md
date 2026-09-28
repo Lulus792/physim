@@ -5,9 +5,11 @@ und ersetzen keine Abnahme aller Ziele des Projektplans.
 
 ## Linux
 
-**Ubuntu 24.04 mit GCC ist für die geprüften Arbeitsabläufe bestätigt.**
-Der [vollständig erfolgreiche CI-Job](https://github.com/PhysicSimulator/physim/actions/runs/36453338672/job/109033291071)
-prüft den Quellstand `738cac3` mit AddressSanitizer und UndefinedBehaviorSanitizer:
+**Ubuntu 24.04 mit GCC und Clang ist für die geprüften Arbeitsabläufe bestätigt.**
+Die erfolgreichen Jobs für
+[GCC](https://github.com/PhysicSimulator/physim/actions/runs/36459604565/job/109054553336)
+und [Clang](https://github.com/PhysicSimulator/physim/actions/runs/36459604565/job/109054552812)
+prüfen den Quellstand `0a27cef` mit AddressSanitizer und UndefinedBehaviorSanitizer:
 
 - 276 Tests ohne Fenster, einschließlich Sprachcompiler, Physik, Daten,
   Runner, nativen Projektbuilds und Fehlerbehandlung.
@@ -25,12 +27,6 @@ Nutzerprojekte werden direkt mit `physim-build` gebaut und benötigen keine
 `CMakeLists.txt`. Quellen und `physim.project` bleiben im Projektordner;
 Buildprodukte liegen in `build/Debug` beziehungsweise `build/Release`.
 
-Auch Clang ist bestätigt: Für `f2bf2ba` bestanden sowohl
-[GCC](https://github.com/PhysicSimulator/physim/actions/runs/36457154756/job/109046291673)
-als auch [Clang](https://github.com/PhysicSimulator/physim/actions/runs/36457154756/job/109046291210)
-sämtliche Tests, das verschobene SDK und die acht zusätzlichen C-App-Abläufe.
-Eine Compilerwarnung hatte im vorherigen Test das Protokoll bereits geöffnet;
-der Shortcut-Test setzt seinen Ausgangszustand jetzt ausdrücklich.
 Wayland, weitere Distributionen, reale Linux-Grafiktreiber und ein fertiges
 Installationspaket auf einem frischen Zielsystem sind noch nicht abgenommen.
 Äußere Fensterecken hängen unter Linux vom Desktop ab; die Windows-DWM-Rundung
@@ -38,7 +34,7 @@ ist kein plattformübergreifender Nachweis.
 
 ## Windows
 
-Die [CI-Matrix für `c576355`](https://github.com/PhysicSimulator/physim/actions/runs/36452292141)
+Die [CI-Matrix für `0a27cef`](https://github.com/PhysicSimulator/physim/actions/runs/36459604565)
 bestand in allen vier Windows-Jobs: MSVC und ClangCL jeweils in Debug und Release,
 einschließlich Tests und installiertem SDK. Fenster- und Grafiktests werden
 zusätzlich lokal unter Windows ausgeführt; die GitHub-Windows-Worker garantieren
@@ -48,8 +44,16 @@ keinen OpenGL-3.3-Treiber.
 
 macOS auf Apple Silicon und Intel ist ein verbindliches Plattformziel.
 Die CI verwendet `macos-15` und `macos-15-intel` mit Apple Clang und SDL 3.2.30.
-Sie prüft Bibliothek, Compiler, Runner, native Projektbuilds, installiertes SDK,
-Grafiktests und die acht C-App-Abläufe. Die erste vollständige Abnahme steht noch aus.
+Für `0a27cef` haben der
+[Apple-Silicon-Job](https://github.com/PhysicSimulator/physim/actions/runs/36459604565/job/109054553102)
+und der [Intel-Job](https://github.com/PhysicSimulator/physim/actions/runs/36459604565/job/109054553310)
+alle 276 Tests ohne Fenster, 35 Grafik-/Fenstertests, das verschobene SDK,
+und die acht C-App-Abläufe bestanden. Die Paket-Signierreihenfolge wurde anschließend
+für Intel korrigiert. Der separate
+[Paketlauf für `2de20b6`](https://github.com/PhysicSimulator/physim/actions/runs/36462932066)
+bestand auf beiden Architekturen: neu gebaut, signiert, Signatur geprüft,
+in einen Pfad mit Leerzeichen und Umlaut verschoben und daraus vollständige
+C- und Physim-Sprachprojekte gebaut, simuliert und ausgewertet.
 
 Die Implementierung berücksichtigt Darwins Programmpfaderkennung, Mach-O-Module,
 lokalisierte Zahlenkonvertierung, macOS-Systemschriften und OpenGL 4.1 Core.
@@ -57,6 +61,11 @@ lokalisierte Zahlenkonvertierung, macOS-Systemschriften und OpenGL 4.1 Core.
 Die lokale Ad-hoc-Signatur wird geprüft; Developer-ID-Signierung und Notarisierung
 für eine öffentliche Verteilung sind noch offen. Die CI prüft vollständige C- und
 Physim-Sprachprojekte aus dem verschobenen Paket.
+Die geprüften ZIP-Dateien stehen im Paketlauf als `physim-app-macos-15`
+(Apple Silicon) und `physim-app-macos-15-intel` bereit.
+Die CI-Pakete sind Debug-Entwicklungsstände. Weitere macOS-Versionen, echte
+Mac-Grafikhardware und Installation auf einem frischen Mac bleiben separate
+Abnahmen; die gehosteten Grafiktests verwenden Apples Software Renderer.
 
 ## Weitere Änderungen prüfen
 
