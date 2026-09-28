@@ -24,6 +24,8 @@ def main():
                     "--prefix", str(resources)], check=True)
     binaries = contents / "MacOS"
     shutil.move(resources / "bin", binaries)
+    # Preserve the SDK's bin/ contract for its command-line/CMake consumers.
+    (resources / "bin").symlink_to("../MacOS", target_is_directory=True)
     info = {
         "CFBundleDevelopmentRegion": "de",
         "CFBundleExecutable": "physim",

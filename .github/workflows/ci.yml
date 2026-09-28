@@ -47,6 +47,7 @@ jobs:
           mv build/Physim.app "build/Moved Mac ä/Physim.app"
           "build/Moved Mac ä/Physim.app/Contents/MacOS/physim" --self-test "$PWD/build/Bundled C ä" pendulum
           "build/Moved Mac ä/Physim.app/Contents/MacOS/physim" --self-test "$PWD/build/Bundled Language ä" language_full
+          ditto -c -k --sequesterRsrc --keepParent "build/Moved Mac ä/Physim.app" "build/Physim-${{ matrix.runner }}.zip"
       - name: Archive macOS evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -59,6 +60,13 @@ jobs:
             build/App Test*/*.bmp
             build/Bundled*/*.bmp
             build/Testing/Temporary/LastTest.log
+          if-no-files-found: ignore
+      - name: Archive tested macOS app
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: physim-app-${{ matrix.runner }}
+          path: build/Physim-${{ matrix.runner }}.zip
           if-no-files-found: ignore
   windows:
     runs-on: windows-2022

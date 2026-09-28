@@ -349,3 +349,5 @@ Die lokale Ad-hoc-Signatur wird geprüft. Für eine öffentliche Verteilung mit
 Developer ID und Notarisierung fehlen noch die Apple-Entwicklerzugänge.
 Die macOS-CI verschiebt das Paket in einen Pfad mit Leerzeichen und Umlaut und
 prüft daraus vollständige C- und Physim-Sprachprojekte.
+Erfolgreich geprüfte Pakete stehen im jeweiligen CI-Lauf als
+`physim-app-macos-15` (Apple Silicon) oder `physim-app-macos-15-intel` bereit.
