@@ -565,6 +565,20 @@ unverändert. Die normalen Benutzereinstellungen werden von diesen Tests nicht g
 
 ## Sanitizer ohne CMake
 
+Für einen hängenden Linux-Fensterablauf lässt sich zusätzlich ein bestimmter
+Workflow mit Systemaufrufen aufzeichnen (strace ab 6.6 erforderlich):
+
+```sh
+PHYSIM_TEST_STRACE_CASE=floating_workflow python3 tools/build.py --test-display --test-filter floating_workflow
+```
+
+Die Aufzeichnung liegt als `app-001.strace` neben dem `app-steps.json` des
+Workflows. Zeitgrenzen und Fehlerbedingungen bleiben aktiv; beim Timeout beendet
+strace auch die verfolgte App und ihre Kindprozesse. Die Linux-CI zeichnet den
+ersten Fensterablauf sowohl im normalen als auch im Sanitizer-Build auf und
+archiviert die Dateien. Ein zusätzlicher Läufertest prüft Aufzeichnung und
+Prozessende beim Timeout.
+
 `--sanitizers` instrumentiert die direkt gebauten Bibliotheken, Programme,
 Testmodule und aus Physim erzeugten C-Quellen. Windows verwendet AddressSanitizer
 (ASan); Linux und macOS zusätzlich UndefinedBehaviorSanitizer (UBSan). Ein

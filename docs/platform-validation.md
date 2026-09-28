@@ -256,9 +256,16 @@ aber der erste App-Ablauf hängt erneut vor der Meldung „window and OpenGL rea
 Zusätzliche Tracepunkte unterscheiden nun SDL-Initialisierung, Fenstererzeugung
 und GL-Kontext. Der Wartepunkt auf den Fenstermanager allein behebt diesen
 sporadischen Startfehler damit nicht vollständig.
-Zu `f6cedbf` bestehen unter Linux GCC zusätzlich alle 35 direkt gebauten
+Zu `f6cedbf` bestehen unter Linux GCC und Clang zusätzlich alle 35 direkt gebauten
 Fenster-/Grafiktests mit ASan und UBSan. Das belegt diesen Lauf, schließt den
 zuvor beobachteten sporadischen Startfehler aber nicht aus.
+Die Linux-CI ergänzt deshalb für `floating_workflow` eine strace-Aufzeichnung
+einschließlich Prozess-, Socket- und Warteaufrufen. Der bestehende Timeout bleibt
+aktiv; `--kill-on-exit` beendet beim Abbruch auch die verfolgten Prozesse.
+Eine zusätzliche Linux-Läuferprüfung kontrolliert echte Traceausgabe und das
+Ende eines gestarteten Kindprozesses. Der gemeinsame Läufertest besteht lokal
+unter Windows (`build/native-trace-runner-windows.log`); die neuen Linux-Zweige
+müssen noch in der CI laufen.
 
 Die direkte SDK-Prüfung umfasst jetzt auch alle zuvor nur im CMake-SDK-Vergleich
 gebauten Sprachmodule: 27 Module, neun Sprachexperimente mit beiden allgemeinen

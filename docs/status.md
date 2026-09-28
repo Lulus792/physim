@@ -79,7 +79,10 @@ Destruktorausgabe. Mit LLVM 20 und LLD besteht diese Minimalprüfung im Lauf zu
 Beide Mac-Fuzzerkampagnen bestehen
 im CI-Lauf zu `f6cedbf` mit LLVM 20 und LLD.
 Der sporadische Linux-Startfehler wird durch feinere SDL-/Fenster-/GL-Protokolle
-weiter eingegrenzt.
+weiter eingegrenzt. Die CI zeichnet beim ersten Fensterablauf zusätzlich
+Systemaufrufe auf. Der betroffene Test behält seine Zeitgrenze und wird bei
+einem Fehler nicht automatisch wiederholt; die Linux-Abnahme dieser neuen
+Diagnose und ihrer Prozessbereinigung steht noch aus.
 
 Der direkte Builder kann nun außerdem ein SDK in einen neuen Ordner installieren.
 Es enthält die App, Werkzeuge, alle acht C-Beispielmodule, Analysemodul, öffentliche

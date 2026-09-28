@@ -250,7 +250,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Platform dependencies
-        run: sudo apt-get update && sudo apt-get install -y ninja-build libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxi-dev libxfixes-dev libxss-dev libxtst-dev libwayland-dev libxkbcommon-dev libegl1-mesa-dev libgl1-mesa-dev xvfb openbox x11-utils
+        run: sudo apt-get update && sudo apt-get install -y ninja-build libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxi-dev libxfixes-dev libxss-dev libxtst-dev libwayland-dev libxkbcommon-dev libegl1-mesa-dev libgl1-mesa-dev xvfb openbox x11-utils strace
       - name: Direct libFuzzer campaign
         if: matrix.compiler == 'clang'
         run: |
@@ -278,6 +278,7 @@ jobs:
       - name: Direct window and graphics tests
         env:
           LIBGL_ALWAYS_SOFTWARE: "1"
+          PHYSIM_TEST_STRACE_CASE: floating_workflow
         run: xvfb-run -a -s '-screen 0 1920x1080x24' sh -c 'openbox > build/native-openbox.log 2>&1 & python3 tools/wait-window-manager.py && python3 tools/build.py --compiler "${{ matrix.compiler }}" --test-display'
       - name: Direct sanitizer tests
         run: |
@@ -289,6 +290,7 @@ jobs:
           # for the separate non-window suite above.
           ASAN_OPTIONS: detect_leaks=0
           LIBGL_ALWAYS_SOFTWARE: "1"
+          PHYSIM_TEST_STRACE_CASE: floating_workflow
         run: xvfb-run -a -s '-screen 0 1920x1080x24' sh -c 'openbox > build/native-sanitizer-openbox.log 2>&1 & python3 tools/wait-window-manager.py && python3 tools/build.py --compiler "${{ matrix.compiler }}" --sanitizers --test-display'
       - name: Archive native Linux package
         if: ${{ !cancelled() }}
@@ -346,6 +348,7 @@ jobs:
             build/native/fuzzer run*/**
             build/native-openbox.log
             build/native-sanitizer-openbox.log
+            build/native/*/test-results/**/*.strace
             build/native/sanitizer probe*/results.json
             build/native/*/test-results/**/results.json
             build/native/*/test-results/**/app-steps.json

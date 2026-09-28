@@ -53,8 +53,9 @@ def fingerprint(path):
 
 
 class Workflow:
-    def __init__(self, app, work, root, small, compiler=None):
+    def __init__(self, app, work, root, small, compiler=None, trace=False):
         self.app, self.work, self.root = app, work, root
+        self.trace = trace
         self.env = dict(os.environ)
         self.env["PHYSIM_TEST_TRACE"] = "1"
         self.env.pop("PHYSIM_TEST_SMALL", None)
@@ -67,6 +68,15 @@ class Workflow:
     def run(self, *arguments, timeout=25, marker=None):
         command = [str(self.app), *map(str, arguments)]
         step = dict(command=command)
+        if self.trace:
+            require(sys.platform == "linux", "System call tracing requires Linux and strace >= 6.6")
+            trace = self.work / f"app-{len(self.steps) + 1:03d}.strace"
+            # EXITKILL also stops the traced app/children when subprocess.run
+            # kills the tracer on timeout; no retry can hide the original hang.
+            command = ["strace", "-f", "--kill-on-exit", "-tt", "-T", "-s", "128",
+                       "-e", "trace=%process,%network,poll,ppoll,select,pselect6,futex",
+                       "-o", str(trace), "--", *command]
+            step.update(trace_command=command, syscall_trace=str(trace))
         try:
             result = subprocess.run(command, cwd=self.work, env=self.env, capture_output=True,
                                     timeout=timeout, encoding="utf-8", errors="replace")
@@ -219,7 +229,8 @@ def main():
     directory = args.work.resolve() / "workflow ä"
     require(not directory.exists(), f"Workflow directory already exists: {directory}")
     small = SIMPLE[args.case][2] if args.case in SIMPLE else True
-    flow = Workflow(args.app.resolve(), args.work.resolve(), args.root.resolve(), small, args.cc)
+    flow = Workflow(args.app.resolve(), args.work.resolve(), args.root.resolve(), small, args.cc,
+                    trace=os.environ.get("PHYSIM_TEST_STRACE_CASE") == args.case)
     if args.case in SPECIAL:
         SPECIAL[args.case](flow, directory)
     elif args.case in language_cases:

@@ -6,8 +6,10 @@ import io
 import json
 import os
 from pathlib import Path
+import shutil
 import sys
 import tempfile
+import time
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -130,6 +132,34 @@ def main():
         pass
     steps = json.loads((directory / "app-steps.json").read_text(encoding="utf-8"))
     assert steps[-1]["status"] == "timeout" and "before timeout" in steps[-1]["stdout"]
+    if sys.platform == "linux" and shutil.which("strace"):
+        traced = display_checker.Workflow(Path(sys.executable), directory, source, False, trace=True)
+        traced.run("-c", "print('trace success')", marker="trace success")
+        trace = Path(traced.steps[-1]["syscall_trace"])
+        assert trace.is_file() and "execve(" in trace.read_text(encoding="utf-8")
+        # A killed tracer must not leave the app or its subprocess running.
+        code = ("import subprocess,sys,time; "
+                "child=subprocess.Popen([sys.executable,'-c','import time; time.sleep(30)']); "
+                "print(child.pid,flush=True); time.sleep(30)")
+        try:
+            traced.run("-c", code, timeout=1)
+            raise AssertionError("Traced app timeout was accepted")
+        except RuntimeError:
+            pass
+        assert traced.steps[-1]["status"] == "timeout"
+        child = int(traced.steps[-1]["stdout"].strip())
+        status_file = Path(f"/proc/{child}/status")
+        deadline = time.monotonic() + 5
+        while time.monotonic() < deadline:
+            try:
+                status = status_file.read_text(encoding="utf-8")
+            except FileNotFoundError:
+                break
+            if "State:\tZ" in status or "State:\tX" in status:
+                break
+            time.sleep(.01)
+        else:
+            raise AssertionError(f"Traced subprocess {child} survived the timeout")
     persisted = directory / "persisted α.txt"
     display_checker.write(persisted, "original β\n")
     display_checker.exact(persisted, "original β\n")
