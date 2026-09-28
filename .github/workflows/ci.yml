@@ -96,3 +96,13 @@ jobs:
           for example in pendulum projectile collision box_floor spring uncertain_projectile box_collision buoyancy; do
             xvfb-run -a ./build/bin/physim --self-test "$PWD/build/App Test ä $example" "$example"
           done
+      - name: Archive Linux UI evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-ui-${{ matrix.compiler }}
+          path: |
+            build/toolbar-*/*.bmp
+            build/App Test*/*.bmp
+            build/Testing/Temporary/LastTest.log
+          if-no-files-found: ignore
