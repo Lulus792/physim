@@ -329,5 +329,23 @@ cpack -C Release
 ```
 
 Das Paket enthält die App, Runner, Beispielmodule, SDK-Quellen und Header, Vorlagen,
-Dokumentation und Lizenzen. CMake und Compiler müssen auf dem Zielsystem eingerichtet
-sein. Ein Clean-Machine-Test und Linux-Distributionspakete sind noch offene Releasegates.
+Dokumentation und Lizenzen. Ein C17-Compiler muss für Nutzerprojekte auf dem Zielsystem
+eingerichtet sein. Ein Clean-Machine-Test und Linux-Distributionspakete sind noch offene Releasegates.
+
+### macOS-App-Paket
+
+Auf einem Mac mit abgeschlossenem Build erzeugt dieser Befehl ein neues App-Paket:
+
+```sh
+python3 tools/package-macos.py --build build --config Release --output build/Physim.app
+open build/Physim.app
+```
+
+Das Ziel darf noch nicht existieren. Das Paket enthält App, Runner, Compiler,
+SDL und das SDK; relative Bibliothekspfade erlauben das Verschieben. Die Ressourcen
+liegen in `Contents/Resources`. Neue Projekte werden unter `Dokumente/Physim`
+vorgeschlagen und können in einem anderen gewählten Ordner angelegt werden.
+Die lokale Ad-hoc-Signatur wird geprüft. Für eine öffentliche Verteilung mit
+Developer ID und Notarisierung fehlen noch die Apple-Entwicklerzugänge.
+Die macOS-CI verschiebt das Paket in einen Pfad mit Leerzeichen und Umlaut und
+prüft daraus vollständige C- und Physim-Sprachprojekte.

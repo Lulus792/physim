@@ -114,6 +114,12 @@ if(PHYSIM_BUILD_APP)
     add_custom_command(TARGET physim POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:SDL3::SDL3> $<TARGET_FILE_DIR:physim>)
   endif()
   install(TARGETS physim RUNTIME DESTINATION bin)
+  if(APPLE)
+    # Keep installed tools independent of the SDL build/installation directory.
+    set_target_properties(physim physim-build PROPERTIES INSTALL_RPATH "@executable_path")
+    install(FILES $<TARGET_FILE:SDL3::SDL3> DESTINATION bin
+      RENAME $<TARGET_SONAME_FILE_NAME:SDL3::SDL3>)
+  endif()
   if(WIN32)
     install(FILES $<TARGET_FILE:SDL3::SDL3> DESTINATION bin)
   endif()

@@ -2350,10 +2350,23 @@ int main(int argc, char **argv) {
     snprintf(a->root, sizeof a->root, "%s/..", a->bin);
     char check[4096];
     join(check, sizeof check, a->root, "include/physim/core.h");
+#ifdef __APPLE__
+    if (!exists(check)) {
+        snprintf(a->root, sizeof a->root, "%s/../Resources", a->bin);
+        join(check, sizeof check, a->root, "include/physim/core.h");
+    }
+#endif
     if (!exists(check))
         snprintf(a->root, sizeof a->root, "%s", PS_SOURCE_DIR);
     char projects[4096];
+#ifdef __APPLE__
+    const char *documents = SDL_GetUserFolder(SDL_FOLDER_DOCUMENTS);
+    char *fallback = documents ? NULL : SDL_GetPrefPath("Physim", "Physim");
+    join(projects, sizeof projects, documents ? documents : fallback ? fallback : ".", "Physim");
+    SDL_free(fallback);
+#else
     join(projects, sizeof projects, a->root, "projects");
+#endif
     ps_make_directory(projects);
     snprintf(a->manager_parent, sizeof a->manager_parent, "%s", projects);
     a->dt = 0.005;

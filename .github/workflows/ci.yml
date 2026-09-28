@@ -39,6 +39,14 @@ jobs:
             ./build/bin/physim --self-test "$PWD/build/App Test ä $example" "$example" || result=1
           done
           exit "$result"
+      - name: Relocated macOS app bundle
+        if: ${{ !cancelled() && steps.macos_build.outcome == 'success' }}
+        run: |
+          python3 tools/package-macos.py --build build --config Debug --output build/Physim.app
+          mkdir -p "build/Moved Mac ä"
+          mv build/Physim.app "build/Moved Mac ä/Physim.app"
+          "build/Moved Mac ä/Physim.app/Contents/MacOS/physim" --self-test "$PWD/build/Bundled C ä" pendulum
+          "build/Moved Mac ä/Physim.app/Contents/MacOS/physim" --self-test "$PWD/build/Bundled Language ä" language_full
       - name: Archive macOS evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -49,6 +57,7 @@ jobs:
             build/SDK Test*/PASSED.txt
             build/toolbar-*/*.bmp
             build/App Test*/*.bmp
+            build/Bundled*/*.bmp
             build/Testing/Temporary/LastTest.log
           if-no-files-found: ignore
   windows:
