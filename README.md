@@ -85,23 +85,26 @@ binden; `if var` und `while var` erzeugen veränderliche lokale Kopien.
 
 ## Schnellstart unter Windows
 
-Das bereits gebaute portable Paket startet über `bin/physim.exe`. Im Entwicklungsordner
-liegt die entsprechende Anwendung unter `build/bin/physim.exe`.
+Das bereits gebaute portable Paket startet über `bin/physim.exe`. Beim folgenden
+Entwicklungsbuild liegt die Anwendung unter `build/native/Debug/bin/physim.exe`.
 
 Voraussetzungen für den Entwicklungsbuild: Windows 10 ab 1903 / Windows 11, Visual
 Studio 2022 mit **Desktopentwicklung mit C++** (enthält den C-Compiler und Windows SDK),
-CMake ab 3.24, Python ab 3.10 für die vollständigen Tests sowie einen Grafiktreiber
+Python ab 3.10 sowie einen Grafiktreiber
 mit **OpenGL 3.3 Core**. Für eigene Experimente
 benötigt die App einen C17-Compiler; CMake ist dafür nicht erforderlich.
 
 ```powershell
 # SDL3 installieren, falls third_party/SDL3-3.2.30 noch nicht vorhanden ist:
 powershell -ExecutionPolicy Bypass -File tools/bootstrap-windows.ps1
-cmake -S . -B build -DPHYSIM_BUILD_APP=ON
-cmake --build build --config Debug --parallel
-ctest --test-dir build -C Debug --output-on-failure
-.\build\bin\physim.exe
+python tools/build.py --config Debug --test
+.\build\native\Debug\bin\physim.exe
 ```
+
+Zum späteren Starten genügt der letzte Befehl. Nach Quellcodeänderungen den
+Buildbefehl erneut ausführen. Er baut auch die Oberfläche und prüft die Tests
+ohne Fenster. Optionale Fenster- und Grafiktests starten mit
+`python tools/build.py --config Debug --test-display`.
 
 Die App lädt nur explizit gebauten und gestarteten Experimentcode. Die mitgelieferten
 Vorlagen werden nicht automatisch ausgeführt. C-Code läuft mit den Rechten des
@@ -255,7 +258,7 @@ sudo apt-get install -y build-essential git cmake ninja-build pkg-config python3
 
 Für andere Distributionen die entsprechenden Pakete aus der
 [SDL-Linux-Anleitung](https://wiki.libsdl.org/SDL3/README-linux) installieren.
-Physim benötigt CMake ab 3.24.
+Für den folgenden SDL-Quellbuild wird CMake ab 3.24 benötigt.
 
 **2. Physim herunterladen und SDL 3.2.30 lokal bauen:**
 
@@ -439,15 +442,14 @@ mit `python3 tools/build.py --test-display` starten (Windows: `python` statt
 ## Ohne Oberfläche
 
 Optional unter Linux und macOS nur Bibliothek und Kommandozeilenprogramme bauen
-(Compiler, CMake und Ninja erforderlich, SDL entfällt):
+(C17-Compiler und Python ab 3.10 erforderlich, SDL entfällt). Die Befehle im
+Physim-Repository ausführen:
 
 ```sh
-cmake -S . -B build-core -G Ninja -DPHYSIM_BUILD_APP=OFF -DCMAKE_BUILD_TYPE=Debug
-cmake --build build-core --parallel
-ctest --test-dir build-core --output-on-failure
-./build-core/bin/physim-runner ./build-core/bin/pendulum.so ./pendel.psrun --steps 4000 --dt 0.005 --seed 42
-./build-core/bin/physim-analysis-runner ./build-core/bin/pendulum_analysis.so ./pendel.psrun ./pendelbericht
-./build-core/bin/physim-analysis-runner --csv ./pendel.psrun ./pendel.csv
+python3 tools/build.py --config Debug --no-app --build-dir build/native/Core --test
+./build/native/Core/bin/physim-runner ./build/native/Core/bin/pendulum.so ./pendel.psrun --steps 4000 --dt 0.005 --seed 42
+./build/native/Core/bin/physim-analysis-runner ./build/native/Core/bin/pendulum_analysis.so ./pendel.psrun ./pendelbericht
+./build/native/Core/bin/physim-analysis-runner --csv ./pendel.psrun ./pendel.csv
 ```
 
 Unter Windows nach dem oben beschriebenen Build:
