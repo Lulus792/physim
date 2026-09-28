@@ -36,6 +36,44 @@ def main():
     assert runner.execute_case([str(directory / "missing-program")], work=directory,
                                env=os.environ, timeout=1)["status"] == "failed"
 
+    # Exercise the language pipeline with real child-process failures. An
+    # emitter failure must never compile or execute a previous generated file.
+    execute = runner.execute_case
+    invocations = []
+
+    def language_process(command, **options):
+        invocations.append(command)
+        if "--emit-c" in command:
+            code = "import sys; print('emitter failed', file=sys.stderr); sys.exit(2)"
+        else:
+            code = "import sys; print('expected type error', file=sys.stderr); sys.exit(1)"
+        return execute([sys.executable, "-c", code], **options)
+
+    class LanguageBuilder:
+        env = os.environ
+        bin = directory
+        def __init__(self):
+            self.directory = directory
+        def executable(self, *args, **options):
+            raise AssertionError("Failed emission must not build or run stale code")
+
+    runner.execute_case = language_process
+    try:
+        result = runner.language_case(
+            runner.Case("emitter_error", (), language_source="fixture.phys"),
+            LanguageBuilder(), {}, source, directory)
+        assert result["status"] == "failed" and len(result["steps"]) == 1
+        assert result["steps"][0]["exit_code"] == 2
+        checks = tuple(dict(name=name, source="invalid", exit_code=1, stderr_pattern=pattern)
+                       for name, pattern in (("wrong", "missing"), ("later", "expected type error")))
+        result = runner.language_case(runner.Case("diagnostics", (), language_checks=checks),
+                                      LanguageBuilder(), {}, source, directory)
+        assert result["status"] == "failed"
+        assert [step["status"] for step in result["steps"]] == ["failed", "passed"]
+        assert len(invocations) == 3
+    finally:
+        runner.execute_case = execute
+
     # A failed build and failed test must not suppress later cases or leave a
     # success-only summary. Use real child processes for the executable cases.
     runner.catalog = lambda: [

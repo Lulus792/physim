@@ -139,8 +139,15 @@ Prüfbedingungen. Alle 51 bestehen lokal mit MSVC Debug; die 41 SDL-freien Fäll
 bestehen zusätzlich mit Clang Release. Enthalten sind auch die bestehenden
 Protokoll-, Messdatei- und Berichtsmutationen. Ein eigener Test prüft Fehlercodes,
 erwartete Diagnosen, Zeitüberschreitungen und den vollständigen Ergebnisbericht
-nach einzelnen Build-/Testfehlern. Die neue CI-Matrix führt diesen Satz ebenfalls
-aus; ein plattformübergreifender Abschlussnachweis dafür steht noch aus.
+nach einzelnen Build-/Testfehlern. Der direkte Build- und Testschritt besteht in
+allen acht Plattformkombinationen in [CI-Lauf 36471876255](https://github.com/PhysicSimulator/physim/actions/runs/36471876255)
+zum Commit `a55d5e0`; dieser Nachweis bezieht sich auf den jeweiligen Schritt.
+
+Die folgende Erweiterung ergänzt elf Sprach-Laufzeitprogramme und elf Gruppen mit
+86 Diagnosefällen. Der Katalog umfasst damit 73 Tests, davon 63 ohne SDL.
+Die 29 Sprachtests bestehen lokal mit MSVC Debug und Clang Release; elf bestehende
+CTest-Einstiegspunkte bestehen mit dem gemeinsamen JSON-Katalog ebenfalls.
+Ein CI-Nachweis für diese Erweiterung steht noch aus.
 Weitere Sprach-, Runner- und Grafikabläufe sind noch an CTest gebunden.
 
 ## Weitere Änderungen prüfen

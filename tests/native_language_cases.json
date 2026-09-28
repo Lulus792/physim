@@ -1,0 +1,587 @@
+{
+  "format": 1,
+  "groups": [
+    {
+      "name": "array_filter",
+      "runtime_source": "tests/fixtures/language/array_filter.phys",
+      "checks": [
+        {
+          "name": "no_predicate",
+          "source": "let a = [1]\nlet b = a.filter()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array filter expects one positional predicate"
+        },
+        {
+          "name": "named_predicate",
+          "source": "func keep(x: Int64) -> Bool:\n    return true\nlet a = [1]\nlet b = a.filter(predicate: keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array filter expects one positional predicate"
+        },
+        {
+          "name": "non_array",
+          "source": "let a = 1\nlet b = a.filter(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array filter requires an array value"
+        },
+        {
+          "name": "non_function",
+          "source": "let a = [1]\nlet b = a.filter(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array filter predicate must be func"
+        },
+        {
+          "name": "wrong_element",
+          "source": "func keep(x: String) -> Bool:\n    return true\nlet a = [1]\nlet b = a.filter(keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array filter predicate must be func"
+        },
+        {
+          "name": "wrong_result",
+          "source": "func keep(x: Int64) -> Int64:\n    return x\nlet a = [1]\nlet b = a.filter(keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array filter predicate must be func"
+        },
+        {
+          "name": "wrong_arity",
+          "source": "func keep(x: Int64, y: Int64) -> Bool:\n    return true\nlet a = [1]\nlet b = a.filter(keep)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array filter predicate must be func"
+        }
+      ]
+    },
+    {
+      "name": "array_map",
+      "runtime_source": "tests/fixtures/language/array_map.phys",
+      "checks": [
+        {
+          "name": "non_array",
+          "source": "let x = 1\nlet y = x.map(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array map requires an array value"
+        },
+        {
+          "name": "no_transform",
+          "source": "let x = [1]\nlet y = x.map()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array map expects one positional transform"
+        },
+        {
+          "name": "named_transform",
+          "source": "func change(x: Int64) -> Int64:\n    return x\nlet a = [1]\nlet b = a.map(transform: change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array map expects one positional transform"
+        },
+        {
+          "name": "non_function",
+          "source": "let x = [1]\nlet y = x.map(2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array map transform must be func"
+        },
+        {
+          "name": "wrong_element",
+          "source": "func change(x: String) -> String:\n    return x\nlet a = [1]\nlet b = a.map(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array map transform must be func"
+        },
+        {
+          "name": "wrong_arity",
+          "source": "func change(x: Int64, y: Int64) -> Int64:\n    return x\nlet a = [1]\nlet b = a.map(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array map transform must be func"
+        },
+        {
+          "name": "void_result",
+          "source": "func change(x: Int64):\n    print(x)\nlet a = [1]\nlet b = a.map(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array map transform must be func"
+        }
+      ]
+    },
+    {
+      "name": "array_compact_map",
+      "runtime_source": "tests/fixtures/language/array_compact_map.phys",
+      "checks": [
+        {
+          "name": "non_array",
+          "source": "let x = 1\nlet y = x.compactMap(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array compactMap requires an array value"
+        },
+        {
+          "name": "no_transform",
+          "source": "let x = [1]\nlet y = x.compactMap()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array compactMap expects one positional transform"
+        },
+        {
+          "name": "named_transform",
+          "source": "func change(x: Int64) -> Int64?:\n    return nil\nlet a = [1]\nlet b = a.compactMap(transform: change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array compactMap expects one positional transform"
+        },
+        {
+          "name": "extra_transform",
+          "source": "func change(x: Int64) -> Int64?:\n    return nil\nlet a = [1]\nlet b = a.compactMap(change, change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array compactMap expects one positional transform"
+        },
+        {
+          "name": "non_function",
+          "source": "let x = [1]\nlet y = x.compactMap(2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array compactMap transform must be func"
+        },
+        {
+          "name": "wrong_element",
+          "source": "func change(x: String) -> String?:\n    return nil\nlet a = [1]\nlet b = a.compactMap(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array compactMap transform must be func"
+        },
+        {
+          "name": "wrong_arity",
+          "source": "func change(x: Int64, y: Int64) -> Int64?:\n    return nil\nlet a = [1]\nlet b = a.compactMap(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array compactMap transform must be func"
+        },
+        {
+          "name": "nonoptional_result",
+          "source": "func change(x: Int64) -> Int64:\n    return x\nlet a = [1]\nlet b = a.compactMap(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array compactMap transform must be func"
+        },
+        {
+          "name": "void_result",
+          "source": "func change(x: Int64):\n    print(x)\nlet a = [1]\nlet b = a.compactMap(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array compactMap transform must be func"
+        },
+        {
+          "name": "explicit_type",
+          "source": "func change(x: Int64) -> Int64?:\n    return nil\nlet a = [1]\nlet b = a.compactMap<Int64>(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        }
+      ]
+    },
+    {
+      "name": "array_flat_map",
+      "runtime_source": "tests/fixtures/language/array_flat_map.phys",
+      "checks": [
+        {
+          "name": "non_array",
+          "source": "let x = 1\nlet y = x.flatMap(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array flatMap requires an array value"
+        },
+        {
+          "name": "no_transform",
+          "source": "let x = [1]\nlet y = x.flatMap()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array flatMap expects one positional transform"
+        },
+        {
+          "name": "named_transform",
+          "source": "func change(x: Int64) -> [Int64]:\n    return [x]\nlet a = [1]\nlet b = a.flatMap(transform: change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array flatMap expects one positional transform"
+        },
+        {
+          "name": "extra_transform",
+          "source": "func change(x: Int64) -> [Int64]:\n    return [x]\nlet a = [1]\nlet b = a.flatMap(change, change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array flatMap expects one positional transform"
+        },
+        {
+          "name": "non_function",
+          "source": "let x = [1]\nlet y = x.flatMap(2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array flatMap transform must be func"
+        },
+        {
+          "name": "wrong_element",
+          "source": "func change(x: String) -> [String]:\n    return [x]\nlet a = [1]\nlet b = a.flatMap(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array flatMap transform must be func"
+        },
+        {
+          "name": "wrong_arity",
+          "source": "func change(x: Int64, y: Int64) -> [Int64]:\n    return [x]\nlet a = [1]\nlet b = a.flatMap(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array flatMap transform must be func"
+        },
+        {
+          "name": "nonarray_result",
+          "source": "func change(x: Int64) -> Int64:\n    return x\nlet a = [1]\nlet b = a.flatMap(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array flatMap transform must be func"
+        },
+        {
+          "name": "optional_result",
+          "source": "func change(x: Int64) -> Int64?:\n    return nil\nlet a = [1]\nlet b = a.flatMap(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array flatMap transform must be func"
+        },
+        {
+          "name": "void_result",
+          "source": "func change(x: Int64):\n    print(x)\nlet a = [1]\nlet b = a.flatMap(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array flatMap transform must be func"
+        },
+        {
+          "name": "explicit_type",
+          "source": "func change(x: Int64) -> [Int64]:\n    return [x]\nlet a = [1]\nlet b = a.flatMap<Int64>(change)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        }
+      ]
+    },
+    {
+      "name": "array_predicate_queries",
+      "runtime_source": "tests/fixtures/language/array_predicate_queries.phys",
+      "checks": [
+        {
+          "name": "no_predicate",
+          "source": "let a = [1]\nlet b = a.allSatisfy()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array predicate query expects one positional predicate"
+        },
+        {
+          "name": "named_predicate",
+          "source": "func test(x: Int64) -> Bool:\n    return true\nlet a = [1]\nlet b = a.allSatisfy(predicate: test)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array predicate query expects one positional predicate"
+        },
+        {
+          "name": "non_array",
+          "source": "let a = 1\nlet b = a.contains(where: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array predicate query requires an array value"
+        },
+        {
+          "name": "non_function",
+          "source": "let a = [1]\nlet b = a.allSatisfy(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array predicate query requires func"
+        },
+        {
+          "name": "wrong_element",
+          "source": "func test(x: String) -> Bool:\n    return true\nlet a = [1]\nlet b = a.contains(where: test)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array predicate query requires func"
+        },
+        {
+          "name": "wrong_result",
+          "source": "func test(x: Int64) -> Int64:\n    return x\nlet a = [1]\nlet b = a.allSatisfy(test)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array predicate query requires func"
+        },
+        {
+          "name": "wrong_arity",
+          "source": "func test(x: Int64, y: Int64) -> Bool:\n    return true\nlet a = [1]\nlet b = a.contains(where: test)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array predicate query requires func"
+        },
+        {
+          "name": "old_any_name",
+          "source": "let a = [1]\nlet x = a.any(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown method for this receiver type"
+        },
+        {
+          "name": "old_all_name",
+          "source": "let a = [1]\nlet x = a.all(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown method for this receiver type"
+        }
+      ]
+    },
+    {
+      "name": "array_reduce",
+      "runtime_source": "tests/fixtures/language/array_reduce.phys",
+      "checks": [
+        {
+          "name": "non_array",
+          "source": "let x = 1\nlet y = x.reduce(0, 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "reduce requires an Array or String value"
+        },
+        {
+          "name": "missing_combine",
+          "source": "let x = [1]\nlet y = x.reduce(0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array reduce expects initial value and positional combine function"
+        },
+        {
+          "name": "named_arguments",
+          "source": "func sum(total: Int64, value: Int64) -> Int64:\n    return total + value\nlet x = [1]\nlet y = x.reduce(initial: 0, combine: sum)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array reduce expects initial value and positional combine function"
+        },
+        {
+          "name": "non_function",
+          "source": "let x = [1]\nlet y = x.reduce(0, 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array reduce combine must be func"
+        },
+        {
+          "name": "wrong_element",
+          "source": "func combine(total: Int64, value: String) -> Int64:\n    return total\nlet x = [1]\nlet y = x.reduce(0, combine)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array reduce combine must be func"
+        },
+        {
+          "name": "wrong_accumulator",
+          "source": "func combine(total: String, value: Int64) -> Int64:\n    return value\nlet x = [1]\nlet y = x.reduce(0, combine)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array reduce combine must be func"
+        },
+        {
+          "name": "wrong_arity",
+          "source": "func combine(value: Int64) -> Int64:\n    return value\nlet x = [1]\nlet y = x.reduce(0, combine)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array reduce combine must be func"
+        },
+        {
+          "name": "void_result",
+          "source": "func combine(total: Int64, value: Int64):\n    print(value)\nlet x = [1]\nlet y = x.reduce(0, combine)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array reduce combine must be func"
+        },
+        {
+          "name": "wrong_initial",
+          "source": "func sum(total: Int64, value: Int64) -> Int64:\n    return total + value\nlet x = [1]\nlet y = x.reduce(\"bad\", sum)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        }
+      ]
+    },
+    {
+      "name": "array_endpoints",
+      "runtime_source": "tests/fixtures/language/array_endpoints.phys",
+      "checks": [
+        {
+          "name": "first_write",
+          "source": "var values = [1]\nvalues.first = Optional.some(2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Assignment requires a mutable var binding"
+        },
+        {
+          "name": "last_write",
+          "source": "var values = [1]\nvalues.last = Optional.some(2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Assignment requires a mutable var binding"
+        },
+        {
+          "name": "empty_write",
+          "source": "var values = [1]\nvalues.isEmpty = true\n",
+          "exit_code": 1,
+          "stderr_pattern": "Assignment requires a mutable var binding"
+        },
+        {
+          "name": "first_where_wrong_label",
+          "source": "func positive(value: Int64) -> Bool:\n    return value > 0\nlet values = [1]\nlet found = values.first(test: positive)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown method for this receiver type"
+        },
+        {
+          "name": "last_where_wrong_predicate",
+          "source": "let values = [1]\nlet found = values.last(where: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array predicate query requires func"
+        },
+        {
+          "name": "first_index_where_wrong_predicate",
+          "source": "let values = [1]\nlet found = values.firstIndex(where: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array predicate query requires func"
+        },
+        {
+          "name": "last_index_where_wrong_predicate",
+          "source": "let values = [1]\nlet found = values.lastIndex(where: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array predicate query requires func"
+        }
+      ]
+    },
+    {
+      "name": "array_sequence_compare",
+      "runtime_source": "tests/fixtures/language/array_sequence_compare.phys",
+      "checks": [
+        {
+          "name": "starts_missing",
+          "source": "let x = [1].starts()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array starts expects with: prefix"
+        },
+        {
+          "name": "starts_label",
+          "source": "let x = [1].starts([1])\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array starts expects with: prefix"
+        },
+        {
+          "name": "starts_type",
+          "source": "let x = [1].starts(with: [\"1\"])\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "equal_missing",
+          "source": "let x = [1].elementsEqual()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array elementsEqual expects one positional array"
+        },
+        {
+          "name": "equal_label",
+          "source": "let x = [1].elementsEqual(other: [1])\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array elementsEqual expects one positional array"
+        },
+        {
+          "name": "equal_type",
+          "source": "let x = [1].elementsEqual([\"1\"])\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "non_equatable",
+          "source": "let x = [Rng(1)].starts(with: [Rng(1)])\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array sequence comparison element type must satisfy Equatable"
+        }
+      ]
+    },
+    {
+      "name": "array_split",
+      "runtime_source": "tests/fixtures/language/array_split.phys",
+      "checks": [
+        {
+          "name": "missing",
+          "source": "let values = [1, 0]\nlet parts = values.split()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array split expects separator:"
+        },
+        {
+          "name": "label",
+          "source": "let values = [1, 0]\nlet parts = values.split(by: 0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array split expects separator:"
+        },
+        {
+          "name": "element",
+          "source": "let values = [1, 0]\nlet parts = values.split(separator: \"0\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "max_type",
+          "source": "let values = [1, 0]\nlet parts = values.split(separator: 0, maxSplits: true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "omit_type",
+          "source": "let values = [1, 0]\nlet parts = values.split(separator: 0, omittingEmptySubsequences: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "non_equatable",
+          "source": "let values = [Rng(1)]\nlet parts = values.split(separator: Rng(1))\n",
+          "exit_code": 1,
+          "stderr_pattern": "Array split element type must satisfy Equatable"
+        }
+      ]
+    },
+    {
+      "name": "string_endpoints",
+      "runtime_source": "tests/fixtures/language/string_endpoints.phys",
+      "checks": [
+        {
+          "name": "first_write",
+          "source": "var value = \"abc\"\nvalue.first = Optional.some(\"z\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "Assignment requires a mutable var binding"
+        },
+        {
+          "name": "last_write",
+          "source": "var value = \"abc\"\nvalue.last = Optional.some(\"z\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "Assignment requires a mutable var binding"
+        },
+        {
+          "name": "first_call",
+          "source": "let value = \"abc\"\nlet letter = value.first()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown method for this receiver type"
+        },
+        {
+          "name": "last_call",
+          "source": "let value = \"abc\"\nlet letter = value.last()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown method for this receiver type"
+        },
+        {
+          "name": "wrong_type",
+          "source": "let value: Int64? = \"abc\".first\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        }
+      ]
+    },
+    {
+      "name": "string_ordering",
+      "runtime_source": "tests/fixtures/language/string_ordering.phys",
+      "checks": [
+        {
+          "name": "sort_immutable",
+          "source": "var value = \"abc\"\nvalue.sort()\n",
+          "exit_code": 1,
+          "stderr_pattern": "String is immutable; use sorted"
+        },
+        {
+          "name": "sorted_wrong_label",
+          "source": "let value = \"abc\"\nlet result = value.sorted(using: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String sorting expects by: comparator"
+        },
+        {
+          "name": "min_wrong_label",
+          "source": "let value = \"abc\"\nlet result = value.min(using: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String extrema expect by: comparator"
+        },
+        {
+          "name": "sorted_non_function",
+          "source": "let value = \"abc\"\nlet result = value.sorted(by: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String comparator must be func"
+        },
+        {
+          "name": "max_wrong_arity",
+          "source": "func compare(value: String) -> Bool:\n    return true\nlet value = \"abc\"\nlet result = value.max(by: compare)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String comparator must be func"
+        },
+        {
+          "name": "min_wrong_element",
+          "source": "func compare(a: Int64, b: Int64) -> Bool:\n    return true\nlet value = \"abc\"\nlet result = value.min(by: compare)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String comparator must be func"
+        },
+        {
+          "name": "sorted_wrong_result",
+          "source": "func compare(a: String, b: String) -> Int64:\n    return 0\nlet value = \"abc\"\nlet result = value.sorted(by: compare)\n",
+          "exit_code": 1,
+          "stderr_pattern": "String comparator must be func"
+        },
+        {
+          "name": "explicit_type",
+          "source": "let value = \"abc\"\nlet result = value.sorted<String>()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        }
+      ]
+    }
+  ]
+}

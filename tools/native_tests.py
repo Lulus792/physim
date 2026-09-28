@@ -1,14 +1,16 @@
 """Direct test catalog and runner. No CMake files are read or executed.
 
-These cases reuse the existing C regressions and their original expectations.
-Language workflow wrappers and display workflows are still migrated separately.
+These cases reuse existing C and language regressions and their expectations.
+Further language workflow wrappers and display workflows are migrated separately.
 """
 from dataclasses import dataclass
 from fnmatch import fnmatchcase
+import hashlib
 import json
 from pathlib import Path
 import re
 import subprocess
+import sys
 import tempfile
 import time
 
@@ -25,6 +27,8 @@ class Case:
     exit_code: int = 0
     stdout: str | None = None
     stderr_pattern: str | None = None
+    language_source: str | None = None
+    language_checks: tuple = ()
 
 
 def catalog():
@@ -75,7 +79,57 @@ def catalog():
         Case("text_document", ("tests/test_text_document.c",), ("project", "core"),
              arguments=("{work}",), app=True),
     ])
+    corpus = json.loads((Path(__file__).resolve().parent.parent / "tests/native_language_cases.json").read_text(encoding="utf-8"))
+    if corpus.get("format") != 1:
+        raise RuntimeError("Unsupported native language test corpus")
+    for group in corpus["groups"]:
+        cases.append(Case("language_" + group["name"] + "_runtime", (), ("core",),
+                          language_source=group["runtime_source"]))
+        cases.append(Case("language_" + group["name"], (), language_checks=tuple(group["checks"])))
     return cases
+
+
+def language_case(case, builder, libraries, source, work):
+    started = time.monotonic()
+    compiler = builder.bin / ("physimc.exe" if sys.platform == "win32" else "physimc")
+    steps = []
+    if case.language_source:
+        emitted = execute_case([str(compiler), "--emit-c", str(source / case.language_source)],
+                               work=work, env=builder.env, timeout=30)
+        code = emitted.pop("stdout", "")
+        steps.append(emitted)
+        if emitted["status"] == "passed":
+            generated = builder.directory / "generated" / case.name / "main.c"
+            generated.parent.mkdir(parents=True, exist_ok=True)
+            content = code.encode("utf-8")
+            emitted["generated_source"] = str(generated)
+            emitted["source_sha256"] = hashlib.sha256(content).hexdigest()
+            if not generated.is_file() or generated.read_bytes() != content:
+                pending = generated.with_suffix(".pending.c")
+                pending.write_bytes(content)
+                pending.replace(generated)
+            try:
+                program = builder.executable("physim-test-" + case.name, [str(generated)],
+                                             [libraries[name] for name in case.libraries], language=True)
+                steps.append(execute_case([str(program)], work=work, env=builder.env,
+                                          timeout=case.timeout))
+            except (OSError, RuntimeError) as error:
+                steps.append({"status": "build_failed", "reason": str(error)})
+        else:
+            emitted["stdout"] = code
+    else:
+        for check in case.language_checks:
+            path = work / (check["name"] + ".phys")
+            path.write_text(check["source"], encoding="utf-8", newline="\n")
+            result = execute_case([str(compiler), "--check", str(path)], work=work,
+                                  env=builder.env, timeout=15, exit_code=check["exit_code"],
+                                  stdout=check.get("stdout"), stderr_pattern=check["stderr_pattern"])
+            result["name"] = check["name"]
+            steps.append(result)
+    failures = [step for step in steps if step["status"] != "passed"]
+    return {"status": "failed" if failures else "passed", "steps": steps,
+            "seconds": round(time.monotonic() - started, 3),
+            "reason": "\n".join(step.get("reason", "") + "\n" + step.get("stderr", "") for step in failures)}
 
 
 def execute_case(command, *, work: Path, env, timeout: float, exit_code=0,
@@ -119,13 +173,16 @@ def run_suite(builder, libraries, source: Path, pattern="*"):
         work = directory / case.name
         work.mkdir()
         try:
-            program = builder.executable("physim-test-" + case.name, list(case.sources),
-                                         [libraries[name] for name in case.libraries],
-                                         sdl=case.app, defines=case.defines)
-            arguments = [arg.format(work=work.as_posix(), source=source.as_posix()) for arg in case.arguments]
-            result = execute_case([str(program), *arguments], work=work, env=builder.env,
-                                  timeout=case.timeout, exit_code=case.exit_code,
-                                  stdout=case.stdout, stderr_pattern=case.stderr_pattern)
+            if case.language_source or case.language_checks:
+                result = language_case(case, builder, libraries, source, work)
+            else:
+                program = builder.executable("physim-test-" + case.name, list(case.sources),
+                                             [libraries[name] for name in case.libraries],
+                                             sdl=case.app, defines=case.defines)
+                arguments = [arg.format(work=work.as_posix(), source=source.as_posix()) for arg in case.arguments]
+                result = execute_case([str(program), *arguments], work=work, env=builder.env,
+                                      timeout=case.timeout, exit_code=case.exit_code,
+                                      stdout=case.stdout, stderr_pattern=case.stderr_pattern)
         except (OSError, RuntimeError) as error:
             result = {"status": "build_failed", "reason": str(error)}
         result["name"] = case.name

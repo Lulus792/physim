@@ -55,6 +55,16 @@ Diagnosetexte, Timeout, fehlende Programme, Buildfehler und unvollständige Erfo
 Die übrigen Sprach-, Runner- und Grafikabläufe bleiben bis zu ihrer eigenen
 Übernahme an CTest gebunden.
 
+Elf Sprachgruppen für Array- und Stringoperationen laufen jetzt ebenfalls direkt:
+elf übersetzte Laufzeitprogramme und 86 Diagnosefälle in elf Gruppen. Damit enthält
+der direkte Testkatalog 73 Einträge beziehungsweise 63 ohne SDL. Die 29 ausgewählten
+Sprachtests bestehen lokal mit MSVC Debug und Clang Release. Die elf bisherigen
+CTest-Diagnoseprüfungen bestehen mit demselben JSON-Katalog weiterhin. Der Buildtest
+prüft erzeugte C-Quellen unter Unicodepfaden und hält ihre Objektdateien im Buildordner.
+Der Testläufer prüft außerdem, dass fehlgeschlagene Übersetzung keinen alten Code
+ausführt und ein Diagnosefehler spätere Fälle nicht unterdrückt. Die neuen
+Sprachgruppen benötigen noch ihren eigenen plattformübergreifenden CI-Nachweis.
+
 | Bereich | Implementiert | Noch offen |
 | --- | --- | --- |
 | Eigene Sprache | verbindliches Ziel als vollständige C-Alternative, C17-Lexer/Parser mit `:`-/Einrückungsblöcken, skalare und nominale Struktur-/Enumtypen mit typisierten und besitzenden Nutzdaten sowie optionale Werte mit Wertsemantik und struktureller Gleichheit, normale/mutierende/statische Strukturmethoden, eigene Struct-Initialisierer mit Überladung nach Parameterform und Parametertyp auch bei generischen Typen, `physimc --check`/`--emit-c`/`--emit-experiment`/`--emit-analysis`, C17-Backend/CMake für Programme und erste Experiment-/Analysemodule, Vec2/Vec3/Vec4, Quaternionen und Mat3/Mat4, Einheiten/Kanäle, explizite PCG32-Wertströme, starre Körper mit Impulsen/Quaternionrotation, Kontaktpaare mit Reibung/Rückprall, Distanzgelenke mit lokalen Ankern, gemeinsamer Körpergruppen-Solver mit besitzenden Ergebniswerten, lineare Kugel-Sweeps und Hüllquader-Kandidatenpaare, gemeinsamer Integrator, Messdaten/Szene, Dataset-/Series-/Plot-/Table-Handles einschließlich erzeugter Datenreihen, gemeinsame Messstatusauswahl, Statistik/Diagramme/Tabellen/Exporte, abgefangene Laufzeitfehler mit Quelldiagnosen, erste App-Vorlagen mit Editor/Build und Quellsnapshots | vollständiger semantischer Sprachvertrag, weitere Werttypen und Fallmuster, Überladungsauflösung für weitere Ausdrücke, erweiterte Module, vollständige Experiment- und Analysebindungen, vollständige Integration beider Editoren, vollständiger Sprachausbau und zwei getestete Dokumentationsteile (LANG-001 bis LANG-007) |

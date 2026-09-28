@@ -171,24 +171,33 @@ class Builder:
         os.replace(temporary_stamp, stamp)
         return True
 
-    def compile(self, source: str, defines: tuple[str, ...] = ()) -> Path:
-        path = ROOT / source
-        variant = hashlib.sha256(repr(defines).encode()).hexdigest()[:10]
-        output = self.directory / "obj" / variant / Path(source).with_suffix(".obj" if self.msvc else ".o")
+    def compile(self, source: str, defines: tuple[str, ...] = (), *, language: bool = False) -> Path:
+        path = (ROOT / source).resolve()
+        if path.is_relative_to(self.directory):
+            relative = Path("generated") / path.relative_to(self.directory)
+        elif path.is_relative_to(ROOT):
+            relative = path.relative_to(ROOT)
+        else:
+            raise RuntimeError(f"Source is outside the repository/build directory: {path}")
+        variant = hashlib.sha256(repr((defines, language)).encode()).hexdigest()[:10]
+        output = self.directory / "obj" / variant / relative.with_suffix(".obj" if self.msvc else ".o")
         output.parent.mkdir(parents=True, exist_ok=True)
         temporary = output.with_name(output.stem + ".pending" + output.suffix)
         debug = self.args.config == "Debug"
         if self.msvc:
-            command = [self.cc, "/nologo", "/c", "/std:c17", "/utf-8", "/W4", "/D_CRT_SECURE_NO_WARNINGS",
-                       "/MDd" if debug else "/MD", "/Od" if debug else "/O2", "/Z7", "/fp:precise"]
+            command = [self.cc, "/nologo", "/c", "/std:c17", "/utf-8", "/W3" if language else "/W4", "/D_CRT_SECURE_NO_WARNINGS",
+                       "/MDd" if debug else "/MD", "/Od" if debug else "/O2", "/Z7",
+                       "/fp:strict" if language else "/fp:precise"]
             command += ["/I" + str(p) for p in self.includes] + ["/D" + d for d in defines]
             if not debug:
                 command.append("/DNDEBUG")
             command += [str(path), "/Fo" + str(temporary)]
         else:
             command = [self.cc, "-c", "-std=c17", "-fPIC", "-g", "-O0" if debug else "-O2",
-                       "-Wall", "-Wextra", "-Wpedantic", "-Wshadow", "-D_POSIX_C_SOURCE=200809L",
+                       "-D_POSIX_C_SOURCE=200809L",
                        "-fno-fast-math", "-ffp-contract=off"]
+            if not language:
+                command += ["-Wall", "-Wextra", "-Wpedantic", "-Wshadow"]
             command += ["-I" + str(p) for p in self.includes] + ["-D" + d for d in defines]
             if not debug:
                 command.append("-DNDEBUG")
@@ -198,9 +207,9 @@ class Builder:
             print(f"Compiled {source}", flush=True)
         return output
 
-    def objects(self, sources: list[str], defines: tuple[str, ...] = ()) -> list[Path]:
+    def objects(self, sources: list[str], defines: tuple[str, ...] = (), *, language: bool = False) -> list[Path]:
         with ThreadPoolExecutor(max_workers=self.args.jobs) as pool:
-            return list(pool.map(lambda source: self.compile(source, defines), sources))
+            return list(pool.map(lambda source: self.compile(source, defines, language=language), sources))
 
     def archive(self, name: str, sources: list[str], defines: tuple[str, ...] = ()) -> Path:
         objects = self.objects(sources, defines)
@@ -214,8 +223,8 @@ class Builder:
         return output
 
     def executable(self, name: str, sources: list[str], libraries: list[Path], *, sdl: bool = False,
-                   defines: tuple[str, ...] = (), module: bool = False) -> Path:
-        objects = self.objects(sources, defines)
+                   defines: tuple[str, ...] = (), module: bool = False, language: bool = False) -> Path:
+        objects = self.objects(sources, defines, language=language)
         suffix = (".dll" if WINDOWS else ".so") if module else (".exe" if WINDOWS else "")
         output = self.bin / (name + suffix)
         temporary = output.with_name(output.stem + ".pending" + output.suffix)

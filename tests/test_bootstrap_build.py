@@ -74,6 +74,20 @@ def main():
     broken = fingerprint(program)
     build()
     assert fingerprint(program) != broken, "Corrupted output was reused"
+    generated = options.build_dir / "generated source ä"
+    generated.mkdir()
+    generated_source = generated / "main.c"
+    generated_source.write_text('#include <stdio.h>\nint main(void) { puts("generated"); return 0; }\n', encoding="utf-8")
+    with module.build_lock(options.build_dir):
+        builder = module.Builder(options, env)
+        generated_program = builder.executable("generated-probe", [str(generated_source)], [], language=True)
+        assert subprocess.check_output([str(generated_program)]).strip() == b"generated"
+        assert {p.name for p in generated.iterdir()} == {"main.c"}, "Objects leaked into generated sources"
+        try:
+            builder.compile(str(source.parent / "outside.c"))
+            raise AssertionError("Source outside repository/build directory was accepted")
+        except RuntimeError as error:
+            assert "outside the repository/build directory" in str(error)
     with module.build_lock(options.build_dir):
         try:
             with module.build_lock(options.build_dir):
@@ -82,7 +96,7 @@ def main():
             pass
     assert not list(source.rglob("CMake*"))
     assert {p.name for p in source.iterdir()} == {"src", "include", "app", "build"}
-    print("Direct build: Unicode paths, incremental headers, failure recovery, artifact integrity and lock passed")
+    print("Direct build: Unicode/generated paths, incremental headers, failure recovery, artifact integrity and lock passed")
 
 
 if __name__ == "__main__":
