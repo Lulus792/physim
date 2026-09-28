@@ -67,6 +67,32 @@ Die CI-Pakete sind Debug-Entwicklungsstände. Weitere macOS-Versionen, echte
 Mac-Grafikhardware und Installation auf einem frischen Mac bleiben separate
 Abnahmen; die gehosteten Grafiktests verwenden Apples Software Renderer.
 
+## Direkter Build von Physim
+
+Der Quellstand `7f05668` ergänzt `tools/build.py`. Im
+[CI-Lauf](https://github.com/PhysicSimulator/physim/actions/runs/36467398347)
+hat der Schritt **Direct compiler build without CMake for Physim** auf allen acht
+Kombinationen bestanden: Windows mit MSVC/ClangCL jeweils Debug/Release,
+Ubuntu 24.04 mit GCC/Clang sowie macOS 15 auf Apple Silicon/Intel.
+Dies belegt diesen abgeschlossenen Schritt; die übrigen Schritte des Laufs
+waren beim Erfassen dieses Nachweises noch aktiv.
+
+Die Prüfung baut Bibliotheken, Sprachcompiler, Runner, Projektbuilder und App
+mit direkten Compiler-/Archiviereraufrufen. Drei Referenzprogramme prüfen Core,
+Numerik und Mechanik. Ein separater Test mit echten Compilerprozessen prüft
+Unicodepfade, Headeränderungen, unveränderte Ausgaben, Fehlerwiederaufnahme,
+beschädigte Ausgabedateien und die Buildsperre. Linux und beide Macs führen
+zusätzlich vollständige Pendel- und Physim-Sprachprojekte in der direkt gebauten
+App aus. Windows-Grafikabläufe werden lokal geprüft: beide vollständigen
+Projektabläufe mit MSVC Debug sowie Renderer und Eingaberegression mit Clang.
+Der lokale Projektbuilder-Test besteht mit den direkt gebauten Werkzeugen für
+C- und Physim-Projekte in Debug/Release, einschließlich Projektverschiebung.
+
+Die vollständige Testsuite und SDK-/App-Paketierung sind weiterhin CMake-gestützt.
+SDL wird für diese CI-Prüfung zuvor mit seinem eigenen CMake-Buildsystem gebaut.
+Der direkte Physim-Build ist daher noch keine vollständige Abnahme des Ziels,
+CMake aus der gesamten Entwicklung und Auslieferung zu entfernen.
+
 ## Weitere Änderungen prüfen
 
 Jeder Push startet die [CI](https://github.com/PhysicSimulator/physim/actions/workflows/ci.yml).

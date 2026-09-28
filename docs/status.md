@@ -25,9 +25,12 @@ Core-/Numerik-/Mechanik-Referenzprogramme. Vollständige C- und Physim-App-Ablä
 bestehen mit dem direkt gebauten Debug-Programm. Der Buildtest prüft Unicodepfade,
 unveränderte Ausgaben, Headeränderungen, Compiler-/Linkerfehler mit erhaltenem
 Programm, beschädigte Cacheausgaben und die Sperre gleichzeitiger Builds.
-Der Nachweis dieses neuen Buildwegs auf Linux/macOS steht noch aus. Die komplette
-Testsuite und Paketierung bleiben vorerst CMake-gestützt; auch der SDL-Quellbuild
-verwendet weiterhin dessen eigenes Buildsystem.
+Der direkte Buildschritt besteht außerdem in allen acht CI-Kombinationen unter
+Windows (MSVC/ClangCL, Debug/Release), Linux (GCC/Clang) und macOS (Apple Silicon/Intel).
+Die Linux-/Mac-Prüfung schließt vollständige C- und Physim-App-Abläufe ein.
+[Nachweise und genaue Abdeckung](platform-validation.md#direkter-build-von-physim).
+Die komplette Testsuite und Paketierung bleiben vorerst CMake-gestützt; auch der
+SDL-Quellbuild verwendet weiterhin dessen eigenes Buildsystem.
 
 | Bereich | Implementiert | Noch offen |
 | --- | --- | --- |

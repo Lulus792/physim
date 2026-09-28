@@ -371,13 +371,15 @@ Nutzerprojekte benötigen nur den C17-Compiler und Physim, keine CMake-Datei.
 Die App verwendet OpenGL 4.1 Core, macOS-Systemschriften und **Cmd** für
 Speichern, Suchen und Editorbefehle.
 
-## Ohne Oberfläche
+## Direkter Build ohne CMake
 
 Ein zusätzlicher [direkter Buildweg](docs/build.md#physim-direkt-ohne-cmake-bauen)
 baut Physim selbst einschließlich Oberfläche über Python und den C17-Compiler,
 ohne CMake oder Ninja für Physim aufzurufen. Er verwendet eine vorhandene
 SDL-Installation. Die vollständige Testsuite und Paketierung laufen weiterhin
 über den oben beschriebenen CMake-Build.
+
+## Ohne Oberfläche
 
 Optional unter Linux und macOS nur Bibliothek und Kommandozeilenprogramme bauen
 (Compiler, CMake und Ninja erforderlich, SDL entfällt):

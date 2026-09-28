@@ -7,3 +7,5 @@
 *.psrun
 *.user
 *.pdb
+__pycache__/
+*.py[cod]

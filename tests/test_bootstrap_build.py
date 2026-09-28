@@ -5,6 +5,7 @@ import importlib.util
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 
 
@@ -16,6 +17,7 @@ def main():
     repo = Path(__file__).resolve().parent.parent
     spec = importlib.util.spec_from_file_location("physim_build", repo / "tools/build.py")
     module = importlib.util.module_from_spec(spec)
+    sys.dont_write_bytecode = True
     spec.loader.exec_module(module)
     args.work.mkdir(parents=True, exist_ok=True)
     source = Path(tempfile.mkdtemp(prefix="bootstrap source ä ", dir=args.work)).resolve()

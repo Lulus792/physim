@@ -26,8 +26,8 @@ PROJECT = "project_file text_document autosave parameter_catalog".split()
 ZLIB = "adler32 crc32 deflate trees zutil".split()
 
 
-def run(args: list[str], env: dict[str, str], *, capture: bool = False) -> str:
-    result = subprocess.run(args, env=env, cwd=ROOT, stdout=subprocess.PIPE,
+def run(args: list[str], env: dict[str, str], *, capture: bool = False, directory: Path | None = None) -> str:
+    result = subprocess.run(args, env=env, cwd=directory or ROOT, stdout=subprocess.PIPE,
                             stderr=subprocess.STDOUT, encoding="utf-8", errors="replace")
     if result.returncode or not capture:
         if result.stdout:
@@ -255,7 +255,7 @@ class Builder:
         if self.args.test:
             for name in ("core", "numerics", "mechanics"):
                 program = self.executable(f"physim-{name}-tests", [f"tests/test_{name}.c"], [platform, core])
-                run([str(program)], self.env)
+                run([str(program)], self.env, directory=self.directory)
             print("Core, numerics and mechanics reference tests passed.")
         print(f"Build complete: {self.bin}")
 
