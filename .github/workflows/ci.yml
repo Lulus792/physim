@@ -50,6 +50,7 @@ jobs:
         compiler: [gcc, clang]
     env:
       CC: ${{ matrix.compiler }}
+      PHYSIM_CC: ${{ matrix.compiler }}
     steps:
       - uses: actions/checkout@v4
       - name: Platform dependencies
@@ -63,10 +64,12 @@ jobs:
       - name: Configure
         run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DPHYSIM_SANITIZERS=ON -DPHYSIM_GRAPHICS_TESTS=ON -DPHYSIM_BUILD_BENCHMARKS=ON -DCMAKE_PREFIX_PATH="$PWD/build-sdl-install"
       - name: Build
+        id: linux_build
         run: cmake --build build --parallel
       - name: Test
         run: ctest --test-dir build --output-on-failure -LE display
       - name: Relocated SDK and all templates
+        if: ${{ !cancelled() && steps.linux_build.outcome == 'success' }}
         run: cmake -DBUILD_DIR=build -DCONFIG=Debug -P tools/verify-sdk.cmake
       - name: Archive SDK verification
         if: always()
@@ -78,12 +81,14 @@ jobs:
             build/SDK Test*/PASSED.txt
           if-no-files-found: ignore
       - name: GPU and window tests
+        if: ${{ !cancelled() && steps.linux_build.outcome == 'success' }}
         env:
           ASAN_OPTIONS: detect_leaks=0
           LIBGL_ALWAYS_SOFTWARE: "1"
         # A window manager is needed for the real maximize/restore workflow.
         run: xvfb-run -a -s '-screen 0 1920x1080x24' sh -c 'openbox > /tmp/physim-openbox.log 2>&1 & ctest --test-dir build --output-on-failure -L display'
       - name: App workflow with paths containing spaces and Unicode
+        if: ${{ !cancelled() && steps.linux_build.outcome == 'success' }}
         env:
           ASAN_OPTIONS: detect_leaks=0
           LIBGL_ALWAYS_SOFTWARE: "1"

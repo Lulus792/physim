@@ -414,6 +414,8 @@ static bool link_module(toolchain *tc, const char *module, const char *object,
         }
     } else {
         args[n++] = "-shared";
+        /* Reject unresolved symbols before replacing the last working modules. */
+        args[n++] = "-Wl,--no-undefined";
         args[n++] = "-o";
         args[n++] = module;
     }

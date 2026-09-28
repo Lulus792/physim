@@ -1228,7 +1228,8 @@ if(Python3_Interpreter_FOUND)
       ${CMAKE_SOURCE_DIR}/tests/test_native_build.py
       --builder $<TARGET_FILE:physim-build> --sdk ${CMAKE_SOURCE_DIR}
       --compiler $<TARGET_FILE:physimc> --runner $<TARGET_FILE:physim-runner>
-      --analysis-runner $<TARGET_FILE:physim-analysis-runner> --work ${CMAKE_BINARY_DIR}/native-project-tests)
+      --analysis-runner $<TARGET_FILE:physim-analysis-runner> --work ${CMAKE_BINARY_DIR}/native-project-tests
+      --cc ${CMAKE_C_COMPILER})
     set_tests_properties(native_project_build PROPERTIES TIMEOUT 600)
   endif()
   add_test(NAME documentation_reference COMMAND ${Python3_EXECUTABLE}
