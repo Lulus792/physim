@@ -230,21 +230,136 @@ Tabellen erscheinen derzeit als Textzeilen.
 
 ## Linux
 
-Für den Bibliotheks- und Runner-Build genügen GCC/Clang, CMake und ein Buildwerkzeug:
+### Installieren und mit Oberfläche starten (Ubuntu 24.04)
+
+Die folgenden Befehle im Terminal ausführen. Zum Starten ist eine grafische
+Desktop-Sitzung mit einem OpenGL-3.3-Core-fähigen Treiber erforderlich.
+Bei einem vorhandenen Checkout die beiden Befehle zum Klonen und Wechseln
+überspringen und im Physim-Repository beginnen.
+
+**1. Compiler, Buildwerkzeuge und Grafikabhängigkeiten installieren:**
 
 ```sh
-cmake -S . -B build -DPHYSIM_BUILD_APP=OFF -DCMAKE_BUILD_TYPE=Debug
-cmake --build build --parallel
-ctest --test-dir build --output-on-failure
+sudo apt-get update
+sudo apt-get install -y build-essential git cmake ninja-build pkg-config python3 \
+  libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxi-dev libxfixes-dev \
+  libxss-dev libxtst-dev libwayland-dev libxkbcommon-dev \
+  libegl1-mesa-dev libgl1-mesa-dev fonts-dejavu-core
 ```
 
-Für die App zusätzlich SDL3 ab 3.2 als CMake-Paket installieren. Eine Anleitung zum
-gepinnten SDL-Quellbuild enthält [docs/build.md](docs/build.md). Ubuntu 24.04 mit GCC und Clang
+Für andere Distributionen die entsprechenden Pakete aus der
+[SDL-Linux-Anleitung](https://wiki.libsdl.org/SDL3/README-linux) installieren.
+Physim benötigt CMake ab 3.24.
+
+**2. Physim herunterladen und SDL 3.2.30 lokal bauen:**
+
+```sh
+git clone https://github.com/PhysicSimulator/physim.git
+cd physim
+git clone --depth 1 --branch release-3.2.30 https://github.com/libsdl-org/SDL.git build-sdl-source
+cmake -S build-sdl-source -B build-sdl -G Ninja \
+  -DCMAKE_BUILD_TYPE=Release -DSDL_TESTS=OFF \
+  -DCMAKE_INSTALL_PREFIX="$PWD/build-sdl-install"
+cmake --build build-sdl --parallel
+cmake --install build-sdl
+```
+
+**3. Physim mit Oberfläche bauen, prüfen und starten:**
+
+```sh
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug \
+  -DPHYSIM_BUILD_APP=ON -DCMAKE_PREFIX_PATH="$PWD/build-sdl-install"
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
+./build/bin/physim
+```
+
+Später genügt im Repository `./build/bin/physim` zum Starten. Nach Änderungen
+am Quellcode zuerst erneut `cmake --build build --parallel` ausführen.
+SDL und Buildausgaben bleiben in den lokalen `build*`-Ordnern; für die
+Build- und Installationsbefehle ist kein `sudo` nötig.
+
+Ubuntu 24.04 mit GCC und Clang
 hat Build, 276 Tests ohne Fenster, 35 Grafik-/Fenstertests unter Xvfb/Mesa, das
 installierte SDK und alle acht vollständigen C-App-Abläufe bestanden.
 [Prüfstand und verbleibende Plattformgrenzen](docs/platform-validation.md).
 
 ## macOS
+
+### Installieren und mit Oberfläche starten (Apple Silicon und Intel)
+
+**1. Xcode Command Line Tools installieren:**
+
+```sh
+xcode-select --install
+```
+
+Die Installation im angezeigten Dialog abschließen, bevor es weitergeht.
+Sind die Werkzeuge bereits installiert, kann dieser Schritt entfallen.
+
+**2. Homebrew und Buildwerkzeuge installieren:**
+
+Falls Homebrew noch fehlt, den offiziellen
+[Homebrew-Installer](https://brew.sh/) im Terminal starten und dessen Anweisungen
+einschließlich der Schritte zur Shell-Einrichtung befolgen:
+
+```sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Homebrew für das aktuelle Terminal aktivieren und die Werkzeuge installieren:
+
+```sh
+if [ -x /opt/homebrew/bin/brew ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+else
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
+brew install cmake ninja python
+```
+
+**3. Physim herunterladen und SDL 3.2.30 lokal bauen:**
+
+Bei einem vorhandenen Checkout die ersten beiden Befehle überspringen und im
+Physim-Repository beginnen. Die Befehle bauen für die Architektur des Macs;
+auf Apple Silicon ein natives Terminal verwenden.
+
+```sh
+git clone https://github.com/PhysicSimulator/physim.git
+cd physim
+git clone --depth 1 --branch release-3.2.30 https://github.com/libsdl-org/SDL.git build-sdl-source
+cmake -S build-sdl-source -B build-sdl -G Ninja \
+  -DCMAKE_BUILD_TYPE=Release -DSDL_TESTS=OFF \
+  -DCMAKE_INSTALL_PREFIX="$PWD/build-sdl-install"
+cmake --build build-sdl --parallel
+cmake --install build-sdl
+```
+
+**4. Physim mit Oberfläche bauen, prüfen und starten:**
+
+```sh
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug \
+  -DPHYSIM_BUILD_APP=ON -DCMAKE_PREFIX_PATH="$PWD/build-sdl-install"
+cmake --build build --parallel
+ctest --test-dir build --output-on-failure
+./build/bin/physim
+```
+
+Später genügt im Repository `./build/bin/physim`. Nach Quellcodeänderungen
+zuerst erneut `cmake --build build --parallel` ausführen.
+
+**Optional: eine App zum Öffnen im Finder erzeugen:**
+
+```sh
+python3 tools/package-macos.py --build build --config Debug --output build/Physim.app
+open build/Physim.app
+```
+
+Danach lässt sich `build/Physim.app` auch per Doppelklick öffnen oder in den
+Programme-Ordner kopieren. Das Paket enthält SDL und das Physim-SDK. Für ein
+erneutes Paket einen neuen Ausgabepfad wählen, etwa `build/Physim-neu.app`;
+das Skript überschreibt kein vorhandenes Paket. Es signiert lokal ad hoc;
+eine Apple-Notarisierung für die öffentliche Verteilung ist noch offen.
 
 macOS 15 auf Apple Silicon und Intel hat jeweils 311 CTest-Prüfungen, das
 verschobene SDK und acht vollständige C-App-Abläufe bestanden. Die `.app`-Pakete
@@ -252,14 +367,25 @@ sind zusätzlich nach dem Verschieben mit C- und Physim-Projekten geprüft.
 Nachweise, Downloads und verbleibende Abnahmen stehen in
 [Plattformprüfung](docs/platform-validation.md).
 
-Für den Entwicklungsbuild werden die Xcode Command Line Tools
-(`xcode-select --install`), CMake und SDL 3.2.30 benötigt. Die
-[Buildanleitung](docs/build.md) enthält den SDL-Quellbuild und die Startbefehle.
 Nutzerprojekte benötigen nur den C17-Compiler und Physim, keine CMake-Datei.
 Die App verwendet OpenGL 4.1 Core, macOS-Systemschriften und **Cmd** für
 Speichern, Suchen und Editorbefehle.
 
 ## Ohne Oberfläche
+
+Optional unter Linux und macOS nur Bibliothek und Kommandozeilenprogramme bauen
+(Compiler, CMake und Ninja erforderlich, SDL entfällt):
+
+```sh
+cmake -S . -B build-core -G Ninja -DPHYSIM_BUILD_APP=OFF -DCMAKE_BUILD_TYPE=Debug
+cmake --build build-core --parallel
+ctest --test-dir build-core --output-on-failure
+./build-core/bin/physim-runner ./build-core/bin/pendulum.so ./pendel.psrun --steps 4000 --dt 0.005 --seed 42
+./build-core/bin/physim-analysis-runner ./build-core/bin/pendulum_analysis.so ./pendel.psrun ./pendelbericht
+./build-core/bin/physim-analysis-runner --csv ./pendel.psrun ./pendel.csv
+```
+
+Unter Windows nach dem oben beschriebenen Build:
 
 ```powershell
 .\build\bin\physim-runner.exe .\build\bin\pendulum.dll .\pendel.psrun --steps 4000 --dt 0.005 --seed 42
