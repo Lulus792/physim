@@ -117,6 +117,13 @@ class Builder:
         self.msvc = Path(self.cc).name.lower() in ("cl.exe", "cl", "clang-cl.exe", "clang-cl")
         if WINDOWS and not self.msvc:
             raise RuntimeError("Windows builds require MSVC or clang-cl.")
+        self.fuzzing = getattr(args, "fuzzer", False)
+        if self.fuzzing:
+            if self.msvc and Path(self.cc).stem.lower() != "clang-cl":
+                raise RuntimeError("libFuzzer requires Clang; pass --compiler clang-cl on Windows or --compiler clang elsewhere.")
+            version = run([self.cc, "--version"], env, capture=True)
+            if "clang" not in version.lower():
+                raise RuntimeError("libFuzzer requires a Clang compiler.")
         self.sanitizers = getattr(args, "sanitizers", False)
         if self.sanitizers and WINDOWS:
             if Path(self.cc).stem.lower() == "clang-cl":
@@ -227,6 +234,8 @@ class Builder:
             if self.sanitizers:
                 command += ["-fsanitize=address,undefined", "-fno-sanitize-recover=all", "-fno-omit-frame-pointer"]
             command += [str(path), "-o", str(temporary)]
+        if self.fuzzing:
+            command.append("-fsanitize=fuzzer-no-link")
         headers = self.headers + (self.test_headers if path.is_relative_to(ROOT / "tests") else "")
         if path.is_relative_to(ROOT / "tools"):
             headers += self.tool_headers
@@ -261,6 +270,8 @@ class Builder:
         if self.sanitizers:
             command += (["/MD", "/fsanitize=address"] if self.msvc else
                         ["-fsanitize=address,undefined", "-fno-sanitize-recover=all"])
+        if self.fuzzing and name == "physim-protocol-libfuzzer":
+            command.append("-fsanitize=fuzzer")
         if self.msvc:
             manifest = ROOT / "app/utf8.manifest"
             command += ["/nologo", "/Fe:" + str(temporary), "/link", "/INCREMENTAL:NO", "/DEBUG",
@@ -270,6 +281,11 @@ class Builder:
             inputs += [manifest]
             if name in ("physim", "physim-ui-benchmark"):
                 command.append("dwmapi.lib")
+            if self.fuzzing and name == "physim-protocol-libfuzzer":
+                # LLVM's Windows fuzzer archive uses the static CRT by default;
+                # ASan and all our objects use the shared CRT.
+                command += ["/NODEFAULTLIB:libcmt", "/NODEFAULTLIB:libucrt", "/NODEFAULTLIB:libvcruntime",
+                            "msvcrt.lib", "ucrt.lib", "vcruntime.lib"]
             if module:
                 command.insert(1, "/LD")
                 command.append("/IMPLIB:" + str(self.lib / (name + ".lib")))
@@ -301,6 +317,12 @@ class Builder:
         products = []
         core = self.archive("physim-core", [f"src/{name}.c" for name in CORE])
         products.append(core)
+        if self.fuzzing:
+            self.executable("physim-protocol-libfuzzer", ["tests/fuzz_protocol.c", "src/protocol.c"], [core])
+            self.executable("physim-protocol-seeds", ["tests/fuzz_protocol.c", "src/protocol.c"], [core],
+                            defines=("PS_FUZZ_STANDALONE",))
+            print(f"Fuzzer build complete: {self.bin}")
+            return
         platform = self.archive("physim-platform", ["src/platform.c", "src/protocol.c"])
         language = self.archive("physim-language", [f"src/language/{name}.c" for name in LANGUAGE])
         batch = self.archive("physim-batch", ["src/batch.c"])
@@ -397,6 +419,7 @@ def main() -> int:
     parser.add_argument("--jobs", type=int, default=min(os.cpu_count() or 1, 8))
     parser.add_argument("--benchmarks", action="store_true", help="Build performance tools; --no-app omits the OpenGL benchmark")
     parser.add_argument("--sanitizers", action="store_true", help="Validate with AddressSanitizer (also UndefinedBehaviorSanitizer on Linux/macOS)")
+    parser.add_argument("--fuzzer", action="store_true", help="Build only the Clang libFuzzer IPC harness and seed generator, with sanitizers and without SDL")
     test_mode = parser.add_mutually_exclusive_group()
     test_mode.add_argument("--test", action="store_true", help="Run tests without windows or CTest")
     test_mode.add_argument("--test-display", action="store_true", help="Run window and graphics tests (requires a graphical desktop)")
@@ -408,11 +431,16 @@ def main() -> int:
         parser.error("--test-filter requires --test or --test-display")
     if args.test_display and args.no_app:
         parser.error("--test-display requires the app; remove --no-app")
+    if args.fuzzer:
+        if args.test or args.test_display or args.install or args.benchmarks:
+            parser.error("--fuzzer builds a separate developer tool; omit --test, --test-display, --install and --benchmarks")
+        args.no_app = True
+        args.sanitizers = True
     if args.sanitizers and args.install:
         parser.error("Sanitizer builds are for validation; use a separate build without --sanitizers to install a portable SDK")
     if args.jobs < 1 or args.jobs > 64:
         parser.error("--jobs must be between 1 and 64")
-    args.build_dir = args.build_dir or ROOT / "build" / "native" / (args.config + ("-sanitized" if args.sanitizers else ""))
+    args.build_dir = args.build_dir or ROOT / "build" / "native" / (args.config + ("-fuzzer" if args.fuzzer else "-sanitized" if args.sanitizers else ""))
     if args.build_dir.resolve() == ROOT or args.build_dir.resolve() in ROOT.parents:
         parser.error("Use a separate build directory, not the source root or its parents")
     try:

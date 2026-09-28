@@ -20,6 +20,11 @@ jobs:
       PHYSIM_CC: clang
     steps:
       - uses: actions/checkout@v4
+      - name: Direct libFuzzer campaign
+        if: ${{ !inputs.package_only }}
+        run: |
+          python3 tools/build.py --fuzzer --compiler clang
+          python3 tests/test_native_fuzzer.py --bin build/native/Debug-fuzzer/bin --work build/native
       - name: SDL3 pinned source
         run: |
           git clone --depth 1 --branch release-3.2.30 https://github.com/libsdl-org/SDL.git build-sdl-source
@@ -101,6 +106,7 @@ jobs:
         with:
           name: macos-${{ matrix.runner }}
           path: |
+            build/native/fuzzer run*/**
             build/native/sanitizer probe*/results.json
             build/native/*/test-results/**/results.json
             build/native/*/test-results/**/app-steps.json
@@ -136,6 +142,14 @@ jobs:
       - name: UI dependency
         shell: pwsh
         run: ./tools/bootstrap-windows.ps1
+      - name: Direct libFuzzer campaign
+        if: matrix.toolset == 'ClangCL' && matrix.configuration == 'Debug'
+        shell: pwsh
+        run: |
+          python tools/build.py --fuzzer --compiler clang-cl
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python tests/test_native_fuzzer.py --bin build/native/Debug-fuzzer/bin --work build/native
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
       - name: Direct compiler build without CMake for Physim
         shell: pwsh
         run: |
@@ -188,6 +202,7 @@ jobs:
         with:
           name: sdk-windows-${{ matrix.toolset }}-${{ matrix.configuration }}
           path: |
+            build/native/fuzzer run*/**
             build/native/sanitizer probe*/results.json
             build/native/*/test-results/**/results.json
             build/native/*/test-results/**/app-steps.json
@@ -225,6 +240,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Platform dependencies
         run: sudo apt-get update && sudo apt-get install -y ninja-build libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxi-dev libxfixes-dev libxss-dev libxtst-dev libwayland-dev libxkbcommon-dev libegl1-mesa-dev libgl1-mesa-dev xvfb openbox x11-utils
+      - name: Direct libFuzzer campaign
+        if: matrix.compiler == 'clang'
+        run: |
+          python3 tools/build.py --fuzzer --compiler clang
+          python3 tests/test_native_fuzzer.py --bin build/native/Debug-fuzzer/bin --work build/native
       - name: SDL3 pinned source
         run: |
           git clone --depth 1 --branch release-3.2.30 https://github.com/libsdl-org/SDL.git build-sdl-source
@@ -312,6 +332,7 @@ jobs:
         with:
           name: linux-ui-${{ matrix.compiler }}
           path: |
+            build/native/fuzzer run*/**
             build/native-openbox.log
             build/native-sanitizer-openbox.log
             build/native/sanitizer probe*/results.json

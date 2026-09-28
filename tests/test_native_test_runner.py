@@ -42,7 +42,7 @@ def main():
     # and SDK installation without tests, which must accept an absent filter.
     common = ["build.py", "--build-dir", str(directory / "cli build")]
     accepted = [([], None), (["--benchmarks"], None), (["--benchmarks", "--no-app"], None),
-                (["--sanitizers", "--test"], None),
+                (["--sanitizers", "--test"], None), (["--fuzzer"], None),
                 (["--install", str(directory / "sdk")], None),
                 (["--test-display"], None), (["--test-display", "--test-filter", "toolbar_*"], ["toolbar_*"]),
                 (["--test"], None), (["--test", "--test-filter", "*"], ["*"]),
@@ -55,6 +55,8 @@ def main():
             with patch.object(sys, "argv", common + arguments):
                 assert build_cli.main() == 0
             assert builder.call_args.args[0].test_filter == filters
+            if "--fuzzer" in arguments:
+                assert builder.call_args.args[0].no_app and builder.call_args.args[0].sanitizers
             builder.return_value.build.assert_called_once_with()
         for pattern in ("*", "language_*"):
             builder.reset_mock()
@@ -69,7 +71,9 @@ def main():
             assert "--test-filter requires --test" in diagnostic.getvalue()
             builder.assert_not_called()
         for arguments in (["--test-display", "--no-app"], ["--test", "--test-display"],
-                          ["--sanitizers", "--install", str(directory / "sdk")]):
+                          ["--sanitizers", "--install", str(directory / "sdk")],
+                          ["--fuzzer", "--test"], ["--fuzzer", "--test-display"],
+                          ["--fuzzer", "--benchmarks"], ["--fuzzer", "--install", str(directory / "sdk")]):
             builder.reset_mock()
             with patch.object(sys, "argv", common + arguments), contextlib.redirect_stderr(io.StringIO()):
                 try:

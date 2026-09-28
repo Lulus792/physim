@@ -610,6 +610,11 @@ Die Option betrifft den Repository-Build. Sie ergänzt keine Compileroptionen in
 Nutzerprojekten, die die App während eines Ablaufs baut. Ein portables SDK wird
 separat ohne `--sanitizers` erstellt; `--sanitizers --install` wird abgelehnt.
 
+Der optionale IPC-Fuzzer wird mit `python3 tools/build.py --fuzzer --compiler clang`
+ebenfalls direkt gebaut (Windows: `python` und `--compiler clang-cl`). Dieser
+getrennte Modus instrumentiert auch die Kernbibliothek und benötigt kein SDL.
+Aufruf, begrenzte Kampagne und Nachweisgrenzen stehen in [Fuzzing](fuzzing.md).
+
 ## Portables Paket
 
 Die Sprachvorlagen lassen sich mit dem vollständigen App-Test prüfen. Jeder Test

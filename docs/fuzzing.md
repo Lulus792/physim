@@ -10,45 +10,66 @@ oder Prozessnachrichten die App zum Absturz bringen.
 
 Physim hat zwei verschiedene Testwege:
 
-- Die drei normalen CTest-Ziele `protocol_mutations`, `run_mutations` und
+- Die drei normalen Tests `protocol_mutations`, `run_mutations` und
   `report_mutations` prüfen festgelegte, reproduzierbare Mutationen und
-  Invarianten. Dafür ist keine libFuzzer-Laufzeit nötig.
-- `PHYSIM_BUILD_FUZZERS=ON` ergänzt `physim-protocol-libfuzzer`. Clang instrumentiert
+  Invarianten. Sie laufen über den direkten Builder und weiterhin über CTest.
+  Dafür ist keine libFuzzer-Laufzeit nötig.
+- `tools/build.py --fuzzer` baut `physim-protocol-libfuzzer`. Clang instrumentiert
   den IPC-Decoder und eine separate Kopie der Kernbibliothek mit libFuzzer und
   AddressSanitizer. libFuzzer nutzt erreichte Codepfade, um weitere Eingaben zu
   erzeugen; AddressSanitizer sucht unter anderem ungültige Speicherzugriffe.
   Dieser optionale Weg betrifft derzeit IPC, nicht die beiden Dateileser.
 
-Das optionale Ziel ist in `CMakeLists.txt` implementiert, wird aber nicht automatisch
-als CTest-Langzeitkampagne gestartet. Es benötigt den `clang`-/`clang.exe`-Treiber;
-MSVC und `clang-cl` werden für dieses Ziel beim Konfigurieren abgewiesen.
+Der direkte Fuzzer-Build benötigt Python ab 3.10 und Clang einschließlich der
+libFuzzer-/Sanitizer-Laufzeiten. Er baut nur den IPC-Harness, seine Kernbibliothek
+und `physim-protocol-seeds` zum Erzeugen gültiger Snapshot- und Frame-Eingaben.
+SDL, CMake und Ninja sind dafür nicht erforderlich. Die Ausgaben liegen separat
+unter `build/native/Debug-fuzzer`; normale App-Builds werden nicht instrumentiert.
+Unter Windows verwendet dieser Weg `clang-cl`, unter Linux/macOS `clang`.
+MSVC und GCC werden für `--fuzzer` mit einer Diagnose abgewiesen.
 
-Beispiel für eine separate Clang-/Ninja-Buildumgebung (auf Windows aus einer
-für Visual Studio und LLVM eingerichteten Entwicklerkonsole):
+**Linux und macOS: bauen und eine begrenzte Kampagne prüfen**
 
-```text
-cmake -S . -B build-fuzz -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPHYSIM_BUILD_APP=OFF -DPHYSIM_BUILD_FUZZERS=ON
-cmake --build build-fuzz --target physim-protocol-libfuzzer
-cmake -E make_directory build-fuzz/corpus build-fuzz/artifacts
+```sh
+python3 tools/build.py --fuzzer --compiler clang
+python3 tests/test_native_fuzzer.py --bin build/native/Debug-fuzzer/bin --work build/native
 ```
 
-Unter Windows benötigt die erzeugte EXE außerdem die passende LLVM-ASan-DLL im
-Suchpfad. Danach lautet ein begrenzter Kampagnenaufruf unter Windows:
+**Windows, mit Visual Studio C++ Build Tools und LLVM/ClangCL:**
 
-```text
-build-fuzz/bin/physim-protocol-libfuzzer.exe build-fuzz/corpus -max_total_time=60 -max_len=8192 -artifact_prefix=build-fuzz/artifacts/
+```powershell
+python tools/build.py --fuzzer --compiler clang-cl
+python tests/test_native_fuzzer.py --bin build/native/Debug-fuzzer/bin --work build/native
 ```
 
-Unter Linux entfällt `.exe`. Funde werden als Corpus-/Artefaktdateien gespeichert
-und können dem Programm zur Reproduktion als einzelne Eingabedatei übergeben
-werden. Eine begrenzte Kampagne beweist keine allgemeine Fehlerfreiheit.
+Falls ClangCL nicht im Suchpfad liegt, bei `--compiler` den vollständigen Pfad
+zu `clang-cl.exe` angeben. Der Builder legt die passenden ASan-DLLs neben die EXE.
 
-**Lokaler Nachweisstand am 2026-09-20:** Die vorhandenen Protokolle in
-`build-libfuzzer-evidence/` zeigen einen erfolgreichen Build, aber einen
-Laufzeitstartfehler (`interception_win: unhandled instruction`) in der verwendeten
-Windows-ASan-Umgebung. Sie belegen keine erfolgreich ausgeführte libFuzzer-Kampagne.
-Ein kompatibler Sanitizer-/Toolchain-Lauf und eine abdeckungsgeführte Kampagne
-bleiben offen. Dies ist von den bestandenen deterministischen Tests zu trennen.
+Der Prüfer erstellt für jeden Lauf einen neuen Ordner unter
+`build/native/fuzzer run <Kennung>`. Er erzeugt beide gültigen Eingaben, spielt
+sie mit dem eigenständigen Harness und libFuzzer erneut ab und startet danach
+10.000 Durchläufe mit Seed 42. Ein Erfolg erfordert einen vollständigen Lauf,
+zusätzlich erreichte Codepfade und keine gespeicherten Fehlerfunde. Die maximale
+Eingabelänge von 8213 Bytes umfasst Nutzdaten, Frameheader und Decoderwahl.
+`results.json` enthält Programmsignaturen, Ausgangseingaben, Kommandos,
+Ausgaben, Exitcodes und Abdeckung. Corpus und mögliche Fehlerartefakte bleiben
+für die Reproduktion im selben Ordner erhalten.
+
+Für eine eigene längere Kampagne kann derselbe Corpus an
+`physim-protocol-libfuzzer` mit `-max_total_time=60 -max_len=8213` übergeben werden.
+`-artifact_prefix=<vorhandener-ordner>/` bestimmt den Speicherort von Fehlerfunden.
+Eine einzelne Eingabedatei statt des Corpus-Ordners wiederholt genau diesen Fall.
+Unter Windows hat das Programm die Endung `.exe`. Eine begrenzte Kampagne beweist
+keine allgemeine Fehlerfreiheit.
+
+**Lokaler Nachweisstand:** Der direkte Build besteht mit ClangCL 19.1.5. Der
+Laufzeitstart scheitert auf dem lokalen Windows-Rechner weiterhin mit
+`interception_win: unhandled instruction` in ASan, noch bevor der Harness läuft.
+`build/native-fuzzer-build.log`, `build/native-fuzzer-run.log` und der JSON-Bericht
+dokumentieren diesen Unterschied. Die neue CI führt den begrenzten Lauf mit
+Windows ClangCL, Linux Clang und Apple Clang auf beiden Mac-Architekturen aus;
+ihre Kampagnenergebnisse stehen noch aus. Der bisherige CMake-Einstieg
+`PHYSIM_BUILD_FUZZERS=ON` bleibt bis zum Abschluss des Vergleichs verfügbar.
 
 ## IPC-Mutationen
 

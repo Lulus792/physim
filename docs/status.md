@@ -40,6 +40,13 @@ Erweiterung auf allen Plattformen steht aus. Der direkte Grafikschritt zu
 einschließlich des UI-Benchmarks. CMake bleibt bis zum Abschluss der
 Sanitizer-/SDK-Vergleiche und der Übernahme der optionalen Fuzzer verfügbar.
 
+Auch der optionale IPC-libFuzzer hat jetzt einen direkten Buildmodus
+`--fuzzer`. Kernbibliothek und Harness erhalten Clangs Abdeckungsinstrumentierung
+und Sanitizer. Ein eigener Prüfer erzeugt gültige Eingaben, spielt sie erneut ab
+und verlangt bei 10.000 libFuzzer-Durchläufen zusätzliche Codeabdeckung.
+Der lokale ClangCL-Build besteht; der Laufzeitstart bleibt durch den bereits
+dokumentierten ASan-Fehler blockiert. Die neue Kampagnen-CI steht noch aus.
+
 Der direkte Builder kann nun außerdem ein SDK in einen neuen Ordner installieren.
 Es enthält die App, Werkzeuge, alle acht C-Beispielmodule, Analysemodul, öffentliche
 Header, Kernbibliothek, SDK-Quellen, Vorlagen, Dokumentation und Lizenzen. Windows
