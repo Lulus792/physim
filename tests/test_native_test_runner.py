@@ -249,6 +249,70 @@ def main():
         finally:
             runner.execute_case = execute
 
+    # Integration workflows combine language modules, C variants and verifiers.
+    # No dependent verifier may run after a failed build or missing artifact.
+    for scenario in ("success", "emission", "c_module", "verifier", "prebuilt", "runtime", "missing_output"):
+        integration_work = directory / ("integration_" + scenario)
+        integration_work.mkdir()
+        prebuilt = integration_work / ("runner.exe" if sys.platform == "win32" else "runner")
+        if scenario != "prebuilt":
+            prebuilt.write_bytes(b"prebuilt runner")
+        commands = []
+        builds = []
+        integration = dict(artifacts={
+            "module": dict(source="fixture.phys", mode="--emit-experiment"),
+            "reference": dict(sources=["reference.c"], libraries=["core"], module=True, defines=["PROBE=1"]),
+            "verifier": dict(sources=["verifier.c"], libraries=["core"]),
+            "runner": dict(prebuilt="runner")}, steps=[
+                dict(program="verifier", arguments=["{module}", "{reference}", "{work}/result.dat"],
+                     timeout=10, stdout_patterns=["verified"], files=["result.dat"]),
+                dict(program="runner", arguments=["{work}/result.dat"], timeout=10, stdout="finished\n")])
+
+        class IntegrationBuilder(LanguageBuilder):
+            def __init__(self):
+                self.directory = integration_work
+                self.bin = integration_work
+            def executable(self, name, sources, libraries, **options):
+                builds.append(name)
+                if name == "integration-reference":
+                    assert options["module"] and options["defines"] == ("PROBE=1",)
+                    if scenario == "c_module":
+                        raise RuntimeError("C reference build failed")
+                if name == "integration-verifier" and scenario == "verifier":
+                    # Existing output must never be run after a build fails.
+                    (integration_work / name).write_bytes(b"stale verifier")
+                    raise RuntimeError("Verifier build failed")
+                program = integration_work / name
+                program.write_bytes(b"built artifact")
+                return program
+
+        def integration_process(command, **options):
+            commands.append(command)
+            if "--emit-experiment" in command:
+                code = "raise SystemExit(1)" if scenario == "emission" else "print('generated module')"
+            elif Path(command[0]).name == "integration-verifier":
+                assert len(command) == 4 and "files ä" in command[-1]
+                code = "print('verified')"
+                if scenario == "runtime":
+                    code += "; raise SystemExit(7)"
+                elif scenario != "missing_output":
+                    code += "; from pathlib import Path; Path('result.dat').write_bytes(b'checked')"
+            else:
+                code = "from pathlib import Path; assert Path('result.dat').read_bytes() == b'checked'; print('finished')"
+            return execute([sys.executable, "-c", code], **options)
+
+        runner.execute_case = integration_process
+        try:
+            result = runner.language_case(runner.Case("integration", (), integration=integration),
+                                          IntegrationBuilder(), {"core": None}, source, integration_work)
+            assert result["status"] == ("passed" if scenario == "success" else "failed")
+            assert len(commands) == (3 if scenario == "success" else 2 if scenario in ("runtime", "missing_output") else 1)
+            if scenario == "success":
+                artifacts = [step for step in result["steps"] if "artifact" in step]
+                assert len(artifacts) == 4 and all(len(step["sha256"]) == 64 for step in artifacts)
+        finally:
+            runner.execute_case = execute
+
     # A failed build and failed test must not suppress later cases or leave a
     # success-only summary. Use real child processes for the executable cases.
     runner.catalog = lambda: [

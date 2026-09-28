@@ -37,6 +37,7 @@ class Case:
     language_workflow: dict | None = None
     language_native: dict | None = None
     language_probe: str | None = None
+    integration: dict | None = None
 
 
 def catalog():
@@ -121,6 +122,14 @@ def catalog():
             cases.append(Case("language_native_memory_" + ("leak" if leak else "clean") + ("_trap" if trap else ""),
                               ("tests/test_language_memory_balance.c",), libraries=(), defines=defines,
                               exit_code=99 if leak else 70 if trap else 0, stdout=""))
+    integrations = json.loads((Path(__file__).resolve().parent.parent / "tests/native_integration_cases.json").read_text(encoding="utf-8"))
+    if integrations.get("format") != 1 or not integrations["tests"]:
+        raise RuntimeError("Unsupported or empty integration test corpus")
+    for record in integrations["tests"]:
+        if not record["steps"] or not record["targets"]:
+            raise RuntimeError(f"Empty integration test: {record['name']}")
+        artifacts = {name: integrations["artifacts"][name] for name in record["targets"]}
+        cases.append(Case(record["name"], (), integration={**record, "artifacts": artifacts}))
     names = [case.name for case in cases]
     if len(set(names)) != len(names):
         raise RuntimeError("Duplicate native test names")
@@ -174,6 +183,48 @@ def prepare_native_fixture(record, source, work):
     for token, repeat in record.get("repeat_tokens", {}).items():
         content = content.replace(token, repeat["text"] * repeat["count"])
     return write_language_fixture(work, record["name"] + ".phys", content)
+
+
+def integration_steps(record, builder, libraries, source, work, steps):
+    """Build the exact modules and C verifiers before any dependent workflow runs."""
+    work = work / "files ä"
+    work.mkdir()
+    paths = {"work": str(work)}
+    for name, artifact in record["artifacts"].items():
+        if "prebuilt" in artifact:
+            suffix = ((".dll" if sys.platform == "win32" else ".so") if artifact.get("module")
+                      else ".exe" if sys.platform == "win32" else "")
+            program = builder.bin / (artifact["prebuilt"] + suffix)
+            if not program.is_file():
+                steps.append({"status": "build_failed", "reason": f"Missing integration artifact: {program}"})
+                return
+        elif "source" in artifact:
+            mode = artifact["mode"]
+            program = build_language_program("integration-" + name, source / artifact["source"], mode,
+                                             mode != "--emit-c", builder, [libraries["core"]], work, steps)
+            if program is None:
+                return
+        else:
+            try:
+                program = builder.executable("integration-" + name, artifact["sources"],
+                                             [libraries[key] for key in artifact["libraries"]],
+                                             defines=tuple(artifact.get("defines", ())), module=artifact.get("module", False))
+            except (OSError, RuntimeError) as error:
+                steps.append({"status": "build_failed", "reason": str(error)})
+                return
+        paths[name] = str(program)
+        steps.append({"status": "passed", "target": name, "artifact": str(program),
+                      "sha256": hashlib.sha256(program.read_bytes()).hexdigest()})
+    for step in record["steps"]:
+        command = [paths[step["program"]], *(arg.format_map(paths) for arg in step["arguments"])]
+        result = execute_case(command, work=work, env=builder.env, timeout=step["timeout"],
+                              exit_code=step.get("exit_code", 0), stdout=step.get("stdout"), stderr=step.get("stderr"),
+                              stderr_pattern=step.get("stderr_pattern"), stdout_patterns=step.get("stdout_patterns", ()))
+        if result["status"] == "passed":
+            result.update(check_workflow_outputs(step, work))
+        steps.append(result)
+        if result["status"] != "passed":
+            return
 
 
 def native_probe(case, builder, libraries, source, work, steps):
@@ -291,7 +342,9 @@ def language_case(case, builder, libraries, source, work):
     started = time.monotonic()
     compiler = builder.bin / ("physimc.exe" if sys.platform == "win32" else "physimc")
     steps = []
-    if case.language_probe:
+    if case.integration:
+        integration_steps(case.integration, builder, libraries, source, work, steps)
+    elif case.language_probe:
         native_probe(case, builder, [libraries[name] for name in case.libraries], source, work, steps)
     elif case.language_native:
         record = case.language_native
@@ -414,7 +467,7 @@ def run_suite(builder, libraries, source: Path, pattern="*"):
         work = directory / case.name
         work.mkdir()
         try:
-            if case.language_source or case.language_checks or case.language_workflow or case.language_native or case.language_probe:
+            if case.language_source or case.language_checks or case.language_workflow or case.language_native or case.language_probe or case.integration:
                 result = language_case(case, builder, libraries, source, work)
             else:
                 program = builder.executable("physim-test-" + case.name, list(case.sources),

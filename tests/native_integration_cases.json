@@ -1,0 +1,1517 @@
+{
+  "format": 1,
+  "artifacts": {
+    "physim-collision-language-parity-tests": {
+      "sources": [
+        "tests/test_collision_language_parity.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "physim-runner": {
+      "prebuilt": "physim-runner"
+    },
+    "collision": {
+      "prebuilt": "collision",
+      "module": true
+    },
+    "physim-language-collision": {
+      "source": "examples/language/collision.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-analysis-runner": {
+      "prebuilt": "physim-analysis-runner"
+    },
+    "pendulum_analysis": {
+      "prebuilt": "pendulum_analysis",
+      "module": true
+    },
+    "physim-language-collision-analysis": {
+      "source": "examples/language/analysis_collision.phys",
+      "mode": "--emit-analysis"
+    },
+    "collision_air": {
+      "sources": [
+        "examples/collision/main.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_COLLISION_MEDIUM=1"
+      ]
+    },
+    "collision_custom": {
+      "sources": [
+        "examples/collision/main.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_COLLISION_MEDIUM=3"
+      ]
+    },
+    "collision_friction": {
+      "sources": [
+        "examples/collision/main.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_COLLISION_FRICTION=0.3",
+        "PS_COLLISION_SPIN=1.0"
+      ]
+    },
+    "physim-box-collision-language-parity-tests": {
+      "sources": [
+        "tests/test_box_collision_language_parity.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "box_collision": {
+      "prebuilt": "box_collision",
+      "module": true
+    },
+    "physim-language-box-collision": {
+      "source": "examples/language/box_collision.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-box-collision-analysis": {
+      "source": "examples/language/analysis_box_collision.phys",
+      "mode": "--emit-analysis"
+    },
+    "box_collision_inelastic": {
+      "sources": [
+        "examples/box_collision/main.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_BOX_RESTITUTION=0.5"
+      ]
+    },
+    "box_collision_oblique": {
+      "sources": [
+        "examples/box_collision/main.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_BOX_ANGLE=0.35",
+        "PS_BOX_OFFSET=0.12",
+        "PS_BOX_RESTITUTION=0.6",
+        "PS_BOX_FRICTION=0.3"
+      ]
+    },
+    "physim-buoyancy-language-parity-tests": {
+      "sources": [
+        "tests/test_buoyancy_language_parity.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "buoyancy": {
+      "prebuilt": "buoyancy",
+      "module": true
+    },
+    "physim-language-buoyancy": {
+      "source": "examples/language/buoyancy.phys",
+      "mode": "--emit-experiment"
+    },
+    "buoyancy_analysis": {
+      "sources": [
+        "examples/buoyancy/analysis.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ]
+    },
+    "physim-language-buoyancy-analysis": {
+      "source": "examples/language/analysis_buoyancy.phys",
+      "mode": "--emit-analysis"
+    },
+    "physim-projectile-drag-parity-tests": {
+      "sources": [
+        "tests/test_projectile_drag_parity.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "projectile": {
+      "prebuilt": "projectile",
+      "module": true
+    },
+    "physim-language-projectile-drag": {
+      "source": "examples/language/projectile_drag.phys",
+      "mode": "--emit-experiment"
+    },
+    "documentation_drag_analysis": {
+      "sources": [
+        "examples/documentation/drag_analysis.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ]
+    },
+    "physim-language-drag-analysis": {
+      "source": "examples/documentation/drag_analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "physim-uncertain-projectile-parity-tests": {
+      "sources": [
+        "tests/test_uncertain_projectile_parity.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "uncertain_projectile": {
+      "prebuilt": "uncertain_projectile",
+      "module": true
+    },
+    "physim-language-uncertain-projectile": {
+      "source": "examples/language/uncertain_projectile.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-analysis-sensors": {
+      "source": "examples/language/analysis_sensors.phys",
+      "mode": "--emit-analysis"
+    },
+    "physim-language-report-tests": {
+      "sources": [
+        "tests/test_language_report.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "physim-language-analysis-selection": {
+      "source": "tests/fixtures/language/analysis_selection.phys",
+      "mode": "--emit-analysis"
+    },
+    "physim-language-analysis-selection-error": {
+      "source": "tests/fixtures/language/analysis_selection_error.phys",
+      "mode": "--emit-analysis"
+    },
+    "physim-language-analysis-tests": {
+      "sources": [
+        "tests/test_language_analysis.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "physim-language-analysis": {
+      "source": "examples/language/analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "physim-language-analysis-stale": {
+      "source": "tests/fixtures/language/analysis_stale.phys",
+      "mode": "--emit-analysis"
+    },
+    "physim-language-analysis-units": {
+      "source": "tests/fixtures/language/analysis_units.phys",
+      "mode": "--emit-analysis"
+    },
+    "physim-language-projectile": {
+      "source": "examples/language/projectile.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-analysis-reference": {
+      "source": "tests/fixtures/language/analysis_reference.phys",
+      "mode": "--emit-analysis"
+    },
+    "physim-language-analysis-operations-error": {
+      "source": "tests/fixtures/language/analysis_operations_error.phys",
+      "mode": "--emit-analysis"
+    },
+    "physim-language-analysis-monte-carlo": {
+      "source": "examples/language/analysis_monte_carlo.phys",
+      "mode": "--emit-analysis"
+    },
+    "physim-language-analysis-batch-endpoints": {
+      "source": "examples/language/analysis_batch_endpoints.phys",
+      "mode": "--emit-analysis"
+    },
+    "physim-language-sweep-tests": {
+      "sources": [
+        "tests/test_language_sweep.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "physim-language-sweep": {
+      "source": "examples/language/fast_sphere.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-sweep-error": {
+      "source": "tests/fixtures/language/sweep_error.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-graph-tests": {
+      "sources": [
+        "tests/test_language_graph.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "physim-language-graph": {
+      "source": "examples/language/coupled_bodies.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-graph-error": {
+      "source": "tests/fixtures/language/graph_error.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-joint-tests": {
+      "sources": [
+        "tests/test_language_joint.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "physim-language-joint": {
+      "source": "examples/language/joint_pendulum.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-joint-error": {
+      "source": "tests/fixtures/language/joint_error.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-contact-tests": {
+      "sources": [
+        "tests/test_language_contact.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "physim-language-contact": {
+      "source": "examples/language/box_contacts.phys",
+      "mode": "--emit-experiment"
+    },
+    "box_floor": {
+      "prebuilt": "box_floor",
+      "module": true
+    },
+    "physim-language-contact-error": {
+      "source": "tests/fixtures/language/contact_error.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-body-tests": {
+      "sources": [
+        "tests/test_language_body.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "physim-language-body": {
+      "source": "examples/language/spinning_body.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-body-error": {
+      "source": "tests/fixtures/language/body_error.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-sensor-tests": {
+      "sources": [
+        "tests/test_language_sensor.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "physim-language-sensors": {
+      "source": "examples/language/sensors.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-sensor-error": {
+      "source": "tests/fixtures/language/sensor_error.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-experiment-tests": {
+      "sources": [
+        "tests/test_language_experiment.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "physim-language-pendulum": {
+      "source": "examples/language/pendulum.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-pendulum-reference": {
+      "sources": [
+        "examples/pendulum/main.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_PENDULUM_METHOD=PS_SYMPLECTIC"
+      ]
+    },
+    "physim-language-error": {
+      "source": "tests/fixtures/language/experiment_error.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-scene_error": {
+      "source": "tests/fixtures/language/experiment_scene_error.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-create_error": {
+      "source": "tests/fixtures/language/experiment_create_error.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-random": {
+      "source": "examples/language/random_samples.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-random-error": {
+      "source": "tests/fixtures/language/random_error.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-random-create-error": {
+      "source": "tests/fixtures/language/random_create_error.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-scene-shapes": {
+      "source": "examples/language/scene_shapes.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-scene-shapes-error": {
+      "source": "tests/fixtures/language/scene_shapes_error.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-spring": {
+      "source": "examples/language/spring.phys",
+      "mode": "--emit-experiment"
+    },
+    "spring": {
+      "prebuilt": "spring",
+      "module": true
+    },
+    "physim-language-polyline-empty": {
+      "source": "tests/fixtures/language/polyline_empty.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-rng-run-streams": {
+      "source": "examples/language/rng_run_streams.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-pendulum-rk4": {
+      "source": "examples/language/pendulum_rk4.phys",
+      "mode": "--emit-experiment"
+    },
+    "pendulum": {
+      "prebuilt": "pendulum",
+      "module": true
+    },
+    "physim-language-pendulum-integrator": {
+      "source": "examples/language/pendulum_integrator.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-pendulum-rk45": {
+      "source": "examples/language/pendulum_rk45.phys",
+      "mode": "--emit-experiment"
+    },
+    "pendulum_rk45": {
+      "sources": [
+        "examples/pendulum/main.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_PENDULUM_METHOD=PS_RK45"
+      ]
+    },
+    "physim-language-pendulum-verlet": {
+      "source": "examples/language/pendulum_verlet.phys",
+      "mode": "--emit-experiment"
+    },
+    "pendulum_verlet": {
+      "sources": [
+        "examples/pendulum/main.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_PENDULUM_METHOD=PS_VERLET"
+      ]
+    },
+    "physim-language-matrix-values": {
+      "source": "examples/language/coordinate_frames.phys",
+      "mode": "--emit-c"
+    },
+    "physim-language-optional-values": {
+      "source": "examples/language/optional_values.phys",
+      "mode": "--emit-c"
+    },
+    "physim-language-rng-streams": {
+      "source": "examples/language/rng_streams.phys",
+      "mode": "--emit-c"
+    },
+    "physim-language-bindings": {
+      "source": "examples/language/optional_bindings.phys",
+      "mode": "--emit-c"
+    },
+    "physim-language-sweep-values": {
+      "source": "examples/language/sweeps.phys",
+      "mode": "--emit-c"
+    },
+    "physim-language-graph-values": {
+      "source": "examples/language/constraint_graph.phys",
+      "mode": "--emit-c"
+    },
+    "physim-language-joint-values": {
+      "source": "examples/language/distance_joints.phys",
+      "mode": "--emit-c"
+    },
+    "physim-language-contact-values": {
+      "source": "examples/language/contacts.phys",
+      "mode": "--emit-c"
+    },
+    "physim-language-body-values": {
+      "source": "examples/language/rigid_body.phys",
+      "mode": "--emit-c"
+    },
+    "physim-language-parameters": {
+      "source": "tests/fixtures/language/parameter_experiment.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-parameter-pair": {
+      "source": "tests/fixtures/language/parameter_pair.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-language-parameter-tests": {
+      "sources": [
+        "tests/test_language_parameters.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "physim-parameter-sweep-tests": {
+      "sources": [
+        "tests/test_parameter_sweep.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "physim-batch": {
+      "prebuilt": "physim-batch"
+    }
+  },
+  "tests": [
+    {
+      "name": "language_collision_parity",
+      "targets": [
+        "physim-collision-language-parity-tests",
+        "physim-runner",
+        "collision",
+        "physim-language-collision",
+        "physim-analysis-runner",
+        "pendulum_analysis",
+        "physim-language-collision-analysis",
+        "collision_air",
+        "collision_custom",
+        "collision_friction"
+      ],
+      "steps": [
+        {
+          "program": "physim-collision-language-parity-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{collision}",
+            "{physim-language-collision}",
+            "{physim-analysis-runner}",
+            "{pendulum_analysis}",
+            "{physim-language-collision-analysis}",
+            "{collision_air}",
+            "{collision_custom}",
+            "{collision_friction}",
+            "{work}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "language_box_collision_parity",
+      "targets": [
+        "physim-box-collision-language-parity-tests",
+        "physim-runner",
+        "box_collision",
+        "physim-language-box-collision",
+        "physim-analysis-runner",
+        "physim-language-box-collision-analysis",
+        "box_collision_inelastic",
+        "box_collision_oblique"
+      ],
+      "steps": [
+        {
+          "program": "physim-box-collision-language-parity-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{box_collision}",
+            "{physim-language-box-collision}",
+            "{physim-analysis-runner}",
+            "{physim-language-box-collision-analysis}",
+            "{box_collision_inelastic}",
+            "{box_collision_oblique}",
+            "{work}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "language_buoyancy_parity",
+      "targets": [
+        "physim-buoyancy-language-parity-tests",
+        "physim-runner",
+        "buoyancy",
+        "physim-language-buoyancy",
+        "physim-analysis-runner",
+        "buoyancy_analysis",
+        "physim-language-buoyancy-analysis"
+      ],
+      "steps": [
+        {
+          "program": "physim-buoyancy-language-parity-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{buoyancy}",
+            "{physim-language-buoyancy}",
+            "{physim-analysis-runner}",
+            "{buoyancy_analysis}",
+            "{physim-language-buoyancy-analysis}",
+            "{work}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "language_projectile_drag_parity",
+      "targets": [
+        "physim-projectile-drag-parity-tests",
+        "physim-runner",
+        "projectile",
+        "physim-language-projectile-drag",
+        "documentation_drag_analysis",
+        "physim-language-drag-analysis"
+      ],
+      "steps": [
+        {
+          "program": "physim-projectile-drag-parity-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{projectile}",
+            "{physim-language-projectile-drag}",
+            "{documentation_drag_analysis}",
+            "{physim-language-drag-analysis}",
+            "{work}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "language_uncertain_projectile_parity",
+      "targets": [
+        "physim-uncertain-projectile-parity-tests",
+        "physim-runner",
+        "uncertain_projectile",
+        "physim-language-uncertain-projectile",
+        "pendulum_analysis",
+        "physim-language-analysis-sensors"
+      ],
+      "steps": [
+        {
+          "program": "physim-uncertain-projectile-parity-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{uncertain_projectile}",
+            "{physim-language-uncertain-projectile}",
+            "{work}",
+            "{pendulum_analysis}",
+            "{physim-language-analysis-sensors}"
+          ],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "language_report",
+      "targets": [
+        "physim-language-report-tests",
+        "physim-language-analysis-selection",
+        "physim-language-analysis-selection-error",
+        "physim-language-analysis-sensors"
+      ],
+      "steps": [
+        {
+          "program": "physim-language-report-tests",
+          "arguments": [
+            "{physim-language-analysis-selection}",
+            "{physim-language-analysis-selection-error}",
+            "{physim-language-analysis-sensors}",
+            "{work}"
+          ],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "language_analysis",
+      "targets": [
+        "physim-language-analysis-tests",
+        "physim-language-analysis",
+        "physim-language-analysis-stale",
+        "physim-language-analysis-units",
+        "physim-analysis-runner",
+        "physim-runner",
+        "physim-language-projectile",
+        "physim-language-analysis-reference",
+        "physim-language-analysis-operations-error",
+        "physim-language-analysis-monte-carlo",
+        "physim-language-analysis-batch-endpoints"
+      ],
+      "steps": [
+        {
+          "program": "physim-language-analysis-tests",
+          "arguments": [
+            "{physim-language-analysis}",
+            "{physim-language-analysis-stale}",
+            "{physim-language-analysis-units}",
+            "{physim-analysis-runner}",
+            "{physim-runner}",
+            "{physim-language-projectile}",
+            "{work}",
+            "{physim-language-analysis-reference}",
+            "{physim-language-analysis-operations-error}",
+            "{physim-language-analysis-monte-carlo}",
+            "{physim-language-analysis-batch-endpoints}"
+          ],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "language_sweep",
+      "targets": [
+        "physim-language-sweep-tests",
+        "physim-language-sweep",
+        "physim-language-sweep-error",
+        "physim-runner"
+      ],
+      "steps": [
+        {
+          "program": "physim-language-sweep-tests",
+          "arguments": [
+            "{physim-language-sweep}",
+            "{physim-language-sweep-error}",
+            "{physim-runner}",
+            "{work}"
+          ],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "language_graph",
+      "targets": [
+        "physim-language-graph-tests",
+        "physim-language-graph",
+        "physim-language-graph-error",
+        "physim-runner"
+      ],
+      "steps": [
+        {
+          "program": "physim-language-graph-tests",
+          "arguments": [
+            "{physim-language-graph}",
+            "{physim-language-graph-error}",
+            "{physim-runner}",
+            "{work}"
+          ],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "language_joint",
+      "targets": [
+        "physim-language-joint-tests",
+        "physim-language-joint",
+        "physim-language-joint-error",
+        "physim-runner"
+      ],
+      "steps": [
+        {
+          "program": "physim-language-joint-tests",
+          "arguments": [
+            "{physim-language-joint}",
+            "{physim-language-joint-error}",
+            "{physim-runner}",
+            "{work}"
+          ],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "language_contact",
+      "targets": [
+        "physim-language-contact-tests",
+        "physim-language-contact",
+        "box_floor",
+        "physim-language-contact-error",
+        "physim-runner"
+      ],
+      "steps": [
+        {
+          "program": "physim-language-contact-tests",
+          "arguments": [
+            "{physim-language-contact}",
+            "{box_floor}",
+            "{physim-language-contact-error}",
+            "{physim-runner}",
+            "{work}"
+          ],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "language_body",
+      "targets": [
+        "physim-language-body-tests",
+        "physim-language-body",
+        "physim-language-body-error",
+        "physim-runner"
+      ],
+      "steps": [
+        {
+          "program": "physim-language-body-tests",
+          "arguments": [
+            "{physim-language-body}",
+            "{physim-language-body-error}",
+            "{physim-runner}",
+            "{work}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "language_sensor",
+      "targets": [
+        "physim-language-sensor-tests",
+        "physim-language-sensors",
+        "physim-language-sensor-error",
+        "physim-runner"
+      ],
+      "steps": [
+        {
+          "program": "physim-language-sensor-tests",
+          "arguments": [
+            "{physim-language-sensors}",
+            "{physim-language-sensor-error}",
+            "{physim-runner}",
+            "{work}"
+          ],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "language_experiment",
+      "targets": [
+        "physim-language-experiment-tests",
+        "physim-language-pendulum",
+        "physim-language-pendulum-reference",
+        "physim-language-projectile",
+        "physim-language-error",
+        "physim-language-scene_error",
+        "physim-language-create_error",
+        "physim-runner",
+        "physim-language-random",
+        "physim-language-random-error",
+        "physim-language-random-create-error",
+        "physim-language-scene-shapes",
+        "physim-language-scene-shapes-error",
+        "physim-language-spring",
+        "spring",
+        "physim-language-polyline-empty",
+        "physim-language-rng-run-streams",
+        "physim-language-pendulum-rk4",
+        "pendulum",
+        "physim-language-pendulum-integrator",
+        "physim-language-pendulum-rk45",
+        "pendulum_rk45",
+        "physim-language-pendulum-verlet",
+        "pendulum_verlet"
+      ],
+      "steps": [
+        {
+          "program": "physim-language-experiment-tests",
+          "arguments": [
+            "{physim-language-pendulum}",
+            "{physim-language-pendulum-reference}",
+            "{physim-language-projectile}",
+            "{physim-language-error}",
+            "{physim-language-scene_error}",
+            "{physim-language-create_error}",
+            "{physim-runner}",
+            "{work}",
+            "{physim-language-random}",
+            "{physim-language-random-error}",
+            "{physim-language-random-create-error}",
+            "{physim-language-scene-shapes}",
+            "{physim-language-scene-shapes-error}",
+            "{physim-language-spring}",
+            "{spring}",
+            "{physim-language-polyline-empty}",
+            "{physim-language-rng-run-streams}",
+            "{physim-language-pendulum-rk4}",
+            "{pendulum}",
+            "{physim-language-pendulum-integrator}",
+            "{physim-language-pendulum-rk45}",
+            "{pendulum_rk45}",
+            "{physim-language-pendulum-verlet}",
+            "{pendulum_verlet}"
+          ],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "language_matrix_values",
+      "targets": [
+        "physim-language-matrix-values"
+      ],
+      "steps": [
+        {
+          "program": "physim-language-matrix-values",
+          "arguments": [],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "language_optional_values",
+      "targets": [
+        "physim-language-optional-values"
+      ],
+      "steps": [
+        {
+          "program": "physim-language-optional-values",
+          "arguments": [],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "language_rng_streams",
+      "targets": [
+        "physim-language-rng-streams"
+      ],
+      "steps": [
+        {
+          "program": "physim-language-rng-streams",
+          "arguments": [],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "language_bindings",
+      "targets": [
+        "physim-language-bindings"
+      ],
+      "steps": [
+        {
+          "program": "physim-language-bindings",
+          "arguments": [],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "language_sweep_values",
+      "targets": [
+        "physim-language-sweep-values"
+      ],
+      "steps": [
+        {
+          "program": "physim-language-sweep-values",
+          "arguments": [],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "language_graph_values",
+      "targets": [
+        "physim-language-graph-values"
+      ],
+      "steps": [
+        {
+          "program": "physim-language-graph-values",
+          "arguments": [],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "language_joint_values",
+      "targets": [
+        "physim-language-joint-values"
+      ],
+      "steps": [
+        {
+          "program": "physim-language-joint-values",
+          "arguments": [],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "language_contact_values",
+      "targets": [
+        "physim-language-contact-values"
+      ],
+      "steps": [
+        {
+          "program": "physim-language-contact-values",
+          "arguments": [],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "language_body_values",
+      "targets": [
+        "physim-language-body-values"
+      ],
+      "steps": [
+        {
+          "program": "physim-language-body-values",
+          "arguments": [],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "language_parameters",
+      "targets": [
+        "physim-language-parameters",
+        "physim-runner",
+        "physim-language-parameter-tests"
+      ],
+      "steps": [
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{physim-language-parameters}",
+            "--describe"
+          ],
+          "timeout": 20,
+          "stdout_patterns": [
+            "PHYSIM_PARAMETERS_1\n1\ninitialSpeed\t2\t-10\t10\tInitial speed\n"
+          ]
+        },
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{physim-language-parameters}",
+            "{work}/parameter-2.psrun",
+            "--steps",
+            "1",
+            "--dt",
+            "0.005"
+          ],
+          "timeout": 20,
+          "stdout_patterns": [
+            "2 samples written"
+          ],
+          "files": [
+            "parameter-2.psrun"
+          ]
+        },
+        {
+          "program": "physim-language-parameter-tests",
+          "arguments": [
+            "{work}/parameter-2.psrun",
+            "2"
+          ],
+          "timeout": 20
+        },
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{physim-language-parameters}",
+            "{work}/parameter-4.5.psrun",
+            "--steps",
+            "1",
+            "--dt",
+            "0.005",
+            "--param",
+            "initialSpeed=4.5"
+          ],
+          "timeout": 20,
+          "stdout_patterns": [
+            "2 samples written"
+          ],
+          "files": [
+            "parameter-4.5.psrun"
+          ]
+        },
+        {
+          "program": "physim-language-parameter-tests",
+          "arguments": [
+            "{work}/parameter-4.5.psrun",
+            "4.5"
+          ],
+          "timeout": 20
+        },
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{physim-language-parameters}",
+            "{work}/invalid-0.psrun",
+            "--steps",
+            "1",
+            "--param",
+            "missing=1"
+          ],
+          "timeout": 20,
+          "exit_code": 5,
+          "absent_files": [
+            "invalid-0.psrun"
+          ]
+        },
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{physim-language-parameters}",
+            "{work}/invalid-1.psrun",
+            "--steps",
+            "1",
+            "--param",
+            "initialSpeed=11"
+          ],
+          "timeout": 20,
+          "exit_code": 5,
+          "absent_files": [
+            "invalid-1.psrun"
+          ]
+        },
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{physim-language-parameters}",
+            "{work}/invalid-2.psrun",
+            "--steps",
+            "1",
+            "--param",
+            "initialSpeed=nan"
+          ],
+          "timeout": 20,
+          "exit_code": 2,
+          "absent_files": [
+            "invalid-2.psrun"
+          ]
+        },
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{physim-language-parameters}",
+            "{work}/invalid-3.psrun",
+            "--steps",
+            "1",
+            "--param",
+            "1bad=3"
+          ],
+          "timeout": 20,
+          "exit_code": 2,
+          "absent_files": [
+            "invalid-3.psrun"
+          ]
+        },
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{physim-language-parameters}",
+            "{work}/invalid-4.psrun",
+            "--steps",
+            "1",
+            "--param",
+            "initialSpeed=3",
+            "--param",
+            "initialSpeed=4"
+          ],
+          "timeout": 20,
+          "exit_code": 2,
+          "absent_files": [
+            "invalid-4.psrun"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "language_parameter_sweep",
+      "targets": [
+        "physim-batch",
+        "physim-runner",
+        "physim-language-parameters",
+        "physim-parameter-sweep-tests"
+      ],
+      "steps": [
+        {
+          "program": "physim-batch",
+          "arguments": [
+            "{physim-runner}",
+            "{physim-language-parameters}",
+            "{work}/study",
+            "speed",
+            "3",
+            "1",
+            "0.005",
+            "42",
+            "--workers",
+            "2",
+            "--sweep",
+            "initialSpeed=1:4"
+          ],
+          "timeout": 30,
+          "files": [
+            "study/endpoints.csv",
+            "study/summary.psreport"
+          ]
+        },
+        {
+          "program": "physim-parameter-sweep-tests",
+          "arguments": [
+            "{work}/study"
+          ],
+          "timeout": 20
+        },
+        {
+          "program": "physim-batch",
+          "arguments": [
+            "{physim-runner}",
+            "{physim-language-parameters}",
+            "{work}/rejected-0",
+            "speed",
+            "3",
+            "1",
+            "0.005",
+            "42",
+            "--sweep",
+            "initialSpeed=1:1"
+          ],
+          "timeout": 20,
+          "exit_code": 2,
+          "absent_files": [
+            "rejected-0"
+          ]
+        },
+        {
+          "program": "physim-batch",
+          "arguments": [
+            "{physim-runner}",
+            "{physim-language-parameters}",
+            "{work}/rejected-1",
+            "speed",
+            "3",
+            "1",
+            "0.005",
+            "42",
+            "--sweep",
+            "initialSpeed=nan:3"
+          ],
+          "timeout": 20,
+          "exit_code": 2,
+          "absent_files": [
+            "rejected-1"
+          ]
+        },
+        {
+          "program": "physim-batch",
+          "arguments": [
+            "{physim-runner}",
+            "{physim-language-parameters}",
+            "{work}/rejected-2",
+            "speed",
+            "3",
+            "1",
+            "0.005",
+            "42",
+            "--sweep",
+            "bad.name=1:"
+          ],
+          "timeout": 20,
+          "exit_code": 2,
+          "absent_files": [
+            "rejected-2"
+          ]
+        },
+        {
+          "program": "physim-batch",
+          "arguments": [
+            "{physim-runner}",
+            "{physim-language-parameters}",
+            "{work}/rejected-3",
+            "speed",
+            "3",
+            "1",
+            "0.005",
+            "42",
+            "--sweep",
+            "9bad=1:3"
+          ],
+          "timeout": 20,
+          "exit_code": 2,
+          "absent_files": [
+            "rejected-3"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "language_parameter_sweep_fixed",
+      "targets": [
+        "physim-batch",
+        "physim-runner",
+        "physim-language-parameter-pair",
+        "physim-parameter-sweep-tests"
+      ],
+      "steps": [
+        {
+          "program": "physim-batch",
+          "arguments": [
+            "{physim-runner}",
+            "{physim-language-parameter-pair}",
+            "{work}/fixed-rejected-0",
+            "speed",
+            "3",
+            "1",
+            "0.005",
+            "42",
+            "--sweep",
+            "initialSpeed=1:4",
+            "--param",
+            "gain=nan"
+          ],
+          "timeout": 20,
+          "exit_code": 2,
+          "absent_files": [
+            "fixed-rejected-0"
+          ]
+        },
+        {
+          "program": "physim-batch",
+          "arguments": [
+            "{physim-runner}",
+            "{physim-language-parameter-pair}",
+            "{work}/fixed-rejected-1",
+            "speed",
+            "3",
+            "1",
+            "0.005",
+            "42",
+            "--sweep",
+            "initialSpeed=1:4",
+            "--param",
+            "gain=2",
+            "--param",
+            "gain=3"
+          ],
+          "timeout": 20,
+          "exit_code": 2,
+          "absent_files": [
+            "fixed-rejected-1"
+          ]
+        },
+        {
+          "program": "physim-batch",
+          "arguments": [
+            "{physim-runner}",
+            "{physim-language-parameter-pair}",
+            "{work}/fixed-rejected-2",
+            "speed",
+            "3",
+            "1",
+            "0.005",
+            "42",
+            "--sweep",
+            "initialSpeed=1:4",
+            "--param",
+            "initialSpeed=2"
+          ],
+          "timeout": 20,
+          "exit_code": 2,
+          "absent_files": [
+            "fixed-rejected-2"
+          ]
+        },
+        {
+          "program": "physim-batch",
+          "arguments": [
+            "{physim-runner}",
+            "{physim-language-parameter-pair}",
+            "{work}/study",
+            "speed",
+            "3",
+            "1",
+            "0.005",
+            "42",
+            "--workers",
+            "2",
+            "--sweep",
+            "initialSpeed=1:4",
+            "--param",
+            "gain=2"
+          ],
+          "timeout": 30,
+          "files": [
+            "study/endpoints.csv",
+            "study/summary.psreport"
+          ]
+        },
+        {
+          "program": "physim-parameter-sweep-tests",
+          "arguments": [
+            "{work}/study",
+            "2"
+          ],
+          "timeout": 20
+        },
+        {
+          "program": "physim-batch",
+          "arguments": [
+            "{physim-runner}",
+            "{physim-language-parameter-pair}",
+            "{work}/rejected-0",
+            "speed",
+            "3",
+            "1",
+            "0.005",
+            "42",
+            "--sweep",
+            "initialSpeed=1:1"
+          ],
+          "timeout": 20,
+          "exit_code": 2,
+          "absent_files": [
+            "rejected-0"
+          ]
+        },
+        {
+          "program": "physim-batch",
+          "arguments": [
+            "{physim-runner}",
+            "{physim-language-parameter-pair}",
+            "{work}/rejected-1",
+            "speed",
+            "3",
+            "1",
+            "0.005",
+            "42",
+            "--sweep",
+            "initialSpeed=nan:3"
+          ],
+          "timeout": 20,
+          "exit_code": 2,
+          "absent_files": [
+            "rejected-1"
+          ]
+        },
+        {
+          "program": "physim-batch",
+          "arguments": [
+            "{physim-runner}",
+            "{physim-language-parameter-pair}",
+            "{work}/rejected-2",
+            "speed",
+            "3",
+            "1",
+            "0.005",
+            "42",
+            "--sweep",
+            "bad.name=1:"
+          ],
+          "timeout": 20,
+          "exit_code": 2,
+          "absent_files": [
+            "rejected-2"
+          ]
+        },
+        {
+          "program": "physim-batch",
+          "arguments": [
+            "{physim-runner}",
+            "{physim-language-parameter-pair}",
+            "{work}/rejected-3",
+            "speed",
+            "3",
+            "1",
+            "0.005",
+            "42",
+            "--sweep",
+            "9bad=1:3"
+          ],
+          "timeout": 20,
+          "exit_code": 2,
+          "absent_files": [
+            "rejected-3"
+          ]
+        }
+      ]
+    }
+  ]
+}

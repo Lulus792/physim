@@ -172,26 +172,12 @@ target_link_libraries(physim-collision-language-parity-tests PRIVATE physim_core
 ps_warnings(physim-collision-language-parity-tests)
 add_dependencies(physim-collision-language-parity-tests collision physim-language-collision
   pendulum_analysis physim-language-collision-analysis physim-runner physim-analysis-runner)
-add_test(NAME language_collision_parity COMMAND physim-collision-language-parity-tests
-  $<TARGET_FILE:physim-runner> $<TARGET_FILE:collision>
-  $<TARGET_FILE:physim-language-collision> $<TARGET_FILE:physim-analysis-runner>
-  $<TARGET_FILE:pendulum_analysis> $<TARGET_FILE:physim-language-collision-analysis>
-  $<TARGET_FILE:collision_air> $<TARGET_FILE:collision_custom> $<TARGET_FILE:collision_friction>
-  ${CMAKE_BINARY_DIR})
-set_tests_properties(language_collision_parity PROPERTIES TIMEOUT 60)
 add_executable(physim-box-collision-language-parity-tests tests/test_box_collision_language_parity.c)
 target_link_libraries(physim-box-collision-language-parity-tests PRIVATE physim_core physim_platform)
 ps_warnings(physim-box-collision-language-parity-tests)
 add_dependencies(physim-box-collision-language-parity-tests box_collision box_collision_inelastic
   box_collision_oblique physim-language-box-collision physim-language-box-collision-analysis
   physim-runner physim-analysis-runner)
-add_test(NAME language_box_collision_parity COMMAND physim-box-collision-language-parity-tests
-  $<TARGET_FILE:physim-runner> $<TARGET_FILE:box_collision>
-  $<TARGET_FILE:physim-language-box-collision> $<TARGET_FILE:physim-analysis-runner>
-  $<TARGET_FILE:physim-language-box-collision-analysis>
-  $<TARGET_FILE:box_collision_inelastic> $<TARGET_FILE:box_collision_oblique>
-  ${CMAKE_BINARY_DIR})
-set_tests_properties(language_box_collision_parity PROPERTIES TIMEOUT 60)
 physim_add_experiment(physim-language-buoyancy examples/language/buoyancy.phys)
 physim_add_analysis(physim-language-buoyancy-analysis examples/language/analysis_buoyancy.phys)
 add_library(buoyancy_analysis MODULE examples/buoyancy/analysis.c)
@@ -203,12 +189,6 @@ target_link_libraries(physim-buoyancy-language-parity-tests PRIVATE physim_core 
 ps_warnings(physim-buoyancy-language-parity-tests)
 add_dependencies(physim-buoyancy-language-parity-tests buoyancy physim-language-buoyancy
   buoyancy_analysis physim-language-buoyancy-analysis physim-runner physim-analysis-runner)
-add_test(NAME language_buoyancy_parity COMMAND physim-buoyancy-language-parity-tests
-  $<TARGET_FILE:physim-runner> $<TARGET_FILE:buoyancy>
-  $<TARGET_FILE:physim-language-buoyancy> $<TARGET_FILE:physim-analysis-runner>
-  $<TARGET_FILE:buoyancy_analysis>
-  $<TARGET_FILE:physim-language-buoyancy-analysis> ${CMAKE_BINARY_DIR})
-set_tests_properties(language_buoyancy_parity PROPERTIES TIMEOUT 60)
 physim_add_analysis(physim-language-drag-analysis examples/documentation/drag_analysis.phys)
 add_library(documentation_drag_analysis MODULE examples/documentation/drag_analysis.c)
 target_link_libraries(documentation_drag_analysis PRIVATE physim_core)
@@ -219,10 +199,6 @@ target_link_libraries(physim-projectile-drag-parity-tests PRIVATE physim_core ph
 ps_warnings(physim-projectile-drag-parity-tests)
 add_dependencies(physim-projectile-drag-parity-tests projectile physim-language-projectile-drag
   documentation_drag_analysis physim-language-drag-analysis physim-runner)
-add_test(NAME language_projectile_drag_parity COMMAND physim-projectile-drag-parity-tests
-  $<TARGET_FILE:physim-runner> $<TARGET_FILE:projectile>
-  $<TARGET_FILE:physim-language-projectile-drag> $<TARGET_FILE:documentation_drag_analysis>
-  $<TARGET_FILE:physim-language-drag-analysis> ${CMAKE_BINARY_DIR})
 physim_add_analysis(physim-language-analysis examples/language/analysis.phys)
 physim_add_analysis(physim-language-analysis-monte-carlo examples/language/analysis_monte_carlo.phys)
 physim_add_analysis(physim-language-analysis-batch-endpoints examples/language/analysis_batch_endpoints.phys)
@@ -275,10 +251,6 @@ target_link_libraries(physim-language-report-tests PRIVATE physim_platform)
 ps_warnings(physim-language-report-tests)
 add_dependencies(physim-language-report-tests physim-language-analysis-selection
   physim-language-analysis-selection-error physim-language-analysis-sensors)
-add_test(NAME language_report COMMAND physim-language-report-tests
-  $<TARGET_FILE:physim-language-analysis-selection> $<TARGET_FILE:physim-language-analysis-selection-error>
-  $<TARGET_FILE:physim-language-analysis-sensors> "${CMAKE_BINARY_DIR}")
-set_tests_properties(language_report PROPERTIES TIMEOUT 90)
 add_executable(physim-language-analysis-tests tests/test_language_analysis.c)
 target_link_libraries(physim-language-analysis-tests PRIVATE physim_platform)
 ps_warnings(physim-language-analysis-tests)
@@ -287,14 +259,6 @@ add_dependencies(physim-language-analysis-tests physim-language-analysis
   physim-language-analysis-batch-endpoints
   physim-language-analysis-stale physim-language-analysis-units physim-language-projectile
   physim-runner physim-analysis-runner physim-language-analysis-reference physim-language-analysis-operations-error)
-add_test(NAME language_analysis COMMAND physim-language-analysis-tests
-  $<TARGET_FILE:physim-language-analysis> $<TARGET_FILE:physim-language-analysis-stale>
-  $<TARGET_FILE:physim-language-analysis-units> $<TARGET_FILE:physim-analysis-runner>
-  $<TARGET_FILE:physim-runner> $<TARGET_FILE:physim-language-projectile> "${CMAKE_BINARY_DIR}"
-  $<TARGET_FILE:physim-language-analysis-reference> $<TARGET_FILE:physim-language-analysis-operations-error>
-  $<TARGET_FILE:physim-language-analysis-monte-carlo>
-  $<TARGET_FILE:physim-language-analysis-batch-endpoints>)
-set_tests_properties(language_analysis PROPERTIES TIMEOUT 90)
 foreach(fault error scene_error create_error)
   physim_add_experiment(physim-language-${fault} tests/fixtures/language/experiment_${fault}.phys)
 endforeach()
@@ -309,32 +273,11 @@ target_link_libraries(physim-parameter-tests PRIVATE physim_core)
 ps_warnings(physim-parameter-tests)
 add_test(NAME parameters_api COMMAND physim-parameter-tests)
 add_dependencies(physim-language-parameter-tests physim-language-parameters physim-runner)
-add_test(NAME language_parameters COMMAND ${CMAKE_COMMAND}
-  -DEXPERIMENT=$<TARGET_FILE:physim-language-parameters>
-  -DRUNNER=$<TARGET_FILE:physim-runner>
-  -DVERIFY=$<TARGET_FILE:physim-language-parameter-tests>
-  -DWORK=${CMAKE_BINARY_DIR}/language-parameters
-  -P ${CMAKE_SOURCE_DIR}/tests/check_language_parameters.cmake)
 add_executable(physim-parameter-sweep-tests tests/test_parameter_sweep.c)
 target_link_libraries(physim-parameter-sweep-tests PRIVATE physim_core)
 ps_warnings(physim-parameter-sweep-tests)
 add_dependencies(physim-parameter-sweep-tests physim-language-parameters
   physim-language-parameter-pair physim-batch)
-add_test(NAME language_parameter_sweep COMMAND ${CMAKE_COMMAND}
-  -DBATCH=$<TARGET_FILE:physim-batch>
-  -DRUNNER=$<TARGET_FILE:physim-runner>
-  -DEXPERIMENT=$<TARGET_FILE:physim-language-parameters>
-  -DVERIFY=$<TARGET_FILE:physim-parameter-sweep-tests>
-  -DWORK=${CMAKE_BINARY_DIR}/language-parameter-sweep
-  -P ${CMAKE_SOURCE_DIR}/tests/check_parameter_sweep.cmake)
-add_test(NAME language_parameter_sweep_fixed COMMAND ${CMAKE_COMMAND}
-  -DBATCH=$<TARGET_FILE:physim-batch>
-  -DRUNNER=$<TARGET_FILE:physim-runner>
-  -DEXPERIMENT=$<TARGET_FILE:physim-language-parameter-pair>
-  -DVERIFY=$<TARGET_FILE:physim-parameter-sweep-tests>
-  -DWORK=${CMAKE_BINARY_DIR}/language-parameter-sweep-fixed
-  -DFIXED=2
-  -P ${CMAKE_SOURCE_DIR}/tests/check_parameter_sweep.cmake)
 physim_add_experiment(physim-language-rng-run-streams examples/language/rng_run_streams.phys)
 physim_add_experiment(physim-language-random-error tests/fixtures/language/random_error.phys)
 physim_add_experiment(physim-language-random-create-error tests/fixtures/language/random_create_error.phys)
@@ -860,94 +803,53 @@ add_test(NAME language_modules COMMAND ${CMAKE_COMMAND}
   -DEXAMPLE=${CMAKE_SOURCE_DIR}/examples/language/modules/main.phys
   -P ${CMAKE_SOURCE_DIR}/tests/check_language_modules.cmake)
 physim_add_program(physim-language-matrix-values examples/language/coordinate_frames.phys)
-add_test(NAME language_matrix_values COMMAND physim-language-matrix-values)
 physim_add_program(physim-language-optional-values examples/language/optional_values.phys)
-add_test(NAME language_optional_values COMMAND physim-language-optional-values)
-set_tests_properties(language_optional_values PROPERTIES TIMEOUT 90)
 physim_add_program(physim-language-rng-streams examples/language/rng_streams.phys)
-add_test(NAME language_rng_streams COMMAND physim-language-rng-streams)
-set_tests_properties(language_rng_streams PROPERTIES TIMEOUT 90)
 physim_add_program(physim-language-bindings examples/language/optional_bindings.phys)
-add_test(NAME language_bindings COMMAND physim-language-bindings)
-set_tests_properties(language_bindings PROPERTIES TIMEOUT 90)
 physim_add_program(physim-language-sweep-values examples/language/sweeps.phys)
-add_test(NAME language_sweep_values COMMAND physim-language-sweep-values)
 physim_add_experiment(physim-language-sweep examples/language/fast_sphere.phys)
 physim_add_experiment(physim-language-sweep-error tests/fixtures/language/sweep_error.phys)
 add_executable(physim-language-sweep-tests tests/test_language_sweep.c)
 target_link_libraries(physim-language-sweep-tests PRIVATE physim_platform)
 ps_warnings(physim-language-sweep-tests)
 add_dependencies(physim-language-sweep-tests physim-language-sweep physim-language-sweep-error physim-runner)
-add_test(NAME language_sweep COMMAND physim-language-sweep-tests
-  $<TARGET_FILE:physim-language-sweep> $<TARGET_FILE:physim-language-sweep-error>
-  $<TARGET_FILE:physim-runner> "${CMAKE_BINARY_DIR}/language-runs")
-set_tests_properties(language_sweep PROPERTIES TIMEOUT 90)
 physim_add_program(physim-language-graph-values examples/language/constraint_graph.phys)
-add_test(NAME language_graph_values COMMAND physim-language-graph-values)
 physim_add_experiment(physim-language-graph examples/language/coupled_bodies.phys)
 physim_add_experiment(physim-language-graph-error tests/fixtures/language/graph_error.phys)
 add_executable(physim-language-graph-tests tests/test_language_graph.c)
 target_link_libraries(physim-language-graph-tests PRIVATE physim_platform)
 ps_warnings(physim-language-graph-tests)
 add_dependencies(physim-language-graph-tests physim-language-graph physim-language-graph-error physim-runner)
-add_test(NAME language_graph COMMAND physim-language-graph-tests
-  $<TARGET_FILE:physim-language-graph> $<TARGET_FILE:physim-language-graph-error>
-  $<TARGET_FILE:physim-runner> "${CMAKE_BINARY_DIR}/language-runs")
-set_tests_properties(language_graph PROPERTIES TIMEOUT 90)
 physim_add_program(physim-language-joint-values examples/language/distance_joints.phys)
-add_test(NAME language_joint_values COMMAND physim-language-joint-values)
 physim_add_experiment(physim-language-joint examples/language/joint_pendulum.phys)
 physim_add_experiment(physim-language-joint-error tests/fixtures/language/joint_error.phys)
 add_executable(physim-language-joint-tests tests/test_language_joint.c)
 target_link_libraries(physim-language-joint-tests PRIVATE physim_platform)
 ps_warnings(physim-language-joint-tests)
 add_dependencies(physim-language-joint-tests physim-language-joint physim-language-joint-error physim-runner)
-add_test(NAME language_joint COMMAND physim-language-joint-tests
-  $<TARGET_FILE:physim-language-joint> $<TARGET_FILE:physim-language-joint-error>
-  $<TARGET_FILE:physim-runner> "${CMAKE_BINARY_DIR}/language-runs")
-set_tests_properties(language_joint PROPERTIES TIMEOUT 90)
 physim_add_program(physim-language-contact-values examples/language/contacts.phys)
-add_test(NAME language_contact_values COMMAND physim-language-contact-values)
 physim_add_experiment(physim-language-contact-error tests/fixtures/language/contact_error.phys)
 physim_add_experiment(physim-language-contact examples/language/box_contacts.phys)
 add_executable(physim-language-contact-tests tests/test_language_contact.c)
 target_link_libraries(physim-language-contact-tests PRIVATE physim_platform)
 ps_warnings(physim-language-contact-tests)
 add_dependencies(physim-language-contact-tests physim-language-contact physim-language-contact-error box_floor physim-runner)
-add_test(NAME language_contact COMMAND physim-language-contact-tests
-  $<TARGET_FILE:physim-language-contact> $<TARGET_FILE:box_floor> $<TARGET_FILE:physim-language-contact-error>
-  $<TARGET_FILE:physim-runner> "${CMAKE_BINARY_DIR}/language-runs")
-set_tests_properties(language_contact PROPERTIES TIMEOUT 90)
-add_test(NAME language_body_values COMMAND physim-language-body-values)
 physim_add_experiment(physim-language-body examples/language/spinning_body.phys)
 physim_add_experiment(physim-language-body-error tests/fixtures/language/body_error.phys)
 add_executable(physim-language-body-tests tests/test_language_body.c)
 target_link_libraries(physim-language-body-tests PRIVATE physim_platform)
 ps_warnings(physim-language-body-tests)
 add_dependencies(physim-language-body-tests physim-language-body physim-language-body-error physim-runner)
-add_test(NAME language_body COMMAND physim-language-body-tests
-  $<TARGET_FILE:physim-language-body> $<TARGET_FILE:physim-language-body-error>
-  $<TARGET_FILE:physim-runner> "${CMAKE_BINARY_DIR}/language-runs")
-set_tests_properties(language_body PROPERTIES TIMEOUT 60)
 add_executable(physim-language-sensor-tests tests/test_language_sensor.c)
 target_link_libraries(physim-language-sensor-tests PRIVATE physim_platform)
 ps_warnings(physim-language-sensor-tests)
 add_dependencies(physim-language-sensor-tests physim-language-sensors physim-language-sensor-error physim-runner)
-add_test(NAME language_sensor COMMAND physim-language-sensor-tests
-  $<TARGET_FILE:physim-language-sensors> $<TARGET_FILE:physim-language-sensor-error>
-  $<TARGET_FILE:physim-runner> "${CMAKE_BINARY_DIR}/language-runs")
-set_tests_properties(language_sensor PROPERTIES TIMEOUT 90)
 add_executable(physim-uncertain-projectile-parity-tests tests/test_uncertain_projectile_parity.c)
 target_link_libraries(physim-uncertain-projectile-parity-tests PRIVATE physim_core physim_platform)
 ps_warnings(physim-uncertain-projectile-parity-tests)
 add_dependencies(physim-uncertain-projectile-parity-tests uncertain_projectile
   physim-language-uncertain-projectile pendulum_analysis physim-language-analysis-sensors
   physim-runner)
-add_test(NAME language_uncertain_projectile_parity COMMAND physim-uncertain-projectile-parity-tests
-  $<TARGET_FILE:physim-runner> $<TARGET_FILE:uncertain_projectile>
-  $<TARGET_FILE:physim-language-uncertain-projectile> "${CMAKE_BINARY_DIR}"
-  $<TARGET_FILE:pendulum_analysis> $<TARGET_FILE:physim-language-analysis-sensors>)
-set_tests_properties(language_uncertain_projectile_parity PROPERTIES TIMEOUT 90)
 add_library(physim-language-pendulum-reference MODULE examples/pendulum/main.c)
 target_compile_definitions(physim-language-pendulum-reference PRIVATE PS_PENDULUM_METHOD=PS_SYMPLECTIC)
 target_link_libraries(physim-language-pendulum-reference PRIVATE physim_core)
@@ -965,22 +867,6 @@ add_dependencies(physim-language-experiment-tests physim-language-pendulum physi
   physim-language-scene-shapes physim-language-scene-shapes-error physim-language-spring spring
   physim-language-polyline-empty)
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/language-runs")
-add_test(NAME language_experiment COMMAND physim-language-experiment-tests
-  $<TARGET_FILE:physim-language-pendulum> $<TARGET_FILE:physim-language-pendulum-reference>
-  $<TARGET_FILE:physim-language-projectile> $<TARGET_FILE:physim-language-error>
-  $<TARGET_FILE:physim-language-scene_error> $<TARGET_FILE:physim-language-create_error>
-  $<TARGET_FILE:physim-runner> "${CMAKE_BINARY_DIR}/language-runs"
-  $<TARGET_FILE:physim-language-random> $<TARGET_FILE:physim-language-random-error>
-  $<TARGET_FILE:physim-language-random-create-error>
-  $<TARGET_FILE:physim-language-scene-shapes> $<TARGET_FILE:physim-language-scene-shapes-error>
-  $<TARGET_FILE:physim-language-spring> $<TARGET_FILE:spring>
-  $<TARGET_FILE:physim-language-polyline-empty>
-  $<TARGET_FILE:physim-language-rng-run-streams>
-  $<TARGET_FILE:physim-language-pendulum-rk4> $<TARGET_FILE:pendulum>
-  $<TARGET_FILE:physim-language-pendulum-integrator>
-  $<TARGET_FILE:physim-language-pendulum-rk45> $<TARGET_FILE:pendulum_rk45>
-  $<TARGET_FILE:physim-language-pendulum-verlet> $<TARGET_FILE:pendulum_verlet>)
-set_tests_properties(language_experiment PROPERTIES TIMEOUT 90)
 add_test(NAME language_cli COMMAND ${CMAKE_COMMAND}
   -DCOMPILER=$<TARGET_FILE:physimc> -DWORK=${CMAKE_BINARY_DIR}/language-cli
   -DEXAMPLE=${CMAKE_SOURCE_DIR}/examples/language/energy.phys
@@ -1626,3 +1512,6 @@ set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
 set(CPACK_PACKAGE_FILE_NAME "Physim-${PROJECT_VERSION}-dev-${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
 set(CPACK_GENERATOR ZIP)
 include(CPack)
+
+# Shared C/Physim integration workflows, also executed by tools/build.py.
+include(tests/register_native_integrations.cmake)

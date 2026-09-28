@@ -135,7 +135,23 @@ Damit enthält der direkte Katalog 437 Tests beziehungsweise 427 ohne SDL.
 Alle 209 neuen Fälle bestehen mit MSVC Debug und Clang Release; der bisherige
 CTest-Sprachtest besteht mit denselben Quellen und Erwartungen. Die Tests des
 Läufers weisen falsche Diagnosezeilen, geänderte Ausgaben, temporäre Restdateien
-und unpassende Compilerfehler ab. Der CI-Nachweis dieser Erweiterung steht noch aus.
+und unpassende Compilerfehler ab. Zum Commit `2b3b6e7` besteht der direkte Build-
+und Testschritt in allen acht CI-Plattformkombinationen.
+
+Weitere 26 Integrationsprüfungen laufen nun ohne CMake. Der gemeinsame Katalog
+erfasst 97 Programme und Module und 48 Ausführungsschritte. Bestehende C-Prüfer
+vergleichen C- und Physim-Modelle einschließlich Integratoren, Kollisionen,
+Auftrieb, Sensoren, Kontakten, Gelenken, Körpergruppen und Sweeps. Weitere Fälle
+prüfen Analyseberichte, Einheiten, exportierte Daten, Parameterbeschreibungen
+und parallele Parameterreihen. Ungültige Parameter dürfen keine Ergebnisdateien
+oder Ordner erzeugen. Quellen, Modulvarianten und Argumentreihenfolgen bleiben
+erhalten; die bisherigen Parameter-CMake-Skripte sind durch den gemeinsamen
+Katalog ersetzt. Arbeitsordner mit Leerzeichen und Umlauten isolieren die Läufe.
+Der direkte Katalog umfasst jetzt 463 Tests beziehungsweise 453 ohne SDL.
+Alle 419 direkten Sprachtests bestehen lokal mit MSVC Debug und Clang Release;
+die 26 neuen CTest-Einstiegspunkte bestehen ebenfalls. Der Testläufer prüft außerdem,
+dass Emissions-/C-Buildfehler, fehlende Module und fehlende Ausgaben abhängige
+Schritte stoppen. Der CI-Nachweis dieser Erweiterung steht noch aus.
 
 | Bereich | Implementiert | Noch offen |
 | --- | --- | --- |

@@ -134,13 +134,14 @@ Mac-Notarisierung bleiben offen.
 
 ## Direkter Testläufer
 
-Der direkte Katalog umfasst **437 Tests**, davon 427 ohne SDL. Die jüngste
-Erweiterung übernimmt 203 native Sprachprogramme, zwei Prüfungen für Quelldiagnosen
-und erhaltene Buildausgaben sowie vier Tests des Speicherprüfzusatzes. Alle 209
-neuen Fälle bestehen lokal mit MSVC Debug und Clang Release; der bisherige
-CTest-Einstiegspunkt `language_native` besteht mit demselben Katalog ebenfalls.
-Die 184 zuvor übernommenen Sprachtests und ihre 169 CTest-Prüfungen bestanden
-bereits vor dieser Erweiterung. Der CI-Nachweis der neuen 209 Fälle steht noch aus.
+Der direkte Katalog umfasst **463 Tests**, davon 453 ohne SDL. Alle 419 direkten
+Sprachtests bestehen lokal mit MSVC Debug und Clang Release. Die jüngste Erweiterung
+übernimmt 26 Integrationsprüfungen für C-/Physim-Modelle, Auswertung und Parameter.
+Ihre 26 CTest-Einstiegspunkte bestehen mit demselben Katalog ebenfalls.
+Die 203 zuvor übernommenen nativen Sprachprogramme, zwei Prüfungen für Quelldiagnosen
+und erhaltene Buildausgaben sowie vier Tests des Speicherprüfzusatzes bestehen
+inzwischen auch im direkten CI-Schritt aller acht Plattformkombinationen.
+Der CI-Nachweis der neuen 26 Integrationsprüfungen steht noch aus.
 
 Die Analyseprüfungen vergleichen den vollständigen CSV-Inhalt und verlangen,
 dass ungültige Exporte keine CSV-Datei anlegen. Der Läufertest prüft erwartete
@@ -148,6 +149,11 @@ Exitcodes und Diagnosen, Zeitüberschreitungen, fehlende Programme, Emissions-/
 Buildfehler, fehlende Ausgaben, falsche Inhalte und ungültiges UTF-8. Fehlerhafte
 Schritte verhindern die Ausführung davon abhängiger Programme. Die Ergebnisberichte
 enthalten für erwartete Dateien außerdem Größe und SHA-256-Prüfsumme.
+Die Integrationsprüfungen erfassen zusätzlich die Prüfsummen aller verwendeten
+Programme und Module. Ihre C-Prüfer kontrollieren Messwerte, Metadaten, Szenen,
+Berichte und das Verhalten bei ungültigen Parametern. Tests der Ablaufsteuerung
+verhindern Erfolge durch veraltete Prüfer nach C-/Physim-Buildfehlern oder fehlende
+Ausgabedateien.
 
 Die folgende Tabelle dokumentiert abgeschlossene **direkte Build- und Testschritte**.
 Sie nimmt spätere SDK-, Grafik- oder CTest-Schritte desselben CI-Laufs nicht vorweg.
@@ -163,6 +169,7 @@ GCC/Clang sowie macOS auf Apple Silicon/Intel.
 | `d7fb0b0` | 200 Tests | Alle acht Kombinationen: [Lauf 36476324664](https://github.com/PhysicSimulator/physim/actions/runs/36476324664) |
 | `0923b6e` | 222 Tests | Alle acht Kombinationen: [Lauf 36477404252](https://github.com/PhysicSimulator/physim/actions/runs/36477404252) |
 | `8516187` | 228 Tests | Alle acht Kombinationen: [Lauf 36478529900](https://github.com/PhysicSimulator/physim/actions/runs/36478529900) |
+| `2b3b6e7` | 437 Tests | Alle acht Kombinationen: [Lauf 36480859045](https://github.com/PhysicSimulator/physim/actions/runs/36480859045) |
 
 Die ursprünglichen 51 C-Tests bestanden auch lokal mit MSVC Debug; die 41 SDL-freien
 Fälle zusätzlich mit Clang Release. Der vollständige Satz mit 134 Tests bestand
