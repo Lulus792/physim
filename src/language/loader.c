@@ -1,3 +1,6 @@
+#ifndef _WIN32
+#define _XOPEN_SOURCE 700
+#endif
 #include "loader.h"
 #include <errno.h>
 #include <stdio.h>

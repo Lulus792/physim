@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 3.24)
 foreach(required COMPILER WORK SOURCE_DIR C_COMPILER GENERATOR)
   if(NOT DEFINED ${required})
     message(FATAL_ERROR "Missing ${required}")
