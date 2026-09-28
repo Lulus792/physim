@@ -29,9 +29,11 @@ blockieren Speichern und Laufstart. Änderungen dieser Laufwerte benötigen
 keinen neuen Modulbuild; jeder Lauf archiviert die verwendeten Werte.
 
 Unter Windows werden Visual Studio 2022 C++ Build Tools und ein Windows SDK
-automatisch gefunden; eine Developer-Konsole ist nicht nötig. Unter Linux wird
+automatisch gefunden; eine Developer-Konsole ist nicht nötig. Unter Linux und macOS wird
 `cc` verwendet. Die Umgebungsvariable `PHYSIM_CC` kann einen anderen Compiler
-angeben, etwa `clang-cl.exe` unter Windows oder `clang` unter Linux.
+angeben, etwa `clang-cl.exe` unter Windows oder `clang` unter Linux und macOS.
+Auf macOS stellen die Xcode Command Line Tools (`xcode-select --install`) den
+Compiler und das System-SDK bereit.
 
 Der Projektordner behält seine Quellen, `physim.project` und Ergebnisse in `runs/`.
 `build/Debug` und `build/Release` enthalten Module, generiertes C, Objektdateien,
@@ -58,7 +60,7 @@ Maximierungs-/Wiederherstellungstest startet er zusätzlich den Fenstermanager O
 Nuklear ist unter `third_party` eingecheckt. SDL3 für Windows wird aus dem offiziellen
 3.2.30-Release bezogen. Das Bootstrap-Skript prüft SHA-256 vor dem Entpacken.
 
-Für Linux SDL3 aus derselben Version bauen:
+Für Linux und macOS SDL3 aus derselben Version bauen:
 
 ```sh
 git clone --depth 1 --branch release-3.2.30 https://github.com/libsdl-org/SDL.git build-sdl-source
@@ -73,6 +75,14 @@ ctest --test-dir build --output-on-failure
 SDL benötigt systemabhängig X11-/Wayland-Entwicklungspakete. Der CI-Workflow zeigt
 die Ubuntu-Pakete. Bibliothek und Runner können mit `PHYSIM_BUILD_APP=OFF` unabhängig
 von sämtlichen UI-Paketen gebaut werden.
+
+macOS verwendet Apple Clang, die Xcode Command Line Tools und OpenGL 4.1 Core.
+Die obigen Befehle bauen jeweils für die Architektur des Macs (Apple Silicon oder
+Intel). Für Fensterprüfungen beim Konfigurieren `-DPHYSIM_GRAPHICS_TESTS=ON`
+ergänzen und die Tests in einer angemeldeten grafischen Sitzung ausführen.
+Die App startet mit `./build/bin/physim`. Für Speichern, Suche und Editorbefehle
+gilt auf macOS **Cmd** anstelle von **Ctrl**. Die aktuellen Plattformnachweise
+stehen in [Plattformprüfung](platform-validation.md).
 
 ## Tests
 

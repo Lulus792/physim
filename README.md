@@ -86,7 +86,7 @@ liegt die entsprechende Anwendung unter `build/bin/physim.exe`.
 Voraussetzungen für den Entwicklungsbuild: Windows 10 ab 1903 / Windows 11, Visual
 Studio 2022 mit **Desktopentwicklung mit C++** (enthält den C-Compiler und Windows SDK),
 CMake ab 3.24 sowie einen Grafiktreiber mit **OpenGL 3.3 Core**. Für eigene Experimente
-benötigt auch die App CMake und einen C17-Compiler.
+benötigt die App einen C17-Compiler; CMake ist dafür nicht erforderlich.
 
 ```powershell
 # SDL3 installieren, falls third_party/SDL3-3.2.30 noch nicht vorhanden ist:
@@ -243,6 +243,19 @@ hat Build, 276 Tests ohne Fenster, 35 Grafik-/Fenstertests unter Xvfb/Mesa, das
 installierte SDK und alle acht vollständigen C-App-Abläufe bestanden.
 [Prüfstand und verbleibende Plattformgrenzen](docs/platform-validation.md).
 
+## macOS
+
+Apple Silicon und Intel werden als Zielplattformen unterstützt und in eigenen
+CI-Jobs geprüft. Die vollständige Plattformabnahme läuft noch; der aktuelle
+Nachweis steht in [Plattformprüfung](docs/platform-validation.md).
+
+Für den Entwicklungsbuild werden die Xcode Command Line Tools
+(`xcode-select --install`), CMake und SDL 3.2.30 benötigt. Die
+[Buildanleitung](docs/build.md) enthält den SDL-Quellbuild und die Startbefehle.
+Nutzerprojekte benötigen nur den C17-Compiler und Physim, keine CMake-Datei.
+Die App verwendet OpenGL 4.1 Core, macOS-Systemschriften und **Cmd** für
+Speichern, Suchen und Editorbefehle.
+
 ## Ohne Oberfläche
 
 ```powershell
@@ -251,7 +264,7 @@ installierte SDK und alle acht vollständigen C-App-Abläufe bestanden.
 .\build\bin\physim-analysis-runner.exe --csv .\pendel.psrun .\pendel.csv
 ```
 
-Unter Linux heißen Module `.so`, Programme haben kein `.exe`. Ausgabedateien werden
+Unter Linux und macOS heißen Projektmodule `.so`, Programme haben kein `.exe`. Ausgabedateien werden
 absichtlich exklusiv angelegt: für erneute Läufe einen neuen Namen verwenden.
 
 ## Struktur

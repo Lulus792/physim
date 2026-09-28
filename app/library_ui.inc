@@ -43,7 +43,7 @@ static void library_view(app *a, float height) {
         snprintf(detail, sizeof detail, "%zu Dateien · %zu Einträge konnten nicht gelesen werden.",
                  a->library->count, a->library->skipped);
     else
-        snprintf(detail, sizeof detail, "%zu Dateien im Projekt · neueste zuerst · Ctrl+F filtert",
+        snprintf(detail, sizeof detail, "%zu Dateien im Projekt · neueste zuerst · " PS_UI_SHORTCUT "F filtert",
                  a->library ? a->library->count : 0);
     nk_label_colored(ui, detail, NK_TEXT_LEFT, nk_rgb(166, 169, 177));
     nk_layout_row_dynamic(ui, 34, 3);

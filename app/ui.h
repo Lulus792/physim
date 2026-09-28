@@ -4,6 +4,13 @@
 #define SDL_MAIN_HANDLED
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
+#ifdef __APPLE__
+#define PS_UI_COMMAND_MOD SDL_KMOD_GUI
+#define PS_UI_SHORTCUT "Cmd+"
+#else
+#define PS_UI_COMMAND_MOD SDL_KMOD_CTRL
+#define PS_UI_SHORTCUT "Ctrl+"
+#endif
 #define NK_BOOL bool
 #define NK_INCLUDE_FIXED_TYPES
 #define NK_INCLUDE_STANDARD_IO

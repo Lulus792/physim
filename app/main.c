@@ -1943,7 +1943,7 @@ static void test_window_key(SDL_Window *window, SDL_Keycode key) {
     e.type = SDL_EVENT_KEY_DOWN;
     e.key.windowID = SDL_GetWindowID(window);
     e.key.key = key;
-    e.key.mod = SDL_KMOD_CTRL;
+    e.key.mod = PS_UI_COMMAND_MOD;
     e.key.down = true;
     SDL_PushEvent(&e);
     e.type = SDL_EVENT_KEY_UP;
@@ -2540,7 +2540,7 @@ int main(int argc, char **argv) {
                     documentation_window_hide(a);
                 else if (a->doc_visible) {
                     if (e.type == SDL_EVENT_KEY_DOWN && !e.key.repeat) {
-                        if (e.key.key == SDLK_F && (e.key.mod & SDL_KMOD_CTRL)) {
+                        if (e.key.key == SDLK_F && (e.key.mod & PS_UI_COMMAND_MOD)) {
                             a->doc_search_focus = true;
                             a->doc_filter_active = false;
                         }
@@ -2562,7 +2562,7 @@ int main(int argc, char **argv) {
             }
             if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && !a->recovery) {
                 if (scene_shortcut(a, &e.key)) continue;
-                if (!e.key.repeat && (e.key.mod & SDL_KMOD_CTRL)) {
+                if (!e.key.repeat && (e.key.mod & PS_UI_COMMAND_MOD)) {
                     if (e.key.key >= SDLK_1 && e.key.key <= SDLK_3)
                         select_workspace_tab(a, (int)(e.key.key - SDLK_1));
                     if (e.key.key == SDLK_4)
@@ -2578,9 +2578,9 @@ int main(int argc, char **argv) {
                     if (e.key.key == SDLK_COMMA)
                         open_settings(a);
                 }
-                if (e.key.key == SDLK_S && (e.key.mod & SDL_KMOD_CTRL))
+                if (e.key.key == SDLK_S && (e.key.mod & PS_UI_COMMAND_MOD))
                     save_active_document(a);
-                if (e.key.key == SDLK_W && (e.key.mod & SDL_KMOD_CTRL) && a->tab == 8)
+                if (e.key.key == SDLK_W && (e.key.mod & PS_UI_COMMAND_MOD) && a->tab == 8)
                     document_request(a, 1);
                 if (e.key.key == SDLK_F5)
                     build_project(a);

@@ -423,8 +423,8 @@ static void draw_ui(app *a, int width, int height) {
             }
             if (nk_tree_push(ui, NK_TREE_TAB, "Tastaturbefehle", NK_MINIMIZED)) {
                 nk_layout_row_dynamic(ui, 130, 1);
-                nk_label_wrap(ui, "Ctrl+1/2/3  Arbeitsbereich\nCtrl+S  Speichern\nCtrl+F  "
-                                  "Suchen\nCtrl+4  Läufe & Berichte\nCtrl+L  Protokoll\nF5  "
+                nk_label_wrap(ui, "" PS_UI_SHORTCUT "1/2/3  Arbeitsbereich\n" PS_UI_SHORTCUT "S  Speichern\n" PS_UI_SHORTCUT "F  "
+                                  "Suchen\n" PS_UI_SHORTCUT "4  Läufe & Berichte\n" PS_UI_SHORTCUT "L  Protokoll\nF5  "
                                   "Build\nF6  Start / Pause");
                 nk_tree_pop(ui);
             }
@@ -566,10 +566,10 @@ static void draw_ui(app *a, int width, int height) {
             editor(a, edit, content - (a->show_search ? 150 : 112));
             nk_layout_row_dynamic(ui, 22, 1);
             nk_label_colored(ui,
-                             analysis ? (a->language_analysis ? "Auswertung  ·  Physim  ·  Ctrl+S speichern" : "Auswertung  ·  C17  ·  Ctrl+S speichern")
+                             analysis ? (a->language_analysis ? "Auswertung  ·  Physim  ·  " PS_UI_SHORTCUT "S speichern" : "Auswertung  ·  C17  ·  " PS_UI_SHORTCUT "S speichern")
                                       : a->language_experiment
-                                          ? "Experiment  ·  Physim  ·  Ctrl+F suchen  ·  F5 bauen"
-                                          : "Experiment  ·  C17  ·  Ctrl+F suchen  ·  F5 bauen",
+                                          ? "Experiment  ·  Physim  ·  " PS_UI_SHORTCUT "F suchen  ·  F5 bauen"
+                                          : "Experiment  ·  C17  ·  " PS_UI_SHORTCUT "F suchen  ·  F5 bauen",
                              NK_TEXT_LEFT, muted());
         } else if (a->tab == 1) {
             nk_layout_row_begin(ui, NK_DYNAMIC, 34, 2);

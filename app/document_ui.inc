@@ -147,6 +147,6 @@ static void document_view(app *a, float content) {
                                           : autosave,
                      NK_TEXT_LEFT, muted());
     nk_layout_row_dynamic(ui, 22, 1);
-    nk_label_colored(ui, "UTF-8  ·  Ctrl+S speichern  ·  Ctrl+F suchen  ·  Ctrl+W schließen",
+    nk_label_colored(ui, "UTF-8  ·  " PS_UI_SHORTCUT "S speichern  ·  " PS_UI_SHORTCUT "F suchen  ·  " PS_UI_SHORTCUT "W schließen",
                      NK_TEXT_LEFT, muted());
 }

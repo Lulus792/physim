@@ -197,7 +197,7 @@ NK_API int nk_sdl_handle_event(struct nk_context *ctx, SDL_Event *evt) {
     case SDL_EVENT_KEY_UP: /* KEYUP & KEYDOWN share same routine */
     case SDL_EVENT_KEY_DOWN: {
         int down = evt->type == SDL_EVENT_KEY_DOWN;
-        int ctrl_down = evt->key.mod & SDL_KMOD_CTRL;
+        int ctrl_down = evt->key.mod & PS_UI_COMMAND_MOD;
 
         switch (evt->key.key) {
         case SDLK_LALT:
@@ -410,6 +410,14 @@ bool nk_sdl_test_input(SDL_Window *window, ps_graphics *graphics) {
     event.key.down = true;
     nk_sdl_handle_event(ctx, &event);
     ok = ok && ctx->input.keyboard.keys[NK_KEY_SHIFT].down;
+    event.key.key = SDLK_C;
+    event.key.mod = PS_UI_COMMAND_MOD;
+    nk_sdl_handle_event(ctx, &event);
+    ok = ok && ctx->input.keyboard.keys[NK_KEY_COPY].down;
+    event.type = SDL_EVENT_KEY_UP;
+    event.key.down = false;
+    nk_sdl_handle_event(ctx, &event);
+    ok = ok && !ctx->input.keyboard.keys[NK_KEY_COPY].down;
     event.type = SDL_EVENT_MOUSE_BUTTON_DOWN;
     event.button.windowID = id;
     event.button.button = SDL_BUTTON_RIGHT;

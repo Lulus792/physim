@@ -71,7 +71,7 @@ static void toolbar_popup(app *a, int previous) {
                 a->workspace_preview_path[0] = 0;
             }
             a->toolbar_item_bounds[4] = nk_widget_bounds(ui);
-            if (toolbar_menu_action(a, "Speichern\tCtrl+S",
+            if (toolbar_menu_action(a, "Speichern\t" PS_UI_SHORTCUT "S",
                                     (a->loaded || a->document_count) && idle(a)))
                 save_active_document(a);
 
@@ -79,13 +79,13 @@ static void toolbar_popup(app *a, int previous) {
             nk_layout_row_dynamic(ui, 26, 1);
             a->toolbar_item_bounds[5] = nk_widget_bounds(ui);
             if (toolbar_menu_action(a,
-                                    a->show_log ? "Protokoll ausblenden\tCtrl+L"
-                                                : "Protokoll einblenden\tCtrl+L",
+                                    a->show_log ? "Protokoll ausblenden\t" PS_UI_SHORTCUT "L"
+                                                : "Protokoll einblenden\t" PS_UI_SHORTCUT "L",
                                     true))
                 a->show_log = !a->show_log;
             if (toolbar_menu_action(a, "Dateibaum aktualisieren", a->workspace_open))
                 refresh_workspace_entries(a);
-            if (toolbar_menu_action(a, "Läufe und Berichte\tCtrl+4", a->loaded)) {
+            if (toolbar_menu_action(a, "Läufe und Berichte\t" PS_UI_SHORTCUT "4", a->loaded)) {
                 a->project_manager = false;
                 open_library(a);
             }

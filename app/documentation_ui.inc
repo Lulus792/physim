@@ -406,7 +406,7 @@ static void documentation_view(app *a, float height) {
                  d ? documentation_topics[a->doc_topic].title : "", match_count,
                  match_count ? " · blau markiert" : "");
     else
-        snprintf(detail, sizeof detail, "%s · offline verfügbar · Ctrl+F sucht in diesem Dokument",
+        snprintf(detail, sizeof detail, "%s · offline verfügbar · " PS_UI_SHORTCUT "F sucht in diesem Dokument",
                  d ? documentation_topics[a->doc_topic].title : "Dokument nicht verfügbar");
     nk_label_colored(ui, detail, NK_TEXT_LEFT, nk_rgb(166, 169, 177));
     nk_layout_row_dynamic(ui, height - 146, 1);
