@@ -1,4 +1,5 @@
 #define PSRT_MODULE
+#include "physim/language_runtime.h"
 #include "physim/data.h"
 #include "physim/language_constraints.h"
 #include "platform.h"
