@@ -273,17 +273,26 @@ cmake --install build-sdl
 **3. Physim mit Oberfläche bauen, prüfen und starten:**
 
 ```sh
-cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug \
-  -DPHYSIM_BUILD_APP=ON -DCMAKE_PREFIX_PATH="$PWD/build-sdl-install"
-cmake --build build --parallel
-ctest --test-dir build --output-on-failure
-./build/bin/physim
+python3 tools/build.py --config Debug --sdl "$PWD/build-sdl-install" --test
+./build/native/Debug/bin/physim
 ```
 
-Später genügt im Repository `./build/bin/physim` zum Starten. Nach Änderungen
-am Quellcode zuerst erneut `cmake --build build --parallel` ausführen.
+Der erste Befehl baut auch die Oberfläche und führt die Tests ohne Fenster aus.
+Der zweite öffnet die App. Zum späteren Starten genügt im Repository
+`./build/native/Debug/bin/physim`. Nach Quellcodeänderungen beide Befehle
+erneut ausführen. Physim selbst wird dabei direkt mit Python und dem Compiler
+gebaut; CMake und Ninja werden oben für SDL verwendet.
 SDL und Buildausgaben bleiben in den lokalen `build*`-Ordnern; für die
 Build- und Installationsbefehle ist kein `sudo` nötig.
+
+**Optional: Oberfläche und Fenster automatisch prüfen:**
+
+Die App zuerst schließen und diesen Befehl in der grafischen Desktop-Sitzung
+ausführen. Die Tests öffnen und schließen selbstständig Fenster.
+
+```sh
+python3 tools/build.py --config Debug --sdl "$PWD/build-sdl-install" --test-display
+```
 
 Ubuntu 24.04 mit GCC und Clang
 hat Build, 276 Tests ohne Fenster, 35 Grafik-/Fenstertests unter Xvfb/Mesa, das
@@ -344,27 +353,39 @@ cmake --install build-sdl
 **4. Physim mit Oberfläche bauen, prüfen und starten:**
 
 ```sh
-cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug \
-  -DPHYSIM_BUILD_APP=ON -DCMAKE_PREFIX_PATH="$PWD/build-sdl-install"
-cmake --build build --parallel
-ctest --test-dir build --output-on-failure
-./build/bin/physim
+python3 tools/build.py --config Debug --sdl "$PWD/build-sdl-install" --test
+./build/native/Debug/bin/physim
 ```
 
-Später genügt im Repository `./build/bin/physim`. Nach Quellcodeänderungen
-zuerst erneut `cmake --build build --parallel` ausführen.
+Der erste Befehl baut einschließlich Oberfläche und führt die Tests ohne Fenster
+aus. Der zweite öffnet die App. Später genügt im Repository
+`./build/native/Debug/bin/physim`. Nach Quellcodeänderungen beide Befehle erneut
+ausführen. CMake und Ninja werden nur für den obigen SDL-Build benötigt;
+Physim selbst baut direkt mit Python und Apple Clang.
+
+**Optional: Oberfläche und Fenster automatisch prüfen:**
+
+Die App zuerst schließen und in einer angemeldeten grafischen macOS-Sitzung
+ausführen. Die Tests öffnen und schließen selbstständig Fenster.
+
+```sh
+python3 tools/build.py --config Debug --sdl "$PWD/build-sdl-install" --test-display
+```
 
 **Optional: eine App zum Öffnen im Finder erzeugen:**
 
 ```sh
-python3 tools/package-macos.py --build build --config Debug --output build/Physim.app
+python3 tools/build.py --config Release --sdl "$PWD/build-sdl-install" --install build/native/SDK
+python3 tools/package-macos.py --sdk build/native/SDK --output build/Physim.app
 open build/Physim.app
 ```
 
 Danach lässt sich `build/Physim.app` auch per Doppelklick öffnen oder in den
-Programme-Ordner kopieren. Das Paket enthält SDL und das Physim-SDK. Für ein
-erneutes Paket einen neuen Ausgabepfad wählen, etwa `build/Physim-neu.app`;
-das Skript überschreibt kein vorhandenes Paket. Es signiert lokal ad hoc;
+Programme-Ordner kopieren. Das Release-Paket enthält SDL und das Physim-SDK.
+Für ein erneutes Paket neue Ausgabeordner wählen, etwa `build/native/SDK-neu`
+und `build/Physim-neu.app`, und beim Paketbefehl denselben neuen SDK-Pfad angeben.
+Die Werkzeuge überschreiben keine vorhandenen SDK- oder App-Ordner.
+Das Paket wird lokal ad hoc signiert;
 eine Apple-Notarisierung für die öffentliche Verteilung ist noch offen.
 
 macOS 15 auf Apple Silicon und Intel hat jeweils 311 CTest-Prüfungen, das
