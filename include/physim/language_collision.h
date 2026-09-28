@@ -1,9 +1,9 @@
 #ifndef PHYSIM_LANGUAGE_COLLISION_H
 #define PHYSIM_LANGUAGE_COLLISION_H
 /* Internal value bindings for the shared collision library. */
-#include "collision.h"
-#include "language_array.h"
 #include "language_mechanics.h"
+#include "language_array.h"
+#include "collision.h"
 typedef struct {
     bool hit;
     ps_sweep_hit value;

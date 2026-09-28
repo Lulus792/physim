@@ -215,8 +215,10 @@ Core-/Runner-Tests ohne Display laufen. Die Grafiktests wurden lokal mit NVIDIA
 OpenGL 3.3 ausgeführt. Der Windows-CI-Job prüft Build und Core/Runner; Linux-CI soll
 Grafik unter Xvfb/Mesa prüfen. Das CTest-Label `display` erfasst die Tests,
 die ein Fenster benötigen: `ctest -LE display` prüft ohne Anzeige, `ctest -L display`
-unter Xvfb mit Openbox prüft die Fensterabläufe. Die CI wurde hier noch nicht
-tatsächlich gestartet; auf dem lokalen Windows-Rechner ist keine WSL-Distribution installiert.
+unter Xvfb mit Openbox prüft die Fensterabläufe. Die CI läuft bei jedem Push in
+beiden Repositories. Den konkreten Prüfstand zeigt
+[GitHub Actions](https://github.com/PhysicSimulator/physim/actions/workflows/ci.yml).
+Auf dem lokalen Windows-Rechner ist keine WSL-Distribution installiert.
 
 `physim --plot-test <neuer-absoluter-ordner>` prüft Diagrammzoom und Verschieben
 über SDL-Ereignisse sowie den PNG-Export per Schaltfläche. Es erzeugt außerdem

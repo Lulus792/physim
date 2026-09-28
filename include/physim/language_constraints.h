@@ -1,8 +1,8 @@
 #ifndef PHYSIM_LANGUAGE_CONSTRAINTS_H
 #define PHYSIM_LANGUAGE_CONSTRAINTS_H
 /* Internal compiled-language value bindings; no stable ABI. */
-#include "language_array.h"
 #include "language_mechanics.h"
+#include "language_array.h"
 
 typedef struct {
     int64_t body_a, body_b;
