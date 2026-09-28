@@ -260,6 +260,9 @@ Prüfsummen und benötigen keine `CMakeLists.txt`.
 Der direkte Build erzeugt auch die acht C-Beispielmodule und das Analysemodul.
 `--install` stellt Programme, Module, Kernbibliothek, öffentliche Header,
 SDK-Quellen, Vorlagen, Dokumentation und Lizenzen in einem neuen Ordner zusammen.
+Die Paket-README erklärt den direkten Start der App und Runner sowie die
+Compilerinstallation für Nutzerprojekte. Die Repository-README mit den
+Entwicklungsbefehlen wird nicht als Paketeinstieg verwendet.
 Die Datei `physim-sdk.json` enthält relative Dateipfade und SHA-256-Prüfsummen.
 Objekte, Buildcaches, Tests und temporäre Linkerdateien werden nicht installiert.
 Vorhandene Zielordner werden nicht überschrieben; ein unvollständiges Paket wird

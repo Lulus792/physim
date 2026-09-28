@@ -410,7 +410,8 @@ class Builder:
                              ("third_party/SDL3-LICENSE.txt", "SDL3-LICENSE.txt"),
                              ("third_party/README.md", "Dependencies.md")):
             shutil.copy2(ROOT / source, staging / "licenses" / name)
-        for name in ("LICENSE", "README.md", "Physim_Projektplan.md"):
+        shutil.copy2(ROOT / "tools/SDK-README.md", staging / "README.md")
+        for name in ("LICENSE", "Physim_Projektplan.md"):
             shutil.copy2(ROOT / name, staging / name)
         # Relative paths and content hashes make moved packages independently auditable.
         files = {p.relative_to(staging).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()

@@ -29,32 +29,34 @@ Der direkte Buildschritt besteht außerdem in allen acht CI-Kombinationen unter
 Windows (MSVC/ClangCL, Debug/Release), Linux (GCC/Clang) und macOS (Apple Silicon/Intel).
 Die Linux-/Mac-Prüfung schließt vollständige C- und Physim-App-Abläufe ein.
 [Nachweise und genaue Abdeckung](platform-validation.md#direkter-build-von-physim).
-Die komplette Testsuite bleibt vorerst CMake-gestützt; auch der SDL-Quellbuild
+Der direkte Testkatalog umfasst alle 528 übernommenen Prüfungen: 493 ohne Fenster
+und 35 Fenster-/Grafiktests. Ohne SDL bleiben 482 Prüfungen verfügbar. Die bisherigen
+CMake-Abläufe dienen noch dem abschließenden Vergleich. Der SDL-Quellbuild
 verwendet weiterhin dessen eigenes Buildsystem.
 
 Der direkte Build unterstützt inzwischen auch Sanitizer. Lokal erkennt MSVC den
 absichtlich eingebauten Speicherfehler und besteht zehn instrumentierte Core-,
-Speicher-, Berichts-, Mutations- und Sprachspeichertests. Die CI-Abnahme dieser
-Erweiterung auf allen Plattformen steht aus. Der direkte Grafikschritt zu
-`37eef01` besteht unter Linux mit GCC und Clang sowie macOS Apple Silicon
-einschließlich des UI-Benchmarks. CMake bleibt bis zum Abschluss der
-Sanitizer-/SDK-Vergleiche und der Übernahme der optionalen Fuzzer verfügbar.
+Speicher-, Berichts-, Mutations- und Sprachspeichertests. Unter Windows bestehen
+die Probe und diese zehn Prüfungen in der CI mit MSVC und ClangCL. Unter Linux
+GCC und Clang bestehen zu `f6cedbf` alle 493 Prüfungen ohne Fenster und alle
+35 Grafikprüfungen mit ASan/UBSan. Die vollständige macOS-Sanitizer-Prüfung mit
+LLVM 20 läuft noch. CMake bleibt bis zum Abschluss dieses Vergleichs verfügbar.
 
 Auch der optionale IPC-libFuzzer hat jetzt einen direkten Buildmodus
 `--fuzzer`. Kernbibliothek und Harness erhalten Clangs Abdeckungsinstrumentierung
 und Sanitizer. Ein eigener Prüfer erzeugt gültige Eingaben, spielt sie erneut ab
 und verlangt bei 10.000 libFuzzer-Durchläufen zusätzliche Codeabdeckung.
 Der lokale ClangCL-Build besteht; der Laufzeitstart bleibt durch den bereits
-dokumentierten ASan-Fehler blockiert. Die Kampagnenprüfung zu `a9accf5` besteht
-inzwischen unter Windows ClangCL und Linux Clang; macOS ist noch offen.
-Auch die zehn instrumentierten Tests samt Fehlerprobe zu `c92dbd3` bestehen
-unter Windows mit MSVC und ClangCL in CI.
+dokumentierten ASan-Fehler blockiert. Die Kampagnenprüfung besteht in der CI
+unter Windows ClangCL und Linux Clang sowie zu `f6cedbf` unter macOS auf Apple
+Silicon und Intel mit LLVM 20 und LLD.
 
 Ein weiterer Linux-GCC-Lauf hat im UI-Benchmark eine noch ausstehende
 Fenstergrößenänderung sichtbar gemacht: Das wiederhergestellte Bild hatte noch
 640 × 480 statt 1080 × 740 Pixel. Der Benchmark wartet nun auf den Abschluss
 und kontrolliert die Größe vor dem Rendern. Der Bildvergleich besteht lokal
-mit MSVC Debug und Clang Release; die erneute Linux-Prüfung steht aus.
+mit MSVC Debug und Clang Release sowie zu `f6cedbf` unter Linux GCC und Clang,
+dort auch mit ASan/UBSan.
 
 Die direkte SDK-Prüfung übernimmt nun auch den vollständigen bisherigen
 Sprachmodulvergleich: 27 neu gebaute Module, neun Experimente mit beiden allgemeinen
@@ -62,7 +64,8 @@ Sprach-Analysen, Sensoranalyse und sechs gemischte C-/Physim-Auswertungen.
 Core-Quellen und alle acht C-Vorlagen werden unabhängig von den ausgelieferten
 Bibliotheken neu gebaut. Die erweiterte Prüfung besteht lokal mit einem SDL-freien
 MSVC-Release-SDK und mit Clang Release einschließlich neun Projektbuilds und
-beider grafischer Abläufe. Die CI-Abnahme ist noch offen.
+beider grafischer Abläufe. Der erweiterte SDK-Schritt zu `f6cedbf` besteht unter
+Linux GCC/Clang, macOS Apple Silicon/Intel und Windows MSVC/ClangCL Release.
 
 Die neuen Sanitizer-Prüfungen decken zusätzliche Probleme auf: Der Nullzeiger-
 Vergleich im Clipboard-Test ist korrigiert; alle 493 Sanitizer-Tests ohne Fenster
@@ -83,11 +86,19 @@ Es enthält die App, Werkzeuge, alle acht C-Beispielmodule, Analysemodul, öffen
 Header, Kernbibliothek, SDK-Quellen, Vorlagen, Dokumentation und Lizenzen. Windows
 verwendet dafür Release und die Visual-Studio-Laufzeitbibliotheken. Mac-App-Pakete
 können dieses SDK über `package-macos.py --sdk` ohne CMake übernehmen.
+Die Paket-README beschreibt den Start der bereits gebauten App, die benötigten
+Compiler für Nutzerprojekte und die mitgelieferten CLI-Beispiele. Die Anleitung
+zum Bauen des vollständigen Repositorys bleibt in dessen eigener README.
 `verify-native-sdk.py` prüft ein verschobenes Paket mit unabhängigen Headern,
 15 Sprachprogrammen, mitgelieferten Modulen und neu gebauten C-/Physim-Projekten.
 Bei dieser Prüfung wurde die Windows-Compilererkennung für unterschiedlich
 geschriebene Umgebungsvariablennamen korrigiert; die Windows-API übernimmt jetzt
 die Suche nach `ProgramFiles(x86)` unabhängig von der Großschreibung.
+
+## Bisherige Umsetzungsschritte des direkten Builders
+
+Die folgenden Abschnitte dokumentieren die einzelnen Übertragungen. Ihre
+Testzahlen und damaligen offenen Punkte beschreiben den jeweiligen Zwischenstand.
 
 Der direkte Testläufer übernimmt jetzt 51 vorhandene C-Referenztests ohne CTest;
 41 davon benötigen kein SDL. Der vollständige übernommene Satz besteht lokal
