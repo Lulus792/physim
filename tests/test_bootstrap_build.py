@@ -1,0 +1,87 @@
+"""Regression for the direct repository build, using the real system compiler."""
+import argparse
+import hashlib
+import importlib.util
+from pathlib import Path
+import shutil
+import subprocess
+import tempfile
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--work", type=Path, required=True)
+    parser.add_argument("--compiler")
+    args = parser.parse_args()
+    repo = Path(__file__).resolve().parent.parent
+    spec = importlib.util.spec_from_file_location("physim_build", repo / "tools/build.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    args.work.mkdir(parents=True, exist_ok=True)
+    source = Path(tempfile.mkdtemp(prefix="bootstrap source ä ", dir=args.work)).resolve()
+    for name in ("src", "include", "app"):
+        (source / name).mkdir()
+    shutil.copyfile(repo / "app/utf8.manifest", source / "app/utf8.manifest")
+    (source / "include/value.h").write_text("#define VALUE 1\n", encoding="utf-8")
+    helper = source / "src/helper.c"
+    helper_text = '#include "value.h"\nint value(void) { return VALUE; }\n'
+    helper.write_text(helper_text, encoding="utf-8")
+    (source / "src/main.c").write_text('#include <stdio.h>\nint value(void);\n'
+                                      'int main(void) { printf("%d\\n", value()); return 0; }\n', encoding="utf-8")
+    module.ROOT = source
+    options = argparse.Namespace(build_dir=source / "build", config="Debug", no_app=True,
+                                 compiler=args.compiler, jobs=2, test=False)
+    env = module.compiler_environment()
+
+    def build():
+        with module.build_lock(options.build_dir):
+            builder = module.Builder(options, env)
+            library = builder.archive("value", ["src/helper.c"])
+            return builder.executable("probe", ["src/main.c"], [library])
+
+    def fingerprint(path):
+        return hashlib.sha256(path.read_bytes()).hexdigest()
+
+    program = build()
+    assert subprocess.check_output([str(program)]).strip() == b"1"
+    artifacts = [p for p in options.build_dir.rglob("*") if p.suffix in (".o", ".obj", ".a", ".lib")]
+    times = {p: p.stat().st_mtime_ns for p in artifacts + [program]}
+    build()
+    assert times == {p: p.stat().st_mtime_ns for p in times}, "Unchanged build rewrote outputs"
+    (source / "include/value.h").write_text("#define VALUE 2\n", encoding="utf-8")
+    build()
+    assert subprocess.check_output([str(program)]).strip() == b"2", "Header change was not rebuilt"
+    good = fingerprint(program)
+    helper.write_text("#error expected compiler failure\n", encoding="utf-8")
+    try:
+        build()
+        raise AssertionError("Compiler failure was ignored")
+    except RuntimeError:
+        assert fingerprint(program) == good
+    helper.write_text("int missing(void); int value(void) { return missing(); }\n", encoding="utf-8")
+    try:
+        build()
+        raise AssertionError("Link failure was ignored")
+    except RuntimeError:
+        assert fingerprint(program) == good
+    helper.write_text(helper_text, encoding="utf-8")
+    build()
+    assert subprocess.check_output([str(program)]).strip() == b"2"
+    with program.open("ab") as file:
+        file.write(b"corrupt cached artifact")
+    broken = fingerprint(program)
+    build()
+    assert fingerprint(program) != broken, "Corrupted output was reused"
+    with module.build_lock(options.build_dir):
+        try:
+            with module.build_lock(options.build_dir):
+                raise AssertionError("Concurrent build was allowed")
+        except RuntimeError:
+            pass
+    assert not list(source.rglob("CMake*"))
+    assert {p.name for p in source.iterdir()} == {"src", "include", "app", "build"}
+    print("Direct build: Unicode paths, incremental headers, failure recovery, artifact integrity and lock passed")
+
+
+if __name__ == "__main__":
+    main()

@@ -26,6 +26,14 @@ jobs:
           cmake -S build-sdl-source -B build-sdl -G Ninja -DCMAKE_BUILD_TYPE=Release -DSDL_TESTS=OFF -DCMAKE_INSTALL_PREFIX="$PWD/build-sdl-install"
           cmake --build build-sdl --parallel
           cmake --install build-sdl
+      - name: Direct compiler build without CMake for Physim
+        if: ${{ !inputs.package_only }}
+        run: |
+          python3 tools/build.py --compiler clang --test
+          python3 tests/test_bootstrap_build.py --compiler clang --work build/native
+          python3 tools/build.py --compiler clang --test
+          build/native/Debug/bin/physim --self-test "$PWD/build/Native C ä" pendulum
+          build/native/Debug/bin/physim --self-test "$PWD/build/Native Language ä" language_full
       - name: Configure
         run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DPHYSIM_GRAPHICS_TESTS=ON -DPHYSIM_BUILD_BENCHMARKS=ON -DCMAKE_PREFIX_PATH="$PWD/build-sdl-install"
       - name: Build
@@ -95,6 +103,16 @@ jobs:
       - name: UI dependency
         shell: pwsh
         run: ./tools/bootstrap-windows.ps1
+      - name: Direct compiler build without CMake for Physim
+        shell: pwsh
+        run: |
+          $compiler = if ('${{ matrix.toolset }}' -eq 'ClangCL') { 'clang-cl' } else { 'cl' }
+          python tools/build.py --compiler $compiler --config ${{ matrix.configuration }} --test
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python tests/test_bootstrap_build.py --compiler $compiler --work build/native
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python tools/build.py --compiler $compiler --config ${{ matrix.configuration }} --test
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
       - name: Configure
         run: cmake -S . -B build -A x64 -T ${{ matrix.toolset }} -DPHYSIM_BUILD_BENCHMARKS=ON
       - name: Build
@@ -144,6 +162,13 @@ jobs:
           cmake -S build-sdl-source -B build-sdl -G Ninja -DCMAKE_BUILD_TYPE=Release -DSDL_TESTS=OFF -DCMAKE_INSTALL_PREFIX="$PWD/build-sdl-install"
           cmake --build build-sdl --parallel
           cmake --install build-sdl
+      - name: Direct compiler build without CMake for Physim
+        run: |
+          python3 tools/build.py --compiler "${{ matrix.compiler }}" --test
+          python3 tests/test_bootstrap_build.py --compiler "${{ matrix.compiler }}" --work build/native
+          python3 tools/build.py --compiler "${{ matrix.compiler }}" --test
+          xvfb-run -a build/native/Debug/bin/physim --self-test "$PWD/build/Native C ä" pendulum
+          xvfb-run -a build/native/Debug/bin/physim --self-test "$PWD/build/Native Language ä" language_full
       - name: Configure
         run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DPHYSIM_SANITIZERS=ON -DPHYSIM_GRAPHICS_TESTS=ON -DPHYSIM_BUILD_BENCHMARKS=ON -DCMAKE_PREFIX_PATH="$PWD/build-sdl-install"
       - name: Build

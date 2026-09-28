@@ -1,0 +1,289 @@
+"""Build Physim directly with a C17 compiler; no generated build system required.
+
+Uses only Python's standard library. SDL must already be installed when building
+the app. All generated files, signatures and locks live in the build directory.
+"""
+from __future__ import annotations
+
+import argparse
+from concurrent.futures import ThreadPoolExecutor
+from contextlib import contextmanager
+import hashlib
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+
+ROOT = Path(__file__).resolve().parent.parent
+WINDOWS = sys.platform == "win32"
+MAC = sys.platform == "darwin"
+CORE = "core memory array string_view hashmap math data analysis scene numerics units series report report_export mechanics box_contacts collision measurement".split()
+LANGUAGE = "lexer parser checker emitter builtins".split()
+APP = "main ui_backend ui_sdl ui_geometry graphics documentation library preferences workspace_state workspace_tree plot_view report_image png".split()
+PROJECT = "project_file text_document autosave parameter_catalog".split()
+ZLIB = "adler32 crc32 deflate trees zutil".split()
+
+
+def run(args: list[str], env: dict[str, str], *, capture: bool = False) -> str:
+    result = subprocess.run(args, env=env, cwd=ROOT, stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT, encoding="utf-8", errors="replace")
+    if result.returncode or not capture:
+        if result.stdout:
+            print(result.stdout, end="", flush=True)
+    if result.returncode:
+        raise RuntimeError(f"Command failed ({result.returncode}): {subprocess.list2cmdline(args)}")
+    return result.stdout
+
+
+def compiler_environment() -> dict[str, str]:
+    env = dict(os.environ)
+    if not WINDOWS or (env.get("VCINSTALLDIR") and env.get("VSCMD_ARG_TGT_ARCH") == "x64"
+                       and shutil.which("cl", path=env.get("PATH"))):
+        return env
+    vswhere = Path(env.get("ProgramFiles(x86)", "C:/Program Files (x86)")) / "Microsoft Visual Studio/Installer/vswhere.exe"
+    if not vswhere.is_file():
+        raise RuntimeError("Install Visual Studio 2022 C++ Build Tools and a Windows SDK.")
+    installation = run([str(vswhere), "-latest", "-products", "*", "-requires",
+                        "Microsoft.VisualStudio.Component.VC.Tools.x86.x64", "-property",
+                        "installationPath"], env, capture=True).strip()
+    setup = Path(installation) / "VC/Auxiliary/Build/vcvars64.bat"
+    if not installation or not setup.is_file():
+        raise RuntimeError("Visual Studio C++ x64 tools were not found.")
+    # Only the installed toolchain path enters cmd.exe. Source/build paths never do.
+    command = f'""{setup}" >nul && set"'
+    result = subprocess.run(f'{env.get("COMSPEC", "cmd.exe")} /d /s /c {command}',
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+    for line in result.stdout.decode("mbcs").splitlines():
+        if "=" in line and not line.startswith("="):
+            key, value = line.split("=", 1)
+            # Windows environment keys are case insensitive; avoid duplicate PATH entries.
+            env[key.upper()] = value
+    return {key.upper(): value for key, value in env.items()}
+
+
+def digest_files(paths: list[Path]) -> str:
+    digest = hashlib.sha256()
+    for path in paths:
+        digest.update(str(path).encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+@contextmanager
+def build_lock(directory: Path):
+    directory.mkdir(parents=True, exist_ok=True)
+    with (directory / ".physim-build.lock").open("a+b") as lock:
+        if os.fstat(lock.fileno()).st_size == 0:
+            lock.write(b"0")
+            lock.flush()
+        lock.seek(0)
+        try:
+            if WINDOWS:
+                import msvcrt
+                msvcrt.locking(lock.fileno(), msvcrt.LK_NBLCK, 1)
+            else:
+                import fcntl
+                fcntl.flock(lock.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError as error:
+            raise RuntimeError(f"Another build is using {directory}") from error
+        try:
+            yield
+        finally:
+            if WINDOWS:
+                lock.seek(0)
+                msvcrt.locking(lock.fileno(), msvcrt.LK_UNLCK, 1)
+            else:
+                fcntl.flock(lock.fileno(), fcntl.LOCK_UN)
+
+
+class Builder:
+    def __init__(self, args: argparse.Namespace, env: dict[str, str]):
+        self.args, self.env = args, env
+        self.directory = args.build_dir.resolve()
+        self.bin = self.directory / "bin"
+        self.lib = self.directory / "lib"
+        self.bin.mkdir(exist_ok=True)
+        self.lib.mkdir(exist_ok=True)
+        self.cc = shutil.which(args.compiler or ("cl" if WINDOWS else "cc"), path=env.get("PATH"))
+        if not self.cc:
+            raise RuntimeError("C17 compiler not found; pass --compiler with its executable path.")
+        self.msvc = Path(self.cc).name.lower() in ("cl.exe", "cl", "clang-cl.exe", "clang-cl")
+        if WINDOWS and not self.msvc:
+            raise RuntimeError("Windows builds require MSVC or clang-cl.")
+        self.ar = shutil.which("lib" if self.msvc else "ar", path=env.get("PATH"))
+        if not self.ar:
+            raise RuntimeError("Static library tool not found (lib.exe / ar).")
+        self.includes = [ROOT / "include", ROOT / "src", ROOT / "app"]
+        self.sdl_library: Path | None = None
+        if not args.no_app:
+            prefix = args.sdl.resolve() if args.sdl else ROOT / ("third_party/SDL3-3.2.30" if WINDOWS else "build-sdl-install")
+            self.includes.extend([ROOT / "third_party", ROOT / "third_party/zlib-1.3.2", prefix / "include"])
+            if not (prefix / "include/SDL3/SDL.h").is_file():
+                raise RuntimeError("SDL3 headers not found. Pass --sdl with an SDL3 installation prefix.")
+            if WINDOWS:
+                self.sdl_library = prefix / "lib/x64/SDL3.lib"
+                runtime = prefix / "lib/x64/SDL3.dll"
+            else:
+                name = "libSDL3.0.dylib" if MAC else "libSDL3.so.0"
+                runtime = next((prefix / d / name for d in ("lib", "lib64") if (prefix / d / name).is_file()), prefix / "lib" / name)
+                self.sdl_library = runtime
+            if not self.sdl_library.is_file() or not runtime.is_file():
+                raise RuntimeError(f"Shared SDL3 library not found in {prefix}")
+            destination = self.bin / runtime.name
+            if not destination.is_file() or destination.read_bytes() != runtime.read_bytes():
+                shutil.copy2(runtime, destination)
+        headers = sorted({p for base in self.includes for p in base.rglob("*")
+                          if p.suffix in (".h", ".inc") and p.is_file()})
+        # Conservative dependency tracking: changing any included project/SDL header
+        # rebuilds all objects. Source edits still rebuild just the affected objects.
+        self.headers = digest_files(headers)
+        self.toolchain = digest_files([Path(self.cc), Path(self.ar)])
+        self.environment = {k: env.get(k, "") for k in
+                            ("INCLUDE", "LIB", "CL", "_CL_", "CPATH", "C_INCLUDE_PATH", "SDKROOT", "MACOSX_DEPLOYMENT_TARGET")}
+
+    def signature(self, args: list[str], inputs: list[Path]) -> str:
+        data = [args, digest_files(inputs), self.toolchain, self.environment]
+        return hashlib.sha256(json.dumps(data, sort_keys=True).encode("utf-8")).hexdigest()
+
+    def execute(self, output: Path, command: list[str], inputs: list[Path], extra: str = "") -> bool:
+        stamp = output.with_name(output.name + ".json")
+        signature = self.signature(command, inputs) + extra
+        try:
+            state = json.loads(stamp.read_text(encoding="utf-8"))
+            if not getattr(self.args, "rebuild", False) and state == {"input": signature, "output": digest_files([output])}:
+                return False
+        except (OSError, ValueError):
+            pass
+        run(command, self.env)
+        temporary = output.with_name(output.stem + ".pending" + output.suffix)
+        os.replace(temporary, output)
+        temporary_stamp = stamp.with_suffix(".pending")
+        temporary_stamp.write_text(json.dumps({"input": signature, "output": digest_files([output])}), encoding="utf-8")
+        os.replace(temporary_stamp, stamp)
+        return True
+
+    def compile(self, source: str, defines: tuple[str, ...] = ()) -> Path:
+        path = ROOT / source
+        variant = hashlib.sha256(repr(defines).encode()).hexdigest()[:10]
+        output = self.directory / "obj" / variant / Path(source).with_suffix(".obj" if self.msvc else ".o")
+        output.parent.mkdir(parents=True, exist_ok=True)
+        temporary = output.with_name(output.stem + ".pending" + output.suffix)
+        debug = self.args.config == "Debug"
+        if self.msvc:
+            command = [self.cc, "/nologo", "/c", "/std:c17", "/utf-8", "/W4", "/D_CRT_SECURE_NO_WARNINGS",
+                       "/MDd" if debug else "/MD", "/Od" if debug else "/O2", "/Z7", "/fp:precise"]
+            command += ["/I" + str(p) for p in self.includes] + ["/D" + d for d in defines]
+            if not debug:
+                command.append("/DNDEBUG")
+            command += [str(path), "/Fo" + str(temporary)]
+        else:
+            command = [self.cc, "-c", "-std=c17", "-fPIC", "-g", "-O0" if debug else "-O2",
+                       "-Wall", "-Wextra", "-Wpedantic", "-Wshadow", "-D_POSIX_C_SOURCE=200809L",
+                       "-fno-fast-math", "-ffp-contract=off"]
+            command += ["-I" + str(p) for p in self.includes] + ["-D" + d for d in defines]
+            if not debug:
+                command.append("-DNDEBUG")
+            command += [str(path), "-o", str(temporary)]
+        changed = self.execute(output, command, [path], self.headers)
+        if changed:
+            print(f"Compiled {source}", flush=True)
+        return output
+
+    def objects(self, sources: list[str], defines: tuple[str, ...] = ()) -> list[Path]:
+        with ThreadPoolExecutor(max_workers=self.args.jobs) as pool:
+            return list(pool.map(lambda source: self.compile(source, defines), sources))
+
+    def archive(self, name: str, sources: list[str], defines: tuple[str, ...] = ()) -> Path:
+        objects = self.objects(sources, defines)
+        output = self.lib / (name + ".lib" if self.msvc else "lib" + name + ".a")
+        temporary = output.with_name(output.stem + ".pending" + output.suffix)
+        # ar replaces members but retains removed sources: always create a fresh archive.
+        temporary.unlink(missing_ok=True)
+        command = ([self.ar, "/nologo", "/OUT:" + str(temporary)] if self.msvc else
+                   [self.ar, "rcs", str(temporary)]) + [str(p) for p in objects]
+        self.execute(output, command, objects)
+        return output
+
+    def executable(self, name: str, sources: list[str], libraries: list[Path], *, sdl: bool = False,
+                   defines: tuple[str, ...] = ()) -> Path:
+        objects = self.objects(sources, defines)
+        output = self.bin / (name + ".exe" if WINDOWS else name)
+        temporary = output.with_name(output.stem + ".pending" + output.suffix)
+        inputs = objects + libraries + ([self.sdl_library] if sdl else [])
+        command = [self.cc, *map(str, inputs)]
+        if self.msvc:
+            manifest = ROOT / "app/utf8.manifest"
+            command += ["/nologo", "/Fe:" + str(temporary), "/link", "/INCREMENTAL:NO", "/DEBUG",
+                        "/PDB:" + str(temporary.with_suffix(".pdb")), "/MANIFEST:EMBED", "/MANIFESTINPUT:" + str(manifest),
+                        "/PDBALTPATH:" + output.with_suffix(".pdb").name,
+                        "user32.lib", "shell32.lib", "advapi32.lib"]
+            inputs += [manifest]
+            if name == "physim":
+                command.append("dwmapi.lib")
+        else:
+            command += ["-o", str(temporary), "-lm"]
+            if not MAC:
+                command += ["-ldl", "-pthread"]
+            if sdl:
+                command += ["-Wl,-rpath,@executable_path" if MAC else "-Wl,-rpath,$ORIGIN"]
+        if self.execute(output, command, inputs):
+            if self.msvc:
+                os.replace(temporary.with_suffix(".pdb"), output.with_suffix(".pdb"))
+            print(f"Linked {output.name}", flush=True)
+        return output
+
+    def build(self):
+        core = self.archive("physim-core", [f"src/{name}.c" for name in CORE])
+        platform = self.archive("physim-platform", ["src/platform.c", "src/protocol.c"])
+        language = self.archive("physim-language", [f"src/language/{name}.c" for name in LANGUAGE])
+        batch = self.archive("physim-batch", ["src/batch.c"])
+        self.executable("physimc", ["src/language/main.c", "src/language/loader.c"], [language])
+        self.executable("physim-runner", ["runners/experiment.c"], [platform, core])
+        self.executable("physim-analysis-runner", ["runners/analysis.c"], [platform, core])
+        self.executable("physim-batch", ["runners/batch.c"], [batch, platform, core])
+        if not self.args.no_app:
+            project = self.archive("physim-project", [f"app/{name}.c" for name in PROJECT])
+            zlib = self.archive("physim-zlib", [f"third_party/zlib-1.3.2/{name}.c" for name in ZLIB], ("Z_PREFIX",))
+            self.executable("physim-build", ["app/build_main.c"], [project, platform, core], sdl=True)
+            self.executable("physim", [f"app/{name}.c" for name in APP],
+                            [project, batch, platform, language, zlib, core], sdl=True,
+                            defines=("Z_PREFIX", f'PS_SOURCE_DIR="{ROOT.as_posix()}"'))
+        if self.args.test:
+            for name in ("core", "numerics", "mechanics"):
+                program = self.executable(f"physim-{name}-tests", [f"tests/test_{name}.c"], [platform, core])
+                run([str(program)], self.env)
+            print("Core, numerics and mechanics reference tests passed.")
+        print(f"Build complete: {self.bin}")
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--config", choices=("Debug", "Release"), default="Debug")
+    parser.add_argument("--build-dir", type=Path)
+    parser.add_argument("--compiler", help="C17 compiler executable (cl/clang-cl on Windows, cc/clang/gcc elsewhere)")
+    parser.add_argument("--sdl", type=Path, help="SDL3 installation prefix")
+    parser.add_argument("--no-app", action="store_true", help="Build the library, language compiler and runners without SDL")
+    parser.add_argument("--jobs", type=int, default=min(os.cpu_count() or 1, 8))
+    parser.add_argument("--test", action="store_true", help="Run core, numerics and mechanics reference tests")
+    parser.add_argument("--rebuild", action="store_true", help="Recompile and relink all selected targets")
+    args = parser.parse_args()
+    if args.jobs < 1 or args.jobs > 64:
+        parser.error("--jobs must be between 1 and 64")
+    args.build_dir = args.build_dir or ROOT / "build" / "native" / args.config
+    if args.build_dir.resolve() == ROOT or args.build_dir.resolve() in ROOT.parents:
+        parser.error("Use a separate build directory, not the source root or its parents")
+    try:
+        with build_lock(args.build_dir.resolve()):
+            Builder(args, compiler_environment()).build()
+    except (OSError, RuntimeError, subprocess.SubprocessError) as error:
+        print(f"Build failed: {error}", file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

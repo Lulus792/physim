@@ -45,8 +45,67 @@ nach. Gleichzeitige Builds im selben Ausgabeordner werden abgewiesen.
 Quellen mit zeitabhängigen Makros wie `__TIME__` können bei jedem Build erneut
 übersetzt werden, weil sich ihr vorverarbeiteter Inhalt ändert.
 
-Die nachfolgenden CMake-Anleitungen betreffen den Bau von Physim selbst und die
-bisherige SDK-Anbindung. Deren vollständige Ablösung bleibt ein eigenes Ziel.
+Die nachfolgenden CMake-Anleitungen betreffen den bisherigen Bau von Physim selbst
+und die SDK-Anbindung. Der direkte Buildweg ist unten beschrieben; die vollständige
+Ablösung einschließlich Paketierung und gesamter Testsuite bleibt ein eigenes Ziel.
+
+## Physim direkt ohne CMake bauen
+
+`tools/build.py` ruft den C17-Compiler und den Archivierer direkt auf. Es benötigt
+Python ab 3.10 und dessen Standardbibliothek. Es baut die Bibliotheken, `physimc`,
+alle drei Runner-Werkzeuge, `physim-build` und die Oberfläche. Physim bleibt in C17
+implementiert; Python steuert nur den Entwicklungsbuild.
+
+Für die Oberfläche zuerst SDL 3.2.30 installieren, wie in der
+[README](../README.md#linux) beschrieben. Der Quellbuild von SDL verwendet weiterhin
+dessen eigenes CMake-Buildsystem; eine vorhandene SDL-Installation lässt sich direkt
+angeben. Für Physim selbst werden weder CMake noch Ninja aufgerufen.
+
+Windows, im Repository mit installierten Visual Studio C++ Build Tools und Python:
+
+```powershell
+.\tools\bootstrap-windows.ps1
+python tools/build.py --config Debug --test
+.\build\native\Debug\bin\physim.exe
+```
+
+Der Builder findet die x64-Werkzeuge von Visual Studio automatisch. Alternativ
+`--compiler clang-cl` oder den vollständigen Pfad zu `clang-cl.exe` angeben.
+
+Linux und macOS, nach dem lokalen SDL-Build aus der README:
+
+```sh
+python3 tools/build.py --config Debug --sdl "$PWD/build-sdl-install" --test
+./build/native/Debug/bin/physim
+```
+
+`--compiler gcc` beziehungsweise `--compiler clang` wählt einen anderen Compiler.
+macOS baut für die Architektur des verwendeten Compilers. Unter Linux/macOS wird
+SDL neben die Programme kopiert und über einen relativen Laufzeitpfad gefunden.
+
+Weitere Aufrufe (unter Windows `python` verwenden):
+
+```sh
+# Optimierter Build mit Oberfläche:
+python3 tools/build.py --config Release --test
+# Bibliothek, Sprachcompiler und Runner ohne SDL:
+python3 tools/build.py --no-app --build-dir build/native/Core --test
+# Den Buildmechanismus mit echten Compiler- und Linkerfehlern prüfen:
+python3 tests/test_bootstrap_build.py --work build/native
+```
+
+Alle erzeugten Dateien liegen unter `build/native/<Konfiguration>` beziehungsweise
+dem gewählten `--build-dir`. Unveränderte Quellen und Programme werden anhand von
+Inhaltsprüfsummen wiederverwendet. Eine Änderung an Projekt- oder SDL-Headern baut
+konservativ alle Objekte neu. Nach Änderungen am externen System-SDK kann
+`--rebuild` einen vollständigen Neubau erzwingen. `--jobs 4` begrenzt die Zahl
+gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
+dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
+erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
+
+`--test` führt die drei Referenzprogramme für Core, Numerik und Mechanik aus.
+Die vollständige Testsuite, SDK-Installation und Mac-Paketierung verwenden noch
+die folgenden CMake-Abläufe. Der direkte Build ersetzt diese Prüfungen noch nicht.
 
 ## Toolchains
 

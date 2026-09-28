@@ -17,6 +17,18 @@ mit MSVC, Clang und AddressSanitizer auf Windows. Der App-Test prüft Neustart,
 Release-Build, Ablehnung eines überlaufenden Seeds und einen echten Runnerlauf
 mit 0,125 Sekunden und Seed 18446744073709551615 einschließlich der Messdatei.
 
+Ein zusätzlicher direkter Entwicklungsbuild (`tools/build.py`) baut jetzt auch
+Physim selbst über die Compiler-/Archiviererprogramme. Bibliotheken, Sprachcompiler,
+Runner, Projektbuilder und Oberfläche benötigen dabei keinen CMake-Aufruf.
+Windows/MSVC besteht Debug und Release sowie den SDL-freien Build und die drei
+Core-/Numerik-/Mechanik-Referenzprogramme. Vollständige C- und Physim-App-Abläufe
+bestehen mit dem direkt gebauten Debug-Programm. Der Buildtest prüft Unicodepfade,
+unveränderte Ausgaben, Headeränderungen, Compiler-/Linkerfehler mit erhaltenem
+Programm, beschädigte Cacheausgaben und die Sperre gleichzeitiger Builds.
+Der Nachweis dieses neuen Buildwegs auf Linux/macOS steht noch aus. Die komplette
+Testsuite und Paketierung bleiben vorerst CMake-gestützt; auch der SDL-Quellbuild
+verwendet weiterhin dessen eigenes Buildsystem.
+
 | Bereich | Implementiert | Noch offen |
 | --- | --- | --- |
 | Eigene Sprache | verbindliches Ziel als vollständige C-Alternative, C17-Lexer/Parser mit `:`-/Einrückungsblöcken, skalare und nominale Struktur-/Enumtypen mit typisierten und besitzenden Nutzdaten sowie optionale Werte mit Wertsemantik und struktureller Gleichheit, normale/mutierende/statische Strukturmethoden, eigene Struct-Initialisierer mit Überladung nach Parameterform und Parametertyp auch bei generischen Typen, `physimc --check`/`--emit-c`/`--emit-experiment`/`--emit-analysis`, C17-Backend/CMake für Programme und erste Experiment-/Analysemodule, Vec2/Vec3/Vec4, Quaternionen und Mat3/Mat4, Einheiten/Kanäle, explizite PCG32-Wertströme, starre Körper mit Impulsen/Quaternionrotation, Kontaktpaare mit Reibung/Rückprall, Distanzgelenke mit lokalen Ankern, gemeinsamer Körpergruppen-Solver mit besitzenden Ergebniswerten, lineare Kugel-Sweeps und Hüllquader-Kandidatenpaare, gemeinsamer Integrator, Messdaten/Szene, Dataset-/Series-/Plot-/Table-Handles einschließlich erzeugter Datenreihen, gemeinsame Messstatusauswahl, Statistik/Diagramme/Tabellen/Exporte, abgefangene Laufzeitfehler mit Quelldiagnosen, erste App-Vorlagen mit Editor/Build und Quellsnapshots | vollständiger semantischer Sprachvertrag, weitere Werttypen und Fallmuster, Überladungsauflösung für weitere Ausdrücke, erweiterte Module, vollständige Experiment- und Analysebindungen, vollständige Integration beider Editoren, vollständiger Sprachausbau und zwei getestete Dokumentationsteile (LANG-001 bis LANG-007) |
