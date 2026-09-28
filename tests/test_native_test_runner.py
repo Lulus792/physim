@@ -39,9 +39,26 @@ def main():
     assert check("print('literal{ 97,10,0 } literal{13,0}')", stdout_captures=captures)["status"] == "passed"
     assert check("print('literal{13,0} literal{97,10,0}')", stdout_captures=captures)["status"] == "failed"
     assert check("print('no literal')", stdout_captures=captures)["status"] == "failed"
+    counts = (dict(pattern=r"Shared\.phys", count=1), dict(pattern=r"Other\.phys", count=0))
+    assert check("print('Shared.phys')", stdout_counts=counts)["status"] == "passed"
+    assert check("print('Shared.phys Shared.phys')", stdout_counts=counts)["status"] == "failed"
+    assert check("print('Shared.phys Other.phys')", stdout_counts=counts)["status"] == "failed"
     assert check("import time; time.sleep(60)", timeout=.2)["status"] == "timeout"
     assert runner.execute_case([str(directory / "missing-program")], work=directory,
                                env=os.environ, timeout=1)["status"] == "failed"
+
+    probe = directory / "compiler source ä"
+    probe.mkdir()
+    arguments = runner.prepare_compiler_case(dict(name="missing"), source, probe)
+    assert arguments == ["--check", str(probe / "missing.phys")]
+    assert not (probe / "missing.phys").exists()
+    arguments = runner.prepare_compiler_case(dict(name="entry", entry="Local/Main ä.phys", source="import Shared\n",
+        files={"Local/Shared.phys": "let value = 1\n"},
+        arguments=["--deps", "--module-path", "{work}", "{entry}"]), source, probe)
+    assert arguments == ["--deps", "--module-path", str(probe), str(probe / "Local/Main ä.phys")]
+    assert (probe / "Local/Shared.phys").read_bytes() == b"let value = 1\n"
+    runner.prepare_compiler_case(dict(name="oversized", repeat_source=dict(text=" ", count=1048577)), source, probe)
+    assert (probe / "oversized.phys").stat().st_size == 1048577
 
     # Output existence alone cannot validate an export. Preserve exact values,
     # normalize only CRLF and reject artifacts from failed operations.

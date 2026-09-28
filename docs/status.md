@@ -99,9 +99,8 @@ Byteprüfung mehrzeiliger Strings vergleicht weiterhin das erste erzeugte Litera
 ein späteres passendes Literal kann ein falsches erstes Ergebnis nicht verdecken.
 Der direkte Katalog umfasst jetzt 200 Tests, davon 190 ohne SDL. Alle 156 Sprachtests
 bestehen lokal mit MSVC Debug und Clang Release, ebenso die 147 zugehörigen
-CTest-Prüfungen. Der direkte CI-Schritt zum Commit `d7fb0b0` besteht auf Linux
-mit GCC/Clang, beiden macOS-Architekturen sowie Windows mit MSVC Debug und
-ClangCL Debug/Release; MSVC Release ist zum Prüfzeitpunkt noch offen.
+CTest-Prüfungen. Der direkte CI-Schritt zum Commit `d7fb0b0` besteht inzwischen
+in allen acht Plattformkombinationen.
 
 Physikalische Einheiten, Materialien, Medien und Kugelauftrieb werden jetzt
 ebenfalls direkt geprüft, einschließlich statischer Dimensionsfehler und
@@ -111,8 +110,19 @@ CSV-Inhalt und verlangen, dass abgelehnte Exporte keine CSV-Datei anlegen.
 Der direkte Katalog enthält jetzt 222 Tests, davon 212 ohne SDL. Alle 178 Sprachtests
 bestehen lokal mit MSVC Debug und Clang Release; die 163 zugehörigen CTest-Prüfungen
 bestehen ebenfalls. Der Läufertest erkennt falsche Inhalte, ungültiges UTF-8,
-fehlende Dateien und unerwünschte Ausgaben. Der CI-Nachweis dieser Erweiterung
-steht noch aus.
+fehlende Dateien und unerwünschte Ausgaben. Der direkte CI-Schritt zum Commit
+`0923b6e` besteht auf Linux mit GCC/Clang, beiden macOS-Architekturen sowie Windows
+mit MSVC Debug und ClangCL Debug/Release; MSVC Release ist noch offen.
+
+Compiler-CLI und Modulimporte laufen nun ebenfalls direkt. 52 Compileraufrufe
+prüfen Host-Beschränkungen, Unicodepfade, Diagnosepositionen, Größenbegrenzung,
+Abhängigkeiten, Importzyklen und die Suchreihenfolge. Die lokale Modulpriorität
+wird zusätzlich anhand der tatsächlich aufgelisteten Datei geprüft. Drei weitere
+Programme prüfen Importe, zusätzliche Suchpfade und einen Fehler aus einer
+importierten Funktion. Der direkte Katalog umfasst 228 Tests, davon 218 ohne SDL.
+Alle 184 Sprachtests bestehen lokal mit MSVC Debug und Clang Release; die 169
+zugehörigen CTest-Prüfungen bestehen ebenfalls mit den gemeinsamen Erwartungen.
+Der CI-Nachweis dieser Erweiterung steht noch aus.
 
 | Bereich | Implementiert | Noch offen |
 | --- | --- | --- |

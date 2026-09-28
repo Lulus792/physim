@@ -4346,6 +4346,610 @@
           "stderr_pattern": "Expression type does not match required type"
         }
       ]
+    },
+    {
+      "name": "cli",
+      "checks": [
+        {
+          "name": "sensor_host_emit-c",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-c",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr_pattern": "Host API requires|unavailable in this module kind",
+          "source": "func f(c: SensorConfig):\n    let s = Sensor.forRun(c,0)\n"
+        },
+        {
+          "name": "sensor_host_emit-analysis",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-analysis",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr_pattern": "Host API requires|unavailable in this module kind",
+          "source": "func f(c: SensorConfig):\n    let s = Sensor.forRun(c,0)\n"
+        },
+        {
+          "name": "seed_host_emit-c",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-c",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr_pattern": "Host API requires|unavailable in this module kind",
+          "source": "let seed = runSeed()\n"
+        },
+        {
+          "name": "seed_host_emit-analysis",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-analysis",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr_pattern": "Host API requires|unavailable in this module kind",
+          "source": "let seed = runSeed()\n"
+        },
+        {
+          "name": "series_host_emit-c",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-c",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr_pattern": "Host API requires|unavailable in this module kind",
+          "source": "let unit = Unit(0,0,0,0,0,0,0,1,\"1\")\nlet values = Series.fromValues([1.0,2.0],unit,\"values\")\n"
+        },
+        {
+          "name": "series_host_emit-experiment",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-experiment",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr_pattern": "Host API requires|unavailable in this module kind",
+          "source": "let unit = Unit(0,0,0,0,0,0,0,1,\"1\")\nlet values = Series.fromValues([1.0,2.0],unit,\"values\")\n"
+        },
+        {
+          "name": "polyline_host_emit-c",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-c",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr_pattern": "Host API requires|unavailable in this module kind",
+          "source": "polyline([], 0, 0, 0)\n"
+        },
+        {
+          "name": "polyline_host_emit-analysis",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-analysis",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr_pattern": "Host API requires|unavailable in this module kind",
+          "source": "polyline([], 0, 0, 0)\n"
+        },
+        {
+          "name": "arrays_check",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--check",
+          "exit_code": 0,
+          "stdout_patterns": [
+            "check passed"
+          ],
+          "source": "var values: [[Float64]] = [[1, 2], []]\nvalues[0][1] += 3\n"
+        },
+        {
+          "name": "arrays_emit",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-c",
+          "exit_code": 0,
+          "stdout_patterns": [
+            "psrt_array_build_begin",
+            "Physim language 0.167.0"
+          ],
+          "stderr": "",
+          "source": "var values: [[Float64]] = [[1, 2], []]\nvalues[0][1] += 3\n"
+        },
+        {
+          "name": "valid_source",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--check",
+          "exit_code": 0,
+          "source_file": "examples/language/energy.phys",
+          "stdout_patterns": [
+            "check passed"
+          ],
+          "stderr": ""
+        },
+        {
+          "name": "immutable_check",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--check",
+          "exit_code": 1,
+          "stderr_pattern": ":2:1: error: Assignment requires a mutable var binding",
+          "source": "let mass = 2.0\nmass = 3.0\n"
+        },
+        {
+          "name": "immutable_emit",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-c",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr_pattern": ":2:1: error:",
+          "source": "let mass = 2.0\nmass = 3.0\n"
+        },
+        {
+          "name": "scalar_callback",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--check",
+          "exit_code": 1,
+          "stderr_pattern": ":3:[0-9]+: error: Scalar callback requires func",
+          "source": "func wrong(x: Int64) -> Float64:\n    return 0\nlet x = rootBisect(wrong, 0, 1, 1e-9, 0, 10)\n"
+        },
+        {
+          "name": "ode_callback",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--check",
+          "exit_code": 1,
+          "stderr_pattern": ":3:[0-9]+: error: ODE callback requires func",
+          "source": "func wrong(time: Float64, state: Float64) -> [Float64]:\n    return [state]\nlet x = rk4Step(wrong, [1.0], 0, 0.1)\n"
+        },
+        {
+          "name": "analysis_callback",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-analysis",
+          "exit_code": 0,
+          "stdout_patterns": [
+            "static double pscb_[0-9]+",
+            "psrt_root_bisect"
+          ],
+          "stderr": "",
+          "source": "func target(x: Float64) -> Float64:\n    return x * x - 2\nfunc analyze():\n    let x = rootBisect(target, 1, 2, 1e-9, 0, 100)\n"
+        },
+        {
+          "name": "syntax",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--check",
+          "exit_code": 1,
+          "stderr_pattern": ":1:9: error: Expected ':'",
+          "source": "if true {\n    return\n}\n"
+        },
+        {
+          "name": "missing_source",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--check",
+          "exit_code": 2,
+          "stderr_pattern": "Cannot open source"
+        },
+        {
+          "name": "source_limit",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--check",
+          "exit_code": 2,
+          "repeat_source": {
+            "text": " ",
+            "count": 1048577
+          },
+          "stderr_pattern": "exceeds 1 MiB"
+        },
+        {
+          "name": "empty_source",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--check",
+          "exit_code": 0,
+          "source": ""
+        },
+        {
+          "name": "version",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--check",
+          "exit_code": 0,
+          "arguments": [
+            "--version"
+          ],
+          "stdout_patterns": [
+            "physimc 0.1.0-dev; Physim language 0.167.0"
+          ]
+        },
+        {
+          "name": "unknown_option",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--check",
+          "exit_code": 2,
+          "arguments": [
+            "--unknown"
+          ],
+          "stderr_pattern": "Usage:"
+        },
+        {
+          "name": "table_host_emit-c",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-c",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr_pattern": "Analysis handles require|Host API requires|unavailable in this module kind",
+          "source": "func create():\n    let t = Table(\"T\", [], [])\nfunc reset():\n    return\nfunc step(dt: Float64):\n    return\nfunc scene():\n    return\n"
+        },
+        {
+          "name": "table_host_emit-experiment",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-experiment",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr_pattern": "Analysis handles require|Host API requires|unavailable in this module kind",
+          "source": "func create():\n    let t = Table(\"T\", [], [])\nfunc reset():\n    return\nfunc step(dt: Float64):\n    return\nfunc scene():\n    return\n"
+        },
+        {
+          "name": "random_uniform_host",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-c",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr_pattern": "Host API requires",
+          "source": "let x = randomUniform(0, 1)\n"
+        },
+        {
+          "name": "random_normal_host",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-analysis",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr_pattern": "unavailable in this module kind",
+          "source": "func analyze():\n    let x = randomNormal(0, 1)\n"
+        },
+        {
+          "name": "standalone_rng",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-c",
+          "exit_code": 0,
+          "stdout_patterns": [
+            "psrt_rng_sample"
+          ],
+          "stderr": "",
+          "source": "var rng = Rng(42)\nlet x = rng.sample(Distribution.normal(0, 1))\n"
+        },
+        {
+          "name": "analysis_rng",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-analysis",
+          "exit_code": 0,
+          "stdout_patterns": [
+            "psrt_rng_sample"
+          ],
+          "stderr": "",
+          "source": "func analyze():\n    var rng = Rng(42)\n    let x = rng.sample(Distribution.normal(0, 1))\n"
+        },
+        {
+          "name": "rng_host_emit-c",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-c",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr_pattern": "Host API requires|unavailable in this module kind",
+          "source": "let rng = Rng.forRun(1)\n"
+        },
+        {
+          "name": "rng_host_emit-analysis",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-analysis",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr_pattern": "Host API requires|unavailable in this module kind",
+          "source": "let rng = Rng.forRun(1)\n"
+        },
+        {
+          "name": "experiment",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-experiment",
+          "exit_code": 0,
+          "stdout_patterns": [
+            "PSRT_EXPERIMENT_ADAPTER"
+          ],
+          "stdout_counts": [
+            {
+              "pattern": "int main",
+              "count": 0
+            }
+          ],
+          "source": "func create():\n    return\nfunc reset():\n    return\nfunc step(dt: Float64):\n    return\nfunc scene():\n    return\n"
+        },
+        {
+          "name": "experiment_print",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-experiment",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr_pattern": "print is unavailable",
+          "source": "func create():\n    return\nfunc reset():\n    return\nfunc step(dt: Float64):\n    return\nfunc scene():\n    return\nprint(1)\n"
+        },
+        {
+          "name": "standalone_metadata",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-c",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr_pattern": "Host API requires",
+          "source": "metadata(\"model=test\")\n"
+        },
+        {
+          "name": "experiment_callback",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-experiment",
+          "exit_code": 1,
+          "stdout": "",
+          "source": "func step(dt: Int64):\n    return\n"
+        },
+        {
+          "name": "analysis",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-analysis",
+          "exit_code": 0,
+          "stdout_patterns": [
+            "PSRT_FN_ANALYZE"
+          ],
+          "stdout_counts": [
+            {
+              "pattern": "int main",
+              "count": 0
+            }
+          ],
+          "source": "func analyze():\n    report(\"Reference\")\n"
+        },
+        {
+          "name": "analysis_metadata",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-analysis",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr_pattern": "unavailable in this module kind",
+          "source": "func analyze():\n    report(\"Reference\")\nmetadata(\"wrong host\")\n"
+        },
+        {
+          "name": "analysis_signature",
+          "entry": "Sprachtest ä/Quelle mit Leerzeichen.phys",
+          "mode": "--emit-analysis",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr_pattern": "Analysis requires",
+          "source": "func analyze(value: Float64):\n    return\n"
+        }
+      ]
+    },
+    {
+      "name": "modules",
+      "checks": [
+        {
+          "name": "dependencies",
+          "arguments": [
+            "--deps",
+            "{root}/examples/language/modules/main.phys"
+          ],
+          "exit_code": 0,
+          "stderr": "",
+          "stdout_counts": [
+            {
+              "pattern": "[/\\\\]main\\.phys",
+              "count": 1
+            },
+            {
+              "pattern": "[/\\\\]Shared\\.phys",
+              "count": 1
+            },
+            {
+              "pattern": "[/\\\\]Left\\.phys",
+              "count": 1
+            },
+            {
+              "pattern": "[/\\\\]Right\\.phys",
+              "count": 1
+            },
+            {
+              "pattern": "[/\\\\]Scale\\.phys",
+              "count": 1
+            },
+            {
+              "pattern": "[/\\\\]Value\\.phys",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "name": "semantic",
+          "entry": "Main.phys",
+          "source": "import Dependency\nlet x = Dependency.value\n",
+          "files": {
+            "Dependency.phys": "let value = missing\n"
+          },
+          "exit_code": 1,
+          "stderr_pattern": "Dependency\\.phys:1:13: error: Unknown name"
+        },
+        {
+          "name": "syntax",
+          "entry": "Main.phys",
+          "source": "import Dependency\nlet x = Dependency.value\n",
+          "files": {
+            "Dependency.phys": "func broken(:\n"
+          },
+          "exit_code": 1,
+          "stderr_pattern": "Dependency\\.phys:1:[0-9]+: error:"
+        },
+        {
+          "name": "missing",
+          "entry": "Main.phys",
+          "source": "import Missing\n",
+          "files": {},
+          "exit_code": 2,
+          "stderr_pattern": "Main\\.phys:1:8: error: Cannot open imported module"
+        },
+        {
+          "name": "cycle",
+          "entry": "Main.phys",
+          "source": "import Dependency\n",
+          "files": {
+            "Dependency.phys": "import Main\n"
+          },
+          "exit_code": 1,
+          "stderr_pattern": "Dependency\\.phys:1:8: error: Cyclic module import"
+        },
+        {
+          "name": "qualified_missing",
+          "entry": "Main.phys",
+          "source": "import Folder.Missing\n",
+          "files": {},
+          "exit_code": 2,
+          "directories": [
+            "Folder"
+          ],
+          "stderr_pattern": "Main\\.phys:1:15: error: Cannot open imported module"
+        },
+        {
+          "name": "qualified_syntax",
+          "entry": "Main.phys",
+          "source": "import Folder.\n",
+          "files": {},
+          "exit_code": 1,
+          "stderr_pattern": "Expected module name after"
+        },
+        {
+          "name": "aliases",
+          "entry": "Main.phys",
+          "source": "import Folder.One as Left\nimport Other.One as Right\nlet sum = Left.value + Right.value\n",
+          "files": {
+            "Folder/One.phys": "let value = 1\n",
+            "Other/One.phys": "let value = 2\n"
+          },
+          "exit_code": 0,
+          "stderr": ""
+        },
+        {
+          "name": "nested_cycle",
+          "entry": "Main.phys",
+          "source": "import Folder.A\n",
+          "files": {
+            "Folder/A.phys": "import B\n",
+            "Folder/B.phys": "import A\n"
+          },
+          "exit_code": 1,
+          "stderr_pattern": "B\\.phys:1:8: error: Cyclic module import"
+        }
+      ]
+    },
+    {
+      "name": "module_paths",
+      "checks": [
+        {
+          "name": "dependencies",
+          "arguments": [
+            "--deps",
+            "--module-path",
+            "{root}/tests/fixtures/language/shared_modules",
+            "{root}/tests/fixtures/language/module_paths/main.phys"
+          ],
+          "exit_code": 0,
+          "stderr": "",
+          "stdout_counts": [
+            {
+              "pattern": "[/\\\\]main\\.phys",
+              "count": 1
+            },
+            {
+              "pattern": "[/\\\\]Helpers\\.phys",
+              "count": 1
+            },
+            {
+              "pattern": "[/\\\\]Scale\\.phys",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "name": "missing_path",
+          "arguments": [
+            "--check",
+            "{root}/tests/fixtures/language/module_paths/main.phys"
+          ],
+          "exit_code": 2,
+          "stderr_pattern": "Cannot open imported module"
+        },
+        {
+          "name": "local_check",
+          "entry": "Local/Main.phys",
+          "source": "import Shared\nassert(Shared.value == 1)\n",
+          "files": {
+            "Local/Shared.phys": "let value = 1\n",
+            "Shared.phys": "let value = 2\n"
+          },
+          "arguments": [
+            "--check",
+            "--module-path",
+            "{work}",
+            "{entry}"
+          ],
+          "exit_code": 0,
+          "stderr": ""
+        },
+        {
+          "name": "local_deps",
+          "entry": "Local/Main.phys",
+          "source": "import Shared\nassert(Shared.value == 1)\n",
+          "files": {
+            "Local/Shared.phys": "let value = 1\n",
+            "Shared.phys": "let value = 2\n"
+          },
+          "arguments": [
+            "--deps",
+            "--module-path",
+            "{work}",
+            "{entry}"
+          ],
+          "exit_code": 0,
+          "stderr": "",
+          "stdout_counts": [
+            {
+              "pattern": "Local[/\\\\]Shared\\.phys",
+              "count": 1
+            },
+            {
+              "pattern": "[/\\\\]Shared\\.phys",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "name": "ordered",
+          "entry": "Client/Main.phys",
+          "source": "import Shared\nassert(Shared.value == 3)\n",
+          "files": {
+            "First/Shared.phys": "let value = 3\n",
+            "Second/Shared.phys": "let value = 4\n"
+          },
+          "arguments": [
+            "--deps",
+            "--module-path",
+            "{work}/First",
+            "--module-path",
+            "{work}/Second",
+            "{entry}"
+          ],
+          "exit_code": 0,
+          "stderr": "",
+          "stdout_counts": [
+            {
+              "pattern": "First[/\\\\]Shared\\.phys",
+              "count": 1
+            },
+            {
+              "pattern": "Second[/\\\\]Shared\\.phys",
+              "count": 0
+            }
+          ]
+        },
+        {
+          "name": "malformed",
+          "arguments": [
+            "--check",
+            "--module-path",
+            "{root}/tests/fixtures/language/shared_modules",
+            "--module-path"
+          ],
+          "exit_code": 2,
+          "stderr_pattern": "Usage: physimc"
+        }
+      ]
     }
   ],
   "programs": [
@@ -4558,6 +5162,23 @@
     {
       "name": "submersion_values_runtime",
       "source": "tests/fixtures/language/submersion_values.phys"
+    },
+    {
+      "name": "modules_runtime",
+      "source": "examples/language/modules/main.phys"
+    },
+    {
+      "name": "module_paths_runtime",
+      "source": "tests/fixtures/language/module_paths/main.phys",
+      "module_paths": [
+        "tests/fixtures/language/shared_modules"
+      ]
+    },
+    {
+      "name": "modules_runtime_error",
+      "source": "tests/fixtures/language/modules/error.phys",
+      "exit_code": 70,
+      "stderr_pattern": "Failure\\.phys:2:14: runtime error: Division by zero"
     }
   ],
   "workflows": [

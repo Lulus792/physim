@@ -31,6 +31,7 @@ class Case:
     language_checks: tuple = ()
     language_mode: str = "--emit-c"
     language_harness: str | None = None
+    language_module_paths: tuple[str, ...] = ()
     language_workflow: dict | None = None
 
 
@@ -96,6 +97,7 @@ def catalog():
         cases.append(Case("language_" + program["name"], (), ("core",),
                           language_source=program["source"], language_mode=program.get("mode", "--emit-c"),
                           language_harness=program.get("harness"), exit_code=program.get("exit_code", 0),
+                          language_module_paths=tuple(program.get("module_paths", ())),
                           stdout=program.get("stdout"), stderr_pattern=program.get("stderr_pattern")))
     for workflow in corpus.get("workflows", []):
         if not workflow["modules"] or not workflow["steps"]:
@@ -107,10 +109,13 @@ def catalog():
     return cases
 
 
-def build_language_program(name, fixture, mode, module, builder, libraries, work, steps):
+def build_language_program(name, fixture, mode, module, builder, libraries, work, steps, *, module_paths=()):
     """Record emission/build failures before callers can run a stale artifact."""
     compiler = builder.bin / ("physimc.exe" if sys.platform == "win32" else "physimc")
-    emitted = execute_case([str(compiler), mode, str(fixture)], work=work, env=builder.env, timeout=30)
+    arguments = [str(compiler), mode]
+    for path in module_paths:
+        arguments.extend(["--module-path", str(path)])
+    emitted = execute_case([*arguments, str(fixture)], work=work, env=builder.env, timeout=30)
     code = emitted.pop("stdout", "")
     steps.append(emitted)
     if emitted["status"] != "passed":
@@ -169,6 +174,30 @@ def check_workflow_outputs(step, work):
     return {"status": "failed" if errors else "passed", "reason": "\n".join(errors), "artifacts": artifacts}
 
 
+def prepare_compiler_case(check, source, work):
+    """Materialize each CLI/import probe independently, including absent inputs."""
+    for filename, content in check.get("files", {}).items():
+        write_language_fixture(work, filename, content)
+    for name in check.get("directories", ()):
+        path = (work / name).resolve()
+        if not path.is_relative_to(work.resolve()):
+            raise RuntimeError(f"Language directory escapes its test directory: {name}")
+        path.mkdir(parents=True, exist_ok=True)
+    entry = check.get("entry", check["name"] + ".phys")
+    content = check.get("source")
+    if "source_file" in check:
+        content = (source / check["source_file"]).read_text(encoding="utf-8")
+    if "repeat_source" in check:
+        repeated = check["repeat_source"]
+        content = repeated["text"] * repeated["count"]
+    path = work / entry
+    if content is not None:
+        path = write_language_fixture(work, entry, content)
+    arguments = check.get("arguments", [check.get("mode", "--check"), "{entry}"])
+    values = {"work": str(work), "root": str(source), "entry": str(path)}
+    return [argument.format_map(values) for argument in arguments]
+
+
 def language_case(case, builder, libraries, source, work):
     started = time.monotonic()
     compiler = builder.bin / ("physimc.exe" if sys.platform == "win32" else "physimc")
@@ -198,7 +227,8 @@ def language_case(case, builder, libraries, source, work):
     elif case.language_source:
         program = build_language_program(case.name, source / case.language_source, case.language_mode,
                                          bool(case.language_harness), builder,
-                                         [libraries[name] for name in case.libraries], work, steps)
+                                         [libraries[name] for name in case.libraries], work, steps,
+                                         module_paths=[source / path for path in case.language_module_paths])
         if program is not None:
             try:
                 command = [str(program)]
@@ -216,14 +246,13 @@ def language_case(case, builder, libraries, source, work):
         for check in case.language_checks:
             check_work = work / check["name"]
             check_work.mkdir()
-            for filename, content in check.get("files", {}).items():
-                write_language_fixture(check_work, filename, content)
-            path = write_language_fixture(check_work, check.get("entry", check["name"] + ".phys"), check["source"])
-            result = execute_case([str(compiler), check.get("mode", "--check"), str(path)], work=check_work,
+            arguments = prepare_compiler_case(check, source, check_work)
+            result = execute_case([str(compiler), *arguments], work=check_work,
                                   env=builder.env, timeout=15, exit_code=check["exit_code"],
                                   stdout=check.get("stdout"), stderr_pattern=check.get("stderr_pattern"),
                                   stderr=check.get("stderr"), stdout_patterns=check.get("stdout_patterns", ()),
-                                  stdout_captures=check.get("stdout_captures", ()))
+                                  stdout_captures=check.get("stdout_captures", ()),
+                                  stdout_counts=check.get("stdout_counts", ()))
             result["name"] = check["name"]
             steps.append(result)
     failures = [step for step in steps if step["status"] != "passed"]
@@ -233,7 +262,7 @@ def language_case(case, builder, libraries, source, work):
 
 
 def execute_case(command, *, work: Path, env, timeout: float, exit_code=0,
-                 stdout=None, stderr_pattern=None, stderr=None, stdout_patterns=(), stdout_captures=()):
+                 stdout=None, stderr_pattern=None, stderr=None, stdout_patterns=(), stdout_captures=(), stdout_counts=()):
     """Keep expected failures distinct from crashes, timeouts and launch failures."""
     started = time.monotonic()
     result = {"command": [str(p) for p in command], "status": "failed"}
@@ -252,6 +281,8 @@ def execute_case(command, *, work: Path, env, timeout: float, exit_code=0,
             result["reason"] = "Standard error did not match the expected text"
         elif any(not re.search(pattern, output) for pattern in stdout_patterns):
             result["reason"] = "Expected output pattern was missing"
+        elif any(len(list(re.finditer(item["pattern"], output))) != item["count"] for item in stdout_counts):
+            result["reason"] = "Output pattern occurred an unexpected number of times"
         else:
             result["status"] = "passed"
             for capture in stdout_captures:
