@@ -42,7 +42,9 @@ def main():
     # CMake rewrites runtime paths during installation. Sign the final Mach-O files,
     # then the bundle. This is local ad-hoc signing, not Developer ID notarization.
     for binary in sorted(binaries.iterdir()):
-        if binary.is_file() and not binary.is_symlink():
+        # Signing CFBundleExecutable also signs its enclosing bundle. Defer it
+        # until every nested module/helper is signed (Intel links are unsigned).
+        if binary.name != info["CFBundleExecutable"] and binary.is_file() and not binary.is_symlink():
             subprocess.run(["codesign", "--force", "--sign", "-", str(binary)], check=True)
     subprocess.run(["codesign", "--force", "--sign", "-", str(app)], check=True)
     subprocess.run(["codesign", "--verify", "--deep", "--strict", str(app)], check=True)
