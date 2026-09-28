@@ -69,6 +69,13 @@ einem PNG-Export aus einem zweiten Nuklear-Kontext und nach einem Größenwechse
 auf 640 × 480 und zurück muss die leere Ansicht wieder bytegleich erscheinen.
 Bei Abweichungen schlägt der Lauf fehl und erhält seine Diagnoseartefakte.
 
+Die Größenwechsel warten mit `SDL_SyncWindow` auf den Abschluss und prüfen danach
+die tatsächliche Fenstergröße. Laut [SDL-Dokumentation](https://wiki.libsdl.org/SDL3/SDL_SetWindowSize)
+kann `SDL_SetWindowSize` asynchron sein; einmaliges Abholen von Ereignissen reicht
+daher nicht aus. Im Linux-GCC-Lauf zu `c92dbd3` hatte `empty-restored.bmp` noch
+640 × 480 Pixel, während die Referenz bereits 1080 × 740 Pixel hatte.
+Die Prüfung behält den vollständigen Bildvergleich nach dem Größenwechsel bei.
+
 ## Lokale Vorher-/Nachher-Messung, 19. September 2026
 
 Windows 11 (10.0.26200), Xeon W-2123, MSVC 19.38.33145.0 Release,

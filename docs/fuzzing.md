@@ -68,7 +68,9 @@ Laufzeitstart scheitert auf dem lokalen Windows-Rechner weiterhin mit
 `build/native-fuzzer-build.log`, `build/native-fuzzer-run.log` und der JSON-Bericht
 dokumentieren diesen Unterschied. Die neue CI führt den begrenzten Lauf mit
 Windows ClangCL, Linux Clang und Apple Clang auf beiden Mac-Architekturen aus;
-ihre Kampagnenergebnisse stehen noch aus. Der bisherige CMake-Einstieg
+im [Lauf zu `a9accf5`](https://github.com/PhysicSimulator/physim/actions/runs/36492484066)
+bestehen Windows ClangCL und Linux Clang bereits die vollständige Kampagnenprüfung.
+Der macOS-Nachweis steht noch aus. Der bisherige CMake-Einstieg
 `PHYSIM_BUILD_FUZZERS=ON` bleibt bis zum Abschluss des Vergleichs verfügbar.
 
 ## IPC-Mutationen

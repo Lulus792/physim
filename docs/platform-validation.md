@@ -175,10 +175,11 @@ Linux-CI und der Grafiknachweis für macOS Intel standen bei diesem Stand aus.
 
 Im [Folgelauf zu `37eef01`](https://github.com/PhysicSimulator/physim/actions/runs/36490044371)
 besteht der direkte Grafikschritt mit allen 35 Fällen unter Linux GCC und Clang
-sowie macOS Apple Silicon. Damit besteht dort auch der neue UI-Benchmark.
+sowie macOS Apple Silicon und Intel. Damit besteht dort auch der neue UI-Benchmark.
 Der erste Linux-Auftriebstest läuft mit der Fenstermanager-Wartebedingung durch;
 ein eindeutiger Ursachennachweis für den vorherigen Timeout folgt daraus nicht.
-macOS Intel und die übrigen noch laufenden Schritte werden separat ausgewertet.
+Auch der direkte Build- und Testschritt mit 493 Tests besteht auf allen acht
+Plattformkombinationen dieses Stands.
 
 Die drei ergänzten Benchmark-Prüfungen bestehen lokal mit MSVC Debug, Clang Release
 und über CTest. Der SDL-freie MSVC-Release-Build besteht beide Prüfungen ohne Fenster.
@@ -188,7 +189,14 @@ dem Aufwärmen keine weiteren Zeichenpuffer-Allokationen. Die bisherigen Prüfun
 für Export, Größenwechsel, Referenzwerte und Vergleichsfehler bleiben erhalten.
 Dies sind Funktionsprüfungen; die parallel zu Builds gemessenen Zeiten sind keine
 Performance-Baseline. Der direkte Grafikschritt des Folgelaufs bestätigt den
-UI-Benchmark inzwischen auf den oben genannten drei CI-Kombinationen.
+UI-Benchmark inzwischen auf den oben genannten vier CI-Kombinationen.
+
+Der [Linux-GCC-Lauf zu `c92dbd3`](https://github.com/PhysicSimulator/physim/actions/runs/36491788018)
+besteht erneut alle 34 App-Abläufe, scheitert aber im UI-Benchmark am Größenwechsel.
+Das archivierte `empty-restored.bmp` hat noch 640 × 480 statt 1080 × 740 Pixel.
+Der Benchmark wartet nun mit `SDL_SyncWindow` auf die Größenänderung und prüft
+die tatsächliche Fenstergröße, bevor er zeichnet. Lokal besteht die korrigierte
+Prüfung mit MSVC Debug und Clang Release. Der erneute Linux-Nachweis steht noch aus.
 
 Der direkte Builder unterstützt zusätzlich `--sanitizers`: ASan unter Windows,
 ASan und UBSan unter Linux/macOS. Lokal bestehen mit MSVC die positive
@@ -198,8 +206,15 @@ die vier Sprachspeicherprüfungen. Die Ergebnisdatei liegt unter
 `build/native/Debug-sanitized/test-results/run-1t_t37re/results.json`.
 ClangCL 19.1.5 scheitert lokal schon beim Start des sicheren ASan-Probeprogramms
 in seiner Interception-Laufzeit. Deshalb ist dafür keine lokale Abnahme belegt.
-Neue CI-Schritte prüfen Windows MSVC/ClangCL, Linux GCC/Clang und macOS auf beiden
-Architekturen; diese Sanitizer-Nachweise stehen noch aus.
+Im [CI-Lauf zu `c92dbd3`](https://github.com/PhysicSimulator/physim/actions/runs/36491788018)
+bestehen die Sanitizer-Probe und alle zehn ausgewählten Tests unter Windows
+mit MSVC und ClangCL. Die Linux-/macOS-Sanitizer-Abnahme steht noch aus.
+
+Der [CI-Lauf zu `a9accf5`](https://github.com/PhysicSimulator/physim/actions/runs/36492484066)
+bestätigt außerdem den direkt gebauten IPC-libFuzzer unter Windows ClangCL und
+Linux Clang. Beide Prüfungen erzeugen gültige Eingaben, spielen sie erneut ab
+und bestehen 10.000 Durchläufe mit zusätzlicher Codeabdeckung ohne Fehlerfund.
+Die macOS-Jobs sind zum Prüfzeitpunkt noch eingereiht.
 
 Die Pendelreferenzen prüfen jeweils 4001 Messpunkte, Energiedrift und Periodendauer
 gegen eine analytische Referenz. MSVC und Clang liefern für RK4 eine Periodendauer

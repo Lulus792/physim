@@ -522,10 +522,11 @@ einschließlich Änderung der Parallelität per UI, Bericht, Anleitung, erneutem
 Abbruch und Schließen während einer weiteren Serie; Screenshots liegen im Testprojekt.
 `batch_workflow` erzeugt dafür bei jeder CTest-Ausführung einen eigenen Projektordner.
 
-Lokal wurde neben MSVC auch Clang-Cl 19.1.5 mit Ninja geprüft. Das optionale
-`tools/build-clang.cmd` ist auf den Standardpfad von Visual Studio 2022 Community
-eingestellt; bei anderer Edition den Pfad anpassen. Das zusätzliche Visual-Studio-
-Toolset `ClangCL` muss für diesen Ninja-Weg nicht installiert sein.
+`tools\build-clang.cmd` baut die App direkt mit ClangCL und führt die Tests ohne
+Fenster aus. Es benötigt Python, SDL und die Visual-Studio-C++-Werkzeuge mit LLVM;
+CMake und Ninja werden nicht aufgerufen. Der Builder erkennt Visual Studio
+automatisch, der Ausgabeordner ist `build/native/Clang`. Weitere Argumente werden
+weitergegeben, etwa `--config Release` oder `--test-filter core`.
 
 RK4-Test: beim Halbieren von dt von 0.1 auf 0.05 im harmonischen Oszillator wird
 ein Fehlerquotient zwischen 14 und 18 erwartet (globale Ordnung 4), absoluter Fehler
@@ -604,7 +605,9 @@ Berichts-, Mutations- und Sprachspeichertests. Der installierte ClangCL 19.1.5
 scheitert auf diesem Windows-Rechner bereits beim Start des fehlerfreien
 ASan-Minimalprogramms mit `interception_win: unhandled instruction`.
 Die neuen CI-Schritte prüfen die Instrumentierung getrennt unter Windows,
-Linux und macOS; ihr Ergebnis steht noch aus.
+Linux und macOS. Im [Lauf zu `c92dbd3`](https://github.com/PhysicSimulator/physim/actions/runs/36491788018)
+bestehen die Probe und zehn ausgewählte Tests mit Windows MSVC und ClangCL;
+die Ergebnisse für Linux und macOS stehen noch aus.
 
 Die Option betrifft den Repository-Build. Sie ergänzt keine Compileroptionen in
 Nutzerprojekten, die die App während eines Ablaufs baut. Ein portables SDK wird

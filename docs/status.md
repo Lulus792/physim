@@ -45,7 +45,16 @@ Auch der optionale IPC-libFuzzer hat jetzt einen direkten Buildmodus
 und Sanitizer. Ein eigener Prüfer erzeugt gültige Eingaben, spielt sie erneut ab
 und verlangt bei 10.000 libFuzzer-Durchläufen zusätzliche Codeabdeckung.
 Der lokale ClangCL-Build besteht; der Laufzeitstart bleibt durch den bereits
-dokumentierten ASan-Fehler blockiert. Die neue Kampagnen-CI steht noch aus.
+dokumentierten ASan-Fehler blockiert. Die Kampagnenprüfung zu `a9accf5` besteht
+inzwischen unter Windows ClangCL und Linux Clang; macOS ist noch offen.
+Auch die zehn instrumentierten Tests samt Fehlerprobe zu `c92dbd3` bestehen
+unter Windows mit MSVC und ClangCL in CI.
+
+Ein weiterer Linux-GCC-Lauf hat im UI-Benchmark eine noch ausstehende
+Fenstergrößenänderung sichtbar gemacht: Das wiederhergestellte Bild hatte noch
+640 × 480 statt 1080 × 740 Pixel. Der Benchmark wartet nun auf den Abschluss
+und kontrolliert die Größe vor dem Rendern. Der Bildvergleich besteht lokal
+mit MSVC Debug und Clang Release; die erneute Linux-Prüfung steht aus.
 
 Der direkte Builder kann nun außerdem ein SDK in einen neuen Ordner installieren.
 Es enthält die App, Werkzeuge, alle acht C-Beispielmodule, Analysemodul, öffentliche

@@ -7,6 +7,21 @@
 #include <stdlib.h>
 #include <string.h>
 
+static bool resize_window(SDL_Window *window, int width, int height) {
+    /* SDL_SetWindowSize is asynchronous on X11/Wayland. Event pumping alone
+     * need not finish the change before rendering/capturing the next frame. */
+    if (!SDL_SetWindowSize(window, width, height) || !SDL_SyncWindow(window))
+        return false;
+    SDL_PumpEvents();
+    int actual_width = 0, actual_height = 0;
+    if (!SDL_GetWindowSize(window, &actual_width, &actual_height))
+        return false;
+    if (actual_width != width || actual_height != height)
+        return SDL_SetError("Resize requested %dx%d but window is %dx%d", width, height,
+                            actual_width, actual_height);
+    return true;
+}
+
 static void draw(struct nk_context *ui, unsigned kind) {
     nk_input_begin(ui);
     nk_input_end(ui);
@@ -146,15 +161,13 @@ int main(int argc, char **argv) {
     snprintf(path, sizeof path, "%s/empty-after-export.bmp", argv[1]);
     if (!ps_graphics_capture(graphics, path))
         goto cleanup;
-    if (!SDL_SetWindowSize(window, 640, 480))
+    if (!resize_window(window, 640, 480))
         goto cleanup;
-    SDL_PumpEvents();
     draw(ui, 1);
     if (!nk_sdl_render(ui) || !ps_graphics_present(graphics))
         goto cleanup;
-    if (!SDL_SetWindowSize(window, 1080, 740))
+    if (!resize_window(window, 1080, 740))
         goto cleanup;
-    SDL_PumpEvents();
     draw(ui, 0);
     if (!nk_sdl_render(ui))
         goto cleanup;
