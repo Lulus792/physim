@@ -71,8 +71,9 @@ Laden von Modulen auf macOS bleibt zu untersuchen. Eine gezielte Prüfung
 wiederholt den Modulwechsel und kontrolliert den Speicherschutz nach dem
 erneuten Laden; lokal besteht sie mit MSVC und in der CI mit Apple Clang auf Intel.
 Auf Apple Silicon reproduziert sie den Fehler mit Apples veralteter ASan-
-Destruktorausgabe. Die Mac-Sanitizer-CI verwendet nun LLVM 20 und LLD; der erneute
-Nachweis steht aus. Beide Mac-Fuzzerkampagnen bestehen
+Destruktorausgabe. Mit LLVM 20 und LLD besteht diese Minimalprüfung im Lauf zu
+`69ddae7` auf beiden Mac-Architekturen; die vollständige Sanitizer-Suite läuft noch.
+Beide Mac-Fuzzerkampagnen bestehen
 im CI-Lauf zu `f6cedbf` mit LLVM 20 und LLD.
 Der sporadische Linux-Startfehler wird durch feinere SDL-/Fenster-/GL-Protokolle
 weiter eingegrenzt.

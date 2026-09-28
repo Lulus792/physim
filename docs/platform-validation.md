@@ -245,7 +245,10 @@ die doppelte Registrierung von `probe_globals`. Die archivierte Assemblerdatei
 zeigt dort `__mod_term_func` für den ASan-Destruktor. Die LLVM-Umstellung auf
 [`__cxa_atexit`](https://reviews.llvm.org/D121327) vermeidet diese veraltete
 Darstellung. Die macOS-Sanitizer-CI verwendet nun LLVM 20 und LLD wie der Fuzzer;
-der vollständige Nachweis mit dieser Toolchain steht noch aus.
+im [Lauf zu `69ddae7`](https://github.com/PhysicSimulator/physim/actions/runs/36495859541)
+besteht die vollständige Minimalprüfung auf Apple Silicon und Intel, einschließlich
+der 64 Modulöffnungen und des erkannten globalen Pufferüberlaufs nach erneutem
+Laden. Die vollständige Experiment-Sanitizer-Suite mit dieser Toolchain läuft noch.
 
 Die korrigierte UI-Größenprüfung besteht im direkten Grafikschritt unter Linux
 GCC zu `0d10940`. Im vorherigen GCC-Lauf zu `49efcbb` besteht der UI-Benchmark,
@@ -253,6 +256,9 @@ aber der erste App-Ablauf hängt erneut vor der Meldung „window and OpenGL rea
 Zusätzliche Tracepunkte unterscheiden nun SDL-Initialisierung, Fenstererzeugung
 und GL-Kontext. Der Wartepunkt auf den Fenstermanager allein behebt diesen
 sporadischen Startfehler damit nicht vollständig.
+Zu `f6cedbf` bestehen unter Linux GCC zusätzlich alle 35 direkt gebauten
+Fenster-/Grafiktests mit ASan und UBSan. Das belegt diesen Lauf, schließt den
+zuvor beobachteten sporadischen Startfehler aber nicht aus.
 
 Die direkte SDK-Prüfung umfasst jetzt auch alle zuvor nur im CMake-SDK-Vergleich
 gebauten Sprachmodule: 27 Module, neun Sprachexperimente mit beiden allgemeinen
