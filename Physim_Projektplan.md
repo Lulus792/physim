@@ -2,7 +2,7 @@
 
 ## 1. Vision
 
-Physim wird eine plattformübergreifende Simulationsumgebung für Windows und Linux. Das Projekt besteht aus zwei klar getrennten Produkten:
+Physim wird eine plattformübergreifende Simulationsumgebung für Windows, Linux und macOS. Das Projekt besteht aus zwei klar getrennten Produkten:
 
 1. **Physim Library** – eine modulare Physik-, Mathematik-, Mess- und Auswertungsbibliothek in C.
 2. **Physim App** – eine grafische Arbeitsumgebung, in der Experimente in C oder einer eigenen, auf Physim zugeschnittenen kompilierten Sprache entwickelt, ausgeführt, dreidimensional beobachtet, gemessen und anschließend ausgewertet werden. Die eigene Sprache ist ein verbindliches Produktziel und eine vollständige Alternative zu C für den gesamten Physim-Arbeitsablauf.
@@ -16,6 +16,18 @@ Der wichtigste Grundsatz lautet:
 ---
 
 ## 2. Verbindliche Produktziele
+
+### Ergänzung vom 2026-09-28: macOS
+
+- App, Bibliothek, Sprachcompiler, Runner und native Projektbuilds unterstützen
+  macOS auf Apple Silicon und Intel.
+- Dieselben C-/Physim-Projekte müssen sich bauen, simulieren und auswerten lassen.
+  Dazu gehören Dateidialoge, Editor, Diagramme, Exporte und gespeicherte Ergebnisse.
+- Die Abnahme erfolgt durch ausgeführte macOS-Builds und Tests, einschließlich
+  Grafikabläufen und verschobenem SDK. Ein konfigurierter CI-Job allein reicht nicht.
+- Ein auslieferbares Mac-Paket mit korrekten Bibliothekspfaden und macOS-gerechter
+  Bedienung gehört zum Plattformziel. Signierung und Notarisierung benötigen
+  später die passenden Apple-Entwicklerzugänge.
 
 ### Ergänzung vom 2026-09-28: von der App verwaltete Projekte
 

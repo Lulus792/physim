@@ -1925,6 +1925,8 @@ static struct nk_font *system_font(struct nk_font_atlas *atlas, float size, bool
              code    ? "consola.ttf"
              : title ? "seguisb.ttf"
                      : "segoeui.ttf");
+#elif defined(__APPLE__)
+    snprintf(path, sizeof path, "/System/Library/Fonts/%s", code ? "Menlo.ttc" : "Helvetica.ttc");
 #else
     snprintf(path, sizeof path, "/usr/share/fonts/truetype/dejavu/%s",
              code    ? "DejaVuSansMono.ttf"
@@ -2249,8 +2251,14 @@ int main(int argc, char **argv) {
         SDL_Quit();
         return 1;
     }
+#ifdef __APPLE__
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+#else
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+#endif
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_Window *window =

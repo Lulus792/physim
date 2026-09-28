@@ -266,6 +266,9 @@ bool ps_executable_path(char *out, size_t cap) {
 #include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
+#ifdef __APPLE__
+#include <mach-o/dyld.h>
+#endif
 static int fd(void *p) { return (int)(intptr_t)p - 1; }
 static void *handle(int f) { return (void *)(intptr_t)(f + 1); }
 bool ps_process_start_limited(ps_process *p, const char *const *argv, const char *dir,
@@ -408,10 +411,31 @@ void ps_binary_stdio(void) {
 bool ps_make_directory(const char *p) { return !mkdir(p, 0755) || errno == EEXIST; }
 bool ps_make_directory_exclusive(const char *p) { return !mkdir(p, 0755); }
 bool ps_executable_path(char *p, size_t n) {
+    if (!p || n < 2)
+        return false;
+#ifdef __APPLE__
+    uint32_t size = 0;
+    _NSGetExecutablePath(NULL, &size);
+    char *path = malloc(size);
+    if (!path)
+        return false;
+    bool ok = false;
+    if (_NSGetExecutablePath(path, &size) == 0) {
+        char *resolved = realpath(path, NULL);
+        if (resolved && strlen(resolved) < n) {
+            memcpy(p, resolved, strlen(resolved) + 1);
+            ok = true;
+        }
+        free(resolved);
+    }
+    free(path);
+    return ok;
+#else
     ssize_t r = readlink("/proc/self/exe", p, n - 1);
     if (r <= 0 || (size_t)r >= n - 1)
         return false;
     p[r] = 0;
     return true;
+#endif
 }
 #endif

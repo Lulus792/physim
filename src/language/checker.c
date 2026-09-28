@@ -9,6 +9,9 @@
 #include <float.h>
 #include <limits.h>
 #include <locale.h>
+#ifdef __APPLE__
+#include <xlocale.h>
+#endif
 #include <math.h>
 #include <stdint.h>
 #include <stdlib.h>

@@ -10,6 +10,9 @@
 #include <float.h>
 #include <inttypes.h>
 #include <locale.h>
+#ifdef __APPLE__
+#include <xlocale.h>
+#endif
 #include <math.h>
 #include <setjmp.h>
 #include <stdbool.h>

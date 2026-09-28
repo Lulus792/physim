@@ -40,6 +40,17 @@ einschließlich Tests und installiertem SDK. Fenster- und Grafiktests werden
 zusätzlich lokal unter Windows ausgeführt; die GitHub-Windows-Worker garantieren
 keinen OpenGL-3.3-Treiber.
 
+## macOS
+
+macOS auf Apple Silicon und Intel ist ein verbindliches Plattformziel.
+Die CI verwendet `macos-15` und `macos-15-intel` mit Apple Clang und SDL 3.2.30.
+Sie prüft Bibliothek, Compiler, Runner, native Projektbuilds, installiertes SDK,
+Grafiktests und die acht C-App-Abläufe. Die erste vollständige Abnahme steht noch aus.
+
+Die Implementierung berücksichtigt Darwins Programmpfaderkennung, Mach-O-Module,
+lokalisierte Zahlenkonvertierung, macOS-Systemschriften und OpenGL 4.1 Core.
+Ein signiertes und notarisiertes Installationspaket ist noch nicht vorhanden.
+
 ## Weitere Änderungen prüfen
 
 Jeder Push startet die [CI](https://github.com/PhysicSimulator/physim/actions/workflows/ci.yml).
