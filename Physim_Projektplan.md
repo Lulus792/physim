@@ -51,7 +51,7 @@ Der wichtigste Grundsatz lautet:
 
 ### 2.1 Muss-Ziele der ersten stabilen Version
 
-- Physim läuft unter Windows und Linux.
+- Physim läuft unter Windows, Linux und macOS.
 - Bibliothek, App, Runner und eigener Compiler werden in **C17** implementiert. Nutzer schreiben Experimente und Analysen wahlweise in C oder der eigenen Physim-Sprache.
 - Die Physikbibliothek besitzt keine GUI-Abhängigkeit.
 - Die App hat drei Hauptarbeitsbereiche:
@@ -101,7 +101,7 @@ Der wichtigste Grundsatz lautet:
 
 - Eine klar abgegrenzte UI-Plattformschicht darf externe GUI-/Fenstertechnik verwenden.
 - Empfohlener Start: **SDL3** für Fenster, Eingabe und OpenGL-Kontext; darauf eine C-kompatible GUI-Schicht wie **Nuklear** oder langfristig eigene Widgets.
-- Der 3D-Renderer wird in C auf einer kleinen Grafikabstraktion aufgebaut. Erste Implementierung: OpenGL 3.3 Core, damit Windows und Linux mit derselben Rendering-Pipeline bedient werden.
+- Der 3D-Renderer wird in C auf einer kleinen Grafikabstraktion aufgebaut. Erste Implementierung: OpenGL 3.3 Core unter Windows/Linux und OpenGL 4.1 Core unter macOS, mit derselben Rendering-Pipeline.
 - Schrift- und Bild-Helfer dürfen als Teil des UI-Pakets mitgeliefert werden. Sie dürfen nicht in die Physikbibliothek eindringen.
 
 ### 3.3 Compiler
@@ -512,7 +512,7 @@ Physim erhält eine **eigenständige Programmiersprache als vollständige Altern
 4. **LANG-004 – Experimente:** Bindungen für Physik, Einheiten, Parameter, Zustand, Szene und Messkanäle; Pendel und Wurf laufen vollständig aus der eigenen Sprache im bestehenden Runner.
 5. **LANG-005 – Auswertung:** Dataset-/Series-/Report-Bindungen sowie Batch/Monte Carlo; gespeicherte C- und Sprachläufe werden gleichermaßen verarbeitet, geplottet und exportiert.
 6. **LANG-006 – Vollständiger Sprachausbau:** Strukturen, Enums, optionale Werte, Arrays, Module und Generics samt festgelegten Lebensdauer-/Fehlerregeln; keine Pflicht, für unterstützte Physim-Aufgaben C-Code nachzuschreiben.
-7. **LANG-007 – Produktabnahme:** Sprachauswahl in beiden Editoren, Vorlagen, Diagnosen, Debugpfad, SDK-Paket und zwei vollständige Dokumentationspfade; End-to-End-Tests auf Windows und Linux.
+7. **LANG-007 – Produktabnahme:** Sprachauswahl in beiden Editoren, Vorlagen, Diagnosen, Debugpfad, SDK-Paket und zwei vollständige Dokumentationspfade; End-to-End-Tests auf Windows, Linux und macOS.
 
 Abnahme bedeutet Funktionsparität anhand derselben Referenzexperimente und Analysen in beiden Sprachen. Ergebnisse werden mit fachlich begründeten Toleranzen, identischen Seeds und denselben Datenformaten verglichen. Speicherfehler, ungültige Quellen, Compilerabbruch und Runnerfehler dürfen die App nicht beschädigen. Ein Lexer oder ein einzelnes übersetztes Beispiel allein erfüllt dieses Ziel nicht.
 
@@ -531,10 +531,10 @@ Jede Phase endet mit einem vorführbaren Ergebnis und darf erst abgeschlossen we
 - Repository und Verzeichnisstruktur anlegen.
 - C17, Formatierungsregeln, Namenskonventionen und Fehlerbehandlung festlegen.
 - Lizenz für Physim bestimmen.
-- unterstützte Mindestversionen von Windows, Linux, Compiler und OpenGL festlegen.
+- unterstützte Mindestversionen von Windows, Linux, macOS, Compiler und OpenGL festlegen.
 - UI-Stack in zwei kleinen Spikes prüfen: Fenster/Texteditor sowie 3D-Dreieck/ImGui-ähnliches Docking.
 - Architecture Decision Records für UI, Renderer, Compilerstrategie, Prozesse und Datendatei schreiben.
-- CI für Windows und Linux einrichten.
+- CI für Windows, Linux und macOS einrichten.
 - Sanitizer-Build auf Linux und Debug-Checks auf Windows.
 
 ### Abnahme
@@ -595,7 +595,7 @@ Jede Phase endet mit einem vorführbaren Ergebnis und darf erst abgeschlossen we
 - Position, Geschwindigkeit und Energie werden live geschrieben.
 - Ein abgebrochener Lauf lässt sich bis zum letzten vollständigen Block öffnen.
 - Millionen Messpunkte können blockweise gelesen werden.
-- Windows und Linux lesen dieselbe Testdatei identisch.
+- Windows, Linux und macOS lesen dieselbe Testdatei identisch.
 
 ## Phase 4 – App-Shell und Navigation
 
@@ -625,7 +625,7 @@ Jede Phase endet mit einem vorführbaren Ergebnis und darf erst abgeschlossen we
 
 ### Abnahme
 
-- Neues Projekt → Vorlage → Build funktioniert auf Windows und Linux.
+- Neues Projekt → Vorlage → Build funktioniert auf Windows, Linux und macOS.
 - Syntaxfehler erscheint mit Datei, Zeile und Spalte.
 - Erfolgreicher Build erzeugt ein ladbares Experimentmodul.
 - Pfade mit Leerzeichen und Nicht-ASCII-Zeichen sind getestet.
@@ -715,7 +715,7 @@ Jede Phase endet mit einem vorführbaren Ergebnis und darf erst abgeschlossen we
 
 ### Abnahme
 
-- Clean-Machine-Test auf Windows und mindestens zwei Linux-Distributionen.
+- Clean-Machine-Test auf Windows, macOS (Apple Silicon und Intel) und mindestens zwei Linux-Distributionen.
 - Tutorial „Projektile motion“ funktioniert ohne internes Wissen.
 - Keine bekannten kritischen Datenverlust- oder Absturzfehler.
 - Öffentliche API und Dateiformat sind versioniert.
@@ -905,7 +905,7 @@ Jedes Arbeitspaket erhält:
 - konkrete Akzeptanzkriterien.
 - Tests.
 - betroffene Dokumentation.
-- Plattformkennzeichnung Windows/Linux/beide.
+- Plattformkennzeichnung Windows/Linux/macOS und Kombinationen.
 
 Empfohlene Epics:
 
@@ -935,7 +935,7 @@ Ein Ticket darf begonnen werden, wenn Ziel, Grenzen, Abhängigkeiten und prüfba
 
 Ein Ticket ist fertig, wenn:
 
-- Code auf Windows und Linux baut, sofern nicht explizit plattformspezifisch.
+- Code auf Windows, Linux und macOS baut, sofern nicht explizit plattformspezifisch.
 - relevante Tests vorhanden und grün sind.
 - Compiler keine neuen Warnungen meldet.
 - Fehlerpfade und Speicherbesitz geprüft sind.
@@ -949,7 +949,7 @@ Ein Ticket ist fertig, wenn:
 
 1. `FOUNDATION-001`: Repository-Struktur und CMake-Targets anlegen.
 2. `FOUNDATION-002`: C17-Regeln, Formatierung und Warnungsprofil definieren.
-3. `FOUNDATION-003`: Windows-/Linux-CI mit leerem Testziel einrichten.
+3. `FOUNDATION-003`: Windows-/Linux-/macOS-CI mit leerem Testziel einrichten.
 4. `FOUNDATION-004`: UI-Stack-Spike für Fenster, Text und DPI durchführen.
 5. `FOUNDATION-005`: OpenGL-Spike mit 3D-Kamera durchführen.
 6. `CORE-001`: Fehlercode- und Diagnosesystem implementieren.
@@ -986,7 +986,7 @@ Diese Liste ist die empfohlene tatsächliche Startreihenfolge. Tickets dürfen p
 - **0.4.0 – Authoring Preview:** besserer Editor, API-Browser, Vorlagen und Projektmigration.
 - **0.5.0 – Public Alpha:** Pakete, Tutorials, Crash Recovery und stabilisierte Formate.
 - **0.6.0 – Language Preview:** spezifizierter Sprachkern, statische Typprüfung, native Kompilierung und erstes vollständiges Experiment samt Auswertung; verbleibende Sprachlücken explizit dokumentiert.
-- **1.0.0:** stabile Kern-API, dokumentierte Kompatibilitätsregeln, belastbare Mechanik-, Mess- und Analysefunktionen auf Windows und Linux sowie eigene Sprache als vollständige Alternative zu C für den Physim-Workflow einschließlich beider Dokumentationsteile und LANG-001 bis LANG-007.
+- **1.0.0:** stabile Kern-API, dokumentierte Kompatibilitätsregeln, belastbare Mechanik-, Mess- und Analysefunktionen auf Windows, Linux und macOS sowie eigene Sprache als vollständige Alternative zu C für den Physim-Workflow einschließlich beider Dokumentationsteile und LANG-001 bis LANG-007.
 
 Versionsnummern sind an Fähigkeiten und Qualitätskriterien gebunden, nicht an Kalendertermine.
 
@@ -995,7 +995,7 @@ Versionsnummern sind an Fähigkeiten und Qualitätskriterien gebunden, nicht an 
 ## 21. Entscheidungen, die vor dem ersten Code verbindlich getroffen werden müssen
 
 1. Open-Source- oder proprietäre Lizenz.
-2. minimale Windows- und Linux-Versionen.
+2. minimale Windows-, Linux- und macOS-Versionen.
 3. SDL3/Nuklear oder alternative reine-C-UI-Kombination nach dem Spike.
 4. OpenGL 3.3 als erster Renderer oder eine andere ausdrücklich gewählte Basis.
 5. unterstützte Compiler der ersten Alpha.
@@ -1009,7 +1009,7 @@ Diese Entscheidungen werden als kurze Architecture Decision Records dokumentiert
 
 ## 22. Erfolgskriterien für Physim 1.0
 
-Physim 1.0 gilt als erreicht, wenn ein neuer Nutzer auf Windows oder Linux ohne Änderung am Physim-Quellcode:
+Physim 1.0 gilt als erreicht, wenn ein neuer Nutzer auf Windows, Linux oder macOS ohne Änderung am Physim-Quellcode:
 
 1. ein Beispielprojekt anlegen kann,
 2. ein Experiment wahlweise in C oder der eigenen Sprache mit ausgewählten Physim-Modulen nativ kompilieren kann,

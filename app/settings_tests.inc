@@ -3,12 +3,23 @@ static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
     bool writing = !strcmp(mode, "write"), resetting = !strcmp(mode, "reset");
     bool ok = true;
     static struct nk_rect drag;
+    /* Restored windows fit the usable desktop, including menu bar and Dock.
+     * The test requests 1200x800 but hosted Macs may expose a smaller desktop. */
+    int restored_width = 1200, restored_height = 800;
+    SDL_Rect usable;
+    if (SDL_GetDisplayUsableBounds(SDL_GetDisplayForWindow(a->window), &usable)) {
+        if (usable.w < restored_width)
+            restored_width = usable.w < 1080 ? 1080 : usable.w;
+        if (usable.h < restored_height)
+            restored_height = usable.h < 740 ? 740 : usable.h;
+    }
     if (!strcmp(mode, "maxwrite") || !strcmp(mode, "maxread")) {
         if (*stage == 0 && !strcmp(mode, "maxwrite"))
             SDL_MaximizeWindow(a->window);
         if (!(SDL_GetWindowFlags(a->window) & SDL_WINDOW_MAXIMIZED))
             return;
-        ok = a->preferences.width == 1200 && a->preferences.height == 800;
+        ok = a->preferences.width == (uint32_t)restored_width &&
+             a->preferences.height == (uint32_t)restored_height;
         if (!strcmp(mode, "maxread"))
             ok &= a->preferences.maximized == 1;
         if (*stage == 3)
@@ -40,7 +51,10 @@ static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
         case 2: {
             int w, h;
             SDL_GetWindowSize(a->window, &w, &h);
-            ok = w == 1200 && h == 800;
+            ok = w == restored_width && h == restored_height;
+            if (!ok)
+                fprintf(stderr, "Restored window: %dx%d; expected %dx%d on this desktop\n",
+                        w, h, restored_width, restored_height);
         }
             *capture = "settings-restored.bmp";
             test_mouse(a, a->settings_bounds[5], true);
