@@ -171,7 +171,14 @@ bestehen jeweils 33 von 34 Fällen; der erste Auftriebstest endet nach 150 Sekun
 ohne App-Ausgabe im Timeout. Die Ursache ist noch offen. Der Linux-Aufruf wartet
 nun vor dem App-Start auf den Fenstermanager; zusätzliche App-Testprotokolle halten
 Initialisierung und Phasenwechsel auch bei Zeitüberschreitung fest. Die erneute
-Linux-CI und der Grafiknachweis für macOS Intel stehen zum Prüfzeitpunkt aus.
+Linux-CI und der Grafiknachweis für macOS Intel standen bei diesem Stand aus.
+
+Im [Folgelauf zu `37eef01`](https://github.com/PhysicSimulator/physim/actions/runs/36490044371)
+besteht der direkte Grafikschritt mit allen 35 Fällen unter Linux GCC und Clang
+sowie macOS Apple Silicon. Damit besteht dort auch der neue UI-Benchmark.
+Der erste Linux-Auftriebstest läuft mit der Fenstermanager-Wartebedingung durch;
+ein eindeutiger Ursachennachweis für den vorherigen Timeout folgt daraus nicht.
+macOS Intel und die übrigen noch laufenden Schritte werden separat ausgewertet.
 
 Die drei ergänzten Benchmark-Prüfungen bestehen lokal mit MSVC Debug, Clang Release
 und über CTest. Der SDL-freie MSVC-Release-Build besteht beide Prüfungen ohne Fenster.
@@ -180,7 +187,19 @@ zwischen den beiden Compilern bytegleich. In allen drei Messfällen entstehen na
 dem Aufwärmen keine weiteren Zeichenpuffer-Allokationen. Die bisherigen Prüfungen
 für Export, Größenwechsel, Referenzwerte und Vergleichsfehler bleiben erhalten.
 Dies sind Funktionsprüfungen; die parallel zu Builds gemessenen Zeiten sind keine
-Performance-Baseline. Der CI-Nachweis der neuen Benchmarks steht noch aus.
+Performance-Baseline. Der direkte Grafikschritt des Folgelaufs bestätigt den
+UI-Benchmark inzwischen auf den oben genannten drei CI-Kombinationen.
+
+Der direkte Builder unterstützt zusätzlich `--sanitizers`: ASan unter Windows,
+ASan und UBSan unter Linux/macOS. Lokal bestehen mit MSVC die positive
+Instrumentierungsprobe (fehlerfreier Lauf und erkannter Heap-Pufferüberlauf) sowie
+zehn Tests für Core, Speicherbesitz, Berichte, Protokoll-/Messdateimutationen und
+die vier Sprachspeicherprüfungen. Die Ergebnisdatei liegt unter
+`build/native/Debug-sanitized/test-results/run-1t_t37re/results.json`.
+ClangCL 19.1.5 scheitert lokal schon beim Start des sicheren ASan-Probeprogramms
+in seiner Interception-Laufzeit. Deshalb ist dafür keine lokale Abnahme belegt.
+Neue CI-Schritte prüfen Windows MSVC/ClangCL, Linux GCC/Clang und macOS auf beiden
+Architekturen; diese Sanitizer-Nachweise stehen noch aus.
 
 Die Pendelreferenzen prüfen jeweils 4001 Messpunkte, Energiedrift und Periodendauer
 gegen eine analytische Referenz. MSVC und Clang liefern für RK4 eine Periodendauer

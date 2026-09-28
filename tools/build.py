@@ -105,7 +105,7 @@ def build_lock(directory: Path):
 
 class Builder:
     def __init__(self, args: argparse.Namespace, env: dict[str, str]):
-        self.args, self.env = args, env
+        self.args, self.env = args, dict(env)
         self.directory = args.build_dir.resolve()
         self.bin = self.directory / "bin"
         self.lib = self.directory / "lib"
@@ -117,6 +117,21 @@ class Builder:
         self.msvc = Path(self.cc).name.lower() in ("cl.exe", "cl", "clang-cl.exe", "clang-cl")
         if WINDOWS and not self.msvc:
             raise RuntimeError("Windows builds require MSVC or clang-cl.")
+        self.sanitizers = getattr(args, "sanitizers", False)
+        if self.sanitizers and WINDOWS:
+            if Path(self.cc).stem.lower() == "clang-cl":
+                resource = Path(run([self.cc, "/clang:-print-resource-dir"], env, capture=True).strip())
+                runtime_dir = resource / "lib/windows"
+            else:
+                runtime_dir = Path(self.cc).parent
+            runtimes = sorted(runtime_dir.glob("clang_rt.asan*.dll"))
+            if not runtimes:
+                raise RuntimeError(f"AddressSanitizer runtime not found in {runtime_dir}; install the compiler's ASan component.")
+            for runtime in runtimes:
+                destination = self.bin / runtime.name
+                if not destination.is_file() or destination.read_bytes() != runtime.read_bytes():
+                    shutil.copy2(runtime, destination)
+            self.env["PATH"] = str(self.bin) + os.pathsep + self.env.get("PATH", "")
         self.ar = shutil.which("lib" if self.msvc else "ar", path=env.get("PATH"))
         if not self.ar:
             raise RuntimeError("Static library tool not found (lib.exe / ar).")
@@ -189,12 +204,16 @@ class Builder:
         temporary = output.with_name(output.stem + ".pending" + output.suffix)
         debug = self.args.config == "Debug"
         if self.msvc:
+            # ClangCL ASan does not support the debug CRT. Keep debug symbols
+            # and optimization settings, but use the shared release CRT for ASan.
             command = [self.cc, "/nologo", "/c", "/std:c17", "/utf-8", "/W3" if language else "/W4", "/D_CRT_SECURE_NO_WARNINGS",
-                       "/MDd" if debug else "/MD", "/Od" if debug else "/O2", "/Z7",
+                       "/MDd" if debug and not self.sanitizers else "/MD", "/Od" if debug else "/O2", "/Z7",
                        "/fp:strict" if language else "/fp:precise"]
             command += ["/I" + str(p) for p in self.includes] + ["/D" + d for d in defines]
             if not debug:
                 command.append("/DNDEBUG")
+            if self.sanitizers:
+                command.append("/fsanitize=address")
             command += [str(path), "/Fo" + str(temporary)]
         else:
             command = [self.cc, "-c", "-std=c17", "-fPIC", "-g", "-O0" if debug else "-O2",
@@ -205,6 +224,8 @@ class Builder:
             command += ["-I" + str(p) for p in self.includes] + ["-D" + d for d in defines]
             if not debug:
                 command.append("-DNDEBUG")
+            if self.sanitizers:
+                command += ["-fsanitize=address,undefined", "-fno-sanitize-recover=all", "-fno-omit-frame-pointer"]
             command += [str(path), "-o", str(temporary)]
         headers = self.headers + (self.test_headers if path.is_relative_to(ROOT / "tests") else "")
         if path.is_relative_to(ROOT / "tools"):
@@ -237,6 +258,9 @@ class Builder:
         temporary = output.with_name(output.stem + ".pending" + output.suffix)
         inputs = objects + libraries + ([self.sdl_library] if sdl else [])
         command = [self.cc, *map(str, inputs)]
+        if self.sanitizers:
+            command += (["/MD", "/fsanitize=address"] if self.msvc else
+                        ["-fsanitize=address,undefined", "-fno-sanitize-recover=all"])
         if self.msvc:
             manifest = ROOT / "app/utf8.manifest"
             command += ["/nologo", "/Fe:" + str(temporary), "/link", "/INCREMENTAL:NO", "/DEBUG",
@@ -372,6 +396,7 @@ def main() -> int:
     parser.add_argument("--no-app", action="store_true", help="Build the library, language compiler and runners without SDL")
     parser.add_argument("--jobs", type=int, default=min(os.cpu_count() or 1, 8))
     parser.add_argument("--benchmarks", action="store_true", help="Build performance tools; --no-app omits the OpenGL benchmark")
+    parser.add_argument("--sanitizers", action="store_true", help="Validate with AddressSanitizer (also UndefinedBehaviorSanitizer on Linux/macOS)")
     test_mode = parser.add_mutually_exclusive_group()
     test_mode.add_argument("--test", action="store_true", help="Run tests without windows or CTest")
     test_mode.add_argument("--test-display", action="store_true", help="Run window and graphics tests (requires a graphical desktop)")
@@ -383,9 +408,11 @@ def main() -> int:
         parser.error("--test-filter requires --test or --test-display")
     if args.test_display and args.no_app:
         parser.error("--test-display requires the app; remove --no-app")
+    if args.sanitizers and args.install:
+        parser.error("Sanitizer builds are for validation; use a separate build without --sanitizers to install a portable SDK")
     if args.jobs < 1 or args.jobs > 64:
         parser.error("--jobs must be between 1 and 64")
-    args.build_dir = args.build_dir or ROOT / "build" / "native" / args.config
+    args.build_dir = args.build_dir or ROOT / "build" / "native" / (args.config + ("-sanitized" if args.sanitizers else ""))
     if args.build_dir.resolve() == ROOT or args.build_dir.resolve() in ROOT.parents:
         parser.error("Use a separate build directory, not the source root or its parents")
     try:

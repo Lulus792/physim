@@ -32,6 +32,14 @@ Die Linux-/Mac-Prüfung schließt vollständige C- und Physim-App-Abläufe ein.
 Die komplette Testsuite bleibt vorerst CMake-gestützt; auch der SDL-Quellbuild
 verwendet weiterhin dessen eigenes Buildsystem.
 
+Der direkte Build unterstützt inzwischen auch Sanitizer. Lokal erkennt MSVC den
+absichtlich eingebauten Speicherfehler und besteht zehn instrumentierte Core-,
+Speicher-, Berichts-, Mutations- und Sprachspeichertests. Die CI-Abnahme dieser
+Erweiterung auf allen Plattformen steht aus. Der direkte Grafikschritt zu
+`37eef01` besteht unter Linux mit GCC und Clang sowie macOS Apple Silicon
+einschließlich des UI-Benchmarks. CMake bleibt bis zum Abschluss der
+Sanitizer-/SDK-Vergleiche und der Übernahme der optionalen Fuzzer verfügbar.
+
 Der direkte Builder kann nun außerdem ein SDK in einen neuen Ordner installieren.
 Es enthält die App, Werkzeuge, alle acht C-Beispielmodule, Analysemodul, öffentliche
 Header, Kernbibliothek, SDK-Quellen, Vorlagen, Dokumentation und Lizenzen. Windows

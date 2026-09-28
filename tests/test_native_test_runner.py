@@ -42,6 +42,7 @@ def main():
     # and SDK installation without tests, which must accept an absent filter.
     common = ["build.py", "--build-dir", str(directory / "cli build")]
     accepted = [([], None), (["--benchmarks"], None), (["--benchmarks", "--no-app"], None),
+                (["--sanitizers", "--test"], None),
                 (["--install", str(directory / "sdk")], None),
                 (["--test-display"], None), (["--test-display", "--test-filter", "toolbar_*"], ["toolbar_*"]),
                 (["--test"], None), (["--test", "--test-filter", "*"], ["*"]),
@@ -67,7 +68,8 @@ def main():
                     assert error.code == 2
             assert "--test-filter requires --test" in diagnostic.getvalue()
             builder.assert_not_called()
-        for arguments in (["--test-display", "--no-app"], ["--test", "--test-display"]):
+        for arguments in (["--test-display", "--no-app"], ["--test", "--test-display"],
+                          ["--sanitizers", "--install", str(directory / "sdk")]):
             builder.reset_mock()
             with patch.object(sys, "argv", common + arguments), contextlib.redirect_stderr(io.StringIO()):
                 try:

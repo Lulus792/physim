@@ -47,6 +47,11 @@ jobs:
       - name: Direct window and graphics tests
         if: ${{ !inputs.package_only }}
         run: python3 tools/build.py --compiler clang --test-display
+      - name: Direct sanitizer tests
+        if: ${{ !inputs.package_only }}
+        run: |
+          python3 tests/test_sanitizer_build.py --compiler clang --work build/native
+          python3 tools/build.py --compiler clang --sanitizers --no-app --test
       - name: Archive native macOS package
         if: ${{ !cancelled() && !inputs.package_only }}
         uses: actions/upload-artifact@v4
@@ -96,6 +101,7 @@ jobs:
         with:
           name: macos-${{ matrix.runner }}
           path: |
+            build/native/sanitizer probe*/results.json
             build/native/*/test-results/**/results.json
             build/native/*/test-results/**/app-steps.json
             build/native/*/test-results/*/ui_rendering/**/measurements/**
@@ -159,6 +165,15 @@ jobs:
           name: physim-native-windows-${{ matrix.toolset }}
           path: build/Physim-native-windows-${{ matrix.toolset }}.zip
           if-no-files-found: ignore
+      - name: Direct sanitizer tests
+        if: matrix.configuration == 'Debug'
+        shell: pwsh
+        run: |
+          $compiler = if ('${{ matrix.toolset }}' -eq 'ClangCL') { 'clang-cl' } else { 'cl' }
+          python tests/test_sanitizer_build.py --compiler $compiler --work build/native
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python tools/build.py --compiler $compiler --sanitizers --no-app --test --test-filter 'memory*' --test-filter core --test-filter report --test-filter run_mutations --test-filter protocol_mutations --test-filter 'language_native_memory_*'
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
       - name: Configure
         run: cmake -S . -B build -A x64 -T ${{ matrix.toolset }} -DPHYSIM_BUILD_BENCHMARKS=ON
       - name: Build
@@ -173,6 +188,7 @@ jobs:
         with:
           name: sdk-windows-${{ matrix.toolset }}-${{ matrix.configuration }}
           path: |
+            build/native/sanitizer probe*/results.json
             build/native/*/test-results/**/results.json
             build/native/*/test-results/**/app-steps.json
             build/native/*/test-results/*/ui_rendering/**/measurements/**
@@ -232,6 +248,17 @@ jobs:
         env:
           LIBGL_ALWAYS_SOFTWARE: "1"
         run: xvfb-run -a -s '-screen 0 1920x1080x24' sh -c 'openbox > build/native-openbox.log 2>&1 & python3 tools/wait-window-manager.py && python3 tools/build.py --compiler "${{ matrix.compiler }}" --test-display'
+      - name: Direct sanitizer tests
+        run: |
+          python3 tests/test_sanitizer_build.py --compiler "${{ matrix.compiler }}" --work build/native
+          python3 tools/build.py --compiler "${{ matrix.compiler }}" --sanitizers --test
+      - name: Direct sanitizer window and graphics tests
+        env:
+          # SDL/Mesa retain process-wide allocations; keep leak checks enabled
+          # for the separate non-window suite above.
+          ASAN_OPTIONS: detect_leaks=0
+          LIBGL_ALWAYS_SOFTWARE: "1"
+        run: xvfb-run -a -s '-screen 0 1920x1080x24' sh -c 'openbox > build/native-sanitizer-openbox.log 2>&1 & python3 tools/wait-window-manager.py && python3 tools/build.py --compiler "${{ matrix.compiler }}" --sanitizers --test-display'
       - name: Archive native Linux package
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
@@ -286,6 +313,8 @@ jobs:
           name: linux-ui-${{ matrix.compiler }}
           path: |
             build/native-openbox.log
+            build/native-sanitizer-openbox.log
+            build/native/sanitizer probe*/results.json
             build/native/*/test-results/**/results.json
             build/native/*/test-results/**/app-steps.json
             build/native/*/test-results/*/ui_rendering/**/measurements/**

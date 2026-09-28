@@ -551,14 +551,64 @@ Neustarts prüfen Fenstermaße, Maximierung, Sichtbarkeit und Schrift. Eine real
 Autosave-Datei bestätigt das gewählte Intervall; beschädigte Einstellungen bleiben
 unverändert. Die normalen Benutzereinstellungen werden von diesen Tests nicht gelesen.
 
-## AddressSanitizer unter Windows
+## Sanitizer ohne CMake
 
-Die beiden neuen Speichertests können im Quellcheckout zusätzlich unter Windows
-mit `tools\check-memory-asan.cmd` gegen MSVC AddressSanitizer ausgeführt werden.
-Das Skript verwendet Visual Studio 2022 Community mit installiertem ASan und legt
-einen eigenen `build-asan-memory`-Ordner an. Es baut RelWithDebInfo ohne inkrementelles
-Linken. Der vollständige Core wird instrumentiert; ausgeführt werden hier nur
-`memory` und `memory_owners`, keine vollständige Sanitizer-Abnahme der App.
+`--sanitizers` instrumentiert die direkt gebauten Bibliotheken, Programme,
+Testmodule und aus Physim erzeugten C-Quellen. Windows verwendet AddressSanitizer
+(ASan); Linux und macOS zusätzlich UndefinedBehaviorSanitizer (UBSan). Ein
+erkannter Fehler beendet das betroffene Programm mit einem Fehlercode.
+Die Standardausgabe liegt getrennt unter `build/native/Debug-sanitized`.
+
+**Windows, Speicherverwaltung mit MSVC prüfen:**
+
+```powershell
+python tools/build.py --sanitizers --no-app --test --test-filter "memory*"
+python tests/test_sanitizer_build.py --work build/native
+```
+
+Auch `tools\check-memory-asan.cmd` verwendet jetzt diesen direkten Buildweg.
+Python ab 3.10, Visual Studio C++ Build Tools und deren ASan-Komponente sind
+erforderlich. Der Builder erkennt die Visual-Studio-Installation automatisch und
+kopiert die zum gewählten Compiler gehörenden ASan-DLLs neben die Programme.
+Sanitizer-Builds verwenden `/MD` auch in Debug, da ClangCL ASan die Debug-CRT
+nicht unterstützt; Debugsymbole und deaktivierte Optimierung bleiben erhalten.
+
+**Linux und macOS, alle Tests ohne Fenster:**
+
+```sh
+python3 tests/test_sanitizer_build.py --work build/native
+python3 tools/build.py --sanitizers --test --sdl "$PWD/build-sdl-install"
+```
+
+Mit `--no-app` statt `--sdl ...` entfallen SDL und die App-spezifischen Tests.
+`--compiler gcc`, `--compiler clang` beziehungsweise `--compiler clang-cl`
+wählt einen anderen Compiler. Der Probe-Test läuft erst fehlerfrei ohne und mit
+Instrumentierung; danach muss ASan einen echten Heap-Pufferüberlauf erkennen.
+Unter Linux/macOS muss außerdem UBSan einen vorzeichenbehafteten Ganzzahlüberlauf
+erkennen. Die Ausgaben und Exitcodes stehen unter
+`build/native/sanitizer probe <Kennung>/results.json`.
+
+**Linux, Fensterabläufe mit Instrumentierung:**
+
+```sh
+ASAN_OPTIONS=detect_leaks=0 python3 tools/build.py --sanitizers --test-display --sdl "$PWD/build-sdl-install"
+```
+
+Hierfür wird eine grafische Sitzung benötigt. Nur für diese Grafikprüfung ist
+die Leakprüfung wegen der Lebensdauer globaler SDL-/Mesa-Allokationen ausgenommen;
+die separaten Tests ohne Fenster behalten sie bei. Die CI verwendet Xvfb und
+Openbox wie bei den normalen Grafiktests.
+
+Lokal bestehen mit MSVC die Instrumentierungsprobe und zehn Core-, Speicher-,
+Berichts-, Mutations- und Sprachspeichertests. Der installierte ClangCL 19.1.5
+scheitert auf diesem Windows-Rechner bereits beim Start des fehlerfreien
+ASan-Minimalprogramms mit `interception_win: unhandled instruction`.
+Die neuen CI-Schritte prüfen die Instrumentierung getrennt unter Windows,
+Linux und macOS; ihr Ergebnis steht noch aus.
+
+Die Option betrifft den Repository-Build. Sie ergänzt keine Compileroptionen in
+Nutzerprojekten, die die App während eines Ablaufs baut. Ein portables SDK wird
+separat ohne `--sanitizers` erstellt; `--sanitizers --install` wird abgelehnt.
 
 ## Portables Paket
 
