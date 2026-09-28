@@ -20,8 +20,10 @@ static void release(nk_handle user, void *memory) {
     free(memory);
 }
 static bool equals(struct nk_text_edit *edit, const char *text) {
-    return nk_str_len_char(&edit->string) == (int)strlen(text) &&
-           !memcmp(nk_str_get_const(&edit->string), text, strlen(text));
+    size_t length = strlen(text);
+    const char *actual = nk_str_get_const(&edit->string);
+    return nk_str_len_char(&edit->string) == (int)length &&
+           (!length || (actual && !memcmp(actual, text, length)));
 }
 int main(void) {
     char buffer[64];

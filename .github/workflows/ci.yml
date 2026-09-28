@@ -25,8 +25,8 @@ jobs:
         env:
           HOMEBREW_NO_AUTO_UPDATE: "1"
         run: |
-          brew install llvm@20
-          python3 tools/build.py --fuzzer --compiler "$(brew --prefix llvm@20)/bin/clang"
+          brew install llvm@20 lld@20
+          PATH="$(brew --prefix lld@20)/bin:$PATH" python3 tools/build.py --fuzzer --compiler "$(brew --prefix llvm@20)/bin/clang"
           python3 tests/test_native_fuzzer.py --bin build/native/Debug-fuzzer/bin --work build/native
       - name: SDL3 pinned source
         run: |

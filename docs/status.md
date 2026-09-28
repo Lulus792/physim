@@ -56,6 +56,21 @@ Fenstergrößenänderung sichtbar gemacht: Das wiederhergestellte Bild hatte noc
 und kontrolliert die Größe vor dem Rendern. Der Bildvergleich besteht lokal
 mit MSVC Debug und Clang Release; die erneute Linux-Prüfung steht aus.
 
+Die direkte SDK-Prüfung übernimmt nun auch den vollständigen bisherigen
+Sprachmodulvergleich: 27 neu gebaute Module, neun Experimente mit beiden allgemeinen
+Sprach-Analysen, Sensoranalyse und sechs gemischte C-/Physim-Auswertungen.
+Core-Quellen und alle acht C-Vorlagen werden unabhängig von den ausgelieferten
+Bibliotheken neu gebaut. Die erweiterte Prüfung besteht lokal mit einem SDL-freien
+MSVC-Release-SDK und mit Clang Release einschließlich neun Projektbuilds und
+beider grafischer Abläufe. Die CI-Abnahme ist noch offen.
+
+Die neuen Sanitizer-Prüfungen decken zusätzliche Probleme auf: Der Nullzeiger-
+Vergleich im Clipboard-Test ist korrigiert. Die ASan-Registrierung beim erneuten
+Laden von Modulen auf macOS bleibt zu untersuchen. Die Intel-Mac-Fuzzerkampagne
+besteht mit LLVM 20; für Apple Silicon verwendet der Build nun zusätzlich LLD.
+Der sporadische Linux-Startfehler wird durch feinere SDL-/Fenster-/GL-Protokolle
+weiter eingegrenzt.
+
 Der direkte Builder kann nun außerdem ein SDK in einen neuen Ordner installieren.
 Es enthält die App, Werkzeuge, alle acht C-Beispielmodule, Analysemodul, öffentliche
 Header, Kernbibliothek, SDK-Quellen, Vorlagen, Dokumentation und Lizenzen. Windows

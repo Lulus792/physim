@@ -219,6 +219,37 @@ Der Apple-Silicon-Job scheitert mit Apple Clang aus Xcode 16.4 am Linken, weil
 Homebrew LLVM 20 auf beiden Mac-Architekturen verwendet. Der erneute Mac-Nachweis
 steht noch aus; normale App- und Sanitizer-Builds verwenden weiter Apple Clang.
 
+Im selben Lauf besteht die Fuzzer-Kampagne mit LLVM 20 auf macOS Intel. Auf
+Apple Silicon meldet Apples Linker `invalid r_symbolnum=1` für instrumentierte
+Objekte. Der direkte Fuzzer-Build verwendet nun LLVMs Mach-O-Linker `ld64.lld`;
+der erneute Nachweis steht aus.
+
+Die direkte Linux-Clang-Sanitizer-Suite zu `c92dbd3` besteht 492 von 493 Tests.
+UBSan findet im Clipboard-Test einen `memcmp`-Aufruf mit Nullzeiger bei Länge null.
+Der Vergleich behandelt leere Texte nun vor dem Speichervergleich; lokal bestehen
+die Clipboard-Prüfungen mit MSVC Debug und Clang Release. Der Mac-ARM-Lauf desselben
+Stands besteht 479 von 482 Sanitizer-Tests. Beim erneuten Laden von Modulen melden
+zwei Fälle doppelt registrierte ASan-Globals; `template_ids` bricht in der
+ASan-Registrierung ab. Diese Mac-Sanitizer-Ursache bleibt in Untersuchung.
+
+Die korrigierte UI-Größenprüfung besteht im direkten Grafikschritt unter Linux
+GCC zu `0d10940`. Im vorherigen GCC-Lauf zu `49efcbb` besteht der UI-Benchmark,
+aber der erste App-Ablauf hängt erneut vor der Meldung „window and OpenGL ready“.
+Zusätzliche Tracepunkte unterscheiden nun SDL-Initialisierung, Fenstererzeugung
+und GL-Kontext. Der Wartepunkt auf den Fenstermanager allein behebt diesen
+sporadischen Startfehler damit nicht vollständig.
+
+Die direkte SDK-Prüfung umfasst jetzt auch alle zuvor nur im CMake-SDK-Vergleich
+gebauten Sprachmodule: 27 Module, neun Sprachexperimente mit beiden allgemeinen
+Analysen, spezielle Sensoranalyse und sechs C-/Physim-Kombinationen.
+Die installierten Core-Quellen und alle acht C-Vorlagen samt Analyse werden
+unabhängig von den ausgelieferten Bibliotheken neu gebaut. Ein SDL-freies
+MSVC-Release-SDK besteht die vollständige erweiterte Prüfung unter
+`build/native/Native SDK ä cnycd4y3`. Das Clang-Release-SDK besteht zusätzlich
+neun Projektbuilds und beide grafischen Abläufe unter
+`build/native/Native SDK ä elwayubq`. Der entsprechende Plattform-CI-Vergleich
+steht noch aus.
+
 Die Pendelreferenzen prüfen jeweils 4001 Messpunkte, Energiedrift und Periodendauer
 gegen eine analytische Referenz. MSVC und Clang liefern für RK4 eine Periodendauer
 von 2,48880586925 s bei einer Referenz von 2,48880587159 s. Die Prüfung abgeleiteter

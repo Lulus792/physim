@@ -118,6 +118,7 @@ class Builder:
         if WINDOWS and not self.msvc:
             raise RuntimeError("Windows builds require MSVC or clang-cl.")
         self.fuzzing = getattr(args, "fuzzer", False)
+        self.linker = None
         if self.fuzzing:
             if self.msvc and Path(self.cc).stem.lower() != "clang-cl":
                 raise RuntimeError("libFuzzer requires Clang; pass --compiler clang-cl on Windows or --compiler clang elsewhere.")
@@ -128,6 +129,11 @@ class Builder:
                 resource = Path(run([self.cc, "-print-resource-dir"], env, capture=True).strip())
                 if not (resource / "lib/darwin/libclang_rt.fuzzer_osx.a").is_file():
                     raise RuntimeError("This Clang installation has no libFuzzer runtime; install LLVM (for example brew install llvm@20) and pass its bin/clang with --compiler.")
+                # Apple ld rejects some LLVM sanitizer relocations on arm64.
+                # Use LLVM's Mach-O linker for the instrumented fuzzer tools.
+                self.linker = shutil.which("ld64.lld", path=str(Path(self.cc).parent) + os.pathsep + env.get("PATH", ""))
+                if not self.linker:
+                    raise RuntimeError("macOS libFuzzer builds require ld64.lld; install lld@20 and add its bin directory to PATH.")
         self.sanitizers = getattr(args, "sanitizers", False)
         if self.sanitizers and WINDOWS:
             if Path(self.cc).stem.lower() == "clang-cl":
@@ -176,7 +182,7 @@ class Builder:
                                                 if p.suffix in (".h", ".inc") and p.is_file()))
         self.tool_headers = digest_files(sorted(p for p in (ROOT / "tools").rglob("*")
                                                 if p.suffix in (".h", ".inc") and p.is_file()))
-        self.toolchain = digest_files([Path(self.cc), Path(self.ar)])
+        self.toolchain = digest_files([Path(self.cc), Path(self.ar)] + ([Path(self.linker)] if self.linker else []))
         self.environment = {k: env.get(k, "") for k in
                             ("INCLUDE", "LIB", "CL", "_CL_", "CPATH", "C_INCLUDE_PATH", "SDKROOT", "MACOSX_DEPLOYMENT_TARGET")}
 
@@ -271,6 +277,8 @@ class Builder:
         temporary = output.with_name(output.stem + ".pending" + output.suffix)
         inputs = objects + libraries + ([self.sdl_library] if sdl else [])
         command = [self.cc, *map(str, inputs)]
+        if self.linker:
+            command.append("--ld-path=" + self.linker)
         if self.sanitizers:
             command += (["/MD", "/fsanitize=address"] if self.msvc else
                         ["-fsanitize=address,undefined", "-fno-sanitize-recover=all"])

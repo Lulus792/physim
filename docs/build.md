@@ -306,7 +306,11 @@ CMake-Buildverzeichnisse.
 Die SDK-Prüfung kopiert und verschiebt das Paket in einen Pfad mit Leerzeichen
 und Umlaut. Sie prüft alle mitgelieferten Module, öffentliche Header einzeln,
 15 eigenständige Sprachprogramme und neu gebaute C-/Physim-Projekte samt echten
-Runnern und Mess-/Berichtsdateien. `--app-tests` ergänzt zwei vollständige
+Runnern und Mess-/Berichtsdateien. Zusätzlich werden die installierten Core-Quellen,
+alle acht C-Vorlagen samt Analyse sowie 27 Sprachmodule unabhängig neu gebaut.
+Neun Sprachexperimente laufen mit beiden allgemeinen Sprach-Auswertungen;
+hinzu kommen die spezielle Sensoranalyse und sechs C-/Physim-Kombinationen.
+`--app-tests` ergänzt zwei vollständige
 App-Abläufe und benötigt eine grafische Sitzung. Unter Windows führen die
 gehosteten CI-Worker diese Grafikabläufe nicht aus; sie werden lokal geprüft.
 Die mitgelieferten CMake-Anbindungsdateien bleiben vorerst für bestehende
@@ -369,37 +373,41 @@ Suche und das unabhängige Hilfefenster.
 
 ### Installiertes SDK prüfen
 
-Nach einem vollständigen Build prüft dieser plattformunabhängige Ablauf auch
-die installierten Quellen und Werkzeuge:
+Der direkte Ablauf prüft sowohl die ausgelieferten Programme und Bibliotheken
+als auch die installierten Quellen. Neue Ausgabeordner verwenden:
 
 ```sh
-cmake -DBUILD_DIR=build -DCONFIG=Release -P tools/verify-sdk.cmake
+python3 tools/build.py --config Release --install build/SDK-check
+python3 tools/verify-native-sdk.py --sdk build/SDK-check --work build/sdk-checks
 ```
 
-`CONFIG` muss zur gebauten Konfiguration passen, beispielsweise `Debug` auf
-Linux oder beim entsprechenden Visual-Studio-Build. Generator und Compiler
-werden aus dessen CMake-Cache übernommen; bei Ninja muss die ursprüngliche
-Compilerumgebung weiterhin eingerichtet sein.
+Unter Windows `python` statt `python3` verwenden. `--compiler` wählt bei Bedarf
+für beide Befehle denselben Compiler. Der Prüfer übernimmt Debug/Release aus
+den SDK-Metadaten. `--app-tests` ergänzt zwei grafische Abläufe und benötigt
+eine Desktop-Sitzung.
 
-Das Skript installiert in einen neuen Ordner mit Leerzeichen und Umlaut,
-verschiebt das SDK und baut einen separaten Verbraucher mit dem installierten
-`PhysimExperiment.cmake`. Alle acht Vorlagen und das Analysemodul werden aus den
-installierten Quellen neu kompiliert; jeder öffentliche Header wird in einer
-eigenen Übersetzungseinheit eingebunden. Die installierten Runner führen jede
-Vorlage aus. Eine gegen das SDK gebaute Prüfung liest alle 201 Samples, prüft
-Zeitpunkte und endliche Werte und lädt den erzeugten Bericht samt CRC-Prüfung.
-Zusätzlich werden alle installierten Sprachbeispiele über `PhysimLanguage.cmake`
-neu gebaut, wobei der Compiler aus dem verschobenen SDK gefunden werden muss.
-Sieben eigenständige Sprachprogramme laufen mit ihren eingebauten Referenzprüfungen.
-Sprach-Pendel, -Wurf und -Feder werden jeweils mit beiden Sprach-Analysemodulen
-ausgewertet; die Prüfung kontrolliert Messzeilen und die erwarteten Berichtsplots.
-Dies ist eine Paket-/Integrationsprüfung; die physikalischen Referenztests
-bleiben zusätzlich erforderlich.
+Das Skript kopiert und verschiebt das SDK in einen Pfad mit Leerzeichen und
+Umlaut. Es kontrolliert die Dateiprüfsummen und baut einen unabhängigen Verbraucher
+gegen die installierte Kernbibliothek. Jeder öffentliche Header wird separat
+kompiliert. Danach baut es die Kernbibliothek erneut aus den installierten Quellen
+und verwendet sie für acht C-Experimente und 27 Sprachmodule. Die 15 eigenständigen
+Sprachprogramme laufen gegen die mitgelieferte Kernbibliothek.
 
-Unter `build/SDK Test ä <Kennung>/` bleiben `verification.log`, erzeugte Dateien
-und bei Erfolg `PASSED.txt` erhalten. Wiederholungen verwenden neue Ordner.
-Die Windows- und Linux-CI führen den Ablauf aus und archivieren das Protokoll.
-Eine konfigurierte CI ist kein Beleg für einen erfolgreich ausgeführten Lauf.
+Die installierten Runner führen alle acht C-Vorlagen aus. Neun Sprach-Experimente
+werden jeweils mit beiden allgemeinen Sprach-Analysemodulen ausgewertet;
+Sensoranalyse und sechs C-/Physim-Kombinationen ergänzen die Prüfung.
+Der unabhängige Prüfer liest jeweils alle 201 Samples, kontrolliert Zeitpunkte
+und endliche Werte und lädt Berichte samt CRC- und Strukturprüfung. Bei der
+Sensoranalyse vergleicht er gültige Messpunkte, Scatterdaten und Tabellenwerte.
+Ein SDK mit App baut außerdem neun Projekte über `physim.project`; dabei dürfen
+nur unter `build/` neue Dateien entstehen und keine Quellen verändert werden.
+Die physikalischen Referenztests bleiben zusätzlich erforderlich.
+
+Unter `build/sdk-checks/Native SDK ä <Kennung>/` bleiben `verification.log`,
+erzeugte Dateien und bei Erfolg `PASSED.txt` erhalten. Wiederholungen verwenden
+neue Ordner. Die CI führt diese Prüfung unter Windows, Linux und macOS aus.
+Der bisherige Vergleich über `cmake -DBUILD_DIR=build -DCONFIG=Release -P tools/verify-sdk.cmake`
+bleibt bis zur Abnahme der erweiterten direkten Prüfung verfügbar.
 
 ### Fachliche und technische Prüfungen
 

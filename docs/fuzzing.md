@@ -39,11 +39,12 @@ python3 tests/test_native_fuzzer.py --bin build/native/Debug-fuzzer/bin --work b
 
 Apple Clang aus Xcode 16.4 enthält auf den CI-Macs keine libFuzzer-Bibliothek.
 Für diesen optionalen Test wird deshalb [LLVM 20 über Homebrew](https://formulae.brew.sh/formula/llvm@20)
-verwendet. Voraussetzung sind die Xcode-Werkzeuge und Homebrew aus der README.
+mit seinem [Mach-O-Linker LLD](https://lld.llvm.org/MachO/index.html) verwendet.
+Voraussetzung sind die Xcode-Werkzeuge und Homebrew aus der README.
 
 ```sh
-brew install llvm@20
-python3 tools/build.py --fuzzer --compiler "$(brew --prefix llvm@20)/bin/clang"
+brew install llvm@20 lld@20
+PATH="$(brew --prefix lld@20)/bin:$PATH" python3 tools/build.py --fuzzer --compiler "$(brew --prefix llvm@20)/bin/clang"
 python3 tests/test_native_fuzzer.py --bin build/native/Debug-fuzzer/bin --work build/native
 ```
 
@@ -83,7 +84,10 @@ Windows ClangCL, Linux Clang und Homebrew LLVM auf beiden Mac-Architekturen aus;
 im [Lauf zu `a9accf5`](https://github.com/PhysicSimulator/physim/actions/runs/36492484066)
 bestehen Windows ClangCL und Linux Clang bereits die vollständige Kampagnenprüfung.
 Der erste Apple-Silicon-Lauf scheiterte an der fehlenden libFuzzer-Bibliothek in
-Apple Clang. Die CI verwendet nun LLVM 20; dessen macOS-Nachweis steht noch aus.
+Apple Clang. Mit LLVM 20 besteht die Kampagne auf macOS Intel. Auf Apple Silicon
+wies Apples Linker die instrumentierten Objekte mit `invalid r_symbolnum=1` ab.
+Der direkte Fuzzer-Build verwendet dort nun LLVMs `ld64.lld`; der erneute
+Apple-Silicon-Nachweis steht noch aus.
 Der bisherige CMake-Einstieg
 `PHYSIM_BUILD_FUZZERS=ON` bleibt bis zum Abschluss des Vergleichs verfügbar.
 

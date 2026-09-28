@@ -78,13 +78,16 @@ def main():
             header_sources.append(name)
         builder.objects(header_sources)
 
+        def check_analysis(run, name, analysis, kind=None):
+            report = root / (name + "-report")
+            checked([sdk / "bin" / ("physim-analysis-runner" + suffix), analysis, run, report])
+            checked([probe, run, report.with_suffix(".psreport")] + ([kind] if kind else []))
+
         def check_modules(name, experiment, analysis, language=False):
             run = root / (name + ".psrun")
-            report = root / (name + "-report")
             checked([sdk / "bin" / ("physim-runner" + suffix), experiment, run,
                      "--steps", "200", "--dt", ".005", "--seed", "42"])
-            checked([sdk / "bin" / ("physim-analysis-runner" + suffix), analysis, run, report])
-            checked([probe, run, report.with_suffix(".psreport")] + (["language"] if language else []))
+            check_analysis(run, name, analysis, "language" if language else None)
             print(f"Installed SDK: {name} passed", flush=True)
 
         for name in native.EXAMPLES:
@@ -96,9 +99,56 @@ def main():
             source = consumer / (name + ".c")
             checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
                      sdk / "examples/language" / (name + ".phys")], output=source)
-            program = builder.executable(name, [source.name], [library])
+            program = builder.executable(name, [source.name], [library], language=True)
             checked([program])
             print(f"Installed language program: {name} passed", flush=True)
+
+        # Exercise the installed source distribution independently of its archive.
+        # No compiler input below comes from the repository's include/src trees.
+        shutil.copytree(sdk / "src", consumer / "src")
+        rebuilt_core = builder.archive("sdk-rebuilt-core", [f"src/{name}.c" for name in native.CORE])
+        rebuilt_probe = builder.executable("sdk-rebuilt-probe", ["probe.c"], [rebuilt_core])
+        checked([rebuilt_probe, root / "bundled-pendulum.psrun", root / "bundled-pendulum-report.psreport"])
+        shutil.copy2(sdk / "examples/pendulum/analysis.c", consumer / "c-analysis.c")
+        c_analysis = builder.executable("sdk-c-analysis", ["c-analysis.c"], [rebuilt_core], module=True)
+        for name in native.EXAMPLES:
+            source = consumer / ("c-" + name + ".c")
+            shutil.copy2(sdk / "examples" / name / "main.c", source)
+            experiment = builder.executable("sdk-c-" + name, [source.name], [rebuilt_core], module=True)
+            check_modules("source-c-" + name, experiment, c_analysis)
+
+        modules = {}
+        experiments = ("pendulum pendulum_rk4 pendulum_integrator pendulum_rk45 pendulum_verlet "
+                       "projectile projectile_drag collision box_collision buoyancy random_samples scene_shapes "
+                       "spring sensors uncertain_projectile spinning_body box_contacts joint_pendulum "
+                       "coupled_bodies fast_sphere").split()
+        analyses = ("analysis analysis_collision analysis_box_collision analysis_buoyancy "
+                    "analysis_sensors analysis_integral").split()
+        inputs = [(name, "--emit-experiment", f"language/{name}.phys") for name in experiments]
+        inputs += [(name, "--emit-analysis", f"language/{name}.phys") for name in analyses]
+        inputs.append(("drag_analysis", "--emit-analysis", "documentation/drag_analysis.phys"))
+        for name, mode, relative in inputs:
+            source = consumer / (name + ".c")
+            checked([sdk / "bin" / ("physimc" + suffix), mode, sdk / "examples" / relative], output=source)
+            modules[name] = builder.executable("language-" + name, [source.name], [rebuilt_core],
+                                               module=True, language=True)
+            print(f"Installed language module: {name} rebuilt", flush=True)
+
+        # Preserve the former SDK comparison: nine experiments, both general
+        # Physim analyses, the sensor report and six C/Physim combinations.
+        # Broader physics equivalence is checked by the normal integration suite.
+        mixed = {"sensors", "spinning_body", "box_contacts", "joint_pendulum", "coupled_bodies", "fast_sphere"}
+        for name in ("pendulum", "projectile", "spring", *sorted(mixed)):
+            run = root / ("language-" + name + ".psrun")
+            checked([sdk / "bin" / ("physim-runner" + suffix), modules[name], run,
+                     "--steps", "200", "--dt", ".005", "--seed", "42"])
+            for analyzer in ("analysis", "analysis_integral"):
+                check_analysis(run, "language-" + name + "-" + analyzer, modules[analyzer], "language")
+            if name == "sensors":
+                check_analysis(run, "language-sensors-special", modules["analysis_sensors"], "sensor-language")
+            if name in mixed:
+                check_analysis(run, "language-" + name + "-c", c_analysis)
+            print(f"Installed language experiment and analyses: {name} passed", flush=True)
 
         if metadata["app"]:
             for name in native.EXAMPLES + ["language"]:
@@ -130,7 +180,12 @@ def main():
                     checked([sdk / "bin" / ("physim" + suffix), "--self-test", root / ("App " + example), example])
         elif args.app_tests:
             raise RuntimeError("App tests require an SDK with the app")
-    (root / "PASSED.txt").write_text("Native SDK relocation, public headers, templates and language programs passed.\n", encoding="utf-8")
+    (root / "PASSED.txt").write_text(
+        "Native SDK relocation, independent headers, installed and rebuilt core archives, eight bundled and rebuilt C templates, "
+        "fifteen language programs, 27 rebuilt language modules, nine language experiments with both general analyses, "
+        "specialized sensor analysis and six C/Physim combinations passed.\n" +
+        ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
+        ("C and Physim GUI workflows passed.\n" if args.app_tests else ""), encoding="utf-8")
     print(f"Native SDK verified: {root}")
 
 

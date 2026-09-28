@@ -2251,6 +2251,10 @@ int main(int argc, char **argv) {
         fprintf(stderr, "SDL: %s\n", SDL_GetError());
         return 1;
     }
+    if (trace_test) {
+        const char *driver = SDL_GetCurrentVideoDriver();
+        fprintf(stderr, "APP TEST TRACE: SDL initialized, video driver %s\n", driver ? driver : "unknown");
+    }
     workspace_dialog_event = SDL_RegisterEvents(1);
     if (workspace_dialog_event == (Uint32)-1) {
         fprintf(stderr, "Workspace dialog event: %s\n", SDL_GetError());
@@ -2267,9 +2271,13 @@ int main(int argc, char **argv) {
 #endif
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    if (trace_test)
+        fprintf(stderr, "APP TEST TRACE: creating window\n");
     SDL_Window *window =
         SDL_CreateWindow("Physim | Experiment Studio", 1440, 940,
                          SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY | SDL_WINDOW_OPENGL);
+    if (trace_test)
+        fprintf(stderr, "APP TEST TRACE: window %s, creating OpenGL context\n", window ? "created" : "failed");
     ps_graphics *graphics = window ? ps_graphics_create(window) : NULL;
     if (!graphics) {
         fprintf(stderr, "OpenGL initialization: %s\n", SDL_GetError());
