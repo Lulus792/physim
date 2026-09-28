@@ -1,5 +1,10 @@
 # Physim
 
+**Installieren und mit Oberfläche starten:**
+[Windows](#schnellstart-unter-windows) · [Linux / Ubuntu](#linux) ·
+[macOS / Apple Silicon und Intel](#macos).
+Die Anleitungen enthalten Installation, Build, Tests und den Start der App.
+
 **Neu hier?** Das [Handbuch mit Lernpfaden](docs/guide.md) erklärt Bedienung,
 Experimente, Auswertung und alle öffentlichen Funktionen. In der App öffnet **F1**
 dieselben Inhalte offline, mit themenübergreifender Suche und kopierbaren Beispielen.
@@ -379,6 +384,29 @@ ohne CMake oder Ninja für Physim aufzurufen. Er verwendet eine vorhandene
 SDL-Installation. Auch [SDK- und App-Pakete](docs/build.md#sdk-und-portable-pakete-ohne-cmake)
 lassen sich direkt erzeugen. Die vollständige Testsuite läuft weiterhin über
 den oben beschriebenen CMake-Build.
+
+Nach der Installation der Werkzeuge und SDL aus der jeweiligen Plattformanleitung
+im Physim-Repository ausführen. Zusätzlich ist Python ab 3.10 erforderlich;
+die obigen Linux- und macOS-Befehle installieren es bereits.
+
+**Linux und macOS, einschließlich Oberfläche:**
+
+```sh
+python3 tools/build.py --config Debug --sdl "$PWD/build-sdl-install" --test
+./build/native/Debug/bin/physim
+```
+
+**Windows, einschließlich Oberfläche:**
+
+```powershell
+python tools/build.py --config Debug --test
+.\build\native\Debug\bin\physim.exe
+```
+
+Zum späteren Starten genügt jeweils der zweite Befehl. Nach Quellcodeänderungen
+beide Befehle erneut ausführen. `--test` führt die bisher auf den direkten
+Buildweg übertragenen Tests aus. Der SDL-Quellbuild aus der Linux- und
+macOS-Anleitung verwendet weiterhin CMake.
 
 ## Ohne Oberfläche
 
