@@ -173,6 +173,74 @@ static void nk_sdl_clipboard_copy(nk_handle usr, const char *text, int len) {
     sdl->allocator.free(sdl->allocator.userdata, str);
 }
 
+/* Keep platform conventions here so editor and other text fields agree. The
+ * platform argument also lets the input regression exercise both mappings. */
+static bool nk_sdl_edit_key(struct nk_context *ctx, SDL_Keycode key, SDL_Keymod mod, bool down,
+                            bool mac) {
+    bool command = (mod & (mac ? SDL_KMOD_GUI : SDL_KMOD_CTRL)) != 0;
+    bool word = (mod & (mac ? SDL_KMOD_ALT : SDL_KMOD_CTRL)) != 0;
+    bool shift = (mod & SDL_KMOD_SHIFT) != 0;
+    enum nk_keys keys[3], selected = NK_KEY_NONE;
+    unsigned count = 0;
+    switch (key) {
+    case SDLK_Z:
+        keys[count++] = NK_KEY_TEXT_UNDO;
+        keys[count++] = NK_KEY_TEXT_REDO;
+        if (command)
+            selected = shift ? NK_KEY_TEXT_REDO : NK_KEY_TEXT_UNDO;
+        break;
+    case SDLK_Y:
+        if (mac)
+            return false;
+        /* Ctrl+Y and Ctrl+Shift+Z both repeat the undone edit. */
+        /* fall through */
+    case SDLK_R:
+        keys[count++] = NK_KEY_TEXT_REDO;
+        if (command)
+            selected = NK_KEY_TEXT_REDO;
+        break;
+    case SDLK_LEFT:
+    case SDLK_RIGHT: {
+        bool left = key == SDLK_LEFT;
+        keys[count++] = left ? NK_KEY_LEFT : NK_KEY_RIGHT;
+        keys[count++] = left ? NK_KEY_TEXT_WORD_LEFT : NK_KEY_TEXT_WORD_RIGHT;
+        keys[count++] = left ? NK_KEY_TEXT_LINE_START : NK_KEY_TEXT_LINE_END;
+        selected = keys[mac && command ? 2 : word ? 1 : 0];
+        break;
+    }
+    case SDLK_UP:
+    case SDLK_DOWN:
+        keys[count++] = key == SDLK_UP ? NK_KEY_UP : NK_KEY_DOWN;
+        keys[count++] = key == SDLK_UP ? NK_KEY_TEXT_START : NK_KEY_TEXT_END;
+        selected = keys[mac && command ? 1 : 0];
+        break;
+    case SDLK_HOME:
+    case SDLK_END: {
+        bool home = key == SDLK_HOME;
+        keys[count++] = home ? NK_KEY_TEXT_LINE_START : NK_KEY_TEXT_LINE_END;
+        keys[count++] = home ? NK_KEY_TEXT_START : NK_KEY_TEXT_END;
+        keys[count++] = home ? NK_KEY_SCROLL_START : NK_KEY_SCROLL_END;
+        selected = keys[command ? 1 : mac ? 2 : 0];
+        break;
+    }
+    default:
+        return false;
+    }
+    if (ctx->input.keyboard.keys[NK_KEY_SHIFT].down != shift)
+        nk_input_key(ctx, NK_KEY_SHIFT, shift);
+    /* Key-up can arrive after the modifier was released. Clear every variant
+     * of that physical key so a word/line action cannot remain held. */
+    for (unsigned i = 0; i < count; i++) {
+        bool pressed = down && keys[i] == selected;
+        /* Nuklear counts even redundant releases as clicks. Only release an
+         * action that
+         * was held, while still forwarding repeated key-downs. */
+        if (pressed || ctx->input.keyboard.keys[keys[i]].down)
+            nk_input_key(ctx, keys[i], pressed);
+    }
+    return true;
+}
+
 NK_API int nk_sdl_handle_event(struct nk_context *ctx, SDL_Event *evt) {
     struct nk_sdl *sdl;
 
@@ -198,6 +266,13 @@ NK_API int nk_sdl_handle_event(struct nk_context *ctx, SDL_Event *evt) {
     case SDL_EVENT_KEY_DOWN: {
         int down = evt->type == SDL_EVENT_KEY_DOWN;
         int ctrl_down = evt->key.mod & PS_UI_COMMAND_MOD;
+#ifdef __APPLE__
+        const bool mac = true;
+#else
+        const bool mac = false;
+#endif
+        if (nk_sdl_edit_key(ctx, evt->key.key, evt->key.mod, down != 0, mac))
+            return 1;
 
         switch (evt->key.key) {
         case SDLK_LALT:
@@ -220,14 +295,6 @@ NK_API int nk_sdl_handle_event(struct nk_context *ctx, SDL_Event *evt) {
             break;
         case SDLK_BACKSPACE:
             nk_input_key(ctx, NK_KEY_BACKSPACE, down);
-            break;
-        case SDLK_HOME:
-            nk_input_key(ctx, NK_KEY_TEXT_START, down);
-            nk_input_key(ctx, NK_KEY_SCROLL_START, down);
-            break;
-        case SDLK_END:
-            nk_input_key(ctx, NK_KEY_TEXT_END, down);
-            nk_input_key(ctx, NK_KEY_SCROLL_END, down);
             break;
         case SDLK_PAGEDOWN:
             nk_input_key(ctx, NK_KEY_SCROLL_DOWN, down);
@@ -274,12 +341,6 @@ NK_API int nk_sdl_handle_event(struct nk_context *ctx, SDL_Event *evt) {
         case SDLK_A:
             nk_input_key(ctx, NK_KEY_TEXT_SELECT_ALL, down && ctrl_down);
             break;
-        case SDLK_Z:
-            nk_input_key(ctx, NK_KEY_TEXT_UNDO, down && ctrl_down);
-            break;
-        case SDLK_R:
-            nk_input_key(ctx, NK_KEY_TEXT_REDO, down && ctrl_down);
-            break;
         case SDLK_C:
             nk_input_key(ctx, NK_KEY_COPY, down && ctrl_down);
             break;
@@ -295,12 +356,6 @@ NK_API int nk_sdl_handle_event(struct nk_context *ctx, SDL_Event *evt) {
         case SDLK_E:
             nk_input_key(ctx, NK_KEY_TEXT_LINE_END, down && ctrl_down);
             break;
-        case SDLK_UP:
-            nk_input_key(ctx, NK_KEY_UP, down);
-            break;
-        case SDLK_DOWN:
-            nk_input_key(ctx, NK_KEY_DOWN, down);
-            break;
         case SDLK_ESCAPE:
             nk_input_key(ctx, NK_KEY_TEXT_RESET_MODE, down);
             break;
@@ -312,18 +367,6 @@ NK_API int nk_sdl_handle_event(struct nk_context *ctx, SDL_Event *evt) {
             } else {
                 nk_input_key(ctx, NK_KEY_TEXT_REPLACE_MODE, down);
             }
-            break;
-        case SDLK_LEFT:
-            if (ctrl_down)
-                nk_input_key(ctx, NK_KEY_TEXT_WORD_LEFT, down);
-            else
-                nk_input_key(ctx, NK_KEY_LEFT, down);
-            break;
-        case SDLK_RIGHT:
-            if (ctrl_down)
-                nk_input_key(ctx, NK_KEY_TEXT_WORD_RIGHT, down);
-            else
-                nk_input_key(ctx, NK_KEY_RIGHT, down);
             break;
         default:
             return 0;
@@ -390,6 +433,85 @@ NK_API int nk_sdl_handle_event(struct nk_context *ctx, SDL_Event *evt) {
     return 0;
 }
 
+static float test_text_width(nk_handle user, float height, const char *text, int length) {
+    (void)user;
+    (void)text;
+    return height * 0.5f * (float)length;
+}
+static void test_edit_frame(struct nk_context *ctx, struct nk_text_edit *edit) {
+    if (nk_begin(ctx, "Keyboard regression", nk_rect(0, 0, 600, 400), 0)) {
+        nk_layout_row_dynamic(ctx, 300, 1);
+        nk_edit_focus(ctx, NK_EDIT_ALWAYS_INSERT_MODE);
+        nk_edit_buffer(ctx, NK_EDIT_BOX | NK_EDIT_ALWAYS_INSERT_MODE, edit, nk_filter_default);
+    }
+    nk_end(ctx);
+    nk_clear(ctx);
+}
+static bool test_editor_navigation(bool mac) {
+    struct nk_user_font font = {0};
+    font.height = 16;
+    font.width = test_text_width;
+    struct nk_context ctx;
+    if (!nk_init_default(&ctx, &font))
+        return false;
+    char buffer[128];
+    struct nk_text_edit edit;
+    nk_textedit_init_fixed(&edit, buffer, sizeof buffer);
+    edit.mode = NK_TEXT_EDIT_MODE_INSERT;
+    nk_sdl_paste_text(&edit, "one two\nthree four");
+    test_edit_frame(&ctx, &edit);
+    SDL_Keymod command = mac ? SDL_KMOD_GUI : SDL_KMOD_CTRL;
+    SDL_Keymod word = mac ? SDL_KMOD_ALT : SDL_KMOD_CTRL;
+    const struct {
+        SDL_Keycode key;
+        SDL_Keymod mod;
+        int cursor;
+    } cases[] = {
+        {SDLK_LEFT, word, 8},
+        {SDLK_RIGHT, word, 14},
+        {mac ? SDLK_LEFT : SDLK_HOME, mac ? command : 0, 8},
+        {mac ? SDLK_RIGHT : SDLK_END, mac ? command : 0, 18},
+        {mac ? SDLK_UP : SDLK_HOME, command, 0},
+        {mac ? SDLK_DOWN : SDLK_END, command, 18},
+        {SDLK_LEFT, 0, 10},
+        {SDLK_RIGHT, 0, 12},
+        {SDLK_LEFT, (SDL_Keymod)(word | SDL_KMOD_SHIFT), 8},
+        {mac ? SDLK_RIGHT : SDLK_END, (SDL_Keymod)((mac ? command : 0) | SDL_KMOD_SHIFT), 18},
+    };
+    bool ok = true;
+    for (unsigned i = 0; i < sizeof cases / sizeof cases[0]; i++) {
+        edit.cursor = edit.select_start = edit.select_end = 11;
+        nk_input_begin(&ctx);
+        nk_sdl_edit_key(&ctx, cases[i].key, cases[i].mod, true, mac);
+        nk_input_end(&ctx);
+        test_edit_frame(&ctx, &edit);
+        bool selected = (cases[i].mod & SDL_KMOD_SHIFT) != 0;
+        ok = ok && edit.cursor == cases[i].cursor &&
+             (selected ? edit.select_start == 11 && edit.select_end == cases[i].cursor
+                       : edit.select_start == edit.select_end);
+        /* Release modifiers first: no action may remain held or move the cursor again. */
+        nk_input_begin(&ctx);
+        nk_sdl_edit_key(&ctx, cases[i].key, 0, false, mac);
+        nk_input_end(&ctx);
+        test_edit_frame(&ctx, &edit);
+        ok = ok && edit.cursor == cases[i].cursor;
+        for (int key = 0; key < NK_KEY_MAX; key++)
+            ok = ok && !ctx.input.keyboard.keys[key].down;
+    }
+    /* A quick press/release within one frame must undo or redo exactly once. */
+    for (unsigned i = 0; i < 4; i++) {
+        SDL_Keycode key = i == 3 ? (mac ? SDLK_R : SDLK_Y) : SDLK_Z;
+        SDL_Keymod mod = (SDL_Keymod)(command | (i == 1 ? SDL_KMOD_SHIFT : 0));
+        nk_input_begin(&ctx);
+        nk_sdl_edit_key(&ctx, key, mod, true, mac);
+        nk_sdl_edit_key(&ctx, key, 0, false, mac);
+        nk_input_end(&ctx);
+        test_edit_frame(&ctx, &edit);
+        ok = ok && nk_str_len_char(&edit.string) == (i % 2 ? 18 : 0);
+    }
+    nk_free(&ctx);
+    return ok;
+}
 bool nk_sdl_test_input(SDL_Window *window, ps_graphics *graphics) {
     struct nk_context *ctx = nk_sdl_init(window, graphics);
     if (!ctx)
@@ -454,10 +576,12 @@ bool nk_sdl_test_input(SDL_Window *window, ps_graphics *graphics) {
         free(oversized);
     } else
         ok = false;
+    ok = test_editor_navigation(false) && ok;
+    ok = test_editor_navigation(true) && ok;
     nk_sdl_shutdown(ctx);
     if (!ok)
-        SDL_SetError("SDL input test: Unicode, clipboard or focus reset failed");
+        SDL_SetError("SDL input test: Unicode, clipboard, editor navigation or focus reset failed");
     else
-        puts("INPUT TEST: UTF-8 input/paste, undo/redo, clipboard limit, keys, focus loss PASSED");
+        puts("INPUT TEST: UTF-8, undo/redo, clipboard, Mac/PC navigation/selection, focus PASSED");
     return ok;
 }

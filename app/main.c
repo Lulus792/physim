@@ -1938,17 +1938,20 @@ static struct nk_font *system_font(struct nk_font_atlas *atlas, float size, bool
     return font ? font : nk_font_atlas_add_default(atlas, size, NULL);
 }
 #include "documentation_window.inc"
-static void test_window_key(SDL_Window *window, SDL_Keycode key) {
+static void test_window_key_mod(SDL_Window *window, SDL_Keycode key, SDL_Keymod mod) {
     SDL_Event e = {0};
     e.type = SDL_EVENT_KEY_DOWN;
     e.key.windowID = SDL_GetWindowID(window);
     e.key.key = key;
-    e.key.mod = PS_UI_COMMAND_MOD;
+    e.key.mod = mod;
     e.key.down = true;
     SDL_PushEvent(&e);
     e.type = SDL_EVENT_KEY_UP;
     e.key.down = false;
     SDL_PushEvent(&e);
+}
+static void test_window_key(SDL_Window *window, SDL_Keycode key) {
+    test_window_key_mod(window, key, PS_UI_COMMAND_MOD);
 }
 static void create_managed_project(app *a) {
     if (!idle(a) || a->library_thread || a->recovery) {

@@ -49,7 +49,10 @@ array. AddressSanitizer found this during system-font baking; the synthetic
 `font_shape` test covers one contour and adjacent singleton contours without
 requiring an installed font. The affected routine is also present in the
 [upstream stb_truetype source](https://github.com/nothings/stb/blob/master/stb_truetype.h).
-Patched header SHA-256: 95cbb20e766bed5a42bb7abb32e3bcf0a55eefebe3498a3f277ddde88f14a913.
+Local patch (2026-09-28): undo/redo collapses the current selection to the restored
+cursor. A selection into removed text previously reached the renderer with invalid
+bounds. `editor_clipboard` and the SDL editor regression cover this case.
+Patched header SHA-256 (LF): 39e5cb4d2da72c77dfebc42eb64959825dc243f209c74eaac792f4150b4dc936.
 
 `nuklear_sdl3_renderer.h` is retained as the upstream `demo/sdl3_renderer` reference;
 it is no longer compiled into Physim. Input and clipboard handling in `app/ui_sdl.c`

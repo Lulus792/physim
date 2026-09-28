@@ -116,7 +116,9 @@ Das Protokoll zeigt Compilerfehler. Anklickbare Quelldiagnosen führen zur betro
 Stelle. **Analysecode bearbeiten** öffnet den zweiten Editor; **Zum Bericht** führt zurück.
 Einzelne Quelldateien dürfen höchstens 256 KiB UTF-8-Text enthalten.
 **Tab** fügt vier Leerzeichen als einen Bearbeitungsschritt ein. **Ctrl+Z** macht
-ihn rückgängig; **Ctrl+R** stellt ihn wieder her. Dies gilt auch für zusätzlich
+ihn rückgängig; **Ctrl+Shift+Z**, **Ctrl+Y** oder **Ctrl+R** stellt ihn wieder her.
+Auf macOS gelten **Cmd+Z** und **Cmd+Shift+Z** (alternativ **Cmd+R**).
+Dies gilt auch für zusätzlich
 geöffnete Textdateien.
 
 Automatische Sicherungen ersetzen Ctrl+S nicht. Nach einem Abbruch bietet Physim
@@ -193,6 +195,8 @@ im Ergebnis zu berücksichtigen.
 
 ## Fenster, Hilfe und Tastenkürzel
 
+Auf macOS gilt für die unten aufgeführten App-Befehle **Cmd** anstelle von **Ctrl**.
+
 Ziehe die Trennlinie neben der Seitenleiste oder über dem Protokoll, um Platz zu
 verteilen. **Einstellungen / Ctrl+,** bietet Codeschrift, Autosave und Darstellung.
 Übernehmen speichert, Abbrechen verwirft den Einstellungsentwurf.
@@ -206,6 +210,16 @@ verteilen. **Einstellungen / Ctrl+,** bietet Codeschrift, Autosave und Darstellu
 - **F6:** Simulation starten oder pausieren.
 - **F1:** Eigenständiges Handbuchfenster öffnen.
 - **Ctrl+,**: Einstellungen.
+
+Im Texteditor gelten außerdem die plattformüblichen Sprungbefehle:
+
+| Bewegung | Windows / Linux | macOS |
+| --- | --- | --- |
+| Wort zurück / vor | Ctrl+Pfeil links / rechts | Option+Pfeil links / rechts |
+| Zeilenanfang / -ende | Home / End | Cmd+Pfeil links / rechts |
+| Dokumentanfang / -ende | Ctrl+Home / End | Cmd+Pfeil hoch / runter |
+
+Mit zusätzlichem **Shift** wird der Text bis zum Ziel ausgewählt.
 
 Im Hilfefenster sucht Ctrl+F nur im Dokument, die linke Suche in allen Inhalten.
 Esc schließt die Hilfe. Die Arbeitsbereichskürzel werden dort nicht ans Hauptfenster

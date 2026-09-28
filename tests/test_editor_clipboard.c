@@ -32,10 +32,14 @@ int main(void) {
     const char text[32] = "\xc3\xa4\xe2\x82\xac";
     CHECK(nk_textedit_paste(&edit, text, 5));
     CHECK(equals(&edit, text) && edit.cursor == 2);
+    edit.select_start = 1;
+    edit.select_end = 2;
     nk_textedit_undo(&edit);
     CHECK(equals(&edit, "") && edit.cursor == 0);
+    CHECK(edit.select_start == 0 && edit.select_end == 0);
     nk_textedit_redo(&edit);
     CHECK(equals(&edit, text) && edit.cursor == 2);
+    CHECK(edit.select_start == 2 && edit.select_end == 2);
     edit.select_start = 0;
     edit.select_end = 2;
     CHECK(nk_textedit_paste(&edit, "A\xf0\x9f\x98\x80\nB", 7));

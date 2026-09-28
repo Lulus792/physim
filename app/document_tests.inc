@@ -270,7 +270,7 @@ static void document_test_frame(app *a, const char *root, int *stage, int *code,
         break;
     case 68:
         ok = doc && !doc->dirty && nk_str_len_char(&doc->edit.string) == 0;
-        test_key(a, SDLK_R);
+        test_window_key_mod(a->window, SDLK_Z, PS_UI_COMMAND_MOD | SDL_KMOD_SHIFT);
         break;
     case 70:
         ok = doc && doc->dirty && nk_str_len_char(&doc->edit.string) == 4;
