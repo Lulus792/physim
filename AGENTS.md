@@ -7,5 +7,5 @@
   `origin` (Lulus792/Physim) und `upstream` (PhysicSimulator/physim).
   Diese Vorgabe ist vom Nutzer autorisiert; nicht bei jedem Push erneut fragen.
 - Bestehende Remote-Historien erhalten. Keine erzwungenen Pushes ohne ausdrücklichen Auftrag.
-- Linux-Unterstützung anhand tatsächlich ausgeführter Builds und Tests bewerten.
+- Linux- und macOS-Unterstützung anhand tatsächlich ausgeführter Builds und Tests bewerten.
   Eine vorhandene CI-Konfiguration allein beweist keine Funktionsgleichheit.

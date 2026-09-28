@@ -25,8 +25,12 @@ Nutzerprojekte werden direkt mit `physim-build` gebaut und benötigen keine
 `CMakeLists.txt`. Quellen und `physim.project` bleiben im Projektordner;
 Buildprodukte liegen in `build/Debug` beziehungsweise `build/Release`.
 
-Die Clang-Freigabe ist noch offen: Ein Lauf bestand alle 311 CTest-Prüfungen und
-das SDK, scheiterte aber im zusätzlichen C-App-Ablauf. Folgeläufe werden geprüft.
+Auch Clang ist bestätigt: Für `f2bf2ba` bestanden sowohl
+[GCC](https://github.com/PhysicSimulator/physim/actions/runs/36457154756/job/109046291673)
+als auch [Clang](https://github.com/PhysicSimulator/physim/actions/runs/36457154756/job/109046291210)
+sämtliche Tests, das verschobene SDK und die acht zusätzlichen C-App-Abläufe.
+Eine Compilerwarnung hatte im vorherigen Test das Protokoll bereits geöffnet;
+der Shortcut-Test setzt seinen Ausgangszustand jetzt ausdrücklich.
 Wayland, weitere Distributionen, reale Linux-Grafiktreiber und ein fertiges
 Installationspaket auf einem frischen Zielsystem sind noch nicht abgenommen.
 Äußere Fensterecken hängen unter Linux vom Desktop ab; die Windows-DWM-Rundung
@@ -49,7 +53,10 @@ Grafiktests und die acht C-App-Abläufe. Die erste vollständige Abnahme steht n
 
 Die Implementierung berücksichtigt Darwins Programmpfaderkennung, Mach-O-Module,
 lokalisierte Zahlenkonvertierung, macOS-Systemschriften und OpenGL 4.1 Core.
-Ein signiertes und notarisiertes Installationspaket ist noch nicht vorhanden.
+`tools/package-macos.py` erzeugt ein verschiebbares `.app`-Paket mit SDL und SDK.
+Die lokale Ad-hoc-Signatur wird geprüft; Developer-ID-Signierung und Notarisierung
+für eine öffentliche Verteilung sind noch offen. Die CI prüft vollständige C- und
+Physim-Sprachprojekte aus dem verschobenen Paket.
 
 ## Weitere Änderungen prüfen
 
