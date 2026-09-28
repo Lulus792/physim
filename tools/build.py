@@ -15,6 +15,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+import tempfile
 
 ROOT = Path(__file__).resolve().parent.parent
 WINDOWS = sys.platform == "win32"
@@ -24,6 +25,7 @@ LANGUAGE = "lexer parser checker emitter builtins".split()
 APP = "main ui_backend ui_sdl ui_geometry graphics documentation library preferences workspace_state workspace_tree plot_view report_image png".split()
 PROJECT = "project_file text_document autosave parameter_catalog".split()
 ZLIB = "adler32 crc32 deflate trees zutil".split()
+EXAMPLES = "pendulum projectile collision box_floor spring uncertain_projectile box_collision buoyancy".split()
 
 
 def run(args: list[str], env: dict[str, str], *, capture: bool = False, directory: Path | None = None) -> str:
@@ -119,6 +121,7 @@ class Builder:
             raise RuntimeError("Static library tool not found (lib.exe / ar).")
         self.includes = [ROOT / "include", ROOT / "src", ROOT / "app"]
         self.sdl_library: Path | None = None
+        self.runtime: Path | None = None
         if not args.no_app:
             prefix = args.sdl.resolve() if args.sdl else ROOT / ("third_party/SDL3-3.2.30" if WINDOWS else "build-sdl-install")
             self.includes.extend([ROOT / "third_party", ROOT / "third_party/zlib-1.3.2", prefix / "include"])
@@ -134,6 +137,7 @@ class Builder:
             if not self.sdl_library.is_file() or not runtime.is_file():
                 raise RuntimeError(f"Shared SDL3 library not found in {prefix}")
             destination = self.bin / runtime.name
+            self.runtime = destination
             if not destination.is_file() or destination.read_bytes() != runtime.read_bytes():
                 shutil.copy2(runtime, destination)
         headers = sorted({p for base in self.includes for p in base.rglob("*")
@@ -209,9 +213,10 @@ class Builder:
         return output
 
     def executable(self, name: str, sources: list[str], libraries: list[Path], *, sdl: bool = False,
-                   defines: tuple[str, ...] = ()) -> Path:
+                   defines: tuple[str, ...] = (), module: bool = False) -> Path:
         objects = self.objects(sources, defines)
-        output = self.bin / (name + ".exe" if WINDOWS else name)
+        suffix = (".dll" if WINDOWS else ".so") if module else (".exe" if WINDOWS else "")
+        output = self.bin / (name + suffix)
         temporary = output.with_name(output.stem + ".pending" + output.suffix)
         inputs = objects + libraries + ([self.sdl_library] if sdl else [])
         command = [self.cc, *map(str, inputs)]
@@ -224,12 +229,17 @@ class Builder:
             inputs += [manifest]
             if name == "physim":
                 command.append("dwmapi.lib")
+            if module:
+                command.insert(1, "/LD")
+                command.append("/IMPLIB:" + str(self.lib / (name + ".lib")))
         else:
             command += ["-o", str(temporary), "-lm"]
             if not MAC:
                 command += ["-ldl", "-pthread"]
             if sdl:
                 command += ["-Wl,-rpath,@executable_path" if MAC else "-Wl,-rpath,$ORIGIN"]
+            if module:
+                command += ["-bundle", "-Wl,-undefined,error"] if MAC else ["-shared"]
         if self.execute(output, command, inputs):
             if self.msvc:
                 os.replace(temporary.with_suffix(".pdb"), output.with_suffix(".pdb"))
@@ -237,27 +247,85 @@ class Builder:
         return output
 
     def build(self):
+        products = []
         core = self.archive("physim-core", [f"src/{name}.c" for name in CORE])
+        products.append(core)
         platform = self.archive("physim-platform", ["src/platform.c", "src/protocol.c"])
         language = self.archive("physim-language", [f"src/language/{name}.c" for name in LANGUAGE])
         batch = self.archive("physim-batch", ["src/batch.c"])
-        self.executable("physimc", ["src/language/main.c", "src/language/loader.c"], [language])
-        self.executable("physim-runner", ["runners/experiment.c"], [platform, core])
-        self.executable("physim-analysis-runner", ["runners/analysis.c"], [platform, core])
-        self.executable("physim-batch", ["runners/batch.c"], [batch, platform, core])
+        products.append(self.executable("physimc", ["src/language/main.c", "src/language/loader.c"], [language]))
+        products.append(self.executable("physim-runner", ["runners/experiment.c"], [platform, core]))
+        products.append(self.executable("physim-analysis-runner", ["runners/analysis.c"], [platform, core]))
+        products.append(self.executable("physim-batch", ["runners/batch.c"], [batch, platform, core]))
+        for name in EXAMPLES:
+            products.append(self.executable(name, [f"examples/{name}/main.c"], [core], module=True))
+        products.append(self.executable("pendulum_analysis", ["examples/pendulum/analysis.c"], [core], module=True))
         if not self.args.no_app:
             project = self.archive("physim-project", [f"app/{name}.c" for name in PROJECT])
             zlib = self.archive("physim-zlib", [f"third_party/zlib-1.3.2/{name}.c" for name in ZLIB], ("Z_PREFIX",))
-            self.executable("physim-build", ["app/build_main.c"], [project, platform, core], sdl=True)
-            self.executable("physim", [f"app/{name}.c" for name in APP],
+            products.append(self.executable("physim-build", ["app/build_main.c"], [project, platform, core], sdl=True))
+            products.append(self.executable("physim", [f"app/{name}.c" for name in APP],
                             [project, batch, platform, language, zlib, core], sdl=True,
-                            defines=("Z_PREFIX", f'PS_SOURCE_DIR="{ROOT.as_posix()}"'))
+                            defines=("Z_PREFIX", f'PS_SOURCE_DIR="{ROOT.as_posix()}"')))
+            products.append(self.runtime)
         if self.args.test:
             for name in ("core", "numerics", "mechanics"):
                 program = self.executable(f"physim-{name}-tests", [f"tests/test_{name}.c"], [platform, core])
                 run([str(program)], self.env, directory=self.directory)
             print("Core, numerics and mechanics reference tests passed.")
         print(f"Build complete: {self.bin}")
+        if self.args.install:
+            self.install(products, self.args.install.resolve())
+
+    def install(self, products: list[Path], output: Path):
+        if output.exists():
+            raise RuntimeError("Installation requires a new output directory.")
+        for name in ("include", "examples", "docs", "src", "cmake", "third_party"):
+            source = (ROOT / name).resolve()
+            if source == output or source in output.parents:
+                raise RuntimeError("Installation must be outside the SDK source directories.")
+        if WINDOWS and self.args.config != "Release":
+            raise RuntimeError("Windows packages require --config Release (redistributable runtime).")
+        if WINDOWS:
+            redist = Path(self.env.get("VCTOOLSREDISTDIR", "")) / "x64/Microsoft.VC143.CRT"
+            runtime = sorted(redist.glob("*.dll"))
+            if not (redist / "vcruntime140.dll").is_file():
+                raise RuntimeError("Visual Studio x64 redistributable runtime was not found.")
+            products = products + runtime
+        output.parent.mkdir(parents=True, exist_ok=True)
+        # Publish only a complete installation. On failure the staging directory
+        # remains available for diagnosis and the requested output is untouched.
+        staging = Path(tempfile.mkdtemp(prefix=output.name + ".pending-", dir=output.parent))
+        for product in products:
+            destination = staging / ("lib" if product == self.lib / ("physim-core.lib" if self.msvc else "libphysim-core.a") else "bin") / product.name
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(product, destination)
+        for directory in ("include", "examples", "docs"):
+            shutil.copytree(ROOT / directory, staging / directory,
+                            ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "build", "runs"))
+        for name in CORE:
+            destination = staging / "src" / (name + ".c")
+            destination.parent.mkdir(exist_ok=True)
+            shutil.copy2(ROOT / "src" / (name + ".c"), destination)
+        shutil.copy2(ROOT / "src/report_internal.h", staging / "src/report_internal.h")
+        (staging / "cmake").mkdir()
+        for name in ("PhysimExperiment.cmake", "PhysimLanguage.cmake", "PhysimEmitC.cmake"):
+            shutil.copy2(ROOT / "cmake" / name, staging / "cmake" / name)
+        (staging / "licenses").mkdir()
+        for source, name in (("third_party/Nuklear-LICENSE", "Nuklear-LICENSE"),
+                             ("third_party/zlib-1.3.2/LICENSE", "zlib-LICENSE.txt"),
+                             ("third_party/SDL3-LICENSE.txt", "SDL3-LICENSE.txt"),
+                             ("third_party/README.md", "Dependencies.md")):
+            shutil.copy2(ROOT / source, staging / "licenses" / name)
+        for name in ("LICENSE", "README.md", "Physim_Projektplan.md"):
+            shutil.copy2(ROOT / name, staging / name)
+        # Relative paths and content hashes make moved packages independently auditable.
+        files = {p.relative_to(staging).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+                 for p in sorted(staging.rglob("*")) if p.is_file()}
+        (staging / "physim-sdk.json").write_text(json.dumps({"format": 1, "config": self.args.config,
+            "platform": sys.platform, "app": not self.args.no_app, "files": files}, indent=2) + "\n", encoding="utf-8")
+        staging.rename(output)
+        print(f"Installed SDK: {output}")
 
 
 def main() -> int:
@@ -270,6 +338,7 @@ def main() -> int:
     parser.add_argument("--jobs", type=int, default=min(os.cpu_count() or 1, 8))
     parser.add_argument("--test", action="store_true", help="Run core, numerics and mechanics reference tests")
     parser.add_argument("--rebuild", action="store_true", help="Recompile and relink all selected targets")
+    parser.add_argument("--install", type=Path, help="Install an SDK and portable app to a new directory")
     args = parser.parse_args()
     if args.jobs < 1 or args.jobs > 64:
         parser.error("--jobs must be between 1 and 64")

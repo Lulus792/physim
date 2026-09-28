@@ -376,8 +376,9 @@ Speichern, Suchen und Editorbefehle.
 Ein zusätzlicher [direkter Buildweg](docs/build.md#physim-direkt-ohne-cmake-bauen)
 baut Physim selbst einschließlich Oberfläche über Python und den C17-Compiler,
 ohne CMake oder Ninja für Physim aufzurufen. Er verwendet eine vorhandene
-SDL-Installation. Die vollständige Testsuite und Paketierung laufen weiterhin
-über den oben beschriebenen CMake-Build.
+SDL-Installation. Auch [SDK- und App-Pakete](docs/build.md#sdk-und-portable-pakete-ohne-cmake)
+lassen sich direkt erzeugen. Die vollständige Testsuite läuft weiterhin über
+den oben beschriebenen CMake-Build.
 
 ## Ohne Oberfläche
 

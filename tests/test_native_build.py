@@ -23,7 +23,10 @@ extension = ".dll" if os.name == "nt" else ".so"
 
 
 def command(argv, success=True):
-    result = subprocess.run(list(map(str, argv)), capture_output=True, timeout=150)
+    # Python/launchers may normalize Windows environment names. Discovery must
+    # still find ProgramFiles(x86), independently of its spelling in the parent.
+    environment = {key.upper(): value for key, value in os.environ.items()} if os.name == "nt" else None
+    result = subprocess.run(list(map(str, argv)), capture_output=True, timeout=150, env=environment)
     output = (result.stdout + result.stderr).decode("utf-8", errors="replace")
     if (result.returncode == 0) != success:
         raise AssertionError(f"Command returned {result.returncode}: {argv}\n{output}")

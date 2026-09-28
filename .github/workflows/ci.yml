@@ -34,6 +34,22 @@ jobs:
           python3 tools/build.py --compiler clang --test
           build/native/Debug/bin/physim --self-test "$PWD/build/Native C ä" pendulum
           build/native/Debug/bin/physim --self-test "$PWD/build/Native Language ä" language_full
+      - name: Native SDK package and relocation
+        if: ${{ !inputs.package_only }}
+        run: |
+          python3 tools/build.py --compiler clang --install build/native/SDK
+          python3 tools/verify-native-sdk.py --sdk build/native/SDK --work build/native --compiler clang --app-tests
+          python3 tools/package-macos.py --sdk build/native/SDK --output "build/native/Moved App ä/Physim.app"
+          "build/native/Moved App ä/Physim.app/Contents/MacOS/physim" --self-test "$PWD/build/native/Bundled C ä" pendulum
+          "build/native/Moved App ä/Physim.app/Contents/MacOS/physim" --self-test "$PWD/build/native/Bundled Language ä" language_full
+          ditto -c -k --sequesterRsrc --keepParent "build/native/Moved App ä/Physim.app" "build/Physim-native-${{ matrix.runner }}.zip"
+      - name: Archive native macOS package
+        if: ${{ !cancelled() && !inputs.package_only }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: physim-native-${{ matrix.runner }}
+          path: build/Physim-native-${{ matrix.runner }}.zip
+          if-no-files-found: ignore
       - name: Configure
         run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DPHYSIM_GRAPHICS_TESTS=ON -DPHYSIM_BUILD_BENCHMARKS=ON -DCMAKE_PREFIX_PATH="$PWD/build-sdl-install"
       - name: Build
@@ -113,6 +129,23 @@ jobs:
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
           python tools/build.py --compiler $compiler --config ${{ matrix.configuration }} --test
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - name: Native SDK package and relocation
+        if: matrix.configuration == 'Release'
+        shell: pwsh
+        run: |
+          $compiler = if ('${{ matrix.toolset }}' -eq 'ClangCL') { 'clang-cl' } else { 'cl' }
+          python tools/build.py --compiler $compiler --config Release --install build/native/SDK
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python tools/verify-native-sdk.py --sdk build/native/SDK --work build/native --compiler $compiler
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          Compress-Archive -Path build/native/SDK -DestinationPath build/Physim-native-windows-${{ matrix.toolset }}.zip
+      - name: Archive native Windows package
+        if: ${{ !cancelled() && matrix.configuration == 'Release' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: physim-native-windows-${{ matrix.toolset }}
+          path: build/Physim-native-windows-${{ matrix.toolset }}.zip
+          if-no-files-found: ignore
       - name: Configure
         run: cmake -S . -B build -A x64 -T ${{ matrix.toolset }} -DPHYSIM_BUILD_BENCHMARKS=ON
       - name: Build
@@ -169,6 +202,18 @@ jobs:
           python3 tools/build.py --compiler "${{ matrix.compiler }}" --test
           xvfb-run -a build/native/Debug/bin/physim --self-test "$PWD/build/Native C ä" pendulum
           xvfb-run -a build/native/Debug/bin/physim --self-test "$PWD/build/Native Language ä" language_full
+      - name: Native SDK package and relocation
+        run: |
+          python3 tools/build.py --compiler "${{ matrix.compiler }}" --install build/native/SDK
+          xvfb-run -a python3 tools/verify-native-sdk.py --sdk build/native/SDK --work build/native --compiler "${{ matrix.compiler }}" --app-tests
+          tar -czf "build/Physim-native-linux-${{ matrix.compiler }}.tar.gz" -C build/native SDK
+      - name: Archive native Linux package
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: physim-native-linux-${{ matrix.compiler }}
+          path: build/Physim-native-linux-${{ matrix.compiler }}.tar.gz
+          if-no-files-found: ignore
       - name: Configure
         run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DPHYSIM_SANITIZERS=ON -DPHYSIM_GRAPHICS_TESTS=ON -DPHYSIM_BUILD_BENCHMARKS=ON -DCMAKE_PREFIX_PATH="$PWD/build-sdl-install"
       - name: Build

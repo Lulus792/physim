@@ -200,8 +200,15 @@ static SDL_EnumerationResult sdk_version(void *user, const char *directory, cons
 }
 static bool windows_toolchain(toolchain *tc, const char *override) {
     char finder[PATH_SIZE], install[PATH_SIZE] = {0}, tools[PATH_SIZE], version_path[PATH_SIZE];
-    const char *programs = SDL_getenv("ProgramFiles(x86)");
-    if (!programs || !path_join(finder, programs, "Microsoft Visual Studio/Installer/vswhere.exe"))
+    char programs[PATH_SIZE];
+    wchar_t programs_wide[PATH_SIZE];
+    /* Windows environment names are case insensitive. SDL's environment map
+     * can preserve a parent's upper-case spelling and miss this mixed-case key. */
+    DWORD programs_length = GetEnvironmentVariableW(L"ProgramFiles(x86)", programs_wide, PATH_SIZE);
+    if (!programs_length || programs_length >= PATH_SIZE ||
+        !WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, programs_wide, -1, programs,
+                            PATH_SIZE, NULL, NULL) ||
+        !path_join(finder, programs, "Microsoft Visual Studio/Installer/vswhere.exe"))
         return false;
     const char *args[] = {finder,      "-latest",
                           "-products", "*",

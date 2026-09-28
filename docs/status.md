@@ -29,8 +29,19 @@ Der direkte Buildschritt besteht außerdem in allen acht CI-Kombinationen unter
 Windows (MSVC/ClangCL, Debug/Release), Linux (GCC/Clang) und macOS (Apple Silicon/Intel).
 Die Linux-/Mac-Prüfung schließt vollständige C- und Physim-App-Abläufe ein.
 [Nachweise und genaue Abdeckung](platform-validation.md#direkter-build-von-physim).
-Die komplette Testsuite und Paketierung bleiben vorerst CMake-gestützt; auch der
-SDL-Quellbuild verwendet weiterhin dessen eigenes Buildsystem.
+Die komplette Testsuite bleibt vorerst CMake-gestützt; auch der SDL-Quellbuild
+verwendet weiterhin dessen eigenes Buildsystem.
+
+Der direkte Builder kann nun außerdem ein SDK in einen neuen Ordner installieren.
+Es enthält die App, Werkzeuge, alle acht C-Beispielmodule, Analysemodul, öffentliche
+Header, Kernbibliothek, SDK-Quellen, Vorlagen, Dokumentation und Lizenzen. Windows
+verwendet dafür Release und die Visual-Studio-Laufzeitbibliotheken. Mac-App-Pakete
+können dieses SDK über `package-macos.py --sdk` ohne CMake übernehmen.
+`verify-native-sdk.py` prüft ein verschobenes Paket mit unabhängigen Headern,
+15 Sprachprogrammen, mitgelieferten Modulen und neu gebauten C-/Physim-Projekten.
+Bei dieser Prüfung wurde die Windows-Compilererkennung für unterschiedlich
+geschriebene Umgebungsvariablennamen korrigiert; die Windows-API übernimmt jetzt
+die Suche nach `ProgramFiles(x86)` unabhängig von der Großschreibung.
 
 | Bereich | Implementiert | Noch offen |
 | --- | --- | --- |

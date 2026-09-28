@@ -104,8 +104,64 @@ dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
 `--test` führt die drei Referenzprogramme für Core, Numerik und Mechanik aus.
-Die vollständige Testsuite, SDK-Installation und Mac-Paketierung verwenden noch
-die folgenden CMake-Abläufe. Der direkte Build ersetzt diese Prüfungen noch nicht.
+Die vollständige Testsuite verwendet noch die folgenden CMake-Abläufe.
+
+### SDK und portable Pakete ohne CMake
+
+Der direkte Build erzeugt auch die acht C-Beispielmodule und das Analysemodul.
+`--install` stellt Programme, Module, Kernbibliothek, öffentliche Header,
+SDK-Quellen, Vorlagen, Dokumentation und Lizenzen in einem neuen Ordner zusammen.
+Die Datei `physim-sdk.json` enthält relative Dateipfade und SHA-256-Prüfsummen.
+Objekte, Buildcaches, Tests und temporäre Linkerdateien werden nicht installiert.
+Vorhandene Zielordner werden nicht überschrieben; ein unvollständiges Paket wird
+nicht unter dem gewünschten Zielnamen veröffentlicht.
+
+Windows, mit den oben genannten Voraussetzungen:
+
+```powershell
+python tools/build.py --config Release --install build/native/SDK
+python tools/verify-native-sdk.py --sdk build/native/SDK --work build/native --app-tests
+Compress-Archive -Path build/native/SDK -DestinationPath build/Physim-Windows.zip
+```
+
+Windows-Pakete benötigen `Release`; die x64-Laufzeitbibliotheken stammen aus
+der installierten Visual-Studio-Weiterverteilung. Debug-Builds bleiben lokale
+Entwicklungsbuilds. Nach dem Entpacken startet `SDK/bin/physim.exe` die App.
+
+Linux:
+
+```sh
+python3 tools/build.py --config Release --install build/native/SDK
+python3 tools/verify-native-sdk.py --sdk build/native/SDK --work build/native --app-tests
+tar -czf build/Physim-Linux.tar.gz -C build/native SDK
+```
+
+Das entpackte Paket startet mit `./SDK/bin/physim`. SDL liegt neben dem Programm;
+der Zielrechner benötigt weiterhin einen kompatiblen Linux-Unterbau und Grafiktreiber.
+
+macOS, einschließlich Finder-App:
+
+```sh
+python3 tools/build.py --config Release --install build/native/SDK
+python3 tools/verify-native-sdk.py --sdk build/native/SDK --work build/native --app-tests
+python3 tools/package-macos.py --sdk build/native/SDK --output build/Physim-native.app
+open build/Physim-native.app
+ditto -c -k --sequesterRsrc --keepParent build/Physim-native.app build/Physim-macOS.zip
+```
+
+Das `.app`-Paket enthält SDL und das SDK und wird lokal ad hoc signiert und geprüft.
+Developer-ID-Signierung und Apple-Notarisierung bleiben offen. `--sdk` verwendet
+keinen CMake-Aufruf; `--build` im Paketskript unterstützt weiterhin bestehende
+CMake-Buildverzeichnisse.
+
+Die SDK-Prüfung kopiert und verschiebt das Paket in einen Pfad mit Leerzeichen
+und Umlaut. Sie prüft alle mitgelieferten Module, öffentliche Header einzeln,
+15 eigenständige Sprachprogramme und neu gebaute C-/Physim-Projekte samt echten
+Runnern und Mess-/Berichtsdateien. `--app-tests` ergänzt zwei vollständige
+App-Abläufe und benötigt eine grafische Sitzung. Unter Windows führen die
+gehosteten CI-Worker diese Grafikabläufe nicht aus; sie werden lokal geprüft.
+Die mitgelieferten CMake-Anbindungsdateien bleiben vorerst für bestehende
+SDK-Verbraucher erhalten; der neue Ablauf verwendet sie nicht.
 
 ## Toolchains
 
