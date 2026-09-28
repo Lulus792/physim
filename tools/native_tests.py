@@ -31,6 +31,7 @@ class Case:
     language_checks: tuple = ()
     language_mode: str = "--emit-c"
     language_harness: str | None = None
+    language_workflow: dict | None = None
 
 
 def catalog():
@@ -96,35 +97,84 @@ def catalog():
                           language_source=program["source"], language_mode=program.get("mode", "--emit-c"),
                           language_harness=program.get("harness"), exit_code=program.get("exit_code", 0),
                           stdout=program.get("stdout"), stderr_pattern=program.get("stderr_pattern")))
+    for workflow in corpus.get("workflows", []):
+        if not workflow["modules"] or not workflow["steps"]:
+            raise RuntimeError(f"Empty language workflow: {workflow['name']}")
+        cases.append(Case("language_" + workflow["name"], (), language_workflow=workflow))
     names = [case.name for case in cases]
     if len(set(names)) != len(names):
         raise RuntimeError("Duplicate native test names")
     return cases
 
 
+def build_language_program(name, fixture, mode, module, builder, libraries, work, steps):
+    """Record emission/build failures before callers can run a stale artifact."""
+    compiler = builder.bin / ("physimc.exe" if sys.platform == "win32" else "physimc")
+    emitted = execute_case([str(compiler), mode, str(fixture)], work=work, env=builder.env, timeout=30)
+    code = emitted.pop("stdout", "")
+    steps.append(emitted)
+    if emitted["status"] != "passed":
+        emitted["stdout"] = code
+        return None
+    generated = builder.directory / "generated" / name / "main.c"
+    generated.parent.mkdir(parents=True, exist_ok=True)
+    content = code.encode("utf-8")
+    emitted["generated_source"] = str(generated)
+    emitted["source_sha256"] = hashlib.sha256(content).hexdigest()
+    if not generated.is_file() or generated.read_bytes() != content:
+        pending = generated.with_suffix(".pending.c")
+        pending.write_bytes(content)
+        pending.replace(generated)
+    try:
+        return builder.executable("physim-test-" + name, [str(generated)], libraries,
+                                  language=True, module=module)
+    except (OSError, RuntimeError) as error:
+        steps.append({"status": "build_failed", "reason": str(error)})
+        return None
+
+
+def write_language_fixture(directory, filename, content):
+    path = (directory / filename).resolve()
+    if not path.is_relative_to(directory.resolve()):
+        raise RuntimeError(f"Language fixture escapes its test directory: {filename}")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content, encoding="utf-8", newline="\n")
+    return path
+
+
 def language_case(case, builder, libraries, source, work):
     started = time.monotonic()
     compiler = builder.bin / ("physimc.exe" if sys.platform == "win32" else "physimc")
     steps = []
-    if case.language_source:
-        emitted = execute_case([str(compiler), case.language_mode, str(source / case.language_source)],
-                               work=work, env=builder.env, timeout=30)
-        code = emitted.pop("stdout", "")
-        steps.append(emitted)
-        if emitted["status"] == "passed":
-            generated = builder.directory / "generated" / case.name / "main.c"
-            generated.parent.mkdir(parents=True, exist_ok=True)
-            content = code.encode("utf-8")
-            emitted["generated_source"] = str(generated)
-            emitted["source_sha256"] = hashlib.sha256(content).hexdigest()
-            if not generated.is_file() or generated.read_bytes() != content:
-                pending = generated.with_suffix(".pending.c")
-                pending.write_bytes(content)
-                pending.replace(generated)
+    if case.language_workflow:
+        workflow = case.language_workflow
+        paths = {"work": str(work)}
+        for module in workflow["modules"]:
+            program = build_language_program(case.name + "-" + module["name"], source / module["source"],
+                                             module["mode"], True, builder, [libraries["core"]], work, steps)
+            if program is None:
+                break
+            paths[module["name"]] = str(program)
+        else:
+            for step in workflow["steps"]:
+                executable = builder.bin / (step["program"] + (".exe" if sys.platform == "win32" else ""))
+                command = [str(executable), *(arg.format_map(paths) for arg in step["arguments"])]
+                result = execute_case(command, work=work, env=builder.env, timeout=step.get("timeout", 60),
+                                      exit_code=step.get("exit_code", 0), stdout=step.get("stdout"),
+                                      stderr_pattern=step.get("stderr_pattern"), stderr=step.get("stderr"),
+                                      stdout_patterns=step.get("stdout_patterns", ()))
+                missing = [filename for filename in step.get("files", ()) if not (work / filename).is_file()]
+                if result["status"] == "passed" and missing:
+                    result.update(status="failed", reason="Missing workflow outputs: " + ", ".join(missing))
+                steps.append(result)
+                if result["status"] != "passed":
+                    break
+    elif case.language_source:
+        program = build_language_program(case.name, source / case.language_source, case.language_mode,
+                                         bool(case.language_harness), builder,
+                                         [libraries[name] for name in case.libraries], work, steps)
+        if program is not None:
             try:
-                program = builder.executable("physim-test-" + case.name, [str(generated)],
-                                             [libraries[name] for name in case.libraries], language=True,
-                                             module=bool(case.language_harness))
                 command = [str(program)]
                 if case.language_harness:
                     harness = builder.executable("physim-test-" + case.name + "-harness",
@@ -136,13 +186,14 @@ def language_case(case, builder, libraries, source, work):
                                           stderr_pattern=case.stderr_pattern))
             except (OSError, RuntimeError) as error:
                 steps.append({"status": "build_failed", "reason": str(error)})
-        else:
-            emitted["stdout"] = code
     else:
         for check in case.language_checks:
-            path = work / (check["name"] + ".phys")
-            path.write_text(check["source"], encoding="utf-8", newline="\n")
-            result = execute_case([str(compiler), check.get("mode", "--check"), str(path)], work=work,
+            check_work = work / check["name"]
+            check_work.mkdir()
+            for filename, content in check.get("files", {}).items():
+                write_language_fixture(check_work, filename, content)
+            path = write_language_fixture(check_work, check.get("entry", check["name"] + ".phys"), check["source"])
+            result = execute_case([str(compiler), check.get("mode", "--check"), str(path)], work=check_work,
                                   env=builder.env, timeout=15, exit_code=check["exit_code"],
                                   stdout=check.get("stdout"), stderr_pattern=check.get("stderr_pattern"),
                                   stderr=check.get("stderr"), stdout_patterns=check.get("stdout_patterns", ()))
@@ -199,7 +250,7 @@ def run_suite(builder, libraries, source: Path, pattern="*"):
         work = directory / case.name
         work.mkdir()
         try:
-            if case.language_source or case.language_checks:
+            if case.language_source or case.language_checks or case.language_workflow:
                 result = language_case(case, builder, libraries, source, work)
             else:
                 program = builder.executable("physim-test-" + case.name, list(case.sources),

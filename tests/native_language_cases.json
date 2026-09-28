@@ -2018,6 +2018,913 @@
         }
       ],
       "runtime_source": "tests/fixtures/language/string_while_selection.phys"
+    },
+    {
+      "name": "generics",
+      "checks": [
+        {
+          "name": "conflict",
+          "source": "func choose<T>(a: T, b: T) -> T:\n    return a\nlet first: Int64 = 1\nlet x = choose(first, 2.0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type|Conflicting types for generic parameter",
+          "stdout": ""
+        },
+        {
+          "name": "unbound",
+          "source": "func make<T>() -> T:\n    return nil\nlet x = make()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Cannot infer every generic type parameter",
+          "stdout": ""
+        },
+        {
+          "name": "empty_unbound",
+          "source": "func pass<T>(value: [T]) -> [T]:\n    return value\nlet x = pass([])\n",
+          "exit_code": 1,
+          "stderr_pattern": "Cannot infer every generic type parameter",
+          "stdout": ""
+        },
+        {
+          "name": "nil_unbound",
+          "source": "func pass<T>(value: T?) -> T?:\n    return value\nlet x = pass(nil)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Cannot infer every generic type parameter",
+          "stdout": ""
+        },
+        {
+          "name": "explicit_excess",
+          "source": "func identity<T>(value: T) -> T:\n    return value\nlet x = identity<Int64, Float64>(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Too many explicit type arguments",
+          "stdout": ""
+        },
+        {
+          "name": "explicit_missing",
+          "source": "func pair<A, B>(left: A, right: B) -> A:\n    return left\nlet x = pair<Int64>(1, 2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Missing explicit type arguments",
+          "stdout": ""
+        },
+        {
+          "name": "explicit_mismatch",
+          "source": "func identity<T>(value: T) -> T:\n    return value\nlet x = identity<Float64>(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type",
+          "stdout": ""
+        },
+        {
+          "name": "explicit_unknown",
+          "source": "func identity<T>(value: T) -> T:\n    return value\nlet x = identity<Unknown>(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown or unsupported type",
+          "stdout": ""
+        },
+        {
+          "name": "explicit_void",
+          "source": "func identity<T>(value: T) -> T:\n    return value\nlet x = identity<Void>(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown or unsupported type",
+          "stdout": ""
+        },
+        {
+          "name": "explicit_nongeneric",
+          "source": "func plain(value: Int64) -> Int64:\n    return value\nlet x = plain<Int64>(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function",
+          "stdout": ""
+        },
+        {
+          "name": "explicit_builtin",
+          "source": "print<Int64>(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function",
+          "stdout": ""
+        },
+        {
+          "name": "constraint_unknown",
+          "source": "func identity<T: Unknown>(value: T) -> T:\n    return value\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown generic constraint",
+          "stdout": ""
+        },
+        {
+          "name": "constraint_duplicate",
+          "source": "func identity<T: Numeric & Numeric>(value: T) -> T:\n    return value\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate generic constraint",
+          "stdout": ""
+        },
+        {
+          "name": "constraint_numeric",
+          "source": "func identity<T: Numeric>(value: T) -> T:\n    return value\nlet x = identity(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Type argument must satisfy Numeric constraint",
+          "stdout": ""
+        },
+        {
+          "name": "constraint_numeric_explicit",
+          "source": "func identity<T: Numeric>(value: T) -> T:\n    return value\nlet x = identity<Bool>(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Type argument must satisfy Numeric constraint",
+          "stdout": ""
+        },
+        {
+          "name": "constraint_scalar",
+          "source": "func identity<T: Scalar>(value: T) -> T:\n    return value\nlet x = identity([1, 2])\n",
+          "exit_code": 1,
+          "stderr_pattern": "Type argument must satisfy Scalar constraint",
+          "stdout": ""
+        },
+        {
+          "name": "constraint_equatable",
+          "source": "func identity<T: Equatable>(value: T) -> T:\n    return value\nfunc use(value: Rng) -> Rng:\n    return identity(value)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Type argument must satisfy Equatable constraint",
+          "stdout": ""
+        },
+        {
+          "name": "constraint_vector",
+          "source": "func identity<T: Vector>(value: T) -> T:\n    return value\nlet x = identity(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Type argument must satisfy Vector constraint",
+          "stdout": ""
+        },
+        {
+          "name": "duplicate",
+          "source": "func same<T, T>(value: T) -> T:\n    return value\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate generic type parameter",
+          "stdout": ""
+        },
+        {
+          "name": "builtin",
+          "source": "func wrong<Int64>(value: Int64) -> Int64:\n    return value\n",
+          "exit_code": 1,
+          "stderr_pattern": "Generic type parameter conflicts with a builtin type",
+          "stdout": ""
+        },
+        {
+          "name": "signature",
+          "source": "func wrong<T>(value: Unknown) -> T:\n    return value\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown or unsupported type",
+          "stdout": ""
+        },
+        {
+          "name": "parameters",
+          "source": "func wrong<T>(value: T, value: T) -> T:\n    return value\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate parameter name",
+          "stdout": ""
+        },
+        {
+          "name": "method_body",
+          "source": "struct Box:\n    let value: Int64\n    func bad<T>(value: T) -> T:\n        return self.value + value\nlet x = Box(1).bad(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Invalid|requires|operand|Expression type does not match required type",
+          "stdout": ""
+        },
+        {
+          "name": "method_static",
+          "source": "struct Box:\n    let value: Int64\n    static func echo<T>(value: T) -> T:\n        return value\nlet x = Box(1).echo(2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Static method must be called on its type",
+          "stdout": ""
+        },
+        {
+          "name": "method_mutating",
+          "source": "struct Box:\n    var value: Int64\n    mutating func echo<T>(value: T) -> T:\n        self.value += 1\n        return value\nlet box = Box(0)\nlet x = box.echo(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Mutating method requires a mutable var binding",
+          "stdout": ""
+        },
+        {
+          "name": "method_signature",
+          "source": "struct Box:\n    let value: Int64\n    static func echo<T>(value: Unknown) -> T:\n        return value\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown or unsupported type",
+          "stdout": ""
+        },
+        {
+          "name": "method_type_parameter",
+          "source": "struct Box:\n    let value: Int64\n    func echo<self>(value: self) -> self:\n        return value\n",
+          "exit_code": 1,
+          "stderr_pattern": "self is reserved",
+          "stdout": ""
+        },
+        {
+          "name": "body",
+          "source": "func add<T>(a: T, b: T) -> T:\n    return a + b\nlet x = add(true, false)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Invalid|requires|operand",
+          "stdout": ""
+        },
+        {
+          "name": "value",
+          "source": "func identity<T>(value: T) -> T:\n    return value\nlet f = identity\n",
+          "exit_code": 1,
+          "stderr_pattern": "Generic function values require specialization",
+          "stdout": ""
+        },
+        {
+          "name": "recursion_limit",
+          "source": "func grow<T>(value: T) -> Int64:\n    return grow([value])\nlet x = grow(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Generic specialization limit exceeded",
+          "stdout": ""
+        },
+        {
+          "name": "import_Imported",
+          "source": "import Imported\nlet x = Imported.invalid(1)\n",
+          "entry": "Main.phys",
+          "files": {
+            "Imported.phys": "func invalid<T>(value: T) -> T:\n    return value + true\n"
+          },
+          "exit_code": 1,
+          "stderr_pattern": "Imported\\.phys:2:[0-9]+: error:"
+        },
+        {
+          "name": "import_BadMethod",
+          "source": "import BadMethod\nlet x = BadMethod.Box(1).invalid(2)\n",
+          "entry": "MainMethod.phys",
+          "files": {
+            "BadMethod.phys": "struct Box:\n    let value: Int64\n    func invalid<T>(value: T) -> T:\n        return value + true\n"
+          },
+          "exit_code": 1,
+          "stderr_pattern": "BadMethod\\.phys:4:[0-9]+: error:"
+        }
+      ],
+      "runtime_source": "examples/language/generics/main.phys"
+    },
+    {
+      "name": "generic_structs",
+      "checks": [
+        {
+          "name": "duplicate",
+          "source": "struct Box<T, T>:\n    let value: T\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate generic type parameter",
+          "stdout": ""
+        },
+        {
+          "name": "builtin",
+          "source": "struct Box<Int64>:\n    let value: Int64\n",
+          "exit_code": 1,
+          "stderr_pattern": "Generic type parameter conflicts with a builtin type",
+          "stdout": ""
+        },
+        {
+          "name": "unknown_field",
+          "source": "struct Box<T>:\n    let value: Unknown\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown or unsupported type",
+          "stdout": ""
+        },
+        {
+          "name": "missing_annotation",
+          "source": "struct Box<T>:\n    let value: T\nlet item: Box = Box<Int64>(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Generic struct requires type arguments",
+          "stdout": ""
+        },
+        {
+          "name": "unbound_constructor",
+          "source": "struct Phantom<T>:\n    let fixed: Int64\nlet item = Phantom(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Cannot infer every generic struct type parameter",
+          "stdout": ""
+        },
+        {
+          "name": "excess",
+          "source": "struct Box<T>:\n    let value: T\nlet item = Box<Int64, Float64>(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Too many generic struct type arguments",
+          "stdout": ""
+        },
+        {
+          "name": "few",
+          "source": "struct Pair<A, B>:\n    let first: A\n    let second: B\nlet item = Pair<Int64>(1, 2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Missing generic struct type arguments",
+          "stdout": ""
+        },
+        {
+          "name": "nongeneric",
+          "source": "struct Plain:\n    let value: Int64\nlet item: Plain<Int64> = Plain(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Type arguments require a generic struct",
+          "stdout": ""
+        },
+        {
+          "name": "mismatch",
+          "source": "struct Box<T>:\n    let value: T\nlet item = Box<Int64>(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type",
+          "stdout": ""
+        },
+        {
+          "name": "nominal",
+          "source": "struct Box<T>:\n    let value: T\nlet item: Box<Float64> = Box<Int64>(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type",
+          "stdout": ""
+        },
+        {
+          "name": "infinite",
+          "source": "struct Loop<T>:\n    let next: Loop<T>\nlet item: Loop<Int64> = nil\n",
+          "exit_code": 1,
+          "stderr_pattern": "Recursive struct values have infinite size",
+          "stdout": ""
+        },
+        {
+          "name": "polymorphic_recursion",
+          "source": "struct Grow<T>:\n    let next: Grow<[T]>?\nlet item: Grow<Int64> = nil\n",
+          "exit_code": 1,
+          "stderr_pattern": "Semantic nesting limit exceeded|Generic specialization limit exceeded|Generic struct specialization exceeds compiler capacity",
+          "stdout": ""
+        },
+        {
+          "name": "method_shadow",
+          "source": "struct Box<T>:\n    let value: T\n    func echo<T>(item: T) -> T:\n        return item\n",
+          "exit_code": 1,
+          "stderr_pattern": "Method type parameter shadows a struct type parameter",
+          "stdout": ""
+        },
+        {
+          "name": "method_unknown",
+          "source": "struct Box<T>:\n    let value: T\n    func echo<U>(item: Unknown) -> U:\n        return item\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown or unsupported type",
+          "stdout": ""
+        },
+        {
+          "name": "method_duplicate",
+          "source": "struct Box<T>:\n    let value: T\n    func echo<U, U>(item: U) -> U:\n        return item\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate generic type parameter",
+          "stdout": ""
+        },
+        {
+          "name": "constraint_unknown",
+          "source": "struct Box<T: Unknown>:\n    let value: T\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown generic constraint",
+          "stdout": ""
+        },
+        {
+          "name": "constraint_explicit",
+          "source": "struct Box<T: Scalar>:\n    let value: T\nlet item = Box<[Int64]>([1])\n",
+          "exit_code": 1,
+          "stderr_pattern": "Type argument must satisfy Scalar constraint",
+          "stdout": ""
+        },
+        {
+          "name": "constraint_inferred",
+          "source": "struct Box<T: Scalar>:\n    let value: T\nlet item = Box([1])\n",
+          "exit_code": 1,
+          "stderr_pattern": "Type argument must satisfy Scalar constraint",
+          "stdout": ""
+        },
+        {
+          "name": "method_constraint",
+          "source": "struct Box<T>:\n    let value: T\n    func echo<U: Numeric & Equatable>(item: U) -> U:\n        return item\nlet item = Box(true).echo(false)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Type argument must satisfy Numeric constraint",
+          "stdout": ""
+        },
+        {
+          "name": "import_BadBox",
+          "source": "import BadBox\nlet item = BadBox.Box<Int64>(1)\nlet value = item.invalid()\n",
+          "entry": "Main.phys",
+          "files": {
+            "BadBox.phys": "struct Box<T>:\n    let value: T\n    func invalid() -> T:\n        return self.value + true\n"
+          },
+          "exit_code": 1,
+          "stderr_pattern": "BadBox\\.phys:4:[0-9]+: error:",
+          "stdout": ""
+        }
+      ]
+    },
+    {
+      "name": "generic_enums",
+      "checks": [
+        {
+          "name": "case_1",
+          "source": "enum E<T>:\n    case none\nlet value = E.none\n",
+          "exit_code": 1,
+          "stderr_pattern": "Generic enum case needs explicit type arguments or an expected type"
+        },
+        {
+          "name": "case_2",
+          "source": "enum E<T>:\n    case some(value: T)\nlet value = E.some(value: nil)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Cannot infer every generic enum type parameter"
+        },
+        {
+          "name": "case_3",
+          "source": "enum E<T>:\n    case none\nlet value = E<Int64, String>.none\n",
+          "exit_code": 1,
+          "stderr_pattern": "Too many generic enum type arguments"
+        },
+        {
+          "name": "case_4",
+          "source": "enum E<T: Numeric>:\n    case some(value: T)\nlet value = E<String>.some(value: \"bad\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "Type argument must satisfy Numeric constraint"
+        },
+        {
+          "name": "case_5",
+          "source": "enum E<T>:\n    case one(value: T)\n    case one(value: T)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate enum case"
+        },
+        {
+          "name": "case_6",
+          "source": "enum E<T>:\n    case one(value: T, value: T)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate enum payload field"
+        },
+        {
+          "name": "case_7",
+          "source": "enum E<T>:\n    case one = 1\n    case two = 1\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate enum raw value"
+        },
+        {
+          "name": "case_8",
+          "source": "enum E<T>:\n    case some(value: T)\nlet constructor = E.some\n",
+          "exit_code": 1,
+          "stderr_pattern": "Generic enum case needs explicit type arguments or an expected type"
+        },
+        {
+          "name": "case_9",
+          "source": "enum E<T>:\n    case some(value: T)\nlet constructor: func(String) -> E<Int64> = E<Int64>.some\n",
+          "exit_code": 1,
+          "stderr_pattern": "type does not match"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/generic_enums.phys"
+    },
+    {
+      "name": "free_overloads",
+      "checks": [
+        {
+          "name": "duplicate_signature",
+          "source": "func choose(value: Int64) -> Int64:\n    return value\nfunc choose(value: Int64) -> String:\n    return String(value)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate free function signature"
+        },
+        {
+          "name": "no_match",
+          "source": "func describe(value: Int64) -> String:\n    return String(value)\nfunc describe(value: String) -> String:\n    return value\nlet x = describe(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "No matching free function overload"
+        },
+        {
+          "name": "ambiguous_positional",
+          "source": "func choose(left: Int64) -> Int64:\n    return left\nfunc choose(right: Int64) -> Int64:\n    return right\nlet x = choose(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Ambiguous free function overload"
+        },
+        {
+          "name": "ambiguous_nil",
+          "source": "func choose(value: Int64?) -> Int64:\n    return 1\nfunc choose(value: String?) -> Int64:\n    return 2\nlet x = choose(nil)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Ambiguous free function overload"
+        },
+        {
+          "name": "untyped_value",
+          "source": "func describe(value: Int64) -> String:\n    return String(value)\nfunc describe(value: String) -> String:\n    return value\nlet f = describe\n",
+          "exit_code": 1,
+          "stderr_pattern": "Overloaded function value requires an expected function type"
+        },
+        {
+          "name": "wrong_function_type",
+          "source": "func describe(value: Int64) -> String:\n    return String(value)\nfunc describe(value: String) -> String:\n    return value\nlet f: func(Bool) -> String = describe\n",
+          "exit_code": 1,
+          "stderr_pattern": "No free function overload matches the required function type"
+        },
+        {
+          "name": "ambiguous_function_argument",
+          "source": "func describe(value: Int64) -> String:\n    return String(value)\nfunc describe(value: String) -> String:\n    return value\nfunc apply(function: func(Int64) -> String) -> String:\n    return function(1)\nfunc apply(function: func(String) -> String) -> String:\n    return function(\"a\")\nlet x = apply(describe)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Ambiguous free function overload"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/free_overloads.phys"
+    },
+    {
+      "name": "generic_free_overloads",
+      "checks": [
+        {
+          "name": "duplicate_template",
+          "source": "func choose<T>(value: T) -> T:\n    return value\nfunc choose<U>(value: U) -> U:\n    return value\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate free function signature"
+        },
+        {
+          "name": "ambiguous_generic",
+          "source": "func choose<T>(left: T) -> Int64:\n    return 1\nfunc choose<U>(right: U) -> Int64:\n    return 2\nlet x = choose(3)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Ambiguous free function overload"
+        },
+        {
+          "name": "constraint_miss",
+          "source": "func choose<T: Numeric>(value: T) -> Int64:\n    return 1\nfunc choose<T: Vector>(vector: T) -> Int64:\n    return 2\nlet x = choose(\"text\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "No matching free function overload"
+        },
+        {
+          "name": "ambiguous_reference",
+          "source": "func choose<T>(value: T) -> T:\n    return value\nfunc choose<T>(values: [T]) -> [T]:\n    return values\nlet f = choose<Int64>\n",
+          "exit_code": 1,
+          "stderr_pattern": "Ambiguous generic free function reference"
+        },
+        {
+          "name": "reference_type_mismatch",
+          "source": "func choose<T>(value: T) -> T:\n    return value\nfunc choose<T>(values: [T]) -> [T]:\n    return values\nlet f: func(Bool) -> Bool = choose<Int64>\n",
+          "exit_code": 1,
+          "stderr_pattern": "No generic free function matches the required function type"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/generic_free_overloads.phys"
+    },
+    {
+      "name": "method_overloads",
+      "checks": [
+        {
+          "name": "duplicate_signature",
+          "source": "struct S:\n    func use(value: Int64) -> Int64:\n        return value\n    func use(value: Int64) -> String:\n        return String(value)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate method signature"
+        },
+        {
+          "name": "no_match",
+          "source": "struct S:\n    func use(value: Int64) -> Int64:\n        return value\n    func use(value: String) -> Int64:\n        return value.count\nlet x = S().use(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "No matching method overload"
+        },
+        {
+          "name": "ambiguous_positional",
+          "source": "struct S:\n    func use(left: Int64) -> Int64:\n        return left\n    func use(right: Int64) -> Int64:\n        return right\nlet x = S().use(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Ambiguous method overload"
+        },
+        {
+          "name": "wrong_receiver",
+          "source": "struct S:\n    static func use(value: Int64) -> Int64:\n        return value\nlet x = S().use(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Static method must be called on its type"
+        },
+        {
+          "name": "immutable_selected_mutating",
+          "source": "struct S:\n    var value: Int64\n    func use(value: Int64) -> Int64:\n        return value\n    mutating func use(value: Bool) -> Int64:\n        self.value += 1\n        return self.value\nlet x = S(0)\nlet y = x.use(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Mutating method requires a mutable var binding"
+        },
+        {
+          "name": "generic_record_duplicate_mutability",
+          "source": "struct S<T>:\n    var value: T\n    func use(item: T) -> T:\n        return item\n    mutating func use(item: T) -> T:\n        return item\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate method signature"
+        },
+        {
+          "name": "untyped_method_value",
+          "source": "struct S:\n    func use(value: Int64) -> Int64:\n        return value\n    func use(value: String) -> Int64:\n        return value.count\nlet f = S().use\n",
+          "exit_code": 1,
+          "stderr_pattern": "Overloaded method value requires an expected function type"
+        },
+        {
+          "name": "method_value_type_mismatch",
+          "source": "struct S:\n    func use(value: Int64) -> Int64:\n        return value\n    func use(value: String) -> Int64:\n        return value.count\nlet f: func(Bool) -> Int64 = S().use\n",
+          "exit_code": 1,
+          "stderr_pattern": "No method overload matches the required function type"
+        },
+        {
+          "name": "ambiguous_generic_reference",
+          "source": "struct S:\n    func choose<T>(value: T) -> T:\n        return value\n    func choose<T>(values: [T]) -> [T]:\n        return values\nlet f = S().choose<Int64>\n",
+          "exit_code": 1,
+          "stderr_pattern": "Ambiguous generic method reference"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/method_overloads.phys"
+    },
+    {
+      "name": "struct_defaults",
+      "checks": [
+        {
+          "name": "default_type",
+          "source": "struct S:\n    let value: Int64 = true\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "default_unknown",
+          "source": "struct S:\n    let value: Int64 = unknown\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown name"
+        },
+        {
+          "name": "required_field",
+          "source": "struct S:\n    let required: Int64\n    let optional: Int64 = 2\nlet s = S()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Missing struct fields"
+        },
+        {
+          "name": "generic_inference",
+          "source": "struct Box<T>:\n    let item: T\n    let count: Int64 = 1\nlet b = Box()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Missing or excess generic struct fields"
+        },
+        {
+          "name": "named_field",
+          "source": "struct S:\n    let value: Int64 = 1\nlet s = S(missing: 2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown parameter name"
+        },
+        {
+          "name": "recursive_default",
+          "source": "struct S:\n    let value: Int64 = S().value\nlet s = S()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Recursive struct field default"
+        },
+        {
+          "name": "indirect_default",
+          "source": "struct A:\n    let value: Int64 = B().value\nstruct B:\n    let value: Int64 = A().value\nlet a = A()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Recursive struct field default"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/struct_defaults.phys"
+    },
+    {
+      "name": "struct_initializers",
+      "checks": [
+        {
+          "name": "nonstatic",
+          "source": "struct S:\n    let value: Int64\n    func init(value: Int64) -> S:\n        return S(value)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Struct initializer must be a static function"
+        },
+        {
+          "name": "result_type",
+          "source": "struct S:\n    let value: Int64\n    static func init(value: Int64) -> Int64:\n        return value\n",
+          "exit_code": 1,
+          "stderr_pattern": "Struct initializer must return its struct type"
+        },
+        {
+          "name": "method_type_parameter_nonstatic",
+          "source": "struct S:\n    let value: Int64\n    func init<T>(value: T) -> S:\n        return S(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Struct initializer must be a static function"
+        },
+        {
+          "name": "method_type_parameter_result",
+          "source": "struct S:\n    let value: Int64\n    static func init<T>(value: T) -> Int64:\n        return 1\n",
+          "exit_code": 1,
+          "stderr_pattern": "Struct initializer must return its struct type"
+        },
+        {
+          "name": "method_type_parameter_constraint",
+          "source": "struct S:\n    let value: Int64\n    static func init<T: Numeric>(value: T) -> S:\n        return S(1)\nlet s = S(\"x\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "Type argument must satisfy Numeric constraint"
+        },
+        {
+          "name": "method_type_parameter_uninferred",
+          "source": "struct S:\n    let value: Int64\n    static func init<T>() -> S:\n        return S(1)\nlet s = S()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Cannot infer every generic type parameter"
+        },
+        {
+          "name": "method_type_parameter_nil_uninferred",
+          "source": "struct S:\n    let value: Int64\n    static func init<T>(value: T?) -> S:\n        return S(1)\nlet s = S(nil)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Cannot infer every generic type parameter"
+        },
+        {
+          "name": "method_type_parameter_duplicate",
+          "source": "struct S:\n    let value: Int64\n    static func init<T>(value: T) -> S:\n        return S(1)\n    static func init<U>(value: U) -> S:\n        return S(2)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate struct initializer signature"
+        },
+        {
+          "name": "method_type_argument_without_generic_init",
+          "source": "struct S:\n    let value: Int64\n    static func init(value: Int64) -> S:\n        return S(value)\nlet s = S<Int64>(value: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Explicit type arguments require a generic function or method"
+        },
+        {
+          "name": "parameter_name",
+          "source": "struct S:\n    let value: Int64\n    static func init(input: Int64) -> S:\n        return S(input)\nlet s = S(value: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown parameter name"
+        },
+        {
+          "name": "generic_parameter_name",
+          "source": "struct Box<T>:\n    let item: T\n    static func init(value: T) -> Box<T>:\n        return Box(value)\nlet box = Box(item: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Unknown field name"
+        },
+        {
+          "name": "generic_result_type",
+          "source": "struct Box<T>:\n    let item: T\n    static func init(value: T) -> Int64:\n        return 1\n",
+          "exit_code": 1,
+          "stderr_pattern": "Struct initializer must return its struct type"
+        },
+        {
+          "name": "generic_uninferred",
+          "source": "struct Box<T>:\n    let item: [T]\n    static func init() -> Box<T>:\n        return Box([])\nlet box = Box()\n",
+          "exit_code": 1,
+          "stderr_pattern": "Cannot infer every generic struct type parameter"
+        },
+        {
+          "name": "overload_ambiguous",
+          "source": "struct S:\n    let value: Int64\n    static func init(left: Int64) -> S:\n        return S(left)\n    static func init(right: Int64) -> S:\n        return S(right)\nlet s = S(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Ambiguous struct initializer overload"
+        },
+        {
+          "name": "value_ambiguous",
+          "source": "struct S:\n    let value: Int64\n    static func init() -> S:\n        return S(0)\n    static func init(value: Int64) -> S:\n        return S(value)\nlet factory = S.init\n",
+          "exit_code": 1,
+          "stderr_pattern": "Ambiguous struct initializer value"
+        },
+        {
+          "name": "value_same_type_ambiguous",
+          "source": "struct S:\n    let value: Int64\n    static func init(left: Int64) -> S:\n        return S(left)\n    static func init(right: Int64) -> S:\n        return S(right)\nlet factory: func(Int64) -> S = S.init\n",
+          "exit_code": 1,
+          "stderr_pattern": "Ambiguous struct initializer value"
+        },
+        {
+          "name": "value_type_mismatch",
+          "source": "struct S:\n    let value: Int64\n    static func init(value: Int64) -> S:\n        return S(value)\nlet factory: func(String) -> S = S.init\n",
+          "exit_code": 1,
+          "stderr_pattern": "No struct initializer matches the required function type"
+        },
+        {
+          "name": "value_generic_unspecialized",
+          "source": "struct S:\n    let value: Int64\n    static func init<T>(value: T) -> S:\n        return S(1)\nlet factory = S.init\n",
+          "exit_code": 1,
+          "stderr_pattern": "Generic initializer values require explicit type arguments"
+        },
+        {
+          "name": "value_generic_ambiguous",
+          "source": "struct S:\n    let value: Int64\n    static func init<T>(value: T?) -> S:\n        return S(1)\n    static func init<T>(value: [T]) -> S:\n        return S(2)\nlet factory = S.init<Int64>\n",
+          "exit_code": 1,
+          "stderr_pattern": "Ambiguous generic initializer value"
+        },
+        {
+          "name": "value_generic_no_match",
+          "source": "struct S:\n    let value: Int64\n    static func init<T>(value: T?) -> S:\n        return S(1)\n    static func init<T>(value: [T]) -> S:\n        return S(2)\nlet factory: func(Bool) -> S = S.init<Int64>\n",
+          "exit_code": 1,
+          "stderr_pattern": "No generic initializer matches the type arguments and function type"
+        },
+        {
+          "name": "overload_duplicate",
+          "source": "struct S:\n    let value: Int64\n    static func init(value: Int64) -> S:\n        return S(value)\n    static func init(value: Int64) -> S:\n        return S(1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate struct initializer signature"
+        },
+        {
+          "name": "overload_duplicate_reordered",
+          "source": "struct S:\n    let value: Int64\n    static func init(left: Int64, right: String) -> S:\n        return S(left)\n    static func init(right: String, left: Int64) -> S:\n        return S(left)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate struct initializer signature"
+        },
+        {
+          "name": "overload_untyped_nil",
+          "source": "struct S:\n    let value: Int64\n    static func init(value: Int64?) -> S:\n        return S(1)\n    static func init(value: String?) -> S:\n        return S(2)\nlet s = S(nil)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Ambiguous struct initializer overload"
+        },
+        {
+          "name": "overload_untyped_array",
+          "source": "struct S:\n    let value: Int64\n    static func init(value: [Int64]) -> S:\n        return S(1)\n    static func init(value: [String]) -> S:\n        return S(2)\nlet s = S([])\n",
+          "exit_code": 1,
+          "stderr_pattern": "Ambiguous struct initializer overload"
+        },
+        {
+          "name": "overload_no_type_match",
+          "source": "struct S:\n    let value: Int64\n    static func init(value: Int64) -> S:\n        return S(value)\n    static func init(value: String) -> S:\n        return S(1)\nlet s = S(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "No matching struct initializer overload"
+        },
+        {
+          "name": "optional_some_no_type_match",
+          "source": "struct S:\n    let value: Int64\n    static func init(value: Int64?) -> S:\n        return S(1)\n    static func init(value: String?) -> S:\n        return S(2)\nlet s = S(Optional.some(true))\n",
+          "exit_code": 1,
+          "stderr_pattern": "No matching struct initializer overload"
+        },
+        {
+          "name": "optional_some_ambiguous",
+          "source": "struct S:\n    let value: Int64\n    static func init(value: Int64??) -> S:\n        return S(1)\n    static func init(value: String??) -> S:\n        return S(2)\nlet s = S(Optional.some(nil))\n",
+          "exit_code": 1,
+          "stderr_pattern": "Ambiguous struct initializer overload"
+        },
+        {
+          "name": "generic_overload_duplicate",
+          "source": "struct Box<T>:\n    let value: T\n    static func init(value: T) -> Box<T>:\n        return Box(value)\n    static func init(value: T) -> Box<T>:\n        return Box(value)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate struct initializer signature"
+        },
+        {
+          "name": "generic_overload_collision",
+          "source": "struct Box<T>:\n    let value: T\n    static func init(value: T) -> Box<T>:\n        return Box(value)\n    static func init(value: Int64) -> Box<T>:\n        return Box(value)\nlet box = Box<Int64>(value: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Generic struct initializer signatures collide after specialization"
+        },
+        {
+          "name": "generic_method_overload_collision",
+          "source": "struct Box<T>:\n    let value: T\n    static func init(value: T) -> Box<T>:\n        return Box(value)\n    static func init<U>(value: Int64) -> Box<T>:\n        return Box(value)\nlet box = Box<Int64>(value: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Generic struct initializer signatures collide after specialization"
+        },
+        {
+          "name": "generic_overload_ambiguous",
+          "source": "struct Box<T>:\n    let value: T\n    static func init(value: T, other: String?) -> Box<T>:\n        return Box(value)\n    static func init(value: T, other: Bool?) -> Box<T>:\n        return Box(value)\nlet box = Box(value: 1, other: nil)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Ambiguous generic struct initializer overload"
+        },
+        {
+          "name": "generic_context_uninferred",
+          "source": "struct Box<T>:\n    let value: Int64\n    static func init(value: T?) -> Box<T>:\n        return Box(1)\n    static func init(value: [T]) -> Box<T>:\n        return Box(2)\nlet box = Box(nil)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Cannot infer every generic struct type parameter"
+        },
+        {
+          "name": "generic_some_uninferred",
+          "source": "struct Box<T>:\n    let value: Int64\n    static func init(value: T?) -> Box<T>:\n        return Box(1)\n    static func init(value: [T]) -> Box<T>:\n        return Box(2)\nlet box = Box(Optional.some(nil))\n",
+          "exit_code": 1,
+          "stderr_pattern": "nil requires an explicit optional type"
+        },
+        {
+          "name": "generic_numeric_variable_conflict",
+          "source": "struct Pair<T>:\n    let left: T\n    let right: T\n    static func init(left: T, right: T) -> Pair<T>:\n        return Pair(left, right)\nlet integer: Int64 = 1\nlet pair = Pair(left: integer, right: 2.5)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "generic_numeric_optional_variable_conflict",
+          "source": "struct Box<T>:\n    let value: T\n    static func init(optional: T?, value: T) -> Box<T>:\n        return Box(value)\nlet integer: Int64 = 1\nlet box = Box(optional: Optional.some(integer), value: 2.5)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/struct_initializers.phys"
+    },
+    {
+      "name": "comparable",
+      "checks": [
+        {
+          "name": "bool_argument",
+          "source": "func earlier<T: Comparable>(a: T, b: T) -> T:\n    if a < b:\n        return a\n    return b\nlet value = earlier(true, false)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Type argument must satisfy Comparable constraint"
+        },
+        {
+          "name": "array_argument",
+          "source": "func earlier<T: Comparable>(a: T, b: T) -> T:\n    if a < b:\n        return a\n    return b\nlet value = earlier([1], [2])\n",
+          "exit_code": 1,
+          "stderr_pattern": "Type argument must satisfy Comparable constraint"
+        },
+        {
+          "name": "explicit_bool",
+          "source": "func earlier<T: Comparable>(a: T, b: T) -> T:\n    if a < b:\n        return a\n    return b\nlet value = earlier<Bool>(true, false)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Type argument must satisfy Comparable constraint"
+        },
+        {
+          "name": "struct_bool",
+          "source": "struct Interval<T: Comparable>:\n    let value: T\nlet interval = Interval<Bool>(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Type argument must satisfy Comparable constraint"
+        },
+        {
+          "name": "enum_bool",
+          "source": "enum Choice<T: Comparable>:\n    case value(item: T)\nlet value = Choice<Bool>.value(true)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Type argument must satisfy Comparable constraint"
+        },
+        {
+          "name": "duplicate",
+          "source": "func earlier<T: Comparable & Comparable>(value: T) -> T:\n    return value\n",
+          "exit_code": 1,
+          "stderr_pattern": "Duplicate generic constraint"
+        },
+        {
+          "name": "bool_order",
+          "source": "let invalid = true < false\n",
+          "exit_code": 1,
+          "stderr_pattern": "Operator requires numbers of the same type"
+        },
+        {
+          "name": "mixed_order",
+          "source": "let invalid = \"a\" < 1\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        }
+      ],
+      "runtime_source": "tests/fixtures/language/comparable.phys"
     }
   ],
   "programs": [
@@ -2078,6 +2985,58 @@
       "source": "tests/fixtures/language/array_safe_remove_module.phys",
       "mode": "--emit-experiment",
       "harness": "tests/test_language_array_safe_remove_module.c"
+    }
+  ],
+  "workflows": [
+    {
+      "name": "generic_modes",
+      "modules": [
+        {
+          "name": "experiment",
+          "source": "tests/fixtures/language/generic_modes/experiment.phys",
+          "mode": "--emit-experiment"
+        },
+        {
+          "name": "analysis",
+          "source": "tests/fixtures/language/generic_modes/analysis.phys",
+          "mode": "--emit-analysis"
+        }
+      ],
+      "steps": [
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{experiment}",
+            "{work}/run.psrun",
+            "--steps",
+            "2",
+            "--dt",
+            "0.01"
+          ],
+          "stdout_patterns": [
+            "3 samples written"
+          ],
+          "files": [
+            "run.psrun"
+          ],
+          "timeout": 20
+        },
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{analysis}",
+            "--runs",
+            "{work}/report"
+          ],
+          "stdout_patterns": [
+            "Analysis: OK"
+          ],
+          "files": [
+            "report.psreport"
+          ],
+          "timeout": 20
+        }
+      ]
     }
   ]
 }

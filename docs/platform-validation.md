@@ -157,7 +157,15 @@ Alle 134 bestehen lokal mit MSVC Debug; die 90 Sprachtests bestehen zusätzlich
 mit Clang Release. Alle 82 betroffenen CTest-Prüfungen bestehen ebenfalls. Enthalten sind
 36 Array-/Stringgruppen mit 299 Compilerprüfungen und 47 ausgeführte Programme,
 einschließlich zweier erwarteter Laufzeitfehler und eines Experimentmoduls.
-Für diesen erweiterten Satz steht der plattformübergreifende CI-Nachweis noch aus.
+Der direkte Build- und Testschritt dieses Satzes besteht in allen acht
+Plattformkombinationen in [CI-Lauf 36474491263](https://github.com/PhysicSimulator/physim/actions/runs/36474491263)
+zum Commit `430df15`; spätere Schritte sind damit nicht vorweggenommen.
+
+Die jüngste Erweiterung umfasst 152 Tests, davon 142 ohne SDL. Alle 108 Sprachtests
+bestehen lokal mit MSVC Debug und Clang Release, außerdem alle 100 betroffenen
+CTest-Prüfungen. Neu sind neun Diagnosegruppen zu Generics, Überladungen und
+Strukturinitialisierern, acht Laufzeitprogramme und ein Ablauf mit generischen
+Experiment-/Analysemodulen. Dieser Satz benötigt noch seinen eigenen CI-Nachweis.
 Weitere Sprach-, Runner- und Grafikabläufe sind noch an CTest gebunden.
 
 ## Weitere Änderungen prüfen

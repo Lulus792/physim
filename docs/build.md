@@ -103,18 +103,24 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt derzeit 134 Tests aus, mit `--no-app` die
-124 Prüfungen ohne SDL-Abhängigkeit. Die 51 C-Referenztests decken Mathematik, Numerik,
+`--test` führt derzeit 152 Tests aus, mit `--no-app` die
+142 Prüfungen ohne SDL-Abhängigkeit. Die 51 C-Referenztests decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
 Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.
-Hinzu kommen 47 übersetzte Sprachprogramme und 36 Gruppen mit insgesamt 299
-Compilerprüfungen für Array- und Stringoperationen. Diese prüfen 297 abgelehnte
+Hinzu kommen 55 übersetzte Sprachprogramme und 45 Gruppen mit insgesamt 431
+Compilerprüfungen für Sequenzen, Generics, Überladungen und Strukturinitialisierer.
+Diese prüfen 429 abgelehnte
 Programme und die Ausgabe mehrzeiliger Stringinterpolation mit LF und CRLF.
 Die ausführbaren Fälle schließen zwei erwartete Laufzeitfehler und ein geladenes
 Experimentmodul mit Create-/Reset-/Step-/Scene-/Destroy-Prüfung ein. Der Katalog
 `tests/native_language_cases.json` enthält die gemeinsamen Erwartungen für den
 direkten Läufer und die verbleibenden CTest-Einstiegspunkte.
+Ein weiterer Ablauf baut ein generisches Experiment- und Analysemodul und führt
+beide mit den separaten Runnern aus. Er prüft Rückgabecodes, Ausgaben und erzeugte
+Mess-/Berichtsdateien; ein fehlgeschlagener Schritt stoppt seine Folgeschritte.
+Diagnosefälle mit Imports erhalten jeweils einen eigenen Ordner, sodass ihre
+Module und Quelldiagnosen voneinander unabhängig bleiben.
 
 ```sh
 # Nur die direkt unterstützten Sprachtests ausführen:
@@ -132,7 +138,7 @@ Aufruf endet dennoch mit einem Fehlercode. Zeitüberschreitungen werden als Fehl
 gespeichert. Ein Filter ohne Treffer ist ebenfalls ein Fehler.
 
 Die weiteren Sprach-, Runner- und Grafikabläufe der vollständigen Testsuite
-verwenden noch die folgenden CMake-Abläufe. Die 134 Prüfungen ersetzen noch nicht
+verwenden noch die folgenden CMake-Abläufe. Die 152 Prüfungen ersetzen noch nicht
 die gesamte Suite.
 
 ### SDK und portable Pakete ohne CMake

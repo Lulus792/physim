@@ -63,7 +63,7 @@ def main():
     runner.execute_case = language_process
     try:
         result = runner.language_case(
-            runner.Case("emitter_error", (), language_source="fixture.phys"),
+            runner.Case("emitter_error", (), libraries=(), language_source="fixture.phys"),
             LanguageBuilder(), {}, source, directory)
         assert result["status"] == "failed" and len(result["steps"]) == 1
         assert result["steps"][0]["exit_code"] == 2
@@ -96,6 +96,45 @@ def main():
         assert [step["exit_code"] for step in result["steps"]] == [0, 70]
     finally:
         runner.execute_case = execute
+
+    # Workflow success requires every build, process, diagnostic and output.
+    # A missing artifact or failed module must stop dependent runner steps.
+    workflow = dict(modules=[dict(name="module", source="fixture.phys", mode="--emit-experiment")],
+                    steps=[dict(program="first", arguments=["{module}"], stdout_patterns=["first OK"], files=["result.dat"]),
+                           dict(program="second", arguments=["{work}/result.dat"], stdout_patterns=["second OK"])])
+    for scenario in ("success", "emission", "build", "missing", "process"):
+        workflow_work = directory / scenario
+        workflow_work.mkdir()
+        commands = []
+
+        class WorkflowBuilder(RuntimeBuilder):
+            def executable(self, *args, **options):
+                if scenario == "build":
+                    raise RuntimeError("Expected module build failure")
+                return super().executable(*args, **options)
+
+        def workflow_process(command, **options):
+            commands.append(command)
+            if "--emit-experiment" in command:
+                code = "raise SystemExit(2)" if scenario == "emission" else "print('generated module')"
+            elif Path(command[0]).stem == "first":
+                code = "print('first OK')"
+                if scenario == "process":
+                    code += "; raise SystemExit(7)"
+                elif scenario != "missing":
+                    code += "; from pathlib import Path; Path('result.dat').write_text('saved')"
+            else:
+                code = "from pathlib import Path; assert Path('result.dat').read_text() == 'saved'; print('second OK')"
+            return execute([sys.executable, "-c", code], **options)
+
+        runner.execute_case = workflow_process
+        try:
+            result = runner.language_case(runner.Case("workflow_" + scenario, (), language_workflow=workflow),
+                                          WorkflowBuilder(), {"core": None}, source, workflow_work)
+            assert result["status"] == ("passed" if scenario == "success" else "failed")
+            assert len(commands) == (3 if scenario == "success" else 1 if scenario in ("emission", "build") else 2)
+        finally:
+            runner.execute_case = execute
 
     # A failed build and failed test must not suppress later cases or leave a
     # success-only summary. Use real child processes for the executable cases.

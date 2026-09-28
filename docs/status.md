@@ -75,7 +75,19 @@ Modulablauf einschließlich Reset, Szene und Freigabe. Alle 134 direkten Tests b
 lokal mit MSVC Debug, die 90 Sprachtests zusätzlich mit Clang Release. Alle 82
 betroffenen CTest-Prüfungen bestehen ebenfalls. Die Einstiegspunkte verwenden denselben
 Katalog; die Umwandlung bereits vorhandener CRLF-Zeilenenden wurde für CMake unter
-Windows korrigiert. Der Plattformnachweis für diese Erweiterung steht noch aus.
+Windows korrigiert. Der direkte Build- und Testschritt dieses Stands besteht
+in allen acht CI-Plattformkombinationen zum Commit `430df15`.
+
+Neun weitere Diagnosegruppen und acht Laufzeitprogramme prüfen Generics,
+Funktions-/Methodenüberladungen, Strukturdefaults und eigene Initialisierer direkt.
+Importierte Fehlerfälle erhalten getrennte Quelldateien; die erwarteten Diagnosen
+verweisen weiterhin auf den richtigen Import und dessen Zeile. Ein weiterer Ablauf
+baut generische Experiment-/Analysemodule und prüft ihre separaten Runner und
+Ausgabedateien. Damit umfasst der direkte Katalog 152 Tests, davon 142 ohne SDL.
+Alle 108 Sprachtests bestehen lokal mit MSVC Debug und Clang Release; alle 100
+betroffenen CTest-Prüfungen bestehen ebenfalls. Der Läufertest prüft außerdem,
+dass Emissions-, Build-, Prozessfehler und fehlende Dateien Folgeschritte verhindern.
+Der plattformübergreifende Nachweis dieser jüngsten Erweiterung steht noch aus.
 
 | Bereich | Implementiert | Noch offen |
 | --- | --- | --- |
