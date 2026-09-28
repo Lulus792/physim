@@ -1002,6 +1002,11 @@ target_link_libraries(physim-language-checker-tests PRIVATE physim_language)
 ps_warnings(physim-language-checker-tests)
 add_test(NAME language_checker COMMAND physim-language-checker-tests)
 set_tests_properties(language_checker PROPERTIES TIMEOUT 30)
+if(PHYSIM_SANITIZERS AND NOT MSVC)
+  # The full mutation corpus takes 22-30 seconds on hosted Linux workers with
+  # sanitizers. Keep every case and allow headroom for worker contention.
+  set_tests_properties(language_checker PROPERTIES TIMEOUT 120)
+endif()
 option(PHYSIM_BUILD_FUZZERS "Build Clang libFuzzer IPC target with AddressSanitizer" OFF)
 if(PHYSIM_BUILD_FUZZERS)
   if(NOT CMAKE_C_COMPILER_ID MATCHES "Clang" OR NOT CMAKE_C_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")

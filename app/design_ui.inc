@@ -418,7 +418,7 @@ static void draw_ui(app *a, int width, int height) {
             section(ui, "Hilfe");
             nk_layout_row_dynamic(ui, 32, 1);
             a->documentation_bounds = nk_widget_bounds(ui);
-            if (nk_button_label(ui, "Handbuch & Referenz · F1")) {
+            if (nk_button_label(ui, "Handbuch · F1")) {
                 open_documentation(a, 1);
             }
             if (nk_tree_push(ui, NK_TREE_TAB, "Tastaturbefehle", NK_MINIMIZED)) {
