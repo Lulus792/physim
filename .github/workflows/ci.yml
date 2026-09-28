@@ -22,8 +22,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Direct libFuzzer campaign
         if: ${{ !inputs.package_only }}
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
         run: |
-          python3 tools/build.py --fuzzer --compiler clang
+          brew install llvm@20
+          python3 tools/build.py --fuzzer --compiler "$(brew --prefix llvm@20)/bin/clang"
           python3 tests/test_native_fuzzer.py --bin build/native/Debug-fuzzer/bin --work build/native
       - name: SDL3 pinned source
         run: |

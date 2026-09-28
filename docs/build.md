@@ -616,7 +616,9 @@ separat ohne `--sanitizers` erstellt; `--sanitizers --install` wird abgelehnt.
 Der optionale IPC-Fuzzer wird mit `python3 tools/build.py --fuzzer --compiler clang`
 ebenfalls direkt gebaut (Windows: `python` und `--compiler clang-cl`). Dieser
 getrennte Modus instrumentiert auch die Kernbibliothek und benötigt kein SDL.
-Aufruf, begrenzte Kampagne und Nachweisgrenzen stehen in [Fuzzing](fuzzing.md).
+Auf macOS wird LLVM mit libFuzzer zusätzlich benötigt; der Compiler aus Xcode
+16.4 enthält diese Bibliothek nicht. Installation, Aufruf, begrenzte Kampagne
+und Nachweisgrenzen stehen in [Fuzzing](fuzzing.md).
 
 ## Portables Paket
 

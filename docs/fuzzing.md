@@ -28,10 +28,22 @@ unter `build/native/Debug-fuzzer`; normale App-Builds werden nicht instrumentier
 Unter Windows verwendet dieser Weg `clang-cl`, unter Linux/macOS `clang`.
 MSVC und GCC werden für `--fuzzer` mit einer Diagnose abgewiesen.
 
-**Linux und macOS: bauen und eine begrenzte Kampagne prüfen**
+**Linux: bauen und eine begrenzte Kampagne prüfen**
 
 ```sh
 python3 tools/build.py --fuzzer --compiler clang
+python3 tests/test_native_fuzzer.py --bin build/native/Debug-fuzzer/bin --work build/native
+```
+
+**macOS: LLVM mit libFuzzer installieren und verwenden**
+
+Apple Clang aus Xcode 16.4 enthält auf den CI-Macs keine libFuzzer-Bibliothek.
+Für diesen optionalen Test wird deshalb [LLVM 20 über Homebrew](https://formulae.brew.sh/formula/llvm@20)
+verwendet. Voraussetzung sind die Xcode-Werkzeuge und Homebrew aus der README.
+
+```sh
+brew install llvm@20
+python3 tools/build.py --fuzzer --compiler "$(brew --prefix llvm@20)/bin/clang"
 python3 tests/test_native_fuzzer.py --bin build/native/Debug-fuzzer/bin --work build/native
 ```
 
@@ -67,10 +79,12 @@ Laufzeitstart scheitert auf dem lokalen Windows-Rechner weiterhin mit
 `interception_win: unhandled instruction` in ASan, noch bevor der Harness läuft.
 `build/native-fuzzer-build.log`, `build/native-fuzzer-run.log` und der JSON-Bericht
 dokumentieren diesen Unterschied. Die neue CI führt den begrenzten Lauf mit
-Windows ClangCL, Linux Clang und Apple Clang auf beiden Mac-Architekturen aus;
+Windows ClangCL, Linux Clang und Homebrew LLVM auf beiden Mac-Architekturen aus;
 im [Lauf zu `a9accf5`](https://github.com/PhysicSimulator/physim/actions/runs/36492484066)
 bestehen Windows ClangCL und Linux Clang bereits die vollständige Kampagnenprüfung.
-Der macOS-Nachweis steht noch aus. Der bisherige CMake-Einstieg
+Der erste Apple-Silicon-Lauf scheiterte an der fehlenden libFuzzer-Bibliothek in
+Apple Clang. Die CI verwendet nun LLVM 20; dessen macOS-Nachweis steht noch aus.
+Der bisherige CMake-Einstieg
 `PHYSIM_BUILD_FUZZERS=ON` bleibt bis zum Abschluss des Vergleichs verfügbar.
 
 ## IPC-Mutationen

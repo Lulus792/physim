@@ -124,6 +124,10 @@ class Builder:
             version = run([self.cc, "--version"], env, capture=True)
             if "clang" not in version.lower():
                 raise RuntimeError("libFuzzer requires a Clang compiler.")
+            if MAC:
+                resource = Path(run([self.cc, "-print-resource-dir"], env, capture=True).strip())
+                if not (resource / "lib/darwin/libclang_rt.fuzzer_osx.a").is_file():
+                    raise RuntimeError("This Clang installation has no libFuzzer runtime; install LLVM (for example brew install llvm@20) and pass its bin/clang with --compiler.")
         self.sanitizers = getattr(args, "sanitizers", False)
         if self.sanitizers and WINDOWS:
             if Path(self.cc).stem.lower() == "clang-cl":

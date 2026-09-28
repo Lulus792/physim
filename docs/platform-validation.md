@@ -214,7 +214,10 @@ Der [CI-Lauf zu `a9accf5`](https://github.com/PhysicSimulator/physim/actions/run
 bestätigt außerdem den direkt gebauten IPC-libFuzzer unter Windows ClangCL und
 Linux Clang. Beide Prüfungen erzeugen gültige Eingaben, spielen sie erneut ab
 und bestehen 10.000 Durchläufe mit zusätzlicher Codeabdeckung ohne Fehlerfund.
-Die macOS-Jobs sind zum Prüfzeitpunkt noch eingereiht.
+Der Apple-Silicon-Job scheitert mit Apple Clang aus Xcode 16.4 am Linken, weil
+`libclang_rt.fuzzer_osx.a` in der Toolchain fehlt. Für die Fuzzer-Prüfung wird nun
+Homebrew LLVM 20 auf beiden Mac-Architekturen verwendet. Der erneute Mac-Nachweis
+steht noch aus; normale App- und Sanitizer-Builds verwenden weiter Apple Clang.
 
 Die Pendelreferenzen prüfen jeweils 4001 Messpunkte, Energiedrift und Periodendauer
 gegen eine analytische Referenz. MSVC und Clang liefern für RK4 eine Periodendauer
