@@ -563,7 +563,7 @@ Neustarts prüfen Fenstermaße, Maximierung, Sichtbarkeit und Schrift. Eine real
 Autosave-Datei bestätigt das gewählte Intervall; beschädigte Einstellungen bleiben
 unverändert. Die normalen Benutzereinstellungen werden von diesen Tests nicht gelesen.
 
-## Sanitizer ohne CMake
+## Linux-Startfehler untersuchen
 
 Für einen hängenden Linux-Fensterablauf lässt sich zusätzlich ein bestimmter
 Workflow mit Systemaufrufen aufzeichnen (strace ab 6.6 erforderlich):
@@ -578,6 +578,8 @@ strace auch die verfolgte App und ihre Kindprozesse. Die Linux-CI zeichnet den
 ersten Fensterablauf sowohl im normalen als auch im Sanitizer-Build auf und
 archiviert die Dateien. Ein zusätzlicher Läufertest prüft Aufzeichnung und
 Prozessende beim Timeout.
+
+## Sanitizer ohne CMake
 
 `--sanitizers` instrumentiert die direkt gebauten Bibliotheken, Programme,
 Testmodule und aus Physim erzeugten C-Quellen. Windows verwendet AddressSanitizer
