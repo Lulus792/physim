@@ -103,23 +103,26 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt derzeit 200 Tests aus, mit `--no-app` die
-190 Prüfungen ohne SDL-Abhängigkeit. Die 51 C-Referenztests decken Mathematik, Numerik,
+`--test` führt derzeit 222 Tests aus, mit `--no-app` die
+212 Prüfungen ohne SDL-Abhängigkeit. Die 51 C-Referenztests decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
 Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.
-Hinzu kommen 87 übersetzte Sprachprogramme und 61 Gruppen mit insgesamt 613
+Hinzu kommen 99 übersetzte Sprachprogramme und 68 Gruppen mit insgesamt 646
 Compilerprüfungen für Sequenzen, Generics, Überladungen, Strukturinitialisierer,
-Kontrollfluss, optionale Werte und Unicode. Diese prüfen 607 abgelehnte Programme,
-drei gültige Kontrollflussfälle und drei Ausgaben zur Normalisierung von Zeilenumbrüchen.
-Die ausführbaren Fälle schließen neun erwartete Laufzeitfehler und zwei geladene
+Kontrollfluss, optionale Werte, Unicode und physikalische Einheiten. Diese prüfen
+635 abgelehnte Programme, acht gültige Fälle und drei Ausgaben zur Normalisierung
+von Zeilenumbrüchen. Die ausführbaren Fälle schließen 17 erwartete Laufzeitfehler und zwei geladene
 Experimentmodule mit Create-/Reset-/Step-/Scene-/Destroy-Prüfung ein. Das
 `attempt`-Modul prüft auch die Erholung nach einem Fehler. Der Katalog
 `tests/native_language_cases.json` enthält die gemeinsamen Erwartungen für den
 direkten Läufer und die verbleibenden CTest-Einstiegspunkte.
-Ein weiterer Ablauf baut ein generisches Experiment- und Analysemodul und führt
-beide mit den separaten Runnern aus. Er prüft Rückgabecodes, Ausgaben und erzeugte
-Mess-/Berichtsdateien; ein fehlgeschlagener Schritt stoppt seine Folgeschritte.
+Vier weitere Abläufe bauen Experiment-/Analysemodule und führen sie mit den
+separaten Runnern aus. Neben Generics prüfen sie das Lesen von Datenreihen,
+Quantile und den Export mehrerer CSV-Spalten. Geprüft werden Rückgabecodes,
+Diagnosen, erzeugte Dateien, exakter CSV-Inhalt und das Ausbleiben abgelehnter
+Exporte. Dateigröße und SHA-256-Prüfsumme der erwarteten Ausgaben stehen im
+JSON-Bericht. Ein fehlgeschlagener Schritt stoppt seine Folgeschritte.
 Diagnosefälle mit Imports erhalten jeweils einen eigenen Ordner, sodass ihre
 Module und Quelldiagnosen voneinander unabhängig bleiben.
 
@@ -139,7 +142,7 @@ Aufruf endet dennoch mit einem Fehlercode. Zeitüberschreitungen werden als Fehl
 gespeichert. Ein Filter ohne Treffer ist ebenfalls ein Fehler.
 
 Die weiteren Sprach-, Runner- und Grafikabläufe der vollständigen Testsuite
-verwenden noch die folgenden CMake-Abläufe. Die 200 Prüfungen ersetzen noch nicht
+verwenden noch die folgenden CMake-Abläufe. Die 222 Prüfungen ersetzen noch nicht
 die gesamte Suite.
 
 ### SDK und portable Pakete ohne CMake

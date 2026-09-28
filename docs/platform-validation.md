@@ -134,48 +134,36 @@ Mac-Notarisierung bleiben offen.
 
 ## Direkter Testläufer
 
-`tools/native_tests.py` übernimmt 51 bestehende C-Referenztests mit unveränderten
-Prüfbedingungen. Alle 51 bestehen lokal mit MSVC Debug; die 41 SDL-freien Fälle
-bestehen zusätzlich mit Clang Release. Enthalten sind auch die bestehenden
-Protokoll-, Messdatei- und Berichtsmutationen. Ein eigener Test prüft Fehlercodes,
-erwartete Diagnosen, Zeitüberschreitungen und den vollständigen Ergebnisbericht
-nach einzelnen Build-/Testfehlern. Der direkte Build- und Testschritt besteht in
-allen acht Plattformkombinationen in [CI-Lauf 36471876255](https://github.com/PhysicSimulator/physim/actions/runs/36471876255)
-zum Commit `a55d5e0`; dieser Nachweis bezieht sich auf den jeweiligen Schritt.
+Der direkte Katalog umfasst **222 Tests**, davon 212 ohne SDL. Alle 178 Sprachtests
+bestehen lokal mit MSVC Debug und Clang Release; die 163 zugehörigen CTest-Prüfungen
+bestehen ebenfalls mit den gemeinsamen Erwartungen. Die jüngste Erweiterung
+übernimmt Einheiten, Materialien, Medien, Auftrieb und drei Analyseabläufe für
+Reihenwerte, Quantile und CSV-Spalten. Ihr eigener CI-Nachweis steht noch aus.
 
-Die folgende Erweiterung ergänzt elf Sprach-Laufzeitprogramme und elf Gruppen mit
-86 Diagnosefällen. Der Katalog umfasst damit 73 Tests, davon 63 ohne SDL.
-Die 29 Sprachtests bestehen lokal mit MSVC Debug und Clang Release; elf bestehende
-CTest-Einstiegspunkte bestehen mit dem gemeinsamen JSON-Katalog ebenfalls.
-Diese Erweiterung besteht im direkten Build- und Testschritt aller acht
-Plattformkombinationen in [CI-Lauf 36473305112](https://github.com/PhysicSimulator/physim/actions/runs/36473305112)
-zum Commit `199a8f7`. Der Nachweis gilt für diesen Schritt, nicht automatisch für
-alle nachfolgenden Prüfungen des CI-Laufs.
+Die Analyseprüfungen vergleichen den vollständigen CSV-Inhalt und verlangen,
+dass ungültige Exporte keine CSV-Datei anlegen. Der Läufertest prüft erwartete
+Exitcodes und Diagnosen, Zeitüberschreitungen, fehlende Programme, Emissions-/
+Buildfehler, fehlende Ausgaben, falsche Inhalte und ungültiges UTF-8. Fehlerhafte
+Schritte verhindern die Ausführung davon abhängiger Programme. Die Ergebnisberichte
+enthalten für erwartete Dateien außerdem Größe und SHA-256-Prüfsumme.
 
-Die nächste Erweiterung umfasst insgesamt 134 direkte Tests, davon 124 ohne SDL.
-Alle 134 bestehen lokal mit MSVC Debug; die 90 Sprachtests bestehen zusätzlich
-mit Clang Release. Alle 82 betroffenen CTest-Prüfungen bestehen ebenfalls. Enthalten sind
-36 Array-/Stringgruppen mit 299 Compilerprüfungen und 47 ausgeführte Programme,
-einschließlich zweier erwarteter Laufzeitfehler und eines Experimentmoduls.
-Der direkte Build- und Testschritt dieses Satzes besteht in allen acht
-Plattformkombinationen in [CI-Lauf 36474491263](https://github.com/PhysicSimulator/physim/actions/runs/36474491263)
-zum Commit `430df15`; spätere Schritte sind damit nicht vorweggenommen.
+Die folgende Tabelle dokumentiert abgeschlossene **direkte Build- und Testschritte**.
+Sie nimmt spätere SDK-, Grafik- oder CTest-Schritte desselben CI-Laufs nicht vorweg.
+Die acht Kombinationen sind Windows MSVC/ClangCL jeweils Debug/Release, Linux
+GCC/Clang sowie macOS auf Apple Silicon/Intel.
 
-Die jüngste Erweiterung umfasst 152 Tests, davon 142 ohne SDL. Alle 108 Sprachtests
-bestehen lokal mit MSVC Debug und Clang Release, außerdem alle 100 betroffenen
-CTest-Prüfungen. Neu sind neun Diagnosegruppen zu Generics, Überladungen und
-Strukturinitialisierern, acht Laufzeitprogramme und ein Ablauf mit generischen
-Experiment-/Analysemodulen. In [CI-Lauf 36475496512](https://github.com/PhysicSimulator/physim/actions/runs/36475496512)
-zum Commit `0a937f8` besteht der direkte Build- und Testschritt unter Linux mit
-GCC/Clang, auf macOS Apple Silicon und unter Windows mit MSVC Debug sowie ClangCL
-Debug/Release. MSVC Release und macOS Intel sind zum Prüfzeitpunkt noch offen.
+| Stand | Direkte Tests | Ausgeführter CI-Nachweis |
+| --- | --- | --- |
+| `a55d5e0` | 51 C-Tests | Alle acht Kombinationen: [Lauf 36471876255](https://github.com/PhysicSimulator/physim/actions/runs/36471876255) |
+| `199a8f7` | 73 Tests | Alle acht Kombinationen: [Lauf 36473305112](https://github.com/PhysicSimulator/physim/actions/runs/36473305112) |
+| `430df15` | 134 Tests | Alle acht Kombinationen: [Lauf 36474491263](https://github.com/PhysicSimulator/physim/actions/runs/36474491263) |
+| `0a937f8` | 152 Tests | Alle acht Kombinationen: [Lauf 36475496512](https://github.com/PhysicSimulator/physim/actions/runs/36475496512) |
+| `d7fb0b0` | 200 Tests | Linux GCC/Clang, macOS Apple Silicon/Intel, Windows MSVC Debug und ClangCL Debug/Release: [Lauf 36476324664](https://github.com/PhysicSimulator/physim/actions/runs/36476324664). MSVC Release ist zum Prüfzeitpunkt noch offen. |
 
-Die Erweiterung um Kontrollfluss, optionale Werte, Enums, Unicode und weitere
-Laufzeitfehler erhöht den Katalog auf 200 Tests, davon 190 ohne SDL. Alle 156
-Sprachtests bestehen lokal mit MSVC Debug und Clang Release; die 147 zugehörigen
-CTest-Prüfungen bestehen ebenfalls. Sie enthält auch das `attempt`-Experimentmodul
-mit Fehlerbehandlung und erneutem Reset. Der CI-Nachweis für diesen Satz steht aus.
-Weitere Sprach-, Runner- und Grafikabläufe sind noch an CTest gebunden.
+Die ursprünglichen 51 C-Tests bestanden auch lokal mit MSVC Debug; die 41 SDL-freien
+Fälle zusätzlich mit Clang Release. Der vollständige Satz mit 134 Tests bestand
+lokal mit MSVC Debug. Weitere Sprach-, Runner- und Grafikabläufe sind noch an
+CTest gebunden.
 
 ## Weitere Änderungen prüfen
 

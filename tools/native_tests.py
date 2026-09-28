@@ -142,6 +142,33 @@ def write_language_fixture(directory, filename, content):
     return path
 
 
+def check_workflow_outputs(step, work):
+    artifacts = []
+    errors = []
+    contents = step.get("file_contents", {})
+    for filename in dict.fromkeys([*step.get("files", ()), *contents]):
+        path = work / filename
+        if not path.is_file():
+            errors.append("Missing workflow output: " + filename)
+            continue
+        data = path.read_bytes()
+        artifacts.append({"path": str(path), "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()})
+        if filename in contents:
+            try:
+                actual = data.decode("utf-8").replace("\r\n", "\n")
+            except UnicodeDecodeError:
+                actual = None
+            if actual != contents[filename]:
+                errors.append("Workflow output content did not match: " + filename)
+    for filename in step.get("absent_files", ()):
+        path = work / filename
+        absent = not path.exists()
+        artifacts.append({"path": str(path), "absent": absent})
+        if not absent:
+            errors.append("Rejected operation created an output: " + filename)
+    return {"status": "failed" if errors else "passed", "reason": "\n".join(errors), "artifacts": artifacts}
+
+
 def language_case(case, builder, libraries, source, work):
     started = time.monotonic()
     compiler = builder.bin / ("physimc.exe" if sys.platform == "win32" else "physimc")
@@ -163,9 +190,8 @@ def language_case(case, builder, libraries, source, work):
                                       exit_code=step.get("exit_code", 0), stdout=step.get("stdout"),
                                       stderr_pattern=step.get("stderr_pattern"), stderr=step.get("stderr"),
                                       stdout_patterns=step.get("stdout_patterns", ()))
-                missing = [filename for filename in step.get("files", ()) if not (work / filename).is_file()]
-                if result["status"] == "passed" and missing:
-                    result.update(status="failed", reason="Missing workflow outputs: " + ", ".join(missing))
+                if result["status"] == "passed":
+                    result.update(check_workflow_outputs(step, work))
                 steps.append(result)
                 if result["status"] != "passed":
                     break

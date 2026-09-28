@@ -43,6 +43,23 @@ def main():
     assert runner.execute_case([str(directory / "missing-program")], work=directory,
                                env=os.environ, timeout=1)["status"] == "failed"
 
+    # Output existence alone cannot validate an export. Preserve exact values,
+    # normalize only CRLF and reject artifacts from failed operations.
+    expected_csv = '"time [s]","distance [m]"\n0,1\n'
+    csv_path = directory / "export.csv"
+    csv_path.write_bytes(expected_csv.replace("\n", "\r\n").encode("utf-8"))
+    output_check = dict(file_contents={"export.csv": expected_csv}, absent_files=["rejected.csv"])
+    result = runner.check_workflow_outputs(output_check, directory)
+    assert result["status"] == "passed" and len(result["artifacts"][0]["sha256"]) == 64
+    csv_path.write_text(expected_csv.replace("0,1", "0,2"), encoding="utf-8")
+    assert runner.check_workflow_outputs(output_check, directory)["status"] == "failed"
+    csv_path.write_bytes(b"\xff\xfe")
+    assert runner.check_workflow_outputs(output_check, directory)["status"] == "failed"
+    csv_path.write_bytes(expected_csv.encode("utf-8"))
+    (directory / "rejected.csv").write_text("", encoding="utf-8")
+    assert runner.check_workflow_outputs(output_check, directory)["status"] == "failed"
+    assert runner.check_workflow_outputs(dict(file_contents={"missing.csv": ""}), directory)["status"] == "failed"
+
     # Exercise the language pipeline with real child-process failures. An
     # emitter failure must never compile or execute a previous generated file.
     execute = runner.execute_case

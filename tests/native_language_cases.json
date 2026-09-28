@@ -4118,6 +4118,234 @@
         }
       ],
       "runtime_source": "tests/fixtures/language/unicode_escapes.phys"
+    },
+    {
+      "name": "static_units",
+      "checks": [
+        {
+          "name": "quantity_add",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet distance = Quantity(1,metres)\nlet duration = Quantity(2,seconds)\nlet bad = distance.adding(duration)\n",
+          "exit_code": 1,
+          "stderr_pattern": "quantity_add\\.phys:[0-9]+:[0-9]+: error: Statically incompatible unit dimensions"
+        },
+        {
+          "name": "quantity_subtract",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet bad = Quantity(1,metres).subtracting(Quantity(2,seconds))\n",
+          "exit_code": 1,
+          "stderr_pattern": "quantity_subtract\\.phys:[0-9]+:[0-9]+: error: Statically incompatible unit dimensions"
+        },
+        {
+          "name": "quantity_convert",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet bad = Quantity(1,metres).converted(seconds)\n",
+          "exit_code": 1,
+          "stderr_pattern": "quantity_convert\\.phys:[0-9]+:[0-9]+: error: Statically incompatible unit dimensions"
+        },
+        {
+          "name": "unit_convert",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet alias = metres\nlet bad = alias.convert(to: seconds, value: 1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "unit_convert\\.phys:[0-9]+:[0-9]+: error: Statically incompatible unit dimensions"
+        },
+        {
+          "name": "composed",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet speed = metres.divided(seconds,\"m/s\")\nlet bad = Quantity(1,speed).converted(metres)\n",
+          "exit_code": 1,
+          "stderr_pattern": "composed\\.phys:[0-9]+:[0-9]+: error: Statically incompatible unit dimensions"
+        },
+        {
+          "name": "powered",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet area = metres.powered(2,\"m2\")\nlet bad = Quantity(1,area).converted(metres)\n",
+          "exit_code": 1,
+          "stderr_pattern": "powered\\.phys:[0-9]+:[0-9]+: error: Statically incompatible unit dimensions"
+        },
+        {
+          "name": "member_unit",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet lengthExponent = 1\nlet alias = Unit(lengthExponent,0,0,0,0,0,0,1,\"m\")\nlet bad = Quantity(1,alias).unit.convert(1,seconds)\n",
+          "exit_code": 1,
+          "stderr_pattern": "member_unit\\.phys:[0-9]+:[0-9]+: error: Statically incompatible unit dimensions"
+        },
+        {
+          "name": "arithmetic_exponents",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet lengthExponent = (8 / 2 - 3) * 1\nlet computed = Unit(lengthExponent,0,0,0,0,0,0,1,\"m\")\nlet bad = Quantity(1,computed).converted(seconds)\n",
+          "exit_code": 1,
+          "stderr_pattern": "arithmetic_exponents\\.phys:[0-9]+:[0-9]+: error: Statically incompatible unit dimensions"
+        },
+        {
+          "name": "arithmetic_power",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet area = metres.powered(5 % 3,\"m2\")\nlet bad = Quantity(1,area).converted(metres)\n",
+          "exit_code": 1,
+          "stderr_pattern": "arithmetic_power\\.phys:[0-9]+:[0-9]+: error: Statically incompatible unit dimensions"
+        },
+        {
+          "name": "operator_add",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet bad = Quantity(1,metres) + Quantity(2,seconds)\n",
+          "exit_code": 1,
+          "stderr_pattern": "operator_add\\.phys:[0-9]+:[0-9]+: error: Statically incompatible unit dimensions"
+        },
+        {
+          "name": "operator_subtract",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet bad = Quantity(1,metres) - Quantity(2,seconds)\n",
+          "exit_code": 1,
+          "stderr_pattern": "operator_subtract\\.phys:[0-9]+:[0-9]+: error: Statically incompatible unit dimensions"
+        },
+        {
+          "name": "operator_chain",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet bad = (Quantity(1,metres) + Quantity(2,metres)) - Quantity(3,seconds)\n",
+          "exit_code": 1,
+          "stderr_pattern": "operator_chain\\.phys:[0-9]+:[0-9]+: error: Statically incompatible unit dimensions"
+        },
+        {
+          "name": "operator_method",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet bad = (Quantity(1,metres) + Quantity(2,metres)).converted(seconds)\n",
+          "exit_code": 1,
+          "stderr_pattern": "operator_method\\.phys:[0-9]+:[0-9]+: error: Statically incompatible unit dimensions"
+        },
+        {
+          "name": "scalar_chain",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet bad = (2 * Quantity(1,metres)).converted(seconds)\n",
+          "exit_code": 1,
+          "stderr_pattern": "scalar_chain\\.phys:[0-9]+:[0-9]+: error: Statically incompatible unit dimensions"
+        },
+        {
+          "name": "negated_chain",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet bad = (-Quantity(1,metres)).converted(seconds)\n",
+          "exit_code": 1,
+          "stderr_pattern": "negated_chain\\.phys:[0-9]+:[0-9]+: error: Statically incompatible unit dimensions"
+        },
+        {
+          "name": "operator_number",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet bad = Quantity(1,metres) + 2\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "operator_multiply",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet bad = Quantity(1,metres) * Quantity(2,metres)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Invalid Quantity operator or operand types"
+        },
+        {
+          "name": "operator_inverse_division",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet bad = 2 / Quantity(1,metres)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Invalid Quantity operator or operand types"
+        },
+        {
+          "name": "dynamic",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nfunc unknown() -> Unit:\n    return seconds\nlet value = Quantity(1,unknown())\nlet result = value.adding(Quantity(2,metres))\n",
+          "exit_code": 0
+        },
+        {
+          "name": "operator_dynamic",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nfunc unknown() -> Quantity:\n    return Quantity(1,seconds)\nlet value = Quantity(2,metres) + unknown()\n",
+          "exit_code": 0
+        },
+        {
+          "name": "compatible",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet centimetres = Unit(1,0,0,0,0,0,0,0.01,\"cm\")\nlet value = Quantity(1,metres).adding(Quantity(50,centimetres))\nlet different = metres.isCompatible(seconds)\n",
+          "exit_code": 0
+        },
+        {
+          "name": "arithmetic_compatible",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet exponent = 3 - 2\nlet computed = Unit(exponent,0,0,0,0,0,0,1,\"m\")\nlet value = Quantity(1,computed).adding(Quantity(2,metres))\n",
+          "exit_code": 0
+        },
+        {
+          "name": "overflow_dynamic",
+          "source": "let metres = Unit(1,0,0,0,0,0,0,1,\"m\")\nlet seconds = Unit(0,0,1,0,0,0,0,1,\"s\")\nlet exponent = 9223372036854775807 + 1\nlet computed = Unit(exponent,0,0,0,0,0,0,1,\"m\")\nlet value = Quantity(1,computed).converted(seconds)\n",
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "name": "medium",
+      "checks": [
+        {
+          "name": "medium_wrong_type",
+          "source": "let m = Medium(\"air\", 0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "medium_property_mutation",
+          "source": "var m = Medium(1, 0)\nm.density = -1\n",
+          "exit_code": 1,
+          "stderr_pattern": "Assignment requires a mutable var binding"
+        },
+        {
+          "name": "medium_wrong_velocity",
+          "source": "let m = Medium.air()\nlet f = m.dragForce(Vec2(1, 0), 0.47, 0.01)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "medium_wrong_stokes_radius",
+          "source": "let m = Medium.air()\nlet f = m.stokesDrag(Vec3(1, 0, 0), \"large\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        }
+      ]
+    },
+    {
+      "name": "material",
+      "checks": [
+        {
+          "name": "immutable",
+          "source": "var material = Material(1000,0.2,0.6)\nmaterial.friction = -1\n",
+          "exit_code": 1,
+          "stderr_pattern": "Assignment requires a mutable var binding"
+        }
+      ]
+    },
+    {
+      "name": "submersion",
+      "checks": [
+        {
+          "name": "submersion_wrong_type",
+          "source": "let s = Submersion.sphere(\"large\", 0)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        },
+        {
+          "name": "submersion_property_mutation",
+          "source": "var s = Submersion.sphere(2, 0)\ns.volume = 1\n",
+          "exit_code": 1,
+          "stderr_pattern": "Assignment requires a mutable var binding"
+        }
+      ]
+    },
+    {
+      "name": "series_values_types",
+      "checks": [
+        {
+          "name": "wrong",
+          "source": "func analyze():\n    let values = Series.fromValues([1.0],Unit(0,0,0,0,0,0,0,1,\"1\"),\"x\")\n    let read = values.values(0.5,1)\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        }
+      ]
+    },
+    {
+      "name": "series_quantile_types",
+      "checks": [
+        {
+          "name": "wrong",
+          "source": "func analyze():\n    let values = Series.fromValues([1.0],Unit(0,0,0,0,0,0,0,1,\"1\"),\"x\")\n    let read = values.quantile(\"half\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        }
+      ]
+    },
+    {
+      "name": "export_columns_types",
+      "checks": [
+        {
+          "name": "wrong",
+          "source": "func analyze():\n    Series.exportColumns([1],\"bad\")\n",
+          "exit_code": 1,
+          "stderr_pattern": "Expression type does not match required type"
+        }
+      ]
     }
   ],
   "programs": [
@@ -4266,6 +4494,70 @@
       "source": "tests/fixtures/language/attempt_module.phys",
       "mode": "--emit-experiment",
       "harness": "tests/test_language_attempt_module.c"
+    },
+    {
+      "name": "material_invalid",
+      "source": "tests/fixtures/language/material_invalid.phys",
+      "exit_code": 70,
+      "stderr_pattern": "material_invalid\\.phys:1:[0-9]+: runtime error: Material density, restitution or friction is invalid"
+    },
+    {
+      "name": "submersion_invalid_radius",
+      "source": "tests/fixtures/language/submersion_invalid_radius.phys",
+      "exit_code": 70,
+      "stderr_pattern": "submersion_invalid.*Sphere submersion"
+    },
+    {
+      "name": "submersion_invalid_range",
+      "source": "tests/fixtures/language/submersion_invalid_range.phys",
+      "exit_code": 70,
+      "stderr_pattern": "submersion_invalid.*Sphere submersion"
+    },
+    {
+      "name": "quantity_operator_error",
+      "source": "tests/fixtures/language/quantity_operator_error.phys",
+      "exit_code": 70,
+      "stderr_pattern": "quantity_operator_error\\.phys:5:[0-9]+: runtime error: Invalid quantity operation"
+    },
+    {
+      "name": "quantity_scalar_error",
+      "source": "tests/fixtures/language/quantity_scalar_error.phys",
+      "exit_code": 70,
+      "stderr_pattern": "quantity_scalar_error\\.phys:2:[0-9]+: runtime error: Division by zero"
+    },
+    {
+      "name": "medium_invalid_density",
+      "source": "tests/fixtures/language/medium_invalid_density.phys",
+      "exit_code": 70,
+      "stderr_pattern": "medium_invalid_density\\.phys:[0-9]+:[0-9]+: runtime error: Medium.density.and.viscosity"
+    },
+    {
+      "name": "medium_invalid_drag",
+      "source": "tests/fixtures/language/medium_invalid_drag.phys",
+      "exit_code": 70,
+      "stderr_pattern": "medium_invalid_drag\\.phys:[0-9]+:[0-9]+: runtime error: Invalid.medium.drag.parameters"
+    },
+    {
+      "name": "medium_invalid_stokes",
+      "source": "tests/fixtures/language/medium_invalid_stokes.phys",
+      "exit_code": 70,
+      "stderr_pattern": "medium_invalid_stokes\\.phys:[0-9]+:[0-9]+: runtime error: Invalid.force.parameters"
+    },
+    {
+      "name": "quantity_operators_runtime",
+      "source": "tests/fixtures/language/quantity_operators.phys"
+    },
+    {
+      "name": "medium_values_runtime",
+      "source": "tests/fixtures/language/medium_values.phys"
+    },
+    {
+      "name": "material_values_runtime",
+      "source": "tests/fixtures/language/material_values.phys"
+    },
+    {
+      "name": "submersion_values_runtime",
+      "source": "tests/fixtures/language/submersion_values.phys"
     }
   ],
   "workflows": [
@@ -4316,6 +4608,154 @@
             "report.psreport"
           ],
           "timeout": 20
+        }
+      ]
+    },
+    {
+      "name": "series_values",
+      "modules": [
+        {
+          "name": "valid",
+          "source": "tests/fixtures/language/analysis_series_values.phys",
+          "mode": "--emit-analysis"
+        },
+        {
+          "name": "invalid",
+          "source": "tests/fixtures/language/analysis_series_values_error.phys",
+          "mode": "--emit-analysis"
+        }
+      ],
+      "steps": [
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{valid}",
+            "--runs",
+            "{work}/valid"
+          ],
+          "timeout": 30,
+          "stderr": "",
+          "files": [
+            "valid.psreport"
+          ]
+        },
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{invalid}",
+            "--runs",
+            "{work}/invalid"
+          ],
+          "timeout": 30,
+          "exit_code": 5,
+          "stderr_pattern": "analysis_series_values_error\\.phys:5:[0-9]+: runtime error: Invalid argument"
+        }
+      ]
+    },
+    {
+      "name": "series_quantile",
+      "modules": [
+        {
+          "name": "valid",
+          "source": "tests/fixtures/language/analysis_series_quantile.phys",
+          "mode": "--emit-analysis"
+        },
+        {
+          "name": "invalid",
+          "source": "tests/fixtures/language/analysis_series_quantile_error.phys",
+          "mode": "--emit-analysis"
+        }
+      ],
+      "steps": [
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{valid}",
+            "--runs",
+            "{work}/valid"
+          ],
+          "timeout": 30,
+          "stderr": "",
+          "files": [
+            "valid.psreport"
+          ]
+        },
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{invalid}",
+            "--runs",
+            "{work}/invalid"
+          ],
+          "timeout": 30,
+          "exit_code": 5,
+          "stderr_pattern": "analysis_series_quantile_error\\.phys:5:[0-9]+: runtime error: Invalid argument"
+        }
+      ]
+    },
+    {
+      "name": "export_columns",
+      "modules": [
+        {
+          "name": "valid",
+          "source": "tests/fixtures/language/analysis_export_columns.phys",
+          "mode": "--emit-analysis"
+        },
+        {
+          "name": "invalid",
+          "source": "tests/fixtures/language/analysis_export_columns_error.phys",
+          "mode": "--emit-analysis"
+        },
+        {
+          "name": "unaligned",
+          "source": "tests/fixtures/language/analysis_export_columns_unaligned.phys",
+          "mode": "--emit-analysis"
+        }
+      ],
+      "steps": [
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{valid}",
+            "--runs",
+            "{work}/report"
+          ],
+          "timeout": 30,
+          "stderr": "",
+          "files": [
+            "report.psreport"
+          ],
+          "file_contents": {
+            "report-three.csv": "\"time [s]\",\"distance [m]\",\"speed [m s^-1]\"\n0,0,1\n1,2,2\n2,5,3\n"
+          }
+        },
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{invalid}",
+            "--runs",
+            "{work}/invalid"
+          ],
+          "timeout": 30,
+          "exit_code": 5,
+          "stderr_pattern": "analysis_export_columns_error\\.phys:3:[0-9]+: runtime error: Invalid argument",
+          "absent_files": [
+            "invalid-empty.csv"
+          ]
+        },
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{unaligned}",
+            "--runs",
+            "{work}/unaligned"
+          ],
+          "timeout": 30,
+          "exit_code": 5,
+          "stderr_pattern": "analysis_export_columns_unaligned\\.phys:6:[0-9]+: runtime error: Invalid argument",
+          "absent_files": [
+            "unaligned-unaligned.csv"
+          ]
         }
       ]
     }

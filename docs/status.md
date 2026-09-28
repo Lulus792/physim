@@ -87,9 +87,8 @@ Ausgabedateien. Damit umfasst der direkte Katalog 152 Tests, davon 142 ohne SDL.
 Alle 108 Sprachtests bestehen lokal mit MSVC Debug und Clang Release; alle 100
 betroffenen CTest-Prüfungen bestehen ebenfalls. Der Läufertest prüft außerdem,
 dass Emissions-, Build-, Prozessfehler und fehlende Dateien Folgeschritte verhindern.
-Dieser Stand besteht im direkten CI-Schritt unter Linux mit GCC/Clang, auf macOS
-mit Apple Silicon sowie unter Windows mit MSVC Debug und ClangCL Debug/Release.
-MSVC Release und macOS Intel sind zum dokumentierten Prüfzeitpunkt noch offen.
+Dieser Stand besteht inzwischen im direkten CI-Schritt aller acht
+Plattformkombinationen zum Commit `0a937f8`.
 
 Weitere 16 Gruppen übernehmen Kontrollfluss, optionale Werte, Enums, verzögerte
 Initialisierung, Unicode, Zahlkonvertierung und Ganzzahlfehler in den direkten Läufer.
@@ -100,7 +99,20 @@ Byteprüfung mehrzeiliger Strings vergleicht weiterhin das erste erzeugte Litera
 ein späteres passendes Literal kann ein falsches erstes Ergebnis nicht verdecken.
 Der direkte Katalog umfasst jetzt 200 Tests, davon 190 ohne SDL. Alle 156 Sprachtests
 bestehen lokal mit MSVC Debug und Clang Release, ebenso die 147 zugehörigen
-CTest-Prüfungen. Der CI-Nachweis dieser Erweiterung steht noch aus.
+CTest-Prüfungen. Der direkte CI-Schritt zum Commit `d7fb0b0` besteht auf Linux
+mit GCC/Clang, beiden macOS-Architekturen sowie Windows mit MSVC Debug und
+ClangCL Debug/Release; MSVC Release ist zum Prüfzeitpunkt noch offen.
+
+Physikalische Einheiten, Materialien, Medien und Kugelauftrieb werden jetzt
+ebenfalls direkt geprüft, einschließlich statischer Dimensionsfehler und
+Quelldiagnosen bei ungültigen Laufzeitwerten. Drei weitere Analyseabläufe prüfen
+Reihenwerte, Quantile und CSV-Spalten. Exportprüfungen vergleichen den vollständigen
+CSV-Inhalt und verlangen, dass abgelehnte Exporte keine CSV-Datei anlegen.
+Der direkte Katalog enthält jetzt 222 Tests, davon 212 ohne SDL. Alle 178 Sprachtests
+bestehen lokal mit MSVC Debug und Clang Release; die 163 zugehörigen CTest-Prüfungen
+bestehen ebenfalls. Der Läufertest erkennt falsche Inhalte, ungültiges UTF-8,
+fehlende Dateien und unerwünschte Ausgaben. Der CI-Nachweis dieser Erweiterung
+steht noch aus.
 
 | Bereich | Implementiert | Noch offen |
 | --- | --- | --- |
