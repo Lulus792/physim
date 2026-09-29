@@ -46,8 +46,6 @@ def main():
     root = Path(__file__).resolve().parent.parent
     sources = [root / "tools/build.py", root / "tools/benchmark_build.h",
                root / "tools/ui_benchmark.c", Path(__file__).resolve()]
-    if (root / "CMakeLists.txt").is_file():
-        sources.append(root / "CMakeLists.txt")
     metadata["working_tree_source_sha256"] = {
         path.relative_to(root).as_posix(): digest(path) for path in sorted(
             sources

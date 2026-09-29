@@ -12,8 +12,8 @@ Lege in der App ein **Pendel · Physim-Sprache**-Projekt in einem neuen Ordner a
 und wähle für die Auswertung ebenfalls **Physim-Sprache**. Ersetze den gesamten
 Inhalt von `main.phys` und `analysis.phys` durch die folgenden beiden Beispiele.
 Die Originalquellen liegen unter `examples/documentation/language_main.phys`
-und `examples/documentation/language_analysis.phys`. Die vom Projekt erzeugte
-CMake-Datei übersetzt beide Dateien nativ; du musst keinen C-Code schreiben.
+und `examples/documentation/language_analysis.phys`. Physim pflegt die
+`physim.project` und baut beide Dateien mit F5 nativ; du musst keinen C-Code schreiben.
 
 ## Experimentcode
 

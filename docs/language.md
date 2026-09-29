@@ -19,8 +19,8 @@ Diagramm und Fehlerdiagnose dient das [ausführbar geprüfte Tutorial](language-
 
 Die Sprache bietet einen vollständigen zweiten Zugang zu Experimenten und
 Auswertung. Statische Typprüfung erfolgt vor nativer Ausführung. Der eigene
-Compiler wird in C17 geschrieben; sein erstes Backend erzeugt C17 und
-übersetzt dieses über CMake zu nativen eigenständigen Programmen und ersten
+Compiler wird in C17 geschrieben; sein erstes Backend erzeugt C17. Der direkte
+Build übersetzt dieses zu nativen eigenständigen Programmen sowie
 Experiment- und Analysemodulen. Die eigene
 Grammatik und Typprüfung sind unabhängig vom C-Compiler. Physik, Messdaten und
 Berichte verwenden dieselbe Bibliothek und ABI wie C-Projekte.
@@ -516,12 +516,11 @@ Analysemodule verwenden denselben Importmechanismus; Einstiegscallbacks werden
 nur in der als Einstieg angegebenen Datei gesucht.
 
 `physimc --deps quelle.phys` listet die geladenen Dateien einmalig auf; auch
-`--deps` akzeptiert `--module-path`. In CMake können alle drei Sprachfunktionen
-`MODULE_PATHS verzeichnis1 verzeichnis2` nach dem Quellpfad erhalten. Die
-CMake-Funktionen `physim_add_program`, `physim_add_experiment` und
-`physim_add_analysis` lösen einen Neubau aus, wenn eine `.phys`-Datei im
-Quellverzeichnis, einem Unterordner oder einem angegebenen Modulverzeichnis
-verändert wird. Der Compiler begrenzt
+`--deps` akzeptiert `--module-path`, ebenso alle drei Ausgabearten
+`--emit-c`, `--emit-experiment` und `--emit-analysis`. In App-Projekten löst der
+Compiler relative Importe ausgehend von den Quelldateien auf. `physim-build`
+prüft und übersetzt sie bei jedem Build erneut; der Vergleich des vorverarbeiteten
+C-Codes entscheidet anschließend über den nötigen C-Neubau. Der Compiler begrenzt
 alle Quellen zusammen auf 1 MiB, alle AST-Knoten zusammen auf 65.536 und den
 Importgraphen auf 128 Dateien.
 [Das Modulbeispiel](../examples/language/modules/main.phys) enthält einen
@@ -2179,9 +2178,9 @@ verarbeiten Laufdateien beider Sprachen.
 
 ## Erste Analysemodule
 
-`physimc --emit-analysis analysis.phys` erzeugt ein natives Analysemodul mit
-`analyze() -> Void` als Einstieg. `physim_add_analysis(ziel analysis.phys)` baut
-es über CMake. Beispiel: `examples/language/analysis.phys`. Die App kann diese
+`physimc --emit-analysis analysis.phys` erzeugt C17 für ein Analysemodul mit
+`analyze() -> Void` als Einstieg. `physim-build` kompiliert es zum nativen Modul.
+Beispiel: `examples/language/analysis.phys`. Die App kann diese
 Vorlage beim Anlegen als `analysis.phys` übernehmen und über den Analyseeditor bauen.
 
 ```text

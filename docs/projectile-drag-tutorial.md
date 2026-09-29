@@ -294,8 +294,8 @@ func analyze():
 
 ## Prüfen und Grenzen
 
-`ctest --test-dir build-language -C Debug -R language_projectile_drag_parity
---output-on-failure` startet beide Experimente im echten Runner. Der Test
+`python3 tools/build.py --no-app --test --test-filter language_projectile_drag_parity`
+startet beide Experimente im echten Runner (Windows: `python`). Der Test
 vergleicht 201 gespeicherte Zeilen und alle fünf Kanäle, prüft Energieabnahme,
 Szenenobjekte, Reset und beide Analysen gegen den direkt gemessenen
 Geschwindigkeitskanal. Der Quellabgleich

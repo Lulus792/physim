@@ -1,7 +1,0 @@
-set(PHYSIM_LANGUAGE_CASE_GROUP delayed_initialization)
-include("${CMAKE_CURRENT_LIST_DIR}/check_language_corpus.cmake")
-physim_check_language_program(delayed_initialization_error "${PROGRAM}")
-physim_check_language_program(delayed_global_error "${PROGRAM_GLOBAL}")
-physim_check_language_program(delayed_compound_error "${PROGRAM_COMPOUND}")
-physim_check_language_program(delayed_field_error "${PROGRAM_FIELD}")
-physim_check_language_program(delayed_capture_error "${PROGRAM_CAPTURE}")

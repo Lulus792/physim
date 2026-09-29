@@ -298,7 +298,7 @@ python3 tools/build.py --config Debug --sdl "$PWD/build-sdl-install" --test-disp
 ```
 
 Ubuntu 24.04 mit GCC und Clang
-hat Build, 276 Tests ohne Fenster, 35 Grafik-/Fenstertests unter Xvfb/Mesa, das
+hat den direkten Build, 493 Tests ohne Fenster, 35 Grafik-/Fenstertests unter Xvfb/Mesa, das
 installierte SDK und alle acht vollständigen C-App-Abläufe bestanden.
 [Prüfstand und verbleibende Plattformgrenzen](docs/platform-validation.md).
 
@@ -391,8 +391,10 @@ Die Werkzeuge überschreiben keine vorhandenen SDK- oder App-Ordner.
 Das Paket wird lokal ad hoc signiert;
 eine Apple-Notarisierung für die öffentliche Verteilung ist noch offen.
 
-macOS 15 auf Apple Silicon und Intel hat jeweils 311 CTest-Prüfungen, das
-verschobene SDK und acht vollständige C-App-Abläufe bestanden. Die `.app`-Pakete
+macOS 15 auf Apple Silicon und Intel hat den direkten Build mit jeweils 493 Tests
+ohne Fenster, 35 Grafik-/Fenstertests und das verschobene SDK bestanden.
+Außerdem bestehen 482 SDL-freie Sanitizer-Tests mit LLVM 20 und LLD.
+Die acht vollständigen C-App-Abläufe sind ebenfalls geprüft. Die `.app`-Pakete
 sind zusätzlich nach dem Verschieben mit C- und Physim-Projekten geprüft.
 Nachweise, Downloads und verbleibende Abnahmen stehen in
 [Plattformprüfung](docs/platform-validation.md).
@@ -403,13 +405,14 @@ Speichern, Suchen und Editorbefehle.
 
 ## Direkter Build ohne CMake
 
-Ein zusätzlicher [direkter Buildweg](docs/build.md#physim-direkt-ohne-cmake-bauen)
+Der [direkte Buildweg](docs/build.md#physim-direkt-ohne-cmake-bauen)
 baut Physim selbst einschließlich Oberfläche über Python und den C17-Compiler,
 ohne CMake oder Ninja für Physim aufzurufen. Er verwendet eine vorhandene
 SDL-Installation. Auch [SDK- und App-Pakete](docs/build.md#sdk-und-portable-pakete-ohne-cmake)
 lassen sich direkt erzeugen. Der direkte Testkatalog umfasst auch die Fenster-
-und Benchmark-Prüfungen. Die bisherigen CMake-Abläufe bleiben vorerst für den
-Vergleich sowie ihre Sanitizer- und SDK-Prüfungen verfügbar.
+und Benchmark-Prüfungen. Die CI verwendet ihn auch für Sanitizer und SDK-Prüfungen.
+Die früheren CMake-Builddateien und Testskripte sind aus dem Repository entfernt.
+Auch Nutzerprojekte und SDK-Pakete benötigen diese Dateien nicht mehr.
 
 Nach der Installation der Werkzeuge und SDL aus der jeweiligen Plattformanleitung
 im Physim-Repository ausführen. Zusätzlich ist Python ab 3.10 erforderlich;

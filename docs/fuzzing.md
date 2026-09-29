@@ -12,7 +12,7 @@ Physim hat zwei verschiedene Testwege:
 
 - Die drei normalen Tests `protocol_mutations`, `run_mutations` und
   `report_mutations` prüfen festgelegte, reproduzierbare Mutationen und
-  Invarianten. Sie laufen über den direkten Builder und weiterhin über CTest.
+  Invarianten. Sie laufen über den direkten Builder.
   Dafür ist keine libFuzzer-Laufzeit nötig.
 - `tools/build.py --fuzzer` baut `physim-protocol-libfuzzer`. Clang instrumentiert
   den IPC-Decoder und eine separate Kopie der Kernbibliothek mit libFuzzer und
@@ -89,20 +89,34 @@ wies Apples Linker die instrumentierten Objekte mit `invalid r_symbolnum=1` ab.
 Der direkte Fuzzer-Build verwendet dort nun LLVMs `ld64.lld`. Im
 [Lauf zu `f6cedbf`](https://github.com/PhysicSimulator/physim/actions/runs/36494602802)
 bestehen beide Mac-Architekturen die vollständige Kampagnenprüfung.
-Der bisherige CMake-Einstieg
-`PHYSIM_BUILD_FUZZERS=ON` bleibt bis zum Abschluss des Vergleichs verfügbar.
+
+## Die drei Mutationsprüfungen starten
+
+Im Repository-Verzeichnis ausführen:
+
+```sh
+python3 tools/build.py --no-app --config Release --test --test-filter '*_mutations'
+```
+
+Unter Windows `python` verwenden. Das baut die drei Testprogramme und führt die
+vollständigen Kampagnen aus. SDL und CMake werden nicht benötigt. Jeder Aufruf
+legt einen neuen Ergebnisordner unter `build/native/Release/test-results/run-<Kennung>/`
+an und nennt am Ende dessen genauen Pfad. `results.json` enthält Status und
+Diagnosen; jeder Test hat einen eigenen Unterordner. Bei einem Fehler bleiben
+dort die letzten Eingaben erhalten. `<Kennung>` in den folgenden Beispielen
+durch die Kennung dieses Laufs ersetzen. Die Replay-Aufrufe werden aus dem
+jeweiligen Testordner gestartet, damit auch ihre Arbeitsdateien unter `build/` bleiben.
 
 ## IPC-Mutationen
 
-`physim-protocol-fuzz` führt eine deterministische IPC-Kampagne ohne externe
+`physim-test-protocol_mutations` führt eine deterministische IPC-Kampagne ohne externe
 Fuzzing-Laufzeit aus. Sie erzeugt einen gültigen Snapshot mit allen Kanal-,
 Objekt- und Punktplätzen sowie UTF-8-Label und Polyline und verpackt ihn als Frame.
 Für beide Eingaben prüft sie alle Kürzungen und Einzelbitänderungen sowie je
 20.000 Vierbyte-Mutationen mit festem Seed `0x70687973`.
 
 ```powershell
-cmake --build build --config Release --target physim-protocol-fuzz
-ctest --test-dir build -C Release --output-on-failure -R protocol_mutations
+python tools/build.py --no-app --config Release --test --test-filter protocol_mutations
 ```
 
 Die aktuelle Kampagne umfasst 183.462 Eingaben. Sie prüft:
@@ -116,28 +130,32 @@ Die aktuelle Kampagne umfasst 183.462 Eingaben. Sie prüft:
   einschließlich `UINT32_MAX` und des Additionsüberlaufs beim 20-Byte-Header.
 
 Bei einem verletzten Harness-Invariant wird vor dem Abbruch die aktuelle Eingabe
-als `protocol-failure.bin` im Arbeitsordner gespeichert. CTest verwendet dafür den
-eigenen Unterordner `build/protocol-fuzz`. Ein Absturz im Decoder kann vor dieser
+als `protocol-failure.bin` im Unterordner `protocol_mutations` des Ergebnisordners
+gespeichert. Ein Absturz im Decoder kann vor dieser
 Speicherung auftreten; Sanitizer-Ausgaben und der feste Seed dienen dann zur
 Reproduktion der gesamten Kampagne. Eine gespeicherte Eingabe lässt sich direkt
 wiederholen:
 
 ```powershell
-build/bin/physim-protocol-fuzz.exe build/protocol-fuzz/protocol-failure.bin
+Push-Location "build/native/Release/test-results/run-<Kennung>/protocol_mutations"
+try { & ../../../bin/physim-test-protocol_mutations.exe protocol-failure.bin }
+finally { Pop-Location }
 ```
+
+Unter Linux/macOS im selben Testordner
+`../../../bin/physim-test-protocol_mutations protocol-failure.bin` ausführen.
 
 Das erste Byte wählt den Decoder: ungerade für Snapshot, gerade für Frame. Die
 restlichen Bytes sind die Eingabe. Die gleiche Harness-Funktion heißt
 `LLVMFuzzerTestOneInput`; das vorhandene Ziel `physim-protocol-libfuzzer` verwendet
 sie ohne `PS_FUZZ_STANDALONE`. Build und Kampagnenstatus sind oben getrennt beschrieben.
 
-Die Tests laufen durch ihre CTest-Registrierung auch in der bestehenden CI.
-Lokal bestehen MSVC Release, Clang Debug und AddressSanitizer; dies ist keine
-Linux-Ausführungsabnahme.
+Die drei Kampagnen gehören zum direkten CI-Testkatalog. Die ausgeführten
+Plattform- und Sanitizer-Nachweise stehen in [Plattformprüfung](platform-validation.md).
 
 ## Gespeicherte Läufe
 
-CTest `run_mutations` baut eine gültige Datei mit drei Kanälen und drei Messpunkten
+Die Prüfung `run_mutations` baut eine gültige Datei mit drei Kanälen und drei Messpunkten
 über die öffentliche Writer-API auf. Die Kampagne prüft alle Kürzungen und
 Einzelbitänderungen, extreme Chunklängen sowie Nutzdatenänderungen mit neu
 berechneter CRC. Letztere erreichen die semantischen Prüfungen hinter der
@@ -145,8 +163,7 @@ Prüfsummenkontrolle. Ein gezielt injizierter NaN im letzten Kanal sichert ab, d
 ein abgewiesener Messpunkt weder Zeit noch frühere Kanalwerte in die Ausgabe schreibt.
 
 ```powershell
-cmake --build build --config Release --target physim-run-fuzz
-ctest --test-dir build -C Release --output-on-failure -R run_mutations
+python tools/build.py --no-app --config Release --test --test-filter run_mutations
 ```
 
 Jede Mutation wird über eine echte Datei durch `ps_run_open` und `ps_run_next`
@@ -155,14 +172,19 @@ eins erhöhen. Fehler/EOF erhalten sämtliche Ausgabeparameter; Finalisierung un
 Zähler werden geprüft. Datei-Handles müssen nach Ablehnung oder Schließen frei sein.
 Der Test ist dadurch langsamer als die IPC-Kampagne und hat ein 180-Sekunden-Limit.
 
-Bei einem Fehler bleibt `build/run-fuzz/run-mutation.psrun` erhalten, auch bei
+Bei einem Fehler bleibt `run_mutations/run-mutation.psrun` im Ergebnisordner erhalten, auch bei
 einem Decoder-Absturz. Der Harness meldet die deterministische Fallnummer.
-Eine Eingabe von höchstens 8192 Bytes kann in einem separaten Arbeitsordner so
+Eine Eingabe von höchstens 8192 Bytes kann im Testordner so
 wiederholt werden:
 
 ```powershell
-build/bin/physim-run-fuzz.exe --replay build/run-fuzz/run-mutation.psrun
+Push-Location "build/native/Release/test-results/run-<Kennung>/run_mutations"
+try { & ../../../bin/physim-test-run_mutations.exe --replay run-mutation.psrun }
+finally { Pop-Location }
 ```
+
+Unter Linux/macOS im selben Testordner
+`../../../bin/physim-test-run_mutations --replay run-mutation.psrun` ausführen.
 
 Der Replay liest die Eingabe vollständig, bevor er seine Arbeitsdatei schreibt.
 Die Kampagne ist begrenzt und ersetzt weder große Datensatzreferenzen noch
@@ -170,7 +192,7 @@ abdeckungsgeführtes Langzeit-Fuzzing. Die Dateiformatversion bleibt unveränder
 
 ## Analyseberichte
 
-CTest `report_mutations` erzeugt einen Bericht mit UTF-8-Titel, Provenienz,
+Die Prüfung `report_mutations` erzeugt einen Bericht mit UTF-8-Titel, Provenienz,
 Linien-/Punkt-/Histogrammkurven und einer Tabelle über die öffentliche API.
 Alle Kürzungen und Einzelbitänderungen ohne CRC-Anpassung müssen abgewiesen werden.
 Anschließend werden alle Nutzdatenbits erneut einzeln verändert, diesmal mit
@@ -178,8 +200,7 @@ passender Prüfsumme, um die Inhaltsprüfung zu erreichen. Extreme Größenangab
 ein zusätzliches Byte nach dem Bericht werden ebenfalls geprüft.
 
 ```powershell
-cmake --build build --config Release --target physim-report-fuzz
-ctest --test-dir build -C Release --output-on-failure -R report_mutations
+python tools/build.py --no-app --config Release --test --test-filter report_mutations
 ```
 
 Akzeptierte Berichte werden vollständig über die öffentlichen Lese- und
@@ -189,13 +210,18 @@ und begrenzt den Ladebereich auf 32 MiB. Nach jedem Fall dürfen keine Blöcke �
 sein. Zusätzlich wird beim gültigen Ausgangsbericht jede Allokationsstelle einzeln
 zum Scheitern gebracht; auch dabei müssen Ausgabe und Speicherbereinigung stimmen.
 
-CTest verwendet `build/report-fuzz` und ein 300-Sekunden-Limit. Die zuletzt geprüfte
-Eingabe bleibt bei einem Fehler als `report-mutation.psreport` erhalten. Reproduktion
-für Eingaben bis 8192 Bytes, am besten in einem eigenen Arbeitsordner:
+Der direkte Test verwendet den Unterordner `report_mutations` im Ergebnisordner
+und ein 300-Sekunden-Limit. Die zuletzt geprüfte Eingabe bleibt bei einem Fehler
+als `report-mutation.psreport` erhalten. Reproduktion für Eingaben bis 8192 Bytes:
 
 ```powershell
-build/bin/physim-report-fuzz.exe --replay build/report-fuzz/report-mutation.psreport
+Push-Location "build/native/Release/test-results/run-<Kennung>/report_mutations"
+try { & ../../../bin/physim-test-report_mutations.exe --replay report-mutation.psreport }
+finally { Pop-Location }
 ```
+
+Unter Linux/macOS im selben Testordner
+`../../../bin/physim-test-report_mutations --replay report-mutation.psreport` ausführen.
 
 Diese Kampagne prüft einen begrenzten Ausgangsbericht mit allen Kurvenarten und
 Tabellen. Maximale Berichtsgrößen, lange Zufallssequenzen und abdeckungsgeführtes

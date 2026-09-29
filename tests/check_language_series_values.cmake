@@ -1,7 +1,0 @@
-set(PHYSIM_LANGUAGE_CASE_GROUP series_values_types)
-include("${CMAKE_CURRENT_LIST_DIR}/check_language_corpus.cmake")
-set(PHYSIM_MODULE_valid "${MODULE}")
-set(PHYSIM_MODULE_invalid "${ERROR_MODULE}")
-set(ANALYSIS_RUNNER "${RUNNER}")
-include("${CMAKE_CURRENT_LIST_DIR}/check_language_workflow_corpus.cmake")
-physim_language_workflow(series_values "${WORK}")

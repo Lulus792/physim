@@ -1,9 +1,11 @@
 # ADR 001: Grundlage des ersten vertikalen Durchstichs
 
-Datum: 2026-09-16. Status: implementierte Ausgangsentscheidung.
+Datum: 2026-09-16. Status: implementierte Ausgangsentscheidung;
+Buildverwaltung am 2026-09-29 auf den direkten Builder umgestellt.
 
 - Lizenz: MIT, vom Projekteigentümer ausdrücklich gewählt.
-- Eigener Produktcode: C17. CMake und CI-Dateien sind Buildkonfiguration.
+- Eigener Produktcode: C17. Python verwaltet den Repository-Build und die Tests;
+  die CI-Dateien beschreiben deren Plattformausführung.
 - Windows-Basis: Windows 10 ab 1903 wegen UTF-8-Prozessmanifest, MSVC 2022.
 - Linux-Ziel: aktuelle glibc-Distributionen, GCC und Clang. Validierung über CI;
   eine lokale Linux-Laufzeit steht auf dem Entwicklungsrechner nicht bereit.
@@ -11,8 +13,9 @@ Datum: 2026-09-16. Status: implementierte Ausgangsentscheidung.
 - Renderer: Der ursprüngliche SDL-Renderer mit CPU-Projektion wurde durch
   OpenGL 3.3 Core ersetzt. UI und Szene teilen einen Kontext; Details, Tests
   und aktuelle Grenzen stehen in ADR 002.
-- Compiler: CMake erkennt MSVC/GCC/Clang; Experimentbuild läuft als separater
-  Hintergrundprozess mit Argumentliste. Die erste Distribution enthält keinen Compiler.
+- Compiler: Physim erkennt MSVC/GCC/Clang selbst; der Experimentbuild läuft als
+  separater Hintergrundprozess mit Argumentliste. Die erste Distribution enthält
+  den eigenen Sprachcompiler, benötigt aber einen installierten C17-Compiler.
 - Isolation: getrennte Prozesse, versionierte lokale Pipe-Kommunikation. Kein OS-Sandboxing.
 - Daten: little-endian, IEEE-754 Float64, append-only Chunks mit CRC32. Die Vorschau
   darf ausdünnen, der Runner schreibt jeden erfolgreichen Physikschritt.

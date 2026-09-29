@@ -265,9 +265,9 @@ genannten Werte erscheinen. Das Auswertungsdiagramm ist eine waagerechte
 Linie bei `2 m/s`; seine CSV enthält 201 Werte. In der Szene zeigt eine
 Kugel die Position, eine Linie die momentane Flugrichtung.
 
-Im Quellbaum prüft `ctest --test-dir build-language -C Debug -R
-documentation_vacuum_tutorial --output-on-failure` beide Experimente und
-beide Analysen gegen dieselben Gleichungen. Der Test kontrolliert außerdem
+Im Quellbaum prüft `python3 tools/build.py --no-app --test --test-filter
+documentation_vacuum_tutorial` beide Experimente und
+beide Analysen gegen dieselben Gleichungen (Windows: `python`). Der Test kontrolliert außerdem
 Reset, Szene, Kanalnamen, gespeicherte Läufe und Berichte. Ein Abweichen bei
 halbiertem Zeitschritt sollte hier nur Rundung sein; das Integrationsschema
 ist für konstante Beschleunigung exakt. Das Modell beendet den Flug **nicht**

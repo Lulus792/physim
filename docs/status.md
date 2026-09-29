@@ -31,8 +31,8 @@ Die Linux-/Mac-Prüfung schließt vollständige C- und Physim-App-Abläufe ein.
 [Nachweise und genaue Abdeckung](platform-validation.md#direkter-build-von-physim).
 Der direkte Testkatalog umfasst alle 528 übernommenen Prüfungen: 493 ohne Fenster
 und 35 Fenster-/Grafiktests. Ohne SDL bleiben 482 Prüfungen verfügbar. Die bisherigen
-Repository-Dateien für CMake bleiben noch zum abschließenden Vergleich erhalten.
-Die CI verwendet jetzt ausschließlich den direkten Physim-Build. Der SDL-Quellbuild
+Repository-Dateien für CMake sind entfernt. Die CI verwendet jetzt ausschließlich
+den direkten Physim-Build. Der SDL-Quellbuild
 verwendet weiterhin dessen eigenes Buildsystem.
 
 Der direkte Build unterstützt inzwischen auch Sanitizer. Lokal erkennt MSVC den
@@ -125,6 +125,18 @@ vollständige Prüfung einschließlich aller neun grafischen Abläufe unter
 `build/native/direct-only-verification/Native SDK ä sv58dunt`. Der direkte
 Release-Benchmark besteht mit 100.000 Samples und fünf Wiederholungen unter
 `build/native-ci-benchmark-results`. SDL verwendet weiterhin sein eigenes Buildsystem.
+
+Die 90 bisherigen Physim-CMake-Dateien sind jetzt entfernt: Root-Build,
+SDK-Anbindungen, Beispielbuilds und alte Testaufrufe. Testprogramme, Sprachquellen
+und die direkten JSON-Kataloge bleiben erhalten; der Katalog umfasst weiterhin
+528 Fälle. README, Tutorials, CRC- und Fuzzing-Anleitungen verwenden den direkten
+Builder und dessen tatsächliche Ausgabepfade. Die drei Replay-Aufrufe sind mit
+abgeschnittenen Eingaben aus ihren Testordnern geprüft; Arbeitsdateien bleiben
+unter `build/`. Drittanbieterquellen behalten ihre eigenen Builddateien.
+Nach der Entfernung bestehen lokal alle 493 Tests ohne Fenster mit MSVC Debug
+(`build/native/Debug/test-results/run-9wu8gqqs`) und alle 35 Grafik-/Fensterprüfungen
+mit MSVC Release (`build/native/Release/test-results/run-hxhqdkcm`), einschließlich
+der beiden Benchmark-Prüfer. Der CI-Nachweis des bereinigten Repositorys folgt.
 
 ## Bisherige Umsetzungsschritte des direkten Builders
 

@@ -46,8 +46,6 @@ def main():
     }
     root = Path(__file__).resolve().parent.parent
     sources = [root / "tools/build.py", Path(__file__).resolve()]
-    if (root / "CMakeLists.txt").is_file():
-        sources.append(root / "CMakeLists.txt")
     for folder in ("src", "include", "tools", "app", "runners", "tests"):
         sources.extend(p for p in (root / folder).rglob("*") if p.suffix in (".c", ".h"))
     metadata["working_tree_source_sha256"] = {

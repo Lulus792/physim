@@ -69,8 +69,11 @@ Rohdaten, Metadaten und Vergleich:
 [CRC-Benchmark](benchmarks/2026-09-19/crc/crc-summary.json).
 
 ```powershell
-cmake --build build --config Release --target physim-crc-tests
-ctest --test-dir build -C Release -R crc --output-on-failure
-build/bin/physim-crc-tests.exe --benchmark
-python tools/benchmark.py build/bin/physim-benchmark.exe --output build/crc-results
+python tools/build.py --no-app --config Release --benchmarks --test --test-filter "crc*"
+.\build\native\Release\bin\physim-test-crc.exe --benchmark
+python tools/benchmark.py build/native/Release/bin/physim-benchmark.exe --output build/crc-results
 ```
+
+Unter Linux/macOS `python3` verwenden und die Endung `.exe` weglassen; der
+CRC-Aufruf lautet `./build/native/Release/bin/physim-test-crc --benchmark`.
+Die Tests und Benchmarks benötigen weder SDL noch CMake.

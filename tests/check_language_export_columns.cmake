@@ -1,8 +1,0 @@
-set(PHYSIM_LANGUAGE_CASE_GROUP export_columns_types)
-include("${CMAKE_CURRENT_LIST_DIR}/check_language_corpus.cmake")
-set(PHYSIM_MODULE_valid "${MODULE}")
-set(PHYSIM_MODULE_invalid "${ERROR_MODULE}")
-set(ANALYSIS_RUNNER "${RUNNER}")
-set(PHYSIM_MODULE_unaligned "${UNALIGNED_MODULE}")
-include("${CMAKE_CURRENT_LIST_DIR}/check_language_workflow_corpus.cmake")
-physim_language_workflow(export_columns "${WORK}")

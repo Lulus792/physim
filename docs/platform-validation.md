@@ -332,9 +332,13 @@ umgestellt. Die 528 Tests, Sanitizer, SDK-Prüfung, Fuzzer und Benchmarks bleibe
 enthalten. Die SDK-Grafikprüfung übernimmt zusätzlich alle acht C-Vorlagen;
 Linux prüft sie auch mit der instrumentierten App. Mac-Pakete entstehen nur aus
 dem nativen SDK und werden nach dem Signieren verschoben und erneut geprüft.
-Neue SDKs enthalten keine CMake-Builddateien. Der Nachweis dieses umgestellten
-Gesamtablaufs steht noch aus; die alten Repository-Builddateien bleiben bis dahin
-als Vergleich erhalten. SDL wird in der CI weiterhin mit seinem CMake-Build gebaut.
+Neue SDKs enthalten keine CMake-Builddateien. Die alten Repository-Builddateien
+und CMake-Testskripte sind entfernt; alle 528 Fälle bleiben im direkten Katalog.
+Der CI-Nachweis dieses bereinigten Gesamtablaufs steht noch aus.
+Lokal bestehen nach dem Entfernen der 90 Physim-CMake-Dateien alle 493 Prüfungen
+ohne Fenster mit MSVC Debug (`build/native/Debug/test-results/run-9wu8gqqs`) und
+alle 35 Grafikprüfungen mit MSVC Release (`build/native/Release/test-results/run-hxhqdkcm`).
+SDL wird in der CI weiterhin mit seinem CMake-Build gebaut.
 
 ## Weitere Änderungen prüfen
 

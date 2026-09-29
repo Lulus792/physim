@@ -115,8 +115,7 @@ erzeugten C-Code, Version, Größenbegrenzung und Abhängigkeitslisten. Die
 ausführbaren Fälle schließen 18 erwartete Laufzeitfehler und zwei geladene
 Experimentmodule mit Create-/Reset-/Step-/Scene-/Destroy-Prüfung ein. Das
 `attempt`-Modul prüft auch die Erholung nach einem Fehler. Der Katalog
-`tests/native_language_cases.json` enthält die gemeinsamen Erwartungen für den
-direkten Läufer und die verbleibenden CTest-Einstiegspunkte.
+`tests/native_language_cases.json` enthält die Erwartungen für den direkten Läufer.
 Vier weitere Abläufe bauen Experiment-/Analysemodule und führen sie mit den
 separaten Runnern aus. Neben Generics prüfen sie das Lesen von Datenreihen,
 Quantile und den Export mehrerer CSV-Spalten. Geprüft werden Rückgabecodes,
@@ -154,13 +153,12 @@ Abgelehnte Parameter dürfen keine Laufdateien oder Ergebnisordner anlegen.
 Jeder Ablauf erhält einen eigenen Arbeitsordner mit Leerzeichen und Umlaut.
 Buildfehler stoppen abhängige Schritte; Ergebnisberichte erfassen außerdem die
 Pfade und SHA-256-Prüfsummen aller verwendeten Programme und Module.
-Der verbleibende CTest-Einstieg verwendet dieselben Aufrufe und Erwartungen.
 Die Runner-Prüfungen schließen Handshake, Pause/Einzelschritt/Fortsetzen, falsche
 Modul-ABI, Abstürze, Endlosschleifen und das Beenden paralleler Kindprozesse ein.
 Weitere Referenzen vergleichen Energie und Periode des Pendels für RK4, RK45 und
 Verlet sowie abgeleitete Daten und Berichte. Vor jedem Vergleich erzeugt der
 jeweilige Ablauf seine Messdaten im eigenen Arbeitsordner. Gemeinsam genutzte
-CTest-Messdateien und ein gesonderter Bereinigungsschritt entfallen damit.
+Messdateien und ein gesonderter Bereinigungsschritt entfallen damit.
 Auch die C- und Physim-Beispiele aus der Dokumentation werden ausgeführt.
 
 Vier zusätzliche Prüfungen vergleichen elf Codeblöcke der Tutorials mit den
@@ -168,8 +166,7 @@ getesteten Quelldateien. Eine weitere kontrolliert die erzeugte API-Referenz.
 Der PNG-Ablauf erzeugt seine Bilder selbst und prüft deren dekodierte Pixel.
 Der Projektbuild-Test baut und startet C- und Physim-Projekte und prüft unveränderte
 Builds, Headeränderungen, Fehlererholung, die Buildsperre und verschobene Ordner.
-Diese Python-Prüfungen verwenden in beiden Buildwegen denselben Katalog; für
-die vollständige CTest-Suite muss Python ab 3.10 installiert sein.
+Diese Prüfungen verwenden denselben direkten Katalog und benötigen Python ab 3.10.
 
 ```sh
 # Nur die direkt unterstützten Sprachtests ausführen:
@@ -217,7 +214,7 @@ Jeder Ablauf erhält einen frischen Ordner mit Leerzeichen und Umlaut.
 `app-steps.json` enthält die einzelnen App-Aufrufe, Rückgabecodes und Ausgaben;
 Screenshots und gespeicherte Projekte bleiben daneben erhalten.
 Die bisherigen 13 CMake-Workflow-Skripte sind durch einen gemeinsamen Python-Prüfer
-ersetzt. Die CTest-Einstiegspunkte verwenden denselben Prüfer und Katalog.
+ersetzt. Die alten CMake-Einstiegspunkte sind entfernt.
 
 ### Ergebnisberichte
 
@@ -532,10 +529,10 @@ Nur in diesem Testmodus werden markierte Test-Mausereignisse verarbeitet;
 Desktop-Mausbewegungen und Fokusverlust verändern den Testeingang nicht.
 `physim --plot-test-noise <neuer-absoluter-ordner>` streut zusätzlich in jedem
 Frame fremde Mausbewegungen, Loslassen der Maustaste und Fokusverlust ein.
-CTest führt diesen vollständigen Ablauf als `plot_input_isolation` aus.
+Der direkte Katalog führt diesen vollständigen Ablauf als `plot_input_isolation` aus.
 Normale App-Eingaben und deren Fokusverlust-Behandlung bleiben unverändert.
-`png` prüft den PNG-Schreiber ohne Grafik. Nach CTest lassen sich beide Ergebnisse
-mit `python tests/verify_png.py <build-ordner> <plot-test-ordner>` unabhängig
+`png` prüft den PNG-Schreiber ohne Grafik. Nach dem Test lassen sich beide Ergebnisse
+mit `python tests/verify_png.py <png-testordner> <plot-testordner>` unabhängig
 mit Python-zlib und erwarteten Pixelwerten überprüfen; zusätzliche Python-Pakete
 sind für diesen Prüfschritt nicht nötig.
 
@@ -551,7 +548,7 @@ Fehler und starkem stdout-Verkehr mit Zeitlimit sowie die CLI-Option `--workers`
 baut die Unsicherheitsvorlage und prüft die Laufserie mit injizierten SDL-Klicks
 einschließlich Änderung der Parallelität per UI, Bericht, Anleitung, erneutem Start,
 Abbruch und Schließen während einer weiteren Serie; Screenshots liegen im Testprojekt.
-`batch_workflow` erzeugt dafür bei jeder CTest-Ausführung einen eigenen Projektordner.
+`batch_workflow` erzeugt dafür bei jeder Ausführung einen eigenen Projektordner.
 
 `tools\build-clang.cmd` baut die App direkt mit ClangCL und führt die Tests ohne
 Fenster aus. Es benötigt Python, SDL und die Visual-Studio-C++-Werkzeuge mit LLVM;

@@ -9,8 +9,8 @@ Es gibt keine Kräfte und keine Kollisionen; der Zeitschritt ist für dieses Mod
 
 Lege in der App ein **Pendel**-Projekt mit **C-Auswertung** in einem neuen Ordner an.
 Ersetze den gesamten Experimentcode durch das erste Beispiel und den gesamten
-Analysecode durch das zweite. Die erzeugte CMake-Datei übernimmt SDK-Pfade,
-Bibliothek und Modulnamen. Die gleichen Quellen liegen im SDK unter
+Analysecode durch das zweite. Physim pflegt die `physim.project`; der mitgelieferte
+Builder übernimmt SDK-Pfade, Bibliothek und Modulnamen. Die gleichen Quellen liegen im SDK unter
 `examples/documentation/main.c` und `examples/documentation/analysis.c`.
 
 Du musst dafür nur C-Funktionen, Strukturen und Zeiger kennen. Die benötigten
