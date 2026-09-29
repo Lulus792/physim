@@ -167,6 +167,18 @@ Die CI-Pakete sind Debug-Entwicklungsstände. Weitere macOS-Versionen, echte
 Mac-Grafikhardware und Installation auf einem frischen Mac bleiben separate
 Abnahmen; die gehosteten Grafiktests verwenden Apples Software Renderer.
 
+Eine zusätzliche Paketprüfung startet jetzt die verschobene `.app` über
+`/usr/bin/open -W -n -a`, also über macOS LaunchServices. Sie verwendet ein leeres
+Arbeitsverzeichnis, den Systempfad `/usr/bin:/bin:/usr/sbin:/sbin` und entfernt
+Entwickler-Vorgaben für Compiler, SDK und Bibliotheken aus der Startumgebung.
+Die bisherigen Paketprüfungen starteten direkt `Contents/MacOS/physim`.
+Der neue Prüfer verlangt für C und Physim einen vollständigen Oberflächenablauf,
+einen erfolgreichen Abschluss nach dem Aufräumen der App, gebaute Module,
+gespeicherte Messdaten/Berichte und Screenshots. Abschließend muss die Signatur
+des Pakets weiterhin gültig sein. Protokolle und Bilder werden unter
+`LaunchServices*` archiviert. Der tatsächliche macOS-Nachweis dieser neuen
+Startvariante steht noch aus; native macOS-Dateidialoge bleiben separat offen.
+
 ## Direkter Build von Physim
 
 Der Quellstand `7f05668` ergänzt `tools/build.py`. Im

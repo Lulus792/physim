@@ -353,6 +353,17 @@ Das `.app`-Paket enthält SDL und das SDK und wird lokal ad hoc signiert und gep
 Developer-ID-Signierung und Apple-Notarisierung bleiben offen. Das Paketskript
 übernimmt ausschließlich ein mit `tools/build.py --install` erzeugtes SDK.
 
+Den Start über macOS LaunchServices anschließend separat prüfen (die App vorher
+schließen; eine angemeldete grafische Sitzung ist erforderlich):
+
+```sh
+python3 tests/test_macos_app_launch.py --app build/Physim-native.app --work build/native
+```
+
+Dieser Prüfer öffnet das Paket über `open`, baut C- und Physim-Projekte mit
+Systemwerkzeugen und prüft Simulation, Analyse, gespeicherte Dateien sowie die
+unveränderte Signatur. Protokolle und Bilder liegen unter `build/native/LaunchServices*`.
+
 Die SDK-Prüfung kopiert und verschiebt das Paket in einen Pfad mit Leerzeichen
 und Umlaut. Sie prüft alle mitgelieferten Module, öffentliche Header einzeln,
 15 eigenständige Sprachprogramme und neu gebaute C-/Physim-Projekte samt echten

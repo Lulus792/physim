@@ -3672,5 +3672,7 @@ int main(int argc, char **argv) {
     ps_graphics_destroy(graphics);
     SDL_DestroyWindow(window);
     SDL_Quit();
+    if (self_test)
+        printf("APP TEST EXIT: %d\n", exit_code);
     return exit_code;
 }

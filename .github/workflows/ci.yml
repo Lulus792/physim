@@ -62,6 +62,8 @@ jobs:
           "build/native/Moved App ä/Physim.app/Contents/MacOS/physim" --self-test "$PWD/build/native/Bundled C ä" pendulum
           "build/native/Moved App ä/Physim.app/Contents/MacOS/physim" --self-test "$PWD/build/native/Bundled Language ä" language_full
           ditto -c -k --sequesterRsrc --keepParent "build/native/Moved App ä/Physim.app" "build/Physim-native-${{ matrix.runner }}.zip"
+      - name: Open packaged app through macOS LaunchServices
+        run: python3 tests/test_macos_app_launch.py --app "build/native/Moved App ä/Physim.app" --work build/native
       - name: Direct window and graphics tests
         if: ${{ !inputs.package_only }}
         run: python3 tools/build.py --compiler clang --test-display
@@ -95,6 +97,10 @@ jobs:
             build/native/Native SDK*/PASSED.txt
             build/native/Native SDK*/App */*.bmp
             build/native/Bundled*/*.bmp
+            build/native/LaunchServices*/**/*.log
+            build/native/LaunchServices*/launches.json
+            build/native/LaunchServices*/PASSED.txt
+            build/native/LaunchServices*/Project*/*.bmp
           if-no-files-found: ignore
   windows:
     if: ${{ !inputs.package_only }}

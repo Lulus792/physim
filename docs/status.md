@@ -205,6 +205,14 @@ erhält einen externen Zenity-Prüfer, einschließlich fehlendem Dialogtreiber;
 dessen Ausführung unter Debian und Ubuntu steht noch aus. Der Paketlauf zu
 `ae31aee` besteht bereits auf beiden Systemen mit installierter Zenity-Abhängigkeit.
 
+Die Mac-Paketprüfung erhält außerdem einen Start über LaunchServices (`open`)
+mit Systempfad und ohne Compiler-/SDK-Vorgaben aus der Entwicklershell.
+Der Prüfer verlangt vollständige C-/Physim-Oberflächenabläufe, gespeicherte
+Ergebnisse und eine weiterhin gültige Paketsignatur. Die dafür ergänzte
+Abschlussmeldung nach dem Aufräumen ist lokal mit beiden Windows-App-Abläufen
+geprüft (`build/launch-check-c.log`, `build/launch-check-language.log`). Der
+tatsächliche LaunchServices-Start auf beiden Mac-Architekturen steht noch aus.
+
 Der Projektbuilder nennt bei fehlendem Compiler nun die zur Plattform passende
 Einrichtung: Visual Studio unter Windows, Xcode Command Line Tools unter macOS
 und GCC/Clang unter Linux. Der erweiterte Projektbuild-Test besteht mit MSVC
