@@ -136,7 +136,9 @@ unter `build/`. Drittanbieterquellen behalten ihre eigenen Builddateien.
 Nach der Entfernung bestehen lokal alle 493 Tests ohne Fenster mit MSVC Debug
 (`build/native/Debug/test-results/run-9wu8gqqs`) und alle 35 Grafik-/Fensterprüfungen
 mit MSVC Release (`build/native/Release/test-results/run-hxhqdkcm`), einschließlich
-der beiden Benchmark-Prüfer. Der CI-Nachweis des bereinigten Repositorys folgt.
+der beiden Benchmark-Prüfer. Auch das bereinigte Repository besteht im
+[CI-Lauf zu `7d39aa7`](https://github.com/PhysicSimulator/physim/actions/runs/36502055743)
+alle acht Plattformjobs.
 
 Der native Projektbuilder schreibt Sprachübersetzungen jetzt zunächst in eine
 temporäre Datei. Ein Sprachfehler lässt den bisherigen generierten C-Code und
@@ -157,6 +159,19 @@ Die Reparaturprüfung besteht mit MSVC Debug (`run-44khj5c2`) und Clang Release
 (`run-88j2cd1_`): Nach jeder Beschädigung laufen Experiment und Analyse wieder.
 Die grafischen Projekt-Einstellungs- und Sprachabläufe bestehen zusätzlich mit
 MSVC Debug (`run-yd0x76sr`). Der plattformübergreifende CI-Lauf dafür folgt.
+
+Ein separater Linux-Paketlauf baut nun ein Release-Archiv unter Debian 12 und
+prüft es in frischen Debian-12- und Ubuntu-24.04-Containern. Die App muss zunächst
+ohne Compiler, Python, CMake oder SDL-Entwicklungsdateien starten. Anschließend
+prüft ein unabhängig übertragenes Prüfpaket das verschobene SDK einschließlich
+aller neun grafischen Projektabläufe. Lokal besteht dieses separate Prüfpaket
+mit dem MSVC-Release-SDK vollständig, einschließlich aller neun Oberflächenabläufe
+(`build/native/clean-kit-verification/Native SDK ä 50brmrgx`). Workflow-Struktur und
+Shellsyntax sind geprüft; der tatsächliche Linux-Paketnachweis steht noch aus.
+Im bisherigen Lauf zu `0321c85` ist außerdem ein sporadischer Windows-Clang-ASan-
+Absturz sichtbar geworden: Core scheitert ohne Stacktrace, während derselbe Commit
+im zweiten Repository alle zehn Sanitizer-Tests besteht. Der
+[Plattformnachweis](platform-validation.md) hält beide Ergebnisse fest.
 
 ## Bisherige Umsetzungsschritte des direkten Builders
 

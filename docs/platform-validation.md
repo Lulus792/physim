@@ -3,6 +3,19 @@
 Stand: 29. September 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+Aktuell offener Fehler: Im
+[Windows-ClangCL-Debug-Job zu `0321c85`](https://github.com/PhysicSimulator/physim/actions/runs/36504185474/job/109201756506)
+bestehen alle 493 normalen Tests einschließlich der neuen Projektcache-Reparatur.
+Die Sanitizer-Probe besteht ebenfalls; danach endet der instrumentierte Core-Test
+mit Windows-Zugriffsverletzung `0xC0000005` ohne Diagnoseausgabe. Die übrigen neun
+Sanitizer-Tests bestehen. Die Ursache dieses Absturzes ist noch ungeklärt;
+der gesamte Job ist damit fehlgeschlagen. Das lokale Protokoll liegt unter
+`build/ci-cache-clang-debug.log`. Der parallele
+[Job desselben Commits im zweiten Repository](https://github.com/Lulus792/physim/actions/runs/36504182060/job/109201744452)
+besteht alle zehn Sanitizer-Tests mit derselben Windows-Image-Version
+`20260920.314.1`. Der Fehler tritt damit nicht in jedem Lauf auf; die Ursache
+bleibt offen. Das Vergleichsprotokoll ist `build/ci-cache-clang-debug-origin.log`.
+
 ## Linux
 
 **Ubuntu 24.04 mit GCC und Clang ist für die geprüften Arbeitsabläufe bestätigt.**
@@ -31,6 +44,28 @@ Wayland, weitere Distributionen, reale Linux-Grafiktreiber und ein fertiges
 Installationspaket auf einem frischen Zielsystem sind noch nicht abgenommen.
 Äußere Fensterecken hängen unter Linux vom Desktop ab; die Windows-DWM-Rundung
 ist kein plattformübergreifender Nachweis.
+
+### Release-Paket auf frischen Linux-Systemen
+
+Der zusätzliche Workflow `linux-package.yml` baut ein Release-SDK mit GCC unter
+Debian 12 (`debian:bookworm`) und prüft dort alle Tests ohne Fenster. Das Archiv
+`Physim-linux-x86_64.tar.gz` wird anschließend in zwei neue Container entpackt:
+Debian 12 und Ubuntu 24.04. Diese Prüfungen haben keinen Repository-Checkout,
+keine SDL-Entwicklungsdateien und kein CMake. Zunächst werden nur Desktopbibliotheken
+installiert und die Oberfläche ohne Compiler oder Python gestartet. Anschließend
+kommen ein C17-Compiler für Nutzerprojekte und Python für die Teststeuerung hinzu.
+
+Ein separates Prüfpaket enthält nur den SDK-Prüfer, dessen Compilerhelfer und
+kleine Prüfquellen. Der Prüfer verwendet die Header, Bibliotheken, Vorlagen und
+Kernquellen aus dem verschobenen SDK. Er baut alle C-/Physim-Beispiele und Projekte
+und führt alle acht C-Vorlagen sowie den vollständigen Physim-Sprachablauf in der
+Oberfläche aus. Die Systempakete, aufgelösten App-Bibliotheken, Laufprotokolle und
+Screenshots werden als `installed-linux-debian-12` und `installed-linux-ubuntu-24.04`
+archiviert. Das Release-Archiv heißt als CI-Artefakt `physim-linux-release-x86_64`.
+
+Dieser zusätzliche Plattformnachweis steht noch aus. Die Container verwenden
+X11, Xvfb und Mesa; sie prüfen die Paketabhängigkeiten und Anwendungsabläufe,
+aber keine echte Grafikhardware, Wayland-Sitzung oder Desktopinstallation.
 
 ## Windows
 
@@ -336,7 +371,8 @@ Linux prüft sie auch mit der instrumentierten App. Mac-Pakete entstehen nur aus
 dem nativen SDK und werden nach dem Signieren verschoben und erneut geprüft.
 Neue SDKs enthalten keine CMake-Builddateien. Die alten Repository-Builddateien
 und CMake-Testskripte sind entfernt; alle 528 Fälle bleiben im direkten Katalog.
-Der CI-Nachweis dieses bereinigten Gesamtablaufs steht noch aus.
+Auch das bereinigte Repository besteht alle acht Plattformjobs im
+[Lauf zu `7d39aa7`](https://github.com/PhysicSimulator/physim/actions/runs/36502055743).
 Lokal bestehen nach dem Entfernen der 90 Physim-CMake-Dateien alle 493 Prüfungen
 ohne Fenster mit MSVC Debug (`build/native/Debug/test-results/run-9wu8gqqs`) und
 alle 35 Grafikprüfungen mit MSVC Release (`build/native/Release/test-results/run-hxhqdkcm`).
