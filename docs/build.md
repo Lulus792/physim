@@ -42,6 +42,11 @@ um auch Änderungen an indirekt eingebundenen Headern zu erkennen. Unveränderte
 Objekte und Module werden wiederverwendet. Ein fehlgeschlagener Compiler- oder
 Linkeraufruf veröffentlicht keine neuen Module; der nächste Build holt das Linken
 nach. Gleichzeitige Builds im selben Ausgabeordner werden abgewiesen.
+Bei Physim-Quellen schreibt der Sprachcompiler zunächst eine temporäre C-Datei
+unter `build/`. Erst eine erfolgreiche Übersetzung ersetzt die bisherige Ausgabe.
+Eine fehlerhafte Übersetzung ersetzt den zugehörigen C-Code nicht; die lauffähigen
+Module bleiben erhalten. Unveränderte Übersetzungen erhalten auch den Zeitstempel
+der erzeugten C-Datei.
 Quellen mit zeitabhängigen Makros wie `__TIME__` können bei jedem Build erneut
 übersetzt werden, weil sich ihr vorverarbeiteter Inhalt ändert.
 

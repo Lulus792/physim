@@ -289,7 +289,10 @@ static bool discover(toolchain *tc, const char *override) {
 }
 static bool emit_source(const char *compiler, const char *source, const char *kind,
                         const char *output, const char *directory) {
-    FILE *f = fopen(output, "wb");
+    char pending[PATH_SIZE];
+    if (snprintf(pending, sizeof pending, "%s.next", output) >= PATH_SIZE)
+        return false;
+    FILE *f = fopen(pending, "wb");
     if (!f)
         return false;
     const char *args[] = {compiler, kind, source, NULL};
@@ -297,15 +300,26 @@ static bool emit_source(const char *compiler, const char *source, const char *ki
     if (fclose(f))
         result = 1;
     if (result) {
-        f = fopen(output, "rb");
+        f = fopen(pending, "rb");
         if (f) {
             char line[1024];
             while (fgets(line, sizeof line, f))
                 fputs(line, stderr);
             fclose(f);
         }
+        SDL_RemovePath(pending);
+        return false;
     }
-    return !result;
+    /* A failed translation must not replace the last complete C source.
+       Keep its timestamp too when the successful output has not changed. */
+    if (equal_files(pending, output))
+        return SDL_RemovePath(pending);
+    if (!SDL_RenamePath(pending, output)) {
+        fprintf(stderr, "Cannot publish generated source: %s\n", SDL_GetError());
+        SDL_RemovePath(pending);
+        return false;
+    }
+    return true;
 }
 static bool compile(toolchain *tc, const char *source, const char *object, const char *sdk,
                     const char *project, const char *directory, bool release, bool strict,

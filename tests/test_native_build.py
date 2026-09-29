@@ -152,7 +152,31 @@ shutil.copyfile(args.sdk / "examples/language/analysis.phys", language / "analys
 for profile in ("Debug", "Release"):
     assert "Build successful" in build(language, profile)
     run_modules(language, profile)
+    generated = [language / "build" / profile / (name + ".physim.c")
+                 for name in ("experiment", "analysis")]
+    generated_stamps = [(fingerprint(p), p.stat().st_mtime_ns) for p in generated]
     assert "Build up to date" in build(language, profile)
+    assert generated_stamps == [(fingerprint(p), p.stat().st_mtime_ns) for p in generated]
+
+# A language error preserves generated C and the runnable modules, including
+# when the experiment translated successfully before the analysis failed.
+out = language / "build/Debug"
+published = [out / (name + suffix) for name in ("experiment", "analysis")
+             for suffix in (".physim.c", extension)]
+for source_name in ("main.phys", "analysis.phys"):
+    source = language / source_name
+    good_source = source.read_bytes()
+    previous = [(fingerprint(p), p.stat().st_mtime_ns) for p in published]
+    source.write_text('let broken: Int64 = "text"\n', encoding="utf-8")
+    failure = build(language, success=False)
+    assert source_name in failure and "error:" in failure, failure
+    assert previous == [(fingerprint(p), p.stat().st_mtime_ns) for p in published]
+    assert not any(out.glob("*.physim.c.next"))
+    run_modules(language, "Debug")
+    source.write_bytes(good_source)
+    assert "Build successful" in build(language)
+    assert not (out / "build.pending").exists()
+    run_modules(language, "Debug")
 assert set(p.name for p in language.iterdir()) == {"main.phys", "analysis.phys", "physim.project", "build"}
 # Resolve all relative paths before subprocesses change to the build directory.
 relative = lambda path: os.path.relpath(path)

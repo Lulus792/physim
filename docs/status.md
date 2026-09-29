@@ -138,6 +138,15 @@ Nach der Entfernung bestehen lokal alle 493 Tests ohne Fenster mit MSVC Debug
 mit MSVC Release (`build/native/Release/test-results/run-hxhqdkcm`), einschließlich
 der beiden Benchmark-Prüfer. Der CI-Nachweis des bereinigten Repositorys folgt.
 
+Der native Projektbuilder schreibt Sprachübersetzungen jetzt zunächst in eine
+temporäre Datei. Ein Sprachfehler lässt den bisherigen generierten C-Code und
+die lauffähigen Module bestehen; identische Ausgaben behalten ihren Zeitstempel.
+Die vorherigen Fehler sind unter `build/emission-regression-before.log` reproduziert.
+Der erweiterte Projektbuild-Test besteht mit MSVC und Clang, einschließlich
+Fehlern in Experiment und Analyse sowie anschließender Korrektur. Beide Profile
+werden geprüft. Der vollständige grafische Sprachablauf besteht zusätzlich mit
+MSVC Debug (`build/native/Debug/test-results/run-kzh44qyj`).
+
 ## Bisherige Umsetzungsschritte des direkten Builders
 
 Die folgenden Abschnitte dokumentieren die einzelnen Übertragungen. Ihre
