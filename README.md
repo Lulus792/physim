@@ -5,6 +5,21 @@
 [macOS / Apple Silicon und Intel](#macos).
 Die Anleitungen enthalten Installation, Build, Tests und den Start der App.
 
+**Oberfläche nach der Installation erneut starten:** Im Terminal in den
+Physim-Repository-Ordner wechseln und den passenden Befehl ausführen:
+
+| System | Oberfläche starten (Debug-Build) |
+| --- | --- |
+| Windows / PowerShell | `.\build\native\Debug\bin\physim.exe` |
+| Linux / Terminal | `./build/native/Debug/bin/physim` |
+| macOS / Terminal | `./build/native/Debug/bin/physim` |
+
+Die vollständigen Installationsbefehle stehen in den oben verlinkten Abschnitten.
+Unter macOS beschreibt die Anleitung außerdem, wie sich `Physim.app` zum
+Starten per Doppelklick erstellen lässt. Linux benötigt eine grafische
+Desktop-Sitzung. `--test` prüft den Build ohne Fenster; der anschließende
+Startbefehl öffnet die Oberfläche.
+
 **Neu hier?** Das [Handbuch mit Lernpfaden](docs/guide.md) erklärt Bedienung,
 Experimente, Auswertung und alle öffentlichen Funktionen. In der App öffnet **F1**
 dieselben Inhalte offline, mit themenübergreifender Suche und kopierbaren Beispielen.
@@ -476,8 +491,8 @@ python tools/build.py --config Debug --test
 ```
 
 Zum späteren Starten genügt jeweils der zweite Befehl. Nach Quellcodeänderungen
-beide Befehle erneut ausführen. `--test` führt die bisher auf den direkten
-Buildweg übertragenen Tests aus. Der SDL-Quellbuild aus der Linux- und
+beide Befehle erneut ausführen. `--test` führt die Tests ohne Fenster aus.
+Der SDL-Quellbuild aus der Linux- und
 macOS-Anleitung verwendet weiterhin CMake.
 
 Fenster- und Grafiktests lassen sich in einer grafischen Desktop-Sitzung separat
@@ -501,9 +516,9 @@ python3 tools/build.py --config Debug --no-app --build-dir build/native/Core --t
 Unter Windows nach dem oben beschriebenen Build:
 
 ```powershell
-.\build\bin\physim-runner.exe .\build\bin\pendulum.dll .\pendel.psrun --steps 4000 --dt 0.005 --seed 42
-.\build\bin\physim-analysis-runner.exe .\build\bin\pendulum_analysis.dll .\pendel.psrun .\pendelbericht
-.\build\bin\physim-analysis-runner.exe --csv .\pendel.psrun .\pendel.csv
+.\build\native\Debug\bin\physim-runner.exe .\build\native\Debug\bin\pendulum.dll .\pendel.psrun --steps 4000 --dt 0.005 --seed 42
+.\build\native\Debug\bin\physim-analysis-runner.exe .\build\native\Debug\bin\pendulum_analysis.dll .\pendel.psrun .\pendelbericht
+.\build\native\Debug\bin\physim-analysis-runner.exe --csv .\pendel.psrun .\pendel.csv
 ```
 
 Unter Linux und macOS heißen Projektmodule `.so`, Programme haben kein `.exe`. Ausgabedateien werden
