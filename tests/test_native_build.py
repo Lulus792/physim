@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 import uuid
 
@@ -153,8 +154,15 @@ assert "Build up to date" in build(project)
 manifest.write_text(manifest_text + "experiment=main.phys\n", encoding="utf-8")
 assert "Invalid physim.project" in build(project, success=False)
 manifest.write_text(manifest_text, encoding="utf-8")
-command([args.builder, "--project", project, "--sdk", args.sdk, "--output", out,
-         "--physimc", args.compiler, "--cc", "physim-no-such-compiler"], success=False)
+missing_compiler = command(
+    [args.builder, "--project", project, "--sdk", args.sdk, "--output", out,
+     "--physimc", args.compiler, "--cc", "physim-no-such-compiler"], success=False)
+setup_hint = {"win32": "Visual Studio C++ Build Tools and Windows SDK",
+              "darwin": "xcode-select --install"}.get(sys.platform, "apt-get install build-essential")
+assert "No C17 toolchain found" in missing_compiler and setup_hint in missing_compiler
+assert "--cc or PHYSIM_CC" in missing_compiler
+if os.name != "nt":
+    assert "Visual Studio" not in missing_compiler
 
 # A held cache lock rejects a second writer; releasing it allows the next build.
 with (out / "build.lock").open("r+b") as lock:

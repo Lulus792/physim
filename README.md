@@ -1,7 +1,7 @@
 # Physim
 
 **Installieren und mit Oberfläche starten:**
-[Windows](#schnellstart-unter-windows) · [Linux / Ubuntu](#linux) ·
+[Windows](#schnellstart-unter-windows) · [Linux / Debian und Ubuntu](#linux) ·
 [macOS / Apple Silicon und Intel](#macos).
 Die Anleitungen enthalten Installation, Build, Tests und den Start der App.
 
@@ -239,9 +239,52 @@ Tabellen erscheinen derzeit als Textzeilen.
 
 ## Linux
 
+### Fertiges Paket mit Oberfläche starten
+
+Der [Linux-Paketlauf](https://github.com/PhysicSimulator/physim/actions/workflows/linux-package.yml)
+erzeugt ein Release-Paket für **x86-64**. Es wird unter Debian 12 gebaut und in
+frischen Debian-12- und Ubuntu-24.04-Systemen geprüft. Für ein geprüftes Paket einen
+vollständig erfolgreichen Lauf öffnen und unter **Artifacts** die Datei
+`physim-linux-release-x86_64.zip` herunterladen. Der aktuelle Nachweis steht im
+[Plattformprüfstand](docs/platform-validation.md#release-paket-auf-frischen-linux-systemen).
+
+Für die erste Installation in einer grafischen Desktop-Sitzung:
+
+```sh
+sudo apt-get update
+sudo apt-get install -y unzip zenity fonts-dejavu-core libx11-6 libxext6 libxrandr2 \
+  libxcursor1 libxi6 libxfixes3 libxss1 libxtst6 libwayland-client0 \
+  libwayland-cursor0 libwayland-egl1 libxkbcommon0 libegl1 libgl1 \
+  libgl1-mesa-dri libdbus-1-3
+mkdir -p "$HOME/Downloads/physim-linux-package" "$HOME/Applications"
+unzip "$HOME/Downloads/physim-linux-release-x86_64.zip" \
+  -d "$HOME/Downloads/physim-linux-package"
+tar -xzf "$HOME/Downloads/physim-linux-package/Physim-linux-x86_64.tar.gz" \
+  -C "$HOME/Applications"
+cd "$HOME/Applications/Physim"
+./bin/physim
+```
+
+Ein OpenGL-3.3-Core-fähiger Grafiktreiber ist erforderlich. Für den App-Start sind
+Compiler, Python und CMake nicht nötig; SDL liegt im Paket. Zenity stellt die
+Datei- und Ordnerauswahl bereit, wenn der Desktop keinen XDG-Portal-Dialog anbietet.
+Den gesamten `Physim`-Ordner zusammen verschieben, damit Programme, SDK und Vorlagen
+erhalten bleiben.
+
+Zum **Bauen eigener C- oder Physim-Projekte** zusätzlich den Compiler installieren:
+
+```sh
+sudo apt-get install -y build-essential
+```
+
+Danach in der App **Datei → Neues Projekt** wählen und mit **F5** bauen.
+Die ausgelieferte [Paket-README](tools/SDK-README.md) beschreibt auch Simulation
+und Analyse mit den Kommandozeilenprogrammen.
+
 ### Installieren und mit Oberfläche starten (Ubuntu 24.04)
 
-Die folgenden Befehle im Terminal ausführen. Zum Starten ist eine grafische
+Die folgenden Schritte bauen Physim und SDL aus ihren Quellen.
+Die Befehle im Terminal ausführen. Zum Starten ist eine grafische
 Desktop-Sitzung mit einem OpenGL-3.3-Core-fähigen Treiber erforderlich.
 Bei einem vorhandenen Checkout die beiden Befehle zum Klonen und Wechseln
 überspringen und im Physim-Repository beginnen.
@@ -250,7 +293,7 @@ Bei einem vorhandenen Checkout die beiden Befehle zum Klonen und Wechseln
 
 ```sh
 sudo apt-get update
-sudo apt-get install -y build-essential git cmake ninja-build pkg-config python3 \
+sudo apt-get install -y build-essential git cmake ninja-build pkg-config python3 zenity \
   libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxi-dev libxfixes-dev \
   libxss-dev libxtst-dev libwayland-dev libxkbcommon-dev \
   libegl1-mesa-dev libgl1-mesa-dev fonts-dejavu-core

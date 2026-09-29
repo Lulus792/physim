@@ -624,10 +624,21 @@ int main(int argc, char **argv) {
 #endif
     toolchain *tc = calloc(1, sizeof *tc);
     int result = 1;
-    if (!tc || !discover(tc, cc)) {
-        fputs("No C17 toolchain found. Install Visual Studio C++ Build Tools and Windows SDK, "
-              "or select a compiler executable with PHYSIM_CC.\n",
+    if (!tc) {
+        fputs("Cannot allocate toolchain configuration\n", stderr);
+        goto done;
+    }
+    if (!discover(tc, cc)) {
+        fputs("No C17 toolchain found. ", stderr);
+#ifdef _WIN32
+        fputs("Install Visual Studio C++ Build Tools and Windows SDK.\n", stderr);
+#elif defined(__APPLE__)
+        fputs("Install Xcode Command Line Tools with: xcode-select --install\n", stderr);
+#else
+        fputs("Install GCC or Clang (Debian/Ubuntu: sudo apt-get install build-essential).\n",
               stderr);
+#endif
+        fputs("Select an installed compiler executable with --cc or PHYSIM_CC.\n", stderr);
         goto done;
     }
     printf("Compiler: %s\nProfile: %s\n", tc->compiler, profile);

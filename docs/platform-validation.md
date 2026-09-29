@@ -34,8 +34,13 @@ Das Artefakt `windows-crash-diagnostics-ClangCL` beziehungsweise
 Die Aufnahme erfolgt während des ursprünglichen Testlaufs; fehlerhafte Tests
 werden nicht automatisch wiederholt. Lokal sind der Prüfer kompiliert, sein
 Absturz mit ProcDump erfasst und die Dump-Auswertung geprüft
-(`build/crash capture check 1tq7fixm`). Der WER-Nachweis im CI-System steht aus;
-lokal wurden keine administrativen WER-Einstellungen verändert.
+(`build/crash capture check 1tq7fixm`). Im Lauf zu `620246b` bestehen die echte
+WER-Aufzeichnung und alle zehn Sanitizer-Tests sowohl mit
+[ClangCL](https://github.com/PhysicSimulator/physim/actions/runs/36506432739/job/109208791289)
+als auch mit [MSVC](https://github.com/PhysicSimulator/physim/actions/runs/36506432739/job/109208791471).
+Die Protokolle sind `build/ci-wer-clang.log` und `build/ci-wer-msvc.log`.
+Der ursprüngliche sporadische Absturz gilt damit noch nicht als behoben.
+Lokal wurden keine administrativen WER-Einstellungen verändert.
 
 ## Linux
 
@@ -61,8 +66,9 @@ Nutzerprojekte werden direkt mit `physim-build` gebaut und benötigen keine
 `CMakeLists.txt`. Quellen und `physim.project` bleiben im Projektordner;
 Buildprodukte liegen in `build/Debug` beziehungsweise `build/Release`.
 
-Wayland, weitere Distributionen, reale Linux-Grafiktreiber und ein fertiges
-Installationspaket auf einem frischen Zielsystem sind noch nicht abgenommen.
+Das Release-Paket besteht inzwischen auch die unten beschriebene Prüfung auf
+frischen Debian-12- und Ubuntu-24.04-Systemen. Wayland, weitere Distributionen,
+reale Linux-Grafiktreiber und die Integration in einen echten Desktop bleiben offen.
 Äußere Fensterecken hängen unter Linux vom Desktop ab; die Windows-DWM-Rundung
 ist kein plattformübergreifender Nachweis.
 
@@ -89,9 +95,24 @@ besteht alle 493 Tests ohne Fenster und erzeugt das Paket. Die anschließenden
 beiden Installationsprüfungen stoppen vor dem App-Start, weil Openbox Python
 als Abhängigkeit installiert hatte. Openbox wird jetzt erst nach dem Starttest
 installiert; die Bedingung, dass Python beim ersten Start fehlt, bleibt erhalten.
-Der vollständige Paketnachweis steht damit noch aus. Die Container verwenden
-X11, Xvfb und Mesa; sie prüfen die Paketabhängigkeiten und Anwendungsabläufe,
-aber keine echte Grafikhardware, Wayland-Sitzung oder Desktopinstallation.
+Im Lauf zu `620246b` besteht der App-Start ohne Compiler, Python und CMake in
+beiden frischen Systemen:
+[Debian 12](https://github.com/PhysicSimulator/physim/actions/runs/36506432788/job/109210313653)
+und [Ubuntu 24.04](https://github.com/PhysicSimulator/physim/actions/runs/36506432788/job/109210313628).
+Auch die vollständige SDK-/Projektprüfung besteht auf beiden Systemen: verschobenes
+SDK, unabhängige Header und Kernbibliothek, 15 Sprachprogramme, 27 Sprachmodule,
+neun neu gebaute Projekte sowie alle acht C-Vorlagen und der vollständige
+Physim-Sprachablauf in der Oberfläche. Die Protokolle liegen unter
+`build/ci-installed-debian-620246b.log` und `build/ci-installed-ubuntu-620246b.log`.
+Das heruntergeladene Paket zu `0dbe24f` hat außerdem die Prüfung der ZIP-/TAR-Struktur,
+Ausführungsrechte der App und aller 224 Dateiprüfsummen bestanden.
+
+Die Container verwenden X11, Xvfb und Mesa; sie prüfen die Paketabhängigkeiten
+und Anwendungsabläufe, aber keine echte Grafikhardware oder Wayland-Sitzung.
+Die native Datei-/Ordnerauswahl ist noch separat zu prüfen. Für Desktops ohne
+XDG-Portal enthalten Installationsanleitung und folgende Paketläufe nun Zenity;
+[SDL 3.2.30](https://github.com/libsdl-org/SDL/blob/release-3.2.30/src/dialog/unix/SDL_unixdialog.c)
+verwendet Portal oder Zenity für diese Dialoge.
 
 ## Windows
 

@@ -3,13 +3,17 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-09-29. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
-Aktueller [Plattformnachweis](platform-validation.md): Ubuntu 24.04 mit GCC und Clang
-bestand 276 Tests ohne Fenster, 35 Grafik-/Fenstertests, das installierte SDK
-und acht vollständige C-App-Abläufe. macOS 15 auf Apple Silicon und Intel bestand
-dieselben Prüfungen. Die verschiebbaren Mac-App-Pakete bestanden zusätzlich
-Signaturprüfungen und vollständige C-/Physim-Sprachabläufe nach dem Verschieben.
-Weitere Linux-Umgebungen bleiben in Prüfung. Ältere Linux-Hinweise in den folgenden Entwicklungsnotizen geben
-den damaligen Prüfstand wieder.
+Aktueller [Plattformnachweis](platform-validation.md): Der direkte Physim-Build nach
+Entfernen der eigenen CMake-Dateien besteht alle acht CI-Kombinationen. Ubuntu 24.04
+mit GCC/Clang und macOS 15 auf Apple Silicon/Intel bestehen jeweils 493 Tests ohne
+Fenster, 35 Grafik-/Fenstertests und die SDK-Prüfung. Verschobene Mac-App-Pakete
+bestehen Signaturprüfungen und vollständige C-/Physim-Sprachabläufe.
+Das Release-Paket besteht außerdem auf frischen Debian-12- und Ubuntu-24.04-Systemen:
+Start ohne Compiler/Python, verschobenes SDK, native Projekte und alle neun
+grafischen Vorlagenabläufe. Diese Linux-Prüfungen verwenden X11/Xvfb/Mesa.
+Ein sporadischer Windows-Clang-ASan-Absturz bleibt offen; seine Aufzeichnung als
+Minidump ist nun in beiden Windows-Debug-Jobs geprüft. Ältere Entwicklungsnotizen
+geben den damaligen Prüfstand wieder.
 
 Projektdateien speichern jetzt zusätzlich den Zeitschritt und den vollständigen
 64-Bit-Seed. Die App prüft beide vor Speichern und Laufstart. Modelltests bestehen
@@ -186,6 +190,19 @@ lokal kompiliert und mit ProcDump samt Dump-Auswertung geprüft; WER selbst wird
 im CI-System geprüft. Ein lokaler Core-Absturz ist ebenfalls als Minidump erfasst:
 Die Fehleradresse liegt in der ASan-Laufzeit, die Gleichheit mit der CI-Ursache
 ist noch unbewiesen. Details und Nachweise stehen im Plattformdokument.
+
+Der Paketlauf zu `620246b` besteht jetzt vollständig auf Debian 12 und Ubuntu
+24.04, einschließlich SDK und aller neun Oberflächenabläufe. Die README enthält
+die konkreten Befehle für das heruntergeladene Release-Archiv; dessen tatsächliche
+ZIP-/TAR-Struktur, Ausführungsrechte und 224 Dateiprüfsummen sind geprüft.
+Paket- und Quellbuildanleitung nennen zudem Zenity für die native Dateiauswahl
+auf Desktops ohne Portal. Die native Auswahl selbst bleibt eine separate Abnahme.
+
+Der Projektbuilder nennt bei fehlendem Compiler nun die zur Plattform passende
+Einrichtung: Visual Studio unter Windows, Xcode Command Line Tools unter macOS
+und GCC/Clang unter Linux. Der erweiterte Projektbuild-Test besteht mit MSVC
+Debug (`run-y6luocgh`); der Clang-Release-Builder ist gebaut und der Fehlerpfad
+mit einem nicht vorhandenen Compiler separat geprüft.
 
 ## Bisherige Umsetzungsschritte des direkten Builders
 

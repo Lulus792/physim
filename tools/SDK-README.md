@@ -24,8 +24,24 @@ Voraussetzungen: Windows 10 ab 1903 oder Windows 11 und ein Treiber mit OpenGL 3
 ./bin/physim
 ```
 
-Die geprüfte Umgebung ist Ubuntu 24.04 mit OpenGL 3.3 Core. SDL ist im Paket enthalten;
+Das unter Debian 12 gebaute CI-Release-Paket ist unter Debian 12 und Ubuntu 24.04
+mit X11/Mesa geprüft.
+Die App benötigt OpenGL 3.3 Core. SDL ist im Paket enthalten;
 die Systembibliotheken des Desktops und ein passender Grafiktreiber werden benötigt.
+Fehlende Laufzeitbibliotheken unter Debian 12 oder Ubuntu 24.04 installieren:
+
+```sh
+sudo apt-get update
+sudo apt-get install -y zenity fonts-dejavu-core libx11-6 libxext6 libxrandr2 libxcursor1 \
+  libxi6 libxfixes3 libxss1 libxtst6 libwayland-client0 libwayland-cursor0 \
+  libwayland-egl1 libxkbcommon0 libegl1 libgl1 libgl1-mesa-dri libdbus-1-3
+./bin/physim
+```
+
+Zum Öffnen der App sind Python, CMake und ein Compiler nicht erforderlich.
+Zenity ermöglicht Datei- und Ordnerdialoge, wenn kein XDG-Portal verfügbar ist.
+Die jeweiligen Paketprüfungen und Grenzen stehen im
+[Plattformprüfstand](docs/platform-validation.md#release-paket-auf-frischen-linux-systemen).
 
 **macOS, Terminal:**
 
@@ -44,7 +60,7 @@ Für neue C- und Physim-Projekte ist zusätzlich ein C17-Compiler erforderlich:
 
 - **Windows:** Visual Studio 2022 oder Build Tools mit „Desktopentwicklung mit C++“
   einschließlich Windows SDK installieren. Physim erkennt die Installation automatisch.
-- **Ubuntu:** `sudo apt-get install build-essential`.
+- **Debian / Ubuntu:** `sudo apt-get install build-essential`.
 - **macOS:** `xcode-select --install` ausführen und den Installationsdialog abschließen.
 
 In der App **Datei → Neues Projekt** wählen, eine Vorlage auswählen und das Projekt

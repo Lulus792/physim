@@ -34,6 +34,10 @@ automatisch gefunden; eine Developer-Konsole ist nicht nötig. Unter Linux und m
 angeben, etwa `clang-cl.exe` unter Windows oder `clang` unter Linux und macOS.
 Auf macOS stellen die Xcode Command Line Tools (`xcode-select --install`) den
 Compiler und das System-SDK bereit.
+Fehlt die Toolchain, nennt der Projektbuilder die Einrichtung für das laufende
+System: Visual Studio C++ unter Windows, `xcode-select --install` unter macOS
+und GCC/Clang mit dem Paketbefehl für Debian/Ubuntu unter Linux. Ein vorhandener
+Compiler lässt sich über `--cc` oder `PHYSIM_CC` auswählen.
 
 Der Projektordner behält seine Quellen, `physim.project` und Ergebnisse in `runs/`.
 `build/Debug` und `build/Release` enthalten Module, generiertes C, Objektdateien,
