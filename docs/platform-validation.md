@@ -16,6 +16,27 @@ besteht alle zehn Sanitizer-Tests mit derselben Windows-Image-Version
 `20260920.314.1`. Der Fehler tritt damit nicht in jedem Lauf auf; die Ursache
 bleibt offen. Das Vergleichsprotokoll ist `build/ci-cache-clang-debug-origin.log`.
 
+Lokal scheitert der Core-Test mit ClangCL 19.1.5 ebenfalls mit `0xC0000005`;
+hier meldet die Laufzeit zusätzlich eine unbekannte Interceptor-Instruktion.
+Der mit [Microsoft ProcDump](https://learn.microsoft.com/en-us/sysinternals/downloads/procdump)
+erfasste Minidump zeigt die Fehleradresse in `clang_rt.asan_dynamic-x86_64.dll`
+bei Offset `0x4859b`, innerhalb von `__asan_region_is_poisoned`.
+Das ist noch kein Nachweis derselben Ursache wie im CI-Lauf ohne Diagnoseausgabe.
+Protokolle: `build/clang-asan-core.log`, `build/clang-asan-core-verbose.log`;
+Speicherabbild: `build/clang-asan-dumps/physim-test-core.exe_260929_030111.dmp`.
+
+Die Windows-Debug-Jobs konfigurieren nun
+[WER-Minidumps pro Testprogramm](https://learn.microsoft.com/en-us/windows/win32/wer/collecting-user-mode-dumps)
+für `physim-test-core.exe` und einen eigenen Absturzprüfer. Der Prüfer verlangt
+eine echte Zugriffsverletzung und denselben Fehlercode im erzeugten Minidump.
+Das Artefakt `windows-crash-diagnostics-ClangCL` beziehungsweise
+`windows-crash-diagnostics-v143` enthält Dumps, Testprogramm, PDB und Laufzeit-DLLs.
+Die Aufnahme erfolgt während des ursprünglichen Testlaufs; fehlerhafte Tests
+werden nicht automatisch wiederholt. Lokal sind der Prüfer kompiliert, sein
+Absturz mit ProcDump erfasst und die Dump-Auswertung geprüft
+(`build/crash capture check 1tq7fixm`). Der WER-Nachweis im CI-System steht aus;
+lokal wurden keine administrativen WER-Einstellungen verändert.
+
 ## Linux
 
 **Ubuntu 24.04 mit GCC und Clang ist für die geprüften Arbeitsabläufe bestätigt.**
@@ -63,7 +84,12 @@ Oberfläche aus. Die Systempakete, aufgelösten App-Bibliotheken, Laufprotokolle
 Screenshots werden als `installed-linux-debian-12` und `installed-linux-ubuntu-24.04`
 archiviert. Das Release-Archiv heißt als CI-Artefakt `physim-linux-release-x86_64`.
 
-Dieser zusätzliche Plattformnachweis steht noch aus. Die Container verwenden
+Der [Debian-12-Release-Build zu `0dbe24f`](https://github.com/PhysicSimulator/physim/actions/runs/36505336425/job/109205387725)
+besteht alle 493 Tests ohne Fenster und erzeugt das Paket. Die anschließenden
+beiden Installationsprüfungen stoppen vor dem App-Start, weil Openbox Python
+als Abhängigkeit installiert hatte. Openbox wird jetzt erst nach dem Starttest
+installiert; die Bedingung, dass Python beim ersten Start fehlt, bleibt erhalten.
+Der vollständige Paketnachweis steht damit noch aus. Die Container verwenden
 X11, Xvfb und Mesa; sie prüfen die Paketabhängigkeiten und Anwendungsabläufe,
 aber keine echte Grafikhardware, Wayland-Sitzung oder Desktopinstallation.
 

@@ -148,6 +148,31 @@ jobs:
           name: physim-native-windows-${{ matrix.toolset }}
           path: build/Physim-native-windows-${{ matrix.toolset }}.zip
           if-no-files-found: ignore
+      - name: Enable Windows crash capture
+        id: crash_capture
+        if: matrix.configuration == 'Debug'
+        shell: pwsh
+        run: |
+          # Scope WER to these test executables on the disposable CI machine.
+          # https://learn.microsoft.com/windows/win32/wer/collecting-user-mode-dumps
+          $dumpFolder = New-Item -ItemType Directory -Force build/native/crash-dumps
+          $dumpRoot = 'HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps'
+          $applications = @('physim-crash-probe.exe', 'physim-test-core.exe')
+          foreach ($application in $applications) {
+            if (Test-Path -LiteralPath "$dumpRoot\$application") { throw "Existing crash policy for $application" }
+          }
+          foreach ($application in $applications) {
+            $key = New-Item -Path "$dumpRoot\$application" -Force
+            New-ItemProperty -LiteralPath $key.PSPath -Name DumpFolder -PropertyType ExpandString -Value $dumpFolder.FullName | Out-Null
+            New-ItemProperty -LiteralPath $key.PSPath -Name DumpType -PropertyType DWord -Value 1 | Out-Null
+            New-ItemProperty -LiteralPath $key.PSPath -Name DumpCount -PropertyType DWord -Value 4 | Out-Null
+          }
+      - name: Verify Windows crash capture
+        if: matrix.configuration == 'Debug'
+        shell: pwsh
+        run: |
+          python tests/test_windows_crash_dump.py --work build/native --dumps build/native/crash-dumps
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
       - name: Direct sanitizer tests
         if: matrix.configuration == 'Debug'
         shell: pwsh
@@ -157,6 +182,24 @@ jobs:
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
           python tools/build.py --compiler $compiler --sanitizers --no-app --test --test-filter 'memory*' --test-filter core --test-filter report --test-filter run_mutations --test-filter protocol_mutations --test-filter 'language_native_memory_*'
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - name: Archive Windows crash diagnostics
+        if: always() && matrix.configuration == 'Debug'
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-crash-diagnostics-${{ matrix.toolset }}
+          path: |
+            build/native/crash-dumps/*.dmp
+            build/native/crash dump probe*/results.json
+            build/native/crash dump probe*/build/bin/physim-crash-probe.*
+            build/native/Debug-sanitized/bin/physim-test-core.*
+            build/native/Debug-sanitized/bin/*.dll
+          if-no-files-found: ignore
+      - name: Remove test crash capture settings
+        if: always() && steps.crash_capture.outcome == 'success'
+        shell: pwsh
+        run: |
+          Remove-Item -LiteralPath 'HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps\physim-crash-probe.exe'
+          Remove-Item -LiteralPath 'HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps\physim-test-core.exe'
       - name: Archive SDK verification
         if: always()
         uses: actions/upload-artifact@v4

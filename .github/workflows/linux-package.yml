@@ -77,7 +77,7 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends ca-certificates \
-            xvfb xauth openbox x11-utils fonts-dejavu-core libx11-6 libxext6 libxrandr2 libxcursor1 libxi6 \
+            xvfb xauth x11-utils fonts-dejavu-core libx11-6 libxext6 libxrandr2 libxcursor1 libxi6 \
             libxfixes3 libxss1 libxtst6 libwayland-client0 libwayland-cursor0 libwayland-egl1 \
             libxkbcommon0 libegl1 libgl1 libgl1-mesa-dri libdbus-1-3
       - uses: actions/download-artifact@v4
@@ -110,7 +110,9 @@ jobs:
           xvfb-run -a -s '-screen 0 1920x1080x24' timeout 60 "Installed package ä/Physim/bin/physim" --smoke > evidence/app-start.log 2>&1
       - name: Project compiler and test harness
         run: |
-          apt-get install -y --no-install-recommends build-essential python3
+          # Openbox itself depends on Python; install it only after the
+          # package's independent startup check without Python has passed.
+          apt-get install -y --no-install-recommends build-essential python3 openbox
           gcc --version > evidence/compiler.txt
           dpkg-query -W >> evidence/compiler.txt
       - name: Verify relocated SDK and all nine GUI project workflows

@@ -173,6 +173,20 @@ Absturz sichtbar geworden: Core scheitert ohne Stacktrace, während derselbe Com
 im zweiten Repository alle zehn Sanitizer-Tests besteht. Der
 [Plattformnachweis](platform-validation.md) hält beide Ergebnisse fest.
 
+Der neue Debian-12-Release-Build besteht inzwischen alle 493 Tests ohne Fenster
+und erzeugt das SDK. Die beiden frischen Installationssysteme haben einen Fehler
+im Testaufbau offengelegt: Openbox installierte Python vor dem Starttest. Die
+Installation von Openbox erfolgt nun später; der Start ohne Python bleibt ein
+verbindlicher Prüfschritt. Die vollständige Paketprüfung folgt erneut.
+
+Für den offenen Windows-Clang-ASan-Absturz sammeln die Debug-CI-Jobs nun
+Minidumps des Core-Tests sowie das passende Programm, PDB und Laufzeit-DLLs.
+Eine echte Zugriffsverletzung prüft vorher die Dump-Aufzeichnung. Der Prüfer ist
+lokal kompiliert und mit ProcDump samt Dump-Auswertung geprüft; WER selbst wird
+im CI-System geprüft. Ein lokaler Core-Absturz ist ebenfalls als Minidump erfasst:
+Die Fehleradresse liegt in der ASan-Laufzeit, die Gleichheit mit der CI-Ursache
+ist noch unbewiesen. Details und Nachweise stehen im Plattformdokument.
+
 ## Bisherige Umsetzungsschritte des direkten Builders
 
 Die folgenden Abschnitte dokumentieren die einzelnen Übertragungen. Ihre
