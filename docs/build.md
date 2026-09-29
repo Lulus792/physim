@@ -218,7 +218,7 @@ Der App-Prüfer setzt außerdem `PHYSIM_TEST_TRACE=1`, damit Start und Testphase
 bei einem Timeout in `app-steps.json` und der Fehlerausgabe sichtbar bleiben.
 
 **Native Linux-Datei- und Ordnerdialoge separat prüfen:** Zusätzlich `zenity` und
-`xdotool` installieren und in einer X11-Sitzung mit Fenstermanager ausführen:
+`xdotool` und `scrot` installieren und in einer X11-Sitzung mit Fenstermanager ausführen:
 
 ```sh
 python3 tests/test_linux_native_dialogs.py --app build/native/Debug/bin/physim --work build/dialog-tests
@@ -227,7 +227,7 @@ python3 tests/test_linux_native_dialogs.py --app build/native/Debug/bin/physim -
 Der Prüfer bedient echte Zenity-Fenster und prüft die von SDL gelieferten Pfade,
 Abbrechen und einen fehlenden Dialogtreiber. Er benötigt währenddessen den
 Tastaturfokus. Die Paket-CI führt ihn in einem eigenen Xvfb-Display unter Debian
-12 und Ubuntu 24.04 aus; Protokolle und ein Workspace-Bild bleiben im Testordner.
+12 und Ubuntu 24.04 aus; Protokolle, Dialogbilder und ein Workspace-Bild bleiben im Testordner.
 Der Dialogtest gehört zusätzlich zu den oben genannten 35 Grafikabläufen.
 
 Die Abläufe prüfen Menüs und Tabs bei zwei Fenstergrößen, Dokumentbearbeitung,

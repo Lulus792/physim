@@ -16,7 +16,7 @@ def main():
     parser.add_argument("--work", type=Path, required=True)
     args = parser.parse_args()
     if sys.platform != "linux":
-        parser.error("Requires Linux, X11, a window manager, Zenity and xdotool")
+        parser.error("Requires Linux, X11, a window manager, Zenity, xdotool and scrot")
     args.work.mkdir(parents=True, exist_ok=True)
     root = Path(tempfile.mkdtemp(prefix="Native dialogs ä ", dir=args.work)).resolve()
     actions = []
@@ -29,6 +29,10 @@ def main():
         if result.returncode and not (allow_empty and result.returncode == 1):
             raise RuntimeError(f"xdotool {arguments}: {result.stderr.decode(errors='replace')}")
         return result.stdout.decode("utf-8", errors="replace").strip()
+
+    def screenshot(label):
+        subprocess.run(["scrot", str(root / (label + ".png"))], env=environment,
+                       capture_output=True, check=True, timeout=5)
 
     log = root / "app.log"
     selected = root / "selected"
@@ -61,15 +65,26 @@ def main():
                 (root / "actions.json").write_text(json.dumps(actions, ensure_ascii=False, indent=2),
                                                     encoding="utf-8")
                 xdo("windowactivate", "--sync", window)
+                screenshot(kind + "-opened")
                 if name:
                     xdo("key", "--clearmodifiers", "ctrl+l")
                     xdo("key", "--clearmodifiers", "ctrl+a")
                     xdo("type", "--clearmodifiers", "--delay", "1", str(selected / name))
-                    xdo("key", "--clearmodifiers", "Return")
+                    screenshot(kind + "-entered")
+                    # Return in GTK's location entry can navigate into a folder
+                    # without accepting it. Activate Zenity's _OK button instead
+                    # (both GTK 3 and GTK 4; LC_ALL above fixes the UI language).
+                    xdo("key", "--clearmodifiers", "alt+o")
                 else:
                     xdo("key", "--clearmodifiers", "Escape")
             if process.wait(timeout=15) != 0:
                 raise RuntimeError(log.read_text(errors="replace"))
+        except Exception:
+            try:
+                screenshot("failure")
+            except (OSError, subprocess.SubprocessError) as error:
+                (root / "screenshot-error.txt").write_text(str(error), encoding="utf-8")
+            raise
         finally:
             # Include Zenity children when a failed interaction leaves a dialog open.
             try:

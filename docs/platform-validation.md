@@ -125,6 +125,15 @@ den Workspace zu verändern. Protokolle, ausgewählte Pfade und ein abschließen
 Bild liegen im Artefakt unter `Native dialogs*`. Der Linux-Ausführungsnachweis
 für diesen neuen Dialogtest steht noch aus.
 
+Im [Dialoglauf zu `bd359c7`](https://github.com/PhysicSimulator/physim/actions/runs/36509517062)
+bestehen auf beiden Systemen alle neun SDK-Oberflächenabläufe. Der Dialogprüfer
+findet das erste Zenity-Fenster, bleibt aber nach der Ordnerpfadeingabe bis zum
+Zeitlimit darin. Er bestätigt jetzt ausdrücklich mit Zenitys OK-Schaltfläche
+(`Alt+O`), statt Enter im GTK-Pfadfeld zu verwenden, und archiviert Bilder vor
+und nach der Eingabe sowie bei Fehlern. Die erneute Ausführung bleibt offen.
+Protokolle: `build/native-linux-dialog-109220128459.log` und
+`build/native-linux-dialog-109220128487.log`.
+
 Der gleiche interaktive App-Test besteht lokal unter Windows mit MSVC Debug und
 den tatsächlichen Systemdialogen (`build/native-dialog-windows-3.log`,
 `build/native-dialog-windows-3/native-dialogs.bmp`). Der Pfadvergleich berücksichtigt
