@@ -91,6 +91,36 @@ initial_object = fingerprint(out / "experiment.obj")
 assert "Build successful" in build(project)
 assert fingerprint(out / "experiment.obj") != initial_object
 
+# File existence, length and timestamp cannot establish that cached output is intact.
+for artifact in (out / "experiment.obj", out / "sdk-math.obj", *modules):
+    data, stamp = artifact.read_bytes(), artifact.stat()
+    artifact.write_bytes(bytes([data[0] ^ 1]) + data[1:])
+    os.utime(artifact, ns=(stamp.st_atime_ns, stamp.st_mtime_ns))
+    assert artifact.stat().st_size == len(data) and artifact.stat().st_mtime_ns == stamp.st_mtime_ns
+    repair = build(project)
+    assert "Build successful" in repair and "Link:" in repair
+    assert ("Compile:" in repair) == (artifact.suffix == ".obj"), repair
+    run_modules(project, "Debug")
+    assert "Build up to date" in build(project)
+
+# Missing or partial integrity records trigger a rebuild; partial publication
+# from an interrupted run is replaced, without rewriting unchanged valid state.
+integrity = out / "build.artifacts"
+for damaged_state in (None, b"physim_artifacts=1\n000"):
+    if damaged_state is None:
+        integrity.unlink()
+    else:
+        integrity.write_bytes(damaged_state)
+    assert "Compile:" in build(project)
+    run_modules(project, "Debug")
+    assert "Build up to date" in build(project)
+integrity_stamp = (fingerprint(integrity), integrity.stat().st_mtime_ns)
+partial_integrity = out / "build.artifacts.next"
+partial_integrity.write_bytes(b"interrupted publication")
+assert "Build up to date" in build(project)
+assert not partial_integrity.exists()
+assert integrity_stamp == (fingerprint(integrity), integrity.stat().st_mtime_ns)
+
 # A failed link may leave freshly compiled objects. The next build still must link them.
 good_modules = [fingerprint(p) for p in modules]
 analysis = project / "analysis.c"

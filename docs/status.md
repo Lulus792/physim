@@ -119,8 +119,8 @@ doppelten CMake-/CTest-Schritte entfallen. Neue SDKs enthalten keine
 `--app-tests` übernimmt alle acht C-Vorlagen plus den vollständigen Sprachablauf;
 Linux prüft alle C-Vorlagen zusätzlich mit der instrumentierten App. Mac-Pakete
 entstehen ausschließlich aus dem nativen SDK und werden nach dem Verschieben
-erneut auf ihre Signatur geprüft. Die plattformübergreifende Abnahme dieses
-gesamten CI-Ablaufs steht noch aus. Lokal besteht das neue MSVC-Release-SDK die
+erneut auf ihre Signatur geprüft. Im Lauf zu `558c2ee` bestehen alle acht
+Plattformjobs dieses direkten CI-Ablaufs. Lokal besteht das neue MSVC-Release-SDK die
 vollständige Prüfung einschließlich aller neun grafischen Abläufe unter
 `build/native/direct-only-verification/Native SDK ä sv58dunt`. Der direkte
 Release-Benchmark besteht mit 100.000 Samples und fünf Wiederholungen unter
@@ -146,6 +146,17 @@ Der erweiterte Projektbuild-Test besteht mit MSVC und Clang, einschließlich
 Fehlern in Experiment und Analyse sowie anschließender Korrektur. Beide Profile
 werden geprüft. Der vollständige grafische Sprachablauf besteht zusätzlich mit
 MSVC Debug (`build/native/Debug/test-results/run-kzh44qyj`).
+
+Der native Projektbuilder erkennt nun beschädigte Objektdateien und Module über
+Dateigröße und CRC32-Prüfsummen in `build.artifacts` im jeweiligen Buildordner.
+Er kompiliert betroffene Objekte neu und verlinkt beschädigte Module erneut.
+Fehlende oder unvollständige Prüfdaten lösen einen vollständigen Neubau aus;
+unveränderte Prüfdaten behalten ihren Zeitstempel. Der frühere Fehler ist unter
+`build/cache-regression-before.log` auch bei unveränderter Größe und Zeit reproduziert.
+Die Reparaturprüfung besteht mit MSVC Debug (`run-44khj5c2`) und Clang Release
+(`run-88j2cd1_`): Nach jeder Beschädigung laufen Experiment und Analyse wieder.
+Die grafischen Projekt-Einstellungs- und Sprachabläufe bestehen zusätzlich mit
+MSVC Debug (`run-yd0x76sr`). Der plattformübergreifende CI-Lauf dafür folgt.
 
 ## Bisherige Umsetzungsschritte des direkten Builders
 

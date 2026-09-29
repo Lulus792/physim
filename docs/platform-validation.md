@@ -327,8 +327,10 @@ Die ursprünglichen 51 C-Tests bestanden auch lokal mit MSVC Debug; die 41 SDL-f
 Fälle zusätzlich mit Clang Release. Der vollständige Satz mit 134 Tests bestand
 lokal mit MSVC Debug.
 
-Die CI wird nach diesen Vergleichen vollständig auf den direkten Physim-Build
-umgestellt. Die 528 Tests, Sanitizer, SDK-Prüfung, Fuzzer und Benchmarks bleiben
+Die CI verwendet nach diesen Vergleichen vollständig den direkten Physim-Build.
+Im [Lauf zu `558c2ee`](https://github.com/PhysicSimulator/physim/actions/runs/36500503825)
+bestehen alle acht Plattformjobs, einschließlich der neuen SDK- und Paketabläufe.
+Die 528 Tests, Sanitizer, SDK-Prüfung, Fuzzer und Benchmarks bleiben
 enthalten. Die SDK-Grafikprüfung übernimmt zusätzlich alle acht C-Vorlagen;
 Linux prüft sie auch mit der instrumentierten App. Mac-Pakete entstehen nur aus
 dem nativen SDK und werden nach dem Signieren verschoben und erneut geprüft.

@@ -22,6 +22,11 @@
 #include <unistd.h>
 #endif
 #define PATH_SIZE 4096
+enum { SDK_OBJECT_COUNT = 18, ARTIFACT_COUNT = SDK_OBJECT_COUNT + 4 };
+typedef struct {
+    Uint64 size;
+    Uint32 crc;
+} artifact_digest;
 typedef struct {
     char compiler[PATH_SIZE], linker[PATH_SIZE];
     char includes[4][PATH_SIZE], libraries[3][PATH_SIZE];
@@ -129,6 +134,72 @@ static bool equal_files(const char *left, const char *right) {
     if (b)
         fclose(b);
     return same;
+}
+static bool digest_file(const char *path, artifact_digest *digest) {
+    FILE *file = fopen(path, "rb");
+    if (!file)
+        return false;
+    artifact_digest value = {0};
+    unsigned char bytes[16384];
+    size_t count;
+    while ((count = fread(bytes, 1, sizeof bytes, file)) != 0) {
+        value.size += count;
+        value.crc = SDL_crc32(value.crc, bytes, count);
+    }
+    bool ok = !ferror(file);
+    if (fclose(file))
+        ok = false;
+    if (ok)
+        *digest = value;
+    return ok;
+}
+static bool artifact_matches(const char *path, const artifact_digest *expected) {
+    SDL_PathInfo info;
+    if (!SDL_GetPathInfo(path, &info) || info.type != SDL_PATHTYPE_FILE || info.size != expected->size)
+        return false;
+    artifact_digest actual;
+    return digest_file(path, &actual) && actual.size == expected->size && actual.crc == expected->crc;
+}
+static bool read_artifacts(const char *path, artifact_digest digests[ARTIFACT_COUNT]) {
+    FILE *file = fopen(path, "rb");
+    if (!file)
+        return false;
+    char header[32];
+    bool ok = fgets(header, sizeof header, file) && !strcmp(header, "physim_artifacts=1\n");
+    for (unsigned i = 0; ok && i < ARTIFACT_COUNT; i++) {
+        unsigned long long size;
+        unsigned crc;
+        char end;
+        ok = fscanf(file, "%16llx %8x%c", &size, &crc, &end) == 3 && end == '\n';
+        if (ok) {
+            digests[i].size = size;
+            digests[i].crc = crc;
+        }
+    }
+    ok = ok && fgetc(file) == EOF && !ferror(file);
+    if (fclose(file))
+        ok = false;
+    return ok;
+}
+static bool write_artifacts(const char *path, const artifact_digest digests[ARTIFACT_COUNT]) {
+    char pending[PATH_SIZE];
+    if (snprintf(pending, sizeof pending, "%s.next", path) >= PATH_SIZE)
+        return false;
+    FILE *file = fopen(pending, "wb");
+    if (!file)
+        return false;
+    bool ok = fputs("physim_artifacts=1\n", file) != EOF;
+    for (unsigned i = 0; ok && i < ARTIFACT_COUNT; i++)
+        ok = fprintf(file, "%016llx %08x\n", (unsigned long long)digests[i].size,
+                     (unsigned)digests[i].crc) > 0;
+    if (fclose(file))
+        ok = false;
+    if (ok && equal_files(pending, path))
+        return SDL_RemovePath(pending);
+    if (ok && SDL_RenamePath(pending, path))
+        return true;
+    SDL_RemovePath(pending);
+    return false;
 }
 static bool executable(const char *name, char output[PATH_SIZE]) {
 #ifdef _WIN32
@@ -323,7 +394,7 @@ static bool emit_source(const char *compiler, const char *source, const char *ki
 }
 static bool compile(toolchain *tc, const char *source, const char *object, const char *sdk,
                     const char *project, const char *directory, bool release, bool strict,
-                    bool force, bool *changed) {
+                    bool force, bool *changed, artifact_digest *digest) {
     char preprocessed[PATH_SIZE], previous[PATH_SIZE], next_object[PATH_SIZE];
     char include[PATH_SIZE], project_include[PATH_SIZE], output[PATH_SIZE];
     if (snprintf(preprocessed, sizeof preprocessed, "%s.next.i", object) >= PATH_SIZE ||
@@ -373,7 +444,7 @@ static bool compile(toolchain *tc, const char *source, const char *object, const
     args[n] = NULL;
     if (run(args, directory, NULL, NULL, 0))
         return false;
-    if (!force && file_exists(object) && equal_files(preprocessed, previous)) {
+    if (!force && artifact_matches(object, digest) && equal_files(preprocessed, previous)) {
         SDL_RemovePath(preprocessed);
         return true;
     }
@@ -412,13 +483,13 @@ static bool compile(toolchain *tc, const char *source, const char *object, const
     printf("Compile: %s\n", source);
     fflush(stdout);
     if (run(args, directory, NULL, NULL, 0) || !SDL_RenamePath(next_object, object) ||
-        !SDL_RenamePath(preprocessed, previous))
+        !SDL_RenamePath(preprocessed, previous) || !digest_file(object, digest))
         return false;
     *changed = true;
     return true;
 }
 static bool link_module(toolchain *tc, const char *module, const char *object,
-                        char core[18][PATH_SIZE], const char *directory, bool release) {
+                        char core[SDK_OBJECT_COUNT][PATH_SIZE], const char *directory, bool release) {
     const char *args[40];
     char output[PATH_SIZE], libs[3][PATH_SIZE];
     unsigned n = 0;
@@ -449,7 +520,7 @@ static bool link_module(toolchain *tc, const char *module, const char *object,
         args[n++] = module;
     }
     args[n++] = object;
-    for (unsigned i = 0; i < 18; i++)
+    for (unsigned i = 0; i < SDK_OBJECT_COUNT; i++)
         args[n++] = core[i];
     if (!tc->msvc)
         args[n++] = "-lm";
@@ -586,7 +657,11 @@ int main(int argc, char **argv) {
         settings_ok = false;
     if (!settings_ok)
         goto done;
-    bool force = !equal_files(config, next_config), changed = force;
+    char artifacts_path[PATH_SIZE];
+    path_join(artifacts_path, directory, "build.artifacts");
+    artifact_digest artifacts[ARTIFACT_COUNT] = {{0}};
+    bool force = !read_artifacts(artifacts_path, artifacts) || !equal_files(config, next_config);
+    bool changed = force;
     char pending[PATH_SIZE];
     path_join(pending, directory, "build.pending");
     changed = changed || file_exists(pending);
@@ -599,15 +674,16 @@ int main(int argc, char **argv) {
                            "math",         "data",      "analysis",   "scene",         "numerics",
                            "units",        "series",    "report",     "report_export", "mechanics",
                            "box_contacts", "collision", "measurement"};
-    char(*objects)[PATH_SIZE] = calloc(18, PATH_SIZE);
+    _Static_assert(SDL_arraysize(names) == SDK_OBJECT_COUNT, "SDK artifact catalog mismatch");
+    char(*objects)[PATH_SIZE] = calloc(SDK_OBJECT_COUNT, PATH_SIZE);
     if (!objects)
         goto done;
-    for (unsigned i = 0; i < 18; i++) {
+    for (unsigned i = 0; i < SDK_OBJECT_COUNT; i++) {
         char source[PATH_SIZE];
         snprintf(source, sizeof source, "%s/src/%s.c", sdk, names[i]);
         snprintf(objects[i], PATH_SIZE, "%s/sdk-%s.obj", directory, names[i]);
         if (!compile(tc, source, objects[i], sdk, project, directory, release, false, force,
-                     &changed)) {
+                     &changed, &artifacts[i])) {
             free(objects);
             goto done;
         }
@@ -628,7 +704,8 @@ int main(int argc, char **argv) {
         snprintf(user_objects[i], PATH_SIZE, "%s/%s.obj", directory, name);
         if (ok)
             ok = compile(tc, source, user_objects[i], sdk, project, directory, release,
-                         strstr(input, ".phys") != NULL, force, &changed);
+                         strstr(input, ".phys") != NULL, force, &changed,
+                         &artifacts[SDK_OBJECT_COUNT + i]);
 #ifdef _WIN32
         const char *extension = "dll";
 #else
@@ -636,15 +713,16 @@ int main(int argc, char **argv) {
 #endif
         snprintf(modules[i], PATH_SIZE, "%s/%s.%s", directory, name, extension);
         snprintf(staged[i], PATH_SIZE, "%s/%s.next.%s", directory, name, extension);
-        if (!file_exists(modules[i]))
+        if (!artifact_matches(modules[i], &artifacts[SDK_OBJECT_COUNT + 2 + i]))
             changed = true;
     }
     for (unsigned i = 0; ok && changed && i < 2; i++)
         ok = link_module(tc, staged[i], user_objects[i], objects, directory, release);
     for (unsigned i = 0; ok && changed && i < 2; i++)
-        ok = SDL_RenamePath(staged[i], modules[i]);
+        ok = SDL_RenamePath(staged[i], modules[i]) &&
+             digest_file(modules[i], &artifacts[SDK_OBJECT_COUNT + 2 + i]);
     free(objects);
-    if (ok && SDL_RenamePath(next_config, config)) {
+    if (ok && write_artifacts(artifacts_path, artifacts) && SDL_RenamePath(next_config, config)) {
         SDL_RemovePath(pending);
         puts(changed ? "Build successful." : "Build up to date.");
         result = 0;

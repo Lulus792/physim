@@ -39,7 +39,11 @@ Der Projektordner behält seine Quellen, `physim.project` und Ergebnisse in `run
 `build/Debug` und `build/Release` enthalten Module, generiertes C, Objektdateien,
 Debugsymbole und den Buildzustand. Physim vergleicht vorverarbeitete Quellen,
 um auch Änderungen an indirekt eingebundenen Headern zu erkennen. Unveränderte
-Objekte und Module werden wiederverwendet. Ein fehlgeschlagener Compiler- oder
+Objekte und Module werden wiederverwendet. Vorher kontrolliert Physim ihre Größe
+und CRC32-Prüfsumme anhand von `build.artifacts` im jeweiligen Buildordner.
+Beschädigte Objekte werden neu kompiliert, beschädigte Module neu verlinkt.
+Fehlende oder unvollständige Prüfsummendateien lösen einen vollständigen Neubau
+des Profils aus. Ein fehlgeschlagener Compiler- oder
 Linkeraufruf veröffentlicht keine neuen Module; der nächste Build holt das Linken
 nach. Gleichzeitige Builds im selben Ausgabeordner werden abgewiesen.
 Bei Physim-Quellen schreibt der Sprachcompiler zunächst eine temporäre C-Datei
