@@ -32,7 +32,7 @@ jobs:
           tar -czf build/Physim-linux-x86_64.tar.gz -C build/package Physim
           # The verification kit contains no Physim implementation or SDL headers.
           # All compiler inputs for its consumers come from the installed package.
-          tar -czf build/linux-verification-kit.tar.gz tools/build.py tools/verify-native-sdk.py tools/sdk_probe.c tools/wait-window-manager.py app/utf8.manifest
+          tar -czf build/linux-verification-kit.tar.gz tools/build.py tools/verify-native-sdk.py tools/sdk_probe.c tools/wait-window-manager.py app/utf8.manifest tests/test_linux_native_dialogs.py
       - name: Upload Release package
         uses: actions/upload-artifact@v4
         with:
@@ -112,7 +112,7 @@ jobs:
         run: |
           # Openbox itself depends on Python; install it only after the
           # package's independent startup check without Python has passed.
-          apt-get install -y --no-install-recommends build-essential python3 openbox
+          apt-get install -y --no-install-recommends build-essential python3 openbox xdotool
           gcc --version > evidence/compiler.txt
           dpkg-query -W >> evidence/compiler.txt
       - name: Verify relocated SDK and all nine GUI project workflows
@@ -122,6 +122,14 @@ jobs:
             openbox > evidence/openbox.log 2>&1 &
             python3 verifier/tools/wait-window-manager.py || exit 1
             python3 verifier/tools/verify-native-sdk.py --sdk "Installed package ä/Physim" --work evidence --compiler gcc --app-tests
+          '
+      - name: Verify native file and folder dialogs
+        run: |
+          export XDG_RUNTIME_DIR="$(mktemp -d)"
+          xvfb-run -a -s '-screen 0 1920x1080x24' sh -c '
+            openbox > evidence/native-dialog-openbox.log 2>&1 &
+            python3 verifier/tools/wait-window-manager.py || exit 1
+            python3 verifier/tests/test_linux_native_dialogs.py --app "Installed package ä/Physim/bin/physim" --work evidence
           '
       - name: Archive clean-system results
         if: always()
@@ -134,6 +142,8 @@ jobs:
             evidence/app-start.log
             evidence/app-libraries.txt
             evidence/openbox.log
+            evidence/native-dialog-openbox.log
+            evidence/Native dialogs*/**
             evidence/Native SDK*/verification.log
             evidence/Native SDK*/PASSED.txt
             evidence/Native SDK*/App */*.bmp

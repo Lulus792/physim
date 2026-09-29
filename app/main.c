@@ -2123,6 +2123,7 @@ static void test_mouse(app *a, struct nk_rect rect, bool down) {
 #include "document_recovery_tests.inc"
 #include "toolbar_tests.inc"
 #include "project_settings_tests.inc"
+#include "native_dialog_tests.inc"
 #include "workspace_tests.inc"
 // clang-format on
 int main(int argc, char **argv) {
@@ -2648,7 +2649,7 @@ int main(int argc, char **argv) {
         } else if (workspace_state_test) {
             if (ps_clock() - test_started >
                 (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17)
-                     ? 120 : 15)) {
+                     ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15)) {
                 exit_code = 1;
                 a->quitting = true;
             } else

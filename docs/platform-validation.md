@@ -114,6 +114,23 @@ XDG-Portal enthalten Installationsanleitung und folgende Paketläufe nun Zenity;
 [SDL 3.2.30](https://github.com/libsdl-org/SDL/blob/release-3.2.30/src/dialog/unix/SDL_unixdialog.c)
 verwendet Portal oder Zenity für diese Dialoge.
 
+Auch der [Paketlauf zu `ae31aee`](https://github.com/PhysicSimulator/physim/actions/runs/36507609163)
+besteht in beiden Distributionen mit Zenity als installierter Laufzeitabhängigkeit.
+Der neue separate Dialogtest steuert echte Zenity-Fenster mit `xdotool`: Hauptordner
+öffnen, externe Datei und zusätzlichen Ordner hinzufügen, anschließend abbrechen.
+Alle ausgewählten Pfade enthalten Leerzeichen und Umlaute. Die App prüft die
+übernommenen Pfade und den unveränderten Workspace nach Abbruch. Ein zweiter Lauf
+erzwingt einen nicht vorhandenen Dialogtreiber und prüft die Fehlermeldung, ohne
+den Workspace zu verändern. Protokolle, ausgewählte Pfade und ein abschließendes
+Bild liegen im Artefakt unter `Native dialogs*`. Der Linux-Ausführungsnachweis
+für diesen neuen Dialogtest steht noch aus.
+
+Der gleiche interaktive App-Test besteht lokal unter Windows mit MSVC Debug und
+den tatsächlichen Systemdialogen (`build/native-dialog-windows-3.log`,
+`build/native-dialog-windows-3/native-dialogs.bmp`). Der Pfadvergleich berücksichtigt
+Windows-Pfadtrenner. Die macOS-Systemdialoge und Linux-Portaldialoge sind damit
+noch nicht geprüft.
+
 ## Windows
 
 Die [CI-Matrix für `0a27cef`](https://github.com/PhysicSimulator/physim/actions/runs/36459604565)

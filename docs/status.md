@@ -198,6 +198,13 @@ ZIP-/TAR-Struktur, Ausführungsrechte und 224 Dateiprüfsummen sind geprüft.
 Paket- und Quellbuildanleitung nennen zudem Zenity für die native Dateiauswahl
 auf Desktops ohne Portal. Die native Auswahl selbst bleibt eine separate Abnahme.
 
+Ein neuer Dialogtest öffnet die tatsächlichen SDL-Systemdialoge und prüft
+Hauptordner, zusätzliche Datei und Ordner sowie Abbrechen mit Umlautpfaden.
+Der Ablauf besteht lokal unter Windows mit MSVC Debug. Die Linux-Paket-CI
+erhält einen externen Zenity-Prüfer, einschließlich fehlendem Dialogtreiber;
+dessen Ausführung unter Debian und Ubuntu steht noch aus. Der Paketlauf zu
+`ae31aee` besteht bereits auf beiden Systemen mit installierter Zenity-Abhängigkeit.
+
 Der Projektbuilder nennt bei fehlendem Compiler nun die zur Plattform passende
 Einrichtung: Visual Studio unter Windows, Xcode Command Line Tools unter macOS
 und GCC/Clang unter Linux. Der erweiterte Projektbuild-Test besteht mit MSVC
