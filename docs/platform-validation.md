@@ -65,9 +65,58 @@ SDK und alle neun GUI-Projektabläufe auf Debian 12 und Ubuntu 24.04. Beide Jobs
 scheitern weiterhin am nativen Datei-/Ordnerdialog:
 [Debian 12](https://github.com/PhysicSimulator/physim/actions/runs/37223668792/job/111500303931),
 [Ubuntu 24.04](https://github.com/PhysicSimulator/physim/actions/runs/37223668792/job/111500303988).
-Der Dialogprüfer veröffentlicht künftig die tatsächliche Fehlerphase und SDL-Ausgabe
-auch als Jobannotation. Die genaue Ursache dieses Laufs ist ohne dessen
-authentifizierte Protokolle noch nicht geprüft; die Dialogabnahme bleibt offen.
+Die Jobannotationen zu `68bb8a4` bestätigen auf beiden Distributionen, dass der
+erste Ordnerdialog gefunden und bedient wird, aber vor der nächsten Dateianfrage
+offen bleibt:
+[Debian 12](https://github.com/PhysicSimulator/physim/actions/runs/37225049564/job/111504289877),
+[Ubuntu 24.04](https://github.com/PhysicSimulator/physim/actions/runs/37225049564/job/111504289907).
+Dieser CI-Lauf bestätigt die Dialogabnahme noch nicht; der folgende lokale
+Nachweis prüft die anschließende Korrektur.
+
+Der [C17-Lauf zu `68bb8a4`](https://github.com/PhysicSimulator/physim/actions/runs/37225049628)
+besteht alle Build-, Test-, Sanitizer-, Fuzzer- und SDK-Schritte in den acht
+Plattformkombinationen, einschließlich der jetzt 36 Grafik-/Fensterfälle.
+Im Intel-macOS-Job scheitern anschließend beide Artefakt-Uploads mit
+`ArtifactService/CreateArtifact`-Zeitüberschreitung. Der gesamte Job ist dadurch
+fehlgeschlagen; seine Prüfungen sind bestanden, die Ergebnisarchive fehlen.
+
+## Lokale Linux-Dialogprüfung am 4. Oktober 2026
+
+Eine lokale QEMU-10.1.0-VM mit HVF auf dem Intel-Mac läuft mit Debian 12,
+Linux `6.1.0-53-cloud-amd64` und GCC 12.2.0. SDL 3.2.30 und Physim sind dort
+aus Quellen als Release gebaut. Der bisherige Dialogprüfer reproduziert den
+CI-Hänger (`build/linux-vm/dialog-baseline.log`). Nach funktionierender Auswahl
+zeigt die echte Abbruchprüfung einen App-Fehler: SDLs Zenity-Backend liefert
+einen leeren ersten Pfadstring, den Physim als Ordnerpfad öffnet. Die App
+behandelt diesen Rückgabewert nun wie eine leere Dateiliste als Abbruch;
+Fehler mit einer NULL-Dateiliste bleiben als Fehler gemeldet.
+
+Der korrigierte Prüfer verwendet einen privaten Home-/Konfigurationsbereich,
+eine D-Bus-Sitzung und die tatsächlichen AT-SPI-Namen und Fensterkoordinaten der
+GTK-Dialogelemente. XTest klickt diese Elemente; es werden keine SDL-Ergebnisse
+oder Callback-Pfade eingespeist. Eine direkte Pfadeingabe mit schnellen
+Unicode-Tastaturzuordnungen und die anfängliche Recent-Ansicht entfallen.
+
+Das verschobene Release-SDK in `Installed package ä/Physim` besteht die tatsächliche
+Ordnerauswahl, externe Datei, Zusatzordner, Abbruch mit unverändertem Workspace und
+Status sowie den getrennten Test eines nicht vorhandenen Dialogtreibers:
+
+| Umgebung | Dialogbibliotheken | Protokoll |
+| --- | --- | --- |
+| Debian 12 in der VM | Zenity 3.44.0, GTK 3.24.38, Mesa 22.3.6 | `build/linux-vm/debian-final-dialogs.log` |
+| Ubuntu 24.04 im Container innerhalb derselben VM | Zenity 4.0.1, GTK 4.14.5, Mesa 25.2.8 | `build/linux-vm/ubuntu-final-dialogs.log` |
+
+Dialogbilder, `actions.json`, das abschließende Workspace-Bild und
+`unavailable.log` liegen unter `build/linux-vm/dialog-evidence`. Die App-Korrektur
+baut zusätzlich lokal mit Apple Clang 16.0.0; Workspace-Dateibaum und
+Workspace-Neustart bestehen auf macOS 14.6.1 (2/2 Fälle unter
+`build/workspace-check/test-results/run-l9i4rk48`).
+
+Diese Linux-Prüfungen verwenden X11/Xvfb und Mesa llvmpipe. Sie sind ein tatsächlich
+ausgeführter Dialognachweis für die genannten GTK-Versionen, aber kein Test von
+Portal-/Wayland-Dialogen oder realer Grafikhardware. Der erneute Paket-CI-Lauf
+mit dem korrigierten Prüfer steht noch aus. Dessen zusätzliche AT-SPI-/Python-
+Testabhängigkeiten werden erst nach dem Paketstart ohne Compiler/Python installiert.
 
 ## Windows-ClangCL-Sanitizer
 
@@ -191,7 +240,8 @@ Alle ausgewählten Pfade enthalten Leerzeichen und Umlaute. Die App prüft die
 erzwingt einen nicht vorhandenen Dialogtreiber und prüft die Fehlermeldung, ohne
 den Workspace zu verändern. Protokolle, ausgewählte Pfade und ein abschließendes
 Bild liegen im Artefakt unter `Native dialogs*`. Der Linux-Ausführungsnachweis
-für diesen neuen Dialogtest steht noch aus.
+für diesen neuen Dialogtest steht bei diesem Commit noch aus. Der aktuelle lokale
+Nachweis für GTK 3 und 4 steht oben unter „Lokale Linux-Dialogprüfung“.
 
 Im [Dialoglauf zu `bd359c7`](https://github.com/PhysicSimulator/physim/actions/runs/36509517062)
 bestehen auf beiden Systemen alle neun SDK-Oberflächenabläufe. Der Dialogprüfer

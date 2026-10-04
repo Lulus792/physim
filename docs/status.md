@@ -32,8 +32,22 @@ bestehen lokal; der aktuelle Katalog enthält 493 Prüfungen ohne Fenster und
 Fenster; ausschließlich das Sprach-Testprogramm wird im Debug-Build von macOS
 blockiert. Im Release-Build besteht dasselbe Programm. Die Linux-Paket-CI zu
 `1b098d7` besteht Paketstart, SDK und alle neun grafischen Projekte auf Debian
-und Ubuntu, scheitert aber weiterhin an der nativen Dialogprüfung. Die genaue
-Fehlerphase wird künftig zusätzlich als Jobannotation ausgegeben.
+und Ubuntu, scheitert aber weiterhin an der nativen Dialogprüfung. Die Annotationen
+zu `68bb8a4` zeigen auf beiden Systemen den Hänger bei der ersten Ordnerbestätigung.
+Im zugehörigen C17-Lauf bestehen alle Prüfschritte der acht Plattformkombinationen,
+einschließlich der 36 Grafikfälle. Der Intel-Mac-Job scheitert anschließend nur
+beim Upload beider Ergebnisarchive mit GitHub-ArtifactService-Zeitüberschreitung.
+
+Die native Linux-Dialogprüfung besteht inzwischen lokal unter Debian 12 mit
+GTK 3 und in einem Ubuntu-24.04-Container mit GTK 4, jeweils mit dem verschobenen
+Release-SDK. Die App behandelt den leeren Pfad, den SDL 3.2.30 beim Zenity-Abbruch
+liefern kann, jetzt als Abbruch ohne Workspace- oder Statusänderung. Der Prüfer
+bedient echte Dialogelemente über AT-SPI und XTest in Fensterkoordinaten; Unicode-
+Tastaturzuordnungen und feste Klickpositionen entfallen. Ordner, externe Datei,
+Zusatzordner, Abbruch und fehlender Treiber sind geprüft. Der Debian-Build läuft
+in einer lokalen QEMU-VM; beide Dialogprüfungen verwenden X11/Xvfb/Mesa. Die zwei
+betroffenen Workspace-Abläufe bestehen außerdem auf dem lokalen Intel-Mac.
+Ein erneuter Paket-CI-Lauf und Portal-/Wayland-Dialoge bleiben separat zu prüfen.
 
 Aktueller [Plattformnachweis](platform-validation.md): Der direkte Physim-Build nach
 Entfernen der eigenen CMake-Dateien besteht alle acht CI-Kombinationen. Ubuntu 24.04
@@ -240,7 +254,8 @@ dessen Ausführung unter Debian und Ubuntu steht noch aus. Der Paketlauf zu
 Der erste native Dialoglauf zu `bd359c7` bleibt auf Debian und Ubuntu nach der
 Ordnerpfadeingabe im Auswahlfenster hängen; alle vorherigen Projektabläufe bestehen.
 Der Prüfer aktiviert jetzt Zenitys OK-Schaltfläche und zeichnet Dialogbilder auf.
-Die neue Dialogabnahme ist noch nicht bestanden.
+Zu diesem Commit ist die neue Dialogabnahme noch nicht bestanden. Der aktuelle
+lokale Nachweis für Debian und Ubuntu steht am Anfang dieses Dokuments.
 
 Die Mac-Paketprüfung erhält außerdem einen Start über LaunchServices (`open`)
 mit Systempfad und ohne Compiler-/SDK-Vorgaben aus der Entwicklershell.

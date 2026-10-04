@@ -20,6 +20,8 @@ Menüzeile unter **Datei** lädt einen bestehenden Ordner. Enthält er ein Physi
 Quellen geöffnet; weitere Textdateien kannst du im Editor bearbeiten.
 **Datei → Datei hinzufügen** und **Datei → Ordner hinzufügen** ergänzen die Arbeitsumgebung um
 bis zu 32 weitere Pfade.
+Abbrechen im Systemdialog erhält den Workspace und seine Statusmeldung. Auch
+ein leerer Rückgabepfad des Linux-Zenity-Backends gilt als Abbruch.
 
 Der **Workspace** in der Seitenleiste zeigt einen aufklappbaren Dateibaum.
 Ein Klick auf einen Ordner öffnet oder schließt dessen Inhalt; ein Klick auf eine

@@ -2036,7 +2036,8 @@ static void SDLCALL workspace_dialog_callback(void *userdata, const char *const 
     SDL_Event event = {0};
     event.type = workspace_dialog_event;
     event.user.code = *(const int *)userdata;
-    event.user.data1 = filelist && filelist[0] ? SDL_strdup(filelist[0]) : NULL;
+    /* Zenity in SDL 3.2.30 can report cancellation as an empty first string. */
+    event.user.data1 = filelist && filelist[0] && filelist[0][0] ? SDL_strdup(filelist[0]) : NULL;
     event.user.data2 = filelist ? NULL : (void *)1;
     if (!SDL_PushEvent(&event))
         SDL_free(event.user.data1);

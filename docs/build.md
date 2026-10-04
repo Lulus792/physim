@@ -217,16 +217,20 @@ Vor dem App-Start prüft der Aufruf den lebenden Fenstermanager anhand der
 Der App-Prüfer setzt außerdem `PHYSIM_TEST_TRACE=1`, damit Start und Testphasen
 bei einem Timeout in `app-steps.json` und der Fehlerausgabe sichtbar bleiben.
 
-**Native Linux-Datei- und Ordnerdialoge separat prüfen:** Zusätzlich `zenity` und
-`xdotool` und `scrot` installieren und in einer X11-Sitzung mit Fenstermanager ausführen:
+**Native Linux-Datei- und Ordnerdialoge separat prüfen:** Zusätzlich `zenity`,
+`python3-pyatspi`, `at-spi2-core`, `dbus-x11`, `xdotool` und `scrot` installieren
+und in einer X11-Sitzung mit Fenstermanager und D-Bus-Sitzung ausführen:
 
 ```sh
-python3 tests/test_linux_native_dialogs.py --app build/native/Debug/bin/physim --work build/dialog-tests
+dbus-run-session python3 tests/test_linux_native_dialogs.py --app build/native/Debug/bin/physim --work build/dialog-tests
 ```
 
-Der Prüfer bedient echte Zenity-Fenster und prüft die von SDL gelieferten Pfade,
-Abbrechen und einen fehlenden Dialogtreiber. Er benötigt währenddessen den
-Tastaturfokus. Die Paket-CI führt ihn in einem eigenen Xvfb-Display unter Debian
+Der Prüfer findet die echten GTK-Dialogelemente über AT-SPI und klickt sie mit
+XTest in Fensterkoordinaten. Ein privates Home-Verzeichnis enthält die geprüften
+Unicode-Pfade; persönliche App- und GTK-Einstellungen bleiben außerhalb des Tests.
+Die App prüft die von SDL gelieferten Pfade, Abbrechen und einen fehlenden
+Dialogtreiber. Der Prüfer benötigt währenddessen den Eingabefokus. Die Paket-CI
+führt ihn in einem eigenen Xvfb-Display unter Debian
 12 und Ubuntu 24.04 aus; Protokolle, Dialogbilder und ein Workspace-Bild bleiben im Testordner.
 Der Dialogtest gehört zusätzlich zu den oben genannten 36 Grafikabläufen.
 

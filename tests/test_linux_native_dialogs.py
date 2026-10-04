@@ -16,12 +16,16 @@ def main():
     parser.add_argument("--work", type=Path, required=True)
     args = parser.parse_args()
     if sys.platform != "linux":
-        parser.error("Requires Linux, X11, a window manager, Zenity, xdotool and scrot")
+        parser.error("Requires Linux, X11, a window manager, Zenity, AT-SPI, xdotool and scrot")
     args.work.mkdir(parents=True, exist_ok=True)
     root = Path(tempfile.mkdtemp(prefix="Native dialogs ä ", dir=args.work)).resolve()
     actions = []
+    (root / "selected").mkdir()
+    import pyatspi
+    from gi.repository import GLib
     environment = dict(os.environ, SDL_FILE_DIALOG_DRIVER="zenity", GDK_BACKEND="x11",
-                       LC_ALL="C.UTF-8")
+                       GSETTINGS_BACKEND="memory", LC_ALL="C.UTF-8", HOME=str(root / "selected"),
+                       XDG_CONFIG_HOME=str(root / ".config"), XDG_DATA_HOME=str(root / ".local/share"))
 
     def xdo(*arguments, allow_empty=False):
         result = subprocess.run(["xdotool", *map(str, arguments)], capture_output=True,
@@ -33,6 +37,45 @@ def main():
     def screenshot(label):
         subprocess.run(["scrot", str(root / (label + ".png"))], env=environment,
                        capture_output=True, check=True, timeout=5)
+
+    def find_widget(names, role=None):
+        context = GLib.MainContext.default()
+        while context.pending():
+            context.iteration(False)
+        def visit(node):
+            try:
+                if (node.name in names and (role is None or node.getRoleName() == role)
+                        and node.getState().contains(pyatspi.STATE_SHOWING)):
+                    return node
+                for child in node:
+                    found = visit(child)
+                    if found is not None:
+                        return found
+            except GLib.Error:
+                # A previous Zenity process can disappear during a tree read.
+                return None
+            return None
+
+        for application in pyatspi.Registry.getDesktop(0):
+            try:
+                if application.name.lower() == "zenity":
+                    found = visit(application)
+                    if found is not None:
+                        return found
+            except GLib.Error:
+                continue
+        return None
+
+    def click_widget(widget, window):
+        # GTK 4's accessible coordinates must be translated through its X11
+        # window; using them as desktop coordinates can click outside it.
+        box = widget.queryComponent().getExtents(pyatspi.WINDOW_COORDS)
+        if box.width <= 0 or box.height <= 0:
+            raise RuntimeError(f"Invalid widget bounds: {widget.name}")
+        xdo("mousemove", "--window", window, box.x + box.width // 2, box.y + box.height // 2)
+        xdo("mousedown", "1")
+        time.sleep(.1)
+        xdo("mouseup", "1")
 
     log = root / "app.log"
     selected = root / "selected"
@@ -65,18 +108,31 @@ def main():
                 (root / "actions.json").write_text(json.dumps(actions, ensure_ascii=False, indent=2),
                                                     encoding="utf-8")
                 xdo("windowactivate", "--sync", window)
+                xdo("windowmove", window, "100", "100")
+                # A mapped window can still be setting up its chooser widgets.
+                time.sleep(.5)
                 screenshot(kind + "-opened")
                 if name:
-                    xdo("key", "--clearmodifiers", "ctrl+l")
-                    xdo("key", "--clearmodifiers", "ctrl+a")
-                    xdo("type", "--clearmodifiers", "--delay", "1", str(selected / name))
-                    screenshot(kind + "-entered")
-                    # Return in GTK's location entry can navigate into a folder
-                    # without accepting it. Activate Zenity's _OK button instead
-                    # (both GTK 3 and GTK 4; LC_ALL above fixes the UI language).
-                    xdo("key", "--clearmodifiers", "alt+o")
+                    # Browse a private Home containing the actual test paths.
+                    # AT-SPI locates real GTK widgets across GTK 3/4 layouts;
+                    # XTest clicks them without typing remapped Unicode keys.
+                    home = wait_for(lambda: find_widget(("Home", "Open your personal folder")),
+                                    f"{kind} Home control")
+                    click_widget(home, window)
+                    target = wait_for(lambda: find_widget((name,)), f"{kind} path row")
+                    click_widget(target, window)
+                    screenshot(kind + "-selected")
+                    accept = wait_for(lambda: (button if (button := find_widget(("OK",), "push button"))
+                                                and button.getState().contains(pyatspi.STATE_SENSITIVE)
+                                                else None), f"{kind} enabled OK button")
+                    click_widget(accept, window)
                 else:
-                    xdo("key", "--clearmodifiers", "Escape")
+                    cancel = wait_for(lambda: find_widget(("Cancel",), "push button"),
+                                      "cancel button")
+                    click_widget(cancel, window)
+                wait_for(lambda: window not in xdo("search", "--onlyvisible", "--class",
+                                                   "[Zz]enity", allow_empty=True).splitlines(),
+                         f"{kind} {'confirmation' if name else 'cancellation'}")
             if process.wait(timeout=15) != 0:
                 raise RuntimeError(log.read_text(errors="replace"))
         except Exception:

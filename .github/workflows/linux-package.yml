@@ -72,7 +72,7 @@ jobs:
       LIBGL_ALWAYS_SOFTWARE: "1"
     steps:
       # This job deliberately has no checkout and installs no SDL development
-      # package, CMake or Python modules. Python only drives the test harness.
+      # package or CMake. Python and PyAT-SPI are added only for the test harness.
       - name: Desktop runtime
         run: |
           apt-get update
@@ -112,7 +112,7 @@ jobs:
         run: |
           # Openbox itself depends on Python; install it only after the
           # package's independent startup check without Python has passed.
-          apt-get install -y --no-install-recommends build-essential python3 openbox xdotool scrot
+          apt-get install -y --no-install-recommends build-essential python3 python3-pyatspi at-spi2-core dbus-x11 openbox xdotool scrot
           gcc --version > evidence/compiler.txt
           dpkg-query -W >> evidence/compiler.txt
       - name: Verify relocated SDK and all nine GUI project workflows
@@ -126,7 +126,7 @@ jobs:
       - name: Verify native file and folder dialogs
         run: |
           export XDG_RUNTIME_DIR="$(mktemp -d)"
-          xvfb-run -a -s '-screen 0 1920x1080x24' sh -c '
+          xvfb-run -a -s '-screen 0 1920x1080x24' dbus-run-session sh -c '
             openbox > evidence/native-dialog-openbox.log 2>&1 &
             python3 verifier/tools/wait-window-manager.py || exit 1
             python3 verifier/tests/test_linux_native_dialogs.py --app "Installed package ä/Physim/bin/physim" --work evidence
