@@ -211,6 +211,8 @@ Auf macOS gilt für die unten aufgeführten App-Befehle **Cmd** anstelle von **C
 Ziehe die Trennlinie neben der Seitenleiste oder über dem Protokoll, um Platz zu
 verteilen. **Einstellungen / Ctrl+,** bietet Codeschrift, Autosave und Darstellung.
 Übernehmen speichert, Abbrechen verwirft den Einstellungsentwurf.
+Die Darstellung lässt sich zwischen Dunkel, Hell und Hoher Kontrast wählen;
+die Auswahl gilt auch für Editor, Diagramme und das geöffnete Hilfefenster.
 
 - **Ctrl+1 / Ctrl+2 / Ctrl+3:** Entwickeln / Simulieren / Auswerten.
 - **Ctrl+4:** Läufe und Berichte.

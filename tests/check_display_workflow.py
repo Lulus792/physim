@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import re
 import subprocess
+import struct
 import sys
 
 
@@ -131,6 +132,34 @@ def settings(flow, directory):
     exact(directory / "preferences.bin", "damaged preferences")
 
 
+def themes(flow, directory):
+    directory.mkdir()
+    for mode in ("light", "light-read", "contrast", "contrast-read", "cancel", "defaults", "dark-read"):
+        path = directory / "preferences.bin"
+        before = fingerprint(path) if path.exists() else None
+        flow.run("--settings-test", directory, "theme-" + mode,
+                 marker="THEME " + mode + " SELF-TEST: PASSED")
+        if mode.endswith("read") or mode == "cancel":
+            require(before == fingerprint(path), "Read/cancel changed stored theme preferences")
+    for mode in ("light", "contrast", "defaults"):
+        require((directory / ("theme-" + mode + ".bmp")).exists(), "Theme editor capture missing")
+        require((directory / ("docs-theme-" + mode + ".bmp")).exists(), "Theme documentation capture missing")
+        expected = (246, 247, 250) if mode == "light" else (0, 0, 0) if mode == "contrast" else (30, 31, 35)
+        for prefix in ("theme-", "theme-settings-", "docs-theme-", "theme-plot-"):
+            data = (directory / (prefix + mode + ".bmp")).read_bytes()
+            require(data[:2] == b"BM", "Invalid theme capture")
+            offset = struct.unpack_from("<I", data, 10)[0]
+            width, height = struct.unpack_from("<ii", data, 18)
+            bits = struct.unpack_from("<H", data, 28)[0]
+            require(bits in (24, 32) and width > 0 and height != 0, "Unsupported capture layout")
+            stride = ((width * bits + 31) // 32) * 4
+            pixel = bytes(reversed(expected))
+            count = sum(data[at:at + 3] == pixel
+                        for row in range(abs(height))
+                        for at in range(offset + row * stride, offset + row * stride + width * (bits // 8), bits // 8))
+            require(count > width * abs(height) // 100, f"Theme background was not rendered: {prefix}{mode}")
+
+
 def toolbar_input_isolation(flow, directory):
     directory.mkdir()
     for size in ("small", "large"):
@@ -224,7 +253,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"project_settings_workflow": project_settings, "settings_workflow": settings,
+SPECIAL = {"project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}
 

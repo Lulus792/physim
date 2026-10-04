@@ -29,6 +29,8 @@ static bool documentation_window_open(app *a) {
         a->doc_graphics = ps_graphics_create(a->doc_window);
         if (!a->doc_graphics)
             goto fail;
+        ps_graphics_background(a->doc_graphics, UI_COLOR(canvas).r, UI_COLOR(canvas).g,
+                               UI_COLOR(canvas).b);
         /* The main window already paces rendering through vsync. */
         SDL_GL_SetSwapInterval(0);
         a->doc_ui = nk_sdl_init(a->doc_window, a->doc_graphics);

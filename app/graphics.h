@@ -22,6 +22,8 @@ typedef struct {
 extern const ps_camera PS_CAMERA_DEFAULT;
 /* All calls belong to the creating thread and its current GL context. */
 ps_graphics *ps_graphics_create(SDL_Window *window);
+/* UI clear color only; physical scene colors are independent. No GL calls. */
+void ps_graphics_background(ps_graphics *g, uint8_t red, uint8_t green, uint8_t blue);
 bool ps_graphics_make_current(ps_graphics *g);
 void ps_graphics_destroy(ps_graphics *g);
 unsigned ps_graphics_texture(ps_graphics *g, const void *rgba, int w, int h);

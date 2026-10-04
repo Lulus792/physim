@@ -28,7 +28,7 @@ static void library_view(app *a, float height) {
     a->library_search_active = (flags & NK_EDIT_ACTIVE) != 0;
     if (!a->library_query[0] && !a->library_search_active)
         report_text(a, nk_rect(search.x + 10, search.y + 7, search.w - 20, 22),
-                    "Dateiname filtern …", nk_rgb(166, 169, 177));
+                    "Dateiname filtern …", UI_COLOR(muted));
     nk_layout_row_dynamic(ui, 28, 1);
     char detail[224];
     if (a->library_error[0])
@@ -45,7 +45,7 @@ static void library_view(app *a, float height) {
     else
         snprintf(detail, sizeof detail, "%zu Dateien im Projekt · neueste zuerst · " PS_UI_SHORTCUT "F filtert",
                  a->library ? a->library->count : 0);
-    nk_label_colored(ui, detail, NK_TEXT_LEFT, nk_rgb(166, 169, 177));
+    nk_label_colored(ui, detail, NK_TEXT_LEFT, UI_COLOR(muted));
     nk_layout_row_dynamic(ui, 34, 3);
     snprintf(detail, sizeof detail, "%u von 8 Läufen ausgewählt", a->selected_count);
     nk_label(ui, detail, NK_TEXT_LEFT);
@@ -83,7 +83,7 @@ static void library_view(app *a, float height) {
                     if (nk_checkbox_label(ui, "", &selected))
                         select_run(a, path, selected);
                 } else
-                    nk_label_colored(ui, "•", NK_TEXT_CENTERED, nk_rgb(166, 169, 177));
+                    nk_label_colored(ui, "•", NK_TEXT_CENTERED, UI_COLOR(muted));
                 nk_end_disabled(ui);
                 nk_layout_row_push(ui, .75f);
                 struct nk_rect name_bounds = nk_widget_bounds(ui);
@@ -120,7 +120,7 @@ static void library_view(app *a, float height) {
                     strftime(date, sizeof date, "%d.%m.%Y · %H:%M:%S", local);
                 snprintf(detail, sizeof detail, "%s · %.1f KiB", date, (double)item->bytes / 1024);
                 nk_layout_row_dynamic(ui, 22, 1);
-                nk_label_colored(ui, detail, NK_TEXT_LEFT, nk_rgb(166, 169, 177));
+                nk_label_colored(ui, detail, NK_TEXT_LEFT, UI_COLOR(muted));
             }
         if (!shown) {
             nk_layout_row_dynamic(ui, 70, 1);

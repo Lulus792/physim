@@ -231,6 +231,8 @@ Anleitung und Grenzen: [Autosave und Wiederherstellung](docs/autosave.md), auch 
 Die Gestaltungsrichtung folgt Apples Prinzipien für klare Hierarchie, zurückhaltende
 Farben und schrittweise sichtbare Details. Die App verwendet eine ruhige dunkle
 Oberfläche, Systemschrift für Bedienelemente und eine separate Codeschrift im Editor.
+Unter **Einstellungen** lassen sich auch **Hell** und **Hoher Kontrast** wählen.
+Die gespeicherte Auswahl gilt für Editor, Diagramme und das Dokumentationsfenster.
 Kamera und Sichtbarkeit liegen im Inspector; das Protokoll lässt sich einklappen.
 Windows nutzt lokal vorhandenes Segoe UI und Consolas, Linux DejaVu und macOS
 Helvetica und Menlo, jeweils mit

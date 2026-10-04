@@ -37,9 +37,9 @@ static void workspace_tree_view(app *a) {
             struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
             float x = bounds.x + 8, y = bounds.y + bounds.h * .5f;
             if (entry->expanded)
-                nk_fill_triangle(canvas, x, y - 3, x + 8, y - 3, x + 4, y + 3, PS_UI_DARK.text);
+                nk_fill_triangle(canvas, x, y - 3, x + 8, y - 3, x + 4, y + 3, UI_COLOR(text));
             else
-                nk_fill_triangle(canvas, x, y - 4, x, y + 4, x + 6, y, PS_UI_DARK.text);
+                nk_fill_triangle(canvas, x, y - 4, x, y + 4, x + 6, y, UI_COLOR(text));
         }
         if (nk_input_is_mouse_hovering_rect(&ui->input, bounds))
             nk_tooltip(ui, entry->path);

@@ -16,6 +16,9 @@
 #include "text_document.h"
 #include "protocol.h"
 #include "ui.h"
+#include "design_tokens.h"
+static const ps_ui_palette *ui_palette = &PS_UI_DARK;
+#define UI_COLOR(field) (ui_palette->field)
 #include "language/lexer.h"
 #include <ctype.h>
 #include <errno.h>
@@ -88,7 +91,7 @@ typedef struct {
     char preferences_path[4096], preferences_error[192];
     bool preferences_writable, show_grid;
     int settings_previous_tab, panel_drag;
-    struct nk_rect settings_bounds[6], panel_bounds[2];
+    struct nk_rect settings_bounds[6], theme_bounds[PS_THEME_COUNT], panel_bounds[2];
     SDL_Window *window;
     ps_graphics *graphics;
     ps_vec3 camera_target;
@@ -1564,21 +1567,21 @@ static void plot(app *a, const double *times, const double *values, int count, f
         plot_expand_range(&lo, &hi, true);
     double bounds[] = {count ? times[0] : 0, count ? times[count - 1] : 1, lo, hi};
     nk_layout_row_dynamic(ui, 22, 1);
-    nk_label_colored(ui, label, NK_TEXT_LEFT, nk_rgb(146, 166, 186));
+    nk_label_colored(ui, label, NK_TEXT_LEFT, UI_COLOR(muted));
     if (view)
         plot_controls(a, view, have_values && count > 1 ? bounds : NULL);
     nk_layout_row_dynamic(ui, height, 1);
     struct nk_rect r;
     nk_widget(&r, ui);
     struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
-    nk_fill_rect(canvas, r, 6, nk_rgb(23, 24, 28));
+    nk_fill_rect(canvas, r, 6, UI_COLOR(edit));
     if (count < 2)
         return;
     if (!have_values) {
         const char *message = "Keine gültigen Messwerte in dieser Vorschau.";
         nk_draw_text(canvas, nk_rect(r.x + 12, r.y + 12, r.w - 24, 24), message,
-                     (int)strlen(message), ui->style.font, nk_rgb(23, 24, 28),
-                     nk_rgb(166, 169, 177));
+                     (int)strlen(message), ui->style.font, UI_COLOR(edit),
+                     UI_COLOR(muted));
         return;
     }
     if (!(times[count - 1] > times[0]))
@@ -1599,18 +1602,18 @@ static void plot(app *a, const double *times, const double *values, int count, f
         snprintf(note, sizeof note, "Offset: Zeit %.17g s · Wert %.17g · Achsenwerte addieren",
                  x_offset, y_offset);
         nk_draw_text(canvas, nk_rect(r.x + 8, r.y + 1, r.w - 16, 18), note, (int)strlen(note),
-                     ui->style.font, nk_rgb(23, 24, 28), nk_rgb(166, 169, 177));
+                     ui->style.font, UI_COLOR(edit), UI_COLOR(muted));
     }
     int ticks = area.h < 80 ? 3 : 5;
     for (int i = 0; i < ticks; i++) {
         float y = area.y + area.h * (float)i / (float)(ticks - 1);
-        nk_stroke_line(canvas, area.x, y, area.x + area.w, y, 1, nk_rgb(53, 55, 63));
+        nk_stroke_line(canvas, area.x, y, area.x + area.w, y, 1, UI_COLOR(plot_grid));
         char text[40];
         snprintf(text, sizeof text, "%.4g",
                  plot_tick(displayed[2] - y_offset, displayed[3] - y_offset,
                            1 - (double)i / (ticks - 1)));
         nk_draw_text(canvas, nk_rect(r.x + 4, y - 8, 62, 18), text, (int)strlen(text),
-                     ui->style.font, nk_rgb(23, 24, 28), nk_rgb(166, 169, 177));
+                     ui->style.font, UI_COLOR(edit), UI_COLOR(muted));
     }
     struct nk_rect previous_clip = canvas->clip;
     nk_push_scissor(canvas, plot_intersection(area, previous_clip));
@@ -1620,14 +1623,14 @@ static void plot(app *a, const double *times, const double *values, int count, f
         double x2 = plot_fraction(view, bounds, 0, times[i]),
                y2 = plot_fraction(view, bounds, 1, values[i]);
         if (scatter) {
-            plot_dot(canvas, area, x2, y2, 2, nk_rgb(100, 170, 255));
+            plot_dot(canvas, area, x2, y2, 2, UI_COLOR(accent));
             continue;
         }
         if (!i || !isfinite(values[i - 1]))
             continue;
         double x1 = plot_fraction(view, bounds, 0, times[i - 1]),
                y1 = plot_fraction(view, bounds, 1, values[i - 1]);
-        plot_segment(canvas, area, x1, y1, x2, y2, nk_rgb(100, 170, 255));
+        plot_segment(canvas, area, x1, y1, x2, y2, UI_COLOR(accent));
     }
     nk_push_scissor(canvas, previous_clip);
     for (int endpoint = 0; endpoint < 2; endpoint++) {
@@ -1637,7 +1640,7 @@ static void plot(app *a, const double *times, const double *values, int count, f
                                                  text, (int)strlen(text));
         float x = endpoint ? area.x + area.w - text_width : area.x;
         nk_draw_text(canvas, nk_rect(x, area.y + area.h + 10, text_width + 1, 22), text,
-                     (int)strlen(text), ui->style.font, nk_rgb(23, 24, 28), nk_rgb(166, 169, 177));
+                     (int)strlen(text), ui->style.font, UI_COLOR(edit), UI_COLOR(muted));
     }
 }
 static void find_text(app *a, struct nk_text_edit *edit, bool replace) {
@@ -1748,7 +1751,7 @@ static void syntax_text(app *a, struct nk_text_edit *edit, struct nk_rect bounds
             continue;
         }
         size_t begin = at;
-        struct nk_color color = nk_rgb(211, 224, 237);
+        struct nk_color color = UI_COLOR(code_text);
         if (kind < 0) {
             nk_rune rune;
             int n = nk_utf_decode(text + at, &rune, (int)(size - at));
@@ -1756,7 +1759,7 @@ static void syntax_text(app *a, struct nk_text_edit *edit, struct nk_rect bounds
         } else if (triple_string ||
             (language && at + 2 < size && text[at] == '"' && text[at + 1] == '"' &&
              text[at + 2] == '"')) {
-            color = nk_rgb(232, 192, 121);
+            color = UI_COLOR(code_string);
             if (!triple_string) {
                 at += 3;
                 triple_string = true;
@@ -1775,7 +1778,7 @@ static void syntax_text(app *a, struct nk_text_edit *edit, struct nk_rect bounds
                 }
             }
         } else if (block_depth || (at + 1 < size && text[at] == '/' && text[at + 1] == '*')) {
-            color = nk_rgb(118, 145, 154);
+            color = UI_COLOR(code_comment);
             if (!block_depth) {
                 at += 2;
                 block_depth = 1;
@@ -1793,11 +1796,11 @@ static void syntax_text(app *a, struct nk_text_edit *edit, struct nk_rect bounds
             }
         } else if ((at + 1 < size && text[at] == '/' && text[at + 1] == '/') ||
                    (!language && text[at] == '#')) {
-            color = text[at] == '#' ? nk_rgb(192, 157, 230) : nk_rgb(118, 145, 154);
+            color = text[at] == '#' ? UI_COLOR(code_preprocessor) : UI_COLOR(code_comment);
             while (at < size && text[at] != '\n' && text[at] != '\r')
                 at++;
         } else if (text[at] == '"' || (!language && text[at] == '\'')) {
-            color = nk_rgb(232, 192, 121);
+            color = UI_COLOR(code_string);
             char quote = text[at++];
             while (at < size && text[at] != '\n') {
                 if (text[at] == '\\' && at + 1 < size && text[at + 1] != '\n') {
@@ -1824,12 +1827,12 @@ static void syntax_text(app *a, struct nk_text_edit *edit, struct nk_rect bounds
             }
             if (language ? language_keyword(text + begin, at - begin)
                          : c_keyword(text + begin, at - begin))
-                color = nk_rgb(187, 160, 236);
+                color = UI_COLOR(code_keyword);
             else if (at - begin >= 3 && text[begin] == 'p' && text[begin + 1] == 's' &&
                      text[begin + 2] == '_')
-                color = nk_rgb(100, 170, 255);
+                color = UI_COLOR(code_type);
         } else if (isdigit((unsigned char)text[at])) {
-            color = nk_rgb(119, 191, 246);
+            color = UI_COLOR(code_number);
             at++;
             while (at < size && (isalnum((unsigned char)text[at]) || text[at] == '.' ||
                                  (language && text[at] == '_')))
@@ -1898,7 +1901,7 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
             nk_rect(gutter.x,
                     gutter.y + (float)i * line_h - edit->scrollbar.y + ui->style.edit.padding.y, 42,
                     line_h),
-            number, (int)strlen(number), ui->style.font, nk_rgb(30, 31, 35), nk_rgb(142, 145, 154));
+            number, (int)strlen(number), ui->style.font, UI_COLOR(gutter), UI_COLOR(gutter_text));
     }
     nk_push_scissor(canvas, nk_window_get_content_region(ui));
     nk_style_pop_font(ui);
@@ -2143,7 +2146,11 @@ int main(int argc, char **argv) {
     bool settings_test = argc > 1 && !strcmp(argv[1], "--settings-test");
     if (settings_test && (argc != 4 || (strcmp(argv[3], "write") && strcmp(argv[3], "read") &&
         strcmp(argv[3], "reset") && strcmp(argv[3], "defaults") && strcmp(argv[3], "corrupt") &&
-        strcmp(argv[3], "maxwrite") && strcmp(argv[3], "maxread"))))
+        strcmp(argv[3], "maxwrite") && strcmp(argv[3], "maxread") &&
+        strcmp(argv[3], "theme-light") && strcmp(argv[3], "theme-light-read") &&
+        strcmp(argv[3], "theme-contrast") && strcmp(argv[3], "theme-contrast-read") &&
+        strcmp(argv[3], "theme-cancel") && strcmp(argv[3], "theme-defaults") &&
+        strcmp(argv[3], "theme-dark-read"))))
         return 2;
     bool plot_noise = argc > 1 && !strcmp(argv[1], "--plot-test-noise");
     bool plot_test = plot_noise || (argc > 1 && !strcmp(argv[1], "--plot-test"));
@@ -2565,7 +2572,7 @@ int main(int argc, char **argv) {
                 }
                 continue;
             }
-            if ((plot_test || toolbar_test) && test_scripted_external_input(&e)) continue;
+            if ((plot_test || toolbar_test || settings_test) && test_scripted_external_input(&e)) continue;
             if (self_test && e.type == SDL_EVENT_TEXT_INPUT) {
                 doc_input_events++;
                 doc_input_bytes += (unsigned)strlen(e.text.text);

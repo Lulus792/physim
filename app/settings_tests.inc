@@ -1,5 +1,116 @@
+static void test_theme_frame(app *a, const char *mode, int *stage, int *code,
+                             const char **capture) {
+    bool reading = strstr(mode, "-read") != NULL, cancel = !strcmp(mode, "cancel");
+    bool defaults = !strcmp(mode, "defaults");
+    unsigned target = !strncmp(mode, "light", 5) ? PS_THEME_LIGHT
+                      : !strcmp(mode, "dark-read") || defaults ? PS_THEME_DARK
+                                                              : PS_THEME_HIGH_CONTRAST;
+    const ps_ui_palette *expected = target == PS_THEME_LIGHT ? &PS_UI_LIGHT
+                                   : target == PS_THEME_HIGH_CONTRAST ? &PS_UI_HIGH_CONTRAST
+                                                                      : &PS_UI_DARK;
+    bool ok = true;
+    static uint32_t previous;
+    static char name[80];
+    switch (*stage) {
+    case 0:
+        SDL_SetWindowSize(a->window, 1080, 740);
+        previous = a->preferences.theme;
+        open_documentation(a, 8);
+        ok = a->doc_visible && a->documentation && !a->doc_error[0];
+        ok &= ps_report_create("Darstellung", "Kurven und Achsen", &a->analysis_report) == PS_OK;
+        if (ok) {
+            ps_plot_info info = {0};
+            strcpy(info.title, "Diagramm in der gewählten Darstellung");
+            strcpy(info.x_label, "Zeit");
+            strcpy(info.y_label, "Position");
+            ps_report_unit_from(PS_SECOND, &info.x_unit);
+            ps_report_unit_from(PS_METRE, &info.y_unit);
+            ps_plot_handle handle;
+            ok = ps_report_add_plot(a->analysis_report, &info, &handle) == PS_OK;
+            ps_curve_data *curve = calloc(1, sizeof *curve);
+            ok &= curve != NULL;
+            for (unsigned j = 0; ok && j < 3; j++) {
+                snprintf(curve->label, sizeof curve->label, "Messreihe %u", j + 1);
+                curve->kind = PS_PLOT_LINE;
+                curve->count = curve->source_count = 25;
+                for (unsigned i = 0; i < curve->count; i++) {
+                    curve->x[i] = i * .2;
+                    curve->y[i] = sin(i * .3 + j);
+                }
+                ok = ps_report_add_curve(a->analysis_report, handle, curve) == PS_OK;
+            }
+            free(curve);
+        }
+        if (reading)
+            ok &= previous == target;
+        a->tab = 0;
+        open_settings(a);
+        break;
+    case 2:
+        test_mouse(a, defaults ? a->settings_bounds[5]
+                               : a->theme_bounds[cancel ? PS_THEME_LIGHT : target], true);
+        break;
+    case 3:
+        test_mouse(a, defaults ? a->settings_bounds[5]
+                               : a->theme_bounds[cancel ? PS_THEME_LIGHT : target], false);
+        break;
+    case 5:
+        ok = a->settings_draft.theme == (cancel ? PS_THEME_LIGHT : target) &&
+             a->preferences.theme == previous;
+        test_mouse(a, a->settings_bounds[cancel || reading ? 4 : 0], true);
+        break;
+    case 6:
+        test_mouse(a, a->settings_bounds[cancel || reading ? 4 : 0], false);
+        break;
+    case 8:
+        ok = a->tab == 0 && a->preferences.theme == (cancel ? previous : target) &&
+             ui_palette == expected && a->ui->style.font == a->font_ui &&
+             a->doc_ui->style.font == a->doc_font_ui &&
+             !memcmp(&a->ui->style.text.color, &expected->text, sizeof expected->text) &&
+             !memcmp(&a->doc_ui->style.text.color, &expected->text, sizeof expected->text);
+        snprintf(name, sizeof name, "theme-%s.bmp", mode);
+        *capture = name;
+        break;
+    case 9:
+        snprintf(name, sizeof name, "docs-theme-%s.bmp", mode);
+        *capture = name;
+        break;
+    case 10:
+        a->tab = 2;
+        a->show_report = true;
+        break;
+    case 11:
+        snprintf(name, sizeof name, "theme-plot-%s.bmp", mode);
+        *capture = name;
+        break;
+    case 12:
+        a->tab = 0;
+        open_settings(a);
+        break;
+    case 14:
+        snprintf(name, sizeof name, "theme-settings-%s.bmp", mode);
+        *capture = name;
+        break;
+    case 15:
+        a->quitting = true;
+        break;
+    }
+    if (!ok) {
+        fprintf(stderr, "Theme %s stage %d: stored=%u draft=%u target=%u\n", mode, *stage,
+                a->preferences.theme, a->settings_draft.theme, target);
+        *code = 1;
+        a->quitting = true;
+    }
+    if (a->quitting)
+        printf("THEME %s SELF-TEST: %s\n", mode, *code ? "FAILED" : "PASSED");
+    (*stage)++;
+}
 static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
                                 const char **capture) {
+    if (!strncmp(mode, "theme-", 6)) {
+        test_theme_frame(a, mode + 6, stage, code, capture);
+        return;
+    }
     bool writing = !strcmp(mode, "write"), resetting = !strcmp(mode, "reset");
     bool ok = true;
     static struct nk_rect drag;

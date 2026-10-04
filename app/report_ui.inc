@@ -1,9 +1,6 @@
 /* Presentation of validated analysis outputs. No analysis code executes here. */
 static struct nk_color report_color(uint32_t i) {
-    static const unsigned char palette[][3] = {{100, 170, 255}, {245, 166, 87},  {109, 207, 148},
-                                               {193, 151, 240}, {242, 140, 178}, {89, 205, 220},
-                                               {222, 204, 110}, {188, 197, 212}};
-    return nk_rgb(palette[i % 8][0], palette[i % 8][1], palette[i % 8][2]);
+    return UI_COLOR(curves)[i % 8];
 }
 static void report_text(app *a, struct nk_rect bounds, const char *text, struct nk_color color) {
     nk_draw_text(nk_window_get_canvas(a->ui), bounds, text, (int)strlen(text), a->font_ui,
@@ -21,15 +18,15 @@ static void report_plot(app *a, uint32_t index, float height) {
     nk_layout_row_dynamic(ui, 24, 1);
     char label[256];
     snprintf(label, sizeof label, "%s [%s]", p.y_label, p.y_unit.symbol);
-    nk_label_colored(ui, label, NK_TEXT_LEFT, nk_rgb(166, 169, 177));
+    nk_label_colored(ui, label, NK_TEXT_LEFT, UI_COLOR(muted));
     nk_layout_row_dynamic(ui, height, 1);
     struct nk_rect r;
     nk_widget(&r, ui);
     struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
-    nk_fill_rect(canvas, r, 7, nk_rgb(23, 24, 28));
+    nk_fill_rect(canvas, r, 7, UI_COLOR(edit));
     if (bounds_result != PS_OK) {
         report_text(a, nk_rect(r.x + 20, r.y + 20, r.w - 40, 24),
-                    "Dieses Diagramm enthält noch keine Kurven.", nk_rgb(166, 169, 177));
+                    "Dieses Diagramm enthält noch keine Kurven.", UI_COLOR(muted));
         return;
     }
     struct nk_rect area = nk_rect(r.x + 86, r.y + 20, r.w - 112, r.h - 64);
@@ -40,22 +37,22 @@ static void report_plot(app *a, uint32_t index, float height) {
     double y_offset = ps_plot_axis_offset(displayed[2], displayed[3]);
     if (y_offset) {
         snprintf(label, sizeof label, "Y-Offset: %.17g %s", y_offset, p.y_unit.symbol);
-        report_text(a, nk_rect(area.x, r.y + 1, area.w, 18), label, nk_rgb(166, 169, 177));
+        report_text(a, nk_rect(area.x, r.y + 1, area.w, 18), label, UI_COLOR(muted));
     }
     for (int i = 0; i <= 4; i++) {
         double fraction = i / 4.;
         float x = area.x + (float)fraction * area.w, y = area.y + (1 - (float)fraction) * area.h;
-        nk_stroke_line(canvas, area.x, y, area.x + area.w, y, 1, nk_rgb(53, 55, 63));
-        nk_stroke_line(canvas, x, area.y, x, area.y + area.h, 1, nk_rgb(42, 44, 51));
+        nk_stroke_line(canvas, area.x, y, area.x + area.w, y, 1, UI_COLOR(plot_grid));
+        nk_stroke_line(canvas, x, area.y, x, area.y + area.h, 1, UI_COLOR(plot_grid_minor));
         snprintf(label, sizeof label, "%.5g",
                  plot_tick(displayed[2] - y_offset, displayed[3] - y_offset, fraction));
-        report_text(a, nk_rect(r.x + 8, y - 8, 74, 20), label, nk_rgb(166, 169, 177));
+        report_text(a, nk_rect(r.x + 8, y - 8, 74, 20), label, UI_COLOR(muted));
         snprintf(label, sizeof label, "%.5g",
                  plot_tick(displayed[0] - x_offset, displayed[1] - x_offset, fraction));
         float tw =
             a->font_ui->width(a->font_ui->userdata, a->font_ui->height, label, (int)strlen(label));
         report_text(a, nk_rect(x - tw * .5f, area.y + area.h + 10, tw + 2, 20), label,
-                    nk_rgb(166, 169, 177));
+                    UI_COLOR(muted));
     }
     const ps_curve_data *c;
     bool reduced = false, sampled_scatter = false;
@@ -97,12 +94,12 @@ static void report_plot(app *a, uint32_t index, float height) {
              reduced ? (sampled_scatter ? " · gleichmäßig abgetastete Vorschau"
                                         : " · reduzierte Vorschau, Spitzen bleiben erhalten")
                      : "");
-    nk_label_colored(ui, label, NK_TEXT_CENTERED, nk_rgb(166, 169, 177));
+    nk_label_colored(ui, label, NK_TEXT_CENTERED, UI_COLOR(muted));
     if (x_offset) {
         nk_layout_row_dynamic(ui, 20, 1);
         snprintf(label, sizeof label, "X-Offset: %.17g %s · Wert = Offset + Achsenwert", x_offset,
                  p.x_unit.symbol);
-        nk_label_colored(ui, label, NK_TEXT_CENTERED, nk_rgb(166, 169, 177));
+        nk_label_colored(ui, label, NK_TEXT_CENTERED, UI_COLOR(muted));
     }
     nk_layout_row_dynamic(ui, 22, 2);
     for (uint32_t j = 0; j < p.curves; j++) {

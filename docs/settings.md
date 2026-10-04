@@ -20,6 +20,18 @@ Details stehen unter [Autosave und Wiederherstellung](autosave.md).
 
 ## Darstellung und Panelgrößen
 
+**Darstellung** bietet **Dunkel**, **Hell** und **Hoher Kontrast**. Nach
+**Übernehmen** verwenden Navigation, Editor, Protokoll, Diagramme und das
+Dokumentationsfenster die gewählte Palette. Auch ein bereits geöffnetes
+Hilfefenster wechselt mit. Die Auswahl bleibt beim nächsten Start erhalten;
+**Abbrechen** bewahrt die bisherige Darstellung. **Standardwerte** wählt Dunkel
+im Entwurf aus. Szenenobjekte behalten ihre eigenen Farben.
+
+Hoher Kontrast verwendet helle Schrift auf schwarzem Grund, gelbe Hervorhebungen
+und sichtbare Rahmen um Eingabefelder und Schaltflächen. Die neuen Paletten
+prüfen Textkontraste rechnerisch; vollständige Tastatur- und Screenreader-Bedienung
+ist weiterhin ein offenes Projektziel.
+
 Ein **Linksklick in die Szene** wählt das vorderste sichtbare Objekt unter dem
 Mauszeiger. Der Inspektor zeigt dessen ID beziehungsweise Listenposition und
 bietet **Auswahl ausblenden**. Ein Klick auf den Hintergrund hebt die Auswahl auf.
@@ -93,6 +105,8 @@ speichert ihn. Die aktuelle Fenstergröße und der maximierte Zustand bleiben da
 
 Einstellungen liegen im persönlichen Anwendungsordner, den SDL für Physim bereitstellt,
 als `preferences.bin`. Sie gehören weder zum Projekt noch zu den Laufmetadaten.
+Das aktuelle Format 2 speichert zusätzlich die Farbpalette. Dateien des Formats 1
+bleiben lesbar; ihre bisherigen Werte werden mit der dunklen Palette übernommen.
 Alle normalen Physim-Instanzen desselben Benutzerkontos teilen diese Datei;
 bei gleichzeitiger Nutzung gewinnt der zuletzt vollständig gespeicherte Stand.
 

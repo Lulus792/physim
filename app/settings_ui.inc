@@ -1,6 +1,17 @@
 /* App-owned presentation state, separate from project sources and run metadata. */
 static void preferences_apply(app *a, const ps_preferences *p) {
     a->preferences = *p;
+    ui_palette = p->theme == PS_THEME_LIGHT ? &PS_UI_LIGHT :
+                 p->theme == PS_THEME_HIGH_CONTRAST ? &PS_UI_HIGH_CONTRAST : &PS_UI_DARK;
+    style(a->ui);
+    nk_style_set_font(a->ui, a->font_ui);
+    ps_graphics_background(a->graphics, UI_COLOR(canvas).r, UI_COLOR(canvas).g, UI_COLOR(canvas).b);
+    if (a->doc_ui) {
+        style(a->doc_ui);
+        nk_style_set_font(a->doc_ui, a->doc_font_ui);
+        ps_graphics_background(a->doc_graphics, UI_COLOR(canvas).r, UI_COLOR(canvas).g,
+                               UI_COLOR(canvas).b);
+    }
     a->font_code = a->code_fonts[(p->editor_size - 16) / 2];
     a->show_vectors = (p->view_flags & PS_VIEW_VECTORS) != 0;
     a->show_paths = (p->view_flags & PS_VIEW_PATHS) != 0;
@@ -120,6 +131,15 @@ static void settings_view(app *a) {
     nk_layout_row_dynamic(ui, 40, 1);
     nk_label_wrap(ui,
                   "Deine Darstellung und Fensteraufteilung bleiben beim nächsten Start erhalten.");
+    nk_layout_row_dynamic(ui, 26, 1);
+    nk_label_colored(ui, "Darstellung", NK_TEXT_LEFT, muted());
+    nk_layout_row_dynamic(ui, 32, 3);
+    const char *themes[] = {"Dunkel", "Hell", "Hoher Kontrast"};
+    for (unsigned i = 0; i < PS_THEME_COUNT; i++) {
+        a->theme_bounds[i] = nk_widget_bounds(ui);
+        if (nk_option_label(ui, themes[i], p->theme == i))
+            p->theme = i;
+    }
     nk_layout_row_dynamic(ui, 26, 1);
     nk_label_colored(ui, "Schriftgröße im Code-Editor", NK_TEXT_LEFT, muted());
     nk_layout_row_dynamic(ui, 32, 4);

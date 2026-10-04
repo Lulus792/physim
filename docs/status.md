@@ -47,7 +47,20 @@ Tastaturzuordnungen und feste Klickpositionen entfallen. Ordner, externe Datei,
 Zusatzordner, Abbruch und fehlender Treiber sind geprüft. Der Debian-Build läuft
 in einer lokalen QEMU-VM; beide Dialogprüfungen verwenden X11/Xvfb/Mesa. Die zwei
 betroffenen Workspace-Abläufe bestehen außerdem auf dem lokalen Intel-Mac.
-Ein erneuter Paket-CI-Lauf und Portal-/Wayland-Dialoge bleiben separat zu prüfen.
+Der erneute [Paket-CI-Lauf zu `fa311dc`](https://github.com/PhysicSimulator/physim/actions/runs/37234502965)
+besteht Paketierung und sämtliche Prüfungen auf Debian 12 und Ubuntu 24.04,
+einschließlich echter Dialoge. Portal-/Wayland-Dialoge bleiben separat zu prüfen.
+
+Die App bietet jetzt zusätzlich Hell und Hoher Kontrast in den Einstellungen.
+Die gespeicherte Auswahl gilt für Navigation, Code-Editor, Protokoll, Diagramme
+und das schon geöffnete Dokumentationsfenster. Das erweiterte Einstellungsformat
+liest Format 1 mit dunkler Darstellung. Migration, Fehlererhaltung und Textkontraste
+bestehen unter macOS Debug und Debian 12 Release. Sieben App-Starts je System
+prüfen Auswahl, Abbrechen, Standardwerte und Neustarts; tatsächliche BMP-Ausgaben
+prüfen Editor, Einstellungen, Diagramme und geladene Hilfe bei 1080 × 740.
+Der Katalog umfasst damit 493 Prüfungen ohne Fenster und 37 Grafik-/Fensterfälle.
+UI-weite Schriftvergrößerung, vollständige Tastatur- und Screenreader-Bedienung
+bleiben offen. Die ausgeführten Umgebungen stehen im [Plattformnachweis](platform-validation.md).
 
 Aktueller [Plattformnachweis](platform-validation.md): Der direkte Physim-Build nach
 Entfernen der eigenen CMake-Dateien besteht alle acht CI-Kombinationen. Ubuntu 24.04
@@ -470,7 +483,7 @@ und veraltete Fenstermanager-Einträge geprüft. Die erneute Linux-CI steht aus.
 | Einheiten | SI-Dimensionen, Konvertierung, Einheitenalgebra, Quantity-Rechnung und Dimensionsprüfung von Datenreihen | benutzerdefinierte Anzeigeeinheiten in der GUI |
 | Runner | versionierte Modul-ABI, Handshake, Pause/Step/Run/Stop, Heartbeat, Crash-/Hang-Isolation | Ressourcenlimits, eigener Logkanal, echtes OS-Sandboxing |
 | Daten | CRC-Chunks, Streaming, Recovery, CSV, Seed-/Modellmetadaten | Index, mehr Datentypen, komprimierte Blöcke, Schemaerweiterung |
-| App | leerer Workspace-Einstieg mit gespeicherter Ordnerauswahl und bewusster Wiederöffnung, kompakte Menüleiste, Projektmanager, aufklappbarer Dateibaum und bis zu 16 editierbare Textdokumente mit separaten Autosaves und gespeicherten Editoransichten, drei Arbeitsbereiche, integrierte Offline-Dokumentation, Systemtypografie, Einstellungen mit Code-Schriftgröße und Autosave-Intervall, gespeicherte Darstellung/Fenstergröße/Maximierung, vergrößerbare Seitenleiste und Protokoll, Vorlagen, Editor, direkter Projektbuild ohne CMake mit Ausgaben unter `build/`, Diagramme | mehrere benannte Workspaces, freies Docking, weitere Panelzustände, UI-weite Schriftvergrößerung, helle/kontrastreiche Themes, vollständige Barrierefreiheit |
+| App | leerer Workspace-Einstieg mit gespeicherter Ordnerauswahl und bewusster Wiederöffnung, kompakte Menüleiste, Projektmanager, aufklappbarer Dateibaum und bis zu 16 editierbare Textdokumente mit separaten Autosaves und gespeicherten Editoransichten, drei Arbeitsbereiche, integrierte Offline-Dokumentation, Systemtypografie, Einstellungen mit Code-Schriftgröße und Autosave-Intervall, dunkle, helle und kontrastreiche Darstellung, gespeicherte Fenstergröße/Maximierung, vergrößerbare Seitenleiste und Protokoll, Vorlagen, Editor, direkter Projektbuild ohne CMake mit Ausgaben unter `build/`, Diagramme | mehrere benannte Workspaces, freies Docking, weitere Panelzustände, UI-weite Schriftvergrößerung, vollständige Barrierefreiheit |
 | Editor | C- und Physim-Dateien bearbeiten, sprachspezifische Syntaxfarben, Zeilennummern, Debug/Release, anklickbare Compilerdiagnosen, öffentlicher Header-Browser | Completion |
 | Szene | OpenGL 3.3 Core, Tiefenpuffer, MSAA, alle acht Grundprimitive, orientierte Boxen/Ebenen, RGBA-Transparenz mit Dreieckssortierung, UTF-8-Labels, Wurf-Flugbahn, Grid/Achsen, Kamera, Ansichten und Sichtbarkeit und Mausklickauswahl einzelner Szeneneinträge mit optionalen Objekt-IDs | artefaktfreie Transparenz bei sich durchdringenden Flächen, Szenenhierarchie, Zeitleiste |
 | Analyse | eigener C-Editor/Runner, Dataset-/Series-Handles, blockweise Transformationen mit Einheitenprüfung, eigene Ergebnisplots/-tabellen, Linien/Punkte/Histogramme mit Zoom am Mauszeiger, Verschieben, separaten Ausschnitten und Achsenoffsets, PNG-/SVG-Export des sichtbaren Ausschnitts, CSV/SVG und verlustfrei komprimiertes PNG mit vier Größen von 1200 × 850 bis 4800 × 3400 Pixeln, Statistik, Ableitung, Integral, gleitendes Mittel, Periode, Energieabweichung, Auswahl und Vergleich von bis zu acht Läufen, gemeinsame Statusauswahl von Datenreihen, lineares Resampling, Nearest/Previous im SDK und Differenzkurven, frühere Berichte öffnen | weitere Interpolationsverfahren/Transformationen |

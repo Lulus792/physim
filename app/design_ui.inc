@@ -1,34 +1,34 @@
 /* Private workspace presentation, included after main.c's application actions. */
 #include "design_tokens.h"
-static struct nk_color muted(void) { return PS_UI_DARK.muted; }
-static struct nk_color accent(void) { return PS_UI_DARK.accent; }
+static struct nk_color muted(void) { return UI_COLOR(muted); }
+static struct nk_color accent(void) { return UI_COLOR(accent); }
 static void style(struct nk_context *ui) {
     struct nk_color c[NK_COLOR_COUNT];
     nk_style_default(ui);
     for (int i = 0; i < NK_COLOR_COUNT; i++)
-        c[i] = nk_rgb(48, 49, 54);
-    c[NK_COLOR_TEXT] = PS_UI_DARK.text;
-    c[NK_COLOR_WINDOW] = PS_UI_DARK.window;
-    c[NK_COLOR_HEADER] = PS_UI_DARK.header;
-    c[NK_COLOR_BORDER] = PS_UI_DARK.border;
-    c[NK_COLOR_BUTTON] = PS_UI_DARK.button;
-    c[NK_COLOR_BUTTON_HOVER] = PS_UI_DARK.button_hover;
-    c[NK_COLOR_BUTTON_ACTIVE] = PS_UI_DARK.button_active;
-    c[NK_COLOR_EDIT] = PS_UI_DARK.edit;
+        c[i] = UI_COLOR(surface);
+    c[NK_COLOR_TEXT] = UI_COLOR(text);
+    c[NK_COLOR_WINDOW] = UI_COLOR(window);
+    c[NK_COLOR_HEADER] = UI_COLOR(header);
+    c[NK_COLOR_BORDER] = UI_COLOR(border);
+    c[NK_COLOR_BUTTON] = UI_COLOR(button);
+    c[NK_COLOR_BUTTON_HOVER] = UI_COLOR(button_hover);
+    c[NK_COLOR_BUTTON_ACTIVE] = UI_COLOR(button_active);
+    c[NK_COLOR_EDIT] = UI_COLOR(edit);
     c[NK_COLOR_EDIT_CURSOR] = accent();
-    c[NK_COLOR_SELECT] = PS_UI_DARK.button;
-    c[NK_COLOR_SELECT_ACTIVE] = PS_UI_DARK.selection_active;
-    c[NK_COLOR_TOGGLE] = PS_UI_DARK.toggle;
-    c[NK_COLOR_TOGGLE_HOVER] = PS_UI_DARK.toggle_hover;
+    c[NK_COLOR_SELECT] = UI_COLOR(button);
+    c[NK_COLOR_SELECT_ACTIVE] = UI_COLOR(selection_active);
+    c[NK_COLOR_TOGGLE] = UI_COLOR(toggle);
+    c[NK_COLOR_TOGGLE_HOVER] = UI_COLOR(toggle_hover);
     c[NK_COLOR_TOGGLE_CURSOR] = accent();
-    c[NK_COLOR_SLIDER] = PS_UI_DARK.slider;
+    c[NK_COLOR_SLIDER] = UI_COLOR(slider);
     c[NK_COLOR_SLIDER_CURSOR] = accent();
-    c[NK_COLOR_SLIDER_CURSOR_HOVER] = PS_UI_DARK.accent_hover;
+    c[NK_COLOR_SLIDER_CURSOR_HOVER] = UI_COLOR(accent_hover);
     c[NK_COLOR_SLIDER_CURSOR_ACTIVE] = accent();
     c[NK_COLOR_SCROLLBAR] = c[NK_COLOR_WINDOW];
-    c[NK_COLOR_SCROLLBAR_CURSOR] = PS_UI_DARK.scrollbar;
-    c[NK_COLOR_SCROLLBAR_CURSOR_HOVER] = PS_UI_DARK.scrollbar_hover;
-    c[NK_COLOR_SCROLLBAR_CURSOR_ACTIVE] = PS_UI_DARK.scrollbar_active;
+    c[NK_COLOR_SCROLLBAR_CURSOR] = UI_COLOR(scrollbar);
+    c[NK_COLOR_SCROLLBAR_CURSOR_HOVER] = UI_COLOR(scrollbar_hover);
+    c[NK_COLOR_SCROLLBAR_CURSOR_ACTIVE] = UI_COLOR(scrollbar_active);
     nk_style_from_table(ui, c);
     ui->style.progress.padding = nk_vec2(0, 0);
     ui->style.progress.rounding = PS_UI_RADIUS_PROGRESS;
@@ -50,20 +50,31 @@ static void style(struct nk_context *ui) {
     ui->style.tab.background = nk_style_item_color(c[NK_COLOR_WINDOW]);
     ui->style.tab.border = 0;
     ui->style.tab.padding = nk_vec2(0, 8);
+    if (ui_palette == &PS_UI_HIGH_CONTRAST) {
+        ui->style.button.border = 1;
+        ui->style.edit.border = 1;
+        ui->style.combo.border = 1;
+        ui->style.property.border = 1;
+    }
 }
 static bool action_button(struct nk_context *ui, const char *label, bool primary) {
     if (primary) {
         nk_style_push_style_item(ui, &ui->style.button.normal,
-                                 nk_style_item_color(PS_UI_DARK.primary));
+                                 nk_style_item_color(UI_COLOR(primary)));
         nk_style_push_style_item(ui, &ui->style.button.hover,
-                                 nk_style_item_color(PS_UI_DARK.primary_hover));
+                                 nk_style_item_color(UI_COLOR(primary_hover)));
         nk_style_push_style_item(ui, &ui->style.button.active,
-                                 nk_style_item_color(PS_UI_DARK.primary_active));
+                                 nk_style_item_color(UI_COLOR(primary_active)));
+        nk_style_push_color(ui, &ui->style.button.text_normal, UI_COLOR(primary_text));
+        nk_style_push_color(ui, &ui->style.button.text_hover, UI_COLOR(primary_text));
+        nk_style_push_color(ui, &ui->style.button.text_active, UI_COLOR(primary_text));
     }
     bool pressed = nk_button_label(ui, label);
     if (primary)
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++) {
             nk_style_pop_style_item(ui);
+            nk_style_pop_color(ui);
+        }
     return pressed;
 }
 static void section(struct nk_context *ui, const char *label) {
@@ -231,7 +242,7 @@ static void camera_inspector(app *a) {
                 if (ps_parameter_catalog_value(&a->parameters, i, &selected) != PS_OK) {
                     nk_layout_row_dynamic(ui, 24, 1);
                     nk_label_colored(ui, "Wert außerhalb des gültigen Bereichs", NK_TEXT_LEFT,
-                                     PS_UI_DARK.error);
+                                     UI_COLOR(error));
                 }
             }
             nk_end_disabled(ui);
@@ -320,10 +331,10 @@ static void draw_ui(app *a, int width, int height) {
         bool side_hover = nk_input_is_mouse_hovering_rect(&ui->input, a->panel_bounds[0]);
         bool log_hover = nk_input_is_mouse_hovering_rect(&ui->input, a->panel_bounds[1]);
         nk_stroke_line(canvas, side + 12, top + 12, side + 12, top + content - 12, 2,
-                       side_hover || a->panel_drag == 1 ? accent() : PS_UI_DARK.divider);
+                       side_hover || a->panel_drag == 1 ? accent() : UI_COLOR(divider));
         if (expanded_log)
             nk_stroke_line(canvas, 24, h - footer - 4, w - 24, h - footer - 4, 2,
-                           log_hover || a->panel_drag == 2 ? accent() : PS_UI_DARK.divider);
+                           log_hover || a->panel_drag == 2 ? accent() : UI_COLOR(divider));
         nk_push_scissor(canvas, previous_clip);
     }
     nk_end(ui);
@@ -637,7 +648,7 @@ static void draw_ui(app *a, int width, int height) {
             if (a->runner.running && ps_clock() - a->heartbeat > 3) {
                 nk_layout_row_dynamic(ui, 28, 1);
                 nk_label_colored(ui, "Keine Antwort. Mit Stoppen den Lauf beenden.", NK_TEXT_LEFT,
-                                 PS_UI_DARK.error);
+                                 UI_COLOR(error));
             }
         } else {
             nk_layout_row_dynamic(ui, 34, 2);

@@ -232,7 +232,7 @@ static float documentation_table(app *a, const ps_doc_block *block, const char *
     if (!bounds)
         return height;
     struct nk_command_buffer *canvas = nk_window_get_canvas(a->doc_ui);
-    nk_fill_rect(canvas, *bounds, 4, block->level ? nk_rgb(38, 48, 65) : nk_rgb(25, 26, 30));
+    nk_fill_rect(canvas, *bounds, 4, block->level ? UI_COLOR(doc_header) : UI_COLOR(doc_body));
     for (int i = 0; i < count; i++) {
         size_t at = 0;
         float y = bounds->y + 8;
@@ -244,8 +244,8 @@ static float documentation_table(app *a, const ps_doc_block *block, const char *
                 canvas,
                 nk_rect(bounds->x + i * cell_width + 10, y, cell_width - 20, font->height + 6),
                 cells[i] + at, (int)length, font, nk_rgba(0, 0, 0, 0),
-                match && match < cells[i] + at + length ? nk_rgb(100, 170, 255)
-                                                        : nk_rgb(225, 227, 233));
+                match && match < cells[i] + at + length ? UI_COLOR(accent)
+                                                        : UI_COLOR(doc_text));
             at += used;
             y += font->height + 6;
         } while (at < lengths[i]);
@@ -281,7 +281,7 @@ static void documentation_link(app *a, const char *target) {
 static void documentation_sidebar(app *a) {
     struct nk_context *ui = a->doc_ui;
     nk_layout_row_dynamic(ui, 28, 1);
-    nk_label_colored(ui, "PHYSIM HANDBUCH", NK_TEXT_LEFT, nk_rgb(166, 169, 177));
+    nk_label_colored(ui, "PHYSIM HANDBUCH", NK_TEXT_LEFT, UI_COLOR(muted));
     nk_layout_row_dynamic(ui, 30, 2);
     if (nk_button_label(ui, "Themen"))
         a->doc_contents = false;
@@ -369,7 +369,7 @@ static void documentation_view(app *a, float height) {
         nk_draw_text(nk_window_get_canvas(ui),
                      nk_rect(search_bounds.x + 10, search_bounds.y + 8, search_bounds.w - 20, 20),
                      placeholder, (int)strlen(placeholder), a->doc_font_ui, nk_rgba(0, 0, 0, 0),
-                     nk_rgb(166, 169, 177));
+                     UI_COLOR(muted));
     }
     nk_layout_row_push(ui, .20f);
     if (nk_button_label(ui, "Vorheriger")) {
@@ -408,7 +408,7 @@ static void documentation_view(app *a, float height) {
     else
         snprintf(detail, sizeof detail, "%s · offline verfügbar · " PS_UI_SHORTCUT "F sucht in diesem Dokument",
                  d ? documentation_topics[a->doc_topic].title : "Dokument nicht verfügbar");
-    nk_label_colored(ui, detail, NK_TEXT_LEFT, nk_rgb(166, 169, 177));
+    nk_label_colored(ui, detail, NK_TEXT_LEFT, UI_COLOR(muted));
     nk_layout_row_dynamic(ui, height - 146, 1);
     if (nk_group_scrolled_offset_begin(ui, &a->doc_scroll_x, &a->doc_scroll_y, "document-body",
                                        0)) {
@@ -464,7 +464,7 @@ static void documentation_view(app *a, float height) {
                                                                               : a->doc_font_ui;
                 if (b->kind == PS_DOC_CODE) {
                     nk_layout_row_dynamic(ui, 28, 2);
-                    nk_label_colored(ui, "Code", NK_TEXT_LEFT, nk_rgb(166, 169, 177));
+                    nk_label_colored(ui, "Code", NK_TEXT_LEFT, UI_COLOR(muted));
                     if (nk_button_label(ui, "Code kopieren"))
                         SDL_SetClipboardText(text);
                 }
@@ -488,10 +488,10 @@ static void documentation_view(app *a, float height) {
                             documentation_table(a, b, text, width, &rect);
                         else if (b->kind == PS_DOC_RULE)
                             nk_stroke_line(canvas, rect.x, rect.y + 7, rect.x + rect.w, rect.y + 7,
-                                           1, nk_rgb(65, 66, 73));
+                                           1, UI_COLOR(border));
                         else {
                             if (b->kind == PS_DOC_CODE)
-                                nk_fill_rect(canvas, rect, 7, nk_rgb(23, 24, 28));
+                                nk_fill_rect(canvas, rect, 7, UI_COLOR(edit));
                             size_t at = 0;
                             float y = rect.y + 8;
                             do {
@@ -500,8 +500,8 @@ static void documentation_view(app *a, float height) {
                                                               width - 24, &length);
                                 const char *match = ps_document_find(text + at, a->doc_query);
                                 struct nk_color color = match && match < text + at + length
-                                                            ? nk_rgb(100, 170, 255)
-                                                            : nk_rgb(225, 227, 233);
+                                                            ? UI_COLOR(accent)
+                                                            : UI_COLOR(doc_text);
                                 nk_draw_text(
                                     canvas, nk_rect(rect.x + 12, y, rect.w - 24, font->height + 6),
                                     text + at, (int)length, font, nk_rgba(0, 0, 0, 0), color);

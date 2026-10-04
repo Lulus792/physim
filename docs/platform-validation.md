@@ -3,6 +3,38 @@
 Stand: 4. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Darstellungswechsel am 4. Oktober 2026
+
+Die neue helle und kontrastreiche Darstellung wurde tatsächlich auf dem lokalen
+Intel-Mac (macOS 14.6.1, Apple Clang 16, SDL 3.2.30, Debug) und in der Debian-12-VM
+(Linux 6.1.0-53-cloud-amd64, GCC 12.2, SDL 3.2.30, Release) gebaut und ausgeführt.
+Debian verwendet X11/Xvfb/Openbox und Mesa 22.3.6. Das belegt keine Wayland- oder
+physische GPU-Abnahme.
+
+- `preferences` prüft die drei Paletten, Format-1-Migration, Grenzen, Prüfsumme,
+  alle Kürzungen und Erhaltung bei Fehlern. Die neuen Text-, Syntax- und
+  Kurvenlegendenfarben erreichen rechnerisch mindestens 4,5:1 auf Hell und 7:1
+  auf Hoher Kontrast.
+- `themes_workflow` startet je sieben App-Prozesse, bedient die echten Optionen
+  und prüft Übernehmen, Abbrechen, Standardwerte und gespeicherte Neustarts.
+  Der Wechsel erreicht das vorher geöffnete Dokumentationsfenster und bewahrt
+  dessen Fonts. BMP-Ausgaben prüfen die Hintergrundfarbe in Editor, Einstellungen,
+  Diagrammen mit drei Kurven und geladener Dokumentation bei 1080 × 740.
+- Die bisherigen Abläufe für Einstellungen, Dokumentation, Diagramme, beide
+  Menügrößen und kleine Dokumentansicht bestehen zusätzlich: macOS 8/8 mit
+  UI-Rendererprüfung (`build/workspace-check/test-results/run-egjd2dld`),
+  Debian 7/7 (`build/native/Release/test-results/run-soyj8nw8` innerhalb der VM).
+  Die abschließende erweiterte Themenprüfung besteht separat auf macOS
+  (`run-ba1lmh_4`) und Debian (`run-g_gz4yq3`). Die abschließende Menü- und
+  Themenprüfung des fertigen Quellstands besteht jeweils 2/2:
+  macOS `run-q5yc2y_x`, Debian `run-cek89xm5`. Der abschließende Kontrast-/Format-Test
+  besteht auf macOS (`run-rflngm6f`) und Debian (`run-6b2meyq1`).
+  macOS-Bilder wurden visuell geprüft.
+
+Die Linux-Paket-CI des vorherigen Commits `fa311dc` besteht mittlerweile vollständig
+auf [Debian 12 und Ubuntu 24.04](https://github.com/PhysicSimulator/physim/actions/runs/37234502965),
+einschließlich der echten GTK-Dateidialoge. Diese CI enthält noch keine neuen Themen.
+
 ## Lokaler Intel-Mac am 4. Oktober 2026
 
 macOS 14.6.1 (23G93), Intel x86_64, Apple Clang 16.0.0 und lokal aus

@@ -55,14 +55,16 @@ static void window_control(app *a, unsigned control) {
     nk_style_pop_float(ui);
     struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
     float x = floorf(bounds.x + bounds.w / 2), y = floorf(bounds.y + bounds.h / 2);
-    struct nk_color color = PS_UI_DARK.text;
+    struct nk_color color = UI_COLOR(text);
+    if (control == 2 && (ui->last_widget_state & NK_WIDGET_STATE_HOVER))
+        color = nk_rgb(255, 255, 255);
     if (control == 0)
         nk_stroke_line(canvas, x - 5, y + 3, x + 5, y + 3, 1, color);
     else if (control == 1) {
         bool maximized = (SDL_GetWindowFlags(a->window) & SDL_WINDOW_MAXIMIZED) != 0;
         if (maximized)
             nk_stroke_rect(canvas, nk_rect(x - 2, y - 5, 8, 8), 0, 1, color);
-        nk_fill_rect(canvas, nk_rect(x - 5, y - 3, 9, 9), 0, PS_UI_DARK.header);
+        nk_fill_rect(canvas, nk_rect(x - 5, y - 3, 9, 9), 0, UI_COLOR(header));
         nk_stroke_rect(canvas, nk_rect(x - 5, y - 3, 9, 9), 0, 1, color);
     } else {
         nk_stroke_line(canvas, x - 4, y - 4, x + 4, y + 4, 1, color);

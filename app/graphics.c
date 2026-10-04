@@ -91,6 +91,7 @@ _Static_assert(SCENE_CAPACITY >= (PS_MAX_OBJECTS * (PS_MAX_SCENE_POINTS - 1) + 3
                "The scene buffer must fit even overlapping maximal polylines");
 struct ps_graphics {
     SDL_Window *window;
+    float background[3];
     SDL_GLContext context;
 #define GL_FIELD(ret, name, args) ret(APIENTRY *name) args;
     GL_FUNCTIONS(GL_FIELD)
@@ -114,6 +115,13 @@ struct ps_graphics {
     ps_ui_render_stats ui_stats;
     ps_ui_geometry ui_geometry;
 };
+void ps_graphics_background(ps_graphics *g, uint8_t red, uint8_t green, uint8_t blue) {
+    if (g) {
+        g->background[0] = red / 255.f;
+        g->background[1] = green / 255.f;
+        g->background[2] = blue / 255.f;
+    }
+}
 bool ps_graphics_ui_stats(const ps_graphics *g, ps_ui_render_stats *out) {
     if (!g || !out)
         return false;
@@ -187,6 +195,7 @@ ps_graphics *ps_graphics_create(SDL_Window *window) {
         return NULL;
     }
     g->window = window;
+    ps_graphics_background(g, 20, 21, 24);
     ps_ui_geometry_init(&g->ui_geometry, ps_allocator_default(), 0);
     g->context = SDL_GL_CreateContext(window);
     if (!g->context || !SDL_GL_MakeCurrent(window, g->context))
@@ -373,7 +382,7 @@ static bool ui_target(ps_graphics *g, struct nk_context *ui, struct nk_buffer *c
     g->Disable(GL_DEPTH_TEST);
     g->Disable(GL_CULL_FACE);
     g->Disable(GL_SCISSOR_TEST);
-    g->ClearColor(20 / 255.f, 21 / 255.f, 24 / 255.f, 1);
+    g->ClearColor(g->background[0], g->background[1], g->background[2], 1);
     g->Clear(GL_COLOR_BUFFER_BIT);
     g->Enable(GL_BLEND);
     g->BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

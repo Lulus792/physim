@@ -49,7 +49,7 @@ static void plot_controls(app *a, ps_plot_view *v, const double full[4]) {
     }
     nk_layout_row_push(ui, .52f);
     nk_label_colored(ui, "Mausrad: Zoom · Ziehen: Verschieben", NK_TEXT_RIGHT,
-                     nk_rgb(166, 169, 177));
+                     UI_COLOR(muted));
     nk_layout_row_end(ui);
     if (full) {
         double b[4];

@@ -192,7 +192,7 @@ python3 tests/test_native_test_runner.py --work build/native
 
 ### Fenster- und Grafiktests direkt ausführen
 
-`--test-display` führt zusätzlich 36 Fenster- und Grafikabläufe aus. Dafür sind
+`--test-display` führt zusätzlich 37 Fenster- und Grafikabläufe aus. Dafür sind
 eine grafische Sitzung, SDL und ein geeigneter OpenGL-Treiber erforderlich.
 Die beiden Testgruppen werden getrennt gestartet; `--test-display` lässt sich
 nicht mit `--no-app` oder `--test` kombinieren.
@@ -624,6 +624,16 @@ Schriftwahl, Schalter, Übernehmen, Abbrechen, Standardwerte und Ziehen der Pane
 Neustarts prüfen Fenstermaße, Maximierung, Sichtbarkeit und Schrift. Eine reale
 Autosave-Datei bestätigt das gewählte Intervall; beschädigte Einstellungen bleiben
 unverändert. Die normalen Benutzereinstellungen werden von diesen Tests nicht gelesen.
+
+`themes_workflow` prüft zusätzlich sieben Starts für Hell, Hoher Kontrast, Abbrechen,
+Standardwerte und gespeicherte Wiederherstellung. Bei 1080 × 740 werden echte
+Editor-, Einstellungs-, Diagramm- und Dokumentationsansichten gerendert; BMP-Prüfungen
+bestätigen die gewählte Hintergrundfarbe. Das bereits vor dem Wechsel geöffnete
+Hilfefenster behält seine eigenen Fonts. `preferences` prüft Format-1-Migration,
+alle drei gespeicherten Paletten und Textkontraste einschließlich Syntax und
+Kurvenlegenden: mindestens 4,5:1 für Hell und 7:1 für Hoher Kontrast gemäß der
+[W3C-Kontrastberechnung](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html).
+Das ist keine vollständige Barrierefreiheitsabnahme.
 
 ## Linux-Startfehler untersuchen
 

@@ -1,5 +1,8 @@
 #include "physim/data.h"
 #include "preferences.h"
+#include "ui.h"
+#include "design_tokens.h"
+#include <math.h>
 #include <SDL3/SDL.h>
 #include <stdio.h>
 #include <string.h>
@@ -21,8 +24,46 @@ static void put32(unsigned char *p, uint32_t v) {
     for (unsigned i = 0; i < 4; i++)
         p[i] = (unsigned char)(v >> (8 * i));
 }
+static double channel(unsigned value) {
+    double s = value / 255.0;
+    return s <= 0.04045 ? s / 12.92 : pow((s + 0.055) / 1.055, 2.4);
+}
+static double luminance(struct nk_color c) {
+    return .2126 * channel(c.r) + .7152 * channel(c.g) + .0722 * channel(c.b);
+}
+static bool readable(struct nk_color foreground, struct nk_color background, double minimum) {
+    double a = luminance(foreground), b = luminance(background);
+    return (fmax(a, b) + .05) / (fmin(a, b) + .05) >= minimum;
+}
+static int contrast(void) {
+    const ps_ui_palette *palettes[] = {&PS_UI_LIGHT, &PS_UI_HIGH_CONTRAST};
+    for (unsigned i = 0; i < 2; i++) {
+        const ps_ui_palette *p = palettes[i];
+        double minimum = i ? 7 : 4.5;
+        CHECK(readable(p->text, p->window, minimum));
+        CHECK(readable(p->text, p->header, minimum));
+        CHECK(readable(p->text, p->edit, minimum));
+        CHECK(readable(p->text, p->button_active, minimum));
+        CHECK(readable(p->muted, p->window, minimum));
+        CHECK(readable(p->muted, p->header, minimum));
+        CHECK(readable(p->gutter_text, p->gutter, minimum));
+        CHECK(readable(p->doc_text, p->doc_body, minimum));
+        CHECK(readable(p->doc_text, p->doc_header, minimum));
+        CHECK(readable(p->primary_text, p->primary, minimum));
+        CHECK(readable(p->primary_text, p->primary_hover, minimum));
+        CHECK(readable(p->primary_text, p->primary_active, minimum));
+        struct nk_color syntax[] = {p->code_text, p->code_comment, p->code_string, p->code_keyword,
+            p->code_type, p->code_preprocessor, p->code_number, p->accent, p->error};
+        for (unsigned j = 0; j < sizeof syntax / sizeof syntax[0]; j++)
+            CHECK(readable(syntax[j], p->edit, minimum));
+        for (unsigned j = 0; j < 8; j++)
+            CHECK(readable(p->curves[j], p->edit, minimum));
+    }
+    return 0;
+}
 int main(int argc, char **argv) {
     CHECK(argc == 2);
+    CHECK(contrast() == 0);
     char path[4096], bad[4096];
     snprintf(path, sizeof path, "%s/preferences-unit.bin", argv[1]);
     snprintf(bad, sizeof bad, "%s/preferences-corrupt.bin", argv[1]);
@@ -31,6 +72,11 @@ int main(int argc, char **argv) {
     ps_preferences p = PS_PREFERENCES_DEFAULT, out = p;
     CHECK(ps_preferences_valid(&p) && ps_preferences_read(path, &out) == PS_EOF);
     CHECK(ps_preferences_write(path, &p) == PS_OK);
+    for (unsigned theme = 0; theme < PS_THEME_COUNT; theme++) {
+        p.theme = theme;
+        CHECK(ps_preferences_write(path, &p) == PS_OK && ps_preferences_read(path, &out) == PS_OK);
+        CHECK(!memcmp(&p, &out, sizeof p));
+    }
     p.editor_size = 22;
     p.autosave_seconds = 120;
     p.width = 1200;
@@ -59,30 +105,49 @@ int main(int argc, char **argv) {
     invalid = p;
     invalid.workspace = 3;
     CHECK(!ps_preferences_valid(&invalid));
-    unsigned char bytes[57] = {0};
+    invalid = p;
+    invalid.theme = PS_THEME_COUNT;
+    CHECK(ps_preferences_write(path, &invalid) == PS_INVALID);
+    CHECK(ps_preferences_read(path, &out) == PS_OK && !memcmp(&p, &out, sizeof p));
+    unsigned char bytes[61] = {0};
     FILE *f = fopen(path, "rb");
-    CHECK(f && fread(bytes, 1, 56, f) == 56 && !fclose(f));
-    for (size_t n = 0; n < 56; n++) {
+    CHECK(f && fread(bytes, 1, 60, f) == 60 && !fclose(f));
+    for (size_t n = 0; n < 60; n++) {
         CHECK(bytes_write(bad, bytes, n));
         CHECK(ps_preferences_read(bad, &out) == PS_CORRUPT && !memcmp(&p, &out, sizeof p));
     }
-    CHECK(bytes_write(bad, bytes, 57) && ps_preferences_read(bad, &out) == PS_CORRUPT);
-    for (unsigned i = 0; i < 56; i++) {
+    CHECK(bytes_write(bad, bytes, 61) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    for (unsigned i = 0; i < 60; i++) {
         bytes[i] ^= 1;
-        CHECK(bytes_write(bad, bytes, 56));
+        CHECK(bytes_write(bad, bytes, 60));
         CHECK(ps_preferences_read(bad, &out) != PS_OK && !memcmp(&p, &out, sizeof p));
         bytes[i] ^= 1;
     }
     put32(bytes + 32, 17);
+    put32(bytes + 56, ps_crc32(bytes, 56));
+    CHECK(bytes_write(bad, bytes, 60) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    put32(bytes + 32, p.editor_size);
+    put32(bytes + 52, PS_THEME_COUNT);
+    put32(bytes + 56, ps_crc32(bytes, 56));
+    CHECK(bytes_write(bad, bytes, 60) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    CHECK(!memcmp(&p, &out, sizeof p));
+    /* Version 1 fixture retains all earlier settings and defaults to the dark theme. */
+    memcpy(bytes + 6, "01", 2);
+    put32(bytes + 8, 40);
     put32(bytes + 52, ps_crc32(bytes, 52));
-    CHECK(bytes_write(bad, bytes, 56) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    CHECK(bytes_write(bad, bytes, 56) && ps_preferences_read(bad, &out) == PS_OK);
+    ps_preferences legacy = p;
+    legacy.theme = PS_THEME_DARK;
+    CHECK(!memcmp(&legacy, &out, sizeof out));
+    CHECK(ps_preferences_write(bad, &out) == PS_OK && ps_preferences_read(bad, &out) == PS_OK);
+    CHECK(!memcmp(&legacy, &out, sizeof out));
     /* Rename failure: a directory cannot be replaced with a settings file. */
     char directory[4096];
     snprintf(directory, sizeof directory, "%s/preferences-target", argv[1]);
     CHECK(SDL_CreateDirectory(directory));
     CHECK(ps_preferences_write(directory, &p) == PS_IO);
     CHECK(ps_preferences_read(path, &out) == PS_OK && !memcmp(&p, &out, sizeof p));
-    puts("Preferences: roundtrip, replacement, bounds, CRC, all truncations and failure "
+    puts("Preferences: themes, contrast, v1 migration, roundtrip, replacement, bounds, CRC, truncations and failure "
          "preservation passed");
     return 0;
 }
