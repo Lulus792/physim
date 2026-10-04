@@ -3201,6 +3201,36 @@
       ]
     },
     {
+      "name": "toolbar_input_isolation",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "toolbar_input_isolation",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 65,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
       "name": "documents_large",
       "app": true,
       "display": true,

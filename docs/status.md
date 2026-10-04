@@ -18,6 +18,23 @@ Menüabläufe scheitern nach dem Hilfefenster; der kleine Menütest besteht in e
 gezielten Wiederholung, die Ursache ist noch nicht belegt. Diese Befunde sind keine bestandene
 vollständige Mac-Abnahme; bisherige CI-Nachweise gelten für ihre genannten Systeme.
 
+Die anschließende Batch-Diagnose zeigt, dass das 0,25-Sekunden-Limit alle drei
+Fehlerprüfungen vor ihrem eigentlichen Fehler beendet. Nur der Hängefall verwendet
+weiterhin dieses kurze Limit; Absturz und Schemafehler erhalten fünf Sekunden
+für ihren Start. Der Test verlangt jetzt ausdrücklich `PS_IO`, `PS_LIMIT` und
+`PS_INVALID` sowie dieselben abgeschlossenen Läufe und die bisherige Fünf-Sekunden-Grenze.
+Batchreferenz und parallele Referenz bestehen damit auf dem lokalen Intel-Mac.
+Die Menüprüfung isoliert jetzt ihre geplanten Klicks von nativen Maus-/Fokusereignissen.
+Eine zusätzliche Prüfung reproduziert die Störung ohne Isolation und besteht mit
+Isolation in beiden Fenstergrößen. Menüs, Plot-Eingabeisolation und Fensterstart
+bestehen lokal; der aktuelle Katalog enthält 493 Prüfungen ohne Fenster und
+36 Grafik-/Fensterfälle. Der anschließende Gesamtlauf besteht 492/493 Tests ohne
+Fenster; ausschließlich das Sprach-Testprogramm wird im Debug-Build von macOS
+blockiert. Im Release-Build besteht dasselbe Programm. Die Linux-Paket-CI zu
+`1b098d7` besteht Paketstart, SDK und alle neun grafischen Projekte auf Debian
+und Ubuntu, scheitert aber weiterhin an der nativen Dialogprüfung. Die genaue
+Fehlerphase wird künftig zusätzlich als Jobannotation ausgegeben.
+
 Aktueller [Plattformnachweis](platform-validation.md): Der direkte Physim-Build nach
 Entfernen der eigenen CMake-Dateien besteht alle acht CI-Kombinationen. Ubuntu 24.04
 mit GCC/Clang und macOS 15 auf Apple Silicon/Intel bestehen jeweils 493 Tests ohne

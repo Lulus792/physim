@@ -131,6 +131,17 @@ def settings(flow, directory):
     exact(directory / "preferences.bin", "damaged preferences")
 
 
+def toolbar_input_isolation(flow, directory):
+    directory.mkdir()
+    for size in ("small", "large"):
+        if size == "small":
+            flow.env["PHYSIM_TEST_SMALL"] = "1"
+        else:
+            flow.env.pop("PHYSIM_TEST_SMALL", None)
+        flow.run("--workspace-state-test", directory / size, "toolbar-noise", timeout=25,
+                 marker="TOOLBAR AND TABS: PASSED")
+
+
 def workspace_state(flow, directory):
     for mode in ("write", "read", "read-analysis", "read-simulate", "missing-addition", "missing-root", "forget", "empty", "write-folder", "read-folder",
                  "read-folder-shortened", "read-folder-recovery", "corrupt"):
@@ -215,7 +226,7 @@ def autosave(flow, root):
 
 SPECIAL = {"project_settings_workflow": project_settings, "settings_workflow": settings,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
-           "autosave_workflow": autosave}
+           "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}
 
 
 def main():

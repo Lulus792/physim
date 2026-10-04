@@ -192,7 +192,7 @@ python3 tests/test_native_test_runner.py --work build/native
 
 ### Fenster- und Grafiktests direkt ausführen
 
-`--test-display` führt zusätzlich 35 Fenster- und Grafikabläufe aus. Dafür sind
+`--test-display` führt zusätzlich 36 Fenster- und Grafikabläufe aus. Dafür sind
 eine grafische Sitzung, SDL und ein geeigneter OpenGL-Treiber erforderlich.
 Die beiden Testgruppen werden getrennt gestartet; `--test-display` lässt sich
 nicht mit `--no-app` oder `--test` kombinieren.
@@ -228,11 +228,15 @@ Der Prüfer bedient echte Zenity-Fenster und prüft die von SDL gelieferten Pfad
 Abbrechen und einen fehlenden Dialogtreiber. Er benötigt währenddessen den
 Tastaturfokus. Die Paket-CI führt ihn in einem eigenen Xvfb-Display unter Debian
 12 und Ubuntu 24.04 aus; Protokolle, Dialogbilder und ein Workspace-Bild bleiben im Testordner.
-Der Dialogtest gehört zusätzlich zu den oben genannten 35 Grafikabläufen.
+Der Dialogtest gehört zusätzlich zu den oben genannten 36 Grafikabläufen.
 
 Die Abläufe prüfen Menüs und Tabs bei zwei Fenstergrößen, Dokumentbearbeitung,
 Wiederherstellung nach Abbrüchen, Workspace- und Projekteinstellungen,
 Diagramme, Stapelläufe, Sprachvorschauen und 13 vollständige Sprachprojekte.
+`toolbar_input_isolation` wiederholt die vollständige Menü-/Tab-Prüfung bei beiden
+Fenstergrößen mit absichtlich eingeschobenen fremden Maus-, Mausrad- und Fokusereignissen.
+Die skriptgesteuerten Plot- und Menütests verwenden dafür eine eigene Mauskennung;
+native Fenstergrößen-, Minimierungs- und Schließereignisse werden weiter verarbeitet.
 Der gewählte Compiler wird auch für die von der App angelegten Projekte verwendet.
 Diagrammtests dekodieren zusätzlich die PNG-Exporte und vergleichen Pixel,
 Farben, Legenden und beschnittene Linien, Balken und Punktmengen.
@@ -254,7 +258,7 @@ gespeichert. Ein Filter ohne Treffer ist ebenfalls ein Fehler.
 
 Die drei Benchmark-Prüfungen (`benchmark_smoke`, `benchmark_driver`, `ui_rendering`)
 sind ebenfalls übertragen. Der direkte Katalog enthält damit 493 Prüfungen ohne
-Fenster und 35 Grafikabläufe. Die CI verwendet diesen Katalog, die direkte
+Fenster und 36 Grafikabläufe. Die CI verwendet diesen Katalog, die direkte
 Sanitizer-Prüfung und die Prüfung des verschobenen SDKs. Die ausgeführten
 Plattformnachweise stehen in [Plattformprüfung](platform-validation.md).
 

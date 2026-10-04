@@ -183,7 +183,7 @@ static bool test_plot_setup(app *a, const char *directory) {
     request_dataset(a);
     return ok;
 }
-static void test_plot_noise(app *a) {
+static void test_pointer_noise(app *a) {
     SDL_Event e = {0};
     e.type = SDL_EVENT_MOUSE_MOTION;
     e.motion.windowID = SDL_GetWindowID(a->window);
@@ -193,6 +193,11 @@ static void test_plot_noise(app *a) {
     e.type = SDL_EVENT_MOUSE_BUTTON_UP;
     e.button.button = SDL_BUTTON_LEFT;
     e.button.down = false;
+    SDL_PushEvent(&e);
+    e.type = SDL_EVENT_MOUSE_WHEEL;
+    e.wheel.which = 0;
+    e.wheel.x = 0;
+    e.wheel.y = 10;
     SDL_PushEvent(&e);
     e.type = SDL_EVENT_WINDOW_FOCUS_LOST;
     e.window.windowID = SDL_GetWindowID(a->window);

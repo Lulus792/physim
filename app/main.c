@@ -2084,8 +2084,9 @@ static void test_key(app *a, SDL_Keycode key) {
     test_window_key(a->window, key);
 }
 #define PS_TEST_MOUSE_ID ((SDL_MouseID)0x50535445u)
-/* Only --plot-test uses this filter. Normal application input is unchanged. */
-static bool test_plot_external_input(const SDL_Event *e) {
+/* Scripted plot/menu clicks are isolated from native pointer and focus events.
+ * Window resizing, minimizing and closing still come from the real desktop. */
+static bool test_scripted_external_input(const SDL_Event *e) {
     switch (e->type) {
     case SDL_EVENT_MOUSE_MOTION: return e->motion.which != PS_TEST_MOUSE_ID;
     case SDL_EVENT_MOUSE_BUTTON_DOWN:
@@ -2131,6 +2132,8 @@ int main(int argc, char **argv) {
     bool workspace_state_test = argc > 1 && !strcmp(argv[1], "--workspace-state-test");
     if (workspace_state_test && argc != 4)
         return 1;
+    bool toolbar_test = workspace_state_test &&
+                        (!strcmp(argv[3], "toolbar") || !strcmp(argv[3], "toolbar-noise"));
     if (workspace_test && argc != 3)
         return 2;
     bool syntax_preview_test = argc > 1 && !strcmp(argv[1], "--syntax-preview-test");
@@ -2561,7 +2564,7 @@ int main(int argc, char **argv) {
                 }
                 continue;
             }
-            if (plot_test && test_plot_external_input(&e)) continue;
+            if ((plot_test || toolbar_test) && test_scripted_external_input(&e)) continue;
             if (self_test && e.type == SDL_EVENT_TEXT_INPUT) {
                 doc_input_events++;
                 doc_input_bytes += (unsigned)strlen(e.text.text);
@@ -2722,7 +2725,7 @@ int main(int argc, char **argv) {
                 a->quitting = true;
             } else
                 test_plot_frame(a, &test_stage, &exit_code, &capture);
-            if (plot_noise) test_plot_noise(a);
+            if (plot_noise) test_pointer_noise(a);
         } else if (batch_test) {
             if (ps_clock() - test_started > 150) {
                 fprintf(stderr, "Batch UI timeout, stage %d\n", test_stage);

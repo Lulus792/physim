@@ -35,6 +35,40 @@ aus `42d1f9e` exportierte und gebaute App scheitert ebenfalls im kleinen Menüte
 und eine mögliche Beeinflussung durch native Fokus-/Mausereignisse bleiben offen.
 Die bisherigen macOS-15-CI-Ergebnisse belegen keine Fehlerfreiheit auf macOS 14.6.1.
 
+Die anschließende Diagnose zeigt beim Batchtest für alle drei Fehlerfälle
+Zeitüberschreitungen nach ungefähr 0,25 Sekunden, einschließlich des normalen
+Schemafixtures. Die Fehlerprüfungen lassen Absturz und Schemaprüfung nun fünf
+Sekunden zum Starten, verlangen ausdrücklich `PS_IO` bzw. `PS_INVALID` und behalten
+für den Hängefall 0,25 Sekunden und `PS_LIMIT`. Die bisherige Gesamtdauergrenze
+von fünf Sekunden sowie die Abschlusszahlen bleiben geprüft. Alle drei Fehlerarten
+bestehen (`build/native/Debug/test-results/run-bjamthli`); die parallele Batchreferenz
+besteht separat (`run-mkysw5d1`).
+
+Natürliche Maus-/Fokusereignisse sind im Menütest nach dem Hilfefenster protokolliert.
+Absichtlich eingeschobene Ereignisse reproduzieren den Prüffehler unter
+`build/toolbar-noise-before.log`. Die Teststeuerung isoliert jetzt ihre Mauskennung
+auch in den Menüfällen. Mit zusätzlichen Maus-, Mausrad- und Fokusereignissen
+bestehen die vollständigen kleinen und großen Menüabläufe, die normalen Menütests,
+Plot-Eingabeisolation und Fensterstart (5/5 Fälle unter
+`build/workspace-check/test-results/run-23gu5c67`). Der SDL-Eingabetest prüft weiterhin
+die normale Freigabe gehaltener Tasten/Maustasten bei Fokusverlust.
+
+Der anschließende vollständige lokale Debug-Build besteht 492 von 493 Tests ohne
+Fenster (`build/workspace-check/test-results/run-7288kqxh`), einschließlich
+Batchtests, nativen Projektbuilds und Benchmarks. Ausschließlich
+`language_function_values_runtime` bleibt durch macOS-Systempolitik blockiert.
+Dasselbe Sprachprogramm besteht lokal im Release-Build
+(`build/native/Release/test-results/run-203vuguu`).
+
+Die Linux-Paketprüfung zu `1b098d7` baut das Paket und besteht dessen Start sowie
+SDK und alle neun GUI-Projektabläufe auf Debian 12 und Ubuntu 24.04. Beide Jobs
+scheitern weiterhin am nativen Datei-/Ordnerdialog:
+[Debian 12](https://github.com/PhysicSimulator/physim/actions/runs/37223668792/job/111500303931),
+[Ubuntu 24.04](https://github.com/PhysicSimulator/physim/actions/runs/37223668792/job/111500303988).
+Der Dialogprüfer veröffentlicht künftig die tatsächliche Fehlerphase und SDL-Ausgabe
+auch als Jobannotation. Die genaue Ursache dieses Laufs ist ohne dessen
+authentifizierte Protokolle noch nicht geprüft; die Dialogabnahme bleibt offen.
+
 ## Windows-ClangCL-Sanitizer
 
 Aktuell offener Fehler: Im

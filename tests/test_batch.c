@@ -278,9 +278,16 @@ int main(int argc, char **argv) {
     for (unsigned failure = 0; failure < 3; failure++) {
         strcpy(o.module, argv[4 + failure]);
         snprintf(o.directory, sizeof o.directory, "%s/failure-%u", root, failure);
-        o.timeout_s = .25;
+        /* Only the hang fixture tests a short deadline. The crash and schema
+         * checks must reach their intended failure, including a cold OS loader. */
+        o.timeout_s = failure == 1 ? .25 : 5;
         double begin = ps_clock();
-        CHECK(ps_batch_run(&o, NULL, NULL, &result) != PS_OK && !result.cancelled &&
+        ps_result failure_result = ps_batch_run(&o, NULL, NULL, &result);
+        fprintf(stderr, "Batch failure fixture %u: result=%s completed=%u elapsed=%.3f error=%s\n",
+                failure, ps_result_string(failure_result), result.completed, ps_clock() - begin,
+                result.error);
+        CHECK(failure_result == (failure == 0 ? PS_IO : failure == 1 ? PS_LIMIT : PS_INVALID) &&
+              !result.cancelled &&
               absent_report(o.directory));
         CHECK(result.completed == (failure == 2 ? 1u : 0u) && ps_clock() - begin < 5);
         CHECK(file_contains(o.directory, "status.txt", "status=failed"));
