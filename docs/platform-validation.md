@@ -1,7 +1,41 @@
 # Plattformprüfung
 
-Stand: 29. September 2026. Diese Nachweise gelten für die genannten Umgebungen
+Stand: 4. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
+
+## Lokaler Intel-Mac am 4. Oktober 2026
+
+macOS 14.6.1 (23G93), Intel x86_64, Apple Clang 16.0.0 und lokal aus
+`release-3.2.30` gebautes SDL prüfen jetzt zusätzlich die Workspace-Dokumentansichten.
+Der Debug-Modelltest besteht mit Format-1-Kompatibilität, maximalen Pfad-/Dokumentgrenzen,
+abgeschnittenen und manipulierten Dateien sowie Erhaltung des bisherigen Zustands
+bei Fehlern (`build/workspace-check/test-results/run-80qn96q7`). Die Fensterprüfung
+startet getrennte App-Prozesse für Projekt-/Ordner-Wiederöffnung, aktive Dokumente,
+Analyse-/Simulationsansicht, fehlende und extern gekürzte Unicode-Dateien sowie
+vorhandene Autosaves. Dateibaum, beide Dokumentfenstergrößen, Buildinvalidierung
+und Dokument-Autosaves sind zusätzlich geprüft. Diese lokalen Prüfungen sind kein
+neuer Linux- oder Apple-Silicon-Nachweis. Alle sechs Fensterfälle bestehen unter
+`build/workspace-check/test-results/run-sg5hhnt6`.
+
+Der SDL-freie Gesamtlauf des Ausgangsstands `42d1f9e` besteht 480 von 482 Fällen
+(`build/native/Debug/test-results/run-vsag2ez2`).
+`language_function_values_runtime` wird vor der Programmausführung mit Signal 9
+beendet; das macOS-Systemprotokoll nennt `AppleSystemPolicy` und
+`Security policy would not allow process`. Eine separat ad hoc signierte Kopie
+besitzt eine gültige Signatur, wird aber ebenfalls blockiert. Eine Ursache im
+Sprachprogramm ist damit nicht nachgewiesen. `batch_reference` scheitert an der
+Prüfung der abgeschlossenen Läufe bzw. der Fünf-Sekunden-Grenze; die Fehlerjournale
+nennen Runner-Zeitüberschreitungen. Beide gezielten Wiederholungen scheitern erneut
+(`run-6x4lxg2j`).
+
+Beide Menüfenstergrößen scheitern in einem gemeinsamen lokalen Lauf; die jeweils
+isolierten Wiederholungen bestehen (`run-t9h7c5ep`, `run-zij55d1b`). Eine separat
+aus `42d1f9e` exportierte und gebaute App scheitert ebenfalls im kleinen Menütest
+(`build/baseline-app/test-results/run-mozmzzn3`). Die wechselnden Fehlerstellen
+und eine mögliche Beeinflussung durch native Fokus-/Mausereignisse bleiben offen.
+Die bisherigen macOS-15-CI-Ergebnisse belegen keine Fehlerfreiheit auf macOS 14.6.1.
+
+## Windows-ClangCL-Sanitizer
 
 Aktuell offener Fehler: Im
 [Windows-ClangCL-Debug-Job zu `0321c85`](https://github.com/PhysicSimulator/physim/actions/runs/36504185474/job/109201756506)

@@ -71,9 +71,17 @@ Beschädigte oder unbekannte Versionen werden gemeldet und unverändert erhalten
 **Workspace zurücksetzen** verwirft den gespeicherten Zustand ausdrücklich.
 Ohne geöffneten Ordner wird beim Beenden kein neuer Zustand gespeichert.
 Bei mehreren App-Instanzen gilt der zuletzt vollständig gespeicherte Zustand.
-Gespeichert werden absolute Pfade; das Verschieben eines Workspace auf einen
-anderen Rechner, mehrere benannte Workspaces und die Wiederherstellung einzelner
-Dokumentansichten sind noch offen. Ein Prozessabbruch sichert keinen neuen Workspace;
+Gespeichert werden absolute Pfade, die Reihenfolge der geöffneten Textdokumente,
+das aktive Dokument und der zuletzt geöffnete Hauptbereich. Die beiden Projekteditoren
+und zusätzliche Dokumente behalten Cursor, Textauswahl und Scrollposition.
+Wiederöffnen liest den aktuellen Dateiinhalt. Nach externen Kürzungen werden Cursor,
+Auswahl und Scrollposition auf den vorhandenen Text begrenzt. Fehlende oder nicht
+mehr lesbare Textdokumente werden übersprungen und gemeldet; die übrigen Dateien
+öffnen sich weiter. Vorhandene Autosaves werden zur Wiederherstellung angeboten.
+Die ältere Workspace-Datei ohne Dokumentansichten bleibt lesbar; beim nächsten
+Speichern entsteht das neue Format.
+Das Verschieben eines Workspace auf einen anderen Rechner und mehrere benannte
+Workspaces sind noch offen. Ein Prozessabbruch sichert keinen neuen Workspace;
 ungespeicherte Projektquellen haben die separate [Autosave-Wiederherstellung](autosave.md).
 Allgemeine Dokumente bieten beim erneuten Öffnen der Datei ihre separat im
 persönlichen App-Datenverzeichnis gespeicherte Sicherung zur Wiederherstellung an.
@@ -93,8 +101,9 @@ bieten beide Aktionen Speichern, Verwerfen und Abbrechen.
 
 Vor Workspace-Wechsel, Build und normalem Beenden werden offene Dokumente
 gespeichert. Scheitert das Speichern, bleibt der Vorgang beim betroffenen
-Dokument stehen. Offene Dokumente werden nach einem Neustart noch nicht
-wiederhergestellt.
+Dokument stehen. Dokumente werden beim bewussten Wiederöffnen des gespeicherten
+Workspace nach einem Neustart wiederhergestellt. Build, Simulation und Analyse
+starten dabei nicht.
 
 Bei geöffnetem Projekt machen Änderungen an zusätzlichen Dokumenten den letzten
 Build ungültig: Auch Header, Builddateien oder geladene Modelldaten können das

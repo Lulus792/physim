@@ -1,7 +1,22 @@
 # Umsetzungsstand
 
-Stand: erster Entwicklungsdurchstich, ergänzt am 2026-09-29. Der Projektplan ist die Roadmap;
+Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-04. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
+
+Die bewusste Workspace-Wiederöffnung stellt jetzt bis zu 16 zusätzliche Dokumente
+in ihrer Reihenfolge, das aktive Dokument und den Hauptbereich wieder her. Cursor,
+Unicode-Textauswahl und Scrollposition bleiben auch in den beiden Projekteditoren
+erhalten. Gekürzte Dateien begrenzen die Ansichten auf vorhandenen Text; fehlende
+Dokumente werden gemeldet. Autosaves werden weiterhin ausdrücklich angeboten.
+Workspace-Format 2 liest Format 1; beschädigte oder unbekannte Dateien bleiben
+erhalten. Auf einem Intel-Mac mit macOS 14.6.1 bestehen Modelltest, Neustartablauf,
+Dateibaum, beide Dokumentfenstergrößen, Buildinvalidierung und Autosave-Ablauf.
+Der unveränderte Ausgangsstand besteht lokal 480 von 482 SDL-freien Tests:
+macOS-Systempolitik blockiert das Sprachprogramm `language_function_values_runtime`,
+und `batch_reference` scheitert an seiner Abschluss-/Zeitprüfung. Zwei zusätzliche
+Menüabläufe scheitern nach dem Hilfefenster; der kleine Menütest besteht in einer
+gezielten Wiederholung, die Ursache ist noch nicht belegt. Diese Befunde sind keine bestandene
+vollständige Mac-Abnahme; bisherige CI-Nachweise gelten für ihre genannten Systeme.
 
 Aktueller [Plattformnachweis](platform-validation.md): Der direkte Physim-Build nach
 Entfernen der eigenen CMake-Dateien besteht alle acht CI-Kombinationen. Ubuntu 24.04
@@ -423,7 +438,7 @@ und veraltete Fenstermanager-Einträge geprüft. Die erneute Linux-CI steht aus.
 | Einheiten | SI-Dimensionen, Konvertierung, Einheitenalgebra, Quantity-Rechnung und Dimensionsprüfung von Datenreihen | benutzerdefinierte Anzeigeeinheiten in der GUI |
 | Runner | versionierte Modul-ABI, Handshake, Pause/Step/Run/Stop, Heartbeat, Crash-/Hang-Isolation | Ressourcenlimits, eigener Logkanal, echtes OS-Sandboxing |
 | Daten | CRC-Chunks, Streaming, Recovery, CSV, Seed-/Modellmetadaten | Index, mehr Datentypen, komprimierte Blöcke, Schemaerweiterung |
-| App | leerer Workspace-Einstieg mit gespeicherter Ordnerauswahl und bewusster Wiederöffnung, kompakte Menüleiste, Projektmanager, aufklappbarer Dateibaum und bis zu 16 editierbare Textdokumente mit separaten Autosaves, drei Arbeitsbereiche, integrierte Offline-Dokumentation, Systemtypografie, Einstellungen mit Code-Schriftgröße und Autosave-Intervall, gespeicherte Darstellung/Fenstergröße/Maximierung, vergrößerbare Seitenleiste und Protokoll, Vorlagen, Editor, direkter Projektbuild ohne CMake mit Ausgaben unter `build/`, Diagramme | mehrere benannte Workspaces und Wiederherstellung von Dokumentansichten, freies Docking, weitere Panelzustände, UI-weite Schriftvergrößerung, helle/kontrastreiche Themes, vollständige Barrierefreiheit |
+| App | leerer Workspace-Einstieg mit gespeicherter Ordnerauswahl und bewusster Wiederöffnung, kompakte Menüleiste, Projektmanager, aufklappbarer Dateibaum und bis zu 16 editierbare Textdokumente mit separaten Autosaves und gespeicherten Editoransichten, drei Arbeitsbereiche, integrierte Offline-Dokumentation, Systemtypografie, Einstellungen mit Code-Schriftgröße und Autosave-Intervall, gespeicherte Darstellung/Fenstergröße/Maximierung, vergrößerbare Seitenleiste und Protokoll, Vorlagen, Editor, direkter Projektbuild ohne CMake mit Ausgaben unter `build/`, Diagramme | mehrere benannte Workspaces, freies Docking, weitere Panelzustände, UI-weite Schriftvergrößerung, helle/kontrastreiche Themes, vollständige Barrierefreiheit |
 | Editor | C- und Physim-Dateien bearbeiten, sprachspezifische Syntaxfarben, Zeilennummern, Debug/Release, anklickbare Compilerdiagnosen, öffentlicher Header-Browser | Completion |
 | Szene | OpenGL 3.3 Core, Tiefenpuffer, MSAA, alle acht Grundprimitive, orientierte Boxen/Ebenen, RGBA-Transparenz mit Dreieckssortierung, UTF-8-Labels, Wurf-Flugbahn, Grid/Achsen, Kamera, Ansichten und Sichtbarkeit und Mausklickauswahl einzelner Szeneneinträge mit optionalen Objekt-IDs | artefaktfreie Transparenz bei sich durchdringenden Flächen, Szenenhierarchie, Zeitleiste |
 | Analyse | eigener C-Editor/Runner, Dataset-/Series-Handles, blockweise Transformationen mit Einheitenprüfung, eigene Ergebnisplots/-tabellen, Linien/Punkte/Histogramme mit Zoom am Mauszeiger, Verschieben, separaten Ausschnitten und Achsenoffsets, PNG-/SVG-Export des sichtbaren Ausschnitts, CSV/SVG und verlustfrei komprimiertes PNG mit vier Größen von 1200 × 850 bis 4800 × 3400 Pixeln, Statistik, Ableitung, Integral, gleitendes Mittel, Periode, Energieabweichung, Auswahl und Vergleich von bis zu acht Läufen, gemeinsame Statusauswahl von Datenreihen, lineares Resampling, Nearest/Previous im SDK und Differenzkurven, frühere Berichte öffnen | weitere Interpolationsverfahren/Transformationen |
@@ -559,7 +574,7 @@ Start ausdrücklich wieder her; **Eintrag vergessen** entfernt die Auswahl.
 Die separate versionierte Datei prüft Größenlimits, absolute UTF-8-Pfade und CRC.
 Fehlende Pfade bleiben erhalten, beschädigte Dateien werden bis zum ausdrücklichen
 Zurücksetzen nicht überschrieben. Mehrere benannte Workspaces und die
-Wiederherstellung einzelner Dokumentansichten sind weiterhin offen.
+Wiederherstellung einzelner Dokumentansichten waren zu diesem Stand weiterhin offen.
 Die gezielten Tests bestehen unter Windows mit MSVC Debug und Clang Debug.
 Sie prüfen Dateigrenzen und beschädigte Inhalte sowie separate App-Prozesse für
 Speichern, Öffnen per UI-Klick, fehlende Pfade, Vergessen und leeren Neustart.

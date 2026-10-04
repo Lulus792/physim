@@ -132,7 +132,8 @@ def settings(flow, directory):
 
 
 def workspace_state(flow, directory):
-    for mode in ("write", "read", "missing-addition", "missing-root", "forget", "empty", "write-folder", "read-folder", "corrupt"):
+    for mode in ("write", "read", "read-analysis", "read-simulate", "missing-addition", "missing-root", "forget", "empty", "write-folder", "read-folder",
+                 "read-folder-shortened", "read-folder-recovery", "corrupt"):
         if mode == "missing-addition":
             (directory / "notes ä.txt").rename(directory / "notes-moved.txt")
         elif mode == "missing-root":
@@ -140,9 +141,13 @@ def workspace_state(flow, directory):
             before = fingerprint(directory / "workspace.bin")
         elif mode == "corrupt":
             write(directory / "workspace.bin", "damaged workspace")
+        elif mode == "read-folder-shortened":
+            write(directory / "view λ.txt", "λ")
         flow.run("--workspace-state-test", directory, mode, timeout=20)
         if mode == "missing-root":
             require(before == fingerprint(directory / "workspace.bin"), "Missing root lost the saved workspace")
+        if mode in ("read-folder-shortened", "read-folder-recovery"):
+            exact(directory / "view λ.txt", "λ")
     exact(directory / "workspace.bin", "damaged workspace")
 
 

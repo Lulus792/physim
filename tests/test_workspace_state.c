@@ -37,6 +37,16 @@ int main(int argc, char **argv) {
     CHECK(ps_workspace_absolute("Versuch ä", s->root) == PS_OK);
     CHECK(ps_workspace_absolute("Messdaten/λ.txt", s->additions[0]) == PS_OK);
     s->count = 1;
+    s->document_count = 2;
+    s->active_document = 1;
+    s->view = 3;
+    s->analysis_editor = 1;
+    CHECK(ps_workspace_absolute("Messdaten/λ.txt", s->documents[0].path) == PS_OK);
+    CHECK(ps_workspace_absolute("notes ä.txt", s->documents[1].path) == PS_OK);
+    s->documents[0].editor = (ps_workspace_editor){4, 2, 7, 10, 640};
+    s->documents[1].editor = (ps_workspace_editor){100, 90, 100, 50, 1234};
+    s->experiment = (ps_workspace_editor){42, 40, 50, 1, 100};
+    s->analysis = (ps_workspace_editor){12, 2, 12, 20, 30};
     CHECK(ps_workspace_state_write(path, s) == PS_OK);
     CHECK(ps_workspace_state_read(path, out) == PS_OK && !memcmp(s, out, sizeof *s));
     unsigned char bytes[16384];
@@ -57,8 +67,20 @@ int main(int argc, char **argv) {
     }
     bytes[size] = 0;
     CHECK(write_bytes(bad, bytes, size + 1) && ps_workspace_state_read(bad, out) == PS_CORRUPT);
+    /* Version 1 has only the path list. Reading it clears all newer view fields. */
+    size_t views = 20 + strlen(s->root) + 4 + strlen(s->additions[0]);
+    unsigned char legacy[16384];
+    memcpy(legacy, bytes, views);
+    memcpy(legacy + 6, "01", 2);
+    put32(legacy + 8, (uint32_t)(views + 4));
+    put32(legacy + views, ps_crc32(legacy, views));
+    CHECK(write_bytes(bad, legacy, views + 4));
+    CHECK(ps_workspace_state_read(bad, out) == PS_OK);
+    CHECK(!strcmp(out->root, s->root) && out->count == 1 && !out->document_count &&
+          !out->active_document && !out->view && !out->analysis.cursor);
+    CHECK(ps_workspace_state_read(path, out) == PS_OK && !memcmp(s, out, sizeof *s));
     /* Semantic errors remain invalid even with a recomputed CRC. */
-    for (unsigned test = 0; test < 5; test++) {
+    for (unsigned test = 0; test < 11; test++) {
         unsigned char mutated[16384];
         memcpy(mutated, bytes, size);
         if (test == 0)
@@ -73,6 +95,18 @@ int main(int argc, char **argv) {
             mutated[20] = '.';
             mutated[21] = '.';
         }
+        if (test == 5)
+            put32(mutated + views, PS_WORKSPACE_DOCUMENTS + 1);
+        if (test == 6)
+            put32(mutated + views + 4, s->document_count);
+        if (test == 7)
+            put32(mutated + views + 8, 4);
+        if (test == 8)
+            put32(mutated + views + 12, 2);
+        if (test == 9)
+            put32(mutated + views + 16, PS_WORKSPACE_TEXT_LIMIT + 1);
+        if (test == 10)
+            put32(mutated + views + 32, PS_WORKSPACE_SCROLL_LIMIT + 1);
         put32(mutated + size - 4, ps_crc32(mutated, size - 4));
         CHECK(write_bytes(bad, mutated, size));
         CHECK(ps_workspace_state_read(bad, out) == PS_CORRUPT && !memcmp(s, out, sizeof *s));
@@ -80,6 +114,10 @@ int main(int argc, char **argv) {
     s->count = 33;
     CHECK(ps_workspace_state_write(path, s) == PS_INVALID);
     s->count = 1;
+    CHECK(ps_workspace_state_read(path, out) == PS_OK && !memcmp(s, out, sizeof *s));
+    s->documents[0].editor.cursor = PS_WORKSPACE_TEXT_LIMIT + 1;
+    CHECK(ps_workspace_state_write(path, s) == PS_INVALID);
+    s->documents[0].editor.cursor = 4;
     CHECK(ps_workspace_state_read(path, out) == PS_OK && !memcmp(s, out, sizeof *s));
     CHECK(SDL_CreateDirectory(directory));
     CHECK(ps_workspace_state_write(directory, s) == PS_IO);
@@ -91,6 +129,13 @@ int main(int argc, char **argv) {
         s->additions[i][4095] = 0;
     }
     s->count = PS_WORKSPACE_ADDITIONS;
+    for (unsigned i = 0; i < PS_WORKSPACE_DOCUMENTS; i++) {
+        memcpy(s->documents[i].path, s->additions[i], PS_WORKSPACE_PATH);
+        s->documents[i].editor = (ps_workspace_editor){PS_WORKSPACE_TEXT_LIMIT, 0,
+             PS_WORKSPACE_TEXT_LIMIT, PS_WORKSPACE_SCROLL_LIMIT, PS_WORKSPACE_SCROLL_LIMIT};
+    }
+    s->document_count = PS_WORKSPACE_DOCUMENTS;
+    s->active_document = PS_WORKSPACE_DOCUMENTS - 1;
     CHECK(ps_workspace_state_write(path, s) == PS_OK);
     CHECK(ps_workspace_state_read(path, out) == PS_OK && !memcmp(s, out, sizeof *s));
     memset(s->additions[0], 'a', 4096);

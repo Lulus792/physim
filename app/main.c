@@ -48,7 +48,7 @@ static void nk_end_disabled(struct nk_context *ctx) {
 #define EXE_EXT ""
 #endif
 #define PREVIEW 2048
-#define WORKSPACE_DOCUMENTS 16
+#define WORKSPACE_DOCUMENTS PS_WORKSPACE_DOCUMENTS
 typedef struct {
     ps_text_document file;
     char path[4096]; /* User-facing path; file.path resolves symbolic links for saving. */

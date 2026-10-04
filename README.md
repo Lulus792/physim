@@ -206,8 +206,9 @@ Die kompakte Menüzeile bündelt globale Werkzeuge unter **Datei** und **Ansicht
 Fensterknöpfen in den oberen Fensterkopf integriert.
 
 Beim normalen Beenden merkt sich Physim den Hauptordner und hinzugefügte Dateien
-und Ordner. **Letzten Workspace öffnen** stellt diese Auswahl beim nächsten Start
-auf Wunsch wieder her. [Workspace und Wiederöffnung](docs/workspace.md)
+und Ordner sowie die geöffneten Textdokumente. **Letzten Workspace öffnen** stellt
+diese Auswahl samt aktivem Dokument, Cursor, Textauswahl und Scrollposition beim
+nächsten Start auf Wunsch wieder her. [Workspace und Wiederöffnung](docs/workspace.md)
 Die Seitenleiste zeigt einen aufklappbaren Dateibaum mit sortierten Ordnern,
 verschachtelten Dateien und zusätzlichen Wurzeleinträgen. Aktualisieren erhält
 aufgeklappte Zweige; fehlende Pfade und Anzeigegrenzen werden gekennzeichnet.
