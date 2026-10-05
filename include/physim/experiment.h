@@ -55,6 +55,15 @@ typedef struct {
     double value, default_value, minimum, maximum;
     bool defined;
 } ps_parameter;
+/* Owned display-unit metadata. Parameter values, defaults, bounds and overrides
+ * remain SI numbers; scale converts one display unit to SI. Undeclared is not
+ * the same as dimensionless (declare PS_ONE for that). */
+typedef struct {
+    int8_t dimension[7];
+    double scale;
+    char symbol[16];
+    bool declared;
+} ps_parameter_unit;
 typedef struct ps_context {
     uint32_t struct_size, api_version;
     void *user;
@@ -69,6 +78,8 @@ typedef struct ps_context {
     /* Optional ABI-3 context extension; check struct_size before accessing it. */
     uint32_t parameter_count;
     ps_parameter parameters[PS_MAX_PARAMETERS];
+    /* Optional ABI-3 tail. Old context/parameter layouts remain unchanged. */
+    ps_parameter_unit parameter_units[PS_MAX_PARAMETERS];
 } ps_context;
 typedef struct {
     double elapsed_s, next_s;
@@ -102,6 +113,21 @@ ps_result ps_parameter_define(ps_context *context, const char *name, const char 
                               double default_value, double minimum, double maximum,
                               double *value);
 ps_result ps_parameter_finalize(const ps_context *context);
+/* Defines SI values with an owned display-unit declaration. Requires the unit
+ * tail in struct_size. Invalid declarations leave context and value unchanged. */
+ps_result ps_parameter_define_unit(ps_context *context, const char *name,
+                                   const char *description, ps_unit display_unit,
+                                   double default_value, double minimum, double maximum,
+                                   double *value);
+/* Old contexts and untyped parameters return undeclared metadata, scale 1.
+ * Outputs remain unchanged on error. */
+ps_result ps_parameter_unit_read(const ps_context *context, uint32_t index,
+                                 ps_parameter_unit *unit);
+/* Reads the three parameter_unit/scale/dimension keys from run metadata.
+ * Missing declarations return undeclared; partial, duplicate or malformed keys
+ * return PS_CORRUPT. Numbers in run metadata are always SI. */
+ps_result ps_parameter_unit_parse(const char *metadata, const char *name,
+                                  ps_parameter_unit *unit);
 void ps_scene_add(ps_scene *scene, ps_shape shape, ps_vec3 a, ps_vec3 b, double radius,
                   uint32_t rgba);
 /* Checked helpers are atomic on failure. Clear the whole scene before building it.

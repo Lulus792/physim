@@ -13,6 +13,9 @@ static int launch(const char *const *args,const char *work,int expected) {
 static int valid(const char *path,double target,unsigned expected,bool clipped) {
     ps_run_reader r;CHECK(ps_run_open(&r,path)==PS_OK);
     CHECK(strstr(r.metadata,"\nend_time_s=") && strstr(r.metadata,"\nmaximum_accepted_steps=20\n"));
+    ps_parameter_unit unit;
+    CHECK(ps_parameter_unit_parse(r.metadata,"velocity",&unit)==PS_OK && unit.declared &&
+          unit.scale==.01 && unit.dimension[0]==1 && unit.dimension[2]==-1 && !strcmp(unit.symbol,"cm/s"));
     double t,v[PS_MAX_CHANNELS],initial=0,previous=0,last_dt=0;unsigned n=0;ps_result status;
     while((status=ps_run_next(&r,&t,v))==PS_OK) {
         if(!n){CHECK(t==0);initial=v[0];}
@@ -62,5 +65,15 @@ int main(int argc,char **argv) {
         const char *args[]={argv[1],argv[2],"unused.psrun","--until",bad[i],NULL};CHECK(!launch(args,argv[4],2));
     }
     const char *interactive[]={argv[1],argv[2],"unused.psrun","--interactive","--until",".7",NULL};CHECK(!launch(interactive,argv[4],2));
+    for(unsigned language=0;language<2;language++) {
+        char path[4096];snprintf(path,sizeof path,"%s/subnormal-%u.psrun",argv[4],language);
+        const char *args[]={argv[1],argv[2+language],path,"--steps","1","--param","offset=1e-310",NULL};
+        CHECK(!launch(args,argv[4],0));ps_run_reader r;CHECK(ps_run_open(&r,path)==PS_OK);
+        double t,v[PS_MAX_CHANNELS];CHECK(r.channels==5);
+        CHECK(ps_run_next(&r,&t,v)==PS_OK && v[4]==1e-310);
+        CHECK(ps_run_next(&r,&t,v)==PS_OK && v[4]==1e-310 && ps_run_next(&r,&t,v)==PS_EOF);ps_run_reader_close(&r);
+    }
+    const char *underflow[]={argv[1],argv[2],"unused.psrun","--param","offset=1e-999",NULL};
+    CHECK(!launch(underflow,argv[4],2));
     puts("Exact target times, clipped terminal intervals, C/Physim parity, bounded steps and preserved incomplete prefixes passed.");return 0;
 }

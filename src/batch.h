@@ -40,6 +40,7 @@ typedef struct {
     bool cancelled;
     char error[256];
     ps_channel channel;
+    ps_parameter_unit sweep_unit;
     double values[PS_BATCH_MAX_RUNS];
     bool finished[PS_BATCH_MAX_RUNS]; /* values[i] is valid iff finished[i]. */
 } ps_batch_result;

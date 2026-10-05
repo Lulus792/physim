@@ -1,0 +1,11 @@
+let selected = parameterWithUnit("length", Unit(1,0,0,0,0,0,0,1,"symbol-too-long-for-parameter"),
+                                 1, 0.1, 10, "Length")
+let channel = Channel("length", Unit(1,0,0,0,0,0,0,1,"m"), "Length")
+func create():
+    return
+func reset():
+    channel.sample(selected)
+func step(dt: Float64):
+    channel.sample(selected)
+func scene():
+    return

@@ -359,6 +359,8 @@ static const ps_lang_builtin library[] = {
     {"runSeed", "psrt_run_seed", I, 0, 1, {0}, {0}},
     {"parameter", "psrt_parameter", F, 5, 1,
      {S, F, F, F, S}, {"name", "default", "minimum", "maximum", "description"}},
+    {"parameterWithUnit", "psrt_parameter_unit", F, 6, 1,
+     {S,U,F,F,F,S}, {"name","unit","default","minimum","maximum","description"}},
     {"randomUniform", "psrt_random_uniform", F, 2, 1, {F, F}, {"min", "max"}},
     {"randomNormal", "psrt_random_normal", F, 2, 1, {F, F}, {"mean", "standardDeviation"}},
     {"inputCount", "psra_input_count", I, 0, 2, {0}, {0}},

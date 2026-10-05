@@ -181,3 +181,32 @@ Modulidentität verhindert das Anlegen der Datei. Numerische Chunks und Footer
 behalten Format 1. Die Serienprüfung verlangt passenden Seed, Konfiguration,
 strikt steigende Zeiten, gültige Intervallgrenzen und exakt dieselbe Endzeit
 für jeden akzeptierten Lauf. Verschiedene adaptive Raster und Punktzahlen sind zulässig.
+
+
+## Ergänzende Parametereinheiten
+
+Die optionalen ABI-3-Kontextfelder `parameter_units` verändern weder die bisherigen
+Kontextfelder noch `ps_parameter`, Modul-ABI oder Messdatei-Formatversion.
+Deklarierte Parameter ergänzen den Text-Metadatenchunk um drei Zeilen:
+
+```text
+parameter_unit.length=cm
+parameter_scale.length=0.01
+parameter_dimension.length=1,0,0,0,0,0,0
+```
+
+`parameter.length`, Standard und Grenzen bleiben SI-Zahlen. Dimensionen stehen
+in der Reihenfolge Länge, Masse, Zeit, Strom, Temperatur, Stoffmenge und
+Lichtstärke. Das Symbol ist eigener UTF-8-Text mit maximal 15 Bytes. `scale`
+ist positiv und endlich; `Anzeige × scale = SI`. Fehlen alle drei Felder, bleibt
+die Einheit unbekannt. `ps_parameter_unit_parse` unterscheidet das von einer
+expliziten dimensionslosen Deklaration und weist unvollständige, doppelte oder
+ungültige Felder mit `PS_CORRUPT` ab. Seine Ausgabe bleibt bei Fehlern erhalten.
+Alte Laufdateien werden weiter ohne angenommene Parametereinheit gelesen.
+
+Die Runner-Abfrage `--describe` verwendet `PHYSIM_PARAMETERS_2`, sobald mindestens
+ein Parameter eine deklarierte Einheit trägt. Die bisherigen fünf Tab-Felder
+(Name, SI-Standard, SI-Minimum, SI-Maximum, Beschreibung) erhalten Symbol, Skala
+und die sieben durch Kommas getrennten Dimensionswerte. Unbekannte Einheiten
+haben ein leeres Symbol, Skala 1 und Nulldimensionen. Reine untypisierte Module
+liefern weiterhin Format 1; die App liest beide Formate atomar.

@@ -98,6 +98,19 @@ typedef struct {
 } ps_parameter;
 ```
 
+### ps_parameter_unit
+
+```c
+typedef struct {
+    int8_t dimension[7];
+    double scale;
+    char symbol[16];
+    bool declared;
+} ps_parameter_unit;
+```
+
+Owned display-unit metadata. Parameter values, defaults, bounds and overrides remain SI numbers; scale converts one display unit to SI. Undeclared is not the same as dimensionless (declare PS_ONE for that).
+
 ### ps_context
 
 ```c
@@ -114,10 +127,13 @@ typedef struct ps_context {
     char model_metadata[2048];
     uint32_t parameter_count;
     ps_parameter parameters[PS_MAX_PARAMETERS];
+    ps_parameter_unit parameter_units[PS_MAX_PARAMETERS];
 } ps_context;
 ```
 
 Optional ABI-3 context extension; check struct_size before accessing it.
+
+Optional ABI-3 tail. Old context/parameter layouts remain unchanged.
 
 ### ps_step_interval
 
@@ -196,6 +212,50 @@ Prüft nach create, ob jeder vorgegebene Override durch das Experiment definiert
 ```c
 ps_result ps_parameter_finalize(const ps_context *context);
 ```
+
+## ps_parameter_define_unit
+
+Definiert SI-Parameterwerte mit deklarierter Anzeigeeinheit. Kopiert Symbol, Skala und Dimensionen in den optionalen ABI-3-Kontext-Tail; Grenzen müssen in der Anzeigeeinheit darstellbar sein. Fehler bewahren Kontext und Ausgabe.
+
+```c
+ps_result ps_parameter_define_unit(
+    ps_context *context,
+    const char *name,
+    const char *description,
+    ps_unit display_unit,
+    double default_value,
+    double minimum,
+    double maximum,
+    double *value);
+```
+
+Defines SI values with an owned display-unit declaration. Requires the unit tail in struct_size. Invalid declarations leave context and value unchanged.
+
+## ps_parameter_unit_read
+
+Liest die eigene Einheitendeklaration eines Parameters. Alte Kontexte und untypisierte Parameter liefern declared=false und Skala 1; dies behauptet keine Dimensionslosigkeit.
+
+```c
+ps_result ps_parameter_unit_read(
+    const ps_context *context,
+    uint32_t index,
+    ps_parameter_unit *unit);
+```
+
+Old contexts and untyped parameters return undeclared metadata, scale 1. Outputs remain unchanged on error.
+
+## ps_parameter_unit_parse
+
+Liest parameter_unit/scale/dimension aus Laufmetadaten. Fehlende Deklarationen bleiben unbekannt; unvollständige, doppelte oder ungültige Felder ergeben PS_CORRUPT. Ausgabe bleibt bei Fehlern erhalten.
+
+```c
+ps_result ps_parameter_unit_parse(
+    const char *metadata,
+    const char *name,
+    ps_parameter_unit *unit);
+```
+
+Reads the three parameter_unit/scale/dimension keys from run metadata. Missing declarations return undeclared; partial, duplicate or malformed keys return PS_CORRUPT. Numbers in run metadata are always SI.
 
 ## ps_scene_add
 

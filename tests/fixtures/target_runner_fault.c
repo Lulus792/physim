@@ -6,7 +6,7 @@
 int main(int argc,char **argv) {
     if(argc<3)return 2;
     FILE *config=fopen(argv[1],"rb");if(!config)return 3;int mode=fgetc(config);fclose(config);
-    double target=.7,dt=.1,minimum=.02,maximum=.2;unsigned steps=8;uint64_t seed=42;
+    double target=.7,dt=.1,minimum=.02,maximum=.2,velocity=1;unsigned steps=8;uint64_t seed=42;
     for(int i=3;i+1<argc;i++) {
         if(!strcmp(argv[i],"--until"))target=strtod(argv[++i],NULL);
         else if(!strcmp(argv[i],"--dt"))dt=strtod(argv[++i],NULL);
@@ -14,12 +14,26 @@ int main(int argc,char **argv) {
         else if(!strcmp(argv[i],"--max-dt"))maximum=strtod(argv[++i],NULL);
         else if(!strcmp(argv[i],"--steps"))steps=(unsigned)strtoul(argv[++i],NULL,10);
         else if(!strcmp(argv[i],"--seed"))seed=strtoull(argv[++i],NULL,10);
+        else if(!strcmp(argv[i],"--param")) {
+            const char *selected=argv[++i];
+            if(!strncmp(selected,"velocity=",9))velocity=strtod(selected+9,NULL);
+        }
     }
     ps_context c={0};c.struct_size=sizeof c;c.api_version=PS_API_VERSION;c.dt_s=dt;c.seed=seed;
     ps_channel_add(&c,"position",PS_METRE,"Position");
     snprintf(c.model_metadata,sizeof c.model_metadata,
              "step_mode=%s\nend_time_s=%.17g\nmaximum_accepted_steps=%u\nminimum_dt_s=%.17g\nmaximum_dt_s=%.17g",
              mode=='4'?"fixed":"adaptive",mode=='3'?target+.1:target,steps,minimum,maximum);
+    if(mode=='u' || mode=='d') {
+        double selected;
+        if(ps_parameter_define(&c,"velocity","Velocity",1,.2,3,&selected)!=PS_OK)return 4;
+        c.parameters[0].value=velocity;
+        size_t used=strlen(c.model_metadata);
+        if(mode=='u')snprintf(c.model_metadata+used,sizeof c.model_metadata-used,"\nparameter_unit.velocity=cm/s");
+        else snprintf(c.model_metadata+used,sizeof c.model_metadata-used,
+            "\nparameter_unit.velocity=%s\nparameter_scale.velocity=%.17g\nparameter_dimension.velocity=1,0,-1,0,0,0,0",
+            seed==42?"cm/s":"m/s",seed==42?.01:1);
+    }
     ps_run_writer w;if(ps_run_create(&w,argv[2],&c,"timing fault")!=PS_OK)return 4;
     double times[32]={0,.1,.2,.3,.4,.5,.6,0};times[7]=target;unsigned count=8;
     switch(mode) {

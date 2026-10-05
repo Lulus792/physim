@@ -170,6 +170,23 @@ int main(int argc, char **argv) {
     CHECK(write_text(path, long_line));
     CHECK(ps_project_settings_read(path, &settings) == PS_DOCUMENT_LIMIT);
     CHECK(!memcmp(&before, &settings, sizeof settings));
+    char unit_path[4096];snprintf(unit_path,sizeof unit_path,"%s/units.project",argv[1]);
+    CHECK(write_text(unit_path,"physim_project=1\n"));
+    CHECK(ps_project_settings_read(unit_path,&settings)==PS_DOCUMENT_OK);
+    CHECK(ps_parameter_catalog_restore(&settings.parameters,"length","0.5"));
+    const char *unit_description="PHYSIM_PARAMETERS_2\n1\n"
+        "length\t1.5\t0.1\t10\tLength\tcm\t0.01\t1,0,0,0,0,0,0\n";
+    CHECK(ps_parameter_catalog_parse(&settings.parameters,unit_description));
+    CHECK(!strcmp(settings.parameters.selected[0],"50"));
+    CHECK(ps_project_settings_save(unit_path,&settings)==PS_DOCUMENT_OK);
+    FILE *units_file=fopen(unit_path,"rb");char unit_text[2048];CHECK(units_file);
+    size_t unit_bytes=fread(unit_text,1,sizeof unit_text-1,units_file);unit_text[unit_bytes]=0;CHECK(!fclose(units_file));
+    CHECK(strstr(unit_text,"parameter.length=0.5\n") && !strstr(unit_text,"parameter.length=50\n"));
+    CHECK(ps_project_settings_read(unit_path,&restored)==PS_DOCUMENT_OK);
+    CHECK(ps_parameter_catalog_parse(&restored.parameters,unit_description));
+    double si_value;
+    CHECK(!strcmp(restored.parameters.selected[0],"50") &&
+          ps_parameter_catalog_value(&restored.parameters,0,&si_value)==PS_OK && si_value==.5);
     puts("Project defaults, profiles, parameters, preserved extensions, invalid input and write "
          "failures passed.");
     return 0;

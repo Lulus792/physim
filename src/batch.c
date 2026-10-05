@@ -219,8 +219,11 @@ static ps_result sweep_report(const ps_batch_options *o, const ps_batch_result *
     snprintf(plot.x_label, sizeof plot.x_label, "%s", o->sweep_name);
     snprintf(plot.y_label, sizeof plot.y_label, "%s", o->channel);
     plot.x_unit.scale = plot.y_unit.scale = 1;
-    /* Parameter descriptors carry no unit declaration. Do not invent a
-     * dimensionless label for physical parameters such as pendulum length. */
+    if(result->sweep_unit.declared) {
+        memcpy(plot.x_unit.dimension,result->sweep_unit.dimension,7);
+        plot.x_unit.scale=result->sweep_unit.scale;
+        snprintf(plot.x_unit.symbol,sizeof plot.x_unit.symbol,"%s",result->sweep_unit.symbol);
+    }
     memcpy(plot.y_unit.dimension, result->channel.dimension, 7);
     snprintf(plot.y_unit.symbol, sizeof plot.y_unit.symbol, "%s", result->channel.unit);
     ps_plot_handle handle;
@@ -234,7 +237,7 @@ static ps_result sweep_report(const ps_batch_options *o, const ps_batch_result *
         curve->count = o->runs;
         curve->source_count = o->runs;
         for (uint32_t i = 0; i < o->runs; i++) {
-            curve->x[i] = sweep_value(o, i);
+            curve->x[i] = sweep_value(o, i)/plot.x_unit.scale;
             curve->y[i] = result->values[i];
         }
         r = ps_report_add_curve(report, handle, curve);
@@ -383,6 +386,7 @@ static ps_result run_pool(const ps_batch_options *o, const char *module, FILE *j
     if (!slots)
         return PS_MEMORY;
     ps_result r = PS_OK;
+    bool sweep_unit_known=false;
     char dt[64], steps[32], seed[32], work[4096],target[64],minimum[64],maximum[64];
     snprintf(dt, sizeof dt, "%.17g", o->dt);
     snprintf(steps, sizeof steps, "%u", o->steps);
@@ -422,6 +426,19 @@ static ps_result run_pool(const ps_batch_options *o, const char *module, FILE *j
                     goto done;
                 }
                 r = open_endpoint(slot, o);
+                if(r==PS_OK && o->sweep) {
+                    ps_parameter_unit unit;
+                    r=ps_parameter_unit_parse(slot->reader.metadata,o->sweep_name,&unit);
+                    if(r==PS_OK && (!isfinite(o->sweep_start/unit.scale) ||
+                                    !isfinite(o->sweep_end/unit.scale))) r=PS_CORRUPT;
+                    if(r==PS_OK && sweep_unit_known &&
+                       (unit.declared!=result->sweep_unit.declared || unit.scale!=result->sweep_unit.scale ||
+                        strcmp(unit.symbol,result->sweep_unit.symbol) ||
+                        memcmp(unit.dimension,result->sweep_unit.dimension,7))) r=PS_CORRUPT;
+                    if(r==PS_OK && !sweep_unit_known) {
+                        result->sweep_unit=unit;sweep_unit_known=true;
+                    }
+                }
                 if (r != PS_OK) {
                     snprintf(result->error, sizeof result->error,
                              "Lauf %u: Messdatei/Kanal %s: %s.", slot->index + 1, o->channel,
@@ -656,6 +673,22 @@ ps_result ps_batch_run(const ps_batch_options *o, ps_batch_continue proceed, voi
             r = PS_IO;
         csv = NULL;
     }
+    if(r==PS_OK && o->sweep && !result->cancelled && result->sweep_unit.declared) {
+        snprintf(path,sizeof path,"%s/series.txt",o->directory);
+        FILE *units=fopen(path,"ab");
+        if(!units)r=PS_IO;
+        else {
+            const ps_parameter_unit *u=&result->sweep_unit;
+            int written=fprintf(units,"parameter_value_storage=SI\n"
+                "parameter_unit.%s=%s\nparameter_scale.%s=%.17g\n"
+                "parameter_dimension.%s=%d,%d,%d,%d,%d,%d,%d\n",
+                o->sweep_name,u->symbol,o->sweep_name,u->scale,o->sweep_name,
+                u->dimension[0],u->dimension[1],u->dimension[2],u->dimension[3],
+                u->dimension[4],u->dimension[5],u->dimension[6]);
+            int closed_units=fclose(units);
+            if(written<0 || closed_units)r=PS_IO;
+        }
+    }
     ps_result ordered = ordered_endpoints(o, result);
     if (ordered != PS_OK)
         r = ordered;
@@ -666,6 +699,7 @@ ps_result ps_batch_run(const ps_batch_options *o, ps_batch_continue proceed, voi
                      "Parameterstudie mit einem separaten Runner-Prozess je Punkt.\n"
                      "Rohdaten, Seeds und Snapshots: %s\n"
                      "Parameter %s linear von %.17g bis %.17g, %u inklusive Punkte.\n"
+                     "Deklarierte Parameterwerte in Rohdaten und CSV sind SI; die X-Achse verwendet die Anzeigeeinheit.\n"
                      "Kanal %s; Endzeit %.17g s; Startseed %llu; Parallelität %u.\n"
                      "Die Seeds steigen ebenfalls je Laufindex; ein stochastisches Modell "
                      "kann daher zusätzliche Streuung erzeugen.\n"

@@ -72,6 +72,16 @@ int main(int argc,char **argv) {
     strcpy(o.module,argv[3]);snprintf(language,sizeof language,"%s/sweep-phys",argv[6]);strcpy(o.directory,language);CHECK(ps_batch_run(&o,NULL,NULL,&b)==PS_OK && !memcmp(a.values,b.values,3*sizeof(double)));
     CHECK(same_summary(first,language));
     for(unsigned i=0;i<3;i++)CHECK(!data(first,language,i,.7,i==0?.2:i==1?1.6:3,&count));
+    CHECK(a.sweep_unit.declared && a.sweep_unit.scale==.01 && !strcmp(a.sweep_unit.symbol,"cm/s") &&
+          a.sweep_unit.dimension[0]==1 && a.sweep_unit.dimension[2]==-1);
+    CHECK(contains(first,"series.txt","parameter_value_storage=SI\n") &&
+          contains(first,"series.txt","parameter_unit.velocity=cm/s\n"));
+    char study_path[4096];snprintf(study_path,sizeof study_path,"%s/summary.psreport",first);
+    ps_report *study=NULL;CHECK(ps_report_load(study_path,&study)==PS_OK);
+    ps_plot_info plot;const ps_curve_data *curve;
+    CHECK(ps_report_plot_read(study,0,&plot)==PS_OK && plot.x_unit.scale==.01 && !strcmp(plot.x_unit.symbol,"cm/s"));
+    CHECK(ps_report_curve_view(study,0,0,&curve)==PS_OK && curve->x[0]==20 && curve->x[1]==160 && curve->x[2]==300);
+    ps_report_destroy(study);
     o.sweep=false;o.runs=2;o.workers=2;o.end_time=.25;o.minimum_dt=.08;o.maximum_dt=.1;
     snprintf(o.directory,sizeof o.directory,"%s/clipped-series",argv[6]);CHECK(ps_batch_run(&o,NULL,NULL,&a)==PS_OK);
     char path[4096];snprintf(path,sizeof path,"%s/run-0001.psrun",o.directory);ps_run_reader r;CHECK(ps_run_open(&r,path)==PS_OK);
@@ -88,6 +98,15 @@ int main(int argc,char **argv) {
         snprintf(o.directory,sizeof o.directory,"%s/fault-%u",argv[6],fault);
         CHECK(ps_batch_run(&o,NULL,NULL,&a)==PS_CORRUPT && !a.completed && !a.active && absent(o.directory,"summary.psreport"));
     }
+    o.sweep=true;strcpy(o.sweep_name,"velocity");o.sweep_start=.2;o.sweep_end=3;
+    const char unit_faults[]={'u','d'};
+    for(unsigned i=0;i<2;i++) {
+        snprintf(o.module,sizeof o.module,"%s/unit-fault-%c.data",argv[6],unit_faults[i]);
+        FILE *config=fopen(o.module,"wb");CHECK(config && fputc(unit_faults[i],config)!=EOF && !fclose(config));
+        snprintf(o.directory,sizeof o.directory,"%s/unit-fault-%c",argv[6],unit_faults[i]);
+        CHECK(ps_batch_run(&o,NULL,NULL,&a)==PS_CORRUPT && a.completed<=1 && !a.active && absent(o.directory,"summary.psreport"));
+    }
+    o.sweep=false;
     snprintf(o.module,sizeof o.module,"%s/hang.data",argv[6]);FILE *f=fopen(o.module,"wb");CHECK(f && fputc('h',f)!=EOF && !fclose(f));
     snprintf(o.directory,sizeof o.directory,"%s/cancelled",argv[6]);double until=ps_clock()+.3;
     CHECK(ps_batch_run(&o,cancel,&until,&a)==PS_OK && a.cancelled && a.started>0 && a.active==0 && absent(o.directory,"summary.psreport"));
@@ -95,6 +114,13 @@ int main(int argc,char **argv) {
     snprintf(path,sizeof path,"%s/cli",argv[6]);
     const char *command[]={argv[4],argv[1],argv[2],path,"position","3","100",".1","42","--until",".7","--adaptive","--min-dt",".02","--max-dt",".3","--workers","2",NULL};
     CHECK(!cli(command,argv[6],0) && contains(path,"status.txt","status=complete\n"));
+    snprintf(path,sizeof path,"%s/cli-subnormal",argv[6]);
+    const char *tiny[]={argv[4],argv[1],argv[2],path,"position","3","100",".1","42","--until",".7",
+                       "--adaptive","--min-dt",".02","--max-dt",".3","--param","offset=1e-310",NULL};
+    CHECK(!cli(tiny,argv[6],0));
+    char tiny_path[4096];snprintf(tiny_path,sizeof tiny_path,"%s/run-0001.psrun",path);
+    CHECK(ps_run_open(&r,tiny_path)==PS_OK && strstr(r.metadata,"parameter.offset=9.9999999999999694e-311\n"));
+    CHECK(ps_run_next(&r,&time,values)==PS_OK && values[4]==1e-310);ps_run_reader_close(&r);
     const char *bad[]={argv[4],argv[1],argv[2],path,"position","3","100",".1","42","--adaptive",NULL};CHECK(!cli(bad,argv[6],2));
     const char *bad_target[]={argv[4],argv[1],argv[2],path,"position","3","100",".1","42","--until","0",NULL};CHECK(!cli(bad_target,argv[6],2));
     o.end_time=NAN;CHECK(ps_batch_validate(&o)==PS_INVALID);o.end_time=.7;o.minimum_dt=.2;CHECK(ps_batch_validate(&o)==PS_INVALID);

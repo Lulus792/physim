@@ -577,3 +577,8 @@ Laufserien und Parameterstudien bieten eine gemeinsame Zielzeit und adaptive
 Schritte mit Budget. Auch bei unterschiedlichen Schrittzahlen erreichen alle
 akzeptierten Läufe dieselbe Endzeit. Die Pendelvorlagen definieren Länge und
 Anfangswinkel als Parameter. [Bedienung und CLI](docs/monte-carlo.md#gemeinsame-zielzeit-und-adaptive-serien).
+
+Experimentparameter können in C und Physim Anzeigeeinheiten deklarieren.
+Formulare und Studienachsen zeigen beispielsweise Zentimeter, während Modellwerte,
+Projektdateien, CLI-Overrides und Rohdaten SI bewahren. Details stehen unter
+[Parametereinheiten](docs/monte-carlo.md#einheiten-von-parameterstudien).

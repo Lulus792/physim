@@ -2911,6 +2911,16 @@ Definiert beim Erzeugen des Experiments einen benannten Float64-Parameter mit St
 
 Experimentmodul erforderlich.
 
+## parameterWithUnit
+
+```text
+parameterWithUnit(name: String, unit: Unit, default: Float64, minimum: Float64, maximum: Float64, description: String) -> Float64
+```
+
+Wie parameter, mit einer eigenen Anzeigeeinheit aus Symbol, positiver Skala und sieben SI-Dimensionen. Standard, Grenzen, Override und Rückgabewert bleiben SI-Zahlen. Die GUI konvertiert Eingaben, Studienberichte skalieren ihre X-Achse; Rohdaten und CSV bewahren SI. Das Symbol muss gültiges UTF-8 ohne Steuerzeichen mit höchstens 15 Bytes sein.
+
+Experimentmodul erforderlich.
+
 ## plane
 
 ```text

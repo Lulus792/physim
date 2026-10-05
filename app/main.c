@@ -228,6 +228,7 @@ typedef struct {
     char batch_sweep_start[64], batch_sweep_end[64];
     struct nk_rect batch_start_bounds, batch_cancel_bounds, batch_navigation_bounds;
     struct nk_rect batch_sweep_bounds;
+    struct nk_rect batch_sweep_value_bounds[2];
     struct nk_rect batch_workers_bounds;
     int job_kind;
     diagnostic diagnostics[64];

@@ -913,4 +913,16 @@ static inline double psrt_parameter(psrt_host *host, const char *name,
         psrt_fail(site, "Invalid parameter definition or override");
     return value;
 }
+static inline double psrt_parameter_unit(psrt_host *host,const char *name,ps_unit unit,
+                                          double standard,double minimum,double maximum,
+                                          const char *description,psrt_site site) {
+    if (!host || !host->context || host->phase!=PSRT_CREATE)
+        psrt_fail(site,"Parameters can only be declared during create");
+    double value=0;
+    ps_result result=ps_parameter_define_unit(host->context,name,description,unit,
+                                             standard,minimum,maximum,&value);
+    if(result==PS_LIMIT)psrt_fail(site,"Parameter capacity exceeded");
+    if(result!=PS_OK)psrt_fail(site,"Invalid parameter unit, definition or override");
+    return value;
+}
 #endif

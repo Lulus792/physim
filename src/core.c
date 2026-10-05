@@ -1,7 +1,11 @@
 #include "physim/core.h"
 #include "physim/experiment.h"
+#include "text_validation.h"
+#include "number_parse.h"
+#include <errno.h>
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 const char *ps_result_string(ps_result r) {
     static const char *names[] = {"OK",
@@ -201,6 +205,18 @@ static bool parameter_context(const ps_context *c) {
                     offsetof(ps_context, parameters) + sizeof c->parameters &&
            c->api_version == PS_API_VERSION;
 }
+static bool parameter_unit_tail(const ps_context *c) {
+    return parameter_context(c) && c->struct_size >=
+        offsetof(ps_context, parameter_units) + sizeof c->parameter_units;
+}
+static bool parameter_unit_valid(ps_unit unit) {
+    return isfinite(unit.scale) && unit.scale>0 && unit.symbol && unit.symbol[0] &&
+        ps_text_valid(unit.symbol,sizeof(((ps_parameter_unit *)0)->symbol),false);
+}
+static bool parameter_display_valid(double value,double scale) {
+    double shown=value/scale;
+    return isfinite(shown) && (value==0 || shown!=0);
+}
 static bool parameter_name(const char *name) {
     if (!name)
         return false;
@@ -237,6 +253,8 @@ ps_result ps_parameter_override(ps_context *c, const char *name, double value) {
     if (c->parameter_count == PS_MAX_PARAMETERS)
         return PS_LIMIT;
     ps_parameter *entry = &c->parameters[c->parameter_count++];
+    if (parameter_unit_tail(c))
+        memset(&c->parameter_units[c->parameter_count-1], 0, sizeof c->parameter_units[0]);
     memset(entry, 0, sizeof *entry);
     memcpy(entry->name, name, strlen(name) + 1);
     entry->value = value;
@@ -276,17 +294,98 @@ ps_result ps_parameter_define(ps_context *c, const char *name, const char *descr
     entry->minimum = minimum;
     entry->maximum = maximum;
     entry->defined = true;
+    if (parameter_unit_tail(c))
+        memset(&c->parameter_units[entry-c->parameters], 0, sizeof c->parameter_units[0]);
     *value = selected;
     return PS_OK;
+}
+ps_result ps_parameter_define_unit(ps_context *c, const char *name, const char *description,
+                                   ps_unit unit, double standard, double minimum,
+                                   double maximum, double *value) {
+    if (!parameter_unit_tail(c)) return PS_VERSION;
+    if (!parameter_unit_valid(unit) || !isfinite(standard) || !isfinite(minimum) ||
+        !isfinite(maximum) || !parameter_name(name) || c->parameter_count>PS_MAX_PARAMETERS)
+        return PS_INVALID;
+    if (!parameter_display_valid(standard,unit.scale) || !parameter_display_valid(minimum,unit.scale) ||
+        !parameter_display_valid(maximum,unit.scale) ||
+        (minimum!=maximum && minimum/unit.scale==maximum/unit.scale)) return PS_NUMERIC;
+    for(uint32_t i=0;i<c->parameter_count;i++)
+        if(!strcmp(c->parameters[i].name,name) && !parameter_display_valid(c->parameters[i].value,unit.scale))
+            return PS_NUMERIC;
+    ps_result result = ps_parameter_define(c,name,description,standard,minimum,maximum,value);
+    if (result != PS_OK) return result;
+    for (uint32_t i=0;i<c->parameter_count;i++) {
+        if (!strcmp(c->parameters[i].name,name)) {
+            ps_parameter_unit *stored=&c->parameter_units[i];
+            memcpy(stored->dimension,unit.dimension,7);
+            stored->scale=unit.scale;
+            memcpy(stored->symbol,unit.symbol,strlen(unit.symbol)+1);
+            stored->declared=true;
+            break;
+        }
+    }
+    return PS_OK;
+}
+ps_result ps_parameter_unit_read(const ps_context *c,uint32_t index,ps_parameter_unit *unit) {
+    if (!parameter_context(c)) return PS_VERSION;
+    if (!unit || c->parameter_count>PS_MAX_PARAMETERS || index>=c->parameter_count)
+        return PS_INVALID;
+    ps_parameter_unit result={0};result.scale=1;
+    if (parameter_unit_tail(c) && c->parameter_units[index].declared) {
+        result=c->parameter_units[index];
+        ps_unit check={{0},result.scale,result.symbol};
+        if (!parameter_unit_valid(check)) return PS_INVALID;
+    }
+    *unit=result;return PS_OK;
+}
+/* Return one exact line value, rejecting duplicate keys and oversized fields. */
+static int parameter_metadata_field(const char *metadata,const char *prefix,const char *name,
+                                     char *value,size_t capacity) {
+    char key[96];snprintf(key,sizeof key,"%s.%s=",prefix,name);
+    const char *cursor=metadata;int found=0;
+    while ((cursor=strstr(cursor,key))) {
+        if (cursor!=metadata && cursor[-1]!='\n') {cursor++;continue;}
+        cursor+=strlen(key);
+        const char *end=strchr(cursor,'\n');if(!end)end=cursor+strlen(cursor);
+        size_t length=(size_t)(end-cursor);
+        if (found || length>=capacity) return -1;
+        memcpy(value,cursor,length);value[length]=0;found=1;
+    }
+    return found;
+}
+ps_result ps_parameter_unit_parse(const char *metadata,const char *name,ps_parameter_unit *unit) {
+    if (!metadata || !parameter_name(name) || !unit) return PS_INVALID;
+    char symbol[16],scale[64],dimension[64];
+    int a=parameter_metadata_field(metadata,"parameter_unit",name,symbol,sizeof symbol);
+    int b=parameter_metadata_field(metadata,"parameter_scale",name,scale,sizeof scale);
+    int d=parameter_metadata_field(metadata,"parameter_dimension",name,dimension,sizeof dimension);
+    ps_parameter_unit parsed={0};parsed.scale=1;
+    if (!a && !b && !d) {*unit=parsed;return PS_OK;}
+    if (a!=1 || b!=1 || d!=1) return PS_CORRUPT;
+    char *end;
+    if (!ps_parse_finite_number(scale,NULL,&parsed.scale)) return PS_CORRUPT;
+    ps_unit check={{0},parsed.scale,symbol};
+    if (!parameter_unit_valid(check)) return PS_CORRUPT;
+    char *cursor=dimension;
+    for (unsigned i=0;i<7;i++) {
+        errno=0;long exponent=strtol(cursor,&end,10);
+        if(errno || end==cursor || exponent<INT8_MIN || exponent>INT8_MAX ||
+           *end!=(i<6?',':0)) return PS_CORRUPT;
+        parsed.dimension[i]=(int8_t)exponent;cursor=end+1;
+    }
+    memcpy(parsed.symbol,symbol,strlen(symbol)+1);parsed.declared=true;
+    *unit=parsed;return PS_OK;
 }
 ps_result ps_parameter_finalize(const ps_context *c) {
     if (!parameter_context(c))
         return PS_VERSION;
     if (c->parameter_count > PS_MAX_PARAMETERS)
         return PS_INVALID;
-    for (uint32_t i = 0; i < c->parameter_count; i++)
-        if (!c->parameters[i].defined)
+    for (uint32_t i = 0; i < c->parameter_count; i++) {
+        ps_parameter_unit unit;
+        if (!c->parameters[i].defined || ps_parameter_unit_read(c,i,&unit)!=PS_OK)
             return PS_INVALID;
+    }
     return PS_OK;
 }
 void ps_scene_add(ps_scene *s, ps_shape shape, ps_vec3 a, ps_vec3 b, double radius, uint32_t rgba) {

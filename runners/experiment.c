@@ -4,6 +4,7 @@
 #include "protocol.h"
 #include "pacing.h"
 #include <errno.h>
+#include "number_parse.h"
 #include <float.h>
 #include <math.h>
 #include <stdlib.h>
@@ -85,9 +86,8 @@ int main(int argc, char **argv) {
             size_t length = (size_t)(equals - argv[i]);
             memcpy(name, argv[i], length);
             name[length] = 0;
-            char *value_end = NULL;
-            double selected = strtod(equals + 1, &value_end);
-            if (errno || value_end == equals + 1 || !value_end || *value_end ||
+            double selected;
+            if (!ps_parse_finite_number(equals+1,NULL,&selected) ||
                 ps_parameter_override(&c, name, selected) != PS_OK)
                 return 2;
             continue;
@@ -161,11 +161,19 @@ int main(int argc, char **argv) {
         return 5;
     }
     if (describe) {
-        int wrote = printf("PHYSIM_PARAMETERS_1\n%u\n", c.parameter_count);
+        bool typed=false;
+        for(uint32_t i=0;i<c.parameter_count;i++)typed |= c.parameter_units[i].declared;
+        int wrote = printf("PHYSIM_PARAMETERS_%u\n%u\n",typed?2:1, c.parameter_count);
         for (uint32_t i = 0; wrote >= 0 && i < c.parameter_count; i++) {
             const ps_parameter *p = &c.parameters[i];
-            wrote = printf("%s\t%.17g\t%.17g\t%.17g\t%s\n", p->name,
+            wrote = printf("%s\t%.17g\t%.17g\t%.17g\t%s", p->name,
                            p->default_value, p->minimum, p->maximum, p->description);
+            ps_parameter_unit unit;ps_parameter_unit_read(&c,i,&unit);
+            if(wrote>=0 && typed)
+                wrote=printf("\t%s\t%.17g\t%d,%d,%d,%d,%d,%d,%d",unit.symbol,unit.scale,
+                    unit.dimension[0],unit.dimension[1],unit.dimension[2],unit.dimension[3],
+                    unit.dimension[4],unit.dimension[5],unit.dimension[6]);
+            if(wrote>=0)wrote=printf("\n");
         }
         int flushed = fflush(stdout);
         api->destroy(&c);

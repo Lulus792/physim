@@ -40,24 +40,29 @@ static void batch_view(app *a) {
             a->batch_sweep_parameter = nk_combo(ui, names, (int)a->parameters.count,
                                                  a->batch_sweep_parameter, 28, nk_vec2(280, 240));
             const ps_parameter *parameter = &a->parameters.entries[a->batch_sweep_parameter];
+            const ps_parameter_unit *unit=&a->parameters.units[a->batch_sweep_parameter];
+            double scale=unit->declared?unit->scale:1;
             if (!a->batch_sweep_ready || previous != a->batch_sweep_parameter) {
                 snprintf(a->batch_sweep_start, sizeof a->batch_sweep_start, "%.17g",
-                         parameter->minimum);
+                         parameter->minimum/scale);
                 snprintf(a->batch_sweep_end, sizeof a->batch_sweep_end, "%.17g",
-                         parameter->maximum);
+                         parameter->maximum/scale);
                 a->batch_sweep_ready = true;
             }
             char description[256];
-            snprintf(description, sizeof description, "%s · Bereich %.6g bis %.6g",
-                     parameter->description, parameter->minimum, parameter->maximum);
+            snprintf(description, sizeof description, "%s · Bereich %.6g bis %.6g%s%s",
+                     parameter->description, parameter->minimum/scale, parameter->maximum/scale,
+                     unit->declared?" ":"",unit->symbol);
             nk_layout_row_dynamic(ui, 40, 1);
             nk_label_wrap(ui, description);
             nk_layout_row_dynamic(ui, 22, 2);
             nk_label(ui, "Startwert", NK_TEXT_LEFT);
             nk_label(ui, "Endwert", NK_TEXT_LEFT);
             nk_layout_row_dynamic(ui, 34, 2);
+            a->batch_sweep_value_bounds[0]=nk_widget_bounds(ui);
             nk_edit_string_zero_terminated(ui, NK_EDIT_FIELD, a->batch_sweep_start,
                                            sizeof a->batch_sweep_start, nk_filter_default);
+            a->batch_sweep_value_bounds[1]=nk_widget_bounds(ui);
             nk_edit_string_zero_terminated(ui, NK_EDIT_FIELD, a->batch_sweep_end,
                                            sizeof a->batch_sweep_end, nk_filter_default);
         } else {

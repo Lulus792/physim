@@ -3,19 +3,19 @@
 #include "physim/measurement.h"
 #include <stdlib.h>
 #include <stdio.h>
-typedef struct {double position,velocity;} model;
+typedef struct {double position,velocity,offset;} model;
 static void derivative(double t,const double *y,double *dy,void *user) {
     (void)t;(void)y;dy[0]=((model*)user)->velocity;
 }
 static void measure(ps_context *c,double endpoint,double interval) {
     model *m=c->user;c->values[0]=m->position;c->values[1]=endpoint;
-    c->values[2]=interval;c->values[3]=m->velocity;
+    c->values[2]=interval;c->values[3]=m->velocity;c->values[4]=m->offset;
 }
 static ps_result reset(ps_context *c) {
     ps_rng_seed(&c->rng,c->seed);
     model *m=c->user;
     ps_result r=ps_distribution_sample((ps_distribution){PS_DIST_UNIFORM,0,1},&c->rng,&m->position);
-    if(r==PS_OK)measure(c,0,0);
+    if(r==PS_OK){m->position+=m->offset;measure(c,0,0);}
     return r;
 }
 static ps_result create(ps_context *c) {
@@ -24,8 +24,11 @@ static ps_result create(ps_context *c) {
     ps_channel_add(c,"endpoint",PS_SECOND,"Actual endpoint");
     ps_channel_add(c,"interval",PS_SECOND,"Accepted interval");
     ps_channel_add(c,"velocity",PS_VELOCITY,"Constant selected velocity");
+    ps_channel_add(c,"offset",PS_METRE,"Selected SI offset");
     snprintf(c->model_metadata,sizeof c->model_metadata,"model=uniform translation; initial position U(0,1)");
-    ps_result r=ps_parameter_define(c,"velocity","Constant velocity",1,.2,3,&((model*)c->user)->velocity);
+    ps_unit display={{1,0,-1,0,0,0,0},.01,"cm/s"};
+    ps_result r=ps_parameter_define_unit(c,"velocity","Constant velocity",display,1,.2,3,&((model*)c->user)->velocity);
+    if(r==PS_OK)r=ps_parameter_define_unit(c,"offset","Position offset",PS_METRE,0,0,1,&((model*)c->user)->offset);
     return r==PS_OK?reset(c):r;
 }
 static ps_result step(ps_context *c,double dt) {

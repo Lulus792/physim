@@ -58,18 +58,13 @@ static void start_batch(app *a) {
             return;
         }
         const ps_parameter *parameter = &a->parameters.entries[a->batch_sweep_parameter];
-        char *end;
-        errno = 0;
-        double start = strtod(a->batch_sweep_start, &end);
-        if (errno || end == a->batch_sweep_start || *end || !isfinite(start)) {
+        double start,finish;
+        if (ps_parameter_catalog_input(&a->parameters,a->batch_sweep_parameter,a->batch_sweep_start,&start)!=PS_OK) {
             status(a, "Ungültiger Startwert der Parameterstudie.");
             return;
         }
-        errno = 0;
-        double finish = strtod(a->batch_sweep_end, &end);
-        if (errno || end == a->batch_sweep_end || *end || !isfinite(finish) ||
-            start == finish || start < parameter->minimum || start > parameter->maximum ||
-            finish < parameter->minimum || finish > parameter->maximum) {
+        if (ps_parameter_catalog_input(&a->parameters,a->batch_sweep_parameter,a->batch_sweep_end,&finish)!=PS_OK ||
+            start == finish) {
             status(a, "Parameterstudie: verschiedene endliche Werte innerhalb der Grenzen eingeben.");
             return;
         }

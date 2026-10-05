@@ -246,12 +246,16 @@ static void camera_inspector(app *a) {
             nk_begin_disabled(ui, a->runner.running || a->reset_pending);
             for (uint32_t i = 0; i < a->parameters.count; i++) {
                 const ps_parameter *parameter = &a->parameters.entries[i];
+                const ps_parameter_unit *unit=&a->parameters.units[i];
+                double scale=unit->declared?unit->scale:1;
                 nk_layout_row_dynamic(ui, 24, 1);
-                nk_label(ui, parameter->name, NK_TEXT_LEFT);
                 char detail[256];
+                snprintf(detail,sizeof detail,"%s%s%s%s",parameter->name,
+                         unit->declared?" [":"",unit->symbol,unit->declared?"]":"");
+                nk_label(ui, detail, NK_TEXT_LEFT);
                 snprintf(detail, sizeof detail, "%s · Bereich %.6g bis %.6g · Standard %.6g",
-                         parameter->description, parameter->minimum, parameter->maximum,
-                         parameter->default_value);
+                         parameter->description, parameter->minimum/scale, parameter->maximum/scale,
+                         parameter->default_value/scale);
                 nk_layout_row_dynamic(ui, 52, 1);
                 nk_label_wrap(ui, detail);
                 nk_layout_row_dynamic(ui, 32, 2);
@@ -263,7 +267,7 @@ static void camera_inspector(app *a) {
                     a->project_settings_dirty = true;
                 if (nk_button_label(ui, "Standard")) {
                     snprintf(a->parameters.selected[i], sizeof a->parameters.selected[i], "%.17g",
-                             parameter->default_value);
+                             parameter->default_value/scale);
                     a->project_settings_dirty = true;
                 }
                 double selected;

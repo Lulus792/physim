@@ -249,9 +249,50 @@ Die Physim-Analyse `analysis_batch_endpoints.phys` und C-Analysen lesen die
 Rohdateien unabhängig von der Sprache des Modells.
 
 
-Experimentparameter sind in der derzeitigen Parameter-API reine Zahlen mit
-Beschreibung und Grenzen. Ihre physikalische Einheit steht in der Modellbeschreibung;
-ein Sweep-Bericht erfindet keinen dimensionslosen Einheitensuffix für die X-Achse.
-Kanalachsen behalten ihre ausdrücklich registrierten Einheiten. Diese Darstellung
-gilt auch für SVG- und PNG-Exporte. Eine formale Einheitenbeschreibung je Parameter
-ist ein weiterer Ausbau der Metadaten-API.
+Experimentparameter können jetzt eine eigene Anzeigeeinheit deklarieren. Die
+Pendelvorlagen verwenden `m` für `length` und `rad` für `initialAngle`. Ohne
+Deklaration bleibt die Einheit unbekannt; die X-Achse erhält dann keinen Suffix.
+Kanalachsen behalten ihre registrierten SI-Einheiten.
+
+## Einheiten von Parameterstudien
+
+`ps_parameter_define_unit` in C und `parameterWithUnit` in Physim erklären Symbol,
+Skala und sieben SI-Dimensionen. Standard, Grenzen, Rückgabewert und Runner-Override
+sind **SI-Zahlen**. Die Anzeigeeinheit ändert weder das Modell noch dessen Ableitung.
+Eine Zentimeterdeklaration mit Skala 0,01 und Standard 1,5 bedeutet deshalb
+1,5 m; das Formular zeigt 150 cm. Nach einem kompatiblen Einheitenwechsel beim
+Neubau bleibt eine gültige SI-Auswahl erhalten. Ein Wechsel der bekannten Dimension
+setzt sie auf den neuen Standard zurück.
+
+In der App sind Experimentparameter und Start-/Endwert einer Studie in der
+angegebenen Anzeigeeinheit einzugeben. 50 bis 250 cm erzeugen dieselben Modellwerte
+wie 0,5 bis 2,5 m. Der Controller gibt dem Runner SI-Overrides, prüft in jedem Lauf
+identische vollständige Deklarationen des Studienparameters und erzeugt eine Kurve in der Anzeigeeinheit.
+PNG und SVG verwenden die Beschriftung `length [cm]`; ein geladener Bericht enthält
+Skala und Dimensionen, sodass `Kurven-X × Skala` wieder den SI-Parameterwert ergibt.
+
+Projektdateien, `--param`, die CLI-Option `--sweep`, Rohdaten und `parameter_value`
+in `completed.csv`/`endpoints.csv` verwenden bei deklarierten Einheiten weiterhin
+SI. Eine CLI-Studie von 50 bis 250 cm lautet daher weiterhin
+`--sweep length=0.5:2.5`. Das Serienmanifest ergänzt
+`parameter_value_storage=SI` sowie die `parameter_unit`, `parameter_scale` und
+`parameter_dimension`-Felder des untersuchten Parameters. Die bestehenden
+Manifestversionen bleiben lesbar; die neuen Felder sind ergänzende Metadaten.
+
+`parameter(...)` und `ps_parameter_define` bleiben für untypisierte Zahlen
+verfügbar. Unbekannt ist kein Synonym für dimensionslos: Ein ausdrücklich
+registriertes `PS_ONE` beziehungsweise eine `Unit` mit Symbol `1` zeigt `[1]`.
+Beschreibungen werden nicht als Einheit interpretiert. Es gibt keine affine
+Umrechnung; die Skala muss positiv und endlich sein. Nicht darstellbare Anzeigen,
+unvollständige oder doppelte Einheitenfelder und widersprüchliche Deklarationen
+führen zu Fehlern statt zu einer stillschweigenden Umrechnung.
+
+
+Die Parameterparser erhalten auch darstellbare nichtnullige subnormale Zahlen
+(zum Beispiel `1e-310`) in Formularen, Projektdateien, CLI und Metadaten. Die
+Parser unterscheiden sie von Eingaben wie `1e-999`, die vollständig zu Null
+unterlaufen. Anzeigen, die einen vorhandenen nichtnulligen SI-Wert zu Null
+runden würden, werden abgewiesen; ein erfolgloser Neubau erhält die alte Auswahl.
+Positive und negative Null bleiben bei der Eingabe unterscheidbar. Unveränderte
+Standards, Grenzen und Auswahlen werden direkt aus ihren SI-Werten übernommen,
+sodass etwa 0,29 m bei einer Zentimeteranzeige exakt 0,29 m bleibt.

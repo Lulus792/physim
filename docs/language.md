@@ -1,10 +1,10 @@
 # Eigene Physim-Sprache
 
-Stand: 2026-10-05. Sprachvertrag 0.169.0; noch keine freigegebene Anwendersprache.
+Stand: 2026-10-05. Sprachvertrag 0.170.0; noch keine freigegebene Anwendersprache.
 Der Arbeitsname ist „Physim-Sprache“. Das vollständige Ziel und die Abnahmen
 LANG-001 bis LANG-007 stehen in Abschnitt 10 des Projektplans.
 
-Die Sprachversion `0.169.0` steht unabhängig von der App-Version und der SDK-ABI
+Die Sprachversion `0.170.0` steht unabhängig von der App-Version und der SDK-ABI
 in `src/language/version.h`. `physimc --version` und der Kopf des generierten C
 geben sie aus. Änderungen an Syntax oder Semantik erfordern eine bewusste
 Anhebung; die vorliegende Fassung ist noch ein Entwicklungsvertrag und keine
@@ -2910,8 +2910,36 @@ beschrieben. Die gespeicherten Daten enthalten die tatsächlich akzeptierten Zei
 Analysecode sollte diese Zeitwerte verwenden.
 
 
-Die Pendelvorlagen definieren `length` und `initialAngle` über `parameter(...)`.
+Die Pendelvorlagen definieren `length` und `initialAngle` über `parameterWithUnit(...)`
+mit `m` beziehungsweise `rad`.
 Die Werte wirken im festen und adaptiven Modus einschließlich Szenengeometrie;
 die Standards bleiben 1,5 m und 0,45 rad. [Laufserien und Parameterstudien](monte-carlo.md#gemeinsame-zielzeit-und-adaptive-serien)
 verwenden die gleichen Physim-Module wie Einzelversuche und speichern die tatsächlichen
 akzeptierten Zeiten. Die unabhängige Analyse liest die Zeitspalte des Datensatzes.
+
+
+## Parametereinheiten (Sprachvertrag 0.170.0)
+
+`parameterWithUnit(name, unit, default, minimum, maximum, description)` ergänzt
+`parameter` um eine ausdrückliche Anzeigeeinheit. Der Rückgabewert sowie Standard,
+Grenzen und Overrides sind SI-Zahlen. Die Skala gehört zur Anzeige und konvertiert
+keine Modellvariablen oder Messkanäle. Beispielsweise:
+
+```physim
+let centimetres = Unit(1, 0, 0, 0, 0, 0, 0, 0.01, "cm")
+let length = parameterWithUnit("length", centimetres, 1.5, 0.1, 10, "Pendulum length")
+```
+
+`length` liefert hier standardmäßig 1,5 m; die App zeigt 150 cm und Grenzen
+von 10 bis 1000 cm. Ein Override `--param length=0.5` bleibt 0,5 m. Die Funktion
+ist wie `parameter` nur bei globaler Initialisierung oder in `create` erlaubt.
+Ungültige Definitionen erhalten Quelldiagnosen. Das Symbol muss gültiges UTF-8
+ohne Steuerzeichen sein und darf höchstens 15 Bytes belegen; Skala und alle
+SI-Werte müssen endlich sein, die Anzeige darf weder unendlich werden noch nichtnullige SI-Werte zu Null runden.
+Messkanäle verwenden weiterhin eigene kanonische SI-Einheiten mit Skala 1.
+
+Deklarationen werden in den Laufmetadaten und in Studienberichten archiviert.
+Die Anzeigeeinheit eines geladenen Berichts bleibt auch ohne Neubau verfügbar.
+Untypisierte Parameter bleiben unbekannt; Dimensionen werden weder aus Namen
+noch aus Beschreibungen abgeleitet. [Serien und Anzeigeeinheiten](monte-carlo.md#einheiten-von-parameterstudien)
+beschreibt Formulare, CLI, SI-Persistenz und Berichte.

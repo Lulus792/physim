@@ -178,6 +178,24 @@ mit installierter und unabhängig neu gebauter Bibliothek.
 Ausgeführte Nachweise stehen im [Plattformbericht](platform-validation.md).
 Wiederaufnahme, fehlende Endwerte und weitere Produktziele bleiben offen.
 
+**Explizite Parametereinheiten** ergänzen C und Physim (Sprachvertrag 0.170.0).
+Ein optionaler ABI-3-Kontext-Tail trägt eigene Symbole, Skalen und SI-Dimensionen;
+bestehende Parameter-/Kontextfelder und die Modul-ABI bleiben erhalten.
+Die Pendelvorlagen deklarieren Länge in Metern und Anfangswinkel in Radiant.
+Formulare und Studienachsen verwenden die Anzeigeeinheit, während Modelle,
+Projektdateien, CLI und Rohdaten SI erhalten. Fehlende Deklarationen bleiben
+unbekannt; explizite Dimensionslosigkeit wird gesondert deklariert.
+Unvollständige, doppelte oder zwischen Läufen widersprüchliche Einheiten werden
+abgewiesen. Unveränderte Auswahlwerte, Defaults und Grenzen bleiben exakt in SI;
+Neubauten mit kompatibler Skala erhalten die Auswahl. Der Katalog umfasst
+510 Prüfungen ohne Fenster (499 ohne SDL) und 46 Fensterabläufe.
+Die vollständigen Release-Läufe bestehen auf macOS und Debian jeweils 510/510
+ohne Fenster und 46/46 Fensterabläufe. Finale Zahlen-/Projekt-/Runnerprüfungen
+bestehen je 7/7, beide verschobenen SDKs mit unabhängigen Verbrauchern ebenfalls.
+Die gezielten API-, Projekt-, Runner-, Bericht- und C-/Physim-Bediennachweise
+stehen im [Plattformbericht](platform-validation.md). Frei wählbare Anzeigeeinheiten
+für Messkanäle und weitere Produktziele bleiben offen.
+
 Aktueller [Plattformnachweis](platform-validation.md): Der direkte Physim-Build nach
 Entfernen der eigenen CMake-Dateien besteht alle acht CI-Kombinationen. Ubuntu 24.04
 mit GCC/Clang und macOS 15 auf Apple Silicon/Intel bestehen jeweils 493 Tests ohne
@@ -596,7 +614,7 @@ und veraltete Fenstermanager-Einträge geprüft. Die erneute Linux-CI steht aus.
 | Foundation | C17, direkter Build ohne eigene CMake-Dateien, MIT, Windows-/POSIX-/Darwin-Schicht, erfolgreiche Windows-CI und Linux-CI mit GCC und Clang, macOS-CI und geprüfte App-Pakete für Apple Silicon und Intel, Release-Paket auf frischem Debian/Ubuntu geprüft | weitere macOS-Versionen und reale Mac-Grafikhardware, öffentliche Mac-Signierung/Notarisierung, Wayland, Installation auf frischen Windows-/Mac-Systemen |
 | Mathematik | Vec2/3/4 mit skalierter Normalisierung, Mat3/4 mit Inversion, Quaternion-Verknüpfung und Rotationsinterpolation, affine/projektive Punkttransformation sowie Richtungs-/Normalentransformation, absolute/relative Vergleiche, Euler/RK4, symplektischer Euler, Verlet, RK45, linearer Solver, Bisektion, Minimierung, kubische räumliche Bézierkurven mit Tangente und Unterteilung | weitere Kurven-/Interpolationsverfahren, Events/dichte Ausgabe, steife Verfahren |
 | Basis | Fehlercodes, expliziter RNG, explizite Allocatoren mit Fehlerprüfungen, feste Arenen, eigene Speicherdomänen für Berichte/Analysekontexte, Test-Allocator mit Fehler-Injektion und Bytebudget, dynamische Arrays mit Größenlimit und Selbstkopien, begrenzte String-Views ohne Kopie, Hashmap mit eigenen Schlüsseln und Größenlimits | strukturierte Diagnosen, Allocator-Anbindung weiterer Subsysteme |
-| Einheiten | SI-Dimensionen, Konvertierung, Einheitenalgebra, Quantity-Rechnung und Dimensionsprüfung von Datenreihen | benutzerdefinierte Anzeigeeinheiten in der GUI |
+| Einheiten | SI-Dimensionen, Konvertierung, Einheitenalgebra, Quantity-Rechnung und Dimensionsprüfung von Datenreihen, deklarierte Anzeigeeinheiten für Experimentparameter samt Formulare und Studienberichte | frei wählbare Anzeigeeinheiten für Messkanäle in der GUI |
 | Runner | versionierte Modul-ABI, Handshake, Pause/Step/Run/Stop, Heartbeat, Crash-/Hang-Isolation, feste/adaptive Modellschritte, Echtzeittaktung von 0,1× bis 16× und Offline | Ressourcenlimits, eigener Logkanal, echtes OS-Sandboxing |
 | Daten | CRC-Chunks, Streaming, Recovery, CSV, Seed-/Modellmetadaten und optionale versionierte Szenenblöcke | Index, mehr Datentypen, komprimierte Blöcke, Schemaerweiterung |
 | App | leerer Workspace-Einstieg mit gespeicherter Ordnerauswahl und bewusster Wiederöffnung, kompakte Menüleiste, Projektmanager, aufklappbarer Dateibaum und bis zu 16 editierbare Textdokumente mit separaten Autosaves und gespeicherten Editoransichten, drei Arbeitsbereiche, integrierte Offline-Dokumentation, Systemtypografie, Einstellungen mit Code-Schriftgröße und Autosave-Intervall, dunkle, helle und kontrastreiche Darstellung, gespeicherte Fenstergröße/Maximierung, verschiebbare Seitenleiste, Arbeitsbereich und Protokoll mit Teilungen, Tabgruppen und gespeicherten frei platzierten Panels im Hauptfenster, Reset zum pausierten Anfangszustand mit erhaltenen Alt-Läufen, Vorlagen, Editor, direkter Projektbuild ohne CMake mit Ausgaben unter `build/`, Diagramme | mehrere benannte Workspaces und Panelanordnungen, separate Panelfenster, unabhängiger Inspektor, weitere Panelzustände, UI-weite Schriftvergrößerung, vollständige Barrierefreiheit |

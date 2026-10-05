@@ -1,3 +1,4 @@
+#include "text_validation.h"
 #include "report_internal.h"
 #include <float.h>
 #include <math.h>
@@ -32,48 +33,8 @@ static void *report_buffer(ps_allocator allocator, size_t bytes) {
     (void)ps_memory_allocate(allocator, bytes, &p);
     return p;
 }
-static bool text_valid(const char *s, size_t capacity, bool multiline) {
-    size_t length = 0;
-    while (length < capacity && s[length])
-        length++;
-    if (length == capacity)
-        return false;
-    const char *end = s + length;
-    const unsigned char *p = (const unsigned char *)s;
-    while (p < (const unsigned char *)end) {
-        uint32_t c = *p++;
-        unsigned extra = 0;
-        uint32_t minimum = 0;
-        if (c >= 0xc2 && c <= 0xdf) {
-            extra = 1;
-            minimum = 0x80;
-            c &= 31;
-        } else if (c >= 0xe0 && c <= 0xef) {
-            extra = 2;
-            minimum = 0x800;
-            c &= 15;
-        } else if (c >= 0xf0 && c <= 0xf4) {
-            extra = 3;
-            minimum = 0x10000;
-            c &= 7;
-        } else if (c >= 0x80)
-            return false;
-        if ((size_t)((const unsigned char *)end - p) < extra)
-            return false;
-        for (unsigned i = 0; i < extra; i++) {
-            if ((*p & 0xc0) != 0x80)
-                return false;
-            c = (c << 6) | (*p++ & 63);
-        }
-        if (c < minimum || c > 0x10ffff || (c >= 0xd800 && c <= 0xdfff) ||
-            (c >= 0x7f && c <= 0x9f) ||
-            (c < 32 && !(multiline && (c == '\n' || c == '\r' || c == '\t'))))
-            return false;
-    }
-    return true;
-}
 static bool unit_valid(const ps_report_unit *u) {
-    return isfinite(u->scale) && u->scale > 0 && text_valid(u->symbol, sizeof u->symbol, false);
+    return isfinite(u->scale) && u->scale > 0 && ps_text_valid(u->symbol, sizeof u->symbol, false);
 }
 ps_result ps_report_unit_from(ps_unit u, ps_report_unit *out) {
     if (!out || !ps_unit_valid(u) || !u.symbol || strlen(u.symbol) >= sizeof out->symbol)
@@ -91,8 +52,8 @@ ps_result ps_report_create(const char *title, const char *provenance, ps_report 
 }
 ps_result ps_report_create_with_allocator(const char *title, const char *provenance,
                                           ps_allocator allocator, ps_report **out) {
-    if (!out || !title || !provenance || !title[0] || !text_valid(title, 192, false) ||
-        !text_valid(provenance, 8192, true) || !ps_allocator_valid(allocator))
+    if (!out || !title || !provenance || !title[0] || !ps_text_valid(title, 192, false) ||
+        !ps_text_valid(provenance, 8192, true) || !ps_allocator_valid(allocator))
         return PS_INVALID;
     ps_report *r = report_memory(allocator, sizeof *r);
     if (!r)
@@ -128,13 +89,13 @@ ps_result ps_report_describe(const ps_report *r, char title[192], char provenanc
     return PS_OK;
 }
 static bool plot_valid(const ps_plot_info *p) {
-    return p && p->title[0] && text_valid(p->title, sizeof p->title, false) &&
-           text_valid(p->x_label, sizeof p->x_label, false) &&
-           text_valid(p->y_label, sizeof p->y_label, false) && unit_valid(&p->x_unit) &&
+    return p && p->title[0] && ps_text_valid(p->title, sizeof p->title, false) &&
+           ps_text_valid(p->x_label, sizeof p->x_label, false) &&
+           ps_text_valid(p->y_label, sizeof p->y_label, false) && unit_valid(&p->x_unit) &&
            unit_valid(&p->y_unit);
 }
 static bool curve_valid(const ps_curve_data *c) {
-    if (!c || !text_valid(c->label, sizeof c->label, false) || !c->count ||
+    if (!c || !ps_text_valid(c->label, sizeof c->label, false) || !c->count ||
         c->count > PS_REPORT_MAX_POINTS || !c->source_count ||
         (c->kind != PS_PLOT_HISTOGRAM && c->source_count < c->count) || c->kind < PS_PLOT_LINE ||
         c->kind > PS_PLOT_HISTOGRAM || !isfinite(c->bar_width))
@@ -178,11 +139,11 @@ ps_result ps_report_add_curve(ps_report *r, ps_plot_handle h, const ps_curve_dat
     return PS_OK;
 }
 static bool table_valid(const ps_table_info *t) {
-    if (!t || !t->title[0] || !text_valid(t->title, sizeof t->title, false) || !t->columns ||
+    if (!t || !t->title[0] || !ps_text_valid(t->title, sizeof t->title, false) || !t->columns ||
         t->columns > PS_REPORT_MAX_COLUMNS)
         return false;
     for (uint32_t i = 0; i < t->columns; i++)
-        if (!text_valid(t->column[i].label, sizeof t->column[i].label, false) ||
+        if (!ps_text_valid(t->column[i].label, sizeof t->column[i].label, false) ||
             !unit_valid(&t->column[i].unit))
             return false;
     return true;
@@ -202,7 +163,7 @@ ps_result ps_report_add_table(ps_report *r, const ps_table_info *info, ps_table_
 }
 ps_result ps_report_add_row(ps_report *r, ps_table_handle h, const ps_table_row *row) {
     if (!r || h.owner != r || h.index >= r->tables || !row ||
-        !text_valid(row->label, sizeof row->label, false))
+        !ps_text_valid(row->label, sizeof row->label, false))
         return PS_INVALID;
     table_data *t = r->table[h.index];
     if (t->info.rows == PS_REPORT_MAX_ROWS)
@@ -250,7 +211,7 @@ static void point(ps_curve_data *c, double x, double y) {
 }
 ps_result ps_report_add_series(ps_report *r, ps_plot_handle h, ps_analysis_context *ctx,
                                ps_series xs, ps_series ys, const char *label, ps_plot_kind kind) {
-    if (!r || h.owner != r || h.index >= r->plots || !label || !text_valid(label, 96, false) ||
+    if (!r || h.owner != r || h.index >= r->plots || !label || !ps_text_valid(label, 96, false) ||
         (kind != PS_PLOT_LINE && kind != PS_PLOT_SCATTER) ||
         ps_series_aligned(ctx, xs, ys) != PS_OK)
         return PS_INVALID;
@@ -369,8 +330,8 @@ double ps_report_axis_fraction(double v, double minimum, double maximum) {
 ps_result ps_report_add_histogram(ps_report *r, ps_analysis_context *ctx, ps_series s,
                                   const char *title, const char *x_label, uint32_t bins,
                                   ps_plot_handle *out) {
-    if (!r || !out || !title || !x_label || !text_valid(x_label, 96, false) ||
-        !text_valid(title, 192, false) || !title[0] || !bins || bins > PS_REPORT_MAX_BINS)
+    if (!r || !out || !title || !x_label || !ps_text_valid(x_label, 96, false) ||
+        !ps_text_valid(title, 192, false) || !title[0] || !bins || bins > PS_REPORT_MAX_BINS)
         return PS_INVALID;
     if (r->plots == PS_REPORT_MAX_PLOTS)
         return PS_LIMIT;
@@ -527,8 +488,8 @@ static ps_result report_codec(codec *c, ps_report *r) {
     integer(c, &plots);
     integer(c, &tables);
     if (!c->ok || plots > PS_REPORT_MAX_PLOTS || tables > PS_REPORT_MAX_TABLES || !r->title[0] ||
-        !text_valid(r->title, sizeof r->title, false) ||
-        !text_valid(r->provenance, sizeof r->provenance, true))
+        !ps_text_valid(r->title, sizeof r->title, false) ||
+        !ps_text_valid(r->provenance, sizeof r->provenance, true))
         return PS_CORRUPT;
     for (uint32_t i = 0; i < plots && c->ok; i++) {
         plot_data *p = &r->plot[i];
@@ -601,7 +562,7 @@ static ps_result report_codec(codec *c, ps_report *r) {
             return PS_CORRUPT;
         for (uint32_t j = 0; j < v->rows && c->ok; j++) {
             string(c, t->row[j].label, sizeof t->row[j].label);
-            if (!text_valid(t->row[j].label, sizeof t->row[j].label, false))
+            if (!ps_text_valid(t->row[j].label, sizeof t->row[j].label, false))
                 return PS_CORRUPT;
             for (uint32_t k = 0; k < v->columns && c->ok; k++) {
                 number(c, &t->row[j].values[k]);

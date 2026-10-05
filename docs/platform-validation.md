@@ -3,6 +3,91 @@
 Stand: 5. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Explizite Parametereinheiten am 5. Oktober 2026
+
+Die Änderung ergänzt eigene Symbol-/Skalen-/Dimensionsdaten im optionalen
+ABI-3-Kontext-Tail, SI-Persistenz, Runner-Abfrageformat 2 und Anzeigeumrechnung.
+Die bestehenden Kontext- und Parameterfelder bleiben an ihrer bisherigen Position.
+Der Katalog enthält 510 Prüfungen ohne Fenster (499 ohne SDL) und 46 Fensterfälle.
+
+Die gezielte macOS-Release-Prüfung besteht 8/8:
+`build/parameter-units-model-final-mac/test-results/run-edmj8xj3`.
+Ein analytisches Modell in C und Physim deklariert `velocity` in `cm/s` mit Skala
+0,01; sämtliche numerischen Messungen bleiben SI und werden exakt verglichen.
+Der Studienbericht enthält 20/160/300 cm/s zu SI-Overrides 0,2/1,6/3 m/s.
+Katalogformat 1 bleibt lesbar; Format 2 transportiert bekannte und unbekannte
+Einheiten. Ein eigener CRC-gültiger Runner mit unvollständigen oder zwischen
+Läufen widersprüchlichen Einheiten wird ohne Gesamtbericht abgewiesen.
+Ein Physim-Modul mit zu langem Symbol erhält eine Quelldiagnose und Startfehler.
+
+Der abschließende gezielte macOS-Release-Lauf besteht 5/5:
+`build/parameter-units-final-target-mac/test-results/run-o5i6o17q`.
+Er prüft zusätzlich Über-/Unterlauf der Anzeige, exakte Erhaltung von Standards
+und bestehenden SI-Auswahlen sowie Speichern/Wiederherstellen von 50 cm als
+0,5 m in der Projektdatei. Bekannte Dimensionswechsel setzen die Auswahl zurück.
+Ungültige Deklarationen und Metadaten erhalten die bisherigen Ausgaben; alte
+Kontextgrößen bleiben für untypisierte Parameter nutzbar.
+
+Die zwei vollständigen Meter-/Zentimeter-Bedienfälle bestehen auf macOS:
+`build/parameter-units-mac/test-results/run-vvjxc49n`.
+Jeweils C- und Physim-Pendel verwenden echte Text-/Mausereignisse für Start- und
+Endwert, erzeugen SI-Laufdaten, 1200 × 850 Pixel große PNGs und SVGs und öffnen
+den archivierten Bericht ohne Build/Runner erneut. Sämtliche Zeitpunkte und
+Kanalwerte stimmen zwischen beiden Sprachen exakt überein. Die PNG-Achse mit
+50/150/250 cm und `length [cm]` wurde visuell geprüft. Wiederöffnung bewahrt
+die Datenhashes.
+
+Der erste frühe Modelllauf scheitert an noch nicht deklarierten Einheitenbezeichnern
+in der Physim-Pendelvorlage; die konkreten Unit-Werte stehen jetzt vor der
+Parameterdefinition. Der erste Zentimeter-Bedienlauf besteht nur für C: Das
+Physim-Testmodell änderte irrtümlich auch die Messkanäle auf Skala 0,01, die
+kanonische Kanalregistrierung lehnt das korrekt ab. Der korrigierte Prüfer ändert
+nur die Parameterdeklaration. Diese frühen Läufe gelten nicht als finale Abnahme.
+
+Die vollständigen Release-Läufe ohne Fenster bestehen 510/510: macOS
+`build/parameter-units-model-final-mac/test-results/run-sr6cg0g0`, Debian
+`build/parameter-units-linux/test-results/run-q0i1kyh5` innerhalb der VM.
+Die vollständigen Fensterläufe bestehen 46/46: macOS
+`build/parameter-units-mac/test-results/run-hdgug8rh`, Debian
+`build/parameter-units-linux/test-results/run-s6dy7qiv`.
+
+Die zusätzliche rundungskritische Bedienprüfung mit Standard 0,29 m und
+Zentimeteranzeige besteht auf macOS 2/2:
+`build/parameter-units-mac/test-results/run-gzp_j26s`. Ihr erster Aufruf verlangte
+irrtümlich das Schreiben einer unveränderten Einstellung; normales Speichern
+ist dann ohne Wirkung. Der Prüfer fordert nun wie das Parameterformular die
+Übernahme der Auswahl an und prüft den exakt archivierten SI-Wert. Nach der
+abschließenden Parseränderung bestehen beide Bedienfälle nochmals 2/2:
+`build/parameter-units-mac/test-results/run-1ru5roi5`.
+
+Die abschließende Zahlenprüfung besteht 7/7 auf macOS:
+`build/parameter-units-last-model-mac/test-results/run-q3onl7t4`, und 7/7 unter
+Debian: `build/parameter-units-final-linux/test-results/run-qwakwdf2`.
+Sie erhält nichtnullige subnormale Skalen und Parameterwerte, einschließlich
+`offset=1e-310` in C- und Physim-Runnern sowie im Batch-CLI. Ein unabhängiger
+Messkanal enthält den Wert in allen gelesenen Samples exakt. `1e-999` bleibt
+ungültig; Vorzeichen der Null bleiben erhalten. Eine bei einer neuen Skala zu
+Null gerundete vorhandene Auswahl führt zu atomarer Ablehnung statt zum Verlust
+ihres SI-Werts. Bericht, Projektdatei, Default 0,29 m und CRC-gültige Einheitenfehler
+bleiben Teil dieser Prüfung. Die finalen sechs Modellfälle bestehen zusätzlich
+im macOS-Debug-Build:
+`build/parameter-units-debug-mac/test-results/run-ijlnvipu`.
+
+Die SDK-Prüfung besteht mit den finalen öffentlichen und privaten Headern,
+installierter und aus SDK-Quellen unabhängig neu gebauter Bibliothek, C-/Physim-
+Modulen, Parameterstudien, Metadaten, Diagrammen und SVG-Beschriftungen: macOS
+`build/parameter-units-sdk-final-proof-mac/Native SDK ä ppueo3yp`, Debian
+`build/parameter-units-sdk-final-proof-linux/Native SDK ä 25v20ne2`.
+Beide SDKs sind vor der Prüfung verschoben; keine Bibliothek aus dem Checkout
+wird als Ersatz benutzt.
+
+Mit dem finalen Zahlenparser bestehen die Meter-/Zentimeter-Bedienfälle unter
+Debian 2/2: `build/parameter-units-final-linux/test-results/run-rdp6q5ef`.
+Die vollständige Zentimeterprüfung mit UI-Assertions besteht auch im finalen
+macOS-Debug-Build: `build/parameter-units-debug-mac/test-results/run-fj1bmvhw`.
+Diese zusätzlichen Läufe prüfen die abschließenden Änderungen an Zahleneingabe
+und SI-Erhaltung; die vollständigen Durchläufe oben decken die übrigen Abläufe ab.
+
 ## Laufserien mit gemeinsamer Zielzeit am 5. Oktober 2026
 
 Der Zielzeitmodus wurde auf dem lokalen Intel-Mac (macOS 14.6.1, Apple Clang 16,

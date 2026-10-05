@@ -1189,6 +1189,10 @@
         "platform",
         "core"
       ]
+    },
+    "unit-parameter-invalid": {
+      "source": "tests/fixtures/language/parameter_unit_invalid.phys",
+      "mode": "--emit-experiment"
     }
   },
   "tests": [
@@ -4484,6 +4488,83 @@
           "timeout": 560,
           "files": [
             "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "parameter_units_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "parameter_units_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 560,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "language_parameter_units",
+      "targets": [
+        "physim-runner",
+        "target-c",
+        "target-phys",
+        "unit-parameter-invalid"
+      ],
+      "steps": [
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{target-c}",
+            "--describe"
+          ],
+          "timeout": 20,
+          "stdout_patterns": [
+            "PHYSIM_PARAMETERS_2\\n2\\nvelocity\\t1\\t0.20000000000000001\\t3\\tConstant velocity\\tcm/s\\t0.01\\t1,0,-1,0,0,0,0\\noffset\\t0\\t0\\t1\\tPosition offset\\tm\\t1\\t1,0,0,0,0,0,0\\n"
+          ]
+        },
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{target-phys}",
+            "--describe"
+          ],
+          "timeout": 20,
+          "stdout_patterns": [
+            "PHYSIM_PARAMETERS_2\\n2\\nvelocity\\t1\\t0.20000000000000001\\t3\\tConstant velocity\\tcm/s\\t0.01\\t1,0,-1,0,0,0,0\\noffset\\t0\\t0\\t1\\tPosition offset\\tm\\t1\\t1,0,0,0,0,0,0\\n"
+          ]
+        },
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{unit-parameter-invalid}",
+            "{work}/invalid-unit.psrun",
+            "--steps",
+            "1"
+          ],
+          "exit_code": 5,
+          "timeout": 20,
+          "stderr_patterns": [
+            "parameter_unit_invalid\\.phys:[0-9]+:[0-9]+: runtime error: Invalid parameter unit, definition or override"
           ]
         }
       ]

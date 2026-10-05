@@ -258,6 +258,7 @@ LANG_DESCRIPTIONS = {
     'metadata': 'Setzt beschreibenden UTF-8-Modelltext, etwa Parameter und Methode.',
     'simulationTime': 'Aktuelle Hostzeit in Sekunden; beim Eintritt in step die Zeit vor dem Schritt.',
     'runSeed': 'Liefert das vollständige 64-Bit-Bitmuster des aktuellen Laufseeds als Int64. Auch Seedwerte oberhalb von INT64_MAX bleiben beim Zurückwandeln in einen Zufallsstrom erhalten; nur im Experiment.',
+    'parameterWithUnit': 'Wie parameter, mit einer eigenen Anzeigeeinheit aus Symbol, positiver Skala und sieben SI-Dimensionen. Standard, Grenzen, Override und Rückgabewert bleiben SI-Zahlen. Die GUI konvertiert Eingaben, Studienberichte skalieren ihre X-Achse; Rohdaten und CSV bewahren SI. Das Symbol muss gültiges UTF-8 ohne Steuerzeichen mit höchstens 15 Bytes sein.',
     'parameter': 'Definiert beim Erzeugen des Experiments einen benannten Float64-Parameter mit Standardwert, inklusiven Grenzen und Beschreibung. Liefert den wirksamen Wert nach dem Runner-Override. Nur während globaler Initialisierung oder create; eindeutiger Name, endliche Werte und höchstens 16 Parameter.',
     'randomUniform': 'Zieht aus dem reproduzierbaren Laufzufallsstrom zwischen min und max.',
     'randomNormal': 'Zieht normalverteilte Werte aus dem Laufzufallsstrom mit explizitem Mittelwert und Streuung.',

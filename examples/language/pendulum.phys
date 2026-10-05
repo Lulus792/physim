@@ -1,10 +1,10 @@
 // Same symplectic integrator and vacuum parameters as the C pendulum reference.
-let length = parameter("length", 1.5, 0.1, 10, "Pendulum length in metres")
-let initialAngle = parameter("initialAngle", 0.45, -1.5, 1.5, "Initial angle in radians")
-let gravity: Float64 = 9.80665
 let radians = Unit(0, 0, 0, 0, 0, 0, 0, 1, "rad")
-let angularRate = Unit(0, 0, -1, 0, 0, 0, 0, 1, "rad/s")
 let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
+let length = parameterWithUnit("length", metres, 1.5, 0.1, 10, "Pendulum length in metres")
+let initialAngle = parameterWithUnit("initialAngle", radians, 0.45, -1.5, 1.5, "Initial angle in radians")
+let gravity: Float64 = 9.80665
+let angularRate = Unit(0, 0, -1, 0, 0, 0, 0, 1, "rad/s")
 let joules = Unit(2, 1, -2, 0, 0, 0, 0, 1, "J")
 let angleChannel = Channel("angle", radians, "True pendulum angle")
 let rateChannel = Channel("angular_velocity", angularRate, "Angular velocity")

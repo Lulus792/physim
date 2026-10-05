@@ -177,6 +177,18 @@ ps_result ps_run_create(ps_run_writer *w, const char *path, const ps_context *c,
             r = PS_LIMIT;
         else
             n += extra;
+        ps_parameter_unit unit;
+        if (r==PS_OK && ps_parameter_unit_read(c,i,&unit)!=PS_OK) r=PS_INVALID;
+        if (r==PS_OK && unit.declared) {
+            extra=snprintf(meta+n,sizeof meta-(size_t)n,
+                "parameter_unit.%s=%s\nparameter_scale.%s=%.17g\n"
+                "parameter_dimension.%s=%d,%d,%d,%d,%d,%d,%d\n",
+                p->name,unit.symbol,p->name,unit.scale,p->name,
+                unit.dimension[0],unit.dimension[1],unit.dimension[2],unit.dimension[3],
+                unit.dimension[4],unit.dimension[5],unit.dimension[6]);
+            if(extra<0 || extra>=(int)(sizeof meta-(size_t)n)) r=PS_LIMIT;
+            else n+=extra;
+        }
     }
     if (r == PS_OK && (fwrite(h, 1, 16, w->file) != 16 ||
                        chunk(w->file, 1, (unsigned char *)meta, (uint32_t)n) != PS_OK))

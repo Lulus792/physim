@@ -1,5 +1,6 @@
 #include "batch.h"
 #include <errno.h>
+#include "number_parse.h"
 #include <signal.h>
 #include <stdlib.h>
 #include <string.h>
@@ -97,10 +98,7 @@ int main(int argc, char **argv) {
             size_t length = (size_t)(equals - argv[i]);
             memcpy(options.parameters[index].name, argv[i], length);
             options.parameters[index].name[length] = 0;
-            char *end;
-            errno = 0;
-            options.parameters[index].value = strtod(equals + 1, &end);
-            if (errno || end == equals + 1 || *end)
+            if (!ps_parse_finite_number(equals+1,NULL,&options.parameters[index].value))
                 return 2;
         } else if (!strcmp(argv[i], "--sweep")) {
             if (options.sweep || ++i == argc)
@@ -113,14 +111,10 @@ int main(int argc, char **argv) {
             memcpy(options.sweep_name, argv[i], length);
             options.sweep_name[length] = 0;
             char *end;
-            errno = 0;
-            options.sweep_start = strtod(equals + 1, &end);
-            if (errno || end == equals + 1 || *end != ':')
+            if (!ps_parse_finite_number(equals+1,&end,&options.sweep_start) || *end != ':')
                 return 2;
             const char *second = end + 1;
-            errno = 0;
-            options.sweep_end = strtod(second, &end);
-            if (errno || end == second || *end)
+            if (!ps_parse_finite_number(second,NULL,&options.sweep_end))
                 return 2;
             options.sweep = true;
         } else if (argv[i][0] != '-' && !options.source[0] && strlen(argv[i]) < 4000)

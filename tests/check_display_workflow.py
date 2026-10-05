@@ -125,13 +125,14 @@ def project_settings(flow, directory):
     require("profile=Release" in read(project / "build/Release/build.config"), "Restored profile was not built")
 
 
-def timed_series(flow, directory):
+def timed_series(flow, directory, scaled=False):
     records = []
     for language in ("c", "phys"):
         root = directory / language
         root.mkdir(parents=True)
-        flow.run("--workspace-state-test", root, "series-" + language, timeout=130,
-                 marker="TIMED SERIES series-" + language + " SELF-TEST: PASSED")
+        mode=("series-cm-" if scaled else "series-")+language
+        flow.run("--workspace-state-test", root, mode, timeout=130,
+                 marker="TIMED SERIES " + mode + " SELF-TEST: PASSED")
         project = root / "project"
         directories = list((project / "runs").glob("*-batch"))
         require(len(directories) == 1, "Invalid target input created an extra series")
@@ -144,8 +145,11 @@ def timed_series(flow, directory):
         require(png[:8] == b"\x89PNG\r\n\x1a\n" and struct.unpack(">II", png[16:24]) == (1200, 850),
                 "Study PNG dimensions or signature differ")
         svg = read(batch / "study.svg")
-        require(">length</text>" in svg and ">angle [rad]</text>" in svg,
-                "Study SVG invents a parameter unit or loses the measured unit")
+        symbol="cm" if scaled else "m"
+        require(">length ["+symbol+"]</text>" in svg and ">angle [rad]</text>" in svg,
+                "Study SVG loses a declared unit")
+        require("parameter_value_storage=SI" in manifest and "parameter_unit.length="+symbol in manifest,
+                "Study manifest loses parameter storage or display unit")
         runs = sorted(batch.glob("run-*.psrun"))
         require(len(runs) == 3, "Study must contain three complete runs")
         values = []
@@ -498,7 +502,8 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"timed_series_workflow": timed_series, "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
+SPECIAL = {"timed_series_workflow": timed_series,
+           "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}
 

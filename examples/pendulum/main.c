@@ -63,9 +63,9 @@ static ps_result create(ps_context *c) {
     if (!c->user)
         return PS_MEMORY;
     pendulum *p=c->user;
-    ps_result parameter=ps_parameter_define(c,"length","Pendulum length in metres",length_m,.1,10,&p->length);
+    ps_result parameter=ps_parameter_define_unit(c,"length","Pendulum length in metres",PS_METRE,length_m,.1,10,&p->length);
     if(parameter==PS_OK)
-        parameter=ps_parameter_define(c,"initialAngle","Initial angle in radians",initial_angle_rad,-1.5,1.5,&p->initial_angle);
+        parameter=ps_parameter_define_unit(c,"initialAngle","Initial angle in radians",PS_RADIAN,initial_angle_rad,-1.5,1.5,&p->initial_angle);
     if(parameter!=PS_OK) return parameter;
     ps_unit angular_velocity = {{0, 0, -1, 0, 0, 0, 0}, 1, "rad/s"};
     ps_channel_add(c, "angle", PS_RADIAN, "True pendulum angle");
