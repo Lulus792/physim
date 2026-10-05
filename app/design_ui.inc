@@ -2,22 +2,25 @@
 #include "design_tokens.h"
 static struct nk_color muted(void) { return UI_COLOR(muted); }
 static struct nk_color accent(void) { return UI_COLOR(accent); }
-static void step_bound_editor(app *a,unsigned which,const char *label,double *value) {
-    char *text=a->adaptive_limit_text[which];
-    double *displayed=&a->adaptive_limit_displayed[which];
+static bool timing_text_field(struct nk_context *ui,char *text,double *displayed,double *value) {
     if(*displayed!=*value && !(isnan(*displayed) && isnan(*value))) {
         snprintf(text,64,"%.9g",*value);*displayed=*value;
     }
     char previous[64];snprintf(previous,sizeof previous,"%s",text);
-    nk_layout_row_dynamic(a->ui,32,2);
-    nk_label(a->ui,label,NK_TEXT_LEFT);
-    a->adaptive_limit_bounds[which]=nk_widget_bounds(a->ui);
-    nk_edit_string_zero_terminated(a->ui,NK_EDIT_FIELD,text,64,nk_filter_default);
+    nk_edit_string_zero_terminated(ui,NK_EDIT_FIELD,text,64,nk_filter_default);
     if(strcmp(previous,text)) {
         char *end;errno=0;double parsed=strtod(text,&end);
         *value=errno || end==text || *end ? NAN:parsed;
-        *displayed=*value;a->project_settings_dirty=true;
+        *displayed=*value;return true;
     }
+    return false;
+}
+static void step_bound_editor(app *a,unsigned which,const char *label,double *value) {
+    nk_layout_row_dynamic(a->ui,32,2);
+    nk_label(a->ui,label,NK_TEXT_LEFT);
+    a->adaptive_limit_bounds[which]=nk_widget_bounds(a->ui);
+    if(timing_text_field(a->ui,a->adaptive_limit_text[which],&a->adaptive_limit_displayed[which],value))
+        a->project_settings_dirty=true;
 }
 static void style(struct nk_context *ui) {
     struct nk_color c[NK_COLOR_COUNT];

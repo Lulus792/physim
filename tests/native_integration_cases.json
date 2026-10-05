@@ -1148,6 +1148,47 @@
         "platform",
         "core"
       ]
+    },
+    "target-c": {
+      "sources": [
+        "tests/fixtures/target_experiment.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ]
+    },
+    "target-phys": {
+      "source": "tests/fixtures/language/target_experiment.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-target-runner-tests": {
+      "sources": [
+        "tests/test_runner_target_time.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "physim-target-batch-tests": {
+      "sources": [
+        "tests/test_batch_target_time.c"
+      ],
+      "libraries": [
+        "batch",
+        "platform",
+        "core"
+      ]
+    },
+    "target-runner-fault": {
+      "sources": [
+        "tests/fixtures/target_runner_fault.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
     }
   },
   "tests": [
@@ -4353,6 +4394,84 @@
           "arguments": [
             "{root}/tests/check_display_workflow.py",
             "adaptive_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 560,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "runner_target_time",
+      "targets": [
+        "physim-target-runner-tests",
+        "physim-runner",
+        "target-c",
+        "target-phys"
+      ],
+      "steps": [
+        {
+          "program": "physim-target-runner-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{target-c}",
+            "{target-phys}",
+            "{work}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "batch_target_time",
+      "targets": [
+        "physim-target-batch-tests",
+        "physim-runner",
+        "target-c",
+        "target-phys",
+        "physim-batch",
+        "target-runner-fault",
+        "hierarchy-legacy"
+      ],
+      "steps": [
+        {
+          "program": "physim-target-batch-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{target-c}",
+            "{target-phys}",
+            "{physim-batch}",
+            "{target-runner-fault}",
+            "{work}",
+            "{hierarchy-legacy}"
+          ],
+          "timeout": 100
+        }
+      ]
+    },
+    {
+      "name": "timed_series_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "timed_series_workflow",
             "--app",
             "{physim}",
             "--work",

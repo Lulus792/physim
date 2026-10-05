@@ -2908,3 +2908,10 @@ Die fünf Pendelvarianten unter `examples/language/` zeigen diesen Callback.
 Die Auswahl in der App und CLI ist im [Workspace-Handbuch](workspace.md#adaptive-simulationsschritte)
 beschrieben. Die gespeicherten Daten enthalten die tatsächlich akzeptierten Zeiten;
 Analysecode sollte diese Zeitwerte verwenden.
+
+
+Die Pendelvorlagen definieren `length` und `initialAngle` über `parameter(...)`.
+Die Werte wirken im festen und adaptiven Modus einschließlich Szenengeometrie;
+die Standards bleiben 1,5 m und 0,45 rad. [Laufserien und Parameterstudien](monte-carlo.md#gemeinsame-zielzeit-und-adaptive-serien)
+verwenden die gleichen Physim-Module wie Einzelversuche und speichern die tatsächlichen
+akzeptierten Zeiten. Die unabhängige Analyse liest die Zeitspalte des Datensatzes.

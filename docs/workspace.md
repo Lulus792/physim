@@ -349,8 +349,8 @@ build/native/Release/bin/physim-runner \
 Unter Windows ist das Modul `pendulum.dll`, das Programm hat `.exe`.
 `--steps` zählt akzeptierte Schritte; 500 adaptive Schritte haben keine vorab feste
 Endzeit. Ohne Grenzen sind Minimum `1e-8 s` und Maximum `0.1 s` eingestellt.
-Grenzoptionen erfordern `--adaptive`. Die separate Monte-Carlo-/Parameterstudien-
-Steuerung verwendet weiterhin ihr ausdrücklich eingestelltes festes Raster.
+Grenzoptionen erfordern `--adaptive`. Die Monte-Carlo-/Parameterstudien-Steuerung bietet feste Raster oder eine
+[gemeinsame Zielzeit mit adaptiven Schritten](monte-carlo.md#gemeinsame-zielzeit-und-adaptive-serien).
 
 Die Messdatei hält Startschritt, Modus, Grenzen, Seed, Modulidentität und Modell-
 Metadaten fest. Für Reproduktion müssen auch Ableitung, Toleranzen und

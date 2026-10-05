@@ -84,8 +84,9 @@ typedef struct {
     void (*destroy)(ps_context *context);
     /* Optional ABI-3 tail, advertised with PS_EXPERIMENT_ADAPTIVE_STEPS.
      * Accept one forward step of minimum_s <= elapsed_s <= proposed_s.
-     * next_s must lie in [minimum_s, maximum_s]. Rejected numerical trials
-     * remain internal to the model and must not publish measurements/state.
+     * next_s must lie in [minimum_s, maximum_s]. The host may lower minimum_s
+     * for the clipped final target-time step. Rejected numerical trials remain
+     * internal to the model and must not publish measurements/state.
      * On success update the model and channel values, but not context->time_s.
      * The host advances time and persists exactly one accepted sample. */
     ps_result (*adaptive_step)(ps_context *context, double proposed_s, double minimum_s,

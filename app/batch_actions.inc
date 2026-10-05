@@ -31,8 +31,11 @@ static void start_batch(app *a) {
         }
         seed = seed * 10 + (unsigned)(*p - '0');
     }
-    ps_batch_options *o = &a->batch_options;
-    memset(o, 0, sizeof *o);
+    ps_batch_options selected={0};
+    ps_batch_options *o = &selected;
+    if(a->batch_target && (!isfinite(a->batch_end_time) || a->batch_end_time<=0)) {
+        status(a,"Endzeit: positiven endlichen Wert eingeben.");return;
+    }
     join(o->runner, sizeof o->runner, a->bin, "physim-runner" EXE_EXT);
     join(o->module, sizeof o->module, a->build_directory, "experiment" MODULE_EXT);
     join(o->source, sizeof o->source, a->project, experiment_source(a));
@@ -43,6 +46,9 @@ static void start_batch(app *a) {
     o->steps = (uint32_t)a->batch_steps;
     o->workers = (uint32_t)a->batch_workers;
     o->dt = a->batch_dt;
+    o->end_time=a->batch_target?a->batch_end_time:0;
+    o->adaptive=a->batch_adaptive;
+    o->minimum_dt=a->batch_minimum_dt;o->maximum_dt=a->batch_maximum_dt;
     o->timeout_s = a->batch_timeout;
     o->memory_bytes = (uint64_t)a->runner_memory_mib * UINT64_C(1048576);
     if (a->batch_sweep) {
@@ -87,7 +93,7 @@ static void start_batch(app *a) {
         o->parameters[index].value = selected;
     }
     if (ps_batch_validate(o) != PS_OK) {
-        status(a, "Grenzen prüfen: 1–1000 Läufe, maximal 5 Mio. Samples, kein Seed-Überlauf.");
+        status(a, "Serie: Zielzeit, Schrittbudget, adaptive Grenzen und Seed prüfen (maximal 5 Mio. Samples).");
         return;
     }
     char runs[4096];
@@ -103,6 +109,7 @@ static void start_batch(app *a) {
     }
     o->source_text = a->batch_source;
     o->source_size = strlen(a->batch_source);
+    a->batch_options=selected;o=&a->batch_options;
     SDL_SetAtomicInt(&a->batch_cancel, 0);
     SDL_SetAtomicInt(&a->batch_done, 0);
     SDL_SetAtomicInt(&a->batch_completed, 0);

@@ -3,6 +3,128 @@
 Stand: 5. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Laufserien mit gemeinsamer Zielzeit am 5. Oktober 2026
+
+Der Zielzeitmodus wurde auf dem lokalen Intel-Mac (macOS 14.6.1, Apple Clang 16,
+SDL 3.2.30, Release) und in der Debian-12-VM (Linux 6.1.0-53-cloud-amd64,
+GCC 12.2, SDL 3.2.30, X11/Xvfb/Openbox, Mesa 22.3.6) gebaut und ausgeführt.
+Der Katalog enthält 509 Prüfungen ohne Fenster (498 ohne SDL) und 45 Fensterabläufe.
+
+Die gezielte Runnerprüfung besteht auf macOS:
+`build/series-target-mac/test-results/run-ihh0h_f7`. Ein analytisches Translationsmodell
+in C und Physim vergleicht alle Messungen exakt. Ziele vor dem ersten Rasterpunkt,
+zwischen Punkten und nach mehreren Punkten sind geprüft; ein 0,05-s-Endintervall
+endet bei 0,25 s trotz konfiguriertem 0,08-s-Minimum. Ein zu kurzes Budget erhält
+Anfang und akzeptierten Punkt als lesbaren Präfix ohne gültigen Footer.
+Ungültige Ziele und Verwendung im interaktiven Modus werden vor dem Start abgewiesen.
+
+Die Serienprüfung besteht auf macOS:
+`build/series-target-mac/test-results/run-8bhsi5w5`. Seedabhängige Anfangswerte,
+seriale/parallelisierte Ausführung, C-/Physim-Daten, Rohendwerte und Berichtsdaten
+werden verglichen. Velocity-Sweep, abgeschnittenes Endintervall, fehlender adaptiver
+Callback, Budgetfehler und Abbruch mit Prozessbereinigung sind geprüft. Ein eigener
+Runner schreibt CRC-gültige Dateien mit falschem Ziel, doppelten Zeiten, zu vielen
+Samples, falscher Konfiguration, verletzten Schrittgrenzen, falschem Start oder
+fehlendem Footer. Der Controller weist diese Dateien ab und schreibt keinen Gesamtbericht.
+
+Die unveränderten Runner-/Parallelprüfungen bestehen auf macOS 4/4:
+`build/series-timing-mac/test-results/run-muc2qsb9`; die bisherigen festen
+Pendel-/Integratorreferenzen bestehen zusätzlich:
+`build/series-timing-mac/test-results/run-3n83g_ih`.
+Die bisherigen Serien-/Adaptive-Bedienabläufe bestehen 2/2:
+`build/series-timing-mac/test-results/run-rtxdyaqw`.
+
+Der neue Fensterablauf besteht auf macOS:
+`build/series-timing-mac/test-results/run-yyf2512r`. C- und Physim-Pendelprojekte
+aktivieren adaptive Serien über echte Widgets, geben zunächst das ungültige Ziel
+0 und danach `7e-1` über SDL-Text-/Tastaturereignisse ein und vergleichen die Längen
+0,5/1,5/2,5 m. Alle überlappenden Zeiten und Kanalwerte stimmen exakt überein;
+die Punktzahlen unterscheiden sich nach Pendellänge. Zwei weitere Prozesse öffnen
+den archivierten Bericht ohne Build/Runner. Dateihashes bestätigen unveränderte Daten.
+Der erste Wiederöffnungstest wartet irrtümlich in der Messlaufansicht auf den Bericht;
+die Prüfung wählt nun vor dem Öffnen die Berichtansicht.
+
+Der erste Debian-Build stoppt wegen eines vollen 16-GiB-Datenträgers. Alte generierte
+Arbeitsordner früherer Prüfungen unter `build/native/Release/test-results` werden
+entfernt; die zwei neuesten vollständigen Durchläufe und sämtliche strukturierten
+Ergebnisberichte bleiben erhalten. Dieser Buildabbruch wird nicht als bestandener
+Testdurchlauf gezählt.
+
+Die abschließende gezielte macOS-Release-Prüfung besteht 4/4:
+`build/series-final-mac/test-results/run-ankpqg54` (Runner, Serien, Bericht und
+unveränderter mathematischer Sprachfehlerfall). Die neuen Modellprüfungen bestehen
+auch im Debug-Build 2/2: `build/series-debug-mac/test-results/run-obl8dd0u`;
+der adaptive Serien-Fensterablauf mit aktiven Assertions besteht zusätzlich:
+`build/series-debug-mac/test-results/run-pve22knr`.
+
+Der finale Export-/Bedienvergleich besteht auf macOS 2/2:
+`build/series-display-final-mac/test-results/run-fi5w1rhl`. PNG-Dateien mit
+1200 × 850 Pixeln und SVG-Dateien werden für beide Modelle erzeugt und geprüft.
+Die PNG-Darstellung wurde außerdem visuell kontrolliert. Parameter besitzen in
+der aktuellen API keine formale Einheit; die X-Achse zeigt deshalb `length`
+ohne erfundenes `[1]`. Die Kanalachse behält `angle [rad]`. Dieselbe Regel gilt
+für die App und beide Exportformate.
+
+Der erste macOS-Gesamtlauf ohne Fenster besteht 508/509; der unveränderte
+Sprachfehlerfall `language_native_mathpowdomain` überschreitet seine Zehn-Sekunden-Grenze.
+Die gezielte Wiederholung besteht mit derselben Grenze. Der erste vollständige
+Mac-Fensterlauf besteht 43/45. Der Workspace-Prüfer wechselte das Projekt,
+bevor sein Bibliotheksworker beendet war; er wartet nun wie die anderen
+Bedienprüfer auf den tatsächlichen Abschluss. Der gezielte Fall besteht mit
+seiner bisherigen Grenze: `build/series-display-final-mac/test-results/run-omhe2m67`.
+Der zweite Fehler entstand, weil der laufende Prüfer bereits neue Exportdateien
+verlangte, sein zuvor gebautes Testprogramm sie aber noch nicht erzeugte.
+Der abschließende Exportvergleich verwendet das aktualisierte Programm.
+
+Die erste SDK-Prüfung mit SVG-Export erkennt im Prüfer eine doppelte Ausgabe:
+installierter und neu gebauter Verbraucher schrieben denselben Dateinamen.
+Der Exporter lehnt bestehende Dateien korrekt ab. Beide Verbraucher verwenden
+jetzt getrennte Ausgaben. Das finale verschobene macOS-SDK besteht vollständig:
+`build/series-sdk-corrected-proof-mac/Native SDK ä npnkp6da`. Vorgebauter Pendel,
+neu gebaute C-Quellen und Physim-Quellen erzeugen je drei adaptive Läufe mit
+exakter gemeinsamer Endzeit. Beide Bibliotheksverbraucher prüfen variable
+Punktzahlen, Energie, Rohendwerte, Berichtskurven und SVG-Beschriftung.
+
+Das finale verschobene Debian-SDK besteht ebenfalls vollständig:
+`build/series-sdk-final-proof-linux/Native SDK ä goh054ga` innerhalb der VM.
+Die Zielzeitstudien laufen für alle drei Modulwege durch beide Verbraucher;
+Header, Beispielmodule, native Projekte und Sprachmodule werden unabhängig
+gegen die installierte und die aus SDK-Quellen neu gebaute Bibliothek geprüft.
+
+Der vollständige finale macOS-Fensterlauf besteht 45/45:
+`build/series-display-final-mac/test-results/run-2pue_3pu`.
+Der vollständige Debian-Lauf ohne Fenster besteht 509/509:
+`build/series-target/test-results/run-oj_64_2b` innerhalb der VM.
+Nach den abschließenden Änderungen an Einheitenanzeige und Exportprüfern bestehen
+Runner, Serien und Bericht unter Debian nochmals 3/3:
+`build/series-target/test-results/run-xo552x2v`.
+
+Der erste vollständige Debian-Fensterlauf besteht 44/45:
+`build/native/Release/test-results/run-xqni5_ig`. Der neue Zielzeitablauf besteht;
+der unveränderte Geschwindigkeitstest verfehlt bei parallelen SDK-/Buildarbeiten
+seinen Mindestfortschritt (1,36 statt mehr als 1,4 simulierte Sekunden).
+Die Folgeprüfung läuft nach Abschluss dieser Zusatzarbeiten mit denselben
+Zeit- und Fortschrittsgrenzen.
+
+Ein anschließender Prüfaufruf ohne Xvfb scheitert bei allen 45 Fensterfällen
+bereits am SDL-Start (`No available video device`):
+`build/native/Release/test-results/run-ioa037qk`. Dieser Aufruffehler liefert
+keinen Nachweis zum App-Verhalten. Die finale Wiederholung verwendet wieder
+Xvfb, Openbox, X11 und Mesa.
+
+Der abschließende vollständige macOS-Release-Lauf ohne Fenster besteht 509/509:
+`build/series-final-mac/test-results/run-6kqmayn0`. Er enthält auch die zuvor
+zeitüberschrittene Sprachprüfung mit ihrer unveränderten Grenze und beide
+neuen Zielzeitprüfungen.
+
+Der finale vollständige Debian-Fensterlauf mit Xvfb/Openbox besteht 45/45:
+`build/native/Release/test-results/run-xx5p4wra` innerhalb der VM. Der zuvor
+knapp fehlgeschlagene Geschwindigkeitstest und der vollständige neue
+C-/Physim-Zielzeit-/Export-/Wiederöffnungsablauf bestehen mit unveränderten
+Prüfgrenzen. Damit liegen für diese Änderung auf beiden ausgeführten Systemen
+509/509 Prüfungen ohne Fenster, 45/45 Fensterabläufe und die verschobenen
+SDK-Verbraucher vor. Das belegt keine zusätzlichen Plattformen oder Wayland.
+
 ## Adaptive Simulationsschritte am 5. Oktober 2026
 
 Die adaptiven Schritte wurden auf dem lokalen Intel-Mac (macOS 14.6.1,

@@ -216,6 +216,11 @@ typedef struct {
     ps_result batch_code;
     int batch_runs, batch_steps, batch_workers;
     double batch_dt;
+    bool batch_target,batch_adaptive;
+    double batch_end_time,batch_minimum_dt,batch_maximum_dt;
+    char batch_timing_text[4][64];
+    double batch_timing_displayed[4];
+    struct nk_rect batch_target_bounds,batch_adaptive_bounds,batch_timing_bounds[4];
     char batch_seed[32], batch_channel[48], batch_last_report[4096];
     bool batch_sweep;
     bool batch_sweep_ready;
@@ -789,6 +794,7 @@ static void open_project(app *a) {
     snprintf(a->seed, sizeof a->seed, "%llu", (unsigned long long)project_settings.seed);
     a->project_settings_dirty = false;
     a->batch_sweep = false;
+    a->batch_target=a->batch_adaptive=false;
     a->batch_sweep_ready = false;
     a->batch_sweep_parameter = 0;
     a->batch_sweep_start[0] = a->batch_sweep_end[0] = 0;
@@ -2420,6 +2426,7 @@ static void test_mouse(app *a, struct nk_rect rect, bool down) {
 #include "docking_tests.inc"
 #include "hierarchy_tests.inc"
 #include "adaptive_tests.inc"
+#include "series_tests.inc"
 #include "native_dialog_tests.inc"
 #include "workspace_tests.inc"
 // clang-format on
@@ -2693,6 +2700,7 @@ int main(int argc, char **argv) {
     a->simulation_speed = 1;
     a->minimum_dt=1e-8;a->maximum_dt=.1;
     a->batch_dt = .005;
+    a->batch_end_time=1;a->batch_minimum_dt=1e-8;a->batch_maximum_dt=.1;
     a->batch_timeout = 30;
     a->batch_runs = 256;
     a->batch_workers = SDL_GetNumLogicalCPUCores();
@@ -2968,7 +2976,7 @@ int main(int argc, char **argv) {
         } else if (workspace_state_test) {
             if (ps_clock() - test_started >
                 (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
-                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
+                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15)) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
                         argv[3], ps_clock() - test_started);
@@ -3022,7 +3030,7 @@ int main(int argc, char **argv) {
                     !test_source_has(a, "physim.project", "experiment=main.phys"))
                     exit_code = 1;
                 test_stage = 104;
-            } else if (test_stage == 104) {
+            } else if (test_stage == 104 && idle(a)) {
                 open_workspace_path(a, argv[2]);
                 if (a->loaded || !a->workspace_open || a->project[0] ||
                     strcmp(a->workspace, argv[2]))

@@ -161,6 +161,23 @@ und die verschobenen SDKs auf beiden Systemen bestehen ebenfalls.
 Die ausgeführten Nachweise stehen im [Plattformbericht](platform-validation.md).
 Adaptive Batch-/Parameterstudien und weitere Produktziele bleiben offen.
 
+**Laufserien mit gemeinsamer Zielzeit** ergänzen feste und adaptive Schritte
+in CLI und App. Der letzte Schritt endet genau an der Zielzeit, auch wenn sie
+zwischen Rasterpunkten liegt. Schrittzahl ist dann ein Budget; fehlende Endzeit,
+ungültige Konfiguration oder erschöpftes Budget erzeugen keinen Gesamtbericht.
+Manifestversion 4 speichert Ziel, Modus und Grenzen. Der Controller prüft auch
+CRC-gültige Dateien auf exakte Endzeit, steigende Zeiten, Intervallgrenzen,
+passende Seeds und Metadaten. C- und Physim-Pendelvorlagen bieten Länge und
+Anfangswinkel als Parameter; Standards und feste Referenzläufe bleiben erhalten.
+Die neue Bedienprüfung vergleicht drei Pendellängen mit unterschiedlichen
+Schrittzahlen bis zum selben Zeitpunkt und öffnet ihren Bericht erneut.
+Der Katalog enthält 509 Prüfungen ohne Fenster (498 ohne SDL) und 45 Fensterabläufe.
+Die vollständigen Release-Läufe bestehen auf macOS und Debian jeweils mit
+509/509 ohne Fenster und 45/45 Fensterabläufen; beide verschobenen SDKs bestehen
+mit installierter und unabhängig neu gebauter Bibliothek.
+Ausgeführte Nachweise stehen im [Plattformbericht](platform-validation.md).
+Wiederaufnahme, fehlende Endwerte und weitere Produktziele bleiben offen.
+
 Aktueller [Plattformnachweis](platform-validation.md): Der direkte Physim-Build nach
 Entfernen der eigenen CMake-Dateien besteht alle acht CI-Kombinationen. Ubuntu 24.04
 mit GCC/Clang und macOS 15 auf Apple Silicon/Intel bestehen jeweils 493 Tests ohne
@@ -580,7 +597,7 @@ und veraltete Fenstermanager-Einträge geprüft. Die erneute Linux-CI steht aus.
 | Mathematik | Vec2/3/4 mit skalierter Normalisierung, Mat3/4 mit Inversion, Quaternion-Verknüpfung und Rotationsinterpolation, affine/projektive Punkttransformation sowie Richtungs-/Normalentransformation, absolute/relative Vergleiche, Euler/RK4, symplektischer Euler, Verlet, RK45, linearer Solver, Bisektion, Minimierung, kubische räumliche Bézierkurven mit Tangente und Unterteilung | weitere Kurven-/Interpolationsverfahren, Events/dichte Ausgabe, steife Verfahren |
 | Basis | Fehlercodes, expliziter RNG, explizite Allocatoren mit Fehlerprüfungen, feste Arenen, eigene Speicherdomänen für Berichte/Analysekontexte, Test-Allocator mit Fehler-Injektion und Bytebudget, dynamische Arrays mit Größenlimit und Selbstkopien, begrenzte String-Views ohne Kopie, Hashmap mit eigenen Schlüsseln und Größenlimits | strukturierte Diagnosen, Allocator-Anbindung weiterer Subsysteme |
 | Einheiten | SI-Dimensionen, Konvertierung, Einheitenalgebra, Quantity-Rechnung und Dimensionsprüfung von Datenreihen | benutzerdefinierte Anzeigeeinheiten in der GUI |
-| Runner | versionierte Modul-ABI, Handshake, Pause/Step/Run/Stop, Heartbeat, Crash-/Hang-Isolation, feste/adaptive Modellschritte, Echtzeittaktung von 0,1× bis 16× und Offline | adaptive Batchschritte, Ressourcenlimits, eigener Logkanal, echtes OS-Sandboxing |
+| Runner | versionierte Modul-ABI, Handshake, Pause/Step/Run/Stop, Heartbeat, Crash-/Hang-Isolation, feste/adaptive Modellschritte, Echtzeittaktung von 0,1× bis 16× und Offline | Ressourcenlimits, eigener Logkanal, echtes OS-Sandboxing |
 | Daten | CRC-Chunks, Streaming, Recovery, CSV, Seed-/Modellmetadaten und optionale versionierte Szenenblöcke | Index, mehr Datentypen, komprimierte Blöcke, Schemaerweiterung |
 | App | leerer Workspace-Einstieg mit gespeicherter Ordnerauswahl und bewusster Wiederöffnung, kompakte Menüleiste, Projektmanager, aufklappbarer Dateibaum und bis zu 16 editierbare Textdokumente mit separaten Autosaves und gespeicherten Editoransichten, drei Arbeitsbereiche, integrierte Offline-Dokumentation, Systemtypografie, Einstellungen mit Code-Schriftgröße und Autosave-Intervall, dunkle, helle und kontrastreiche Darstellung, gespeicherte Fenstergröße/Maximierung, verschiebbare Seitenleiste, Arbeitsbereich und Protokoll mit Teilungen, Tabgruppen und gespeicherten frei platzierten Panels im Hauptfenster, Reset zum pausierten Anfangszustand mit erhaltenen Alt-Läufen, Vorlagen, Editor, direkter Projektbuild ohne CMake mit Ausgaben unter `build/`, Diagramme | mehrere benannte Workspaces und Panelanordnungen, separate Panelfenster, unabhängiger Inspektor, weitere Panelzustände, UI-weite Schriftvergrößerung, vollständige Barrierefreiheit |
 | Editor | C- und Physim-Dateien bearbeiten, sprachspezifische Syntaxfarben, Zeilennummern, Debug/Release, anklickbare Compilerdiagnosen, öffentlicher Header-Browser | Completion |

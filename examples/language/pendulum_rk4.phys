@@ -1,5 +1,6 @@
 // Same RK4 integrator and vacuum parameters as the default C pendulum.
-let length: Float64 = 1.5
+let length = parameter("length", 1.5, 0.1, 10, "Pendulum length in metres")
+let initialAngle = parameter("initialAngle", 0.45, -1.5, 1.5, "Initial angle in radians")
 let gravity: Float64 = 9.80665
 let radians = Unit(0, 0, 0, 0, 0, 0, 0, 1, "rad")
 let angularRate = Unit(0, 0, -1, 0, 0, 0, 0, 1, "rad/s")
@@ -21,7 +22,7 @@ struct PendulumState:
         return PendulumState(self.phase + dt * (k1 + 2 * k2 + 2 * k3 + k4) / 6)
     mutating func advance(dt: Float64):
         self = self.advanced(dt)
-var states = [PendulumState(Vec2(0.45, 0))]
+var states = [PendulumState(Vec2(initialAngle, 0))]
 
 func slope(phase: Vec2) -> Vec2:
     return Vec2(phase.y, -gravity / length * sin(phase.x))
@@ -37,11 +38,11 @@ func measure():
         sensorChannel.sample(state.x)
 
 func create():
-    metadata("model=point pendulum, vacuum\nlength_m=1.5\nmass_kg=1\ngravity_m_s2=9.80665\nintegrator=RK4\nsensor_noise_rad=0\nadaptive_integrator=Dormand-Prince 5(4)\nadaptive_absolute_tolerance=1e-10\nadaptive_relative_tolerance=1e-8")
+    metadata("model=point pendulum, vacuum\nlength_m=" + String(length) + "\ninitial_angle_rad=" + String(initialAngle) + "\nmass_kg=1\ngravity_m_s2=9.80665\nintegrator=RK4\nsensor_noise_rad=0\nadaptive_integrator=Dormand-Prince 5(4)\nadaptive_absolute_tolerance=1e-10\nadaptive_relative_tolerance=1e-8")
 
 func reset():
     states = []
-    states.append(PendulumState(Vec2(0.45, 0)))
+    states.append(PendulumState(Vec2(initialAngle, 0)))
     measure()
 
 func step(dt: Float64):

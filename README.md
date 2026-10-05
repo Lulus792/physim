@@ -571,3 +571,9 @@ Die C- und Physim-Pendelvorlagen bieten einen Dormand–Prince-Callback; Startsc
 und Grenzen werden im Projekt gespeichert. Jeder akzeptierte Schritt erhält seine
 wirkliche Zeit in der Messdatei. [Bedienung und CLI](docs/workspace.md#adaptive-simulationsschritte)
 und [Sprachcallback](docs/language.md#adaptive-runner-schritte) beschreiben den Weg.
+
+
+Laufserien und Parameterstudien bieten eine gemeinsame Zielzeit und adaptive
+Schritte mit Budget. Auch bei unterschiedlichen Schrittzahlen erreichen alle
+akzeptierten Läufe dieselbe Endzeit. Die Pendelvorlagen definieren Länge und
+Anfangswinkel als Parameter. [Bedienung und CLI](docs/monte-carlo.md#gemeinsame-zielzeit-und-adaptive-serien).

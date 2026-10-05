@@ -19,6 +19,11 @@ typedef struct {
     uint64_t memory_bytes; /* Per runner; zero disables. Platform semantics: platform.h. */
     uint32_t runs, steps, workers; /* 1..PS_BATCH_MAX_WORKERS; capped by runs. */
     double dt, timeout_s;
+    /* end_time=0 retains the fixed sample-count workflow. A positive target
+     * clips the final interval; steps becomes an accepted-step budget.
+     * Adaptive series require a common target, not equal step counts. */
+    bool adaptive;
+    double end_time, minimum_dt, maximum_dt;
     /* Optional linear parameter study. Index 0 uses start, the final index end. */
     bool sweep;
     char sweep_name[48];

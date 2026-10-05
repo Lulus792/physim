@@ -46,6 +46,7 @@ def main():
     consumer = root / "Consumer ä"
     (consumer / "app").mkdir(parents=True)
     shutil.copy2(repo / "tools/sdk_probe.c", consumer / "probe.c")
+    shutil.copy2(repo / "tools/sdk_series_probe.c", consumer / "series-probe.c")
     shutil.copy2(repo / "app/utf8.manifest", consumer / "app/utf8.manifest")
     native.ROOT = consumer
     options = argparse.Namespace(build_dir=consumer / "build", compiler=args.compiler,
@@ -73,6 +74,7 @@ def main():
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
         probe = builder.executable("sdk-probe", ["probe.c"], [library])
+        series_probe=builder.executable("sdk-series-probe",["series-probe.c"],[library])
         header_sources = []
         for header in sorted((sdk / "include/physim").glob("*.h")):
             name = "header_" + header.stem + ".c"
@@ -109,6 +111,7 @@ def main():
         shutil.copytree(sdk / "src", consumer / "src")
         rebuilt_core = builder.archive("sdk-rebuilt-core", [f"src/{name}.c" for name in native.CORE])
         rebuilt_probe = builder.executable("sdk-rebuilt-probe", ["probe.c"], [rebuilt_core])
+        rebuilt_series_probe=builder.executable("sdk-rebuilt-series-probe",["series-probe.c"],[rebuilt_core])
         checked([rebuilt_probe, root / "bundled-pendulum.psrun", root / "bundled-pendulum-report.psreport"])
         shutil.copy2(sdk / "examples/pendulum/analysis.c", consumer / "c-analysis.c")
         c_analysis = builder.executable("sdk-c-analysis", ["c-analysis.c"], [rebuilt_core], module=True)
@@ -157,6 +160,13 @@ def main():
             check_analysis(run, "adaptive-" + name + "-phys", modules["analysis"], "adaptive-language")
             checked([rebuilt_probe, run, root / ("adaptive-" + name + "-c-report.psreport"), "adaptive"])
             print(f"Installed adaptive experiment and C/Physim analyses: {name} passed", flush=True)
+            series=root/("target-series-"+name)
+            checked([sdk / "bin" / ("physim-batch" + suffix),
+                     sdk / "bin" / ("physim-runner" + suffix),experiment,series,
+                     "angle","3","1000",".1","42","--until",".7","--adaptive",
+                     "--min-dt","1e-6","--max-dt",".2","--sweep","length=.5:2.5","--workers","3"])
+            checked([series_probe,series,"installed"]);checked([rebuilt_series_probe,series,"rebuilt"])
+            print(f"Installed target-time study: {name} passed",flush=True)
 
         if metadata["app"]:
             for name in native.EXAMPLES + ["language"]:
@@ -194,6 +204,7 @@ def main():
         "fifteen language programs, 27 rebuilt language modules, nine language experiments with both general analyses, "
         "specialized sensor analysis and six C/Physim combinations passed.\n"
         "Adaptive bundled/source C and Physim pendulums, actual variable sample times, energy and both analysis languages passed.\n" +
+        "Common-target-time parameter studies from bundled/source C and Physim pendulums passed with installed and rebuilt probes.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
         ("Eight C template GUI workflows and the complete Physim language GUI workflow passed.\n" if args.app_tests else ""), encoding="utf-8")
     print(f"Native SDK verified: {root}")

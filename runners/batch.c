@@ -33,13 +33,15 @@ int main(int argc, char **argv) {
         fprintf(stderr,
                 "Usage: physim-batch runner module new-directory channel runs steps dt seed "
                 "[source] [--workers N] [--timeout S] [--memory-mib N] "
-                "[--param name=value ...] [--sweep name=start:end]\n"
+                "[--param name=value ...] [--sweep name=start:end] [--until seconds] "
+                "[--adaptive --min-dt seconds --max-dt seconds]\n"
                 "All paths must be absolute. Ctrl+C cancels and preserves completed runs.\n");
         return 2;
     }
     ps_batch_options options = {0};
     options.workers = 1;
     options.timeout_s = 30;
+    options.minimum_dt=1e-8;options.maximum_dt=.1;
     char *paths[] = {options.runner, options.module, options.directory};
     for (unsigned i = 0; i < 3; i++) {
         if (strlen(argv[i + 1]) >= 4000)
@@ -50,8 +52,19 @@ int main(int argc, char **argv) {
         return 2;
     strcpy(options.channel, argv[4]);
     bool workers_seen = false, timeout_seen = false, memory_seen = false;
+    bool until_seen=false,minimum_seen=false,maximum_seen=false;
     for (int i = 9; i < argc; i++) {
-        if (!strcmp(argv[i], "--workers")) {
+        if(!strcmp(argv[i],"--adaptive")) {
+            if(options.adaptive) return 2;
+            options.adaptive=true;
+        } else if(!strcmp(argv[i],"--until") || !strcmp(argv[i],"--min-dt") || !strcmp(argv[i],"--max-dt")) {
+            bool *seen=!strcmp(argv[i],"--until")?&until_seen:
+                       !strcmp(argv[i],"--min-dt")?&minimum_seen:&maximum_seen;
+            double *value=seen==&until_seen?&options.end_time:seen==&minimum_seen?&options.minimum_dt:&options.maximum_dt;
+            if(*seen || ++i==argc) return 2;
+            *seen=true;char *end;errno=0;*value=strtod(argv[i],&end);
+            if(errno || end==argv[i] || *end || *value<=0) return 2;
+        } else if (!strcmp(argv[i], "--workers")) {
             uint64_t workers;
             if (workers_seen || ++i == argc || !unsigned_number(argv[i], &workers) || !workers ||
                 workers > PS_BATCH_MAX_WORKERS)
@@ -127,7 +140,8 @@ int main(int argc, char **argv) {
     options.dt = strtod(argv[7], &end);
     if (errno || end == argv[7] || *end)
         return 2;
-    if (ps_batch_validate(&options) != PS_OK)
+    if(((minimum_seen || maximum_seen) && !options.adaptive) ||
+       ps_batch_validate(&options) != PS_OK)
         return 2;
     signal(SIGINT, stop);
     signal(SIGTERM, stop);

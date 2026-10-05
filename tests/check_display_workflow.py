@@ -125,6 +125,55 @@ def project_settings(flow, directory):
     require("profile=Release" in read(project / "build/Release/build.config"), "Restored profile was not built")
 
 
+def timed_series(flow, directory):
+    records = []
+    for language in ("c", "phys"):
+        root = directory / language
+        root.mkdir(parents=True)
+        flow.run("--workspace-state-test", root, "series-" + language, timeout=130,
+                 marker="TIMED SERIES series-" + language + " SELF-TEST: PASSED")
+        project = root / "project"
+        directories = list((project / "runs").glob("*-batch"))
+        require(len(directories) == 1, "Invalid target input created an extra series")
+        batch = directories[0]
+        manifest = read(batch / "series.txt")
+        require("physim_batch=4" in manifest and "step_mode=adaptive" in manifest, "Timed series configuration missing")
+        require("parameter=length" in manifest and "parameter_start=0.5" in manifest and "parameter_end=2.5" in manifest,
+                "Pendulum length study not recorded")
+        png = (batch / "study.png").read_bytes()
+        require(png[:8] == b"\x89PNG\r\n\x1a\n" and struct.unpack(">II", png[16:24]) == (1200, 850),
+                "Study PNG dimensions or signature differ")
+        svg = read(batch / "study.svg")
+        require(">length</text>" in svg and ">angle [rad]</text>" in svg,
+                "Study SVG invents a parameter unit or loses the measured unit")
+        runs = sorted(batch.glob("run-*.psrun"))
+        require(len(runs) == 3, "Study must contain three complete runs")
+        values = []
+        for run in runs:
+            data = run.read_bytes()
+            at = 16
+            points = []
+            while at < len(data):
+                kind, length, crc = struct.unpack_from("<III", data, at)
+                payload = data[at + 12:at + 12 + length]
+                require(zlib.crc32(payload) == crc, "Study run CRC mismatch")
+                if kind == 3:
+                    points.append(struct.unpack("<" + "d" * (length // 8), payload))
+                at += 12 + length
+            require(points[0][0] == 0 and points[-1][0] == 0.7, "Study endpoint differs from target")
+            values.append(points)
+        require(len({len(points) for points in values}) > 1, "Different lengths should require different accepted step counts")
+        records.append(values)
+        replay = project / "runs/timed-summary.psreport"
+        replay.write_bytes((batch / "summary.psreport").read_bytes())
+        protected = runs + [batch / "summary.psreport", replay]
+        hashes = [fingerprint(path) for path in protected]
+        flow.run("--workspace-state-test", root, "series-read", timeout=130,
+                 marker="TIMED SERIES series-read SELF-TEST: PASSED")
+        require(hashes == [fingerprint(path) for path in protected], "Reopening a study changed its data")
+    require(records[0] == records[1], "Timed C/Physim studies differ in accepted times or values")
+
+
 def adaptive(flow, directory):
     prefixes = []
     for language in ("c", "phys"):
@@ -449,7 +498,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
+SPECIAL = {"timed_series_workflow": timed_series, "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}
 

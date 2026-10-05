@@ -159,3 +159,25 @@ Der nächste Vorschlag steuert die nächste akzeptierte Iteration; beim Reset wi
 wieder die konfigurierte Startdauer verwendet. Ungültige Berichte oder numerische
 Fehler beenden den Runner mit lesbarem Fehler und erhalten den gültigen Dateipräfix.
 Sie schreiben keinen zusätzlichen Punkt und keinen erfolgreichen Footer.
+
+
+## Zielzeit im Offline-Runner
+
+`--until` ist eine positive endliche Zielzeit bis `1e9 s` und erfordert den
+Offline-Modus. `--steps` begrenzt dann die Zahl akzeptierter Schritte. Erschöpftes
+Budget vor der Zielzeit liefert einen Fehler und lässt den gültigen Präfix ohne
+Erfolgsfooter zurück. Ohne `--until` behält `--steps` die bisherige Bedeutung.
+
+Im festen Modus bleiben vollständige Rasterpunkte unverändert; ein Restintervall
+endet an der Zielzeit. Adaptive Schritte verwenden den jeweils akzeptierten
+Fortschritt. Ist der verbleibende Rest kürzer als der konfigurierte Mindestschritt,
+erhält der Callback diese Restdauer als effektives Minimum. Sein erfolgreicher
+Bericht muss die Zielzeit genau erreichen; der Host extrapoliert keine Messwerte.
+Es gelten weiterhin Fehlertoleranzen, Budget und positive endliche Zeitfortschritte.
+
+Zusätzlich speichert der Metadatenblock `end_time_s` und `maximum_accepted_steps`.
+`dt_s` bleibt die Startdauer. Fehlender Platz für Modus, Ziel, Grenzen oder
+Modulidentität verhindert das Anlegen der Datei. Numerische Chunks und Footer
+behalten Format 1. Die Serienprüfung verlangt passenden Seed, Konfiguration,
+strikt steigende Zeiten, gültige Intervallgrenzen und exakt dieselbe Endzeit
+für jeden akzeptierten Lauf. Verschiedene adaptive Raster und Punktzahlen sind zulässig.

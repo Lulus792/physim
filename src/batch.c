@@ -48,7 +48,11 @@ ps_result ps_batch_validate(const ps_batch_options *o) {
         o->runs > PS_BATCH_MAX_RUNS || !o->workers || o->workers > PS_BATCH_MAX_WORKERS ||
         !o->steps || o->steps > 100000 ||
         (uint64_t)o->runs * (o->steps + 1u) > PS_BATCH_MAX_SAMPLES ||
-        o->seed > UINT64_MAX - (o->runs - 1u) || !isfinite(o->dt) || o->dt <= 0 || o->dt > 1 ||
+        o->seed > UINT64_MAX - (o->runs - 1u) || !isfinite(o->dt) || o->dt < DBL_MIN || o->dt > 1 ||
+        !isfinite(o->end_time) || o->end_time<0 || o->end_time>1e9 ||
+        (o->adaptive && (o->end_time==0 || !isfinite(o->minimum_dt) || o->minimum_dt<DBL_MIN ||
+                        !isfinite(o->maximum_dt) || o->maximum_dt>1 ||
+                        o->minimum_dt>o->dt || o->dt>o->maximum_dt)) ||
         !isfinite(o->timeout_s) || o->timeout_s <= 0 || o->timeout_s > 3600 ||
         o->memory_bytes > UINT64_C(17179869184) ||
         o->source_size > 256u * 1024u || (!o->source_text && o->source_size) ||
@@ -215,7 +219,8 @@ static ps_result sweep_report(const ps_batch_options *o, const ps_batch_result *
     snprintf(plot.x_label, sizeof plot.x_label, "%s", o->sweep_name);
     snprintf(plot.y_label, sizeof plot.y_label, "%s", o->channel);
     plot.x_unit.scale = plot.y_unit.scale = 1;
-    snprintf(plot.x_unit.symbol, sizeof plot.x_unit.symbol, "1");
+    /* Parameter descriptors carry no unit declaration. Do not invent a
+     * dimensionless label for physical parameters such as pendulum length. */
     memcpy(plot.y_unit.dimension, result->channel.dimension, 7);
     snprintf(plot.y_unit.symbol, sizeof plot.y_unit.symbol, "%s", result->channel.unit);
     ps_plot_handle handle;
@@ -268,22 +273,44 @@ typedef struct {
     ps_run_reader reader;
     uint32_t index, samples;
     int channel, status_channel;
-    double deadline, value, measurement_status;
+    double deadline, value, measurement_status, previous_time;
     char path[4096];
 } batch_slot;
+static double endpoint_time(const ps_batch_options *o) {
+    return o->end_time>0?o->end_time:o->steps*o->dt;
+}
 static bool csv_row(FILE *file, const ps_batch_options *o, uint32_t index, double value) {
     if (o->sweep)
         return fprintf(file, "%u,%llu,run-%04u.psrun,%.17g,%.17g,%.17g\n", index + 1,
-                       (unsigned long long)(o->seed + index), index + 1, o->steps * o->dt,
+                       (unsigned long long)(o->seed + index), index + 1, endpoint_time(o),
                        sweep_value(o, index), value) >= 0;
     return fprintf(file, "%u,%llu,run-%04u.psrun,%.17g,%.17g\n", index + 1,
-                   (unsigned long long)(o->seed + index), index + 1, o->steps * o->dt, value) >= 0;
+                   (unsigned long long)(o->seed + index), index + 1, endpoint_time(o), value) >= 0;
 }
 static ps_result open_endpoint(batch_slot *slot, const ps_batch_options *o) {
     ps_result r = ps_run_open(&slot->reader, slot->path);
     if (r != PS_OK)
         return r;
     slot->state = SLOT_READING;
+    if(o->end_time>0) {
+        char expected[128];
+        snprintf(expected,sizeof expected,"\nend_time_s=%.17g\n",o->end_time);
+        if(!strstr(slot->reader.metadata,expected) ||
+           !strstr(slot->reader.metadata,o->adaptive?"\nstep_mode=adaptive\n":"\nstep_mode=fixed\n"))
+            return PS_CORRUPT;
+        snprintf(expected,sizeof expected,"\nmaximum_accepted_steps=%u\n",o->steps);
+        if(!strstr(slot->reader.metadata,expected)) return PS_CORRUPT;
+        snprintf(expected,sizeof expected,"\nseed=%llu\n",(unsigned long long)(o->seed+slot->index));
+        if(!strstr(slot->reader.metadata,expected)) return PS_CORRUPT;
+        snprintf(expected,sizeof expected,"\ndt_s=%.17g\n",o->dt);
+        if(!strstr(slot->reader.metadata,expected)) return PS_CORRUPT;
+        if(o->adaptive) {
+            snprintf(expected,sizeof expected,"\nminimum_dt_s=%.17g\n",o->minimum_dt);
+            if(!strstr(slot->reader.metadata,expected)) return PS_CORRUPT;
+            snprintf(expected,sizeof expected,"\nmaximum_dt_s=%.17g\n",o->maximum_dt);
+            if(!strstr(slot->reader.metadata,expected)) return PS_CORRUPT;
+        }
+    }
     if (o->sweep) {
         char expected[128];
         snprintf(expected, sizeof expected, "\nparameter.%s=%.17g\n", o->sweep_name,
@@ -299,6 +326,7 @@ static ps_result open_endpoint(batch_slot *slot, const ps_batch_options *o) {
             return PS_CORRUPT;
     }
     slot->samples = 0;
+    slot->previous_time=0;
     slot->channel = -1;
     for (uint32_t i = 0; i < slot->reader.channels; i++)
         if (!strcmp(slot->reader.schema[i].name, o->channel))
@@ -319,11 +347,24 @@ static ps_result read_endpoint(batch_slot *slot, const ps_batch_options *o, bool
             *done = true;
             if (slot->status_channel >= 0 && slot->measurement_status != 1)
                 return PS_INVALID;
+            if(o->end_time>0)
+                return slot->samples>=2 && slot->previous_time==o->end_time?PS_OK:PS_CORRUPT;
             return slot->samples == o->steps + 1u ? PS_OK : PS_CORRUPT;
         }
-        if (r != PS_OK || slot->samples > o->steps ||
-            fabs(time - slot->samples * o->dt) > 1e-10 * fmax(1, fabs(time)))
+        if (r != PS_OK || slot->samples > o->steps)
             return PS_CORRUPT;
+        if(o->end_time>0) {
+            if(!slot->samples) {if(time!=0) return PS_CORRUPT;}
+            else {
+                if(time<=slot->previous_time || time>o->end_time) return PS_CORRUPT;
+                if(o->adaptive) {
+                    double minimum=fmin(o->minimum_dt,o->end_time-slot->previous_time);
+                    if(time<slot->previous_time+minimum || time>slot->previous_time+o->maximum_dt)
+                        return PS_CORRUPT;
+                } else if(time!=fmin((double)slot->samples*o->dt,o->end_time)) return PS_CORRUPT;
+            }
+        } else if(fabs(time-slot->samples*o->dt)>1e-10*fmax(1,fabs(time))) return PS_CORRUPT;
+        slot->previous_time=time;
         slot->value = values[slot->channel];
         if (slot->status_channel >= 0) {
             slot->measurement_status = values[slot->status_channel];
@@ -342,9 +383,12 @@ static ps_result run_pool(const ps_batch_options *o, const char *module, FILE *j
     if (!slots)
         return PS_MEMORY;
     ps_result r = PS_OK;
-    char dt[64], steps[32], seed[32], work[4096];
+    char dt[64], steps[32], seed[32], work[4096],target[64],minimum[64],maximum[64];
     snprintf(dt, sizeof dt, "%.17g", o->dt);
     snprintf(steps, sizeof steps, "%u", o->steps);
+    snprintf(target,sizeof target,"%.17g",o->end_time);
+    snprintf(minimum,sizeof minimum,"%.17g",o->minimum_dt);
+    snprintf(maximum,sizeof maximum,"%.17g",o->maximum_dt);
     while (result->completed < o->runs && keep_going(proceed, user, result)) {
         for (uint32_t s = 0; s < workers; s++) {
             batch_slot *slot = &slots[s];
@@ -444,9 +488,15 @@ static ps_result run_pool(const ps_batch_options *o, const char *module, FILE *j
             snprintf(slot->path, sizeof slot->path, "%s/run-%04u.psrun", o->directory, next + 1);
             snprintf(seed, sizeof seed, "%llu", (unsigned long long)(o->seed + next));
             char parameters[PS_MAX_PARAMETERS][128];
-            const char *args[10 + 2 * PS_MAX_PARAMETERS] = {
+            const char *args[17 + 2 * PS_MAX_PARAMETERS] = {
                 o->runner, module, slot->path, "--steps", steps, "--dt", dt, "--seed", seed};
             size_t argument_count = 9;
+            if(o->end_time>0) {args[argument_count++]="--until";args[argument_count++]=target;}
+            if(o->adaptive) {
+                args[argument_count++]="--adaptive";
+                args[argument_count++]="--min-dt";args[argument_count++]=minimum;
+                args[argument_count++]="--max-dt";args[argument_count++]=maximum;
+            }
             for (uint32_t i = 0; i < o->parameter_count; i++) {
                 snprintf(parameters[i], sizeof parameters[i], "%s=%.17g",
                          o->parameters[i].name, o->parameters[i].value);
@@ -569,12 +619,17 @@ ps_result ps_batch_run(const ps_batch_options *o, ps_batch_continue proceed, voi
         "timeout_s=%.17g\nrunner=%s\nsource=%s\noriginal_module=%s\n"
         "workers=%u\nmemory_bytes=%llu\nworking_directory=work-NNNN (one per run)\n"
         "journal=completed.csv (completion order)\nendpoints=endpoints.csv (index order)\n",
-        o->sweep ? 3u : 2u, o->runs, o->steps, o->dt, (unsigned long long)o->seed, o->channel,
+        o->end_time>0?4u:o->sweep ? 3u : 2u, o->runs, o->steps, o->dt, (unsigned long long)o->seed, o->channel,
         o->timeout_s, o->runner,
         *o->source       ? o->source
         : o->source_text ? "in-memory snapshot"
                          : "not supplied",
         o->module, o->workers, (unsigned long long)o->memory_bytes);
+    if(wrote>=0 && o->end_time>0)
+        wrote=fprintf(manifest,"end_time_s=%.17g\nstep_mode=%s\nmaximum_accepted_steps=%u\n"
+                      "minimum_dt_s=%.17g\nmaximum_dt_s=%.17g\nterminal_step=clip_to_target\n",
+                      o->end_time,o->adaptive?"adaptive":"fixed",o->steps,
+                      o->adaptive?o->minimum_dt:o->dt,o->adaptive?o->maximum_dt:o->dt);
     if (wrote >= 0 && o->sweep)
         wrote = fprintf(manifest,
                         "study=linear_parameter\nparameter=%s\nparameter_start=%.17g\n"
@@ -616,7 +671,7 @@ ps_result ps_batch_run(const ps_batch_options *o, ps_batch_continue proceed, voi
                      "kann daher zusätzliche Streuung erzeugen.\n"
                      "Die Kurve zeigt Rohendwerte, keine statistischen Schätzungen.",
                      o->directory, o->sweep_name, o->sweep_start, o->sweep_end, o->runs,
-                     o->channel, o->steps * o->dt, (unsigned long long)o->seed, o->workers);
+                     o->channel, endpoint_time(o), (unsigned long long)o->seed, o->workers);
         else
             snprintf(provenance, sizeof provenance,
                  "Endwert je unabhängigem Runner-Prozess.\nRohdaten, Seeds und Snapshots: %s\n"
@@ -629,7 +684,7 @@ ps_result ps_batch_run(const ps_batch_options *o, ps_batch_continue proceed, voi
                  "Das KI ist kein Vorhersageintervall für einen einzelnen Lauf.\n"
                  "Wiederholbarkeit setzt voraus, dass der Experimentcode nur den expliziten Seed "
                  "als Zufallsquelle nutzt; dieselbe Binärdatei und Laufumgebung verwenden.",
-                 o->directory, o->channel, o->steps * o->dt, (unsigned long long)o->seed, o->runs,
+                 o->directory, o->channel, endpoint_time(o), (unsigned long long)o->seed, o->runs,
                  o->workers);
         ps_report *report = NULL;
         r = o->sweep ? sweep_report(o, result, provenance, &report)

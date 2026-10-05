@@ -17,7 +17,8 @@ static void report_plot(app *a, uint32_t index, float height) {
     plot_controls(a, view, bounds_result == PS_OK ? b : NULL);
     nk_layout_row_dynamic(ui, 24, 1);
     char label[256];
-    snprintf(label, sizeof label, "%s [%s]", p.y_label, p.y_unit.symbol);
+    snprintf(label, sizeof label, "%s%s%s%s", p.y_label,p.y_unit.symbol[0]?" [":"",
+             p.y_unit.symbol,p.y_unit.symbol[0]?"]":"");
     nk_label_colored(ui, label, NK_TEXT_LEFT, UI_COLOR(muted));
     nk_layout_row_dynamic(ui, height, 1);
     struct nk_rect r;
@@ -89,7 +90,8 @@ static void report_plot(app *a, uint32_t index, float height) {
     }
     nk_push_scissor(canvas, previous_clip);
     nk_layout_row_dynamic(ui, 22, 1);
-    snprintf(label, sizeof label, "%s [%s]%s%s", p.x_label, p.x_unit.symbol,
+    snprintf(label, sizeof label, "%s%s%s%s%s%s", p.x_label,p.x_unit.symbol[0]?" [":"",p.x_unit.symbol,
+             p.x_unit.symbol[0]?"]":"",
              ps_plot_view_changed(view) ? " · Ausschnitt" : "",
              reduced ? (sampled_scatter ? " · gleichmäßig abgetastete Vorschau"
                                         : " · reduzierte Vorschau, Spitzen bleiben erhalten")

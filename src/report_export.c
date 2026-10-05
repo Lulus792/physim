@@ -171,14 +171,12 @@ ps_result ps_report_export_svg_region(const ps_report *r, uint32_t plot, const d
     }
     fputs("<text x=\"630\" y=\"620\" text-anchor=\"middle\" font-size=\"15\">", f);
     xml(f, info.x_label);
-    fputs(" [", f);
-    xml(f, info.x_unit.symbol);
-    fputs("]</text>\n", f);
+    if(info.x_unit.symbol[0]){fputs(" [",f);xml(f,info.x_unit.symbol);fputs("]",f);}
+    fputs("</text>\n", f);
     fputs("<text x=\"110\" y=\"74\" font-size=\"15\">", f);
     xml(f, info.y_label);
-    fputs(" [", f);
-    xml(f, info.y_unit.symbol);
-    fputs("]</text>\n", f);
+    if(info.y_unit.symbol[0]){fputs(" [",f);xml(f,info.y_unit.symbol);fputs("]",f);}
+    fputs("</text>\n", f);
     static const char *colors[] = {"#176dd1", "#bc4b12", "#178450", "#8d4ab8",
                                    "#a22556", "#147f8b", "#756313", "#536173"};
     bool reduced = false;

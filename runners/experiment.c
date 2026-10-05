@@ -47,14 +47,16 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Usage: physim-runner module output.psrun [--steps N | --interactive] "
                         "[--dt seconds] [--seed N] [--param name=value]... "
                         "[--speed 0|0.1..16 (interactive only)] [--record-scenes] "
-                        "[--adaptive [--min-dt seconds] [--max-dt seconds]]\n"
+                        "[--adaptive [--min-dt seconds] [--max-dt seconds]] "
+                        "[--until seconds (offline; --steps is the step budget)]\n"
                         "       physim-runner module --describe\n");
         return 2;
     }
     bool describe = argc == 3 && !strcmp(argv[2], "--describe");
     bool interactive = false, record_scenes = false, adaptive = false, step_bounds = false;
     uint64_t steps = 4000, seed = 42;
-    double dt = 0.005, speed = 1, minimum_dt=1e-8, maximum_dt=.1;
+    double dt = 0.005, speed = 1, minimum_dt=1e-8, maximum_dt=.1, end_time=0;
+    bool until_option=false;
     bool speed_option = false;
     ps_context c = {0};
     c.struct_size = sizeof c;
@@ -92,6 +94,10 @@ int main(int argc, char **argv) {
         }
         if (!strcmp(key, "--dt"))
             dt = strtod(argv[i], &end);
+        else if(!strcmp(key,"--until")) {
+            if(until_option) return 2;
+            end_time=strtod(argv[i],&end);until_option=true;
+        }
         else if (!strcmp(key,"--min-dt")) {
             minimum_dt=strtod(argv[i],&end);step_bounds=true;
         } else if (!strcmp(key,"--max-dt")) {
@@ -110,6 +116,7 @@ int main(int argc, char **argv) {
             return 2;
     }
     if (!isfinite(dt) || dt < DBL_MIN || dt > 1 || steps > UINT64_C(1000000000) ||
+        (until_option && (interactive || !isfinite(end_time) || end_time<=0 || end_time>1e9)) ||
         (step_bounds && !adaptive) || (adaptive &&
          (!isfinite(minimum_dt) || minimum_dt<DBL_MIN || !isfinite(maximum_dt) ||
           maximum_dt>1 || minimum_dt>dt || dt>maximum_dt)) ||
@@ -180,12 +187,22 @@ int main(int argc, char **argv) {
         fclose(binary);
     }
     size_t used = strlen(c.model_metadata);
-    if(adaptive) {
+    if(adaptive || until_option) {
         int added=snprintf(c.model_metadata+used,sizeof c.model_metadata-used,
-                 "\nstep_mode=adaptive\nminimum_dt_s=%.17g\nmaximum_dt_s=%.17g",
-                 minimum_dt,maximum_dt);
+                 "\nstep_mode=%s\nminimum_dt_s=%.17g\nmaximum_dt_s=%.17g",
+                 adaptive?"adaptive":"fixed",adaptive?minimum_dt:dt,adaptive?maximum_dt:dt);
         if(added<0 || (size_t)added>=sizeof c.model_metadata-used) {
             report(interactive,"Model metadata has no room for adaptive step provenance");
+            api->destroy(&c);ps_module_close(module);return 5;
+        }
+        used=strlen(c.model_metadata);
+    }
+    if(until_option) {
+        int added=snprintf(c.model_metadata+used,sizeof c.model_metadata-used,
+                          "\nend_time_s=%.17g\nmaximum_accepted_steps=%llu",
+                          end_time,(unsigned long long)steps);
+        if(added<0 || (size_t)added>=sizeof c.model_metadata-used) {
+            report(interactive,"Model metadata has no room for target-time provenance");
             api->destroy(&c);ps_module_close(module);return 5;
         }
         used=strlen(c.model_metadata);
@@ -193,7 +210,7 @@ int main(int argc, char **argv) {
     int provenance=snprintf(c.model_metadata + used, sizeof c.model_metadata - used,
              "\nmodule_fnv1a64=%016llx\nrunner_build=%s %s", (unsigned long long)hash, __DATE__,
              __TIME__);
-    if(adaptive && (provenance<0 || (size_t)provenance>=sizeof c.model_metadata-used)) {
+    if((adaptive || until_option) && (provenance<0 || (size_t)provenance>=sizeof c.model_metadata-used)) {
         report(interactive,"Model metadata has no room for module provenance");
         api->destroy(&c);ps_module_close(module);return 5;
     }
@@ -289,23 +306,38 @@ int main(int argc, char **argv) {
                 ps_sleep(1);
                 continue;
             }
-        } else if (tick >= steps)
-            break;
-        double accepted_dt=step_dt, previous_time=c.time_s;
+        } else {
+            if(until_option && c.time_s==end_time) break;
+            if(tick>=steps) {
+                if(until_option) {
+                    snprintf(c.error,sizeof c.error,"Accepted step budget exhausted before target time");
+                    result=PS_LIMIT;
+                }
+                break;
+            }
+        }
+        double proposed=step_dt, previous_time=c.time_s;
+        bool terminal=false;
+        if(until_option) {
+            double remaining=end_time-previous_time;
+            terminal=adaptive?proposed>=remaining:(double)(tick+1)*dt>end_time;
+            if(terminal) proposed=remaining;
+        }
+        double accepted_dt=proposed, call_minimum=fmin(minimum_dt,proposed);
         if(adaptive) {
-            if(previous_time+step_dt==previous_time || previous_time+minimum_dt==previous_time) {
+            if(previous_time+proposed==previous_time || previous_time+call_minimum==previous_time) {
                 snprintf(c.error,sizeof c.error,"Adaptive step cannot advance floating-point time");
                 result=PS_LIMIT;break;
             }
             ps_step_interval interval={NAN,NAN};
-            c.dt_s=step_dt;
-            result=api->adaptive_step(&c,step_dt,minimum_dt,maximum_dt,&interval);
+            c.dt_s=proposed;
+            result=api->adaptive_step(&c,proposed,call_minimum,maximum_dt,&interval);
             if(result==PS_OK) {
                 double next_time=previous_time+interval.elapsed_s;
                 if(c.time_s!=previous_time || !isfinite(interval.elapsed_s) || !isfinite(next_time) ||
-                   next_time<=previous_time || next_time<previous_time+minimum_dt ||
-                   next_time>previous_time+step_dt || !isfinite(interval.next_s) ||
-                   interval.next_s<minimum_dt || interval.next_s>maximum_dt) {
+                   next_time<=previous_time || next_time<previous_time+call_minimum ||
+                   next_time>previous_time+proposed || (until_option && next_time>end_time) ||
+                   !isfinite(interval.next_s) || interval.next_s<call_minimum || interval.next_s>maximum_dt) {
                     snprintf(c.error,sizeof c.error,"Invalid adaptive step interval or modified host time");
                     result=PS_INVALID;
                 } else {
@@ -314,12 +346,15 @@ int main(int argc, char **argv) {
                     step_dt=interval.next_s;
                 }
             }
-        } else result = api->step(&c, dt);
+        } else {
+            if(until_option) c.dt_s=proposed;
+            result = api->step(&c, proposed);
+        }
         if (result != PS_OK)
             break;
         tick++;
-        c.time_s = adaptive ? previous_time+accepted_dt : (double)tick * dt;
-        if(adaptive) c.dt_s=accepted_dt;
+        c.time_s = adaptive ? previous_time+accepted_dt : terminal?end_time:(double)tick * dt;
+        if(adaptive || until_option) c.dt_s=accepted_dt;
         result = ps_run_append(&writer, c.time_s, c.values);
         if (interactive && (single || now - last_frame >= 1.0 / 60)) {
             ps_result scene_result = snapshot(api, &c, &writer, paused, true);

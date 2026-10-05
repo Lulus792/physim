@@ -14,6 +14,8 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
         return hierarchy_test_start(a,root,mode);
     if (!strncmp(mode,"adaptive-",9))
         return adaptive_test_start(a,root,mode);
+    if(!strncmp(mode,"series-",7))
+        return series_test_start(a,root,mode);
     if (!strncmp(mode, "dock-", 5))
         return docking_test_start(a, root, mode);
     if (!strncmp(mode, "timeline-", 9))
@@ -102,6 +104,9 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
     }
     if(!strncmp(mode,"adaptive-",9)) {
         adaptive_test_frame(a,mode,stage,code,capture);return;
+    }
+    if(!strncmp(mode,"series-",7)) {
+        series_test_frame(a,mode,stage,code,capture);return;
     }
     if (!strncmp(mode, "dock-", 5)) {
         docking_test_frame(a, mode, stage, code, capture);

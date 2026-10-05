@@ -68,15 +68,18 @@ static void batch_view(app *a) {
     }
     nk_layout_row_dynamic(ui, 22, 2);
     nk_label(ui, "Läufe", NK_TEXT_LEFT);
-    nk_label(ui, "Schritte pro Lauf", NK_TEXT_LEFT);
+    nk_label(ui, a->batch_target?"Maximale akzeptierte Schritte":"Schritte pro Lauf", NK_TEXT_LEFT);
     nk_layout_row_dynamic(ui, 34, 2);
     nk_property_int(ui, "#Anzahl", 1, &a->batch_runs, 1000, 1, 1);
     nk_property_int(ui, "#Schritte", 1, &a->batch_steps, 100000, 10, 1);
     nk_layout_row_dynamic(ui, 22, 2);
-    nk_label(ui, "Zeitschritt in Sekunden", NK_TEXT_LEFT);
+    nk_label(ui, a->batch_adaptive?"Startschritt in Sekunden":"Zeitschritt in Sekunden", NK_TEXT_LEFT);
     nk_label(ui, "Startseed", NK_TEXT_LEFT);
     nk_layout_row_dynamic(ui, 34, 2);
-    nk_property_double(ui, "#dt", .000001, &a->batch_dt, 1, .001, .0001f);
+    a->batch_timing_bounds[0]=nk_widget_bounds(ui);
+    if(a->batch_adaptive)
+        timing_text_field(ui,a->batch_timing_text[0],&a->batch_timing_displayed[0],&a->batch_dt);
+    else nk_property_double(ui, "#dt", .000001, &a->batch_dt, 1, .001, .0001f);
     nk_edit_string_zero_terminated(ui, NK_EDIT_FIELD, a->batch_seed, sizeof a->batch_seed,
                                    nk_filter_decimal);
     nk_layout_row_dynamic(ui, 22, 2);
@@ -93,10 +96,34 @@ static void batch_view(app *a) {
     nk_layout_row_dynamic(ui, 34, 2);
     nk_property_double(ui, "#Limit", 1, &a->batch_timeout, 3600, 5, 1);
     nk_property_int(ui, "#Speicher", 0, &a->runner_memory_mib, 16384, 128, 16);
+    nk_layout_row_dynamic(ui,30,2);
+    a->batch_target_bounds=nk_widget_bounds(ui);
+    nk_begin_disabled(ui,a->batch_adaptive);
+    nk_checkbox_label(ui,"Gemeinsame Endzeit",&a->batch_target);
+    nk_end_disabled(ui);
+    a->batch_adaptive_bounds=nk_widget_bounds(ui);
+    nk_checkbox_label(ui,"Adaptive Schritte",&a->batch_adaptive);
+    if(a->batch_adaptive) a->batch_target=true;
+    if(a->batch_target) {
+        nk_layout_row_dynamic(ui,32,2);nk_label(ui,"Endzeit (s)",NK_TEXT_LEFT);
+        a->batch_timing_bounds[1]=nk_widget_bounds(ui);
+        timing_text_field(ui,a->batch_timing_text[1],&a->batch_timing_displayed[1],&a->batch_end_time);
+    }
+    if(a->batch_adaptive) {
+        nk_layout_row_dynamic(ui,22,2);
+        nk_label(ui,"Minimum (s)",NK_TEXT_LEFT);nk_label(ui,"Maximum (s)",NK_TEXT_LEFT);
+        nk_layout_row_dynamic(ui,32,2);
+        a->batch_timing_bounds[2]=nk_widget_bounds(ui);
+        timing_text_field(ui,a->batch_timing_text[2],&a->batch_timing_displayed[2],&a->batch_minimum_dt);
+        a->batch_timing_bounds[3]=nk_widget_bounds(ui);
+        timing_text_field(ui,a->batch_timing_text[3],&a->batch_timing_displayed[3],&a->batch_maximum_dt);
+        nk_layout_row_dynamic(ui,52,1);
+        nk_label_wrap(ui,"Minimum ≤ Startschritt ≤ Maximum ≤ 1 s. Das Modell muss adaptive Schritte unterstützen; der letzte Schritt endet an der Zielzeit.");
+    }
     nk_end_disabled(ui);
     char text[256];
-    snprintf(text, sizeof text, "Endzeit %.6g s · %llu Samples · Seed pro Lauf: Startseed + Index",
-             a->batch_steps * a->batch_dt,
+    snprintf(text, sizeof text, "Endzeit %.6g s · %s %llu Samples · Seed pro Lauf: Startseed + Index",
+             a->batch_target?a->batch_end_time:a->batch_steps * a->batch_dt,a->batch_target?"höchstens":"",
              (unsigned long long)a->batch_runs * ((unsigned)a->batch_steps + 1u));
     nk_layout_row_dynamic(ui, 32, 1);
     nk_label_wrap(ui, text);

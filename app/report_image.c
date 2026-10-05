@@ -82,7 +82,8 @@ ps_result ps_report_image_region(struct nk_context *ui, const struct nk_user_fon
     const struct nk_rect area = {118, 150, 1020, 430};
     char label[384];
     text(&draw, nk_rect(60, 32, 1080, 38), info.title, 28, ink, false);
-    snprintf(label, sizeof label, "%s [%s]", info.y_label, info.y_unit.symbol);
+    snprintf(label, sizeof label, "%s%s%s%s", info.y_label,info.y_unit.symbol[0]?" [":"",
+             info.y_unit.symbol,info.y_unit.symbol[0]?"]":"");
     text(&draw, nk_rect(118, 92, 1020, 24), label, 18, ink, false);
     double xo = ps_plot_axis_offset(bounds[0], bounds[1]);
     double yo = ps_plot_axis_offset(bounds[2], bounds[3]);
@@ -167,7 +168,8 @@ ps_result ps_report_image_region(struct nk_context *ui, const struct nk_user_fon
                  (unsigned long long)curve->source_count);
         text(&draw, nk_rect(x + 34, y, 495, 24), label, 16, ink, false);
     }
-    snprintf(label, sizeof label, "%s [%s]", info.x_label, info.x_unit.symbol);
+    snprintf(label, sizeof label, "%s%s%s%s", info.x_label,info.x_unit.symbol[0]?" [":"",
+             info.x_unit.symbol,info.x_unit.symbol[0]?"]":"");
     text(&draw, nk_rect(118, 626, 1020, 24), label, 18, ink, true);
     if (xo) {
         snprintf(label, sizeof label, "X-Offset: %.17g %s · Wert = Offset + Achsenwert", xo,

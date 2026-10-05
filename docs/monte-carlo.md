@@ -42,7 +42,8 @@ Der nullbasierte Laufindex i erhält `Startseed + i`. Ein 64-Bit-Überlauf wird
 vor dem Start abgewiesen. Der Ausgabeordner wird exklusiv erstellt; bestehende
 Serien werden niemals überschrieben. Unter `runs/<Zeitstempel>-batch/` liegen:
 
-- `series.txt`: Version 2 für Seedserien, Version 3 für Parameterstudien;
+- `series.txt`: Version 2 für feste Seedserien, Version 3 für feste Parameterstudien,
+  Version 4 für Serien mit gemeinsamer Zielzeit;
   Konfiguration einschließlich Parallelität, Kanal, fester Parameterwerte,
   ursprüngliche Pfade und Seedregel.
 - `experiment.dll` beziehungsweise `experiment.so`: verwendetes Modul als Kopie.
@@ -83,7 +84,7 @@ anderen aktiven Runner. Das Journal und die bereits geprüften Endwerte bleiben 
 Fehlender `status.txt` bedeutet
 keinen bestätigten Abschluss, etwa nach einem harten Prozess-/Systemabbruch.
 
-Gleiche Seeds, identischer Modulcode, gleiche Schritte und dieselbe Laufumgebung
+Gleiche Seeds, identischer Modulcode, gleiche Schritte beziehungsweise Zielzeit-/Integratorgrenzen und dieselbe Laufumgebung
 reproduzieren die Messwerte, sofern der Code ausschließlich explizit gesetzte RNGs
 verwendet. Ein eigener Zugriff auf Uhrzeit, externe Dateien oder Betriebssystem-Zufall
 kann diese Eigenschaft aufheben. Der Snapshot umfasst keine externen Modulabhängigkeiten;
@@ -183,9 +184,74 @@ Grenzen: 1–1000 Läufe, 1–100000 Schritte, insgesamt
 höchstens fünf Millionen Samples und 30 Sekunden Laufzeitlimit je Runner.
 dt muss positiv und höchstens eine Sekunde sein; die App bietet mindestens 1 µs.
 Kanalnamen bestehen aus ASCII-Buchstaben, Zahlen, Punkt, Bindestrich oder Unterstrich.
-Einheiten und Zeitraster müssen in allen Dateien übereinstimmen. Unvollständige
+Einheiten und Endzeit müssen in allen Dateien übereinstimmen. Bei adaptiven
+Schritten dürfen Anzahl und Zeitraster der akzeptierten Schritte je Lauf abweichen. Unvollständige
 Rohdateien, Prozessfehler und nicht darstellbare numerische Ergebnisse stoppen die Serie.
 Rohdaten können je nach Kanalzahl mehrere hundert MB belegen; es gibt noch keine
-Speicherplatzvorprüfung, Wiederaufnahme, Parameterstudien in der App oder eine Aggregation mit
+Speicherplatzvorprüfung, Wiederaufnahme oder eine Aggregation mit
 ausdrücklich ausgewiesenen fehlenden Endwerten. Die allgemeine Sensor-API ist in
 [Messungsreferenz](reference/measurement.md) verfügbar.
+
+
+## Gemeinsame Zielzeit und adaptive Serien
+
+**Gemeinsame Endzeit** vergleicht den Kanalwert aller Läufe zum selben Zeitpunkt.
+Die Endzeit kann zwischen zwei Rasterpunkten liegen; der Runner verkürzt dann
+seinen letzten Schritt. **Schritte pro Lauf** wird in diesem Modus zum Budget
+maximal akzeptierter Schritte. Reicht es nicht aus, stoppt die Serie mit Fehler;
+Rohdaten bleiben als gültiger Präfix erhalten und es entsteht kein Gesamtbericht.
+Ohne Zielzeitauswahl gilt weiterhin das feste Raster `Schritte × dt`.
+
+**Adaptive Schritte** aktiviert die gemeinsame Endzeit automatisch. Das Modell
+muss den adaptiven Callback anbieten. `dt` ist die Startdauer; Minimum und Maximum
+begrenzen die späteren Schritte. Start, Ziel und Grenzen erlauben wissenschaftliche
+Schreibweise. Es gilt `0 < Minimum ≤ dt ≤ Maximum ≤ 1 s` und `0 < Endzeit ≤ 1e9 s`.
+Bei einem kürzeren Restintervall senkt der Host die dem Modell übergebene
+Mindestdauer auf diesen Rest. Der letzte akzeptierte Schritt muss genau die
+Zielzeit erreichen; Zwischenwerte werden nicht als Endwerte extrapoliert.
+Eine nicht erreichbare Toleranz bleibt ein Fehler, auch im letzten Schritt.
+
+Die C- und Physim-Pendelvorlagen bieten `length` (0,1–10 m) und `initialAngle`
+(-1,5–1,5 rad). Die bisherigen Standards sind 1,5 m und 0,45 rad. Eine Studie über
+die Länge kann beispielsweise drei Werte von 0,5 bis 2,5 m bis 0,7 s vergleichen.
+Wähle Kanal `angle`, Startschritt 0,1 s, Minimum `1e-6`, Maximum 0,2 s und ein
+Budget von 1000 Schritten. Verschiedene Pendellängen benötigen unterschiedlich
+viele akzeptierte Schritte, erreichen aber dieselbe Endzeit. Ihre adaptiven
+C-/Physim-Läufe sind in den ausgeführten Tests kanalweise verglichen.
+
+Die CLI stellt dieselbe Steuerung bereit:
+
+```text
+physim-batch <runner> <pendulum-module> <neuer-ordner> angle 3 1000 0.1 42 --until 0.7 --adaptive --min-dt 1e-6 --max-dt 0.2 --sweep length=0.5:2.5 --workers 3
+```
+
+`--until` ohne `--adaptive` verwendet feste Schritte mit verkürztem Endintervall.
+`--adaptive` in einer Serie verlangt eine positive `--until`-Zielzeit;
+Mindest-/Höchstschrittoptionen verlangen den adaptiven Modus. Die Grenzen gelten
+auch für die CLI, einschließlich Samplebudget und Seed-Überlauf. Die einzelne
+Runner-CLI unterstützt `--until` nur im Offline-Modus; `--steps` ist dann das
+Schrittbudget. Bestehende CLI-Aufrufe ohne Zielzeit behalten ihre Bedeutung.
+
+Manifestversion 4 und jeder `.psrun`-Lauf speichern Zielzeit, Schrittmodus,
+Startdauer und Budget, bei adaptiven Läufen auch die ursprünglichen Grenzen.
+`terminal_step=clip_to_target` dokumentiert das Endintervall. Quellen, Modul,
+Parameter und Seeds werden wie bisher eingefroren. Der Controller prüft CRC,
+Footer, Start bei 0, strikt steigende Zeiten, Intervallgrenzen, passende Metadaten
+und den exakten Zielzeitpunkt. Er akzeptiert nur vollständig geprüfte Endwerte.
+Abbruch und Fehler beenden alle verbleibenden Prozesse und erhalten die bereits
+geprüften Journal-/CSV-Einträge. Parallelität verändert bei deterministischem
+Modell weder Messwerte noch Berichtsdaten.
+
+Für die Analyse verschiedener adaptiver Läufe sind deren tatsächliche Zeitspalten
+maßgeblich. Resampling kann gemeinsame Zwischenzeitpunkte herstellen; ein
+Vergleich nur nach Schrittnummern ist bei unterschiedlichen Rastern nicht geeignet.
+Die Physim-Analyse `analysis_batch_endpoints.phys` und C-Analysen lesen die
+Rohdateien unabhängig von der Sprache des Modells.
+
+
+Experimentparameter sind in der derzeitigen Parameter-API reine Zahlen mit
+Beschreibung und Grenzen. Ihre physikalische Einheit steht in der Modellbeschreibung;
+ein Sweep-Bericht erfindet keinen dimensionslosen Einheitensuffix für die X-Achse.
+Kanalachsen behalten ihre ausdrücklich registrierten Einheiten. Diese Darstellung
+gilt auch für SVG- und PNG-Exporte. Eine formale Einheitenbeschreibung je Parameter
+ist ein weiterer Ausbau der Metadaten-API.

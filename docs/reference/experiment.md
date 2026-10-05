@@ -144,7 +144,7 @@ typedef struct {
 } ps_experiment_api;
 ```
 
-Optional ABI-3 tail, advertised with PS_EXPERIMENT_ADAPTIVE_STEPS. Accept one forward step of minimum_s <= elapsed_s <= proposed_s. next_s must lie in [minimum_s, maximum_s]. Rejected numerical trials remain internal to the model and must not publish measurements/state. On success update the model and channel values, but not context->time_s. The host advances time and persists exactly one accepted sample.
+Optional ABI-3 tail, advertised with PS_EXPERIMENT_ADAPTIVE_STEPS. Accept one forward step of minimum_s <= elapsed_s <= proposed_s. next_s must lie in [minimum_s, maximum_s]. The host may lower minimum_s for the clipped final target-time step. Rejected numerical trials remain internal to the model and must not publish measurements/state. On success update the model and channel values, but not context->time_s. The host advances time and persists exactly one accepted sample.
 
 ### ps_experiment_entry
 

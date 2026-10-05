@@ -1,0 +1,30 @@
+let velocity = parameter("velocity", 1, 0.2, 3, "Constant velocity")
+let positionChannel = Channel("position", Unit(1,0,0,0,0,0,0,1,"m"), "Position with uncertain initial value")
+let endpointChannel = Channel("endpoint", Unit(0,0,1,0,0,0,0,1,"s"), "Actual endpoint")
+let intervalChannel = Channel("interval", Unit(0,0,1,0,0,0,0,1,"s"), "Accepted interval")
+let velocityChannel = Channel("velocity", Unit(1,0,-1,0,0,0,0,1,"m/s"), "Constant selected velocity")
+var position = 0.0
+func derivative(time: Float64, state: [Float64]) -> [Float64]:
+    return [velocity]
+func measure(time: Float64, dt: Float64):
+    positionChannel.sample(position)
+    endpointChannel.sample(time)
+    intervalChannel.sample(dt)
+    velocityChannel.sample(velocity)
+func create():
+    metadata("model=uniform translation; initial position U(0,1)")
+func reset():
+    position = randomUniform(0, 1)
+    measure(0, 0)
+func step(dt: Float64):
+    position += velocity * dt
+    measure(simulationTime() + dt, dt)
+func adaptiveStep(dt: Float64, minimum: Float64, maximum: Float64) -> StepInterval:
+    let time = simulationTime()
+    let result = rk45StepReported(derivative, [position], time, time + dt,
+                                  1e-9, 1e-7, 100000, dt, minimum, maximum)
+    position = result.state[0]
+    measure(result.reachedTime, result.reachedTime - time)
+    return StepInterval(result.reachedTime - time, result.nextStep)
+func scene():
+    sphere(Vec3(position, 0, 0), 0.1, 0xFFFFFFFF, 1)
