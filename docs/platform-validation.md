@@ -3,6 +3,67 @@
 Stand: 5. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Benannte Workspaces am 5. Oktober 2026
+
+Workspace-Zustand und neuer Katalog bestehen auf macOS Debug 2/2:
+`build/workspaces-debug-mac/test-results/run-a_g1mn_j`. Der Katalog prüft UTF-8,
+Ersetzen gleicher Namen, acht Einträge, Löschen, doppelte Namen, verschachtelte
+Zustände, alle Abschneidepositionen und byteweisen Beschädigungen, unbekannte
+Versionen und fehlgeschlagene Dateiersetzung. Acht Zustände mit jeweils
+32 zusätzlichen Pfaden und 16 Dokumenten an der Pfadlängengrenze bestehen im
+Roundtrip. Zustände und Transaktionskopien liegen auf dem Heap. Die gemeinsame
+Kodierung erhält die vorhandenen Workspace-Formate 1 und 2.
+
+Neuer Katalogablauf, bisherige Workspace-Wiederöffnung und kleines Dokumentfenster
+bestehen unter macOS Debug 3/3:
+`build/workspaces-debug-mac/test-results/run-fgj6sp7s`; unter Debian Release
+ebenfalls 3/3: `build/workspaces-linux/test-results/run-285x2ixz` innerhalb der VM.
+Ein C-Projekt speichert seinen Workspace während einer laufenden Simulation;
+der Runner und der ungespeicherte Quelltext bleiben erhalten. Öffnen und F7
+sind dabei gesperrt. Ein Physim-Projekt wird anschließend als zweiter Workspace
+gespeichert. Eine extern geänderte Dokumentdatei verhindert den Wechsel;
+eine fehlende Analysequelle im Zielprojekt erhält den bestehenden Workspace.
+Nach Auflösen des Konflikts stellt der erste Eintrag Dokumente und Editoransichten
+wieder her, ohne Build oder Runner zu starten. Ersetzen und Löschen halten die
+erwartete Eintragszahl. Neue Prozesse prüfen bewusste Wiederöffnung, gekürzten
+Unicode-Text, Erhalt beschädigter Kataloge und ausdrückliches Zurücksetzen.
+Hashes von C-/Physim-Quellen und Laufdatei bleiben unverändert.
+Die erweiterten Grenzmodelle bestehen unter Debian Release 2/2:
+`build/workspaces-linux/test-results/run-cpighmxl`.
+
+Der erste macOS-Fenstergesamtlauf besteht 48/49:
+`build/workspaces-final-mac/test-results/run-pe0vn8sk`. Der bestehende
+`workspace_workflow` versucht einen Ordnerwechsel unmittelbar nach dem Projektladen,
+während der Bibliotheksleser noch arbeitet. Die App blockiert diesen Wechsel korrekt.
+Der Prüfer wartet jetzt auf den Bibliotheksleser; seine Zeitgrenze und alle
+Zustandsprüfungen bleiben erhalten. Korrigierter Workspace-Ablauf und neuer
+Katalogablauf bestehen unter macOS Debug 2/2:
+`build/workspaces-debug-mac/test-results/run-cy86lc6v`.
+
+Frühe Builds und Prüfungen erkennen eine Namenskollision mit dem Dateibaumtyp,
+nicht bereinigte Pfadreste im Grenztest und den
+Neustartklick vor dem ersten Renderframe. Diese Fehler sind korrigiert; die Zeitgrenzen bleiben
+erhalten. Die Sichtprüfung bei 1080 × 740 erkennt eine zu lange Beschreibung
+und abgeschnittene Pfade. Die Beschreibung ist gekürzt; Pfade zeigen einen
+passenden UTF-8-Suffix samt vollständigem Pfad als Hinweis.
+
+Die vollständigen Release-Läufe ohne Fenster bestehen jeweils 512/512:
+macOS `build/workspaces-final-mac/test-results/run-d6055ur1`, Debian
+`build/workspaces-linux/test-results/run-ckleqt__` innerhalb der VM.
+Der wiederholte macOS-Fenstergesamtlauf besteht 49/49:
+`build/workspaces-final-mac/test-results/run-t5wk63xn`. Debian besteht ebenfalls
+49/49: `build/workspaces-linux/test-results/run-k_dkl_m3` unter
+X11/Xvfb/Openbox/Mesa. Die finale Verwaltungsansicht mit Pfadsuffix und
+gesperrter Öffnen-Aktion wurde auf beiden Systemen bei 1080 × 740 visuell geprüft.
+Die neu installierten, verschobenen Release-SDKs bestehen mit unabhängigen
+Headern und Verbrauchern, installiertem und neu gebautem Kern, C-/Physim-Modulen,
+adaptiven Läufen, Zielzeitstudien und neun neu gebauten Projekten:
+macOS `build/workspaces-sdk-proof-mac/Native SDK ä fhqa41w_`, Debian
+`build/workspaces-sdk-proof-linux/Native SDK ä 4fpkhmcf` innerhalb der VM.
+Die Umgebungen bleiben Intel macOS 14.6.1/AppleClang 16 und Debian 12/GCC 12.2
+mit SDL 3.2.30. Sprache 0.170.0, öffentliche API und ABI 3 bleiben unverändert;
+der persönliche Katalog verwendet Format 1.
+
 ## Benannte Panelanordnungen am 5. Oktober 2026
 
 Katalog, Docking und Einstellungen bestehen auf macOS Debug 3/3:

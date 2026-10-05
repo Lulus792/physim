@@ -228,6 +228,11 @@ und mit Schutz vor externen Änderungen speichern. Ihre automatischen Sicherunge
 liegen außerhalb des Workspace und werden beim erneuten Öffnen der Datei zur
 [Wiederherstellung](docs/autosave.md) angeboten.
 
+**Datei → Workspaces …** verwaltet bis zu acht benannte Arbeitsumgebungen mit
+Ordnern, zusätzlichen Pfaden, offenen Dokumenten und Editoransichten.
+Speicherfehler und laufende Jobs verhindern den Wechsel; Wiederöffnen startet
+Build und Simulation erst auf Wunsch. [Benannte Workspaces](docs/workspace.md#benannte-workspaces).
+
 **Einstellungen** in der Menüzeile oder **Ctrl+,** öffnet Code-Schriftgröße,
 Autosave-Intervall und Darstellungsoptionen. Seitenleiste, Arbeitsbereich und Protokoll
 lassen sich an ihren Titelzeilen verschieben: als Tabs zusammenfassen, nebeneinander

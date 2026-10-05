@@ -13,6 +13,7 @@
 #include "preferences.h"
 #include "layout_catalog.h"
 #include "workspace_state.h"
+#include "workspace_catalog.h"
 #include "workspace_tree.h"
 #include "text_document.h"
 #include "protocol.h"
@@ -139,6 +140,11 @@ typedef struct {
     char workspace_state_path[4096], workspace_state_error[192];
     bool workspace_state_writable;
     struct nk_rect workspace_restore_bounds;
+    ps_workspace_catalog *workspaces;
+    char workspaces_path[4096], workspaces_error[192], workspace_name[PS_WORKSPACE_NAME_BYTES];
+    bool workspaces_writable, workspace_manager;
+    int workspace_selected;
+    struct nk_rect workspace_catalog_bounds[6], workspace_catalog_entries[PS_WORKSPACE_MAX], workspace_menu_bounds;
     enum nk_collapse_states workspace_disclosure;
     char log[65536], status[256], find[128], replace[128];
     int tab, analysis_tab, example, profile, plot_channel;
@@ -340,6 +346,11 @@ static void choose_workspace_path(app *a, int mode);
 static void create_managed_project(app *a);
 static bool open_workspace_path(app *a, const char *path);
 static void restore_workspace(app *a);
+static void workspace_catalog_start(app *a);
+static void workspace_catalog_store(app *a);
+static void workspace_catalog_open(app *a);
+static void workspace_catalog_delete(app *a);
+static void workspace_catalog_reset(app *a);
 static void forget_workspace(app *a);
 static const char *experiment_source(const app *a) {
     return a->language_experiment ? "main.phys" : "main.c";
@@ -720,25 +731,25 @@ static void refresh_workspace_entries(app *a) {
                  "Dateibaum nicht vollständig geladen (%s). Betroffene Ordner sind markiert.",
                  ps_result_string(r));
 }
-static void open_project(app *a) {
+static bool open_project(app *a) {
     bool leaving_manager = a->project_manager;
     if (a->recovery)
-        return;
+        return false;
     if (!idle(a) || a->library_thread) {
         status(a, "Zuerst den laufenden Job beenden.");
-        return;
+        return false;
     }
     if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
         save_project(a);
     if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
-        return;
-    if (!documents_save_all(a)) return;
+        return false;
+    if (!documents_save_all(a)) return false;
     char p[4096];
     join(p, sizeof p, a->project_input, "physim.project");
     ps_project_settings project_settings;
     if (ps_project_settings_read(p, &project_settings) != PS_DOCUMENT_OK) {
         status(a, "Projektdatei fehlt oder ist ungültig. Quellen und Einstellungen bleiben erhalten.");
-        return;
+        return false;
     }
     bool language = project_settings.language_experiment;
     bool analysis_language = project_settings.language_analysis;
@@ -750,14 +761,14 @@ static void open_project(app *a) {
         nk_textedit_free(&experiment);
         nk_textedit_free(&analysis);
         status(a, "Experimentquelle konnte nicht geladen werden (UTF-8, maximal 256 KiB).");
-        return;
+        return false;
     }
     join(p, sizeof p, a->project_input, analysis_language ? "analysis.phys" : "analysis.c");
     if (!load_editor(&analysis, p)) {
         nk_textedit_free(&experiment);
         nk_textedit_free(&analysis);
         status(a, "Analysequelle konnte nicht geladen werden.");
-        return;
+        return false;
     }
     char *saved[2] = {copy_editor_text(&experiment), copy_editor_text(&analysis)};
     if (!saved[0] || !saved[1]) {
@@ -766,9 +777,10 @@ static void open_project(app *a) {
         nk_textedit_free(&experiment);
         nk_textedit_free(&analysis);
         status(a, "Projekt konnte nicht geladen werden: Speicher erschöpft.");
-        return;
+        return false;
     }
     documents_clear(a);
+    clear_project(a);
     for (unsigned i = 0; i < 2; i++) {
         free(a->saved_source[i]);
         a->saved_source[i] = saved[i];
@@ -831,6 +843,7 @@ static void open_project(app *a) {
     refresh_library(a);
     status(a, "Projekt geladen. Build kompiliert die lokalen Quelldateien.");
     check_recovery(a);
+    return true;
 }
 static void new_project(app *a) {
     if (!documents_save_all(a)) return;
@@ -2306,6 +2319,18 @@ static bool open_workspace_path(app *a, const char *path) {
         return false;
     }
     if (!documents_save_all(a)) return false;
+    char manifest[4096];
+    join(manifest, sizeof manifest, path, "physim.project");
+    if (exists(manifest)) {
+        char previous[4096];snprintf(previous,sizeof previous,"%s",a->project_input);
+        snprintf(a->project_input,sizeof a->project_input,"%s",path);
+        if (!open_project(a)) {
+            snprintf(a->project_input,sizeof a->project_input,"%s",previous);
+            return false;
+        }
+        a->tab=0;
+        return true;
+    }
     documents_clear(a);
     clear_project(a);
     snprintf(a->workspace, sizeof a->workspace, "%s", path);
@@ -2317,16 +2342,12 @@ static bool open_workspace_path(app *a, const char *path) {
     a->workspace_preview_path[0] = 0;
     a->workspace_addition_count = 0;
     refresh_workspace_entries(a);
-    char manifest[4096];
-    join(manifest, sizeof manifest, path, "physim.project");
-    if (exists(manifest))
-        open_project(a);
-    else
-        status(a, "Ordner geöffnet. Kein Physim-Projekt erkannt; Dateien können angesehen werden.");
+    status(a, "Ordner geöffnet. Kein Physim-Projekt erkannt; Dateien können angesehen werden.");
     return true;
 }
 
 #include "workspace_actions.inc"
+#include "workspace_catalog_actions.inc"
 
 static Uint32 workspace_dialog_event;
 static const int dialog_open_folder = PS_DIALOG_OPEN_FOLDER;
@@ -2435,6 +2456,7 @@ static void test_mouse(app *a, struct nk_rect rect, bool down) {
 #include "hierarchy_tests.inc"
 #include "inspector_tests.inc"
 #include "layout_tests.inc"
+#include "workspace_catalog_tests.inc"
 #include "adaptive_tests.inc"
 #include "series_tests.inc"
 #include "native_dialog_tests.inc"
@@ -2917,11 +2939,12 @@ int main(int argc, char **argv) {
                 if (!a->dirty && !a->analysis_dirty && !a->project_settings_dirty && documents_save_all(a))
                     a->quitting = true;
             }
-            if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && a->layout_manager && e.key.key == SDLK_ESCAPE) {
+            if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && (a->layout_manager || a->workspace_manager) && e.key.key == SDLK_ESCAPE) {
                 a->layout_manager = false;
+                a->workspace_manager = false;
                 continue;
             }
-            if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && !a->recovery && !a->layout_manager) {
+            if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && !a->recovery && !a->layout_manager && !a->workspace_manager) {
                 if (a->dock_drag && e.key.key==SDLK_ESCAPE) { a->dock_drag=0;a->dock_dragging=false;continue; }
                 if (scene_shortcut(a, &e.key)) continue;
                 if (a->tab == 1 && e.key.key == SDLK_SPACE && !e.key.repeat &&
@@ -2990,7 +3013,7 @@ int main(int argc, char **argv) {
         } else if (workspace_state_test) {
             if (ps_clock() - test_started >
                 (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
-                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
+                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15)) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
                         argv[3], ps_clock() - test_started);
@@ -3044,7 +3067,7 @@ int main(int argc, char **argv) {
                     !test_source_has(a, "physim.project", "experiment=main.phys"))
                     exit_code = 1;
                 test_stage = 104;
-            } else if (test_stage == 104 && idle(a)) {
+            } else if (test_stage == 104 && idle(a) && !a->library_thread) {
                 open_workspace_path(a, argv[2]);
                 if (a->loaded || !a->workspace_open || a->project[0] ||
                     strcmp(a->workspace, argv[2]))
@@ -4009,6 +4032,7 @@ int main(int argc, char **argv) {
     free(a->documentation);
     free(a->saved_source[0]);
     free(a->saved_source[1]);
+    free(a->workspaces);
     ps_autosave_destroy(a->recovery);
     ps_workspace_tree_destroy(&a->workspace_tree);
     documents_clear(a);

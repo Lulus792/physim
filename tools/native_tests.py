@@ -92,6 +92,8 @@ def catalog():
              arguments=("{work}",), app=True),
         Case("workspace_state", ("tests/test_workspace_state.c", "app/workspace_state.c", "app/autosave.c"),
              arguments=("{work}",), app=True),
+        Case("workspace_catalog", ("tests/test_workspace_catalog.c", "app/workspace_catalog.c", "app/workspace_state.c", "app/autosave.c"),
+             arguments=("{work}",), app=True),
         Case("workspace_tree", ("tests/test_workspace_tree.c", "app/workspace_tree.c", "app/autosave.c"),
              arguments=("{work}",), app=True),
         Case("text_document", ("tests/test_text_document.c",), ("project", "core"),

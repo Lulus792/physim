@@ -223,7 +223,22 @@ ausdrückliches Zurücksetzen ersetzt. Der Katalog umfasst 511 Prüfungen ohne F
 macOS und Debian jeweils 511/511 ohne Fenster und 48/48 Fensterabläufe; die neuen
 Modelle und C-/Physim-Bedienabläufe bestehen zusätzlich unter macOS Debug.
 Ausgeführte Nachweise stehen im [Plattformbericht](platform-validation.md).
-Mehrere benannte Workspaces bleiben offen.
+Benannte Workspaces ergänzt der folgende Abschnitt.
+
+**Benannte Workspaces:** Unter **Datei** werden bis zu acht benannte Arbeitsumgebungen
+verwaltet. Hauptordner, zusätzliche Pfade, offene Dokumente und Editoransichten
+kehren bewusst zurück; der Katalog ist vom letzten Workspace und von
+Panelanordnungen getrennt. Speichern erfasst Ansichten auch bei laufender
+Simulation. Öffnen speichert aktuelle Änderungen und blockiert bei Fehlern,
+laufenden Jobs oder ungelösten Wiederherstellungen. Zielprojekte werden vor der
+Freigabe des bisherigen Workspace geladen. Dateiformate 1/2 bleiben kompatibel;
+Katalogformat 1 erhält beschädigte Dateien bis zum ausdrücklichen Zurücksetzen.
+Der Katalog umfasst 512 Prüfungen ohne Fenster (499 ohne SDL) und 49 Fensterfälle.
+Die vollständigen Release-Läufe bestehen auf macOS und Debian jeweils 512/512
+ohne Fenster und 49/49 Fensterabläufe. Modelle und neue Bedienabläufe bestehen
+zusätzlich unter macOS Debug. Ausgeführte Nachweise und der korrigierte
+Hintergrundjob-Wartefall stehen im [Plattformbericht](platform-validation.md).
+Portable Workspaces, separate Panelfenster und weitere Produktziele bleiben offen.
 
 Aktueller [Plattformnachweis](platform-validation.md): Der direkte Physim-Build nach
 Entfernen der eigenen CMake-Dateien besteht alle acht CI-Kombinationen. Ubuntu 24.04
@@ -646,7 +661,7 @@ und veraltete Fenstermanager-Einträge geprüft. Die erneute Linux-CI steht aus.
 | Einheiten | SI-Dimensionen, Konvertierung, Einheitenalgebra, Quantity-Rechnung und Dimensionsprüfung von Datenreihen, deklarierte Anzeigeeinheiten für Experimentparameter samt Formulare und Studienberichte | frei wählbare Anzeigeeinheiten für Messkanäle in der GUI |
 | Runner | versionierte Modul-ABI, Handshake, Pause/Step/Run/Stop, Heartbeat, Crash-/Hang-Isolation, feste/adaptive Modellschritte, Echtzeittaktung von 0,1× bis 16× und Offline | Ressourcenlimits, eigener Logkanal, echtes OS-Sandboxing |
 | Daten | CRC-Chunks, Streaming, Recovery, CSV, Seed-/Modellmetadaten und optionale versionierte Szenenblöcke | Index, mehr Datentypen, komprimierte Blöcke, Schemaerweiterung |
-| App | leerer Workspace-Einstieg mit gespeicherter Ordnerauswahl und bewusster Wiederöffnung, kompakte Menüleiste, Projektmanager, aufklappbarer Dateibaum und bis zu 16 editierbare Textdokumente mit separaten Autosaves und gespeicherten Editoransichten, drei Arbeitsbereiche, integrierte Offline-Dokumentation, Systemtypografie, Einstellungen mit Code-Schriftgröße und Autosave-Intervall, dunkle, helle und kontrastreiche Darstellung, gespeicherte Fenstergröße/Maximierung, verschiebbare Seitenleiste, Arbeitsbereich, Protokoll und eigenständiger Inspektor mit Teilungen, Tabgruppen, gespeicherten frei platzierten Panels und bis zu acht benannten Panelanordnungen im Hauptfenster, Reset zum pausierten Anfangszustand mit erhaltenen Alt-Läufen, Vorlagen, Editor, direkter Projektbuild ohne CMake mit Ausgaben unter `build/`, Diagramme | mehrere benannte Workspaces, separate Panelfenster, weitere Panelzustände, UI-weite Schriftvergrößerung, vollständige Barrierefreiheit |
+| App | leerer Workspace-Einstieg mit gespeicherter Ordnerauswahl und bewusster Wiederöffnung, kompakte Menüleiste, Projektmanager, aufklappbarer Dateibaum und bis zu 16 editierbare Textdokumente mit separaten Autosaves und gespeicherten Editoransichten, drei Arbeitsbereiche, integrierte Offline-Dokumentation, Systemtypografie, Einstellungen mit Code-Schriftgröße und Autosave-Intervall, dunkle, helle und kontrastreiche Darstellung, gespeicherte Fenstergröße/Maximierung, verschiebbare Seitenleiste, Arbeitsbereich, Protokoll und eigenständiger Inspektor mit Teilungen, Tabgruppen, gespeicherten frei platzierten Panels und bis zu acht benannten Panelanordnungen im Hauptfenster und acht benannten Workspaces mit Ordnern und Editoransichten, Reset zum pausierten Anfangszustand mit erhaltenen Alt-Läufen, Vorlagen, Editor, direkter Projektbuild ohne CMake mit Ausgaben unter `build/`, Diagramme | portable Workspaces, separate Panelfenster, weitere Panelzustände, UI-weite Schriftvergrößerung, vollständige Barrierefreiheit |
 | Editor | C- und Physim-Dateien bearbeiten, sprachspezifische Syntaxfarben, Zeilennummern, Debug/Release, anklickbare Compilerdiagnosen, öffentlicher Header-Browser | Completion |
 | Szene | OpenGL 3.3 Core, Tiefenpuffer, MSAA, alle acht Grundprimitive, orientierte Boxen/Ebenen, RGBA-Transparenz mit Dreieckssortierung, UTF-8-Labels, Wurf-Flugbahn, Grid/Achsen, Kamera, Ansichten und Sichtbarkeit und Mausklickauswahl einzelner Szeneneinträge mit optionalen Objekt-IDs, gespeicherte Szenen mit Zeitleiste und Wiedergabe, benannte Gruppen und Elternbeziehungen mit aufklappbarem Inspektorbaum und geerbter Sichtbarkeit | artefaktfreie Transparenz bei sich durchdringenden Flächen, hierarchische Koordinatentransformationen |
 | Analyse | eigener C-Editor/Runner, Dataset-/Series-Handles, blockweise Transformationen mit Einheitenprüfung, eigene Ergebnisplots/-tabellen, Linien/Punkte/Histogramme mit Zoom am Mauszeiger, Verschieben, separaten Ausschnitten und Achsenoffsets, PNG-/SVG-Export des sichtbaren Ausschnitts, CSV/SVG und verlustfrei komprimiertes PNG mit vier Größen von 1200 × 850 bis 4800 × 3400 Pixeln, Statistik, Ableitung, Integral, gleitendes Mittel, Periode, Energieabweichung, Auswahl und Vergleich von bis zu acht Läufen, gemeinsame Statusauswahl von Datenreihen, lineares Resampling, Nearest/Previous im SDK und Differenzkurven, frühere Berichte öffnen | weitere Interpolationsverfahren/Transformationen |

@@ -82,11 +82,58 @@ mehr lesbare Textdokumente werden übersprungen und gemeldet; die übrigen Datei
 öffnen sich weiter. Vorhandene Autosaves werden zur Wiederherstellung angeboten.
 Die ältere Workspace-Datei ohne Dokumentansichten bleibt lesbar; beim nächsten
 Speichern entsteht das neue Format.
-Das Verschieben eines Workspace auf einen anderen Rechner und mehrere benannte
-Workspaces sind noch offen. Ein Prozessabbruch sichert keinen neuen Workspace;
+Das Verschieben eines Workspace auf einen anderen Rechner ist noch offen.
+Ein Prozessabbruch sichert keinen neuen Workspace;
 ungespeicherte Projektquellen haben die separate [Autosave-Wiederherstellung](autosave.md).
 Allgemeine Dokumente bieten beim erneuten Öffnen der Datei ihre separat im
 persönlichen App-Datenverzeichnis gespeicherte Sicherung zur Wiederherstellung an.
+
+## Benannte Workspaces
+
+**Datei → Workspaces …** verwaltet bis zu acht benannte Arbeitsumgebungen.
+Öffne einen Ordner, richte zusätzliche Pfade und Dokumente ein und wähle dort
+**Workspace speichern**. Gespeichert werden Hauptordner, bis zu 32 zusätzliche
+Pfade, die Reihenfolge von bis zu 16 offenen Dokumenten, aktives Dokument,
+Hauptbereich sowie Cursor, Auswahl und Scrollposition der Projekteditoren und
+Dokumente. Es werden Ansichten gespeichert; der Text kommt beim Öffnen aus den
+aktuellen Dateien. Einen vorhandenen Namen ersetzt bewusstes Speichern.
+Namen unterscheiden Groß- und Kleinschreibung und dürfen bis zu 63 UTF-8-Bytes
+ohne Steuerzeichen oder Rand-Leerzeichen enthalten.
+
+Wähle einen Eintrag und **Öffnen**, um ihn wiederherzustellen. Der vollständige
+Ordnerpfad erscheint als Hinweis über der Pfadzeile; lange Pfade zeigen in der
+Zeile ihr Ende. Vor dem Wechsel werden die aktuellen Projektänderungen und
+Dokumente gespeichert. Ein Speicherfehler hält den bisherigen Workspace offen.
+Eine vorhandene Projektdatei und ihre beiden Quellen werden geladen, bevor
+die bisherige Arbeitsumgebung freigegeben wird; Lesefehler verhindern den Wechsel.
+Laufende Jobs, offene Dialoge und ungelöste Wiederherstellungen sperren **Öffnen**.
+**Workspace speichern** kann auch während einer Simulation die aktuelle Ansicht
+erfassen, ohne den Lauf oder ungespeicherten Text zu ändern.
+
+Wiederöffnen startet weder Build noch Simulation. Nicht erreichbare Hauptordner
+bleiben im Katalog; fehlende zusätzliche Pfade und Dokumente werden wie bei der
+letzten Arbeitsumgebung behandelt. Nach externen Kürzungen werden Editoransichten
+auf den vorhandenen Text begrenzt. Autosaves erfordern weiterhin eine bewusste
+Wiederherstellung. Theme, Schriftgröße und [Panelanordnungen](settings.md#benannte-panelanordnungen)
+werden separat verwaltet.
+
+**Löschen** entfernt nur den gewählten Katalogeintrag. Projektdateien, Laufdaten
+und der separate letzte Workspace bleiben erhalten. **Schließen** oder Escape
+verlässt die Verwaltung. Geänderte Ansichten überschreiben einen benannten
+Eintrag erst beim ausdrücklichen Speichern; das Beenden speichert weiterhin
+die letzte Arbeitsumgebung in `workspace.bin`.
+
+Der persönliche Katalog liegt als `workspaces.bin` neben `workspace.bin`.
+Format 1 enthält versionierte Workspace-Zustände und prüft Namen, Pfade,
+Ansichten, Größenlimits und CRC-Prüfsummen. Speichern, Löschen und bewusstes
+Zurücksetzen schreiben eine geschlossene temporäre Datei und ersetzen danach
+die bisherige. Fehler erhalten Datei und Katalog. Beschädigte oder unbekannte
+Dateien sperren die Verwaltung; nur **Datei bewusst zurücksetzen** ersetzt sie
+durch einen leeren Katalog. Bei mehreren App-Instanzen gewinnt der zuletzt
+vollständig gespeicherte Stand. Ein Stromausfall während des Austauschs ist
+nicht abgesichert. Die vorhandenen Workspace-Dateien der Formate 1 und 2 bleiben
+lesbar. Ein alter letzter Workspace lässt sich öffnen und anschließend unter
+einem Namen speichern; er wird nicht automatisch in den Katalog übernommen.
 
 ## Weitere Textdateien bearbeiten
 

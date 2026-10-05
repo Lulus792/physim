@@ -68,43 +68,46 @@ static void workspace_state_start(app *a, const char *override_path) {
             a->workspace_state_error, sizeof a->workspace_state_error,
             "Gespeicherter Workspace konnte nicht gelesen werden (%s). Die Datei bleibt erhalten.",
             ps_result_string(r));
+    workspace_catalog_start(a);
+}
+static ps_result workspace_state_capture(app *a, ps_workspace_state *state) {
+    if (!a->workspace_open || !state) return PS_INVALID;
+    memset(state,0,sizeof *state);
+    ps_result r=ps_workspace_absolute(a->workspace,state->root);
+    state->count=a->workspace_addition_count;
+    for (uint32_t i=0;r==PS_OK && i<state->count;i++)
+        r=ps_workspace_absolute(a->workspace_additions[i],state->additions[i]);
+    state->document_count=a->document_count;
+    state->active_document=a->document_count?a->document_active:0;
+    state->view=a->tab==8 && a->document_count?3:a->tab==1?1:a->tab==2?2:0;
+    state->analysis_editor=a->analysis_tab==1;
+    state->experiment=workspace_editor_capture(&a->experiment);
+    state->analysis=workspace_editor_capture(&a->analysis);
+    for (uint32_t i=0;r==PS_OK && i<state->document_count;i++) {
+        r=ps_workspace_absolute(a->documents[i].path,state->documents[i].path);
+        state->documents[i].editor=workspace_editor_capture(&a->documents[i].edit);
+    }
+    return r;
 }
 static ps_result workspace_state_save(app *a) {
-    if (!a->workspace_state_writable || !a->workspace_open || !a->workspace_state_path[0])
-        return PS_OK;
-    ps_workspace_state *state = calloc(1, sizeof *state);
-    ps_result r = state ? ps_workspace_absolute(a->workspace, state->root) : PS_MEMORY;
-    if (state) {
-        state->count = a->workspace_addition_count;
-        for (uint32_t i = 0; r == PS_OK && i < state->count; i++)
-            r = ps_workspace_absolute(a->workspace_additions[i], state->additions[i]);
-        state->document_count = a->document_count;
-        state->active_document = a->document_count ? a->document_active : 0;
-        state->view = a->tab == 8 && a->document_count ? 3 : a->tab == 1 ? 1 : a->tab == 2 ? 2 : 0;
-        state->analysis_editor = a->analysis_tab == 1;
-        state->experiment = workspace_editor_capture(&a->experiment);
-        state->analysis = workspace_editor_capture(&a->analysis);
-        for (uint32_t i = 0; r == PS_OK && i < state->document_count; i++) {
-            r = ps_workspace_absolute(a->documents[i].path, state->documents[i].path);
-            state->documents[i].editor = workspace_editor_capture(&a->documents[i].edit);
-        }
-        if (r == PS_OK)
-            r = ps_workspace_state_write(a->workspace_state_path, state);
-        free(state);
-    }
+    if (!a->workspace_state_writable || !a->workspace_open || !a->workspace_state_path[0]) return PS_OK;
+    ps_workspace_state *state=calloc(1,sizeof *state);
+    ps_result r=state?workspace_state_capture(a,state):PS_MEMORY;
+    if(r==PS_OK)r=ps_workspace_state_write(a->workspace_state_path,state);
+    free(state);
     if (r != PS_OK)
         snprintf(a->workspace_state_error, sizeof a->workspace_state_error,
                  "Workspace konnte nicht gespeichert werden: %s.", ps_result_string(r));
     return r;
 }
-static void restore_workspace(app *a) {
-    if (!a->last_workspace.root[0] || a->dialog_pending)
-        return;
-    if (!open_workspace_path(a, a->last_workspace.root))
-        return;
+static bool workspace_restore_state(app *a, const ps_workspace_state *state) {
+    if (!state->root[0] || a->dialog_pending)
+        return false;
+    if (!open_workspace_path(a, state->root))
+        return false;
     unsigned missing = 0;
-    for (uint32_t i = 0; i < a->last_workspace.count; i++) {
-        const char *path = a->last_workspace.additions[i];
+    for (uint32_t i = 0; i < state->count; i++) {
+        const char *path = state->additions[i];
         SDL_PathInfo info;
         if (!SDL_GetPathInfo(path, &info))
             missing++;
@@ -114,8 +117,8 @@ static void restore_workspace(app *a) {
     }
     refresh_workspace_entries(a);
     unsigned unavailable = 0, active = 0;
-    for (uint32_t i = 0; i < a->last_workspace.document_count; i++) {
-        const ps_workspace_document *saved = &a->last_workspace.documents[i];
+    for (uint32_t i = 0; i < state->document_count; i++) {
+        const ps_workspace_document *saved = &state->documents[i];
         unsigned before = a->document_count;
         preview_workspace_path(a, saved->path);
         if (a->document_count == before) {
@@ -123,16 +126,16 @@ static void restore_workspace(app *a) {
             continue;
         }
         workspace_editor_restore(a, &a->documents[before].edit, &saved->editor);
-        if (i == a->last_workspace.active_document)
+        if (i == state->active_document)
             active = before;
     }
-    workspace_editor_restore(a, &a->experiment, &a->last_workspace.experiment);
-    workspace_editor_restore(a, &a->analysis, &a->last_workspace.analysis);
+    workspace_editor_restore(a, &a->experiment, &state->experiment);
+    workspace_editor_restore(a, &a->analysis, &state->analysis);
     if (a->document_count)
         document_select(a, active);
-    a->analysis_tab = (int)a->last_workspace.analysis_editor;
-    a->tab = a->loaded ? (int)a->last_workspace.view : 0;
-    if (a->last_workspace.view == 3)
+    a->analysis_tab = (int)state->analysis_editor;
+    a->tab = a->loaded ? (int)state->view : 0;
+    if (state->view == 3)
         a->tab = a->document_count ? 8 : 0;
     if (missing || unavailable) {
         char message[192];
@@ -141,7 +144,9 @@ static void restore_workspace(app *a) {
                  "%u Dokumente konnten nicht geöffnet werden.", missing, unavailable);
         status(a, message);
     }
+    return true;
 }
+static void restore_workspace(app *a) { workspace_restore_state(a,&a->last_workspace); }
 static void forget_workspace(app *a) {
     ps_workspace_state *empty = calloc(1, sizeof *empty);
     ps_result r = empty ? ps_workspace_state_write(a->workspace_state_path, empty) : PS_MEMORY;

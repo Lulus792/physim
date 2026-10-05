@@ -27,6 +27,12 @@ typedef struct {
  * Read is transactional. Missing files return PS_EOF.
  * Replacement uses a closed, exclusive sibling file; failed writes preserve
  * the previous file. Concurrent instances use the last completed write. */
+#define PS_WORKSPACE_WIRE_LIMIT (24u + PS_WORKSPACE_PATH + PS_WORKSPACE_ADDITIONS * (4u + PS_WORKSPACE_PATH) + 56u + PS_WORKSPACE_DOCUMENTS * (24u + PS_WORKSPACE_PATH))
+bool ps_workspace_state_valid(const ps_workspace_state *state);
+/* Shared private encoding. Encode allocates a buffer owned by the caller;
+ * decode accepts versions 1/2. Outputs remain unchanged on failure. */
+ps_result ps_workspace_state_encode(const ps_workspace_state *state, unsigned char **bytes, size_t *size);
+ps_result ps_workspace_state_decode(const unsigned char *bytes, size_t size, ps_workspace_state *out);
 ps_result ps_workspace_state_read(const char *path, ps_workspace_state *out);
 ps_result ps_workspace_state_write(const char *path, const ps_workspace_state *state);
 /* Resolve a relative path against the current directory without requiring the

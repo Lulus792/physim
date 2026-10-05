@@ -178,6 +178,40 @@ def timed_series(flow, directory, scaled=False):
     require(records[0] == records[1], "Timed C/Physim studies differ in accepted times or values")
 
 
+def named_workspaces(flow, directory):
+    root = directory / "Workspaces ä"
+    root.mkdir(parents=True)
+    flow.run("--workspace-state-test", root, "named-write", timeout=130,
+             marker="NAMED WORKSPACES named-write SELF-TEST: PASSED")
+    runs = list((root / "Pendel ä/runs").glob("*.psrun"))
+    require(len(runs) == 1, "Saving a workspace restarted the simulation")
+    protected = runs + [root / "Pendel ä/main.c", root / "Pendel ä/analysis.c",
+                        root / "Sprache ä/main.phys", root / "Sprache ä/analysis.c"]
+    hashes = [fingerprint(path) for path in protected]
+    catalog = root / "workspaces.bin"
+    data = catalog.read_bytes()
+    require(data[:8] == b"PSWSET01" and struct.unpack_from("<I", data, 12)[0] == 1,
+            "Expected one named workspace")
+    flow.run("--workspace-state-test", root, "named-read", timeout=130,
+             marker="NAMED WORKSPACES named-read SELF-TEST: PASSED")
+    require(catalog.read_bytes() == data, "Opening wrote the workspace catalog")
+    write(root / "Pendel ä/Notizen ä.txt", "αβ")
+    flow.run("--workspace-state-test", root, "named-short", timeout=130,
+             marker="NAMED WORKSPACES named-short SELF-TEST: PASSED")
+    require(catalog.read_bytes() == data, "Shortened text overwrote saved views")
+    damaged = data[:100]
+    catalog.write_bytes(damaged)
+    flow.run("--workspace-state-test", root, "named-corrupt", timeout=130,
+             marker="NAMED WORKSPACES named-corrupt SELF-TEST: PASSED")
+    require(catalog.read_bytes() == damaged, "Corrupt catalog was overwritten")
+    flow.run("--workspace-state-test", root, "named-reset", timeout=130,
+             marker="NAMED WORKSPACES named-reset SELF-TEST: PASSED")
+    empty = catalog.read_bytes()
+    require(len(empty) == 20 and struct.unpack_from("<I", empty, 12)[0] == 0,
+            "Explicit workspace catalog reset did not persist")
+    require(hashes == [fingerprint(path) for path in protected], "Workspace restoration changed sources or runs")
+
+
 def layouts(flow, directory):
     for language in ("c", "phys"):
         root = directory / language
@@ -551,7 +585,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
+SPECIAL = {"named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}
