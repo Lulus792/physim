@@ -207,6 +207,25 @@ ps_result ps_ode_integrate_diagnosed(
 
 Same integration and transactional state contract. Optional caller-owned diagnostic is written on EVERY return, including invalid arguments; report remains untouched on invalid arguments. No allocation or global error state. Diagnostic storage, report and state must not overlap. NONE denotes success. For invalid arguments, time is start (possibly nonfinite).
 
+## ps_ode_step_diagnosed
+
+Akzeptiert genau einen Dormand–Prince-Schritt in Richtung end; verworfene Versuche ändern den Zustand nicht. Bericht und Diagnose enthalten tatsächliche Zielzeit, nächste Schrittweite und Fehlernorm.
+
+```c
+ps_result ps_ode_step_diagnosed(
+    ps_ode_fn fn,
+    void *user,
+    double start,
+    double end,
+    double *state,
+    size_t n,
+    const ps_ode_options *options,
+    ps_ode_report *report,
+    ps_ode_diagnostic *diagnostic);
+```
+
+Same transactional error control, but returns after the first accepted step toward end. report->reached_time is the actual endpoint; next_step is the suggested signed duration. Rejected trials consume maximum_steps. A nonzero interval is required; final endpoint clipping follows the integrate contract.
+
 ## ps_ode_diagnostic_string
 
 Liefert die statische Textbeschreibung einer ODE-Diagnose.

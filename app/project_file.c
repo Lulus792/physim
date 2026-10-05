@@ -25,9 +25,15 @@ bool ps_project_seed_parse(const char *text, uint64_t *seed) {
 bool ps_project_timestep_valid(double timestep) {
     return isfinite(timestep) && timestep >= DBL_MIN && timestep <= 1;
 }
+bool ps_project_step_bounds_valid(const ps_project_settings *s) {
+    return s && (!s->adaptive || (ps_project_timestep_valid(s->minimum_timestep) &&
+           ps_project_timestep_valid(s->maximum_timestep) &&
+           s->minimum_timestep<=s->timestep && s->timestep<=s->maximum_timestep));
+}
 static ps_document_result parse(const ps_text_document *document, ps_project_settings *out) {
-    ps_project_settings settings = {.timestep = .005, .seed = 42, .speed = 1};
-    bool seen[6] = {false};
+    ps_project_settings settings = {.timestep = .005, .seed = 42, .speed = 1,
+                                    .minimum_timestep=1e-8,.maximum_timestep=.1};
+    bool seen[9] = {false};
     size_t position = 0;
     unsigned index = 0;
     while (position < document->length) {
@@ -87,6 +93,18 @@ static ps_document_result parse(const ps_text_document *document, ps_project_set
             if (errno || number_end == value + 1 || *number_end || !ps_speed_valid(speed))
                 return PS_DOCUMENT_INVALID;
             settings.speed = speed;
+        } else if(!strncmp(line,"simulation.steps=",17)) {
+            if(seen[6] || (strcmp(value+1,"fixed") && strcmp(value+1,"adaptive")))
+                return PS_DOCUMENT_INVALID;
+            seen[6]=true;settings.adaptive=!strcmp(value+1,"adaptive");
+        } else if(!strncmp(line,"simulation.minimum_dt=",22) || !strncmp(line,"simulation.maximum_dt=",22)) {
+            unsigned which=!strncmp(line,"simulation.minimum_dt=",22)?7:8;
+            if(seen[which]) return PS_DOCUMENT_INVALID;
+            seen[which]=true;char *number_end;errno=0;
+            double dt=strtod(value+1,&number_end);
+            if(errno || number_end==value+1 || *number_end || !ps_project_timestep_valid(dt))
+                return PS_DOCUMENT_INVALID;
+            if(which==7) settings.minimum_timestep=dt;else settings.maximum_timestep=dt;
         } else if (!strncmp(line, "parameter.", 10)) {
             if (!value)
                 return PS_DOCUMENT_INVALID;
@@ -96,7 +114,7 @@ static ps_document_result parse(const ps_text_document *document, ps_project_set
         } else if (!strncmp(line, "physim_project=", 15))
             return PS_DOCUMENT_INVALID;
     }
-    if (!index)
+    if (!index || !ps_project_step_bounds_valid(&settings))
         return PS_DOCUMENT_INVALID;
     *out = settings;
     return PS_DOCUMENT_OK;
@@ -113,7 +131,7 @@ ps_document_result ps_project_settings_read(const char *path, ps_project_setting
 }
 ps_document_result ps_project_settings_save(const char *path, const ps_project_settings *settings) {
     if (!path || !settings || !ps_project_timestep_valid(settings->timestep) ||
-        !ps_speed_valid(settings->speed))
+        !ps_speed_valid(settings->speed) || !ps_project_step_bounds_valid(settings))
         return PS_DOCUMENT_INVALID;
     const ps_parameter_catalog *parameters = &settings->parameters;
     if (parameters->count > PS_MAX_PARAMETERS)
@@ -127,7 +145,7 @@ ps_document_result ps_project_settings_save(const char *path, const ps_project_s
         ps_text_document_destroy(&document);
         return result;
     }
-    size_t capacity = document.length + PS_MAX_PARAMETERS * 160 + 192, used = 0;
+    size_t capacity = document.length + PS_MAX_PARAMETERS * 160 + 384, used = 0;
     char *text = malloc(capacity);
     if (!text) {
         ps_text_document_destroy(&document);
@@ -143,7 +161,8 @@ ps_document_result ps_project_settings_save(const char *path, const ps_project_s
         const char *line = document.saved + position;
         if (strncmp(line, "profile=", 8) && strncmp(line, "parameter.", 10) &&
             strncmp(line, "simulation.dt=", 14) && strncmp(line, "simulation.seed=", 16) &&
-            strncmp(line, "simulation.speed=", 17)) {
+            strncmp(line, "simulation.speed=", 17) && strncmp(line,"simulation.steps=",17) &&
+            strncmp(line,"simulation.minimum_dt=",22) && strncmp(line,"simulation.maximum_dt=",22)) {
             memcpy(text + used, line, end - position);
             used += end - position;
         }
@@ -161,6 +180,12 @@ ps_document_result ps_project_settings_save(const char *path, const ps_project_s
         result = PS_DOCUMENT_LIMIT;
     else
         used += (size_t)n;
+    if(result==PS_DOCUMENT_OK && settings->adaptive) {
+        n=snprintf(text+used,capacity-used,
+                   "simulation.steps=adaptive%ssimulation.minimum_dt=%.17g%ssimulation.maximum_dt=%.17g%s",
+                   newline,settings->minimum_timestep,newline,settings->maximum_timestep,newline);
+        if(n<0 || (size_t)n>=capacity-used) result=PS_DOCUMENT_LIMIT;else used+=(size_t)n;
+    }
     for (uint32_t i = 0; result == PS_DOCUMENT_OK && i < parameters->count; i++) {
         double value;
         if (ps_parameter_catalog_value(parameters, i, &value) != PS_OK) {

@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* Edit these SI parameters, then Build. One state, fixed dt, explicit seed. */
+/* Edit these SI parameters, then Build. One state, fixed/adaptive steps, explicit seed. */
 static const double length_m = 1.5;
 static const double mass_kg = 1.0;
 static const double gravity_m_s2 = 9.80665;
@@ -74,7 +74,7 @@ static ps_result create(ps_context *c) {
         "model=point pendulum, massless rigid rod, uniform "
         "gravity\nlength_m=%.17g\nmass_kg=%.17g\ngravity_m_s2=%.17g\ninitial_angle_rad=%."
         "17g\nmedium_density_kg_m3=%.17g\ndrag_coefficient=%.17g\narea_m2=%.17g\nsensor_noise_"
-        "rad=%.17g\nintegrator=%s\nrk45_absolute_tolerance=%.17g\nrk45_relative_tolerance=%.17g",
+        "rad=%.17g\nintegrator=%s\nadaptive_integrator=Dormand-Prince 5(4)\nrk45_absolute_tolerance=%.17g\nrk45_relative_tolerance=%.17g",
         length_m, mass_kg, gravity_m_s2, initial_angle_rad, air_density_kg_m3, drag_coefficient,
         area_m2, sensor_noise_rad,
         integrator == PS_RK4      ? "RK4"
@@ -106,6 +106,22 @@ static ps_result step(ps_context *c, double dt) {
         measure(c);
     return r;
 }
+static ps_result adaptive_step(ps_context *c,double proposed,double minimum,double maximum,
+                                ps_step_interval *interval) {
+    pendulum *p=c->user;
+    ps_ode_options options=ps_ode_options_default();
+    options.absolute_tolerance=absolute_tolerance;options.relative_tolerance=relative_tolerance;
+    options.initial_step=proposed;options.minimum_step=minimum;options.maximum_step=maximum;
+    ps_ode_report report;ps_ode_diagnostic diagnostic;
+    ps_result result=ps_ode_step_diagnosed(derivative,NULL,c->time_s,c->time_s+proposed,
+                                          p->y,2,&options,&report,&diagnostic);
+    if(result!=PS_OK) {
+        snprintf(c->error,sizeof c->error,"%s",ps_ode_diagnostic_string(diagnostic.reason));
+        return result;
+    }
+    measure(c);*interval=(ps_step_interval){report.reached_time-c->time_s,report.next_step};
+    return PS_OK;
+}
 static void scene(ps_context *c, ps_scene *s) {
     ps_vec3 origin = ps_v3(0, 0, 0), bob = ps_v3(c->values[2], c->values[3], 0);
     ps_scene_add_id(s, 1, PS_LINE, origin, bob, 0, 0xb5c4d8ff);
@@ -132,12 +148,12 @@ static void destroy(ps_context *c) {
 PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
     static const ps_experiment_api api = {sizeof(ps_experiment_api),
                                           PS_ABI_VERSION,
-                                          PS_EXPERIMENT_SCENE_HIERARCHY,
+                                          PS_EXPERIMENT_SCENE_HIERARCHY | PS_EXPERIMENT_ADAPTIVE_STEPS,
                                           "Pendel",
                                           create,
                                           reset,
                                           step,
                                           scene,
-                                          destroy};
+                                          destroy, adaptive_step};
     return &api;
 }

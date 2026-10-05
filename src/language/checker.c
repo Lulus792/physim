@@ -97,7 +97,7 @@ static int builtin_type_name(checker *c, ps_lang_token t) {
         "Vec4", "Quat", "Mat3", "Mat4", "Bezier3", "Unit", "Quantity", "Medium", "Material",
         "Submersion", "Channel", "Dataset",
         "Series", "Plot", "Table", "Distribution", "SensorConfig", "Sensor",
-        "Measurement", "Rng", "OdeResult", "ScalarResult", "Body", "Contacts", "ContactSolver", "ContactResult",
+        "Measurement", "Rng", "OdeResult", "StepInterval", "ScalarResult", "Body", "Contacts", "ContactSolver", "ContactResult",
         "DistanceJoint", "JointResult", "ContactConstraint", "JointConstraint",
         "ConstraintResult", "Sweep", "Aabb", "CollisionPair"
     };
@@ -111,7 +111,7 @@ static int reserved_nominal_type_name(checker *c, ps_lang_token t) {
         "Int64", "Float64", "Bool", "String", "Void", "Vec2", "Vec3", "Vec4",
         "Quat", "Mat3", "Mat4", "Bezier3", "Optional", "Rng", "Unit", "Medium", "Material",
         "Submersion", "Channel",
-        "Dataset", "Series", "Plot", "OdeResult", "ScalarResult"
+        "Dataset", "Series", "Plot", "OdeResult", "StepInterval", "ScalarResult"
     };
     for (size_t i = 0; i < sizeof(names) / sizeof(names[0]); ++i)
         if (word(c, t, names[i]))
@@ -529,6 +529,8 @@ static ps_lang_type annotation(checker *c, size_t id, int allow_void) {
             t = PS_TYPE_RNG;
         else if (word(c, n->token, "OdeResult"))
             t = PS_TYPE_ODE_RESULT;
+        else if (word(c, n->token, "StepInterval"))
+            t = PS_TYPE_STEP_INTERVAL;
         else if (word(c, n->token, "ScalarResult"))
             t = PS_TYPE_SCALAR_RESULT;
         else if (word(c, n->token, "Body"))
@@ -595,6 +597,9 @@ static int sequence(checker *c, size_t first);
 static void function_signature(checker *c, size_t id, size_t owner);
 static void generic_signature(checker *c, size_t id, size_t owner);
 static size_t field_lookup(checker *c, ps_lang_type type, ps_lang_token name) {
+    if (type == PS_TYPE_STEP_INTERVAL)
+        return word(c,name,"elapsed") ? PS_LANG_MEMBER_STEP_ELAPSED
+               : word(c,name,"nextStep") ? PS_LANG_MEMBER_STEP_NEXT : 0;
     if (type == PS_TYPE_SCALAR_RESULT)
         return word(c, name, "x") ? PS_LANG_MEMBER_SCALAR_X
                : word(c, name, "value") ? PS_LANG_MEMBER_SCALAR_VALUE
@@ -4089,6 +4094,7 @@ static int mutable_target(checker *c, size_t id) {
                 field == PS_LANG_MEMBER_MEDIUM_VISCOSITY ||
                 field == PS_LANG_MEMBER_SUBMERSION_VOLUME ||
                 field == PS_LANG_MEMBER_SUBMERSION_CENTROID ||
+                field == PS_LANG_MEMBER_STEP_ELAPSED || field == PS_LANG_MEMBER_STEP_NEXT ||
                 (field <= PS_LANG_MEMBER_MATERIAL_DENSITY &&
                  field >= PS_LANG_MEMBER_MATERIAL_FRICTION) ||
                 (field <= PS_LANG_MEMBER_MEASUREMENT_VALUE && field >= PS_LANG_MEMBER_SKIPPED) ||
@@ -5255,6 +5261,8 @@ static void check_record(checker *c, size_t id) {
             part = 192;
         if (c->info[f].type == PS_TYPE_MEASUREMENT)
             part = 96;
+        if (c->info[f].type == PS_TYPE_STEP_INTERVAL)
+            part = 16;
         if (c->info[f].type == PS_TYPE_RNG)
             part = 16;
         if (c->info[f].type == PS_TYPE_ODE_RESULT)

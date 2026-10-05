@@ -3,6 +3,110 @@
 Stand: 5. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Adaptive Simulationsschritte am 5. Oktober 2026
+
+Die adaptiven Schritte wurden auf dem lokalen Intel-Mac (macOS 14.6.1,
+Apple Clang 16, SDL 3.2.30, Release) und in der Debian-12-VM (Linux
+6.1.0-53-cloud-amd64, GCC 12.2, SDL 3.2.30, X11/Xvfb/Openbox, Mesa 22.3.6)
+gebaut und ausgeführt. Der Katalog enthält 507 Prüfungen ohne Fenster,
+davon 496 ohne SDL, und 44 Grafik-/Fensterabläufe.
+
+Die Numerikprüfung bestätigt den ersten akzeptierten Dormand–Prince-Schritt,
+verworfene Versuche, analytische Exponentialreferenzen, Rückwärtsintegration,
+Versuchs-/Mindestschrittgrenzen und unveränderten Zustand bei Fehlern.
+Der Runnerprüfer verwendet denselben analytischen Oszillator in C und Physim.
+Alle 201 Offline-Referenzmessungen stimmen in sämtlichen Kanälen exakt überein;
+variable Intervalle und Verwerfungen sind ausdrücklich erforderlich. Jeder
+Zeitpunkt wird außerdem gegen Sinus/Cosinus geprüft. Interaktive Läufe mit
+0,5×, 4×, Offline und verzögertem Leser werden kanalweise mit unabhängigen
+Offline-CLI-Läufen gleicher Länge verglichen. Pause, Einzelschritt und Live-
+Geschwindigkeitswechsel erhalten dieses Raster. Ungültige Dauer, Vorschlag,
+veränderte Hostzeit und fehlende ABI-Tailgröße beenden den Lauf, ohne einen
+weiteren Messpunkt oder gültigen Footer zu schreiben.
+
+Die unveränderten festen Referenzabläufe und das mit eingefrorenem ABI-3-Header
+gebaute Modul bestehen zusätzlich auf macOS 4/4:
+`build/adaptive-mac/test-results/run-lrdo8mlx`.
+Die erste neue Numerikprüfung besteht; der erste Runnerdurchlauf erkennt einen
+zu kurzen Referenzlauf für Offline-Geschwindigkeit. Der Prüfer erzeugt nun eine
+unabhängige CLI-Referenz mit der tatsächlichen gespeicherten Punktzahl und vergleicht
+weiterhin sämtliche Punkte exakt. Er besteht:
+`build/adaptive-mac/test-results/run-f_qfh42l`.
+Projektdatei und Zeitkonto bestehen 2/2:
+`build/adaptive-mac/test-results/run-u60c_w6m`.
+Neue Sprachwerte, Callbackdiagnosen und generierte Referenz bestehen 3/3:
+`build/adaptive-mac/test-results/run-8d9tm97z`.
+
+`adaptive_workflow` bedient Auswahl, Einzelschritt, Pause, Reset und Stop in
+C- und Physim-Pendelprojekten. Reset reproduziert Zeit und alle Werte des ersten
+akzeptierten Schritts. Gespeicherte Grenzen und variable Zeiten werden geprüft;
+alle überlappenden C-/Physim-Messungen stimmen exakt überein. Zwei weitere Prozesse
+öffnen die archivierten Szenen über die Laufbibliothek und bedienen Rückblick,
+Schritt und Wiedergabe ohne Modellstart. Hashes bestätigen unveränderte Dateien.
+
+Der korrigierte vollständige Debian-Release-Lauf besteht 507/507 ohne Fenster:
+`build/adaptive-final/test-results/run-bhf2hhku` innerhalb der VM.
+
+Der korrigierte vollständige macOS-Release-Lauf besteht 507/507 ohne Fenster:
+`build/adaptive-final-mac/test-results/run-5akn2oys`. Der vollständige
+Fensterdurchlauf mit geprüften Texteingaben besteht 44/44:
+`build/adaptive-ui-final-mac/test-results/run-76aj8pe8`.
+Nach Ergänzung derselben Texteingabe für die Startdauer erkennt der adaptive
+Bedienfall eine beim Umschalten versehentlich zusätzlich angelegte Layoutzeile.
+Die doppelte Zeile ist entfernt; der gesamte adaptive Ablauf besteht mit dem
+finalen Editor auf macOS erneut:
+`build/adaptive-editor-final-mac/test-results/run-rn_c1kdu`.
+
+Die abschließenden vollständigen Fensterläufe mit dem finalen Start- und
+Grenzeditor bestehen je 44/44: macOS
+`build/adaptive-editor-final-mac/test-results/run-s75ualf3`, Debian
+`build/native/Release/test-results/run-5kcxf9rh` innerhalb der VM.
+Die Startdauer, wissenschaftliche Mindestdauer und Höchstdauer sind bei
+1080 × 740 logischen Pixeln auf macOS visuell geprüft (2160 × 1480 physische Pixel).
+
+Die erste Sichtprüfung bei 1080 × 740 logischen Pixeln zeigt einen abgeschnittenen
+Erklärungstext und als 0.0000 gerundete Mindestschritte. Wissenschaftliche
+Texteingaben ersetzen die Zahlenwidgets für Startdauer und beide Grenzen. Der erweiterte Ablauf
+schreibt über echte SDL-Tastatur-/Text-Ereignisse zunächst den unvollständigen
+Wert `1e-`, verlangt verhinderten Start und schreibt danach `1e-6`.
+Der erste erweiterte Prüflauf liest den Wert zu früh vor Verarbeitung im Widget;
+ein Frame Abstand, wie bei den bisherigen Dokumenttests, prüft den tatsächlich
+verarbeiteten Zustand. Frühere Prüfläufe werden nicht als finale Abnahme gezählt.
+
+
+Der erste macOS-Gesamtlauf besteht 504/507, der erste Debian-Gesamtlauf 505/507.
+Zwei Tutorialprüfungen erkennen in beiden Läufen den fehlenden `NULL`-Tail in den
+abgedruckten C-Descriptoren; die Blöcke entsprechen jetzt wieder exakt ihren
+getesteten Quelldateien. Der nachträglich ergänzte macOS-Metadatenfall zeigt am
+frühen Runner tatsächlich eine Datei ohne Adaptive-Modus und Modulidentität,
+wenn das Modell den Textpuffer füllt. Der Runner prüft jetzt Platz für beide
+Provenienzblöcke und weist den Start vor dem Anlegen der Datei ab; die neue
+Prüfung verlangt den Fehlercode und eine nicht vorhandene Datei.
+
+Der Debug-Modelllauf besteht 4/4 auf macOS:
+`build/adaptive-debug-mac/test-results/run-tp7w9y7v`; der vollständige adaptive
+Fensterablauf mit Eingabe und aktiven UI-Assertions besteht zusätzlich:
+`build/adaptive-debug-mac/test-results/run-yae_4cau`.
+
+Eine weitere Compilerprüfung zeigt, dass ein generisch deklarierter
+`adaptiveStep<T>` im frühen Emitter stillschweigend nicht als Callback exportiert
+wird. Der Compiler weist diese Deklaration jetzt ausdrücklich ab. Der abschließende
+Sprach-/Runnervergleich besteht auf macOS 3/3:
+`build/adaptive-callback-final-mac/test-results/run-t2wni63b`.
+
+
+Der abschließende Sprach-/Runnervergleich besteht auch unter Debian 3/3:
+`build/adaptive-callback-final/test-results/run-h_3b3l8m` innerhalb der VM.
+Die finalen verschobenen SDKs bestehen auf beiden Plattformen: unabhängige Header,
+installierte und aus SDK-Quellen neu gebaute Bibliothek, C- und Physim-Module und
+native Projekte. Zusätzlich laufen je 501 adaptive Pendelmessungen aus einem
+vorgebauten C-Modul, neu gebauten C-Quellen und Physim-Quellen; tatsächliche variable
+Zeiten und Energie werden geprüft, anschließend Analysen in beiden Sprachen
+und erneut die Verbraucherprobe gegen die neu gebaute Bibliothek. macOS:
+`build/adaptive-sdk-final-proof-mac/Native SDK ä yp9sjtu8`; Debian:
+`build/adaptive-sdk-final-proof-linux/Native SDK ä ysgopwad` innerhalb der VM.
+Die SDK-Prüfung verwendet hier keine GUI-Abläufe; deren Nachweise stehen separat.
+
 ## Szenenhierarchie und Szenenversionen am 5. Oktober 2026
 
 Die Szenenhierarchie wurde auf dem lokalen Intel-Mac (macOS 14.6.1, Apple Clang 16,

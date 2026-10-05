@@ -12,6 +12,8 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
         return native_dialog_test_start(root);
     if (!strncmp(mode, "hierarchy-", 10))
         return hierarchy_test_start(a,root,mode);
+    if (!strncmp(mode,"adaptive-",9))
+        return adaptive_test_start(a,root,mode);
     if (!strncmp(mode, "dock-", 5))
         return docking_test_start(a, root, mode);
     if (!strncmp(mode, "timeline-", 9))
@@ -97,6 +99,9 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
     }
     if (!strncmp(mode, "hierarchy-", 10)) {
         hierarchy_test_frame(a,mode,stage,code,capture);return;
+    }
+    if(!strncmp(mode,"adaptive-",9)) {
+        adaptive_test_frame(a,mode,stage,code,capture);return;
     }
     if (!strncmp(mode, "dock-", 5)) {
         docking_test_frame(a, mode, stage, code, capture);

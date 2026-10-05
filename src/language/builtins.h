@@ -76,6 +76,8 @@
 #define PS_LANG_MEMBER_MATERIAL_FRICTION (SIZE_MAX - 171)
 #define PS_LANG_MEMBER_SUBMERSION_VOLUME (SIZE_MAX - 172)
 #define PS_LANG_MEMBER_SUBMERSION_CENTROID (SIZE_MAX - 173)
+#define PS_LANG_MEMBER_STEP_ELAPSED (SIZE_MAX - 174)
+#define PS_LANG_MEMBER_STEP_NEXT (SIZE_MAX - 175)
 /* Signature-only markers, resolved to canonical array types by the checker. */
 #define PS_LANG_VEC3_ARRAY ((ps_lang_type)128)
 #define PS_LANG_SERIES_ARRAY ((ps_lang_type)129)

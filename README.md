@@ -136,7 +136,7 @@ erklärt den elastischen und schrägen Stoß orientierter Boxen und ihre Messkan
 3. **Build / F5** speichert die Quellen und baut Experiment und Analyse im Hintergrund.
 4. Unter **Simulieren** starten. Pause, Einzelschritt und Stop steuern den Runner.
    **Geschwindigkeit** wählt 0,25× bis 16× Echtzeit oder Offline; der physikalische
-   Zeitschritt bleibt dabei gleich. Die Auswahl ist auch während des Laufs möglich.
+   Geschwindigkeit ändert die Modellschritte nicht. Die Auswahl ist auch während des Laufs möglich.
    **Zurücksetzen / F7** öffnet den Anfangszustand pausiert in einer neuen Messdatei;
    bisherige Läufe bleiben erhalten.
    Die **Zeitleiste** zeigt frühere Szenen und Messwerte und spielt Aufzeichnungen
@@ -564,3 +564,10 @@ Zeichenpuffer, Größenwechsel und PNG-Exporte mit identischen Vergleichsbildern
 
 Eigener Code: [MIT](LICENSE). SDL3: zlib-Lizenz. Nuklear: MIT/Public Domain nach Wahl;
 Physim nutzt die MIT-Option. Quellen und Lizenztexte: [third_party/README.md](third_party/README.md).
+
+
+Adaptive Simulationsschritte sind im Inspector unter **Laufeinstellungen** wählbar.
+Die C- und Physim-Pendelvorlagen bieten einen Dormand–Prince-Callback; Startschritt
+und Grenzen werden im Projekt gespeichert. Jeder akzeptierte Schritt erhält seine
+wirkliche Zeit in der Messdatei. [Bedienung und CLI](docs/workspace.md#adaptive-simulationsschritte)
+und [Sprachcallback](docs/language.md#adaptive-runner-schritte) beschreiben den Weg.

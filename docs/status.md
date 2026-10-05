@@ -142,6 +142,25 @@ besteht außerdem unter macOS Debug mit aktiven UI-Assertions.
 Die neuen Modell-, Runner- und Bedienprüfungen sowie SDK-Nachweise stehen im
 [Plattformnachweis](platform-validation.md). Weitere Produktziele bleiben offen.
 
+**Adaptive Runner-Schritte** ergänzen das feste Raster. Ein ausdrücklich
+angekündigter optionaler ABI-3-Callback meldet akzeptierte Dauer und nächsten
+Vorschlag innerhalb gespeicherter Grenzen; ältere Descriptoren behalten den
+Basisprefix. Der gemeinsame Dormand–Prince-Löser kann nach dem ersten akzeptierten
+Schritt zurückkehren. Verwerfungen verändern keinen endgültigen Zustand und
+speichern keine Messung. Der Runner prüft Dauer, Hostzeit und nächsten Vorschlag,
+verbucht nur die akzeptierte Zeit und erhält bei Fehlern den gültigen Dateipräfix.
+Geschwindigkeit, Pause, Einzelschritt, Reset, Zeitleiste und wiedergeöffnete Daten
+verwenden diesen Zeitfortschritt. C- und Physim-Pendelvorlagen bieten denselben
+adaptiven Weg; ihr fester Modus bleibt erhalten. Sprachvertrag 0.169.0 ergänzt
+`rk45StepReported`, `StepInterval` und den optionalen `adaptiveStep`-Einstieg.
+Die GUI speichert Auswahl und Grenzen und akzeptiert wissenschaftliche Schreibweise.
+Der Katalog umfasst 507 Prüfungen ohne Fenster (496 ohne SDL) und 44 Fensterabläufe.
+Die vollständigen Release-Läufe bestehen auf macOS und Debian mit jeweils
+507/507 ohne Fenster und 44/44 Fensterabläufen. Zusätzliche macOS-Debug-Prüfungen
+und die verschobenen SDKs auf beiden Systemen bestehen ebenfalls.
+Die ausgeführten Nachweise stehen im [Plattformbericht](platform-validation.md).
+Adaptive Batch-/Parameterstudien und weitere Produktziele bleiben offen.
+
 Aktueller [Plattformnachweis](platform-validation.md): Der direkte Physim-Build nach
 Entfernen der eigenen CMake-Dateien besteht alle acht CI-Kombinationen. Ubuntu 24.04
 mit GCC/Clang und macOS 15 auf Apple Silicon/Intel bestehen jeweils 493 Tests ohne
@@ -561,7 +580,7 @@ und veraltete Fenstermanager-Einträge geprüft. Die erneute Linux-CI steht aus.
 | Mathematik | Vec2/3/4 mit skalierter Normalisierung, Mat3/4 mit Inversion, Quaternion-Verknüpfung und Rotationsinterpolation, affine/projektive Punkttransformation sowie Richtungs-/Normalentransformation, absolute/relative Vergleiche, Euler/RK4, symplektischer Euler, Verlet, RK45, linearer Solver, Bisektion, Minimierung, kubische räumliche Bézierkurven mit Tangente und Unterteilung | weitere Kurven-/Interpolationsverfahren, Events/dichte Ausgabe, steife Verfahren |
 | Basis | Fehlercodes, expliziter RNG, explizite Allocatoren mit Fehlerprüfungen, feste Arenen, eigene Speicherdomänen für Berichte/Analysekontexte, Test-Allocator mit Fehler-Injektion und Bytebudget, dynamische Arrays mit Größenlimit und Selbstkopien, begrenzte String-Views ohne Kopie, Hashmap mit eigenen Schlüsseln und Größenlimits | strukturierte Diagnosen, Allocator-Anbindung weiterer Subsysteme |
 | Einheiten | SI-Dimensionen, Konvertierung, Einheitenalgebra, Quantity-Rechnung und Dimensionsprüfung von Datenreihen | benutzerdefinierte Anzeigeeinheiten in der GUI |
-| Runner | versionierte Modul-ABI, Handshake, Pause/Step/Run/Stop, Heartbeat, Crash-/Hang-Isolation, feste Echtzeittaktung von 0,1× bis 16× und Offline | Ressourcenlimits, eigener Logkanal, echtes OS-Sandboxing |
+| Runner | versionierte Modul-ABI, Handshake, Pause/Step/Run/Stop, Heartbeat, Crash-/Hang-Isolation, feste/adaptive Modellschritte, Echtzeittaktung von 0,1× bis 16× und Offline | adaptive Batchschritte, Ressourcenlimits, eigener Logkanal, echtes OS-Sandboxing |
 | Daten | CRC-Chunks, Streaming, Recovery, CSV, Seed-/Modellmetadaten und optionale versionierte Szenenblöcke | Index, mehr Datentypen, komprimierte Blöcke, Schemaerweiterung |
 | App | leerer Workspace-Einstieg mit gespeicherter Ordnerauswahl und bewusster Wiederöffnung, kompakte Menüleiste, Projektmanager, aufklappbarer Dateibaum und bis zu 16 editierbare Textdokumente mit separaten Autosaves und gespeicherten Editoransichten, drei Arbeitsbereiche, integrierte Offline-Dokumentation, Systemtypografie, Einstellungen mit Code-Schriftgröße und Autosave-Intervall, dunkle, helle und kontrastreiche Darstellung, gespeicherte Fenstergröße/Maximierung, verschiebbare Seitenleiste, Arbeitsbereich und Protokoll mit Teilungen, Tabgruppen und gespeicherten frei platzierten Panels im Hauptfenster, Reset zum pausierten Anfangszustand mit erhaltenen Alt-Läufen, Vorlagen, Editor, direkter Projektbuild ohne CMake mit Ausgaben unter `build/`, Diagramme | mehrere benannte Workspaces und Panelanordnungen, separate Panelfenster, unabhängiger Inspektor, weitere Panelzustände, UI-weite Schriftvergrößerung, vollständige Barrierefreiheit |
 | Editor | C- und Physim-Dateien bearbeiten, sprachspezifische Syntaxfarben, Zeilennummern, Debug/Release, anklickbare Compilerdiagnosen, öffentlicher Header-Browser | Completion |

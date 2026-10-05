@@ -125,6 +125,41 @@ def project_settings(flow, directory):
     require("profile=Release" in read(project / "build/Release/build.config"), "Restored profile was not built")
 
 
+def adaptive(flow, directory):
+    prefixes = []
+    for language in ("c", "phys"):
+        root = directory / language
+        root.mkdir(parents=True)
+        flow.run("--workspace-state-test", root, "adaptive-" + language, timeout=130,
+                 marker="ADAPTIVE adaptive-" + language + " SELF-TEST: PASSED")
+        project = root / "project"
+        runs = sorted((project / "runs").glob("*.psrun"))
+        require(len(runs) == 2, "Adaptive reset must retain the original and create one new run")
+        require("simulation.steps=adaptive" in read(project / "physim.project"), "Adaptive mode not saved")
+        for name in ("adaptive-paused.bmp", "adaptive-reset.bmp", "adaptive-recorded.bmp"):
+            require((root / name).exists(), "Adaptive capture missing")
+        # Compare every overlapping accepted C/Physim sample, including actual times.
+        samples = []
+        data = runs[-1].read_bytes()
+        at = 16
+        while at < len(data):
+            kind, length, crc = struct.unpack_from("<III", data, at)
+            payload = data[at + 12:at + 12 + length]
+            require(zlib.crc32(payload) == crc, "Adaptive run chunk CRC mismatch")
+            if kind == 3:
+                samples.append(struct.unpack("<" + "d" * (length // 8), payload))
+            at += 12 + length
+        prefixes.append(samples)
+        replay = project / "runs/adaptive-replay.psrun"
+        replay.write_bytes(data)
+        original = [fingerprint(path) for path in runs + [replay]]
+        flow.run("--workspace-state-test", root, "adaptive-replay", timeout=130,
+                 marker="TIMELINE adaptive-replay SELF-TEST: PASSED")
+        require(original == [fingerprint(path) for path in runs + [replay]], "Adaptive replay changed a run")
+    require(min(map(len, prefixes)) > 5, "Too few adaptive C/Physim samples")
+    require(all(a == b for a, b in zip(*prefixes)), "Adaptive C/Physim pendulum values or times differ")
+
+
 def hierarchy(flow, directory):
     for language in ("c", "phys"):
         root = directory / language
@@ -414,7 +449,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
+SPECIAL = {"adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}
 

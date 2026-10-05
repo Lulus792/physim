@@ -36,7 +36,7 @@ func measure():
         sensorChannel.sample(state.x)
 
 func create():
-    metadata("model=point pendulum, vacuum\nlength_m=1.5\nmass_kg=1\ngravity_m_s2=9.80665\nintegrator=Dormand-Prince 5(4)\nrk45_absolute_tolerance=1e-10\nrk45_relative_tolerance=1e-8\nsensor_noise_rad=0")
+    metadata("model=point pendulum, vacuum\nlength_m=1.5\nmass_kg=1\ngravity_m_s2=9.80665\nintegrator=Dormand-Prince 5(4)\nrk45_absolute_tolerance=1e-10\nrk45_relative_tolerance=1e-8\nsensor_noise_rad=0\nadaptive_integrator=Dormand-Prince 5(4)\nadaptive_absolute_tolerance=1e-10\nadaptive_relative_tolerance=1e-8")
 
 func reset():
     states = []
@@ -60,3 +60,16 @@ func scene():
     sceneParent(1, 100)
     sceneParent(2, 100)
     sceneParent(3, 101)
+
+// One accepted Dormand-Prince step; rejected trials never update model state.
+func adaptiveDerivative(time: Float64, state: [Float64]) -> [Float64]:
+    return [state[1], -gravity / length * sin(state[0])]
+
+func adaptiveStep(dt: Float64, minimum: Float64, maximum: Float64) -> StepInterval:
+    let phase = states[0].phase
+    let time = simulationTime()
+    let result = rk45StepReported(adaptiveDerivative, [phase.x, phase.y], time, time + dt,
+                                  1e-10, 1e-8, 100000, dt, minimum, maximum)
+    states[0] = PendulumState(Vec2(result.state[0], result.state[1]))
+    measure()
+    return StepInterval(result.reachedTime - time, result.nextStep)

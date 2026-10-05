@@ -52,6 +52,6 @@ PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
                                           reset,
                                           step,
                                           scene,
-                                          destroy};
+                                          destroy, NULL};
     return &api;
 }

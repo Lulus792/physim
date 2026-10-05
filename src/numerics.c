@@ -192,15 +192,15 @@ ps_result ps_ode_integrate(ps_ode_fn fn, void *u, double start, double end, doub
                            const ps_ode_options *options, ps_ode_report *out) {
     return ps_ode_integrate_diagnosed(fn, u, start, end, state, n, options, out, NULL);
 }
-ps_result ps_ode_integrate_diagnosed(ps_ode_fn fn, void *u, double start, double end, double *state,
+static ps_result ode_advance(ps_ode_fn fn, void *u, double start, double end, double *state,
                                      size_t n, const ps_ode_options *options, ps_ode_report *out,
-                                     ps_ode_diagnostic *diagnostic) {
+                                     ps_ode_diagnostic *diagnostic, bool single) {
     ps_ode_diagnostic local;
     if (!diagnostic)
         diagnostic = &local;
     *diagnostic = (ps_ode_diagnostic){PS_ODE_DIAG_ARGUMENT, start, SIZE_MAX, UINT_MAX};
     ps_ode_options o = options ? *options : ps_ode_options_default();
-    if (!fn || !state || !n || n > 32 || !isfinite(start) || !isfinite(end) ||
+    if (!fn || !state || !n || n > 32 || !isfinite(start) || !isfinite(end) || (single && start==end) ||
         !isfinite(end - start) || !isfinite(o.absolute_tolerance) || o.absolute_tolerance <= 0 ||
         !isfinite(o.relative_tolerance) || o.relative_tolerance < 0 || o.relative_tolerance >= 1 ||
         !isfinite(o.initial_step) || o.initial_step <= 0 || !isfinite(o.minimum_step) ||
@@ -314,6 +314,7 @@ ps_result ps_ode_integrate_diagnosed(ps_ode_fn fn, void *u, double start, double
         }
         step = fmin(o.maximum_step, fmax(o.minimum_step, fabs(h) * factor));
         r.next_step = direction * step;
+        if(single && r.accepted_steps) break;
     }
 done:
     if (diagnostic->component == SIZE_MAX)
@@ -323,6 +324,17 @@ done:
     if (status == PS_OK)
         memcpy(state, y, n * sizeof *state);
     return status;
+}
+
+ps_result ps_ode_integrate_diagnosed(ps_ode_fn fn, void *u, double start, double end, double *state,
+                                     size_t n, const ps_ode_options *options, ps_ode_report *out,
+                                     ps_ode_diagnostic *diagnostic) {
+    return ode_advance(fn,u,start,end,state,n,options,out,diagnostic,false);
+}
+ps_result ps_ode_step_diagnosed(ps_ode_fn fn, void *u, double start, double end, double *state,
+                                size_t n, const ps_ode_options *options, ps_ode_report *out,
+                                ps_ode_diagnostic *diagnostic) {
+    return ode_advance(fn,u,start,end,state,n,options,out,diagnostic,true);
 }
 
 const char *ps_ode_diagnostic_string(ps_ode_diagnostic_reason reason) {

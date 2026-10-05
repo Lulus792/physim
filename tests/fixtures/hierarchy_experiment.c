@@ -28,6 +28,10 @@ PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
 #else
         PS_EXPERIMENT_SCENE_HIERARCHY,
 #endif
-        "Hierarchy",create,reset,step,scene,destroy};
+        "Hierarchy",create,reset,step,scene,destroy
+#ifndef PS_TEST_LEGACY_SCENE
+        ,NULL
+#endif
+    };
     return &api;
 }

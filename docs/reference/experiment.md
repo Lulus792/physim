@@ -14,6 +14,8 @@ Einbinden: `#include "physim/experiment.h"`. Die folgenden Signaturen, Typen und
 #define PS_MAX_SCENE_POINTS 96
 #define PS_MAX_PARAMETERS 16
 #define PS_EXPERIMENT_SCENE_HIERARCHY UINT64_C(1)
+#define PS_EXPERIMENT_ADAPTIVE_STEPS UINT64_C(2)
+#define PS_EXPERIMENT_API_BASE_SIZE offsetof(ps_experiment_api, adaptive_step)
 ```
 
 `PS_EXPORT` kennzeichnet den Moduleinstieg für den Export. Das SDK wählt dafür automatisch die passende Windows- beziehungsweise Unix-Deklaration.
@@ -117,6 +119,14 @@ typedef struct ps_context {
 
 Optional ABI-3 context extension; check struct_size before accessing it.
 
+### ps_step_interval
+
+```c
+typedef struct {
+    double elapsed_s, next_s;
+} ps_step_interval;
+```
+
 ### ps_experiment_api
 
 ```c
@@ -129,8 +139,12 @@ typedef struct {
     ps_result (*step)(ps_context *context, double dt_s);
     void (*build_scene)(ps_context *context, ps_scene *scene);
     void (*destroy)(ps_context *context);
+    ps_result (*adaptive_step)(ps_context *context, double proposed_s, double minimum_s,
+                               double maximum_s, ps_step_interval *interval);
 } ps_experiment_api;
 ```
+
+Optional ABI-3 tail, advertised with PS_EXPERIMENT_ADAPTIVE_STEPS. Accept one forward step of minimum_s <= elapsed_s <= proposed_s. next_s must lie in [minimum_s, maximum_s]. Rejected numerical trials remain internal to the model and must not publish measurements/state. On success update the model and channel values, but not context->time_s. The host advances time and persists exactly one accepted sample.
 
 ### ps_experiment_entry
 

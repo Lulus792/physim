@@ -35,6 +35,12 @@ int main(void) {
     CHECK(ps_pacer_due(&p, 10.01, .01));
     p.running = false;
     CHECK(!ps_pacer_due(&p, 10.01, .01));
+    p=(ps_pacer){.running=true,.speed=1};
+    CHECK(ps_pacer_due(&p,.1,.1) && p.credit==0);
+    ps_pacer_refund(&p,.1,.03);
+    CHECK(fabs(p.credit-.07)<1e-12 && ps_pacer_due(&p,.1,.05));
+    CHECK(!ps_pacer_due(&p,.1,.03));
+    p.running=false;double credit=p.credit;ps_pacer_refund(&p,.1,.01);CHECK(p.credit==credit);
     puts("Fixed-step pacing, speed changes, paused/offline modes and bounded debt passed.");
     return 0;
 }

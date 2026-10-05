@@ -153,7 +153,8 @@ Offline berechnet ohne Zeitvorgabe so schnell wie möglich. Die Ansicht erhält
 höchstens 60 reguläre Momentaufnahmen pro Sekunde; jeder Physikschritt wird gespeichert.
 Du kannst die Geschwindigkeit im laufenden oder pausierten Modell ändern.
 Eine Änderung startet weder einen neuen Lauf noch setzt sie einen pausierten Lauf fort.
-**Einzelschritt** berechnet in jeder Geschwindigkeit genau den eingestellten Zeitschritt.
+**Einzelschritt** berechnet im festen Modus genau den eingestellten Zeitschritt.
+Im adaptiven Modus akzeptiert er genau einen Modellschritt innerhalb der gewählten Grenzen.
 Die Wahl bleibt nach Reset und beim erneuten Öffnen des gespeicherten Projekts erhalten.
 
 Die Geschwindigkeit verändert weder `dt` noch Seed, Parameter oder Messwerte an
@@ -191,7 +192,7 @@ Szenenaufzeichnung erscheinen in der 3D-Ansicht; vorhandene Messdaten bleiben au
 
 **Zurücksetzen / F7** beendet einen laufenden oder pausierten Runner und öffnet
 einen neuen Lauf **pausiert bei 0 Sekunden**. **Einzelschritt** berechnet danach
-genau einen Zeitschritt; **Fortsetzen** startet die laufende Simulation.
+genau einen festen beziehungsweise einen akzeptierten adaptiven Schritt; **Fortsetzen** startet die laufende Simulation.
 Seed, Zeitschritt und Experimentparameter bleiben erhalten. Nach einem bereits
 beendeten Lauf gelten die aktuell gespeicherten Laufeinstellungen.
 Jeder Neustart erhält eine eigene Messdatei mit Quellcode-Snapshot und Laufgrenzen;
@@ -312,3 +313,49 @@ Im Hilfefenster sucht Ctrl+F nur im Dokument, die linke Suche in allen Inhalten.
 Esc schließt die Hilfe. Die Arbeitsbereichskürzel werden dort nicht ans Hauptfenster
 weitergegeben. Vollständige Tastaturfokussierung und Screenreader-Unterstützung
 sind noch nicht implementiert.
+
+
+## Adaptive Simulationsschritte
+
+Aktiviere im Inspector unter **Laufeinstellungen** vor dem Start **Adaptive Schritte**.
+`dt` ist dann die Startdauer. **Start (s)**, **Minimum (s)** und **Maximum (s)** erlauben normale
+Zahlen oder wissenschaftliche Schreibweise, etwa `1e-6`. Es gilt
+`0 < Minimum ≤ dt ≤ Maximum ≤ 1 s`. Unvollständige oder ungültige Eingaben verhindern
+Speichern und Start. Die Wahl und Grenzen werden im Projekt gespeichert;
+ältere Projekte erhalten feste Schritte. Änderungen sind während des Laufs gesperrt.
+
+Das Experiment muss adaptive Schritte unterstützen. Die C- und Physim-Pendelvorlagen
+verwenden dafür Dormand–Prince 5(4); ihre bisherigen festen Integratoren bleiben
+über den festen Modus erreichbar. Ein Modell ohne adaptive Schnittstelle wird mit
+lesbarer Runnerdiagnose abgewiesen. Eine passende Schrittsteuerung ist Teil des
+Modells, nicht automatisch für beliebige Kraft-, Kontakt- oder Zufallsmodelle ableitbar.
+
+Die Geschwindigkeit bleibt unabhängig von der Physik. Ein verworfener numerischer
+Versuch speichert keine Messung; jeder akzeptierte Schritt speichert genau einen
+Messpunkt mit tatsächlicher Zeit. Einzelschritt akzeptiert einen Schritt, Pause
+hält die Zeit fest. Reset verwendet wieder die Startdauer, Grenzen, Parameter und
+den Seed und erhält die alte Laufdatei. Zeitleiste und wiedergeöffnete Daten verwenden
+auch die unregelmäßigen Zeiten. Die eigene Analyse verwendet die Zeitspalte für
+Ableitungen, Integrale und Diagramme.
+
+Die CLI bietet denselben Weg:
+
+```sh
+build/native/Release/bin/physim-runner \
+  build/native/Release/bin/pendulum.so build/adaptive-pendulum.psrun \
+  --adaptive --dt .005 --min-dt 1e-8 --max-dt .1 --steps 500 --record-scenes
+```
+
+Unter Windows ist das Modul `pendulum.dll`, das Programm hat `.exe`.
+`--steps` zählt akzeptierte Schritte; 500 adaptive Schritte haben keine vorab feste
+Endzeit. Ohne Grenzen sind Minimum `1e-8 s` und Maximum `0.1 s` eingestellt.
+Grenzoptionen erfordern `--adaptive`. Die separate Monte-Carlo-/Parameterstudien-
+Steuerung verwendet weiterhin ihr ausdrücklich eingestelltes festes Raster.
+
+Die Messdatei hält Startschritt, Modus, Grenzen, Seed, Modulidentität und Modell-
+Metadaten fest. Für Reproduktion müssen auch Ableitung, Toleranzen und
+Versuchsbudget Teil des Modellcodes oder seiner Metadaten sein. Bei zu wenig
+Metadatenplatz startet der adaptive Runner keine unvollständig beschriebene Datei.
+Ein anderer Integrator, andere Toleranzen oder andere Grenzen können die Messzeiten
+und damit zeitabhängige Sensor-/Zufallsaufrufe ändern. Ein Vergleich solcher Modelle
+verwendet gemeinsame Zeitpunkte beziehungsweise Resampling.

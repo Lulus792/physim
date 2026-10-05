@@ -237,6 +237,12 @@ typedef struct {
     struct nk_rect run_control_bounds[6];
     struct nk_rect speed_bounds, speed_choices[8];
     double simulation_speed;
+    bool adaptive_steps;
+    double minimum_dt,maximum_dt;
+    struct nk_rect adaptive_bounds;
+    struct nk_rect adaptive_limit_bounds[3];
+    char adaptive_limit_text[3][64];
+    double adaptive_limit_displayed[3];
     double heartbeat, stop_at, simulation_time, dt;
     char seed[32];
     double values[PS_MAX_CHANNELS];
@@ -252,6 +258,7 @@ typedef struct {
     struct nk_rect scene_label_bounds[PS_MAX_OBJECTS];
     struct nk_rect scene_hide_selection_bounds;
     enum nk_collapse_states scene_disclosure;
+    enum nk_collapse_states steps_disclosure;
     struct nk_rect scene_visibility_bounds[PS_MAX_OBJECTS];
     double history_t[PREVIEW], history_v[PS_MAX_CHANNELS][PREVIEW];
     int history_count;
@@ -538,7 +545,9 @@ static bool save_project_settings(app *a) {
     char path[4096];
     join(path, sizeof path, a->project, "physim.project");
     ps_project_settings settings = {.release = a->profile != 0, .timestep = a->dt,
-                                   .speed = a->simulation_speed, .parameters = a->parameters};
+                                   .speed = a->simulation_speed, .parameters = a->parameters,
+                                   .adaptive=a->adaptive_steps,.minimum_timestep=a->minimum_dt,
+                                   .maximum_timestep=a->maximum_dt};
     if (!ps_project_seed_parse(a->seed, &settings.seed)) return false;
     return ps_project_settings_save(path, &settings) == PS_DOCUMENT_OK;
 }
@@ -554,6 +563,12 @@ static bool simulation_settings_valid(app *a) {
     }
     if (!ps_speed_valid(a->simulation_speed)) {
         status(a, "Geschwindigkeit: 0 für Offline oder Faktor 0,1 bis 16 wählen.");
+        return false;
+    }
+    ps_project_settings steps={.timestep=a->dt,.adaptive=a->adaptive_steps,
+                               .minimum_timestep=a->minimum_dt,.maximum_timestep=a->maximum_dt};
+    if(!ps_project_step_bounds_valid(&steps)) {
+        status(a,"Adaptive Schritte: 0 < Minimum ≤ Startschritt ≤ Maximum ≤ 1 Sekunde wählen.");
         return false;
     }
     return true;
@@ -768,6 +783,9 @@ static void open_project(app *a) {
     a->profile = project_settings.release ? 1 : 0;
     a->dt = project_settings.timestep;
     a->simulation_speed = project_settings.speed;
+    a->adaptive_steps=project_settings.adaptive;
+    a->minimum_dt=project_settings.minimum_timestep;
+    a->maximum_dt=project_settings.maximum_timestep;
     snprintf(a->seed, sizeof a->seed, "%llu", (unsigned long long)project_settings.seed);
     a->project_settings_dirty = false;
     a->batch_sweep = false;
@@ -1034,11 +1052,19 @@ static bool start_run_mode(app *a, bool paused) {
     unique_path(a, next_run, sizeof next_run, ".psrun");
     snprintf(dt, sizeof dt, "%.17g", a->dt);
     snprintf(speed, sizeof speed, "%.17g", a->simulation_speed);
+    char minimum[64],maximum[64];
+    snprintf(minimum,sizeof minimum,"%.17g",a->minimum_dt);
+    snprintf(maximum,sizeof maximum,"%.17g",a->maximum_dt);
     char parameter_arguments[PS_MAX_PARAMETERS][128];
-    const char *args[11 + 2 * PS_MAX_PARAMETERS] = {
+    const char *args[16 + 2 * PS_MAX_PARAMETERS] = {
         runner, module, next_run, "--interactive", "--dt", dt, "--seed", a->seed,
         "--speed", speed};
     size_t argument_count = 10;
+    if(a->adaptive_steps) {
+        args[argument_count++]="--adaptive";
+        args[argument_count++]="--min-dt";args[argument_count++]=minimum;
+        args[argument_count++]="--max-dt";args[argument_count++]=maximum;
+    }
     for (uint32_t i = 0; i < a->parameters.count; i++) {
         double selected;
         if (ps_parameter_catalog_value(&a->parameters, i, &selected) != PS_OK) {
@@ -2393,6 +2419,7 @@ static void test_mouse(app *a, struct nk_rect rect, bool down) {
 #include "timeline_tests.inc"
 #include "docking_tests.inc"
 #include "hierarchy_tests.inc"
+#include "adaptive_tests.inc"
 #include "native_dialog_tests.inc"
 #include "workspace_tests.inc"
 // clang-format on
@@ -2664,6 +2691,7 @@ int main(int argc, char **argv) {
     snprintf(a->manager_parent, sizeof a->manager_parent, "%s", projects);
     a->dt = 0.005;
     a->simulation_speed = 1;
+    a->minimum_dt=1e-8;a->maximum_dt=.1;
     a->batch_dt = .005;
     a->batch_timeout = 30;
     a->batch_runs = 256;
@@ -2940,7 +2968,7 @@ int main(int argc, char **argv) {
         } else if (workspace_state_test) {
             if (ps_clock() - test_started >
                 (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
-                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
+                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15)) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
                         argv[3], ps_clock() - test_started);

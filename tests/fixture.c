@@ -31,6 +31,6 @@ PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
                                           0,          "fixture",
                                           create,     create,
                                           step,       scene,
-                                          destroy};
+                                          destroy, NULL};
     return &api;
 }

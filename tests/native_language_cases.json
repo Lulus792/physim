@@ -4439,7 +4439,7 @@
           "exit_code": 0,
           "stdout_patterns": [
             "psrt_array_build_begin",
-            "Physim language 0.168.0"
+            "Physim language 0.169.0"
           ],
           "stderr": "",
           "source": "var values: [[Float64]] = [[1, 2], []]\nvalues[0][1] += 3\n"
@@ -4542,7 +4542,7 @@
             "--version"
           ],
           "stdout_patterns": [
-            "physimc 0.1.0-dev; Physim language 0.168.0"
+            "physimc 0.1.0-dev; Physim language 0.169.0"
           ]
         },
         {
@@ -4948,6 +4948,45 @@
           ],
           "exit_code": 2,
           "stderr_pattern": "Usage: physimc"
+        }
+      ]
+    },
+    {
+      "name": "adaptive_callbacks",
+      "runtime_source": "tests/fixtures/language/adaptive_values.phys",
+      "checks": [
+        {
+          "name": "readonly",
+          "source": "var interval = StepInterval(0.1, 0.2)\ninterval.elapsed = 0.3\n",
+          "exit_code": 1,
+          "stderr_pattern": "Assignment requires a mutable var binding"
+        },
+        {
+          "name": "reserved",
+          "source": "struct StepInterval:\n    var elapsed: Float64\n",
+          "exit_code": 1,
+          "stderr_pattern": "builtin type"
+        },
+        {
+          "name": "wrong_return",
+          "mode": "--emit-experiment",
+          "source": "func create():\n    return\nfunc reset():\n    return\nfunc step(dt: Float64):\n    return\nfunc scene():\n    return\nfunc adaptiveStep(dt: Float64, minimum: Float64, maximum: Float64) -> Vec2:\n    return Vec2(dt, dt)\n",
+          "exit_code": 1,
+          "stderr_pattern": "adaptiveStep requires"
+        },
+        {
+          "name": "wrong_arguments",
+          "mode": "--emit-experiment",
+          "source": "func create():\n    return\nfunc reset():\n    return\nfunc step(dt: Float64):\n    return\nfunc scene():\n    return\nfunc adaptiveStep(dt: Float64) -> StepInterval:\n    return StepInterval(dt, dt)\n",
+          "exit_code": 1,
+          "stderr_pattern": "adaptiveStep requires"
+        },
+        {
+          "name": "generic_callback",
+          "mode": "--emit-experiment",
+          "source": "func create():\n    return\nfunc reset():\n    return\nfunc step(dt: Float64):\n    return\nfunc scene():\n    return\nfunc adaptiveStep<T>(dt: Float64, minimum: Float64, maximum: Float64) -> StepInterval:\n    return StepInterval(dt, dt)\n",
+          "exit_code": 1,
+          "stderr_pattern": "adaptiveStep requires a non-generic"
         }
       ]
     }

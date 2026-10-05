@@ -1610,6 +1610,16 @@ Liest count Werte ab first blockweise als unabhängiges Float64-Array. Negative 
 
 Analysemodul erforderlich.
 
+## StepInterval
+
+```text
+StepInterval(elapsed: Float64, nextStep: Float64) -> StepInterval
+```
+
+Wert mit den positiven endlichen Dauern elapsed und nextStep in Sekunden. Der adaptiveStep-Callback meldet damit die akzeptierte Dauer und den nächsten Schrittvorschlag. Beide Felder sind schreibgeschützt; Arrays, optionale Werte und Funktionswerte kopieren den Wert.
+
+Überall verfügbar.
+
 ## String(repeating:count:)
 
 ```text
@@ -3028,6 +3038,16 @@ rk45IntegrateWithTolerancesReported(derivative: func(Float64, [Float64]) -> [Flo
 ```
 
 Wie rk45IntegrateWithTolerances mit einem positiven absoluten Toleranzwert pro Zustandskomponente, jedoch mit einem kopierbaren OdeResult statt nur des Zustandsarrays. state besitzt unabhängigen Speicher; acceptedSteps, rejectedSteps, evaluations, reachedTime, nextStep und errorNorm stammen aus demselben C-Integrationslauf. Das Toleranzarray wird vor dem ersten Callback kopiert. Formfehler, ungültige Toleranzen, ausgeschöpftes Schrittbudget und numerische Fehler erzeugen Quelldiagnosen.
+
+Überall verfügbar.
+
+## rk45StepReported
+
+```text
+rk45StepReported(derivative: func(Float64, [Float64]) -> [Float64], state: [Float64], start: Float64, end: Float64, absoluteTolerance: Float64, relativeTolerance: Float64, maxSteps: Int64, initialStep: Float64, minimumStep: Float64, maximumStep: Float64) -> OdeResult
+```
+
+Wie rk45IntegrateReported, beendet aber nach genau einem akzeptierten Dormand–Prince-Schritt. start und end müssen verschieden sein; reachedTime kann vor end liegen. Verwerfungen verbrauchen das Versuchslimit, Eingaben bleiben erhalten und state ist ein eigener Array-Wert. nextStep enthält den vorzeichenbehafteten nächsten Vorschlag innerhalb der Optionen. Lokale Fehlertoleranzen sind keine globale Fehlergrenze.
 
 Überall verfügbar.
 

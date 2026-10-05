@@ -1,0 +1,23 @@
+func growth(time: Float64, state: [Float64]) -> [Float64]:
+    return [10 * state[0]]
+let initial = [1.0]
+let result = rk45StepReported(growth, initial, 0, 0.5, 1e-12, 1e-10, 100000, 0.5, 1e-14, 0.5)
+assert(initial == [1.0])
+assert(result.acceptedSteps == 1)
+assert(result.rejectedSteps > 0)
+assert(result.reachedTime > 0 && result.reachedTime < 0.5)
+assert(abs(result.state[0] - exp(10 * result.reachedTime)) < 1e-9)
+assert(result.evaluations == 7 * (1 + result.rejectedSteps))
+let accepted: StepInterval = StepInterval(result.reachedTime, result.nextStep)
+assert(accepted.elapsed == result.reachedTime && accepted.nextStep == result.nextStep)
+var values = [accepted]
+let copy = values
+values[0] = StepInterval(0.1, 0.2)
+assert(copy[0].elapsed == accepted.elapsed)
+assert(values[0].elapsed == 0.1)
+let optional: StepInterval? = Optional.some(accepted)
+assert(optional.hasValue)
+func identity(value: StepInterval) -> StepInterval:
+    return value
+let function: func(StepInterval) -> StepInterval = identity
+assert(function(accepted).nextStep == accepted.nextStep)

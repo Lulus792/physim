@@ -80,7 +80,8 @@ Der Befehl ist erst nach HELLO zulässig; falsche Länge, nicht endliche oder
 außerhalb des Bereichs liegende Werte beenden den Runner mit einem Protokollfehler.
 Ein Wechsel verwirft das Echtzeitkonto und lässt den Pausestatus unverändert.
 RUN und PAUSE melden ihren Zustand sofort als Snapshot, auch ohne neuen Physikschritt.
-STEP im pausierten Zustand führt genau einen festen Zeitschritt aus.
+STEP im pausierten Zustand führt im festen Modus einen festen Zeitschritt aus;
+im adaptiven Modus einen akzeptierten Schritt innerhalb der konfigurierten Grenzen.
 Die Geschwindigkeit gehört zur Zeitsteuerung und ändert keine Modul-ABI,
 Snapshotfelder oder Messdateiformate. CLI: `--interactive --speed 0|0.1..16`;
 ohne Angabe gilt 1×. Ohne `--interactive` bleibt der CLI-Modus mit `--steps` immer Offline.
@@ -130,3 +131,31 @@ mit ABI 3 bleiben auf dem aktuellen Runner verwendbar.
 `stdout` ist im interaktiven Runner für IPC reserviert. Direkte printf-/stderr-Ausgaben
 aus Experimentcode verletzen derzeit den Kanal; die App erkennt dies und stoppt den
 Runner. Ein eigener strukturierter Logkanal ist noch zu ergänzen.
+
+
+## Adaptive Zeiten und ABI-3-Erweiterung
+
+Der numerische Dateichunk bleibt unverändert. Adaptive Messungen speichern den
+akzeptierten Zeitfortschritt statt `Schrittnummer × dt`. `dt_s` in den Metadaten
+ist die Startdauer; `step_mode=adaptive`, `minimum_dt_s` und `maximum_dt_s` beschreiben
+die Hostgrenzen. Die Szenenfrequenz verändert weder das adaptive Raster noch die
+Anzahl numerischer Messungen. Die Analyse und Zeitleiste lesen die tatsächlichen
+Zeitwerte. SDK-Analysen arbeiten mit diesem unregelmäßigen Raster.
+
+`ps_experiment_api.adaptive_step` ist ein optionales Feld nach `destroy`.
+`PS_EXPERIMENT_API_BASE_SIZE` benennt die Größe bis zu diesem Feld. Der aktuelle
+Runner akzeptiert weiterhin einen eingefrorenen ABI-3-Descriptor ohne diesen Tail.
+Er liest den neuen Callback nur bei Adaptive-Auswahl, gesetztem
+`PS_EXPERIMENT_ADAPTIVE_STEPS`-Bit, ausreichendem `struct_size` und einem gültigen
+Funktionszeiger. ABI-Version, Kontextstruktur und Pipe-Version bleiben erhalten.
+C-Module ohne Callback initialisieren das neue Feld mit `NULL`.
+
+Der Callback erhält Vorschlag, Mindest- und Höchstdauer und liefert
+`ps_step_interval` mit `elapsed_s` und `next_s`. Er aktualisiert Modell und
+Kanalwerte bei Erfolg und lässt `context->time_s` unverändert. Der Host prüft
+endlichen positiven Fortschritt und die Grenzen, setzt die tatsächliche Zeit
+und `context->dt_s` auf die akzeptierte Dauer und speichert genau einen Messpunkt.
+Der nächste Vorschlag steuert die nächste akzeptierte Iteration; beim Reset wird
+wieder die konfigurierte Startdauer verwendet. Ungültige Berichte oder numerische
+Fehler beenden den Runner mit lesbarem Fehler und erhalten den gültigen Dateipräfix.
+Sie schreiben keinen zusätzlichen Punkt und keinen erfolgreichen Footer.

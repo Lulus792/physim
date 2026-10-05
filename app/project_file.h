@@ -6,6 +6,8 @@
 typedef struct {
     bool language_experiment, language_analysis, release;
     double timestep, speed;
+    bool adaptive;
+    double minimum_timestep, maximum_timestep;
     uint64_t seed;
     ps_parameter_catalog parameters;
 } ps_project_settings;
@@ -22,4 +24,5 @@ ps_document_result ps_project_settings_save(const char *path, const ps_project_s
  * output unchanged. Timestep is a finite normal positive double, at most 1 s. */
 bool ps_project_seed_parse(const char *text, uint64_t *seed);
 bool ps_project_timestep_valid(double timestep);
+bool ps_project_step_bounds_valid(const ps_project_settings *settings);
 #endif

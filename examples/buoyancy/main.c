@@ -177,6 +177,6 @@ static void destroy(ps_context *c) {
 }
 PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
     static const ps_experiment_api api = {sizeof api, PS_ABI_VERSION, 0,     "Auftrieb", create,
-                                          reset,      step,           scene, destroy};
+                                          reset,      step,           scene, destroy, NULL};
     return &api;
 }

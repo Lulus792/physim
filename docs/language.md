@@ -1,10 +1,10 @@
 # Eigene Physim-Sprache
 
-Stand: 2026-10-05. Sprachvertrag 0.168.0; noch keine freigegebene Anwendersprache.
+Stand: 2026-10-05. Sprachvertrag 0.169.0; noch keine freigegebene Anwendersprache.
 Der Arbeitsname ist „Physim-Sprache“. Das vollständige Ziel und die Abnahmen
 LANG-001 bis LANG-007 stehen in Abschnitt 10 des Projektplans.
 
-Die Sprachversion `0.168.0` steht unabhängig von der App-Version und der SDK-ABI
+Die Sprachversion `0.169.0` steht unabhängig von der App-Version und der SDK-ABI
 in `src/language/version.h`. `physimc --version` und der Kopf des generierten C
 geben sie aus. Änderungen an Syntax oder Semantik erfordern eine bewusste
 Anhebung; die vorliegende Fassung ist noch ein Entwicklungsvertrag und keine
@@ -2865,3 +2865,46 @@ aus. Die eigene Sichtbarkeitswahl eines Kindes bleibt dabei erhalten.
 Neue Sprachmodule melden die Hierarchiefähigkeit automatisch. Der aktuelle Runner
 und Snapshotversion 2 zeichnen die Beziehungen mit auf. Ältere Szenenblöcke in
 Version 1 bleiben als flache Szenen lesbar. [Dateiformat](data-format.md)
+
+
+## Adaptive Runner-Schritte
+
+Ein Experiment kann zusätzlich zu den vier Pflichtcallbacks anbieten:
+
+```physim
+func adaptiveStep(dt: Float64, minimum: Float64, maximum: Float64) -> StepInterval:
+    let time = simulationTime()
+    let result = rk45StepReported(derivative, state, time, time + dt,
+                                  1e-10, 1e-8, 100000, dt, minimum, maximum)
+    state = result.state
+    measure()
+    return StepInterval(result.reachedTime - time, result.nextStep)
+```
+
+`derivative` hat `(Float64, [Float64]) -> [Float64]`; `state` und `measure`
+gehören zum eigenen Modell. Der Callback hat genau drei `Float64`-Parameter und
+liefert `StepInterval`; generische Funktionen und Überladungen dieses Einstiegspunkts sind nicht erlaubt.
+Der Compiler exportiert nur bei vorhandenem Callback die Adaptive-Capability.
+Ohne adaptive Auswahl ruft der Runner weiterhin `step(dt)` auf.
+
+`StepInterval` hat die schreibgeschützten `Float64`-Felder `elapsed` und
+`nextStep` in Sekunden. Der Konstruktor verlangt positive endliche Werte.
+Der Runner prüft zusätzlich die vorgegebenen Grenzen. Der Wert lässt sich in
+Arrays, eigenen Strukturen, optionalen Werten und Funktionswerten verwenden.
+Wie andere SDK-Aggregate ohne definierte Gleichheit hat er keine Inhaltsgleichheit.
+
+`rk45StepReported` hat dieselben Eingaben und dieselben kopierenden Ergebniswerte
+wie `rk45IntegrateReported`, beendet aber nach dem ersten akzeptierten Schritt.
+`start` und `end` müssen verschieden sein. `result.acceptedSteps` ist bei Erfolg
+1; `reachedTime` kann vor der gewünschten Zielzeit liegen. `nextStep` ist die
+vorgeschlagene nächste Dauer, bei Rückwärtsintegration negativ. Verwerfungen
+verbrauchen `maxSteps`; Fehler melden Diagnose und Quellposition. Zustand,
+Messwerte und Zufallsströme erst nach erfolgreicher Integration aktualisieren.
+Die Ableitung darf keine sichtbaren Seiteneffekte haben, weil sie auch für
+verworfene Versuche aufgerufen wird. Lokale Fehlertoleranzen sind keine globale
+Fehlergrenze und ersetzen keine Konvergenz- oder Erhaltungsprüfung.
+
+Die fünf Pendelvarianten unter `examples/language/` zeigen diesen Callback.
+Die Auswahl in der App und CLI ist im [Workspace-Handbuch](workspace.md#adaptive-simulationsschritte)
+beschrieben. Die gespeicherten Daten enthalten die tatsächlich akzeptierten Zeiten;
+Analysecode sollte diese Zeitwerte verwenden.

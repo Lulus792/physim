@@ -112,10 +112,12 @@ def main():
         checked([rebuilt_probe, root / "bundled-pendulum.psrun", root / "bundled-pendulum-report.psreport"])
         shutil.copy2(sdk / "examples/pendulum/analysis.c", consumer / "c-analysis.c")
         c_analysis = builder.executable("sdk-c-analysis", ["c-analysis.c"], [rebuilt_core], module=True)
+        c_modules = {}
         for name in native.EXAMPLES:
             source = consumer / ("c-" + name + ".c")
             shutil.copy2(sdk / "examples" / name / "main.c", source)
             experiment = builder.executable("sdk-c-" + name, [source.name], [rebuilt_core], module=True)
+            c_modules[name] = experiment
             check_modules("source-c-" + name, experiment, c_analysis)
 
         modules = {}
@@ -143,6 +145,18 @@ def main():
             if name in mixed:
                 check_analysis(run, "language-" + name + "-c", c_analysis)
             print(f"Installed language experiment and analyses: {name} passed", flush=True)
+
+        for name, experiment in (("bundled-pendulum", sdk / "bin" / ("pendulum" + module_suffix)),
+                                 ("source-c-pendulum", c_modules["pendulum"]),
+                                 ("language-pendulum", modules["pendulum"])):
+            run = root / ("adaptive-" + name + ".psrun")
+            checked([sdk / "bin" / ("physim-runner" + suffix), experiment, run,
+                     "--steps", "500", "--dt", ".005", "--adaptive",
+                     "--min-dt", "1e-8", "--max-dt", ".1"])
+            check_analysis(run, "adaptive-" + name + "-c", c_analysis, "adaptive")
+            check_analysis(run, "adaptive-" + name + "-phys", modules["analysis"], "adaptive-language")
+            checked([rebuilt_probe, run, root / ("adaptive-" + name + "-c-report.psreport"), "adaptive"])
+            print(f"Installed adaptive experiment and C/Physim analyses: {name} passed", flush=True)
 
         if metadata["app"]:
             for name in native.EXAMPLES + ["language"]:
@@ -178,7 +192,8 @@ def main():
     (root / "PASSED.txt").write_text(
         "Native SDK relocation, independent headers, installed and rebuilt core archives, eight bundled and rebuilt C templates, "
         "fifteen language programs, 27 rebuilt language modules, nine language experiments with both general analyses, "
-        "specialized sensor analysis and six C/Physim combinations passed.\n" +
+        "specialized sensor analysis and six C/Physim combinations passed.\n"
+        "Adaptive bundled/source C and Physim pendulums, actual variable sample times, energy and both analysis languages passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
         ("Eight C template GUI workflows and the complete Physim language GUI workflow passed.\n" if args.app_tests else ""), encoding="utf-8")
     print(f"Native SDK verified: {root}")

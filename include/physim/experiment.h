@@ -8,6 +8,7 @@
 /* ABI-3 scene extension: parent_id occupies the former ps_object tail padding.
  * Modules must advertise this capability to publish parent relationships. */
 #define PS_EXPERIMENT_SCENE_HIERARCHY UINT64_C(1)
+#define PS_EXPERIMENT_ADAPTIVE_STEPS UINT64_C(2)
 #ifdef _WIN32
 #define PS_EXPORT __declspec(dllexport)
 #else
@@ -70,6 +71,9 @@ typedef struct ps_context {
     ps_parameter parameters[PS_MAX_PARAMETERS];
 } ps_context;
 typedef struct {
+    double elapsed_s, next_s;
+} ps_step_interval;
+typedef struct {
     uint32_t struct_size, abi_version;
     uint64_t capabilities;
     const char *name;
@@ -78,7 +82,16 @@ typedef struct {
     ps_result (*step)(ps_context *context, double dt_s);
     void (*build_scene)(ps_context *context, ps_scene *scene);
     void (*destroy)(ps_context *context);
+    /* Optional ABI-3 tail, advertised with PS_EXPERIMENT_ADAPTIVE_STEPS.
+     * Accept one forward step of minimum_s <= elapsed_s <= proposed_s.
+     * next_s must lie in [minimum_s, maximum_s]. Rejected numerical trials
+     * remain internal to the model and must not publish measurements/state.
+     * On success update the model and channel values, but not context->time_s.
+     * The host advances time and persists exactly one accepted sample. */
+    ps_result (*adaptive_step)(ps_context *context, double proposed_s, double minimum_s,
+                               double maximum_s, ps_step_interval *interval);
 } ps_experiment_api;
+#define PS_EXPERIMENT_API_BASE_SIZE offsetof(ps_experiment_api, adaptive_step)
 typedef const ps_experiment_api *(*ps_experiment_entry)(void);
 /* Export ps_get_experiment from each module. Context and scene are owned by host.
  * Module owns context->user and releases it in destroy, including failed create. */

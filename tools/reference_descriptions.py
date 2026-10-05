@@ -30,6 +30,7 @@ add('ps_', {
     'verlet_step': 'Integriert Position und Geschwindigkeit mit Velocity Verlet für eine orts-/zeitabhängige Beschleunigung.',
     'ode_options_default': 'Liefert die Standardtoleranzen und Schrittgrenzen für adaptive Integration.',
     'ode_integrate': 'Integriert ein nichtsteifes ODE-System mit Dormand–Prince 5(4) bis zur Zielzeit.',
+    'ode_step_diagnosed': 'Akzeptiert genau einen Dormand–Prince-Schritt in Richtung end; verworfene Versuche ändern den Zustand nicht. Bericht und Diagnose enthalten tatsächliche Zielzeit, nächste Schrittweite und Fehlernorm.',
     'ode_integrate_diagnosed': 'Wie ode_integrate, ergänzt um die konkrete Abbruchursache, Komponente und Stufe.',
     'ode_diagnostic_string': 'Liefert die statische Textbeschreibung einer ODE-Diagnose.',
     'statistics_push': 'Fügt einer mit null initialisierten Statistik einen Wert hinzu; Mittelwert und Streuung werden online aktualisiert.',

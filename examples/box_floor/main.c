@@ -130,6 +130,6 @@ static void scene(ps_context *c, ps_scene *s) {
 static void destroy(ps_context *c) { free(c->user); }
 PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
     static const ps_experiment_api api = {
-        sizeof api, PS_ABI_VERSION, 0, "Box auf Ebene", create, reset, step, scene, destroy};
+        sizeof api, PS_ABI_VERSION, 0, "Box auf Ebene", create, reset, step, scene, destroy, NULL};
     return &api;
 }

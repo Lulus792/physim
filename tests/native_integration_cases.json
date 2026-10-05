@@ -1117,6 +1117,37 @@
         "platform",
         "core"
       ]
+    },
+    "adaptive-c": {
+      "sources": [
+        "tests/fixtures/adaptive_experiment.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ]
+    },
+    "adaptive-phys": {
+      "source": "tests/fixtures/language/adaptive_experiment.phys",
+      "mode": "--emit-experiment"
+    },
+    "adaptive-short-api": {
+      "sources": [
+        "tests/fixtures/legacy_adaptive_experiment.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ]
+    },
+    "physim-runner-adaptive-tests": {
+      "sources": [
+        "tests/test_runner_adaptive.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
     }
   },
   "tests": [
@@ -2975,7 +3006,7 @@
           "arguments": [
             "{root}/tests/verify_png.py",
             "{work}",
-            "{work}/workflow ä"
+            "{work}/workflow \u00e4"
           ],
           "timeout": 60
         }
@@ -3022,7 +3053,7 @@
           "arguments": [
             "{root}/tests/verify_png.py",
             "{work}",
-            "{work}/workflow ä"
+            "{work}/workflow \u00e4"
           ],
           "timeout": 60
         }
@@ -4279,6 +4310,59 @@
             "{cc}"
           ],
           "timeout": 110,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "runner_adaptive",
+      "targets": [
+        "physim-runner-adaptive-tests",
+        "physim-runner",
+        "adaptive-c",
+        "adaptive-phys",
+        "adaptive-short-api"
+      ],
+      "steps": [
+        {
+          "program": "physim-runner-adaptive-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{adaptive-c}",
+            "{adaptive-phys}",
+            "{adaptive-short-api}",
+            "{work}"
+          ],
+          "timeout": 100
+        }
+      ]
+    },
+    {
+      "name": "adaptive_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "adaptive_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 560,
           "files": [
             "app-steps.json"
           ]

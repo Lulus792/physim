@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <math.h>
 
-/* Wall-clock scheduling only. Physics always receives the original fixed dt.
+/* Wall-clock scheduling only. The caller supplies the proposed physics duration.
  * Speed 0 is offline; real-time multipliers range from 0.1 to 16. */
 typedef struct {
     double speed, credit, last;
@@ -33,5 +33,11 @@ static inline bool ps_pacer_due(ps_pacer *p, double now, double dt) {
         return false;
     p->credit -= dt;
     return true;
+}
+/* A rejected numerical trial can shorten an accepted adaptive step. Return
+ * the unused scheduling credit; single steps bypass the pacer entirely. */
+static inline void ps_pacer_refund(ps_pacer *p,double proposed,double accepted) {
+    if(p->running && p->speed!=0 && accepted<proposed)
+        p->credit += proposed-accepted;
 }
 #endif

@@ -76,6 +76,18 @@ int main(int argc, char **argv) {
     CHECK(ps_project_settings_save(path, &settings) == PS_DOCUMENT_OK);
     CHECK(matches(path, saved) &&
           matches(backup, original)); /* No redundant backup on unchanged save. */
+    CHECK(!settings.adaptive && settings.minimum_timestep==1e-8 && settings.maximum_timestep==.1);
+    settings.adaptive=true;settings.minimum_timestep=.00001;settings.maximum_timestep=.25;
+    CHECK(ps_project_settings_save(path,&settings)==PS_DOCUMENT_OK);
+    ps_project_settings restored;
+    CHECK(ps_project_settings_read(path,&restored)==PS_DOCUMENT_OK && restored.adaptive &&
+          restored.minimum_timestep==.00001 && restored.maximum_timestep==.25 && restored.timestep==.125);
+    ps_project_settings invalid_bounds=restored;invalid_bounds.minimum_timestep=.2;
+    CHECK(ps_project_settings_save(path,&invalid_bounds)==PS_DOCUMENT_INVALID);
+    restored.adaptive=false;
+    CHECK(ps_project_settings_save(path,&restored)==PS_DOCUMENT_OK && matches(path,saved));
+    CHECK(write_text(backup,original));
+    settings=restored;
     ps_project_settings before = settings;
     const char *invalid[] = {"",
                              "physim_project=2\n",
@@ -100,6 +112,14 @@ int main(int argc, char **argv) {
                              "physim_project=1\nsimulation.speed=inf\n",
                              "physim_project=1\nsimulation.speed=1e-999\n",
                              "physim_project=1\nsimulation.speed=1\nsimulation.speed=2\n",
+                             "physim_project=1\nsimulation.steps=unknown\n",
+                             "physim_project=1\nsimulation.steps=fixed\nsimulation.steps=adaptive\n",
+                             "physim_project=1\nsimulation.steps=adaptive\nsimulation.minimum_dt=.1\n",
+                             "physim_project=1\nsimulation.steps=adaptive\nsimulation.maximum_dt=.001\n",
+                             "physim_project=1\nsimulation.minimum_dt=nan\n",
+                             "physim_project=1\nsimulation.maximum_dt=0\n",
+                             "physim_project=1\nsimulation.maximum_dt=1.1\n",
+                             "physim_project=1\nsimulation.minimum_dt=1e-8\nsimulation.minimum_dt=1e-8\n",
                              "physim_project=1\nexperiment=other.c\n",
                              "physim_project=1\nanalysis=analysis.c\nanalysis=analysis.phys\n",
                              "physim_project=1\nparameter.mass=nan\n",

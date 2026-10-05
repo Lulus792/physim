@@ -2,6 +2,23 @@
 #include "design_tokens.h"
 static struct nk_color muted(void) { return UI_COLOR(muted); }
 static struct nk_color accent(void) { return UI_COLOR(accent); }
+static void step_bound_editor(app *a,unsigned which,const char *label,double *value) {
+    char *text=a->adaptive_limit_text[which];
+    double *displayed=&a->adaptive_limit_displayed[which];
+    if(*displayed!=*value && !(isnan(*displayed) && isnan(*value))) {
+        snprintf(text,64,"%.9g",*value);*displayed=*value;
+    }
+    char previous[64];snprintf(previous,sizeof previous,"%s",text);
+    nk_layout_row_dynamic(a->ui,32,2);
+    nk_label(a->ui,label,NK_TEXT_LEFT);
+    a->adaptive_limit_bounds[which]=nk_widget_bounds(a->ui);
+    nk_edit_string_zero_terminated(a->ui,NK_EDIT_FIELD,text,64,nk_filter_default);
+    if(strcmp(previous,text)) {
+        char *end;errno=0;double parsed=strtod(text,&end);
+        *value=errno || end==text || *end ? NAN:parsed;
+        *displayed=*value;a->project_settings_dirty=true;
+    }
+}
 static void style(struct nk_context *ui) {
     struct nk_color c[NK_COLOR_COUNT];
     nk_style_default(ui);
@@ -177,15 +194,37 @@ static void camera_inspector(app *a) {
                           "Alt + Bild auf/ab: zoomen. Alt + Pos1: Standard.");
         nk_tree_pop(ui);
     }
-    if (nk_tree_push(ui, NK_TREE_TAB, "Laufeinstellungen", NK_MINIMIZED)) {
+    if (nk_tree_state_push(ui, NK_TREE_TAB, "Laufeinstellungen", &a->steps_disclosure)) {
         nk_layout_row_dynamic(ui, 24, 1);
         nk_label(ui, "Zeitschritt in Sekunden", NK_TEXT_LEFT);
-        nk_layout_row_dynamic(ui, 32, 1);
         nk_begin_disabled(ui, a->runner.running || a->reset_pending);
         double previous_dt = a->dt;
         char previous_seed[sizeof a->seed];
         snprintf(previous_seed, sizeof previous_seed, "%s", a->seed);
-        nk_property_double(ui, "dt", DBL_MIN, &a->dt, 1, .001, .0001f);
+        if(a->adaptive_steps) step_bound_editor(a,2,"Start (s)",&a->dt);
+        else {
+            nk_layout_row_dynamic(ui,32,1);
+            nk_property_double(ui, "dt", DBL_MIN, &a->dt, 1, .001, .0001f);
+        }
+        nk_layout_row_dynamic(ui,26,1);
+        bool previous_adaptive=a->adaptive_steps;
+        double previous_minimum=a->minimum_dt,previous_maximum=a->maximum_dt;
+        a->adaptive_bounds=nk_widget_bounds(ui);
+        nk_checkbox_label(ui,"Adaptive Schritte",&a->adaptive_steps);
+        if(a->adaptive_steps) {
+            nk_layout_row_dynamic(ui,68,1);
+            nk_label_wrap(ui,"dt ist der Startschritt. Das Modell muss adaptive Schritte unterstützen.");
+            step_bound_editor(a,0,"Minimum (s)",&a->minimum_dt);
+            step_bound_editor(a,1,"Maximum (s)",&a->maximum_dt);
+            ps_project_settings steps={.timestep=a->dt,.adaptive=true,
+                .minimum_timestep=a->minimum_dt,.maximum_timestep=a->maximum_dt};
+            if(!ps_project_step_bounds_valid(&steps)) {
+                nk_layout_row_dynamic(ui,52,1);
+                nk_label_wrap(ui,"Positive Zahlen wählen: Minimum ≤ dt ≤ Maximum ≤ 1 s.");
+            }
+        }
+        if(a->loaded && (previous_adaptive!=a->adaptive_steps || previous_minimum!=a->minimum_dt ||
+                         previous_maximum!=a->maximum_dt)) a->project_settings_dirty=true;
         nk_layout_row_dynamic(ui, 24, 1);
         nk_label(ui, "Zufallsseed", NK_TEXT_LEFT);
         nk_layout_row_dynamic(ui, 32, 1);

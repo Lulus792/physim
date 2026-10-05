@@ -102,6 +102,6 @@ static void scene(ps_context *c, ps_scene *s) {
 static void destroy(ps_context *c) { (void)c; }
 PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
     static const ps_experiment_api api = {
-        sizeof api, PS_ABI_VERSION, 0, "parallel fixture", create, create, step, scene, destroy};
+        sizeof api, PS_ABI_VERSION, 0, "parallel fixture", create, create, step, scene, destroy, NULL};
     return &api;
 }

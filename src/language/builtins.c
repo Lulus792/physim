@@ -27,6 +27,7 @@
 #define SAMPLE PS_TYPE_MEASUREMENT
 #define RNG PS_TYPE_RNG
 #define ODE_RESULT PS_TYPE_ODE_RESULT
+#define STEP_INTERVAL PS_TYPE_STEP_INTERVAL
 #define SCALAR_RESULT PS_TYPE_SCALAR_RESULT
 #define BODY PS_TYPE_BODY
 #define CONTACTS PS_TYPE_CONTACTS
@@ -40,6 +41,7 @@
 #define SWEEP PS_TYPE_SWEEP
 #define AABB PS_TYPE_AABB
 static const ps_lang_builtin library[] = {
+    {"StepInterval", "psrt_step_interval", STEP_INTERVAL, 2, 0, {F,F}, {"elapsed","nextStep"}},
     {"Rng", "psrt_rng_make", RNG, 1, 0, {I}, {"seed"}},
     {"rngForRun", "psrt_rng_for_run", RNG, 1, 1, {I}, {"stream"}},
     {"rngSample", "psrt_rng_sample", F, 2, 0, {RNG, DIST}, {"rng", "distribution"}},
@@ -233,6 +235,10 @@ static const ps_lang_builtin library[] = {
     {"rk45IntegrateWithTolerances", "psrt_ode_rk45_with_tolerances", PS_LANG_FLOAT_ARRAY, 10, 0,
      {PS_LANG_ODE_CALLBACK, PS_LANG_FLOAT_ARRAY, F, F, PS_LANG_FLOAT_ARRAY, F, I, F, F, F},
      {"derivative", "state", "start", "end", "absoluteTolerances",
+      "relativeTolerance", "maxSteps", "initialStep", "minimumStep", "maximumStep"}},
+    {"rk45StepReported", "psrt_ode_rk45_step_reported", ODE_RESULT, 10, 0,
+     {PS_LANG_ODE_CALLBACK, PS_LANG_FLOAT_ARRAY, F, F, F, F, I, F, F, F},
+     {"derivative", "state", "start", "end", "absoluteTolerance",
       "relativeTolerance", "maxSteps", "initialStep", "minimumStep", "maximumStep"}},
     {"rk45IntegrateReported", "psrt_ode_rk45_reported", ODE_RESULT, 10, 0,
      {PS_LANG_ODE_CALLBACK, PS_LANG_FLOAT_ARRAY, F, F, F, F, I, F, F, F},
@@ -621,6 +627,8 @@ const ps_lang_builtin *ps_lang_static_method_find(const void *type, size_t type_
     return NULL;
 }
 const char *ps_lang_member_name(size_t binding) {
+    if(binding==PS_LANG_MEMBER_STEP_ELAPSED) return "elapsed_s";
+    if(binding==PS_LANG_MEMBER_STEP_NEXT) return "next_s";
     if (binding == PS_LANG_MEMBER_SUBMERSION_VOLUME) return "volume_m3";
     if (binding == PS_LANG_MEMBER_SUBMERSION_CENTROID) return "centroid_offset_m";
     if (binding == PS_LANG_MEMBER_MATERIAL_DENSITY) return "density_kg_m3";

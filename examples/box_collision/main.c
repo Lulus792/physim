@@ -172,6 +172,6 @@ PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
     static const ps_experiment_api api = {
         sizeof api, PS_ABI_VERSION, 0,    "Boxstoß mit Flächen- und Kantenkontakten",
         create,     reset,          step, scene,
-        destroy};
+        destroy, NULL};
     return &api;
 }

@@ -1,6 +1,7 @@
 #include "physim/collision.h"
 #include "physim/data.h"
 #include "physim/report.h"
+#include "physim/numerics.h"
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -11,9 +12,20 @@
             return 1;                                                                              \
         }                                                                                          \
     } while (0)
+static void growth(double t,const double *y,double *dy,void *user) {
+    (void)t;(void)user;dy[0]=y[0];
+}
 int main(int argc, char **argv) {
     CHECK(argc == 3 || (argc == 4 && (!strcmp(argv[3], "language") ||
-                                    !strcmp(argv[3], "sensor-language"))));
+                                    !strcmp(argv[3], "sensor-language") ||
+                                    !strcmp(argv[3],"adaptive") || !strcmp(argv[3],"adaptive-language"))));
+    bool adaptive=argc==4 && !strncmp(argv[3],"adaptive",8);
+    double integrated=1;ps_ode_options options=ps_ode_options_default();
+    options.initial_step=.5;options.maximum_step=.5;
+    ps_ode_report numeric;ps_ode_diagnostic diagnostic;
+    CHECK(ps_ode_step_diagnosed(growth,NULL,0,.5,&integrated,1,&options,&numeric,&diagnostic)==PS_OK);
+    CHECK(numeric.accepted_steps==1 && numeric.reached_time>0 && numeric.reached_time<.5 &&
+          fabs(integrated-exp(numeric.reached_time))<1e-7);
     const ps_aabb bounds[] = {{{0, 0, 0}, {1, 1, 1}}, {{1, 1, 1}, {2, 2, 2}}};
     ps_collision_pair pair;
     size_t candidates = 0;
@@ -34,15 +46,26 @@ int main(int argc, char **argv) {
     CHECK(reader.channels > 0 && reader.channels <= PS_MAX_CHANNELS);
     double time, values[PS_MAX_CHANNELS];
     unsigned rows = 0;
+    double previous=0,first=0,energy=0;bool varied=false;
+    if(adaptive)CHECK(reader.channels==6 && strstr(reader.metadata,"step_mode=adaptive\n"));
     ps_result result;
     while ((result = ps_run_next(&reader, &time, values)) == PS_OK) {
-        CHECK(rows <= 200 && fabs(time - rows * .005) < 1e-12);
+        CHECK(rows <= (adaptive?500u:200u));
+        if(adaptive) {
+            if(!rows)energy=values[4];
+            else {
+                CHECK(time>previous && time<=previous+.1);
+                if(rows==1)first=time;else varied |= fabs(time-previous-first)>1e-6;
+                CHECK(fabs(values[4]-energy)<1e-6);
+            }
+            previous=time;
+        } else CHECK(fabs(time - rows * .005) < 1e-12);
         for (unsigned i = 0; i < reader.channels; i++)
             CHECK(isfinite(values[i]));
         rows++;
     }
     ps_run_reader_close(&reader);
-    CHECK(result == PS_EOF && rows == 201);
+    CHECK(result == PS_EOF && rows == (adaptive?501u:201u) && (!adaptive || varied));
     ps_report *report = NULL;
     CHECK(ps_report_load(argv[2], &report) == PS_OK);
     char title[192], provenance[8192];
@@ -63,7 +86,7 @@ int main(int argc, char **argv) {
         CHECK(ps_report_table_read(report, 1, &info) == PS_OK && info.rows == 1);
         CHECK(ps_report_row_read(report, 1, 0, &row) == PS_OK);
         CHECK(row.values[0] == valid && row.values[3] > 0);
-    } else if (argc == 4) {
+    } else if (argc == 4 && strcmp(argv[3],"adaptive")) {
         CHECK(plots == 2 && tables == 0);
     } else {
         CHECK(plots > 0 && tables > 0);

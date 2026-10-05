@@ -163,6 +163,8 @@ static const char *type(emitter *e, ps_lang_type t) {
         return "psrt_constraint_result";
     case PS_TYPE_ODE_RESULT:
         return "psrt_ode_result_value";
+    case PS_TYPE_STEP_INTERVAL:
+        return "ps_step_interval";
     case PS_TYPE_SCALAR_RESULT:
         return "ps_scalar_report";
     case PS_TYPE_SWEEP: return "psrt_sweep";
@@ -4062,8 +4064,8 @@ static ps_lang_check_result emit(FILE *output, const char *source_path,
     e.info = info;
     e.node_count = parsed.count;
     e.experiment = experiment;
-    size_t callbacks[4] = {0};
-    const char *names[] = {"create", "reset", "step", "scene"};
+    size_t callbacks[5] = {0};
+    const char *names[] = {"create", "reset", "step", "scene", "adaptiveStep"};
     for (size_t id = 1; id < parsed.count; id++) {
         if (ps_lang_function_type(info[id].type) ||
             info[id].type >= PS_TYPE_OPTIONAL_BASE ||
@@ -4099,15 +4101,29 @@ static ps_lang_check_result emit(FILE *output, const char *source_path,
     }
     if (experiment == 1) {
         for (size_t id = nodes[parsed.root].a; id; id = nodes[id].next) {
+            if(nodes[id].kind==PS_AST_GENERIC_FUNCTION &&
+               nodes[id].token.file==nodes[parsed.root].token.file &&
+               nodes[id].token.length==12 &&
+               !memcmp(e.source+nodes[id].token.offset,"adaptiveStep",12)) {
+                fail(&e,id,"adaptiveStep requires a non-generic experiment callback");
+                continue;
+            }
             if (nodes[id].kind != PS_AST_FUNCTION || info[id].generic_origin ||
                 nodes[id].token.file != nodes[parsed.root].token.file)
                 continue;
-            for (unsigned which = 0; which < 4; which++) {
+            for (unsigned which = 0; which < 5; which++) {
                 ps_lang_token token = nodes[id].token;
                 if (token.length != strlen(names[which]) ||
                     memcmp(e.source + token.offset, names[which], token.length) != 0)
                     continue;
                 size_t param = nodes[id].a;
+                if(which==4) {
+                    unsigned count=0;int valid=info[id].type==PS_TYPE_STEP_INTERVAL;
+                    for(size_t p=param;p;p=nodes[p].next) {count++;valid &= info[p].type==PS_TYPE_FLOAT64;}
+                    if(!valid || count!=3 || callbacks[4])
+                        fail(&e,id,"adaptiveStep requires three Float64 arguments and returns StepInterval; overloads are unavailable");
+                    callbacks[4]=id;continue;
+                }
                 int args_ok =
                     which == 2 ? param && !nodes[param].next && info[param].type == PS_TYPE_FLOAT64
                                : !param;
@@ -4447,6 +4463,7 @@ static ps_lang_check_result emit(FILE *output, const char *source_path,
                 callbacks[0], callbacks[1]);
             out(&e, "#define PSRT_FN_STEP psfn_%zu\n#define PSRT_FN_SCENE psfn_%zu\n", callbacks[2],
                 callbacks[3]);
+            if(callbacks[4]) out(&e,"#define PSRT_FN_ADAPTIVE_STEP psfn_%zu\n",callbacks[4]);
             out(&e, "#define PSRT_EXPERIMENT_NAME PSRT_SOURCE\n#include "
                     "<physim/language_experiment.h>\n");
         }

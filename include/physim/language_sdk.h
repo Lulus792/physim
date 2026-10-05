@@ -24,6 +24,12 @@
 #define PSRT_COMPILER_VERSION "0.1.0-dev"
 #endif
 
+static inline ps_step_interval psrt_step_interval(double elapsed,double next,psrt_site site) {
+    if(!isfinite(elapsed) || elapsed<=0 || !isfinite(next) || next<=0)
+        psrt_fail(site,"StepInterval requires positive finite durations");
+    return (ps_step_interval){elapsed,next};
+}
+
 typedef struct psrt_channel {
     ps_context *owner;
     uint32_t index;
@@ -363,7 +369,7 @@ static inline psrt_array psrt_ode_rk45_with_tolerances(
 static inline psrt_ode_result_value psrt_ode_rk45_reported_options(
     ps_allocator allocator, ps_ode_fn derivative, void *user,
     const double *state, size_t count, double start, double end,
-    int64_t max_steps, ps_ode_options options, psrt_site site) {
+    int64_t max_steps, ps_ode_options options, bool single, psrt_site site) {
     if (!count || count > PS_NUMERIC_MAX_DIMENSION || !state)
         psrt_fail(site, "RK45 integration requires 1 to 32 state values");
     if (max_steps <= 0 || max_steps > UINT32_MAX / 7)
@@ -373,8 +379,8 @@ static inline psrt_ode_result_value psrt_ode_rk45_reported_options(
     options.maximum_steps = (unsigned)max_steps;
     ps_ode_report report;
     ps_ode_diagnostic diagnostic;
-    ps_result status = ps_ode_integrate_diagnosed(derivative, user, start, end,
-                                                 values, count, &options, &report, &diagnostic);
+    ps_result status = (single ? ps_ode_step_diagnosed : ps_ode_integrate_diagnosed)(
+        derivative,user,start,end,values,count,&options,&report,&diagnostic);
     if (status != PS_OK)
         psrt_fail(site, ps_ode_diagnostic_string(diagnostic.reason));
     psrt_ode_result_value result = {
@@ -398,7 +404,22 @@ static inline psrt_ode_result_value psrt_ode_rk45_reported(
     options.minimum_step = minimum_step;
     options.maximum_step = maximum_step;
     return psrt_ode_rk45_reported_options(allocator, derivative, user, state, count,
-                                           start, end, max_steps, options, site);
+                                           start, end, max_steps, options, false, site);
+}
+static inline psrt_ode_result_value psrt_ode_rk45_step_reported(
+    ps_allocator allocator, ps_ode_fn derivative, void *user,
+    const double *state, size_t count, double start, double end,
+    double absolute_tolerance, double relative_tolerance, int64_t max_steps,
+    double initial_step, double minimum_step, double maximum_step,
+    psrt_site site) {
+    ps_ode_options options = ps_ode_options_default();
+    options.absolute_tolerance = absolute_tolerance;
+    options.relative_tolerance = relative_tolerance;
+    options.initial_step = initial_step;
+    options.minimum_step = minimum_step;
+    options.maximum_step = maximum_step;
+    return psrt_ode_rk45_reported_options(allocator, derivative, user, state, count,
+                                           start, end, max_steps, options, true, site);
 }
 static inline psrt_ode_result_value psrt_ode_rk45_with_tolerances_reported(
     ps_allocator allocator, ps_ode_fn derivative, void *user,
@@ -419,7 +440,7 @@ static inline psrt_ode_result_value psrt_ode_rk45_with_tolerances_reported(
     options.minimum_step = minimum_step;
     options.maximum_step = maximum_step;
     return psrt_ode_rk45_reported_options(allocator, derivative, user, state, count,
-                                           start, end, max_steps, options, site);
+                                           start, end, max_steps, options, false, site);
 }
 static inline psrt_array psrt_verlet_step(ps_allocator allocator,
                                          ps_acceleration_fn acceleration, void *user,

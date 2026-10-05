@@ -74,7 +74,7 @@ PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
                                           reset,
                                           step,
                                           scene,
-                                          destroy};
+                                          destroy, NULL};
     return &api;
 }
 ```
@@ -242,7 +242,7 @@ ps_scene_set_parent(scene, 1, 200);
 
 Im Moduldescriptor muss `capabilities = PS_EXPERIMENT_SCENE_HIERARCHY` gesetzt
 sein. Die neue Eltern-ID verwendet die bisherige Padding-Fläche von `ps_object`;
-ABI 3 und die Größe der Struktur bleiben erhalten. Der aktuelle Runner ignoriert
+ABI 3 und die Größe von `ps_object` bleiben erhalten. Der aktuelle Runner ignoriert
 bei alten Modulen ohne diese Fähigkeit die Padding-Bytes, statt sie als Beziehungen
 zu deuten. Neue Module mit Hierarchie benötigen den aktuellen Runner.
 
@@ -253,3 +253,51 @@ Weltwerte; die Beziehung erzeugt keine automatische Transformation oder physikal
 Kopplung. Snapshotversion 2 speichert die Beziehungen; frühere Szenenblöcke bleiben
 als flache Szenen lesbar. [SDK-Referenz](reference/experiment.md),
 [Versioniertes Szenenformat](data-format.md).
+
+
+## Ein adaptiver Modellschritt
+
+Ein C-Modul kann `PS_EXPERIMENT_ADAPTIVE_STEPS` setzen und das optionale
+Descriptorfeld `adaptive_step` initialisieren. Die vorhandenen `step`-, Reset-
+und Szenencallbacks bleiben erforderlich. Ein Beispiel ist
+[`examples/pendulum/main.c`](../examples/pendulum/main.c). Seine Ableitung bleibt
+frei von Mess- und Zufallsaufrufen; Messungen folgen erst dem akzeptierten Zustand.
+
+```c
+static ps_result adaptive_step(ps_context *context, double proposed,
+                                double minimum, double maximum,
+                                ps_step_interval *interval) {
+    /* state ist der besitzende Modellzustand; derivative die reine Ableitung. */
+    ps_ode_options options = ps_ode_options_default();
+    options.absolute_tolerance = 1e-10;
+    options.relative_tolerance = 1e-8;
+    options.initial_step = proposed;
+    options.minimum_step = minimum;
+    options.maximum_step = maximum;
+    ps_ode_report report;
+    ps_ode_diagnostic diagnostic;
+    ps_result result = ps_ode_step_diagnosed(derivative, NULL,
+        context->time_s, context->time_s + proposed, state, 2,
+        &options, &report, &diagnostic);
+    if (result != PS_OK) return result;
+    measure(context);
+    *interval = (ps_step_interval){report.reached_time - context->time_s,
+                                   report.next_step};
+    return PS_OK;
+}
+```
+
+Der numerische Löser ändert `state` nur bei Erfolg und akzeptiert genau einen
+Schritt. `report.reached_time` kann vor dem vorgeschlagenen Endpunkt liegen.
+`context->time_s` bleibt im Callback unverändert; der Runner setzt es nach
+Prüfung des Berichts. `context->dt_s` ist beim Aufruf der aktuelle Vorschlag und
+nach Erfolg die akzeptierte Dauer. Ein Modell darf die Runge-Kutta-Stufen und
+Verwerfungen nicht als endgültige Zustände, Messungen oder Zufallsziehungen
+veröffentlichen. Lokale Fehlertoleranzen sind keine globale Fehlergrenze.
+
+Kombiniert ein Modul Gruppen und adaptive Schritte, verknüpft es beide
+Capability-Bits mit `|`. Module ohne adaptive Unterstützung initialisieren den
+neuen Tail mit `NULL`. Der Runner prüft Tailgröße, Capability und Funktionszeiger,
+bevor er ihn aufruft; alte ABI-3-Module verwenden weiterhin den Basisprefix.
+[Auswahl, CLI, Metadaten und Reproduktion](workspace.md#adaptive-simulationsschritte)
+stehen im Workspace-Handbuch.
