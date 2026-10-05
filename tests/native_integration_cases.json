@@ -4598,6 +4598,36 @@
           ]
         }
       ]
+    },
+    {
+      "name": "layouts_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "layouts_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 660,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
     }
   ]
 }

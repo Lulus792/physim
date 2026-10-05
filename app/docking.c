@@ -1,6 +1,37 @@
 #include "docking.h"
 #include <string.h>
 const ps_dock_layout PS_DOCK_DEFAULT = PS_DOCK_DEFAULT_INITIALIZER;
+static void dock_put32(unsigned char *p,uint32_t value) {
+    for(unsigned i=0;i<4;i++)p[i]=(unsigned char)(value>>(8*i));
+}
+static uint32_t dock_get32(const unsigned char *p) {
+    return (uint32_t)p[0]|(uint32_t)p[1]<<8|(uint32_t)p[2]<<16|(uint32_t)p[3]<<24;
+}
+bool ps_dock_encode(const ps_dock_layout *d,unsigned char *at,size_t size) {
+    if(!at || size!=PS_DOCK_WIRE_BYTES || !ps_dock_valid(d))return false;
+    for(unsigned i=0;i<PS_DOCK_NODES;i++,at+=24) {
+        const ps_dock_node *n=&d->nodes[i];
+        uint32_t fields[]={n->kind,n->first,n->second,n->ratio,n->panels,n->active};
+        for(unsigned j=0;j<6;j++)dock_put32(at+4*j,fields[j]);
+    }
+    dock_put32(at,d->root);dock_put32(at+4,d->floating);dock_put32(at+8,d->hidden);at+=12;
+    for(unsigned i=0;i<PS_DOCK_PANELS;i++,at+=16) {
+        const ps_dock_float *r=&d->floats[i];
+        dock_put32(at,r->x);dock_put32(at+4,r->y);dock_put32(at+8,r->w);dock_put32(at+12,r->h);
+    }
+    return true;
+}
+bool ps_dock_decode(const unsigned char *at,size_t size,ps_dock_layout *out) {
+    if(!at || !out || size!=PS_DOCK_WIRE_BYTES)return false;
+    ps_dock_layout d={0};
+    for(unsigned i=0;i<PS_DOCK_NODES;i++,at+=24)
+        d.nodes[i]=(ps_dock_node){dock_get32(at),dock_get32(at+4),dock_get32(at+8),dock_get32(at+12),dock_get32(at+16),dock_get32(at+20)};
+    d.root=dock_get32(at);d.floating=dock_get32(at+4);d.hidden=dock_get32(at+8);at+=12;
+    for(unsigned i=0;i<PS_DOCK_PANELS;i++,at+=16)
+        d.floats[i]=(ps_dock_float){dock_get32(at),dock_get32(at+4),dock_get32(at+8),dock_get32(at+12)};
+    if(!ps_dock_valid(&d))return false;
+    *out=d;return true;
+}
 static bool walk(const ps_dock_layout *d, uint32_t id, uint32_t *visited, uint32_t *panels) {
     if (id >= PS_DOCK_NODES || (*visited & (1u << id))) return false;
     *visited |= 1u << id;

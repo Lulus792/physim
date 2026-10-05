@@ -76,6 +76,7 @@ static void preferences_start(app *a, const char *override_path) {
     SDL_SetWindowSize(a->window, width, height);
     if (p.maximized)
         SDL_MaximizeWindow(a->window);
+    layouts_start(a);
 }
 static void open_settings(app *a) {
     if (a->tab == 6)

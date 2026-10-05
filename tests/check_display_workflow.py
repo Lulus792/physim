@@ -178,6 +178,38 @@ def timed_series(flow, directory, scaled=False):
     require(records[0] == records[1], "Timed C/Physim studies differ in accepted times or values")
 
 
+def layouts(flow, directory):
+    for language in ("c", "phys"):
+        root = directory / language
+        root.mkdir(parents=True)
+        flow.run("--workspace-state-test", root, "layouts-" + language, timeout=130,
+                 marker="LAYOUTS layouts-" + language + " SELF-TEST: PASSED")
+        runs = list((root / "project/runs").glob("*.psrun"))
+        require(len(runs) == 1, "Applying layouts restarted the simulation")
+        protected = runs + [root / "project/main.c" if language == "c" else root / "project/main.phys"]
+        hashes = [fingerprint(path) for path in protected]
+        for name in ("saved", "applied", "empty", "restored"):
+            require((root / ("layouts-" + name + ".bmp")).exists(), "Layout capture missing: " + name)
+        catalog = root / "layouts.bin"
+        data = catalog.read_bytes()
+        require(data[:8] == b"PSLAYT01" and len(data) == 344 and struct.unpack_from("<I", data, 12)[0] == 1,
+                "Expected one saved layout")
+        flow.run("--workspace-state-test", root, "layouts-read", timeout=130,
+                 marker="LAYOUTS layouts-read SELF-TEST: PASSED")
+        require(catalog.read_bytes() == data, "Reopening wrote the layout catalog")
+        damaged = data[:100]
+        catalog.write_bytes(damaged)
+        flow.run("--workspace-state-test", root, "layouts-corrupt", timeout=130,
+                 marker="LAYOUTS layouts-corrupt SELF-TEST: PASSED")
+        require(catalog.read_bytes() == damaged, "Corrupt layout catalog was overwritten")
+        flow.run("--workspace-state-test", root, "layouts-reset", timeout=130,
+                 marker="LAYOUTS layouts-reset SELF-TEST: PASSED")
+        empty = catalog.read_bytes()
+        require(len(empty) == 20 and struct.unpack_from("<I", empty, 12)[0] == 0,
+                "Explicit catalog reset did not persist")
+        require(hashes == [fingerprint(path) for path in protected], "Layout actions changed sources or run data")
+
+
 def inspector(flow, directory):
     for language in ("c", "phys"):
         root=directory/language
@@ -519,7 +551,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"inspector_workflow": inspector, "timed_series_workflow": timed_series,
+SPECIAL = {"layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}

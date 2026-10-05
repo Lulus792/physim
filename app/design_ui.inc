@@ -286,6 +286,7 @@ static void camera_inspector(app *a) {
 #include "document_ui.inc"
 #include "workspace_tree_ui.inc"
 #include "window_header.inc"
+#include "layout_ui.inc"
 #include "toolbar_ui.inc"
 static void sidebar_panel(app *a) {
     struct nk_context *ui=a->ui;
@@ -812,6 +813,7 @@ static void log_panel(app *a) {
 }
 static void draw_ui(app *a, int width, int height) {
     struct nk_context *ui = a->ui;
+    if(a->layout_manager) { layout_manager_view(a,width,height);return; }
     if (a->recovery) {
         nk_style_push_vec2(ui, &ui->style.window.padding, nk_vec2(0, 5));
         nk_style_push_vec2(ui, &ui->style.window.spacing, nk_vec2(0, 0));

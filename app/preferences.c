@@ -49,21 +49,21 @@ ps_result ps_preferences_read(const char *path, ps_preferences *out) {
                         get32(bytes + 28), get32(bytes + 32), get32(bytes + 36), get32(bytes + 40),
                         get32(bytes + 44), get32(bytes + 48), legacy ? PS_THEME_DARK : get32(bytes + 52),
                         legacy || second || third?280:get32(bytes+56), PS_DOCK_DEFAULT_INITIALIZER};
-    if (!legacy && !second) {
-        const unsigned char *at = bytes + (third?56:60);
+    if(!legacy && !second && !third) {
+        if(!ps_dock_decode(bytes+60,PS_DOCK_WIRE_BYTES,&p.dock))return PS_CORRUPT;
+    } else if (third) {
+        const unsigned char *at = bytes + 56;
         memset(p.dock.nodes,0,sizeof p.dock.nodes);
-        for (unsigned i = 0; i < (third?5u:PS_DOCK_NODES); i++, at += 24)
+        for (unsigned i = 0; i < 5; i++, at += 24)
             p.dock.nodes[i] = (ps_dock_node){get32(at),get32(at+4),get32(at+8),get32(at+12),get32(at+16),get32(at+20)};
         p.dock.root=get32(at); p.dock.floating=get32(at+4); p.dock.hidden=get32(at+8); at+=12;
-        for (unsigned i=0;i<(third?3u:PS_DOCK_PANELS);i++,at+=16)
+        for (unsigned i=0;i<3;i++,at+=16)
             p.dock.floats[i]=(ps_dock_float){get32(at),get32(at+4),get32(at+8),get32(at+12)};
-        if(third) {
-            if((p.dock.floating|p.dock.hidden)&~7u)return PS_CORRUPT;
-            for(unsigned i=0;i<5;i++)
-                if((p.dock.nodes[i].panels&~7u) ||
-                   (p.dock.nodes[i].kind==PS_DOCK_GROUP && p.dock.nodes[i].active>=3)) return PS_CORRUPT;
-            p.dock.hidden|=1u<<PS_DOCK_INSPECTOR;
-        }
+        if((p.dock.floating|p.dock.hidden)&~7u)return PS_CORRUPT;
+        for(unsigned i=0;i<5;i++)
+            if((p.dock.nodes[i].panels&~7u) ||
+               (p.dock.nodes[i].kind==PS_DOCK_GROUP && p.dock.nodes[i].active>=3)) return PS_CORRUPT;
+        p.dock.hidden|=1u<<PS_DOCK_INSPECTOR;
     }
     if (!ps_preferences_valid(&p))
         return PS_CORRUPT;
@@ -81,17 +81,7 @@ ps_result ps_preferences_write(const char *path, const ps_preferences *p) {
                          p->inspector_open, p->workspace, p->theme,p->inspector_width};
     for (unsigned i = 0; i < 12; i++)
         put32(bytes + 12 + 4 * i, fields[i]);
-    unsigned char *at=bytes+60;
-    for (unsigned i=0;i<PS_DOCK_NODES;i++,at+=24) {
-        const ps_dock_node *n=&p->dock.nodes[i];
-        uint32_t values[]={n->kind,n->first,n->second,n->ratio,n->panels,n->active};
-        for (unsigned j=0;j<6;j++) put32(at+4*j,values[j]);
-    }
-    put32(at,p->dock.root); put32(at+4,p->dock.floating); put32(at+8,p->dock.hidden); at+=12;
-    for (unsigned i=0;i<PS_DOCK_PANELS;i++,at+=16) {
-        const ps_dock_float *r=&p->dock.floats[i];
-        put32(at,r->x); put32(at+4,r->y); put32(at+8,r->w); put32(at+12,r->h);
-    }
+    if(!ps_dock_encode(&p->dock,bytes+60,PS_DOCK_WIRE_BYTES))return PS_INVALID;
     put32(bytes+304,ps_crc32(bytes,304));
     char temporary[4096];
     FILE *f = NULL;

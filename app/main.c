@@ -11,6 +11,7 @@
 #include "report_image.h"
 #include "scene_view.h"
 #include "preferences.h"
+#include "layout_catalog.h"
 #include "workspace_state.h"
 #include "workspace_tree.h"
 #include "text_document.h"
@@ -104,7 +105,12 @@ typedef struct {
     int dock_resize, dock_float_resize, dock_drag, dock_last_tab;
     struct nk_vec2 dock_origin, dock_grab, dock_resize_mouse;
     ps_dock_float dock_resize_start;
-    struct nk_rect dock_menu_bounds[4];
+    struct nk_rect dock_menu_bounds[5];
+    ps_layout_catalog layouts;
+    char layouts_path[4096], layouts_error[192], layout_name[PS_LAYOUT_NAME_BYTES];
+    bool layouts_writable, layout_manager;
+    int layout_selected;
+    struct nk_rect layout_bounds[6], layout_entries[PS_LAYOUT_MAX];
     uint32_t dock_target, dock_side;
     struct nk_rect settings_bounds[6], theme_bounds[PS_THEME_COUNT], panel_bounds[2];
     SDL_Window *window;
@@ -2204,6 +2210,7 @@ static bool documentation_window_open(app *a);
 #include "documentation_ui.inc"
 #include "report_ui.inc"
 #include "library_ui.inc"
+static void layouts_start(app *a);
 #include "design_ui.inc"
 // clang-format on
 static struct nk_font *system_font(struct nk_font_atlas *atlas, float size, bool code, bool title) {
@@ -2427,6 +2434,7 @@ static void test_mouse(app *a, struct nk_rect rect, bool down) {
 #include "docking_tests.inc"
 #include "hierarchy_tests.inc"
 #include "inspector_tests.inc"
+#include "layout_tests.inc"
 #include "adaptive_tests.inc"
 #include "series_tests.inc"
 #include "native_dialog_tests.inc"
@@ -2909,7 +2917,11 @@ int main(int argc, char **argv) {
                 if (!a->dirty && !a->analysis_dirty && !a->project_settings_dirty && documents_save_all(a))
                     a->quitting = true;
             }
-            if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && !a->recovery) {
+            if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && a->layout_manager && e.key.key == SDLK_ESCAPE) {
+                a->layout_manager = false;
+                continue;
+            }
+            if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && !a->recovery && !a->layout_manager) {
                 if (a->dock_drag && e.key.key==SDLK_ESCAPE) { a->dock_drag=0;a->dock_dragging=false;continue; }
                 if (scene_shortcut(a, &e.key)) continue;
                 if (a->tab == 1 && e.key.key == SDLK_SPACE && !e.key.repeat &&
@@ -2978,7 +2990,7 @@ int main(int argc, char **argv) {
         } else if (workspace_state_test) {
             if (ps_clock() - test_started >
                 (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
-                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
+                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15)) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
                         argv[3], ps_clock() - test_started);

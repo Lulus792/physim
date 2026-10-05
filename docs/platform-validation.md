@@ -3,6 +3,61 @@
 Stand: 5. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Benannte Panelanordnungen am 5. Oktober 2026
+
+Katalog, Docking und Einstellungen bestehen auf macOS Debug 3/3:
+`build/layouts-debug-mac/test-results/run-xrp18z64`. Die neue Verwaltung besteht
+mit aktiven UI-Assertions:
+`build/layouts-debug-mac/test-results/run-607y3f86`.
+Unter Debian Release bestehen die drei Modelle ebenfalls:
+`build/layouts-linux/test-results/run-9g3bs89x` innerhalb der VM; der erste
+Verwaltungsablauf besteht unter
+`build/layouts-linux/test-results/run-zjet3zqb`.
+
+Die Katalogprüfung deckt leere und volle Kataloge, UTF-8-Namen, byteweise
+Beschädigungen, alle Abschneidepositionen, zusätzliche Bytes, unbekannte
+Versionen, ungültige Namen, doppelte Namen, Panelgraphen, aktive Tabs,
+Größengrenzen und fehlgeschlagene Dateiersetzung ab. Lese- und Modellfehler
+erhalten den bisherigen Zustand. Die gemeinsame Dockingkodierung erhält
+das bisherige Einstellungsformat und die Migration der Formate 1–3.
+
+C und Physim laufen in eigenen Projekten. Maus- und Texteingabeereignisse
+speichern zwei Anordnungen, wenden sie an, ersetzen einen vorhandenen Namen
+und löschen einen Eintrag. Teilungen, aktive Tabs, versteckte Panels, freier
+Inspektor, Größen und Protokollansicht kehren zurück. Theme und Schriftgröße
+bleiben bestehen; die Simulation schreitet fort, und der CRC des ungespeicherten
+Editors bleibt gleich. Ein vollständig verborgener Panelbaum lässt sich weiterhin
+über die Menüzeile wiederherstellen. Weitere App-Prozesse prüfen Neustart,
+Erhalt einer beschädigten Datei und ausdrückliches Zurücksetzen. Die Hashes
+von Quellen und Laufdaten bleiben dabei unverändert. Der finale Debugablauf
+prüft zusätzlich das Anwenden aus den Einstellungen: Geometrie wird synchronisiert,
+der ungespeicherte Theme-/Schriftentwurf bleibt erhalten.
+
+Frühe Verwaltungsprüfungen lesen Texteingaben vor dem folgenden Renderframe;
+sie warten jetzt auf dessen Verarbeitung. Dabei entdeckt der Prüfer, dass
+die ausgewählte Zeile einen neu eingegebenen Namen pro Frame zurücksetzt.
+Die Auswahl kopiert den Namen nun ausschließlich bei einem Klick.
+Die bisherigen Zeitgrenzen sind unverändert. Dunkle und helle Ansichten,
+UTF-8-Namen, Fehler und Zurücksetzen wurden bei 1080 × 740 logischen Pixeln
+auf dem Intel-Mac visuell geprüft. Die neue Kopfzeile verwendet keinen Abstand
+zwischen den Fenstersteuerungen; alle drei Buttons bleiben vollständig sichtbar.
+
+Die vollständigen Release-Läufe ohne Fenster bestehen jeweils 511/511:
+macOS `build/layouts-final-mac/test-results/run-r6lupogg`, Debian
+`build/layouts-linux/test-results/run-s6mgc2eh` innerhalb der VM.
+Die vollständigen Release-Fensterläufe bestehen jeweils 48/48: macOS
+`build/layouts-final-mac/test-results/run-0_2371a7`, Debian
+`build/layouts-linux/test-results/run-b4nqdu99` unter X11/Xvfb/Openbox/Mesa.
+Auch die Linux-Ausgabe der neuen Verwaltung wurde bei 1080 × 740 visuell geprüft.
+Die verschobenen Release-SDKs bestehen mit unabhängigen Headern und Verbrauchern,
+installiertem und aus SDK-Quellen neu gebautem Kern, C-/Physim-Modulen,
+adaptiven Läufen, Zielzeitstudien und neun neu gebauten Projekten:
+macOS `build/layouts-sdk-proof-mac/Native SDK ä e1zcew_4`, Debian
+`build/layouts-sdk-proof-linux/Native SDK ä h7_g5aj5` innerhalb der VM.
+Die Umgebungen sind weiterhin Intel macOS 14.6.1/AppleClang 16 und
+Debian 12/GCC 12.2/SDL 3.2.30. Die Sprache bleibt auf 0.170.0, öffentliche
+API und ABI bleiben auf 3; der private Katalog verwendet Format 1.
+
 ## Eigenständiger Inspektor am 5. Oktober 2026
 
 Dockingmodell und Einstellungenmigration bestehen auf macOS Release 2/2:

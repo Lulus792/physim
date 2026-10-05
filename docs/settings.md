@@ -180,3 +180,36 @@ zwei Spalten. Die Zeitleiste zeigt ihre vier Schaltflächen und den Schieberegle
 auf getrennten Reihen. Die Szene bleibt mindestens 160 logische Pixel hoch;
 kleinere Panelhöhen können vertikales Scrollen erfordern. Die globale Mindestgröße
 1080 × 740 bleibt bestehen.
+
+## Benannte Panelanordnungen
+
+**Ansicht → Panelanordnungen …** öffnet die Verwaltung. Gib einen Namen ein und
+wähle **Anordnung speichern**, um die aktuelle Aufteilung zu sichern. Bis zu acht
+Anordnungen sind möglich. **Anwenden** stellt die ausgewählte Anordnung wieder her;
+**Löschen** entfernt sie. Ein bereits vorhandener Name wird beim Speichern ersetzt.
+Namen unterscheiden Groß- und Kleinschreibung und dürfen bis zu 63 UTF-8-Bytes
+enthalten, ohne Steuerzeichen oder Leerzeichen am Anfang und Ende.
+
+Gespeichert werden Panelbaum, aktive Tabs, verborgene Panels, freie Rechtecke,
+Seitenleisten- und Inspektorbreite, Protokollhöhe und die aufgeklappte
+Protokollansicht. Freie Rechtecke werden beim Anzeigen auf das aktuelle Fenster
+begrenzt. Auch eine Anordnung mit ausschließlich verborgenen Panels lässt sich
+über die Menüzeile wieder öffnen. **Schließen** oder Escape verlässt die Verwaltung.
+Quelltexte, aktive Dokumente, Arbeitsbereich, Theme, Schriftgröße, Kamera,
+Projektparameter, Lauf und Messdaten bleiben beim Anwenden erhalten.
+
+Der persönliche Katalog liegt als `layouts.bin` neben `preferences.bin`.
+Format 1 ist versioniert und mit einer CRC-Prüfsumme geschützt. Speichern, Löschen
+und bewusstes Zurücksetzen schreiben jeweils eine temporäre Datei und ersetzen
+die bisherige erst nach vollständigem Schreiben und Schließen. Bei einem
+Schreibfehler bleiben der bisherige Katalog und die Datei erhalten. Das Beenden
+oder bloße Anwenden schreibt den Katalog nicht. Die aktive Anordnung wird wie
+bisher beim normalen Beenden in den Einstellungen gespeichert.
+
+Beschädigte oder unbekannte Katalogdateien bleiben erhalten; die Verwaltung
+zeigt den Ladefehler und sperrt Speichern, Anwenden und Löschen. Nur **Datei bewusst
+zurücksetzen** ersetzt den Katalog durch eine leere Datei. Gleichzeitige Instanzen
+teilen den persönlichen Katalog; der zuletzt vollständig gespeicherte Stand
+gewinnt. Stromausfälle während des Dateiaustauschs sind nicht abgesichert.
+Diese Anordnungen speichern keine Projekt- oder Workspace-Pfade. Mehrere benannte
+Workspaces und separate Panelfenster bleiben weitere Produktziele.

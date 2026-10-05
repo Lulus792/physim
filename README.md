@@ -234,6 +234,9 @@ lassen sich an ihren Titelzeilen verschieben: als Tabs zusammenfassen, nebeneina
 oder übereinander andocken und innerhalb des Hauptfensters frei platzieren.
 Trennlinien und der Griff rechts unten verändern die Größe; Escape bricht das
 Verschieben ab. **Ansicht** blendet Panels wieder ein und setzt die Anordnung zurück.
+**Ansicht → Panelanordnungen …** speichert bis zu acht benannte Anordnungen mit
+Teilungen, aktiven Tabs, freien Rechtecken und Panelgrößen. Anwenden und Löschen
+sind dort ebenfalls möglich; Quelltext und laufende Simulation bleiben erhalten.
 Fenstergröße, Maximierung, Darstellung und Panelanordnung bleiben bei normalem
 Beenden für den nächsten Start erhalten.
 Anleitung: [Einstellungen und Fensteraufteilung](docs/settings.md), auch direkt über F1.

@@ -7,6 +7,7 @@ enum { PS_DOCK_TAB, PS_DOCK_LEFT, PS_DOCK_RIGHT, PS_DOCK_TOP, PS_DOCK_BOTTOM };
 #define PS_DOCK_NODES 7u
 #define PS_DOCK_ALL ((1u << PS_DOCK_PANELS)-1u)
 #define PS_DOCK_NONE UINT32_MAX
+#define PS_DOCK_WIRE_BYTES (PS_DOCK_NODES*24u+12u+PS_DOCK_PANELS*16u)
 typedef struct { uint32_t kind, first, second, ratio, panels, active; } ps_dock_node;
 typedef struct { uint32_t x, y, w, h; } ps_dock_float;
 typedef struct {
@@ -30,4 +31,8 @@ bool ps_dock_hide(ps_dock_layout *layout, uint32_t panel);
 /* Restore a hidden panel beside the first docked panel, then select it. */
 bool ps_dock_reveal(ps_dock_layout *layout, uint32_t panel, uint32_t side);
 bool ps_dock_select(ps_dock_layout *layout, uint32_t panel);
+/* Private fixed-width encoding used by preferences and named layouts.
+ * Decode is transactional; both functions require exactly WIRE_BYTES. */
+bool ps_dock_encode(const ps_dock_layout *layout,unsigned char *bytes,size_t size);
+bool ps_dock_decode(const unsigned char *bytes,size_t size,ps_dock_layout *layout);
 #endif
