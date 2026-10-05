@@ -120,8 +120,8 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt derzeit 496 Tests ohne Fenster aus, mit `--no-app` die
-485 Prüfungen ohne SDL-Abhängigkeit. Die 51 C-Referenztests decken Mathematik, Numerik,
+`--test` führt derzeit 500 Tests ohne Fenster aus, mit `--no-app` die
+489 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
 Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.
@@ -197,7 +197,7 @@ python3 tests/test_native_test_runner.py --work build/native
 
 ### Fenster- und Grafiktests direkt ausführen
 
-`--test-display` führt zusätzlich 39 Fenster- und Grafikabläufe aus. Dafür sind
+`--test-display` führt zusätzlich 40 Fenster- und Grafikabläufe aus. Dafür sind
 eine grafische Sitzung, SDL und ein geeigneter OpenGL-Treiber erforderlich.
 Die beiden Testgruppen werden getrennt gestartet; `--test-display` lässt sich
 nicht mit `--no-app` oder `--test` kombinieren.
@@ -661,6 +661,19 @@ Ein 1-Sekunden-Schritt bei 0,1× bestätigt die sofortige RUN-Rückmeldung und d
 unmittelbaren Einzelschritt. `speed_workflow` bedient die echten Auswahl- und
 Steuerknöpfe in C-/Physim-Projekten, prüft Reset mit Offline-Modus und lädt die
 gespeicherte Wahl in einem neuen App-Prozess. Messdateiformat und Modul-ABI bleiben gleich.
+
+`run_snapshots` prüft optionale Szenenblöcke mit maximaler Geometrie und allen
+Kanälen, unveränderte Messpunktzähler, alte Dateien, unbekannte Versionen,
+ungültige Szenen, CRC-Fehler und abgeschnittene Enden. `timeline` prüft über
+10.000 Zustände die Speichergrenze, Chronologie, Anfang/Ende und Auswahl.
+`runner_snapshots_c` und `runner_snapshots_phys` führen die Offline-CLI mit und
+ohne `--record-scenes` aus: Alle 201 Referenzmessungen bleiben gleich, Szenen
+enthalten die dazugehörigen Werte und Anfang/Ende. `timeline_workflow` startet
+C-/Physim-Projekte und bedient Rückblick, Klick/Ziehen der Leiste, Pfeile,
+Wiedergabe, Leertaste, Live und Reset. Weitere Prozesse öffnen die archivierte,
+die von Szenen befreite alte, eine alte mit negativen Zeitstempeln und die am Footer
+abgeschnittene Datei. CRCs und
+Dateihashes bestätigen, dass Rückblick und Wiedergabe keine Dateien verändern.
 
 ## Linux-Startfehler untersuchen
 

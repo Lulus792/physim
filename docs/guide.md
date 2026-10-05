@@ -40,7 +40,8 @@ Der Lauf liegt im Projekt unter `runs/`; das Schließen der App löscht ihn nich
 - Körper, Kräfte, Kontakte, Reibung, Gelenke, Kontaktketten und kontinuierliche Kugelkollisionen: [Mechanik](mechanics.md), [Kollisionserkennung](reference/collision.md).
 - Zufallszahlen und Fehlercodes: [Grundlagenreferenz](reference/core.md).
 - Kanäle, Formen, Objekt-IDs und Szenengrenzen: [API-Überblick](api.md), [Experimentreferenz](reference/experiment.md).
-- Dateien lesen und schreiben: [Datenreferenz](reference/data.md), [Dateiformat](data-format.md).
+- Dateien lesen und schreiben: [Datenreferenz](reference/data.md),
+  [Szenenzustände](reference/snapshot.md), [Dateiformat](data-format.md).
 - Speicher und eigene Datenstrukturen: [Allocator und Arena](memory.md), [Arrays](array.md), [String-Views](string-view.md), [Hashmap](hashmap.md).
 
 ## Das Handbuch verwenden

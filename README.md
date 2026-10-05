@@ -139,6 +139,8 @@ erklärt den elastischen und schrägen Stoß orientierter Boxen und ihre Messkan
    Zeitschritt bleibt dabei gleich. Die Auswahl ist auch während des Laufs möglich.
    **Zurücksetzen / F7** öffnet den Anfangszustand pausiert in einer neuen Messdatei;
    bisherige Läufe bleiben erhalten.
+   Die **Zeitleiste** zeigt frühere Szenen und Messwerte und spielt Aufzeichnungen
+   ab. Der laufende Versuch bleibt dabei unverändert; **Live** kehrt zur aktuellen Ansicht zurück.
 5. Nach Stop lädt die App die Messdaten im Hintergrund. **Auswerten** zeigt Kurven
    und Statistik. **Analyse starten** führt `analysis.c` oder `analysis.phys` in einem weiteren Prozess aus.
    Dessen **Analyseergebnis** zeigt eigene Diagramme und Tabellen. Die Vorlage erzeugt

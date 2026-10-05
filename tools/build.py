@@ -21,9 +21,9 @@ import tempfile
 ROOT = Path(__file__).resolve().parent.parent
 WINDOWS = sys.platform == "win32"
 MAC = sys.platform == "darwin"
-CORE = "core memory array string_view hashmap math data analysis scene numerics units series report report_export mechanics box_contacts collision measurement".split()
+CORE = "core memory array string_view hashmap math data snapshot analysis scene numerics units series report report_export mechanics box_contacts collision measurement".split()
 LANGUAGE = "lexer parser checker emitter builtins".split()
-APP = "main ui_backend ui_sdl ui_geometry graphics documentation library preferences workspace_state workspace_tree plot_view report_image png".split()
+APP = "main timeline ui_backend ui_sdl ui_geometry graphics documentation library preferences workspace_state workspace_tree plot_view report_image png".split()
 PROJECT = "project_file text_document autosave parameter_catalog".split()
 ZLIB = "adler32 crc32 deflate trees zutil".split()
 EXAMPLES = "pendulum projectile collision box_floor spring uncertain_projectile box_collision buoyancy".split()

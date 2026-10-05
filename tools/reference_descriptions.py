@@ -98,7 +98,14 @@ add('ps_quantity_', {
     'multiply': 'Multipliziert Werte und Einheiten; symbol benennt die Produkteinheit.',
     'divide': 'Dividiert Werte und Einheiten mit Prüfung auf ungültigen Divisor.',
 })
+add('ps_snapshot_', {
+    'encode': 'Kodiert Zeit, Kanalwerte, Pausestatus und validierte Geometrie explizit little-endian; benötigt PS_SNAPSHOT_MAX Bytes und liefert bei ungültigen Eingaben 0.',
+    'decode': 'Dekodiert einen vollständigen Zustand mit Größen-, Zahlen-, Text- und Geometrieprüfung; Fehler lassen sämtliche Ausgaben unverändert.',
+})
+
 add('ps_run_', {
+    'append_snapshot': 'Schreibt einen optionalen versionierten Szenenblock mit zugehörigen Werten, ohne den Messpunktzähler zu verändern. Kanalzahl und Szene müssen zum Lauf passen.',
+    'snapshot_next': 'Liest den nächsten validierten Szenenblock mit einem eigenen Reader, zählt übersprungene Messpunkte und prüft den Footer. Fehler lassen den ausgegebenen Snapshot unverändert.',
     'create': 'Erzeugt eine neue Laufdatei mit Kanaldefinitionen und Metadaten; vorhandene Pfade werden geschützt.',
     'append': 'Schreibt einen Messpunkt mit Zeit und einem Wert je registriertem Kanal.',
     'close': 'Finalisiert die Laufdatei mit Abschlussmarker und schließt den Writer.',

@@ -18,6 +18,7 @@ CRC32: reflektiertes Polynom `0xEDB88320`, Initialwert und abschließendes XOR
 | 2 | Kanalzahl u32, dann je Kanal 48 Bytes Name, 16 Einheit, 96 Beschreibung, 7 int8 SI-Exponenten |
 | 3 | Zeit f64 und genau Kanalzahl f64-Messwerte |
 | 4 | Gesamtzahl Messpunkte u64; Abschlussmarker |
+| 5 | optionale Szene: Snapshotversion u32 = 1, danach der unten beschriebene Snapshotkopf, Werte, Objekte und Punkte |
 
 Metadaten und Schema stehen unmittelbar nach dem Header. Strings im Schema sind
 NUL-terminiert und auf ihre Feldbreite begrenzt. Die Payloadobergrenze ist 8192 Bytes.
@@ -27,6 +28,27 @@ Zeilen `parameter.<name>`, `parameter_default.<name>`,
 `parameter.<name>` ist der im Lauf wirksame Wert nach einem möglichen Override.
 Unbekannte Chunktypen innerhalb dieser Obergrenze werden nach CRC-Prüfung übersprungen.
 Eine Schemaänderung innerhalb eines Laufs ist nicht zulässig.
+
+Die Snapshotversion ist unabhängig von Dateiformat, Modul-ABI und Pipe-Version.
+Der Snapshot enthält Zeit, zugehörige Kanalwerte, Pausestatus und validierte
+Geometrie einschließlich Orientierung, IDs, Labels und Polyline-Punkten.
+Seine Kanalzahl muss dem Dateischema entsprechen. Der Block fügt keinen Messpunkt
+hinzu: Der Abschlusszähler zählt ausschließlich Typ 3. Gleiche Snapshotzeiten
+sind bei RUN-/PAUSE-Rückmeldungen erlaubt; die Zeitleiste zeigt dann den letzten
+Zustand dieses Zeitpunkts. Messwertleser überspringen die optionalen Blöcke nach
+CRC-Prüfung. Ältere Dateien benötigen keine Konvertierung.
+
+Interaktive Läufe archivieren die ausgegebenen Szenen einschließlich Anfang und
+regulärem Ende. Die Offline-CLI zeichnet mit `--record-scenes` zusätzlich
+ausgewählte Zustände in Abständen von mindestens 1/60 Simulationssekunde auf;
+der letzte Zustand wird auch bei kürzerem Restabstand gespeichert. Die normale
+CLI ohne diesen Schalter speichert weiterhin nur Messwerte. Alle Physikschritte
+bleiben unabhängig von der Szenenfrequenz als Typ 3 erhalten.
+
+`ps_run_snapshot_next` liest die Szenen mit einem eigenen Reader, validiert dabei
+auch übersprungene Messpunkte und prüft den Abschlusszähler. Ungültige Szenen,
+unbekannte Snapshotversionen und unvollständige/CRC-fehlerhafte Enden werden gemeldet;
+die ausgegebene Szene bleibt bei einem Lesefehler unverändert.
 
 Jeder Punkt wird mit `fflush` an das OS übergeben. Alle 100 Punkte und beim Abschluss
 folgt `fsync`/`_commit`. Bei einem reinen Prozessabsturz bleiben vollständige Blöcke

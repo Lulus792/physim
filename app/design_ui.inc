@@ -100,11 +100,12 @@ static const char *workspace_name(const char *path) {
 // clang-format off
 #include "batch_ui.inc"
 #include "settings_ui.inc"
+#include "timeline_ui.inc"
 // clang-format on
 static void camera_inspector(app *a) {
     struct nk_context *ui = a->ui;
     scene_selection_sync(a);
-    if (a->scene_selected && a->scene_selected_slot < a->scene.count) {
+    if (a->scene_selected && a->scene_selected_slot < display_scene(a)->count) {
         char selected[96];
         if (a->scene_selected_id) snprintf(selected, sizeof selected, "Auswahl: ID %u", a->scene_selected_id);
         else snprintf(selected, sizeof selected, "Auswahl: Eintrag %u", a->scene_selected_slot + 1);
@@ -122,8 +123,8 @@ static void camera_inspector(app *a) {
         if (nk_button_label(ui, "Alle einblenden")) a->scene_view.hidden = 0;
         nk_layout_row_dynamic(ui, 48, 1);
         nk_label_wrap(ui, "Alt + N/P: Auswahl. Alt + H: ausblenden.");
-        for (uint32_t i = 0; i < a->scene.count; i++) {
-            const ps_object *o = &a->scene.objects[i];
+        for (uint32_t i = 0; i < display_scene(a)->count; i++) {
+            const ps_object *o = &display_scene(a)->objects[i];
             char label[112];
             snprintf(label, sizeof label, "%u · %s%s%s", i + 1, names[o->shape],
                      o->text[0] ? " · " : "", o->text);
@@ -590,7 +591,10 @@ static void draw_ui(app *a, int width, int height) {
             nk_style_pop_font(ui);
             nk_layout_row_push(ui, .4f);
             char time[96];
-            snprintf(time, sizeof time, "%.3f s", a->simulation_time);
+            if (a->timeline_browsing)
+                snprintf(time, sizeof time, "Rückblick %.6g s · %s %.6g s", display_time(a),
+                         a->runner.running ? "Live" : "Ende", a->simulation_time);
+            else snprintf(time, sizeof time, "%.6g s", a->simulation_time);
             nk_label_colored(ui, time, NK_TEXT_RIGHT, muted());
             nk_layout_row_end(ui);
             nk_layout_row_dynamic(ui, 34, 3);
@@ -663,7 +667,8 @@ static void draw_ui(app *a, int width, int height) {
             }
             nk_end_disabled(ui);
             float plot_height = fmaxf(96, content * .21f);
-            viewport(a, content - plot_height - 270);
+            viewport(a, content - plot_height - 308);
+            timeline_controls(a);
             nk_layout_row_dynamic(ui, 28, 2);
             if (a->channel_count) {
                 const char *names[PS_MAX_CHANNELS];
@@ -674,11 +679,12 @@ static void draw_ui(app *a, int width, int height) {
                 a->plot_channel = nk_combo(ui, names, (int)a->channel_count, a->plot_channel, 26,
                                            nk_vec2(280, 240));
                 char value[96];
-                snprintf(value, sizeof value, "%.8g", a->values[a->plot_channel]);
+                const double *shown = display_values(a);
+                snprintf(value, sizeof value, "%.8g", shown[a->plot_channel]);
                 int mask = a->channel_status[a->plot_channel];
-                if (mask >= 0 && a->values[mask] != 1)
+                if (mask >= 0 && shown[mask] != 1)
                     snprintf(value, sizeof value, "%s",
-                             a->values[mask] == 2 ? "Messung ausgefallen" : "Keine neue Messung");
+                             shown[mask] == 2 ? "Messung ausgefallen" : "Keine neue Messung");
                 nk_label(ui, value, NK_TEXT_RIGHT);
                 plot(a, a->history_t, a->history_v[a->plot_channel], a->history_count, plot_height,
                      "Live-Messwerte", mask >= 0, NULL);

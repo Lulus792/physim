@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 static uint32_t sequence;
+static double last_snapshot_time = -1;
 static bool send_message(uint32_t type, const void *p, uint32_t n) {
     unsigned char b[PS_WIRE_MAX + 20];
     size_t size = ps_wire_encode(b, type, sequence++, p, n);
@@ -19,12 +20,17 @@ static void report(bool interactive, const char *error) {
     else
         fprintf(stderr, "%s\n", error);
 }
-static ps_result snapshot(const ps_experiment_api *api, ps_context *c, bool paused) {
+static ps_result snapshot(const ps_experiment_api *api, ps_context *c, ps_run_writer *writer,
+                          bool paused, bool emit) {
     ps_scene scene = {0};
     c->error[0] = 0;
     api->build_scene(c, &scene);
     if (c->error[0])
         return PS_NUMERIC;
+    ps_result result = ps_run_append_snapshot(writer, c, &scene, paused);
+    if (result != PS_OK) return result;
+    last_snapshot_time = c->time_s;
+    if (!emit) return PS_OK;
     unsigned char p[PS_WIRE_MAX];
     size_t n = ps_snapshot_encode(p, c, &scene, paused);
     return n && send_message(PS_MSG_SNAPSHOT, p, (uint32_t)n) ? PS_OK : PS_IO;
@@ -33,12 +39,12 @@ int main(int argc, char **argv) {
     if (argc < 3) {
         fprintf(stderr, "Usage: physim-runner module output.psrun [--steps N | --interactive] "
                         "[--dt seconds] [--seed N] [--param name=value]... "
-                        "[--speed 0|0.1..16 (interactive only)]\n"
+                        "[--speed 0|0.1..16 (interactive only)] [--record-scenes]\n"
                         "       physim-runner module --describe\n");
         return 2;
     }
     bool describe = argc == 3 && !strcmp(argv[2], "--describe");
-    bool interactive = false;
+    bool interactive = false, record_scenes = false;
     uint64_t steps = 4000, seed = 42;
     double dt = 0.005, speed = 1;
     bool speed_option = false;
@@ -49,6 +55,10 @@ int main(int argc, char **argv) {
         char *end = NULL;
         if (!strcmp(argv[i], "--interactive")) {
             interactive = true;
+            continue;
+        }
+        if (!strcmp(argv[i], "--record-scenes")) {
+            record_scenes = true;
             continue;
         }
         if (i + 1 >= argc)
@@ -160,6 +170,8 @@ int main(int argc, char **argv) {
         return 6;
     }
     result = ps_run_append(&writer, 0, c.values);
+    if (result == PS_OK && record_scenes && !interactive)
+        result = snapshot(api, &c, &writer, true, false);
     bool paused = true, stop = false, handshake = false;
     uint64_t tick = 0;
     ps_wire_buffer wire = {0};
@@ -189,7 +201,7 @@ int main(int argc, char **argv) {
                 if (type == PS_MSG_HELLO && n == 4 && ps_get_u32(p) == PS_ABI_VERSION &&
                     !handshake) {
                     handshake = true;
-                    result = snapshot(api, &c, paused);
+                    result = snapshot(api, &c, &writer, paused, true);
                     if (result != PS_OK)
                         break;
                 } else if (handshake && type == PS_MSG_SPEED && n == 8 &&
@@ -204,7 +216,7 @@ int main(int argc, char **argv) {
                     pacer.running = true;
                     ps_pacer_restart(&pacer, now);
                     /* Report control state even when a slow, large dt is not due yet. */
-                    result = snapshot(api, &c, false);
+                    result = snapshot(api, &c, &writer, false, true);
                     if (result != PS_OK)
                         break;
                     last_frame = now;
@@ -212,7 +224,7 @@ int main(int argc, char **argv) {
                     paused = true;
                     pacer.running = false;
                     ps_pacer_restart(&pacer, now);
-                    result = snapshot(api, &c, true);
+                    result = snapshot(api, &c, &writer, true, true);
                     if (result != PS_OK)
                         break;
                 } else if (type == PS_MSG_STEP && paused)
@@ -249,14 +261,20 @@ int main(int argc, char **argv) {
         c.time_s = (double)tick * dt;
         result = ps_run_append(&writer, c.time_s, c.values);
         if (interactive && (single || now - last_frame >= 1.0 / 60)) {
-            ps_result scene_result = snapshot(api, &c, paused);
+            ps_result scene_result = snapshot(api, &c, &writer, paused, true);
             if (scene_result != PS_OK) {
                 result = scene_result;
                 break;
             }
             last_frame = now;
         }
+        if (!interactive && record_scenes && c.time_s - last_snapshot_time >= 1.0 / 60) {
+            ps_result scene_result = snapshot(api, &c, &writer, false, false);
+            if (scene_result != PS_OK) result = scene_result;
+        }
     }
+    if (result == PS_OK && last_snapshot_time >= 0 && c.time_s > last_snapshot_time)
+        result = snapshot(api, &c, &writer, true, interactive);
     if (result == PS_OK)
         result = ps_run_close(&writer);
     else {

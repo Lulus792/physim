@@ -163,6 +163,32 @@ feste Schritte. Nach Pause, Geschwindigkeitswechsel oder längerer Verzögerung 
 versucht keinen unbegrenzten Sprung zur aktuellen Echtzeit. Langsame Modelle oder
 eine blockierte Datenübertragung können daher hinter der gewünschten Echtzeit zurückbleiben.
 
+Die **Zeitleiste** unter der 3D-Ansicht erlaubt einen Rückblick auf aufgezeichnete
+Zustände. Klicke auf die Leiste oder ziehe ihren Griff; die Pfeile wechseln zum
+vorherigen/nächsten Zustand. Szene und angezeigter Kanalwert gehören zum selben
+gespeicherten Zeitpunkt. Die senkrechte Markierung im Diagramm zeigt die Auswahl.
+Bei **Rückblick** nennt der Fensterinhalt zusätzlich die aktuelle Simulationszeit.
+Der Versuch kann im Hintergrund weiterlaufen. **Live** folgt wieder dem Runner;
+bei einem beendeten Lauf heißt die Schaltfläche **Letzter**.
+
+**Abspielen / Anhalten** und die **Leertaste** geben aufgezeichnete Zustände in
+Echtzeit wieder. Die Leertaste gilt im Simulationsbereich, solange kein Eingabefeld
+oder Menü aktiv ist. Wiedergabe und Rückblick verändern weder Modell noch Seed,
+Messdatei oder Laufsteuerung. **Pause/Fortsetzen** und **Einzelschritt** steuern
+weiterhin den Versuch; **Zurücksetzen** beendet zusätzlich den Rückblick.
+
+Szenen werden direkt in der `.psrun`-Datei gespeichert. Nach dem Öffnen eines Laufs
+unter **Läufe & Berichte** stehen sie wieder unter **Simulieren** bereit, ohne
+ein Experimentmodul auszuführen. Auch gültige Zustände eines rekonstruierten Laufs
+bleiben verfügbar. Ältere Dateien ohne Szenen erhalten eine Zeitleiste für ihre
+Messwerte; die 3D-Ansicht weist auf die fehlende Aufzeichnung hin.
+Die App liest Dateien im Hintergrund und hält höchstens 2048 Vorschauzustände im
+Speicher. Bei langen Läufen werden Zwischenzustände ausgedünnt; Anfang und letzter
+Zustand bleiben erhalten. Ein bereits betrachteter Zustand bleibt währenddessen
+unverändert. Die Datei enthält weiterhin alle aufgezeichneten Szenen und alle
+Messpunkte. Es wird keine Geometrie zwischen Zuständen interpoliert. Fehler der
+Szenenaufzeichnung erscheinen in der 3D-Ansicht; vorhandene Messdaten bleiben auswertbar.
+
 **Zurücksetzen / F7** beendet einen laufenden oder pausierten Runner und öffnet
 einen neuen Lauf **pausiert bei 0 Sekunden**. **Einzelschritt** berechnet danach
 genau einen Zeitschritt; **Fortsetzen** startet die laufende Simulation.

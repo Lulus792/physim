@@ -232,6 +232,19 @@ ps_result ps_run_close(ps_run_writer *w) {
     w->file = NULL;
     return r;
 }
+ps_result ps_run_append_snapshot(ps_run_writer *w, const ps_context *c,
+                                 const ps_scene *scene, bool paused) {
+    if (!w || !w->file || !c || c->channel_count != w->channels)
+        return PS_INVALID;
+    unsigned char payload[PS_SNAPSHOT_MAX];
+    ps_put_u32(payload, PS_SNAPSHOT_VERSION);
+    size_t size = ps_snapshot_encode(payload + 4, c, scene, paused);
+    if (!size || size > sizeof payload - 4)
+        return PS_INVALID;
+    ps_result result = chunk(w->file, 5, payload, (uint32_t)size + 4);
+    if (result == PS_OK && fflush(w->file)) result = PS_IO;
+    return result;
+}
 static ps_result read_chunk(FILE *f, uint32_t *type, unsigned char *p, uint32_t *size) {
     unsigned char h[12];
     if (fread(h, 1, 12, f) != 12)
@@ -286,8 +299,8 @@ fail:
     r->file = NULL;
     return error;
 }
-ps_result ps_run_next(ps_run_reader *r, double *t, double *v) {
-    if (!r || !r->file || !t || !v)
+static ps_result next_record(ps_run_reader *r, double *t, double *v, ps_snapshot *snapshot) {
+    if (!r || !r->file || (!snapshot && (!t || !v)))
         return PS_INVALID;
     if (r->complete)
         return PS_EOF;
@@ -308,9 +321,22 @@ ps_result ps_run_next(ps_run_reader *r, double *t, double *v) {
                 if (!isfinite(values[i]))
                     return PS_CORRUPT;
             }
-            *t = time;
-            memcpy(v, values, r->channels * sizeof *v);
             r->samples++;
+            if (!snapshot) {
+                *t = time;
+                memcpy(v, values, r->channels * sizeof *v);
+                return PS_OK;
+            }
+        }
+        if (type == 5 && snapshot) {
+            if (n < 4 || ps_get_u32(p) != PS_SNAPSHOT_VERSION)
+                return n < 4 ? PS_CORRUPT : PS_VERSION;
+            ps_snapshot decoded = {0};
+            if (!ps_snapshot_decode(p + 4, n - 4, &decoded.time, decoded.values,
+                                    &decoded.count, &decoded.scene, &decoded.paused) ||
+                decoded.count != r->channels)
+                return PS_CORRUPT;
+            *snapshot = decoded;
             return PS_OK;
         }
         if (type == 4) {
@@ -323,6 +349,13 @@ ps_result ps_run_next(ps_run_reader *r, double *t, double *v) {
         if (type == 1 || type == 2)
             return PS_CORRUPT;
     }
+}
+ps_result ps_run_next(ps_run_reader *r, double *t, double *v) {
+    return next_record(r, t, v, NULL);
+}
+ps_result ps_run_snapshot_next(ps_run_reader *r, ps_snapshot *snapshot) {
+    if (!snapshot) return PS_INVALID;
+    return next_record(r, NULL, NULL, snapshot);
 }
 void ps_run_reader_close(ps_run_reader *r) {
     if (r && r->file) {

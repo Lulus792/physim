@@ -57,6 +57,20 @@ Schreibt einen Messpunkt mit Zeit und einem Wert je registriertem Kanal.
 ps_result ps_run_append(ps_run_writer *writer, double time_s, const double *values);
 ```
 
+## ps_run_append_snapshot
+
+Schreibt einen optionalen versionierten Szenenblock mit zugehörigen Werten, ohne den Messpunktzähler zu verändern. Kanalzahl und Szene müssen zum Lauf passen.
+
+```c
+ps_result ps_run_append_snapshot(
+    ps_run_writer *writer,
+    const ps_context *context,
+    const ps_scene *scene,
+    bool paused);
+```
+
+Optional versioned scene chunk. Does not add a measurement row or change its footer count. Existing readers skip it after CRC validation.
+
 ## ps_run_close
 
 Finalisiert die Laufdatei mit Abschlussmarker und schließt den Writer.
@@ -85,6 +99,16 @@ ps_result ps_run_next(
 ```
 
 Streaming read: PS_EOF = finalized run; PS_RECOVERED = incomplete/corrupt tail. Time and values change only on PS_OK, after the entire sample is validated. Stop reading on any other result; the file cursor may already have advanced.
+
+## ps_run_snapshot_next
+
+Liest den nächsten validierten Szenenblock mit einem eigenen Reader, zählt übersprungene Messpunkte und prüft den Footer. Fehler lassen den ausgegebenen Snapshot unverändert.
+
+```c
+ps_result ps_run_snapshot_next(ps_run_reader *reader, ps_snapshot *snapshot);
+```
+
+Use a separate reader to stream snapshots. Measurement rows are validated and counted while scanning; PS_EOF/PS_RECOVERED have the same meanings as above. Legacy runs contain no snapshots. Failed reads leave snapshot unchanged.
 
 ## ps_run_reader_close
 

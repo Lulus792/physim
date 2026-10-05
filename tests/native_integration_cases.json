@@ -1074,9 +1074,56 @@
         "platform",
         "core"
       ]
+    },
+    "physim-runner-snapshots-tests": {
+      "sources": [
+        "tests/test_runner_snapshots.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
     }
   },
   "tests": [
+    {
+      "name": "runner_snapshots_phys",
+      "targets": [
+        "physim-runner-snapshots-tests",
+        "physim-runner",
+        "physim-language-uncertain-projectile"
+      ],
+      "steps": [
+        {
+          "program": "physim-runner-snapshots-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{physim-language-uncertain-projectile}",
+            "{work}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "runner_snapshots_c",
+      "targets": [
+        "physim-runner-snapshots-tests",
+        "physim-runner",
+        "uncertain_projectile"
+      ],
+      "steps": [
+        {
+          "program": "physim-runner-snapshots-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{uncertain_projectile}",
+            "{work}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
     {
       "name": "runner_pacing_phys",
       "targets": [
@@ -4055,6 +4102,36 @@
             "{cc}"
           ],
           "timeout": 560,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "timeline_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "timeline_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 1100,
           "files": [
             "app-steps.json"
           ]

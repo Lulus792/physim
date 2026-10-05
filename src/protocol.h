@@ -1,11 +1,10 @@
 #ifndef PS_PROTOCOL_H
 #define PS_PROTOCOL_H
 #include "physim/data.h"
-#define PS_WIRE_MAX 8192
+#define PS_WIRE_MAX PS_SNAPSHOT_MAX
 #define PS_WIRE_HEADER 20
 #define PS_WIRE_VERSION 3u
-#define PS_SNAPSHOT_HEADER 24u
-#define PS_WIRE_OBJECT_SIZE 172u
+#define PS_WIRE_OBJECT_SIZE PS_SNAPSHOT_OBJECT_SIZE
 enum {
     PS_MSG_HELLO = 1,
     PS_MSG_RUN,
@@ -31,8 +30,4 @@ int ps_wire_peek(ps_wire_buffer *buffer, uint32_t *type, const unsigned char **p
 /* peek: 1=complete, 0=partial, -1=invalid. Outputs change only on 1.
  * consume ignores oversized/incomplete lengths and invalid buffer bounds. */
 void ps_wire_consume(ps_wire_buffer *buffer, uint32_t size);
-size_t ps_snapshot_encode(unsigned char *out, const ps_context *ctx, const ps_scene *scene,
-                          bool paused);
-bool ps_snapshot_decode(const unsigned char *in, uint32_t size, double *time, double *values,
-                        uint32_t *count, ps_scene *scene, bool *paused);
 #endif

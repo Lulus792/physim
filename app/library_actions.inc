@@ -102,6 +102,10 @@ static void open_library_item(app *a, size_t index) {
     if (a->library->items[index].kind == PS_LIBRARY_REPORT)
         request_report_path(a, path);
     else {
+        timeline_clear(a);
+        a->scene.count = 0;
+        a->channel_count = 0;
+        a->history_count = 0;
         snprintf(a->last_run, sizeof a->last_run, "%s", path);
         a->show_report = false;
         request_dataset(a);

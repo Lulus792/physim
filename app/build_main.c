@@ -22,7 +22,7 @@
 #include <unistd.h>
 #endif
 #define PATH_SIZE 4096
-enum { SDK_OBJECT_COUNT = 18, ARTIFACT_COUNT = SDK_OBJECT_COUNT + 4 };
+enum { SDK_OBJECT_COUNT = 19, ARTIFACT_COUNT = SDK_OBJECT_COUNT + 4 };
 typedef struct {
     Uint64 size;
     Uint32 crc;
@@ -682,7 +682,7 @@ int main(int argc, char **argv) {
     if (fclose(marker))
         goto done;
     const char *names[] = {"core",         "memory",    "array",      "string_view",   "hashmap",
-                           "math",         "data",      "analysis",   "scene",         "numerics",
+                           "math",         "data",      "snapshot", "analysis",   "scene",         "numerics",
                            "units",        "series",    "report",     "report_export", "mechanics",
                            "box_contacts", "collision", "measurement"};
     _Static_assert(SDL_arraysize(names) == SDK_OBJECT_COUNT, "SDK artifact catalog mismatch");

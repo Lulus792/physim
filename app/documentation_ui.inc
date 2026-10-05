@@ -77,7 +77,9 @@ static const documentation_topic documentation_topics[] = {
     {"Wurfparabel: C & Physim", "docs/projectile-tutorial.md", false},
     {"Wurf mit Luftwiderstand", "docs/projectile-drag-tutorial.md", false},
     {"Mehrlaufanalyse in Physim", "docs/language-analysis-tutorial.md", false},
-    {"Plattformprüfung", "docs/platform-validation.md", false}};
+    {"Plattformprüfung", "docs/platform-validation.md", false},
+    {"snapshot.h", "include/physim/snapshot.h", true},
+    {"C: Aufgezeichnete Szenen", "docs/reference/snapshot.md", false}};
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27
 #define DOCUMENTATION_MEASUREMENT_TOPIC 28
@@ -86,6 +88,9 @@ static const documentation_topic documentation_topics[] = {
 static char *documentation_index[DOCUMENTATION_TOPIC_COUNT];
 static bool documentation_hits[DOCUMENTATION_TOPIC_COUNT];
 static int documentation_group(int topic) {
+    if (!strncmp(documentation_topics[topic].path, "docs/reference/", 15)) return 2;
+    if (documentation_topics[topic].code &&
+        !strncmp(documentation_topics[topic].path, "include/", 8)) return 4;
     if (!strcmp(documentation_topics[topic].path, "docs/language-tutorial.md") ||
         !strcmp(documentation_topics[topic].path, "docs/language-analysis-tutorial.md") ||
         !strcmp(documentation_topics[topic].path, "docs/projectile-tutorial.md") ||

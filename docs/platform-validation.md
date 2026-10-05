@@ -3,6 +3,62 @@
 Stand: 5. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Zeitleiste und Szenenaufzeichnung am 5. Oktober 2026
+
+Die Zeitleiste wurde auf dem lokalen Intel-Mac (macOS 14.6.1, Apple Clang 16,
+SDL 3.2.30, Debug und Release) und in der Debian-12-VM (Linux 6.1.0-53-cloud-amd64,
+GCC 12.2, SDL 3.2.30, Release, X11/Xvfb/Openbox, Mesa 22.3.6) gebaut und ausgeführt.
+Die vollständigen Release-Läufe bestehen mit 500/500:
+macOS `build/timeline-release-mac/test-results/run-97k6w7xp` und
+Debian `build/native/Release/test-results/run-qg1essmn` innerhalb der VM.
+
+Zwölf gezielte Prüfungen von Kern, Snapshotcodec, Streaming, Mutationen, Datenreihen,
+Berichten, Taktung, Szenenaufzeichnung und echtem Projektbuild bestehen zuvor auf
+beiden Plattformen: macOS `run-3nrdim5a`, Debian `run-o7fqbagl`.
+Die C- und Physim-Runner liefern mit und ohne `--record-scenes` dieselben 201
+Messungen aller Referenzkanäle. Die optionalen Blöcke enthalten die zugehörigen
+Werte und komplette Geometrie; Anfang/Ende, Footerzählung, Legacy-Lesen,
+ungültige Snapshotversionen/Szenen und CRC-/Tail-Recovery sind geprüft.
+Über 10.000 Vorschauzustände bestätigen die Speichergrenze und erhaltene Endpunkte.
+
+Der gemeinsame Fensterdurchlauf besteht je 9/9 mit Zeitleiste, Geschwindigkeit,
+Reset, Themen, Projekteinstellungen, beiden Menügrößen und vollständigen
+C-/Physim-App-Abläufen einschließlich Analyse, Export und Wiederöffnung:
+macOS `run-44gk6k1o`, Debian `run-pf_6612g`.
+Die abschließenden Prüfungen von Zeitleiste, Themen und vollständigem Physim-Ablauf
+bestehen je 3/3: macOS `run-iyoym0pp`, Debian `run-uety5xa_`.
+Nach der abschließenden Leseränderung, die für beide Durchgänge dieselbe geöffnete
+Datei hält, bestehen Zeitleiste, Reset und vollständiger Physim-Ablauf erneut
+je 3/3: macOS `run-fuvn_qum`, Debian `run-9hjimzg5`.
+Der Zeitleistenfall startet zehn Prozesse für C-/Physim-Projekte sowie archivierte,
+alte, alte mit negativen Zeitstempeln und rekonstruierte Dateien. Reale Widgets
+und Tastaturereignisse prüfen Rückblick bei weiterlaufendem Versuch, Klick/Ziehen,
+Vor/Zurück, Wiedergabe/Leertaste, Live und Reset. Kanonische Snapshot-CRCs und
+Dateihashes bestätigen unveränderte Zustände und Originaldateien. Die Darstellung
+bei 1080 × 740 ist visuell geprüft.
+
+Die verschobenen SDKs sind auf beiden Systemen verifiziert: öffentliche Header
+einschließlich `snapshot.h` einzeln kompilieren, gegen die installierte und aus
+den gelieferten Quellen neu gebaute Kernbibliothek linken sowie gebündelte und
+neu gebaute C-Vorlagen und Physim-Experimente/Analysen ausführen. macOS:
+`build/timeline-sdk-proof-mac/Native SDK ä qn7i69nr`; Debian:
+`build/timeline-sdk-proof-linux/Native SDK ä x_vuw3n3` innerhalb der VM.
+
+Der erste Debug-Gesamtlauf auf macOS besteht 498/500. Neben dem bereits bekannten
+Signal-9-Abbruch von `language_function_values_runtime` erkennt die Referenzprüfung
+den noch nicht eingetragenen neuen öffentlichen Header. Modulbeschreibung,
+Funktionsbeschreibungen und Offline-Navigation sind ergänzt; die korrigierte
+Referenzprüfung besteht. Der vollständige Release-Lauf enthält beide Prüfungen
+und besteht. Die lokale Debug-Systempolitik bleibt eine Einschränkung.
+
+Die [C17-CI zu `a714459`](https://github.com/PhysicSimulator/physim/actions/runs/37281091082)
+und [Paket-CI](https://github.com/PhysicSimulator/physim/actions/runs/37281091099)
+sind fehlgeschlagen. Der alte Isolationstest verlangt nach RUN sofort Fortschritt;
+dieser Fehler ist lokal in Debian reproduziert. Der aktualisierte Test trennt
+Zustandsbestätigung und echten Fortschritt und prüft anschließend eine zeitstabile
+Pause. Er besteht auf beiden Plattformen, einschließlich der Release-Gesamtläufe.
+Ein neuer CI-Nachweis für diesen Stand steht bis zum Push aus.
+
 ## Simulationsgeschwindigkeit am 5. Oktober 2026
 
 Die Geschwindigkeitswahl und das feste Echtzeitkonto wurden auf dem lokalen

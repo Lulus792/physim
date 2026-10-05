@@ -17,7 +17,7 @@ static bool send(ps_process *p, uint32_t type, uint32_t seq) {
     size_t n = ps_wire_encode(b, type, seq, payload, type == PS_MSG_HELLO ? 4 : 0);
     return ps_process_write(p, b, n);
 }
-static int receive(ps_process *p, ps_wire_buffer *b, uint32_t wanted, double *time) {
+static int receive(ps_process *p, ps_wire_buffer *b, uint32_t wanted, double *time, bool *pause) {
     double until = ps_clock() + 5;
     while (ps_clock() < until) {
         int n = ps_process_read(p, b->data + b->used, sizeof b->data - b->used);
@@ -35,6 +35,7 @@ static int receive(ps_process *p, ps_wire_buffer *b, uint32_t wanted, double *ti
                 bool paused;
                 if (!ps_snapshot_decode(payload, size, time, values, &count, &scene, &paused))
                     return -1;
+                if (pause) *pause = paused;
             }
             ps_wire_consume(b, size);
             if (found)
@@ -54,27 +55,38 @@ int main(int argc, char **argv) {
     ps_process p = {0};
     ps_wire_buffer wire = {0};
     double t = 0;
+    bool paused = false;
     remove("interactive.psrun");
     const char *args[] = {argv[1], argv[2], "interactive.psrun", "--interactive", NULL};
     REQUIRE(ps_process_start(&p, args, NULL));
-    REQUIRE(receive(&p, &wire, PS_MSG_HELLO, &t) == 1);
+    REQUIRE(receive(&p, &wire, PS_MSG_HELLO, &t, &paused) == 1);
     REQUIRE(send(&p, PS_MSG_HELLO, 0));
-    REQUIRE(receive(&p, &wire, PS_MSG_SNAPSHOT, &t) == 1);
-    REQUIRE(t == 0);
+    REQUIRE(receive(&p, &wire, PS_MSG_SNAPSHOT, &t, &paused) == 1);
+    REQUIRE(t == 0 && paused);
     REQUIRE(send(&p, PS_MSG_STEP, 1));
-    REQUIRE(receive(&p, &wire, PS_MSG_SNAPSHOT, &t) == 1);
+    REQUIRE(receive(&p, &wire, PS_MSG_SNAPSHOT, &t, &paused) == 1);
     REQUIRE(fabs(t - 0.005) < 1e-12);
     ps_sleep(30);
     REQUIRE(send(&p, PS_MSG_STEP, 2));
-    REQUIRE(receive(&p, &wire, PS_MSG_SNAPSHOT, &t) == 1);
+    REQUIRE(receive(&p, &wire, PS_MSG_SNAPSHOT, &t, &paused) == 1);
     REQUIRE(fabs(t - 0.01) < 1e-12);
     REQUIRE(send(&p, PS_MSG_RUN, 3));
-    REQUIRE(receive(&p, &wire, PS_MSG_SNAPSHOT, &t) == 1);
-    REQUIRE(t > 0.01);
+    REQUIRE(receive(&p, &wire, PS_MSG_SNAPSHOT, &t, &paused) == 1);
+    REQUIRE(fabs(t - 0.01) < 1e-12 && !paused); /* RUN acknowledges state before dt is due. */
+    REQUIRE(receive(&p, &wire, PS_MSG_SNAPSHOT, &t, &paused) == 1);
+    REQUIRE(t > 0.01 && !paused);
     REQUIRE(send(&p, PS_MSG_PAUSE, 4));
-    REQUIRE(receive(&p, &wire, PS_MSG_SNAPSHOT, &t) == 1);
-    REQUIRE(send(&p, PS_MSG_STOP, 5));
-    REQUIRE(receive(&p, &wire, PS_MSG_BYE, &t) == 1);
+    double paused_until = ps_clock() + 5;
+    do { REQUIRE(receive(&p, &wire, PS_MSG_SNAPSHOT, &t, &paused) == 1); }
+    while (!paused && ps_clock() < paused_until);
+    REQUIRE(paused);
+    double held_time = t;
+    ps_sleep(30);
+    REQUIRE(send(&p, PS_MSG_PAUSE, 5));
+    REQUIRE(receive(&p, &wire, PS_MSG_SNAPSHOT, &t, &paused) == 1);
+    REQUIRE(paused && t == held_time);
+    REQUIRE(send(&p, PS_MSG_STOP, 6));
+    REQUIRE(receive(&p, &wire, PS_MSG_BYE, &t, &paused) == 1);
     double until = ps_clock() + 5;
     while (ps_process_poll(&p) && ps_clock() < until)
         ps_sleep(1);
@@ -96,9 +108,9 @@ int main(int argc, char **argv) {
         memset(&wire, 0, sizeof wire);
         REQUIRE(ps_process_start(&p, failure, NULL));
         if (mode < 2) {
-            REQUIRE(receive(&p, &wire, PS_MSG_HELLO, &t) == 1);
+            REQUIRE(receive(&p, &wire, PS_MSG_HELLO, &t, &paused) == 1);
             REQUIRE(send(&p, PS_MSG_HELLO, 0));
-            REQUIRE(receive(&p, &wire, PS_MSG_SNAPSHOT, &t) == 1);
+            REQUIRE(receive(&p, &wire, PS_MSG_SNAPSHOT, &t, &paused) == 1);
             REQUIRE(send(&p, PS_MSG_RUN, 1));
         }
         if (mode == 1) {

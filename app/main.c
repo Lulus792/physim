@@ -16,6 +16,7 @@
 #include "text_document.h"
 #include "protocol.h"
 #include "pacing.h"
+#include "timeline.h"
 #include "ui.h"
 #include "design_tokens.h"
 static const ps_ui_palette *ui_palette = &PS_UI_DARK;
@@ -78,6 +79,9 @@ typedef struct {
     int count;
     ps_statistics stats[PS_MAX_CHANNELS];
     char metadata[8192];
+    ps_timeline timeline;
+    ps_result timeline_result;
+    bool recorded_scenes;
 } dataset;
 typedef struct {
     int line, column;
@@ -242,8 +246,60 @@ typedef struct {
     int history_count;
     uint64_t history_seen, history_stride;
     float yaw, pitch, zoom;
+    ps_timeline timeline;
+    ps_snapshot timeline_view;
+    bool timeline_browsing, timeline_playing, timeline_scenes;
+    double timeline_target, timeline_wall;
+    char timeline_error[160];
+    struct nk_rect timeline_bounds[5];
     dataset data;
 } app;
+static const ps_scene *display_scene(const app *a) {
+    return a->timeline_browsing ? &a->timeline_view.scene : &a->scene;
+}
+static double display_time(const app *a) {
+    return a->timeline_browsing ? a->timeline_view.time : a->simulation_time;
+}
+static const double *display_values(const app *a) {
+    return a->timeline_browsing ? a->timeline_view.values : a->values;
+}
+static void timeline_live(app *a) {
+    a->timeline_browsing = a->timeline_playing = false;
+    ps_scene_view_sync(&a->scene_view, &a->scene);
+}
+static void timeline_clear(app *a) {
+    ps_timeline_clear(&a->timeline);
+    a->timeline_browsing = a->timeline_playing = a->timeline_scenes = false;
+    a->timeline_error[0] = 0;
+}
+static void timeline_select(app *a, uint32_t index) {
+    const ps_snapshot *snapshot = ps_timeline_get(&a->timeline, index);
+    if (!snapshot) return;
+    a->timeline_view = *snapshot;
+    a->timeline_browsing = true;
+    ps_scene_view_sync(&a->scene_view, &a->timeline_view.scene);
+}
+static void timeline_tick(app *a) {
+    if (!a->timeline_playing) return;
+    uint32_t count = ps_timeline_count(&a->timeline);
+    if (!count) { a->timeline_playing = false; return; }
+    double now = ps_clock();
+    a->timeline_target += fmin(.25, fmax(0, now - a->timeline_wall));
+    a->timeline_wall = now;
+    uint32_t index = ps_timeline_nearest(&a->timeline, a->timeline_target);
+    /* Playback presents recorded states without stepping the experiment. */
+    timeline_select(a, index);
+    if (a->timeline_target >= a->timeline.latest.time) a->timeline_playing = false;
+}
+static void timeline_toggle_play(app *a) {
+    if (a->reset_pending || a->reset_starting || ps_timeline_count(&a->timeline) < 2) return;
+    if (a->timeline_playing) { a->timeline_playing = false; return; }
+    if (!a->timeline_browsing || a->timeline_view.time >= a->timeline.latest.time)
+        timeline_select(a, 0);
+    a->timeline_target = a->timeline_view.time;
+    a->timeline_wall = ps_clock();
+    a->timeline_playing = true;
+}
 static void refresh_library(app *a);
 static void open_library(app *a);
 static bool action_button(struct nk_context *ui, const char *label, bool primary);
@@ -602,10 +658,12 @@ static void clear_project(app *a) {
     a->language_experiment = a->language_analysis = false;
     a->selected_count = a->channel_count = 0;
     a->history_count = 0;
+    timeline_clear(a);
     a->scene.count = 0;
     a->scene_view = (ps_scene_view){0};
     a->scene_selected = false;
     a->loaded_report_path[0] = a->result_error[0] = 0;
+    ps_timeline_destroy(&a->data.timeline);
     memset(&a->data, 0, sizeof a->data);
 }
 static void refresh_workspace_entries(app *a) {
@@ -715,7 +773,9 @@ static void open_project(app *a) {
     a->analysis_report = NULL;
     a->show_report = false;
     a->result_error[0] = 0;
+    ps_timeline_destroy(&a->data.timeline);
     memset(&a->data, 0, sizeof a->data);
+    timeline_clear(a);
     a->scene.count = 0;
     a->scene_view = (ps_scene_view){0};
     a->scene_selected = false;
@@ -927,6 +987,7 @@ static bool discover_parameters(app *a) {
     return true;
 }
 static void begin_run_view(app *a) {
+    timeline_clear(a);
     a->selected_count = 1;
     snprintf(a->selected_runs[0], sizeof a->selected_runs[0], "%s", a->last_run);
     ps_report_destroy(a->analysis_report);
@@ -1062,6 +1123,8 @@ static int load_dataset(void *user) {
     }
     double t, v[PS_MAX_CHANNELS];
     uint64_t stride = 1, seen = 0;
+    long records_begin = ftell(r.file);
+    d->timeline_result = PS_OK;
     while ((d->result = ps_run_next(&r, &t, v)) == PS_OK) {
         bool invalid = false;
         for (uint32_t j = 0; j < r.channels; j++) {
@@ -1074,6 +1137,11 @@ static int load_dataset(void *user) {
         if (invalid) {
             d->result = PS_CORRUPT;
             break;
+        }
+        if (d->timeline_result == PS_OK) {
+            ps_snapshot frame = {.time = t, .count = r.channels, .paused = true};
+            memcpy(frame.values, v, r.channels * sizeof *v);
+            d->timeline_result = ps_timeline_push(&d->timeline, &frame);
         }
         if (seen % stride == 0) {
             if (d->count == PREVIEW) {
@@ -1093,6 +1161,24 @@ static int load_dataset(void *user) {
         seen++;
     }
     d->total = seen;
+    if (d->result == PS_EOF || d->result == PS_RECOVERED) {
+        /* Keep the same open file: a renamed/replaced path must not mix two runs. */
+        if (records_begin >= 0 && !fseek(r.file, records_begin, SEEK_SET)) {
+            r.samples = 0;
+            r.complete = false;
+            ps_snapshot frame;
+            ps_result next;
+            while ((next = ps_run_snapshot_next(&r, &frame)) == PS_OK) {
+                if (!d->recorded_scenes) {
+                    ps_timeline_clear(&d->timeline);
+                    d->recorded_scenes = true;
+                }
+                next = ps_timeline_push(&d->timeline, &frame);
+                if (next != PS_OK) break;
+            }
+            if (d->recorded_scenes || d->timeline_result == PS_OK) d->timeline_result = next;
+        } else d->timeline_result = PS_IO;
+    }
     ps_run_reader_close(&r);
     SDL_SetAtomicInt(&d->done, 1);
     return 0;
@@ -1105,6 +1191,7 @@ static void request_dataset(app *a) {
         snprintf(a->plot_data_path, sizeof a->plot_data_path, "%s", a->last_run);
         a->plot_drag = NULL;
     }
+    ps_timeline_destroy(&a->data.timeline);
     memset(&a->data, 0, sizeof a->data);
     snprintf(a->data.path, sizeof a->data.path, "%s", a->last_run);
     SDL_SetAtomicInt(&a->data.done, 0);
@@ -1376,7 +1463,14 @@ static void pump(app *a) {
                     status(a, a->paused
                                   ? "Simulation pausiert. Einzelschritt oder Fortsetzen wählen."
                                   : "Simulation läuft. Messwerte werden gespeichert.");
-                ps_scene_view_sync(&a->scene_view, &a->scene);
+                ps_snapshot frame = {.time = time, .count = count, .scene = scene, .paused = paused};
+                memcpy(frame.values, values, count * sizeof *values);
+                ps_result timeline_result = ps_timeline_push(&a->timeline, &frame);
+                a->timeline_scenes = true;
+                if (timeline_result != PS_OK)
+                    snprintf(a->timeline_error, sizeof a->timeline_error,
+                             "Zeitleiste: %s", ps_result_string(timeline_result));
+                if (!a->timeline_browsing) ps_scene_view_sync(&a->scene_view, &a->scene);
                 add_history(a);
             } else if (type == PS_MSG_ERROR) {
                 char error[8193];
@@ -1429,6 +1523,29 @@ static void pump(app *a) {
         SDL_WaitThread(a->data.thread, NULL);
         a->data.thread = NULL;
         if (a->data.result == PS_EOF || a->data.result == PS_RECOVERED) {
+            ps_timeline_destroy(&a->timeline);
+            a->timeline = a->data.timeline;
+            memset(&a->data.timeline, 0, sizeof a->data.timeline);
+            a->timeline_scenes = a->data.recorded_scenes;
+            if (a->data.timeline_result != PS_EOF && a->data.timeline_result != PS_RECOVERED)
+                snprintf(a->timeline_error, sizeof a->timeline_error, "Zeitleiste: %s",
+                         ps_result_string(a->data.timeline_result));
+            else a->timeline_error[0] = 0;
+            if (a->timeline.seen) {
+                const ps_snapshot *latest = &a->timeline.latest;
+                a->simulation_time = latest->time;
+                memcpy(a->values, latest->values, sizeof a->values);
+                a->channel_count = a->data.channel_count;
+                a->scene = latest->scene;
+                for (uint32_t j = 0; j < a->channel_count; j++)
+                    snprintf(a->channel_names[j], sizeof a->channel_names[j], "%s [%s]",
+                             a->data.channels[j].name, a->data.channels[j].unit);
+                synchronize_live_schema(a);
+                if (!a->timeline_browsing) ps_scene_view_sync(&a->scene_view, &a->scene);
+            }
+            a->history_count = a->data.count;
+            memcpy(a->history_t, a->data.time, sizeof a->history_t);
+            memcpy(a->history_v, a->data.values, sizeof a->history_v);
             char message[128];
             snprintf(message, sizeof message, "%llu Messpunkte geladen%s.",
                      (unsigned long long)a->data.total,
@@ -1443,6 +1560,7 @@ static void pump(app *a) {
         a->reset_pending = false;
         (void)start_run_mode(a, true);
     }
+    timeline_tick(a);
 }
 static bool place_label(struct nk_rect *label, struct nk_rect viewport,
                         const struct nk_rect *placed, unsigned count) {
@@ -1473,17 +1591,17 @@ static bool place_label(struct nk_rect *label, struct nk_rect viewport,
 static void scene_selection_sync(app *a) {
     if (a->scene_selected && a->scene_selected_id) {
         a->scene_selected = false;
-        for (uint32_t i = 0; i < a->scene.count; i++)
-            if (a->scene.objects[i].id == a->scene_selected_id) {
+        for (uint32_t i = 0; i < display_scene(a)->count; i++)
+            if (display_scene(a)->objects[i].id == a->scene_selected_id) {
                 a->scene_selected = true;
                 a->scene_selected_slot = i;
                 break;
             }
     }
-    if (a->scene_selected_slot >= a->scene.count) a->scene_selected = false;
+    if (a->scene_selected_slot >= display_scene(a)->count) a->scene_selected = false;
 }
 static bool scene_entry_enabled(const app *a, uint32_t i) {
-    const ps_object *o = &a->scene.objects[i];
+    const ps_object *o = &display_scene(a)->objects[i];
     return ps_scene_view_visible(&a->scene_view, i) && (o->color & 255) &&
            (o->shape != PS_ARROW || a->show_vectors) &&
            (o->shape != PS_POLYLINE || a->show_paths) &&
@@ -1529,7 +1647,7 @@ static bool scene_shortcut(app *a, const SDL_KeyboardEvent *key) {
     if (key->key != SDLK_N && key->key != SDLK_P && key->key != SDLK_H)
         return false;
     if (key->repeat) return true;
-    ps_scene_view_sync(&a->scene_view, &a->scene);
+    ps_scene_view_sync(&a->scene_view, display_scene(a));
     scene_selection_sync(a);
     if (key->key == SDLK_H) {
         if (a->scene_selected) {
@@ -1541,12 +1659,12 @@ static bool scene_shortcut(app *a, const SDL_KeyboardEvent *key) {
     int direction = key->key == SDLK_N ? 1 : -1;
     int index = a->scene_selected ? (int)a->scene_selected_slot : direction > 0 ? -1 : 0;
     a->scene_selected = false;
-    for (uint32_t step = 0; step < a->scene.count; step++) {
-        index = (index + direction + (int)a->scene.count) % (int)a->scene.count;
+    for (uint32_t step = 0; step < display_scene(a)->count; step++) {
+        index = (index + direction + (int)display_scene(a)->count) % (int)display_scene(a)->count;
         if (scene_entry_enabled(a, (uint32_t)index)) {
             a->scene_selected = true;
             a->scene_selected_slot = (uint32_t)index;
-            a->scene_selected_id = a->scene.objects[index].id;
+            a->scene_selected_id = display_scene(a)->objects[index].id;
             break;
         }
     }
@@ -1584,11 +1702,11 @@ static void viewport(app *a, float height) {
     SDL_GetWindowSizeInPixels(a->window, &pw, &ph);
     int width = (int)fmaxf(1, r.w * (float)pw / (float)(w ? w : 1));
     int pixels = (int)fmaxf(1, r.h * (float)ph / (float)(h ? h : 1));
-    ps_scene visible = a->scene;
+    ps_scene visible = *display_scene(a);
     uint32_t visible_slots[PS_MAX_OBJECTS];
     visible.count = 0;
-    for (uint32_t i = 0; i < a->scene.count; i++) {
-        const ps_object *o = &a->scene.objects[i];
+    for (uint32_t i = 0; i < display_scene(a)->count; i++) {
+        const ps_object *o = &display_scene(a)->objects[i];
         if (!scene_entry_enabled(a, i)) continue;
         visible_slots[visible.count] = i;
         visible.objects[visible.count++] = *o;
@@ -1651,6 +1769,14 @@ static void viewport(app *a, float height) {
                                  (int)(c & 255)));
         }
         nk_push_scissor(canvas, previous);
+        if (a->timeline_error[0])
+            nk_draw_text(canvas, nk_rect(r.x + 10, r.y + 10, r.w - 20, 22), a->timeline_error,
+                         (int)strlen(a->timeline_error), font, nk_rgba(0, 0, 0, 0), UI_COLOR(error));
+        if (a->timeline.seen && !a->timeline_scenes) {
+            const char *message = "Keine Szenenaufzeichnung · Zeitleiste zeigt Messwerte";
+            nk_draw_text(canvas, nk_rect(r.x + 10, r.y + (a->timeline_error[0] ? 36 : 10), r.w - 20, 22), message,
+                         (int)strlen(message), font, nk_rgba(0, 0, 0, 0), UI_COLOR(muted));
+        }
     } else {
         nk_fill_rect(nk_window_get_canvas(ui), r, 0, nk_rgb(70, 20, 25));
         status(a, SDL_GetError());
@@ -1737,6 +1863,14 @@ static void plot(app *a, const double *times, const double *values, int count, f
         double x1 = plot_fraction(view, bounds, 0, times[i - 1]),
                y1 = plot_fraction(view, bounds, 1, values[i - 1]);
         plot_segment(canvas, area, x1, y1, x2, y2, UI_COLOR(accent));
+    }
+    if (a->tab == 1 && a->timeline_browsing) {
+        double x = plot_fraction(view, bounds, 0, a->timeline_view.time);
+        if (x >= 0 && x <= 1) {
+            float position = area.x + (float)x * area.w;
+            nk_stroke_line(canvas, position, area.y, position, area.y + area.h, 1,
+                           UI_COLOR(accent));
+        }
     }
     nk_push_scissor(canvas, previous_clip);
     for (int endpoint = 0; endpoint < 2; endpoint++) {
@@ -2236,6 +2370,7 @@ static void test_mouse(app *a, struct nk_rect rect, bool down) {
 #include "project_settings_tests.inc"
 #include "reset_tests.inc"
 #include "speed_tests.inc"
+#include "timeline_tests.inc"
 #include "native_dialog_tests.inc"
 #include "workspace_tests.inc"
 // clang-format on
@@ -2682,7 +2817,7 @@ int main(int argc, char **argv) {
                 continue;
             }
             if ((plot_test || toolbar_test || settings_test ||
-                 (workspace_state_test && (!strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6)))) && test_scripted_external_input(&e)) continue;
+                 (workspace_state_test && (!strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9)))) && test_scripted_external_input(&e)) continue;
             if (self_test && e.type == SDL_EVENT_TEXT_INPUT) {
                 doc_input_events++;
                 doc_input_bytes += (unsigned)strlen(e.text.text);
@@ -2715,6 +2850,13 @@ int main(int argc, char **argv) {
             }
             if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && !a->recovery) {
                 if (scene_shortcut(a, &e.key)) continue;
+                if (a->tab == 1 && e.key.key == SDLK_SPACE && !e.key.repeat &&
+                    !(e.key.mod & (SDL_KMOD_CTRL | SDL_KMOD_GUI | SDL_KMOD_ALT)) &&
+                    (!a->ui->active || (!a->ui->active->edit.active &&
+                     !a->ui->active->property.active && !a->ui->active->popup.active))) {
+                    timeline_toggle_play(a);
+                    continue;
+                }
                 if (!e.key.repeat && (e.key.mod & PS_UI_COMMAND_MOD)) {
                     if (e.key.key >= SDLK_1 && e.key.key <= SDLK_3)
                         select_workspace_tab(a, (int)(e.key.key - SDLK_1));
@@ -2772,7 +2914,7 @@ int main(int argc, char **argv) {
         } else if (workspace_state_test) {
             if (ps_clock() - test_started >
                 (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
-                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6)
+                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9)
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15)) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
                         argv[3], ps_clock() - test_started);
@@ -3774,6 +3916,8 @@ int main(int argc, char **argv) {
     ps_library_destroy(a->pending_library);
     ps_library_destroy(a->library);
     ps_report_destroy(a->pending_report);
+    ps_timeline_destroy(&a->timeline);
+    ps_timeline_destroy(&a->data.timeline);
     ps_report_destroy(a->analysis_report);
     if (self_test)
         puts(a->log);

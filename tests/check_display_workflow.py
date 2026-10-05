@@ -8,6 +8,7 @@ import re
 import subprocess
 import struct
 import sys
+import zlib
 
 
 LANGUAGE_MODES = ("full", "mixed", "projectile", "sensors", "body", "contact", "joint",
@@ -122,6 +123,52 @@ def project_settings(flow, directory):
         require(not any((project / name).exists() for name in ("main.phys.bak", "analysis.c.bak", "CMakeLists.txt")),
                 "Settings created source backups or CMake files")
     require("profile=Release" in read(project / "build/Release/build.config"), "Restored profile was not built")
+
+
+def timeline(flow, directory):
+    for language in ("c", "phys"):
+        root = directory / language
+        root.mkdir(parents=True)
+        flow.run("--workspace-state-test", root, "timeline-" + language, timeout=130,
+                 marker="TIMELINE timeline-" + language + " SELF-TEST: PASSED")
+        runs = list((root / "project/runs").glob("*.psrun"))
+        require(len(runs) == 2, "Browsing or playback created a simulation run")
+        original = max(runs, key=lambda p: p.stat().st_size)
+        before = {p: fingerprint(p) for p in runs}
+        content = original.read_bytes()
+        # Strip only optional scene chunks; measurement bytes and footer remain identical.
+        legacy = bytearray(content[:16])
+        at = 16
+        scene_count = 0
+        while at < len(content):
+            kind, length, crc = struct.unpack_from("<III", content, at)
+            end = at + 12 + length
+            require(end <= len(content), "Truncated source run")
+            if kind != 5:
+                legacy.extend(content[at:end])
+            else:
+                scene_count += 1
+            at = end
+        require(scene_count >= 4, "Runner did not archive its scene states")
+        negative = bytearray(legacy)
+        at = 16
+        while at < len(negative):
+            kind, length, crc = struct.unpack_from("<III", negative, at)
+            if kind == 3:
+                time = struct.unpack_from("<d", negative, at + 12)[0]
+                struct.pack_into("<d", negative, at + 12, time - 1)
+                struct.pack_into("<I", negative, at + 8, zlib.crc32(negative[at + 12:at + 12 + length]))
+            at += 12 + length
+        for mode, data in (("open", content), ("legacy", bytes(legacy)),
+                           ("legacy-negative", bytes(negative)), ("recovered", content[:-20])):
+            name = "timeline-" + mode
+            fixture = root / "project/runs" / (name + ".psrun")
+            require(not fixture.exists(), "Timeline fixture would overwrite a file")
+            fixture.write_bytes(data)
+            flow.run("--workspace-state-test", root, name, timeout=130,
+                     marker="TIMELINE " + name + " SELF-TEST: PASSED")
+        for path, digest in before.items():
+            require(fingerprint(path) == digest, "Review changed the original run")
 
 
 def speed(flow, directory):
@@ -289,7 +336,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
+SPECIAL = {"timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}
 

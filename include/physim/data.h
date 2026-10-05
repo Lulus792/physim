@@ -1,6 +1,7 @@
 #ifndef PHYSIM_DATA_H
 #define PHYSIM_DATA_H
 #include "experiment.h"
+#include "snapshot.h"
 #include <stdio.h>
 typedef struct {
     FILE *file;
@@ -19,12 +20,20 @@ typedef struct {
 ps_result ps_run_create(ps_run_writer *writer, const char *path, const ps_context *context,
                         const char *experiment_name);
 ps_result ps_run_append(ps_run_writer *writer, double time_s, const double *values);
+/* Optional versioned scene chunk. Does not add a measurement row or change its
+ * footer count. Existing readers skip it after CRC validation. */
+ps_result ps_run_append_snapshot(ps_run_writer *writer, const ps_context *context,
+                                const ps_scene *scene, bool paused);
 ps_result ps_run_close(ps_run_writer *writer);
 ps_result ps_run_open(ps_run_reader *reader, const char *path);
 /* Streaming read: PS_EOF = finalized run; PS_RECOVERED = incomplete/corrupt tail.
  * Time and values change only on PS_OK, after the entire sample is validated.
  * Stop reading on any other result; the file cursor may already have advanced. */
 ps_result ps_run_next(ps_run_reader *reader, double *time_s, double values[PS_MAX_CHANNELS]);
+/* Use a separate reader to stream snapshots. Measurement rows are validated and
+ * counted while scanning; PS_EOF/PS_RECOVERED have the same meanings as above.
+ * Legacy runs contain no snapshots. Failed reads leave snapshot unchanged. */
+ps_result ps_run_snapshot_next(ps_run_reader *reader, ps_snapshot *snapshot);
 void ps_run_reader_close(ps_run_reader *reader);
 /* Optional measurement convention: <name>.status masks <name> and <name>.u.
  * States are 0=not due, 1=valid, 2=dropped. Returns index=-1 when absent;

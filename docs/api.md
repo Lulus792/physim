@@ -140,6 +140,19 @@ als Flugbahn. Deren Inhalt hängt nicht von der Häufigkeit der Scene-Snapshots 
 
 ## Datensätze und Analyse
 
+`physim/snapshot.h` beschreibt unveränderliche Zustände mit Zeit, Kanalwerten,
+Pausestatus und vollständiger Szene. `ps_snapshot_encode`/`ps_snapshot_decode`
+verwenden das explizite little-endian Format; der Encoder benötigt einen Puffer
+mit `PS_SNAPSHOT_MAX` Bytes. Fehler des Decoders lassen alle Ausgaben unverändert.
+
+`physim/data.h` bietet zusätzlich `ps_run_append_snapshot` und
+`ps_run_snapshot_next` für optionale Szenenblöcke. Verwende für das Lesen von
+Messwerten und Szenen jeweils einen eigenen `ps_run_reader`. Szenenblöcke ändern
+den Messpunktzähler nicht; vorhandene Reader und CSV-Exporte lesen weiterhin alle
+Messpunkte. Eine alte Datei ohne Szenen endet beim Snapshotlesen mit `PS_EOF`.
+`PS_RECOVERED` bezeichnet einen gültigen Präfix mit unvollständigem/CRC-fehlerhaftem
+Ende. Einzelheiten und Versionsregeln stehen im [Dateiformat](data-format.md).
+
 `physim/series.h` stellt Datensätze und versionierte Reihen-Handles bereit:
 blockweises Lesen, Ausschnitte, gemeinsame Statusauswahl, Einheitenprüfung, Reihenarithmetik, lineares Resampling, Ableitung,
 Trapezintegration, gleitendes Mittel, Statistik und CSV-Export. Bis zu acht Läufe
