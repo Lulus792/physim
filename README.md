@@ -582,3 +582,7 @@ Experimentparameter können in C und Physim Anzeigeeinheiten deklarieren.
 Formulare und Studienachsen zeigen beispielsweise Zentimeter, während Modellwerte,
 Projektdateien, CLI-Overrides und Rohdaten SI bewahren. Details stehen unter
 [Parametereinheiten](docs/monte-carlo.md#einheiten-von-parameterstudien).
+
+Der Inspektor ist ein eigenständiges Docking-Panel für Szene, Kamera und
+Experimentparameter. Seine Position und Größe werden unabhängig vom Dateibaum
+wiederhergestellt. [Panelanordnung](docs/settings.md#panelanordnung)

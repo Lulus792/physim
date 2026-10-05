@@ -10,6 +10,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
         return false;
     if (!strcmp(mode, "native-dialogs") || !strcmp(mode, "native-dialog-error"))
         return native_dialog_test_start(root);
+    if(!strncmp(mode,"inspector-",10))return inspector_test_start(a,root,mode);
     if (!strncmp(mode, "hierarchy-", 10))
         return hierarchy_test_start(a,root,mode);
     if (!strncmp(mode,"adaptive-",9))
@@ -94,7 +95,8 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
     return a->workspace_state_writable && a->last_workspace.root[0] && a->last_workspace.count == 2;
 }
 static void workspace_test_frame(app *a, const char *mode, int *stage, int *code,
-                                 const char **capture) {
+                                const char **capture) {
+    if(!strncmp(mode,"inspector-",10)){inspector_test_frame(a,mode,stage,code,capture);return;}
     if (!strcmp(mode, "native-dialogs") || !strcmp(mode, "native-dialog-error")) {
         native_dialog_test_frame(a, !strcmp(mode, "native-dialog-error"), stage, code, capture);
         return;

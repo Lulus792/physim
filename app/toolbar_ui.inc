@@ -40,7 +40,7 @@ static void toolbar_popup(app *a, int previous) {
     const bool can_choose = !a->dialog_pending && idle(a) && !a->library_thread && !a->recovery;
     struct nk_rect anchor = a->toolbar_bounds[(a->toolbar_menu ? a->toolbar_menu : previous) - 1];
     a->toolbar_popup_bounds =
-        nk_rect(anchor.x, anchor.y + anchor.h + 2, 286, a->toolbar_menu == 2 ? 236.f : 170.f);
+        nk_rect(anchor.x, anchor.y + anchor.h + 2, 286, a->toolbar_menu == 2 ? 266.f : 170.f);
     nk_style_push_vec2(ui, &ui->style.window.popup_padding, nk_vec2(5, 5));
     nk_style_push_vec2(ui, &ui->style.window.spacing, nk_vec2(4, 4));
     nk_style_push_float(ui, &ui->style.window.rounding, 9);
@@ -106,6 +106,11 @@ static void toolbar_popup(app *a, int previous) {
             if(toolbar_menu_action(a,"Arbeitsbereich anzeigen",true)) dock_show(a,PS_DOCK_WORKSPACE);
             a->dock_menu_bounds[2]=nk_widget_bounds(ui);
             if(toolbar_menu_action(a,"Panelanordnung zurücksetzen",true)) a->preferences.dock=PS_DOCK_DEFAULT;
+            a->dock_menu_bounds[3]=nk_widget_bounds(ui);
+            if(toolbar_menu_action(a,a->preferences.dock.hidden&8?"Inspektor anzeigen":"Inspektor ausblenden",true)) {
+                if(a->preferences.dock.hidden&8)dock_show(a,PS_DOCK_INSPECTOR);
+                else ps_dock_hide(&a->preferences.dock,PS_DOCK_INSPECTOR);
+            }
         }
         nk_popup_end(ui);
     }

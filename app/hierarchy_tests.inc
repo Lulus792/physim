@@ -8,7 +8,7 @@ static bool hierarchy_test_start(app *a,const char *root,const char *mode) {
     a->dt=.01;a->project_settings_dirty=true;select_build_profile(a,1);return true;
 }
 static bool hierarchy_test_click(app *a,struct nk_rect r) {
-    struct nk_rect panel=a->dock_panels[PS_DOCK_SIDEBAR];
+    struct nk_rect panel=a->dock_panels[PS_DOCK_INSPECTOR];
     if(r.y<panel.y+32 || r.y+r.h>panel.y+panel.h-12) {
         test_plot_wheel(a,panel.x+panel.w/2,panel.y+panel.h/2,r.y<panel.y+32?1:-1);return false;
     }

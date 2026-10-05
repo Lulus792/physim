@@ -196,18 +196,20 @@ static void report_view(app *a, float height) {
         report_export(a, REPORT_CSV);
     nk_begin_disabled(ui, !is_plot);
     a->result_export_bounds[1] = nk_widget_bounds(ui);
-    if (nk_button_label(ui, cropped ? "SVG · Ganzes Diagramm" : "SVG · Diagramm"))
+    if (nk_button_label(ui, cropped ? "SVG · Gesamt" : "SVG · Diagramm"))
         report_export(a, REPORT_SVG);
     a->result_export_bounds[2] = nk_widget_bounds(ui);
-    if (nk_button_label(ui, cropped ? "PNG · Ganzes Diagramm" : "PNG · Diagramm"))
+    if (nk_button_label(ui, cropped ? "PNG · Gesamt" : "PNG · Diagramm"))
         report_export(a, REPORT_PNG);
     nk_end_disabled(ui);
     if (is_plot) {
         const char *sizes[] = {"1200 × 850", "2400 × 1700", "3600 × 2550", "4800 × 3400"};
-        nk_layout_row_begin(ui, NK_STATIC, 26, 4);
+        float available=nk_window_get_content_region(ui).w;
+        bool compact=available<740;
+        nk_layout_row_begin(ui,NK_STATIC,26,compact?2:4);
         nk_layout_row_push(ui, 150);
         nk_label(ui, "PNG-Größe (Pixel)", NK_TEXT_LEFT);
-        nk_layout_row_push(ui, 230);
+        nk_layout_row_push(ui,compact?fmaxf(120,fminf(230,available-158)):230);
         a->png_size_bounds = nk_widget_bounds(ui);
         if (nk_combo_begin_label(ui, sizes[a->png_scale - 1], nk_vec2(230, 145))) {
             nk_layout_row_dynamic(ui, 28, 1);
@@ -217,15 +219,16 @@ static void report_view(app *a, float height) {
             }
             nk_combo_end(ui);
         }
-        nk_layout_row_push(ui, 160);
+        if(compact){nk_layout_row_end(ui);nk_layout_row_dynamic(ui,30,2);}
+        else nk_layout_row_push(ui,160);
         nk_begin_disabled(ui, !cropped);
         a->png_region_bounds = nk_widget_bounds(ui);
         if (nk_button_label(ui, "PNG · Ausschnitt")) report_export(a, REPORT_PNG_REGION);
-        nk_layout_row_push(ui, 160);
+        if(!compact)nk_layout_row_push(ui,160);
         a->svg_region_bounds = nk_widget_bounds(ui);
         if (nk_button_label(ui, "SVG · Ausschnitt")) report_export(a, REPORT_SVG_REGION);
         nk_end_disabled(ui);
-        nk_layout_row_end(ui);
+        if(!compact)nk_layout_row_end(ui);
         ps_plot_info selected;
         ps_report_plot_read(a->analysis_report, (uint32_t)a->result_view, &selected);
         float legend_height = (float)((selected.curves + 1) / 2) * 30;

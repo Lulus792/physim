@@ -314,10 +314,7 @@ static void sidebar_panel(app *a) {
                     snprintf(uri, sizeof uri, "file:///%s/runs", a->project);
                     SDL_OpenURL(uri);
                 }
-                if (a->tab == 1) {
-                    section(ui, "Inspector");
-                    camera_inspector(a);
-                } else {
+                {
                     section(ui, "Dateien");
                     nk_layout_row_dynamic(ui, 32, 1);
                     char source_label[32];
@@ -356,6 +353,28 @@ static void sidebar_panel(app *a) {
                     }
                 }
             }
+            section(ui, "Hilfe");
+            nk_layout_row_dynamic(ui, 32, 1);
+            a->documentation_bounds = nk_widget_bounds(ui);
+            if (nk_button_label(ui, "Handbuch · F1")) {
+                open_documentation(a, 1);
+            }
+            if (nk_tree_push(ui, NK_TREE_TAB, "Tastaturbefehle", NK_MINIMIZED)) {
+                nk_layout_row_dynamic(ui, 154, 1);
+                nk_label_wrap(ui, "" PS_UI_SHORTCUT "1/2/3  Arbeitsbereich\n" PS_UI_SHORTCUT "S  Speichern\n" PS_UI_SHORTCUT "F  "
+                                  "Suchen\n" PS_UI_SHORTCUT "4  Läufe & Berichte\n" PS_UI_SHORTCUT "L  Protokoll\nF5  "
+                                  "Build\nF6  Start / Pause\nF7  Zurücksetzen");
+                nk_tree_pop(ui);
+            }
+        }
+    }
+    nk_end(ui);
+}
+static void inspector_panel(app *a) {
+    struct nk_context *ui=a->ui;
+    if(dock_begin(a,PS_DOCK_INSPECTOR)) {
+        if(a->loaded) {
+            camera_inspector(a);
             if (nk_tree_state_push(ui, NK_TREE_TAB, "Laufgrenzen", &a->limits_disclosure)) {
                 nk_begin_disabled(ui, !idle(a));
                 nk_layout_row_dynamic(ui, 26, 1);
@@ -374,19 +393,9 @@ static void sidebar_panel(app *a) {
                                   "Zeit zählt inklusive Pausen. Serien haben ein eigenes Zeitlimit.");
                 nk_tree_state_pop(ui);
             }
-            section(ui, "Hilfe");
-            nk_layout_row_dynamic(ui, 32, 1);
-            a->documentation_bounds = nk_widget_bounds(ui);
-            if (nk_button_label(ui, "Handbuch · F1")) {
-                open_documentation(a, 1);
-            }
-            if (nk_tree_push(ui, NK_TREE_TAB, "Tastaturbefehle", NK_MINIMIZED)) {
-                nk_layout_row_dynamic(ui, 154, 1);
-                nk_label_wrap(ui, "" PS_UI_SHORTCUT "1/2/3  Arbeitsbereich\n" PS_UI_SHORTCUT "S  Speichern\n" PS_UI_SHORTCUT "F  "
-                                  "Suchen\n" PS_UI_SHORTCUT "4  Läufe & Berichte\n" PS_UI_SHORTCUT "L  Protokoll\nF5  "
-                                  "Build\nF6  Start / Pause\nF7  Zurücksetzen");
-                nk_tree_pop(ui);
-            }
+        } else {
+            nk_layout_row_dynamic(ui,64,1);
+            nk_label_wrap(ui,"Öffne ein Physim-Projekt, um Szene, Kamera und Experimentparameter zu untersuchen.");
         }
     }
     nk_end(ui);
@@ -546,7 +555,8 @@ static void workspace_panel(app *a) {
             else snprintf(time, sizeof time, "%.6g s", a->simulation_time);
             nk_label_colored(ui, time, NK_TEXT_RIGHT, muted());
             nk_layout_row_end(ui);
-            nk_layout_row_dynamic(ui, 34, 3);
+            bool compact_controls=nk_window_get_content_region(ui).w<480;
+            nk_layout_row_dynamic(ui, 34, compact_controls?2:3);
             a->run_control_bounds[0] = nk_widget_bounds(ui);
             nk_begin_disabled(ui, a->runner.running || !idle(a));
             if (action_button(ui, a->built ? "Neuer Lauf" : "Build",
@@ -569,7 +579,7 @@ static void workspace_panel(app *a) {
                 command(a, PS_MSG_STEP);
             nk_end_disabled(ui);
             nk_end_disabled(ui);
-            nk_layout_row_dynamic(ui, 34, 3);
+            if(!compact_controls)nk_layout_row_dynamic(ui, 34, 3);
             a->run_control_bounds[3] = nk_widget_bounds(ui);
             nk_begin_disabled(ui, !reset_available(a));
             if (nk_button_label(ui, a->reset_pending ? "Zurücksetzen …" : "Zurücksetzen"))
@@ -616,7 +626,8 @@ static void workspace_panel(app *a) {
             }
             nk_end_disabled(ui);
             float plot_height = fmaxf(96, content * .21f);
-            viewport(a, content - plot_height - 308);
+            viewport(a,fmaxf(160,content-plot_height-308-(compact_controls?34:0)-
+                       (nk_window_get_content_region(ui).w<560?30:0)));
             timeline_controls(a);
             nk_layout_row_dynamic(ui, 28, 2);
             if (a->channel_count) {
@@ -878,7 +889,8 @@ static void draw_ui(app *a, int width, int height) {
             if (((a->preferences.dock.floating >> panel)&1u)!=floating) continue;
             if(panel==PS_DOCK_SIDEBAR) sidebar_panel(a);
             else if(panel==PS_DOCK_WORKSPACE) workspace_panel(a);
-            else log_panel(a);
+            else if(panel==PS_DOCK_LOG) log_panel(a);
+            else inspector_panel(a);
         }
     }
     dock_headers(a);

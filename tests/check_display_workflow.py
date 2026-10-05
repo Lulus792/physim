@@ -178,6 +178,23 @@ def timed_series(flow, directory, scaled=False):
     require(records[0] == records[1], "Timed C/Physim studies differ in accepted times or values")
 
 
+def inspector(flow, directory):
+    for language in ("c", "phys"):
+        root=directory/language
+        root.mkdir(parents=True)
+        flow.run("--workspace-state-test",root,"inspector-"+language,timeout=130,
+                 marker="INSPECTOR inspector-"+language+" SELF-TEST: PASSED")
+        runs=list((root/"project/runs").glob("*.psrun"))
+        require(len(runs)==1,"Inspector movement restarted the simulation")
+        protected=runs+[root/"project/main.c" if language=="c" else root/"project/main.phys"]
+        hashes=[fingerprint(path) for path in protected]
+        for name in ("docked","floating","hidden","tabs","resized"):
+            require((root/("inspector-"+name+".bmp")).exists(),"Inspector capture missing: "+name)
+        flow.run("--workspace-state-test",root,"inspector-read",timeout=130,
+                 marker="INSPECTOR inspector-read SELF-TEST: PASSED")
+        require(hashes==[fingerprint(path) for path in protected],"Reopening inspector changed source or run")
+
+
 def adaptive(flow, directory):
     prefixes = []
     for language in ("c", "phys"):
@@ -502,7 +519,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"timed_series_workflow": timed_series,
+SPECIAL = {"inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}

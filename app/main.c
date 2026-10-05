@@ -104,7 +104,7 @@ typedef struct {
     int dock_resize, dock_float_resize, dock_drag, dock_last_tab;
     struct nk_vec2 dock_origin, dock_grab, dock_resize_mouse;
     ps_dock_float dock_resize_start;
-    struct nk_rect dock_menu_bounds[3];
+    struct nk_rect dock_menu_bounds[4];
     uint32_t dock_target, dock_side;
     struct nk_rect settings_bounds[6], theme_bounds[PS_THEME_COUNT], panel_bounds[2];
     SDL_Window *window;
@@ -2426,6 +2426,7 @@ static void test_mouse(app *a, struct nk_rect rect, bool down) {
 #include "timeline_tests.inc"
 #include "docking_tests.inc"
 #include "hierarchy_tests.inc"
+#include "inspector_tests.inc"
 #include "adaptive_tests.inc"
 #include "series_tests.inc"
 #include "native_dialog_tests.inc"
@@ -2977,7 +2978,7 @@ int main(int argc, char **argv) {
         } else if (workspace_state_test) {
             if (ps_clock() - test_started >
                 (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
-                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
+                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15)) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
                         argv[3], ps_clock() - test_started);

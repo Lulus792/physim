@@ -109,34 +109,34 @@ int main(int argc, char **argv) {
     invalid.theme = PS_THEME_COUNT;
     CHECK(ps_preferences_write(path, &invalid) == PS_INVALID);
     CHECK(ps_preferences_read(path, &out) == PS_OK && !memcmp(&p, &out, sizeof p));
-    unsigned char bytes[241] = {0};
+    unsigned char bytes[309] = {0};
     FILE *f = fopen(path, "rb");
-    CHECK(f && fread(bytes, 1, 240, f) == 240 && !fclose(f));
-    for (size_t n = 0; n < 240; n++) {
+    CHECK(f && fread(bytes, 1, 308, f) == 308 && !fclose(f));
+    for (size_t n = 0; n < 308; n++) {
         CHECK(bytes_write(bad, bytes, n));
         CHECK(ps_preferences_read(bad, &out) == PS_CORRUPT && !memcmp(&p, &out, sizeof p));
     }
-    CHECK(bytes_write(bad, bytes, 241) && ps_preferences_read(bad, &out) == PS_CORRUPT);
-    for (unsigned i = 0; i < 240; i++) {
+    CHECK(bytes_write(bad, bytes, 309) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    for (unsigned i = 0; i < 308; i++) {
         bytes[i] ^= 1;
-        CHECK(bytes_write(bad, bytes, 240));
+        CHECK(bytes_write(bad, bytes, 308));
         CHECK(ps_preferences_read(bad, &out) != PS_OK && !memcmp(&p, &out, sizeof p));
         bytes[i] ^= 1;
     }
     put32(bytes + 32, 17);
-    put32(bytes + 236, ps_crc32(bytes, 236));
-    CHECK(bytes_write(bad, bytes, 240) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    put32(bytes + 304, ps_crc32(bytes, 304));
+    CHECK(bytes_write(bad, bytes, 308) && ps_preferences_read(bad, &out) == PS_CORRUPT);
     put32(bytes + 32, p.editor_size);
     put32(bytes + 52, PS_THEME_COUNT);
-    put32(bytes + 236, ps_crc32(bytes, 236));
-    CHECK(bytes_write(bad, bytes, 240) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    put32(bytes + 304, ps_crc32(bytes, 304));
+    CHECK(bytes_write(bad, bytes, 308) && ps_preferences_read(bad, &out) == PS_CORRUPT);
     CHECK(!memcmp(&p, &out, sizeof p));
     /* Correct-CRC invalid graphs must also preserve the previous settings. */
     put32(bytes + 52, p.theme);
-    put32(bytes + 56 + 3 * 24 + 4, 3); /* split references itself */
-    put32(bytes + 236, ps_crc32(bytes, 236));
-    CHECK(bytes_write(bad, bytes, 240) && ps_preferences_read(bad, &out) == PS_CORRUPT);
-    put32(bytes + 56 + 3 * 24 + 4, 0);
+    put32(bytes + 60 + 5 * 24 + 4, 5); /* split references itself */
+    put32(bytes + 304, ps_crc32(bytes, 304));
+    CHECK(bytes_write(bad, bytes, 308) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    put32(bytes + 60 + 5 * 24 + 4, 0);
     put32(bytes + 52, p.theme);
     memcpy(bytes + 6, "02", 2); put32(bytes + 8, 44);
     put32(bytes + 56, ps_crc32(bytes, 56));
@@ -152,6 +152,34 @@ int main(int argc, char **argv) {
     CHECK(!memcmp(&legacy, &out, sizeof out));
     CHECK(ps_preferences_write(bad, &out) == PS_OK && ps_preferences_read(bad, &out) == PS_OK);
     CHECK(!memcmp(&legacy, &out, sizeof out));
+    /* A genuine five-node version-3 layout migrates without moving its panels. */
+    unsigned char v3[240]={0};memcpy(v3,"PSPREF03",8);put32(v3+8,224);
+    memcpy(v3+12,bytes+12,44);put32(v3+52,p.theme);
+    ps_dock_node old_nodes[5]={{PS_DOCK_GROUP,0,0,0,1,0},{PS_DOCK_GROUP,0,0,0,2,1},
+        {PS_DOCK_GROUP,0,0,0,4,2},{PS_DOCK_X,0,1,190,0,0},{PS_DOCK_Y,3,2,800,0,0}};
+    unsigned char *old_at=v3+56;
+    for(unsigned i=0;i<5;i++,old_at+=24) {
+        const ps_dock_node *node=&old_nodes[i];
+        uint32_t fields[]={node->kind,node->first,node->second,node->ratio,node->panels,node->active};
+        for(unsigned j=0;j<6;j++)put32(old_at+4*j,fields[j]);
+    }
+    put32(old_at,4);old_at+=12;
+    for(unsigned i=0;i<3;i++,old_at+=16) {
+        const ps_dock_float *r=&p.dock.floats[i];
+        put32(old_at,r->x);put32(old_at+4,r->y);put32(old_at+8,r->w);put32(old_at+12,r->h);
+    }
+    put32(v3+236,ps_crc32(v3,236));
+    CHECK(bytes_write(bad,v3,sizeof v3) && ps_preferences_read(bad,&out)==PS_OK);
+    CHECK(out.dock.root==4 && out.dock.hidden==8 && out.inspector_width==280 &&
+          !memcmp(out.dock.nodes,old_nodes,sizeof old_nodes));
+    CHECK(ps_preferences_write(bad,&out)==PS_OK && ps_preferences_read(bad,&legacy)==PS_OK &&
+          !memcmp(&legacy,&out,sizeof out));
+    ps_preferences untouched=out;
+    put32(v3+56+3*24+4,3);put32(v3+236,ps_crc32(v3,236));
+    CHECK(bytes_write(bad,v3,sizeof v3) && ps_preferences_read(bad,&out)==PS_CORRUPT &&
+          !memcmp(&out,&untouched,sizeof out));
+    /* Return the snapshot expected by the independent failed-write checks. */
+    out=p;
     /* Rename failure: a directory cannot be replaced with a settings file. */
     char directory[4096];
     snprintf(directory, sizeof directory, "%s/preferences-target", argv[1]);

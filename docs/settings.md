@@ -96,8 +96,12 @@ in den Szenendaten erhalten; die physikalische Rechnung verändert sich dadurch 
 
 ## Panelanordnung
 
-**Seitenleiste**, **Arbeitsbereich** und **Protokoll** sind verschiebbare Panels.
-Die Seitenleiste enthält Dateibaum und Inspektor; der Arbeitsbereich zeigt weiterhin
+**Seitenleiste**, **Arbeitsbereich**, **Inspektor** und **Protokoll** sind verschiebbare Panels.
+Die Seitenleiste enthält Dateibaum, Dokumente und Projektzugänge. Der eigene
+Inspektor zeigt Szenenbaum, Auswahl, Kamera, Darstellung, Lauf- und
+Experimentparameter sowie Ressourcenlimits. Er lässt sich unabhängig vom
+Dateibaum platzieren und ist auch beim Bearbeiten des Codes erreichbar.
+Der Arbeitsbereich zeigt weiterhin
 den ausgewählten Editor, die Simulation oder die Auswertung. Die drei globalen
 Arbeitsbereich-Tabs und die Menüzeile bleiben im Fensterkopf.
 
@@ -115,13 +119,12 @@ hat als frei platziertes Panel mindestens 640 × 580 logische Pixel. Kleine
 angedockte Bereiche lassen sich vertikal scrollen.
 
 Das **×** in einer Titelzeile blendet das aktive Panel aus. **Ansicht → Seitenleiste
-anzeigen**, **Arbeitsbereich anzeigen** und **Protokoll einblenden** stellen es wieder
+anzeigen**, **Arbeitsbereich anzeigen** und **Inspektor anzeigen** und **Protokoll einblenden** stellen es wieder
 her. Ein globaler Arbeitsbereich-Tab zeigt den Arbeitsbereich ebenfalls wieder an.
 **Ansicht → Panelanordnung zurücksetzen** stellt Seitenleiste links, Arbeitsbereich
-rechts und Protokoll darunter wieder her. Das Umordnen lässt ungespeicherten
+in der Mitte, Inspektor rechts und Protokoll darunter wieder her. Das Umordnen lässt ungespeicherten
 Quelltext und laufende Versuche bestehen. Frei platzierte Panels bleiben Teil des
-Hauptfensters; separate Betriebssystemfenster und ein eigenständiger Inspektor
-sind weitere Produktziele.
+Hauptfensters; separate Betriebssystemfenster bleiben ein weiteres Produktziel.
 
 Physim merkt sich bei normalem Beenden Fenstergröße, maximierten Zustand, Panelanordnung,
 ausgewählte Paneltabs, Positionen und Größen frei platzierter Panels,
@@ -137,14 +140,19 @@ Projekt beginnt im Editor. Kameraausrichtung, Zoom und Szenenfokus bleiben sitzu
 **Abbrechen** verwirft den Entwurf. Verschieben, Ausblenden und Größenänderung von
 Panels sind unabhängige Layoutänderungen und werden dadurch nicht zurückgenommen.
 **Standardwerte** setzt den Entwurf auf die Vorgaben zurück; erst **Übernehmen**
-speichert ihn. Fenstergröße, maximierter Zustand und Panelanordnung bleiben dabei
-erhalten; die Anordnung wird über **Ansicht** zurückgesetzt.
+speichert ihn. Fenstergröße, maximierter Zustand, Panelbaum und freie Rechtecke bleiben dabei
+erhalten. Die Standardbreiten und Protokollhöhe werden zurückgesetzt; der
+vollständige Panelbaum wird über **Ansicht** zurückgesetzt.
 
 Einstellungen liegen im persönlichen Anwendungsordner, den SDL für Physim bereitstellt,
 als `preferences.bin`. Sie gehören weder zum Projekt noch zu den Laufmetadaten.
-Das aktuelle Format 3 speichert den vollständigen Panelbaum, aktive Paneltabs,
+Das aktuelle Format 4 speichert den vollständigen Panelbaum, aktive Paneltabs,
 ausgeblendete Panels und frei platzierte Rechtecke. Dateien der Formate 1 und 2
 bleiben lesbar und erhalten die Standardanordnung; Format 1 verwendet die dunkle Palette.
+Format 3 behält seinen fünfteiligen Panelbaum, aktive Tabs und freie Rechtecke
+unverändert. Sein zusätzlicher Inspektor beginnt ausgeblendet und lässt sich über
+**Ansicht → Inspektor anzeigen** rechts neben dem Arbeitsbereich öffnen.
+Format 4 speichert den Vier-Panel-Baum und die unabhängige Inspektorbreite.
 Alle normalen Physim-Instanzen desselben Benutzerkontos teilen diese Datei;
 bei gleichzeitiger Nutzung gewinnt der zuletzt vollständig gespeicherte Stand.
 
@@ -159,3 +167,16 @@ Einstellungen nicht.
 Der letzte Workspace wird separat in `workspace.bin` gespeichert. Hauptordner und
 zusätzliche Pfade lassen sich auf dem leeren Startbildschirm ausdrücklich wieder
 öffnen oder vergessen. [Workspace wieder öffnen](workspace.md)
+
+
+Bei einer neuen Anordnung sitzt der Inspektor rechts. Seine Trennlinie verändert
+seine Breite unabhängig von der Seitenleiste. **Panelanordnung zurücksetzen**
+kehrt zu dieser Anordnung zurück. Schließen, Wiederanzeigen, Tabgruppen und
+Verschieben lassen Quelltexte und Runnerzustand bestehen; die Darstellung eines
+Objekts lässt sich auch im frei platzierten Inspektor umschalten.
+
+Wird der Simulationsbereich schmal, verteilen sich seine sechs Steuerungen auf
+zwei Spalten. Die Zeitleiste zeigt ihre vier Schaltflächen und den Schieberegler
+auf getrennten Reihen. Die Szene bleibt mindestens 160 logische Pixel hoch;
+kleinere Panelhöhen können vertikales Scrollen erfordern. Die globale Mindestgröße
+1080 × 740 bleibt bestehen.

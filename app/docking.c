@@ -6,7 +6,7 @@ static bool walk(const ps_dock_layout *d, uint32_t id, uint32_t *visited, uint32
     *visited |= 1u << id;
     const ps_dock_node *n = &d->nodes[id];
     if (n->kind == PS_DOCK_GROUP) {
-        if (!n->panels || (n->panels & ~7u) || (*panels & n->panels) ||
+        if (!n->panels || (n->panels & ~PS_DOCK_ALL) || (*panels & n->panels) ||
             n->active >= PS_DOCK_PANELS || !(n->panels & (1u << n->active)) ||
             n->first || n->second || n->ratio) return false;
         *panels |= n->panels;
@@ -17,10 +17,10 @@ static bool walk(const ps_dock_layout *d, uint32_t id, uint32_t *visited, uint32
            walk(d, n->first, visited, panels) && walk(d, n->second, visited, panels);
 }
 bool ps_dock_valid(const ps_dock_layout *d) {
-    if (!d || ((d->floating | d->hidden) & ~7u) || (d->floating & d->hidden)) return false;
+    if (!d || ((d->floating | d->hidden) & ~PS_DOCK_ALL) || (d->floating & d->hidden)) return false;
     uint32_t visited = 0, panels = 0;
     if (d->root != PS_DOCK_NONE && !walk(d, d->root, &visited, &panels)) return false;
-    if ((panels & (d->floating | d->hidden)) || (panels | d->floating | d->hidden) != 7) return false;
+    if ((panels & (d->floating | d->hidden)) || (panels | d->floating | d->hidden) != PS_DOCK_ALL) return false;
     for (uint32_t i = 0; i < PS_DOCK_NODES; i++)
         if (!(visited & (1u << i)) && memcmp(&d->nodes[i], &(ps_dock_node){0}, sizeof d->nodes[i])) return false;
     for (unsigned i = 0; i < PS_DOCK_PANELS; i++) {

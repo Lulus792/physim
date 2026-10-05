@@ -5,8 +5,9 @@ static void timeline_controls(app *a) {
                             ? ps_timeline_nearest(&a->timeline, a->timeline_view.time)
                             : count ? count - 1 : 0;
     bool ready = count && !a->reset_pending && !a->reset_starting;
-    nk_layout_row_begin(ui, NK_DYNAMIC, 30, 5);
-    nk_layout_row_push(ui, .06f);
+    bool compact=nk_window_get_content_region(ui).w<560;
+    nk_layout_row_begin(ui,compact?NK_STATIC:NK_DYNAMIC,30,compact?4:5);
+    nk_layout_row_push(ui,compact?36:.06f);
     a->timeline_bounds[0] = nk_widget_bounds(ui);
     nk_begin_disabled(ui, !ready || !selected);
     if (nk_button_symbol(ui, NK_SYMBOL_TRIANGLE_LEFT)) {
@@ -16,7 +17,7 @@ static void timeline_controls(app *a) {
     nk_end_disabled(ui);
     if (nk_input_is_mouse_hovering_rect(&ui->input, a->timeline_bounds[0]))
         nk_tooltip(ui, "Vorheriger aufgezeichneter Zustand");
-    nk_layout_row_push(ui, .06f);
+    nk_layout_row_push(ui,compact?36:.06f);
     a->timeline_bounds[1] = nk_widget_bounds(ui);
     nk_begin_disabled(ui, !ready || selected + 1 >= count);
     if (nk_button_symbol(ui, NK_SYMBOL_TRIANGLE_RIGHT)) {
@@ -24,17 +25,18 @@ static void timeline_controls(app *a) {
         timeline_select(a, selected + 1);
     }
     nk_end_disabled(ui);
-    nk_layout_row_push(ui, .12f);
+    nk_layout_row_push(ui,compact?76:.12f);
     a->timeline_bounds[2] = nk_widget_bounds(ui);
     nk_begin_disabled(ui, !ready);
     if (action_button(ui, a->runner.running ? "Live" : "Letzter", !a->timeline_browsing)) timeline_live(a);
-    nk_layout_row_push(ui, .20f);
+    nk_layout_row_push(ui,compact?112:.20f);
     a->timeline_bounds[3] = nk_widget_bounds(ui);
     nk_begin_disabled(ui, count < 2);
     if (nk_button_label(ui, a->timeline_playing ? "Anhalten" : "Abspielen"))
         timeline_toggle_play(a);
     nk_end_disabled(ui);
-    nk_layout_row_push(ui, .56f);
+    if(compact) {nk_layout_row_end(ui);nk_layout_row_dynamic(ui,30,1);}
+    else nk_layout_row_push(ui,.56f);
     a->timeline_bounds[4] = nk_widget_bounds(ui);
     if (ready && count > 1 &&
         nk_input_is_mouse_hovering_rect(&ui->input, a->timeline_bounds[4]) &&
@@ -63,5 +65,5 @@ static void timeline_controls(app *a) {
         else snprintf(detail, sizeof detail, "Zeitleiste erscheint nach dem ersten aufgezeichneten Zustand.");
         nk_tooltip(ui, detail);
     }
-    nk_layout_row_end(ui);
+    if(!compact)nk_layout_row_end(ui);
 }

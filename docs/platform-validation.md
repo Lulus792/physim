@@ -3,6 +3,91 @@
 Stand: 5. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Eigenständiger Inspektor am 5. Oktober 2026
+
+Dockingmodell und Einstellungenmigration bestehen auf macOS Release 2/2:
+`build/inspector-mac/test-results/run-r0bg29vm`, und Debian Release 2/2:
+`build/inspector-linux/test-results/run-2t56qv2n` innerhalb der VM.
+Vier Panels, sieben Knoten, Tab-/Teilungs-/Float-/Hidden-Wechsel und transaktionale
+Fehler sind geprüft. Eine echte fünfknotige Format-3-Datei erhält ihre Knoten,
+Tabs und Rechtecke; der neue Inspektor bleibt zunächst verborgen. Formate 1/2,
+CRC, Abschneiden, ungültige Graphen und fehlgeschlagene Dateiersetzung sind geprüft.
+
+Die ersten vier macOS-Fensterprüfungen bestehen:
+`build/inspector-mac/test-results/run-oxkweq7i` (Einstellungen, Hierarchie,
+adaptive Schritte und Zielzeitserien). Docking, kleines Menü, Projekteinstellungen
+und Parametereinheiten bestehen zusätzlich 4/4:
+`build/inspector-mac/test-results/run-6a9mkk3c`.
+
+Der neue Inspektorablauf besteht auf macOS:
+`build/inspector-mac/test-results/run-c47n901_`.
+C und Physim laufen in separaten Projekten; echte Mausereignisse lösen den
+Inspektor aus der Anordnung, bedienen Objektsichtbarkeit, schließen und öffnen
+ihn über das Menü, bilden eine Tabgruppe mit dem Dateibaum und ändern sein
+freies Rechteck auf 320 × 480. Die Simulation läuft dabei weiter. Ein CRC des
+ungespeicherten Editors bleibt identisch; es entsteht je Projekt nur ein Run.
+Weitere App-Prozesse öffnen die gespeicherte Anordnung ohne Build/Runner;
+Hashes von Quelle und Lauf bleiben unverändert.
+
+Die frühe Sichtprüfung bei 1080 × 740 erkennt zu schmale Simulations- und
+Zeitleistenbuttons. Bei schmalem Arbeitsbereich verwenden die Steuerungen nun
+zwei Spalten, und der Timeline-Schieber hat eine eigene Reihe. Die aktuelle
+Anordnung, beschriftete Steuerung und Inspektor wurden bei 2160 × 1480 physischen
+Pixeln auf dem Intel-Mac visuell geprüft.
+Die ersten zwei Inspektorprüfungen lesen Float-/Tabwechsel vor dem nächsten
+Renderframe; sie warten jetzt wie der bestehende Dockingprüfer auf dessen
+Verarbeitung. Die bisherigen Zeitgrenzen sind unverändert.
+
+Die vollständigen Release-Läufe ohne Fenster bestehen 510/510: macOS
+`build/inspector-final-mac/test-results/run-d6xhnjy0`, Debian
+`build/inspector-linux/test-results/run-u18jcah3` innerhalb der VM.
+Docking und Migration bestehen zusätzlich im macOS-Debug-Build 2/2:
+`build/inspector-debug-mac/test-results/run-4xy3qbmt`.
+
+Der erste macOS-Fenstergesamtlauf besteht 44/47:
+`build/inspector-mac/test-results/run-_udplaoz`.
+Eine unbeabsichtigte Erweiterung des Standardwerte-Verhaltens bewahrte alte
+Panelbreiten und Protokollhöhe. Das bisherige Zurücksetzen ist wiederhergestellt;
+die Einstellungsprüfung besteht mit demselben Prüfer:
+`build/inspector-settings-final-mac/test-results/run-dbx1usxt`.
+Die beiden Plotfälle erkennen eine feste, insgesamt 700 Pixel breite Exportreihe,
+deren letzte Schaltfläche unter dem neuen Inspektor lag. Die Ausschnittbuttons
+verwenden in schmalen Arbeitsbereichen nun eine eigene Zeile; die Größenwahl
+behält ihre Funktion. Der Prüfer verlangt weiterhin tatsächliche SVG-/PNG-Dateien
+und ihre Inhalte, ohne die Prüfung abzuschwächen.
+
+Das verschobene macOS-SDK mit installierter und aus SDK-Quellen neu gebauter
+Bibliothek besteht: `build/inspector-sdk-proof-mac/Native SDK ä fj4_k76s`.
+
+Die finalen Plot-/Eingabeprüfungen bestehen auf macOS 2/2:
+`build/inspector-plot-final-mac/test-results/run-pt1_ldlp`. Beide Ausschnittformate
+werden über echte Schaltflächen erzeugt; die bestehenden Bild- und Bereichsprüfungen
+bleiben erhalten. Der neue Inspektorablauf besteht auch mit aktiven UI-Assertions
+im macOS-Debug-Build: `build/inspector-debug-mac/test-results/run-f4t25yji`.
+
+Der korrigierte vollständige macOS-Fensterlauf besteht 47/47:
+`build/inspector-plot-final-mac/test-results/run-jvfs2qf6`. Das finale verschobene
+macOS-SDK einschließlich der korrigierten Exportanordnung besteht:
+`build/inspector-sdk-final-proof-mac/Native SDK ä kdd9dg3j`.
+Der erste Debian-Fensterlauf besteht 45/47:
+`build/inspector-linux/test-results/run-vz7089wn`; ausschließlich die beiden
+Plot-/SVG-Ausschnittfälle scheitern am selben zu breiten Exportlayout. Inspektor,
+Einstellungen und sämtliche übrigen Abläufe bestehen bereits in diesem Lauf.
+
+Der korrigierte vollständige Debian-Fensterlauf besteht 47/47:
+`build/inspector-linux/test-results/run-m6rg6hyd` innerhalb der VM. Er verwendet
+X11, Xvfb/Openbox und Mesa 22.3.6. Beide zuvor fehlgeschlagenen Plotfälle,
+Inspektor, Docking, Einstellungen und sämtliche übrigen Abläufe bestehen mit
+den bisherigen Zeitgrenzen. Es wurden keine zusätzlichen Plattformen oder
+Wayland aus dieser Abnahme abgeleitet.
+
+Das finale verschobene Debian-SDK mit installierter und unabhängig aus seinen
+Quellen neu gebauter Bibliothek besteht ebenfalls:
+`build/inspector-sdk-proof-linux/Native SDK ä 1x1xy_0j` innerhalb der VM.
+Damit liegen für diese Änderung auf beiden ausgeführten Systemen vollständige
+Release-, Fenster- und SDK-Nachweise vor; die UI- und Datenformate wurden nur
+in den beschriebenen Umgebungen ausgeführt.
+
 ## Explizite Parametereinheiten am 5. Oktober 2026
 
 Die Änderung ergänzt eigene Symbol-/Skalen-/Dimensionsdaten im optionalen

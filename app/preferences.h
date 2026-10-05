@@ -16,6 +16,7 @@ typedef struct {
     uint32_t width, height, maximized, sidebar_width, log_height;
     uint32_t editor_size, autosave_seconds, view_flags, inspector_open, workspace;
     uint32_t theme;
+    uint32_t inspector_width;
     ps_dock_layout dock;
 } ps_preferences;
 extern const ps_preferences PS_PREFERENCES_DEFAULT;

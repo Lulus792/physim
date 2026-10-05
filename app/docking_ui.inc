@@ -1,11 +1,21 @@
-static const char *dock_names[] = {"Seitenleiste", "Arbeitsbereich", "Protokoll"};
-static const char *dock_windows[] = {"sidebar", "workspace", "log"};
+static const char *dock_names[] = {"Seitenleiste", "Arbeitsbereich", "Protokoll", "Inspektor"};
+static const char *dock_windows[] = {"sidebar", "workspace", "log", "inspector"};
 static uint32_t dock_mask(const ps_dock_layout *d, uint32_t id) {
     const ps_dock_node *n=&d->nodes[id];
     return n->kind==PS_DOCK_GROUP?n->panels:dock_mask(d,n->first)|dock_mask(d,n->second);
 }
 static bool dock_single(const ps_dock_layout *d,uint32_t id,uint32_t panel) {
     return d->nodes[id].kind==PS_DOCK_GROUP && d->nodes[id].panels==(1u<<panel);
+}
+static bool dock_sidebar_split(const ps_dock_layout *d,const ps_dock_node *n) {
+    if(n->kind!=PS_DOCK_X || !dock_single(d,n->first,PS_DOCK_SIDEBAR))return false;
+    uint32_t mask=dock_mask(d,n->second);
+    return mask==2 || mask==10;
+}
+static bool dock_log_split(const ps_dock_layout *d,const ps_dock_node *n) {
+    if(n->kind!=PS_DOCK_Y || !dock_single(d,n->second,PS_DOCK_LOG))return false;
+    uint32_t mask=dock_mask(d,n->first);
+    return mask==3 || mask==11;
 }
 static float dock_minimum(const ps_dock_layout *d,uint32_t id,bool x) {
     const ps_dock_node *n=&d->nodes[id];
@@ -24,9 +34,11 @@ static void dock_arrange(app *a,uint32_t id,struct nk_rect r) {
     }
     bool x=n->kind==PS_DOCK_X;
     float extent=(x?r.w:r.h)-8,first=extent*n->ratio/1024.f;
-    if(x && dock_single(d,n->first,PS_DOCK_SIDEBAR) && dock_single(d,n->second,PS_DOCK_WORKSPACE))
+    if(dock_sidebar_split(d,n))
         first=(float)a->preferences.sidebar_width;
-    if(!x && dock_single(d,n->second,PS_DOCK_LOG) && dock_mask(d,n->first)==3)
+    if(x && dock_single(d,n->first,PS_DOCK_WORKSPACE) && dock_single(d,n->second,PS_DOCK_INSPECTOR))
+        first=extent-(float)a->preferences.inspector_width;
+    if(dock_log_split(d,n))
         first=extent-(a->show_log&&a->tab!=6?(float)a->preferences.log_height-8:68.f);
     first=fmaxf(dock_minimum(d,n->first,x),fminf(extent-dock_minimum(d,n->second,x),first));
     struct nk_rect one=r,two=r,split=r;
@@ -41,6 +53,10 @@ static ps_dock_float dock_clamp_float(unsigned panel,struct nk_rect r,float w,fl
     return (ps_dock_float){(uint32_t)r.x,(uint32_t)r.y,(uint32_t)r.w,(uint32_t)r.h};
 }
 static void dock_show(app *a,unsigned panel) {
+    if(panel==PS_DOCK_INSPECTOR && (a->preferences.dock.hidden&(1u<<panel)) &&
+       ps_dock_group(&a->preferences.dock,PS_DOCK_WORKSPACE)!=PS_DOCK_NONE) {
+        ps_dock_move(&a->preferences.dock,panel,PS_DOCK_WORKSPACE,PS_DOCK_RIGHT);return;
+    }
     ps_dock_reveal(&a->preferences.dock,panel,panel==PS_DOCK_SIDEBAR?PS_DOCK_LEFT:panel==PS_DOCK_LOG?PS_DOCK_BOTTOM:PS_DOCK_TAB);
 }
 static void dock_relayout(app *a,float w,float h) {
@@ -53,8 +69,8 @@ static void dock_relayout(app *a,float w,float h) {
     a->panel_bounds[0]=a->panel_bounds[1]=nk_rect(0,0,0,0);
     for(unsigned i=0;i<PS_DOCK_NODES;i++) {
         ps_dock_node *n=&d->nodes[i];
-        if(n->kind==PS_DOCK_X && dock_single(d,n->first,0) && dock_single(d,n->second,1)) a->panel_bounds[0]=a->dock_splitters[i];
-        if(n->kind==PS_DOCK_Y && dock_single(d,n->second,2) && dock_mask(d,n->first)==3) a->panel_bounds[1]=a->dock_splitters[i];
+        if(dock_sidebar_split(d,n)) a->panel_bounds[0]=a->dock_splitters[i];
+        if(dock_log_split(d,n)) a->panel_bounds[1]=a->dock_splitters[i];
     }
 }
 static void dock_prepare(app *a,float w,float h) {
@@ -100,10 +116,12 @@ static void dock_prepare(app *a,float w,float h) {
         bool x=n->kind==PS_DOCK_X;
         float fraction=(x?in->mouse.pos.x-r.x:in->mouse.pos.y-r.y)/(x?r.w:r.h);
         n->ratio=(uint32_t)fmaxf(64,fminf(960,fraction*1024));
-        if(x && dock_single(d,n->first,0) && dock_single(d,n->second,1)) {
+        if(dock_sidebar_split(d,n)) {
             a->preferences.sidebar_width=(uint32_t)fmaxf(208,fminf(360,in->mouse.pos.x-r.x-4));a->panel_drag=1;
         }
-        if(!x && dock_single(d,n->second,2) && dock_mask(d,n->first)==3) {
+        if(x && dock_single(d,n->first,PS_DOCK_WORKSPACE) && dock_single(d,n->second,PS_DOCK_INSPECTOR))
+            a->preferences.inspector_width=(uint32_t)fmaxf(208,fminf(480,r.x+r.w-in->mouse.pos.x-4));
+        if(dock_log_split(d,n)) {
             a->preferences.log_height=(uint32_t)fmaxf(150,fminf(340,h-in->mouse.pos.y-4));a->panel_drag=2;
         }
     }
@@ -143,6 +161,7 @@ static void dock_prepare(app *a,float w,float h) {
     if(!down) { a->dock_resize=a->dock_float_resize=a->dock_drag=0;a->dock_dragging=false;a->panel_drag=0; }
     if(a->tab==6 && (a->dock_resize || a->dock_float_resize || a->dock_dragging)) {
         a->settings_draft.dock=*d;a->settings_draft.sidebar_width=a->preferences.sidebar_width;a->settings_draft.log_height=a->preferences.log_height;
+        a->settings_draft.inspector_width=a->preferences.inspector_width;
     }
     dock_relayout(a,w,h);
 }
@@ -195,10 +214,10 @@ static void dock_headers(app *a) {
         struct nk_window *previous=ui->active;
         if(nk_begin(ui,name,r,NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BACKGROUND)) {
             dock_input(a,floating?p:d->nodes[i].active,r,previous,false);
-            unsigned count=0;for(unsigned j=0;j<3;j++) if(mask&(1u<<j)) count++;
+            unsigned count=0;for(unsigned j=0;j<PS_DOCK_PANELS;j++) if(mask&(1u<<j)) count++;
             float close_fraction=fminf(.25f,24.f/fmaxf(1,r.w));
             nk_layout_row_begin(ui,NK_DYNAMIC,24,(int)count+1);
-            for(unsigned j=0;j<3;j++) if(mask&(1u<<j)) {
+            for(unsigned j=0;j<PS_DOCK_PANELS;j++) if(mask&(1u<<j)) {
                 nk_layout_row_push(ui,(1-close_fraction)/count);
                 a->dock_headers[j]=nk_widget_bounds(ui);
                 if(action_button(ui,dock_names[j],floating || d->nodes[i].active==j)) ps_dock_select(d,j);
@@ -217,7 +236,7 @@ static void dock_headers(app *a) {
         ps_dock_hide(d,close);
         if(close==PS_DOCK_LOG) a->show_log=false;
     }
-    for(unsigned p=0;p<3;p++) if(d->floating&(1u<<p)) {
+    for(unsigned p=0;p<PS_DOCK_PANELS;p++) if(d->floating&(1u<<p)) {
         struct nk_rect r=a->dock_panels[p];a->dock_float_grips[p]=nk_rect(r.x+r.w-18,r.y+r.h-18,18,18);
     }
 }
