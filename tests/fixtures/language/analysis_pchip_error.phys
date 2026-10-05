@@ -1,0 +1,6 @@
+func analyze():
+    let one = Unit(0,0,0,0,0,0,0,1,"1")
+    let x = Series.fromValues([0.0,1.0,2.0],one,"x")
+    let y = x.alignedValues([0.0,1.0,4.0],one,"y")
+    let q = Series.fromValues([0.0,0.5,3.0],one,"outside")
+    let invalid = y.resampledPchip(x,q)

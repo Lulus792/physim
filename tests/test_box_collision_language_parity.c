@@ -167,7 +167,7 @@ int main(int argc, char **argv) {
         CHECK(c.channels == 15 && language.channels == 15);
         CHECK(strstr(c.metadata, "contact=15-axis SAT") &&
               strstr(language.metadata, "contact=15-axis SAT") &&
-              strstr(language.metadata, "language=physim-0.170.0") &&
+              strstr(language.metadata, "language=physim-0.171.0") &&
               strstr(language.metadata, "iterations=128"));
         for (uint32_t i = 0; i < 15; i++) {
             CHECK(!strcmp(c.schema[i].name, language.schema[i].name));

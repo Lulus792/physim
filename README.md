@@ -594,3 +594,8 @@ Projektdateien, CLI-Overrides und Rohdaten SI bewahren. Details stehen unter
 Der Inspektor ist ein eigenständiges Docking-Panel für Szene, Kamera und
 Experimentparameter. Seine Position und Größe werden unabhängig vom Dateibaum
 wiederhergestellt. [Panelanordnung](docs/settings.md#panelanordnung)
+
+Messreihen lassen sich in C und Physim auch mit monotoner kubischer
+Hermite-Interpolation (PCHIP) auf ein gemeinsames Raster bringen. Einheiten,
+Zuordnung und Dataset-Lebensdauer bleiben geprüft; Extrapolation ist ausgeschlossen.
+[PCHIP im Analysecode](docs/language-analysis-tutorial.md#unregelmäßige-raster-mit-pchip-vergleichen).

@@ -1,10 +1,10 @@
 # Eigene Physim-Sprache
 
-Stand: 2026-10-05. Sprachvertrag 0.170.0; noch keine freigegebene Anwendersprache.
+Stand: 2026-10-05. Sprachvertrag 0.171.0; noch keine freigegebene Anwendersprache.
 Der Arbeitsname ist „Physim-Sprache“. Das vollständige Ziel und die Abnahmen
 LANG-001 bis LANG-007 stehen in Abschnitt 10 des Projektplans.
 
-Die Sprachversion `0.170.0` steht unabhängig von der App-Version und der SDK-ABI
+Die Sprachversion `0.171.0` steht unabhängig von der App-Version und der SDK-ABI
 in `src/language/version.h`. `physimc --version` und der Kopf des generierten C
 geben sie aus. Änderungen an Syntax oder Semantik erfordern eine bewusste
 Anhebung; die vorliegende Fassung ist noch ein Entwicklungsvertrag und keine
@@ -2239,6 +2239,7 @@ Compilerkennung, Backend und Quellhash. Er lässt sich in der bestehenden App ö
 | `left.adding(right)`, `left.subtracting(right)` | Zuordnungs- und dimensionsgeprüfte Summe/Differenz |
 | `left.multiplied(right)`, `left.divided(right)` | Zugeordnete Reihen mit zusammengesetzten Einheiten; Nullteiler sind Fehler |
 | `y.resampledLinear(x, targetX)` | Explizite lineare Interpolation auf ein anderes Zeitraster, auch aus einem anderen Dataset |
+| `y.resampledPchip(x, targetX)` | Monotone kubische Hermite-Interpolation auf ein anderes Raster; keine Extrapolation |
 | `y.resampledNearest(x, targetX)` | Nächster Messpunkt; bei gleichem Abstand der frühere |
 | `y.resampledPrevious(x, targetX)` | Letzten vorherigen Messwert halten; exakte Stützstellen bleiben erhalten |
 | `input.movingAverage(window)` | Kausaler gleitender Mittelwert, Fenster 1 bis 4096 |

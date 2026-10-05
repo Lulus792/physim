@@ -441,6 +441,7 @@ class Builder:
         shutil.copy2(ROOT / "src/report_internal.h", staging / "src/report_internal.h")
         shutil.copy2(ROOT / "src/text_validation.h", staging / "src/text_validation.h")
         shutil.copy2(ROOT / "src/number_parse.h", staging / "src/number_parse.h")
+        shutil.copy2(ROOT / "src/pchip.h", staging / "src/pchip.h")
         (staging / "licenses").mkdir()
         for source, name in (("third_party/Nuklear-LICENSE", "Nuklear-LICENSE"),
                              ("third_party/zlib-1.3.2/LICENSE", "zlib-LICENSE.txt"),

@@ -1520,6 +1520,16 @@ Wählt den nächsten Stützpunkt auf targetX; bei gleichem Abstand den früheren
 
 Analysemodul erforderlich.
 
+## Series.resampledPchip
+
+```text
+Series.resampledPchip(x: Series, targetX: Series) -> Series
+```
+
+Interpoliert y(x) mit monotoner kubischer Hermite-Interpolation (PCHIP) auf targetX ohne Extrapolation.
+
+Analysemodul erforderlich.
+
 ## Series.resampledPrevious
 
 ```text

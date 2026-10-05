@@ -178,22 +178,26 @@ int main(void) {
     CHECK(ps_analysis_create("resample-methods", 0, &c) == PS_OK);
     CHECK(open_series(c, source, &a, &x, &y) == PS_OK);
     CHECK(open_series(c, target, &b, &q, &reference) == PS_OK);
-    ps_series outputs[2];
-    for (int mode = 0; mode < 2; mode++) {
-        ps_resample_method method = mode ? PS_RESAMPLE_PREVIOUS : PS_RESAMPLE_NEAREST;
+    ps_series outputs[3];
+    for (int mode = 0; mode < 3; mode++) {
+        ps_resample_method method = mode==2?PS_RESAMPLE_PCHIP:mode?PS_RESAMPLE_PREVIOUS:PS_RESAMPLE_NEAREST;
         CHECK(ps_series_resample(c, y, x, q, method, &outputs[mode]) == PS_OK);
         CHECK(ps_series_aligned(c, q, outputs[mode]) == PS_OK);
         CHECK(ps_series_describe(c, outputs[mode], &info) == PS_OK && info.dimension[0] == 1 &&
               info.scale == 1);
     }
     CHECK(ps_dataset_close(c, a) == PS_OK);
-    for (int mode = 0; mode < 2; mode++) {
+    for (int mode = 0; mode < 3; mode++) {
         for (size_t at = 0; at < 3073; at += got) {
             CHECK(ps_series_read(c, outputs[mode], at, values, 127, &got) == PS_OK && got);
             for (size_t i = 0; i < got; i++) {
                 size_t index = (at + i + (mode ? 0 : 1)) / 4;
                 double coordinate = (double)index * .5;
-                CHECK(values[i] == coordinate * coordinate);
+                if(mode==2) {
+                    double lower=(double)((at+i)/4)*.5,upper=lower+.5;
+                    CHECK(values[i]>=lower*lower && values[i]<=upper*upper);
+                    if((at+i)%4==0)CHECK(values[i]==lower*lower);
+                } else CHECK(values[i] == coordinate * coordinate);
             }
         }
     }

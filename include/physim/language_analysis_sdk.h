@@ -413,6 +413,7 @@ PSRA_COMBINE(psra_divide, PS_SERIES_DIVIDE)
 PSRA_RESAMPLE(psra_linear, PS_RESAMPLE_LINEAR)
 PSRA_RESAMPLE(psra_nearest, PS_RESAMPLE_NEAREST)
 PSRA_RESAMPLE(psra_previous, PS_RESAMPLE_PREVIOUS)
+PSRA_RESAMPLE(psra_pchip, PS_RESAMPLE_PCHIP)
 #undef PSRA_RESAMPLE
 static inline void psra_release(psra_host *h, ps_series input, psrt_site site) {
     psra_check(h, ps_series_release(h->context, input), site);

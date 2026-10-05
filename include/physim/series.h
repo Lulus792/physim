@@ -118,11 +118,17 @@ ps_result ps_series_moving_average(ps_analysis_context *ctx, ps_series input, si
  * all source x values are validated, including those beyond the last target. */
 ps_result ps_series_resample_linear(ps_analysis_context *ctx, ps_series y, ps_series x,
                                     ps_series target_x, ps_series *out);
-typedef enum { PS_RESAMPLE_LINEAR, PS_RESAMPLE_NEAREST, PS_RESAMPLE_PREVIOUS } ps_resample_method;
+typedef enum { PS_RESAMPLE_LINEAR, PS_RESAMPLE_NEAREST, PS_RESAMPLE_PREVIOUS,
+               PS_RESAMPLE_PCHIP } ps_resample_method;
 /* Same axis, unit, lifetime and transactional contract as resample_linear.
  * NEAREST selects the earlier sample at equal distances. PREVIOUS holds the
  * last source value at or before each target. Exact source coordinates always
  * return that source value. No extrapolation for any method. */
+/* PCHIP is a local, monotonicity-preserving cubic Hermite interpolant with
+ * continuous first derivatives. Flat spans and extrema have zero knot slopes;
+ * endpoints use limited one-sided slopes. Two source points reduce to linear
+ * interpolation; a single point is valid only at that exact coordinate.
+ * Bounded block memory, finite-input arithmetic without wider numeric types. */
 ps_result ps_series_resample(ps_analysis_context *ctx, ps_series y, ps_series x, ps_series target_x,
                              ps_resample_method method, ps_series *out);
 ps_result ps_series_statistics(ps_analysis_context *ctx, ps_series input, ps_statistics *out);

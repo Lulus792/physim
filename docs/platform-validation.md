@@ -3,6 +3,60 @@
 Stand: 5. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Monotone kubische Interpolation am 5. Oktober 2026
+
+Resampling, PCHIP-Modell und ausgeführte Physim-Analysemodule bestehen auf
+macOS Debug 3/3: `build/pchip-debug-mac/test-results/run-ehr4gt2h`.
+Die erste Debian-Release-Prüfung besteht ebenfalls 3/3:
+`build/pchip-linux/test-results/run-fms8h68d` innerhalb der VM.
+Analytische Referenzen prüfen gleichmäßige und unregelmäßige Raster,
+Einheitenumrechnung, exakte Stützstellen, erste Ableitungen an inneren Knoten,
+Monotonie, Plateaus, Extrema und mehrere Blockgrenzen. Endliche Extremwerte,
+subnormale Achsenabstände, zwei/ein Quellpunkt, Scratch-Quota und Fehler nach
+mehreren Zielblöcken sind geprüft. Ein Fehler hinter dem verwendeten Quellpräfix
+wird erkannt. Ergebnisreihen bleiben nach dem Schließen der Quelle lesbar und
+werden durch das Schließen des Ziel-Dataset invalidiert.
+
+Das neue Verfahren verwendet lokale Fritsch–Butland-Steigungen mit
+begrenzten einseitigen Endsteigungen. Mantissen-/Exponentenarithmetik vermeidet
+die Voraussetzung eines breiteren `long double`; Bézier-Kontrollen und
+de-Casteljau-Auswertung halten Ergebnisse im jeweiligen Werteintervall.
+Methodische Grundlage ist die [PCHIP-Dokumentation von SciPy](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html).
+Die Implementierung ist in C geschrieben und benötigt SciPy nicht zur Laufzeit.
+
+Der neue Fensterablauf besteht auf macOS Debug:
+`build/pchip-debug-mac/test-results/run-iiiwjoeb`.
+Ein C- und ein Physim-Projekt bauen ihre Analyse in der App, führen das Modell
+aus und erzeugen je einen Bericht mit 129 PCHIP- und linearen Werten.
+Numerische Zwischenwerte, Monotonie, Einheiten und Endpunkte sind geprüft.
+Die SVGs beider Sprachen sind bytegleich; PNG misst jeweils 1200 × 850 Pixel.
+Weitere Prozesse öffnen dieselben Berichte; deren SVG bleibt identisch und
+Hashes von Quellen, Bericht und Laufdaten bleiben erhalten. Die Kurvenansicht
+wurde bei 1080 × 740 logischen Pixeln auf dem Intel-Mac visuell geprüft.
+Frühe Fixtures verwenden zunächst nicht unterstützte freie/static Series-Aufrufe
+und falsche App-Hilfsfunktionssignaturen; sie verwenden jetzt die vorhandenen
+Methoden und Berichtslader. Ihre Zeitgrenzen bleiben unverändert.
+
+Sprache 0.171.0 ergänzt `Series.resampledPchip`; API und ABI bleiben auf 3.
+Die privaten numerischen Helfer werden mit den SDK-Quellen ausgeliefert.
+Ein unabhängiger öffentlicher SDK-Verbraucher prüft PCHIP gegen das installierte
+Archiv und den aus SDK-Quellen neu gebauten Kern.
+Die vollständigen Release-Läufe ohne Fenster bestehen jeweils 514/514:
+macOS `build/pchip-final-mac/test-results/run-_wqs83qb`, Debian
+`build/pchip-linux/test-results/run-27oiqc36` innerhalb der VM. Die Umgebungen
+bleiben Intel macOS 14.6.1/AppleClang 16 und Debian 12/GCC 12.2/SDL 3.2.30.
+Die vollständigen Release-Fensterläufe bestehen jeweils 50/50: macOS
+`build/pchip-final-mac/test-results/run-h2yktdf9`, Debian
+`build/pchip-linux/test-results/run-oo9993th` unter X11/Xvfb/Openbox/Mesa.
+Auch die Linux-Kurvenansicht wurde bei 1080 × 740 visuell geprüft.
+Die verschobenen Release-SDKs bestehen mit unabhängigen Headern und Verbrauchern,
+installiertem und aus SDK-Quellen neu gebautem Kern, C-/Physim-Modulen,
+adaptiven Läufen, Zielzeitstudien und neun neu gebauten Projekten:
+macOS `build/pchip-sdk-proof-mac/Native SDK ä uftgb797`, Debian
+`build/pchip-sdk-proof-linux/Native SDK ä knmhmus1` innerhalb der VM.
+Der öffentliche Reihenverbraucher prüft PCHIP-Werte und Zielzuordnung mit beiden
+Archiven; dadurch ist auch die Auslieferung des privaten numerischen Headers geprüft.
+
 ## Benannte Workspaces am 5. Oktober 2026
 
 Workspace-Zustand und neuer Katalog bestehen auf macOS Debug 2/2:

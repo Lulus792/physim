@@ -362,7 +362,8 @@ Explicit linear interpolation of aligned (x,y) onto target_x, possibly from anot
 ### ps_resample_method
 
 ```c
-typedef enum { PS_RESAMPLE_LINEAR, PS_RESAMPLE_NEAREST, PS_RESAMPLE_PREVIOUS } ps_resample_method;
+typedef enum { PS_RESAMPLE_LINEAR, PS_RESAMPLE_NEAREST, PS_RESAMPLE_PREVIOUS,
+               PS_RESAMPLE_PCHIP } ps_resample_method;
 ```
 
 ## ps_series_resample
@@ -380,6 +381,8 @@ ps_result ps_series_resample(
 ```
 
 Same axis, unit, lifetime and transactional contract as resample_linear. NEAREST selects the earlier sample at equal distances. PREVIOUS holds the last source value at or before each target. Exact source coordinates always return that source value. No extrapolation for any method.
+
+PCHIP is a local, monotonicity-preserving cubic Hermite interpolant with continuous first derivatives. Flat spans and extrema have zero knot slopes; endpoints use limited one-sided slopes. Two source points reduce to linear interpolation; a single point is valid only at that exact coordinate. Bounded block memory, finite-input arithmetic without wider numeric types.
 
 ## ps_series_statistics
 

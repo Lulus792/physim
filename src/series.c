@@ -1,4 +1,5 @@
 #include "physim/series.h"
+#include "pchip.h"
 #include <limits.h>
 #include <math.h>
 #include <stdlib.h>
@@ -795,6 +796,57 @@ static ps_result cursor_next(ps_analysis_context *c, series_cursor *cursor, doub
     *value = cursor->values[cursor->used++];
     return PS_OK;
 }
+static ps_result resample_pchip(ps_analysis_context *c,const series_slot *x,const series_slot *y,
+                                 const series_slot *q,series_slot *draft,int slot,ps_series *out,
+                                 double first,double last) {
+    series_cursor xc={0},yc={0};xc.series=x;yc.series=y;
+    double xx[4],yy[4],controls[4];unsigned count=0,left=0;uint64_t loaded=0;
+    ps_result r=PS_OK;
+    while(count<3 && r==PS_OK) {
+        r=cursor_next(c,&xc,&xx[count]);
+        if(r==PS_OK)r=cursor_next(c,&yc,&yy[count]);
+        if(r==PS_OK){count++;loaded++;}
+    }
+    if(r==PS_OK)ps_pchip_controls(xx,yy,count,left,controls);
+    double block[PS_SERIES_BLOCK_SIZE],previous=0;
+    ps_unit from=unit_of(q),to=unit_of(x);
+    for(uint64_t at=0;at<q->info.count && r==PS_OK;) {
+        size_t n=(size_t)(q->info.count-at>PS_SERIES_BLOCK_SIZE?PS_SERIES_BLOCK_SIZE:q->info.count-at);
+        r=read_values(c,q,at,n,block);
+        for(size_t i=0;i<n && r==PS_OK;i++) {
+            double query;r=ps_convert(block[i],from,to,&query);
+            if(r!=PS_OK)break;
+            if(query<first || query>last || (at+i && query<=previous)){r=PS_INVALID;break;}
+            previous=query;
+            bool changed=false;
+            while(xx[left+1]<query && r==PS_OK) {
+                left++;changed=true;
+                if(left==2) {
+                    memmove(xx,xx+1,(count-1)*sizeof *xx);memmove(yy,yy+1,(count-1)*sizeof *yy);
+                    left--;count--;
+                }
+                if(loaded<x->info.count && left+2>=count) {
+                    r=cursor_next(c,&xc,&xx[count]);
+                    if(r==PS_OK)r=cursor_next(c,&yc,&yy[count]);
+                    if(r==PS_OK){count++;loaded++;}
+                }
+            }
+            if(r!=PS_OK)break;
+            if(changed)ps_pchip_controls(xx,yy,count,left,controls);
+            if(query==xx[left])block[i]=yy[left];
+            else if(query==xx[left+1])block[i]=yy[left+1];
+            else {
+                double span=xx[left+1]-xx[left];
+                double t=isfinite(span)?(query-xx[left])/span:
+                    (query*.5-xx[left]*.5)/(xx[left+1]*.5-xx[left]*.5);
+                block[i]=ps_pchip_evaluate(controls,t);
+            }
+        }
+        if(r==PS_OK)r=write_values(draft->file,block,n);
+        at+=n;
+    }
+    return finish_derived(c,draft,slot,r,out);
+}
 ps_result ps_series_resample_linear(ps_analysis_context *c, ps_series hy, ps_series hx,
                                     ps_series target, ps_series *out) {
     return ps_series_resample(c, hy, hx, target, PS_RESAMPLE_LINEAR, out);
@@ -802,7 +854,7 @@ ps_result ps_series_resample_linear(ps_analysis_context *c, ps_series hy, ps_ser
 ps_result ps_series_resample(ps_analysis_context *c, ps_series hy, ps_series hx, ps_series target,
                              ps_resample_method method, ps_series *out) {
     series_slot *y = series_get(c, hy), *x = series_get(c, hx), *q = series_get(c, target);
-    if (method < PS_RESAMPLE_LINEAR || method > PS_RESAMPLE_PREVIOUS || !x || !y || !q || !out ||
+    if (method < PS_RESAMPLE_LINEAR || method > PS_RESAMPLE_PCHIP || !x || !y || !q || !out ||
         !aligned(x, y) || !x->info.count || !q->info.count ||
         !ps_unit_compatible(unit_of(x), unit_of(q)))
         return PS_INVALID;
@@ -829,8 +881,10 @@ ps_result ps_series_resample(ps_analysis_context *c, ps_series hy, ps_series hx,
         return r;
     draft.info = y->info;
     draft.info.count = q->info.count;
-    const char *names[] = {"linear", "nearest", "previous"};
+    const char *names[] = {"linear", "nearest", "previous", "pchip"};
     snprintf(draft.info.name, sizeof draft.info.name, "%s(%.*s)", names[method], 48, y->info.name);
+    if(method==PS_RESAMPLE_PCHIP && x->info.count>2)
+        return resample_pchip(c,x,y,q,&draft,slot,out,first,last);
     xc.next = 0;
     xc.used = xc.count = 0;
     double left_x = 0, right_x = 0, left_y = 0, right_y = 0, previous = 0;

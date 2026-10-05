@@ -92,3 +92,48 @@ Modul im Quellbaum und prüft den gemischten C-/Sprachlauf samt Bericht
 Für die allgemeine Form von
 `Dataset`, `Series`, `Plot` und `Table` siehe die
 [Sprachbibliotheksreferenz](reference/language-library.md).
+
+## Unregelmäßige Raster mit PCHIP vergleichen
+
+`y.resampledPchip(x, targetX)` interpoliert die Werte `y` über ihre zugehörige
+Achse `x` auf das Raster `targetX`. Anders als ein allgemeiner kubischer Spline
+erhält PCHIP monotone Abschnitte und erzeugt dort keine Überschwingungen.
+Die ersten Ableitungen sind stetig; zweite Ableitungen können an Stützstellen
+springen. Das Verfahren nutzt lokale gewichtete harmonische Steigungen und
+begrenzte einseitige Endsteigungen. Methodische Grundlage:
+[Fritsch–Butland/PCHIP in der SciPy-Dokumentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html).
+
+```physim
+func analyze():
+    report("Rastervergleich")
+    let second = Unit(0,0,1,0,0,0,0,1,"s")
+    let metre = Unit(1,0,0,0,0,0,0,1,"m")
+    let x = Series.fromValues([0.0,1.0,2.0],second,"Zeit")
+    let y = x.alignedValues([0.0,1.0,4.0],metre,"Position")
+    let grid = Series.fromValues([0.0,0.5,1.0,1.5,2.0],second,"Raster")
+    let cubic = y.resampledPchip(x,grid)
+    let linear = y.resampledLinear(x,grid)
+    let diagram = cubic.plot(grid,"PCHIP und linear","PCHIP")
+    diagram.curve(grid,linear,"linear")
+```
+
+PCHIP liefert an den beiden Zwischenpunkten `0,3125 m` und `2,1875 m`;
+linear liefert `0,5 m` und `2,5 m`. Für einen glatter dargestellten Verlauf
+wählst du ein dichteres Zielraster. `x` und `y` müssen zugeordnet sein. Beide
+Achsen müssen endlich, streng steigend und in kompatiblen Einheiten angegeben
+sein; Zielwerte werden in die Quellachseinheit umgerechnet. Kein Zielwert darf
+außerhalb des geschlossenen Quellbereichs liegen. Exakte Stützstellen bleiben
+unverändert, zwei Quellpunkte ergeben lineare Interpolation, ein einzelner
+Quellpunkt erlaubt nur seine exakte Koordinate.
+
+Die Ergebnisreihe erhält Einheit und Skala von `y`, aber Raster und
+Dataset-Lebensdauer von `targetX`. Quellreihen und ihr Dataset können nach dem
+Interpolieren freigegeben werden; das Schließen des Ziel-Dataset invalidiert
+das Ergebnis. Die Berechnung benötigt begrenzten Blockspeicher und unterliegt
+der Scratch-Quota. Ungültige Achsen, Extrapolation und Fehler lassen das
+Ausgabehandle und die bisherige Scratch-Belegung unverändert. PCHIP ist eine
+Interpolation vorhandener endlicher Werte; Messlücken werden nicht automatisch
+aufgefüllt oder als Messwerte erklärt.
+
+Die C-API bietet dieselbe Wahl:
+`ps_series_resample(ctx, y, x, targetX, PS_RESAMPLE_PCHIP, &result)`.

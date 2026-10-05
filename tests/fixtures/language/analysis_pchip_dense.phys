@@ -1,0 +1,14 @@
+func analyze():
+    report("PCHIP comparison")
+    let second = Unit(0,0,1,0,0,0,0,1,"s")
+    let metre = Unit(1,0,0,0,0,0,0,1,"m")
+    let x = Series.fromValues([0.0,1.0,2.0],second,"time")
+    let y = x.alignedValues([0.0,1.0,4.0],metre,"square")
+    var values: [Float64] = []
+    for index in 0..<129:
+        values.append(Float64(index)/64)
+    let grid = Series.fromValues(values,second,"grid")
+    let cubic = y.resampledPchip(x,grid)
+    let linear = y.resampledLinear(x,grid)
+    let graph = cubic.plot(grid,"PCHIP comparison","PCHIP")
+    graph.curve(grid,linear,"linear")

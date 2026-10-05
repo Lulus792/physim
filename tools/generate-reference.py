@@ -294,6 +294,7 @@ LANG_DESCRIPTIONS = {
     'multiplySeries': 'Multipliziert gepaarte Reihen und ihre Einheiten.',
     'divideSeries': 'Dividiert gepaarte Reihen; Nulldivision ist ein Fehler.',
     'resampleLinear': 'Interpoliert y(x) linear auf targetX ohne Extrapolation.',
+    'resamplePchip': 'Interpoliert y(x) mit monotoner kubischer Hermite-Interpolation (PCHIP) auf targetX ohne Extrapolation.',
     'resampleNearest': 'Wählt den nächsten Stützpunkt auf targetX; bei gleichem Abstand den früheren.',
     'resamplePrevious': 'Verwendet den letzten Stützpunkt vor oder an targetX, etwa für stückweise konstante Signale.',
     'movingAverage': 'Kausaler Mittelwert über höchstens window Werte; window liegt zwischen 1 und 4096.',

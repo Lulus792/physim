@@ -178,6 +178,34 @@ def timed_series(flow, directory, scaled=False):
     require(records[0] == records[1], "Timed C/Physim studies differ in accepted times or values")
 
 
+def pchip(flow, directory):
+    outputs = []
+    for language in ("c", "phys"):
+        root = directory / language
+        root.mkdir(parents=True)
+        flow.run("--workspace-state-test", root, "pchip-" + language, timeout=130,
+                 marker="PCHIP pchip-" + language + " SELF-TEST: PASSED")
+        project = root / "project"
+        runs = list((project / "runs").glob("*.psrun"))
+        require(len(runs) == 1, "PCHIP analysis restarted the simulation")
+        protected = runs + [project / "saved-pchip.psreport", project / ("main.c" if language == "c" else "main.phys"),
+                            project / ("analysis.c" if language == "c" else "analysis.phys")]
+        hashes = [fingerprint(path) for path in protected]
+        svg = project / "saved-pchip.svg"
+        text = svg.read_text(encoding="utf-8")
+        require("PCHIP" in text and "linear" in text and "grid [s]" in text and "pchip(square) [m]" in text,
+                "PCHIP report SVG labels or units missing")
+        image = (project / "saved-pchip.png").read_bytes()
+        require(image[:8] == b"\x89PNG\r\n\x1a\n" and struct.unpack_from(">II", image, 16) == (1200, 850),
+                "PCHIP PNG export missing")
+        flow.run("--workspace-state-test", root, "pchip-read", timeout=130,
+                 marker="PCHIP pchip-read SELF-TEST: PASSED")
+        require(hashes == [fingerprint(path) for path in protected], "Reopening PCHIP report changed sources or run data")
+        require((project / "reopened-pchip.svg").read_bytes() == svg.read_bytes(), "Reopening changed the PCHIP curves")
+        outputs.append(svg.read_bytes())
+    require(outputs[0] == outputs[1], "C and Physim PCHIP reports differ")
+
+
 def named_workspaces(flow, directory):
     root = directory / "Workspaces ä"
     root.mkdir(parents=True)
@@ -585,7 +613,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
+SPECIAL = {"pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}
