@@ -35,6 +35,7 @@ size_t ps_snapshot_encode(unsigned char *p, const ps_context *c, const ps_scene 
         ps_put_u32(p + at + 160, o->point_first);
         ps_put_u32(p + at + 164, o->point_count);
         ps_put_u32(p + at + 168, o->id);
+        ps_put_u32(p + at + 172, o->parent_id);
     }
     for (uint32_t i = 0; i < s->point_count; i++, at += 24) {
         ps_put_f64(p + at, s->points[i].x);
@@ -45,12 +46,18 @@ size_t ps_snapshot_encode(unsigned char *p, const ps_context *c, const ps_scene 
 }
 bool ps_snapshot_decode(const unsigned char *p, uint32_t n, double *t, double *v, uint32_t *count,
                         ps_scene *s, bool *paused) {
+    return ps_snapshot_decode_version(PS_SNAPSHOT_VERSION,p,n,t,v,count,s,paused);
+}
+bool ps_snapshot_decode_version(uint32_t version,const unsigned char *p,uint32_t n,double *t,
+                                double *v,uint32_t *count,ps_scene *s,bool *paused) {
+    if(version!=1 && version!=PS_SNAPSHOT_VERSION) return false;
+    uint32_t object_size=version==1?172u:PS_SNAPSHOT_OBJECT_SIZE;
     if (!p || !t || !v || !count || !s || !paused || n < PS_SNAPSHOT_HEADER)
         return false;
     uint32_t nc = ps_get_u32(p + 8), ns = ps_get_u32(p + 12), np = ps_get_u32(p + 20),
              pause = ps_get_u32(p + 16);
     if (nc > PS_MAX_CHANNELS || ns > PS_MAX_OBJECTS || np > PS_MAX_SCENE_POINTS || pause > 1 ||
-        n != PS_SNAPSHOT_HEADER + nc * 8 + ns * PS_SNAPSHOT_OBJECT_SIZE + np * 24)
+        n != PS_SNAPSHOT_HEADER + nc * 8 + ns * object_size + np * 24)
         return false;
     double time = ps_get_f64(p), values[PS_MAX_CHANNELS] = {0};
     if (!isfinite(time))
@@ -64,9 +71,10 @@ bool ps_snapshot_decode(const unsigned char *p, uint32_t n, double *t, double *v
         if (!isfinite(values[i]))
             return false;
     }
-    for (uint32_t i = 0; i < ns; i++, at += PS_SNAPSHOT_OBJECT_SIZE) {
+    for (uint32_t i = 0; i < ns; i++, at += object_size) {
         ps_object *o = &scene.objects[i];
         o->shape = ps_get_u32(p + at);
+        if(version==1 && o->shape>PS_LABEL) return false;
         o->color = ps_get_u32(p + at + 4);
         double a[11];
         for (size_t k = 0; k < 11; k++)
@@ -79,6 +87,7 @@ bool ps_snapshot_decode(const unsigned char *p, uint32_t n, double *t, double *v
         o->point_first = ps_get_u32(p + at + 160);
         o->point_count = ps_get_u32(p + at + 164);
         o->id = ps_get_u32(p + at + 168);
+        o->parent_id=version==1?0:ps_get_u32(p+at+172);
     }
     for (uint32_t i = 0; i < np; i++, at += 24)
         scene.points[i] =

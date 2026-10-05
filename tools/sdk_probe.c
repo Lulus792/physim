@@ -19,6 +19,16 @@ int main(int argc, char **argv) {
     size_t candidates = 0;
     CHECK(ps_broad_phase(bounds, 2, &pair, 1, &candidates) == PS_OK && candidates == 1 &&
           pair.a == 0 && pair.b == 1);
+    ps_scene hierarchy={0};
+    CHECK(ps_scene_group(&hierarchy,100,0,"SDK Root")==PS_OK);
+    CHECK(ps_scene_add_id(&hierarchy,1,PS_POINT,ps_v3(1,2,3),ps_v3(1,2,3),.1,UINT32_MAX)==PS_OK);
+    CHECK(ps_scene_set_parent(&hierarchy,1,100)==PS_OK && ps_scene_parent_index(&hierarchy,1)==0);
+    CHECK(ps_scene_set_parent(&hierarchy,100,1)==PS_INVALID && ps_scene_valid(&hierarchy));
+    unsigned char bytes[PS_SNAPSHOT_MAX];ps_context state={0};ps_snapshot restored={0};
+    size_t length=ps_snapshot_encode(bytes,&state,&hierarchy,false);
+    CHECK(length && ps_snapshot_decode_version(2,bytes,(uint32_t)length,&restored.time,restored.values,
+                                               &restored.count,&restored.scene,&restored.paused));
+    CHECK(restored.scene.objects[1].parent_id==100 && restored.scene.objects[0].shape==PS_GROUP);
     ps_run_reader reader;
     CHECK(ps_run_open(&reader, argv[1]) == PS_OK);
     CHECK(reader.channels > 0 && reader.channels <= PS_MAX_CHANNELS);

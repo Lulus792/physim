@@ -113,9 +113,9 @@ First-order symplectic linear step, explicit gyroscopic angular acceleration, th
 
 ```c
 typedef struct {
-    ps_vec3 anchor_a_m, anchor_b_m; 
-    double length_m;                
-    double stabilization;           
+    ps_vec3 anchor_a_m, anchor_b_m;
+    double length_m;
+    double stabilization;
 } ps_distance_joint;
 ```
 
@@ -140,8 +140,8 @@ Validate finite local anchors, positive length and stabilization in 0..1.
 ```c
 typedef struct {
     ps_vec3 impulse_on_a_ns;
-    double length_error_m;     
-    double velocity_error_m_s; 
+    double length_error_m;
+    double velocity_error_m_s;
 } ps_distance_joint_solution;
 ```
 
@@ -168,7 +168,7 @@ One bilateral velocity constraint along the current anchor separation. Solve aft
 
 ```c
 typedef struct {
-    ps_vec3 point_m, normal; 
+    ps_vec3 point_m, normal;
     double penetration_m;
 } ps_contact;
 ```
@@ -266,10 +266,10 @@ Two oriented boxes, full extents; normals point from A toward B. SAT over face/e
 
 ```c
 typedef struct {
-    uint32_t iterations; 
+    uint32_t iterations;
     double restitution, friction;
-    double bounce_threshold_m_s;                    
-    double penetration_slop_m, correction_fraction; 
+    double bounce_threshold_m_s;
+    double penetration_slop_m, correction_fraction;
 } ps_contact_solver;
 ```
 
@@ -291,7 +291,7 @@ extern const ps_contact_solver PS_CONTACT_SOLVER_DEFAULT;
 typedef struct {
     uint32_t count;
     ps_vec3 impulse_on_a_ns[PS_CONTACT_MAX_POINTS];
-    double max_normal_error_m_s; 
+    double max_normal_error_m_s;
 } ps_contact_solution;
 ```
 
@@ -316,7 +316,7 @@ Pair manifold: accumulated projected normal impulses and a two-dimensional Coulo
 
 ```c
 typedef struct {
-    uint32_t a, b; 
+    uint32_t a, b;
     ps_contact contact;
 } ps_contact_constraint;
 ```
@@ -329,8 +329,8 @@ Body array indices; only B may be PS_CONTACT_WORLD.
 typedef struct {
     uint32_t count;
     ps_vec3 impulse_on_a_ns[PS_CONTACT_GRAPH_MAX_CONTACTS];
-    double max_normal_error_m_s;   
-    double max_projection_error_m; 
+    double max_normal_error_m_s;
+    double max_projection_error_m;
 } ps_contact_graph_solution;
 ```
 
@@ -358,7 +358,7 @@ Simultaneous contact graph with accumulated normal/friction impulses. Determinis
 
 ```c
 typedef struct {
-    uint32_t a, b; 
+    uint32_t a, b;
     ps_distance_joint joint;
 } ps_distance_constraint;
 ```
@@ -372,8 +372,8 @@ typedef struct {
     ps_contact_graph_solution contacts;
     uint32_t joint_count;
     ps_vec3 joint_impulse_on_a_ns[PS_CONSTRAINT_GRAPH_MAX_JOINTS];
-    double max_joint_velocity_error_m_s; 
-    double max_joint_length_error_m;     
+    double max_joint_velocity_error_m_s;
+    double max_joint_length_error_m;
 } ps_constraint_graph_solution;
 ```
 
@@ -441,7 +441,7 @@ Archimedes force = -density * displaced volume * gravity, in world space. Unifor
 ```c
 typedef struct {
     double volume_m3;
-    double centroid_offset_m; 
+    double centroid_offset_m;
 } ps_submersion;
 ```
 

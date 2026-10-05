@@ -110,8 +110,8 @@ Velocity Verlet for q''=a(t,q), no velocity-dependent acceleration. Arrays must 
 typedef struct {
     double absolute_tolerance, relative_tolerance;
     double initial_step, minimum_step, maximum_step;
-    unsigned maximum_steps;                     
-    const double *component_absolute_tolerance; 
+    unsigned maximum_steps;
+    const double *component_absolute_tolerance;
 } ps_ode_options;
 ```
 
@@ -176,9 +176,9 @@ typedef enum {
 ```c
 typedef struct {
     ps_ode_diagnostic_reason reason;
-    double time;      
-    size_t component; 
-    unsigned stage;   
+    double time;
+    size_t component;
+    unsigned stage;
 } ps_ode_diagnostic;
 ```
 

@@ -246,6 +246,7 @@ typedef struct {
     ps_scene scene;
     ps_scene_view scene_view;
     bool scene_selected;
+    struct nk_rect scene_expand_bounds[PS_MAX_OBJECTS];
     uint32_t scene_selected_id, scene_selected_slot;
     struct nk_rect scene_viewport_bounds;
     struct nk_rect scene_label_bounds[PS_MAX_OBJECTS];
@@ -1612,11 +1613,22 @@ static void scene_selection_sync(app *a) {
 }
 static bool scene_entry_enabled(const app *a, uint32_t i) {
     const ps_object *o = &display_scene(a)->objects[i];
-    return ps_scene_view_visible(&a->scene_view, i) && (o->color & 255) &&
+    return o->shape!=PS_GROUP && ps_scene_view_visible(&a->scene_view, i) && (o->color & 255) &&
            (o->shape != PS_ARROW || a->show_vectors) &&
            (o->shape != PS_POLYLINE || a->show_paths) &&
            (o->shape != PS_POINT || a->show_points) &&
            (o->shape != PS_LABEL || (a->show_labels && o->text[0]));
+}
+static void scene_select_entry(app *a,uint32_t slot) {
+    const ps_scene *scene=display_scene(a);
+    a->scene_selected=slot<scene->count;
+    if(!a->scene_selected) return;
+    a->scene_selected_slot=slot;a->scene_selected_id=scene->objects[slot].id;
+    int parent=ps_scene_parent_index(scene,slot);
+    for(unsigned depth=0;parent>=0 && depth<PS_MAX_OBJECTS;depth++) {
+        a->scene_view.collapsed &= ~(UINT32_C(1)<<(unsigned)parent);
+        parent=ps_scene_parent_index(scene,(uint32_t)parent);
+    }
 }
 static bool scene_shortcut(app *a, const SDL_KeyboardEvent *key) {
     if (a->tab != 1 || a->recovery || !(key->mod & SDL_KMOD_ALT) ||
@@ -1671,10 +1683,9 @@ static bool scene_shortcut(app *a, const SDL_KeyboardEvent *key) {
     a->scene_selected = false;
     for (uint32_t step = 0; step < display_scene(a)->count; step++) {
         index = (index + direction + (int)display_scene(a)->count) % (int)display_scene(a)->count;
-        if (scene_entry_enabled(a, (uint32_t)index)) {
-            a->scene_selected = true;
-            a->scene_selected_slot = (uint32_t)index;
-            a->scene_selected_id = display_scene(a)->objects[index].id;
+        if (scene_entry_enabled(a, (uint32_t)index) ||
+            (display_scene(a)->objects[index].shape==PS_GROUP && ps_scene_view_visible(&a->scene_view,(uint32_t)index))) {
+            scene_select_entry(a,(uint32_t)index);
             break;
         }
     }
@@ -1720,7 +1731,8 @@ static void viewport(app *a, float height) {
         const ps_object *o = &display_scene(a)->objects[i];
         if (!scene_entry_enabled(a, i)) continue;
         visible_slots[visible.count] = i;
-        visible.objects[visible.count++] = *o;
+        visible.objects[visible.count] = *o;
+        visible.objects[visible.count++].parent_id=0; /* Rendering receives a flat world-space subset. */
     }
     unsigned texture = ps_graphics_scene(a->graphics, &visible, &camera, width, pixels);
     if (texture) {
@@ -1732,8 +1744,7 @@ static void viewport(app *a, float height) {
                                        (input->mouse.pos.y-r.y)/r.h);
             a->scene_selected = hit >= 0;
             if (hit >= 0) {
-                a->scene_selected_slot = visible_slots[hit];
-                a->scene_selected_id = visible.objects[hit].id;
+                scene_select_entry(a,visible_slots[hit]);
             }
         }
         struct nk_image image = nk_image_id((int)texture);
@@ -1763,9 +1774,7 @@ static void viewport(app *a, float height) {
             placed[placed_count++] = label;
             a->scene_label_bounds[visible_slots[i]] = label;
             if (picking && nk_input_is_mouse_hovering_rect(input, label)) {
-                a->scene_selected = true;
-                a->scene_selected_slot = visible_slots[i];
-                a->scene_selected_id = o->id;
+                scene_select_entry(a,visible_slots[i]);
             }
             if (fabsf(label.y - preferred_y) > 1)
                 nk_stroke_line(canvas, r.x + x * r.w, r.y + y * r.h, label.x,
@@ -2339,7 +2348,7 @@ static void test_key(app *a, SDL_Keycode key) {
     test_window_key(a->window, key);
 }
 #define PS_TEST_MOUSE_ID ((SDL_MouseID)0x50535445u)
-/* Scripted plot/menu clicks are isolated from native pointer and focus events.
+/* Scripted desktop workflows are isolated from native pointer and focus events.
  * Window resizing, minimizing and closing still come from the real desktop. */
 static bool test_scripted_external_input(const SDL_Event *e) {
     switch (e->type) {
@@ -2383,6 +2392,7 @@ static void test_mouse(app *a, struct nk_rect rect, bool down) {
 #include "speed_tests.inc"
 #include "timeline_tests.inc"
 #include "docking_tests.inc"
+#include "hierarchy_tests.inc"
 #include "native_dialog_tests.inc"
 #include "workspace_tests.inc"
 // clang-format on
@@ -2829,7 +2839,8 @@ int main(int argc, char **argv) {
                 continue;
             }
             if ((plot_test || toolbar_test || settings_test ||
-                 (workspace_state_test && (!strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3], "dock-", 5)))) && test_scripted_external_input(&e)) continue;
+                 (workspace_state_test && strncmp(argv[3],"native-dialog",13) &&
+                  strcmp(argv[3],"documents-unfiltered"))) && test_scripted_external_input(&e)) continue;
             if (self_test && e.type == SDL_EVENT_TEXT_INPUT) {
                 doc_input_events++;
                 doc_input_bytes += (unsigned)strlen(e.text.text);
@@ -2929,7 +2940,7 @@ int main(int argc, char **argv) {
         } else if (workspace_state_test) {
             if (ps_clock() - test_started >
                 (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
-                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3], "dock-", 5)
+                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15)) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
                         argv[3], ps_clock() - test_started);
@@ -3180,7 +3191,8 @@ int main(int argc, char **argv) {
                     planes += a->scene.objects[i].shape == PS_PLANE;
                 }
                 if ((!a->language_experiment && !label) ||
-                    (test_example == 8 && a->scene.count != 3) ||
+                    (test_example == 8 && (a->scene.count != 5 || a->scene.objects[2].parent_id!=101 ||
+                                           a->scene.objects[3].shape!=PS_GROUP || a->scene.objects[4].parent_id!=100)) ||
                     (test_example == 9 && (a->scene.count != 5 || !path || !label)) ||
                     (test_example == 10 && (a->scene.count != 9 || contact_points != 2 ||
                                             orientation_lines != 2 || velocity_arrows != 1 ||

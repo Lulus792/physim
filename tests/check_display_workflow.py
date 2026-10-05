@@ -67,7 +67,7 @@ class Workflow:
             self.env["PHYSIM_CC"] = compiler
         self.steps = []
 
-    def run(self, *arguments, timeout=25, marker=None):
+    def run(self, *arguments, timeout=25, marker=None, expected_exit_code=0):
         command = [str(self.app), *map(str, arguments)]
         step = dict(command=command)
         if self.trace:
@@ -98,7 +98,7 @@ class Workflow:
             (self.work / "app-steps.json").write_text(json.dumps(self.steps, indent=2) + "\n", encoding="utf-8")
         print(result.stdout, end="", flush=True)
         print(result.stderr, end="", file=sys.stderr, flush=True)
-        require(result.returncode == 0, f"App failed ({result.returncode}): {command}")
+        require(result.returncode == expected_exit_code, f"App exited {result.returncode}, expected {expected_exit_code}: {command}")
         require(marker is None or marker in result.stdout, f"Missing success marker {marker!r}: {command}")
 
 
@@ -123,6 +123,50 @@ def project_settings(flow, directory):
         require(not any((project / name).exists() for name in ("main.phys.bak", "analysis.c.bak", "CMakeLists.txt")),
                 "Settings created source backups or CMake files")
     require("profile=Release" in read(project / "build/Release/build.config"), "Restored profile was not built")
+
+
+def hierarchy(flow, directory):
+    for language in ("c", "phys"):
+        root = directory / language
+        root.mkdir(parents=True)
+        flow.run("--workspace-state-test", root, "hierarchy-" + language, timeout=130,
+                 marker="HIERARCHY hierarchy-" + language + " SELF-TEST: PASSED")
+        runs = list((root / "project/runs").glob("*.psrun"))
+        require(len(runs) == 1,
+                "Navigating the scene hierarchy created another simulation run")
+        original = runs[0]
+        before = fingerprint(original)
+        data = original.read_bytes()
+        legacy = bytearray(data[:16])
+        at = 16
+        while at < len(data):
+            kind, length, crc = struct.unpack_from("<III", data, at)
+            payload = data[at + 12:at + 12 + length]
+            if kind == 5:
+                version, = struct.unpack_from("<I", payload)
+                require(version == 2, "Hierarchy source does not contain version-2 scenes")
+                channels, objects = struct.unpack_from("<II", payload, 12)
+                head = 4 + 24 + channels * 8
+                flat = [payload[head + i * 176:head + i * 176 + 172]
+                        for i in range(objects)
+                        if struct.unpack_from("<I", payload, head + i * 176)[0] != 8]
+                old = bytearray(payload[:head])
+                struct.pack_into("<I", old, 0, 1)
+                struct.pack_into("<I", old, 16, len(flat))
+                old.extend(b"".join(flat))
+                old.extend(payload[head + objects * 176:])
+                legacy.extend(struct.pack("<III", 5, len(old), zlib.crc32(old)))
+                legacy.extend(old)
+            else:
+                legacy.extend(data[at:at + 12 + length])
+            at += 12 + length
+        path = root / "project/runs/v1.psrun"
+        path.write_bytes(legacy)
+        legacy_before = fingerprint(path)
+        flow.run("--workspace-state-test", root, "hierarchy-v1", timeout=130,
+                 marker="TIMELINE v1 SELF-TEST: PASSED")
+        require(fingerprint(original) == before and fingerprint(path) == legacy_before,
+                "Replaying legacy scenes changed the original or version-1 file")
 
 
 def docking(flow, directory):
@@ -259,6 +303,24 @@ def themes(flow, directory):
             require(count > width * abs(height) // 100, f"Theme background was not rendered: {prefix}{mode}")
 
 
+def documents_input_isolation(flow, directory):
+    directory.mkdir(parents=True)
+    for size in ("small", "large"):
+        if size == "small":
+            flow.env["PHYSIM_TEST_SMALL"] = "1"
+        else:
+            flow.env.pop("PHYSIM_TEST_SMALL", None)
+        flow.run("--workspace-state-test", directory / (size + "-unfiltered"), "documents-unfiltered",
+                 expected_exit_code=1)
+        require("First workflow failure at stage 4" in flow.steps[-1]["stderr"],
+                "Unfiltered pointer noise did not reproduce the missed file selection")
+        flow.run("--workspace-state-test", directory / size, "documents-noise",
+                 timeout=25, marker="DOCUMENT WORKFLOW: PASSED")
+        exact(directory / size / "notes α.txt", "Saved on close: γ\n")
+        exact(directory / size / "notes α.txt.bak", "Text über SDL: β = 2\n")
+        exact(directory / size / "second.txt", "external")
+
+
 def toolbar_input_isolation(flow, directory):
     directory.mkdir()
     for size in ("small", "large"):
@@ -352,7 +414,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"docking_workflow": docking, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
+SPECIAL = {"docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}
 

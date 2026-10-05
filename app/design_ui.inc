@@ -102,6 +102,7 @@ static const char *workspace_name(const char *path) {
 #include "settings_ui.inc"
 #include "timeline_ui.inc"
 #include "docking_ui.inc"
+#include "scene_tree_ui.inc"
 // clang-format on
 static void camera_inspector(app *a) {
     struct nk_context *ui = a->ui;
@@ -119,28 +120,11 @@ static void camera_inspector(app *a) {
         }
     }
     if (nk_tree_state_push(ui, NK_TREE_TAB, "Szeneneinträge", &a->scene_disclosure)) {
-        static const char *names[] = {"Kugel", "Linie", "Box", "Vektor", "Punkt", "Ebene", "Pfad", "Beschriftung"};
         nk_layout_row_dynamic(ui, 26, 1);
         if (nk_button_label(ui, "Alle einblenden")) a->scene_view.hidden = 0;
         nk_layout_row_dynamic(ui, 48, 1);
         nk_label_wrap(ui, "Alt + N/P: Auswahl. Alt + H: ausblenden.");
-        for (uint32_t i = 0; i < display_scene(a)->count; i++) {
-            const ps_object *o = &display_scene(a)->objects[i];
-            char label[112];
-            snprintf(label, sizeof label, "%u · %s%s%s", i + 1, names[o->shape],
-                     o->text[0] ? " · " : "", o->text);
-            if (o->id)
-                snprintf(label, sizeof label, "ID %u · %s%s%s", o->id, names[o->shape],
-                         o->text[0] ? " · " : "", o->text);
-            bool visible = ps_scene_view_visible(&a->scene_view, i);
-            nk_layout_row_dynamic(ui, 26, 1);
-            a->scene_visibility_bounds[i] = nk_widget_bounds(ui);
-            if (nk_checkbox_label(ui, label, &visible)) {
-                uint32_t bit = UINT32_C(1) << i;
-                if (visible) a->scene_view.hidden &= ~bit;
-                else a->scene_view.hidden |= bit;
-            }
-        }
+        scene_tree_view(a);
         nk_tree_state_pop(ui);
     }
     if (nk_tree_state_push(ui, NK_TREE_TAB, "Darstellung", &a->view_disclosure)) {

@@ -205,6 +205,11 @@ Module bitte neu bauen. Bestehende `.psrun`-Messdaten bleiben lesbar.
 
 ## Oberfläche
 
+Der Simulationsinspektor zeigt Gruppen und Elternbeziehungen als aufklappbaren
+Szenenbaum. Ein ausgeblendeter Elternknoten verbirgt seine Nachfahren; Auswahl
+und aufgeklappte Zweige folgen stabilen IDs. C und Physim können diese Hierarchien
+erzeugen und mit den Szenen aufzeichnen. Frühere Aufzeichnungen bleiben lesbar.
+
 Die kompakte Menüzeile bündelt globale Werkzeuge unter **Datei** und **Ansicht**;
 **Hilfe** und **Einstellungen** sind direkt erreichbar. Die Arbeitsbereiche
 **Entwickeln**, **Simulieren** und **Auswerten** liegen als schmale, gleich breite Tabs

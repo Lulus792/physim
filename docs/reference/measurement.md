@@ -65,12 +65,12 @@ ps_result ps_distribution_moments(
 
 ```c
 typedef struct {
-    ps_unit unit; 
+    ps_unit unit;
     double rate_hz, start_time_s;
-    double resolution, offset, drift_per_s; 
-    ps_distribution noise;                  
-    double dropout_probability;             
-    double uncertainty_absolute, uncertainty_relative; 
+    double resolution, offset, drift_per_s;
+    ps_distribution noise;
+    double dropout_probability;
+    double uncertainty_absolute, uncertainty_relative;
 } ps_sensor_config;
 ```
 

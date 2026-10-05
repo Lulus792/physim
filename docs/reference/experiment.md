@@ -13,6 +13,7 @@ Einbinden: `#include "physim/experiment.h"`. Die folgenden Signaturen, Typen und
 #define PS_MAX_OBJECTS 32
 #define PS_MAX_SCENE_POINTS 96
 #define PS_MAX_PARAMETERS 16
+#define PS_EXPERIMENT_SCENE_HIERARCHY UINT64_C(1)
 ```
 
 `PS_EXPORT` kennzeichnet den Moduleinstieg für den Export. Das SDK wählt dafür automatisch die passende Windows- beziehungsweise Unix-Deklaration.
@@ -28,6 +29,8 @@ typedef struct {
 } ps_channel;
 ```
 
+ABI-3 scene extension: parent_id occupies the former ps_object tail padding. Modules must advertise this capability to publish parent relationships.
+
 ### ps_shape
 
 ```c
@@ -39,9 +42,12 @@ typedef enum {
     PS_POINT,
     PS_PLANE,
     PS_POLYLINE,
-    PS_LABEL
+    PS_LABEL,
+    PS_GROUP
 } ps_shape;
 ```
+
+Named organizational node; no geometry or coordinate transform.
 
 ### ps_object
 
@@ -50,10 +56,11 @@ typedef struct {
     uint32_t shape, color;
     ps_vec3 a, b;
     double radius;
-    ps_quat orientation; 
-    char text[64];       
-    uint32_t point_first, point_count; 
-    uint32_t id; 
+    ps_quat orientation;
+    char text[64];
+    uint32_t point_first, point_count;
+    uint32_t id;
+    uint32_t parent_id;
 } ps_object;
 ```
 
@@ -66,6 +73,8 @@ UTF-8 label, terminated; empty for other shapes.
 Polyline range in the scene point pool.
 
 Optional stable ID within a run; 0 = anonymous. Unique per scene.
+
+0 = root; otherwise a scene ID. Coordinates stay world-space.
 
 ### ps_scene
 
@@ -230,6 +239,38 @@ Prüft den vollständigen Snapshot auf Form-, Zahlen-, Text-, ID- und Punktberei
 ```c
 bool ps_scene_valid(const ps_scene *scene);
 ```
+
+## ps_scene_group
+
+Erzeugt eine benannte Gruppe mit eindeutiger ID und optionalem Elternknoten; fehlerhafte Beziehungen verändern die Szene nicht.
+
+```c
+ps_result ps_scene_group(
+    ps_scene *scene,
+    uint32_t id,
+    uint32_t parent_id,
+    const char *name);
+```
+
+Named groups require a nonzero unique ID. Parent 0 is the scene root. Checked relationships reject missing parents, self-parenting and cycles. Failure leaves the scene unchanged. Publish with PS_EXPERIMENT_SCENE_HIERARCHY.
+
+## ps_scene_set_parent
+
+Ändert die Eltern-ID eines benannten Szeneneintrags; fehlende IDs, Selbstbeziehungen und Zyklen werden transaktional abgewiesen.
+
+```c
+ps_result ps_scene_set_parent(ps_scene *scene, uint32_t child_id, uint32_t parent_id);
+```
+
+## ps_scene_parent_index
+
+Liefert den Slot des Elternknotens oder -1 für Wurzeln, ungültige Slots und fehlende Eltern.
+
+```c
+int ps_scene_parent_index(const ps_scene *scene, uint32_t index);
+```
+
+Returns the parent's slot, or -1 for a root, invalid index or missing parent.
 
 ## ps_scene_add_id
 

@@ -225,6 +225,11 @@ Unter **Szeneneinträge** kannst du Objekte einzeln ausblenden; **Alle einblende
 macht sie wieder sichtbar. Vektoren, Flugbahnen, Punkte, Beschriftungen und Raster
 haben zusätzliche gemeinsame Schalter. Dies verändert keine Messwerte.
 Objekte mit stabiler ID bleiben auch beim Umsortieren richtig zugeordnet.
+Gruppen und Elternbeziehungen bilden einen aufklappbaren Szenenbaum. Das Ausblenden
+eines Elternknotens wirkt auf seine Nachfahren; deren eigene Sichtbarkeitswahl
+bleibt erhalten. Die Auswahl eines Objekts öffnet seinen Weg im Baum. Szene und
+Messdaten bleiben beim Umordnen der Anzeige unverändert. Alte aufgezeichnete
+Szenen ohne Beziehungen erscheinen als flache Liste.
 [Kameratastatur und Darstellung](settings.md)
 
 ## Messdaten und eigene Berichte

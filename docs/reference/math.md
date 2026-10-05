@@ -183,7 +183,7 @@ typedef struct {
 ```c
 typedef struct {
     ps_vec3 position;
-    ps_vec3 tangent; 
+    ps_vec3 tangent;
 } ps_curve_sample3;
 ```
 

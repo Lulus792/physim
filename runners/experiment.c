@@ -27,6 +27,12 @@ static ps_result snapshot(const ps_experiment_api *api, ps_context *c, ps_run_wr
     api->build_scene(c, &scene);
     if (c->error[0])
         return PS_NUMERIC;
+    if(scene.count>PS_MAX_OBJECTS) return PS_INVALID;
+    /* Legacy ABI-3 modules own the same object size but their tail padding has
+     * no meaning. Never interpret those bytes as parent IDs without opt-in. */
+    if(!(api->capabilities&PS_EXPERIMENT_SCENE_HIERARCHY))
+        for(uint32_t i=0;i<scene.count;i++) scene.objects[i].parent_id=0;
+    if(!ps_scene_valid(&scene)) return PS_INVALID;
     ps_result result = ps_run_append_snapshot(writer, c, &scene, paused);
     if (result != PS_OK) return result;
     last_snapshot_time = c->time_s;

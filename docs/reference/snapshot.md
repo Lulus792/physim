@@ -9,10 +9,10 @@ Einbinden: `#include "physim/snapshot.h"`. Die folgenden Signaturen, Typen und S
 ## Konstanten
 
 ```c
-#define PS_SNAPSHOT_VERSION 1u
+#define PS_SNAPSHOT_VERSION 2u
 #define PS_SNAPSHOT_MAX 8192u
 #define PS_SNAPSHOT_HEADER 24u
-#define PS_SNAPSHOT_OBJECT_SIZE 172u
+#define PS_SNAPSHOT_OBJECT_SIZE 176u
 ```
 
 ## Typen und Funktionen
@@ -60,3 +60,21 @@ bool ps_snapshot_decode(
 ```
 
 Failure preserves all outputs. Provide space for PS_MAX_CHANNELS values.
+
+## ps_snapshot_decode_version
+
+Dekodiert die ausdrücklich genannte Szenenversion; Version 1 erhält Eltern-ID 0, Version 2 prüft Hierarchien. Fehler erhalten alle Ausgaben.
+
+```c
+bool ps_snapshot_decode_version(
+    uint32_t version,
+    const unsigned char *in,
+    uint32_t size,
+    double *time,
+    double *values,
+    uint32_t *count,
+    ps_scene *scene,
+    bool *paused);
+```
+
+Version 1 restores a flat scene with parent_id=0. Version 2 includes hierarchy. The declared version determines the exact payload size; unknown versions fail.

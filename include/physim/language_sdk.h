@@ -795,6 +795,16 @@ static inline void psrt_scene_required(psrt_host *host, psrt_site site) {
     if (host->phase != PSRT_SCENE || !host->scene)
         psrt_fail(site, "Scene objects require scene callback");
 }
+static inline void psrt_group(psrt_host *host,const char *name,int64_t id,int64_t parent,psrt_site site) {
+    psrt_scene_required(host,site);
+    if(ps_scene_group(host->scene,psrt_u32(id,site),psrt_u32(parent,site),name)!=PS_OK)
+        psrt_fail(site,"Invalid scene group, duplicate ID, missing parent or scene capacity exceeded");
+}
+static inline void psrt_scene_parent(psrt_host *host,int64_t child,int64_t parent,psrt_site site) {
+    psrt_scene_required(host,site);
+    if(ps_scene_set_parent(host->scene,psrt_u32(child,site),psrt_u32(parent,site))!=PS_OK)
+        psrt_fail(site,"Invalid scene parent: missing ID, self-parent or cycle");
+}
 static inline void psrt_arrow(psrt_host *host, ps_vec3 start, ps_vec3 end, double radius,
                               int64_t color, int64_t id, psrt_site site) {
     psrt_scene_required(host, site);

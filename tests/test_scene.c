@@ -42,7 +42,7 @@ int main(void) {
     CHECK(!memcmp(&scene, &unchanged, sizeof scene));
     unsigned char payload[PS_WIRE_MAX], damaged[PS_WIRE_MAX];
     size_t size = ps_snapshot_encode(payload, &context, &scene, true);
-    CHECK(size == 7960 && size <= PS_WIRE_MAX);
+    CHECK(size == 8088 && size <= PS_WIRE_MAX);
     CHECK(ps_get_u32(payload + 20) == 96);
     size_t base = 24 + 16 * 8;
     CHECK(payload[base] == PS_POLYLINE && payload[base + 4] == 0xff && payload[base + 5] == 0x56);

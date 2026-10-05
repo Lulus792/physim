@@ -124,6 +124,24 @@ tatsächlich ausgeführten Prüfungen bestehen mit je 501/501 ohne Fenster und
 Eigenständige Betriebssystemfenster für Panels, ein separat verschiebbarer
 Inspektor und benannte Anordnungen bleiben weitere Produktziele.
 
+Die **Szenenhierarchie** ergänzt benannte Gruppen und Eltern-IDs im unveränderlichen
+Snapshot. Der Inspektor zeigt einen aufklappbaren Baum; Sichtbarkeit eines Elternknotens
+wirkt auf Nachfahren, während deren eigene Wahl erhalten bleibt. Eine Objektauswahl
+öffnet ihre Vorfahren. Sichtbarkeit und auf-/zugeklappte Zweige folgen stabilen IDs.
+Alle Koordinaten bleiben Weltwerte; Gruppen erzeugen keine Transformation oder
+physikalische Kopplung. C- und Physim-Pendelvorlagen zeigen eine gemeinsame Hierarchie.
+Sprachvertrag 0.168.0 ergänzt `group` und `sceneParent`.
+Snapshotversion 2 zeichnet Beziehungen auf, Version 1 bleibt als flache Szene lesbar.
+IPC 4 grenzt den neuen Transport ab. ABI 3 bleibt durch die ausdrücklich angekündigte
+Nutzung bisherigen Objekt-Paddings kompatibel; ein mit eingefrorenem alten Header
+gebautes Modul prüft tatsächlich beliebige Padding-Bytes. Der Katalog enthält
+503 Prüfungen ohne Fenster (492 ohne SDL) und 43 Grafik-/Fensterabläufe.
+Die vollständigen Release-Läufe bestehen auf macOS und Debian jeweils mit
+503/503 ohne Fenster und 43/43 Grafik-/Fensterabläufen. Der Hierarchie-Fensterablauf
+besteht außerdem unter macOS Debug mit aktiven UI-Assertions.
+Die neuen Modell-, Runner- und Bedienprüfungen sowie SDK-Nachweise stehen im
+[Plattformnachweis](platform-validation.md). Weitere Produktziele bleiben offen.
+
 Aktueller [Plattformnachweis](platform-validation.md): Der direkte Physim-Build nach
 Entfernen der eigenen CMake-Dateien besteht alle acht CI-Kombinationen. Ubuntu 24.04
 mit GCC/Clang und macOS 15 auf Apple Silicon/Intel bestehen jeweils 493 Tests ohne
@@ -547,7 +565,7 @@ und veraltete Fenstermanager-Einträge geprüft. Die erneute Linux-CI steht aus.
 | Daten | CRC-Chunks, Streaming, Recovery, CSV, Seed-/Modellmetadaten und optionale versionierte Szenenblöcke | Index, mehr Datentypen, komprimierte Blöcke, Schemaerweiterung |
 | App | leerer Workspace-Einstieg mit gespeicherter Ordnerauswahl und bewusster Wiederöffnung, kompakte Menüleiste, Projektmanager, aufklappbarer Dateibaum und bis zu 16 editierbare Textdokumente mit separaten Autosaves und gespeicherten Editoransichten, drei Arbeitsbereiche, integrierte Offline-Dokumentation, Systemtypografie, Einstellungen mit Code-Schriftgröße und Autosave-Intervall, dunkle, helle und kontrastreiche Darstellung, gespeicherte Fenstergröße/Maximierung, verschiebbare Seitenleiste, Arbeitsbereich und Protokoll mit Teilungen, Tabgruppen und gespeicherten frei platzierten Panels im Hauptfenster, Reset zum pausierten Anfangszustand mit erhaltenen Alt-Läufen, Vorlagen, Editor, direkter Projektbuild ohne CMake mit Ausgaben unter `build/`, Diagramme | mehrere benannte Workspaces und Panelanordnungen, separate Panelfenster, unabhängiger Inspektor, weitere Panelzustände, UI-weite Schriftvergrößerung, vollständige Barrierefreiheit |
 | Editor | C- und Physim-Dateien bearbeiten, sprachspezifische Syntaxfarben, Zeilennummern, Debug/Release, anklickbare Compilerdiagnosen, öffentlicher Header-Browser | Completion |
-| Szene | OpenGL 3.3 Core, Tiefenpuffer, MSAA, alle acht Grundprimitive, orientierte Boxen/Ebenen, RGBA-Transparenz mit Dreieckssortierung, UTF-8-Labels, Wurf-Flugbahn, Grid/Achsen, Kamera, Ansichten und Sichtbarkeit und Mausklickauswahl einzelner Szeneneinträge mit optionalen Objekt-IDs, gespeicherte Szenen mit Zeitleiste und Wiedergabe | artefaktfreie Transparenz bei sich durchdringenden Flächen, Szenenhierarchie |
+| Szene | OpenGL 3.3 Core, Tiefenpuffer, MSAA, alle acht Grundprimitive, orientierte Boxen/Ebenen, RGBA-Transparenz mit Dreieckssortierung, UTF-8-Labels, Wurf-Flugbahn, Grid/Achsen, Kamera, Ansichten und Sichtbarkeit und Mausklickauswahl einzelner Szeneneinträge mit optionalen Objekt-IDs, gespeicherte Szenen mit Zeitleiste und Wiedergabe, benannte Gruppen und Elternbeziehungen mit aufklappbarem Inspektorbaum und geerbter Sichtbarkeit | artefaktfreie Transparenz bei sich durchdringenden Flächen, hierarchische Koordinatentransformationen |
 | Analyse | eigener C-Editor/Runner, Dataset-/Series-Handles, blockweise Transformationen mit Einheitenprüfung, eigene Ergebnisplots/-tabellen, Linien/Punkte/Histogramme mit Zoom am Mauszeiger, Verschieben, separaten Ausschnitten und Achsenoffsets, PNG-/SVG-Export des sichtbaren Ausschnitts, CSV/SVG und verlustfrei komprimiertes PNG mit vier Größen von 1200 × 850 bis 4800 × 3400 Pixeln, Statistik, Ableitung, Integral, gleitendes Mittel, Periode, Energieabweichung, Auswahl und Vergleich von bis zu acht Läufen, gemeinsame Statusauswahl von Datenreihen, lineares Resampling, Nearest/Previous im SDK und Differenzkurven, frühere Berichte öffnen | weitere Interpolationsverfahren/Transformationen |
 | Mechanik | starre Körper mit Kugel-/Boxträgheit, Quaternionrotation, Drehmomente/Impulse, Kugel–Kugel/Kugel–Ebene/Kugel–Box/Box–Ebene/Box–Box, iterative Paar- und Graph-Solver mit Coulomb-Reibung/Restitution (bis zu 128 Körper und 512 Kontakte), Distanzgelenk mit lokalen Ankern und Driftkorrektur, gemeinsamer Geschwindigkeits-Solver für Kontakte und bis zu 256 Gelenke, Feder/Dämpfung, Stokes-/quadratischer Widerstand, Kugelstoß-, Boxstoß- und Bodenkontaktvorlagen mit Debug-Vektoren, Feder–Masse–Dämpfer mit dissipierter Arbeit und Energiebilanz, archimedischer Auftrieb und Kugel-Eintauchvolumen samt Auftriebsmittelpunkt, Auftriebsvorlage mit Kraftanzeige und Energiebilanz | automatische Kontaktverwaltung, Warmstart, gemeinsame nichtlineare Positionsprojektion, weitere Gelenke, Box-CCD, erweiterte Stoffmodelle |
 | Unsicherheit | PCG32, geprüfte konstante/uniforme/normale Verteilungen, öffentliche Sensor-API mit Einheiten, Zeitraster, Auflösung, Offset, Drift, Rauschen, Ausfällen und Standardunsicherheit, getrennte Modell-/Soll-/Messwerte, gültigkeitsbewusste Vorschau/Statistik/CSV, Batchcontroller in App/CLI mit bis zu acht Runnern, expliziten Seeds, eigenen Arbeitsordnern, Abbruch und fester Auswertungsreihenfolge, Endwert-Histogramm/Typ-7-Quantile, Normalnäherung des Mittelwert-KI ab 200 Läufen und lineare Parameterstudien in CLI und App mit Kurvenbericht | Wiederaufnahme, Batchstatistik mit fehlenden Endwerten, Erhaltung von Messlücken als explizite Masken, korrelierte Sensor-/Unsicherheitsmodelle, weitere Konfidenzverfahren und Verteilungsdiagnostik |

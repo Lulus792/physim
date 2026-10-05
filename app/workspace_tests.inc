@@ -10,6 +10,8 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
         return false;
     if (!strcmp(mode, "native-dialogs") || !strcmp(mode, "native-dialog-error"))
         return native_dialog_test_start(root);
+    if (!strncmp(mode, "hierarchy-", 10))
+        return hierarchy_test_start(a,root,mode);
     if (!strncmp(mode, "dock-", 5))
         return docking_test_start(a, root, mode);
     if (!strncmp(mode, "timeline-", 9))
@@ -24,7 +26,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
         return document_recovery_test_start(a, root, mode);
     if (!strcmp(mode, "tree"))
         return workspace_tree_test_start(a, root);
-    if (!strcmp(mode, "documents"))
+    if (!strcmp(mode, "documents") || !strcmp(mode,"documents-noise") || !strcmp(mode,"documents-unfiltered"))
         return document_test_start(a, root);
     if (!strcmp(mode, "documents-build"))
         return document_build_test_start(a, root);
@@ -93,6 +95,9 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
         native_dialog_test_frame(a, !strcmp(mode, "native-dialog-error"), stage, code, capture);
         return;
     }
+    if (!strncmp(mode, "hierarchy-", 10)) {
+        hierarchy_test_frame(a,mode,stage,code,capture);return;
+    }
     if (!strncmp(mode, "dock-", 5)) {
         docking_test_frame(a, mode, stage, code, capture);
         return;
@@ -121,8 +126,9 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
         document_build_test_frame(a, stage, code);
         return;
     }
-    if (!strcmp(mode, "documents")) {
+    if (!strcmp(mode, "documents") || !strcmp(mode,"documents-noise") || !strcmp(mode,"documents-unfiltered")) {
         document_test_frame(a, a->workspace, stage, code, capture);
+        if(strcmp(mode,"documents")) test_pointer_noise(a);
         return;
     }
     if (!strcmp(mode, "toolbar") || !strcmp(mode, "toolbar-noise")) {

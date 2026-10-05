@@ -89,7 +89,7 @@ static void psbridge_destroy(ps_context *c) {
     }
 }
 PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
-    static const ps_experiment_api api = {sizeof api,           PS_ABI_VERSION,  0,
+    static const ps_experiment_api api = {sizeof api,           PS_ABI_VERSION,  PS_EXPERIMENT_SCENE_HIERARCHY,
                                           PSRT_EXPERIMENT_NAME, psbridge_create, psbridge_reset,
                                           psbridge_step,        psbridge_scene,  psbridge_destroy};
     return &api;

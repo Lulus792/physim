@@ -52,7 +52,7 @@ ps_result ps_aabb_box(const ps_body *body, ps_vec3 size_m, ps_aabb *out);
 
 ```c
 typedef struct {
-    double fraction; 
+    double fraction;
     ps_contact contact;
 } ps_sweep_hit;
 ```

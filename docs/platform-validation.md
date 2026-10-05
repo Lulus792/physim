@@ -3,6 +3,82 @@
 Stand: 5. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Szenenhierarchie und Szenenversionen am 5. Oktober 2026
+
+Die Szenenhierarchie wurde auf dem lokalen Intel-Mac (macOS 14.6.1, Apple Clang 16,
+SDL 3.2.30, Release) und in der Debian-12-VM (Linux 6.1.0-53-cloud-amd64,
+GCC 12.2, SDL 3.2.30, Release, X11/Xvfb/Openbox, Mesa 22.3.6) gebaut und ausgeführt.
+Der Katalog enthält 503 Prüfungen ohne Fenster, davon 492 ohne SDL, sowie
+43 Grafik-/Fensterabläufe.
+
+Die vollständigen Release-Läufe ohne Fenster bestehen je 503/503:
+macOS `build/hierarchy-final-mac/test-results/run-kzr13_49`,
+Debian `build/hierarchy-final/test-results/run-bz0zd13y` innerhalb der VM.
+
+Die vollständigen Grafik-/Fensterläufe bestehen je 43/43:
+macOS `build/hierarchy-mac/test-results/run-kjhsbh2v`,
+Debian `build/native/Release/test-results/run-p0pebaqx` innerhalb der VM.
+
+Die gezielten Modellprüfungen bestehen auf macOS 3/3:
+`build/hierarchy-mac/test-results/run-b92wlh8h`. Gruppen, fehlende Eltern,
+Selbstbeziehungen, Zyklen, atomare Fehler, Umsortierung, Reparenting und geerbte
+Sichtbarkeit sind geprüft. Der maximale neue Snapshot mit 32 Einträgen,
+96 Punkten und 16 Kanälen hat 8088 Bytes. Eine handgebaute versionierte alte
+Szenendatei wird gelesen; gekürzte aktuelle Payloads werden nicht umgedeutet.
+
+`runner_hierarchy` kompiliert ein C-Modul, dasselbe Modell in Physim und ein
+Legacy-Modul mit dem eingefrorenen ABI-3-Header aus `8d69e4e`. Letzteres belegt
+seine bisherigen Objekt-Padding-Bytes absichtlich mit 0xa5. Der aktuelle Runner
+ignoriert diese Bytes ohne Hierarchie-Capability. Alle 21 Messungen stimmen
+zwischen den drei Modulen genau überein; kanonische Snapshot-CRCs bestätigen
+dieselben C-/Physim-Hierarchien und nach Entfernen der Gruppen dieselbe alte Geometrie.
+Der Fehlerprüfer des direkten Testläufers ist erneut ausgeführt:
+`build/hierarchy-harness-final/test runner ä ho03opvy` auf macOS.
+
+`hierarchy_workflow` bedient die echten Widgets mit C- und Physim-Pendelprojekten.
+Gruppen einklappen/ausblenden, Untergruppe ausblenden und Auswahl mit erneutem
+Aufklappen werden gegen Snapshot-CRC und unveränderte pausierte Zeit geprüft.
+Nach Stop liest die App die gespeicherte Hierarchie. Zwei weitere Prozesse öffnen
+handkonvertierte Version-1-Szenen derselben Versuche über die Laufbibliothek,
+zeigen sie als flache Szenen und bedienen Rückblick, Schritt und Wiedergabe.
+Dateihashes bestätigen unveränderte Originale und Legacy-Dateien; Modellcode
+läuft beim Wiederöffnen nicht.
+
+Die verschobenen SDKs bestehen auf beiden Plattformen. Die Verbraucherprobe
+baut Gruppen und Elternbeziehungen, weist einen Zyklus ab und liest den neuen
+Snapshot wieder. Sie läuft gegen die installierte Bibliothek und erneut gegen
+die aus SDK-Quellen gebaute Bibliothek. Öffentliche Header werden einzeln
+kompiliert; gebündelte und neu gebaute C-Vorlagen sowie Physim-Experimente und
+Analysen werden ausgeführt. macOS:
+`build/hierarchy-sdk-final-proof-mac/Native SDK ä g9yaqnzw`; Debian:
+`build/hierarchy-sdk-final-proof-linux/Native SDK ä g0x_bsmp` innerhalb der VM.
+
+Die ersten vollständigen Läufe ohne Fenster erkennen auf beiden Systemen sechs
+veraltete Testannahmen: fünf erwarten Sprachversion 0.167.0, eine erwartet die
+Pendelgeometrie ohne die zwei neuen Gruppen. Die korrigierten Prüfungen verlangen
+exakt 0.168.0 und prüfen zusätzlich die Beziehungen; die bisherigen numerischen
+Referenzvergleiche bleiben erhalten. Alle sechs Fälle und die Referenzprüfung
+bestehen anschließend je 7/7: macOS `run-8uflbb9y`, Debian `run-pzqgvpxp`.
+
+Der erste Fensterdurchlauf besteht auf macOS 38/42 und auf Debian 41/42.
+Beide erkennen dieselbe veraltete Pendel-Szenenanzahl im vollständigen Sprachablauf.
+Auf macOS schlagen außerdem drei Dokument-/Workspace-Abläufe fehl. Der zusätzliche
+Fall `documents_input_isolation` reproduziert einen verfehlten Dateiklick durch
+native Maus-/Fokusereignisse gezielt ohne Eingabeisolation und bestätigt den
+vollständigen Dokumentablauf mit Isolation in beiden Fenstergrößen. Er prüft
+auch die tatsächlich gespeicherten Unicode-Texte, Sicherung und externe Änderung.
+Die Isolation gilt nur für geskriptete Prüfungen; native Dialogtests behalten ihre
+Desktop-Eingabe. Die fünf betroffenen macOS-Abläufe bestehen danach 5/5
+(`run-vpp8_ufy`), der zusätzliche Störtest 1/1 (`run-wz1ix52a`). Die Zwischenläufe
+werden nicht als bestandene Gesamtabnahme gezählt.
+
+Die auf- und zugeklappte Hierarchie sowie ausgeblendete Nachfahren wurden bei
+1080 × 740 logischen Pixeln auf macOS visuell geprüft (2160 × 1480 physische Pixel).
+Die organisatorischen Beziehungen belegen keine vererbten Koordinatentransformationen.
+
+Der vollständige Hierarchie-Fensterablauf besteht zusätzlich im macOS-Debug-Build
+mit aktiven Nuklear-Assertions: `build/workspace-check/test-results/run-4532_de3`.
+
 ## Docking und gespeicherte Panelanordnung am 5. Oktober 2026
 
 Das Docking-Grundsystem wurde auf dem lokalen Intel-Mac (macOS 14.6.1,

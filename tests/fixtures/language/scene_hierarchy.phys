@@ -1,0 +1,16 @@
+let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
+let channel = Channel("position.x", metres, "Position")
+var position: Float64 = 0
+func create():
+    metadata("model=hierarchy fixture")
+func reset():
+    position = 0
+    channel.sample(position)
+func step(dt: Float64):
+    position += dt
+    channel.sample(position)
+func scene():
+    sphere(Vec3(position, 0, 0), 0.2, 0x53DEC2FF, 1)
+    group("Root", 100, 0)
+    group("Model", 200, 100)
+    sceneParent(1, 200)

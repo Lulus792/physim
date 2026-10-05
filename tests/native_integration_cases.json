@@ -1083,6 +1083,40 @@
         "platform",
         "core"
       ]
+    },
+    "hierarchy-c": {
+      "sources": [
+        "tests/fixtures/hierarchy_experiment.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ]
+    },
+    "hierarchy-legacy": {
+      "sources": [
+        "tests/fixtures/hierarchy_experiment.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_TEST_LEGACY_SCENE"
+      ]
+    },
+    "hierarchy-phys": {
+      "source": "tests/fixtures/language/scene_hierarchy.phys",
+      "mode": "--emit-experiment"
+    },
+    "physim-runner-hierarchy-tests": {
+      "sources": [
+        "tests/test_runner_hierarchy.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
     }
   },
   "tests": [
@@ -4162,6 +4196,89 @@
             "{cc}"
           ],
           "timeout": 350,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "runner_hierarchy",
+      "targets": [
+        "physim-runner-hierarchy-tests",
+        "physim-runner",
+        "hierarchy-c",
+        "hierarchy-phys",
+        "hierarchy-legacy"
+      ],
+      "steps": [
+        {
+          "program": "physim-runner-hierarchy-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{hierarchy-c}",
+            "{hierarchy-phys}",
+            "{hierarchy-legacy}",
+            "{work}"
+          ],
+          "timeout": 80
+        }
+      ]
+    },
+    {
+      "name": "hierarchy_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "hierarchy_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 350,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "documents_input_isolation",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "documents_input_isolation",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 110,
           "files": [
             "app-steps.json"
           ]

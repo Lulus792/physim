@@ -1,4 +1,4 @@
-# `.psrun` Format 1 und IPC 3
+# `.psrun` Format 1 und IPC 4
 
 ## Datendatei
 
@@ -18,7 +18,7 @@ CRC32: reflektiertes Polynom `0xEDB88320`, Initialwert und abschließendes XOR
 | 2 | Kanalzahl u32, dann je Kanal 48 Bytes Name, 16 Einheit, 96 Beschreibung, 7 int8 SI-Exponenten |
 | 3 | Zeit f64 und genau Kanalzahl f64-Messwerte |
 | 4 | Gesamtzahl Messpunkte u64; Abschlussmarker |
-| 5 | optionale Szene: Snapshotversion u32 = 1, danach der unten beschriebene Snapshotkopf, Werte, Objekte und Punkte |
+| 5 | optionale Szene: Snapshotversion u32 = 1 oder 2, danach Snapshotkopf, Werte, Objekte und Punkte |
 
 Metadaten und Schema stehen unmittelbar nach dem Header. Strings im Schema sind
 NUL-terminiert und auf ihre Feldbreite begrenzt. Die Payloadobergrenze ist 8192 Bytes.
@@ -31,7 +31,9 @@ Eine Schemaänderung innerhalb eines Laufs ist nicht zulässig.
 
 Die Snapshotversion ist unabhängig von Dateiformat, Modul-ABI und Pipe-Version.
 Der Snapshot enthält Zeit, zugehörige Kanalwerte, Pausestatus und validierte
-Geometrie einschließlich Orientierung, IDs, Labels und Polyline-Punkten.
+Geometrie einschließlich Orientierung, IDs, Labels und Polyline-Punkten. Version 2
+enthält zusätzlich Gruppen und Eltern-IDs. Version 1 bleibt lesbar und erhält
+Eltern-ID 0 für sämtliche Einträge.
 Seine Kanalzahl muss dem Dateischema entsprechen. Der Block fügt keinen Messpunkt
 hinzu: Der Abschlusszähler zählt ausschließlich Typ 3. Gleiche Snapshotzeiten
 sind bei RUN-/PAUSE-Rückmeldungen erlaubt; die Zeitleiste zeigt dann den letzten
@@ -61,7 +63,7 @@ Recovery arbeitet sequentiell bis zum letzten gültigen Block.
 
 ## Runner-Pipe
 
-Header (20 Bytes): Magic u32 `0x5053494D`, Version u32 = 3, Typ u32,
+Header (20 Bytes): Magic u32 `0x5053494D`, Version u32 = 4, Typ u32,
 Payloadlänge u32 (maximal 8192), Sequenznummer u32 (je Richtung ab 0).
 Unvollständige Frames werden gesammelt, falsche Versionen, Sequenzen und Größen abgewiesen.
 
@@ -86,11 +88,11 @@ ohne Angabe gilt 1×. Ohne `--interactive` bleibt der CLI-Modus mit `--steps` im
 Snapshotkopf (24 Bytes): Zeit f64, Kanalzahl u32, Objektzahl u32, Pausestatus u32
 (ausschließlich 0/1), Punktzahl u32. Danach Kanalwerte f64, Objekte und Punkte.
 
-Jedes Objekt belegt genau 172 Wire-Bytes:
+Jedes Objekt belegt in Snapshotversion 2 genau 176 Wire-Bytes:
 
 | Offset | Feld |
 | --- | --- |
-| 0 | Form u32: Kugel=0, Linie=1, Box=2, Pfeil=3, Punkt=4, Ebene=5, Polyline=6, Label=7 |
+| 0 | Form u32: Kugel=0, Linie=1, Box=2, Pfeil=3, Punkt=4, Ebene=5, Polyline=6, Label=7, Gruppe=8 |
 | 4 | RGBA u32 |
 | 8 / 32 | a.xyz / b.xyz, jeweils drei f64 |
 | 56 | Radius f64 |
@@ -98,14 +100,32 @@ Jedes Objekt belegt genau 172 Wire-Bytes:
 | 96 | 64 Bytes UTF-8-Label inklusive NUL; ungenutzte Bytes werden mit null geschrieben |
 | 160 / 164 | erster Polyline-Punkt / Punktzahl, je u32 |
 | 168 | optionale Objekt-ID u32; 0 anonym, sonst eindeutig innerhalb der Szene |
+| 172 | Eltern-ID u32; 0 Wurzel, sonst eine vorhandene Szenen-ID |
+
+Gruppen sind benannte Einträge mit eindeutiger nichtnull ID und ohne Geometrie.
+Elternbeziehungen dürfen weder auf fehlende IDs zeigen noch Zyklen bilden. Alle
+Koordinaten bleiben Weltkoordinaten; Eltern führen keine Transformation aus.
+Version 1 verwendet weiterhin 172 Objektbytes und Formen 0–7. Der ausdrücklich
+deklarierte Versionswert bestimmt die Länge; ein gekürzter Version-2-Block wird
+nicht als Version 1 umgedeutet. `ps_snapshot_decode_version` liest beide Versionen,
+`ps_snapshot_decode` die aktuelle Version 2.
 
 Nach den Objekten folgen `Punktzahl` Weltkoordinaten, jeweils x/y/z als f64 (24 Bytes).
-Maximal 32 Objekte, 96 Punkte und 16 Kanäle ergeben eine Payload von 7960 Bytes.
+Maximal 32 Einträge einschließlich Gruppen, 96 Punkte und 16 Kanäle ergeben
+eine Payload von 8088 Bytes.
 Polylinien enthalten mindestens zwei Punkte und referenzieren ausschließlich ihren
 gültigen Bereich im gemeinsamen Punktpuffer. Keine externen Speicheradressen werden
 übertragen. Der Decoder prüft alle Größen, Zahlen und Texte vor Übernahme der Szene;
-bei Fehler bleiben die Ausgaben unverändert. IPC 1/2 und Modul-ABI 1/2 sind inkompatibel
+bei Fehler bleiben die Ausgaben unverändert. IPC 1/2/3 und Modul-ABI 1/2 sind inkompatibel
 und werden abgewiesen. Das Messdateiformat bleibt unverändert.
+
+Die Modul-ABI bleibt 3: `parent_id` nutzt die bisherigen vier Padding-Bytes am
+Ende von `ps_object`; Objekt- und Szenengröße bleiben unverändert. C-Module
+aktivieren `PS_EXPERIMENT_SCENE_HIERARCHY` in `ps_experiment_api.capabilities`.
+Ohne diesen Vertrag setzt der Runner Eltern-IDs nach dem Callback auf 0, da alte
+Module diese Bytes nicht initialisieren müssen. Neue Sprachmodule melden die
+Fähigkeit automatisch. Hierarchie benötigt den aktuellen Runner; alte Module
+mit ABI 3 bleiben auf dem aktuellen Runner verwendbar.
 
 `stdout` ist im interaktiven Runner für IPC reserviert. Direkte printf-/stderr-Ausgaben
 aus Experimentcode verletzen derzeit den Kanal; die App erkennt dies und stoppt den

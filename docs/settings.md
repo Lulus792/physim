@@ -66,13 +66,26 @@ Liste; Form und gegebenenfalls Beschriftung helfen bei der Zuordnung.
 **Alle einblenden** hebt diese Auswahl auf. Die allgemeinen Darstellungsschalter
 für Vektoren, Pfade und Beschriftungen gelten zusätzlich.
 
+Bei Szenen mit Gruppen oder Elternbeziehungen erscheint ein **Szenenbaum**.
+Der Pfeil links klappt Untereinträge auf oder zu; dies ändert nur den Baum.
+Das Sichtbarkeitskästchen steuert den Eintrag und seine Nachfahren. Ein Kind
+behält seine eigene Wahl, wenn ein Elternknoten ausgeblendet wird. Deshalb kann
+ein ausgeblendetes Kind weiterhin angekreuzt und mit grauer Schrift erscheinen;
+beim Wiedereinblenden des Elternknotens gilt seine bisherige Wahl erneut.
+**Alt + N/P** wählt auch sichtbare Gruppen. Ein neu ausgewähltes Objekt öffnet
+seinen Weg im Baum. Gruppen enthalten keine Geometrie, und Eltern ändern keine
+Weltkoordinaten. Neue Pendelvorlagen zeigen die Aufhängung und die bewegte Masse
+in einer gemeinsamen Hierarchie. Die aufgezeichneten Beziehungen bleiben beim
+Wiederöffnen und in der Zeitleiste erhalten.
+
 Die Auswahl bleibt bei Bewegungen erhalten und gilt nur für den aktuellen Lauf.
 Objekte mit einer von null verschiedenen `ps_object.id` werden als **ID …**
 angezeigt. Ihre Auswahl folgt der ID auch bei geänderter Listenposition oder Form.
 Entfernte IDs werden vergessen; ein später erneut eingefügtes Objekt erscheint sichtbar.
 Ein neuer Lauf setzt die Auswahl zurück. Für anonyme Objekte (`id = 0`) gilt
 weiter die Listenposition; eine geänderte Anzahl oder Formenfolge setzt deren
-Auswahl zurück. Eine Szenenhierarchie ist noch nicht implementiert.
+Auswahl zurück. Auch der aufgeklappte Zustand benannter Baumzweige folgt ihren IDs;
+er ist sitzungsbezogen.
 Messwerte und Simulation werden durch Ausblenden nicht
 verändert; bei langen Listen kann die Seitenleiste gescrollt werden.
 

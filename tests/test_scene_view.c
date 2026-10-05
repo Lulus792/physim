@@ -39,6 +39,24 @@ int main(void) {
     scene.objects[1].shape = PS_POINT;
     ps_scene_view_sync(&view, &scene);
     CHECK(!ps_scene_view_visible(&view, 1));
+    scene=(ps_scene){0};view=(ps_scene_view){0};
+    CHECK(ps_scene_group(&scene,100,0,"Root")==PS_OK);
+    CHECK(ps_scene_group(&scene,200,100,"Child")==PS_OK);
+    CHECK(ps_scene_add_id(&scene,1,PS_POINT,ps_v3(0,0,0),ps_v3(0,0,0),0,UINT32_MAX)==PS_OK);
+    CHECK(ps_scene_set_parent(&scene,1,200)==PS_OK);
+    ps_scene_view_sync(&view,&scene);view.hidden=1;view.collapsed=2;
+    CHECK(!ps_scene_view_visible(&view,0) && !ps_scene_view_visible(&view,1) && !ps_scene_view_visible(&view,2));
+    CHECK(!(view.hidden&4)); /* Inherited hiding does not overwrite the child's own choice. */
+    view.hidden=0;CHECK(ps_scene_view_visible(&view,2));
+    view.hidden=4;
+    swap=scene.objects[0];scene.objects[0]=scene.objects[2];scene.objects[2]=swap;
+    ps_scene_view_sync(&view,&scene);
+    CHECK(view.hidden==1 && view.collapsed==2 && !ps_scene_view_visible(&view,0) && ps_scene_view_visible(&view,2));
+    view.hidden=4;
+    ps_scene_view_sync(&view,&scene);
+    CHECK(!ps_scene_view_visible(&view,0));
+    CHECK(ps_scene_set_parent(&scene,1,0)==PS_OK);ps_scene_view_sync(&view,&scene);
+    CHECK(ps_scene_view_visible(&view,0));
     puts("Scene visibility: boundary slots, motion persistence and structure reset passed");
     return 0;
 }

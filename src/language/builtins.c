@@ -346,6 +346,8 @@ static const ps_lang_builtin library[] = {
      {V3, V2, Q, I, I},
      {"center", "size", "rotation", "color", "id"}},
     {"label", "psrt_label", VOID, 4, 1, {V3, S, I, I}, {"position", "text", "color", "id"}},
+    {"group", "psrt_group", VOID, 3, 1, {S,I,I}, {"name","id","parent"}},
+    {"sceneParent", "psrt_scene_parent", VOID, 2, 1, {I,I}, {"child","parent"}},
     {"metadata", "psrt_metadata", VOID, 1, 1, {S}, {"text"}},
     {"simulationTime", "psrt_time", F, 0, 1, {0}, {0}},
     {"runSeed", "psrt_run_seed", I, 0, 1, {0}, {0}},

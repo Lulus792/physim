@@ -48,3 +48,9 @@ func scene():
     line(origin, bob, 0, 3049576703, 1)
     sphere(origin, 0.045, 3874354175, 2)
     sphere(bob, 0.12, 1407107839, 3)
+
+    group("Pendel", 100, 0)
+    group("Bewegte Masse", 101, 100)
+    sceneParent(1, 100)
+    sceneParent(2, 100)
+    sceneParent(3, 101)

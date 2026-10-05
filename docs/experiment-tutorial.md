@@ -223,3 +223,33 @@ mit halbiertem Zeitschritt. Für Kräfte und Kontakte stehen eigene Anleitungen 
 [Weitere Reihenoperationen](series.md)
 
 [Diagramme und Tabellen erweitern](reports.md)
+
+## Szenengruppen und Eltern
+
+Mit `ps_scene_group(scene, id, parent_id, name)` entstehen benannte Gruppen.
+`ps_scene_set_parent(scene, child_id, parent_id)` ordnet einen bereits vorhandenen
+Eintrag einem Elternknoten zu. Eltern-ID 0 bezeichnet die Wurzel. Die IDs sind
+innerhalb eines Snapshots eindeutig; Eltern müssen vorhanden sein. Gruppen
+zählen gemeinsam mit der Geometrie zum Limit von 32 Einträgen. Fehlende IDs,
+Selbstbeziehungen, Zyklen und doppelte IDs werden ohne Teiländerung abgewiesen.
+
+```c
+ps_scene_group(scene, 100, 0, "Versuch");
+ps_scene_group(scene, 200, 100, "Modell");
+ps_scene_add_id(scene, 1, PS_SPHERE, ps_v3(1, 0, 0), ps_v3(1, 0, 0), .2, 0x53dec2ff);
+ps_scene_set_parent(scene, 1, 200);
+```
+
+Im Moduldescriptor muss `capabilities = PS_EXPERIMENT_SCENE_HIERARCHY` gesetzt
+sein. Die neue Eltern-ID verwendet die bisherige Padding-Fläche von `ps_object`;
+ABI 3 und die Größe der Struktur bleiben erhalten. Der aktuelle Runner ignoriert
+bei alten Modulen ohne diese Fähigkeit die Padding-Bytes, statt sie als Beziehungen
+zu deuten. Neue Module mit Hierarchie benötigen den aktuellen Runner.
+
+Die App zeigt den Baum, erhält Sichtbarkeitsentscheidungen nach ID und blendet
+Nachfahren eines ausgeblendeten Elternknotens ebenfalls aus. Gruppen enthalten
+keine Geometrie. Positionen, Polyline-Punkte, Orientierungen und Kräfte bleiben
+Weltwerte; die Beziehung erzeugt keine automatische Transformation oder physikalische
+Kopplung. Snapshotversion 2 speichert die Beziehungen; frühere Szenenblöcke bleiben
+als flache Szenen lesbar. [SDK-Referenz](reference/experiment.md),
+[Versioniertes Szenenformat](data-format.md).

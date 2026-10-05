@@ -116,6 +116,14 @@ static void scene(ps_context *c, ps_scene *s) {
     ps_scene_add_id(s, 4, PS_ARROW, bob, ps_vadd(bob, ps_vscale(velocity, 0.3)), 0, 0xf2c572ff);
     (void)ps_scene_label_id(s, 5, origin, "Aufhaengung", 0xb5c4d8ff);
     (void)ps_scene_label_id(s, 6, bob, "Pendelmasse", 0x53dec2ff);
+    (void)ps_scene_group(s,100,0,"Pendel");
+    (void)ps_scene_group(s,101,100,"Bewegte Masse");
+    (void)ps_scene_set_parent(s,1,100);
+    (void)ps_scene_set_parent(s,2,100);
+    (void)ps_scene_set_parent(s,3,101);
+    (void)ps_scene_set_parent(s,4,3);
+    (void)ps_scene_set_parent(s,5,2);
+    (void)ps_scene_set_parent(s,6,3);
 }
 static void destroy(ps_context *c) {
     free(c->user);
@@ -124,7 +132,7 @@ static void destroy(ps_context *c) {
 PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
     static const ps_experiment_api api = {sizeof(ps_experiment_api),
                                           PS_ABI_VERSION,
-                                          0,
+                                          PS_EXPERIMENT_SCENE_HIERARCHY,
                                           "Pendel",
                                           create,
                                           reset,

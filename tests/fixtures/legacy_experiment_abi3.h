@@ -1,13 +1,11 @@
+/* Frozen ABI-3 fixture from 8d69e4e. The object tail is padding, not a parent field. */
 #ifndef PHYSIM_EXPERIMENT_H
 #define PHYSIM_EXPERIMENT_H
-#include "core.h"
+#include "physim/core.h"
 #define PS_MAX_CHANNELS 16
 #define PS_MAX_OBJECTS 32
 #define PS_MAX_SCENE_POINTS 96
 #define PS_MAX_PARAMETERS 16
-/* ABI-3 scene extension: parent_id occupies the former ps_object tail padding.
- * Modules must advertise this capability to publish parent relationships. */
-#define PS_EXPERIMENT_SCENE_HIERARCHY UINT64_C(1)
 #ifdef _WIN32
 #define PS_EXPORT __declspec(dllexport)
 #else
@@ -25,8 +23,7 @@ typedef enum {
     PS_POINT,
     PS_PLANE,
     PS_POLYLINE,
-    PS_LABEL,
-    PS_GROUP /* Named organizational node; no geometry or coordinate transform. */
+    PS_LABEL
 } ps_shape;
 /* Metres, Y up. Sphere: a=center, radius. Box: a=center, b=full XYZ extents;
  * if an extent is nonpositive, a cube with half-size radius is used.
@@ -42,7 +39,6 @@ typedef struct {
     char text[64];       /* UTF-8 label, terminated; empty for other shapes. */
     uint32_t point_first, point_count; /* Polyline range in the scene point pool. */
     uint32_t id; /* Optional stable ID within a run; 0 = anonymous. Unique per scene. */
-    uint32_t parent_id; /* 0 = root; otherwise a scene ID. Coordinates stay world-space. */
 } ps_object;
 typedef struct {
     uint32_t count, point_count;
@@ -98,13 +94,6 @@ ps_result ps_scene_polyline(ps_scene *scene, const ps_vec3 *points, size_t count
                             uint32_t rgba);
 ps_result ps_scene_label(ps_scene *scene, ps_vec3 position, const char *text, uint32_t rgba);
 bool ps_scene_valid(const ps_scene *scene);
-/* Named groups require a nonzero unique ID. Parent 0 is the scene root.
- * Checked relationships reject missing parents, self-parenting and cycles.
- * Failure leaves the scene unchanged. Publish with PS_EXPERIMENT_SCENE_HIERARCHY. */
-ps_result ps_scene_group(ps_scene *scene, uint32_t id, uint32_t parent_id, const char *name);
-ps_result ps_scene_set_parent(ps_scene *scene, uint32_t child_id, uint32_t parent_id);
-/* Returns the parent's slot, or -1 for a root, invalid index or missing parent. */
-int ps_scene_parent_index(const ps_scene *scene, uint32_t index);
 /* ID-bearing constructors. ID 0 is anonymous; duplicate nonzero IDs fail
  * without changing the scene, including its polyline point pool. */
 ps_result ps_scene_add_id(ps_scene *scene, uint32_t id, ps_shape shape, ps_vec3 a, ps_vec3 b,

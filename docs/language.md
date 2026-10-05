@@ -1,10 +1,10 @@
 # Eigene Physim-Sprache
 
-Stand: 2026-09-24. Sprachvertrag 0.167.0; noch keine freigegebene Anwendersprache.
+Stand: 2026-10-05. Sprachvertrag 0.168.0; noch keine freigegebene Anwendersprache.
 Der Arbeitsname ist „Physim-Sprache“. Das vollständige Ziel und die Abnahmen
 LANG-001 bis LANG-007 stehen in Abschnitt 10 des Projektplans.
 
-Die Sprachversion `0.167.0` steht unabhängig von der App-Version und der SDK-ABI
+Die Sprachversion `0.168.0` steht unabhängig von der App-Version und der SDK-ABI
 in `src/language/version.h`. `physimc --version` und der Kopf des generierten C
 geben sie aus. Änderungen an Syntax oder Semantik erfordern eine bewusste
 Anhebung; die vorliegende Fassung ist noch ein Entwicklungsvertrag und keine
@@ -2839,3 +2839,29 @@ Diese Punkte sind verbindlicher Ausbau, keine bereits implementierten Fähigkeit
 Die Anwenderdokumentation erhält bei Integration zwei vollständige Teile:
 „Physim mit C“ und „Physim mit der eigenen Sprache“. Bis dahin bleiben die
 bestehenden C-Anleitungen gültig; dieses Dokument ist der Compilerentwurf.
+
+## Szenengruppen und Elternbeziehungen
+
+Im `scene`-Callback erzeugt `group(name: String, id: Int64, parent: Int64)` eine
+benannte Gruppe. Eine Gruppe benötigt eine eindeutige nichtnull ID; Eltern-ID 0
+steht für die Wurzel. `sceneParent(child: Int64, parent: Int64)` ordnet einen
+vorhandenen Eintrag einer vorhandenen Eltern-ID zu oder löst ihn mit parent 0
+zur Wurzel. Fehlende IDs, doppelte IDs, Selbstbeziehungen und Zyklen erzeugen eine
+Quelldiagnose. Die geprüfte Änderung erhält die bisherige Szene bei Fehlern.
+
+```physim
+func scene():
+    group("Versuch", 100, 0)
+    group("Modell", 200, 100)
+    sphere(Vec3(1, 0, 0), 0.2, 0x53DEC2FF, 1)
+    sceneParent(1, 200)
+```
+
+Gruppen enthalten keine Geometrie. Alle Positionen und Richtungen bleiben in
+Weltkoordinaten; es gibt hier keine automatische Elterntransformation. Gruppen
+zählen zum Limit von 32 Szeneneinträgen. Die App zeigt Beziehungen im aufklappbaren
+Szenenbaum und blendet beim Ausblenden eines Elternknotens seine Nachfahren mit
+aus. Die eigene Sichtbarkeitswahl eines Kindes bleibt dabei erhalten.
+Neue Sprachmodule melden die Hierarchiefähigkeit automatisch. Der aktuelle Runner
+und Snapshotversion 2 zeichnen die Beziehungen mit auf. Ältere Szenenblöcke in
+Version 1 bleiben als flache Szenen lesbar. [Dateiformat](data-format.md)

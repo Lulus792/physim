@@ -77,7 +77,10 @@ static int pendulum_api(const char *path, const char *reference_path,
     }
     ps_scene scene = {0};
     api->build_scene(&a, &scene);
-    CHECK(ps_scene_valid(&scene) && scene.count == 3);
+    CHECK(ps_scene_valid(&scene) && scene.count == 5);
+    CHECK(scene.objects[0].parent_id==100 && scene.objects[1].parent_id==100 &&
+          scene.objects[2].parent_id==101 && scene.objects[3].shape==PS_GROUP &&
+          scene.objects[3].id==100 && scene.objects[4].parent_id==100);
     ps_scene reference_scene = {0};
     reference->build_scene(&b, &reference_scene);
     CHECK(ps_scene_valid(&reference_scene) && reference_scene.count >= 3);
@@ -367,7 +370,7 @@ static int runner(const char *runner_path, const char *module_path, const char *
     ps_run_reader reader;
     CHECK(ps_run_open(&reader, path) == PS_OK);
     CHECK(reader.channels == (pendulum == 2 ? 2u : pendulum ? 6u : 5u));
-    CHECK(strstr(reader.metadata, "language=physim-0.167.0\ncompiler=physimc-0.1.0-dev"));
+    CHECK(strstr(reader.metadata, "language=physim-0.168.0\ncompiler=physimc-0.1.0-dev"));
     CHECK(strstr(reader.metadata, "source_fnv1a64=") && strstr(reader.metadata, "module_fnv1a64="));
     if (pendulum == 3)
         CHECK(strstr(reader.metadata, "integrator=Dormand-Prince 5(4)"));
@@ -497,7 +500,7 @@ int main(int argc, char **argv) {
     CHECK(b.values[0] == other_angle);
     ps_scene scene = {0};
     api[0]->build_scene(&a, &scene);
-    CHECK(ps_scene_valid(&scene) && scene.count == 3);
+    CHECK(ps_scene_valid(&scene) && scene.count == 5 && scene.objects[2].parent_id==101);
     CHECK(scene.objects[2].shape == PS_SPHERE && scene.objects[2].id == 3);
     CHECK(near(scene.objects[2].a.x, a.values[2]) && near(scene.objects[2].a.y, a.values[3]));
     CHECK(api[0]->step(&a, 0) == PS_INVALID && api[0]->step(&a, NAN) == PS_INVALID);

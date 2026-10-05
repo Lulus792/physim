@@ -2761,6 +2761,16 @@ Größte ganze Float64-Zahl, die nicht größer als value ist.
 
 Überall verfügbar.
 
+## group
+
+```text
+group(name: String, id: Int64, parent: Int64) -> Void
+```
+
+Benannte Szenengruppe mit eindeutiger ID; parent 0 erzeugt eine Wurzel. Nur im scene-Callback. Gruppen enthalten keine Geometrie und verändern keine Weltkoordinaten.
+
+Experimentmodul erforderlich.
+
 ## hypot
 
 ```text
@@ -3068,6 +3078,16 @@ runSeed() -> Int64
 ```
 
 Liefert das vollständige 64-Bit-Bitmuster des aktuellen Laufseeds als Int64. Auch Seedwerte oberhalb von INT64_MAX bleiben beim Zurückwandeln in einen Zufallsstrom erhalten; nur im Experiment.
+
+Experimentmodul erforderlich.
+
+## sceneParent
+
+```text
+sceneParent(child: Int64, parent: Int64) -> Void
+```
+
+Ordnet einen Szeneneintrag einer Eltern-ID zu; parent 0 löst ihn zur Wurzel. Fehlende IDs und Zyklen erzeugen eine Quelldiagnose, ohne die Szene zu verändern.
 
 Experimentmodul erforderlich.
 

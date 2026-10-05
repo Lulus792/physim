@@ -53,6 +53,7 @@ def declarations(source):
             comments = re.findall(r'/\*.*?\*/|//[^\n]*', raw, re.S)
             code = re.sub(r'/\*.*?\*/|//[^\n]*', '', raw, flags=re.S).strip()
             code = re.sub(r'\n\s*\n', '\n', code)
+            code = '\n'.join(line.rstrip() for line in code.splitlines())
             if code: yield code, [comment_text(c) for c in comments]
 
 
@@ -89,6 +90,8 @@ def c_reference(module, title, guide, intro):
 
 
 LANG_DESCRIPTIONS = {
+    'group': 'Benannte Szenengruppe mit eindeutiger ID; parent 0 erzeugt eine Wurzel. Nur im scene-Callback. Gruppen enthalten keine Geometrie und verändern keine Weltkoordinaten.',
+    'sceneParent': 'Ordnet einen Szeneneintrag einer Eltern-ID zu; parent 0 löst ihn zur Wurzel. Fehlende IDs und Zyklen erzeugen eine Quelldiagnose, ohne die Szene zu verändern.',
     'Bezier3': 'Kubische räumliche Bézierkurve aus vier endlichen Kontrollpunkten. Der Wert ist unabhängig kopierbar. Alle Koordinaten verwenden dieselbe Längeneinheit des Aufrufers.',
     'bezierPosition': 'Position bei dimensionslosem t im inklusiven Intervall [0, 1]. Die Auswertung verwendet die De-Casteljau-Implementierung der C-Bibliothek.',
     'bezierTangent': 'Ableitung der Position nach dem dimensionslosen Parameter t. Sie ist weder normiert noch eine physikalische Geschwindigkeit. Ein nicht darstellbares Ergebnis erzeugt eine Quelldiagnose.',
