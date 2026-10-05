@@ -58,6 +58,7 @@ def catalog():
         cases.append(Case("language_" + part, (f"tests/test_language_{part}.c",),
                           ("language",), timeout=120))
     cases.extend([
+        Case("pacing", ("tests/test_pacing.c",)),
         Case("parameter_catalog", ("tests/test_parameter_catalog.c", "app/parameter_catalog.c")),
         Case("documentation", ("tests/test_documentation.c", "app/documentation.c")),
         Case("plot_view", ("tests/test_plot_view.c", "app/plot_view.c")),

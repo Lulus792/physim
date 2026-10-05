@@ -3,6 +3,47 @@
 Stand: 5. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Simulationsgeschwindigkeit am 5. Oktober 2026
+
+Die Geschwindigkeitswahl und das feste Echtzeitkonto wurden auf dem lokalen
+Intel-Mac (macOS 14.6.1, Apple Clang 16, SDL 3.2.30, Debug) und in der Debian-12-VM
+(Linux 6.1.0-53-cloud-amd64, GCC 12.2, SDL 3.2.30, Release, X11/Xvfb/Openbox,
+Mesa 22.3.6) gebaut und ausgeführt.
+
+Die sechs gezielten Prüfungen bestehen auf beiden Plattformen: `pacing`,
+`project_file`, `scene_protocol`, `parameters_api`, `runner_pacing_c` und
+`runner_pacing_phys`. macOS: `build/workspace-check/test-results/run-al6_mguy`;
+Debian: `build/native/Release/test-results/run-1kw0782u` innerhalb der VM.
+Die C- und Physim-Zufallsmodelle vergleichen jeweils 201 Messpunkte aller Kanäle
+mit dem unverändert offline ausgeführten CLI-Referenzlauf. 0,5×, 4×, Offline und
+ein absichtlich verzögerter Pipe-Leser ergeben dieselben Zeiten und Werte.
+Die tatsächlichen Laufzeiten werden verglichen; der feste `dt` und der Seed
+bleiben erhalten. Geschwindigkeit während Betrieb/Pause, Einzelschritt,
+ungültige CLI-/Wire-Werte und ein fehlender Handshake sind geprüft.
+Bei `dt=1`, Faktor 0,1 meldet RUN sofort den unpausierten Zustand bei Zeit 0;
+der folgende pausierte Einzelschritt erreicht unmittelbar Zeit 1.
+Das künstliche Zeitkonto prüft zusätzlich lange Verzögerungen und begrenztes Aufholen.
+
+Der gemeinsame App-Durchlauf besteht jeweils 8/8: Geschwindigkeit, Reset,
+Projekteinstellungen, Themen, beide Menügrößen und vollständiger C-/Physim-Ablauf
+mit Analyse, Export und Wiederöffnung. macOS: `run-wwivzhlo`; Debian: `run-78d35ayu`.
+`speed_workflow` bedient die tatsächlichen Widgets in beiden Sprachen bei
+1080 × 740 und prüft 0,25×, 4×, Wechsel auf 1× im laufenden Betrieb, Offline,
+Pause, Einzelschritt, Reset und Wiederöffnung mit gespeicherter Geschwindigkeit.
+Die Darstellung ist visuell geprüft; Messdateiformat und Modul-ABI bleiben gleich.
+Nach der sofortigen RUN-Rückmeldung besteht der abschließende Durchlauf mit
+Geschwindigkeit, Reset und beiden vollständigen App-Abläufen auf beiden Plattformen
+(je 4/4): macOS `run-1j7s4k_5`, Debian `run-a7ock72l`.
+Ein macOS-Zwischenlauf endete im internen Testfristpfad; ein zusätzlicher
+Debian-Durchlauf wurde durch die nicht mehr auf SSH-Befehle antwortende VM unterbrochen.
+Der erneute gemeinsame macOS-Lauf und der Debian-Lauf nach VM-Wiederherstellung
+sind die abschließenden Nachweise. Die unterbrochenen Läufe werden nicht als bestanden gezählt.
+
+Die [C17-CI zu `dec629f`](https://github.com/PhysicSimulator/physim/actions/runs/37271795266)
+und die [Linux-Paket-CI](https://github.com/PhysicSimulator/physim/actions/runs/37271795260)
+sind inzwischen erfolgreich abgeschlossen. Diese Nachweise gelten für den
+vorherigen Reset-Stand und enthalten die neue Geschwindigkeitswahl noch nicht.
+
 ## Simulationsreset am 4. Oktober 2026
 
 Die Reset-Steuerung wurde auf dem lokalen Intel-Mac (macOS 14.6.1, Apple Clang 16,

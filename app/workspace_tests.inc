@@ -10,6 +10,8 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
         return false;
     if (!strcmp(mode, "native-dialogs") || !strcmp(mode, "native-dialog-error"))
         return native_dialog_test_start(root);
+    if (!strncmp(mode, "speed-", 6))
+        return speed_test_start(a, root, mode);
     if (!strncmp(mode, "reset-", 6))
         return reset_test_start(a, root, mode);
     if (!strncmp(mode, "project-settings-", 17))
@@ -85,6 +87,10 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
                                  const char **capture) {
     if (!strcmp(mode, "native-dialogs") || !strcmp(mode, "native-dialog-error")) {
         native_dialog_test_frame(a, !strcmp(mode, "native-dialog-error"), stage, code, capture);
+        return;
+    }
+    if (!strncmp(mode, "speed-", 6)) {
+        speed_test_frame(a, mode, stage, code, capture);
         return;
     }
     if (!strncmp(mode, "reset-", 6)) {

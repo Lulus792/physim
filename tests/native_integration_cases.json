@@ -1065,9 +1065,56 @@
     },
     "physim-ui-benchmark": {
       "benchmark": "physim-ui-benchmark"
+    },
+    "physim-runner-pacing-tests": {
+      "sources": [
+        "tests/test_runner_pacing.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
     }
   },
   "tests": [
+    {
+      "name": "runner_pacing_phys",
+      "targets": [
+        "physim-runner-pacing-tests",
+        "physim-runner",
+        "physim-language-uncertain-projectile"
+      ],
+      "steps": [
+        {
+          "program": "physim-runner-pacing-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{physim-language-uncertain-projectile}",
+            "{work}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "runner_pacing_c",
+      "targets": [
+        "physim-runner-pacing-tests",
+        "physim-runner",
+        "uncertain_projectile"
+      ],
+      "steps": [
+        {
+          "program": "physim-runner-pacing-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{uncertain_projectile}",
+            "{work}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
     {
       "name": "language_collision_parity",
       "targets": [
@@ -3980,6 +4027,36 @@
             "measurements/metadata.json",
             "measurements/summary.json",
             "measurements/native/frames.csv"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "speed_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "speed_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 560,
+          "files": [
+            "app-steps.json"
           ]
         }
       ]

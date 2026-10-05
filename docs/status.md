@@ -76,6 +76,19 @@ weitere offene Anforderungen bleiben im Projektplan bestehen.
 Die [Linux-Paket-CI zu `2afef89`](https://github.com/PhysicSimulator/physim/actions/runs/37236029010)
 besteht zusätzlich auf Debian 12 und Ubuntu 24.04; sie enthält noch keinen Reset.
 
+Die Simulation hat eine **Geschwindigkeitswahl von 0,25× bis 16× und Offline**.
+Ein begrenztes Echtzeitkonto steuert feste Physikschritte unabhängig von der
+Darstellung. Wechsel sind während Lauf und Pause möglich; Einzelschritt und Reset
+behalten ihre Bedeutung. Die Auswahl wird im Projekt gespeichert. C- und
+Physim-Zufallsmodelle liefern bei verschiedenen Geschwindigkeiten sowie mit
+verzögertem Pipe-Leser kanalweise identische Referenzmessungen. Die native
+Bedienprüfung bestätigt langsamen/schnellen Betrieb, Live-Wechsel, Offline,
+Reset und Wiederöffnung. Der Katalog umfasst jetzt 496 Prüfungen ohne Fenster
+und 39 Grafik-/Fensterfälle. Zeitleiste, adaptive Runner-Schritte und Docking
+bleiben offen; interne adaptive Integratoren sind davon unabhängig.
+Die tatsächlich ausgeführten macOS-/Debian-Prüfungen stehen im
+[Plattformnachweis](platform-validation.md).
+
 Aktueller [Plattformnachweis](platform-validation.md): Der direkte Physim-Build nach
 Entfernen der eigenen CMake-Dateien besteht alle acht CI-Kombinationen. Ubuntu 24.04
 mit GCC/Clang und macOS 15 auf Apple Silicon/Intel bestehen jeweils 493 Tests ohne
@@ -495,7 +508,7 @@ und veraltete Fenstermanager-Einträge geprüft. Die erneute Linux-CI steht aus.
 | Mathematik | Vec2/3/4 mit skalierter Normalisierung, Mat3/4 mit Inversion, Quaternion-Verknüpfung und Rotationsinterpolation, affine/projektive Punkttransformation sowie Richtungs-/Normalentransformation, absolute/relative Vergleiche, Euler/RK4, symplektischer Euler, Verlet, RK45, linearer Solver, Bisektion, Minimierung, kubische räumliche Bézierkurven mit Tangente und Unterteilung | weitere Kurven-/Interpolationsverfahren, Events/dichte Ausgabe, steife Verfahren |
 | Basis | Fehlercodes, expliziter RNG, explizite Allocatoren mit Fehlerprüfungen, feste Arenen, eigene Speicherdomänen für Berichte/Analysekontexte, Test-Allocator mit Fehler-Injektion und Bytebudget, dynamische Arrays mit Größenlimit und Selbstkopien, begrenzte String-Views ohne Kopie, Hashmap mit eigenen Schlüsseln und Größenlimits | strukturierte Diagnosen, Allocator-Anbindung weiterer Subsysteme |
 | Einheiten | SI-Dimensionen, Konvertierung, Einheitenalgebra, Quantity-Rechnung und Dimensionsprüfung von Datenreihen | benutzerdefinierte Anzeigeeinheiten in der GUI |
-| Runner | versionierte Modul-ABI, Handshake, Pause/Step/Run/Stop, Heartbeat, Crash-/Hang-Isolation | Ressourcenlimits, eigener Logkanal, echtes OS-Sandboxing |
+| Runner | versionierte Modul-ABI, Handshake, Pause/Step/Run/Stop, Heartbeat, Crash-/Hang-Isolation, feste Echtzeittaktung von 0,1× bis 16× und Offline | Ressourcenlimits, eigener Logkanal, echtes OS-Sandboxing |
 | Daten | CRC-Chunks, Streaming, Recovery, CSV, Seed-/Modellmetadaten | Index, mehr Datentypen, komprimierte Blöcke, Schemaerweiterung |
 | App | leerer Workspace-Einstieg mit gespeicherter Ordnerauswahl und bewusster Wiederöffnung, kompakte Menüleiste, Projektmanager, aufklappbarer Dateibaum und bis zu 16 editierbare Textdokumente mit separaten Autosaves und gespeicherten Editoransichten, drei Arbeitsbereiche, integrierte Offline-Dokumentation, Systemtypografie, Einstellungen mit Code-Schriftgröße und Autosave-Intervall, dunkle, helle und kontrastreiche Darstellung, gespeicherte Fenstergröße/Maximierung, vergrößerbare Seitenleiste und Protokoll, Reset zum pausierten Anfangszustand mit erhaltenen Alt-Läufen, Vorlagen, Editor, direkter Projektbuild ohne CMake mit Ausgaben unter `build/`, Diagramme | mehrere benannte Workspaces, freies Docking, weitere Panelzustände, UI-weite Schriftvergrößerung, vollständige Barrierefreiheit |
 | Editor | C- und Physim-Dateien bearbeiten, sprachspezifische Syntaxfarben, Zeilennummern, Debug/Release, anklickbare Compilerdiagnosen, öffentlicher Header-Browser | Completion |

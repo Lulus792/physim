@@ -5,13 +5,13 @@
 
 typedef struct {
     bool language_experiment, language_analysis, release;
-    double timestep;
+    double timestep, speed;
     uint64_t seed;
     ps_parameter_catalog parameters;
 } ps_project_settings;
 
 /* Version 1, UTF-8, LF or CRLF. Absent source/profile entries retain the legacy
- * defaults main.c, analysis.c, Debug, 0.005 seconds, seed 42.
+ * defaults main.c, analysis.c, Debug, 0.005 seconds, seed 42, speed 1.
  * Failed reads leave settings unchanged. */
 ps_document_result ps_project_settings_read(const char *path, ps_project_settings *settings);
 /* Updates profile, simulation settings and parameter selections, preserving all other entries

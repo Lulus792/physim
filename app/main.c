@@ -15,6 +15,7 @@
 #include "workspace_tree.h"
 #include "text_document.h"
 #include "protocol.h"
+#include "pacing.h"
 #include "ui.h"
 #include "design_tokens.h"
 static const ps_ui_palette *ui_palette = &PS_UI_DARK;
@@ -220,6 +221,8 @@ typedef struct {
     char reset_previous_run[4096], reset_channel_names[PS_MAX_CHANNELS][96];
     uint32_t reset_channel_count;
     struct nk_rect run_control_bounds[6];
+    struct nk_rect speed_bounds, speed_choices[8];
+    double simulation_speed;
     double heartbeat, stop_at, simulation_time, dt;
     char seed[32];
     double values[PS_MAX_CHANNELS];
@@ -468,7 +471,7 @@ static bool save_project_settings(app *a) {
     char path[4096];
     join(path, sizeof path, a->project, "physim.project");
     ps_project_settings settings = {.release = a->profile != 0, .timestep = a->dt,
-                                   .parameters = a->parameters};
+                                   .speed = a->simulation_speed, .parameters = a->parameters};
     if (!ps_project_seed_parse(a->seed, &settings.seed)) return false;
     return ps_project_settings_save(path, &settings) == PS_DOCUMENT_OK;
 }
@@ -480,6 +483,10 @@ static bool simulation_settings_valid(app *a) {
     }
     if (!ps_project_seed_parse(a->seed, &seed)) {
         status(a, "Zufallsseed: ganze Zahl von 0 bis 18446744073709551615 eingeben.");
+        return false;
+    }
+    if (!ps_speed_valid(a->simulation_speed)) {
+        status(a, "Geschwindigkeit: 0 für Offline oder Faktor 0,1 bis 16 wählen.");
         return false;
     }
     return true;
@@ -691,6 +698,7 @@ static void open_project(app *a) {
     a->parameters = project_settings.parameters;
     a->profile = project_settings.release ? 1 : 0;
     a->dt = project_settings.timestep;
+    a->simulation_speed = project_settings.speed;
     snprintf(a->seed, sizeof a->seed, "%llu", (unsigned long long)project_settings.seed);
     a->project_settings_dirty = false;
     a->batch_sweep = false;
@@ -859,6 +867,25 @@ static bool command(app *a, uint32_t type) {
     size_t size = ps_wire_encode(frame, type, a->command_seq++, payload, n);
     return ps_process_write(&a->runner, frame, size);
 }
+static bool select_simulation_speed(app *a, double speed) {
+    if (!a->loaded || !ps_speed_valid(speed) || a->reset_pending || a->reset_starting ||
+        (a->runner.running && (!a->hello || a->stop_at)))
+        return false;
+    if (a->simulation_speed == speed)
+        return true;
+    if (a->runner.running) {
+        unsigned char frame[28], payload[8];
+        ps_put_f64(payload, speed);
+        size_t size = ps_wire_encode(frame, PS_MSG_SPEED, a->command_seq++, payload, 8);
+        if (!ps_process_write(&a->runner, frame, size)) {
+            status(a, "Geschwindigkeit konnte nicht geändert werden.");
+            return false;
+        }
+    }
+    a->simulation_speed = speed;
+    a->project_settings_dirty = true;
+    return true;
+}
 static void unique_path(app *a, char *out, size_t cap, const char *suffix) {
     time_t now = time(NULL);
     struct tm *t = localtime(&now);
@@ -924,7 +951,7 @@ static bool start_run_mode(app *a, bool paused) {
         status(a, "Zuerst das gespeicherte Projekt erfolgreich bauen.");
         return false;
     }
-    char runner[4096], module[4096], dt[64], src[4096], copy[4096], runs[4096], next_run[4096];
+    char runner[4096], module[4096], dt[64], speed[64], src[4096], copy[4096], runs[4096], next_run[4096];
     join(runs, sizeof runs, a->project, "runs");
     if (!ps_make_directory(runs)) {
         status(a, "Laufordner konnte nicht angelegt werden.");
@@ -934,10 +961,12 @@ static bool start_run_mode(app *a, bool paused) {
     join(module, sizeof module, a->build_directory, "experiment" MODULE_EXT);
     unique_path(a, next_run, sizeof next_run, ".psrun");
     snprintf(dt, sizeof dt, "%.17g", a->dt);
+    snprintf(speed, sizeof speed, "%.17g", a->simulation_speed);
     char parameter_arguments[PS_MAX_PARAMETERS][128];
-    const char *args[9 + 2 * PS_MAX_PARAMETERS] = {
-        runner, module, next_run, "--interactive", "--dt", dt, "--seed", a->seed};
-    size_t argument_count = 8;
+    const char *args[11 + 2 * PS_MAX_PARAMETERS] = {
+        runner, module, next_run, "--interactive", "--dt", dt, "--seed", a->seed,
+        "--speed", speed};
+    size_t argument_count = 10;
     for (uint32_t i = 0; i < a->parameters.count; i++) {
         double selected;
         if (ps_parameter_catalog_value(&a->parameters, i, &selected) != PS_OK) {
@@ -2206,6 +2235,7 @@ static void test_mouse(app *a, struct nk_rect rect, bool down) {
 #include "toolbar_tests.inc"
 #include "project_settings_tests.inc"
 #include "reset_tests.inc"
+#include "speed_tests.inc"
 #include "native_dialog_tests.inc"
 #include "workspace_tests.inc"
 // clang-format on
@@ -2476,6 +2506,7 @@ int main(int argc, char **argv) {
     ps_make_directory(projects);
     snprintf(a->manager_parent, sizeof a->manager_parent, "%s", projects);
     a->dt = 0.005;
+    a->simulation_speed = 1;
     a->batch_dt = .005;
     a->batch_timeout = 30;
     a->batch_runs = 256;
@@ -2651,7 +2682,7 @@ int main(int argc, char **argv) {
                 continue;
             }
             if ((plot_test || toolbar_test || settings_test ||
-                 (workspace_state_test && !strncmp(argv[3], "reset-", 6))) && test_scripted_external_input(&e)) continue;
+                 (workspace_state_test && (!strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6)))) && test_scripted_external_input(&e)) continue;
             if (self_test && e.type == SDL_EVENT_TEXT_INPUT) {
                 doc_input_events++;
                 doc_input_bytes += (unsigned)strlen(e.text.text);
@@ -2741,8 +2772,10 @@ int main(int argc, char **argv) {
         } else if (workspace_state_test) {
             if (ps_clock() - test_started >
                 (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
-                  !strncmp(argv[3], "reset-", 6)
+                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6)
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15)) {
+                fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
+                        argv[3], ps_clock() - test_started);
                 exit_code = 1;
                 a->quitting = true;
             } else

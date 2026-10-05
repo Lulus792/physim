@@ -1,4 +1,5 @@
 #include "project_file.h"
+#include "pacing.h"
 #include <errno.h>
 #include <float.h>
 #include <math.h>
@@ -25,8 +26,8 @@ bool ps_project_timestep_valid(double timestep) {
     return isfinite(timestep) && timestep >= DBL_MIN && timestep <= 1;
 }
 static ps_document_result parse(const ps_text_document *document, ps_project_settings *out) {
-    ps_project_settings settings = {.timestep = .005, .seed = 42};
-    bool seen[5] = {false};
+    ps_project_settings settings = {.timestep = .005, .seed = 42, .speed = 1};
+    bool seen[6] = {false};
     size_t position = 0;
     unsigned index = 0;
     while (position < document->length) {
@@ -77,6 +78,15 @@ static ps_document_result parse(const ps_text_document *document, ps_project_set
             if (seen[4] || !ps_project_seed_parse(value + 1, &settings.seed))
                 return PS_DOCUMENT_INVALID;
             seen[4] = true;
+        } else if (!strncmp(line, "simulation.speed=", 17)) {
+            if (seen[5]) return PS_DOCUMENT_INVALID;
+            seen[5] = true;
+            char *number_end;
+            errno = 0;
+            double speed = strtod(value + 1, &number_end);
+            if (errno || number_end == value + 1 || *number_end || !ps_speed_valid(speed))
+                return PS_DOCUMENT_INVALID;
+            settings.speed = speed;
         } else if (!strncmp(line, "parameter.", 10)) {
             if (!value)
                 return PS_DOCUMENT_INVALID;
@@ -102,7 +112,8 @@ ps_document_result ps_project_settings_read(const char *path, ps_project_setting
     return result;
 }
 ps_document_result ps_project_settings_save(const char *path, const ps_project_settings *settings) {
-    if (!path || !settings || !ps_project_timestep_valid(settings->timestep))
+    if (!path || !settings || !ps_project_timestep_valid(settings->timestep) ||
+        !ps_speed_valid(settings->speed))
         return PS_DOCUMENT_INVALID;
     const ps_parameter_catalog *parameters = &settings->parameters;
     if (parameters->count > PS_MAX_PARAMETERS)
@@ -131,7 +142,8 @@ ps_document_result ps_project_settings_save(const char *path, const ps_project_s
             ++end;
         const char *line = document.saved + position;
         if (strncmp(line, "profile=", 8) && strncmp(line, "parameter.", 10) &&
-            strncmp(line, "simulation.dt=", 14) && strncmp(line, "simulation.seed=", 16)) {
+            strncmp(line, "simulation.dt=", 14) && strncmp(line, "simulation.seed=", 16) &&
+            strncmp(line, "simulation.speed=", 17)) {
             memcpy(text + used, line, end - position);
             used += end - position;
         }
@@ -142,9 +154,9 @@ ps_document_result ps_project_settings_save(const char *path, const ps_project_s
         used += strlen(newline);
     }
     int n = snprintf(text + used, capacity - used,
-                     "profile=%s%ssimulation.dt=%.17g%ssimulation.seed=%llu%s",
+                     "profile=%s%ssimulation.dt=%.17g%ssimulation.seed=%llu%ssimulation.speed=%.17g%s",
                      settings->release ? "Release" : "Debug", newline, settings->timestep, newline,
-                     (unsigned long long)settings->seed, newline);
+                     (unsigned long long)settings->seed, newline, settings->speed, newline);
     if (n < 0 || (size_t)n >= capacity - used)
         result = PS_DOCUMENT_LIMIT;
     else

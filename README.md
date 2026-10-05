@@ -135,6 +135,8 @@ erklärt den elastischen und schrägen Stoß orientierter Boxen und ihre Messkan
 2. `main.c` enthält Länge, Masse, Winkel, Luftdichte, Sensorrauschen und Integrator.
 3. **Build / F5** speichert die Quellen und baut Experiment und Analyse im Hintergrund.
 4. Unter **Simulieren** starten. Pause, Einzelschritt und Stop steuern den Runner.
+   **Geschwindigkeit** wählt 0,25× bis 16× Echtzeit oder Offline; der physikalische
+   Zeitschritt bleibt dabei gleich. Die Auswahl ist auch während des Laufs möglich.
    **Zurücksetzen / F7** öffnet den Anfangszustand pausiert in einer neuen Messdatei;
    bisherige Läufe bleiben erhalten.
 5. Nach Stop lädt die App die Messdaten im Hintergrund. **Auswerten** zeigt Kurven

@@ -635,8 +635,35 @@ static void draw_ui(app *a, int width, int height) {
                 a->tab = 2;
                 a->analysis_tab = 0;
             }
+            nk_layout_row_dynamic(ui, 30, 2);
+            nk_label(ui, "Geschwindigkeit", NK_TEXT_LEFT);
+            char speed_label[64];
+            if (a->simulation_speed == 0)
+                snprintf(speed_label, sizeof speed_label, "Offline · maximale Geschwindigkeit");
+            else
+                snprintf(speed_label, sizeof speed_label, "%.3g× Echtzeit", a->simulation_speed);
+            bool speed_ready = !a->reset_pending && !a->reset_starting &&
+                               (!a->runner.running || (a->hello && !a->stop_at));
+            nk_begin_disabled(ui, !speed_ready);
+            a->speed_bounds = nk_widget_bounds(ui);
+            if (nk_combo_begin_label(ui, speed_label, nk_vec2(300, 290))) {
+                const double speeds[] = {.25, .5, 1, 2, 4, 8, 16, 0};
+                nk_layout_row_dynamic(ui, 28, 1);
+                for (unsigned i = 0; i < 8; i++) {
+                    char label[64];
+                    if (speeds[i] == 0) snprintf(label, sizeof label, "Offline · maximal");
+                    else snprintf(label, sizeof label, "%.3g× Echtzeit", speeds[i]);
+                    a->speed_choices[i] = nk_widget_bounds(ui);
+                    if (nk_button_label(ui, label)) {
+                        select_simulation_speed(a, speeds[i]);
+                        nk_combo_close(ui);
+                    }
+                }
+                nk_combo_end(ui);
+            }
+            nk_end_disabled(ui);
             float plot_height = fmaxf(96, content * .21f);
-            viewport(a, content - plot_height - 232);
+            viewport(a, content - plot_height - 270);
             nk_layout_row_dynamic(ui, 28, 2);
             if (a->channel_count) {
                 const char *names[PS_MAX_CHANNELS];

@@ -44,11 +44,22 @@ Payloadlänge u32 (maximal 8192), Sequenznummer u32 (je Richtung ab 0).
 Unvollständige Frames werden gesammelt, falsche Versionen, Sequenzen und Größen abgewiesen.
 
 Typen: HELLO=1, RUN=2, PAUSE=3, STEP=4, STOP=5, SNAPSHOT=6,
-ERROR=7, BYE=8, HEARTBEAT=9. Kontrollbefehle außer HELLO tragen keine Payload.
+ERROR=7, BYE=8, HEARTBEAT=9, SPEED=10. Kontrollbefehle außer HELLO und SPEED tragen keine Payload.
 Host-HELLO enthält ABI-Version u32. Runner-HELLO enthält Name und Kanaltitel als
 UTF-8-Zeilen. Der Runner bleibt bis zum Handshake pausiert; Frist: 10 Sekunden.
 Heartbeat: 500 ms. Die GUI markiert mehr als drei Sekunden ohne Nachricht;
 Stop beendet nach einer Sekunde auch festhängenden Code.
+
+SPEED trägt genau acht Bytes: einen little-endian f64-Faktor. Null bedeutet
+Offline, endliche Faktoren von 0,1 bis 16 regeln die Echtzeitgeschwindigkeit.
+Der Befehl ist erst nach HELLO zulässig; falsche Länge, nicht endliche oder
+außerhalb des Bereichs liegende Werte beenden den Runner mit einem Protokollfehler.
+Ein Wechsel verwirft das Echtzeitkonto und lässt den Pausestatus unverändert.
+RUN und PAUSE melden ihren Zustand sofort als Snapshot, auch ohne neuen Physikschritt.
+STEP im pausierten Zustand führt genau einen festen Zeitschritt aus.
+Die Geschwindigkeit gehört zur Zeitsteuerung und ändert keine Modul-ABI,
+Snapshotfelder oder Messdateiformate. CLI: `--interactive --speed 0|0.1..16`;
+ohne Angabe gilt 1×. Ohne `--interactive` bleibt der CLI-Modus mit `--steps` immer Offline.
 
 Snapshotkopf (24 Bytes): Zeit f64, Kanalzahl u32, Objektzahl u32, Pausestatus u32
 (ausschließlich 0/1), Punktzahl u32. Danach Kanalwerte f64, Objekte und Punkte.

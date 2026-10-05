@@ -28,6 +28,11 @@ werden als Dezimalzahl von 0 bis 18446744073709551615 akzeptiert. Ungültige Wer
 blockieren Speichern und Laufstart. Änderungen dieser Laufwerte benötigen
 keinen neuen Modulbuild; jeder Lauf archiviert die verwendeten Werte.
 
+`simulation.speed` speichert die Zeitsteuerung: 0 für Offline oder ein endlicher
+Faktor von 0,1 bis 16. Ältere Projekte ohne den Eintrag verwenden 1× Echtzeit.
+Diese Einstellung verändert die Schrittfolge und Messwerte nicht. Die App bietet
+gängige Faktoren von 0,25× bis 16× und kann sie im Betrieb wechseln.
+
 Unter Windows werden Visual Studio 2022 C++ Build Tools und ein Windows SDK
 automatisch gefunden; eine Developer-Konsole ist nicht nötig. Unter Linux und macOS wird
 `cc` verwendet. Die Umgebungsvariable `PHYSIM_CC` kann einen anderen Compiler
@@ -115,8 +120,8 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt derzeit 493 Tests ohne Fenster aus, mit `--no-app` die
-482 Prüfungen ohne SDL-Abhängigkeit. Die 51 C-Referenztests decken Mathematik, Numerik,
+`--test` führt derzeit 496 Tests ohne Fenster aus, mit `--no-app` die
+485 Prüfungen ohne SDL-Abhängigkeit. Die 51 C-Referenztests decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
 Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.
@@ -192,7 +197,7 @@ python3 tests/test_native_test_runner.py --work build/native
 
 ### Fenster- und Grafiktests direkt ausführen
 
-`--test-display` führt zusätzlich 38 Fenster- und Grafikabläufe aus. Dafür sind
+`--test-display` führt zusätzlich 39 Fenster- und Grafikabläufe aus. Dafür sind
 eine grafische Sitzung, SDL und ein geeigneter OpenGL-Treiber erforderlich.
 Die beiden Testgruppen werden getrennt gestartet; `--test-display` lässt sich
 nicht mit `--no-app` oder `--test` kombinieren.
@@ -644,6 +649,18 @@ dass alte Läufe unverändert bleiben. Fehlende Quellen, ein fehlendes Modul und
 eine hängende Initialisierung erhalten den vorherigen Zustand; Stop-Timeout und
 Recovery vollständiger Messblöcke werden tatsächlich ausgeführt. Ein ungesicherter
 Editor verhindert den Reset. Die Tests verwenden eigene Projekt- und Laufordner.
+
+`pacing` prüft das feste Zeitkonto einschließlich unregelmäßiger Zeitabstände,
+Pause, begrenztem Aufholen und großem Zeitschritt bei niedriger Geschwindigkeit.
+`runner_pacing_c` und `runner_pacing_phys` vergleichen jeweils 201 Messungen aller
+Kanäle mit dem CLI-Referenzlauf: 0,5×, 4×, Offline und ein verzögerter Pipe-Leser
+müssen dieselben Werte erzeugen. Die Tests messen tatsächliche Laufzeiten,
+wechseln die Geschwindigkeit im Betrieb, halten Pausen, führen Einzelschritte
+aus und prüfen ungültige CLI-/Wire-Werte einschließlich fehlendem Handshake.
+Ein 1-Sekunden-Schritt bei 0,1× bestätigt die sofortige RUN-Rückmeldung und den
+unmittelbaren Einzelschritt. `speed_workflow` bedient die echten Auswahl- und
+Steuerknöpfe in C-/Physim-Projekten, prüft Reset mit Offline-Modus und lädt die
+gespeicherte Wahl in einem neuen App-Prozess. Messdateiformat und Modul-ABI bleiben gleich.
 
 ## Linux-Startfehler untersuchen
 

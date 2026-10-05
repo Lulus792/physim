@@ -2,6 +2,7 @@
 #include "physim/data.h"
 #include "platform.h"
 #include "protocol.h"
+#include "pacing.h"
 #include <errno.h>
 #include <math.h>
 #include <stdlib.h>
@@ -31,14 +32,16 @@ static ps_result snapshot(const ps_experiment_api *api, ps_context *c, bool paus
 int main(int argc, char **argv) {
     if (argc < 3) {
         fprintf(stderr, "Usage: physim-runner module output.psrun [--steps N | --interactive] "
-                        "[--dt seconds] [--seed N] [--param name=value]...\n"
+                        "[--dt seconds] [--seed N] [--param name=value]... "
+                        "[--speed 0|0.1..16 (interactive only)]\n"
                         "       physim-runner module --describe\n");
         return 2;
     }
     bool describe = argc == 3 && !strcmp(argv[2], "--describe");
     bool interactive = false;
     uint64_t steps = 4000, seed = 42;
-    double dt = 0.005;
+    double dt = 0.005, speed = 1;
+    bool speed_option = false;
     ps_context c = {0};
     c.struct_size = sizeof c;
     c.api_version = PS_API_VERSION;
@@ -70,16 +73,20 @@ int main(int argc, char **argv) {
         }
         if (!strcmp(key, "--dt"))
             dt = strtod(argv[i], &end);
-        else if (!strcmp(key, "--steps"))
+        else if (!strcmp(key, "--speed")) {
+            speed = strtod(argv[i], &end);
+            speed_option = true;
+        } else if (!strcmp(key, "--steps"))
             steps = strtoull(argv[i], &end, 10);
         else if (!strcmp(key, "--seed"))
             seed = strtoull(argv[i], &end, 10);
         else
             return 2;
-        if (errno || !end || *end || argv[i][0] == '-')
+        if (errno || !end || end == argv[i] || *end || argv[i][0] == '-')
             return 2;
     }
-    if (!isfinite(dt) || dt <= 0 || dt > 1 || steps > UINT64_C(1000000000))
+    if (!isfinite(dt) || dt <= 0 || dt > 1 || steps > UINT64_C(1000000000) ||
+        !ps_speed_valid(speed) || (speed_option && !interactive))
         return 2;
     ps_binary_stdio();
     void *module = ps_module_open(argv[1]);
@@ -156,7 +163,8 @@ int main(int argc, char **argv) {
     bool paused = true, stop = false, handshake = false;
     uint64_t tick = 0;
     ps_wire_buffer wire = {0};
-    double next = ps_clock(), last_frame = next, last_heartbeat = next, start = next;
+    double start = ps_clock(), last_frame = start, last_heartbeat = start;
+    ps_pacer pacer = {.speed = speed, .last = start};
     if (interactive) {
         char hello[4096];
         int n = snprintf(hello, sizeof hello, "%s\n", api->name);
@@ -184,14 +192,26 @@ int main(int argc, char **argv) {
                     result = snapshot(api, &c, paused);
                     if (result != PS_OK)
                         break;
+                } else if (handshake && type == PS_MSG_SPEED && n == 8 &&
+                           ps_speed_valid(ps_get_f64(p))) {
+                    pacer.speed = ps_get_f64(p);
+                    ps_pacer_restart(&pacer, now);
                 } else if (!handshake || n != 0) {
                     result = PS_VERSION;
                     break;
                 } else if (type == PS_MSG_RUN) {
                     paused = false;
-                    next = now;
+                    pacer.running = true;
+                    ps_pacer_restart(&pacer, now);
+                    /* Report control state even when a slow, large dt is not due yet. */
+                    result = snapshot(api, &c, false);
+                    if (result != PS_OK)
+                        break;
+                    last_frame = now;
                 } else if (type == PS_MSG_PAUSE) {
                     paused = true;
+                    pacer.running = false;
+                    ps_pacer_restart(&pacer, now);
                     result = snapshot(api, &c, true);
                     if (result != PS_OK)
                         break;
@@ -216,7 +236,7 @@ int main(int argc, char **argv) {
                     break;
                 last_heartbeat = now;
             }
-            if (!single && (paused || !handshake || now < next)) {
+            if (!single && (!handshake || !ps_pacer_due(&pacer, now, dt))) {
                 ps_sleep(1);
                 continue;
             }
@@ -236,9 +256,6 @@ int main(int argc, char **argv) {
             }
             last_frame = now;
         }
-        next += dt;
-        if (next < now - 0.25)
-            next = now;
     }
     if (result == PS_OK)
         result = ps_run_close(&writer);

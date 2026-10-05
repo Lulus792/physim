@@ -124,6 +124,21 @@ def project_settings(flow, directory):
     require("profile=Release" in read(project / "build/Release/build.config"), "Restored profile was not built")
 
 
+def speed(flow, directory):
+    for mode in ("c", "phys"):
+        root = directory / mode
+        root.mkdir(parents=True)
+        flow.run("--workspace-state-test", root, "speed-" + mode, timeout=130,
+                 marker="SPEED speed-" + mode + " SELF-TEST: PASSED")
+        project = root / "project"
+        require(len(list((project / "runs").glob("*.psrun"))) == 2, "Speed changes replaced a run")
+        require("simulation.speed=0" in read(project / "physim.project"), "Pacing choice not saved")
+        for name in ("speed-paused.bmp", "speed-live.bmp", "speed-reset.bmp"):
+            require((root / name).exists(), "Pacing capture missing")
+        flow.run("--workspace-state-test", root, "speed-read", timeout=20,
+                 marker="SPEED speed-read SELF-TEST: PASSED")
+
+
 def reset(flow, directory):
     for mode in ("c", "phys", "parameters", "hang"):
         root = directory / mode
@@ -274,7 +289,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
+SPECIAL = {"speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}
 

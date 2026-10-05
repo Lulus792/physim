@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
     CHECK(write_text(path, "physim_project=1"));
     CHECK(ps_project_settings_read(path, &settings) == PS_DOCUMENT_OK);
     CHECK(!settings.release && !settings.language_experiment && !settings.language_analysis);
-    CHECK(settings.timestep == .005 && settings.seed == 42);
+    CHECK(settings.timestep == .005 && settings.seed == 42 && settings.speed == 1);
     uint64_t seed = 7;
     CHECK(ps_project_seed_parse("0", &seed) && seed == 0);
     CHECK(ps_project_seed_parse("00042", &seed) && seed == 42);
@@ -61,17 +61,18 @@ int main(int argc, char **argv) {
     settings.release = true;
     settings.timestep = .125;
     settings.seed = UINT64_MAX;
+    settings.speed = 4;
     CHECK(ps_project_settings_save(path, &settings) == PS_DOCUMENT_OK);
     CHECK(matches(backup, original));
     const char *saved =
         "physim_project=1\r\n# Projekt α\r\nexperiment=main.phys\r\n"
         "analysis=analysis.c\r\nmodules=core,mechanics\r\nfuture.option=preserve this\r\n"
         "profile=Release\r\nsimulation.dt=0.125\r\nsimulation.seed="
-        "18446744073709551615\r\nparameter.mass=3.125\r\n";
+        "18446744073709551615\r\nsimulation.speed=4\r\nparameter.mass=3.125\r\n";
     CHECK(matches(path, saved));
     CHECK(ps_project_settings_read(path, &settings) == PS_DOCUMENT_OK && settings.release);
     CHECK(!strcmp(settings.parameters.selected[0], "3.125"));
-    CHECK(settings.timestep == .125 && settings.seed == UINT64_MAX);
+    CHECK(settings.timestep == .125 && settings.seed == UINT64_MAX && settings.speed == 4);
     CHECK(ps_project_settings_save(path, &settings) == PS_DOCUMENT_OK);
     CHECK(matches(path, saved) &&
           matches(backup, original)); /* No redundant backup on unchanged save. */
@@ -91,6 +92,14 @@ int main(int argc, char **argv) {
                              "physim_project=1\nsimulation.seed=-1\n",
                              "physim_project=1\nsimulation.seed=18446744073709551616\n",
                              "physim_project=1\nsimulation.seed=1\nsimulation.seed=2\n",
+                             "physim_project=1\nsimulation.speed=\n",
+                             "physim_project=1\nsimulation.speed=-1\n",
+                             "physim_project=1\nsimulation.speed=0.01\n",
+                             "physim_project=1\nsimulation.speed=16.1\n",
+                             "physim_project=1\nsimulation.speed=nan\n",
+                             "physim_project=1\nsimulation.speed=inf\n",
+                             "physim_project=1\nsimulation.speed=1e-999\n",
+                             "physim_project=1\nsimulation.speed=1\nsimulation.speed=2\n",
                              "physim_project=1\nexperiment=other.c\n",
                              "physim_project=1\nanalysis=analysis.c\nanalysis=analysis.phys\n",
                              "physim_project=1\nparameter.mass=nan\n",
@@ -109,6 +118,13 @@ int main(int argc, char **argv) {
     for (unsigned i = 0; i < sizeof bad_steps / sizeof bad_steps[0]; i++) {
         settings = before;
         settings.timestep = bad_steps[i];
+        CHECK(ps_project_settings_save(path, &settings) == PS_DOCUMENT_INVALID);
+        CHECK(matches(path, saved));
+    }
+    const double bad_speeds[] = {-1, .01, 16.1, NAN, INFINITY};
+    for (unsigned i = 0; i < sizeof bad_speeds / sizeof *bad_speeds; i++) {
+        settings = before;
+        settings.speed = bad_speeds[i];
         CHECK(ps_project_settings_save(path, &settings) == PS_DOCUMENT_INVALID);
         CHECK(matches(path, saved));
     }

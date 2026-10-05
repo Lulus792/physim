@@ -9,8 +9,8 @@ Ein Wechsel ändert die Ansicht, ohne einen laufenden Prozess zu stoppen.
 Projektdateien enthalten dein Modell und deine Auswertung; `runs/` enthält
 gespeicherte Messläufe und Ergebnisse.
 
-Die Projektdatei speichert auch Buildprofil, Experimentparameter, Zeitschritt
-und Zufallsseed. Beim erneuten Öffnen stehen diese Werte wieder bereit.
+Die Projektdatei speichert auch Buildprofil, Experimentparameter, Zeitschritt,
+Zufallsseed und Simulationsgeschwindigkeit. Beim erneuten Öffnen stehen diese Werte wieder bereit.
 Änderungen an Zeitschritt oder Seed benötigen keinen neuen Build.
 
 ## Projekt anlegen oder öffnen
@@ -145,6 +145,23 @@ der Oberfläche. Ein kleinerer Wert erzeugt mehr Messpunkte und kostet Rechenzei
 **Einzelschritt** ist zum Untersuchen eines pausierten Modells gedacht.
 **Stoppen** beendet den Lauf und ermöglicht die Auswertung.
 **Neuer Lauf** beginnt wieder am Anfang mit demselben eingestellten Seed.
+
+**Geschwindigkeit** unter den Steuerknöpfen bietet 0,25×, 0,5×, 1×, 2×, 4×,
+8× und 16× Echtzeit sowie **Offline**. Bei 1× entspricht eine Simulationssekunde
+ungefähr einer realen Sekunde, sofern das Modell schnell genug berechnet wird.
+Offline berechnet ohne Zeitvorgabe so schnell wie möglich. Die Ansicht erhält
+höchstens 60 reguläre Momentaufnahmen pro Sekunde; jeder Physikschritt wird gespeichert.
+Du kannst die Geschwindigkeit im laufenden oder pausierten Modell ändern.
+Eine Änderung startet weder einen neuen Lauf noch setzt sie einen pausierten Lauf fort.
+**Einzelschritt** berechnet in jeder Geschwindigkeit genau den eingestellten Zeitschritt.
+Die Wahl bleibt nach Reset und beim erneuten Öffnen des gespeicherten Projekts erhalten.
+
+Die Geschwindigkeit verändert weder `dt` noch Seed, Parameter oder Messwerte an
+denselben Simulationszeitpunkten. Ein Echtzeitkonto sammelt verstrichene Zeit für
+feste Schritte. Nach Pause, Geschwindigkeitswechsel oder längerer Verzögerung wird
+übermäßiger Rückstand verworfen: Das Modell überspringt keine Physikschritte und
+versucht keinen unbegrenzten Sprung zur aktuellen Echtzeit. Langsame Modelle oder
+eine blockierte Datenübertragung können daher hinter der gewünschten Echtzeit zurückbleiben.
 
 **Zurücksetzen / F7** beendet einen laufenden oder pausierten Runner und öffnet
 einen neuen Lauf **pausiert bei 0 Sekunden**. **Einzelschritt** berechnet danach
