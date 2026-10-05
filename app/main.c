@@ -216,6 +216,10 @@ typedef struct {
     size_t diagnostic_used;
     ps_wire_buffer wire;
     uint32_t command_seq;
+    bool reset_pending, start_paused, reset_starting;
+    char reset_previous_run[4096], reset_channel_names[PS_MAX_CHANNELS][96];
+    uint32_t reset_channel_count;
+    struct nk_rect run_control_bounds[6];
     double heartbeat, stop_at, simulation_time, dt;
     char seed[32];
     double values[PS_MAX_CHANNELS];
@@ -566,10 +570,11 @@ static bool build_inputs_current(const app *a) {
     return a->source_revision == a->build_revision && !a->dirty && !a->analysis_dirty &&
            !documents_dirty(a);
 }
-static bool idle(app *a) {
+static bool jobs_idle(app *a) {
     return !a->job.running && !a->runner.running && !a->data.thread && !a->report_thread &&
            !a->batch_thread;
 }
+static bool idle(app *a) { return !a->reset_pending && jobs_idle(a); }
 static void clear_project(app *a) {
     ps_report_destroy(a->analysis_report);
     a->analysis_report = NULL;
@@ -894,31 +899,44 @@ static bool discover_parameters(app *a) {
     status(a, "Build erfolgreich. Experimentparameter werden gelesen ...");
     return true;
 }
-static void start_run(app *a) {
+static void begin_run_view(app *a) {
+    a->selected_count = 1;
+    snprintf(a->selected_runs[0], sizeof a->selected_runs[0], "%s", a->last_run);
+    ps_report_destroy(a->analysis_report);
+    a->analysis_report = NULL;
+    a->show_report = false;
+    a->result_error[0] = 0;
+    a->history_count = 0;
+    a->history_seen = 0;
+    a->history_stride = 1;
+    a->scene_view = (ps_scene_view){0};
+    a->scene_selected = false;
+}
+static bool start_run_mode(app *a, bool paused) {
     if (a->recovery)
-        return;
-    if (!simulation_settings_valid(a)) return;
+        return false;
+    if (!simulation_settings_valid(a)) return false;
     if (a->project_settings_dirty)
         save_project(a);
     if (a->project_settings_dirty)
-        return;
+        return false;
     if (!a->built || !idle(a) || a->dirty) {
         status(a, "Zuerst das gespeicherte Projekt erfolgreich bauen.");
-        return;
+        return false;
     }
-    char runner[4096], module[4096], dt[64], src[4096], copy[4096], runs[4096];
+    char runner[4096], module[4096], dt[64], src[4096], copy[4096], runs[4096], next_run[4096];
     join(runs, sizeof runs, a->project, "runs");
     if (!ps_make_directory(runs)) {
         status(a, "Laufordner konnte nicht angelegt werden.");
-        return;
+        return false;
     }
     join(runner, sizeof runner, a->bin, "physim-runner" EXE_EXT);
     join(module, sizeof module, a->build_directory, "experiment" MODULE_EXT);
-    unique_path(a, a->last_run, sizeof a->last_run, ".psrun");
+    unique_path(a, next_run, sizeof next_run, ".psrun");
     snprintf(dt, sizeof dt, "%.17g", a->dt);
     char parameter_arguments[PS_MAX_PARAMETERS][128];
     const char *args[9 + 2 * PS_MAX_PARAMETERS] = {
-        runner, module, a->last_run, "--interactive", "--dt", dt, "--seed", a->seed};
+        runner, module, next_run, "--interactive", "--dt", dt, "--seed", a->seed};
     size_t argument_count = 8;
     for (uint32_t i = 0; i < a->parameters.count; i++) {
         double selected;
@@ -927,7 +945,7 @@ static void start_run(app *a) {
             snprintf(message, sizeof message, "Parameter %s: endlichen Wert innerhalb der Grenzen eingeben.",
                      a->parameters.entries[i].name);
             status(a, message);
-            return;
+            return false;
         }
         snprintf(parameter_arguments[i], sizeof parameter_arguments[i], "%s=%.17g",
                  a->parameters.entries[i].name, selected);
@@ -936,42 +954,62 @@ static void start_run(app *a) {
     }
     args[argument_count] = NULL;
     join(src, sizeof src, a->project, experiment_source(a));
-    snprintf(copy, sizeof copy, "%s.experiment.%s", a->last_run,
+    snprintf(copy, sizeof copy, "%s.experiment.%s", next_run,
              a->language_experiment ? "phys" : "c");
     if (!copy_file_exclusive(src, copy)) {
         status(a, "Quellcode-Snapshot konnte nicht gespeichert werden.");
-        return;
+        return false;
     }
     ps_process_limits limits = {(uint64_t)a->runner_memory_mib * UINT64_C(1048576),
                                 a->runner_wall_seconds};
-    if (!record_limits(a->last_run, &limits)) {
+    if (!record_limits(next_run, &limits)) {
         status(a, "Laufgrenzen konnten nicht archiviert werden.");
-        return;
+        return false;
     }
     if (ps_process_start_limited(&a->runner, args, a->project, &limits)) {
-        a->selected_count = 1;
-        snprintf(a->selected_runs[0], sizeof a->selected_runs[0], "%s", a->last_run);
-        ps_report_destroy(a->analysis_report);
-        a->analysis_report = NULL;
-        a->show_report = false;
-        a->result_error[0] = 0;
+        snprintf(a->reset_previous_run, sizeof a->reset_previous_run, "%s", a->last_run);
+        snprintf(a->last_run, sizeof a->last_run, "%s", next_run);
+        a->start_paused = a->reset_starting = paused;
+        /* A reset keeps the displayed state until a valid initial snapshot arrives. */
+        if (!paused) {
+            begin_run_view(a);
+            a->channel_count = 0;
+            memset(a->values, 0, sizeof a->values);
+            a->simulation_time = 0;
+            a->scene.count = 0;
+        }
         memset(&a->wire, 0, sizeof a->wire);
         a->command_seq = 0;
         a->paused = true;
         a->hello = false;
         a->heartbeat = ps_clock();
         a->stop_at = 0;
-        a->simulation_time = 0;
-        a->history_count = 0;
-        a->history_seen = 0;
-        a->history_stride = 1;
-        a->scene.count = 0;
-        a->scene_view = (ps_scene_view){0};
-        a->scene_selected = false;
         a->tab = 1;
         status(a, "Runner gestartet; Versionsabgleich ...");
+        return true;
     } else
         status(a, "Runner konnte nicht gestartet werden.");
+    return false;
+}
+static void start_run(app *a) { (void)start_run_mode(a, false); }
+/* A reset owns the stop/reap/load/relaunch sequence. Other actions remain idle-gated. */
+static bool reset_available(app *a) {
+    return a->loaded && a->built && build_inputs_current(a) && !a->recovery &&
+           !a->reset_pending && !a->reset_starting && !a->job.running && !a->data.thread && !a->report_thread &&
+           !a->batch_thread && (!a->runner.running || (a->hello && !a->stop_at));
+}
+static void reset_run(app *a) {
+    if (!reset_available(a))
+        return;
+    if (a->runner.running) {
+        if (!command(a, PS_MSG_STOP)) {
+            status(a, "Zurücksetzen fehlgeschlagen: Runner konnte nicht gestoppt werden.");
+            return;
+        }
+        a->stop_at = ps_clock();
+    }
+    a->reset_pending = true;
+    status(a, "Simulation wird zurückgesetzt. Der bisherige Lauf bleibt gespeichert.");
 }
 static int load_dataset(void *user) {
     dataset *d = user;
@@ -1130,6 +1168,22 @@ static void analyze(app *a, bool csv) {
     } else
         status(a, "Analyse-Runner konnte nicht gestartet werden.");
 }
+static void synchronize_live_schema(app *a) {
+    ps_channel schema[PS_MAX_CHANNELS] = {0};
+    for (uint32_t j = 0; j < a->channel_count; j++) {
+        const char *unit = strrchr(a->channel_names[j], '[');
+        size_t length = unit && unit > a->channel_names[j]
+                            ? (size_t)(unit - a->channel_names[j] - 1)
+                            : strlen(a->channel_names[j]);
+        snprintf(schema[j].name, sizeof schema[j].name, "%.*s", (int)length,
+                 a->channel_names[j]);
+    }
+    for (uint32_t j = 0; j < a->channel_count; j++) {
+        a->channel_status[j] = -1;
+        (void)ps_channel_status_index(schema, a->channel_count, j,
+                                      &a->channel_status[j]);
+    }
+}
 static void add_history(app *a) {
     if (a->history_count && a->simulation_time <= a->history_t[a->history_count - 1])
         return;
@@ -1241,44 +1295,55 @@ static void pump(app *a) {
                 memcpy(hello, p, n);
                 hello[n] = 0;
                 char *line = strchr(hello, '\n');
-                a->channel_count = 0;
+                uint32_t count = 0;
+                char (*names)[96] = a->reset_starting ? a->reset_channel_names : a->channel_names;
                 if (line) {
                     line++;
-                    while (*line && a->channel_count < PS_MAX_CHANNELS) {
+                    while (*line && count < PS_MAX_CHANNELS) {
                         char *end = strchr(line, '\n');
                         if (!end)
                             break;
                         *end = 0;
-                        snprintf(a->channel_names[a->channel_count++], 96, "%s", line);
+                        snprintf(names[count++], 96, "%s", line);
                         line = end + 1;
                     }
                 }
-                ps_channel schema[PS_MAX_CHANNELS] = {0};
-                for (uint32_t j = 0; j < a->channel_count; j++) {
-                    const char *unit = strrchr(a->channel_names[j], '[');
-                    size_t length = unit && unit > a->channel_names[j]
-                                        ? (size_t)(unit - a->channel_names[j] - 1)
-                                        : strlen(a->channel_names[j]);
-                    snprintf(schema[j].name, sizeof schema[j].name, "%.*s", (int)length,
-                             a->channel_names[j]);
-                }
-                for (uint32_t j = 0; j < a->channel_count; j++) {
-                    a->channel_status[j] = -1;
-                    (void)ps_channel_status_index(schema, a->channel_count, j,
-                                                  &a->channel_status[j]);
+                if (a->reset_starting)
+                    a->reset_channel_count = count;
+                else {
+                    a->channel_count = count;
+                    synchronize_live_schema(a);
                 }
                 a->hello = true;
                 command(a, PS_MSG_HELLO);
-                command(a, PS_MSG_RUN);
-                status(a, "Simulation laeuft. Messwerte werden fortlaufend gespeichert.");
+                if (!a->start_paused)
+                    command(a, PS_MSG_RUN);
+                status(a, a->start_paused
+                              ? "Runner bereit. Anfangszustand wird geladen."
+                              : "Simulation laeuft. Messwerte werden fortlaufend gespeichert.");
             } else if (type == PS_MSG_SNAPSHOT) {
-                bool was_paused = a->paused;
-                if (!ps_snapshot_decode(p, n, &a->simulation_time, a->values, &a->channel_count,
-                                        &a->scene, &a->paused)) {
+                bool was_paused = a->paused, paused;
+                double time, values[PS_MAX_CHANNELS];
+                uint32_t count;
+                ps_scene scene;
+                if (!ps_snapshot_decode(p, n, &time, values, &count, &scene, &paused) ||
+                    (a->reset_starting && (time != 0 || !paused || count != a->reset_channel_count))) {
                     r = -1;
                     break;
                 }
-                if (was_paused != a->paused)
+                a->simulation_time = time;
+                memcpy(a->values, values, count * sizeof *values);
+                a->channel_count = count;
+                a->scene = scene;
+                a->paused = paused;
+                if (a->reset_starting) {
+                    memcpy(a->channel_names, a->reset_channel_names, sizeof a->channel_names);
+                    synchronize_live_schema(a);
+                    begin_run_view(a);
+                    a->reset_starting = false;
+                    a->reset_previous_run[0] = 0;
+                    status(a, "Zurückgesetzt. Anfangszustand pausiert; Einzelschritt oder Fortsetzen wählen.");
+                } else if (was_paused != a->paused)
                     status(a, a->paused
                                   ? "Simulation pausiert. Einzelschritt oder Fortsetzen wählen."
                                   : "Simulation läuft. Messwerte werden gespeichert.");
@@ -1311,7 +1376,14 @@ static void pump(app *a) {
             a->paused = true;
             a->hello = false;
             char message[200];
-            if (a->runner.timed_out)
+            bool failed_reset = a->reset_starting;
+            if (failed_reset) {
+                snprintf(a->last_run, sizeof a->last_run, "%s", a->reset_previous_run);
+                a->reset_previous_run[0] = 0;
+                a->reset_starting = false;
+                snprintf(message, sizeof message,
+                         "Zurücksetzen fehlgeschlagen (Exit %d). Der bisherige Zustand bleibt erhalten.", code);
+            } else if (a->runner.timed_out)
                 snprintf(message, sizeof message,
                          "Runner nach Zeitlimit beendet. Vollständige Messblöcke bleiben lesbar.");
             else
@@ -1319,7 +1391,8 @@ static void pump(app *a) {
                          "Runner beendet (Exit %d). Lauf gespeichert bzw. bis zum letzten Block "
                          "rekonstruierbar.", code);
             status(a, message);
-            request_dataset(a);
+            if (!failed_reset)
+                request_dataset(a);
             refresh_library(a);
         }
     }
@@ -1336,6 +1409,10 @@ static void pump(app *a) {
             a->data.count = 0;
             status(a, "Datensatz konnte nicht vollstaendig gelesen werden.");
         }
+    }
+    if (a->reset_pending && !a->quitting && jobs_idle(a)) {
+        a->reset_pending = false;
+        (void)start_run_mode(a, true);
     }
 }
 static bool place_label(struct nk_rect *label, struct nk_rect viewport,
@@ -2128,6 +2205,7 @@ static void test_mouse(app *a, struct nk_rect rect, bool down) {
 #include "document_recovery_tests.inc"
 #include "toolbar_tests.inc"
 #include "project_settings_tests.inc"
+#include "reset_tests.inc"
 #include "native_dialog_tests.inc"
 #include "workspace_tests.inc"
 // clang-format on
@@ -2572,7 +2650,8 @@ int main(int argc, char **argv) {
                 }
                 continue;
             }
-            if ((plot_test || toolbar_test || settings_test) && test_scripted_external_input(&e)) continue;
+            if ((plot_test || toolbar_test || settings_test ||
+                 (workspace_state_test && !strncmp(argv[3], "reset-", 6))) && test_scripted_external_input(&e)) continue;
             if (self_test && e.type == SDL_EVENT_TEXT_INPUT) {
                 doc_input_events++;
                 doc_input_bytes += (unsigned)strlen(e.text.text);
@@ -2629,7 +2708,9 @@ int main(int argc, char **argv) {
                     build_project(a);
                 if (e.key.key == SDLK_F1 && !e.key.repeat)
                     open_documentation(a, a->documentation ? a->doc_topic : 1);
-                if (e.key.key == SDLK_F6 && !e.key.repeat) {
+                if (e.key.key == SDLK_F7 && !e.key.repeat)
+                    reset_run(a);
+                if (e.key.key == SDLK_F6 && !e.key.repeat && !a->reset_pending && !a->reset_starting) {
                     if (!a->runner.running)
                         start_run(a);
                     else if (a->hello && !a->stop_at)
@@ -2659,7 +2740,8 @@ int main(int argc, char **argv) {
             }
         } else if (workspace_state_test) {
             if (ps_clock() - test_started >
-                (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17)
+                (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
+                  !strncmp(argv[3], "reset-", 6)
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15)) {
                 exit_code = 1;
                 a->quitting = true;

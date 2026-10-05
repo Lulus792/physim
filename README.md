@@ -135,6 +135,8 @@ erklärt den elastischen und schrägen Stoß orientierter Boxen und ihre Messkan
 2. `main.c` enthält Länge, Masse, Winkel, Luftdichte, Sensorrauschen und Integrator.
 3. **Build / F5** speichert die Quellen und baut Experiment und Analyse im Hintergrund.
 4. Unter **Simulieren** starten. Pause, Einzelschritt und Stop steuern den Runner.
+   **Zurücksetzen / F7** öffnet den Anfangszustand pausiert in einer neuen Messdatei;
+   bisherige Läufe bleiben erhalten.
 5. Nach Stop lädt die App die Messdaten im Hintergrund. **Auswerten** zeigt Kurven
    und Statistik. **Analyse starten** führt `analysis.c` oder `analysis.phys` in einem weiteren Prozess aus.
    Dessen **Analyseergebnis** zeigt eigene Diagramme und Tabellen. Die Vorlage erzeugt
@@ -240,7 +242,8 @@ Fallback. Diese Systemschriften werden nicht mit dem Paket verteilt.
 
 Ctrl+1/2/3 wechselt den Arbeitsbereich, Ctrl+4 öffnet Läufe und Berichte,
 Ctrl+F sucht in der aktuellen Ansicht (im Editor mit Ersetzen), Ctrl+L zeigt das
-Protokoll. F5 baut und F6 startet oder pausiert den Lauf. Die Mindestfenstergröße
+Protokoll. F5 baut, F6 startet oder pausiert und F7 setzt den Lauf zurück.
+Die Mindestfenstergröße
 beträgt 1080 × 740. Vollständige Tastaturfokussierung und Screenreader-Unterstützung
 sind noch offen. Die verbindliche Richtung steht in [docs/design-direction.md](docs/design-direction.md).
 

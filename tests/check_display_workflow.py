@@ -124,6 +124,27 @@ def project_settings(flow, directory):
     require("profile=Release" in read(project / "build/Release/build.config"), "Restored profile was not built")
 
 
+def reset(flow, directory):
+    for mode in ("c", "phys", "parameters", "hang"):
+        root = directory / mode
+        root.mkdir(parents=True)
+        flow.run("--workspace-state-test", root, "reset-" + mode, timeout=130,
+                 marker="RESET reset-" + mode + " SELF-TEST: PASSED")
+        project = root / "project"
+        runs = list((project / "runs").glob("*.psrun"))
+        require(len(runs) == 4, "Reset overwrote a run or created duplicates")
+        language = "c" if mode in ("c", "hang") else "phys"
+        experiment = "main." + language
+        source = fingerprint(project / experiment)
+        for run in runs:
+            require(fingerprint(Path(str(run) + ".experiment." + language)) == source,
+                    "Reset lost the original source snapshot")
+            require(Path(str(run) + ".limits.txt").exists(), "Reset did not archive run limits")
+        require(not (project / "reset-source-hidden").exists(), "Failed-start source not restored")
+        for name in ("reset-initial.bmp", "reset-step.bmp", "reset-retry.bmp"):
+            require((root / name).exists(), "Reset control capture missing")
+
+
 def settings(flow, directory):
     for mode in ("write", "read", "reset", "defaults", "maxwrite", "maxread", "corrupt"):
         if mode == "corrupt":
@@ -253,7 +274,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
+SPECIAL = {"reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}
 

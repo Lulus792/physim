@@ -1,7 +1,43 @@
 # Plattformprüfung
 
-Stand: 4. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
+Stand: 5. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
+
+## Simulationsreset am 4. Oktober 2026
+
+Die Reset-Steuerung wurde auf dem lokalen Intel-Mac (macOS 14.6.1, Apple Clang 16,
+SDL 3.2.30, Debug) und in der Debian-12-VM (Linux 6.1.0-53-cloud-amd64, GCC 12.2,
+SDL 3.2.30, Release) gebaut und ausgeführt. Linux verwendet X11/Xvfb/Openbox und
+Mesa 22.3.6. Das ist kein neuer Windows-, Apple-Silicon-, Wayland- oder GPU-Nachweis.
+
+`reset_workflow` startet vier Prozesse mit eigenen Projekten bei 1080 × 740:
+C- und Physim-Unsicherheitsmodelle, Physim-Stoßmodell mit Reibung 0,25 und ein
+C-Hängefall. Der Seed 18446744073709551615 und dt 0,125 bleiben erhalten.
+Reale SDL-Bedienereignisse prüfen Reset während des Laufs und der Pause,
+Einzelschritt, Fortsetzen, Stoppen und F7 nach Laufende. Anfangswerte und erster
+Zeitschritt stimmen mit den gespeicherten Referenzkanälen überein. Pro Projekt
+bleiben vier erfolgreiche Läufe erhalten; CRCs bestätigen die alten Dateien,
+Quellcode-Snapshots und Grenzdateien sind zusätzlich geprüft.
+
+Fehlende Quellen und ein vorübergehend entferntes Modul melden Fehler und erhalten
+Laufverweis, Messwerte, Live-Verlauf und Analyse. Der C-Prüffall hängt tatsächlich
+in `step` und später in `create`; die App beendet beide nach der Stop-Frist.
+Vollständige Messblöcke des Hängefalls werden mit `PS_RECOVERED` geladen.
+Die erneute Initialisierung gelingt nach Beseitigen der Fehlerursache. Geänderte
+Editorquellen verhindern einen Reset. Der pausierte Anfangszustand ist visuell
+geprüft; Kamera und kleine Fenster bleiben bedienbar.
+
+Der gemeinsame Durchlauf besteht jeweils 8/8: Reset, Projekteinstellungen, Themen,
+Plots, beide Menügrößen sowie vollständiger C- und Physim-App-Ablauf einschließlich
+Analyse, Export und Wiederöffnung. macOS: `build/workspace-check/test-results/run-iu0zd7di`;
+Debian: `build/native/Release/test-results/run-ohc6zzby` innerhalb der VM.
+Die abschließende Prüfung der verzögerten Übernahme von Kanalnamen und Statusschema
+besteht zusätzlich mit Reset sowie beiden vollständigen App-Abläufen (3/3):
+macOS `run-37nsr8sl`, Debian `run-d9ylbk38`.
+
+Die [Linux-Paket-CI zu `2afef89`](https://github.com/PhysicSimulator/physim/actions/runs/37236029010)
+besteht inzwischen auf Debian 12 und Ubuntu 24.04. Dieser Paketnachweis bezieht
+sich auf den vorherigen Stand mit Themen und enthält noch keinen Reset.
 
 ## Darstellungswechsel am 4. Oktober 2026
 

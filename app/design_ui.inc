@@ -195,7 +195,7 @@ static void camera_inspector(app *a) {
         nk_layout_row_dynamic(ui, 24, 1);
         nk_label(ui, "Zeitschritt in Sekunden", NK_TEXT_LEFT);
         nk_layout_row_dynamic(ui, 32, 1);
-        nk_begin_disabled(ui, a->runner.running);
+        nk_begin_disabled(ui, a->runner.running || a->reset_pending);
         double previous_dt = a->dt;
         char previous_seed[sizeof a->seed];
         snprintf(previous_seed, sizeof previous_seed, "%s", a->seed);
@@ -215,7 +215,7 @@ static void camera_inspector(app *a) {
         }
         if (a->built && a->parameters.count &&
             nk_tree_push(ui, NK_TREE_TAB, "Experimentparameter", NK_MINIMIZED)) {
-            nk_begin_disabled(ui, a->runner.running);
+            nk_begin_disabled(ui, a->runner.running || a->reset_pending);
             for (uint32_t i = 0; i < a->parameters.count; i++) {
                 const ps_parameter *parameter = &a->parameters.entries[i];
                 nk_layout_row_dynamic(ui, 24, 1);
@@ -433,10 +433,10 @@ static void draw_ui(app *a, int width, int height) {
                 open_documentation(a, 1);
             }
             if (nk_tree_push(ui, NK_TREE_TAB, "Tastaturbefehle", NK_MINIMIZED)) {
-                nk_layout_row_dynamic(ui, 130, 1);
+                nk_layout_row_dynamic(ui, 154, 1);
                 nk_label_wrap(ui, "" PS_UI_SHORTCUT "1/2/3  Arbeitsbereich\n" PS_UI_SHORTCUT "S  Speichern\n" PS_UI_SHORTCUT "F  "
                                   "Suchen\n" PS_UI_SHORTCUT "4  Läufe & Berichte\n" PS_UI_SHORTCUT "L  Protokoll\nF5  "
-                                  "Build\nF6  Start / Pause");
+                                  "Build\nF6  Start / Pause\nF7  Zurücksetzen");
                 nk_tree_pop(ui);
             }
         }
@@ -593,7 +593,8 @@ static void draw_ui(app *a, int width, int height) {
             snprintf(time, sizeof time, "%.3f s", a->simulation_time);
             nk_label_colored(ui, time, NK_TEXT_RIGHT, muted());
             nk_layout_row_end(ui);
-            nk_layout_row_dynamic(ui, 34, 5);
+            nk_layout_row_dynamic(ui, 34, 3);
+            a->run_control_bounds[0] = nk_widget_bounds(ui);
             nk_begin_disabled(ui, a->runner.running || !idle(a));
             if (action_button(ui, a->built ? "Neuer Lauf" : "Build",
                               !a->runner.running && idle(a))) {
@@ -603,25 +604,39 @@ static void draw_ui(app *a, int width, int height) {
                     build_project(a);
             }
             nk_end_disabled(ui);
-            bool run_control_ready = a->runner.running && a->hello && a->stop_at == 0;
+            bool run_control_ready = a->runner.running && a->hello && !a->reset_starting &&
+                                     a->stop_at == 0;
             nk_begin_disabled(ui, !run_control_ready);
+            a->run_control_bounds[1] = nk_widget_bounds(ui);
             if (action_button(ui, a->paused ? "Fortsetzen" : "Pause", run_control_ready))
                 command(a, a->paused ? PS_MSG_RUN : PS_MSG_PAUSE);
             nk_begin_disabled(ui, !a->paused);
+            a->run_control_bounds[2] = nk_widget_bounds(ui);
             if (nk_button_label(ui, "Einzelschritt"))
                 command(a, PS_MSG_STEP);
             nk_end_disabled(ui);
+            nk_end_disabled(ui);
+            nk_layout_row_dynamic(ui, 34, 3);
+            a->run_control_bounds[3] = nk_widget_bounds(ui);
+            nk_begin_disabled(ui, !reset_available(a));
+            if (nk_button_label(ui, a->reset_pending ? "Zurücksetzen …" : "Zurücksetzen"))
+                reset_run(a);
+            nk_end_disabled(ui);
+            /* A hung create callback may never complete HELLO; stopping still works. */
+            nk_begin_disabled(ui, !a->runner.running || a->stop_at != 0);
+            a->run_control_bounds[4] = nk_widget_bounds(ui);
             if (nk_button_label(ui, "Stoppen")) {
                 command(a, PS_MSG_STOP);
                 a->stop_at = ps_clock();
             }
             nk_end_disabled(ui);
+            a->run_control_bounds[5] = nk_widget_bounds(ui);
             if (nk_button_label(ui, "Auswerten")) {
                 a->tab = 2;
                 a->analysis_tab = 0;
             }
             float plot_height = fmaxf(96, content * .21f);
-            viewport(a, content - plot_height - 190);
+            viewport(a, content - plot_height - 232);
             nk_layout_row_dynamic(ui, 28, 2);
             if (a->channel_count) {
                 const char *names[PS_MAX_CHANNELS];

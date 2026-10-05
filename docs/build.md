@@ -192,7 +192,7 @@ python3 tests/test_native_test_runner.py --work build/native
 
 ### Fenster- und Grafiktests direkt ausführen
 
-`--test-display` führt zusätzlich 37 Fenster- und Grafikabläufe aus. Dafür sind
+`--test-display` führt zusätzlich 38 Fenster- und Grafikabläufe aus. Dafür sind
 eine grafische Sitzung, SDL und ein geeigneter OpenGL-Treiber erforderlich.
 Die beiden Testgruppen werden getrennt gestartet; `--test-display` lässt sich
 nicht mit `--no-app` oder `--test` kombinieren.
@@ -634,6 +634,16 @@ alle drei gespeicherten Paletten und Textkontraste einschließlich Syntax und
 Kurvenlegenden: mindestens 4,5:1 für Hell und 7:1 für Hoher Kontrast gemäß der
 [W3C-Kontrastberechnung](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html).
 Das ist keine vollständige Barrierefreiheitsabnahme.
+
+`reset_workflow` prüft vier echte App-Prozesse mit C- und Physim-Zufallsmodellen,
+einem parametrisierten Modell und einem absichtlich hängenden C-Modul.
+Die Bedienereignisse setzen laufende, pausierte und beendete Simulationen zurück.
+Anfangswerte und erster Einzelschritt stimmen kanalweise mit dem alten Datensatz
+überein; Seed und Zeitschritt stehen weiterhin in der Datei. CRCs bestätigen,
+dass alte Läufe unverändert bleiben. Fehlende Quellen, ein fehlendes Modul und
+eine hängende Initialisierung erhalten den vorherigen Zustand; Stop-Timeout und
+Recovery vollständiger Messblöcke werden tatsächlich ausgeführt. Ein ungesicherter
+Editor verhindert den Reset. Die Tests verwenden eigene Projekt- und Laufordner.
 
 ## Linux-Startfehler untersuchen
 

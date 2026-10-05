@@ -146,6 +146,23 @@ der Oberfläche. Ein kleinerer Wert erzeugt mehr Messpunkte und kostet Rechenzei
 **Stoppen** beendet den Lauf und ermöglicht die Auswertung.
 **Neuer Lauf** beginnt wieder am Anfang mit demselben eingestellten Seed.
 
+**Zurücksetzen / F7** beendet einen laufenden oder pausierten Runner und öffnet
+einen neuen Lauf **pausiert bei 0 Sekunden**. **Einzelschritt** berechnet danach
+genau einen Zeitschritt; **Fortsetzen** startet die laufende Simulation.
+Seed, Zeitschritt und Experimentparameter bleiben erhalten. Nach einem bereits
+beendeten Lauf gelten die aktuell gespeicherten Laufeinstellungen.
+Jeder Neustart erhält eine eigene Messdatei mit Quellcode-Snapshot und Laufgrenzen;
+die bisherigen Läufe bleiben unter **Läufe & Berichte** verfügbar.
+
+Die App wartet im Hintergrund auf das Prozessende und das Lesen des alten
+Datensatzes. Nach einer Sekunde ohne Stop-Antwort beendet sie den Runner;
+vollständige Messblöcke bleiben rekonstruierbar. **Stoppen** funktioniert auch,
+wenn die Initialisierung noch keine Antwort geliefert hat. Ein fehlgeschlagener
+Neustart erhält den bisherigen angezeigten Zustand und meldet den Fehler.
+Erst ein gültiger Anfangszustand ersetzt Messwerte, Live-Verlauf und Szenenauswahl;
+die Kamera bleibt erhalten. Geänderte Quellen müssen vor dem Zurücksetzen
+gespeichert und erfolgreich gebaut werden.
+
 Unter **Laufgrenzen** lassen sich Speicher in MiB und reale Laufzeit in Sekunden
 begrenzen. Null bedeutet ohne Grenze. Die Zeit schließt Pausen ein; Änderungen
 gelten für neu gestartete Simulationen und Auswertungen. Monte-Carlo-Serien haben
@@ -221,6 +238,7 @@ die Auswahl gilt auch für Editor, Diagramme und das geöffnete Hilfefenster.
 - **Ctrl+L:** Protokoll ein- oder ausblenden.
 - **F5:** Speichern und bauen.
 - **F6:** Simulation starten oder pausieren.
+- **F7:** Simulation auf den pausierten Anfangszustand zurücksetzen.
 - **F1:** Eigenständiges Handbuchfenster öffnen.
 - **Ctrl+,**: Einstellungen.
 
