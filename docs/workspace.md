@@ -268,8 +268,16 @@ im Ergebnis zu berücksichtigen.
 
 Auf macOS gilt für die unten aufgeführten App-Befehle **Cmd** anstelle von **Ctrl**.
 
-Ziehe die Trennlinie neben der Seitenleiste oder über dem Protokoll, um Platz zu
-verteilen. **Einstellungen / Ctrl+,** bietet Codeschrift, Autosave und Darstellung.
+Ziehe eine Paneltitelzeile, um Seitenleiste, Arbeitsbereich und Protokoll anzuordnen.
+Die fünf Ziele in der Mitte eines anderen Panels bilden eine Tabgruppe oder teilen
+den Platz links, rechts, oben oder unten. Außerhalb dieser Ziele entsteht ein frei
+platziertes Panel im Hauptfenster. Escape bricht das Verschieben ab. Trennlinien
+und der Griff rechts unten verändern die Größe. **Ansicht** stellt ausgeblendete
+Panels und die Standardanordnung wieder her. Der nächste Start lädt die Anordnung
+mit ausgewählten Tabs und den Positionen frei platzierter Panels.
+[Panelanordnung und Grenzen](settings.md#panelanordnung)
+
+**Einstellungen / Ctrl+,** bietet Codeschrift, Autosave und Darstellung.
 Übernehmen speichert, Abbrechen verwirft den Einstellungsentwurf.
 Die Darstellung lässt sich zwischen Dunkel, Hell und Hoher Kontrast wählen;
 die Auswahl gilt auch für Editor, Diagramme und das geöffnete Hilfefenster.

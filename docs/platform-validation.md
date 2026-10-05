@@ -3,6 +3,64 @@
 Stand: 5. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Docking und gespeicherte Panelanordnung am 5. Oktober 2026
+
+Das Docking-Grundsystem wurde auf dem lokalen Intel-Mac (macOS 14.6.1,
+Apple Clang 16, SDL 3.2.30, Release) und in der Debian-12-VM
+(Linux 6.1.0-53-cloud-amd64, GCC 12.2, SDL 3.2.30, Release,
+X11/Xvfb/Openbox, Mesa 22.3.6) gebaut und ausgeführt.
+Die vollständigen Tests ohne Fenster bestehen mit 501/501:
+macOS `build/timeline-release-mac/test-results/run-ty4lwbk4`,
+Debian `build/native/Release/test-results/run-sndxecqo` innerhalb der VM.
+Der gemeinsame Katalog enthält jetzt 501 Prüfungen ohne Fenster, davon
+490 ohne SDL, und 41 Grafik-/Fensterabläufe.
+
+Der vollständige Grafik-/Fensterdurchlauf besteht auf beiden Systemen mit 41/41:
+macOS `build/docking-ui-final/test-results/run-p75wze89`,
+Debian `build/native/Release/test-results/run-viu8navp` innerhalb der VM.
+Das umfasst Editor, Autosaves, Wiederöffnung, beide Fenstergrößen, Menübedienung,
+Diagramme, Serien, Reset, Geschwindigkeit, Zeitleiste sowie alle vollständigen
+Physim-Projekte mit Analyse und Export. Die Anordnung bei 1080 × 740 wurde
+visuell geprüft; der Mac liefert dabei 2160 × 1480 physische Pixel, Xvfb 1080 × 740.
+
+Das Modell prüft Split-/Tab-/Float-/Hide-Übergänge, einen vollständig leeren
+Panelbaum, Wiederanzeigen sowie tausend weitere gültige oder transaktional
+abgewiesene Anordnungsänderungen. Einstellungen prüfen zusätzlich Format-1-
+und Format-2-Migration, den vollständigen Baum, freie Rechtecke, Tabs,
+240 Kürzungen und Byteänderungen sowie einen ungültigen Baum mit gültiger CRC.
+Fehler erhalten sowohl die bestehende Datei als auch bereits geladene Einstellungen.
+
+Die abschließenden Modell-/Einstellungsprüfungen bestehen je 2/2:
+macOS `build/docking-ui-final/test-results/run-8it06dng`,
+Debian `build/native/Release/test-results/run-pbtygbx4` innerhalb der VM.
+Die Fehlerbehandlung des nativen Prüfers ist ebenfalls erneut ausgeführt:
+`build/docking-harness-final/test runner ä bqu5b3m6` auf macOS.
+
+`docking_workflow` bedient echte Titelzeilen, Ziele, Tabs, Größenänderungsgriffe,
+Schließen, Menüaktionen, Escape und die Mindesthöhen einer verschachtelten
+Teilung bei stark vergrößerter Nachbarfläche. Zwei Prozesse bauen C- und Physim-Versuche,
+ordnen die Panels während weiterlaufender Simulation um und prüfen erhaltenen
+ungespeicherten Quelltext über CRC, Zeitfortschritt und die danach vollständig
+lesbaren Messdaten. Der Einstellungsweg stellt das ausgeblendete Protokoll wieder
+her und prüft die unmittelbar gespeicherte Anordnung. Drei weitere Prozesse
+prüfen Speicherung, Neustart/Wiederherstellung, erneutes Andocken, Zurücksetzen
+und den Erhalt einer beschädigten Einstellungsdatei. Frei platzierte Panels
+bleiben im Hauptfenster; diese Prüfung belegt keine separaten Betriebssystemfenster.
+
+Die drei abschließenden macOS-Debug-Prüfungen von Diagrammen, Serien und
+Docking bestehen mit aktivierten Nuklear-Assertions: `build/workspace-check/test-results/run-55oi60e7`.
+
+Nach dem lesbaren Schließen-Knopf und der Begrenzung verschachtelter Teilungen
+besteht der komplette Docking-Ablauf erneut auf beiden Systemen: macOS Debug
+`build/workspace-check/test-results/run-ru22fbmp`, Debian Release
+`build/native/Release/test-results/run-z6s33n7k` innerhalb der VM.
+
+Zwischenläufe deckten eine verdeckte freie Panelfläche, die erst im nächsten
+Frame aufgebaute Menüansicht und verbrauchte Mausrad-/Ziehereignisse auf.
+Die korrigierte Reihenfolge und Eingabezuordnung bestehen die unveränderten
+Diagramm-, Serien- und Zeitleistenprüfungen im vollständigen Enddurchlauf.
+Die Zwischenläufe werden nicht als bestandene Gesamtabnahme gezählt.
+
 ## Zeitleiste und Szenenaufzeichnung am 5. Oktober 2026
 
 Die Zeitleiste wurde auf dem lokalen Intel-Mac (macOS 14.6.1, Apple Clang 16,

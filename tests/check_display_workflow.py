@@ -125,6 +125,22 @@ def project_settings(flow, directory):
     require("profile=Release" in read(project / "build/Release/build.config"), "Restored profile was not built")
 
 
+def docking(flow, directory):
+    for language in ("c", "phys"):
+        root = directory / language
+        root.mkdir(parents=True)
+        flow.run("--workspace-state-test", root, "dock-live-" + language, timeout=130,
+                 marker="DOCK dock-live-" + language + " SELF-TEST: PASSED")
+        require(len(list((root / "project/runs").glob("*.psrun"))) == 1,
+                "Moving panels created another simulation run")
+    for mode in ("write", "read", "corrupt"):
+        if mode == "corrupt":
+            write(directory / "preferences.bin", "damaged layout")
+        flow.run("--workspace-state-test", directory, "dock-" + mode, timeout=30,
+                 marker="DOCK dock-" + mode + " SELF-TEST: PASSED")
+    exact(directory / "preferences.bin", "damaged layout")
+
+
 def timeline(flow, directory):
     for language in ("c", "phys"):
         root = directory / language
@@ -336,7 +352,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
+SPECIAL = {"docking_workflow": docking, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}
 

@@ -105,6 +105,9 @@ static void settings_view(app *a) {
         next.width = a->preferences.width;
         next.height = a->preferences.height;
         next.maximized = a->preferences.maximized;
+        next.dock = a->preferences.dock;
+        if((next.view_flags&PS_VIEW_LOG) && (next.dock.hidden&(1u<<PS_DOCK_LOG)))
+            ps_dock_reveal(&next.dock,PS_DOCK_LOG,PS_DOCK_BOTTOM);
         ps_result r =
             a->preferences_path[0] ? ps_preferences_write(a->preferences_path, &next) : PS_IO;
         if (r == PS_OK) {
@@ -128,21 +131,21 @@ static void settings_view(app *a) {
         p->width = a->preferences.width;
         p->height = a->preferences.height;
     }
-    nk_layout_row_dynamic(ui, 40, 1);
+    nk_layout_row_dynamic(ui, 28, 1);
     nk_label_wrap(ui,
                   "Deine Darstellung und Fensteraufteilung bleiben beim nächsten Start erhalten.");
-    nk_layout_row_dynamic(ui, 26, 1);
+    nk_layout_row_dynamic(ui, 22, 1);
     nk_label_colored(ui, "Darstellung", NK_TEXT_LEFT, muted());
-    nk_layout_row_dynamic(ui, 32, 3);
+    nk_layout_row_dynamic(ui, 28, 3);
     const char *themes[] = {"Dunkel", "Hell", "Hoher Kontrast"};
     for (unsigned i = 0; i < PS_THEME_COUNT; i++) {
         a->theme_bounds[i] = nk_widget_bounds(ui);
         if (nk_option_label(ui, themes[i], p->theme == i))
             p->theme = i;
     }
-    nk_layout_row_dynamic(ui, 26, 1);
+    nk_layout_row_dynamic(ui, 22, 1);
     nk_label_colored(ui, "Schriftgröße im Code-Editor", NK_TEXT_LEFT, muted());
-    nk_layout_row_dynamic(ui, 32, 4);
+    nk_layout_row_dynamic(ui, 28, 4);
     const char *sizes[] = {"16 px", "18 px", "20 px", "22 px"};
     for (unsigned i = 0; i < 4; i++) {
         if (i == 2)
@@ -151,10 +154,10 @@ static void settings_view(app *a) {
             p->editor_size = 16 + i * 2;
     }
     nk_style_push_font(ui, a->code_fonts[(p->editor_size - 16) / 2]);
-    nk_layout_row_dynamic(ui, 38, 1);
+    nk_layout_row_dynamic(ui, 30, 1);
     nk_label(ui, "double energy = 0.5 * mass * speed * speed;", NK_TEXT_LEFT);
     nk_style_pop_font(ui);
-    nk_layout_row_dynamic(ui, 26, 1);
+    nk_layout_row_dynamic(ui, 22, 1);
     nk_label_colored(ui, "Automatische Sicherung", NK_TEXT_LEFT, muted());
     nk_layout_row_dynamic(ui, 30, 2);
     nk_label(ui, "Ungespeicherte Quellen sichern", NK_TEXT_LEFT);
@@ -166,9 +169,9 @@ static void settings_view(app *a) {
         if (p->autosave_seconds == seconds[i])
             selected = i;
     p->autosave_seconds = seconds[nk_combo(ui, intervals, 4, selected, 30, nk_vec2(250, 180))];
-    nk_layout_row_dynamic(ui, 26, 1);
+    nk_layout_row_dynamic(ui, 22, 1);
     nk_label_colored(ui, "Simulation und Arbeitsfläche", NK_TEXT_LEFT, muted());
-    nk_layout_row_dynamic(ui, 28, 2);
+    nk_layout_row_dynamic(ui, 24, 2);
     settings_flag(ui, "Vektoren", PS_VIEW_VECTORS, &p->view_flags);
     settings_flag(ui, "Flugbahnen", PS_VIEW_PATHS, &p->view_flags);
     settings_flag(ui, "Punkte", PS_VIEW_POINTS, &p->view_flags);
@@ -179,38 +182,11 @@ static void settings_view(app *a) {
     a->settings_bounds[3] = nk_widget_bounds(ui);
     settings_flag(ui, "Protokoll geöffnet", PS_VIEW_LOG, &p->view_flags);
     nk_spacer(ui);
-    nk_layout_row_dynamic(ui, 40, 1);
+    nk_layout_row_dynamic(ui, 28, 1);
     nk_label_wrap(ui,
-                  "Seitenleiste und geöffnetes Protokoll lassen sich an ihren Trennlinien ziehen.");
+                  "Panels an Titelzeilen ziehen; Trennlinien ändern die Größe.");
     if (a->preferences_error[0]) {
         nk_layout_row_dynamic(ui, 64, 1);
         nk_label_wrap(ui, a->preferences_error);
-    }
-}
-static void panel_resize(app *a, float width, float height, float top, float footer) {
-    struct nk_input *input = &a->ui->input;
-    float side = (float)a->preferences.sidebar_width;
-    a->panel_bounds[0] = nk_rect(side + 8, top, 8, height - top - footer - 8);
-    a->panel_bounds[1] = nk_rect(8, height - footer - 8, width - 16, 8);
-    if (!nk_input_is_mouse_down(input, NK_BUTTON_LEFT))
-        a->panel_drag = 0;
-    if (!a->panel_drag) {
-        if (a->ui->active && a->ui->active->popup.active)
-            return;
-        if (nk_input_has_mouse_click_down_in_rect(input, NK_BUTTON_LEFT, a->panel_bounds[0], true))
-            a->panel_drag = 1;
-        else if (a->show_log && a->tab != 6 &&
-                 nk_input_has_mouse_click_down_in_rect(input, NK_BUTTON_LEFT, a->panel_bounds[1],
-                                                       true))
-            a->panel_drag = 2;
-    }
-    if (a->panel_drag == 1)
-        a->preferences.sidebar_width = (uint32_t)fmaxf(208, fminf(360, input->mouse.pos.x - 12));
-    if (a->panel_drag == 2)
-        a->preferences.log_height =
-            (uint32_t)fmaxf(150, fminf(340, height - input->mouse.pos.y - 4));
-    if (a->panel_drag && a->tab == 6) {
-        a->settings_draft.sidebar_width = a->preferences.sidebar_width;
-        a->settings_draft.log_height = a->preferences.log_height;
     }
 }

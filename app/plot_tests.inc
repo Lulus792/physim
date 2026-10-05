@@ -637,6 +637,9 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
         return;
     }
     if (!ok) {
+        for(struct nk_window *window=a->ui->begin;window;window=window->next)
+            fprintf(stderr,"Plot window %s flags=%x active=%d bounds=%.1f/%.1f/%.1f/%.1f\n",window->name_string,
+                    window->flags,window==a->ui->active,window->bounds.x,window->bounds.y,window->bounds.w,window->bounds.h);
         fprintf(stderr, "Plot UI stage %d failed, area=(%.1f,%.1f,%.1f,%.1f), range=(%.9g,%.9g)\n",
                 *stage, area.x, area.y, area.w, area.h, a->report_views[0].low[0],
                 a->report_views[0].low[1]);

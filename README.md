@@ -224,9 +224,13 @@ liegen außerhalb des Workspace und werden beim erneuten Öffnen der Datei zur
 [Wiederherstellung](docs/autosave.md) angeboten.
 
 **Einstellungen** in der Menüzeile oder **Ctrl+,** öffnet Code-Schriftgröße,
-Autosave-Intervall und Darstellungsoptionen. Seitenleiste und Protokoll lassen sich
-an ihren Trennlinien vergrößern; Fenstergröße, Maximierung und Darstellung bleiben
-bei normalem Beenden für den nächsten Start erhalten.
+Autosave-Intervall und Darstellungsoptionen. Seitenleiste, Arbeitsbereich und Protokoll
+lassen sich an ihren Titelzeilen verschieben: als Tabs zusammenfassen, nebeneinander
+oder übereinander andocken und innerhalb des Hauptfensters frei platzieren.
+Trennlinien und der Griff rechts unten verändern die Größe; Escape bricht das
+Verschieben ab. **Ansicht** blendet Panels wieder ein und setzt die Anordnung zurück.
+Fenstergröße, Maximierung, Darstellung und Panelanordnung bleiben bei normalem
+Beenden für den nächsten Start erhalten.
 Anleitung: [Einstellungen und Fensteraufteilung](docs/settings.md), auch direkt über F1.
 
 Ungespeicherte Änderungen beider Editoren werden standardmäßig alle 30 Sekunden separat

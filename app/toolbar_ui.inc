@@ -1,4 +1,5 @@
 static void select_workspace_tab(app *a, int tab) {
+    dock_show(a,PS_DOCK_WORKSPACE);
     a->project_manager = false;
     a->tab = tab == 0 && !a->loaded && a->document_count ? 8 : tab;
 }
@@ -39,7 +40,7 @@ static void toolbar_popup(app *a, int previous) {
     const bool can_choose = !a->dialog_pending && idle(a) && !a->library_thread && !a->recovery;
     struct nk_rect anchor = a->toolbar_bounds[(a->toolbar_menu ? a->toolbar_menu : previous) - 1];
     a->toolbar_popup_bounds =
-        nk_rect(anchor.x, anchor.y + anchor.h + 2, 286, a->toolbar_menu == 2 ? 132.f : 170.f);
+        nk_rect(anchor.x, anchor.y + anchor.h + 2, 286, a->toolbar_menu == 2 ? 236.f : 170.f);
     nk_style_push_vec2(ui, &ui->style.window.popup_padding, nk_vec2(5, 5));
     nk_style_push_vec2(ui, &ui->style.window.spacing, nk_vec2(4, 4));
     nk_style_push_float(ui, &ui->style.window.rounding, 9);
@@ -81,8 +82,10 @@ static void toolbar_popup(app *a, int previous) {
             if (toolbar_menu_action(a,
                                     a->show_log ? "Protokoll ausblenden\t" PS_UI_SHORTCUT "L"
                                                 : "Protokoll einblenden\t" PS_UI_SHORTCUT "L",
-                                    true))
+                                    true)) {
                 a->show_log = !a->show_log;
+                if(a->show_log) dock_show(a,PS_DOCK_LOG);
+            }
             if (toolbar_menu_action(a, "Dateibaum aktualisieren", a->workspace_open))
                 refresh_workspace_entries(a);
             if (toolbar_menu_action(a, "Läufe und Berichte\t" PS_UI_SHORTCUT "4", a->loaded)) {
@@ -94,6 +97,15 @@ static void toolbar_popup(app *a, int previous) {
                 a->project_manager = false;
                 a->tab = 5;
             }
+            a->dock_menu_bounds[0]=nk_widget_bounds(ui);
+            if(toolbar_menu_action(a,a->preferences.dock.hidden&1?"Seitenleiste anzeigen":"Seitenleiste ausblenden",true)) {
+                if(a->preferences.dock.hidden&1) dock_show(a,PS_DOCK_SIDEBAR);
+                else ps_dock_hide(&a->preferences.dock,PS_DOCK_SIDEBAR);
+            }
+            a->dock_menu_bounds[1]=nk_widget_bounds(ui);
+            if(toolbar_menu_action(a,"Arbeitsbereich anzeigen",true)) dock_show(a,PS_DOCK_WORKSPACE);
+            a->dock_menu_bounds[2]=nk_widget_bounds(ui);
+            if(toolbar_menu_action(a,"Panelanordnung zurücksetzen",true)) a->preferences.dock=PS_DOCK_DEFAULT;
         }
         nk_popup_end(ui);
     }

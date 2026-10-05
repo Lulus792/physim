@@ -35,6 +35,8 @@ ps_result nk_sdl_export_png(struct nk_context *ctx, struct nk_context *drawing, 
 ps_result nk_sdl_export_png_scaled(struct nk_context *ctx, struct nk_context *drawing, int width,
                                    int height, unsigned scale, const char *path);
 void nk_sdl_update_TextInput(struct nk_context *ctx);
+/* Change stacking without moving keyboard focus. */
+void nk_sdl_window_raise(struct nk_context *ctx, const char *name);
 void nk_sdl_shutdown(struct nk_context *ctx);
 bool nk_sdl_test_input(SDL_Window *window, ps_graphics *graphics);
 #endif

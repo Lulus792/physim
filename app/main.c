@@ -96,6 +96,16 @@ typedef struct {
     char preferences_path[4096], preferences_error[192];
     bool preferences_writable, show_grid;
     int settings_previous_tab, panel_drag;
+    struct nk_rect dock_rects[PS_DOCK_NODES], dock_panels[PS_DOCK_PANELS];
+    struct nk_rect dock_headers[PS_DOCK_PANELS], dock_closes[PS_DOCK_PANELS], dock_splitters[PS_DOCK_NODES], dock_float_grips[PS_DOCK_PANELS];
+    struct nk_rect dock_targets[5], dock_preview;
+    bool dock_visible[PS_DOCK_PANELS], dock_dragging, dock_started;
+    unsigned dock_front;
+    int dock_resize, dock_float_resize, dock_drag, dock_last_tab;
+    struct nk_vec2 dock_origin, dock_grab, dock_resize_mouse;
+    ps_dock_float dock_resize_start;
+    struct nk_rect dock_menu_bounds[3];
+    uint32_t dock_target, dock_side;
     struct nk_rect settings_bounds[6], theme_bounds[PS_THEME_COUNT], panel_bounds[2];
     SDL_Window *window;
     ps_graphics *graphics;
@@ -1675,6 +1685,7 @@ static void viewport(app *a, float height) {
     nk_layout_row_dynamic(ui, height, 1);
     struct nk_rect r;
     enum nk_widget_layout_states widget_state = nk_widget(&r, ui);
+    if(ui->current->layout->flags & NK_WINDOW_ROM) widget_state=NK_WIDGET_ROM;
     a->scene_viewport_bounds = r;
     struct nk_input *input = &ui->input;
     if (widget_state == NK_WIDGET_VALID && nk_input_is_mouse_hovering_rect(input, r)) {
@@ -2371,6 +2382,7 @@ static void test_mouse(app *a, struct nk_rect rect, bool down) {
 #include "reset_tests.inc"
 #include "speed_tests.inc"
 #include "timeline_tests.inc"
+#include "docking_tests.inc"
 #include "native_dialog_tests.inc"
 #include "workspace_tests.inc"
 // clang-format on
@@ -2817,7 +2829,7 @@ int main(int argc, char **argv) {
                 continue;
             }
             if ((plot_test || toolbar_test || settings_test ||
-                 (workspace_state_test && (!strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9)))) && test_scripted_external_input(&e)) continue;
+                 (workspace_state_test && (!strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3], "dock-", 5)))) && test_scripted_external_input(&e)) continue;
             if (self_test && e.type == SDL_EVENT_TEXT_INPUT) {
                 doc_input_events++;
                 doc_input_bytes += (unsigned)strlen(e.text.text);
@@ -2849,6 +2861,7 @@ int main(int argc, char **argv) {
                     a->quitting = true;
             }
             if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && !a->recovery) {
+                if (a->dock_drag && e.key.key==SDLK_ESCAPE) { a->dock_drag=0;a->dock_dragging=false;continue; }
                 if (scene_shortcut(a, &e.key)) continue;
                 if (a->tab == 1 && e.key.key == SDLK_SPACE && !e.key.repeat &&
                     !(e.key.mod & (SDL_KMOD_CTRL | SDL_KMOD_GUI | SDL_KMOD_ALT)) &&
@@ -2868,8 +2881,10 @@ int main(int argc, char **argv) {
                         else
                             a->show_search = !a->show_search;
                     }
-                    if (e.key.key == SDLK_L)
+                    if (e.key.key == SDLK_L) {
                         a->show_log = !a->show_log;
+                        if(a->show_log) dock_show(a,PS_DOCK_LOG);
+                    }
                     if (e.key.key == SDLK_COMMA)
                         open_settings(a);
                 }
@@ -2914,7 +2929,7 @@ int main(int argc, char **argv) {
         } else if (workspace_state_test) {
             if (ps_clock() - test_started >
                 (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
-                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9)
+                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3], "dock-", 5)
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15)) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
                         argv[3], ps_clock() - test_started);

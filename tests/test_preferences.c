@@ -109,27 +109,38 @@ int main(int argc, char **argv) {
     invalid.theme = PS_THEME_COUNT;
     CHECK(ps_preferences_write(path, &invalid) == PS_INVALID);
     CHECK(ps_preferences_read(path, &out) == PS_OK && !memcmp(&p, &out, sizeof p));
-    unsigned char bytes[61] = {0};
+    unsigned char bytes[241] = {0};
     FILE *f = fopen(path, "rb");
-    CHECK(f && fread(bytes, 1, 60, f) == 60 && !fclose(f));
-    for (size_t n = 0; n < 60; n++) {
+    CHECK(f && fread(bytes, 1, 240, f) == 240 && !fclose(f));
+    for (size_t n = 0; n < 240; n++) {
         CHECK(bytes_write(bad, bytes, n));
         CHECK(ps_preferences_read(bad, &out) == PS_CORRUPT && !memcmp(&p, &out, sizeof p));
     }
-    CHECK(bytes_write(bad, bytes, 61) && ps_preferences_read(bad, &out) == PS_CORRUPT);
-    for (unsigned i = 0; i < 60; i++) {
+    CHECK(bytes_write(bad, bytes, 241) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    for (unsigned i = 0; i < 240; i++) {
         bytes[i] ^= 1;
-        CHECK(bytes_write(bad, bytes, 60));
+        CHECK(bytes_write(bad, bytes, 240));
         CHECK(ps_preferences_read(bad, &out) != PS_OK && !memcmp(&p, &out, sizeof p));
         bytes[i] ^= 1;
     }
     put32(bytes + 32, 17);
-    put32(bytes + 56, ps_crc32(bytes, 56));
-    CHECK(bytes_write(bad, bytes, 60) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    put32(bytes + 236, ps_crc32(bytes, 236));
+    CHECK(bytes_write(bad, bytes, 240) && ps_preferences_read(bad, &out) == PS_CORRUPT);
     put32(bytes + 32, p.editor_size);
     put32(bytes + 52, PS_THEME_COUNT);
+    put32(bytes + 236, ps_crc32(bytes, 236));
+    CHECK(bytes_write(bad, bytes, 240) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    CHECK(!memcmp(&p, &out, sizeof p));
+    /* Correct-CRC invalid graphs must also preserve the previous settings. */
+    put32(bytes + 52, p.theme);
+    put32(bytes + 56 + 3 * 24 + 4, 3); /* split references itself */
+    put32(bytes + 236, ps_crc32(bytes, 236));
+    CHECK(bytes_write(bad, bytes, 240) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    put32(bytes + 56 + 3 * 24 + 4, 0);
+    put32(bytes + 52, p.theme);
+    memcpy(bytes + 6, "02", 2); put32(bytes + 8, 44);
     put32(bytes + 56, ps_crc32(bytes, 56));
-    CHECK(bytes_write(bad, bytes, 60) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    CHECK(bytes_write(bad, bytes, 60) && ps_preferences_read(bad, &out) == PS_OK);
     CHECK(!memcmp(&p, &out, sizeof p));
     /* Version 1 fixture retains all earlier settings and defaults to the dark theme. */
     memcpy(bytes + 6, "01", 2);
@@ -147,7 +158,12 @@ int main(int argc, char **argv) {
     CHECK(SDL_CreateDirectory(directory));
     CHECK(ps_preferences_write(directory, &p) == PS_IO);
     CHECK(ps_preferences_read(path, &out) == PS_OK && !memcmp(&p, &out, sizeof p));
-    puts("Preferences: themes, contrast, v1 migration, roundtrip, replacement, bounds, CRC, truncations and failure "
+    ps_preferences arranged=p;
+    CHECK(ps_dock_move(&arranged.dock,PS_DOCK_SIDEBAR,PS_DOCK_WORKSPACE,PS_DOCK_TAB));
+    CHECK(ps_dock_float_panel(&arranged.dock,PS_DOCK_LOG,(ps_dock_float){300,100,520,300}));
+    CHECK(ps_preferences_write(bad,&arranged)==PS_OK && ps_preferences_read(bad,&out)==PS_OK);
+    CHECK(!memcmp(&arranged,&out,sizeof out));
+    puts("Preferences: themes, contrast, v1/v2 migration, docked/floating roundtrip, replacement, bounds, CRC, truncations and failure "
          "preservation passed");
     return 0;
 }

@@ -4137,6 +4137,36 @@
           ]
         }
       ]
+    },
+    {
+      "name": "docking_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "docking_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 350,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
     }
   ]
 }

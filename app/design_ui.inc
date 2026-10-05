@@ -101,6 +101,7 @@ static const char *workspace_name(const char *path) {
 #include "batch_ui.inc"
 #include "settings_ui.inc"
 #include "timeline_ui.inc"
+#include "docking_ui.inc"
 // clang-format on
 static void camera_inspector(app *a) {
     struct nk_context *ui = a->ui;
@@ -256,93 +257,9 @@ static void camera_inspector(app *a) {
 #include "workspace_tree_ui.inc"
 #include "window_header.inc"
 #include "toolbar_ui.inc"
-static void draw_ui(app *a, int width, int height) {
-    struct nk_context *ui = a->ui;
-    if (a->recovery) {
-        nk_style_push_vec2(ui, &ui->style.window.padding, nk_vec2(0, 5));
-        nk_style_push_vec2(ui, &ui->style.window.spacing, nk_vec2(0, 0));
-        nk_style_push_float(ui, &ui->style.window.rounding, 0);
-        if (nk_begin(ui, "recovery-header", nk_rect(0, 0, (float)width, 38), NK_WINDOW_NO_SCROLLBAR)) {
-            nk_layout_row_begin(ui, NK_STATIC, 28, 4);
-            nk_layout_row_push(ui, (float)width - 138);
-            a->window_drag_bounds = nk_widget_bounds(ui);
-            nk_label(ui, "   Physim  ·  Wiederherstellung", NK_TEXT_LEFT);
-            for (unsigned i = 0; i < 3; i++) {
-                nk_layout_row_push(ui, 46);
-                window_control(a, i);
-            }
-            nk_layout_row_end(ui);
-        }
-        nk_end(ui);
-        nk_style_pop_float(ui);
-        nk_style_pop_vec2(ui);
-        nk_style_pop_vec2(ui);
-        float panel_width = 640, panel_height = 420;
-        if (nk_begin(ui, "recovery",
-                     nk_rect(((float)width - panel_width) / 2, ((float)height - panel_height) / 2,
-                             panel_width, panel_height),
-                     0)) {
-            nk_style_push_font(ui, a->font_title);
-            nk_layout_row_dynamic(ui, 40, 1);
-            nk_label(ui, "Deine Arbeit ist noch da.", NK_TEXT_LEFT);
-            nk_style_pop_font(ui);
-            nk_layout_row_dynamic(ui, 28, 1);
-            nk_label_colored(ui, project_name(a), NK_TEXT_LEFT, muted());
-            nk_layout_row_dynamic(ui, 64, 1);
-            nk_label_wrap(ui, "Für Experiment- und Analysecode gibt es eine automatische Sicherung. "
-                              "Stelle die Änderungen im Editor wieder her oder verwende die "
-                              "gespeicherten Quelldateien und verwirf die Sicherung.");
-            nk_layout_row_dynamic(ui, 60, 1);
-            nk_label_wrap(
-                ui,
-                a->recovery_conflict
-                    ? "Die Quelldateien wurden seit dieser Sicherung geändert. Wiederherstellen "
-                      "lädt die gesicherten Texte; es führt die Änderungen nicht zusammen."
-                    : "Beim Wiederherstellen bleiben die Quelldateien zunächst unverändert. "
-                      "Du kannst beide Texte prüfen und anschließend speichern.");
-            nk_layout_row_dynamic(ui, 40, 1);
-            a->recovery_bounds[0] = nk_widget_bounds(ui);
-            if (action_button(ui, "Änderungen wiederherstellen", true))
-                resolve_recovery(a, true);
-            nk_layout_row_dynamic(ui, 40, 1);
-            a->recovery_bounds[1] = nk_widget_bounds(ui);
-            if (nk_button_label(ui, "Gespeicherte Dateien verwenden"))
-                resolve_recovery(a, false);
-            nk_layout_row_dynamic(ui, 44, 1);
-            nk_label_wrap(ui, a->status);
-        }
-        nk_end(ui);
-        return;
-    }
-    float w = (float)width, h = (float)height, top = 72;
-    bool expanded_log = a->show_log && a->tab != 6;
-    float footer = expanded_log ? (float)a->preferences.log_height : 52.f;
-    panel_resize(a, w, h, top, footer);
-    float side = (float)a->preferences.sidebar_width;
-    footer = expanded_log ? (float)a->preferences.log_height : 52.f;
-    float content = h - top - footer - 8;
-    nk_style_push_vec2(ui, &ui->style.window.padding, nk_vec2(0, 0));
-    nk_style_push_vec2(ui, &ui->style.window.spacing, nk_vec2(0, 0));
-    nk_style_push_float(ui, &ui->style.window.rounding, 0);
-    if (nk_begin(ui, "header", nk_rect(0, 0, w, 64), NK_WINDOW_NO_SCROLLBAR)) {
-        toolbar_view(a);
-        struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
-        struct nk_rect previous_clip = canvas->clip;
-        nk_push_scissor(canvas, nk_rect(0, 0, w, h));
-        bool side_hover = nk_input_is_mouse_hovering_rect(&ui->input, a->panel_bounds[0]);
-        bool log_hover = nk_input_is_mouse_hovering_rect(&ui->input, a->panel_bounds[1]);
-        nk_stroke_line(canvas, side + 12, top + 12, side + 12, top + content - 12, 2,
-                       side_hover || a->panel_drag == 1 ? accent() : UI_COLOR(divider));
-        if (expanded_log)
-            nk_stroke_line(canvas, 24, h - footer - 4, w - 24, h - footer - 4, 2,
-                           log_hover || a->panel_drag == 2 ? accent() : UI_COLOR(divider));
-        nk_push_scissor(canvas, previous_clip);
-    }
-    nk_end(ui);
-    nk_style_pop_float(ui);
-    nk_style_pop_vec2(ui);
-    nk_style_pop_vec2(ui);
-    if (nk_begin(ui, "sidebar", nk_rect(8, top, side, content), 0)) {
+static void sidebar_panel(app *a) {
+    struct nk_context *ui=a->ui;
+    if (dock_begin(a, PS_DOCK_SIDEBAR)) {
         {
             if (nk_tree_state_push(ui, NK_TREE_TAB, "Workspace", &a->workspace_disclosure)) {
                 if (a->workspace_open) {
@@ -443,11 +360,13 @@ static void draw_ui(app *a, int width, int height) {
         }
     }
     nk_end(ui);
-    /* Nuklear otherwise transfers keyboard focus on mere sidebar hover. Keep an
-     * activated search editable until a click deactivates it. */
-    if (a->tab == 4 && (a->library_search_focus || a->library_search_active))
-        nk_window_set_focus(ui, "workspace");
-    if (nk_begin(ui, "workspace", nk_rect(side + 16, top, w - side - 24, content), 0)) {
+}
+static void workspace_panel(app *a) {
+    struct nk_context *ui=a->ui;
+    float content=fmaxf(500,a->dock_panels[PS_DOCK_WORKSPACE].h-24);
+    if (a->dock_visible[PS_DOCK_WORKSPACE] && a->tab==4 && (a->library_search_focus || a->library_search_active))
+        nk_window_set_focus(ui,"workspace");
+    if (dock_begin(a, PS_DOCK_WORKSPACE)) {
         if (a->project_manager) {
             nk_layout_row_dynamic(ui, 42, 1);
             nk_style_push_font(ui, a->font_title);
@@ -804,12 +723,17 @@ static void draw_ui(app *a, int width, int height) {
         }
     }
     nk_end(ui);
+}
+static void log_panel(app *a) {
+    struct nk_context *ui=a->ui;
+    bool expanded_log=a->show_log && a->tab!=6;
+    float footer=fmaxf(68,a->dock_panels[PS_DOCK_LOG].h-16);
     nk_style_push_vec2(ui, &ui->style.window.padding, nk_vec2(16, 8));
-    if (nk_begin(ui, "log", nk_rect(8, h - footer, w - 16, footer - 8), NK_WINDOW_NO_SCROLLBAR)) {
+    if (dock_begin(a, PS_DOCK_LOG)) {
         nk_layout_row_begin(ui, NK_DYNAMIC, 28, 3);
-        nk_layout_row_push(ui, .72f);
+        nk_layout_row_push(ui, .60f);
         nk_label_colored(ui, a->status, NK_TEXT_LEFT, muted());
-        nk_layout_row_push(ui, .14f);
+        nk_layout_row_push(ui, .16f);
         if (a->job.running) {
             if (nk_button_label(ui, "Abbrechen")) {
                 ps_process_kill(&a->job);
@@ -818,8 +742,8 @@ static void draw_ui(app *a, int width, int height) {
             }
         } else
             nk_spacer(ui);
-        nk_layout_row_push(ui, .14f);
-        if (nk_button_label(ui, expanded_log ? "Protokoll schließen" : "Protokoll")) {
+        nk_layout_row_push(ui, .24f);
+        if (nk_button_label(ui, expanded_log ? "Weniger" : "Protokoll")) {
             a->show_log = !expanded_log;
         }
         nk_layout_row_end(ui);
@@ -844,6 +768,91 @@ static void draw_ui(app *a, int width, int height) {
     }
     nk_end(ui);
     nk_style_pop_vec2(ui);
-    if (a->tab == 4 && a->library_search_active)
-        nk_window_set_focus(ui, "workspace");
+}
+static void draw_ui(app *a, int width, int height) {
+    struct nk_context *ui = a->ui;
+    if (a->recovery) {
+        nk_style_push_vec2(ui, &ui->style.window.padding, nk_vec2(0, 5));
+        nk_style_push_vec2(ui, &ui->style.window.spacing, nk_vec2(0, 0));
+        nk_style_push_float(ui, &ui->style.window.rounding, 0);
+        if (nk_begin(ui, "recovery-header", nk_rect(0, 0, (float)width, 38), NK_WINDOW_NO_SCROLLBAR)) {
+            nk_layout_row_begin(ui, NK_STATIC, 28, 4);
+            nk_layout_row_push(ui, (float)width - 138);
+            a->window_drag_bounds = nk_widget_bounds(ui);
+            nk_label(ui, "   Physim  ·  Wiederherstellung", NK_TEXT_LEFT);
+            for (unsigned i = 0; i < 3; i++) {
+                nk_layout_row_push(ui, 46);
+                window_control(a, i);
+            }
+            nk_layout_row_end(ui);
+        }
+        nk_end(ui);
+        nk_style_pop_float(ui);
+        nk_style_pop_vec2(ui);
+        nk_style_pop_vec2(ui);
+        float panel_width = 640, panel_height = 420;
+        if (nk_begin(ui, "recovery",
+                     nk_rect(((float)width - panel_width) / 2, ((float)height - panel_height) / 2,
+                             panel_width, panel_height),
+                     0)) {
+            nk_style_push_font(ui, a->font_title);
+            nk_layout_row_dynamic(ui, 40, 1);
+            nk_label(ui, "Deine Arbeit ist noch da.", NK_TEXT_LEFT);
+            nk_style_pop_font(ui);
+            nk_layout_row_dynamic(ui, 28, 1);
+            nk_label_colored(ui, project_name(a), NK_TEXT_LEFT, muted());
+            nk_layout_row_dynamic(ui, 64, 1);
+            nk_label_wrap(ui, "Für Experiment- und Analysecode gibt es eine automatische Sicherung. "
+                              "Stelle die Änderungen im Editor wieder her oder verwende die "
+                              "gespeicherten Quelldateien und verwirf die Sicherung.");
+            nk_layout_row_dynamic(ui, 60, 1);
+            nk_label_wrap(
+                ui,
+                a->recovery_conflict
+                    ? "Die Quelldateien wurden seit dieser Sicherung geändert. Wiederherstellen "
+                      "lädt die gesicherten Texte; es führt die Änderungen nicht zusammen."
+                    : "Beim Wiederherstellen bleiben die Quelldateien zunächst unverändert. "
+                      "Du kannst beide Texte prüfen und anschließend speichern.");
+            nk_layout_row_dynamic(ui, 40, 1);
+            a->recovery_bounds[0] = nk_widget_bounds(ui);
+            if (action_button(ui, "Änderungen wiederherstellen", true))
+                resolve_recovery(a, true);
+            nk_layout_row_dynamic(ui, 40, 1);
+            a->recovery_bounds[1] = nk_widget_bounds(ui);
+            if (nk_button_label(ui, "Gespeicherte Dateien verwenden"))
+                resolve_recovery(a, false);
+            nk_layout_row_dynamic(ui, 44, 1);
+            nk_label_wrap(ui, a->status);
+        }
+        nk_end(ui);
+        return;
+    }
+    float w=(float)width,h=(float)height;
+    dock_prepare(a,w,h);
+    dock_order(a);
+    nk_style_push_vec2(ui, &ui->style.window.padding, nk_vec2(0, 0));
+    nk_style_push_vec2(ui, &ui->style.window.spacing, nk_vec2(0, 0));
+    nk_style_push_float(ui, &ui->style.window.rounding, 0);
+    if (nk_begin(ui, "header", nk_rect(0, 0, w, 64), NK_WINDOW_NO_SCROLLBAR)) {
+        toolbar_view(a);
+        dock_overlay(a,w,h);
+    }
+    nk_end(ui);
+    nk_style_pop_float(ui);
+    nk_style_pop_vec2(ui);
+    nk_style_pop_vec2(ui);
+    if(a->tab!=a->dock_last_tab) { dock_show(a,PS_DOCK_WORKSPACE);a->dock_last_tab=a->tab; }
+    dock_relayout(a,w,h);
+    for(unsigned floating=0;floating<2;floating++) {
+        for(unsigned panel=0;panel<PS_DOCK_PANELS;panel++) {
+            if (((a->preferences.dock.floating >> panel)&1u)!=floating) continue;
+            if(panel==PS_DOCK_SIDEBAR) sidebar_panel(a);
+            else if(panel==PS_DOCK_WORKSPACE) workspace_panel(a);
+            else log_panel(a);
+        }
+    }
+    dock_headers(a);
+    if(a->tab==4 && a->library_search_active && a->dock_visible[PS_DOCK_WORKSPACE])
+        nk_window_set_focus(ui,"workspace");
+    dock_order(a);
 }

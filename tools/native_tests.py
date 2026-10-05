@@ -58,6 +58,7 @@ def catalog():
         cases.append(Case("language_" + part, (f"tests/test_language_{part}.c",),
                           ("language",), timeout=120))
     cases.extend([
+        Case("docking", ("tests/test_docking.c", "app/docking.c")),
         Case("timeline", ("tests/test_timeline.c", "app/timeline.c")),
         Case("run_snapshots", ("tests/test_run_snapshots.c",), arguments=("{work}",)),
         Case("pacing", ("tests/test_pacing.c",)),
@@ -83,7 +84,7 @@ def catalog():
         Case("font_shape", ("tests/test_font_shape.c",), app=True),
         Case("library", ("tests/test_library.c", "app/library.c"), app=True),
         Case("autosave", ("tests/test_autosave.c", "app/autosave.c"), app=True),
-        Case("preferences", ("tests/test_preferences.c", "app/preferences.c"),
+        Case("preferences", ("tests/test_preferences.c", "app/preferences.c", "app/docking.c"),
              arguments=("{work}",), app=True),
         Case("workspace_state", ("tests/test_workspace_state.c", "app/workspace_state.c", "app/autosave.c"),
              arguments=("{work}",), app=True),

@@ -81,14 +81,37 @@ lassen sich ein- oder ausblenden. Diese Auswahl entspricht den Schaltern im
 Simulationsinspector und gilt für die nächste Sitzung. Ausgeblendete Objekte bleiben
 in den Szenendaten erhalten; die physikalische Rechnung verändert sich dadurch nicht.
 
-Die senkrechte Trennlinie rechts neben der Seitenleiste verändert deren Breite.
-Die waagerechte Linie über dem geöffneten Protokoll verändert seine Höhe.
-Mit gedrückter linker Maustaste ziehen; die hervorgehobene Linie zeigt den Griff.
-Die Bereiche haben Mindest- und Höchstgrößen, damit die Arbeitsfläche nutzbar bleibt.
-Dies sind feste, vergrößerbare Panels; frei verschiebbare oder ablösbare Fenster
-sind noch nicht implementiert.
+## Panelanordnung
 
-Physim merkt sich bei normalem Beenden Fenstergröße, maximierten Zustand, Panelgrößen,
+**Seitenleiste**, **Arbeitsbereich** und **Protokoll** sind verschiebbare Panels.
+Die Seitenleiste enthält Dateibaum und Inspektor; der Arbeitsbereich zeigt weiterhin
+den ausgewählten Editor, die Simulation oder die Auswertung. Die drei globalen
+Arbeitsbereich-Tabs und die Menüzeile bleiben im Fensterkopf.
+
+Ziehe eine Paneltitelzeile mit gedrückter linker Maustaste. Über einem anderen
+angedockten Panel erscheinen fünf Ziele: Die Mitte bildet eine Tabgruppe; links,
+rechts, oben und unten teilen dessen Fläche. Beim Loslassen außerhalb dieser Ziele
+bleibt das Panel frei im Hauptfenster stehen. Die Vorschau zeigt seine Position.
+**Escape** bricht das Verschieben ab. Ein Klick auf einen Paneltab wählt dessen Inhalt.
+
+Trennlinien zwischen angedockten Panels verändern die Aufteilung. Frei platzierte
+Panels lassen sich über ihre Titelzeile verschieben und mit dem Griff rechts unten
+vergrößern oder verkleinern. Die Position wird auf das Hauptfenster begrenzt;
+bei einer kleineren Fenstergröße bleibt das Panel erreichbar. Der Arbeitsbereich
+hat als frei platziertes Panel mindestens 640 × 580 logische Pixel. Kleine
+angedockte Bereiche lassen sich vertikal scrollen.
+
+Das **×** in einer Titelzeile blendet das aktive Panel aus. **Ansicht → Seitenleiste
+anzeigen**, **Arbeitsbereich anzeigen** und **Protokoll einblenden** stellen es wieder
+her. Ein globaler Arbeitsbereich-Tab zeigt den Arbeitsbereich ebenfalls wieder an.
+**Ansicht → Panelanordnung zurücksetzen** stellt Seitenleiste links, Arbeitsbereich
+rechts und Protokoll darunter wieder her. Das Umordnen lässt ungespeicherten
+Quelltext und laufende Versuche bestehen. Frei platzierte Panels bleiben Teil des
+Hauptfensters; separate Betriebssystemfenster und ein eigenständiger Inspektor
+sind weitere Produktziele.
+
+Physim merkt sich bei normalem Beenden Fenstergröße, maximierten Zustand, Panelanordnung,
+ausgewählte Paneltabs, Positionen und Größen frei platzierter Panels,
 Protokollsichtbarkeit, den aufgeklappten Darstellungsinspector und den letzten
 Hauptarbeitsbereich. Die Fenstergröße wird beim Start auf den verfügbaren Bildschirm
 begrenzt; die unterstützte Mindestgröße bleibt 1080 × 740. Die Fensterposition und
@@ -98,15 +121,17 @@ Projekt beginnt im Editor. Kameraausrichtung, Zoom und Szenenfokus bleiben sitzu
 ## Übernehmen, Abbrechen und Standardwerte
 
 **Übernehmen** speichert den Entwurf und wendet ihn sofort an.
-**Abbrechen** verwirft den Entwurf. Direktes Ziehen der Panelgrenzen ist eine unabhängige
-Layoutänderung und wird dadurch nicht zurückgenommen.
+**Abbrechen** verwirft den Entwurf. Verschieben, Ausblenden und Größenänderung von
+Panels sind unabhängige Layoutänderungen und werden dadurch nicht zurückgenommen.
 **Standardwerte** setzt den Entwurf auf die Vorgaben zurück; erst **Übernehmen**
-speichert ihn. Die aktuelle Fenstergröße und der maximierte Zustand bleiben dabei erhalten.
+speichert ihn. Fenstergröße, maximierter Zustand und Panelanordnung bleiben dabei
+erhalten; die Anordnung wird über **Ansicht** zurückgesetzt.
 
 Einstellungen liegen im persönlichen Anwendungsordner, den SDL für Physim bereitstellt,
 als `preferences.bin`. Sie gehören weder zum Projekt noch zu den Laufmetadaten.
-Das aktuelle Format 2 speichert zusätzlich die Farbpalette. Dateien des Formats 1
-bleiben lesbar; ihre bisherigen Werte werden mit der dunklen Palette übernommen.
+Das aktuelle Format 3 speichert den vollständigen Panelbaum, aktive Paneltabs,
+ausgeblendete Panels und frei platzierte Rechtecke. Dateien der Formate 1 und 2
+bleiben lesbar und erhalten die Standardanordnung; Format 1 verwendet die dunkle Palette.
 Alle normalen Physim-Instanzen desselben Benutzerkontos teilen diese Datei;
 bei gleichzeitiger Nutzung gewinnt der zuletzt vollständig gespeicherte Stand.
 
