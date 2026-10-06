@@ -307,3 +307,10 @@ add('ps_experiment_', {
     'fail': 'Speichert eine strukturierte Diagnose und einen kompatiblen Text im Hostcontext; liefert den gespeicherten Fehlercode.',
     'diagnostic': 'Liefert eine unabhängige Kopie der Experimentdiagnose; ein älterer Context ohne optionalen Tail meldet PS_VERSION.',
 })
+add('ps_run_index_', {
+    'open': 'Öffnet und validiert einen Lauf mit begrenzten Allocator-Checkpoints; liefert auch bei PS_RECOVERED einen besitzenden Handle.',
+    'destroy': 'Schließt die unverändert geöffnete Datei und gibt alle Checkpoints an den ursprünglichen Allocator zurück.',
+    'get_info': 'Kopiert Schema, Metadaten, Präfixzählungen und Status nach Prüfung der Ausgabegröße und Version.',
+    'read': 'Liest bis zu 256 Messzeilen ab einer nullbasierten Zeilennummer; alle Ausgaben bleiben bei Fehlern unverändert.',
+    'snapshot': 'Liest eine aufgezeichnete Szene anhand ihrer nullbasierten Nummer mit erneuter CRC- und Snapshotprüfung.',
+})

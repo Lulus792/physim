@@ -176,6 +176,14 @@ def main():
                      experiment,modules["diagnostic_experiment"],sdk / "bin" / ("physim-analysis-runner"+suffix),
                      analysis,modules["diagnostic_analysis"],legacy,directory])
         print("Installed SDK diagnostics: installed/rebuilt C, Physim and legacy ABI passed",flush=True)
+        shutil.copy2(repo / "tests/test_run_index.c",consumer / "run-index-probe.c")
+        shutil.copy2(repo / "tests/test_allocator.h",consumer / "test_allocator.h")
+        for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+            program=builder.executable("run-index-probe-"+kind,["run-index-probe.c"],[archive])
+            directory=root / ("Run index "+kind);directory.mkdir()
+            checked([program,directory])
+            checked([sys.executable,repo / "tests/test_run_index_codec.py",directory])
+        print("Installed SDK run index: installed/rebuilt Core, million rows and independent codec passed",flush=True)
 
 
         # Preserve the former SDK comparison: nine experiments, both general
@@ -252,6 +260,7 @@ def main():
         "Common-target-time parameter studies from bundled/source C and Physim pendulums passed with installed and rebuilt probes.\n" +
         "Logging through installed/rebuilt C Core and Physim passed with exclusive JSONL and opt-in wire events.\n" +
         "Structured diagnostics through installed/rebuilt Core, C/Physim runners and legacy ABI passed.\n" +
+        "Run indexes through installed/rebuilt Core, legacy/recovered files, allocator failures and million-row independent codec passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
         ("Eight C template GUI workflows and the complete Physim language GUI workflow passed.\n" if args.app_tests else ""), encoding="utf-8")
     print(f"Native SDK verified: {root}")

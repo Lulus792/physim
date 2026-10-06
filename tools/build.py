@@ -21,7 +21,7 @@ import tempfile
 ROOT = Path(__file__).resolve().parent.parent
 WINDOWS = sys.platform == "win32"
 MAC = sys.platform == "darwin"
-CORE = "core memory array string_view hashmap math data snapshot analysis scene numerics units series report report_export mechanics box_contacts collision measurement".split()
+CORE = "core memory array string_view hashmap math data run_index snapshot analysis scene numerics units series report report_export mechanics box_contacts collision measurement".split()
 LANGUAGE = "lexer parser checker emitter builtins".split()
 APP = "main timeline docking layout_catalog channel_units run_import ui_backend ui_sdl ui_geometry graphics documentation library preferences workspace_state workspace_catalog workspace_tree plot_view report_image png".split()
 PROJECT = "project_file text_document autosave parameter_catalog".split()
@@ -443,6 +443,7 @@ class Builder:
         shutil.copy2(ROOT / "src/text_validation.h", staging / "src/text_validation.h")
         shutil.copy2(ROOT / "src/number_parse.h", staging / "src/number_parse.h")
         shutil.copy2(ROOT / "src/pchip.h", staging / "src/pchip.h")
+        shutil.copy2(ROOT / "src/run_index_internal.h", staging / "src/run_index_internal.h")
         (staging / "licenses").mkdir()
         for source, name in (("third_party/Nuklear-LICENSE", "Nuklear-LICENSE"),
                              ("third_party/zlib-1.3.2/LICENSE", "zlib-LICENSE.txt"),

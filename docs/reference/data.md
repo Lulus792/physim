@@ -79,6 +79,8 @@ Finalisiert die Laufdatei mit Abschlussmarker und schließt den Writer.
 ps_result ps_run_close(ps_run_writer *writer);
 ```
 
+Writes bounded CRC-protected index pages and the existing footer. Validates the recorded prefix once at finalization; no allocation. Previous readers skip index chunks. Failure closes the file without a successful footer.
+
 ## ps_run_open
 
 Öffnet einen Lauf zum blockweisen Lesen und lädt sein Schema.

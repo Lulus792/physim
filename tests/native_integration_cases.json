@@ -1321,6 +1321,14 @@
         "core"
       ],
       "module": true
+    },
+    "run-index-probe": {
+      "sources": [
+        "tests/test_run_index.c"
+      ],
+      "libraries": [
+        "core"
+      ]
     }
   },
   "tests": [
@@ -5190,6 +5198,30 @@
           "files": [
             "app-steps.json"
           ]
+        }
+      ]
+    },
+    {
+      "name": "run_index",
+      "targets": [
+        "python",
+        "run-index-probe"
+      ],
+      "steps": [
+        {
+          "program": "run-index-probe",
+          "arguments": [
+            "{work}"
+          ],
+          "timeout": 120
+        },
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_run_index_codec.py",
+            "{work}"
+          ],
+          "timeout": 60
         }
       ]
     }

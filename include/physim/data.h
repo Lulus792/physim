@@ -24,6 +24,9 @@ ps_result ps_run_append(ps_run_writer *writer, double time_s, const double *valu
  * footer count. Existing readers skip it after CRC validation. */
 ps_result ps_run_append_snapshot(ps_run_writer *writer, const ps_context *context,
                                 const ps_scene *scene, bool paused);
+/* Writes bounded CRC-protected index pages and the existing footer. Validates
+ * the recorded prefix once at finalization; no allocation. Previous readers
+ * skip index chunks. Failure closes the file without a successful footer. */
 ps_result ps_run_close(ps_run_writer *writer);
 ps_result ps_run_open(ps_run_reader *reader, const char *path);
 /* Streaming read: PS_EOF = finalized run; PS_RECOVERED = incomplete/corrupt tail.

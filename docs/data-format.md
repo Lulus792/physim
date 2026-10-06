@@ -19,6 +19,8 @@ CRC32: reflektiertes Polynom `0xEDB88320`, Initialwert und abschließendes XOR
 | 3 | Zeit f64 und genau Kanalzahl f64-Messwerte |
 | 4 | Gesamtzahl Messpunkte u64; Abschlussmarker |
 | 5 | optionale Szene: Snapshotversion u32 = 1, 2 oder 3, danach Snapshotkopf, Werte, Objekte und Punkte |
+| 6 | optionale Abschlussindexseite: Version, Messstride, Eintragszahl, Checkpoints |
+| 7 | optionaler Abschlussindexkopf: Indexbeginn, Seitenzahl, Mess-/Szenenzahl |
 
 Metadaten und Schema stehen unmittelbar nach dem Header. Strings im Schema sind
 NUL-terminiert und auf ihre Feldbreite begrenzt. Die Payloadobergrenze ist 8192 Bytes.
@@ -59,8 +61,32 @@ lesbar. Bei Stromausfall sind Daten seit dem letzten erfolgreichen Sync möglich
 verloren. Das Format verspricht keine atomare Speicherung eines gerade geschriebenen
 Blocks; stattdessen wird ein unvollständiger/CRC-fehlerhafter Endblock erkannt.
 
-Die erste Version besitzt einen Abschlusszähler, noch keinen Zufallszugriffsindex.
-Recovery arbeitet sequentiell bis zum letzten gültigen Block.
+Neue Writer ergänzen vor dem Abschlusszähler einen Zufallszugriffsindex.
+Dateien ohne Index bleiben gültig. Recovery arbeitet sequentiell bis zum letzten
+gültigen Block; die Index-API rekonstruiert die Checkpoints ohne Dateiveränderung.
+
+### Abschlussindexversion 1
+
+Typ 6 trägt einen 16-Byte-Kopf: Version u32=1, Messstride u32=256,
+Eintragszahl u32 (1–255), reserviert u32=0. Danach folgen genau entsprechend
+viele 32-Byte-Einträge: Chunktyp u32 (3 oder 5), reserviert u32=0, nullbasierte
+Zeilen-/Szenennummer u64, absolute Byteposition des zugehörigen Chunkkopfs u64,
+ursprüngliche Zeit f64. Checkpoints stehen in Dateireihenfolge; jede 256. Messzeile
+und jede Szene sind vertreten. Die maximale Seitenpayload ist 8176 Bytes.
+
+Typ 7 trägt genau 40 Bytes: Version u32=1, Messstride u32=256, Beginn des
+Indexbereichs u64, Seitenzahl u64, Messzeilenzahl u64, Szenenzahl u64. Die
+Indexseiten stehen unmittelbar hinter den Daten, der Kopf hinter den Seiten,
+der bestehende Typ-4-Footer hinter dem Kopf. Bei einem leeren Index bezeichnet
+der Indexbeginn den Typ-7-Chunkkopf. Alle u64-Felder sind unsigned little-endian;
+die unveränderte Chunk-CRC schützt jeden Payload separat.
+
+Ein gespeicherter Index wird nur bestätigt, wenn alle Checkpoints und Zähler
+mit dem validierten Datenpräfix übereinstimmen. Andernfalls verwendet die neue
+API rekonstruierte Checkpoints. Bisherige Reader überspringen Typ 6/7 nach der
+CRC-Prüfung und prüfen den unveränderten Messzähler. Einzelne Typ-3-/Typ-5-
+Payloads, Dateiformat 1, Snapshotversion 3, API/ABI 3 und IPC 5 ändern sich nicht.
+[Benutzung, Besitz und Kosten](run-index.md).
 
 ## Runner-Pipe
 

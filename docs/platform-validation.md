@@ -3,6 +3,85 @@
 Stand: 6. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Rekonstruierbare Laufdatei-Indizes am 6. Oktober 2026
+
+Format 1 erhält optionale Abschlusschunks 6/7 vor dem bisherigen Footer.
+Mess- und Szenenpayloads, Reader-/Writerstrukturen, API/ABI 3, Snapshot 3,
+IPC 5 und Physim 0.175.0 bleiben erhalten. Writerabschluss validiert einmal
+den aufgezeichneten Präfix und erzeugt begrenzte Indexseiten ohne Allokation.
+Die neue besitzende C-API validiert beim Öffnen den lesbaren Präfix und
+rekonstruiert Checkpoints mit einem expliziten Allocator. Gezielte Messblöcke
+und Szenen werden beim Abfragen erneut geprüft; alle Fehler erhalten Ausgaben.
+Ein gespeicherter Index gilt erst nach vollständigem Vergleich mit den
+tatsächlich gelesenen Daten als bestätigt. Quelllaufdateien bleiben unverändert.
+Der native Projektbuilder und ausgelieferte Quellen umfassen nun 20 Core-Einheiten.
+
+Die gezielten macOS-Debug-Prüfungen von Snapshots, Runnern, Frame-Aufzeichnung,
+Logging und dem neuen Index bestehen 7/7 unter
+`build/run-index-debug-mac/test-results/run-5wfp3ltu`. Nach Ergänzung der
+Checkpointprüfung und absichtlicher Beschädigung nach dem Öffnen bestehen
+Index und alte Szenenversionen 2/2 unter `run-6fge4idn`.
+Die unabhängige Pythonprüfung liest eine Million Messzeilen, 3907 Checkpoints,
+16 Indexseiten und den unveränderten Footer mit korrekten CRCs und Bytepositionen.
+Sie kontrolliert außerdem Indexfreiheit, Recovery, semantisch falsche
+Checkpoints trotz korrekter CRC und eine unbekannte Indexversion.
+Die C-Prüfung erzwingt jede Allokationsfehlerstelle und ein Budget von 600000
+Bytes beim Million-Zeilen-Lauf; sämtliche Besitzer werden korrekt freigegeben.
+
+Linux GCC Debug mit AddressSanitizer und UndefinedBehaviorSanitizer besteht
+5/5 unter `build/run-index-asan-linux/test-results/run-rea3kiur` in der Debian-VM:
+Core, Snapshots, alte Szenenversionen, C-/Physim-Frame-Runner und Index einschließlich
+Million-Zeilen- und unabhängiger Codec-Prüfung.
+Ein unveränderter Analyse-Runner und das Analysemodul aus dem vorherigen macOS-SDK
+`build/Diagnostics clean SDK ä mac` verarbeiten die neue Million-Zeilen-Datei
+erfolgreich (`build/run-index-legacy-million-proof.*`). Ein erster Versuch mit
+der absichtlich nichtmonotonen Prüffixture bestätigt zwar 1000 lesbare Zeilen,
+wird aber erwartbar von deren strenger Analyse-Zeitprüfung abgewiesen.
+
+Die ersten Release-Gesamtläufe enden auf beiden Plattformen 528/529:
+`build/run-index-release-mac/test-results/run-4ms85qtl` und in der VM
+`build/run-index-release-linux/test-results/run-_jy4js73`. Der bestehende
+Mutationsprüfer erwartete noch sechs Chunks; Indexseite und Indexkopf ergeben
+nun acht. Nach Korrektur und Erweiterung um die Index-API bestehen dessen
+8660 Varianten unter macOS Debug (`run-f1vlwacq`) und zusätzlich unter Linux
+ASan/UBSan (`build/run-index-asan-linux/test-results/run-o5qx3yw0`).
+Der anschließende Linux-Release-Gesamtlauf besteht 529/529 unter
+`build/run-index-release-linux/test-results/run-a0u2wsxq`. Er baut auch alle
+16 eigenständigen Sprachprogramme und 31 Experiment-/Analysemodule.
+Linux Release mit X11/Mesa, Xvfb und Openbox besteht vollständigen Physim-Ablauf
+und C-/Physim-Zeitleiste 2/2 unter
+`build/run-index-release-linux/test-results/run-3bqae85o`. Die Abläufe öffnen
+aufgezeichnete Szenen erneut und kontrollieren Zeiten, Werte, Auswahl und
+unveränderte Rohdateien. Es ist keine vollständige Abnahme aller 58 Fensterfälle.
+macOS Release besteht ebenfalls 529/529 unter
+`build/run-index-release-mac/test-results/run-sqfa86sl` mit Apple Clang 16,
+Intel macOS 14.6.1 und SDL 3.2.30; auch dort werden alle 16 Sprachprogramme und
+31 Module gebaut. Debian 12 verwendet GCC 12.2.0, Kernel 6.1.0-53-cloud-amd64
+und SDL 3.2.30. Die Wiederholungen verwenden den unveränderten Produktionscode
+mit dem korrigierten und erweiterten Mutationsprüfer.
+macOS Release besteht die beiden App-Prüfungen ebenfalls 2/2 unter
+`build/run-index-release-mac/test-results/run-fx8u_vc0`.
+Das verschobene Linux-SDK besteht die vollständige unabhängige Prüfung unter
+`build/run-index-sdk-proof-linux/Native SDK ä k2jnfyn3` in der VM. Sie prüft alle
+gelieferten Header separat, baut die 20 Core-Quellen neu, führt 16 Sprachprogramme,
+31 Module und neun native Projektbuilds aus. Neue Indexprobes laufen gegen das
+installierte und das neu gebaute Archiv, jeweils mit Million-Zeilen-Fixture,
+Allocatorfehlern, Recovery und unabhängigem Pythoncodec. Alle 305 Manifestdateien
+des SDKs stimmen mit ihren SHA-256-Werten überein.
+Das macOS-SDK besteht dieselbe vollständige Prüfung unter
+`build/run-index-sdk-proof-mac/Native SDK ä ycjz0z88`, ebenfalls einschließlich
+beider Indexarchive, Million-Zeilen-Dateien und unabhängiger Codec-Prüfung.
+Die abschließenden Pakete liegen unter `build/Run Index clean SDK ä mac` bzw.
+`build/Run Index clean SDK ä linux` in der VM. Ihre jeweils 305 Manifestdateien
+werden erneut gehasht. Header, Archive, ausgelieferte Core-Quellen und alle
+Programme stimmen bytegenau mit den vollständig geprüften verschobenen SDKs
+überein; die Pakete enthalten die abschließenden Nachweistexte.
+
+Die Indexfinalisierung und das geprüfte Öffnen sind zusätzliche lineare Scans;
+gezielte nachfolgende Abfragen profitieren von Checkpoints. Kompression,
+weitere Messdatentypen, schnelleres ungeprüftes Öffnen und eigene direkte
+Sprachmethoden für die gezielten C-Abfragen sind damit nicht abgenommen.
+
 ## Strukturierte Diagnosen am 6. Oktober 2026
 
 Der neue besitzende UTF-8-Wert trägt Fehlercode, Operation, Argument und

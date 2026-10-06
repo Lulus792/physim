@@ -1,4 +1,5 @@
 #include "physim/data.h"
+#include "run_index_internal.h"
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -154,7 +155,7 @@ ps_result ps_run_create(ps_run_writer *w, const char *path, const ps_context *c,
     if (parameter_count && ps_parameter_finalize(c) != PS_OK)
         return PS_INVALID;
     memset(w, 0, sizeof *w);
-    w->file = fopen(path, "wbx");
+    w->file = fopen(path, "w+bx");
     if (!w->file)
         return PS_IO;
     w->channels = c->channel_count;
@@ -236,7 +237,8 @@ ps_result ps_run_close(ps_run_writer *w) {
     unsigned char p[8];
     ps_put_u32(p, (uint32_t)w->samples);
     ps_put_u32(p + 4, (uint32_t)(w->samples >> 32));
-    ps_result r = chunk(w->file, 4, p, 8);
+    ps_result r = ps_run_write_index(w->file,w->channels,w->samples);
+    if(r==PS_OK)r = chunk(w->file, 4, p, 8);
     if (flush_file(w->file) != PS_OK)
         r = PS_IO;
     if (fclose(w->file))
@@ -257,7 +259,7 @@ ps_result ps_run_append_snapshot(ps_run_writer *w, const ps_context *c,
     if (result == PS_OK && fflush(w->file)) result = PS_IO;
     return result;
 }
-static ps_result read_chunk(FILE *f, uint32_t *type, unsigned char *p, uint32_t *size) {
+ps_result ps_run_chunk_read(FILE *f, uint32_t *type, unsigned char *p, uint32_t *size) {
     unsigned char h[12];
     if (fread(h, 1, 12, f) != 12)
         return ferror(f) ? PS_IO : PS_RECOVERED;
@@ -287,11 +289,11 @@ ps_result ps_run_open(ps_run_reader *r, const char *path) {
         goto fail;
     }
     uint32_t type, n;
-    if (read_chunk(r->file, &type, p, &n) != PS_OK || type != 1 || n >= sizeof r->metadata)
+    if (ps_run_chunk_read(r->file, &type, p, &n) != PS_OK || type != 1 || n >= sizeof r->metadata)
         goto fail;
     memcpy(r->metadata, p, n);
     r->metadata[n] = 0;
-    if (read_chunk(r->file, &type, p, &n) != PS_OK || type != 2 || n < 4)
+    if (ps_run_chunk_read(r->file, &type, p, &n) != PS_OK || type != 2 || n < 4)
         goto fail;
     r->channels = ps_get_u32(p);
     if (!r->channels || r->channels > PS_MAX_CHANNELS || n != 4 + 167 * r->channels)
@@ -319,7 +321,7 @@ static ps_result next_record(ps_run_reader *r, double *t, double *v, ps_snapshot
     for (;;) {
         uint32_t type, n;
         unsigned char p[8192];
-        ps_result e = read_chunk(r->file, &type, p, &n);
+        ps_result e = ps_run_chunk_read(r->file, &type, p, &n);
         if (e != PS_OK)
             return e;
         if (type == 3) {

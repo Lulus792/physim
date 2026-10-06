@@ -3,6 +3,13 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-06. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Laufdatei-Index:** Finalisierte Messdateien erhalten begrenzte CRC-geschützte
+Indexseiten vor dem bisherigen Footer. Die neue C-API validiert und rekonstruiert
+Checkpoints mit explizitem Allocator, auch für alte und unterbrochene Läufe;
+gezielte Messblöcke und Szenenabfragen erhalten Ausgaben bei Fehlern. Writer-
+Finalisierung benötigt keinen Heap. Format 1 und ABI 3 bleiben erhalten.
+[Vertrag und Kosten](run-index.md).
+
 **Strukturierte Diagnosen:** Eigene begrenzte UTF-8-Werte tragen Fehlercode,
 Operation, Argument und ursprüngliche Quellposition ohne globalen Last-error-
 Zustand. Experiment- und Analyse-Runner speichern CRC-geschützte Sidecars;
@@ -53,7 +60,7 @@ geprüft und übernommen, nur fehlende Indizes starten erneut. Seeds, Parameter
 und feste/adaptive Zeitvorgaben bleiben erhalten. Aktuelle Editoränderungen und
 die alte Serie werden nicht verändert. Vollständig vorhandene Serien starten
 keine neuen Prozesse. Frühere Serien ohne Checkpoint bleiben nicht fortsetzbar.
-Der Katalog umfasst 528 Prüfungen ohne Fenster (513 ohne SDL) und 58 Fensterfälle.
+Der Katalog umfasst 529 Prüfungen ohne Fenster (514 ohne SDL) und 58 Fensterfälle.
 Ausgeführte Nachweise stehen im [Plattformbericht](platform-validation.md).
 
 **Eigenständige Analyseprojekte:** Die App legt jetzt C-/Physim-Auswertungen ohne
@@ -757,7 +764,7 @@ und veraltete Fenstermanager-Einträge geprüft. Die erneute Linux-CI steht aus.
 | Basis | Fehlercodes und besitzende strukturierte Diagnosen an Modulgrenzen, expliziter Logger mit synchronem Sink, expliziter RNG, explizite Allocatoren mit Fehlerprüfungen, feste Arenen, eigene Speicherdomänen für Berichte/Analysekontexte, Test-Allocator mit Fehler-Injektion und Bytebudget, dynamische Arrays mit Größenlimit und Selbstkopien, begrenzte String-Views ohne Kopie, Hashmap mit eigenen Schlüsseln und Größenlimits | Allocator-Anbindung weiterer Subsysteme |
 | Einheiten | SI-Dimensionen, Konvertierung, Einheitenalgebra, Quantity-Rechnung und Dimensionsprüfung von Datenreihen, deklarierte Anzeigeeinheiten für Experimentparameter samt Formulare und Studienberichte, persönliche lineare Anzeigeeinheiten für Messkanäle mit Live-Werten, Kurven und Gesamtstatistik | — |
 | Runner | versionierte Modul-ABI, Handshake, Pause/Step/Run/Stop, Heartbeat, Crash-/Hang-Isolation, feste/adaptive Modellschritte, Echtzeittaktung von 0,1× bis 16× und Offline, eigener begrenzter Logkanal mit JSONL-Speicherung | allgemeine Ressourcenlimits, echtes OS-Sandboxing |
-| Daten | CRC-Chunks, Streaming, Recovery, CSV, Seed-/Modellmetadaten und optionale versionierte Szenenblöcke | Index, mehr Datentypen, komprimierte Blöcke, Schemaerweiterung |
+| Daten | CRC-Chunks, Streaming, Recovery, CSV, Seed-/Modellmetadaten, optionale versionierte Szenenblöcke und rekonstruierbare Abschlussindizes mit begrenzten gezielten C-Abfragen | mehr Datentypen, komprimierte Blöcke, Schemaerweiterung |
 | App | leerer Workspace-Einstieg mit gespeicherter Ordnerauswahl und bewusster Wiederöffnung, kompakte Menüleiste, Projektmanager, aufklappbarer Dateibaum und bis zu 16 editierbare Textdokumente mit separaten Autosaves und gespeicherten Editoransichten, drei Arbeitsbereiche, integrierte Offline-Dokumentation, Systemtypografie, Einstellungen mit Code-Schriftgröße und Autosave-Intervall, dunkle, helle und kontrastreiche Darstellung, gespeicherte Fenstergröße/Maximierung, verschiebbare Seitenleiste, Arbeitsbereich, Protokoll und eigenständiger Inspektor mit Teilungen, Tabgruppen, gespeicherten frei platzierten Panels und bis zu acht benannten Panelanordnungen im Hauptfenster und acht benannten Workspaces mit Ordnern und Editoransichten, Reset zum pausierten Anfangszustand mit erhaltenen Alt-Läufen, Vorlagen, Editor, direkter Projektbuild ohne CMake mit Ausgaben unter `build/`, Diagramme | portable Workspaces, separate Panelfenster, weitere Panelzustände, UI-weite Schriftvergrößerung, vollständige Barrierefreiheit |
 | Editor | C- und Physim-Dateien bearbeiten, sprachspezifische Syntaxfarben, Zeilennummern, Debug/Release, anklickbare Compilerdiagnosen, öffentlicher Header-Browser | Completion |
 | Szene | OpenGL 3.3 Core, Tiefenpuffer, MSAA, alle acht Grundprimitive, orientierte Boxen/Ebenen, RGBA-Transparenz mit Dreieckssortierung, UTF-8-Labels, Wurf-Flugbahn, Grid/Achsen, Kamera, Ansichten und Sichtbarkeit und Mausklickauswahl einzelner Szeneneinträge mit optionalen Objekt-IDs, gespeicherte Szenen mit Zeitleiste und Wiedergabe, benannte Gruppen, Elternbeziehungen und explizite hierarchische TRS-Koordinatenrahmen mit aufklappbarem Inspektorbaum, geerbter Sichtbarkeit und konsistenter Weltgeometrie für Darstellung/Picking | artefaktfreie Transparenz bei sich durchdringenden Flächen |

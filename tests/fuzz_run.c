@@ -1,4 +1,4 @@
-#include "physim/data.h"
+#include "physim/run_index.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,6 +18,22 @@ static void exercise(const unsigned char *data, size_t size) {
     require(fwrite(data, 1, size, f) == size);
     require(fclose(f) == 0);
     cases++;
+    ps_run_index *index=NULL;
+    ps_result indexed=ps_run_index_open("run-mutation.psrun",ps_allocator_default(),128,&index);
+    if(indexed==PS_OK || indexed==PS_RECOVERED) {
+        require(index!=NULL);
+        ps_run_index_info info={.struct_size=sizeof info,.version=PS_RUN_INDEX_VERSION};
+        require(ps_run_index_get_info(index,&info)==PS_OK && info.complete==(indexed==PS_OK));
+        require(info.samples<=size/12 && info.checkpoints<=128);
+        if(info.samples) {
+            double time,values[PS_MAX_CHANNELS];require(ps_run_index_read(index,0,1,&time,values)==PS_OK && isfinite(time));
+            for(unsigned i=0;i<info.channels;i++)require(isfinite(values[i]));
+        }
+        if(info.snapshots){ps_snapshot snapshot;require(ps_run_index_snapshot(index,0,&snapshot)==PS_OK);}
+        ps_run_index_destroy(index);
+    } else {
+        require(index==NULL && (indexed==PS_CORRUPT || indexed==PS_VERSION || indexed==PS_LIMIT));
+    }
     ps_run_reader reader;
     ps_result result = ps_run_open(&reader, "run-mutation.psrun");
     if (result != PS_OK) {
@@ -102,7 +118,7 @@ int main(int argc, char **argv) {
         lengths[chunks++] = length;
         at += 12 + length;
     }
-    require(chunks == 6);
+    require(chunks == 8 && ps_get_u32(seed+starts[5])==6 && ps_get_u32(seed+starts[6])==7 && ps_get_u32(seed+starts[7])==4);
     exercise(seed, size);
     /* CRC-correct nonfinite last channel must not expose earlier values/time. */
     memcpy(changed, seed, size);

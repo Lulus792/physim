@@ -87,7 +87,10 @@ static const documentation_topic documentation_topics[] = {
     {"Lokale Szenenkoordinaten", "docs/scene-frames.md", false},
     {"Strukturierte Diagnosen", "docs/diagnostics.md", false},
     {"diagnostic.h", "include/physim/diagnostic.h", true},
-    {"C: Diagnosen", "docs/reference/diagnostic.md", false}};
+    {"C: Diagnosen", "docs/reference/diagnostic.md", false},
+    {"Indizierte Laufdateien", "docs/run-index.md", false},
+    {"run_index.h", "include/physim/run_index.h", true},
+    {"C: Laufdatei-Index", "docs/reference/run_index.md", false}};
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27
 #define DOCUMENTATION_MEASUREMENT_TOPIC 28
