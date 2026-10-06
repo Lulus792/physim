@@ -3171,6 +3171,16 @@ Liefert das vollständige 64-Bit-Bitmuster des aktuellen Laufseeds als Int64. Au
 
 Experimentmodul erforderlich.
 
+## sceneFrame
+
+```text
+sceneFrame(name: String, id: Int64, parent: Int64, translation: Vec3, rotation: Quat, scale: Vec3) -> Void
+```
+
+Erzeugt einen expliziten lokalen TRS-Koordinatenrahmen. Nur im scene-Callback; parent 0 bezeichnet die Wurzel. Endliche Translation, nonzero Quaternion und endliche nonzero Scale; Nachfahren werden für Darstellung und Picking transformiert.
+
+Experimentmodul erforderlich.
+
 ## sceneParent
 
 ```text
@@ -3178,6 +3188,26 @@ sceneParent(child: Int64, parent: Int64) -> Void
 ```
 
 Ordnet einen Szeneneintrag einer Eltern-ID zu; parent 0 löst ihn zur Wurzel. Fehlende IDs und Zyklen erzeugen eine Quelldiagnose, ohne die Szene zu verändern.
+
+Experimentmodul erforderlich.
+
+## sceneTransform
+
+```text
+sceneTransform(index: Int64) -> Mat4
+```
+
+Liefert die zusammengesetzte Local-to-world-Matrix des Szenenslots. Nur im scene-Callback; index beginnt bei 0. Rahmen enthalten ihre eigene TRS, Geometrie nur ihre Frame-Vorfahren.
+
+Experimentmodul erforderlich.
+
+## sceneWorldPoint
+
+```text
+sceneWorldPoint(index: Int64, point: Vec3) -> Vec3
+```
+
+Konvertiert einen Punkt in der Basis des Szenenslots in Weltkoordinaten; nur im scene-Callback. Fehler erhalten eine Quelldiagnose.
 
 Experimentmodul erforderlich.
 

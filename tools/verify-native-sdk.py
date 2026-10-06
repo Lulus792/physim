@@ -32,6 +32,8 @@ def main():
     if (sdk / "cmake").exists() or any(sdk.rglob("CMakeLists.txt")) or any(sdk.rglob("*.cmake")):
         raise RuntimeError("Native SDK must not contain legacy CMake build files")
     for name, digest in metadata["files"].items():
+        if any(part == ".DS_Store" or part.startswith("._") for part in Path(name).parts):
+            raise RuntimeError(f"SDK contains local Finder metadata: {name}")
         path = (sdk / name).resolve()
         if sdk not in path.parents or hashlib.sha256(path.read_bytes()).hexdigest() != digest:
             raise RuntimeError(f"SDK integrity check failed: {name}")
@@ -146,6 +148,19 @@ def main():
         checked([sys.executable, repo / "tests/test_runner_logging.py",
                  sdk / "bin" / ("physim-runner" + suffix), modules["logging"], directory])
         print("Installed SDK logging: installed/rebuilt C and Physim passed", flush=True)
+        shutil.copy2(sdk / "examples/scene_frames/main.c",consumer / "frames.c")
+        frames=builder.executable("frames-rebuilt",["frames.c"],[rebuilt_core],module=True)
+        for name,experiment in (("C",frames),("Physim",modules["scene_frames"])):
+            checked([sdk / "bin" / ("physim-runner"+suffix),experiment,root / ("Frames "+name+".psrun"),
+                     "--steps","20","--dt",".01","--record-scenes"])
+        print("Installed SDK coordinate frames: rebuilt C/Physim modules passed",flush=True)
+        shutil.copy2(repo / "tests/test_scene_frames.c",consumer / "frame-probe.c")
+        for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+            program=builder.executable("frame-probe-"+kind,["frame-probe.c"],[archive])
+            directory=root / ("Frame probe "+kind);directory.mkdir()
+            checked([program,directory])
+        print("Installed SDK coordinate frames: independent installed/rebuilt API probes passed",flush=True)
+
 
         # Preserve the former SDK comparison: nine experiments, both general
         # Physim analyses, the sensor report and six C/Physim combinations.
@@ -215,7 +230,7 @@ def main():
             raise RuntimeError("App tests require an SDK with the app")
     (root / "PASSED.txt").write_text(
         "Native SDK relocation, independent headers, installed and rebuilt core archives, eight bundled and rebuilt C templates, "
-        "fifteen language programs, 28 rebuilt language modules, nine language experiments with both general analyses, "
+        "fifteen language programs, 29 rebuilt language modules, nine language experiments with both general analyses, "
         "specialized sensor analysis and six C/Physim combinations passed.\n"
         "Adaptive bundled/source C and Physim pendulums, actual variable sample times, energy and both analysis languages passed.\n" +
         "Common-target-time parameter studies from bundled/source C and Physim pendulums passed with installed and rebuilt probes.\n" +

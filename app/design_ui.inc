@@ -133,6 +133,21 @@ static void camera_inspector(app *a) {
         else snprintf(selected, sizeof selected, "Auswahl: Eintrag %u", a->scene_selected_slot + 1);
         nk_layout_row_dynamic(ui, 26, 1);
         nk_label(ui, selected, NK_TEXT_LEFT);
+        const ps_scene *scene=display_scene(a);const ps_object *object=&scene->objects[a->scene_selected_slot];
+        if(object->shape!=PS_GROUP) {
+            ps_vec3 world,local=object->shape==PS_FRAME?ps_v3(0,0,0):object->a;
+            if(ps_scene_world_point(scene,a->scene_selected_slot,local,&world)==PS_OK) {
+                char position[128];nk_layout_row_dynamic(ui,20,1);
+                snprintf(position,sizeof position,"Welt [m]: %.6g / %.6g / %.6g",world.x,world.y,world.z);nk_label(ui,position,NK_TEXT_LEFT);
+                nk_layout_row_dynamic(ui,20,1);
+                snprintf(position,sizeof position,"Lokal [m]: %.6g / %.6g / %.6g",object->a.x,object->a.y,object->a.z);nk_label(ui,position,NK_TEXT_LEFT);
+                if(object->shape==PS_FRAME) {
+                    nk_layout_row_dynamic(ui,20,1);
+                    snprintf(position,sizeof position,"Skalierung: %.6g / %.6g / %.6g",object->b.x,object->b.y,object->b.z);nk_label(ui,position,NK_TEXT_LEFT);
+                }
+            }
+        }
+        nk_layout_row_dynamic(ui,26,1);
         a->scene_hide_selection_bounds = nk_widget_bounds(ui);
         if (nk_button_label(ui, "Auswahl ausblenden")) {
             a->scene_view.hidden |= UINT32_C(1) << a->scene_selected_slot;

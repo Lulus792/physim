@@ -1,0 +1,39 @@
+let pi = 3.141592653589793
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let position = Channel("position.x", metres, "Local position")
+var value = 0.0
+func create():
+    return
+func reset():
+    value = 0
+    position.sample(value)
+func step(dt: Float64):
+    value += dt
+    position.sample(value)
+func scene():
+    let rotation = Quat.axisAngle(Vec3(0,0,1), pi/2)
+    sceneFrame("Translated/rotated frame", 100, 0, Vec3(0.4,-0.2,0), rotation, Vec3(1.5,1,0.5))
+    group("Model", 101, 100)
+    sceneFrame("Nested scaled frame", 200, 101, Vec3(0.15,0,0), rotation, Vec3(0.75,1.25,1))
+    box(Vec3(value,0,0), Vec3(0.5,0.3,0.3), Quat(0,0,0,1), 0x53dec2ff, 1)
+    sceneParent(1,200)
+    sphere(Vec3(-0.45,0,0), 0.16, 0xf6b966a0, 2)
+    sceneParent(2,200)
+    label(Vec3(value,0.3,0), "Local body α", 0xffffffff, 3)
+    sceneParent(3,200)
+    polyline([Vec3(-0.6,-0.35,0),Vec3(0,-0.2,0),Vec3(0.6,-0.35,0)],0.015,0x66aafaff,4)
+    sceneParent(4,200)
+    arrow(Vec3(0,0,0), Vec3(0.5,0,0), 0.012,0xef6670ff,5)
+    sceneParent(5,200)
+    point(Vec3(0,0.45,0),0.025,0xffffffff,6)
+    sceneParent(6,200)
+    plane(Vec3(0,0,-0.3),Vec2(1.3,0.7),Quat.axisAngle(Vec3(1,0,0),pi/2),0x49607950,7)
+    sceneParent(7,200)
+    line(Vec3(-0.5,0.5,0),Vec3(0.5,0.5,0),0.01,0xaaaaffff,8)
+    sceneParent(8,200)
+    let world = sceneWorldPoint(3, Vec3(value,0,0))
+    let matrix = sceneTransform(3)
+    let viaMatrix = matrix.transformPoint(Vec3(value,0,0))
+    assert(abs(world.x - (0.4-0.75*value)) < 0.000000000001)
+    assert(abs(world.y - 0.025) < 0.000000000001)
+    assert(abs(viaMatrix.x-world.x) < 0.000000000001)

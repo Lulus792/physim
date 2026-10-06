@@ -3,7 +3,7 @@
 #include "physim/data.h"
 #define PS_WIRE_MAX PS_SNAPSHOT_MAX
 #define PS_WIRE_HEADER 20
-#define PS_WIRE_VERSION 4u
+#define PS_WIRE_VERSION 5u
 #define PS_WIRE_OBJECT_SIZE PS_SNAPSHOT_OBJECT_SIZE
 enum {
     PS_MSG_HELLO = 1,

@@ -341,7 +341,7 @@ static ps_result next_record(ps_run_reader *r, double *t, double *v, ps_snapshot
             }
         }
         if (type == 5 && snapshot) {
-            if (n < 4 || (ps_get_u32(p)!=1 && ps_get_u32(p) != PS_SNAPSHOT_VERSION))
+            if (n < 4 || (ps_get_u32(p)!=1 && ps_get_u32(p)!=2 && ps_get_u32(p) != PS_SNAPSHOT_VERSION))
                 return n < 4 ? PS_CORRUPT : PS_VERSION;
             ps_snapshot decoded = {0};
             if (!ps_snapshot_decode_version(ps_get_u32(p),p + 4, n - 4, &decoded.time, decoded.values,

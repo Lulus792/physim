@@ -65,7 +65,7 @@ Prüfe sie im Experiment, wenn vollständiges Logging erforderlich ist.
 ## Interaktives Protokoll
 
 `--interactive --log-events` aktiviert zusätzlich `PS_MSG_LOG` (Typ 11) im
-versionierten Wire-4-Datenstrom. Ohne dieses ausdrückliche Opt-in bleiben die
+versionierten Wire-5-Datenstrom. Ohne dieses ausdrückliche Opt-in bleiben die
 bisherigen Nachrichten erhalten; die Sidecar wird trotzdem geschrieben. Die App
 fordert Logevents an. Eine Meldung kann vor HELLO erscheinen und `destroy`-Meldungen
 stehen vor BYE. Der Payload enthält little-endian `u32 level`, `f64 time_s` und

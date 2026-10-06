@@ -3,6 +3,96 @@
 Stand: 6. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Lokale Szenenkoordinaten am 6. Oktober 2026
+
+Explizite `PS_FRAME`-Knoten ergänzen hierarchische Translation, Quaternionrotation
+und nichtuniforme Skalierung. Gruppen und Geometrie-Eltern behalten ihre bisherige
+Bedeutung; ausschließlich Frame-Vorfahren transformieren lokale Geometrie.
+Spiegelungen und entstehende Scherung wirken auf vollständige Mesh-Vertices und
+inverse-transponierte Normalen. Picking und Transparenzsortierung verwenden
+dieselben Welt-Vertices, Labels dieselben Weltanker. Ein gemeinsamer lokaler
+Polyline-Pool wird nicht verändert. Der Inspektor zeigt Welt- und Lokalposition.
+
+API/ABI 3 und Objekt-/Szenenlayouts bleiben erhalten. Snapshot 3 speichert die
+lokalen Daten und unterstützt Versionen 1 und 2 beim Lesen. Version 2 weist
+Frame-Form 9 ab. IPC 5 grenzt die neue Interpretation ab; Messdateiformat 1 bleibt
+unverändert. Physim 0.174.0 bindet `sceneFrame`, `sceneTransform` und
+`sceneWorldPoint`. Die Rendergrenze wird nach Umrechnung angewendet; ein GPU-Test
+prüft ausdrücklich eine große lokale Kugel, die durch Skalierung in den
+sichtbaren Weltbereich fällt.
+
+Der Core-Test prüft analytische verschachtelte TRS mit Spiegelung, lokale
+Annotationen, organisatorische und geometrische Eltern, gemeinsam verwendete
+Polyline-Punkte unter unterschiedlichen Rahmen, umgeordnete Snapshots,
+unveränderte Eingaben/Ausgaben bei ungültigen Zahlen, Zyklen, null Scale,
+null Quaternion, nicht darstellbarer Komposition und numerisch singulären Basen.
+Wire- und Messdateirundläufe erhalten alle lokalen Werte. Der Runnervergleich
+prüft sämtliche 21 Messwerte und aufgezeichneten C-/Physim-Szenen sowie die
+analytische Weltbewegung eines Körpers; fehlende Frame-Capability wird abgewiesen.
+Die eigene Sprache prüft ihre Weltpunkt- und Matrixabfragen zusätzlich per
+`assert` im ausgeführten Experiment.
+
+Die gezielte macOS-Debug-Prüfung von Frame-Core, Hierarchie und Runner besteht
+3/3 (`build/scene-frames-debug-mac/test-results/run-7tv5i269`); nach Ergänzung der
+Sprachabfragen bestehen Frame-Core und Runner 2/2 (`run-ke41ga22`).
+Linux GCC Debug mit AddressSanitizer und UndefinedBehaviorSanitizer besteht
+4/4: Frames, Hierarchie, Runner und Protokollmutationen unter
+`build/scene-frames-asan-linux/test-results/run-e48v3kom` in der Debian-VM.
+
+Die App-Abläufe bauen C- und Physim-Projekte, wählen Weltgeometrie und Labels
+per Maus, prüfen Frame-Sichtbarkeit, Schrittwerte und Wiederöffnung ohne
+Veränderung der Messdatei. Ein früher Test fand alte Label-Klickflächen nach
+Ausblenden; die Viewport-Ausgabe setzt diese Bounds nun in jedem Frame zurück.
+Die neue Unicode-Beschriftung zeigte außerdem die bisher fehlende griechische
+UI-Glyphenrange. UI-Schriften binden nun wie Codeschriften den Bereich
+U+0300–U+04FF ein; der Test prüft das gebackene Alpha-Glyph und die gerenderte
+Ansicht. Ein fehlerhafter Font-Cast im neuen Testsetup wurde korrigiert.
+macOS Release besteht GPU, Plots, bisherige Hierarchie und neue Frame-Abläufe
+4/4 unter `build/scene-frames-release-mac/test-results/run-3nxi83q0`.
+Debian Release mit X11/Mesa, Xvfb und Openbox besteht dieselben vier
+Fensterprüfungen 4/4 unter
+`build/scene-frames-release-linux/test-results/run-473b86k9`.
+macOS Debug besteht GPU, bisherige Hierarchie und neue Frame-Abläufe 3/3:
+`build/scene-frames-debug-mac/test-results/run-swv6vzts`.
+Der GPU-Test prüft alle sieben Meshformen in perspektivischer und orthografischer
+Sicht unter verschachtelter Rotation, nichtuniformer Scale und Spiegelung.
+
+Ein erster Debian-Gesamtlauf vor den abschließenden Sprachabfragen bestand
+525/525 (`build/scene-frames-release-linux/test-results/run-i3kt5ndg`).
+Der parallel laufende erste macOS-Gesamtlauf verwendete noch den Compiler vor
+diesen Abfragen und endete 524/525 (`run-bobtxr8j`): nur das inzwischen erweiterte
+Frame-Beispiel konnte die neuen Namen nicht auflösen. Dieser Lauf ist keine
+vollständige Prüfung des abschließenden Stands. Die anschließenden Gesamtprüfungen des feststehenden Quellstands bestehen
+jeweils 525/525: macOS Release unter
+`build/scene-frames-release-mac/test-results/run-u_zmy4jx` und Debian Release unter
+`build/scene-frames-release-linux/test-results/run-rvk6rjdr`.
+
+Die installierten Release-SDKs wurden für die Prüfung in Unicode-Pfade mit
+Leerzeichen verschoben. Header-Einzelübersetzung, alle mitgelieferten C-/Physim-
+Beispiele, Nutzerprojektbuilds und die bisherigen Sensor-/Analyse-/Logging-
+Proben bestehen. Neu hinzu kommen tatsächliche C-/Physim-Frame-Module mit
+aufgezeichneten Szenen und unabhängige Frame-API-Proben gegen das installierte
+und das aus gelieferten Quellen neu gebaute Core-Archiv.
+Beide vollständigen Verifizierungen bestehen:
+`build/scene-frames-sdk-proof-mac/Native SDK ä zki8xdhc` und in der VM
+`build/scene-frames-sdk-proof-linux/Native SDK ä qmrr709o`.
+
+Der Paketvergleich fand lokale Finder-Metadaten in den zuvor erzeugten SDKs.
+Der Installer schließt `.DS_Store` und AppleDouble-Dateien `._*` nun aus;
+der Verifier prüft diese Eigenschaft. Die bereinigten Pakete unter
+`build/Scene Frames clean SDK ä mac` und entsprechend `... ä Linux` enthalten
+je 288 Dateien; alle SHA-256-Werte sind geprüft. Archive, Programme, Header,
+Quellen, Beispiele und fachliche Dokumentation sind bytegleich mit den bereits
+vollständig verifizierten Paketen. Auf macOS wurde zusätzlich nur dieser
+Plattformbericht aktualisiert. Das Entfernen der lokalen Metadaten verändert
+keine ausführbaren oder öffentlichen SDK-Inhalte.
+
+Vertrag und Grenzen stehen unter [Szenenkoordinaten](scene-frames.md).
+Numerisch singuläre Rahmen und null Scale werden abgewiesen. Die Geometrie
+hat eine Kamera-/Rendergrenze und ersetzt keine physikalische Kopplung. Diese
+Änderung wurde lokal bislang unter macOS 14.6.1/AppleClang 16 und Debian 12/GCC
+12.2 geprüft; andere Plattformkombinationen werden nicht daraus abgeleitet.
+
 ## Explizites Experiment-Logging am 6. Oktober 2026
 
 Der Host besitzt einen expliziten synchronen Logger; der optionale Context-Tail

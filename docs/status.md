@@ -3,9 +3,17 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-06. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Lokale Szenenkoordinaten:** Explizite TRS-Rahmen erhalten lokale Geometrie
+und setzen Translation, Quaternionrotation und nichtuniforme Skalierung über
+mehrere Ebenen zusammen. Spiegelungen und resultierende Scherung wirken auf
+Meshes, Normalen, Picking und Labels; Sichtbarkeit bleibt separat vererbt.
+Gewöhnliche Gruppen behalten ihre bisherige Bedeutung. Snapshot 3 zeichnet
+lokale Werte auf und liest Versionen 1/2; IPC 5 grenzt die neue Interpretation ab.
+C-/Physim-Bindungen stehen unter [Szenenkoordinaten](scene-frames.md).
+
 **Experiment-Logging:** API/ABI 3 erhält einen optionalen Context-Tail mit
 explizitem synchronem Sink. Der Runner schreibt begrenzte UTF-8-JSONL-Sidecars
-und sendet mit Opt-in eigene Wire-4-Logevents; die App zeigt Zeit und Schweregrad.
+und sendet mit Opt-in eigene Wire-5-Logevents; die App zeigt Zeit und Schweregrad.
 Physim 0.173.0 bindet alle vier Schweregrade mit Bool-Rückgabe. Bestehende
 Logdateien werden erhalten, Parameterabfragen erzeugen keine Ausgaben.
 Verträge und Grenzen stehen unter [Logging](logging.md).
@@ -37,7 +45,7 @@ geprüft und übernommen, nur fehlende Indizes starten erneut. Seeds, Parameter
 und feste/adaptive Zeitvorgaben bleiben erhalten. Aktuelle Editoränderungen und
 die alte Serie werden nicht verändert. Vollständig vorhandene Serien starten
 keine neuen Prozesse. Frühere Serien ohne Checkpoint bleiben nicht fortsetzbar.
-Der Katalog umfasst 523 Prüfungen ohne Fenster (508 ohne SDL) und 56 Fensterfälle.
+Der Katalog umfasst 525 Prüfungen ohne Fenster (510 ohne SDL) und 57 Fensterfälle.
 Ausgeführte Nachweise stehen im [Plattformbericht](platform-validation.md).
 
 **Eigenständige Analyseprojekte:** Die App legt jetzt C-/Physim-Auswertungen ohne
@@ -744,7 +752,7 @@ und veraltete Fenstermanager-Einträge geprüft. Die erneute Linux-CI steht aus.
 | Daten | CRC-Chunks, Streaming, Recovery, CSV, Seed-/Modellmetadaten und optionale versionierte Szenenblöcke | Index, mehr Datentypen, komprimierte Blöcke, Schemaerweiterung |
 | App | leerer Workspace-Einstieg mit gespeicherter Ordnerauswahl und bewusster Wiederöffnung, kompakte Menüleiste, Projektmanager, aufklappbarer Dateibaum und bis zu 16 editierbare Textdokumente mit separaten Autosaves und gespeicherten Editoransichten, drei Arbeitsbereiche, integrierte Offline-Dokumentation, Systemtypografie, Einstellungen mit Code-Schriftgröße und Autosave-Intervall, dunkle, helle und kontrastreiche Darstellung, gespeicherte Fenstergröße/Maximierung, verschiebbare Seitenleiste, Arbeitsbereich, Protokoll und eigenständiger Inspektor mit Teilungen, Tabgruppen, gespeicherten frei platzierten Panels und bis zu acht benannten Panelanordnungen im Hauptfenster und acht benannten Workspaces mit Ordnern und Editoransichten, Reset zum pausierten Anfangszustand mit erhaltenen Alt-Läufen, Vorlagen, Editor, direkter Projektbuild ohne CMake mit Ausgaben unter `build/`, Diagramme | portable Workspaces, separate Panelfenster, weitere Panelzustände, UI-weite Schriftvergrößerung, vollständige Barrierefreiheit |
 | Editor | C- und Physim-Dateien bearbeiten, sprachspezifische Syntaxfarben, Zeilennummern, Debug/Release, anklickbare Compilerdiagnosen, öffentlicher Header-Browser | Completion |
-| Szene | OpenGL 3.3 Core, Tiefenpuffer, MSAA, alle acht Grundprimitive, orientierte Boxen/Ebenen, RGBA-Transparenz mit Dreieckssortierung, UTF-8-Labels, Wurf-Flugbahn, Grid/Achsen, Kamera, Ansichten und Sichtbarkeit und Mausklickauswahl einzelner Szeneneinträge mit optionalen Objekt-IDs, gespeicherte Szenen mit Zeitleiste und Wiedergabe, benannte Gruppen und Elternbeziehungen mit aufklappbarem Inspektorbaum und geerbter Sichtbarkeit | artefaktfreie Transparenz bei sich durchdringenden Flächen, hierarchische Koordinatentransformationen |
+| Szene | OpenGL 3.3 Core, Tiefenpuffer, MSAA, alle acht Grundprimitive, orientierte Boxen/Ebenen, RGBA-Transparenz mit Dreieckssortierung, UTF-8-Labels, Wurf-Flugbahn, Grid/Achsen, Kamera, Ansichten und Sichtbarkeit und Mausklickauswahl einzelner Szeneneinträge mit optionalen Objekt-IDs, gespeicherte Szenen mit Zeitleiste und Wiedergabe, benannte Gruppen, Elternbeziehungen und explizite hierarchische TRS-Koordinatenrahmen mit aufklappbarem Inspektorbaum, geerbter Sichtbarkeit und konsistenter Weltgeometrie für Darstellung/Picking | artefaktfreie Transparenz bei sich durchdringenden Flächen |
 | Analyse | eigener C-Editor/Runner, eigenständige C-/Physim-Analyseprojekte ohne Experiment mit geprüftem Dateiimport, Dataset-/Series-Handles, blockweise Transformationen mit Einheitenprüfung, eigene Ergebnisplots/-tabellen, Linien/Punkte/Histogramme mit Zoom am Mauszeiger, Verschieben, separaten Ausschnitten und Achsenoffsets, PNG-/SVG-Export des sichtbaren Ausschnitts, CSV/SVG und verlustfrei komprimiertes PNG mit vier Größen von 1200 × 850 bis 4800 × 3400 Pixeln, Statistik, Ableitung, Integral, gleitendes Mittel, Periode, Energieabweichung, Auswahl und Vergleich von bis zu acht Läufen, gemeinsame Statusauswahl von Datenreihen, lineares, Nearest-/Previous- und monotones kubisches Resampling (PCHIP) in C/Physim und Differenzkurven, frühere Berichte öffnen | weitere Interpolationsverfahren/Transformationen |
 | Mechanik | starre Körper mit Kugel-/Boxträgheit, Quaternionrotation, Drehmomente/Impulse, Kugel–Kugel/Kugel–Ebene/Kugel–Box/Box–Ebene/Box–Box, iterative Paar- und Graph-Solver mit Coulomb-Reibung/Restitution (bis zu 128 Körper und 512 Kontakte), Distanzgelenk mit lokalen Ankern und Driftkorrektur, gemeinsamer Geschwindigkeits-Solver für Kontakte und bis zu 256 Gelenke, Feder/Dämpfung, Stokes-/quadratischer Widerstand, Kugelstoß-, Boxstoß- und Bodenkontaktvorlagen mit Debug-Vektoren, Feder–Masse–Dämpfer mit dissipierter Arbeit und Energiebilanz, archimedischer Auftrieb und Kugel-Eintauchvolumen samt Auftriebsmittelpunkt, Auftriebsvorlage mit Kraftanzeige und Energiebilanz | automatische Kontaktverwaltung, Warmstart, gemeinsame nichtlineare Positionsprojektion, weitere Gelenke, Box-CCD, erweiterte Stoffmodelle |
 | Unsicherheit | PCG32, geprüfte konstante/uniforme/normale Verteilungen, öffentliche Sensor-API mit Einheiten, Zeitraster, Auflösung, Offset, Drift, Rauschen, Ausfällen und Standardunsicherheit, getrennte Modell-/Soll-/Messwerte, gültigkeitsbewusste Vorschau/Statistik/CSV, Batchcontroller in App/CLI mit bis zu acht Runnern, expliziten Seeds, eigenen Arbeitsordnern, Abbruch und fester Auswertungsreihenfolge, Endwert-Histogramm/Typ-7-Quantile, Normalnäherung des Mittelwert-KI ab 200 gültigen Endwerten und lineare Parameterstudien in CLI und App mit Kurvenbericht, geprüfte Wiederaufnahme journalisierter Läufe aus archivierten Konfigurationen in neue Serienordner, gültigkeitsbewusste Endwertaggregation mit Messstatus-CSV und Messabdeckung einschließlich vollständig fehlender Messungen, explizite Masken in transformierten C-/Physim-Datenreihen und Berichten mit erhaltenen Segmentgrenzen | korrelierte Sensor-/Unsicherheitsmodelle, weitere Konfidenzverfahren und Verteilungsdiagnostik |

@@ -1,4 +1,4 @@
-# `.psrun` Format 1 und IPC 4
+# `.psrun` Format 1 und IPC 5
 
 ## Datendatei
 
@@ -18,7 +18,7 @@ CRC32: reflektiertes Polynom `0xEDB88320`, Initialwert und abschließendes XOR
 | 2 | Kanalzahl u32, dann je Kanal 48 Bytes Name, 16 Einheit, 96 Beschreibung, 7 int8 SI-Exponenten |
 | 3 | Zeit f64 und genau Kanalzahl f64-Messwerte |
 | 4 | Gesamtzahl Messpunkte u64; Abschlussmarker |
-| 5 | optionale Szene: Snapshotversion u32 = 1 oder 2, danach Snapshotkopf, Werte, Objekte und Punkte |
+| 5 | optionale Szene: Snapshotversion u32 = 1, 2 oder 3, danach Snapshotkopf, Werte, Objekte und Punkte |
 
 Metadaten und Schema stehen unmittelbar nach dem Header. Strings im Schema sind
 NUL-terminiert und auf ihre Feldbreite begrenzt. Die Payloadobergrenze ist 8192 Bytes.
@@ -32,7 +32,8 @@ Eine Schemaänderung innerhalb eines Laufs ist nicht zulässig.
 Die Snapshotversion ist unabhängig von Dateiformat, Modul-ABI und Pipe-Version.
 Der Snapshot enthält Zeit, zugehörige Kanalwerte, Pausestatus und validierte
 Geometrie einschließlich Orientierung, IDs, Labels und Polyline-Punkten. Version 2
-enthält zusätzlich Gruppen und Eltern-IDs. Version 1 bleibt lesbar und erhält
+enthält zusätzlich Gruppen und Eltern-IDs; Version 3 ergänzt explizite lokale
+Koordinatenrahmen. Versionen 1 und 2 bleiben lesbar. Version 1 erhält
 Eltern-ID 0 für sämtliche Einträge.
 Seine Kanalzahl muss dem Dateischema entsprechen. Der Block fügt keinen Messpunkt
 hinzu: Der Abschlusszähler zählt ausschließlich Typ 3. Gleiche Snapshotzeiten
@@ -63,12 +64,12 @@ Recovery arbeitet sequentiell bis zum letzten gültigen Block.
 
 ## Runner-Pipe
 
-Header (20 Bytes): Magic u32 `0x5053494D`, Version u32 = 4, Typ u32,
+Header (20 Bytes): Magic u32 `0x5053494D`, Version u32 = 5, Typ u32,
 Payloadlänge u32 (maximal 8192), Sequenznummer u32 (je Richtung ab 0).
 Unvollständige Frames werden gesammelt, falsche Versionen, Sequenzen und Größen abgewiesen.
 
 Typen: HELLO=1, RUN=2, PAUSE=3, STEP=4, STOP=5, SNAPSHOT=6,
-ERROR=7, BYE=8, HEARTBEAT=9, SPEED=10. Kontrollbefehle außer HELLO und SPEED tragen keine Payload.
+ERROR=7, BYE=8, HEARTBEAT=9, SPEED=10, LOG=11 (mit `--log-events`). Kontrollbefehle außer HELLO und SPEED tragen keine Payload.
 Host-HELLO enthält ABI-Version u32. Runner-HELLO enthält Name und Kanaltitel als
 UTF-8-Zeilen. Der Runner bleibt bis zum Handshake pausiert; Frist: 10 Sekunden.
 Heartbeat: 500 ms. Die GUI markiert mehr als drei Sekunden ohne Nachricht;
@@ -89,11 +90,11 @@ ohne Angabe gilt 1×. Ohne `--interactive` bleibt der CLI-Modus mit `--steps` im
 Snapshotkopf (24 Bytes): Zeit f64, Kanalzahl u32, Objektzahl u32, Pausestatus u32
 (ausschließlich 0/1), Punktzahl u32. Danach Kanalwerte f64, Objekte und Punkte.
 
-Jedes Objekt belegt in Snapshotversion 2 genau 176 Wire-Bytes:
+Jedes Objekt belegt in Snapshotversion 2 und 3 genau 176 Wire-Bytes:
 
 | Offset | Feld |
 | --- | --- |
-| 0 | Form u32: Kugel=0, Linie=1, Box=2, Pfeil=3, Punkt=4, Ebene=5, Polyline=6, Label=7, Gruppe=8 |
+| 0 | Form u32: Kugel=0, Linie=1, Box=2, Pfeil=3, Punkt=4, Ebene=5, Polyline=6, Label=7, Gruppe=8, Rahmen=9 (nur Version 3) |
 | 4 | RGBA u32 |
 | 8 / 32 | a.xyz / b.xyz, jeweils drei f64 |
 | 56 | Radius f64 |
@@ -105,13 +106,17 @@ Jedes Objekt belegt in Snapshotversion 2 genau 176 Wire-Bytes:
 
 Gruppen sind benannte Einträge mit eindeutiger nichtnull ID und ohne Geometrie.
 Elternbeziehungen dürfen weder auf fehlende IDs zeigen noch Zyklen bilden. Alle
-Koordinaten bleiben Weltkoordinaten; Eltern führen keine Transformation aus.
+Koordinaten bleiben in Versionen 1 und 2 Weltkoordinaten. Version 3 ergänzt
+`PS_FRAME=9`: a ist Translation, b ist Scale, orientation ist Rotation.
+Nachfahren verwenden lokale Geometrie und erben die zusammengesetzten Rahmen.
+Gewöhnliche Gruppen und Körper liefern keine zusätzlichen Transformationen.
+[Vertrag und Renderregeln](scene-frames.md).
 Version 1 verwendet weiterhin 172 Objektbytes und Formen 0–7. Der ausdrücklich
 deklarierte Versionswert bestimmt die Länge; ein gekürzter Version-2-Block wird
-nicht als Version 1 umgedeutet. `ps_snapshot_decode_version` liest beide Versionen,
-`ps_snapshot_decode` die aktuelle Version 2.
+nicht als Version 1 umgedeutet. `ps_snapshot_decode_version` liest Versionen 1, 2 und 3,
+`ps_snapshot_decode` die aktuelle Version 3. Version 2 weist Form 9 ab.
 
-Nach den Objekten folgen `Punktzahl` Weltkoordinaten, jeweils x/y/z als f64 (24 Bytes).
+Nach den Objekten folgen `Punktzahl` lokale Koordinaten (ohne Rahmen Weltkoordinaten), jeweils x/y/z als f64 (24 Bytes).
 Maximal 32 Einträge einschließlich Gruppen, 96 Punkte und 16 Kanäle ergeben
 eine Payload von 8088 Bytes.
 Polylinien enthalten mindestens zwei Punkte und referenzieren ausschließlich ihren
@@ -234,7 +239,7 @@ Längen, Anzahl, Prüfsumme, UTF-8, Schlüssel und Faktoren werden vor Übernahm
 validiert; Fehler verändern den geladenen Zustand nicht. Unbekannte Versionen
 bleiben bis zum ausdrücklichen Zurücksetzen erhalten. Das Messschema wird beim
 Runner-Handshake aus dem bereits geschriebenen Dateikopf gelesen und mit den
-HELLO-Kanalnamen abgeglichen. Pipe-Version 4, Messdatei-Format 1 und ABI 3 bleiben
+HELLO-Kanalnamen abgeglichen. Pipe-Version 5, Messdatei-Format 1 und ABI 3 bleiben
 unverändert.
 
 
@@ -332,10 +337,10 @@ Danach folgen entsprechend viele Bytes: 0 = fehlend, 1 = gültig/verbunden,
 Daten. Auch ungültige Koordinaten bleiben endlich; die Maske verleiht einem
 Platzhalter keine Messbedeutung. Die Masken sind Teil der Payload-CRC.
 
-Kanal-/Messdateiformat 1, Projektformat 2 und Runner-Pipe-Version 4 ändern sich
+Kanal-/Messdateiformat 1, Projektformat 2 und Runner-Pipe-Version 5 ändern sich
 dadurch nicht. Auch öffentliche C-Strukturen und Modul-ABI 3 bleiben erhalten.
 
-## Experiment-Logdateien und optionale Wire-4-Events
+## Experiment-Logdateien und optionale Wire-5-Events
 
 `<output.psrun>.pslog` speichert UTF-8-JSONL separat von Rohdaten und Snapshots.
 `--log-events` aktiviert in interaktiven Runnern Typ 11 mit Schweregrad, Modellzeit

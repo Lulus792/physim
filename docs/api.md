@@ -235,3 +235,10 @@ gleichzeitigen Runnern und einem expliziten Seed je Runner-Prozess,
 Modul-/Quellsnapshot, Endwert-CSV und
 aggregiertem Bericht. Der Controller ist vorerst ein interner Anwendungsdienst.
 Einrichtung, Statistik und Beispielcode: [Monte Carlo und Unsicherheit](monte-carlo.md).
+
+## Lokale Szenenkoordinaten
+
+`ps_scene_frame`, `ps_scene_transforms` und `ps_scene_world_point` ergänzen
+explizite hierarchische TRS, Weltpositionen und dieselbe Geometrie für
+Darstellung und Picking. Gruppen und Körper als Eltern liefern selbst keine
+Koordinatentransformation. [Vertrag und Beispiele](scene-frames.md).

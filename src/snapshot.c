@@ -50,7 +50,7 @@ bool ps_snapshot_decode(const unsigned char *p, uint32_t n, double *t, double *v
 }
 bool ps_snapshot_decode_version(uint32_t version,const unsigned char *p,uint32_t n,double *t,
                                 double *v,uint32_t *count,ps_scene *s,bool *paused) {
-    if(version!=1 && version!=PS_SNAPSHOT_VERSION) return false;
+    if(version!=1 && version!=2 && version!=PS_SNAPSHOT_VERSION) return false;
     uint32_t object_size=version==1?172u:PS_SNAPSHOT_OBJECT_SIZE;
     if (!p || !t || !v || !count || !s || !paused || n < PS_SNAPSHOT_HEADER)
         return false;
@@ -74,7 +74,7 @@ bool ps_snapshot_decode_version(uint32_t version,const unsigned char *p,uint32_t
     for (uint32_t i = 0; i < ns; i++, at += object_size) {
         ps_object *o = &scene.objects[i];
         o->shape = ps_get_u32(p + at);
-        if(version==1 && o->shape>PS_LABEL) return false;
+        if((version==1 && o->shape>PS_LABEL) || (version==2 && o->shape>PS_GROUP)) return false;
         o->color = ps_get_u32(p + at + 4);
         double a[11];
         for (size_t k = 0; k < 11; k++)

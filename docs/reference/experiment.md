@@ -15,6 +15,7 @@ Einbinden: `#include "physim/experiment.h"`. Die folgenden Signaturen, Typen und
 #define PS_MAX_PARAMETERS 16
 #define PS_EXPERIMENT_SCENE_HIERARCHY UINT64_C(1)
 #define PS_EXPERIMENT_ADAPTIVE_STEPS UINT64_C(2)
+#define PS_EXPERIMENT_SCENE_FRAMES UINT64_C(4)
 #define PS_EXPERIMENT_API_BASE_SIZE offsetof(ps_experiment_api, adaptive_step)
 ```
 
@@ -45,11 +46,14 @@ typedef enum {
     PS_PLANE,
     PS_POLYLINE,
     PS_LABEL,
-    PS_GROUP
+    PS_GROUP,
+    PS_FRAME
 } ps_shape;
 ```
 
-Named organizational node; no geometry or coordinate transform.
+Named organizational node; no coordinate transform.
+
+Named local coordinate frame: a=translation, b=scale, orientation=rotation.
 
 ### ps_object
 
@@ -68,7 +72,7 @@ typedef struct {
 
 Metres, Y up. Sphere: a=center, radius. Box: a=center, b=full XYZ extents; if an extent is nonpositive, a cube with half-size radius is used. Line/arrow: a=start, b=end, radius=shaft radius (0 selects 0.009 m). Color is RRGGBBAA. Alpha 0 hides geometry and labels, including picking. Mesh alpha 1..254 uses back-to-front triangle blending; intersecting transparent surfaces may show sorting artifacts. Alpha 255 is opaque.
 
-Local-to-world rotation for box/plane. Zero means identity.
+Mesh rotation for box/plane (zero=identity); frame rotation must be nonzero.
 
 UTF-8 label, terminated; empty for other shapes.
 
@@ -76,7 +80,7 @@ Polyline range in the scene point pool.
 
 Optional stable ID within a run; 0 = anonymous. Unique per scene.
 
-0 = root; otherwise a scene ID. Coordinates stay world-space.
+0 = root; otherwise a scene ID. Frame ancestors define local coordinates.
 
 ### ps_scene
 
@@ -293,11 +297,11 @@ Prüft und kopiert ein vollständig beschriebenes Szenenobjekt.
 ps_result ps_scene_push(ps_scene *scene, const ps_object *object);
 ```
 
-Checked helpers are atomic on failure. Clear the whole scene before building it. Plane: a=center, b.x/b.z=full side lengths in local XZ; orientation rotates it. Polyline coordinates are in world space; label positions are annotation anchors.
+Checked helpers are atomic on failure. Clear the whole scene before building it. Plane: a=center, b.x/b.z=full side lengths in local XZ; orientation rotates it. Polyline coordinates and label anchors use the coordinates of frame ancestors; without frames these remain world-space values.
 
 ## ps_scene_polyline
 
-Kopiert mindestens zwei Weltpunkte in den Szenenpunktpuffer und fügt einen Linienzug hinzu.
+Kopiert mindestens zwei lokale Punkte (ohne Rahmen Weltpunkte) in den Szenenpunktpuffer und fügt einen Linienzug hinzu.
 
 ```c
 ps_result ps_scene_polyline(
@@ -310,7 +314,7 @@ ps_result ps_scene_polyline(
 
 ## ps_scene_label
 
-Kopiert eine UTF-8-Beschriftung mit Weltanker in die Szene.
+Kopiert eine UTF-8-Beschriftung mit lokalem Anker (ohne Rahmen Weltanker) in die Szene.
 
 ```c
 ps_result ps_scene_label(
@@ -341,6 +345,45 @@ ps_result ps_scene_group(
 ```
 
 Named groups require a nonzero unique ID. Parent 0 is the scene root. Checked relationships reject missing parents, self-parenting and cycles. Failure leaves the scene unchanged. Publish with PS_EXPERIMENT_SCENE_HIERARCHY.
+
+## ps_scene_frame
+
+Erzeugt einen expliziten TRS-Koordinatenrahmen mit eindeutiger ID und geprüftem Elternknoten. Skalierungen müssen endlich und ungleich null sein; Fehler erhalten die Szene.
+
+```c
+ps_result ps_scene_frame(
+    ps_scene *scene,
+    uint32_t id,
+    uint32_t parent_id,
+    const char *name,
+    ps_vec3 translation,
+    ps_quat rotation,
+    ps_vec3 scale);
+```
+
+Explicit TRS frame. Scale components must be finite and nonzero (reflection is supported); rotation must be finite and nonzero, normalized internally. Descendants inherit frame transforms through organizational/geometry nodes. Group and geometry nodes do not supply additional transforms. T*R*S order; nested nonuniform scales can produce shear. No physical coupling. Publish with SCENE_HIERARCHY | SCENE_FRAMES. Existing object/scene layouts stay unchanged.
+
+## ps_scene_transforms
+
+Berechnet für jeden Szenenslot die zusammengesetzte Local-to-world-Matrix. Keine Allokation, kein gemeinsamer Cache; Fehler erhalten das Ausgabearray.
+
+```c
+ps_result ps_scene_transforms(const ps_scene *scene, ps_mat4 *out);
+```
+
+Returns one local-to-world matrix per scene slot. For a frame it includes its own TRS; for geometry its mesh/positions are transformed by frame ancestors. Provide PS_MAX_OBJECTS matrices. No allocation. Outputs unchanged on error: PS_INVALID for malformed scenes, PS_NUMERIC for unrepresentable composition or normal transform, PS_SINGULAR for a numerically singular composed basis.
+
+## ps_scene_world_point
+
+Konvertiert einen Punkt in der Koordinatenbasis des Eintrags in Weltkoordinaten; fehlerhafte Transformationen erhalten die Ausgabe.
+
+```c
+ps_result ps_scene_world_point(
+    const ps_scene *scene,
+    uint32_t index,
+    ps_vec3 local,
+    ps_vec3 *out);
+```
 
 ## ps_scene_set_parent
 

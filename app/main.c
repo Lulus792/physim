@@ -1,3 +1,4 @@
+#include "physim/math.h"
 #include "autosave.h"
 #include "batch.h"
 #include "documentation.h"
@@ -1734,7 +1735,7 @@ static void scene_selection_sync(app *a) {
 }
 static bool scene_entry_enabled(const app *a, uint32_t i) {
     const ps_object *o = &display_scene(a)->objects[i];
-    return o->shape!=PS_GROUP && ps_scene_view_visible(&a->scene_view, i) && (o->color & 255) &&
+    return o->shape!=PS_GROUP && o->shape!=PS_FRAME && ps_scene_view_visible(&a->scene_view, i) && (o->color & 255) &&
            (o->shape != PS_ARROW || a->show_vectors) &&
            (o->shape != PS_POLYLINE || a->show_paths) &&
            (o->shape != PS_POINT || a->show_points) &&
@@ -1805,7 +1806,7 @@ static bool scene_shortcut(app *a, const SDL_KeyboardEvent *key) {
     for (uint32_t step = 0; step < display_scene(a)->count; step++) {
         index = (index + direction + (int)display_scene(a)->count) % (int)display_scene(a)->count;
         if (scene_entry_enabled(a, (uint32_t)index) ||
-            (display_scene(a)->objects[index].shape==PS_GROUP && ps_scene_view_visible(&a->scene_view,(uint32_t)index))) {
+            ((display_scene(a)->objects[index].shape==PS_GROUP || display_scene(a)->objects[index].shape==PS_FRAME) && ps_scene_view_visible(&a->scene_view,(uint32_t)index))) {
             scene_select_entry(a,(uint32_t)index);
             break;
         }
@@ -1813,6 +1814,7 @@ static bool scene_shortcut(app *a, const SDL_KeyboardEvent *key) {
     return true;
 }
 static void viewport(app *a, float height) {
+    memset(a->scene_label_bounds,0,sizeof a->scene_label_bounds);
     struct nk_context *ui = a->ui;
     nk_layout_row_dynamic(ui, height, 1);
     struct nk_rect r;
@@ -1847,13 +1849,13 @@ static void viewport(app *a, float height) {
     int pixels = (int)fmaxf(1, r.h * (float)ph / (float)(h ? h : 1));
     ps_scene visible = *display_scene(a);
     uint32_t visible_slots[PS_MAX_OBJECTS];
-    visible.count = 0;
+    ps_mat4 transforms[PS_MAX_OBJECTS];
+    if(ps_scene_transforms(&visible,transforms)!=PS_OK)return;
     for (uint32_t i = 0; i < display_scene(a)->count; i++) {
         const ps_object *o = &display_scene(a)->objects[i];
-        if (!scene_entry_enabled(a, i)) continue;
-        visible_slots[visible.count] = i;
-        visible.objects[visible.count] = *o;
-        visible.objects[visible.count++].parent_id=0; /* Rendering receives a flat world-space subset. */
+        (void)o;
+        visible_slots[i]=i;
+        if(!scene_entry_enabled(a,i))visible.objects[i].color=0;
     }
     unsigned texture = ps_graphics_scene(a->graphics, &visible, &camera, width, pixels);
     if (texture) {
@@ -1881,9 +1883,10 @@ static void viewport(app *a, float height) {
         unsigned placed_count = 0;
         for (uint32_t i = 0; i < visible.count; i++) {
             const ps_object *o = &visible.objects[i];
-            float x, y;
+            float x, y;ps_vec3 anchor;
+            if(ps_transform_point(transforms[i],o->a,&anchor)!=PS_OK)continue;
             if (o->shape != PS_LABEL || !o->text[0] || !(o->color & 255) ||
-                !ps_graphics_project(&camera, o->a, (double)width / pixels, &x, &y))
+                !ps_graphics_project(&camera, anchor, (double)width / pixels, &x, &y))
                 continue;
             int length = (int)strlen(o->text);
             float text_width = font->width(font->userdata, font->height, o->text, length);
@@ -2297,7 +2300,7 @@ static void channel_units_start(app *a);
 #include "design_ui.inc"
 // clang-format on
 static struct nk_font *system_font(struct nk_font_atlas *atlas, float size, bool code, bool title) {
-    static const nk_rune ui_ranges[] = {0x20, 0x17f, 0x2000, 0x206f, 0};
+    static const nk_rune ui_ranges[] = {0x20, 0x17f, 0x300, 0x4ff, 0x2000, 0x206f, 0};
     static const nk_rune code_ranges[] = {0x20, 0x17f, 0x300, 0x4ff,
                                           0x1e00, 0x1eff, 0x2000, 0x206f, 0};
     struct nk_font_config config = nk_font_config(size);
@@ -2547,6 +2550,7 @@ static void test_mouse(app *a, struct nk_rect rect, bool down) {
 #include "batch_missing_tests.inc"
 #include "series_mask_tests.inc"
 #include "logging_tests.inc"
+#include "frame_tests.inc"
 #include "adaptive_tests.inc"
 #include "series_tests.inc"
 #include "native_dialog_tests.inc"
@@ -3106,7 +3110,7 @@ int main(int argc, char **argv) {
         } else if (workspace_state_test) {
             if (ps_clock() - test_started >
                 (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
-                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strcmp(argv[3],"logging-c") || !strcmp(argv[3],"logging-phys") || !strcmp(argv[3],"logging-flood") || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
+                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strcmp(argv[3],"logging-c") || !strcmp(argv[3],"logging-phys") || !strcmp(argv[3],"logging-flood") || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15)) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
                         argv[3], ps_clock() - test_started);

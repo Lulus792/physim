@@ -35,6 +35,8 @@ static ps_result snapshot(const ps_experiment_api *api, ps_context *c, ps_run_wr
      * no meaning. Never interpret those bytes as parent IDs without opt-in. */
     if(!(api->capabilities&PS_EXPERIMENT_SCENE_HIERARCHY))
         for(uint32_t i=0;i<scene.count;i++) scene.objects[i].parent_id=0;
+    if(!(api->capabilities&PS_EXPERIMENT_SCENE_FRAMES))
+        for(uint32_t i=0;i<scene.count;i++)if(scene.objects[i].shape==PS_FRAME)return PS_VERSION;
     if(!ps_scene_valid(&scene)) return PS_INVALID;
     ps_result result = ps_run_append_snapshot(writer, c, &scene, paused);
     if (result != PS_OK) return result;
@@ -138,6 +140,7 @@ int main(int argc, char **argv) {
     memcpy(&entry, &symbol, sizeof entry);
     const ps_experiment_api *api = entry ? entry() : NULL;
     if (!api || api->struct_size < PS_EXPERIMENT_API_BASE_SIZE || api->abi_version != PS_ABI_VERSION ||
+        ((api->capabilities&PS_EXPERIMENT_SCENE_FRAMES) && !(api->capabilities&PS_EXPERIMENT_SCENE_HIERARCHY)) ||
         !api->name || !api->create || !api->step || !api->reset || !api->build_scene ||
         !api->destroy) {
         report(interactive, "Experiment ABI mismatch or missing callback");

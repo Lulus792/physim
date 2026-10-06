@@ -1252,6 +1252,40 @@
     "logging-phys": {
       "source": "examples/language/logging.phys",
       "mode": "--emit-experiment"
+    },
+    "frames-c": {
+      "sources": [
+        "examples/scene_frames/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "frames-phys": {
+      "source": "examples/language/scene_frames.phys",
+      "mode": "--emit-experiment"
+    },
+    "frames-no-cap": {
+      "sources": [
+        "examples/scene_frames/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PS_TEST_FRAME_CAP_MISSING"
+      ]
+    },
+    "frames-test": {
+      "sources": [
+        "tests/test_runner_frames.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
     }
   },
   "tests": [
@@ -4995,6 +5029,59 @@
           "arguments": [
             "{root}/tests/check_display_workflow.py",
             "logging_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 560,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "runner_frames",
+      "targets": [
+        "frames-test",
+        "physim-runner",
+        "frames-c",
+        "frames-phys",
+        "frames-no-cap"
+      ],
+      "steps": [
+        {
+          "program": "frames-test",
+          "arguments": [
+            "{physim-runner}",
+            "{frames-c}",
+            "{frames-phys}",
+            "{frames-no-cap}",
+            "{work}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "scene_frames_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "scene_frames_workflow",
             "--app",
             "{physim}",
             "--work",

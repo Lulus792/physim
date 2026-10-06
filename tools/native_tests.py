@@ -60,6 +60,7 @@ def catalog():
     cases.extend([
         Case("logging", ("tests/test_logging.c",)),
         Case("series_mask",("tests/test_series_mask.c",),arguments=("{work}",)),
+        Case("scene_frames", ("tests/test_scene_frames.c",), arguments=("{work}",)),
         Case("scene_hierarchy", ("tests/test_scene_hierarchy.c",), arguments=("{work}",)),
         Case("docking", ("tests/test_docking.c", "app/docking.c")),
         Case("timeline", ("tests/test_timeline.c", "app/timeline.c")),

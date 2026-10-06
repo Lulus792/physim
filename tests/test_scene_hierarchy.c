@@ -27,6 +27,8 @@ int main(int argc,char **argv) {
     ps_snapshot snapshot={0};
     CHECK(ps_snapshot_decode(bytes,(uint32_t)size,&snapshot.time,snapshot.values,&snapshot.count,&snapshot.scene,&snapshot.paused));
     CHECK(snapshot.time==.25 && snapshot.values[0]==42 && !memcmp(&snapshot.scene,&scene,sizeof scene));
+    CHECK(ps_snapshot_decode_version(2,bytes,(uint32_t)size,&snapshot.time,snapshot.values,&snapshot.count,&snapshot.scene,&snapshot.paused));
+    CHECK(!memcmp(&snapshot.scene,&scene,sizeof scene));
     ps_snapshot preserved=snapshot;
     memcpy(damaged,bytes,size);ps_put_u32(damaged+PS_SNAPSHOT_HEADER+8+172,1); /* self-parent */
     CHECK(!ps_snapshot_decode(damaged,(uint32_t)size,&snapshot.time,snapshot.values,&snapshot.count,&snapshot.scene,&snapshot.paused));

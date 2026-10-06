@@ -92,6 +92,9 @@ def c_reference(module, title, guide, intro):
 
 LANG_DESCRIPTIONS = {
     'group': 'Benannte Szenengruppe mit eindeutiger ID; parent 0 erzeugt eine Wurzel. Nur im scene-Callback. Gruppen enthalten keine Geometrie und verändern keine Weltkoordinaten.',
+    'sceneTransform': 'Liefert die zusammengesetzte Local-to-world-Matrix des Szenenslots. Nur im scene-Callback; index beginnt bei 0. Rahmen enthalten ihre eigene TRS, Geometrie nur ihre Frame-Vorfahren.',
+    'sceneWorldPoint': 'Konvertiert einen Punkt in der Basis des Szenenslots in Weltkoordinaten; nur im scene-Callback. Fehler erhalten eine Quelldiagnose.',
+    'sceneFrame': 'Erzeugt einen expliziten lokalen TRS-Koordinatenrahmen. Nur im scene-Callback; parent 0 bezeichnet die Wurzel. Endliche Translation, nonzero Quaternion und endliche nonzero Scale; Nachfahren werden für Darstellung und Picking transformiert.',
     'sceneParent': 'Ordnet einen Szeneneintrag einer Eltern-ID zu; parent 0 löst ihn zur Wurzel. Fehlende IDs und Zyklen erzeugen eine Quelldiagnose, ohne die Szene zu verändern.',
     'Bezier3': 'Kubische räumliche Bézierkurve aus vier endlichen Kontrollpunkten. Der Wert ist unabhängig kopierbar. Alle Koordinaten verwenden dieselbe Längeneinheit des Aufrufers.',
     'bezierPosition': 'Position bei dimensionslosem t im inklusiven Intervall [0, 1]. Die Auswertung verwendet die De-Casteljau-Implementierung der C-Bibliothek.',

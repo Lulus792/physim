@@ -1,13 +1,13 @@
-/* Parent IDs define ordering; geometry continues to use world coordinates. */
+/* Frame ancestors define coordinates; ordinary groups only organize nodes. */
 static void scene_tree_row(app *a,uint32_t slot,unsigned depth) {
     struct nk_context *ui=a->ui;const ps_scene *scene=display_scene(a);
     const ps_object *o=&scene->objects[slot];
-    static const char *names[]={"Kugel","Linie","Box","Vektor","Punkt","Ebene","Pfad","Beschriftung","Gruppe"};
+    static const char *names[]={"Kugel","Linie","Box","Vektor","Punkt","Ebene","Pfad","Beschriftung","Gruppe","Koordinatenrahmen"};
     bool children=false;
     if(o->id) for(uint32_t i=0;i<scene->count;i++) children |= scene->objects[i].parent_id==o->id;
     uint32_t bit=UINT32_C(1)<<slot;
     char label[112];
-    if(o->shape==PS_GROUP && o->text[0]) snprintf(label,sizeof label,"%s",o->text);
+    if((o->shape==PS_GROUP || o->shape==PS_FRAME) && o->text[0]) snprintf(label,sizeof label,"%s",o->text);
     else if(o->id) snprintf(label,sizeof label,"ID %u · %s%s%s",o->id,names[o->shape],o->text[0]?" · ":"",o->text);
     else snprintf(label,sizeof label,"%u · %s%s%s",slot+1,names[o->shape],o->text[0]?" · ":"",o->text);
     bool own_visible=!(a->scene_view.hidden&bit);

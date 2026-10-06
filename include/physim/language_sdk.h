@@ -821,6 +821,27 @@ static inline void psrt_group(psrt_host *host,const char *name,int64_t id,int64_
     if(ps_scene_group(host->scene,psrt_u32(id,site),psrt_u32(parent,site),name)!=PS_OK)
         psrt_fail(site,"Invalid scene group, duplicate ID, missing parent or scene capacity exceeded");
 }
+static inline void psrt_scene_frame(psrt_host *host,const char *name,int64_t id,int64_t parent,
+                                    ps_vec3 translation,ps_quat rotation,ps_vec3 scale,psrt_site site) {
+    psrt_scene_required(host,site);
+    if(ps_scene_frame(host->scene,psrt_u32(id,site),psrt_u32(parent,site),name,translation,rotation,scale)!=PS_OK)
+        psrt_fail(site,"Invalid coordinate frame: ID, parent, translation, rotation, scale or composed transform");
+}
+static inline uint32_t psrt_scene_index(psrt_host *host,int64_t index,psrt_site site) {
+    psrt_scene_required(host,site);
+    if(index<0 || (uint64_t)index>=host->scene->count)psrt_fail(site,"Scene index outside published objects");
+    return (uint32_t)index;
+}
+static inline ps_mat4 psrt_scene_transform(psrt_host *host,int64_t index,psrt_site site) {
+    uint32_t slot=psrt_scene_index(host,index,site);ps_mat4 matrices[PS_MAX_OBJECTS];
+    if(ps_scene_transforms(host->scene,matrices)!=PS_OK)psrt_fail(site,"Cannot compose scene coordinate frames");
+    return matrices[slot];
+}
+static inline ps_vec3 psrt_scene_world_point(psrt_host *host,int64_t index,ps_vec3 local,psrt_site site) {
+    uint32_t slot=psrt_scene_index(host,index,site);ps_vec3 result;
+    if(ps_scene_world_point(host->scene,slot,local,&result)!=PS_OK)psrt_fail(site,"Invalid scene point or coordinate transform");
+    return result;
+}
 static inline void psrt_scene_parent(psrt_host *host,int64_t child,int64_t parent,psrt_site site) {
     psrt_scene_required(host,site);
     if(ps_scene_set_parent(host->scene,psrt_u32(child,site),psrt_u32(parent,site))!=PS_OK)

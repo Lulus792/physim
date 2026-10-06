@@ -68,7 +68,7 @@ for enabled in (False, True):
     deadline = time.monotonic() + 15
     def send(kind, payload=b''):
         global sent
-        child.stdin.write(struct.pack('<IIIII', 0x5053494d, 4, kind, len(payload), sent) + payload)
+        child.stdin.write(struct.pack('<IIIII', 0x5053494d, 5, kind, len(payload), sent) + payload)
         child.stdin.flush()
         sent += 1
     try:
@@ -81,7 +81,7 @@ for enabled in (False, True):
                 incoming.extend(chunk)
             while len(incoming) >= 20:
                 magic, version, kind, size, sequence = struct.unpack_from('<IIIII', incoming)
-                assert magic == 0x5053494d and version == 4 and sequence == len(received)
+                assert magic == 0x5053494d and version == 5 and sequence == len(received)
                 assert size <= 2000000
                 if len(incoming) < 20 + size:
                     break

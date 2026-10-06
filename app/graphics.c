@@ -102,6 +102,9 @@ struct ps_graphics {
     int width, height, samples;
     scene_vertex *vertices;
     size_t count;
+    ps_mat4 object_transform;
+    ps_mat3 object_normal;
+    bool transform_active, object_invalid;
     GLuint scene_ebo;
     alpha_triangle *alpha_triangles;
     uint32_t *scene_indices;
@@ -506,6 +509,15 @@ static bool finite_vector(ps_vec3 p) {
 static void vertex(ps_graphics *g, ps_vec3 p, ps_vec3 normal, uint32_t color) {
     if (g->count >= SCENE_CAPACITY)
         return;
+    if(g->transform_active) {
+        ps_vec3 world;
+        normal=ps_vnormalize(ps_mat3_apply(g->object_normal,normal));
+        if(ps_transform_point(g->object_transform,p,&world)!=PS_OK || !finite_vector(world) ||
+           !isfinite(normal.x) || !isfinite(normal.y) || !isfinite(normal.z)) {
+            g->object_invalid=true;return;
+        }
+        p=world;
+    }
     scene_vertex *v = &g->vertices[g->count++];
     v->p[0] = (float)p.x;
     v->p[1] = (float)p.y;
@@ -745,7 +757,7 @@ unsigned ps_graphics_scene(ps_graphics *g, const ps_scene *scene, const ps_camer
     g->DepthFunc(GL_LESS);
     g->ClearColor(12 / 255.f, 22 / 255.f, 33 / 255.f, 1);
     g->Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    g->count = 0;
+    g->count = 0;g->transform_active=false;
     if (camera->grid) {
         for (int i = -8; i <= 8; i++) {
             double k = i * .5;
@@ -756,14 +768,31 @@ unsigned ps_graphics_scene(ps_graphics *g, const ps_scene *scene, const ps_camer
         }
         tube(g, ps_v3(0, -1.65, 0), ps_v3(0, -1.05, 0), .008, .008, 0x55b99bff);
     }
+    ps_mat4 transforms[PS_MAX_OBJECTS];
+    if(ps_scene_transforms(scene,transforms)!=PS_OK)return 0;
     for (uint32_t i = 0; i < scene->count; i++) {
         g->pick_ranges[i] = g->count;
         const ps_object *o = &scene->objects[i];
         if (!(o->color & 255))
             continue;
-        if (!finite_vector(o->a) || !finite_vector(o->b) || !isfinite(o->radius) || o->radius < 0 ||
-            o->radius > 1e10)
-            continue;
+        /* Apply the ancestor transform before narrowing vertices to GPU floats.
+         * Complete local meshes support shear, reflected bases and ellipsoids.
+         * Picking uses these exact world-space triangles. */
+        g->object_invalid=false;g->transform_active=false;
+        ps_mat4 identity=ps_mat4_identity();
+        if(memcmp(&transforms[i],&identity,sizeof identity)) {
+            ps_mat4 transform=transforms[i];
+            ps_mat3 basis={{transform.m[0],transform.m[1],transform.m[2],transform.m[4],transform.m[5],transform.m[6],
+                           transform.m[8],transform.m[9],transform.m[10]}},inverse;
+            if(ps_mat3_inverse(basis,0,&inverse)!=PS_OK)continue;
+            g->object_transform=transform;g->object_normal=ps_mat3_transpose(inverse);g->transform_active=true;
+        }
+        bool local_finite=isfinite(o->a.x) && isfinite(o->a.y) && isfinite(o->a.z) &&
+            isfinite(o->b.x) && isfinite(o->b.y) && isfinite(o->b.z);
+        if(!local_finite || !isfinite(o->radius) || o->radius<0 ||
+           (!g->transform_active && (!finite_vector(o->a) || !finite_vector(o->b) || o->radius>1e10))) {
+            g->transform_active=false;continue;
+        }
         if (o->shape == PS_SPHERE && o->radius > 0)
             ball(g, o->a, o->radius, o->color);
         if (o->shape == PS_BOX) {
@@ -781,7 +810,7 @@ unsigned ps_graphics_scene(ps_graphics *g, const ps_scene *scene, const ps_camer
             for (uint32_t j = 1; j < o->point_count; j++) {
                 ps_vec3 a = scene->points[o->point_first + j - 1],
                         b = scene->points[o->point_first + j];
-                if (finite_vector(a) && finite_vector(b))
+                if ((g->transform_active || (finite_vector(a) && finite_vector(b))))
                     tube(g, a, b, radius, radius, o->color);
             }
         }
@@ -797,6 +826,9 @@ unsigned ps_graphics_scene(ps_graphics *g, const ps_scene *scene, const ps_camer
                 tube(g, neck, o->b, fmin(head * .4, radius * 3), 0, o->color);
             }
         }
+        if(g->object_invalid)g->count=g->pick_ranges[i];
+        g->transform_active=false;
+
     }
     g->pick_ranges[scene->count] = g->count;
     g->pick_count = scene->count;
@@ -1006,6 +1038,19 @@ bool ps_graphics_test(ps_graphics *g, const char *capture_path) {
                 return false;
             }
         }
+        pick_scene.objects[0].id=1;
+        if(ps_scene_frame(&pick_scene,100,0,"Outer",ps_v3(.6,.2,0),
+                          ps_quat_axis_angle(ps_v3(0,0,1),PS_PI/2),ps_v3(2,3,1))!=PS_OK ||
+           ps_scene_frame(&pick_scene,200,100,"Inner",ps_v3(.2,0,0),
+                          ps_quat_axis_angle(ps_v3(0,1,0),.35),ps_v3(-1,.5,2))!=PS_OK ||
+           ps_scene_set_parent(&pick_scene,1,200)!=PS_OK)return false;
+        pick_camera.target=ps_v3(.6,.6,0);
+        for(unsigned ortho=0;ortho<2;ortho++) {
+            pick_camera.orthographic=ortho!=0;
+            if(!ps_graphics_scene(g,&pick_scene,&pick_camera,160,120) || ps_graphics_pick(g,.5,.5)!=0) {
+                SDL_SetError("Nested reflected/nonuniform frame picking failed for shape %u",shape);return false;
+            }
+        }
         if (shape == PS_ARROW) {
             pick_camera.vectors = false;
             if (!ps_graphics_scene(g, &pick_scene, &pick_camera, 160, 120) ||
@@ -1013,6 +1058,11 @@ bool ps_graphics_test(ps_graphics *g, const char *capture_path) {
                 return false;
         }
     }
+    ps_scene large={0};ps_camera large_camera=PS_CAMERA_DEFAULT;large_camera.target=ps_v3(1,0,0);large_camera.grid=false;
+    if(ps_scene_add_id(&large,1,PS_SPHERE,ps_v3(1e15,0,0),ps_v3(1e15,0,0),2e14,UINT32_MAX)!=PS_OK ||
+       ps_scene_frame(&large,100,0,"Unit conversion",ps_v3(0,0,0),ps_quat_identity(),ps_v3(1e-15,1e-15,1e-15))!=PS_OK ||
+       ps_scene_set_parent(&large,1,100)!=PS_OK || !ps_graphics_scene(g,&large,&large_camera,160,120) ||
+       ps_graphics_pick(g,.5,.5)!=0){SDL_SetError("Frame geometry was clipped before conversion to world coordinates");return false;}
     enum { W = 160, H = 120 };
     unsigned char first[W * H * 4], second[W * H * 4];
     ps_camera camera = {0, 0, 4, {0, 0, 0}, false, true, false};
@@ -1185,6 +1235,6 @@ bool ps_graphics_test(ps_graphics *g, const char *capture_path) {
             return false;
     }
     puts("GPU TEST: depth, rotated box/plane, points, polylines, label projection, resize, "
-         "clipping, transparency and picking PASSED");
+         "clipping, transparency, nested coordinate frames and picking PASSED");
     return true;
 }

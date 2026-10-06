@@ -83,7 +83,8 @@ static const documentation_topic documentation_topics[] = {
     {"Historische lokale Prüfungen", "docs/status-history.md", false},
     {"Logging", "docs/logging.md", false},
     {"log.h", "include/physim/log.h", true},
-    {"C: Logging", "docs/reference/log.md", false}};
+    {"C: Logging", "docs/reference/log.md", false},
+    {"Lokale Szenenkoordinaten", "docs/scene-frames.md", false}};
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27
 #define DOCUMENTATION_MEASUREMENT_TOPIC 28

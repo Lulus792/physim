@@ -107,7 +107,7 @@ add('ps_quantity_', {
     'divide': 'Dividiert Werte und Einheiten mit Prüfung auf ungültigen Divisor.',
 })
 add('ps_snapshot_', {
-    'decode_version': 'Dekodiert die ausdrücklich genannte Szenenversion; Version 1 erhält Eltern-ID 0, Version 2 prüft Hierarchien. Fehler erhalten alle Ausgaben.',
+    'decode_version': 'Dekodiert die ausdrücklich genannte Szenenversion; Version 1 erhält Eltern-ID 0, Version 2 prüft Hierarchien und Version 3 ergänzt lokale Koordinatenrahmen. Fehler erhalten alle Ausgaben.',
     'encode': 'Kodiert Zeit, Kanalwerte, Pausestatus und validierte Geometrie explizit little-endian; benötigt PS_SNAPSHOT_MAX Bytes und liefert bei ungültigen Eingaben 0.',
     'decode': 'Dekodiert einen vollständigen Zustand mit Größen-, Zahlen-, Text- und Geometrieprüfung; Fehler lassen sämtliche Ausgaben unverändert.',
 })
@@ -124,13 +124,16 @@ add('ps_run_', {
     'export_csv': 'Exportiert Rohzeit und sämtliche Kanäle als CSV, einschließlich Status und ungültiger Sensorzeilen.',
 })
 add('ps_scene_', {
+    'frame': 'Erzeugt einen expliziten TRS-Koordinatenrahmen mit eindeutiger ID und geprüftem Elternknoten. Skalierungen müssen endlich und ungleich null sein; Fehler erhalten die Szene.',
+    'transforms': 'Berechnet für jeden Szenenslot die zusammengesetzte Local-to-world-Matrix. Keine Allokation, kein gemeinsamer Cache; Fehler erhalten das Ausgabearray.',
+    'world_point': 'Konvertiert einen Punkt in der Koordinatenbasis des Eintrags in Weltkoordinaten; fehlerhafte Transformationen erhalten die Ausgabe.',
     'group': 'Erzeugt eine benannte Gruppe mit eindeutiger ID und optionalem Elternknoten; fehlerhafte Beziehungen verändern die Szene nicht.',
     'set_parent': 'Ändert die Eltern-ID eines benannten Szeneneintrags; fehlende IDs, Selbstbeziehungen und Zyklen werden transaktional abgewiesen.',
     'parent_index': 'Liefert den Slot des Elternknotens oder -1 für Wurzeln, ungültige Slots und fehlende Eltern.',
     'add': 'Fügt ein anonymes einfaches Objekt hinzu; Fehler sind hier nicht als Rückgabewert verfügbar.',
     'push': 'Prüft und kopiert ein vollständig beschriebenes Szenenobjekt.',
-    'polyline': 'Kopiert mindestens zwei Weltpunkte in den Szenenpunktpuffer und fügt einen Linienzug hinzu.',
-    'label': 'Kopiert eine UTF-8-Beschriftung mit Weltanker in die Szene.',
+    'polyline': 'Kopiert mindestens zwei lokale Punkte (ohne Rahmen Weltpunkte) in den Szenenpunktpuffer und fügt einen Linienzug hinzu.',
+    'label': 'Kopiert eine UTF-8-Beschriftung mit lokalem Anker (ohne Rahmen Weltanker) in die Szene.',
     'valid': 'Prüft den vollständigen Snapshot auf Form-, Zahlen-, Text-, ID- und Punktbereichsregeln.',
     'add_id': 'Fügt ein einfaches Objekt mit optionaler stabiler ID hinzu und meldet Fehler.',
     'polyline_id': 'Fügt einen Linienzug mit stabiler ID hinzu; Fehler verändern weder Objekte noch Punktpuffer.',

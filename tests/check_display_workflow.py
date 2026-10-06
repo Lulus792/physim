@@ -201,6 +201,17 @@ def masked_png_pixels(path):
         require(not any(blue(x,y) for y in range(95,565) for x in range(left,right)),"Masked PNG draws a line across a measurement gap")
 
 
+def scene_frames(flow,directory):
+    for language in ("c","phys"):
+        root=directory/language
+        root.mkdir(parents=True)
+        flow.run("--workspace-state-test",root,"frames-"+language,timeout=130,marker="FRAMES frames-"+language+" SELF-TEST: PASSED")
+        raw=Path(read(root/"project/saved-frame-path.txt"))
+        before=fingerprint(raw)
+        flow.run("--workspace-state-test",root,"frames-read",timeout=130,marker="FRAMES frames-read SELF-TEST: PASSED")
+        require(before==fingerprint(raw),"Replaying frame scene changed raw data")
+
+
 def logging(flow,directory):
     for language in ("c","phys","flood"):
         root=directory/language
@@ -505,7 +516,7 @@ def hierarchy(flow, directory):
             payload = data[at + 12:at + 12 + length]
             if kind == 5:
                 version, = struct.unpack_from("<I", payload)
-                require(version == 2, "Hierarchy source does not contain version-2 scenes")
+                require(version == 3, "Hierarchy source does not contain current version-3 scenes")
                 channels, objects = struct.unpack_from("<II", payload, 12)
                 head = 4 + 24 + channels * 8
                 flat = [payload[head + i * 176:head + i * 176 + 172]
@@ -775,7 +786,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"logging_workflow": logging, "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
+SPECIAL = {"scene_frames_workflow": scene_frames, "logging_workflow": logging, "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}
