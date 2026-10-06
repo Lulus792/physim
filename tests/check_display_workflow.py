@@ -216,6 +216,17 @@ def material_tutorial(flow,directory):
         flow.run("--workspace-state-test",path,"material-"+language,timeout=130,
                  marker="MATERIAL TUTORIAL SELF-TEST: PASSED")
 
+def saved_run_tutorial(flow,directory):
+    import hashlib
+    for language in ("c","phys"):
+        path=directory/language;path.mkdir(parents=True)
+        flow.run("--workspace-state-test",path,"saved-run-tutorial-"+language,timeout=130,
+                 marker="SAVED RUN TUTORIAL SELF-TEST: PASSED")
+        sources=list((path/"Producer/runs").glob("*.psrun"))
+        copies=list((path/"Consumer/runs").glob("*-import.psrun"))
+        require(len(sources)==len(copies)==1,"Exactly one producer archive and imported copy required")
+        require(hashlib.sha256(sources[0].read_bytes()).digest()==hashlib.sha256(copies[0].read_bytes()).digest(),"Imported archive differs from original")
+
 def monte_carlo_tutorial(flow,directory):
     for language in ("c","phys"):
         path=directory/language;path.mkdir(parents=True)
@@ -841,7 +852,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"monte_carlo_tutorial_workflow": monte_carlo_tutorial,"collision_tutorial_workflow": collision_tutorial,"pendulum_tutorial_workflow": pendulum_tutorial,"spring_tutorial_workflow": spring_tutorial,"material_tutorial_workflow": material_tutorial,"contact_world_language_workflow": contact_world_language,"contact_world_workflow": contact_world, "diagnostic_workflow": diagnostics, "scene_frames_workflow": scene_frames, "logging_workflow": logging, "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
+SPECIAL = {"saved_run_tutorial_workflow": saved_run_tutorial,"monte_carlo_tutorial_workflow": monte_carlo_tutorial,"collision_tutorial_workflow": collision_tutorial,"pendulum_tutorial_workflow": pendulum_tutorial,"spring_tutorial_workflow": spring_tutorial,"material_tutorial_workflow": material_tutorial,"contact_world_language_workflow": contact_world_language,"contact_world_workflow": contact_world, "diagnostic_workflow": diagnostics, "scene_frames_workflow": scene_frames, "logging_workflow": logging, "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}

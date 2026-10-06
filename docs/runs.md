@@ -28,6 +28,9 @@ Projekts. **Messläufe** zeigt `.psrun`, **Analyseberichte** zeigt `.psreport` a
 Ordner `runs`. Die Liste wird im Hintergrund geladen und nach Änderungsdatum sortiert.
 Ctrl+F filtert nach Dateiname. **Aktualisieren** liest Änderungen außerhalb der App ein.
 
+Der [Lernpfad zur Auswertung eines gespeicherten Laufs](saved-run-tutorial.md)
+führt in C und Physim durch Import, unabhängige Analyse und erneutes Öffnen.
+
 ## Gespeicherte Ergebnisse öffnen
 
 **Ansehen** lädt einen Messlauf in die Auswertung. **Öffnen** lädt einen gespeicherten

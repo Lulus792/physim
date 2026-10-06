@@ -323,6 +323,40 @@ def main():
                  sdk / "bin" / ("language-monte_carlo_analysis"+module_suffix),monte_carlo_probe,monte_carlo_results])
         print("Installed SDK Monte Carlo tutorial: installed/rebuilt Core, documented native build, seeded ensembles, worker reproducibility, constant populations and mixed reports passed",flush=True)
 
+        shutil.copy2(sdk / "examples/documentation/main.c",consumer / "saved-run-producer.c")
+        shutil.copy2(sdk / "examples/documentation/saved_run_analysis.c",consumer / "saved-run-analysis.c")
+        shutil.copy2(repo / "tests/test_saved_run_tutorial_report.c",consumer / "saved-run-probe.c")
+        checked([sdk / "bin" / ("physimc"+suffix),"--emit-experiment",sdk / "examples/documentation/language_main.phys"],output=consumer / "saved-run-producer-phys.c")
+        for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+            saved_producer=builder.executable("saved-run-producer-"+kind,["saved-run-producer.c"],[archive],module=True)
+            saved_producer_phys=builder.executable("saved-run-producer-phys-"+kind,["saved-run-producer-phys.c"],[archive],module=True,language=True)
+            saved_analyzer=builder.executable("saved-run-analysis-"+kind,["saved-run-analysis.c"],[archive],module=True)
+            saved_probe=builder.executable("saved-run-probe-"+kind,["saved-run-probe.c"],[archive])
+            saved_language=modules["saved_run_analysis"] if kind=="rebuilt" else sdk / "bin" / ("language-saved_run_analysis"+module_suffix)
+            directory=root / ("Saved run tutorial "+kind);directory.mkdir()
+            checked([sys.executable,repo / "tests/test_saved_run_tutorial.py",sdk / "bin" / ("physim-runner"+suffix),
+                     sdk / "bin" / ("physim-analysis-runner"+suffix),saved_producer,saved_producer_phys,saved_analyzer,saved_language,saved_probe,directory])
+        saved_documented=root / "Saved documented producer";saved_documented.mkdir()
+        shutil.copy2(sdk / "examples/documentation/main.c",saved_documented / "main.c")
+        shutil.copy2(sdk / "examples/documentation/analysis.c",saved_documented / "analysis.c")
+        (saved_documented / "physim.project").write_text("physim_project=1\n",encoding="utf-8")
+        saved_output=saved_documented / "build/Release"
+        checked([sdk / "bin" / ("physim-build"+suffix),"--project",saved_documented,"--sdk",sdk,
+                 "--output",saved_output,"--physimc",sdk / "bin" / ("physimc"+suffix),"--profile","Release"])
+        saved_consumer=root / "Saved documented analysis";saved_consumer.mkdir()
+        shutil.copy2(sdk / "examples/documentation/saved_run_analysis.c",saved_consumer / "analysis.c")
+        (saved_consumer / "physim.project").write_text("physim_project=2\nkind=analysis\nanalysis=analysis.c\n",encoding="utf-8")
+        saved_consumer_output=saved_consumer / "build/Release"
+        checked([sdk / "bin" / ("physim-build"+suffix),"--project",saved_consumer,"--sdk",sdk,
+                 "--output",saved_consumer_output,"--physimc",sdk / "bin" / ("physimc"+suffix),"--profile","Release"])
+        if (saved_consumer_output / ("experiment"+module_suffix)).exists():
+            raise RuntimeError("Documented analysis-only project built an experiment")
+        saved_results=root / "Saved documented results";saved_results.mkdir()
+        checked([sys.executable,repo / "tests/test_saved_run_tutorial.py",sdk / "bin" / ("physim-runner"+suffix),
+                 sdk / "bin" / ("physim-analysis-runner"+suffix),saved_output / ("experiment"+module_suffix),saved_producer_phys,
+                 saved_consumer_output / ("analysis"+module_suffix),sdk / "bin" / ("language-saved_run_analysis"+module_suffix),saved_probe,saved_results])
+        print("Installed SDK saved run tutorial: installed/rebuilt Core, documented producer and analysis-only build, sixteen mixed reports and immutable archives passed",flush=True)
+
         # Preserve the former SDK comparison: nine experiments, both general
         # Physim analyses, the sensor report and six C/Physim combinations.
         # Broader physics equivalence is checked by the normal integration suite.
@@ -405,6 +439,7 @@ def main():
         "Pendulum tutorial through installed/rebuilt Core, five integrators and mixed/adaptive reports passed.\n" +
         "Collision tutorial through installed/rebuilt Core, eleven exact scenarios and mixed reports passed.\n" +
         "Monte Carlo tutorial through installed/rebuilt Core, seeded ensembles, worker reproducibility and mixed reports passed.\n" +
+        "Saved run tutorial through installed/rebuilt Core, eight archive scenarios, sixteen mixed reports and independent analysis-only projects passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
         ("Eight C template GUI workflows and the complete Physim language GUI workflow passed.\n" if args.app_tests else ""), encoding="utf-8")
     print(f"Native SDK verified: {root}")

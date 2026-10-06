@@ -3,6 +3,92 @@
 Stand: 7. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Gespeicherten Lauf unabhängig auswerten am 7. Oktober 2026
+
+Der neue Lernpfad verwendet die bestehenden gleichförmigen C-/Physim-Experimente
+und zwei vollständige neue Archivanalysen. Ein eigenständiges Analyseprojekt
+importiert einen gespeicherten Lauf, leitet `position.x` über zentrale Sekanten
+ab und rekonstruiert die Position mit Trapezen ab dem archivierten Anfangswert.
+Drei Plots zeigen Position/Rekonstruktion, Geschwindigkeit und Residuum; zwei
+Tabellen speichern Laufumfang, Wiederherstellungsstatus, Anfangs-/Endposition,
+Verschiebung, Sekantengeschwindigkeit und maximale Rekonstruktionsabweichung.
+Der CSV-Export enthält sämtliche fünf Reihen. Das Verfahren benötigt genau
+einen Lauf, mindestens zwei Messpunkte, eine streng steigende Zeitachse und
+Längenwerte. Ein Nulloffset prüft Dimensionskompatibilität; die gemeinsame
+Positionsachse verwendet die kanonischen Meter der rekonstruierten Reihe,
+auch wenn das Archiv ein anderes Anzeigeeinheitensymbol enthält.
+Core-API/ABI 3, Sprachvertrag 0.177.0 und Dateiformate bleiben unverändert.
+[Lernziel, Modell, Gleichungen und vollständige Quellen](saved-run-tutorial.md).
+
+Der unabhängige Pythonprüfer erzeugt neben beiden echten Modellarchiven sechs
+weitere Archive direkt mit eigener PSRUN-Kodierung und CRCs: unregelmäßige
+quadratische Positionen, eine spätere Startzeit, zwei rückwärts gerichtete
+Messpunkte, ein lesbares Archiv ohne Abschlussfooter, ein abweichendes
+Anzeigeeinheitensymbol und 2.049 Messpunkte. Beide Analysesprachen verarbeiten
+alle acht Fälle. Ein separater C-Prüfer liest die Originalarchive, berechnet
+Sekanten und Trapeze selbst und kontrolliert alle Berichtskurven, Vorschau-
+Endpunkte, SI-Achsendimensionen/-maßstäbe/-symbole sowie beide Tabellen.
+Python vergleicht jeden Wert der vollständigen CSV und die beiden Analysen
+untereinander. Alle 16 gemischten Berichte bestehen; bei der großen Reihe
+bleiben sämtliche 2.049 CSV-Zeilen erhalten, während die Vorschau auf höchstens
+2.048 Punkte begrenzt ist. Datei-SHA-256-Werte bleiben nach jeder Analyse gleich.
+
+Leere, zu kurze, mehrfach ausgewählte oder fehlende Eingänge, doppelte Zeiten,
+fehlende Positionskanäle und falsche Dimensionen werden ohne fertigen Bericht
+zurückgewiesen. Wiederhergestellte gültige Präfixe tragen ausdrücklich den
+Tabellenwert `Recovered prefix=1`; fehlende spätere Messpunkte werden nicht
+hinzugefügt. Die dokumentierten Grenzen unterscheiden Datenverarbeitung von
+physikalischer Validierung und erklären Rauschen sowie grobe/unregelmäßige
+Abtastung. Vier vollständige Dokumentationsblöcke entsprechen exakt den gebauten
+Experiment-/Analysequellen.
+
+macOS Release besteht drei ausgewählte Prüfungen unter
+`build/contact-world-language-release-mac/test-results/run-fnegvx10`, Linux GCC
+Release unter `build/contact-world-language-release-linux/test-results/run-l1y8qzpf`:
+neuer Lernpfad, Quellcodegleichheit und bisheriges C-Dokumentationsbeispiel.
+Linux Debug besteht den neuen Lernpfad mit AddressSanitizer und
+UndefinedBehaviorSanitizer unter
+`build/spring-tutorial-asan-linux/test-results/run-0vhqs921`.
+
+Beide Plattformen bestehen drei ausgewählte Fensterabläufe: macOS unter
+`build/contact-world-language-release-mac/test-results/run-l9s6h_uq`, Linux unter
+`build/contact-world-language-release-linux/test-results/run-6ho99fgb`.
+Der neue Ablauf erzeugt je ein echtes Archiv mit 32 angehaltenen Schritten
+zu 0,0625 s und importiert es in ein Analyseprojekt der jeweils anderen Sprache.
+Die Projekte enthalten keine Experimentquelle und kein Experimentmodul;
+Simulation wird abgewiesen. Der Import erfolgt über die tatsächliche
+Schaltfläche mit injiziertem Testpfad, nicht über eine automatisierte native
+Dateiauswahl. Der Test kontrolliert 33 Messpunkte, drei Plots, zwei Tabellen,
+Position 3 m und Geschwindigkeit 1,5 m/s und öffnet das Projekt samt Bericht
+anschließend ohne Build erneut. Python vergleicht Original und importierte
+Datei per SHA-256. Zusätzlich bestehen die bisherigen eigenständigen
+Analyseprojekte und die Offline-Dokumentnavigation einschließlich des neuen
+Lernpfads. Die geprüften Intel-macOS-/Debian-12-Umgebungen und Compiler-/SDL-
+Versionen entsprechen den folgenden Nachweisen. Position, Kennzahlentabelle
+und wiedergeöffnete Geschwindigkeit wurden auf macOS bei 1280 × 900 logischen
+Pixeln visuell geprüft, Position und Geschwindigkeit unter Linux bei 1280 × 900.
+
+Beide neu installierten SDKs bestehen den vollständigen Relokationsprüfer:
+macOS unter `build/saved-run-tutorial-sdk-proof-mac/Native SDK ä tt9nk6ee`,
+Linux unter `build/saved-run-tutorial-sdk-proof-linux/Native SDK ä eo571jes`.
+Der Prüfer kontrolliert alle Manifestdateien und öffentlichen Header, baut Core
+und alle 43 Sprachmodule aus der mitgelieferten Quelldistribution neu und führt
+die bisherigen Index-, Kontakt-, Diagnose-, Serien- und Beispielprüfungen aus.
+Der neue Lernpfad läuft mit installiertem und neu gebautem Core sowie über die
+dokumentierten nativen Builds von Erzeuger und eigenständigem Analyseprojekt.
+Letzteres darf kein Experimentmodul erstellen. Alle acht Archivszenarien und
+16 gemischten Berichte bestehen in jedem Durchgang. Die endgültigen Pakete
+enthalten die aktuellen Nachweise mit erneuertem Manifest: jeweils 355 Dateien
+mit SHA-256-Prüfung. Alle 141 Code-/Binärdateien und 110 Beispieldateien bleiben
+bytegleich zur verifizierten Installation; die App bleibt bytegleich zur
+geprüften Release-App.
+
+Der aktuelle Katalog umfasst 563 Prüfungen ohne Fenster (548 ohne SDL),
+66 Fensterfälle, 18 eigenständige Sprachprogramme und 43 Experiment-/Analysemodule.
+Ein Gesamtlauf aller aktuellen Fälle wird hier nicht behauptet; der frühere
+Gesamtlauf aller 555 Fälle bleibt weiter unten belegt. Der Lernpfad schließt
+keine anderen noch offenen Anforderungen des Projektplans ab.
+
 ## Monte Carlo mit unsicheren Anfangswerten am 7. Oktober 2026
 
 Vier vollständige Quellen liefern in C und Physim denselben Vakuumwurf mit

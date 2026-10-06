@@ -98,6 +98,7 @@ static const documentation_topic documentation_topics[] = {
     {"Pendel & Integratoren", "docs/pendulum-tutorial.md", false},
     {"Elastischer & inelastischer Stoß", "docs/collision-tutorial.md", false},
     {"Monte Carlo: Anfangswerte", "docs/monte-carlo-tutorial.md", false},
+    {"Gespeicherten Lauf auswerten", "docs/saved-run-tutorial.md", false},
 };
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27
@@ -116,7 +117,8 @@ static int documentation_group(int topic) {
         !strcmp(documentation_topics[topic].path, "docs/projectile-drag-tutorial.md") ||
         !strcmp(documentation_topics[topic].path, "docs/pendulum-tutorial.md") ||
         !strcmp(documentation_topics[topic].path, "docs/collision-tutorial.md") ||
-        !strcmp(documentation_topics[topic].path, "docs/monte-carlo-tutorial.md"))
+        !strcmp(documentation_topics[topic].path, "docs/monte-carlo-tutorial.md") ||
+        !strcmp(documentation_topics[topic].path, "docs/saved-run-tutorial.md"))
         return 0;
     if (topic == 23 || topic >= 65)
         return 3;

@@ -1559,6 +1559,27 @@
         "platform",
         "core"
       ]
+    },
+    "saved-run-analysis-c": {
+      "sources": [
+        "examples/documentation/saved_run_analysis.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "saved-run-analysis-phys": {
+      "source": "examples/documentation/saved_run_analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "saved-run-report-probe": {
+      "sources": [
+        "tests/test_saved_run_tutorial_report.c"
+      ],
+      "libraries": [
+        "core"
+      ]
     }
   },
   "tests": [
@@ -6026,6 +6047,84 @@
           "arguments": [
             "{root}/tests/check_tutorial_sources.py",
             "documentation_monte_carlo_source",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "saved_run_tutorial",
+      "targets": [
+        "python",
+        "physim-runner",
+        "physim-analysis-runner",
+        "documentation_main",
+        "physim-language-documentation-main",
+        "saved-run-analysis-c",
+        "saved-run-analysis-phys",
+        "saved-run-report-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_saved_run_tutorial.py",
+            "{physim-runner}",
+            "{physim-analysis-runner}",
+            "{documentation_main}",
+            "{physim-language-documentation-main}",
+            "{saved-run-analysis-c}",
+            "{saved-run-analysis-phys}",
+            "{saved-run-report-probe}",
+            "{work}"
+          ],
+          "timeout": 180
+        }
+      ]
+    },
+    {
+      "name": "saved_run_tutorial_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "saved_run_tutorial_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 560,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "documentation_saved_run_source",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tutorial_sources.py",
+            "documentation_saved_run_source",
             "--root",
             "{root}"
           ],

@@ -167,5 +167,26 @@
         "language": "physim"
       }
     ]
+  },
+  "documentation_saved_run_source": {
+    "document": "docs/saved-run-tutorial.md",
+    "sources": [
+      {
+        "path": "examples/documentation/main.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/language_main.phys",
+        "language": "physim"
+      },
+      {
+        "path": "examples/documentation/saved_run_analysis.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/saved_run_analysis.phys",
+        "language": "physim"
+      }
+    ]
   }
 }
