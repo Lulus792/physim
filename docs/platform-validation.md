@@ -3,6 +3,90 @@
 Stand: 6. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Persistente Kontaktverwaltung am 6. Oktober 2026
+
+Der neue caller-eigene C-Kontaktzustand regeneriert diskrete Kugel-/Box-/
+Ebenenkontakte durch die bestehenden Broad-/Narrow-Phase-Funktionen. Stabile
+Collider-IDs, beide Körperlokalanker und ein Normalenvergleich ordnen Kontakte
+eins zu eins zwischen erfolgreichen Aufrufen zu. Masse-/Trägheits-/Formänderungen
+verwerfen die Zuordnung; fehlende Kontakte laufen sofort aus. Startimpulse werden
+mit dem Zeitschrittverhältnis skaliert und auf den aktuellen Coulomb-Kegel
+projiziert. Restitutionsziele werden vor sämtlichen Warmimpulsen vorbereitet.
+Körper, Cache und Ergebnis ändern sich bei Fehlern nicht. Es gibt keine eigenen
+Heapallokationen oder implizite Integration. Alte Solver bleiben kalt; ABI 3,
+Physim 0.176.0 und alle Daten-/Wireformate bleiben erhalten.
+
+macOS Debug besteht die abschließenden Core-, Kontaktgraph-, gemischten Graph-
+und Runnerprüfungen 4/4 unter
+`build/contact-world-debug-mac/test-results/run-i_b62wvv`. Ein analytischer
+Vier-Körper-Stapel erreicht mit gespeicherten Impulsen bereits nach einer
+Geschwindigkeitsiteration einen Rest unter 1e-12, während der kalte Lauf einen
+Rest über .04 behält. Timestep-Skalierung, Umordnung von Körper-/Colliderarrays,
+Kontaktablauf, geänderte Masse/Trägheit, rotierte Ebenen, alle unterstützten
+Formpaare, aktuelle Reibung, Restitution vor Warmstart sowie ungültige Seeds,
+Kapazitäts- und numerische Überläufe werden ausdrücklich geprüft.
+
+Der unabhängige Runnerprüfer liest jeweils 1001 Messzeilen eines warmen und
+kalten Boxenstapels und CRC-validierte aufgezeichnete Szenen. Kontaktzähler,
+Höhen, SI-Metadaten, Abschlussindex und geringerer mittlerer Normalenrest des
+warmen Laufs werden geprüft. Die Debug-App-Prüfung besteht 1/1 unter
+`build/contact-world-debug-mac/test-results/run-99qjwffa`: neues Projekt bauen,
+40 kontrollierte Schritte, aktive Cachezähler und vollständige Wiederöffnung
+der 41 Messzeilen/Szenen. Der Screenshot der Körper und Kontaktnormalen wurde
+visuell geprüft; die Körperfarben wurden anschließend zur Unterscheidung variiert.
+
+Für weitere Prüfungen wurde die eigene Debian-Testplatte von 16 auf 32 GiB
+erweitert. Das vorherige Disk-Image wurde unter
+`build/linux-vm/debian-dialogs-before-contact-world.qcow2` erhalten; Debian
+erweiterte die bestehende Ext4-Rootpartition automatisch. Betriebssystem und
+Compiler bleiben Debian 12/GCC 12.2.0 mit Kernel 6.1.0-53-cloud-amd64.
+Linux GCC Debug mit AddressSanitizer und UndefinedBehaviorSanitizer besteht
+6/6 unter `build/contact-world-asan-linux/test-results/run-yni30whx`: neuer
+Kontaktzustand und Runner, bisherige Kontakt-/Gelenkgraphen, Boxkontakte und
+Broad Phase. Die tatsächlichen warmen/kalten Simulationen laufen ebenfalls
+mit instrumentiertem Runner und Modul.
+Linux Release besteht die vollständige Prüfung 533/533 unter
+`build/contact-world-release-linux/test-results/run-9b3v74yv` in der VM.
+Der Lauf baut alle 17 eigenständigen Sprachprogramme und 32 Module sowie
+den nativen Projektbuilder mit nun 21 Core-Einheiten.
+macOS Release besteht ebenfalls 533/533 unter
+`build/contact-world-release-mac/test-results/run-n2idnt61` mit Apple Clang 16,
+Intel macOS 14.6.1 und SDL 3.2.30. Beide Gesamtprüfungen verwenden den
+abschließenden unveränderten Produktionscode.
+Debian Release mit X11/Mesa, Xvfb und Openbox besteht neue Stapelansicht,
+bisherigen C-/Physim-Kontaktablauf und Boxstoß 3/3 unter
+`build/contact-world-release-linux/test-results/run-cywzwx6t`. Dies ist keine
+vollständige Abnahme aller 59 Fensterfälle.
+macOS Release besteht dieselben drei Fensterprüfungen 3/3 unter
+`build/contact-world-release-mac/test-results/run-ov7_9k70`.
+Die abschließende Linux-Stapelansicht mit getrennten Körperfarben wurde
+visuell geprüft; gespeicherte Kontakte und Normale bleiben sichtbar.
+
+Die vollständige verschobene SDK-Prüfung besteht auf macOS unter
+`build/contact-world-sdk-proof-mac/Native SDK ä bdjem_8b` und auf Debian unter
+`build/contact-world-sdk-proof-linux/Native SDK ä gi_i7c87` in der VM.
+Alle öffentlichen Header werden unabhängig kompiliert; die ausgelieferte
+Bibliothek und ein Neubau aus 21 Core-Einheiten bestehen die analytische
+Kontaktweltprüfung und tatsächliche warme/kalte Stapelläufe mit aufgezeichneten
+Szenen. Außerdem bestehen 17 eigenständige Sprachprogramme, 32 Module,
+Logging-/Frame-/Diagnostik-/Indexproben, C-/Physim-Analysen, adaptive Studien
+und neun unabhängige Projektneubauten. Diese SDK-Prüfungen führen keine
+zusätzliche GUI-Prüfung aus.
+
+Die abschließenden Pakete `build/Contact World clean SDK ä mac` und
+`build/Contact World clean SDK ä linux` enthalten die aktualisierten Nachweise.
+Ihre SHA-256-Manifeste wurden jeweils für alle 315 Dateien geprüft. Alle 128
+Dateien unter `include`, `lib`, `src` und `bin` stimmen bytegenau mit dem
+jeweils vollständig geprüften verschobenen SDK überein; die App entspricht
+der zuvor geprüften Release-App. Die aktualisierte Dokumentation erfordert
+keinen erneuten Programmneubau.
+
+Die neue Verwaltung ist diskret, synchron und begrenzt auf 128 Körper/Collider
+und 512 Kontakte. Kein CCD, Compound-/konvexe Formen, Feature-IDs/Kontaktinseln,
+Gelenk-Warmstart, nichtlineare Rotationsprojektion oder direkte neue Physim-
+Bindungen sind damit abgenommen. Der feste Iterationsetat garantiert keine
+Konvergenz; Normalen- und Projektionsreste bleiben ausdrücklich sichtbar.
+
 ## Physim-Indexabfragen am 6. Oktober 2026
 
 Sprachvertrag 0.176.0 ergänzt `RunIndex`, `RunBlock` und vollständige

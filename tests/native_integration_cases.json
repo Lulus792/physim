@@ -1353,6 +1353,15 @@
       "libraries": [
         "core"
       ]
+    },
+    "contact-stack": {
+      "sources": [
+        "examples/contact_stack/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
     }
   },
   "tests": [
@@ -5275,7 +5284,7 @@
         {
           "program": "run-index-memory",
           "arguments": [
-            "{work}/index \u03b1.psrun"
+            "{work}/index α.psrun"
           ],
           "timeout": 60
         },
@@ -5294,6 +5303,56 @@
             "{work}/indexed-report.psreport"
           ],
           "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "runner_contact_world",
+      "targets": [
+        "python",
+        "physim-runner",
+        "contact-stack"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_runner_contact_world.py",
+            "{physim-runner}",
+            "{contact-stack}",
+            "{work}"
+          ],
+          "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "contact_world_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "contact_world_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 560,
+          "files": [
+            "app-steps.json"
+          ]
         }
       ]
     }

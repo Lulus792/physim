@@ -134,6 +134,17 @@ ps_result ps_contacts_resolve_graph(ps_body *bodies, size_t body_count,
                                     const ps_contact_constraint *constraints, size_t count,
                                     const ps_contact_solver *settings,
                                     ps_contact_graph_solution *out);
+/* Same graph solve, initialized by per-contact world-space impulses ON A.
+ * initial may be NULL for the exact cold path. Finite seeds are projected onto
+ * the current normal/Coulomb cone before application. Restitution targets use
+ * velocities BEFORE all warm impulses. out reports the total applied impulse,
+ * including the seed. Caller owns contact matching and timestep scaling.
+ * Invalid seeds preserve every body/output. Storage must be disjoint. */
+ps_result ps_contacts_resolve_graph_warm(ps_body *bodies, size_t body_count,
+                                         const ps_contact_constraint *contacts, size_t count,
+                                         const ps_contact_solver *settings,
+                                         const ps_vec3 *initial_impulse_on_a_ns,
+                                         ps_contact_graph_solution *out);
 #define PS_CONSTRAINT_GRAPH_MAX_JOINTS 256u
 typedef struct {
     uint32_t a, b; /* Only B may be PS_CONTACT_WORLD. */

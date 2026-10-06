@@ -45,7 +45,7 @@ def catalog():
     cases = []
     for name in ("core", "numerics", "mechanics", "hashmap", "string_view", "array",
                  "memory", "memory_owners", "math", "box_contacts", "contact_graph",
-                 "distance_joint", "constraint_graph", "broad_phase", "measurement",
+                 "distance_joint", "constraint_graph", "contact_world", "broad_phase", "measurement",
                  "buoyancy", "contacts", "resample", "series", "report", "scene_view"):
         cases.append(Case(name, (f"tests/test_{name}.c",)))
     for name, source in (("sphere_sweep", "sweep"), ("series_select", "select"),

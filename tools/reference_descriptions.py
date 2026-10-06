@@ -314,3 +314,9 @@ add('ps_run_index_', {
     'read': 'Liest bis zu 256 Messzeilen ab einer nullbasierten Zeilennummer; alle Ausgaben bleiben bei Fehlern unverändert.',
     'snapshot': 'Liest eine aufgezeichnete Szene anhand ihrer nullbasierten Nummer mit erneuter CRC- und Snapshotprüfung.',
 })
+add('ps_contact_world_', {
+    'init': 'Initialisiert den begrenzten Kontaktzustand mit Größenprüfung und validierten Match-/Warmstart-Einstellungen; Fehler erhalten den bisherigen Wert.',
+    'reset': 'Entfernt die gesamte Kontakthistorie und behält gültige Einstellungen; für Modellreset, Teleports oder ersetzte Objekte verwenden.',
+    'solve': 'Erzeugt und löst aktuelle diskrete Kontakte, ordnet alte lokale Anker zu und aktualisiert Körper, Cache und Ergebnis atomar.',
+})
+DESCRIPTIONS['ps_contacts_resolve_graph_warm']='Wie der Kontaktsolver mit expliziten Startimpulsen auf A. Restitution wird vor sämtlichen Warmimpulsen bestimmt; Startwerte werden auf die aktuelle Normale und den Coulomb-Kegel projiziert. NULL wählt den kalten Pfad.'

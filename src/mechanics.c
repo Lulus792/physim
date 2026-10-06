@@ -575,7 +575,7 @@ static ps_result resolve_graph(ps_body *bodies, size_t body_count,
                                const ps_contact_constraint *constraints, size_t count,
                                const ps_contact_solver *settings, ps_contact_graph_solution *out,
                                const ps_distance_constraint *joints, size_t joint_count, double dt,
-                               ps_constraint_graph_solution *mixed_out) {
+                               ps_constraint_graph_solution *mixed_out,const ps_vec3 *initial) {
     if ((!bodies && body_count) || (!constraints && count) || !solver_valid(settings) ||
         (!joints && joint_count) || !isfinite(dt) || dt <= 0)
         return PS_INVALID;
@@ -592,6 +592,7 @@ static ps_result resolve_graph(ps_body *bodies, size_t body_count,
             c->a == c->b || !finite3(p->point_m) || !unit_normal(p->normal) ||
             !isfinite(p->penetration_m) || p->penetration_m < 0)
             return PS_INVALID;
+        if(initial && !finite3(initial[i]))return PS_INVALID;
     }
     for (size_t i = 0; i < joint_count; i++)
         if (joints[i].a >= body_count ||
@@ -617,6 +618,22 @@ static ps_result resolve_graph(ps_body *bodies, size_t body_count,
             if (r != PS_OK)
                 return r;
         }
+    }
+    /* All restitution targets above precede any warm velocity update. */
+    if(initial)for(size_t i=0;i<count;i++) {
+        if(!state[i].normal_mass)continue;
+        const ps_contact_constraint *c=&constraints[i];contact_iteration *s=&state[i];
+        s->normal=fmax(0,-ps_vdot(initial[i],c->contact.normal));
+        s->tangent1=-ps_vdot(initial[i],s->t1);s->tangent2=-ps_vdot(initial[i],s->t2);
+        double length=hypot(s->tangent1,s->tangent2),limit=settings->friction*s->normal;
+        if(!isfinite(s->normal) || !isfinite(length) || !isfinite(limit))return PS_NUMERIC;
+        if(length>limit){s->tangent1*=limit/length;s->tangent2*=limit/length;}
+        ps_vec3 applied=ps_vadd(ps_vscale(c->contact.normal,s->normal),
+            ps_vadd(ps_vscale(s->t1,s->tangent1),ps_vscale(s->t2,s->tangent2)));
+        if(!finite3(applied))return PS_NUMERIC;
+        ps_body *a=&working[c->a],*b=c->b==PS_CONTACT_WORLD?NULL:&working[c->b];
+        impulse(a,ps_vscale(applied,-1),c->contact.point_m);impulse(b,applied,c->contact.point_m);
+        if(ps_body_validate(a)!=PS_OK || (b && ps_body_validate(b)!=PS_OK))return PS_NUMERIC;
     }
     for (uint32_t iteration = 0; iteration < settings->iterations; iteration++) {
         for (size_t i = 0; i < count; i++) {
@@ -726,7 +743,12 @@ ps_result ps_contacts_resolve_graph(ps_body *bodies, size_t body_count,
                                     const ps_contact_constraint *contacts, size_t count,
                                     const ps_contact_solver *settings,
                                     ps_contact_graph_solution *out) {
-    return resolve_graph(bodies, body_count, contacts, count, settings, out, NULL, 0, 1, NULL);
+    return resolve_graph(bodies, body_count, contacts, count, settings, out, NULL, 0, 1, NULL,NULL);
+}
+ps_result ps_contacts_resolve_graph_warm(ps_body *bodies,size_t body_count,
+    const ps_contact_constraint *contacts,size_t count,const ps_contact_solver *settings,
+    const ps_vec3 *initial,ps_contact_graph_solution *out) {
+    return resolve_graph(bodies,body_count,contacts,count,settings,out,NULL,0,1,NULL,initial);
 }
 ps_result ps_constraints_resolve_graph(ps_body *bodies, size_t body_count,
                                        const ps_contact_constraint *contacts, size_t contact_count,
@@ -734,7 +756,7 @@ ps_result ps_constraints_resolve_graph(ps_body *bodies, size_t body_count,
                                        const ps_contact_solver *settings, double dt,
                                        ps_constraint_graph_solution *out) {
     return resolve_graph(bodies, body_count, contacts, contact_count, settings, NULL, joints,
-                         joint_count, dt, out);
+                         joint_count, dt, out,NULL);
 }
 /* Exponent scaling prevents intermediate overflow/underflow for finite factors. */
 static double product4(double a, double b, double c, double d) {

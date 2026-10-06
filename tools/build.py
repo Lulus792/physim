@@ -21,7 +21,7 @@ import tempfile
 ROOT = Path(__file__).resolve().parent.parent
 WINDOWS = sys.platform == "win32"
 MAC = sys.platform == "darwin"
-CORE = "core memory array string_view hashmap math data run_index snapshot analysis scene numerics units series report report_export mechanics box_contacts collision measurement".split()
+CORE = "core memory array string_view hashmap math data run_index snapshot analysis scene numerics units series report report_export mechanics contact_world box_contacts collision measurement".split()
 LANGUAGE = "lexer parser checker emitter builtins".split()
 APP = "main timeline docking layout_catalog channel_units run_import ui_backend ui_sdl ui_geometry graphics documentation library preferences workspace_state workspace_catalog workspace_tree plot_view report_image png".split()
 PROJECT = "project_file text_document autosave parameter_catalog".split()

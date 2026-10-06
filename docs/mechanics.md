@@ -505,3 +505,10 @@ Eckpunkte verglichen. Kontaktpunkte werden auf beiden Oberflächen geprüft, au�
 Vertauschung der Körper, Wiederholbarkeit, Größenextreme und Impuls-/Drehimpulserhaltung.
 Die Boxstoßvorlage läuft elastisch, inelastisch und gedreht mit Reibung im Runner;
 alle 401 Samples jedes Laufs werden gegen Erhaltungsgrößen und Referenzen geprüft.
+
+## Persistente Kontaktverwaltung
+
+Für automatisch regenerierte Kugel-/Box-/Ebenenkontakte ergänzt `contact_world.h`
+einen caller-eigenen Zustand mit stabilen Collider-IDs, lokaler Punktzuordnung,
+Lebensdauerzählungen und Warmstart des Graphsolvers. Vorhandene Paar- und
+Graphfunktionen bleiben kalt und unverändert. [Vertrag und Stapelbeispiel](contact-world.md).

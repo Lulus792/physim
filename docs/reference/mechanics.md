@@ -354,6 +354,23 @@ ps_result ps_contacts_resolve_graph(
 
 Simultaneous contact graph with accumulated normal/friction impulses. Deterministic input order; restitution targets use INITIAL contact velocities. Fixed iterations across ALL constraints, then repeated translation projection. Contacts/normals are fixed during solving; regenerate them each physical step. No allocation, warm start, contact generation, CCD or joint constraints. PS_OK means budget completed, not convergence: inspect both residuals. Bodies, constraints, settings and optional output must occupy disjoint storage. Every body is validated, including unused/static bodies. Errors change no output. Zero counts permit NULL arrays. Limits are above; exceeding them is PS_LIMIT.
 
+## ps_contacts_resolve_graph_warm
+
+Wie der Kontaktsolver mit expliziten Startimpulsen auf A. Restitution wird vor sämtlichen Warmimpulsen bestimmt; Startwerte werden auf die aktuelle Normale und den Coulomb-Kegel projiziert. NULL wählt den kalten Pfad.
+
+```c
+ps_result ps_contacts_resolve_graph_warm(
+    ps_body *bodies,
+    size_t body_count,
+    const ps_contact_constraint *contacts,
+    size_t count,
+    const ps_contact_solver *settings,
+    const ps_vec3 *initial_impulse_on_a_ns,
+    ps_contact_graph_solution *out);
+```
+
+Same graph solve, initialized by per-contact world-space impulses ON A. initial may be NULL for the exact cold path. Finite seeds are projected onto the current normal/Coulomb cone before application. Restitution targets use velocities BEFORE all warm impulses. out reports the total applied impulse, including the seed. Caller owns contact matching and timestep scaling. Invalid seeds preserve every body/output. Storage must be disjoint.
+
 ### ps_distance_constraint
 
 ```c

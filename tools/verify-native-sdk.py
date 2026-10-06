@@ -198,6 +198,15 @@ def main():
             checked([program,directory])
             checked([sys.executable,repo / "tests/test_run_index_codec.py",directory])
         print("Installed SDK run index: installed/rebuilt Core, million rows and independent codec passed",flush=True)
+        shutil.copy2(repo / "tests/test_contact_world.c",consumer / "contact-world-probe.c")
+        shutil.copy2(sdk / "examples/contact_stack/main.c",consumer / "contact-stack.c")
+        for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+            program=builder.executable("contact-world-probe-"+kind,["contact-world-probe.c"],[archive])
+            checked([program])
+            experiment=builder.executable("contact-stack-"+kind,["contact-stack.c"],[archive],module=True)
+            directory=root / ("Contact world "+kind);directory.mkdir()
+            checked([sys.executable,repo / "tests/test_runner_contact_world.py",sdk / "bin" / ("physim-runner"+suffix),experiment,directory])
+        print("Installed SDK contact world: installed/rebuilt Core, analytic warm stack, lifecycle and real recorded simulations passed",flush=True)
 
 
         # Preserve the former SDK comparison: nine experiments, both general
@@ -276,6 +285,7 @@ def main():
         "Structured diagnostics through installed/rebuilt Core, C/Physim runners and legacy ABI passed.\n" +
         "Run indexes through installed/rebuilt Core, legacy/recovered files, allocator failures and million-row independent codec passed.\n" +
         "Indexed language values, copied owners, failure cleanup and all 256 SI report rows passed.\n" +
+        "Persistent contact world and projected warm graph through installed/rebuilt Core and real stack runners passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
         ("Eight C template GUI workflows and the complete Physim language GUI workflow passed.\n" if args.app_tests else ""), encoding="utf-8")
     print(f"Native SDK verified: {root}")
