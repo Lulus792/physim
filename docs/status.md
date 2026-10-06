@@ -1,7 +1,16 @@
 # Umsetzungsstand
 
-Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-06. Der Projektplan ist die Roadmap;
+Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-07. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
+
+**Pendel und Vergleich von Integratoren:** Vollständige C-/Physim-Quellen
+beschreiben dasselbe konservative nichtlineare Pendel mit fünf wählbaren
+Verfahren. Eine Mehrlaufanalyse vergleicht Winkel, Energieabweichungen und
+Perioden auf den gespeicherten Zeitachsen, einschließlich adaptiver Läufe.
+Ein unabhängiger Test prüft die nichtlineare Periode durch elliptische Quadratur
+und die Schrittweitenordnung durch rekursive Taylorentwicklung. Reset,
+Parameterinstanzen und Fehlererhaltung sind gesondert geprüft.
+[Lernziel, Quellen und vollständiger Ablauf](pendulum-tutorial.md).
 
 **Korrekturen aus dem Prüfbericht vom 6. Oktober:** Hauptquellen, zusätzliche
 Texte und Autosaves erzeugen Zwischenfiles exklusiv. POSIX-Speicherung erhält
@@ -109,7 +118,7 @@ geprüft und übernommen, nur fehlende Indizes starten erneut. Seeds, Parameter
 und feste/adaptive Zeitvorgaben bleiben erhalten. Aktuelle Editoränderungen und
 die alte Serie werden nicht verändert. Vollständig vorhandene Serien starten
 keine neuen Prozesse. Frühere Serien ohne Checkpoint bleiben nicht fortsetzbar.
-Der Katalog umfasst 555 Prüfungen ohne Fenster (540 ohne SDL) und 62 Fensterfälle.
+Der Katalog umfasst 557 Prüfungen ohne Fenster (542 ohne SDL) und 63 Fensterfälle.
 Ausgeführte Nachweise stehen im [Plattformbericht](platform-validation.md).
 
 **Eigenständige Analyseprojekte:** Die App legt jetzt C-/Physim-Auswertungen ohne

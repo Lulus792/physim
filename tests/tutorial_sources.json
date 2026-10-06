@@ -104,5 +104,26 @@
         "language": "physim"
       }
     ]
+  },
+  "documentation_pendulum_source": {
+    "document": "docs/pendulum-tutorial.md",
+    "sources": [
+      {
+        "path": "examples/documentation/pendulum_main.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/pendulum_analysis.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/pendulum_main.phys",
+        "language": "physim"
+      },
+      {
+        "path": "examples/documentation/pendulum_analysis.phys",
+        "language": "physim"
+      }
+    ]
   }
 }

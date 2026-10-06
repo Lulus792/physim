@@ -1430,6 +1430,49 @@
         "platform",
         "core"
       ]
+    },
+    "pendulum-tutorial-c": {
+      "sources": [
+        "examples/documentation/pendulum_main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "pendulum-tutorial-phys": {
+      "source": "examples/documentation/pendulum_main.phys",
+      "mode": "--emit-experiment"
+    },
+    "pendulum-tutorial-analysis-c": {
+      "sources": [
+        "examples/documentation/pendulum_analysis.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "pendulum-tutorial-analysis-phys": {
+      "source": "examples/documentation/pendulum_analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "pendulum-tutorial-report-probe": {
+      "sources": [
+        "tests/test_pendulum_tutorial_report.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "pendulum-tutorial-instances": {
+      "sources": [
+        "tests/test_pendulum_tutorial_instances.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
     }
   },
   "tests": [
@@ -3288,7 +3331,7 @@
           "arguments": [
             "{root}/tests/verify_png.py",
             "{work}",
-            "{work}/workflow ä"
+            "{work}/workflow \u00e4"
           ],
           "timeout": 60
         }
@@ -3335,7 +3378,7 @@
           "arguments": [
             "{root}/tests/verify_png.py",
             "{work}",
-            "{work}/workflow ä"
+            "{work}/workflow \u00e4"
           ],
           "timeout": 60
         }
@@ -5352,7 +5395,7 @@
         {
           "program": "run-index-memory",
           "arguments": [
-            "{work}/index α.psrun"
+            "{work}/index \u03b1.psrun"
           ],
           "timeout": 60
         },
@@ -5634,6 +5677,93 @@
           "arguments": [
             "{root}/tests/check_tutorial_sources.py",
             "documentation_spring_source",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "pendulum_tutorial",
+      "targets": [
+        "python",
+        "physim-runner",
+        "physim-analysis-runner",
+        "pendulum-tutorial-c",
+        "pendulum-tutorial-phys",
+        "pendulum-tutorial-analysis-c",
+        "pendulum-tutorial-analysis-phys",
+        "pendulum-tutorial-report-probe",
+        "pendulum-tutorial-instances"
+      ],
+      "steps": [
+        {
+          "program": "pendulum-tutorial-instances",
+          "arguments": [
+            "{pendulum-tutorial-c}",
+            "{pendulum-tutorial-phys}"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_pendulum_tutorial.py",
+            "{physim-runner}",
+            "{physim-analysis-runner}",
+            "{pendulum-tutorial-c}",
+            "{pendulum-tutorial-phys}",
+            "{pendulum-tutorial-analysis-c}",
+            "{pendulum-tutorial-analysis-phys}",
+            "{pendulum-tutorial-report-probe}",
+            "{work}"
+          ],
+          "timeout": 360
+        }
+      ]
+    },
+    {
+      "name": "pendulum_tutorial_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "pendulum_tutorial_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 560,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "documentation_pendulum_source",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tutorial_sources.py",
+            "documentation_pendulum_source",
             "--root",
             "{root}"
           ],

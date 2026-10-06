@@ -1,0 +1,56 @@
+let methods = ["Euler","symplectic Euler","RK4","velocity Verlet","Dormand-Prince 5(4)"]
+func runLabel(run: Dataset, index: Int64) -> String:
+    let text = run.metadata()
+    for method in methods:
+        if text.contains("\nintegrator=" + method + "\n"):
+            return "Run " + String(index + 1) + " / " + method
+    assert(false,"Pendulum integrator metadata required")
+    return ""
+func analyze():
+    assert(inputCount() > 0,"Select at least one pendulum run")
+    report("Pendulum integrators")
+    let one = Unit(0,0,0,0,0,0,0,1,"1")
+    let seconds = Unit(0,0,1,0,0,0,0,1,"s")
+    let joules = Unit(2,1,-2,0,0,0,0,1,"J")
+    let first = Dataset(0)
+    let firstTime = first.series("time")
+    let firstAngle = first.series("angle")
+    let firstEnergy = first.series("energy")
+    let firstDrift = firstEnergy.affine(1,-firstEnergy.value(0),joules)
+    let anglePlot = firstAngle.plot(firstTime,"Angle",runLabel(first,0))
+    let energyPlot = firstDrift.plot(firstTime,"Energy drift",runLabel(first,0))
+    first.close()
+    let summary = Table("Run comparison",["Samples","Maximum energy drift","Duration","Period intervals"],[one,joules,seconds,one])
+    let periods = Table("Measured periods",["Mean positive-crossing period"],[seconds])
+    for index in 0..<inputCount():
+        let run = Dataset(index)
+        let name = runLabel(run,index)
+        let time = run.series("time")
+        let angle = run.series("angle")
+        let energy = run.series("energy")
+        let drift = energy.affine(1,-energy.value(0),joules)
+        if index > 0:
+            anglePlot.curve(time,angle,name)
+            energyPlot.curve(time,drift,name)
+        var lastCross = 0.0
+        var periodSum = 0.0
+        var intervals: Int64 = 0
+        var crossed = false
+        for i in 1..<angle.count():
+            let previous = angle.value(i - 1)
+            let current = angle.value(i)
+            if previous < 0 && current >= 0:
+                let previousTime = time.value(i - 1)
+                let crossing = previousTime + (time.value(i) - previousTime) * (-previous) / (current - previous)
+                if crossed:
+                    periodSum += crossing - lastCross
+                    intervals += 1
+                crossed = true
+                lastCross = crossing
+        let maximum = max(abs(drift.minimum()),abs(drift.maximum()))
+        summary.row(name,[Quantity(Float64(angle.count()),one),Quantity(maximum,joules),
+            Quantity(time.value(time.count() - 1) - time.value(0),seconds),Quantity(Float64(intervals),one)])
+        if intervals > 0:
+            periods.row(name,[Quantity(periodSum / Float64(intervals),seconds)])
+        Series.exportColumns([time,angle,energy,drift],"pendulum_" + String(index + 1))
+        run.close()

@@ -242,6 +242,33 @@ def main():
                      sdk / "bin" / ("physim-analysis-runner"+suffix),spring_experiment,spring_language,spring_analyzer,spring_analysis,spring_probe,directory])
         print("Installed SDK spring tutorial: installed/rebuilt Core, four damping regimes and sixteen mixed analyses passed",flush=True)
 
+        for source in ("pendulum_main", "pendulum_analysis"):
+            shutil.copy2(sdk / "examples/documentation" / (source+".c"),consumer / (source+".c"))
+        shutil.copy2(repo / "tests/test_pendulum_tutorial_report.c",consumer / "pendulum-tutorial-probe.c")
+        for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+            pendulum_experiment=builder.executable("pendulum-tutorial-"+kind,["pendulum_main.c"],[archive],module=True)
+            pendulum_analyzer=builder.executable("pendulum-tutorial-analysis-"+kind,["pendulum_analysis.c"],[archive],module=True)
+            pendulum_probe=builder.executable("pendulum-tutorial-probe-"+kind,["pendulum-tutorial-probe.c"],[archive])
+            directory=root / ("Pendulum tutorial "+kind);directory.mkdir()
+            pendulum_language=modules["pendulum_main"] if kind=="rebuilt" else sdk / "bin" / ("language-pendulum_main"+module_suffix)
+            pendulum_analysis=modules["pendulum_analysis"] if kind=="rebuilt" else sdk / "bin" / ("language-pendulum_analysis"+module_suffix)
+            checked([sys.executable,repo / "tests/test_pendulum_tutorial.py",sdk / "bin" / ("physim-runner"+suffix),
+                     sdk / "bin" / ("physim-analysis-runner"+suffix),pendulum_experiment,pendulum_language,
+                     pendulum_analyzer,pendulum_analysis,pendulum_probe,directory])
+        pendulum_documented=root / "Pendulum documented project";pendulum_documented.mkdir()
+        shutil.copy2(sdk / "examples/documentation/pendulum_main.c",pendulum_documented / "main.c")
+        shutil.copy2(sdk / "examples/documentation/pendulum_analysis.c",pendulum_documented / "analysis.c")
+        (pendulum_documented / "physim.project").write_text("physim_project=1\n",encoding="utf-8")
+        pendulum_output=pendulum_documented / "build/Release"
+        checked([sdk / "bin" / ("physim-build"+suffix),"--project",pendulum_documented,"--sdk",sdk,
+                 "--output",pendulum_output,"--physimc",sdk / "bin" / ("physimc"+suffix),"--profile","Release"])
+        pendulum_results=root / "Pendulum documented results";pendulum_results.mkdir()
+        checked([sys.executable,repo / "tests/test_pendulum_tutorial.py",sdk / "bin" / ("physim-runner"+suffix),
+                 sdk / "bin" / ("physim-analysis-runner"+suffix),pendulum_output / ("experiment"+module_suffix),
+                 sdk / "bin" / ("language-pendulum_main"+module_suffix),pendulum_output / ("analysis"+module_suffix),
+                 sdk / "bin" / ("language-pendulum_analysis"+module_suffix),pendulum_probe,pendulum_results])
+        print("Installed SDK pendulum tutorial: installed/rebuilt Core, documented native build, five integrators and mixed/adaptive reports passed",flush=True)
+
         # Preserve the former SDK comparison: nine experiments, both general
         # Physim analyses, the sensor report and six C/Physim combinations.
         # Broader physics equivalence is checked by the normal integration suite.

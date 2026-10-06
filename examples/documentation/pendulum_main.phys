@@ -1,0 +1,81 @@
+// Same vacuum model and integrator numbers as pendulum_main.c.
+let radians = Unit(0,0,0,0,0,0,0,1,"rad")
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let rate = Unit(0,0,-1,0,0,0,0,1,"rad/s")
+let joules = Unit(2,1,-2,0,0,0,0,1,"J")
+let one = Unit(0,0,0,0,0,0,0,1,"1")
+let length = parameterWithUnit("length",metres,1.5,0.1,10,"Pendulum length in metres")
+let initialAngle = parameterWithUnit("initialAngle",radians,0.45,-1.5,1.5,"Initial angle in radians")
+let method = parameterWithUnit("integrator",one,2,0,4,"0 Euler; 1 symplectic; 2 RK4; 3 Verlet; 4 RK45")
+let methods = ["Euler","symplectic Euler","RK4","velocity Verlet","Dormand-Prince 5(4)"]
+let gravity = 9.80665
+let ca = Channel("angle",radians,"angle")
+let cw = Channel("angular_velocity",rate,"angular_velocity")
+let cx = Channel("position.x",metres,"position.x")
+let cy = Channel("position.y",metres,"position.y")
+let ce = Channel("energy",joules,"energy")
+let cs = Channel("sensor.angle",radians,"sensor.angle")
+var state = [initialAngle,0.0]
+func slope(time: Float64, value: [Float64]) -> [Float64]:
+    return [value[1],-gravity / length * sin(value[0])]
+func acceleration(time: Float64, position: [Float64]) -> [Float64]:
+    return [-gravity / length * sin(position[0])]
+func measure(value: [Float64]):
+    let x = length * sin(value[0])
+    let y = -length * cos(value[0])
+    let energy = 0.5 * length * length * value[1] * value[1] + gravity * length * (1 - cos(value[0]))
+    ca.sample(value[0])
+    cw.sample(value[1])
+    cx.sample(x)
+    cy.sample(y)
+    ce.sample(energy)
+    cs.sample(value[0])
+func create():
+    assert(method == floor(method),"Integrator must be an integer from 0 to 4")
+    metadata("model=point pendulum, massless rigid rod, vacuum\nlength_m=" + String(length) + "\ninitial_angle_rad=" + String(initialAngle) + "\nmass_kg=1\ngravity_m_s2=9.80665\nintegrator=" + methods[Int64(method)] + "\nrk45_absolute_tolerance=1e-10\nrk45_relative_tolerance=1e-8\nexcluded=drag, drive, rod inertia, contacts, sensor noise\n")
+func reset():
+    let initial = [initialAngle,0.0]
+    measure(initial)
+    state = initial
+func step(dt: Float64):
+    assert(dt > 0 && simulationTime() + dt > simulationTime(),"Positive representable step required")
+    var next = state
+    if method == 0:
+        next = eulerStep(slope,state,simulationTime(),dt)
+    else if method == 1:
+        let velocity = state[1] - dt * gravity / length * sin(state[0])
+        next = [state[0] + dt * velocity,velocity]
+    else if method == 2:
+        next = rk4Step(slope,state,simulationTime(),dt)
+    else if method == 3:
+        next = verletStep(acceleration,state,simulationTime(),dt)
+    else:
+        next = rk45IntegrateWithSteps(slope,state,simulationTime(),simulationTime() + dt,
+            1e-10,1e-8,100000,dt,min(1e-14,dt),dt)
+    measure(next)
+    state = next
+func adaptiveStep(dt: Float64, minimum: Float64, maximum: Float64) -> StepInterval:
+    assert(method == 4,"Adaptive mode requires integrator=4")
+    let time = simulationTime()
+    let result = rk45StepReported(slope,state,time,time + dt,1e-10,1e-8,100000,dt,minimum,maximum)
+    measure(result.state)
+    state = result.state
+    return StepInterval(result.reachedTime - time,result.nextStep)
+func scene():
+    let origin = Vec3(0,0,0)
+    let bob = Vec3(length * sin(state[0]),-length * cos(state[0]),0)
+    let velocity = Vec3(length * cos(state[0]) * state[1],length * sin(state[0]) * state[1],0)
+    line(origin,bob,0,0xB5C4D8FF,1)
+    sphere(origin,0.045,0xE6EDF3FF,2)
+    sphere(bob,0.12,0x53DEC2FF,3)
+    arrow(bob,bob + 0.3 * velocity,0,0xF2C572FF,4)
+    label(origin,"Aufhaengung",0xB5C4D8FF,5)
+    label(bob,"Pendelmasse",0x53DEC2FF,6)
+    group("Pendel",100,0)
+    group("Bewegte Masse",101,100)
+    sceneParent(1,100)
+    sceneParent(2,100)
+    sceneParent(3,101)
+    sceneParent(4,3)
+    sceneParent(5,2)
+    sceneParent(6,3)

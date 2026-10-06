@@ -1,7 +1,98 @@
 # Plattformprüfung
 
-Stand: 6. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
+Stand: 7. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
+
+## Pendel-Lernpfad in beiden Sprachen am 7. Oktober 2026
+
+Vier neue vollständige Quellen liefern dasselbe konservative nichtlineare
+Pendel und eine gemeinsame Mehrlaufanalyse in C und Physim. Die typisierten
+Parameter `length`, `initialAngle` und `integrator` gehören zur Modellinstanz.
+Fünf Verfahren stehen zur Wahl: explizites Euler, symplektisches Euler, RK4,
+Velocity Verlet und Dormand–Prince 5(4). Tatsächlich adaptive Aufzeichnung
+verlangt ausdrücklich Verfahren 4. Modell, SI-Kanäle, Grenzen und Auswahl werden
+im Laufmanifest gespeichert. Core-API/ABI 3, Sprachvertrag 0.177.0 und Dateiformate
+bleiben unverändert.
+
+Der unabhängige Prüfer kontrolliert 40.010 primäre Messzeilen der fünf Verfahren
+in beiden Sprachen samt allen sechs Kanalnamen und SI-Dimensionen sowie sämtliche
+Felder der Szenen mit sechs geometrischen Einträgen und zwei Gruppen. Die
+nichtlineare Periode wird durch Simpsonquadratur des elliptischen Integrals
+berechnet. Eine rekursive Taylorentwicklung der Bewegung bei t=0,5 s prüft die
+Ordnungen 1, 1, 4 und 2 beim Halbieren der Schrittweite; sie verwendet keine
+RK-Stufen aus dem Produkt. Veränderte Längen, positive/negative Auslenkung,
+Ruhezustand und zwei adaptive Läufe werden ebenfalls geprüft. Der
+Instanzprüfer kontrolliert unabhängige Parameter/Verfahren, Einheiten, Reset,
+fehlgeschlagene Schritte und dass eine fehlerhafte Sprachinstanz andere Instanzen
+nicht beeinflusst. Beim Sprachadapter beendet ein Laufzeitfehler die betroffene
+Instanz bis Reset; der Host beendet diesen Lauf. Messwerte werden vorher geprüft
+und erst bei erfolgreichem Abschluss veröffentlicht.
+
+Die Analysen verbinden einen bis acht gespeicherte Läufe auf deren eigenen
+Zeitachsen. Sie erzeugen zwei Plots mit Winkel und Energieabweichung, zwei
+Tabellen mit Laufkennzahlen und tatsächlich gemessenen Perioden sowie
+vollständiges CSV pro Eingabe. Perioden beruhen auf linear interpolierten
+positiven Nulldurchgängen; kurze oder ruhende Läufe erhalten keine erfundenen
+Periodenwerte. Ein separater C-Prüfer vergleicht acht gemischte Mehrlaufberichte
+und zwei Einzellaufberichte mit den Originaldaten, einschließlich Plotmetadaten,
+Quellenzahl, vollständigen Kurven unterhalb der Vorschaugrenze und aller
+Tabellenwerte. Der Pythonprüfer prüft sämtliche CSV-Zeilen, auch bei reduziertem
+Berichtsplot. Die vier dokumentierten Codeblöcke entsprechen exakt den gebauten
+Quellen. [Lernziel, Modell und vollständiger Ablauf](pendulum-tutorial.md).
+
+macOS Release besteht sechs ausgewählte Prüfungen unter
+`build/contact-world-language-release-mac/test-results/run-f_cdfqro`, Linux GCC
+Release dieselben sechs unter
+`build/contact-world-language-release-linux/test-results/run-5jvxw5yz`:
+neuer Lernpfad, Quellcode-/Referenzdokumentation sowie die bisherigen drei
+Pendelreferenzen für RK4, RK45 und Verlet. Linux Debug mit AddressSanitizer und
+UndefinedBehaviorSanitizer besteht den gesamten neuen Lernpfad einschließlich
+beider Module und Instanzprobe unter
+`build/spring-tutorial-asan-linux/test-results/run-0h7jbom1`.
+
+Die zusätzlichen Grenzprüfungen mit genau acht ausgewählten Läufen und einer
+abgewiesenen leeren Auswahl bestehen auf macOS zusammen mit Quellcode- und
+Referenzprüfung 3/3 unter
+`build/contact-world-language-release-mac/test-results/run-wp5pe_w2` und unter
+Linux ASan+UBSan im erweiterten Lernpfad unter
+`build/spring-tutorial-asan-linux/test-results/run-w8c9qcv3`.
+
+macOS besteht die drei ausgewählten Fensterabläufe unter
+`build/contact-world-language-release-mac/test-results/run-hp6wgi1q`, Linux unter
+`build/contact-world-language-release-linux/test-results/run-vx1_cjf7`.
+Die neue Prüfung erzeugt beide App-Projektsprachen aus Vorlagen, übernimmt die
+getesteten Tutorialquellen, baut, wählt Verlet, führt 40 angehaltene Einzelschritte
+aus und öffnet die 41 gespeicherten Messzeilen mit Szene und Bericht erneut.
+Zusätzlich bestehen der bestehende adaptive Fensterablauf und die gesamte
+Offline-Dokumentnavigation einschließlich des neuen Lernpfads. Die macOS-Fenster
+wurden nativ ausgeführt; Linux nutzte X11, Xvfb, Openbox und Mesa. Die Plattform-
+und Compiler-Versionen entsprechen den folgenden Intel-/Debian-12-Nachweisen.
+Screenshots von Pendel, Beschriftungen und Energieanalyse wurden visuell geprüft.
+Der kleine Bildschirm erfordert weiterhin Scrollen zu den unteren Diagrammteilen.
+
+Beide SDKs wurden neu installiert, in Ordner mit Leerzeichen/Umlauten kopiert
+und unter einem anderen absoluten Pfad vollständig geprüft. macOS-Nachweis:
+`build/pendulum-tutorial-sdk-final-mac/Native SDK ä it4e0vz5`; Linux-Nachweis:
+`build/pendulum-tutorial-sdk-final-linux/Native SDK ä 5lzt4zzx`. Der Gesamtprüfer
+kontrolliert alle Manifestdateien und eigenständigen öffentlichen Header, baut
+Core und sämtliche Sprachmodule aus den mitgelieferten Quellen neu und prüft
+die vorhandenen Archiv-, Kontakt-, Diagnose-, Serien- und Beispielproben.
+Für den neuen Lernpfad laufen fünf Integratoren und acht gemischte
+Mehrlaufanalysen jeweils gegen installiertes und neu gebautes Core. Außerdem
+führt der Prüfer genau den dokumentierten nativen C-Projektbuild mit
+`physim-build` aus und prüft dessen Experiment-/Analysemodul erneut mit denselben
+unabhängigen Oracles. Die App wurde aus derselben Release-Binärdatei geprüft;
+Code-/Beispieldateien der endgültigen Pakete werden bytegleich zur verifizierten
+Installation erhalten. Nur die aktuellen Dokumentationsnachweise und ihre
+SHA-256-Manifestwerte werden danach aufgefrischt.
+
+Der Katalog umfasst jetzt 557 Prüfungen ohne Fenster (542 ohne SDL), 63
+Fensterfälle und 18 eigenständige Sprachprogramme plus 38 Experiment-/
+Analysemodule. Beide Release-Builds mit `--examples` erstellen diese Programme
+und Module. Diese Sitzung behauptet keinen Gesamtlauf aller 557/63 Fälle;
+der vorherige Gesamtlauf aller 555 Fälle ist im folgenden Abschnitt belegt.
+Der Projektplan bleibt offen; dieser Lernpfad schließt keine anderen
+Roadmap-Anforderungen automatisch ab.
 
 ## Korrekturen des Prüfberichts am 6. Oktober 2026
 
