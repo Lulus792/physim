@@ -1,6 +1,7 @@
 #ifndef PHYSIM_LANGUAGE_SDK_H
 #define PHYSIM_LANGUAGE_SDK_H
 #include "language_runtime.h"
+#include "language_diagnostic.h"
 #include "language_array.h"
 #include "experiment.h"
 #include "language_measurement.h"
@@ -898,6 +899,10 @@ static inline void psrt_label(psrt_host *host, ps_vec3 position, const char *tex
     if (ps_scene_label_id(host->scene, psrt_u32(id, site), position, text, psrt_u32(color, site)) !=
         PS_OK)
         psrt_fail(site, "Invalid label, duplicate ID or scene capacity exceeded");
+}
+static inline ps_diagnostic psrt_current_diagnostic(psrt_host *host,psrt_site site) {
+    if(!host || !host->context)psrt_fail_code(site,PS_INVALID,"Diagnostic context requires an experiment");
+    ps_diagnostic result;psrt_diagnostic_check(ps_experiment_diagnostic(host->context,&result),site);return result;
 }
 /* Logging is optional and never traps for a host budget/I/O rejection. The
  * boolean lets model code decide whether a message was accepted. */

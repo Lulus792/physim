@@ -133,6 +133,7 @@ typedef struct ps_context {
     ps_parameter parameters[PS_MAX_PARAMETERS];
     ps_parameter_unit parameter_units[PS_MAX_PARAMETERS];
     ps_logger logger;
+    ps_diagnostic diagnostic;
 } ps_context;
 ```
 
@@ -141,6 +142,8 @@ Optional ABI-3 context extension; check struct_size before accessing it.
 Optional ABI-3 tail. Old context/parameter layouts remain unchanged.
 
 Optional ABI-3 tail. Host-owned logger; do not replace its descriptor.
+
+Optional ABI-3 tail. Explicit failure record; prior fields keep their offsets.
 
 ### ps_step_interval
 
@@ -187,6 +190,24 @@ ps_result ps_experiment_log(
 Export ps_get_experiment from each module. Context and scene are owned by host. Module owns context->user and releases it in destroy, including failed create.
 
 Log at the current host simulation time. Old contexts without the logger tail return PS_VERSION. A disabled logger succeeds. Logging never mutates channel values, RNG state or host time; sink errors are reported to caller.
+
+## ps_experiment_fail
+
+Speichert eine strukturierte Diagnose und einen kompatiblen Text im Hostcontext; liefert den gespeicherten Fehlercode.
+
+```c
+ps_result ps_experiment_fail(ps_context *context, const ps_diagnostic *diagnostic);
+```
+
+Publish a valid failure and return its stored code. Old contexts still receive a bounded legacy error string; only contexts with the optional tail store the full record. Invalid input is atomic. Read returns PS_VERSION for old contexts.
+
+## ps_experiment_diagnostic
+
+Liefert eine unabhängige Kopie der Experimentdiagnose; ein älterer Context ohne optionalen Tail meldet PS_VERSION.
+
+```c
+ps_result ps_experiment_diagnostic(const ps_context *context, ps_diagnostic *out);
+```
 
 ## ps_channel_add
 

@@ -54,12 +54,22 @@ static bool manifest(const char *module, const char *const *runs, size_t count,
         ok = false;
     return ok;
 }
+static void analysis_diagnostic(const char *prefix,ps_result code,const char *operation,
+                                const char *message,const ps_diagnostic *provided) {
+    ps_diagnostic record;
+    if(provided && ps_diagnostic_valid(provided) && provided->code==code)record=*provided;
+    else if(ps_diagnostic_set(&record,code,operation,NULL,NULL,0,0,message)!=PS_OK)return;
+    char path[4096];int n=snprintf(path,sizeof path,"%s.psdiag",prefix);
+    if(n>0 && (size_t)n<sizeof path)(void)ps_diagnostic_save(path,&record);
+}
 int main(int argc, char **argv) {
     ps_binary_stdio();
     if (argc == 4 && !strcmp(argv[1], "--csv")) {
         ps_result r = ps_run_export_csv(argv[2], argv[3]);
-        if (r != PS_OK)
+        if (r != PS_OK && r != PS_RECOVERED) {
             fprintf(stderr, "%s\n", ps_result_string(r));
+            analysis_diagnostic(argv[3],r,"export.csv",ps_result_string(r),NULL);
+        }
         return r == PS_OK || r == PS_RECOVERED ? 0 : 1;
     }
     bool many = argc >= 4 && !strcmp(argv[2], "--runs");
@@ -79,11 +89,13 @@ int main(int argc, char **argv) {
         for (size_t j = 0; j < i; j++)
             if (!strcmp(inputs[i], inputs[j])) {
                 fprintf(stderr, "Duplicate input run\n");
+                analysis_diagnostic(prefix,PS_INVALID,"inputs","Duplicate input run",NULL);
                 return 2;
             }
     void *module = ps_module_open(argv[1]);
     if (!module) {
         fprintf(stderr, "Cannot load analysis module\n");
+        analysis_diagnostic(prefix,PS_IO,"module.load","Cannot load analysis module",NULL);
         return 3;
     }
     ps_analysis_entry entry = NULL;
@@ -93,23 +105,30 @@ int main(int argc, char **argv) {
     if (!api || api->struct_size < PS_ANALYSIS_API_BASE_SIZE ||
         api->abi_version != PS_ABI_VERSION || !api->run) {
         fprintf(stderr, "Analysis ABI mismatch\n");
+        analysis_diagnostic(prefix,PS_VERSION,"module.abi","Analysis ABI mismatch",NULL);
         ps_module_close(module);
         return 4;
     }
-    if (count != 1 && (api->struct_size < sizeof *api || !api->run_many)) {
+    bool typed=api->struct_size>=sizeof *api && api->run_diagnostic;
+    if (count != 1 && !typed && (api->struct_size < PS_ANALYSIS_API_MANY_SIZE || !api->run_many)) {
         fprintf(
             stderr,
             "This analysis module supports one run only. Implement run_many for zero or multiple runs.\n");
+        analysis_diagnostic(prefix,PS_VERSION,"run_many","Analysis module supports one input only",NULL);
         ps_module_close(module);
         return 6;
     }
     if (!manifest(argv[1], inputs, count, prefix)) {
         fprintf(stderr, "Cannot create input manifest or read an input file\n");
+        analysis_diagnostic(prefix,PS_IO,"manifest","Cannot create input manifest or read an input file",NULL);
         ps_module_close(module);
         return 7;
     }
-    ps_result result = count != 1 ? api->run_many(count ? inputs : NULL, count, prefix)
-                                  : api->run(inputs[0], prefix);
+    ps_diagnostic record;ps_diagnostic_clear(&record);
+    ps_result result = typed?api->run_diagnostic(count?inputs:NULL,count,prefix,&record):
+        count != 1 ? api->run_many(count ? inputs : NULL, count, prefix):api->run(inputs[0],prefix);
+    if(result!=PS_OK && result!=PS_RECOVERED)
+        analysis_diagnostic(prefix,result,"analyze",ps_result_string(result),&record);
     printf("Analysis: %s\n", ps_result_string(result));
     ps_module_close(module);
     return result == PS_OK || result == PS_RECOVERED ? 0 : 5;

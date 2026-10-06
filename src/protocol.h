@@ -16,7 +16,8 @@ enum {
     PS_MSG_BYE,
     PS_MSG_HEARTBEAT,
     PS_MSG_SPEED, /* 8-byte little-endian double: 0 offline, 0.1..16 real-time multiplier. */
-    PS_MSG_LOG /* Explicit --log-events opt-in. */
+    PS_MSG_LOG, /* Explicit --log-events opt-in. */
+    PS_MSG_DIAGNOSTIC /* Versioned diagnostic payload; explicit --diagnostics opt-in. */
 };
 typedef struct {
     unsigned char data[PS_WIRE_MAX + PS_WIRE_HEADER];

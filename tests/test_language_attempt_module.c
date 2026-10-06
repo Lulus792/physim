@@ -26,16 +26,16 @@ int main(int argc, char **argv) {
     context.dt_s = 0.1;
     context.seed = 42;
     CHECK(api->create(&context) == PS_OK);
-    CHECK(context.channel_count == 1 && !context.error[0]);
+    CHECK(context.channel_count == 1 && !context.error[0] && context.diagnostic.code==PS_OK);
     CHECK(api->reset(&context) == PS_OK);
     CHECK(context.values[0] == 0);
     for (int i = 1; i <= 3; i++) {
         CHECK(api->step(&context, 0.1) == PS_OK);
-        CHECK(context.values[0] == 2.0 * i && !context.error[0]);
+        CHECK(context.values[0] == 2.0 * i && !context.error[0] && context.diagnostic.code==PS_OK);
     }
     CHECK(api->step(&context, 2.0) == PS_NUMERIC);
-    CHECK(strstr(context.error, "Assertion failed"));
-    CHECK(api->reset(&context) == PS_OK && !context.error[0]);
+    CHECK(strstr(context.error, "Assertion failed") && context.diagnostic.code==PS_NUMERIC && context.diagnostic.line>0);
+    CHECK(api->reset(&context) == PS_OK && !context.error[0] && context.diagnostic.code==PS_OK);
     CHECK(api->step(&context, 0.1) == PS_OK && context.values[0] == 2);
     ps_scene scene = {0};
     api->build_scene(&context, &scene);

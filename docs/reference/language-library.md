@@ -520,6 +520,16 @@ Holt einen Kanal über seinen exakten Namen. Der reservierte Name time liefert d
 
 Analysemodul erforderlich.
 
+## Diagnostic
+
+```text
+Diagnostic(code: Int64, operation: String, argument: String, source: String, line: Int64, column: Int64, message: String) -> Diagnostic
+```
+
+Erzeugt einen besitzenden begrenzten Diagnosewert. Fehlercode 1–10 außer EOF/Recovered, 1-basierte Quellposition oder null für unbekannt. Ungültige Werte werfen eine Quelldiagnose.
+
+Überall verfügbar.
+
 ## DistanceJoint
 
 ```text
@@ -2751,6 +2761,146 @@ Kosinus eines Winkels in Radiant.
 
 Überall verfügbar.
 
+## currentDiagnostic
+
+```text
+currentDiagnostic() -> Diagnostic
+```
+
+Liefert eine Kopie der aktuellen Experimentdiagnose, bei Erfolg einen leeren Wert. Kein globaler Last-error-Zustand.
+
+Experimentmodul erforderlich.
+
+## diagnosticArgument
+
+```text
+diagnosticArgument(diagnostic: Diagnostic) -> String
+```
+
+Liefert das betroffene Argument als eigenen String-Wert.
+
+Überall verfügbar.
+
+## diagnosticCode
+
+```text
+diagnosticCode(diagnostic: Diagnostic) -> Int64
+```
+
+Liefert den unveränderten Core-Fehlercode; 0 bezeichnet keinen Fehler.
+
+Überall verfügbar.
+
+## diagnosticColumn
+
+```text
+diagnosticColumn(diagnostic: Diagnostic) -> Int64
+```
+
+Liefert die 1-basierte Spalte oder 0 bei unbekannter Spalte.
+
+Überall verfügbar.
+
+## diagnosticDecoded
+
+```text
+diagnosticDecoded(bytes: [Int64]) -> Diagnostic
+```
+
+Dekodiert ein vollständiges Bytearray mit Version-, Längen-, CRC- und UTF-8-Prüfung; Fehler können mit attempt abgefangen werden.
+
+Überall verfügbar.
+
+## diagnosticEncoded
+
+```text
+diagnosticEncoded(diagnostic: Diagnostic) -> [Int64]
+```
+
+Kodiert einen Fehler als begrenztes versioniertes Bytearray mit CRC; Int64-Werte 0–255.
+
+Überall verfügbar.
+
+## diagnosticFormatted
+
+```text
+diagnosticFormatted(diagnostic: Diagnostic) -> String
+```
+
+Formatiert den Diagnosewert für die menschliche Anzeige; Quelldaten bleiben separat erhalten.
+
+Überall verfügbar.
+
+## diagnosticHere
+
+```text
+diagnosticHere(code: Int64, operation: String, argument: String, message: String) -> Diagnostic
+```
+
+Wie Diagnostic mit automatisch erfasstem Quellpfad, Zeile und Spalte dieser Factory-Expression.
+
+Überall verfügbar.
+
+## diagnosticLine
+
+```text
+diagnosticLine(diagnostic: Diagnostic) -> Int64
+```
+
+Liefert die 1-basierte Zeile oder 0 bei unbekannter Quellposition.
+
+Überall verfügbar.
+
+## diagnosticMessage
+
+```text
+diagnosticMessage(diagnostic: Diagnostic) -> String
+```
+
+Liefert den vollständigen UTF-8-Nachrichtentext als eigenen String-Wert.
+
+Überall verfügbar.
+
+## diagnosticOperation
+
+```text
+diagnosticOperation(diagnostic: Diagnostic) -> String
+```
+
+Liefert die Operation als eigenen String-Wert.
+
+Überall verfügbar.
+
+## diagnosticSource
+
+```text
+diagnosticSource(diagnostic: Diagnostic) -> String
+```
+
+Liefert den ursprünglichen Quellpfad als eigenen String-Wert.
+
+Überall verfügbar.
+
+## diagnosticValid
+
+```text
+diagnosticValid(diagnostic: Diagnostic) -> Bool
+```
+
+Prüft die Versions-, Text-, Fehlercode- und Positionsregeln des Werts.
+
+Überall verfügbar.
+
+## emptyDiagnostic
+
+```text
+emptyDiagnostic() -> Diagnostic
+```
+
+Erzeugt einen gültigen leeren Diagnosewert mit Code 0.
+
+Überall verfügbar.
+
 ## eulerStep
 
 ```text
@@ -2838,6 +2988,16 @@ linearSolve(coefficients: [Float64], rhs: [Float64], pivotTolerance: Float64) ->
 ```
 
 Löst A*x = rhs mit skalierter Pivotwahl. rhs enthält 1 bis 32 Werte; coefficients enthält genau rhs.count² Werte in Zeilenreihenfolge. pivotTolerance=0 wählt n mal die Maschinengenauigkeit, sonst gilt 0<t<1. Eingaben bleiben unverändert. Formfehler, Singularität und numerische Fehler erzeugen Quelldiagnosen. Das Ergebnis ist ein eigener Array-Wert im Sprachspeicherbudget.
+
+Überall verfügbar.
+
+## loadDiagnostic
+
+```text
+loadDiagnostic(path: String) -> Diagnostic
+```
+
+Lädt und validiert einen vollständig gespeicherten Diagnosewert.
 
 Überall verfügbar.
 
@@ -3031,6 +3191,16 @@ Quadratischer Kugelwiderstand mit Dichte in kg/m³, Radius in m und dimensionslo
 
 Überall verfügbar.
 
+## raiseDiagnostic
+
+```text
+raiseDiagnostic(diagnostic: Diagnostic) -> Void
+```
+
+Löst einen Fehler mit den Feldern dieses Diagnosewerts aus. attempt fängt ihn innerhalb eines Wertausdrucks ab; außerhalb endet der Callback bzw. das Standalone-Programm.
+
+Überall verfügbar.
+
 ## randomNormal
 
 ```text
@@ -3170,6 +3340,16 @@ runSeed() -> Int64
 Liefert das vollständige 64-Bit-Bitmuster des aktuellen Laufseeds als Int64. Auch Seedwerte oberhalb von INT64_MAX bleiben beim Zurückwandeln in einen Zufallsstrom erhalten; nur im Experiment.
 
 Experimentmodul erforderlich.
+
+## saveDiagnostic
+
+```text
+saveDiagnostic(diagnostic: Diagnostic, path: String) -> Void
+```
+
+Speichert einen Fehler exklusiv in eine neue Datei; vorhandene Dateien bleiben erhalten.
+
+Überall verfügbar.
 
 ## sceneFrame
 

@@ -23,8 +23,10 @@ Ursachen sind Division durch null, instabile Integration, ungültige Einheiten,
 Verkleinere bei instabiler Integration den Zeitschritt und prüfe deine Modellgleichung.
 Eine kleinere Schrittweite behebt keinen falschen Einheitenfaktor.
 
-Schreibe in C eine konkrete Erklärung nach `context->error`, bevor dein Callback
-einen Fehler zurückgibt. In der Physim-Sprache liefern Laufzeitfehler Quelldiagnosen.
+Verwende in C `ps_diagnostic_set` und `ps_experiment_fail` für Fehlercode,
+Operation, Argument und Quellstelle. Ältere Module können weiterhin nach
+`context->error` schreiben. Physim-Laufzeitfehler tragen diese strukturierten
+Quellinformationen automatisch. [Diagnosen und Fehlercodes](diagnostics.md).
 Eine Pause zählt beim realen Zeitlimit weiter. Prüfe deshalb bei einem unerwarteten
 Abbruch auch **Laufgrenzen** und bei Serien deren eigenes Zeitlimit.
 

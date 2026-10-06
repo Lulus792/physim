@@ -1,0 +1,4 @@
+func analyze():
+    report("Diagnostic failure")
+    let failure = Diagnostic.here(1,"analyze","input","Deliberate analysis error α")
+    failure.raise()

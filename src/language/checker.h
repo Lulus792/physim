@@ -158,6 +158,7 @@ typedef enum ps_lang_type {
     PS_TYPE_SUBMERSION,
     PS_TYPE_STEP_INTERVAL,
     PS_TYPE_SCALAR_RESULT,
+    PS_TYPE_DIAGNOSTIC,
     /* Nominal record types encode PS_TYPE_RECORD_BASE + struct AST index. */
     PS_TYPE_RECORD_BASE = 256,
     /* Structural function signatures encode a canonical annotation or function AST index. */

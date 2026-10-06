@@ -3,6 +3,84 @@
 Stand: 6. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Strukturierte Diagnosen am 6. Oktober 2026
+
+Der neue besitzende UTF-8-Wert trägt Fehlercode, Operation, Argument und
+ursprüngliche Quellposition. Ein optionaler Experimentcontext-Tail und ein
+optionaler Analysecallback erweitern API/ABI 3 ohne verschobene bestehende
+Felder. Physim 0.175.0 bindet Kopien, Formatierung, Bytes, Dateien und Auslösen.
+CRC-geschützte `.psdiag`-Sidecars entstehen exklusiv; bereits vorhandene Dateien
+bleiben erhalten. IPC 5 sendet Typ 12 nur mit `--diagnostics`, ansonsten weiterhin
+Typ 7 mit bisherigem Fehlertext. Messdateien und Snapshots bleiben unverändert.
+
+Die Core-Prüfung kontrolliert UTF-8, Feldgrenzen, Fehlercodes, Koordinaten,
+unveränderte Ausgaben bei ungültigen Eingaben, sämtliche gekürzten Payloads,
+CRC und Versionen sowie alte Context-Grenzen. Die Runnerprüfung vergleicht
+C-/Physim-Fehler beim Schritt und bei Analysen mit ihren gespeicherten Feldern,
+beide Wire-Modi und unveränderte fremde Sidecars. Ein Szenenfehler behält seinen
+Code `PS_SINGULAR`; ein eingefrorener alter ABI-3-Analysetail mit `run_many`
+bleibt für null Eingaben verwendbar. Abgefangene Sprachfehler hinterlassen keine
+Hostdiagnose; Rücksetzen und Wertkopien werden ebenfalls ausgeführt.
+
+Linux GCC Debug mit AddressSanitizer und UndefinedBehaviorSanitizer besteht
+4/4 unter `build/diagnostics-asan-linux/test-results/run-dgsghrph` in der
+Debian-12-VM (GCC 12.2.0, Kernel 6.1.0-53-cloud-amd64).
+Linux Release besteht alle 528 Prüfungen unter
+`build/diagnostics-release-linux/test-results/run-c20csgrl`.
+Die X11/Mesa-Fensterprüfung unter Xvfb und Openbox besteht 3/3 unter
+`build/diagnostics-release-linux/test-results/run-y6ztxcgb`: vollständiger
+Physim-Ablauf, eigenständige Analyseprojekte und Diagnosen. Letztere bauen und
+führen vier fehlschlagende C-/Physim-Experiment-/Analyseprojekte aus, prüfen
+Sidecars und Quellmarkierungen; ein fünfter Ablauf öffnet eine zusätzliche
+Unicode-Quelldatei. Es ist keine vollständige Prüfung aller 58 Fensterfälle.
+
+Der erste macOS-Gesamtlauf endet 527/528 unter `run-ujep0jyy`: der während
+des laufenden Builds ergänzte Szenenfehler-Test verwendet dort noch den vorher
+gebauten Runner. Dieser Lauf bestätigt nicht die abschließende Korrektur.
+Der korrigierte Runner gibt die veröffentlichte Szenendiagnose statt des
+bisherigen pauschalen `PS_NUMERIC` zurück.
+Der anschließende macOS-Release-Gesamtlauf besteht 528/528 unter
+`build/diagnostics-release-mac/test-results/run-fg394xdy` (Intel macOS 14.6.1,
+Apple Clang 16, SDL 3.2.30). Beide Gesamtläufe bauen außerdem 16 eigenständige
+Physim-Programme und 31 Experiment-/Analysemodule.
+
+Das verschobene Linux-SDK besteht die vollständige unabhängige Prüfung unter
+`build/diagnostics-sdk-proof-linux/Native SDK ä 3koqddhm` in der VM. Sie kompiliert
+alle gelieferten Header separat, baut die Core-Bibliothek aus den gelieferten
+Quellen neu und führt Programme, Module und neun native Projektbuilds aus.
+Neue Diagnoseprobes werden gegen das installierte und das neu gebaute Archiv
+gelinkt. C-/Physim-Runner, beide Wire-Modi, `.psdiag`, Szene und eingefrorenes
+Analyse-ABI werden auch aus dieser Installation ausgeführt. Das SDK-Manifest
+enthält 300 Dateien; alle SHA-256-Werte sind geprüft.
+Die Sichtprüfung fand lange absolute Pfade, welche die Fehlermeldung aus der
+anklickbaren Zeile verdrängten, sowie sichtbare Ersatzglyphen für Zeilenumbrüche.
+Die App zeigt dort jetzt den Dateinamen und Leerzeichen; die vollständigen
+Quellpfade und Nachrichten bleiben in den Diagnosewerten erhalten.
+Die abschließenden fünf Linux-Diagnoseabläufe bestehen erneut 1/1 unter
+`build/diagnostics-release-linux/test-results/run-qrbgnbgl`;
+Screenshots der Fehleranzeige und zusätzlichen Quelldatei wurden geprüft.
+macOS Release besteht die drei App-Prüfungen mit der abschließenden Anzeige
+ebenfalls 3/3 unter `build/diagnostics-release-mac/test-results/run-i8kxzhzp`.
+Der Physim-Screenshot zeigt die ursprüngliche Erstellungszeile des Diagnosewerts,
+Code/Operation/Argument und den lesbaren UTF-8-Fehlertext.
+Das macOS-SDK mit der abschließend geprüften App besteht dieselbe vollständige
+unabhängige Prüfung unter
+`build/diagnostics-sdk-proof-mac/Native SDK ä efo47ad0`: 16 Sprachprogramme,
+31 Module, Diagnoseprobes gegen beide Archive, C-/Physim- und alte ABI-Runner
+sowie neun native Projektbuilds.
+
+Abschließende Pakete liegen unter `build/Diagnostics clean SDK ä mac` bzw.
+`build/Diagnostics clean SDK ä linux` in der VM. Ihre jeweils 300 Manifestdateien
+werden erneut per SHA-256 geprüft. Header, Core, Compiler, Runner, Builder und
+gelieferte Core-Quellen stimmen mit den vollständig geprüften verschobenen SDKs
+überein. Die aktualisierte App stimmt jeweils mit dem Programm der abschließenden
+Fensterprüfung überein; die Pakete enthalten die abschließenden Nachweistexte.
+
+Die Implementierung ergänzt explizite Diagnosen an Modulgrenzen; bestehende
+niedrige C-Funktionen liefern weiterhin ihre dokumentierten Ergebniswerte.
+Prozessabstürze und Zeitüberschreitungen besitzen damit noch keine originale
+Sprachquellposition. Die Dateiablage ist keine Stromausfall-Durabilitätsgarantie.
+
 ## Lokale Szenenkoordinaten am 6. Oktober 2026
 
 Explizite `PS_FRAME`-Knoten ergänzen hierarchische Translation, Quaternionrotation

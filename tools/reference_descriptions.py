@@ -292,3 +292,18 @@ DESCRIPTIONS.update({
     'ps_report_add_curve_masked': 'Kopiert eine Kurve samt Gültigkeit und Segmentanfängen. Fehlende Punkte werden beim Zeichnen und bei Grenzen übergangen.',
     'ps_report_curve_mask': 'Leiht unveränderliche Kurvenflags; NULL bezeichnet eine vollständig gültige, zusammenhängende Kurve.',
 })
+
+add('ps_diagnostic_', {
+    'clear': 'Setzt einen vorhandenen Wert auf eine gültige leere Diagnose mit Code PS_OK.',
+    'valid': 'Prüft Größe, Version, Fehlercode, UTF-8-Felder und konsistente Quellkoordinaten.',
+    'set': 'Kopiert einen vollständigen Fehler in den Ausgabe-Wert; ungültige Eingaben erhalten ihn unverändert.',
+    'format': 'Formatiert Fehlercode, Operation, Argument und Quellstelle als begrenztes UTF-8; PS_LIMIT meldet Kürzung.',
+    'encode': 'Kodiert einen Fehler mit exakten Längen, little-endian Feldern und CRC; liefert die Bytezahl oder 0.',
+    'decode': 'Prüft den gesamten versionierten Fehlerpayload; Änderungen erfolgen erst nach vollständiger Validierung.',
+    'save': 'Schreibt einen gültigen Fehler exklusiv in eine neue Binärdatei; vorhandene Dateien bleiben erhalten.',
+    'load': 'Lädt einen vollständigen Fehler und prüft Version, Grenzen, CRC und Text; Fehler erhalten die Ausgabe.',
+})
+add('ps_experiment_', {
+    'fail': 'Speichert eine strukturierte Diagnose und einen kompatiblen Text im Hostcontext; liefert den gespeicherten Fehlercode.',
+    'diagnostic': 'Liefert eine unabhängige Kopie der Experimentdiagnose; ein älterer Context ohne optionalen Tail meldet PS_VERSION.',
+})

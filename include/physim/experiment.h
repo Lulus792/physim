@@ -2,6 +2,7 @@
 #define PHYSIM_EXPERIMENT_H
 #include "core.h"
 #include "log.h"
+#include "diagnostic.h"
 #define PS_MAX_CHANNELS 16
 #define PS_MAX_OBJECTS 32
 #define PS_MAX_SCENE_POINTS 96
@@ -85,6 +86,8 @@ typedef struct ps_context {
     ps_parameter_unit parameter_units[PS_MAX_PARAMETERS];
     /* Optional ABI-3 tail. Host-owned logger; do not replace its descriptor. */
     ps_logger logger;
+    /* Optional ABI-3 tail. Explicit failure record; prior fields keep their offsets. */
+    ps_diagnostic diagnostic;
 } ps_context;
 typedef struct {
     double elapsed_s, next_s;
@@ -116,6 +119,11 @@ typedef const ps_experiment_api *(*ps_experiment_entry)(void);
  * tail return PS_VERSION. A disabled logger succeeds. Logging never mutates
  * channel values, RNG state or host time; sink errors are reported to caller. */
 ps_result ps_experiment_log(const ps_context *context,ps_log_level level,const char *message);
+/* Publish a valid failure and return its stored code. Old contexts still receive
+ * a bounded legacy error string; only contexts with the optional tail store the
+ * full record. Invalid input is atomic. Read returns PS_VERSION for old contexts. */
+ps_result ps_experiment_fail(ps_context *context, const ps_diagnostic *diagnostic);
+ps_result ps_experiment_diagnostic(const ps_context *context, ps_diagnostic *out);
 int ps_channel_add(ps_context *context, const char *name, ps_unit unit, const char *description);
 ps_result ps_parameter_override(ps_context *context, const char *name, double value);
 ps_result ps_parameter_define(ps_context *context, const char *name, const char *description,

@@ -146,12 +146,12 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt derzeit 525 Tests ohne Fenster aus, mit `--no-app` die
-510 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
+`--test` führt derzeit 528 Tests ohne Fenster aus, mit `--no-app` die
+513 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
 Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.
-Hinzu kommen 102 übersetzte Sprachprogramme und 71 Gruppen mit insgesamt 704
+Hinzu kommen 103 übersetzte Sprachprogramme und 71 Gruppen mit insgesamt 704
 Compilerprüfungen für Sequenzen, Generics, Überladungen, Strukturinitialisierer,
 Kontrollfluss, optionale Werte, Unicode, physikalische Einheiten, Compileraufrufe
 und Modulimporte. Diese prüfen 671 erwartete Fehlerfälle sowie gültige Quellen,
@@ -230,7 +230,7 @@ und das erneute Öffnen einschließlich beschädigter Katalogdateien.
 
 ### Fenster- und Grafiktests direkt ausführen
 
-`--test-display` führt zusätzlich 57 Fenster- und Grafikabläufe aus. Dafür sind
+`--test-display` führt zusätzlich 58 Fenster- und Grafikabläufe aus. Dafür sind
 eine grafische Sitzung, SDL und ein geeigneter OpenGL-Treiber erforderlich.
 Die beiden Testgruppen werden getrennt gestartet; `--test-display` lässt sich
 nicht mit `--no-app` oder `--test` kombinieren.

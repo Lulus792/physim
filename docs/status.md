@@ -3,6 +3,14 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-06. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Strukturierte Diagnosen:** Eigene begrenzte UTF-8-Werte tragen Fehlercode,
+Operation, Argument und ursprüngliche Quellposition ohne globalen Last-error-
+Zustand. Experiment- und Analyse-Runner speichern CRC-geschützte Sidecars;
+IPC 5 liefert strukturierte Fehler mit Opt-in. Die App verwendet die Felder für
+Codeauswahl und zusätzliche Quelldateien. Physim 0.175.0 bindet den kopierbaren
+Wert samt Formatierung, Bytes, Dateien und Auslösen; abgefangene Fehler bleiben
+lokal. API/ABI 3 behält bisherige Feldpositionen. [Vertrag](diagnostics.md).
+
 **Lokale Szenenkoordinaten:** Explizite TRS-Rahmen erhalten lokale Geometrie
 und setzen Translation, Quaternionrotation und nichtuniforme Skalierung über
 mehrere Ebenen zusammen. Spiegelungen und resultierende Scherung wirken auf
@@ -45,7 +53,7 @@ geprüft und übernommen, nur fehlende Indizes starten erneut. Seeds, Parameter
 und feste/adaptive Zeitvorgaben bleiben erhalten. Aktuelle Editoränderungen und
 die alte Serie werden nicht verändert. Vollständig vorhandene Serien starten
 keine neuen Prozesse. Frühere Serien ohne Checkpoint bleiben nicht fortsetzbar.
-Der Katalog umfasst 525 Prüfungen ohne Fenster (510 ohne SDL) und 57 Fensterfälle.
+Der Katalog umfasst 528 Prüfungen ohne Fenster (513 ohne SDL) und 58 Fensterfälle.
 Ausgeführte Nachweise stehen im [Plattformbericht](platform-validation.md).
 
 **Eigenständige Analyseprojekte:** Die App legt jetzt C-/Physim-Auswertungen ohne
@@ -746,7 +754,7 @@ und veraltete Fenstermanager-Einträge geprüft. Die erneute Linux-CI steht aus.
 | Eigene Sprache | verbindliches Ziel als vollständige C-Alternative, C17-Lexer/Parser mit `:`-/Einrückungsblöcken, skalare und nominale Struktur-/Enumtypen mit typisierten und besitzenden Nutzdaten sowie optionale Werte mit Wertsemantik und struktureller Gleichheit, normale/mutierende/statische Strukturmethoden, eigene Struct-Initialisierer mit Überladung nach Parameterform und Parametertyp auch bei generischen Typen, `physimc --check`/`--emit-c`/`--emit-experiment`/`--emit-analysis`, C17-Backend/CMake für Programme und erste Experiment-/Analysemodule, Vec2/Vec3/Vec4, Quaternionen und Mat3/Mat4, Einheiten/Kanäle, explizite PCG32-Wertströme, starre Körper mit Impulsen/Quaternionrotation, Kontaktpaare mit Reibung/Rückprall, Distanzgelenke mit lokalen Ankern, gemeinsamer Körpergruppen-Solver mit besitzenden Ergebniswerten, lineare Kugel-Sweeps und Hüllquader-Kandidatenpaare, gemeinsamer Integrator, Messdaten/Szene, Dataset-/Series-/Plot-/Table-Handles einschließlich erzeugter Datenreihen, gemeinsame Messstatusauswahl, Statistik/Diagramme/Tabellen/Exporte, abgefangene Laufzeitfehler mit Quelldiagnosen, erste App-Vorlagen mit Editor/Build und Quellsnapshots | vollständiger semantischer Sprachvertrag, weitere Werttypen und Fallmuster, Überladungsauflösung für weitere Ausdrücke, erweiterte Module, vollständige Experiment- und Analysebindungen, vollständige Integration beider Editoren, vollständiger Sprachausbau und zwei getestete Dokumentationsteile (LANG-001 bis LANG-007) |
 | Foundation | C17, direkter Build ohne eigene CMake-Dateien, MIT, Windows-/POSIX-/Darwin-Schicht, erfolgreiche Windows-CI und Linux-CI mit GCC und Clang, macOS-CI und geprüfte App-Pakete für Apple Silicon und Intel, Release-Paket auf frischem Debian/Ubuntu geprüft | weitere macOS-Versionen und reale Mac-Grafikhardware, öffentliche Mac-Signierung/Notarisierung, Wayland, Installation auf frischen Windows-/Mac-Systemen |
 | Mathematik | Vec2/3/4 mit skalierter Normalisierung, Mat3/4 mit Inversion, Quaternion-Verknüpfung und Rotationsinterpolation, affine/projektive Punkttransformation sowie Richtungs-/Normalentransformation, absolute/relative Vergleiche, Euler/RK4, symplektischer Euler, Verlet, RK45, linearer Solver, Bisektion, Minimierung, kubische räumliche Bézierkurven mit Tangente und Unterteilung | weitere Kurven-/Interpolationsverfahren, Events/dichte Ausgabe, steife Verfahren |
-| Basis | Fehlercodes, expliziter Logger mit synchronem Sink, expliziter RNG, explizite Allocatoren mit Fehlerprüfungen, feste Arenen, eigene Speicherdomänen für Berichte/Analysekontexte, Test-Allocator mit Fehler-Injektion und Bytebudget, dynamische Arrays mit Größenlimit und Selbstkopien, begrenzte String-Views ohne Kopie, Hashmap mit eigenen Schlüsseln und Größenlimits | strukturierte Diagnosen, Allocator-Anbindung weiterer Subsysteme |
+| Basis | Fehlercodes und besitzende strukturierte Diagnosen an Modulgrenzen, expliziter Logger mit synchronem Sink, expliziter RNG, explizite Allocatoren mit Fehlerprüfungen, feste Arenen, eigene Speicherdomänen für Berichte/Analysekontexte, Test-Allocator mit Fehler-Injektion und Bytebudget, dynamische Arrays mit Größenlimit und Selbstkopien, begrenzte String-Views ohne Kopie, Hashmap mit eigenen Schlüsseln und Größenlimits | Allocator-Anbindung weiterer Subsysteme |
 | Einheiten | SI-Dimensionen, Konvertierung, Einheitenalgebra, Quantity-Rechnung und Dimensionsprüfung von Datenreihen, deklarierte Anzeigeeinheiten für Experimentparameter samt Formulare und Studienberichte, persönliche lineare Anzeigeeinheiten für Messkanäle mit Live-Werten, Kurven und Gesamtstatistik | — |
 | Runner | versionierte Modul-ABI, Handshake, Pause/Step/Run/Stop, Heartbeat, Crash-/Hang-Isolation, feste/adaptive Modellschritte, Echtzeittaktung von 0,1× bis 16× und Offline, eigener begrenzter Logkanal mit JSONL-Speicherung | allgemeine Ressourcenlimits, echtes OS-Sandboxing |
 | Daten | CRC-Chunks, Streaming, Recovery, CSV, Seed-/Modellmetadaten und optionale versionierte Szenenblöcke | Index, mehr Datentypen, komprimierte Blöcke, Schemaerweiterung |

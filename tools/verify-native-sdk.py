@@ -160,6 +160,22 @@ def main():
             directory=root / ("Frame probe "+kind);directory.mkdir()
             checked([program,directory])
         print("Installed SDK coordinate frames: independent installed/rebuilt API probes passed",flush=True)
+        shutil.copy2(repo / "tests/test_diagnostic.c",consumer / "diagnostic-probe.c")
+        shutil.copy2(repo / "tests/fixtures/legacy_analysis_diagnostic.c",consumer / "legacy-diagnostic.c")
+        shutil.copy2(sdk / "examples/diagnostics/main.c",consumer / "diagnostic-experiment.c")
+        shutil.copy2(sdk / "examples/diagnostics/analysis.c",consumer / "diagnostic-analysis.c")
+        for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+            program=builder.executable("diagnostic-probe-"+kind,["diagnostic-probe.c"],[archive])
+            directory=root / ("Diagnostic probe "+kind);directory.mkdir()
+            checked([program,directory])
+            experiment=builder.executable("diagnostic-experiment-"+kind,["diagnostic-experiment.c"],[archive],module=True)
+            analysis=builder.executable("diagnostic-analysis-"+kind,["diagnostic-analysis.c"],[archive],module=True)
+            legacy=builder.executable("legacy-diagnostic-"+kind,["legacy-diagnostic.c"],[archive],module=True)
+            directory=root / ("Diagnostic runners "+kind);directory.mkdir()
+            checked([sys.executable,repo / "tests/test_runner_diagnostic.py",sdk / "bin" / ("physim-runner"+suffix),
+                     experiment,modules["diagnostic_experiment"],sdk / "bin" / ("physim-analysis-runner"+suffix),
+                     analysis,modules["diagnostic_analysis"],legacy,directory])
+        print("Installed SDK diagnostics: installed/rebuilt C, Physim and legacy ABI passed",flush=True)
 
 
         # Preserve the former SDK comparison: nine experiments, both general
@@ -230,11 +246,12 @@ def main():
             raise RuntimeError("App tests require an SDK with the app")
     (root / "PASSED.txt").write_text(
         "Native SDK relocation, independent headers, installed and rebuilt core archives, eight bundled and rebuilt C templates, "
-        "fifteen language programs, 29 rebuilt language modules, nine language experiments with both general analyses, "
+        "sixteen language programs, 31 rebuilt language modules, nine language experiments with both general analyses, "
         "specialized sensor analysis and six C/Physim combinations passed.\n"
         "Adaptive bundled/source C and Physim pendulums, actual variable sample times, energy and both analysis languages passed.\n" +
         "Common-target-time parameter studies from bundled/source C and Physim pendulums passed with installed and rebuilt probes.\n" +
         "Logging through installed/rebuilt C Core and Physim passed with exclusive JSONL and opt-in wire events.\n" +
+        "Structured diagnostics through installed/rebuilt Core, C/Physim runners and legacy ABI passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
         ("Eight C template GUI workflows and the complete Physim language GUI workflow passed.\n" if args.app_tests else ""), encoding="utf-8")
     print(f"Native SDK verified: {root}")

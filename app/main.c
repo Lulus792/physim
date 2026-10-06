@@ -30,6 +30,7 @@ static const ps_ui_palette *ui_palette = &PS_UI_DARK;
 #include <ctype.h>
 #include <errno.h>
 #include <float.h>
+#include <limits.h>
 #include <math.h>
 #include <stdarg.h>
 #include <stdlib.h>
@@ -91,7 +92,9 @@ typedef struct {
 typedef struct {
     int line, column;
     bool analysis;
-    char text[256];
+    char text[2048],source[PS_DIAGNOSTIC_SOURCE_MAX+1u];
+    ps_result code;
+    bool foreign,structured;
 } diagnostic;
 typedef struct {
     struct nk_context *ui;
@@ -375,6 +378,34 @@ static const char *experiment_source(const app *a) {
 static const char *analysis_source(const app *a) {
     return a->language_analysis ? "analysis.phys" : "analysis.c";
 }
+static void preview_workspace_path(app *a,const char *path);
+static const char *diagnostic_basename(const char *path) {
+    const char *base=path;for(const char *p=path;*p;p++)if(*p=='/' || *p=='\\')base=p+1;return base;
+}
+static void structured_diagnostic(app *a,const ps_diagnostic *record,bool analysis) {
+    if(!ps_diagnostic_valid(record) || record->code==PS_OK || a->diagnostic_count>=64)return;
+    /* Prefer a typed record over a legacy line already received from stderr. */
+    for(int i=0;i<a->diagnostic_count;i++)if(a->diagnostics[i].analysis==analysis &&
+        !strcmp(diagnostic_basename(a->diagnostics[i].source),diagnostic_basename(record->source)) &&
+        (a->diagnostics[i].line==(int)record->line || (!a->diagnostics[i].structured && strstr(a->diagnostics[i].text,"runtime error")))) {
+        memmove(a->diagnostics+i,a->diagnostics+i+1,(size_t)(a->diagnostic_count-i-1)*sizeof a->diagnostics[0]);a->diagnostic_count--;break;
+    }
+    diagnostic *d=&a->diagnostics[a->diagnostic_count++];memset(d,0,sizeof *d);
+    d->analysis=analysis;d->structured=true;d->code=record->code;d->line=record->line<=INT_MAX?(int)record->line:0;
+    d->column=record->column<=INT_MAX?(int)record->column:1;
+    snprintf(d->source,sizeof d->source,"%s",record->source);
+    if(*d->source) {
+        char actual[4096],expected[4096];
+        if(d->source[0]=='/' || d->source[0]=='\\' || (d->source[0] && d->source[1]==':'))snprintf(actual,sizeof actual,"%s",d->source);
+        else snprintf(actual,sizeof actual,"%s/%s",a->project,d->source);
+        snprintf(expected,sizeof expected,"%s/%s",a->project,analysis?analysis_source(a):experiment_source(a));
+        d->foreign=strcmp(actual,expected) && !ps_text_document_same_file(actual,expected);
+    }
+    ps_diagnostic display=*record;
+    snprintf(display.source,sizeof display.source,"%s",diagnostic_basename(record->source));
+    for(char *p=display.message;*p;p++)if(*p=='\n' || *p=='\r' || *p=='\t')*p=' ';
+    (void)ps_diagnostic_format(&display,d->text,sizeof d->text);a->show_log=true;
+}
 static void parse_diagnostic(app *a, const char *line) {
     const char *source = experiment_source(a);
     const char *p = strstr(line, source);
@@ -402,7 +433,8 @@ static void parse_diagnostic(app *a, const char *line) {
     a->show_log = true;
     d->line = row;
     d->column = column;
-    d->analysis = analysis;
+    d->analysis = analysis;d->foreign=false;d->structured=false;d->code=PS_INVALID;
+    snprintf(d->source,sizeof d->source,"%s",source);
     snprintf(d->text, sizeof d->text, "%s:%d:%d %s", source, row,
              column, p);
 }
@@ -417,7 +449,17 @@ static void diagnostic_bytes(app *a, const char *text, size_t size) {
     }
 }
 static void jump_to_diagnostic(app *a, const diagnostic *d) {
+    if(d->line<=0 || !d->source[0])return;
     struct nk_text_edit *edit = d->analysis ? &a->analysis : &a->experiment;
+    if(d->foreign) {
+        char path[4096];
+        if(d->source[0]=='/' || d->source[0]=='\\' || (d->source[0] && d->source[1]==':'))snprintf(path,sizeof path,"%s",d->source);
+        else snprintf(path,sizeof path,"%s/%s",a->project,d->source);
+        preview_workspace_path(a,path);
+        if(a->tab!=8 || a->document_active>=a->document_count)return;
+        if(!ps_text_document_same_file(path,a->documents[a->document_active].file.path))return;
+        edit=&a->documents[a->document_active].edit;
+    }
     const char *text = nk_str_get_const(&edit->string);
     int size = nk_str_len_char(&edit->string), at = 0, line = 1;
     while (at < size && line < d->line)
@@ -432,6 +474,7 @@ static void jump_to_diagnostic(app *a, const diagnostic *d) {
     edit->scrollbar.y =
         (float)(line > 3 ? line - 3 : 0) * (a->font_code->height + a->ui->style.edit.row_padding);
     edit->scrollbar.x = 0;
+    if(d->foreign)return;
     a->tab = d->analysis ? 2 : 0;
     if (d->analysis)
         a->analysis_tab = 1;
@@ -1115,10 +1158,10 @@ static bool start_run_mode(app *a, bool paused) {
     snprintf(minimum,sizeof minimum,"%.17g",a->minimum_dt);
     snprintf(maximum,sizeof maximum,"%.17g",a->maximum_dt);
     char parameter_arguments[PS_MAX_PARAMETERS][128];
-    const char *args[17 + 2 * PS_MAX_PARAMETERS] = {
-        runner, module, next_run, "--interactive", "--log-events", "--dt", dt, "--seed", a->seed,
+    const char *args[18 + 2 * PS_MAX_PARAMETERS] = {
+        runner, module, next_run, "--interactive", "--log-events", "--diagnostics", "--dt", dt, "--seed", a->seed,
         "--speed", speed};
-    size_t argument_count = 11;
+    size_t argument_count = 12;
     if(a->adaptive_steps) {
         args[argument_count++]="--adaptive";
         args[argument_count++]="--min-dt";args[argument_count++]=minimum;
@@ -1473,6 +1516,10 @@ static void pump(app *a) {
         if (!ps_process_poll(&a->job)) {
             int code = a->job.exit_code;
             ps_process_close(&a->job);
+            if(code && (a->job_kind==3 || a->job_kind==4)) {
+                char path[4096];snprintf(path,sizeof path,"%s.psdiag",a->report);ps_diagnostic record;
+                if(ps_diagnostic_load(path,&record)==PS_OK)structured_diagnostic(a,&record,true);
+            }
             if (!code && a->job_kind == 2) {
                 if (!a->diagnostic_count)
                     a->show_log = false;
@@ -1604,6 +1651,10 @@ static void pump(app *a) {
                 ps_log_record record;
                 if(!ps_wire_log_decode(p,n,&record)){r=-1;break;}
                 log_line(a,"Experiment [%s, t=%.17g s]: %s",ps_log_level_name(record.level),record.time_s,record.message);
+            } else if(type==PS_MSG_DIAGNOSTIC) {
+                ps_diagnostic record;if(ps_diagnostic_decode(p,n,&record)!=PS_OK){r=-1;break;}
+                structured_diagnostic(a,&record,false);char text[PS_DIAGNOSTIC_WIRE_MAX+256];
+                (void)ps_diagnostic_format(&record,text,sizeof text);log_line(a,"Runner: %s",text);
             } else if (type == PS_MSG_ERROR) {
                 char error[8193];
                 memcpy(error, p, n);
@@ -2551,6 +2602,7 @@ static void test_mouse(app *a, struct nk_rect rect, bool down) {
 #include "series_mask_tests.inc"
 #include "logging_tests.inc"
 #include "frame_tests.inc"
+#include "diagnostic_tests.inc"
 #include "adaptive_tests.inc"
 #include "series_tests.inc"
 #include "native_dialog_tests.inc"
@@ -3110,7 +3162,7 @@ int main(int argc, char **argv) {
         } else if (workspace_state_test) {
             if (ps_clock() - test_started >
                 (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
-                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strcmp(argv[3],"logging-c") || !strcmp(argv[3],"logging-phys") || !strcmp(argv[3],"logging-flood") || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
+                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"diagnostic-",11) || !strcmp(argv[3],"logging-c") || !strcmp(argv[3],"logging-phys") || !strcmp(argv[3],"logging-flood") || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15)) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
                         argv[3], ps_clock() - test_started);

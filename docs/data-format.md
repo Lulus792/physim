@@ -69,7 +69,7 @@ Payloadlänge u32 (maximal 8192), Sequenznummer u32 (je Richtung ab 0).
 Unvollständige Frames werden gesammelt, falsche Versionen, Sequenzen und Größen abgewiesen.
 
 Typen: HELLO=1, RUN=2, PAUSE=3, STEP=4, STOP=5, SNAPSHOT=6,
-ERROR=7, BYE=8, HEARTBEAT=9, SPEED=10, LOG=11 (mit `--log-events`). Kontrollbefehle außer HELLO und SPEED tragen keine Payload.
+ERROR=7, BYE=8, HEARTBEAT=9, SPEED=10, LOG=11 (mit `--log-events`), DIAGNOSTIC=12 (mit `--diagnostics`). Kontrollbefehle außer HELLO und SPEED tragen keine Payload.
 Host-HELLO enthält ABI-Version u32. Runner-HELLO enthält Name und Kanaltitel als
 UTF-8-Zeilen. Der Runner bleibt bis zum Handshake pausiert; Frist: 10 Sekunden.
 Heartbeat: 500 ms. Die GUI markiert mehr als drei Sekunden ohne Nachricht;
@@ -347,3 +347,15 @@ dadurch nicht. Auch öffentliche C-Strukturen und Modul-ABI 3 bleiben erhalten.
 und Text; Typ 10 bleibt SPEED. Ohne Opt-in werden keine zusätzlichen Wire-Events
 gesendet. Format, Validierung, Budgets und Fehlerverhalten stehen unter
 [Logging](logging.md).
+
+## Diagnose-Sidecar und optionaler IPC-Typ 12
+
+`.psdiag` verwendet exakt denselben Payload wie `PS_MSG_DIAGNOSTIC`. Header:
+Magic u32 `0x47445350` (Bytes PSDG), Version u32=1, Fehlercode u32, Zeile u32,
+Spalte u32 und vier u32-UTF-8-Bytelängen für Operation, Argument, Quelle und
+Nachricht. Ab Byte 36 folgen diese Texte ohne NUL. Ein abschließendes u32 enthält
+CRC32 über alle vorangehenden Bytes. Maximale Gesamtlänge: 2216 Bytes.
+Bekannte Fehlercodes, Textgrenzen, Positionsregeln und exakte Gesamtlänge werden
+geprüft; Decoder erhalten Ausgaben bei Fehlern. Unbekannte Versionen melden
+`PS_VERSION`, beschädigte Payloads `PS_CORRUPT`. Headergrößen/ABI-Padding sind
+keine Wire-Daten. [API, Sprachbindungen und Grenzen](diagnostics.md).

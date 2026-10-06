@@ -12,6 +12,7 @@ from reference_descriptions import DESCRIPTIONS
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULES = {
+    'diagnostic': ('Strukturierte Diagnosen', 'diagnostics.md', 'Diagnosen sind eigene begrenzte UTF-8-Werte mit Fehlercode, Operation, Argument und Quellposition. Kein globaler Last-error-Zustand. Konstruktion und Decodierung sind transaktional, Dateien werden exklusiv erstellt. Experiment- und Analyse-Runner transportieren die Daten zusätzlich zur bisherigen Textausgabe.'),
     'log': ('Logging mit explizitem Sink', 'logging.md', 'Ein Logger verbindet einen benannten Schweregrad und eine endliche Modellzeit mit einem synchronen Sink. Kein globaler Logger und keine implizite Ausgabe. Kontextlogger gehören dem Host; ps_experiment_log verwendet die aktuelle Simulationszeit. Nachrichten sind begrenztes UTF-8; Rückgabewerte entscheiden über die Behandlung verworfener Meldungen.'),
     'core': ('Grundlagen und Zufall', 'api.md', 'Vektoren, Rotation, Zufallsströme, Basiseinheiten und einfache Integrations-/Kollisionshelfer. Zufallsströme zuerst mit ps_rng_seed initialisieren; derselbe Seed wiederholt den Strom. ps_rng_uniform liefert Werte in (0,1). Winkel werden im Bogenmaß angegeben.'),
     'experiment': ('Experimente und Szenen', 'experiment-tutorial.md', 'Ein Experiment exportiert ps_get_experiment. Der Host ruft create, reset, step, build_scene und destroy auf. ps_channel_add liefert einen Kanalindex oder -1; Messwerte werden über context->values[index] gesetzt. Kanäle nur einmal registrieren. Szenen werden pro Snapshot neu aufgebaut.'),
@@ -92,6 +93,24 @@ def c_reference(module, title, guide, intro):
 
 LANG_DESCRIPTIONS = {
     'group': 'Benannte Szenengruppe mit eindeutiger ID; parent 0 erzeugt eine Wurzel. Nur im scene-Callback. Gruppen enthalten keine Geometrie und verändern keine Weltkoordinaten.',
+    'Diagnostic': 'Erzeugt einen besitzenden begrenzten Diagnosewert. Fehlercode 1–10 außer EOF/Recovered, 1-basierte Quellposition oder null für unbekannt. Ungültige Werte werfen eine Quelldiagnose.',
+    'diagnosticHere': 'Wie Diagnostic mit automatisch erfasstem Quellpfad, Zeile und Spalte dieser Factory-Expression.',
+    'emptyDiagnostic': 'Erzeugt einen gültigen leeren Diagnosewert mit Code 0.',
+    'diagnosticValid': 'Prüft die Versions-, Text-, Fehlercode- und Positionsregeln des Werts.',
+    'diagnosticCode': 'Liefert den unveränderten Core-Fehlercode; 0 bezeichnet keinen Fehler.',
+    'diagnosticLine': 'Liefert die 1-basierte Zeile oder 0 bei unbekannter Quellposition.',
+    'diagnosticColumn': 'Liefert die 1-basierte Spalte oder 0 bei unbekannter Spalte.',
+    'diagnosticOperation': 'Liefert die Operation als eigenen String-Wert.',
+    'diagnosticArgument': 'Liefert das betroffene Argument als eigenen String-Wert.',
+    'diagnosticSource': 'Liefert den ursprünglichen Quellpfad als eigenen String-Wert.',
+    'diagnosticMessage': 'Liefert den vollständigen UTF-8-Nachrichtentext als eigenen String-Wert.',
+    'diagnosticFormatted': 'Formatiert den Diagnosewert für die menschliche Anzeige; Quelldaten bleiben separat erhalten.',
+    'diagnosticEncoded': 'Kodiert einen Fehler als begrenztes versioniertes Bytearray mit CRC; Int64-Werte 0–255.',
+    'diagnosticDecoded': 'Dekodiert ein vollständiges Bytearray mit Version-, Längen-, CRC- und UTF-8-Prüfung; Fehler können mit attempt abgefangen werden.',
+    'saveDiagnostic': 'Speichert einen Fehler exklusiv in eine neue Datei; vorhandene Dateien bleiben erhalten.',
+    'loadDiagnostic': 'Lädt und validiert einen vollständig gespeicherten Diagnosewert.',
+    'raiseDiagnostic': 'Löst einen Fehler mit den Feldern dieses Diagnosewerts aus. attempt fängt ihn innerhalb eines Wertausdrucks ab; außerhalb endet der Callback bzw. das Standalone-Programm.',
+    'currentDiagnostic': 'Liefert eine Kopie der aktuellen Experimentdiagnose, bei Erfolg einen leeren Wert. Kein globaler Last-error-Zustand.',
     'sceneTransform': 'Liefert die zusammengesetzte Local-to-world-Matrix des Szenenslots. Nur im scene-Callback; index beginnt bei 0. Rahmen enthalten ihre eigene TRS, Geometrie nur ihre Frame-Vorfahren.',
     'sceneWorldPoint': 'Konvertiert einen Punkt in der Basis des Szenenslots in Weltkoordinaten; nur im scene-Callback. Fehler erhalten eine Quelldiagnose.',
     'sceneFrame': 'Erzeugt einen expliziten lokalen TRS-Koordinatenrahmen. Nur im scene-Callback; parent 0 bezeichnet die Wurzel. Endliche Translation, nonzero Quaternion und endliche nonzero Scale; Nachfahren werden für Darstellung und Picking transformiert.',
@@ -345,7 +364,7 @@ def language_reference():
     table = source.split('library[] = {', 1)[1].split('static const ps_lang_builtin *library_find', 1)[0]
     pattern = re.compile(r'\{\s*"(\w+)"\s*,\s*"\w+"\s*,\s*(\w+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*\{([^}]+)\}\s*,\s*\{([^}]+)\}\s*\}', re.S)
     types = dict(F='Float64', I='Int64', S='String', U='Unit', QUANTITY='Quantity', MEDIUM='Medium', MATERIAL='Material', SUBMERSION='Submersion', C='Channel',
-                 V2='Vec2', V3='Vec3', V4='Vec4', Q='Quat', M3='Mat3', M4='Mat4', B3='Bezier3', RNG='Rng', ODE_RESULT='OdeResult', STEP_INTERVAL='StepInterval', SCALAR_RESULT='ScalarResult', VOID='Void', D='Dataset', R='Series',
+                 V2='Vec2', V3='Vec3', V4='Vec4', Q='Quat', M3='Mat3', M4='Mat4', B3='Bezier3', RNG='Rng', ODE_RESULT='OdeResult', STEP_INTERVAL='StepInterval', SCALAR_RESULT='ScalarResult', DIAGNOSTIC='Diagnostic', VOID='Void', D='Dataset', R='Series',
                  P='Plot', TABLE='Table', DIST='Distribution', CONFIG='SensorConfig', SENSOR='Sensor',
                  BODY='Body', CONTACTS='Contacts', SOLVER='ContactSolver', RESULT='ContactResult',
                  JOINT='DistanceJoint', JOINT_RESULT='JointResult',
@@ -355,7 +374,7 @@ def language_reference():
                  PS_LANG_JOINT_CONSTRAINT_ARRAY='[JointConstraint]',
                  SAMPLE='Measurement', PS_TYPE_BOOL='Bool', PS_TYPE_FUNCTION='func(Float64) -> Float64',
                  PS_LANG_ODE_CALLBACK='func(Float64, [Float64]) -> [Float64]',
-                 PS_LANG_VEC3_ARRAY='[Vec3]', PS_LANG_FLOAT_ARRAY='[Float64]',
+                 PS_LANG_VEC3_ARRAY='[Vec3]', PS_LANG_FLOAT_ARRAY='[Float64]', PS_LANG_INT_ARRAY='[Int64]',
                  PS_LANG_SERIES_ARRAY='[Series]', PS_LANG_STRING_ARRAY='[String]',
                  PS_LANG_UNIT_ARRAY='[Unit]', PS_LANG_QUANTITY_ARRAY='[Quantity]')
     methods_text = source.split('methods[] =', 1)[1].split('const ps_lang_method *ps_lang_method_find', 1)[0]

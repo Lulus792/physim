@@ -84,7 +84,10 @@ static const documentation_topic documentation_topics[] = {
     {"Logging", "docs/logging.md", false},
     {"log.h", "include/physim/log.h", true},
     {"C: Logging", "docs/reference/log.md", false},
-    {"Lokale Szenenkoordinaten", "docs/scene-frames.md", false}};
+    {"Lokale Szenenkoordinaten", "docs/scene-frames.md", false},
+    {"Strukturierte Diagnosen", "docs/diagnostics.md", false},
+    {"diagnostic.h", "include/physim/diagnostic.h", true},
+    {"C: Diagnosen", "docs/reference/diagnostic.md", false}};
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27
 #define DOCUMENTATION_MEASUREMENT_TOPIC 28

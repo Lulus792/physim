@@ -129,6 +129,8 @@ static const char *type(emitter *e, ps_lang_type t) {
         return "ps_quantity";
     case PS_TYPE_MEDIUM:
         return "ps_medium";
+    case PS_TYPE_DIAGNOSTIC:
+        return "ps_diagnostic";
     case PS_TYPE_MATERIAL:
         return "ps_material";
     case PS_TYPE_SUBMERSION:
@@ -4075,13 +4077,13 @@ static ps_lang_check_result emit(FILE *output, const char *source_path,
             info[id].optional_element == PS_TYPE_STRING)
             e.strings = e.arrays = 1;
         if ((info[id].type >= PS_TYPE_BOOL && info[id].type <= PS_TYPE_STRING) ||
-            (info[id].type >= PS_TYPE_VEC2 && info[id].type <= PS_TYPE_SCALAR_RESULT))
+            (info[id].type >= PS_TYPE_VEC2 && info[id].type <= PS_TYPE_DIAGNOSTIC))
             e.primitive_types |= UINT64_C(1) << info[id].type;
         if ((info[id].array_element >= PS_TYPE_BOOL && info[id].array_element <= PS_TYPE_STRING) ||
-            (info[id].array_element >= PS_TYPE_VEC2 && info[id].array_element <= PS_TYPE_SCALAR_RESULT))
+            (info[id].array_element >= PS_TYPE_VEC2 && info[id].array_element <= PS_TYPE_DIAGNOSTIC))
             e.primitive_types |= UINT64_C(1) << info[id].array_element;
         if ((info[id].optional_element >= PS_TYPE_BOOL && info[id].optional_element <= PS_TYPE_STRING) ||
-            (info[id].optional_element >= PS_TYPE_VEC2 && info[id].optional_element <= PS_TYPE_SCALAR_RESULT))
+            (info[id].optional_element >= PS_TYPE_VEC2 && info[id].optional_element <= PS_TYPE_DIAGNOSTIC))
             e.primitive_types |= UINT64_C(1) << info[id].optional_element;
         const ps_lang_builtin *builtin = ps_lang_builtin_get(info[id].binding);
         if (builtin) {
@@ -4091,7 +4093,7 @@ static ps_lang_check_result emit(FILE *output, const char *source_path,
             else if (builtin->host && builtin->host != (unsigned)experiment)
                 fail(&e, id, "Host API is unavailable in this module kind");
         }
-        if (info[id].type >= PS_TYPE_VEC2 && info[id].type <= PS_TYPE_SCALAR_RESULT)
+        if (info[id].type >= PS_TYPE_VEC2 && info[id].type <= PS_TYPE_DIAGNOSTIC)
             e.sdk = 1;
         if (info[id].type >= PS_TYPE_DATASET && info[id].type <= PS_TYPE_TABLE && experiment != 2)
             fail(&e, id, "Analysis handles require --emit-analysis");

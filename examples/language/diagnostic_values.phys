@@ -1,0 +1,22 @@
+let error = Diagnostic(8, "linearSolve", "matrix", "C:\\models α\\main.c", 12, 7, "Singular matrix α\nChoose independent equations")
+assert(error.isValid() && error.code() == 8 && error.line() == 12 && error.column() == 7)
+assert(error.operation() == "linearSolve" && error.argument() == "matrix")
+assert(error.source() == "C:\\models α\\main.c" && error.message().contains("α"))
+assert(error.formatted().contains("linearSolve/matrix"))
+let bytes = error.encoded()
+let restored = Diagnostic.decode(bytes)
+assert(restored.message() == error.message() && restored.source() == error.source())
+error.save("diagnostic α.psdiag")
+let saved = Diagnostic.load("diagnostic α.psdiag")
+assert(saved.code() == 8 && saved.formatted() == error.formatted())
+assert(Diagnostic.empty().isValid() && Diagnostic.empty().code() == 0)
+var copies = [error, restored]
+copies.append(saved)
+assert(copies.count == 3 && copies[2].argument() == "matrix")
+assert(attempt(Diagnostic.decode([-1,0,1])) == nil)
+assert(attempt(Diagnostic(6,"","","",0,0,"not a failure")) == nil)
+func raised() -> Int64:
+    error.raise()
+    return 0
+assert(attempt(raised()) == nil)
+print("Structured diagnostics value copies, UTF-8, formatting, bytes, files and caught failures passed")

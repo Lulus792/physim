@@ -1,5 +1,6 @@
 #include "physim/core.h"
 #include "physim/experiment.h"
+#include "physim/data.h"
 #include "text_validation.h"
 #include "number_parse.h"
 #include <errno.h>
@@ -424,4 +425,104 @@ ps_result ps_experiment_log(const ps_context *context,ps_log_level level,const c
     if(!context || context->api_version!=PS_API_VERSION ||
        context->struct_size<offsetof(ps_context,logger)+sizeof context->logger)return PS_VERSION;
     return ps_logger_emit(&context->logger,level,context->time_s,message);
+}
+
+static bool diagnostic_error(ps_result code) {
+    return code>=PS_INVALID && code<=PS_NUMERIC && code!=PS_EOF && code!=PS_RECOVERED;
+}
+void ps_diagnostic_clear(ps_diagnostic *d) {
+    if(d){memset(d,0,sizeof *d);d->struct_size=sizeof *d;d->version=PS_DIAGNOSTIC_VERSION;}
+}
+bool ps_diagnostic_valid(const ps_diagnostic *d) {
+    if(!d || d->struct_size!=sizeof *d || d->version!=PS_DIAGNOSTIC_VERSION ||
+       !ps_text_valid(d->operation,sizeof d->operation,false) ||
+       !ps_text_valid(d->argument,sizeof d->argument,false) ||
+       !ps_text_valid(d->source,sizeof d->source,false) ||
+       !ps_text_valid(d->message,sizeof d->message,true) ||
+       (d->column && !d->line) || ((d->line || d->column) && !d->source[0]))return false;
+    if(d->code==PS_OK)return !d->operation[0] && !d->argument[0] && !d->source[0] && !d->message[0] && !d->line && !d->column;
+    return diagnostic_error(d->code) && d->message[0];
+}
+ps_result ps_diagnostic_set(ps_diagnostic *out,ps_result code,const char *operation,const char *argument,
+                            const char *source,uint32_t line,uint32_t column,const char *message) {
+    if(!out || !message || !diagnostic_error(code))return PS_INVALID;
+    operation=operation?operation:"";argument=argument?argument:"";source=source?source:"";
+    if(!ps_text_valid(operation,PS_DIAGNOSTIC_LABEL_MAX+1u,false) ||
+       !ps_text_valid(argument,PS_DIAGNOSTIC_LABEL_MAX+1u,false) ||
+       !ps_text_valid(source,PS_DIAGNOSTIC_SOURCE_MAX+1u,false) ||
+       !ps_text_valid(message,PS_DIAGNOSTIC_MESSAGE_MAX+1u,true))return PS_INVALID;
+    ps_diagnostic d;ps_diagnostic_clear(&d);d.code=code;d.line=line;d.column=column;
+    memcpy(d.operation,operation,strlen(operation)+1);memcpy(d.argument,argument,strlen(argument)+1);
+    memcpy(d.source,source,strlen(source)+1);memcpy(d.message,message,strlen(message)+1);
+    if(!ps_diagnostic_valid(&d))return PS_INVALID;
+    *out=d;return PS_OK;
+}
+ps_result ps_diagnostic_format(const ps_diagnostic *d,char *out,size_t capacity) {
+    if(!out || !capacity || !ps_diagnostic_valid(d))return PS_INVALID;
+    char text[PS_DIAGNOSTIC_WIRE_MAX+256],location[PS_DIAGNOSTIC_SOURCE_MAX+64];location[0]=0;
+    if(d->source[0]) {
+        if(d->line)snprintf(location,sizeof location,"%s:%u:%u: ",d->source,d->line,d->column?d->column:1);
+        else snprintf(location,sizeof location,"%s: ",d->source);
+    }
+    if(d->code==PS_OK)text[0]=0;
+    else snprintf(text,sizeof text,"%serror [%s%s%s%s%s]: %s",location,ps_result_string(d->code),
+        d->operation[0]?"; ":"",d->operation,d->argument[0]?"/":"",d->argument,d->message);
+    size_t n=strlen(text),copied=n<capacity?n:capacity-1;
+    while(copied && ((unsigned char)text[copied]&0xc0)==0x80)copied--;
+    memcpy(out,text,copied);out[copied]=0;return copied==n?PS_OK:PS_LIMIT;
+}
+size_t ps_diagnostic_encode(unsigned char *out,size_t capacity,const ps_diagnostic *d) {
+    if(!out || !ps_diagnostic_valid(d) || !diagnostic_error(d->code))return 0;
+    const char *fields[]={d->operation,d->argument,d->source,d->message};uint32_t lengths[4];size_t size=40;
+    for(unsigned i=0;i<4;i++){lengths[i]=(uint32_t)strlen(fields[i]);size+=lengths[i];}
+    if(capacity<size)return 0;
+    ps_put_u32(out,UINT32_C(0x47445350));ps_put_u32(out+4,PS_DIAGNOSTIC_VERSION);
+    ps_put_u32(out+8,(uint32_t)d->code);ps_put_u32(out+12,d->line);ps_put_u32(out+16,d->column);
+    size_t at=36;
+    for(unsigned i=0;i<4;i++){ps_put_u32(out+20+4*i,lengths[i]);memcpy(out+at,fields[i],lengths[i]);at+=lengths[i];}
+    ps_put_u32(out+at,ps_crc32(out,at));return size;
+}
+ps_result ps_diagnostic_decode(const unsigned char *data,size_t size,ps_diagnostic *out) {
+    if(!data || !out)return PS_INVALID;
+    if(size<40 || size>PS_DIAGNOSTIC_WIRE_MAX || ps_get_u32(data)!=UINT32_C(0x47445350))return PS_CORRUPT;
+    if(ps_get_u32(data+4)!=PS_DIAGNOSTIC_VERSION)return PS_VERSION;
+    uint32_t lengths[4],limits[]={PS_DIAGNOSTIC_LABEL_MAX,PS_DIAGNOSTIC_LABEL_MAX,PS_DIAGNOSTIC_SOURCE_MAX,PS_DIAGNOSTIC_MESSAGE_MAX};size_t expected=40;
+    for(unsigned i=0;i<4;i++){lengths[i]=ps_get_u32(data+20+4*i);if(lengths[i]>limits[i])return PS_CORRUPT;expected+=lengths[i];}
+    if(size!=expected || ps_get_u32(data+size-4)!=ps_crc32(data,size-4))return PS_CORRUPT;
+    ps_diagnostic d;ps_diagnostic_clear(&d);d.code=(ps_result)ps_get_u32(data+8);d.line=ps_get_u32(data+12);d.column=ps_get_u32(data+16);
+    char *fields[]={d.operation,d.argument,d.source,d.message};size_t at=36;
+    for(unsigned i=0;i<4;i++){if(memchr(data+at,0,lengths[i]))return PS_CORRUPT;memcpy(fields[i],data+at,lengths[i]);at+=lengths[i];}
+    if(!ps_diagnostic_valid(&d) || !diagnostic_error(d.code))return PS_CORRUPT;
+    *out=d;return PS_OK;
+}
+ps_result ps_diagnostic_save(const char *path,const ps_diagnostic *d) {
+    if(!path || !*path)return PS_INVALID;
+    unsigned char data[PS_DIAGNOSTIC_WIRE_MAX];size_t n=ps_diagnostic_encode(data,sizeof data,d);if(!n)return PS_INVALID;
+    FILE *f=fopen(path,"wbx");if(!f)return PS_IO;
+    bool ok=fwrite(data,1,n,f)==n && !fflush(f);if(fclose(f))ok=false;return ok?PS_OK:PS_IO;
+}
+ps_result ps_diagnostic_load(const char *path,ps_diagnostic *out) {
+    if(!path || !*path || !out)return PS_INVALID;
+    FILE *f=fopen(path,"rb");if(!f)return PS_IO;
+    unsigned char data[PS_DIAGNOSTIC_WIRE_MAX];size_t n=fread(data,1,sizeof data,f);int extra=fgetc(f);
+    bool failed=ferror(f)!=0;if(fclose(f))failed=true;
+    if(failed)return PS_IO;
+    if(extra!=EOF)return PS_CORRUPT;
+    return ps_diagnostic_decode(data,n,out);
+}
+static bool diagnostic_context(const ps_context *c) {
+    return c && c->api_version==PS_API_VERSION && c->struct_size>=offsetof(ps_context,diagnostic)+sizeof c->diagnostic;
+}
+ps_result ps_experiment_fail(ps_context *c,const ps_diagnostic *d) {
+    if(!c || c->api_version!=PS_API_VERSION || c->struct_size<offsetof(ps_context,error)+sizeof c->error)return PS_VERSION;
+    if(!ps_diagnostic_valid(d) || !diagnostic_error(d->code))return PS_INVALID;
+    ps_diagnostic copy=*d;char text[sizeof c->error];(void)ps_diagnostic_format(&copy,text,sizeof text);
+    memcpy(c->error,text,strlen(text)+1);if(diagnostic_context(c))c->diagnostic=copy;return copy.code;
+}
+ps_result ps_experiment_diagnostic(const ps_context *c,ps_diagnostic *out) {
+    if(!out)return PS_INVALID;
+    if(!diagnostic_context(c))return PS_VERSION;
+    if(!c->diagnostic.struct_size && c->diagnostic.code==PS_OK){ps_diagnostic_clear(out);return PS_OK;}
+    if(!ps_diagnostic_valid(&c->diagnostic))return PS_CORRUPT;
+    *out=c->diagnostic;return PS_OK;
 }

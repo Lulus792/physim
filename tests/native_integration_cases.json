@@ -1286,6 +1286,41 @@
         "platform",
         "core"
       ]
+    },
+    "diagnostic-c": {
+      "sources": [
+        "examples/diagnostics/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "diagnostic-phys": {
+      "source": "examples/language/diagnostic_experiment.phys",
+      "mode": "--emit-experiment"
+    },
+    "diagnostic-analysis-c": {
+      "sources": [
+        "examples/diagnostics/analysis.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "diagnostic-analysis-phys": {
+      "source": "examples/language/diagnostic_analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "diagnostic-analysis-legacy": {
+      "sources": [
+        "tests/fixtures/legacy_analysis_diagnostic.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
     }
   },
   "tests": [
@@ -5082,6 +5117,66 @@
           "arguments": [
             "{root}/tests/check_display_workflow.py",
             "scene_frames_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 560,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "runner_diagnostic",
+      "targets": [
+        "python",
+        "physim-runner",
+        "physim-analysis-runner",
+        "diagnostic-c",
+        "diagnostic-phys",
+        "diagnostic-analysis-c",
+        "diagnostic-analysis-phys",
+        "diagnostic-analysis-legacy"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_runner_diagnostic.py",
+            "{physim-runner}",
+            "{diagnostic-c}",
+            "{diagnostic-phys}",
+            "{physim-analysis-runner}",
+            "{diagnostic-analysis-c}",
+            "{diagnostic-analysis-phys}",
+            "{diagnostic-analysis-legacy}",
+            "{work}"
+          ],
+          "timeout": 100
+        }
+      ]
+    },
+    {
+      "name": "diagnostic_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "diagnostic_workflow",
             "--app",
             "{physim}",
             "--work",

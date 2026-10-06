@@ -7,6 +7,7 @@
 #define _GNU_SOURCE 1
 #endif
 #endif
+#include "diagnostic.h"
 #include <float.h>
 #include <inttypes.h>
 #include <locale.h>
@@ -49,6 +50,10 @@ typedef struct psrt_trap {
     size_t capacity;
     unsigned depth;
     psrt_cleanup *cleanup;
+    ps_diagnostic *diagnostic;
+    const ps_result *result;
+    const char *operation, *argument;
+    ps_result failure_code;
 } psrt_trap;
 #ifdef _MSC_VER
 static __declspec(thread) psrt_trap *psrt_current;
@@ -90,7 +95,7 @@ static inline void psrt_cleanup_unwind(psrt_cleanup *mark) {
     }
 }
 
-static _Noreturn void psrt_fail(psrt_site site, const char *message) {
+static _Noreturn void psrt_raise(psrt_site site, ps_result code, const char *message, const ps_diagnostic *provided) {
     if (psrt_try_current) {
         psrt_try_frame *frame = psrt_try_current;
         psrt_cleanup_unwind(frame->mark);
@@ -100,6 +105,20 @@ static _Noreturn void psrt_fail(psrt_site site, const char *message) {
     }
 #ifdef PSRT_MODULE
     if (psrt_current) {
+        if(code<PS_INVALID || code>PS_NUMERIC || code==PS_EOF || code==PS_RECOVERED)code=PS_NUMERIC;
+        psrt_current->failure_code=code;
+        if(psrt_current->diagnostic) {
+            if(provided && ps_diagnostic_valid(provided) && provided->code==code) *psrt_current->diagnostic=*provided;
+            else {
+            uint32_t line=site.line<=UINT32_MAX?(uint32_t)site.line:0;
+            uint32_t column=site.column<=UINT32_MAX?(uint32_t)site.column:0;
+            if(ps_diagnostic_set(psrt_current->diagnostic,code,
+                  psrt_current->operation?psrt_current->operation:"runtime",psrt_current->argument,
+                  site.file,line,column,message)!=PS_OK)
+                (void)ps_diagnostic_set(psrt_current->diagnostic,code,"runtime",NULL,NULL,0,0,
+                    "Runtime failure (details exceed diagnostic bounds)");
+            }
+        }
         snprintf(psrt_current->error, psrt_current->capacity, "%s:%zu:%zu: runtime error: %s",
                  site.file, site.line, site.column, message);
         /* Still inside the failing call: registered stack addresses remain live. */
@@ -112,6 +131,16 @@ static _Noreturn void psrt_fail(psrt_site site, const char *message) {
     psrt_cleanup_unwind(NULL);
 #endif
     exit(70);
+}
+static _Noreturn void psrt_fail(psrt_site site,const char *message) {
+    ps_result code=PS_NUMERIC;
+#ifdef PSRT_MODULE
+    if(psrt_current && psrt_current->result)code=*psrt_current->result;
+#endif
+    psrt_raise(site,code,message,NULL);
+}
+static _Noreturn void psrt_fail_code(psrt_site site,ps_result code,const char *message) {
+    psrt_raise(site,code,message,NULL);
 }
 static inline void psrt_initialized(bool ready, psrt_site site) {
     if (!ready)

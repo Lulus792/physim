@@ -10,6 +10,7 @@ Einbinden: `#include "physim/analysis.h"`. Die folgenden Signaturen, Typen und S
 
 ```c
 #define PS_ANALYSIS_API_BASE_SIZE offsetof(ps_analysis_api, run_many)
+#define PS_ANALYSIS_API_MANY_SIZE offsetof(ps_analysis_api, run_diagnostic)
 #define PS_ANALYSIS_MAX_INPUTS 8u
 ```
 
@@ -64,10 +65,14 @@ typedef struct {
     const char *name;
     ps_result (*run)(const char *input_run, const char *output_prefix);
     ps_result (*run_many)(const char *const *input_runs, size_t count, const char *output_prefix);
+    ps_result (*run_diagnostic)(const char *const *input_runs, size_t count,
+                                const char *output_prefix, ps_diagnostic *diagnostic);
 } ps_analysis_api;
 ```
 
 Optional tail extension of ABI 2. The runner checks struct_size before reading it. Receives 0..8 explicit paths, in selection order, no resampling. Zero inputs are for self-generated analyses; modules may reject them. Input strings are borrowed for the duration of this synchronous call.
+
+Optional ABI-3 tail. Explicit diagnostic output owned by the caller. Receives 0..8 inputs; return result and write a matching error record if available. Clear the record on success. Inputs/prefix borrowed synchronously.
 
 ### ps_analysis_entry
 

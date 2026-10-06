@@ -1,7 +1,8 @@
 #ifndef PHYSIM_LANGUAGE_ANALYSIS_H
 #define PHYSIM_LANGUAGE_ANALYSIS_H
 #ifdef PSRT_FN_ANALYZE
-static ps_result psra_run_many(const char *const *inputs, size_t count, const char *prefix) {
+static ps_result psra_run_diagnostic(const char *const *inputs, size_t count, const char *prefix,ps_diagnostic *diagnostic) {
+    if(diagnostic)ps_diagnostic_clear(diagnostic);
     if ((!inputs && count) || count > PS_ANALYSIS_MAX_INPUTS || !prefix || !*prefix)
         return PS_INVALID;
     for (size_t i = 0; i < count; i++)
@@ -27,10 +28,12 @@ static ps_result psra_run_many(const char *const *inputs, size_t count, const ch
     state->trap.previous = psrt_current;
     state->trap.error = state->error;
     state->trap.capacity = sizeof state->error;
+    state->trap.diagnostic=diagnostic;state->trap.result=&state->host.result;
+    state->trap.operation="analyze";state->trap.argument=NULL;state->trap.failure_code=PS_NUMERIC;
     psrt_current = &state->trap;
     if (setjmp(state->trap.jump)) {
         fprintf(stderr, "%s\n", state->error);
-        result = state->host.result;
+        result = state->trap.failure_code;
     } else {
         ps_module_init(state);
         PSRT_FN_ANALYZE(state);
@@ -52,12 +55,15 @@ static ps_result psra_run_many(const char *const *inputs, size_t count, const ch
     free(state);
     return result;
 }
+static ps_result psra_run_many(const char *const *inputs,size_t count,const char *prefix) {
+    return psra_run_diagnostic(inputs,count,prefix,NULL);
+}
 static ps_result psra_run(const char *input, const char *prefix) {
     return psra_run_many(&input, 1, prefix);
 }
 PS_EXPORT const ps_analysis_api *ps_get_analysis(void) {
     static const ps_analysis_api api = {sizeof api, PS_ABI_VERSION, PSRT_SOURCE, psra_run,
-                                        psra_run_many};
+                                        psra_run_many,psra_run_diagnostic};
     return &api;
 }
 #endif

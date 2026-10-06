@@ -17,17 +17,27 @@ static bool send_message(uint32_t type, const void *p, uint32_t n) {
     return size && fwrite(b, 1, size, stdout) == size && !fflush(stdout);
 }
 #include "logging.inc"
-static void report(bool interactive, const char *error) {
-    if (interactive)
-        send_message(PS_MSG_ERROR, error, (uint32_t)strlen(error));
-    else
-        fprintf(stderr, "%s\n", error);
+static void report(bool interactive,bool structured,const char *path,const ps_context *context,
+                    ps_result code,const char *operation,const char *error) {
+    ps_diagnostic d;ps_diagnostic_clear(&d);
+    if(!context || ps_experiment_diagnostic(context,&d)!=PS_OK || d.code!=code || !ps_diagnostic_valid(&d)) {
+        if(ps_diagnostic_set(&d,code,operation,NULL,NULL,0,0,error)!=PS_OK)
+            (void)ps_diagnostic_set(&d,code,operation,NULL,NULL,0,0,ps_result_string(code));
+    }
+    if(path && *path)(void)ps_diagnostic_save(path,&d);
+    if(interactive) {
+        unsigned char payload[PS_DIAGNOSTIC_WIRE_MAX];size_t n=structured?ps_diagnostic_encode(payload,sizeof payload,&d):0;
+        if(n)send_message(PS_MSG_DIAGNOSTIC,payload,(uint32_t)n);
+        else send_message(PS_MSG_ERROR,error,(uint32_t)strlen(error));
+    } else fprintf(stderr,"%s\n",error);
 }
 static ps_result snapshot(const ps_experiment_api *api, ps_context *c, ps_run_writer *writer,
                           bool paused, bool emit) {
     ps_scene scene = {0};
-    c->error[0] = 0;
+    c->error[0] = 0;ps_diagnostic_clear(&c->diagnostic);
     api->build_scene(c, &scene);
+    if(ps_diagnostic_valid(&c->diagnostic) && c->diagnostic.code!=PS_OK)
+        return c->diagnostic.code;
     if (c->error[0])
         return PS_NUMERIC;
     if(scene.count>PS_MAX_OBJECTS) return PS_INVALID;
@@ -50,14 +60,14 @@ int main(int argc, char **argv) {
     if (argc < 3) {
         fprintf(stderr, "Usage: physim-runner module output.psrun [--steps N | --interactive] "
                         "[--dt seconds] [--seed N] [--param name=value]... "
-                        "[--speed 0|0.1..16 (interactive only)] [--log-events (interactive only)] [--record-scenes] "
+                        "[--speed 0|0.1..16 (interactive only)] [--log-events] [--diagnostics] (interactive only) [--record-scenes] "
                         "[--adaptive [--min-dt seconds] [--max-dt seconds]] "
                         "[--until seconds (offline; --steps is the step budget)]\n"
                         "       physim-runner module --describe\n");
         return 2;
     }
     bool describe = argc == 3 && !strcmp(argv[2], "--describe");
-    bool interactive = false, record_scenes = false, adaptive = false, step_bounds = false, log_events=false;
+    bool interactive = false, record_scenes = false, adaptive = false, step_bounds = false, log_events=false,diagnostics=false;
     uint64_t steps = 4000, seed = 42;
     double dt = 0.005, speed = 1, minimum_dt=1e-8, maximum_dt=.1, end_time=0;
     bool until_option=false;
@@ -71,6 +81,7 @@ int main(int argc, char **argv) {
             interactive = true;
             continue;
         }
+        if(!strcmp(argv[i],"--diagnostics")){diagnostics=true;continue;}
         if(!strcmp(argv[i],"--log-events")){log_events=true;continue;}
         if (!strcmp(argv[i], "--record-scenes")) {
             record_scenes = true;
@@ -124,15 +135,17 @@ int main(int argc, char **argv) {
         (step_bounds && !adaptive) || (adaptive &&
          (!isfinite(minimum_dt) || minimum_dt<DBL_MIN || !isfinite(maximum_dt) ||
           maximum_dt>1 || minimum_dt>dt || dt>maximum_dt)) ||
-        !ps_speed_valid(speed) || (speed_option && !interactive) || (log_events && !interactive))
+        !ps_speed_valid(speed) || (speed_option && !interactive) || ((log_events || diagnostics) && !interactive))
         return 2;
     ps_binary_stdio();
     runner_log_state logs={.events=log_events,.disabled=describe};
     if(!describe && snprintf(logs.path,sizeof logs.path,"%s.pslog",argv[2])>=(int)sizeof logs.path)return 2;
     c.logger=(ps_logger){&logs,runner_log_write};
+    ps_diagnostic_clear(&c.diagnostic);char diagnostic_path[4096]="";
+    if(!describe && snprintf(diagnostic_path,sizeof diagnostic_path,"%s.psdiag",argv[2])>=(int)sizeof diagnostic_path)return 2;
     void *module = ps_module_open(argv[1]);
     if (!module) {
-        report(interactive, "Cannot load experiment module");
+        report(interactive,diagnostics,diagnostic_path,&c,PS_IO,"module.load","Cannot load experiment module");
         return 3;
     }
     ps_experiment_entry entry = NULL;
@@ -143,14 +156,14 @@ int main(int argc, char **argv) {
         ((api->capabilities&PS_EXPERIMENT_SCENE_FRAMES) && !(api->capabilities&PS_EXPERIMENT_SCENE_HIERARCHY)) ||
         !api->name || !api->create || !api->step || !api->reset || !api->build_scene ||
         !api->destroy) {
-        report(interactive, "Experiment ABI mismatch or missing callback");
+        report(interactive,diagnostics,diagnostic_path,&c,PS_VERSION,"module.abi","Experiment ABI mismatch or missing callback");
         runner_log_close(&logs,c.time_s);
         ps_module_close(module);
         return 4;
     }
     if(adaptive && (!(api->capabilities&PS_EXPERIMENT_ADAPTIVE_STEPS) ||
                     api->struct_size<sizeof *api || !api->adaptive_step)) {
-        report(interactive,"Experiment does not provide an adaptive_step callback");
+        report(interactive,diagnostics,diagnostic_path,&c,PS_VERSION,"adaptive_step","Experiment does not provide an adaptive_step callback");
         runner_log_close(&logs,c.time_s);
         ps_module_close(module);return 4;
     }
@@ -159,14 +172,14 @@ int main(int argc, char **argv) {
     ps_rng_seed(&c.rng, seed);
     ps_result result = api->create(&c);
     if (result != PS_OK) {
-        report(interactive, c.error[0] ? c.error : ps_result_string(result));
+        report(interactive,diagnostics,diagnostic_path,&c,result,"create",c.error[0]?c.error:ps_result_string(result));
         api->destroy(&c);
         runner_log_close(&logs,c.time_s);
         ps_module_close(module);
         return 5;
     }
     if (ps_parameter_finalize(&c) != PS_OK) {
-        report(interactive, "Unknown experiment parameter");
+        report(interactive,diagnostics,diagnostic_path,&c,PS_INVALID,"parameters","Unknown experiment parameter");
         api->destroy(&c);
         runner_log_close(&logs,c.time_s);
         ps_module_close(module);
@@ -213,7 +226,7 @@ int main(int argc, char **argv) {
                  "\nstep_mode=%s\nminimum_dt_s=%.17g\nmaximum_dt_s=%.17g",
                  adaptive?"adaptive":"fixed",adaptive?minimum_dt:dt,adaptive?maximum_dt:dt);
         if(added<0 || (size_t)added>=sizeof c.model_metadata-used) {
-            report(interactive,"Model metadata has no room for adaptive step provenance");
+            report(interactive,diagnostics,diagnostic_path,&c,PS_LIMIT,"metadata","Model metadata has no room for adaptive step provenance");
             api->destroy(&c);
             runner_log_close(&logs,c.time_s);
             ps_module_close(module);return 5;
@@ -225,7 +238,7 @@ int main(int argc, char **argv) {
                           "\nend_time_s=%.17g\nmaximum_accepted_steps=%llu",
                           end_time,(unsigned long long)steps);
         if(added<0 || (size_t)added>=sizeof c.model_metadata-used) {
-            report(interactive,"Model metadata has no room for target-time provenance");
+            report(interactive,diagnostics,diagnostic_path,&c,PS_LIMIT,"metadata","Model metadata has no room for target-time provenance");
             api->destroy(&c);
             runner_log_close(&logs,c.time_s);
             ps_module_close(module);return 5;
@@ -236,14 +249,14 @@ int main(int argc, char **argv) {
              "\nmodule_fnv1a64=%016llx\nrunner_build=%s %s", (unsigned long long)hash, __DATE__,
              __TIME__);
     if((adaptive || until_option) && (provenance<0 || (size_t)provenance>=sizeof c.model_metadata-used)) {
-        report(interactive,"Model metadata has no room for module provenance");
+        report(interactive,diagnostics,diagnostic_path,&c,PS_LIMIT,"metadata","Model metadata has no room for module provenance");
         api->destroy(&c);runner_log_close(&logs,c.time_s);
         ps_module_close(module);return 5;
     }
     ps_run_writer writer;
     result = ps_run_create(&writer, argv[2], &c, api->name);
     if (result != PS_OK) {
-        report(interactive, "Cannot create run (path missing or file already exists)");
+        report(interactive,diagnostics,diagnostic_path,&c,PS_IO,"run.create","Cannot create run (path missing or file already exists)");
         api->destroy(&c);
         runner_log_close(&logs,c.time_s);
         ps_module_close(module);
@@ -405,7 +418,7 @@ int main(int argc, char **argv) {
         writer.file = NULL;
     }
     if (result != PS_OK)
-        report(interactive, c.error[0] ? c.error : ps_result_string(result));
+        report(interactive,diagnostics,diagnostic_path,&c,result,"step",c.error[0]?c.error:ps_result_string(result));
     api->destroy(&c);
     runner_log_close(&logs,c.time_s);
     if (interactive)

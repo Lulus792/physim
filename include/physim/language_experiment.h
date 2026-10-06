@@ -15,6 +15,10 @@ static ps_result psbridge_invoke(ps_context *c, ps_scene *scene, double dt, unsi
     state->trap.error = c->error;
     state->trap.capacity = sizeof c->error;
     state->trap.depth = 0;
+    state->trap.diagnostic=&c->diagnostic;
+    state->trap.result=NULL;
+    state->trap.operation=phase==PSRT_CREATE?"create":phase==PSRT_RESET?"reset":phase==PSRT_STEP?"step":"scene";
+    state->trap.argument=NULL;state->trap.failure_code=PS_NUMERIC;ps_diagnostic_clear(&c->diagnostic);
     c->error[0] = 0;
     psrt_current = &state->trap;
     if (setjmp(state->trap.jump)) {
@@ -22,7 +26,7 @@ static ps_result psbridge_invoke(ps_context *c, ps_scene *scene, double dt, unsi
         state->failed = true;
         if (scene)
             memset(scene, 0, sizeof *scene);
-        return PS_NUMERIC;
+        return state->trap.failure_code;
     }
     if (phase == PSRT_CREATE) {
         ps_module_init(state);
@@ -97,9 +101,11 @@ static ps_result psbridge_adaptive_step(ps_context *c,double dt,double minimum,d
     state->host=(psrt_host){c,NULL,PSRT_STEP};
     state->trap.previous=psrt_current;state->trap.error=c->error;
     state->trap.capacity=sizeof c->error;state->trap.depth=0;
+    state->trap.diagnostic=&c->diagnostic;state->trap.result=NULL;
+    state->trap.operation="adaptive_step";state->trap.argument=NULL;state->trap.failure_code=PS_NUMERIC;ps_diagnostic_clear(&c->diagnostic);
     c->error[0]=0;psrt_current=&state->trap;
     if(setjmp(state->trap.jump)) {
-        psrt_current=state->trap.previous;state->failed=true;return PS_NUMERIC;
+        psrt_current=state->trap.previous;state->failed=true;return state->trap.failure_code;
     }
     ps_step_interval accepted=PSRT_FN_ADAPTIVE_STEP(state,dt,minimum,maximum);
     psrt_current=state->trap.previous;state->failed=false;*interval=accepted;

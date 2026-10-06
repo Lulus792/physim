@@ -7,6 +7,7 @@
 #define QUANTITY PS_TYPE_QUANTITY
 #define MEDIUM PS_TYPE_MEDIUM
 #define MATERIAL PS_TYPE_MATERIAL
+#define DIAGNOSTIC PS_TYPE_DIAGNOSTIC
 #define SUBMERSION PS_TYPE_SUBMERSION
 #define C PS_TYPE_CHANNEL
 #define V2 PS_TYPE_VEC2
@@ -361,6 +362,24 @@ static const ps_lang_builtin library[] = {
     {"sceneTransform","psrt_scene_transform",M4,1,1,{I},{"index"}},
     {"sceneWorldPoint","psrt_scene_world_point",V3,2,1,{I,V3},{"index","point"}},
     {"sceneParent", "psrt_scene_parent", VOID, 2, 1, {I,I}, {"child","parent"}},
+    {"Diagnostic","psrt_diagnostic_make",DIAGNOSTIC,7,0,{I,S,S,S,I,I,S},{"code","operation","argument","source","line","column","message"}},
+    {"diagnosticHere","psrt_diagnostic_here",DIAGNOSTIC,4,0,{I,S,S,S},{"code","operation","argument","message"}},
+    {"emptyDiagnostic","psrt_diagnostic_empty",DIAGNOSTIC,0,0,{0},{0}},
+    {"diagnosticValid","psrt_diagnostic_valid",PS_TYPE_BOOL,1,0,{DIAGNOSTIC},{"diagnostic"}},
+    {"diagnosticCode","psrt_diagnostic_code",I,1,0,{DIAGNOSTIC},{"diagnostic"}},
+    {"diagnosticLine","psrt_diagnostic_line",I,1,0,{DIAGNOSTIC},{"diagnostic"}},
+    {"diagnosticColumn","psrt_diagnostic_column",I,1,0,{DIAGNOSTIC},{"diagnostic"}},
+    {"diagnosticOperation","psrt_diagnostic_operation",S,1,0,{DIAGNOSTIC},{"diagnostic"}},
+    {"diagnosticArgument","psrt_diagnostic_argument",S,1,0,{DIAGNOSTIC},{"diagnostic"}},
+    {"diagnosticSource","psrt_diagnostic_source",S,1,0,{DIAGNOSTIC},{"diagnostic"}},
+    {"diagnosticMessage","psrt_diagnostic_message",S,1,0,{DIAGNOSTIC},{"diagnostic"}},
+    {"diagnosticFormatted","psrt_diagnostic_formatted",S,1,0,{DIAGNOSTIC},{"diagnostic"}},
+    {"diagnosticEncoded","psrt_diagnostic_encoded",PS_LANG_INT_ARRAY,1,0,{DIAGNOSTIC},{"diagnostic"}},
+    {"diagnosticDecoded","psrt_diagnostic_decoded",DIAGNOSTIC,1,0,{PS_LANG_INT_ARRAY},{"bytes"}},
+    {"saveDiagnostic","psrt_diagnostic_save",VOID,2,0,{DIAGNOSTIC,S},{"diagnostic","path"}},
+    {"loadDiagnostic","psrt_diagnostic_load",DIAGNOSTIC,1,0,{S},{"path"}},
+    {"raiseDiagnostic","psrt_diagnostic_raise",VOID,1,0,{DIAGNOSTIC},{"diagnostic"}},
+    {"currentDiagnostic","psrt_current_diagnostic",DIAGNOSTIC,0,1,{0},{0}},
     {"logDebug","psrt_log_debug",PS_TYPE_BOOL,1,1,{S},{"message"}},
     {"logInfo","psrt_log_info",PS_TYPE_BOOL,1,1,{S},{"message"}},
     {"logWarning","psrt_log_warning",PS_TYPE_BOOL,1,1,{S},{"message"}},
@@ -443,7 +462,14 @@ const ps_lang_builtin *ps_lang_builtin_get(size_t binding) {
                ? &library[index]
                : NULL;
 }
-static const ps_lang_method methods[] = {{"row", "tableRow", TABLE, 0},
+static const ps_lang_method methods[] = {
+    {"isValid","diagnosticValid",DIAGNOSTIC,0}, {"code","diagnosticCode",DIAGNOSTIC,0},
+    {"line","diagnosticLine",DIAGNOSTIC,0}, {"column","diagnosticColumn",DIAGNOSTIC,0},
+    {"operation","diagnosticOperation",DIAGNOSTIC,0}, {"argument","diagnosticArgument",DIAGNOSTIC,0},
+    {"source","diagnosticSource",DIAGNOSTIC,0}, {"message","diagnosticMessage",DIAGNOSTIC,0},
+    {"formatted","diagnosticFormatted",DIAGNOSTIC,0}, {"encoded","diagnosticEncoded",DIAGNOSTIC,0},
+    {"save","saveDiagnostic",DIAGNOSTIC,0}, {"raise","raiseDiagnostic",DIAGNOSTIC,0},
+{"row", "tableRow", TABLE, 0},
                                          {"sample", "rngSample", RNG, PS_LANG_METHOD_MUTATING},
                                          {"reseed", "rngReseed", RNG, PS_LANG_METHOD_MUTATING},
                                          {"reseedForRun", "rngReseedForRun", RNG, PS_LANG_METHOD_MUTATING},
@@ -588,6 +614,7 @@ const ps_lang_method *ps_lang_method_find(ps_lang_type owner, const void *name, 
     return NULL;
 }
 static const struct { const char *owner, *name, *function; } factories[] = {
+    {"Diagnostic","here","diagnosticHere"}, {"Diagnostic","empty","emptyDiagnostic"}, {"Diagnostic","decode","diagnosticDecoded"}, {"Diagnostic","load","loadDiagnostic"},
     {"Int64", "abs", "intAbs"},
     {"Int64", "min", "intMin"},
     {"Int64", "max", "intMax"},

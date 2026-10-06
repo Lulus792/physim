@@ -1,0 +1,12 @@
+let value = Channel("value", Unit(0,0,0,0,0,0,0,1,"1"), "Initial value")
+func create():
+    return
+func reset():
+    value.sample(1)
+func step(dt: Float64):
+    let none = attempt(Int64("bad"))
+    assert(none == nil && currentDiagnostic().code() == 0)
+    let failure = Diagnostic.here(8,"solve","matrix","Singular matrix α\nChoose independent equations")
+    failure.raise()
+func scene():
+    sphere(Vec3(0,0,0),0.2,0xffffffff,1)
