@@ -80,7 +80,71 @@ baut dieses Projekt und führt kontrollierte Einzelschritte aus.
 
 Dieser Durchstich ist diskret und besitzt noch keine CCD, Compound-/konvexen
 Collider, Kontaktinseln, persistente Feature-IDs, gemeinsame Gelenk-Warmstarts
-oder nichtlineare Rotations-/Positionsprojektion. Direkte Physim-Bindungen für
-den neuen Kontaktzustand stehen noch aus. Fachlicher Hintergrund zur Wiederverwendung
+oder nichtlineare Rotations-/Positionsprojektion. Fachlicher Hintergrund zur Wiederverwendung
 akkumulierter Impulse: [Box2D-Dokumentation](https://box2d.org/documentation/md_simulation.html)
 und [Catto: Understanding Constraints](https://box2d.org/files/ErinCatto_UnderstandingConstraints_GDC2014.pdf).
+## Physim-Werte (0.177.0)
+
+`Collider.sphere(id, body, radius)`, `Collider.box(id, body, size)` und
+`Collider.plane(id, body, normal)` erzeugen kopierbare Colliderwerte. IDs liegen
+in 1..4294967295, Körperindizes in 0..127; Maße/Normalen folgen dem C-Vertrag.
+`id()`, `body()`, `shape()`, `size()` und `normal()` lesen die Werte.
+`shape()` verwendet Kugel=1, Box=2, Ebene=3.
+
+`ContactWorld.defaults()` verwendet die C-Standardwerte.
+`ContactWorld(matchDistance, minimumNormalDot, maximumDtRatio, warmFraction)`
+erlaubt dieselben expliziten Einstellungen. Der Zustand enthält keine impliziten
+Kräfte oder Integration. Ein Schritt erzeugt einen neuen Snapshot:
+
+```physim
+var world = ContactWorld.defaults()
+var bodies = [Body.sphere(0,0.5), Body.sphere(1,0.5)]
+bodies[1].setState(Vec3(0,0.5,0),Vec3(0,-0.1,0),Quat(0,0,0,1),Vec3(0,0,0))
+let colliders = [Collider.plane(1,0,Vec3(0,1,0)), Collider.sphere(2,1,0.5)]
+world = world.solve(bodies,colliders,ContactSolver.defaults(),0.01)
+bodies = world.bodies()
+assert(world.contactCount() == 1)
+```
+
+`solve(bodies, colliders, solver, dt)` und `reset()` ändern ihren Receiver nicht.
+Das Ergebnis ist wieder ein `ContactWorld`, damit die nächste Zuweisung den
+Kontaktverlauf fortsetzt. Kopien teilen nur unveränderliche Speichersnapshots;
+jeder nächste Schritt oder Reset ist unabhängig. Arrays, optionale Werte,
+Structs, Rückgaben und Closures übernehmen automatische Besitzregeln.
+`reset()` erhält die Einstellungen und entfernt Körper/Collider/Kontakte aus
+dem Snapshot. Eingabekörper werden nie verändert; `bodies()` liefert einen
+unabhängigen Körperarraywert. Fehler und Allokationsfehler erhalten sämtliche
+Eingaben und gespeicherte Kopien.
+
+| Methoden | Ergebnis |
+| --- | --- |
+| `bodyCount()`, `colliderCount()`, `contactCount()` | Anzahlen im Snapshot |
+| `matched()`, `created()`, `ended()`, `warmed()` | Lebenszyklus des letzten erfolgreichen Schritts |
+| `dt()`, `maxNormalError()`, `maxProjectionError()` | Letzte Schrittweite und sichtbare Solverreste, SI |
+| `body(index)`, `bodies()` | Körperwert beziehungsweise unabhängiger Arraywert |
+| `contactIdA(index)`, `contactIdB(index)` | Stabile Collider-IDs in kanonischer Reihenfolge |
+| `contactPoint(index)`, `contactNormal(index)`, `contactPenetration(index)` | Geometrie vor Positionsprojektion |
+| `localAnchorA(index)`, `localAnchorB(index)` | Beide vor Projektion gespeicherten Körperlokalanker |
+| `contactImpulse(index)` | Gesamter Impuls auf A einschließlich Warmstart, N s |
+
+Indizes sind nullbasiert und werden geprüft. Leere Konstruktor-/Resetzustände
+melden null Anzahlen, Schrittweite und Reste; Körper-/Kontaktzugriff bleibt
+außerhalb dieser Anzahlen ein Laufzeitfehler. Der Sprachzustand benötigt eine
+begrenzte Allokation pro erfolgreichem Snapshot innerhalb des gemeinsamen
+64-MiB-Budgets. Dauerhaft gespeicherte Verläufe zählen zu diesem Budget.
+Der C-Core selbst bleibt ohne Heap; Rechen- und Kapazitätsgrenzen sind identisch.
+
+`ContactSolver.solveWarm(bodies, contacts, initialImpulses)` bindet den manuellen
+C-Kontaktgraphen mit `[ContactConstraint]` und `[Vec3]`. Genau ein endlicher
+Seed pro Kontakt ist erforderlich; das Ergebnis ist ein `ConstraintResult`
+mit null Gelenken und totalen Kontaktimpulsen. Normalseeds werden auf nichtnegative
+Impulse und Tangentenseeds auf den aktuellen Reibungskegel projiziert.
+Restitution bezieht sich auf die Geschwindigkeiten vor sämtlichen Startimpulsen.
+Die bisherige `solve()`-Bindung bleibt unverändert.
+
+[Werte-/Besitzbeispiel](../examples/language/contact_world.phys) und
+[Physim-Stapel](../examples/language/contact_stack.phys) sind ausführbar.
+Der Stapel verwendet dieselben Parameter, 11 Messkanäle und vollständigen
+Szenen wie das C-Beispiel. Ein unabhängiger Parser vergleicht beide Modi über
+je 1001 Messungen und alle aufgezeichneten Objektfelder mit 1e-12 relativer/
+absoluter Toleranz; Quaternionnormalisierung kann letzte Bits verändern.

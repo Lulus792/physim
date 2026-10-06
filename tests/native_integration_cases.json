@@ -1362,6 +1362,10 @@
         "core"
       ],
       "module": true
+    },
+    "language-contact-stack": {
+      "source": "examples/language/contact_stack.phys",
+      "mode": "--emit-experiment"
     }
   },
   "tests": [
@@ -3220,7 +3224,7 @@
           "arguments": [
             "{root}/tests/verify_png.py",
             "{work}",
-            "{work}/workflow \u00e4"
+            "{work}/workflow ä"
           ],
           "timeout": 60
         }
@@ -3267,7 +3271,7 @@
           "arguments": [
             "{root}/tests/verify_png.py",
             "{work}",
-            "{work}/workflow \u00e4"
+            "{work}/workflow ä"
           ],
           "timeout": 60
         }
@@ -5340,6 +5344,58 @@
           "arguments": [
             "{root}/tests/check_display_workflow.py",
             "contact_world_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 560,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "contact_world_language_parity",
+      "targets": [
+        "python",
+        "physim-runner",
+        "contact-stack",
+        "language-contact-stack"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_contact_world_language_parity.py",
+            "{physim-runner}",
+            "{contact-stack}",
+            "{language-contact-stack}",
+            "{work}"
+          ],
+          "timeout": 160
+        }
+      ]
+    },
+    {
+      "name": "contact_world_language_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "contact_world_language_workflow",
             "--app",
             "{physim}",
             "--work",

@@ -1,10 +1,10 @@
 # Eigene Physim-Sprache
 
-Stand: 2026-10-06. Sprachvertrag 0.176.0; noch keine freigegebene Anwendersprache.
+Stand: 2026-10-06. Sprachvertrag 0.177.0; noch keine freigegebene Anwendersprache.
 Der Arbeitsname ist „Physim-Sprache“. Das vollständige Ziel und die Abnahmen
 LANG-001 bis LANG-007 stehen in Abschnitt 10 des Projektplans.
 
-Die Sprachversion `0.176.0` steht unabhängig von der App-Version und der SDK-ABI
+Die Sprachversion `0.177.0` steht unabhängig von der App-Version und der SDK-ABI
 in `src/language/version.h`. `physimc --version` und der Kopf des generierten C
 geben sie aus. Änderungen an Syntax oder Semantik erfordern eine bewusste
 Anhebung; die vorliegende Fassung ist noch ein Entwicklungsvertrag und keine
@@ -1727,8 +1727,8 @@ auf die Sprachquelle; `PSRT_AT` liefert zusätzlich die genaue
 Spalte bei Laufzeitfehlern. Ein absichtlich ausgelöster C-Compilerfehler wird
 im nativen Sprachtest an der ursprünglichen `.phys`-Datei nachgewiesen.
 
-Der direkte Repository-Build mit `--examples` übersetzt alle 15 eigenständigen
-Sprachbeispiele sowie 27 Experiment-/Analysemodule. Generiertes C liegt ausschließlich
+Der direkte Repository-Build mit `--examples` übersetzt alle 18 eigenständigen
+Sprachbeispiele sowie 33 Experiment-/Analysemodule. Generiertes C liegt ausschließlich
 im Buildordner unter `examples/` und wird erst nach erfolgreicher Sprachprüfung
 ersetzt. Unveränderte Quellen und Programme bleiben erhalten. Sprachfehler brechen
 mit der ursprünglichen Quelldiagnose ab; der letzte vollständige C-Code und das
@@ -2560,7 +2560,7 @@ Die Stabilisierung korrigiert einen Anteil des Längenfehlers pro Schritt über
 eine Zielgeschwindigkeit; sie kann Energie zuführen. Die Position wird weder
 projiziert noch nachträglich auf die Soll-Länge gesetzt. Schrittweitenverfeinerung
 ist deshalb erforderlich. Ein einzelner Aufruf löst ein Gelenk; gekoppelte
-Gelenk-/Kontaktgraphen verwenden die nachfolgende Gruppenbindung. Warmstart und
+Gelenk-/Kontaktgraphen verwenden die nachfolgende Gruppenbindung. Gelenk-Warmstart und
 weitere Gelenkarten stehen noch nicht zur Verfügung.
 
 `distance_joints.phys` prüft Impulsbilanz, gedrehte lokale Anker, statische Körper,
@@ -2986,3 +2986,13 @@ ausgewählten Quelldateien. Kopien teilen einen automatisch freigegebenen Besitz
 `close()` verändert nur den jeweiligen veränderbaren Wert. Arrays, optionale
 Werte und Strukturen behalten diese Besitzregeln. Details, Grenzen, Szenenabfragen
 und ein Beispiel mit ausgerichteten SI-Reihen stehen unter [Laufdatei-Index](run-index.md).
+
+## Persistente Kontaktzustände und Warmstart (0.177.0)
+
+`Collider`, `ContactWorld` und `ContactSolver.solveWarm()` binden die neuen
+öffentlichen C-Funktionen mit denselben Körpern, Geometrien und Solvergrenzen.
+`ContactWorld.solve()` liefert einen neuen besitzenden Snapshot; Kopien bleiben
+unabhängig, Eingabearrays werden erhalten. Kontakt-IDs, lokale Anker,
+Geometrien, Impulse, Lebenszykluszähler und Solverreste sind direkt abfragbar.
+[Signaturen, Besitzregeln und C-/Physim-Stapel](contact-world.md#physim-werte-01770).
+Die bisherigen manuellen Graphbindungen bleiben erhalten.

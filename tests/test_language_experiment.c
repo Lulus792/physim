@@ -370,7 +370,7 @@ static int runner(const char *runner_path, const char *module_path, const char *
     ps_run_reader reader;
     CHECK(ps_run_open(&reader, path) == PS_OK);
     CHECK(reader.channels == (pendulum == 2 ? 2u : pendulum ? 6u : 5u));
-    CHECK(strstr(reader.metadata, "language=physim-0.176.0\ncompiler=physimc-0.1.0-dev"));
+    CHECK(strstr(reader.metadata, "language=physim-0.177.0\ncompiler=physimc-0.1.0-dev"));
     CHECK(strstr(reader.metadata, "source_fnv1a64=") && strstr(reader.metadata, "module_fnv1a64="));
     if (pendulum == 3)
         CHECK(strstr(reader.metadata, "integrator=Dormand-Prince 5(4)"));

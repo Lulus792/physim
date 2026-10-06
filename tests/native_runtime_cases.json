@@ -1313,6 +1313,105 @@
       "source": "func f():\n    later += 1\nf()\nvar later = 1\n",
       "exit_code": 70,
       "stderr_pattern": "compoundglobal\\.phys:[0-9]+:[0-9]+: runtime error:.*Global used before initialization"
+    },
+    {
+      "name": "contact_world",
+      "source_file": "examples/language/contact_world.phys",
+      "exit_code": 0,
+      "stdout": "contact world checks passed\n",
+      "stderr": "",
+      "memory_balance": true
+    },
+    {
+      "name": "collider_zero",
+      "source": "let saved = ContactWorld.defaults()\nlet c = Collider.sphere(0,0,1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "collider_zero\\.phys:[0-9]+:[0-9]+: runtime error:.*Collider ID",
+      "memory_balance": true
+    },
+    {
+      "name": "collider_id_overflow",
+      "source": "let saved = ContactWorld.defaults()\nlet c = Collider.sphere(4294967296,0,1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "collider_id_overflow\\.phys:[0-9]+:[0-9]+: runtime error:.*Collider ID",
+      "memory_balance": true
+    },
+    {
+      "name": "collider_body_negative",
+      "source": "let saved = ContactWorld.defaults()\nlet c = Collider.sphere(1,-1,1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "collider_body_negative\\.phys:[0-9]+:[0-9]+: runtime error:.*Collider ID",
+      "memory_balance": true
+    },
+    {
+      "name": "collider_radius",
+      "source": "let saved = ContactWorld.defaults()\nlet c = Collider.sphere(1,0,0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "collider_radius\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid Collider geometry",
+      "memory_balance": true
+    },
+    {
+      "name": "collider_box",
+      "source": "let saved = ContactWorld.defaults()\nlet c = Collider.box(1,0,Vec3(1,-1,1))\n",
+      "exit_code": 70,
+      "stderr_pattern": "collider_box\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid Collider geometry",
+      "memory_balance": true
+    },
+    {
+      "name": "collider_normal",
+      "source": "let saved = ContactWorld.defaults()\nlet c = Collider.plane(1,0,Vec3(0,2,0))\n",
+      "exit_code": 70,
+      "stderr_pattern": "collider_normal\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid Collider geometry",
+      "memory_balance": true
+    },
+    {
+      "name": "world_settings",
+      "source": "let w = ContactWorld(0.02,1.1,4,1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "world_settings\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid ContactWorld settings",
+      "memory_balance": true
+    },
+    {
+      "name": "world_duplicates",
+      "source": "let world = ContactWorld.defaults()\nlet solver = ContactSolver.defaults()\nlet body = Body.sphere(1,0.5)\nlet next = world.solve([body],[Collider.sphere(1,0,1),Collider.sphere(1,0,1)],solver,0.01)\n",
+      "exit_code": 70,
+      "stderr_pattern": "world_duplicates\\.phys:[0-9]+:[0-9]+: runtime error:.*ContactWorld solve failed",
+      "memory_balance": true
+    },
+    {
+      "name": "world_dynamic_plane",
+      "source": "let world = ContactWorld.defaults()\nlet solver = ContactSolver.defaults()\nlet body = Body.sphere(1,0.5)\nlet next = world.solve([body],[Collider.plane(1,0,Vec3(0,1,0))],solver,0.01)\n",
+      "exit_code": 70,
+      "stderr_pattern": "world_dynamic_plane\\.phys:[0-9]+:[0-9]+: runtime error:.*ContactWorld solve failed",
+      "memory_balance": true
+    },
+    {
+      "name": "world_dt",
+      "source": "let world = ContactWorld.defaults()\nlet solver = ContactSolver.defaults()\nlet body = Body.sphere(1,0.5)\nlet next = world.solve([body],[Collider.sphere(1,0,1)],solver,0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "world_dt\\.phys:[0-9]+:[0-9]+: runtime error:.*ContactWorld solve failed",
+      "memory_balance": true
+    },
+    {
+      "name": "world_body",
+      "source": "let world = ContactWorld.defaults()\nlet solver = ContactSolver.defaults()\nlet body = Body.sphere(1,0.5)\nlet next = world.body(0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "world_body\\.phys:[0-9]+:[0-9]+: runtime error:.*ContactWorld body index",
+      "memory_balance": true
+    },
+    {
+      "name": "world_contact",
+      "source": "let world = ContactWorld.defaults()\nlet solver = ContactSolver.defaults()\nlet body = Body.sphere(1,0.5)\nlet next = world.contactImpulse(0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "world_contact\\.phys:[0-9]+:[0-9]+: runtime error:.*ContactWorld contact index",
+      "memory_balance": true
+    },
+    {
+      "name": "warm_count",
+      "source": "let world = ContactWorld.defaults()\nlet solver = ContactSolver.defaults()\nlet body = Body.sphere(1,0.5)\nlet next = solver.solveWarm([body],[],[Vec3(1,0,0)])\n",
+      "exit_code": 70,
+      "stderr_pattern": "warm_count\\.phys:[0-9]+:[0-9]+: runtime error:.*Warm impulse count",
+      "memory_balance": true
     }
   ]
 }

@@ -200,12 +200,17 @@ def main():
         print("Installed SDK run index: installed/rebuilt Core, million rows and independent codec passed",flush=True)
         shutil.copy2(repo / "tests/test_contact_world.c",consumer / "contact-world-probe.c")
         shutil.copy2(sdk / "examples/contact_stack/main.c",consumer / "contact-stack.c")
+        shutil.copy2(repo / "tests/test_language_contact_world_memory.c",consumer / "contact-world-memory.c")
         for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+            memory=builder.executable("contact-world-memory-"+kind,["contact-world-memory.c"],[archive]);checked([memory])
             program=builder.executable("contact-world-probe-"+kind,["contact-world-probe.c"],[archive])
             checked([program])
             experiment=builder.executable("contact-stack-"+kind,["contact-stack.c"],[archive],module=True)
             directory=root / ("Contact world "+kind);directory.mkdir()
             checked([sys.executable,repo / "tests/test_runner_contact_world.py",sdk / "bin" / ("physim-runner"+suffix),experiment,directory])
+            parity=root / ("Contact world parity "+kind);parity.mkdir()
+            language_stack=modules["contact_stack"] if kind=="rebuilt" else sdk / "bin" / ("language-contact_stack"+module_suffix)
+            checked([sys.executable,repo / "tests/test_contact_world_language_parity.py",sdk / "bin" / ("physim-runner"+suffix),experiment,language_stack,parity])
         print("Installed SDK contact world: installed/rebuilt Core, analytic warm stack, lifecycle and real recorded simulations passed",flush=True)
 
 
@@ -277,7 +282,7 @@ def main():
             raise RuntimeError("App tests require an SDK with the app")
     (root / "PASSED.txt").write_text(
         "Native SDK relocation, independent headers, installed and rebuilt core archives, eight bundled and rebuilt C templates, "
-        "seventeen language programs, 32 rebuilt language modules, nine language experiments with both general analyses, "
+        "eighteen language programs, 33 rebuilt language modules, nine language experiments with both general analyses, "
         "specialized sensor analysis and six C/Physim combinations passed.\n"
         "Adaptive bundled/source C and Physim pendulums, actual variable sample times, energy and both analysis languages passed.\n" +
         "Common-target-time parameter studies from bundled/source C and Physim pendulums passed with installed and rebuilt probes.\n" +
@@ -285,7 +290,7 @@ def main():
         "Structured diagnostics through installed/rebuilt Core, C/Physim runners and legacy ABI passed.\n" +
         "Run indexes through installed/rebuilt Core, legacy/recovered files, allocator failures and million-row independent codec passed.\n" +
         "Indexed language values, copied owners, failure cleanup and all 256 SI report rows passed.\n" +
-        "Persistent contact world and projected warm graph through installed/rebuilt Core and real stack runners passed.\n" +
+        "Persistent contact world and projected warm graph through installed/rebuilt Core and real C/Physim stack runners, copied snapshots and allocation failures passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
         ("Eight C template GUI workflows and the complete Physim language GUI workflow passed.\n" if args.app_tests else ""), encoding="utf-8")
     print(f"Native SDK verified: {root}")

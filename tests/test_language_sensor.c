@@ -140,7 +140,7 @@ static int run_file(const char *runner, const char *module, const char *work) {
     CHECK(code == 0);
     ps_run_reader reader;
     CHECK(ps_run_open(&reader, path) == PS_OK && reader.channels == 15);
-    CHECK(strstr(reader.metadata, "language=physim-0.176.0\ncompiler=physimc-0.1.0-dev") &&
+    CHECK(strstr(reader.metadata, "language=physim-0.177.0\ncompiler=physimc-0.1.0-dev") &&
           strstr(reader.metadata, "sensor_seed_x=run seed XOR 17"));
     reference r;
     CHECK(initialize(&r, UINT64_MAX) == 0);

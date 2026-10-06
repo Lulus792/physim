@@ -474,12 +474,38 @@ for shape in ('sphere', 'line', 'arrow', 'point', 'polyline', 'box', 'plane', 'l
     }[shape] + ' Nur in scene verwenden. Farbe: dezimales RRGGBBAA, etwa 1407107839; ID 0 ist anonym, andere IDs müssen pro Szene eindeutig sein.'
 
 
+LANG_DESCRIPTIONS.update({
+    'ContactWorld': 'Erzeugt einen besitzenden, unveränderlichen Kontaktzustand mit expliziten Zuordnungs- und Warmstartgrenzen; alle vier Einstellungen folgen dem C-Vertrag.',
+    'defaultContactWorld': 'Erzeugt einen leeren Kontaktzustand mit den C-Standardwerten; keine implizite Integration.',
+    'worldReset': 'Liefert einen neuen leeren Snapshot mit denselben Einstellungen; der ursprüngliche Zustand und seine Kopien bleiben erhalten.',
+    'worldSolve': 'Erzeugt diskrete Kugel-/Box-/Ebenenkontakte und löst den warmen C-Graphen. Liefert einen neuen Snapshot mit Körpern, Kontaktverlauf und Resten; Eingaben bleiben erhalten.',
+    'sphereCollider': 'Erzeugt einen Kugelcollider mit stabiler nichtnull u32-ID, Körperindex 0..127 und positivem Radius in Metern.',
+    'boxCollider': 'Erzeugt einen Boxcollider mit stabiler ID, Körperindex und positiven vollständigen Ausmaßen in Metern.',
+    'planeCollider': 'Erzeugt eine Ebene mit stabiler ID, Körperindex und lokaler Einheitsnormale in den freien Halbraum; der zugeordnete Körper muss statisch sein.',
+    'worldBodies': 'Liefert einen unabhängigen Arraywert der gelösten Körper; Änderungen daran ändern den Kontaktzustand nicht.',
+    'solveWarmContacts': 'Löst einen manuellen Kontaktgraphen mit genau einem endlichen Startimpuls auf A je Kontakt. Der aktuelle Reibungskegel begrenzt Seeds; Restitution verwendet die Geschwindigkeiten vor allen Seeds. Keine Gelenke.',
+})
+for name,description in {
+    'id':'Stabile Collider-ID in 1..4294967295.', 'body':'Nullbasierter Körperindex.', 'shape':'Formnummer: Kugel=1, Box=2, Ebene=3.',
+    'size':'Kugelradius in x beziehungsweise volle Boxausmaße, Meter; Ebene null.', 'normal':'Lokale Ebenen-Einheitsnormale; andere Formen null.'
+}.items(): LANG_DESCRIPTIONS['collider_'+name]=description
+for name,description in {
+    'bodyCount':'Anzahl gespeicherter Körper.', 'colliderCount':'Anzahl gespeicherter Collider.', 'contactCount':'Anzahl erzeugter Kontaktpunkte.',
+    'matched':'Eins zu eins zugeordnete Kontakte.', 'created':'Neu erzeugte Kontakte ohne Zuordnung.', 'ended':'Seit dem vorigen Schritt ausgelaufene Kontakte.',
+    'warmed':'Zugeordnete Kontakte mit nichtnull Warmseed vor Kegelprojektion.', 'maxNormalError':'Größter Normalgeschwindigkeitsrest in m/s vor Positionsprojektion.',
+    'maxProjectionError':'Nicht erfüllte Positionskorrektur in Metern.', 'dt':'Letzte erfolgreiche Schrittweite in Sekunden, leer null.',
+    'body':'Körperwert am geprüften nullbasierten Index.', 'contactIdA':'Stabile ID von Kontaktpartner A.', 'contactIdB':'Stabile ID von Kontaktpartner B; größer als A.',
+    'contactPoint':'Kontaktpunkt in Weltmetern vor Projektion.', 'contactNormal':'Einheitsnormale von A nach B.', 'contactPenetration':'Eindringtiefe in Metern vor Projektion.',
+    'localAnchorA':'Lokaler Körperanker auf A vor Projektion.', 'localAnchorB':'Lokaler Körperanker auf B vor Projektion.',
+    'contactImpulse':'Gesamter Impuls auf A einschließlich Warmstart in N s.'
+}.items(): LANG_DESCRIPTIONS['world_'+name]=description+' Der Snapshot bleibt unverändert.'
+
 def language_reference():
     source = (ROOT / 'src/language/builtins.c').read_text(encoding='utf-8')
     table = source.split('library[] = {', 1)[1].split('static const ps_lang_builtin *library_find', 1)[0]
     pattern = re.compile(r'\{\s*"(\w+)"\s*,\s*"\w+"\s*,\s*(\w+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*\{([^}]+)\}\s*,\s*\{([^}]+)\}\s*\}', re.S)
     types = dict(F='Float64', I='Int64', S='String', U='Unit', QUANTITY='Quantity', MEDIUM='Medium', MATERIAL='Material', SUBMERSION='Submersion', C='Channel',
-                 V2='Vec2', V3='Vec3', V4='Vec4', Q='Quat', M3='Mat3', M4='Mat4', B3='Bezier3', RNG='Rng', ODE_RESULT='OdeResult', STEP_INTERVAL='StepInterval', SCALAR_RESULT='ScalarResult', DIAGNOSTIC='Diagnostic', RUN_INDEX='RunIndex', RUN_BLOCK='RunBlock', RUN_SNAPSHOT='RunSnapshot', VOID='Void', D='Dataset', R='Series',
+                 V2='Vec2', V3='Vec3', V4='Vec4', Q='Quat', M3='Mat3', M4='Mat4', B3='Bezier3', RNG='Rng', ODE_RESULT='OdeResult', STEP_INTERVAL='StepInterval', SCALAR_RESULT='ScalarResult', DIAGNOSTIC='Diagnostic', RUN_INDEX='RunIndex', RUN_BLOCK='RunBlock', RUN_SNAPSHOT='RunSnapshot', COLLIDER='Collider', WORLD='ContactWorld', PS_LANG_COLLIDER_ARRAY='[Collider]', VOID='Void', D='Dataset', R='Series',
                  P='Plot', TABLE='Table', DIST='Distribution', CONFIG='SensorConfig', SENSOR='Sensor',
                  BODY='Body', CONTACTS='Contacts', SOLVER='ContactSolver', RESULT='ContactResult',
                  JOINT='DistanceJoint', JOINT_RESULT='JointResult',
@@ -494,6 +520,8 @@ def language_reference():
                  PS_LANG_UNIT_ARRAY='[Unit]', PS_LANG_QUANTITY_ARRAY='[Quantity]')
     methods_text = source.split('methods[] =', 1)[1].split('const ps_lang_method *ps_lang_method_find', 1)[0]
     methods = re.findall(r'\{"(\w+)", "(\w+)", (\w+), ([^}]+)\}', methods_text)
+    compact = re.findall(r'\{\s*"(\w+)"\s*,\s*"(\w+)"\s*,\s*(\w+)\s*,\s*([^}]+)\}', methods_text)
+    methods += [m for m in compact if m not in methods and (m[2] in ('WORLD','COLLIDER') or m[1]=='solveWarmContacts')]
     factory_text = source.split('factories[] =', 1)[1].split('const ps_lang_builtin *ps_lang_builtin_find', 1)[0]
     factories = re.findall(r'\{"(\w+)", "(\w+)", "(\w+)"\}', factory_text)
     result = ['# Physim-Sprache: Bibliotheksreferenz',

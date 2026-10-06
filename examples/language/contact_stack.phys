@@ -1,0 +1,65 @@
+// Four unit boxes; integration and persistent contact solving use the C Core.
+let zero = Vec3(0,0,0)
+let identity = Quat(0,0,0,1)
+let size = Vec3(1,1,1)
+let warm = parameter("warmStart",1,0,1,"Warmstart fraction")
+let iterations = parameter("iterations",4,1,256,"Velocity/projection iterations")
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let speed = Unit(1,0,-1,0,0,0,0,1,"m/s")
+let joules = Unit(2,1,-2,0,0,0,0,1,"J")
+let one = Unit(0,0,0,0,0,0,0,1,"1")
+let bottom = Channel("bottom.height",metres,"bottom.height")
+let top = Channel("top.height",metres,"top.height")
+let velocity = Channel("top.velocity",speed,"top.velocity")
+let kinetic = Channel("energy.kinetic",joules,"energy.kinetic")
+let count = Channel("contacts",one,"contacts")
+let matched = Channel("contacts.matched",one,"contacts.matched")
+let warmed = Channel("contacts.warmed",one,"contacts.warmed")
+let created = Channel("contacts.created",one,"contacts.created")
+let ended = Channel("contacts.ended",one,"contacts.ended")
+let normalError = Channel("solver.normalError",speed,"solver.normalError")
+let projectionError = Channel("solver.projectionError",metres,"solver.projectionError")
+let colliders = [Collider.plane(1,0,Vec3(0,1,0)),Collider.box(2,1,size),Collider.box(3,2,size),Collider.box(4,3,size),Collider.box(5,4,size)]
+var world = ContactWorld(0.02,0.95,4,warm)
+var bodies: [Body] = []
+func measure():
+    bottom.sample(bodies[1].position.y)
+    top.sample(bodies[4].position.y)
+    velocity.sample(bodies[4].velocity.y)
+    var energy = 0.0
+    for i in 1..<5:
+        energy += bodies[i].kineticEnergy()
+    kinetic.sample(energy)
+    count.sample(Float64(world.contactCount()))
+    matched.sample(Float64(world.matched()))
+    warmed.sample(Float64(world.warmed()))
+    created.sample(Float64(world.created()))
+    ended.sample(Float64(world.ended()))
+    normalError.sample(world.maxNormalError())
+    projectionError.sample(world.maxProjectionError())
+func create():
+    assert(iterations == Float64(Int64(iterations)))
+    metadata("model=four homogeneous unit boxes on a static plane\ngravity_m_s2=-9.80665\ncontacts=automatic sphere/box/plane discrete\ncontact_ids=stable collider IDs with local anchors\nsolver=projected graph impulses with warm history\nccd=none\n")
+func reset():
+    world = world.reset()
+    bodies = [Body.sphere(0,0.5)]
+    for i in 1..<5:
+        var body = Body.box(1,size)
+        body.setState(Vec3(0,Float64(i)-0.5,0),zero,identity,zero)
+        bodies.append(body)
+    measure()
+func step(dt: Float64):
+    for i in 1..<5:
+        bodies[i].step(Vec3(0,-9.80665,0),zero,dt)
+    world = world.solve(bodies,colliders,ContactSolver(Int64(iterations),0,0.5,0.5,0.00001,0.8),dt)
+    bodies = world.bodies()
+    measure()
+func scene():
+    plane(zero,Vec2(8,8),identity,1718977279,1)
+    let colors = [831451135,1186242559,1891756287,2458640383]
+    for i in 1..<5:
+        box(bodies[i].position,size,bodies[i].orientation,colors[i-1],i+1)
+    for i in 0..<Int64(min(Float64(world.contactCount()),10)):
+        let position = world.contactPoint(i)
+        point(position,0.03,4290267903,100+i)
+        arrow(position,position + world.contactNormal(i) * 0.2,0.008,4290267903,200+i)

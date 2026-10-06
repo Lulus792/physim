@@ -113,6 +113,32 @@ psrt_constraints_solve(ps_allocator allocator, ps_contact_solver solver, const p
     result.joint_length_error = storage.solution.max_joint_length_error_m;
     return result;
 }
+static inline psrt_constraint_result
+psrt_constraints_solve_warm(ps_allocator allocator,ps_contact_solver solver,
+    const ps_body *bodies,size_t body_count,const psrt_graph_contact *contacts,size_t contact_count,
+    const ps_vec3 *initial,size_t initial_count,psrt_site site) {
+    if(body_count>PS_CONTACT_GRAPH_MAX_BODIES || contact_count>PS_CONTACT_GRAPH_MAX_CONTACTS)
+        psrt_fail(site,"Warm contact graph capacity exceeded (128 bodies, 512 contacts)");
+    if(initial_count!=contact_count)psrt_fail(site,"Warm impulse count must equal contact count");
+    psrt_constraint_storage storage={0};
+    if(body_count)memcpy(storage.bodies,bodies,body_count*sizeof *bodies);
+    ps_contact_constraint cs[PS_CONTACT_GRAPH_MAX_CONTACTS];
+    for(size_t i=0;i<contact_count;i++) {
+        psrt_constraint_pair(contacts[i].body_a,contacts[i].body_b,site);
+        cs[i]=(ps_contact_constraint){psrt_constraint_index(contacts[i].body_a,false,site),
+            psrt_constraint_index(contacts[i].body_b,true,site),contacts[i].contact};
+    }
+    ps_result status=ps_contacts_resolve_graph_warm(storage.bodies,body_count,cs,contact_count,&solver,initial,&storage.solution.contacts);
+    if(status!=PS_OK)psrt_fail_code(site,status,"Warm contact graph solver failed: invalid inputs or numeric range");
+    static const psrt_element_type element={sizeof(psrt_constraint_storage),NULL,NULL};
+    psrt_constraint_result result={0};
+    if(psrt_array_init(&element,allocator,1,&result.storage)!=PS_OK || psrt_array_replace(&result.storage,0,0,&storage,1)!=PS_OK)
+        psrt_fail(site,"Constraint result memory budget or allocation exhausted");
+    result.body_count=(int64_t)body_count;result.contact_count=(int64_t)contact_count;
+    result.normal_error=storage.solution.contacts.max_normal_error_m_s;
+    result.projection_error=storage.solution.contacts.max_projection_error_m;
+    return result;
+}
 static inline const psrt_constraint_storage *psrt_constraints_data(psrt_constraint_result result,
                                                                    psrt_site site) {
     if (!result.storage.block)

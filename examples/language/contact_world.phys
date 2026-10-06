@@ -1,0 +1,75 @@
+let zero = Vec3(0,0,0)
+let identity = Quat(0,0,0,1)
+func stack() -> [Body]:
+    var bodies = [Body.sphere(0,0.5)]
+    for i in 1..<5:
+        var body = Body.sphere(1,0.5)
+        body.setState(Vec3(0,Float64(i)-0.5,0),Vec3(0,-0.1,0),identity,zero)
+        bodies.append(body)
+    return bodies
+let colliders = [Collider.plane(1,0,Vec3(0,1,0)),Collider.sphere(2,1,0.5),Collider.sphere(3,2,0.5),Collider.sphere(4,3,0.5),Collider.sphere(5,4,0.5)]
+assert(colliders[0].id() == 1 && colliders[0].body() == 0 && colliders[0].shape() == 3)
+assert(colliders[1].size().x == 0.5 && colliders[0].normal().y == 1)
+let settings = ContactSolver(256,0,0,0.5,0,1)
+let initial = ContactWorld.defaults()
+let ready: ContactWorld = initial.solve(dt: 0.01, solver: settings, colliders: colliders, bodies: stack())
+assert(ready.contactCount() == 4 && ready.created() == 4 && ready.matched() == 0)
+assert(ready.maxNormalError() < 1e-12 && ready.bodyCount() == 5 && ready.colliderCount() == 5)
+assert(initial.contactCount() == 0 && initial.bodyCount() == 0)
+let warm = ready.solve(stack(),colliders,ContactSolver(1,0,0,0.5,0,1),0.01)
+let cold = initial.solve(stack(),colliders,ContactSolver(1,0,0,0.5,0,1),0.01)
+assert(warm.matched() == 4 && warm.warmed() == 4 && warm.created() == 0 && warm.ended() == 0)
+assert(warm.maxNormalError() < 1e-12 && cold.maxNormalError() > 0.04)
+assert(warm.contactIdA(0) == 1 && warm.contactIdB(0) == 2)
+assert(warm.contactNormal(0).y == 1 && warm.contactPoint(0).y == 0)
+assert(abs(warm.contactImpulse(0).y + 0.4) < 1e-12 && warm.dt() == 0.01)
+assert(warm.localAnchorA(0).y == 0 && warm.localAnchorB(0).y == -0.5)
+assert(warm.contactPenetration(0) == 0 && warm.maxProjectionError() == 0)
+var doubled = stack()
+for i in 1..<5:
+    doubled[i].applyImpulse(Vec3(0,-0.1,0),doubled[i].position)
+let scaled = ready.solve(doubled,colliders,ContactSolver(1,0,0,0.5,0,1),0.02)
+assert(scaled.warmed() == 4 && scaled.maxNormalError() < 1e-12)
+let cleared = warm.reset()
+assert(cleared.contactCount() == 0 && cleared.bodyCount() == 0 && warm.contactCount() == 4)
+let empty = ready.solve([],[],settings,0.01)
+assert(empty.ended() == 4 && empty.bodies().count == 0)
+// Copies and closures share immutable snapshots, then solve independently.
+struct History:
+    var world: ContactWorld
+func history() -> History:
+    return History(ready)
+var h = history()
+let original = h
+var values = [h]
+let oldValues = values
+var optional: ContactWorld? = Optional.some(warm)
+let savedOptional = optional
+func saved() -> func() -> ContactWorld:
+    let copy = ready
+    return func() -> ContactWorld:
+        return copy
+let closure = saved()
+h.world = h.world.reset()
+values[0].world = empty
+optional = Optional.some(cleared)
+assert(original.world.contactCount() == 4 && oldValues[0].world.contactCount() == 4)
+assert(savedOptional.unwrap().warmed() == 4 && closure().contactCount() == 4)
+for i in 0..<2000:
+    h.world = original.world.solve(stack(),colliders,ContactSolver(1,0,0,0.5,0,1),0.01)
+    values[0] = h
+assert(values[0].world.maxNormalError() < 1e-12)
+var adopted = warm.bodies()
+adopted[1].applyImpulse(Vec3(1,0,0),adopted[1].position)
+assert(adopted[1].velocity.x == 1 && warm.body(1).velocity.x == 0)
+// Explicit graph seeds use the same pre-warm restitution and current cone.
+var ball = Body.sphere(1,0.5)
+ball.setState(Vec3(0,0.5,0),Vec3(0,-2,0),identity,zero)
+let floor = Contacts.spherePlane(ball,0.5,zero,Vec3(0,1,0)).constraint(0,0,-1)
+let bounce = ContactSolver(1,1,0,0,0,1).solveWarm([ball],[floor],[Vec3(99,9,0)])
+assert(abs(bounce.body(0).velocity.y - 2) < 1e-12)
+assert(abs(bounce.contactImpulse(0).y - 4) < 1e-12 && bounce.contactImpulse(0).x == 0)
+assert(bounce.jointCount == 0 && ball.velocity.y == -2)
+let box = Collider.box(4294967295,127,Vec3(1,2,3))
+assert(box.id() == 4294967295 && box.body() == 127 && box.shape() == 2 && box.size().z == 3)
+print("contact world checks passed")

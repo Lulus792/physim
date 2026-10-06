@@ -220,6 +220,86 @@ Setzt den aktuellen Messwert des Kanals in seiner deklarierten Einheit. Auch den
 
 Experimentmodul erforderlich.
 
+## Collider.body
+
+```text
+Collider.body() -> Int64
+```
+
+Nullbasierter Körperindex.
+
+Überall verfügbar.
+
+## Collider.box
+
+```text
+Collider.box(id: Int64, body: Int64, size: Vec3) -> Collider
+```
+
+Erzeugt einen Boxcollider mit stabiler ID, Körperindex und positiven vollständigen Ausmaßen in Metern.
+
+Überall verfügbar.
+
+## Collider.id
+
+```text
+Collider.id() -> Int64
+```
+
+Stabile Collider-ID in 1..4294967295.
+
+Überall verfügbar.
+
+## Collider.normal
+
+```text
+Collider.normal() -> Vec3
+```
+
+Lokale Ebenen-Einheitsnormale; andere Formen null.
+
+Überall verfügbar.
+
+## Collider.plane
+
+```text
+Collider.plane(id: Int64, body: Int64, normal: Vec3) -> Collider
+```
+
+Erzeugt eine Ebene mit stabiler ID, Körperindex und lokaler Einheitsnormale in den freien Halbraum; der zugeordnete Körper muss statisch sein.
+
+Überall verfügbar.
+
+## Collider.shape
+
+```text
+Collider.shape() -> Int64
+```
+
+Formnummer: Kugel=1, Box=2, Ebene=3.
+
+Überall verfügbar.
+
+## Collider.size
+
+```text
+Collider.size() -> Vec3
+```
+
+Kugelradius in x beziehungsweise volle Boxausmaße, Meter; Ebene null.
+
+Überall verfügbar.
+
+## Collider.sphere
+
+```text
+Collider.sphere(id: Int64, body: Int64, radius: Float64) -> Collider
+```
+
+Erzeugt einen Kugelcollider mit stabiler nichtnull u32-ID, Körperindex 0..127 und positivem Radius in Metern.
+
+Überall verfügbar.
+
 ## ConstraintResult.bodies
 
 ```text
@@ -297,6 +377,256 @@ ContactSolver.solve(bodies: [Body], contacts: [ContactConstraint], joints: [Join
 ```
 
 Löst Kontakte und Distanzgelenke gemeinsam für unabhängige Körperkopien. Maximal 128 Körper, 512 Kontakte und 256 Gelenke; dt muss positiv sein. Körperindizes müssen zum Array passen. Eingaben bleiben bei Erfolg und Fehler unverändert. Ergebnis besitzt automatisch verwalteten Speicher im Sprachbudget. bodyCount/contactCount/jointCount sowie maxNormalError, maxProjectionError, maxJointVelocityError und maxJointLengthError sind schreibgeschützt. Ein erfolgreicher Aufruf garantiert keine Konvergenz.
+
+Überall verfügbar.
+
+## ContactSolver.solveWarm
+
+```text
+ContactSolver.solveWarm(bodies: [Body], contacts: [ContactConstraint], initialImpulses: [Vec3]) -> ConstraintResult
+```
+
+Löst einen manuellen Kontaktgraphen mit genau einem endlichen Startimpuls auf A je Kontakt. Der aktuelle Reibungskegel begrenzt Seeds; Restitution verwendet die Geschwindigkeiten vor allen Seeds. Keine Gelenke.
+
+Überall verfügbar.
+
+## ContactWorld
+
+```text
+ContactWorld(matchDistance: Float64, minimumNormalDot: Float64, maximumDtRatio: Float64, warmFraction: Float64) -> ContactWorld
+```
+
+Erzeugt einen besitzenden, unveränderlichen Kontaktzustand mit expliziten Zuordnungs- und Warmstartgrenzen; alle vier Einstellungen folgen dem C-Vertrag.
+
+Überall verfügbar.
+
+## ContactWorld.bodies
+
+```text
+ContactWorld.bodies() -> [Body]
+```
+
+Liefert einen unabhängigen Arraywert der gelösten Körper; Änderungen daran ändern den Kontaktzustand nicht.
+
+Überall verfügbar.
+
+## ContactWorld.body
+
+```text
+ContactWorld.body(index: Int64) -> Body
+```
+
+Körperwert am geprüften nullbasierten Index. Der Snapshot bleibt unverändert.
+
+Überall verfügbar.
+
+## ContactWorld.bodyCount
+
+```text
+ContactWorld.bodyCount() -> Int64
+```
+
+Anzahl gespeicherter Körper. Der Snapshot bleibt unverändert.
+
+Überall verfügbar.
+
+## ContactWorld.colliderCount
+
+```text
+ContactWorld.colliderCount() -> Int64
+```
+
+Anzahl gespeicherter Collider. Der Snapshot bleibt unverändert.
+
+Überall verfügbar.
+
+## ContactWorld.contactCount
+
+```text
+ContactWorld.contactCount() -> Int64
+```
+
+Anzahl erzeugter Kontaktpunkte. Der Snapshot bleibt unverändert.
+
+Überall verfügbar.
+
+## ContactWorld.contactIdA
+
+```text
+ContactWorld.contactIdA(index: Int64) -> Int64
+```
+
+Stabile ID von Kontaktpartner A. Der Snapshot bleibt unverändert.
+
+Überall verfügbar.
+
+## ContactWorld.contactIdB
+
+```text
+ContactWorld.contactIdB(index: Int64) -> Int64
+```
+
+Stabile ID von Kontaktpartner B; größer als A. Der Snapshot bleibt unverändert.
+
+Überall verfügbar.
+
+## ContactWorld.contactImpulse
+
+```text
+ContactWorld.contactImpulse(index: Int64) -> Vec3
+```
+
+Gesamter Impuls auf A einschließlich Warmstart in N s. Der Snapshot bleibt unverändert.
+
+Überall verfügbar.
+
+## ContactWorld.contactNormal
+
+```text
+ContactWorld.contactNormal(index: Int64) -> Vec3
+```
+
+Einheitsnormale von A nach B. Der Snapshot bleibt unverändert.
+
+Überall verfügbar.
+
+## ContactWorld.contactPenetration
+
+```text
+ContactWorld.contactPenetration(index: Int64) -> Float64
+```
+
+Eindringtiefe in Metern vor Projektion. Der Snapshot bleibt unverändert.
+
+Überall verfügbar.
+
+## ContactWorld.contactPoint
+
+```text
+ContactWorld.contactPoint(index: Int64) -> Vec3
+```
+
+Kontaktpunkt in Weltmetern vor Projektion. Der Snapshot bleibt unverändert.
+
+Überall verfügbar.
+
+## ContactWorld.created
+
+```text
+ContactWorld.created() -> Int64
+```
+
+Neu erzeugte Kontakte ohne Zuordnung. Der Snapshot bleibt unverändert.
+
+Überall verfügbar.
+
+## ContactWorld.defaults
+
+```text
+ContactWorld.defaults() -> ContactWorld
+```
+
+Erzeugt einen leeren Kontaktzustand mit den C-Standardwerten; keine implizite Integration.
+
+Überall verfügbar.
+
+## ContactWorld.dt
+
+```text
+ContactWorld.dt() -> Float64
+```
+
+Letzte erfolgreiche Schrittweite in Sekunden, leer null. Der Snapshot bleibt unverändert.
+
+Überall verfügbar.
+
+## ContactWorld.ended
+
+```text
+ContactWorld.ended() -> Int64
+```
+
+Seit dem vorigen Schritt ausgelaufene Kontakte. Der Snapshot bleibt unverändert.
+
+Überall verfügbar.
+
+## ContactWorld.localAnchorA
+
+```text
+ContactWorld.localAnchorA(index: Int64) -> Vec3
+```
+
+Lokaler Körperanker auf A vor Projektion. Der Snapshot bleibt unverändert.
+
+Überall verfügbar.
+
+## ContactWorld.localAnchorB
+
+```text
+ContactWorld.localAnchorB(index: Int64) -> Vec3
+```
+
+Lokaler Körperanker auf B vor Projektion. Der Snapshot bleibt unverändert.
+
+Überall verfügbar.
+
+## ContactWorld.matched
+
+```text
+ContactWorld.matched() -> Int64
+```
+
+Eins zu eins zugeordnete Kontakte. Der Snapshot bleibt unverändert.
+
+Überall verfügbar.
+
+## ContactWorld.maxNormalError
+
+```text
+ContactWorld.maxNormalError() -> Float64
+```
+
+Größter Normalgeschwindigkeitsrest in m/s vor Positionsprojektion. Der Snapshot bleibt unverändert.
+
+Überall verfügbar.
+
+## ContactWorld.maxProjectionError
+
+```text
+ContactWorld.maxProjectionError() -> Float64
+```
+
+Nicht erfüllte Positionskorrektur in Metern. Der Snapshot bleibt unverändert.
+
+Überall verfügbar.
+
+## ContactWorld.reset
+
+```text
+ContactWorld.reset() -> ContactWorld
+```
+
+Liefert einen neuen leeren Snapshot mit denselben Einstellungen; der ursprüngliche Zustand und seine Kopien bleiben erhalten.
+
+Überall verfügbar.
+
+## ContactWorld.solve
+
+```text
+ContactWorld.solve(bodies: [Body], colliders: [Collider], solver: ContactSolver, dt: Float64) -> ContactWorld
+```
+
+Erzeugt diskrete Kugel-/Box-/Ebenenkontakte und löst den warmen C-Graphen. Liefert einen neuen Snapshot mit Körpern, Kontaktverlauf und Resten; Eingaben bleiben erhalten.
+
+Überall verfügbar.
+
+## ContactWorld.warmed
+
+```text
+ContactWorld.warmed() -> Int64
+```
+
+Zugeordnete Kontakte mit nichtnull Warmseed vor Kegelprojektion. Der Snapshot bleibt unverändert.
 
 Überall verfügbar.
 

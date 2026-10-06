@@ -67,7 +67,7 @@ static void scene(ps_context *c,ps_scene *s) {
     }
     for(unsigned i=0;i<e->world.count && i<10;i++) {
         const ps_contact *contact=&e->world.contacts[i].constraint.contact;
-        ps_scene_add_id(s,100+i,PS_POINT,contact->point_m,ps_v3(0,0,0),.03,0xffb84aff);
+        ps_scene_add_id(s,100+i,PS_POINT,contact->point_m,contact->point_m,.03,0xffb84aff);
         ps_scene_add_id(s,200+i,PS_ARROW,contact->point_m,ps_vadd(contact->point_m,ps_vscale(contact->normal,.2)),.008,0xffb84aff);
     }
 }

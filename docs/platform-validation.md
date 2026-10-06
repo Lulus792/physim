@@ -3,6 +3,92 @@
 Stand: 6. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Physim-Kontaktzustände am 6. Oktober 2026
+
+Sprachvertrag 0.177.0 bindet die öffentliche persistente Kontaktwelt und den
+manuellen Warm-Kontaktgraphen an denselben C-Core. Collider sind kleine Werte;
+Kontaktzustände besitzen unveränderliche Snapshots im gemeinsamen 64-MiB-Budget.
+`solve()` und `reset()` erzeugen neue Werte und ändern weder Receiver noch
+Eingabekörper. Arrays, optionale Werte, Strukturfelder, Rückgaben und Closures
+behalten unabhängig gespeicherte Zustände und geben sie automatisch frei.
+API/ABI 3 und alle Mess-/Snapshot-/Wireformate bleiben unverändert.
+
+Die abschließende gezielte macOS-Debug-Prüfung besteht 19/19 unter
+`build/contact-world-language-debug-mac/test-results/run-jnqomjeg`.
+Sie enthält analytische Warm-/Kaltreste, Zeitschrittskalierung, Kontaktgeometrie,
+ID-Grenzen, Kopien/Closures und 2000 Ersetzungszyklen mit tatsächlicher Kontrolle
+des verbleibenden Sprachspeichers. Negative Compilerfälle prüfen reservierte
+Namen und Arrayelementtypen. Runtimefehler prüfen Collidergrenzen, Formen,
+Normalen, Weltsettings, doppelte IDs, dynamische Ebenen, Schrittweiten, Zugriffe
+und Seedanzahlen, jeweils mit Freigabe bestehender Besitzer. Ein eigener
+Allocator erzwingt alle Allokationsfehler von Konstruktor, Solve, Reset,
+Körperarray und Warmgraph; Eingabesnapshots bleiben bytegleich und alle Besitzer
+werden anschließend vollständig freigegeben.
+Der erste gezielte Lauf scheiterte ausschließlich beim Testinstrumentieren von
+POD-Programmen ohne Sprachspeicher. Die betroffenen Fehlerproben besitzen nun
+zusätzlich einen echten Weltzustand und prüfen auch dessen Freigabe.
+
+Ein unabhängiger CRC-/Wireparser vergleicht C und Physim in warmem und kaltem
+Modus über je 1001 vollständige Messzeilen und sämtliche aufgezeichneten
+Objektfelder mit 1e-12 relativer/absoluter Toleranz. Die C-Punktmarker verwenden
+nun denselben zweiten Positionswert wie die Sprachbindung. Die Quaternion-
+normalisierung der Sprach-Szenenkonstruktoren kann letzte Bits verändern;
+Formen, Farben, IDs, Texte und Strukturfelder werden exakt verglichen.
+Linux GCC Debug mit AddressSanitizer und UndefinedBehaviorSanitizer besteht
+alle 19 gezielten Prüfungen unter
+`build/contact-world-language-asan-linux/test-results/run-f1wai2ee`.
+macOS Debug besteht die C- und Physim-Stapelfenster 2/2 unter
+`build/contact-world-language-debug-mac/test-results/run-0zkbhpx3`.
+Die App erstellt echte Projekte, baut sie, führt 40 kontrollierte Schritte aus
+und öffnet 41 aufgezeichnete Messzeilen mit Szenen wieder. Die Physim-
+Stapelansicht wurde visuell geprüft.
+
+Die ersten Release-Gesamtläufe bestanden auf beiden Plattformen 549/550;
+allein der CLI-Korpus traf zwei alte
+Erwartungen an die Sprachversionsausgabe 0.176.0. Diese ersten Läufe liegen unter
+`build/contact-world-language-release-mac/test-results/run-w5mvh34p` und in der VM
+`build/contact-world-language-release-linux/test-results/run-cp09edzv`. Der Compiler meldete bereits
+korrekt 0.177.0. Diese Erwartungen wurden aktualisiert; der Produktionscode
+blieb unverändert. Erst die anschließenden Gesamtprüfungen belegen den
+abschließenden Katalog mit 550 Fällen ohne Fenster und 60 Fensterfällen.
+
+macOS Release besteht die abschließende Gesamtprüfung 550/550 unter
+`build/contact-world-language-release-mac/test-results/run-z18rl376` mit
+Apple Clang 16 auf Intel macOS 14.6.1 und SDL 3.2.30.
+Linux Release besteht die abschließende Gesamtprüfung 550/550 unter
+`build/contact-world-language-release-linux/test-results/run-4crv23h0`.
+Der abschließende Katalog enthält 18 eigenständige Sprachprogramme und 33 Module.
+Dieselbe Release-App besteht C-/Physim-Stapel und den bisherigen Kontaktablauf
+3/3 mit X11/Mesa, Xvfb und Openbox unter
+`build/contact-world-language-release-linux/test-results/run-barcukyy`.
+Die Physim-Stapelansicht wurde auch auf Linux visuell geprüft; dies ersetzt
+keine Gesamtprüfung sämtlicher 60 Fensterfälle.
+macOS Release besteht dieselben drei Fensterabläufe 3/3 unter
+`build/contact-world-language-release-mac/test-results/run-511vesok`.
+Die SHA-256-Manifeste der ersten Pakete enthalten auf beiden Plattformen
+320 geprüfte Dateien, darunter 131 Code-/Binärdateien.
+
+Die vollständige verschobene SDK-Prüfung besteht auf macOS unter
+`build/contact-world-language-sdk-proof-mac/Native SDK ä paqeof_i` und auf
+Debian unter `build/contact-world-language-sdk-proof-linux/Native SDK ä _63wzqhx`.
+Beide prüfen unabhängig alle Header, 21 Core-Quellen, 18 Sprachprogramme,
+33 Sprachmodule, installierte und neu gebaute Kontaktwelten mit Allokations-
+fehlern sowie die vollständigen warmen/kalten C-/Physim-Stapelvergleiche.
+Bestehende Logging-/Frame-/Diagnostik-/Indexproben, gemeinsame Analysen,
+adaptive Studien und neun eigenständige native Projektneubauten bestehen.
+Diese SDK-Prüfungen enthalten keine zusätzliche GUI-Abnahme.
+
+Die abschließenden Pakete `build/Contact Language clean SDK ä mac` und
+`build/Contact Language clean SDK ä linux` enthalten die finalen Nachweise.
+Ihre SHA-256-Manifeste wurden für alle 320 Dateien geprüft; alle 131 Dateien
+unter `include`, `src`, `lib` und `bin` stimmen mit dem jeweils vollständig
+geprüften verschobenen SDK überein. Die Apps entsprechen den geprüften
+Release-Programmen. Der Produktionscode blieb seit den Gesamtprüfungen
+unverändert; die finalen Pakete aktualisieren nur Dokumentation.
+
+Kontaktverwaltung und Warmstart bleiben diskret; Feature-IDs, Kontaktinseln,
+Gelenk-Warmstart und nichtlineare Rotationsprojektion sind weiter offen.
+
 ## Persistente Kontaktverwaltung am 6. Oktober 2026
 
 Der neue caller-eigene C-Kontaktzustand regeneriert diskrete Kugel-/Box-/

@@ -3,6 +3,15 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-06. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Physim-Kontaktzustände:** Sprachvertrag 0.177.0 bindet `Collider` und
+`ContactWorld` als Werte. `solve()` und `reset()` erzeugen neue unveränderliche,
+automatisch freigegebene Snapshots; Kopien, Arrays, optionale Werte,
+Strukturfelder und Closures können unabhängig weiterlaufen. Körper, alle
+Kontaktgeometrien, stabile IDs, Impulse, Lebenszykluszähler und Solverreste
+bleiben abfragbar. `ContactSolver.solveWarm()` bindet manuelle Graphseeds.
+C- und Physim-Stapel verwenden dieselben Core-Funktionen und liefern gleiche
+Messungen/Szenen. [Sprachvertrag und Beispiele](contact-world.md).
+
 **Persistente Kontaktverwaltung:** Ein expliziter C-Zustand erzeugt Kugel-/Box-/
 Ebenenkontakte über Broad/Narrow Phase und ordnet sie zwischen erfolgreichen
 Schritten mit stabilen Collider-IDs und lokalen Ankern zu. Der Graphsolver
@@ -75,7 +84,7 @@ geprüft und übernommen, nur fehlende Indizes starten erneut. Seeds, Parameter
 und feste/adaptive Zeitvorgaben bleiben erhalten. Aktuelle Editoränderungen und
 die alte Serie werden nicht verändert. Vollständig vorhandene Serien starten
 keine neuen Prozesse. Frühere Serien ohne Checkpoint bleiben nicht fortsetzbar.
-Der Katalog umfasst 533 Prüfungen ohne Fenster (518 ohne SDL) und 59 Fensterfälle.
+Der Katalog umfasst 550 Prüfungen ohne Fenster (535 ohne SDL) und 60 Fensterfälle.
 Ausgeführte Nachweise stehen im [Plattformbericht](platform-validation.md).
 
 **Eigenständige Analyseprojekte:** Die App legt jetzt C-/Physim-Auswertungen ohne
@@ -784,7 +793,7 @@ und veraltete Fenstermanager-Einträge geprüft. Die erneute Linux-CI steht aus.
 | Editor | C- und Physim-Dateien bearbeiten, sprachspezifische Syntaxfarben, Zeilennummern, Debug/Release, anklickbare Compilerdiagnosen, öffentlicher Header-Browser | Completion |
 | Szene | OpenGL 3.3 Core, Tiefenpuffer, MSAA, alle acht Grundprimitive, orientierte Boxen/Ebenen, RGBA-Transparenz mit Dreieckssortierung, UTF-8-Labels, Wurf-Flugbahn, Grid/Achsen, Kamera, Ansichten und Sichtbarkeit und Mausklickauswahl einzelner Szeneneinträge mit optionalen Objekt-IDs, gespeicherte Szenen mit Zeitleiste und Wiedergabe, benannte Gruppen, Elternbeziehungen und explizite hierarchische TRS-Koordinatenrahmen mit aufklappbarem Inspektorbaum, geerbter Sichtbarkeit und konsistenter Weltgeometrie für Darstellung/Picking | artefaktfreie Transparenz bei sich durchdringenden Flächen |
 | Analyse | eigener C-Editor/Runner, eigenständige C-/Physim-Analyseprojekte ohne Experiment mit geprüftem Dateiimport, Dataset-/Series-Handles, blockweise Transformationen mit Einheitenprüfung, eigene Ergebnisplots/-tabellen, Linien/Punkte/Histogramme mit Zoom am Mauszeiger, Verschieben, separaten Ausschnitten und Achsenoffsets, PNG-/SVG-Export des sichtbaren Ausschnitts, CSV/SVG und verlustfrei komprimiertes PNG mit vier Größen von 1200 × 850 bis 4800 × 3400 Pixeln, Statistik, Ableitung, Integral, gleitendes Mittel, Periode, Energieabweichung, Auswahl und Vergleich von bis zu acht Läufen, gemeinsame Statusauswahl von Datenreihen, lineares, Nearest-/Previous- und monotones kubisches Resampling (PCHIP) in C/Physim und Differenzkurven, frühere Berichte öffnen | weitere Interpolationsverfahren/Transformationen |
-| Mechanik | starre Körper mit Kugel-/Boxträgheit, Quaternionrotation, Drehmomente/Impulse, Kugel–Kugel/Kugel–Ebene/Kugel–Box/Box–Ebene/Box–Box, iterative Paar- und Graph-Solver mit Coulomb-Reibung/Restitution (bis zu 128 Körper und 512 Kontakte), persistente diskrete C-Kontaktverwaltung mit stabilen IDs und projizierten Warmimpulsen, Distanzgelenk mit lokalen Ankern und Driftkorrektur, gemeinsamer Geschwindigkeits-Solver für Kontakte und bis zu 256 Gelenke, Feder/Dämpfung, Stokes-/quadratischer Widerstand, Kugelstoß-, Boxstoß- und Bodenkontaktvorlagen mit Debug-Vektoren, Feder–Masse–Dämpfer mit dissipierter Arbeit und Energiebilanz, archimedischer Auftrieb und Kugel-Eintauchvolumen samt Auftriebsmittelpunkt, Auftriebsvorlage mit Kraftanzeige und Energiebilanz | direkte Physim-Kontaktzustandsbindungen, persistente Feature-IDs/Kontaktinseln, Gelenk-Warmstart, gemeinsame nichtlineare Positionsprojektion, weitere Gelenke, Box-CCD, erweiterte Stoffmodelle |
+| Mechanik | starre Körper mit Kugel-/Boxträgheit, Quaternionrotation, Drehmomente/Impulse, Kugel–Kugel/Kugel–Ebene/Kugel–Box/Box–Ebene/Box–Box, iterative Paar- und Graph-Solver mit Coulomb-Reibung/Restitution (bis zu 128 Körper und 512 Kontakte), persistente diskrete C-/Physim-Kontaktverwaltung mit stabilen IDs und projizierten Warmimpulsen, Distanzgelenk mit lokalen Ankern und Driftkorrektur, gemeinsamer Geschwindigkeits-Solver für Kontakte und bis zu 256 Gelenke, Feder/Dämpfung, Stokes-/quadratischer Widerstand, Kugelstoß-, Boxstoß- und Bodenkontaktvorlagen mit Debug-Vektoren, Feder–Masse–Dämpfer mit dissipierter Arbeit und Energiebilanz, archimedischer Auftrieb und Kugel-Eintauchvolumen samt Auftriebsmittelpunkt, Auftriebsvorlage mit Kraftanzeige und Energiebilanz | persistente Feature-IDs/Kontaktinseln, Gelenk-Warmstart, gemeinsame nichtlineare Positionsprojektion, weitere Gelenke, Box-CCD, erweiterte Stoffmodelle |
 | Unsicherheit | PCG32, geprüfte konstante/uniforme/normale Verteilungen, öffentliche Sensor-API mit Einheiten, Zeitraster, Auflösung, Offset, Drift, Rauschen, Ausfällen und Standardunsicherheit, getrennte Modell-/Soll-/Messwerte, gültigkeitsbewusste Vorschau/Statistik/CSV, Batchcontroller in App/CLI mit bis zu acht Runnern, expliziten Seeds, eigenen Arbeitsordnern, Abbruch und fester Auswertungsreihenfolge, Endwert-Histogramm/Typ-7-Quantile, Normalnäherung des Mittelwert-KI ab 200 gültigen Endwerten und lineare Parameterstudien in CLI und App mit Kurvenbericht, geprüfte Wiederaufnahme journalisierter Läufe aus archivierten Konfigurationen in neue Serienordner, gültigkeitsbewusste Endwertaggregation mit Messstatus-CSV und Messabdeckung einschließlich vollständig fehlender Messungen, explizite Masken in transformierten C-/Physim-Datenreihen und Berichten mit erhaltenen Segmentgrenzen | korrelierte Sensor-/Unsicherheitsmodelle, weitere Konfidenzverfahren und Verteilungsdiagnostik |
 | Produktreife | Quellen-Snapshots, versionierte Dateien, Backup beim Speichern, Autosave beider C-Editoren mit wählbarem Intervall (Standard 30 Sekunden), Wiederherstellung mit Erkennung extern geänderter Quellen | gleichzeitige Autoren/Dateizusammenführung, Projektmigration, Installer, Leistungsbudget, abdeckungsgeführte Langzeit-Fuzzing-Kampagne |
 

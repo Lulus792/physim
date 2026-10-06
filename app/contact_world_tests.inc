@@ -1,7 +1,7 @@
-static bool contact_world_test_start(app *a,const char *root) {
+static bool contact_world_test_start(app *a,const char *root,bool language) {
     char path[4096];join(path,sizeof path,root,"preferences.bin");preferences_start(a,path);
-    join(a->project_input,sizeof a->project_input,root,"project");a->example=0;new_project(a);if(!a->loaded)return false;
-    join(path,sizeof path,a->root,"examples/contact_stack/main.c");if(!load_editor(&a->experiment,path))return false;
+    join(a->project_input,sizeof a->project_input,root,"project");a->example=language?10:0;new_project(a);if(!a->loaded)return false;
+    join(path,sizeof path,a->root,language?"examples/language/contact_stack.phys":"examples/contact_stack/main.c");if(!load_editor(&a->experiment,path))return false;
     a->dirty=true;a->dt=.005;a->project_settings_dirty=true;select_build_profile(a,1);
     SDL_SetWindowSize(a->window,1080,740);return true;
 }

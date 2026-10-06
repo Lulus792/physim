@@ -92,8 +92,10 @@
 #define PS_LANG_FLOAT_ARRAY ((ps_lang_type)138)
 #define PS_LANG_ODE_CALLBACK ((ps_lang_type)139)
 #define PS_LANG_INT_ARRAY ((ps_lang_type)140)
+#define PS_LANG_COLLIDER_ARRAY ((ps_lang_type)141)
 static inline ps_lang_type ps_lang_signature_element(ps_lang_type type) {
-    return type == PS_LANG_VEC3_ARRAY ? PS_TYPE_VEC3
+    return type == PS_LANG_COLLIDER_ARRAY ? PS_TYPE_COLLIDER
+           : type == PS_LANG_VEC3_ARRAY ? PS_TYPE_VEC3
            : type == PS_LANG_FLOAT_ARRAY ? PS_TYPE_FLOAT64
            : type == PS_LANG_INT_ARRAY ? PS_TYPE_INT64
            : type == PS_LANG_SERIES_ARRAY ? PS_TYPE_SERIES
