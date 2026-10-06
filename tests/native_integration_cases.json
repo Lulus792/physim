@@ -1400,6 +1400,36 @@
       "libraries": [
         "core"
       ]
+    },
+    "spring-tutorial-analysis-c": {
+      "sources": [
+        "examples/documentation/spring_analysis.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "spring-tutorial-analysis-phys": {
+      "source": "examples/documentation/spring_analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "spring-tutorial-report-probe": {
+      "sources": [
+        "tests/test_spring_tutorial_report.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "spring-instances": {
+      "sources": [
+        "tests/test_spring_instances.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
     }
   },
   "tests": [
@@ -5517,6 +5547,93 @@
           "arguments": [
             "{root}/tests/check_tutorial_sources.py",
             "documentation_material_source",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "spring_tutorial",
+      "targets": [
+        "python",
+        "physim-runner",
+        "physim-analysis-runner",
+        "spring",
+        "physim-language-spring",
+        "spring-tutorial-analysis-c",
+        "spring-tutorial-analysis-phys",
+        "spring-tutorial-report-probe",
+        "spring-instances"
+      ],
+      "steps": [
+        {
+          "program": "spring-instances",
+          "arguments": [
+            "{spring}",
+            "{physim-language-spring}"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_spring_tutorial.py",
+            "{physim-runner}",
+            "{physim-analysis-runner}",
+            "{spring}",
+            "{physim-language-spring}",
+            "{spring-tutorial-analysis-c}",
+            "{spring-tutorial-analysis-phys}",
+            "{spring-tutorial-report-probe}",
+            "{work}"
+          ],
+          "timeout": 180
+        }
+      ]
+    },
+    {
+      "name": "spring_tutorial_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "spring_tutorial_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 560,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "documentation_spring_source",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tutorial_sources.py",
+            "documentation_spring_source",
             "--root",
             "{root}"
           ],

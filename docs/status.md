@@ -3,6 +3,13 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-06. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Feder-Lernpfad in C und Physim:** Beide Vorlagen erhalten einen typisierten
+Dämpfungsparameter pro Modellinstanz. Vollständige Quellen und Analysen zeigen
+vier Dämpfungsfälle, mechanische Energie, integrierte Dissipation und die maximale
+Bilanzabweichung. Ein unabhängiger Prüfer vergleicht 16.008 Messzeilen, sämtliche
+Szenengeometrien, SI-Metadaten, Verfeinerung und sechzehn gemischte Analysewege.
+[Modell, Ablauf und Quellen](spring.md).
+
 **Eigenes Material und Medium:** Ein vollständiger Lernpfad liefert gleiche
 C-/Physim-Kugelversuche und beide Analysesprachen. Eigene Materialdichte bestimmt
 die Masse; eigene Fluiddichte und Viskosität bestimmen Auftrieb und Stokes-
@@ -92,7 +99,7 @@ geprüft und übernommen, nur fehlende Indizes starten erneut. Seeds, Parameter
 und feste/adaptive Zeitvorgaben bleiben erhalten. Aktuelle Editoränderungen und
 die alte Serie werden nicht verändert. Vollständig vorhandene Serien starten
 keine neuen Prozesse. Frühere Serien ohne Checkpoint bleiben nicht fortsetzbar.
-Der Katalog umfasst 552 Prüfungen ohne Fenster (537 ohne SDL) und 61 Fensterfälle.
+Der Katalog umfasst 554 Prüfungen ohne Fenster (539 ohne SDL) und 62 Fensterfälle.
 Ausgeführte Nachweise stehen im [Plattformbericht](platform-validation.md).
 
 **Eigenständige Analyseprojekte:** Die App legt jetzt C-/Physim-Auswertungen ohne

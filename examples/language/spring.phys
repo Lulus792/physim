@@ -1,7 +1,8 @@
 // Horizontal spring-mass-damper, SI units; RK4 for motion and dissipated work.
 let mass = 1.0
 let stiffness = 16.0
-let damping = 1.2
+let dampingUnit = Unit(0,1,-1,0,0,0,0,1,"N s/m")
+let damping = parameterWithUnit("damping",dampingUnit,1.2,0,64,"Viscous damping coefficient")
 let restLength = 1.0
 let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
 let speed = Unit(1, 0, -1, 0, 0, 0, 0, 1, "m/s")
@@ -44,13 +45,14 @@ func measure():
     powerChannel.sample(damping * state.y * state.y)
 
 func create():
-    metadata("model=horizontal spring-mass-damper\nmass_kg=1\nstiffness_n_m=16\ndamping_ns_m=1.2\nrest_length_m=1\ninitial_extension_m=0.35\nintegrator=RK4 in Physim source\nconstraints=prescribed horizontal guide\ngravity=none\ncontact=none")
+    metadata("model=horizontal spring-mass-damper\nintegrator=RK4\nmass_kg=1\nstiffness_n_m=16\ndamping_ns_m=" + String(damping) + "\nrest_length_m=1\ninitial_extension_m=0.35\ninitial_velocity_m_s=0\nanchor_x_m=-1\nequilibrium_x_m=0\nconstraints=prescribed 1D horizontal guide, no constraint solver\ngravity=none\ncontact=none\nspring_mass=0\nthermal_model=none\ndissipated_work=integrated c*v^2\ndomain=slider right of anchor\n")
 
 func reset():
     state = Vec3(0.35, 0, 0)
     measure()
 
 func step(dt: Float64):
+    assert(dt > 0,"Spring step requires positive dt")
     let k1 = derivative(state)
     let k2 = derivative(state + 0.5 * dt * k1)
     let k3 = derivative(state + 0.5 * dt * k2)

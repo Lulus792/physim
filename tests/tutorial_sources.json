@@ -83,5 +83,26 @@
         "language": "physim"
       }
     ]
+  },
+  "documentation_spring_source": {
+    "document": "docs/spring.md",
+    "sources": [
+      {
+        "path": "examples/spring/main.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/language/spring.phys",
+        "language": "physim"
+      },
+      {
+        "path": "examples/documentation/spring_analysis.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/spring_analysis.phys",
+        "language": "physim"
+      }
+    ]
   }
 }

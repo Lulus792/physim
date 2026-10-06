@@ -3,6 +3,78 @@
 Stand: 6. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Feder-Lernpfad in beiden Sprachen am 6. Oktober 2026
+
+C- und Physim-Federvorlagen definieren die Dämpfung jetzt als typisierten
+Experimentparameter `damping` in N s/m, Bereich 0..64. Wert und Metadaten
+gehören zum Modellkontext; mehrere Instanzen teilen keinen veränderlichen
+Parameter. Der C-Makrostandard bleibt für vorhandene Referenzvarianten erhalten.
+Physim prüft positive Schrittweiten ausdrücklich. Die C-Punktmarkierung speichert
+nun denselben zweiten Punktwert wie die Sprachbindung. Modell, RK4-Verfahren,
+Kanäle und Standards sind erhalten; öffentliche Core-API, ABI 3, Sprachvertrag
+0.177.0 und alle Dateiformate bleiben unverändert.
+
+Der vollständige Lernpfad enthält beide Experiment- und Analysequellen sowie
+Ablauf, Gleichungen, vier Dämpfungsfälle, Einheiten, Ergebnisse und Modellgrenzen.
+Die Analysen erzeugen drei Plots mit fünf vollständigen Kurven, eine Tabelle
+mit Zeilenzahl und maximaler absoluter Bilanzabweichung und vollständiges CSV.
+Ein unabhängiger Pythonprüfer vergleicht 16.008 Messzeilen, alle elf Kanäle mit
+SI-Dimensionen, komplette Szenen mit 13 Objekten und 65 Helixpunkten sowie
+Parameterprovenienz. Er prüft die geschlossenen Lösungen für Dämpfung 0, 1,2, 8
+und 12 und eine RK4-Verfeinerung zwischen Faktor 14 und 18. Sechzehn gemischte
+Analysewege werden durch einen getrennten C-Prüfer kanalweise samt Einheiten und
+exakter Tabellenstatistik mit den Rohdaten verglichen. Die Instanzprobe löst zwei
+verschiedene Dämpfungen im selben geladenen Modul, prüft Reset und Fehlererhaltung.
+Alle vier dokumentierten Codeblöcke entsprechen den tatsächlich gebauten Quellen.
+
+macOS Release besteht neue Tutorial-, Quellcode- und Referenzprüfung sowie die
+bisherigen Federreferenzen und den Sprachlebenszyklus 5/5 unter
+`build/contact-world-language-release-mac/test-results/run-b1ltqy4u`.
+Linux Release besteht dieselben fünf Prüfungen unter
+`build/contact-world-language-release-linux/test-results/run-gl65_h83`.
+Linux GCC Debug mit AddressSanitizer und UndefinedBehaviorSanitizer besteht
+Federreferenz, Sprachlebenszyklus und vollständigen neuen Tutorialablauf 3/3 unter
+`build/spring-tutorial-asan-linux/test-results/run-otgywszl`.
+macOS Release besteht neues C-/Physim-Tutorial, bisherige Sprach-Federvorlage
+und Handbuchfenster 3/3 unter
+`build/contact-world-language-release-mac/test-results/run-_ow7csno`.
+Die neuen Projekte verwenden tatsächlich Parameterwert 8, 40 kontrollierte
+Schritte, 41 gespeicherte Messungen/Szenen und eine in der App wieder geöffnete
+Energieanalyse. Die Physim-Energieansicht wurde auf macOS und Linux visuell geprüft.
+
+Linux Release besteht dieselben drei Fensterprüfungen unter
+`build/contact-world-language-release-linux/test-results/run-uz1gqxof` mit
+X11/Mesa, Xvfb und Openbox. Die Paket-Apps sind bytegleich mit den zuvor
+geprüften GUI-Apps. Beide ersten SDK-Manifeste enthalten 330 geprüfte Dateien,
+darunter 134 Code-/Binärdateien.
+
+Die vollständige verschobene SDK-Prüfung besteht auf macOS unter
+`build/spring-tutorial-sdk-proof-mac/Native SDK ä uro52_vz`. Sie kompiliert alle
+öffentlichen Header und 21 Core-Einheiten, prüft 18 eigenständige Sprachprogramme
+und 36 Module und führt den neuen Federlernweg gegen ausgelieferte und neu
+gebaute Bibliotheken aus. Zusätzlich bestehen die bisherigen Spezialproben,
+Material-/Medium-Lernpfade, adaptive Studien und neun eigenständige Projektneubauten.
+Diese SDK-Prüfung enthält keine zusätzliche GUI-Abnahme.
+
+Linux besteht die vollständige SDK-Prüfung mit demselben Umfang unter
+`build/spring-tutorial-sdk-proof-linux/Native SDK ä mjxnz2wi`.
+Die finalen Pakete `build/Spring tutorial clean SDK ä mac` und
+`build/Spring tutorial clean SDK ä linux` übernehmen die geprüften SDKs und
+aktualisieren die Dokumentation. Ihre SHA-256-Manifeste wurden für alle 330
+Dateien geprüft. Alle 134 Dateien unter `include`, `src`, `lib` und `bin` sowie
+sämtliche Beispielquellen stimmen mit dem jeweiligen vollständig geprüften
+verschobenen SDK überein. Die Apps entsprechen bytegenau den geprüften GUI-Apps.
+Seit den erfolgreichen Rechen-, Fenster- und SDK-Prüfungen wurde kein
+Produktionscode verändert.
+
+Der Katalog umfasst 554 Prüfungen ohne Fenster (539 ohne SDL) und 62 Fensterfälle.
+Der Beispiel-/SDK-Katalog umfasst 18 eigenständige Sprachprogramme und 36 Module.
+Diese Änderung verwendet gezielte Regressionen und SDK-Prüfungen; ein neuer
+Gesamtlauf aller 554 beziehungsweise 62 Fälle ist nicht behauptet. Die frühere
+550/550-Abnahme bleibt für ihren benannten Stand erhalten. Dieser Lernpfad
+schließt weiterhin weder steife/nichtlineare Federn noch allgemeine Führungs-
+Constraints oder weitere offene Produktziele ab.
+
 ## Lernpfad eigenes Material und Medium am 6. Oktober 2026
 
 Der achte geforderte Lernpfad liefert vollständige C-/Physim-Experimente und

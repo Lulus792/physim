@@ -9,35 +9,39 @@
 #ifndef PS_SPRING_DAMPING
 #define PS_SPRING_DAMPING 1.2
 #endif
-static const double mass_kg = 1, stiffness_n_m = 16, damping_ns_m = PS_SPRING_DAMPING;
+static const double mass_kg = 1, stiffness_n_m = 16, default_damping_ns_m = PS_SPRING_DAMPING;
 static const double rest_length_m = 1, initial_extension_m = .35, initial_velocity_m_s = 0;
 typedef struct {
     double y[3];
+    double damping_ns_m;
 } experiment; /* extension, velocity, dissipated work */
-static ps_result force(double x, double v, ps_vec3 *out) {
+typedef struct { const experiment *state; ps_result error; } derivative_context;
+static ps_result force(const experiment *e, double x, double v, ps_vec3 *out) {
     /* Crossing the anchor leaves this one-dimensional axial model's domain. */
     if (x <= -rest_length_m)
         return PS_INVALID;
     return ps_spring_force(ps_v3(x, 0, 0), ps_v3(v, 0, 0), ps_v3(-rest_length_m, 0, 0),
-                           ps_v3(0, 0, 0), stiffness_n_m, rest_length_m, damping_ns_m, out);
+                           ps_v3(0, 0, 0), stiffness_n_m, rest_length_m, e->damping_ns_m, out);
 }
 static void derivative(double t, const double *y, double *dy, void *user) {
     (void)t;
-    ps_result *error = user;
+    derivative_context *context = user;
+    const experiment *e = context->state;
     ps_vec3 f;
-    ps_result r = force(y[0], y[1], &f);
+    ps_result r = force(e, y[0], y[1], &f);
     if (r != PS_OK) {
-        *error = r;
+        context->error = r;
         dy[0] = dy[1] = dy[2] = NAN;
         return;
     }
     dy[0] = y[1];
     dy[1] = f.x / mass_kg;
-    dy[2] = damping_ns_m * y[1] * y[1];
+    dy[2] = e->damping_ns_m * y[1] * y[1];
 }
 static ps_result measure(ps_context *c, const double *y) {
+    const experiment *e = c->user;
     ps_vec3 f;
-    ps_result r = force(y[0], y[1], &f);
+    ps_result r = force(e, y[0], y[1], &f);
     if (r != PS_OK)
         return r;
     double kinetic = .5 * mass_kg * y[1] * y[1], potential = .5 * stiffness_n_m * y[0] * y[0];
@@ -49,9 +53,9 @@ static ps_result measure(ps_context *c, const double *y) {
                        y[2],
                        kinetic + potential + y[2],
                        -stiffness_n_m * y[0],
-                       -damping_ns_m * y[1],
+                       -e->damping_ns_m * y[1],
                        f.x,
-                       damping_ns_m * y[1] * y[1]};
+                       e->damping_ns_m * y[1] * y[1]};
     for (unsigned i = 0; i < sizeof values / sizeof values[0]; i++)
         if (!isfinite(values[i]))
             return PS_NUMERIC;
@@ -68,12 +72,17 @@ static ps_result reset(ps_context *c) {
 }
 static ps_result create(ps_context *c) {
     if (!isfinite(mass_kg) || mass_kg <= 0 || !isfinite(stiffness_n_m) || stiffness_n_m <= 0 ||
-        !isfinite(damping_ns_m) || damping_ns_m < 0 || !isfinite(rest_length_m) ||
+        !isfinite(default_damping_ns_m) || default_damping_ns_m < 0 || !isfinite(rest_length_m) ||
         rest_length_m <= 0 || !isfinite(initial_extension_m) || !isfinite(initial_velocity_m_s))
         return PS_INVALID;
     c->user = calloc(1, sizeof(experiment));
     if (!c->user)
         return PS_MEMORY;
+    experiment *e = c->user;
+    const ps_unit damping_unit = {{0, 1, -1, 0, 0, 0, 0}, 1, "N s/m"};
+    ps_result parameter = ps_parameter_define_unit(c, "damping", "Viscous damping coefficient", damping_unit,
+                                                  default_damping_ns_m, 0, 64, &e->damping_ns_m);
+    if (parameter != PS_OK) return parameter;
     const ps_unit newton = {{1, 1, -2, 0, 0, 0, 0}, 1, "N"};
     const ps_unit watt = {{2, 1, -3, 0, 0, 0, 0}, 1, "W"};
     ps_channel_add(c, "position.x", PS_METRE, "Extension from equilibrium at X=0");
@@ -97,7 +106,7 @@ static ps_result create(ps_context *c) {
              "constraints=prescribed 1D horizontal guide, no constraint solver\n"
              "gravity=none\ncontact=none\nspring_mass=0\nthermal_model=none\n"
              "dissipated_work=integrated c*v^2\ndomain=slider right of anchor\n",
-             mass_kg, stiffness_n_m, damping_ns_m, rest_length_m, initial_extension_m,
+             mass_kg, stiffness_n_m, e->damping_ns_m, rest_length_m, initial_extension_m,
              initial_velocity_m_s, -rest_length_m);
     return reset(c);
 }
@@ -105,12 +114,12 @@ static ps_result step(ps_context *c, double dt) {
     experiment *e = c->user;
     double y[3];
     memcpy(y, e->y, sizeof y);
-    ps_result error = PS_OK;
-    ps_result r = ps_ode_step(PS_RK4, derivative, &error, c->time_s, dt, y, 3);
-    if (error != PS_OK) {
+    derivative_context context = {e, PS_OK};
+    ps_result r = ps_ode_step(PS_RK4, derivative, &context, c->time_s, dt, y, 3);
+    if (context.error != PS_OK) {
         snprintf(c->error, sizeof c->error,
                  "Spring domain exceeded or invalid force; refine dt and check initial energy.");
-        return error;
+        return context.error;
     }
     if (r == PS_OK)
         r = measure(c, y);
@@ -134,7 +143,7 @@ static void scene(ps_context *c, ps_scene *s) {
     ps_scene_add_id(s, 5, PS_LINE, ps_v3(left, -.3, 0), ps_v3(x, -.3, 0), .008, 0xa2b0c1ff);
     ps_scene_add_id(s, 6, PS_BOX, ps_v3(left * .6, -.3, 0), ps_v3(.3, .09, .09), 0, 0x596675ff);
     ps_scene_add_id(s, 7, PS_LINE, ps_v3(x, -.3, 0), ps_v3(x, -.15, 0), .008, 0xa2b0c1ff);
-    ps_scene_add_id(s, 8, PS_POINT, ps_v3(0, -.18, .1), ps_v3(0, 0, 0), .025, 0xe6edf3ff);
+    ps_scene_add_id(s, 8, PS_POINT, ps_v3(0, -.18, .1), ps_v3(0, -.18, .1), .025, 0xe6edf3ff);
     const double y[] = {.25, .42, .59}, scale[] = {.2, .06, .06};
     const unsigned channel[] = {1, 7, 8};
     const uint32_t color[] = {0x6dcf94ff, 0xf2c572ff, 0xff8eafff};

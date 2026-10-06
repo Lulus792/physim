@@ -228,6 +228,20 @@ def main():
                      sdk / "bin" / ("physim-analysis-runner"+suffix),experiment,language_main,analyzer,language_analysis,material_probe,directory])
         print("Installed SDK material tutorial: installed/rebuilt Core, seven analytic scenarios and all four analysis combinations passed",flush=True)
 
+        shutil.copy2(sdk / "examples/spring/main.c",consumer / "spring-tutorial.c")
+        shutil.copy2(sdk / "examples/documentation/spring_analysis.c",consumer / "spring-tutorial-analysis.c")
+        shutil.copy2(repo / "tests/test_spring_tutorial_report.c",consumer / "spring-tutorial-probe.c")
+        for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+            spring_experiment=builder.executable("spring-tutorial-"+kind,["spring-tutorial.c"],[archive],module=True)
+            spring_analyzer=builder.executable("spring-tutorial-analysis-"+kind,["spring-tutorial-analysis.c"],[archive],module=True)
+            spring_probe=builder.executable("spring-tutorial-probe-"+kind,["spring-tutorial-probe.c"],[archive])
+            directory=root / ("Spring tutorial "+kind);directory.mkdir()
+            spring_language=modules["spring"] if kind=="rebuilt" else sdk / "bin" / ("language-spring"+module_suffix)
+            spring_analysis=modules["spring_analysis"] if kind=="rebuilt" else sdk / "bin" / ("language-spring_analysis"+module_suffix)
+            checked([sys.executable,repo / "tests/test_spring_tutorial.py",sdk / "bin" / ("physim-runner"+suffix),
+                     sdk / "bin" / ("physim-analysis-runner"+suffix),spring_experiment,spring_language,spring_analyzer,spring_analysis,spring_probe,directory])
+        print("Installed SDK spring tutorial: installed/rebuilt Core, four damping regimes and sixteen mixed analyses passed",flush=True)
+
         # Preserve the former SDK comparison: nine experiments, both general
         # Physim analyses, the sensor report and six C/Physim combinations.
         # Broader physics equivalence is checked by the normal integration suite.
@@ -296,7 +310,7 @@ def main():
             raise RuntimeError("App tests require an SDK with the app")
     (root / "PASSED.txt").write_text(
         "Native SDK relocation, independent headers, installed and rebuilt core archives, eight bundled and rebuilt C templates, "
-        "eighteen language programs, 35 rebuilt language modules, nine language experiments with both general analyses, "
+        "eighteen language programs, 36 rebuilt language modules, nine language experiments with both general analyses, "
         "specialized sensor analysis and six C/Physim combinations passed.\n"
         "Adaptive bundled/source C and Physim pendulums, actual variable sample times, energy and both analysis languages passed.\n" +
         "Common-target-time parameter studies from bundled/source C and Physim pendulums passed with installed and rebuilt probes.\n" +
@@ -306,6 +320,7 @@ def main():
         "Indexed language values, copied owners, failure cleanup and all 256 SI report rows passed.\n" +
         "Persistent contact world and projected warm graph through installed/rebuilt Core and real C/Physim stack runners, copied snapshots and allocation failures passed.\n" +
         "Custom material/medium tutorial through installed/rebuilt Core, analytic scenarios, C/Physim parity and all mixed analyses passed.\n" +
+        "Spring tutorial through installed/rebuilt Core, four damping regimes, typed parameters and sixteen mixed analyses passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
         ("Eight C template GUI workflows and the complete Physim language GUI workflow passed.\n" if args.app_tests else ""), encoding="utf-8")
     print(f"Native SDK verified: {root}")
