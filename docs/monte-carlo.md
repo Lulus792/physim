@@ -296,3 +296,49 @@ runden würden, werden abgewiesen; ein erfolgloser Neubau erhält die alte Auswa
 Positive und negative Null bleiben bei der Eingabe unterscheidbar. Unveränderte
 Standards, Grenzen und Auswahlen werden direkt aus ihren SI-Werten übernommen,
 sodass etwa 0,29 m bei einer Zentimeteranzeige exakt 0,29 m bleibt.
+
+
+## Unterbrochene Serien fortsetzen
+
+**Archivierte Serie fortsetzen …** im Bereich **Laufserien** wählt den alten
+Serienordner. Physim übernimmt dessen archiviertes Experiment und Einstellungen
+und legt im aktuellen Projekt einen neuen Serienordner an. Der aktuelle
+Experimenteditor und seine ungespeicherten Änderungen bleiben erhalten.
+Abgeschlossene, journalisierte Läufe werden erneut geprüft und bytegleich
+kopiert; nur fehlende Laufindizes starten neue Prozesse. Seeds bleiben `base+i`,
+Parameterwerte und feste/adaptive Zeitvorgaben bleiben unverändert. Das Ergebnis
+enthält sämtliche Endwerte in fester Indexreihenfolge. `reused` in `status.txt`
+zeigt die Zahl übernommener Läufe, `started` nur neu gestartete Prozesse.
+
+CLI, mit absoluten Pfaden:
+
+```sh
+physim-batch --resume /sdk/bin/physim-runner /project/runs/old-series /project/runs/new-series
+```
+
+Der neue Ausgabeordner darf noch nicht existieren. Auch eine bereits vollständige
+Serie kann übernommen werden; dann starten keine neuen Runner. Die Fortsetzung
+kann erneut abgebrochen und ihr neuer Ordner später weitergeführt werden.
+
+Neue Serien speichern vor dem ersten Kindprozess `resume.bin`: versionierte
+Konfiguration, CRC-Prüfsumme und Dateigröße/FNV-1a-Fingerprints von Runner,
+archiviertem Modul und optionalem Quellsnapshot. Änderungen an diesen Dateien oder
+an der gespeicherten Konfiguration verhindern die Wiederaufnahme. Ein verschobener
+Runner ist erlaubt, wenn seine Bytes identisch sind. Serien aus früheren Versionen
+ohne diesen Checkpoint lassen sich nicht mit dieser Funktion fortsetzen.
+Die Fingerprints erkennen Änderungen; sie sind keine kryptografische Authentifizierung.
+
+`completed.csv` ist die Grundlage: Index, Seed, Dateiname, Zeit, Parameterwert und
+Endwert müssen zu Konfiguration und vollständiger Messdatei passen. Kanal- und
+Parametereinheiten werden abgeglichen. Ein unvollständig geschriebener letzter
+Journal-Eintrag wird übergangen. Andere beschädigte Einträge oder veränderte
+Messdateien werden abgewiesen; die alte Serie bleibt unverändert. Ein vollständiger
+Rohlauf ohne Journal-Eintrag wird neu gerechnet, weil sein erfolgreicher
+Prozessabschluss nicht dokumentiert ist. Unterbrochene Rohläufe bleiben im
+ursprünglichen Ordner erhalten.
+
+Die neue Serie verwendet neue Arbeitsverzeichnisse. Wiederholbarkeit setzt wie
+bisher voraus, dass das Modell nur den expliziten Seed als Zufallsquelle und die
+archivierte Konfiguration nutzt; externe Dateien, Uhrzeit oder Prozesszustand
+werden nicht wiederhergestellt. Fehlende oder ungültige Endmesswerte werden
+weiterhin abgewiesen; eine Auswertung mit fehlenden Endwerten bleibt ein offenes Ziel.

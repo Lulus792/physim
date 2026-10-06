@@ -42,6 +42,7 @@ static bool same_summary(const char *a,const char *b) {
     }
     ps_report_destroy(x);ps_report_destroy(y);return ok;
 }
+static bool cancel_completed(uint32_t completed,uint32_t active,void *user){(void)active;return completed<*(uint32_t*)user;}
 static bool cancel(uint32_t completed,uint32_t active,void *user) {
     (void)completed;(void)active;return ps_clock()<*(double*)user;
 }
@@ -63,6 +64,21 @@ int main(int argc,char **argv) {
     CHECK(contains(first,"series.txt","physim_batch=4\n") && contains(first,"series.txt","step_mode=adaptive\n"));
     strcpy(o.directory,parallel);o.workers=4;CHECK(ps_batch_run(&o,NULL,NULL,&b)==PS_OK && b.peak_active==4 && !memcmp(a.values,b.values,6*sizeof(double)));
     CHECK(same_summary(first,parallel));
+    /* Continuation retains nonuniform accepted time grids for C and Physim. */
+    for(unsigned lang=0;lang<2;lang++) {
+        ps_batch_options original=o,resumed;ps_batch_result partial,continued,all;
+        snprintf(original.module,sizeof original.module,"%s",argv[2+lang]);
+        snprintf(original.directory,sizeof original.directory,"%s/resume-%u-original",argv[6],lang);
+        uint32_t cancel_after=2;
+        CHECK(ps_batch_run(&original,cancel_completed,&cancel_after,&partial)==PS_OK && partial.cancelled && partial.completed==2);
+        char output[4096];snprintf(output,sizeof output,"%s/resume-%u-next",argv[6],lang);
+        CHECK(ps_batch_resume_load(original.directory,original.runner,output,&resumed)==PS_OK);
+        CHECK(ps_batch_run(&resumed,NULL,NULL,&continued)==PS_OK && continued.completed==6 && continued.reused==2 && continued.started==4);
+        snprintf(original.directory,sizeof original.directory,"%s/resume-%u-reference",argv[6],lang);
+        CHECK(ps_batch_run(&original,NULL,NULL,&all)==PS_OK && !memcmp(all.values,continued.values,6*sizeof(double)));
+        CHECK(same_summary(output,original.directory));
+    }
+
     strcpy(o.directory,language);strcpy(o.module,argv[3]);CHECK(ps_batch_run(&o,NULL,NULL,&b)==PS_OK && !memcmp(a.values,b.values,6*sizeof(double)));
     CHECK(same_summary(first,language));
     unsigned count;

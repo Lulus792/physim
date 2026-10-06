@@ -178,6 +178,26 @@ def timed_series(flow, directory, scaled=False):
     require(records[0] == records[1], "Timed C/Physim studies differ in accepted times or values")
 
 
+def batch_resume(flow, directory):
+    for language in ("c", "phys"):
+        root = directory / language
+        root.mkdir(parents=True)
+        flow.run("--workspace-state-test", root, "resume-" + language, timeout=130,
+                 marker="BATCH RESUME SELF-TEST: PASSED")
+        runs = root / "project/runs"
+        series = [p for p in runs.iterdir() if p.is_dir() and (p / "resume.bin").exists()]
+        require(len(series) == 2, "Continuation must create a new series directory")
+        old = next(p for p in series if "status=cancelled" in read(p / "status.txt"))
+        new = next(p for p in series if p != old)
+        require("status=complete" in read(new / "status.txt"), "Continuation incomplete")
+        rows = read(old / "completed.csv").splitlines()[1:]
+        require(0 < len(rows) < 64, "Cancellation failed to retain a partial series")
+        for row in rows:
+            filename = row.split(",")[2]
+            require(fingerprint(old / filename) == fingerprint(new / filename), "Completed raw data changed")
+        require(len(read(new / "endpoints.csv").splitlines()) == 65, "Final endpoint table incomplete")
+
+
 def analysis_projects(flow, directory):
     for language in ("c", "phys"):
         root = directory / language
@@ -664,7 +684,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
+SPECIAL = {"batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}

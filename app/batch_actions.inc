@@ -123,6 +123,19 @@ static void start_batch(app *a) {
                                           : "Laufserie gestartet. Jeder Lauf erhält den nächsten Seed.")
                               : "Laufserie konnte nicht gestartet werden.");
 }
+static void resume_batch(app *a,const char *path) {
+    if(!a->loaded || !idle(a) || a->recovery){status(a,"Zuerst den laufenden Job beenden und ein Projekt öffnen.");return;}
+    char runner[4096],destination[4096];join(runner,sizeof runner,a->bin,"physim-runner" EXE_EXT);
+    unique_path(a,destination,sizeof destination,"-resumed-series");
+    ps_batch_options options;ps_result r=ps_batch_resume_load(path,runner,destination,&options);
+    if(r!=PS_OK){char error[192];snprintf(error,sizeof error,"Fortsetzung abgewiesen (%s). Serienordner und archivierte Dateien prüfen.",ps_result_string(r));status(a,error);return;}
+    a->batch_options=options;a->batch_source=NULL;a->batch_last_report[0]=0;
+    memset(&a->batch_result,0,sizeof a->batch_result);
+    SDL_SetAtomicInt(&a->batch_cancel,0);SDL_SetAtomicInt(&a->batch_done,0);
+    SDL_SetAtomicInt(&a->batch_completed,0);SDL_SetAtomicInt(&a->batch_active,0);
+    a->batch_thread=SDL_CreateThread(batch_worker,"batch-resume",a);
+    status(a,a->batch_thread?"Archivierte Serie wird im neuen Ordner fortgesetzt. Abgeschlossene Läufe werden geprüft.":"Fortsetzung konnte nicht gestartet werden.");
+}
 static void pump_batch(app *a) {
     if (!a->batch_thread || !SDL_GetAtomicInt(&a->batch_done))
         return;

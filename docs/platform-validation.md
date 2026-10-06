@@ -3,6 +3,70 @@
 Stand: 6. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Fortsetzung archivierter Laufserien am 6. Oktober 2026
+
+Monte-Carlo-Serien und Parameterstudien speichern einen privaten, versionierten
+Checkpoint. GUI und CLI setzen eine Serie in einem neuen Ordner fort. Das alte
+Archiv wird ausschließlich gelesen. Konfiguration, Runner, archiviertes Modul
+und Quelle müssen übereinstimmen; Journal, Messdatei, Seed, Zeitachse, Endwert
+und Einheiten werden geprüft. Nur vollständig journalierte Läufe werden
+übernommen. Fehlende Indizes behalten ihre ursprünglichen Seeds und werden
+neu ausgeführt. Dateigröße/FNV-Fingerprints dienen der Änderungserkennung,
+nicht der kryptografischen Authentifizierung.
+
+Der neue Integrationstest prüft einen Abbruch mit nicht zusammenhängenden
+fertigen Indizes, bytegleiche übernommene Rohdaten, fehlende Prozessordner für
+übernommene Indizes, identische Endpunkte gegenüber einer frischen Serie,
+Fortsetzung vollständig fertiger Serien ohne neue Prozesse, CLI und
+Parameterstudien. Konfigurationsabweichungen, Quellenänderungen, Zahlenüberlauf
+im Journal, doppelte Indizes, beschädigte Messdateien, Checkpoints und unbekannte
+Versionen werden abgewiesen. Der erste Fixture-Build verwendete einen falschen
+Parameterfunktionsnamen; die Fixture nutzt jetzt `ps_parameter_define`.
+
+Die macOS-Debug-Prüfungen von Fortsetzung, Parallelbetrieb und Zielzeit bestehen
+3/3: `build/batch-resume-debug-mac/test-results/run-nudh14ra`.
+macOS Release besteht für Fortsetzung, Referenz, Parallelbetrieb und Zielzeit
+4/4: `build/batch-resume-mac/test-results/run-8u7uivgq`; Debian Release ebenfalls
+4/4: `build/batch-resume-linux/test-results/run-j0l6wp0b` innerhalb der VM.
+Zusätzliche adaptive Fortsetzungen mit C- und Physim-Modulen bestehen jeweils
+1/1: macOS `build/batch-resume-mac/test-results/run-kkpqqz8m`, Debian
+`build/batch-resume-linux/test-results/run-1h1wz8_a`.
+Die abschließenden Fehlerfallprüfungen bestehen jeweils 1/1: macOS
+`build/batch-resume-mac/test-results/run-pkg740sr`, Debian
+`build/batch-resume-linux/test-results/run-8j9xevqz`.
+
+Der Fensterablauf baut beide Modellsprachen, startet jeweils 64 Läufe, bricht
+über die Schaltfläche ab und setzt über den Ordnerdialog-Callback fort. Hashes
+aller alten Rohdateien und Serienartefakte bleiben unverändert; ungespeicherte
+Editoränderungen und der vollständige Endpunktbericht bleiben erhalten.
+Fortsetzung, bestehende Serien, gemeinsame Zielzeit und Parametereinheiten
+bestehen auf beiden Plattformen 4/4: macOS
+`build/batch-resume-mac/test-results/run-2hulfwe0`, Debian
+`build/batch-resume-linux/test-results/run-2evu3r8d`.
+Die Callbackprüfung ersetzt keine erneute Prüfung der nativen Ordnerauswahl.
+
+Die Statusseite überschritt durch die ergänzten Nachweise die 256-KiB-Grenze
+des Offline-Viewers. Historische Prüfabschnitte sind unverändert nach
+`status-history.md` verschoben und als eigener Handbuchpunkt erreichbar.
+Dokumentationsfenster und Fortsetzungsablauf bestehen danach jeweils 2/2:
+macOS `build/batch-resume-mac/test-results/run-gs3np9v_`, Debian
+`build/batch-resume-linux/test-results/run-0wv6lclz`.
+Alle 19 generierten API-Referenzdokumente sind geprüft.
+
+Installierte SDKs bestehen den C-/Physim-Abbruch-/Fortsetzungsablauf auch nach
+Verschieben in Pfade mit Leerzeichen und Umlaut: macOS
+`build/batch-resume-sdk-proof-mac/app-steps.json`, Debian
+`build/batch-resume-sdk-proof-linux/app-steps.json` innerhalb der VM.
+Fortsetzungsschaltfläche und Ergebnisansicht wurden auf beiden Plattformen
+bei 1080 × 740 visuell geprüft. Ausgeführt wurden Intel macOS 14.6.1 mit
+Apple Clang 16 und SDL 3.2.30 sowie Debian 12 mit Linux 6.1.0-53-cloud-amd64,
+GCC 12.2, SDL 3.2.30 und X11/Xvfb/Openbox/Mesa 22.3.6.
+
+API/ABI 3, Sprache 0.171.0 und Messdatei-/Pipe-Versionen bleiben unverändert.
+Der Katalog enthält 517 Prüfungen ohne Fenster (502 ohne SDL) und 53
+Fensterabläufe. Diese gezielten Prüfungen sind keine erneute vollständige
+517/53-Abnahme. Statistische Behandlung fehlender Endwerte bleibt offen.
+
 ## Eigenständige Analyseprojekte am 6. Oktober 2026
 
 Projektformat 2 erfordert einen ausdrücklichen Typ. Analyseprojekte benötigen

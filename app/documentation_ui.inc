@@ -79,7 +79,8 @@ static const documentation_topic documentation_topics[] = {
     {"Mehrlaufanalyse in Physim", "docs/language-analysis-tutorial.md", false},
     {"Plattformprüfung", "docs/platform-validation.md", false},
     {"snapshot.h", "include/physim/snapshot.h", true},
-    {"C: Aufgezeichnete Szenen", "docs/reference/snapshot.md", false}};
+    {"C: Aufgezeichnete Szenen", "docs/reference/snapshot.md", false},
+    {"Historische lokale Prüfungen", "docs/status-history.md", false}};
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27
 #define DOCUMENTATION_MEASUREMENT_TOPIC 28

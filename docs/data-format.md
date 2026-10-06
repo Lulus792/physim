@@ -271,3 +271,23 @@ meldet der Import einen Fehler; Quelldateien bleiben erhalten.
 Vorhandene `.experiment.c`, `.experiment.phys` und `.limits.txt` werden ebenfalls
 kopiert. Fehlgeschlagene Imports räumen ausschließlich selbst erzeugte Dateien
 auf. Ein gültiger rekonstruierbarer Präfix bleibt als unvollständiger Lauf nutzbar.
+
+
+## Serien-Checkpoint
+
+`resume.bin` ist ein privates Format 1 mit Signatur `PSBRES01`, u32-Gesamtlänge,
+festen Little-Endian-Feldern und abschließender CRC32 über alle vorigen Bytes.
+Es enthält weder Zeiger noch C-Strukturpadding. Die Größe beträgt 5244 Bytes bei
+16 Parameterplätzen. Die Felder sind Runnerpfad (4096 Bytes), Kanalname (48),
+Laufzahl/Schrittbudget/Parallelität/Parameterzahl/Flags (je u32), Seed/Speicherlimit
+(je u64), sieben binary64-Zahlen für Zeit-/Studienvorgaben, Studienparametername
+(48), 16 Paare aus Parametername (48) und binary64-Wert sowie drei Paare aus
+Dateigröße und FNV-1a64 für Runner, Modul und Quellsnapshot. Zeichenketten sind
+nullterminiert. Fehler verändern die Ausgabe des Lesers nicht.
+
+Die Flags kennzeichnen adaptive Schritte, Parameterstudie, Quellsnapshot und
+Physim-Quellsprache. Quelldatei und Modul werden beim Laden aus dem gewählten
+Serienordner genommen; das ursprüngliche Arbeitsverzeichnis wird nicht benutzt.
+Der Fortsetzungsordner erhält einen eigenen Checkpoint. `series.txt` verweist
+mit `resume_from` auf den Vorgänger; Originaldateien werden nicht überschrieben.
+Messdatei-, Pipe-, Sprach- und Modul-ABI-Versionen bleiben unverändert.

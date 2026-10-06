@@ -30,12 +30,23 @@ static bool unsigned_number(const char *s, uint64_t *value) {
     return true;
 }
 int main(int argc, char **argv) {
+    if(argc==5 && !strcmp(argv[1],"--resume")) {
+        ps_batch_options options;ps_batch_result result;
+        ps_result r=ps_batch_resume_load(argv[3],argv[2],argv[4],&options);
+        if(r!=PS_OK){fprintf(stderr,"Resume rejected: %s\n",ps_result_string(r));return 1;}
+        signal(SIGINT,stop);signal(SIGTERM,stop);uint32_t previous=0;
+        r=ps_batch_run(&options,proceed,&previous,&result);
+        fprintf(stderr,"%s: %u/%u runs, %u reused, %u newly started. %s\n",
+            result.cancelled?"Cancelled":ps_result_string(r),result.completed,options.runs,result.reused,result.started,result.error);
+        return r!=PS_OK?1:result.cancelled?130:0;
+    }
     if (argc < 9) {
         fprintf(stderr,
                 "Usage: physim-batch runner module new-directory channel runs steps dt seed "
                 "[source] [--workers N] [--timeout S] [--memory-mib N] "
                 "[--param name=value ...] [--sweep name=start:end] [--until seconds] "
                 "[--adaptive --min-dt seconds --max-dt seconds]\n"
+                "Continuation: physim-batch --resume runner old-directory new-directory\n"
                 "All paths must be absolute. Ctrl+C cancels and preserves completed runs.\n");
         return 2;
     }

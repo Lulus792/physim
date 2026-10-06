@@ -1193,6 +1193,26 @@
     "unit-parameter-invalid": {
       "source": "tests/fixtures/language/parameter_unit_invalid.phys",
       "mode": "--emit-experiment"
+    },
+    "batch-resume-tests": {
+      "sources": [
+        "tests/test_batch_resume.c"
+      ],
+      "libraries": [
+        "batch",
+        "platform",
+        "core"
+      ]
+    },
+    "batch-resume-model": {
+      "sources": [
+        "tests/fixtures/batch_resume_model.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ],
+      "module": true
     }
   },
   "tests": [
@@ -4733,6 +4753,58 @@
           "arguments": [
             "{root}/tests/check_display_workflow.py",
             "analysis_projects_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 560,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "batch_resume",
+      "targets": [
+        "batch-resume-tests",
+        "batch-resume-model",
+        "physim-runner",
+        "physim-batch"
+      ],
+      "steps": [
+        {
+          "program": "batch-resume-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{batch-resume-model}",
+            "{physim-batch}",
+            "{root}/tests/fixtures/batch_resume_model.c",
+            "{work}"
+          ],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "batch_resume_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "batch_resume_workflow",
             "--app",
             "{physim}",
             "--work",

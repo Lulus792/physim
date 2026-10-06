@@ -11,6 +11,7 @@
  * must not exist. Each child has its own process and working directory. */
 typedef struct {
     char runner[4096], module[4096], source[4096], directory[4096], channel[48];
+    char resume_from[4096]; /* Optional existing series; its files stay read-only. */
     /* Optional immutable UTF-8 source captured by the UI before the worker starts.
      * Borrowed for the duration of ps_batch_run; source remains its original path. */
     const char *source_text;
@@ -36,7 +37,7 @@ typedef struct {
     } parameters[PS_MAX_PARAMETERS];
 } ps_batch_options;
 typedef struct {
-    uint32_t completed, started, active, peak_active;
+    uint32_t completed, started, active, peak_active, reused;
     bool cancelled;
     char error[256];
     ps_channel channel;
@@ -50,6 +51,11 @@ typedef struct {
  * successful series receives a report. Results/aggregates use fixed index order. */
 typedef bool (*ps_batch_continue)(uint32_t completed, uint32_t active, void *user);
 ps_result ps_batch_validate(const ps_batch_options *options);
+/* Load immutable saved options and archived module/source for continuation into
+ * a new directory. Runner must match the saved fingerprint. Outputs unchanged
+ * on failure. Versions lacking a checkpoint cannot be resumed. */
+ps_result ps_batch_resume_load(const char *series,const char *runner,const char *new_directory,
+                               ps_batch_options *out);
 ps_result ps_batch_run(const ps_batch_options *options, ps_batch_continue proceed, void *user,
                        ps_batch_result *result);
 /* Final-value statistics, Type-7 quantiles. Approximate normal mean CI only for

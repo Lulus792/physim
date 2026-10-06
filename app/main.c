@@ -251,7 +251,8 @@ typedef struct {
     bool batch_sweep_ready;
     int batch_sweep_parameter;
     char batch_sweep_start[64], batch_sweep_end[64];
-    struct nk_rect batch_start_bounds, batch_cancel_bounds, batch_navigation_bounds;
+    struct nk_rect batch_start_bounds, batch_cancel_bounds, batch_navigation_bounds, batch_resume_bounds;
+    char batch_resume_test_path[4096];
     struct nk_rect batch_sweep_bounds;
     struct nk_rect batch_sweep_value_bounds[2];
     struct nk_rect batch_workers_bounds;
@@ -354,9 +355,10 @@ static void open_library(app *a);
 static bool action_button(struct nk_context *ui, const char *label, bool primary);
 static void open_settings(app *a);
 enum { PS_DIALOG_OPEN_FOLDER = 1, PS_DIALOG_ADD_FILE, PS_DIALOG_ADD_FOLDER,
-       PS_DIALOG_MANAGER_PARENT, PS_DIALOG_IMPORT_RUN };
+       PS_DIALOG_MANAGER_PARENT, PS_DIALOG_IMPORT_RUN, PS_DIALOG_RESUME_BATCH };
 static void choose_workspace_path(app *a, int mode);
 static void import_run(app *a,const char *path);
+static void resume_batch(app *a,const char *path);
 static void create_managed_project(app *a);
 static bool open_workspace_path(app *a, const char *path);
 static void restore_workspace(app *a);
@@ -2414,6 +2416,7 @@ static const int dialog_add_file = PS_DIALOG_ADD_FILE;
 static const int dialog_add_folder = PS_DIALOG_ADD_FOLDER;
 static const int dialog_manager_parent = PS_DIALOG_MANAGER_PARENT;
 static const int dialog_import_run=PS_DIALOG_IMPORT_RUN;
+static const int dialog_resume_batch=PS_DIALOG_RESUME_BATCH;
 static void SDLCALL workspace_dialog_callback(void *userdata, const char *const *filelist,
                                                int filter) {
     (void)filter;
@@ -2430,7 +2433,10 @@ static void choose_workspace_path(app *a, int mode) {
     if (a->dialog_pending || workspace_dialog_event == (Uint32)-1)
         return;
     a->dialog_pending = true;
-    if(mode==PS_DIALOG_IMPORT_RUN && *a->import_test_path) {
+    if(mode==PS_DIALOG_RESUME_BATCH && *a->batch_resume_test_path) {
+        const char *files[]={a->batch_resume_test_path,NULL};workspace_dialog_callback((void *)&dialog_resume_batch,files,0);
+    }
+    else if(mode==PS_DIALOG_IMPORT_RUN && *a->import_test_path) {
         const char *files[]={a->import_test_path,NULL};workspace_dialog_callback((void *)&dialog_import_run,files,0);
     }
     else if(mode==PS_DIALOG_IMPORT_RUN) {
@@ -2442,6 +2448,7 @@ static void choose_workspace_path(app *a, int mode) {
                                NULL, 0, a->workspace_open ? a->workspace : NULL, false);
     else {
         const int *dialog_mode = mode == PS_DIALOG_OPEN_FOLDER ? &dialog_open_folder
+                                 : mode == PS_DIALOG_RESUME_BATCH ? &dialog_resume_batch
                                  : mode == PS_DIALOG_MANAGER_PARENT ? &dialog_manager_parent
                                                                     : &dialog_add_folder;
         const char *location = mode == PS_DIALOG_MANAGER_PARENT ? a->manager_parent
@@ -2527,6 +2534,7 @@ static void test_mouse(app *a, struct nk_rect rect, bool down) {
 #include "pchip_tests.inc"
 #include "channel_units_tests.inc"
 #include "analysis_project_tests.inc"
+#include "batch_resume_tests.inc"
 #include "adaptive_tests.inc"
 #include "series_tests.inc"
 #include "native_dialog_tests.inc"
@@ -2967,6 +2975,7 @@ int main(int argc, char **argv) {
                     if (e.user.code == PS_DIALOG_OPEN_FOLDER)
                         open_workspace_path(a, path);
                     else if(e.user.code==PS_DIALOG_IMPORT_RUN)import_run(a,path);
+                    else if(e.user.code==PS_DIALOG_RESUME_BATCH)resume_batch(a,path);
                     else if (e.user.code == PS_DIALOG_MANAGER_PARENT)
                         snprintf(a->manager_parent, sizeof a->manager_parent, "%s", path);
                     else
@@ -3085,7 +3094,7 @@ int main(int argc, char **argv) {
         } else if (workspace_state_test) {
             if (ps_clock() - test_started >
                 (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
-                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
+                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15)) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
                         argv[3], ps_clock() - test_started);

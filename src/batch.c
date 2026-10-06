@@ -1,6 +1,7 @@
 #include "batch.h"
 #include "platform.h"
 #include <float.h>
+#include "number_parse.h"
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -44,6 +45,7 @@ ps_result ps_batch_validate(const ps_batch_options *o) {
         !absolute(o->module, sizeof o->module, false) ||
         !absolute(o->source, sizeof o->source, true) ||
         !absolute(o->directory, sizeof o->directory, false) ||
+        !absolute(o->resume_from,sizeof o->resume_from,true) ||
         !memchr(o->channel, 0, sizeof o->channel) || !o->channel[0] || !o->runs ||
         o->runs > PS_BATCH_MAX_RUNS || !o->workers || o->workers > PS_BATCH_MAX_WORKERS ||
         !o->steps || o->steps > 100000 ||
@@ -78,6 +80,8 @@ ps_result ps_batch_validate(const ps_batch_options *o) {
             return PS_INVALID;
     return PS_OK;
 }
+#include "batch_checkpoint.inc"
+
 static int compare(const void *a, const void *b) {
     double x = *(const double *)a, y = *(const double *)b;
     return (x > y) - (x < y);
@@ -295,6 +299,16 @@ static ps_result open_endpoint(batch_slot *slot, const ps_batch_options *o) {
     if (r != PS_OK)
         return r;
     slot->state = SLOT_READING;
+    if(*o->resume_from) {
+        char expected[128];uint64_t size,hash;
+        if(!batch_fingerprint(o->module,&size,&hash))return PS_IO;
+        snprintf(expected,sizeof expected,"\nmodule_fnv1a64=%016llx\n",(unsigned long long)hash);
+        if(!strstr(slot->reader.metadata,expected))return PS_CORRUPT;
+        snprintf(expected,sizeof expected,"\nseed=%llu\n",(unsigned long long)(o->seed+slot->index));
+        if(!strstr(slot->reader.metadata,expected))return PS_CORRUPT;
+        snprintf(expected,sizeof expected,"\ndt_s=%.17g\n",o->dt);
+        if(!strstr(slot->reader.metadata,expected))return PS_CORRUPT;
+    }
     if(o->end_time>0) {
         char expected[128];
         snprintf(expected,sizeof expected,"\nend_time_s=%.17g\n",o->end_time);
@@ -379,6 +393,69 @@ static ps_result read_endpoint(batch_slot *slot, const ps_batch_options *o, bool
     }
     return PS_OK;
 }
+static bool batch_resume_options_match(const ps_batch_options *a,const ps_batch_options *b) {
+    if(strcmp(a->module,b->module) || strcmp(a->source,b->source) || strcmp(a->channel,b->channel) ||
+       a->source_text || a->source_size || a->runs!=b->runs || a->steps!=b->steps || a->workers!=b->workers ||
+       a->seed!=b->seed || a->dt!=b->dt || a->timeout_s!=b->timeout_s || a->memory_bytes!=b->memory_bytes ||
+       a->adaptive!=b->adaptive || a->end_time!=b->end_time || a->minimum_dt!=b->minimum_dt || a->maximum_dt!=b->maximum_dt ||
+       a->sweep!=b->sweep || strcmp(a->sweep_name,b->sweep_name) || a->sweep_start!=b->sweep_start || a->sweep_end!=b->sweep_end ||
+       a->parameter_count!=b->parameter_count)return false;
+    for(unsigned i=0;i<a->parameter_count;i++)if(strcmp(a->parameters[i].name,b->parameters[i].name) || a->parameters[i].value!=b->parameters[i].value)return false;
+    return true;
+}
+static bool batch_csv_unsigned(const char *text,uint64_t *out) {
+    if(!*text)return false;
+    uint64_t value=0;
+    for(const unsigned char *p=(const unsigned char*)text;*p;p++) {
+        if(*p<'0' || *p>'9' || value>(UINT64_MAX-(*p-'0'))/10)return false;
+        value=value*10+(*p-'0');
+    }
+    *out=value;return true;
+}
+static ps_result batch_reuse(const ps_batch_options *o,FILE *journal,ps_batch_continue proceed,void *user,ps_batch_result *result) {
+    char path[4096],line[512];snprintf(path,sizeof path,"%s/completed.csv",o->resume_from);
+    FILE *old=fopen(path,"rb");if(!old)return PS_IO;
+    const char *header=o->sweep?"index,seed,file,time_s,parameter_value,value\n":"index,seed,file,time_s,value\n";
+    ps_result r=PS_OK;
+    if(!fgets(line,sizeof line,old) || strcmp(line,header)){fclose(old);return PS_CORRUPT;}
+    while(fgets(line,sizeof line,old)) {
+        if(!strchr(line,'\n')) {if(feof(old))break;r=PS_CORRUPT;break;}
+        if(!keep_going(proceed,user,result))break;
+        line[strlen(line)-1]=0;char *fields[6];unsigned count=0;fields[count++]=line;
+        for(char *p=line;*p;p++)if(*p==','){*p=0;if(count==6){count=0;break;}fields[count++]=p+1;}
+        uint64_t index64,seed;double time,value,parameter=0;char name[64];
+        if(count!=(o->sweep?6u:5u) || !batch_csv_unsigned(fields[0],&index64) || !index64 || index64>o->runs ||
+           !batch_csv_unsigned(fields[1],&seed) || !ps_parse_finite_number(fields[3],NULL,&time) ||
+           !ps_parse_finite_number(fields[count-1],NULL,&value) ||
+           (o->sweep && !ps_parse_finite_number(fields[4],NULL,&parameter))){r=PS_CORRUPT;break;}
+        unsigned index=(unsigned)index64;
+        if(result->finished[index-1] || seed!=o->seed+index-1 || time!=endpoint_time(o) ||
+           (o->sweep && parameter!=sweep_value(o,index-1))){r=PS_CORRUPT;break;}
+        snprintf(name,sizeof name,"run-%04u.psrun",index);if(strcmp(name,fields[2])){r=PS_CORRUPT;break;}
+        batch_slot slot={.index=index-1};snprintf(slot.path,sizeof slot.path,"%s/%s",o->resume_from,name);
+        r=open_endpoint(&slot,o);bool done=false;
+        while(r==PS_OK && !done && keep_going(proceed,user,result))r=read_endpoint(&slot,o,&done);
+        if(r==PS_OK && !result->cancelled && (!done || memcmp(&slot.value,&value,sizeof value)))r=PS_CORRUPT;
+        ps_channel schema={0};ps_parameter_unit unit={0};
+        if(r==PS_OK && !result->cancelled) {
+            schema=slot.reader.schema[slot.channel];
+            if(result->completed && (strcmp(schema.unit,result->channel.unit) || memcmp(schema.dimension,result->channel.dimension,7)))r=PS_CORRUPT;
+            if(o->sweep)r=ps_parameter_unit_parse(slot.reader.metadata,o->sweep_name,&unit);
+            if(r==PS_OK && o->sweep && (!isfinite(o->sweep_start/unit.scale) || !isfinite(o->sweep_end/unit.scale)))r=PS_CORRUPT;
+            if(r==PS_OK && o->sweep && result->completed &&
+               (unit.declared!=result->sweep_unit.declared || unit.scale!=result->sweep_unit.scale ||
+                strcmp(unit.symbol,result->sweep_unit.symbol) || memcmp(unit.dimension,result->sweep_unit.dimension,7)))r=PS_CORRUPT;
+        }
+        ps_run_reader_close(&slot.reader);if(r!=PS_OK || result->cancelled)break;
+        snprintf(path,sizeof path,"%s/%s",o->directory,name);
+        if(!copy(slot.path,path) || !csv_row(journal,o,index-1,value) || fflush(journal)){r=PS_IO;break;}
+        result->values[index-1]=value;result->finished[index-1]=true;result->completed++;result->reused++;
+        if(result->completed==1 || index==1){result->channel=schema;result->sweep_unit=unit;}
+    }
+    if(ferror(old))r=PS_IO;
+    if(fclose(old))r=PS_IO;
+    return r;
+}
 static ps_result run_pool(const ps_batch_options *o, const char *module, FILE *journal,
                           ps_batch_continue proceed, void *user, ps_batch_result *result) {
     uint32_t workers = o->workers < o->runs ? o->workers : o->runs, next = 0;
@@ -386,7 +463,7 @@ static ps_result run_pool(const ps_batch_options *o, const char *module, FILE *j
     if (!slots)
         return PS_MEMORY;
     ps_result r = PS_OK;
-    bool sweep_unit_known=false;
+    bool sweep_unit_known=result->completed!=0;
     char dt[64], steps[32], seed[32], work[4096],target[64],minimum[64],maximum[64];
     snprintf(dt, sizeof dt, "%.17g", o->dt);
     snprintf(steps, sizeof steps, "%u", o->steps);
@@ -492,6 +569,8 @@ static ps_result run_pool(const ps_batch_options *o, const char *module, FILE *j
                 goto done;
         }
         for (uint32_t s = 0; s < workers && next < o->runs; s++) {
+            while(next<o->runs && result->finished[next])next++;
+            if(next==o->runs)break;
             batch_slot *slot = &slots[s];
             if (slot->state != SLOT_EMPTY)
                 continue;
@@ -583,6 +662,14 @@ ps_result ps_batch_run(const ps_batch_options *o, ps_batch_continue proceed, voi
                  "Ungültige Laufserie: Pfade, Seed und Grenzen prüfen.");
         return r;
     }
+    if(*o->resume_from) {
+        ps_batch_options saved;
+        r=ps_batch_resume_load(o->resume_from,o->runner,o->directory,&saved);
+        if(r!=PS_OK || !batch_resume_options_match(o,&saved)) {
+            snprintf(result->error,sizeof result->error,"Fortsetzung abgewiesen: gespeicherte Konfiguration oder Dateien stimmen nicht überein.");
+            return r==PS_OK?PS_INVALID:r;
+        }
+    }
     if (!keep_going(proceed, user, result))
         return PS_OK;
     if (!ps_make_directory_exclusive(o->directory)) {
@@ -590,7 +677,7 @@ ps_result ps_batch_run(const ps_batch_options *o, ps_batch_continue proceed, voi
                  "Ausgabeordner existiert bereits oder ist nicht anlegbar.");
         return PS_IO;
     }
-    char path[4096], module[4096];
+    char path[4096], module[4096], archived_source[4096]={0};
 #ifdef _WIN32
     snprintf(module, sizeof module, "%s/experiment.dll", o->directory);
 #else
@@ -607,6 +694,7 @@ ps_result ps_batch_run(const ps_batch_options *o, ps_batch_continue proceed, voi
                                         !strcmp(o->source + source_length - 5, ".phys")
                                     ? "phys" : "c";
         snprintf(path, sizeof path, "%s/experiment.%s", o->directory, extension);
+        snprintf(archived_source,sizeof archived_source,"%s",path);
         bool copied;
         if (o->source_text) {
             FILE *source = fopen(path, "wbx");
@@ -623,6 +711,7 @@ ps_result ps_batch_run(const ps_batch_options *o, ps_batch_continue proceed, voi
             goto finish;
         }
     }
+    r=batch_checkpoint_write(o,module,archived_source);if(r!=PS_OK)goto finish;
     snprintf(path, sizeof path, "%s/series.txt", o->directory);
     FILE *manifest = fopen(path, "wbx");
     if (!manifest) {
@@ -655,6 +744,7 @@ ps_result ps_batch_run(const ps_batch_options *o, ps_batch_continue proceed, voi
     for (uint32_t i = 0; wrote >= 0 && i < o->parameter_count; i++)
         wrote = fprintf(manifest, "fixed_parameter.%s=%.17g\n",
                         o->parameters[i].name, o->parameters[i].value);
+    if(wrote>=0 && *o->resume_from)wrote=fprintf(manifest,"resume_from=%s\nresume_policy=verified_journal_reuse_into_new_directory\n",o->resume_from);
     int closed = fclose(manifest);
     if (wrote < 0 || closed) {
         r = PS_IO;
@@ -667,7 +757,8 @@ ps_result ps_batch_run(const ps_batch_options *o, ps_batch_continue proceed, voi
         r = PS_IO;
         goto finish;
     }
-    r = run_pool(o, module, csv, proceed, user, result);
+    if(*o->resume_from)r=batch_reuse(o,csv,proceed,user,result);
+    if(r==PS_OK && !result->cancelled)r = run_pool(o, module, csv, proceed, user, result);
     if (csv) {
         if (fclose(csv))
             r = PS_IO;
@@ -743,11 +834,11 @@ finish:
     FILE *status = fopen(path, "wbx");
     if (status) {
         int n = fprintf(
-            status, "status=%s\ncompleted=%u\nrequested=%u\nstarted=%u\npeak_active=%u\nerror=%s\n",
+            status, "status=%s\ncompleted=%u\nrequested=%u\nstarted=%u\npeak_active=%u\nreused=%u\nerror=%s\n",
             r != PS_OK          ? "failed"
             : result->cancelled ? "cancelled"
                                 : "complete",
-            result->completed, o->runs, result->started, result->peak_active, result->error);
+            result->completed, o->runs, result->started, result->peak_active, result->reused, result->error);
         int c = fclose(status);
         if (n < 0 || c)
             r = PS_IO;

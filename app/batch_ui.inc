@@ -21,6 +21,10 @@ static void batch_view(app *a) {
     nk_end_disabled(ui);
     if (nk_button_label(ui, "Anleitung"))
         open_documentation(a, DOCUMENTATION_MONTE_CARLO_TOPIC);
+    nk_layout_row_dynamic(ui,32,1);nk_begin_disabled(ui,!idle(a) || a->dialog_pending);
+    a->batch_resume_bounds=nk_widget_bounds(ui);
+    if(nk_button_label(ui,"Archivierte Serie fortsetzen …"))choose_workspace_path(a,PS_DIALOG_RESUME_BATCH);
+    nk_end_disabled(ui);
     nk_begin_disabled(ui, running);
     nk_layout_row_dynamic(ui, 30, 1);
     a->batch_sweep_bounds = nk_widget_bounds(ui);

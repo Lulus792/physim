@@ -234,6 +234,12 @@ Analyseprojekt in C oder Physim ohne Experimentquelle an. **Messlauf importieren
 und die Auswertung kann bis zu acht importierte Läufe verwenden.
 [Analyseprojekte und Dateiimport](docs/build.md#projekte-in-der-app-bauen).
 
+Unterbrochene Monte-Carlo-Serien und Parameterstudien lassen sich über
+**Laufserien → Archivierte Serie fortsetzen …** weiterführen. Abgeschlossene
+Läufe werden geprüft und übernommen; fehlende Indizes laufen mit denselben
+Seeds und archivierten Einstellungen in einem neuen Serienordner.
+[Wiederaufnahme von Laufserien](docs/monte-carlo.md#unterbrochene-serien-fortsetzen).
+
 **Datei → Workspaces …** verwaltet bis zu acht benannte Arbeitsumgebungen mit
 Ordnern, zusätzlichen Pfaden, offenen Dokumenten und Editoransichten.
 Speicherfehler und laufende Jobs verhindern den Wechsel; Wiederöffnen startet
