@@ -2861,6 +2861,46 @@ Zehnerlogarithmus; der Wert muss positiv sein.
 
 Überall verfügbar.
 
+## logDebug
+
+```text
+logDebug(message: String) -> Bool
+```
+
+Schreibt eine Debug-Meldung mit aktueller Simulationszeit. Nur im Experiment; Bool meldet Annahme durch den Hostlogger.
+
+Experimentmodul erforderlich.
+
+## logError
+
+```text
+logError(message: String) -> Bool
+```
+
+Schreibt eine Fehlermeldung; der Schweregrad beendet die Simulation nicht. Prüfe Bool bei Bedarf.
+
+Experimentmodul erforderlich.
+
+## logInfo
+
+```text
+logInfo(message: String) -> Bool
+```
+
+Schreibt eine Info-Meldung mit aktueller Simulationszeit. Nur im Experiment; false bei ungültigem Text, ausgeschöpftem Budget oder I/O-Fehler.
+
+Experimentmodul erforderlich.
+
+## logWarning
+
+```text
+logWarning(message: String) -> Bool
+```
+
+Schreibt eine Warnung mit aktueller Simulationszeit; verändert weder Modellzustand noch Messwerte.
+
+Experimentmodul erforderlich.
+
 ## maskSeries
 
 ```text

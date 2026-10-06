@@ -1236,6 +1236,22 @@
     "batch-missing-phys": {
       "source": "tests/fixtures/language/batch_missing_model.phys",
       "mode": "--emit-experiment"
+    },
+    "python-logging": {
+      "interpreter": "python"
+    },
+    "logging-c": {
+      "sources": [
+        "examples/logging/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "logging-phys": {
+      "source": "examples/language/logging.phys",
+      "mode": "--emit-experiment"
     }
   },
   "tests": [
@@ -4909,6 +4925,76 @@
           "arguments": [
             "{root}/tests/check_display_workflow.py",
             "series_mask_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 560,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "runner_logging_c",
+      "targets": [
+        "python-logging",
+        "physim-runner",
+        "logging-c"
+      ],
+      "steps": [
+        {
+          "program": "python-logging",
+          "arguments": [
+            "{root}/tests/test_runner_logging.py",
+            "{physim-runner}",
+            "{logging-c}",
+            "{work}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "runner_logging_phys",
+      "targets": [
+        "python-logging",
+        "physim-runner",
+        "logging-phys"
+      ],
+      "steps": [
+        {
+          "program": "python-logging",
+          "arguments": [
+            "{root}/tests/test_runner_logging.py",
+            "{physim-runner}",
+            "{logging-phys}",
+            "{work}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "logging_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "logging_workflow",
             "--app",
             "{physim}",
             "--work",

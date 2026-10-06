@@ -30,7 +30,7 @@ EXAMPLES = "pendulum projectile collision box_floor spring uncertain_projectile 
 LANGUAGE_PROGRAMS = "energy motion flight_phases sampling phase_space rotation_path particles rigid_body contacts distance_joints constraint_graph sweeps coordinate_frames optional_values optional_bindings".split()
 LANGUAGE_EXPERIMENTS = ("pendulum pendulum_rk4 pendulum_integrator pendulum_rk45 pendulum_verlet "
     "projectile projectile_drag collision box_collision buoyancy random_samples scene_shapes "
-    "spring sensors uncertain_projectile spinning_body box_contacts joint_pendulum coupled_bodies fast_sphere").split()
+    "spring sensors uncertain_projectile spinning_body box_contacts joint_pendulum coupled_bodies fast_sphere logging").split()
 LANGUAGE_ANALYSES = "analysis analysis_collision analysis_box_collision analysis_buoyancy analysis_sensors analysis_integral".split()
 
 

@@ -3,7 +3,7 @@
 
 /* The source language evolves independently of the Physim application and SDK ABI. */
 #define PS_LANGUAGE_VERSION_MAJOR 0
-#define PS_LANGUAGE_VERSION_MINOR 172
+#define PS_LANGUAGE_VERSION_MINOR 173
 #define PS_LANGUAGE_VERSION_PATCH 0
 #define PS_LANGUAGE_STRINGIFY_(value) #value
 #define PS_LANGUAGE_STRINGIFY(value) PS_LANGUAGE_STRINGIFY_(value)

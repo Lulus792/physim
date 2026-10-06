@@ -80,7 +80,10 @@ static const documentation_topic documentation_topics[] = {
     {"Plattformprüfung", "docs/platform-validation.md", false},
     {"snapshot.h", "include/physim/snapshot.h", true},
     {"C: Aufgezeichnete Szenen", "docs/reference/snapshot.md", false},
-    {"Historische lokale Prüfungen", "docs/status-history.md", false}};
+    {"Historische lokale Prüfungen", "docs/status-history.md", false},
+    {"Logging", "docs/logging.md", false},
+    {"log.h", "include/physim/log.h", true},
+    {"C: Logging", "docs/reference/log.md", false}};
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27
 #define DOCUMENTATION_MEASUREMENT_TOPIC 28

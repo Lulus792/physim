@@ -12,6 +12,7 @@ from reference_descriptions import DESCRIPTIONS
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULES = {
+    'log': ('Logging mit explizitem Sink', 'logging.md', 'Ein Logger verbindet einen benannten Schweregrad und eine endliche Modellzeit mit einem synchronen Sink. Kein globaler Logger und keine implizite Ausgabe. Kontextlogger gehören dem Host; ps_experiment_log verwendet die aktuelle Simulationszeit. Nachrichten sind begrenztes UTF-8; Rückgabewerte entscheiden über die Behandlung verworfener Meldungen.'),
     'core': ('Grundlagen und Zufall', 'api.md', 'Vektoren, Rotation, Zufallsströme, Basiseinheiten und einfache Integrations-/Kollisionshelfer. Zufallsströme zuerst mit ps_rng_seed initialisieren; derselbe Seed wiederholt den Strom. ps_rng_uniform liefert Werte in (0,1). Winkel werden im Bogenmaß angegeben.'),
     'experiment': ('Experimente und Szenen', 'experiment-tutorial.md', 'Ein Experiment exportiert ps_get_experiment. Der Host ruft create, reset, step, build_scene und destroy auf. ps_channel_add liefert einen Kanalindex oder -1; Messwerte werden über context->values[index] gesetzt. Kanäle nur einmal registrieren. Szenen werden pro Snapshot neu aufgebaut.'),
     'numerics': ('Numerische Verfahren', 'numerics.md', 'Wähle Integrator, Zustand und Ableitung passend zum Modell. Numerische Callbacks müssen alle Komponenten setzen und frei von sichtbaren Nebenwirkungen sein. Adaptive Zwischenstufen sind keine Messzeitpunkte. Prüfe Rückgabewert und gegebenenfalls Diagnose vor Verwendung des Ergebnisses.'),
@@ -259,6 +260,10 @@ LANG_DESCRIPTIONS = {
     'compatibleUnit': 'Prüft gleiche SI-Dimensionen unabhängig von Skala und Symbol.',
     'Channel': 'Registriert einen skalaren Messkanal; nur beim Anlegen des Experiments verwenden, nicht in step oder scene.',
     'sample': 'Setzt den aktuellen Messwert des Kanals in seiner deklarierten Einheit. Auch den Anfangswert in reset setzen.',
+    'logDebug': 'Schreibt eine Debug-Meldung mit aktueller Simulationszeit. Nur im Experiment; Bool meldet Annahme durch den Hostlogger.',
+    'logInfo': 'Schreibt eine Info-Meldung mit aktueller Simulationszeit. Nur im Experiment; false bei ungültigem Text, ausgeschöpftem Budget oder I/O-Fehler.',
+    'logWarning': 'Schreibt eine Warnung mit aktueller Simulationszeit; verändert weder Modellzustand noch Messwerte.',
+    'logError': 'Schreibt eine Fehlermeldung; der Schweregrad beendet die Simulation nicht. Prüfe Bool bei Bedarf.',
     'metadata': 'Setzt beschreibenden UTF-8-Modelltext, etwa Parameter und Methode.',
     'simulationTime': 'Aktuelle Hostzeit in Sekunden; beim Eintritt in step die Zeit vor dem Schritt.',
     'runSeed': 'Liefert das vollständige 64-Bit-Bitmuster des aktuellen Laufseeds als Int64. Auch Seedwerte oberhalb von INT64_MAX bleiben beim Zurückwandeln in einen Zufallsstrom erhalten; nur im Experiment.',

@@ -444,6 +444,8 @@ static void log_line(app *a, const char *format, ...) {
     size_t n = strlen(a->log), m = strlen(text);
     if (n + m + 2 >= sizeof a->log) {
         size_t drop = sizeof a->log / 2;
+        while(drop<n && a->log[drop]!='\n')drop++;
+        if(drop<n)drop++;
         memmove(a->log, a->log + drop, n - drop + 1);
         n -= drop;
     }
@@ -1112,10 +1114,10 @@ static bool start_run_mode(app *a, bool paused) {
     snprintf(minimum,sizeof minimum,"%.17g",a->minimum_dt);
     snprintf(maximum,sizeof maximum,"%.17g",a->maximum_dt);
     char parameter_arguments[PS_MAX_PARAMETERS][128];
-    const char *args[16 + 2 * PS_MAX_PARAMETERS] = {
-        runner, module, next_run, "--interactive", "--dt", dt, "--seed", a->seed,
+    const char *args[17 + 2 * PS_MAX_PARAMETERS] = {
+        runner, module, next_run, "--interactive", "--log-events", "--dt", dt, "--seed", a->seed,
         "--speed", speed};
-    size_t argument_count = 10;
+    size_t argument_count = 11;
     if(a->adaptive_steps) {
         args[argument_count++]="--adaptive";
         args[argument_count++]="--min-dt";args[argument_count++]=minimum;
@@ -1597,6 +1599,10 @@ static void pump(app *a) {
                              "Zeitleiste: %s", ps_result_string(timeline_result));
                 if (!a->timeline_browsing) ps_scene_view_sync(&a->scene_view, &a->scene);
                 add_history(a);
+            } else if(type==PS_MSG_LOG) {
+                ps_log_record record;
+                if(!ps_wire_log_decode(p,n,&record)){r=-1;break;}
+                log_line(a,"Experiment [%s, t=%.17g s]: %s",ps_log_level_name(record.level),record.time_s,record.message);
             } else if (type == PS_MSG_ERROR) {
                 char error[8193];
                 memcpy(error, p, n);
@@ -2540,6 +2546,7 @@ static void test_mouse(app *a, struct nk_rect rect, bool down) {
 #include "batch_resume_tests.inc"
 #include "batch_missing_tests.inc"
 #include "series_mask_tests.inc"
+#include "logging_tests.inc"
 #include "adaptive_tests.inc"
 #include "series_tests.inc"
 #include "native_dialog_tests.inc"
@@ -3099,7 +3106,7 @@ int main(int argc, char **argv) {
         } else if (workspace_state_test) {
             if (ps_clock() - test_started >
                 (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
-                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
+                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strcmp(argv[3],"logging-c") || !strcmp(argv[3],"logging-phys") || !strcmp(argv[3],"logging-flood") || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15)) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
                         argv[3], ps_clock() - test_started);

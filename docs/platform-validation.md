@@ -3,6 +3,95 @@
 Stand: 6. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Explizites Experiment-Logging am 6. Oktober 2026
+
+Der Host besitzt einen expliziten synchronen Logger; der optionale Context-Tail
+bewahrt die bisherigen Feldpositionen von ABI 3. Core- und Experiment-API
+validieren Schweregrad, endliche Modellzeit und 1–1024 UTF-8-Bytes. Physim 0.173.0
+bindet Debug/Info/Warning/Error mit Bool-Rückgabe. Der Runner schreibt exklusive
+JSONL-Sidecars und sendet ausschließlich mit `--log-events` zusätzliche
+Wire-4-Frames vom Typ 11. Typ 10 bleibt SPEED. Meldungen aus Initialisierung und
+Zerstörung stehen außerhalb der HELLO/BYE-Phase; die App nimmt sie korrekt an.
+
+Die neue Prüfung verwendet echte C-/Physim-Module und prüft Unicode, JSON-Escaping,
+Zeitpunkte, Parameterabfrage ohne Log-I/O, Default-Clients ohne Logframes,
+Opt-in-Clients mit lückenlosen Sequenznummern, exklusive Fremddateien und
+unveränderte Rohdaten trotz abgewiesenem Logging. Ein Burst von 5000 Aufrufen
+bleibt auf 4096 akzeptierte Records plus eine Zusammenfassung begrenzt.
+Core-Tests prüfen unabhängige Sinks, Grenzlängen, ungültiges UTF-8/Controls,
+kurze ältere Contexts, weitergegebene Fehler, alle vier Sprachwrapper und
+transaktionale Wire-Decodierung. Eine zusätzliche Compilerprüfung lehnt die
+Experimentfunktion im Standalone-Modus ab.
+
+Tatsächlich ausgeführte Release-Gesamtprüfungen bestehen 523/523 auf beiden
+Plattformen: macOS 14.6.1 (23G93), Intel, AppleClang 16.0.0 und SDL 3.2.30 unter
+`build/logging-release-mac/test-results/run-vha0_q58`; Debian 12, Kernel
+6.1.0-53-cloud-amd64, GCC 12.2 und SDL 3.2.30 unter
+`build/logging-release-linux/test-results/run-viquytof` innerhalb der VM.
+Diese Gesamtläufe gingen der abschließenden App-Pufferkorrektur voraus;
+deren gezielte Nachprüfungen werden separat ausgewiesen.
+
+Der Debug-Loggingtest einschließlich beider Runner besteht auf macOS 3/3
+(`build/logging-debug-mac/test-results/run-1r68gma0`), der zusätzliche
+Standalone-Compilercheck 1/1 (`run-svg1tt44`). Ein früher Funktionsname kollidierte
+mit dem vorhandenen mathematischen Logarithmus und wurde in
+`psrt_log_message` geändert. Das C-Beispiel ruft seine Initialisierung aus
+`create` auf, wie die übrigen nativen Modelle; der Runner führt keinen
+zusätzlichen Reset-Callback aus.
+
+Der App-Ablauf baut C- und Physim-Projekte, startet pausiert, betätigt den
+Einzelschritt und prüft Zeit, Kanalwert, Logtexte und gespeicherte Meldungen.
+Der zusätzliche C-Burst prüft gültiges UTF-8 nach der Begrenzung des 64-KiB-
+Anzeigepuffers und die gespeicherte Drop-Zusammenfassung. Alte Texte werden jetzt
+an einer Zeilengrenze entfernt. Die Ansicht wurde nach Scrollen zum Logende
+auch visuell kontrolliert. macOS Release besteht 1/1 einschließlich aller drei
+Teilabläufe: `build/logging-release-mac/test-results/run-m6rx4ffp`.
+Im vorangegangenen Dreifachlauf bestanden Reset und Workspace, während das neue
+Burst-Testsetup eine bereits bekannte Parameterauswahl fälschlich erneut als
+unbekannten Parameter restaurieren wollte (`run-r2_cczsx`, 2/3). Das Setup setzt
+nun den vorhandenen Parameterwert. Eine frühere generische 15-Sekunden-Frist wurde
+für diesen Projektbuild-Ablauf auf dieselben 120 Sekunden wie vergleichbare
+bestehende Fensterfälle gesetzt. Messwert- und Protokollassertions bleiben erhalten.
+
+Die letzte Linux-Release-Nachprüfung von Core-Logging, C-/Physim-Runnern und
+Standalone-Compilercheck besteht 4/4:
+`build/logging-release-linux/test-results/run-3kcsx0za`.
+Die letzte macOS-Release-Nachprüfung derselben vier Fälle besteht 4/4:
+`build/logging-release-mac/test-results/run-3nxgo4et`.
+Die Debian-X11-Fensterprüfung mit Mesa 22.3.6, Xvfb und Openbox besteht 3/3:
+Logging (C, Physim, Unicode-Burst), Reset und Workspace unter
+`build/logging-release-linux/test-results/run-rai17wux`.
+
+Linux GCC Debug mit AddressSanitizer und UndefinedBehaviorSanitizer besteht
+3/3 nach der abschließenden Änderung des C-Beispiels zu context-eigenem Zustand:
+`build/logging-asan-linux/test-results/run-9f7sa_li`. Eine macOS-Sanitizerprüfung
+wird weiterhin nicht behauptet: Der benötigte `ld64.lld` fehlt lokal.
+
+Die portablen Release-SDKs wurden in Pfade mit Leerzeichen und Umlauten
+verschoben. `verify-native-sdk.py` prüft unabhängige Header-Übersetzung,
+installiertes und aus gelieferten Quellen neu gebautes Core-Archiv, die
+mitgelieferten C-/Physim-Beispiele und echte Nutzerprojektbuilds. Zusätzlich
+prüft er jetzt das Logging durch das installierte und neu gebaute C-Archiv
+sowie ein Physim-Modul mit denselben JSONL-/Wire-Assertions wie die Runner-Suite.
+Beide Prüfungen bestehen vollständig:
+`build/logging-sdk-proof-mac/Native SDK ä mhoxlqxl` und in der VM
+`build/logging-sdk-proof-linux/Native SDK ä 9e4_elo9`.
+Die Manifeste enthalten 287 Dateien unter macOS und 284 unter Linux; alle
+SHA-256-Werte wurden geprüft.
+
+Auch bereits im vorherigen Masken-Build übersetzte ABI-3-Pendelmodule laufen
+unverändert im neuen Runner: je drei Samples unter macOS und Debian, ohne
+Log-Sidecar. Beide Tests verwenden die alten Binärdateien aus
+`build/series-mask-mac/bin/pendulum.so` bzw.
+`build/series-mask-linux/bin/pendulum.so`. Die Referenzprüfung bestätigt alle
+20 generierten API-Dokumente und ihre Offline-Navigation.
+
+Vertrag und praktische Grenzen stehen unter [Logging](logging.md). Beliebige
+stdout-/stderr-Ausgaben eines interaktiven Moduls werden nicht abgefangen;
+`fflush` ist keine Zusicherung gegen Stromausfall. Der Logkanal ersetzt keine
+OS-Sandbox und keine allgemeine Ressourcenbegrenzung. Windows, Wayland und
+weitere OS-/Grafikkombinationen wurden für diese Änderung nicht lokal geprüft.
+
 ## Explizite Masken in Datenreihen und Berichten am 6. Oktober 2026
 
 Die neue C-/Physim-Maske erhält Zeilen, Alignment und Dataset-Lebensdauer.

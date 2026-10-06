@@ -1,10 +1,10 @@
 # Eigene Physim-Sprache
 
-Stand: 2026-10-06. Sprachvertrag 0.172.0; noch keine freigegebene Anwendersprache.
+Stand: 2026-10-06. Sprachvertrag 0.173.0; noch keine freigegebene Anwendersprache.
 Der Arbeitsname ist „Physim-Sprache“. Das vollständige Ziel und die Abnahmen
 LANG-001 bis LANG-007 stehen in Abschnitt 10 des Projektplans.
 
-Die Sprachversion `0.172.0` steht unabhängig von der App-Version und der SDK-ABI
+Die Sprachversion `0.173.0` steht unabhängig von der App-Version und der SDK-ABI
 in `src/language/version.h`. `physimc --version` und der Kopf des generierten C
 geben sie aus. Änderungen an Syntax oder Semantik erfordern eine bewusste
 Anhebung; die vorliegende Fassung ist noch ein Entwicklungsvertrag und keine
@@ -2951,3 +2951,13 @@ Sprachvertrag 0.172.0 ergänzt `Series.masked(selector, accepted)`, `validity()`
 Transformationen und Berichte übernehmen die Masken. `value`/`values` verlangen
 gültige Beobachtungen im angeforderten Bereich. Numerische Regeln und Beispiele
 stehen unter [Datenreihen mit Masken](series.md#messlücken-mit-expliziten-masken).
+
+
+## Experimentmeldungen (0.173.0)
+
+`logDebug(message)`, `logInfo(message)`, `logWarning(message)` und
+`logError(message)` liefern `Bool` und sind im Experiment verfügbar. Die Meldung
+trägt die aktuelle Hostzeit; in `step` ist das die Zeit vor dem Schritt. `false`
+meldet eine abgewiesene Nachricht, einen vollen Logkanal oder einen Schreibfehler.
+Ein Fehler-Schweregrad beendet die Simulation nicht. Grenzen, JSONL-Speicherung
+und das C-Gegenstück erklärt [Logging](logging.md).

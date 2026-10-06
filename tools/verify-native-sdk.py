@@ -133,6 +133,20 @@ def main():
                                                module=True, language=True)
             print(f"Installed language module: {name} rebuilt", flush=True)
 
+        # Logging must also survive relocation and a rebuild of the shipped Core.
+        shutil.copy2(sdk / "examples/logging/main.c", consumer / "logging.c")
+        for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
+            experiment = builder.executable("logging-" + kind, ["logging.c"], [archive], module=True)
+            directory = root / ("Logging " + kind)
+            directory.mkdir()
+            checked([sys.executable, repo / "tests/test_runner_logging.py",
+                     sdk / "bin" / ("physim-runner" + suffix), experiment, directory])
+        directory = root / "Logging Physim"
+        directory.mkdir()
+        checked([sys.executable, repo / "tests/test_runner_logging.py",
+                 sdk / "bin" / ("physim-runner" + suffix), modules["logging"], directory])
+        print("Installed SDK logging: installed/rebuilt C and Physim passed", flush=True)
+
         # Preserve the former SDK comparison: nine experiments, both general
         # Physim analyses, the sensor report and six C/Physim combinations.
         # Broader physics equivalence is checked by the normal integration suite.
@@ -201,10 +215,11 @@ def main():
             raise RuntimeError("App tests require an SDK with the app")
     (root / "PASSED.txt").write_text(
         "Native SDK relocation, independent headers, installed and rebuilt core archives, eight bundled and rebuilt C templates, "
-        "fifteen language programs, 27 rebuilt language modules, nine language experiments with both general analyses, "
+        "fifteen language programs, 28 rebuilt language modules, nine language experiments with both general analyses, "
         "specialized sensor analysis and six C/Physim combinations passed.\n"
         "Adaptive bundled/source C and Physim pendulums, actual variable sample times, energy and both analysis languages passed.\n" +
         "Common-target-time parameter studies from bundled/source C and Physim pendulums passed with installed and rebuilt probes.\n" +
+        "Logging through installed/rebuilt C Core and Physim passed with exclusive JSONL and opt-in wire events.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
         ("Eight C template GUI workflows and the complete Physim language GUI workflow passed.\n" if args.app_tests else ""), encoding="utf-8")
     print(f"Native SDK verified: {root}")

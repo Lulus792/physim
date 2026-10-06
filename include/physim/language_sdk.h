@@ -878,6 +878,16 @@ static inline void psrt_label(psrt_host *host, ps_vec3 position, const char *tex
         PS_OK)
         psrt_fail(site, "Invalid label, duplicate ID or scene capacity exceeded");
 }
+/* Logging is optional and never traps for a host budget/I/O rejection. The
+ * boolean lets model code decide whether a message was accepted. */
+static inline bool psrt_log_message(psrt_host *host,const char *text,ps_log_level level,psrt_site site) {
+    if(!host || !host->context)psrt_fail(site,"Logging requires an experiment context");
+    return ps_experiment_log(host->context,level,text)==PS_OK;
+}
+static inline bool psrt_log_debug(psrt_host *host,const char *text,psrt_site site){return psrt_log_message(host,text,PS_LOG_DEBUG,site);}
+static inline bool psrt_log_info(psrt_host *host,const char *text,psrt_site site){return psrt_log_message(host,text,PS_LOG_INFO,site);}
+static inline bool psrt_log_warning(psrt_host *host,const char *text,psrt_site site){return psrt_log_message(host,text,PS_LOG_WARNING,site);}
+static inline bool psrt_log_error(psrt_host *host,const char *text,psrt_site site){return psrt_log_message(host,text,PS_LOG_ERROR,site);}
 static inline void psrt_metadata(psrt_host *host, const char *text, psrt_site site) {
     if (host->phase != PSRT_CREATE)
         psrt_fail(site, "Metadata requires create callback");

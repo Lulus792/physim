@@ -201,6 +201,21 @@ def masked_png_pixels(path):
         require(not any(blue(x,y) for y in range(95,565) for x in range(left,right)),"Masked PNG draws a line across a measurement gap")
 
 
+def logging(flow,directory):
+    for language in ("c","phys","flood"):
+        root=directory/language
+        root.mkdir(parents=True)
+        flow.run("--workspace-state-test",root,"logging-"+language,timeout=130,
+                 marker="LOGGING logging-"+language+" SELF-TEST: PASSED")
+        logs=list((root/"project").rglob("*.pslog"))
+        require(len(logs)==1,"Expected one saved logging run")
+        rows=[json.loads(line) for line in read(logs[0]).splitlines()]
+        require(rows[0]["message"]=="Created: α","App lost initial log")
+        require(any(r["message"]=="Step\nnext line" and r["time_s"]==0 for r in rows),"App lost step log")
+        if language=="flood":
+            require(len(rows)==4097 and "suppressed 908 messages" in rows[-1]["message"],"App lost bounded logging summary")
+
+
 def series_masks(flow,directory):
     import csv
     for language in ("c","phys"):
@@ -760,7 +775,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
+SPECIAL = {"logging_workflow": logging, "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}

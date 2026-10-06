@@ -128,12 +128,15 @@ typedef struct ps_context {
     uint32_t parameter_count;
     ps_parameter parameters[PS_MAX_PARAMETERS];
     ps_parameter_unit parameter_units[PS_MAX_PARAMETERS];
+    ps_logger logger;
 } ps_context;
 ```
 
 Optional ABI-3 context extension; check struct_size before accessing it.
 
 Optional ABI-3 tail. Old context/parameter layouts remain unchanged.
+
+Optional ABI-3 tail. Host-owned logger; do not replace its descriptor.
 
 ### ps_step_interval
 
@@ -168,6 +171,19 @@ Optional ABI-3 tail, advertised with PS_EXPERIMENT_ADAPTIVE_STEPS. Accept one fo
 typedef const ps_experiment_api *(*ps_experiment_entry)(void);
 ```
 
+## ps_experiment_log
+
+Schreibt über den Hostlogger mit der aktuellen Simulationszeit. Ein älterer Context ohne Logger-Tail liefert PS_VERSION.
+
+```c
+ps_result ps_experiment_log(
+    const ps_context *context,ps_log_level level,const char *message);
+```
+
+Export ps_get_experiment from each module. Context and scene are owned by host. Module owns context->user and releases it in destroy, including failed create.
+
+Log at the current host simulation time. Old contexts without the logger tail return PS_VERSION. A disabled logger succeeds. Logging never mutates channel values, RNG state or host time; sink errors are reported to caller.
+
 ## ps_channel_add
 
 Registriert einen skalaren Messkanal und liefert seinen Index; -1 bedeutet Fehler. Namen, Einheitensymbol und Beschreibung passend zu den Kapazitäten halten.
@@ -179,8 +195,6 @@ int ps_channel_add(
     ps_unit unit,
     const char *description);
 ```
-
-Export ps_get_experiment from each module. Context and scene are owned by host. Module owns context->user and releases it in destroy, including failed create.
 
 ## ps_parameter_override
 

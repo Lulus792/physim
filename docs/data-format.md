@@ -334,3 +334,11 @@ Platzhalter keine Messbedeutung. Die Masken sind Teil der Payload-CRC.
 
 Kanal-/Messdateiformat 1, Projektformat 2 und Runner-Pipe-Version 4 ändern sich
 dadurch nicht. Auch öffentliche C-Strukturen und Modul-ABI 3 bleiben erhalten.
+
+## Experiment-Logdateien und optionale Wire-4-Events
+
+`<output.psrun>.pslog` speichert UTF-8-JSONL separat von Rohdaten und Snapshots.
+`--log-events` aktiviert in interaktiven Runnern Typ 11 mit Schweregrad, Modellzeit
+und Text; Typ 10 bleibt SPEED. Ohne Opt-in werden keine zusätzlichen Wire-Events
+gesendet. Format, Validierung, Budgets und Fehlerverhalten stehen unter
+[Logging](logging.md).

@@ -40,3 +40,17 @@ void ps_wire_consume(ps_wire_buffer *b, uint32_t n) {
     memmove(b->data, b->data + 20 + n, b->used);
     b->sequence++;
 }
+
+size_t ps_wire_log_encode(unsigned char *out,size_t capacity,const ps_log_record *record) {
+    if(!out || !ps_log_record_valid(record))return 0;
+    size_t n=strlen(record->message);if(capacity<12+n)return 0;
+    ps_put_u32(out,(uint32_t)record->level);ps_put_f64(out+4,record->time_s);
+    memcpy(out+12,record->message,n);return 12+n;
+}
+bool ps_wire_log_decode(const unsigned char *data,size_t size,ps_log_record *out) {
+    if(!data || !out || size<=12 || size>12+PS_LOG_MESSAGE_MAX || memchr(data+12,0,size-12))return false;
+    ps_log_record record={0};record.level=(ps_log_level)ps_get_u32(data);record.time_s=ps_get_f64(data+4);
+    memcpy(record.message,data+12,size-12);
+    if(!ps_log_record_valid(&record))return false;
+    *out=record;return true;
+}

@@ -1,6 +1,7 @@
 #ifndef PHYSIM_EXPERIMENT_H
 #define PHYSIM_EXPERIMENT_H
 #include "core.h"
+#include "log.h"
 #define PS_MAX_CHANNELS 16
 #define PS_MAX_OBJECTS 32
 #define PS_MAX_SCENE_POINTS 96
@@ -80,6 +81,8 @@ typedef struct ps_context {
     ps_parameter parameters[PS_MAX_PARAMETERS];
     /* Optional ABI-3 tail. Old context/parameter layouts remain unchanged. */
     ps_parameter_unit parameter_units[PS_MAX_PARAMETERS];
+    /* Optional ABI-3 tail. Host-owned logger; do not replace its descriptor. */
+    ps_logger logger;
 } ps_context;
 typedef struct {
     double elapsed_s, next_s;
@@ -107,6 +110,10 @@ typedef struct {
 typedef const ps_experiment_api *(*ps_experiment_entry)(void);
 /* Export ps_get_experiment from each module. Context and scene are owned by host.
  * Module owns context->user and releases it in destroy, including failed create. */
+/* Log at the current host simulation time. Old contexts without the logger
+ * tail return PS_VERSION. A disabled logger succeeds. Logging never mutates
+ * channel values, RNG state or host time; sink errors are reported to caller. */
+ps_result ps_experiment_log(const ps_context *context,ps_log_level level,const char *message);
 int ps_channel_add(ps_context *context, const char *name, ps_unit unit, const char *description);
 ps_result ps_parameter_override(ps_context *context, const char *name, double value);
 ps_result ps_parameter_define(ps_context *context, const char *name, const char *description,

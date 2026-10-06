@@ -622,3 +622,6 @@ Messreihen lassen sich in C und Physim auch mit monotoner kubischer
 Hermite-Interpolation (PCHIP) auf ein gemeinsames Raster bringen. Einheiten,
 Zuordnung und Dataset-Lebensdauer bleiben geprüft; Extrapolation ist ausgeschlossen.
 [PCHIP im Analysecode](docs/language-analysis-tutorial.md#unregelmäßige-raster-mit-pchip-vergleichen).
+
+Experimente können Meldungen mit Modellzeit über einen eigenen Logkanal ausgeben.
+[C und Physim, gespeicherte JSONL-Meldungen und Grenzen](docs/logging.md).

@@ -1,0 +1,15 @@
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let value = Channel("value", metres, "Logging leaves physics unchanged")
+var current = 100.0
+func create():
+    logInfo("Created: α")
+func reset():
+    current = 100 + Float64(runSeed())
+    value.sample(current)
+    logDebug("Reset \"quoted\"\t☃")
+func step(dt: Float64):
+    logWarning("Step\nnext line")
+    current += dt
+    value.sample(current)
+func scene():
+    return

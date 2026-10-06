@@ -403,3 +403,25 @@ ps_result ps_scene_add_id(ps_scene *s, uint32_t id, ps_shape shape, ps_vec3 a, p
     o.orientation.w = 1;
     return ps_scene_push(s, &o);
 }
+
+const char *ps_log_level_name(ps_log_level level) {
+    static const char *names[]={"debug","info","warning","error"};
+    return level>=PS_LOG_DEBUG && level<=PS_LOG_ERROR?names[level-PS_LOG_DEBUG]:"unknown";
+}
+bool ps_log_record_valid(const ps_log_record *record) {
+    return record && record->level>=PS_LOG_DEBUG && record->level<=PS_LOG_ERROR &&
+        isfinite(record->time_s) && record->message[0] &&
+        ps_text_valid(record->message,sizeof record->message,true);
+}
+ps_result ps_logger_emit(const ps_logger *logger,ps_log_level level,double time_s,const char *message) {
+    if(!logger || !message || !ps_text_valid(message,PS_LOG_MESSAGE_MAX+1u,true) || !*message ||
+       level<PS_LOG_DEBUG || level>PS_LOG_ERROR || !isfinite(time_s))return PS_INVALID;
+    ps_log_record record={.level=level,.time_s=time_s};
+    memcpy(record.message,message,strlen(message)+1);
+    return logger->write?logger->write(logger->user,&record):PS_OK;
+}
+ps_result ps_experiment_log(const ps_context *context,ps_log_level level,const char *message) {
+    if(!context || context->api_version!=PS_API_VERSION ||
+       context->struct_size<offsetof(ps_context,logger)+sizeof context->logger)return PS_VERSION;
+    return ps_logger_emit(&context->logger,level,context->time_s,message);
+}

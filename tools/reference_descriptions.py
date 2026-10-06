@@ -8,6 +8,10 @@ def add(prefix, entries):
 
 
 add('ps_', {
+    'log_record_valid': 'Prüft Schweregrad, endliche Modellzeit und terminierte UTF-8-Nachricht mit höchstens 1024 Bytes.',
+    'logger_emit': 'Validiert und kopiert eine Meldung, ruft den expliziten Sink synchron auf und gibt dessen Ergebnis zurück. Ein deaktivierter Sink akzeptiert gültige Meldungen ohne I/O.',
+    'log_level_name': 'Liefert debug, info, warning oder error als unveränderlichen Bibliothekstext; unbekannte Werte liefern unknown.',
+    'experiment_log': 'Schreibt über den Hostlogger mit der aktuellen Simulationszeit. Ein älterer Context ohne Logger-Tail liefert PS_VERSION.',
     'result_string': 'Liefert den lesbaren Namen eines Rückgabewerts; der Text gehört der Bibliothek.',
     'convert': 'Konvertiert value zwischen dimensionskompatiblen Einheiten und schreibt das Ergebnis nach output.',
     'rng_seed': 'Initialisiert einen PCG32-Zufallsstrom für einen reproduzierbaren Seed.',
