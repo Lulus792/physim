@@ -1473,6 +1473,49 @@
         "platform",
         "core"
       ]
+    },
+    "collision-tutorial-c": {
+      "sources": [
+        "examples/documentation/collision_main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "collision-tutorial-phys": {
+      "source": "examples/documentation/collision_main.phys",
+      "mode": "--emit-experiment"
+    },
+    "collision-tutorial-analysis-c": {
+      "sources": [
+        "examples/documentation/collision_analysis.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "collision-tutorial-analysis-phys": {
+      "source": "examples/documentation/collision_analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "collision-tutorial-report-probe": {
+      "sources": [
+        "tests/test_collision_tutorial_report.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "collision-tutorial-instances": {
+      "sources": [
+        "tests/test_collision_tutorial_instances.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
     }
   },
   "tests": [
@@ -5764,6 +5807,93 @@
           "arguments": [
             "{root}/tests/check_tutorial_sources.py",
             "documentation_pendulum_source",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "collision_tutorial",
+      "targets": [
+        "python",
+        "physim-runner",
+        "physim-analysis-runner",
+        "collision-tutorial-c",
+        "collision-tutorial-phys",
+        "collision-tutorial-analysis-c",
+        "collision-tutorial-analysis-phys",
+        "collision-tutorial-report-probe",
+        "collision-tutorial-instances"
+      ],
+      "steps": [
+        {
+          "program": "collision-tutorial-instances",
+          "arguments": [
+            "{collision-tutorial-c}",
+            "{collision-tutorial-phys}"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_collision_tutorial.py",
+            "{physim-runner}",
+            "{physim-analysis-runner}",
+            "{collision-tutorial-c}",
+            "{collision-tutorial-phys}",
+            "{collision-tutorial-analysis-c}",
+            "{collision-tutorial-analysis-phys}",
+            "{collision-tutorial-report-probe}",
+            "{work}"
+          ],
+          "timeout": 240
+        }
+      ]
+    },
+    {
+      "name": "collision_tutorial_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "collision_tutorial_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 560,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "documentation_collision_source",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tutorial_sources.py",
+            "documentation_collision_source",
             "--root",
             "{root}"
           ],

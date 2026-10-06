@@ -3,6 +3,91 @@
 Stand: 7. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Elastischer und inelastischer Stoß am 7. Oktober 2026
+
+Vier neue vollständige Quellen liefern ein zentrales Stoßexperiment im Vakuum
+und dessen Auswertung in C und Physim. Massen, Anfangsgeschwindigkeiten und
+Restitution sind typisierte Parameter je Modellinstanz. Die kontinuierliche
+Kugelabfrage bestimmt den Kontakt innerhalb eines Zeitschritts; Impulsantwort
+und Integration der Restzeit erhalten die Nachstoßbewegung. Das Experiment
+modelliert genau diesen einen zentralen Stoß ohne äußere Kräfte, Reibung oder
+Rotation. Bei vollkommen inelastischem Stoß bleiben zwei co-bewegte Kugeln
+bestehen; ein gemeinsamer Körper oder eine Klebeverbindung wird nicht erzeugt.
+Core-API/ABI 3, Sprachvertrag 0.177.0 und Dateiformate bleiben unverändert.
+
+Ein unabhängiger Pythonprüfer kontrolliert 7.250 primäre Messzeilen aus elf
+Szenarien in beiden Sprachen: elastisch, teilweise und vollkommen inelastisch,
+ungleiche Massen, einseitig bewegte, auseinanderlaufende, ruhende und co-bewegte
+Kugeln sowie grobe Aufzeichnung und Kontakt auf einer Schrittgrenze. Er berechnet
+Stoßzeit, Impuls, Nachstoßgeschwindigkeiten, dissipierte Energie und sämtliche
+Positionen aus geschlossenen eindimensionalen Formeln. Er prüft alle elf
+Kanalnamen mit SI-Dimensionen, Parameterprovenienz und sämtliche Felder der
+Szenen mit acht Einträgen vor beziehungsweise zehn nach dem Kontakt. Ein
+zusätzlicher einzelner großer Schritt muss den Stoß und die restliche Bewegung
+vollständig erfassen. Ungültige Massen/Restitution werden zurückgewiesen.
+Die Instanzprobe führt verschiedene Massen und Restitutionen gleichzeitig aus,
+prüft Einheiten, Reset und unveränderte Messwerte bei abgewiesenen Schritten.
+
+Die beiden Analysesprachen lesen C- und Physim-Läufe. Vier Plots zeigen
+Positionen, Geschwindigkeiten, Gesamtimpuls und K/D/K+D; zwei Tabellen liefern
+Erhaltungskontrollen und tatsächliche Ereignisse. Ausbleibende Kontakte erzeugen
+keine erfundene Ereigniszeile. Ein separater C-Prüfer vergleicht acht vollständige
+Berichtskurven, SI-Plotachsen und alle Tabellenwerte mit den Originaldaten.
+Der unabhängige Parser kontrolliert jedes Feld des vollständigen CSV-Exports.
+Alle 44 Kombinationen aus elf Modellen und beiden Experiment-/Analysesprachen
+bestehen. Leere oder mehrfache Auswahl wird kontrolliert abgewiesen; diese
+Beispielanalyse verarbeitet ausdrücklich einen Lauf. Vier dokumentierte
+Codeblöcke entsprechen exakt den gebauten Quellen.
+[Lernziel, Modell, Gleichungen und Ablauf](collision-tutorial.md).
+
+macOS Release besteht fünf ausgewählte Prüfungen unter
+`build/contact-world-language-release-mac/test-results/run-4tqyn295`, Linux GCC
+Release dieselben fünf unter
+`build/contact-world-language-release-linux/test-results/run-i_fspv_j`:
+neuer Lernpfad, Quellcode- und Referenzdokumentation sowie bisherige Kugelstoß-
+Referenz und C-/Physim-Kugelparität. Linux Debug mit AddressSanitizer und
+UndefinedBehaviorSanitizer besteht den gesamten neuen Lernpfad einschließlich
+beider Module, Analysen und Instanzprobe unter
+`build/spring-tutorial-asan-linux/test-results/run-bwnqmvya`.
+
+macOS besteht die drei ausgewählten Fensterabläufe unter
+`build/contact-world-language-release-mac/test-results/run-s5t1jz8z`, Linux unter
+`build/contact-world-language-release-linux/test-results/run-a8u4tf5i`.
+Die neue Prüfung übernimmt die getesteten Quellen in beide App-Projektsprachen,
+baut, wählt mA=2 kg/e=0, führt 100 angehaltene Schritte zu 0,02 s aus und öffnet
+101 gespeicherte Messzeilen mit Szene und Analyse erneut. Die gemeinsame
+Nachstoßgeschwindigkeit beträgt 0,2 m/s; K=0,06 J, D=0,48 J und K+D=0,54 J.
+Impuls 0,6 kg m/s, Stoßzeit 4/3 s und Impuls auf A −0,8 kg m/s werden geprüft.
+Zusätzlich bestehen der bestehende Physim-Kugelablauf und die komplette
+Offline-Dokumentnavigation einschließlich des neuen Lernpfads. macOS lief im
+nativen Desktop, Linux unter X11/Xvfb/Openbox/Mesa. Compiler-, SDL- und OS-
+Versionen entsprechen den folgenden Intel-/Debian-12-Nachweisen. Screenshots
+von Szene und Energieabrechnung wurden visuell geprüft. Auf kleiner Fläche
+bleiben untere Diagrammteile über Scrollen erreichbar; die Darstellung verbindet
+Messpunkte und berechnet keinen endlichen Stoßkraftverlauf.
+
+Beide neu installierten SDKs wurden an einen anderen absoluten Pfad mit
+Leerzeichen/Umlauten kopiert und vollständig verifiziert: macOS unter
+`build/collision-tutorial-sdk-proof-mac/Native SDK ä ol9_d8s1`, Linux unter
+`build/collision-tutorial-sdk-proof-linux/Native SDK ä 4sht9ghs`. Der Gesamtprüfer
+kontrolliert Manifest und öffentliche Header, baut Core und alle Sprachmodule
+aus der mitgelieferten Quelldistribution neu und führt die bisherigen Archiv-,
+Kontakt-, Diagnose-, Serien- und Beispielprüfungen aus. Der neue Stoß-Lernpfad
+läuft jeweils mit installiertem und neu gebautem Core sowie ein drittes Mal
+über genau den dokumentierten nativen C-Projektbuild. Elf analytische Szenarien
+und alle 44 Experiment-/Analysepfade werden bei jedem Durchgang geprüft.
+Die endgültigen SDKs übernehmen die aktuellen Nachweise und erneuern deren
+Manifestwerte; Code-, Beispiel- und App-Binärdateien bleiben bytegleich zur
+verifizierten Installation und zur geprüften Release-App.
+
+Der Katalog umfasst 559 Prüfungen ohne Fenster (544 ohne SDL), 64 Fensterfälle
+und 18 eigenständige Sprachprogramme plus 40 Experiment-/Analysemodule. Beide
+Release-Builds mit `--examples` erstellen sämtliche Programme und Module.
+Ein Gesamtlauf aller aktuellen 559/64 Fälle wird für diese Sitzung nicht
+behauptet; der frühere Lauf aller 555 Fälle ist weiter unten belegt.
+Dieser Lernpfad erfüllt keine anderen offenen Anforderungen des Projektplans
+und wird nicht als vollständige Produktabnahme ausgegeben.
+
 ## Pendel-Lernpfad in beiden Sprachen am 7. Oktober 2026
 
 Vier neue vollständige Quellen liefern dasselbe konservative nichtlineare

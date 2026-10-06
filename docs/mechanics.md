@@ -5,6 +5,10 @@ Impulse, Kugel- und Boxkontakte, Reibung, eine axiale Feder mit Dämpfung sowie 
 Kugelwiderstand und hydrostatischen Auftrieb. Alle Größen verwenden SI; Richtungen und Geschwindigkeiten liegen
 im Weltkoordinatensystem. Die API ist unabhängig von Szene, Runner und GUI.
 
+Der vollständige [Lernpfad zum elastischen und inelastischen Stoß](collision-tutorial.md)
+führt durch ein zentrales Vakuummodell mit wählbaren Massen, Geschwindigkeiten
+und Restitution sowie vollständigen C-/Physim-Quellen und Analysen.
+
 ## Stoßexperiment in der App
 
 1. Vorlage **Kugelstoß & Medien** anlegen und mit F5 bauen.

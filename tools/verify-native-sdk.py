@@ -269,6 +269,33 @@ def main():
                  sdk / "bin" / ("language-pendulum_analysis"+module_suffix),pendulum_probe,pendulum_results])
         print("Installed SDK pendulum tutorial: installed/rebuilt Core, documented native build, five integrators and mixed/adaptive reports passed",flush=True)
 
+        for source in ("collision_main", "collision_analysis"):
+            shutil.copy2(sdk / "examples/documentation" / (source+".c"),consumer / (source+".c"))
+        shutil.copy2(repo / "tests/test_collision_tutorial_report.c",consumer / "collision-tutorial-probe.c")
+        for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+            collision_experiment=builder.executable("collision-tutorial-"+kind,["collision_main.c"],[archive],module=True)
+            collision_analyzer=builder.executable("collision-tutorial-analysis-"+kind,["collision_analysis.c"],[archive],module=True)
+            collision_probe=builder.executable("collision-tutorial-probe-"+kind,["collision-tutorial-probe.c"],[archive])
+            directory=root / ("Collision tutorial "+kind);directory.mkdir()
+            collision_language=modules["collision_main"] if kind=="rebuilt" else sdk / "bin" / ("language-collision_main"+module_suffix)
+            collision_analysis=modules["collision_analysis"] if kind=="rebuilt" else sdk / "bin" / ("language-collision_analysis"+module_suffix)
+            checked([sys.executable,repo / "tests/test_collision_tutorial.py",sdk / "bin" / ("physim-runner"+suffix),
+                     sdk / "bin" / ("physim-analysis-runner"+suffix),collision_experiment,collision_language,
+                     collision_analyzer,collision_analysis,collision_probe,directory])
+        collision_documented=root / "Collision documented project";collision_documented.mkdir()
+        shutil.copy2(sdk / "examples/documentation/collision_main.c",collision_documented / "main.c")
+        shutil.copy2(sdk / "examples/documentation/collision_analysis.c",collision_documented / "analysis.c")
+        (collision_documented / "physim.project").write_text("physim_project=1\n",encoding="utf-8")
+        collision_output=collision_documented / "build/Release"
+        checked([sdk / "bin" / ("physim-build"+suffix),"--project",collision_documented,"--sdk",sdk,
+                 "--output",collision_output,"--physimc",sdk / "bin" / ("physimc"+suffix),"--profile","Release"])
+        collision_results=root / "Collision documented results";collision_results.mkdir()
+        checked([sys.executable,repo / "tests/test_collision_tutorial.py",sdk / "bin" / ("physim-runner"+suffix),
+                 sdk / "bin" / ("physim-analysis-runner"+suffix),collision_output / ("experiment"+module_suffix),
+                 sdk / "bin" / ("language-collision_main"+module_suffix),collision_output / ("analysis"+module_suffix),
+                 sdk / "bin" / ("language-collision_analysis"+module_suffix),collision_probe,collision_results])
+        print("Installed SDK collision tutorial: installed/rebuilt Core, documented native build, eleven exact scenarios and mixed reports passed",flush=True)
+
         # Preserve the former SDK comparison: nine experiments, both general
         # Physim analyses, the sensor report and six C/Physim combinations.
         # Broader physics equivalence is checked by the normal integration suite.

@@ -3,6 +3,15 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-07. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Elastischer und inelastischer Stoß:** Ein vollständiger Lernpfad liefert
+C-/Physim-Experimente und Analysen eines zentralen Vakuumstoßes mit wählbaren
+Massen, Anfangsgeschwindigkeiten und Restitution. Kontinuierliche Erkennung,
+Impulsantwort und verbleibende Schrittzeit erhalten den Ereignisablauf auch
+zwischen Messpunkten. Energie und physikalische Dissipation bleiben getrennt;
+Impuls und Gesamtbilanz werden überprüft. Unabhängige Formeln prüfen elf
+Szenarien, alle Szenenfelder und 44 gemischte Analysen.
+[Vollständige Quellen, Gleichungen und Ablauf](collision-tutorial.md).
+
 **Pendel und Vergleich von Integratoren:** Vollständige C-/Physim-Quellen
 beschreiben dasselbe konservative nichtlineare Pendel mit fünf wählbaren
 Verfahren. Eine Mehrlaufanalyse vergleicht Winkel, Energieabweichungen und
@@ -118,7 +127,7 @@ geprüft und übernommen, nur fehlende Indizes starten erneut. Seeds, Parameter
 und feste/adaptive Zeitvorgaben bleiben erhalten. Aktuelle Editoränderungen und
 die alte Serie werden nicht verändert. Vollständig vorhandene Serien starten
 keine neuen Prozesse. Frühere Serien ohne Checkpoint bleiben nicht fortsetzbar.
-Der Katalog umfasst 557 Prüfungen ohne Fenster (542 ohne SDL) und 63 Fensterfälle.
+Der Katalog umfasst 559 Prüfungen ohne Fenster (544 ohne SDL) und 64 Fensterfälle.
 Ausgeführte Nachweise stehen im [Plattformbericht](platform-validation.md).
 
 **Eigenständige Analyseprojekte:** Die App legt jetzt C-/Physim-Auswertungen ohne

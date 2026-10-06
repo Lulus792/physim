@@ -1,0 +1,125 @@
+// One central collision in vacuum; same parameters and channels as collision_main.c.
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let speed = Unit(1,0,-1,0,0,0,0,1,"m/s")
+let kilograms = Unit(0,1,0,0,0,0,0,1,"kg")
+let joules = Unit(2,1,-2,0,0,0,0,1,"J")
+let momentum = Unit(1,1,-1,0,0,0,0,1,"kg m/s")
+let seconds = Unit(0,0,1,0,0,0,0,1,"s")
+let one = Unit(0,0,0,0,0,0,0,1,"1")
+let massA = parameterWithUnit("massA",kilograms,1,0.1,10,"Sphere A mass in kilograms")
+let massB = parameterWithUnit("massB",kilograms,1,0.1,10,"Sphere B mass in kilograms")
+let velocityA = parameterWithUnit("velocityA",speed,0.6,-5,5,"Sphere A initial X velocity")
+let velocityB = parameterWithUnit("velocityB",speed,-0.6,-5,5,"Sphere B initial X velocity")
+let restitution = parameterWithUnit("restitution",one,1,0,1,"Normal coefficient of restitution")
+let radius = 0.2
+let zero = Vec3(0,0,0)
+let ax = Channel("a.position",metres,"a.position")
+let bx = Channel("b.position",metres,"b.position")
+let av = Channel("a.velocity",speed,"a.velocity")
+let bv = Channel("b.velocity",speed,"b.velocity")
+let energy = Channel("energy",joules,"energy")
+let totalMomentum = Channel("momentum.x",momentum,"momentum.x")
+let dissipated = Channel("energy.dissipated",joules,"energy.dissipated")
+let balance = Channel("energy.balance",joules,"energy.balance")
+let impulse = Channel("a.impulse",momentum,"a.impulse")
+let eventTime = Channel("collision.time",seconds,"collision.time")
+let eventCount = Channel("collision.count",one,"collision.count")
+var a = Body.sphere(massA,radius)
+var b = Body.sphere(massB,radius)
+var lost = 0.0
+var collisionTime = 0.0
+var impulseA = 0.0
+var eventPoint = zero
+var collided = false
+func measure(nextA: Body, nextB: Body, nextLost: Float64, nextImpulse: Float64, nextTime: Float64, nextCollided: Bool):
+    let kinetic = nextA.kineticEnergy() + nextB.kineticEnergy()
+    let conserved = kinetic + nextLost
+    let total = massA * nextA.velocity.x + massB * nextB.velocity.x
+    ax.sample(nextA.position.x)
+    bx.sample(nextB.position.x)
+    av.sample(nextA.velocity.x)
+    bv.sample(nextB.velocity.x)
+    energy.sample(kinetic)
+    totalMomentum.sample(total)
+    dissipated.sample(nextLost)
+    balance.sample(conserved)
+    impulse.sample(nextImpulse)
+    eventTime.sample(nextTime)
+    var count = 0.0
+    if nextCollided:
+        count = 1
+    eventCount.sample(count)
+func create():
+    metadata("model=one central collision of two rigid spheres\nmedium=vacuum\ngravity=none\nfriction=0\ninitial_spin=0\nradius_m=0.2\ninitial_positions_m=-1,1\nmass_a_kg=" + String(massA) + "\nmass_b_kg=" + String(massB) + "\nvelocity_a_m_s=" + String(velocityA) + "\nvelocity_b_m_s=" + String(velocityB) + "\nrestitution=" + String(restitution) + "\nccd=linear sphere sweep, impulse, remaining time\ndissipation=0.5*reduced_mass*(1-e^2)*closing_speed^2\nevent_time_valid=collision.count==1\nexcluded=external forces, rotation, deformation, further contacts\n")
+func reset():
+    var initialA = Body.sphere(massA,radius)
+    var initialB = Body.sphere(massB,radius)
+    initialA.setState(Vec3(-1,0,0),Vec3(velocityA,0,0),Quat(0,0,0,1),zero)
+    initialB.setState(Vec3(1,0,0),Vec3(velocityB,0,0),Quat(0,0,0,1),zero)
+    measure(initialA,initialB,0,0,0,false)
+    a = initialA
+    b = initialB
+    lost = 0
+    collisionTime = 0
+    impulseA = 0
+    eventPoint = zero
+    collided = false
+func step(dt: Float64):
+    assert(dt > 0 && simulationTime() + dt > simulationTime(),"Positive representable step required")
+    var nextA = a
+    var nextB = b
+    var nextLost = lost
+    var nextTime = collisionTime
+    var nextCollided = collided
+    var nextPoint = eventPoint
+    var nextImpulse = 0.0
+    var first = dt
+    var event: Sweep? = nil
+    if !collided:
+        let hit = Sweep.spheres(nextA,radius,nextA.velocity * dt,nextB,radius,nextB.velocity * dt)
+        if hit.hit:
+            event = Optional.some(hit)
+            first = dt * hit.fraction()
+    if first > 0:
+        nextA.step(zero,zero,first)
+        nextB.step(zero,zero,first)
+    if let hit = event:
+        let closing = nextA.velocity.x - nextB.velocity.x
+        let reduced = massA * massB / (massA + massB)
+        let contacts = hit.contacts()
+        let result = contacts.resolveSingle(nextA,nextB,restitution,0)
+        nextA = result.bodyA
+        nextB = result.bodyB
+        nextImpulse = result.impulse(0).x
+        nextLost = 0.5 * reduced * (1 - restitution * restitution) * closing * closing
+        nextTime = simulationTime() + first
+        nextPoint = contacts.point(0)
+        nextCollided = true
+        let remaining = dt - first
+        if remaining > 0:
+            nextA.step(zero,zero,remaining)
+            nextB.step(zero,zero,remaining)
+    measure(nextA,nextB,nextLost,nextImpulse,nextTime,nextCollided)
+    a = nextA
+    b = nextB
+    lost = nextLost
+    collisionTime = nextTime
+    impulseA = nextImpulse
+    eventPoint = nextPoint
+    collided = nextCollided
+func scene():
+    sphere(a.position,radius,0x53DEC2FF,1)
+    arrow(a.position,a.position + a.velocity,0.006,0x53DEC2FF,2)
+    label(a.position,"Kugel A",0x53DEC2FF,3)
+    sphere(b.position,radius,0xF2C572FF,4)
+    arrow(b.position,b.position + b.velocity,0.006,0xF2C572FF,5)
+    label(b.position,"Kugel B",0xF2C572FF,6)
+    label(Vec3(0,0.6,0),"Pfeile: Geschwindigkeit [1 m pro m/s]",0xB9C0CDFF,7)
+    group("Zentraler Stoss",100,0)
+    for id in 1..<8:
+        sceneParent(id,100)
+    if collided:
+        point(eventPoint,0.035,0xFF8EAFFF,8)
+        label(eventPoint,"Stosszeit siehe collision.time",0xFF8EAFFF,9)
+        sceneParent(8,100)
+        sceneParent(9,100)

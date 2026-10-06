@@ -125,5 +125,26 @@
         "language": "physim"
       }
     ]
+  },
+  "documentation_collision_source": {
+    "document": "docs/collision-tutorial.md",
+    "sources": [
+      {
+        "path": "examples/documentation/collision_main.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/collision_analysis.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/collision_main.phys",
+        "language": "physim"
+      },
+      {
+        "path": "examples/documentation/collision_analysis.phys",
+        "language": "physim"
+      }
+    ]
   }
 }

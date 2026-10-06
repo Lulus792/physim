@@ -1728,7 +1728,7 @@ Spalte bei Laufzeitfehlern. Ein absichtlich ausgelöster C-Compilerfehler wird
 im nativen Sprachtest an der ursprünglichen `.phys`-Datei nachgewiesen.
 
 Der direkte Repository-Build mit `--examples` übersetzt alle 18 eigenständigen
-Sprachbeispiele sowie 38 Experiment-/Analysemodule. Generiertes C liegt ausschließlich
+Sprachbeispiele sowie 40 Experiment-/Analysemodule. Generiertes C liegt ausschließlich
 im Buildordner unter `examples/` und wird erst nach erfolgreicher Sprachprüfung
 ersetzt. Unveränderte Quellen und Programme bleiben erhalten. Sprachfehler brechen
 mit der ursprünglichen Quelldiagnose ab; der letzte vollständige C-Code und das
