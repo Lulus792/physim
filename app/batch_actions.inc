@@ -136,6 +136,19 @@ static void resume_batch(app *a,const char *path) {
     a->batch_thread=SDL_CreateThread(batch_worker,"batch-resume",a);
     status(a,a->batch_thread?"Archivierte Serie wird im neuen Ordner fortgesetzt. Abgeschlossene Läufe werden geprüft.":"Fortsetzung konnte nicht gestartet werden.");
 }
+static bool batch_analysis_ready(app *a) {
+    return a->loaded && !a->recovery && !a->batch_thread && idle(a) && !a->library_thread &&
+        a->built && !a->analysis_dirty && a->batch_code==PS_OK && !a->batch_result.cancelled &&
+        a->batch_options.runs && a->batch_result.completed==a->batch_options.runs &&
+        a->batch_result.finished[0] && a->batch_options.directory[0];
+}
+static void analyze_first_batch_run(app *a) {
+    if(!batch_analysis_ready(a))return;
+    char path[4096];join(path,sizeof path,a->batch_options.directory,"run-0001.psrun");
+    a->selected_count=0;select_run(a,path,true);
+    a->tab=2;a->analysis_tab=0;a->show_report=false;
+    analyze(a,false);
+}
 static void pump_batch(app *a) {
     if (!a->batch_thread || !SDL_GetAtomicInt(&a->batch_done))
         return;

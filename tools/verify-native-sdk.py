@@ -296,6 +296,33 @@ def main():
                  sdk / "bin" / ("language-collision_analysis"+module_suffix),collision_probe,collision_results])
         print("Installed SDK collision tutorial: installed/rebuilt Core, documented native build, eleven exact scenarios and mixed reports passed",flush=True)
 
+        for source in ("monte_carlo_main", "monte_carlo_analysis"):
+            shutil.copy2(sdk / "examples/documentation" / (source+".c"),consumer / (source+".c"))
+        shutil.copy2(repo / "tests/test_monte_carlo_tutorial_report.c",consumer / "monte-carlo-tutorial-probe.c")
+        for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+            monte_carlo_experiment=builder.executable("monte-carlo-tutorial-"+kind,["monte_carlo_main.c"],[archive],module=True)
+            monte_carlo_analyzer=builder.executable("monte-carlo-tutorial-analysis-"+kind,["monte_carlo_analysis.c"],[archive],module=True)
+            monte_carlo_probe=builder.executable("monte-carlo-tutorial-probe-"+kind,["monte-carlo-tutorial-probe.c"],[archive])
+            directory=root / ("Monte Carlo tutorial "+kind);directory.mkdir()
+            monte_carlo_language=modules["monte_carlo_main"] if kind=="rebuilt" else sdk / "bin" / ("language-monte_carlo_main"+module_suffix)
+            monte_carlo_analysis=modules["monte_carlo_analysis"] if kind=="rebuilt" else sdk / "bin" / ("language-monte_carlo_analysis"+module_suffix)
+            checked([sys.executable,repo / "tests/test_monte_carlo_tutorial.py",sdk / "bin" / ("physim-runner"+suffix),
+                     sdk / "bin" / ("physim-batch"+suffix), sdk / "bin" / ("physim-analysis-runner"+suffix),monte_carlo_experiment,monte_carlo_language,
+                     monte_carlo_analyzer,monte_carlo_analysis,monte_carlo_probe,directory])
+        monte_carlo_documented=root / "Monte Carlo documented project";monte_carlo_documented.mkdir()
+        shutil.copy2(sdk / "examples/documentation/monte_carlo_main.c",monte_carlo_documented / "main.c")
+        shutil.copy2(sdk / "examples/documentation/monte_carlo_analysis.c",monte_carlo_documented / "analysis.c")
+        (monte_carlo_documented / "physim.project").write_text("physim_project=1\n",encoding="utf-8")
+        monte_carlo_output=monte_carlo_documented / "build/Release"
+        checked([sdk / "bin" / ("physim-build"+suffix),"--project",monte_carlo_documented,"--sdk",sdk,
+                 "--output",monte_carlo_output,"--physimc",sdk / "bin" / ("physimc"+suffix),"--profile","Release"])
+        monte_carlo_results=root / "Monte Carlo documented results";monte_carlo_results.mkdir()
+        checked([sys.executable,repo / "tests/test_monte_carlo_tutorial.py",sdk / "bin" / ("physim-runner"+suffix),
+                 sdk / "bin" / ("physim-batch"+suffix), sdk / "bin" / ("physim-analysis-runner"+suffix),monte_carlo_output / ("experiment"+module_suffix),
+                 sdk / "bin" / ("language-monte_carlo_main"+module_suffix),monte_carlo_output / ("analysis"+module_suffix),
+                 sdk / "bin" / ("language-monte_carlo_analysis"+module_suffix),monte_carlo_probe,monte_carlo_results])
+        print("Installed SDK Monte Carlo tutorial: installed/rebuilt Core, documented native build, seeded ensembles, worker reproducibility, constant populations and mixed reports passed",flush=True)
+
         # Preserve the former SDK comparison: nine experiments, both general
         # Physim analyses, the sensor report and six C/Physim combinations.
         # Broader physics equivalence is checked by the normal integration suite.
@@ -364,7 +391,7 @@ def main():
             raise RuntimeError("App tests require an SDK with the app")
     (root / "PASSED.txt").write_text(
         "Native SDK relocation, independent headers, installed and rebuilt core archives, eight bundled and rebuilt C templates, "
-        "eighteen language programs, 36 rebuilt language modules, nine language experiments with both general analyses, "
+        f"eighteen language programs, {len(modules)} rebuilt language modules, nine language experiments with both general analyses, "
         "specialized sensor analysis and six C/Physim combinations passed.\n"
         "Adaptive bundled/source C and Physim pendulums, actual variable sample times, energy and both analysis languages passed.\n" +
         "Common-target-time parameter studies from bundled/source C and Physim pendulums passed with installed and rebuilt probes.\n" +
@@ -375,6 +402,9 @@ def main():
         "Persistent contact world and projected warm graph through installed/rebuilt Core and real C/Physim stack runners, copied snapshots and allocation failures passed.\n" +
         "Custom material/medium tutorial through installed/rebuilt Core, analytic scenarios, C/Physim parity and all mixed analyses passed.\n" +
         "Spring tutorial through installed/rebuilt Core, four damping regimes, typed parameters and sixteen mixed analyses passed.\n" +
+        "Pendulum tutorial through installed/rebuilt Core, five integrators and mixed/adaptive reports passed.\n" +
+        "Collision tutorial through installed/rebuilt Core, eleven exact scenarios and mixed reports passed.\n" +
+        "Monte Carlo tutorial through installed/rebuilt Core, seeded ensembles, worker reproducibility and mixed reports passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
         ("Eight C template GUI workflows and the complete Physim language GUI workflow passed.\n" if args.app_tests else ""), encoding="utf-8")
     print(f"Native SDK verified: {root}")

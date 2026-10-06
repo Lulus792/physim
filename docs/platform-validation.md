@@ -3,6 +3,96 @@
 Stand: 7. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Monte Carlo mit unsicheren Anfangswerten am 7. Oktober 2026
+
+Vier vollständige Quellen liefern in C und Physim denselben Vakuumwurf mit
+normalverteilten Anfangsgeschwindigkeiten und eine Auswertung seiner archivierten
+Serie. Die vier typisierten Geschwindigkeitsparameter gehören zur Modellinstanz.
+Die Bewegung ist analytisch, ohne Sensorrauschen oder Integrationsfehler.
+Neun Kanäle speichern Ist-/Sollposition, Geschwindigkeit, Populationsstreuung und
+Energie; die Szene zeigt beide Bahnen und ein Kreuz von einer Standardabweichung.
+Core-API/ABI 3, Sprachvertrag 0.177.0 und Dateiformate bleiben unverändert.
+[Lernziel, Modell, statistische Annahmen und vollständige Quellen](monte-carlo-tutorial.md).
+
+Der unabhängige Pythonprüfer berechnet PCG32-Ziehungen und Ballistik selbst.
+Er kontrolliert 1.536 archivierte Läufe mit jeweils 33 Messzeilen: vier Serien
+mit 256 unterschiedlichen Seeds in beiden Sprachen und mit einem beziehungsweise
+vier Workern sowie zwei konstante Serien mit beiden Standardabweichungen null.
+Innerhalb derselben Sprache sind die Endwert-CSV-Dateien bei anderer Parallelität
+bytegleich; beide Sprachen stimmen innerhalb der numerischen Vergleichsschranken
+überein. Der Prüfer liest PSRUN-Magic, CRCs, Footer, sämtliche neun Kanäle,
+SI-Dimensionen und Seedprovenienz unabhängig. Szenen für Seeds 0, 42, einen Wert
+oberhalb 2^63 und UINT64_MAX stimmen in sämtlichen Objekt- und Punktfeldern
+überein. Fehlende beziehungsweise gekürzte Mitglieder, verschiedene Endzeiten
+und geänderte Populationsparameter werden von beiden Analysen abgewiesen.
+Die Instanzprobe prüft unabhängige Parameter,
+Seed-Wiederholung, Seed-Wechsel, Nullstreuung, Energie und unveränderte Messwerte
+nach abgewiesenen Schritten.
+
+Beide Analysesprachen lesen beide Laufsprachen. Vier Plots zeigen alle Endwerte
+und die beiden Histogramme; zwei Tabellen vergleichen Mittelwert,
+Stichprobenstreuung und Typ-7-Quantile mit der Modellreferenz und zeigen ein
+95%-Intervall des Mittelwerts bei bekannter Normalstreuung. Ein separater
+C-Prüfer kontrolliert sämtliche Kurven, Klassenhäufigkeiten und Tabellenwerte
+gegen die Originalarchive. Acht gemischte Analysen bestehen, einschließlich
+konstanter Populationen mit einer Histogrammklasse und Intervallbreite null.
+Der CSV-Export enthält alle 256 Endwertpaare. Diese Beispielanalyse erwartet
+explizit 256 archivierte Dateien; die allgemeine Serienauswertung bleibt für
+andere Laufzahlen verfügbar. Vier dokumentierte Codeblöcke entsprechen exakt
+den tatsächlich gebauten Quellen.
+
+macOS Release besteht die drei ausgewählten Prüfungen unter
+`build/contact-world-language-release-mac/test-results/run-bnxl1mtn`, Linux GCC
+Release unter `build/contact-world-language-release-linux/test-results/run-8exxinth`:
+neuer Lernpfad, Quellcodegleichheit und bisherige Monte-Carlo-Serienreferenz.
+Linux Debug besteht den neuen Lernpfad mit AddressSanitizer und
+UndefinedBehaviorSanitizer einschließlich beider Experimente, Analysen und
+Instanzprobe unter `build/spring-tutorial-asan-linux/test-results/run-n7_ec93l`.
+
+Die neue Schaltfläche **Ersten Serienlauf auswerten** startet die gebaute Analyse
+mit dem ursprünglichen ersten Archivpfad. Sie ist ohne abgeschlossene erfolgreiche
+Serie beziehungsweise bei ungebauter oder ungespeicherter Analyse gesperrt.
+Die Monte-Carlo-Beispielanalyse liest dadurch die 256 Nachbardateien, ohne den
+Einzellaufimport oder dessen Kopiervertrag zu ändern. Gewöhnliche Analysen
+verarbeiten über dieselbe Schaltfläche nur den ersten Lauf.
+
+macOS besteht drei ausgewählte Fensterabläufe unter
+`build/contact-world-language-release-mac/test-results/run-qzxygk3g`: der neue
+Lernpfad, die bestehende Serienbedienung und die Offline-Dokumentnavigation.
+Der neue Ablauf baut beide Sprachprojekte, führt 32 angehaltene Schritte aus,
+öffnet 33 archivierte Messzeilen mit Szene, startet je 256 Läufe mit vier
+Workern und betätigt die neue Schaltfläche tatsächlich per Mausereignis.
+Er prüft anschließend den Originalpfad, vier Plots, zwei Tabellen und die
+Modell-/Stichprobenwerte. Linux besteht dieselben drei Fensterabläufe unter
+`build/contact-world-language-release-linux/test-results/run-8upn0u0o`.
+macOS lief auf dem nativen Intel-Desktop; Linux auf Debian 12/GCC 12.2 unter
+X11/Xvfb/Openbox/Mesa, jeweils mit SDL 3.2.30. Szene, Histogramm, Statistik und
+Mittelwertintervall wurden auf macOS bei 1440 × 960 logischen Pixeln visuell geprüft.
+Auch Szene, Histogramm und beide Tabellen wurden unter Linux bei 1440 × 960 geprüft. Breite
+Statistiktabellen benötigen horizontales Scrollen; dies ist im Ablauf beschrieben.
+
+Beide SDKs bestehen den vollständigen Relokationsprüfer: macOS unter
+`build/monte-carlo-tutorial-sdk-proof-mac/Native SDK ä t7lngpyy`, Linux unter
+`build/monte-carlo-tutorial-sdk-proof-linux/Native SDK ä 9_kllbwq`. Der Prüfer
+kontrolliert alle Manifestdateien und öffentlichen Header, baut Core und alle
+42 Sprachmodule aus der mitgelieferten Quelldistribution neu und führt die
+bisherigen Index-, Kontakt-, Diagnose-, Serien- und Beispielprüfungen aus.
+Der Monte-Carlo-Lernpfad läuft mit installiertem und neu gebautem Core sowie
+über den dokumentierten nativen C-Projektbuild, jeweils mit den reproduzierbaren
+Serien und allen acht gemischten Analysen. Die endgültigen Pakete enthalten
+die aktuellen Nachweise mit erneuertem Manifest. Alle 140 Code-/Binärdateien
+und 108 Beispieldateien bleiben bytegleich zur jeweils verifizierten Installation;
+die App bleibt bytegleich zur geprüften Release-App. Insgesamt enthält jedes
+Paket 351 per SHA-256 geprüfte Dateien.
+
+Der aktuelle Katalog umfasst 561 Prüfungen ohne Fenster (546 ohne SDL),
+65 Fensterfälle, 18 eigenständige Sprachprogramme und 42 Experiment-/Analysemodule.
+Ein Gesamtlauf aller aktuellen Fälle wird hier nicht behauptet; der frühere Lauf
+aller 555 Fälle ist weiter unten belegt. Die neue Analyse setzt unabhängige
+Normalziehungen und bekannte Modellstreuung voraus und beweist keine allgemeine
+Unabhängigkeit aufeinanderfolgender Seeds. Andere offene Anforderungen des
+Projektplans bleiben offen.
+
 ## Elastischer und inelastischer Stoß am 7. Oktober 2026
 
 Vier neue vollständige Quellen liefern ein zentrales Stoßexperiment im Vakuum

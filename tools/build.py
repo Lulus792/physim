@@ -46,7 +46,9 @@ def language_examples():
              ("pendulum_main", "--emit-experiment", "documentation/pendulum_main.phys"),
              ("pendulum_analysis", "--emit-analysis", "documentation/pendulum_analysis.phys"),
              ("collision_main", "--emit-experiment", "documentation/collision_main.phys"),
-             ("collision_analysis", "--emit-analysis", "documentation/collision_analysis.phys")])
+             ("collision_analysis", "--emit-analysis", "documentation/collision_analysis.phys"),
+             ("monte_carlo_main", "--emit-experiment", "documentation/monte_carlo_main.phys"),
+             ("monte_carlo_analysis", "--emit-analysis", "documentation/monte_carlo_analysis.phys")])
 
 
 def run(args: list[str], env: dict[str, str], *, capture: bool = False, directory: Path | None = None) -> str:

@@ -146,5 +146,26 @@
         "language": "physim"
       }
     ]
+  },
+  "documentation_monte_carlo_source": {
+    "document": "docs/monte-carlo-tutorial.md",
+    "sources": [
+      {
+        "path": "examples/documentation/monte_carlo_main.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/monte_carlo_analysis.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/monte_carlo_main.phys",
+        "language": "physim"
+      },
+      {
+        "path": "examples/documentation/monte_carlo_analysis.phys",
+        "language": "physim"
+      }
+    ]
   }
 }

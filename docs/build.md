@@ -146,8 +146,8 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt derzeit 559 Tests ohne Fenster aus, mit `--no-app` die
-544 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
+`--test` führt derzeit 561 Tests ohne Fenster aus, mit `--no-app` die
+546 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
 Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.
@@ -230,7 +230,7 @@ und das erneute Öffnen einschließlich beschädigter Katalogdateien.
 
 ### Fenster- und Grafiktests direkt ausführen
 
-`--test-display` führt zusätzlich 64 Fenster- und Grafikabläufe aus. Dafür sind
+`--test-display` führt zusätzlich 65 Fenster- und Grafikabläufe aus. Dafür sind
 eine grafische Sitzung, SDL und ein geeigneter OpenGL-Treiber erforderlich.
 Die beiden Testgruppen werden getrennt gestartet; `--test-display` lässt sich
 nicht mit `--no-app` oder `--test` kombinieren.
@@ -326,7 +326,7 @@ Prüfsummen und benötigen keine `CMakeLists.txt`.
 ### Sprachbeispiele ohne CMake bauen
 
 `--examples` baut zusätzlich die 18 eigenständigen Sprachprogramme und alle
-40 Experiment-/Analysemodule aus dem bisherigen Sprachbeispielprojekt. Der
+42 Experiment-/Analysemodule aus dem bisherigen Sprachbeispielprojekt. Der
 Beispielbuild und die SDK-Prüfung lesen denselben Katalog. SDL ist dafür nicht nötig.
 
 ```sh

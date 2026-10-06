@@ -1516,6 +1516,49 @@
         "platform",
         "core"
       ]
+    },
+    "monte-carlo-tutorial-c": {
+      "sources": [
+        "examples/documentation/monte_carlo_main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "monte-carlo-tutorial-phys": {
+      "source": "examples/documentation/monte_carlo_main.phys",
+      "mode": "--emit-experiment"
+    },
+    "monte-carlo-tutorial-analysis-c": {
+      "sources": [
+        "examples/documentation/monte_carlo_analysis.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "monte-carlo-tutorial-analysis-phys": {
+      "source": "examples/documentation/monte_carlo_analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "monte-carlo-tutorial-probe": {
+      "sources": [
+        "tests/test_monte_carlo_tutorial_report.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "monte-carlo-tutorial-instances": {
+      "sources": [
+        "tests/test_monte_carlo_tutorial_instances.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
     }
   },
   "tests": [
@@ -5894,6 +5937,95 @@
           "arguments": [
             "{root}/tests/check_tutorial_sources.py",
             "documentation_collision_source",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "monte_carlo_tutorial",
+      "targets": [
+        "python",
+        "physim-runner",
+        "physim-batch",
+        "physim-analysis-runner",
+        "monte-carlo-tutorial-c",
+        "monte-carlo-tutorial-phys",
+        "monte-carlo-tutorial-analysis-c",
+        "monte-carlo-tutorial-analysis-phys",
+        "monte-carlo-tutorial-probe",
+        "monte-carlo-tutorial-instances"
+      ],
+      "steps": [
+        {
+          "program": "monte-carlo-tutorial-instances",
+          "arguments": [
+            "{monte-carlo-tutorial-c}",
+            "{monte-carlo-tutorial-phys}"
+          ],
+          "timeout": 30
+        },
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_monte_carlo_tutorial.py",
+            "{physim-runner}",
+            "{physim-batch}",
+            "{physim-analysis-runner}",
+            "{monte-carlo-tutorial-c}",
+            "{monte-carlo-tutorial-phys}",
+            "{monte-carlo-tutorial-analysis-c}",
+            "{monte-carlo-tutorial-analysis-phys}",
+            "{monte-carlo-tutorial-probe}",
+            "{work}"
+          ],
+          "timeout": 360
+        }
+      ]
+    },
+    {
+      "name": "monte_carlo_tutorial_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "monte_carlo_tutorial_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 560,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "documentation_monte_carlo_source",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tutorial_sources.py",
+            "documentation_monte_carlo_source",
             "--root",
             "{root}"
           ],

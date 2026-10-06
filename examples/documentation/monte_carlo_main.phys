@@ -1,0 +1,80 @@
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let speed = Unit(1,0,-1,0,0,0,0,1,"m/s")
+let joules = Unit(2,1,-2,0,0,0,0,1,"J")
+let meanVx = parameterWithUnit("meanVx",speed,3,-20,20,"Mean initial horizontal velocity")
+let sigmaVx = parameterWithUnit("sigmaVx",speed,0.15,0,5,"Initial horizontal standard deviation")
+let meanVy = parameterWithUnit("meanVy",speed,5,-20,20,"Mean initial vertical velocity")
+let sigmaVy = parameterWithUnit("sigmaVy",speed,0.25,0,5,"Initial vertical standard deviation")
+let gravity = 9.80665
+let cx = Channel("position.x",metres,"position.x")
+let cy = Channel("position.y",metres,"position.y")
+let cvx = Channel("velocity.x",speed,"velocity.x")
+let cvy = Channel("velocity.y",speed,"velocity.y")
+let cnx = Channel("nominal.x",metres,"nominal.x")
+let cny = Channel("nominal.y",metres,"nominal.y")
+let csx = Channel("uncertainty.x",metres,"uncertainty.x")
+let csy = Channel("uncertainty.y",metres,"uncertainty.y")
+let ce = Channel("energy",joules,"energy")
+var vx = meanVx
+var vy = meanVy
+var elapsed = 0.0
+func measure(time: Float64, initialVx: Float64, initialVy: Float64):
+    let x = -2 + initialVx * time
+    let y = initialVy * time - 0.5 * gravity * time * time
+    let velocityY = initialVy - gravity * time
+    let energy = 0.5 * (initialVx * initialVx + velocityY * velocityY) + gravity * y
+    let nx = -2 + meanVx * time
+    let ny = meanVy * time - 0.5 * gravity * time * time
+    let sx = sigmaVx * time
+    let sy = sigmaVy * time
+    cx.sample(x)
+    cy.sample(y)
+    cvx.sample(initialVx)
+    cvy.sample(velocityY)
+    cnx.sample(nx)
+    cny.sample(ny)
+    csx.sample(sx)
+    csy.sample(sy)
+    ce.sample(energy)
+func create():
+    metadata("model=uncertain initial velocities, exact vacuum projectile\nmass_kg=1\ngravity_m_s2=9.80665\ninitial_position_m=-2,0\nvx_distribution=normal\nvy_distribution=normal\nvelocity_dependence=independent model draws\nintegrator=exact ballistic propagation\nuncertainty_channels=population standard deviations, not sensor errors\nexcluded=ground, drag, sensor noise, parameter drift\n")
+func reset():
+    let nextVx = randomNormal(meanVx,sigmaVx)
+    let nextVy = randomNormal(meanVy,sigmaVy)
+    measure(0,nextVx,nextVy)
+    vx = nextVx
+    vy = nextVy
+    elapsed = 0
+func step(dt: Float64):
+    assert(dt > 0 && simulationTime() + dt > simulationTime(),"Positive representable step required")
+    let time = simulationTime() + dt
+    measure(time,vx,vy)
+    elapsed = time
+func scene():
+    let actual = Vec3(-2 + vx * elapsed,vy * elapsed - 0.5 * gravity * elapsed * elapsed,0)
+    let nominal = Vec3(-2 + meanVx * elapsed,meanVy * elapsed - 0.5 * gravity * elapsed * elapsed,0)
+    sphere(actual,0.09,0x53DEC2FF,1)
+    point(nominal,0.05,0x779BCCFF,2)
+    arrow(actual,actual + Vec3(0.12 * vx,0.12 * (vy - gravity * elapsed),0),0,0x53DEC2FF,3)
+    label(actual,"Einzellauf",0x53DEC2FF,4)
+    label(nominal,"Erwartungswert",0x779BCCFF,5)
+    let horizontal = Vec3(sigmaVx * elapsed,0,0)
+    let vertical = Vec3(0,sigmaVy * elapsed,0)
+    line(nominal - horizontal,nominal + horizontal,0.006,0xF2C572FF,6)
+    line(nominal - vertical,nominal + vertical,0.006,0xF2C572FF,7)
+    label(Vec3(-0.5,1.6,0),"Kreuz: eine Populations-Standardabweichung",0xF2C572FF,8)
+    if elapsed > 0:
+        var actualPath: [Vec3] = []
+        var nominalPath: [Vec3] = []
+        for i in 0..<32:
+            let time = elapsed * Float64(i) / 31
+            actualPath.append(Vec3(-2 + vx * time,vy * time - 0.5 * gravity * time * time,0))
+            nominalPath.append(Vec3(-2 + meanVx * time,meanVy * time - 0.5 * gravity * time * time,0))
+        polyline(actualPath,0.008,0x53DEC2FF,9)
+        polyline(nominalPath,0.004,0x779BCCFF,10)
+    group("Unsicherer Vakuumwurf",100,0)
+    for id in 1..<9:
+        sceneParent(id,100)
+    if elapsed > 0:
+        sceneParent(9,100)
+        sceneParent(10,100)

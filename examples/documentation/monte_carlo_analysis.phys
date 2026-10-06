@@ -1,0 +1,66 @@
+// Match the number of archived runs configured in the tutorial's series.
+let runs: Int64 = 256
+func analyze():
+    assert(inputCount() == 1,"Select a raw run inside the 256-run series")
+    let path = inputPath(0).replacingOccurrences(of: "\\",with: "/")
+    var directory = ""
+    if let separator = path.lastIndex(of: "/"):
+        directory = path.prefix(separator)
+    assert(directory.count > 0,"Series directory required")
+    var indices: [Float64] = []
+    var xs: [Float64] = []
+    var ys: [Float64] = []
+    var expected = [0.0,0.0,0.0,0.0]
+    var endpoint = 0.0
+    let names = ["position.x","position.y","velocity.x","velocity.y","nominal.x","nominal.y","uncertainty.x","uncertainty.y","energy"]
+    for index in 0..<runs:
+        var digits = String(index + 1)
+        while digits.count < 4:
+            digits = "0" + digits
+        var run = RunIndex(directory + "/run-" + digits + ".psrun",4096)
+        assert(run.isComplete() && run.sampleCount() > 0 && run.channelCount() == 9,"Complete tutorial run required")
+        for channel in 0..<9:
+            assert(run.channelName(channel) == names[channel],"Tutorial channel schema required")
+            var dimension = [1,0,0,0,0,0,0]
+            if channel == 2 || channel == 3:
+                dimension = [1,0,-1,0,0,0,0]
+            else if channel == 8:
+                dimension = [2,1,-2,0,0,0,0]
+            for axis in 0..<7:
+                assert(run.channelDimension(channel,axis) == dimension[axis],"Tutorial SI dimensions required")
+        let block = run.read(run.sampleCount() - 1,1)
+        let time = block.times()[0]
+        if index == 0:
+            endpoint = time
+            for channel in 0..<4:
+                expected[channel] = block.column(channel + 4)[0]
+        assert(time == endpoint && endpoint > 0,"Common positive endpoint required")
+        assert(block.column(6)[0] >= 0 && block.column(7)[0] >= 0,"Nonnegative population sigma required")
+        for channel in 0..<4:
+            assert(block.column(channel + 4)[0] == expected[channel],"Identical model parameters required")
+        indices.append(Float64(index + 1))
+        xs.append(block.column(0)[0])
+        ys.append(block.column(1)[0])
+        run.close()
+    report("Monte Carlo initial velocities")
+    let one = Unit(0,0,0,0,0,0,0,1,"1")
+    let metres = Unit(1,0,0,0,0,0,0,1,"m")
+    let ordinal = Series.fromValues(indices,one,"run")
+    let x = ordinal.alignedValues(xs,metres,"position.x endpoint")
+    let y = ordinal.alignedValues(ys,metres,"position.y endpoint")
+    let summary = Table("Endpoint statistics",["Mean","Sample standard deviation","Q2.5%","Median","Q97.5%","Model mean","Model standard deviation"],[metres,metres,metres,metres,metres,metres,metres])
+    let confidence = Table("95% mean interval, known model sigma",["Lower","Upper"],[metres,metres])
+    let series = [x,y]
+    let titles = ["Horizontal endpoints","Vertical endpoints"]
+    let distributions = ["Horizontal distribution","Vertical distribution"]
+    let labels = ["x","y"]
+    for axis in 0..<2:
+        let values = series[axis]
+        values.plot(ordinal,titles[axis],labels[axis])
+        values.histogram(distributions[axis],16)
+        summary.row(labels[axis],[Quantity(values.mean(),metres),Quantity(values.stddev(),metres),
+            Quantity(values.quantile(0.025),metres),Quantity(values.quantile(0.5),metres),Quantity(values.quantile(0.975),metres),
+            Quantity(expected[axis],metres),Quantity(expected[axis + 2],metres)])
+        let radius = 1.959963984540054 * expected[axis + 2] / sqrt(Float64(runs))
+        confidence.row(labels[axis],[Quantity(values.mean() - radius,metres),Quantity(values.mean() + radius,metres)])
+    Series.exportColumns([ordinal,x,y],"endpoints")

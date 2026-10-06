@@ -8,6 +8,9 @@ Parameterangabe gelten die Modellstandards; der Experimentcode entscheidet,
 wie er den Seed verwendet. Die App kann einen benannten Parameter linear
 variieren und weitere Parameter konstant halten.
 
+Der [vollständige Lernpfad zu unsicheren Anfangswerten](monte-carlo-tutorial.md)
+enthält passende Experimente und Archivanalysen in C und Physim.
+
 ## In der App
 
 1. Ein Projekt anlegen, zum Beispiel „Wurf mit Unsicherheit“, und mit F5 bauen.
@@ -27,6 +30,11 @@ variieren und weitere Parameter konstant halten.
    Histogramm und Tabellen, die Parameterstudie eine Endwertkurve. Plots und Tabellen
    lassen sich mit den üblichen CSV-/SVG-Funktionen exportieren. Später steht der
    Bericht unter „Läufe & Berichte“ auch ohne Build zur Verfügung.
+
+Nach einer vollständigen Serie startet **Ersten Serienlauf auswerten** die gebaute
+Analysequelle mit dem ursprünglichen Pfad von `run-0001.psrun`. Gewöhnliche
+Analysen werten diesen einen Lauf aus; die Lernpfadanalyse liest darüber die
+256 Nachbardateien im Serienordner. Die Rohdateien bleiben dort erhalten.
 
 „Anleitung“ öffnet dieses Dokument direkt in Physim. Die API-Dokumentation und
 alle öffentlichen Header bleiben über F1 erreichbar.
