@@ -210,3 +210,29 @@ ein Parameter eine deklarierte Einheit trägt. Die bisherigen fünf Tab-Felder
 und die sieben durch Kommas getrennten Dimensionswerte. Unbekannte Einheiten
 haben ein leeres Symbol, Skala 1 und Nulldimensionen. Reine untypisierte Module
 liefern weiterhin Format 1; die App liest beide Formate atomar.
+
+
+## Persönliche Anzeigeeinheiten
+
+`channel-units.bin` ist ein privater App-Katalog, getrennt von Messdateien,
+Projektparametern, CSV und Analyseberichten. Format 1 verwendet Little Endian:
+
+| Feld | Größe |
+| --- | --- |
+| Signatur `PSCUNI01` | 8 Bytes |
+| Gesamtlänge und Eintragszahl | je u32 |
+| Einträge, höchstens 64 | je 127 Bytes |
+| CRC32 über alle vorigen Bytes | u32 |
+
+Ein Eintrag enthält Kanalname (48 Bytes), sieben int8-SI-Exponenten,
+Anzeige-Symbol (64 Bytes) und positiven endlichen Faktor (IEEE-754 binary64).
+Name und Symbol sind nullterminiertes UTF-8 ohne Steuerzeichen. Schema-Namen
+werden unverändert übernommen, auch mit Rand-Leerzeichen oder leerem Namen;
+Anzeige-Symbole haben keine Rand-Leerzeichen. Name plus Dimensionen ist eindeutig. Der Faktor bedeutet SI pro Anzeigeeinheit.
+Die leere Datei umfasst 20 Bytes, der maximale Katalog 8148 Bytes.
+Längen, Anzahl, Prüfsumme, UTF-8, Schlüssel und Faktoren werden vor Übernahme
+validiert; Fehler verändern den geladenen Zustand nicht. Unbekannte Versionen
+bleiben bis zum ausdrücklichen Zurücksetzen erhalten. Das Messschema wird beim
+Runner-Handshake aus dem bereits geschriebenen Dateikopf gelesen und mit den
+HELLO-Kanalnamen abgeglichen. Pipe-Version 4, Messdatei-Format 1 und ABI 3 bleiben
+unverändert.

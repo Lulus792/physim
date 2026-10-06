@@ -213,3 +213,42 @@ teilen den persönlichen Katalog; der zuletzt vollständig gespeicherte Stand
 gewinnt. Stromausfälle während des Dateiaustauschs sind nicht abgesichert.
 Diese Anordnungen speichern keine Projekt- oder Workspace-Pfade. Mehrere benannte
 Workspaces und separate Panelfenster bleiben weitere Produktziele.
+
+
+## Anzeigeeinheiten für Messkanäle
+
+In **Simulieren** öffnet **Einheit …** neben dem ausgewählten Kanal die Auswahl.
+In **Auswerten → Messdaten** heißt die Schaltfläche **Anzeigeeinheit …**.
+Passende Presets berücksichtigen die sieben SI-Dimensionen des Kanals, etwa
+`m`, `cm`, `mm`, `km` für eine Länge oder `m/s` und `km/h` für eine Geschwindigkeit.
+Eigene Symbole mit bis zu 63 UTF-8-Bytes und ein positiver endlicher Faktor sind
+ebenfalls möglich. Der Faktor gibt SI-Einheiten pro Anzeigeeinheit an:
+`Anzeige = SI / Faktor`. Für Zentimeter ist er `0.01`; die Vorschau zeigt einen
+aktuellen gültigen Wert oder ersatzweise `1 SI`. Einheiten mit Offset, etwa Grad
+Celsius, sind hier nicht unterstützt. Symbole enthalten keine Steuerzeichen
+oder Leerzeichen am Anfang und Ende.
+
+**Anwenden** speichert die Auswahl. **SI wiederherstellen** entfernt sie für diesen
+Kanal; **Abbrechen** oder Escape verwirft die Eingabe. Die Auswahl wirkt auf
+Live-Werte, Live-Kurven, Messdaten-Diagramme und Statistiken des gesamten Laufs.
+Die Statistiktabelle lässt sich bei schmalem Platz horizontal scrollen;
+abgekürzte Kanalnamen, Symbole oder Zahlen sind per Tooltip vollständig lesbar.
+Positive Skalierung erhält den ausgewählten Diagrammausschnitt. Messausfälle
+und nicht fällige Sensorwerte bleiben ausgeschlossen. Rohdaten, Modellparameter,
+Geometrie und CSV-Export ändern sich nicht. Analyseberichte verwenden weiterhin
+die vom Analysecode angegebenen Einheiten.
+
+Überlauf und Unterlauf vorhandener Werte oder Statistiken verhindern das
+Anwenden. Können spätere Live-Werte nicht mehr dargestellt werden, erscheint
+**nicht darstellbar**; betroffene Kurvenwerte werden als Lücken mit einem Hinweis
+gezeigt. Diese Prüfung ändert die Rohmessung nicht.
+
+Bis zu 64 persönliche Auswahlen werden als `channel-units.bin` neben
+`preferences.bin` gespeichert. Kanalname und SI-Dimensionen identifizieren eine
+Auswahl; derselbe Name mit anderer Dimension erhält sie nicht. Unbekannte oder
+beschädigte Dateien bleiben erhalten. Die Auswahl zeigt den Fehler und sperrt
+Änderungen, bis **Datei bewusst zurücksetzen** den Katalog ausdrücklich leert.
+Speichern schreibt und schließt zunächst eine temporäre Datei und ersetzt dann
+den Katalog. Schreibfehler erhalten Datei und aktive Auswahl. Bloßes Öffnen und
+Beenden schreiben ihn nicht. Bei mehreren Instanzen gewinnt der zuletzt
+vollständig gespeicherte Stand; Stromausfälle beim Austausch sind nicht abgesichert.

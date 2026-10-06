@@ -1,7 +1,80 @@
 # Plattformprüfung
 
-Stand: 5. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
+Stand: 6. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
+
+## Messkanal-Anzeigeeinheiten am 6. Oktober 2026
+
+Der neue private Katalog besteht auf macOS Debug:
+`build/channel-units-debug-mac/test-results/run-baav6ek6`.
+Geprüft sind dimensionsabhängige Schlüssel, lineare Konvertierung, signierte Null,
+subnormale Faktoren, Über-/Unterlauf ohne Änderung der Ausgabe, 64 Einträge,
+Ersetzen und Entfernen, UTF-8, Rundlauf, alle Abschneidepositionen und byteweise
+Beschädigungen eines Zwei-Eintrag-Katalogs, CRC-gültige Duplikate, unbekannte
+Versionen und fehlgeschlagene Dateiersetzung mit Erhalt des Originals.
+
+Der gezielte Fensterablauf besteht auf macOS Debug:
+`build/channel-units-debug-mac/test-results/run-kg4b4qqc`.
+C- und Physim-Projekte bauen und laufen in der App. Echte Texteingaben und
+Mausereignisse prüfen eigene Symbole/Faktoren, Ablehnung von null,
+Live-Konvertierung, Statistik, SI-Rücksetzung und Abbrechen. F7 löst im Dialog
+keinen Reset aus; der Runner läuft während der Auswahl weiter. Sensorlücken
+bleiben Lücken. Ein Faktor mit Überlauf vorhandener Werte wird abgelehnt;
+der ausgewählte Diagrammausschnitt bleibt bei SI-Rücksetzung erhalten.
+Weitere Prozesse laden die Auswahl und prüfen die Erhaltung beschädigter Dateien
+bis zum ausdrücklichen Reset. Hashes von Quellen und Laufdateien bleiben erhalten.
+
+Die vollständigen Release-Läufe ohne Fenster bestehen auf beiden Systemen 515/515:
+macOS `build/channel-units-mac/test-results/run-vkw6s26a`, Debian
+`build/channel-units-linux/test-results/run-gb6eh__b` innerhalb der VM.
+Die Umgebungen bleiben Intel macOS 14.6.1/AppleClang 16 und Debian 12/GCC 12.2/
+SDL 3.2.30. API/ABI 3, Sprache 0.171.0, Pipe-Version 4 und Messdatei-Format 1
+bleiben unverändert. Der neue persönliche Katalog verwendet Format 1.
+
+Die finale Katalogprüfung nach Ergänzung unveränderter Schema-Namen (auch mit
+Rand-Leerzeichen oder leerem Namen) besteht jeweils 1/1: macOS
+`build/channel-units-mac/test-results/run-j3bl9vjk`, Debian
+`build/channel-units-linux/test-results/run-bmmz2o54`.
+
+Der erste vollständige macOS-Fensterlauf besteht 50/51:
+`build/channel-units-mac/test-results/run-t7zmqdg3`. Der bisherige
+Autosave-Verwerfentest beobachtet die Oberfläche zu früh; er lässt jetzt einen
+vollständigen Renderframe zwischen Mausereignis und Prüfung. Unveränderte
+Wiederherstellungs-/Verwerfungsassertionen und der Einheitenablauf bestehen danach
+2/2: `build/channel-units-mac/test-results/run-tk8u6egn`.
+Die frühe Statistik-Detailaufnahme hatte zudem eine falsche Nuklear-Signatur im
+Testcode; der erkannte Buildfehler ist korrigiert.
+
+Unter Debian verliert die VM zunächst SSH; ihre Konsole dokumentiert Kernel-RCU-Stalls.
+Nach Neustart bestehen 46 Fensterfälle in
+`build/channel-units-linux/test-results/run-sgmfabef`, bevor der VM-Speicherplatz
+erschöpft ist. Ältere generierte Arbeitsdateien unter `build/native` werden
+entfernt, die strukturierten Ergebnisberichte bleiben erhalten. Die fünf noch
+nicht belegten Fälle und der korrigierte Autosave-Ablauf bestehen anschließend
+6/6: `build/channel-units-linux/test-results/run-386kps2s`.
+Diese Teilnachweise sind kein ununterbrochener 51/51-Komplettlauf. Über die
+abgeschlossenen Läufe sind alle 51 Fensterfälle auf beiden Systemen erfolgreich
+belegt; `build/channel-units-proof-mac/coverage.json` und innerhalb der VM
+`build/channel-units-proof-linux/coverage.json` prüfen jeden Fall gegen den Katalog.
+Frühere Fehlschläge beziehungsweise unvollständige Datenträgerberichte bleiben vermerkt.
+
+Visuelle Prüfung bei 1080 × 740 zeigt zu enge Statistikspalten. Die Tabelle erhält
+horizontalen/vertikalen Bildlauf, ausreichend breite Spalten und explizite
+Abkürzungen mit vollständigem Tooltip. Die Vorschau verwendet ein lesbares
+Gleichheitszeichen. Finale Einheitenansicht: macOS 1/1
+`build/channel-units-mac/test-results/run-x7q06_28`; Plot-/Eingabeprüfung macOS
+2/2 `build/channel-units-mac/test-results/run-e4_1g9ik`. Debian besteht die drei
+Fälle 3/3: `build/channel-units-linux/test-results/run-m6hwh4os`.
+Dialog und Statistik wurden auf beiden Systemen visuell geprüft.
+
+Die installierte Release-App baut C-/Physim-Projekte auch nach dem Verschieben
+in SDK-Pfade mit Leerzeichen und Umlaut und besteht denselben Einheitenablauf
+mit Wiederöffnung, Dateischutz und ausdrücklichem Reset: macOS
+`build/channel-units-sdk-proof-mac-final/app-steps.json`, Debian
+`build/channel-units-sdk-proof-linux/app-steps.json` innerhalb der VM.
+Die SDK-Prüfung betrifft hier die installierte App und deren Projektbuild;
+der öffentliche Kern ist seit dem PCHIP-Nachweis unverändert. Die 19 erzeugten
+Referenzdokumente bestehen weiterhin den Abgleich.
 
 ## Monotone kubische Interpolation am 5. Oktober 2026
 

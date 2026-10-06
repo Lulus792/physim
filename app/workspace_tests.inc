@@ -13,6 +13,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
     if(!strncmp(mode,"inspector-",10))return inspector_test_start(a,root,mode);
     if(!strncmp(mode,"layouts-",8))return layout_test_start(a,root,mode);
     if(!strncmp(mode,"named-",6))return workspace_catalog_test_start(a,root,mode);
+    if(!strncmp(mode,"units-",6))return channel_units_test_start(a,root,mode);
     if(!strncmp(mode,"pchip-",6))return pchip_test_start(a,root,mode);
     if (!strncmp(mode, "hierarchy-", 10))
         return hierarchy_test_start(a,root,mode);
@@ -102,6 +103,7 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
     if(!strncmp(mode,"inspector-",10)){inspector_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"layouts-",8)){layout_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"named-",6)){workspace_catalog_test_frame(a,mode,stage,code,capture);return;}
+    if(!strncmp(mode,"units-",6)){channel_units_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"pchip-",6)){pchip_test_frame(a,mode,stage,code,capture);return;}
     if (!strcmp(mode, "native-dialogs") || !strcmp(mode, "native-dialog-error")) {
         native_dialog_test_frame(a, !strcmp(mode, "native-dialog-error"), stage, code, capture);

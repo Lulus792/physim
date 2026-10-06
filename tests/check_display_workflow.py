@@ -178,6 +178,36 @@ def timed_series(flow, directory, scaled=False):
     require(records[0] == records[1], "Timed C/Physim studies differ in accepted times or values")
 
 
+def channel_units(flow, directory):
+    for language in ("c", "phys"):
+        root = directory / language
+        root.mkdir(parents=True)
+        flow.run("--workspace-state-test", root, "units-" + language, timeout=130,
+                 marker="CHANNEL UNITS units-" + language + " SELF-TEST: PASSED")
+        project = root / "project"
+        runs = list((project / "runs").glob("*.psrun"))
+        require(len(runs) == 1, "Display unit selection restarted the simulation")
+        protected = runs + [project / ("main.c" if language == "c" else "main.phys")]
+        hashes = [fingerprint(path) for path in protected]
+        catalog = root / "channel-units.bin"
+        data = catalog.read_bytes()
+        require(data[:8] == b"PSCUNI01" and len(data) == 147, "Unit choice did not persist")
+        for name in ("selection", "live", "statistics", "statistics-detail"):
+            require((root / ("units-" + name + ".bmp")).exists(), "Unit capture missing")
+        flow.run("--workspace-state-test", root, "units-read", timeout=130,
+                 marker="CHANNEL UNITS units-read SELF-TEST: PASSED")
+        require(catalog.read_bytes() == data, "Reopening wrote unit choices")
+        damaged = data[:100]
+        catalog.write_bytes(damaged)
+        flow.run("--workspace-state-test", root, "units-corrupt", timeout=130,
+                 marker="CHANNEL UNITS units-corrupt SELF-TEST: PASSED")
+        require(catalog.read_bytes() == damaged, "Corrupt unit choices were overwritten")
+        flow.run("--workspace-state-test", root, "units-reset", timeout=130,
+                 marker="CHANNEL UNITS units-reset SELF-TEST: PASSED")
+        require(len(catalog.read_bytes()) == 20, "Explicit reset did not persist")
+        require(hashes == [fingerprint(path) for path in protected], "Unit selection changed sources or raw measurements")
+
+
 def pchip(flow, directory):
     outputs = []
     for language in ("c", "phys"):
@@ -613,7 +643,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
+SPECIAL = {"channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}

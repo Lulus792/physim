@@ -77,6 +77,7 @@ static void preferences_start(app *a, const char *override_path) {
     if (p.maximized)
         SDL_MaximizeWindow(a->window);
     layouts_start(a);
+    channel_units_start(a);
 }
 static void open_settings(app *a) {
     if (a->tab == 6)

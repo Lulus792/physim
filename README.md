@@ -246,6 +246,12 @@ Fenstergröße, Maximierung, Darstellung und Panelanordnung bleiben bei normalem
 Beenden für den nächsten Start erhalten.
 Anleitung: [Einstellungen und Fensteraufteilung](docs/settings.md), auch direkt über F1.
 
+**Einheit …** neben dem Live-Kanal und **Anzeigeeinheit …** bei den Messdaten
+wählen passende Presets oder eigene lineare Einheiten. Werte, Kurven und
+Statistiken verwenden die gewählte Einheit; Modelle, Messdateien und CSV bleiben
+in SI. Die persönliche Auswahl bleibt beim nächsten Start erhalten.
+[Anzeigeeinheiten für Messkanäle](docs/settings.md#anzeigeeinheiten-für-messkanäle).
+
 Ungespeicherte Änderungen beider Editoren werden standardmäßig alle 30 Sekunden separat
 gesichert. Nach einem Abbruch bietet die App beim erneuten Öffnen die
 Wiederherstellung an und erkennt inzwischen extern geänderte Quellen.

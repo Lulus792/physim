@@ -12,6 +12,7 @@
 #include "scene_view.h"
 #include "preferences.h"
 #include "layout_catalog.h"
+#include "channel_units.h"
 #include "workspace_state.h"
 #include "workspace_catalog.h"
 #include "workspace_tree.h"
@@ -112,6 +113,12 @@ typedef struct {
     bool layouts_writable, layout_manager;
     int layout_selected;
     struct nk_rect layout_bounds[6], layout_entries[PS_LAYOUT_MAX];
+    ps_channel_units channel_units;
+    char channel_units_path[4096], channel_units_error[192], channel_unit_scale[64];
+    bool channel_units_writable, channel_unit_manager;
+    ps_channel unit_channel, live_channels[PS_MAX_CHANNELS], reset_channels[PS_MAX_CHANNELS];
+    ps_display_unit unit_draft;
+    struct nk_rect channel_unit_buttons[2], channel_unit_bounds[7];
     uint32_t dock_target, dock_side;
     struct nk_rect settings_bounds[6], theme_bounds[PS_THEME_COUNT], panel_bounds[2];
     SDL_Window *window;
@@ -712,6 +719,7 @@ static void clear_project(app *a) {
     a->scene_view = (ps_scene_view){0};
     a->scene_selected = false;
     a->loaded_report_path[0] = a->result_error[0] = 0;
+    memset(a->live_channels,0,sizeof a->live_channels);
     ps_timeline_destroy(&a->data.timeline);
     memset(&a->data, 0, sizeof a->data);
 }
@@ -1348,18 +1356,9 @@ static void analyze(app *a, bool csv) {
         status(a, "Analyse-Runner konnte nicht gestartet werden.");
 }
 static void synchronize_live_schema(app *a) {
-    ps_channel schema[PS_MAX_CHANNELS] = {0};
-    for (uint32_t j = 0; j < a->channel_count; j++) {
-        const char *unit = strrchr(a->channel_names[j], '[');
-        size_t length = unit && unit > a->channel_names[j]
-                            ? (size_t)(unit - a->channel_names[j] - 1)
-                            : strlen(a->channel_names[j]);
-        snprintf(schema[j].name, sizeof schema[j].name, "%.*s", (int)length,
-                 a->channel_names[j]);
-    }
     for (uint32_t j = 0; j < a->channel_count; j++) {
         a->channel_status[j] = -1;
-        (void)ps_channel_status_index(schema, a->channel_count, j,
+        (void)ps_channel_status_index(a->live_channels, a->channel_count, j,
                                       &a->channel_status[j]);
     }
 }
@@ -1475,7 +1474,7 @@ static void pump(app *a) {
                 hello[n] = 0;
                 char *line = strchr(hello, '\n');
                 uint32_t count = 0;
-                char (*names)[96] = a->reset_starting ? a->reset_channel_names : a->channel_names;
+                char names[PS_MAX_CHANNELS][96] = {{0}};
                 if (line) {
                     line++;
                     while (*line && count < PS_MAX_CHANNELS) {
@@ -1487,6 +1486,19 @@ static void pump(app *a) {
                         line = end + 1;
                     }
                 }
+                ps_run_reader schema_reader;
+                if(ps_run_open(&schema_reader,a->last_run)!=PS_OK) {r=-1;break;}
+                bool valid_schema=schema_reader.channels==count;
+                for(uint32_t i=0;i<count && valid_schema;i++) {
+                    char label[96];snprintf(label,sizeof label,"%s [%s]",schema_reader.schema[i].name,schema_reader.schema[i].unit);
+                    valid_schema=!strcmp(label,names[i]);
+                }
+                if(valid_schema) {
+                    memcpy(a->reset_starting?a->reset_channels:a->live_channels,schema_reader.schema,sizeof a->live_channels);
+                    memcpy(a->reset_starting?a->reset_channel_names:a->channel_names,names,sizeof names);
+                }
+                ps_run_reader_close(&schema_reader);
+                if(!valid_schema){r=-1;break;}
                 if (a->reset_starting)
                     a->reset_channel_count = count;
                 else {
@@ -1517,6 +1529,7 @@ static void pump(app *a) {
                 a->paused = paused;
                 if (a->reset_starting) {
                     memcpy(a->channel_names, a->reset_channel_names, sizeof a->channel_names);
+                    memcpy(a->live_channels,a->reset_channels,sizeof a->live_channels);
                     synchronize_live_schema(a);
                     begin_run_view(a);
                     a->reset_starting = false;
@@ -1599,6 +1612,7 @@ static void pump(app *a) {
                 a->simulation_time = latest->time;
                 memcpy(a->values, latest->values, sizeof a->values);
                 a->channel_count = a->data.channel_count;
+                memcpy(a->live_channels,a->data.channels,sizeof a->live_channels);
                 a->scene = latest->scene;
                 for (uint32_t j = 0; j < a->channel_count; j++)
                     snprintf(a->channel_names[j], sizeof a->channel_names[j], "%s [%s]",
@@ -2224,6 +2238,7 @@ static bool documentation_window_open(app *a);
 #include "report_ui.inc"
 #include "library_ui.inc"
 static void layouts_start(app *a);
+static void channel_units_start(app *a);
 #include "design_ui.inc"
 // clang-format on
 static struct nk_font *system_font(struct nk_font_atlas *atlas, float size, bool code, bool title) {
@@ -2458,6 +2473,7 @@ static void test_mouse(app *a, struct nk_rect rect, bool down) {
 #include "layout_tests.inc"
 #include "workspace_catalog_tests.inc"
 #include "pchip_tests.inc"
+#include "channel_units_tests.inc"
 #include "adaptive_tests.inc"
 #include "series_tests.inc"
 #include "native_dialog_tests.inc"
@@ -2940,12 +2956,13 @@ int main(int argc, char **argv) {
                 if (!a->dirty && !a->analysis_dirty && !a->project_settings_dirty && documents_save_all(a))
                     a->quitting = true;
             }
-            if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && (a->layout_manager || a->workspace_manager) && e.key.key == SDLK_ESCAPE) {
+            if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && (a->layout_manager || a->workspace_manager || a->channel_unit_manager) && e.key.key == SDLK_ESCAPE) {
                 a->layout_manager = false;
                 a->workspace_manager = false;
+                a->channel_unit_manager = false;
                 continue;
             }
-            if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && !a->recovery && !a->layout_manager && !a->workspace_manager) {
+            if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && !a->recovery && !a->layout_manager && !a->workspace_manager && !a->channel_unit_manager) {
                 if (a->dock_drag && e.key.key==SDLK_ESCAPE) { a->dock_drag=0;a->dock_dragging=false;continue; }
                 if (scene_shortcut(a, &e.key)) continue;
                 if (a->tab == 1 && e.key.key == SDLK_SPACE && !e.key.repeat &&
@@ -3014,7 +3031,7 @@ int main(int argc, char **argv) {
         } else if (workspace_state_test) {
             if (ps_clock() - test_started >
                 (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
-                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
+                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15)) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
                         argv[3], ps_clock() - test_started);
@@ -3099,56 +3116,64 @@ int main(int argc, char **argv) {
             } else
                 test_batch_frame(a, &test_stage, &exit_code, &capture, test_batch_workers);
         } else if (recovery_test) {
-            if (ps_clock() - test_started > 30) {
-                exit_code = 1;
-                a->quitting = true;
-            } else if (test_stage == 80 && frames > 1) {
-                if (!strcmp(recovery_mode, "corrupt")) {
-                    char path[4096];
-                    autosave_path(a, path, sizeof path);
-                    nk_str_append_text_char(&a->experiment.string, "\n/* new draft */\n", 17);
-                    a->dirty = true;
-                    autosave_tick(a, a->autosave_due + 30);
-                    save_project(a);
-                    ps_autosave *snapshot = NULL;
-                    if (!a->autosave_blocked || a->recovery ||
-                        ps_autosave_read(path, &snapshot) != PS_CORRUPT)
+            /* Queued SDL events affect widgets in the next draw. Leave a
+             * complete frame between actions and observations, including
+             * asynchronous native window geometry changes during startup. */
+            static bool settle;
+            if(settle)settle=false;
+            else {
+                settle=true;
+                if (ps_clock() - test_started > 30) {
+                    exit_code = 1;
+                    a->quitting = true;
+                } else if (test_stage == 80 && frames > 1) {
+                    if (!strcmp(recovery_mode, "corrupt")) {
+                        char path[4096];
+                        autosave_path(a, path, sizeof path);
+                        nk_str_append_text_char(&a->experiment.string, "\n/* new draft */\n", 17);
+                        a->dirty = true;
+                        autosave_tick(a, a->autosave_due + 30);
+                        save_project(a);
+                        ps_autosave *snapshot = NULL;
+                        if (!a->autosave_blocked || a->recovery ||
+                            ps_autosave_read(path, &snapshot) != PS_CORRUPT)
+                            exit_code = 1;
+                        ps_autosave_destroy(snapshot);
+                        test_stage = 84;
+                    } else {
+                        test_key(a, SDLK_S);
+                        SDL_Event key = {0};
+                        key.type = SDL_EVENT_KEY_DOWN;
+                        key.key.windowID = SDL_GetWindowID(window);
+                        key.key.key = SDLK_F5;
+                        SDL_PushEvent(&key);
+                        test_stage = 81;
+                    }
+                } else if (test_stage == 81) {
+                    if (!a->recovery || a->job.running || a->dirty || a->analysis_dirty ||
+                        test_source_has(a, "main.c", "autosave main"))
                         exit_code = 1;
-                    ps_autosave_destroy(snapshot);
+                    capture = "recovery.bmp";
+                    if (!strcmp(recovery_mode, "cancel")) {
+                        SDL_Event quit = {0};
+                        quit.type = SDL_EVENT_QUIT;
+                        SDL_PushEvent(&quit);
+                        test_stage = 84;
+                    } else {
+                        test_mouse(a, a->recovery_bounds[!strcmp(recovery_mode, "discard")], true);
+                        test_stage = 82;
+                    }
+                } else if (test_stage == 82) {
+                    test_mouse(a, a->recovery_bounds[!strcmp(recovery_mode, "discard")], false);
+                    test_stage = 83;
+                } else if (test_stage == 83) {
+                    if (!test_recovery_result(a, strcmp(recovery_mode, "discard") != 0))
+                        exit_code = 1;
                     test_stage = 84;
-                } else {
-                    test_key(a, SDLK_S);
-                    SDL_Event key = {0};
-                    key.type = SDL_EVENT_KEY_DOWN;
-                    key.key.windowID = SDL_GetWindowID(window);
-                    key.key.key = SDLK_F5;
-                    SDL_PushEvent(&key);
-                    test_stage = 81;
+                } else if (test_stage == 84) {
+                    printf("RECOVERY SELF-TEST: %s\n", exit_code ? "FAILED" : "PASSED");
+                    a->quitting = true;
                 }
-            } else if (test_stage == 81) {
-                if (!a->recovery || a->job.running || a->dirty || a->analysis_dirty ||
-                    test_source_has(a, "main.c", "autosave main"))
-                    exit_code = 1;
-                capture = "recovery.bmp";
-                if (!strcmp(recovery_mode, "cancel")) {
-                    SDL_Event quit = {0};
-                    quit.type = SDL_EVENT_QUIT;
-                    SDL_PushEvent(&quit);
-                    test_stage = 84;
-                } else {
-                    test_mouse(a, a->recovery_bounds[!strcmp(recovery_mode, "discard")], true);
-                    test_stage = 82;
-                }
-            } else if (test_stage == 82) {
-                test_mouse(a, a->recovery_bounds[!strcmp(recovery_mode, "discard")], false);
-                test_stage = 83;
-            } else if (test_stage == 83) {
-                if (!test_recovery_result(a, strcmp(recovery_mode, "discard") != 0))
-                    exit_code = 1;
-                test_stage = 84;
-            } else if (test_stage == 84) {
-                printf("RECOVERY SELF-TEST: %s\n", exit_code ? "FAILED" : "PASSED");
-                a->quitting = true;
             }
         } else if (self_test) {
             if (ps_clock() - test_started > 180) {

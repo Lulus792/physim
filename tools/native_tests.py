@@ -89,6 +89,7 @@ def catalog():
         Case("autosave", ("tests/test_autosave.c", "app/autosave.c"), app=True),
         Case("preferences", ("tests/test_preferences.c", "app/preferences.c", "app/docking.c"),
              arguments=("{work}",), app=True),
+        Case("channel_units", ("tests/test_channel_units.c", "app/channel_units.c"), arguments=("{work}",), app=True),
         Case("layout_catalog", ("tests/test_layout_catalog.c", "app/layout_catalog.c", "app/docking.c"),
              arguments=("{work}",), app=True),
         Case("workspace_state", ("tests/test_workspace_state.c", "app/workspace_state.c", "app/autosave.c"),

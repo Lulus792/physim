@@ -1,7 +1,21 @@
 # Umsetzungsstand
 
-Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-05. Der Projektplan ist die Roadmap;
+Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-06. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
+
+**Messkanal-Anzeigeeinheiten:** Live-Werte, Messkurven und Gesamtstatistiken
+verwenden jetzt persönliche lineare Einheiten mit passenden Presets oder eigenem
+Symbol/Faktor. Kanalname und SI-Dimensionen identifizieren bis zu 64 Auswahlen;
+Rohdaten, Modell, CSV und Analyseberichtseinheiten bleiben erhalten. Vorschau,
+SI-Rücksetzung, numerische Grenzen und beschädigte Kataloge sind geprüft.
+Der Katalog umfasst 515 Prüfungen ohne Fenster (501 ohne SDL) und 51 Fensterfälle.
+Die vollständigen Prüfungen ohne Fenster bestehen auf macOS und Debian 515/515;
+alle 51 Fensterfälle sind über abgeschlossene Gesamt- und gezielte Läufe belegt.
+Ein Autosave-Test erhält eine korrekte Renderframe-Abfolge; Linux-VM-Stalls und
+voller Testdatenträger sind im [Plattformbericht](platform-validation.md) getrennt
+dokumentiert. Finale Statistikansicht, Plot-Eingaben und verschobene installierte
+Apps mit C-/Physim-Projektbuild bestehen auf beiden Systemen. Das Gesamtprojekt
+hat weiterhin die offenen Ziele der Roadmap.
 
 Die bewusste Workspace-Wiederöffnung stellt jetzt bis zu 16 zusätzliche Dokumente
 in ihrer Reihenfolge, das aktive Dokument und den Hauptbereich wieder her. Cursor,
@@ -193,8 +207,8 @@ Die vollständigen Release-Läufe bestehen auf macOS und Debian jeweils 510/510
 ohne Fenster und 46/46 Fensterabläufe. Finale Zahlen-/Projekt-/Runnerprüfungen
 bestehen je 7/7, beide verschobenen SDKs mit unabhängigen Verbrauchern ebenfalls.
 Die gezielten API-, Projekt-, Runner-, Bericht- und C-/Physim-Bediennachweise
-stehen im [Plattformbericht](platform-validation.md). Frei wählbare Anzeigeeinheiten
-für Messkanäle und weitere Produktziele bleiben offen.
+stehen im [Plattformbericht](platform-validation.md). Die damalige Lücke bei
+Messkanal-Anzeigeeinheiten ist inzwischen geschlossen; weitere Produktziele bleiben offen.
 
 **Eigenständiger Inspektor:** Szene, Kamera, Darstellung, Experimentparameter
 und Laufgrenzen sind aus der Seitenleiste gelöst und bilden ein viertes
@@ -675,7 +689,7 @@ und veraltete Fenstermanager-Einträge geprüft. Die erneute Linux-CI steht aus.
 | Foundation | C17, direkter Build ohne eigene CMake-Dateien, MIT, Windows-/POSIX-/Darwin-Schicht, erfolgreiche Windows-CI und Linux-CI mit GCC und Clang, macOS-CI und geprüfte App-Pakete für Apple Silicon und Intel, Release-Paket auf frischem Debian/Ubuntu geprüft | weitere macOS-Versionen und reale Mac-Grafikhardware, öffentliche Mac-Signierung/Notarisierung, Wayland, Installation auf frischen Windows-/Mac-Systemen |
 | Mathematik | Vec2/3/4 mit skalierter Normalisierung, Mat3/4 mit Inversion, Quaternion-Verknüpfung und Rotationsinterpolation, affine/projektive Punkttransformation sowie Richtungs-/Normalentransformation, absolute/relative Vergleiche, Euler/RK4, symplektischer Euler, Verlet, RK45, linearer Solver, Bisektion, Minimierung, kubische räumliche Bézierkurven mit Tangente und Unterteilung | weitere Kurven-/Interpolationsverfahren, Events/dichte Ausgabe, steife Verfahren |
 | Basis | Fehlercodes, expliziter RNG, explizite Allocatoren mit Fehlerprüfungen, feste Arenen, eigene Speicherdomänen für Berichte/Analysekontexte, Test-Allocator mit Fehler-Injektion und Bytebudget, dynamische Arrays mit Größenlimit und Selbstkopien, begrenzte String-Views ohne Kopie, Hashmap mit eigenen Schlüsseln und Größenlimits | strukturierte Diagnosen, Allocator-Anbindung weiterer Subsysteme |
-| Einheiten | SI-Dimensionen, Konvertierung, Einheitenalgebra, Quantity-Rechnung und Dimensionsprüfung von Datenreihen, deklarierte Anzeigeeinheiten für Experimentparameter samt Formulare und Studienberichte | frei wählbare Anzeigeeinheiten für Messkanäle in der GUI |
+| Einheiten | SI-Dimensionen, Konvertierung, Einheitenalgebra, Quantity-Rechnung und Dimensionsprüfung von Datenreihen, deklarierte Anzeigeeinheiten für Experimentparameter samt Formulare und Studienberichte, persönliche lineare Anzeigeeinheiten für Messkanäle mit Live-Werten, Kurven und Gesamtstatistik | — |
 | Runner | versionierte Modul-ABI, Handshake, Pause/Step/Run/Stop, Heartbeat, Crash-/Hang-Isolation, feste/adaptive Modellschritte, Echtzeittaktung von 0,1× bis 16× und Offline | Ressourcenlimits, eigener Logkanal, echtes OS-Sandboxing |
 | Daten | CRC-Chunks, Streaming, Recovery, CSV, Seed-/Modellmetadaten und optionale versionierte Szenenblöcke | Index, mehr Datentypen, komprimierte Blöcke, Schemaerweiterung |
 | App | leerer Workspace-Einstieg mit gespeicherter Ordnerauswahl und bewusster Wiederöffnung, kompakte Menüleiste, Projektmanager, aufklappbarer Dateibaum und bis zu 16 editierbare Textdokumente mit separaten Autosaves und gespeicherten Editoransichten, drei Arbeitsbereiche, integrierte Offline-Dokumentation, Systemtypografie, Einstellungen mit Code-Schriftgröße und Autosave-Intervall, dunkle, helle und kontrastreiche Darstellung, gespeicherte Fenstergröße/Maximierung, verschiebbare Seitenleiste, Arbeitsbereich, Protokoll und eigenständiger Inspektor mit Teilungen, Tabgruppen, gespeicherten frei platzierten Panels und bis zu acht benannten Panelanordnungen im Hauptfenster und acht benannten Workspaces mit Ordnern und Editoransichten, Reset zum pausierten Anfangszustand mit erhaltenen Alt-Läufen, Vorlagen, Editor, direkter Projektbuild ohne CMake mit Ausgaben unter `build/`, Diagramme | portable Workspaces, separate Panelfenster, weitere Panelzustände, UI-weite Schriftvergrößerung, vollständige Barrierefreiheit |

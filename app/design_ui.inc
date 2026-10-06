@@ -287,6 +287,7 @@ static void camera_inspector(app *a) {
 #include "workspace_tree_ui.inc"
 #include "window_header.inc"
 #include "layout_ui.inc"
+#include "channel_units_ui.inc"
 #include "workspace_catalog_ui.inc"
 #include "toolbar_ui.inc"
 static void sidebar_panel(app *a) {
@@ -631,29 +632,38 @@ static void workspace_panel(app *a) {
             viewport(a,fmaxf(160,content-plot_height-308-(compact_controls?34:0)-
                        (nk_window_get_content_region(ui).w<560?30:0)));
             timeline_controls(a);
-            nk_layout_row_dynamic(ui, 28, 2);
+            nk_layout_row_dynamic(ui, 28, 3);
             if (a->channel_count) {
-                const char *names[PS_MAX_CHANNELS];
-                for (uint32_t i = 0; i < a->channel_count; i++)
-                    names[i] = a->channel_names[i];
+                const char *names[PS_MAX_CHANNELS];char labels[PS_MAX_CHANNELS][128];
+                for (uint32_t i = 0; i < a->channel_count; i++) {
+                    ps_display_unit label_unit=channel_display_unit(a,&a->live_channels[i]);
+                    snprintf(labels[i],sizeof labels[i],"%s [%s]",a->live_channels[i].name,label_unit.symbol);
+                    names[i]=labels[i];
+                }
                 if (a->plot_channel >= (int)a->channel_count)
                     a->plot_channel = 0;
                 a->plot_channel = nk_combo(ui, names, (int)a->channel_count, a->plot_channel, 26,
                                            nk_vec2(280, 240));
+                a->channel_unit_buttons[0]=nk_widget_bounds(ui);
+                if(nk_button_label(ui,"Einheit …"))channel_unit_open(a,&a->live_channels[a->plot_channel]);
+                ps_display_unit unit=channel_display_unit(a,&a->live_channels[a->plot_channel]);
                 char value[96];
                 const double *shown = display_values(a);
-                snprintf(value, sizeof value, "%.8g", shown[a->plot_channel]);
+                channel_display_text(&unit,shown[a->plot_channel],value,sizeof value);
                 int mask = a->channel_status[a->plot_channel];
                 if (mask >= 0 && shown[mask] != 1)
                     snprintf(value, sizeof value, "%s",
                              shown[mask] == 2 ? "Messung ausgefallen" : "Keine neue Messung");
                 nk_label(ui, value, NK_TEXT_RIGHT);
-                plot(a, a->history_t, a->history_v[a->plot_channel], a->history_count, plot_height,
-                     "Live-Messwerte", mask >= 0, NULL);
+                double displayed[PREVIEW];
+                bool represented=channel_display_values(&unit,a->history_v[a->plot_channel],a->history_count,displayed);
+                char title[160];snprintf(title,sizeof title,"Live-Messwerte [%s]%s",unit.symbol,represented?"":" · Werte nicht darstellbar");
+                plot(a, a->history_t, displayed, a->history_count, plot_height,
+                     title, mask >= 0, NULL);
             } else {
                 nk_label_colored(ui, "Messwerte erscheinen während des Laufs.", NK_TEXT_LEFT,
                                  muted());
-                nk_spacer(ui);
+                nk_spacer(ui);nk_spacer(ui);
             }
             if (a->runner.running && ps_clock() - a->heartbeat > 3) {
                 nk_layout_row_dynamic(ui, 28, 1);
@@ -712,9 +722,14 @@ static void workspace_panel(app *a) {
                          (unsigned long long)a->data.total,
                          a->data.result == PS_RECOVERED ? "rekonstruiert" : "vollständig");
                 nk_label_colored(ui, total, NK_TEXT_RIGHT, muted());
-                char title[128];
-                snprintf(title, sizeof title, "%s [%s]", names[a->plot_channel],
-                         a->data.channels[a->plot_channel].unit);
+                nk_layout_row_dynamic(ui,28,1);a->channel_unit_buttons[1]=nk_widget_bounds(ui);
+                if(nk_button_label(ui,"Anzeigeeinheit …"))channel_unit_open(a,&a->data.channels[a->plot_channel]);
+                ps_display_unit unit=channel_display_unit(a,&a->data.channels[a->plot_channel]);
+                double displayed[PREVIEW];
+                bool represented=channel_display_values(&unit,a->data.values[a->plot_channel],a->data.count,displayed);
+                char title[192];
+                snprintf(title, sizeof title, "%s [%s]%s", names[a->plot_channel],unit.symbol,
+                         represented?"":" · Werte nicht darstellbar");
                 int mask = -1;
                 (void)ps_channel_status_index(a->data.channels, a->data.channel_count,
                                               (uint32_t)a->plot_channel, &mask);
@@ -727,25 +742,34 @@ static void workspace_panel(app *a) {
                              (unsigned long long)a->data.stats[a->plot_channel].count);
                     nk_label_colored(ui, note, NK_TEXT_LEFT, muted());
                 }
-                plot(a, a->data.time, a->data.values[a->plot_channel], a->data.count,
+                plot(a, a->data.time, displayed, a->data.count,
                      content * .39f, title, mask >= 0, &a->data_views[a->plot_channel]);
                 section(ui, "Statistik des gesamten Laufs");
-                nk_layout_row_dynamic(ui, 28, 5);
-                const char *head[] = {"Kanal", "Mittelwert", "Std.-Abw.", "Minimum", "Maximum"};
-                for (int i = 0; i < 5; i++)
-                    nk_label_colored(ui, head[i], NK_TEXT_LEFT, muted());
-                for (uint32_t i = 0; i < a->data.channel_count; i++) {
-                    nk_label(ui, names[i], NK_TEXT_LEFT);
-                    double values[] = {a->data.stats[i].mean,
-                                       ps_statistics_stddev(&a->data.stats[i]),
-                                       a->data.stats[i].min, a->data.stats[i].max};
-                    for (int k = 0; k < 4; k++) {
-                        char text[80];
-                        snprintf(text, sizeof text, "%.8g", values[k]);
-                        if (!a->data.stats[i].count || (k == 1 && a->data.stats[i].count < 2))
-                            snprintf(text, sizeof text, "—");
-                        nk_label(ui, text, NK_TEXT_LEFT);
+                nk_layout_row_dynamic(ui,fminf(360,56+28*(float)a->data.channel_count),1);
+                if(nk_group_begin(ui,"measurement-statistics",0)) {
+                    int column_width=(int)fmaxf(136,(nk_window_get_content_region(ui).w-24)/5);
+                    nk_layout_row_static(ui,28,column_width,5);
+                    const char *head[] = {"Kanal", "Mittelwert", "Std.-Abw.", "Minimum", "Maximum"};
+                    for (int i = 0; i < 5; i++)
+                        nk_label_colored(ui, head[i], NK_TEXT_LEFT, muted());
+                    for (uint32_t i = 0; i < a->data.channel_count; i++) {
+                        ps_display_unit stat_unit=channel_display_unit(a,&a->data.channels[i]);
+                        char stat_label[128];snprintf(stat_label,sizeof stat_label,"%s [%s]",names[i],stat_unit.symbol);
+                        channel_unit_cell(ui,stat_label);
+                        double values[] = {a->data.stats[i].mean,
+                                           ps_statistics_stddev(&a->data.stats[i]),
+                                           a->data.stats[i].min, a->data.stats[i].max};
+                        for (int k = 0; k < 4; k++) {
+                            char text[80];
+                            double converted;
+                            if(ps_display_unit_value(&stat_unit,values[k],&converted)==PS_OK)snprintf(text,sizeof text,"%.8g",converted);
+                            else snprintf(text,sizeof text,"nicht darstellbar");
+                            if (!a->data.stats[i].count || (k == 1 && a->data.stats[i].count < 2))
+                                snprintf(text, sizeof text, "—");
+                            channel_unit_cell(ui,text);
+                        }
                     }
+                    nk_group_end(ui);
                 }
             } else {
                 nk_layout_row_dynamic(ui, 110, 1);
@@ -814,6 +838,7 @@ static void log_panel(app *a) {
 }
 static void draw_ui(app *a, int width, int height) {
     struct nk_context *ui = a->ui;
+    if(a->channel_unit_manager) { channel_unit_manager_view(a,width,height);return; }
     if(a->layout_manager) { layout_manager_view(a,width,height);return; }
     if(a->workspace_manager) { workspace_catalog_view(a,width,height);return; }
     if (a->recovery) {

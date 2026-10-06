@@ -120,8 +120,8 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt derzeit 500 Tests ohne Fenster aus, mit `--no-app` die
-489 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
+`--test` führt derzeit 515 Tests ohne Fenster aus, mit `--no-app` die
+501 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
 Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.
@@ -195,9 +195,16 @@ python3 tools/build.py --test --test-filter '*_reference' --test-filter '*_isola
 python3 tests/test_native_test_runner.py --work build/native
 ```
 
+Die privaten Messkanal-Anzeigeeinheiten werden im Modellfall `channel_units`
+auf Dimensionen, Konvertierungsgrenzen, Kataloglimits, Beschädigungen und
+fehlgeschlagene Dateiersetzung geprüft. Der Fensterfall `channel_units_workflow`
+prüft C-/Physim-Läufe, echte Texteingaben und Schaltflächen, ungültige Faktoren,
+Live-Anzeige, Statistik, erhaltene Diagrammausschnitte, Abbrechen, SI-Rücksetzung
+und das erneute Öffnen einschließlich beschädigter Katalogdateien.
+
 ### Fenster- und Grafiktests direkt ausführen
 
-`--test-display` führt zusätzlich 40 Fenster- und Grafikabläufe aus. Dafür sind
+`--test-display` führt zusätzlich 51 Fenster- und Grafikabläufe aus. Dafür sind
 eine grafische Sitzung, SDL und ein geeigneter OpenGL-Treiber erforderlich.
 Die beiden Testgruppen werden getrennt gestartet; `--test-display` lässt sich
 nicht mit `--no-app` oder `--test` kombinieren.
