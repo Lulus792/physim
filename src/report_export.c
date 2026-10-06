@@ -82,16 +82,20 @@ ps_result ps_report_export_plot_csv(const ps_report *r, uint32_t plot, const cha
         ps_memory_free(allocator, c, sizeof *c);
         return PS_IO;
     }
-    fputs("curve,kind,x,y,bar_width,source_samples,x_unit,y_unit\n", f);
+    bool masked=false;const uint8_t *mask=NULL;
+    for(uint32_t i=0;i<info.curves;i++){ps_report_curve_mask(r,plot,i,&mask);masked |= mask!=NULL;}
+    fputs(masked?"curve,kind,x,y,bar_width,source_samples,x_unit,y_unit,valid,segment_start\n":"curve,kind,x,y,bar_width,source_samples,x_unit,y_unit\n",f);
     for (uint32_t i = 0; i < info.curves; i++) {
-        ps_report_curve_read(r, plot, i, c);
+        ps_report_curve_read(r, plot, i, c);ps_report_curve_mask(r,plot,i,&mask);
         for (uint32_t j = 0; j < c->count; j++) {
             csv_text(f, c->label);
-            fprintf(f, ",%u,%.17g,%.17g,%.17g,%llu,", (unsigned)c->kind, c->x[j], c->y[j],
-                    c->bar_width, (unsigned long long)c->source_count);
+            fprintf(f,",%u,",(unsigned)c->kind);
+            if(!mask || (mask[j]&1))fprintf(f,"%.17g,%.17g",c->x[j],c->y[j]);else fputc(',',f);
+            fprintf(f,",%.17g,%llu,",c->bar_width,(unsigned long long)c->source_count);
             csv_text(f, info.x_unit.symbol);
             fputc(',', f);
             csv_text(f, info.y_unit.symbol);
+            if(masked)fprintf(f,",%u,%u",mask?mask[j]&1:1,mask?(mask[j]&2)!=0:0);
             fputc('\n', f);
         }
     }
@@ -182,18 +186,34 @@ ps_result ps_report_export_svg_region(const ps_report *r, uint32_t plot, const d
     bool reduced = false;
     for (uint32_t i = 0; i < info.curves; i++) {
         ps_report_curve_read(r, plot, i, c);
+        const uint8_t *mask=NULL;ps_report_curve_mask(r,plot,i,&mask);
         if (c->kind != PS_PLOT_HISTOGRAM && c->count < c->source_count)
             reduced = true;
         if (region)
             fputs("<g clip-path=\"url(#plot-region)\">\n", f);
-        if (c->kind == PS_PLOT_LINE && c->count > 1)
+        if (c->kind == PS_PLOT_LINE && c->count > 1 && !mask)
             fprintf(f, "<polyline fill=\"none\" stroke=\"%s\" stroke-width=\"2\" points=\"",
                     colors[i]);
+        if(c->kind==PS_PLOT_LINE && c->count>1 && mask) {
+            fprintf(f,"<path fill=\"none\" stroke=\"%s\" stroke-width=\"2\" d=\"",colors[i]);
+            for(uint32_t j=0;j<c->count;j++)if(mask[j]&1) {
+                double x=110+1040*ps_report_axis_fraction(c->x[j],b[0],b[1]);
+                double y=570-480*ps_report_axis_fraction(c->y[j],b[2],b[3]);
+                bool connected=j && (mask[j-1]&1) && !(mask[j]&2);
+                fprintf(f,"%c%.3f %.3f ",connected?'L':'M',x,y);
+            }
+            fputs("\"/>\n",f);
+        }
         for (uint32_t j = 0; j < c->count; j++) {
+            if(mask && !(mask[j]&1))continue;
             double x = 110 + 1040 * ps_report_axis_fraction(c->x[j], b[0], b[1]);
             double y = 570 - 480 * ps_report_axis_fraction(c->y[j], b[2], b[3]);
-            if (c->kind == PS_PLOT_LINE && c->count > 1)
-                fprintf(f, "%.3f,%.3f ", x, y);
+            if (c->kind == PS_PLOT_LINE && c->count > 1) {
+                if(!mask)fprintf(f,"%.3f,%.3f ",x,y);
+                else if((!j || !(mask[j-1]&1) || (mask[j]&2)) &&
+                        (j+1==c->count || !(mask[j+1]&1) || (mask[j+1]&2)))
+                    fprintf(f,"<circle cx=\"%.3f\" cy=\"%.3f\" r=\"3\" fill=\"%s\"/>\n",x,y,colors[i]);
+            }
             else if (c->kind == PS_PLOT_HISTOGRAM) {
                 double left =
                     110 + 1040 * ps_report_axis_fraction(c->x[j] - c->bar_width / 2, b[0], b[1]);
@@ -208,7 +228,7 @@ ps_result ps_report_export_svg_region(const ps_report *r, uint32_t plot, const d
                 fprintf(f, "<circle cx=\"%.3f\" cy=\"%.3f\" r=\"3\" fill=\"%s\"/>\n", x, y,
                         colors[i]);
         }
-        if (c->kind == PS_PLOT_LINE && c->count > 1)
+        if (c->kind == PS_PLOT_LINE && c->count > 1 && !mask)
             fputs("\"/>\n", f);
         if (region)
             fputs("</g>\n", f);

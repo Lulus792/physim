@@ -3,6 +3,16 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-06. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Messlücken in Datenreihen:** Explizite Masken erhalten die ursprünglichen Zeilen
+und das Alignment. Numerische Operationen, Statistik, CSV und Kurven übernehmen
+die Gültigkeit; Ableitungen und PCHIP verbinden keine Lücken, ein kumulatives
+Integral bleibt nach der ersten unbeobachteten Strecke ungültig. GUI, SVG und PNG
+beachten Segmentgrenzen. Berichtformat 2 ergänzt Masken, Format 1 bleibt lesbar
+und wird für normale Berichte weiter geschrieben. Physim 0.172.0 bietet passende
+Series-Methoden; API/ABI 3 und die öffentlichen C-Strukturen bleiben erhalten.
+Eigenständige Analyseprojekte können eigene Daten ohne Eingabedatei auswerten.
+Die Plattformabnahme steht im [Plattformnachweis](platform-validation.md).
+
 **Fehlende Sensor-Endwerte:** Laufserien erfassen nicht fällige und ausgefallene
 Endmessungen, ohne die ganze Serie abzubrechen. Statistik verwendet nur gültige
 Werte, CSV erhält den Status und ein leeres Feld für fehlende Werte. Berichte
@@ -20,7 +30,7 @@ geprüft und übernommen, nur fehlende Indizes starten erneut. Seeds, Parameter
 und feste/adaptive Zeitvorgaben bleiben erhalten. Aktuelle Editoränderungen und
 die alte Serie werden nicht verändert. Vollständig vorhandene Serien starten
 keine neuen Prozesse. Frühere Serien ohne Checkpoint bleiben nicht fortsetzbar.
-Der Katalog umfasst 518 Prüfungen ohne Fenster (503 ohne SDL) und 54 Fensterfälle.
+Der Katalog umfasst 520 Prüfungen ohne Fenster (505 ohne SDL) und 55 Fensterfälle.
 Ausgeführte Nachweise stehen im [Plattformbericht](platform-validation.md).
 
 **Eigenständige Analyseprojekte:** Die App legt jetzt C-/Physim-Auswertungen ohne
@@ -730,7 +740,7 @@ und veraltete Fenstermanager-Einträge geprüft. Die erneute Linux-CI steht aus.
 | Szene | OpenGL 3.3 Core, Tiefenpuffer, MSAA, alle acht Grundprimitive, orientierte Boxen/Ebenen, RGBA-Transparenz mit Dreieckssortierung, UTF-8-Labels, Wurf-Flugbahn, Grid/Achsen, Kamera, Ansichten und Sichtbarkeit und Mausklickauswahl einzelner Szeneneinträge mit optionalen Objekt-IDs, gespeicherte Szenen mit Zeitleiste und Wiedergabe, benannte Gruppen und Elternbeziehungen mit aufklappbarem Inspektorbaum und geerbter Sichtbarkeit | artefaktfreie Transparenz bei sich durchdringenden Flächen, hierarchische Koordinatentransformationen |
 | Analyse | eigener C-Editor/Runner, eigenständige C-/Physim-Analyseprojekte ohne Experiment mit geprüftem Dateiimport, Dataset-/Series-Handles, blockweise Transformationen mit Einheitenprüfung, eigene Ergebnisplots/-tabellen, Linien/Punkte/Histogramme mit Zoom am Mauszeiger, Verschieben, separaten Ausschnitten und Achsenoffsets, PNG-/SVG-Export des sichtbaren Ausschnitts, CSV/SVG und verlustfrei komprimiertes PNG mit vier Größen von 1200 × 850 bis 4800 × 3400 Pixeln, Statistik, Ableitung, Integral, gleitendes Mittel, Periode, Energieabweichung, Auswahl und Vergleich von bis zu acht Läufen, gemeinsame Statusauswahl von Datenreihen, lineares, Nearest-/Previous- und monotones kubisches Resampling (PCHIP) in C/Physim und Differenzkurven, frühere Berichte öffnen | weitere Interpolationsverfahren/Transformationen |
 | Mechanik | starre Körper mit Kugel-/Boxträgheit, Quaternionrotation, Drehmomente/Impulse, Kugel–Kugel/Kugel–Ebene/Kugel–Box/Box–Ebene/Box–Box, iterative Paar- und Graph-Solver mit Coulomb-Reibung/Restitution (bis zu 128 Körper und 512 Kontakte), Distanzgelenk mit lokalen Ankern und Driftkorrektur, gemeinsamer Geschwindigkeits-Solver für Kontakte und bis zu 256 Gelenke, Feder/Dämpfung, Stokes-/quadratischer Widerstand, Kugelstoß-, Boxstoß- und Bodenkontaktvorlagen mit Debug-Vektoren, Feder–Masse–Dämpfer mit dissipierter Arbeit und Energiebilanz, archimedischer Auftrieb und Kugel-Eintauchvolumen samt Auftriebsmittelpunkt, Auftriebsvorlage mit Kraftanzeige und Energiebilanz | automatische Kontaktverwaltung, Warmstart, gemeinsame nichtlineare Positionsprojektion, weitere Gelenke, Box-CCD, erweiterte Stoffmodelle |
-| Unsicherheit | PCG32, geprüfte konstante/uniforme/normale Verteilungen, öffentliche Sensor-API mit Einheiten, Zeitraster, Auflösung, Offset, Drift, Rauschen, Ausfällen und Standardunsicherheit, getrennte Modell-/Soll-/Messwerte, gültigkeitsbewusste Vorschau/Statistik/CSV, Batchcontroller in App/CLI mit bis zu acht Runnern, expliziten Seeds, eigenen Arbeitsordnern, Abbruch und fester Auswertungsreihenfolge, Endwert-Histogramm/Typ-7-Quantile, Normalnäherung des Mittelwert-KI ab 200 gültigen Endwerten und lineare Parameterstudien in CLI und App mit Kurvenbericht, geprüfte Wiederaufnahme journalisierter Läufe aus archivierten Konfigurationen in neue Serienordner, gültigkeitsbewusste Endwertaggregation mit Messstatus-CSV und Messabdeckung einschließlich vollständig fehlender Messungen | Erhaltung von Messlücken als explizite Masken in transformierten Datenreihen, korrelierte Sensor-/Unsicherheitsmodelle, weitere Konfidenzverfahren und Verteilungsdiagnostik |
+| Unsicherheit | PCG32, geprüfte konstante/uniforme/normale Verteilungen, öffentliche Sensor-API mit Einheiten, Zeitraster, Auflösung, Offset, Drift, Rauschen, Ausfällen und Standardunsicherheit, getrennte Modell-/Soll-/Messwerte, gültigkeitsbewusste Vorschau/Statistik/CSV, Batchcontroller in App/CLI mit bis zu acht Runnern, expliziten Seeds, eigenen Arbeitsordnern, Abbruch und fester Auswertungsreihenfolge, Endwert-Histogramm/Typ-7-Quantile, Normalnäherung des Mittelwert-KI ab 200 gültigen Endwerten und lineare Parameterstudien in CLI und App mit Kurvenbericht, geprüfte Wiederaufnahme journalisierter Läufe aus archivierten Konfigurationen in neue Serienordner, gültigkeitsbewusste Endwertaggregation mit Messstatus-CSV und Messabdeckung einschließlich vollständig fehlender Messungen, explizite Masken in transformierten C-/Physim-Datenreihen und Berichten mit erhaltenen Segmentgrenzen | korrelierte Sensor-/Unsicherheitsmodelle, weitere Konfidenzverfahren und Verteilungsdiagnostik |
 | Produktreife | Quellen-Snapshots, versionierte Dateien, Backup beim Speichern, Autosave beider C-Editoren mit wählbarem Intervall (Standard 30 Sekunden), Wiederherstellung mit Erkennung extern geänderter Quellen | gleichzeitige Autoren/Dateizusammenführung, Projektmigration, Installer, Leistungsbudget, abdeckungsgeführte Langzeit-Fuzzing-Kampagne |
 
 Keine Kennzeichnung als stabile 1.0 und keine Behauptung, dass alle 25 Starttickets

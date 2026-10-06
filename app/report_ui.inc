@@ -27,7 +27,7 @@ static void report_plot(app *a, uint32_t index, float height) {
     nk_fill_rect(canvas, r, 7, UI_COLOR(edit));
     if (bounds_result != PS_OK) {
         report_text(a, nk_rect(r.x + 20, r.y + 20, r.w - 40, 24),
-                    "Dieses Diagramm enthält noch keine Kurven.", UI_COLOR(muted));
+                    "Dieses Diagramm enthält keine gültigen Messpunkte.", UI_COLOR(muted));
         return;
     }
     struct nk_rect area = nk_rect(r.x + 86, r.y + 20, r.w - 112, r.h - 64);
@@ -62,14 +62,19 @@ static void report_plot(app *a, uint32_t index, float height) {
     for (uint32_t j = 0; j < p.curves; j++) {
         if (ps_report_curve_view(a->analysis_report, index, j, &c) != PS_OK)
             continue;
+        const uint8_t *mask=NULL;ps_report_curve_mask(a->analysis_report,index,j,&mask);
         struct nk_color color = report_color(j);
         reduced |= c->kind != PS_PLOT_HISTOGRAM && c->count < c->source_count;
         sampled_scatter |= c->kind == PS_PLOT_SCATTER && c->count < c->source_count;
         double previous_x = 0, previous_y = 0;
         for (uint32_t i = 0; i < c->count; i++) {
+            if(mask && !(mask[i]&1))continue;
             double x = plot_fraction(view, b, 0, c->x[i]), y = plot_fraction(view, b, 1, c->y[i]);
             if (c->kind == PS_PLOT_LINE && c->count > 1) {
-                if (i)
+                bool before=i && (!mask || ((mask[i-1]&1) && !(mask[i]&2)));
+                bool after=i+1<c->count && (!mask || ((mask[i+1]&1) && !(mask[i+1]&2)));
+                if(!before && !after)plot_dot(canvas,area,x,y,2.5f,color);
+                if (before)
                     plot_segment(canvas, area, previous_x, previous_y, x, y, color);
             } else if (c->kind == PS_PLOT_HISTOGRAM) {
                 double left = fmax(0, plot_fraction(view, b, 0, c->x[i] - c->bar_width / 2));

@@ -1,10 +1,10 @@
 # Eigene Physim-Sprache
 
-Stand: 2026-10-05. Sprachvertrag 0.171.0; noch keine freigegebene Anwendersprache.
+Stand: 2026-10-06. Sprachvertrag 0.172.0; noch keine freigegebene Anwendersprache.
 Der Arbeitsname ist „Physim-Sprache“. Das vollständige Ziel und die Abnahmen
 LANG-001 bis LANG-007 stehen in Abschnitt 10 des Projektplans.
 
-Die Sprachversion `0.171.0` steht unabhängig von der App-Version und der SDK-ABI
+Die Sprachversion `0.172.0` steht unabhängig von der App-Version und der SDK-ABI
 in `src/language/version.h`. `physimc --version` und der Kopf des generierten C
 geben sie aus. Änderungen an Syntax oder Semantik erfordern eine bewusste
 Anhebung; die vorliegende Fassung ist noch ein Entwicklungsvertrag und keine
@@ -2944,3 +2944,10 @@ Die Anzeigeeinheit eines geladenen Berichts bleibt auch ohne Neubau verfügbar.
 Untypisierte Parameter bleiben unbekannt; Dimensionen werden weder aus Namen
 noch aus Beschreibungen abgeleitet. [Serien und Anzeigeeinheiten](monte-carlo.md#einheiten-von-parameterstudien)
 beschreibt Formulare, CLI, SI-Persistenz und Berichte.
+
+
+Sprachvertrag 0.172.0 ergänzt `Series.masked(selector, accepted)`, `validity()`,
+`hasMask()` und `isValid(index)` für ausdrücklich erhaltene Messlücken.
+Transformationen und Berichte übernehmen die Masken. `value`/`values` verlangen
+gültige Beobachtungen im angeforderten Bereich. Numerische Regeln und Beispiele
+stehen unter [Datenreihen mit Masken](series.md#messlücken-mit-expliziten-masken).

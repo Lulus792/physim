@@ -25,6 +25,22 @@ static inline void psra_check(psra_host *h, ps_result r, psrt_site site) {
 }
 /* Handles remain owned by the analysis context. Only the returned array block
  * is a language owner; releasing a copied Series still invalidates its aliases. */
+static inline ps_series psra_mask(psra_host *h,ps_series input,ps_series selector,double accepted,psrt_site site) {
+    ps_series result;psra_check(h,ps_series_mask(h->context,input,selector,accepted,&result),site);return result;
+}
+static inline ps_series psra_validity(psra_host *h,ps_series input,psrt_site site) {
+    ps_series result;psra_check(h,ps_series_validity(h->context,input,&result),site);return result;
+}
+static inline bool psra_has_mask(psra_host *h,ps_series input,psrt_site site) {
+    bool result;psra_check(h,ps_series_is_masked(h->context,input,&result),site);return result;
+}
+static inline bool psra_is_valid(psra_host *h,ps_series input,int64_t index,psrt_site site) {
+    if(index<0)psra_check(h,PS_INVALID,site);
+    double value;uint8_t valid;size_t got;
+    psra_check(h,ps_series_read_masked(h->context,input,(uint64_t)index,&value,&valid,1,&got),site);
+    if(got!=1)psra_check(h,PS_INVALID,site);
+    return valid!=0;
+}
 static inline psrt_array psra_select(psra_host *h, ps_allocator allocator,
     const ps_series *columns, size_t count, ps_series selector, double accepted, psrt_site site) {
     if (!count || count > 32)
@@ -271,9 +287,9 @@ static inline double psra_value(psra_host *h, ps_series input, int64_t index, ps
     if (index < 0)
         psra_check(h, PS_INVALID, site);
     double value;
-    size_t count;
-    psra_check(h, ps_series_read(h->context, input, (uint64_t)index, &value, 1, &count), site);
-    if (count != 1)
+    size_t count;uint8_t valid;
+    psra_check(h, ps_series_read_masked(h->context,input,(uint64_t)index,&value,&valid,1,&count), site);
+    if (count != 1 || !valid)
         psra_check(h, PS_INVALID, site);
     return psrt_finite(value, site);
 }
@@ -291,17 +307,17 @@ static inline psrt_array psra_values(psra_host *h, ps_allocator allocator, ps_se
     psrt_array result;
     psra_check(h, psrt_array_init(&element, allocator, (size_t)count, &result), site);
     psra_check(h, psrt_array_build_begin(&result, (size_t)count), site);
-    double block[PS_SERIES_BLOCK_SIZE];
+    double block[PS_SERIES_BLOCK_SIZE];uint8_t valid[PS_SERIES_BLOCK_SIZE];
     for (uint64_t at = 0; at < (uint64_t)count;) {
         size_t take = (size_t)((uint64_t)count - at > PS_SERIES_BLOCK_SIZE
                                    ? PS_SERIES_BLOCK_SIZE : (uint64_t)count - at);
         size_t got = 0;
-        ps_result status = ps_series_read(h->context, input, (uint64_t)first + at,
-                                          block, take, &got);
+        ps_result status=ps_series_read_masked(h->context,input,(uint64_t)first+at,block,valid,take,&got);
         if (status == PS_OK && got != take)
             status = PS_CORRUPT;
         for (size_t i = 0; i < got && status == PS_OK; i++) {
-            if (!isfinite(block[i]))
+            if(!valid[i])status=PS_INVALID;
+            else if (!isfinite(block[i]))
                 status = PS_NUMERIC;
             else
                 status = psrt_array_copy_one(result.block, &block[i]);

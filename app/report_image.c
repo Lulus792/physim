@@ -116,15 +116,20 @@ ps_result ps_report_image_region(struct nk_context *ui, const struct nk_user_fon
     bool reduced = false;
     for (uint32_t c = 0; c < info.curves; c++) {
         ps_report_curve_read(report, plot, c, curve);
+        const uint8_t *mask=NULL;ps_report_curve_mask(report,plot,c,&mask);
         struct nk_color color = nk_rgb(palette[c][0], palette[c][1], palette[c][2]);
         reduced |= curve->kind != PS_PLOT_HISTOGRAM && curve->count < curve->source_count;
         /* One pixel of room for marks exactly at a bound. */
         nk_push_scissor(canvas, nk_rect(area.x - 3, area.y - 3, area.w + 6, area.h + 6));
         struct nk_vec2 previous = {0};
         for (uint32_t i = 0; i < curve->count; i++) {
+            if(mask && !(mask[i]&1))continue;
             struct nk_vec2 p = point(area, bounds, curve->x[i], curve->y[i]);
             if (curve->kind == PS_PLOT_LINE && curve->count > 1) {
-                if (i && region) {
+                bool before=i && (!mask || ((mask[i-1]&1) && !(mask[i]&2)));
+                bool after=i+1<curve->count && (!mask || ((mask[i+1]&1) && !(mask[i+1]&2)));
+                if(!before && !after)nk_fill_circle(canvas,nk_rect(p.x-3,p.y-3,6,6),color);
+                if (before && region) {
                     double x0 = ps_report_axis_fraction(curve->x[i - 1], bounds[0], bounds[1]);
                     double y0 = ps_report_axis_fraction(curve->y[i - 1], bounds[2], bounds[3]);
                     double x1 = ps_report_axis_fraction(curve->x[i], bounds[0], bounds[1]);
@@ -134,7 +139,7 @@ ps_result ps_report_image_region(struct nk_context *ui, const struct nk_user_fon
                                        area.y + (1 - (float)y0) * area.h,
                                        area.x + (float)x1 * area.w,
                                        area.y + (1 - (float)y1) * area.h, 2, color);
-                } else if (i)
+                } else if (before)
                     nk_stroke_line(canvas, previous.x, previous.y, p.x, p.y, 2, color);
             } else if (curve->kind == PS_PLOT_HISTOGRAM) {
                 struct nk_vec2 left = point(area, bounds, curve->x[i] - curve->bar_width / 2, 0);

@@ -253,10 +253,17 @@ int main(int argc, char **argv) {
         if (mode == 1)
             CHECK(r == PS_OK && result.completed == 1 &&
                   fabs(result.values[0] - model[2][0]) < 1e-12);
-        else
-            CHECK(r == PS_INVALID && result.completed == 0 &&
-                  strstr(result.error, "kein gültiger Messwert"));
+        else {
+            CHECK(r==PS_OK && result.completed==1 && result.valid==0 && result.finished[0] &&
+                  result.endpoint_status[0]==(mode==0?0:2));
+            char summary[4096];snprintf(summary,sizeof summary,"%s/summary.psreport",options.directory);
+            ps_report *report=NULL;CHECK(ps_report_load(summary,&report)==PS_OK);
+            uint32_t plots,tables;CHECK(ps_report_describe(report,NULL,NULL,&plots,&tables)==PS_OK && plots==0 && tables==1);
+            ps_table_row row;CHECK(ps_report_row_read(report,0,1,&row)==PS_OK && row.values[0]==0);
+            CHECK(ps_report_row_read(report,0,mode==0?2:3,&row)==PS_OK && row.values[0]==1 && row.values[1]==100);
+            ps_report_destroy(report);
+        }
     }
-    puts("Sensor reference, masked report/CSV and batch endpoint guards passed.");
+    puts("Sensor reference, masked report/CSV and batch endpoint coverage passed.");
     return 0;
 }

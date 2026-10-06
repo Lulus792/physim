@@ -190,6 +190,34 @@ ps_result ps_report_add_curve(
 
 Data already uses the plot axis units. Finite values only. A histogram's positive bar_width uses the X unit; its Y values are nonnegative counts.
 
+## ps_report_add_curve_masked
+
+Kopiert eine Kurve samt Gültigkeit und Segmentanfängen. Fehlende Punkte werden beim Zeichnen und bei Grenzen übergangen.
+
+```c
+ps_result ps_report_add_curve_masked(
+    ps_report *report,
+    ps_plot_handle plot,
+    const ps_curve_data *data,
+    const uint8_t *flags);
+```
+
+Optional curve flags: 0=missing, 1=valid/connected, 3=valid/new segment. NULL means all valid/connected. Flags are copied and must match data->count. Existing ps_curve_data layout and ordinary curves remain unchanged.
+
+## ps_report_curve_mask
+
+Leiht unveränderliche Kurvenflags; NULL bezeichnet eine vollständig gültige, zusammenhängende Kurve.
+
+```c
+ps_result ps_report_curve_mask(
+    const ps_report *report,
+    uint32_t plot,
+    uint32_t curve,
+    const uint8_t **out);
+```
+
+Borrowed flags; NULL denotes an unmasked curve. Same lifetime as curve_view.
+
 ## ps_report_add_series
 
 Übernimmt ausgerichtete Reihen als Linien- oder Punktkurve, mit geprüfter Einheitenkonvertierung und Vorschaugrenze.
@@ -205,7 +233,7 @@ ps_result ps_report_add_series(
     ps_plot_kind kind);
 ```
 
-Copies aligned x/y data with checked dimensions and axis-scale conversion. Line previews preserve bucket extrema and both endpoints; scatter previews sample uniformly. source_count exposes reduction. Full data remains in Series.
+Copies aligned x/y data with checked dimensions and axis-scale conversion. Line previews preserve bucket extrema and both endpoints; scatter previews sample uniformly. Masks and segment boundaries survive reduction; missing points are not drawn and line segments never bridge gaps. source_count exposes reduction. Full data remains in Series.
 
 ## ps_report_add_histogram
 
@@ -222,7 +250,7 @@ ps_result ps_report_add_histogram(
     ps_plot_handle *out);
 ```
 
-Equal-width bins over the entire series; final bin includes the maximum. Constant input produces a single nonzero-width bin. All samples are counted.
+Equal-width bins over the entire series; final bin includes the maximum. Constant input produces a single nonzero-width bin. Only valid samples count.
 
 ## ps_report_add_table
 
@@ -335,7 +363,7 @@ Schreibt den Bericht als versionierte, CRC-geprüfte neue .psreport-Datei.
 ps_result ps_report_save(const ps_report *report, const char *path);
 ```
 
-Versioned little-endian .psreport, CRC checked, bounded to 8 MiB. Load is transactional; truncated, malformed, nonfinite or oversized data is rejected. Outputs are created exclusively; failed writes may leave a partial file.
+Versioned little-endian .psreport, CRC checked, bounded to 8 MiB. Version 1 remains for ordinary reports; version 2 adds masks. Both versions load. Load is transactional; truncated, malformed, nonfinite or oversized data is rejected. Outputs are created exclusively; failed writes may leave a partial file.
 
 ## ps_report_load
 

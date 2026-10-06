@@ -154,3 +154,30 @@ ist noch offen. Der Runner schreibt zusätzlich `<präfix>.inputs.csv` mit Modul
 allen Eingängen, Dateigrößen und FNV-1a-Fingerabdrücken. Diese sind keine
 kryptographischen Nachweise. Frühere Berichte lassen sich über
 [Läufe & Berichte](runs.md) ohne Neubau direkt in der App öffnen.
+
+
+## Maskierte Kurven und Segmentgrenzen
+
+`ps_report_add_series` übernimmt Gültigkeitsmasken automatisch. Ungültige Punkte
+beeinflussen weder Achsengrenzen noch Statistik oder Histogramme. Linien verbinden
+nur zusammenhängende gültige Beobachtungen; einzelne gültige Punkte bleiben als
+Punktmarker sichtbar. Die begrenzte Vorschau erhält gültige Extrema und markiert
+Segmentwechsel auch dann, wenn dazwischenliegende Zeilen bei der Reduktion
+entfallen. Für sämtliche Originalzeilen verwende den Reihenexport.
+
+Für eigene Kurvendaten bietet `ps_report_add_curve_masked` eine Flagfolge neben
+dem unveränderten `ps_curve_data`: 0 = fehlend, 1 = gültig und verbunden, 3 = gültig
+mit neuem Segment. `NULL` bezeichnet vollständig gültige, zusammenhängende Daten.
+`ps_report_curve_mask` leiht diese Flags unveränderlich mit derselben Lebensdauer
+wie `curve_view`. Die vorhandenen C-Strukturen und ABI 3 bleiben unverändert.
+
+GUI, SVG und PNG beachten diese Flags. Der Plot-CSV ergänzt bei maskierten
+Diagrammen `valid` und `segment_start`; fehlende x/y-Felder bleiben leer.
+Ein Diagramm ohne gültige Punkte hat keine numerischen Achsengrenzen. Die App
+zeigt dies ausdrücklich; ein PNG-/SVG-Export ohne Grenzen liefert einen Fehler.
+Der Bericht selbst kann weiterhin gespeichert und wieder geöffnet werden.
+
+Normale Berichte werden unverändert als Format 1 gespeichert. Sobald eine Kurve
+fehlende Punkte oder Segmentanfänge enthält, verwendet der Writer Format 2.
+Der Reader akzeptiert beide Formate und prüft Größenlimits, CRC, Koordinaten und
+Flags, bevor er einen Bericht veröffentlicht.

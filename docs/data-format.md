@@ -316,3 +316,21 @@ Konfiguration beschreibt dieselben Modelle, Seeds und Zeitvorgaben.
 `status.txt` ergänzt die Anzahl `valid` und `missing`. Zusammen ergeben sie
 `completed`, auch bei einem geregelten Abbruch. Berichtformat, API/ABI und
 Pipe-Versionen ändern sich nicht.
+
+
+## Berichtformat 2 für Gültigkeitsmasken
+
+Die Signatur `PSRPT17\n`, der 20-Byte-Header, Payloadlänge, CRC32 und das
+8-MiB-Limit bleiben bestehen. Das Versionsfeld enthält 1 für normale Berichte
+oder 2 für Berichte mit Kurvenmasken. Der Reader akzeptiert beide; ältere Reader
+weisen Version 2 mit `PS_VERSION` ab.
+
+Version 2 ergänzt nach den x/y-Paaren jeder Kurve eine Little-Endian-`uint32`
+Maskenlänge. Sie ist null (alle Punkte gültig/verbunden) oder exakt die Punktzahl.
+Danach folgen entsprechend viele Bytes: 0 = fehlend, 1 = gültig/verbunden,
+3 = gültiger Segmentanfang. Andere Werte und abweichende Längen sind beschädigte
+Daten. Auch ungültige Koordinaten bleiben endlich; die Maske verleiht einem
+Platzhalter keine Messbedeutung. Die Masken sind Teil der Payload-CRC.
+
+Kanal-/Messdateiformat 1, Projektformat 2 und Runner-Pipe-Version 4 ändern sich
+dadurch nicht. Auch öffentliche C-Strukturen und Modul-ABI 3 bleiben erhalten.

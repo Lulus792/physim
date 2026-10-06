@@ -14,10 +14,11 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
     if(!strncmp(mode,"layouts-",8))return layout_test_start(a,root,mode);
     if(!strncmp(mode,"named-",6))return workspace_catalog_test_start(a,root,mode);
     if(!strncmp(mode,"resume-",7))return batch_resume_test_start(a,root,mode);
-    if(!strncmp(mode,"missing-",8))return batch_missing_test_start(a,root,mode);
+    if(!strcmp(mode,"missing-c") || !strcmp(mode,"missing-phys"))return batch_missing_test_start(a,root,mode);
     if(!strncmp(mode,"analysis-project-",17))return analysis_project_test_start(a,root,mode);
     if(!strncmp(mode,"units-",6))return channel_units_test_start(a,root,mode);
     if(!strncmp(mode,"pchip-",6))return pchip_test_start(a,root,mode);
+    if(!strncmp(mode,"mask-",5))return series_mask_test_start(a,root,mode);
     if (!strncmp(mode, "hierarchy-", 10))
         return hierarchy_test_start(a,root,mode);
     if (!strncmp(mode,"adaptive-",9))
@@ -107,9 +108,10 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
     if(!strncmp(mode,"layouts-",8)){layout_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"named-",6)){workspace_catalog_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"resume-",7)){batch_resume_test_frame(a,stage,code,capture);return;}
-    if(!strncmp(mode,"missing-",8)){batch_missing_test_frame(a,stage,code,capture);return;}
+    if(!strcmp(mode,"missing-c") || !strcmp(mode,"missing-phys")){batch_missing_test_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"analysis-project-",17)){analysis_project_test_frame(a,a->manager_parent,mode,stage,code,capture);return;}
     if(!strncmp(mode,"units-",6)){channel_units_test_frame(a,mode,stage,code,capture);return;}
+    if(!strncmp(mode,"mask-",5)){series_mask_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"pchip-",6)){pchip_test_frame(a,mode,stage,code,capture);return;}
     if (!strcmp(mode, "native-dialogs") || !strcmp(mode, "native-dialog-error")) {
         native_dialog_test_frame(a, !strcmp(mode, "native-dialog-error"), stage, code, capture);

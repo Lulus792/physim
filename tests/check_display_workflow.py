@@ -178,6 +178,56 @@ def timed_series(flow, directory, scaled=False):
     require(records[0] == records[1], "Timed C/Physim studies differ in accepted times or values")
 
 
+def masked_png_pixels(path):
+    data=path.read_bytes()
+    at=8;compressed=[];width=height=0
+    while at<len(data):
+        length=struct.unpack_from(">I",data,at)[0];kind=data[at+4:at+8];payload=data[at+8:at+8+length]
+        require(zlib.crc32(kind+payload)==struct.unpack_from(">I",data,at+8+length)[0],"Masked PNG CRC failed")
+        if kind==b"IHDR":
+            width,height,depth,color,compression,filtering,interlace=struct.unpack(">IIBBBBB",payload)
+            require((depth,color,compression,filtering,interlace)==(8,2,0,0,0),"Unexpected masked PNG encoding")
+        elif kind==b"IDAT":compressed.append(payload)
+        at+=12+length
+    require(at==len(data) and (width,height)==(1200,850),"Masked PNG layout failed")
+    pixels=zlib.decompress(b"".join(compressed));stride=width*3+1
+    require(len(pixels)==height*stride and all(pixels[y*stride]==0 for y in range(height)),"Masked PNG scanlines failed")
+    ink=bytes((23,109,209))
+    def blue(x,y):
+        index=y*stride+1+x*3
+        return pixels[index:index+3]==ink
+    require(sum(blue(x,y) for y in range(95,565) for x in range(115,1145))>100,"Masked PNG has no plotted signal")
+    for left,right in ((280,530),(740,975)):
+        require(not any(blue(x,y) for y in range(95,565) for x in range(left,right)),"Masked PNG draws a line across a measurement gap")
+
+
+def series_masks(flow,directory):
+    import csv
+    for language in ("c","phys"):
+        root=directory/language
+        root.mkdir(parents=True)
+        flow.run("--workspace-state-test",root,"mask-"+language,timeout=130,
+                 marker="SERIES MASK mask-"+language+" SELF-TEST: PASSED")
+        project=root/"project"
+        require("kind=analysis" in read(project/"physim.project"),"Mask analysis needs an independent project")
+        require(not (project/"main.c").exists() and not (project/"main.phys").exists(),"Generated analysis created an experiment")
+        report=project/"saved-mask.psreport"
+        require(struct.unpack_from("<I",report.read_bytes(),8)[0]==2,"Masked report lost its format version")
+        rows=list(csv.DictReader(read(project/"saved-mask.csv").splitlines()))
+        require(len(rows)==8 and rows[2]["valid"]=="0" and rows[2]["y"]=="" and rows[3]["segment_start"]=="1","Mask CSV lost gaps or segment boundaries")
+        svg=read(project/"saved-mask.svg")
+        require(len(re.findall(r"M[0-9.-]+ [0-9.-]+",svg))>=3,"SVG connects through missing points")
+        png=(project/"saved-mask.png").read_bytes()
+        require(png[:8]==b"\x89PNG\r\n\x1a\n" and struct.unpack_from(">II",png,16)==(1200,850),"Masked PNG failed")
+        masked_png_pixels(project/"saved-mask.png")
+        protected=[report,project/"saved-mask.csv",project/"saved-mask.svg",project/"saved-mask.png"]
+        hashes=[fingerprint(p) for p in protected]
+        flow.run("--workspace-state-test",root,"mask-read",timeout=130,
+                 marker="SERIES MASK mask-read SELF-TEST: PASSED")
+        require(hashes==[fingerprint(p) for p in protected],"Reopening masked report changed artifacts")
+        require(read(project/"reopened-mask.svg")==svg,"Mask rendering changed after reopening")
+
+
 def batch_missing(flow, directory):
     import csv
     for language in ("c", "phys"):
@@ -710,7 +760,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
+SPECIAL = {"series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}

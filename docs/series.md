@@ -209,3 +209,68 @@ Ein Context ist nicht gleichzeitig aus mehreren Threads verwendbar.
 [Numerische Verfahren und Einheiten](numerics.md)
 
 [Dateiformat und Recovery](data-format.md)
+
+
+## Messlücken mit expliziten Masken
+
+`ps_series_select` entfernt Zeilen bewusst. Wenn die ursprüngliche Zeitachse und
+Messlücken erhalten bleiben sollen, verwende `ps_series_mask(ctx, signal, status,
+1, &masked)`. Die Reihe behält alle Zeilen, Einheiten, Alignment und die Dataset-
+Lebensdauer. Gültig ist eine Zeile nur, wenn beide Eingabemasken gültig sind und
+der dimensionslose Selektor exakt den angegebenen Wert in seinen gespeicherten
+Einheiten hat. Das ist eine ausdrücklich gewählte Maske; Kanalnamen lösen keine
+stillschweigende Filterung aus.
+
+`ps_series_read_masked` liefert Werte und 0/1-Flags zusammen. Ungültige numerische
+Felder sind Platzhalter und dürfen nicht als Beobachtungen verwendet werden.
+`ps_series_validity` erzeugt eine ausgerichtete, selbst unmaskierte 0/1-Reihe.
+`ps_series_is_masked` zeigt das Vorhandensein einer gespeicherten Maske, auch bei
+vollständiger Gültigkeit. Masken benötigen zusätzlich ein Byte pro Zeile im
+Scratch-Budget. Ableitungen, Kopien und Kombinationen besitzen ihre Masken;
+die Freigabe eines Eingabehandles verändert sie nicht.
+
+- Ausschnitte und affine Transformationen erhalten die Maske. Ungültige Werte
+  werden bei affiner Rechnung nicht als Zahlen verarbeitet.
+- Binäre Operationen verwenden die Schnittmenge der Gültigkeiten. Beispielsweise
+  löst ein ausgeschlossener Nenner von null keinen numerischen Fehler aus.
+- Ableitungen verwenden nur unmittelbar benachbarte gültige Punkte. Segmentenden
+  erhalten einseitige Sekanten; ein einzelner gültiger Punkt hat keine Ableitung.
+- Gleitende Mittel beginnen nach jeder Lücke mit einem neuen Fenster gültiger,
+  zusammenhängender Beobachtungen.
+- Das kumulative Integral ist ab der ersten fehlenden x-/y-Beobachtung ungültig.
+  Für eine spätere zusammenhängende Teilstrecke kann ein eigener Ausschnitt mit
+  ausdrücklich angegebenem Anfangswert integriert werden. Es wird weder eine
+  Lückenfläche erfunden noch das Integral stillschweigend zurückgesetzt.
+- Lineares Resampling und PCHIP benötigen zwei gültige Intervallknoten. PCHIP
+  behandelt Lückenränder als Segmentenden und verwendet nur zusammenhängende
+  gültige Nachbarn für die Steigungen. Nearest/Previous übernehmen die Gültigkeit
+  des ausgewählten Knotens; Previous hält nach einem fehlenden Knoten dessen
+  Ungültigkeit bis zur nächsten Beobachtung. Source- und Zielachsen benötigen
+  überall gültige, streng steigende Koordinaten.
+- Statistik und Quantile verwenden gültige Beobachtungen; vollständig fehlende
+  Eingaben liefern `PS_INVALID`, ohne das Ausgabeargument zu verändern.
+
+Der vollständige Reihen-CSV erhält jede Zeile und schreibt fehlende Werte als
+leere Felder. Exportiere bei Bedarf `ps_series_validity` als weitere Spalte.
+Ein ausdrücklich aufgerufenes `select` kann weiterhin Zeilen komprimieren;
+seine Ergebnisreihen bleiben gemeinsam ausgerichtet und behalten vorhandene Masken.
+
+In Physim 0.172.0 gelten dieselben Operationen:
+
+```text
+let measured = raw.masked(status, 1)
+let flags = measured.validity()
+let velocity = measured.derivative(time)
+if measured.isValid(3):
+    let value = measured.value(3)
+let graph = measured.plot(time, "Messung mit Lücken", "Sensor")
+measured.export(time, "masked-data")
+```
+
+`value` und `values` liefern einen Quellfehler, wenn eine angeforderte Zeile
+ungültig ist. Prüfe `isValid(index)` beziehungsweise die Gültigkeitsreihe, oder
+wähle gültige Zeilen ausdrücklich aus. `count` zählt weiterhin alle Zeilen.
+Die Beispiele `examples/analysis_masks/analysis.c` und
+`examples/language/analysis_masks.phys` erzeugen ohne Eingabedatei maskierte
+Messungen, Segmentableitungen und ein PCHIP-Diagramm. Ein eigenständiges
+Analyseprojekt kann sie mit „Analyse starten“ direkt ausführen.

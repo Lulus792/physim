@@ -21,11 +21,14 @@ typedef struct {
     uint64_t bytes;
     ps_dataset_info info;
 } dataset_slot;
-typedef struct {
+typedef struct ps_series_slot {
     bool live;
     uint32_t generation, dataset, dataset_generation, column;
     uint64_t first, bytes, alignment;
-    FILE *file; /* NULL for source columns; otherwise own contiguous doubles. */
+    FILE *file; /* Doubles followed by an optional byte-per-row validity plane. */
+    bool masked, mask_written;
+    const struct ps_series_slot *mask_source;
+    uint64_t mask_first;
     ps_series_info info;
 } series_slot;
 struct ps_analysis_context {
@@ -336,6 +339,27 @@ static ps_result read_values(ps_analysis_context *c, const series_slot *s, uint6
     }
     return PS_OK;
 }
+static ps_result read_validity(const series_slot *s,uint64_t at,size_t n,uint8_t *out) {
+    if(!s->masked){memset(out,1,n);return PS_OK;}
+    if(!seek(s->file,s->info.count*8+at) || fread(out,1,n,s->file)!=n)return PS_IO;
+    return PS_OK;
+}
+static ps_result write_validity(series_slot *s,uint64_t at,size_t n,const uint8_t *valid) {
+    if(!s->masked)return PS_OK;
+    s->mask_written=true;
+    if(!seek(s->file,s->info.count*8+at) || fwrite(valid,1,n,s->file)!=n || !seek(s->file,(at+n)*8))return PS_IO;
+    return PS_OK;
+}
+ps_result ps_series_read_masked(ps_analysis_context *c,ps_series h,uint64_t at,double *values,
+                                uint8_t *valid,size_t capacity,size_t *got) {
+    series_slot *s=series_get(c,h);
+    if(!s || !got || ((!values || !valid) && capacity) || at>s->info.count || capacity>SIZE_MAX/sizeof(double))return PS_INVALID;
+    size_t n=(size_t)(s->info.count-at<capacity?s->info.count-at:capacity);
+    ps_result r=n?read_values(c,s,at,n,values):PS_OK;
+    if(r==PS_OK && n)r=read_validity(s,at,n,valid);
+    if(r==PS_OK)*got=n;
+    return r;
+}
 ps_result ps_series_read(ps_analysis_context *c, ps_series h, uint64_t at, double *out,
                          size_t capacity, size_t *got) {
     series_slot *s = series_get(c, h);
@@ -349,24 +373,35 @@ ps_result ps_series_read(ps_analysis_context *c, ps_series h, uint64_t at, doubl
     return r;
 }
 /* Reserve only after validation; commit only after all I/O succeeds. */
-static ps_result begin_derived(ps_analysis_context *c, const series_slot *input, uint64_t count,
+static ps_result begin_derived(ps_analysis_context *c, const series_slot *input, uint64_t count,bool force_mask,
                                series_slot *draft, int *slot) {
     *slot = free_series(c);
     if (*slot < 0)
         return PS_LIMIT;
-    if (count > UINT64_MAX / 8 || count * 8 > c->limit - c->bytes)
-        return PS_LIMIT;
+    unsigned stride=input->masked || force_mask?9u:8u;
+    if(count>UINT64_MAX/stride || count*stride>c->limit-c->bytes)return PS_LIMIT;
     *draft = *input;
+    draft->masked=stride==9;draft->mask_written=false;draft->mask_source=input;draft->mask_first=0;
     draft->file = scratch(c);
     if (!draft->file)
         return PS_IO;
-    draft->bytes = count * 8;
+    draft->bytes = count * stride;
     draft->info.count = count;
     draft->generation = c->series[*slot].generation + 1;
     return PS_OK;
 }
 static ps_result finish_derived(ps_analysis_context *c, series_slot *draft, int slot, ps_result r,
                                 ps_series *out) {
+    if(r==PS_OK && draft->masked && !draft->mask_written) {
+        uint8_t valid[PS_SERIES_BLOCK_SIZE];
+        for(uint64_t at=0;at<draft->info.count && r==PS_OK;) {
+            size_t n=(size_t)(draft->info.count-at>PS_SERIES_BLOCK_SIZE?PS_SERIES_BLOCK_SIZE:draft->info.count-at);
+            r=read_validity(draft->mask_source,draft->mask_first+at,n,valid);
+            if(r==PS_OK)r=write_validity(draft,at,n,valid);
+            at+=n;
+        }
+    }
+    draft->mask_source=NULL;
     if (r == PS_OK && fflush(draft->file))
         r = PS_IO;
     if (r != PS_OK) {
@@ -406,7 +441,7 @@ static ps_result import_values(ps_analysis_context *c, const series_slot *anchor
     }
     series_slot draft;
     int slot;
-    ps_result r = begin_derived(c, anchor, count, &draft, &slot);
+    ps_result r = begin_derived(c, anchor, count, false, &draft, &slot);
     if (r != PS_OK)
         return r;
     draft.live = true;
@@ -436,10 +471,10 @@ ps_result ps_series_slice(ps_analysis_context *c, ps_series h, uint64_t first, u
         return PS_INVALID;
     series_slot draft;
     int slot;
-    ps_result r = begin_derived(c, s, count, &draft, &slot);
+    ps_result r = begin_derived(c, s, count, false, &draft, &slot);
     if (r != PS_OK)
         return r;
-    draft.first += first;
+    draft.first += first;draft.mask_first=first;
     double block[PS_SERIES_BLOCK_SIZE];
     for (uint64_t at = 0; at < count;) {
         size_t n = (size_t)(count - at > PS_SERIES_BLOCK_SIZE ? PS_SERIES_BLOCK_SIZE : count - at);
@@ -474,6 +509,8 @@ ps_result ps_series_select(ps_analysis_context *c, const ps_series *columns, siz
     if (available != count || c->alignment_serial == UINT64_MAX)
         return PS_LIMIT;
     double flags[PS_SERIES_BLOCK_SIZE], values[PS_SERIES_BLOCK_SIZE];
+    uint8_t accepted_valid[PS_SERIES_BLOCK_SIZE],valid[PS_SERIES_BLOCK_SIZE];
+    unsigned stride=0;for(size_t i=0;i<count;i++)stride+=inputs[i]->masked?9u:8u;
     uint64_t selected = 0;
     for (uint64_t at = 0; at < mask->info.count;) {
         size_t n = (size_t)(mask->info.count - at > PS_SERIES_BLOCK_SIZE ? PS_SERIES_BLOCK_SIZE
@@ -481,11 +518,11 @@ ps_result ps_series_select(ps_analysis_context *c, const ps_series *columns, siz
         ps_result r = read_values(c, mask, at, n, flags);
         if (r != PS_OK)
             return r;
-        for (size_t j = 0; j < n; j++)
-            selected += flags[j] == accepted;
+        r=read_validity(mask,at,n,accepted_valid);if(r!=PS_OK)return r;
+        for(size_t j=0;j<n;j++)selected+=accepted_valid[j] && flags[j]==accepted;
         at += n;
     }
-    if (selected > (c->limit - c->bytes) / (8 * count))
+    if (selected > (c->limit - c->bytes) / stride)
         return PS_LIMIT;
     series_slot drafts[32];
     size_t opened = 0;
@@ -502,26 +539,33 @@ ps_result ps_series_select(ps_analysis_context *c, const ps_series *columns, siz
         drafts[i].first = 0;
         drafts[i].alignment = c->alignment_serial + 1;
         drafts[i].info.count = selected;
-        drafts[i].bytes = selected * 8;
+        drafts[i].bytes = selected * (inputs[i]->masked?9u:8u);
+        drafts[i].mask_source=NULL;drafts[i].mask_first=0;drafts[i].mask_written=false;
     }
+    uint64_t written=0;
     for (uint64_t at = 0; at < mask->info.count;) {
         size_t n = (size_t)(mask->info.count - at > PS_SERIES_BLOCK_SIZE ? PS_SERIES_BLOCK_SIZE
                                                                          : mask->info.count - at);
         result = read_values(c, mask, at, n, flags);
         if (result != PS_OK)
             goto cleanup;
+        result=read_validity(mask,at,n,accepted_valid);if(result!=PS_OK)goto cleanup;
+        size_t batch_kept=0;
         for (size_t i = 0; i < count; i++) {
             result = read_values(c, inputs[i], at, n, values);
             if (result != PS_OK)
                 goto cleanup;
+            result=read_validity(inputs[i],at,n,valid);if(result!=PS_OK)goto cleanup;
             size_t kept = 0;
             for (size_t j = 0; j < n; j++)
-                if (flags[j] == accepted)
-                    values[kept++] = values[j];
+                if(accepted_valid[j] && flags[j]==accepted){values[kept]=values[j];valid[kept++]=valid[j];}
             result = write_values(drafts[i].file, values, kept);
+            if(result==PS_OK)result=write_validity(&drafts[i],written,kept,valid);
+            batch_kept=kept;
             if (result != PS_OK)
                 goto cleanup;
         }
+        written+=batch_kept;
         at += n;
     }
     for (size_t i = 0; i < count; i++)
@@ -541,6 +585,43 @@ cleanup:
         fclose(drafts[i].file);
     return result;
 }
+ps_result ps_series_is_masked(ps_analysis_context *c,ps_series input,bool *out) {
+    series_slot *s=series_get(c,input);if(!s || !out)return PS_INVALID;*out=s->masked;return PS_OK;
+}
+ps_result ps_series_mask(ps_analysis_context *c,ps_series input,ps_series selector,double accepted,ps_series *out) {
+    series_slot *s=series_get(c,input),*m=series_get(c,selector);
+    if(!s || !m || !out || !aligned(s,m) || !isfinite(accepted))return PS_INVALID;
+    for(unsigned i=0;i<7;i++)if(m->info.dimension[i])return PS_INVALID;
+    series_slot draft;int slot;ps_result r=begin_derived(c,s,s->info.count,true,&draft,&slot);
+    if(r!=PS_OK)return r;
+    double values[PS_SERIES_BLOCK_SIZE],flags[PS_SERIES_BLOCK_SIZE];uint8_t a[PS_SERIES_BLOCK_SIZE],b[PS_SERIES_BLOCK_SIZE];
+    for(uint64_t at=0;at<s->info.count && r==PS_OK;) {
+        size_t n=(size_t)(s->info.count-at>PS_SERIES_BLOCK_SIZE?PS_SERIES_BLOCK_SIZE:s->info.count-at);
+        r=read_values(c,s,at,n,values);if(r==PS_OK)r=read_values(c,m,at,n,flags);
+        if(r==PS_OK)r=read_validity(s,at,n,a);
+        if(r==PS_OK)r=read_validity(m,at,n,b);
+        for(size_t i=0;r==PS_OK && i<n;i++)a[i]=(uint8_t)(a[i] && b[i] && flags[i]==accepted);
+        if(r==PS_OK)r=write_values(draft.file,values,n);
+        if(r==PS_OK)r=write_validity(&draft,at,n,a);
+        at+=n;
+    }
+    return finish_derived(c,&draft,slot,r,out);
+}
+ps_result ps_series_validity(ps_analysis_context *c,ps_series input,ps_series *out) {
+    series_slot *s=series_get(c,input);if(!s || !out)return PS_INVALID;
+    series_slot anchor=*s;anchor.masked=false;
+    series_slot draft;int slot;ps_result r=begin_derived(c,&anchor,s->info.count,false,&draft,&slot);
+    if(r!=PS_OK)return r;
+    set_unit(&draft,PS_ONE);strcpy(draft.info.name,"validity");
+    double values[PS_SERIES_BLOCK_SIZE];uint8_t valid[PS_SERIES_BLOCK_SIZE];
+    for(uint64_t at=0;at<s->info.count && r==PS_OK;) {
+        size_t n=(size_t)(s->info.count-at>PS_SERIES_BLOCK_SIZE?PS_SERIES_BLOCK_SIZE:s->info.count-at);
+        r=read_validity(s,at,n,valid);for(size_t i=0;r==PS_OK && i<n;i++)values[i]=valid[i];
+        if(r==PS_OK)r=write_values(draft.file,values,n);
+        at+=n;
+    }
+    return finish_derived(c,&draft,slot,r,out);
+}
 ps_result ps_series_affine(ps_analysis_context *c, ps_series h, double factor, ps_quantity offset,
                            ps_series *out) {
     series_slot *s = series_get(c, h);
@@ -552,19 +633,19 @@ ps_result ps_series_affine(ps_analysis_context *c, ps_series h, double factor, p
         return r;
     series_slot draft;
     int slot;
-    r = begin_derived(c, s, s->info.count, &draft, &slot);
+    r = begin_derived(c, s, s->info.count, false, &draft, &slot);
     if (r != PS_OK)
         return r;
     snprintf(draft.info.name, sizeof draft.info.name, "affine(%.*s)", 48, s->info.name);
-    double block[PS_SERIES_BLOCK_SIZE];
+    double block[PS_SERIES_BLOCK_SIZE];uint8_t valid[PS_SERIES_BLOCK_SIZE];
     for (uint64_t at = 0; at < s->info.count;) {
         size_t n = (size_t)(s->info.count - at > PS_SERIES_BLOCK_SIZE ? PS_SERIES_BLOCK_SIZE
                                                                       : s->info.count - at);
         r = read_values(c, s, at, n, block);
         if (r != PS_OK)
             break;
-        for (size_t i = 0; i < n; i++)
-            block[i] = factor * block[i] + shift;
+        r=read_validity(s,at,n,valid);if(r!=PS_OK)break;
+        for(size_t i=0;i<n;i++)if(valid[i])block[i]=factor*block[i]+shift;
         r = write_values(draft.file, block, n);
         if (r != PS_OK)
             break;
@@ -589,12 +670,12 @@ ps_result ps_series_combine(ps_analysis_context *c, ps_series_operator op, ps_se
         return r;
     series_slot draft;
     int slot;
-    r = begin_derived(c, a, a->info.count, &draft, &slot);
+    r = begin_derived(c, a, a->info.count, b->masked, &draft, &slot);
     if (r != PS_OK)
         return r;
     set_unit(&draft, unit);
     snprintf(draft.info.name, sizeof draft.info.name, "combined series");
-    double x[PS_SERIES_BLOCK_SIZE], y[PS_SERIES_BLOCK_SIZE];
+    double x[PS_SERIES_BLOCK_SIZE], y[PS_SERIES_BLOCK_SIZE];uint8_t va[PS_SERIES_BLOCK_SIZE],vb[PS_SERIES_BLOCK_SIZE];
     for (uint64_t at = 0; at < a->info.count;) {
         size_t n = (size_t)(a->info.count - at > PS_SERIES_BLOCK_SIZE ? PS_SERIES_BLOCK_SIZE
                                                                       : a->info.count - at);
@@ -604,7 +685,9 @@ ps_result ps_series_combine(ps_analysis_context *c, ps_series_operator op, ps_se
         r = read_values(c, b, at, n, y);
         if (r != PS_OK)
             break;
+        r=read_validity(a,at,n,va);if(r==PS_OK)r=read_validity(b,at,n,vb);if(r!=PS_OK)break;
         for (size_t i = 0; i < n; i++) {
+            va[i]=(uint8_t)(va[i] && vb[i]);if(!va[i]){x[i]=0;continue;}
             if (op == PS_SERIES_DIVIDE && y[i] == 0) {
                 r = PS_NUMERIC;
                 break;
@@ -617,6 +700,7 @@ ps_result ps_series_combine(ps_analysis_context *c, ps_series_operator op, ps_se
         if (r != PS_OK)
             break;
         r = write_values(draft.file, x, n);
+        if(r==PS_OK)r=write_validity(&draft,at,n,va);
         if (r != PS_OK)
             break;
         at += n;
@@ -633,11 +717,12 @@ ps_result ps_series_derivative(ps_analysis_context *c, ps_series hy, ps_series h
         return r;
     series_slot draft;
     int slot;
-    r = begin_derived(c, y, y->info.count, &draft, &slot);
+    r = begin_derived(c, y, y->info.count, x->masked, &draft, &slot);
     if (r != PS_OK)
         return r;
     set_unit(&draft, unit);
     snprintf(draft.info.name, sizeof draft.info.name, "derivative(%.*s)", 48, y->info.name);
+    uint8_t vx[PS_SERIES_BLOCK_SIZE+2],vy[PS_SERIES_BLOCK_SIZE+2],valid[PS_SERIES_BLOCK_SIZE];
     double xx[PS_SERIES_BLOCK_SIZE + 2], yy[PS_SERIES_BLOCK_SIZE + 2], values[PS_SERIES_BLOCK_SIZE];
     for (uint64_t at = 0; at < y->info.count;) {
         size_t n = (size_t)(y->info.count - at > PS_SERIES_BLOCK_SIZE ? PS_SERIES_BLOCK_SIZE
@@ -650,6 +735,8 @@ ps_result ps_series_derivative(ps_analysis_context *c, ps_series hy, ps_series h
         r = read_values(c, y, at - before, total, yy);
         if (r != PS_OK)
             break;
+        r=read_validity(x,at-before,total,vx);if(r==PS_OK)r=read_validity(y,at-before,total,vy);if(r!=PS_OK)break;
+        for(size_t i=0;i<total;i++)vy[i]=(uint8_t)(vy[i] && vx[i]);
         for (size_t i = 1; i < total; i++)
             if (xx[i] <= xx[i - 1]) {
                 r = PS_INVALID;
@@ -659,6 +746,10 @@ ps_result ps_series_derivative(ps_analysis_context *c, ps_series hy, ps_series h
             break;
         for (size_t i = 0; i < n; i++) {
             size_t j = i + before, a = j ? j - 1 : 0, b = j + 1 < total ? j + 1 : j;
+            if(!vy[a])a=j;
+            if(!vy[b])b=j;
+            valid[i]=(uint8_t)(vy[j] && a!=b);
+            if(!valid[i]){values[i]=0;continue;}
             double dx = xx[b] - xx[a], dy = yy[b] - yy[a];
             if (!isfinite(dx) || !isfinite(dy)) {
                 r = PS_NUMERIC;
@@ -669,6 +760,7 @@ ps_result ps_series_derivative(ps_analysis_context *c, ps_series hy, ps_series h
         if (r != PS_OK)
             break;
         r = write_values(draft.file, values, n);
+        if(r==PS_OK)r=write_validity(&draft,at,n,valid);
         if (r != PS_OK)
             break;
         at += n;
@@ -690,13 +782,14 @@ ps_result ps_series_integral(ps_analysis_context *c, ps_series hy, ps_series hx,
         return r;
     series_slot draft;
     int slot;
-    r = begin_derived(c, y, y->info.count, &draft, &slot);
+    r = begin_derived(c, y, y->info.count, x->masked, &draft, &slot);
     if (r != PS_OK)
         return r;
     set_unit(&draft, unit);
     snprintf(draft.info.name, sizeof draft.info.name, "integral(%.*s)", 48, y->info.name);
     double xx[PS_SERIES_BLOCK_SIZE], yy[PS_SERIES_BLOCK_SIZE], values[PS_SERIES_BLOCK_SIZE],
         previous_x = 0, previous_y = 0, compensation = 0;
+    bool known=true;uint8_t vx[PS_SERIES_BLOCK_SIZE],valid[PS_SERIES_BLOCK_SIZE];
     for (uint64_t at = 0; at < y->info.count;) {
         size_t n = (size_t)(y->info.count - at > PS_SERIES_BLOCK_SIZE ? PS_SERIES_BLOCK_SIZE
                                                                       : y->info.count - at);
@@ -706,7 +799,9 @@ ps_result ps_series_integral(ps_analysis_context *c, ps_series hy, ps_series hx,
         r = read_values(c, y, at, n, yy);
         if (r != PS_OK)
             break;
+        r=read_validity(x,at,n,vx);if(r==PS_OK)r=read_validity(y,at,n,valid);if(r!=PS_OK)break;
         for (size_t i = 0; i < n; i++) {
+            known=known && vx[i] && valid[i];valid[i]=(uint8_t)known;
             if (at + i) {
                 if (xx[i] <= previous_x) {
                     r = PS_INVALID;
@@ -717,18 +812,21 @@ ps_result ps_series_integral(ps_analysis_context *c, ps_series hy, ps_series hx,
                     r = PS_NUMERIC;
                     break;
                 }
+                if(known) {
                 double delta = dx * (yy[i] * .5 + previous_y * .5) - compensation,
                        next = sum + delta;
                 compensation = (next - sum) - delta;
                 sum = next;
+                }
             }
-            values[i] = sum;
+            values[i] = known?sum:0;
             previous_x = xx[i];
             previous_y = yy[i];
         }
         if (r != PS_OK)
             break;
         r = write_values(draft.file, values, n);
+        if(r==PS_OK)r=write_validity(&draft,at,n,valid);
         if (r != PS_OK)
             break;
         at += n;
@@ -742,20 +840,22 @@ ps_result ps_series_moving_average(ps_analysis_context *c, ps_series h, size_t w
         return PS_INVALID;
     series_slot draft;
     int slot;
-    ps_result r = begin_derived(c, s, s->info.count, &draft, &slot);
+    ps_result r = begin_derived(c, s, s->info.count, false, &draft, &slot);
     if (r != PS_OK)
         return r;
     snprintf(draft.info.name, sizeof draft.info.name, "mean(%.*s)", 48, s->info.name);
     double ring[PS_SERIES_MAX_WINDOW], block[PS_SERIES_BLOCK_SIZE], values[PS_SERIES_BLOCK_SIZE],
         sum = 0, compensation = 0;
-    size_t used = 0, index = 0;
+    size_t used = 0, index = 0;uint8_t valid[PS_SERIES_BLOCK_SIZE];
     for (uint64_t at = 0; at < s->info.count;) {
         size_t n = (size_t)(s->info.count - at > PS_SERIES_BLOCK_SIZE ? PS_SERIES_BLOCK_SIZE
                                                                       : s->info.count - at);
         r = read_values(c, s, at, n, block);
         if (r != PS_OK)
             break;
+        r=read_validity(s,at,n,valid);if(r!=PS_OK)break;
         for (size_t i = 0; i < n; i++) {
+            if(!valid[i]){used=index=0;sum=compensation=0;values[i]=0;continue;}
             double removed = used == window ? ring[index] : 0;
             if (used < window)
                 used++;
@@ -779,6 +879,7 @@ typedef struct {
     uint64_t next;
     size_t used, count;
     double values[PS_SERIES_BLOCK_SIZE];
+    uint8_t valid[PS_SERIES_BLOCK_SIZE],last_valid;
 } series_cursor;
 static ps_result cursor_next(ps_analysis_context *c, series_cursor *cursor, double *value) {
     if (cursor->used == cursor->count) {
@@ -790,9 +891,11 @@ static ps_result cursor_next(ps_analysis_context *c, series_cursor *cursor, doub
         ps_result r = read_values(c, cursor->series, cursor->next, cursor->count, cursor->values);
         if (r != PS_OK)
             return r;
+        r=read_validity(cursor->series,cursor->next,cursor->count,cursor->valid);if(r!=PS_OK)return r;
         cursor->next += cursor->count;
         cursor->used = 0;
     }
+    cursor->last_valid=cursor->valid[cursor->used];
     *value = cursor->values[cursor->used++];
     return PS_OK;
 }
@@ -847,6 +950,66 @@ static ps_result resample_pchip(ps_analysis_context *c,const series_slot *x,cons
     }
     return finish_derived(c,draft,slot,r,out);
 }
+/* Four-point streaming window. PCHIP slopes use only contiguous valid knots;
+ * holding/nearest methods propagate the selected source knot's validity. */
+static ps_result resample_masked(ps_analysis_context *c,const series_slot *x,const series_slot *y,
+                                  const series_slot *q,ps_resample_method method,series_slot *draft,
+                                  int slot,ps_series *out,double first,double last) {
+    series_cursor xc={0},yc={0};xc.series=x;yc.series=y;
+    double xx[4],yy[4];uint8_t valid[4];unsigned count=0,left=0;uint64_t loaded=0;
+    ps_result r=PS_OK;
+    while(count<3 && loaded<x->info.count && r==PS_OK) {
+        r=cursor_next(c,&xc,&xx[count]);if(r==PS_OK)r=cursor_next(c,&yc,&yy[count]);
+        if(r==PS_OK){valid[count]=yc.last_valid;count++;loaded++;}
+    }
+    double block[PS_SERIES_BLOCK_SIZE],previous=0;uint8_t mask[PS_SERIES_BLOCK_SIZE];
+    ps_unit from=unit_of(q),to=unit_of(x);
+    for(uint64_t at=0;at<q->info.count && r==PS_OK;) {
+        size_t n=(size_t)(q->info.count-at>PS_SERIES_BLOCK_SIZE?PS_SERIES_BLOCK_SIZE:q->info.count-at);
+        r=read_values(c,q,at,n,block);
+        for(size_t i=0;i<n && r==PS_OK;i++) {
+            double query;r=ps_convert(block[i],from,to,&query);if(r!=PS_OK)break;
+            if(query<first || query>last || (at+i && query<=previous)){r=PS_INVALID;break;}previous=query;
+            while(count>1 && xx[left+1]<query && r==PS_OK) {
+                left++;
+                if(left==2) {
+                    memmove(xx,xx+1,(count-1)*sizeof *xx);memmove(yy,yy+1,(count-1)*sizeof *yy);
+                    memmove(valid,valid+1,count-1);left--;count--;
+                }
+                if(loaded<x->info.count && left+2>=count) {
+                    r=cursor_next(c,&xc,&xx[count]);if(r==PS_OK)r=cursor_next(c,&yc,&yy[count]);
+                    if(r==PS_OK){valid[count]=yc.last_valid;count++;loaded++;}
+                }
+            }
+            if(r!=PS_OK)break;
+            unsigned right=count>1?left+1:left;
+            if(query==xx[left]){mask[i]=valid[left];block[i]=yy[left];}
+            else if(query==xx[right]){mask[i]=valid[right];block[i]=yy[right];}
+            else if(method==PS_RESAMPLE_PREVIOUS){mask[i]=valid[left];block[i]=yy[left];}
+            else if(method==PS_RESAMPLE_NEAREST) {
+                double a=query-xx[left],b=xx[right]-query;
+                if(!isfinite(a) || !isfinite(b)){a=query*.5-xx[left]*.5;b=xx[right]*.5-query*.5;}
+                unsigned chosen=a<=b?left:right;mask[i]=valid[chosen];block[i]=yy[chosen];
+            } else {
+                mask[i]=(uint8_t)(valid[left] && valid[right]);
+                if(!mask[i]){block[i]=0;continue;}
+                double span=xx[right]-xx[left];
+                double t=isfinite(span)?(query-xx[left])/span:(query*.5-xx[left]*.5)/(xx[right]*.5-xx[left]*.5);
+                if(method==PS_RESAMPLE_PCHIP) {
+                    unsigned start=left && valid[left-1]?left-1:left;
+                    unsigned end=right+1<count && valid[right+1]?right+1:right;
+                    double controls[4];ps_pchip_controls(xx+start,yy+start,end-start+1,left-start,controls);
+                    block[i]=ps_pchip_evaluate(controls,t);
+                } else block[i]=ps_pchip_blend(yy[left],yy[right],t);
+            }
+            if(!mask[i])block[i]=0;
+        }
+        if(r==PS_OK)r=write_values(draft->file,block,n);
+        if(r==PS_OK)r=write_validity(draft,at,n,mask);
+        at+=n;
+    }
+    return finish_derived(c,draft,slot,r,out);
+}
 ps_result ps_series_resample_linear(ps_analysis_context *c, ps_series hy, ps_series hx,
                                     ps_series target, ps_series *out) {
     return ps_series_resample(c, hy, hx, target, PS_RESAMPLE_LINEAR, out);
@@ -868,7 +1031,7 @@ ps_result ps_series_resample(ps_analysis_context *c, ps_series hy, ps_series hx,
         r = cursor_next(c, &xc, &value);
         if (r != PS_OK)
             return r;
-        if (!isfinite(value) || (i && value <= last))
+        if (!xc.last_valid || !isfinite(value) || (i && value <= last))
             return PS_INVALID;
         if (!i)
             first = value;
@@ -876,13 +1039,21 @@ ps_result ps_series_resample(ps_analysis_context *c, ps_series hy, ps_series hx,
     }
     series_slot draft;
     int slot;
-    r = begin_derived(c, q, q->info.count, &draft, &slot);
+    uint8_t target_valid[PS_SERIES_BLOCK_SIZE];
+    for(uint64_t at=0;at<q->info.count;) {
+        size_t n=(size_t)(q->info.count-at>PS_SERIES_BLOCK_SIZE?PS_SERIES_BLOCK_SIZE:q->info.count-at);
+        r=read_validity(q,at,n,target_valid);if(r!=PS_OK)return r;
+        for(size_t i=0;i<n;i++)if(!target_valid[i])return PS_INVALID;
+        at+=n;
+    }
+    r = begin_derived(c, q, q->info.count, y->masked, &draft, &slot);
     if (r != PS_OK)
         return r;
     draft.info = y->info;
     draft.info.count = q->info.count;
     const char *names[] = {"linear", "nearest", "previous", "pchip"};
     snprintf(draft.info.name, sizeof draft.info.name, "%s(%.*s)", names[method], 48, y->info.name);
+    if(y->masked)return resample_masked(c,x,y,q,method,&draft,slot,out,first,last);
     if(method==PS_RESAMPLE_PCHIP && x->info.count>2)
         return resample_pchip(c,x,y,q,&draft,slot,out,first,last);
     xc.next = 0;
@@ -951,7 +1122,7 @@ ps_result ps_series_statistics(ps_analysis_context *c, ps_series h, ps_statistic
     series_slot *s = series_get(c, h);
     if (!s || !out || !s->info.count)
         return PS_INVALID;
-    double block[PS_SERIES_BLOCK_SIZE];
+    double block[PS_SERIES_BLOCK_SIZE];uint8_t valid[PS_SERIES_BLOCK_SIZE];
     ps_statistics stats = {0};
     for (uint64_t at = 0; at < s->info.count;) {
         size_t n = (size_t)(s->info.count - at > PS_SERIES_BLOCK_SIZE ? PS_SERIES_BLOCK_SIZE
@@ -959,12 +1130,13 @@ ps_result ps_series_statistics(ps_analysis_context *c, ps_series h, ps_statistic
         ps_result r = read_values(c, s, at, n, block);
         if (r != PS_OK)
             return r;
-        for (size_t i = 0; i < n; i++)
-            ps_statistics_push(&stats, block[i]);
+        r=read_validity(s,at,n,valid);if(r!=PS_OK)return r;
+        for(size_t i=0;i<n;i++)if(valid[i])ps_statistics_push(&stats,block[i]);
         if (!isfinite(stats.mean) || !isfinite(stats.m2))
             return PS_NUMERIC;
         at += n;
     }
+    if(!stats.count)return PS_INVALID;
     *out = stats;
     return PS_OK;
 }
@@ -986,15 +1158,17 @@ ps_result ps_series_quantile_with_allocator(ps_analysis_context *c, ps_series h,
     ps_result result = ps_memory_allocate(allocator, bytes, (void **)&values);
     if (result != PS_OK)
         return result;
+    size_t kept=0;uint8_t valid[PS_SERIES_BLOCK_SIZE];
     for (size_t at = 0; at < count && result == PS_OK;) {
         size_t take = count - at > PS_SERIES_BLOCK_SIZE ? PS_SERIES_BLOCK_SIZE : count - at;
         result = read_values(c, s, at, take, values + at);
-        for (size_t i = 0; result == PS_OK && i < take; i++)
-            if (!isfinite(values[at + i]))
-                result = PS_NUMERIC;
+        if(result==PS_OK)result=read_validity(s,at,take,valid);
+        for(size_t i=0;result==PS_OK && i<take;i++)if(valid[i])values[kept++]=values[at+i];
         at += take;
     }
+    if(result==PS_OK && !kept)result=PS_INVALID;
     if (result == PS_OK) {
+        count=kept;
         qsort(values, count, sizeof *values, compare_finite_double);
         double position = (double)(count - 1) * probability;
         size_t lower = (size_t)position;
@@ -1050,7 +1224,7 @@ ps_result ps_series_export_csv(ps_analysis_context *c, const ps_series *columns,
         csv_text(file, label);
     }
     fputc('\n', file);
-    double block[32][PS_SERIES_BLOCK_SIZE];
+    double block[32][PS_SERIES_BLOCK_SIZE];uint8_t valid[32][PS_SERIES_BLOCK_SIZE];
     ps_result r = PS_OK;
     for (uint64_t at = 0; at < series[0]->info.count;) {
         size_t n = (size_t)(series[0]->info.count - at > PS_SERIES_BLOCK_SIZE
@@ -1058,14 +1232,14 @@ ps_result ps_series_export_csv(ps_analysis_context *c, const ps_series *columns,
                                 : series[0]->info.count - at);
         for (size_t i = 0; i < count; i++) {
             r = read_values(c, series[i], at, n, block[i]);
+            if(r==PS_OK)r=read_validity(series[i],at,n,valid[i]);
             if (r != PS_OK)
                 break;
         }
         if (r != PS_OK)
             break;
         for (size_t row = 0; row < n; row++) {
-            for (size_t i = 0; i < count; i++)
-                fprintf(file, "%s%.17g", i ? "," : "", block[i][row]);
+            for(size_t i=0;i<count;i++){if(i)fputc(',',file);if(valid[i][row])fprintf(file,"%.17g",block[i][row]);}
             fputc('\n', file);
         }
         if (ferror(file)) {

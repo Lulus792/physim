@@ -220,7 +220,7 @@ typedef struct {
     unsigned selected_count;
     int library_kind;
     bool library_again, library_search_focus, library_search_active;
-    struct nk_rect library_open_bounds[8], library_select_bounds[8], library_analyze_bounds;
+    struct nk_rect library_open_bounds[8], library_select_bounds[8], library_analyze_bounds, analysis_start_bounds;
     size_t library_visible_indices[8];
     unsigned library_visible_count;
     ps_process job, runner;
@@ -1334,7 +1334,7 @@ static void analyze(app *a, bool csv) {
         status(a, "Analysecode zuerst speichern und bauen.");
         return;
     }
-    if ((!a->last_run[0] && (csv || !a->selected_count)) || !idle(a)) {
+    if ((!a->last_run[0] && (csv || (!a->selected_count && !a->analysis_only))) || !idle(a)) {
         status(a, "Zuerst einen Lauf stoppen und speichern.");
         return;
     }
@@ -1346,7 +1346,10 @@ static void analyze(app *a, bool csv) {
     const char *input = !csv && a->selected_count ? a->selected_runs[0] : a->last_run;
     const char *args[5 + PS_ANALYSIS_MAX_INPUTS] = {runner, csv ? "--csv" : module, input,
                                                     a->report, NULL};
-    if (!csv && count > 1) {
+    if(!csv && a->analysis_only && !a->selected_count && !a->last_run[0]) {
+        count=0;args[2]="--runs";args[3]=a->report;args[4]=NULL;
+    }
+    else if (!csv && count > 1) {
         args[2] = "--runs";
         for (unsigned i = 0; i < count; i++)
             args[i + 4] = a->selected_runs[i];
@@ -2536,6 +2539,7 @@ static void test_mouse(app *a, struct nk_rect rect, bool down) {
 #include "analysis_project_tests.inc"
 #include "batch_resume_tests.inc"
 #include "batch_missing_tests.inc"
+#include "series_mask_tests.inc"
 #include "adaptive_tests.inc"
 #include "series_tests.inc"
 #include "native_dialog_tests.inc"
@@ -3095,7 +3099,7 @@ int main(int argc, char **argv) {
         } else if (workspace_state_test) {
             if (ps_clock() - test_started >
                 (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
-                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
+                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15)) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
                         argv[3], ps_clock() - test_started);

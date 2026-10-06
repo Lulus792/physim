@@ -439,6 +439,7 @@ class Builder:
             destination.parent.mkdir(exist_ok=True)
             shutil.copy2(ROOT / "src" / (name + ".c"), destination)
         shutil.copy2(ROOT / "src/report_internal.h", staging / "src/report_internal.h")
+        shutil.copy2(ROOT / "src/report_mask.inc",staging / "src/report_mask.inc")
         shutil.copy2(ROOT / "src/text_validation.h", staging / "src/text_validation.h")
         shutil.copy2(ROOT / "src/number_parse.h", staging / "src/number_parse.h")
         shutil.copy2(ROOT / "src/pchip.h", staging / "src/pchip.h")

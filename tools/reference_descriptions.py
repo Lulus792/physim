@@ -276,3 +276,12 @@ add('ps_hashmap_', {
     'visit': 'Besucht jeden Eintrag mit geliehenen schreibgeschützten Schlüssel-/Wertzeigern; die Reihenfolge ist nicht zugesichert.',
     'destroy': 'Gibt Map, Schlüssel und Werte frei; während einer aktiven Traversierung wirkungslos.',
 })
+
+DESCRIPTIONS.update({
+    'ps_series_mask': 'Erhält alle Zeilen und das Alignment; kombiniert die Eingabemasken mit einem expliziten dimensionlosen Selektorwert.',
+    'ps_series_read_masked': 'Liest numerische Werte samt Gültigkeit pro Zeile blockweise. Fehlende Werte sind nur mit ihrem Flag zu interpretieren.',
+    'ps_series_is_masked': 'Prüft, ob die Reihe eine ausdrücklich gespeicherte Gültigkeitsmaske besitzt, auch wenn alle Zeilen gültig sind.',
+    'ps_series_validity': 'Erzeugt eine ausgerichtete, unmaskierte Reihe exakter 0/1-Gültigkeitswerte.',
+    'ps_report_add_curve_masked': 'Kopiert eine Kurve samt Gültigkeit und Segmentanfängen. Fehlende Punkte werden beim Zeichnen und bei Grenzen übergangen.',
+    'ps_report_curve_mask': 'Leiht unveränderliche Kurvenflags; NULL bezeichnet eine vollständig gültige, zusammenhängende Kurve.',
+})

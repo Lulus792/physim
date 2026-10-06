@@ -8,6 +8,7 @@
 typedef struct {
     ps_plot_info info;
     ps_curve_data *curve[PS_REPORT_MAX_CURVES];
+    uint8_t *mask[PS_REPORT_MAX_CURVES];
 } plot_data;
 typedef struct {
     ps_table_info info;
@@ -68,8 +69,10 @@ void ps_report_destroy(ps_report *r) {
     if (!r)
         return;
     for (uint32_t i = 0; i < r->plots; i++)
-        for (uint32_t j = 0; j < r->plot[i].info.curves; j++)
+        for (uint32_t j = 0; j < r->plot[i].info.curves; j++) {
+            ps_memory_free(r->allocator,r->plot[i].mask[j],PS_REPORT_MAX_POINTS);
             ps_memory_free(r->allocator, r->plot[i].curve[j], sizeof *r->plot[i].curve[j]);
+        }
     for (uint32_t i = 0; i < r->tables; i++)
         ps_memory_free(r->allocator, r->table[i], sizeof *r->table[i]);
     ps_memory_free(r->allocator, r, sizeof *r);
@@ -120,7 +123,10 @@ ps_result ps_report_add_plot(ps_report *r, const ps_plot_info *info, ps_plot_han
     *out = (ps_plot_handle){r, r->plots++};
     return PS_OK;
 }
-ps_result ps_report_add_curve(ps_report *r, ps_plot_handle h, const ps_curve_data *data) {
+ps_result ps_report_add_curve(ps_report *r,ps_plot_handle h,const ps_curve_data *data) {
+    return ps_report_add_curve_masked(r,h,data,NULL);
+}
+ps_result ps_report_add_curve_masked(ps_report *r,ps_plot_handle h,const ps_curve_data *data,const uint8_t *flags) {
     if (!r || h.owner != r || h.index >= r->plots || !curve_valid(data))
         return PS_INVALID;
     plot_data *p = &r->plot[h.index];
@@ -131,10 +137,18 @@ ps_result ps_report_add_curve(ps_report *r, ps_plot_handle h, const ps_curve_dat
         if (memcmp(p->info.y_unit.dimension, zero, 7) || p->info.y_unit.scale != 1)
             return PS_INVALID;
     }
+    bool masked=false;
+    if(flags)for(uint32_t i=0;i<data->count;i++) {
+        if(flags[i]!=0 && flags[i]!=1 && flags[i]!=3)return PS_INVALID;
+        masked |= flags[i]!=1;
+    }
     ps_curve_data *c = report_memory(r->allocator, sizeof *c);
     if (!c)
         return PS_MEMORY;
-    *c = *data;
+    uint8_t *mask=masked?report_memory(r->allocator,PS_REPORT_MAX_POINTS):NULL;
+    if(masked && !mask){ps_memory_free(r->allocator,c,sizeof *c);return PS_MEMORY;}
+    if(mask)memcpy(mask,flags,data->count);
+    *c = *data;p->mask[p->info.curves]=mask;
     p->curve[p->info.curves++] = c;
     return PS_OK;
 }
@@ -193,6 +207,10 @@ ps_result ps_report_curve_view(const ps_report *r, uint32_t p, uint32_t c,
     *out = r->plot[p].curve[c];
     return PS_OK;
 }
+ps_result ps_report_curve_mask(const ps_report *r,uint32_t p,uint32_t c,const uint8_t **out) {
+    if(!r || !out || p>=r->plots || c>=r->plot[p].info.curves)return PS_INVALID;
+    *out=r->plot[p].mask[c];return PS_OK;
+}
 ps_result ps_report_table_read(const ps_report *r, uint32_t i, ps_table_info *out) {
     if (!r || !out || i >= r->tables)
         return PS_INVALID;
@@ -209,6 +227,7 @@ static void point(ps_curve_data *c, double x, double y) {
     c->x[c->count] = x;
     c->y[c->count++] = y;
 }
+#include "report_mask.inc"
 ps_result ps_report_add_series(ps_report *r, ps_plot_handle h, ps_analysis_context *ctx,
                                ps_series xs, ps_series ys, const char *label, ps_plot_kind kind) {
     if (!r || h.owner != r || h.index >= r->plots || !label || !ps_text_valid(label, 96, false) ||
@@ -219,6 +238,9 @@ ps_result ps_report_add_series(ps_report *r, ps_plot_handle h, ps_analysis_conte
     if (ps_series_describe(ctx, xs, &xi) != PS_OK || ps_series_describe(ctx, ys, &yi) != PS_OK ||
         !xi.count)
         return PS_INVALID;
+    bool xm=false,ym=false;
+    if(ps_series_is_masked(ctx,xs,&xm)!=PS_OK || ps_series_is_masked(ctx,ys,&ym)!=PS_OK)return PS_INVALID;
+    if(xm || ym)return report_masked_series(r,h,ctx,xs,ys,label,kind,&xi,&yi);
     ps_plot_info *p = &r->plot[h.index].info;
     if (memcmp(xi.dimension, p->x_unit.dimension, 7) ||
         memcmp(yi.dimension, p->y_unit.dimension, 7))
@@ -361,15 +383,16 @@ ps_result ps_report_add_histogram(ps_report *r, ps_analysis_context *ctx, ps_ser
         c->x[i] = stats.min == stats.max ? stats.min : (1 - f) * stats.min + f * stats.max;
     }
     for (uint64_t at = 0; at < si.count && result == PS_OK;) {
-        double values[PS_SERIES_BLOCK_SIZE];
+        double values[PS_SERIES_BLOCK_SIZE];uint8_t valid[PS_SERIES_BLOCK_SIZE];
         size_t count = 0;
-        result = ps_series_read(ctx, s, at, values, PS_SERIES_BLOCK_SIZE, &count);
+        result = ps_series_read_masked(ctx,s,at,values,valid,PS_SERIES_BLOCK_SIZE,&count);
         if (result != PS_OK || !count) {
             if (result == PS_OK)
                 result = PS_CORRUPT;
             break;
         }
         for (size_t j = 0; j < count; j++) {
+            if(!valid[j])continue;
             double f = ps_report_axis_fraction(values[j], stats.min, stats.max);
             uint32_t bin = f >= 1 ? bins - 1 : (uint32_t)(f * bins);
             c->y[bin]++;
@@ -404,16 +427,20 @@ ps_result ps_report_plot_bounds(const ps_report *r, uint32_t plot, double bounds
     const plot_data *p = &r->plot[plot];
     for (uint32_t j = 0; j < p->info.curves; j++) {
         const ps_curve_data *c = p->curve[j];
+        bool any=false;
         for (uint32_t i = 0; i < c->count; i++) {
+            if(p->mask[j] && !(p->mask[j][i]&1))continue;
+            any=true;
             double half = c->kind == PS_PLOT_HISTOGRAM ? c->bar_width / 2 : 0;
             b[0] = fmin(b[0], c->x[i] - half);
             b[1] = fmax(b[1], c->x[i] + half);
             b[2] = fmin(b[2], c->y[i]);
             b[3] = fmax(b[3], c->y[i]);
         }
-        if (c->kind == PS_PLOT_HISTOGRAM)
+        if (any && c->kind == PS_PLOT_HISTOGRAM)
             b[2] = fmin(0, b[2]);
     }
+    if(b[0]>b[1] || b[2]>b[3])return PS_INVALID;
     for (unsigned i = 0; i < 4; i += 2) {
         if (b[i] == b[i + 1]) {
             double delta = fmax(1, fabs(b[i]) * .05);
@@ -432,6 +459,7 @@ typedef struct {
     unsigned char *data;
     size_t size, at;
     bool read, ok;
+    uint32_t version;
 } codec;
 static void bytes(codec *c, void *data, size_t size) {
     if (!c->ok || size > c->size - c->at) {
@@ -531,6 +559,17 @@ static ps_result report_codec(codec *c, ps_report *r) {
                 number(c, &q->x[k]);
                 number(c, &q->y[k]);
             }
+            if(c->version==2) {
+                uint32_t length=p->mask[j]?q->count:0;integer(c,&length);
+                if(!c->ok || (length && length!=q->count))return PS_CORRUPT;
+                if(c->read && length) {
+                    p->mask[j]=report_memory(r->allocator,PS_REPORT_MAX_POINTS);if(!p->mask[j])return PS_MEMORY;
+                }
+                if(length) {
+                    bytes(c,p->mask[j],length);
+                    for(uint32_t k=0;k<length;k++)if(p->mask[j][k]!=0 && p->mask[j][k]!=1 && p->mask[j][k]!=3)return PS_CORRUPT;
+                }
+            }
             if (!curve_valid(q))
                 return PS_CORRUPT;
             if (q->kind == PS_PLOT_HISTOGRAM) {
@@ -579,7 +618,8 @@ ps_result ps_report_save(const ps_report *r, const char *path) {
     unsigned char *buffer = report_buffer(r->allocator, FILE_LIMIT);
     if (!buffer)
         return PS_MEMORY;
-    codec c = {buffer, FILE_LIMIT, 0, false, true};
+    codec c = {buffer,FILE_LIMIT,0,false,true,1};
+    for(uint32_t i=0;i<r->plots;i++)for(uint32_t j=0;j<r->plot[i].info.curves;j++)if(r->plot[i].mask[j])c.version=2;
     /* Encoding does not mutate values. */
     ps_result result = report_codec(&c, (ps_report *)r);
     if (result == PS_OK) {
@@ -588,7 +628,7 @@ ps_result ps_report_save(const ps_report *r, const char *path) {
             result = PS_IO;
         else {
             unsigned char header[20] = {'P', 'S', 'R', 'P', 'T', '1', '7', '\n'};
-            ps_put_u32(header + 8, 1);
+            ps_put_u32(header + 8, c.version);
             ps_put_u32(header + 12, (uint32_t)c.at);
             ps_put_u32(header + 16, ps_crc32(buffer, c.at));
             if (fwrite(header, 1, sizeof header, f) != sizeof header ||
@@ -617,7 +657,7 @@ ps_result ps_report_load_with_allocator(const char *path, ps_allocator allocator
     uint32_t n = 0;
     if (fread(header, 1, sizeof header, f) != sizeof header || memcmp(header, "PSRPT17\n", 8))
         goto done;
-    if (ps_get_u32(header + 8) != 1) {
+    if (ps_get_u32(header + 8) != 1 && ps_get_u32(header+8)!=2) {
         result = PS_VERSION;
         goto done;
     }
@@ -637,7 +677,7 @@ ps_result ps_report_load_with_allocator(const char *path, ps_allocator allocator
     if (fread(buffer, 1, n, f) != n || fgetc(f) != EOF || ferror(f) ||
         ps_crc32(buffer, n) != ps_get_u32(header + 16))
         goto done;
-    codec c = {buffer, n, 0, true, true};
+    codec c = {buffer,n,0,true,true,ps_get_u32(header+8)};
     result = report_codec(&c, r);
     if (result == PS_OK && c.at != c.size)
         result = PS_CORRUPT;

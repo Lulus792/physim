@@ -1606,7 +1606,7 @@ Analysemodul erforderlich.
 Series.value(index: Int64) -> Float64
 ```
 
-Liest einen einzelnen Zahlenwert am nullbasierten Index.
+Liest einen gültigen Zahlenwert am nullbasierten Index. Eine maskierte fehlende Beobachtung erzeugt einen Quellfehler.
 
 Analysemodul erforderlich.
 
@@ -1616,7 +1616,7 @@ Analysemodul erforderlich.
 Series.values(first: Int64, count: Int64) -> [Float64]
 ```
 
-Liest count Werte ab first blockweise als unabhängiges Float64-Array. Negative oder zu große Bereiche sind Fehler; ein leerer Ausschnitt am Ende ist erlaubt.
+Liest count gültige Werte ab first als unabhängiges Float64-Array. Fehlende Beobachtungen, negative oder zu große Bereiche sind Fehler; ein leerer Ausschnitt am Ende ist erlaubt.
 
 Analysemodul erforderlich.
 
@@ -2861,6 +2861,16 @@ Zehnerlogarithmus; der Wert muss positiv sein.
 
 Überall verfügbar.
 
+## maskSeries
+
+```text
+maskSeries(input: Series, selector: Series, accepted: Float64) -> Series
+```
+
+Erhält alle Zeilen und markiert Werte nur dann gültig, wenn Eingabe und Selektor gültig sind und der Selektor exakt accepted entspricht.
+
+Analysemodul erforderlich.
+
 ## max
 
 ```text
@@ -3130,6 +3140,36 @@ sceneParent(child: Int64, parent: Int64) -> Void
 Ordnet einen Szeneneintrag einer Eltern-ID zu; parent 0 löst ihn zur Wurzel. Fehlende IDs und Zyklen erzeugen eine Quelldiagnose, ohne die Szene zu verändern.
 
 Experimentmodul erforderlich.
+
+## seriesHasMask
+
+```text
+seriesHasMask(input: Series) -> Bool
+```
+
+Prüft die ausdrücklich gespeicherte Maske der Reihe, auch wenn alle Werte gültig sind.
+
+Analysemodul erforderlich.
+
+## seriesIsValid
+
+```text
+seriesIsValid(input: Series, index: Int64) -> Bool
+```
+
+Prüft die Gültigkeit am nullbasierten Zeilenindex; ungültige Handles oder Indizes sind Quellfehler.
+
+Analysemodul erforderlich.
+
+## seriesValidity
+
+```text
+seriesValidity(input: Series) -> Series
+```
+
+Liefert eine ausgerichtete, unmaskierte Reihe aus 0/1-Gültigkeitsflags.
+
+Analysemodul erforderlich.
 
 ## simulationTime
 

@@ -1,0 +1,6 @@
+func analyze():
+    let one = Unit(0,0,0,0,0,0,0,1,"1")
+    let raw = Series.fromValues([1.0,2.0],one,"raw")
+    let selector = raw.alignedValues([1.0,0.0],one,"selector")
+    let y = raw.masked(selector,1)
+    assert(y.value(1) == 0)

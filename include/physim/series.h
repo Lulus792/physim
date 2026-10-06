@@ -78,6 +78,18 @@ ps_result ps_series_aligned(ps_analysis_context *ctx, ps_series left, ps_series 
  * at count; index > count is invalid. Outputs are unspecified on I/O error. */
 ps_result ps_series_read(ps_analysis_context *ctx, ps_series series, uint64_t index, double *values,
                          size_t capacity, size_t *read_count);
+/* Explicit masks retain every row and the original alignment. Validity is the
+ * conjunction of the input/selector masks and selector==accepted. Invalid
+ * numeric values remain finite placeholders; use read_masked or validity to
+ * distinguish them. Source channels remain unmasked unless explicitly masked.
+ * Mask bytes count against the scratch quota. All operations are transactional. */
+ps_result ps_series_mask(ps_analysis_context *ctx, ps_series input, ps_series selector,
+                         double accepted, ps_series *out);
+ps_result ps_series_read_masked(ps_analysis_context *ctx, ps_series input, uint64_t index,
+                                double *values, uint8_t *valid, size_t capacity, size_t *read_count);
+ps_result ps_series_is_masked(ps_analysis_context *ctx, ps_series input, bool *out);
+/* An aligned, unmasked dimensionless series of exact 0/1 flags. */
+ps_result ps_series_validity(ps_analysis_context *ctx, ps_series input, ps_series *out);
 /* Derived series own scratch data and survive release of their input series.
  * Operations preserve alignment, except slice/select/resample (see below).
  * Matching slices within the same selection can still be paired.
@@ -101,12 +113,15 @@ ps_result ps_series_affine(ps_analysis_context *ctx, ps_series input, double fac
                            ps_quantity offset, ps_series *out);
 ps_result ps_series_combine(ps_analysis_context *ctx, ps_series_operator op, ps_series left,
                             ps_series right, ps_series *out);
-/* Central secants, one-sided endpoints; x must strictly increase. */
+/* Central secants, one-sided segment endpoints; x must strictly increase.
+ * Missing neighbors are never bridged; isolated valid samples have no derivative. */
 ps_result ps_series_derivative(ps_analysis_context *ctx, ps_series y, ps_series x, ps_series *out);
-/* Cumulative trapezoidal integral, first value = initial. */
+/* Cumulative trapezoidal integral, first value = initial. A missing x/y sample
+ * makes this and all later cumulative values unknown; no invented gap area. */
 ps_result ps_series_integral(ps_analysis_context *ctx, ps_series y, ps_series x,
                              ps_quantity initial, ps_series *out);
-/* Causal moving average of up to window available samples, window <= 4096. */
+/* Causal moving average, window <= 4096. A missing sample resets the window;
+ * only consecutive valid observations contribute. */
 ps_result ps_series_moving_average(ps_analysis_context *ctx, ps_series input, size_t window,
                                    ps_series *out);
 /* Explicit linear interpolation of aligned (x,y) onto target_x, possibly from
@@ -115,7 +130,10 @@ ps_result ps_series_moving_average(ps_analysis_context *ctx, ps_series input, si
  * values must lie in the closed source range (PS_INVALID otherwise).
  * Output has y's unit and target_x's dataset/sample alignment. It survives
  * closing the source dataset, but not the target dataset. Bounded block memory;
- * all source x values are validated, including those beyond the last target. */
+ * all source x values are validated, including those beyond the last target.
+ * Both axes must have valid coordinates. Linear/PCHIP intervals require two
+ * valid y knots; nearest/previous propagate the chosen knot validity. PCHIP
+ * slopes use contiguous valid neighbors and treat gap edges as endpoints. */
 ps_result ps_series_resample_linear(ps_analysis_context *ctx, ps_series y, ps_series x,
                                     ps_series target_x, ps_series *out);
 typedef enum { PS_RESAMPLE_LINEAR, PS_RESAMPLE_NEAREST, PS_RESAMPLE_PREVIOUS,
@@ -133,14 +151,16 @@ ps_result ps_series_resample(ps_analysis_context *ctx, ps_series y, ps_series x,
                              ps_resample_method method, ps_series *out);
 ps_result ps_series_statistics(ps_analysis_context *ctx, ps_series input, ps_statistics *out);
 /* Type-7 quantile for a nonempty series. probability must be finite in [0, 1].
- * Reads the whole series into allocator-backed temporary memory; output is
+ * Uses only valid rows; all-missing input is PS_INVALID. Reads the whole series
+ * into allocator-backed temporary memory; output is
  * unchanged on error. */
 ps_result ps_series_quantile(ps_analysis_context *ctx, ps_series input, double probability,
                              double *out);
 /* Variant for hosts with a separate temporary-memory budget. */
 ps_result ps_series_quantile_with_allocator(ps_analysis_context *ctx, ps_series input,
                                             double probability, ps_allocator allocator, double *out);
-/* Exports aligned series without loading them in memory. Exclusive output.
+/* Exports every aligned row without loading them in memory. Masked values are
+ * empty fields; export an explicit validity series for flags. Exclusive output.
  * On I/O failure a partial output may remain. At most 32 columns. */
 ps_result ps_series_export_csv(ps_analysis_context *ctx, const ps_series *columns, size_t count,
                                const char *path);

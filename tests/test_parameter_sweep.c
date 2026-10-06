@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
     char path[4096], text[4096];
     snprintf(path, sizeof path, "%s/series.txt", argv[1]);
     CHECK(read_text(path, text, sizeof text));
-    CHECK(strstr(text, "physim_batch=3\n") &&
+    CHECK(strstr(text, "physim_batch=5\n") &&
           strstr(text, "parameter=initialSpeed\n") &&
           strstr(text, "parameter_start=1\n") &&
           strstr(text, "parameter_end=4\n"));
@@ -34,11 +34,11 @@ int main(int argc, char **argv) {
         CHECK(strstr(text, "fixed_parameter.gain=2\n"));
     snprintf(path, sizeof path, "%s/endpoints.csv", argv[1]);
     CHECK(read_text(path, text, sizeof text));
-    CHECK(strstr(text, "index,seed,file,time_s,parameter_value,value\n"));
+    CHECK(strstr(text, "index,seed,file,time_s,parameter_value,value,status\n"));
     for (int i = 0; i < 3; i++) {
         double selected = i == 0 ? 1 : i == 1 ? 2.5 : 4;
         char row[128];
-        snprintf(row, sizeof row, "%d,%d,run-%04d.psrun,%.17g,%.17g,%.17g\n",
+        snprintf(row, sizeof row, "%d,%d,run-%04d.psrun,%.17g,%.17g,%.17g,1\n",
                  i + 1, 42 + i, i + 1, 0.005, selected, selected * gain);
         CHECK(strstr(text, row));
         snprintf(path, sizeof path, "%s/run-%04d.psrun", argv[1], i + 1);

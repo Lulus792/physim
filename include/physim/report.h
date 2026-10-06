@@ -70,13 +70,23 @@ ps_result ps_report_add_plot(ps_report *report, const ps_plot_info *info, ps_plo
 /* Data already uses the plot axis units. Finite values only. A histogram's
  * positive bar_width uses the X unit; its Y values are nonnegative counts. */
 ps_result ps_report_add_curve(ps_report *report, ps_plot_handle plot, const ps_curve_data *data);
+/* Optional curve flags: 0=missing, 1=valid/connected, 3=valid/new segment.
+ * NULL means all valid/connected. Flags are copied and must match data->count.
+ * Existing ps_curve_data layout and ordinary curves remain unchanged. */
+ps_result ps_report_add_curve_masked(ps_report *report, ps_plot_handle plot,
+                                     const ps_curve_data *data, const uint8_t *flags);
+/* Borrowed flags; NULL denotes an unmasked curve. Same lifetime as curve_view. */
+ps_result ps_report_curve_mask(const ps_report *report, uint32_t plot, uint32_t curve,
+                                const uint8_t **out);
 /* Copies aligned x/y data with checked dimensions and axis-scale conversion.
  * Line previews preserve bucket extrema and both endpoints; scatter previews
- * sample uniformly. source_count exposes reduction. Full data remains in Series. */
+ * sample uniformly. Masks and segment boundaries survive reduction; missing
+ * points are not drawn and line segments never bridge gaps. source_count
+ * exposes reduction. Full data remains in Series. */
 ps_result ps_report_add_series(ps_report *report, ps_plot_handle plot, ps_analysis_context *ctx,
                                ps_series x, ps_series y, const char *label, ps_plot_kind kind);
 /* Equal-width bins over the entire series; final bin includes the maximum.
- * Constant input produces a single nonzero-width bin. All samples are counted. */
+ * Constant input produces a single nonzero-width bin. Only valid samples count. */
 ps_result ps_report_add_histogram(ps_report *report, ps_analysis_context *ctx, ps_series series,
                                   const char *title, const char *x_label, uint32_t bins,
                                   ps_plot_handle *out);
@@ -98,7 +108,8 @@ ps_result ps_report_row_read(const ps_report *report, uint32_t table, uint32_t r
  * Mapping is overflow-safe, including very large finite coordinates. */
 ps_result ps_report_plot_bounds(const ps_report *report, uint32_t plot, double bounds[4]);
 double ps_report_axis_fraction(double value, double minimum, double maximum);
-/* Versioned little-endian .psreport, CRC checked, bounded to 8 MiB. Load is
+/* Versioned little-endian .psreport, CRC checked, bounded to 8 MiB. Version 1
+ * remains for ordinary reports; version 2 adds masks. Both versions load. Load is
  * transactional; truncated, malformed, nonfinite or oversized data is rejected.
  * Outputs are created exclusively; failed writes may leave a partial file. */
 ps_result ps_report_save(const ps_report *report, const char *path);

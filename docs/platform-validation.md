@@ -3,6 +3,103 @@
 Stand: 6. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Explizite Masken in Datenreihen und Berichten am 6. Oktober 2026
+
+Die neue C-/Physim-Maske erhält Zeilen, Alignment und Dataset-Lebensdauer.
+Slice, affine Rechnung, binäre Operationen, Segmentableitungen, kumulative
+Integration, gleitende Mittel, Statistik, Quantile und Resampling beachten die
+Gültigkeit. Eine Integral-Lücke macht spätere kumulative Werte unbekannt.
+PCHIP berechnet Randsteigungen innerhalb zusammenhängender gültiger Segmente;
+Nearest/Previous übernehmen die Gültigkeit ihres ausgewählten Knotens.
+Scratch-Quoten berücksichtigen ein zusätzliches Maskenbyte pro Zeile.
+
+Der neue C-Test prüft genaue Werte, Maskenschnittmengen, gültige Nullwerte,
+Blockgrenzen, Freigabe der Eingabehandles, 5000 Zeilen mit mehr Lücken als
+Vorschaupunkten, quota-bedingte Rücknahme, Allocation-Failure beim Kurvenaufbau,
+CSV, erhaltene Segmentgrenzen, Format-2-Rundlauf, CRC-gültige falsche Flags und
+unbekannte Versionen mit unverändertem Ausgabeargument. Die Sprachprüfung verwendet
+dieselben Segmentwerte und prüft einen Quellfehler beim Zugriff auf eine fehlende
+Beobachtung. C-Strukturen und ABI 3 ändern sich nicht. Maskierte Berichte verwenden
+Format 2; unmaskierte Berichte werden weiterhin als Format 1 geschrieben und
+beide Formate gelesen. Der Sprachvertrag ist 0.172.0.
+
+Die macOS-Debug-Prüfungen von Series, Auswahl, Resampling, PCHIP und Report
+bestehen 5/5: `build/series-mask-debug-mac/test-results/run-w948zpe6`.
+Neue Masken- und Sprachprüfungen bestehen 2/2:
+`build/series-mask-debug-mac/test-results/run-6q4slaya`.
+Die erste gezielte Debian-Release-Prüfung besteht 8/8:
+`build/series-mask-linux/test-results/run-jdozfbfx` innerhalb der VM.
+
+Der neue Fensterablauf legt ein unabhängiges C-/Physim-Analyseprojekt an,
+baut nur die Analyse und startet eigene Daten über die echte Schaltfläche ohne
+Eingabedatei. Er prüft maskierte Linien, Segmentableitungen, PCHIP und
+Wiederöffnung. Report-/CSV-/SVG-/PNG-Dateien bleiben beim erneuten Öffnen
+bytegleich. Eine unabhängige Python-PNG-Prüfung prüft CRC, Pixel und ausdrücklich
+das Fehlen blauer Verbindungslinien in zwei Messlücken.
+Der frühe Testaufbau blieb auf der Editoransicht; nach Wechsel in die
+Ergebnisansicht führte ein vertauschtes Plot-Receiverargument im Physim-Beispiel
+zu vertauschten Achsen. Beide Test-/Beispielkorrekturen sind enthalten.
+Der macOS-Debug-Fensterablauf besteht danach:
+`build/series-mask-debug-mac/test-results/run-e2plk3ot`.
+
+Die ersten vollständigen Release-Läufe bestanden auf beiden Plattformen
+517/520: macOS `build/series-mask-mac/test-results/run-o9lo_shg`, Debian
+`build/series-mask-linux/test-results/run-dcl3dlhv`. Drei alte Regressionserwartungen
+gehörten noch zum Serienformat 3 beziehungsweise zum Abbruch bei fehlender
+Endmessung. Der Parameterprüfer verlangt jetzt Serienformat 5, den Status in CSV
+und weiterhin die richtigen Parameterwerte/Rohdaten. Der Sensorprüfer verlangt
+einen erfolgreichen Abschluss mit expliziter fehlender Messung und überprüft
+die reine Messabdeckung ohne erfundene Statistik. Diese drei Prüfungen bestehen
+anschließend jeweils 3/3: macOS
+`build/series-mask-mac/test-results/run-2mmi837n`, Debian
+`build/series-mask-linux/test-results/run-rrik9_te`.
+
+Die anschließenden vollständigen Release-Läufe bestehen auf beiden Plattformen
+520/520: macOS `build/series-mask-mac/test-results/run-vivgzdti`, Debian
+`build/series-mask-linux/test-results/run-8lw_67_d`. Damit sind auch die bisherigen
+Sprach-, Sensor-, Daten-, Builder-, Dokumentations- und Mutationsprüfungen erneut
+ausgeführt; die drei überholten Erwartungen sind in dieser Abnahme korrigiert.
+
+Die vollständige Fenstergruppe wurde mit allen 55 Abläufen ausgeführt. Der erste
+macOS-Lauf besteht 54/55: `build/series-mask-mac/test-results/run-qpvnlu6t`.
+Der erste Debian-Lauf besteht 52/55:
+`build/series-mask-linux/test-results/run-e8um47qv`.
+Der neue Maskenablauf besteht in beiden Läufen einschließlich Report-Rundlauf,
+SVG-Gleichheit und unabhängiger PNG-Pixelprüfung zweier Messlücken.
+
+Der Sensor-Testpräfix `missing-` erfasste auch die bestehende Workspace-Prüfung
+`missing-addition`. Die Auswahl verwendet jetzt exakt `missing-c`/`missing-phys`.
+Workspace und Sensorablauf bestehen danach auf macOS 2/2:
+`build/series-mask-mac/test-results/run-im89m2cu`.
+Unter Debian fehlten zusätzlich die erwartete Zoom-Eingabeisolation und der
+Mindestfortschritt bei 4×-Tempo. Die Grenzwerte wurden nicht verändert.
+Ohne parallele macOS-Fensterprüfung bestehen Zoom-Eingabeisolation, Workspace,
+Tempo und Sensorablauf 4/4: `build/series-mask-linux/test-results/run-prq9yeua`.
+Die Ursache der beiden früheren Linux-Abweichungen ist damit nicht abschließend
+belegt. Eine einzelne fehlerfreie vollständige 55/55-Wiederholung wird nicht
+behauptet; alle zuvor fehlgeschlagenen Abläufe sind erfolgreich nachgeprüft.
+Maskierte Signal-, Ableitungs- und PCHIP-Ansichten wurden bei 1080 × 740 auf
+beiden Plattformen visuell geprüft.
+
+Die installierten SDKs bauen und betreiben die neuen unabhängigen C-/Physim-
+Maskenanalysen auch nach Verschieben in Pfade mit Leerzeichen und Umlaut.
+Private Core-Helfer wie `src/report_mask.inc` werden vollständig mitgeliefert.
+Die Abläufe mit Daten ohne Eingabedatei, Export-Pixelprüfung und Wiederöffnung
+bestehen: `build/series-mask-sdk-proof-mac/app-steps.json` und
+`build/series-mask-sdk-proof-linux/app-steps.json` innerhalb der VM.
+Alle 19 generierten API-Referenzdokumente sind geprüft.
+
+Ausgeführt wurden Intel macOS 14.6.1 mit Apple Clang 16 und SDL 3.2.30 sowie
+Debian 12 mit Linux 6.1.0-53-cloud-amd64, GCC 12.2, SDL 3.2.30 und
+X11/Xvfb/Openbox/Mesa 22.3.6. Diese Nachweise belegen den genannten Stand und
+keine vollständige Abnahme aller übrigen Roadmap-Ziele.
+
+Die vier Kernprüfungen (Resampling, Report, Masken, PCHIP) bestehen unter
+Debian/GCC mit AddressSanitizer und UndefinedBehaviorSanitizer 4/4:
+`build/series-mask-asan-linux/test-results/run-at6ywg_j`.
+Der macOS-Sanitizer-Build wurde vor dem Bauen abgewiesen, weil der erforderliche
+Mach-O-Linker `ld64.lld` fehlt. Daraus wird keine macOS-Sanitizer-Abnahme abgeleitet.
+
 ## Laufserien mit fehlenden Sensor-Endwerten am 6. Oktober 2026
 
 Der Controller unterscheidet erfolgreiche Runner-Abschlüsse von gültigen

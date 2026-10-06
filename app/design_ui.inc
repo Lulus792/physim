@@ -702,13 +702,14 @@ static void workspace_panel(app *a) {
             if(nk_button_label(ui,"Messlauf importieren …"))choose_workspace_path(a,PS_DIALOG_IMPORT_RUN);
             nk_end_disabled(ui);
             nk_layout_row_dynamic(ui, 34, 3);
-            nk_begin_disabled(ui, !idle(a) || (!a->last_run[0] && !a->selected_count));
+            nk_begin_disabled(ui, !idle(a) || (!a->last_run[0] && !a->selected_count && !a->analysis_only));
             char analyze_label[64];
             if (a->selected_count > 1)
                 snprintf(analyze_label, sizeof analyze_label, "%u Läufe vergleichen",
                          a->selected_count);
             else
                 snprintf(analyze_label, sizeof analyze_label, "Analyse starten");
+            a->analysis_start_bounds=nk_widget_bounds(ui);
             if (action_button(ui, analyze_label, true))
                 analyze(a, false);
             nk_end_disabled(ui);

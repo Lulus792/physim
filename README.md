@@ -242,6 +242,8 @@ Seeds und archivierten Einstellungen in einem neuen Serienordner.
 Sensor-Endwerte mit Messausfällen werden mit ihrem Status erfasst. Berichte
 zeigen die Messabdeckung und werten nur gültige Werte aus.
 [Fehlende Endwerte](docs/monte-carlo.md#fehlende-endwerte).
+Explizite Gültigkeitsmasken erhalten Messlücken auch in transformierten Datenreihen,
+Linien und Exporten. [Datenreihen mit Masken](docs/series.md#messlücken-mit-expliziten-masken).
 
 **Datei → Workspaces …** verwaltet bis zu acht benannte Arbeitsumgebungen mit
 Ordnern, zusätzlichen Pfaden, offenen Dokumenten und Editoransichten.
