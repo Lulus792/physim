@@ -1,0 +1,30 @@
+// Editable preview of the first two channels of each input (at most 16 plots).
+// Each point uses the original time; sensor status=1 selects valid measurements.
+let runs = ["Run 1", "Run 2", "Run 3", "Run 4", "Run 5", "Run 6", "Run 7", "Run 8"]
+func analyze():
+    report("First two channels per input run")
+    for input in 0..<inputCount():
+        let run = Dataset(input)
+        let time = run.series("time")
+        for channel in 0..<run.channelCount():
+            if channel >= 2:
+                break
+            let name = run.channelName(channel)
+            let values = run.series(name)
+            var statusName = name + ".status"
+            for other in 0..<run.channelCount():
+                if run.channelName(other) + ".u" == name:
+                    statusName = run.channelName(other) + ".status"
+            var selectorIndex: Int64 = -1
+            for other in 0..<run.channelCount():
+                if run.channelName(other) == statusName:
+                    selectorIndex = other
+            var columns = [time, values]
+            if selectorIndex >= 0:
+                columns = Series.select(columns, run.series(statusName), 1)
+            if columns[0].count() > 0:
+                let firstTime = columns[0].slice(0, 1)
+                let firstValue = columns[1].slice(0, 1)
+                let plot = firstValue.plot(firstTime, runs[input] + " · " + name, "First valid sample")
+                plot.points(columns[0], columns[1], "Measurements")
+        run.close()

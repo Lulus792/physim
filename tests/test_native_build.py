@@ -235,3 +235,28 @@ assert "Profile: Release" in output and "Build up to date" in output
 output = command(argv + ["--profile", "Debug", "--output", language / "build/Debug"])
 assert "Profile: Debug" in output and "Build up to date" in output
 print(f"Native builds, incremental headers, failure recovery, locks, relocation and runners passed: {root}")
+
+# Analysis-only projects use the same native backend without experiment sources.
+for language in ("c", "phys"):
+    analysis_project = root / ("Independent analysis " + language)
+    analysis_project.mkdir()
+    source = analysis_project / ("analysis." + language)
+    shutil.copyfile(args.sdk / "examples/analysis_only" / source.name, source)
+    (analysis_project / "physim.project").write_text(
+        "physim_project=2\nkind=analysis\nanalysis=" + source.name + "\n", encoding="utf-8")
+    original = fingerprint(source)
+    assert "Build successful" in build(analysis_project)
+    output = analysis_project / "build/Debug"
+    assert not (output / ("experiment" + extension)).exists()
+    assert "Build up to date" in build(analysis_project)
+    raw = root / ("input-analysis-" + language + ".psrun")
+    command([args.runner, moved / "build/Debug" / ("experiment" + extension), raw, "--steps", "100"])
+    raw_hash = fingerprint(raw)
+    prefix = root / ("independent-report-" + language)
+    command([args.analysis_runner, output / ("analysis" + extension), raw, prefix])
+    assert prefix.with_suffix(".psreport").stat().st_size > 0
+    assert fingerprint(raw) == raw_hash and fingerprint(source) == original
+    source.write_text(source.read_text(encoding="utf-8") + ("\ninvalid code" if language == "phys" else "\n#error preserved analysis\n"), encoding="utf-8")
+    module_hash = fingerprint(output / ("analysis" + extension))
+    build(analysis_project, success=False)
+    assert fingerprint(output / ("analysis" + extension)) == module_hash

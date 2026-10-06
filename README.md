@@ -228,6 +228,12 @@ und mit Schutz vor externen Änderungen speichern. Ihre automatischen Sicherunge
 liegen außerhalb des Workspace und werden beim erneuten Öffnen der Datei zur
 [Wiederherstellung](docs/autosave.md) angeboten.
 
+**Datei → Neues Projekt … → Nur Auswertung gespeicherter Läufe** legt ein
+Analyseprojekt in C oder Physim ohne Experimentquelle an. **Messlauf importieren …**
+übernimmt gespeicherte Daten samt vorhandenen Quellsnapshots, F5 baut die Analyse,
+und die Auswertung kann bis zu acht importierte Läufe verwenden.
+[Analyseprojekte und Dateiimport](docs/build.md#projekte-in-der-app-bauen).
+
 **Datei → Workspaces …** verwaltet bis zu acht benannte Arbeitsumgebungen mit
 Ordnern, zusätzlichen Pfaden, offenen Dokumenten und Editoransichten.
 Speicherfehler und laufende Jobs verhindern den Wechsel; Wiederöffnen startet

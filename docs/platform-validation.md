@@ -3,6 +3,82 @@
 Stand: 6. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Eigenständige Analyseprojekte am 6. Oktober 2026
+
+Projektformat 2 erfordert einen ausdrücklichen Typ. Analyseprojekte benötigen
+keine Experimentquelle; Format 1 bleibt für bestehende Projekte lesbar. Die
+Typprüfung erhält Kommentare und unbekannte Einträge, lehnt widersprüchliche
+Experimentangaben ab und konvertiert nicht während eines Einstellungsspeicherns.
+Ändert sich Typ oder Quellsprache extern, verlangt die App erneutes Öffnen.
+Der native Builder baut nur das Analysemodul und verwendet den Typ im Cache.
+
+Die Importprüfung verwendet konstante Blockspeichergröße. Sie kopiert den Lauf,
+prüft vollständige Zeitachse und Szenen und veröffentlicht ohne Ersetzungsflag.
+Vorhandene Experimentquellen und Ressourcenlimits werden übernommen. Tests
+prüfen bytegleiche Daten/Quellen, vorhandene Zieldateien, Rücknahme eigener
+Dateien bei Sidecar-Kollisionen, unvollständige Läufe, beschädigte Daten,
+rückwärts laufende Zeit und unbekannte Snapshot-Versionen. Fehler erhalten
+Original und fremde Dateien; die Source-Prüfung benötigt keine GUI.
+
+Die erste macOS-Debug-Prüfung mit Projektleser, Import und erweitertem echten
+Projektbuild hatte falsche Writer-Namen in der neuen Testfixture sowie einen
+SDK-Bin-Pfad, der beim Repository-Build nicht vorhanden ist. Die Fixture benutzt
+jetzt die tatsächliche Append-/Close-API, schließt unvollständige Dateien ohne
+Footer und verwendet ein zuvor gebautes Produzentenmodul. Der Importtest und
+der native Projektbuild bestehen danach 2/2:
+`build/analysis-project-debug-mac/test-results/run-mzjsoubv`.
+Nach Format-2-Umstellung bestehen Projekt- und Importmodell 2/2:
+`build/analysis-project-debug-mac/test-results/run-ljevqftl`.
+
+Der native Projektbuild testet C-/Physim-Analyseprojekte ohne Experimentdatei,
+Analysemodul ohne Experimentmodul, inkrementellen Neubau und Erhalt eines
+lauffähigen Analysemoduls nach einem Compilerfehler. Laufdateien und Quellen
+bleiben unverändert. macOS Release besteht 3/3:
+`build/analysis-project-mac/test-results/run-6g5_t3tj`; Debian Release 3/3:
+`build/analysis-project-linux/test-results/run-b4yeethl` innerhalb der VM.
+Die spätere Debian-Format-/Snapshotprüfung besteht 2/2:
+`build/analysis-project-linux/test-results/run-qrv3gw71`.
+
+Der neue Fensterablauf baut zunächst einen Produzenten, stoppt seinen Lauf und
+legt über die Projekttypauswahl ein eigenständiges Analyseprojekt der jeweils
+anderen Sprache an. Die App baut ausschließlich dessen Analyse, importiert
+über den Dialog-Callbackpfad den gespeicherten Lauf, erzeugt zwei Ergebnisplots
+und öffnet das Projekt in einem weiteren Prozess. Hashes von Original,
+importierten Daten, Bericht und Analysequelle bleiben erhalten. Start/Reset
+sind für Analyseprojekte gesperrt. Der Dialog-Callback wird im Test mit einem
+festen Dateipfad versorgt; dies belegt keinen erneuten nativen Dateidialogtest.
+
+Die frühe Projektmanager-Ansicht hatte die neue Erstellen-Schaltfläche unterhalb
+des sichtbaren Bereichs. Experimentvorlage/-sprache werden jetzt bei reinen
+Analyseprojekten ausgeblendet. Neuer Ablauf, Autosave und Dokument-Build bestehen
+auf macOS Debug 3/3: `build/analysis-project-debug-mac/test-results/run-pzke3zbp`;
+auf Debian Release 3/3: `build/analysis-project-linux/test-results/run-lyv38ssw`.
+Projektmanager und Ergebnisansicht wurden auf dem Intel-Mac visuell geprüft.
+
+Die abschließenden Release-Modelle bestehen auf macOS 2/2:
+`build/analysis-project-mac/test-results/run-ugmxr863`.
+Projektablauf, Diagramme/Eingabeisolation, beide Menügrößen, Workspace-Wiederöffnung
+und Dokument-Build bestehen auf beiden Plattformen 7/7: macOS
+`build/analysis-project-mac/test-results/run-z6trc510`, Debian
+`build/analysis-project-linux/test-results/run-mczc7v0l` innerhalb der VM.
+Die installierte macOS-App baut Produzent und unabhängige Analyse auch nach dem
+Verschieben des SDK in einen Pfad mit Leerzeichen und Umlaut und besteht Import,
+Auswertung und Wiederöffnung:
+`build/analysis-project-sdk-proof-mac/app-steps.json`.
+
+Die letzte Importprüfung mit zusätzlichem Schutz aller bekannten Ziel-Sidecars
+besteht unter Debian 1/1:
+`build/analysis-project-linux/test-results/run-10klg9cn`.
+Auch die installierte Debian-App besteht nach Verschieben des SDK den gesamten
+Produzenten-/Analyseprojekt-/Import-/Wiederöffnungsablauf:
+`build/analysis-project-sdk-proof-linux/app-steps.json` innerhalb der VM.
+Projektmanager und Berichtansicht wurden ebenfalls unter X11/Xvfb/Openbox/Mesa
+bei 1080 × 740 visuell geprüft. Die native Dateiauswahl selbst wird durch diese
+Callbackprüfungen weiterhin nicht neu abgenommen.
+
+API/ABI 3, Sprache 0.171.0 und Messdatei-/Pipe-Versionen bleiben unverändert.
+Diese gezielten Prüfungen sind keine erneute vollständige 516/52-Abnahme.
+
 ## Messkanal-Anzeigeeinheiten am 6. Oktober 2026
 
 Der neue private Katalog besteht auf macOS Debug:

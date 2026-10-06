@@ -297,7 +297,7 @@ static void preview_workspace_path(app *a, const char *path) {
     if (a->loaded) {
         char source[4096];
         join(source, sizeof source, a->project, experiment_source(a));
-        bool experiment = document_matches(path, source);
+        bool experiment = !a->analysis_only && document_matches(path, source);
         join(source, sizeof source, a->project, analysis_source(a));
         if (experiment || document_matches(path, source)) {
             a->project_manager = false;

@@ -587,7 +587,7 @@ int main(int argc, char **argv) {
     bool release = !strcmp(profile, "Release");
     const char *experiment = project_settings.language_experiment ? "main.phys" : "main.c";
     const char *analysis = project_settings.language_analysis ? "analysis.phys" : "analysis.c";
-    if (strstr(experiment, ".phys") || strstr(analysis, ".phys")) {
+    if ((!project_settings.analysis_only && strstr(experiment, ".phys")) || strstr(analysis, ".phys")) {
         if (!executable(language_compiler, absolute_language_compiler)) {
             fputs("Cannot find physimc\n", stderr);
             return 1;
@@ -658,10 +658,10 @@ int main(int argc, char **argv) {
     bool settings_ok =
         fprintf(settings,
                 "physim_native_build=1\nproject=%s\nsdk=%s\ncompiler=%s\n"
-                "compiler_time=%lld\nlinker=%s\nlinker_time=%lld\nprofile=%s\nbuilder_time=%lld\n",
+                "compiler_time=%lld\nlinker=%s\nlinker_time=%lld\nprofile=%s\nbuilder_time=%lld\nkind=%s\n",
                 project, sdk, tc->compiler, (long long)compiler_info.modify_time, tc->linker,
                 (long long)linker_info.modify_time, profile,
-                (long long)builder_info.modify_time) > 0;
+                (long long)builder_info.modify_time, project_settings.analysis_only?"analysis":"experiment") > 0;
     for (unsigned i = 0; i < tc->library_count; i++)
         settings_ok = fprintf(settings, "lib=%s\n", tc->libraries[i]) > 0 && settings_ok;
     if (fclose(settings))
@@ -701,7 +701,9 @@ int main(int argc, char **argv) {
     }
     char modules[2][PATH_SIZE], staged[2][PATH_SIZE], user_objects[2][PATH_SIZE];
     bool ok = true;
-    for (unsigned i = 0; ok && i < 2; i++) {
+    unsigned first=project_settings.analysis_only?1:0;
+    if(first){artifacts[SDK_OBJECT_COUNT]=(artifact_digest){0};artifacts[SDK_OBJECT_COUNT+2]=(artifact_digest){0};}
+    for (unsigned i = first; ok && i < 2; i++) {
         const char *name = i ? "analysis" : "experiment", *input = i ? analysis : experiment;
         char source[PATH_SIZE];
         path_join(source, project, input);
@@ -727,9 +729,9 @@ int main(int argc, char **argv) {
         if (!artifact_matches(modules[i], &artifacts[SDK_OBJECT_COUNT + 2 + i]))
             changed = true;
     }
-    for (unsigned i = 0; ok && changed && i < 2; i++)
+    for (unsigned i = first; ok && changed && i < 2; i++)
         ok = link_module(tc, staged[i], user_objects[i], objects, directory, release);
-    for (unsigned i = 0; ok && changed && i < 2; i++)
+    for (unsigned i = first; ok && changed && i < 2; i++)
         ok = SDL_RenamePath(staged[i], modules[i]) &&
              digest_file(modules[i], &artifacts[SDK_OBJECT_COUNT + 2 + i]);
     free(objects);

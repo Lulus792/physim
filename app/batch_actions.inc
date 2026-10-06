@@ -11,6 +11,7 @@ static int batch_worker(void *user) {
     return 0;
 }
 static void start_batch(app *a) {
+    if(a->analysis_only){status(a,"Für Monte Carlo ein Experimentprojekt öffnen.");return;}
     if (a->project_settings_dirty)
         save_project(a);
     if (a->project_settings_dirty)

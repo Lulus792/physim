@@ -33,9 +33,9 @@ bool ps_project_step_bounds_valid(const ps_project_settings *s) {
 static ps_document_result parse(const ps_text_document *document, ps_project_settings *out) {
     ps_project_settings settings = {.timestep = .005, .seed = 42, .speed = 1,
                                     .minimum_timestep=1e-8,.maximum_timestep=.1};
-    bool seen[9] = {false};
+    bool seen[10] = {false};
     size_t position = 0;
-    unsigned index = 0;
+    unsigned index = 0, version=1;
     while (position < document->length) {
         size_t end = position;
         while (end < document->length && document->saved[end] != '\n')
@@ -50,12 +50,15 @@ static ps_document_result parse(const ps_text_document *document, ps_project_set
         line[length] = 0;
         position = end < document->length ? end + 1 : end;
         if (!index++) {
-            if (strcmp(line, "physim_project=1"))
-                return PS_DOCUMENT_INVALID;
+            if(!strcmp(line,"physim_project=2"))version=2;
+            else if (strcmp(line, "physim_project=1"))return PS_DOCUMENT_INVALID;
             continue;
         }
         const char *value = strchr(line, '=');
-        if (!strncmp(line, "experiment=", 11) || !strncmp(line, "analysis=", 9)) {
+        if (!strncmp(line,"kind=",5)) {
+            if(seen[9] || (strcmp(value+1,"analysis") && strcmp(value+1,"experiment")))return PS_DOCUMENT_INVALID;
+            seen[9]=true;settings.analysis_only=!strcmp(value+1,"analysis");
+        } else if (!strncmp(line, "experiment=", 11) || !strncmp(line, "analysis=", 9)) {
             unsigned which = !strncmp(line, "analysis=", 9);
             bool language = !strcmp(value + 1, which ? "analysis.phys" : "main.phys");
             if (seen[which] || (!language && strcmp(value + 1, which ? "analysis.c" : "main.c")))
@@ -114,7 +117,7 @@ static ps_document_result parse(const ps_text_document *document, ps_project_set
         } else if (!strncmp(line, "physim_project=", 15))
             return PS_DOCUMENT_INVALID;
     }
-    if (!index || !ps_project_step_bounds_valid(&settings))
+    if (!index || (version==2 && !seen[9]) || (settings.analysis_only && (version!=2 || seen[0])) || !ps_project_step_bounds_valid(&settings))
         return PS_DOCUMENT_INVALID;
     *out = settings;
     return PS_DOCUMENT_OK;
@@ -141,6 +144,8 @@ ps_document_result ps_project_settings_save(const char *path, const ps_project_s
     ps_project_settings previous;
     if (result == PS_DOCUMENT_OK)
         result = parse(&document, &previous);
+    if (result == PS_DOCUMENT_OK && settings->analysis_only != previous.analysis_only)
+        result=PS_DOCUMENT_INVALID; /* Saving settings cannot silently change project kind. */
     if (result != PS_DOCUMENT_OK) {
         ps_text_document_destroy(&document);
         return result;

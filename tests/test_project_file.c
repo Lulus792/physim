@@ -89,8 +89,22 @@ int main(int argc, char **argv) {
     CHECK(write_text(backup,original));
     settings=restored;
     ps_project_settings before = settings;
+    const char *analysis_manifest="physim_project=2\nkind=analysis\nanalysis=analysis.phys\n# saved data only\nprofile=Debug\n";
+    CHECK(write_text(path,analysis_manifest));
+    ps_project_settings only;
+    CHECK(ps_project_settings_read(path,&only)==PS_DOCUMENT_OK && only.analysis_only && only.language_analysis);
+    only.release=true;CHECK(ps_project_settings_save(path,&only)==PS_DOCUMENT_OK);
+    CHECK(ps_project_settings_read(path,&only)==PS_DOCUMENT_OK && only.analysis_only && only.release);
+    only.analysis_only=false;CHECK(ps_project_settings_save(path,&only)==PS_DOCUMENT_INVALID);
+    CHECK(write_text(path,original) && write_text(backup,original));
     const char *invalid[] = {"",
                              "physim_project=2\n",
+                             "physim_project=2\nkind=analysis\nexperiment=main.c\n",
+                             "physim_project=2\nkind=analysis\nkind=experiment\n",
+                             "physim_project=1\nkind=other\n",
+                             "physim_project=1\nkind=analysis\nkind=analysis\n",
+                             "physim_project=1\nkind=analysis\nexperiment=main.c\n",
+                             "physim_project=1\nexperiment=main.phys\nkind=analysis\n",
                              "physim_project=1\nphysim_project=1\n",
                              "physim_project=1\nprofile=Release\nprofile=Debug\n",
                              "physim_project=1\nprofile=Fast\n",

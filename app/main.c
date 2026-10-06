@@ -2,6 +2,7 @@
 #include "batch.h"
 #include "documentation.h"
 #include "library.h"
+#include "run_import.h"
 #include "physim/analysis.h"
 #include "physim/report.h"
 #include "platform.h"
@@ -156,6 +157,7 @@ typedef struct {
     char log[65536], status[256], find[128], replace[128];
     int tab, analysis_tab, example, profile, plot_channel;
     bool loaded, built, dirty, analysis_dirty, paused, hello, show_vectors, orthographic, quitting;
+    bool analysis_only, manager_analysis_only;
     bool language_experiment;
     bool language_analysis;
     int template_analysis_language;
@@ -207,6 +209,10 @@ typedef struct {
     char plot_data_path[4096];
     ps_library *library, *pending_library;
     SDL_Thread *library_thread;
+    SDL_Thread *import_thread;SDL_AtomicInt import_done;ps_result import_result;
+    char import_source[4096],import_destination[4096];
+    struct nk_rect import_bounds, project_kind_bounds, project_kind_choices[2], project_create_bounds;
+    char import_test_path[4096];
     SDL_AtomicInt library_done;
     ps_result library_result;
     char library_directory[4096], library_error[192], library_query[128];
@@ -348,8 +354,9 @@ static void open_library(app *a);
 static bool action_button(struct nk_context *ui, const char *label, bool primary);
 static void open_settings(app *a);
 enum { PS_DIALOG_OPEN_FOLDER = 1, PS_DIALOG_ADD_FILE, PS_DIALOG_ADD_FOLDER,
-       PS_DIALOG_MANAGER_PARENT };
+       PS_DIALOG_MANAGER_PARENT, PS_DIALOG_IMPORT_RUN };
 static void choose_workspace_path(app *a, int mode);
+static void import_run(app *a,const char *path);
 static void create_managed_project(app *a);
 static bool open_workspace_path(app *a, const char *path);
 static void restore_workspace(app *a);
@@ -574,7 +581,7 @@ static bool save_editor(struct nk_text_edit *edit, const char *path) {
 static bool save_project_settings(app *a) {
     char path[4096];
     join(path, sizeof path, a->project, "physim.project");
-    ps_project_settings settings = {.release = a->profile != 0, .timestep = a->dt,
+    ps_project_settings settings = {.analysis_only=a->analysis_only, .release = a->profile != 0, .timestep = a->dt,
                                    .speed = a->simulation_speed, .parameters = a->parameters,
                                    .adaptive=a->adaptive_steps,.minimum_timestep=a->minimum_dt,
                                    .maximum_timestep=a->maximum_dt};
@@ -648,7 +655,7 @@ static void save_project(app *a) {
     }
     char p[4096];
     join(p, sizeof p, a->project, experiment_source(a));
-    bool ok = !a->dirty || save_editor(&a->experiment, p);
+    bool ok = !a->dirty || (!a->analysis_only && save_editor(&a->experiment, p));
     join(p, sizeof p, a->project, analysis_source(a));
     ok = (!a->analysis_dirty || save_editor(&a->analysis, p)) && ok;
     if (ok && a->project_settings_dirty)
@@ -691,7 +698,7 @@ static bool build_inputs_current(const app *a) {
 }
 static bool jobs_idle(app *a) {
     return !a->job.running && !a->runner.running && !a->data.thread && !a->report_thread &&
-           !a->batch_thread;
+           !a->batch_thread && !a->import_thread;
 }
 static bool idle(app *a) { return !a->reset_pending && jobs_idle(a); }
 static void clear_project(app *a) {
@@ -711,7 +718,7 @@ static void clear_project(app *a) {
     a->loaded = a->built = a->dirty = a->analysis_dirty = false;
     a->project_settings_dirty = false;
     memset(&a->parameters, 0, sizeof a->parameters);
-    a->language_experiment = a->language_analysis = false;
+    a->language_experiment = a->language_analysis = a->analysis_only = false;
     a->selected_count = a->channel_count = 0;
     a->history_count = 0;
     timeline_clear(a);
@@ -765,7 +772,7 @@ static bool open_project(app *a) {
     nk_textedit_init_default(&experiment);
     nk_textedit_init_default(&analysis);
     join(p, sizeof p, a->project_input, language ? "main.phys" : "main.c");
-    if (!load_editor(&experiment, p)) {
+    if (!project_settings.analysis_only && !load_editor(&experiment, p)) {
         nk_textedit_free(&experiment);
         nk_textedit_free(&analysis);
         status(a, "Experimentquelle konnte nicht geladen werden (UTF-8, maximal 256 KiB).");
@@ -798,6 +805,7 @@ static bool open_project(app *a) {
     a->experiment = experiment;
     a->language_experiment = language;
     a->language_analysis = analysis_language;
+    a->analysis_only=project_settings.analysis_only;
     a->analysis = analysis;
     snprintf(a->project, sizeof a->project, "%s", a->project_input);
     snprintf(a->workspace, sizeof a->workspace, "%s", a->project_input);
@@ -849,7 +857,8 @@ static bool open_project(app *a) {
     a->library_query[0] = 0;
     a->library_error[0] = 0;
     refresh_library(a);
-    status(a, "Projekt geladen. Build kompiliert die lokalen Quelldateien.");
+    if(a->analysis_only){a->tab=0;a->analysis_tab=1;}
+    status(a, a->analysis_only?"Analyseprojekt geladen. Messläufe importieren und Analyse bauen.":"Projekt geladen. Build kompiliert die lokalen Quelldateien.");
     check_recovery(a);
     return true;
 }
@@ -886,12 +895,14 @@ static void new_project(app *a) {
                  : a->example == 18 ? "collision" : "box_collision");
     else
         snprintf(src, sizeof src, "%s/examples/%s/main.c", a->root, examples[a->example]);
-    if (!copy_file_exclusive(src, p)) {
+    if (!a->manager_analysis_only && !copy_file_exclusive(src, p)) {
         status(a, "Experimentvorlage konnte nicht kopiert werden.");
         return;
     }
     bool analysis_language = a->template_analysis_language == 1;
-    join(src, sizeof src, a->root, analysis_language
+    join(src, sizeof src, a->root, a->manager_analysis_only
+        ? (analysis_language?"examples/analysis_only/analysis.phys":"examples/analysis_only/analysis.c")
+        : analysis_language
         ? (a->example == 10 ? "examples/language/analysis_sensors.phys"
            : a->example == 18 ? "examples/language/analysis_collision.phys"
            : a->example == 19 ? "examples/language/analysis_box_collision.phys"
@@ -909,7 +920,9 @@ static void new_project(app *a) {
         status(a, "Projektbeschreibung konnte nicht geschrieben werden.");
         return;
     }
-    bool written = fprintf(f, "physim_project=1\nexperiment=%s\nanalysis=%s\nmodules=core,units,mechanics,"
+    bool written = a->manager_analysis_only
+        ? fprintf(f,"physim_project=2\nkind=analysis\nanalysis=%s\nmodules=core,units,data,analysis\nprofile=Debug\n",analysis_language?"analysis.phys":"analysis.c")>0
+        : fprintf(f, "physim_project=1\nexperiment=%s\nanalysis=%s\nmodules=core,units,mechanics,"
                "data,analysis\nprofile=Debug\nsimulation.dt=0.005\nsimulation.seed=42\n", language ? "main.phys" : "main.c",
                analysis_language ? "analysis.phys" : "analysis.c") > 0;
     if (fclose(f)) written = false;
@@ -962,6 +975,12 @@ static void build_project(app *a) {
     save_project(a);
     if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
         return;
+    char manifest[4096];join(manifest,sizeof manifest,a->project,"physim.project");
+    ps_project_settings current;
+    if(ps_project_settings_read(manifest,&current)!=PS_DOCUMENT_OK || current.analysis_only!=a->analysis_only ||
+       current.language_analysis!=a->language_analysis || current.language_experiment!=a->language_experiment) {
+        invalidate_build(a);status(a,"Projektbeschreibung wurde geändert. Projekt erneut öffnen.");return;
+    }
     char builder[4096], compiler[4096];
     join(a->build_directory, sizeof a->build_directory, a->project,
          a->profile ? "build/Release" : "build/Debug");
@@ -976,7 +995,7 @@ static void build_project(app *a) {
     a->build_revision = a->source_revision;
     if (ps_process_start(&a->job, args, a->project)) {
         a->job_kind = 2;
-        status(a, "Physim baut Experiment und Analyse ...");
+        status(a,a->analysis_only?"Physim baut die Analyse ...":"Physim baut Experiment und Analyse ...");
     } else
         status(a, "Physim-Build konnte nicht gestartet werden. Installation prüfen.");
 }
@@ -1064,6 +1083,7 @@ static void begin_run_view(app *a) {
     a->scene_selected = false;
 }
 static bool start_run_mode(app *a, bool paused) {
+    if(a->analysis_only){status(a,"Analyseprojekte werten gespeicherte Messläufe aus. Zur Auswertung wechseln.");return false;}
     if (a->recovery)
         return false;
     if (!simulation_settings_valid(a)) return false;
@@ -1155,7 +1175,7 @@ static bool start_run_mode(app *a, bool paused) {
 static void start_run(app *a) { (void)start_run_mode(a, false); }
 /* A reset owns the stop/reap/load/relaunch sequence. Other actions remain idle-gated. */
 static bool reset_available(app *a) {
-    return a->loaded && a->built && build_inputs_current(a) && !a->recovery &&
+    return a->loaded && !a->analysis_only && a->built && build_inputs_current(a) && !a->recovery &&
            !a->reset_pending && !a->reset_starting && !a->job.running && !a->data.thread && !a->report_thread &&
            !a->batch_thread && (!a->runner.running || (a->hello && !a->stop_at));
 }
@@ -1382,7 +1402,28 @@ static void add_history(app *a) {
         a->history_v[j][at] =
             a->channel_status[j] < 0 || a->values[a->channel_status[j]] == 1 ? a->values[j] : NAN;
 }
+static int import_worker(void *user) {
+    app *a=user;a->import_result=ps_run_import(a->import_source,a->import_destination);
+    SDL_SetAtomicInt(&a->import_done,1);return 0;
+}
+static void import_run(app *a,const char *path) {
+    if(!a->loaded || !idle(a) || a->library_thread || a->recovery){status(a,"Zuerst einen laufenden Job beenden und ein Projekt öffnen.");return;}
+    if(!path || strlen(path)>=sizeof a->import_source){status(a,"Importpfad ist zu lang.");return;}
+    snprintf(a->import_source,sizeof a->import_source,"%s",path);
+    unique_path(a,a->import_destination,sizeof a->import_destination,"-import.psrun");
+    SDL_SetAtomicInt(&a->import_done,0);a->import_thread=SDL_CreateThread(import_worker,"physim-import",a);
+    status(a,a->import_thread?"Messlauf wird kopiert und geprüft …":"Import konnte nicht gestartet werden.");
+}
 static void pump(app *a) {
+    if(a->import_thread && SDL_GetAtomicInt(&a->import_done)) {
+        SDL_WaitThread(a->import_thread,NULL);a->import_thread=NULL;
+        if(a->import_result==PS_OK || a->import_result==PS_RECOVERED) {
+            snprintf(a->last_run,sizeof a->last_run,"%s",a->import_destination);
+            a->selected_count=0;select_run(a,a->last_run,true);refresh_workspace_entries(a);refresh_library(a);
+            a->tab=2;a->analysis_tab=0;a->show_report=false;request_dataset(a);
+            status(a,a->import_result==PS_RECOVERED?"Unvollständiger Messlauf importiert; gültiger Präfix bleibt erhalten.":"Messlauf und vorhandene Quellsnapshots importiert.");
+        } else {char message[160];snprintf(message,sizeof message,"Import fehlgeschlagen (%s). Vorhandene Daten bleiben erhalten.",ps_result_string(a->import_result));status(a,message);}
+    }
     pump_batch(a);
     pump_library(a);
     if (a->report_thread && SDL_GetAtomicInt(&a->report_done)) {
@@ -1429,6 +1470,9 @@ static void pump(app *a) {
                     a->show_log = false;
                 if (!build_inputs_current(a))
                     status(a, "Build fertig; Editor wurde waehrenddessen geaendert. Erneut bauen.");
+                else if(a->analysis_only) {
+                    a->built=true;status(a,"Analyse erfolgreich gebaut. Gespeicherte Läufe können ausgewertet werden.");
+                }
                 else if (!discover_parameters(a))
                     status(a, "Build fertig; Parameterabfrage konnte nicht gestartet werden.");
             } else if (a->job_kind == 5) {
@@ -2369,6 +2413,7 @@ static const int dialog_open_folder = PS_DIALOG_OPEN_FOLDER;
 static const int dialog_add_file = PS_DIALOG_ADD_FILE;
 static const int dialog_add_folder = PS_DIALOG_ADD_FOLDER;
 static const int dialog_manager_parent = PS_DIALOG_MANAGER_PARENT;
+static const int dialog_import_run=PS_DIALOG_IMPORT_RUN;
 static void SDLCALL workspace_dialog_callback(void *userdata, const char *const *filelist,
                                                int filter) {
     (void)filter;
@@ -2385,7 +2430,14 @@ static void choose_workspace_path(app *a, int mode) {
     if (a->dialog_pending || workspace_dialog_event == (Uint32)-1)
         return;
     a->dialog_pending = true;
-    if (mode == PS_DIALOG_ADD_FILE)
+    if(mode==PS_DIALOG_IMPORT_RUN && *a->import_test_path) {
+        const char *files[]={a->import_test_path,NULL};workspace_dialog_callback((void *)&dialog_import_run,files,0);
+    }
+    else if(mode==PS_DIALOG_IMPORT_RUN) {
+        static const SDL_DialogFileFilter filters[]={{"Physim-Messlauf","psrun"}};
+        SDL_ShowOpenFileDialog(workspace_dialog_callback,(void *)&dialog_import_run,a->window,filters,1,NULL,false);
+    }
+    else if (mode == PS_DIALOG_ADD_FILE)
         SDL_ShowOpenFileDialog(workspace_dialog_callback, (void *)&dialog_add_file, a->window,
                                NULL, 0, a->workspace_open ? a->workspace : NULL, false);
     else {
@@ -2474,6 +2526,7 @@ static void test_mouse(app *a, struct nk_rect rect, bool down) {
 #include "workspace_catalog_tests.inc"
 #include "pchip_tests.inc"
 #include "channel_units_tests.inc"
+#include "analysis_project_tests.inc"
 #include "adaptive_tests.inc"
 #include "series_tests.inc"
 #include "native_dialog_tests.inc"
@@ -2913,6 +2966,7 @@ int main(int argc, char **argv) {
                 if (path) {
                     if (e.user.code == PS_DIALOG_OPEN_FOLDER)
                         open_workspace_path(a, path);
+                    else if(e.user.code==PS_DIALOG_IMPORT_RUN)import_run(a,path);
                     else if (e.user.code == PS_DIALOG_MANAGER_PARENT)
                         snprintf(a->manager_parent, sizeof a->manager_parent, "%s", path);
                     else
@@ -3031,7 +3085,7 @@ int main(int argc, char **argv) {
         } else if (workspace_state_test) {
             if (ps_clock() - test_started >
                 (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
-                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
+                  !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15)) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
                         argv[3], ps_clock() - test_started);
@@ -4037,6 +4091,7 @@ int main(int argc, char **argv) {
         SDL_WaitThread(a->data.thread, NULL);
     if (a->report_thread)
         SDL_WaitThread(a->report_thread, NULL);
+    if (a->import_thread)SDL_WaitThread(a->import_thread,NULL);
     if (a->library_thread)
         SDL_WaitThread(a->library_thread, NULL);
     ps_library_destroy(a->pending_library);

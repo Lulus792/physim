@@ -80,6 +80,7 @@ def catalog():
              stderr_pattern=r"array-exit\.phys:8:4: runtime error: owned array exit probe"),
         Case("png", ("tests/test_png.c", "app/png.c"), ("zlib", "core"),
              arguments=("{work}/png-reference.png",), defines=("Z_PREFIX",)),
+        Case("run_import", ("tests/test_run_import.c", "app/run_import.c"), arguments=("{work}",), app=True),
         Case("project_file", ("tests/test_project_file.c",), ("project", "core"),
              arguments=("{work}",), app=True),
         Case("ui_geometry", ("tests/test_ui_geometry.c", "app/ui_geometry.c", "app/ui_backend.c"), app=True),

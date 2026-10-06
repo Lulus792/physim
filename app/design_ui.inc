@@ -321,10 +321,12 @@ static void sidebar_panel(app *a) {
                     section(ui, "Dateien");
                     nk_layout_row_dynamic(ui, 32, 1);
                     char source_label[32];
+                    if(!a->analysis_only) {
                     snprintf(source_label, sizeof source_label, "%s%s", experiment_source(a),
                              a->dirty ? "  •" : "");
                     if (nk_button_label(ui, source_label))
                         a->tab = 0;
+                    }
                     snprintf(source_label, sizeof source_label, "%s%s", analysis_source(a),
                              a->analysis_dirty ? "  •" : "");
                     if (nk_button_label(ui, source_label)) {
@@ -435,6 +437,17 @@ static void workspace_panel(app *a) {
                 "Pendel", "Wurf mit Luftwiderstand", "Kugelstoß & Medien", "Box auf Ebene",
                 "Feder–Masse–Dämpfer", "Wurf mit Unsicherheit", "Boxstoß", "Auftrieb"};
             static const char *languages[] = {"C", "Physim"};
+            nk_layout_row_dynamic(ui,22,1);nk_label(ui,"Projekttyp",NK_TEXT_LEFT);
+            nk_layout_row_dynamic(ui,34,1);const char *kinds[]={"Experiment und Auswertung","Nur Auswertung gespeicherter Läufe"};
+            a->project_kind_bounds=nk_widget_bounds(ui);
+            if(nk_combo_begin_label(ui,kinds[a->manager_analysis_only],nk_vec2(360,120))) {
+                nk_layout_row_dynamic(ui,30,1);
+                for(unsigned kind=0;kind<2;kind++) {
+                    a->project_kind_choices[kind]=nk_widget_bounds(ui);
+                    if(nk_button_label(ui,kinds[kind])){a->manager_analysis_only=kind!=0;nk_combo_close(ui);}
+                }nk_combo_end(ui);
+            }
+            if(!a->manager_analysis_only) {
             nk_layout_row_dynamic(ui, 22, 1);
             nk_label(ui, "Vorlage", NK_TEXT_LEFT);
             nk_layout_row_dynamic(ui, 34, 1);
@@ -447,12 +460,14 @@ static void workspace_panel(app *a) {
             nk_layout_row_dynamic(ui, 34, 1);
             a->manager_experiment_language = nk_combo(ui, languages, 2,
                 a->manager_experiment_language, 30, nk_vec2(240, 100));
+            }
             nk_layout_row_dynamic(ui, 22, 1);
             nk_label(ui, "Sprache der Auswertung", NK_TEXT_LEFT);
             nk_layout_row_dynamic(ui, 34, 1);
             a->template_analysis_language = nk_combo(ui, languages, 2,
                 a->template_analysis_language, 30, nk_vec2(240, 100));
             nk_layout_row_dynamic(ui, 36, 2);
+            a->project_create_bounds=nk_widget_bounds(ui);
             if (action_button(ui, "Projekt anlegen", true))
                 create_managed_project(a);
             if (nk_button_label(ui, "Zurück zum Workspace"))
@@ -502,7 +517,7 @@ static void workspace_panel(app *a) {
                 nk_label_wrap(ui, "Kein Physim-Projekt erkannt. Wähle links eine Textdatei zum Bearbeiten oder lege über Datei ein Projekt an.");
             }
         } else if (a->tab == 0 || (a->tab == 2 && a->analysis_tab == 1)) {
-            bool analysis = a->tab == 2;
+            bool analysis = a->tab == 2 || a->analysis_only;
             struct nk_text_edit *edit = analysis ? &a->analysis : &a->experiment;
             nk_layout_row_begin(ui, NK_DYNAMIC, 34, 4);
             nk_layout_row_push(ui, .46f);
@@ -544,6 +559,11 @@ static void workspace_panel(app *a) {
                                           ? "Experiment  ·  Physim  ·  " PS_UI_SHORTCUT "F suchen  ·  F5 bauen"
                                           : "Experiment  ·  C17  ·  " PS_UI_SHORTCUT "F suchen  ·  F5 bauen",
                              NK_TEXT_LEFT, muted());
+        } else if (a->tab == 1 && a->analysis_only) {
+            nk_layout_row_dynamic(ui,44,1);nk_label_wrap(ui,"Gespeicherte Szene · Die Wiedergabe verändert den importierten Lauf nicht.");
+            viewport(a,fmaxf(180,content-170));timeline_controls(a);
+            nk_layout_row_dynamic(ui,32,1);
+            if(nk_button_label(ui,"Zur Auswertung")){a->tab=2;a->analysis_tab=0;}
         } else if (a->tab == 1) {
             nk_layout_row_begin(ui, NK_DYNAMIC, 34, 2);
             nk_layout_row_push(ui, .6f);
@@ -677,6 +697,10 @@ static void workspace_panel(app *a) {
             nk_style_pop_font(ui);
             if (nk_button_label(ui, "Analysecode bearbeiten"))
                 a->analysis_tab = 1;
+            nk_layout_row_dynamic(ui, 32, 1);
+            nk_begin_disabled(ui,!idle(a) || a->library_thread || a->dialog_pending);a->import_bounds=nk_widget_bounds(ui);
+            if(nk_button_label(ui,"Messlauf importieren …"))choose_workspace_path(a,PS_DIALOG_IMPORT_RUN);
+            nk_end_disabled(ui);
             nk_layout_row_dynamic(ui, 34, 3);
             nk_begin_disabled(ui, !idle(a) || (!a->last_run[0] && !a->selected_count));
             char analyze_label[64];

@@ -2,6 +2,32 @@
 
 ## Projekte in der App bauen
 
+**Datei → Neues Projekt … → Nur Auswertung gespeicherter Läufe** erstellt ein
+Analyseprojekt in C oder Physim. Es enthält `analysis.c` beziehungsweise
+`analysis.phys` und keine Experimentquelle. F5 baut ausschließlich das Analysemodul;
+Parameterabfrage, Simulation und Monte Carlo benötigen ein Experimentprojekt.
+Projektformat 2 kennzeichnet diesen Typ ausdrücklich, damit ältere Apps ihn
+abweisen. Format 1 für bestehende Experimentprojekte bleibt unterstützt.
+
+In **Auswerten** übernimmt **Messlauf importieren …** eine `.psrun`-Datei samt
+vorhandenen Experimentquellen-Snapshots und Ressourcenlimit-Datei in `runs/`.
+Der Import läuft im Hintergrund, validiert Zeitachsen und Szenen und ersetzt
+keine vorhandene Datei. Original und importierte Kopie bleiben bytegleich.
+Unvollständige Läufe erhalten den Hinweis auf rekonstruierte Daten. In
+**Läufe & Berichte** lassen sich bis zu acht importierte Läufe auswählen.
+**Analyse starten** wertet die Auswahl aus; Bilder und CSV verwenden die
+bestehenden Exportfunktionen. Unter **Simulieren** ist die gespeicherte Szene
+mit ihrer Zeitleiste lesbar, ohne einen neuen Modelllauf zu starten.
+
+Die bearbeitbaren Vorlagen unter `examples/analysis_only/` stellen die ersten
+zwei Kanäle pro Eingabelauf dar, mit ursprünglichen Zeitachsen und höchstens
+16 Diagrammen. Ein einzelner erster gültiger Punkt und eine Punktwolke zeigen
+vorhandene Messungen; Sensoren verwenden ausschließlich Status 1. Zwischen
+fehlenden Messungen entstehen keine Linien. Weitere Kanäle, Kennzahlen und
+Darstellungen können im Analysecode mit der bestehenden API ergänzt werden.
+Jeder Bericht erhält den Quellsnapshot und das Eingabemanifest des Analyse-Runners.
+
+
 Physim erzeugt `physim.project` beim Anlegen und pflegt die Projekteinstellungen.
 F5 startet den mitgelieferten `physim-build`, der C- und Physim-Quellen direkt über
 den C17-Compiler in Experiment- und Analysemodule übersetzt. Eine `CMakeLists.txt`
@@ -120,7 +146,7 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt derzeit 515 Tests ohne Fenster aus, mit `--no-app` die
+`--test` führt derzeit 516 Tests ohne Fenster aus, mit `--no-app` die
 501 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
@@ -204,7 +230,7 @@ und das erneute Öffnen einschließlich beschädigter Katalogdateien.
 
 ### Fenster- und Grafiktests direkt ausführen
 
-`--test-display` führt zusätzlich 51 Fenster- und Grafikabläufe aus. Dafür sind
+`--test-display` führt zusätzlich 52 Fenster- und Grafikabläufe aus. Dafür sind
 eine grafische Sitzung, SDL und ein geeigneter OpenGL-Treiber erforderlich.
 Die beiden Testgruppen werden getrennt gestartet; `--test-display` lässt sich
 nicht mit `--no-app` oder `--test` kombinieren.

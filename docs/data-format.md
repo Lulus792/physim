@@ -236,3 +236,38 @@ bleiben bis zum ausdrücklichen Zurücksetzen erhalten. Das Messschema wird beim
 Runner-Handshake aus dem bereits geschriebenen Dateikopf gelesen und mit den
 HELLO-Kanalnamen abgeglichen. Pipe-Version 4, Messdatei-Format 1 und ABI 3 bleiben
 unverändert.
+
+
+## Eigenständige Analyseprojekte
+
+Bestehende Experimentprojekte behalten `physim_project=1`. Format 2 verlangt einen
+expliziten Typ `kind=analysis` oder `kind=experiment`. Analyseprojekte verwenden:
+
+```text
+physim_project=2
+kind=analysis
+analysis=analysis.c
+profile=Debug
+```
+
+`analysis=analysis.phys` wählt die eigene Sprache. Eine `experiment=`-Zeile ist
+bei `kind=analysis` widersprüchlich und wird abgewiesen, unabhängig von der
+Zeilenreihenfolge. Format 2 ohne Typ, doppelte/ungültige Typen und
+`kind=analysis` in Format 1 sind ungültig. Ältere Apps weisen Format 2 ab.
+Speichern von Einstellungen erhält Typ, Kommentare und fremde Einträge; es
+konvertiert den Projekttyp nicht stillschweigend. Änderungen von Typ oder
+Quellsprache an einer geöffneten Projektbeschreibung verlangen erneutes Öffnen.
+
+Der native Buildcache enthält den Projekttyp und hält ungenutzte Experiment-
+Digestplätze leer. Neue Analyseprojekte bauen kein Experimentmodul. API/ABI,
+Sprachvertrag und Messdatei-Format bleiben unverändert.
+
+Importierte Messdateien bleiben bytegleich. Der Import kopiert blockweise in
+eine exklusive temporäre Datei, prüft die komplette Zeitachse und die gespeicherten
+Szenen und veröffentlicht die Kopie ohne Ersetzung. POSIX verwendet einen
+Hardlink innerhalb desselben Verzeichnisses, Windows einen Move ohne
+Ersetzungsflag. Unterstützt das Ziel-Dateisystem diese Veröffentlichung nicht,
+meldet der Import einen Fehler; Quelldateien bleiben erhalten.
+Vorhandene `.experiment.c`, `.experiment.phys` und `.limits.txt` werden ebenfalls
+kopiert. Fehlgeschlagene Imports räumen ausschließlich selbst erzeugte Dateien
+auf. Ein gültiger rekonstruierbarer Präfix bleibt als unvollständiger Lauf nutzbar.

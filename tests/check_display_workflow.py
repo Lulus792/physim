@@ -178,6 +178,27 @@ def timed_series(flow, directory, scaled=False):
     require(records[0] == records[1], "Timed C/Physim studies differ in accepted times or values")
 
 
+def analysis_projects(flow, directory):
+    for language in ("c", "phys"):
+        root = directory / language
+        root.mkdir(parents=True)
+        flow.run("--workspace-state-test", root, "analysis-project-" + language, timeout=130,
+                 marker="ANALYSIS PROJECT analysis-project-" + language + " SELF-TEST: PASSED")
+        project = root / "Independent analysis"
+        require(not (project / "main.c").exists() and not (project / "main.phys").exists(), "Analysis project created an experiment")
+        require("kind=analysis" in read(project / "physim.project"), "Analysis kind missing")
+        originals = list((root / "Producer/runs").glob("*.psrun"))
+        imports = list((project / "runs").glob("*.psrun"))
+        require(len(originals) == len(imports) == 1 and fingerprint(originals[0]) == fingerprint(imports[0]), "Import changed data")
+        reports = list((project / "runs").glob("*.psreport"))
+        require(len(reports) == 1, "Independent analysis result missing")
+        protected = originals + imports + reports + [project / ("analysis." + language)]
+        hashes = [fingerprint(path) for path in protected]
+        flow.run("--workspace-state-test", root, "analysis-project-read", timeout=130,
+                 marker="ANALYSIS PROJECT analysis-project-read SELF-TEST: PASSED")
+        require(hashes == [fingerprint(path) for path in protected], "Reopening changed sources or data")
+
+
 def channel_units(flow, directory):
     for language in ("c", "phys"):
         root = directory / language
@@ -643,7 +664,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
+SPECIAL = {"analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}

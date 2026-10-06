@@ -35,6 +35,10 @@ static void check_recovery(app *a) {
         status(a, a->autosave_error);
         return;
     }
+    if(a->analysis_only && (snapshot->length[0] || snapshot->length[2])) {
+        ps_autosave_destroy(snapshot);a->autosave_blocked=true;
+        snprintf(a->autosave_error,sizeof a->autosave_error,"Sicherung gehört zu einem Experimentprojekt. Datei bleibt erhalten.");status(a,a->autosave_error);return;
+    }
     bool equal = !strcmp(snapshot->text[0], a->saved_source[0]) &&
                  !strcmp(snapshot->text[1], a->saved_source[1]);
     if (equal) {
