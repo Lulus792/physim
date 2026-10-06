@@ -1,0 +1,91 @@
+// Same RK4 state, forces and validity limits as material_main.c.
+let gravity = 9.80665
+let radius = parameter("radius",0.05,0.001,1,"Sphere radius in m")
+let density = parameter("materialDensity",2500,1,10000,"Material density in kg/m^3")
+let fluidDensity = parameter("mediumDensity",1000,0,10000,"Medium density in kg/m^3")
+let viscosity = parameter("viscosity",100,0,10000,"Dynamic viscosity in Pa s")
+let material = Material(density,0,0)
+let medium = Medium(fluidDensity,viscosity)
+let volume = 4.0 / 3.0 * 3.14159265358979323846 * radius * radius * radius
+let mass = material.density * volume
+let lambda = 6 * 3.14159265358979323846 * medium.viscosity * radius / mass
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let speed = Unit(1,0,-1,0,0,0,0,1,"m/s")
+let kilograms = Unit(0,1,0,0,0,0,0,1,"kg")
+let newtons = Unit(1,1,-2,0,0,0,0,1,"N")
+let joules = Unit(2,1,-2,0,0,0,0,1,"J")
+let one = Unit(0,0,0,0,0,0,0,1,"1")
+let cy = Channel("position.y",metres,"position.y")
+let cv = Channel("velocity.y",speed,"velocity.y")
+let cm = Channel("mass",kilograms,"mass")
+let cw = Channel("force.weight",newtons,"force.weight")
+let cb = Channel("force.buoyancy",newtons,"force.buoyancy")
+let cd = Channel("force.drag",newtons,"force.drag")
+let cr = Channel("reynolds",one,"reynolds")
+let ck = Channel("energy.kinetic",joules,"energy.kinetic")
+let ce = Channel("energy.dissipated",joules,"energy.dissipated")
+let cp = Channel("energy.potential",joules,"energy.potential")
+let balance = Channel("energy.balance",joules,"energy.balance")
+let ry = Channel("reference.y",metres,"reference.y")
+let rv = Channel("reference.velocity",speed,"reference.velocity")
+let weight = -mass * gravity
+let buoyancy = buoyancyForce(medium.density,volume,Vec3(0,-gravity,0)).y
+var state = Vec4(0.5,0,0,0)
+var elapsed = 0.0
+func drag(velocity: Float64) -> Float64:
+    return medium.stokesDrag(Vec3(0,velocity,0),radius).y
+func slope(value: Vec4) -> Vec4:
+    let force = drag(value.y)
+    return Vec4(value.y,(weight + buoyancy + force) / mass,-force * value.y,0)
+func measure():
+    let force = drag(state.y)
+    var re = 0.0
+    if medium.viscosity > 0:
+        re = 2 * medium.density * radius * abs(state.y) / medium.viscosity
+    assert(re <= 0.1,"Stokes tutorial requires Reynolds <= 0.1")
+    let acceleration = (weight + buoyancy) / mass
+    var exactY = 0.5 + 0.5 * acceleration * elapsed * elapsed
+    var exactV = acceleration * elapsed
+    if lambda > 0:
+        let onset = 1 - exp(-lambda * elapsed)
+        exactV = acceleration / lambda * onset
+        exactY = 0.5 + acceleration / lambda * (elapsed - onset / lambda)
+    let kinetic = 0.5 * mass * state.y * state.y
+    let potential = -(weight + buoyancy) * state.x
+    cy.sample(state.x)
+    cv.sample(state.y)
+    cm.sample(mass)
+    cw.sample(weight)
+    cb.sample(buoyancy)
+    cd.sample(force)
+    cr.sample(re)
+    ck.sample(kinetic)
+    ce.sample(state.z)
+    cp.sample(potential)
+    balance.sample(kinetic + potential + state.z)
+    ry.sample(exactY)
+    rv.sample(exactV)
+func create():
+    assert(medium.density == 0 || medium.viscosity > 0,"Nonzero fluid density requires positive viscosity")
+    metadata("model=custom-material sphere in uniform custom medium\nmaterial=custom sphere\nmedium=custom viscous fluid\nmaterial_density_kg_m3=" + String(material.density) + "\nmedium_density_kg_m3=" + String(medium.density) + "\nviscosity_pa_s=" + String(medium.viscosity) + "\nradius_m=" + String(radius) + "\nmass_kg=" + String(mass) + "\ngravity_m_s2=9.80665\nintegrator=RK4\nforces=weight, full-volume buoyancy, Stokes drag\nvalidity=Re<=0.1; lambda*dt<=0.25\nexcluded=walls, contacts, surface, added mass, history force, non-Newtonian rheology\n")
+func reset():
+    state = Vec4(0.5,0,0,0)
+    elapsed = 0
+    measure()
+func step(dt: Float64):
+    assert(lambda * dt <= 0.25,"RK4 tutorial requires lambda*dt <= 0.25")
+    let k1 = slope(state)
+    let k2 = slope(state + 0.5 * dt * k1)
+    let k3 = slope(state + 0.5 * dt * k2)
+    let k4 = slope(state + dt * k3)
+    state += dt / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
+    elapsed += dt
+    measure()
+func scene():
+    sphere(Vec3(0,state.x,0),radius,1407107839,1)
+    let forces = [weight,buoyancy,drag(state.y)]
+    let colors = [4073026303,1403973631,4118780927]
+    for i in 0..<3:
+        let start = Vec3(Float64(i+1) * 0.12,state.x,0)
+        arrow(start,start + Vec3(0,0.03 * forces[i],0),0.003,colors[i],i+2)
+    label(Vec3(-0.35,0.7,0),"Custom material + medium",3369593599,5)

@@ -3,6 +3,14 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-06. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Eigenes Material und Medium:** Ein vollständiger Lernpfad liefert gleiche
+C-/Physim-Kugelversuche und beide Analysesprachen. Eigene Materialdichte bestimmt
+die Masse; eigene Fluiddichte und Viskosität bestimmen Auftrieb und Stokes-
+Widerstand. Manifest, analytische Kontrollkanäle, Energieabrechnung und explizite
+Reynolds-/Zeitschrittgrenzen erhalten die Modellannahmen. Ein unabhängiger
+Parser prüft sieben Szenarien, Verfeinerung, alle vier Analysekombinationen und
+ungültige Modelle. [Quellen, Gleichungen und Ablauf](material-tutorial.md).
+
 **Physim-Kontaktzustände:** Sprachvertrag 0.177.0 bindet `Collider` und
 `ContactWorld` als Werte. `solve()` und `reset()` erzeugen neue unveränderliche,
 automatisch freigegebene Snapshots; Kopien, Arrays, optionale Werte,
@@ -84,7 +92,7 @@ geprüft und übernommen, nur fehlende Indizes starten erneut. Seeds, Parameter
 und feste/adaptive Zeitvorgaben bleiben erhalten. Aktuelle Editoränderungen und
 die alte Serie werden nicht verändert. Vollständig vorhandene Serien starten
 keine neuen Prozesse. Frühere Serien ohne Checkpoint bleiben nicht fortsetzbar.
-Der Katalog umfasst 550 Prüfungen ohne Fenster (535 ohne SDL) und 60 Fensterfälle.
+Der Katalog umfasst 552 Prüfungen ohne Fenster (537 ohne SDL) und 61 Fensterfälle.
 Ausgeführte Nachweise stehen im [Plattformbericht](platform-validation.md).
 
 **Eigenständige Analyseprojekte:** Die App legt jetzt C-/Physim-Auswertungen ohne

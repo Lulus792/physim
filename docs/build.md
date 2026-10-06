@@ -146,8 +146,8 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt derzeit 550 Tests ohne Fenster aus, mit `--no-app` die
-535 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
+`--test` führt derzeit 552 Tests ohne Fenster aus, mit `--no-app` die
+537 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
 Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.
@@ -230,7 +230,7 @@ und das erneute Öffnen einschließlich beschädigter Katalogdateien.
 
 ### Fenster- und Grafiktests direkt ausführen
 
-`--test-display` führt zusätzlich 60 Fenster- und Grafikabläufe aus. Dafür sind
+`--test-display` führt zusätzlich 61 Fenster- und Grafikabläufe aus. Dafür sind
 eine grafische Sitzung, SDL und ein geeigneter OpenGL-Treiber erforderlich.
 Die beiden Testgruppen werden getrennt gestartet; `--test-display` lässt sich
 nicht mit `--no-app` oder `--test` kombinieren.
@@ -326,7 +326,7 @@ Prüfsummen und benötigen keine `CMakeLists.txt`.
 ### Sprachbeispiele ohne CMake bauen
 
 `--examples` baut zusätzlich die 18 eigenständigen Sprachprogramme und alle
-33 Experiment-/Analysemodule aus dem bisherigen Sprachbeispielprojekt. Der
+35 Experiment-/Analysemodule aus dem bisherigen Sprachbeispielprojekt. Der
 Beispielbuild und die SDK-Prüfung lesen denselben Katalog. SDL ist dafür nicht nötig.
 
 ```sh
@@ -414,7 +414,7 @@ Die SDK-Prüfung kopiert und verschiebt das Paket in einen Pfad mit Leerzeichen
 und Umlaut. Sie prüft alle mitgelieferten Module, öffentliche Header einzeln,
 18 eigenständige Sprachprogramme und neu gebaute C-/Physim-Projekte samt echten
 Runnern und Mess-/Berichtsdateien. Zusätzlich werden die installierten Core-Quellen,
-alle acht C-Vorlagen samt Analyse sowie 33 Sprachmodule unabhängig neu gebaut.
+alle acht C-Vorlagen samt Analyse sowie 35 Sprachmodule unabhängig neu gebaut.
 Neun Sprachexperimente laufen mit beiden allgemeinen Sprach-Auswertungen;
 hinzu kommen die spezielle Sensoranalyse und sechs C-/Physim-Kombinationen.
 `--app-tests` ergänzt neun vollständige App-Abläufe: alle acht C-Vorlagen und
@@ -498,7 +498,7 @@ Das Skript kopiert und verschiebt das SDK in einen Pfad mit Leerzeichen und
 Umlaut. Es kontrolliert die Dateiprüfsummen und baut einen unabhängigen Verbraucher
 gegen die installierte Kernbibliothek. Jeder öffentliche Header wird separat
 kompiliert. Danach baut es die Kernbibliothek erneut aus den installierten Quellen
-und verwendet sie für acht C-Experimente und 33 Sprachmodule. Die 18 eigenständigen
+und verwendet sie für acht C-Experimente und 35 Sprachmodule. Die 18 eigenständigen
 Sprachprogramme laufen gegen die mitgelieferte Kernbibliothek.
 
 Die installierten Runner führen alle acht C-Vorlagen aus. Neun Sprach-Experimente

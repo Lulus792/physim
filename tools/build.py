@@ -39,7 +39,9 @@ def language_examples():
     return ([(name, "--emit-c", f"language/{name}.phys") for name in LANGUAGE_PROGRAMS] +
             [(name, "--emit-experiment", f"language/{name}.phys") for name in LANGUAGE_EXPERIMENTS] +
             [(name, "--emit-analysis", f"language/{name}.phys") for name in LANGUAGE_ANALYSES] +
-            [("drag_analysis", "--emit-analysis", "documentation/drag_analysis.phys")])
+            [("drag_analysis", "--emit-analysis", "documentation/drag_analysis.phys"),
+             ("material_main", "--emit-experiment", "documentation/material_main.phys"),
+             ("material_analysis", "--emit-analysis", "documentation/material_analysis.phys")])
 
 
 def run(args: list[str], env: dict[str, str], *, capture: bool = False, directory: Path | None = None) -> str:

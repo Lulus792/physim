@@ -62,5 +62,26 @@
         "language": "physim"
       }
     ]
+  },
+  "documentation_material_source": {
+    "document": "docs/material-tutorial.md",
+    "sources": [
+      {
+        "path": "examples/documentation/material_main.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/material_main.phys",
+        "language": "physim"
+      },
+      {
+        "path": "examples/documentation/material_analysis.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/material_analysis.phys",
+        "language": "physim"
+      }
+    ]
   }
 }

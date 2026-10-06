@@ -3,6 +3,90 @@
 Stand: 6. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Lernpfad eigenes Material und Medium am 6. Oktober 2026
+
+Der achte geforderte Lernpfad liefert vollständige C-/Physim-Experimente und
+Auswertungen. Ein benutzerdefiniertes Material bestimmt die Kugelmasse über
+Dichte und Volumen; benutzerdefinierte Fluiddichte und Viskosität bestimmen
+Auftrieb und Stokes-Widerstand. RK4 integriert Ort, Geschwindigkeit und
+Dissipation unabhängig von den analytischen Kontrollkanälen. Eigene,
+konservative Grenzen Re<=0,1 und lambda*dt<=0,25 werden durchgesetzt.
+Quelle, Parameter, Kräfte, Integrator und ausgeschlossene hydrodynamische
+Effekte sind dokumentiert und im Laufmanifest gespeichert. ABI, öffentliche
+Core-API, Sprachvertrag 0.177.0 und alle Dateiformate bleiben unverändert.
+
+Der unabhängige Pythonprüfer validiert CRC, alle 1001 Messzeilen und sämtliche
+Szenenfelder für sieben Konfigurationen in beiden Sprachen: Standard, Aufstieg,
+Dichtegleichheit, Viskosität, Radius, Vakuum und halbierter Zeitschritt.
+Masse, Kräfte, analytische Lösung und Energiebilanz werden unabhängig gerechnet.
+Die Halbierung verlangt mindestens Faktor 14 weniger Geschwindigkeitsfehler.
+Alle vier Experiment-/Analysesprache-Kombinationen erzeugen drei Plots mit
+sieben vollständigen Kurven und CSV; ein separater C-Prüfer vergleicht jeden
+Kurvenwert und seine SI-Dimension mit den ursprünglichen Messungen.
+Ungültige Reynolds-Zahl, Viskosität und Schrittweite werden in beiden Sprachen
+abgewiesen. Die Codeblöcke des Handbuchs werden gegen alle vier Quellen geprüft.
+
+macOS Release besteht zunächst den neuen Rechenablauf 1/1 unter
+`build/material-tutorial-release-mac/test-results/run-afa49mvr`.
+Die abschließende Paketprüfung besteht Materiallernweg, Quellcodeabgleich,
+C-Dokumentmodell und generierte Funktionsreferenz 4/4 unter
+`build/contact-world-language-release-mac/test-results/run-cd4q13l8`.
+Linux GCC Debug mit AddressSanitizer und UndefinedBehaviorSanitizer besteht
+den vollständigen neuen Referenzablauf 1/1 unter
+`build/material-tutorial-asan-linux/test-results/run-yiurqtb1`.
+macOS Release besteht Handbuchfenster und neuen C-/Physim-Fensterablauf 2/2
+unter `build/material-tutorial-release-mac/test-results/run-gpwxchvj`.
+Linux Release besteht dieselben Fensterprüfungen 2/2 mit X11/Mesa, Xvfb und
+Openbox unter `build/material-tutorial-release-linux/test-results/run-het1psio`.
+Beide Sprachprojekte werden tatsächlich angelegt, gebaut, 40 Schritte ausgeführt,
+41 Messzeilen und Szenen wieder geöffnet sowie der gespeicherte Analysebericht
+in der App geladen. Die Physim-Auswertung wurde auf macOS und Linux visuell geprüft.
+Der erste Fensteraufbau markierte die ersetzte Analysequelle nicht als geändert
+und baute deshalb die Vorlagenanalyse; die korrigierte Probe markiert beide
+Editoren und überprüft das tatsächliche Tutorialergebnis.
+
+Linux Release besteht die abschließende gezielte Paketprüfung 4/4 unter
+`build/contact-world-language-release-linux/test-results/run-4y9miqrn`.
+Die ersten SDK-Manifeste enthalten jeweils 327 Dateien und 133 Code-/Binärdateien.
+Da Apps aus unterschiedlichen Buildordnern verschiedene Binärhashes hatten,
+wurden die ausgelieferten Programme direkt geprüft: jeweils vollständiger
+C-/Physim-Materialablauf unter `build/material-tutorial-installed-gui-mac`
+beziehungsweise `build/material-tutorial-installed-gui-linux`. Beide bestehen.
+
+Die erste erweiterte SDK-Prüfung bestand den neuen Materialablauf, scheiterte
+aber danach an einem überschriebenen lokalen Prüferpfad: die Tutorialprobe
+ersetzte den allgemeinen Analyseprüfer. Ein eigener Variablenname erhält
+nun beide Prüfer; der SDK-Gesamtaufruf wurde vollständig wiederholt.
+macOS besteht diese Wiederholung unter
+`build/material-tutorial-sdk-final-proof-mac/Native SDK ä rj4l769l`.
+Sie prüft alle Header, 21 Core-Einheiten, 18 Sprachprogramme, 35 Module,
+installierte und neu gebaute C-/Physim-Materialversuche, alle vier Analysesprachen-
+Kombinationen sowie die bisherigen Spezialproben, adaptiven Studien und neun
+unabhängigen Projektneubauten. Die SDK-Prüfung selbst enthält keine GUI-Abnahme.
+
+Linux besteht den vollständig wiederholten SDK-Aufruf unter
+`build/material-tutorial-sdk-final-proof-linux/Native SDK ä s6j__27_` mit
+identischem Umfang. Der abschließend verschärfte Messdateiprüfer verlangt
+Namen und SI-Dimensionen aller 13 Kanäle; macOS besteht damit erneut 4/4 unter
+`build/contact-world-language-release-mac/test-results/run-jvgg_51u`.
+
+Linux besteht dieselben vier abschließenden Prüfungen unter
+`build/contact-world-language-release-linux/test-results/run-epardf8l`.
+Die finalen Pakete `build/Material tutorial clean SDK ä mac` und
+`build/Material tutorial clean SDK ä linux` übernehmen die geprüften SDKs
+und aktualisieren die Dokumentation. Ihre Manifeste enthalten jeweils 327
+SHA-256-geprüfte Dateien. Alle 133 Dateien unter `include`, `src`, `lib` und
+`bin` sowie alle Experiment-/Analysequellen stimmen bytegenau mit dem jeweiligen
+vollständig geprüften verschobenen SDK überein. Die App entspricht der direkt
+geprüften installierten App; der Produktionscode blieb unverändert.
+
+Der Katalog wächst auf 552 Fälle ohne Fenster (537 ohne SDL) und 61 Fensterfälle.
+Diese Änderung nutzt gezielte Prüfungen und die vollständigen SDK-Prüfungen;
+ein neuer Gesamtaufruf aller 552 beziehungsweise 61 Fälle ist nicht behauptet.
+Die vorausgehenden 550/550-Gesamtprüfungen bleiben für ihren benannten Stand
+erhalten. Materialkennwerte sind Demonstrationsdaten, keine gemessene
+Stoffdatenbank; der Lernweg übernimmt keine vollständige Flüssigkeitsdynamik.
+
 ## Physim-Kontaktzustände am 6. Oktober 2026
 
 Sprachvertrag 0.177.0 bindet die öffentliche persistente Kontaktwelt und den

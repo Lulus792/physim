@@ -29,6 +29,7 @@ Der Lauf liegt im Projekt unter `runs/`; das Schließen der App löscht ihn nich
 - **Mehrere Läufe mit Sprachcode auswerten:** Kombiniere C- und Physim-Läufe, sammle Endwerte und erzeuge Diagramm, Histogramm, Tabelle und CSV. [Mehrlaufanalyse in Physim](language-analysis-tutorial.md).
 - **Wurfparabel im Vakuum:** Baue dasselbe Experiment und dieselbe Auswertung in C und Physim-Sprache; prüfe die Werte gegen die exakte Lösung. [Vollständiger Lernpfad](projectile-tutorial.md).
 - **Wurf mit Luftwiderstand:** Ergänze eine quadratische Kraft, integriere mit RK4 und vergleiche C und Physim-Sprache an denselben Messdaten. [Vollständiger Lernpfad](projectile-drag-tutorial.md).
+- **Eigenes Material und Medium:** Leite die Kugelmasse aus einer eigenen Materialdichte ab, kombiniere Gewicht, Auftrieb und viskosen Widerstand und prüfe C-/Physim-Läufe gegen die analytische Lösung. [Vollständiger Lernpfad](material-tutorial.md).
 - **Messwerte auswerten:** Öffne einen Lauf, leite Position ab, filtere ungültige Sensorwerte und erzeuge eigene Diagramme. [Datenreihen](series.md), [Berichte und Export](reports.md), [Vergleich mehrerer Läufe](runs.md).
 - **Unsicherheit untersuchen:** Trenne Modell, Messung, Messstatus und Standardunsicherheit. [Sensoren](measurement.md), [Monte Carlo](monte-carlo.md).
 

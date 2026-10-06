@@ -214,6 +214,20 @@ def main():
         print("Installed SDK contact world: installed/rebuilt Core, analytic warm stack, lifecycle and real recorded simulations passed",flush=True)
 
 
+        for source in ("material_main", "material_analysis"):
+            shutil.copy2(sdk / "examples/documentation" / (source+".c"),consumer / (source+".c"))
+        shutil.copy2(repo / "tests/test_material_tutorial_report.c",consumer / "material-report-probe.c")
+        for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+            experiment=builder.executable("material-main-"+kind,["material_main.c"],[archive],module=True)
+            analyzer=builder.executable("material-analysis-"+kind,["material_analysis.c"],[archive],module=True)
+            material_probe=builder.executable("material-report-"+kind,["material-report-probe.c"],[archive])
+            directory=root / ("Material tutorial "+kind);directory.mkdir()
+            language_main=modules["material_main"] if kind=="rebuilt" else sdk / "bin" / ("language-material_main"+module_suffix)
+            language_analysis=modules["material_analysis"] if kind=="rebuilt" else sdk / "bin" / ("language-material_analysis"+module_suffix)
+            checked([sys.executable,repo / "tests/test_material_tutorial.py",sdk / "bin" / ("physim-runner"+suffix),
+                     sdk / "bin" / ("physim-analysis-runner"+suffix),experiment,language_main,analyzer,language_analysis,material_probe,directory])
+        print("Installed SDK material tutorial: installed/rebuilt Core, seven analytic scenarios and all four analysis combinations passed",flush=True)
+
         # Preserve the former SDK comparison: nine experiments, both general
         # Physim analyses, the sensor report and six C/Physim combinations.
         # Broader physics equivalence is checked by the normal integration suite.
@@ -282,7 +296,7 @@ def main():
             raise RuntimeError("App tests require an SDK with the app")
     (root / "PASSED.txt").write_text(
         "Native SDK relocation, independent headers, installed and rebuilt core archives, eight bundled and rebuilt C templates, "
-        "eighteen language programs, 33 rebuilt language modules, nine language experiments with both general analyses, "
+        "eighteen language programs, 35 rebuilt language modules, nine language experiments with both general analyses, "
         "specialized sensor analysis and six C/Physim combinations passed.\n"
         "Adaptive bundled/source C and Physim pendulums, actual variable sample times, energy and both analysis languages passed.\n" +
         "Common-target-time parameter studies from bundled/source C and Physim pendulums passed with installed and rebuilt probes.\n" +
@@ -291,6 +305,7 @@ def main():
         "Run indexes through installed/rebuilt Core, legacy/recovered files, allocator failures and million-row independent codec passed.\n" +
         "Indexed language values, copied owners, failure cleanup and all 256 SI report rows passed.\n" +
         "Persistent contact world and projected warm graph through installed/rebuilt Core and real C/Physim stack runners, copied snapshots and allocation failures passed.\n" +
+        "Custom material/medium tutorial through installed/rebuilt Core, analytic scenarios, C/Physim parity and all mixed analyses passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
         ("Eight C template GUI workflows and the complete Physim language GUI workflow passed.\n" if args.app_tests else ""), encoding="utf-8")
     print(f"Native SDK verified: {root}")

@@ -1366,6 +1366,40 @@
     "language-contact-stack": {
       "source": "examples/language/contact_stack.phys",
       "mode": "--emit-experiment"
+    },
+    "material-c": {
+      "sources": [
+        "examples/documentation/material_main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "material-phys": {
+      "source": "examples/documentation/material_main.phys",
+      "mode": "--emit-experiment"
+    },
+    "material-analysis-c": {
+      "sources": [
+        "examples/documentation/material_analysis.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "material-analysis-phys": {
+      "source": "examples/documentation/material_analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "material-report-probe": {
+      "sources": [
+        "tests/test_material_tutorial_report.c"
+      ],
+      "libraries": [
+        "core"
+      ]
     }
   },
   "tests": [
@@ -5409,6 +5443,84 @@
           "files": [
             "app-steps.json"
           ]
+        }
+      ]
+    },
+    {
+      "name": "material_tutorial",
+      "targets": [
+        "python",
+        "physim-runner",
+        "physim-analysis-runner",
+        "material-c",
+        "material-phys",
+        "material-analysis-c",
+        "material-analysis-phys",
+        "material-report-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_material_tutorial.py",
+            "{physim-runner}",
+            "{physim-analysis-runner}",
+            "{material-c}",
+            "{material-phys}",
+            "{material-analysis-c}",
+            "{material-analysis-phys}",
+            "{material-report-probe}",
+            "{work}"
+          ],
+          "timeout": 220
+        }
+      ]
+    },
+    {
+      "name": "material_tutorial_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "material_tutorial_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 560,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "documentation_material_source",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tutorial_sources.py",
+            "documentation_material_source",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 30
         }
       ]
     }

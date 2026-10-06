@@ -93,7 +93,9 @@ static const documentation_topic documentation_topics[] = {
     {"C: Laufdatei-Index", "docs/reference/run_index.md", false},
     {"Persistente Kontakte & Warmstart", "docs/contact-world.md", false},
     {"contact_world.h", "include/physim/contact_world.h", true},
-    {"C: Kontaktzustand", "docs/reference/contact_world.md", false}};
+    {"C: Kontaktzustand", "docs/reference/contact_world.md", false},
+    {"Eigenes Material & Medium", "docs/material-tutorial.md", false},
+};
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27
 #define DOCUMENTATION_MEASUREMENT_TOPIC 28

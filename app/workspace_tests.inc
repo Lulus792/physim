@@ -22,6 +22,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
     if(!strncmp(mode,"diagnostic-",11))return diagnostic_test_start(a,root,mode);
     if(!strncmp(mode,"frames-",7))return frame_test_start(a,root,mode);
     if(!strcmp(mode,"contact-world") || !strcmp(mode,"contact-world-phys"))return contact_world_test_start(a,root,!strcmp(mode,"contact-world-phys"));
+    if(!strncmp(mode,"material-",9))return material_test_start(a,root,mode);
     if(!strncmp(mode,"mask-",5))return series_mask_test_start(a,root,mode);
     if (!strncmp(mode, "hierarchy-", 10))
         return hierarchy_test_start(a,root,mode);
@@ -118,6 +119,7 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
     if(!strcmp(mode,"logging-c") || !strcmp(mode,"logging-phys") || !strcmp(mode,"logging-flood")){logging_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"diagnostic-",11)){diagnostic_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"frames-",7)){frame_test_frame(a,mode,stage,code,capture);return;}
+    if(!strncmp(mode,"material-",9)){material_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"contact-world") || !strcmp(mode,"contact-world-phys")){contact_world_test_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"mask-",5)){series_mask_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"pchip-",6)){pchip_test_frame(a,mode,stage,code,capture);return;}
