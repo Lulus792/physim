@@ -43,10 +43,17 @@ static ps_result measure(ps_context *c, const double *state, double time) {
         snprintf(c->error, sizeof c->error, "Stokes tutorial requires Reynolds <= 0.1"); return PS_INVALID;
     }
     double acceleration = (w + b) / s->mass, exact_y, exact_v;
-    if (s->lambda == 0) {
-        exact_y = .5 + .5 * acceleration * time * time; exact_v = acceleration * time;
+    double z = s->lambda * time;
+    if (z <= .1) {
+        double phi1 = 1, phi2 = .5, term1 = 1, term2 = .5;
+        for (unsigned k = 1; k <= 8; k++) {
+            term1 *= -z / (k + 1); term2 *= -z / (k + 2);
+            phi1 += term1; phi2 += term2;
+        }
+        exact_v = acceleration * time * phi1;
+        exact_y = .5 + acceleration * time * time * phi2;
     } else {
-        double onset = -expm1(-s->lambda * time);
+        double onset = -expm1(-z);
         exact_v = acceleration / s->lambda * onset;
         exact_y = .5 + acceleration / s->lambda * (time - onset / s->lambda);
     }

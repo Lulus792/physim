@@ -209,32 +209,6 @@ ps_document_result ps_text_document_open(ps_text_document *document, const char 
     document->length = length;
     return PS_DOCUMENT_OK;
 }
-static ps_document_result temporary_write(const char *path, const char *text, size_t length,
-                                          char temporary[4096]) {
-    FILE *f = NULL;
-    temporary[0] = 0;
-    char candidate[4096];
-    for (unsigned i = 0; i < 16 && !f; i++) {
-        int n = snprintf(candidate, sizeof candidate, "%s.tmp-%llu-%u", path,
-                         (unsigned long long)SDL_GetTicksNS(), i);
-        if (n < 0 || n >= 4096)
-            return PS_DOCUMENT_LIMIT;
-        f = fopen(candidate, "wbx");
-        if (!f && errno != EEXIST)
-            return PS_DOCUMENT_IO;
-    }
-    if (!f)
-        return PS_DOCUMENT_IO;
-    memcpy(temporary, candidate, strlen(candidate) + 1);
-    bool ok = !length || fwrite(text, 1, length, f) == length;
-    if (fclose(f))
-        ok = false;
-    if (!ok) {
-        SDL_RemovePath(temporary);
-        temporary[0] = 0;
-    }
-    return ok ? PS_DOCUMENT_OK : PS_DOCUMENT_IO;
-}
 static bool unchanged(const ps_text_document *document) {
     char *text = NULL;
     size_t length = 0;
@@ -261,10 +235,12 @@ ps_document_result ps_text_document_save(ps_text_document *document, const char 
     int n = snprintf(backup, sizeof backup, "%s.bak", document->path);
     if (n < 0 || (size_t)n >= sizeof backup)
         goto done;
-    r = temporary_write(document->path, copy, length, temporary);
+    ps_result written = ps_private_temporary_write(document->path, copy, length, document->path, temporary);
+    r = written == PS_OK ? PS_DOCUMENT_OK : written == PS_LIMIT ? PS_DOCUMENT_LIMIT : PS_DOCUMENT_IO;
     if (r != PS_DOCUMENT_OK)
         goto done;
-    r = temporary_write(backup, document->saved, document->length, backup_temporary);
+    written = ps_private_temporary_write(backup, document->saved, document->length, document->path, backup_temporary);
+    r = written == PS_OK ? PS_DOCUMENT_OK : written == PS_LIMIT ? PS_DOCUMENT_LIMIT : PS_DOCUMENT_IO;
     if (r != PS_DOCUMENT_OK)
         goto done;
     if (!unchanged(document)) {

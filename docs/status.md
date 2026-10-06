@@ -3,6 +3,16 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-06. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Korrekturen aus dem Prüfbericht vom 6. Oktober:** Hauptquellen, zusätzliche
+Texte und Autosaves erzeugen Zwischenfiles exklusiv. POSIX-Speicherung erhält
+gewöhnliche Zugriffsrechte einschließlich Ausführbarkeit; Sicherungen erweitern
+den Schutz der Quelle nicht. Die Materialreferenz bleibt bei kleiner Viskosität
+stabil. Die Standardanalyse maskiert Energie- und Periodenkennzahlen, zeichnet
+konstante große Werte endlich und weist überlaufende Statistikakkumulatoren mit
+`PS_NUMERIC` zurück. Sekanten und Trapeze vermeiden Zwischenüberläufe; fehlerhafte
+Ableitungen lassen die Ausgabe unverändert. Core-ABI und Dateiformate bleiben
+unverändert. [Verträge](reference/analysis.md), [Speicherregeln](workspace.md).
+
 **Feder-Lernpfad in C und Physim:** Beide Vorlagen erhalten einen typisierten
 Dämpfungsparameter pro Modellinstanz. Vollständige Quellen und Analysen zeigen
 vier Dämpfungsfälle, mechanische Energie, integrierte Dissipation und die maximale
@@ -99,7 +109,7 @@ geprüft und übernommen, nur fehlende Indizes starten erneut. Seeds, Parameter
 und feste/adaptive Zeitvorgaben bleiben erhalten. Aktuelle Editoränderungen und
 die alte Serie werden nicht verändert. Vollständig vorhandene Serien starten
 keine neuen Prozesse. Frühere Serien ohne Checkpoint bleiben nicht fortsetzbar.
-Der Katalog umfasst 554 Prüfungen ohne Fenster (539 ohne SDL) und 62 Fensterfälle.
+Der Katalog umfasst 555 Prüfungen ohne Fenster (540 ohne SDL) und 62 Fensterfälle.
 Ausgeführte Nachweise stehen im [Plattformbericht](platform-validation.md).
 
 **Eigenständige Analyseprojekte:** Die App legt jetzt C-/Physim-Auswertungen ohne

@@ -166,10 +166,17 @@ static ps_result measure(ps_context *c, const double *state, double time) {
         snprintf(c->error, sizeof c->error, "Stokes tutorial requires Reynolds <= 0.1"); return PS_INVALID;
     }
     double acceleration = (w + b) / s->mass, exact_y, exact_v;
-    if (s->lambda == 0) {
-        exact_y = .5 + .5 * acceleration * time * time; exact_v = acceleration * time;
+    double z = s->lambda * time;
+    if (z <= .1) {
+        double phi1 = 1, phi2 = .5, term1 = 1, term2 = .5;
+        for (unsigned k = 1; k <= 8; k++) {
+            term1 *= -z / (k + 1); term2 *= -z / (k + 2);
+            phi1 += term1; phi2 += term2;
+        }
+        exact_v = acceleration * time * phi1;
+        exact_y = .5 + acceleration * time * time * phi2;
     } else {
-        double onset = -expm1(-s->lambda * time);
+        double onset = -expm1(-z);
         exact_v = acceleration / s->lambda * onset;
         exact_y = .5 + acceleration / s->lambda * (time - onset / s->lambda);
     }
@@ -288,10 +295,23 @@ func measure():
         re = 2 * medium.density * radius * abs(state.y) / medium.viscosity
     assert(re <= 0.1,"Stokes tutorial requires Reynolds <= 0.1")
     let acceleration = (weight + buoyancy) / mass
-    var exactY = 0.5 + 0.5 * acceleration * elapsed * elapsed
-    var exactV = acceleration * elapsed
-    if lambda > 0:
-        let onset = 1 - exp(-lambda * elapsed)
+    let z = lambda * elapsed
+    var exactY = 0.5
+    var exactV = 0.0
+    if z <= 0.1:
+        var phi1 = 1.0
+        var phi2 = 0.5
+        var term1 = 1.0
+        var term2 = 0.5
+        for k in 1..<9:
+            term1 *= -z / Float64(k + 1)
+            term2 *= -z / Float64(k + 2)
+            phi1 += term1
+            phi2 += term2
+        exactV = acceleration * elapsed * phi1
+        exactY = 0.5 + acceleration * elapsed * elapsed * phi2
+    else:
+        let onset = 1 - exp(-z)
         exactV = acceleration / lambda * onset
         exactY = 0.5 + acceleration / lambda * (elapsed - onset / lambda)
     let kinetic = 0.5 * mass * state.y * state.y
@@ -408,3 +428,10 @@ func analyze():
     Series.exportColumns([time,velocity,reference,error,total],"material_check")
     run.close()
 ```
+
+Für `z = λt ≤ 0,1` berechnen beide Beispiele die Referenz mit Taylorreihen
+bis einschließlich `z⁸`. Damit bleiben Geschwindigkeit und Position auch beim
+Übergang zu verschwindender Viskosität stabil; die Subtraktion fast gleicher
+Exponentialwerte entfällt. Die erste ausgelassene Potenz beträgt im
+Geschwindigkeitsfaktor höchstens `0,1⁹ / 10!`, im Positionsfaktor
+`0,1⁹ / 11!`.

@@ -44,10 +44,23 @@ func measure():
         re = 2 * medium.density * radius * abs(state.y) / medium.viscosity
     assert(re <= 0.1,"Stokes tutorial requires Reynolds <= 0.1")
     let acceleration = (weight + buoyancy) / mass
-    var exactY = 0.5 + 0.5 * acceleration * elapsed * elapsed
-    var exactV = acceleration * elapsed
-    if lambda > 0:
-        let onset = 1 - exp(-lambda * elapsed)
+    let z = lambda * elapsed
+    var exactY = 0.5
+    var exactV = 0.0
+    if z <= 0.1:
+        var phi1 = 1.0
+        var phi2 = 0.5
+        var term1 = 1.0
+        var term2 = 0.5
+        for k in 1..<9:
+            term1 *= -z / Float64(k + 1)
+            term2 *= -z / Float64(k + 2)
+            phi1 += term1
+            phi2 += term2
+        exactV = acceleration * elapsed * phi1
+        exactY = 0.5 + acceleration * elapsed * elapsed * phi2
+    else:
+        let onset = 1 - exp(-z)
         exactV = acceleration / lambda * onset
         exactY = 0.5 + acceleration / lambda * (elapsed - onset / lambda)
     let kinetic = 0.5 * mass * state.y * state.y

@@ -21,7 +21,10 @@ typedef struct {
 ps_document_result ps_text_document_open(ps_text_document *document, const char *path);
 void ps_text_document_destroy(ps_text_document *document);
 /* Compares the current file with the saved snapshot before replacing it. Writes
- * unique sibling temporary files and a .bak copy of the previous source. A
+ * unique sibling temporary files and a .bak copy of the previous source.
+ * POSIX replacement and backup retain ordinary rwx bits; special mode bits,
+ * ACLs and extended attributes are not copied. New temporary files start at
+ * 0600. Windows uses exclusive CRT creation with inherited permissions. A
  * failed operation preserves the editor snapshot and the source file. Concurrent
  * writers between the last comparison and rename are not locked out. */
 ps_document_result ps_text_document_save(ps_text_document *document, const char *text,

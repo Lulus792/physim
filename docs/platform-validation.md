@@ -3,6 +3,71 @@
 Stand: 6. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Korrekturen des Prüfberichts am 6. Oktober 2026
+
+Die Befunde CR-001 bis CR-007 aus dem externen Prüfbericht wurden am lokalen
+Stand nachvollzogen und korrigiert. Die archivierte alte Bibliothek scheitert
+an der neuen Sekantenregression. Der konkrete Materialfall mit Dichte 10000,
+Fluiddichte `1e-20`, Radius 1 und Viskosität `1e-8` ergibt bei t=0,001 s in beiden
+korrigierten Sprachen `reference.y=0.499995096675` und
+`reference.velocity=-0.009806649999999978`. Die alte Physim-Quelle ergibt dort
+`25141055.324947417` m; die alte C-Quelle `0.49999480194206297` m.
+
+| Befund | Korrektur und Nachweis |
+| --- | --- |
+| CR-001 | Editor und Autosave erzeugen eindeutige Geschwisterdateien exklusiv. Vorhandene `.tmp`-Dateien, Verzeichnisse, Symlinks und Hardlinks bleiben erhalten. Fehlgeschlagene Veröffentlichung entfernt nur eigene Zwischenfiles. Der App-Selbsttest ruft den tatsächlichen Hauptquellen-Speicherpfad auf und prüft das fremde Symlinkziel. |
+| CR-002 | Auf POSIX starten Zwischenfiles mit `0600`; Quelle und Backup übernehmen gewöhnliche rwx-Bits. Tests erhalten `0600`, `0640`, `0700`, `0755`, einschließlich Ausführbarkeit. ACLs, xattrs und besondere Modusbits werden nicht übernommen; Windows-Rechte wurden nicht geprüft. |
+| CR-003 | Zwei Taylorfaktoren bis Ordnung acht vermeiden Auslöschung für `λt≤0,1`. 18 vollständige C-/Physim-Läufe mit logarithmischen Viskositäten, Nullfall und Übergangsbereich werden gegen ein unabhängiges Decimal-Oracle mit 80 Stellen geprüft. |
+| CR-004 | Konstante Kurven liegen in der Mitte der Zeichenfläche; skalierte Brüche vermeiden überlaufende Achsenspannen. Sieben Konstanten einschließlich `±DBL_MAX` exportieren endliche SVG-Punkte. |
+| CR-005 | Energie startet beim ersten gültigen Messwert; nur gültige Messungen tragen zur Drift bei. Lücken unterbrechen Periodenintervalle. Tests decken Status 0/2 am Anfang, in der Mitte und am Ende sowie Nulldurchgänge ab. Fehlende Kennzahlen sind im Manifest `nan`. |
+| CR-006 | Nichtendliche Statistikakkumulatoren führen vor dem Export zu `PS_NUMERIC`. Die bestehende `ps_statistics`-ABI bleibt unverändert; ihr unskaliertes `m2` begrenzt den Wertebereich. `±1` und `±1e150` stimmen mit der unabhängigen Streuung überein, `±1e200` wird kontrolliert abgewiesen. |
+| CR-007 | Skalierte Differenzen und Produkte liefern Sekante 1 für `x=y={-1e308,1e308}` und Trapezintegral `1e108`. Nichtdarstellbare Ableitungen lassen die ganze Ausgabe unverändert; Eingabe-/Ausgabealiase werden unterstützt. |
+
+Beide Release-Gesamtläufe bestehen den vollständigen aktuellen Katalog ohne
+Fenster 555/555: macOS unter
+`build/contact-world-language-release-mac/test-results/run-y6el5jvy`, Linux unter
+`build/contact-world-language-release-linux/test-results/run-7e671h5x`.
+Die C-/Physim-Module, Prozessabläufe, nativen Projektbuilds, Messarchive und
+vorhandenen Regressionen sind damit vollständig im aktuellen Katalog geprüft.
+Die 62 Fensterfälle wurden hier nur im beschriebenen Ausschnitt ausgeführt.
+
+macOS Release besteht sieben gezielte Prüfungen unter
+`build/contact-world-language-release-mac/test-results/run-wramilpq`:
+Core, neue Analysegrenzen, Autosave, Textdokumente, Projektdateien,
+Materialtutorial und dessen dokumentierte Quellen. Die App besteht die beiden
+Abläufe Autosave und Physim-Feder einschließlich der neuen Prüfung des echten
+Editor-Speicherpfads unter
+`build/contact-world-language-release-mac/test-results/run-fgh4df4a`.
+
+Zusätzlich bestehen auf macOS Dokumentwiederherstellung und Dokumentneubau
+unter `build/review-fixes-gui-mac/documents_recovery` beziehungsweise
+`build/review-fixes-gui-mac/documents_build`, jeweils mit `app-steps.json`.
+Unter Linux bestehen alle vier App-Abläufe (Autosave, Physim-Feder,
+Dokumentwiederherstellung und Dokumentneubau) unter
+`build/review-fixes-gui-linux/<Fall>`; der Sammellog ist
+`build/review-fixes-gui-linux.log`. Die Linux-Fenster liefen tatsächlich unter
+X11, Xvfb und Openbox mit Mesa; die macOS-Fenster im nativen Desktop.
+
+Die abschließenden zusätzlichen Kollisionszusicherungen prüfen auch die
+Identität beziehungsweise den Inhalt des vorbestehenden temporären Pfades.
+Autosave, Textdokumente und Analysegrenzen bestehen erneut 3/3 auf macOS unter
+`build/contact-world-language-release-mac/test-results/run-8vcz30cv` und Linux
+unter `build/contact-world-language-release-linux/test-results/run-3wpn5bu8`.
+Der tatsächliche Editorpfad mit erhaltener Symlinkidentität besteht erneut im
+Physim-Federablauf unter `build/review-final-gui-mac` und
+`build/review-final-gui-linux`, jeweils mit `app-steps.json`. Eine getrennte
+macOS-Probe gegen den aktuellen Core prüft die vollständige Ausgabeerhaltung
+auch nach bereits berechneten gültigen Ableitungen unter
+`build/review-final-analysis-mac`.
+
+Linux GCC Debug mit AddressSanitizer und UndefinedBehaviorSanitizer besteht
+Core, Analysegrenzen, Messmasken und Materialtutorial 4/4 unter
+`build/spring-tutorial-asan-linux/test-results/run-n_2va9lb`.
+Die Compiler-, Betriebssystem- und SDL-Versionen entsprechen den folgenden
+macOS-Intel- und Debian-12-Nachweisen. Core-API/ABI, Sprachvertrag und Dateiformate
+bleiben unverändert. Diese Nachprüfung ist keine Fehlerfreiheitszusage für den
+übrigen Code und keine vollständige Abnahme des Projektplans.
+
 ## Feder-Lernpfad in beiden Sprachen am 6. Oktober 2026
 
 C- und Physim-Federvorlagen definieren die Dämpfung jetzt als typisierten

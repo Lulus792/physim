@@ -70,7 +70,7 @@ nicht automatisch überschrieben. Die gespeicherten Quellen bleiben bearbeitbar;
 die Seitenleiste meldet **Autosave pausiert**. Zum erneuten Aktivieren die Datei
 `.physim-autosave` außerhalb der App an einen anderen Ort sichern, aus dem Projektordner
 entfernen und das Projekt erneut öffnen. Eine allein zurückgebliebene
-`.physim-autosave.tmp` stammt von einem unvollständigen Schreibvorgang und wird beim
+`.physim-autosave.tmp-*` stammt von einem unvollständigen Schreibvorgang und wird beim
 Öffnen ignoriert. Die letzte vollständig übernommene Sicherung bleibt maßgeblich.
 
 ## Speicherformat
@@ -81,7 +81,10 @@ der Sicherung. Vier Längenfelder begrenzen den Gesamtinhalt auf 1 MiB Text; ein
 CRC-32 schützt Header und Inhalt vor unbemerkter Beschädigung. Beim Lesen werden
 auch Version, reservierte Felder, UTF-8 und das exakte Dateiende geprüft.
 
-Die App schreibt zuerst eine vollständige temporäre Datei, schließt sie und ersetzt
+Die App legt exklusiv eine eindeutige Geschwisterdatei mit `.tmp-*` an. Bereits
+vorhandene Kandidaten bleiben erhalten; nur selbst angelegte Dateien werden entfernt.
+Unter macOS und Linux erhält die Sicherung von Anfang an Modus `0600`.
+Die App schreibt die vollständige temporäre Datei, schließt sie und ersetzt
 danach die vorherige Sicherung durch Umbenennen. Beide Editorinhalte gehören dadurch
 immer zur selben Sicherung. Es gibt keine Zusage für Stromausfälle, defekte Datenträger
 oder besondere Netzwerkdateisysteme. Die beiden eigentlichen Quelldateien werden

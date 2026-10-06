@@ -84,4 +84,29 @@ for name,extra in [('unstable',['--dt','.01']),('inviscid-fluid',['--param','vis
     for language,module in [('c',c_model),('phys',phys_model)]:
         result=run([runner,module,work/f'invalid-{name}-{language}.psrun','--steps','1000','--dt','.001',*extra]);assert result.returncode!=0,(name,language)
         assert b'lambda*dt' in result.stderr if name=='unstable' else b'positive viscosity' in result.stderr if name=='inviscid-fluid' else b'Reynolds' in result.stderr,(name,result.stderr)
+# 80-digit oracle detects cancellation independently of C/Physim parity.
+from decimal import Decimal, localcontext
+with localcontext() as context:
+    context.prec=80
+    for viscosity in (0,1e-12,1e-8,1e-4,1,200,222.222,222.223,1000):
+        rate=4.5e-4*viscosity
+        dt=.001
+        for language,module in [('c',c_model),('phys',phys_model)]:
+            path=work/f'phi-{viscosity}-{language}.psrun'
+            result=run([runner,module,path,'--steps','1000','--dt',str(dt),'--record-scenes',
+                        '--param','materialDensity=10000','--param','mediumDensity=0',
+                        '--param','radius=1','--param',f'viscosity={viscosity}'])
+            assert result.returncode==0,(viscosity,language,result.stderr)
+            rows,_,_=read(path)
+            lam=Decimal(str(rate));acc=Decimal('-9.80665')
+            for row in rows:
+                t=Decimal(str(row[0]))
+                if lam:
+                    onset=1-(-lam*t).exp()
+                    ey=Decimal('.5')+acc/lam*(t-onset/lam)
+                    ev=acc/lam*onset
+                else:ey=Decimal('.5')+acc*t*t/2;ev=acc*t
+                assert close(row[12],float(ey),2e-13),(viscosity,language,row[0],row[12],ey)
+                assert close(row[13],float(ev),2e-13),(viscosity,language,row[0],row[13],ev)
+print('Material reference: 18 logarithmic C/Physim runs against 80-digit Decimal oracle passed')
 print('Material tutorial: seven analytic scenarios, complete C/Physim measurements/scenes, fourth-order refinement, four mixed analyses and six rejected models passed')

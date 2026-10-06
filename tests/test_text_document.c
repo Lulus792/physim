@@ -8,6 +8,7 @@
 #include <windows.h>
 #else
 #include <unistd.h>
+#include <sys/stat.h>
 #endif
 #define CHECK(x)                                                                                   \
     do {                                                                                           \
@@ -72,9 +73,9 @@ int main(int argc, char **argv) {
     draft = NULL;
     snprintf(temporary, sizeof temporary, "%s.tmp", draft_path);
     CHECK(SDL_CreateDirectory(temporary));
-    CHECK(ps_document_draft_write(drafts, &doc, "new", 3, 124) == PS_IO);
+    CHECK(ps_document_draft_write(drafts, &doc, "new", 3, 124) == PS_OK);
     CHECK(ps_document_draft_read(drafts, doc.path, &draft) == PS_OK);
-    CHECK(!strcmp(draft->text[0], "draft γ"));
+    CHECK(!strcmp(draft->text[0], "new"));
     CHECK(SDL_RemovePath(temporary));
     /* A valid bundle for another source at the same cache key is never replaced. */
     char *original_path = draft->text[1];
@@ -110,6 +111,16 @@ int main(int argc, char **argv) {
     CHECK(SDL_RemovePath(backup));
     CHECK(ps_text_document_save(&doc, NULL, 0) == PS_DOCUMENT_OK);
     CHECK(matches(path, "") && matches(backup, "external"));
+#ifndef _WIN32
+    const unsigned modes[]={0600,0640,0700,0755};
+    for(unsigned i=0;i<4;i++) {
+        CHECK(!chmod(path,modes[i]));
+        CHECK(ps_text_document_save(&doc,"mode",4)==PS_DOCUMENT_OK);
+        struct stat source_info,backup_info;
+        CHECK(!stat(path,&source_info) && !stat(backup,&backup_info));
+        CHECK((source_info.st_mode&0777)==modes[i] && (backup_info.st_mode&0777)==modes[i]);
+    }
+#endif
     char *large = malloc(PS_SOURCE_MAX_BYTES + 1);
     CHECK(large);
     memset(large, 'a', PS_SOURCE_MAX_BYTES + 1);

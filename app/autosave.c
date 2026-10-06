@@ -1,11 +1,64 @@
+#ifndef _WIN32
+#define _POSIX_C_SOURCE 200809L
+#endif
 #include "autosave.h"
 #include "physim/data.h"
 #include <SDL3/SDL_filesystem.h>
+#include <SDL3/SDL_timer.h>
+#ifndef _WIN32
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#endif
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+/* Exclusive creation protects existing regular files, links and directories.
+ * POSIX content is private from creation, including while still being written. */
+ps_result ps_private_temporary_write(const char *path, const void *bytes, size_t length,
+                                     const char *mode_source, char temporary[4096]) {
+    temporary[0] = 0;
+#ifndef _WIN32
+    mode_t mode = 0600;
+    struct stat metadata;
+    if (mode_source) {
+        if (stat(mode_source, &metadata)) return PS_IO;
+        mode = metadata.st_mode & 0777; /* Never copy set-ID or sticky bits. */
+    }
+#else
+    (void)mode_source;
+#endif
+    FILE *f = NULL;
+    char candidate[4096];
+    for (unsigned i = 0; i < 16 && !f; i++) {
+        int n = snprintf(candidate, sizeof candidate, "%s.tmp-%llu-%u", path,
+                         (unsigned long long)SDL_GetTicksNS(), i);
+        if (n < 0 || n >= 4096) return PS_LIMIT;
+#ifdef _WIN32
+        f = fopen(candidate, "wbx");
+#else
+        int fd = open(candidate, O_WRONLY | O_CREAT | O_EXCL, 0600);
+        if (fd >= 0) {
+            f = fdopen(fd, "wb");
+            if (!f) { close(fd); SDL_RemovePath(candidate); return PS_IO; }
+        }
+#endif
+        if (!f && errno != EEXIST) return PS_IO;
+    }
+    if (!f) return PS_IO;
+    bool ok = !length || fwrite(bytes, 1, length, f) == length;
+#ifndef _WIN32
+    /* Flush content before applying the original access mode; failure never
+     * publishes the replacement. Backups use the same original permissions. */
+    if (fflush(f) || (ok && fchmod(fileno(f), mode))) ok = false;
+#endif
+    if (fclose(f)) ok = false;
+    if (!ok) { SDL_RemovePath(candidate); return PS_IO; }
+    memcpy(temporary, candidate, strlen(candidate) + 1);
+    return PS_OK;
+}
 bool ps_source_text_valid(const char *text, size_t length) {
     if ((!text && length) || length > PS_SOURCE_MAX_BYTES)
         return false;
@@ -73,9 +126,6 @@ ps_result ps_autosave_write(const char *path, const ps_autosave *s) {
         size += s->length[i];
     }
     char temp[4096];
-    int n = snprintf(temp, sizeof temp, "%s.tmp", path);
-    if (n < 0 || (size_t)n >= sizeof temp)
-        return PS_LIMIT;
     unsigned char *bytes = calloc(size, 1);
     if (!bytes)
         return PS_MEMORY;
@@ -90,13 +140,11 @@ ps_result ps_autosave_write(const char *path, const ps_autosave *s) {
         offset += s->length[i];
     }
     put32(bytes + 36, ps_crc32(bytes, size));
-    FILE *f = fopen(temp, "wb");
-    bool ok = f && fwrite(bytes, 1, size, f) == size;
-    if (f && fclose(f))
-        ok = false;
+    ps_result result = ps_private_temporary_write(path, bytes, size, NULL, temp);
     free(bytes);
-    if (ok)
-        ok = SDL_RenamePath(temp, path);
+    if (result != PS_OK) return result;
+    bool ok = SDL_RenamePath(temp, path);
+    if (!ok) SDL_RemovePath(temp);
     return ok ? PS_OK : PS_IO;
 }
 ps_result ps_autosave_read(const char *path, ps_autosave **out) {

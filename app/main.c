@@ -36,6 +36,10 @@ static const ps_ui_palette *ui_palette = &PS_UI_DARK;
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#ifndef _WIN32
+#include <sys/stat.h>
+#include <unistd.h>
+#endif
 /* Preserve the surrounding disabled state for nested control groups. */
 static bool disabled_stack[16];
 static int disabled_depth;
@@ -535,7 +539,6 @@ static bool copy_file_mode(const char *src, const char *dst, const char *mode) {
         ok = false;
     return ok;
 }
-static bool copy_file(const char *src, const char *dst) { return copy_file_mode(src, dst, "wb"); }
 static bool copy_file_exclusive(const char *src, const char *dst) {
     return copy_file_mode(src, dst, "wbx");
 }
@@ -610,21 +613,23 @@ static bool load_editor(struct nk_text_edit *edit, const char *path) {
     return ok;
 }
 static bool save_editor(struct nk_text_edit *edit, const char *path) {
-    char tmp[4096], backup[4096];
-    snprintf(tmp, sizeof tmp, "%s.tmp", path);
-    snprintf(backup, sizeof backup, "%s.bak", path);
-    FILE *f = fopen(tmp, "wb");
-    if (!f)
-        return false;
     int n = nk_str_len_char(&edit->string);
-    bool ok = !n || fwrite(nk_str_get_const(&edit->string), 1, (size_t)n, f) == (size_t)n;
-    if (fclose(f))
-        ok = false;
-    if (!ok)
+    if (n < 0) return false;
+    const char *text = nk_str_get_const(&edit->string);
+    if (exists(path)) {
+        ps_text_document document = {0};
+        bool ok = ps_text_document_open(&document, path) == PS_DOCUMENT_OK &&
+                  ps_text_document_save(&document, text, (size_t)n) == PS_DOCUMENT_OK;
+        ps_text_document_destroy(&document);
+        return ok;
+    }
+    if (!ps_source_text_valid(text, (size_t)n)) return false;
+    char temporary[4096];
+    if (ps_private_temporary_write(path, text, (size_t)n, NULL, temporary) != PS_OK)
         return false;
-    if (exists(path) && !copy_file(path, backup))
-        return false;
-    return SDL_RenamePath(tmp, path);
+    bool ok = SDL_RenamePath(temporary, path);
+    if (!ok) SDL_RemovePath(temporary);
+    return ok;
 }
 static bool save_project_settings(app *a) {
     char path[4096];
@@ -683,6 +688,39 @@ static bool test_editor_failed_import(app *a) {
     }
     if (remove(path))
         ok = false;
+    return ok;
+}
+/* Exercises the actual primary-editor path using only self-test fixtures. */
+static bool test_editor_safe_save(app *a) {
+    char source[4096], foreign[4096], candidate[4096], backup[4096];
+    join(source,sizeof source,a->project,"safe-save-test.c");
+    join(foreign,sizeof foreign,a->project,"safe-save-foreign.txt");
+    int n=snprintf(candidate,sizeof candidate,"%s.tmp",source);
+    if(n<0 || n>=(int)sizeof candidate)return false;
+    n=snprintf(backup,sizeof backup,"%s.bak",source);
+    if(n<0 || n>=(int)sizeof backup)return false;
+    FILE *f=fopen(foreign,"wbx");if(!f)return false;
+    bool ok=fputs("foreign contents",f)>=0;
+    if(fclose(f))ok=false;
+    struct nk_text_edit edit;nk_textedit_init_default(&edit);
+    ok=ok && set_editor_text(&edit,"source one",10) && save_editor(&edit,source);
+#ifndef _WIN32
+    if(ok)ok=!chmod(source,0700) && !symlink(foreign,candidate);
+#else
+    if(ok){f=fopen(candidate,"wbx");ok=f && fputs("foreign contents",f)>=0;if(f && fclose(f))ok=false;}
+#endif
+    ok=ok && set_editor_text(&edit,"source two",10) && save_editor(&edit,source);
+    size_t size=0;char *bytes=load_utf8_text(foreign,&size);
+    ok=ok && bytes && size==16 && !memcmp(bytes,"foreign contents",16);free(bytes);
+    bytes=load_utf8_text(backup,&size);
+    ok=ok && bytes && size==10 && !memcmp(bytes,"source one",10);free(bytes);
+#ifndef _WIN32
+    struct stat x,y;
+    ok=ok && !stat(source,&x) && !stat(backup,&y) && (x.st_mode&0777)==0700 && (y.st_mode&0777)==0700;
+    ok=ok && !lstat(candidate,&x) && S_ISLNK(x.st_mode);
+#endif
+    nk_textedit_free(&edit);
+    SDL_RemovePath(candidate);SDL_RemovePath(source);SDL_RemovePath(backup);SDL_RemovePath(foreign);
     return ok;
 }
 // clang-format off
@@ -3012,8 +3050,8 @@ int main(int argc, char **argv) {
             fprintf(stderr, "Self-test requires a new writable project directory.\n");
             a->quitting = true;
             exit_code = 1;
-        } else if (!test_editor_failed_import(a)) {
-            status(a, "SELF-TEST: Fehlerhafter Import hat den Editorzustand veraendert.");
+        } else if (!test_editor_failed_import(a) || !test_editor_safe_save(a)) {
+            status(a, "SELF-TEST: Import oder sicheres Speichern fehlgeschlagen.");
             a->quitting = true;
             exit_code = 1;
         } else {

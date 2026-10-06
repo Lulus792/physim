@@ -10,8 +10,13 @@ typedef struct {
     uint32_t length[4];
     uint64_t saved_at_s;
 } ps_autosave;
+/* Internal shared persistence helper. POSIX files start at 0600; mode_source
+ * copies ordinary rwx bits before publication. Does not copy ACLs/xattrs.
+ * On success caller owns temporary; on failure no owned file remains. */
+ps_result ps_private_temporary_write(const char *path, const void *bytes, size_t length,
+                                     const char *mode_source, char temporary[4096]);
 bool ps_source_text_valid(const char *text, size_t length);
-/* Write a complete CRC-protected bundle to path.tmp, close, then replace path.
+/* Write a complete CRC-protected bundle to an exclusive sibling file, close, then replace path.
  * A failed write never replaces the previous snapshot. Caller owns the path;
  * concurrent writers to one project are unsupported. No power-loss guarantee. */
 ps_result ps_autosave_write(const char *path, const ps_autosave *snapshot);

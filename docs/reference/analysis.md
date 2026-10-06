@@ -33,6 +33,8 @@ Fügt einer mit null initialisierten Statistik einen Wert hinzu; Mittelwert und 
 void ps_statistics_push(ps_statistics *stats, double value);
 ```
 
+Welford accumulation stores the unscaled squared deviation in m2. Very large finite inputs may overflow it; check mean/m2 before using the result. ps_series_statistics and ps_analyze_run return PS_NUMERIC in that case.
+
 ## ps_statistics_stddev
 
 Liefert die Stichprobenstandardabweichung der gesammelten Werte; für eine Aussage sind mindestens zwei Werte nötig.
@@ -49,6 +51,8 @@ Schreibt Sekantenableitungen dy/dx in out, mit einseitigen Rändern.
 ps_result ps_derivative(const double *x, const double *y, size_t n, double *out);
 ```
 
+Finite, strictly increasing x; finite y; n>=2. Output may alias inputs. PS_NUMERIC for an unrepresentable slope; all failures leave out unchanged.
+
 ## ps_trapezoid
 
 Berechnet das bestimmte Integral der Werte y über x mit der Trapezregel.
@@ -56,6 +60,8 @@ Berechnet das bestimmte Integral der Werte y über x mit der Trapezregel.
 ```c
 double ps_trapezoid(const double *x, const double *y, size_t n);
 ```
+
+Finite strictly increasing x, finite y, n>=2. NAN for invalid input or an unrepresentable interval/partial sum.
 
 ### ps_analysis_api
 
@@ -88,4 +94,4 @@ Schreibt Standardstatistik, Vorschau und Analysemanifest für einen gespeicherte
 ps_result ps_analyze_run(const char *input_run, const char *output_prefix);
 ```
 
-Streaming statistics, bounded preview SVG and CSV table. Prefix is a filename prefix. Energy deviation uses energy.balance when present, otherwise energy; the manifest records energy_metric_channel. Sources are expected to use SI. Associated measurement .status channels mask statistics (only status=1). Empty statistics and the standard deviation for n<2 are blank in CSV.
+Streaming statistics, bounded preview SVG and CSV table. Prefix is a filename prefix. Energy deviation uses energy.balance when present, otherwise energy; the manifest records energy_metric_channel. Sources are expected to use SI. Associated measurement .status channels mask statistics and energy/period metrics (only status=1); gaps interrupt period counting. Missing energy deviation is nan in the manifest. PS_NUMERIC precedes export on statistical accumulator overflow; the unscaled variance range is the limiting factor. Empty statistics and the standard deviation for n<2 are blank in CSV.

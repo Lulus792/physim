@@ -2,6 +2,7 @@
 #include <float.h>
 #include <math.h>
 #include <string.h>
+#include <stdlib.h>
 void ps_statistics_push(ps_statistics *s, double x) {
     if (!s || !isfinite(x))
         return;
@@ -19,28 +20,60 @@ void ps_statistics_push(ps_statistics *s, double x) {
 double ps_statistics_stddev(const ps_statistics *s) {
     return s && s->count > 1 ? sqrt(s->m2 / (double)(s->count - 1)) : 0;
 }
+/* Scale only overflowing differences. Scaling both operands preserves a
+ * representable secant even when dy and dx themselves exceed DBL_MAX. */
+static double secant(double xa, double xb, double ya, double yb) {
+    double dx = xb - xa, dy = yb - ya;
+    int shift_x = !isfinite(dx), shift_y = !isfinite(dy);
+    if (shift_x) dx = xb * .5 - xa * .5;
+    if (shift_y) dy = yb * .5 - ya * .5;
+    int ex, ey;
+    double mx = frexp(dx, &ex), my = frexp(dy, &ey);
+    return scalbn(my / mx, ey - ex + shift_y - shift_x);
+}
 ps_result ps_derivative(const double *x, const double *y, size_t n, double *out) {
-    if (!x || !y || !out || n < 2)
-        return PS_INVALID;
+    if (!x || !y || !out || n < 2) return PS_INVALID;
     for (size_t i = 0; i < n; i++)
         if (!isfinite(x[i]) || !isfinite(y[i]) || (i && x[i] <= x[i - 1]))
             return PS_INVALID;
+    if (n > SIZE_MAX / sizeof(double)) return PS_LIMIT;
+    double *values = malloc(n * sizeof *values);
+    if (!values) return PS_MEMORY;
     for (size_t i = 0; i < n; i++) {
         size_t a = i ? i - 1 : 0, b = i + 1 < n ? i + 1 : n - 1;
-        out[i] = (y[b] - y[a]) / (x[b] - x[a]);
+        values[i] = secant(x[a], x[b], y[a], y[b]);
+        if (!isfinite(values[i])) { free(values); return PS_NUMERIC; }
     }
+    memcpy(out, values, n * sizeof *out);
+    free(values);
     return PS_OK;
 }
 double ps_trapezoid(const double *x, const double *y, size_t n) {
-    if (!x || !y || n < 2)
-        return NAN;
-    double s = 0;
+    if (!x || !y || n < 2) return NAN;
+    for (size_t i = 0; i < n; i++)
+        if (!isfinite(x[i]) || !isfinite(y[i]) || (i && x[i] <= x[i - 1])) return NAN;
+    double sum = 0;
     for (size_t i = 1; i < n; i++) {
-        if (x[i] <= x[i - 1])
-            return NAN;
-        s += (x[i] - x[i - 1]) * (y[i] + y[i - 1]) / 2;
+        double width = x[i] - x[i - 1], average = y[i] * .5 + y[i - 1] * .5;
+        int extra = !isfinite(width), ew, ea;
+        if (extra) width = x[i] * .5 - x[i - 1] * .5;
+        /* Preserve subnormal means by scaling the sum upwards when needed. */
+        int small = fabs(y[i]) < DBL_MIN && fabs(y[i - 1]) < DBL_MIN;
+        if (small) average = y[i] + y[i - 1];
+        double mw = frexp(width, &ew), ma = frexp(average, &ea);
+        double area = scalbn(mw * ma, ew + ea + extra - small);
+        sum += area;
+        if (!isfinite(area) || !isfinite(sum)) return NAN;
     }
-    return s;
+    return sum;
+}
+/* Fraction on a finite axis without overflowing its span. Constants sit in
+ * the middle; labels retain their exact finite value rather than a fake span. */
+static double axis_fraction(double value, double lo, double hi) {
+    if (lo == hi) return .5;
+    double scale = fmax(fabs(lo), fabs(hi));
+    if (scale > 1) return (value / scale - lo / scale) / (hi / scale - lo / scale);
+    return (value - lo) / (hi - lo);
 }
 static void xml(FILE *f, const char *s) {
     for (; *s; s++) {
@@ -82,7 +115,7 @@ ps_result ps_analyze_run(const char *input, const char *prefix) {
     double t, v[PS_MAX_CHANNELS], initial_energy = 0, max_drift = 0, previous_t = 0,
                                   previous_angle = 0, last_cross = 0, period_sum = 0;
     unsigned periods = 0;
-    bool had_cross = false;
+    bool had_cross = false, had_angle = false, had_energy = false;
     int energy = -1, angle = -1, balance = -1;
     for (uint32_t i = 0; i < r.channels; i++) {
         if (!strcmp(r.schema[i].name, "energy"))
@@ -101,20 +134,26 @@ ps_result ps_analyze_run(const char *input, const char *prefix) {
                 ps_run_reader_close(&r);
                 return PS_CORRUPT;
             }
-            if (status < 0 || v[status] == 1)
+            if (status < 0 || v[status] == 1) {
                 ps_statistics_push(&stats[i], v[i]);
+                if (!isfinite(stats[i].mean) || !isfinite(stats[i].m2)) {
+                    ps_run_reader_close(&r);
+                    return PS_NUMERIC;
+                }
+            }
         }
-        if (energy >= 0) {
-            if (r.samples == 1)
-                initial_energy = v[energy];
+        if (energy >= 0 && (status_channels[energy] < 0 || v[status_channels[energy]] == 1)) {
+            if (!had_energy) initial_energy = v[energy];
+            had_energy = true;
             double drift = fabs(v[energy] - initial_energy);
+            if (!isfinite(drift)) { ps_run_reader_close(&r); return PS_NUMERIC; }
             if (drift > max_drift)
                 max_drift = drift;
         }
-        if (angle >= 0) {
-            if (r.samples > 1 && previous_angle < 0 && v[angle] >= 0) {
+        if (angle >= 0 && (status_channels[angle] < 0 || v[status_channels[angle]] == 1)) {
+            if (had_angle && previous_angle < 0 && v[angle] >= 0) {
                 double cross =
-                    previous_t + (t - previous_t) * (-previous_angle) / (v[angle] - previous_angle);
+                    previous_t + (t - previous_t) * axis_fraction(0, previous_angle, v[angle]);
                 if (had_cross) {
                     period_sum += cross - last_cross;
                     periods++;
@@ -123,6 +162,10 @@ ps_result ps_analyze_run(const char *input, const char *prefix) {
                 had_cross = true;
             }
             previous_angle = v[angle];
+            had_angle = true;
+        } else {
+            had_angle = false;
+            had_cross = false; /* Never interpolate or count intervals through a gap. */
         }
         previous_t = t;
     }
@@ -168,7 +211,7 @@ ps_result ps_analyze_run(const char *input, const char *prefix) {
     fprintf(manifest,
             "analysis_api=%u\ninput=%s\nsamples=%llu\nrecovered=%d\nmax_energy_drift_J=%."
             "17g\nperiod_s=%.17g\nperiod_intervals=%u\nenergy_metric_channel=%s\n%s",
-            PS_API_VERSION, input, (unsigned long long)count, recovered, max_drift,
+            PS_API_VERSION, input, (unsigned long long)count, recovered, had_energy ? max_drift : NAN,
             periods ? period_sum / periods : NAN, periods,
             energy >= 0 ? r.schema[energy].name : "none", r.metadata);
     if (ferror(manifest))
@@ -176,17 +219,13 @@ ps_result ps_analyze_run(const char *input, const char *prefix) {
     if (fclose(manifest))
         bad = true;
     printf("Samples: %llu%s\n", (unsigned long long)count, recovered ? " (recovered)" : "");
-    if (energy >= 0)
+    if (had_energy)
         printf("Maximum %s deviation: %.9g J\n", balance >= 0 ? "energy balance" : "energy",
                max_drift);
     if (periods)
         printf("Period: %.9g s (%u intervals)\n", period_sum / periods, periods);
     uint32_t index = energy >= 0 ? (uint32_t)energy : 0;
     double lo = stats[index].min, hi = stats[index].max;
-    if (hi - lo < 1e-12) {
-        lo -= 0.5;
-        hi += 0.5;
-    }
     snprintf(name, sizeof name, "%s-plot.svg", prefix);
     FILE *svg = fopen(name, "wx");
     if (!svg) {
@@ -216,7 +255,7 @@ ps_result ps_analyze_run(const char *input, const char *prefix) {
         if ((status_channels[index] < 0 || v[status_channels[index]] == 1) &&
             ((r.samples - 1) % stride == 0 || r.samples == count))
             fprintf(svg, "%.3f,%.3f ", 70 + (previous_t > 0 ? t / previous_t : 0) * 970,
-                    530 - (v[index] - lo) / (hi - lo) * 410);
+                    530 - axis_fraction(v[index], lo, hi) * 410);
     }
     fputs("\"/></svg>\n", svg);
     if (ferror(svg))

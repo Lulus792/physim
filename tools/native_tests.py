@@ -59,6 +59,7 @@ def catalog():
                           ("language",), timeout=120))
     cases.extend([
         Case("language_contact_world_memory", ("tests/test_language_contact_world_memory.c",)),
+        Case("analysis_extremes", ("tests/test_analysis_extremes.c",), arguments=("{work}",)),
         Case("diagnostic", ("tests/test_diagnostic.c",), arguments=("{work}",)),
         Case("logging", ("tests/test_logging.c",)),
         Case("series_mask",("tests/test_series_mask.c",),arguments=("{work}",)),

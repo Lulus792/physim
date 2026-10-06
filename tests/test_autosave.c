@@ -1,9 +1,16 @@
+#ifndef _WIN32
+#define _POSIX_C_SOURCE 200809L
+#endif
 #include "autosave.h"
 #include "physim/data.h"
 #include <SDL3/SDL_filesystem.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifndef _WIN32
+#include <sys/stat.h>
+#include <unistd.h>
+#endif
 #define CHECK(x)                                                                                   \
     do {                                                                                           \
         if (!(x)) {                                                                                \
@@ -69,21 +76,42 @@ int main(void) {
     /* Failed temporary-file creation preserves the previous complete generation. */
     CHECK(SDL_CreateDirectory("autosave fixture ä/draft.psauto.tmp"));
     original.saved_at_s++;
-    CHECK(ps_autosave_write(path, &original) == PS_IO);
+    CHECK(ps_autosave_write(path, &original) == PS_OK);
     ps_autosave *preserved = NULL;
     CHECK(ps_autosave_read(path, &preserved) == PS_OK &&
-          preserved->saved_at_s + 1 == original.saved_at_s &&
+          preserved->saved_at_s == original.saved_at_s &&
           !strcmp(preserved->text[0], old->text[0]));
     ps_autosave_destroy(preserved);
     CHECK(SDL_RemovePath("autosave fixture ä/draft.psauto.tmp"));
     CHECK(SDL_CreateDirectory("autosave fixture ä/occupied.psauto"));
     CHECK(ps_autosave_write("autosave fixture ä/occupied.psauto", &original) == PS_IO);
-    CHECK(SDL_RemovePath("autosave fixture ä/occupied.psauto.tmp"));
+
     CHECK(SDL_RemovePath("autosave fixture ä/occupied.psauto"));
     CHECK(ps_autosave_write(path, &original) == PS_OK);
     CHECK(ps_autosave_read(path, &preserved) == PS_OK &&
           preserved->saved_at_s == original.saved_at_s);
     ps_autosave_destroy(preserved);
+#ifndef _WIN32
+    struct stat metadata;
+    CHECK(!stat(path,&metadata) && (metadata.st_mode & 0777)==0600);
+    const char *candidate="autosave fixture ä/draft.psauto.tmp";
+    for(unsigned kind=0;kind<3;kind++) {
+        CHECK(write_bytes(bad,"foreign",7));
+        CHECK(kind==0 ? write_bytes(candidate,"foreign",7) :
+              kind==1 ? !symlink("bad.psauto",candidate) : !link(bad,candidate));
+        CHECK(ps_autosave_write(path,&original)==PS_OK);
+        FILE *foreign=fopen(bad,"rb");char data[8]={0};CHECK(foreign && fread(data,1,7,foreign)==7);
+        CHECK(!fclose(foreign) && !strcmp(data,"foreign"));
+        if (kind==0) {
+            foreign=fopen(candidate,"rb");memset(data,0,sizeof data);
+            CHECK(foreign && fread(data,1,7,foreign)==7);
+            CHECK(!fclose(foreign) && !strcmp(data,"foreign"));
+        }
+        CHECK(!lstat(candidate,&metadata));
+        CHECK(kind==1 ? S_ISLNK(metadata.st_mode) : S_ISREG(metadata.st_mode));
+        CHECK(SDL_RemovePath(candidate));
+    }
+#endif
     const char *invalid[] = {"\xc0\xaf", "\xed\xa0\x80", "\xf4\x90\x80\x80", "\xe2\x82", "\x80",
                              "\x01",     "\x7f"};
     for (unsigned i = 0; i < sizeof invalid / sizeof invalid[0]; i++)

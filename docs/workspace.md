@@ -406,3 +406,13 @@ Metadatenplatz startet der adaptive Runner keine unvollständig beschriebene Dat
 Ein anderer Integrator, andere Toleranzen oder andere Grenzen können die Messzeiten
 und damit zeitabhängige Sensor-/Zufallsaufrufe ändern. Ein Vergleich solcher Modelle
 verwendet gemeinsame Zeitpunkte beziehungsweise Resampling.
+
+### Zugriffsrechte beim Speichern
+
+Unter macOS und Linux erhalten gespeicherte Quellen und ihre `.bak`-Kopien die
+bisherigen gewöhnlichen Lese-, Schreib- und Ausführungsrechte (beispielsweise
+`0600` oder `0755`). Zwischenfiles werden exklusiv mit `0600` erzeugt. Neue
+Hauptquellen und Autosaves bleiben `0600`. Set-ID-Bits, ACLs und erweiterte
+Attribute werden bei der Ersetzung nicht übernommen. Auf Windows gelten die
+geerbten Rechte der exklusiv erzeugten CRT-Dateien; deren ACL-Erhaltung wurde
+hier nicht geprüft.
