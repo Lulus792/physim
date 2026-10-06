@@ -3,6 +3,73 @@
 Stand: 6. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Laufserien mit fehlenden Sensor-Endwerten am 6. Oktober 2026
+
+Der Controller unterscheidet erfolgreiche Runner-Abschlüsse von gültigen
+Endmessungen. Sensorstatus 0 und 2 beenden die Serie nicht mehr; Journal und
+Endpunkt-CSV speichern ihren Status mit leerem Wert. Ein gültiger Nullwert
+bleibt numerisch null mit Status 1. Unbekannter Status, defekte Dateien und
+Prozessfehler bleiben Fehler. Statistik zählt nur gültige Endwerte. Berichte
+weisen Anzahl und Anteil fehlender Messungen aus; ohne gültige Endwerte entsteht
+nur die Messabdeckung. Parameterstudien mit Lücken zeigen gültige Einzelpunkte
+anstelle einer Verbindung über fehlende Messungen.
+
+Der neue Integrationstest verwendet die echte Sensor-API in C und Physim mit
+bekannten gültigen, nicht fälligen und ausgefallenen Endmessungen. Geprüft sind
+Statusmasken, erwartete Mittelwerte und Histogrammzählungen, sequenzielle/
+parallele Wiederholbarkeit, Status-CSV mit leeren Feldern, Parameterpositionen,
+Fortsetzung mit fehlenden Endwerten, gemeinsame/adaptive Zielzeit mit verkürztem
+Schlussschritt, vollständig fehlende Messungen, ungültige Statuswerte, ein
+gültiger Nullwert und Tabellenexport. 210 abgeschlossene Läufe mit nur 70
+gültigen Endwerten erzeugen kein Mittelwert-KI. Die bestehende Referenz prüft
+die Grenze 199/200 für die numerische Statistik. Der Fortsetzungstest liest auch
+alte Journale ohne Statusspalte und prüft die Übereinstimmung mit den Rohdaten.
+
+Die erste macOS-Debug-Runde bestand 4/5. Die Erwartung des Mittelwerts aus 70
+Messungen verwendete exakte Float-Gleichheit trotz skalierter Summation. Sie
+verwendet jetzt eine numerische Toleranz; der neue Test besteht danach 1/1:
+`build/batch-missing-debug-mac/test-results/run-9cax1hus`.
+Die fünf abschließenden Release-Prüfungen (Referenz, Parallelbetrieb, Zielzeit,
+Fortsetzung, fehlende Endwerte) bestehen auf beiden Plattformen 5/5: macOS
+`build/batch-missing-mac/test-results/run-y3f1141l`, Debian
+`build/batch-missing-linux/test-results/run-7vrgjrnz` innerhalb der VM.
+
+Der Fensterablauf baut die unveränderte C-/Physim-Vorlage „Wurf mit Unsicherheit“,
+misst jeweils 64 Sensor-x-Endwerte, zeigt Histogramm und Messabdeckung und erzeugt
+anschließend eine Serie, deren Endzeit zwischen zwei Sensorzeitpunkten liegt.
+Diese vollständig fehlende Endmessung wird als Tabellenbericht angezeigt und
+über die Laufbibliothek in einem neuen App-Prozess geöffnet. Rohdaten und der
+wieder geöffnete Bericht bleiben bytegleich. Der neue Debug-Fensterablauf besteht
+auf dem Intel-Mac: `build/batch-missing-debug-mac/test-results/run-6fepmujp`.
+
+Neue/bestehende Serien, Fortsetzung, Zielzeitstudien, Parametereinheiten und
+Dokumentationsfenster bestehen auf beiden Plattformen im Release-Build 6/6:
+macOS `build/batch-missing-mac/test-results/run-w6t3gcg3`, Debian
+`build/batch-missing-linux/test-results/run-an0rphs9`.
+Die CLI beendet eine Serie mit sechs vollständig ausgefallenen Endmessungen
+auf beiden Plattformen mit Exitcode 0 und `valid=0`, `missing=6`:
+`build/batch-missing-cli-proof-mac/cli-proof.json` beziehungsweise
+`build/batch-missing-cli-proof-linux/cli-proof.json` innerhalb der VM.
+
+Installierte SDKs bestehen denselben C-/Physim-Sensorablauf einschließlich
+vollständig fehlender Endwerte und Wiederöffnung nach dem Verschieben in Pfade
+mit Leerzeichen und Umlaut: `build/batch-missing-sdk-proof-mac/app-steps.json`
+und `build/batch-missing-sdk-proof-linux/app-steps.json` innerhalb der VM.
+Die Messabdeckung wurde auf beiden Plattformen bei 1080 × 740 visuell geprüft.
+Eine zu lange neue Zeilenbeschriftung wurde gekürzt; der abschließende SDK-Ablauf
+verwendet die korrigierte Tabelle mit dimensionsloser Laufzahl und Prozentanteil.
+Alle 19 generierten API-Referenzdokumente sind geprüft.
+
+Ausgeführt wurden Intel macOS 14.6.1 mit Apple Clang 16 und SDL 3.2.30 sowie
+Debian 12 mit Linux 6.1.0-53-cloud-amd64, GCC 12.2, SDL 3.2.30 und
+X11/Xvfb/Openbox/Mesa 22.3.6. `physim_batch=5` kennzeichnet die private
+Statusaggregation; `PSBRES01`, öffentliche API/ABI 3, Sprache 0.171.0,
+Messdatei-/Bericht-/Pipe-Formate bleiben unverändert. Der Katalog umfasst nun
+518 Prüfungen ohne Fenster (503 ohne SDL) und 54 Fensterabläufe.
+Diese gezielten Prüfungen sind keine erneute vollständige 518/54-Abnahme.
+Explizite Masken in transformierten Datenreihen und korrelierte Sensorfehler
+bleiben offene Ziele; selektive Ausfälle werden nicht automatisch korrigiert.
+
 ## Fortsetzung archivierter Laufserien am 6. Oktober 2026
 
 Monte-Carlo-Serien und Parameterstudien speichern einen privaten, versionierten

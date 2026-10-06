@@ -1,0 +1,30 @@
+let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
+let one = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
+let value = Channel("sensor", metres, "Sensor endpoint")
+let status = Channel("sensor.status", one, "0:not due, 1:valid, 2:dropped")
+var mode = 0.0
+var shift = 1.0
+var sensor = Sensor(SensorConfig(metres, 100, 0, 0, 0, 0, Distribution.constant(0), 0, 0, 0), 0)
+func measure(time: Float64):
+    let sample = sensor.read(time, Quantity(100 + Float64(runSeed()) + shift, metres))
+    value.sample(sample.value.value)
+    status.sample(mode == 4 ? 3 : Float64(sample.state))
+func create():
+    mode = parameter("mode", 0, 0, 4, "Sensor mode")
+    shift = parameter("shift", 1, -200, 200, "Endpoint offset")
+func reset():
+    var rate = 100.0
+    var dropout = 0.0
+    if mode == 2 || (mode == 0 && runSeed() % 3 == 0):
+        rate = 5.0
+    if mode == 1 || (mode == 0 && runSeed() % 3 == 2):
+        dropout = 1.0
+    sensor = Sensor.forRun(SensorConfig(metres, rate, 0, 0, 0, 0, Distribution.constant(0), dropout, 0, 0), 0)
+    measure(0)
+func step(dt: Float64):
+    measure(simulationTime() + dt)
+func adaptiveStep(dt: Float64, minimum: Float64, maximum: Float64) -> StepInterval:
+    step(dt)
+    return StepInterval(dt, dt)
+func scene():
+    return

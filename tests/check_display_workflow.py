@@ -138,7 +138,7 @@ def timed_series(flow, directory, scaled=False):
         require(len(directories) == 1, "Invalid target input created an extra series")
         batch = directories[0]
         manifest = read(batch / "series.txt")
-        require("physim_batch=4" in manifest and "step_mode=adaptive" in manifest, "Timed series configuration missing")
+        require("physim_batch=5" in manifest and "step_mode=adaptive" in manifest, "Timed series configuration missing")
         require("parameter=length" in manifest and "parameter_start=0.5" in manifest and "parameter_end=2.5" in manifest,
                 "Pendulum length study not recorded")
         png = (batch / "study.png").read_bytes()
@@ -176,6 +176,32 @@ def timed_series(flow, directory, scaled=False):
                  marker="TIMED SERIES series-read SELF-TEST: PASSED")
         require(hashes == [fingerprint(path) for path in protected], "Reopening a study changed its data")
     require(records[0] == records[1], "Timed C/Physim studies differ in accepted times or values")
+
+
+def batch_missing(flow, directory):
+    import csv
+    for language in ("c", "phys"):
+        root = directory / language
+        root.mkdir(parents=True)
+        flow.run("--workspace-state-test", root, "missing-" + language, timeout=130,
+                 marker="BATCH MISSING SELF-TEST: PASSED")
+        series = list((root / "project/runs").glob("*-batch"))
+        require(len(series) == 2, "Missing endpoint workflow should retain two complete series")
+        for batch in series:
+            rows = list(csv.DictReader(read(batch / "endpoints.csv").splitlines()))
+            require(len(rows) == 64 and all(int(row["index"]) == i + 1 for i, row in enumerate(rows)), "Endpoint indices lost")
+            valid = sum(row["status"] == "1" for row in rows)
+            require(all((row["value"] != "") == (row["status"] == "1") for row in rows), "Missing endpoints became numeric placeholders")
+            require("status=complete" in read(batch / "status.txt") and f"valid={valid}\n" in read(batch / "status.txt"), "Endpoint coverage differs from status")
+            if not valid:
+                empty = batch
+        replay = root / "project/runs/timed-summary.psreport"
+        replay.write_bytes((empty / "summary.psreport").read_bytes())
+        protected = [p for batch in series for p in batch.glob("run-*.psrun")] + [replay]
+        hashes = [fingerprint(p) for p in protected]
+        flow.run("--workspace-state-test", root, "series-read", timeout=130,
+                 marker="TIMED SERIES series-read SELF-TEST: PASSED")
+        require(hashes == [fingerprint(p) for p in protected], "Reopening empty coverage changed data")
 
 
 def batch_resume(flow, directory):
@@ -684,7 +710,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
+SPECIAL = {"batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}

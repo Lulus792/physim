@@ -142,7 +142,10 @@ er enthält Zeit, Modell, Sollbahn, Sensor, Fehler und Standardunsicherheit. Nur
 Diagrammvorschau wird gegebenenfalls auf 2048 gültige Punkte reduziert. Bei vollständigem
 Ausfall bleiben Modellkurven und Statuszählung sichtbar; eine Sensorfehlerstatistik entfällt.
 
-Bei [Monte-Carlo-Endwerten](monte-carlo.md) muss jeder ausgewählte Sensorendwert gültig
-sein. Ein ausgefallener oder nicht fälliger Endwert beendet die Serie mit einer
-verständlichen Fehlermeldung; es wird kein Nullwert aggregiert. Eine Auswertung mit
-fehlenden Endwerten und entsprechend ausgewiesener Erfolgsquote ist noch offen.
+Bei [Monte-Carlo-Endwerten](monte-carlo.md#fehlende-endwerte) werden nur gültige
+Sensorendwerte aggregiert. Nicht fällige und ausgefallene Endmessungen bleiben
+im Abschlussjournal und Endpunkt-CSV mit Status und leerem Wert erhalten.
+Der Bericht zeigt ihre Anzahl und ihren Anteil; eine Serie ohne gültigen Endwert
+enthält nur die Messabdeckung. Fehlende Messungen werden nicht auf null gesetzt
+oder durch frühere Werte ersetzt. Selektive Ausfälle können die Statistik der
+gültigen Teilmenge verzerren und werden nicht automatisch korrigiert.

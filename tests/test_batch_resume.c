@@ -35,6 +35,16 @@ int main(int argc,char **argv) {
     snprintf(a,sizeof a,"%s/endpoints.csv",dest);snprintf(b,sizeof b,"%s/endpoints.csv",reference);CHECK(same(a,b));
     ps_batch_options changed=loaded;changed.seed++;snprintf(changed.directory,sizeof changed.directory,"%s/rejected",argv[5]);
     CHECK(ps_batch_run(&changed,NULL,NULL,&fresh)==PS_INVALID);snprintf(a,sizeof a,"%s/resume.bin",changed.directory);CHECK(!file_exists(a));
+    /* Accept legacy journals without the status column: their entries must all
+     * agree with genuinely valid terminal measurements. */
+    snprintf(a,sizeof a,"%s/completed.csv",dest);FILE *legacy_in=fopen(a,"rb");CHECK(legacy_in);
+    char legacy[8192],line[512];size_t legacy_size=0;
+    while(fgets(line,sizeof line,legacy_in)) {
+        char *last=strrchr(line,',');CHECK(last);*last='\n';last[1]=0;
+        size_t row_size=strlen(line);CHECK(legacy_size+row_size<sizeof legacy);
+        memcpy(legacy+legacy_size,line,row_size);legacy_size+=row_size;
+    }
+    CHECK(!ferror(legacy_in) && !fclose(legacy_in) && replace_bytes(a,legacy,legacy_size));
     /* A fully completed continuation starts zero new processes. */
     char all[4096];snprintf(all,sizeof all,"%s/all-reused",argv[5]);CHECK(ps_batch_resume_load(dest,o.runner,all,&loaded)==PS_OK);
     CHECK(ps_batch_run(&loaded,NULL,NULL,&fresh)==PS_OK && fresh.reused==6 && fresh.started==0 && !memcmp(fresh.values,continued.values,6*sizeof(double)));

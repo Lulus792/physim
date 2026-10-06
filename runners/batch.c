@@ -36,8 +36,8 @@ int main(int argc, char **argv) {
         if(r!=PS_OK){fprintf(stderr,"Resume rejected: %s\n",ps_result_string(r));return 1;}
         signal(SIGINT,stop);signal(SIGTERM,stop);uint32_t previous=0;
         r=ps_batch_run(&options,proceed,&previous,&result);
-        fprintf(stderr,"%s: %u/%u runs, %u reused, %u newly started. %s\n",
-            result.cancelled?"Cancelled":ps_result_string(r),result.completed,options.runs,result.reused,result.started,result.error);
+        fprintf(stderr,"%s: %u/%u runs, %u reused, %u newly started, %u valid, %u missing. %s\n",
+            result.cancelled?"Cancelled":ps_result_string(r),result.completed,options.runs,result.reused,result.started,result.valid,result.completed-result.valid,result.error);
         return r!=PS_OK?1:result.cancelled?130:0;
     }
     if (argc < 9) {
@@ -153,7 +153,7 @@ int main(int argc, char **argv) {
     ps_batch_result result;
     uint32_t previous = 0;
     ps_result r = ps_batch_run(&options, proceed, &previous, &result);
-    fprintf(stderr, "%s: %u/%u runs. %s\n", result.cancelled ? "Cancelled" : ps_result_string(r),
-            result.completed, options.runs, result.error);
+    fprintf(stderr, "%s: %u/%u runs, %u valid, %u missing. %s\n", result.cancelled ? "Cancelled" : ps_result_string(r),
+            result.completed, options.runs, result.valid,result.completed-result.valid,result.error);
     return r != PS_OK ? 1 : result.cancelled ? 130 : 0;
 }

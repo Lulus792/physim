@@ -291,3 +291,28 @@ Serienordner genommen; das ursprüngliche Arbeitsverzeichnis wird nicht benutzt.
 Der Fortsetzungsordner erhält einen eigenen Checkpoint. `series.txt` verweist
 mit `resume_from` auf den Vorgänger; Originaldateien werden nicht überschrieben.
 Messdatei-, Pipe-, Sprach- und Modul-ABI-Versionen bleiben unverändert.
+
+
+## Endmessungen in Laufserien
+
+`series.txt` mit `physim_batch=5` beschreibt die private Serienaggregation mit
+explizitem Messstatus. Die `.psrun`-Dateien behalten Format 1; deren numerische
+Messkanäle und zugehörige `.status`-Kanäle bleiben unverändert.
+
+Das Abschlussjournal und die geordnete Endpunkttabelle verwenden die Kopfzeile
+`index,seed,file,time_s,value,status`, bei Parameterstudien
+`index,seed,file,time_s,parameter_value,value,status`. `status` ist 0 (nicht
+fällig), 1 (gültig) oder 2 (ausgefallen). Nur Status 1 hat einen endlichen Wert
+im `value`-Feld; bei 0 und 2 ist dieses Feld leer. Bei Kanälen ohne Statuskanal
+gilt Status 1. Ein erfolgreich beendeter Lauf mit fehlender Endmessung bleibt
+journalisiert und kann bei der Fortsetzung übernommen werden. Nicht fertig
+geprüfte Laufindizes erhalten keine Zeile.
+
+Der Leser akzeptiert auch ältere Kopfzeilen ohne `status`; solche Einträge
+werden als gültig behandelt und müssen zum tatsächlichen Messstatus passen.
+Ein Statuswechsel oder ein numerischer Platzhalter in einem fehlenden Feld
+wird abgewiesen. Der private Checkpoint `PSBRES01` bleibt kompatibel; seine
+Konfiguration beschreibt dieselben Modelle, Seeds und Zeitvorgaben.
+`status.txt` ergänzt die Anzahl `valid` und `missing`. Zusammen ergeben sie
+`completed`, auch bei einem geregelten Abbruch. Berichtformat, API/ABI und
+Pipe-Versionen ändern sich nicht.

@@ -3,7 +3,7 @@
 Eine Laufserie wiederholt dasselbe gebaute Experiment mit verschiedenen expliziten
 Seeds. Jeder Lauf bekommt einen eigenen Runner-Prozess und Arbeitsordner. Bis zu
 acht Läufe können gleichzeitig rechnen. Der Controller sammelt
-den letzten Messwert eines gewählten Kanals bei derselben Endzeit. Ohne
+den letzten Kanalwert und seinen Messstatus bei derselben Endzeit. Ohne
 Parameterangabe gelten die Modellstandards; der Experimentcode entscheidet,
 wie er den Seed verwendet. Die App kann einen benannten Parameter linear
 variieren und weitere Parameter konstant halten.
@@ -42,8 +42,8 @@ Der nullbasierte Laufindex i erhält `Startseed + i`. Ein 64-Bit-Überlauf wird
 vor dem Start abgewiesen. Der Ausgabeordner wird exklusiv erstellt; bestehende
 Serien werden niemals überschrieben. Unter `runs/<Zeitstempel>-batch/` liegen:
 
-- `series.txt`: Version 2 für feste Seedserien, Version 3 für feste Parameterstudien,
-  Version 4 für Serien mit gemeinsamer Zielzeit;
+- `series.txt`: Version 5 für Seedserien und Parameterstudien mit explizitem
+  Messstatus; ältere Versionen 2–4 stammen aus Serien ohne fehlende Endwerte.
   Konfiguration einschließlich Parallelität, Kanal, fester Parameterwerte,
   ursprüngliche Pfade und Seedregel.
 - `experiment.dll` beziehungsweise `experiment.so`: verwendetes Modul als Kopie.
@@ -53,7 +53,7 @@ Serien werden niemals überschrieben. Unter `runs/<Zeitstempel>-batch/` liegen:
 - `work-0001/` usw.: eigener Arbeitsordner je Lauf. Relative Dateien des Moduls
   liegen hier und kollidieren nicht mit gleichnamigen Dateien anderer Läufe.
 - `completed.csv`: fortlaufendes Journal mit Index, konkretem Seed, Dateiname,
-  Endzeit und Endwert jedes vollständig geprüften Laufs, in Abschlussreihenfolge.
+  Endzeit, Messstatus und gegebenenfalls Endwert jedes vollständig geprüften Laufs, in Abschlussreihenfolge.
   Nach jedem Eintrag wird der Schreibpuffer an
   das Betriebssystem übertragen (flush), sodass abgeschlossene Zeilen bei einem
   geregelten Abbruch erhalten bleiben. Dies ist keine Stromausfallgarantie (fsync).
@@ -61,7 +61,7 @@ Serien werden niemals überschrieben. Unter `runs/<Zeitstempel>-batch/` liegen:
   Diese Datei entsteht am regulären Ende, auch bei Abbruch oder Fehler. Einträge
   können dann Lücken haben; es werden keine fehlenden Messwerte ergänzt.
 - `status.txt`: `complete`, `cancelled` oder `failed`, gestartete/akzeptierte Läufe,
-  höchste gleichzeitig aktive Prozesszahl und Fehler.
+  höchste gleichzeitig aktive Prozesszahl, `valid`/`missing` und Fehler.
 - `summary.psreport`: nur bei einer vollständig erfolgreichen Serie.
 
 Bei einer Parameterstudie enthält das Manifest zusätzlich Name, Start- und
@@ -99,17 +99,17 @@ bei sehr kurzen Läufen oder knappen CPU-/Datenträgerressourcen nicht automatis
 
 ## Bedeutung der Statistik
 
-Das Histogramm zählt alle Endwerte in gleich breiten Klassen; die letzte Klasse
+Das Histogramm zählt alle gültigen Endwerte in gleich breiten Klassen; die letzte Klasse
 schließt den größten Wert ein. Die Klassenanzahl ist die aufgerundete Quadratwurzel
-der Laufzahl. Gleiche Endwerte ergeben eine einzelne Klasse.
+der Zahl gültiger Endwerte. Gleiche Endwerte ergeben eine einzelne Klasse.
 
-Mittelwert und Stichproben-Standardabweichung beschreiben die Endwerte. Bei nur
-einem Lauf ist keine Standardabweichung ausgewiesen. Median sowie 2,5-%- und
+Mittelwert und Stichproben-Standardabweichung beschreiben die gültigen Endwerte. Bei nur
+einem gültigen Endwert ist keine Standardabweichung ausgewiesen. Median sowie 2,5-%- und
 97,5-%-Quantil werden linear interpoliert: `h=(n-1)*p`, zwischen den benachbarten
 sortierten Werten. Das entspricht Typ 7 in der
 [R-Referenz zu Quantilen](https://www.stat.ethz.ch/R-manual/R-devel/library/stats/html/quantile.html).
 
-Ab 200 Läufen erscheint zusätzlich ein angenähertes 95-%-Konfidenzintervall des
+Ab 200 gültigen Endwerten erscheint zusätzlich ein angenähertes 95-%-Konfidenzintervall des
 Mittelwerts: `Mittelwert ± 1,959963984540054 * s / sqrt(n)`.
 Die Normalnäherung setzt unabhängige Stichproben und eine geeignete Verteilung mit
 endlicher Varianz voraus. Die Laufzahl allein garantiert ihre Güte nicht: Starke
@@ -144,9 +144,10 @@ Bei t=1 s hat `position.x` theoretisch den Mittelwert 1 m und die
 Standardabweichung 0,15 m. `nominal.x` ist für jeden Seed genau 1 m;
 Der Sensor enthält zusätzlich Rauschen, systematische Effekte und Quantisierung.
 Einzelne Monte-Carlo-Stichproben weichen von den theoretischen Modellwerten ab.
-Bei einem Kanal mit zugehörigem `.status` muss der Endwert jedes Laufs gültig sein.
-Andernfalls stoppt die Serie mit einer Fehlermeldung und erzeugt keinen Gesamtbericht.
-Fehlende Endwerte werden weder durch null ersetzt noch stillschweigend ausgelassen.
+Bei einem Kanal mit zugehörigem `.status` entscheidet der Status am letzten
+Simulationspunkt über dessen Aufnahme in die Statistik. Nur Status 1 ist gültig.
+Die Serie läuft auch bei nicht fälligen oder ausgefallenen Endmessungen weiter;
+der Bericht weist diese Fälle ausdrücklich aus. Siehe [fehlende Endwerte](#fehlende-endwerte).
 
 ## Kommandozeile und Grenzen
 
@@ -188,8 +189,8 @@ Einheiten und Endzeit müssen in allen Dateien übereinstimmen. Bei adaptiven
 Schritten dürfen Anzahl und Zeitraster der akzeptierten Schritte je Lauf abweichen. Unvollständige
 Rohdateien, Prozessfehler und nicht darstellbare numerische Ergebnisse stoppen die Serie.
 Rohdaten können je nach Kanalzahl mehrere hundert MB belegen; es gibt noch keine
-Speicherplatzvorprüfung, Wiederaufnahme oder eine Aggregation mit
-ausdrücklich ausgewiesenen fehlenden Endwerten. Die allgemeine Sensor-API ist in
+Speicherplatzvorprüfung. Fortsetzung und Aggregation fehlender Endwerte sind
+weiter unten beschrieben. Die allgemeine Sensor-API ist in
 [Messungsreferenz](reference/measurement.md) verfügbar.
 
 
@@ -340,5 +341,41 @@ ursprünglichen Ordner erhalten.
 Die neue Serie verwendet neue Arbeitsverzeichnisse. Wiederholbarkeit setzt wie
 bisher voraus, dass das Modell nur den expliziten Seed als Zufallsquelle und die
 archivierte Konfiguration nutzt; externe Dateien, Uhrzeit oder Prozesszustand
-werden nicht wiederhergestellt. Fehlende oder ungültige Endmesswerte werden
-weiterhin abgewiesen; eine Auswertung mit fehlenden Endwerten bleibt ein offenes Ziel.
+werden nicht wiederhergestellt. Journalisierte nicht fällige oder ausgefallene
+Endmessungen werden mit ihrem Status übernommen und nicht erneut gemessen.
+Ältere Journale ohne Statusspalte werden gelesen; ihre Einträge müssen mit
+gültigen Endmessungen übereinstimmen.
+
+
+## Fehlende Endwerte
+
+Kanäle ohne zugehörigen `.status` liefern reguläre numerische Endwerte. Bei
+Messkanälen bezeichnet Status 0 eine zu diesem Zeitpunkt nicht fällige Messung,
+Status 1 einen gültigen Wert und Status 2 einen Sensorausfall. Der Controller
+prüft weiterhin die vollständige Messdatei, Zeitachse und Einheit. Unbekannte
+Statuswerte, beschädigte Dateien, Prozessfehler und Zeitlimits bleiben Fehler.
+
+Ein erfolgreich beendeter Lauf zählt auch mit fehlendem Endwert als abgeschlossen.
+`completed.csv` und `endpoints.csv` enthalten jede geprüfte Laufnummer samt
+Seed, Zeitpunkt und `status`. Bei Status 0 oder 2 bleibt `value` leer. Ein gültiger
+Wert von null bleibt dagegen `0` mit Status 1. Fehlende Endwerte werden weder
+auf null gesetzt noch durch einen früheren Wert oder eine Interpolation ersetzt.
+Bei Abbruch fehlen nicht fertig geprüfte Laufindizes weiterhin ganz.
+
+Histogramm, Mittelwert, Streuung und Quantile verwenden ausschließlich gültige
+Endwerte in fester Laufindexreihenfolge. Die Mindestzahl 200 für das angenäherte
+Mittelwert-KI bezieht sich ebenfalls auf gültige Endwerte. Sobald Werte fehlen,
+zeigt eine zusätzliche Tabelle die Anzahl und den Anteil gültiger, nicht fälliger
+und ausgefallener Endmessungen. Ohne gültige Endwerte besteht der Bericht nur
+aus dieser Messabdeckung, ohne Mittelwert, Streuung oder Histogramm.
+
+Diese Statistik beschreibt die tatsächlich gemessene Teilmenge. Selektive,
+vom Signal abhängige Ausfälle können sie verzerren. Ein Konfidenzintervall für
+die Gesamtheit erfordert zusätzlich von den Endwerten unabhängige Ausfälle;
+eine Korrektur für informative Ausfälle wird nicht automatisch vorgenommen.
+
+Parameterstudien mit fehlenden Endwerten zeigen gültige Punkte als Scatterplot.
+Es gibt keine Verbindungslinien über Messlücken und keine erfundenen Werte an
+den fehlenden Parameterpunkten. Sind alle Endwerte gültig, bleibt die bisherige
+Linienkurve erhalten. Das CSV bewahrt die vollständigen Parameterpositionen
+und ihre Statuswerte, auch wenn der Plot nur gültige Punkte enthält.

@@ -164,7 +164,8 @@ static void pump_batch(app *a) {
             request_report_path(a, a->batch_last_report);
             a->tab = 2;
             a->analysis_tab = 0;
-            status(a, "Laufserie vollständig. Verteilung und Kennzahlen werden geöffnet.");
+            char message[192];snprintf(message,sizeof message,"Laufserie vollständig: %u gültige, %u fehlende Endwerte. Bericht wird geöffnet.",
+                a->batch_result.valid,a->batch_result.completed-a->batch_result.valid);status(a,message);
         }
     }
 }

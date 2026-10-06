@@ -218,6 +218,7 @@ static ps_result sweep_report(const ps_batch_options *o, const ps_batch_result *
     ps_result r = ps_report_create("Parameterstudie · Endwerte", provenance, &report);
     if (r != PS_OK)
         return r;
+    if(!result->valid){*out=report;return PS_OK;}
     ps_plot_info plot = {0};
     snprintf(plot.title, sizeof plot.title, "%s nach %s", o->channel, o->sweep_name);
     snprintf(plot.x_label, sizeof plot.x_label, "%s", o->sweep_name);
@@ -237,12 +238,13 @@ static ps_result sweep_report(const ps_batch_options *o, const ps_batch_result *
         r = PS_MEMORY;
     if (r == PS_OK) {
         snprintf(curve->label, sizeof curve->label, "Endwert je Parameter");
-        curve->kind = PS_PLOT_LINE;
-        curve->count = o->runs;
+        curve->kind = result->valid==o->runs?PS_PLOT_LINE:PS_PLOT_SCATTER;
+        curve->count = result->valid;
         curve->source_count = o->runs;
-        for (uint32_t i = 0; i < o->runs; i++) {
-            curve->x[i] = sweep_value(o, i)/plot.x_unit.scale;
-            curve->y[i] = result->values[i];
+        uint32_t point=0;
+        for (uint32_t i = 0; i < o->runs; i++)if(result->endpoint_status[i]==1) {
+            curve->x[point] = sweep_value(o, i)/plot.x_unit.scale;
+            curve->y[point++] = result->values[i];
         }
         r = ps_report_add_curve(report, handle, curve);
     }
@@ -251,6 +253,25 @@ static ps_result sweep_report(const ps_batch_options *o, const ps_batch_result *
         *out = report;
     else
         ps_report_destroy(report);
+    return r;
+}
+/* Missing measurements are distinct from failed runs. Keep coverage explicit,
+ * including an all-missing series, without fabricated statistical estimates. */
+static ps_result batch_coverage(ps_report *report,const ps_batch_result *result) {
+    if(result->valid==result->completed)return PS_OK;
+    uint32_t not_due=0,dropped=0;
+    for(uint32_t i=0;i<PS_BATCH_MAX_RUNS;i++)if(result->finished[i]) {
+        not_due+=result->endpoint_status[i]==0;dropped+=result->endpoint_status[i]==2;
+    }
+    ps_table_info table={0};strcpy(table.title,"Messabdeckung · Endwerte");table.columns=2;
+    strcpy(table.column[0].label,"Läufe");table.column[0].unit.scale=1;strcpy(table.column[0].unit.symbol,"1");
+    strcpy(table.column[1].label,"Anteil");table.column[1].unit.scale=.01;strcpy(table.column[1].unit.symbol,"%");
+    ps_table_handle handle;ps_result r=ps_report_add_table(report,&table,&handle);
+    const char *labels[]={"Abgeschlossen","Gültige Endwerte","Nicht fällig","Ausgefallen"};
+    double counts[]={result->completed,result->valid,not_due,dropped};
+    for(unsigned i=0;r==PS_OK && i<4;i++) {
+        ps_table_row row={0};strcpy(row.label,labels[i]);row.values[0]=counts[i];row.values[1]=100*counts[i]/result->completed;r=ps_report_add_row(report,handle,&row);
+    }
     return r;
 }
 static bool copy(const char *from, const char *to) {
@@ -286,13 +307,16 @@ typedef struct {
 static double endpoint_time(const ps_batch_options *o) {
     return o->end_time>0?o->end_time:o->steps*o->dt;
 }
-static bool csv_row(FILE *file, const ps_batch_options *o, uint32_t index, double value) {
-    if (o->sweep)
-        return fprintf(file, "%u,%llu,run-%04u.psrun,%.17g,%.17g,%.17g\n", index + 1,
-                       (unsigned long long)(o->seed + index), index + 1, endpoint_time(o),
-                       sweep_value(o, index), value) >= 0;
-    return fprintf(file, "%u,%llu,run-%04u.psrun,%.17g,%.17g\n", index + 1,
-                   (unsigned long long)(o->seed + index), index + 1, endpoint_time(o), value) >= 0;
+static const char *batch_csv_header(bool sweep,bool status) {
+    return sweep ? (status ? "index,seed,file,time_s,parameter_value,value,status\n" : "index,seed,file,time_s,parameter_value,value\n")
+                 : (status ? "index,seed,file,time_s,value,status\n" : "index,seed,file,time_s,value\n");
+}
+static bool csv_row(FILE *file, const ps_batch_options *o, uint32_t index, double value,unsigned status) {
+    int wrote=fprintf(file,"%u,%llu,run-%04u.psrun,%.17g,",index+1,
+        (unsigned long long)(o->seed+index),index+1,endpoint_time(o));
+    if(wrote>=0 && o->sweep)wrote=fprintf(file,"%.17g,",sweep_value(o,index));
+    if(wrote>=0 && status==1)wrote=fprintf(file,"%.17g",value);
+    return wrote>=0 && fprintf(file,",%u\n",status)>=0;
 }
 static ps_result open_endpoint(batch_slot *slot, const ps_batch_options *o) {
     ps_result r = ps_run_open(&slot->reader, slot->path);
@@ -344,6 +368,7 @@ static ps_result open_endpoint(batch_slot *slot, const ps_batch_options *o) {
     }
     slot->samples = 0;
     slot->previous_time=0;
+    slot->measurement_status=1;
     slot->channel = -1;
     for (uint32_t i = 0; i < slot->reader.channels; i++)
         if (!strcmp(slot->reader.schema[i].name, o->channel))
@@ -362,8 +387,6 @@ static ps_result read_endpoint(batch_slot *slot, const ps_batch_options *o, bool
         ps_result r = ps_run_next(&slot->reader, &time, values);
         if (r == PS_EOF) {
             *done = true;
-            if (slot->status_channel >= 0 && slot->measurement_status != 1)
-                return PS_INVALID;
             if(o->end_time>0)
                 return slot->samples>=2 && slot->previous_time==o->end_time?PS_OK:PS_CORRUPT;
             return slot->samples == o->steps + 1u ? PS_OK : PS_CORRUPT;
@@ -415,18 +438,22 @@ static bool batch_csv_unsigned(const char *text,uint64_t *out) {
 static ps_result batch_reuse(const ps_batch_options *o,FILE *journal,ps_batch_continue proceed,void *user,ps_batch_result *result) {
     char path[4096],line[512];snprintf(path,sizeof path,"%s/completed.csv",o->resume_from);
     FILE *old=fopen(path,"rb");if(!old)return PS_IO;
-    const char *header=o->sweep?"index,seed,file,time_s,parameter_value,value\n":"index,seed,file,time_s,value\n";
+    bool statuses=false;
     ps_result r=PS_OK;
-    if(!fgets(line,sizeof line,old) || strcmp(line,header)){fclose(old);return PS_CORRUPT;}
+    if(!fgets(line,sizeof line,old)){fclose(old);return PS_CORRUPT;}
+    if(!strcmp(line,batch_csv_header(o->sweep,true)))statuses=true;
+    else if(strcmp(line,batch_csv_header(o->sweep,false))){fclose(old);return PS_CORRUPT;}
     while(fgets(line,sizeof line,old)) {
         if(!strchr(line,'\n')) {if(feof(old))break;r=PS_CORRUPT;break;}
         if(!keep_going(proceed,user,result))break;
-        line[strlen(line)-1]=0;char *fields[6];unsigned count=0;fields[count++]=line;
-        for(char *p=line;*p;p++)if(*p==','){*p=0;if(count==6){count=0;break;}fields[count++]=p+1;}
-        uint64_t index64,seed;double time,value,parameter=0;char name[64];
-        if(count!=(o->sweep?6u:5u) || !batch_csv_unsigned(fields[0],&index64) || !index64 || index64>o->runs ||
+        line[strlen(line)-1]=0;char *fields[7];unsigned count=0;fields[count++]=line;
+        for(char *p=line;*p;p++)if(*p==','){*p=0;if(count==7){count=0;break;}fields[count++]=p+1;}
+        uint64_t index64,seed,status=1;double time,value=0,parameter=0;char name[64];
+        unsigned expected=o->sweep?6u:5u,value_field=o->sweep?5u:4u;
+        if(count!=expected+(statuses?1u:0u) || !batch_csv_unsigned(fields[0],&index64) || !index64 || index64>o->runs ||
            !batch_csv_unsigned(fields[1],&seed) || !ps_parse_finite_number(fields[3],NULL,&time) ||
-           !ps_parse_finite_number(fields[count-1],NULL,&value) ||
+           (statuses && (!batch_csv_unsigned(fields[expected],&status) || status>2)) ||
+           (status==1 ? !ps_parse_finite_number(fields[value_field],NULL,&value) : *fields[value_field]!=0) ||
            (o->sweep && !ps_parse_finite_number(fields[4],NULL,&parameter))){r=PS_CORRUPT;break;}
         unsigned index=(unsigned)index64;
         if(result->finished[index-1] || seed!=o->seed+index-1 || time!=endpoint_time(o) ||
@@ -435,12 +462,12 @@ static ps_result batch_reuse(const ps_batch_options *o,FILE *journal,ps_batch_co
         batch_slot slot={.index=index-1};snprintf(slot.path,sizeof slot.path,"%s/%s",o->resume_from,name);
         r=open_endpoint(&slot,o);bool done=false;
         while(r==PS_OK && !done && keep_going(proceed,user,result))r=read_endpoint(&slot,o,&done);
-        if(r==PS_OK && !result->cancelled && (!done || memcmp(&slot.value,&value,sizeof value)))r=PS_CORRUPT;
+        if(r==PS_OK && !result->cancelled && (!done || slot.measurement_status!=status || (status==1 && memcmp(&slot.value,&value,sizeof value))))r=PS_CORRUPT;
         ps_channel schema={0};ps_parameter_unit unit={0};
         if(r==PS_OK && !result->cancelled) {
             schema=slot.reader.schema[slot.channel];
             if(result->completed && (strcmp(schema.unit,result->channel.unit) || memcmp(schema.dimension,result->channel.dimension,7)))r=PS_CORRUPT;
-            if(o->sweep)r=ps_parameter_unit_parse(slot.reader.metadata,o->sweep_name,&unit);
+            if(r==PS_OK && o->sweep)r=ps_parameter_unit_parse(slot.reader.metadata,o->sweep_name,&unit);
             if(r==PS_OK && o->sweep && (!isfinite(o->sweep_start/unit.scale) || !isfinite(o->sweep_end/unit.scale)))r=PS_CORRUPT;
             if(r==PS_OK && o->sweep && result->completed &&
                (unit.declared!=result->sweep_unit.declared || unit.scale!=result->sweep_unit.scale ||
@@ -448,8 +475,9 @@ static ps_result batch_reuse(const ps_batch_options *o,FILE *journal,ps_batch_co
         }
         ps_run_reader_close(&slot.reader);if(r!=PS_OK || result->cancelled)break;
         snprintf(path,sizeof path,"%s/%s",o->directory,name);
-        if(!copy(slot.path,path) || !csv_row(journal,o,index-1,value) || fflush(journal)){r=PS_IO;break;}
-        result->values[index-1]=value;result->finished[index-1]=true;result->completed++;result->reused++;
+        if(!copy(slot.path,path) || !csv_row(journal,o,index-1,value,(unsigned)status) || fflush(journal)){r=PS_IO;break;}
+        result->values[index-1]=value;result->endpoint_status[index-1]=(uint8_t)status;
+        result->finished[index-1]=true;result->completed++;result->reused++;result->valid+=status==1;
         if(result->completed==1 || index==1){result->channel=schema;result->sweep_unit=unit;}
     }
     if(ferror(old))r=PS_IO;
@@ -533,14 +561,8 @@ static ps_result run_pool(const ps_batch_options *o, const char *module, FILE *j
             bool complete;
             r = read_endpoint(slot, o, &complete);
             if (r != PS_OK) {
-                if (r == PS_INVALID && complete && slot->status_channel >= 0)
-                    snprintf(result->error, sizeof result->error,
-                             "Lauf %u: Endwert von %s ist kein gültiger Messwert (Status %.0f).",
-                             slot->index + 1, o->channel, slot->measurement_status);
-                else
-                    snprintf(result->error, sizeof result->error,
-                             "Lauf %u: Messdatei ungültig (%s).", slot->index + 1,
-                             ps_result_string(r));
+                snprintf(result->error, sizeof result->error,
+                         "Lauf %u: Messdatei ungültig (%s).", slot->index + 1,ps_result_string(r));
                 goto done;
             }
             if (complete) {
@@ -553,13 +575,15 @@ static ps_result run_pool(const ps_batch_options *o, const char *module, FILE *j
                     r = PS_INVALID;
                     goto done;
                 }
-                if (!csv_row(journal, o, slot->index, slot->value) || fflush(journal)) {
+                if (!csv_row(journal, o, slot->index, slot->value,(unsigned)slot->measurement_status) || fflush(journal)) {
                     r = PS_IO;
                     goto done;
                 }
                 if (!result->completed || !slot->index)
                     result->channel = schema;
-                result->values[slot->index] = slot->value;
+                result->values[slot->index] = slot->measurement_status==1?slot->value:0;
+                result->endpoint_status[slot->index]=(uint8_t)slot->measurement_status;
+                result->valid+=slot->measurement_status==1;
                 result->finished[slot->index] = true;
                 result->completed++;
                 ps_run_reader_close(&slot->reader);
@@ -642,11 +666,10 @@ static ps_result ordered_endpoints(const ps_batch_options *o, const ps_batch_res
     FILE *file = fopen(path, "wbx");
     if (!file)
         return PS_IO;
-    bool ok = fprintf(file, o->sweep ? "index,seed,file,time_s,parameter_value,value\n"
-                                     : "index,seed,file,time_s,value\n") >= 0;
+    bool ok = fprintf(file,"%s",batch_csv_header(o->sweep,true)) >= 0;
     for (uint32_t i = 0; ok && i < o->runs; i++)
         if (result->finished[i])
-            ok = csv_row(file, o, i, result->values[i]);
+            ok = csv_row(file, o, i, result->values[i],result->endpoint_status[i]);
     if (fclose(file))
         ok = false;
     return ok ? PS_OK : PS_IO;
@@ -724,8 +747,9 @@ ps_result ps_batch_run(const ps_batch_options *o, ps_batch_continue proceed, voi
         "seed_policy=base+i (i=0..runs-1)\nchannel=%s\nmetric=last_sample\n"
         "timeout_s=%.17g\nrunner=%s\nsource=%s\noriginal_module=%s\n"
         "workers=%u\nmemory_bytes=%llu\nworking_directory=work-NNNN (one per run)\n"
-        "journal=completed.csv (completion order)\nendpoints=endpoints.csv (index order)\n",
-        o->end_time>0?4u:o->sweep ? 3u : 2u, o->runs, o->steps, o->dt, (unsigned long long)o->seed, o->channel,
+        "journal=completed.csv (completion order)\nendpoints=endpoints.csv (index order)\n"
+        "endpoint_status=0:not_due,1:valid,2:dropped\nmissing_value=empty_csv_field\nstatistics=valid_endpoints_only\n",
+        5u, o->runs, o->steps, o->dt, (unsigned long long)o->seed, o->channel,
         o->timeout_s, o->runner,
         *o->source       ? o->source
         : o->source_text ? "in-memory snapshot"
@@ -752,8 +776,7 @@ ps_result ps_batch_run(const ps_batch_options *o, ps_batch_continue proceed, voi
     }
     snprintf(path, sizeof path, "%s/completed.csv", o->directory);
     csv = fopen(path, "wbx");
-    if (!csv || fprintf(csv, o->sweep ? "index,seed,file,time_s,parameter_value,value\n"
-                                      : "index,seed,file,time_s,value\n") < 0) {
+    if (!csv || fprintf(csv,"%s",batch_csv_header(o->sweep,true)) < 0) {
         r = PS_IO;
         goto finish;
     }
@@ -803,7 +826,7 @@ ps_result ps_batch_run(const ps_batch_options *o, ps_batch_continue proceed, voi
                  "Kanal: %s; Endzeit: %.17g s; Startseed: %llu; Läufe: %u; Parallelität: %u.\n"
                  "Auswertung in fester Laufindex-Reihenfolge, unabhängig vom Abschlusszeitpunkt.\n"
                  "Quantile: linear, Typ 7. Streuung: Stichproben-Standardabweichung (n-1).\n"
-                 "95%%-KI des Mittelwerts: Normalnäherung, nur ab 200 Läufen.\n"
+                 "95%%-KI des Mittelwerts: Normalnäherung, nur ab 200 gültigen Endwerten.\n"
                  "Voraussetzung: unabhängige Stichproben mit endlicher Varianz; starke Schiefe/"
                  "Ausreißer können die Näherung unbrauchbar machen.\n"
                  "Das KI ist kein Vorhersageintervall für einen einzelnen Lauf.\n"
@@ -811,10 +834,21 @@ ps_result ps_batch_run(const ps_batch_options *o, ps_batch_continue proceed, voi
                  "als Zufallsquelle nutzt; dieselbe Binärdatei und Laufumgebung verwenden.",
                  o->directory, o->channel, endpoint_time(o), (unsigned long long)o->seed, o->runs,
                  o->workers);
+        size_t used=strlen(provenance);
+        snprintf(provenance+used,sizeof provenance-used,
+            "\nMessabdeckung: %u von %u gültige Endwerte. Status 0=nicht fällig, 1=gültig, 2=ausgefallen.\n"
+            "Fehlende Endwerte werden weder als Null noch durch frühere Messungen ersetzt.\n"
+            "Statistik und KI beschreiben nur gültige Endwerte; selektive Ausfälle können diese Auswahl verzerren.\n"
+            "Ein KI für die Gesamtheit setzt zusätzlich von den Endwerten unabhängige Ausfälle voraus.\n"
+            "Parameterstudien mit Lücken zeigen einzelne gültige Punkte ohne verbindende Linien.",
+            result->valid,result->completed);
+        double valid_values[PS_BATCH_MAX_RUNS];uint32_t count=0;
+        for(uint32_t i=0;i<o->runs;i++)if(result->endpoint_status[i]==1)valid_values[count++]=result->values[i];
         ps_report *report = NULL;
-        r = o->sweep ? sweep_report(o, result, provenance, &report)
-                     : ps_batch_report(result->values, result->completed, &result->channel,
-                                       provenance, &report);
+        r=o->sweep?sweep_report(o,result,provenance,&report)
+            :count?ps_batch_report(valid_values,count,&result->channel,provenance,&report)
+                  :ps_report_create("Monte Carlo · keine gültigen Endwerte",provenance,&report);
+        if(r==PS_OK)r=batch_coverage(report,result);
         if (r == PS_OK) {
             snprintf(path, sizeof path, "%s/summary.psreport", o->directory);
             r = ps_report_save(report, path);
@@ -834,11 +868,11 @@ finish:
     FILE *status = fopen(path, "wbx");
     if (status) {
         int n = fprintf(
-            status, "status=%s\ncompleted=%u\nrequested=%u\nstarted=%u\npeak_active=%u\nreused=%u\nerror=%s\n",
+            status, "status=%s\ncompleted=%u\nrequested=%u\nstarted=%u\npeak_active=%u\nreused=%u\nvalid=%u\nmissing=%u\nerror=%s\n",
             r != PS_OK          ? "failed"
             : result->cancelled ? "cancelled"
                                 : "complete",
-            result->completed, o->runs, result->started, result->peak_active, result->reused, result->error);
+            result->completed, o->runs, result->started, result->peak_active, result->reused, result->valid,result->completed-result->valid,result->error);
         int c = fclose(status);
         if (n < 0 || c)
             r = PS_IO;

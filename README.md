@@ -239,6 +239,9 @@ Unterbrochene Monte-Carlo-Serien und Parameterstudien lassen sich über
 Läufe werden geprüft und übernommen; fehlende Indizes laufen mit denselben
 Seeds und archivierten Einstellungen in einem neuen Serienordner.
 [Wiederaufnahme von Laufserien](docs/monte-carlo.md#unterbrochene-serien-fortsetzen).
+Sensor-Endwerte mit Messausfällen werden mit ihrem Status erfasst. Berichte
+zeigen die Messabdeckung und werten nur gültige Werte aus.
+[Fehlende Endwerte](docs/monte-carlo.md#fehlende-endwerte).
 
 **Datei → Workspaces …** verwaltet bis zu acht benannte Arbeitsumgebungen mit
 Ordnern, zusätzlichen Pfaden, offenen Dokumenten und Editoransichten.

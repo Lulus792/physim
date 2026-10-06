@@ -61,7 +61,7 @@ int main(int argc,char **argv) {
     snprintf(first,sizeof first,"%s/serial",argv[6]);snprintf(parallel,sizeof parallel,"%s/parallel",argv[6]);snprintf(language,sizeof language,"%s/language",argv[6]);
     strcpy(o.directory,first);ps_batch_result a,b;
     CHECK(ps_batch_run(&o,NULL,NULL,&a)==PS_OK && a.completed==6 && a.values[0]!=a.values[1]);
-    CHECK(contains(first,"series.txt","physim_batch=4\n") && contains(first,"series.txt","step_mode=adaptive\n"));
+    CHECK(contains(first,"series.txt","physim_batch=5\n") && contains(first,"series.txt","step_mode=adaptive\n"));
     strcpy(o.directory,parallel);o.workers=4;CHECK(ps_batch_run(&o,NULL,NULL,&b)==PS_OK && b.peak_active==4 && !memcmp(a.values,b.values,6*sizeof(double)));
     CHECK(same_summary(first,parallel));
     /* Continuation retains nonuniform accepted time grids for C and Physim. */

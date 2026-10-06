@@ -37,13 +37,14 @@ typedef struct {
     } parameters[PS_MAX_PARAMETERS];
 } ps_batch_options;
 typedef struct {
-    uint32_t completed, started, active, peak_active, reused;
+    uint32_t completed, started, active, peak_active, reused, valid;
     bool cancelled;
     char error[256];
     ps_channel channel;
     ps_parameter_unit sweep_unit;
     double values[PS_BATCH_MAX_RUNS];
-    bool finished[PS_BATCH_MAX_RUNS]; /* values[i] is valid iff finished[i]. */
+    bool finished[PS_BATCH_MAX_RUNS]; /* Journaled successful run, even if its endpoint is missing. */
+    uint8_t endpoint_status[PS_BATCH_MAX_RUNS]; /* 0=not due, 1=valid, 2=dropped. values[i] valid only at 1. */
 } ps_batch_result;
 /* Called on the invoking thread; false requests cancellation of the entire pool.
  * completed counts fully validated, journaled runs; active counts live children

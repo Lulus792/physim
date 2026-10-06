@@ -123,7 +123,7 @@ int main(int argc, char **argv) {
         snprintf(name, sizeof name, "work-%04u/scratch.txt", i + 1);
         CHECK(read_text(o.directory, name, text) && atoi(text) == (int)i);
     }
-    CHECK(read_text(o.directory, "series.txt", text) && strstr(text, "physim_batch=2") &&
+    CHECK(read_text(o.directory, "series.txt", text) && strstr(text, "physim_batch=5") &&
           strstr(text, "workers=4"));
     /* Preserve non-contiguous completions when lower indices are still active. */
     snprintf(o.directory, sizeof o.directory, "%s/gap-cancel", root);

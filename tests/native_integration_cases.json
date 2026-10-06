@@ -1213,6 +1213,29 @@
         "core"
       ],
       "module": true
+    },
+    "batch-missing-tests": {
+      "sources": [
+        "tests/test_batch_missing.c"
+      ],
+      "libraries": [
+        "batch",
+        "platform",
+        "core"
+      ]
+    },
+    "batch-missing-c": {
+      "sources": [
+        "tests/fixtures/batch_missing_model.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "batch-missing-phys": {
+      "source": "tests/fixtures/language/batch_missing_model.phys",
+      "mode": "--emit-experiment"
     }
   },
   "tests": [
@@ -4805,6 +4828,57 @@
           "arguments": [
             "{root}/tests/check_display_workflow.py",
             "batch_resume_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 560,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "batch_missing",
+      "targets": [
+        "batch-missing-tests",
+        "physim-runner",
+        "batch-missing-c",
+        "batch-missing-phys"
+      ],
+      "steps": [
+        {
+          "program": "batch-missing-tests",
+          "arguments": [
+            "{physim-runner}",
+            "{batch-missing-c}",
+            "{batch-missing-phys}",
+            "{work}"
+          ],
+          "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "batch_missing_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "batch_missing_workflow",
             "--app",
             "{physim}",
             "--work",

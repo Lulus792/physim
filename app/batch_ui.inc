@@ -147,6 +147,11 @@ static void batch_view(app *a) {
         nk_layout_row_dynamic(ui, 8, 1);
         nk_progress(ui, &progress, a->batch_options.runs, false);
     }
+    if(!running && a->batch_result.completed) {
+        snprintf(text,sizeof text,"Endwerte: %u gültig · %u fehlend",a->batch_result.valid,
+                 a->batch_result.completed-a->batch_result.valid);
+        nk_layout_row_dynamic(ui,28,1);nk_label(ui,text,NK_TEXT_LEFT);
+    }
     nk_layout_row_dynamic(ui, 64, 1);
     nk_label_wrap(ui, a->batch_sweep
                       ? "Die Studie variiert den Parameter linear. Auch der Seed steigt je Lauf; "
