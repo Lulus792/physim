@@ -3,6 +3,74 @@
 Stand: 6. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Physim-Indexabfragen am 6. Oktober 2026
+
+Sprachvertrag 0.176.0 ergänzt `RunIndex`, `RunBlock` und vollständige
+`RunSnapshot`-Werte. Indexkopien teilen einen automatisch freigegebenen
+Dateibesitzer; `close()` gibt nur die jeweilige Referenz frei. Arrays,
+optionale Werte, Strukturfelder, Rückgaben und Closures behalten ihre
+Besitzregeln. Blockdaten und Snapshotdaten bleiben nach dem Schließen des
+Index verwendbar. Abfragen, Metadaten und SI-Dimensionen verwenden den
+geprüften C-Core. `inputPath(index)` erschließt die explizite Analyseauswahl
+als eigenen String. API/ABI 3 und alle Datei-/Wireformate bleiben erhalten.
+
+Die Debug-Prüfung auf macOS besteht neue Werte, alte/recovered Dateien,
+Arraykopien mit unabhängigem Schließen, optionale Werte und Strukturfelder,
+einen aus der Funktion zurückgegebenen Closure sowie 2000 Aufräumschleifen.
+Eine direkte C-Prüfung erzwingt jede Allokationsfehlerstelle beim Öffnen und
+eine fehlgeschlagene Blockallokation und verlangt null verbleibende Besitzer.
+Ein echtes Physim-Analysemodul liest die letzten 256 Zeilen eines
+Million-Zeilen-Laufs; ein unabhängiger C-Prüfer vergleicht alle Zeiten/Werte
+und die SI-Dimensionen des Berichts. Sechs Compilerchecks prüfen reservierte
+Typnamen, Parametertypen, unveränderbare Receiver und den Analyse-Hostvertrag.
+Die abschließenden beiden Debugfälle bestehen 2/2 unter
+`build/run-index-language-debug-mac/test-results/run-jooqqt1l`.
+Ein früher Analyseentwurf verwendete einen nicht vorhandenen Series-Konstruktor
+und danach zwei voneinander unabhängige Reihen. Das Beispiel verwendet nun
+`Series.fromValues` und ausdrücklich `alignedValues`, bevor es die Kurve erzeugt.
+
+Linux GCC Debug mit AddressSanitizer und UndefinedBehaviorSanitizer besteht
+5/5 unter `build/run-index-language-asan-linux/test-results/run-u71pu0nh`:
+neue Indexwerte samt Analyse und Speicherprobes, sechs Compilerchecks,
+abgefangene Modulfehler und beide bisherigen Speicherleck-Abläufe.
+Die vollständigen Release-Läufe bestehen jeweils 531/531: macOS unter
+`build/run-index-language-release-mac/test-results/run-a40iew2d`, Debian unter
+`build/run-index-language-release-linux/test-results/run-frpk9b9o` in der VM.
+Beide bauen zusätzlich 17 eigenständige Sprachprogramme und 32 Module.
+Die Umgebungen sind Intel macOS 14.6.1/Apple Clang 16 und Debian 12/GCC 12.2.0
+mit Kernel 6.1.0-53-cloud-amd64, jeweils SDL 3.2.30.
+Debian Release mit X11/Mesa, Xvfb und Openbox besteht vollständigen Sprachworkflow
+und eigenständige Analyseprojekte 2/2 unter
+`build/run-index-language-release-linux/test-results/run-069l_kgq`. Dies ist keine
+erneute vollständige Prüfung aller 58 Fensterabläufe.
+macOS Release besteht dieselben beiden App-Prüfungen 2/2 unter
+`build/run-index-language-release-mac/test-results/run-0oncir9q`.
+Das verschobene Linux-SDK besteht die vollständige unabhängige Prüfung unter
+`build/run-index-language-sdk-proof-linux/Native SDK ä q6o953s4` in der VM.
+Sie kompiliert alle ausgelieferten Header, baut die 20 Core-Quellen neu, führt
+17 Sprachprogramme und 32 Module aus bzw. baut sie neu und prüft neun native
+Projektbuilds. Die neuen Sprachwerte laufen mit den erzeugten Million-Zeilen-
+Fixtures; Besitzer-/Fehlerprobes werden gegen beide Archive gelinkt. Das neue
+Analysemodul wird tatsächlich ausgeführt; ein aus dem SDK gelinkter C-Prüfer
+vergleicht alle 256 Kurvenwerte und SI-Einheiten.
+Das macOS-SDK besteht dieselbe vollständige Prüfung unter
+`build/run-index-language-sdk-proof-mac/Native SDK ä wj2v1yh2`, einschließlich
+beider Besitzer-/Fehlerprobes und des tatsächlich ausgeführten Analysemoduls.
+Die SDK-Manifeste enthalten jeweils 310 geprüfte SHA-256-Dateieinträge.
+Abschließende Pakete liegen unter `build/Run Index Language clean SDK ä mac`
+bzw. `build/Run Index Language clean SDK ä linux` in der VM; ihre Manifestdateien
+werden erneut gehasht. Ausgelieferte Header, Archive und Core-Quellen stimmen
+mit den vollständig geprüften SDKs überein, die App mit dem abschließend
+geprüften Fensterprogramm. Nach dem Paketneubau unterscheiden sich unter Linux
+vier Programmdateien vom ersten SDK-Proof. Das abschließend gebaute Linux-SDK
+besteht deshalb die komplette Prüfung erneut unter
+`build/run-index-language-clean-sdk-proof-linux/Native SDK ä kxonlhz6`.
+Endgültige Pakete mit diesen Nachweistexte liegen unter
+`build/Run Index Language final SDK ä mac` bzw.
+`build/Run Index Language final SDK ä linux` in der VM. Ihre 310 Manifestdateien
+werden erneut geprüft; sämtliche 126 Code-/Programmdateien stimmen bytegenau
+mit dem jeweiligen abschließend geprüften SDK überein.
+
 ## Rekonstruierbare Laufdatei-Indizes am 6. Oktober 2026
 
 Format 1 erhält optionale Abschlusschunks 6/7 vor dem bisherigen Footer.

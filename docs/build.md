@@ -146,12 +146,12 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt derzeit 529 Tests ohne Fenster aus, mit `--no-app` die
-514 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
+`--test` führt derzeit 531 Tests ohne Fenster aus, mit `--no-app` die
+516 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
 Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.
-Hinzu kommen 103 übersetzte Sprachprogramme und 71 Gruppen mit insgesamt 704
+Hinzu kommen 103 übersetzte Sprachprogramme und 73 Gruppen mit insgesamt 710
 Compilerprüfungen für Sequenzen, Generics, Überladungen, Strukturinitialisierer,
 Kontrollfluss, optionale Werte, Unicode, physikalische Einheiten, Compileraufrufe
 und Modulimporte. Diese prüfen 671 erwartete Fehlerfälle sowie gültige Quellen,

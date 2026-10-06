@@ -1220,6 +1220,16 @@ Zieht mutierend einen Wert aus der Verteilung; der Zufallsstrom muss als var geb
 
 Überall verfügbar.
 
+## RunIndex
+
+```text
+RunIndex(path: String, maximumEntries: Int64) -> RunIndex
+```
+
+Öffnet und validiert eine Laufdatei mit positivem Checkpointlimit im 64-MiB-Sprachbudget. Alte und unvollständige Dateien werden rekonstruiert. Kopien teilen einen automatisch freigegebenen Dateibesitzer; Abfragen verwenden nullbasierte Indizes.
+
+Überall verfügbar.
+
 ## Sensor
 
 ```text
@@ -2961,6 +2971,16 @@ Anzahl der für diese Analyse ausgewählten Eingabeläufe.
 
 Analysemodul erforderlich.
 
+## inputPath
+
+```text
+inputPath(index: Int64) -> String
+```
+
+Liefert einen eigenen UTF-8-String mit dem ausgewählten Eingabepfad. Nullbasierter Index muss kleiner als inputCount sein. Nur in Analysemodulen verfügbar.
+
+Analysemodul erforderlich.
+
 ## label
 
 ```text
@@ -3331,6 +3351,216 @@ Nächste ganze Float64-Zahl; ein exakter Gleichstand wird von null weg gerundet.
 
 Überall verfügbar.
 
+## runBlock_channels
+
+```text
+runBlock_channels(block: RunBlock) -> Int64
+```
+
+Liefert Kanalzahl. Der Block bleibt nach Schließen des Index verwendbar; ungültige Indizes werfen Fehler.
+
+Überall verfügbar.
+
+## runBlock_column
+
+```text
+runBlock_column(block: RunBlock, channel: Int64) -> [Float64]
+```
+
+Liefert unabhängiges Float64-Array eines nullbasierten Kanals. Der Block bleibt nach Schließen des Index verwendbar; ungültige Indizes werfen Fehler.
+
+Überall verfügbar.
+
+## runBlock_count
+
+```text
+runBlock_count(block: RunBlock) -> Int64
+```
+
+Liefert Zeilenzahl. Der Block bleibt nach Schließen des Index verwendbar; ungültige Indizes werfen Fehler.
+
+Überall verfügbar.
+
+## runBlock_time
+
+```text
+runBlock_time(block: RunBlock, row: Int64) -> Float64
+```
+
+Liefert Zeit an der nullbasierten Zeile. Der Block bleibt nach Schließen des Index verwendbar; ungültige Indizes werfen Fehler.
+
+Überall verfügbar.
+
+## runBlock_times
+
+```text
+runBlock_times(block: RunBlock) -> [Float64]
+```
+
+Liefert unabhängiges Float64-Array aller Zeiten. Der Block bleibt nach Schließen des Index verwendbar; ungültige Indizes werfen Fehler.
+
+Überall verfügbar.
+
+## runBlock_value
+
+```text
+runBlock_value(block: RunBlock, row: Int64, channel: Int64) -> Float64
+```
+
+Liefert Messwert an nullbasierter Zeile und Kanal. Der Block bleibt nach Schließen des Index verwendbar; ungültige Indizes werfen Fehler.
+
+Überall verfügbar.
+
+## runIndexClose
+
+```text
+runIndexClose(run: RunIndex) -> Void
+```
+
+Gibt die Referenz dieses veränderbaren Werts frei und schließt ihn. Andere Kopien bleiben verwendbar; die Datei schließt nach der letzten Referenz. Wiederholtes Schließen ist erlaubt.
+
+Überall verfügbar.
+
+## runIndexDimension
+
+```text
+runIndexDimension(run: RunIndex, channel: Int64, axis: Int64) -> Int64
+```
+
+Liest den SI-Dimensionsexponenten am Kanal und Achsenindex 0–6: Länge, Masse, Zeit, Strom, Temperatur, Stoffmenge, Lichtstärke.
+
+Überall verfügbar.
+
+## runIndexRead
+
+```text
+runIndexRead(run: RunIndex, first: Int64, count: Int64) -> RunBlock
+```
+
+Liest einen unabhängigen besitzenden RunBlock mit 0–256 Zeilen ab first. Ungültige Grenzen oder CRC lösen typisierte Fehler aus; attempt liefert dann nil.
+
+Überall verfügbar.
+
+## runIndexSnapshot
+
+```text
+runIndexSnapshot(run: RunIndex, ordinal: Int64) -> RunSnapshot
+```
+
+Liest und validiert einen vollständigen kopierbaren RunSnapshot anhand seiner nullbasierten Szenennummer. Werte, Szene, Eltern und TRS bleiben erhalten.
+
+Überall verfügbar.
+
+## runIndex_channels
+
+```text
+runIndex_channels(run: RunIndex) -> Int64
+```
+
+Liefert die Kanalzahl. Kanalindizes sind nullbasiert; geschlossene Handles werfen einen Fehler, außer isOpen.
+
+Überall verfügbar.
+
+## runIndex_checkpoints
+
+```text
+runIndex_checkpoints(run: RunIndex) -> Int64
+```
+
+Liefert die gemeinsame Zahl aller Checkpoints. Kanalindizes sind nullbasiert; geschlossene Handles werfen einen Fehler, außer isOpen.
+
+Überall verfügbar.
+
+## runIndex_complete
+
+```text
+runIndex_complete(run: RunIndex) -> Bool
+```
+
+Liefert ob ein gültiger Footer vorliegt. Kanalindizes sind nullbasiert; geschlossene Handles werfen einen Fehler, außer isOpen.
+
+Überall verfügbar.
+
+## runIndex_description
+
+```text
+runIndex_description(run: RunIndex, channel: Int64) -> String
+```
+
+Liefert die Kanalbeschreibung als eigenen String. Kanalindizes sind nullbasiert; geschlossene Handles werfen einen Fehler, außer isOpen.
+
+Überall verfügbar.
+
+## runIndex_is_open
+
+```text
+runIndex_is_open(run: RunIndex) -> Bool
+```
+
+Liefert den Öffnungszustand ohne Fehler auch nach close. Kanalindizes sind nullbasiert; geschlossene Handles werfen einen Fehler, außer isOpen.
+
+Überall verfügbar.
+
+## runIndex_metadata
+
+```text
+runIndex_metadata(run: RunIndex) -> String
+```
+
+Liefert einen eigenen Metadatenstring. Kanalindizes sind nullbasiert; geschlossene Handles werfen einen Fehler, außer isOpen.
+
+Überall verfügbar.
+
+## runIndex_name
+
+```text
+runIndex_name(run: RunIndex, channel: Int64) -> String
+```
+
+Liefert den Kanalnamen als eigenen String. Kanalindizes sind nullbasiert; geschlossene Handles werfen einen Fehler, außer isOpen.
+
+Überall verfügbar.
+
+## runIndex_persisted
+
+```text
+runIndex_persisted(run: RunIndex) -> Bool
+```
+
+Liefert ob der gespeicherte Index dem geprüften Präfix entspricht. Kanalindizes sind nullbasiert; geschlossene Handles werfen einen Fehler, außer isOpen.
+
+Überall verfügbar.
+
+## runIndex_samples
+
+```text
+runIndex_samples(run: RunIndex) -> Int64
+```
+
+Liefert die Zahl validierter Messzeilen. Kanalindizes sind nullbasiert; geschlossene Handles werfen einen Fehler, außer isOpen.
+
+Überall verfügbar.
+
+## runIndex_snapshots
+
+```text
+runIndex_snapshots(run: RunIndex) -> Int64
+```
+
+Liefert die Zahl validierter Szenen. Kanalindizes sind nullbasiert; geschlossene Handles werfen einen Fehler, außer isOpen.
+
+Überall verfügbar.
+
+## runIndex_symbol
+
+```text
+runIndex_symbol(run: RunIndex, channel: Int64) -> String
+```
+
+Liefert das Kanalsymbol als eigenen String. Kanalindizes sind nullbasiert; geschlossene Handles werfen einen Fehler, außer isOpen.
+
+Überall verfügbar.
+
 ## runSeed
 
 ```text
@@ -3340,6 +3570,206 @@ runSeed() -> Int64
 Liefert das vollständige 64-Bit-Bitmuster des aktuellen Laufseeds als Int64. Auch Seedwerte oberhalb von INT64_MAX bleiben beim Zurückwandeln in einen Zufallsstrom erhalten; nur im Experiment.
 
 Experimentmodul erforderlich.
+
+## runSnapshot_channels
+
+```text
+runSnapshot_channels(snapshot: RunSnapshot) -> Int64
+```
+
+Liefert Kanalzahl aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runSnapshot_color
+
+```text
+runSnapshot_color(snapshot: RunSnapshot, index: Int64) -> Int64
+```
+
+Liefert RGBA-Farbwert aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runSnapshot_id
+
+```text
+runSnapshot_id(snapshot: RunSnapshot, index: Int64) -> Int64
+```
+
+Liefert stabile Objekt-ID aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runSnapshot_objects
+
+```text
+runSnapshot_objects(snapshot: RunSnapshot) -> Int64
+```
+
+Liefert Objektzahl aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runSnapshot_parent
+
+```text
+runSnapshot_parent(snapshot: RunSnapshot, index: Int64) -> Int64
+```
+
+Liefert Eltern-ID aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runSnapshot_paused
+
+```text
+runSnapshot_paused(snapshot: RunSnapshot) -> Bool
+```
+
+Liefert Pausestatus aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runSnapshot_point
+
+```text
+runSnapshot_point(snapshot: RunSnapshot, index: Int64) -> Vec3
+```
+
+Liefert lokalen Punkt im gemeinsamen Punktpool aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runSnapshot_point_count
+
+```text
+runSnapshot_point_count(snapshot: RunSnapshot, index: Int64) -> Int64
+```
+
+Liefert Länge des Polyline-Bereichs aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runSnapshot_point_first
+
+```text
+runSnapshot_point_first(snapshot: RunSnapshot, index: Int64) -> Int64
+```
+
+Liefert Anfang des Polyline-Bereichs aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runSnapshot_points
+
+```text
+runSnapshot_points(snapshot: RunSnapshot) -> Int64
+```
+
+Liefert Punktzahl aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runSnapshot_position
+
+```text
+runSnapshot_position(snapshot: RunSnapshot, index: Int64) -> Vec3
+```
+
+Liefert lokales a.xyz (Frame-Translation) aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runSnapshot_radius
+
+```text
+runSnapshot_radius(snapshot: RunSnapshot, index: Int64) -> Float64
+```
+
+Liefert Radius aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runSnapshot_rotation
+
+```text
+runSnapshot_rotation(snapshot: RunSnapshot, index: Int64) -> Quat
+```
+
+Liefert Quaternionorientierung aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runSnapshot_shape
+
+```text
+runSnapshot_shape(snapshot: RunSnapshot, index: Int64) -> Int64
+```
+
+Liefert Formnummer aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runSnapshot_size
+
+```text
+runSnapshot_size(snapshot: RunSnapshot, index: Int64) -> Vec3
+```
+
+Liefert lokales b.xyz (Boxausdehnung oder Frame-Skalierung) aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runSnapshot_text
+
+```text
+runSnapshot_text(snapshot: RunSnapshot, index: Int64) -> String
+```
+
+Liefert eigenen Beschriftungsstring aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runSnapshot_time
+
+```text
+runSnapshot_time(snapshot: RunSnapshot) -> Float64
+```
+
+Liefert Zeit aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runSnapshot_transform
+
+```text
+runSnapshot_transform(snapshot: RunSnapshot, index: Int64) -> Mat4
+```
+
+Liefert die lokale-zu-Welt-Matrix eines Objektslots aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runSnapshot_value
+
+```text
+runSnapshot_value(snapshot: RunSnapshot, channel: Int64) -> Float64
+```
+
+Liefert Messwert am Kanal aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runSnapshot_world_point
+
+```text
+runSnapshot_world_point(snapshot: RunSnapshot, index: Int64, local: Vec3) -> Vec3
+```
+
+Liefert den Weltpunkt aus lokalem Punkt und Objektslot aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
 
 ## saveDiagnostic
 

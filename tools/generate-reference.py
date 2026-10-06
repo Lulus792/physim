@@ -341,6 +341,119 @@ LANG_DESCRIPTIONS = {
     'exportColumns': 'Exportiert 1 bis 32 zugeordnete Reihen gemeinsam als CSV. Reihenfolge, Namen und Einheiten erscheinen als Spalten; leere und nicht zugeordnete Listen sind Fehler.',
     'exportPlot': 'Exportiert das gespeicherte Diagramm als SVG mit dem angegebenen Suffix.',
 }
+LANG_DESCRIPTIONS.update({'RunIndex': 'Öffnet und validiert eine Laufdatei mit positivem Checkpointlimit im '
+             '64-MiB-Sprachbudget. Alte und unvollständige Dateien werden rekonstruiert. Kopien '
+             'teilen einen automatisch freigegebenen Dateibesitzer; Abfragen verwenden '
+             'nullbasierte Indizes.',
+ 'runIndexClose': 'Gibt die Referenz dieses veränderbaren Werts frei und schließt ihn. Andere '
+                  'Kopien bleiben verwendbar; die Datei schließt nach der letzten Referenz. '
+                  'Wiederholtes Schließen ist erlaubt.',
+ 'inputPath': 'Liefert einen eigenen UTF-8-String mit dem ausgewählten Eingabepfad. Nullbasierter '
+              'Index muss kleiner als inputCount sein. Nur in Analysemodulen verfügbar.',
+ 'runIndexRead': 'Liest einen unabhängigen besitzenden RunBlock mit 0–256 Zeilen ab first. '
+                 'Ungültige Grenzen oder CRC lösen typisierte Fehler aus; attempt liefert dann '
+                 'nil.',
+ 'runIndexSnapshot': 'Liest und validiert einen vollständigen kopierbaren RunSnapshot anhand '
+                     'seiner nullbasierten Szenennummer. Werte, Szene, Eltern und TRS bleiben '
+                     'erhalten.',
+ 'runIndexDimension': 'Liest den SI-Dimensionsexponenten am Kanal und Achsenindex 0–6: Länge, '
+                      'Masse, Zeit, Strom, Temperatur, Stoffmenge, Lichtstärke.',
+ 'runIndex_is_open': 'Liefert den Öffnungszustand ohne Fehler auch nach close. Kanalindizes sind '
+                     'nullbasiert; geschlossene Handles werfen einen Fehler, außer isOpen.',
+ 'runIndex_samples': 'Liefert die Zahl validierter Messzeilen. Kanalindizes sind nullbasiert; '
+                     'geschlossene Handles werfen einen Fehler, außer isOpen.',
+ 'runIndex_snapshots': 'Liefert die Zahl validierter Szenen. Kanalindizes sind nullbasiert; '
+                       'geschlossene Handles werfen einen Fehler, außer isOpen.',
+ 'runIndex_checkpoints': 'Liefert die gemeinsame Zahl aller Checkpoints. Kanalindizes sind '
+                         'nullbasiert; geschlossene Handles werfen einen Fehler, außer isOpen.',
+ 'runIndex_channels': 'Liefert die Kanalzahl. Kanalindizes sind nullbasiert; geschlossene Handles '
+                      'werfen einen Fehler, außer isOpen.',
+ 'runIndex_complete': 'Liefert ob ein gültiger Footer vorliegt. Kanalindizes sind nullbasiert; '
+                      'geschlossene Handles werfen einen Fehler, außer isOpen.',
+ 'runIndex_persisted': 'Liefert ob der gespeicherte Index dem geprüften Präfix entspricht. '
+                       'Kanalindizes sind nullbasiert; geschlossene Handles werfen einen Fehler, '
+                       'außer isOpen.',
+ 'runIndex_metadata': 'Liefert einen eigenen Metadatenstring. Kanalindizes sind nullbasiert; '
+                      'geschlossene Handles werfen einen Fehler, außer isOpen.',
+ 'runIndex_name': 'Liefert den Kanalnamen als eigenen String. Kanalindizes sind nullbasiert; '
+                  'geschlossene Handles werfen einen Fehler, außer isOpen.',
+ 'runIndex_symbol': 'Liefert das Kanalsymbol als eigenen String. Kanalindizes sind nullbasiert; '
+                    'geschlossene Handles werfen einen Fehler, außer isOpen.',
+ 'runIndex_description': 'Liefert die Kanalbeschreibung als eigenen String. Kanalindizes sind '
+                         'nullbasiert; geschlossene Handles werfen einen Fehler, außer isOpen.',
+ 'runBlock_count': 'Liefert Zeilenzahl. Der Block bleibt nach Schließen des Index verwendbar; '
+                   'ungültige Indizes werfen Fehler.',
+ 'runBlock_channels': 'Liefert Kanalzahl. Der Block bleibt nach Schließen des Index verwendbar; '
+                      'ungültige Indizes werfen Fehler.',
+ 'runBlock_time': 'Liefert Zeit an der nullbasierten Zeile. Der Block bleibt nach Schließen des '
+                  'Index verwendbar; ungültige Indizes werfen Fehler.',
+ 'runBlock_value': 'Liefert Messwert an nullbasierter Zeile und Kanal. Der Block bleibt nach '
+                   'Schließen des Index verwendbar; ungültige Indizes werfen Fehler.',
+ 'runBlock_times': 'Liefert unabhängiges Float64-Array aller Zeiten. Der Block bleibt nach '
+                   'Schließen des Index verwendbar; ungültige Indizes werfen Fehler.',
+ 'runBlock_column': 'Liefert unabhängiges Float64-Array eines nullbasierten Kanals. Der Block '
+                    'bleibt nach Schließen des Index verwendbar; ungültige Indizes werfen Fehler.',
+ 'runSnapshot_time': 'Liefert Zeit aus dem vollständigen Snapshot. Kanal-, Objekt- und '
+                     'Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine '
+                     'IDs.',
+ 'runSnapshot_paused': 'Liefert Pausestatus aus dem vollständigen Snapshot. Kanal-, Objekt- und '
+                       'Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine '
+                       'IDs.',
+ 'runSnapshot_channels': 'Liefert Kanalzahl aus dem vollständigen Snapshot. Kanal-, Objekt- und '
+                         'Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind '
+                         'keine IDs.',
+ 'runSnapshot_objects': 'Liefert Objektzahl aus dem vollständigen Snapshot. Kanal-, Objekt- und '
+                        'Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind '
+                        'keine IDs.',
+ 'runSnapshot_points': 'Liefert Punktzahl aus dem vollständigen Snapshot. Kanal-, Objekt- und '
+                       'Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine '
+                       'IDs.',
+ 'runSnapshot_value': 'Liefert Messwert am Kanal aus dem vollständigen Snapshot. Kanal-, Objekt- '
+                      'und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind '
+                      'keine IDs.',
+ 'runSnapshot_id': 'Liefert stabile Objekt-ID aus dem vollständigen Snapshot. Kanal-, Objekt- und '
+                   'Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine '
+                   'IDs.',
+ 'runSnapshot_parent': 'Liefert Eltern-ID aus dem vollständigen Snapshot. Kanal-, Objekt- und '
+                       'Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine '
+                       'IDs.',
+ 'runSnapshot_shape': 'Liefert Formnummer aus dem vollständigen Snapshot. Kanal-, Objekt- und '
+                      'Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine '
+                      'IDs.',
+ 'runSnapshot_color': 'Liefert RGBA-Farbwert aus dem vollständigen Snapshot. Kanal-, Objekt- und '
+                      'Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine '
+                      'IDs.',
+ 'runSnapshot_position': 'Liefert lokales a.xyz (Frame-Translation) aus dem vollständigen '
+                         'Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden '
+                         'geprüft; Objektindizes sind keine IDs.',
+ 'runSnapshot_size': 'Liefert lokales b.xyz (Boxausdehnung oder Frame-Skalierung) aus dem '
+                     'vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert '
+                     'und werden geprüft; Objektindizes sind keine IDs.',
+ 'runSnapshot_radius': 'Liefert Radius aus dem vollständigen Snapshot. Kanal-, Objekt- und '
+                       'Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine '
+                       'IDs.',
+ 'runSnapshot_rotation': 'Liefert Quaternionorientierung aus dem vollständigen Snapshot. Kanal-, '
+                         'Objekt- und Punktindizes sind nullbasiert und werden geprüft; '
+                         'Objektindizes sind keine IDs.',
+ 'runSnapshot_point_first': 'Liefert Anfang des Polyline-Bereichs aus dem vollständigen Snapshot. '
+                            'Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; '
+                            'Objektindizes sind keine IDs.',
+ 'runSnapshot_point_count': 'Liefert Länge des Polyline-Bereichs aus dem vollständigen Snapshot. '
+                            'Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; '
+                            'Objektindizes sind keine IDs.',
+ 'runSnapshot_text': 'Liefert eigenen Beschriftungsstring aus dem vollständigen Snapshot. Kanal-, '
+                     'Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes '
+                     'sind keine IDs.',
+ 'runSnapshot_point': 'Liefert lokalen Punkt im gemeinsamen Punktpool aus dem vollständigen '
+                      'Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden '
+                      'geprüft; Objektindizes sind keine IDs.',
+ 'runSnapshot_world_point': 'Liefert den Weltpunkt aus lokalem Punkt und Objektslot aus dem '
+                            'vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind '
+                            'nullbasiert und werden geprüft; Objektindizes sind keine IDs.',
+ 'runSnapshot_transform': 'Liefert die lokale-zu-Welt-Matrix eines Objektslots aus dem '
+                          'vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind '
+                          'nullbasiert und werden geprüft; Objektindizes sind keine IDs.'})
+
 for n in (2, 3, 4):
     LANG_DESCRIPTIONS[f'dot{n}'] = 'Skalarprodukt zweier Vektoren gleicher Dimension.'
     LANG_DESCRIPTIONS[f'length{n}'] = 'Euklidische Länge des Vektors.'
@@ -365,7 +478,7 @@ def language_reference():
     table = source.split('library[] = {', 1)[1].split('static const ps_lang_builtin *library_find', 1)[0]
     pattern = re.compile(r'\{\s*"(\w+)"\s*,\s*"\w+"\s*,\s*(\w+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*\{([^}]+)\}\s*,\s*\{([^}]+)\}\s*\}', re.S)
     types = dict(F='Float64', I='Int64', S='String', U='Unit', QUANTITY='Quantity', MEDIUM='Medium', MATERIAL='Material', SUBMERSION='Submersion', C='Channel',
-                 V2='Vec2', V3='Vec3', V4='Vec4', Q='Quat', M3='Mat3', M4='Mat4', B3='Bezier3', RNG='Rng', ODE_RESULT='OdeResult', STEP_INTERVAL='StepInterval', SCALAR_RESULT='ScalarResult', DIAGNOSTIC='Diagnostic', VOID='Void', D='Dataset', R='Series',
+                 V2='Vec2', V3='Vec3', V4='Vec4', Q='Quat', M3='Mat3', M4='Mat4', B3='Bezier3', RNG='Rng', ODE_RESULT='OdeResult', STEP_INTERVAL='StepInterval', SCALAR_RESULT='ScalarResult', DIAGNOSTIC='Diagnostic', RUN_INDEX='RunIndex', RUN_BLOCK='RunBlock', RUN_SNAPSHOT='RunSnapshot', VOID='Void', D='Dataset', R='Series',
                  P='Plot', TABLE='Table', DIST='Distribution', CONFIG='SensorConfig', SENSOR='Sensor',
                  BODY='Body', CONTACTS='Contacts', SOLVER='ContactSolver', RESULT='ContactResult',
                  JOINT='DistanceJoint', JOINT_RESULT='JointResult',

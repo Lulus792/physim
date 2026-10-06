@@ -1,0 +1,11 @@
+// Read a bounded tail of the selected raw run without importing a Dataset.
+func analyze():
+    report("Indexed run tail")
+    var run = RunIndex(inputPath(0), 1000000)
+    let count = Int64.min(run.sampleCount(), 256)
+    let block = run.read(run.sampleCount() - count, count)
+    let time = Series.fromValues(block.times(), Unit(0,0,1,0,0,0,0,1,"s"), "time")
+    let unit = Unit(run.channelDimension(0,0),run.channelDimension(0,1),run.channelDimension(0,2),run.channelDimension(0,3),run.channelDimension(0,4),run.channelDimension(0,5),run.channelDimension(0,6),1,run.channelSymbol(0))
+    let values = time.alignedValues(block.column(0), unit, run.channelName(0))
+    values.plot(time, "Last recorded samples", run.channelName(0))
+    run.close()

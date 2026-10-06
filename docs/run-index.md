@@ -68,8 +68,57 @@ ein zusätzlicher linearer Finalisierungsscan; auch das geprüfte Öffnen ist li
 Der Index beschleunigt anschließende gezielte Abfragen. Kompression, neue
 Messdatentypen und ein ungeprüfter Schnellöffnungsmodus sind damit nicht implementiert.
 Physim-Experimente speichern den Index automatisch über denselben Runner.
-Die gezielten Abfragefunktionen besitzen bislang eine C-Schnittstelle;
-eigene Sprachmethoden dafür stehen noch aus.
+Physim 0.176.0 ergänzt eigene Abfragen mit `RunIndex`, `RunBlock` und `RunSnapshot`.
+
+## Gezielte Abfragen in Physim
+
+```text
+var run = RunIndex("runs/example.psrun", 100000)
+let block = run.read(1000, 32)
+let times = block.times()
+let position = block.column(0)
+let savedScene = run.snapshot(0)
+let copy = run
+run.close()
+assert(!run.isOpen() && copy.isOpen())
+```
+
+`RunIndex(path, maximumEntries)` prüft dieselben C-Daten im gemeinsamen
+64-MiB-Sprachbudget. `sampleCount`, `snapshotCount`, `checkpointCount` und
+`channelCount` sind Methoden; `isComplete()` und `isPersisted()` zeigen den
+Abschluss-/Indexstatus. Ein rekonstruierbarer Präfix liefert einen offenen Wert.
+`metadata()`, `channelName(i)`, `channelSymbol(i)` und `channelDescription(i)`
+liefern eigene Strings. `channelDimension(i, axis)` liest die sieben SI-Exponenten.
+In einem Analysemodul liefert `inputPath(i)` einen eigenen String mit dem
+ausgewählten Eingabepfad, geprüft gegen `inputCount()`.
+
+Kopien teilen einen automatisch verwalteten Dateibesitzer. `close()` verändert
+nur die Referenz des jeweiligen `var`-Werts; andere Kopien bleiben offen. Nach
+der letzten Referenz werden Datei und Checkpoints freigegeben. Arrays, optionale
+Werte, Strukturfelder, Rückgaben und Closures verwenden dieselben Besitzregeln.
+Die Handlekopien werden in diesem synchronen Sprachmodell nicht nebenläufig
+verwendet. Wiederholtes `close()` ist erlaubt; weitere Abfragen am geschlossenen
+Wert lösen `PS_INVALID` aus. `isOpen()` bleibt abfragbar.
+
+`RunBlock` hält unabhängige Zeilen und bleibt nach Schließen des Index verwendbar.
+`count()`, `channelCount()`, `time(row)` und `value(row, channel)` lesen die Werte.
+`times()` und `column(channel)` liefern eigene Float64-Arrays. `RunSnapshot`
+kopiert den vollständigen gespeicherten Zustand ohne geliehene Zeiger. Seine
+Methoden lesen Zeit, Pausestatus, Messwerte, Objekt-/Punktzahl, IDs, Eltern, Form,
+Farbe, lokale Position, Ausdehnung/Scale, Radius, Quaternion, Text und
+Polyline-Bereiche/Punkte. `worldPoint(index, local)` und `transform(index)`
+verwenden denselben Core-Transformationsvertrag. Objektindizes sind Slots,
+keine stabilen IDs; alle Indizes sind nullbasiert und geprüft.
+
+`attempt` fängt Abfrage-/Allokationsfehler ab und erhält alle bestehenden Werte.
+Ein nicht vorhandener C-Bereich (`PS_EOF`) wird zu `PS_INVALID`, beschädigte
+ausgewählte Blöcke (`PS_RECOVERED`) zu `PS_CORRUPT`; andere Fehlercodes bleiben
+erhalten. Erfolgreich rekonstruierte Dateien lösen beim Öffnen keinen Fehler aus.
+Bereiche werden nicht interpoliert oder an eine andere Zeitreihe angepasst.
+Das [Analysebeispiel](../examples/language/run_index_analysis.phys) erzeugt
+aus einem gelesenen Block ausdrücklich ausgerichtete Reihen und übernimmt
+die Kanal-Dimensionen. [Wert-/Besitzprüfungen](../examples/language/run_index_values.phys)
+verwenden die durch den C-Prüfer erzeugten Fixtures.
 
 Eine Million Zeilen erzeugen 3907 Messcheckpoints. Die ausführbare Prüfung
 kontrolliert diesen Fall mit einem Allocatorbudget von 600000 Bytes, zusätzlich

@@ -1,10 +1,10 @@
 # Eigene Physim-Sprache
 
-Stand: 2026-10-06. Sprachvertrag 0.175.0; noch keine freigegebene Anwendersprache.
+Stand: 2026-10-06. Sprachvertrag 0.176.0; noch keine freigegebene Anwendersprache.
 Der Arbeitsname ist „Physim-Sprache“. Das vollständige Ziel und die Abnahmen
 LANG-001 bis LANG-007 stehen in Abschnitt 10 des Projektplans.
 
-Die Sprachversion `0.175.0` steht unabhängig von der App-Version und der SDK-ABI
+Die Sprachversion `0.176.0` steht unabhängig von der App-Version und der SDK-ABI
 in `src/language/version.h`. `physimc --version` und der Kopf des generierten C
 geben sie aus. Änderungen an Syntax oder Semantik erfordern eine bewusste
 Anhebung; die vorliegende Fassung ist noch ein Entwicklungsvertrag und keine
@@ -2969,10 +2969,20 @@ Koordinatenrahmen im `scene`-Callback. Nachfahren verwenden deren zusammengesetz
 TRS; gewöhnliche Gruppen bleiben rein organisatorisch. Vertrag, Beispiele,
 Picking und gespeicherte lokale Szenen erklärt [Szenenkoordinaten](scene-frames.md).
 
-## Strukturierte Diagnosen (0.175.0)
+## Strukturierte Diagnosen (0.176.0)
 
 `Diagnostic` besitzt Fehlercode, Operation, Argument, Quellpfad, Zeile, Spalte
 und Nachricht mit Wertsemantik. `Diagnostic.here` erfasst die ursprüngliche
 Quellstelle; Methoden formatieren, speichern und kodieren den Wert. `.raise()`
 transportiert die Felder aus dem Callback. Abgefangene `attempt`-Fehler hinterlassen
 keine Hostdiagnose. [Vertrag, Methoden und Beispiele](diagnostics.md).
+
+## Indizierte Läufe und Szenen
+
+`RunIndex(path, maximumEntries)` besitzt einen validierten Lauf samt Checkpoints;
+`read(first, count)` liefert einen unabhängigen `RunBlock`, `snapshot(ordinal)`
+einen vollständigen `RunSnapshot`. In Analysen erschließt `inputPath(index)` die
+ausgewählten Quelldateien. Kopien teilen einen automatisch freigegebenen Besitzer;
+`close()` verändert nur den jeweiligen veränderbaren Wert. Arrays, optionale
+Werte und Strukturen behalten diese Besitzregeln. Details, Grenzen, Szenenabfragen
+und ein Beispiel mit ausgerichteten SI-Reihen stehen unter [Laufdatei-Index](run-index.md).

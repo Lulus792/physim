@@ -105,6 +105,10 @@ static inline void psra_path(psra_host *h, const char *suffix, const char *exten
     if (n < 0 || n >= 4096)
         psra_check(h, PS_LIMIT, site);
 }
+static inline psrt_string psra_input_path(psra_host *h,ps_allocator allocator,int64_t index,psrt_site site) {
+    if(index<0 || (uint64_t)index>=h->count)psra_check(h,PS_INVALID,site);
+    psrt_string result;psra_check(h,psrt_string_make(allocator,h->inputs[index],strlen(h->inputs[index]),&result),site);return result;
+}
 static inline int64_t psra_input_count(psra_host *h, psrt_site site) {
     (void)site;
     return (int64_t)h->count;

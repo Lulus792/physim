@@ -97,7 +97,7 @@ static int builtin_type_name(checker *c, ps_lang_token t) {
         "Vec4", "Quat", "Mat3", "Mat4", "Bezier3", "Unit", "Quantity", "Medium", "Material",
         "Submersion", "Channel", "Dataset",
         "Series", "Plot", "Table", "Distribution", "SensorConfig", "Sensor",
-        "Measurement", "Rng", "OdeResult", "StepInterval", "ScalarResult", "Diagnostic", "Body", "Contacts", "ContactSolver", "ContactResult",
+        "Measurement", "Rng", "OdeResult", "StepInterval", "ScalarResult", "Diagnostic", "RunIndex", "RunBlock", "RunSnapshot", "Body", "Contacts", "ContactSolver", "ContactResult",
         "DistanceJoint", "JointResult", "ContactConstraint", "JointConstraint",
         "ConstraintResult", "Sweep", "Aabb", "CollisionPair"
     };
@@ -111,7 +111,7 @@ static int reserved_nominal_type_name(checker *c, ps_lang_token t) {
         "Int64", "Float64", "Bool", "String", "Void", "Vec2", "Vec3", "Vec4",
         "Quat", "Mat3", "Mat4", "Bezier3", "Optional", "Rng", "Unit", "Medium", "Material",
         "Submersion", "Channel",
-        "Dataset", "Series", "Plot", "OdeResult", "StepInterval", "ScalarResult", "Diagnostic"
+        "Dataset", "Series", "Plot", "OdeResult", "StepInterval", "ScalarResult", "Diagnostic", "RunIndex", "RunBlock", "RunSnapshot"
     };
     for (size_t i = 0; i < sizeof(names) / sizeof(names[0]); ++i)
         if (word(c, t, names[i]))
@@ -199,7 +199,7 @@ static int numeric(ps_lang_type t) { return t == PS_TYPE_INT64 || t == PS_TYPE_F
 static int vector_type(ps_lang_type t) { return ps_lang_vector_dimensions(t) != 0; }
 static int value_type(ps_lang_type t) {
     return t == PS_TYPE_BOOL || numeric(t) || t == PS_TYPE_STRING || t >= PS_TYPE_RECORD_BASE ||
-           (t >= PS_TYPE_VEC2 && t <= PS_TYPE_DIAGNOSTIC);
+           (t >= PS_TYPE_VEC2 && t <= PS_TYPE_RUN_SNAPSHOT);
 }
 static int scalar_type(ps_lang_type t) {
     return t == PS_TYPE_BOOL || numeric(t) || t == PS_TYPE_STRING;
@@ -509,6 +509,12 @@ static ps_lang_type annotation(checker *c, size_t id, int allow_void) {
             t = PS_TYPE_MATERIAL;
         else if (word(c, n->token, "Submersion"))
             t = PS_TYPE_SUBMERSION;
+        else if (word(c,n->token,"RunIndex"))
+            t=PS_TYPE_RUN_INDEX;
+        else if (word(c,n->token,"RunBlock"))
+            t=PS_TYPE_RUN_BLOCK;
+        else if (word(c,n->token,"RunSnapshot"))
+            t=PS_TYPE_RUN_SNAPSHOT;
         else if (word(c, n->token, "Channel"))
             t = PS_TYPE_CHANNEL;
         else if (word(c, n->token, "Dataset"))
@@ -5269,6 +5275,9 @@ static void check_record(checker *c, size_t id) {
             part = 16;
         if (c->info[f].type == PS_TYPE_ODE_RESULT)
             part = 128;
+        if (c->info[f].type == PS_TYPE_RUN_INDEX) part=8;
+        if (c->info[f].type == PS_TYPE_RUN_BLOCK) part=64;
+        if (c->info[f].type == PS_TYPE_RUN_SNAPSHOT) part=8192;
         if (c->info[f].type == PS_TYPE_SCALAR_RESULT)
             part = 48;
         if (c->info[f].type == PS_TYPE_BODY)

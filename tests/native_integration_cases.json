@@ -1329,6 +1329,30 @@
       "libraries": [
         "core"
       ]
+    },
+    "run-index-values": {
+      "source": "examples/language/run_index_values.phys",
+      "mode": "--emit-c"
+    },
+    "run-index-memory": {
+      "sources": [
+        "tests/test_language_run_index_memory.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "run-index-analysis": {
+      "source": "examples/language/run_index_analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "run-index-report": {
+      "sources": [
+        "tests/test_language_run_index_report.c"
+      ],
+      "libraries": [
+        "core"
+      ]
     }
   },
   "tests": [
@@ -5220,6 +5244,54 @@
           "arguments": [
             "{root}/tests/test_run_index_codec.py",
             "{work}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "language_run_index",
+      "targets": [
+        "run-index-probe",
+        "run-index-values",
+        "run-index-memory",
+        "physim-analysis-runner",
+        "run-index-analysis",
+        "run-index-report"
+      ],
+      "steps": [
+        {
+          "program": "run-index-probe",
+          "arguments": [
+            "{work}"
+          ],
+          "timeout": 120
+        },
+        {
+          "program": "run-index-values",
+          "arguments": [],
+          "timeout": 120
+        },
+        {
+          "program": "run-index-memory",
+          "arguments": [
+            "{work}/index \u03b1.psrun"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{run-index-analysis}",
+            "{work}/million.psrun",
+            "{work}/indexed-report"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "run-index-report",
+          "arguments": [
+            "{work}/indexed-report.psreport"
           ],
           "timeout": 60
         }

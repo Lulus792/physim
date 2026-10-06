@@ -77,6 +77,10 @@ def main():
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
         probe = builder.executable("sdk-probe", ["probe.c"], [library])
         series_probe=builder.executable("sdk-series-probe",["series-probe.c"],[library])
+        shutil.copy2(repo / "tests/test_run_index.c",consumer / "run-index-language-fixture.c")
+        shutil.copy2(repo / "tests/test_allocator.h",consumer / "test_allocator.h")
+        fixture=builder.executable("run-index-language-fixture",["run-index-language-fixture.c"],[library])
+        checked([fixture,root])
         header_sources = []
         for header in sorted((sdk / "include/physim").glob("*.h")):
             name = "header_" + header.stem + ".c"
@@ -134,6 +138,16 @@ def main():
             modules[name] = builder.executable("language-" + name, [source.name], [rebuilt_core],
                                                module=True, language=True)
             print(f"Installed language module: {name} rebuilt", flush=True)
+        shutil.copy2(repo / "tests/test_language_run_index_memory.c",consumer / "run-index-language-memory.c")
+        shutil.copy2(repo / "tests/test_language_run_index_report.c",consumer / "run-index-language-report.c")
+        for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+            memory=builder.executable("run-index-language-memory-"+kind,["run-index-language-memory.c"],[archive])
+            checked([memory,root / "index α.psrun"])
+        report=root / "Indexed language report"
+        checked([sdk / "bin" / ("physim-analysis-runner"+suffix),modules["run_index_analysis"],root / "million.psrun",report])
+        checker=builder.executable("run-index-language-report",["run-index-language-report.c"],[rebuilt_core])
+        checked([checker,Path(str(report)+".psreport")])
+        print("Installed SDK indexed language: owned handles, allocation failures, selected input path and all 256 report rows passed",flush=True)
 
         # Logging must also survive relocation and a rebuild of the shipped Core.
         shutil.copy2(sdk / "examples/logging/main.c", consumer / "logging.c")
@@ -254,13 +268,14 @@ def main():
             raise RuntimeError("App tests require an SDK with the app")
     (root / "PASSED.txt").write_text(
         "Native SDK relocation, independent headers, installed and rebuilt core archives, eight bundled and rebuilt C templates, "
-        "sixteen language programs, 31 rebuilt language modules, nine language experiments with both general analyses, "
+        "seventeen language programs, 32 rebuilt language modules, nine language experiments with both general analyses, "
         "specialized sensor analysis and six C/Physim combinations passed.\n"
         "Adaptive bundled/source C and Physim pendulums, actual variable sample times, energy and both analysis languages passed.\n" +
         "Common-target-time parameter studies from bundled/source C and Physim pendulums passed with installed and rebuilt probes.\n" +
         "Logging through installed/rebuilt C Core and Physim passed with exclusive JSONL and opt-in wire events.\n" +
         "Structured diagnostics through installed/rebuilt Core, C/Physim runners and legacy ABI passed.\n" +
         "Run indexes through installed/rebuilt Core, legacy/recovered files, allocator failures and million-row independent codec passed.\n" +
+        "Indexed language values, copied owners, failure cleanup and all 256 SI report rows passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
         ("Eight C template GUI workflows and the complete Physim language GUI workflow passed.\n" if args.app_tests else ""), encoding="utf-8")
     print(f"Native SDK verified: {root}")

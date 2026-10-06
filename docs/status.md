@@ -3,6 +3,13 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-06. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Physim-Indexabfragen:** Sprachvertrag 0.176.0 ergänzt besitzende `RunIndex`-/
+`RunBlock`-Werte und vollständige kopierbare `RunSnapshot`-Zustände. Kopien, Arrays,
+optionale Werte und Strukturfelder räumen Ressourcen automatisch auf; `close()`
+gibt nur die jeweilige Referenz frei. Abfragen und Kanal-SI-Metadaten verwenden
+den geprüften C-Core. `inputPath()` verbindet Analyseauswahl und direkte Abfragen.
+[Benutzung und Besitz](run-index.md).
+
 **Laufdatei-Index:** Finalisierte Messdateien erhalten begrenzte CRC-geschützte
 Indexseiten vor dem bisherigen Footer. Die neue C-API validiert und rekonstruiert
 Checkpoints mit explizitem Allocator, auch für alte und unterbrochene Läufe;
@@ -60,7 +67,7 @@ geprüft und übernommen, nur fehlende Indizes starten erneut. Seeds, Parameter
 und feste/adaptive Zeitvorgaben bleiben erhalten. Aktuelle Editoränderungen und
 die alte Serie werden nicht verändert. Vollständig vorhandene Serien starten
 keine neuen Prozesse. Frühere Serien ohne Checkpoint bleiben nicht fortsetzbar.
-Der Katalog umfasst 529 Prüfungen ohne Fenster (514 ohne SDL) und 58 Fensterfälle.
+Der Katalog umfasst 531 Prüfungen ohne Fenster (516 ohne SDL) und 58 Fensterfälle.
 Ausgeführte Nachweise stehen im [Plattformbericht](platform-validation.md).
 
 **Eigenständige Analyseprojekte:** Die App legt jetzt C-/Physim-Auswertungen ohne

@@ -1,0 +1,51 @@
+var run = RunIndex("index α.psrun", 1000)
+assert(run.isOpen() && run.isComplete() && run.isPersisted())
+assert(run.sampleCount() == 1000 && run.snapshotCount() == 334 && run.channelCount() == 2)
+assert(run.channelName(0) == "position" && run.channelSymbol(0) == "m")
+assert(run.channelDimension(0,0) == 1 && run.metadata().contains("Indexed α"))
+let copied = run
+let rows = run.read(250, 20)
+assert(rows.count() == 20 && rows.channelCount() == 2 && rows.value(19,0) == 269)
+assert(rows.times()[0] == 0.25 && rows.column(1)[1] == -251)
+let snapshot = run.snapshot(2)
+assert(snapshot.time() == 0.006 && snapshot.objectId(0) == 1 && snapshot.position(0).x == 6)
+assert(snapshot.worldPoint(0,Vec3(1,2,3)).x == 1)
+var owners = [copied, run]
+assert(owners.count == 2)
+run.close()
+assert(!run.isOpen() && copied.isOpen() && copied.read(0,1).value(0,0) == 0)
+assert(attempt(run.read(0,1)) == nil && attempt(copied.read(-1,1)) == nil)
+var editable = [copied]
+let original = editable
+editable[0].close()
+assert(!editable[0].isOpen() && original[0].isOpen())
+let optional: RunIndex? = Optional.some(copied)
+assert(optional != nil)
+struct Holder:
+    let index: RunIndex
+let wrapped = Holder(copied)
+assert(wrapped.index.sampleCount() == 1000)
+print("RunIndex owned language values passed")
+
+let legacy = RunIndex("variant-1.psrun",1000)
+let recovered = RunIndex("variant-2.psrun",1000)
+assert(legacy.isComplete() && !legacy.isPersisted())
+assert(!recovered.isComplete() && !recovered.isPersisted() && recovered.sampleCount() == 1000)
+assert(attempt(RunIndex("index α.psrun",1)) == nil)
+assert(attempt(copied.snapshot(-1)) == nil && attempt(copied.snapshot(999)) == nil)
+assert(attempt(copied.read(0,257)) == nil && attempt(rows.value(0,2)) == nil)
+for i in 0..<2000:
+    var transient = RunIndex("index α.psrun",1000)
+    let block = transient.read(255,2)
+    let option = Optional.some(transient)
+    let kept = [transient, option.unwrap()]
+    transient.close()
+    assert(kept[0].read(0,1).count() == 1 && block.value(1,0) == 256)
+    assert(attempt(kept[1].read(-1,1)) == nil)
+func capture() -> func() -> Int64:
+    let captured = RunIndex("index α.psrun",1000)
+    return func() -> Int64:
+        return captured.sampleCount()
+let retained = capture()
+assert(retained() == 1000)
+assert(attempt(rows.column(-1)) == nil)

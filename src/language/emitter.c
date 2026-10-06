@@ -129,6 +129,9 @@ static const char *type(emitter *e, ps_lang_type t) {
         return "ps_quantity";
     case PS_TYPE_MEDIUM:
         return "ps_medium";
+    case PS_TYPE_RUN_INDEX: return "psrt_run_index";
+    case PS_TYPE_RUN_BLOCK: return "psrt_run_block";
+    case PS_TYPE_RUN_SNAPSHOT: return "ps_snapshot";
     case PS_TYPE_DIAGNOSTIC:
         return "ps_diagnostic";
     case PS_TYPE_MATERIAL:
@@ -218,7 +221,7 @@ static int owns(emitter *e, ps_lang_type t) {
     if (!e->arrays)
         return 0;
     if (ps_lang_function_type(t) || t >= PS_TYPE_OPTIONAL_BASE ||
-        t == PS_TYPE_CONSTRAINT_RESULT ||
+        t == PS_TYPE_RUN_INDEX || t == PS_TYPE_RUN_BLOCK || t == PS_TYPE_CONSTRAINT_RESULT ||
         t == PS_TYPE_ODE_RESULT || t == PS_TYPE_STRING)
         return 1;
     if (!ps_lang_record_type(t))
@@ -283,6 +286,8 @@ static void descriptor(emitter *e, ps_lang_type t) {
 static void keeper(emitter *e, ps_lang_type t) {
     if (ps_lang_function_type(t))
         out(e, "pskeep_function");
+    else if (t == PS_TYPE_RUN_INDEX) out(e,"psrt_run_index_keep");
+    else if (t == PS_TYPE_RUN_BLOCK) out(e,"psrt_run_block_keep");
     else if (t == PS_TYPE_CONSTRAINT_RESULT)
         out(e, "psrt_constraints_keep");
     else if (t == PS_TYPE_ODE_RESULT)
@@ -295,6 +300,8 @@ static void keeper(emitter *e, ps_lang_type t) {
 static void destroyer(emitter *e, ps_lang_type t) {
     if (ps_lang_function_type(t))
         out(e, "psrt_function_destroy");
+    else if (t == PS_TYPE_RUN_INDEX) out(e,"psrt_run_index_drop");
+    else if (t == PS_TYPE_RUN_BLOCK) out(e,"psrt_run_block_drop");
     else if (t == PS_TYPE_CONSTRAINT_RESULT)
         out(e, "psrt_constraints_drop");
     else if (t == PS_TYPE_ODE_RESULT)
@@ -2111,6 +2118,7 @@ static void call(emitter *e, size_t id) {
                 e->experiment ? "psstate->memory" : "psmemory");
         if (ps_lang_signature_element(builtin->result) ||
             builtin->result == PS_TYPE_STRING ||
+            builtin->result == PS_TYPE_RUN_INDEX || builtin->result == PS_TYPE_RUN_BLOCK ||
             builtin->result == PS_TYPE_CONSTRAINT_RESULT ||
             builtin->result == PS_TYPE_ODE_RESULT)
             out(e, "psrt_memory_allocator(&%s), ", e->experiment ? "psstate->memory" : "psmemory");
@@ -3862,6 +3870,8 @@ static void ownership_definitions(emitter *e) {
             out(e, "static const psrt_element_type psdesc_%u = {sizeof(%s),%s};\n", t,
                 type(e, (ps_lang_type)t), t == PS_TYPE_CONSTRAINT_RESULT
                 ? "psrt_constraints_copy,psrt_constraints_drop"
+                : t == PS_TYPE_RUN_INDEX ? "psrt_run_index_copy,psrt_run_index_drop"
+                : t == PS_TYPE_RUN_BLOCK ? "psrt_run_block_copy,psrt_run_block_drop"
                 : t == PS_TYPE_ODE_RESULT
                 ? "psrt_ode_result_copy,psrt_ode_result_drop" : "NULL,NULL");
     for (size_t id = 1; id < e->node_count; id++)
@@ -4071,19 +4081,20 @@ static ps_lang_check_result emit(FILE *output, const char *source_path,
     for (size_t id = 1; id < parsed.count; id++) {
         if (ps_lang_function_type(info[id].type) ||
             info[id].type >= PS_TYPE_OPTIONAL_BASE ||
+            info[id].type == PS_TYPE_RUN_INDEX || info[id].type == PS_TYPE_RUN_BLOCK ||
             info[id].type == PS_TYPE_CONSTRAINT_RESULT || info[id].type == PS_TYPE_ODE_RESULT)
             e.arrays = e.sdk = 1;
         if (info[id].type == PS_TYPE_STRING || info[id].array_element == PS_TYPE_STRING ||
             info[id].optional_element == PS_TYPE_STRING)
             e.strings = e.arrays = 1;
         if ((info[id].type >= PS_TYPE_BOOL && info[id].type <= PS_TYPE_STRING) ||
-            (info[id].type >= PS_TYPE_VEC2 && info[id].type <= PS_TYPE_DIAGNOSTIC))
+            (info[id].type >= PS_TYPE_VEC2 && info[id].type <= PS_TYPE_RUN_SNAPSHOT))
             e.primitive_types |= UINT64_C(1) << info[id].type;
         if ((info[id].array_element >= PS_TYPE_BOOL && info[id].array_element <= PS_TYPE_STRING) ||
-            (info[id].array_element >= PS_TYPE_VEC2 && info[id].array_element <= PS_TYPE_DIAGNOSTIC))
+            (info[id].array_element >= PS_TYPE_VEC2 && info[id].array_element <= PS_TYPE_RUN_SNAPSHOT))
             e.primitive_types |= UINT64_C(1) << info[id].array_element;
         if ((info[id].optional_element >= PS_TYPE_BOOL && info[id].optional_element <= PS_TYPE_STRING) ||
-            (info[id].optional_element >= PS_TYPE_VEC2 && info[id].optional_element <= PS_TYPE_DIAGNOSTIC))
+            (info[id].optional_element >= PS_TYPE_VEC2 && info[id].optional_element <= PS_TYPE_RUN_SNAPSHOT))
             e.primitive_types |= UINT64_C(1) << info[id].optional_element;
         const ps_lang_builtin *builtin = ps_lang_builtin_get(info[id].binding);
         if (builtin) {
@@ -4093,7 +4104,7 @@ static ps_lang_check_result emit(FILE *output, const char *source_path,
             else if (builtin->host && builtin->host != (unsigned)experiment)
                 fail(&e, id, "Host API is unavailable in this module kind");
         }
-        if (info[id].type >= PS_TYPE_VEC2 && info[id].type <= PS_TYPE_DIAGNOSTIC)
+        if (info[id].type >= PS_TYPE_VEC2 && info[id].type <= PS_TYPE_RUN_SNAPSHOT)
             e.sdk = 1;
         if (info[id].type >= PS_TYPE_DATASET && info[id].type <= PS_TYPE_TABLE && experiment != 2)
             fail(&e, id, "Analysis handles require --emit-analysis");
