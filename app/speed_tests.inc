@@ -1,6 +1,7 @@
 /* Real widgets verify live speed commands and fixed physics steps. Exact wall
  * rates belong to test_runner_pacing: rendering can backpressure the runner,
- * whose documented policy discards excessive scheduling debt. */
+ * whose documented policy discards excessive scheduling debt. Queued snapshots
+ * may also predate a live speed change, so neither wall-rate bound belongs here. */
 static bool speed_test_start(app *a, const char *root, const char *mode) {
     join(a->project_input, sizeof a->project_input, root, "project");
     if (!strcmp(mode, "speed-read")) {
@@ -72,8 +73,7 @@ static void speed_test_frame(app *a, const char *mode, int *stage, int *code, co
         double elapsed=ps_clock()-held_wall;
         if (elapsed < .8) return;
         ok = !a->paused && a->simulation_speed == .25 && a->dt == .005 &&
-             a->simulation_time > held_time &&
-             a->simulation_time - held_time < .4 * elapsed;
+             a->simulation_time > held_time;
         test_mouse(a, a->run_control_bounds[1], true); break;
     }
     case 13: test_mouse(a, a->run_control_bounds[1], false); break;
@@ -100,13 +100,15 @@ static void speed_test_frame(app *a, const char *mode, int *stage, int *code, co
         double elapsed=ps_clock()-held_wall;
         if (elapsed < .5) return;
         ok = !a->paused && a->simulation_speed == 4 && a->dt == .005 &&
-             a->simulation_time > held_time &&
-             a->simulation_time - held_time < 5.6 * elapsed;
+             a->simulation_time > held_time;
         /* Change speed through the widget while physics is still running. */
         test_mouse(a, a->speed_bounds, true); break;
     }
     case 21: test_mouse(a, a->speed_bounds, false); break;
-    case 22: test_mouse(a, a->speed_choices[2], true); break;
+    case 22:
+        /* Accumulate old 4x snapshots before requesting the live downshift. */
+        if(strstr(mode,"-stalled"))ps_sleep(1000);
+        test_mouse(a, a->speed_choices[2], true); break;
     case 23: test_mouse(a, a->speed_choices[2], false); break;
     case 24:
         ok = a->simulation_speed == 1 && !a->paused;
@@ -125,8 +127,7 @@ static void speed_test_frame(app *a, const char *mode, int *stage, int *code, co
         double elapsed=ps_clock()-held_wall;
         if (elapsed < .5) return;
         ok = !a->paused && a->simulation_speed == 1 && a->dt == .005 &&
-             a->simulation_time > held_time &&
-             a->simulation_time - held_time < 1.7 * elapsed;
+             a->simulation_time > held_time;
         test_mouse(a, a->run_control_bounds[1], true); break;
     }
     case 26: test_mouse(a, a->run_control_bounds[1], false); break;

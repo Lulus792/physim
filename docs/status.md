@@ -13,6 +13,12 @@ Die Installation baut jetzt alle 75 kompilierten Sprachprodukte auch ohne
 Pipe-Leseverfahren. Die erneute Remote-CI-Abnahme steht noch aus; lokale Tests
 ersetzen diese Releasegates nicht.
 
+**Live-Geschwindigkeitswechsel:** Die GUI-Prüfung berücksichtigt alte gepufferte
+Snapshots nach dem Wechsel 4×→1×. Normale und verzögerte C-/Physim-Fensterläufe
+bestehen auf macOS und Linux. Ein zusätzlicher direkter Runner-Test prüft die
+neue 1×-Rate und identische Referenzdaten; die erneute Apple-Silicon-CI bleibt offen.
+[Konkrete Nachweise](platform-validation.md).
+
 **Nativer Projektbuilder und aktuelle Gesamtsuite:** Repository und Projektbuilder
 verwenden nun dieselben 26 Core-Module. Acht frische dokumentierte C-/Physim-
 Domänenprojekte bestehen unabhängige Lernprüfungen. Die vollständigen aktuellen

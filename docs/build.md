@@ -719,6 +719,12 @@ korrekten Kontrollzustand; sie verlangt keine Mindest-Wandtaktrate bei
 Render-/Pipe-Rückstau. Das begrenzte Zeitkonto verwirft dort ausdrücklich
 übermäßige Schulden. Die direkten Runner-Prüfungen behalten ihre gemessenen
 Geschwindigkeitsverhältnisse bei.
+Auch eine kurze obere GUI-Taktschranke wäre nach einem Live-Wechsel falsch:
+bereits gepufferte Snapshots können noch unter der vorherigen Geschwindigkeit
+entstanden sein. Die verzögerten Fensterdurchläufe stauen daher zusätzlich
+4×-Snapshots vor dem Wechsel auf 1× auf. Ein direkter Runner-Test verwirft die
+Übergangsphase, misst die neue 1×-Rate bei fortlaufendem Lesen und prüft sämtliche
+Referenzkanäle ohne Rendering.
 
 `run_snapshots` prüft optionale Szenenblöcke mit maximaler Geometrie und allen
 Kanälen, unveränderte Messpunktzähler, alte Dateien, unbekannte Versionen,

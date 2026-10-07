@@ -161,6 +161,44 @@ static bool next_frame(ps_process *child, ps_wire_buffer *wire, uint32_t *type,
     }
     return false;
 }
+/* Consume frames directly, with no renderer. Discard the transition interval
+ * before checking the new rate; old snapshots can already be in the pipe. */
+static int live_downshift(const char *runner, const char *module, const char *path,
+                          const char *work, const char *reference_path) {
+    const char *args[] = {runner, module, path, "--interactive", "--dt", "0.005",
+                         "--seed", "42", "--speed", "4", NULL};
+    ps_process child = {0};
+    CHECK(ps_process_start(&child, args, work));
+    ps_wire_buffer wire = {0}; uint32_t type, sequence = 0; double time; bool paused;
+    double deadline = ps_clock() + 10;
+    CHECK(next_frame(&child, &wire, &type, &time, &paused, deadline) && type == PS_MSG_HELLO);
+    CHECK(send(&child, &sequence, PS_MSG_HELLO, 0));
+    CHECK(next_frame(&child, &wire, &type, &time, &paused, deadline) &&
+          type == PS_MSG_SNAPSHOT && paused && time == 0);
+    CHECK(send(&child, &sequence, PS_MSG_RUN, 0));
+    do {
+        CHECK(next_frame(&child, &wire, &type, &time, &paused, deadline) &&
+              type == PS_MSG_SNAPSHOT && !paused);
+    } while(time < .3);
+    CHECK(send(&child, &sequence, PS_MSG_SPEED, 1));
+    double changed = ps_clock();
+    do {
+        CHECK(next_frame(&child, &wire, &type, &time, &paused, deadline) &&
+              type == PS_MSG_SNAPSHOT && !paused);
+    } while(ps_clock() - changed < .25);
+    double initial = time, started = ps_clock();
+    do {
+        CHECK(next_frame(&child, &wire, &type, &time, &paused, deadline) &&
+              type == PS_MSG_SNAPSHOT && !paused);
+    } while(ps_clock() - started < 1);
+    double elapsed = ps_clock() - started, advanced = time - initial;
+    bool correct = advanced > .65 * elapsed && advanced < 1.4 * elapsed;
+    printf("Live 4x -> 1x: %.3f simulation seconds in %.3f wall seconds\n", advanced, elapsed);
+    CHECK(send(&child, &sequence, PS_MSG_STOP, 0));
+    CHECK(finish(&child, deadline) == 0 && correct);
+    CHECK(!compare(path, reference_path));
+    return 0;
+}
 static int large_step(const char *runner, const char *module, const char *work) {
     char path[4096];
     snprintf(path, sizeof path, "%s/pacing-large-dt-%.0f.psrun", work, ps_clock() * 1e9);
@@ -233,6 +271,9 @@ int main(int argc, char **argv) {
     unsigned long long stamp = (unsigned long long)(ps_clock() * 1e9);
     snprintf(base, sizeof base, "%s/pacing-reference-%llu.psrun", argv[3], stamp);
     CHECK(!reference(argv[1], argv[2], base, argv[3]));
+    char transition[4096];
+    snprintf(transition, sizeof transition, "%s/pacing-live-downshift-%llu.psrun", argv[3], stamp);
+    CHECK(!live_downshift(argv[1], argv[2], transition, argv[3], base));
     const char *speeds[] = {"0.5", "4", "0", "0.5"};
     double durations[4] = {0};
     for (unsigned i = 0; i < 4; i++) {

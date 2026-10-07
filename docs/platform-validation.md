@@ -3,6 +3,34 @@
 Stand: 7. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Live-Geschwindigkeitswechsel und gepufferte Snapshots am 7. Oktober 2026
+
+Das SHA-256-geprüfte Apple-Silicon-Artefakt von `d3120ad` zeigt, dass Stage 20
+den früheren 4×-Fehler passiert. Stage 25 scheitert nach dem Live-Wechsel 4×→1×
+an der kurzen oberen GUI-Taktschranke. Bereits gepufferte Snapshots können noch
+unter 4× entstanden sein; ihr Empfang ist keine frische Wandtaktratenmessung.
+Die GUI-Prüfung verlangt daher korrekte Auswahl, Fortschritt, unverändertes dt,
+Pause, Einzelschritt, Reset und Persistenz. Die verzögerten C-/Physim-Durchläufe
+stauen zusätzlich alte 4×-Snapshots vor dem Live-Wechsel auf 1× auf.
+
+Alle acht App-Aufrufe bestehen unter Intel macOS unter
+`build/contact-world-language-release-mac/test-results/run-c5zrravs` und
+Debian/GCC unter
+`build/contact-world-language-release-linux/test-results/run-_rx_hr2t`.
+Die direkten Zeitkonto-/Runner-Prüfungen bestehen mit je 3/3 unter
+`run-rdyt5q75` auf macOS und `run-n0li8d7x` unter Linux in denselben Release-
+Testordnern. Ein neuer direkter Runner-Test führt den Live-Wechsel ohne
+Rendering aus, verwirft die Übergangsphase, verlangt danach die gemessene
+1×-Rate und vergleicht weiterhin alle 201 Referenzmessungen jedes Kanals.
+Auf dem Mac messen C und Physim jeweils 1,020 Simulationssekunden in 1,019–1,020
+Wandsekunden. Eine ignorierte 1×-Anforderung würde die neue Rateprüfung verletzen.
+
+Scheduling, Physikschritte, Daten-/Wire-/Modulformate wurden nicht verändert.
+Die vollständigen 608/608-Gesamtläufe und SDK-Prüfungen des Builder-Meilensteins
+`11b709f` bleiben eigene vorherige Nachweise. Diese anschließende Korrektur
+besitzt die genannten gezielten GUI-/Runner-Prüfungen. Eine erneute tatsächliche
+Apple-Silicon-CI-Abnahme bleibt erforderlich.
+
 ## Gemeinsamer Core im nativen Projektbuilder am 7. Oktober 2026
 
 Der native Projektbuilder enthielt noch 21 Core-Module; der Repository-Build
