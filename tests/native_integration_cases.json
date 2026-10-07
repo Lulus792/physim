@@ -1637,6 +1637,40 @@
     "batch-documentation-model-phys": {
       "source": "examples/language/uncertain_projectile.phys",
       "mode": "--emit-experiment"
+    },
+    "thermal-model-c": {
+      "sources": [
+        "examples/documentation/thermal_main.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ]
+    },
+    "thermal-model-phys": {
+      "source": "examples/documentation/thermal_main.phys",
+      "mode": "--emit-experiment"
+    },
+    "thermal-analysis-c": {
+      "sources": [
+        "examples/documentation/thermal_analysis.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ]
+    },
+    "thermal-analysis-phys": {
+      "source": "examples/documentation/thermal_analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "thermal-report-probe": {
+      "sources": [
+        "tests/test_thermal_tutorial_report.c"
+      ],
+      "libraries": [
+        "core"
+      ]
     }
   },
   "tests": [
@@ -3495,7 +3529,7 @@
           "arguments": [
             "{root}/tests/verify_png.py",
             "{work}",
-            "{work}/workflow \u00e4"
+            "{work}/workflow ä"
           ],
           "timeout": 60
         }
@@ -3542,7 +3576,7 @@
           "arguments": [
             "{root}/tests/verify_png.py",
             "{work}",
-            "{work}/workflow \u00e4"
+            "{work}/workflow ä"
           ],
           "timeout": 60
         }
@@ -5559,7 +5593,7 @@
         {
           "program": "run-index-memory",
           "arguments": [
-            "{work}/index \u03b1.psrun"
+            "{work}/index α.psrun"
           ],
           "timeout": 60
         },
@@ -6357,6 +6391,52 @@
             "{root}",
             "--catalog",
             "{root}/tests/tutorial_sources.json"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "thermal_tutorial",
+      "targets": [
+        "python",
+        "physim-runner",
+        "physim-analysis-runner",
+        "thermal-model-c",
+        "thermal-model-phys",
+        "thermal-analysis-c",
+        "thermal-analysis-phys",
+        "thermal-report-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_thermal_tutorial.py",
+            "{physim-runner}",
+            "{physim-analysis-runner}",
+            "{thermal-model-c}",
+            "{thermal-model-phys}",
+            "{thermal-analysis-c}",
+            "{thermal-analysis-phys}",
+            "{thermal-report-probe}",
+            "{work}"
+          ],
+          "timeout": 180
+        }
+      ]
+    },
+    {
+      "name": "documentation_thermal_source",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tutorial_sources.py",
+            "documentation_thermal_source"
           ],
           "timeout": 30
         }

@@ -277,6 +277,24 @@ def main():
                      sdk / "bin" / ("physim-analysis-runner"+suffix),experiment,language_main,analyzer,language_analysis,material_probe,directory])
         print("Installed SDK material tutorial: installed/rebuilt Core, seven analytic scenarios and all four analysis combinations passed",flush=True)
 
+        for source in ("thermal_main","thermal_analysis"):
+            shutil.copy2(sdk / "examples/documentation" / (source+".c"),consumer / (source+".c"))
+        shutil.copy2(repo / "tests/test_thermal_tutorial_report.c",consumer / "thermal-tutorial-probe.c")
+        shutil.copy2(repo / "tests/test_thermodynamics.c",consumer / "thermal-core-check.c")
+        for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+            thermal_core=builder.executable("thermal-core-"+kind,["thermal-core-check.c"],[archive])
+            checked([thermal_core])
+            thermal_experiment=builder.executable("thermal-experiment-"+kind,["thermal_main.c"],[archive],module=True)
+            thermal_analyzer=builder.executable("thermal-analysis-"+kind,["thermal_analysis.c"],[archive],module=True)
+            thermal_probe=builder.executable("thermal-probe-"+kind,["thermal-tutorial-probe.c"],[archive])
+            directory=root / ("Thermal tutorial "+kind);directory.mkdir()
+            thermal_language=modules["thermal_main"] if kind=="rebuilt" else sdk / "bin" / ("language-thermal_main"+module_suffix)
+            thermal_analysis=modules["thermal_analysis"] if kind=="rebuilt" else sdk / "bin" / ("language-thermal_analysis"+module_suffix)
+            checked([sys.executable,repo / "tests/test_thermal_tutorial.py",sdk / "bin" / ("physim-runner"+suffix),
+                     sdk / "bin" / ("physim-analysis-runner"+suffix),thermal_experiment,thermal_language,
+                     thermal_analyzer,thermal_analysis,thermal_probe,directory])
+        print("Installed SDK thermodynamics: installed/rebuilt Core, six Decimal scenarios, 48 mixed analyses and atomic numeric errors passed",flush=True)
+
         shutil.copy2(sdk / "examples/spring/main.c",consumer / "spring-tutorial.c")
         shutil.copy2(sdk / "examples/documentation/spring_analysis.c",consumer / "spring-tutorial-analysis.c")
         shutil.copy2(repo / "tests/test_spring_tutorial_report.c",consumer / "spring-tutorial-probe.c")
@@ -491,6 +509,7 @@ def main():
         "Collision tutorial through installed/rebuilt Core, eleven exact scenarios and mixed reports passed.\n" +
         "Monte Carlo tutorial through installed/rebuilt Core, seeded ensembles, worker reproducibility and mixed reports passed.\n" +
         "Saved run tutorial through installed/rebuilt Core, eight archive scenarios, sixteen mixed reports and independent analysis-only projects passed.\n" +
+        "Thermodynamics through installed/rebuilt Core, independent Decimal oracles, mixed reports and extreme-value contracts passed.\n" +
         "Both complete C/Physim learning routes, eight paired model source groups and executable language introductions passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
         ("Eight C template GUI workflows, the complete Physim language GUI workflow and independent documentation route navigation passed.\n" if args.app_tests else ""), encoding="utf-8")

@@ -3,15 +3,29 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-07. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
-**Aktuelle Abnahme:** Die vollständigen erneuten Release-Prüfungen einschließlich
+**Vollständiger Ausgangsnachweis (`10d8392`):** Die erneuten Release-Prüfungen einschließlich
 der Batch-Sprachbindung bestehen auf dem Intel-Mac und unter Debian
 mit jeweils 572/572 Fällen.
 Der anschließende [Anforderungsabgleich](project-audit.md) bewahrt sämtliche
 Planpunkte und unterscheidet Implementierung, Teilnachweise und fehlende Abnahme.
-Die Installation baut jetzt alle 63 kompilierten Sprachprodukte auch ohne
+Die Installation baut jetzt alle 66 kompilierten Sprachprodukte auch ohne
 `--examples`. Windows-Prüfungen verwenden logische Textzeilen und ein portables
 Pipe-Leseverfahren. Die erneute Remote-CI-Abnahme steht noch aus; lokale Tests
 ersetzen diese Releasegates nicht.
+
+**Thermodynamik in C und Physim:** Sprachvertrag 0.179.0 liefert zehn reine
+SI-Funktionen für ideale Gaszustände, Energie/Entropiedifferenzen, konstante
+Wärmekapazität und linearen Wärmefluss. Reservoir und isolierte Körperpaare
+verwenden eine exakte Exponentiallösung, mit erhaltenen Ausgaben bei Fehlern.
+Der vollständige Lernpfad prüft 2.412 Messungen, sechs unabhängige Decimal-
+Szenarien, SI-Metadaten, Szenen und 24 gemischte Analysen. Extremwerte und
+abgefangene Fehler sind geprüft. Reale Gase bleiben offen.
+[Quellen und Grenzen](thermodynamics.md), [ausgeführte Systeme](platform-validation.md).
+
+**Windows-Dokumentationsprüfung:** Die Artefakte von `3f14f3b` zeigen bei v143
+Debug und ClangCL Debug/Release jeweils 576 bestandene Fälle und denselben
+CP1252-Lesefehler im neuen Dokumentationsprüfer. Er liest jetzt ausdrücklich
+UTF-8; die tatsächliche erneute Windows-CI-Abnahme steht noch aus.
 
 **Zwei vollständige Dokumentationsteile:** [Teil I: C](c-guide.md) und
 [Teil II: Physim](physim-guide.md) führen jeweils vom Sprach- und Workfloweinstieg
@@ -19,7 +33,7 @@ ersetzen diese Releasegates nicht.
 Modelllernwegen. Das Hilfefenster bietet eigene Auswahl und Startnavigation.
 Die Einstiegsprogramme, veröffentlichten Quellen und Links bestehen auf macOS
 und Debian; beide verschobenen SDKs bestehen auch alle neun grafischen
-Beispielabläufe und die Lernweg-Navigation. Der neue Katalog umfasst 577 Fälle;
+Beispielabläufe und die Lernweg-Navigation. Der damalige Dokumentationskatalog umfasst 577 Fälle; aktuell sind es 583.
 der zuvor vollständig geprüfte Stand mit 572 Fällen bleibt gesondert dokumentiert.
 [Konkrete Nachweise](platform-validation.md).
 

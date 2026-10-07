@@ -206,5 +206,26 @@
         "language": "physim"
       }
     ]
+  },
+  "documentation_thermal_source": {
+    "document": "docs/thermodynamics.md",
+    "sources": [
+      {
+        "path": "examples/documentation/thermal_main.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/thermal_main.phys",
+        "language": "physim"
+      },
+      {
+        "path": "examples/documentation/thermal_analysis.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/thermal_analysis.phys",
+        "language": "physim"
+      }
+    ]
   }
 }

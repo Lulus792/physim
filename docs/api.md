@@ -242,3 +242,9 @@ Einrichtung, Statistik und Beispielcode: [Monte Carlo und Unsicherheit](monte-ca
 explizite hierarchische TRS, Weltpositionen und dieselbe Geometrie für
 Darstellung und Picking. Gruppen und Körper als Eltern liefern selbst keine
 Koordinatentransformation. [Vertrag und Beispiele](scene-frames.md).
+
+## Thermodynamik
+
+`physim/thermodynamics.h` liefert ideale Gaszustände, Energie und Entropiedifferenzen,
+Wärmekapazität, Wärmefluss und exakte thermische Relaxation ohne versteckte Zustände.
+[Vertrag und vollständige C-/Physim-Beispiele](thermodynamics.md).

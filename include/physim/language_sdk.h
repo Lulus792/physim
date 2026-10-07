@@ -7,6 +7,7 @@
 #include "experiment.h"
 #include "language_measurement.h"
 #include "language_mechanics.h"
+#include "language_thermodynamics.h"
 #include "language_constraints.h"
 #include "language_contact_world.h"
 #include "language_batch.h"

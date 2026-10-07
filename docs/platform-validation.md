@@ -3,6 +3,78 @@
 Stand: 7. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Thermodynamik und Physim 0.179.0 am 7. Oktober 2026
+
+Das neue allokationsfreie SI-Modul berechnet ideale Gaszustände, Energie und
+Entropiedifferenzen, konstante Wärmekapazitäten, signierten Wärmefluss sowie
+exakte Reservoir- und isolierte Zweikörperrelaxation. Zehn reine Sprachbindungen
+verwenden dieselben C-Funktionen und erhalten Quelldiagnosen bei Fehlern.
+Ausgaben bleiben bei Fehlern unverändert; normalisierte Produkte vermeiden
+Zwischenüberlauf und bewahren darstellbaren Wärmeaustausch auch bei unterlaufendem
+Relaxationsfaktor. [Vertrag und vollständige Quellen](thermodynamics.md).
+
+Die endgültigen neun gezielten Release-Prüfungen bestehen auf Intel macOS
+(Apple Clang 16) unter
+`build/contact-world-language-release-mac/test-results/run-mz7mtoms`
+und Debian 12/GCC 12.2 unter
+`build/contact-world-language-release-linux/test-results/run-ravfy132`.
+Vier endgültige Linux-Clang-14-ASan/UBSan-Fälle bestehen unter
+`build/thermal-asan-linux/test-results/run-i0vcdiw1`.
+Eine versuchte Mac-Sanitizerprüfung wurde vor dem Build wegen des fehlenden
+`ld64.lld` abgewiesen und wird nicht als ausgeführt gewertet.
+
+Neun bestehende Sprach-/Experiment-/Analyse-/Sensor-/Paritätsprüfungen bestehen
+mit der neuen Provenienz auf macOS unter `run-_nybq1u1` und Linux unter
+`run-ro1dxr9n` in den jeweiligen Release-Testordnern. Die 25 generierten C-/
+Sprachreferenzen sind geprüft. Der grafische Dokumentationsablauf besteht
+auf macOS unter `run-p8tf_ue3` und Linux unter `run-zgj6zqre`.
+Der aktuelle Katalog umfasst 583 Fälle ohne Fenster, 568 ohne SDL und 66
+Fensterfälle. Dies ist kein neuer vollständiger 583-Fälle-Gesamtnachweis.
+
+Der unabhängige Tutorialprüfer kontrolliert 2.412 Messungen mit 65-stelligen
+Decimal-Exponentiallösungen in sechs Szenarien: Wärmefluss in beiden Richtungen,
+Nullleitwert, thermisches Gleichgewicht sowie stark verschiedene Kapazitäten
+und Leitwerte. Er kontrolliert alle SI-Kanäle, CRC/Footer, vollständige
+Szenengeometrie, Zeitkomposition und 24 C-/Physim-Analysekonfigurationen.
+Berichtsprüfer laden sechs Kurven und den Bilanzfehler neu; CSV-Werte müssen
+mit den Rohdaten übereinstimmen. Ungültige absolute Temperaturen werden abgewiesen.
+Reale Gase und weitere Stoffmodelle bleiben ausdrücklich offen.
+
+Beide endgültigen SDKs bestehen die ausschließlich aus dem 46-Dateien-Kit
+gestarteten vollständigen Prüfungen, einschließlich aller neun grafischen
+Projektabläufe und der Dokumentationsnavigation:
+
+- macOS: `build/thermal-final-sdk-proof-mac/Native SDK ä wtao5wwo`.
+- Linux: `build/thermal-final-sdk-proof-linux/Native SDK ä tmja35_b`.
+
+Sie bauen alle öffentlichen Header, 20 Standalone-Programme und 46 Sprachmodule
+und prüfen Thermodynamik gegen installierten und neu aufgebauten Core:
+4.824 unabhängig geprüfte Messungen und 48 gemischte Analysen je SDK.
+Die endgültigen Pakete `build/Thermodynamics clean SDK ä mac` und
+`build/Thermodynamics clean SDK ä linux` enthalten jeweils 387 Manifestdateien
+und 66 kompilierte Sprachprodukte. Alle 273 Code-/Beispieldateien stimmen
+byteweise mit den verifizierten SDK-Kopien überein; die Apps stimmen mit den
+geprüften Release-Binaries überein. Abschließend werden nur Dokumentation
+und Manifest aktualisiert.
+
+Die tatsächliche Windows-CI von `3f14f3b` besteht bei v143 Debug und ClangCL
+Debug/Release jeweils 576/577 Fälle. Die drei per offiziellem Artefakt-Digest
+geprüften ZIPs zeigen denselben Fehler: `test_documentation_tracks.py` liest
+UTF-8-Modellseiten mit der Standardcodierung CP1252. Alle Textleser dieses
+Prüfers verwenden nun ausdrücklich UTF-8. Die Korrektur besteht lokal auch
+mit simuliertem CP1252-Standard und ist als `49389c5` in beiden Repositories.
+Die [erneute tatsächliche Matrix](https://github.com/PhysicSimulator/physim/actions/runs/37570296575)
+bleibt ein eigener Nachweis; die Simulation ersetzt keinen Windows-Lauf.
+
+Zwei frühere generierte Linux-SDK-Prüfordner wurden vor der Freigabe von
+VM-Speicher vollständig auf den Mac übertragen und jede reguläre Datei gegen
+ihren ursprünglichen SHA-256-Wert geprüft. Die Archive bleiben lokal erhalten:
+
+- `build/batch-language-final-sdk-proof-linux-evidence.tar.gz`: 12.233 Dateien,
+  SHA-256 `61f54526f0493eb993a35a4a1c8f4f8ae6b0de7f3d8c64f39b144925cbce0eca`.
+- `build/documentation-tracks-sdk-proof-linux-evidence.tar.gz`: 12.259 Dateien,
+  SHA-256 `77db4dbb3d26902e050f0a74ebc1831714834661a408cddff7d5c9e4a82ba250`.
+
 ## Getrennte C-/Physim-Dokumentation am 7. Oktober 2026
 
 [Teil I: C](c-guide.md) und [Teil II: Physim](physim-guide.md) enthalten jeweils

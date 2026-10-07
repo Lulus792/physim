@@ -1444,6 +1444,19 @@
       "exit_code": 0,
       "stdout": "9\n12.5\n",
       "stderr": ""
+    },
+    {
+      "name": "thermodynamics",
+      "source_file": "examples/language/thermodynamics.phys",
+      "exit_code": 0,
+      "stdout": "Thermodynamics gas, heat, entropy, exchange and caught errors passed\n",
+      "stderr": ""
+    },
+    {
+      "name": "thermodynamics_temperature_error",
+      "source": "let pressure = idealGasPressure(1,-1,1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "thermodynamics_temperature_error\\.phys:1:[0-9]+: runtime error:.*Thermodynamics"
     }
   ]
 }

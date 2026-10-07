@@ -81,6 +81,9 @@ Quellen, Erwartung, Modellgrenzen und automatisierte Prüfungen. Wähle dort jew
 7. [Gespeicherten Lauf analysieren](saved-run-tutorial.md): Ableitung, Rückintegration und unveränderte Archive.
 8. [Eigenes Material und Medium](material-tutorial.md): Masse aus Dichte, Auftrieb, Stokes-Widerstand und Gültigkeitsgrenzen.
 
+Der zusätzliche [Thermodynamik-Einstieg](thermodynamics.md) untersucht
+ideales Gas und isolierten Wärmeaustausch mit vollständigen Quellen beider Sprachen.
+
 ## Nachschlagen und weitergehen
 
 [C-API nach Aufgabe](api.md), [vollständige C-Funktionen](reference/core.md),

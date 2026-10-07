@@ -3641,6 +3641,26 @@ Benannte Szenengruppe mit eindeutiger ID; parent 0 erzeugt eine Wurzel. Nur im s
 
 Experimentmodul erforderlich.
 
+## heatCapacity
+
+```text
+heatCapacity(mass: Float64, specificHeat: Float64) -> Float64
+```
+
+Berechnet C=m c in J/K aus Masse in kg und konstanter spezifischer Wärmekapazität in J/(kg K).
+
+Überall verfügbar.
+
+## heatFlow
+
+```text
+heatFlow(conductance: Float64, temperatureA: Float64, temperatureB: Float64) -> Float64
+```
+
+Berechnet P=G(Ta-Tb) in W; positiv fließt Wärme von A nach B, G in W/K ist nichtnegativ.
+
+Überall verfügbar.
+
 ## hypot
 
 ```text
@@ -3648,6 +3668,56 @@ hypot(x: Float64, y: Float64) -> Float64
 ```
 
 Berechnet die euklidische Länge von (x, y) mit skalierter Arithmetik.
+
+Überall verfügbar.
+
+## idealGasEnergy
+
+```text
+idealGasEnergy(amount: Float64, molarCv: Float64, temperature: Float64) -> Float64
+```
+
+Berechnet U=n cv T in J bei konstantem molarem cv; Referenz U=0 bei T=0.
+
+Überall verfügbar.
+
+## idealGasEntropyChange
+
+```text
+idealGasEntropyChange(amount: Float64, molarCv: Float64, initialTemperature: Float64, initialVolume: Float64, finalTemperature: Float64, finalVolume: Float64) -> Float64
+```
+
+Berechnet n[cv ln(T1/T0)+R ln(V1/V0)] in J/K zwischen zwei Gleichgewichtszuständen desselben idealen Gases; konstantes molares cv.
+
+Überall verfügbar.
+
+## idealGasPressure
+
+```text
+idealGasPressure(amount: Float64, temperature: Float64, volume: Float64) -> Float64
+```
+
+Berechnet p=nRT/V in Pa für positive Stoffmenge, Kelvin und Volumen in m³.
+
+Überall verfügbar.
+
+## idealGasTemperature
+
+```text
+idealGasTemperature(amount: Float64, pressure: Float64, volume: Float64) -> Float64
+```
+
+Berechnet T=pV/(nR) in Kelvin für ein ideales Gas.
+
+Überall verfügbar.
+
+## idealGasVolume
+
+```text
+idealGasVolume(amount: Float64, temperature: Float64, pressure: Float64) -> Float64
+```
+
+Berechnet V=nRT/p in m³ für ein ideales Gas.
 
 Überall verfügbar.
 
@@ -4521,6 +4591,16 @@ Konvertiert einen Punkt in der Basis des Szenenslots in Weltkoordinaten; nur im 
 
 Experimentmodul erforderlich.
 
+## sensibleHeat
+
+```text
+sensibleHeat(capacity: Float64, initialTemperature: Float64, finalTemperature: Float64) -> Float64
+```
+
+Berechnet Q=C(T1-T0) in J; positiv bedeutet Erwärmung. Keine latente Wärme.
+
+Überall verfügbar.
+
 ## seriesHasMask
 
 ```text
@@ -4618,6 +4698,26 @@ tan(angle: Float64) -> Float64
 ```
 
 Tangens eines Winkels in Radiant; nicht endliche Ergebnisse sind Laufzeitfehler.
+
+Überall verfügbar.
+
+## thermalPairStep
+
+```text
+thermalPairStep(capacityA: Float64, temperatureA: Float64, capacityB: Float64, temperatureB: Float64, conductance: Float64, dt: Float64) -> Vec2
+```
+
+Exakte isolierte Zweikörperrelaxation bei konstanten Kapazitäten und Leitwert. Vec2.x/y enthält A/B in Kelvin; Energie bleibt bis auf Rundung erhalten. Fehler sind mit attempt abfangbar.
+
+Überall verfügbar.
+
+## thermalReservoirStep
+
+```text
+thermalReservoirStep(capacity: Float64, temperature: Float64, reservoirTemperature: Float64, conductance: Float64, dt: Float64) -> Float64
+```
+
+Exakte Temperatur nach dt an einem Reservoir fester Temperatur: konstante Kapazität und Leitwert, kein Zeitschritt-Stabilitätslimit. Kelvin; G und dt dürfen null sein.
 
 Überall verfügbar.
 

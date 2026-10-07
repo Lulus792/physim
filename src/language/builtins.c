@@ -49,6 +49,16 @@
 #define SWEEP PS_TYPE_SWEEP
 #define AABB PS_TYPE_AABB
 static const ps_lang_builtin library[] = {
+    {"idealGasPressure", "psrt_gas_pressure", F, 3, 0, {F,F,F}, {"amount","temperature","volume"}},
+    {"idealGasVolume", "psrt_gas_volume", F, 3, 0, {F,F,F}, {"amount","temperature","pressure"}},
+    {"idealGasTemperature", "psrt_gas_temperature", F, 3, 0, {F,F,F}, {"amount","pressure","volume"}},
+    {"idealGasEnergy", "psrt_gas_energy", F, 3, 0, {F,F,F}, {"amount","molarCv","temperature"}},
+    {"idealGasEntropyChange", "psrt_gas_entropy", F, 6, 0, {F,F,F,F,F,F}, {"amount","molarCv","initialTemperature","initialVolume","finalTemperature","finalVolume"}},
+    {"heatCapacity", "psrt_heat_capacity", F, 2, 0, {F,F}, {"mass","specificHeat"}},
+    {"sensibleHeat", "psrt_sensible_heat", F, 3, 0, {F,F,F}, {"capacity","initialTemperature","finalTemperature"}},
+    {"heatFlow", "psrt_heat_flow", F, 3, 0, {F,F,F}, {"conductance","temperatureA","temperatureB"}},
+    {"thermalReservoirStep", "psrt_thermal_reservoir", F, 5, 0, {F,F,F,F,F}, {"capacity","temperature","reservoirTemperature","conductance","dt"}},
+    {"thermalPairStep", "psrt_thermal_pair", V2, 6, 0, {F,F,F,F,F,F}, {"capacityA","temperatureA","capacityB","temperatureB","conductance","dt"}},
     {"Batch", "psrt_batch_make", BATCH, 8, 0, {S,S,S,I,I,F,I,I}, {"module","directory","channel","runs","steps","dt","seed","workers"}},
     {"batchParameter", "psrt_batch_parameter", BATCH, 3, 0, {BATCH,S,F}, {"batch","name","value"}},
     {"batchSweep", "psrt_batch_sweep", BATCH, 4, 0, {BATCH,S,F,F}, {"batch","name","start","end"}},

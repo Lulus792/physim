@@ -12,6 +12,7 @@ from reference_descriptions import DESCRIPTIONS
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULES = {
+    'thermodynamics': ('Thermodynamik: ideales Gas und Wärmefluss', 'thermodynamics.md', 'SI-Werte, Kelvin, konstante Wärmekapazitäten und explizite lineare Leitwerte. Ideale Zustandsgrößen, Energie und Entropiedifferenzen sowie exakte Reservoir-/Zweikörperrelaxation. Keine Allokation, kein impliziter Integrator und keine Stofftabellen; Fehler erhalten Ausgaben.'),
     'batch': ('Archivierte Serien und Analyse-Hostdienste', 'batch-language.md', 'Ein expliziter Analysehost stellt versionierte, synchrone Batch-Dienste bereit. Requests beschreiben getrennte Runner mit SI-Parametern, Seeds, Zeit- und Speichergrenzen. Ergebnisse enthalten validierte Teilfortschritte und Messstatus. Der Core startet keine Prozesse; der Analyse-Runner liefert die Dienste über den optionalen run_host-Tail. Geliehene Dienstzeiger leben nur während dieses Aufrufs.'),
     'contact_world': ('Persistente Kontakte und Warmstart', 'contact-world.md', 'Ein expliziter, caller-eigener Kontaktzustand erzeugt diskrete Kugel-/Box-/Ebenenkontakte. Stabile Collider-IDs und lokale Anker ordnen Kontakte zwischen erfolgreichen Schritten zu; alte Impulse werden zeitabhängig skaliert und im aktuellen Coulomb-Kegel gelöst. Keine Heapallokation, keine automatische Integration oder CCD. Körper, Cache und Ergebnisse bleiben bei Fehlern unverändert.'),
     'run_index': ('Indizierte Laufdateien', 'run-index.md', 'Ein Index besitzt eine unverändert geöffnete Messdatei und Checkpoints aus einem expliziten Allocator. Das Öffnen prüft den gesamten lesbaren Präfix einmal und rekonstruiert auch alte oder unvollständige Dateien. Gezielte Messblöcke und Szenen verwenden diese geprüften Positionen. PS_OK und PS_RECOVERED liefern beide einen zu zerstörenden Handle; andere Fehler erhalten die Ausgabe.'),
@@ -95,6 +96,16 @@ def c_reference(module, title, guide, intro):
 
 
 LANG_DESCRIPTIONS = {
+    'idealGasPressure': 'Berechnet p=nRT/V in Pa für positive Stoffmenge, Kelvin und Volumen in m³.',
+    'idealGasVolume': 'Berechnet V=nRT/p in m³ für ein ideales Gas.',
+    'idealGasTemperature': 'Berechnet T=pV/(nR) in Kelvin für ein ideales Gas.',
+    'idealGasEnergy': 'Berechnet U=n cv T in J bei konstantem molarem cv; Referenz U=0 bei T=0.',
+    'idealGasEntropyChange': 'Berechnet n[cv ln(T1/T0)+R ln(V1/V0)] in J/K zwischen zwei Gleichgewichtszuständen desselben idealen Gases; konstantes molares cv.',
+    'heatCapacity': 'Berechnet C=m c in J/K aus Masse in kg und konstanter spezifischer Wärmekapazität in J/(kg K).',
+    'sensibleHeat': 'Berechnet Q=C(T1-T0) in J; positiv bedeutet Erwärmung. Keine latente Wärme.',
+    'heatFlow': 'Berechnet P=G(Ta-Tb) in W; positiv fließt Wärme von A nach B, G in W/K ist nichtnegativ.',
+    'thermalReservoirStep': 'Exakte Temperatur nach dt an einem Reservoir fester Temperatur: konstante Kapazität und Leitwert, kein Zeitschritt-Stabilitätslimit. Kelvin; G und dt dürfen null sein.',
+    'thermalPairStep': 'Exakte isolierte Zweikörperrelaxation bei konstanten Kapazitäten und Leitwert. Vec2.x/y enthält A/B in Kelvin; Energie bleibt bis auf Rundung erhalten. Fehler sind mit attempt abfangbar.',
     'group': 'Benannte Szenengruppe mit eindeutiger ID; parent 0 erzeugt eine Wurzel. Nur im scene-Callback. Gruppen enthalten keine Geometrie und verändern keine Weltkoordinaten.',
     'Diagnostic': 'Erzeugt einen besitzenden begrenzten Diagnosewert. Fehlercode 1–10 außer EOF/Recovered, 1-basierte Quellposition oder null für unbekannt. Ungültige Werte werfen eine Quelldiagnose.',
     'diagnosticHere': 'Wie Diagnostic mit automatisch erfasstem Quellpfad, Zeile und Spalte dieser Factory-Expression.',

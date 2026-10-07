@@ -1,6 +1,6 @@
 # Teil II – Physim mit der eigenen Sprache
 
-Dieser Lernweg führt mit Physim 0.178.0 von der Einrichtung bis zum gespeicherten
+Dieser Lernweg führt mit Physim 0.179.0 von der Einrichtung bis zum gespeicherten
 Ergebnis. Experiment und Analyse können vollständig Physim bleiben; du brauchst
 für die unterstützten Aufgaben keinen C-Code nachzuschreiben. Die Sprache ist
 weiter ein Entwicklungsvertrag. Dieselben Modelle und Archive verwendet
@@ -83,6 +83,9 @@ sind vollständig und werden gegen dieselben physikalischen Erwartungen geprüft
 6. [Unsichere Anfangswerte mit Monte Carlo](monte-carlo-tutorial.md): dieselben 256 Seeds, Quantile und Konfidenzgrenzen.
 7. [Gespeicherten Lauf analysieren](saved-run-tutorial.md): unabhängiges Analyseprojekt mit Ableitung und Rückintegration.
 8. [Eigenes Material und Medium](material-tutorial.md): eigene Dichte und Viskosität, Referenzlösung und Grenzen.
+
+Der zusätzliche [Thermodynamik-Einstieg](thermodynamics.md) untersucht
+ideales Gas und isolierten Wärmeaustausch mit vollständigen Quellen beider Sprachen.
 
 ## Nachschlagen und weitergehen
 

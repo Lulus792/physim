@@ -320,3 +320,16 @@ add('ps_contact_world_', {
     'solve': 'Erzeugt und löst aktuelle diskrete Kontakte, ordnet alte lokale Anker zu und aktualisiert Körper, Cache und Ergebnis atomar.',
 })
 DESCRIPTIONS['ps_contacts_resolve_graph_warm']='Wie der Kontaktsolver mit expliziten Startimpulsen auf A. Restitution wird vor sämtlichen Warmimpulsen bestimmt; Startwerte werden auf die aktuelle Normale und den Coulomb-Kegel projiziert. NULL wählt den kalten Pfad.'
+
+add('ps_', {
+    'ideal_gas_pressure': 'Berechnet p=nRT/V in Pa für positive SI-Zustandsgrößen eines idealen Gases.',
+    'ideal_gas_volume': 'Berechnet V=nRT/p in m³ für ein ideales Gas.',
+    'ideal_gas_temperature': 'Berechnet T=pV/(nR) in Kelvin für ein ideales Gas.',
+    'ideal_gas_energy': 'Berechnet U=n cv T in J bei konstantem molarem cv und Referenz U=0 bei T=0.',
+    'ideal_gas_entropy_change': 'Berechnet die reversible Entropiedifferenz zwischen zwei Gleichgewichtszuständen desselben idealen Gases bei konstantem cv.',
+    'heat_capacity': 'Berechnet C=m c in J/K bei konstanter spezifischer Wärmekapazität.',
+    'sensible_heat': 'Berechnet Q=C(T1-T0) in J, positiv bei Erwärmung.',
+    'heat_flow': 'Berechnet P=G(Ta-Tb) in W, positiv von A nach B.',
+    'thermal_reservoir_step': 'Berechnet die exakte Relaxation an ein konstantes Reservoir ohne Zeitschritt-Stabilitätsgrenze.',
+    'thermal_pair_step': 'Berechnet die exakte isolierte Zweikörperrelaxation mit konstanter Kapazität und Leitwert; beide Temperaturen stehen in Vec2.',
+})

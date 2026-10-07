@@ -1,10 +1,10 @@
 # Eigene Physim-Sprache
 
-Stand: 2026-10-07. Sprachvertrag 0.178.0; noch keine freigegebene Anwendersprache.
+Stand: 2026-10-07. Sprachvertrag 0.179.0; noch keine freigegebene Anwendersprache.
 Der Arbeitsname ist „Physim-Sprache“. Das vollständige Ziel und die Abnahmen
 LANG-001 bis LANG-007 stehen in Abschnitt 10 des Projektplans.
 
-Die Sprachversion `0.178.0` steht unabhängig von der App-Version und der SDK-ABI
+Die Sprachversion `0.179.0` steht unabhängig von der App-Version und der SDK-ABI
 in `src/language/version.h`. `physimc --version` und der Kopf des generierten C
 geben sie aus. Änderungen an Syntax oder Semantik erfordern eine bewusste
 Anhebung; die vorliegende Fassung ist noch ein Entwicklungsvertrag und keine
@@ -14,6 +14,10 @@ Generierte Module schreiben die tatsächliche Sprachversion und die getrennte
 
 Für den Weg vom ersten Sprachprojekt über ein Experiment bis zu Messwerten,
 Diagramm und Fehlerdiagnose dient das [ausführbar geprüfte Tutorial](language-tutorial.md).
+
+Thermodynamik bindet in dieser Fassung zehn reine SI-Funktionen für ideales Gas,
+Wärmekapazität, Wärmefluss und exakten Wärmeaustausch. [Vertrag und vollständige
+Experimente/Analysen beider Sprachen](thermodynamics.md).
 
 ## Ziel und Übersetzung
 

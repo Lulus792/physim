@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-07",
-  "inspected_revision": "10d8392585915b081eb493aac09b22e2236faebb",
+  "inspected_revision": "49389c5e761295dee64a30e11de10bfd0c1351c5",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2784,9 +2784,16 @@
       "text": "- **Thermodynamik:** Wärmefluss, Zustandsgrößen, ideale und später reale Gase.\n",
       "status": "incomplete",
       "evidence": [
-        "include/physim/"
+        "include/physim/thermodynamics.h",
+        "src/thermodynamics.c",
+        "include/physim/language_thermodynamics.h",
+        "docs/thermodynamics.md",
+        "tests/test_thermodynamics.c",
+        "tests/test_thermal_tutorial.py",
+        "tools/verify-native-sdk.py",
+        "docs/platform-validation.md"
       ],
-      "note": "Keine eigenständigen Module für diese angekündigte Domäne vorhanden; langfristiger Umfang bleibt erhalten."
+      "note": "Eigenständiges allokationsfreies SI-Modul für ideale Gaszustände, Energie/Entropiedifferenzen, konstante Wärmekapazität, Wärmefluss und exakte Reservoir-/Zweikörperrelaxation. Gleichwertige C-/Physim-Experimente und Analysen, unabhängige Decimal-Oracles und ausgeführte macOS-/Linux-/Linux-Sanitizer-Prüfungen. Reale Gase, weitere Stoffmodelle und die gesamte Domänen-/Plattformabnahme bleiben offen."
     },
     {
       "id": "PP-0413",
