@@ -9,7 +9,7 @@ import sys
 parser = argparse.ArgumentParser(description=__doc__)
 for name in ('builder', 'sdk', 'compiler', 'runner', 'analysis-runner', 'probe', 'oracle', 'work'):
     parser.add_argument('--' + name, type=Path, required=True)
-parser.add_argument('--domain', choices=('thermal', 'rc', 'string', 'transport', 'property'), required=True)
+parser.add_argument('--domain', choices=('thermal', 'rc', 'string', 'transport', 'property', 'real_gas'), required=True)
 parser.add_argument('--cc')
 args = parser.parse_args()
 args.work.mkdir(parents=True, exist_ok=True)
@@ -50,7 +50,7 @@ for language, suffix in (('c', '.c'), ('physim', '.phys')):
     products[language] = modules
     print(args.domain + ' ' + language + ': cold native build and unchanged cached build passed', flush=True)
 
-if args.domain == 'property':
+if args.domain in ('property','real_gas'):
     oracle = [sys.executable, args.oracle, '--runner', args.runner, '--analysis', args.analysis_runner,
               '--c-model', products['c'][0], '--phys-model', products['physim'][0],
               '--c-analysis', products['c'][1], '--phys-analysis', products['physim'][1],

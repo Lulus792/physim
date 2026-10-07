@@ -1823,6 +1823,40 @@
       "libraries": [
         "core"
       ]
+    },
+    "real-gas-model-c": {
+      "sources": [
+        "examples/documentation/real_gas_main.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ]
+    },
+    "real-gas-model-phys": {
+      "source": "examples/documentation/real_gas_main.phys",
+      "mode": "--emit-experiment"
+    },
+    "real-gas-analysis-c": {
+      "sources": [
+        "examples/documentation/real_gas_analysis.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ]
+    },
+    "real-gas-analysis-phys": {
+      "source": "examples/documentation/real_gas_analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "real-gas-report-probe": {
+      "sources": [
+        "tests/test_real_gas_report.c"
+      ],
+      "libraries": [
+        "core"
+      ]
     }
   },
   "tests": [
@@ -7385,6 +7419,103 @@
             "{cc}"
           ],
           "timeout": 600
+        }
+      ]
+    },
+    {
+      "name": "real_gas_workflow",
+      "targets": [
+        "python",
+        "physim-runner",
+        "physim-analysis-runner",
+        "real-gas-model-c",
+        "real-gas-model-phys",
+        "real-gas-analysis-c",
+        "real-gas-analysis-phys",
+        "real-gas-report-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_real_gas_workflow.py",
+            "--runner",
+            "{physim-runner}",
+            "--analysis",
+            "{physim-analysis-runner}",
+            "--c-model",
+            "{real-gas-model-c}",
+            "--phys-model",
+            "{real-gas-model-phys}",
+            "--c-analysis",
+            "{real-gas-analysis-c}",
+            "--phys-analysis",
+            "{real-gas-analysis-phys}",
+            "--probe",
+            "{real-gas-report-probe}",
+            "--work",
+            "{work}/models"
+          ],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "documented_native_real_gas",
+      "app": true,
+      "targets": [
+        "python",
+        "physim-build",
+        "physimc",
+        "physim-runner",
+        "physim-analysis-runner",
+        "real-gas-report-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_native_domain_build.py",
+            "--domain",
+            "real_gas",
+            "--sdk",
+            "{root}",
+            "--builder",
+            "{physim-build}",
+            "--compiler",
+            "{physimc}",
+            "--runner",
+            "{physim-runner}",
+            "--analysis-runner",
+            "{physim-analysis-runner}",
+            "--probe",
+            "{real-gas-report-probe}",
+            "--oracle",
+            "{root}/tests/test_real_gas_workflow.py",
+            "--work",
+            "{work}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 600
+        }
+      ]
+    },
+    {
+      "name": "documentation_real_gas_source",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tutorial_sources.py",
+            "documentation_real_gas_source",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 30
         }
       ]
     }

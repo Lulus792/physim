@@ -103,3 +103,53 @@ ps_result ps_thermal_pair_step(double ca, double ta, double cb, double tb,
     *out=result;
     return PS_OK;
 }
+
+
+/* Normalized terms retain representable cancellation even when the repulsive
+ * and attractive contributions separately overflow. All factors are finite,
+ * numerators nonnegative, denominators positive. No wider floating type needed. */
+typedef struct { double mantissa; int exponent; } gas_term;
+static gas_term gas_product(const double *numerators,size_t nc,const double *denominators,size_t dc) {
+    gas_term term={1,0};
+    for(size_t i=0;i<nc;i++) {
+        if(numerators[i]==0)return (gas_term){0,0};
+        int e;term.mantissa*=frexp(numerators[i],&e);term.exponent+=e;
+    }
+    for(size_t i=0;i<dc;i++) {
+        int e;term.mantissa/=frexp(denominators[i],&e);term.exponent-=e;
+    }
+    return term;
+}
+static double gas_difference(gas_term positive_term,gas_term negative_term) {
+    if(positive_term.mantissa==0)return -scalbn(negative_term.mantissa,negative_term.exponent);
+    if(negative_term.mantissa==0)return scalbn(positive_term.mantissa,positive_term.exponent);
+    int exponent=positive_term.exponent>negative_term.exponent?positive_term.exponent:negative_term.exponent;
+    double difference=scalbn(positive_term.mantissa,positive_term.exponent-exponent)-
+                      scalbn(negative_term.mantissa,negative_term.exponent-exponent);
+    return scalbn(difference,exponent);
+}
+static bool gas_domain(double n,double t,double v,double a,double b,double *available) {
+    if(!positive(n) || !positive(t) || !positive(v) || !nonnegative(a) || !nonnegative(b))return false;
+    *available=fma(-n,b,v);return positive(*available);
+}
+ps_result ps_vdw_gas_pressure(double n,double t,double v,double a,double b,double *out) {
+    double w;if(!out || !gas_domain(n,t,v,a,b,&w))return PS_INVALID;
+    double repulsive[]={n,PS_MOLAR_GAS_CONSTANT,t},attractive[]={a,n,n},denominator[]={v,v};
+    return scalar(gas_difference(gas_product(repulsive,3,&w,1),gas_product(attractive,3,denominator,2)),false,out);
+}
+ps_result ps_vdw_gas_pressure_derivative(double n,double t,double v,double a,double b,double *out) {
+    double w;if(!out || !gas_domain(n,t,v,a,b,&w))return PS_INVALID;
+    double repulsive[]={n,PS_MOLAR_GAS_CONSTANT,t},attractive[]={2,a,n,n},
+           free_squared[]={w,w},volume_cubed[]={v,v,v};
+    return scalar(gas_difference(gas_product(attractive,4,volume_cubed,3),
+                                 gas_product(repulsive,3,free_squared,2)),false,out);
+}
+ps_result ps_vdw_gas_energy(double n,double cv,double t,double v,double a,double *out) {
+    if(!out || !positive(n) || !positive(cv) || !positive(t) || !positive(v) || !nonnegative(a))return PS_INVALID;
+    double thermal[]={n,cv,t},attraction[]={a,n,n};
+    return scalar(gas_difference(gas_product(thermal,3,NULL,0),gas_product(attraction,3,&v,1)),false,out);
+}
+ps_result ps_vdw_gas_entropy_change(double n,double cv,double t0,double v0,double t1,double v1,double b,double *out) {
+    double w0,w1;if(!out || !positive(cv) || !gas_domain(n,t0,v0,0,b,&w0) || !gas_domain(n,t1,v1,0,b,&w1))return PS_INVALID;
+    return ps_ideal_gas_entropy_change(n,cv,t0,w0,t1,w1,out);
+}

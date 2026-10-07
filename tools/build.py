@@ -39,7 +39,9 @@ def language_examples():
     return ([(name, "--emit-c", f"language/{name}.phys") for name in LANGUAGE_PROGRAMS] +
             [(name, "--emit-experiment", f"language/{name}.phys") for name in LANGUAGE_EXPERIMENTS] +
             [(name, "--emit-analysis", f"language/{name}.phys") for name in LANGUAGE_ANALYSES] +
-            [("property_main", "--emit-experiment", "documentation/property_main.phys"),
+            [("real_gas_main", "--emit-experiment", "documentation/real_gas_main.phys"),
+             ("real_gas_analysis", "--emit-analysis", "documentation/real_gas_analysis.phys"),
+             ("property_main", "--emit-experiment", "documentation/property_main.phys"),
              ("property_analysis", "--emit-analysis", "documentation/property_analysis.phys"),
              ("transport_main", "--emit-experiment", "documentation/transport_main.phys"),
              ("transport_analysis", "--emit-analysis", "documentation/transport_analysis.phys"),

@@ -1,0 +1,26 @@
+// Synthetic molar SI coefficients; prescribed isothermal compression.
+let volume = Channel("volume",Unit(3,0,0,0,0,0,0,1,"m3"),"volume")
+let idealPressure = Channel("ideal_pressure",Unit(-1,1,-2,0,0,0,0,1,"Pa"),"ideal_pressure")
+let pressure = Channel("vdw_pressure",Unit(-1,1,-2,0,0,0,0,1,"Pa"),"vdw_pressure")
+let idealEnergy = Channel("ideal_energy",Unit(2,1,-2,0,0,0,0,1,"J"),"ideal_energy")
+let energy = Channel("vdw_energy",Unit(2,1,-2,0,0,0,0,1,"J"),"vdw_energy")
+let entropy = Channel("entropy_change",Unit(2,1,-2,0,-1,0,0,1,"J/K"),"entropy_change")
+let derivative = Channel("pressure_derivative",Unit(-4,1,-2,0,0,0,0,1,"Pa/m3"),"pressure_derivative")
+func measure(time: Float64):
+    let v = 0.005 - 0.004*min(1,time)
+    volume.sample(v)
+    idealPressure.sample(idealGasPressure(1,450,v))
+    pressure.sample(vdwGasPressure(1,450,v,0.4,4e-5))
+    idealEnergy.sample(idealGasEnergy(1,20.8,450))
+    energy.sample(vdwGasEnergy(1,20.8,450,v,0.4))
+    entropy.sample(vdwGasEntropyChange(1,20.8,450,0.005,450,v,4e-5))
+    derivative.sample(vdwGasPressureDerivative(1,450,v,0.4,4e-5))
+func create():
+    metadata("model=homogeneous van der Waals vs ideal gas\nsource=synthetic coefficients; not a calibrated gas\namount=1 mol\ntemperature=450 K\nattraction=0.4 Pa m6/mol2\ncovolume=0.00004 m3/mol\nmolar_cv=20.8 J/(mol K)\nvolume=0.005 to 0.001 m3 in 1 s; then fixed\nenergy_reference=U=n cv T-a n2/V\nexcluded=phase coexistence,Maxwell construction,latent heat,temperature-dependent coefficients\n")
+    reset()
+func reset():
+    measure(0)
+func step(dt: Float64):
+    measure(simulationTime()+dt)
+func scene():
+    sphere(Vec3(simulationTime(),0,0),0.1,0x53aeefff,1)

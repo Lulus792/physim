@@ -311,5 +311,26 @@
         "language": "physim"
       }
     ]
+  },
+  "documentation_real_gas_source": {
+    "document": "docs/real-gas.md",
+    "sources": [
+      {
+        "path": "examples/documentation/real_gas_main.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/real_gas_main.phys",
+        "language": "physim"
+      },
+      {
+        "path": "examples/documentation/real_gas_analysis.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/real_gas_analysis.phys",
+        "language": "physim"
+      }
+    ]
   }
 }

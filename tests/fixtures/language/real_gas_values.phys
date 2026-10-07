@@ -1,0 +1,16 @@
+let r = 8.31446261815324
+let tc = 8*0.4/(27*r*4e-5)
+assert(vdwGasPressureDerivative(1,0.8*tc,3*4e-5,0.4,4e-5) > 0)
+assert(vdwGasPressure(1,1,0.001,0.4,4e-5) < 0)
+assert(vdwGasEnergy(1,20.8,450,0.001,0.4) == 8960)
+for i in 1..<50:
+    let v = 0.001 + Float64(i)*0.0001
+    assert(abs(vdwGasPressure(2,300,v,0,0)/idealGasPressure(2,300,v)-1) < 1e-14)
+    assert(vdwGasPressureDerivative(1,450,v,0.4,4e-5) < 0)
+    let forward = vdwGasEntropyChange(1,20.8,450,0.005,450,v,4e-5)
+    let reverse = vdwGasEntropyChange(1,20.8,450,v,450,0.005,4e-5)
+    assert(abs(forward+reverse) < 1e-12)
+assert(attempt(vdwGasPressure(1,300,4e-5,0.4,4e-5)) == nil)
+assert(attempt(vdwGasEnergy(1,20.8,450,0.001,-1)) == nil)
+assert(attempt(vdwGasEntropyChange(1,20.8,300,0.001,300,4e-5,4e-5)) == nil)
+print("Real gas bindings: ideal limit, signed and unstable algebra, entropy reversal and caught domain errors passed")

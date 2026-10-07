@@ -124,6 +124,7 @@ static const documentation_topic documentation_topics[] = {
     {"Materialdaten & Gültigkeitsbereiche", "docs/properties.md", false},
     {"properties.h", "include/physim/properties.h", true},
     {"C: Materialeigenschaften", "docs/reference/properties.md", false},
+    {"Reale Gase: Van der Waals", "docs/real-gas.md", false},
 };
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27

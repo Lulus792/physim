@@ -41,4 +41,19 @@ static inline ps_vec2 psrt_thermal_pair(double ca,double ta,double cb,double tb,
         psrt_fail(site,"Thermodynamics: invalid SI inputs or numeric range");
     return value;
 }
+/* Homogeneous real-gas algebra; all coefficients use molar SI units. */
+#define PSRT_VDW_FIVE(name, call) \
+    static inline double name(double a,double b,double c,double d,double e,psrt_site site) { \
+        double value=0; ps_result result=call(a,b,c,d,e,&value); \
+        if(result!=PS_OK)psrt_raise(site,result,"Van der Waals: invalid SI inputs or numeric range",NULL); \
+        return value; }
+PSRT_VDW_FIVE(psrt_vdw_pressure,ps_vdw_gas_pressure)
+PSRT_VDW_FIVE(psrt_vdw_derivative,ps_vdw_gas_pressure_derivative)
+PSRT_VDW_FIVE(psrt_vdw_energy,ps_vdw_gas_energy)
+#undef PSRT_VDW_FIVE
+static inline double psrt_vdw_entropy(double n,double cv,double t0,double v0,double t1,double v1,double b,psrt_site site) {
+    double value=0;ps_result result=ps_vdw_gas_entropy_change(n,cv,t0,v0,t1,v1,b,&value);
+    if(result!=PS_OK)psrt_raise(site,result,"Van der Waals: invalid SI inputs or numeric range",NULL);
+    return value;
+}
 #endif

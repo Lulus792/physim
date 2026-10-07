@@ -341,3 +341,10 @@ add('ps_', {'point_charge_field': 'Berechnet das homogene Coulombfeld in V/m; de
 add('ps_', {'harmonic_step': 'Berechnet einen exakten undämpften Oszillatorschritt für Position und Geschwindigkeit.', 'string_wave_speed': 'Berechnet die ideale Saitengeschwindigkeit aus Spannungskraft und linearer Dichte.', 'traveling_wave': 'Wertet Verschiebung, Geschwindigkeit und Steigung einer harmonischen Laufwelle aus.', 'string_wave_step': 'Berechnet einen atomaren zentrierten 1D-Wellenschritt mit Nullrändern und geprüfter CFL-Grenze.', 'ray_reflect': 'Reflektiert eine validierte Unit-Richtung an einer orientierten Unit-Normale.', 'ray_refract': 'Berechnet Snell-Brechung oder meldet ausdrücklich Totalreflexion ohne Ausgabeänderung.', 'thin_lens_image': 'Berechnet signierte Bildweite und Vergrößerung einer paraxialen dünnen Linse.'})
 
 add('ps_', {'pipe_conductance': 'Berechnet den Hagen-Poiseuille-Leitwert eines idealen laminaren Rundrohrs.', 'pipe_flow': 'Berechnet den signierten Volumenstrom G(pa-pb).', 'pipe_power': 'Berechnet die nichtnegative hydraulische Verlustleistung.', 'reynolds_number': 'Berechnet die dimensionslose Reynolds-Zahl aus expliziten SI-Stoffdaten.', 'hydrostatic_pressure': 'Berechnet den hydrostatischen Relativdruck mit signierter Tiefe.', 'pipe_network_solve': 'Löst ein verankertes passives lineares Drucknetz atomar und liefert Kantenflüsse.', 'transport_periodic_step': 'Berechnet einen atomaren konservativen Upwind-/Diffusionsschritt für einen periodischen nichtnegativen Tracer.'})
+
+add('ps_', {
+    'vdw_gas_pressure': 'Wertet p=nRT/(V-nb)-an²/V² in Pa für konstante molare SI-Koeffizienten aus; V>nb. Keine Phasenauswahl.',
+    'vdw_gas_pressure_derivative': 'Wertet die Druckableitung bei festem n,T in Pa/m³ aus; positive Werte sind mechanisch instabile homogene Zustände.',
+    'vdw_gas_energy': 'Wertet U=n cv T-an²/V in J bei konstantem a,cv aus; Referenz T→0,V→∞ und signierte Ergebnisse.',
+    'vdw_gas_entropy_change': 'Berechnet die Entropiedifferenz mit freiem Volumen V-nb bei konstantem cv,b; keine Entropieproduktion oder Phasenkoexistenz.',
+})

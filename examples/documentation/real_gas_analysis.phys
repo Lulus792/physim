@@ -1,0 +1,6 @@
+func analyze():
+    report("Real gas comparison")
+    let run = Dataset(0)
+    let volume = run.series("volume")
+    run.series("ideal_pressure").plot(volume,"Ideal pressure","ideal_pressure")
+    run.series("vdw_pressure").plot(volume,"Van der Waals pressure","vdw_pressure")

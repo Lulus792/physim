@@ -3,6 +3,12 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-07. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Erster realer Gasbaustein:** Ein homogenes Van-der-Waals-Modell ergänzt Druck,
+Druckableitung, Energie und Entropiedifferenz in C und Physim. Ein synthetischer
+isothermer Vergleich speichert SI-Kanäle und alle Koeffizienten und besitzt
+unabhängig geprüfte gemischte Analysen. Phasengleichgewichte, Maxwell-Konstruktion
+und Stoffkalibrierung bleiben offen. [Quellen und Grenzen](real-gas.md).
+
 **Materialeigenschaften als SI-Daten:** Konstante und temperatur-/druckabhängige
 Tabellen besitzen Quelle, Einheit und geschlossenen Gültigkeitsbereich.
 C-/Physim-Modelle wählen die benötigten Daten ausdrücklich; Beispiele speichern

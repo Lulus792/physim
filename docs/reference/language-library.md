@@ -5011,6 +5011,46 @@ Liefert die gemessene Vakuumpermittivität nach CODATA 2022 in F/m, keine exakte
 
 Überall verfügbar.
 
+## vdwGasEnergy
+
+```text
+vdwGasEnergy(amount: Float64, molarCv: Float64, temperature: Float64, volume: Float64, attraction: Float64) -> Float64
+```
+
+U=n cv T-an²/V in J bei konstantem a,cv. Referenz T→0,V→∞; keine Kalibrierung. Signierte Werte.
+
+Überall verfügbar.
+
+## vdwGasEntropyChange
+
+```text
+vdwGasEntropyChange(amount: Float64, molarCv: Float64, initialTemperature: Float64, initialVolume: Float64, finalTemperature: Float64, finalVolume: Float64, covolume: Float64) -> Float64
+```
+
+n[cv ln(T1/T0)+R ln((V1-nb)/(V0-nb))] in J/K bei konstantem cv,b und derselben Stoffmenge. V0,V1>nb. Fehler mit attempt abfangbar.
+
+Überall verfügbar.
+
+## vdwGasPressure
+
+```text
+vdwGasPressure(amount: Float64, temperature: Float64, volume: Float64, attraction: Float64, covolume: Float64) -> Float64
+```
+
+Homogenes Van-der-Waals-Modell: p=nRT/(V-nb)-an²/V². Molares a in Pa m⁶/mol², b in m³/mol; V>nb. Signierte Werte, keine Phasenauswahl.
+
+Überall verfügbar.
+
+## vdwGasPressureDerivative
+
+```text
+vdwGasPressureDerivative(amount: Float64, temperature: Float64, volume: Float64, attraction: Float64, covolume: Float64) -> Float64
+```
+
+Ableitung bei festem n,T: -nRT/(V-nb)²+2an²/V³ in Pa/m³. Positiv bedeutet mechanisch instabile homogene Algebra; keine Maxwell-Konstruktion.
+
+Überall verfügbar.
+
 ## verletStep
 
 ```text

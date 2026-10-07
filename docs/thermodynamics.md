@@ -19,7 +19,9 @@ gewählter Referenz U=0 bei T=0. Zwischen zwei Gleichgewichtszuständen derselbe
 Stoffmenge ist ΔS=n[cv ln(T1/T0)+R ln(V1/V0)] in J/K. Dies ist eine Zustandsdifferenz,
 keine Schätzung irreversibler Entropieproduktion und kein Wärmepfadintegral.
 Gültig ist das verdünnte ideale Gas mit konstantem cv, ohne Phasenübergang.
-Reale Gase, temperaturabhängige Stofftabellen und Strahlung sind noch offen.
+Ein [begrenztes Van-der-Waals-Modell](real-gas.md) ergänzt reale Gase.
+[Materialtabellen](properties.md) sind explizite SI-Daten; Phasengleichgewichte
+und Strahlung bleiben offen.
 
 Ein homogener Körper mit konstanter spezifischer Wärmekapazität c hat C=mc und
 benötigt Q=C(T1-T0). Für lineare Wärmeleitung von A nach B gilt P=G(Ta-Tb).

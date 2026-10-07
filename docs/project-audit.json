@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-07",
-  "inspected_revision": "915e431f179b5ecf94e610d659276f4fa6c6eaf3",
+  "inspected_revision": "1f092553b30d7fffb5355337c8d040240c2c25c3",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2862,9 +2862,16 @@
         "tests/test_thermodynamics.c",
         "tests/test_thermal_tutorial.py",
         "tools/verify-native-sdk.py",
-        "docs/platform-validation.md"
+        "docs/platform-validation.md",
+        "docs/real-gas.md",
+        "tests/test_real_gas.c",
+        "tests/fixtures/language/real_gas_values.phys",
+        "tests/test_real_gas_workflow.py",
+        "tests/test_real_gas_report.c",
+        "examples/documentation/real_gas_main.c",
+        "examples/documentation/real_gas_main.phys"
       ],
-      "note": "Eigenständiges allokationsfreies SI-Modul für ideale Gaszustände, Energie/Entropiedifferenzen, konstante Wärmekapazität, Wärmefluss und exakte Reservoir-/Zweikörperrelaxation. Gleichwertige C-/Physim-Experimente und Analysen, unabhängige Decimal-Oracles und ausgeführte macOS-/Linux-/Linux-Sanitizer-Prüfungen. Reale Gase, weitere Stoffmodelle und die gesamte Domänen-/Plattformabnahme bleiben offen."
+      "note": "Eigenständiges allokationsfreies SI-Modul für ideale und homogene Van-der-Waals-Gaszustände, Energie/Entropiedifferenzen, konstante Wärmekapazität, Wärmefluss und exakte Reservoir-/Zweikörperrelaxation. Gleichwertige C-/Physim-Experimente und Analysen; unabhängige Decimal-Oracles und ausgeführte macOS-/Linux-/Linux-Sanitizer-Prüfungen. Phasengleichgewichte, Maxwell-Konstruktion, kalibrierte reale Stoffmodelle und die gesamte Domänen-/Plattformabnahme bleiben offen; der Block bleibt unvollständig."
     },
     {
       "id": "PP-0413",

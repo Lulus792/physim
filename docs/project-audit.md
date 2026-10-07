@@ -150,3 +150,17 @@ PP-0393 bleibt für die gesamte Liste der physikalischen Größen und Stoffmodel
 ungeprüft. Ein allgemeiner Quantity-Datentyp allein ersetzt deren fachliche
 Einzelabnahme nicht. Neue API-/Laufzeitnachweise ersetzen weiterhin weder die
 Gesamtplattformabnahme noch die übrigen Plananforderungen.
+
+
+## Homogene reale Gaszustände (§7.7)
+
+PP-0412 bleibt unvollständig, besitzt aber zusätzlich ein explizit begrenztes
+Van-der-Waals-Modell. C und Physim berechnen Druck, Druckableitung, Energie und
+Entropiedifferenz mit denselben molaren SI-Koeffizienten. Ein synthetisches
+isothermes Vergleichsexperiment speichert sieben Kanäle und seine Koeffizienten;
+alle vier gemischten Analysen werden unabhängig geprüft.
+[Modell, Quellen und Grenzen](real-gas.md) schließen Phasenauswahl,
+Maxwell-Konstruktion und experimentelle Stoffkalibrierung aus. Der ideale
+Grenzfall und mechanisch instabile homogene Algebra sind ausdrücklich getestet.
+Die Zahl implementierter Planblöcke bleibt unverändert; diese Ergänzung ist
+keine gesamte thermodynamische oder Plattformabnahme.

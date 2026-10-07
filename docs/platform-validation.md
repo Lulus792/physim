@@ -2412,3 +2412,93 @@ noch. Die [frische Linux-Paket-CI](https://github.com/PhysicSimulator/physim/act
 besteht vollständig einschließlich der installierten Debian-/Ubuntu-Prüfungen.
 Diese Ergebnisse gelten für die frühere Revision. Die nächste gesamte Matrix
 mit dem neuen Eigenschaftsbaustein bleibt erforderlich.
+
+## Homogenes Van-der-Waals-Modell am 7. Oktober 2026
+
+Dieser begrenzte reale Gasbaustein ergänzt das bestehende Thermodynamikmodul;
+Core bleibt bei 27 Modulen, API/ABI 3, Wire 5, Snapshot 3 und psrun 1 bleiben
+unverändert. Vier C-/Physim-Funktionen berechnen Druck, Druckableitung,
+innere Energie und Entropiedifferenz mit konstanten molaren SI-Koeffizienten.
+[Modell, Primärquelle und vollständige Beispiele](real-gas.md) dokumentieren
+insbesondere die fehlende Phasenauswahl und Kalibrierung. PP-0412 bleibt
+unvollständig; der gesamte Projektplan ist weiterhin nicht abgenommen.
+
+### Tatsächlich ausgeführte gezielte Prüfungen
+
+Die acht Release-Fälle bestehen auf macOS/Apple Clang unter `run-rds54d3j`
+und auf Debian 12/GCC unter `run-c481q_od`. Enthalten sind C-Grenzfälle,
+Physim-Werte/attempt, das bestehende Thermodynamikmodul, eine unabhängige
+60-stellige Decimal-Referenz für reale aufgezeichnete C-/Physim-Läufe, vier
+gemischte Analysen, zwei kalte native Projekte samt unverändertem Cache,
+publizierte Quellen, Referenzseiten und das isolierte Kit.
+Die Läufe speichern sieben geprüfte SI-Kanäle und synthetische Koeffizienten;
+sie setzen die Kompression nach einer Sekunde auf ein festes Volumen fort.
+Es werden keine gemessenen Gasdaten behauptet.
+
+Vier Fälle bestehen zusätzlich unter Linux/Clang mit ASan/UBSan in
+`build/base-contract-asan-linux/test-results/run-homy18es`: C-Gasmodell,
+Physim-Bindungen, bisherige Thermodynamik und der wirkliche Experiment-/Analyseablauf.
+Die C-Prüfung enthält idealen Grenzfall, Druckableitung per endlicher Differenz,
+Stoffmengen-/Volumenskalierung, Entropieumkehr, mechanisch instabile homogene
+Algebra, negative Ausgaben, Domainfehler und endliche Rechnung trotz separatem
+Überlauf der Energieterme. Bei Fehlern bleibt die Ausgabe erhalten.
+
+Vier Handbuchprüfungen bestehen je Plattform: sämtliche Themen, Tastatur mit
+16/22 px und künstlich verzögerte Tastaturnavigation. Belege liegen unter
+`build/real-gas-handbook-mac-wlhwzc34` und auf Linux unter
+`build/real-gas-handbook-linux-ssktfa0m`; der Linux-Receipt ist zusätzlich als
+`build/real-gas-handbook-linux-PASSED.json` lokal erhalten. 30 generierte
+Referenzseiten bestehen einschließlich neuer C-/Physim-Einträge.
+
+### Vollständige verschobene SDKs
+
+Beide vollständigen isolierten SDK-Prüfungen ohne Fensterprüfungen bestehen
+mit jeweils **380 erfolgreichen Prüfbefehlen**:
+
+- macOS: `build/Real gas SDK ä mac nu580m90`, verschoben unter
+  `proof/Native SDK ä zwjx2pql/Relocated SDK ä`.
+- Linux: `build/Real gas SDK ä linux d33yv2j1`, verschoben unter
+  `proof/Native SDK ä _7m5hk7u/Relocated SDK ä`.
+
+Jedes SDK enthält 448 SHA-256-erfasste Dateien; das isolierte Kit hat 71 Eingaben.
+Alle 27 Core-Module und öffentlichen Header stammen aus dem SDK. Das neue
+Gasmodell und seine Physim-Bindungen bestehen gegen das installierte und das
+neu gebaute Archiv. Zwölf kalte native C-/Physim-Projekte einschließlich beider
+Gasprojekte, unveränderter Cache und sechs unabhängige Domänenorakel bestehen.
+Alle früheren SDK-Gates bleiben erhalten. Receipts stehen in
+`build/real-gas-sdk-mac-PASSED.json` und `build/real-gas-sdk-linux-PASSED.json`.
+26 Implementierungs-/Test-/Dokumentationsdateien sind in
+`build/real-gas-source-freeze.json` festgehalten. Nach den SDK-Läufen wurde nur
+Text im abschließenden Verifier-Receipt auf zwölf Projekte und die tatsächlich
+geprüften Material-/Gasfälle berichtigt; die geprüften Operationen sind identisch.
+Das erneut paketierte Kit hat ebenfalls 71 Eingaben.
+
+### Erhaltene Fehlversuche und Grenzen
+
+Die erste Sprachbindung rief `psrt_raise` ohne dessen viertes Argument auf
+(`run-41b7k717`); der Aufruf wurde auf den vorhandenen Vertrag korrigiert.
+Die ersten C-Experiment-/Projektfälle (`run-1h0gckvs`) zeigten die fehlende
+eigenständige Einbindung von `units.h` für `PS_PASCAL`. Beide C-Beispiele binden
+sie nun ausdrücklich ein. Die erfolgreichen Folgeprüfungen verwenden diese
+Korrekturen. Zwei früh gestartete SDK-Läufe (`l5dn54s5`, `en_fcx5k`) wurden vom
+Build-Lock abgewiesen; ihre Logs bleiben erhalten. Die erfolgreichen SDK-Läufe
+starteten erst nach Abschluss der vorherigen Builds.
+
+Diese Belege gelten für den lokalen Intel-Mac und Debian-VM-Lauf. Sie beweisen
+keine neue Windows-/Apple-Silicon-Gesamtabnahme, kein Phasengleichgewicht und
+keine Stoffkalibrierung. Der Katalog enthält jetzt 626 Fälle ohne Fenster und
+77 Fensterfälle; Katalogzahlen allein sind keine bestandenen Gesamtläufe.
+
+### Abschließende Gesamtläufe
+
+Die tatsächlichen Release-Gesamtläufe mit diesem Baustein bestehen auf beiden
+lokalen Systemen vollständig, jeweils **626/626**:
+
+- macOS/Apple Clang: `build/contact-world-language-release-mac/test-results/run-ngt3aqiy`.
+- Debian 12/GCC: `build/contact-world-language-release-linux/test-results/run-w7lsv7gh`.
+
+Sie enthalten auch die früheren Compiler-, Runtime-, Runner-, Batch-, Format-,
+Domänen- und Projektbuildfälle. Der Linux-Ergebnisreceipt ist zusätzlich als
+`build/real-gas-full-linux-results.json` lokal erhalten. Die zuvor genannten
+acht gezielten Fälle, Sanitizer- und Handbuchprüfungen sind separate Belege;
+sie werden nicht zu einer erfundenen größeren Testsuite zusammengezählt.
