@@ -2152,3 +2152,84 @@ der Übertragungsmetadaten wurde zusätzlich der gesamte erwartete
 Repository-Dateibestand auf Linux byteweise mit dem Mac abgeglichen.
 Neue Fenster-, Windows- und Apple-Silicon-Prüfungen gehören nicht zum
 Nachweis dieser Runde. Die oben aufgeführten Remote-Fehler bleiben zu bearbeiten.
+
+
+## CI-Timingprüfungen am 7. Oktober 2026
+
+Die [C17-CI für `37a55bd`](https://github.com/PhysicSimulator/physim/actions/runs/37609456911)
+ist abgeschlossen: beide Linux- und alle vier Windows-Jobs bestehen. Die beiden
+macOS-Jobs scheitern weiterhin in der SDK-Handbuchprüfung an Stufe 13 nach
+15,061 beziehungsweise 15,055 Sekunden. Die gezielt gelesenen Artefakte stimmen
+mit den veröffentlichten SHA-256-Digests überein: Intel
+`5a41d123f7a87ef8b2382ba176bbbfbf9d623b8f9f2ac2e5a6761c1e509ddaaa`,
+Apple Silicon `3227a33d7ea1ebdc21afa9ca5f1bf31dcafc46b7cf5a7139041d666dfa3e9d0d`.
+
+### Reproduzierte Testannahmen
+
+Ein deterministisch verzögertes Zeichnen mit 80 ms pro Frame reproduziert unter
+Intel macOS genau die Handbuchstufe 13 und den bisherigen 15-Sekunden-Abbruch:
+`build/contact-world-language-release-mac/test-results/run-8x2xqqpy`.
+Der Trace zeigt weiter wechselnde Fokusziele; die Navigation hängt dort nicht.
+Die genaue Ursache des langsameren Zeichnens auf den Remote-Macs bleibt ohne
+deren detaillierten Trace unbewiesen. Die Prüfung muss langsames Zeichnen
+zulassen, ohne fehlende oder unerreichbare Bedienelemente zu akzeptieren.
+
+Die Handbuch-Tastaturtests besitzen nun ein eigenes 60-Sekunden-Gesamtlimit
+(innerhalb der 75-/85-Sekunden-Prozessgrenzen). Jede Fokussuche prüft zusätzlich,
+dass das semantische Ziel existiert, und begrenzt die Versuche anhand der
+aktuellen Zahl navigierbarer Elemente. Fehlschläge melden Stufe, Ziel, Fokus,
+Sichtbarkeitszustand, Thema und Versuchszahl. Eine neue negative Prüfung erzwingt
+ein fehlendes Ziel und verlangt Exitcode 1 mit der passenden Diagnose.
+`docs-keyboard-delayed` verwendet die gesamte bisherige Tastaturfolge und ist
+auch im SDK-Prüfverfahren enthalten; der normale Produktbetrieb bekommt keine
+künstliche Verzögerung.
+
+Der unveränderte Offline-Zeitvergleich scheitert mit einem um 1,5 Sekunden
+verzögerten Beobachter unter `run-bkhk2803`: 0,5× benötigt 2,003 Sekunden,
+4× 0,260 Sekunden, Offline 1,501 Sekunden. Datenvergleich, Pause und Einzelschritt
+sind bereits erfolgreich; nur die bisher geforderte relative Beobachtungszeit
+scheitert. Offline bedeutet fehlende Scheduling-Wartezeit, keine garantierte
+Schranke für Experimentrechnung, Datenträger, Pipes und den Beobachter.
+Die genaue zusätzliche Latenz des früheren Linux-CI-Laufs bleibt unbewiesen.
+Der neue Vertragstest fordert 100.000 fällige Schritte bei **unveränderter** Uhr
+und prüft zusätzlich die tatsächlichen Runner-Daten und Steuerungen mit dem
+verzögerten Beobachter. Die Zeitprüfungen der realen 0,5×-/4×-Raten und die
+Prüfung des langsamen Lesers bleiben erhalten. Runner und Pacer wurden nicht
+geändert.
+
+### Ausgeführte Nachweise
+
+Die vier gezielten Runner-Fälle bestehen auf macOS unter `run-yfpgwbav` und
+Linux unter `run-sst862ow`. Die sieben bisherigen Handbuch-/Menüprüfungen
+mit dem neuen langsamen Ablauf bestehen unter macOS `run-8_xgmqrz` und
+Linux `run-plnrml_9`. Nach Ergänzung der negativen Kontrolle bestehen sämtliche
+vier Tastaturfälle am endgültigen App-Stand unter macOS `run-cdtaiyvk` und
+Linux `run-_n21xkus`. Der langsame macOS-Fall benötigt 25,417 Sekunden.
+Ein einzelner neuer Gesamtlauf aller Fälle wird damit nicht behauptet.
+
+Beide gezielten SDK-App-Prüfungen bestehen mit vier erfolgreichen Abläufen
+(16 px, 22 px, langsames Zeichnen, sämtliche Handbuchthemen/Lernwege) sowie der
+korrekt fehlschlagenden Fokus-Kontrolle:
+
+- macOS: `build/CI regression SDK ä mac vxc7i35j/Relocated SDK ä`,
+  App-SHA-256 `f3b748b31e2eb709aab78378f28b82951a22c451439519f6c57034e22d8a0b81`.
+- Linux: `build/CI regression SDK ä linux h05lz9j2/Relocated SDK ä`,
+  App-SHA-256 `53fbb29c403b639ed88a7c04e03c2e1403df5ed06cea42d49031cff6b02a50e8`.
+
+Sie verwenden die zuvor vollständig geprüften numerischen SDKs mit neuer App;
+alle anderen 429 manifestierten Dateien bleiben bytegleich. Die fünf
+Befehle, erwarteten Exitcodes und acht identischen Implementierungs-/Prüfquellen
+stehen in `build/ci-followup-sdk-mac-PASSED.json`,
+`build/ci-followup-sdk-linux-PASSED.json` und `ci-followup-source-freeze.json`.
+Vorherige Hilfsaufrufe endeten vor dem App-Start an fehlenden Arbeitsordnern;
+die Korrektur und Fortsetzung sind in `ci-followup-sdk-ui-proof-v3-*.log`
+festgehalten. Diese Hilfsfehler sind keine erfolgreichen App-Prüfungen.
+
+29 Referenzseiten und das isolierte Kit mit 60 Eingaben bestehen auf beiden
+Systemen. Der Katalog enthält jetzt 611 Fälle ohne Fenster, 592 ohne SDL und
+77 Fensterfälle. Bei der letzten Abfrage ist der Paketbuild der
+[Linux-CI für `d4ac0f3`](https://github.com/PhysicSimulator/physim/actions/runs/37619178591)
+erfolgreich; die beiden installierten Systemprüfungen und der Großteil der
+[C17-Matrix](https://github.com/PhysicSimulator/physim/actions/runs/37619178905)
+laufen noch. Das bestätigt weder diese neue Korrektur noch die vollständige
+Plattformabnahme; die nächste Remote-Matrix bleibt erforderlich.

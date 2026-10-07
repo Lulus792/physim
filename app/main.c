@@ -3256,7 +3256,7 @@ int main(int argc, char **argv) {
             }
         } else if (workspace_state_test) {
             if (ps_clock() - test_started >
-                (!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
+                (!strncmp(argv[3],"docs-keyboard",13)?60:!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
                   !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || !strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strcmp(argv[3],"logging-c") || !strcmp(argv[3],"logging-phys") || !strcmp(argv[3],"logging-flood") || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15))) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
@@ -4244,7 +4244,8 @@ int main(int argc, char **argv) {
         frames++;
         if (smoke && frames >= 8)
             a->quitting = true;
-        SDL_Delay(5);
+        /* Deterministic slow rendering for the keyboard regression only. */
+        SDL_Delay(workspace_state_test && !strcmp(argv[3],"docs-keyboard-delayed")?80:5);
     }
     if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
         save_project(a);

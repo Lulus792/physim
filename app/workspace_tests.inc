@@ -187,7 +187,7 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
     }
     if(!strcmp(mode,"manager-errors")){project_manager_error_test_frame(a,a->manager_parent,stage,code,capture);return;}
     if(!strncmp(mode,"manager-keyboard",16)){project_manager_keyboard_test_frame(a,a->manager_parent,stage,code,capture);return;}
-    if (!strncmp(mode,"docs-keyboard",13)) {documentation_keyboard_test_frame(a,stage,code,capture);return;}
+    if (!strncmp(mode,"docs-keyboard",13)) {documentation_keyboard_test_frame(a,mode,stage,code,capture);return;}
     if (!strcmp(mode,"toolbar-keyboard")) {
         keyboard_menu_test_frame(a,a->manager_parent,stage,code,capture);return;
     }

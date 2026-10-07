@@ -3,6 +3,13 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-07. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Belastbare Timingprüfungen:** Offline-Runner werden anhand fehlender
+Scheduling-Wartezeit, identischer Messdaten und echter Steuerungen geprüft;
+ein verzögerter Beobachter darf die gemessene Laufzeit beeinflussen. Die
+Handbuch-Tastaturprüfung erlaubt langsames Zeichnen und erkennt fehlende
+Fokusziele ausdrücklich. Lokale macOS-/Linux- und verschobene SDK-Prüfungen
+bestehen; die neue Remote-Matrix bleibt erforderlich. [Nachweise](platform-validation.md).
+
 **Skalierte Series-Numerik:** Array-Helfer, C-Series und Physim-Series verwenden
 nun dieselbe Intervallrechnung für Ableitung und Trapezintegral. Darstellbare
 Ergebnisse bleiben auch bei extremen Differenzen und subnormalen Signalwerten

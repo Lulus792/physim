@@ -71,7 +71,7 @@ Das ist ein Nachweis für diesen Stand und diese Umgebungen. Die anschließenden
 Änderungen an Laufzeitsupport und Prüfern benötigen eigene Nachweise; eine
 nachträgliche Änderung der Zahl macht den alten Lauf nicht zu einem aktuellen
 Gesamtlauf. Der aktuelle Katalog enthält mit den zusätzlichen Lernwegprüfungen
-610 Fälle ohne Fenster, 591 ohne SDL und 75 Fensterfälle.
+611 Fälle ohne Fenster, 592 ohne SDL und 77 Fensterfälle.
 
 Die Abnahme bleibt offen, bis sämtliche konkreten Anforderungen passende
 aktuelle Implementierungs-, Laufzeit- und Plattformnachweise besitzen.

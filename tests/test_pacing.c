@@ -31,8 +31,9 @@ int main(void) {
     for (unsigned i = 1; i <= 39; i++) CHECK(!ps_pacer_due(&p, i * .25, 1));
     CHECK(ps_pacer_due(&p, 10.01, 1));
     p.speed = 0;
-    CHECK(ps_pacer_due(&p, 10.01, .01));
-    CHECK(ps_pacer_due(&p, 10.01, .01));
+    ps_pacer_restart(&p,10.01);
+    for(unsigned i=0;i<100000;i++)CHECK(ps_pacer_due(&p,10.01,.01));
+    CHECK(p.last==10.01 && p.credit==0);
     p.running = false;
     CHECK(!ps_pacer_due(&p, 10.01, .01));
     p=(ps_pacer){.running=true,.speed=1};

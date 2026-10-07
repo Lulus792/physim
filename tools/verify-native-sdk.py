@@ -606,7 +606,7 @@ def main():
                     if "SETTINGS KEYBOARD SELF-TEST: PASSED" not in output.read_text(encoding="utf-8"):
                         raise RuntimeError("Installed SDK keyboard settings did not complete")
                 print("Installed SDK settings: keyboard-only traversal, all toggles, restart, cancellation and large-font focus scrolling passed",flush=True)
-                for mode in ("docs-keyboard","docs-keyboard-22"):
+                for mode in ("docs-keyboard","docs-keyboard-22","docs-keyboard-delayed"):
                     directory=root / mode;directory.mkdir();output=root / (mode+".txt")
                     checked([sdk / "bin" / ("physim"+suffix),"--workspace-state-test",directory,mode],output=output)
                     if "DOCUMENTATION KEYBOARD SELF-TEST: PASSED" not in output.read_text(encoding="utf-8"):

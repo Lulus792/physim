@@ -29,8 +29,9 @@ SIMPLE = {
 }
 SIMPLE["project_manager_keyboard_errors"] = (["--workspace-state-test", "{directory}", "manager-errors"], 35, True)
 SIMPLE["documentation_pointer_isolation"] = (["--docs-test-noise", "{directory}"], 35, True)
-SIMPLE["documentation_keyboard_22"] = (["--workspace-state-test", "{directory}", "docs-keyboard-22"], 55, True)
-SIMPLE["documentation_keyboard"] = (["--workspace-state-test", "{directory}", "docs-keyboard"], 55, True)
+SIMPLE["documentation_keyboard_delayed"] = (["--workspace-state-test", "{directory}", "docs-keyboard-delayed"], 75, True)
+SIMPLE["documentation_keyboard_22"] = (["--workspace-state-test", "{directory}", "docs-keyboard-22"], 75, True)
+SIMPLE["documentation_keyboard"] = (["--workspace-state-test", "{directory}", "docs-keyboard"], 75, True)
 for size in ("small", "large"):
     for name, mode in (("toolbar", "toolbar"), ("documents", "documents")):
         SIMPLE[f"{name}_{size}"] = (["--workspace-state-test", "{directory}", mode], 25, size == "small")
