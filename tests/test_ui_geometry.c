@@ -76,7 +76,29 @@ static int compare(struct nk_context *ctx, ps_ui_geometry *g, struct nk_buffer *
     nk_buffer_free(&indices);
     return 0;
 }
+static int large_close_button(void) {
+    struct nk_user_font font={0};font.height=22;font.width=width;
+    struct nk_context ctx;CHECK(nk_init_default(&ctx,&font));
+    ps_ui_font_layout layout={PS_UI_LAYOUT_MAGIC,22};ctx.userdata=nk_handle_ptr(&layout);
+    ctx.style.button.padding=nk_vec2(10,4);
+    if(nk_begin(&ctx,"close-button",nk_rect(0,0,200,150),0)) {
+        nk_layout_row_static(&ctx,26,24,1);
+        nk_button_label(&ctx,"x");
+    }
+    nk_end(&ctx);
+    const struct nk_command *command;bool found=false;
+    nk_foreach(command,&ctx)if(command->type==NK_COMMAND_TEXT) {
+        const struct nk_command_text *text=(const struct nk_command_text *)command;
+        if(text->length!=1 || text->w<11 || text->h<22)
+            fprintf(stderr,"Close glyph: length=%d width=%u height=%u text=%s\n",text->length,text->w,text->h,text->string);
+        CHECK(text->length==1 && text->string[0]=='x' && text->w>=11 && text->h>=22);
+        found=true;
+    }
+    CHECK(found && ctx.style.button.padding.x==10 && ctx.style.button.padding.y==4);
+    nk_free(&ctx);return 0;
+}
 int main(void) {
+    CHECK(large_close_button()==0);
     struct nk_user_font font = {0};
     font.height = 18;
     font.width = width;

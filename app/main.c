@@ -103,6 +103,7 @@ typedef struct {
 typedef struct {
     struct nk_context *ui;
     const struct nk_user_font *font_ui, *font_code, *font_title;
+    const struct nk_user_font *ui_fonts[4], *title_fonts[4];
     const struct nk_user_font *code_fonts[4];
     ps_preferences preferences, settings_draft;
     char preferences_path[4096], preferences_error[192];
@@ -130,6 +131,7 @@ typedef struct {
     struct nk_rect channel_unit_buttons[2], channel_unit_bounds[7];
     uint32_t dock_target, dock_side;
     struct nk_rect settings_bounds[6], theme_bounds[PS_THEME_COUNT], panel_bounds[2];
+    struct nk_rect ui_size_bounds[4];
     SDL_Window *window;
     ps_graphics *graphics;
     ps_vec3 camera_target;
@@ -192,6 +194,7 @@ typedef struct {
     ps_graphics *doc_graphics;
     struct nk_context *doc_ui;
     const struct nk_user_font *doc_font_ui, *doc_font_title, *doc_font_code, *doc_code_fonts[4];
+    const struct nk_user_font *doc_ui_fonts[4], *doc_title_fonts[4];
     bool doc_visible;
     int doc_topic, doc_match, doc_jump_block;
     nk_uint doc_scroll_x, doc_scroll_y;
@@ -2626,6 +2629,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "autosave_tests.inc"
 #include "batch_tests.inc"
 #include "plot_tests.inc"
+#include "ui_size_tests.inc"
 #include "settings_tests.inc"
 #include "workspace_tree_tests.inc"
 #include "document_tests.inc"
@@ -2681,7 +2685,7 @@ int main(int argc, char **argv) {
         strcmp(argv[3], "theme-light") && strcmp(argv[3], "theme-light-read") &&
         strcmp(argv[3], "theme-contrast") && strcmp(argv[3], "theme-contrast-read") &&
         strcmp(argv[3], "theme-cancel") && strcmp(argv[3], "theme-defaults") &&
-        strcmp(argv[3], "theme-dark-read"))))
+        strcmp(argv[3], "theme-dark-read") && strncmp(argv[3],"ui-size-",8))))
         return 2;
     bool plot_noise = argc > 1 && !strcmp(argv[1], "--plot-test-noise");
     bool plot_test = plot_noise || (argc > 1 && !strcmp(argv[1], "--plot-test"));
@@ -2871,15 +2875,22 @@ int main(int argc, char **argv) {
         return 1;
     }
     struct nk_font_atlas *atlas = nk_sdl_font_stash_begin(a->ui);
-    struct nk_font *font = system_font(atlas, 16, false, false);
+    struct nk_font *ui_fonts[4], *title_fonts[4];
+    bool ui_fonts_ok=true;
+    for(int i=0;i<4;i++) {
+        ui_fonts[i]=system_font(atlas,(float)(16+i*2),false,false);
+        title_fonts[i]=system_font(atlas,(float)(23+i*2),false,true);
+        ui_fonts_ok &= ui_fonts[i]!=NULL && title_fonts[i]!=NULL;
+    }
+    struct nk_font *font=ui_fonts[0];
     struct nk_font *code_fonts[4];
     bool code_fonts_ok = true;
     for (int i = 0; i < 4; i++) {
         code_fonts[i] = system_font(atlas, (float)(16 + i * 2), true, false);
         code_fonts_ok &= code_fonts[i] != NULL;
     }
-    struct nk_font *title_font = system_font(atlas, 23, false, true);
-    if (!font || !code_fonts_ok || !title_font || !nk_sdl_font_stash_end(a->ui)) {
+    struct nk_font *title_font = title_fonts[0];
+    if (!ui_fonts_ok || !code_fonts_ok || !title_font || !nk_sdl_font_stash_end(a->ui)) {
         fprintf(stderr, "Font initialization: %s\n", SDL_GetError());
         nk_sdl_shutdown(a->ui);
         free(a);
@@ -2890,6 +2901,7 @@ int main(int argc, char **argv) {
     }
     style(a->ui);
     a->font_ui = &font->handle;
+    for(int i=0;i<4;i++){a->ui_fonts[i]=&ui_fonts[i]->handle;a->title_fonts[i]=&title_fonts[i]->handle;}
     for (int i = 0; i < 4; i++)
         a->code_fonts[i] = &code_fonts[i]->handle;
     a->font_code = a->code_fonts[0];

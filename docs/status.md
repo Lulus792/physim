@@ -3,6 +3,14 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-07. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Unabhängige UI-Schriftgröße:** Einstellungen bieten 16, 18, 20 und 22 logische
+Pixel für die Oberfläche unabhängig von der Codeschrift. Geöffnete Dokumentation,
+Menüs und Diagramme wechseln mit; umgebrochene Texte und Schaltflächen erhalten
+mehr Platz. Persönliches Format 5 liest weiterhin Formate 1–4. Die automatisierten
+Prüfungen kontrollieren Größenwechsel, Neustart, Abbrechen, Standardwerte und
+vollständige Zeichenbreiten. Tastaturführung und Screenreader bleiben offene
+Produktziele. [Ausgeführte Nachweise und Grenzen](platform-validation.md).
+
 **Vollständiger Ausgangsnachweis (`10d8392`):** Die erneuten Release-Prüfungen einschließlich
 der Batch-Sprachbindung bestehen auf dem Intel-Mac und unter Debian
 mit jeweils 572/572 Fällen.

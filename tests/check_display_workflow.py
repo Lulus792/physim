@@ -6,6 +6,7 @@ import math
 import os
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import struct
 import sys
@@ -727,6 +728,36 @@ def settings(flow, directory):
     exact(directory / "preferences.bin", "damaged preferences")
 
 
+def ui_typography(flow, directory):
+    directory.mkdir()
+    for size in (16, 18, 20, 22):
+        root = directory / ("UI " + str(size)); root.mkdir()
+        flow.run("--settings-test", root, "ui-size-" + str(size), timeout=35,
+                 marker="UI SIZE SELF-TEST: PASSED")
+        captures=root / "initial-size-captures";captures.mkdir()
+        for name in ("ui-size-menu.bmp","docs-ui-size.bmp","ui-size-settings.bmp",
+                     "ui-size-editor.bmp","ui-size-plot.bmp"):
+            shutil.copy2(root / name,captures / name)
+        data=(root / "preferences.bin").read_bytes()
+        require(len(data)==312 and data[:8]==b"PSPREF05" and
+                struct.unpack_from("<I",data,304)[0]==size and
+                struct.unpack_from("<I",data,308)[0]==zlib.crc32(data[:308]),
+                "UI size was not saved in the versioned CRC-protected preferences")
+        before = fingerprint(root / "preferences.bin")
+        flow.run("--settings-test", root, "ui-size-" + str(size) + "-read", timeout=35,
+                 marker="UI SIZE SELF-TEST: PASSED")
+        require(fingerprint(root / "preferences.bin") == before, "Read/cancel changed saved UI size")
+    root = directory / "UI 22"
+    flow.run("--settings-test", root, "ui-size-18-cancel", timeout=35,
+             marker="UI SIZE SELF-TEST: PASSED")
+    flow.run("--settings-test", root, "ui-size-22-read", timeout=35,
+             marker="UI SIZE SELF-TEST: PASSED")
+    flow.run("--settings-test", root, "ui-size-16-defaults", timeout=35,
+             marker="UI SIZE SELF-TEST: PASSED")
+    flow.run("--settings-test", root, "ui-size-16-read", timeout=35,
+             marker="UI SIZE SELF-TEST: PASSED")
+
+
 def themes(flow, directory):
     directory.mkdir()
     for mode in ("light", "light-read", "contrast", "contrast-read", "cancel", "defaults", "dark-read"):
@@ -866,7 +897,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"saved_run_tutorial_workflow": saved_run_tutorial,"monte_carlo_tutorial_workflow": monte_carlo_tutorial,"collision_tutorial_workflow": collision_tutorial,"pendulum_tutorial_workflow": pendulum_tutorial,"spring_tutorial_workflow": spring_tutorial,"material_tutorial_workflow": material_tutorial,"contact_world_language_workflow": contact_world_language,"contact_world_workflow": contact_world, "diagnostic_workflow": diagnostics, "scene_frames_workflow": scene_frames, "logging_workflow": logging, "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
+SPECIAL = {"ui_typography_workflow": ui_typography,"saved_run_tutorial_workflow": saved_run_tutorial,"monte_carlo_tutorial_workflow": monte_carlo_tutorial,"collision_tutorial_workflow": collision_tutorial,"pendulum_tutorial_workflow": pendulum_tutorial,"spring_tutorial_workflow": spring_tutorial,"material_tutorial_workflow": material_tutorial,"contact_world_language_workflow": contact_world_language,"contact_world_workflow": contact_world, "diagnostic_workflow": diagnostics, "scene_frames_workflow": scene_frames, "logging_workflow": logging, "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}

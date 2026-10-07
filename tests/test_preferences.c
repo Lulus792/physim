@@ -77,6 +77,15 @@ int main(int argc, char **argv) {
         CHECK(ps_preferences_write(path, &p) == PS_OK && ps_preferences_read(path, &out) == PS_OK);
         CHECK(!memcmp(&p, &out, sizeof p));
     }
+    for(unsigned size=16;size<=22;size+=2) {
+        p.ui_size=size;
+        CHECK(ps_preferences_write(path,&p)==PS_OK && ps_preferences_read(path,&out)==PS_OK);
+        CHECK(!memcmp(&p,&out,sizeof p));
+    }
+    p.ui_size=16;
+    CHECK(ps_preferences_write(path,&p)==PS_OK);
+    ps_preferences bad_size=p;bad_size.ui_size=17;
+    CHECK(ps_preferences_write(path,&bad_size)==PS_INVALID);
     p.editor_size = 22;
     p.autosave_seconds = 120;
     p.width = 1200;
@@ -109,35 +118,43 @@ int main(int argc, char **argv) {
     invalid.theme = PS_THEME_COUNT;
     CHECK(ps_preferences_write(path, &invalid) == PS_INVALID);
     CHECK(ps_preferences_read(path, &out) == PS_OK && !memcmp(&p, &out, sizeof p));
-    unsigned char bytes[309] = {0};
+    unsigned char bytes[313] = {0};
     FILE *f = fopen(path, "rb");
-    CHECK(f && fread(bytes, 1, 308, f) == 308 && !fclose(f));
-    for (size_t n = 0; n < 308; n++) {
+    CHECK(f && fread(bytes, 1, 312, f) == 312 && !fclose(f));
+    for (size_t n = 0; n < 312; n++) {
         CHECK(bytes_write(bad, bytes, n));
         CHECK(ps_preferences_read(bad, &out) == PS_CORRUPT && !memcmp(&p, &out, sizeof p));
     }
-    CHECK(bytes_write(bad, bytes, 309) && ps_preferences_read(bad, &out) == PS_CORRUPT);
-    for (unsigned i = 0; i < 308; i++) {
+    CHECK(bytes_write(bad, bytes, 313) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    for (unsigned i = 0; i < 312; i++) {
         bytes[i] ^= 1;
-        CHECK(bytes_write(bad, bytes, 308));
+        CHECK(bytes_write(bad, bytes, 312));
         CHECK(ps_preferences_read(bad, &out) != PS_OK && !memcmp(&p, &out, sizeof p));
         bytes[i] ^= 1;
     }
     put32(bytes + 32, 17);
-    put32(bytes + 304, ps_crc32(bytes, 304));
-    CHECK(bytes_write(bad, bytes, 308) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    put32(bytes + 308, ps_crc32(bytes, 308));
+    CHECK(bytes_write(bad, bytes, 312) && ps_preferences_read(bad, &out) == PS_CORRUPT);
     put32(bytes + 32, p.editor_size);
     put32(bytes + 52, PS_THEME_COUNT);
-    put32(bytes + 304, ps_crc32(bytes, 304));
-    CHECK(bytes_write(bad, bytes, 308) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    put32(bytes + 308, ps_crc32(bytes, 308));
+    CHECK(bytes_write(bad, bytes, 312) && ps_preferences_read(bad, &out) == PS_CORRUPT);
     CHECK(!memcmp(&p, &out, sizeof p));
     /* Correct-CRC invalid graphs must also preserve the previous settings. */
     put32(bytes + 52, p.theme);
+    put32(bytes+304,17);put32(bytes+308,ps_crc32(bytes,308));
+    CHECK(bytes_write(bad,bytes,312) && ps_preferences_read(bad,&out)==PS_CORRUPT &&
+          !memcmp(&p,&out,sizeof p));
+    put32(bytes+304,p.ui_size);
     put32(bytes + 60 + 5 * 24 + 4, 5); /* split references itself */
-    put32(bytes + 304, ps_crc32(bytes, 304));
-    CHECK(bytes_write(bad, bytes, 308) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    put32(bytes + 308, ps_crc32(bytes, 308));
+    CHECK(bytes_write(bad, bytes, 312) && ps_preferences_read(bad, &out) == PS_CORRUPT);
     put32(bytes + 60 + 5 * 24 + 4, 0);
     put32(bytes + 52, p.theme);
+    unsigned char v4[308];memcpy(v4,bytes,sizeof v4);
+    memcpy(v4+6,"04",2);put32(v4+8,292);put32(v4+304,ps_crc32(v4,304));
+    CHECK(bytes_write(bad,v4,sizeof v4) && ps_preferences_read(bad,&out)==PS_OK);
+    CHECK(out.ui_size==16 && !memcmp(&p,&out,sizeof p));
     memcpy(bytes + 6, "02", 2); put32(bytes + 8, 44);
     put32(bytes + 56, ps_crc32(bytes, 56));
     CHECK(bytes_write(bad, bytes, 60) && ps_preferences_read(bad, &out) == PS_OK);

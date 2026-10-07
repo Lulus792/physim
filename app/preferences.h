@@ -18,6 +18,7 @@ typedef struct {
     uint32_t theme;
     uint32_t inspector_width;
     ps_dock_layout dock;
+    uint32_t ui_size;
 } ps_preferences;
 extern const ps_preferences PS_PREFERENCES_DEFAULT;
 bool ps_preferences_valid(const ps_preferences *settings);

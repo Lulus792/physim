@@ -39,4 +39,26 @@ void nk_sdl_update_TextInput(struct nk_context *ctx);
 void nk_sdl_window_raise(struct nk_context *ctx, const char *name);
 void nk_sdl_shutdown(struct nk_context *ctx);
 bool nk_sdl_test_input(SDL_Window *window, ps_graphics *graphics);
+void nk_sdl_set_ui_size(struct nk_context *ctx, unsigned size);
+enum { PS_UI_LAYOUT_MAGIC = 0x50534C59u };
+typedef struct { unsigned magic,ui_size; } ps_ui_font_layout;
+float nk_sdl_row_height(const struct nk_context *ctx, float requested);
+void ps_ui_label_wrap(struct nk_context *ctx,const char *text);
+nk_bool ps_ui_button_label(struct nk_context *ctx,const char *text);
+/* Keep short label/control rows readable with enlarged UI fonts. Spacer and
+ * chart/editor heights remain explicit; the default 16 px layout is unchanged. */
+static inline void ps_ui_row_dynamic(struct nk_context *ctx,float height,int columns) {
+    nk_layout_row_dynamic(ctx,nk_sdl_row_height(ctx,height),columns);
+}
+static inline void ps_ui_row_static(struct nk_context *ctx,float height,int width,int columns) {
+    nk_layout_row_static(ctx,nk_sdl_row_height(ctx,height),width,columns);
+}
+static inline void ps_ui_row_begin(struct nk_context *ctx,enum nk_layout_format format,float height,int columns) {
+    nk_layout_row_begin(ctx,format,nk_sdl_row_height(ctx,height),columns);
+}
+#define nk_layout_row_dynamic ps_ui_row_dynamic
+#define nk_layout_row_static ps_ui_row_static
+#define nk_layout_row_begin ps_ui_row_begin
+#define nk_label_wrap ps_ui_label_wrap
+#define nk_button_label ps_ui_button_label
 #endif

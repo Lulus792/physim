@@ -30,6 +30,7 @@ static void window_chrome(SDL_Window *window) {
 #endif
 }
 struct nk_sdl {
+    ps_ui_font_layout font_layout; /* First: shared layout lookup without SDL linkage. */
     SDL_Window *win;
     ps_graphics *graphics;
     struct nk_context ctx;
@@ -59,6 +60,7 @@ struct nk_context *nk_sdl_init(SDL_Window *window, ps_graphics *graphics) {
         return NULL;
     sdl->win = window;
     sdl->graphics = graphics;
+    sdl->font_layout=(ps_ui_font_layout){PS_UI_LAYOUT_MAGIC,16};
     sdl->last_render = SDL_GetTicksNS();
     sdl->allocator.alloc = ui_alloc;
     sdl->allocator.free = ui_free;
@@ -72,6 +74,10 @@ struct nk_context *nk_sdl_init(SDL_Window *window, ps_graphics *graphics) {
     sdl->ctx.clip.userdata = nk_handle_ptr(sdl);
     nk_buffer_init_default(&sdl->commands);
     return &sdl->ctx;
+}
+void nk_sdl_set_ui_size(struct nk_context *ctx,unsigned size) {
+    if(ctx && ctx->userdata.ptr && size>=16 && size<=22 && size%2==0)
+        ((struct nk_sdl *)ctx->userdata.ptr)->font_layout.ui_size=size;
 }
 struct nk_font_atlas *nk_sdl_font_stash_begin(struct nk_context *ctx) {
     struct nk_sdl *sdl = ctx->userdata.ptr;

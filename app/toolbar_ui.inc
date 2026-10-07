@@ -144,7 +144,8 @@ static void toolbar_popup(app *a, int previous) {
     if(!a->toolbar_menu && !previous)return;
     int menu=a->toolbar_menu?a->toolbar_menu:previous;
     struct nk_rect anchor=a->toolbar_bounds[menu-1];
-    a->toolbar_popup_bounds=nk_rect(anchor.x,anchor.y+anchor.h+2,286,menu==2?296.f:200.f);
+    float factor=a->preferences.ui_size/16.f;
+    a->toolbar_popup_bounds=nk_rect(anchor.x,anchor.y+anchor.h+2,286*factor,(menu==2?296.f:200.f)+(a->preferences.ui_size-16)*(menu==2?9.f:6.f));
     nk_style_push_vec2(ui,&ui->style.window.popup_padding,nk_vec2(5,5));
     nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(4,4));
     nk_style_push_float(ui,&ui->style.window.rounding,9);
@@ -191,7 +192,8 @@ static void toolbar_view(app *a) {
     nk_layout_row_push(ui, 72);
     nk_label(ui, "Physim", NK_TEXT_CENTERED);
     const char *menus[] = {"Datei", "Ansicht", "Hilfe", "Einstellungen"};
-    const float menu_width[] = {58, 72, 54, 116};
+    float factor=a->preferences.ui_size/16.f;
+    const float menu_width[] = {58*factor,72*factor,54*factor,116*factor};
     int previous = a->toolbar_popup_menu;
     /* Header actions remain responsive while the popup makes its parent read-only. */
     bool press = nk_input_is_mouse_pressed(&ui->input, NK_BUTTON_LEFT);
@@ -251,7 +253,7 @@ static void toolbar_view(app *a) {
                              font->height),
                      menus[i], (int)strlen(menus[i]), font, nk_rgba(0, 0, 0, 0), UI_COLOR(text));
     }
-    nk_layout_row_push(ui, fmaxf(100, available - 72 - 58 - 72 - 54 - 116 - 175 - 138));
+    nk_layout_row_push(ui, fmaxf(100, available - 72 - (58+72+54+116)*factor - 175 - 138));
     struct nk_rect path_bounds = nk_widget_bounds(ui);
     nk_label_colored(ui, a->workspace_open ? a->workspace : "Kein Ordner geöffnet", NK_TEXT_LEFT,
                      muted());

@@ -28,28 +28,33 @@ static void plot_controls(app *a, ps_plot_view *v, const double full[4]) {
         ps_plot_view_reset(v);
     ps_plot_view before = *v;
     struct nk_context *ui = a->ui;
+    bool large=a->preferences.ui_size>=20;
     nk_layout_row_begin(ui, NK_DYNAMIC, 26, 4);
-    nk_layout_row_push(ui, .14f);
+    nk_layout_row_push(ui, large?.22f:.14f);
     a->plot_buttons[0] = nk_widget_bounds(ui);
     if (nk_button_label(ui, "Zoom +")) {
         ps_plot_view_zoom(v, 2, .5, .5);
         a->plot_drag = NULL;
     }
-    nk_layout_row_push(ui, .14f);
+    nk_layout_row_push(ui, large?.22f:.14f);
     a->plot_buttons[1] = nk_widget_bounds(ui);
     if (nk_button_label(ui, "Zoom -")) {
         ps_plot_view_zoom(v, .5, .5, .5);
         a->plot_drag = NULL;
     }
-    nk_layout_row_push(ui, .20f);
+    nk_layout_row_push(ui, large?.28f:.20f);
     a->plot_buttons[2] = nk_widget_bounds(ui);
     if (nk_button_label(ui, "Alles zeigen")) {
         ps_plot_view_reset(v);
         a->plot_drag = NULL;
     }
-    nk_layout_row_push(ui, .52f);
-    nk_label_colored(ui, "Mausrad: Zoom · Ziehen: Verschieben", NK_TEXT_RIGHT,
-                     UI_COLOR(muted));
+    nk_layout_row_push(ui, large?.28f:.52f);
+    if(large) {
+        nk_style_push_color(ui,&ui->style.text.color,UI_COLOR(muted));
+        nk_label_wrap(ui,"Mausrad: Zoom · Ziehen: Verschieben");
+        nk_style_pop_color(ui);
+    } else nk_label_colored(ui, "Mausrad: Zoom · Ziehen: Verschieben", NK_TEXT_RIGHT,
+                            UI_COLOR(muted));
     nk_layout_row_end(ui);
     if (full) {
         double b[4];

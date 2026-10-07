@@ -6920,6 +6920,36 @@
           ]
         }
       ]
+    },
+    {
+      "name": "ui_typography_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "ui_typography_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 420,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
     }
   ]
 }

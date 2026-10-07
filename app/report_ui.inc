@@ -192,7 +192,7 @@ static void report_view(app *a, float height) {
     nk_layout_row_dynamic(ui, 32, 1);
     a->result_view =
         nk_combo(ui, names, (int)(plots + tables), a->result_view, 30, nk_vec2(580, 260));
-    nk_layout_row_dynamic(ui, 30, 3);
+    nk_layout_row_dynamic(ui, 30, a->preferences.ui_size>=20?2:3);
     bool is_plot = (uint32_t)a->result_view < plots;
     bool cropped = is_plot && ps_plot_view_changed(&a->report_views[a->result_view]);
     a->result_export_bounds[0] = nk_widget_bounds(ui);
@@ -212,9 +212,10 @@ static void report_view(app *a, float height) {
         float available=nk_window_get_content_region(ui).w;
         bool compact=available<740;
         nk_layout_row_begin(ui,NK_STATIC,26,compact?2:4);
-        nk_layout_row_push(ui, 150);
+        float label_width=150*(a->preferences.ui_size/16.f);
+        nk_layout_row_push(ui,label_width);
         nk_label(ui, "PNG-Größe (Pixel)", NK_TEXT_LEFT);
-        nk_layout_row_push(ui,compact?fmaxf(120,fminf(230,available-158)):230);
+        nk_layout_row_push(ui,compact?fmaxf(120,fminf(230,available-label_width-8)):230);
         a->png_size_bounds = nk_widget_bounds(ui);
         if (nk_combo_begin_label(ui, sizes[a->png_scale - 1], nk_vec2(230, 145))) {
             nk_layout_row_dynamic(ui, 28, 1);

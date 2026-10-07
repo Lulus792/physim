@@ -1,14 +1,21 @@
 /* App-owned presentation state, separate from project sources and run metadata. */
 static void preferences_apply(app *a, const ps_preferences *p) {
     a->preferences = *p;
+    a->font_ui=a->ui_fonts[(p->ui_size-16)/2];
+    a->font_title=a->title_fonts[(p->ui_size-16)/2];
     ui_palette = p->theme == PS_THEME_LIGHT ? &PS_UI_LIGHT :
                  p->theme == PS_THEME_HIGH_CONTRAST ? &PS_UI_HIGH_CONTRAST : &PS_UI_DARK;
     style(a->ui);
     nk_style_set_font(a->ui, a->font_ui);
+    nk_sdl_set_ui_size(a->ui,p->ui_size);
     ps_graphics_background(a->graphics, UI_COLOR(canvas).r, UI_COLOR(canvas).g, UI_COLOR(canvas).b);
     if (a->doc_ui) {
+        a->doc_font_ui=a->doc_ui_fonts[(p->ui_size-16)/2];
+        a->doc_font_title=a->doc_title_fonts[(p->ui_size-16)/2];
+        if(a->documentation)a->documentation->layout_width=0;
         style(a->doc_ui);
         nk_style_set_font(a->doc_ui, a->doc_font_ui);
+        nk_sdl_set_ui_size(a->doc_ui,p->ui_size);
         ps_graphics_background(a->doc_graphics, UI_COLOR(canvas).r, UI_COLOR(canvas).g,
                                UI_COLOR(canvas).b);
     }
@@ -99,7 +106,15 @@ static void settings_view(app *a) {
     nk_layout_row_dynamic(ui, 34, 1);
     nk_label(ui, "Einstellungen", NK_TEXT_LEFT);
     nk_style_pop_font(ui);
-    nk_layout_row_dynamic(ui, 36, 3);
+    nk_layout_row_dynamic(ui,22,1);
+    nk_label_colored(ui,"Schriftgröße der Oberfläche",NK_TEXT_LEFT,muted());
+    nk_layout_row_dynamic(ui,28,4);
+    const char *ui_sizes[]={"16 px","18 px","20 px","22 px"};
+    for(unsigned i=0;i<4;i++) {
+        a->ui_size_bounds[i]=nk_widget_bounds(ui);
+        if(nk_option_label(ui,ui_sizes[i],p->ui_size==16+i*2))p->ui_size=16+i*2;
+    }
+    nk_layout_row_dynamic(ui, 36, a->preferences.ui_size>=20?2:3);
     a->settings_bounds[0] = nk_widget_bounds(ui);
     if (action_button(ui, "Übernehmen", true)) {
         ps_preferences next = *p;
@@ -138,7 +153,7 @@ static void settings_view(app *a) {
                   "Deine Darstellung und Fensteraufteilung bleiben beim nächsten Start erhalten.");
     nk_layout_row_dynamic(ui, 22, 1);
     nk_label_colored(ui, "Darstellung", NK_TEXT_LEFT, muted());
-    nk_layout_row_dynamic(ui, 28, 3);
+    nk_layout_row_dynamic(ui, 28, a->preferences.ui_size>=20?2:3);
     const char *themes[] = {"Dunkel", "Hell", "Hoher Kontrast"};
     for (unsigned i = 0; i < PS_THEME_COUNT; i++) {
         a->theme_bounds[i] = nk_widget_bounds(ui);
@@ -161,7 +176,7 @@ static void settings_view(app *a) {
     nk_style_pop_font(ui);
     nk_layout_row_dynamic(ui, 22, 1);
     nk_label_colored(ui, "Automatische Sicherung", NK_TEXT_LEFT, muted());
-    nk_layout_row_dynamic(ui, 30, 2);
+    nk_layout_row_dynamic(ui, 30, a->preferences.ui_size>=20?1:2);
     nk_label(ui, "Ungespeicherte Quellen sichern", NK_TEXT_LEFT);
     const char *intervals[] = {"Alle 10 Sekunden", "Alle 30 Sekunden", "Jede Minute",
                                "Alle 2 Minuten"};
@@ -173,7 +188,7 @@ static void settings_view(app *a) {
     p->autosave_seconds = seconds[nk_combo(ui, intervals, 4, selected, 30, nk_vec2(250, 180))];
     nk_layout_row_dynamic(ui, 22, 1);
     nk_label_colored(ui, "Simulation und Arbeitsfläche", NK_TEXT_LEFT, muted());
-    nk_layout_row_dynamic(ui, 24, 2);
+    nk_layout_row_dynamic(ui, 24, a->preferences.ui_size>=20?1:2);
     settings_flag(ui, "Vektoren", PS_VIEW_VECTORS, &p->view_flags);
     settings_flag(ui, "Flugbahnen", PS_VIEW_PATHS, &p->view_flags);
     settings_flag(ui, "Punkte", PS_VIEW_POINTS, &p->view_flags);

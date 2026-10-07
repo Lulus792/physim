@@ -9,8 +9,12 @@ damit die Bedienelemente auch im kleinen Fenster Platz haben.
 
 Die Code-Schriftgröße lässt sich zwischen 16, 18, 20 und 22 logischen Pixeln wählen.
 Eine Vorschau zeigt die neue Größe. Sie gilt nach **Übernehmen** für beide C-Editoren,
-Codeblöcke im Dokumentationsbrowser und das Protokoll. Navigation und normaler
-Dokumentationstext behalten ihre Systemschriftgröße.
+Codeblöcke im Dokumentationsbrowser und das Protokoll. Die **Schriftgröße der Oberfläche** ist davon unabhängig wählbar: 16, 18, 20
+oder 22 logische Pixel gelten für Navigation, Menüs, Beschriftungen, Diagramme und den
+normalen Text im Handbuch. Auch ein bereits geöffnetes Handbuch wechselt nach
+Übernehmen zur neuen Größe. Kleine Zeilen und lange Schaltflächenbeschriftungen
+passen sich an; umfangreiche Ansichten bleiben scrollbar. Abbrechen erhält die
+bisherige Größe, Standardwerte wählen wieder 16 Pixel.
 
 Automatische Sicherungen lassen sich alle 10, 30, 60 oder 120 Sekunden erstellen.
 Standard sind 30 Sekunden. Nach dem Übernehmen beginnt das neue Intervall;
@@ -146,13 +150,15 @@ vollständige Panelbaum wird über **Ansicht** zurückgesetzt.
 
 Einstellungen liegen im persönlichen Anwendungsordner, den SDL für Physim bereitstellt,
 als `preferences.bin`. Sie gehören weder zum Projekt noch zu den Laufmetadaten.
-Das aktuelle Format 4 speichert den vollständigen Panelbaum, aktive Paneltabs,
+Das aktuelle Format 5 speichert den vollständigen Panelbaum, aktive Paneltabs,
 ausgeblendete Panels und frei platzierte Rechtecke. Dateien der Formate 1 und 2
 bleiben lesbar und erhalten die Standardanordnung; Format 1 verwendet die dunkle Palette.
 Format 3 behält seinen fünfteiligen Panelbaum, aktive Tabs und freie Rechtecke
 unverändert. Sein zusätzlicher Inspektor beginnt ausgeblendet und lässt sich über
 **Ansicht → Inspektor anzeigen** rechts neben dem Arbeitsbereich öffnen.
 Format 4 speichert den Vier-Panel-Baum und die unabhängige Inspektorbreite.
+Format 5 ergänzt die unabhängige UI-Schriftgröße; Formate 1–4 laden dafür
+16 Pixel, ohne ihre bisherigen Einstellungen zu verändern.
 Alle normalen Physim-Instanzen desselben Benutzerkontos teilen diese Datei;
 bei gleichzeitiger Nutzung gewinnt der zuletzt vollständig gespeicherte Stand.
 

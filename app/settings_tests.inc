@@ -1,3 +1,10 @@
+static bool settings_test_reveal(app *a,struct nk_rect bounds) {
+    struct nk_rect panel=a->dock_panels[PS_DOCK_WORKSPACE];
+    float top=panel.y+30,bottom=panel.y+panel.h-10;
+    if(bounds.y>=top && bounds.y+bounds.h<=bottom)return true;
+    test_plot_wheel(a,panel.x+panel.w*.5f,panel.y+panel.h*.5f,bounds.y<top?3:-3);
+    return false;
+}
 static void test_theme_frame(app *a, const char *mode, int *stage, int *code,
                              const char **capture) {
     bool reading = strstr(mode, "-read") != NULL, cancel = !strcmp(mode, "cancel");
@@ -106,7 +113,10 @@ static void test_theme_frame(app *a, const char *mode, int *stage, int *code,
     (*stage)++;
 }
 static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
-                                const char **capture) {
+                               const char **capture) {
+    if(!strncmp(mode,"ui-size-",8)) {
+        test_ui_size_frame(a,mode,stage,code,capture);return;
+    }
     if (!strncmp(mode, "theme-", 6)) {
         test_theme_frame(a, mode + 6, stage, code, capture);
         return;
@@ -201,6 +211,7 @@ static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
             test_mouse(a, a->settings_bounds[1], false);
             break;
         case 5:
+            if(!settings_test_reveal(a,a->settings_bounds[2]))return;
             ok = a->settings_draft.editor_size == 20 && a->preferences.editor_size == 16;
             a->settings_draft.autosave_seconds = 60;
             test_mouse(a, a->settings_bounds[2], true);
@@ -209,12 +220,14 @@ static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
             test_mouse(a, a->settings_bounds[2], false);
             break;
         case 8:
+            if(!settings_test_reveal(a,a->settings_bounds[3]))return;
             test_mouse(a, a->settings_bounds[3], true);
             break;
         case 9:
             test_mouse(a, a->settings_bounds[3], false);
             break;
         case 11:
+            if(!settings_test_reveal(a,a->settings_bounds[0]))return;
             *capture = "settings-draft.bmp";
             test_mouse(a, a->settings_bounds[0], true);
             break;

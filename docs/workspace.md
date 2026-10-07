@@ -330,7 +330,7 @@ Panels und die Standardanordnung wieder her. Der nächste Start lädt die Anordn
 mit ausgewählten Tabs und den Positionen frei platzierter Panels.
 [Panelanordnung und Grenzen](settings.md#panelanordnung)
 
-**Einstellungen / Ctrl+,** bietet Codeschrift, Autosave und Darstellung.
+**Einstellungen / Ctrl+,** bietet unabhängige UI- und Codeschrift, Autosave und Darstellung.
 Übernehmen speichert, Abbrechen verwirft den Einstellungsentwurf.
 Die Darstellung lässt sich zwischen Dunkel, Hell und Hoher Kontrast wählen;
 die Auswahl gilt auch für Editor, Diagramme und das geöffnete Hilfefenster.

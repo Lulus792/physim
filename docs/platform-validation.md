@@ -3,6 +3,102 @@
 Stand: 7. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Unabhängige UI-Schriftgröße am 7. Oktober 2026
+
+Die persönliche UI-Schriftgröße ist unabhängig von Codeschrift in 16, 18, 20
+und 22 Pixeln einstellbar. Vorausgeladene Systemschriften gelten für Navigation,
+Menüs, Beschriftungen, Diagramme und Dokumentation; ein bereits geöffnetes
+Handbuch wechselt mit und verwirft seine gecachte Textgeometrie. Codeschrift
+bleibt unabhängig. Kurze Zeilen erhalten ausreichende Höhe, mehrzeilige Texte
+und lange Schaltflächen wachsen; größere Einstellungsoptionen und Plotcontrols
+verwenden angepasste Spalten. Umfangreiche Ansichten bleiben scrollbar.
+[Bedienung und Dateiformat](settings.md).
+
+Das persönliche Format PSPREF05 ergänzt eine CRC-geschützte UI-Größe. Formate
+1–4 bleiben lesbar und laden 16 Pixel zusätzlich zu ihren erhaltenen Werten.
+Ungültige Größen, CRC-Fehler, abgeschnittene Dateien und Schreib-/Renamefehler
+bewahren den vorherigen Stand. Die erweiterte C-Prüfung besteht unter macOS
+unter `build/contact-world-language-release-mac/test-results/run-46tw4btu`
+und Linux unter
+`build/contact-world-language-release-linux/test-results/run-3t_fh838`.
+Die App-Prüfung wählt alle vier Größen, startet erneut, prüft Abbrechen und
+Standardwerte, unabhängige Code-/UI-Schriften, bereits geöffnete Dokumentation,
+Menüführung, Menü/Editor/Einstellungen/Diagramm-Aufnahmen sowie die gespeicherten
+312 Bytes, Größenfeld und CRC mit einem unabhängigen Python-Leser.
+
+Die ersten 22-Pixel-Aufnahmen zeigten abgeschnittene Beschriftungen und fehlende
+zweite Textzeilen. Deshalb werden längere Schaltflächen/Textzeilen passend
+umgebrochen; schmale Einstellungs- und Plotcontrols erhalten zusätzliche Breite.
+Die vorherige Einstellungsprüfung wurde nicht gestrichen: Sie scrollt nun die
+unteren Controls tatsächlich an und prüft weiter dieselben gespeicherten Werte.
+
+Die vollständigen 69 Fensterprüfungen des übernommenen Schriftgrößenstands
+bestehen auf Intel macOS unter
+`build/contact-world-language-release-mac/test-results/run-zzkrvc73` und Debian
+unter `build/contact-world-language-release-linux/test-results/run-87y8dn1z`.
+Diese Läufe wurden vor den abschließenden Anpassungen an Sicherungs-/Plothinweisen
+und der Breitenkorrektur für umgebrochene Schaltflächen ausgeführt.
+Ein zusätzlicher Regressionstest prüft nun die tatsächlichen Zeichenbefehle:
+alle UTF-8-Bytes und die volle Breite einschließlich des letzten Zeichens bleiben
+erhalten. Die Nuklear-Hilfsfunktion meldet sonst die Breite vor diesem Zeichen.
+
+Die abschließende Sichtprüfung zeigte zusätzlich verschwindende Schließen-
+Symbole in schmalen Paneltiteln bei 22 Pixeln. Ein separater Geometrietest
+reproduzierte unzureichende Zeichenbreiten und -höhen; einzelne Symbole verwenden
+nun die verfügbare Schaltflächenfläche ohne den Innenabstand langer Beschriftungen.
+Das umgebende Buttondesign und seine Eingabebehandlung bleiben erhalten.
+
+Die abschließenden fünf Prüfungen ohne Fenster (`ui_geometry`,
+`editor_clipboard`, `font_shape`, `preferences`, `verification_kit`) bestehen
+mit der Symbolkorrektur auf Intel macOS unter
+`build/contact-world-language-release-mac/test-results/run-cvaex07p` und Debian
+unter `build/contact-world-language-release-linux/test-results/run-sezob4vk`.
+Die vorherige fehlschlagende Symbolprobe ist unter
+`build/contact-world-language-release-mac/test-results/run-gcbzpw5a` erhalten.
+
+Die vier betroffenen Fensterabläufe für Diagramme, Einstellungen, Themes und
+Schriftgrößen bestehen vor der zusätzlichen Symbolkorrektur auf macOS unter
+`build/contact-world-language-release-mac/test-results/run-u_2yo8bf` und Linux
+unter `build/contact-world-language-release-linux/test-results/run-_62gj2i7`.
+Der zusätzliche macOS-Schriftgrößenlauf mit vollständiger Zeichenbreitenprüfung
+steht unter `build/contact-world-language-release-mac/test-results/run-tp3d9bvg`.
+
+Die vollständige isolierte SDK-Prüfung vor der letzten Symbolkorrektur besteht
+auf macOS unter `build/ui-size-sdk-proof-mac/Native SDK ä mm75zwvw` mit dem
+58-Dateien-Prüfkit. Sie umfasst numerische/Sprach-/Projektprüfungen, alle neun
+grafischen Beispielabläufe, beide Dokumentationswege, Tastaturmenüs in zwei
+Fenstergrößen und alle vier UI-Schriftgrößen mit Neustart.
+Im endgültigen SDK `build/UI typography final SDK ä mac` sind 428 von 429
+Manifestdateien bytegleich; ausschließlich `bin/physim` enthält die Symbolkorrektur.
+Der Abgleich steht unter `build/ui-size-final-sdk-mac-difference.json`.
+Die endgültige App besteht anschließend sieben erneut ausgeführte Abläufe in
+einer weiteren verschobenen SDK-Kopie unter `build/ui-size-final-app-proof-mac`:
+Schriftgrößen, Einstellungen, Themes, Diagramme, kleine/große Tastaturmenüs und
+Docking. `PASSED.json` hält den SHA-256 der tatsächlich gestarteten App sowie
+sämtliche sieben Befehle und Rückgabecodes fest. Die 22-Pixel-Aufnahme
+`build/ui-size-verified-settings-mac.png` bestätigt sichtbar erhaltene Schließen-
+Symbole. Die ursprünglichen Größenaufnahmen werden vor Neustart-/Standardwert-
+Prüfungen separat aufgehoben, damit spätere Schritte diese Belege nicht ersetzen.
+
+470 Code-, Test- und Werkzeugdateien stimmen zwischen den geprüften lokalen
+macOS-/Linux-Quellständen per SHA-256 überein
+(`build/ui-size-cross-platform-source-hashes.json`).
+
+Das endgültige Linux-SDK einschließlich Symbolkorrektur besteht die vollständige
+isolierte Prüfung unter `build/ui-size-sdk-proof-linux/Native SDK ä 91etu6ft`.
+Alle numerischen/Sprach-/Projektgates, neun grafischen Abläufe, beide Lernwege,
+Tastaturmenüs und vier Schriftgrößen mit Neustart bestehen. Die Plattformen sind
+macOS 14.6.1 auf Intel mit Apple Clang 16 und Debian 12 mit GCC 12.2, Kernel
+6.1.0-53-cloud-amd64 und Mesa/Xvfb/Openbox. Die genauen Compiler-/Systemangaben
+stehen unter `build/ui-size-tested-environments.json`. Dies ist keine neue
+Windows-/Apple-Silicon-CI-Abnahme und keine vollständige Abnahme des Projektplans.
+
+Die Linux-VM wurde für die Fortsetzung wieder gestartet und ihr Testdatenträger
+von 32 auf 48 GiB vergrößert. Vorhandene Prüfarbeitsstände bleiben erhalten.
+Vollständige Tastaturführung, Screenreader-Zugang und die übrigen Ziele von
+PP-0710 bleiben offen. Sehr schmale Panels können weiterhin einzeilige Inhalte
+abschneiden; die Schriftoption ersetzt keine vollständige responsive Abnahme.
+
 ## Reihenfolge der Menüaktionen und Editorfokus am 7. Oktober 2026
 
 Ein isolierter App-Build mit dem vorherigen Handler aus `03ba81d` reproduziert
