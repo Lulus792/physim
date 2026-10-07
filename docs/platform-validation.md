@@ -3,6 +3,90 @@
 Stand: 7. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Gesamtabgleich und CI-Prüfpfade am 7. Oktober 2026
+
+Der [Abgleich mit dem vollständigen Plan](project-audit.md) bewahrt 531 Quellblöcke
+mit Originaltext und Zeilenbereichen, darunter alle 475 Aufzählungspunkte.
+Ein SHA-256-Wert bindet die Erfassung an die unveränderte Plandatei.
+Acht Lernpfade besitzen begrenzte Implementierungsnachweise; zehn konkrete
+Lücken sind erfasst. 513 weitere Blöcke bleiben ohne Einzelabnahme. Diese Zahlen
+sind kein Fertigstellungsprozentsatz: Entwürfe, Nicht-Ziele und spätere Domänen
+bleiben mit ihrem ursprünglichen Kontext enthalten. Das Gesamtziel ist offen.
+
+Am Ausgangsstand `4841ee2` bestehen die vollständigen Release-Suiten auf
+Intel macOS unter `build/contact-world-language-release-mac/test-results/run-7kin6e77`
+und Debian/GCC unter `build/contact-world-language-release-linux/test-results/run-dbd70ucn`
+mit jeweils 563/563 Fällen. Die zugehörigen CI-Artefakte für Linux/GCC und
+Apple Silicon bestätigen ebenfalls 563 bestandene Fälle; ihre Archivbytes
+stimmen mit den auf GitHub veröffentlichten SHA-256-Digests überein. Das sind
+standbezogene Nachweise und keine Abnahme nachträglicher Änderungen.
+
+Die getrennten CI-Schritte enthielten drei reproduzierbare Fehler: Ein mit nur
+sechs Dateien gepacktes Linux-Prüfkit fehlte unter anderem `sdk_series_probe.c`;
+der separate Sprachbeispielprüfer hatte die Dateien für `run_index_values`
+nicht erzeugt; Linux/Clang wies den Logger-Test wegen einer nicht deklarierten
+GNU-Funktion `strtod_l` nach vorangegangenen libc-Headern zurück.
+
+Das Prüfkit wird nun aus den expliziten Repository-Dateiabhängigkeiten des
+SDK-Prüfers und lokalen Testheadern erzeugt. Es enthält 33 unabhängige Harness-
+Dateien plus SHA-256-Manifest, keine Core-Implementierung oder SDK-Header.
+Fehlende, dynamische oder unerlaubte Pfade verhindern die Veröffentlichung.
+Bestehende Archive bleiben erhalten; ein Schreibfehler entfernt nur die neu
+erzeugte Ausgabe. Der separate Beispielprüfer baut zuerst die vorhandene
+öffentliche Indexfixture und erzeugt damit finalisierte, alte und rekonstruierbare
+Eingaben. Anschließend bestehen die 18 Programme, alle 43 vorhandenen Module
+und die Tests für inkrementelle Übersetzung sowie Fehlererhaltung auf macOS
+und Linux/GCC. Test-Runner- und Bootstrap-Selbstprüfungen bestehen separat auf
+macOS; ihre absichtlich fehlschlagenden Fälle sind Teil der Prüfung.
+
+Die Linux-Sprachlaufzeit verwendet im Dezimalkomma-Fallback `strtod` mit einer
+vorübergehenden POSIX-Thread-Locale und stellt danach die aufrufende Locale
+wieder her. Die Windows- und macOS-Implementierungen bleiben erhalten.
+Ein strenger Clang-C17-Compile mit `-Werror=implicit-function-declaration`
+reproduziert den vorherigen Fehler und besteht mit der Korrektur.
+Linux/Clang 14 Debug besteht Logger, Locale, Sprachchecker und Kitprüfung unter
+`build/project-audit-clang-linux/test-results/run-daitiwoc`; die Localeprüfung
+lief tatsächlich mit installiertem `de_DE.utf8` und kontrolliert auch den
+Erhalt eines eigenen aufrufenden Thread-Locale-Handles. Die drei Laufzeit-
+Prüfungen bestehen mit AddressSanitizer/UndefinedBehaviorSanitizer unter
+`build/spring-tutorial-asan-linux/test-results/run-cg8grlij`.
+Core-API/ABI 3, Sprachvertrag 0.177.0 und Dateiformate bleiben unverändert.
+
+Das nur aus dem Kit entpackte SDK-Prüfprogramm besteht auf macOS unter
+`build/project-audit/kit-sdk-proof-mac/Native SDK ä 4gzy3db9` und Linux unter
+`build/project-audit/kit-sdk-proof-linux/Native SDK ä 0iuzgm9e`. Linux führt dabei
+zusätzlich alle neun grafischen C-/Physim-Projektabläufe aus. Die geprüften SDKs
+sind die unveränderten Installationen des vorherigen Lernpfads; aktuelle Pakete
+mit der Localekorrektur erhalten gesonderte Nachweise.
+
+Die erneuten vollständigen Release-Suiten mit allen aktuellen Änderungen bestehen
+mit 564/564 auf dem Intel-Mac unter
+`build/contact-world-language-release-mac/test-results/run-ty_ic4b4` und Debian/GCC
+unter `build/contact-world-language-release-linux/test-results/run-1_8_4_wp`.
+Dieser Nachweis ersetzt keine noch fehlenden aktuellen Windows-/Apple-Silicon-
+CI-Ergebnisse und keine vollständige Produktabnahme.
+
+Die neue Offline-Abnahmeseite und die gesamte Dokumentnavigation bestehen
+unter macOS mit `build/contact-world-language-release-mac/test-results/run-p4cryhht`
+und unter Linux mit `build/contact-world-language-release-linux/test-results/run-9gtpbm_o`.
+Das neu installierte macOS-SDK mit der Localekorrektur besteht den vollständigen,
+ausschließlich aus dem Kit gestarteten Prüfer unter
+`build/project-audit/final-kit-sdk-proof-mac/Native SDK ä 9pkl2d81`.
+Alle öffentlichen Header werden dabei nach bereits eingebundenen stdio-/Locale-
+Headern kompiliert, um die problematische Einbindungsreihenfolge ausdrücklich zu prüfen.
+
+Auch das neue Linux-SDK mit der Localekorrektur besteht den vollständigen
+isolierten Prüfer und alle neun grafischen Projektabläufe unter
+`build/project-audit/final-kit-sdk-proof-linux/Native SDK ä x_rvzwxt`.
+Die endgültigen Pakete erhalten die aktuellen Nachweise mit erneuerten
+Manifestwerten. Je Paket bleiben alle 141 Code-/Binärdateien und 110 Beispieldateien
+bytegleich zur verifizierten Installation; die App bleibt bytegleich zur
+geprüften Release-App. Alle 357 Manifestdateien werden per SHA-256 geprüft.
+Die tatsächlichen Umgebungen sind Intel macOS 14.6.1/Apple Clang 16 und Debian 12/
+GCC 12.2 beziehungsweise die genannten gezielten Clang-14-Prüfungen, jeweils
+SDL 3.2.30. Linux-Grafik lief unter X11/Xvfb/Openbox/Mesa. Die Behebung der
+remote CI bleibt durch den nächsten tatsächlichen Workflowlauf zu bestätigen.
+
 ## Gespeicherten Lauf unabhängig auswerten am 7. Oktober 2026
 
 Der neue Lernpfad verwendet die bestehenden gleichförmigen C-/Physim-Experimente

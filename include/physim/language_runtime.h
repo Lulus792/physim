@@ -281,7 +281,22 @@ static inline double psrt_decimal_value(const char *text, char **end, psrt_site 
     locale_t numeric = newlocale(LC_NUMERIC_MASK, "C", (locale_t)0);
     if (!numeric)
         psrt_fail(site, "Cannot initialize C numeric locale");
+#ifdef __APPLE__
     double value = strtod_l(text, end, numeric);
+#else
+    /* strtod_l is a GNU extension whose declaration can disappear when a
+     * consumer includes libc headers before this support header. POSIX thread
+     * locales work with the declared C17 strtod and preserve the caller's
+     * locale, without changing any other thread or the global locale. */
+    locale_t previous = uselocale(numeric);
+    if (!previous) {
+        freelocale(numeric);
+        psrt_fail(site, "Cannot select C numeric locale");
+    }
+    double value = strtod(text, end);
+    if (!uselocale(previous))
+        psrt_fail(site, "Cannot restore numeric locale");
+#endif
     freelocale(numeric);
 #endif
     return value;

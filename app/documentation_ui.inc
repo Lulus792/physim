@@ -99,6 +99,7 @@ static const documentation_topic documentation_topics[] = {
     {"Elastischer & inelastischer Stoß", "docs/collision-tutorial.md", false},
     {"Monte Carlo: Anfangswerte", "docs/monte-carlo-tutorial.md", false},
     {"Gespeicherten Lauf auswerten", "docs/saved-run-tutorial.md", false},
+    {"Projektanforderungen & Abnahme", "docs/project-audit.md", false},
 };
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27

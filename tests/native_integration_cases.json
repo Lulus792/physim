@@ -6131,6 +6131,23 @@
           "timeout": 30
         }
       ]
+    },
+    {
+      "name": "verification_kit",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_verification_kit.py",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 30
+        }
+      ]
     }
   ]
 }

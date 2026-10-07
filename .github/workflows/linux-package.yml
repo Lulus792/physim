@@ -32,7 +32,7 @@ jobs:
           tar -czf build/Physim-linux-x86_64.tar.gz -C build/package Physim
           # The verification kit contains no Physim implementation or SDL headers.
           # All compiler inputs for its consumers come from the installed package.
-          tar -czf build/linux-verification-kit.tar.gz tools/build.py tools/verify-native-sdk.py tools/sdk_probe.c tools/wait-window-manager.py app/utf8.manifest tests/test_linux_native_dialogs.py
+          python3 tools/package-verification-kit.py --output build/linux-verification-kit.tar.gz
       - name: Upload Release package
         uses: actions/upload-artifact@v4
         with:

@@ -84,7 +84,7 @@ def main():
         header_sources = []
         for header in sorted((sdk / "include/physim").glob("*.h")):
             name = "header_" + header.stem + ".c"
-            (consumer / name).write_text(f"#include <physim/{header.name}>\n", encoding="utf-8")
+            (consumer / name).write_text(f"#include <stdio.h>\n#include <locale.h>\n#include <physim/{header.name}>\n", encoding="utf-8")
             header_sources.append(name)
         builder.objects(header_sources)
 

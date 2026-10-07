@@ -33,6 +33,17 @@ def main():
         assert result.returncode == 0, (program, result.returncode, result.stdout, result.stderr)
         return result.stdout.decode("utf-8").replace("\r\n", "\n")
 
+    # The indexed archive example intentionally consumes finalized, legacy and
+    # recovered files. Build its public-API fixture before running examples,
+    # just as the relocated SDK verifier does.
+    core = binaries.parent / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+    fixture_options = argparse.Namespace(build_dir=work / "archive fixture build", compiler=args.compiler,
+                                        no_app=True, config=args.config, jobs=2)
+    with native.build_lock(fixture_options.build_dir):
+        fixture_builder = native.Builder(fixture_options, env)
+        archive_fixture = fixture_builder.executable("run-index-example-fixture",["tests/test_run_index.c"],[core])
+        checked(archive_fixture,work)
+
     for name, mode, _ in native.language_examples():
         path = binaries / ("language-" + name + (suffix if mode == "--emit-c" else module_suffix))
         assert path.is_file(), path
@@ -85,7 +96,7 @@ def main():
         source.write_text("print(2)\n", encoding="utf-8")
         assert checked(build()) == "2\n"
         assert set((fixture / "examples").iterdir()) == {source}
-    print(f"15 programs, 27 modules, runner/analysis, incremental emission and error recovery passed: {work}")
+    print(f"Language examples, archived input fixtures, runner/analysis, incremental emission and error recovery passed: {work}")
 
 
 if __name__ == "__main__":

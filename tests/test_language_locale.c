@@ -1,6 +1,7 @@
+#include <stdio.h>
+#include <locale.h>
 #include "physim/language_string.h"
 #include "test_allocator.h"
-#include <stdio.h>
 
 #define CHECK(condition)                                                                          \
     do {                                                                                          \
@@ -25,6 +26,14 @@ int main(void) {
             break;
         }
     }
+    char selected[128];
+    const char *active = setlocale(LC_NUMERIC, NULL);
+    CHECK(active && strlen(active)<sizeof selected);
+    strcpy(selected,active);
+#ifndef _WIN32
+    locale_t previous_thread = uselocale((locale_t)0);
+    CHECK(previous_thread);
+#endif
     psrt_site site = {"locale-test", 1, 1};
     CHECK(psrt_number("1.25", site) == 1.25);
     CHECK(psrt_parse_float64("-.5", site) == -0.5);
@@ -52,6 +61,18 @@ int main(void) {
     CHECK(psrt_parse_float64(psrt_string_cstr(&value), site) == 0.1);
     psrt_string_destroy(&value);
     CHECK(!tracker.invalid && !tracker.live_bytes && !tracker.live_blocks);
+    CHECK(!strcmp(setlocale(LC_NUMERIC,NULL),selected));
+#ifndef _WIN32
+    CHECK(uselocale((locale_t)0)==previous_thread);
+    if(alternate) {
+        locale_t caller = newlocale(LC_NUMERIC_MASK,selected,(locale_t)0);
+        CHECK(caller && uselocale(caller));
+        CHECK(psrt_parse_float64("2.75",site)==2.75);
+        CHECK(uselocale((locale_t)0)==caller && strcmp(localeconv()->decimal_point,".")!=0);
+        CHECK(uselocale(previous_thread));
+        freelocale(caller);
+    }
+#endif
     CHECK(setlocale(LC_NUMERIC, saved) != NULL);
     puts(alternate ? "C decimal conversion passed with an alternate numeric locale"
                    : "C decimal conversion passed; no alternate locale installed");
