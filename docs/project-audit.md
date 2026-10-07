@@ -97,8 +97,8 @@ Korrekturen zusätzlich in ihrer tatsächlichen Matrix bestätigen.
 
 ## Batch-Bindung und Controller
 
-Der aktuelle Abgleich enthält fünfundzwanzig implementierte Blöcke, fünf konkrete
-unvollständige Blöcke und 501 weiterhin ungeprüfte Blöcke. Die acht Lernpfade
+Der aktuelle Abgleich enthält sechsundzwanzig implementierte Blöcke, fünf konkrete
+unvollständige Blöcke und 500 weiterhin ungeprüfte Blöcke. Die acht Lernpfade
 bleiben erhalten; hinzu kommen LANG-005, der Batch-/Parametercontroller und die beiden Dokumentationsteile. Elektromagnetismus und Wellen/Optik besitzen zusätzliche begrenzte Domänennachweise.
 Die Originaltexte aller 531 Blöcke und 475 Aufzählungspunkte bleiben unverändert.
 Die Sprachbindung und die beiden Lernwege besitzen ausdrücklich begrenzte Implementierungs- und
@@ -234,3 +234,14 @@ Problemen. Dieser Implementierungsnachweis ersetzt keine ganze Plattformabnahme.
 Aktuell 25 implementierte, fünf unvollständige und 501 ungeprüfte Blöcke.
 Weitere Mathematikforderungen bleiben einzeln zu prüfen; sie werden nicht allein
 wegen dieses ODE-Nachweises als erfüllt markiert.
+
+
+## Lineare Gleichungssysteme (§7.2)
+
+PP-0360 ist jetzt konkret der dichten C-/Physim-Lösung mit 1–32 Unbekannten
+zugeordnet. Zwei gewöhnliche Zwischenüberläufe bei endlichen Lösungen sind
+geschlossen; unabhängige rationale Elimination und Residuen prüfen 53 Systeme
+in beiden Sprachen. [Methoden und Grenzen](numerics.md) enthalten Einheiten,
+Pivottoleranz, atomare Fehler, Ausgabealias und die verbleibenden Double-Grenzen.
+Die übrigen Mathematikblöcke und die gesamte Plattform-/Produktabnahme bleiben
+einzeln offen. Die Originaltexte aller 531 Planblöcke sind erhalten.

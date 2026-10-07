@@ -2492,3 +2492,10 @@ geprüft. Eigene Protokolle und die vollständige LANG-006-Abnahme bleiben offen
 
 Die [historischen lokalen Prüfungen](status-history.md) sind separat erhalten.
 Sie ersetzen keine aktuelle Abnahme des gesamten Projektplans.
+
+
+Lineare Systeme (§7.2 / PP-0360) verwenden jetzt separate Exponenten für
+rechte Seiten und Teillösungen. Belegte Zwischenüberläufe bei endlichen
+Lösungen sind geschlossen; C und Physim werden gegen unabhängige rationale
+Lösungen und Residuen geprüft. [Verträge und Grenzen](numerics.md) bleiben
+ausdrücklich begrenzt; der vollständige Projektplan ist weiterhin offen.

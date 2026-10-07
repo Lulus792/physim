@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-07",
-  "inspected_revision": "f604d2aa6c59c6db5397796e96b9bcb3f3eb231a",
+  "inspected_revision": "03c42f6457e52c2536d22f01cce6f29c1fff9beb",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2330,9 +2330,21 @@
       "kind": "list",
       "scope": "planned",
       "text": "- lineare Gleichungssysteme.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/numerics.h",
+        "src/numerics.c",
+        "include/physim/language_sdk.h",
+        "tests/test_numerics.c",
+        "tests/test_linear_range.c",
+        "tests/test_linear_range_oracle.py",
+        "tests/fixtures/language/linear_solve.phys",
+        "tests/fixtures/language/linear_range.phys",
+        "docs/numerics.md",
+        "tools/verify-native-sdk.py",
+        "docs/platform-validation.md"
+      ],
+      "note": "C und Physim lösen dichte Systeme mit 1–32 Unbekannten, zeilenskalierter partieller Pivotisierung, expliziter Pivottoleranz und atomarer Ausgabe. Separate Mantissen/Exponenten für RHS und Teillösungen schließen belegte Zwischenüberläufe bei endlichen Lösungen. Unabhängige rationale Elimination und Residuen prüfen 53 binäre Eingabesysteme in beiden Sprachen, Skalierung, Zeilentausch und Fehler. Einheitenannahmen, Double-Präzision, mögliche Verluste bei Koeffizientennormierung, Singularitätskriterium und fehlende Konditions-/Fehlerschranke sind dokumentiert. Begrenzter Implementierungsnachweis; keine gesamte Mathematik-/Plattform-/Produktabnahme."
     },
     {
       "id": "PP-0361",

@@ -117,9 +117,37 @@ es besteht keine Laufzeitabhängigkeit zu SciPy.
 ## Lineare Systeme, Nullstellen und Minimum
 
 `ps_linear_solve` löst eine dichte, zeilenweise gespeicherte Matrix durch
-zeilenskalierte partielle Pivotisierung. A und b bleiben erhalten; x darf b
-überlagern. Toleranz 0 wählt `n * DBL_EPSILON`. Zu kleine Pivots ergeben
+zeilenskalierte partielle Pivotisierung. Eingaben bleiben erhalten, soweit die
+Ausgabe x sie bei Erfolg nicht überlagert; x darf A oder b überlagern. Toleranz 0 wählt `n * DBL_EPSILON`. Zu kleine Pivots ergeben
 `PS_SINGULAR`; es wird keine Konditionszahl oder Fehlerschranke versprochen.
+
+Die Schnittstellen akzeptieren 1–32 Unbekannte, endliche A-/b-Werte und eine
+Pivottoleranz in [0,1). Sie allokieren keinen Heap-Speicher. Jede rechte Seite
+und jede Teillösung verwendet intern eine eigene Mantisse mit Exponent.
+Dadurch bleiben sowohl extrem unterschiedlich große Komponenten als auch
+vorübergehend größere rechte Seiten bei der Elimination erhalten. Gewichtete
+Rückwärtssummen werden kompensiert, bevor das Ergebnis zurückskaliert wird.
+Ein Beispiel ist das Dreieckssystem mit Zeilen `(1,-1,1)`, `(0,1,0)`, `(0,0,1)`
+und rechter Seite `(1e308,1e308,1e308)`: Seine Lösung ist dieselbe endliche
+Dreiergruppe, obwohl die erste gewöhnliche Rückwärtssumme überlaufen würde.
+
+A und b benutzen die vom Aufrufer festgelegten Einheiten. Jede Gleichung muss
+einheitlich sein: `A[i,j] * x[j]` hat die Einheit von `b[i]`. Die Array-API prüft
+keine Dimensionen; unterschiedliche Unbekannten-Einheiten erfordern entsprechend
+dimensionierte Koeffizienten. Alle Fehler erhalten x, einschließlich des
+unterstützten Aliasfälle x=A und x=b. Singularität bedeutet einen zu kleinen Pivot
+bei der gewählten Toleranz, keine exakte Rangentscheidung.
+
+Die Koeffizientenmatrix und die Präzision bleiben Double. Zeilennormierung kann
+sehr kleine Koeffizienten verlieren; starke Auslöschung und schlecht konditionierte
+Systeme können ungenaue Ergebnisse oder einen Singularitätsfehler verursachen.
+Nichtdarstellbare endgültige Lösungen liefern `PS_NUMERIC`; subnormale Ergebnisse
+folgen der gewöhnlichen Double-Rundung und können null werden. Es gibt keine
+Konditionszahl, iterative Verfeinerung, dünnbesetzte Faktorisierung oder allgemeine
+exakte Rundungsgarantie. `tests/test_linear_range_oracle.py` löst die binären
+Eingabesysteme unabhängig mit rationaler Elimination und prüft zusätzlich ihre
+Residuen in C und Physim. Das dokumentierte Testbudget ersetzt keine allgemeine
+Fehlerschranke.
 
 `ps_root_bisect` benötigt eine stetige Funktion mit Vorzeichenwechsel oder einer
 exakten Nullstelle am Rand. `ps_minimize_golden` benötigt ein unimodales Intervall.

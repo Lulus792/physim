@@ -27,7 +27,7 @@ ps_result ps_linear_solve(
     double *x);
 ```
 
-Row-major A, scaled partial pivoting. A and b are preserved. x may alias b. n <= 32; pivot_tolerance=0 selects n*DBL_EPSILON. Output unchanged on error.
+Row-major A, scaled partial pivoting. Inputs are preserved except where x aliases them on success; x may alias A or b. 1 <= n <= 32; pivot_tolerance=0 selects n*DBL_EPSILON. Finite inputs and tolerance in [0,1) required. Each RHS/solution component has an independent internal exponent; weighted sums avoid premature range failure. Coefficients and precision remain Double; no condition estimate or exact-rounding bound. Final nonfinite solutions yield PS_NUMERIC. Output unchanged on every error.
 
 ### ps_scalar_fn
 

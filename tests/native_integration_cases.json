@@ -1922,6 +1922,18 @@
     "ode-range-language": {
       "source": "tests/fixtures/language/ode_range.phys",
       "mode": "--emit-c"
+    },
+    "linear-range-probe": {
+      "sources": [
+        "tests/linear_range_probe.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "linear-range-language": {
+      "source": "tests/fixtures/language/linear_range.phys",
+      "mode": "--emit-c"
     }
   },
   "tests": [
@@ -7687,6 +7699,31 @@
             "{root}/tests/fixtures/ode_range_cases.json",
             "--fixture",
             "{root}/tests/fixtures/language/ode_range.phys"
+          ],
+          "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "linear_range_oracle",
+      "targets": [
+        "python",
+        "linear-range-probe",
+        "linear-range-language"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_linear_range_oracle.py",
+            "--c",
+            "{linear-range-probe}",
+            "--language",
+            "{linear-range-language}",
+            "--cases",
+            "{root}/tests/fixtures/linear_range_cases.json",
+            "--fixture",
+            "{root}/tests/fixtures/language/linear_range.phys"
           ],
           "timeout": 120
         }
