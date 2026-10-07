@@ -2,7 +2,7 @@
 
 Ein View leiht Bytes und besitzt keinen Speicher. Der Quellpuffer muss leben. Indizes zählen Bytes, nicht Unicode-Zeichen; abschließende Nullzeichen sind nicht erforderlich. Verwende copy, wenn du einen eigenen terminierenden Puffer benötigst.
 
-[Anleitung und Beispiele](../string-view.md) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)
+[Anleitung und Beispiele](../string-view.md) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)
 
 Einbinden: `#include "physim/string_view.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.
 

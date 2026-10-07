@@ -2,7 +2,7 @@
 
 Definiere Verteilung und Sensorkonfiguration, initialisiere den Sensor mit explizitem Seed und frage ihn zu Modellzeitpunkten ab. Verwende einen Wert nur bei gültigem Status. Messwert, Standardunsicherheit und Status getrennt aufzeichnen. Ein Sensor besitzt seinen eigenen Zufallsstrom und Abtastzustand.
 
-[Anleitung und Beispiele](../measurement.md) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)
+[Anleitung und Beispiele](../measurement.md) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)
 
 Einbinden: `#include "physim/measurement.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.
 

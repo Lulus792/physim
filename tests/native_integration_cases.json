@@ -6310,6 +6310,57 @@
           "timeout": 240
         }
       ]
+    },
+    {
+      "name": "documentation_c_workflow_source",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tutorial_sources.py",
+            "documentation_c_workflow_source"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "documentation_physim_workflow_source",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tutorial_sources.py",
+            "documentation_physim_workflow_source"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "documentation_tracks",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_documentation_tracks.py",
+            "--root",
+            "{root}",
+            "--catalog",
+            "{root}/tests/tutorial_sources.json"
+          ],
+          "timeout": 30
+        }
+      ]
     }
   ]
 }

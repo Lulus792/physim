@@ -3,6 +3,42 @@
 Stand: 7. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Getrennte C-/Physim-Dokumentation am 7. Oktober 2026
+
+[Teil I: C](c-guide.md) und [Teil II: Physim](physim-guide.md) enthalten jeweils
+sieben geordnete Kapitel, eigene ausführbare Spracheinstiege, vollständige
+Experiment-/Analyseabläufe, Referenzen und dieselben acht Modelllernwege.
+Das Hilfefenster wählt beide Teile separat aus und erhält den Startpunkt beim
+Besuch gemeinsamer Themen. Die Prüfung lädt alle registrierten Themen,
+kontrolliert Quelltext und Links und bedient die Auswahl und Startknöpfe über
+SDL-Mausereignisse, auch im verkleinerten Fenster.
+
+Die sechs gezielten Prüfungen bestehen auf Intel macOS (Apple Clang 16) unter
+`build/contact-world-language-release-mac/test-results/run-c_azenr8` und
+`run-8qrrmi9x` (je drei Fälle), unter Debian 12/GCC 12.2 unter
+`build/contact-world-language-release-linux/test-results/run-hbhstge9` (sechs Fälle).
+Die endgültige grafische Navigation besteht auf macOS unter `run-p4g3hwpq`
+und Linux unter `run-mltm2ijg` in den jeweiligen Release-Testordnern.
+
+Beide ausschließlich aus dem 43-Dateien-Prüfkit gestarteten SDK-Prüfungen
+bestehen vollständig, einschließlich aller neun grafischen Projektabläufe und
+der neuen Hilfefenster-Navigation:
+
+- macOS: `build/documentation-tracks-sdk-proof-mac/Native SDK ä 00qmysrj`.
+- Linux: `build/documentation-tracks-sdk-proof-linux/Native SDK ä 2s2tu214`.
+
+Beide Prüfungen bauen die Spracheinstiege aus den verschobenen SDK-Quellen,
+prüfen die veröffentlichten Modellquellen und führen die bisherigen fachlichen
+Prüfungen gegen installierten und neu aufgebauten Core aus. Die endgültigen
+Pakete `build/Documentation routes clean SDK ä mac` und
+`build/Documentation routes clean SDK ä linux` enthalten 374 Manifestdateien
+und weiterhin 63 kompilierte Sprachprodukte. Alle Code-/Beispieldateien werden
+byteweise gegen die geprüften SDK-Kopien verglichen, die Apps gegen die
+geprüften Release-Binaries. Zum Abschluss werden nur Dokumentation und Manifest
+aktualisiert. Der Katalog umfasst jetzt 577 Fälle ohne Fenster und 562 ohne SDL;
+die vorherige vollständige 572-Fälle-Abnahme wird dadurch nicht umgedeutet.
+Die aktuelle Windows-/ARM-/Clang-Matrix bleibt ein eigener Abnahmenachweis.
+
 ## Batch-Hostdienste und Physim 0.178.0 am 7. Oktober 2026
 
 Analysen erhalten einen optionalen, größen- und versionsgeprüften `run_host`-Tail

@@ -2,7 +2,7 @@
 
 Erzeuge einen Analysecontext, öffne einen Datensatz und hole time sowie Messkanäle als Reihen. Transformationen erzeugen neue Handles. Wähle gemeinsam ausgerichtete Reihen; Länge allein garantiert keine Zuordnung. Nach ps_analysis_destroy sind alle zugehörigen Handles ungültig.
 
-[Anleitung und Beispiele](../series.md) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)
+[Anleitung und Beispiele](../series.md) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)
 
 Einbinden: `#include "physim/series.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.
 

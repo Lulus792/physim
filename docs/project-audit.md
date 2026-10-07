@@ -24,7 +24,7 @@ Umfang nicht ersetzen.
 | Kern und Numerik (§7) | Öffentliche GUI-unabhängige Header, Referenz-, Konvergenz- und Fehlertests | Jede explizite Algorithmusforderung und ihr dokumentiertes Fehler-/Einheitenverhalten einzeln zuordnen; keine Ableitung aus bloßer Funktionszahl. |
 | Sprache und Bindungen (§10, LANG-001..007) | Version 0.178.0, Lexer/Parser/Checker/C17-Backend, typisierte Werte, Module, Generics, Runner- und Analysebindungen | Vollständigen semantischen Vertrag und C-/Physim-Funktionsparität prüfen. `LANG-005` besitzt jetzt explizite Batch-Hostdienste und besitzende Sprachwerte mit Start, Pause, Wiederaufnahme, Archivabfragen, Statistik, Diagrammen und Export. Die vollständige Sprach-/Produktabnahme und neue Remote-Matrix bleiben offen. |
 | Barrierefreiheit (Phase 10, PP-0710) | Themes, Code-Schriftgröße, Tastenkürzel; `app/preferences.h`, `app/settings_ui.inc` | UI-weite Schriftvergrößerung, vollständige Tastaturführung und grundlegender Screenreader-Zugang. |
-| Dokumentation (§16, LANG-007) | Acht gekoppelte Lernpfade mit vollständigen Quellen, Modellannahmen und automatisierten Prüfungen; `tests/tutorial_sources.json` | Zwei vollständige, separat navigierbare Wege für C und Physim und die gesamte Bindungsabnahme. |
+| Dokumentation (§16, LANG-007) | Acht gekoppelte Lernpfade mit vollständigen Quellen, Modellannahmen und automatisierten Prüfungen; `tests/tutorial_sources.json` | Die beiden separat navigierbaren Wege sind implementiert; aktuelle gesamte Bindungs-/Plattformabnahme und alle Vorlagen bleiben gesondert offen. |
 | Weitere Domänen (§7.7, Phase 12+) | Mechanik-, Material-/Medien-, Mess- und Analysebasis | Thermodynamik, Elektromagnetismus, Wellen/Optik und Strömung sind noch keine eigenständig umgesetzten Domänen. Die empfohlene Reihenfolge bleibt erhalten. |
 
 ## Aktuelle CI-Fehler zuerst schließen
@@ -70,8 +70,8 @@ unter `build/contact-world-language-release-linux/test-results/run-dbd70ucn`.
 Das ist ein Nachweis für diesen Stand und diese Umgebungen. Die anschließenden
 Änderungen an Laufzeitsupport und Prüfern benötigen eigene Nachweise; eine
 nachträgliche Änderung der Zahl macht den alten Lauf nicht zu einem aktuellen
-Gesamtlauf. Der Katalog enthält mit Kit- und Elternprozess-Abbruchprüfung
-572 Fälle ohne Fenster, 557 ohne SDL und weiterhin 66 Fensterfälle.
+Gesamtlauf. Der aktuelle Katalog enthält mit den zusätzlichen Lernwegprüfungen
+577 Fälle ohne Fenster, 562 ohne SDL und weiterhin 66 Fensterfälle.
 
 Die Abnahme bleibt offen, bis sämtliche konkreten Anforderungen passende
 aktuelle Implementierungs-, Laufzeit- und Plattformnachweise besitzen.
@@ -97,10 +97,10 @@ Korrekturen zusätzlich in ihrer tatsächlichen Matrix bestätigen.
 
 ## Batch-Bindung und Controller
 
-Der aktuelle Abgleich enthält zehn implementierte Blöcke, neun konkrete
+Der aktuelle Abgleich enthält zwölf implementierte Blöcke, sieben konkrete
 unvollständige Blöcke und 512 weiterhin ungeprüfte Blöcke. Die acht Lernpfade
-bleiben erhalten; hinzu kommen LANG-005 und der Batch-/Parametercontroller.
+bleiben erhalten; hinzu kommen LANG-005, der Batch-/Parametercontroller und die beiden Dokumentationsteile.
 Die Originaltexte aller 531 Blöcke und 475 Aufzählungspunkte bleiben unverändert.
-Die neue Sprachbindung besitzt ausdrücklich begrenzte Implementierungs- und
+Die Sprachbindung und die beiden Lernwege besitzen ausdrücklich begrenzte Implementierungs- und
 Laufzeitnachweise in [Batch](batch-language.md) und der [Plattformprüfung](platform-validation.md).
 Dies ersetzt keine vollständige Plattform-, Dokumentations- oder Produktabnahme.

@@ -2,7 +2,7 @@
 
 Alle hier aufgeführten Aufrufe sind im Compiler registriert. Die Signaturen zeigen die tatsächlich erlaubte Schreibweise: Empfängermethoden werden auf einem Wert aufgerufen, statische Fabriken auf dem Typ. `Void` bedeutet kein Rückgabewert. Parameter können positional oder mit den gezeigten Namen angegeben werden. Zahlen und Methodenempfänger werden statisch geprüft.
 
-[Sprachanleitung und Beispiele](../language.md) · [Arrays und Wertsemantik](../language-values.md) · [Lernpfade](../guide.md)
+[Sprachanleitung und Beispiele](../language.md) · [Arrays und Wertsemantik](../language-values.md) · [Teil II – Physim](../physim-guide.md)
 
 ## Aufrufbeispiel
 

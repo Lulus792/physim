@@ -2,7 +2,7 @@
 
 Diagnosen sind eigene begrenzte UTF-8-Werte mit Fehlercode, Operation, Argument und Quellposition. Kein globaler Last-error-Zustand. Konstruktion und Decodierung sind transaktional, Dateien werden exklusiv erstellt. Experiment- und Analyse-Runner transportieren die Daten zusätzlich zur bisherigen Textausgabe.
 
-[Anleitung und Beispiele](../diagnostics.md) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)
+[Anleitung und Beispiele](../diagnostics.md) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)
 
 Einbinden: `#include "physim/diagnostic.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.
 

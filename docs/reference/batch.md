@@ -2,7 +2,7 @@
 
 Ein expliziter Analysehost stellt versionierte, synchrone Batch-Dienste bereit. Requests beschreiben getrennte Runner mit SI-Parametern, Seeds, Zeit- und Speichergrenzen. Ergebnisse enthalten validierte Teilfortschritte und Messstatus. Der Core startet keine Prozesse; der Analyse-Runner liefert die Dienste über den optionalen run_host-Tail. Geliehene Dienstzeiger leben nur während dieses Aufrufs.
 
-[Anleitung und Beispiele](../batch-language.md) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)
+[Anleitung und Beispiele](../batch-language.md) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)
 
 Einbinden: `#include "physim/batch.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.
 

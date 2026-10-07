@@ -2,7 +2,7 @@
 
 Reader und Writer werden vom Aufrufer gehalten. Schließe jeden erfolgreich geöffneten Reader/Writer. Wiederhole ps_run_next bis zu einem Ergebnis ungleich PS_OK. PS_EOF bedeutet vollständiger Lauf, PS_RECOVERED einen lesbaren Teil eines beschädigten oder unvollständigen Laufs. ps_put/get_u32 benötigen vier Bytes, ps_put/get_f64 acht Bytes; sie kodieren little-endian.
 
-[Anleitung und Beispiele](../data-format.md) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)
+[Anleitung und Beispiele](../data-format.md) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)
 
 Einbinden: `#include "physim/data.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.
 

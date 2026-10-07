@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-07",
-  "inspected_revision": "a5c7985ca7439ed94fc345ef8378625551ad3410",
+  "inspected_revision": "10d8392585915b081eb493aac09b22e2236faebb",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -3616,7 +3616,7 @@
         "docs/guide.md",
         "tests/tutorial_sources.json"
       ],
-      "note": "Acht gekoppelte Lernpfade vorhanden; zwei vollständige, separat navigierbare Dokumentationswege samt Bindungsabnahme noch nicht belegt."
+      "note": "Beide Dokumentationsteile sind implementiert, separat navigierbar und in Repository-/SDK-Prüfungen eingebunden. Sprachauswahl, Vorlagen, Diagnose und Builds besitzen Teilnachweise. Vollständige aktuelle End-to-End-Abnahme aller Plattformen und aller Vorlagen bleibt separat offen."
     },
     {
       "id": "PP-0517",
@@ -5487,7 +5487,7 @@
         "docs/guide.md",
         "tests/tutorial_sources.json"
       ],
-      "note": "Acht gekoppelte Lernpfade vorhanden; zwei vollständige, separat navigierbare Dokumentationswege samt Bindungsabnahme noch nicht belegt."
+      "note": "Beide Dokumentationsteile sind implementiert, separat navigierbar und in Repository-/SDK-Prüfungen eingebunden. Sprachauswahl, Vorlagen, Diagnose und Builds besitzen Teilnachweise. Vollständige aktuelle End-to-End-Abnahme aller Plattformen und aller Vorlagen bleibt separat offen."
     },
     {
       "id": "PP-0736",
@@ -6583,12 +6583,18 @@
       "kind": "list",
       "scope": "planned",
       "text": "- **Teil I – Physim mit C:** Einrichtung, Spracheinstieg für den Workflow, C-API, Experimente, Messdaten, Auswertung, Debugging und Beispiele.\n",
-      "status": "incomplete",
+      "status": "implemented",
       "evidence": [
-        "docs/guide.md",
-        "tests/tutorial_sources.json"
+        "docs/c-guide.md",
+        "docs/physim-guide.md",
+        "docs/c-workflow.md",
+        "docs/physim-workflow.md",
+        "tests/test_documentation_tracks.py",
+        "tests/tutorial_sources.json",
+        "tools/verify-native-sdk.py",
+        "docs/platform-validation.md"
       ],
-      "note": "Acht gekoppelte Lernpfade vorhanden; zwei vollständige, separat navigierbare Dokumentationswege samt Bindungsabnahme noch nicht belegt."
+      "note": "Separater vollständiger C-/Physim-Dokumentationsweg mit sieben Kapiteln, denselben acht Modellgruppen, ausführbarem Spracheinstieg, gemeinsamem fachlichem Vertrag und eigenem Startziel in der Offline-Hilfe. Lokale Quellen-, Programm- und Fensterprüfungen sind ausgeführt; gesamte Produkt-/Remote-Plattformabnahme bleibt offen."
     },
     {
       "id": "PP-0853",
@@ -6601,12 +6607,18 @@
       "kind": "list",
       "scope": "planned",
       "text": "- **Teil II – Physim mit der eigenen Sprache:** Einrichtung, Syntax und statische Typen einschließlich Inferenz und expliziter Annotationen, Speicher-/Fehlerregeln, Physim-Bindungen, Experimente, Messdaten, Auswertung, Debugging und dieselben Beispiele.\n",
-      "status": "incomplete",
+      "status": "implemented",
       "evidence": [
-        "docs/guide.md",
-        "tests/tutorial_sources.json"
+        "docs/c-guide.md",
+        "docs/physim-guide.md",
+        "docs/c-workflow.md",
+        "docs/physim-workflow.md",
+        "tests/test_documentation_tracks.py",
+        "tests/tutorial_sources.json",
+        "tools/verify-native-sdk.py",
+        "docs/platform-validation.md"
       ],
-      "note": "Acht gekoppelte Lernpfade vorhanden; zwei vollständige, separat navigierbare Dokumentationswege samt Bindungsabnahme noch nicht belegt."
+      "note": "Separater vollständiger C-/Physim-Dokumentationsweg mit sieben Kapiteln, denselben acht Modellgruppen, ausführbarem Spracheinstieg, gemeinsamem fachlichem Vertrag und eigenem Startziel in der Offline-Hilfe. Lokale Quellen-, Programm- und Fensterprüfungen sind ausgeführt; gesamte Produkt-/Remote-Plattformabnahme bleibt offen."
     },
     {
       "id": "PP-0855",

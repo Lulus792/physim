@@ -23,6 +23,13 @@ Der Lauf liegt im Projekt unter `runs/`; das Schließen der App löscht ihn nich
 
 ## Wähle deinen Lernweg
 
+[Teil I – Physim mit C](c-guide.md) führt durch Einrichtung, C-Grundlagen,
+Experiment, Messdaten, Auswertung, Fehlerbehandlung und alle acht Referenzmodelle.
+[Teil II – Physim-Sprache](physim-guide.md) führt durch denselben Workflow mit
+Syntax, statischen Typen, automatischer Wertlebensdauer und Sprachbindungen.
+Die Offline-Hilfe bietet beide Wege als feste Auswahl; **Start** kehrt zum
+ausgewählten Weg zurück. Die gemeinsamen Modellannahmen bleiben einmal dokumentiert.
+
 - **Experimentieren ohne neue API:** Starte mit einer Vorlage, ändere einen Parameter, wiederhole den Lauf und vergleiche die Ergebnisse. [Feder und Dämpfung](spring.md), [Stöße und Medien](mechanics.md), [Auftrieb](buoyancy.md).
 - **Ein eigenes Modell in C:** Ein vollständiges, kleines Modul erklärt Zustand, Zeit, Kanäle, Szene und Aufräumen. [C-Experiment Schritt für Schritt](experiment-tutorial.md).
 - **Physim-Sprache:** Wähle eine Sprachvorlage; Experiment und Analyse dürfen unterschiedliche Sprachen verwenden. [Eigenes Experiment und Auswertung Schritt für Schritt](language-tutorial.md), [Sprachvertrag](language.md), [Werte, Arrays und Methoden](language-values.md), [alle Bibliotheksfunktionen](reference/language-library.md).

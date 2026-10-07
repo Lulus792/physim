@@ -146,8 +146,8 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt derzeit 572 Tests ohne Fenster aus, mit `--no-app` die
-557 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
+`--test` führt derzeit 577 Tests ohne Fenster aus, mit `--no-app` die
+562 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
 Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.
@@ -417,7 +417,9 @@ Runnern und Mess-/Berichtsdateien. Zusätzlich werden die installierten Core-Que
 alle acht C-Vorlagen samt Analyse sowie 36 Sprachmodule unabhängig neu gebaut.
 Neun Sprachexperimente laufen mit beiden allgemeinen Sprach-Auswertungen;
 hinzu kommen die spezielle Sensoranalyse und sechs C-/Physim-Kombinationen.
-`--app-tests` ergänzt neun vollständige App-Abläufe: alle acht C-Vorlagen und
+Beide Dokumentationsteile und ihre C-/Physim-Einstiegsprogramme werden aus dem
+verschobenen SDK geprüft. `--app-tests` ergänzt die Navigation im Hilfefenster und
+neun vollständige App-Abläufe: alle acht C-Vorlagen und
 das reine Physim-Sprachprojekt. Es benötigt eine grafische Sitzung. Unter Windows führen die
 gehosteten CI-Worker diese Grafikabläufe nicht aus; sie werden lokal geprüft.
 Das SDK enthält keine CMake-Anbindungsdateien oder `CMakeLists.txt` mehr.
@@ -566,7 +568,9 @@ Die Prüfung weist SDKs mit verbliebenen CMake-Builddateien zurück.
 - Dokumentation: Parser, Unicode-Suche und Fehlerfälle. `physim --docs-test <bildordner>`
   prüft zusätzlich das separate Fenster über F1, das Laden aller Themen, Suche über
   SDL-Textereignisse, unabhängige Eingaben, Größenänderung sowie Schließen und
-  Wiederöffnen mit erhaltener Leseposition.
+  Wiederöffnen mit erhaltener Leseposition. Die Auswahl von Teil I (C) und Teil II
+  (Physim), gemeinsame Referenzlinks und die Rückkehr zum jeweiligen Startpunkt
+  werden über echte Fenster-Mausereignisse geprüft.
 - Autosave: gemeinsamer Snapshot beider Quellen und ihrer Ausgangstexte, Unicode,
   maximale Dateigröße, jedes abgeschnittene Präfix, Mutationen und fehlgeschlagene
   temporäre Schreib-/Umbenennungsoperationen. `autosave_workflow` beendet einen

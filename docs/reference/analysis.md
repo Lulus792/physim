@@ -2,7 +2,7 @@
 
 Initialisiere ps_statistics mit null und füge endliche Werte mit ps_statistics_push hinzu. ps_statistics_stddev liefert die Stichprobenstreuung. ps_derivative berechnet Sekanten, ps_trapezoid ein bestimmtes Integral. ps_analyze_run erstellt eine Standardauswertung. Eigene Module exportieren ps_get_analysis; das vollständige Beispiel steht im Experimenttutorial.
 
-[Anleitung und Beispiele](../series.md) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)
+[Anleitung und Beispiele](../series.md) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)
 
 Einbinden: `#include "physim/analysis.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.
 

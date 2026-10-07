@@ -196,7 +196,8 @@ typedef struct {
     bool doc_search_focus, doc_search_active, doc_move_match, doc_reset_sidebar;
     char doc_filter[128], doc_last_filter[128];
     bool doc_filter_active, doc_contents;
-    int doc_group, doc_previous;
+    int doc_group, doc_previous, doc_track;
+    struct nk_rect doc_track_bounds[2],doc_home_bounds;
     struct nk_rect documentation_bounds;
     ps_report *analysis_report, *pending_report;
     SDL_Thread *report_thread;
@@ -2597,23 +2598,26 @@ static bool test_scripted_external_input(const SDL_Event *e) {
     default: return false;
     }
 }
-static void test_mouse(app *a, struct nk_rect rect, bool down) {
+static void test_window_mouse(SDL_Window *window,struct nk_rect rect,bool down) {
     float x = rect.x + rect.w * .5f, y = rect.y + rect.h * .5f;
     SDL_Event e = {0};
     e.type = SDL_EVENT_MOUSE_MOTION;
-    e.motion.windowID = SDL_GetWindowID(a->window);
+    e.motion.windowID = SDL_GetWindowID(window);
     e.motion.which = PS_TEST_MOUSE_ID;
     e.motion.x = x;
     e.motion.y = y;
     SDL_PushEvent(&e);
     e.type = down ? SDL_EVENT_MOUSE_BUTTON_DOWN : SDL_EVENT_MOUSE_BUTTON_UP;
-    e.button.windowID = SDL_GetWindowID(a->window);
+    e.button.windowID = SDL_GetWindowID(window);
     e.button.which = PS_TEST_MOUSE_ID;
     e.button.x = x;
     e.button.y = y;
     e.button.button = SDL_BUTTON_LEFT;
     e.button.down = down;
     SDL_PushEvent(&e);
+}
+static void test_mouse(app *a,struct nk_rect rect,bool down) {
+    test_window_mouse(a->window,rect,down);
 }
 // clang-format off
 #include "autosave_tests.inc"
@@ -3951,14 +3955,42 @@ int main(int argc, char **argv) {
                 if (a->doc_visible || a->quitting)
                     exit_code = 1;
                 if (docs_test) {
-                    open_documentation(a, 3);
-                    /* Closing the main window exits even with a second window open. */
-                    SDL_Event close_event = {0};
-                    close_event.type = SDL_EVENT_WINDOW_CLOSE_REQUESTED;
-                    close_event.window.windowID = SDL_GetWindowID(a->window);
-                    SDL_PushEvent(&close_event);
+                    open_documentation(a, 1);
                 }
-                test_stage = docs_test ? 19 : 50;
+                test_stage = docs_test ? 280 : 50;
+            } else if(test_stage==280) {
+                test_window_mouse(a->doc_window,a->doc_track_bounds[0],true);test_stage=281;
+            } else if(test_stage==281) {
+                test_window_mouse(a->doc_window,a->doc_track_bounds[0],false);test_stage=282;
+            } else if(test_stage==282) {
+                if(a->doc_track!=1 || a->doc_topic!=DOCUMENTATION_C_GUIDE_TOPIC)exit_code=1;
+                documentation_link(a,"c-workflow.md");
+                if(strcmp(documentation_topics[a->doc_topic].path,"docs/c-workflow.md") || a->doc_track!=1)exit_code=1;
+                test_window_mouse(a->doc_window,a->doc_home_bounds,true);test_stage=283;
+            } else if(test_stage==283) {
+                test_window_mouse(a->doc_window,a->doc_home_bounds,false);test_stage=284;
+            } else if(test_stage==284) {
+                if(a->doc_topic!=DOCUMENTATION_C_GUIDE_TOPIC || a->doc_track!=1)exit_code=1;
+                capture="docs-c-track.bmp";
+                test_window_mouse(a->doc_window,a->doc_track_bounds[1],true);test_stage=285;
+            } else if(test_stage==285) {
+                test_window_mouse(a->doc_window,a->doc_track_bounds[1],false);test_stage=286;
+            } else if(test_stage==286) {
+                if(a->doc_track!=2 || a->doc_topic!=DOCUMENTATION_PHYSIM_GUIDE_TOPIC)exit_code=1;
+                documentation_link(a,"physim-workflow.md");
+                if(strcmp(documentation_topics[a->doc_topic].path,"docs/physim-workflow.md") || a->doc_track!=2)exit_code=1;
+                documentation_link(a,"reference/language-library.md");
+                if(strcmp(documentation_topics[a->doc_topic].path,"docs/reference/language-library.md") || a->doc_track!=2)exit_code=1;
+                test_window_mouse(a->doc_window,a->doc_home_bounds,true);test_stage=287;
+            } else if(test_stage==287) {
+                test_window_mouse(a->doc_window,a->doc_home_bounds,false);test_stage=288;
+            } else if(test_stage==288) {
+                if(a->doc_topic!=DOCUMENTATION_PHYSIM_GUIDE_TOPIC || a->doc_track!=2)exit_code=1;
+                capture="docs-physim-track.bmp";
+                /* Closing the main window exits with either learning route open. */
+                SDL_Event close_event={0};close_event.type=SDL_EVENT_WINDOW_CLOSE_REQUESTED;
+                close_event.window.windowID=SDL_GetWindowID(a->window);SDL_PushEvent(&close_event);
+                test_stage=19;
             } else if (test_stage == 50 && idle(a) && !a->library_thread) {
                 snprintf(test_original_run, sizeof test_original_run, "%s", a->last_run);
                 snprintf(test_original_report, sizeof test_original_report, "%s",

@@ -2,7 +2,7 @@
 
 Speicher gehört einem expliziten Allocator. Verwende denselben Allocator und die korrekte Größe beim Freigeben. Eine Arena nutzt einen Puffer des Aufrufers; Reset macht alle daraus vergebenen Bereiche logisch ungültig. PS_MEMORY_ALIGNMENT bezeichnet die unterstützte fundamentale Ausrichtung.
 
-[Anleitung und Beispiele](../memory.md) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)
+[Anleitung und Beispiele](../memory.md) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)
 
 Einbinden: `#include "physim/memory.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.
 

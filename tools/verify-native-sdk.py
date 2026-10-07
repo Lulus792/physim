@@ -80,6 +80,16 @@ def main():
         builder.includes = [sdk / "include"]
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+        checked([sys.executable,repo / "tests/test_documentation_tracks.py","--root",sdk,
+                 "--catalog",repo / "tests/tutorial_sources.json"])
+        shutil.copy2(sdk / "examples/documentation/c_workflow.c",consumer / "c-workflow-intro.c")
+        c_intro=builder.executable("c-workflow-intro",["c-workflow-intro.c"],[])
+        checked([c_intro])
+        checked([sdk / "bin" / ("physimc"+suffix),"--emit-c",sdk / "examples/documentation/physim_workflow.phys"],
+                 output=consumer / "physim-workflow-intro.c")
+        physim_intro=builder.executable("physim-workflow-intro",["physim-workflow-intro.c"],[library],language=True)
+        checked([physim_intro])
+        print("Installed SDK learning routes: both complete paths, published sources and native C/Physim introduction programs passed",flush=True)
         probe = builder.executable("sdk-probe", ["probe.c"], [library])
         series_probe=builder.executable("sdk-series-probe",["series-probe.c"],[library])
         shutil.copy2(repo / "tests/test_run_index.c",consumer / "run-index-language-fixture.c")
@@ -460,11 +470,13 @@ def main():
                 for example in native.EXAMPLES + ["language_full"]:
                     checked([sdk / "bin" / ("physim" + suffix), "--self-test", root / ("App " + example), example])
                     print(f"Installed SDK GUI workflow: {example} passed", flush=True)
+                checked([sdk / "bin" / ("physim"+suffix),"--docs-test",root / "Documentation routes"])
+                print("Installed SDK documentation window: both learning route buttons, shared links, route home and small-window rendering passed",flush=True)
         elif args.app_tests:
             raise RuntimeError("App tests require an SDK with the app")
     (root / "PASSED.txt").write_text(
         "Native SDK relocation, independent headers, installed and rebuilt core archives, eight bundled and rebuilt C templates, "
-        f"eighteen language programs, {len(modules)} rebuilt language modules, nine language experiments with both general analyses, "
+        f"{len(native.LANGUAGE_PROGRAMS)} language programs, {len(modules)} rebuilt language modules, nine language experiments with both general analyses, "
         "specialized sensor analysis and six C/Physim combinations passed.\n"
         "Adaptive bundled/source C and Physim pendulums, actual variable sample times, energy and both analysis languages passed.\n" +
         "Common-target-time parameter studies from bundled/source C and Physim pendulums passed with installed and rebuilt probes.\n" +
@@ -479,8 +491,9 @@ def main():
         "Collision tutorial through installed/rebuilt Core, eleven exact scenarios and mixed reports passed.\n" +
         "Monte Carlo tutorial through installed/rebuilt Core, seeded ensembles, worker reproducibility and mixed reports passed.\n" +
         "Saved run tutorial through installed/rebuilt Core, eight archive scenarios, sixteen mixed reports and independent analysis-only projects passed.\n" +
+        "Both complete C/Physim learning routes, eight paired model source groups and executable language introductions passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
-        ("Eight C template GUI workflows and the complete Physim language GUI workflow passed.\n" if args.app_tests else ""), encoding="utf-8")
+        ("Eight C template GUI workflows, the complete Physim language GUI workflow and independent documentation route navigation passed.\n" if args.app_tests else ""), encoding="utf-8")
     print(f"Native SDK verified: {root}")
 
 

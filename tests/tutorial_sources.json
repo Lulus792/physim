@@ -188,5 +188,23 @@
         "language": "physim"
       }
     ]
+  },
+  "documentation_c_workflow_source": {
+    "document": "docs/c-workflow.md",
+    "sources": [
+      {
+        "path": "examples/documentation/c_workflow.c",
+        "language": "c"
+      }
+    ]
+  },
+  "documentation_physim_workflow_source": {
+    "document": "docs/physim-workflow.md",
+    "sources": [
+      {
+        "path": "examples/documentation/physim_workflow.phys",
+        "language": "physim"
+      }
+    ]
   }
 }

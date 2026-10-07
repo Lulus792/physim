@@ -1437,6 +1437,13 @@
       "source": "let b = Batch(\"/tmp/model\",\"/tmp/new\",\"position\",1,1,0.01,42,1)\nlet status = b.status(-1)\n",
       "exit_code": 70,
       "stderr_pattern": "batch_index\\.phys:[0-9]+:[0-9]+: runtime error:.*Batch run index out of bounds"
+    },
+    {
+      "name": "physim_workflow_intro",
+      "source_file": "examples/documentation/physim_workflow.phys",
+      "exit_code": 0,
+      "stdout": "9\n12.5\n",
+      "stderr": ""
     }
   ]
 }

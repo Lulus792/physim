@@ -2,7 +2,7 @@
 
 ps_unit beschreibt Dimension, positive Skala und Symbol. ps_quantity kombiniert Zahlenwert und Einheit. Addition/Subtraktion konvertieren den rechten Operanden in die Einheit des linken. Produkte und Quotienten kombinieren Dimensionen. Symbole müssen solange wie die Einheit gültig bleiben. Temperatur-Offsets werden nicht unterstützt.
 
-[Anleitung und Beispiele](../numerics.md) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)
+[Anleitung und Beispiele](../numerics.md) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)
 
 Einbinden: `#include "physim/units.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.
 

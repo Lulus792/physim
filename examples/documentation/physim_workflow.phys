@@ -1,0 +1,27 @@
+struct Motion:
+    let mass: Float64
+    var speed: Float64
+
+func kineticEnergy(mass: Float64, speed: Float64) -> Float64:
+    return 0.5 * mass * speed * speed
+
+func positive(value: Float64) -> Float64?:
+    if value > 0:
+        return Optional.some(value)
+    return nil
+
+let mass: Float64 = 2.0
+var state = Motion(mass: mass, speed: 3.0)
+let original = state
+state.speed = 5.0
+let speeds = [3.0,4.0]
+var total = 0.0
+for speed in speeds:
+    total += kineticEnergy(mass: mass, speed: speed)
+let energy = kineticEnergy(mass: original.mass, speed: original.speed)
+assert(energy == 9.0 && total / 2 == 12.5)
+assert(original.speed == 3.0 && state.speed == 5.0)
+let selected: Float64? = positive(-1)
+assert(selected == nil && positive(4).unwrap() == 4)
+print(energy)
+print(total / 2)

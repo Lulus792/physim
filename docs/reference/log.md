@@ -2,7 +2,7 @@
 
 Ein Logger verbindet einen benannten Schweregrad und eine endliche Modellzeit mit einem synchronen Sink. Kein globaler Logger und keine implizite Ausgabe. Kontextlogger gehören dem Host; ps_experiment_log verwendet die aktuelle Simulationszeit. Nachrichten sind begrenztes UTF-8; Rückgabewerte entscheiden über die Behandlung verworfener Meldungen.
 
-[Anleitung und Beispiele](../logging.md) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)
+[Anleitung und Beispiele](../logging.md) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)
 
 Einbinden: `#include "physim/log.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.
 

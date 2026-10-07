@@ -2,7 +2,7 @@
 
 Broad Phase liefert mögliche Paare, keine fertigen Kontakte. Prüfe Kandidaten geometrisch und löse anschließend ihre Impulse. Sweep-Funktionen liefern den ersten Kontakt entlang einer vorgegebenen Verschiebung; die verbleibende Bewegung muss der Aufrufer selbst integrieren. Ebenen separat behandeln.
 
-[Anleitung und Beispiele](../mechanics.md) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)
+[Anleitung und Beispiele](../mechanics.md) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)
 
 Einbinden: `#include "physim/collision.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.
 

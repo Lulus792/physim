@@ -65,7 +65,7 @@ def declarations(source):
 def c_reference(module, title, guide, intro):
     source = (ROOT / 'include/physim' / (module + '.h')).read_text(encoding='utf-8')
     result = [f'# C-Referenz: {title}', intro,
-              f'[Anleitung und Beispiele](../{guide}) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)',
+              f'[Anleitung und Beispiele](../{guide}) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)',
               f'Einbinden: `#include "physim/{module}.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.',
               '## Konstanten']
     macros = [(n, v) for n, v in re.findall(r'^#define (PS_\w+)\s+([^\n]+)', source, re.M)
@@ -589,7 +589,7 @@ def language_reference():
     factories = re.findall(r'\{"(\w+)", "(\w+)", "(\w+)"\}', factory_text)
     result = ['# Physim-Sprache: Bibliotheksreferenz',
               'Alle hier aufgeführten Aufrufe sind im Compiler registriert. Die Signaturen zeigen die tatsächlich erlaubte Schreibweise: Empfängermethoden werden auf einem Wert aufgerufen, statische Fabriken auf dem Typ. `Void` bedeutet kein Rückgabewert. Parameter können positional oder mit den gezeigten Namen angegeben werden. Zahlen und Methodenempfänger werden statisch geprüft.',
-              '[Sprachanleitung und Beispiele](../language.md) · [Arrays und Wertsemantik](../language-values.md) · [Lernpfade](../guide.md)',
+              '[Sprachanleitung und Beispiele](../language.md) · [Arrays und Wertsemantik](../language-values.md) · [Teil II – Physim](../physim-guide.md)',
               '## Aufrufbeispiel',
               '```text\nlet direction = Vec3(3, 4, 0)\nlet distance = direction.length()\nlet unitDirection = direction.normalized()\nlet metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")\nlet position = Quantity(2, metres)\n```',
               'Erwartung: distance ist 5, unitDirection ist (0.6, 0.8, 0). Für Experimente stehen globale Channel-Deklarationen sowie create/reset/step/scene bereit; Analysen implementieren analyze. Hostgebundene Funktionen sind nicht in eigenständigen Programmen verfügbar. Ungültige Argumente werden je nach Fall beim Kompilieren oder mit einer Quelldiagnose zur Laufzeit abgewiesen. Die C-Bibliothek ist umfangreicher als die derzeitigen Sprachbindungen.',

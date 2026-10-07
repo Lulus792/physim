@@ -2,7 +2,7 @@
 
 Ein Index besitzt eine unverändert geöffnete Messdatei und Checkpoints aus einem expliziten Allocator. Das Öffnen prüft den gesamten lesbaren Präfix einmal und rekonstruiert auch alte oder unvollständige Dateien. Gezielte Messblöcke und Szenen verwenden diese geprüften Positionen. PS_OK und PS_RECOVERED liefern beide einen zu zerstörenden Handle; andere Fehler erhalten die Ausgabe.
 
-[Anleitung und Beispiele](../run-index.md) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)
+[Anleitung und Beispiele](../run-index.md) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)
 
 Einbinden: `#include "physim/run_index.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.
 

@@ -60,6 +60,7 @@ def catalog():
     cases.extend([
         Case("language_contact_world_memory", ("tests/test_language_contact_world_memory.c",)),
         Case("language_batch_memory", ("tests/test_language_batch_memory.c",)),
+        Case("c_workflow_intro", ("examples/documentation/c_workflow.c",),libraries=(),stdout="Energy: 9.0 J\nMean: 12.5 J\n"),
         Case("analysis_extremes", ("tests/test_analysis_extremes.c",), arguments=("{work}",)),
         Case("diagnostic", ("tests/test_diagnostic.c",), arguments=("{work}",)),
         Case("logging", ("tests/test_logging.c",)),

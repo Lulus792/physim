@@ -2,7 +2,7 @@
 
 Erzeuge eine Map mit Wertgröße und expliziten Grenzen. set kopiert Schlüssel und Wert, get kopiert in deinen Ausgabepuffer. PS_EOF bedeutet fehlender Schlüssel. Besuchercallbacks dürfen lesen, aber keine Änderungen an derselben Map vornehmen. destroy gibt alle map-eigenen Speicherbereiche frei.
 
-[Anleitung und Beispiele](../hashmap.md) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)
+[Anleitung und Beispiele](../hashmap.md) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)
 
 Einbinden: `#include "physim/hashmap.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.
 

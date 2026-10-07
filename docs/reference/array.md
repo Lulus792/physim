@@ -2,7 +2,7 @@
 
 Initialisieren, anhängen/einfügen, lesen und am Ende zerstören. Elemente werden byteweise kopiert, enthalten also keine automatisch verwalteten Unterobjekte. Wachstum kann alle Elementzeiger invalidieren. clear hält die Kapazität; destroy gibt den Speicher frei.
 
-[Anleitung und Beispiele](../array.md) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)
+[Anleitung und Beispiele](../array.md) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)
 
 Einbinden: `#include "physim/array.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.
 

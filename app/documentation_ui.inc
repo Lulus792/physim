@@ -103,15 +103,31 @@ static const documentation_topic documentation_topics[] = {
     {"Batch & Monte Carlo in Physim", "docs/batch-language.md", false},
     {"batch.h", "include/physim/batch.h", true},
     {"C: Batch-Hostdienste", "docs/reference/batch.md", false},
+    {"Teil I – Physim mit C", "docs/c-guide.md", false},
+    {"Teil II – Physim-Sprache", "docs/physim-guide.md", false},
+    {"C-Einstieg für den Workflow", "docs/c-workflow.md", false},
+    {"Physim-Einstieg: Syntax & Werte", "docs/physim-workflow.md", false},
 };
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27
 #define DOCUMENTATION_MEASUREMENT_TOPIC 28
 #define DOCUMENTATION_TOPIC_COUNT                                                                  \
     ((int)(sizeof documentation_topics / sizeof documentation_topics[0]))
+static int documentation_learning_topic(unsigned track) {
+    const char *path=track==1?"docs/c-guide.md":"docs/physim-guide.md";
+    for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)
+        if(!strcmp(documentation_topics[i].path,path))return i;
+    return 1;
+}
+#define DOCUMENTATION_C_GUIDE_TOPIC documentation_learning_topic(1)
+#define DOCUMENTATION_PHYSIM_GUIDE_TOPIC documentation_learning_topic(2)
 static char *documentation_index[DOCUMENTATION_TOPIC_COUNT];
 static bool documentation_hits[DOCUMENTATION_TOPIC_COUNT];
 static int documentation_group(int topic) {
+    if(!strcmp(documentation_topics[topic].path,"docs/c-guide.md") ||
+       !strcmp(documentation_topics[topic].path,"docs/physim-guide.md") ||
+       !strcmp(documentation_topics[topic].path,"docs/c-workflow.md") ||
+       !strcmp(documentation_topics[topic].path,"docs/physim-workflow.md"))return 0;
     if (!strncmp(documentation_topics[topic].path, "docs/reference/", 15)) return 2;
     if (documentation_topics[topic].code &&
         !strncmp(documentation_topics[topic].path, "include/", 8)) return 4;
@@ -157,6 +173,9 @@ static void open_documentation(app *a, int topic) {
     if (!documentation_window_open(a))
         return;
     if (a->documentation && topic == a->doc_topic) {
+        if(topic==DOCUMENTATION_C_GUIDE_TOPIC)a->doc_track=1;
+        else if(topic==DOCUMENTATION_PHYSIM_GUIDE_TOPIC)a->doc_track=2;
+        else if(topic==1)a->doc_track=0;
         a->doc_error[0] = 0;
         return;
     }
@@ -179,6 +198,9 @@ static void open_documentation(app *a, int topic) {
     free(a->documentation);
     a->documentation = document;
     a->doc_topic = topic;
+    if(topic==DOCUMENTATION_C_GUIDE_TOPIC)a->doc_track=1;
+    else if(topic==DOCUMENTATION_PHYSIM_GUIDE_TOPIC)a->doc_track=2;
+    else if(topic==1)a->doc_track=0;
     a->doc_error[0] = 0;
     a->doc_scroll_x = a->doc_scroll_y = 0;
     a->doc_match = 0;
@@ -315,6 +337,20 @@ static void documentation_sidebar(app *a) {
     struct nk_context *ui = a->doc_ui;
     nk_layout_row_dynamic(ui, 28, 1);
     nk_label_colored(ui, "PHYSIM HANDBUCH", NK_TEXT_LEFT, UI_COLOR(muted));
+    nk_layout_row_dynamic(ui,32,1);
+    a->doc_track_bounds[0]=nk_widget_bounds(ui);
+    bool c_selected=a->doc_track==1;
+    if(nk_selectable_label(ui,"Teil I · C",NK_TEXT_LEFT,&c_selected)) {
+        a->doc_query[0]=a->doc_filter[0]=0;documentation_filter(a);a->doc_contents=false;
+        open_documentation(a,DOCUMENTATION_C_GUIDE_TOPIC);
+    }
+    nk_layout_row_dynamic(ui,32,1);
+    a->doc_track_bounds[1]=nk_widget_bounds(ui);
+    bool physim_selected=a->doc_track==2;
+    if(nk_selectable_label(ui,"Teil II · Physim",NK_TEXT_LEFT,&physim_selected)) {
+        a->doc_query[0]=a->doc_filter[0]=0;documentation_filter(a);a->doc_contents=false;
+        open_documentation(a,DOCUMENTATION_PHYSIM_GUIDE_TOPIC);
+    }
     nk_layout_row_dynamic(ui, 30, 2);
     if (nk_button_label(ui, "Themen"))
         a->doc_contents = false;
@@ -383,8 +419,10 @@ static void documentation_view(app *a, float height) {
     if (nk_button_label(ui, "Zurück"))
         open_documentation(a, a->doc_previous);
     nk_end_disabled(ui);
+    a->doc_home_bounds=nk_widget_bounds(ui);
     if (nk_button_label(ui, "Start"))
-        open_documentation(a, 1);
+        open_documentation(a,a->doc_track==1?DOCUMENTATION_C_GUIDE_TOPIC:
+                            a->doc_track==2?DOCUMENTATION_PHYSIM_GUIDE_TOPIC:1);
     if (nk_button_label(ui, "Arbeitsbereich"))
         SDL_RaiseWindow(a->window);
     nk_layout_row_begin(ui, NK_DYNAMIC, 32, 3);

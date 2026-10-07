@@ -2,7 +2,7 @@
 
 Alle Komponenten sind double. Matrizen sind spaltenweise gespeichert und wirken auf Spaltenvektoren; A*B führt B zuerst aus. Winkel sind Radiant. Verwende für Richtungen, Punkte und Normalen die jeweils passende Transformation. Geprüfte Operationen melden ungültige/nicht darstellbare Ergebnisse.
 
-[Anleitung und Beispiele](../math.md) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)
+[Anleitung und Beispiele](../math.md) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)
 
 Einbinden: `#include "physim/math.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.
 

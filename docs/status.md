@@ -13,6 +13,16 @@ Die Installation baut jetzt alle 63 kompilierten Sprachprodukte auch ohne
 Pipe-Leseverfahren. Die erneute Remote-CI-Abnahme steht noch aus; lokale Tests
 ersetzen diese Releasegates nicht.
 
+**Zwei vollständige Dokumentationsteile:** [Teil I: C](c-guide.md) und
+[Teil II: Physim](physim-guide.md) führen jeweils vom Sprach- und Workfloweinstieg
+über Experiment, Messung und Analyse bis zum Debugging und denselben acht
+Modelllernwegen. Das Hilfefenster bietet eigene Auswahl und Startnavigation.
+Die Einstiegsprogramme, veröffentlichten Quellen und Links bestehen auf macOS
+und Debian; beide verschobenen SDKs bestehen auch alle neun grafischen
+Beispielabläufe und die Lernweg-Navigation. Der neue Katalog umfasst 577 Fälle;
+der zuvor vollständig geprüfte Stand mit 572 Fällen bleibt gesondert dokumentiert.
+[Konkrete Nachweise](platform-validation.md).
+
 **Batch und Monte Carlo aus Analysen:** Physim 0.178.0 bindet besitzende,
 unveränderliche Serienkonfigurationen und Ergebnisse. Ein ausdrücklicher
 Host startet den vorhandenen Controller; feste Schritte, Zielzeit, adaptive

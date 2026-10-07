@@ -2,7 +2,7 @@
 
 Wähle Integrator, Zustand und Ableitung passend zum Modell. Numerische Callbacks müssen alle Komponenten setzen und frei von sichtbaren Nebenwirkungen sein. Adaptive Zwischenstufen sind keine Messzeitpunkte. Prüfe Rückgabewert und gegebenenfalls Diagnose vor Verwendung des Ergebnisses.
 
-[Anleitung und Beispiele](../numerics.md) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)
+[Anleitung und Beispiele](../numerics.md) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)
 
 Einbinden: `#include "physim/numerics.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.
 

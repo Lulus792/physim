@@ -2,7 +2,7 @@
 
 Vektoren, Rotation, Zufallsströme, Basiseinheiten und einfache Integrations-/Kollisionshelfer. Zufallsströme zuerst mit ps_rng_seed initialisieren; derselbe Seed wiederholt den Strom. ps_rng_uniform liefert Werte in (0,1). Winkel werden im Bogenmaß angegeben.
 
-[Anleitung und Beispiele](../api.md) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)
+[Anleitung und Beispiele](../api.md) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)
 
 Einbinden: `#include "physim/core.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.
 

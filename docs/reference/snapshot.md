@@ -2,7 +2,7 @@
 
 Ein Snapshot verbindet Simulationszeit, Kanalwerte, Pausestatus und die vollständige Szene. Er enthält keine geliehenen Zeiger. Der Encoder benötigt PS_SNAPSHOT_MAX beschreibbare Bytes; der Decoder validiert das gesamte Format und erhält alle Ausgaben bei Fehlern. Die versionierten Datenblöcke teilen diesen Codec mit der Runner-Pipe.
 
-[Anleitung und Beispiele](../data-format.md) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)
+[Anleitung und Beispiele](../data-format.md) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)
 
 Einbinden: `#include "physim/snapshot.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.
 

@@ -2,7 +2,7 @@
 
 Erzeuge Körper und Trägheit, summiere Kräfte/Drehmomente, integriere und löse Kontakte beziehungsweise Gelenke. SI-Einheiten und Welt-/Lokalkoordinaten beachten. Geometrische Kontaktprüfung und Impulsantwort sind getrennte Schritte. Der Lerntext enthält vollständige Abläufe für Einzelkontakte, Graphen, Gelenke, Medien und CCD.
 
-[Anleitung und Beispiele](../mechanics.md) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)
+[Anleitung und Beispiele](../mechanics.md) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)
 
 Einbinden: `#include "physim/mechanics.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.
 

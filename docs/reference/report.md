@@ -2,7 +2,7 @@
 
 Erzeuge einen Bericht, füge Diagramme/Tabellen und deren Inhalte hinzu, speichere als .psreport und zerstöre ihn. Plot- und Tabellenhandles gelten nur in ihrem eigenen Bericht. Exporte erzeugen neue Dateien. Achseneinheiten müssen zu den Daten passen; Plotvorschauen können reduziert sein.
 
-[Anleitung und Beispiele](../reports.md) · [Lernpfade](../guide.md) · [Fehlercodes](../troubleshooting.md)
+[Anleitung und Beispiele](../reports.md) · [Teil I – C](../c-guide.md) · [Fehlercodes](../troubleshooting.md)
 
 Einbinden: `#include "physim/report.h"`. Die folgenden Signaturen, Typen und SDK-Verträge sind vollständig für dieses Modul. Die SDK-Verträge sind im englischen Original wiedergegeben; die verlinkte Anleitung erklärt den Einsatz auf Deutsch. Funktionen mit `out` schreiben in Speicher des Aufrufers; konkrete Fehler- und Lebensdauerregeln stehen beim jeweiligen Vertrag.
 
