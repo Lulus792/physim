@@ -87,6 +87,9 @@ ideales Gas und isolierten Wärmeaustausch mit vollständigen Quellen beider Spr
 Der zusätzliche [Elektromagnetismus-Einstieg](electromagnetism.md) erklärt
 Ladungen, Felder und den vollständigen RC-Versuch beider Sprachen.
 
+Der zusätzliche [Wellen-/Optik-Einstieg](waves-optics.md) behandelt Oszillatoren,
+eine diskrete Saite, Reflexion, Brechung und dünne Linsen.
+
 ## Nachschlagen und weitergehen
 
 [C-API nach Aufgabe](api.md), [vollständige C-Funktionen](reference/core.md),

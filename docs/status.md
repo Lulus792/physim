@@ -8,10 +8,18 @@ der Batch-Sprachbindung bestehen auf dem Intel-Mac und unter Debian
 mit jeweils 572/572 Fällen.
 Der anschließende [Anforderungsabgleich](project-audit.md) bewahrt sämtliche
 Planpunkte und unterscheidet Implementierung, Teilnachweise und fehlende Abnahme.
-Die Installation baut jetzt alle 69 kompilierten Sprachprodukte auch ohne
+Die Installation baut jetzt alle 72 kompilierten Sprachprodukte auch ohne
 `--examples`. Windows-Prüfungen verwenden logische Textzeilen und ein portables
 Pipe-Leseverfahren. Die erneute Remote-CI-Abnahme steht noch aus; lokale Tests
 ersetzen diese Releasegates nicht.
+
+**Wellen und Optik in C und Physim:** Physim 0.181.0 ergänzt exakten Oszillator,
+Laufwelle, atomare 1D-Saitenschritte mit 4096 Rechenknoten sowie Reflexion,
+Snell/Totalreflexion und dünne Linsen. Der vollständige Lernpfad vergleicht sechs
+Gitterprofile mit diskreter Eigenmode und Kontinuum, prüft Energie und zweite
+Ordnung bei Verfeinerung und zeichnet alle Knoten des grafischen Beispiels auf.
+Physim-Ergebnisse besitzen unabhängige Arrays; Allokationsfehler und verworfene
+Schritte geben Besitzer frei. [Quellen, CFL und Modellgrenzen](waves-optics.md).
 
 **Elektromagnetismus in C und Physim:** Physim 0.180.0 bindet Punktladungsfeld,
 Potential, Lorentzkraft und ideale Widerstands-/Kondensator-/RC-Funktionen.

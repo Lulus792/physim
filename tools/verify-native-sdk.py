@@ -313,6 +313,26 @@ def main():
                      rc_analyzer,rc_analysis,rc_probe,directory])
         print("Installed SDK electromagnetism: installed/rebuilt Core, fields, Lorentz work, seven Decimal RC scenarios and 56 mixed analyses passed",flush=True)
 
+        for source in ("string_main","string_analysis"):
+            shutil.copy2(sdk / "examples/documentation" / (source+".c"),consumer / (source+".c"))
+        shutil.copy2(repo / "tests/test_string_tutorial_report.c",consumer / "string-tutorial-probe.c")
+        shutil.copy2(repo / "tests/test_waves_optics.c",consumer / "waves-optics-core-check.c")
+        shutil.copy2(repo / "tests/test_wave_array_memory.c",consumer / "wave-array-memory.c")
+        for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+            wave_core=builder.executable("waves-optics-core-"+kind,["waves-optics-core-check.c"],[archive])
+            wave_memory=builder.executable("wave-memory-"+kind,["wave-array-memory.c"],[archive])
+            checked([wave_core]);checked([wave_memory])
+            string_experiment=builder.executable("string-experiment-"+kind,["string_main.c"],[archive],module=True)
+            string_analyzer=builder.executable("string-analysis-"+kind,["string_analysis.c"],[archive],module=True)
+            string_probe=builder.executable("string-probe-"+kind,["string-tutorial-probe.c"],[archive])
+            directory=root / ("String tutorial "+kind);directory.mkdir()
+            string_language=modules["string_main"] if kind=="rebuilt" else sdk / "bin" / ("language-string_main"+module_suffix)
+            string_analysis=modules["string_analysis"] if kind=="rebuilt" else sdk / "bin" / ("language-string_analysis"+module_suffix)
+            checked([sys.executable,repo / "tests/test_string_tutorial.py",sdk / "bin" / ("physim-runner"+suffix),
+                     sdk / "bin" / ("physim-analysis-runner"+suffix),string_experiment,string_language,
+                     string_analyzer,string_analysis,string_probe,directory])
+        print("Installed SDK waves/optics: installed/rebuilt Core, 4096-node/ownership failures, six grid profiles, second-order refinement and 48 mixed analyses passed",flush=True)
+
         shutil.copy2(sdk / "examples/spring/main.c",consumer / "spring-tutorial.c")
         shutil.copy2(sdk / "examples/documentation/spring_analysis.c",consumer / "spring-tutorial-analysis.c")
         shutil.copy2(repo / "tests/test_spring_tutorial_report.c",consumer / "spring-tutorial-probe.c")
@@ -529,6 +549,7 @@ def main():
         "Saved run tutorial through installed/rebuilt Core, eight archive scenarios, sixteen mixed reports and independent analysis-only projects passed.\n" +
         "Thermodynamics through installed/rebuilt Core, independent Decimal oracles, mixed reports and extreme-value contracts passed.\n" +
         "Electromagnetism through installed/rebuilt Core, Coulomb/gradient/Lorentz tests, seven RC Decimal oracles and mixed reports passed.\n" +
+        "Waves/optics through installed/rebuilt Core, Snell/TIR/lens invariants, owned 4096-node grids, allocation failures and mixed string reports passed.\n" +
         "Both complete C/Physim learning routes, eight paired model source groups and executable language introductions passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
         ("Eight C template GUI workflows, the complete Physim language GUI workflow and independent documentation route navigation passed.\n" if args.app_tests else ""), encoding="utf-8")

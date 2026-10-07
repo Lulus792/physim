@@ -1705,6 +1705,40 @@
       "libraries": [
         "core"
       ]
+    },
+    "string-model-c": {
+      "sources": [
+        "examples/documentation/string_main.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ]
+    },
+    "string-model-phys": {
+      "source": "examples/documentation/string_main.phys",
+      "mode": "--emit-experiment"
+    },
+    "string-analysis-c": {
+      "sources": [
+        "examples/documentation/string_analysis.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ]
+    },
+    "string-analysis-phys": {
+      "source": "examples/documentation/string_analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "string-report-probe": {
+      "sources": [
+        "tests/test_string_tutorial_report.c"
+      ],
+      "libraries": [
+        "core"
+      ]
     }
   },
   "tests": [
@@ -6517,6 +6551,52 @@
           "arguments": [
             "{root}/tests/check_tutorial_sources.py",
             "documentation_rc_source"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "string_tutorial",
+      "targets": [
+        "python",
+        "physim-runner",
+        "physim-analysis-runner",
+        "string-model-c",
+        "string-model-phys",
+        "string-analysis-c",
+        "string-analysis-phys",
+        "string-report-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_string_tutorial.py",
+            "{physim-runner}",
+            "{physim-analysis-runner}",
+            "{string-model-c}",
+            "{string-model-phys}",
+            "{string-analysis-c}",
+            "{string-analysis-phys}",
+            "{string-report-probe}",
+            "{work}"
+          ],
+          "timeout": 180
+        }
+      ]
+    },
+    {
+      "name": "documentation_string_source",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tutorial_sources.py",
+            "documentation_string_source"
           ],
           "timeout": 30
         }

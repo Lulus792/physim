@@ -254,3 +254,9 @@ Wärmekapazität, Wärmefluss und exakte thermische Relaxation ohne versteckte Z
 `physim/electromagnetism.h` liefert homogene Punktladungsfelder und Potentiale,
 Lorentzkraft, ideale Widerstände, Kondensatorenergie und exakte RC-Schritte.
 [SI-Vertrag, Grenzen und vollständige Beispiele](electromagnetism.md).
+
+## Wellen und Optik
+
+`physim/waves.h` liefert Oszillator, Saitengeschwindigkeit, Laufwelle und atomaren
+1D-Gitterschritt. `physim/optics.h` liefert Reflexion, Snell-Brechung und dünne Linsen.
+[Verträge, Modellgrenzen und vollständige Quellen](waves-optics.md).

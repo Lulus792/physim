@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-07",
-  "inspected_revision": "d4d3d1e19ac29dd47daf0475c34d07aab02057f5",
+  "inspected_revision": "8755399316ab85f8a275b997c620c9d8d4c04107",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2830,11 +2830,21 @@
       "kind": "list",
       "scope": "later",
       "text": "- **Wellen/Optik:** Oszillatoren, Wellenausbreitung, geometrische Optik.\n",
-      "status": "incomplete",
+      "status": "implemented",
       "evidence": [
-        "include/physim/"
+        "include/physim/waves.h",
+        "include/physim/optics.h",
+        "src/waves.c",
+        "src/optics.c",
+        "include/physim/language_waves_optics.h",
+        "docs/waves-optics.md",
+        "tests/test_waves_optics.c",
+        "tests/test_wave_array_memory.c",
+        "tests/test_string_tutorial.py",
+        "tools/verify-native-sdk.py",
+        "docs/platform-validation.md"
       ],
-      "note": "Keine eigenständigen Module für diese angekündigte Domäne vorhanden; langfristiger Umfang bleibt erhalten."
+      "note": "SI-Einstieg für exakten harmonischen Oszillator, harmonische Laufwelle, tatsächliche 1D-Gitterausbreitung mit 4096 Rechenknoten und CFL-Prüfung, Reflexion, Snell/Totalreflexion und paraxiale dünne Linsen. Vollständige C-/Physim-Saite mit aufgezeichneten Knoten, Eigenmode/Kontinuum/refinement und gemischten Analysen. Höherdimensionale/nichtlineare Medien, Beugung, Fresnelamplituden und die gesamte Produkt-/Plattformabnahme werden damit nicht behauptet."
     },
     {
       "id": "PP-0415",

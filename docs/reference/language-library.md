@@ -3661,6 +3661,16 @@ Benannte Szenengruppe mit eindeutiger ID; parent 0 erzeugt eine Wurzel. Nur im s
 
 Experimentmodul erforderlich.
 
+## harmonicStep
+
+```text
+harmonicStep(state: Vec2, omega: Float64, dt: Float64) -> Vec2
+```
+
+Exakter undämpfter Oszillator mit Vec2.x=Position in m und y=Geschwindigkeit in m/s; omega>0 in rad/s, dt≥0.
+
+Überall verfügbar.
+
 ## heatCapacity
 
 ```text
@@ -4078,6 +4088,26 @@ rcVoltageStep(resistance: Float64, capacitance: Float64, voltage: Float64, sourc
 ```
 
 Exakter Spannungsschritt eines konstanten RC-Serienkreises mit konstanter Quelle: dt≥0, positiver Widerstand und Kapazität. Keine Zeitschritt-Stabilitätsgrenze; Fehler sind mit attempt abfangbar.
+
+Überall verfügbar.
+
+## reflectRay
+
+```text
+reflectRay(incident: Vec3, normal: Vec3) -> Vec3
+```
+
+Reflektiert eine Unit-Richtung an einer Unit-Normale in das Einfallsmedium; Normalenorientierung wird geprüft.
+
+Überall verfügbar.
+
+## refractRay
+
+```text
+refractRay(incident: Vec3, normal: Vec3, incidentIndex: Float64, transmittedIndex: Float64) -> Vec3
+```
+
+Berechnet eine Unit-Richtung nach Snell für positive Indizes. Bei Totalreflexion entsteht eine abfangbare Singularitätsdiagnose; Reflexion muss ausdrücklich gewählt werden.
 
 Überall verfügbar.
 
@@ -4751,6 +4781,16 @@ Aktuelle Hostzeit in Sekunden; beim Eintritt in step die Zeit vor dem Schritt.
 
 Experimentmodul erforderlich.
 
+## simulationTimeStep
+
+```text
+simulationTimeStep() -> Float64
+```
+
+Liest das aktuell konfigurierte positive dt in s aus dem Experimentcontext, auch bei create/reset. Nur im Experimenthost; variable Intervalle sind dadurch kein erlaubter Leapfrog-Zeitschritt.
+
+Experimentmodul erforderlich.
+
 ## sin
 
 ```text
@@ -4801,6 +4841,26 @@ Linearer Stokes-Widerstand für relative Geschwindigkeit in m/s, dynamische Visk
 
 Überall verfügbar.
 
+## stringWaveSpeed
+
+```text
+stringWaveSpeed(tension: Float64, linearDensity: Float64) -> Float64
+```
+
+Berechnet sqrt(T/μ) in m/s aus positiver Spannungskraft in N und linearer Dichte in kg/m.
+
+Überall verfügbar.
+
+## stringWaveStep
+
+```text
+stringWaveStep(previous: [Float64], current: [Float64], speed: Float64, dx: Float64, dt: Float64) -> [Float64]
+```
+
+Erzeugt ein neues besitzendes Float64-Array für einen zentrierten 1D-Saitenschritt. Gleiche 3–4096 Knotenanzahl, endliche Meterwerte, feste Nullränder, konstantes dt und c dt/dx≤1. Eingabekopien bleiben unabhängig; Fehler sind abfangbar.
+
+Überall verfügbar.
+
 ## tan
 
 ```text
@@ -4828,6 +4888,26 @@ thermalReservoirStep(capacity: Float64, temperature: Float64, reservoirTemperatu
 ```
 
 Exakte Temperatur nach dt an einem Reservoir fester Temperatur: konstante Kapazität und Leitwert, kein Zeitschritt-Stabilitätslimit. Kelvin; G und dt dürfen null sein.
+
+Überall verfügbar.
+
+## thinLensImage
+
+```text
+thinLensImage(focalLength: Float64, objectDistance: Float64) -> Vec2
+```
+
+Paraxiale dünne Linse: Vec2.x signierte Bildweite in m, y Vergrößerung. Positive Objektweite und signierte nonzero Brennweite; am Fokus liegt das Bild im Unendlichen und erzeugt eine abfangbare Singularitätsdiagnose.
+
+Überall verfügbar.
+
+## travelingWave
+
+```text
+travelingWave(amplitude: Float64, wavenumber: Float64, omega: Float64, phase: Float64, position: Float64, time: Float64) -> Vec3
+```
+
+Wertet A sin(kx-ωt+φ) aus: Vec3.x Verschiebung in m, y Geschwindigkeit in m/s, z dimensionslose Steigung. k,ω>0; keine Dispersion wird implizit gewählt.
 
 Überall verfügbar.
 

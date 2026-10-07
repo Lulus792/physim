@@ -1,0 +1,72 @@
+// Same linear string, fixed endpoints and leapfrog initialization as string_main.c.
+let one = Unit(0,0,0,0,0,0,0,1,"1")
+let metre = Unit(1,0,0,0,0,0,0,1,"m")
+let newton = Unit(1,1,-2,0,0,0,0,1,"N")
+let densityUnit = Unit(-1,1,0,0,0,0,0,1,"kg/m")
+let joule = Unit(2,1,-2,0,0,0,0,1,"J")
+let countValue = parameterWithUnit("nodes",one,65,17,65,"Odd nodes across string (17..65)")
+let modeValue = parameterWithUnit("mode",one,1,1,4,"Standing wave mode (1..4)")
+let length = parameterWithUnit("length",metre,1,0.1,10,"String length in m")
+let amplitude = parameterWithUnit("amplitude",metre,0.05,0,1,"Initial amplitude in m")
+let tension = parameterWithUnit("tension",newton,1,0.0001,100,"Constant tension in N")
+let density = parameterWithUnit("linearDensity",densityUnit,1,0.0001,100,"Linear density in kg/m")
+let nodes = Int64(countValue)
+let mode = Int64(modeValue)
+let speed = stringWaveSpeed(tension,density)
+let dx = length/Float64(nodes-1)
+let interval = simulationTimeStep()
+let courant = speed*interval/dx
+let pi = 3.14159265358979323846
+let theta = 2*asin(courant*sin(Float64(mode)*pi/(2*Float64(nodes-1))))
+let centerChannel = Channel("displacement.center",metre,"displacement.center")
+let referenceChannel = Channel("reference.center",metre,"reference.center")
+let errorChannel = Channel("error.center",metre,"error.center")
+let energyChannel = Channel("energy.discrete",joule,"energy.discrete")
+let courantChannel = Channel("courant",one,"courant")
+let nodesChannel = Channel("nodes",one,"nodes")
+var previous: [Float64] = []
+var current: [Float64] = []
+var elapsed = 0.0
+func measure():
+    var energy = 0.0
+    for j in 1..<(nodes-1):
+        let velocity = (current[j]-previous[j])/interval
+        energy += 0.5*density*dx*velocity*velocity
+    for j in 0..<(nodes-1):
+        energy += 0.5*tension/dx*(current[j+1]-current[j])*(previous[j+1]-previous[j])
+    let reference = amplitude*sin(Float64(mode)*pi*0.5)*cos(speed*Float64(mode)*pi/length*elapsed)
+    let center = current[nodes/2]
+    centerChannel.sample(center)
+    referenceChannel.sample(reference)
+    errorChannel.sample(center-reference)
+    energyChannel.sample(energy)
+    courantChannel.sample(courant)
+    nodesChannel.sample(Float64(nodes))
+func create():
+    assert(Float64(nodes) == countValue && nodes%2 == 1 && Float64(mode) == modeValue,"Integer mode and odd node count required")
+    assert(courant <= 1,"String requires c*dt/dx <= 1")
+    metadata("model=linear fixed-endpoint string\nintegrator=centered second-order leapfrog\ninitial_velocity=zero; previous mode initialized with cos(theta)\nstability=c*dt/dx<=1; constant dt\nenergy=half-step kinetic plus cross-time gradient potential\nexcluded=damping,forcing,variable medium,nonlinear stretch,2D/3D PDE\n")
+    reset()
+func reset():
+    previous = []
+    current = []
+    for j in 0..<nodes:
+        var displacement = amplitude*sin(Float64(mode)*pi*Float64(j)/Float64(nodes-1))
+        if j == 0 || j == nodes-1:
+            displacement = 0
+        current.append(displacement)
+        previous.append(displacement*cos(theta))
+    elapsed = 0
+    measure()
+func step(dt: Float64):
+    assert(abs(dt-interval) <= 8*2.220446049250313e-16*interval,"String requires constant dt")
+    let next = stringWaveStep(previous,current,speed,dx,dt)
+    previous = current
+    current = next
+    elapsed += dt
+    measure()
+func scene():
+    var points: [Vec3] = []
+    for j in 0..<nodes:
+        points.append(Vec3(Float64(j)*dx-length*0.5,current[j],0))
+    polyline(points,0.002,0x53aeefff,1)

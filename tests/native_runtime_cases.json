@@ -1470,6 +1470,19 @@
       "source": "let e = pointChargeField(1,Vec3(0,0,0),Vec3(0,0,0),1)\n",
       "exit_code": 70,
       "stderr_pattern": "electromagnetism_singular\\.phys:1:[0-9]+: runtime error:.*singular"
+    },
+    {
+      "name": "waves_optics",
+      "source_file": "examples/language/waves_optics.phys",
+      "exit_code": 0,
+      "stdout": "Waves/optics oscillator, owned string snapshots, CFL errors, Snell/TIR and lens values passed\n",
+      "stderr": ""
+    },
+    {
+      "name": "waves_cfl_error",
+      "source": "let next = stringWaveStep([0.0,1.0,0.0],[0.0,1.0,0.0],1,1,2)\n",
+      "exit_code": 70,
+      "stderr_pattern": "waves_cfl_error\\.phys:1:[0-9]+: runtime error:.*CFL"
     }
   ]
 }

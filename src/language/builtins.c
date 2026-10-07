@@ -49,6 +49,13 @@
 #define SWEEP PS_TYPE_SWEEP
 #define AABB PS_TYPE_AABB
 static const ps_lang_builtin library[] = {
+    {"harmonicStep", "psrt_harmonic_step", V2, 3, 0, {V2,F,F}, {"state","omega","dt"}},
+    {"stringWaveSpeed", "psrt_string_speed", F, 2, 0, {F,F}, {"tension","linearDensity"}},
+    {"travelingWave", "psrt_traveling_wave", V3, 6, 0, {F,F,F,F,F,F}, {"amplitude","wavenumber","omega","phase","position","time"}},
+    {"stringWaveStep", "psrt_string_wave_step", PS_LANG_FLOAT_ARRAY, 5, 0, {PS_LANG_FLOAT_ARRAY,PS_LANG_FLOAT_ARRAY,F,F,F}, {"previous","current","speed","dx","dt"}},
+    {"reflectRay", "psrt_ray_reflect", V3, 2, 0, {V3,V3}, {"incident","normal"}},
+    {"refractRay", "psrt_ray_refract", V3, 4, 0, {V3,V3,F,F}, {"incident","normal","incidentIndex","transmittedIndex"}},
+    {"thinLensImage", "psrt_thin_lens", V2, 2, 0, {F,F}, {"focalLength","objectDistance"}},
     {"vacuumPermittivity", "psrt_vacuum_permittivity", F, 0, 0, {0}, {NULL}},
     {"pointChargeField", "psrt_charge_field", V3, 4, 0, {F,V3,V3,F}, {"charge","source","point","permittivity"}},
     {"pointChargePotential", "psrt_charge_potential", F, 4, 0, {F,V3,V3,F}, {"charge","source","point","permittivity"}},
@@ -528,6 +535,7 @@ static const ps_lang_builtin library[] = {
     {"logWarning","psrt_log_warning",PS_TYPE_BOOL,1,1,{S},{"message"}},
     {"logError","psrt_log_error",PS_TYPE_BOOL,1,1,{S},{"message"}},
     {"metadata", "psrt_metadata", VOID, 1, 1, {S}, {"text"}},
+    {"simulationTimeStep", "psrt_time_step", F, 0, 1, {0}, {NULL}},
     {"simulationTime", "psrt_time", F, 0, 1, {0}, {0}},
     {"runSeed", "psrt_run_seed", I, 0, 1, {0}, {0}},
     {"parameter", "psrt_parameter", F, 5, 1,

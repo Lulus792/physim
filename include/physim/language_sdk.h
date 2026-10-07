@@ -9,6 +9,7 @@
 #include "language_mechanics.h"
 #include "language_thermodynamics.h"
 #include "language_electromagnetism.h"
+#include "language_waves_optics.h"
 #include "language_constraints.h"
 #include "language_contact_world.h"
 #include "language_batch.h"
@@ -929,6 +930,11 @@ static inline void psrt_metadata(psrt_host *host, const char *text, psrt_site si
         psrt_fail(site, "Model metadata capacity exceeded");
     host->context->model_metadata[used++] = '\n';
     memcpy(host->context->model_metadata + used, text, size + 1);
+}
+static inline double psrt_time_step(psrt_host *host, psrt_site site) {
+    if(!host || !host->context || !isfinite(host->context->dt_s) || host->context->dt_s<=0)
+        psrt_fail(site,"Simulation time step requires a positive configured experiment interval");
+    return host->context->dt_s;
 }
 static inline double psrt_time(psrt_host *host, psrt_site site) {
     return psrt_finite(host->context->time_s, site);

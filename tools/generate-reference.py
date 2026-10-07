@@ -12,6 +12,8 @@ from reference_descriptions import DESCRIPTIONS
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULES = {
+    'waves': ('Oszillatoren und eindimensionale Wellen', 'waves-optics.md', 'Exakter undämpfter Oszillator, ideale Saitengeschwindigkeit, harmonische Laufwelle und diskrete 1D-Wellengleichung mit festen Nullrändern. Der allokationsfreie Saitenschritt prüft CFL und übernimmt Ausgaben erst nach vollständigem Erfolg.'),
+    'optics': ('Geometrische Optik', 'waves-optics.md', 'Reflexion, Snell-Brechung mit ausdrücklicher Totalreflexion und paraxiale dünne Linsen. Unit-Richtungen und Normalen, explizite Brechungsindizes und signierte Bildweiten. Keine automatische Strahlverfolgung, Fresnelamplituden oder Beugung.'),
     'electromagnetism': ('Elektromagnetismus und RC-Schaltungen', 'electromagnetism.md', 'Reine SI-Funktionen für homogene Punktladungsfelder, Potential, Lorentzkraft, Widerstände, Kondensatorenergie und exakte RC-Schritte. Modelle liefern Permittivität und Feldwerte ausdrücklich; Singularität und Fehler bewahren Ausgaben. Kein Maxwell- oder beliebiger Netzwerk-Solver.'),
     'thermodynamics': ('Thermodynamik: ideales Gas und Wärmefluss', 'thermodynamics.md', 'SI-Werte, Kelvin, konstante Wärmekapazitäten und explizite lineare Leitwerte. Ideale Zustandsgrößen, Energie und Entropiedifferenzen sowie exakte Reservoir-/Zweikörperrelaxation. Keine Allokation, kein impliziter Integrator und keine Stofftabellen; Fehler erhalten Ausgaben.'),
     'batch': ('Archivierte Serien und Analyse-Hostdienste', 'batch-language.md', 'Ein expliziter Analysehost stellt versionierte, synchrone Batch-Dienste bereit. Requests beschreiben getrennte Runner mit SI-Parametern, Seeds, Zeit- und Speichergrenzen. Ergebnisse enthalten validierte Teilfortschritte und Messstatus. Der Core startet keine Prozesse; der Analyse-Runner liefert die Dienste über den optionalen run_host-Tail. Geliehene Dienstzeiger leben nur während dieses Aufrufs.'),
@@ -97,6 +99,14 @@ def c_reference(module, title, guide, intro):
 
 
 LANG_DESCRIPTIONS = {
+    'harmonicStep': 'Exakter undämpfter Oszillator mit Vec2.x=Position in m und y=Geschwindigkeit in m/s; omega>0 in rad/s, dt≥0.',
+    'stringWaveSpeed': 'Berechnet sqrt(T/μ) in m/s aus positiver Spannungskraft in N und linearer Dichte in kg/m.',
+    'travelingWave': 'Wertet A sin(kx-ωt+φ) aus: Vec3.x Verschiebung in m, y Geschwindigkeit in m/s, z dimensionslose Steigung. k,ω>0; keine Dispersion wird implizit gewählt.',
+    'stringWaveStep': 'Erzeugt ein neues besitzendes Float64-Array für einen zentrierten 1D-Saitenschritt. Gleiche 3–4096 Knotenanzahl, endliche Meterwerte, feste Nullränder, konstantes dt und c dt/dx≤1. Eingabekopien bleiben unabhängig; Fehler sind abfangbar.',
+    'reflectRay': 'Reflektiert eine Unit-Richtung an einer Unit-Normale in das Einfallsmedium; Normalenorientierung wird geprüft.',
+    'refractRay': 'Berechnet eine Unit-Richtung nach Snell für positive Indizes. Bei Totalreflexion entsteht eine abfangbare Singularitätsdiagnose; Reflexion muss ausdrücklich gewählt werden.',
+    'thinLensImage': 'Paraxiale dünne Linse: Vec2.x signierte Bildweite in m, y Vergrößerung. Positive Objektweite und signierte nonzero Brennweite; am Fokus liegt das Bild im Unendlichen und erzeugt eine abfangbare Singularitätsdiagnose.',
+    'simulationTimeStep': 'Liest das aktuell konfigurierte positive dt in s aus dem Experimentcontext, auch bei create/reset. Nur im Experimenthost; variable Intervalle sind dadurch kein erlaubter Leapfrog-Zeitschritt.',
     'vacuumPermittivity': 'Liefert die gemessene Vakuumpermittivität nach CODATA 2022 in F/m, keine exakte SI-Konstante.',
     'pointChargeField': 'Berechnet das elektrische Feld einer Punktladung in V/m in einem homogenen unendlichen Medium mit ausdrücklich angegebener Permittivität. Am Quellpunkt entsteht eine abfangbare Singularitätsdiagnose.',
     'pointChargePotential': 'Berechnet q/(4π ε r) in V mit Nullpunkt im Unendlichen, ohne Softening oder Grenzflächen.',

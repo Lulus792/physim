@@ -45,7 +45,7 @@ static int report(const char *prefix, unsigned inputs) {
     uint32_t plots, tables;
     CHECK(ps_report_describe(r, NULL, provenance, &plots, &tables) == PS_OK);
     CHECK(plots == inputs * 2 && tables == 0 &&
-          strstr(provenance, "language=physim-0.180.0\ncompiler=physimc-0.1.0-dev") &&
+          strstr(provenance, "language=physim-0.181.0\ncompiler=physimc-0.1.0-dev") &&
           strstr(provenance, "source_fnv1a64="));
     ps_curve_data curve;
     CHECK(ps_report_curve_read(r, 1, 0, &curve) == PS_OK && curve.count == 5);

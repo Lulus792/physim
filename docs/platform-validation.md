@@ -3,6 +3,70 @@
 Stand: 7. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Wellen/Optik und Physim 0.181.0 am 7. Oktober 2026
+
+Die neuen SI-Module liefern exakten undämpften Oszillator, harmonische Laufwelle,
+ideale Saitengeschwindigkeit, tatsächliche 1D-Gitterausbreitung, Reflexion,
+Snell/Totalreflexion und paraxiale dünne Linsen. Der Saitenschritt prüft feste
+Nullränder, endliche Arrays und c dt/dx≤1. Ein begrenzter Stackpuffer erhält
+Ausgaben bei jedem Fehler und unterstützt Input-/Output-Aliasing.
+Physim bindet neue besitzende Arrays; `simulationTimeStep()` liest das positive
+Experimentintervall zur konsistenten Initialisierung. [Vertrag und Quellen](waves-optics.md).
+
+Die 13 ausgewählten Release-Prüfungen bestehen auf Intel macOS/Apple Clang 16
+unter `build/contact-world-language-release-mac/test-results/run-376butxe`
+und Debian 12/GCC 12.2 unter
+`build/contact-world-language-release-linux/test-results/run-zt7k3szw`.
+Fünf Linux-Clang-14-ASan/UBSan-Fälle bestehen unter
+`build/waves-asan-linux/test-results/run-tdeorpv8`.
+Die Coreprüfungen kontrollieren Oszillatorenergie, Laufphase, diskrete Eigenmode,
+CFL/Aliasing, Zahlenextreme, Snell/Totalreflexion und Linsenvorzeichen.
+Sowohl C als auch Physim führen den maximalen 4096-Knoten-Schritt tatsächlich aus.
+Ein unabhängiger Allocator prüft jeden Ergebnis-Allokationsfehler, unabhängige
+Besitzer, verworfene CFL-Ergebnisse und Grenzprüfungen vor Allokation.
+
+Der vollständige Saitenprüfer kontrolliert 2.412 Gittermessungen in sechs Profilen,
+24 gemischte C-/Physim-Analysen, CRC/Footer, SI-Metadaten, sämtliche aufgezeichneten
+Knoten, diskrete Energie und zweite Ordnung bei gemeinsamer Raum-/Zeitverfeinerung.
+Das grafische Beispiel begrenzt sich ausdrücklich auf 65 Knoten, damit jeder
+Knoten in den bestehenden 96-Punkte-Szenenpool passt. Der Core unterstützt
+weiterhin 4096 Rechenknoten; größere Darstellungen sind damit nicht behauptet.
+
+Neun bestehende Sprach-/Experiment-/Analyse-/Sensor-/Paritätsprüfungen bestehen
+auf macOS unter `run-408xrijj` und Linux unter `run-sjqtbz6d` in den genannten
+Release-Testordnern. Das Hilfefenster besteht unter `run-ki17aa0h` auf macOS und
+`run-_uqacd5p` auf Linux; alle 28 generierten Referenzen sind geprüft.
+Der Katalog umfasst nun 596 Fälle ohne Fenster, 581 ohne SDL und 66 Fensterfälle.
+Die Katalogzahl ersetzt keinen vollständigen aktuellen Gesamtlauf.
+
+Beide endgültigen SDKs bestehen die vollständigen isolierten 53-Dateien-Kitprüfungen,
+einschließlich aller neun grafischen Projektabläufe und der Dokumentationsnavigation:
+
+- macOS: `build/waves-sdk-proof-mac/Native SDK ä d8e6xesj`.
+- Linux: `build/waves-sdk-proof-linux/Native SDK ä eob21v02`.
+
+Sie bauen alle öffentlichen Header, 22 Standalone-Programme und 50 Sprachmodule
+nach und prüfen Wellen/Optik gegen installierten und neu aufgebauten Core:
+4.824 Gittermessungen und 48 gemischte Analysen je SDK, zusätzlich 4096-Knoten-
+und Allokationsfehlerprüfungen. Die endgültigen Pakete
+`build/Waves optics clean SDK ä mac` und `build/Waves optics clean SDK ä linux`
+enthalten 416 Manifestdateien und 72 kompilierte Sprachprodukte. Alle 297
+Code-/Beispieldateien stimmen byteweise mit den geprüften SDK-Kopien überein;
+die Apps stimmen mit den geprüften Release-Binaries überein. Zum Abschluss
+werden nur Dokumentation und Manifest aktualisiert. Die neue Remote-Matrix
+bleibt ein eigenständiger Nachweis.
+
+Für den [vorherigen Elektromagnetismus-Commit `8755399`](https://github.com/PhysicSimulator/physim/actions/runs/37573088919)
+sind tatsächliche Windows-v143-Debug- und ClangCL-Debug-/Release-Jobs erfolgreich.
+Dies ist keine Abnahme der neuen Wellen-/Optikfunktionen; die aktuelle
+Remote-Matrix bleibt gesondert erforderlich.
+
+Vor der Freigabe von Linux-VM-Speicher ist der frühere generierte Prüfordner
+`build/em-sdk-proof-linux` vollständig auf dem Mac gesichert. Alle 12.765
+regulären Dateien stimmen per SHA-256 mit ihren ursprünglichen Werten überein.
+Lokal erhaltenes Archiv `build/em-sdk-proof-linux-evidence.tar.gz`, SHA-256
+`bb0792203d3dcd07e5fd5db9e51df80cd23003166a11635ff50251ee45fdabf4`.
+
 ## Elektromagnetismus und Physim 0.180.0 am 7. Oktober 2026
 
 Das neue SI-Modul liefert homogene Punktladungsfelder/Potentiale, Lorentzkraft,

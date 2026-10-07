@@ -248,5 +248,26 @@
         "language": "physim"
       }
     ]
+  },
+  "documentation_string_source": {
+    "document": "docs/waves-optics.md",
+    "sources": [
+      {
+        "path": "examples/documentation/string_main.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/string_main.phys",
+        "language": "physim"
+      },
+      {
+        "path": "examples/documentation/string_analysis.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/string_analysis.phys",
+        "language": "physim"
+      }
+    ]
   }
 }
