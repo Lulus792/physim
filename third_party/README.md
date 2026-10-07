@@ -23,6 +23,12 @@ included as `licenses/zlib-LICENSE.txt` in the portable package.
 
 ## Nuklear snapshot
 
+The local text command uses a C17 flexible array for its dynamically allocated
+text tail. UBSan exposed fixed `char[2]` indexing beyond the declared member
+during actual rendered UTF-8 labels; the existing allocation already reserves
+all text bytes and the terminating NUL. The change corrects the declaration
+without weakening bounds instrumentation.
+
 Official source: <https://github.com/Immediate-Mode-UI/Nuklear>.
 Vendored source snapshot retrieved 2026-09-16. Files are committed, never downloaded
 implicitly at build time. License text: `Nuklear-LICENSE`; the MIT alternative is used.
@@ -52,7 +58,7 @@ requiring an installed font. The affected routine is also present in the
 Local patch (2026-09-28): undo/redo collapses the current selection to the restored
 cursor. A selection into removed text previously reached the renderer with invalid
 bounds. `editor_clipboard` and the SDL editor regression cover this case.
-Patched header SHA-256 (LF): 39e5cb4d2da72c77dfebc42eb64959825dc243f209c74eaac792f4150b4dc936.
+Patched header SHA-256 (LF): 90ac8f20dd76de59fb5a2b83732c284bc3ffb4fe7b4555c604138071bddbb8de.
 
 `nuklear_sdl3_renderer.h` is retained as the upstream `demo/sdl3_renderer` reference;
 it is no longer compiled into Physim. Input and clipboard handling in `app/ui_sdl.c`
@@ -64,3 +70,10 @@ OpenGL 3.3 rendering for both Nuklear and the 3D scene.
 CMake's `InstallRequiredSystemLibraries` includes the redistributable Visual C++
 runtime from the installed Visual Studio toolchain. These binaries retain their
 Microsoft license; the Physim MIT license does not apply to them.
+
+## Linux system D-Bus
+
+The Linux app links dynamically against the system `libdbus-1.so.3` for its
+AT-SPI provider. Development builds use the distribution’s `dbus-1` pkg-config
+metadata; Linux packages declare `libdbus-1-3` as a runtime dependency.
+The library is not vendored, copied into the SDK, or linked into the core.

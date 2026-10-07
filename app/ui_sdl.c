@@ -100,6 +100,9 @@ struct nk_context *nk_sdl_init(SDL_Window *window, ps_graphics *graphics) {
     }
     return &sdl->ctx;
 }
+bool nk_sdl_accessibility_available(struct nk_context *ctx) {
+    return ctx && ctx->userdata.ptr && ((struct nk_sdl *)ctx->userdata.ptr)->accessibility_native;
+}
 bool nk_sdl_accessibility_press(struct nk_context *ctx,const char *label) {
     if(!ctx || !ctx->userdata.ptr)return false;
     struct nk_sdl *sdl=ctx->userdata.ptr;

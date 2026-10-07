@@ -101,6 +101,7 @@ def catalog():
         Case("project_file", ("tests/test_project_file.c",), ("project", "core"),
              arguments=("{work}",), app=True),
         Case("ui_geometry", ("tests/test_ui_geometry.c", "app/ui_geometry.c", "app/ui_backend.c"), app=True),
+        Case("ui_text_tail", ("tests/test_ui_text_tail.c", "app/ui_backend.c"), app=True),
         Case("editor_clipboard", ("tests/test_editor_clipboard.c", "app/ui_backend.c"), app=True),
         Case("font_shape", ("tests/test_font_shape.c",), app=True),
         Case("library", ("tests/test_library.c", "app/library.c"), app=True),
@@ -157,6 +158,8 @@ def catalog():
     if integrations.get("format") != 1 or not integrations["tests"]:
         raise RuntimeError("Unsupported or empty integration test corpus")
     for record in integrations["tests"]:
+        if record.get("platforms") and sys.platform not in record["platforms"]:
+            continue
         if not record["steps"] or not record["targets"]:
             raise RuntimeError(f"Empty integration test: {record['name']}")
         artifacts = {name: integrations["artifacts"][name] for name in record["targets"]}
@@ -248,7 +251,8 @@ def integration_steps(record, builder, libraries, source, work, steps):
             try:
                 program = builder.executable("integration-" + name, artifact["sources"],
                                              [libraries[key] for key in artifact["libraries"]],
-                                             defines=tuple(artifact.get("defines", ())), module=artifact.get("module", False))
+                                             defines=tuple(artifact.get("defines", ())), module=artifact.get("module", False),
+                                             sdl=artifact.get("sdl", False))
             except (OSError, RuntimeError) as error:
                 steps.append({"status": "build_failed", "reason": str(error)})
                 return

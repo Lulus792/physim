@@ -4877,7 +4877,7 @@ struct nk_command_text {
     unsigned short w, h;
     float height;
     int length;
-    char string[2];
+    char string[]; /* C17 flexible tail; allocation includes length + NUL. */
 };
 
 enum nk_command_clipping {

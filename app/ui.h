@@ -40,6 +40,7 @@ void nk_sdl_window_raise(struct nk_context *ctx, const char *name);
 void nk_sdl_shutdown(struct nk_context *ctx);
 bool nk_sdl_test_input(SDL_Window *window, ps_graphics *graphics);
 bool nk_sdl_accessibility_press(struct nk_context *ctx,const char *label);
+bool nk_sdl_accessibility_available(struct nk_context *ctx);
 void nk_sdl_set_ui_size(struct nk_context *ctx, unsigned size);
 enum { PS_UI_LAYOUT_MAGIC = 0x50534C59u };
 typedef bool (*ps_ui_a11y_hook)(void *user,const char *window,const char *label,

@@ -23,7 +23,7 @@ WINDOWS = sys.platform == "win32"
 MAC = sys.platform == "darwin"
 CORE = "core memory array string_view hashmap math data run_index snapshot analysis scene numerics units series report report_export mechanics contact_world box_contacts collision measurement thermodynamics electromagnetism waves optics fluid properties".split()
 LANGUAGE = "lexer parser checker emitter builtins".split()
-APP = "accessibility accessibility_native main timeline docking layout_catalog channel_units run_import ui_backend ui_sdl ui_geometry graphics documentation library preferences workspace_state workspace_catalog workspace_tree plot_view report_image png".split()
+APP = "accessibility accessibility_native accessibility_atspi main timeline docking layout_catalog channel_units run_import ui_backend ui_sdl ui_geometry graphics documentation library preferences workspace_state workspace_catalog workspace_tree plot_view report_image png".split()
 PROJECT = "project_file text_document autosave parameter_catalog".split()
 ZLIB = "adler32 crc32 deflate trees zutil".split()
 EXAMPLES = "pendulum projectile collision box_floor spring uncertain_projectile box_collision buoyancy".split()
@@ -283,6 +283,8 @@ class Builder:
                 command.append("-DNDEBUG")
             if self.sanitizers:
                 command += ["-fsanitize=address,undefined", "-fno-sanitize-recover=all", "-fno-omit-frame-pointer"]
+            if not MAC and path.name == "accessibility_atspi.c":
+                command += run(["pkg-config", "--cflags", "dbus-1"], self.env, capture=True).split()
             command += [str(path), "-o", str(temporary)]
         if self.fuzzing:
             command.append("-fsanitize=fuzzer-no-link")
@@ -349,6 +351,8 @@ class Builder:
                 command += ["-Wl,-rpath,@executable_path" if MAC else "-Wl,-rpath,$ORIGIN"]
             if MAC and (name in ("physim","physim-ui-benchmark") or any(str(p).endswith("accessibility_native.c") for p in sources)):
                 command += ["-framework","AppKit","-framework","CoreGraphics","-lobjc"]
+            if not MAC and any(str(p).endswith("accessibility_atspi.c") for p in sources):
+                command += run(["pkg-config", "--libs", "dbus-1"], self.env, capture=True).split()
             if module:
                 command += ["-bundle", "-Wl,-undefined,error"] if MAC else ["-shared"]
         if self.execute(output, command, inputs, sign=MAC):
@@ -362,7 +366,7 @@ class Builder:
             return self.executable(name, ["tools/benchmark.c"], [libraries["platform"], libraries["core"]])
         if name == "physim-ui-benchmark":
             return self.executable(name, ["tools/ui_benchmark.c", "app/graphics.c", "app/ui_geometry.c",
-                                         "app/ui_backend.c", "app/ui_sdl.c", "app/accessibility.c", "app/accessibility_native.c", "app/png.c"],
+                                         "app/ui_backend.c", "app/ui_sdl.c", "app/accessibility.c", "app/accessibility_native.c", "app/accessibility_atspi.c", "app/png.c"],
                                    [libraries["platform"], libraries["zlib"], libraries["core"]],
                                    sdl=True, defines=("Z_PREFIX",))
         raise RuntimeError(f"Unknown benchmark target: {name}")

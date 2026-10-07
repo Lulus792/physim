@@ -3234,3 +3234,131 @@ gezielten Modell-, Sanitizer-, Native-, GUI- und Paketprüfungen besitzen den
 jeweils beschriebenen Umfang. Grundlegender Zugang auf allen drei Plattformen,
 komplexe Controltypen, Fokus und tatsächliche Screenreader-Bedienung bleiben
 weiterhin offen.
+
+
+## Linux-AT-SPI und asynchrone UI-Aktionen (PP-0710)
+
+Ausgangspunkt ist `b1d678cb6221eeb41775857c7508407542a09e53`. Linux besitzt
+jetzt eine libdbus-Anbindung für die vorhandenen einfachen Buttons und Texte.
+Ein unabhängiger PyAT-SPI-Client entdeckt zwei tatsächlich gerenderte
+SDL-/Nuklear-Fenster über die Registry und prüft UTF-8, Rollen, Eltern,
+Fenster-/Bildschirmrahmen, Hit-Tests, Bulk-Cache, native Buttonaktionen und
+Zustands-/Entfernungsereignisse. Ungültige RPC-Signaturen, Zahlenüberläufe in
+Objektpfaden und schreibgeschützte Properties werden ausdrücklich geprüft.
+Die App bleibt ohne Bus sowie mit `NO_AT_BRIDGE=1` nutzbar.
+
+Unter Debian 12/X11, Clang 14 Debug mit AddressSanitizer und
+UndefinedBehaviorSanitizer besteht diese Prüfung nach den unten beschriebenen
+Korrekturen **1/1** in `build/atspi-asan-linux/test-results/run-4sg6kclt`
+(`build/atspi-race-asan-linux.log`). `ASAN_OPTIONS=detect_leaks=0` betrifft
+SDL/Mesa-Leaks; Address-/UndefinedBehavior-Prüfungen bleiben aktiv. Die
+isolierte D-Bus-Sitzung verwendet temporäre GSettings und einen ausdrücklich
+zugeordneten Accessibility-Bus, damit X11-Sitzungsdaten keine andere
+Testsitzung auswählen.
+
+Die erste Instrumentierung belegte einen C17-Grenzfehler in der vendorten
+Nuklear-Struktur: `nk_draw_text` schrieb über `char string[2]` hinaus, obwohl
+der Befehlsbuffer bereits dynamisch genug Speicher reservierte. Ein echtes
+flexibles Array `char string[]` beschreibt jetzt diese Speicherung korrekt.
+Die neue Gegenprobe prüft eine vollständige 1500-Byte-UTF-8-Nutzlast samt NUL.
+Ein weiterer Lauf belegte eine echte Timing-Lücke: Nach dem Zeichnen
+angenommene Aktionen wurden beim Veröffentlichen gelöscht. Sie bleiben nun
+für den nächsten Besuch eines weiterhin vorhandenen, aktivierten Controls
+erhalten; verschwundene/deaktivierte Ziele verwerfen sie. Eine deterministische
+Modellprüfung deckt diesen Übergang und die einmalige Zustellung ab.
+
+Die Linux-ASan-/UBSan-Prüfungen für Modell, Textbefehle, UI-Geometrie und
+Clipboard bestehen **4/4** in `run-c8w74e68`; das frühere Textpuffer-Ergebnis
+`run-vrhrjna7` lag noch vor der Aktionskorrektur. Auf Intel-macOS bestehen die
+vier Release-Prüfungen in `run-zv47b3bg`, die zwei tatsächlichen AppKit-/UI-
+Prüfungen nach der Textpufferkorrektur in `run-colyd17p`. Der zusätzlich mit
+Apple Clang/C17/Werror gebaute Modelltest mit Aktionskorrektur besteht in
+`build/atspi-model-mac.log`. Der macOS-Sanitizer-Aufruf wurde wegen fehlendem
+`ld64.lld` vor dem Build abgewiesen und zählt nicht als ausgeführte Prüfung.
+
+Die frühen Fehlversuche bleiben erhalten: falscher Statusobjektpfad
+`run-vc5gg8bf`; Busadress-/Cacheprobleme `run-wofa__h8`, `run-zqx281r6`;
+Clientbehandlung veralteter Interfaces `run-8j42i9ay`; lokale Python-
+Signaturprüfung `run-lbuqeen1`; ungetrennte X11-Buswahl `run-fpyigr37`;
+Nuklear-Grenzfehler `run-30hri577`/`run-hxak4vac`; verlorene späte Aktion
+`run-e_nqfms8`. Die beiden letzten waren Implementierungsfehler und wurden
+behoben, ohne Sanitizer auszuschalten oder Wartezeiten zu verlängern.
+Die Release-Gegenprobe für geprüfte Objektpfade vor der zusätzlichen
+Fallback-/Aktionskorrektur bestand in `run-6wyxse59`.
+
+Dieser Nachweis gilt für Debian/X11 und Intel-macOS. Vollständige Orca-/
+VoiceOver-Bedienung, Wayland, Fokus, Textfelder und weitere Widgets sowie
+Windows/UI Automation bleiben offen. PP-0710 bleibt unvollständig; der gesamte
+Projektplan wird damit nicht abgenommen.
+
+
+Die zusätzliche externe Gegenprobe für Elternkoordinaten belegte anschließend
+noch einen Hit-Test-Fehler: Das Elternobjekt eines Fensters verwendet
+Bildschirmkoordinaten, das Elternobjekt seiner Controls Fensterkoordinaten.
+Die Child-Gegenprobe wird jetzt im Koordinatenraum des Aufrufers ausgeführt.
+`build/atspi-parent-before-2.log` hält die fehlgeschlagene echte Clientassertion
+fest; der erste Harness-Aufruf (`atspi-parent-before.log`) scheiterte bereits
+am fehlenden Legacy-PyAT-SPI-Namen für den standardisierten Koordinatentyp 2.
+Die komplette externe Prüfung inklusive Fenster-, Bildschirm- und Eltern-Hit-
+Tests besteht danach unter ASan/UBSan **1/1** in `run-fk9dyxub`
+(`build/atspi-parent-final-asan-linux.log`).
+
+
+Der vollständige Intel-macOS-Release-Fensterlauf besteht **79/79** in
+`run-ogg1ybol` (`build/atspi-all-gui-mac.log`), einschließlich aller 68
+Projektmanager-Kombinationen mit 16/22-Pixel-Schrift. Sein App-Binary wurde vor
+der zusätzlichen späten Aktionskorrektur gebaut; diese wird separat durch den
+finalen Modell-/Native-/SDK-Nachweis geprüft. Der Nuklear-Textpuffer war bereits
+korrigiert. Dadurch wird der breite GUI-Lauf nicht als neuer vollständiger
+Core- oder plattformübergreifender Screenreader-Nachweis umgedeutet.
+
+Für freien Linux-Prüfspeicher wurde ausschließlich der abgeschlossene ältere
+`Linear systems SDK ä linux lk2mfuc5`-Prüflauf archiviert. Das Archiv
+`build/atspi-linear-archived-proofs.tar.gz` enthält **14617 Dateien/Verweise**,
+ist **313895774 Byte** groß und besitzt SHA-256
+`883b00c02b36bb6941e467e025387a9e19dcb9d9096271d3ae0529bced278986`.
+Jeder Inhalt wurde gegen das Originalinventar geprüft, die Originale vor dem
+Entfernen nochmals vollständig geprüft, und die spätere Linux-Archivkopie
+hat denselben Hash. Archiv und Inventar liegen auf Mac und Linux. Wiederherstellung
+entpackt die archivierten `build/`-Pfade; der vorherige SDK-Nachweis bleibt damit
+nachprüfbar. Receipts: `build/atspi-linear-archived-proof-inventory.json`,
+`atspi-linear-archive-verified.json`, `atspi-linear-archive-removed.json` und
+`atspi-linear-archive-linux-copy-verified.json`. Der erste gleichzeitige SCP-
+Transfer wurde vor Beginn mit einem SSH-Bannerfehler abgewiesen; der serielle
+Transfer und seine Hashprüfung waren erfolgreich.
+
+
+Am **8. Oktober 2026** bestehen die finalen AppKit-/UI-Prüfungen mit der
+späten Aktionskorrektur **2/2** in `run-k5qmbdrk`
+(`build/atspi-final-native-mac.log`). Das frisch gebaute und nach
+`AT-SPI SDK ä mac 0er2rk56/Relocated SDK ä` verschobene SDK besteht seine
+Manifest-/Bytegleichheitsprüfung für 450 SDK-Dateien, das unabhängige
+Verification-Kit mit 95 Dateien sowie echte
+Menü-, Einstellungs- und Handbuch-GUI-Abläufe. Receipt:
+`build/atspi-sdk-mac-PASSED.json`. Die unveränderten UI-/Build-/Guide-Eingaben
+sind in `build/atspi-source-freeze.json` festgehalten; diese fortgeschriebene
+Prüfchronik ist bewusst nicht Teil des Freeze. Die Paketprüfung ist gezielt
+und ersetzt keinen neuen vollständigen Core- oder Screenreader-Lauf.
+
+
+Der vollständige Debian/GCC-Release-Fensterlauf besteht **78/78** in
+`run-38r48_zv` (`build/atspi-all-gui-linux.log`), einschließlich aller 68
+Projektmanager-Kombinationen und des finalen externen AT-SPI-Clients. Das
+App-Binary dieses breiten Laufs enthält die Aktions-/Textpufferkorrekturen,
+wurde aber vor der zusätzlichen Eltern-Hit-Test-Korrektur gebaut. Die letzte
+native Fixture wurde anschließend mit der korrigierten Implementierung gebaut
+und geprüft; die ASan-/UBSan-Gegenprobe `run-fk9dyxub` deckt denselben finalen
+Hit-Test-Code ab. Ein aktuelles Linux-SDK wird danach aus diesem Code neu gebaut.
+
+
+Das am 8. Oktober frisch gebaute Debian/GCC-Release-SDK wurde nach
+`AT-SPI SDK ä linux chlu_b3p/Relocated SDK ä` verschoben. Alle **450 SDK-Dateien**
+und **95 Kit-Dateien** stimmen mit ihren Manifesten überein; der App-Binary
+ist bytegleich mit dem finalen frischen Build. `ldd` löst `libdbus-1.so.3`
+auf und zeigt keine fehlende Bibliothek. Menü, Einstellungen und Handbuch
+bestehen danach als tatsächliche GUI-Abläufe aus dem verschobenen Paket.
+Alle sechs aufgezeichneten Schritte (Install, Kit, Linkage, drei GUI-Abläufe)
+bestehen; Receipt: `build/atspi-sdk-linux-PASSED.json`, zusammen mit dem
+macOS-Receipt und den 21 unveränderten Dateien in
+`build/atspi-source-freeze.json`. Dies ergänzt die native externe Clientprüfung,
+behauptet aber keine praktische Screenreader- oder vollständige Core-Abnahme.

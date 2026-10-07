@@ -2505,4 +2505,6 @@ Ein erster nativer macOS-Accessibility-Baum für sichtbare einfache Schaltfläch
 und statische Texte ergänzt die bestehende Tastaturführung. Kopierte Snapshots,
 stabile Kennungen und sichere native Press-Aktionen werden tatsächlich geprüft.
 [Umfang und verbleibende Arbeit](accessibility.md) halten vollständige VoiceOver-,
-Linux-/Windows-Anbindungen und weitere Controltypen ausdrücklich offen.
+Windows-Anbindung und weitere Controltypen ausdrücklich offen. Linux bietet
+nun einen AT-SPI-Einstieg für denselben Controlumfang mit externem Clientnachweis
+unter Debian/X11; Wayland und praktische Orca-Bedienung bleiben offen.

@@ -1934,6 +1934,28 @@
     "linear-range-language": {
       "source": "tests/fixtures/language/linear_range.phys",
       "mode": "--emit-c"
+    },
+    "accessibility-atspi-fixture": {
+      "sources": [
+        "tests/accessibility_atspi_fixture.c",
+        "app/accessibility.c",
+        "app/accessibility_native.c",
+        "app/accessibility_atspi.c",
+        "app/ui_backend.c",
+        "app/ui_sdl.c",
+        "app/ui_geometry.c",
+        "app/graphics.c",
+        "app/png.c"
+      ],
+      "libraries": [
+        "platform",
+        "zlib",
+        "core"
+      ],
+      "sdl": true,
+      "defines": [
+        "Z_PREFIX"
+      ]
     }
   },
   "tests": [
@@ -7724,6 +7746,31 @@
             "{root}/tests/fixtures/linear_range_cases.json",
             "--fixture",
             "{root}/tests/fixtures/language/linear_range.phys"
+          ],
+          "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "accessibility_atspi",
+      "platforms": [
+        "linux"
+      ],
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "accessibility-atspi-fixture"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_accessibility_atspi.py",
+            "--fixture",
+            "{accessibility-atspi-fixture}",
+            "--work",
+            "{work}"
           ],
           "timeout": 120
         }

@@ -187,7 +187,7 @@ bool ps_a11y_native_test(SDL_Window *window) {
  ps_a11y_native_destroy(b);okay &= !((BOOL(*)(id,SEL))objc_msgSend)(element,sel_registerName("accessibilityPerformPress"));
  send0(element,"release");free(model);return okay;
 }
-#else
+#elif !defined(__linux__)
 struct ps_a11y_native {int unused;};
 ps_a11y_native *ps_a11y_native_create(SDL_Window *window,ps_a11y_model *model,SDL_Mutex *mutex) {(void)window;(void)model;(void)mutex;return NULL;}
 void ps_a11y_native_publish(ps_a11y_native *bridge,bool changed) {(void)bridge;(void)changed;}

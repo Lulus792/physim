@@ -61,5 +61,9 @@ bool ps_a11y_publish(ps_a11y_model *m) {
   changed=a->id!=b->id || a->enabled!=b->enabled || memcmp(a->bounds,b->bounds,sizeof a->bounds)!=0;
  }
  memcpy(m->nodes,m->draft,m->draft_count*sizeof *m->nodes);m->count=m->draft_count;
- m->pending_press=0;m->building=false;return changed;
+ /* A dispatcher may queue after this control was already recorded. Keep that
+  * activation for its next visit, provided publication still exposes it. */
+ const ps_a11y_node *pending=ps_a11y_find(m,m->pending_press);
+ if(!pending || pending->role!=PS_A11Y_BUTTON || !pending->enabled)m->pending_press=0;
+ m->building=false;return changed;
 }

@@ -22,8 +22,9 @@ programmatische Fokusführung benötigen weitere semantische Anbindungen.
 Die bestehende Sichtbarkeits-/Deaktivierungslogik wird berücksichtigt, sodass
 dieser Einstieg keine Aktivierung gesperrter oder momentan schreibgeschützter
 UI-Bereiche ermöglicht. Eine vollständige praktische VoiceOver-Abnahme steht
-noch aus. Linux/AT-SPI und Windows/UI Automation sind noch nicht angebunden.
-Die portable Modellprüfung allein beweist keinen Screenreader-Zugang dort.
+noch aus. Windows/UI Automation ist noch nicht angebunden. Linux besitzt jetzt den
+unten beschriebenen AT-SPI-Einstieg.
+Die portable Modellprüfung allein beweist keinen praktischen Screenreader-Zugang.
 
 ## Modell und Prüfumfang
 
@@ -50,3 +51,44 @@ Rahmen, Aktionen und zurückbehaltene Referenzen.
 `tests/test_accessibility_ui.c` prüft den Weg von gezeichneten Nuklear-Controls
 über native Aktionen zurück zur tatsächlichen Button-Auswertung. Diese
 Prüfungen ersetzen keine Abnahme mit einem laufenden Screenreader.
+
+
+## Linux über AT-SPI
+
+Die App registriert einen gemeinsamen Anwendungsroot am Accessibility-Bus.
+Hauptfenster und Handbuch sind getrennte Fenster mit eigenen Objektpfaden;
+sichtbare Texte und einfache Buttons verwenden denselben geprüften Frame-
+Snapshot wie macOS. Rollen, UTF-8-Namen, Zustände, Index-/Elternbeziehungen,
+Fenster-/Bildschirmrahmen und Hit-Tests werden über die Standardinterfaces
+`Accessible`, `Application`, `Component` und bei Buttons `Action` angeboten.
+Ein Bulk-Cache und Ereignisse für hinzugefügte/entfernte Controls, Zustände und
+Rahmen halten Clientansichten aktuell. Eine fremde oder veraltete Kennung,
+ein verborgenes Fenster oder ein deaktivierter Button aktiviert nichts.
+
+Der Busdispatcher läuft in einem eigenen Thread. Er greift unter den
+festgelegten Server-/Modellmutexen auf kopierte Werte zu; Aktionen werden
+weiterhin im normalen UI-Frame angenommen. Eine erst nach dem Zeichnen
+eingetroffene Aktion bleibt für den nächsten Besuch eines weiterhin sichtbaren,
+aktivierten Controls erhalten; entfernte oder gesperrte Ziele verwerfen sie. Beim Schließen eines Fensters
+werden seine Objekte entfernt. Die letzte Fensterfreigabe beendet Dispatcher
+und Busverbindung. Ohne passenden Accessibility-Bus bleibt die normale GUI
+verfügbar. `NO_AT_BRIDGE=1` deaktiviert diese Desktop-Anbindung ausdrücklich.
+
+Es gibt höchstens acht native Fenster pro Prozess und die bestehenden 256
+Elemente/1023 Label-Byte je Modell. Fokus, komplexe Widgets und vollständige
+Text-/Editorinterfaces bleiben offen. Bildschirmkoordinaten werden nur
+geliefert, wenn SDL die Fensterposition kennt; anderenfalls folgt ein
+`NotSupported`-Fehler statt einer erfundenen Position. Der bisher ausgeführte
+Clientnachweis verwendet X11/Xvfb unter Debian. Wayland und praktische Orca-
+Bedienung sind dadurch noch nicht abgenommen. Ein unterbrochener Bus wird
+nicht automatisch neu verbunden; ein Neustart stellt die Anbindung wieder her.
+
+[Die AT-SPI-Registry](https://gnome.pages.gitlab.gnome.org/at-spi2-core/devel-docs/doc-org.a11y.atspi.Socket.html),
+[Accessible](https://gnome.pages.gitlab.gnome.org/at-spi2-core/devel-docs/doc-org.a11y.atspi.Accessible.html),
+[Component](https://gnome.pages.gitlab.gnome.org/at-spi2-core/devel-docs/doc-org.a11y.atspi.Component.html) und
+[Cache](https://gnome.pages.gitlab.gnome.org/at-spi2-core/devel-docs/doc-org.a11y.atspi.Cache.html)
+sind die primären Protokollquellen. `tests/test_accessibility_atspi.py` verwendet
+den unabhängigen PyAT-SPI-Client und explizite D-Bus-Gegenproben an zwei
+tatsächlich gezeichneten Fenstern. Er prüft getrennte gleichnamige Buttons,
+native UI-Aktionen, Zustands-/Cacheänderungen, verborgene Fenster, unzulässige
+RPC-Signaturen und schreibgeschützte Properties.

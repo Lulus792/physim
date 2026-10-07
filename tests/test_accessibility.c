@@ -13,6 +13,12 @@ int main(void) {
  CHECK(!ps_a11y_press(m,m->nodes[1].id));CHECK(ps_a11y_press(m,button));CHECK(!ps_a11y_press(m,button));
  box[0]=200;ps_a11y_begin(m);CHECK(ps_a11y_record(m,"main","Öffnen …",PS_A11Y_BUTTON,box,true));
  ps_a11y_publish(m);CHECK(m->nodes[0].id==button && !m->pending_press);
+ /* Simulate an asynchronous native action after drawing, before publish. */
+ ps_a11y_begin(m);CHECK(!ps_a11y_record(m,"main","Öffnen …",PS_A11Y_BUTTON,box,true));
+ CHECK(ps_a11y_press(m,button));ps_a11y_publish(m);CHECK(m->pending_press==button);
+ ps_a11y_begin(m);CHECK(ps_a11y_record(m,"main","Öffnen …",PS_A11Y_BUTTON,box,true));
+ CHECK(!ps_a11y_record(m,"main","Öffnen …",PS_A11Y_BUTTON,box,true));
+ ps_a11y_publish(m);CHECK(!m->pending_press);
  CHECK(ps_a11y_press(m,button));ps_a11y_begin(m);
  CHECK(!ps_a11y_record(m,"main","Öffnen …",PS_A11Y_BUTTON,box,false));ps_a11y_publish(m);CHECK(!ps_a11y_press(m,button));
  ps_a11y_begin(m);ps_a11y_publish(m);CHECK(!ps_a11y_find(m,button));CHECK(!ps_a11y_press(m,button));

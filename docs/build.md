@@ -898,3 +898,29 @@ Die macOS-CI verschiebt das Paket in einen Pfad mit Leerzeichen und Umlaut und
 prüft daraus vollständige C- und Physim-Sprachprojekte.
 Erfolgreich geprüfte Pakete stehen im jeweiligen CI-Lauf als
 `physim-native-macos-15` (Apple Silicon) oder `physim-native-macos-15-intel` bereit.
+
+
+### Linux-Accessibility bauen und prüfen
+
+Die App verwendet libdbus für die native AT-SPI-Anbindung. Unter Debian/Ubuntu
+benötigt ein App-Build zusätzlich `pkg-config` und `libdbus-1-dev`; der Core-
+Build ohne App benötigt diese Header und Bibliothek nicht. Ausgelieferte
+Linux-Pakete verwenden die systemeigene `libdbus-1.so.3`, bereits als
+Runtime-Abhängigkeit aufgeführt. Eine fehlende Desktop-/Accessibility-
+Bussitzung verhindert den normalen GUI-Start nicht.
+
+Die unabhängige Clientprüfung benötigt `python3-pyatspi`, `at-spi2-core` und
+`dbus-x11` sowie einen laufenden X11-Desktop. Sie benutzt eine eigene D-Bus-
+Sitzung, einen ausdrücklich zugeordneten Accessibility-Bus und temporäre
+GSettings, damit Tests keine Desktop-Einstellungen verändern.
+
+```sh
+python3 tools/build.py --config Release --test-display --test-filter accessibility_atspi
+python3 tools/build.py --config Debug --compiler clang --sanitizers --test-display --test-filter accessibility_atspi
+```
+
+Bei SDL/Mesa-Grafiktests kann `ASAN_OPTIONS=detect_leaks=0` gesetzt werden;
+Address-/UndefinedBehavior-Prüfungen bleiben aktiv. Die separate Modell-/
+Textbefehlsprüfung ohne Fenster läuft zusätzlich unter Sanitizern.
+[Verträge und Plattformgrenzen](accessibility.md) unterscheiden diesen
+Clientnachweis von einer praktischen Orca-/Screenreader-Abnahme.

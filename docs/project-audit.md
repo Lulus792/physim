@@ -255,6 +255,9 @@ Sichtbare einfache Buttons und statische Texte besitzen native Rollen, Labels,
 Rahmen und sichere Press-Aktionen. [Umfang und Grenzen](accessibility.md)
 unterscheiden die ausgeführten Modell-/Native-/UI-Prüfungen von einer
 praktischen Screenreader-Abnahme. Textfelder, Menüs, Regler, Editoren, Fokus
-und beide anderen Plattformbrücken bleiben offen. PP-0710 bleibt unvollständig;
+und Windows/UI Automation bleiben offen. Linux besitzt inzwischen denselben
+begrenzten Einstieg über AT-SPI; ein externer PyAT-SPI-Client prüft zwei
+gezeichnete Fenster, echte Buttonaktionen, Cache-/Zustandsänderungen und
+ungültige Anfragen. Wayland und praktische Orca-Bedienung bleiben offen. PP-0710 bleibt unvollständig;
 die Zahl implementierter Planblöcke und der vollständige Planumfang ändern sich
 durch diesen Einstieg nicht.
