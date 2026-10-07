@@ -12,6 +12,7 @@ from reference_descriptions import DESCRIPTIONS
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULES = {
+    'electromagnetism': ('Elektromagnetismus und RC-Schaltungen', 'electromagnetism.md', 'Reine SI-Funktionen für homogene Punktladungsfelder, Potential, Lorentzkraft, Widerstände, Kondensatorenergie und exakte RC-Schritte. Modelle liefern Permittivität und Feldwerte ausdrücklich; Singularität und Fehler bewahren Ausgaben. Kein Maxwell- oder beliebiger Netzwerk-Solver.'),
     'thermodynamics': ('Thermodynamik: ideales Gas und Wärmefluss', 'thermodynamics.md', 'SI-Werte, Kelvin, konstante Wärmekapazitäten und explizite lineare Leitwerte. Ideale Zustandsgrößen, Energie und Entropiedifferenzen sowie exakte Reservoir-/Zweikörperrelaxation. Keine Allokation, kein impliziter Integrator und keine Stofftabellen; Fehler erhalten Ausgaben.'),
     'batch': ('Archivierte Serien und Analyse-Hostdienste', 'batch-language.md', 'Ein expliziter Analysehost stellt versionierte, synchrone Batch-Dienste bereit. Requests beschreiben getrennte Runner mit SI-Parametern, Seeds, Zeit- und Speichergrenzen. Ergebnisse enthalten validierte Teilfortschritte und Messstatus. Der Core startet keine Prozesse; der Analyse-Runner liefert die Dienste über den optionalen run_host-Tail. Geliehene Dienstzeiger leben nur während dieses Aufrufs.'),
     'contact_world': ('Persistente Kontakte und Warmstart', 'contact-world.md', 'Ein expliziter, caller-eigener Kontaktzustand erzeugt diskrete Kugel-/Box-/Ebenenkontakte. Stabile Collider-IDs und lokale Anker ordnen Kontakte zwischen erfolgreichen Schritten zu; alte Impulse werden zeitabhängig skaliert und im aktuellen Coulomb-Kegel gelöst. Keine Heapallokation, keine automatische Integration oder CCD. Körper, Cache und Ergebnisse bleiben bei Fehlern unverändert.'),
@@ -96,6 +97,17 @@ def c_reference(module, title, guide, intro):
 
 
 LANG_DESCRIPTIONS = {
+    'vacuumPermittivity': 'Liefert die gemessene Vakuumpermittivität nach CODATA 2022 in F/m, keine exakte SI-Konstante.',
+    'pointChargeField': 'Berechnet das elektrische Feld einer Punktladung in V/m in einem homogenen unendlichen Medium mit ausdrücklich angegebener Permittivität. Am Quellpunkt entsteht eine abfangbare Singularitätsdiagnose.',
+    'pointChargePotential': 'Berechnet q/(4π ε r) in V mit Nullpunkt im Unendlichen, ohne Softening oder Grenzflächen.',
+    'lorentzForce': 'Berechnet q(E+v×B) in N für vorgegebene SI-Felder und nichtrelativistische Geschwindigkeit. Keine automatische Integration oder Strahlungsreaktion.',
+    'resistorCurrent': 'Berechnet I=V/R in A für einen positiven idealen Widerstand in ohm.',
+    'resistorVoltage': 'Berechnet V=IR in V, mit signiertem Strom.',
+    'resistorPower': 'Berechnet die nichtnegative Verlustleistung V²/R in W.',
+    'seriesResistance': 'Addiert zwei strikt positive Widerstände, Ergebnis in ohm.',
+    'parallelResistance': 'Berechnet den Gesamtwiderstand zweier positiver Parallelwiderstände ohne Zwischenüberlauf.',
+    'capacitorEnergy': 'Berechnet 0,5 C V² in J für eine positive Kapazität in F.',
+    'rcVoltageStep': 'Exakter Spannungsschritt eines konstanten RC-Serienkreises mit konstanter Quelle: dt≥0, positiver Widerstand und Kapazität. Keine Zeitschritt-Stabilitätsgrenze; Fehler sind mit attempt abfangbar.',
     'idealGasPressure': 'Berechnet p=nRT/V in Pa für positive Stoffmenge, Kelvin und Volumen in m³.',
     'idealGasVolume': 'Berechnet V=nRT/p in m³ für ein ideales Gas.',
     'idealGasTemperature': 'Berechnet T=pV/(nR) in Kelvin für ein ideales Gas.',
@@ -229,6 +241,7 @@ LANG_DESCRIPTIONS = {
     'acos': 'Arkuskosinus eines Werts in [-1, 1], Ergebnis in Radiant.',
     'atan': 'Arkustangens eines Werts, Ergebnis in Radiant.',
     'atan2': 'Winkel des Vektors (x, y) in Radiant; beide Komponenten dürfen nicht zugleich null sein.',
+    'expm1': 'Berechnet exp(x)-1 ohne Auslöschung für kleine x; nicht endliche Ergebnisse sind Laufzeitfehler.',
     'exp': 'Exponentialfunktion zur Basis e; nicht endliche Ergebnisse sind Laufzeitfehler.',
     'clamp': 'Begrenzt value auf das inklusive Intervall. Wenn lower größer als upper ist, entsteht ein Laufzeitfehler mit Quellposition.',
     'min': 'Kleinerer Wert; bei Gleichheit bleibt der linke Wert erhalten.',

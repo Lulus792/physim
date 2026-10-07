@@ -49,6 +49,17 @@
 #define SWEEP PS_TYPE_SWEEP
 #define AABB PS_TYPE_AABB
 static const ps_lang_builtin library[] = {
+    {"vacuumPermittivity", "psrt_vacuum_permittivity", F, 0, 0, {0}, {NULL}},
+    {"pointChargeField", "psrt_charge_field", V3, 4, 0, {F,V3,V3,F}, {"charge","source","point","permittivity"}},
+    {"pointChargePotential", "psrt_charge_potential", F, 4, 0, {F,V3,V3,F}, {"charge","source","point","permittivity"}},
+    {"lorentzForce", "psrt_lorentz_force", V3, 4, 0, {F,V3,V3,V3}, {"charge","electric","velocity","magnetic"}},
+    {"resistorCurrent", "psrt_resistor_current", F, 2, 0, {F,F}, {"voltage","resistance"}},
+    {"resistorVoltage", "psrt_resistor_voltage", F, 2, 0, {F,F}, {"current","resistance"}},
+    {"resistorPower", "psrt_resistor_power", F, 2, 0, {F,F}, {"voltage","resistance"}},
+    {"seriesResistance", "psrt_resistance_series", F, 2, 0, {F,F}, {"first","second"}},
+    {"parallelResistance", "psrt_resistance_parallel", F, 2, 0, {F,F}, {"first","second"}},
+    {"capacitorEnergy", "psrt_capacitor_energy", F, 2, 0, {F,F}, {"capacitance","voltage"}},
+    {"rcVoltageStep", "psrt_rc_step", F, 5, 0, {F,F,F,F,F}, {"resistance","capacitance","voltage","sourceVoltage","dt"}},
     {"idealGasPressure", "psrt_gas_pressure", F, 3, 0, {F,F,F}, {"amount","temperature","volume"}},
     {"idealGasVolume", "psrt_gas_volume", F, 3, 0, {F,F,F}, {"amount","temperature","pressure"}},
     {"idealGasTemperature", "psrt_gas_temperature", F, 3, 0, {F,F,F}, {"amount","pressure","volume"}},
@@ -322,6 +333,7 @@ static const ps_lang_builtin library[] = {
     {"acos", "psrt_acos", F, 1, 0, {F}, {"value"}},
     {"atan", "psrt_atan", F, 1, 0, {F}, {"value"}},
     {"atan2", "psrt_atan2", F, 2, 0, {F, F}, {"y", "x"}},
+    {"expm1", "psrt_expm1", F, 1, 0, {F}, {"value"}},
     {"exp", "psrt_exp", F, 1, 0, {F}, {"value"}},
     {"log", "psrt_log", F, 1, 0, {F}, {"value"}},
     {"log10", "psrt_log10", F, 1, 0, {F}, {"value"}},

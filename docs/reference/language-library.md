@@ -3431,6 +3431,16 @@ Auftrieb entgegen der Schwerkraft aus Dichte in kg/m³, verdrängtem Volumen in 
 
 Überall verfügbar.
 
+## capacitorEnergy
+
+```text
+capacitorEnergy(capacitance: Float64, voltage: Float64) -> Float64
+```
+
+Berechnet 0,5 C V² in J für eine positive Kapazität in F.
+
+Überall verfügbar.
+
 ## ceil
 
 ```text
@@ -3618,6 +3628,16 @@ exp(value: Float64) -> Float64
 ```
 
 Exponentialfunktion zur Basis e; nicht endliche Ergebnisse sind Laufzeitfehler.
+
+Überall verfügbar.
+
+## expm1
+
+```text
+expm1(value: Float64) -> Float64
+```
+
+Berechnet exp(x)-1 ohne Auslöschung für kleine x; nicht endliche Ergebnisse sind Laufzeitfehler.
 
 Überall verfügbar.
 
@@ -3841,6 +3861,16 @@ Schreibt eine Warnung mit aktueller Simulationszeit; verändert weder Modellzust
 
 Experimentmodul erforderlich.
 
+## lorentzForce
+
+```text
+lorentzForce(charge: Float64, electric: Vec3, velocity: Vec3, magnetic: Vec3) -> Vec3
+```
+
+Berechnet q(E+v×B) in N für vorgegebene SI-Felder und nichtrelativistische Geschwindigkeit. Keine automatische Integration oder Strahlungsreaktion.
+
+Überall verfügbar.
+
 ## maskSeries
 
 ```text
@@ -3911,6 +3941,16 @@ Kopiert das Ausgabeprefix des laufenden Analysehosts in einen besitzenden String
 
 Analysemodul erforderlich.
 
+## parallelResistance
+
+```text
+parallelResistance(first: Float64, second: Float64) -> Float64
+```
+
+Berechnet den Gesamtwiderstand zweier positiver Parallelwiderstände ohne Zwischenüberlauf.
+
+Überall verfügbar.
+
 ## parameter
 
 ```text
@@ -3950,6 +3990,26 @@ point(position: Vec3, radius: Float64, color: Int64, id: Int64) -> Void
 Punktmarker an position. Nur in scene verwenden. Farbe: dezimales RRGGBBAA, etwa 1407107839; ID 0 ist anonym, andere IDs müssen pro Szene eindeutig sein.
 
 Experimentmodul erforderlich.
+
+## pointChargeField
+
+```text
+pointChargeField(charge: Float64, source: Vec3, point: Vec3, permittivity: Float64) -> Vec3
+```
+
+Berechnet das elektrische Feld einer Punktladung in V/m in einem homogenen unendlichen Medium mit ausdrücklich angegebener Permittivität. Am Quellpunkt entsteht eine abfangbare Singularitätsdiagnose.
+
+Überall verfügbar.
+
+## pointChargePotential
+
+```text
+pointChargePotential(charge: Float64, source: Vec3, point: Vec3, permittivity: Float64) -> Float64
+```
+
+Berechnet q/(4π ε r) in V mit Nullpunkt im Unendlichen, ohne Softening oder Grenzflächen.
+
+Überall verfügbar.
 
 ## polyline
 
@@ -4011,6 +4071,16 @@ Zieht aus dem reproduzierbaren Laufzufallsstrom zwischen min und max.
 
 Experimentmodul erforderlich.
 
+## rcVoltageStep
+
+```text
+rcVoltageStep(resistance: Float64, capacitance: Float64, voltage: Float64, sourceVoltage: Float64, dt: Float64) -> Float64
+```
+
+Exakter Spannungsschritt eines konstanten RC-Serienkreises mit konstanter Quelle: dt≥0, positiver Widerstand und Kapazität. Keine Zeitschritt-Stabilitätsgrenze; Fehler sind mit attempt abfangbar.
+
+Überall verfügbar.
+
 ## report
 
 ```text
@@ -4020,6 +4090,36 @@ report(title: String) -> Void
 Setzt den Titel des Analyseberichts.
 
 Analysemodul erforderlich.
+
+## resistorCurrent
+
+```text
+resistorCurrent(voltage: Float64, resistance: Float64) -> Float64
+```
+
+Berechnet I=V/R in A für einen positiven idealen Widerstand in ohm.
+
+Überall verfügbar.
+
+## resistorPower
+
+```text
+resistorPower(voltage: Float64, resistance: Float64) -> Float64
+```
+
+Berechnet die nichtnegative Verlustleistung V²/R in W.
+
+Überall verfügbar.
+
+## resistorVoltage
+
+```text
+resistorVoltage(current: Float64, resistance: Float64) -> Float64
+```
+
+Berechnet V=IR in V, mit signiertem Strom.
+
+Überall verfügbar.
 
 ## rk45Integrate
 
@@ -4621,6 +4721,16 @@ Prüft die Gültigkeit am nullbasierten Zeilenindex; ungültige Handles oder Ind
 
 Analysemodul erforderlich.
 
+## seriesResistance
+
+```text
+seriesResistance(first: Float64, second: Float64) -> Float64
+```
+
+Addiert zwei strikt positive Widerstände, Ergebnis in ohm.
+
+Überall verfügbar.
+
 ## seriesValidity
 
 ```text
@@ -4718,6 +4828,16 @@ thermalReservoirStep(capacity: Float64, temperature: Float64, reservoirTemperatu
 ```
 
 Exakte Temperatur nach dt an einem Reservoir fester Temperatur: konstante Kapazität und Leitwert, kein Zeitschritt-Stabilitätslimit. Kelvin; G und dt dürfen null sein.
+
+Überall verfügbar.
+
+## vacuumPermittivity
+
+```text
+vacuumPermittivity() -> Float64
+```
+
+Liefert die gemessene Vakuumpermittivität nach CODATA 2022 in F/m, keine exakte SI-Konstante.
 
 Überall verfügbar.
 

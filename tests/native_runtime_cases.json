@@ -1457,6 +1457,19 @@
       "source": "let pressure = idealGasPressure(1,-1,1)\n",
       "exit_code": 70,
       "stderr_pattern": "thermodynamics_temperature_error\\.phys:1:[0-9]+: runtime error:.*Thermodynamics"
+    },
+    {
+      "name": "electromagnetism",
+      "source_file": "examples/language/electromagnetism.phys",
+      "exit_code": 0,
+      "stdout": "Electromagnetism fields, force, circuits, exact RC and caught errors passed\n",
+      "stderr": ""
+    },
+    {
+      "name": "electromagnetism_singular",
+      "source": "let e = pointChargeField(1,Vec3(0,0,0),Vec3(0,0,0),1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "electromagnetism_singular\\.phys:1:[0-9]+: runtime error:.*singular"
     }
   ]
 }

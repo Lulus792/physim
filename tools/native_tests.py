@@ -43,7 +43,7 @@ class Case:
 
 def catalog():
     cases = []
-    for name in ("core", "numerics", "mechanics", "thermodynamics", "hashmap", "string_view", "array",
+    for name in ("core", "numerics", "mechanics", "thermodynamics", "electromagnetism", "hashmap", "string_view", "array",
                  "memory", "memory_owners", "math", "box_contacts", "contact_graph",
                  "distance_joint", "constraint_graph", "contact_world", "broad_phase", "measurement",
                  "buoyancy", "contacts", "resample", "series", "report", "scene_view"):

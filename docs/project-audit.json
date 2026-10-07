@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-07",
-  "inspected_revision": "49389c5e761295dee64a30e11de10bfd0c1351c5",
+  "inspected_revision": "d4d3d1e19ac29dd47daf0475c34d07aab02057f5",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2806,11 +2806,18 @@
       "kind": "list",
       "scope": "later",
       "text": "- **Elektromagnetismus:** Felder, Ladungen, einfache Schaltungen.\n",
-      "status": "incomplete",
+      "status": "implemented",
       "evidence": [
-        "include/physim/"
+        "include/physim/electromagnetism.h",
+        "src/electromagnetism.c",
+        "include/physim/language_electromagnetism.h",
+        "docs/electromagnetism.md",
+        "tests/test_electromagnetism.c",
+        "tests/test_rc_tutorial.py",
+        "tools/verify-native-sdk.py",
+        "docs/platform-validation.md"
       ],
-      "note": "Keine eigenständigen Module für diese angekündigte Domäne vorhanden; langfristiger Umfang bleibt erhalten."
+      "note": "Eigenständiger SI-Einstieg für Ladungen und homogene Punktladungsfelder/Potentiale, Lorentzkraft in vorgegebenen E/B-Feldern, ideale Widerstände/Kondensatoren und exakte RC-Schaltungen. Vollständige C-/Physim-Experimente und Analysen, unabhängige Gradient-/Arbeits-/Decimal-Prüfungen. Dies belegt die genannten Modelle, keinen räumlichen Maxwell-Solver, beliebige Netzwerke oder die gesamte Produkt-/Plattformabnahme."
     },
     {
       "id": "PP-0414",

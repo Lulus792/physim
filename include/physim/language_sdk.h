@@ -8,6 +8,7 @@
 #include "language_measurement.h"
 #include "language_mechanics.h"
 #include "language_thermodynamics.h"
+#include "language_electromagnetism.h"
 #include "language_constraints.h"
 #include "language_contact_world.h"
 #include "language_batch.h"
@@ -118,6 +119,7 @@ static inline double psrt_atan2(double y, double x, psrt_site site) {
         psrt_fail(site, "atan2 requires a nonzero x or y");
     return psrt_finite(atan2(y, x), site);
 }
+static inline double psrt_expm1(double x, psrt_site site) { return psrt_finite(expm1(x), site); }
 static inline double psrt_exp(double x, psrt_site site) { return psrt_finite(exp(x), site); }
 static inline double psrt_log(double x, psrt_site site) { return psrt_finite(log(x), site); }
 static inline double psrt_log10(double x, psrt_site site) { return psrt_finite(log10(x), site); }

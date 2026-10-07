@@ -1671,6 +1671,40 @@
       "libraries": [
         "core"
       ]
+    },
+    "rc-model-c": {
+      "sources": [
+        "examples/documentation/rc_main.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ]
+    },
+    "rc-model-phys": {
+      "source": "examples/documentation/rc_main.phys",
+      "mode": "--emit-experiment"
+    },
+    "rc-analysis-c": {
+      "sources": [
+        "examples/documentation/rc_analysis.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ]
+    },
+    "rc-analysis-phys": {
+      "source": "examples/documentation/rc_analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "rc-report-probe": {
+      "sources": [
+        "tests/test_rc_tutorial_report.c"
+      ],
+      "libraries": [
+        "core"
+      ]
     }
   },
   "tests": [
@@ -6437,6 +6471,52 @@
           "arguments": [
             "{root}/tests/check_tutorial_sources.py",
             "documentation_thermal_source"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "rc_tutorial",
+      "targets": [
+        "python",
+        "physim-runner",
+        "physim-analysis-runner",
+        "rc-model-c",
+        "rc-model-phys",
+        "rc-analysis-c",
+        "rc-analysis-phys",
+        "rc-report-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_rc_tutorial.py",
+            "{physim-runner}",
+            "{physim-analysis-runner}",
+            "{rc-model-c}",
+            "{rc-model-phys}",
+            "{rc-analysis-c}",
+            "{rc-analysis-phys}",
+            "{rc-report-probe}",
+            "{work}"
+          ],
+          "timeout": 180
+        }
+      ]
+    },
+    {
+      "name": "documentation_rc_source",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tutorial_sources.py",
+            "documentation_rc_source"
           ],
           "timeout": 30
         }

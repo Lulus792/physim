@@ -248,3 +248,9 @@ Koordinatentransformation. [Vertrag und Beispiele](scene-frames.md).
 `physim/thermodynamics.h` liefert ideale Gaszustände, Energie und Entropiedifferenzen,
 Wärmekapazität, Wärmefluss und exakte thermische Relaxation ohne versteckte Zustände.
 [Vertrag und vollständige C-/Physim-Beispiele](thermodynamics.md).
+
+## Elektromagnetismus
+
+`physim/electromagnetism.h` liefert homogene Punktladungsfelder und Potentiale,
+Lorentzkraft, ideale Widerstände, Kondensatorenergie und exakte RC-Schritte.
+[SI-Vertrag, Grenzen und vollständige Beispiele](electromagnetism.md).

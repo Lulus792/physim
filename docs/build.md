@@ -146,8 +146,8 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt derzeit 583 Tests ohne Fenster aus, mit `--no-app` die
-568 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
+`--test` führt derzeit 589 Tests ohne Fenster aus, mit `--no-app` die
+574 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
 Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.
@@ -412,9 +412,9 @@ unveränderte Signatur. Protokolle und Bilder liegen unter `build/native/LaunchS
 
 Die SDK-Prüfung kopiert und verschiebt das Paket in einen Pfad mit Leerzeichen
 und Umlaut. Sie prüft alle mitgelieferten Module, öffentliche Header einzeln,
-20 eigenständige Sprachprogramme und neu gebaute C-/Physim-Projekte samt echten
+21 eigenständige Sprachprogramme und neu gebaute C-/Physim-Projekte samt echten
 Runnern und Mess-/Berichtsdateien. Zusätzlich werden die installierten Core-Quellen,
-alle acht C-Vorlagen samt Analyse sowie 46 Sprachmodule unabhängig neu gebaut.
+alle acht C-Vorlagen samt Analyse sowie 48 Sprachmodule unabhängig neu gebaut.
 Neun Sprachexperimente laufen mit beiden allgemeinen Sprach-Auswertungen;
 hinzu kommen die spezielle Sensoranalyse und sechs C-/Physim-Kombinationen.
 Beide Dokumentationsteile und ihre C-/Physim-Einstiegsprogramme werden aus dem

@@ -333,3 +333,5 @@ add('ps_', {
     'thermal_reservoir_step': 'Berechnet die exakte Relaxation an ein konstantes Reservoir ohne Zeitschritt-Stabilitätsgrenze.',
     'thermal_pair_step': 'Berechnet die exakte isolierte Zweikörperrelaxation mit konstanter Kapazität und Leitwert; beide Temperaturen stehen in Vec2.',
 })
+
+add('ps_', {'point_charge_field': 'Berechnet das homogene Coulombfeld in V/m; der Quellpunkt ist singulär.', 'point_charge_potential': 'Berechnet das Punktladungspotential in V mit Nullpunkt im Unendlichen.', 'lorentz_force': 'Berechnet q(E+v×B) in N für ausdrücklich übergebene SI-Felder.', 'resistor_current': 'Berechnet I=V/R in A.', 'resistor_voltage': 'Berechnet V=IR in V.', 'resistor_power': 'Berechnet die nichtnegative Verlustleistung V²/R in W.', 'resistance_series': 'Addiert zwei positive Widerstände.', 'resistance_parallel': 'Berechnet den Gesamtwiderstand zweier positiver Parallelwiderstände.', 'capacitor_energy': 'Berechnet die ideale Kondensatorenergie 0,5 C V² in J.', 'rc_voltage_step': 'Berechnet einen exakten konstanten RC-Spannungsschritt ohne Zeitschritt-Stabilitätsgrenze.'})

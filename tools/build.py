@@ -21,13 +21,13 @@ import tempfile
 ROOT = Path(__file__).resolve().parent.parent
 WINDOWS = sys.platform == "win32"
 MAC = sys.platform == "darwin"
-CORE = "core memory array string_view hashmap math data run_index snapshot analysis scene numerics units series report report_export mechanics contact_world box_contacts collision measurement thermodynamics".split()
+CORE = "core memory array string_view hashmap math data run_index snapshot analysis scene numerics units series report report_export mechanics contact_world box_contacts collision measurement thermodynamics electromagnetism".split()
 LANGUAGE = "lexer parser checker emitter builtins".split()
 APP = "main timeline docking layout_catalog channel_units run_import ui_backend ui_sdl ui_geometry graphics documentation library preferences workspace_state workspace_catalog workspace_tree plot_view report_image png".split()
 PROJECT = "project_file text_document autosave parameter_catalog".split()
 ZLIB = "adler32 crc32 deflate trees zutil".split()
 EXAMPLES = "pendulum projectile collision box_floor spring uncertain_projectile box_collision buoyancy".split()
-LANGUAGE_PROGRAMS = "energy motion flight_phases sampling phase_space rotation_path particles rigid_body contacts distance_joints constraint_graph sweeps coordinate_frames optional_values optional_bindings diagnostic_values run_index_values contact_world batch_values thermodynamics".split()
+LANGUAGE_PROGRAMS = "energy motion flight_phases sampling phase_space rotation_path particles rigid_body contacts distance_joints constraint_graph sweeps coordinate_frames optional_values optional_bindings diagnostic_values run_index_values contact_world batch_values thermodynamics electromagnetism".split()
 LANGUAGE_EXPERIMENTS = ("pendulum pendulum_rk4 pendulum_integrator pendulum_rk45 pendulum_verlet "
     "projectile projectile_drag collision box_collision buoyancy random_samples scene_shapes "
     "spring sensors uncertain_projectile spinning_body box_contacts joint_pendulum coupled_bodies fast_sphere logging scene_frames diagnostic_experiment contact_stack").split()
@@ -39,7 +39,9 @@ def language_examples():
     return ([(name, "--emit-c", f"language/{name}.phys") for name in LANGUAGE_PROGRAMS] +
             [(name, "--emit-experiment", f"language/{name}.phys") for name in LANGUAGE_EXPERIMENTS] +
             [(name, "--emit-analysis", f"language/{name}.phys") for name in LANGUAGE_ANALYSES] +
-            [("thermal_main", "--emit-experiment", "documentation/thermal_main.phys"),
+            [("rc_main", "--emit-experiment", "documentation/rc_main.phys"),
+             ("rc_analysis", "--emit-analysis", "documentation/rc_analysis.phys"),
+             ("thermal_main", "--emit-experiment", "documentation/thermal_main.phys"),
              ("thermal_analysis", "--emit-analysis", "documentation/thermal_analysis.phys"),
              ("drag_analysis", "--emit-analysis", "documentation/drag_analysis.phys"),
              ("material_main", "--emit-experiment", "documentation/material_main.phys"),

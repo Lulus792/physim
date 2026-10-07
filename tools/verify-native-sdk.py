@@ -295,6 +295,24 @@ def main():
                      thermal_analyzer,thermal_analysis,thermal_probe,directory])
         print("Installed SDK thermodynamics: installed/rebuilt Core, six Decimal scenarios, 48 mixed analyses and atomic numeric errors passed",flush=True)
 
+        for source in ("rc_main","rc_analysis"):
+            shutil.copy2(sdk / "examples/documentation" / (source+".c"),consumer / (source+".c"))
+        shutil.copy2(repo / "tests/test_rc_tutorial_report.c",consumer / "rc-tutorial-probe.c")
+        shutil.copy2(repo / "tests/test_electromagnetism.c",consumer / "electromagnetism-core-check.c")
+        for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+            em_core=builder.executable("electromagnetism-core-"+kind,["electromagnetism-core-check.c"],[archive])
+            checked([em_core])
+            rc_experiment=builder.executable("rc-experiment-"+kind,["rc_main.c"],[archive],module=True)
+            rc_analyzer=builder.executable("rc-analysis-"+kind,["rc_analysis.c"],[archive],module=True)
+            rc_probe=builder.executable("rc-probe-"+kind,["rc-tutorial-probe.c"],[archive])
+            directory=root / ("RC tutorial "+kind);directory.mkdir()
+            rc_language=modules["rc_main"] if kind=="rebuilt" else sdk / "bin" / ("language-rc_main"+module_suffix)
+            rc_analysis=modules["rc_analysis"] if kind=="rebuilt" else sdk / "bin" / ("language-rc_analysis"+module_suffix)
+            checked([sys.executable,repo / "tests/test_rc_tutorial.py",sdk / "bin" / ("physim-runner"+suffix),
+                     sdk / "bin" / ("physim-analysis-runner"+suffix),rc_experiment,rc_language,
+                     rc_analyzer,rc_analysis,rc_probe,directory])
+        print("Installed SDK electromagnetism: installed/rebuilt Core, fields, Lorentz work, seven Decimal RC scenarios and 56 mixed analyses passed",flush=True)
+
         shutil.copy2(sdk / "examples/spring/main.c",consumer / "spring-tutorial.c")
         shutil.copy2(sdk / "examples/documentation/spring_analysis.c",consumer / "spring-tutorial-analysis.c")
         shutil.copy2(repo / "tests/test_spring_tutorial_report.c",consumer / "spring-tutorial-probe.c")
@@ -510,6 +528,7 @@ def main():
         "Monte Carlo tutorial through installed/rebuilt Core, seeded ensembles, worker reproducibility and mixed reports passed.\n" +
         "Saved run tutorial through installed/rebuilt Core, eight archive scenarios, sixteen mixed reports and independent analysis-only projects passed.\n" +
         "Thermodynamics through installed/rebuilt Core, independent Decimal oracles, mixed reports and extreme-value contracts passed.\n" +
+        "Electromagnetism through installed/rebuilt Core, Coulomb/gradient/Lorentz tests, seven RC Decimal oracles and mixed reports passed.\n" +
         "Both complete C/Physim learning routes, eight paired model source groups and executable language introductions passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
         ("Eight C template GUI workflows, the complete Physim language GUI workflow and independent documentation route navigation passed.\n" if args.app_tests else ""), encoding="utf-8")

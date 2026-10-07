@@ -227,5 +227,26 @@
         "language": "physim"
       }
     ]
+  },
+  "documentation_rc_source": {
+    "document": "docs/electromagnetism.md",
+    "sources": [
+      {
+        "path": "examples/documentation/rc_main.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/rc_main.phys",
+        "language": "physim"
+      },
+      {
+        "path": "examples/documentation/rc_analysis.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/rc_analysis.phys",
+        "language": "physim"
+      }
+    ]
   }
 }

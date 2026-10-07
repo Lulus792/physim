@@ -1,6 +1,6 @@
 # Teil II – Physim mit der eigenen Sprache
 
-Dieser Lernweg führt mit Physim 0.179.0 von der Einrichtung bis zum gespeicherten
+Dieser Lernweg führt mit Physim 0.180.0 von der Einrichtung bis zum gespeicherten
 Ergebnis. Experiment und Analyse können vollständig Physim bleiben; du brauchst
 für die unterstützten Aufgaben keinen C-Code nachzuschreiben. Die Sprache ist
 weiter ein Entwicklungsvertrag. Dieselben Modelle und Archive verwendet
@@ -86,6 +86,9 @@ sind vollständig und werden gegen dieselben physikalischen Erwartungen geprüft
 
 Der zusätzliche [Thermodynamik-Einstieg](thermodynamics.md) untersucht
 ideales Gas und isolierten Wärmeaustausch mit vollständigen Quellen beider Sprachen.
+
+Der zusätzliche [Elektromagnetismus-Einstieg](electromagnetism.md) erklärt
+Ladungen, Felder und den vollständigen RC-Versuch beider Sprachen.
 
 ## Nachschlagen und weitergehen
 

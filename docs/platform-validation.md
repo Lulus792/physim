@@ -3,6 +3,69 @@
 Stand: 7. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Elektromagnetismus und Physim 0.180.0 am 7. Oktober 2026
+
+Das neue SI-Modul liefert homogene Punktladungsfelder/Potentiale, Lorentzkraft,
+ideale Widerstands- und Kondensatorgrößen sowie exakte konstante RC-Schritte.
+Elf reine Sprachbindungen verwenden dieselben C-Funktionen. `expm1` ergänzt
+stabile Exponentialdifferenzen in Physim. Normalisierte Produkte erhalten
+repräsentierbare Ergebnisse bei großen Abständen, Feldern oder kleinen RC-
+Relaxationsfaktoren. [Vertrag, Grenzen und vollständige Quellen](electromagnetism.md).
+
+Die zwölf ausgewählten Release-Prüfungen bestehen auf Intel macOS/Apple Clang 16
+unter `build/contact-world-language-release-mac/test-results/run-b8ekfw5j`
+und Debian 12/GCC 12.2 unter
+`build/contact-world-language-release-linux/test-results/run-de4x_2fu`.
+Vier Linux-Clang-14-ASan/UBSan-Prüfungen bestehen unter
+`build/em-asan-linux/test-results/run-fu_nqcv_`.
+Die Coreprüfung vergleicht das Feld mit dem Potentialgradienten und kontrolliert
+Lorentzvorzeichen, magnetische Arbeit, Schaltungsgesetze, Zeitkomposition,
+Singularitäten, extreme Zahlen und unveränderte Ausgaben bei Fehlern.
+
+Der RC-Prüfer kontrolliert 2.814 Messungen in sieben Szenarien mit 65-stelligen
+Decimal-Lösungen. Widerstandswärme wird unabhängig als Integral von I²R geprüft,
+Quellenarbeit mit ihrem Vorzeichen und Kondensatorenergie getrennt kontrolliert.
+Langsame Relaxation verwendet stabile Exponentialdifferenzen; das Subtrahieren
+großer Energien darf kleine Verluste nicht zerstören. Die 28 gemischten C-/
+Physim-Analysen werden gegen Rohdaten, SI-Metadaten, sämtliche Szenengeometrien,
+CSV und erneut geladene Berichte geprüft. Ein exakter RC-Schritt hat keine
+Stabilitätsgrenze; dies ist kein Modell beliebiger Netzwerke oder Maxwell-Felder.
+
+Neun bestehende Sprach-/Experiment-/Analyse-/Sensor-/Paritätsprüfungen bestehen
+auf macOS unter `run-5zzq3n_v` und Linux unter `run-r5c6rjpu` in den genannten
+Release-Testordnern. Das Hilfefenster besteht unter `run-julak5io` auf macOS und
+`run-kkzbzxfh` auf Linux. Alle 26 generierten Referenzen sind geprüft.
+Der Katalog umfasst nun 589 Fälle ohne Fenster, 574 ohne SDL und 66 Fensterfälle;
+diese Katalogzahl ist kein vollständiger neuer Gesamtlauf.
+
+Beide endgültigen SDKs bestehen die vollständige isolierte 49-Dateien-Kitprüfung,
+einschließlich aller neun grafischen Projektabläufe und der Dokumentationsnavigation:
+
+- macOS: `build/em-sdk-proof-mac/Native SDK ä 0yk8gx2j`.
+- Linux: `build/em-sdk-proof-linux/Native SDK ä 64mfcmrk`.
+
+Alle öffentlichen Header, 21 Standalone-Programme und 48 Sprachmodule werden
+nachgebaut. Elektromagnetismus wird gegen installierten und neu aufgebauten
+Core geprüft: 5.628 RC-Messungen und 56 gemischte Analysen je SDK, zusätzlich
+Core-Extremwerte. Die endgültigen Pakete `build/Electromagnetism clean SDK ä mac`
+und `build/Electromagnetism clean SDK ä linux` enthalten 400 Manifestdateien und
+69 kompilierte Sprachprodukte. Alle 284 Code-/Beispieldateien stimmen byteweise
+mit den geprüften SDK-Kopien überein; die Apps stimmen mit den geprüften
+Release-Binaries überein. Zum Abschluss werden nur Dokumentation und Manifest
+aktualisiert. Die neue Remote-Matrix bleibt ein gesonderter Nachweis.
+
+Für den [vorherigen Commit `d4d3d1e`](https://github.com/PhysicSimulator/physim/actions/runs/37571221323)
+sind tatsächliche Windows-v143-Debug sowie ClangCL Debug/Release erfolgreich; die übrige Matrix
+wird separat beobachtet. Das ist ein Nachweis des damaligen Thermodynamikstands,
+keine Abnahme der neuen Elektromagnetismusfunktionen.
+
+Der frühere generierte Linux-Prüfordner `build/thermal-final-sdk-proof-linux`
+wurde vollständig auf den Mac übertragen, bevor sein VM-Speicher freigegeben
+wurde. Alle 12.498 regulären Dateien stimmen mit ihren ursprünglichen SHA-256-
+Werten überein. Lokal erhaltenes Archiv:
+`build/thermal-final-sdk-proof-linux-evidence.tar.gz`, SHA-256
+`5d3b1d61b7214dab0c6a55ff3e17858046c6ecf8c17f4983f75cd079483ac854`.
+
 ## Thermodynamik und Physim 0.179.0 am 7. Oktober 2026
 
 Das neue allokationsfreie SI-Modul berechnet ideale Gaszustände, Energie und

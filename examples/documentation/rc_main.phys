@@ -1,0 +1,51 @@
+// Same constant-source RC model and seven SI channels as rc_main.c.
+let ohm = Unit(2,1,-3,-2,0,0,0,1,"ohm")
+let farad = Unit(-2,-1,4,2,0,0,0,1,"F")
+let volt = Unit(2,1,-3,-1,0,0,0,1,"V")
+let ampere = Unit(0,0,0,1,0,0,0,1,"A")
+let watt = Unit(2,1,-3,0,0,0,0,1,"W")
+let joule = Unit(2,1,-2,0,0,0,0,1,"J")
+let resistance = parameterWithUnit("resistance",ohm,1000,1,1e6,"Series resistance in ohm")
+let capacitance = parameterWithUnit("capacitance",farad,0.002,1e-6,1,"Capacitance in farad")
+let source = parameterWithUnit("sourceVoltage",volt,12,-1000,1000,"Constant supply in V")
+let initial = parameterWithUnit("initialVoltage",volt,0,-1000,1000,"Initial capacitor voltage in V")
+let initialEnergy = capacitorEnergy(capacitance,initial)
+let voltageChannel = Channel("voltage",volt,"voltage")
+let currentChannel = Channel("current",ampere,"current")
+let powerChannel = Channel("power.resistor",watt,"power.resistor")
+let energyChannel = Channel("energy.capacitor",joule,"energy.capacitor")
+let heatChannel = Channel("energy.dissipated",joule,"energy.dissipated")
+let sourceChannel = Channel("energy.source",joule,"energy.source")
+let balanceChannel = Channel("energy.balance",joule,"energy.balance")
+var voltage = 0.0
+var elapsed = 0.0
+func measure():
+    let energy = capacitorEnergy(capacitance,voltage)
+    let rate = elapsed/(resistance*capacitance)
+    let difference = initial-source
+    let work = source*capacitance*(-difference)*(-expm1(-rate))
+    let heat = 0.5*capacitance*difference*difference*(-expm1(-2*rate))
+    voltageChannel.sample(voltage)
+    currentChannel.sample(resistorCurrent(source-voltage,resistance))
+    powerChannel.sample(resistorPower(source-voltage,resistance))
+    energyChannel.sample(energy)
+    heatChannel.sample(heat)
+    sourceChannel.sample(work)
+    balanceChannel.sample(energy+heat-work)
+func create():
+    metadata("model=constant-source series RC\nunits=SI\nintegrator=exact exponential\nenergy_reference=zero capacitor energy at zero voltage\nsource_work=Vs*C*(V-V0); positive into circuit\nheat=exact integral of I^2*R; stable expm1\nexcluded=inductance,parasitics,nonlinear components,source switching\n")
+    reset()
+func reset():
+    voltage = initial
+    elapsed = 0
+    measure()
+func step(dt: Float64):
+    voltage = rcVoltageStep(resistance,capacitance,voltage,source,dt)
+    elapsed += dt
+    measure()
+func scene():
+    let a = Vec3(-0.6,voltage*0.03,0)
+    let b = Vec3(0.6,0,0)
+    sphere(a,0.2,0xf2a052ff,1)
+    sphere(b,0.2,0x53aeefff,2)
+    line(a,b,0.015,0xc8d7eaff,3)

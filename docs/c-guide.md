@@ -84,6 +84,9 @@ Quellen, Erwartung, Modellgrenzen und automatisierte Prüfungen. Wähle dort jew
 Der zusätzliche [Thermodynamik-Einstieg](thermodynamics.md) untersucht
 ideales Gas und isolierten Wärmeaustausch mit vollständigen Quellen beider Sprachen.
 
+Der zusätzliche [Elektromagnetismus-Einstieg](electromagnetism.md) erklärt
+Ladungen, Felder und den vollständigen RC-Versuch beider Sprachen.
+
 ## Nachschlagen und weitergehen
 
 [C-API nach Aufgabe](api.md), [vollständige C-Funktionen](reference/core.md),

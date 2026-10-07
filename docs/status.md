@@ -8,10 +8,18 @@ der Batch-Sprachbindung bestehen auf dem Intel-Mac und unter Debian
 mit jeweils 572/572 Fällen.
 Der anschließende [Anforderungsabgleich](project-audit.md) bewahrt sämtliche
 Planpunkte und unterscheidet Implementierung, Teilnachweise und fehlende Abnahme.
-Die Installation baut jetzt alle 66 kompilierten Sprachprodukte auch ohne
+Die Installation baut jetzt alle 69 kompilierten Sprachprodukte auch ohne
 `--examples`. Windows-Prüfungen verwenden logische Textzeilen und ein portables
 Pipe-Leseverfahren. Die erneute Remote-CI-Abnahme steht noch aus; lokale Tests
 ersetzen diese Releasegates nicht.
+
+**Elektromagnetismus in C und Physim:** Physim 0.180.0 bindet Punktladungsfeld,
+Potential, Lorentzkraft und ideale Widerstands-/Kondensator-/RC-Funktionen.
+`expm1` erhält kleine Exponentialdifferenzen. Der vollständige RC-Lernpfad prüft
+2.814 Messungen und 28 gemischte Analysen gegen unabhängige 65-stellige Lösungen,
+mit Energieaustausch der Quelle, integriertem Joule-Verlust und vollständigen
+Szenen. Homogene Elektrostatik, vorgegebene E/B-Felder und konstante RC-Bauteile
+haben ausdrücklich dokumentierte Grenzen. [Quellen und Vertrag](electromagnetism.md).
 
 **Thermodynamik in C und Physim:** Sprachvertrag 0.179.0 liefert zehn reine
 SI-Funktionen für ideale Gaszustände, Energie/Entropiedifferenzen, konstante

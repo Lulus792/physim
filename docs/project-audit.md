@@ -22,10 +22,10 @@ Umfang nicht ersetzen.
 | Plattformen und Pakete (§2, Phase 10) | Ausgeführte Intel-macOS-/Debian-Builds, verschobene SDKs und historische CI-Nachweise in [Plattformprüfung](platform-validation.md) | Aktuelle vollständige Windows-/Apple-Silicon-/Intel-/Linux-Matrix; frische Systeme. Signierung/Notarisierung bleibt an Entwicklerzugänge gebunden. |
 | Direkte Projektbuilds (§2) | `app/build_main.c`, `tools/build.py`, `tests/test_bootstrap_build.py`; echte C-/Physim-Analyseprojekte und verschobene SDKs | Gegen sämtliche aktuellen Plattformen prüfen. Alte CMake-Skizzen sind durch die ausdrückliche Ergänzung zu direkten Builds abgelöst. |
 | Kern und Numerik (§7) | Öffentliche GUI-unabhängige Header, Referenz-, Konvergenz- und Fehlertests | Jede explizite Algorithmusforderung und ihr dokumentiertes Fehler-/Einheitenverhalten einzeln zuordnen; keine Ableitung aus bloßer Funktionszahl. |
-| Sprache und Bindungen (§10, LANG-001..007) | Version 0.179.0, Lexer/Parser/Checker/C17-Backend, typisierte Werte, Module, Generics, Runner- und Analysebindungen | Vollständigen semantischen Vertrag und C-/Physim-Funktionsparität prüfen. `LANG-005` besitzt jetzt explizite Batch-Hostdienste und besitzende Sprachwerte mit Start, Pause, Wiederaufnahme, Archivabfragen, Statistik, Diagrammen und Export. Die vollständige Sprach-/Produktabnahme und neue Remote-Matrix bleiben offen. |
+| Sprache und Bindungen (§10, LANG-001..007) | Version 0.180.0, Lexer/Parser/Checker/C17-Backend, typisierte Werte, Module, Generics, Runner- und Analysebindungen | Vollständigen semantischen Vertrag und C-/Physim-Funktionsparität prüfen. `LANG-005` besitzt jetzt explizite Batch-Hostdienste und besitzende Sprachwerte mit Start, Pause, Wiederaufnahme, Archivabfragen, Statistik, Diagrammen und Export. Die vollständige Sprach-/Produktabnahme und neue Remote-Matrix bleiben offen. |
 | Barrierefreiheit (Phase 10, PP-0710) | Themes, Code-Schriftgröße, Tastenkürzel; `app/preferences.h`, `app/settings_ui.inc` | UI-weite Schriftvergrößerung, vollständige Tastaturführung und grundlegender Screenreader-Zugang. |
 | Dokumentation (§16, LANG-007) | Acht gekoppelte Lernpfade mit vollständigen Quellen, Modellannahmen und automatisierten Prüfungen; `tests/tutorial_sources.json` | Die beiden separat navigierbaren Wege sind implementiert; aktuelle gesamte Bindungs-/Plattformabnahme und alle Vorlagen bleiben gesondert offen. |
-| Weitere Domänen (§7.7, Phase 12+) | Mechanik-, Material-/Medien-, Mess- und Analysebasis | Thermodynamik besitzt nun ein SI-Modul und vollständige C-/Physim-Beispiele für ideales Gas und Wärmefluss; reale Gase bleiben offen. Elektromagnetismus, Wellen/Optik und Strömung fehlen weiterhin als eigenständige Domänen. Die empfohlene Reihenfolge bleibt erhalten. |
+| Weitere Domänen (§7.7, Phase 12+) | Mechanik-, Material-/Medien-, Mess- und Analysebasis | Thermodynamik besitzt nun ein SI-Modul und vollständige C-/Physim-Beispiele für ideales Gas und Wärmefluss; reale Gase bleiben offen. Elektromagnetismus besitzt nun einen geprüften SI-Einstieg für Ladungen, Felder und RC-Schaltungen. Wellen/Optik und Strömung fehlen weiterhin als eigenständige Domänen. Die empfohlene Reihenfolge bleibt erhalten. |
 
 ## Aktuelle CI-Fehler zuerst schließen
 
@@ -71,7 +71,7 @@ Das ist ein Nachweis für diesen Stand und diese Umgebungen. Die anschließenden
 Änderungen an Laufzeitsupport und Prüfern benötigen eigene Nachweise; eine
 nachträgliche Änderung der Zahl macht den alten Lauf nicht zu einem aktuellen
 Gesamtlauf. Der aktuelle Katalog enthält mit den zusätzlichen Lernwegprüfungen
-583 Fälle ohne Fenster, 568 ohne SDL und weiterhin 66 Fensterfälle.
+589 Fälle ohne Fenster, 574 ohne SDL und weiterhin 66 Fensterfälle.
 
 Die Abnahme bleibt offen, bis sämtliche konkreten Anforderungen passende
 aktuelle Implementierungs-, Laufzeit- und Plattformnachweise besitzen.
@@ -97,9 +97,9 @@ Korrekturen zusätzlich in ihrer tatsächlichen Matrix bestätigen.
 
 ## Batch-Bindung und Controller
 
-Der aktuelle Abgleich enthält zwölf implementierte Blöcke, sieben konkrete
+Der aktuelle Abgleich enthält dreizehn implementierte Blöcke, sechs konkrete
 unvollständige Blöcke und 512 weiterhin ungeprüfte Blöcke. Die acht Lernpfade
-bleiben erhalten; hinzu kommen LANG-005, der Batch-/Parametercontroller und die beiden Dokumentationsteile.
+bleiben erhalten; hinzu kommen LANG-005, der Batch-/Parametercontroller und die beiden Dokumentationsteile. Der Elektromagnetismus-Einstieg ergänzt die erste weitere Domäne.
 Die Originaltexte aller 531 Blöcke und 475 Aufzählungspunkte bleiben unverändert.
 Die Sprachbindung und die beiden Lernwege besitzen ausdrücklich begrenzte Implementierungs- und
 Laufzeitnachweise in [Batch](batch-language.md) und der [Plattformprüfung](platform-validation.md).
