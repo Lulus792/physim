@@ -13,6 +13,13 @@ Die Installation baut jetzt alle 75 kompilierten Sprachprodukte auch ohne
 Pipe-Leseverfahren. Die erneute Remote-CI-Abnahme steht noch aus; lokale Tests
 ersetzen diese Releasegates nicht.
 
+**GUI-Geschwindigkeitsprüfung:** Die Fenstertests berücksichtigen das begrenzte
+Zeitkonto bei Render-/Pipe-Rückstau. C und Physim bestehen zusätzliche
+Ein-Sekunden-Lesepausen unter macOS und Linux; die direkten Runnerprüfungen
+behalten ihre Geschwindigkeitsverhältnisse und identischen Referenzdaten bei.
+Die erneute Apple-Silicon-CI-Abnahme bleibt offen.
+[Nachweise](platform-validation.md).
+
 **Strömungs-Lehrmodelle in C und Physim:** Physim 0.182.0 ergänzt laminare Rohre,
 Reynolds/Hydrostatik, passive Drucknetze bis 16 Knoten/32 Kanten und konservativen
 periodischen Tracertransport bis 4096 Zellen. Der vollständige Lernpfad prüft

@@ -707,6 +707,12 @@ Ein 1-Sekunden-Schritt bei 0,1× bestätigt die sofortige RUN-Rückmeldung und d
 unmittelbaren Einzelschritt. `speed_workflow` bedient die echten Auswahl- und
 Steuerknöpfe in C-/Physim-Projekten, prüft Reset mit Offline-Modus und lädt die
 gespeicherte Wahl in einem neuen App-Prozess. Messdateiformat und Modul-ABI bleiben gleich.
+Zusätzliche C-/Physim-Durchläufe unterbrechen den GUI-Leser bei jeder laufenden
+Geschwindigkeit für eine Sekunde. Die Fensterprüfung verlangt Fortschritt und
+korrekten Kontrollzustand; sie verlangt keine Mindest-Wandtaktrate bei
+Render-/Pipe-Rückstau. Das begrenzte Zeitkonto verwirft dort ausdrücklich
+übermäßige Schulden. Die direkten Runner-Prüfungen behalten ihre gemessenen
+Geschwindigkeitsverhältnisse bei.
 
 `run_snapshots` prüft optionale Szenenblöcke mit maximaler Geometrie und allen
 Kanälen, unveränderte Messpunktzähler, alte Dateien, unbekannte Versionen,

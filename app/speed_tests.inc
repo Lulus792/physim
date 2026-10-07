@@ -1,11 +1,13 @@
-/* Real widgets and runner processes verify live pacing without changing dt. */
+/* Real widgets verify live speed commands and fixed physics steps. Exact wall
+ * rates belong to test_runner_pacing: rendering can backpressure the runner,
+ * whose documented policy discards excessive scheduling debt. */
 static bool speed_test_start(app *a, const char *root, const char *mode) {
     join(a->project_input, sizeof a->project_input, root, "project");
     if (!strcmp(mode, "speed-read")) {
         open_project(a);
         return a->loaded && a->simulation_speed == 0 && a->dt == .005;
     }
-    a->example = !strcmp(mode, "speed-phys") ? 10 : 5;
+    a->example = !strncmp(mode, "speed-phys", 10) ? 10 : 5;
     new_project(a);
     if (!a->loaded || a->simulation_speed != 1) return false;
     select_build_profile(a, 1);
@@ -63,11 +65,14 @@ static void speed_test_frame(app *a, const char *mode, int *stage, int *code, co
     case 12: {
         if(!pacing_ready) {
             if(a->paused)return;
-            held_time=a->simulation_time;held_wall=ps_clock();pacing_ready=true;return;
+            held_time=a->simulation_time;held_wall=ps_clock();pacing_ready=true;
+            if(strstr(mode,"-stalled"))ps_sleep(1000);
+            return;
         }
         double elapsed=ps_clock()-held_wall;
         if (elapsed < .8) return;
-        ok = !a->paused && a->simulation_time - held_time > .125 * elapsed &&
+        ok = !a->paused && a->simulation_speed == .25 && a->dt == .005 &&
+             a->simulation_time > held_time &&
              a->simulation_time - held_time < .4 * elapsed;
         test_mouse(a, a->run_control_bounds[1], true); break;
     }
@@ -88,11 +93,14 @@ static void speed_test_frame(app *a, const char *mode, int *stage, int *code, co
     case 20: {
         if(!pacing_ready) {
             if(a->paused)return;
-            held_time=a->simulation_time;held_wall=ps_clock();pacing_ready=true;return;
+            held_time=a->simulation_time;held_wall=ps_clock();pacing_ready=true;
+            if(strstr(mode,"-stalled"))ps_sleep(1000);
+            return;
         }
         double elapsed=ps_clock()-held_wall;
         if (elapsed < .5) return;
-        ok = !a->paused && a->simulation_time - held_time > 2.8 * elapsed &&
+        ok = !a->paused && a->simulation_speed == 4 && a->dt == .005 &&
+             a->simulation_time > held_time &&
              a->simulation_time - held_time < 5.6 * elapsed;
         /* Change speed through the widget while physics is still running. */
         test_mouse(a, a->speed_bounds, true); break;
@@ -110,11 +118,14 @@ static void speed_test_frame(app *a, const char *mode, int *stage, int *code, co
     case 25: {
         if(!pacing_ready) {
             if(a->paused)return;
-            held_time=a->simulation_time;held_wall=ps_clock();pacing_ready=true;return;
+            held_time=a->simulation_time;held_wall=ps_clock();pacing_ready=true;
+            if(strstr(mode,"-stalled"))ps_sleep(1000);
+            return;
         }
         double elapsed=ps_clock()-held_wall;
         if (elapsed < .5) return;
-        ok = !a->paused && a->simulation_time - held_time > .5 * elapsed &&
+        ok = !a->paused && a->simulation_speed == 1 && a->dt == .005 &&
+             a->simulation_time > held_time &&
              a->simulation_time - held_time < 1.7 * elapsed;
         test_mouse(a, a->run_control_bounds[1], true); break;
     }

@@ -3,6 +3,33 @@
 Stand: 7. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## GUI-Geschwindigkeit bei Rückstau am 7. Oktober 2026
+
+Das SHA-256-geprüfte Apple-Silicon-Artefakt des vorherigen Wellen-Commits
+zeigt einen einzelnen Fehler in `speed_workflow`: Die GUI verlangt über eine
+halbe Sekunde mindestens 2,8 Simulationssekunden pro Wandsekunde bei 4×.
+Der Runner begrenzt bei Render-/Pipe-Rückstau jedoch ausdrücklich sein Zeitkonto
+auf 0,25 Wandsekunden. Die Fenstermessung kann deshalb den Fortschritt korrekt
+anzeigen und diese Mindesttaktrate trotzdem verfehlen.
+
+Die Fensterprüfung prüft nun ausgewählte Geschwindigkeit, unverändertes dt,
+Fortschritt, obere Taktschranke, Pause, Einzelschritt, Reset und Persistenz.
+Zusätzliche C-/Physim-Durchläufe unterbrechen den GUI-Leser bei jeder laufenden
+Geschwindigkeit absichtlich für eine Sekunde. Alle acht App-Aufrufe bestehen
+auf Intel macOS unter
+`build/contact-world-language-release-mac/test-results/run-a68a9u8u` und unter
+Debian/GCC unter
+`build/contact-world-language-release-linux/test-results/run-n538qarn`.
+
+Die unveränderten direkten Zeitkonto-/Runner-Prüfungen bestehen mit jeweils
+3/3 unter `run-rv7jar5p` auf macOS und `run-jyawo_9t` unter Linux in denselben
+Release-Testordnern. Sie messen weiterhin die tatsächlichen Geschwindigkeits-
+verhältnisse und vergleichen 201 Messungen aller Kanäle mit Referenzdaten,
+einschließlich verzögertem Leser und Live-Wechsel. Scheduling, Wire-/Modul-ABI
+und Physikdaten wurden nicht verändert. Eine erneute Apple-Silicon-CI-Abnahme
+bleibt erforderlich. Die zuvor geprüften Strömungs-SDKs behalten ihre eigenen
+unveränderten Binaries und Manifestnachweise.
+
 ## Strömungs-Lehrmodelle und Physim 0.182.0 am 7. Oktober 2026
 
 Das neue SI-Modul liefert laminare Rohrleitwerte, signierte Flüsse, Verlustleistung,

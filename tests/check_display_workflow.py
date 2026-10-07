@@ -682,7 +682,7 @@ def timeline(flow, directory):
 
 
 def speed(flow, directory):
-    for mode in ("c", "phys"):
+    for mode in ("c", "phys", "c-stalled", "phys-stalled"):
         root = directory / mode
         root.mkdir(parents=True)
         flow.run("--workspace-state-test", root, "speed-" + mode, timeout=130,
