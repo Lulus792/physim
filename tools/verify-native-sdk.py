@@ -61,9 +61,9 @@ def main():
     env = native.compiler_environment()
     log = root / "verification.log"
 
-    def checked(command, *, output=None):
+    def checked(command, *, output=None, timeout=300):
         result = subprocess.run([str(p) for p in command], cwd=root, env=env,
-                                capture_output=True, timeout=300)
+                                capture_output=True, timeout=timeout)
         with log.open("ab") as file:
             file.write(("COMMAND: " + repr([str(p) for p in command]) + "\n").encode("utf-8"))
             if output is None:
@@ -598,6 +598,13 @@ def main():
                     if "DOCUMENTATION KEYBOARD SELF-TEST: PASSED" not in output.read_text(encoding="utf-8"):
                         raise RuntimeError("Installed SDK keyboard documentation did not complete")
                 print("Installed SDK documentation: keyboard learning tracks, topics, contents, links, code copy, search and input order at 16/22 px passed",flush=True)
+                for mode in ("manager-keyboard","manager-keyboard-22","manager-errors"):
+                    directory=root / mode;directory.mkdir();output=root / (mode+".txt")
+                    checked([sdk / "bin" / ("physim"+suffix),"--workspace-state-test",directory,mode],output=output,timeout=910)
+                    marker="PROJECT MANAGER ERRORS SELF-TEST: PASSED" if mode=="manager-errors" else "PROJECT MANAGER KEYBOARD SELF-TEST: PASSED"
+                    if marker not in output.read_text(encoding="utf-8"):
+                        raise RuntimeError("Installed SDK keyboard project creation did not complete")
+                print("Installed SDK projects: all 32 template/language pairs and two independent analyses built, recorded/analyzed with keyboard at 16/22 px; error guards passed",flush=True)
         elif args.app_tests:
             raise RuntimeError("App tests require an SDK with the app")
     (root / "PASSED.txt").write_text(
@@ -624,7 +631,7 @@ def main():
         "Eight cold native C/Physim domain project builds, unchanged cache reuse and four complete independent tutorial oracles passed.\n" +
         "Both complete C/Physim learning routes, eight paired model source groups and executable language introductions passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
-        ("Eight C template GUI workflows, the complete Physim language GUI workflow, independent documentation route navigation, keyboard menus in both window sizes and four UI typography sizes with restart, keyboard settings and keyboard documentation passed.\n" if args.app_tests else ""), encoding="utf-8")
+        ("Eight C template GUI workflows, the complete Physim language GUI workflow, independent documentation route navigation, keyboard menus in both window sizes and four UI typography sizes with restart, keyboard settings, keyboard documentation and keyboard project matrix passed.\n" if args.app_tests else ""), encoding="utf-8")
     print(f"Native SDK verified: {root}")
 
 

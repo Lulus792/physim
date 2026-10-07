@@ -27,6 +27,7 @@ SIMPLE = {
     "documents_build": (["--workspace-state-test", "{directory}", "documents-build"], 130, False),
     "documentation_window": (["--docs-test", "{directory}"], 30, True),
 }
+SIMPLE["project_manager_keyboard_errors"] = (["--workspace-state-test", "{directory}", "manager-errors"], 35, True)
 SIMPLE["documentation_pointer_isolation"] = (["--docs-test-noise", "{directory}"], 35, True)
 SIMPLE["documentation_keyboard_22"] = (["--workspace-state-test", "{directory}", "docs-keyboard-22"], 55, True)
 SIMPLE["documentation_keyboard"] = (["--workspace-state-test", "{directory}", "docs-keyboard"], 55, True)
@@ -731,6 +732,30 @@ def settings(flow, directory):
     exact(directory / "preferences.bin", "damaged preferences")
 
 
+def project_manager_keyboard(flow, directory):
+    directory.mkdir()
+    for size in (16,22):
+        root=directory / ("Projects UI "+str(size));root.mkdir()
+        mode="manager-keyboard"+("-22" if size==22 else "")
+        flow.run("--workspace-state-test",root,mode,timeout=910,marker="PROJECT MANAGER KEYBOARD SELF-TEST: PASSED")
+        for index in range(34):
+            project=root / ("keyboard-%02d ä" % index)
+            manifest=(project / "physim.project").read_text()
+            require("analysis=" in manifest and (project / "build").is_dir(),"Keyboard project has no manifest/build")
+            if index>=32:
+                require("kind=analysis" in manifest and not any(project.glob("main.*")),"Independent analysis contains an experiment")
+            else:
+                experiment=index//16;analysis=(index//8)%2;template=index%8
+                c_names=("pendulum","projectile","collision","box_floor","spring","uncertain_projectile","box_collision","buoyancy")
+                phys_names=("pendulum","projectile_drag","collision","box_contacts","spring","uncertain_projectile","box_collision","buoyancy")
+                source=flow.root / "examples" / ("language" if experiment else "") / (phys_names[template] if experiment else c_names[template])
+                source=source.with_suffix(".phys") if experiment else source / "main.c"
+                require((project / ("main.phys" if experiment else "main.c")).read_bytes()==source.read_bytes(),"Keyboard selected wrong template")
+                require("analysis="+("analysis.phys" if analysis else "analysis.c") in manifest,"Keyboard selected wrong analysis language")
+                expected="examples/pendulum/analysis.c" if not analysis else "examples/language/"+({2:"analysis_collision.phys",5:"analysis_sensors.phys",6:"analysis_box_collision.phys",7:"analysis_buoyancy.phys"}.get(template,"analysis.phys"))
+                require((project / ("analysis.phys" if analysis else "analysis.c")).read_bytes()==(flow.root / expected).read_bytes(),"Keyboard selected wrong analysis template")
+
+
 def settings_keyboard(flow, directory):
     directory.mkdir()
     flow.run("--settings-test", directory, "keyboard", timeout=35, marker="SETTINGS KEYBOARD SELF-TEST: PASSED")
@@ -913,7 +938,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"settings_keyboard_workflow": settings_keyboard,"ui_typography_workflow": ui_typography,"saved_run_tutorial_workflow": saved_run_tutorial,"monte_carlo_tutorial_workflow": monte_carlo_tutorial,"collision_tutorial_workflow": collision_tutorial,"pendulum_tutorial_workflow": pendulum_tutorial,"spring_tutorial_workflow": spring_tutorial,"material_tutorial_workflow": material_tutorial,"contact_world_language_workflow": contact_world_language,"contact_world_workflow": contact_world, "diagnostic_workflow": diagnostics, "scene_frames_workflow": scene_frames, "logging_workflow": logging, "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
+SPECIAL = {"project_manager_keyboard_workflow": project_manager_keyboard,"settings_keyboard_workflow": settings_keyboard,"ui_typography_workflow": ui_typography,"saved_run_tutorial_workflow": saved_run_tutorial,"monte_carlo_tutorial_workflow": monte_carlo_tutorial,"collision_tutorial_workflow": collision_tutorial,"pendulum_tutorial_workflow": pendulum_tutorial,"spring_tutorial_workflow": spring_tutorial,"material_tutorial_workflow": material_tutorial,"contact_world_language_workflow": contact_world_language,"contact_world_workflow": contact_world, "diagnostic_workflow": diagnostics, "scene_frames_workflow": scene_frames, "logging_workflow": logging, "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}

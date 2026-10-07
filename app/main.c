@@ -148,8 +148,12 @@ typedef struct {
     uint64_t source_revision, build_revision;
     int document_pending; /* 1: close, 2: reload; discard requires an explicit choice. */
     struct nk_rect document_bounds[10], document_list_bounds[WORKSPACE_DOCUMENTS];
-    char manager_parent[4096], manager_name[256];
+    char manager_parent[4096], manager_name[256],manager_error[256];
+    bool manager_error_reveal;
     int manager_template, manager_experiment_language;
+    int manager_focus;
+    bool manager_keyboard,manager_focus_known,manager_focus_reveal;
+    struct nk_rect manager_focus_bounds[9];
     char workspace_additions[32][4096];
     unsigned workspace_addition_count;
     ps_workspace_tree workspace_tree;
@@ -1003,9 +1007,9 @@ static void new_project(app *a) {
     join(src, sizeof src, a->root, a->manager_analysis_only
         ? (analysis_language?"examples/analysis_only/analysis.phys":"examples/analysis_only/analysis.c")
         : analysis_language
-        ? (a->example == 10 ? "examples/language/analysis_sensors.phys"
-           : a->example == 18 ? "examples/language/analysis_collision.phys"
-           : a->example == 19 ? "examples/language/analysis_box_collision.phys"
+        ? (a->example == 10 || a->example == 5 ? "examples/language/analysis_sensors.phys"
+           : a->example == 18 || a->example == 2 ? "examples/language/analysis_collision.phys"
+           : a->example == 19 || a->example == 6 ? "examples/language/analysis_box_collision.phys"
            : a->example == 17 || a->example == 7 ? "examples/language/analysis_buoyancy.phys"
                                                   : "examples/language/analysis.phys")
         : "examples/pendulum/analysis.c");
@@ -2446,35 +2450,43 @@ static void test_window_key(SDL_Window *window, SDL_Keycode key) {
     test_window_key_mod(window, key, PS_UI_COMMAND_MOD);
 }
 static void create_managed_project(app *a) {
+    a->manager_error[0]=0;
     if (!idle(a) || a->library_thread || a->recovery) {
         status(a, "Zuerst den laufenden Job beenden.");
+        snprintf(a->manager_error,sizeof a->manager_error,"%s",a->status);a->manager_error_reveal=true;
         return;
     }
     if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
         save_project(a);
-    if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
+    if (a->dirty || a->analysis_dirty || a->project_settings_dirty) {
+        snprintf(a->manager_error,sizeof a->manager_error,"%s",a->status);a->manager_error_reveal=true;
         return;
+    }
     if (!a->manager_name[0] || !strcmp(a->manager_name, ".") ||
         !strcmp(a->manager_name, "..") || strpbrk(a->manager_name, "/\\")) {
         status(a, "Einen gültigen Projektordnernamen eingeben.");
+        snprintf(a->manager_error,sizeof a->manager_error,"%s",a->status);a->manager_error_reveal=true;
         return;
     }
     SDL_PathInfo parent;
     if (!SDL_GetPathInfo(a->manager_parent, &parent) ||
         parent.type != SDL_PATHTYPE_DIRECTORY) {
         status(a, "Der Zielordner für das Projekt existiert nicht.");
+        snprintf(a->manager_error,sizeof a->manager_error,"%s",a->status);a->manager_error_reveal=true;
         return;
     }
     int n = snprintf(a->project_input, sizeof a->project_input, "%s/%s", a->manager_parent,
                      a->manager_name);
     if (n < 0 || n >= (int)sizeof a->project_input) {
         status(a, "Projektpfad ist zu lang.");
+        snprintf(a->manager_error,sizeof a->manager_error,"%s",a->status);a->manager_error_reveal=true;
         return;
     }
     static const int language_templates[8] = {8, 9, 18, 12, 16, 10, 19, 17};
     a->example = a->manager_experiment_language
                      ? language_templates[a->manager_template] : a->manager_template;
     new_project(a);
+    if(a->project_manager){snprintf(a->manager_error,sizeof a->manager_error,"%s",a->status);a->manager_error_reveal=true;}
 }
 static bool open_workspace_path(app *a, const char *path) {
     SDL_PathInfo info;
@@ -2643,6 +2655,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "toolbar_tests.inc"
 #include "keyboard_menu_tests.inc"
 #include "documentation_keyboard_tests.inc"
+#include "project_manager_keyboard_tests.inc"
 #include "project_settings_tests.inc"
 #include "reset_tests.inc"
 #include "speed_tests.inc"
@@ -3174,6 +3187,7 @@ int main(int argc, char **argv) {
             if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && !a->recovery && !a->layout_manager && !a->workspace_manager && !a->channel_unit_manager) {
                 if (toolbar_keyboard_key(a, &e.key)) continue;
                 if (settings_keyboard_key(a, &e.key)) continue;
+                if (project_manager_keyboard_key(a, &e.key)) continue;
                 if (a->dock_drag && e.key.key==SDLK_ESCAPE) { a->dock_drag=0;a->dock_dragging=false;continue; }
                 if (scene_shortcut(a, &e.key)) continue;
                 if (a->tab == 1 && e.key.key == SDLK_SPACE && !e.key.repeat &&
@@ -3242,9 +3256,9 @@ int main(int argc, char **argv) {
             }
         } else if (workspace_state_test) {
             if (ps_clock() - test_started >
-                (!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
+                (!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) ||
                   !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || !strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strcmp(argv[3],"logging-c") || !strcmp(argv[3],"logging-phys") || !strcmp(argv[3],"logging-flood") || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
-                     ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15)) {
+                     ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15))) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
                         argv[3], ps_clock() - test_started);
                 exit_code = 1;

@@ -44,7 +44,7 @@ static void toolbar_dispatch(app *a, toolbar_action action) {
     case TOOLBAR_OPEN: choose_workspace_path(a,PS_DIALOG_OPEN_FOLDER);break;
     case TOOLBAR_ADD_FILE: choose_workspace_path(a,PS_DIALOG_ADD_FILE);break;
     case TOOLBAR_ADD_FOLDER: choose_workspace_path(a,PS_DIALOG_ADD_FOLDER);break;
-    case TOOLBAR_NEW: a->project_manager=true;a->workspace_preview_path[0]=0;break;
+    case TOOLBAR_NEW: open_project_manager(a);break;
     case TOOLBAR_SAVE: save_active_document(a);break;
     case TOOLBAR_WORKSPACES: a->workspace_manager=true;break;
     case TOOLBAR_LOG: a->show_log=!a->show_log;if(a->show_log)dock_show(a,PS_DOCK_LOG);break;

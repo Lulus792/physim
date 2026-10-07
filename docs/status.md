@@ -3,6 +3,12 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-07. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Projekte per Tastatur:** Tab/Pfeiltasten und Enter bedienen die gesamte
+Projektmaske; reine Analyseprojekte überspringen Experimentfelder. Fehlermeldungen
+bleiben im Formular lesbar, bestehende Dateien erhalten. C-Kugelstoß, Sensorwurf
+und Boxstoß erhalten bei Physim-Auswertung die passende Vorlage.
+[Bedienung](workspace.md) und [Nachweise](platform-validation.md).
+
 **Handbuch per Tastatur:** Tab erreicht Lernwege, Themen, Inhalt, Suche,
 Navigation, Links und Codekopieren. Sichtbarer Fokus scrollt mit; Lesetasten
 bedienen den Text. Gleichzeitige Texteingabe und Tab erhalten das letzte Zeichen.

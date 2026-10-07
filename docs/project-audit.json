@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-07",
-  "inspected_revision": "6da847c7c73f15d479f457f09b0a931211fee355",
+  "inspected_revision": "0fd3ee7ca028dd31a453d6e6d8c25a8a6bd39eda",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -5297,9 +5297,11 @@
         "app/settings_tests.inc",
         "app/documentation_ui.inc",
         "app/documentation_keyboard_tests.inc",
-        "tests/test_ui_geometry.c"
+        "tests/test_ui_geometry.c",
+        "app/project_manager_ui.inc",
+        "app/project_manager_keyboard_tests.inc"
       ],
-      "note": "Hauptmenüs und persönliche Einstellungen besitzen Tastaturführung mit sichtbarem Fokus. Tab/Shift+Tab, Pfeiltasten und Enter/Leertaste bedienen alle Einstellungsgruppen; Fokus scrollt bei 22 Pixeln mit, Entwürfe lassen sich abbrechen und Werte bleiben nach Neustart erhalten. UI-Schriftgröße ist unabhängig in 16/18/20/22 Pixeln wählbar. Weitere Tastaturführung und grundlegender Screenreader-Zugang bleiben offen. PP-0710 bleibt unvollständig. Das Handbuch besitzt einen dynamischen Tastaturpfad für beide Lernwege, Themen/Inhalt, Suchfelder, Kategorien, Überschriften, Navigation, Treffer, Lesebereich, Links und Codekopieren. Die Fokusführung wird mit 16/22 Pixeln und geordnetem Text-/Tab-Eingang geprüft."
+      "note": "Hauptmenüs und persönliche Einstellungen besitzen Tastaturführung mit sichtbarem Fokus. Tab/Shift+Tab, Pfeiltasten und Enter/Leertaste bedienen alle Einstellungsgruppen; Fokus scrollt bei 22 Pixeln mit, Entwürfe lassen sich abbrechen und Werte bleiben nach Neustart erhalten. UI-Schriftgröße ist unabhängig in 16/18/20/22 Pixeln wählbar. Weitere Tastaturführung und grundlegender Screenreader-Zugang bleiben offen. PP-0710 bleibt unvollständig. Das Handbuch besitzt einen dynamischen Tastaturpfad für beide Lernwege, Themen/Inhalt, Suchfelder, Kategorien, Überschriften, Navigation, Treffer, Lesebereich, Links und Codekopieren. Die Fokusführung wird mit 16/22 Pixeln und geordnetem Text-/Tab-Eingang geprüft. Projekterstellung besitzt Tastaturführung für Textfelder, Vorlagen, Sprachen und Aktionen; Analyseprojekte überspringen Experimentfelder. Feld- und Dateifehler sind inline sichtbar, vorhandene Dateien geschützt. Die gesamte Vorlagen-/Sprachmatrix wird aufgebaut, ausgeführt und ausgewertet."
     },
     {
       "id": "PP-0711",

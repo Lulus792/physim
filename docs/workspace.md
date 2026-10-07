@@ -441,3 +441,21 @@ Texttasten; Tab schließt die Eingabe ab, ohne das letzte Zeichen zu verlieren.
 Im Lesebereich scrollen Pfeile und Bild auf/ab; Home und End springen zum Anfang
 und Ende. Ctrl+F (macOS Cmd+F) fokussiert die Dokumentensuche. Escape schließt
 das Handbuch. Ein Mausklick setzt die Zeigerbedienung fort.
+
+### Projekte per Tastatur anlegen
+
+Öffne **Datei → Neues Projekt** mit F10, Pfeiltasten und Enter. Tab führt durch
+Zielordner, Ordnerwahl, Namen, Projekttyp, Vorlage, Experiment- und Auswertungssprache,
+Anlegen und Zurück. Shift+Tab geht rückwärts; reine Analyseprojekte überspringen
+Vorlage und Experimentsprache. Der sichtbare Fokus scrollt im kleinen Fenster mit.
+Pfeile wechseln die Auswahl eines Felds; Enter oder Leertaste bedient die Aktionen.
+In den Textfeldern bleiben die üblichen Text- und Clipboard-Befehle verfügbar.
+Tab schließt bereits eingegangene Texteingaben ab. Escape und Zurück verlassen
+das Formular. Validierungsfehler erscheinen vollständig im Formular; vorhandene
+Projektdateien werden erhalten. **Ordner wählen** verwendet denselben nativen
+Dialog wie bei Mausbedienung.
+
+Für C-Experimente wählen Kugelstoß, Wurf mit Unsicherheit und Boxstoß nun dieselben
+passenden Physim-Auswertungen wie ihre Physim-Experimentvorlagen. Die allgemeine
+Positionsanalyse benötigt `position.x`; Kugelstoß stellt stattdessen
+`a.position`/`b.position` bereit und benötigt die eigene Stoßauswertung.
