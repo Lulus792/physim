@@ -160,6 +160,21 @@ def main():
             checked([sys.executable, repo / "tests/test_rng_reference.py",
                      "--c", rng_probe, "--language", rng_language])
         print("Installed/rebuilt SDK RNG: independent integer/normal references and C/Physim value snapshots passed", flush=True)
+        shutil.copy2(repo / "tests/test_ode_range.c", consumer / "ode-range-check.c")
+        shutil.copy2(repo / "tests/ode_range_probe.c", consumer / "ode-range-probe.c")
+        checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
+                 repo / "tests/fixtures/language/ode_range.phys"],
+                output=consumer / "ode-range-language.c")
+        for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
+            ode_check = builder.executable("ode-range-check-" + kind, ["ode-range-check.c"], [archive])
+            ode_probe = builder.executable("ode-range-probe-" + kind, ["ode-range-probe.c"], [archive])
+            ode_language = builder.executable("ode-range-language-" + kind, ["ode-range-language.c"], [archive], language=True)
+            checked([ode_check])
+            checked([sys.executable, repo / "tests/test_ode_range_oracle.py",
+                     "--c", ode_probe, "--language", ode_language,
+                     "--cases", repo / "tests/fixtures/ode_range_cases.json",
+                     "--fixture", repo / "tests/fixtures/language/ode_range.phys"])
+        print("Installed/rebuilt SDK ODE range: five C/Physim methods, 244 exact constant-solution references, 32 states and true overflow rollback passed", flush=True)
         shutil.copy2(repo / "tests/test_series_si.c", consumer / "series-si-check.c")
         shutil.copy2(repo / "tests/test_series_si_report.c", consumer / "series-si-report.c")
         checked([sdk / "bin" / ("physimc" + suffix), "--emit-analysis",
@@ -745,6 +760,7 @@ def main():
         "Electromagnetism through installed/rebuilt Core, Coulomb/gradient/Lorentz tests, seven RC Decimal oracles and mixed reports passed.\n" +
         "Waves/optics through installed/rebuilt Core, Snell/TIR/lens invariants, owned 4096-node grids, allocation failures and mixed string reports passed.\n" +
         "Fluid through installed/rebuilt Core, anchored max networks, conservative 4096-cell transport, allocation failures and mixed tutorial reports passed.\n" +
+        "ODE range through installed/rebuilt Core, five C/Physim methods, constant-solution Fraction references and true overflow rollback passed.\n" +
         "Series SI imports through installed/rebuilt Core, multiblock algebra/calculus/resampling, independent C/Physim report/CSV checks and transactional errors passed.\n" +
         "Quantity sums through installed/rebuilt Core, exact Fraction oracles, overflowing conversion and subnormal ties passed.\n" +
         "Canonical SI channel declarations through installed/rebuilt Core, bounded UTF-8, atomic errors and actual C/Physim run/CSV parity passed.\n" +

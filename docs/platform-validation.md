@@ -2797,3 +2797,135 @@ erhalten. Die 21 gezielten Fälle, 19 Sanitizerfälle und SDK-Prüfungen sind
 separate Nachweise. 77 Fensterfälle bleiben im Katalog; dieser Schritt behauptet
 keine erneut ausgeführte gesamte Grafikabnahme. Die Semantikumstellung für eigene
 Series bleibt trotz grüner Gesamtläufe ausdrücklich dokumentiert.
+
+
+## Gewichtete ODE-Arithmetik (§7.2 / PP-0362)
+
+Ausgangsrevision `f604d2a`. Ein getrennt gegen das vorherige installierte Archiv
+gelinkter Probe liefert für `y'=1e308`, `y(0)=0`, `dt=1e-308` den Fehlercode 10
+und Zustand 0 statt eines darstellbaren Zuwachses nahe 1. Die neue Regression
+scheitert am unveränderten Stand in `run-oh2dqpir`. Die frühere RK4-Summe
+`a+2b+2c+d` läuft vor Multiplikation mit der kleinen Schrittweite über.
+
+Der gemeinsame interne Baustein kombiniert endliche Gewichte, Ableitungen und
+Schrittweite mit kompensierten Summen und FMA. Bei problematischen Größenordnungen
+verwendet er Mantissen/Exponenten. Euler, symplektischer Euler, RK4, Verlet und
+RK45 samt Fehlerschätzung verwenden ihn. Echte nichtdarstellbare Stufen oder
+Endzustände bleiben Fehler; die geprüften Schnittstellen erhalten ihre Zustände.
+[Methoden, Einheiten und Grenzen](numerics.md) erklären weiterhin lokale statt
+globale Fehlerschätzung, nichtsteife Probleme und gewöhnliche Double-Rundung.
+
+### Gezielte Laufzeitprüfungen
+
+Je **49/49** Release-Fälle bestehen auf Intel macOS/Apple Clang
+(`run-6gcg9jz5`) und Debian 12/GCC (`run-j25bww01`). Unter Linux/Clang Debug
+mit ASan/UBSan bestehen **44/44** (`run-ukgrsnk_`). Diese Läufe enthalten
+Core/Numerics, tatsächliche Sprachprogramme, RK45-Diagnosen, Verlet sowie
+bestehende nichtkonstante Pendel- und Konvergenzprüfungen.
+
+Der zusätzliche Fraction-Prüfer vergleicht jeweils **244 C- und Physim-Fälle**
+aller fünf Verfahren gegen unabhängige rationale Lösungen für konstante
+Ableitungen/Beschleunigungen. Hex-Eingaben und die erzeugte Sprachfixture
+bewahren dieselben binären Eingaben. Geprüft werden große und kleine Größen,
+Vorzeichen, endliche Auslöschung und echte Rangefehler. Das Fehlerbudget ist
+eine ausdrücklich begrenzte Prüfung, keine Garantie exakt gerundeter Summen.
+Eine separate C-Prüfung enthält außerdem 32 Zustände und atomare Fehlerausgaben.
+
+### Gemessene Kosten und erste SDK-Lücke
+
+`tools/ode_range_benchmark.c` führt 200000 zurückgesetzte, eindimensionale RK4-
+Schritte mit konstanter Ableitung aus. Auf diesem Intel-Mac ergeben sich als
+CPU-Zeiten 0,005608 s am vorherigen Archiv, 0,036980 s mit durchgehend skalierter
+Rechnung und 0,017237 s mit dem geprüften direkten Rechenweg für normale Größen.
+Alle drei akkumulierten Werte sind 200,00000000059092. Das ist ein einzelner
+synthetischer Vergleich: Der endgültige Weg kostet hier etwa das Dreifache des
+vorherigen Wegs. Er beweist weder allgemeine Leistungsgleichheit noch ein
+Leistungsbudget für vollständige Experimente. Die Messausgaben bleiben unter
+`build/ode-cost-before.txt`, `ode-cost-after.txt` und `ode-cost-fast.txt` erhalten.
+
+Der erste isolierte macOS-SDK-Versuch (`ODE range SDK ä mac _a6b6q2f`) entdeckt
+einen fehlenden privaten Header beim Neubau der installierten Quellen.
+`tools/build.py` übernimmt jetzt auch `src/ode_numeric.h` ins SDK. Dieser
+Fehlversuch bleibt erhalten; die endgültige SDK-Abnahme benötigt einen frischen
+vollständigen Lauf.
+
+### Wiederherstellbare ältere Linux-Nachweise
+
+Zwei abgeschlossene generierte Linux-Prüfverzeichnisse wurden nach vollständiger
+Inventar-/SHA-256-Prüfung archiviert: `Base RNG SDK ä linux qfr5yce6` und
+`Material properties SDK ä linux 0d75c6hg`. Sie liegen jetzt in
+`build/archived-proofs-rng-properties.tar.gz` auf Linux und macOS. Das Archiv
+enthält 28166 Dateien/Links, ist 602375720 Byte groß und hat SHA-256
+`e4194290dadf4ca95fc095710f38ad7480955882bdf0c7975bba11ac663ebcc0`.
+`build/archived-proofs-rng-properties.json` enthält das vollständige Inventar.
+Alle Inhalte wurden vor Entfernen der beiden ausgepackten Linux-Verzeichnisse
+gegen das Archiv geprüft; die Mac-Kopie wurde zusätzlich nach Größe/SHA geprüft.
+Die historischen Nachweise bleiben damit wiederherstellbar.
+
+Die Linux-Paket-CI der Ausgangsrevision `f604d2a`
+([Lauf 37657198234](https://github.com/PhysicSimulator/physim/actions/runs/37657198234))
+ist erfolgreich abgeschlossen. Ihre C17-Matrix läuft bei der letzten Abfrage
+noch. Beide Aussagen betreffen die vorherige Revision und ersetzen keine
+Windows-/Apple-Silicon- oder gesamte Grafikabnahme der ODE-Änderung.
+
+### Korrigierte Linux-SDK-Abnahme und macOS-Gesamtlauf
+
+Das korrigierte Linux-SDK besteht vollständig unter
+`build/ODE range SDK ä linux lpk4sq92`, verschoben unter
+`proof/Native SDK ä r8gpcgqf/Relocated SDK ä`. Alle **398 Prüfbefehle**
+enden erfolgreich. 449 SDK-Dateien und 90 Kit-Eingaben sind SHA-256-erfasst.
+`build/ode-range-sdk-linux-PASSED.json` und der zusätzlich lokal erhaltene
+`build/ode-range-sdk-linux-verification.log` enthalten die Receipts.
+Das Kit läuft außerhalb der Repositoryquellen und prüft sowohl das installierte
+Archiv als auch den Neubau aus ausgelieferten SDK-Quellen. Die 21 eingefrorenen
+Implementierungs-/Test-/Dokumentationsdateien bleiben während dieses Nachweises
+unverändert. Die laufend ergänzte Plattformchronik ist nicht Teil dieses Freeze.
+
+Der vollständige macOS/Apple-Clang-Release-Lauf besteht mit **634/634** unter
+`build/contact-world-language-release-mac/test-results/run-r8al1p35`.
+API/ABI 3, Wire 5, Snapshot 3, psrun 1 und Sprache 0.182.0 bleiben unverändert.
+27 Core-Module und sämtliche bisherigen Compiler-, Runtime-, Format-, Batch-,
+Projekt- und Domänenprüfungen bleiben enthalten. Die 77 Fensterfälle im Katalog
+sind durch diesen Lauf ohne Fenster nicht erneut abgenommen.
+
+Der vollständige Debian-12/GCC-Release-Lauf besteht ebenfalls mit **634/634**
+unter `build/contact-world-language-release-linux/test-results/run-bzxu9w5y`.
+Der zusätzliche lokale Receipt ist `build/ode-range-full-linux-results.json`.
+Die beiden gezielten Linux-Receipts liegen lokal unter
+`build/ode-range-targeted-linux-results.json` (49/49) und
+`build/ode-range-asan-linux-results.json` (44/44). Beide vollständigen
+Release-Läufe enden erfolgreich; die SDK- und Sanitizerprüfungen sind getrennte
+Nachweise mit dem jeweils beschriebenen Umfang.
+
+Die spätere Jobabfrage derselben C17-Matrix bestätigt Windows/v143 und
+Windows/ClangCL jeweils Debug und Release erfolgreich. Der macOS-Intel-Job
+[112915204504](https://github.com/PhysicSimulator/physim/actions/runs/37657198365/job/112915204504)
+scheitert im SDK-/Relocation-Schritt, nachdem der direkte Build bestanden ist.
+Die öffentliche Annotation nennt nur Exitcode 1; daraus folgt keine belegte
+Ursache. macOS-ARM und beide Linux-Jobs laufen bei dieser Abfrage noch.
+Receipts: `build/ode-range-prior-c17-jobs.json` und
+`build/ode-range-prior-mac-annotations.json`. Der Fehler bleibt offen, bis
+vollständige Logs oder ein entsprechender reproduzierbarer Gegenbefund vorliegen.
+Die grünen lokalen Prüfungen ersetzen diesen Remote-Fehler nicht.
+
+Der öffentliche Abruf der vollständigen Logs für den älteren macOS-Intel-Job
+liefert HTTP 403 (`build/ode-range-prior-mac-log-response.txt`). Die Annotation
+ersetzt keinen Compiler-/Testlog; es wurde daher keine spekulative CI-Korrektur
+vorgenommen.
+
+### Abschließender macOS-SDK-Nachweis
+
+Das korrigierte macOS-SDK besteht vollständig unter
+`build/ODE range SDK ä mac tk_g682x`, verschoben unter
+`proof/Native SDK ä j3kb1qwy/Relocated SDK ä`. Auch hier enden alle
+**398 Prüfbefehle** erfolgreich; 449 SDK-Dateien und 90 Kit-Eingaben sind
+SHA-256-erfasst. Receipt: `build/ode-range-sdk-mac-PASSED.json`. Beide
+SDK-Prüfungen verwenden die gleichen 21 eingefrorenen Dateien und alle 27
+Core-Module. Gegen installierte und neu gebaute Archive bestehen die fünf
+ODE-Verfahren, unabhängige C-/Physim-Referenzen, tatsächliche Lernpfade und
+sämtliche bisherigen SDK-Gates.
+
+Der endgültige Implementierungsnachweis für PP-0362 ist damit lokal auf Intel
+macOS und Debian belegt. Der vollständige Plan bleibt mit 25 implementierten,
+fünf unvollständigen und 501 ungeprüften Blöcken offen. Eine neue gesamte
+Remote-/Grafik-/Produktabnahme wird durch diesen Schritt nicht behauptet.

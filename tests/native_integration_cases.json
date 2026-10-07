@@ -1910,6 +1910,18 @@
       "libraries": [
         "core"
       ]
+    },
+    "ode-range-probe": {
+      "sources": [
+        "tests/ode_range_probe.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "ode-range-language": {
+      "source": "tests/fixtures/language/ode_range.phys",
+      "mode": "--emit-c"
     }
   },
   "tests": [
@@ -7652,6 +7664,31 @@
             "{work}"
           ],
           "timeout": 150
+        }
+      ]
+    },
+    {
+      "name": "ode_range_oracle",
+      "targets": [
+        "python",
+        "ode-range-probe",
+        "ode-range-language"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_ode_range_oracle.py",
+            "--c",
+            "{ode-range-probe}",
+            "--language",
+            "{ode-range-language}",
+            "--cases",
+            "{root}/tests/fixtures/ode_range_cases.json",
+            "--fixture",
+            "{root}/tests/fixtures/language/ode_range.phys"
+          ],
+          "timeout": 120
         }
       ]
     }

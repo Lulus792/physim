@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-07",
-  "inspected_revision": "00fec466ac39100929dbb5dd9539678a505141a1",
+  "inspected_revision": "f604d2aa6c59c6db5397796e96b9bcb3f3eb231a",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2360,9 +2360,24 @@
       "kind": "list",
       "scope": "planned",
       "text": "- ODE-Solver: Euler nur zu Lernzwecken, symplektischer Euler, Verlet, RK4; später adaptive Runge-Kutta-Verfahren.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/core.h",
+        "include/physim/numerics.h",
+        "src/core.c",
+        "src/numerics.c",
+        "src/ode_numeric.h",
+        "tests/test_core.c",
+        "tests/test_numerics.c",
+        "tests/test_ode_range.c",
+        "tests/test_ode_range_oracle.py",
+        "tests/fixtures/language/ode_range.phys",
+        "tests/test_pendulum_tutorial.py",
+        "docs/numerics.md",
+        "tools/verify-native-sdk.py",
+        "docs/platform-validation.md"
+      ],
+      "note": "C und Physim besitzen Euler, symplektischen Euler, Velocity Verlet, RK4 und adaptives Dormand-Prince 5(4), mit dokumentierten Einheiten, gültigen Problemklassen, Zustands-/Diagnoseverträgen und unabhängigen Referenz-/Konvergenzprüfungen. Gemeinsame skalierte Zustands-/Fehlersummen beheben belegten RK4-Zwischenüberlauf; 244 konstante Lösungen in beiden Sprachen, 32 Zustände und echte Überläufe werden geprüft. Implementierungsnachweis mit begrenzter Abnahme; keine steifen Solver, Ereignissuche, dichte Ausgabe, beliebige Präzision oder ganze Plattformabnahme."
     },
     {
       "id": "PP-0363",

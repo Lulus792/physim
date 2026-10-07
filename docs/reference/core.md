@@ -267,7 +267,7 @@ ps_result ps_ode_step(
     size_t n);
 ```
 
-RK4/Euler support up to 32 first-order states. No allocation, state owned by caller.
+RK4/Euler support 1..32 first-order states. Time/dt share caller time units (seconds in experiments); derivative[i] is state[i] per time unit. Finite time/dt, dt>0, finite t+dt/state and complete finite callback outputs required. Scaled weighted arithmetic avoids intermediate product/sum range failures; every evaluated stage and final state must remain representable. Double rounding applies; no general exact-rounding or global-error guarantee. No allocation. Caller state is preserved on every error.
 
 ## ps_symplectic_step
 

@@ -1,4 +1,5 @@
 #include "physim/numerics.h"
+#include "ode_numeric.h"
 #include <float.h>
 #include <limits.h>
 #include <math.h>
@@ -170,14 +171,16 @@ ps_result ps_verlet_step(ps_acceleration_fn fn, void *u, double t, double dt, do
     if (!finite_vector(a, n))
         return PS_NUMERIC;
     for (size_t i = 0; i < n; i++)
-        qn[i] = q[i] + dt * (v[i] + .5 * dt * a[i]);
+        qn[i] = ps_ode_weighted(q[i],dt,(const double[]){v[i],a[i]},
+                                (const double[]){1,.5*dt},2,1);
     if (!finite_vector(qn, n))
         return PS_NUMERIC;
     fn(t + dt, qn, b, u);
     if (!finite_vector(b, n))
         return PS_NUMERIC;
     for (size_t i = 0; i < n; i++)
-        vn[i] = v[i] + dt * (.5 * a[i] + .5 * b[i]);
+        vn[i] = ps_ode_weighted(v[i],dt,(const double[]){a[i],b[i]},
+                                (const double[]){1,1},2,2);
     if (!finite_vector(vn, n))
         return PS_NUMERIC;
     memcpy(q, qn, n * sizeof *q);
@@ -256,10 +259,9 @@ static ps_result ode_advance(ps_ode_fn fn, void *u, double start, double end, do
         }
         for (size_t stage = 0; stage < 7; stage++) {
             for (size_t i = 0; i < n; i++) {
-                double sum = 0;
-                for (size_t j = 0; j < stage; j++)
-                    sum += a[stage][j] * k[j][i];
-                z[i] = y[i] + h * sum;
+                double derivatives[7];
+                for (size_t j = 0; j < stage; j++) derivatives[j]=k[j][i];
+                z[i] = ps_ode_weighted(y[i],h,derivatives,a[stage],stage,1);
                 k[stage][i] = NAN;
             }
             double stage_time = stage >= 5 ? next : t + c[stage] * h;
@@ -282,13 +284,12 @@ static ps_result ode_advance(ps_ode_fn fn, void *u, double start, double end, do
         }
         double norm = 0;
         for (size_t i = 0; i < n; i++) {
-            double err = 0;
-            for (size_t j = 0; j < 7; j++)
-                err += e[j] * k[j][i];
+            double derivatives[7];
+            for (size_t j = 0; j < 7; j++) derivatives[j]=k[j][i];
             double at = o.component_absolute_tolerance ? o.component_absolute_tolerance[i]
                                                        : o.absolute_tolerance;
             double scale = at + o.relative_tolerance * fmax(fabs(y[i]), fabs(z[i]));
-            double scaled = fabs(h * err) / scale;
+            double scaled = isfinite(scale) ? fabs(ps_ode_weighted(0,h,derivatives,e,7,scale)) : NAN;
             if (!isfinite(scale) || !isfinite(scaled)) {
                 *diagnostic = (ps_ode_diagnostic){PS_ODE_DIAG_ERROR_ESTIMATE, next, i, UINT_MAX};
                 status = PS_NUMERIC;

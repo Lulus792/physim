@@ -97,8 +97,8 @@ Korrekturen zusätzlich in ihrer tatsächlichen Matrix bestätigen.
 
 ## Batch-Bindung und Controller
 
-Der aktuelle Abgleich enthält vierundzwanzig implementierte Blöcke, fünf konkrete
-unvollständige Blöcke und 502 weiterhin ungeprüfte Blöcke. Die acht Lernpfade
+Der aktuelle Abgleich enthält fünfundzwanzig implementierte Blöcke, fünf konkrete
+unvollständige Blöcke und 501 weiterhin ungeprüfte Blöcke. Die acht Lernpfade
 bleiben erhalten; hinzu kommen LANG-005, der Batch-/Parametercontroller und die beiden Dokumentationsteile. Elektromagnetismus und Wellen/Optik besitzen zusätzliche begrenzte Domänennachweise.
 Die Originaltexte aller 531 Blöcke und 475 Aufzählungspunkte bleiben unverändert.
 Die Sprachbindung und die beiden Lernwege besitzen ausdrücklich begrenzte Implementierungs- und
@@ -215,5 +215,22 @@ erklären insbesondere die geänderte Bedeutung von value()/unitScale().
 PP-0370 kehrt nach Schließen dieses konkreten Gegenbefunds zu `unverified`
 zurück: Alle übrigen internen Speicherschichten sind für den gesamten Planumfang
 noch nicht einzeln abgenommen. Die vollständige Einheiten-/Plattformabnahme
-bleibt offen. Aktuell 24 implementierte, fünf unvollständige und 502 ungeprüfte
+bleibt offen. Aktuell 25 implementierte, fünf unvollständige und 501 ungeprüfte
 Blöcke; frühere Gegenbefunde und tatsächliche Nachweise bleiben erhalten.
+
+
+## ODE-Methoden und gewichtete Zustände (§7.2)
+
+PP-0362 ist jetzt den fünf tatsächlich implementierten C-/Physim-Methoden,
+Konventionen und Referenz-/Konvergenz-/Fehlerprüfungen zugeordnet. Ein neuer
+Gegenbeleg zeigt unnötigen RK4-Zwischenüberlauf bei einer endlichen konstanten
+Lösung. Gemeinsame skalierte Arithmetik korrigiert diese Produkt-/Summengrenze
+auch für Euler, symplektischen Euler, Verlet und RK45-Stufen/Fehlerschätzungen.
+244 unabhängige konstante Lösungen ergänzen die bestehenden nichtkonstanten
+Oszillator- und Pendelprüfungen. [Einheiten und Grenzen](numerics.md) unterscheiden
+lokale Fehlerschätzung von globaler Genauigkeit und nichtsteife von steifen
+Problemen. Dieser Implementierungsnachweis ersetzt keine ganze Plattformabnahme.
+
+Aktuell 25 implementierte, fünf unvollständige und 501 ungeprüfte Blöcke.
+Weitere Mathematikforderungen bleiben einzeln zu prüfen; sie werden nicht allein
+wegen dieses ODE-Nachweises als erfüllt markiert.

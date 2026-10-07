@@ -71,7 +71,13 @@ double ps_rng_uniform(ps_rng *rng);
 double ps_rng_normal(ps_rng *rng, double mean, double standard_deviation);
 typedef void (*ps_ode_fn)(double time, const double *state, double *derivative, void *user);
 typedef enum { PS_EULER, PS_SYMPLECTIC, PS_RK4, PS_VERLET, PS_RK45 } ps_integrator;
-/* RK4/Euler support up to 32 first-order states. No allocation, state owned by caller. */
+/* RK4/Euler support 1..32 first-order states. Time/dt share caller time units
+ * (seconds in experiments); derivative[i] is state[i] per time unit. Finite
+ * time/dt, dt>0, finite t+dt/state and complete finite callback outputs required.
+ * Scaled weighted arithmetic avoids intermediate product/sum range failures;
+ * every evaluated stage and final state must remain representable. Double
+ * rounding applies; no general exact-rounding or global-error guarantee.
+ * No allocation. Caller state is preserved on every error. */
 ps_result ps_ode_step(ps_integrator method, ps_ode_fn fn, void *user, double time, double dt,
                       double *state, size_t n);
 /* Symplectic Euler for separable q'=v, v'=a(q). */

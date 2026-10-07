@@ -3,6 +3,7 @@
 #include "physim/data.h"
 #include "text_validation.h"
 #include "number_parse.h"
+#include "ode_numeric.h"
 #include <errno.h>
 #include <math.h>
 #include <stdio.h>
@@ -127,10 +128,10 @@ ps_result ps_ode_step(ps_integrator method, ps_ode_fn f, void *u, double t, doub
             return PS_NUMERIC;
     if (method == PS_EULER) {
         for (size_t i = 0; i < n; i++)
-            z[i] = y[i] + dt * a[i];
+            z[i] = ps_ode_weighted(y[i],dt,&a[i],(const double[]){1},1,1);
     } else {
         for (size_t i = 0; i < n; i++)
-            z[i] = y[i] + dt * a[i] / 2;
+            z[i] = ps_ode_weighted(y[i],dt,&a[i],(const double[]){1},1,2);
         for (size_t i = 0; i < n; i++)
             if (!isfinite(z[i]))
                 return PS_NUMERIC;
@@ -139,7 +140,7 @@ ps_result ps_ode_step(ps_integrator method, ps_ode_fn f, void *u, double t, doub
             if (!isfinite(b[i]))
                 return PS_NUMERIC;
         for (size_t i = 0; i < n; i++)
-            z[i] = y[i] + dt * b[i] / 2;
+            z[i] = ps_ode_weighted(y[i],dt,&b[i],(const double[]){1},1,2);
         for (size_t i = 0; i < n; i++)
             if (!isfinite(z[i]))
                 return PS_NUMERIC;
@@ -148,7 +149,7 @@ ps_result ps_ode_step(ps_integrator method, ps_ode_fn f, void *u, double t, doub
             if (!isfinite(c[i]))
                 return PS_NUMERIC;
         for (size_t i = 0; i < n; i++)
-            z[i] = y[i] + dt * c[i];
+            z[i] = ps_ode_weighted(y[i],dt,&c[i],(const double[]){1},1,1);
         for (size_t i = 0; i < n; i++)
             if (!isfinite(z[i]))
                 return PS_NUMERIC;
@@ -157,7 +158,8 @@ ps_result ps_ode_step(ps_integrator method, ps_ode_fn f, void *u, double t, doub
             if (!isfinite(d[i]))
                 return PS_NUMERIC;
         for (size_t i = 0; i < n; i++)
-            z[i] = y[i] + dt * (a[i] + 2 * b[i] + 2 * c[i] + d[i]) / 6;
+            z[i] = ps_ode_weighted(y[i],dt,(const double[]){a[i],b[i],c[i],d[i]},
+                                      (const double[]){1,2,2,1},4,6);
     }
     for (size_t i = 0; i < n; i++)
         if (!isfinite(z[i]))
@@ -166,8 +168,12 @@ ps_result ps_ode_step(ps_integrator method, ps_ode_fn f, void *u, double t, doub
     return PS_OK;
 }
 void ps_symplectic_step(double *p, double *v, double a, double dt) {
-    *v += a * dt;
-    *p += *v * dt;
+    if (isfinite(*v) && isfinite(a) && isfinite(dt))
+        *v = ps_ode_weighted(*v,dt,&a,(const double[]){1},1,1);
+    else *v += a * dt;
+    if (isfinite(*p) && isfinite(*v) && isfinite(dt))
+        *p = ps_ode_weighted(*p,dt,v,(const double[]){1},1,1);
+    else *p += *v * dt;
 }
 const ps_medium PS_VACUUM = {0, 0, "vacuum"}, PS_AIR = {1.225, 1.81e-5, "air at 15 C, sea level"},
                 PS_WATER = {998.2, 1.002e-3, "water at 20 C"};

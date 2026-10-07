@@ -3,6 +3,11 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-07. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Gewichtete ODE-Zustände:** Euler, symplektischer Euler, RK4, Verlet und RK45
+verwenden skalierte Produkt-/Summenrechnung für problematische Größenordnungen.
+Konstante endliche Lösungen scheitern nicht mehr am belegten RK4-Zwischenüberlauf;
+echte Stufen-/Endüberläufe bleiben Fehler. [Einheiten und Grenzen](numerics.md).
+
 **Kanonische SI-Series:** Eigene und ausgerichtete Reihen konvertieren deklarierte
 Eingabeeinheiten blockweise nach SI und speichern Skala 1. C und Physim rechnen
 1 m + 50 cm jetzt als 1,5 m; Analyse, CSV und Berichte verwenden dieselbe

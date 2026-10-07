@@ -26,7 +26,8 @@ ps_result ps_minimize_golden(ps_scalar_fn fn, void *user, double lower, double u
 typedef void (*ps_acceleration_fn)(double time, const double *position, double *acceleration,
                                    void *user);
 /* Velocity Verlet for q''=a(t,q), no velocity-dependent acceleration. Arrays must
- * be distinct, n<=32. Position/velocity unchanged if any evaluation is invalid. */
+ * be distinct, n<=32. Scaled weighted updates retain small accelerations.
+ * Position/velocity unchanged if any evaluation or final state is invalid. */
 ps_result ps_verlet_step(ps_acceleration_fn fn, void *user, double time, double dt,
                          double *position, double *velocity, size_t n);
 typedef struct {
@@ -42,6 +43,8 @@ typedef struct {
 ps_ode_options ps_ode_options_default(void);
 /* Dormand-Prince 5(4), explicit non-stiff ODEs. Integrates forward or backward to
  * the requested endpoint, n<=32. Infinity norm of component-wise scaled error.
+ * Scaled weighted stage/error sums avoid premature range loss. Every stage
+ * must still be representable; tolerance scales remain finite Double values.
  * Local error control is not a global-error bound. State changes only on PS_OK.
  * Callbacks must be deterministic and must not change externally visible state:
  * rejected stages and trial evaluations are normal. No events/dense output yet. */

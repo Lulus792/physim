@@ -33,6 +33,41 @@ fehlende Ableitungskomponenten ergeben `PS_NUMERIC`. Der optionale Bericht enth�
 auch bei solchen Abbrüchen den intern erreichten Zeitpunkt; der übergebene Zustand
 wird erst bei vollständig erfolgreicher Integration geändert.
 
+### Gewichtete Zustände ohne unnötigen Zwischenüberlauf
+
+Alle fünf Methoden verwenden für endliche Eingaben gemeinsame skalierte
+arithmetische Bausteine: Euler, symplektischer Euler, RK4, Verlet und die
+Dormand–Prince-Stufen samt lokaler Fehlerschätzung. Gewichte, Ableitungen und
+Schrittweite werden vor der endgültigen Rückskalierung kombiniert. Produkte
+und Summen in problematischen Größenordnungen werden über Mantissen/Exponenten
+gebildet; kompensierte Summen und FMA halten gewöhnliche Rundungsreste fest.
+Normale Zahlenbereiche verwenden einen geprüften direkten Rechenweg.
+
+Ein konkreter früherer Fehler ist dadurch geschlossen: Für `y'=1e308`,
+`y(0)=0`, `dt=1e-308` ist der konstante analytische Zuwachs nahe 1. RK4 bildete
+zuvor `a+2b+2c+d` und meldete bereits dabei Überlauf. Jetzt wird die Schrittweite
+berücksichtigt, bevor das Endergebnis zurückskaliert wird. Umgekehrt können
+subnormale Ableitungen mit großer Schrittweite noch darstellbare Zuwächse
+liefern. Die tatsächliche Stufen-/Endzustandsprüfung bleibt erhalten.
+
+Zeit und Schrittweite benutzen dieselbe Zeitbasis; in Physim-Experimenten sind
+es Sekunden. Jede Ableitung hat die Einheit ihrer Zustandskomponente pro
+Zeiteinheit. Bei Verlet besitzt die Beschleunigung Position/Zeiteinheit²,
+Geschwindigkeit Position/Zeiteinheit. Die Rechnung ist explizit und für
+nichtsteife Systeme vorgesehen. Euler ist ein Lernverfahren erster Ordnung,
+symplektischer Euler ein Verfahren erster Ordnung für separable Mechanik,
+Verlet zweiter Ordnung, klassisches RK4 vierter Ordnung. RK45 verwendet die
+lokale eingebettete Fehlerschätzung; eine globale Schranke oder Stiffness-
+Erkennung ist damit nicht garantiert.
+
+Dies ist weiterhin Double-Arithmetik. Unrepräsentierbare echte Stufen oder
+Endzustände, nichtendliche Callback-Ausgaben und nichtdarstellbare Toleranzskalen
+bleiben Fehler. Es gibt keine allgemeine Garantie exakt gerundeter gewichteter
+Summen; starke Auslöschung kann relative Fehler vergrößern. Für konstante
+Ableitungen/Beschleunigungen prüfen unabhängige rationale Referenzen die
+analytischen Lösungen in C und Physim. Die vorhandenen Oszillator-, Pendel-,
+Konvergenz-, Rückwärts- und Diagnoseprüfungen bleiben aktiv.
+
 ### Abbruchursachen untersuchen
 
 `ps_ode_integrate_diagnosed` bietet dieselbe Rechnung mit einem zusätzlichen,
