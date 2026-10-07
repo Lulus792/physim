@@ -1,0 +1,34 @@
+// Loop/branch locals have lexical lifetimes even outside a named function.
+var readers: [func() -> String] = []
+var numbers: [func() -> Int64] = []
+var globalValue = 20
+for index in 0..<4:
+    let prefix = "row " + String(index)
+    var localValue = index
+    let nested = func() -> func() -> String:
+        let suffix = "!"
+        return func() -> String:
+            return prefix + suffix
+    readers.append(nested())
+    numbers.append(func() -> Int64:
+        return index + localValue + globalValue
+    )
+    localValue = 100
+// Local captures are snapshots; real module globals retain global storage.
+globalValue = 30
+for index in 0..<4:
+    assert(readers[index]() == "row " + String(index) + "!")
+    assert(numbers[index]() == index * 2 + 30)
+var branch: (func() -> String)? = nil
+if true:
+    let payload = ["owned", " array"]
+    func read() -> String:
+        return payload[0] + payload[1]
+    branch = Optional.some(read)
+assert(branch.unwrap()() == "owned array")
+let optional: String? = Optional.some("binding")
+if let value = optional:
+    readers.append(func() -> String:
+        return value
+    )
+assert(readers[4]() == "binding")

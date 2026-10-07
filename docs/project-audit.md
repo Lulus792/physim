@@ -261,3 +261,17 @@ gezeichnete Fenster, echte Buttonaktionen, Cache-/Zustandsänderungen und
 ungültige Anfragen. Wayland und praktische Orca-Bedienung bleiben offen. PP-0710 bleibt unvollständig;
 die Zahl implementierter Planblöcke und der vollständige Planumfang ändern sich
 durch diesen Einstieg nicht.
+
+
+## Nullstellensuche und Optimierungsgrundlagen (§7.2 / PP-0361)
+
+Bisection und Golden Section sind über die öffentlichen C-/Physim-Funktionen
+geprüft. Ein belegter falscher Konvergenzerfolg bei subnormalen und relativen
+Rundungsgrenzen ist durch exakte binäre Toleranzvergleiche geschlossen. Die
+Fraction-Gegenprobe prüft anfängliche/finale Entscheidungen, Callback-Bereiche,
+Zähler und gemeinsame Berichte. [Verträge und Grenzen](numerics.md) dokumentieren
+Einheiten, Stetigkeit/Unimodalität, Stagnation und Ausgabeerhaltung bei Fehlern.
+Der dabei belegte Capture-Fehler für Modulblock-Closures ist ebenfalls geschlossen;
+retained Schleifen-/Blockwerte werden als besitzende Snapshots geprüft.
+Aktuell: 27 implementierte, fünf unvollständige und 499 ungeprüfte Planblöcke.
+Der vollständige Projektplan und die Plattform-/Produktabnahme bleiben offen.

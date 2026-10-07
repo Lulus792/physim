@@ -3362,3 +3362,123 @@ bestehen; Receipt: `build/atspi-sdk-linux-PASSED.json`, zusammen mit dem
 macOS-Receipt und den 21 unveränderten Dateien in
 `build/atspi-source-freeze.json`. Dies ergänzt die native externe Clientprüfung,
 behauptet aber keine praktische Screenreader- oder vollständige Core-Abnahme.
+
+
+## Skalare Suche, exakte Toleranzen und Modulblock-Closures (PP-0361)
+
+Ausgangspunkt am 8. Oktober 2026 ist
+`c07e4b832d504d85581284cd74f453f4bcf1ceb2`. Die Abbruchbedingung von Bisection
+und Golden Section wird jetzt als exakter Vergleich der binären Werte behandelt.
+87 vorbereitete Gegenbeispiele belegten falsche Konvergenz bei subnormalen
+Intervallen. Eine einfache Differenzkorrektur schloss diese, ließ aber 1007
+relative Grenzfälle in der separaten Probe offen. Die finale Implementierung
+entscheidet klar entfernte Fälle über eine konservative Fehlerumhüllung und
+Rundungsgrenzen über einen festen Ganzzahlakkumulator, ohne Heap oder breiteren
+Gleitkommatyp. Das betrifft die Abbruchentscheidung, nicht die Präzision der
+Callback-Ergebnisse.
+
+Die öffentliche Gegenprobe `tests/test_scalar_range_oracle.py` prüft **7787 C**-
+und **243 Physim**-Berichte mit unabhängigen Fraction-Vergleichen. Sie prüft
+anfängliche sowie finale Abbruchentscheidungen, Callback-Bereiche/Zähler und
+bekannte Lösungen. Der ältere Code scheitert auch an dieser öffentlichen
+Gegenprobe (`build/scalar-original-oracle-failure.txt`). Zusätzlich bestanden
+1152 vorbereitete C-Gegenproben an den größten endlichen Intervallgrenzen.
+
+Ein weiterer belegter Grenzfehler war vorzeitige Stagnation: Bei
+`[DBL_TRUE_MIN, 4*DBL_TRUE_MIN]` vertauschten getrennt gerundete Produkte die
+Golden-Section-Punkte. Der ältere Code lieferte `PS_LIMIT` nach null Iterationen,
+obwohl zwei Innenpunkte vorhanden waren. Skalierte Mischwerte liefern nun
+geordnet die beiden Innenpunkte und nach einer Iteration `PS_OK` mit erfüllter
+Toleranz. Auch der bisezierende Mittelpunkt wird in kleinen/engen Intervallen
+stabil berechnet; gewöhnliche breite Intervalle behalten ihre normale Rechnung.
+Die neue öffentliche C-Gegenprobe enthält beide konkreten Sample-Grenzfälle.
+
+Die erste Physim-Gegenprobe belegte außerdem einen echten Compilerfehler:
+Schleifen-/Blockwerte auf Modulebene wurden wie echte Modulglobals behandelt,
+aber als C-Lokalvariablen ausgegeben. Closures referenzierten so undeclared
+Identifikatoren. Der Checker unterscheidet jetzt direkte Modulvariablen von
+Blocklocals und übernimmt letztere als besitzende Captures. Zurückbehaltene
+Schleifenwerte, veränderte lokale Entwürfe, echte lebende Modulglobals,
+verschachtelte String-Captures, lokale Funktionen mit Array-Captures und
+optionale Bindungen werden nativ ausgeführt. Der frühere Harness-Aufruf mit
+`Optional.none()` war ein Syntaxfehler der Probe; die Sprache verwendet `nil`.
+
+Die gezielte Linux-Clang-Debug-ASan-/UBSan-Prüfung vor der zusätzlichen
+Sample-Korrektur besteht **5/5** in `run-7ggfzxaa`
+(`build/scalar-final-initial-asan-linux.log`). Die frühere fünffache Prüfung
+`run-v71uny34` hatte die verstärkte anfängliche Entscheidungsgegenprobe noch
+nicht enthalten. Unter Intel-macOS/Apple Clang bestehen vor der Sample-Korrektur
+**5/5** in `run-lzvgypq1`; danach bestehen **19/19** relevante Numerik-, Scalar-,
+Closure-, ODE- und Referenzfälle in `run-h1nrywai`
+(`build/scalar-sampling-final-mac.log`).
+
+Der breite Intel-macOS-Release-Lauf besteht **640/641** in `run-b17mylss`
+(`build/scalar-full-mac.log`). Sein einziger Fehler war die veraltete erzeugte
+API-Referenz nach der Header-Vertragsänderung. `tools/generate-reference.py`
+aktualisierte nur `docs/reference/numerics.md`; alle 30 Referenzdateien bestehen
+anschließend `--check`, und die Referenzgegenprobe besteht im gezielten finalen
+Lauf. Dieser breite Lauf lag noch vor der zusätzlichen Sample-Korrektur; die
+finale 19er-Prüfung deckt diese gezielt ab. Die Fehlerbelege `run-ho7tfwlu`
+(falsche erwartete Iterationslage der neuen C-Probe), `run-823gb3qm`
+(Harness-Syntax) und `run-b5ug0q9u` (echte Capture-Lücke) bleiben erhalten.
+
+Das finale Intel-macOS-SDK `Scalar search SDK ä mac nn54utn3` besteht seinen
+Manifestnachweis für **451 SDK-Dateien** und das unabhängige Kit mit **100 Dateien**.
+Der aus dem Kit entpackte Prüfer verwendet `--scalar-only`, verschiebt das Paket
+und baut den Core ausschließlich aus dessen Quellen neu. Öffentliche C-Probe,
+Fraction-/C-/Physim-Berichte und Modulblock-Closures bestehen mit installiertem
+und frisch gebautem Core. Receipt: `build/scalar-sdk-mac-PASSED.json`. Dieser
+gezielte Paketnachweis ist keine Wiederholung der vollständigen früheren
+SDK-Domänen- oder GUI-Abnahme.
+
+Für die Linux-Prüfung wurden nur die abgeschlossenen älteren SDK-Prüfläufe
+`ODE range SDK ä linux lpk4sq92` und `Series numeric SDK ä linux p5iekc7w`
+archiviert. `build/scalar-old-archived-proofs.tar.gz` enthält **28513 Dateien/Verweise**,
+**594890472 Byte**, SHA-256
+`7cdd96fd1c440adfd32b066f8263792f74d28004bdce6aef8de6dc50742323be`.
+Inhalte wurden gegen das Inventar geprüft, Originale vor dem Entfernen nochmals
+geprüft und die Linux-Archivkopie gegen denselben Hash geprüft. Archiv und
+Inventar liegen auf Mac und Linux; Entpacken stellt die ursprünglichen `build/`-
+Pfade wieder her. Receipts: `build/scalar-old-archived-proof-inventory.json`,
+`scalar-old-archive-verified.json`, `scalar-old-archive-removed.json` und
+`scalar-old-archive-linux-copy-verified.json`.
+
+PP-0361 besitzt damit einen begrenzten Implementierungsnachweis für Bisection
+und Golden Section; globale Optimierung, weitere Mathematikforderungen und
+die gesamte Plattform-/Produktabnahme bleiben offen. Die 531 Originalplanblöcke
+bleiben vollständig erhalten: 27 implementiert, fünf unvollständig, 499 ungeprüft.
+
+
+Der breite Debian/GCC-Release-Lauf besteht **641/641** in `run-t4s0ldly`
+(`build/scalar-full-linux.log`). Die erzeugte Referenz war dort bereits
+aktualisiert. Dieser Lauf lag vor der zusätzlichen Sample-Korrektur.
+Mit dem finalen stabilen Mischwert bestehen danach die **19/19** relevanten
+Fälle sowohl unter GCC/Release in `run-h51lh8ze` als auch unter
+Clang/Debug/ASan/UBSan in `run-z0mxt__a`
+(`build/scalar-sampling-final-release-linux.log`,
+`build/scalar-sampling-final-asan-linux.log`). Es wurden keine Wartezeiten
+verlängert und keine Sanitizer-Prüfungen unterdrückt; `detect_leaks=0` ist wie
+zuvor für SDL/Mesa gesetzt, Address-/UndefinedBehavior bleiben aktiv.
+
+
+Der eng begrenzte Apple-Clang-O2-Zeitvergleich von 20000 flachen Golden-Section-
+Suchen auf `[-10,10]` mit absoluter Toleranz `1e-10` behält 53 Iterationen/
+55 Auswertungen. Drei ältere Läufe brauchen 0,00519–0,00534 Sekunden, drei finale
+0,01284–0,01531 Sekunden. Der exakte Vertrag und stabile Randpunkte verursachen
+hier etwa Faktor 2,5 im Median; das sind in dieser Probe rund 0,4 Mikrosekunden
+zusätzliche Zeit pro Suche. `build/scalar-benchmark-final.json` bewahrt die Werte.
+Dies ist kein allgemeines Leistungsversprechen für andere Callbacks/Intervalle;
+Grenzfälle verwenden zusätzliche exakte Arbeit.
+
+
+Das finale Debian/GCC-SDK `Scalar search SDK ä linux pe_dtue1` besteht ebenfalls
+seine **451 SDK-Dateien** und das unabhängige Kit mit **100 Dateien**. Der aus
+dem Kit entpackte Prüfer verschiebt es und führt `--scalar-only` mit dem
+installierten sowie allein aus Paketquellen neu gebauten Core aus. Alle drei
+äußeren Schritte (Install, Kit, Verify) bestehen; die sechs jeweiligen
+C-/Closure-/Orakel-Gegenproben bestehen. Receipt:
+`build/scalar-sdk-linux-PASSED.json`. Die beiden Plattform-Receipts passen zu
+allen 20 Dateien in `build/scalar-source-freeze.json`; die fortgeschriebene
+Prüfchronik ist davon bewusst ausgenommen. Der gezielte SDK-Nachweis ersetzt
+keinen neuen vollständigen SDK-Domänen-/GUI-Lauf und keine aktuelle Windows-
+oder Apple-Silicon-Abnahme. Der Gesamtplan bleibt unvollständig.

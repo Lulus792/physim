@@ -1,5 +1,6 @@
 #include "physim/numerics.h"
 #include "ode_numeric.h"
+#include "scalar_numeric.h"
 #include <float.h>
 #include <limits.h>
 #include <math.h>
@@ -109,7 +110,17 @@ static bool scalar_args(ps_scalar_fn fn, double lo, double hi, double abs_x, dou
            isfinite(rel_x) && rel_x >= 0 && rel_x < 1 && limit > 0;
 }
 static bool bracket_small(double lo, double hi, double x, double abs_x, double rel_x) {
-    return hi * .5 - lo * .5 <= abs_x + rel_x * fabs(x);
+    return ps_scalar_bracket_small(lo, hi, x, abs_x, rel_x);
+}
+/* Wide intervals retain the ordinary convex sum. Near the representable grid,
+ * keep weighted products normalized until the final sample; independently
+ * rounded subnormal products can invert the two golden-section points. */
+static double scalar_mix(double lo, double hi, double weight) {
+    double scale = fmax(fabs(lo),fabs(hi));
+    if(scale >= 4*DBL_MIN && hi*.5-lo*.5 > (32*DBL_EPSILON)*scale)
+        return (1-weight)*lo+weight*hi;
+    double values[2]={lo,hi},weights[2]={1-weight,weight};
+    return ps_ode_weighted(0,1,values,weights,2,1);
 }
 ps_result ps_root_bisect(ps_scalar_fn fn, void *u, double lo, double hi, double abs_x, double rel_x,
                          unsigned limit, ps_scalar_report *out) {
@@ -128,7 +139,7 @@ ps_result ps_root_bisect(ps_scalar_fn fn, void *u, double lo, double hi, double 
     if (signbit(fl) == signbit(fh))
         return PS_INVALID;
     for (unsigned iter = 0; iter < limit; iter++) {
-        double mid = lo * .5 + hi * .5, fm = fn(mid, u);
+        double mid = scalar_mix(lo, hi, .5), fm = fn(mid, u);
         if (!isfinite(fm))
             return PS_NUMERIC;
         r.x = mid;
@@ -157,7 +168,7 @@ ps_result ps_minimize_golden(ps_scalar_fn fn, void *u, double lo, double hi, dou
     if (!scalar_args(fn, lo, hi, abs_x, rel_x, limit, out))
         return PS_INVALID;
     const double g = 0.6180339887498948482;
-    double a = g * lo + (1 - g) * hi, b = (1 - g) * lo + g * hi, fa = fn(a, u), fb = fn(b, u);
+    double a = scalar_mix(lo, hi, 1-g), b = scalar_mix(lo, hi, g), fa = fn(a, u), fb = fn(b, u);
     if (!isfinite(fa) || !isfinite(fb))
         return PS_NUMERIC;
     ps_scalar_report r = {0, 0, lo, hi, 0, 2};
@@ -179,13 +190,13 @@ ps_result ps_minimize_golden(ps_scalar_fn fn, void *u, double lo, double hi, dou
             hi = b;
             b = a;
             fb = fa;
-            a = g * lo + (1 - g) * hi;
+            a = scalar_mix(lo, hi, 1-g);
             fa = fn(a, u);
         } else {
             lo = a;
             a = b;
             fa = fb;
-            b = (1 - g) * lo + g * hi;
+            b = scalar_mix(lo, hi, g);
             fb = fn(b, u);
         }
         r.evaluations++;

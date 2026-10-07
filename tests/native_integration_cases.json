@@ -1956,6 +1956,18 @@
       "defines": [
         "Z_PREFIX"
       ]
+    },
+    "scalar-range-probe": {
+      "sources": [
+        "tests/scalar_range_probe.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "scalar-range-language": {
+      "source": "tests/fixtures/language/scalar_range.phys",
+      "mode": "--emit-c"
     }
   },
   "tests": [
@@ -7771,6 +7783,29 @@
             "{accessibility-atspi-fixture}",
             "--work",
             "{work}"
+          ],
+          "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "scalar_range_oracle",
+      "targets": [
+        "python",
+        "scalar-range-probe",
+        "scalar-range-language"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_scalar_range_oracle.py",
+            "--c",
+            "{scalar-range-probe}",
+            "--language",
+            "{scalar-range-language}",
+            "--fixture",
+            "{root}/tests/fixtures/language/scalar_range.phys"
           ],
           "timeout": 120
         }

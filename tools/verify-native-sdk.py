@@ -10,13 +10,39 @@ import sys
 import tempfile
 
 
+def verify_scalar_search(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked):
+    """Shared full/focused acceptance against installed and SDK-source-built Core."""
+    shutil.copy2(repo / "tests/test_scalar_range.c", consumer / "scalar-range-check.c")
+    shutil.copy2(repo / "tests/scalar_range_probe.c", consumer / "scalar-range-probe.c")
+    checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
+             repo / "tests/fixtures/language/scalar_range.phys"],
+            output=consumer / "scalar-range-language.c")
+    checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
+             repo / "tests/fixtures/language/module_block_closures.phys"],
+            output=consumer / "module-block-closures.c")
+    for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
+        scalar_check = builder.executable("scalar-range-check-" + kind, ["scalar-range-check.c"], [archive])
+        scalar_probe = builder.executable("scalar-range-probe-" + kind, ["scalar-range-probe.c"], [archive])
+        scalar_language = builder.executable("scalar-range-language-" + kind, ["scalar-range-language.c"], [archive], language=True)
+        closure_check = builder.executable("module-block-closures-" + kind, ["module-block-closures.c"], [archive], language=True)
+        checked([scalar_check]);checked([closure_check])
+        checked([sys.executable, repo / "tests/test_scalar_range_oracle.py",
+                 "--c", scalar_probe, "--language", scalar_language,
+                 "--fixture", repo / "tests/fixtures/language/scalar_range.phys"])
+    print("Installed/rebuilt SDK scalar search: exact binary tolerance decisions, C/Physim reports, callback bounds/counters and owned module-block closures passed", flush=True)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sdk", type=Path, required=True)
     parser.add_argument("--work", type=Path, required=True)
     parser.add_argument("--compiler")
     parser.add_argument("--app-tests", action="store_true")
+    parser.add_argument("--scalar-only", action="store_true",
+                        help="Verify scalar search and module-block closures only; no GUI or other domain acceptance")
     args = parser.parse_args()
+    if args.scalar_only and args.app_tests:
+        parser.error("--scalar-only cannot be combined with --app-tests")
     repo = Path(__file__).resolve().parent.parent
     if args.sdk.resolve() == args.work.resolve() or args.sdk.resolve() in args.work.resolve().parents:
         parser.error("Verification work must be outside the SDK being copied")
@@ -80,6 +106,16 @@ def main():
         builder.includes = [sdk / "include"]
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+        if args.scalar_only:
+            shutil.copytree(sdk / "src", consumer / "src")
+            rebuilt_core = builder.archive("sdk-rebuilt-core", [f"src/{name}.c" for name in native.CORE])
+            verify_scalar_search(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
+            (root / "PASSED.txt").write_text(
+                "Focused scalar-search SDK verification passed.\n"
+                "Installed/rebuilt Core, exact C/Physim stopping decisions, callback bounds/counters,\n"
+                "owned module-block closures, manifest and relocation; no full domain or GUI acceptance.\n", encoding="utf-8")
+            print(f"Scalar-search SDK verified: {root}")
+            return
         checked([sys.executable,repo / "tests/test_documentation_tracks.py","--root",sdk,
                  "--catalog",repo / "tests/tutorial_sources.json"])
         shutil.copy2(sdk / "examples/documentation/c_workflow.c",consumer / "c-workflow-intro.c")
@@ -175,6 +211,7 @@ def main():
                      "--cases", repo / "tests/fixtures/ode_range_cases.json",
                      "--fixture", repo / "tests/fixtures/language/ode_range.phys"])
         print("Installed/rebuilt SDK ODE range: five C/Physim methods, 244 exact constant-solution references, 32 states and true overflow rollback passed", flush=True)
+        verify_scalar_search(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         shutil.copy2(repo / "tests/test_linear_range.c", consumer / "linear-range-check.c")
         shutil.copy2(repo / "tests/linear_range_probe.c", consumer / "linear-range-probe.c")
         checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
@@ -775,6 +812,7 @@ def main():
         "Electromagnetism through installed/rebuilt Core, Coulomb/gradient/Lorentz tests, seven RC Decimal oracles and mixed reports passed.\n" +
         "Waves/optics through installed/rebuilt Core, Snell/TIR/lens invariants, owned 4096-node grids, allocation failures and mixed string reports passed.\n" +
         "Fluid through installed/rebuilt Core, anchored max networks, conservative 4096-cell transport, allocation failures and mixed tutorial reports passed.\n" +
+        "Scalar search through installed/rebuilt Core, exact rational tolerance decisions, C/Physim reports and owned module-block closures passed.\n" +
         "ODE range through installed/rebuilt Core, five C/Physim methods, constant-solution Fraction references and true overflow rollback passed.\n" +
         "Linear systems through installed/rebuilt Core, independent rational C/Physim solutions/residuals, 1..32 dimensions and true overflow rollback passed.\n" +
         "Series SI imports through installed/rebuilt Core, multiblock algebra/calculus/resampling, independent C/Physim report/CSV checks and transactional errors passed.\n" +

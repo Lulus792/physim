@@ -5411,6 +5411,10 @@
     {
       "name": "real_gas_values",
       "source": "tests/fixtures/language/real_gas_values.phys"
+    },
+    {
+      "name": "module_block_closures_runtime",
+      "source": "tests/fixtures/language/module_block_closures.phys"
     }
   ],
   "workflows": [

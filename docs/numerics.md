@@ -154,6 +154,33 @@ exakten Nullstelle am Rand. `ps_minimize_golden` benötigt ein unimodales Interv
 Beide verwenden eine absolute plus relative x-Toleranz und ein Iterationslimit.
 Berichte auf `PS_LIMIT` sind Näherungen, keine Konvergenzbestätigung. Absolute
 Toleranzen müssen positiv, relative Toleranzen endlich und im Bereich [0,1) sein.
+Die Abbruchbedingung vergleicht die binären Eingabewerte exakt, einschließlich
+subnormaler Intervallbreiten und des Produkts aus relativer Toleranz und `abs(x)`.
+Eine konservative Fehlerumhüllung entscheidet gewöhnliche, klar entfernte Fälle;
+an Rundungsgrenzen vergleicht ein privater, fester Ganzzahlakkumulator die exakten
+Summen und Produkte. Es werden weder Heap noch ein breiterer Gleitkommatyp benötigt.
+Suchpunkte bleiben Double-Werte. Bei sehr kleinen oder bereits dicht
+benachbarten Grenzen werden ihre konvexen Mischwerte bis zum letzten Schritt
+skaliert berechnet; vorzeitiges Runden einzelner Produkte darf die beiden
+Golden-Section-Punkte nicht vertauschen. Callback-Ergebnisse erhalten dadurch
+keine höhere Präzision.
+
+Bisection akzeptiert einen als null ausgewerteten Callback sofort. Ansonsten
+endet die Suche nur mit erfüllter x-Toleranz. Ein Iterationslimit oder erschöpfte
+darstellbare Innenpunkte liefert `PS_LIMIT` mit dem letzten Bericht; der
+Physim-Wrapper meldet dies als Fehler, den `attempt` abfangen kann. Nichtendliche
+Callback-Ergebnisse liefern `PS_NUMERIC`; ungültige Argumente `PS_INVALID`.
+Bei diesen beiden Fehlern bleibt der C-Bericht unverändert. C akzeptiert positive
+`unsigned`-Limits, Physim begrenzt seine Arbeitsbudgets wie bisher auf 100000.
+Die unabhängige Fraction-Prüfung verifiziert anfängliche und finale Abbruch-
+entscheidungen, Callback-Grenzen/Zähler sowie gemeinsame C-/Physim-Berichte.
+
+`x`, Intervallgrenzen und absolute Toleranz besitzen dieselbe vom Aufrufer gewählte
+Einheit; relative Toleranz ist dimensionslos. Die Einheit des Callback-Ergebnisses
+ist separat. Die untypisierte C-Grenze prüft diese Dimensionen nicht automatisch.
+Golden Section setzt ein unimodales Intervall voraus; weder globale Optimierung
+mehrerer Minima noch Ableitungen oder Fehlergrenzen des Callback-Wertes sind
+Teil dieser Optimierungsgrundlagen.
 
 ## Einheitenalgebra
 

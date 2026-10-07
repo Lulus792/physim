@@ -924,3 +924,19 @@ Address-/UndefinedBehavior-Prüfungen bleiben aktiv. Die separate Modell-/
 Textbefehlsprüfung ohne Fenster läuft zusätzlich unter Sanitizern.
 [Verträge und Plattformgrenzen](accessibility.md) unterscheiden diesen
 Clientnachweis von einer praktischen Orca-/Screenreader-Abnahme.
+
+### Skalare Suche aus einem SDK prüfen
+
+Für eine gezielte Prüfung des installierten und allein aus SDK-Quellen neu
+gebauten Core gibt es einen separaten Modus:
+
+```sh
+python3 tools/verify-native-sdk.py --sdk build/package --work build/scalar-package-checks --scalar-only
+```
+
+Er prüft Bisection/Golden Section, exakte binäre Toleranzentscheidungen,
+gemeinsame C-/Physim-Berichte und besitzende Modulblock-Closures. Der Prüfer
+arbeitet mit einer verschobenen Paketkopie und ausschließlich deren Headern,
+Compiler und Bibliotheksquellen. Das Verification-Kit enthält die unabhängigen
+Gegenproben. Dieser gezielte Modus ersetzt keine vollständige SDK-/Domänen-
+oder GUI-Abnahme; ohne `--scalar-only` bleiben alle normalen SDK-Prüfungen aktiv.

@@ -60,7 +60,7 @@ ps_result ps_root_bisect(
     ps_scalar_report *report);
 ```
 
-Continuous function, opposite signs at ordered endpoints (or an endpoint root). Terminates on bracket half-width <= absolute_x + relative_x*abs(x). Report is also returned on PS_LIMIT; no guarantee for discontinuous functions.
+Continuous function, opposite signs at ordered endpoints (or an endpoint root). Terminates on bracket half-width <= absolute_x + relative_x*abs(x). Binary input values are compared exactly for this stopping condition. Report is also returned on PS_LIMIT (iteration budget or representable-point exhaustion); no guarantee for discontinuous functions. Nonfinite callbacks yield PS_NUMERIC. Output unchanged on PS_INVALID/PS_NUMERIC. Finite lo < hi, absolute_x > 0, 0 <= relative_x < 1, max_iterations > 0 required. Callback zeros end bisection immediately.
 
 ## ps_minimize_golden
 
@@ -78,7 +78,7 @@ ps_result ps_minimize_golden(
     ps_scalar_report *report);
 ```
 
-Unimodal function on [lower,upper]; golden-section minimization, same x tolerance.
+Unimodal function on [lower,upper]; golden-section minimization, same argument, x-tolerance and error/report contracts. Does not claim a derivative, global minimum on a multimodal interval, or an error bound for callback values.
 
 ### ps_acceleration_fn
 

@@ -35,7 +35,7 @@ typedef struct checker {
     ps_lang_semantic *info;
     size_t head, scope_base, function, work, array_head, optional_head, function_head,
            self_parameter;
-    size_t count, node_capacity, info_capacity, specialization_count;
+    size_t count, node_capacity, info_capacity, specialization_count, module_first;
     specialization specializations[GENERIC_SPECIALIZATION_LIMIT];
     unsigned depth, loops;
     int specializing;
@@ -179,8 +179,17 @@ static void capture_reference(checker *c, size_t decl, size_t use) {
     if (decl == c->function && c->nodes[decl].kind == PS_AST_LOCAL_FUNCTION)
         return;
     size_t owner = c->info[decl].local_function;
-    if (!owner || !c->function || owner == c->function)
+    if (!c->function || owner == c->function)
         return;
+    if (!owner && c->nodes[decl].kind == PS_AST_VARIABLE) {
+        /* Only direct module variables have global storage. Values declared
+         * inside module-level loops/branches still need owned captures. */
+        for (size_t id = c->module_first; id; id = c->nodes[id].next) {
+            if (!enter(c, use)) return;
+            c->depth--;
+            if (id == decl) return;
+        }
+    }
     for (size_t fn = c->function; fn && fn != owner;
          fn = c->info[fn].lambda_parent) {
         if (fn == decl && c->nodes[fn].kind == PS_AST_LOCAL_FUNCTION)
@@ -6726,6 +6735,7 @@ ps_lang_check_result ps_lang_check(const void *source, size_t size, ps_lang_node
     c.node_capacity = node_capacity;
     c.info_capacity = info_capacity;
     size_t first = nodes[parsed.root].a;
+    c.module_first = first;
     for (size_t id = first; id && c.error.kind != PS_LANG_ERROR; id = nodes[id].next)
         if (nodes[id].kind == PS_AST_IMPORT) {
             if (!nodes[id].a || nodes[nodes[id].a].kind != PS_AST_MODULE)

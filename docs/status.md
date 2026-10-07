@@ -2508,3 +2508,12 @@ stabile Kennungen und sichere native Press-Aktionen werden tatsächlich geprüft
 Windows-Anbindung und weitere Controltypen ausdrücklich offen. Linux bietet
 nun einen AT-SPI-Einstieg für denselben Controlumfang mit externem Clientnachweis
 unter Debian/X11; Wayland und praktische Orca-Bedienung bleiben offen.
+
+
+Nullstellensuche und Optimierungsgrundlagen (§7.2 / PP-0361) besitzen nun
+unabhängig geprüfte binäre Abbruchbedingungen für Bisection und Golden Section.
+C-/Physim-Berichte, extrem kleine/große Werte, Callback-Fehler und Stagnation
+werden geprüft. Modulblock-Closures übernehmen lokale Werte jetzt als besitzende
+Snapshots; echte Modulglobals behalten ihren globalen Speicher.
+[Methoden und Grenzen](numerics.md) begrenzen diesen Implementierungsnachweis;
+der gesamte Projektplan bleibt weiterhin offen.

@@ -1,7 +1,7 @@
 {
   "format": 1,
-  "date": "2026-10-07",
-  "inspected_revision": "b1d678cb6221eeb41775857c7508407542a09e53",
+  "date": "2026-10-08",
+  "inspected_revision": "c07e4b832d504d85581284cd74f453f4bcf1ceb2",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2357,9 +2357,22 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Nullstellensuche und Optimierungsgrundlagen.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/numerics.h",
+        "src/numerics.c",
+        "src/scalar_numeric.h",
+        "include/physim/language_sdk.h",
+        "tests/test_numerics.c",
+        "tests/test_scalar_range.c",
+        "tests/scalar_range_probe.c",
+        "tests/test_scalar_range_oracle.py",
+        "tests/fixtures/language/scalar_range.phys",
+        "tests/fixtures/language/scalar_search_analysis.phys",
+        "docs/numerics.md",
+        "tools/verify-native-sdk.py"
+      ],
+      "note": "Nullstellensuche durch Bisection und Optimierungsgrundlagen durch Golden Section sind in C und Physim ausführbar. Binäre x-Toleranzen werden auch an subnormalen und relativen Rundungsgrenzen exakt verglichen; gewöhnliche Fälle nutzen eine konservative Fehlerumhüllung, Grenzfälle einen festen Ganzzahlakkumulator. Unabhängige rationale Vergleiche prüfen anfängliche/finale Abbruchentscheidungen, Callback-Bereiche/Zähler und gemeinsame C-/Physim-Berichte. Fehler, Ausgabeerhaltung, Stagnation, Arbeitsbudgets, Einheitenannahmen und Stetigkeits-/Unimodalitätsvoraussetzungen sind dokumentiert. Keine globale Optimierung, Fehlergrenze für Callback-Werte oder gesamte Mathematik-/Plattform-/Produktabnahme."
     },
     {
       "id": "PP-0362",
