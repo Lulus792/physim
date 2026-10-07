@@ -7,6 +7,26 @@
 #include "ui.h"
 #undef nk_label_wrap
 #undef nk_button_label
+void ps_ui_flush_edit(struct nk_context *ctx,const char *name,char *text,size_t capacity,struct nk_rect bounds) {
+    if(!ctx || !text || capacity<2 || !ctx->style.font)return;
+    struct nk_window *window=nk_find_window(ctx,nk_murmur_hash(name,nk_strlen(name),NK_WINDOW_TITLE),name);
+    if(!window)return;
+    size_t length=strlen(text);if(length>=capacity)return;
+    struct nk_text_edit edit;nk_textedit_init_fixed(&edit,text,capacity-1);
+    edit.string.buffer.allocated=length;edit.string.len=nk_utf_len(text,(int)length);
+    edit.cursor=window->edit.cursor;edit.select_start=window->edit.sel_start;edit.select_end=window->edit.sel_end;
+    edit.active=nk_true;edit.mode=NK_TEXT_EDIT_MODE_INSERT;edit.clip=ctx->clip;nk_textedit_clamp(&edit);
+    struct nk_input input=ctx->input;
+    input.mouse.buttons[NK_BUTTON_LEFT].clicked=0;input.mouse.buttons[NK_BUTTON_RIGHT].clicked=0;
+    char storage[4096];struct nk_buffer commands;struct nk_command_buffer canvas;
+    nk_buffer_init_fixed(&commands,storage,sizeof storage);nk_command_buffer_init(&canvas,&commands,NK_CLIPPING_OFF);
+    canvas.clip=nk_rect(0,0,0,0);nk_flags state=0;
+    nk_do_edit(&state,&canvas,bounds,NK_EDIT_FIELD,nk_filter_default,&edit,&ctx->style.edit,&input,ctx->style.font);
+    text[edit.string.buffer.allocated]=0;
+    window->edit.cursor=edit.cursor;window->edit.sel_start=edit.select_start;window->edit.sel_end=edit.select_end;window->edit.mode=edit.mode;
+    ctx->input.keyboard.text_len=0;
+    for(int i=0;i<NK_KEY_MAX;i++)ctx->input.keyboard.keys[i].clicked=0;
+}
 float nk_sdl_row_height(const struct nk_context *ctx,float requested) {
     if(!ctx || !ctx->userdata.ptr || requested<16)return requested;
     const ps_ui_font_layout *layout=ctx->userdata.ptr;

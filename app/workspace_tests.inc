@@ -53,6 +53,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
         return document_test_start(a, root);
     if (!strcmp(mode, "documents-build"))
         return document_build_test_start(a, root);
+    if (!strncmp(mode,"docs-keyboard",13)){snprintf(a->project,sizeof a->project,"%s",root);if(!strcmp(mode,"docs-keyboard-22")){ps_preferences p=a->preferences;p.ui_size=22;preferences_apply(a,&p);}return true;}
     if (!strcmp(mode,"toolbar-keyboard")) {
         snprintf(a->manager_parent,sizeof a->manager_parent,"%s",root);return true;
     }
@@ -182,6 +183,7 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
         if(strcmp(mode,"documents")) test_pointer_noise(a);
         return;
     }
+    if (!strncmp(mode,"docs-keyboard",13)) {documentation_keyboard_test_frame(a,stage,code,capture);return;}
     if (!strcmp(mode,"toolbar-keyboard")) {
         keyboard_menu_test_frame(a,a->manager_parent,stage,code,capture);return;
     }

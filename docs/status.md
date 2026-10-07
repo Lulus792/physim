@@ -3,6 +3,11 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-07. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Handbuch per Tastatur:** Tab erreicht Lernwege, Themen, Inhalt, Suche,
+Navigation, Links und Codekopieren. Sichtbarer Fokus scrollt mit; Lesetasten
+bedienen den Text. Gleichzeitige Texteingabe und Tab erhalten das letzte Zeichen.
+[Bedienung](workspace.md) und [Nachweise](platform-validation.md).
+
 **Einstellungen per Tastatur:** Tab und Shift+Tab führen durch sämtliche
 Einstellungsgruppen mit sichtbarem, automatisch gescrolltem Fokus. Pfeiltasten
 wechseln Auswahlen; Enter und Leertaste bedienen Aktionen. Escape verwirft den

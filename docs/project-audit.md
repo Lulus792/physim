@@ -23,7 +23,7 @@ Umfang nicht ersetzen.
 | Direkte Projektbuilds (§2) | `app/build_main.c`, `tools/build.py`, `tests/test_bootstrap_build.py`; einheitlich geprüfte 26 Core-Module, acht native Domänenprojekte mit unabhängigen Lernorakeln und verschobene SDKs | Gegen sämtliche aktuellen Plattformen prüfen. Alte CMake-Skizzen sind durch die ausdrückliche Ergänzung zu direkten Builds abgelöst. |
 | Kern und Numerik (§7) | Öffentliche GUI-unabhängige Header, Referenz-, Konvergenz- und Fehlertests | Jede explizite Algorithmusforderung und ihr dokumentiertes Fehler-/Einheitenverhalten einzeln zuordnen; keine Ableitung aus bloßer Funktionszahl. |
 | Sprache und Bindungen (§10, LANG-001..007) | Version 0.182.0, Lexer/Parser/Checker/C17-Backend, typisierte Werte, Module, Generics, Runner- und Analysebindungen | Vollständigen semantischen Vertrag und C-/Physim-Funktionsparität prüfen. `LANG-005` besitzt jetzt explizite Batch-Hostdienste und besitzende Sprachwerte mit Start, Pause, Wiederaufnahme, Archivabfragen, Statistik, Diagrammen und Export. Die vollständige Sprach-/Produktabnahme und neue Remote-Matrix bleiben offen. |
-| Barrierefreiheit (Phase 10, PP-0710) | Themes, Code-Schriftgröße, Tastenkürzel und vollständige Hauptmenüführung per F10/Pfeilen/Enter sowie Einstellungsgruppen per Tab/Pfeilen/Enter mit sichtbarem, automatisch gescrolltem Fokus; `app/preferences.h`, `app/settings_ui.inc`, `app/toolbar_ui.inc` | UI-Schriftgröße ist unabhängig einstellbar; vollständige Tastaturführung und grundlegender Screenreader-Zugang bleiben offen. |
+| Barrierefreiheit (Phase 10, PP-0710) | Themes, Code-Schriftgröße, Tastenkürzel und vollständige Hauptmenüführung per F10/Pfeilen/Enter sowie Einstellungsgruppen und Handbuch per Tab/Pfeilen/Enter mit sichtbarem, automatisch gescrolltem Fokus; `app/preferences.h`, `app/settings_ui.inc`, `app/toolbar_ui.inc` | UI-Schriftgröße ist unabhängig einstellbar; vollständige Tastaturführung und grundlegender Screenreader-Zugang bleiben offen. |
 | Dokumentation (§16, LANG-007) | Acht gekoppelte Lernpfade mit vollständigen Quellen, Modellannahmen und automatisierten Prüfungen; `tests/tutorial_sources.json` | Die beiden separat navigierbaren Wege sind implementiert; aktuelle gesamte Bindungs-/Plattformabnahme und alle Vorlagen bleiben gesondert offen. |
 | Weitere Domänen (§7.7, Phase 12+) | Mechanik-, Material-/Medien-, Mess- und Analysebasis | Thermodynamik besitzt nun ein SI-Modul und vollständige C-/Physim-Beispiele für ideales Gas und Wärmefluss; reale Gase bleiben offen. Elektromagnetismus besitzt nun einen geprüften SI-Einstieg für Ladungen, Felder und RC-Schaltungen. Wellen/Optik besitzt nun Oszillator, 1D-Gitterausbreitung und geometrische Strahlen-/Linsenfunktionen. Strömung besitzt jetzt laminare Rohre, passive Drucknetze und periodischen Tracertransport; spätere ernsthafte Fluidmodelle bleiben offen. Die empfohlene Reihenfolge bleibt erhalten. |
 
@@ -71,7 +71,7 @@ Das ist ein Nachweis für diesen Stand und diese Umgebungen. Die anschließenden
 Änderungen an Laufzeitsupport und Prüfern benötigen eigene Nachweise; eine
 nachträgliche Änderung der Zahl macht den alten Lauf nicht zu einem aktuellen
 Gesamtlauf. Der aktuelle Katalog enthält mit den zusätzlichen Lernwegprüfungen
-608 Fälle ohne Fenster, 589 ohne SDL und weiterhin 69 Fensterfälle.
+608 Fälle ohne Fenster, 589 ohne SDL und 73 Fensterfälle.
 
 Die Abnahme bleibt offen, bis sämtliche konkreten Anforderungen passende
 aktuelle Implementierungs-, Laufzeit- und Plattformnachweise besitzen.

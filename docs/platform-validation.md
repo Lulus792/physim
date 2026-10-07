@@ -3,6 +3,74 @@
 Stand: 7. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Handbuch per Tastatur am 7. Oktober 2026
+
+Das Handbuch besitzt einen aus dem aktuellen Inhalt erzeugten Tab-/Shift+Tab-Pfad.
+Er umfasst beide Lernwege, Themen/Inhalt, globale Suche und Kategorie, Themen
+oder Überschriften, Zurück/Start/Arbeitsbereich, Dokumentensuche und Treffer,
+Lesebereich sowie sämtliche Links und Codekopieren-Schaltflächen. Der Fokus
+scrollt sichtbar mit. Pfeile und Bild auf/ab scrollen im Lesebereich; Home/End
+springen zum Anfang/Ende. Kategorien, Suche und Navigation bleiben per Tastatur
+bedienbar; Mausbedienung und Escape bleiben erhalten. [Bedienung](workspace.md).
+
+Die neuen SDL-Prüfungen öffnen beide Lernwege ohne Maus, wählen das C-Tutorial,
+springen im Inhaltsverzeichnis, vergleichen kopierten Code vollständig mit dem
+Quellblock, folgen einem internen Link und gehen zurück. Sie prüfen Lesetasten,
+Dokumentensuche und globale Suche samt Rücksetzen sowie Schließen per Escape.
+Dies geschieht im 760×540-Fenster mit 16 und 22 Pixeln UI-Schrift.
+
+Der zunächst fehlschlagende Eingabeordnungstest unter
+`build/contact-world-language-release-mac/test-results/run-xcarrtzj` reproduziert
+Zeichenverlust bei Text und unmittelbar folgendem Tab im selben SDL-Paket.
+Vor dem semantischen Fokuswechsel wird jetzt die eingegangene Textfeld-Eingabe
+mit Nuklears Editorlogik abgeschlossen. Eine zusätzliche Prüfung ohne Fenster
+kontrolliert UTF-8, Auswahlersetzung, Rücktaste und eine volle Puffergrenze mit
+unverändertem Schutzbyte. Die bisherige Text-/Clipboard-Prüfung bleibt erhalten.
+
+Die Eingabe- und Pufferprüfungen bestehen auf Intel macOS unter
+`build/contact-world-language-release-mac/test-results/run-righmsct` und Debian
+unter `build/contact-world-language-release-linux/test-results/run-ewj3gvqv`.
+Die Mac-Prüfkiterstellung besteht unter `.../run-pmzxh96n`.
+Elf geänderte Code-/Test-/Werkzeugdateien wurden zwischen den Plattformen per
+SHA-256 verglichen (`build/documentation-keyboard-source-freeze.json`).
+
+Die Sichtprüfung bei 22 Pixeln zeigte schmale Trefferknöpfe und abgeschnittenen
+Statustext. Größere Schriften verwenden deshalb getrennte Such-/Trefferzeilen,
+weniger Navigationsspalten und umbrochene Hinweise; der Lesebereich verwendet
+den tatsächlich verbleibenden Platz.
+
+Ein erster verschobener macOS-SDK-Lauf unter
+`build/documentation-keyboard-final-sdk-proof-mac` besteht die neuen
+Tastaturfälle, scheitert aber in der bisherigen Mausprüfung beim Wechsel zum
+Simulationsbereich (Stufe 14, weiterhin tab=0). Dieser fehlgeschlagene Lauf wird
+nicht als SDK-Erfolg gewertet. Der Test filtert nun fremde Zeiger-/Fokusereignisse
+wie die bisherigen Plot-/Toolbar-/Einstellungstests. Ein zusätzlicher Ablauf
+injiziert echte SDL-Zeiger-, Loslass-, Scroll- und Fokusereignisse fremder Geräte;
+die bisherigen Mausaktionen, Dokumentensuche und Lernwegnavigation bleiben
+unverändert geprüft. Das allein belegt nicht die Ursache des ursprünglichen
+sporadischen Fehlschlags.
+
+Die endgültigen vier Handbuchabläufe bestehen auf Intel macOS unter
+`build/contact-world-language-release-mac/test-results/run-a_l1vl91` und Debian
+unter `build/contact-world-language-release-linux/test-results/run-ssekxyqu`.
+Sie umfassen die bisherige Mausprüfung, beide Tastatur-/Schriftgrößenprüfungen
+und den neuen Ablauf mit fremden Zeigerereignissen. Die Aufnahme
+`build/documentation-keyboard-final-focus-22.png` wurde visuell geprüft:
+Trefferknöpfe und vollständiger Statustext sind bei 22 Pixeln lesbar.
+
+Die aktuelle verschobene macOS-SDK-App besteht sieben gezielte Abläufe unter
+`build/documentation-keyboard-reviewed-sdk-proof-mac`: die vier Handbuchabläufe,
+Einstellungen per Tastatur und kleine/große Tastaturmenüs. `PASSED.json` hält die
+App-Prüfsumme und sämtliche Befehle/Exitcodes fest. Alle übrigen SDK-Produkte
+sind bytegleich zum vorherigen SDK. Dies ist eine gezielte App-Abnahme und keine
+neue vollständige numerische SDK-Suite. Der Katalog enthält jetzt 73 Fensterfälle.
+Dieselben sieben Abläufe bestehen mit der aktuellen Linux-SDK-App unter
+`build/documentation-keyboard-reviewed-sdk-proof-linux`. Ihre protokollierte
+App-Prüfsumme stimmt ebenfalls mit dem aktuellen Release-Binary überein.
+
+Vollständige Tastaturführung in weiteren Arbeitsbereichen und Screenreader-Zugang
+bleiben offene Ziele von PP-0710; der Gesamtplan ist nicht abgenommen.
+
 ## Persönliche Einstellungen per Tastatur am 7. Oktober 2026
 
 Die persönlichen Einstellungen besitzen einen durchgehenden Tab-/Shift+Tab-Pfad

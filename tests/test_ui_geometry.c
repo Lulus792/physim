@@ -97,12 +97,38 @@ static int large_close_button(void) {
     CHECK(found && ctx.style.button.padding.x==10 && ctx.style.button.padding.y==4);
     nk_free(&ctx);return 0;
 }
+static int field_focus_input(const struct nk_user_font *font) {
+    struct nk_context ctx;CHECK(nk_init_default(&ctx,font));
+    char text[32]="αβ";struct nk_rect bounds;
+    nk_input_begin(&ctx);nk_input_end(&ctx);
+    if(nk_begin(&ctx,"Field",nk_rect(0,0,320,100),0)) {
+        nk_layout_row_dynamic(&ctx,32,1);bounds=nk_widget_bounds(&ctx);
+        nk_edit_focus(&ctx,NK_EDIT_ALWAYS_INSERT_MODE);
+        nk_edit_string_zero_terminated(&ctx,NK_EDIT_FIELD,text,sizeof text,nk_filter_default);
+    } else {nk_free(&ctx);return 1;}
+    nk_end(&ctx);nk_clear(&ctx);
+    nk_input_begin(&ctx);nk_input_key(&ctx,NK_KEY_TEXT_END,nk_true);nk_input_unicode(&ctx,'Z');nk_input_end(&ctx);
+    ps_ui_flush_edit(&ctx,"Field",text,sizeof text,bounds);
+    CHECK(!strcmp(text,"αβZ") && !ctx.input.keyboard.text_len);
+    nk_input_begin(&ctx);nk_input_key(&ctx,NK_KEY_TEXT_END,nk_false);nk_input_key(&ctx,NK_KEY_SHIFT,nk_true);nk_input_key(&ctx,NK_KEY_LEFT,nk_true);nk_input_unicode(&ctx,'X');nk_input_end(&ctx);
+    ps_ui_flush_edit(&ctx,"Field",text,sizeof text,bounds);
+    CHECK(!strcmp(text,"αβX"));
+    nk_input_begin(&ctx);nk_input_key(&ctx,NK_KEY_LEFT,nk_false);nk_input_key(&ctx,NK_KEY_SHIFT,nk_false);nk_input_key(&ctx,NK_KEY_BACKSPACE,nk_true);nk_input_end(&ctx);
+    ps_ui_flush_edit(&ctx,"Field",text,sizeof text,bounds);
+    CHECK(!strcmp(text,"αβ"));
+    struct {char text[8];unsigned char guard;} full={"1234567",0xA5};
+    nk_input_begin(&ctx);nk_input_key(&ctx,NK_KEY_BACKSPACE,nk_false);nk_input_key(&ctx,NK_KEY_TEXT_END,nk_true);nk_input_unicode(&ctx,'X');nk_input_end(&ctx);
+    ps_ui_flush_edit(&ctx,"Field",full.text,sizeof full.text,bounds);
+    CHECK(!strcmp(full.text,"1234567") && full.guard==0xA5);
+    nk_free(&ctx);return 0;
+}
 int main(void) {
     CHECK(large_close_button()==0);
     struct nk_user_font font = {0};
     font.height = 18;
     font.width = width;
     font.query = glyph;
+    CHECK(field_focus_input(&font)==0);
     font.texture = nk_handle_id(1);
     struct nk_context ctx;
     CHECK(nk_init_default(&ctx, &font));

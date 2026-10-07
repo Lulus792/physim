@@ -203,6 +203,9 @@ typedef struct {
     nk_uint doc_scroll_x, doc_scroll_y;
     char doc_query[128], doc_last_query[128], doc_error[160];
     bool doc_search_focus, doc_search_active, doc_move_match, doc_reset_sidebar;
+    bool doc_keyboard,doc_focus_reveal,doc_filter_focus;
+    int doc_focus;
+    struct nk_rect doc_focus_bounds;
     char doc_filter[128], doc_last_filter[128];
     bool doc_filter_active, doc_contents;
     int doc_group, doc_previous, doc_track;
@@ -2639,6 +2642,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "document_recovery_tests.inc"
 #include "toolbar_tests.inc"
 #include "keyboard_menu_tests.inc"
+#include "documentation_keyboard_tests.inc"
 #include "project_settings_tests.inc"
 #include "reset_tests.inc"
 #include "speed_tests.inc"
@@ -2716,7 +2720,8 @@ int main(int argc, char **argv) {
         strcmp(recovery_mode, "conflict") && strcmp(recovery_mode, "cancel") &&
         strcmp(recovery_mode, "corrupt"))
         return 2;
-    bool docs_test = argc > 1 && !strcmp(argv[1], "--docs-test");
+    bool docs_noise = argc > 1 && !strcmp(argv[1], "--docs-test-noise");
+    bool docs_test = docs_noise || (argc > 1 && !strcmp(argv[1], "--docs-test"));
     if (docs_test && argc != 3) {
         fprintf(stderr, "Usage: physim --docs-test output-directory\n");
         return 2;
@@ -3124,7 +3129,7 @@ int main(int argc, char **argv) {
                 }
                 continue;
             }
-            if ((plot_test || toolbar_test || settings_test ||
+            if ((plot_test || toolbar_test || settings_test || docs_test ||
                  (workspace_state_test && strncmp(argv[3],"native-dialog",13) &&
                   strcmp(argv[3],"documents-unfiltered"))) && test_scripted_external_input(&e)) continue;
             if (self_test && e.type == SDL_EVENT_TEXT_INPUT) {
@@ -3138,6 +3143,7 @@ int main(int argc, char **argv) {
                 if (e.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED)
                     documentation_window_hide(a);
                 else if (a->doc_visible) {
+                    if (e.type == SDL_EVENT_KEY_DOWN && documentation_keyboard_key(a,&e.key))continue;
                     if (e.type == SDL_EVENT_KEY_DOWN && !e.key.repeat) {
                         if (e.key.key == SDLK_F && (e.key.mod & PS_UI_COMMAND_MOD)) {
                             a->doc_search_focus = true;
@@ -4182,6 +4188,7 @@ int main(int argc, char **argv) {
                 a->quitting = true;
             }
         }
+        if(docs_noise)test_pointer_noise(a);
         if (trace_test && test_stage != checked_stage)
             fprintf(stderr, "APP TEST TRACE: stage %d -> %d, status %s\n",
                     checked_stage, test_stage, a->status);

@@ -98,6 +98,7 @@ static void documentation_window_hide(app *a) {
     SDL_StopTextInput(a->doc_window);
     SDL_HideWindow(a->doc_window);
     a->doc_visible = false;
+    a->doc_keyboard=a->doc_search_active=a->doc_filter_active=false;
 }
 
 static bool documentation_window_render(app *a, const char *capture_path) {

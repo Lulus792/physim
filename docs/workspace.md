@@ -428,3 +428,16 @@ Hauptquellen und Autosaves bleiben `0600`. Set-ID-Bits, ACLs und erweiterte
 Attribute werden bei der Ersetzung nicht übernommen. Auf Windows gelten die
 geerbten Rechte der exklusiv erzeugten CRT-Dateien; deren ACL-Erhaltung wurde
 hier nicht geprüft.
+
+### Handbuch per Tastatur
+
+Im Handbuch beginnt Tab beim C-Lernweg; Shift+Tab führt rückwärts. Der Fokuspfad
+umfasst beide Lernwege, Themen/Inhalt, globale Suche und Kategorie, die
+angezeigten Themen oder Überschriften, Zurück/Start/Arbeitsbereich, Dokumentensuche,
+Treffersteuerung, Lesebereich sowie Links und Codekopieren. Der sichtbare Rahmen
+scrollt zum fokussierten Eintrag. Enter oder Leertaste aktiviert eine Auswahl;
+Pfeile wechseln die Kategorie. In Suchfeldern funktionieren die üblichen
+Texttasten; Tab schließt die Eingabe ab, ohne das letzte Zeichen zu verlieren.
+Im Lesebereich scrollen Pfeile und Bild auf/ab; Home und End springen zum Anfang
+und Ende. Ctrl+F (macOS Cmd+F) fokussiert die Dokumentensuche. Escape schließt
+das Handbuch. Ein Mausklick setzt die Zeigerbedienung fort.

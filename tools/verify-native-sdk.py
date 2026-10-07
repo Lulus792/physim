@@ -592,6 +592,12 @@ def main():
                     if "SETTINGS KEYBOARD SELF-TEST: PASSED" not in output.read_text(encoding="utf-8"):
                         raise RuntimeError("Installed SDK keyboard settings did not complete")
                 print("Installed SDK settings: keyboard-only traversal, all toggles, restart, cancellation and large-font focus scrolling passed",flush=True)
+                for mode in ("docs-keyboard","docs-keyboard-22"):
+                    directory=root / mode;directory.mkdir();output=root / (mode+".txt")
+                    checked([sdk / "bin" / ("physim"+suffix),"--workspace-state-test",directory,mode],output=output)
+                    if "DOCUMENTATION KEYBOARD SELF-TEST: PASSED" not in output.read_text(encoding="utf-8"):
+                        raise RuntimeError("Installed SDK keyboard documentation did not complete")
+                print("Installed SDK documentation: keyboard learning tracks, topics, contents, links, code copy, search and input order at 16/22 px passed",flush=True)
         elif args.app_tests:
             raise RuntimeError("App tests require an SDK with the app")
     (root / "PASSED.txt").write_text(
@@ -618,7 +624,7 @@ def main():
         "Eight cold native C/Physim domain project builds, unchanged cache reuse and four complete independent tutorial oracles passed.\n" +
         "Both complete C/Physim learning routes, eight paired model source groups and executable language introductions passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
-        ("Eight C template GUI workflows, the complete Physim language GUI workflow, independent documentation route navigation, keyboard menus in both window sizes and four UI typography sizes with restart and keyboard settings passed.\n" if args.app_tests else ""), encoding="utf-8")
+        ("Eight C template GUI workflows, the complete Physim language GUI workflow, independent documentation route navigation, keyboard menus in both window sizes and four UI typography sizes with restart, keyboard settings and keyboard documentation passed.\n" if args.app_tests else ""), encoding="utf-8")
     print(f"Native SDK verified: {root}")
 
 

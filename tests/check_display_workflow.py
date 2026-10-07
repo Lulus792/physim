@@ -27,6 +27,9 @@ SIMPLE = {
     "documents_build": (["--workspace-state-test", "{directory}", "documents-build"], 130, False),
     "documentation_window": (["--docs-test", "{directory}"], 30, True),
 }
+SIMPLE["documentation_pointer_isolation"] = (["--docs-test-noise", "{directory}"], 35, True)
+SIMPLE["documentation_keyboard_22"] = (["--workspace-state-test", "{directory}", "docs-keyboard-22"], 55, True)
+SIMPLE["documentation_keyboard"] = (["--workspace-state-test", "{directory}", "docs-keyboard"], 55, True)
 for size in ("small", "large"):
     for name, mode in (("toolbar", "toolbar"), ("documents", "documents")):
         SIMPLE[f"{name}_{size}"] = (["--workspace-state-test", "{directory}", mode], 25, size == "small")

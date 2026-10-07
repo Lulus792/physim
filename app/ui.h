@@ -42,6 +42,8 @@ bool nk_sdl_test_input(SDL_Window *window, ps_graphics *graphics);
 void nk_sdl_set_ui_size(struct nk_context *ctx, unsigned size);
 enum { PS_UI_LAYOUT_MAGIC = 0x50534C59u };
 typedef struct { unsigned magic,ui_size; } ps_ui_font_layout;
+/* Finish queued field input before a semantic keyboard focus change. */
+void ps_ui_flush_edit(struct nk_context *ctx,const char *window,char *text,size_t capacity,struct nk_rect bounds);
 float nk_sdl_row_height(const struct nk_context *ctx, float requested);
 void ps_ui_label_wrap(struct nk_context *ctx,const char *text);
 nk_bool ps_ui_button_label(struct nk_context *ctx,const char *text);
