@@ -3,6 +3,11 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-07. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Einstellungen per Tastatur:** Tab und Shift+Tab führen durch sämtliche
+Einstellungsgruppen mit sichtbarem, automatisch gescrolltem Fokus. Pfeiltasten
+wechseln Auswahlen; Enter und Leertaste bedienen Aktionen. Escape verwirft den
+Entwurf. [Bedienung](settings.md) und [Plattformnachweise](platform-validation.md).
+
 **Unabhängige UI-Schriftgröße:** Einstellungen bieten 16, 18, 20 und 22 logische
 Pixel für die Oberfläche unabhängig von der Codeschrift. Geöffnete Dokumentation,
 Menüs und Diagramme wechseln mit; umgebrochene Texte und Schaltflächen erhalten
@@ -32,8 +37,7 @@ und Escape bedienen die Hauptmenüs mit sichtbarem Fokus. Deaktivierte Aktionen
 werden übersprungen; Menütasten und Text gelangen nicht in einen aktiven Editor.
 Elf betroffene Fensterprüfungen bestehen auf macOS und Linux. Beide isolierten
 SDKs bestehen alle bisherigen Gates und die installierten Tastaturmenüs in zwei
-Fenstergrößen. Weitere Tastaturführung, UI-Schriftvergrößerung und Screenreader-
-Zugang bleiben offen. [Nachweise](platform-validation.md).
+Fenstergrößen. Weitere Tastaturführung und Screenreader-Zugang bleiben offen. [Nachweise](platform-validation.md).
 
 **Live-Geschwindigkeitswechsel:** Die GUI-Prüfung berücksichtigt alte gepufferte
 Snapshots nach dem Wechsel 4×→1×. Normale und verzögerte C-/Physim-Fensterläufe

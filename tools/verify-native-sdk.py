@@ -585,6 +585,13 @@ def main():
                     if len(data)!=312 or data[:8]!=b"PSPREF05" or int.from_bytes(data[304:308],"little")!=ui_size:
                         raise RuntimeError("Installed SDK UI size was not persisted")
                 print("Installed SDK UI typography: four sizes, restart, independent code fonts, open documentation, plots and menus passed",flush=True)
+                directory=root / "Keyboard settings";directory.mkdir()
+                for mode in ("keyboard","keyboard-read"):
+                    output=root / ("settings-"+mode+".txt")
+                    checked([sdk / "bin" / ("physim"+suffix),"--settings-test",directory,mode],output=output)
+                    if "SETTINGS KEYBOARD SELF-TEST: PASSED" not in output.read_text(encoding="utf-8"):
+                        raise RuntimeError("Installed SDK keyboard settings did not complete")
+                print("Installed SDK settings: keyboard-only traversal, all toggles, restart, cancellation and large-font focus scrolling passed",flush=True)
         elif args.app_tests:
             raise RuntimeError("App tests require an SDK with the app")
     (root / "PASSED.txt").write_text(
@@ -611,7 +618,7 @@ def main():
         "Eight cold native C/Physim domain project builds, unchanged cache reuse and four complete independent tutorial oracles passed.\n" +
         "Both complete C/Physim learning routes, eight paired model source groups and executable language introductions passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
-        ("Eight C template GUI workflows, the complete Physim language GUI workflow, independent documentation route navigation, keyboard menus in both window sizes and four UI typography sizes with restart passed.\n" if args.app_tests else ""), encoding="utf-8")
+        ("Eight C template GUI workflows, the complete Physim language GUI workflow, independent documentation route navigation, keyboard menus in both window sizes and four UI typography sizes with restart and keyboard settings passed.\n" if args.app_tests else ""), encoding="utf-8")
     print(f"Native SDK verified: {root}")
 
 

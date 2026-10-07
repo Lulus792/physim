@@ -728,6 +728,19 @@ def settings(flow, directory):
     exact(directory / "preferences.bin", "damaged preferences")
 
 
+def settings_keyboard(flow, directory):
+    directory.mkdir()
+    flow.run("--settings-test", directory, "keyboard", timeout=35, marker="SETTINGS KEYBOARD SELF-TEST: PASSED")
+    data=(directory / "preferences.bin").read_bytes()
+    require(data[:8]==b"PSPREF05" and len(data)==312, "Keyboard settings format")
+    require(int.from_bytes(data[304:308],"little")==22, "Keyboard UI font persistence")
+    require(struct.unpack_from("<I",data,32)[0]==20 and struct.unpack_from("<I",data,36)[0]==120, "Keyboard code font and autosave persistence")
+    require(struct.unpack_from("<I",data,40)[0]==96 and struct.unpack_from("<I",data,52)[0]==1, "Keyboard seven toggles and theme persistence")
+    before=fingerprint(directory / "preferences.bin")
+    flow.run("--settings-test", directory, "keyboard-read", timeout=35, marker="SETTINGS KEYBOARD SELF-TEST: PASSED")
+    require(fingerprint(directory / "preferences.bin")==before, "Escape changed saved settings")
+
+
 def ui_typography(flow, directory):
     directory.mkdir()
     for size in (16, 18, 20, 22):
@@ -897,7 +910,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"ui_typography_workflow": ui_typography,"saved_run_tutorial_workflow": saved_run_tutorial,"monte_carlo_tutorial_workflow": monte_carlo_tutorial,"collision_tutorial_workflow": collision_tutorial,"pendulum_tutorial_workflow": pendulum_tutorial,"spring_tutorial_workflow": spring_tutorial,"material_tutorial_workflow": material_tutorial,"contact_world_language_workflow": contact_world_language,"contact_world_workflow": contact_world, "diagnostic_workflow": diagnostics, "scene_frames_workflow": scene_frames, "logging_workflow": logging, "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
+SPECIAL = {"settings_keyboard_workflow": settings_keyboard,"ui_typography_workflow": ui_typography,"saved_run_tutorial_workflow": saved_run_tutorial,"monte_carlo_tutorial_workflow": monte_carlo_tutorial,"collision_tutorial_workflow": collision_tutorial,"pendulum_tutorial_workflow": pendulum_tutorial,"spring_tutorial_workflow": spring_tutorial,"material_tutorial_workflow": material_tutorial,"contact_world_language_workflow": contact_world_language,"contact_world_workflow": contact_world, "diagnostic_workflow": diagnostics, "scene_frames_workflow": scene_frames, "logging_workflow": logging, "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}

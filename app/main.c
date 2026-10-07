@@ -109,6 +109,9 @@ typedef struct {
     char preferences_path[4096], preferences_error[192];
     bool preferences_writable, show_grid;
     int settings_previous_tab, panel_drag;
+    int settings_focus;
+    struct nk_rect settings_focus_bounds[14];
+    bool settings_keyboard, settings_focus_scroll;
     struct nk_rect dock_rects[PS_DOCK_NODES], dock_panels[PS_DOCK_PANELS];
     struct nk_rect dock_headers[PS_DOCK_PANELS], dock_closes[PS_DOCK_PANELS], dock_splitters[PS_DOCK_NODES], dock_float_grips[PS_DOCK_PANELS];
     struct nk_rect dock_targets[5], dock_preview;
@@ -2680,6 +2683,7 @@ int main(int argc, char **argv) {
         return 2;
     bool settings_test = argc > 1 && !strcmp(argv[1], "--settings-test");
     if (settings_test && (argc != 4 || (strcmp(argv[3], "write") && strcmp(argv[3], "read") &&
+        strcmp(argv[3], "keyboard") && strcmp(argv[3], "keyboard-read") &&
         strcmp(argv[3], "reset") && strcmp(argv[3], "defaults") && strcmp(argv[3], "corrupt") &&
         strcmp(argv[3], "maxwrite") && strcmp(argv[3], "maxread") &&
         strcmp(argv[3], "theme-light") && strcmp(argv[3], "theme-light-read") &&
@@ -3129,7 +3133,7 @@ int main(int argc, char **argv) {
             }
             SDL_Window *event_window = SDL_GetWindowFromEvent(&e);
             if (event_window == a->window && e.type == SDL_EVENT_WINDOW_FOCUS_LOST)
-                toolbar_keyboard_close(a);
+                { toolbar_keyboard_close(a);a->settings_keyboard=false; }
             if (a->doc_window && event_window == a->doc_window) {
                 if (e.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED)
                     documentation_window_hide(a);
@@ -3163,6 +3167,7 @@ int main(int argc, char **argv) {
             }
             if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && !a->recovery && !a->layout_manager && !a->workspace_manager && !a->channel_unit_manager) {
                 if (toolbar_keyboard_key(a, &e.key)) continue;
+                if (settings_keyboard_key(a, &e.key)) continue;
                 if (a->dock_drag && e.key.key==SDLK_ESCAPE) { a->dock_drag=0;a->dock_dragging=false;continue; }
                 if (scene_shortcut(a, &e.key)) continue;
                 if (a->tab == 1 && e.key.key == SDLK_SPACE && !e.key.repeat &&
@@ -3207,7 +3212,7 @@ int main(int argc, char **argv) {
                         command(a, a->paused ? PS_MSG_RUN : PS_MSG_PAUSE);
                 }
             }
-            if (a->toolbar_keyboard && e.type == SDL_EVENT_TEXT_INPUT) continue;
+            if ((a->toolbar_keyboard || (a->tab==6 && a->settings_keyboard)) && e.type == SDL_EVENT_TEXT_INPUT) continue;
             nk_sdl_handle_event(a->ui, &e);
         }
         nk_input_end(a->ui);

@@ -5,6 +5,17 @@ Ein Wechsel hierhin lässt Editorinhalte, Simulation und Analyse im Hintergrund 
 Das geöffnete Protokoll wird während der Einstellungsansicht vorübergehend eingeklappt,
 damit die Bedienelemente auch im kleinen Fenster Platz haben.
 
+## Tastaturbedienung
+
+Tab beginnt mit der UI-Schriftgröße und führt über Übernehmen, Abbrechen,
+Standardwerte, Darstellung, Codeschrift, Sicherungsintervall und die sieben
+Ansichtsoptionen. Shift+Tab geht zurück; am Ende beginnt der Pfad wieder von
+vorn. Ein sichtbarer Rahmen markiert die aktive Gruppe, die bei Bedarf in den
+sichtbaren Bereich scrollt. Pfeiltasten wechseln die Werte einer Auswahlgruppe,
+Leertaste oder Enter aktiviert eine Option oder Schaltfläche. Escape verwirft
+den Entwurf und kehrt zur vorherigen Arbeitsfläche zurück. F10 öffnet weiterhin
+die Hauptmenüs. Ein Mausklick setzt die Bedienung mit dem Zeiger fort.
+
 ## Schrift und Sicherung
 
 Die Code-Schriftgröße lässt sich zwischen 16, 18, 20 und 22 logischen Pixeln wählen.

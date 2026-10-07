@@ -112,8 +112,51 @@ static void test_theme_frame(app *a, const char *mode, int *stage, int *code,
         printf("THEME %s SELF-TEST: %s\n", mode, *code ? "FAILED" : "PASSED");
     (*stage)++;
 }
+/* No pointer input: traverse every settings group and check the save transaction. */
+static void test_settings_keyboard_frame(app *a,bool reading,int *stage,int *code,const char **capture) {
+    bool ok=true;
+#define SETTINGS_KEY(key) test_window_key_mod(a->window,key,0)
+    switch((*stage)++) {
+    case 0: SDL_SetWindowSize(a->window,1080,740);SETTINGS_KEY(SDLK_F10);test_window_key_mod(a->window,SDLK_TAB,SDL_KMOD_SHIFT);SETTINGS_KEY(SDLK_RETURN);break;
+    case 1: ok=a->tab==6;SETTINGS_KEY(SDLK_TAB);break;
+    case 2: ok=a->settings_keyboard && a->settings_focus==0;
+        if(reading) {
+            ok=ok && a->preferences.ui_size==22 && a->preferences.editor_size==20 && a->preferences.theme==PS_THEME_LIGHT && a->preferences.autosave_seconds==120;
+            test_window_key_mod(a->window,SDLK_TAB,SDL_KMOD_SHIFT);*stage=21;break;
+        }
+        SETTINGS_KEY(SDLK_LEFT);break;
+    case 3: ok=a->settings_draft.ui_size==22;for(int i=0;i<4;i++)SETTINGS_KEY(SDLK_TAB);break;
+    case 4: ok=a->settings_focus==4;SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_TAB);break;
+    case 5: ok=a->settings_draft.theme==PS_THEME_LIGHT && a->settings_focus==5;SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_TAB);break;
+    case 6: ok=a->settings_draft.editor_size==20 && a->settings_focus==6;SETTINGS_KEY(SDLK_END);SETTINGS_KEY(SDLK_LEFT);SETTINGS_KEY(SDLK_LEFT);break;
+    case 7: ok=a->settings_draft.autosave_seconds==120;SETTINGS_KEY(SDLK_TAB);break;
+    case 8: case 9: case 10: case 11: case 12: case 13: case 14:
+        ok=a->settings_focus==*stage-2;SETTINGS_KEY(SDLK_SPACE);SETTINGS_KEY(SDLK_TAB);break;
+    case 15: ok=a->settings_focus==0;SETTINGS_KEY(SDLK_TAB);break;
+    case 16: ok=a->settings_focus==1;*capture="keyboard-settings-focus.bmp";SETTINGS_KEY(SDLK_RETURN);break;
+    case 17: ok=a->tab!=6 && a->preferences.ui_size==22 && a->preferences.editor_size==20 && a->preferences.theme==PS_THEME_LIGHT && a->preferences.autosave_seconds==120;
+        SETTINGS_KEY(SDLK_F10);test_window_key_mod(a->window,SDLK_TAB,SDL_KMOD_SHIFT);SETTINGS_KEY(SDLK_RETURN);break;
+    case 18: SETTINGS_KEY(SDLK_TAB);SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_TAB);SETTINGS_KEY(SDLK_TAB);SETTINGS_KEY(SDLK_RETURN);break;
+    case 19: ok=a->tab!=6 && a->preferences.ui_size==22;
+        SETTINGS_KEY(SDLK_F10);test_window_key_mod(a->window,SDLK_TAB,SDL_KMOD_SHIFT);SETTINGS_KEY(SDLK_RETURN);
+        for(int i=0;i<4;i++)SETTINGS_KEY(SDLK_TAB);SETTINGS_KEY(SDLK_SPACE);*stage=23;break;
+    case 23: ok=a->settings_draft.ui_size==16 && a->settings_draft.editor_size==16 && a->settings_draft.theme==PS_THEME_DARK && a->preferences.ui_size==22;
+        test_window_key_mod(a->window,SDLK_TAB,SDL_KMOD_SHIFT);SETTINGS_KEY(SDLK_RETURN);*stage=20;break;
+    case 21: if(a->settings_focus_scroll){--*stage;return;}
+        ok=a->settings_focus==13;
+        {struct nk_rect b=a->settings_focus_bounds[13],panel=a->dock_panels[PS_DOCK_WORKSPACE];
+         ok=ok && b.y>=panel.y+30 && b.y+b.h<=panel.y+panel.h-10;}
+        *capture="keyboard-settings-scroll.bmp";SETTINGS_KEY(SDLK_TAB);break;
+    case 22: if(a->settings_focus_scroll){--*stage;return;}
+        ok=a->settings_focus==0;SETTINGS_KEY(SDLK_ESCAPE);*stage=20;break;
+    case 20: ok=a->tab!=6;a->quitting=true;printf("SETTINGS KEYBOARD SELF-TEST: %s\n",*code?"FAILED":"PASSED");break;
+    }
+    if(!ok){fprintf(stderr,"Settings keyboard failure stage %d focus %d tab %d interval %u\n",*stage-1,a->settings_focus,a->tab,a->settings_draft.autosave_seconds);*code=1;a->quitting=true;}
+#undef SETTINGS_KEY
+}
 static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
                                const char **capture) {
+    if(!strncmp(mode,"keyboard",8)){test_settings_keyboard_frame(a,strstr(mode,"-read")!=NULL,stage,code,capture);return;}
     if(!strncmp(mode,"ui-size-",8)) {
         test_ui_size_frame(a,mode,stage,code,capture);return;
     }

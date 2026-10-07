@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-07",
-  "inspected_revision": "48db57685ad8609caf2364eaa36a2309d9e0ffe6",
+  "inspected_revision": "d20ca0048bed883f073b597d59158c9106b244ba",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -5293,9 +5293,10 @@
         "tools/verify-native-sdk.py",
         "app/ui_size_tests.inc",
         "app/ui_backend.c",
-        "app/preferences.c"
+        "app/preferences.c",
+        "app/settings_tests.inc"
       ],
-      "note": "Hauptmenüs besitzen Tastaturführung mit sichtbarem Fokus; die UI-Schriftgröße ist nun unabhängig von Codeschrift in 16/18/20/22 Pixeln wählbar und gilt auch für geöffnete Dokumentation und Diagramme. Text-/Schaltflächenlayouts und Schriftgröße sind geprüft; weitere Tastaturführung und grundlegender Screenreader-Zugang bleiben offen. PP-0710 bleibt unvollständig."
+      "note": "Hauptmenüs und persönliche Einstellungen besitzen Tastaturführung mit sichtbarem Fokus. Tab/Shift+Tab, Pfeiltasten und Enter/Leertaste bedienen alle Einstellungsgruppen; Fokus scrollt bei 22 Pixeln mit, Entwürfe lassen sich abbrechen und Werte bleiben nach Neustart erhalten. UI-Schriftgröße ist unabhängig in 16/18/20/22 Pixeln wählbar. Weitere Tastaturführung und grundlegender Screenreader-Zugang bleiben offen. PP-0710 bleibt unvollständig."
     },
     {
       "id": "PP-0711",

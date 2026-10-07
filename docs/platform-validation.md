@@ -3,6 +3,71 @@
 Stand: 7. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Persönliche Einstellungen per Tastatur am 7. Oktober 2026
+
+Die persönlichen Einstellungen besitzen einen durchgehenden Tab-/Shift+Tab-Pfad
+über 14 Gruppen. Pfeile wechseln Schriftgrößen, Theme und Sicherungsintervall;
+Enter/Leertaste bedienen Aktionen und Ansichtsoptionen. Der Fokus erhält einen
+sichtbaren Rahmen und scrollt im kleinen Fenster bei 22 Pixeln automatisch mit.
+F10 bleibt für die Hauptmenüs verfügbar. Escape und Abbrechen verwerfen den
+Entwurf; Standardwerte verändern erst den Entwurf. Tastatur und Maus verwenden
+identische Speichervorgänge. [Bedienung](settings.md).
+
+Der neue SDL-Fenstertest öffnet die Einstellungen ausschließlich über F10,
+Shift+Tab und Enter, durchläuft alle Gruppen, ändert sämtliche sieben Flags,
+speichert und startet erneut. Ein unabhängiger Python-Leser prüft Theme,
+Code-/UI-Größe und Intervall sowie sämtliche Flags der gespeicherten Datei.
+Der erneute Start prüft Fokuswechsel zum letzten Eintrag und zurück bei
+22 Pixeln samt tatsächlich sichtbarer Geometrie. Abbrechen, Escape und
+Standardwerte lassen die gespeicherten Werte unverändert. Die macOS-Aufnahme
+`build/settings-keyboard-scroll-mac.png` wurde zusätzlich visuell geprüft.
+
+Die ersten vier betroffenen macOS-Fensterprüfungen bestehen unter
+`build/contact-world-language-release-mac/test-results/run-m5euel_g`.
+Der anschließende Stand mit Fokus-/Scroll-Geometrie besteht in drei Abläufen
+unter `build/contact-world-language-release-mac/test-results/run-07ejir_3`;
+die letzte Erweiterung für Abbrechen/Standardwerte besteht unter
+`build/contact-world-language-release-mac/test-results/run-gx2shw38`.
+UI-Geometrie, Einstellungen und Prüfkiterstellung bestehen unter
+`build/contact-world-language-release-mac/test-results/run-4kxekxdi`,
+die ergänzte SDK-Prüfkiterstellung unter `.../run-hqq9ig8w`.
+
+Der erste Linux-Versuch unter `.../run-j5kkwso4` scheitert bereits beim
+SDL-Start, weil nach dem VM-Neustart kein grafischer Desktop läuft.
+Nach tatsächlichem Start und Bereitschaftsnachweis von Xvfb/Openbox bestehen
+alle sechs betroffenen Fensterabläufe unter
+`build/contact-world-language-release-linux/test-results/run-ga41ooqn`.
+Dieser Lauf umfasst Maus-Einstellungen, Themes, beide Tastaturmenügrößen,
+UI-Schriftgrößen und Einstellungen per Tastatur, vor der abschließenden
+Testergänzung für Abbrechen und Standardwerte.
+
+Die abschließende Linux-Tastaturprüfung inklusive Abbrechen und Standardwerte
+besteht unter
+`build/contact-world-language-release-linux/test-results/run-d_lqaxa7`.
+Sechs geänderte Code-/Test-/Werkzeugdateien wurden zwischen beiden Plattformen
+per SHA-256 verglichen (`build/settings-keyboard-source-freeze.json`).
+
+Die verschobene SDK-App besteht unter
+`build/settings-keyboard-sdk-proof-mac` vier gezielte Abläufe:
+Einstellungen per Tastatur und Maus sowie kleine/große Tastaturmenüs.
+Der SHA-256 der gestarteten App stimmt mit dem aktuellen Release-Binary überein;
+alle übrigen SDK-Produkte bleiben bytegleich zum vorherigen SDK.
+Dies ist eine gezielte App-Abnahme, keine neue vollständige numerische SDK-Suite.
+`PASSED.json` enthält App-Prüfsumme, konkrete Befehle und Rückgabecodes.
+
+Die endgültigen drei Prüfungen ohne Fenster bestehen unter Linux unter
+`build/contact-world-language-release-linux/test-results/run-xmnydtc9`.
+Die Linux-SDK-App besteht dieselben vier gezielten Abläufe unter
+`build/settings-keyboard-sdk-proof-linux`, ebenfalls mit protokollierter
+App-Prüfsumme und unveränderten übrigen SDK-Produkten.
+
+Die [C17-CI zu `48db576`](https://github.com/PhysicSimulator/physim/actions/runs/37588645984)
+und die [frischen Linux-Pakete desselben Stands](https://github.com/PhysicSimulator/physim/actions/runs/37588645973)
+sind abgeschlossen und erfolgreich. Die CI zur UI-Schriftgröße `d20ca00` läuft
+noch; die neue Einstellungsführung benötigt eine eigene Remote-Abnahme.
+Der Katalog enthält jetzt 70 Fensterfälle. Vollständige Tastaturführung und
+Screenreader-Zugang bleiben offene Ziele von PP-0710.
+
 ## Unabhängige UI-Schriftgröße am 7. Oktober 2026
 
 Die persönliche UI-Schriftgröße ist unabhängig von Codeschrift in 16, 18, 20
