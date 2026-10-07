@@ -21,6 +21,9 @@ Der Lauf liegt im Projekt unter `runs/`; das Schließen der App löscht ihn nich
 
 [Alle Bedienelemente und Tastenkürzel](workspace.md)
 
+Mit **F10** erreichst du die Hauptmenüs auch ohne Maus. Pfeiltasten wählen Menü
+und verfügbare Aktion, **Enter** führt sie aus, **Escape** beendet die Menüführung.
+
 ## Wähle deinen Lernweg
 
 [Teil I – Physim mit C](c-guide.md) führt durch Einrichtung, C-Grundlagen,

@@ -335,6 +335,15 @@ mit ausgewählten Tabs und den Positionen frei platzierter Panels.
 Die Darstellung lässt sich zwischen Dunkel, Hell und Hoher Kontrast wählen;
 die Auswahl gilt auch für Editor, Diagramme und das geöffnete Hilfefenster.
 
+**F10** aktiviert die Hauptmenüleiste. **Pfeil links/rechts** oder **Tab/Shift+Tab**
+wechseln zwischen Datei, Ansicht, Hilfe und Einstellungen. **Pfeil hoch/runter**
+öffnet Datei oder Ansicht und wählt verfügbare Einträge; deaktivierte Aktionen
+werden übersprungen. **Home/End** wählen den ersten/letzten verfügbaren Eintrag.
+**Enter** oder **Leertaste** führt die Auswahl aus. **Escape** oder erneut **F10**
+beendet die Menübedienung. Ein Rahmen markiert den Tastaturfokus. Ein Klick
+außerhalb oder ein Fokuswechsel zu einem anderen Fenster schließt das Menü.
+Währenddessen verändern die Menütasten und Texteingaben keinen geöffneten Editor.
+
 - **Ctrl+1 / Ctrl+2 / Ctrl+3:** Entwickeln / Simulieren / Auswerten.
 - **Ctrl+4:** Läufe und Berichte.
 - **Ctrl+S:** Quellen speichern.
@@ -344,6 +353,7 @@ die Auswahl gilt auch für Editor, Diagramme und das geöffnete Hilfefenster.
 - **F6:** Simulation starten oder pausieren.
 - **F7:** Simulation auf den pausierten Anfangszustand zurücksetzen.
 - **F1:** Eigenständiges Handbuchfenster öffnen.
+- **F10:** Hauptmenüleiste mit der Tastatur bedienen.
 - **Ctrl+,**: Einstellungen.
 
 Im Texteditor gelten außerdem die plattformüblichen Sprungbefehle:

@@ -13,6 +13,14 @@ Die Installation baut jetzt alle 75 kompilierten Sprachprodukte auch ohne
 Pipe-Leseverfahren. Die erneute Remote-CI-Abnahme steht noch aus; lokale Tests
 ersetzen diese Releasegates nicht.
 
+**Hauptmenüs per Tastatur:** F10, Pfeile, Tab/Shift+Tab, Home/End, Enter/Leertaste
+und Escape bedienen die Hauptmenüs mit sichtbarem Fokus. Deaktivierte Aktionen
+werden übersprungen; Menütasten und Text gelangen nicht in einen aktiven Editor.
+Elf betroffene Fensterprüfungen bestehen auf macOS und Linux. Beide isolierten
+SDKs bestehen alle bisherigen Gates und die installierten Tastaturmenüs in zwei
+Fenstergrößen. Weitere Tastaturführung, UI-Schriftvergrößerung und Screenreader-
+Zugang bleiben offen. [Nachweise](platform-validation.md).
+
 **Live-Geschwindigkeitswechsel:** Die GUI-Prüfung berücksichtigt alte gepufferte
 Snapshots nach dem Wechsel 4×→1×. Normale und verzögerte C-/Physim-Fensterläufe
 bestehen auf macOS und Linux. Ein zusätzlicher direkter Runner-Test prüft die

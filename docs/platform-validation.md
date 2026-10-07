@@ -3,6 +3,64 @@
 Stand: 7. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Hauptmenüs per Tastatur am 7. Oktober 2026
+
+Die App bietet F10 für die Hauptmenüleiste, Pfeile und Tab/Shift+Tab für den
+Menüwechsel, Home/End und Pfeile für verfügbare Einträge sowie Enter/Leertaste
+zum Ausführen. Escape/F10, ein Klick außerhalb und Fensterfokusverlust beenden
+die Menüführung. Ein sichtbarer Rahmen markiert Menü und Eintrag. Maus und
+Tastatur verwenden dieselbe Aktionsliste und dieselben Freigabebedingungen;
+deaktivierte Aktionen werden übersprungen. Menütasten und Texteingaben gelangen
+während der Menüführung nicht in einen zuvor aktiven Editor.
+[Bedienung](workspace.md).
+
+Die elf betroffenen Release-Fensterprüfungen bestehen auf Intel macOS 14.6.1/
+Apple Clang 16 unter
+`build/contact-world-language-release-mac/test-results/run-eas2s_sy`.
+Sie umfassen bisherige Mausmenüs, Inputisolation, die beiden neuen Tastaturabläufe,
+Editorfenster, Einstellungen, Themes, Dokumentation und Docking.
+Die Tastaturabläufe bei 1080×740 und 1440×940 prüfen Menüwechsel, übersprungene
+inaktive Aktionen, zyklische Auswahl, Home/End, Protokoll, Hilfe, Einstellungen,
+Projektmanager, unveränderten UTF-8-Editorinhalt, anschließendes Schreiben und
+Speichern sowie Rückkehr zur Maus und Fokusverlust. Die tatsächliche kleine
+Fokusaufnahme ist unter `build/keyboard-menu-focus-small.png` visuell geprüft.
+
+Der Katalog enthält weiterhin 608 Fälle ohne Fenster und 589 ohne SDL, jetzt
+68 Fensterfälle. Die vollständigen 608/608-Gesamtläufe des Builder-Meilensteins
+bleiben eigene frühere Nachweise; diese UI-Änderung besitzt die genannten
+betroffenen Fensterprüfungen und neue SDK-Prüfungen. PP-0710 bleibt unvollständig:
+weitere Bedienelemente benötigen Tastaturführung, UI-weite Schriftvergrößerung
+und grundlegender Screenreader-Zugang bleiben offen.
+
+Der vorherige vollständig erfolgreiche Linux-SDK-Prüfordner ist vor dem
+Freigeben von VM-Speicher auf dem Mac gesichert. Alle 14.417 regulären Dateien
+stimmen vor und nach dem Archivieren per SHA-256 überein.
+Archiv `build/native-domain-final-v2-sdk-proof-linux-evidence.tar.gz`, SHA-256
+`ca8b22820d16c4042c7f36b8104c6ac0c1ccb306bb2959c67e1d398724f95654`.
+
+Unter Debian 12/GCC 12.2 bestehen dieselben elf Release-Fensterprüfungen unter
+`build/contact-world-language-release-linux/test-results/run-3kup514s`.
+
+Die neue isolierte 58-Dateien-Kitprüfung besteht auf macOS vollständig unter
+`build/keyboard-menu-final-sdk-proof-mac/Native SDK ä 7j2jyves`.
+Sie prüft zusätzlich zu allen bisherigen numerischen/Sprach-/Projektgates die
+neun grafischen Projektabläufe, Dokumentationsnavigation und die installierte
+App mit Tastaturmenüs in beiden Fenstergrößen. Die Erfolgsmarker beider
+Menüläufe werden ausdrücklich gelesen; erst danach entsteht PASSED.txt.
+
+Unter Linux besteht dieselbe vollständige isolierte Prüfung unter
+`build/keyboard-menu-final-sdk-proof-linux/Native SDK ä yckrcleo`, ebenfalls
+mit allen neun grafischen Abläufen, Dokumentationsnavigation und beiden
+Tastaturmenüläufen der installierten App.
+
+Die endgültigen Pakete `build/Keyboard menu clean SDK ä mac` und
+`build/Keyboard menu clean SDK ä linux` enthalten 429 Manifestdateien,
+308 geprüfte Code-/Beispieldateien und 75 kompilierte Sprachprodukte.
+Alle Code-/Beispieldateien stimmen byteweise mit den vollständig geprüften
+SDK-Kopien überein; die Apps mit den geprüften Release-Binaries. Zum Abschluss
+werden nur Dokumentation und Manifest aktualisiert. Eine neue Remote-Abnahme
+bleibt gesondert erforderlich.
+
 ## Live-Geschwindigkeitswechsel und gepufferte Snapshots am 7. Oktober 2026
 
 Das SHA-256-geprüfte Apple-Silicon-Artefakt von `d3120ad` zeigt, dass Stage 20

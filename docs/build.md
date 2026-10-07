@@ -230,7 +230,7 @@ und das erneute Öffnen einschließlich beschädigter Katalogdateien.
 
 ### Fenster- und Grafiktests direkt ausführen
 
-`--test-display` führt zusätzlich 66 Fenster- und Grafikabläufe aus. Dafür sind
+`--test-display` führt zusätzlich 68 Fenster- und Grafikabläufe aus. Dafür sind
 eine grafische Sitzung, SDL und ein geeigneter OpenGL-Treiber erforderlich.
 Die beiden Testgruppen werden getrennt gestartet; `--test-display` lässt sich
 nicht mit `--no-app` oder `--test` kombinieren.

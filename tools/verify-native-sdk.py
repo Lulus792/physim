@@ -561,6 +561,19 @@ def main():
                     print(f"Installed SDK GUI workflow: {example} passed", flush=True)
                 checked([sdk / "bin" / ("physim"+suffix),"--docs-test",root / "Documentation routes"])
                 print("Installed SDK documentation window: both learning route buttons, shared links, route home and small-window rendering passed",flush=True)
+                previous_small=env.pop("PHYSIM_TEST_SMALL",None)
+                try:
+                    for size in ("large","small"):
+                        if size=="small":env["PHYSIM_TEST_SMALL"]="1"
+                        output=root / ("keyboard-menu-"+size+".txt")
+                        checked([sdk / "bin" / ("physim"+suffix),"--workspace-state-test",
+                                 root / ("Keyboard menu "+size),"toolbar-keyboard"],output=output)
+                        if "KEYBOARD MENU SELF-TEST: PASSED" not in output.read_text(encoding="utf-8"):
+                            raise RuntimeError("Installed SDK keyboard menu did not complete")
+                finally:
+                    env.pop("PHYSIM_TEST_SMALL",None)
+                    if previous_small is not None:env["PHYSIM_TEST_SMALL"]=previous_small
+                print("Installed SDK keyboard menus: both window sizes, disabled actions, text isolation, save, pointer return and focus loss passed",flush=True)
         elif args.app_tests:
             raise RuntimeError("App tests require an SDK with the app")
     (root / "PASSED.txt").write_text(
@@ -587,7 +600,7 @@ def main():
         "Eight cold native C/Physim domain project builds, unchanged cache reuse and four complete independent tutorial oracles passed.\n" +
         "Both complete C/Physim learning routes, eight paired model source groups and executable language introductions passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
-        ("Eight C template GUI workflows, the complete Physim language GUI workflow and independent documentation route navigation passed.\n" if args.app_tests else ""), encoding="utf-8")
+        ("Eight C template GUI workflows, the complete Physim language GUI workflow, independent documentation route navigation and keyboard menus in both window sizes passed.\n" if args.app_tests else ""), encoding="utf-8")
     print(f"Native SDK verified: {root}")
 
 

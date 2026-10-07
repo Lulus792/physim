@@ -380,10 +380,10 @@ static void sidebar_panel(app *a) {
                 open_documentation(a, 1);
             }
             if (nk_tree_push(ui, NK_TREE_TAB, "Tastaturbefehle", NK_MINIMIZED)) {
-                nk_layout_row_dynamic(ui, 154, 1);
+                nk_layout_row_dynamic(ui, 174, 1);
                 nk_label_wrap(ui, "" PS_UI_SHORTCUT "1/2/3  Arbeitsbereich\n" PS_UI_SHORTCUT "S  Speichern\n" PS_UI_SHORTCUT "F  "
                                   "Suchen\n" PS_UI_SHORTCUT "4  Läufe & Berichte\n" PS_UI_SHORTCUT "L  Protokoll\nF5  "
-                                  "Build\nF6  Start / Pause\nF7  Zurücksetzen");
+                                  "Build\nF6  Start / Pause\nF7  Zurücksetzen\nF10  Menüleiste");
                 nk_tree_pop(ui);
             }
         }

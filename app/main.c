@@ -181,6 +181,9 @@ typedef struct {
     struct nk_rect navigation_bounds[3];
     struct nk_rect toolbar_bounds[4], toolbar_item_bounds[6];
     int toolbar_menu; /* 0: closed, 1: File, 2: View. One popup supports direct switching. */
+    bool toolbar_keyboard, toolbar_keyboard_activate;
+    int toolbar_keyboard_top, toolbar_keyboard_item;
+    int toolbar_popup_menu; /* Previous drawn popup, including keyboard close. */
     struct nk_rect toolbar_popup_bounds;
     struct nk_rect window_control_bounds[3], window_drag_bounds;
     enum nk_collapse_states view_disclosure;
@@ -2594,7 +2597,7 @@ static bool test_scripted_external_input(const SDL_Event *e) {
     case SDL_EVENT_MOUSE_BUTTON_DOWN:
     case SDL_EVENT_MOUSE_BUTTON_UP: return e->button.which != PS_TEST_MOUSE_ID;
     case SDL_EVENT_MOUSE_WHEEL: return e->wheel.which != PS_TEST_MOUSE_ID;
-    case SDL_EVENT_WINDOW_FOCUS_LOST: return true;
+    case SDL_EVENT_WINDOW_FOCUS_LOST: return e->window.data1 != (int)PS_TEST_MOUSE_ID;
     default: return false;
     }
 }
@@ -2628,6 +2631,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "document_tests.inc"
 #include "document_recovery_tests.inc"
 #include "toolbar_tests.inc"
+#include "keyboard_menu_tests.inc"
 #include "project_settings_tests.inc"
 #include "reset_tests.inc"
 #include "speed_tests.inc"
@@ -3112,6 +3116,8 @@ int main(int argc, char **argv) {
                 doc_input_bytes += (unsigned)strlen(e.text.text);
             }
             SDL_Window *event_window = SDL_GetWindowFromEvent(&e);
+            if (event_window == a->window && e.type == SDL_EVENT_WINDOW_FOCUS_LOST)
+                toolbar_keyboard_close(a);
             if (a->doc_window && event_window == a->doc_window) {
                 if (e.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED)
                     documentation_window_hide(a);
@@ -3144,6 +3150,7 @@ int main(int argc, char **argv) {
                 continue;
             }
             if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && !a->recovery && !a->layout_manager && !a->workspace_manager && !a->channel_unit_manager) {
+                if (toolbar_keyboard_key(a, &e.key)) continue;
                 if (a->dock_drag && e.key.key==SDLK_ESCAPE) { a->dock_drag=0;a->dock_dragging=false;continue; }
                 if (scene_shortcut(a, &e.key)) continue;
                 if (a->tab == 1 && e.key.key == SDLK_SPACE && !e.key.repeat &&
@@ -3188,6 +3195,7 @@ int main(int argc, char **argv) {
                         command(a, a->paused ? PS_MSG_RUN : PS_MSG_PAUSE);
                 }
             }
+            if (a->toolbar_keyboard && e.type == SDL_EVENT_TEXT_INPUT) continue;
             nk_sdl_handle_event(a->ui, &e);
         }
         nk_input_end(a->ui);

@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-07",
-  "inspected_revision": "d3120ad323a1e65aff2193fa1345de13cb572a0e",
+  "inspected_revision": "ece0e4cdbbae7848427fe7ae225dea791d61a7f9",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -5286,9 +5286,13 @@
       "status": "incomplete",
       "evidence": [
         "app/preferences.h",
-        "app/settings_ui.inc"
+        "app/settings_ui.inc",
+        "app/toolbar_ui.inc",
+        "app/keyboard_menu_tests.inc",
+        "tests/check_display_workflow.py",
+        "tools/verify-native-sdk.py"
       ],
-      "note": "Themes und Code-Schriftgrößen vorhanden; UI-weite Vergrößerung sowie vollständige Tastatur-/Screenreader-Bedienung fehlen."
+      "note": "Die Hauptmenüs unterstützen F10, Pfeile, Tab/Shift+Tab, Home/End, Enter/Leertaste und Escape mit sichtbarem Fokus, übersprungenen deaktivierten Aktionen und isolierten Texteingaben. Ausgeführte Maus-/Tastaturprüfungen in zwei Fenstergrößen auf macOS und Linux. UI-weite Schriftvergrößerung, vollständige Tastaturführung für weitere Bedienelemente und grundlegender Screenreader-Zugang bleiben offen."
     },
     {
       "id": "PP-0711",

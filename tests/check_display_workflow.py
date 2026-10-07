@@ -29,6 +29,8 @@ SIMPLE = {
 for size in ("small", "large"):
     for name, mode in (("toolbar", "toolbar"), ("documents", "documents")):
         SIMPLE[f"{name}_{size}"] = (["--workspace-state-test", "{directory}", mode], 25, size == "small")
+for size in ("small", "large"):
+    SIMPLE["keyboard_menu_" + size] = (["--workspace-state-test", "{directory}", "toolbar-keyboard"], 35, size == "small")
 for name, fixture in (("unicode", "unicode_identifiers"), ("multiline", "multiline_strings")):
     SIMPLE[f"language_editor_{name}_preview"] = (["--syntax-preview-test", "{directory}",
         "{root}/tests/fixtures/language/" + fixture + ".phys"], 30, False)

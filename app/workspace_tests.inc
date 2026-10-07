@@ -53,6 +53,9 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
         return document_test_start(a, root);
     if (!strcmp(mode, "documents-build"))
         return document_build_test_start(a, root);
+    if (!strcmp(mode,"toolbar-keyboard")) {
+        snprintf(a->manager_parent,sizeof a->manager_parent,"%s",root);return true;
+    }
     if (!strcmp(mode, "toolbar") || !strcmp(mode, "toolbar-noise"))
         return true;
     if (!strcmp(mode, "write") || !strcmp(mode, "write-folder")) {
@@ -178,6 +181,9 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
         document_test_frame(a, a->workspace, stage, code, capture);
         if(strcmp(mode,"documents")) test_pointer_noise(a);
         return;
+    }
+    if (!strcmp(mode,"toolbar-keyboard")) {
+        keyboard_menu_test_frame(a,a->manager_parent,stage,code,capture);return;
     }
     if (!strcmp(mode, "toolbar") || !strcmp(mode, "toolbar-noise")) {
         toolbar_test_frame(a, stage, code, capture);
