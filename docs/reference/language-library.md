@@ -1746,7 +1746,7 @@ Verbindet einen Zahlenwert mit seiner Einheit.
 Quantity.adding(right: Quantity) -> Quantity
 ```
 
-Addiert Größen nach Umrechnung in die Einheit des linken Operanden. Bekannte Dimensionskonflikte werden beim Kompilieren erkannt.
+Addiert Größen in der Einheit des linken Operanden mit normierter, kompensierter Umrechnung vor der Rückskalierung. Bekannte Dimensionskonflikte werden beim Kompilieren erkannt; Laufzeitfehler sind mit attempt abfangbar.
 
 Überall verfügbar.
 
@@ -1786,7 +1786,7 @@ Multipliziert Größen und kombiniert ihre Dimensionen; symbol benennt die neue 
 Quantity.subtracting(right: Quantity) -> Quantity
 ```
 
-Subtrahiert Größen nach Umrechnung in die Einheit des linken Operanden. Bekannte Dimensionskonflikte werden beim Kompilieren erkannt.
+Subtrahiert Größen in der Einheit des linken Operanden mit normierter, kompensierter Umrechnung. Bekannte Dimensionskonflikte werden beim Kompilieren erkannt; Fehler erhalten die Werte und sind mit attempt abfangbar.
 
 Überall verfügbar.
 

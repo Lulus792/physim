@@ -3,6 +3,12 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-07. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Erweiterter Bereich von Quantity-Summen:** C und Physim kombinieren normierte,
+kompensierte Umrechnungen vor der Rückskalierung. Darstellbare Summen scheitern
+nicht mehr allein an einer separat überlaufenden Konvertierung; kleine Beiträge
+und Subnormal-Gleichstände besitzen unabhängige Referenzprüfungen.
+[Vertrag und Grenzen](numerics.md).
+
 **Gemeinsame SI-Kanalgrenze:** C und Physim deklarieren Kanäle jetzt über denselben
 Validator. Skala 1, begrenzte UTF-8-Metadaten und eindeutige Namen werden vor
 jeder Kontextänderung geprüft. Laufdatei und CSV enthalten ausdrücklich nach

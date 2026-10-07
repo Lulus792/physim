@@ -103,8 +103,8 @@ add('ps_unit_', {
 })
 add('ps_quantity_', {
     'convert': 'Konvertiert Zahlenwert und Einheit in eine dimensionskompatible Zieleinheit.',
-    'add': 'Addiert Größen nach Umrechnung von b in die Einheit von a.',
-    'subtract': 'Subtrahiert Größen nach Umrechnung von b in die Einheit von a.',
+    'add': 'Addiert dimensionskompatible Größen in der Einheit von a mit normierter, kompensierter Umrechnung und abschließender Subnormalrundung; Fehler erhalten die Ausgabe.',
+    'subtract': 'Subtrahiert dimensionskompatible Größen in der Einheit von a mit normierter, kompensierter Umrechnung; Rückskalierung erfolgt erst nach der Summe.',
     'multiply': 'Multipliziert Werte und Einheiten; symbol benennt die Produkteinheit.',
     'divide': 'Dividiert Werte und Einheiten mit Prüfung auf ungültigen Divisor.',
 })

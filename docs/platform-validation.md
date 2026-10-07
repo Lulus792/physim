@@ -2590,3 +2590,107 @@ erhalten. Die 22 gezielten Fälle, vier Sanitizerfälle und beide SDK-Prüfungen
 sind separate Nachweise; sie werden nicht zu einer erfundenen Gesamtsuite
 zusammengezählt. Die Fensterfallzahl im Katalog bleibt 77; dieser Schritt
 behauptet keine erneut ausgeführte gesamte Grafikabnahme.
+
+## Normierte und kompensierte Quantity-Summen am 7. Oktober 2026
+
+Eine neue C-Regression am unveränderten Ausgangsstand `934d5fc` reproduziert
+`PS_NUMERIC` für die endliche Summe `-2^1023 m + 2^1023 (Skala 2 m)`
+(`run-tq5m9snf`). Die Einzelkonvertierung läuft zuvor über. C und Physim
+kombinieren jetzt normierte Operanden und Konvertierungs-/Summenreste vor der
+Rückskalierung. Subnormale Ergebnisse werden auf dem endgültigen Gitter gerundet;
+sehr kleine Beiträge können dadurch einen Rundungsgleichstand beeinflussen.
+[Vertrag, Primärquelle und Grenzen](numerics.md) nennen die normale Rundung zur
+nächsten Zahl, Alias-/Fehlervertrag und fehlende allgemeine Exaktheitsgarantie.
+Die linke Einheit und ihr geliehenes Symbol bleiben erhalten. Eigenständige
+Konvertierung sowie Produkt-/Quotientenoperationen behalten ihren Vertrag.
+
+### Tatsächlich ausgeführte gezielte Nachweise
+
+Je **16/16** Release-Fälle bestehen auf dem Intel-Mac/Apple Clang
+(`run-2uvhcho3`) und Debian 12/GCC (`run-qonkc1zv`). Sie enthalten C-Grenzfälle,
+bestehende Quantity-Operatoren/-Fehler, numerische Kernprüfungen, Kanaldeklarationen,
+Anzeigeeinheiten, Referenz und isoliertes Kit. Der neue Prüfer benutzt Python
+`Fraction` für exakte rationale Werte der tatsächlich eingelesenen Double-Eingaben:
+**20038 C-Eingaben und 38 tatsächliche Physim-Operatorfälle**. Die gezielten 38
+Fälle verlangen exakt den aus der rationalen Referenz gerundeten Double-Wert;
+in beiden Sprachen werden erfolgreiche Werte, Fehler und linke Skala geprüft.
+
+Die erzeugten Fälle decken 10000 dyadische Skalenverhältnisse und 10000 weitere
+breit verteilte endliche Werte/Skalen ab. Dafür werden Bereich und dokumentierte
+Double-Abweichung unabhängig geprüft; unvermeidbare Endrundung wird bei der
+Fehlerschranke berücksichtigt. Dies ist keine Aussage über sämtliche möglichen
+Double-Paare. Die C-Prüfung verlangt zusätzlich volle unveränderte Fehlerausgaben,
+Symbol-/Dimensionsintegrität, Aliasverhalten, Auslöschung und vorzeichenbehaftete
+Null. Subnormale Fälle auf und beiderseits einer halben Gitterweite sind enthalten.
+
+Unter Linux/Clang mit ASan/UBSan bestehen die elf ausgewählten Fälle in
+`build/base-contract-asan-linux/test-results/run-s2j2pkmr`. Linux-Receipts sind
+zusätzlich unter `build/quantity-targeted-linux-results.json` und
+`build/quantity-asan-linux-results.json` lokal erhalten. 30 Referenzseiten bestehen.
+
+Die erste einfache normierte Version besteht die Überlaufregression, verliert
+aber bei einer Subnormal-Grenze den Rundungsrest. Dieser konkrete Probe führte
+zur Kompensation und abschließenden Gitterrundung. Der erste kompensierte
+Oracle-Lauf (`run-nzu0y43_`) scheitert an einer zu engen Oracle-Fehlerschranke,
+die unvermeidbare Subnormal-Endrundung nicht berücksichtigt. Die Schranke ist nun
+mindestens eine halbe finale ULP; die 38 gezielten Fälle verlangen zusätzlich
+exakte Gleichheit zur rationalen Referenz. Die erfolgreichen Folgeprüfungen
+verwenden diese strengeren gezielten und korrigierten allgemeinen Prüfungen.
+Fehlversuche und Quellen bleiben erhalten.
+
+### Vollständige verschobene SDKs
+
+Beide vollständigen isolierten SDK-Prüfungen ohne Fensterprüfungen bestehen
+mit jeweils **390 erfolgreichen Prüfbefehlen**:
+
+- macOS: `build/Quantity sums SDK ä mac cv7rk3x8`, verschoben unter
+  `proof/Native SDK ä eegxtvz7/Relocated SDK ä`.
+- Linux: `build/Quantity sums SDK ä linux p5n8cppa`, verschoben unter
+  `proof/Native SDK ä gmosenm4/Relocated SDK ä`.
+
+Je 448 SDK-Dateien und 81 Eingaben im isolierten Kit sind SHA-256-erfasst.
+Die neuen C-/Physim-Summen bestehen gegen installierte und aus SDK-Quellen
+neu gebaute Archive. Alle früheren Gates, zwölf kalte native Projekte, unveränderter
+Cache und sechs unabhängige Domänenorakel bleiben aktiv. Die 18 in
+`build/quantity-sum-source-freeze.json` festgehaltenen Implementierungs-/Test-/
+Dokumentationsdateien waren während beider Prüfungen unverändert. Receipts liegen
+in `build/quantity-sum-sdk-mac-PASSED.json` und `build/quantity-sum-sdk-linux-PASSED.json`.
+Der anschließende Planabgleich ergänzt ausschließlich den unten belegten Series-
+Gegenbefund. API/ABI 3, Wire 5, Snapshot 3 und psrun 1 bleiben unverändert.
+
+### Offene Analysegrenze und Windows-Nachweis
+
+Ein tatsächlicher C-Probe gegen das frisch installierte macOS-SDK addiert eine
+Series mit 1 m und eine ausgerichtete Series mit 50 cm als **51 statt 1,5 m**.
+`import_values` speichert rohe Werte mit ihrer Skala; `ps_series_combine` prüft
+Dimensionen, berücksichtigt beim Addieren aber die rechte Skala nicht.
+Quellen und Ergebnis stehen in `build/series-unit-scale-probe.c`,
+`build/series-unit-scale-probe.txt` und `build/series-unit-scale-audit.json`.
+PP-0370 ist deshalb jetzt konkret unvollständig. Der Plan enthält unverändert
+24 implementierte, nun sechs unvollständige und 501 ungeprüfte Blöcke.
+Diese Series-/SI-Speicherlücke wird als nächstes bearbeitet; die Quantity-Korrektur
+ist keine gesamte Einheiten-/Analyseabnahme.
+
+Der [Windows-v143-Debug-Job der vorherigen Revision `934d5fc`](https://github.com/PhysicSimulator/physim/actions/runs/37645634144/job/112875535813)
+ist fehlgeschlagen. Seine öffentlichen Check-Annotationen melden mehrfach ein
+nicht mehr vorhandenes Laufwerk für Runner-Dateien auf `D:` und einen Prozess-
+Exitcode 1. Der Compilerlog ist über die öffentliche API nicht abrufbar (403).
+Daraus wird weder ein konkreter Produktcodefehler noch ein bestandener Job
+abgeleitet. Die neue gesamte Windows-/Apple-Silicon-/Plattformabnahme bleibt offen.
+
+### Abschließende Gesamtläufe der Quantity-Korrektur
+
+Die tatsächlichen Release-Gesamtläufe bestehen auf beiden lokalen Systemen
+vollständig, jeweils **630/630**:
+
+- macOS/Apple Clang: `build/contact-world-language-release-mac/test-results/run-ptuom6qd`.
+- Debian 12/GCC: `build/contact-world-language-release-linux/test-results/run-hp1counu`.
+
+Sie enthalten die früheren Compiler-, Runtime-, Format-, Runner-, Batch-,
+Domänen- und Projektbuildfälle sowie beide neuen Quantity-Summenfälle.
+Der Linux-Receipt ist zusätzlich unter `build/quantity-full-linux-results.json`
+lokal erhalten. Die 16 gezielten Fälle, elf Sanitizerfälle und SDK-Läufe sind
+separate Nachweise. Die 77 Fensterfälle im Katalog sind in diesem Schritt
+nicht als erneut ausgeführte Grafikgesamtabnahme ausgewiesen. Der weiterhin
+belegte Series-Skalierungsfehler wird durch diese grünen Tests nicht widerlegt;
+der Katalog erhält dafür als nächsten Schritt einen eigenen Gegenbeleg.

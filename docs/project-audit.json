@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-07",
-  "inspected_revision": "d9b167ad9df06adc8237a55dc877171934494572",
+  "inspected_revision": "934d5fc415adbf99daf5427226e11be1df6983bc",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2430,9 +2430,13 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Werte werden intern einheitlich in SI gespeichert.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "incomplete",
+      "evidence": [
+        "src/series.c",
+        "include/physim/series.h",
+        "docs/platform-validation.md"
+      ],
+      "note": "Konkreter Gegenbeleg auf macOS: ps_series_from_values/aligned_values speichern rohe Werte mit nichtkanonischer Skala. ps_series_combine addiert 1 m und 50 cm als 51 statt 1.5 m, ohne die rechte Skala zu berücksichtigen. Einheitlicher interner SI-Speicher und skalenrichtige Analyse sind daher noch nicht erreicht; unabhängiger reproduzierbarer C-Probe gegen das frisch installierte SDK. Die Quantity-Summenkorrektur allein schließt diese Series-Lücke nicht."
     },
     {
       "id": "PP-0371",
@@ -2469,9 +2473,16 @@
         "tests/test_channel_declaration_workflow.py",
         "tests/fixtures/channel_declaration.c",
         "tests/fixtures/language/channel_declaration.phys",
-        "docs/numerics.md"
+        "docs/numerics.md",
+        "src/units.c",
+        "include/physim/units.h",
+        "tests/test_quantity_sum.c",
+        "tests/quantity_sum_probe.c",
+        "tests/test_quantity_sum_oracle.py",
+        "tests/fixtures/quantity_sum_cases.json",
+        "tests/fixtures/language/quantity_sum_values.phys"
       ],
-      "note": "Konkrete Kanalgrenze korrigiert: C und Physim verlangen Skala 1, kopieren begrenzte UTF-8-Metadaten ohne Kürzung, weisen doppelte Namen ab und erhalten den Kontext bei Fehlern. Tatsächliche Läufe und CSV prüfen explizite Umrechnung von 125 cm nach 1.25 m. Die gesamte Forderung an sämtliche API-Grenzen und Analyseoperationen bleibt ungeprüft; dieser Teilnachweis ist keine vollständige Einheitenabnahme."
+      "note": "Konkrete Kanalgrenze korrigiert: C und Physim verlangen Skala 1, kopieren begrenzte UTF-8-Metadaten ohne Kürzung, weisen doppelte Namen ab und erhalten den Kontext bei Fehlern. Tatsächliche Läufe und CSV prüfen explizite Umrechnung von 125 cm nach 1.25 m. Die gesamte Forderung an sämtliche API-Grenzen und Analyseoperationen bleibt ungeprüft; dieser Teilnachweis ist keine vollständige Einheitenabnahme. Quantity-Summen sind zusätzlich normiert und kompensiert: endliche Summen trotz nichtdarstellbarer Einzelkonvertierung, Subnormalgrenzen und Ausgabenintegrität werden gegen unabhängige exakte Fraction-Referenzen geprüft. Keine allgemeine Garantie exakter Rundung oder vollständige Einheitenabnahme."
     },
     {
       "id": "PP-0373",

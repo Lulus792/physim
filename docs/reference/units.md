@@ -80,17 +80,17 @@ ps_result ps_quantity_convert(ps_quantity value, ps_unit target, ps_quantity *ou
 
 ## ps_quantity_add
 
-Addiert Größen nach Umrechnung von b in die Einheit von a.
+Addiert dimensionskompatible Größen in der Einheit von a mit normierter, kompensierter Umrechnung und abschließender Subnormalrundung; Fehler erhalten die Ausgabe.
 
 ```c
 ps_result ps_quantity_add(ps_quantity a, ps_quantity b, ps_quantity *out);
 ```
 
-Addition/subtraction convert b to a's unit. Product/quotient compose dimensions.
+Addition/subtraction return a's unit and combine normalized operands before final scaling, including when b alone cannot be represented in a's unit. Assumes default round-to-nearest/ties-to-even; compensated terms retain conversion/sum residuals and subnormals round once on their final lattice. Exact normalized cancellation may return zero; a nonzero normalized result rounding to zero or a nonfinite final result yields PS_NUMERIC. Double rounding still applies, especially near cancellation; no exact-arithmetic guarantee. Inputs/output may alias. Product/quotient compose dimensions.
 
 ## ps_quantity_subtract
 
-Subtrahiert Größen nach Umrechnung von b in die Einheit von a.
+Subtrahiert dimensionskompatible Größen in der Einheit von a mit normierter, kompensierter Umrechnung; Rückskalierung erfolgt erst nach der Summe.
 
 ```c
 ps_result ps_quantity_subtract(ps_quantity a, ps_quantity b, ps_quantity *out);

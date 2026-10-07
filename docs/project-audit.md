@@ -97,8 +97,8 @@ Korrekturen zusätzlich in ihrer tatsächlichen Matrix bestätigen.
 
 ## Batch-Bindung und Controller
 
-Der aktuelle Abgleich enthält vierundzwanzig implementierte Blöcke, fünf konkrete
-unvollständige Blöcke und 502 weiterhin ungeprüfte Blöcke. Die acht Lernpfade
+Der aktuelle Abgleich enthält vierundzwanzig implementierte Blöcke, sechs konkrete
+unvollständige Blöcke und 501 weiterhin ungeprüfte Blöcke. Die acht Lernpfade
 bleiben erhalten; hinzu kommen LANG-005, der Batch-/Parametercontroller und die beiden Dokumentationsteile. Elektromagnetismus und Wellen/Optik besitzen zusätzliche begrenzte Domänennachweise.
 Die Originaltexte aller 531 Blöcke und 475 Aufzählungspunkte bleiben unverändert.
 Die Sprachbindung und die beiden Lernwege besitzen ausdrücklich begrenzte Implementierungs- und
@@ -181,3 +181,23 @@ ungeprüft. Ein grüner Kanaltest beweist weder jede Analyseoperation noch die
 korrekte physikalische Bedeutung nackter Zahlen. Historische Rohschemata
 behalten ihren Dateiformatvertrag. Die Anzahl implementierter Blöcke bleibt
 unverändert.
+
+
+## Quantity-Summen und numerischer Bereich (§7.3)
+
+Der weitere Abgleich belegt eine numerische Bereichsgrenze: Eine separat
+überlaufende Konvertierung verhinderte eine endliche Quantity-Summe.
+Normierte und kompensierte C-Summen erhalten jetzt auch sehr kleine Beiträge;
+subnormale Ergebnisse werden erst auf ihrem endgültigen Gitter gerundet.
+Physim benutzt dieselben Funktionen. Unabhängige exakte Fraction-Referenzen
+prüfen Bereich, Werte, linke Einheit und unveränderte Fehlerausgaben.
+[Methoden und Grenzen](numerics.md) unterscheiden die Erweiterung vom weiterhin
+begrenzten Double-Vertrag. PP-0372 bleibt für sämtliche Grenzen ungeprüft;
+dieser Nachweis ersetzt die gesamte Einheitenabnahme nicht.
+
+
+PP-0370 ist durch einen tatsächlichen Series-Lauf jetzt als unvollständig belegt:
+Die API speichert 50 cm roh mit Skala 0,01 und addiert diese Werte zu 1 m als
+51 m. Die korrekte Summe wäre 1,5 m. Dieser Gegenbeleg wird als nächster
+Analyse-/SI-Speicherfehler bearbeitet. Er bleibt ausdrücklich offen; ein grüner
+Quantity-Teiltest macht die Series-Operation nicht korrekt.

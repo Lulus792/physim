@@ -160,6 +160,21 @@ def main():
             checked([sys.executable, repo / "tests/test_rng_reference.py",
                      "--c", rng_probe, "--language", rng_language])
         print("Installed/rebuilt SDK RNG: independent integer/normal references and C/Physim value snapshots passed", flush=True)
+        shutil.copy2(repo / "tests/test_quantity_sum.c", consumer / "quantity-sum-check.c")
+        shutil.copy2(repo / "tests/quantity_sum_probe.c", consumer / "quantity-sum-probe.c")
+        checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
+                 repo / "tests/fixtures/language/quantity_sum_values.phys"],
+                output=consumer / "quantity-sum-language.c")
+        for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
+            sum_check = builder.executable("quantity-sum-check-" + kind, ["quantity-sum-check.c"], [archive])
+            sum_probe = builder.executable("quantity-sum-probe-" + kind, ["quantity-sum-probe.c"], [archive])
+            sum_language = builder.executable("quantity-sum-language-" + kind, ["quantity-sum-language.c"], [archive], language=True)
+            checked([sum_check])
+            checked([sys.executable, repo / "tests/test_quantity_sum_oracle.py",
+                     "--c", sum_probe, "--language", sum_language,
+                     "--cases", repo / "tests/fixtures/quantity_sum_cases.json",
+                     "--fixture", repo / "tests/fixtures/language/quantity_sum_values.phys"])
+        print("Installed/rebuilt SDK quantity sums: overflowing conversion, subnormal tie cases, exact Fraction references, left units and atomic errors passed", flush=True)
         shutil.copy2(repo / "tests/test_channel_declaration.c", consumer / "channel-declaration-check.c")
         shutil.copy2(repo / "tests/fixtures/channel_declaration.c", consumer / "channel-declaration-model.c")
         shutil.copy2(repo / "tests/channel_export_probe.c", consumer / "channel-export-probe.c")
@@ -716,6 +731,7 @@ def main():
         "Electromagnetism through installed/rebuilt Core, Coulomb/gradient/Lorentz tests, seven RC Decimal oracles and mixed reports passed.\n" +
         "Waves/optics through installed/rebuilt Core, Snell/TIR/lens invariants, owned 4096-node grids, allocation failures and mixed string reports passed.\n" +
         "Fluid through installed/rebuilt Core, anchored max networks, conservative 4096-cell transport, allocation failures and mixed tutorial reports passed.\n" +
+        "Quantity sums through installed/rebuilt Core, exact Fraction oracles, overflowing conversion and subnormal ties passed.\n" +
         "Canonical SI channel declarations through installed/rebuilt Core, bounded UTF-8, atomic errors and actual C/Physim run/CSV parity passed.\n" +
         "Material properties and real gas through installed/rebuilt Core, stored SI metadata, independent Decimal references and mixed analyses passed.\n" +
         "Twelve cold native C/Physim domain project builds, unchanged cache reuse and six complete independent tutorial oracles passed.\n" +

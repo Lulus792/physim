@@ -1,5 +1,6 @@
 #include "physim/units.h"
 #include <math.h>
+#include <float.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -63,19 +64,61 @@ ps_result ps_quantity_convert(ps_quantity a, ps_unit target, ps_quantity *out) {
         *out = r;
     return status;
 }
+/* TwoSum retains the low part of addition in round-to-nearest arithmetic.
+ * Ogita/Rump/Oishi (2005), Algorithm 3.1. No overflow in normalized terms. */
+static void quantity_two_sum(double a, double b, double *high, double *low) {
+    double sum = a + b, z = sum - a;
+    *low = (a - (sum - z)) + (b - z);
+    *high = sum;
+}
+static double quantity_rescale(double high, double low, int exponent) {
+    double magnitude = fabs(scalbn(high, exponent));
+    if (high != 0 && magnitude <= DBL_MIN) {
+        /* Round once on the subnormal lattice. A tiny low part must break a
+         * half-way tie even if adding it to the high part would round away. */
+        int shift = exponent - (DBL_MIN_EXP - DBL_MANT_DIG);
+        double grid = scalbn(fabs(high), shift),
+               tail = scalbn(signbit(high) ? -low : low, shift);
+        double integral = floor(grid), delta = (grid - integral - .5) + tail;
+        if (delta > 0 || (delta == 0 && fmod(integral, 2) != 0)) integral += 1;
+        return copysign(scalbn(integral, DBL_MIN_EXP - DBL_MANT_DIG), high);
+    }
+    return scalbn(high + low, exponent);
+}
 static ps_result sum(ps_quantity a, ps_quantity b, int sign, ps_quantity *out) {
-    if (!out || !isfinite(a.value))
+    if (!out || !isfinite(a.value) || !isfinite(b.value) ||
+        !ps_unit_compatible(a.unit, b.unit))
         return PS_INVALID;
-    double converted;
-    ps_result status = ps_convert(b.value, b.unit, a.unit, &converted);
-    if (status != PS_OK)
-        return status;
-    ps_quantity r = {a.value + sign * converted, a.unit};
-    if (!isfinite(r.value))
-        return PS_NUMERIC;
-    *out = r;
+    double value;
+    if (b.value == 0) {
+        /* Preserve the established signed-zero behavior. */
+        value = a.value + sign * b.value;
+    } else {
+        /* Convert in normalized binary form and add before final scaling.
+         * The converted operand may exceed Double or lie below its smallest
+         * subnormal even when the final sum is representable. No wider type. */
+        int ea, eb, esb, esa;
+        double ma = frexp(a.value, &ea), mb = frexp(b.value, &eb),
+               msb = frexp(b.unit.scale, &esb), msa = frexp(a.unit.scale, &esa);
+        double product = mb * msb, product_error = fma(mb, msb, -product);
+        double converted = product / msa;
+        double conversion_error = (fma(-converted, msa, product) + product_error) / msa;
+        int converted_exponent = eb + esb - esa;
+        if (a.value == 0) ea = converted_exponent;
+        int exponent = ea > converted_exponent ? ea : converted_exponent;
+        double high, low;
+        quantity_two_sum(scalbn(ma, ea - exponent),
+                         sign * scalbn(converted, converted_exponent - exponent), &high, &low);
+        low += sign * scalbn(conversion_error, converted_exponent - exponent);
+        quantity_two_sum(high, low, &high, &low);
+        value = quantity_rescale(high, low, exponent);
+        if (!isfinite(value) || (value == 0 && (high != 0 || low != 0)))
+            return PS_NUMERIC;
+    }
+    *out = (ps_quantity){value, a.unit};
     return PS_OK;
 }
+
 ps_result ps_quantity_add(ps_quantity a, ps_quantity b, ps_quantity *o) { return sum(a, b, 1, o); }
 ps_result ps_quantity_subtract(ps_quantity a, ps_quantity b, ps_quantity *o) {
     return sum(a, b, -1, o);

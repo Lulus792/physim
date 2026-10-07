@@ -1878,6 +1878,18 @@
       "libraries": [
         "core"
       ]
+    },
+    "quantity-sum-probe": {
+      "sources": [
+        "tests/quantity_sum_probe.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "quantity-sum-language": {
+      "source": "tests/fixtures/language/quantity_sum_values.phys",
+      "mode": "--emit-c"
     }
   },
   "tests": [
@@ -7564,6 +7576,31 @@
             "{channel-export-probe}",
             "--work",
             "{work}"
+          ],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "quantity_sum_oracle",
+      "targets": [
+        "python",
+        "quantity-sum-probe",
+        "quantity-sum-language"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_quantity_sum_oracle.py",
+            "--c",
+            "{quantity-sum-probe}",
+            "--language",
+            "{quantity-sum-language}",
+            "--cases",
+            "{root}/tests/fixtures/quantity_sum_cases.json",
+            "--fixture",
+            "{root}/tests/fixtures/language/quantity_sum_values.phys"
           ],
           "timeout": 90
         }

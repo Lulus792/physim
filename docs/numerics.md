@@ -100,6 +100,34 @@ darstellbare Skalierungen. `ps_quantity_add/subtract` konvertieren den zweiten
 Operanden in die Einheit des ersten; unverträgliche Dimensionen sind Fehler.
 Produkte und Quotienten kombinieren Zahlenwerte und Dimensionen.
 
+Addition und Subtraktion erhalten die Einheit des linken Operanden. Beide
+Werte und die Skalen sind endlich, Skalen positiv und Dimensionen gleich.
+Die Umrechnung des rechten Operanden und die Summe werden in normierter
+Binärform kombiniert; die Rückskalierung folgt erst am Ende. Beispielsweise
+liefert `-2^1023 m + 2^1023 (Skala 2 m)` den endlichen Wert `2^1023 m`, obwohl
+jede separat ausgegebene Umrechnung des zweiten Operanden überlaufen würde.
+Auch ein Beitrag unterhalb der kleinsten Subnormalzahl kann noch die Summe
+beeinflussen: `minDouble + minDouble (Skala 0,5)` rundet auf `2*minDouble`.
+
+Die Rechnung hält mit FMA den Produktrundungsrest und einen Quotientenrest
+sowie mit TwoSum einen Summenrest fest. TwoSum und FMA-Produktzerlegung folgen
+[Ogita, Rump und Oishi (2005), Algorithmen 3.1/3.5](https://www.tuhh.de/ti3/paper/rump/OgRuOi05.pdf).
+Subnormale Ergebnisse werden auf ihrem endgültigen Gitter gerundet, damit ein
+kleiner Rest die Entscheidung an einer halben Gitterweite beeinflussen kann.
+Die Implementierung verwendet ausschließlich Double und setzt die normale
+Rundung zur nächsten Zahl mit gerader Mantisse bei Gleichstand voraus.
+Sie ist keine beliebig genaue Arithmetik und verspricht keine allgemeine
+exakte Rundung jeder nichtbinären Skalenteilung. Nahe Auslöschung können
+relative Fehler weiterhin groß werden.
+
+Ein nichtendliches Endergebnis oder ein nichtnuller kompensierter Rest, der
+auf null unterläuft, liefert `PS_NUMERIC`; kompensierte Auslöschung kann null
+liefern. Ungültige Eingaben liefern `PS_INVALID`. Fehler erhalten die gesamte
+C-Ausgabe; Input/Output-Aliasing ist erlaubt. Physim-Operatoren und benannte
+Quantity-Funktionen verwenden dieselbe C-Rechnung; Fehler sind mit `attempt`
+abfangbar. Die eigenständige Konvertierung `ps_convert` behält ihren bisherigen
+Bereichsvertrag. Auch Produkt-/Quotientenoperationen behalten ihren Vertrag.
+
 `ps_convert` vermeidet vermeidbare Zwischenüberläufe durch Mantissen-/Exponenten-
 Zerlegung. Überlauf oder vollständiger Unterlauf des Ergebnisses wird gemeldet.
 Eigene Einheitensymbole werden nicht kopiert; ihre Lebensdauer liegt beim Aufrufer.
