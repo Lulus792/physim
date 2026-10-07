@@ -245,3 +245,16 @@ in beiden Sprachen. [Methoden und Grenzen](numerics.md) enthalten Einheiten,
 Pivottoleranz, atomare Fehler, Ausgabealias und die verbleibenden Double-Grenzen.
 Die übrigen Mathematikblöcke und die gesamte Plattform-/Produktabnahme bleiben
 einzeln offen. Die Originaltexte aller 531 Planblöcke sind erhalten.
+
+
+## Nativer Zugang zu macOS-Controls (PP-0710)
+
+Die belegte Screenreader-Lücke wird jetzt durch ein privates, kopierendes
+Accessibility-Modell und einen tatsächlichen AppKit-Einstieg bearbeitet.
+Sichtbare einfache Buttons und statische Texte besitzen native Rollen, Labels,
+Rahmen und sichere Press-Aktionen. [Umfang und Grenzen](accessibility.md)
+unterscheiden die ausgeführten Modell-/Native-/UI-Prüfungen von einer
+praktischen Screenreader-Abnahme. Textfelder, Menüs, Regler, Editoren, Fokus
+und beide anderen Plattformbrücken bleiben offen. PP-0710 bleibt unvollständig;
+die Zahl implementierter Planblöcke und der vollständige Planumfang ändern sich
+durch diesen Einstieg nicht.

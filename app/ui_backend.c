@@ -5,8 +5,11 @@
 #endif
 #define NK_IMPLEMENTATION
 #include "ui.h"
+#include <math.h>
 #undef nk_label_wrap
 #undef nk_button_label
+#undef nk_label
+#undef nk_label_colored
 void ps_ui_flush_edit(struct nk_context *ctx,const char *name,char *text,size_t capacity,struct nk_rect bounds) {
     if(!ctx || !text || capacity<2 || !ctx->style.font)return;
     struct nk_window *window=nk_find_window(ctx,nk_murmur_hash(name,nk_strlen(name),NK_WINDOW_TITLE),name);
@@ -34,9 +37,31 @@ float nk_sdl_row_height(const struct nk_context *ctx,float requested) {
     unsigned size=layout->ui_size;
     return size>16 && requested<(float)size+4?(float)size+4:requested;
 }
+static bool accessibility_widget(struct nk_context *ctx,const char *text,int role,struct nk_rect bounds) {
+    if(!ctx || !ctx->userdata.ptr || !ctx->current || !ctx->current->layout || !text)return false;
+    const ps_ui_font_layout *layout=ctx->userdata.ptr;
+    if(layout->magic!=PS_UI_LAYOUT_MAGIC || !layout->accessibility)return false;
+    struct nk_rect clip=ctx->current->layout->clip;
+    float left=fmaxf(bounds.x,clip.x),top=fmaxf(bounds.y,clip.y);
+    float right=fminf(bounds.x+bounds.w,clip.x+clip.w),bottom=fminf(bounds.y+bounds.h,clip.y+clip.h);
+    if(right<=left || bottom<=top)return false;
+    float visible[]={left,top,right-left,bottom-top};
+    bool enabled=!ctx->current->widgets_disabled && !(ctx->current->flags&NK_WINDOW_ROM);
+    return layout->accessibility(layout->accessibility_user,ctx->current->name_string,text,role,visible,enabled);
+}
+void ps_ui_label(struct nk_context *ctx,const char *text,nk_flags alignment) {
+    accessibility_widget(ctx,text,0,nk_widget_bounds(ctx));nk_label(ctx,text,alignment);
+}
+void ps_ui_label_colored(struct nk_context *ctx,const char *text,nk_flags alignment,struct nk_color color) {
+    accessibility_widget(ctx,text,0,nk_widget_bounds(ctx));nk_label_colored(ctx,text,alignment,color);
+}
 nk_bool ps_ui_button_label(struct nk_context *ctx,const char *text) {
-    if(!ctx || !ctx->current || !text || nk_sdl_row_height(ctx,16)<=16)
-        return nk_button_label(ctx,text);
+    if(!ctx || !ctx->current || !text || nk_sdl_row_height(ctx,16)<=16) {
+        struct nk_rect bounds=nk_widget_bounds(ctx);
+        nk_bool clicked=nk_button_label(ctx,text);
+        bool pressed=accessibility_widget(ctx,text,1,bounds);
+        return clicked || pressed;
+    }
     const struct nk_user_font *font=ctx->style.font;
     const struct nk_style_button *style=&ctx->style.button;
     int length=nk_strlen(text);
@@ -45,8 +70,12 @@ nk_bool ps_ui_button_label(struct nk_context *ctx,const char *text) {
     bool symbol=nk_utf_len(text,length)==1;
     float inset=symbol?style->border:style->padding.x+style->border+style->rounding;
     float space=nk_widget_width(ctx)-2*inset;
-    if(space<=0 || (!symbol && font->width(font->userdata,font->height,text,length)<=space))
-        return nk_button_label(ctx,text);
+    if(space<=0 || (!symbol && font->width(font->userdata,font->height,text,length)<=space)) {
+        struct nk_rect bounds=nk_widget_bounds(ctx);
+        nk_bool clicked=nk_button_label(ctx,text);
+        bool pressed=accessibility_widget(ctx,text,1,bounds);
+        return clicked || pressed;
+    }
     int done=0,lines=0,glyphs;float width;nk_rune separator=' ';
     while(done<length) {
         int fitting=nk_text_clamp(font,text+done,length-done,space,&glyphs,&width,&separator,1);
@@ -57,6 +86,7 @@ nk_bool ps_ui_button_label(struct nk_context *ctx,const char *text) {
     float height=lines*font->height+2*(symbol?style->border:style->padding.y+style->border+style->rounding);
     if(height>nk_widget_height(ctx))ctx->current->layout->row.height=height+ctx->style.window.spacing.y;
     struct nk_rect bounds=nk_widget_bounds(ctx);
+    nk_bool pressed=accessibility_widget(ctx,text,1,bounds);
     nk_bool clicked=nk_button_label(ctx,"");
     struct nk_color color=style->text_normal;
     if(nk_input_is_mouse_hovering_rect(&ctx->input,bounds))
@@ -74,7 +104,7 @@ nk_bool ps_ui_button_label(struct nk_context *ctx,const char *text) {
                      text+done,fitting,font,nk_rgba(0,0,0,0),color);
         done+=fitting;y+=font->height;
     }
-    return clicked;
+    return clicked || pressed;
 }
 void ps_ui_label_wrap(struct nk_context *ctx,const char *text) {
     if(ctx && ctx->current && text && nk_sdl_row_height(ctx,16)>16) {
@@ -92,6 +122,7 @@ void ps_ui_label_wrap(struct nk_context *ctx,const char *text) {
         if(height>nk_widget_height(ctx))
             ctx->current->layout->row.height=height+ctx->style.window.spacing.y;
     }
+    accessibility_widget(ctx,text,0,nk_widget_bounds(ctx));
     nk_label_wrap(ctx,text);
 }
 

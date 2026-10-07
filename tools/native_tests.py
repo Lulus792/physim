@@ -43,6 +43,9 @@ class Case:
 
 def catalog():
     cases = []
+    if sys.platform == "darwin":
+        cases.append(Case("accessibility_native", ("tests/test_accessibility_native.c", "app/accessibility.c", "app/accessibility_native.c"),app=True,display=True))
+        cases.append(Case("accessibility_ui", ("tests/test_accessibility_ui.c", "app/accessibility.c", "app/accessibility_native.c", "app/ui_backend.c", "app/ui_sdl.c", "app/ui_geometry.c", "app/graphics.c", "app/png.c"),libraries=("platform","zlib","core"),defines=("Z_PREFIX",),app=True,display=True))
     for name in ("core", "linear_range", "ode_range", "quantity_sum", "real_gas", "properties", "numerics", "mechanics", "thermodynamics", "electromagnetism", "waves_optics", "fluid", "hashmap", "string_view", "array",
                  "memory", "memory_owners", "math", "box_contacts", "contact_graph",
                  "distance_joint", "constraint_graph", "contact_world", "broad_phase", "measurement",
@@ -58,6 +61,7 @@ def catalog():
         cases.append(Case("language_" + part, (f"tests/test_language_{part}.c",),
                           ("language",), timeout=120))
     cases.extend([
+        Case("accessibility", ("tests/test_accessibility.c", "app/accessibility.c")),
         Case("series_si", ("tests/test_series_si.c",),arguments=("{work}",)),
         Case("channel_declaration", ("tests/test_channel_declaration.c",),arguments=("{work}",)),
         Case("fluid_array_memory", ("tests/test_fluid_array_memory.c",)),

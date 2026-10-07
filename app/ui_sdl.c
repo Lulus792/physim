@@ -2,6 +2,7 @@
  * Copyright (c) 2017 Micha Mettke. See third_party/Nuklear-LICENSE (MIT option).
  * Physim supplies the OpenGL renderer and font lifecycle. */
 #include "ui.h"
+#include "accessibility_native.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -41,7 +42,17 @@ struct nk_sdl {
     unsigned font_texture;
     Uint64 last_render;
     bool insert_toggle;
+    ps_a11y_model *accessibility;
+    SDL_Mutex *accessibility_mutex;
+    ps_a11y_native *accessibility_native;
 };
+static bool accessibility_widget(void *user,const char *window,const char *label,
+                                 int role,const float bounds[4],bool enabled) {
+    struct nk_sdl *sdl=user;if(!sdl->accessibility)return false;
+    SDL_LockMutex(sdl->accessibility_mutex);
+    bool pressed=ps_a11y_record(sdl->accessibility,window,label,(ps_a11y_role)role,bounds,enabled);
+    SDL_UnlockMutex(sdl->accessibility_mutex);return pressed;
+}
 static void *ui_alloc(nk_handle user, void *old, nk_size size) {
     (void)user;
     (void)old;
@@ -60,7 +71,7 @@ struct nk_context *nk_sdl_init(SDL_Window *window, ps_graphics *graphics) {
         return NULL;
     sdl->win = window;
     sdl->graphics = graphics;
-    sdl->font_layout=(ps_ui_font_layout){PS_UI_LAYOUT_MAGIC,16};
+    sdl->font_layout=(ps_ui_font_layout){.magic=PS_UI_LAYOUT_MAGIC,.ui_size=16};
     sdl->last_render = SDL_GetTicksNS();
     sdl->allocator.alloc = ui_alloc;
     sdl->allocator.free = ui_free;
@@ -73,7 +84,26 @@ struct nk_context *nk_sdl_init(SDL_Window *window, ps_graphics *graphics) {
     sdl->ctx.clip.paste = nk_sdl_clipboard_paste;
     sdl->ctx.clip.userdata = nk_handle_ptr(sdl);
     nk_buffer_init_default(&sdl->commands);
+    sdl->accessibility=malloc(sizeof *sdl->accessibility);
+    sdl->accessibility_mutex=SDL_CreateMutex();
+    if(sdl->accessibility && sdl->accessibility_mutex) {
+        ps_a11y_init(sdl->accessibility);ps_a11y_begin(sdl->accessibility);
+        sdl->accessibility_native=ps_a11y_native_create(window,sdl->accessibility,sdl->accessibility_mutex);
+    }
+    if(sdl->accessibility_native) {
+        sdl->font_layout.accessibility=accessibility_widget;
+        sdl->font_layout.accessibility_user=sdl;
+    } else {
+        free(sdl->accessibility);sdl->accessibility=NULL;
+        if(sdl->accessibility_mutex)SDL_DestroyMutex(sdl->accessibility_mutex);
+        sdl->accessibility_mutex=NULL;
+    }
     return &sdl->ctx;
+}
+bool nk_sdl_accessibility_press(struct nk_context *ctx,const char *label) {
+    if(!ctx || !ctx->userdata.ptr)return false;
+    struct nk_sdl *sdl=ctx->userdata.ptr;
+    return ps_a11y_native_press_label(sdl->accessibility_native,label);
 }
 void nk_sdl_set_ui_size(struct nk_context *ctx,unsigned size) {
     if(ctx && ctx->userdata.ptr && size>=16 && size<=22 && size%2==0)
@@ -103,6 +133,14 @@ bool nk_sdl_render(struct nk_context *ctx) {
     ctx->delta_time_seconds = (float)(now - sdl->last_render) / (float)SDL_NS_PER_SECOND;
     sdl->last_render = now;
     bool ok = ps_graphics_ui(sdl->graphics, ctx, &sdl->commands, &sdl->null_texture);
+    if(sdl->accessibility) {
+        SDL_LockMutex(sdl->accessibility_mutex);
+        bool changed=ps_a11y_publish(sdl->accessibility);
+        SDL_UnlockMutex(sdl->accessibility_mutex);
+        ps_a11y_native_publish(sdl->accessibility_native,changed);
+        SDL_LockMutex(sdl->accessibility_mutex);ps_a11y_begin(sdl->accessibility);
+        SDL_UnlockMutex(sdl->accessibility_mutex);
+    }
     nk_clear(ctx);
     nk_buffer_clear(&sdl->commands);
     return ok;
@@ -130,6 +168,8 @@ void nk_sdl_shutdown(struct nk_context *ctx) {
     if (!ctx)
         return;
     struct nk_sdl *sdl = ctx->userdata.ptr;
+    ps_a11y_native_destroy(sdl->accessibility_native);
+    free(sdl->accessibility);
     ps_graphics_delete_texture(sdl->graphics, sdl->font_texture);
     if (sdl->atlas.temporary.alloc)
         nk_font_atlas_clear(&sdl->atlas);

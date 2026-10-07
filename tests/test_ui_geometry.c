@@ -79,7 +79,7 @@ static int compare(struct nk_context *ctx, ps_ui_geometry *g, struct nk_buffer *
 static int large_close_button(void) {
     struct nk_user_font font={0};font.height=22;font.width=width;
     struct nk_context ctx;CHECK(nk_init_default(&ctx,&font));
-    ps_ui_font_layout layout={PS_UI_LAYOUT_MAGIC,22};ctx.userdata=nk_handle_ptr(&layout);
+    ps_ui_font_layout layout={.magic=PS_UI_LAYOUT_MAGIC,.ui_size=22};ctx.userdata=nk_handle_ptr(&layout);
     ctx.style.button.padding=nk_vec2(10,4);
     if(nk_begin(&ctx,"close-button",nk_rect(0,0,200,150),0)) {
         nk_layout_row_static(&ctx,26,24,1);

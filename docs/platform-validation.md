@@ -3087,3 +3087,150 @@ dem vollständigen Linux-SDK, dem vollständigen macOS-Gesamtlauf, dem macOS-SDK
 samt kompakter Ergänzung und den getrennten Sanitizerprüfungen belegt dies
 den dokumentierten Umfang. Die Originaltexte und SHA-256 des vollständigen
 Projektplans bleiben erhalten; die gesamte Projektabnahme bleibt offen.
+
+
+## Erster nativer macOS-Accessibility-Baum (PP-0710)
+
+Ausgangsrevision `121cff6`. Die UI besaß bislang keine native Accessibility-
+Anbindung für ihre gezeichneten Nuklear-Controls. Ein privates C17-Modell
+veröffentlicht jetzt kopierte sichtbare Texte und einfache Buttons; eine
+AppKit-Brücke erzeugt tatsächliche `NSAccessibilityElement`-Objekte mit
+Rollen, UTF-8-Beschriftungen, sichtbaren Rahmen und Press-Aktionen. Die
+Anbindung verwendet typisierte Objective-C-Laufzeitaufrufe aus C17.
+
+Geometrieänderungen bewahren Kennungen; verschwundene Kennungen werden nicht
+wiederverwendet. Aktivierungen werden nur einmal an ein aktuelles, aktiviertes
+Control im nächsten Frame geliefert. Deaktivierte, entfernte oder veraltete
+Elemente und statische Texte aktivieren nichts. Ein SDL-Mutex serialisiert
+Modellzugriff und Aktionen. Native Referenzen werden vor Freigabe des Modells
+ungültig und behalten ihren Bridge-Lebenszyklus bis zum letzten Element.
+
+[Umfang und Grenzen](accessibility.md) nennt insbesondere 256 sichtbare Elemente,
+1023 Label-Byte mit UTF-8-sicherer Kürzung, fehlende komplexe Controltypen und
+Fokusführung. Linux/AT-SPI und Windows/UIA sind noch nicht implementiert.
+Eine praktische VoiceOver-/Screenreader-Abnahme wird durch die Modell- und
+nativen Selektorprüfungen nicht behauptet. PP-0710 bleibt unvollständig.
+
+### Ausgeführte erste Nachweise
+
+- macOS-Modell: 1/1 in `run-odno3039`.
+- macOS-Modell, UI-Geometrie und Zwischenablage: 3/3 in `run-ga2l1gau`.
+- Tatsächlicher AppKit-Probe: 1/1 in `run-_64aw_87`; UTF-8-Label, Press-Aktion,
+  Modellzustellung und sichere Invalidierung zurückbehaltener Referenzen.
+- Tatsächlicher gezeichneter Nuklear-Button und native Aktion: 2/2 inklusive
+  AppKit-Probe in `run-3u_lj575`; einmalige Aktivierung, deaktivierte und
+  entfernte Controls sowie Freigabe werden geprüft.
+- macOS-Menü-/Einstellungsregressionen: 8/8 in `run-40f9vcd7`.
+- Native/UI- sowie Menü-, Einstellungs- und beide Dokumentationsfenster-
+  Tastaturprüfungen: 12/12 in `run-hynhki76`.
+- Modell, Geometrie, Zwischenablage, Dokumentation, Referenz und Kit: 6/6
+  in `run-4lp3pp_3`. Die neue Dokumentationsseite ist offline als Thema erreichbar.
+- Linux/GCC-Release baut die App und besteht Modell, Geometrie und
+  Zwischenablage: 3/3 in `run-aqkikorc`. Das belegt den portablen Modell-/
+  normalen App-Build, keinen Linux-Screenreader-Provider.
+- Linux/Clang Debug ASan/UBSan: Modell 1/1 in `run-w_mpf753`.
+
+macOS-Pfade beziehen sich auf `build/contact-world-language-release-mac/test-results`,
+Linux-Release auf `build/contact-world-language-release-linux/test-results` und
+Sanitizer auf `build/base-contract-asan-linux/test-results`. Die erste
+Dokumentationsreferenzprüfung entdeckt einen noch nicht als Offline-Thema
+registrierten Link zur neuen Seite. Das Thema wurde am Ende der bestehenden
+Liste ergänzt, bestehende Themenindizes bleiben erhalten. Die Referenzprüfung
+besteht anschließend; dieser erste Fehlversuch bleibt im Toolprotokoll erhalten.
+
+### Belegter Linux-Fehlversuch und wiederherstellbare Archivierung
+
+Die gezielte Linux-Grafikauswahl endet mit **9/10** unter
+`build/contact-world-language-release-linux/test-results/run-0z04_xme`.
+`toolbar_input_isolation` scheitert in der großen Pointer-Störvariante
+am internen App-Zeitlimit nach 15,341 Sekunden bei Stufe 39; die normale
+kleine/große Menüprüfung und alle Einstellungs-/Dokumentationsprüfungen bestehen.
+Der Trace zeigt fortlaufende Stufen bis zum Timeout, keine fehlgeschlagene
+Eingabeassertion. Zeitgleich besitzt die VM nur ungefähr 404 MB freien
+Plattenplatz. Das belegt keine eindeutige Ursache; die Timeout-Grenze wird
+nicht aufgrund dieses einzelnen Versuchs verändert.
+
+Vier abgeschlossene generierte SDK-Prüfwurzeln wurden daraufhin verlustfrei
+archiviert: `Canonical channels SDK ä linux 9gpwkv9q`,
+`Quantity sums SDK ä linux p5n8cppa`, `Real gas SDK ä linux d33yv2j1` und
+`Series SI SDK ä linux gzozrs0z`. Sie liegen wiederherstellbar in
+`build/accessibility-archived-proofs.tar.gz` mit 1201861120 Byte und SHA-256
+`d35026022c4ac2a13bfc77ea3ff3acfbaed3c6c564a5a6ee62228955f57bbc50`.
+Alle **58040 Dateien/Links** im Archiv wurden gegen das Inventar geprüft;
+vor Entfernen der ausgepackten Linux-Verzeichnisse wurden ihre Originalgrößen,
+Hashes und Linkziele erneut geprüft und aktive Prozesse ausgeschlossen.
+Die VM gewinnt dadurch ungefähr 3,7 GB freien Platz. Quelldateien und aktuelle
+Prüfläufe bleiben erhalten. Inventar und Receipts: `build/accessibility-archived-proof-inventory.json`,
+`accessibility-archive-copy.json`, `accessibility-archive-verified.json` und
+`accessibility-archive-removed.json` auf Linux. Die erste lokale Inventarprüfung
+begann vor Ende der SCP-Übertragung und scheiterte beim Lesen des noch
+unvollständigen JSONs. Nach deren bestätigtem Abschluss besteht die vollständige
+Prüfung. Beide Versuchslogs bleiben erhalten.
+
+Der gezielte Linux-Menü-Wiederholungslauf besteht anschließend mit **1/1**
+unter `build/contact-world-language-release-linux/test-results/run-l72srk_8`.
+Die App und alle 19 eingefrorenen Dateien sowie die interne Timeout-Grenze
+bleiben unverändert. Dadurch ist der vorherige Fehlversuch nicht rückwirkend
+bestanden und seine Ursache weiterhin nicht eindeutig belegt. Nach
+Archivierung besitzt die VM etwa 4,1 GB frei; die zurückkopierte Archivdatei
+wurde auf Linux nach Größe und SHA-256 geprüft und lässt etwa 2,9 GB frei.
+Receipt: `build/accessibility-archive-linux-copy-verified.json`. Das Archiv
+und die verifizierten Inventare liegen nun auf beiden Systemen.
+
+### Verschobenes Linux-Paket, gezielter UI-Nachweis
+
+Die frische Paketierung besteht, einschließlich der neuen Offline-Seite,
+unter `build/Accessibility SDK ä linux od5pk550`, anschließend verschoben nach
+`Relocated SDK ä`. Der erste GUI-Aufruf scheitert vor App-Start, weil der
+separate Prüfhelfer seine Arbeitsverzeichnisse noch nicht angelegt hat.
+Nach dieser Helferkorrektur bestehen am **identischen Paket** Menü,
+Einstellungs- und Dokumentationstastaturführung vollständig. Installations-,
+Kit- und erster GUI-Fehlerlog bleiben erhalten; es wurde kein Paket ersetzt.
+
+Das Paket enthält 450 SHA-256-erfasste Dateien, das Kit 95 Eingaben. Die
+installierte App stimmt bytegenau mit dem geprüften Build überein, alle
+Paketdateien bleiben vor/nach den GUI-Läufen unverändert. Die 19 eingefrorenen
+Implementierungs-/Test-/Dokumentationsdateien stimmen mit dem Receipt
+`build/accessibility-sdk-linux-PASSED.json` überein. Diese gezielte Paketprüfung
+belegt Relocation, neue Offline-Dokumentation und normale GUI-Abläufe. Sie
+ersetzt keine erneute vollständige Core-SDK-Prüfung und keinen Linux-Provider,
+der noch nicht implementiert ist.
+
+### Vollständige macOS-Grafiksuite
+
+Der tatsächliche Intel-macOS/Apple-Clang-Grafiklauf besteht vollständig mit
+**79/79** unter `build/contact-world-language-release-mac/test-results/run-uto33o1u`.
+Er enthält die beiden neuen nativen/UI-Probes und sämtliche 77 bisherigen
+Fensterfälle: Rendering, Tempo, Timeline, Docking, Hierarchie, Sprach-/Domänen-
+Workflows, Menüs, Einstellungen, beide Dokumentationsfenster und die komplette
+Vorlagen-/Sprachmatrix per Tastatur mit 16/22-Pixel-UI einschließlich Fehlerpfaden.
+Alle 19 eingefrorenen Dateien bleiben unverändert. Die neuen nativen Probes
+prüfen zusätzlich AppKit-Rollen, statischen UTF-8-Text, Rahmen und abgewiesene
+Schreib-/Press-Aktionen für lesbare Texte. Ein vorheriger abschließender
+Native-/Dokumentationslauf besteht mit 6/6 in `run-ocu0nq0g`.
+
+Diese Grafikabnahme betrifft den beschriebenen macOS-Build. Sie ersetzt keine
+praktische VoiceOver-Abnahme, Apple-Silicon-Ausführung oder native Linux-/
+Windows-Provider. Die allgemeine Tastatur-/Screenreader-Anforderung bleibt offen.
+
+### Verschobenes macOS-Paket und endgültiger Umfang
+
+Das frische macOS-Paket besteht unter `build/Accessibility SDK ä mac 6veyshbc`,
+verschoben nach `Relocated SDK ä`. Alle fünf Helferbefehle bestehen: Installation,
+Kit sowie tatsächliche Menü-, Einstellungs- und Dokumentationstastaturabläufe.
+450 Paketdateien und 95 Kit-Eingaben sind SHA-256-erfasst. Die App ist bytegleich
+mit dem in der vollständigen Grafiksuite geprüften Build; neue Offline-Seite,
+Paketmanifest und sämtliche Dateihashes bleiben vor/nach den GUI-Läufen erhalten.
+Receipt: `build/accessibility-sdk-mac-PASSED.json`. Beide Paketnachweise passen
+zu den 19 unveränderten Dateien in `build/accessibility-source-freeze.json`;
+nur die Plattformchronik wird anschließend weiter ergänzt.
+
+API/ABI 3, Wire 5, Snapshot 3, psrun 1, Sprache 0.182.0 und die 27 Core-Module
+bleiben unverändert. Der Kopflose Katalog ergänzt einen portablen Modellfall;
+die macOS-Grafikauswahl ergänzt zwei echte Native-/UI-Fälle. Die bereits
+abgeschlossene Core-Abnahme der Ausgangsrevision bleibt ein historischer
+Nachweis, keine erneute gesamte Core-Abnahme dieses UI-Schritts. Die aktuellen
+gezielten Modell-, Sanitizer-, Native-, GUI- und Paketprüfungen besitzen den
+jeweils beschriebenen Umfang. Grundlegender Zugang auf allen drei Plattformen,
+komplexe Controltypen, Fokus und tatsächliche Screenreader-Bedienung bleiben
+weiterhin offen.

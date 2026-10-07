@@ -39,14 +39,23 @@ void nk_sdl_update_TextInput(struct nk_context *ctx);
 void nk_sdl_window_raise(struct nk_context *ctx, const char *name);
 void nk_sdl_shutdown(struct nk_context *ctx);
 bool nk_sdl_test_input(SDL_Window *window, ps_graphics *graphics);
+bool nk_sdl_accessibility_press(struct nk_context *ctx,const char *label);
 void nk_sdl_set_ui_size(struct nk_context *ctx, unsigned size);
 enum { PS_UI_LAYOUT_MAGIC = 0x50534C59u };
-typedef struct { unsigned magic,ui_size; } ps_ui_font_layout;
+typedef bool (*ps_ui_a11y_hook)(void *user,const char *window,const char *label,
+                                int role,const float bounds[4],bool enabled);
+typedef struct {
+    unsigned magic,ui_size;
+    ps_ui_a11y_hook accessibility;
+    void *accessibility_user;
+} ps_ui_font_layout;
 /* Finish queued field input before a semantic keyboard focus change. */
 void ps_ui_flush_edit(struct nk_context *ctx,const char *window,char *text,size_t capacity,struct nk_rect bounds);
 float nk_sdl_row_height(const struct nk_context *ctx, float requested);
 void ps_ui_label_wrap(struct nk_context *ctx,const char *text);
 nk_bool ps_ui_button_label(struct nk_context *ctx,const char *text);
+void ps_ui_label(struct nk_context *ctx,const char *text,nk_flags alignment);
+void ps_ui_label_colored(struct nk_context *ctx,const char *text,nk_flags alignment,struct nk_color color);
 /* Keep short label/control rows readable with enlarged UI fonts. Spacer and
  * chart/editor heights remain explicit; the default 16 px layout is unchanged. */
 static inline void ps_ui_row_dynamic(struct nk_context *ctx,float height,int columns) {
@@ -63,4 +72,6 @@ static inline void ps_ui_row_begin(struct nk_context *ctx,enum nk_layout_format 
 #define nk_layout_row_begin ps_ui_row_begin
 #define nk_label_wrap ps_ui_label_wrap
 #define nk_button_label ps_ui_button_label
+#define nk_label ps_ui_label
+#define nk_label_colored ps_ui_label_colored
 #endif

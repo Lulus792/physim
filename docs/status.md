@@ -2499,3 +2499,10 @@ rechte Seiten und Teillösungen. Belegte Zwischenüberläufe bei endlichen
 Lösungen sind geschlossen; C und Physim werden gegen unabhängige rationale
 Lösungen und Residuen geprüft. [Verträge und Grenzen](numerics.md) bleiben
 ausdrücklich begrenzt; der vollständige Projektplan ist weiterhin offen.
+
+
+Ein erster nativer macOS-Accessibility-Baum für sichtbare einfache Schaltflächen
+und statische Texte ergänzt die bestehende Tastaturführung. Kopierte Snapshots,
+stabile Kennungen und sichere native Press-Aktionen werden tatsächlich geprüft.
+[Umfang und verbleibende Arbeit](accessibility.md) halten vollständige VoiceOver-,
+Linux-/Windows-Anbindungen und weitere Controltypen ausdrücklich offen.

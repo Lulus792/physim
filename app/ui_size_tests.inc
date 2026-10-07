@@ -3,7 +3,7 @@
 static bool test_ui_wrapped_button(app *a) {
     struct nk_context ctx;
     if(!nk_init_default(&ctx,a->font_ui))return false;
-    ps_ui_font_layout layout={PS_UI_LAYOUT_MAGIC,a->preferences.ui_size};
+    ps_ui_font_layout layout={.magic=PS_UI_LAYOUT_MAGIC,.ui_size=a->preferences.ui_size};
     ctx.userdata=nk_handle_ptr(&layout);
     const char *label="Messdaten im Ordner öffnen";
     if(nk_begin(&ctx,"wrap-proof",nk_rect(0,0,200,300),0)) {
