@@ -1,0 +1,25 @@
+// Passive hydraulic network and conservative periodic tracer, all SI.
+let g = pipeConductance(0.005,1,0.01)
+assert(abs(g-2.454369260617026e-8) < 1e-20)
+assert(abs(pipeFlow(g,100,0)-g*100) < 1e-18)
+assert(abs(pipePower(g,100,0)-g*10000) < 1e-16)
+assert(reynoldsNumber(1000,-0.1,0.01,0.01) == 100)
+assert(abs(hydrostaticPressure(100,1000,9.80665,2)-19713.3) < 1e-10)
+let network = pipeNetwork([0,1,1],[1,2,3],[g,g,g],[1,0,1,1],[100.0,0.0,0.0,0.0])
+// Four node pressures followed by three edge flows, in input order.
+assert(network.count == 7 && abs(network[1]-100.0/3.0) < 1e-12)
+assert(abs(network[4]-network[5]-network[6]) < 1e-20)
+assert(attempt(pipeNetwork([0],[1],[g],[0,0],[0.0,0.0])) == nil)
+let shifted = transportStep([0.0,1.0,0.0,0.0],1,0,1,1)
+assert(shifted[2] == 1 && shifted[1] == 0)
+let mixed = transportStep([1.0,0.0,0.0,0.0],0,0.5,1,1)
+assert(mixed[1] == 0.5 && mixed[3] == 0.5 && mixed[0] == 0)
+assert(attempt(transportStep([0.0,1.0,0.0],2,0,1,1)) == nil)
+let large = Array(repeating:0.2,count:4096)
+let largeNext = transportStep(large,0.1,0.01,1,0.1)
+assert(largeNext.count == 4096 && abs(largeNext[1024]-0.2) < 1e-14)
+var copies = [network,shifted]
+let original = copies
+copies[1][2] = 9
+assert(original[1][2] == 1)
+print("Fluid pipe network, conservation, Reynolds, periodic transport, owned values and caught errors passed")

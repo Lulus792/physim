@@ -1483,6 +1483,19 @@
       "source": "let next = stringWaveStep([0.0,1.0,0.0],[0.0,1.0,0.0],1,1,2)\n",
       "exit_code": 70,
       "stderr_pattern": "waves_cfl_error\\.phys:1:[0-9]+: runtime error:.*CFL"
+    },
+    {
+      "name": "fluid_values",
+      "source_file": "examples/language/fluid_values.phys",
+      "exit_code": 0,
+      "stdout": "Fluid pipe network, conservation, Reynolds, periodic transport, owned values and caught errors passed\n",
+      "stderr": ""
+    },
+    {
+      "name": "fluid_stability_error",
+      "source": "let next = transportStep([0.0,1.0,0.0],2,0,1,1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "fluid_stability_error\\.phys:1:[0-9]+: runtime error:.*stability"
     }
   ]
 }

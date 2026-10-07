@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-07",
-  "inspected_revision": "8755399316ab85f8a275b997c620c9d8d4c04107",
+  "inspected_revision": "da3a3d21930021c0374cbc1d34ba57f3abb5bf6e",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2859,9 +2859,17 @@
       "text": "- **Strömung:** zunächst Teilchen-/Netzmodelle für Lehrzwecke; erst später ernsthafte numerische Fluidmodelle.\n",
       "status": "incomplete",
       "evidence": [
-        "include/physim/"
+        "include/physim/fluid.h",
+        "src/fluid.c",
+        "include/physim/language_fluid.h",
+        "docs/fluid.md",
+        "tests/test_fluid.c",
+        "tests/test_fluid_array_memory.c",
+        "tests/test_transport_tutorial.py",
+        "tools/verify-native-sdk.py",
+        "docs/platform-validation.md"
       ],
-      "note": "Keine eigenständigen Module für diese angekündigte Domäne vorhanden; langfristiger Umfang bleibt erhalten."
+      "note": "Eigenständiger SI-Einstieg für laminare Newtonsche Rohre, stationäre passive Drucknetze bis 16 Knoten/32 Kanten und konservativen periodischen Tracertransport bis 4096 Zellen. Vollständige C-/Physim-Experimente/Analysen und unabhängige hydraulische/Fourier-/Kontinuumsprüfungen. Dies erfüllt den Lehrmodell-Einstieg; spätere ernsthafte numerische Fluidmodelle, CFD/FEM als eigene Projekte und die vollständige Domänen-/Plattformabnahme bleiben offen."
     },
     {
       "id": "PP-0417",

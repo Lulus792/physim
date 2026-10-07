@@ -10,6 +10,7 @@
 #include "language_thermodynamics.h"
 #include "language_electromagnetism.h"
 #include "language_waves_optics.h"
+#include "language_fluid.h"
 #include "language_constraints.h"
 #include "language_contact_world.h"
 #include "language_batch.h"

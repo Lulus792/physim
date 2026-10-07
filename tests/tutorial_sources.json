@@ -269,5 +269,26 @@
         "language": "physim"
       }
     ]
+  },
+  "documentation_transport_source": {
+    "document": "docs/fluid.md",
+    "sources": [
+      {
+        "path": "examples/documentation/transport_main.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/transport_main.phys",
+        "language": "physim"
+      },
+      {
+        "path": "examples/documentation/transport_analysis.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/transport_analysis.phys",
+        "language": "physim"
+      }
+    ]
   }
 }

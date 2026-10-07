@@ -3,6 +3,79 @@
 Stand: 7. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Strömungs-Lehrmodelle und Physim 0.182.0 am 7. Oktober 2026
+
+Das neue SI-Modul liefert laminare Rohrleitwerte, signierte Flüsse, Verlustleistung,
+Reynolds/Hydrostatik, passive stationäre Netze bis 16 Knoten/32 Kanten und
+periodischen Tracertransport bis 4096 Zellen. Sieben Sprachbindungen verwenden
+dieselben Corefunktionen; Ergebnisarrays besitzen unabhängigen Speicher.
+Netze und Tracer bleiben ausdrücklich getrennte Lehrmodelle. CFD/FEM, Pumpen,
+Drucktransienten und offene Tracerränder sind nicht abgenommen.
+[Vertrag, vollständige Quellen und Modellgrenzen](fluid.md).
+
+Die endgültigen zehn ausgewählten Release-Prüfungen bestehen auf Intel macOS
+14.6.1/Apple Clang 16 unter
+`build/contact-world-language-release-mac/test-results/run-vhfqigsq` und Debian
+12/GCC 12.2 unter
+`build/contact-world-language-release-linux/test-results/run-zvy9dg0x`.
+Fünf Linux-Clang-14-ASan/UBSan-Prüfungen bestehen unter
+`build/fluid-asan-linux/test-results/run-rglx8fma`.
+Die Coreprüfungen lösen auch das maximale 16-Knoten-/32-Kanten-Netz und führen
+4096-Zellen-Schritte tatsächlich aus. Sie prüfen Erhaltung, Aliasing, atomare
+Fehlerausgaben, Zahlenextreme und sämtliche Ergebnis-Allokationsfehler.
+Komponentenweise Druckskalierung erhält getrennte Druckgrößen; verschwindende
+positive Leitwerte oder Fixdrücke brechen mit PS_NUMERIC ab.
+
+Der unabhängige Lernprüfer kontrolliert 2.412 Messungen in sechs Profilen,
+24 gemischte C-/Physim-Analysen, hydraulische Knotenbilanzen, diskrete
+Fourierverstärkung, Kontinuumsreferenz, Masse, Positivität, Flussvorzeichen,
+SI-Metadaten, CSV, CRC/Footer und alle 65 aufgezeichneten Tracerpunkte.
+Instabile Transportschritte und die im Tutorial gesetzte Re-Grenze werden
+abgewiesen. Das grafische Beispiel verwendet 64 Zellen; der Core unterstützt
+4096. Ein stationäres Rohrnetz liefert eine vorgegebene Geschwindigkeit für
+den separaten periodischen Tracer, keine gekoppelte offene Netzströmung.
+
+Neun bestehende Sprach-/Experiment-/Analyse-/Sensor-/Paritätsprüfungen bestehen
+auf macOS unter `run-0bt2ijur`, das Hilfefenster unter `run-mmdawy4i`.
+Lexer, Parser und Checker bestehen unter `run-xtkamgx2` in demselben
+Release-Testordner. Unter Linux bestehen dieselben neun Prüfungen zusammen
+mit Lexer/Parser/Checker (12/12) unter `run-a68x3we_`; das Hilfefenster
+besteht unter `run-pxrp5p77`. Alle 29 generierten Referenzen sind geprüft.
+Der aktuelle Katalog umfasst 603 Fälle ohne Fenster, 588 ohne SDL und 66
+Fensterfälle. Diese Zahl ersetzt keinen aktuellen vollständigen Gesamtlauf.
+
+Beide endgültigen SDKs bestehen die vollständige isolierte Prüfung aus dem
+57-Dateien-Kit, einschließlich aller neun grafischen Projektabläufe und der
+Dokumentationsnavigation:
+
+- macOS: `build/fluid-final-sdk-proof-mac/Native SDK ä 8kpwgdwe`.
+- Linux: `build/fluid-final-sdk-proof-linux/Native SDK ä pdm7hwol`.
+
+Sie bauen alle öffentlichen Header, 23 Standalone-Programme und 52 Sprachmodule
+nach. Die Strömungsprüfungen laufen jeweils gegen installierten und neu gebauten
+Core mit 4.824 Tracermessungen und 48 gemischten Analysen je SDK.
+Die endgültigen Pakete `build/Fluid clean SDK ä mac` und
+`build/Fluid clean SDK ä linux` enthalten 429 Manifestdateien und 75 kompilierte
+Sprachprodukte. Alle 308 Code-/Beispieldateien stimmen byteweise mit den
+geprüften SDK-Kopien überein; die Apps mit den geprüften Release-Binaries.
+Zum Abschluss werden nur Dokumentation und Manifest aktualisiert.
+
+Die [Remote-CI des vorherigen Wellen-Commits `da3a3d2`](https://github.com/PhysicSimulator/physim/actions/runs/37575688333)
+zeigt tatsächliche erfolgreiche Windows-v143- und ClangCL-Debug-/Release-Jobs.
+Unter Apple Silicon bestehen 596/596 Prüfungen ohne Fenster und 65/66
+Fensterprüfungen. `speed_workflow` scheitert bei der gemessenen 4x-Geschwindigkeit;
+Build, SDK-Prüfung und LaunchServices-Start sind dort erfolgreich. Dieser
+Geschwindigkeitsfehler bleibt ein eigener Korrekturpunkt. Das vollständige
+Artefakt `build/waves-apple-silicon-ci.zip` stimmt mit dem API-SHA-256
+`4dc047f0b084c4c24a61b39a3b2fee8b38563d8934009b2617e08893c5b95ffa` überein.
+Diese früheren Nachweise ersetzen keine Remote-Abnahme der neuen Strömungsfunktionen.
+
+Vor der Freigabe von Linux-VM-Speicher ist der frühere generierte Prüfordner
+`build/waves-sdk-proof-linux` vollständig auf dem Mac gesichert. Alle 13.032
+regulären Dateien stimmen per SHA-256 mit ihren ursprünglichen Werten überein.
+Lokal erhaltenes Archiv `build/waves-sdk-proof-linux-evidence.tar.gz`, SHA-256
+`01f8e9df26125f0040c850e2133cccbca096b5185a4eee181657cc379a499510`.
+
 ## Wellen/Optik und Physim 0.181.0 am 7. Oktober 2026
 
 Die neuen SI-Module liefern exakten undämpften Oszillator, harmonische Laufwelle,

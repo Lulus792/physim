@@ -8,10 +8,18 @@ der Batch-Sprachbindung bestehen auf dem Intel-Mac und unter Debian
 mit jeweils 572/572 Fällen.
 Der anschließende [Anforderungsabgleich](project-audit.md) bewahrt sämtliche
 Planpunkte und unterscheidet Implementierung, Teilnachweise und fehlende Abnahme.
-Die Installation baut jetzt alle 72 kompilierten Sprachprodukte auch ohne
+Die Installation baut jetzt alle 75 kompilierten Sprachprodukte auch ohne
 `--examples`. Windows-Prüfungen verwenden logische Textzeilen und ein portables
 Pipe-Leseverfahren. Die erneute Remote-CI-Abnahme steht noch aus; lokale Tests
 ersetzen diese Releasegates nicht.
+
+**Strömungs-Lehrmodelle in C und Physim:** Physim 0.182.0 ergänzt laminare Rohre,
+Reynolds/Hydrostatik, passive Drucknetze bis 16 Knoten/32 Kanten und konservativen
+periodischen Tracertransport bis 4096 Zellen. Der vollständige Lernpfad prüft
+2.412 Messungen, hydraulische Knotenbilanzen, Fourier-/Kontinuumsreferenzen,
+Masse, Positivität und 24 gemischte Analysen mit vollständig aufgezeichneten
+Tracerpunkten. Netz und Tracer sind ausdrücklich getrennte Lehrmodelle;
+ernsthafte CFD bleibt ein eigener späterer Ausbau. [Quellen und Grenzen](fluid.md).
 
 **Wellen und Optik in C und Physim:** Physim 0.181.0 ergänzt exakten Oszillator,
 Laufwelle, atomare 1D-Saitenschritte mit 4096 Rechenknoten sowie Reflexion,
@@ -49,8 +57,8 @@ UTF-8; die tatsächliche erneute Windows-CI-Abnahme steht noch aus.
 Modelllernwegen. Das Hilfefenster bietet eigene Auswahl und Startnavigation.
 Die Einstiegsprogramme, veröffentlichten Quellen und Links bestehen auf macOS
 und Debian; beide verschobenen SDKs bestehen auch alle neun grafischen
-Beispielabläufe und die Lernweg-Navigation. Der damalige Dokumentationskatalog umfasst 577 Fälle; aktuell sind es 583.
-der zuvor vollständig geprüfte Stand mit 572 Fällen bleibt gesondert dokumentiert.
+Beispielabläufe und die Lernweg-Navigation. Der damalige Dokumentationskatalog umfasst 577 Fälle; aktuell sind es 603.
+Der zuvor vollständig geprüfte Stand mit 572 Fällen bleibt gesondert dokumentiert.
 [Konkrete Nachweise](platform-validation.md).
 
 **Batch und Monte Carlo aus Analysen:** Physim 0.178.0 bindet besitzende,

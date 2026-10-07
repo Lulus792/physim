@@ -333,6 +333,26 @@ def main():
                      string_analyzer,string_analysis,string_probe,directory])
         print("Installed SDK waves/optics: installed/rebuilt Core, 4096-node/ownership failures, six grid profiles, second-order refinement and 48 mixed analyses passed",flush=True)
 
+        for source in ("transport_main","transport_analysis"):
+            shutil.copy2(sdk / "examples/documentation" / (source+".c"),consumer / (source+".c"))
+        shutil.copy2(repo / "tests/test_transport_tutorial_report.c",consumer / "transport-tutorial-probe.c")
+        shutil.copy2(repo / "tests/test_fluid.c",consumer / "fluid-core-check.c")
+        shutil.copy2(repo / "tests/test_fluid_array_memory.c",consumer / "fluid-array-memory.c")
+        for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+            fluid_core=builder.executable("fluid-core-"+kind,["fluid-core-check.c"],[archive])
+            fluid_memory=builder.executable("fluid-memory-"+kind,["fluid-array-memory.c"],[archive])
+            checked([fluid_core]);checked([fluid_memory])
+            transport_experiment=builder.executable("transport-experiment-"+kind,["transport_main.c"],[archive],module=True)
+            transport_analyzer=builder.executable("transport-analysis-"+kind,["transport_analysis.c"],[archive],module=True)
+            transport_probe=builder.executable("transport-probe-"+kind,["transport-tutorial-probe.c"],[archive])
+            directory=root / ("Transport tutorial "+kind);directory.mkdir()
+            transport_language=modules["transport_main"] if kind=="rebuilt" else sdk / "bin" / ("language-transport_main"+module_suffix)
+            transport_analysis=modules["transport_analysis"] if kind=="rebuilt" else sdk / "bin" / ("language-transport_analysis"+module_suffix)
+            checked([sys.executable,repo / "tests/test_transport_tutorial.py",sdk / "bin" / ("physim-runner"+suffix),
+                     sdk / "bin" / ("physim-analysis-runner"+suffix),transport_experiment,transport_language,
+                     transport_analyzer,transport_analysis,transport_probe,directory])
+        print("Installed SDK fluid: installed/rebuilt Core, max networks/4096-cell ownership failures, six hydraulic/Fourier profiles and 48 mixed analyses passed",flush=True)
+
         shutil.copy2(sdk / "examples/spring/main.c",consumer / "spring-tutorial.c")
         shutil.copy2(sdk / "examples/documentation/spring_analysis.c",consumer / "spring-tutorial-analysis.c")
         shutil.copy2(repo / "tests/test_spring_tutorial_report.c",consumer / "spring-tutorial-probe.c")
@@ -550,6 +570,7 @@ def main():
         "Thermodynamics through installed/rebuilt Core, independent Decimal oracles, mixed reports and extreme-value contracts passed.\n" +
         "Electromagnetism through installed/rebuilt Core, Coulomb/gradient/Lorentz tests, seven RC Decimal oracles and mixed reports passed.\n" +
         "Waves/optics through installed/rebuilt Core, Snell/TIR/lens invariants, owned 4096-node grids, allocation failures and mixed string reports passed.\n" +
+        "Fluid through installed/rebuilt Core, anchored max networks, conservative 4096-cell transport, allocation failures and mixed tutorial reports passed.\n" +
         "Both complete C/Physim learning routes, eight paired model source groups and executable language introductions passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
         ("Eight C template GUI workflows, the complete Physim language GUI workflow and independent documentation route navigation passed.\n" if args.app_tests else ""), encoding="utf-8")

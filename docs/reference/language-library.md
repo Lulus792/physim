@@ -3691,6 +3691,16 @@ Berechnet P=G(Ta-Tb) in W; positiv fließt Wärme von A nach B, G in W/K ist nic
 
 Überall verfügbar.
 
+## hydrostaticPressure
+
+```text
+hydrostaticPressure(reference: Float64, density: Float64, gravity: Float64, depth: Float64) -> Float64
+```
+
+Berechnet p0+ρ g h für signierte Relativdrücke und Tiefe nach unten; Dichte positiv, g≥0.
+
+Überall verfügbar.
+
 ## hypot
 
 ```text
@@ -3981,6 +3991,46 @@ Wie parameter, mit einer eigenen Anzeigeeinheit aus Symbol, positiver Skala und 
 
 Experimentmodul erforderlich.
 
+## pipeConductance
+
+```text
+pipeConductance(radius: Float64, length: Float64, viscosity: Float64) -> Float64
+```
+
+Berechnet π r⁴/(8 μ L) in m³/(s Pa) für ein ideales laminares kreiszylindrisches Rohr. Positive SI-Radius-, Längen- und Viskositätswerte.
+
+Überall verfügbar.
+
+## pipeFlow
+
+```text
+pipeFlow(conductance: Float64, pressureA: Float64, pressureB: Float64) -> Float64
+```
+
+Berechnet Q=G(pa-pb) in m³/s mit signierten Relativdrücken und G≥0, positiv von A nach B.
+
+Überall verfügbar.
+
+## pipeNetwork
+
+```text
+pipeNetwork(edgeA: [Int64], edgeB: [Int64], conductance: [Float64], fixed: [Int64], pressures: [Float64]) -> [Float64]
+```
+
+Löst ein passives stationäres Netz mit bis zu 16 Knoten und 32 Kanten. Int64-Endpunkte, Leitwerte, 0/1-Fixflags und Drücke. Liefert ein besitzendes Float64-Array: zuerst alle Knotendrücke, dann A→B-Kantenflüsse. Jede positive Verbindungskomponente braucht einen Fixknoten.
+
+Überall verfügbar.
+
+## pipePower
+
+```text
+pipePower(conductance: Float64, pressureA: Float64, pressureB: Float64) -> Float64
+```
+
+Berechnet die nichtnegative hydraulische Dissipation G(pa-pb)² in W.
+
+Überall verfügbar.
+
 ## plane
 
 ```text
@@ -4148,6 +4198,16 @@ resistorVoltage(current: Float64, resistance: Float64) -> Float64
 ```
 
 Berechnet V=IR in V, mit signiertem Strom.
+
+Überall verfügbar.
+
+## reynoldsNumber
+
+```text
+reynoldsNumber(density: Float64, velocity: Float64, diameter: Float64, viscosity: Float64) -> Float64
+```
+
+Berechnet ρ |v| d/μ. Die Gültigkeitsgrenze eines Modells wählt der Aufrufer, nicht diese Funktion.
 
 Überall verfügbar.
 
@@ -4898,6 +4958,16 @@ thinLensImage(focalLength: Float64, objectDistance: Float64) -> Vec2
 ```
 
 Paraxiale dünne Linse: Vec2.x signierte Bildweite in m, y Vergrößerung. Positive Objektweite und signierte nonzero Brennweite; am Fokus liegt das Bild im Unendlichen und erzeugt eine abfangbare Singularitätsdiagnose.
+
+Überall verfügbar.
+
+## transportStep
+
+```text
+transportStep(concentration: [Float64], velocity: Float64, diffusivity: Float64, dx: Float64, dt: Float64) -> [Float64]
+```
+
+Erzeugt ein neues besitzendes Konzentrationsarray für periodische Upwind-Advektion und explizite Diffusion. 3–4096 nichtnegative Zellen; |v|dt/dx+2Ddt/dx²≤1, D≥0. Masse und Maximumprinzip bleiben bis auf Rundung erhalten. Kein Fluidimpulssolver.
 
 Überall verfügbar.
 

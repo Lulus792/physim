@@ -1,6 +1,6 @@
 # Teil II – Physim mit der eigenen Sprache
 
-Dieser Lernweg führt mit Physim 0.181.0 von der Einrichtung bis zum gespeicherten
+Dieser Lernweg führt mit Physim 0.182.0 von der Einrichtung bis zum gespeicherten
 Ergebnis. Experiment und Analyse können vollständig Physim bleiben; du brauchst
 für die unterstützten Aufgaben keinen C-Code nachzuschreiben. Die Sprache ist
 weiter ein Entwicklungsvertrag. Dieselben Modelle und Archive verwendet
@@ -92,6 +92,9 @@ Ladungen, Felder und den vollständigen RC-Versuch beider Sprachen.
 
 Der zusätzliche [Wellen-/Optik-Einstieg](waves-optics.md) behandelt Oszillatoren,
 eine diskrete Saite, Reflexion, Brechung und dünne Linsen.
+
+Der zusätzliche [Strömungs-Einstieg](fluid.md) untersucht laminare Rohrnetze
+und einen konservativen periodischen Tracer mit vollständigen Quellen.
 
 ## Nachschlagen und weitergehen
 

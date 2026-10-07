@@ -12,6 +12,7 @@ from reference_descriptions import DESCRIPTIONS
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULES = {
+    'fluid': ('Laminare Rohre, Netze und Tracertransport', 'fluid.md', 'Lehrmodelle für inkompressible Newtonsche Rohre, passive stationäre Drucknetze und konservativen periodischen 1D-Tracer. Explizite Stoffdaten, Größen- und Stabilitätsgrenzen; keine turbulente oder mehrdimensionale CFD.'),
     'waves': ('Oszillatoren und eindimensionale Wellen', 'waves-optics.md', 'Exakter undämpfter Oszillator, ideale Saitengeschwindigkeit, harmonische Laufwelle und diskrete 1D-Wellengleichung mit festen Nullrändern. Der allokationsfreie Saitenschritt prüft CFL und übernimmt Ausgaben erst nach vollständigem Erfolg.'),
     'optics': ('Geometrische Optik', 'waves-optics.md', 'Reflexion, Snell-Brechung mit ausdrücklicher Totalreflexion und paraxiale dünne Linsen. Unit-Richtungen und Normalen, explizite Brechungsindizes und signierte Bildweiten. Keine automatische Strahlverfolgung, Fresnelamplituden oder Beugung.'),
     'electromagnetism': ('Elektromagnetismus und RC-Schaltungen', 'electromagnetism.md', 'Reine SI-Funktionen für homogene Punktladungsfelder, Potential, Lorentzkraft, Widerstände, Kondensatorenergie und exakte RC-Schritte. Modelle liefern Permittivität und Feldwerte ausdrücklich; Singularität und Fehler bewahren Ausgaben. Kein Maxwell- oder beliebiger Netzwerk-Solver.'),
@@ -99,6 +100,13 @@ def c_reference(module, title, guide, intro):
 
 
 LANG_DESCRIPTIONS = {
+    'pipeConductance': 'Berechnet π r⁴/(8 μ L) in m³/(s Pa) für ein ideales laminares kreiszylindrisches Rohr. Positive SI-Radius-, Längen- und Viskositätswerte.',
+    'pipeFlow': 'Berechnet Q=G(pa-pb) in m³/s mit signierten Relativdrücken und G≥0, positiv von A nach B.',
+    'pipePower': 'Berechnet die nichtnegative hydraulische Dissipation G(pa-pb)² in W.',
+    'reynoldsNumber': 'Berechnet ρ |v| d/μ. Die Gültigkeitsgrenze eines Modells wählt der Aufrufer, nicht diese Funktion.',
+    'hydrostaticPressure': 'Berechnet p0+ρ g h für signierte Relativdrücke und Tiefe nach unten; Dichte positiv, g≥0.',
+    'pipeNetwork': 'Löst ein passives stationäres Netz mit bis zu 16 Knoten und 32 Kanten. Int64-Endpunkte, Leitwerte, 0/1-Fixflags und Drücke. Liefert ein besitzendes Float64-Array: zuerst alle Knotendrücke, dann A→B-Kantenflüsse. Jede positive Verbindungskomponente braucht einen Fixknoten.',
+    'transportStep': 'Erzeugt ein neues besitzendes Konzentrationsarray für periodische Upwind-Advektion und explizite Diffusion. 3–4096 nichtnegative Zellen; |v|dt/dx+2Ddt/dx²≤1, D≥0. Masse und Maximumprinzip bleiben bis auf Rundung erhalten. Kein Fluidimpulssolver.',
     'harmonicStep': 'Exakter undämpfter Oszillator mit Vec2.x=Position in m und y=Geschwindigkeit in m/s; omega>0 in rad/s, dt≥0.',
     'stringWaveSpeed': 'Berechnet sqrt(T/μ) in m/s aus positiver Spannungskraft in N und linearer Dichte in kg/m.',
     'travelingWave': 'Wertet A sin(kx-ωt+φ) aus: Vec3.x Verschiebung in m, y Geschwindigkeit in m/s, z dimensionslose Steigung. k,ω>0; keine Dispersion wird implizit gewählt.',

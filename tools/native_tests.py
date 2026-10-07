@@ -43,7 +43,7 @@ class Case:
 
 def catalog():
     cases = []
-    for name in ("core", "numerics", "mechanics", "thermodynamics", "electromagnetism", "waves_optics", "hashmap", "string_view", "array",
+    for name in ("core", "numerics", "mechanics", "thermodynamics", "electromagnetism", "waves_optics", "fluid", "hashmap", "string_view", "array",
                  "memory", "memory_owners", "math", "box_contacts", "contact_graph",
                  "distance_joint", "constraint_graph", "contact_world", "broad_phase", "measurement",
                  "buoyancy", "contacts", "resample", "series", "report", "scene_view"):
@@ -58,6 +58,7 @@ def catalog():
         cases.append(Case("language_" + part, (f"tests/test_language_{part}.c",),
                           ("language",), timeout=120))
     cases.extend([
+        Case("fluid_array_memory", ("tests/test_fluid_array_memory.c",)),
         Case("wave_array_memory", ("tests/test_wave_array_memory.c",)),
         Case("language_contact_world_memory", ("tests/test_language_contact_world_memory.c",)),
         Case("language_batch_memory", ("tests/test_language_batch_memory.c",)),

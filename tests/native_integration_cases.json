@@ -1739,6 +1739,40 @@
       "libraries": [
         "core"
       ]
+    },
+    "transport-model-c": {
+      "sources": [
+        "examples/documentation/transport_main.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ]
+    },
+    "transport-model-phys": {
+      "source": "examples/documentation/transport_main.phys",
+      "mode": "--emit-experiment"
+    },
+    "transport-analysis-c": {
+      "sources": [
+        "examples/documentation/transport_analysis.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ]
+    },
+    "transport-analysis-phys": {
+      "source": "examples/documentation/transport_analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "transport-report-probe": {
+      "sources": [
+        "tests/test_transport_tutorial_report.c"
+      ],
+      "libraries": [
+        "core"
+      ]
     }
   },
   "tests": [
@@ -6597,6 +6631,52 @@
           "arguments": [
             "{root}/tests/check_tutorial_sources.py",
             "documentation_string_source"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "transport_tutorial",
+      "targets": [
+        "python",
+        "physim-runner",
+        "physim-analysis-runner",
+        "transport-model-c",
+        "transport-model-phys",
+        "transport-analysis-c",
+        "transport-analysis-phys",
+        "transport-report-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_transport_tutorial.py",
+            "{physim-runner}",
+            "{physim-analysis-runner}",
+            "{transport-model-c}",
+            "{transport-model-phys}",
+            "{transport-analysis-c}",
+            "{transport-analysis-phys}",
+            "{transport-report-probe}",
+            "{work}"
+          ],
+          "timeout": 180
+        }
+      ]
+    },
+    {
+      "name": "documentation_transport_source",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tutorial_sources.py",
+            "documentation_transport_source"
           ],
           "timeout": 30
         }

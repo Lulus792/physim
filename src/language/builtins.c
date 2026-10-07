@@ -49,6 +49,13 @@
 #define SWEEP PS_TYPE_SWEEP
 #define AABB PS_TYPE_AABB
 static const ps_lang_builtin library[] = {
+    {"pipeConductance", "psrt_pipe_conductance", F, 3, 0, {F,F,F}, {"radius","length","viscosity"}},
+    {"pipeFlow", "psrt_pipe_flow", F, 3, 0, {F,F,F}, {"conductance","pressureA","pressureB"}},
+    {"pipePower", "psrt_pipe_power", F, 3, 0, {F,F,F}, {"conductance","pressureA","pressureB"}},
+    {"reynoldsNumber", "psrt_reynolds", F, 4, 0, {F,F,F,F}, {"density","velocity","diameter","viscosity"}},
+    {"hydrostaticPressure", "psrt_hydrostatic", F, 4, 0, {F,F,F,F}, {"reference","density","gravity","depth"}},
+    {"pipeNetwork", "psrt_pipe_network", PS_LANG_FLOAT_ARRAY, 5, 0, {PS_LANG_INT_ARRAY,PS_LANG_INT_ARRAY,PS_LANG_FLOAT_ARRAY,PS_LANG_INT_ARRAY,PS_LANG_FLOAT_ARRAY}, {"edgeA","edgeB","conductance","fixed","pressures"}},
+    {"transportStep", "psrt_transport_step", PS_LANG_FLOAT_ARRAY, 5, 0, {PS_LANG_FLOAT_ARRAY,F,F,F,F}, {"concentration","velocity","diffusivity","dx","dt"}},
     {"harmonicStep", "psrt_harmonic_step", V2, 3, 0, {V2,F,F}, {"state","omega","dt"}},
     {"stringWaveSpeed", "psrt_string_speed", F, 2, 0, {F,F}, {"tension","linearDensity"}},
     {"travelingWave", "psrt_traveling_wave", V3, 6, 0, {F,F,F,F,F,F}, {"amplitude","wavenumber","omega","phase","position","time"}},

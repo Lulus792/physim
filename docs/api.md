@@ -260,3 +260,9 @@ Lorentzkraft, ideale Widerstände, Kondensatorenergie und exakte RC-Schritte.
 `physim/waves.h` liefert Oszillator, Saitengeschwindigkeit, Laufwelle und atomaren
 1D-Gitterschritt. `physim/optics.h` liefert Reflexion, Snell-Brechung und dünne Linsen.
 [Verträge, Modellgrenzen und vollständige Quellen](waves-optics.md).
+
+## Strömungs-Lehrmodelle
+
+`physim/fluid.h` liefert Poiseuille-Rohre, Reynolds/Hydrostatik, passive Drucknetze
+und konservativen periodischen 1D-Tracertransport.
+[SI-Verträge, Grenzen und vollständige Quellen](fluid.md).
