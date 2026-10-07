@@ -12,6 +12,7 @@ from reference_descriptions import DESCRIPTIONS
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULES = {
+    'properties': ('Material- und Medieneigenschaften', 'properties.md', 'Eigenschaften sind explizite SI-Daten mit Quellenangabe, Gültigkeitsbereich und konstantem oder tabellarischem Modell. Tabellen werden begrenzt linear/bilinear interpoliert; keine Extrapolation oder automatische Materialauswahl. Das konsumierende Modell prüft die benötigten Eigenschaften.'),
     'fluid': ('Laminare Rohre, Netze und Tracertransport', 'fluid.md', 'Lehrmodelle für inkompressible Newtonsche Rohre, passive stationäre Drucknetze und konservativen periodischen 1D-Tracer. Explizite Stoffdaten, Größen- und Stabilitätsgrenzen; keine turbulente oder mehrdimensionale CFD.'),
     'waves': ('Oszillatoren und eindimensionale Wellen', 'waves-optics.md', 'Exakter undämpfter Oszillator, ideale Saitengeschwindigkeit, harmonische Laufwelle und diskrete 1D-Wellengleichung mit festen Nullrändern. Der allokationsfreie Saitenschritt prüft CFL und übernimmt Ausgaben erst nach vollständigem Erfolg.'),
     'optics': ('Geometrische Optik', 'waves-optics.md', 'Reflexion, Snell-Brechung mit ausdrücklicher Totalreflexion und paraxiale dünne Linsen. Unit-Richtungen und Normalen, explizite Brechungsindizes und signierte Bildweiten. Keine automatische Strahlverfolgung, Fresnelamplituden oder Beugung.'),
@@ -100,6 +101,8 @@ def c_reference(module, title, guide, intro):
 
 
 LANG_DESCRIPTIONS = {
+    'propertyConstant': 'Wertet eine konstante SI-Quantity im geschlossenen T/P-Gültigkeitsbereich domain=(Tmin,Tmax,Pmin,Pmax) aus; name/source sind explizite Metadaten. Außerhalb des Bereichs entsteht ein abfangbarer Fehler.',
+    'propertyTable': 'Interpoliert temperatur-/druckabhängige SI-Eigenschaftsdaten mit je 1–64 streng steigenden Achsen und temperaturweise angeordneten Werten. Eine Einpunktachse bedeutet Unabhängigkeit von dieser Koordinate; keine Extrapolation. Arrays und Metadaten können in eigenen besitzenden Wertstrukturen gespeichert werden.',
     'pipeConductance': 'Berechnet π r⁴/(8 μ L) in m³/(s Pa) für ein ideales laminares kreiszylindrisches Rohr. Positive SI-Radius-, Längen- und Viskositätswerte.',
     'pipeFlow': 'Berechnet Q=G(pa-pb) in m³/s mit signierten Relativdrücken und G≥0, positiv von A nach B.',
     'pipePower': 'Berechnet die nichtnegative hydraulische Dissipation G(pa-pb)² in W.',

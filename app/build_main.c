@@ -26,7 +26,7 @@ static const char *const SDK_MODULES[] = {
     "core", "memory", "array", "string_view", "hashmap", "math", "data", "run_index",
     "snapshot", "analysis", "scene", "numerics", "units", "series", "report",
     "report_export", "mechanics", "contact_world", "box_contacts", "collision",
-    "measurement", "thermodynamics", "electromagnetism", "waves", "optics", "fluid"
+    "measurement", "thermodynamics", "electromagnetism", "waves", "optics", "fluid", "properties"
 };
 enum { SDK_OBJECT_COUNT = SDL_arraysize(SDK_MODULES), ARTIFACT_COUNT = SDK_OBJECT_COUNT + 4 };
 typedef struct {

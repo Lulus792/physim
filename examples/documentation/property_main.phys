@@ -1,0 +1,26 @@
+// Synthetic material data, not measured water; same three SI channels as C.
+let kelvin = Unit(0,0,0,0,1,0,0,1,"K")
+let pascal = Unit(-1,1,-2,0,0,0,0,1,"Pa")
+let densityUnit = Unit(-3,1,0,0,0,0,0,1,"kg/m3")
+let temperature = Channel("temperature",kelvin,"temperature")
+let pressure = Channel("pressure",pascal,"pressure")
+let density = Channel("density",densityUnit,"density")
+func measure(time: Float64):
+    let fraction = min(1,time)
+    let t = 273 + 100*fraction
+    let p = 500000*fraction
+    let value = propertyTable("density","synthetic affine reference",densityUnit,
+        Vec4(273,373,0,500000),[273.0,373.0],[0.0,500000.0],
+        [1145.4,1145.9,1125.4,1125.9],t,p)
+    temperature.sample(t)
+    pressure.sample(p)
+    density.sample(value.value)
+func create():
+    metadata("model=synthetic material property sweep\nproperty.density.source=synthetic affine reference\nproperty.density.unit=kg/m3\nproperty.domain=273..373 K; 0..500000 Pa\nproperty.axes.temperature=273,373\nproperty.axes.pressure=0,500000\nproperty.values=1145.4,1145.9,1125.4,1125.9\nproperty.interpolation=bilinear; no extrapolation\nexcluded=measured material data,phase transitions,uncertainty\n")
+    reset()
+func reset():
+    measure(0)
+func step(dt: Float64):
+    measure(simulationTime()+dt)
+func scene():
+    sphere(Vec3(simulationTime(),0,0),0.1,0x53aeefff,1)

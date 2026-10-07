@@ -49,6 +49,10 @@
 #define SWEEP PS_TYPE_SWEEP
 #define AABB PS_TYPE_AABB
 static const ps_lang_builtin library[] = {
+    {"propertyConstant", "psrt_property_constant", QUANTITY, 6, 0, {S,S,QUANTITY,V4,F,F}, {"name","source","value","domain","temperature","pressure"}},
+    {"propertyTable", "psrt_property_table", QUANTITY, 9, 0,
+     {S,S,U,V4,PS_LANG_FLOAT_ARRAY,PS_LANG_FLOAT_ARRAY,PS_LANG_FLOAT_ARRAY,F,F},
+     {"name","source","unit","domain","temperatures","pressures","values","temperature","pressure"}},
     {"pipeConductance", "psrt_pipe_conductance", F, 3, 0, {F,F,F}, {"radius","length","viscosity"}},
     {"pipeFlow", "psrt_pipe_flow", F, 3, 0, {F,F,F}, {"conductance","pressureA","pressureB"}},
     {"pipePower", "psrt_pipe_power", F, 3, 0, {F,F,F}, {"conductance","pressureA","pressureB"}},

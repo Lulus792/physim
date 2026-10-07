@@ -121,6 +121,9 @@ static const documentation_topic documentation_topics[] = {
     {"Teil II – Physim-Sprache", "docs/physim-guide.md", false},
     {"C-Einstieg für den Workflow", "docs/c-workflow.md", false},
     {"Physim-Einstieg: Syntax & Werte", "docs/physim-workflow.md", false},
+    {"Materialdaten & Gültigkeitsbereiche", "docs/properties.md", false},
+    {"properties.h", "include/physim/properties.h", true},
+    {"C: Materialeigenschaften", "docs/reference/properties.md", false},
 };
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27

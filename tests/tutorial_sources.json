@@ -290,5 +290,26 @@
         "language": "physim"
       }
     ]
+  },
+  "documentation_property_source": {
+    "document": "docs/properties.md",
+    "sources": [
+      {
+        "path": "examples/documentation/property_main.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/property_analysis.c",
+        "language": "c"
+      },
+      {
+        "path": "examples/documentation/property_main.phys",
+        "language": "physim"
+      },
+      {
+        "path": "examples/documentation/property_analysis.phys",
+        "language": "physim"
+      }
+    ]
   }
 }

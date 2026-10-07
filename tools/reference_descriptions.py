@@ -8,6 +8,8 @@ def add(prefix, entries):
 
 
 add('ps_', {
+    'property_validate': 'Prüft SI-Einheit, UTF-8-Metadaten, geschlossenen T/P-Bereich, konstante Werte oder vollständige endliche Tabellen mit höchstens 64 Punkten je Achse.',
+    'property_evaluate': 'Wertet konstante oder begrenzt bilinear interpolierte Materialdaten bei Kelvin/Pa aus und erhält die Ausgabe bei Fehlern. Quellen, Einheit und Gültigkeit bleiben explizite Modelldaten.',
     'log_record_valid': 'Prüft Schweregrad, endliche Modellzeit und terminierte UTF-8-Nachricht mit höchstens 1024 Bytes.',
     'logger_emit': 'Validiert und kopiert eine Meldung, ruft den expliziten Sink synchron auf und gibt dessen Ergebnis zurück. Ein deaktivierter Sink akzeptiert gültige Meldungen ohne I/O.',
     'log_level_name': 'Liefert debug, info, warning oder error als unveränderlichen Bibliothekstext; unbekannte Werte liefern unknown.',

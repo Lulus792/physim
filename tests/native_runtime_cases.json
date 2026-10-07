@@ -1496,6 +1496,37 @@
       "source": "let next = transportStep([0.0,1.0,0.0],2,0,1,1)\n",
       "exit_code": 70,
       "stderr_pattern": "fluid_stability_error\\.phys:1:[0-9]+: runtime error:.*stability"
+    },
+    {
+      "name": "property_values",
+      "source_file": "tests/fixtures/language/property_values.phys",
+      "exit_code": 0,
+      "stdout": "Property values, owned data copies, source/domain and independent affine references passed\n",
+      "stderr": ""
+    },
+    {
+      "name": "property_domain_error",
+      "source": "let q = propertyConstant(\"test\",\"synthetic\",Quantity(1,Unit(0,0,0,0,0,0,0,1,\"1\")),Vec4(273,373,0,1),272,0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "property_domain_error\\.phys:[0-9]+:[0-9]+: runtime error:.*invalid SI data"
+    },
+    {
+      "name": "property_shape_error",
+      "source": "let q = propertyTable(\"test\",\"synthetic\",Unit(0,0,0,0,0,0,0,1,\"1\"),Vec4(273,373,0,1),[273.0,373.0],[0.0],[1.0],300,0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "property_shape_error\\.phys:[0-9]+:[0-9]+: runtime error:.*table shape"
+    },
+    {
+      "name": "property_axis_error",
+      "source": "let q = propertyTable(\"test\",\"synthetic\",Unit(0,0,0,0,0,0,0,1,\"1\"),Vec4(273,373,0,1),[273.0,273.0],[0.0],[1.0,2.0],300,0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "property_axis_error\\.phys:[0-9]+:[0-9]+: runtime error:.*invalid SI data"
+    },
+    {
+      "name": "property_scale_error",
+      "source": "let q = propertyConstant(\"test\",\"synthetic\",Quantity(1,Unit(1,0,0,0,0,0,0,0.01,\"cm\")),Vec4(273,373,0,1),300,0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "property_scale_error\\.phys:[0-9]+:[0-9]+: runtime error:.*invalid SI data"
     }
   ]
 }

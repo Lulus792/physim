@@ -3,6 +3,14 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-07. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Materialeigenschaften als SI-Daten:** Konstante und temperatur-/druckabhängige
+Tabellen besitzen Quelle, Einheit und geschlossenen Gültigkeitsbereich.
+C-/Physim-Modelle wählen die benötigten Daten ausdrücklich; Beispiele speichern
+vollständige Tabellenmetadaten und erzeugen gemischte Analysen. Keine Extrapolation
+oder erfundenen Stoffdaten. Library und native Projektbuilds verwenden 27
+Core-Module. [Vollständige Quellen und Grenzen](properties.md),
+[ausgeführte Nachweise](platform-validation.md).
+
 **Basis und explizite RNG-Zustände:** Fünf Basisanforderungen sind konkreten
 Implementierungen und Referenztests zugeordnet. Der Normalgenerator legt die
 Reihenfolge seiner zwei Ziehungen ausdrücklich fest; unabhängige C-/Physim-Probes

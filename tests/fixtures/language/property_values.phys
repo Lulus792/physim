@@ -1,0 +1,30 @@
+struct PropertyData:
+    let name: String
+    let source: String
+    let unit: Unit
+    let domain: Vec4
+    var temperatures: [Float64]
+    let pressures: [Float64]
+    let values: [Float64]
+    func at(temperature: Float64, pressure: Float64) -> Quantity:
+        return propertyTable(name: self.name, source: self.source, unit: self.unit,
+            domain: self.domain, temperatures: self.temperatures, pressures: self.pressures,
+            values: self.values, temperature: temperature, pressure: pressure)
+let density = Unit(-3,1,0,0,0,0,0,1,"kg/m³")
+let table = PropertyData("Dichte α", "synthetic affine reference", density,
+    Vec4(273,373,0,500000), [250.0,300.0,400.0], [0.0,100000.0,500000.0],
+    [1150.0,1150.1,1150.5,1140.0,1140.1,1140.5,1120.0,1120.1,1120.5])
+var copied = table
+copied.temperatures[0] = 260
+assert(table.temperatures[0] == 250 && copied.temperatures[0] == 260)
+for i in 0..<101:
+    let temperature = 273 + Float64(i)
+    for j in 0..<101:
+        let pressure = Float64(j) * 5000
+        let sample = table.at(temperature,pressure)
+        assert(abs(sample.value - (1200 - 0.2*temperature + 1e-6*pressure)) < 5e-13)
+let constant = propertyConstant("Friction", "synthetic", Quantity(0.4,Unit(0,0,0,0,0,0,0,1,"1")),Vec4(0,1000,0,1000000),300,100000)
+assert(constant.value == 0.4 && table.source == "synthetic affine reference")
+let invalid = attempt(table.at(272,0))
+assert(invalid == nil)
+print("Property values, owned data copies, source/domain and independent affine references passed")

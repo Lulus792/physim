@@ -71,7 +71,7 @@ Das ist ein Nachweis für diesen Stand und diese Umgebungen. Die anschließenden
 Änderungen an Laufzeitsupport und Prüfern benötigen eigene Nachweise; eine
 nachträgliche Änderung der Zahl macht den alten Lauf nicht zu einem aktuellen
 Gesamtlauf. Der aktuelle Katalog enthält mit den zusätzlichen Lernwegprüfungen
-612 Fälle ohne Fenster, 593 ohne SDL und 77 Fensterfälle.
+621 Fälle ohne Fenster, 601 ohne SDL und 77 Fensterfälle.
 
 Die Abnahme bleibt offen, bis sämtliche konkreten Anforderungen passende
 aktuelle Implementierungs-, Laufzeit- und Plattformnachweise besitzen.
@@ -97,8 +97,8 @@ Korrekturen zusätzlich in ihrer tatsächlichen Matrix bestätigen.
 
 ## Batch-Bindung und Controller
 
-Der aktuelle Abgleich enthält zwanzig implementierte Blöcke, fünf konkrete
-unvollständige Blöcke und 506 weiterhin ungeprüfte Blöcke. Die acht Lernpfade
+Der aktuelle Abgleich enthält vierundzwanzig implementierte Blöcke, fünf konkrete
+unvollständige Blöcke und 502 weiterhin ungeprüfte Blöcke. Die acht Lernpfade
 bleiben erhalten; hinzu kommen LANG-005, der Batch-/Parametercontroller und die beiden Dokumentationsteile. Elektromagnetismus und Wellen/Optik besitzen zusätzliche begrenzte Domänennachweise.
 Die Originaltexte aller 531 Blöcke und 475 Aufzählungspunkte bleiben unverändert.
 Die Sprachbindung und die beiden Lernwege besitzen ausdrücklich begrenzte Implementierungs- und
@@ -134,3 +134,19 @@ Handle-APIs beweisen nicht automatisch die allgemeine Anforderung. Auch die
 vollständige Allocator-Anbindung sämtlicher Subsysteme und die aktuelle gesamte
 Plattform-/Produktabnahme bleiben offen. Die Plantexte aller 531 Blöcke bleiben
 erhalten.
+
+
+## Material- und Medieneigenschaften (§7.5)
+
+PP-0391/0392/0394/0396 besitzen jetzt einen konkreten Eigenschaftsbaustein mit
+SI-Einheiten, Name/Quelle, geschlossenem Gültigkeitsbereich und konstanten oder
+begrenzt bilinear interpolierten Tabellen. C leiht diese Daten; eigene
+Physim-Wertstrukturen besitzen kopierbare Arrays und Texte. Beide realen
+Experimentsprachen speichern vollständige Modelldaten und erzeugen mit beiden
+Analysesprachen geprüfte Diagramme. [Verträge und vollständige Quellen](properties.md)
+unterscheiden synthetische Referenzdaten von gemessenen Stoffdaten.
+
+PP-0393 bleibt für die gesamte Liste der physikalischen Größen und Stoffmodelle
+ungeprüft. Ein allgemeiner Quantity-Datentyp allein ersetzt deren fachliche
+Einzelabnahme nicht. Neue API-/Laufzeitnachweise ersetzen weiterhin weder die
+Gesamtplattformabnahme noch die übrigen Plananforderungen.

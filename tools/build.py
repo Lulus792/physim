@@ -21,7 +21,7 @@ import tempfile
 ROOT = Path(__file__).resolve().parent.parent
 WINDOWS = sys.platform == "win32"
 MAC = sys.platform == "darwin"
-CORE = "core memory array string_view hashmap math data run_index snapshot analysis scene numerics units series report report_export mechanics contact_world box_contacts collision measurement thermodynamics electromagnetism waves optics fluid".split()
+CORE = "core memory array string_view hashmap math data run_index snapshot analysis scene numerics units series report report_export mechanics contact_world box_contacts collision measurement thermodynamics electromagnetism waves optics fluid properties".split()
 LANGUAGE = "lexer parser checker emitter builtins".split()
 APP = "main timeline docking layout_catalog channel_units run_import ui_backend ui_sdl ui_geometry graphics documentation library preferences workspace_state workspace_catalog workspace_tree plot_view report_image png".split()
 PROJECT = "project_file text_document autosave parameter_catalog".split()
@@ -39,7 +39,9 @@ def language_examples():
     return ([(name, "--emit-c", f"language/{name}.phys") for name in LANGUAGE_PROGRAMS] +
             [(name, "--emit-experiment", f"language/{name}.phys") for name in LANGUAGE_EXPERIMENTS] +
             [(name, "--emit-analysis", f"language/{name}.phys") for name in LANGUAGE_ANALYSES] +
-            [("transport_main", "--emit-experiment", "documentation/transport_main.phys"),
+            [("property_main", "--emit-experiment", "documentation/property_main.phys"),
+             ("property_analysis", "--emit-analysis", "documentation/property_analysis.phys"),
+             ("transport_main", "--emit-experiment", "documentation/transport_main.phys"),
              ("transport_analysis", "--emit-analysis", "documentation/transport_analysis.phys"),
              ("string_main", "--emit-experiment", "documentation/string_main.phys"),
              ("string_analysis", "--emit-analysis", "documentation/string_analysis.phys"),

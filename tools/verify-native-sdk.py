@@ -160,6 +160,27 @@ def main():
             checked([sys.executable, repo / "tests/test_rng_reference.py",
                      "--c", rng_probe, "--language", rng_language])
         print("Installed/rebuilt SDK RNG: independent integer/normal references and C/Physim value snapshots passed", flush=True)
+        shutil.copy2(repo / "tests/test_properties.c", consumer / "properties-check.c")
+        shutil.copy2(repo / "tests/test_property_report.c", consumer / "property-report-probe.c")
+        checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
+                 repo / "tests/fixtures/language/property_values.phys"],
+                output=consumer / "property-values.c")
+        for name in ("property_main", "property_analysis"):
+            shutil.copy2(sdk / "examples/documentation" / (name + ".c"), consumer / (name + ".c"))
+        for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
+            property_check = builder.executable("properties-check-" + kind, ["properties-check.c"], [archive])
+            property_values = builder.executable("property-values-" + kind, ["property-values.c"], [archive], language=True)
+            checked([property_check]);checked([property_values])
+            property_model = builder.executable("property-model-" + kind, ["property_main.c"], [archive], module=True)
+            property_analysis = builder.executable("property-analysis-" + kind, ["property_analysis.c"], [archive], module=True)
+            property_probe = builder.executable("property-report-" + kind, ["property-report-probe.c"], [archive])
+            checked([sys.executable, repo / "tests/test_property_workflow.py",
+                     "--runner", sdk / "bin" / ("physim-runner" + suffix),
+                     "--analysis", sdk / "bin" / ("physim-analysis-runner" + suffix),
+                     "--c-model", property_model, "--phys-model", sdk / "bin" / ("language-property_main" + module_suffix),
+                     "--c-analysis", property_analysis, "--phys-analysis", sdk / "bin" / ("language-property_analysis" + module_suffix),
+                     "--probe", property_probe, "--work", root / ("Property workflow " + kind)])
+        print("Installed/rebuilt SDK properties: SI domains, owned C/Physim data, stored metadata and mixed analyses passed", flush=True)
         shutil.copy2(sdk / "examples/pendulum/analysis.c", consumer / "c-analysis.c")
         c_analysis = builder.executable("sdk-c-analysis", ["c-analysis.c"], [rebuilt_core], module=True)
         c_modules = {}
@@ -383,14 +404,15 @@ def main():
                 ("thermal",repo / "tests/test_thermal_tutorial.py",thermal_probe),
                 ("rc",repo / "tests/test_rc_tutorial.py",rc_probe),
                 ("string",repo / "tests/test_string_tutorial.py",string_probe),
-                ("transport",repo / "tests/test_transport_tutorial.py",transport_probe)):
+                ("transport",repo / "tests/test_transport_tutorial.py",transport_probe),
+                ("property",repo / "tests/test_property_workflow.py",property_probe)):
             checked([sys.executable,repo / "tests/test_native_domain_build.py","--domain",domain,
                      "--builder",sdk / "bin" / ("physim-build"+suffix),"--sdk",sdk,
                      "--compiler",sdk / "bin" / ("physimc"+suffix),
                      "--runner",sdk / "bin" / ("physim-runner"+suffix),
                      "--analysis-runner",sdk / "bin" / ("physim-analysis-runner"+suffix),
                      "--oracle",oracle,"--probe",domain_probe,"--work",root / ("Documented native "+domain)])
-        print("Installed SDK native domain projects: eight cold C/Physim builds, unchanged cache reuse and four complete independent tutorial oracles passed",flush=True)
+        print("Installed SDK native domain projects: ten cold C/Physim builds, unchanged cache reuse and five complete independent tutorial oracles passed",flush=True)
 
         shutil.copy2(sdk / "examples/spring/main.c",consumer / "spring-tutorial.c")
         shutil.copy2(sdk / "examples/documentation/spring_analysis.c",consumer / "spring-tutorial-analysis.c")
@@ -654,7 +676,7 @@ def main():
         "Electromagnetism through installed/rebuilt Core, Coulomb/gradient/Lorentz tests, seven RC Decimal oracles and mixed reports passed.\n" +
         "Waves/optics through installed/rebuilt Core, Snell/TIR/lens invariants, owned 4096-node grids, allocation failures and mixed string reports passed.\n" +
         "Fluid through installed/rebuilt Core, anchored max networks, conservative 4096-cell transport, allocation failures and mixed tutorial reports passed.\n" +
-        "Eight cold native C/Physim domain project builds, unchanged cache reuse and four complete independent tutorial oracles passed.\n" +
+        "Ten cold native C/Physim domain project builds, unchanged cache reuse and five complete independent tutorial oracles passed.\n" +
         "Both complete C/Physim learning routes, eight paired model source groups and executable language introductions passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
         ("Eight C template GUI workflows, the complete Physim language GUI workflow, independent documentation route navigation, keyboard menus in both window sizes and four UI typography sizes with restart, keyboard settings, keyboard documentation and keyboard project matrix passed.\n" if args.app_tests else ""), encoding="utf-8")

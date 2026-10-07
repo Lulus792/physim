@@ -4091,6 +4091,26 @@ Potenziert base mit exponent; nicht reelle oder nicht endliche Ergebnisse sind L
 
 Überall verfügbar.
 
+## propertyConstant
+
+```text
+propertyConstant(name: String, source: String, value: Quantity, domain: Vec4, temperature: Float64, pressure: Float64) -> Quantity
+```
+
+Wertet eine konstante SI-Quantity im geschlossenen T/P-Gültigkeitsbereich domain=(Tmin,Tmax,Pmin,Pmax) aus; name/source sind explizite Metadaten. Außerhalb des Bereichs entsteht ein abfangbarer Fehler.
+
+Überall verfügbar.
+
+## propertyTable
+
+```text
+propertyTable(name: String, source: String, unit: Unit, domain: Vec4, temperatures: [Float64], pressures: [Float64], values: [Float64], temperature: Float64, pressure: Float64) -> Quantity
+```
+
+Interpoliert temperatur-/druckabhängige SI-Eigenschaftsdaten mit je 1–64 streng steigenden Achsen und temperaturweise angeordneten Werten. Eine Einpunktachse bedeutet Unabhängigkeit von dieser Koordinate; keine Extrapolation. Arrays und Metadaten können in eigenen besitzenden Wertstrukturen gespeichert werden.
+
+Überall verfügbar.
+
 ## quadraticDrag
 
 ```text

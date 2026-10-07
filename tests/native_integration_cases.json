@@ -1789,6 +1789,40 @@
     "rng-reference-language": {
       "source": "tests/fixtures/language/rng_reference.phys",
       "mode": "--emit-c"
+    },
+    "property-model-c": {
+      "sources": [
+        "examples/documentation/property_main.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ]
+    },
+    "property-model-phys": {
+      "source": "examples/documentation/property_main.phys",
+      "mode": "--emit-experiment"
+    },
+    "property-analysis-c": {
+      "sources": [
+        "examples/documentation/property_analysis.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ]
+    },
+    "property-analysis-phys": {
+      "source": "examples/documentation/property_analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "property-report-probe": {
+      "sources": [
+        "tests/test_property_report.c"
+      ],
+      "libraries": [
+        "core"
+      ]
     }
   },
   "tests": [
@@ -7254,6 +7288,103 @@
             "{rng-reference-language}"
           ],
           "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "property_workflow",
+      "targets": [
+        "python",
+        "physim-runner",
+        "physim-analysis-runner",
+        "property-model-c",
+        "property-model-phys",
+        "property-analysis-c",
+        "property-analysis-phys",
+        "property-report-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_property_workflow.py",
+            "--runner",
+            "{physim-runner}",
+            "--analysis",
+            "{physim-analysis-runner}",
+            "--c-model",
+            "{property-model-c}",
+            "--phys-model",
+            "{property-model-phys}",
+            "--c-analysis",
+            "{property-analysis-c}",
+            "--phys-analysis",
+            "{property-analysis-phys}",
+            "--probe",
+            "{property-report-probe}",
+            "--work",
+            "{work}/models"
+          ],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "documentation_property_source",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tutorial_sources.py",
+            "documentation_property_source",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "documented_native_property",
+      "app": true,
+      "targets": [
+        "python",
+        "physim-build",
+        "physimc",
+        "physim-runner",
+        "physim-analysis-runner",
+        "property-report-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_native_domain_build.py",
+            "--domain",
+            "property",
+            "--sdk",
+            "{root}",
+            "--builder",
+            "{physim-build}",
+            "--compiler",
+            "{physimc}",
+            "--runner",
+            "{physim-runner}",
+            "--analysis-runner",
+            "{physim-analysis-runner}",
+            "--probe",
+            "{property-report-probe}",
+            "--oracle",
+            "{root}/tests/test_property_workflow.py",
+            "--work",
+            "{work}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 600
         }
       ]
     }

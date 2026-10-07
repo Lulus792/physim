@@ -9,7 +9,7 @@ import sys
 parser = argparse.ArgumentParser(description=__doc__)
 for name in ('builder', 'sdk', 'compiler', 'runner', 'analysis-runner', 'probe', 'oracle', 'work'):
     parser.add_argument('--' + name, type=Path, required=True)
-parser.add_argument('--domain', choices=('thermal', 'rc', 'string', 'transport'), required=True)
+parser.add_argument('--domain', choices=('thermal', 'rc', 'string', 'transport', 'property'), required=True)
 parser.add_argument('--cc')
 args = parser.parse_args()
 args.work.mkdir(parents=True, exist_ok=True)
@@ -39,7 +39,7 @@ for language, suffix in (('c', '.c'), ('physim', '.phys')):
     if args.cc:
         command += ['--cc', args.cc]
     checked(command, args.work / (language + '-cold-build.log'))
-    for module in ('thermodynamics', 'electromagnetism', 'waves', 'optics', 'fluid'):
+    for module in ('thermodynamics', 'electromagnetism', 'waves', 'optics', 'fluid', 'properties'):
         assert (output / ('sdk-' + module + '.obj')).is_file(), module
     modules = [output / ('experiment' + extension), output / ('analysis' + extension)]
     before = {p: (p.stat().st_mtime_ns, hashlib.sha256(p.read_bytes()).hexdigest()) for p in modules}
@@ -50,7 +50,14 @@ for language, suffix in (('c', '.c'), ('physim', '.phys')):
     products[language] = modules
     print(args.domain + ' ' + language + ': cold native build and unchanged cached build passed', flush=True)
 
-checked([sys.executable, args.oracle, args.runner, args.analysis_runner,
-         products['c'][0], products['physim'][0], products['c'][1], products['physim'][1],
-         args.probe, args.work / 'Independent results ä'], args.work / 'oracle.log', timeout=180)
+if args.domain == 'property':
+    oracle = [sys.executable, args.oracle, '--runner', args.runner, '--analysis', args.analysis_runner,
+              '--c-model', products['c'][0], '--phys-model', products['physim'][0],
+              '--c-analysis', products['c'][1], '--phys-analysis', products['physim'][1],
+              '--probe', args.probe, '--work', args.work / 'Independent results ä']
+else:
+    oracle = [sys.executable, args.oracle, args.runner, args.analysis_runner,
+              products['c'][0], products['physim'][0], products['c'][1], products['physim'][1],
+              args.probe, args.work / 'Independent results ä']
+checked(oracle, args.work / 'oracle.log', timeout=180)
 print(args.domain + ': native-built C/Physim sources passed the complete independent tutorial oracle', flush=True)

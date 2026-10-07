@@ -1,0 +1,6 @@
+func analyze():
+    report("Material property")
+    let run = Dataset(0)
+    let time = run.series("time")
+    let density = run.series("density")
+    density.plot(time,"Synthetic density sweep","density")

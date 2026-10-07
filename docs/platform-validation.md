@@ -2322,3 +2322,93 @@ Die vollständige Selbstprüfung besteht auf macOS und Linux unter
 `base-contract-test-runner-final-*.log`; ihre absichtlich fehlschlagende
 Drei-Fälle-Suite ist kein Produktfehler. Weitere mögliche Fehler des
 zusammengesetzten Remote-Schritts und die neue Gesamtmatrix bleiben zu bestätigen.
+
+
+## Materialeigenschaften als SI-Daten am 7. Oktober 2026
+
+`properties.h` und der neue Core-Baustein `properties.c` beschreiben eine
+Eigenschaft durch Quelle, Einheit, geschlossenen Temperatur-/Druckbereich und
+konstantes oder tabellarisches Modell. 1–64 Achsenpunkte, maximal 4096 Werte,
+Einpunktachsen für unabhängige Koordinaten, keine Extrapolation und eine
+beschränkte konvexe Interpolation bilden den expliziten Vertrag.
+[Verträge und vollständige C-/Physim-Quellen](properties.md) verwenden synthetische
+Referenzdaten; es wird kein gemessener Stoffdatensatz erfunden. Beide wirklichen
+Experimentsprachen speichern Quellen, Bereich, Einheit, Achsen, Eckwerte und
+Methode im Lauf. Die unabhängige Prüfung liest CRC, Schema, sämtliche Messwerte
+und Metadaten und kontrolliert alle vier Analyse-Kombinationen.
+API/ABI 3 und Datenformate bleiben erhalten; die Library und der native
+Projektbuilder verwenden jetzt denselben Satz von **27 Core-Modulen**.
+
+### Lokale Builds, Referenzen und genaue Reichweite
+
+Die vollständigen Release-Suiten bestehen mit **620/620** auf Intel macOS unter
+`build/contact-world-language-release-mac/test-results/run-i9b1hv9g` und
+Debian/GCC unter `build/contact-world-language-release-linux/test-results/run-yx2gke1o`.
+Danach wurde die zusätzliche kalte Eigenschaftsprojekt-Prüfung registriert und
+eine Header-Abhängigkeit korrigiert. Diese ursprünglichen Gesamtläufe werden
+damit nicht zu einem neuen 621-Fälle-Lauf umbenannt.
+
+Die endgültigen zehn gezielten Fälle bestehen unter macOS `run-of580rj2` und
+Linux `run-0breuqjc`. Sie umfassen C-Eigenschaften, fünf Physim-Wert-/Fehlerfälle,
+den tatsächlichen Experiment-/Analyseablauf, kalte native C-/Physim-Projekte,
+Referenzseiten und das isolierte Kit. Der separate Quellenvergleich der vier
+publizierten Programmquellen besteht ebenfalls. Die C-Prüfung verwendet über
+10000 unabhängige T/P-Paare, einen nichtquadratischen 3×2-Aufbau mit echtem
+T·P-Term, Extremwerte und das maximale 64×64-Raster. Quellen und Arrays bleiben
+bei fehlgeschlagenen Abfragen erhalten; Ausgaben werden nicht teilweise geändert.
+
+Die kalten Eigenschaftsprojekte samt unverändertem Cache und Quellen bestehen
+separat unter macOS `run-t_bp6a00` und Linux `run-_k3_pnz7`. Unter Linux/Clang
+bestehen die sieben neuen C-/Physim-Eigenschaftsfälle einschließlich des wirklichen
+Analyseablaufs mit ASan/UBSan unter
+`build/base-contract-asan-linux/test-results/run-i81ymy_i`.
+Die vier Handbuchfenster-/Tastaturfälle (alle Themen, 16 px, 22 px, langsames
+Zeichnen) bestehen unter macOS `run-cvq8czm3` und Linux `run-s4k2glpn`.
+30 Referenzseiten und das isolierte Kit mit 67 Eingaben sind geprüft.
+Der Katalog enthält jetzt 621 Fälle ohne Fenster, 601 ohne SDL und 77 Fensterfälle.
+
+### Erhaltene Fehlversuche
+
+Die erste Sprachfixture verwendete eine nicht vorhandene `unitOne`-Funktion
+und einen falschen Optionalzugriff (`run-fwo1icnr`); beides wurde auf die vorhandene
+Unit-/attempt-Syntax korrigiert. Die ersten SDK-Läufe
+`Material properties SDK ä mac p9epbn11` und
+`Material properties SDK ä linux f1f3gvqi` scheitern an der eigenständigen
+Einbindung von `language_properties.h`: `ps_vec4` war nur über den Sammelheader
+bekannt. Der eigene Header bindet `math.h` jetzt selbst ein. Die fehlgeschlagenen
+Läufe bleiben erhalten und werden nicht als erfolgreiche SDK-Nachweise gezählt.
+
+Die erste Registrierung der kalten Eigenschaftsprojekte referenzierte den
+falsch benannten Oracle `test_property_tutorial.py`. Die Projekte bauen bereits,
+doch der Folgeprüfer startet nicht; die Läufe `run-nfhq9k7k` und `run-uflqhux9`
+bleiben mit 10/11 fehlgeschlagen. Die Registrierung verwendet jetzt den tatsächlich
+vorhandenen `test_property_workflow.py`; die Folgeprüfungen oben bestehen.
+
+### Frische verschobene SDKs mit der Korrektur
+
+Beide vollständigen isolierten SDK-Prüfverfahren ohne Fensterprüfungen bestehen
+mit jeweils **370 erfolgreichen Prüfbefehlen**:
+
+- macOS: `build/Material properties SDK ä mac 9yakyf10`, verschobenes SDK unter
+  `proof/Native SDK ä bptlzb_k/Relocated SDK ä`.
+- Linux: `build/Material properties SDK ä linux 0d75c6hg`, verschobenes SDK unter
+  `proof/Native SDK ä eiggnpef/Relocated SDK ä`.
+
+Das SDK besitzt 441 SHA-256-erfasste Dateien. Der Prüfer verwendet ein isoliertes
+Kit mit 67 Eingaben; Header und alle 27 Core-Module stammen ausschließlich aus
+dem SDK. Die neuen C-/Physim-Eigenschaften und gespeicherten Metadaten bestehen
+gegen das installierte und das neu gebaute Archiv. Zehn kalte native Projekte
+(davon die beiden neuen Eigenschaftsprojekte), unveränderter Cache und fünf
+vollständige unabhängige Domänenorakel bestehen. Alle früheren SDK-Gates bleiben
+aktiv. Receipts und 27 eingefrorene Quellen stehen in
+`build/properties-sdk-mac-PASSED.json`, `build/properties-sdk-linux-PASSED.json`
+und `build/properties-source-freeze.json`. Das belegt diese lokalen Systeme und
+diesen Umfang, keine neue Windows-/Apple-Silicon-Gesamtabnahme.
+
+Die letzte Abfrage der
+[früheren C17-CI für `915e431`](https://github.com/PhysicSimulator/physim/actions/runs/37625776693)
+bestätigt alle vier Windows-Jobs und Linux/Clang; macOS und Linux/GCC laufen
+noch. Die [frische Linux-Paket-CI](https://github.com/PhysicSimulator/physim/actions/runs/37625776779)
+besteht vollständig einschließlich der installierten Debian-/Ubuntu-Prüfungen.
+Diese Ergebnisse gelten für die frühere Revision. Die nächste gesamte Matrix
+mit dem neuen Eigenschaftsbaustein bleibt erforderlich.

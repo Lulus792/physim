@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-07",
-  "inspected_revision": "2564e382ed130d39994300a4833d37692c371d25",
+  "inspected_revision": "915e431f179b5ecf94e610d659276f4fa6c6eaf3",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2625,9 +2625,13 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Materialien und Medien sind Daten, keine fest eingebauten Sonderfälle.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/properties.h",
+        "src/properties.c",
+        "tests/fixtures/language/property_values.phys"
+      ],
+      "note": "Eigenschaften sind caller-eigene SI-Deskriptoren; Physim kann dieselben Arrays, Einheit, Quelle und Bereich in eigenen besitzenden Wertstrukturen speichern. Keine implizite Stoffauswahl oder erfundene Materialkatalogdaten."
     },
     {
       "id": "PP-0392",
@@ -2640,9 +2644,14 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Eigenschaften können konstant, temperaturabhängig oder druckabhängig sein.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/properties.h",
+        "src/properties.c",
+        "include/physim/language_properties.h",
+        "tests/test_properties.c"
+      ],
+      "note": "Konstante und tabellarische Eigenschaften mit einer oder zwei veränderlichen Achsen sind implementiert. Einpunktachsen erlauben unabhängige Koordinaten; geschlossene Bereiche verhindern Extrapolation. Keine Phasen-/Hysteresemodelle."
     },
     {
       "id": "PP-0393",
@@ -2657,7 +2666,7 @@
       "text": "- Beispiele: Dichte, dynamische/kinematische Viskosität, Reibungskoeffizient, Restitution, Wärmeleitfähigkeit, Wärmekapazität, elektrische Leitfähigkeit und Permittivität.\n",
       "status": "unverified",
       "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "note": "Generische SI-Quantities können diese Größen ausdrücken; Dichte und Reibung sind konkret geprüft. Der gesamte Umfang aller aufgezählten Größen, Modelle und Stoffdaten bleibt ungeprüft."
     },
     {
       "id": "PP-0394",
@@ -2670,9 +2679,13 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Quellenangabe und Gültigkeitsbereich können als Metadaten gespeichert werden.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "examples/documentation/property_main.c",
+        "examples/documentation/property_main.phys",
+        "tests/test_property_workflow.py"
+      ],
+      "note": "Name, Quelle, SI-Einheit und Gültigkeitsbereich sind explizite Datenfelder. Beide Modellsprachen zeichnen außerdem Achsen, Eckwerte, Methode und ausgeschlossene Modelle im wirklichen Datensatz auf; CRC/Schema/Metadaten werden unabhängig gelesen."
     },
     {
       "id": "PP-0395",
@@ -2700,9 +2713,14 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Modelle entscheiden explizit, welche Eigenschaften sie verwenden.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/properties.h",
+        "examples/documentation/property_main.c",
+        "examples/documentation/property_main.phys",
+        "docs/properties.md"
+      ],
+      "note": "Keine automatische Auswahl durch die Bibliothek. Das Beispielmodell wertet ausdrücklich nur die Dichte aus; andere Modelle geben ihre benötigten Eigenschaftsdaten selbst vor."
     },
     {
       "id": "PP-0400",
