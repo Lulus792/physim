@@ -2694,3 +2694,106 @@ separate Nachweise. Die 77 Fensterfälle im Katalog sind in diesem Schritt
 nicht als erneut ausgeführte Grafikgesamtabnahme ausgewiesen. Der weiterhin
 belegte Series-Skalierungsfehler wird durch diese grünen Tests nicht widerlegt;
 der Katalog erhält dafür als nächsten Schritt einen eigenen Gegenbeleg.
+
+## Kanonische SI-Series am 7. Oktober 2026
+
+Die neue C-Regression am unveränderten Ausgangsstand `00fec46` reproduziert
+**1 m + 50 cm = 51 statt 1,5 m** (`run-z8v7c6hg`). Eigene Series speicherten
+Rohwerte mit Eingabeskala; die Addition prüfte Dimensionen und addierte die
+Rohzahlen ohne Skalenumrechnung. Beide Importfunktionen übernehmen deklarierte
+Eingabeeinheiten jetzt blockweise nach SI. Eingabearrays bleiben erhalten;
+Ausgabe-Metadaten und Werte verwenden Skala 1 und SI-Dimensionssymbole.
+
+[Vertrag und Umstellung](series.md) beschreiben die absichtliche Änderung von
+`value()/unitScale()`: Bestehende Analysen müssen eine anschließende eigene
+Umrechnung entfernen. Die bisherige Physim-Referenzfixture erwartet für einen
+Zentimeterimport nun Skala 1 und Werte 0,02/0,03 statt 2/3. Sie bleibt Teil
+der tatsächlichen Sprach-/Analyseprüfung; der geänderte Wertvertrag wird nicht
+mit einer bloßen Korrektur der fehlerhaften Summe verdeckt. Historische Laufdateien
+werden nicht umgeschrieben. Plot-/Report-Anzeigeeinheiten bleiben eine ausdrückliche
+Darstellungskonvertierung und ändern die Series nicht.
+
+### Tatsächlich ausgeführte gezielte Nachweise
+
+Je **21/21** Release-Fälle bestehen auf dem Intel-Mac/Apple Clang
+(`run-mbago8z8`) und Debian 12/GCC (`run-ug7tw11k`). Sie enthalten eigene und
+Dataset-Series, Masks, Auswahl/Quantile, alle Resampling-Verfahren, PCHIP,
+numerische Extremfälle, die bestehende Physim-Analyse, Referenz und isoliertes Kit.
+Unter Linux/Clang mit ASan/UBSan bestehen die 19 ausgewählten Fälle in
+`build/base-contract-asan-linux/test-results/run-8pf3i131`. Linux-Receipts sind
+zusätzlich lokal als `build/series-si-targeted-linux-results.json` und
+`build/series-si-asan-linux-results.json` erhalten.
+
+Die neue C-Prüfung verarbeitet **513 Zeilen über mehrere 256er-Blöcke** aus
+cm-/ms-Eingaben. Sie prüft SI-Import, Addition/Subtraktion/Produkt/Quotient,
+Affine, Ableitung, Integral mit nichtkanonischem Anfangswert, Prozent-Selektoren,
+Masken, leere Reihen sowie **1025 Ziele** für linear/nearest/previous/PCHIP.
+Die affine Rechnung verwendet Quantity-Addition pro gültiger Zeile, sodass ein
+allein nichtdarstellbarer Offset noch eine endliche Summe ergeben kann. Maskierte
+Zeilen werden nicht ausgewertet; factor*value muss selbst endlich sein.
+
+Rangefehler im letzten Importblock, nichtdarstellbarer nichtnulliger Unterlauf
+und erschöpfte Quota erhalten Ausgabehandles, vorhandene Werte und belegte
+Scratch-Bytes. Der unveröffentlichte Entwurf wird geschlossen. Ein tatsächliches
+Physim-Analysemodul prüft dieselben Eingaben und skalierte Einheiten, abgefangene
+Rangefehler sowie lineare/PCHIP-Ausgaben. Ein unabhängiger 64-stelliger Decimal-
+Prüfer liest beide fertigen CSVs: alle 513 Zeilen, fünf Spalten und kanonische
+Kopfzeilen. Ein separater Report-Prüfer lädt beide Berichte und prüft jede
+Kurvenkoordinate sowie alle sieben Dimensionsfelder und Skala 1.
+
+### Erhaltene Fehlversuche
+
+Die erste neue Sprachfixture verwendete nicht unterstützte Series-Operatoren
+(`run-4b_irekn`) und danach in diesem Kontext nicht globale Methodennamen
+(`run-8hwak2fh`). Sie verwendet nun die vorhandenen adding/subtracting/multiplied/
+divided-Methoden und besteht in allen Folgeprüfungen. Der zusätzliche Nearest-
+Test nahm anfangs den späteren Punkt am Abstandsgleichstand an (`run-p_xpc4fm`);
+laut bestehendem Headervertrag ist der frühere Punkt richtig. Die Erwartung
+wurde korrigiert, das Verfahren bleibt erhalten. Der erste breitere Lauf
+(`run-o2v_sw8e`) besteht funktional mit 20/21, scheitert aber an noch nicht
+regenerierten Referenzseiten. Die endgültigen 21/21 verwenden die aktualisierten
+30 Referenzseiten. Alle Fehlversuche und Quellen bleiben erhalten.
+
+### Vollständige verschobene SDKs
+
+Beide vollständigen isolierten SDK-Prüfungen ohne Fensterprüfungen bestehen
+mit jeweils **393 erfolgreichen Prüfbefehlen**:
+
+- macOS: `build/Series SI SDK ä mac 198cckdp`, verschoben unter
+  `proof/Native SDK ä 3pbff4ir/Relocated SDK ä`.
+- Linux: `build/Series SI SDK ä linux gzozrs0z`, verschoben unter
+  `proof/Native SDK ä ep8tyb0h/Relocated SDK ä`.
+
+Je 448 SDK-Dateien und 85 Kit-Eingaben sind SHA-256-erfasst. C-/Physim-SI-Import,
+Analysen und Report-/CSV-Ausgaben bestehen gegen das installierte und das aus
+SDK-Quellen neu gebaute Archiv. Alle früheren Gates, zwölf kalte native Projekte,
+unveränderter Cache und sechs unabhängige Domänenorakel bleiben aktiv.
+Die 18 in `build/series-si-source-freeze.json` festgehaltenen Implementierungs-/
+Test-/Dokumentationsdateien waren während beider SDK-Prüfungen unverändert.
+Receipts: `build/series-si-sdk-mac-PASSED.json` und
+`build/series-si-sdk-linux-PASSED.json`. API/ABI 3, Wire 5, Snapshot 3 und psrun 1
+bleiben unverändert; die numerische Importsemantik ist ausdrücklich dokumentiert.
+
+Der konkrete Gegenbefund zu PP-0370 ist geschlossen. Der Block kehrt zu
+`unverified` zurück, weil sämtliche übrigen internen Speicherschichten noch
+nicht einzeln gegen den gesamten Planumfang abgenommen sind. Aktuell 24
+implementierte, fünf unvollständige und 502 ungeprüfte Blöcke. Die letzte Abfrage
+der [C17-CI der vorherigen Quantity-Revision `00fec46`](https://github.com/PhysicSimulator/physim/actions/runs/37651910156)
+bestätigt Windows/MSVC und Windows/ClangCL in Debug; übrige Jobs laufen noch.
+Das ist kein Windows-Nachweis der aktuellen SI-Series-Änderung. Die gesamte
+Einheiten-, Grafik- und Plattformabnahme bleibt offen.
+
+### Abschließende SI-Series-Gesamtläufe
+
+Die tatsächlichen Release-Gesamtläufe bestehen vollständig, jeweils **632/632**:
+
+- macOS/Apple Clang: `build/contact-world-language-release-mac/test-results/run-c052_5rb`.
+- Debian 12/GCC: `build/contact-world-language-release-linux/test-results/run-uj9k60h2`.
+
+Sie enthalten sämtliche bisherigen Compiler-, Runtime-, Runner-, Batch-, Format-,
+Domänen- und Projektbuildfälle sowie beide neuen SI-Series-Fälle. Der Linux-
+Receipt ist zusätzlich lokal als `build/series-si-full-linux-results.json`
+erhalten. Die 21 gezielten Fälle, 19 Sanitizerfälle und SDK-Prüfungen sind
+separate Nachweise. 77 Fensterfälle bleiben im Katalog; dieser Schritt behauptet
+keine erneut ausgeführte gesamte Grafikabnahme. Die Semantikumstellung für eigene
+Series bleibt trotz grüner Gesamtläufe ausdrücklich dokumentiert.

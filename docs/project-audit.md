@@ -97,8 +97,8 @@ Korrekturen zusätzlich in ihrer tatsächlichen Matrix bestätigen.
 
 ## Batch-Bindung und Controller
 
-Der aktuelle Abgleich enthält vierundzwanzig implementierte Blöcke, sechs konkrete
-unvollständige Blöcke und 501 weiterhin ungeprüfte Blöcke. Die acht Lernpfade
+Der aktuelle Abgleich enthält vierundzwanzig implementierte Blöcke, fünf konkrete
+unvollständige Blöcke und 502 weiterhin ungeprüfte Blöcke. Die acht Lernpfade
 bleiben erhalten; hinzu kommen LANG-005, der Batch-/Parametercontroller und die beiden Dokumentationsteile. Elektromagnetismus und Wellen/Optik besitzen zusätzliche begrenzte Domänennachweise.
 Die Originaltexte aller 531 Blöcke und 475 Aufzählungspunkte bleiben unverändert.
 Die Sprachbindung und die beiden Lernwege besitzen ausdrücklich begrenzte Implementierungs- und
@@ -201,3 +201,19 @@ Die API speichert 50 cm roh mit Skala 0,01 und addiert diese Werte zu 1 m als
 51 m. Die korrekte Summe wäre 1,5 m. Dieser Gegenbeleg wird als nächster
 Analyse-/SI-Speicherfehler bearbeitet. Er bleibt ausdrücklich offen; ein grüner
 Quantity-Teiltest macht die Series-Operation nicht korrekt.
+
+
+## Kanonische SI-Series (§7.3)
+
+Der oben belegte Series-Gegenbefund ist nun korrigiert. Eigene/ausgerichtete
+Reihen übernehmen deklarierte Eingabeeinheiten und speichern blockweise SI mit
+Skala 1. Addition und abgeleitete Analysen verwenden dieselbe Grundlage.
+C und Physim erzeugen unabhängig geprüfte CSV-Spalten und Berichte; Range-
+und Quota-Fehler erhalten Daten und Handles. [Vertrag und Umstellung](series.md)
+erklären insbesondere die geänderte Bedeutung von value()/unitScale().
+
+PP-0370 kehrt nach Schließen dieses konkreten Gegenbefunds zu `unverified`
+zurück: Alle übrigen internen Speicherschichten sind für den gesamten Planumfang
+noch nicht einzeln abgenommen. Die vollständige Einheiten-/Plattformabnahme
+bleibt offen. Aktuell 24 implementierte, fünf unvollständige und 502 ungeprüfte
+Blöcke; frühere Gegenbefunde und tatsächliche Nachweise bleiben erhalten.

@@ -61,7 +61,12 @@ ps_result ps_dataset_close(ps_analysis_context *ctx, ps_dataset dataset);
  * are SI; unit scales are 1. Duplicate/ambiguous channel names are rejected. */
 ps_result ps_dataset_series(ps_analysis_context *ctx, ps_dataset dataset, const char *name,
                             ps_series *out);
-/* Copy finite values into scratch storage. Independent roots have distinct
+/* Convert finite inputs from the declared unit to canonical SI scratch values.
+ * Described/output unit.scale is always 1 and the symbol is the SI dimension
+ * spelling. Input arrays are preserved. Unrepresentable nonzero SI conversion
+ * -> PS_NUMERIC. Empty inputs still acquire canonical metadata. Both forms
+ * preserve output handle, quota and alignment serial on every failure.
+ * Independent roots have distinct
  * alignment identities; aligned values share the anchor's dataset lifetime,
  * sample range and alignment, and must have the same count. Both forms are
  * transactional, quota-checked, and valid without an input dataset. */
@@ -109,6 +114,9 @@ ps_result ps_series_slice(ps_analysis_context *ctx, ps_series input, uint64_t fi
  * alias. Bounded block memory; selected data counts against the scratch quota. */
 ps_result ps_series_select(ps_analysis_context *ctx, const ps_series *columns, size_t count,
                            ps_series selector, double accepted, ps_series *out);
+/* Factor is dimensionless; offset is converted/combined per valid SI row using
+ * Quantity addition. Masked rows are not evaluated. Factor*value must itself be
+ * finite; this is not an arbitrary-range three-factor fused operation. */
 ps_result ps_series_affine(ps_analysis_context *ctx, ps_series input, double factor,
                            ps_quantity offset, ps_series *out);
 ps_result ps_series_combine(ps_analysis_context *ctx, ps_series_operator op, ps_series left,

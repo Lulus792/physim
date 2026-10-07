@@ -2016,7 +2016,7 @@ Analysemodul erforderlich.
 Series.alignedValues(values: [Float64], unit: Unit, name: String) -> Series
 ```
 
-Kopiert gleich viele endliche Float64-Werte in eine neue Reihe mit Alignment und Lebensdauer des Ankers.
+Konvertiert gleich viele endliche Float64-Werte aus der Eingabeeinheit nach SI; Skala 1, Alignment und Lebensdauer des Ankers. Eingabearrays bleiben erhalten.
 
 Analysemodul erforderlich.
 
@@ -2086,7 +2086,7 @@ Analysemodul erforderlich.
 Series.fromValues(values: [Float64], unit: Unit, name: String) -> Series
 ```
 
-Kopiert endliche Float64-Werte in eine eigenständige Datenreihe ohne Eingabelauf; jede Reihe hat zunächst ein eigenes Alignment.
+Konvertiert endliche Float64-Werte aus der deklarierten Einheit in eine eigenständige SI-Reihe; unitScale ist 1, value liefert SI. Jede Wurzel hat ein eigenes Alignment.
 
 Analysemodul erforderlich.
 

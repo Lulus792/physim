@@ -3,6 +3,11 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-07. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Kanonische SI-Series:** Eigene und ausgerichtete Reihen konvertieren deklarierte
+Eingabeeinheiten blockweise nach SI und speichern Skala 1. C und Physim rechnen
+1 m + 50 cm jetzt als 1,5 m; Analyse, CSV und Berichte verwenden dieselbe
+Grundlage. Die Umstellung von value()/unitScale() ist [dokumentiert](series.md).
+
 **Erweiterter Bereich von Quantity-Summen:** C und Physim kombinieren normierte,
 kompensierte Umrechnungen vor der Rückskalierung. Darstellbare Summen scheitern
 nicht mehr allein an einer separat überlaufenden Konvertierung; kleine Beiträge

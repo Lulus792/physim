@@ -446,10 +446,20 @@ static ps_result import_values(ps_analysis_context *c, const series_slot *anchor
     if (r != PS_OK)
         return r;
     draft.live = true;
-    set_unit(&draft, unit);
+    ps_unit canonical = unit;
+    canonical.scale = 1;
+    set_unit(&draft, canonical);
     snprintf(draft.info.name, sizeof draft.info.name, "%s", name);
-    if (count)
-        r = write_values(draft.file, values, count);
+    /* Normalize owned scratch data at the boundary. Input arrays stay in their
+     * declared units; conversion failure discards the unpublished draft. */
+    double block[PS_SERIES_BLOCK_SIZE];
+    for (size_t at = 0; at < count && r == PS_OK;) {
+        size_t n = count - at > PS_SERIES_BLOCK_SIZE ? PS_SERIES_BLOCK_SIZE : count - at;
+        for (size_t i = 0; i < n && r == PS_OK; i++)
+            r = ps_convert(values[at + i], unit, canonical, &block[i]);
+        if (r == PS_OK) r = write_values(draft.file, block, n);
+        at += n;
+    }
     r = finish_derived(c, &draft, slot, r, out);
     if (r == PS_OK && anchor == &root)
         c->alignment_serial++;
@@ -628,10 +638,10 @@ ps_result ps_series_affine(ps_analysis_context *c, ps_series h, double factor, p
     series_slot *s = series_get(c, h);
     if (!s || !out || !isfinite(factor))
         return PS_INVALID;
-    double shift;
-    ps_result r = ps_convert(offset.value, offset.unit, unit_of(s), &shift);
-    if (r != PS_OK)
-        return r;
+    ps_unit unit = unit_of(s);
+    if (!isfinite(offset.value) || !ps_unit_compatible(offset.unit, unit))
+        return PS_INVALID;
+    ps_result r = PS_OK;
     series_slot draft;
     int slot;
     r = begin_derived(c, s, s->info.count, false, &draft, &slot);
@@ -646,7 +656,14 @@ ps_result ps_series_affine(ps_analysis_context *c, ps_series h, double factor, p
         if (r != PS_OK)
             break;
         r=read_validity(s,at,n,valid);if(r!=PS_OK)break;
-        for(size_t i=0;i<n;i++)if(valid[i])block[i]=factor*block[i]+shift;
+        for (size_t i = 0; i < n && r == PS_OK; i++) if (valid[i]) {
+            double scaled = factor * block[i];
+            if (!isfinite(scaled)) { r = PS_NUMERIC; break; }
+            ps_quantity result;
+            r = ps_quantity_add((ps_quantity){scaled, unit}, offset, &result);
+            if (r == PS_OK) block[i] = result.value;
+        }
+        if (r != PS_OK) break;
         r = write_values(draft.file, block, n);
         if (r != PS_OK)
             break;

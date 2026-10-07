@@ -160,6 +160,20 @@ def main():
             checked([sys.executable, repo / "tests/test_rng_reference.py",
                      "--c", rng_probe, "--language", rng_language])
         print("Installed/rebuilt SDK RNG: independent integer/normal references and C/Physim value snapshots passed", flush=True)
+        shutil.copy2(repo / "tests/test_series_si.c", consumer / "series-si-check.c")
+        shutil.copy2(repo / "tests/test_series_si_report.c", consumer / "series-si-report.c")
+        checked([sdk / "bin" / ("physimc" + suffix), "--emit-analysis",
+                 repo / "tests/fixtures/language/analysis_series_si.phys"],
+                output=consumer / "series-si-language.c")
+        for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
+            si_check = builder.executable("series-si-check-" + kind, ["series-si-check.c"], [archive])
+            si_report = builder.executable("series-si-report-" + kind, ["series-si-report.c"], [archive])
+            si_language = builder.executable("series-si-language-" + kind, ["series-si-language.c"], [archive], module=True, language=True)
+            checked([sys.executable, repo / "tests/test_series_si_workflow.py",
+                     "--c-check", si_check, "--language", si_language,
+                     "--analysis-runner", sdk / "bin" / ("physim-analysis-runner" + suffix),
+                     "--report-probe", si_report, "--work", root / ("Series SI " + kind)])
+        print("Installed/rebuilt SDK Series SI: cm/ms imports, multiblock algebra/calculus/resampling, canonical CSV/report and atomic conversion/quota failures passed", flush=True)
         shutil.copy2(repo / "tests/test_quantity_sum.c", consumer / "quantity-sum-check.c")
         shutil.copy2(repo / "tests/quantity_sum_probe.c", consumer / "quantity-sum-probe.c")
         checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
@@ -731,6 +745,7 @@ def main():
         "Electromagnetism through installed/rebuilt Core, Coulomb/gradient/Lorentz tests, seven RC Decimal oracles and mixed reports passed.\n" +
         "Waves/optics through installed/rebuilt Core, Snell/TIR/lens invariants, owned 4096-node grids, allocation failures and mixed string reports passed.\n" +
         "Fluid through installed/rebuilt Core, anchored max networks, conservative 4096-cell transport, allocation failures and mixed tutorial reports passed.\n" +
+        "Series SI imports through installed/rebuilt Core, multiblock algebra/calculus/resampling, independent C/Physim report/CSV checks and transactional errors passed.\n" +
         "Quantity sums through installed/rebuilt Core, exact Fraction oracles, overflowing conversion and subnormal ties passed.\n" +
         "Canonical SI channel declarations through installed/rebuilt Core, bounded UTF-8, atomic errors and actual C/Physim run/CSV parity passed.\n" +
         "Material properties and real gas through installed/rebuilt Core, stored SI metadata, independent Decimal references and mixed analyses passed.\n" +

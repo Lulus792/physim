@@ -170,7 +170,7 @@ ps_result ps_dataset_series(
 
 ## ps_series_from_values
 
-Kopiert endliche Werte in eine eigenständige Datenreihe ohne Eingabedatensatz; Einheit und Name werden geprüft.
+Konvertiert endliche Eingaben blockweise aus ihrer deklarierten Einheit in eine eigenständige SI-Reihe mit Skala 1; Eingaben und Fehlerausgaben bleiben erhalten.
 
 ```c
 ps_result ps_series_from_values(
@@ -182,11 +182,11 @@ ps_result ps_series_from_values(
     ps_series *out);
 ```
 
-Copy finite values into scratch storage. Independent roots have distinct alignment identities; aligned values share the anchor's dataset lifetime, sample range and alignment, and must have the same count. Both forms are transactional, quota-checked, and valid without an input dataset.
+Convert finite inputs from the declared unit to canonical SI scratch values. Described/output unit.scale is always 1 and the symbol is the SI dimension spelling. Input arrays are preserved. Unrepresentable nonzero SI conversion -> PS_NUMERIC. Empty inputs still acquire canonical metadata. Both forms preserve output handle, quota and alignment serial on every failure. Independent roots have distinct alignment identities; aligned values share the anchor's dataset lifetime, sample range and alignment, and must have the same count. Both forms are transactional, quota-checked, and valid without an input dataset.
 
 ## ps_series_aligned_values
 
-Kopiert endliche Werte in eine neue Reihe mit der Samplezuordnung einer vorhandenen Ankerreihe.
+Konvertiert endliche Eingaben in eine SI-Reihe mit Skala 1 und der Samplezuordnung/Lebensdauer des Ankers; Quota und Ausgabe bleiben bei Fehlern erhalten.
 
 ```c
 ps_result ps_series_aligned_values(
@@ -335,6 +335,8 @@ ps_result ps_series_affine(
     ps_quantity offset,
     ps_series *out);
 ```
+
+Factor is dimensionless; offset is converted/combined per valid SI row using Quantity addition. Masked rows are not evaluated. Factor*value must itself be finite; this is not an arbitrary-range three-factor fused operation.
 
 ## ps_series_combine
 

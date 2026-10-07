@@ -1,0 +1,60 @@
+func analyze():
+    report("Series SI")
+    let metre = Unit(1,0,0,0,0,0,0,1,"m")
+    let centimetre = Unit(1,0,0,0,0,0,0,0.01,"cm")
+    let millisecond = Unit(0,0,1,0,0,0,0,0.001,"ms")
+    let centimetreSecond = Unit(1,0,1,0,0,0,0,0.01,"cm s")
+    let percent = Unit(0,0,0,0,0,0,0,0.01,"%")
+    var times: [Float64] = []
+    var lengths: [Float64] = []
+    var halves: [Float64] = []
+    var flags: [Float64] = []
+    for i in 0..<513:
+        times.append(Float64(i)*250)
+        lengths.append(100+Float64(i)*12.5)
+        halves.append(50)
+        flags.append(i == 256 ? 0 : 100)
+    let x = Series.fromValues(times,millisecond,"time")
+    let y = x.alignedValues(lengths,centimetre,"length")
+    let half = x.alignedValues(halves,centimetre,"half")
+    let sum = y.adding(half)
+    let difference = y.subtracting(half)
+    let product = y.multiplied(half)
+    let quotient = y.divided(half)
+    let affine = y.affine(2,25,centimetre)
+    let rate = y.derivative(x)
+    let integral = y.integral(x,10,centimetreSecond)
+    let selector = x.alignedValues(flags,percent,"selector")
+    let masked = y.masked(selector,1)
+    assert(x.unitScale() == 1 && y.unitScale() == 1 && sum.unitScale() == 1)
+    assert(x.unitSymbol() == "s" && y.unitSymbol() == "m")
+    assert(rate.exponent(0) == 1 && rate.exponent(2) == -1)
+    assert(integral.exponent(0) == 1 && integral.exponent(2) == 1)
+    assert(!masked.isValid(256) && masked.isValid(257))
+    for i in 0..<513:
+        let t = Float64(i)*0.25
+        assert(abs(x.value(i)-t) < 1e-12)
+        assert(abs(y.value(i)-(1+0.5*t)) < 1e-12)
+        assert(abs(sum.value(i)-(1.5+0.5*t)) < 1e-12)
+        assert(abs(difference.value(i)-(0.5+0.5*t)) < 1e-12)
+        assert(abs(product.value(i)-(0.5+0.25*t)) < 1e-12)
+        assert(abs(quotient.value(i)-(2+t)) < 1e-12)
+        assert(abs(affine.value(i)-(2.25+t)) < 1e-12)
+        assert(abs(rate.value(i)-0.5) < 1e-12)
+        assert(abs(integral.value(i)-(0.1+t+0.25*t*t)) < 1e-10)
+        assert(times[i] == Float64(i)*250 && lengths[i] == 100+Float64(i)*12.5)
+    assert(attempt(Series.fromValues([1e308],Unit(1,0,0,0,0,0,0,2,"2m"),"overflow")) == nil)
+    let extreme = Series.fromValues([-pow(2,1023)],metre,"extreme")
+    let cancelled = extreme.affine(1,pow(2,1023),Unit(1,0,0,0,0,0,0,2,"2m"))
+    assert(cancelled.value(0) == pow(2,1023))
+    var queries: [Float64] = []
+    for i in 0..<1025:
+        queries.append(Float64(i)*125)
+    let target = Series.fromValues(queries,millisecond,"target")
+    let linear = y.resampledLinear(x,target)
+    let pchip = y.resampledPchip(x,target)
+    for i in 0..<1025:
+        assert(abs(linear.value(i)-(1+Float64(i)*0.0625)) < 1e-12)
+        assert(abs(pchip.value(i)-(1+Float64(i)*0.0625)) < 1e-12)
+    sum.plot(x,"SI length","sum")
+    Series.exportColumns([x,y,sum,rate,integral],"series-si")

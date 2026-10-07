@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-07",
-  "inspected_revision": "934d5fc415adbf99daf5427226e11be1df6983bc",
+  "inspected_revision": "00fec466ac39100929dbb5dd9539678a505141a1",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2430,13 +2430,18 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Werte werden intern einheitlich in SI gespeichert.\n",
-      "status": "incomplete",
+      "status": "unverified",
       "evidence": [
         "src/series.c",
         "include/physim/series.h",
-        "docs/platform-validation.md"
+        "docs/platform-validation.md",
+        "tests/test_series_si.c",
+        "tests/fixtures/language/analysis_series_si.phys",
+        "tests/test_series_si_workflow.py",
+        "tests/test_series_si_report.c",
+        "docs/series.md"
       ],
-      "note": "Konkreter Gegenbeleg auf macOS: ps_series_from_values/aligned_values speichern rohe Werte mit nichtkanonischer Skala. ps_series_combine addiert 1 m und 50 cm als 51 statt 1.5 m, ohne die rechte Skala zu berücksichtigen. Einheitlicher interner SI-Speicher und skalenrichtige Analyse sind daher noch nicht erreicht; unabhängiger reproduzierbarer C-Probe gegen das frisch installierte SDK. Die Quantity-Summenkorrektur allein schließt diese Series-Lücke nicht."
+      "note": "Der konkrete Series-Gegenbefund wird durch kanonischen SI-Import korrigiert: 50 cm werden als 0.5 m gespeichert und zu 1 m als 1.5 m addiert. C-/Physim-Analysen prüfen blockweise Algebra, Kalkül, Masken, Resampling und Report/CSV mit Skala 1 sowie Quota-/Konvertierungsrollback. Die Gesamtforderung an alle internen Speicherschichten bleibt ungeprüft; dieser begrenzte Nachweis ist keine globale Einheitenabnahme."
     },
     {
       "id": "PP-0371",

@@ -154,8 +154,8 @@ add('ps_dataset_', {
     'series': 'Holt die Reihe eines benannten Kanals oder die Zeitachse time.',
 })
 add('ps_series_', {
-    'from_values': 'Kopiert endliche Werte in eine eigenständige Datenreihe ohne Eingabedatensatz; Einheit und Name werden geprüft.',
-    'aligned_values': 'Kopiert endliche Werte in eine neue Reihe mit der Samplezuordnung einer vorhandenen Ankerreihe.',
+    'from_values': 'Konvertiert endliche Eingaben blockweise aus ihrer deklarierten Einheit in eine eigenständige SI-Reihe mit Skala 1; Eingaben und Fehlerausgaben bleiben erhalten.',
+    'aligned_values': 'Konvertiert endliche Eingaben in eine SI-Reihe mit Skala 1 und der Samplezuordnung/Lebensdauer des Ankers; Quota und Ausgabe bleiben bei Fehlern erhalten.',
     'describe': 'Kopiert Reihenname, Anzahl und Einheit in den Ausgabedeskriptor.',
     'release': 'Gibt dieses Reihenhandle frei; bereits abgeleitete Reihen bleiben erhalten.',
     'aligned': 'Prüft, ob zwei Reihen dieselbe Samplezuordnung besitzen.',

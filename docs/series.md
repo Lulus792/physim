@@ -56,12 +56,47 @@ doppeldeutiger Kanalname ist ein Fehler. `time` ist für die Zeitachse reservier
 Puffer des Aufrufers. Eine Anfrage am Ende liefert erfolgreich null Werte; hinter
 dem Ende ist der Index ungültig. `ps_series_describe` liefert Name, Anzahl,
 SI-Exponenten, Skalierung und Anzeigesymbol als Kopien.
+Eigene und ausgerichtete Series speichern Zahlenwerte einheitlich in SI: Skala 1.
 
 Handles gehören zu genau einem lebenden Context. `ps_series_release` gibt eine
 Reihe frei; daraus bereits erzeugte Reihen bleiben erhalten. `ps_dataset_close`
 invalidiert dagegen alle Quell- und Ergebnisreihen dieses Datensatzes.
 Wiederverwendete Slots akzeptieren keine alten Handles. Nach Zerstörung eines
 Contexts dürfen dessen Handles nicht mehr benutzt werden.
+
+## Eigene Werte nach SI übernehmen
+
+`ps_series_from_values` und `ps_series_aligned_values` nehmen endliche Werte
+in der angegebenen Einheit entgegen und konvertieren sie blockweise in SI.
+Physim `Series.fromValues` und `anchor.alignedValues` verwenden dieselbe Grenze.
+Beispiel: 50 mit Zentimeter-Skala 0,01 wird als 0,5 gespeichert, 250 ms als
+0,25 s. `read/value/values` liefern bereits diese SI-Werte; `describe/unitScale`
+liefert Skala 1 und das kanonische SI-Dimensionssymbol. Für die Eingabe ist
+keine zusätzliche manuelle SI-Umrechnung nötig. Bereits manuell umgerechnete
+Werte müssen mit ihrer SI-Einheit übergeben werden.
+
+Diese Korrektur ändert den früheren Vertrag, der Rohwerte und Eingabeskala
+speicherte. Bestehende Analysen, die `Series.value()` erneut mit der Eingabeskala
+multiplizierten oder `unitScale()==0.01` erwarteten, müssen die doppelte Umrechnung
+entfernen. Eine Reihe mit 1 m und eine mit 50 cm ergibt nun 1,5 m, statt rohe
+Zahlen als 51 m zu addieren. Eingabearrays bleiben erhalten; leere Reihen erhalten
+ebenfalls kanonische Metadaten. Nichtendliche Eingaben oder eine nichtdarstellbare
+nichtnullige SI-Konvertierung ergeben `PS_NUMERIC`. Handles, Scratch-Quota und
+Alignment-Identität bleiben bei fehlgeschlagenem Import unverändert.
+
+Alle davon abgeleiteten Reihen verwenden dieselbe SI-Grundlage. Auch ein
+nichtkanonischer dimensionsloser Selektor, etwa Prozent, wird normalisiert:
+100 % wird als 1 gespeichert, `masked/selected(...,1)` akzeptiert diesen Wert.
+Anzeigeeinheiten werden ausdrücklich beim Erstellen eines Plots/Reports gewählt;
+sie ändern die zugrunde liegende Series nicht. Bestehende Laufdateien werden
+nicht umgeschrieben. Ihre Kanäle waren bereits als SI-Werte definiert.
+
+Die affine Operation verbindet den dimensionslosen Faktor mit einem Offset als
+Quantity pro gültiger Zeile. Ein allein nichtdarstellbarer Offset kann dank der
+kompensierten Quantity-Addition trotzdem eine endliche Summe ergeben. Maskierte
+Zeilen werden nicht ausgewertet. Das Produkt `factor*value` muss selbst endlich
+sein; diese Funktion ist keine beliebig große Fusionsrechnung für drei Faktoren.
+Ungültige Offsetdimensionen sind auch bei fehlenden Werten Fehler.
 
 ## Operationen und Einheiten
 

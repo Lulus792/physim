@@ -1890,6 +1890,26 @@
     "quantity-sum-language": {
       "source": "tests/fixtures/language/quantity_sum_values.phys",
       "mode": "--emit-c"
+    },
+    "series-si-check": {
+      "sources": [
+        "tests/test_series_si.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "series-si-language": {
+      "source": "tests/fixtures/language/analysis_series_si.phys",
+      "mode": "--emit-analysis"
+    },
+    "series-si-report": {
+      "sources": [
+        "tests/test_series_si_report.c"
+      ],
+      "libraries": [
+        "core"
+      ]
     }
   },
   "tests": [
@@ -7603,6 +7623,35 @@
             "{root}/tests/fixtures/language/quantity_sum_values.phys"
           ],
           "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "series_si_workflow",
+      "targets": [
+        "python",
+        "physim-analysis-runner",
+        "series-si-check",
+        "series-si-language",
+        "series-si-report"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_series_si_workflow.py",
+            "--c-check",
+            "{series-si-check}",
+            "--language",
+            "{series-si-language}",
+            "--analysis-runner",
+            "{physim-analysis-runner}",
+            "--report-probe",
+            "{series-si-report}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 150
         }
       ]
     }
