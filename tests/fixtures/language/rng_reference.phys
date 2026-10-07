@@ -1,0 +1,24 @@
+for seed in [0,42,-9223372036854775808,-1]:
+    var rng = Rng(seed)
+    for i in 0..<32:
+        var distribution = Distribution.normal(2,0)
+        if i % 5 == 0:
+            distribution = Distribution.uniform(0,1)
+        else if i % 5 == 1:
+            distribution = Distribution.normal(2,3)
+        else if i % 5 == 2:
+            distribution = Distribution.constant(7)
+        else if i % 5 == 3:
+            distribution = Distribution.uniform(5,5)
+        print(rng.sample(distribution))
+    var snapshot = rng
+    var copy = rng
+    var unrelated = Rng(123)
+    for i in 0..<100:
+        let value = rng.sample(Distribution.uniform(0,1))
+        let ignored = unrelated.sample(Distribution.normal(0,1))
+        assert(copy.sample(Distribution.uniform(0,1)) == value)
+    rng = snapshot
+    copy = snapshot
+    for i in 0..<100:
+        assert(rng.sample(Distribution.normal(2,3)) == copy.sample(Distribution.normal(2,3)))

@@ -71,7 +71,7 @@ Das ist ein Nachweis für diesen Stand und diese Umgebungen. Die anschließenden
 Änderungen an Laufzeitsupport und Prüfern benötigen eigene Nachweise; eine
 nachträgliche Änderung der Zahl macht den alten Lauf nicht zu einem aktuellen
 Gesamtlauf. Der aktuelle Katalog enthält mit den zusätzlichen Lernwegprüfungen
-611 Fälle ohne Fenster, 592 ohne SDL und 77 Fensterfälle.
+612 Fälle ohne Fenster, 593 ohne SDL und 77 Fensterfälle.
 
 Die Abnahme bleibt offen, bis sämtliche konkreten Anforderungen passende
 aktuelle Implementierungs-, Laufzeit- und Plattformnachweise besitzen.
@@ -97,8 +97,8 @@ Korrekturen zusätzlich in ihrer tatsächlichen Matrix bestätigen.
 
 ## Batch-Bindung und Controller
 
-Der aktuelle Abgleich enthält fünfzehn implementierte Blöcke, fünf konkrete
-unvollständige Blöcke und 511 weiterhin ungeprüfte Blöcke. Die acht Lernpfade
+Der aktuelle Abgleich enthält zwanzig implementierte Blöcke, fünf konkrete
+unvollständige Blöcke und 506 weiterhin ungeprüfte Blöcke. Die acht Lernpfade
 bleiben erhalten; hinzu kommen LANG-005, der Batch-/Parametercontroller und die beiden Dokumentationsteile. Elektromagnetismus und Wellen/Optik besitzen zusätzliche begrenzte Domänennachweise.
 Die Originaltexte aller 531 Blöcke und 475 Aufzählungspunkte bleiben unverändert.
 Die Sprachbindung und die beiden Lernwege besitzen ausdrücklich begrenzte Implementierungs- und
@@ -115,3 +115,22 @@ schließt eine Restlücke zu CR-007 auch in den C-/Physim-Series-Operationen.
 [Methoden und Grenzen](numerics.md) dokumentieren insbesondere ungleiche
 Messabstände und Rauschverstärkung. Dieser Implementierungsnachweis ersetzt
 keine aktuelle Gesamtplattformabnahme oder eine allgemeine Fehlerschranke.
+
+
+## Einzelabgleich der Basis (§7.1)
+
+PP-0348/0349/0350/0351/0353 sind jetzt konkreten APIs, Quellen, Fehlerverträgen und
+Referenzprüfungen zugeordnet: feste Integer-/Ergebniswerte, explizite Allocatoren,
+alle vier Container, explizite Logger und RNG-Zustände. Die unabhängigen RNG-Probes
+prüfen vier vollständige 64-Bit-Seeds in C und Physim, geordnete Normalziehungen,
+verbrauchsfreie degenerierte Verteilungen, Snapshots und unabhängige Wertkopien.
+[Mess- und RNG-Vertrag](measurement.md) unterscheidet exakt prüfbare Integerzustände
+von plattformabhängiger libm-Rundung.
+
+PP-0352 bleibt ungeprüft für seinen gesamten Umfang. Series/Dataset und
+Reportelemente besitzen geprüfte generationale Handles; Reader/Writer und weitere
+Deskriptoren enthalten weiterhin öffentliche Zustandsfelder. Einzelne sichere
+Handle-APIs beweisen nicht automatisch die allgemeine Anforderung. Auch die
+vollständige Allocator-Anbindung sämtlicher Subsysteme und die aktuelle gesamte
+Plattform-/Produktabnahme bleiben offen. Die Plantexte aller 531 Blöcke bleiben
+erhalten.

@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-07",
-  "inspected_revision": "37a55bdd45480bf4f73142ce34c9723d9c49e7ec",
+  "inspected_revision": "2564e382ed130d39994300a4833d37692c371d25",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2152,9 +2152,15 @@
       "kind": "list",
       "scope": "planned",
       "text": "- feste Integer-Typen, Fehlercodes und Ergebniswerte.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/core.h",
+        "src/core.c",
+        "include/physim/diagnostic.h",
+        "tests/test_core.c",
+        "tests/test_diagnostic.c"
+      ],
+      "note": "Feste stdint-Typen, Ergebnis-Enum, statische Fehlertexte und explizite Diagnosen sind implementiert; konkrete API-Verträge behalten ihre eigenen Fehlerregeln. Kein globaler Abnahmestatus."
     },
     {
       "id": "PP-0349",
@@ -2167,9 +2173,15 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Allocator-Schnittstelle.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/memory.h",
+        "src/memory.c",
+        "tests/test_memory.c",
+        "tests/test_memory_owners.c",
+        "docs/memory.md"
+      ],
+      "note": "Explizite Allocator-Deskriptoren, genaue Größen/Frees, Fehler-Rücknahme und feste Arenen sind implementiert. Nicht alle Subsysteme sind an eigene Allokationsdomänen angebunden; dies bleibt gesondert offen."
     },
     {
       "id": "PP-0350",
@@ -2182,9 +2194,20 @@
       "kind": "list",
       "scope": "planned",
       "text": "- dynamische Arrays, Arenen, Hash-Map und String-View.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/array.h",
+        "src/array.c",
+        "include/physim/hashmap.h",
+        "src/hashmap.c",
+        "include/physim/string_view.h",
+        "src/string_view.c",
+        "tests/test_array.c",
+        "tests/test_hashmap.c",
+        "tests/test_string_view.c",
+        "tests/test_memory.c"
+      ],
+      "note": "Alle vier genannten Container sind vorhanden. Referenzoperationen, begrenzte Ressourcen, Selbstkopien, Schlüsselbesitz, Kollisionen, Byte-/UTF-8-Bereiche und Fehler-Rücknahme sind konkret geprüft. Keine globale Plattformabnahme."
     },
     {
       "id": "PP-0351",
@@ -2197,9 +2220,14 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Logging ohne globale versteckte Zustände.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/log.h",
+        "src/core.c",
+        "tests/test_logging.c",
+        "docs/logging.md"
+      ],
+      "note": "Caller-eigener Logger und synchroner Sink ohne global umschaltbare Ausgabe; unabhängige Senken, UTF-8-Grenzen, Callbackfehler und ABI-Tails sind geprüft. Die Logger-/User-Lebensdauer und Synchronisierung bleiben explizit beim Aufrufer."
     },
     {
       "id": "PP-0352",
@@ -2213,8 +2241,14 @@
       "scope": "planned",
       "text": "- versionierte Handles statt frei erreichbarer interner Strukturen.\n",
       "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "evidence": [
+        "include/physim/series.h",
+        "src/series.c",
+        "include/physim/report.h",
+        "include/physim/data.h",
+        "tests/test_series.c"
+      ],
+      "note": "Series/Dataset und Reportelemente besitzen owner/slot/generation mit Prüfungen auf alte Slots. Reader/Writer und andere Deskriptoren besitzen weiterhin öffentliche Zustandsfelder. Die vollständige Reichweite der allgemeinen Handle-Anforderung ist noch nicht einzeln abgenommen; keine Ableitung aus einzelnen generationalen APIs."
     },
     {
       "id": "PP-0353",
@@ -2227,9 +2261,18 @@
       "kind": "list",
       "scope": "planned",
       "text": "- deterministischer, explizit gespeicherter Zufallszahlengenerator.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/core.h",
+        "src/core.c",
+        "src/measurement.c",
+        "tests/rng_reference_probe.c",
+        "tests/fixtures/language/rng_reference.phys",
+        "tests/test_rng_reference.py",
+        "tests/test_monte_carlo_tutorial.py",
+        "docs/measurement.md"
+      ],
+      "note": "PCG32 mit explizitem 128-Bit-Zustand, geordneten Box-Muller-Ziehungen, Wertkopien und unabhängigen C-/Physim-Referenzen. Integerübergänge werden exakt, Normalwerte mit dokumentierter Toleranz verglichen. Keine Garantie bitgleicher libm-Ergebnisse oder eines allgemeinen RNG-Dateiformats."
     },
     {
       "id": "PP-0357",

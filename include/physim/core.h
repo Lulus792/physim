@@ -53,12 +53,21 @@ typedef struct {
 } ps_unit;
 extern const ps_unit PS_METRE, PS_SECOND, PS_KILOGRAM, PS_RADIAN, PS_JOULE, PS_VELOCITY;
 ps_result ps_convert(double value, ps_unit from, ps_unit to, double *output);
+/* Explicit PCG32 state, copied by value; no hidden cache/global random state.
+ * Initialize with ps_rng_seed before drawing. Seed fixes the odd increment;
+ * saving/restoring both fields preserves the stream. External synchronization
+ * is required when sharing one instance. Unchecked helpers require non-NULL
+ * initialized state and valid finite distribution parameters. */
 typedef struct {
     uint64_t state, increment;
 } ps_rng;
 void ps_rng_seed(ps_rng *rng, uint64_t seed);
 uint32_t ps_rng_u32(ps_rng *rng);
+/* Exactly one uint32 draw, mapped to the open interval (0,1). */
 double ps_rng_uniform(ps_rng *rng);
+/* Box-Muller: radius uniform first, angle uniform second, always two draws
+ * (including sd=0). No spare-value cache. Transcendental rounding can differ
+ * between libm implementations; checked/degenerate draws use measurement.h. */
 double ps_rng_normal(ps_rng *rng, double mean, double standard_deviation);
 typedef void (*ps_ode_fn)(double time, const double *state, double *derivative, void *user);
 typedef enum { PS_EULER, PS_SYMPLECTIC, PS_RK4, PS_VERLET, PS_RK45 } ps_integrator;

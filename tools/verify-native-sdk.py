@@ -148,6 +148,18 @@ def main():
             checked([sdk / "bin" / ("physim-analysis-runner" + suffix), numeric_analysis,
                      "--runs", root / ("Language numeric " + kind)])
         print("Installed/rebuilt SDK calculus: C and Physim extreme-value checks passed", flush=True)
+        shutil.copy2(repo / "tests/rng_reference_probe.c", consumer / "rng-reference-probe.c")
+        checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
+                 repo / "tests/fixtures/language/rng_reference.phys"],
+                output=consumer / "rng-reference-language.c")
+        for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
+            rng_probe = builder.executable("rng-reference-" + kind,
+                                           ["rng-reference-probe.c"], [archive])
+            rng_language = builder.executable("rng-language-" + kind,
+                ["rng-reference-language.c"], [archive], language=True)
+            checked([sys.executable, repo / "tests/test_rng_reference.py",
+                     "--c", rng_probe, "--language", rng_language])
+        print("Installed/rebuilt SDK RNG: independent integer/normal references and C/Physim value snapshots passed", flush=True)
         shutil.copy2(sdk / "examples/pendulum/analysis.c", consumer / "c-analysis.c")
         c_analysis = builder.executable("sdk-c-analysis", ["c-analysis.c"], [rebuilt_core], module=True)
         c_modules = {}

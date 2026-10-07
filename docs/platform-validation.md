@@ -2233,3 +2233,92 @@ erfolgreich; die beiden installierten Systemprüfungen und der Großteil der
 [C17-Matrix](https://github.com/PhysicSimulator/physim/actions/runs/37619178905)
 laufen noch. Das bestätigt weder diese neue Korrektur noch die vollständige
 Plattformabnahme; die nächste Remote-Matrix bleibt erforderlich.
+
+
+## Einzelabgleich der Basis und RNG-Vertrag am 7. Oktober 2026
+
+PP-0348/0349/0350/0351/0353 sind jetzt einzeln vorhandenen APIs, Quellen und
+Referenztests zugeordnet. Feste Integer-/Ergebniswerte, Allocatoren, alle vier
+Container, explizite Logger und RNG-Zustände besitzen konkrete Implementierungen.
+Die allgemeine Handle-Anforderung PP-0352 bleibt ungeprüft: sichere generationale
+Series-/Dataset-/Report-APIs ersetzen keine Einzelabnahme sämtlicher öffentlicher
+Zustandsdeskriptoren. Der Abgleich bewahrt alle 531 Originalblöcke und enthält
+jetzt 20 implementierte, fünf unvollständige und 506 ungeprüfte Blöcke.
+
+Der Normalgenerator zieht den Radius und anschließend den Winkel jetzt in
+getrennten C-Anweisungen. Die Probe des vorherigen Ausdrucks auf Debian/GCC und
+Clang liefert dieselben sechs Werte; ein tatsächlicher Unterschied dieser Builds
+wird **nicht** behauptet. Die Änderung macht die Reihenfolge ausdrücklich zum
+Vertrag, statt sie der Operandenauswertung zu überlassen. [RNG-Vertrag](measurement.md)
+unterscheidet exakt prüfbare Integerzustände von libm-Rundung und dem ungeprüften
+C-Helfer von geprüften, verbrauchsfreien degenerierten Verteilungen. API/ABI 3,
+Sprachversion und Dateiformate bleiben erhalten.
+
+### Lokale Referenzen und Sanitizer
+
+Die neuen unabhängigen Probes prüfen vier vollständige 64-Bit-Seeds, 384 C-Referenzwerte
+mit ihren jeweiligen Integerzuständen und 128 Physim-Referenzwerte. Dazu kommen
+Snapshots, abwechselnd genutzte unabhängige Ströme, degenerierte Verteilungen und die
+transaktionale Ablehnung ungültiger Parameter. Integerwerte und Zustände werden
+exakt, Normalwerte mit absoluter/relativer Toleranz `2e-14` geprüft.
+Die erste Sprachfixture enthielt eine nicht unterstützte if-Ausdruckssyntax und
+scheiterte unter `run-fpl88l8n`; sie wurde auf reguläre if-Anweisungen korrigiert.
+Dieser ursprüngliche Lauf bleibt fehlgeschlagen.
+
+Die 24 gezielten Basis-/RNG-/Sensor-/Monte-Carlo-/Sprachfälle bestehen auf Intel
+macOS unter `build/contact-world-language-release-mac/test-results/run-2_wbxiq7`
+und Debian/GCC unter `build/contact-world-language-release-linux/test-results/run-t24apbz3`.
+Der frische Linux/Clang-Debuglauf mit ASan/UBSan besteht mit 9/9 unter
+`build/base-contract-asan-linux/test-results/run-58n1v87k`. Dies umfasst Core,
+Memory, Memory-Owners, Array, Hashmap, String-View, Logging, Measurement und die
+C-/Physim-RNG-Referenz. Die separate direkte C-Probe bestätigt bei sd=0 genau
+zwei Ziehungen auf beiden Systemen (`build/rng-zero-probe-*.log`).
+Ein neuer vollständiger Gesamtlauf sämtlicher Fälle wird damit nicht behauptet.
+
+Die erweiterten Handbuchseiten und Tastaturnavigation bei 16/22 px bestehen
+jeweils mit 3/3 auf macOS unter `run-znrkp4yn` und Linux unter `run-3ea1l5qg`.
+Alle 29 Referenzseiten sind aktuell. Der Katalog besitzt jetzt 612 Fälle ohne
+Fenster, 593 ohne SDL und 77 Fensterfälle.
+
+### Frische verschobene SDKs
+
+Das vollständige isolierte SDK-Prüfverfahren ohne Fensterprüfungen besteht
+auf beiden Systemen mit jeweils 360 erfolgreich ausgeführten Prüfbefehlen:
+
+- macOS: `build/Base RNG SDK ä mac 6er9kgzl`, verschobenes SDK unter
+  `proof/Native SDK ä 0qtgust5/Relocated SDK ä`.
+- Linux: `build/Base RNG SDK ä linux qfr5yce6`, verschobenes SDK unter
+  `proof/Native SDK ä 08t06e77/Relocated SDK ä`.
+
+Das frische SDK besitzt 430 manifestierte Dateien, das unabhängige Kit 63
+Eingaben. Die RNG-Referenzen laufen gegen das installierte **und** aus den 26
+mitgelieferten Core-Modulen neu gebaute Archiv, jeweils in C und Physim.
+Die bisherigen Domänen-, Lernweg-, Analyse- und nativen Projektbuild-Gates
+bleiben aktiv. Receipts und Quellhashes stehen in
+`build/base-contract-sdk-mac-PASSED.json`,
+`build/base-contract-sdk-linux-PASSED.json` und
+`build/base-contract-source-freeze.json`. Neue Windows-/Apple-Silicon- oder
+SDK-Fensterprüfungen werden damit nicht behauptet.
+
+### Weiterer CI-Abbruch nach der nativen Suite
+
+Die [CI für `2564e38`](https://github.com/PhysicSimulator/physim/actions/runs/37621422129)
+meldet Fehler im zusammengesetzten Schritt „Direct compiler build“. Die
+geprüften Linux/GCC- und Apple-Silicon-Artefakte enthalten jeweils **611/611**
+bestandene native Fälle; deren SHA-256 stimmt mit den veröffentlichten Digests
+überein: `f91ca69bf965c1b6fac4a8e507ef8bfd73cf474df56bab723542800d3b04891a`
+und `6e464e3601665ff577806574eab4458009da6555916a0a784e01a09c2eb8e7c4`.
+Die absichtlich ausgelösten Sanitizerfehler der dortigen Probe sind Testdaten;
+auch die Fuzzerkampagne ist erfolgreich.
+
+Ein deterministischer nachfolgender Abbruch ist lokal belegt:
+`test_native_test_runner.py` vergleicht den vollständigen Fensterkatalog mit
+Python-Workflows und kennt die neue direkt gestartete negative Handbuchprüfung
+nicht. Der unveränderte Prüfer scheitert an diesem Mengenvergleich unter
+`build/base-contract-test-runner-audit.log`. Die erwartete Liste erfasst nun die
+negative direkte Prüfung ausdrücklich und kontrolliert deren Exitcode und
+Diagnose. Fehlende/zusätzliche künftige Fälle bleiben Fehler, mit konkreter Liste.
+Die vollständige Selbstprüfung besteht auf macOS und Linux unter
+`base-contract-test-runner-final-*.log`; ihre absichtlich fehlschlagende
+Drei-Fälle-Suite ist kein Produktfehler. Weitere mögliche Fehler des
+zusammengesetzten Remote-Schritts und die neue Gesamtmatrix bleiben zu bestätigen.

@@ -1777,6 +1777,18 @@
     "physim-language-analysis-numeric-extremes": {
       "source": "tests/fixtures/language/analysis_numeric_extremes.phys",
       "mode": "--emit-analysis"
+    },
+    "rng-reference-probe": {
+      "sources": [
+        "tests/rng_reference_probe.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "rng-reference-language": {
+      "source": "tests/fixtures/language/rng_reference.phys",
+      "mode": "--emit-c"
     }
   },
   "tests": [
@@ -7221,6 +7233,27 @@
           "exit_code": 1,
           "stderr_pattern": "Documentation focus cannot be reached: stage=5 target=99999",
           "timeout": 20
+        }
+      ]
+    },
+    {
+      "name": "rng_reference",
+      "targets": [
+        "python",
+        "rng-reference-probe",
+        "rng-reference-language"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_rng_reference.py",
+            "--c",
+            "{rng-reference-probe}",
+            "--language",
+            "{rng-reference-language}"
+          ],
+          "timeout": 60
         }
       ]
     }

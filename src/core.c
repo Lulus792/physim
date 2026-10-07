@@ -103,7 +103,10 @@ void ps_rng_seed(ps_rng *r, uint64_t seed) {
 }
 double ps_rng_uniform(ps_rng *r) { return (ps_rng_u32(r) + 0.5) / 4294967296.0; }
 double ps_rng_normal(ps_rng *r, double mean, double sd) {
-    return mean + sd * sqrt(-2 * log(ps_rng_uniform(r))) * cos(2 * PS_PI * ps_rng_uniform(r));
+    /* Fix draw order independently of operand evaluation order. No cached draw. */
+    double radius = ps_rng_uniform(r);
+    double angle = ps_rng_uniform(r);
+    return mean + sd * sqrt(-2 * log(radius)) * cos(2 * PS_PI * angle);
 }
 ps_result ps_ode_step(ps_integrator method, ps_ode_fn f, void *u, double t, double dt, double *y,
                       size_t n) {

@@ -3,6 +3,13 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-07. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Basis und explizite RNG-Zustände:** Fünf Basisanforderungen sind konkreten
+Implementierungen und Referenztests zugeordnet. Der Normalgenerator legt die
+Reihenfolge seiner zwei Ziehungen ausdrücklich fest; unabhängige C-/Physim-Probes
+prüfen Zustände, vollständige Seeds und Wertkopien. Die allgemeine Handle-Anforderung
+bleibt gesondert ungeprüft. Lokale Referenzen, Sanitizer und isolierte SDK-Prüfungen
+bestehen. [Vertrag](measurement.md) und [Nachweise](platform-validation.md).
+
 **Belastbare Timingprüfungen:** Offline-Runner werden anhand fehlender
 Scheduling-Wartezeit, identischer Messdaten und echter Steuerungen geprüft;
 ein verzögerter Beobachter darf die gemessene Laufzeit beeinflussen. Die

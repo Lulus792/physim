@@ -202,6 +202,8 @@ typedef struct {
 } ps_rng;
 ```
 
+Explicit PCG32 state, copied by value; no hidden cache/global random state. Initialize with ps_rng_seed before drawing. Seed fixes the odd increment; saving/restoring both fields preserves the stream. External synchronization is required when sharing one instance. Unchecked helpers require non-NULL initialized state and valid finite distribution parameters.
+
 ## ps_rng_seed
 
 Initialisiert einen PCG32-Zufallsstrom für einen reproduzierbaren Seed.
@@ -226,6 +228,8 @@ Zieht die nächste gleichverteilte Double-Zahl in (0,1).
 double ps_rng_uniform(ps_rng *rng);
 ```
 
+Exactly one uint32 draw, mapped to the open interval (0,1).
+
 ## ps_rng_normal
 
 Zieht eine normalverteilte Zahl mit Mittelwert und Standardabweichung.
@@ -233,6 +237,8 @@ Zieht eine normalverteilte Zahl mit Mittelwert und Standardabweichung.
 ```c
 double ps_rng_normal(ps_rng *rng, double mean, double standard_deviation);
 ```
+
+Box-Muller: radius uniform first, angle uniform second, always two draws (including sd=0). No spare-value cache. Transcendental rounding can differ between libm implementations; checked/degenerate draws use measurement.h.
 
 ### ps_ode_fn
 

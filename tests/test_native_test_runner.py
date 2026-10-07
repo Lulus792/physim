@@ -110,7 +110,20 @@ def main():
     display_spec.loader.exec_module(display_checker)
     display_names = {*display_checker.SIMPLE, *display_checker.SPECIAL,
                      *(f"language_{mode}_workflow" for mode in display_checker.LANGUAGE_MODES)}
-    assert {case.name for case in runner.catalog() if case.display and not case.integration.get("benchmark")} == display_names
+    # This negative case invokes the app directly; it deliberately expects a
+    # failed focus lookup instead of using the success-only workflow wrapper.
+    direct_display = {"documentation_keyboard_unreachable"}
+    actual_display = {case.name for case in runner.catalog()
+                      if case.display and not case.integration.get("benchmark")}
+    expected_display = display_names | direct_display
+    assert actual_display == expected_display, {
+        "missing": sorted(expected_display - actual_display),
+        "extra": sorted(actual_display - expected_display)}
+    for case in runner.catalog():
+        if case.name in direct_display:
+            step = case.integration["steps"][0]
+            assert step["program"] == "physim" and step["exit_code"] == 1
+            assert step.get("stderr_pattern")
     assert all(case.app for case in runner.catalog() if case.display)
     flow = display_checker.Workflow(Path(sys.executable), directory, source, False)
     flow.env["PYTHONIOENCODING"] = "utf-8"

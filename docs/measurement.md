@@ -149,3 +149,43 @@ Der Bericht zeigt ihre Anzahl und ihren Anteil; eine Serie ohne gültigen Endwer
 enthält nur die Messabdeckung. Fehlende Messungen werden nicht auf null gesetzt
 oder durch frühere Werte ersetzt. Selektive Ausfälle können die Statistik der
 gültigen Teilmenge verzerren und werden nicht automatisch korrigiert.
+
+
+## Explizite Zufallszustände und Ziehungsreihenfolge
+
+`ps_rng` besitzt zwei öffentliche 64-Bit-Zustandswerte, `state` und `increment`.
+`ps_rng_seed` initialisiert den Strom; eine Wertkopie beider Felder ist ein
+vollständiger Snapshot. Verschiedene Instanzen besitzen keine gemeinsame
+veränderliche Zufallsquelle. Wer dieselbe Instanz in mehreren Threads verwendet,
+muss sie extern synchronisieren. Eine Speicherung muss beide Felder erhalten;
+für Dateiformate sind Byteordnung und Version ausdrücklich zu definieren,
+statt rohe C-Strukturen zu schreiben.
+
+Der ganzzahlige PCG32-Strom ist vollständig bestimmt. `ps_rng_uniform` verbraucht
+eine 32-Bit-Ziehung und bildet sie als `(word + 0.5) / 2^32` auf das offene
+Intervall `(0,1)` ab. Der direkte C-Helfer `ps_rng_normal` verwendet Box–Muller:
+zuerst eine uniforme Ziehung für den Radius, danach eine für den Winkel.
+Diese Reihenfolge ist in getrennten C-Anweisungen festgelegt. Es gibt keinen
+versteckten Ersatzwert-Cache; der direkte Helfer verbraucht auch bei
+Standardabweichung 0 zwei Ziehungen.
+
+Die geprüfte API `ps_distribution_sample` und `Rng.sample` in Physim behandeln
+konstante und degenerierte Verteilungen dagegen ausdrücklich ohne Ziehung.
+Ungültige Verteilungen und nichtendliche Resultate erhalten Zustand und Ausgabe.
+`Rng(seed)` übernimmt das `Int64`-Bitmuster vollständig: `-1` entspricht dem
+C-Seed `UINT64_MAX`. Kopien können unabhängig weiterlaufen oder auf denselben
+Snapshot zurückgesetzt werden. Die bestehende Bindung an Laufseeds bleibt erhalten.
+
+Ganzzahlige Zustände und uniforme Abbildungen sind exakt prüfbar. Für `log`,
+`sqrt` und `cos` hängt die letzte Rundung von der Mathematikbibliothek ab;
+die geordnete Ziehung verspricht keine bitgleichen Normalwerte über beliebige
+Plattformen oder Toolchains. Gleicher Build, Seed und gleiche Aufrufreihenfolge
+reproduzieren die Folge. Experimentmetadaten und archivierter Quell-/Buildstand
+gehören deshalb zur Reproduzierbarkeit.
+
+`tests/test_rng_reference.py` berechnet die Integer-Übergänge unabhängig und
+prüft C und Physim für die Seeds 0, 42, `2^63` und `2^64-1`, normale und gemischte
+Verteilungen sowie deren Ziehungsverbrauch. Die C-/Physim-Probes prüfen zusätzlich
+Snapshots, Wertkopien und unbeeinflusste interleavte Ströme. Integer-Zustände
+werden exakt verglichen; Normalwerte verwenden eine absolute/relative Toleranz
+von `2e-14`. Die bisherige statistische Momentenprüfung bleibt daneben erhalten.
