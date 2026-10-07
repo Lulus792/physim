@@ -134,6 +134,20 @@ def main():
         rebuilt_probe = builder.executable("sdk-rebuilt-probe", ["probe.c"], [rebuilt_core])
         rebuilt_series_probe=builder.executable("sdk-rebuilt-series-probe",["series-probe.c"],[rebuilt_core])
         checked([rebuilt_probe, root / "bundled-pendulum.psrun", root / "bundled-pendulum-report.psreport"])
+        shutil.copy2(repo / "tests/test_series_numeric_extremes.c", consumer / "series-numeric-extremes.c")
+        for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
+            numeric_probe = builder.executable("series-numeric-extremes-" + kind,
+                                               ["series-numeric-extremes.c"], [archive])
+            checked([numeric_probe, root / ("Series numeric " + kind)])
+        checked([sdk / "bin" / ("physimc" + suffix), "--emit-analysis",
+                 repo / "tests/fixtures/language/analysis_numeric_extremes.phys"],
+                output=consumer / "analysis-numeric-extremes.c")
+        for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
+            numeric_analysis = builder.executable("analysis-numeric-extremes-" + kind,
+                ["analysis-numeric-extremes.c"], [archive], language=True, module=True)
+            checked([sdk / "bin" / ("physim-analysis-runner" + suffix), numeric_analysis,
+                     "--runs", root / ("Language numeric " + kind)])
+        print("Installed/rebuilt SDK calculus: C and Physim extreme-value checks passed", flush=True)
         shutil.copy2(sdk / "examples/pendulum/analysis.c", consumer / "c-analysis.c")
         c_analysis = builder.executable("sdk-c-analysis", ["c-analysis.c"], [rebuilt_core], module=True)
         c_modules = {}

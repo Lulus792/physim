@@ -11,7 +11,8 @@ typedef struct {
  * ps_series_statistics and ps_analyze_run return PS_NUMERIC in that case. */
 void ps_statistics_push(ps_statistics *stats, double value);
 double ps_statistics_stddev(const ps_statistics *stats);
-/* Finite, strictly increasing x; finite y; n>=2. Output may alias inputs.
+/* Central secants and one-sided endpoints (not quadratic interpolation).
+ * Finite, strictly increasing x; finite y; n>=2. Output may alias inputs.
  * PS_NUMERIC for an unrepresentable slope; all failures leave out unchanged. */
 ps_result ps_derivative(const double *x, const double *y, size_t n, double *out);
 /* Finite strictly increasing x, finite y, n>=2. NAN for invalid input or

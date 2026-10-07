@@ -468,6 +468,7 @@ class Builder:
         shutil.copy2(ROOT / "src/text_validation.h", staging / "src/text_validation.h")
         shutil.copy2(ROOT / "src/number_parse.h", staging / "src/number_parse.h")
         shutil.copy2(ROOT / "src/pchip.h", staging / "src/pchip.h")
+        shutil.copy2(ROOT / "src/analysis_numeric.h", staging / "src/analysis_numeric.h")
         shutil.copy2(ROOT / "src/run_index_internal.h", staging / "src/run_index_internal.h")
         (staging / "licenses").mkdir()
         for source, name in (("third_party/Nuklear-LICENSE", "Nuklear-LICENSE"),

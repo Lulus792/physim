@@ -2048,3 +2048,107 @@ Sprachquellposition. Die Dateiablage ist keine Stromausfall-Durabilitätsgaranti
 Ältere Plattformnachweise stehen vollständig unter
 [Historische lokale Prüfungen](status-history.md). Die genannten Laufstände
 und Dateipfade behalten ihren ursprünglichen Beweisumfang.
+
+
+## Gemeinsame Series-Numerik am 7. Oktober 2026
+
+Die Folgekorrektur zu CR-007 verwendet eine gemeinsame interne Rechnung in
+`src/analysis_numeric.h` für die bisherigen Array-Helfer und die C-/Physim-Series.
+Die Sekantenmethode bleibt erhalten. Extreme darstellbare Steigungen und
+Trapezflächen werden nicht mehr durch überlaufende Differenzen oder vorzeitig
+zu null gerundete subnormale Mittelwerte abgewiesen. Echte Überläufe nehmen
+Handle und Scratch-Speicher vollständig zurück. Ein fehlender Messwert bleibt
+im kumulativen Integral auch über extreme Achsenabstände unbekannt.
+[Verfahren, Einheiten und Grenzen](numerics.md) erklären die Sekanten- und
+Trapezapproximation; PP-0363 besitzt jetzt eine explizite Zuordnung.
+API/ABI 3 und sämtliche Datenformate bleiben erhalten.
+
+### Lokale Tests und ihre genaue Reichweite
+
+Der unveränderte Series-Pfad scheitert am neuen Gegenbeispiel unter
+`build/contact-world-language-release-mac/test-results/run-wo9rwlxg`:
+`x=y={-1e308,1e308}` muss die Steigung 1 ergeben. Der korrigierte gezielte
+Sieben-Fälle-Lauf besteht unter `run-19yzguj5`. Ein weiterer Zwischenlauf
+`run-o8t_3nt1` enthielt doppelte Achsenwerte durch einen zu kleinen Testabstand;
+das Raster wurde korrigiert und dieser Lauf bleibt fehlgeschlagen.
+
+Der vollständige macOS-Release-Lauf besteht mit **609/609** unter
+`build/contact-world-language-release-mac/test-results/run-mrbtiqsb`.
+Unter Debian/GCC enthält der vollständige Lauf `run-mbhcuca2` **608/609**:
+alle Laufzeitfälle bestehen, `documentation_reference` scheitert an
+Apple-Metadatendateien aus der Dateiübertragung. Die zugehörigen erzeugten
+Begleitdateien wurden vor dem Entfernen in
+`build/series-numeric-transfer-metadata.tar.gz` gesichert und gegen das Archiv
+geprüft (SHA-256 `a2e35542025afb38317c72f3f56ba4312f89aa677fc038179209e6c5c67d8021`).
+Der ursprüngliche Lauf wird dadurch nicht nachträglich grün.
+
+Die vier abschließenden Fälle `series_numeric_extremes`,
+`language_analysis_numeric_extremes`, `verification_kit` und
+`documentation_reference` bestehen mit **4/4** auf macOS unter `run-y4a44_hx`
+und Linux unter `run-00f11gmw`. Sie verwenden den endgültigen Teststand mit
+Polynomreferenzen, Konvergenzordnung, Blockgrenzen, Messmasken, subnormalen
+Flächen, Vorzeichenauslöschung, Einheiten und Fehler-Rücknahme. Der separate
+Physim-Analyseprozess prüft selbst erzeugte Reihen ohne Eingabedatensatz.
+29 Referenzseiten sind aktuell. Der Katalog enthält jetzt 610 Fälle ohne
+Fenster, 591 ohne SDL und 75 Fensterfälle; die nach dem Gesamtlauf ergänzte
+separate Sprachprüfung wird durch den Vier-Fälle-Lauf belegt.
+
+### Noch offene Remote-Befunde
+
+Die vor dieser Korrektur abgefragte
+[Linux-Paket-CI für `37a55bd`](https://github.com/PhysicSimulator/physim/actions/runs/37609456711)
+scheitert ausschließlich an `runner_pacing_phys`: der Offline-Lauf benötigt
+1,426 Sekunden gegenüber 2,299 Sekunden bei 0,5× und verletzt den bisherigen
+relativen Zeitvergleich. Die Ursache ist noch nicht nachgeprüft; ein
+Hardware-/Lastproblem wird nicht als bewiesen behandelt. Das Artefakt mit
+608 Ergebnisdatensätzen stimmt mit dem veröffentlichten SHA-256
+`e73958f216105338e4d5564b643fdf1b957b19c08b614fda556d726da79b9f46` überein.
+
+Die [C17-CI für `0fd3ee7`](https://github.com/PhysicSimulator/physim/actions/runs/37603493468)
+enthält weitere Fehler. Der geprüfte Intel-macOS-SDK-Log endet bei der
+Handbuch-Tastaturprüfung an Stufe 13 nach 15,029 Sekunden; die 608 nativen
+Debug-Fälle bestehen. Das Artefakt besitzt SHA-256
+`dc1b6f65b5dd6150001e169dd223d10417a5002c5a6aa892d3b3940b2a36c08e`.
+Das separat geprüfte Windows/v143-Release-Artefakt besitzt SHA-256
+`f17510e40bd81f6d17de142149924bd19448721820c47c59010ca960bd2f4ffd`;
+607/608 Fälle bestehen, die Referenzprüfung weist die damals zu große
+Plattformseite zurück. Die anschließende Archivierung in `37a55bd` hat die
+Seite verkleinert; eine neue Windows-Gesamtabnahme wird damit nicht behauptet.
+Diese Befunde bleiben von der lokalen Numerikkorrektur getrennt offen.
+
+
+### Frische verschobene SDKs
+
+Beide vollständigen SDK-Prüfverfahren **ohne Fensterprüfungen** bestehen:
+
+- macOS: `build/Series numeric SDK ä mac tdu_luc2`, verschobenes SDK unter
+  `proof/Native SDK ä o3ewk32f/Relocated SDK ä`.
+- Linux: `build/Series numeric SDK ä linux p5iekc7w`; der genaue verschobene
+  Pfad steht im zugehörigen `verify.log` und `PASSED.json`.
+
+Jeder Lauf prüft ein frisches SDK mit 430 SHA-256-erfassten Dateien und ein
+isoliertes Kit mit 60 Eingaben. Die neue private Datei `src/analysis_numeric.h`
+ist in der Source-Distribution enthalten. Header und alle 26 Core-Module werden
+ausschließlich aus dem verschobenen SDK kompiliert. Die neuen C- und
+Physim-Gegenbeispiele bestehen jeweils gegen das installierte und das neu
+kompilierte Archiv. Alle bisherigen SDK-Gates bleiben aktiv, darunter die
+gekoppelten Lernpfade, unabhängigen Referenzprüfer und kalten nativen Domänenbuilds.
+`verify.log` enthält den ausdrücklichen Numerik-Erfolgsmarker; das jeweils
+verschobene SDK-Prüfverzeichnis enthält `PASSED.txt` und den vollständigen
+Befehlslog. Die übergeordneten Receipts stehen unter
+`build/series-numeric-sdk-mac-PASSED.json` und
+`build/series-numeric-sdk-linux-PASSED.json`.
+
+Der erste Linux-Hilfsaufruf endete **vor** der SDK-Verifikation an der unter
+Python 3.11 nicht verfügbaren `tarfile.extractall(filter=...)`-Option. Die
+Fortsetzung prüft die Archivpfade, regulären Dateien und Kit-Hashes explizit
+und verwendet dasselbe bereits erfolgreich gebaute SDK. Dieser ursprüngliche
+Hilfsfehler bleibt in `series-numeric-sdk-proof-linux.log` erhalten; die
+Fortsetzung steht in `series-numeric-sdk-resume-linux.log`.
+
+Die zwölf implementierungs- und prüfrelevanten Dateien stimmen auf beiden
+Systemen mit `build/series-numeric-source-freeze.json` überein. Nach dem Entfernen
+der Übertragungsmetadaten wurde zusätzlich der gesamte erwartete
+Repository-Dateibestand auf Linux byteweise mit dem Mac abgeglichen.
+Neue Fenster-, Windows- und Apple-Silicon-Prüfungen gehören nicht zum
+Nachweis dieser Runde. Die oben aufgeführten Remote-Fehler bleiben zu bearbeiten.

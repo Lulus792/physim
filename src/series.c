@@ -1,5 +1,6 @@
 #include "physim/series.h"
 #include "pchip.h"
+#include "analysis_numeric.h"
 #include <limits.h>
 #include <math.h>
 #include <stdlib.h>
@@ -750,12 +751,11 @@ ps_result ps_series_derivative(ps_analysis_context *c, ps_series hy, ps_series h
             if(!vy[b])b=j;
             valid[i]=(uint8_t)(vy[j] && a!=b);
             if(!valid[i]){values[i]=0;continue;}
-            double dx = xx[b] - xx[a], dy = yy[b] - yy[a];
-            if (!isfinite(dx) || !isfinite(dy)) {
+            values[i] = ps_numeric_secant(xx[a], xx[b], yy[a], yy[b]);
+            if (!isfinite(values[i])) {
                 r = PS_NUMERIC;
                 break;
             }
-            values[i] = dy / dx;
         }
         if (r != PS_OK)
             break;
@@ -807,16 +807,19 @@ ps_result ps_series_integral(ps_analysis_context *c, ps_series hy, ps_series hx,
                     r = PS_INVALID;
                     break;
                 }
-                double dx = xx[i] - previous_x;
-                if (!isfinite(dx)) {
-                    r = PS_NUMERIC;
-                    break;
-                }
-                if(known) {
-                double delta = dx * (yy[i] * .5 + previous_y * .5) - compensation,
-                       next = sum + delta;
-                compensation = (next - sum) - delta;
-                sum = next;
+                if (known) {
+                    double area = ps_numeric_trapezoid(previous_x, xx[i], previous_y, yy[i]);
+                    double delta = area - compensation, next = sum + delta;
+                    if (!isfinite(area) || !isfinite(delta) || !isfinite(next)) {
+                        r = PS_NUMERIC;
+                        break;
+                    }
+                    compensation = (next - sum) - delta;
+                    if (!isfinite(compensation)) {
+                        r = PS_NUMERIC;
+                        break;
+                    }
+                    sum = next;
                 }
             }
             values[i] = known?sum:0;

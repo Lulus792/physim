@@ -116,3 +116,39 @@ beschränkten Energiefehler und Zeitumkehr geprüft. Separate Pendelläufe vergl
 RK4, RK45 und Verlet mit der elliptischen Referenzperiode. Lineare Systeme prüfen
 Pivotisierung, Singularität, Skalierung und Aliasfälle; Einheitenprüfungen behandeln
 Dimensionsfehler und Ergebnisintegrität.
+
+## Integration und Differentiation von Messreihen
+
+`ps_derivative` und `ps_series_derivative` berechnen zentrale Sekanten,
+an Segmenträndern einseitige Sekanten. Das Verfahren ist bei gleichmäßigen
+Abständen im Inneren von zweiter Ordnung, an Rändern von erster Ordnung.
+Bei ungleichen Abständen ist die zentrale Sekante **keine** quadratische
+Interpolation: für `x={0,1,3}`, `y=x²` liefert sie am mittleren Punkt 3 statt
+der analytischen Ableitung 2. Ableitungen verstärken Messrauschen; weder
+Glättung noch eine globale Fehlerschranke sind implizit enthalten.
+
+`ps_trapezoid` und `ps_series_integral` integrieren den stückweise linearen
+Verlauf zwischen benachbarten Messpunkten. Die Series-Variante beginnt mit
+einem expliziten Anfangswert und verwendet kompensierte Summation. Einheiten
+werden beim Series-Aufruf zu `y/x` beziehungsweise `y*x` kombiniert; die
+alten Array-Helfer verwenden die vom Aufrufer festgelegten Einheiten.
+
+Beide API-Wege verwenden dieselbe skalierte Intervallrechnung. Beispielsweise
+ist die Sekante von `x=y={-1e308,1e308}` genau 1, obwohl beide Differenzen
+allein den Double-Bereich übersteigen. Ein konstantes Signal `1e-308` über
+dieser Achse hat ein darstellbares Integral von ungefähr 2. Auch kleinste
+subnormale Signalwerte werden vor der Mittelwertbildung skaliert. Echte
+Überläufe bleiben Fehler; eine Prüfung der darstellbaren Intervallflächen
+ersetzt keine allgemeine Analyse der Kondition oder Rundungsfehler.
+
+Messlücken werden nicht überbrückt. Die Ableitung verwendet nur direkt
+benachbarte gültige Werte; ein isolierter gültiger Punkt bleibt unbekannt.
+Beim kumulativen Integral sind die erste fehlende Messung und alle folgenden
+Werte unbekannt. Explizite Auswahl gültiger Zeilen kann diese Semantik ändern,
+weil sie ein neues, verdichtetes Raster erzeugt.
+
+`tests/test_series_numeric_extremes.c` prüft extreme Differenzen, subnormale
+Flächen, Vorzeichenauslöschung, Streaming-Blockgrenzen, Messmasken und echte
+Überläufe. Fehler veröffentlichen keinen neuen Handle und erhöhen den
+Scratch-Verbrauch nicht. `analysis_reference.phys` führt dieselben
+extremen Rechnungen im echten Analyseprozess über die Sprachbindung aus.

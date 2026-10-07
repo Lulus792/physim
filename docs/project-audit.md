@@ -71,7 +71,7 @@ Das ist ein Nachweis für diesen Stand und diese Umgebungen. Die anschließenden
 Änderungen an Laufzeitsupport und Prüfern benötigen eigene Nachweise; eine
 nachträgliche Änderung der Zahl macht den alten Lauf nicht zu einem aktuellen
 Gesamtlauf. Der aktuelle Katalog enthält mit den zusätzlichen Lernwegprüfungen
-608 Fälle ohne Fenster, 589 ohne SDL und 75 Fensterfälle.
+610 Fälle ohne Fenster, 591 ohne SDL und 75 Fensterfälle.
 
 Die Abnahme bleibt offen, bis sämtliche konkreten Anforderungen passende
 aktuelle Implementierungs-, Laufzeit- und Plattformnachweise besitzen.
@@ -97,10 +97,21 @@ Korrekturen zusätzlich in ihrer tatsächlichen Matrix bestätigen.
 
 ## Batch-Bindung und Controller
 
-Der aktuelle Abgleich enthält vierzehn implementierte Blöcke, fünf konkrete
-unvollständige Blöcke und 512 weiterhin ungeprüfte Blöcke. Die acht Lernpfade
+Der aktuelle Abgleich enthält fünfzehn implementierte Blöcke, fünf konkrete
+unvollständige Blöcke und 511 weiterhin ungeprüfte Blöcke. Die acht Lernpfade
 bleiben erhalten; hinzu kommen LANG-005, der Batch-/Parametercontroller und die beiden Dokumentationsteile. Elektromagnetismus und Wellen/Optik besitzen zusätzliche begrenzte Domänennachweise.
 Die Originaltexte aller 531 Blöcke und 475 Aufzählungspunkte bleiben unverändert.
 Die Sprachbindung und die beiden Lernwege besitzen ausdrücklich begrenzte Implementierungs- und
 Laufzeitnachweise in [Batch](batch-language.md) und der [Plattformprüfung](platform-validation.md).
 Dies ersetzt keine vollständige Plattform-, Dokumentations- oder Produktabnahme.
+
+
+## Numerische Integration und Differentiation (§7.2)
+
+PP-0363 ist jetzt einzeln der Array- und Series-API zugeordnet. Sekanten und
+Trapezintegration besitzen Referenz- und Konvergenzprüfungen, explizite Einheiten,
+Messlücken und transaktionale Fehlerpfade. Die gemeinsame skalierte Rechnung
+schließt eine Restlücke zu CR-007 auch in den C-/Physim-Series-Operationen.
+[Methoden und Grenzen](numerics.md) dokumentieren insbesondere ungleiche
+Messabstände und Rauschverstärkung. Dieser Implementierungsnachweis ersetzt
+keine aktuelle Gesamtplattformabnahme oder eine allgemeine Fehlerschranke.

@@ -361,7 +361,7 @@ ps_result ps_series_derivative(
     ps_series *out);
 ```
 
-Central secants, one-sided segment endpoints; x must strictly increase. Missing neighbors are never bridged; isolated valid samples have no derivative.
+Central secants, one-sided segment endpoints; x must strictly increase. Missing neighbors are never bridged; isolated valid samples have no derivative. Scaled arithmetic preserves representable slopes even if endpoint differences overflow. PS_NUMERIC for unrepresentable slopes; output/quota unchanged.
 
 ## ps_series_integral
 
@@ -376,7 +376,7 @@ ps_result ps_series_integral(
     ps_series *out);
 ```
 
-Cumulative trapezoidal integral, first value = initial. A missing x/y sample makes this and all later cumulative values unknown; no invented gap area.
+Cumulative trapezoidal integral, first value = initial. A missing x/y sample makes this and all later cumulative values unknown; no invented gap area. Scaled interval arithmetic avoids intermediate overflow and loss of subnormal means. PS_NUMERIC for unrepresentable areas/sums; output/quota unchanged.
 
 ## ps_series_moving_average
 

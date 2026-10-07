@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-07",
-  "inspected_revision": "0fd3ee7ca028dd31a453d6e6d8c25a8a6bd39eda",
+  "inspected_revision": "37a55bdd45480bf4f73142ce34c9723d9c49e7ec",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2332,9 +2332,19 @@
       "kind": "list",
       "scope": "planned",
       "text": "- numerische Integration und Differentiation.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/analysis.h",
+        "include/physim/series.h",
+        "src/analysis_numeric.h",
+        "src/analysis.c",
+        "src/series.c",
+        "tests/test_analysis_extremes.c",
+        "tests/test_series_numeric_extremes.c",
+        "tests/fixtures/language/analysis_numeric_extremes.phys",
+        "docs/numerics.md"
+      ],
+      "note": "Sekanten-Differentiation und Trapezintegration mit explizitem Einheiten-/Fehlervertrag, Konvergenzprüfungen, Streaming, Messmasken und gemeinsamer skalierter C-/Physim-Rechnung. Keine allgemeine Fehlerschranke und keine vollständige Plattformabnahme; die Methoden-/Rauschgrenzen sind dokumentiert."
     },
     {
       "id": "PP-0365",

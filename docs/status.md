@@ -3,6 +3,12 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-07. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Skalierte Series-Numerik:** Array-Helfer, C-Series und Physim-Series verwenden
+nun dieselbe Intervallrechnung für Ableitung und Trapezintegral. Darstellbare
+Ergebnisse bleiben auch bei extremen Differenzen und subnormalen Signalwerten
+erhalten. Echte Überläufe veröffentlichen keinen Handle und verbrauchen keinen
+zusätzlichen Scratch-Speicher. [Methoden und Grenzen](numerics.md).
+
 **Projekte per Tastatur:** Tab/Pfeiltasten und Enter bedienen die gesamte
 Projektmaske; reine Analyseprojekte überspringen Experimentfelder. Fehlermeldungen
 bleiben im Formular lesbar, bestehende Dateien erhalten. C-Kugelstoß, Sensorwurf

@@ -1,4 +1,5 @@
 #include "physim/analysis.h"
+#include "analysis_numeric.h"
 #include <float.h>
 #include <math.h>
 #include <string.h>
@@ -20,17 +21,6 @@ void ps_statistics_push(ps_statistics *s, double x) {
 double ps_statistics_stddev(const ps_statistics *s) {
     return s && s->count > 1 ? sqrt(s->m2 / (double)(s->count - 1)) : 0;
 }
-/* Scale only overflowing differences. Scaling both operands preserves a
- * representable secant even when dy and dx themselves exceed DBL_MAX. */
-static double secant(double xa, double xb, double ya, double yb) {
-    double dx = xb - xa, dy = yb - ya;
-    int shift_x = !isfinite(dx), shift_y = !isfinite(dy);
-    if (shift_x) dx = xb * .5 - xa * .5;
-    if (shift_y) dy = yb * .5 - ya * .5;
-    int ex, ey;
-    double mx = frexp(dx, &ex), my = frexp(dy, &ey);
-    return scalbn(my / mx, ey - ex + shift_y - shift_x);
-}
 ps_result ps_derivative(const double *x, const double *y, size_t n, double *out) {
     if (!x || !y || !out || n < 2) return PS_INVALID;
     for (size_t i = 0; i < n; i++)
@@ -41,7 +31,7 @@ ps_result ps_derivative(const double *x, const double *y, size_t n, double *out)
     if (!values) return PS_MEMORY;
     for (size_t i = 0; i < n; i++) {
         size_t a = i ? i - 1 : 0, b = i + 1 < n ? i + 1 : n - 1;
-        values[i] = secant(x[a], x[b], y[a], y[b]);
+        values[i] = ps_numeric_secant(x[a], x[b], y[a], y[b]);
         if (!isfinite(values[i])) { free(values); return PS_NUMERIC; }
     }
     memcpy(out, values, n * sizeof *out);
@@ -54,14 +44,7 @@ double ps_trapezoid(const double *x, const double *y, size_t n) {
         if (!isfinite(x[i]) || !isfinite(y[i]) || (i && x[i] <= x[i - 1])) return NAN;
     double sum = 0;
     for (size_t i = 1; i < n; i++) {
-        double width = x[i] - x[i - 1], average = y[i] * .5 + y[i - 1] * .5;
-        int extra = !isfinite(width), ew, ea;
-        if (extra) width = x[i] * .5 - x[i - 1] * .5;
-        /* Preserve subnormal means by scaling the sum upwards when needed. */
-        int small = fabs(y[i]) < DBL_MIN && fabs(y[i - 1]) < DBL_MIN;
-        if (small) average = y[i] + y[i - 1];
-        double mw = frexp(width, &ew), ma = frexp(average, &ea);
-        double area = scalbn(mw * ma, ew + ea + extra - small);
+        double area = ps_numeric_trapezoid(x[i-1], x[i], y[i-1], y[i]);
         sum += area;
         if (!isfinite(area) || !isfinite(sum)) return NAN;
     }

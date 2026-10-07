@@ -114,10 +114,14 @@ ps_result ps_series_affine(ps_analysis_context *ctx, ps_series input, double fac
 ps_result ps_series_combine(ps_analysis_context *ctx, ps_series_operator op, ps_series left,
                             ps_series right, ps_series *out);
 /* Central secants, one-sided segment endpoints; x must strictly increase.
- * Missing neighbors are never bridged; isolated valid samples have no derivative. */
+ * Missing neighbors are never bridged; isolated valid samples have no derivative.
+ * Scaled arithmetic preserves representable slopes even if endpoint differences
+ * overflow. PS_NUMERIC for unrepresentable slopes; output/quota unchanged. */
 ps_result ps_series_derivative(ps_analysis_context *ctx, ps_series y, ps_series x, ps_series *out);
 /* Cumulative trapezoidal integral, first value = initial. A missing x/y sample
- * makes this and all later cumulative values unknown; no invented gap area. */
+ * makes this and all later cumulative values unknown; no invented gap area.
+ * Scaled interval arithmetic avoids intermediate overflow and loss of subnormal
+ * means. PS_NUMERIC for unrepresentable areas/sums; output/quota unchanged. */
 ps_result ps_series_integral(ps_analysis_context *ctx, ps_series y, ps_series x,
                              ps_quantity initial, ps_series *out);
 /* Causal moving average, window <= 4096. A missing sample resets the window;

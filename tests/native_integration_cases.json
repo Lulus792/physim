@@ -1773,6 +1773,10 @@
       "libraries": [
         "core"
       ]
+    },
+    "physim-language-analysis-numeric-extremes": {
+      "source": "tests/fixtures/language/analysis_numeric_extremes.phys",
+      "mode": "--emit-analysis"
     }
   },
   "tests": [
@@ -7128,6 +7132,24 @@
           "files": [
             "app-steps.json"
           ]
+        }
+      ]
+    },
+    {
+      "name": "language_analysis_numeric_extremes",
+      "targets": [
+        "physim-language-analysis-numeric-extremes",
+        "physim-analysis-runner"
+      ],
+      "steps": [
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{physim-language-analysis-numeric-extremes}",
+            "--runs",
+            "{work}/numeric-extremes"
+          ],
+          "timeout": 30
         }
       ]
     }
