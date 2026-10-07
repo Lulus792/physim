@@ -160,6 +160,24 @@ def main():
             checked([sys.executable, repo / "tests/test_rng_reference.py",
                      "--c", rng_probe, "--language", rng_language])
         print("Installed/rebuilt SDK RNG: independent integer/normal references and C/Physim value snapshots passed", flush=True)
+        shutil.copy2(repo / "tests/test_channel_declaration.c", consumer / "channel-declaration-check.c")
+        shutil.copy2(repo / "tests/fixtures/channel_declaration.c", consumer / "channel-declaration-model.c")
+        shutil.copy2(repo / "tests/channel_export_probe.c", consumer / "channel-export-probe.c")
+        checked([sdk / "bin" / ("physimc" + suffix), "--emit-experiment",
+                 repo / "tests/fixtures/language/channel_declaration.phys"],
+                output=consumer / "channel-declaration-phys.c")
+        for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
+            channel_check = builder.executable("channel-declaration-check-" + kind, ["channel-declaration-check.c"], [archive])
+            channel_work = root / ("Channel declaration C " + kind);channel_work.mkdir()
+            checked([channel_check, channel_work])
+            channel_c = builder.executable("channel-declaration-model-" + kind, ["channel-declaration-model.c"], [archive], module=True)
+            channel_phys = builder.executable("channel-declaration-phys-" + kind, ["channel-declaration-phys.c"], [archive], module=True, language=True)
+            channel_export = builder.executable("channel-export-probe-" + kind, ["channel-export-probe.c"], [archive])
+            checked([sys.executable, repo / "tests/test_channel_declaration_workflow.py",
+                     "--runner", sdk / "bin" / ("physim-runner" + suffix),
+                     "--c-model", channel_c, "--phys-model", channel_phys,
+                     "--exporter", channel_export, "--work", root / ("Channel declaration parity " + kind)])
+        print("Installed/rebuilt SDK channel declarations: canonical SI, bounded UTF-8, transactional rejection and actual C/Physim run/CSV parity passed", flush=True)
         shutil.copy2(repo / "tests/test_properties.c", consumer / "properties-check.c")
         shutil.copy2(repo / "tests/test_property_report.c", consumer / "property-report-probe.c")
         checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
@@ -698,6 +716,7 @@ def main():
         "Electromagnetism through installed/rebuilt Core, Coulomb/gradient/Lorentz tests, seven RC Decimal oracles and mixed reports passed.\n" +
         "Waves/optics through installed/rebuilt Core, Snell/TIR/lens invariants, owned 4096-node grids, allocation failures and mixed string reports passed.\n" +
         "Fluid through installed/rebuilt Core, anchored max networks, conservative 4096-cell transport, allocation failures and mixed tutorial reports passed.\n" +
+        "Canonical SI channel declarations through installed/rebuilt Core, bounded UTF-8, atomic errors and actual C/Physim run/CSV parity passed.\n" +
         "Material properties and real gas through installed/rebuilt Core, stored SI metadata, independent Decimal references and mixed analyses passed.\n" +
         "Twelve cold native C/Physim domain project builds, unchanged cache reuse and six complete independent tutorial oracles passed.\n" +
         "Both complete C/Physim learning routes, eight paired model source groups and executable language introductions passed.\n" +

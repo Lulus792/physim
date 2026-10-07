@@ -194,16 +194,29 @@ bool ps_collide_spheres(ps_particle *a, ps_particle *b, double e) {
     return true;
 }
 int ps_channel_add(ps_context *c, const char *name, ps_unit unit, const char *description) {
-    if (!c || !name || !unit.symbol || !description || c->channel_count >= PS_MAX_CHANNELS)
+    if (!c || !name || !unit.symbol || !description || c->channel_count >= PS_MAX_CHANNELS ||
+        unit.scale != 1 || !name[0] ||
+        !ps_text_valid(name, sizeof c->channels[0].name, false) ||
+        !ps_text_valid(unit.symbol, sizeof c->channels[0].unit, false) ||
+        !ps_text_valid(description, sizeof c->channels[0].description, true))
         return -1;
-    unsigned n = c->channel_count++;
-    ps_channel *ch = &c->channels[n];
-    snprintf(ch->name, sizeof ch->name, "%s", name);
-    snprintf(ch->unit, sizeof ch->unit, "%s", unit.symbol);
-    snprintf(ch->description, sizeof ch->description, "%s", description);
-    memcpy(ch->dimension, unit.dimension, 7);
-    return (int)n;
+    for (uint32_t i = 0; i < c->channel_count; i++) {
+        if (!ps_text_valid(c->channels[i].name, sizeof c->channels[i].name, false) ||
+            !strcmp(c->channels[i].name, name))
+            return -1;
+    }
+    /* Copy first: input text may refer to the context's destination slot. */
+    ps_channel channel = {0};
+    memcpy(channel.name, name, strlen(name) + 1);
+    memcpy(channel.unit, unit.symbol, strlen(unit.symbol) + 1);
+    memcpy(channel.description, description, strlen(description) + 1);
+    memcpy(channel.dimension, unit.dimension, sizeof channel.dimension);
+    unsigned index = c->channel_count;
+    c->channels[index] = channel;
+    c->channel_count++;
+    return (int)index;
 }
+
 static bool parameter_context(const ps_context *c) {
     return c && c->struct_size >=
                     offsetof(ps_context, parameters) + sizeof c->parameters &&

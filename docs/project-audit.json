@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-07",
-  "inspected_revision": "1f092553b30d7fffb5355337c8d040240c2c25c3",
+  "inspected_revision": "d9b167ad9df06adc8237a55dc877171934494572",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2461,8 +2461,17 @@
       "scope": "planned",
       "text": "- Laufzeitprüfung an API-Grenzen und in der Analyse.\n",
       "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "evidence": [
+        "src/core.c",
+        "include/physim/experiment.h",
+        "include/physim/language_sdk.h",
+        "tests/test_channel_declaration.c",
+        "tests/test_channel_declaration_workflow.py",
+        "tests/fixtures/channel_declaration.c",
+        "tests/fixtures/language/channel_declaration.phys",
+        "docs/numerics.md"
+      ],
+      "note": "Konkrete Kanalgrenze korrigiert: C und Physim verlangen Skala 1, kopieren begrenzte UTF-8-Metadaten ohne Kürzung, weisen doppelte Namen ab und erhalten den Kontext bei Fehlern. Tatsächliche Läufe und CSV prüfen explizite Umrechnung von 125 cm nach 1.25 m. Die gesamte Forderung an sämtliche API-Grenzen und Analyseoperationen bleibt ungeprüft; dieser Teilnachweis ist keine vollständige Einheitenabnahme."
     },
     {
       "id": "PP-0373",

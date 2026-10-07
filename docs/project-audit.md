@@ -20,12 +20,12 @@ Umfang nicht ersetzen.
 | Planbereich | Aktuelle Grundlage | Noch erforderlicher Nachweis oder Arbeit |
 | --- | --- | --- |
 | Plattformen und Pakete (§2, Phase 10) | Ausgeführte Intel-macOS-/Debian-Builds, verschobene SDKs und historische CI-Nachweise in [Plattformprüfung](platform-validation.md) | Aktuelle vollständige Windows-/Apple-Silicon-/Intel-/Linux-Matrix; frische Systeme. Signierung/Notarisierung bleibt an Entwicklerzugänge gebunden. |
-| Direkte Projektbuilds (§2) | `app/build_main.c`, `tools/build.py`, `tests/test_bootstrap_build.py`; einheitlich geprüfte 26 Core-Module, acht native Domänenprojekte mit unabhängigen Lernorakeln und verschobene SDKs | Gegen sämtliche aktuellen Plattformen prüfen. Alte CMake-Skizzen sind durch die ausdrückliche Ergänzung zu direkten Builds abgelöst. |
+| Direkte Projektbuilds (§2) | `app/build_main.c`, `tools/build.py`, `tests/test_bootstrap_build.py`; einheitlich geprüfte 27 Core-Module, zwölf native Domänenprojekte mit unabhängigen Lernorakeln und verschobene SDKs | Gegen sämtliche aktuellen Plattformen prüfen. Alte CMake-Skizzen sind durch die ausdrückliche Ergänzung zu direkten Builds abgelöst. |
 | Kern und Numerik (§7) | Öffentliche GUI-unabhängige Header, Referenz-, Konvergenz- und Fehlertests | Jede explizite Algorithmusforderung und ihr dokumentiertes Fehler-/Einheitenverhalten einzeln zuordnen; keine Ableitung aus bloßer Funktionszahl. |
 | Sprache und Bindungen (§10, LANG-001..007) | Version 0.182.0, Lexer/Parser/Checker/C17-Backend, typisierte Werte, Module, Generics, Runner- und Analysebindungen | Vollständigen semantischen Vertrag und C-/Physim-Funktionsparität prüfen. `LANG-005` besitzt jetzt explizite Batch-Hostdienste und besitzende Sprachwerte mit Start, Pause, Wiederaufnahme, Archivabfragen, Statistik, Diagrammen und Export. Die vollständige Sprach-/Produktabnahme und neue Remote-Matrix bleiben offen. |
 | Barrierefreiheit (Phase 10, PP-0710) | Themes, Code-Schriftgröße, Tastenkürzel und vollständige Hauptmenüführung per F10/Pfeilen/Enter sowie Einstellungsgruppen, Handbuch und Projekterstellung per Tab/Pfeilen/Enter mit sichtbarem, automatisch gescrolltem Fokus; `app/preferences.h`, `app/settings_ui.inc`, `app/toolbar_ui.inc` | UI-Schriftgröße ist unabhängig einstellbar; vollständige Tastaturführung und grundlegender Screenreader-Zugang bleiben offen. |
 | Dokumentation (§16, LANG-007) | Acht gekoppelte Lernpfade mit vollständigen Quellen, Modellannahmen und automatisierten Prüfungen; `tests/tutorial_sources.json` | Die beiden separat navigierbaren Wege sind implementiert; aktuelle gesamte Bindungs-/Plattformabnahme und alle Vorlagen bleiben gesondert offen. |
-| Weitere Domänen (§7.7, Phase 12+) | Mechanik-, Material-/Medien-, Mess- und Analysebasis | Thermodynamik besitzt nun ein SI-Modul und vollständige C-/Physim-Beispiele für ideales Gas und Wärmefluss; reale Gase bleiben offen. Elektromagnetismus besitzt nun einen geprüften SI-Einstieg für Ladungen, Felder und RC-Schaltungen. Wellen/Optik besitzt nun Oszillator, 1D-Gitterausbreitung und geometrische Strahlen-/Linsenfunktionen. Strömung besitzt jetzt laminare Rohre, passive Drucknetze und periodischen Tracertransport; spätere ernsthafte Fluidmodelle bleiben offen. Die empfohlene Reihenfolge bleibt erhalten. |
+| Weitere Domänen (§7.7, Phase 12+) | Mechanik-, Material-/Medien-, Mess- und Analysebasis | Thermodynamik besitzt nun ein SI-Modul und vollständige C-/Physim-Beispiele für ideales Gas und Wärmefluss; ein homogenes Van-der-Waals-Modell ergänzt reale Gase; Phasengleichgewichte bleiben offen. Elektromagnetismus besitzt nun einen geprüften SI-Einstieg für Ladungen, Felder und RC-Schaltungen. Wellen/Optik besitzt nun Oszillator, 1D-Gitterausbreitung und geometrische Strahlen-/Linsenfunktionen. Strömung besitzt jetzt laminare Rohre, passive Drucknetze und periodischen Tracertransport; spätere ernsthafte Fluidmodelle bleiben offen. Die empfohlene Reihenfolge bleibt erhalten. |
 
 ## Aktuelle CI-Fehler zuerst schließen
 
@@ -164,3 +164,20 @@ Maxwell-Konstruktion und experimentelle Stoffkalibrierung aus. Der ideale
 Grenzfall und mechanisch instabile homogene Algebra sind ausdrücklich getestet.
 Die Zahl implementierter Planblöcke bleibt unverändert; diese Ergänzung ist
 keine gesamte thermodynamische oder Plattformabnahme.
+
+
+## Gemeinsame SI-Grenze für Messkanäle (§7.3)
+
+Der Einzelabgleich von PP-0372 deckt eine Lücke der C-Kanaldeklaration auf:
+Nichtkanonische Einheitenskalen wurden angenommen und beim Speichern des
+Schemas verworfen. C und Physim verwenden jetzt denselben Validator mit Skala 1,
+begrenzten UTF-8-Texten, eindeutigen Namen und atomaren Fehlern. Ein unabhängiger
+Laufdatei-/CSV-Prüfer bestätigt die ausdrückliche Umrechnung 125 cm → 1,25 m
+in beiden Sprachen. [Kanalvertrag](numerics.md) beschreibt Herkunft, Grenzen
+und die Trennung von SI-Werten und Anzeigeeinheiten.
+
+PP-0372 und die weiteren Einheitenblöcke bleiben für ihre gesamte Forderung
+ungeprüft. Ein grüner Kanaltest beweist weder jede Analyseoperation noch die
+korrekte physikalische Bedeutung nackter Zahlen. Historische Rohschemata
+behalten ihren Dateiformatvertrag. Die Anzahl implementierter Blöcke bleibt
+unverändert.

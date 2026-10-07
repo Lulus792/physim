@@ -44,7 +44,7 @@ add('ps_', {
     'derivative': 'Schreibt Sekantenableitungen dy/dx in out, mit einseitigen Rändern.',
     'trapezoid': 'Berechnet das bestimmte Integral der Werte y über x mit der Trapezregel.',
     'analyze_run': 'Schreibt Standardstatistik, Vorschau und Analysemanifest für einen gespeicherten Lauf.',
-    'channel_add': 'Registriert einen skalaren Messkanal und liefert seinen Index; -1 bedeutet Fehler. Namen, Einheitensymbol und Beschreibung passend zu den Kapazitäten halten.',
+    'channel_add': 'Kopiert einen eindeutigen SI-Kanal mit Skala 1 und begrenzten UTF-8-Metadaten ohne Kürzung; liefert Index oder -1 und erhält den Kontext bei Fehlern.',
     'parameter_override': 'Hinterlegt vor create einen endlichen Wert für einen eindeutigen Parameternamen. Der Name muss später definiert werden; der Kontext benötigt die optionale ABI-3-Erweiterung.',
     'parameter_define_unit': 'Definiert SI-Parameterwerte mit deklarierter Anzeigeeinheit. Kopiert Symbol, Skala und Dimensionen in den optionalen ABI-3-Kontext-Tail; Grenzen müssen in der Anzeigeeinheit darstellbar sein. Fehler bewahren Kontext und Ausgabe.',
     'parameter_unit_read': 'Liest die eigene Einheitendeklaration eines Parameters. Alte Kontexte und untypisierte Parameter liefern declared=false und Skala 1; dies behauptet keine Dimensionslosigkeit.',

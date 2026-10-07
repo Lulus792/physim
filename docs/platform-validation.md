@@ -2502,3 +2502,91 @@ Domänen- und Projektbuildfälle. Der Linux-Ergebnisreceipt ist zusätzlich als
 `build/real-gas-full-linux-results.json` lokal erhalten. Die zuvor genannten
 acht gezielten Fälle, Sanitizer- und Handbuchprüfungen sind separate Belege;
 sie werden nicht zu einer erfundenen größeren Testsuite zusammengezählt.
+
+## Gemeinsame SI-Kanaldeklaration am 7. Oktober 2026
+
+Der Einzelabgleich der Einheitenanforderungen deckt einen konkreten Unterschied
+zwischen C und Physim auf: `ps_channel_add` nahm in C eine Skala ungleich 1 an,
+speicherte aber nur Dimensionen und Symbol. Die Skala ging damit verloren.
+Die unveränderte Ausgangsrevision `d9b167a` scheitert reproduzierbar an der neuen
+C-Prüfung: Ein Zentimeterkanal wird angenommen (`run-58yp6qw6`). Das ist ein
+belegter Fehler an dieser API-Grenze, keine Aussage über alle historischen Läufe.
+
+C und Physim verwenden nun denselben Deklarationsvalidator: Skala exakt 1,
+begrenzte UTF-8-Metadaten ohne Kürzung, eindeutiger nichtleerer Name und höchstens
+16 Kanäle. Beschreibungen erlauben Tabs/Zeilenumbrüche. Fehler ändern keinen
+Kontextwert und verbrauchen keinen Slot. Texte werden vor der Zuweisung kopiert,
+auch wenn Eingaben auf den eigenen Zielslot zeigen. Das bestehende Rohschema-
+und Dateiformat bleibt erhalten. [Vertrag und ausdrückliche SI-Umrechnung](numerics.md)
+unterscheiden Kanalwerte von Anzeigeeinheiten und physikalischer Bedeutung.
+Eine nackte Zahl kann die Bibliothek nicht auf ihre richtige Einheit prüfen.
+
+### Gezielte tatsächlich ausgeführte Nachweise
+
+Je **22/22** Release-Fälle bestehen auf dem Intel-Mac/Apple Clang
+(`run-ixa2ludj`) und Debian 12/GCC (`run-83jdka8c`). Sie enthalten Kern-/Numerik-,
+Kanal-/Anzeigeeinheiten-, Runner-, Katalog-, Referenz- und Kitprüfungen. Die neuen
+Fälle behandeln exakte Byte-Grenzen, UTF-8/Steuerzeichen, Duplikate, nichtkanonische und nichtendliche
+Skalen, volle/ungültige Zähler, Input-Aliasing und unveränderte Fehlerausgaben.
+
+Tatsächliche C-/Physim-Experimentmodule weisen ungültige Deklarationen ab und
+speichern nach ausdrücklicher Konvertierung von 125 cm exakt 1,25 m.
+Ein unabhängiger Python-Prüfer liest Magic, CRCs, zwei Kanalschemata samt sieben
+SI-Exponenten, drei reale Zeilen und Footer und vergleicht den fertigen CSV-Export.
+Er bestätigt die kompakten Indizes nach abgefangenen Fehlern und gleiche Werte
+in beiden Sprachen. Der CSV-Prüfer benutzt die öffentliche Export-API, keinen
+nicht vorhandenen Runner-Schalter.
+
+Vier Fälle bestehen zusätzlich unter Linux/Clang mit ASan/UBSan:
+`build/base-contract-asan-linux/test-results/run-93fmxd0p`. Sie umfassen Core,
+Numerik, C-Deklarationen und den echten C-/Physim-Runner-/CSV-Ablauf.
+Linux-Receipts liegen zusätzlich lokal unter `build/channel-targeted-linux-results.json`
+und `build/channel-asan-linux-results.json`. 30 Referenzseiten bestehen.
+
+Die erste Sprachfixture nutzte eine in diesem Bindungskontext nicht globale
+`convert`-Funktion (`run-2ibf7ctf`). Die korrigierte Quelle verwendet die vorhandene
+Methode `centimetre.convert(125,metre)` und besteht unter `run-j404182x` sowie in
+allen gezielten und SDK-Folgeläufen. Fehlversuche und Quellen bleiben erhalten.
+
+### Vollständige frische und verschobene SDKs
+
+Beide vollständigen isolierten SDK-Prüfungen ohne Fensterprüfungen bestehen
+mit jeweils **385 erfolgreichen Prüfbefehlen**:
+
+- macOS: `build/Canonical channels SDK ä mac 7itzrr5z`, verschoben unter
+  `proof/Native SDK ä 0n6v3i18/Relocated SDK ä`.
+- Linux: `build/Canonical channels SDK ä linux 9gpwkv9q`, verschoben unter
+  `proof/Native SDK ä aee01x5u/Relocated SDK ä`.
+
+Je 448 SDK-Dateien und 76 isolierte Kit-Eingaben sind SHA-256-erfasst. Alle
+27 Core-Module und öffentlichen Header stammen aus dem SDK. Die C-Grenzfälle
+und tatsächlich aufgezeichneten C-/Physim-Läufe samt CSV bestehen gegen das
+installierte und das aus SDK-Quellen neu gebaute Archiv. Alle früheren Gates,
+zwölf kalte native Projekte, unveränderte Cache-Wiederverwendung und sechs
+vollständige unabhängige Domänenorakel bleiben aktiv. Receipts stehen in
+`build/channel-declaration-sdk-mac-PASSED.json` und
+`build/channel-declaration-sdk-linux-PASSED.json`. Alle 19 in
+`build/channel-declaration-source-freeze.json` festgehaltenen Implementierungs-,
+Test- und Dokumentationsdateien sind während beider Prüfungen unverändert.
+API/ABI 3, Wire 5, Snapshot 3 und psrun 1 bleiben unverändert.
+
+PP-0372 bleibt für sämtliche API-/Analysegrenzen ungeprüft. Auch die gesamte
+Einheiten-, Windows-/Apple-Silicon- und Produktabnahme bleibt offen. Die letzte
+Abfrage der [C17-CI für die vorherige Revision `d9b167a`](https://github.com/PhysicSimulator/physim/actions/runs/37641732728)
+zeigt drei erfolgreiche Windows-Jobs; die übrigen Jobs laufen noch. Das ist kein
+Windows-Nachweis der aktuellen Kanalkorrektur.
+
+### Abschließende Gesamtläufe der Kanalkorrektur
+
+Die tatsächlichen Release-Gesamtläufe bestehen vollständig, jeweils **628/628**:
+
+- macOS/Apple Clang: `build/contact-world-language-release-mac/test-results/run-5f9izwxu`.
+- Debian 12/GCC: `build/contact-world-language-release-linux/test-results/run-ovk8fbvv`.
+
+Sie enthalten die früheren Compiler-, Runtime-, Format-, Runner-, Batch-,
+Domänen- und Projektbuildfälle sowie beide neuen Kanaldeklarationsfälle.
+Der Linux-Receipt ist zusätzlich lokal unter `build/channel-full-linux-results.json`
+erhalten. Die 22 gezielten Fälle, vier Sanitizerfälle und beide SDK-Prüfungen
+sind separate Nachweise; sie werden nicht zu einer erfundenen Gesamtsuite
+zusammengezählt. Die Fensterfallzahl im Katalog bleibt 77; dieser Schritt
+behauptet keine erneut ausgeführte gesamte Grafikabnahme.

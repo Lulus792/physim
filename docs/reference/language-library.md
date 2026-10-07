@@ -566,7 +566,7 @@ Bewegt den Empfänger mit Weltkraft in N und Drehmoment in N m um positives dt i
 Channel(name: String, unit: Unit, description: String) -> Channel
 ```
 
-Registriert einen skalaren Messkanal; nur beim Anlegen des Experiments verwenden, nicht in step oder scene.
+Deklariert einen eindeutigen Messkanal mit kanonischer SI-Skala 1 und begrenzten UTF-8-Metadaten. Werte vorher ausdrücklich nach SI umrechnen. Fehler sind mit attempt abfangbar und verbrauchen keinen Slot.
 
 Experimentmodul erforderlich.
 

@@ -1,0 +1,19 @@
+let metre = Unit(1,0,0,0,0,0,0,1,"m")
+let centimetre = Unit(1,0,0,0,0,0,0,0.01,"cm")
+let rejectedScale = attempt(Channel("wrong_scale",centimetre,"cm must be explicitly converted"))
+let rejectedName = attempt(Channel("bad\nname",metre,"test"))
+let rejectedLength = attempt(Channel("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",metre,"test"))
+let length = Channel("length",metre,"SI value converted from cm")
+let rejectedDuplicate = attempt(Channel("length",metre,"duplicate"))
+let after = Channel("after",Unit(0,0,0,0,0,0,0,1,"1"),"successful declaration after errors")
+func create():
+    assert(rejectedScale == nil && rejectedName == nil && rejectedLength == nil && rejectedDuplicate == nil)
+    metadata("model=canonical SI channel declaration\ninput=125 cm\nstored=1.25 m\n")
+    reset()
+func reset():
+    length.sample(centimetre.convert(125,metre))
+    after.sample(7)
+func step(dt: Float64):
+    reset()
+func scene():
+    sphere(Vec3(0,0,0),0.1,0x53aeefff,1)

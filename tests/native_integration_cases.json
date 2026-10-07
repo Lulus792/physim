@@ -1857,6 +1857,27 @@
       "libraries": [
         "core"
       ]
+    },
+    "channel-declaration-c": {
+      "sources": [
+        "tests/fixtures/channel_declaration.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ]
+    },
+    "channel-declaration-phys": {
+      "source": "tests/fixtures/language/channel_declaration.phys",
+      "mode": "--emit-experiment"
+    },
+    "channel-export-probe": {
+      "sources": [
+        "tests/channel_export_probe.c"
+      ],
+      "libraries": [
+        "core"
+      ]
     }
   },
   "tests": [
@@ -7516,6 +7537,35 @@
             "{root}"
           ],
           "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "channel_declaration_workflow",
+      "targets": [
+        "python",
+        "physim-runner",
+        "channel-declaration-c",
+        "channel-declaration-phys",
+        "channel-export-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_channel_declaration_workflow.py",
+            "--runner",
+            "{physim-runner}",
+            "--c-model",
+            "{channel-declaration-c}",
+            "--phys-model",
+            "{channel-declaration-phys}",
+            "--exporter",
+            "{channel-export-probe}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 90
         }
       ]
     }

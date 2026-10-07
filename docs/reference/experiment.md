@@ -211,7 +211,7 @@ ps_result ps_experiment_diagnostic(const ps_context *context, ps_diagnostic *out
 
 ## ps_channel_add
 
-Registriert einen skalaren Messkanal und liefert seinen Index; -1 bedeutet Fehler. Namen, Einheitensymbol und Beschreibung passend zu den Kapazitäten halten.
+Kopiert einen eindeutigen SI-Kanal mit Skala 1 und begrenzten UTF-8-Metadaten ohne Kürzung; liefert Index oder -1 und erhält den Kontext bei Fehlern.
 
 ```c
 int ps_channel_add(
@@ -220,6 +220,8 @@ int ps_channel_add(
     ps_unit unit,
     const char *description);
 ```
+
+Declare a canonical SI channel: unit.scale must equal 1. Samples are SI numbers; convert display-unit inputs explicitly before storing in values. Copies bounded UTF-8 metadata without truncation: name 1..47 bytes, symbol 0..15, description 0..95. Name/symbol have no controls; descriptions permit tab/newline. Names must be unique. Returns index or -1, preserving the entire context on failure. No allocation or retained pointers. Legacy raw schemas retain their existing file-format semantics; this validates declarations.
 
 ## ps_parameter_override
 

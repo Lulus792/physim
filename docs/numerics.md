@@ -107,6 +107,25 @@ Eigene Einheitensymbole werden nicht kopiert; ihre Lebensdauer liegt beim Aufruf
 Temperaturskalen und die automatische Dimensionsprüfung kompletter Analyseskripte
 sind weiterhin offen.
 
+### SI-Grenze für Experimentkanäle
+
+`ps_channel_add` und Physim `Channel` akzeptieren nur `unit.scale == 1`.
+Die Laufdatei speichert Dimensionen und Symbol, aber keine Kanalskala: Werte
+in `context.values` oder `channel.sample` müssen bereits SI sein.
+Beispiel: erst `ps_convert(125, cm, PS_METRE, &value)` beziehungsweise
+`centimetre.convert(125,metre)` ausführen, dann 1,25 im Meterkanal speichern.
+Die Bibliothek prüft die Metadaten; eine nackte Zahl kann sie nicht auf eine
+physikalisch richtige Einheit prüfen. Anzeigeeinheiten sind ein gesonderter
+Teil der App und ändern gespeicherte Werte nicht.
+
+Die Deklaration kopiert UTF-8 ohne Kürzung: Name 1–47 Byte, Symbol 0–15 Byte,
+Beschreibung 0–95 Byte. Name/Symbol enthalten keine Steuerzeichen; eine
+Beschreibung darf Zeilenumbrüche und Tabs enthalten. Namen sind eindeutig,
+höchstens 16 Kanäle. Fehler liefern in C -1 und erhalten den gesamten Kontext;
+in Physim sind sie mit `attempt` abfangbar. Die Rückgabe ist der Index,
+fehlgeschlagene Deklarationen verbrauchen keinen Slot. Eigene bereits angelegte
+Rohschemata und historische Laufdateien behalten ihren Formatvertrag.
+
 ## Referenzprüfungen
 
 Tests vergleichen RK45 mit Exponentialfunktion, harmonischem Oszillator und einer

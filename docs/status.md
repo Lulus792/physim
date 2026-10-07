@@ -3,6 +3,11 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-07. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Gemeinsame SI-Kanalgrenze:** C und Physim deklarieren Kanäle jetzt über denselben
+Validator. Skala 1, begrenzte UTF-8-Metadaten und eindeutige Namen werden vor
+jeder Kontextänderung geprüft. Laufdatei und CSV enthalten ausdrücklich nach
+SI umgerechnete Werte. [Vertrag](numerics.md).
+
 **Erster realer Gasbaustein:** Ein homogenes Van-der-Waals-Modell ergänzt Druck,
 Druckableitung, Energie und Entropiedifferenz in C und Physim. Ein synthetischer
 isothermer Vergleich speichert SI-Kanäle und alle Koeffizienten und besitzt

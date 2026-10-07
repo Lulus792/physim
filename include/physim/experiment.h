@@ -124,6 +124,13 @@ ps_result ps_experiment_log(const ps_context *context,ps_log_level level,const c
  * full record. Invalid input is atomic. Read returns PS_VERSION for old contexts. */
 ps_result ps_experiment_fail(ps_context *context, const ps_diagnostic *diagnostic);
 ps_result ps_experiment_diagnostic(const ps_context *context, ps_diagnostic *out);
+/* Declare a canonical SI channel: unit.scale must equal 1. Samples are SI
+ * numbers; convert display-unit inputs explicitly before storing in values.
+ * Copies bounded UTF-8 metadata without truncation: name 1..47 bytes, symbol
+ * 0..15, description 0..95. Name/symbol have no controls; descriptions permit
+ * tab/newline. Names must be unique. Returns index or -1, preserving the entire
+ * context on failure. No allocation or retained pointers. Legacy raw schemas
+ * retain their existing file-format semantics; this validates declarations. */
 int ps_channel_add(ps_context *context, const char *name, ps_unit unit, const char *description);
 ps_result ps_parameter_override(ps_context *context, const char *name, double value);
 ps_result ps_parameter_define(ps_context *context, const char *name, const char *description,

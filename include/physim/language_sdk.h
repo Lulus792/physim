@@ -782,16 +782,9 @@ static inline psrt_channel psrt_add_channel(psrt_host *host, const char *name, p
     ps_context *c = host->context;
     if (host->phase != PSRT_CREATE)
         psrt_fail(site, "Channels can only be declared during create");
-    if (!*name || strlen(name) >= sizeof c->channels[0].name ||
-        strlen(description) >= sizeof c->channels[0].description || !ps_unit_valid(unit) ||
-        unit.scale != 1 || strlen(unit.symbol) >= sizeof c->channels[0].unit)
-        psrt_fail(site, "Invalid channel metadata or non-canonical unit scale");
-    for (uint32_t index = 0; index < c->channel_count; index++)
-        if (strcmp(c->channels[index].name, name) == 0)
-            psrt_fail(site, "Duplicate channel name");
     int index = ps_channel_add(c, name, unit, description);
     if (index < 0)
-        psrt_fail(site, "Channel capacity exceeded");
+        psrt_fail(site, "Invalid channel declaration: canonical SI unit, bounded UTF-8 metadata, unique name and free capacity required");
     return (psrt_channel){c, (uint32_t)index};
 }
 static inline void psrt_sample(psrt_host *host, psrt_channel channel, double value,

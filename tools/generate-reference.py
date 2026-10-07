@@ -332,7 +332,7 @@ LANG_DESCRIPTIONS = {
     'divideUnit': 'Dividiert Dimensionen und Skalen zweier Einheiten.',
     'powerUnit': 'Erhebt eine Einheit in eine ganzzahlige Potenz.',
     'compatibleUnit': 'Prüft gleiche SI-Dimensionen unabhängig von Skala und Symbol.',
-    'Channel': 'Registriert einen skalaren Messkanal; nur beim Anlegen des Experiments verwenden, nicht in step oder scene.',
+    'Channel': 'Deklariert einen eindeutigen Messkanal mit kanonischer SI-Skala 1 und begrenzten UTF-8-Metadaten. Werte vorher ausdrücklich nach SI umrechnen. Fehler sind mit attempt abfangbar und verbrauchen keinen Slot.',
     'sample': 'Setzt den aktuellen Messwert des Kanals in seiner deklarierten Einheit. Auch den Anfangswert in reset setzen.',
     'logDebug': 'Schreibt eine Debug-Meldung mit aktueller Simulationszeit. Nur im Experiment; Bool meldet Annahme durch den Hostlogger.',
     'logInfo': 'Schreibt eine Info-Meldung mit aktueller Simulationszeit. Nur im Experiment; false bei ungültigem Text, ausgeschöpftem Budget oder I/O-Fehler.',
