@@ -4,12 +4,20 @@ Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-07. Der Projektplan is
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
 **Aktuelle Abnahme:** Die vollständigen erneuten Release-Prüfungen einschließlich
-der Localekorrektur und Kitprüfung bestehen auf dem Intel-Mac und unter Debian
-mit jeweils 564/564 Fällen.
+der Elternprozess-Abbruchprüfung bestehen auf dem Intel-Mac und unter Debian
+mit jeweils 565/565 Fällen.
 Der anschließende [Anforderungsabgleich](project-audit.md) bewahrt sämtliche
 Planpunkte und unterscheidet Implementierung, Teilnachweise und fehlende Abnahme.
-CI-Fehler bei separaten Beispielprüfungen und beim Prüfkit für verschobene Pakete
-werden dabei gesondert bearbeitet; lokale Tests ersetzen diese Releasegates nicht.
+Die Installation baut jetzt alle 61 kompilierten Sprachprodukte auch ohne
+`--examples`. Windows-Prüfungen verwenden logische Textzeilen und ein portables
+Pipe-Leseverfahren. Die erneute Remote-CI-Abnahme steht noch aus; lokale Tests
+ersetzen diese Releasegates nicht.
+
+**Abbruch von Laufserien:** Die mitgelieferten Offline-Runner überwachen den
+Elternanschluss auch innerhalb hängender Modellcallbacks. Harter Controllerabbruch
+beendet alle aktiven Worker und erhält fertige Archive und Journalzeilen.
+Ein-/Vierworker-Tests, Create-/Step-Hänger und Linux-ASan/UBSan sind ausgeführt.
+[Vertrag](monte-carlo.md), [konkrete Plattformnachweise](platform-validation.md).
 
 **Gespeicherter Lauf und Monte Carlo:** Die Lernpfade enthalten jetzt vollständige
 C-/Physim-Analysen für unabhängige Analyseprojekte mit Archivimport und

@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
                         "[--dt seconds] [--seed N] [--param name=value]... "
                         "[--speed 0|0.1..16 (interactive only)] [--log-events] [--diagnostics] (interactive only) [--record-scenes] "
                         "[--adaptive [--min-dt seconds] [--max-dt seconds]] "
-                        "[--until seconds (offline; --steps is the step budget)]\n"
+                        "[--until seconds (offline; --steps is the step budget)] [--parent-watch (offline pipe)]\n"
                         "       physim-runner module --describe\n");
         return 2;
     }
@@ -71,12 +71,16 @@ int main(int argc, char **argv) {
     uint64_t steps = 4000, seed = 42;
     double dt = 0.005, speed = 1, minimum_dt=1e-8, maximum_dt=.1, end_time=0;
     bool until_option=false;
-    bool speed_option = false;
+    bool speed_option = false, parent_watch = false;
     ps_context c = {0};
     c.struct_size = sizeof c;
     c.api_version = PS_API_VERSION;
     for (int i = 3; i < argc; i++) {
         char *end = NULL;
+        if(!strcmp(argv[i],"--parent-watch")) {
+            if(parent_watch)return 2;
+            parent_watch=true;continue;
+        }
         if (!strcmp(argv[i], "--interactive")) {
             interactive = true;
             continue;
@@ -135,9 +139,13 @@ int main(int argc, char **argv) {
         (step_bounds && !adaptive) || (adaptive &&
          (!isfinite(minimum_dt) || minimum_dt<DBL_MIN || !isfinite(maximum_dt) ||
           maximum_dt>1 || minimum_dt>dt || dt>maximum_dt)) ||
-        !ps_speed_valid(speed) || (speed_option && !interactive) || ((log_events || diagnostics) && !interactive))
+        !ps_speed_valid(speed) || (speed_option && !interactive) || ((log_events || diagnostics) && !interactive) ||
+        (parent_watch && (interactive || !strcmp(argv[2],"--describe"))))
         return 2;
     ps_binary_stdio();
+    if(parent_watch && !ps_parent_watch_start()) {
+        fprintf(stderr,"Cannot monitor parent stdin pipe\n");return 125;
+    }
     runner_log_state logs={.events=log_events,.disabled=describe};
     if(!describe && snprintf(logs.path,sizeof logs.path,"%s.pslog",argv[2])>=(int)sizeof logs.path)return 2;
     c.logger=(ps_logger){&logs,runner_log_write};

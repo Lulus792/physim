@@ -3,6 +3,64 @@
 Stand: 7. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Elternprozess-Abbruch und Paketierungsfehler am 7. Oktober 2026
+
+Ein unabhängiger Versuch mit dem unveränderten SDK von `222d4bb` beendet nur
+die PID des Seriencontrollers. Der getrennte Runner schreibt danach weiter in
+seine Heartbeat-Datei; die Fixture wurde anschließend gezielt beendet.
+Die neue Offline-Pipeüberwachung endet auch innerhalb eines hängenden Create-
+oder Step-Callbacks mit Code 125. Ein- und Vierworker-Serien prüfen den harten
+Controllerabbruch, unveränderte abgeschlossene Archive, erhaltene Journalzeilen
+und das Fehlen eines erfundenen Gesamtberichts.
+
+Die sechs gezielten Runner-/Serienprüfungen bestehen auf Intel macOS unter
+`build/contact-world-language-release-mac/test-results/run-w2zuyyw1` und Debian
+unter `build/contact-world-language-release-linux/test-results/run-nhql7sdy`.
+Die neue Abbruchfixture besteht zusätzlich unter Linux mit ASan/UBSan unter
+`build/spring-tutorial-asan-linux/test-results/run-um7q1_rf`.
+Der grafische Endzeit-Ablauf besteht nach einer Korrektur der Scroll-/Klickfolge
+im Test auf macOS unter `run-fj81o4wf` und Linux unter `run-2fkhvsx1` in den
+jeweiligen Release-Testordnern. Die Prüfung ersetzt die Texteingabe nicht durch
+direktes Setzen des App-Zustands.
+
+Der [CI-Lauf von `222d4bb`](https://github.com/PhysicSimulator/physim/actions/runs/37550644122)
+zeigt weitere Fehler im getrennten SDK-Schritt und in Windows-Tests.
+Die heruntergeladenen GCC-/ARM-Artefakte scheitern am installierten
+`language-contact_stack`-Modul: `--install` hatte ohne `--examples` keine
+kompilierten Sprachbeispiele erzeugt. Installation baut jetzt den vollständigen
+Katalog automatisch; der SDK-Prüfer verlangt alle Produkte und Manifesteinträge.
+Die Windows-Testartefakte zeigen einen CRLF/LF-Vergleichsfehler in der
+Extremwertprüfung und `select()` auf einer Pipe im Logging-Test. Der Textleser
+verwendet den CRT-Textmodus; ein begrenztes Queue-/Thread-Leseverfahren erhält
+die Fristprüfung auch für Windows-Pipes. Aktuelle Windows-Abnahme benötigt
+einen erneut tatsächlich ausgeführten Workflow.
+
+Die drei ausgewerteten Archive (`linux-ui-gcc`, `macos-macos-15` und
+`sdk-windows-v143-Debug`) stimmen byteweise per SHA-256 mit den über die
+GitHub-Artefakt-API veröffentlichten Digests überein. Ihre Hauptsuiten bestehen
+mit 564/564 auf GCC und ARM sowie 561/564 unter Windows/v143 Debug. Die drei
+Windows-Ausfälle sind ausschließlich `analysis_extremes`, `runner_logging_c`
+und `runner_logging_phys`; dieser alte Stand bestätigt noch keine Korrektur.
+
+Diese Arbeiten sichern bestehende Serien und Release-Prüfungen. Die im
+Anforderungsabgleich fehlende Physim-Sprachbindung für Batch ist weiterhin offen.
+
+Die vollständigen Release-Suiten mit der Abbruchprüfung und den CI-Testkorrekturen
+bestehen mit **565/565** auf Intel macOS unter
+`build/contact-world-language-release-mac/test-results/run-n9fesl5k` und Debian/GCC
+unter `build/contact-world-language-release-linux/test-results/run-vl2t4muf`.
+Beide SDKs wurden mit `--install` ohne `--examples` erzeugt und enthalten den
+vollständigen Katalog mit 61 kompilierten Sprachprodukten.
+
+Beide ausschließlich aus dem unabhängigen Kit gestarteten SDK-Prüfungen bestehen:
+macOS unter `build/parent-watch-sdk-proof-mac/Native SDK ä cb0fysqc`, Linux unter
+`build/parent-watch-sdk-proof-linux/Native SDK ä m7a3cycd`. Linux führt zusätzlich
+alle neun grafischen SDK-Projektabläufe erfolgreich aus. Die endgültigen Pakete
+unter `build/Parent watch clean SDK ä mac` beziehungsweise `build/Parent watch clean SDK ä linux`
+erhalten die aktuelle Dokumentation mit erneuertem SHA-256-Manifest. Alle Code-
+und Beispieldateien werden gegen die verifizierten Kopien geprüft; die jeweilige
+App muss zudem bytegleich zum geprüften Release-Binary bleiben.
+
 ## Gesamtabgleich und CI-Prüfpfade am 7. Oktober 2026
 
 Der [Abgleich mit dem vollständigen Plan](project-audit.md) bewahrt 531 Quellblöcke

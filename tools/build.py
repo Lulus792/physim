@@ -387,7 +387,8 @@ class Builder:
         libraries = {"core": core, "platform": platform, "language": language, "batch": batch, "zlib": zlib}
         compiler = self.executable("physimc", ["src/language/main.c", "src/language/loader.c"], [language])
         products.append(compiler)
-        if getattr(self.args, "examples", False):
+        # Installed SDKs ship the complete executable language example catalog.
+        if getattr(self.args, "examples", False) or getattr(self.args, "install", None):
             products.extend(self.build_language_examples(compiler, core))
         products.append(self.executable("physim-runner", ["runners/experiment.c"], [platform, core]))
         products.append(self.executable("physim-analysis-runner", ["runners/analysis.c"], [platform, core]))

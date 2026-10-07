@@ -34,6 +34,11 @@ double ps_clock(void);
 void ps_sleep(unsigned ms);
 int ps_stdin_read(void *buffer, size_t capacity);
 void ps_binary_stdio(void);
+/* Start a detached watchdog for an offline child with a dedicated stdin pipe.
+ * Pipe EOF/error exits the entire process with 125, even while model callbacks
+ * are blocked. Call once before loading user code; not for interactive input.
+ * This is parent-lifetime protection, not an adversarial security boundary. */
+bool ps_parent_watch_start(void);
 bool ps_make_directory(const char *path);
 bool ps_make_directory_exclusive(const char *path);
 bool ps_executable_path(char *out, size_t capacity);

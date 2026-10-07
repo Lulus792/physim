@@ -1580,6 +1580,16 @@
       "libraries": [
         "core"
       ]
+    },
+    "parent-watch-model": {
+      "sources": [
+        "tests/fixtures/parent_watch_model.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ],
+      "module": true
     }
   },
   "tests": [
@@ -6146,6 +6156,32 @@
             "{work}"
           ],
           "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "parent_watch",
+      "targets": [
+        "python",
+        "physim-runner",
+        "physim-batch",
+        "parent-watch-model"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_parent_watch.py",
+            "--runner",
+            "{physim-runner}",
+            "--batch",
+            "{physim-batch}",
+            "--module",
+            "{parent-watch-model}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 120
         }
       ]
     }

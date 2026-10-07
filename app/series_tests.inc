@@ -22,10 +22,14 @@ static bool series_test_start(app *a,const char *root,const char *mode) {
     snprintf(a->batch_channel,sizeof a->batch_channel,"angle");return true;
 }
 static bool series_test_click(app *a,struct nk_rect r) {
+    static unsigned scroll_pending;
+    /* Injected wheel events are consumed and laid out after this test callback. */
+    if(scroll_pending) {scroll_pending--;return false;}
     struct nk_rect panel=a->dock_panels[PS_DOCK_WORKSPACE];
     if(!r.w)return false;
     if(r.y<panel.y+32 || r.y+r.h>panel.y+panel.h-24) {
-        test_plot_wheel(a,panel.x+panel.w/2,panel.y+panel.h/2,r.y<panel.y+32?1:-1);return false;
+        test_plot_wheel(a,panel.x+panel.w/2,panel.y+panel.h/2,r.y<panel.y+32?1:-1);
+        scroll_pending=2;return false;
     }
     test_mouse(a,r,true);return true;
 }
@@ -73,7 +77,9 @@ static void series_test_frame(app *a,const char *mode,int *stage,int *code,const
         break;
     case 4:test_mouse(a,a->batch_adaptive_bounds,false);break;
     case 5:ok=a->batch_adaptive && a->batch_target;break;
-    case 6:if(!series_test_click(a,a->batch_timing_bounds[1]))return;break;
+    case 6:
+        if(!series_test_click(a,a->batch_timing_bounds[1]))return;
+        break;
     case 7:test_mouse(a,a->batch_timing_bounds[1],false);break;
     case 8:test_key(a,SDLK_A);break;
     case 9: {

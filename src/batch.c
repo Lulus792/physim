@@ -608,9 +608,9 @@ static ps_result run_pool(const ps_batch_options *o, const char *module, FILE *j
             snprintf(slot->path, sizeof slot->path, "%s/run-%04u.psrun", o->directory, next + 1);
             snprintf(seed, sizeof seed, "%llu", (unsigned long long)(o->seed + next));
             char parameters[PS_MAX_PARAMETERS][128];
-            const char *args[17 + 2 * PS_MAX_PARAMETERS] = {
-                o->runner, module, slot->path, "--steps", steps, "--dt", dt, "--seed", seed};
-            size_t argument_count = 9;
+            const char *args[18 + 2 * PS_MAX_PARAMETERS] = {
+                o->runner, module, slot->path, "--steps", steps, "--dt", dt, "--seed", seed,"--parent-watch"};
+            size_t argument_count = 10;
             if(o->end_time>0) {args[argument_count++]="--until";args[argument_count++]=target;}
             if(o->adaptive) {
                 args[argument_count++]="--adaptive";

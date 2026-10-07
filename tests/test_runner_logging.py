@@ -3,10 +3,11 @@ import json
 import math
 import os
 from pathlib import Path
-import select
+import queue
 import struct
 import subprocess
 import sys
+import threading
 import time
 
 runner, module, directory = sys.argv[1:]
@@ -66,6 +67,18 @@ for enabled in (False, True):
     sent = 0
     snapshots = 0
     deadline = time.monotonic() + 15
+    chunks = queue.Queue()
+    def read_stream():
+        try:
+            while True:
+                chunk = os.read(child.stdout.fileno(), 65536)
+                chunks.put(chunk)
+                if not chunk:
+                    break
+        except OSError as error:
+            chunks.put(error)
+    reader = threading.Thread(target=read_stream, daemon=True)
+    reader.start()
     def send(kind, payload=b''):
         global sent
         child.stdin.write(struct.pack('<IIIII', 0x5053494d, 5, kind, len(payload), sent) + payload)
@@ -74,9 +87,12 @@ for enabled in (False, True):
     try:
         while not received or received[-1] != 8:
             assert time.monotonic() < deadline, received
-            ready, _, _ = select.select([child.stdout], [], [], .1)
-            if ready:
-                chunk = os.read(child.stdout.fileno(), 65536)
+            try:
+                chunk = chunks.get(timeout=.1)
+            except queue.Empty:
+                chunk = None
+            if chunk is not None:
+                assert not isinstance(chunk, OSError), chunk
                 assert chunk, (received, child.poll())
                 incoming.extend(chunk)
             while len(incoming) >= 20:
@@ -107,6 +123,9 @@ for enabled in (False, True):
     finally:
         if child.poll() is None:
             child.kill()
+        child.wait(timeout=5)
+        reader.join(timeout=5)
+        assert not reader.is_alive(), 'stdout reader did not stop after runner exit'
         child.communicate(timeout=5)
 
 invalid = subprocess.run([runner, module, str(work / 'invalid'), '--log-events'], capture_output=True, timeout=5)

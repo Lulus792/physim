@@ -43,6 +43,11 @@ def main():
     native = importlib.util.module_from_spec(spec)
     sys.dont_write_bytecode = True
     spec.loader.exec_module(native)
+    for name, mode, _ in native.language_examples():
+        extension = suffix if mode == "--emit-c" else module_suffix
+        product = "bin/language-" + name + extension
+        if product not in metadata["files"] or not (sdk / product).is_file():
+            raise RuntimeError(f"SDK is missing its compiled language example: {product}")
     # Compile the independent public-API probe and header units against the
     # installed include directory and static archive, not repository sources.
     consumer = root / "Consumer ä"

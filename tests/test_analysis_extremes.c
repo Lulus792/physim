@@ -6,7 +6,8 @@
 #include <string.h>
 #define CHECK(x) do { if (!(x)) { fprintf(stderr,"Analysis extremes %d: %s\n",__LINE__,#x);return 1;} } while(0)
 static int contains(const char *path,const char *needle) {
-    FILE *f=fopen(path,"rb"); if(!f)return 0;
+    /* Match logical report lines; the Windows CRT writes CRLF in text mode. */
+    FILE *f=fopen(path,"r"); if(!f)return 0;
     char text[8192];size_t n=fread(text,1,sizeof text-1,f);fclose(f);text[n]=0;
     return strstr(text,needle)!=NULL;
 }

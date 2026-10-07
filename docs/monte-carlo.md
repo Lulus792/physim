@@ -92,6 +92,16 @@ anderen aktiven Runner. Das Journal und die bereits geprüften Endwerte bleiben 
 Fehlender `status.txt` bedeutet
 keinen bestätigten Abschluss, etwa nach einem harten Prozess-/Systemabbruch.
 
+Auch beim harten Beenden nur des Controller-Prozesses endet jeder aktive Runner:
+Er überwacht die ausschließlich dafür verwendete Standardeingabe-Pipe mit
+`--parent-watch`. Ein geschlossener Elternanschluss beendet den Prozess mit Code
+125, selbst wenn ein Modellcallback hängt. Bereits abgeschlossene Laufdateien und
+Journalzeilen bleiben erhalten; ein Gesamtbericht wird dabei nicht erzeugt.
+Die Überwachung gilt für die mitgelieferten Runner und schützt gegen unbeabsichtigte
+verwaiste Prozesse. Sie ist keine Sicherheitsgrenze für absichtlich manipulierenden
+Modulcode. Einzelne Offline-Aufrufe verwenden die Option nur mit einer offenen Pipe;
+interaktiver Betrieb, Parameterabfrage und gewöhnliche Eingabedateien werden abgewiesen.
+
 Gleiche Seeds, identischer Modulcode, gleiche Schritte beziehungsweise Zielzeit-/Integratorgrenzen und dieselbe Laufumgebung
 reproduzieren die Messwerte, sofern der Code ausschließlich explizit gesetzte RNGs
 verwendet. Ein eigener Zugriff auf Uhrzeit, externe Dateien oder Betriebssystem-Zufall

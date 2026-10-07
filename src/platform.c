@@ -233,6 +233,19 @@ void ps_binary_stdio(void) {
     SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
     _set_abort_behavior(0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
 }
+static DWORD WINAPI parent_watch(void *unused) {
+    (void)unused;
+    HANDLE input = GetStdHandle(STD_INPUT_HANDLE);
+    unsigned char buffer[64];DWORD got;
+    while (ReadFile(input,buffer,sizeof buffer,&got,NULL) && got) {}
+    _Exit(125);
+}
+bool ps_parent_watch_start(void) {
+    if(GetFileType(GetStdHandle(STD_INPUT_HANDLE))!=FILE_TYPE_PIPE)return false;
+    HANDLE thread=CreateThread(NULL,65536,parent_watch,NULL,0,NULL);
+    if(!thread)return false;
+    CloseHandle(thread);return true;
+}
 bool ps_make_directory(const char *path) {
     wchar_t *p = wide(path);
     if (!p)
@@ -260,6 +273,8 @@ bool ps_executable_path(char *out, size_t cap) {
 #include <errno.h>
 #include <fcntl.h>
 #include <signal.h>
+#include <poll.h>
+#include <pthread.h>
 #include <sys/resource.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -407,6 +422,28 @@ int ps_stdin_read(void *b, size_t n) {
 void ps_binary_stdio(void) {
     fcntl(0, F_SETFL, O_NONBLOCK);
     signal(SIGPIPE, SIG_IGN);
+}
+static void *parent_watch(void *unused) {
+    (void)unused;
+    unsigned char buffer[64];struct pollfd input={0,POLLIN|POLLHUP,0};
+    for(;;) {
+        int ready=poll(&input,1,-1);
+        if(ready<0 && errno==EINTR)continue;
+        if(ready<=0 || (input.revents&(POLLERR|POLLNVAL)))_Exit(125);
+        ssize_t got=read(0,buffer,sizeof buffer);
+        if(got>0)continue;
+        if(got<0 && (errno==EINTR || errno==EAGAIN))continue;
+        _Exit(125);
+    }
+}
+bool ps_parent_watch_start(void) {
+    struct stat info;if(fstat(0,&info) || !S_ISFIFO(info.st_mode))return false;
+    pthread_attr_t attributes;
+    if(pthread_attr_init(&attributes))return false;
+    int error=pthread_attr_setdetachstate(&attributes,PTHREAD_CREATE_DETACHED);
+    if(!error)error=pthread_attr_setstacksize(&attributes,65536);
+    pthread_t thread;if(!error)error=pthread_create(&thread,&attributes,parent_watch,NULL);
+    pthread_attr_destroy(&attributes);return error==0;
 }
 bool ps_make_directory(const char *p) { return !mkdir(p, 0755) || errno == EEXIST; }
 bool ps_make_directory_exclusive(const char *p) { return !mkdir(p, 0755); }

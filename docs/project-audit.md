@@ -70,8 +70,8 @@ unter `build/contact-world-language-release-linux/test-results/run-dbd70ucn`.
 Das ist ein Nachweis für diesen Stand und diese Umgebungen. Die anschließenden
 Änderungen an Laufzeitsupport und Prüfern benötigen eigene Nachweise; eine
 nachträgliche Änderung der Zahl macht den alten Lauf nicht zu einem aktuellen
-Gesamtlauf. Der Katalog enthält mit der neuen Kitprüfung 564 Fälle ohne Fenster,
-549 ohne SDL und weiterhin 66 Fensterfälle.
+Gesamtlauf. Der Katalog enthält mit Kit- und Elternprozess-Abbruchprüfung
+565 Fälle ohne Fenster, 550 ohne SDL und weiterhin 66 Fensterfälle.
 
 Die Abnahme bleibt offen, bis sämtliche konkreten Anforderungen passende
 aktuelle Implementierungs-, Laufzeit- und Plattformnachweise besitzen.
