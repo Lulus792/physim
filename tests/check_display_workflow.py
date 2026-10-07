@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -175,7 +176,18 @@ def timed_series(flow, directory, scaled=False):
         flow.run("--workspace-state-test", root, "series-read", timeout=130,
                  marker="TIMED SERIES series-read SELF-TEST: PASSED")
         require(hashes == [fingerprint(path) for path in protected], "Reopening a study changed its data")
-    require(records[0] == records[1], "Timed C/Physim studies differ in accepted times or values")
+    require(len(records[0]) == len(records[1]), "Timed C/Physim studies differ in run count")
+    for run_index,(c_rows,phys_rows) in enumerate(zip(records[0],records[1])):
+        require(len(c_rows) == len(phys_rows), f"Timed study {run_index}: accepted step counts differ")
+        for sample_index,(c_row,phys_row) in enumerate(zip(c_rows,phys_rows)):
+            require(len(c_row) == len(phys_row), "Timed study channel counts differ")
+            for channel,(c_value,phys_value) in enumerate(zip(c_row,phys_row)):
+                # Native C and emitted C may contract arithmetic differently.
+                # This bound is 100x tighter than the shared RK45 relative tolerance.
+                require(math.isfinite(c_value) and math.isfinite(phys_value) and
+                        math.isclose(c_value,phys_value,rel_tol=1e-10,abs_tol=1e-12),
+                        f"Timed study run {run_index}, sample {sample_index}, channel {channel}: "
+                        f"C={c_value!r}, Physim={phys_value!r}")
 
 
 def masked_png_pixels(path):

@@ -100,6 +100,9 @@ static const documentation_topic documentation_topics[] = {
     {"Monte Carlo: Anfangswerte", "docs/monte-carlo-tutorial.md", false},
     {"Gespeicherten Lauf auswerten", "docs/saved-run-tutorial.md", false},
     {"Projektanforderungen & Abnahme", "docs/project-audit.md", false},
+    {"Batch & Monte Carlo in Physim", "docs/batch-language.md", false},
+    {"batch.h", "include/physim/batch.h", true},
+    {"C: Batch-Hostdienste", "docs/reference/batch.md", false},
 };
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27

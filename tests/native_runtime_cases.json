@@ -1131,25 +1131,25 @@
     },
     {
       "name": "stringindexnegative",
-      "source": "let text = \"Grüße\"\nlet ch = text[-1]\n",
+      "source": "let text = \"Gr\u00fc\u00dfe\"\nlet ch = text[-1]\n",
       "exit_code": 70,
       "stderr_pattern": "stringindexnegative\\.phys:[0-9]+:[0-9]+: runtime error:.*String index, slice or size out of range"
     },
     {
       "name": "stringindexupper",
-      "source": "let text = \"Grüße\"\nlet ch = text[5]\n",
+      "source": "let text = \"Gr\u00fc\u00dfe\"\nlet ch = text[5]\n",
       "exit_code": 70,
       "stderr_pattern": "stringindexupper\\.phys:[0-9]+:[0-9]+: runtime error:.*String index, slice or size out of range"
     },
     {
       "name": "stringsliceclosed",
-      "source": "let text = \"Grüße\"\nlet part = text[0...5]\n",
+      "source": "let text = \"Gr\u00fc\u00dfe\"\nlet part = text[0...5]\n",
       "exit_code": 70,
       "stderr_pattern": "stringsliceclosed\\.phys:[0-9]+:[0-9]+: runtime error:.*String index, slice or size out of range"
     },
     {
       "name": "stringstepzero",
-      "source": "let text = \"Grüße\"\nlet part = text[... by 0]\n",
+      "source": "let text = \"Gr\u00fc\u00dfe\"\nlet part = text[... by 0]\n",
       "exit_code": 70,
       "stderr_pattern": "stringstepzero\\.phys:[0-9]+:[0-9]+: runtime error:.*Range step must be positive"
     },
@@ -1412,6 +1412,31 @@
       "exit_code": 70,
       "stderr_pattern": "warm_count\\.phys:[0-9]+:[0-9]+: runtime error:.*Warm impulse count",
       "memory_balance": true
+    },
+    {
+      "name": "batch_values",
+      "source_file": "examples/language/batch_values.phys",
+      "exit_code": 0,
+      "stdout": "Batch values passed\n",
+      "stderr": ""
+    },
+    {
+      "name": "batch_seed",
+      "source": "let b = Batch(\"/tmp/model\",\"/tmp/new\",\"position\",2,1,0.01,-1,1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "batch_seed\\.phys:[0-9]+:[0-9]+: runtime error:.*Invalid Batch counts"
+    },
+    {
+      "name": "batch_endpoint",
+      "source": "let b = Batch(\"/tmp/model\",\"/tmp/new\",\"position\",1,1,0.01,42,1)\nlet value = b.value(0)\n",
+      "exit_code": 70,
+      "stderr_pattern": "batch_endpoint\\.phys:[0-9]+:[0-9]+: runtime error:.*Batch endpoint is not valid"
+    },
+    {
+      "name": "batch_index",
+      "source": "let b = Batch(\"/tmp/model\",\"/tmp/new\",\"position\",1,1,0.01,42,1)\nlet status = b.status(-1)\n",
+      "exit_code": 70,
+      "stderr_pattern": "batch_index\\.phys:[0-9]+:[0-9]+: runtime error:.*Batch run index out of bounds"
     }
   ]
 }

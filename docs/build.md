@@ -146,8 +146,8 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt derzeit 565 Tests ohne Fenster aus, mit `--no-app` die
-550 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
+`--test` führt derzeit 572 Tests ohne Fenster aus, mit `--no-app` die
+557 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
 Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.
@@ -325,8 +325,8 @@ Prüfsummen und benötigen keine `CMakeLists.txt`.
 
 ### Sprachbeispiele ohne CMake bauen
 
-`--examples` baut zusätzlich die 18 eigenständigen Sprachprogramme und alle
-43 Experiment-/Analysemodule aus dem bisherigen Sprachbeispielprojekt. Der
+`--examples` baut zusätzlich die 19 eigenständigen Sprachprogramme und alle
+44 Experiment-/Analysemodule aus dem bisherigen Sprachbeispielprojekt. Der
 Beispielbuild und die SDK-Prüfung lesen denselben Katalog. SDL ist dafür nicht nötig.
 
 ```sh
@@ -412,7 +412,7 @@ unveränderte Signatur. Protokolle und Bilder liegen unter `build/native/LaunchS
 
 Die SDK-Prüfung kopiert und verschiebt das Paket in einen Pfad mit Leerzeichen
 und Umlaut. Sie prüft alle mitgelieferten Module, öffentliche Header einzeln,
-18 eigenständige Sprachprogramme und neu gebaute C-/Physim-Projekte samt echten
+19 eigenständige Sprachprogramme und neu gebaute C-/Physim-Projekte samt echten
 Runnern und Mess-/Berichtsdateien. Zusätzlich werden die installierten Core-Quellen,
 alle acht C-Vorlagen samt Analyse sowie 36 Sprachmodule unabhängig neu gebaut.
 Neun Sprachexperimente laufen mit beiden allgemeinen Sprach-Auswertungen;
@@ -478,6 +478,11 @@ veraltete Referenzen und Tutorialcode (wenn Python verfügbar ist).
 `documentation_window` prüft mit aktivierten Grafiktests alle registrierten Seiten,
 Suche und das unabhängige Hilfefenster.
 
+macOS-Entwicklungsartefakte werden nach dem Linken mit einer lokalen Ad-hoc-
+Signatur versehen, bevor sie atomar veröffentlicht und im Cache erfasst werden.
+Das verhindert auf dem geprüften Intel-Mac die beobachtete Startblockade neuer
+unsignierter Programme. Diese Signatur benötigt kein Entwicklerzertifikat.
+
 ### Installiertes SDK prüfen
 
 Der direkte Ablauf prüft sowohl die ausgelieferten Programme und Bibliotheken
@@ -502,7 +507,7 @@ Das Skript kopiert und verschiebt das SDK in einen Pfad mit Leerzeichen und
 Umlaut. Es kontrolliert die Dateiprüfsummen und baut einen unabhängigen Verbraucher
 gegen die installierte Kernbibliothek. Jeder öffentliche Header wird separat
 kompiliert. Danach baut es die Kernbibliothek erneut aus den installierten Quellen
-und verwendet sie für acht C-Experimente und 36 Sprachmodule. Die 18 eigenständigen
+und verwendet sie für acht C-Experimente und 44 Sprachmodule. Die 19 eigenständigen
 Sprachprogramme laufen gegen die mitgelieferte Kernbibliothek.
 
 Die installierten Runner führen alle acht C-Vorlagen aus. Neun Sprach-Experimente

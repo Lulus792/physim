@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-07",
-  "inspected_revision": "4841ee2d1b04874b71bb8b18dd9d64d51f77cfb1",
+  "inspected_revision": "a5c7985ca7439ed94fc345ef8378625551ad3410",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -3571,12 +3571,17 @@
       "kind": "list",
       "scope": "planned",
       "text": "5. **LANG-005 – Auswertung:** Dataset-/Series-/Report-Bindungen sowie Batch/Monte Carlo; gespeicherte C- und Sprachläufe werden gleichermaßen verarbeitet, geplottet und exportiert.\n",
-      "status": "incomplete",
+      "status": "implemented",
       "evidence": [
-        "src/language/builtins.c",
-        "src/batch.h"
+        "include/physim/batch.h",
+        "include/physim/language_batch.h",
+        "include/physim/language_batch_host.h",
+        "tests/test_language_batch.py",
+        "tests/test_batch_documentation.py",
+        "docs/batch-language.md",
+        "docs/platform-validation.md"
       ],
-      "note": "App-/CLI-Controller ist privat; im Sprachregister fehlt eine Bindung für das Starten archivierter Runner-Serien."
+      "note": "Dataset-/Series-/Report-Bindungen und archivierte Batch-/Monte-Carlo-Serien sind implementiert. Vier C-/Physim-Kombinationen, CLI-Parität, Pause/Wiederaufnahme, Rohdaten, Diagramme und Exporte sind ausgeführt. Aktuelle vollständige Plattform- und Produktabnahme bleibt separat offen."
     },
     {
       "id": "PP-0514",
@@ -5096,9 +5101,15 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Batch-/Parameterlauf-Controller.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "src/batch.c",
+        "runners/batch.c",
+        "runners/analysis.c",
+        "tests/test_batch_target_time.c",
+        "tests/test_language_batch.py"
+      ],
+      "note": "Archivierter Serien-/Parametercontroller mit festen SI-Parametern, Sweep, Parallelität, Zielzeit, adaptiven Budgets, Teiljournal und unveränderter Wiederaufnahme. Geprüfte C-/Physim-/CLI-Wege; keine Gesamtproduktabnahme."
     },
     {
       "id": "PP-0694",
@@ -8310,5 +8321,6 @@
       "evidence": [],
       "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
     }
-  ]
+  ],
+  "inspected_working_tree": true
 }

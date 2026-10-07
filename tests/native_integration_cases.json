@@ -1590,6 +1590,53 @@
         "core"
       ],
       "module": true
+    },
+    "batch-analysis-c": {
+      "sources": [
+        "tests/fixtures/analysis_batch.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "batch-analysis-phys": {
+      "source": "tests/fixtures/language/batch_analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "batch-analysis-probe": {
+      "sources": [
+        "tests/test_language_batch_report.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "analysis-diagnostic-tail": {
+      "sources": [
+        "tests/fixtures/analysis_diagnostic_tail.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "batch-documentation-c": {
+      "sources": [
+        "examples/documentation/batch_analysis.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "batch-documentation-phys": {
+      "source": "examples/language/batch_analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "batch-documentation-model-phys": {
+      "source": "examples/language/uncertain_projectile.phys",
+      "mode": "--emit-experiment"
     }
   },
   "tests": [
@@ -6182,6 +6229,85 @@
             "{work}"
           ],
           "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "language_batch",
+      "targets": [
+        "python",
+        "physim-analysis-runner",
+        "physim-runner",
+        "physim-batch",
+        "batch-analysis-c",
+        "batch-analysis-phys",
+        "target-c",
+        "target-phys",
+        "batch-analysis-probe",
+        "analysis-diagnostic-tail",
+        "physimc"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_language_batch.py",
+            "--compiler",
+            "{physimc}",
+            "--analysis-runner",
+            "{physim-analysis-runner}",
+            "--runner",
+            "{physim-runner}",
+            "--batch",
+            "{physim-batch}",
+            "--c-analysis",
+            "{batch-analysis-c}",
+            "--phys-analysis",
+            "{batch-analysis-phys}",
+            "--c-model",
+            "{target-c}",
+            "--phys-model",
+            "{target-phys}",
+            "--probe",
+            "{batch-analysis-probe}",
+            "--legacy",
+            "{analysis-diagnostic-tail}",
+            "--c-source",
+            "{root}/tests/fixtures/target_experiment.c",
+            "--phys-source",
+            "{root}/tests/fixtures/language/target_experiment.phys",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 240
+        }
+      ]
+    },
+    {
+      "name": "batch_documentation",
+      "targets": [
+        "python",
+        "physim-analysis-runner",
+        "batch-documentation-c",
+        "batch-documentation-phys",
+        "uncertain_projectile",
+        "batch-documentation-model-phys",
+        "batch-analysis-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_batch_documentation.py",
+            "{physim-analysis-runner}",
+            "{batch-documentation-c}",
+            "{batch-documentation-phys}",
+            "{uncertain_projectile}",
+            "{batch-documentation-model-phys}",
+            "{batch-analysis-probe}",
+            "{work}"
+          ],
+          "timeout": 240
         }
       ]
     }

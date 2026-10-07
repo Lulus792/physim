@@ -3,6 +3,81 @@
 Stand: 7. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Batch-Hostdienste und Physim 0.178.0 am 7. Oktober 2026
+
+Analysen erhalten einen optionalen, größen- und versionsgeprüften `run_host`-Tail
+innerhalb ABI 3. Ein ausdrücklicher Host liefert den vorhandenen Controller;
+der Core bleibt unabhängig von Prozess- und GUI-Code. Besitzende `Batch`-Werte
+kopieren ihre Konfiguration und Ergebnisse, einschließlich Arrays, optionaler
+Werte, Strukturfelder und Closures. Sie starten feste, zeitgesteuerte, adaptive
+und Parameterstudien und können nach journalierter Teilerledigung pausieren.
+Die Fortsetzung validiert die alte Serie erneut und schreibt ausschließlich in
+einen neuen Ordner. [Benutzung und vollständige Beispiele](batch-language.md).
+
+Die gemischte Prüfung führt 32 C-/Physim-Analysekonfigurationen und acht CLI-
+Referenzen aus. Sie vergleicht alle gespeicherten Zeitpunkte und Werte,
+Controllerzähler, Messstatus, Quellen, Histogramme, exklusiven Ausgabezugriff
+und unveränderte frühere Archive. Die vollständigen C-/Physim-Monte-Carlo-
+Beispiele werden in allen vier Kombinationen geprüft: 1024 rohe Trajektorien,
+unabhängig berechnete Mittelwerte, Streuungen, Type-7-Quantile und Histogramme.
+Die gezielte macOS-Prüfung besteht mit 10/10 unter
+`build/contact-world-language-release-mac/test-results/run-hkaxnwf8`.
+Die sieben gezielten Linux-Clang-14-ASan/UBSan-Prüfungen bestehen unter
+`build/batch-language-clang-asan/test-results/run-uzbcfl58`.
+Fehlgeschlagene Allokationen erzeugen keine Serien; verkürzte oder unbekannte
+Hostdeskriptoren werden vor dem Callback abgewiesen. Ein gespeichertes Unit-
+Symbol bleibt nach der Freigabe aller Batch-Kopien gültig.
+
+Der [vorherige CI-Stand](https://github.com/PhysicSimulator/physim/actions/runs/37554714527)
+bestätigt Linux/GCC, Windows/v143 Debug und Release sowie Windows/ClangCL Debug.
+Die per veröffentlichtem SHA-256-Digest geprüften ClangCL-Release-, Linux-Clang-,
+ARM- und Intel-Artefakte enthalten weitere Testfehler: erneute Floating-Point-
+Berechnung statt Prüfung der geschriebenen Snapshotbits, ein abweichender
+Rückgabetyp des alten `ps_get_analysis`-Fixturesymbols, Timing vor bestätigter
+Fortsetzung beziehungsweise unabhängig von tatsächlicher verstrichener Zeit
+und bitweise C-/Physim-Gleichheit adaptiver Messwerte. Die Tests bewahren jetzt
+die geschriebenen Bytes, verwenden die korrekte Entry-Signatur, messen nach
+Rückmeldung und prüfen numerische Parität mit einer 100-mal strengeren relativen
+Grenze als der konfigurierte RK45-Vertrag. Anzahl, Endzeit und Struktur bleiben
+gesondert geprüft. Clang 14 reproduziert den alten Entry-Ausfall nicht; die
+erneute tatsächliche aktuellen Clang-/Windows-/ARM-CI-Abnahme bleibt erforderlich.
+
+Auf dem Intel-Mac blockierten neue unsignierte Testprogramme sowie der
+Homebrew-Git-Client im Loader. Eine lokal ad hoc signierte, aus denselben
+Quellen gebaute Probe bestand. Der Builder signiert deshalb ausschließlich
+frisch gelinkte temporäre Mac-Artefakte vor Veröffentlichung und Cacheprüfung;
+Code-Signierfehler erhalten die vorherige Ausgabe. Der systemeigene Apple-Git-
+Client ist verwendbar. Bereits blockierte Prozessinstanzen bleiben als
+Betriebssystemproblem gesondert zu behandeln; ihre Läufe sind keine Testnachweise.
+
+Ältere Linux-Prüfverzeichnisse unter `build/project-audit` sind vor der Freigabe
+des VM-Speichers vollständig auf dem Mac unter
+`build/project-audit-linux-evidence.tar.gz` gesichert. Alle 19115 regulären
+Dateien wurden gegen ihre ursprünglichen SHA-256-Werte geprüft. Archiv-SHA-256:
+`e09978e09f6aa49459134acb0eeb73b444b901f91ef3d1da820f8440f7650f14`.
+
+Die vollständigen erneuten Release-Suiten bestehen mit **572/572** auf Intel
+macOS unter `build/contact-world-language-release-mac/test-results/run-vliklgjg`
+und Debian/GCC unter `build/contact-world-language-release-linux/test-results/run-nr1abvnk`.
+Die letzte Korrektur der Timingmessung und die eigenständige Einbindung des neuen
+Host-Headers erhalten zusätzliche Nachweise: vier Mac-App-Prüfungen unter
+`run-9o8ahm9d`, vier Linux-App-Prüfungen unter `run-ehaq83ko` und drei Linux-
+Batch-Prüfungen unter `run-2z5ei6pe`, jeweils in den genannten Release-Testordnern.
+
+Beide endgültigen, ausschließlich aus dem 41-Dateien-Prüfkit gestarteten SDK-
+Prüfungen bestehen unter `build/batch-language-sdk-proof-mac/Native SDK ä kx911ojx`
+und `build/batch-language-final-sdk-proof-linux/Native SDK ä pji_aiq0`.
+Sie bauen alle öffentlichen Header separat nach stdio-/Locale-Headern,
+prüfen die neuen Dienste sowie 2048 neue Batch-Beispielarchive je Plattform
+gegen installierten und neu aufgebauten Core und führen die bisherigen
+Lernpfade weiter aus. Linux besteht zusätzlich alle neun grafischen SDK-Abläufe.
+Die endgültigen Pakete `build/Batch language clean SDK ä mac` und
+`build/Batch language clean SDK ä linux` enthalten 368 Manifestdateien und
+63 kompilierte Sprachprodukte. Code und Beispiele werden byteweise gegen die
+verifizierten Kopien geprüft; die jeweiligen Apps müssen ebenfalls mit den
+geprüften Release-Binaries übereinstimmen. Nur Dokumentation und ihr Manifest
+werden zum Abschluss aktualisiert. Die neue Remote-Matrix bleibt gesondert offen.
+
 ## Elternprozess-Abbruch und Paketierungsfehler am 7. Oktober 2026
 
 Ein unabhängiger Versuch mit dem unveränderten SDK von `222d4bb` beendet nur

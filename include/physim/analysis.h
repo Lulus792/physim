@@ -1,6 +1,7 @@
 #ifndef PHYSIM_ANALYSIS_H
 #define PHYSIM_ANALYSIS_H
 #include "data.h"
+#include "batch.h"
 typedef struct {
     uint64_t count;
     double mean, m2, min, max;
@@ -30,9 +31,14 @@ typedef struct {
      * available. Clear the record on success. Inputs/prefix borrowed synchronously. */
     ps_result (*run_diagnostic)(const char *const *input_runs, size_t count,
                                 const char *output_prefix, ps_diagnostic *diagnostic);
+    /* Optional ABI-3 host-service tail. Services and strings are borrowed only
+     * for this call; a module must not retain them after returning. */
+    ps_result (*run_host)(const char *const *input_runs,size_t count,const char *output_prefix,
+                          const ps_analysis_services *services,ps_diagnostic *diagnostic);
 } ps_analysis_api;
 #define PS_ANALYSIS_API_BASE_SIZE offsetof(ps_analysis_api, run_many)
 #define PS_ANALYSIS_API_MANY_SIZE offsetof(ps_analysis_api, run_diagnostic)
+#define PS_ANALYSIS_API_DIAGNOSTIC_SIZE offsetof(ps_analysis_api, run_host)
 #define PS_ANALYSIS_MAX_INPUTS 8u
 typedef const ps_analysis_api *(*ps_analysis_entry)(void);
 /* Streaming statistics, bounded preview SVG and CSV table. Prefix is a filename

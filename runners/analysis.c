@@ -1,6 +1,39 @@
 #include "physim/analysis.h"
 #include "platform.h"
+#include "batch.h"
 #include <string.h>
+typedef struct {char runner[4096];} analysis_services_state;
+static bool host_batch_continue(uint32_t completed,uint32_t active,void *user) {
+    (void)active;return completed<*(const uint32_t *)user;
+}
+static ps_result host_batch(void *user,const ps_batch_options *request,uint32_t stop_after,ps_batch_result *result) {
+    analysis_services_state *state=user;
+    if(!request || !result || !state->runner[0])return PS_INVALID;
+    ps_batch_options options=*request;
+    snprintf(options.runner,sizeof options.runner,"%s",state->runner);
+    if(stop_after>=options.runs)return PS_INVALID;
+    return ps_batch_run(&options,stop_after?host_batch_continue:NULL,&stop_after,result);
+}
+static ps_result host_resume(void *user,const char *series,const char *directory,ps_batch_options *options) {
+    analysis_services_state *state=user;
+    if(!state->runner[0])return PS_IO;
+    return ps_batch_resume_load(series,state->runner,directory,options);
+}
+static void host_services_init(analysis_services_state *state) {
+    char executable[4096];
+    if(!ps_executable_path(executable,sizeof executable))return;
+    char *slash=NULL;
+    for(char *p=executable;*p;p++)if(*p=='/' || *p=='\\')slash=p;
+    if(!slash)return;
+    slash[1]=0;
+#ifdef _WIN32
+    const char *name="physim-runner.exe";
+#else
+    const char *name="physim-runner";
+#endif
+    int n=snprintf(state->runner,sizeof state->runner,"%s%s",executable,name);
+    if(n<0 || (size_t)n>=sizeof state->runner)state->runner[0]=0;
+}
 static void csv_text(FILE *f, const char *text) {
     fputc('"', f);
     for (; *text; text++) {
@@ -109,8 +142,9 @@ int main(int argc, char **argv) {
         ps_module_close(module);
         return 4;
     }
-    bool typed=api->struct_size>=sizeof *api && api->run_diagnostic;
-    if (count != 1 && !typed && (api->struct_size < PS_ANALYSIS_API_MANY_SIZE || !api->run_many)) {
+    bool hosted=api->struct_size>=sizeof *api && api->run_host;
+    bool typed=api->struct_size>=PS_ANALYSIS_API_DIAGNOSTIC_SIZE && api->run_diagnostic;
+    if (count != 1 && !hosted && !typed && (api->struct_size < PS_ANALYSIS_API_MANY_SIZE || !api->run_many)) {
         fprintf(
             stderr,
             "This analysis module supports one run only. Implement run_many for zero or multiple runs.\n");
@@ -125,7 +159,10 @@ int main(int argc, char **argv) {
         return 7;
     }
     ps_diagnostic record;ps_diagnostic_clear(&record);
-    ps_result result = typed?api->run_diagnostic(count?inputs:NULL,count,prefix,&record):
+    analysis_services_state service_state={0};host_services_init(&service_state);
+    const ps_analysis_services services={sizeof services,PS_ANALYSIS_SERVICES_VERSION,&service_state,host_batch,host_resume};
+    ps_result result = hosted?api->run_host(count?inputs:NULL,count,prefix,&services,&record):
+        typed?api->run_diagnostic(count?inputs:NULL,count,prefix,&record):
         count != 1 ? api->run_many(count ? inputs : NULL, count, prefix):api->run(inputs[0],prefix);
     if(result!=PS_OK && result!=PS_RECOVERED)
         analysis_diagnostic(prefix,result,"analyze",ps_result_string(result),&record);

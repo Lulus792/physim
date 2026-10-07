@@ -157,7 +157,7 @@ int main(int argc, char **argv) {
         CHECK(c.channels == 11 && language.channels == 11);
         CHECK(strstr(c.metadata, "model=two homogeneous rigid spheres") &&
               strstr(language.metadata, "model=two homogeneous rigid spheres") &&
-              strstr(language.metadata, "language=physim-0.177.0") &&
+              strstr(language.metadata, "language=physim-0.178.0") &&
               strstr(c.metadata, media[mode]) && strstr(language.metadata, media[mode]) &&
               strstr(c.metadata, ccd[mode]) && strstr(language.metadata, ccd[mode]));
         for (uint32_t i = 0; i < 11; i++) {

@@ -1,0 +1,74 @@
+func successful(batch: Batch) -> Int64:
+    batch.requireSuccess()
+    return batch.completed()
+
+func analyze():
+    assert(inputCount() == 3)
+    let mode = inputPath(1)
+    var request = Batch(module: inputPath(0), directory: outputPrefix() + "-series", channel: "position",
+                        runs: 6, steps: 100, dt: 0.1, seed: 42, workers: 4).source(inputPath(2)).limits(15,0)
+    if mode.hasSuffix("resume"):
+        let old = inputPath(0).replacingOccurrences(of: "\\", with: "/").replacingOccurrences(of: "/series.txt", with: "")
+        request = Batch.resume(old,outputPrefix() + "-series")
+    else:
+        if mode.hasSuffix("fixed"):
+            request = Batch(inputPath(0),outputPrefix() + "-series","position",6,7,0.1,42,4).source(inputPath(2)).limits(15,0)
+        else:
+            request = request.target(0.7)
+        if mode.hasSuffix("sweep"):
+            request = Batch(inputPath(0),outputPrefix() + "-series","position",3,100,0.1,42,4).source(inputPath(2)).limits(15,0).target(0.7).adaptive(0.02,0.3).sweep("velocity",0.2,3)
+        else:
+            request = request.parameter("velocity",1.4)
+        request = request.parameter("offset",0.4)
+        if mode.hasSuffix("adaptive"):
+            request = request.adaptive(0.02,0.3)
+        if mode.hasSuffix("error"):
+            request = request.parameter("velocity",99)
+        if mode.hasSuffix("partial"):
+            request = Batch(inputPath(0),outputPrefix() + "-series","position",6,100,0.1,42,1).source(inputPath(2)).limits(15,0).target(0.7).parameter("velocity",1.4).parameter("offset",0.4)
+    let original = request
+    if mode.hasSuffix("existing"):
+        let old = inputPath(0).replacingOccurrences(of: "\\", with: "/").replacingOccurrences(of: "/experiment.so", with: "").replacingOccurrences(of: "/experiment.dll", with: "")
+        request = Batch(inputPath(0),old,"position",6,100,0.1,42,4).source(inputPath(2)).target(0.7)
+    var result = request
+    if mode.hasSuffix("partial"):
+        let paused = Batch(inputPath(0),outputPrefix() + "-paused","position",6,100,0.1,42,1).source(inputPath(2)).limits(15,0).target(0.7).parameter("velocity",1.4).parameter("offset",0.4)
+        result = paused.runUntil(2)
+    else:
+        result = request.run()
+    assert(!original.executed() && result.executed())
+    if mode.hasSuffix("error") || mode.hasSuffix("existing"):
+        assert(result.code() != 0 && !result.error().isEmpty)
+        assert(attempt(successful(result)) == nil)
+    else if mode.hasSuffix("partial"):
+        assert(result.cancelled() && result.completed() == 2)
+        assert(attempt(successful(result)) == nil)
+    else:
+        result.requireSuccess()
+    let one = Unit(0,0,0,0,0,0,0,1,"1")
+    report("Batch binding parity")
+    let summary = Table("Counts",["Completed","Started","Reused","Valid","Cancelled","Code"],[one,one,one,one,one,one])
+    var cancelled = 0.0
+    if result.cancelled():
+        cancelled = 1
+    summary.row("result",[Quantity(Float64(result.completed()),one),Quantity(Float64(result.started()),one),
+                Quantity(Float64(result.reused()),one),Quantity(Float64(result.valid()),one),Quantity(cancelled,one),Quantity(Float64(result.code()),one)])
+    if result.valid() > 0:
+        let endpoints = result.series()
+        assert(result.values().count == result.valid())
+        assert(endpoints.count() == result.valid())
+        let statuses = result.statuses()
+        assert(statuses.count == result.runs())
+        endpoints.histogram("Endpoints",3)
+        Series.exportColumns([endpoints],"values")
+        let unit = result.unit()
+        var observed = 0
+        for i in 0..<result.runs():
+            if result.status(i) == 1:
+                assert(result.finished(i))
+                let index = RunIndex(result.runPath(i),10000)
+                let last = index.read(index.sampleCount() - 1,1)
+                assert(last.value(0,0) == result.value(i))
+                observed += 1
+        assert(observed == result.valid())
+        assert(endpoints.exponent(0) == 1)

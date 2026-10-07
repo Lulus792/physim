@@ -1,0 +1,23 @@
+// CLI: pass one compiled experiment module as the explicit input file.
+// Batch output is a new sibling of the analysis output prefix.
+func analyze():
+    assert(inputCount() == 1,"Supply one compiled uncertain-projectile module")
+    let request = Batch(module: inputPath(0), directory: outputPrefix() + "-series",
+                        channel: "position.x", runs: 256, steps: 200, dt: 0.005,
+                        seed: 42, workers: 4).limits(30,0)
+    let completed = request.run()
+    completed.requireSuccess()
+    assert(!request.executed() && completed.completed() == 256)
+    let endpoints = completed.series()
+    report("Archived Monte Carlo from Physim")
+    endpoints.histogram("Final horizontal positions",16)
+    let one = Unit(0,0,0,0,0,0,0,1,"1")
+    let statistics = Table("Final values",["Runs","Mean","Stddev","Median","Lower 2.5%","Upper 97.5%"],
+                           [one,completed.unit(),completed.unit(),completed.unit(),completed.unit(),completed.unit()])
+    statistics.row("seeded ensemble",[Quantity(256,one),Quantity(endpoints.mean(),completed.unit()),
+                   Quantity(endpoints.stddev(),completed.unit()),Quantity(endpoints.quantile(0.5),completed.unit()),
+                   Quantity(endpoints.quantile(0.025),completed.unit()),Quantity(endpoints.quantile(0.975),completed.unit())])
+    // The immutable archived raw runs remain available for independent reading.
+    var first = RunIndex(completed.runPath(0),1000)
+    assert(first.isComplete() && first.sampleCount() == 201)
+    first.close()

@@ -15,6 +15,7 @@ static void speed_test_frame(app *a, const char *mode, int *stage, int *code, co
     static double held_time, held_wall, initial[PS_MAX_CHANNELS], first[PS_MAX_CHANNELS];
     static char original[4096];
     static uint32_t channels;
+    static bool pacing_ready;
     static int reported = -1;
     if (!strcmp(mode, "speed-read")) {
         a->quitting = true;
@@ -56,13 +57,20 @@ static void speed_test_frame(app *a, const char *mode, int *stage, int *code, co
         ok = a->paused && fabs(a->simulation_time - held_time - .005) < 1e-10;
         held_time = a->simulation_time;
         held_wall = ps_clock();
+        pacing_ready = false;
         test_mouse(a, a->run_control_bounds[1], true); break;
     case 11: test_mouse(a, a->run_control_bounds[1], false); break;
-    case 12:
-        if (ps_clock() - held_wall < .8) return;
-        ok = !a->paused && a->simulation_time - held_time > .1 &&
-             a->simulation_time - held_time < .32;
+    case 12: {
+        if(!pacing_ready) {
+            if(a->paused)return;
+            held_time=a->simulation_time;held_wall=ps_clock();pacing_ready=true;return;
+        }
+        double elapsed=ps_clock()-held_wall;
+        if (elapsed < .8) return;
+        ok = !a->paused && a->simulation_time - held_time > .125 * elapsed &&
+             a->simulation_time - held_time < .4 * elapsed;
         test_mouse(a, a->run_control_bounds[1], true); break;
+    }
     case 13: test_mouse(a, a->run_control_bounds[1], false); break;
     case 14:
         if (!a->paused) return;
@@ -74,14 +82,21 @@ static void speed_test_frame(app *a, const char *mode, int *stage, int *code, co
         ok = a->simulation_speed == 4 && a->paused;
         held_time = a->simulation_time;
         held_wall = ps_clock();
+        pacing_ready = false;
         test_mouse(a, a->run_control_bounds[1], true); break;
     case 19: test_mouse(a, a->run_control_bounds[1], false); break;
-    case 20:
-        if (ps_clock() - held_wall < .5) return;
-        ok = !a->paused && a->simulation_time - held_time > 1.4 &&
-             a->simulation_time - held_time < 2.8;
+    case 20: {
+        if(!pacing_ready) {
+            if(a->paused)return;
+            held_time=a->simulation_time;held_wall=ps_clock();pacing_ready=true;return;
+        }
+        double elapsed=ps_clock()-held_wall;
+        if (elapsed < .5) return;
+        ok = !a->paused && a->simulation_time - held_time > 2.8 * elapsed &&
+             a->simulation_time - held_time < 5.6 * elapsed;
         /* Change speed through the widget while physics is still running. */
         test_mouse(a, a->speed_bounds, true); break;
+    }
     case 21: test_mouse(a, a->speed_bounds, false); break;
     case 22: test_mouse(a, a->speed_choices[2], true); break;
     case 23: test_mouse(a, a->speed_choices[2], false); break;
@@ -89,13 +104,20 @@ static void speed_test_frame(app *a, const char *mode, int *stage, int *code, co
         ok = a->simulation_speed == 1 && !a->paused;
         held_time = a->simulation_time;
         held_wall = ps_clock();
+        pacing_ready = false;
         *capture = "speed-live.bmp";
         break;
-    case 25:
-        if (ps_clock() - held_wall < .5) return;
-        ok = !a->paused && a->simulation_time - held_time > .25 &&
-             a->simulation_time - held_time < .85;
+    case 25: {
+        if(!pacing_ready) {
+            if(a->paused)return;
+            held_time=a->simulation_time;held_wall=ps_clock();pacing_ready=true;return;
+        }
+        double elapsed=ps_clock()-held_wall;
+        if (elapsed < .5) return;
+        ok = !a->paused && a->simulation_time - held_time > .5 * elapsed &&
+             a->simulation_time - held_time < 1.7 * elapsed;
         test_mouse(a, a->run_control_bounds[1], true); break;
+    }
     case 26: test_mouse(a, a->run_control_bounds[1], false); break;
     case 27:
         if (!a->paused) return;

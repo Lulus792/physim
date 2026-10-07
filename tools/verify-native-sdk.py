@@ -155,6 +155,40 @@ def main():
         print("Installed SDK indexed language: owned handles, allocation failures, selected input path and all 256 report rows passed",flush=True)
 
         # Logging must also survive relocation and a rebuild of the shipped Core.
+        # Exercise the installed host tail and private controller through public
+        # C/Physim analyses; only independent harness sources come from this kit.
+        shutil.copy2(repo / "tests/fixtures/analysis_batch.c",consumer / "batch-service-analysis.c")
+        shutil.copy2(repo / "tests/fixtures/analysis_diagnostic_tail.c",consumer / "old-diagnostic-tail.c")
+        shutil.copy2(repo / "tests/test_language_batch_report.c",consumer / "batch-service-probe.c")
+        shutil.copy2(repo / "tests/fixtures/target_experiment.c",consumer / "batch-target-model.c")
+        shutil.copy2(repo / "tests/fixtures/language/target_experiment.phys",consumer / "batch-target-model.phys")
+        shutil.copy2(repo / "tests/fixtures/language/batch_analysis.phys",consumer / "batch-service-analysis.phys")
+        batch_c=builder.executable("batch-service-analysis",["batch-service-analysis.c"],[library],module=True)
+        old_tail=builder.executable("old-diagnostic-tail",["old-diagnostic-tail.c"],[library],module=True)
+        batch_probe=builder.executable("batch-service-probe",["batch-service-probe.c"],[library])
+        target_c=builder.executable("batch-target-model",["batch-target-model.c"],[library],module=True)
+        for name,mode in (("batch-target-model","--emit-experiment"),("batch-service-analysis","--emit-analysis")):
+            source=consumer / (name+"-phys.c")
+            checked([sdk / "bin" / ("physimc"+suffix),mode,consumer / (name+".phys")],output=source)
+        target_phys=builder.executable("batch-target-model-phys",["batch-target-model-phys.c"],[library],module=True,language=True)
+        batch_phys=builder.executable("batch-service-analysis-phys",["batch-service-analysis-phys.c"],[library],module=True,language=True)
+        checked([sys.executable,repo / "tests/test_language_batch.py",
+                 "--compiler",sdk / "bin" / ("physimc"+suffix),
+                 "--analysis-runner",sdk / "bin" / ("physim-analysis-runner"+suffix),
+                 "--runner",sdk / "bin" / ("physim-runner"+suffix),"--batch",sdk / "bin" / ("physim-batch"+suffix),
+                 "--c-analysis",batch_c,"--phys-analysis",batch_phys,"--c-model",target_c,"--phys-model",target_phys,
+                 "--c-source",consumer / "batch-target-model.c","--phys-source",consumer / "batch-target-model.phys",
+                 "--probe",batch_probe,"--legacy",old_tail,"--work",root / "Batch services"])
+        print("Installed SDK Batch services: forty C/Physim/CLI configurations, pause/resume, exclusive files and old diagnostic tail passed",flush=True)
+        shutil.copy2(sdk / "examples/documentation/batch_analysis.c",consumer / "batch-documentation.c")
+        batch_rebuilt=builder.executable("batch-documentation-rebuilt",["batch-documentation.c"],[rebuilt_core],module=True)
+        for name,c_analyzer,phys_analyzer,c_model,phys_model in (
+                ("installed",sdk / "bin" / ("batch_analysis"+module_suffix),sdk / "bin" / ("language-batch_analysis"+module_suffix),
+                 sdk / "bin" / ("uncertain_projectile"+module_suffix),sdk / "bin" / ("language-uncertain_projectile"+module_suffix)),
+                ("rebuilt",batch_rebuilt,modules["batch_analysis"],c_modules["uncertain_projectile"],modules["uncertain_projectile"])):
+            checked([sys.executable,repo / "tests/test_batch_documentation.py",sdk / "bin" / ("physim-analysis-runner"+suffix),
+                     c_analyzer,phys_analyzer,c_model,phys_model,batch_probe,root / ("Batch documentation "+name)])
+        print("Installed SDK Batch documentation: installed/rebuilt Core, eight mixed analyses and 2048 independently checked raw archives passed",flush=True)
         shutil.copy2(sdk / "examples/logging/main.c", consumer / "logging.c")
         for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
             experiment = builder.executable("logging-" + kind, ["logging.c"], [archive], module=True)

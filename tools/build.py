@@ -27,11 +27,11 @@ APP = "main timeline docking layout_catalog channel_units run_import ui_backend 
 PROJECT = "project_file text_document autosave parameter_catalog".split()
 ZLIB = "adler32 crc32 deflate trees zutil".split()
 EXAMPLES = "pendulum projectile collision box_floor spring uncertain_projectile box_collision buoyancy".split()
-LANGUAGE_PROGRAMS = "energy motion flight_phases sampling phase_space rotation_path particles rigid_body contacts distance_joints constraint_graph sweeps coordinate_frames optional_values optional_bindings diagnostic_values run_index_values contact_world".split()
+LANGUAGE_PROGRAMS = "energy motion flight_phases sampling phase_space rotation_path particles rigid_body contacts distance_joints constraint_graph sweeps coordinate_frames optional_values optional_bindings diagnostic_values run_index_values contact_world batch_values".split()
 LANGUAGE_EXPERIMENTS = ("pendulum pendulum_rk4 pendulum_integrator pendulum_rk45 pendulum_verlet "
     "projectile projectile_drag collision box_collision buoyancy random_samples scene_shapes "
     "spring sensors uncertain_projectile spinning_body box_contacts joint_pendulum coupled_bodies fast_sphere logging scene_frames diagnostic_experiment contact_stack").split()
-LANGUAGE_ANALYSES = "analysis analysis_collision analysis_box_collision analysis_buoyancy analysis_sensors analysis_integral diagnostic_analysis run_index_analysis".split()
+LANGUAGE_ANALYSES = "analysis analysis_collision analysis_box_collision analysis_buoyancy analysis_sensors analysis_integral diagnostic_analysis run_index_analysis batch_analysis".split()
 
 
 def language_examples():
@@ -213,9 +213,9 @@ class Builder:
         data = [args, digest_files(inputs), self.toolchain, self.environment]
         return hashlib.sha256(json.dumps(data, sort_keys=True).encode("utf-8")).hexdigest()
 
-    def execute(self, output: Path, command: list[str], inputs: list[Path], extra: str = "") -> bool:
+    def execute(self, output: Path, command: list[str], inputs: list[Path], extra: str = "", *, sign: bool = False) -> bool:
         stamp = output.with_name(output.name + ".json")
-        signature = self.signature(command, inputs) + extra
+        signature = self.signature(command, inputs) + extra + ("|macos-adhoc-v1" if sign else "")
         try:
             state = json.loads(stamp.read_text(encoding="utf-8"))
             if not getattr(self.args, "rebuild", False) and state == {"input": signature, "output": digest_files([output])}:
@@ -224,6 +224,11 @@ class Builder:
             pass
         run(command, self.env)
         temporary = output.with_name(output.stem + ".pending" + output.suffix)
+        if sign:
+            # Sign only the freshly linked temporary artifact. The cache records
+            # its final signed bytes, and a failure preserves the previous output.
+            run(["/usr/bin/codesign", "--force", "--sign", "-", "--identifier", output.name,
+                 str(temporary)], self.env)
         os.replace(temporary, output)
         temporary_stamp = stamp.with_suffix(".pending")
         temporary_stamp.write_text(json.dumps({"input": signature, "output": digest_files([output])}), encoding="utf-8")
@@ -332,7 +337,7 @@ class Builder:
                 command += ["-Wl,-rpath,@executable_path" if MAC else "-Wl,-rpath,$ORIGIN"]
             if module:
                 command += ["-bundle", "-Wl,-undefined,error"] if MAC else ["-shared"]
-        if self.execute(output, command, inputs):
+        if self.execute(output, command, inputs, sign=MAC):
             if self.msvc:
                 os.replace(temporary.with_suffix(".pdb"), output.with_suffix(".pdb"))
             print(f"Linked {output.name}", flush=True)
@@ -391,11 +396,12 @@ class Builder:
         if getattr(self.args, "examples", False) or getattr(self.args, "install", None):
             products.extend(self.build_language_examples(compiler, core))
         products.append(self.executable("physim-runner", ["runners/experiment.c"], [platform, core]))
-        products.append(self.executable("physim-analysis-runner", ["runners/analysis.c"], [platform, core]))
+        products.append(self.executable("physim-analysis-runner", ["runners/analysis.c"], [batch, platform, core]))
         products.append(self.executable("physim-batch", ["runners/batch.c"], [batch, platform, core]))
         for name in EXAMPLES:
             products.append(self.executable(name, [f"examples/{name}/main.c"], [core], module=True))
         products.append(self.executable("pendulum_analysis", ["examples/pendulum/analysis.c"], [core], module=True))
+        products.append(self.executable("batch_analysis", ["examples/documentation/batch_analysis.c"], [core], module=True))
         if not self.args.no_app:
             project = self.archive("physim-project", [f"app/{name}.c" for name in PROJECT])
             libraries["project"] = project

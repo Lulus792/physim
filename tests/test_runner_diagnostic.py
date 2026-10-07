@@ -118,7 +118,7 @@ for mode, module in (('c',c_analysis),('phys',phys_analysis)):
 
 output=work/'legacy-analysis'
 run=subprocess.run([analysis_runner,legacy_analysis,'--runs',str(output)],capture_output=True,timeout=15)
-assert run.returncode==5 and b"one run only" not in run.stderr
+assert run.returncode==5 and b"one run only" not in run.stderr,(run.returncode,run.stderr)
 record=decode(Path(str(output)+'.psdiag').read_bytes())
 assert record['code']==1 and record['operation']=='analyze' and record['source']==''
 

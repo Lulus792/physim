@@ -70,6 +70,366 @@ Erzeugt `n` unabhängige Kopien eines Elements. Der Zähler muss nichtnegativ se
 
 Überall verfügbar.
 
+## Batch
+
+```text
+Batch(module: String, directory: String, channel: String, runs: Int64, steps: Int64, dt: Float64, seed: Int64, workers: Int64) -> Batch
+```
+
+Erzeugt eine besitzende unveränderliche Serienkonfiguration. Absolute Modul-/Ausgabepfade, 1..1000 Läufe, höchstens acht Worker und fünf Millionen Samples; Int64-Seeds verwenden ihre 64-Bit-Bitfolge.
+
+Überall verfügbar.
+
+## Batch.adaptive
+
+```text
+Batch.adaptive(minimumDt: Float64, maximumDt: Float64) -> Batch
+```
+
+Aktiviert adaptive Integration mit Minimum und Maximum in Sekunden; eine Zielzeit muss vorher gesetzt sein.
+
+Überall verfügbar.
+
+## Batch.cancelled
+
+```text
+Batch.cancelled() -> Bool
+```
+
+Ob die Serie kontrolliert unterbrochen wurde.
+
+Überall verfügbar.
+
+## Batch.code
+
+```text
+Batch.code() -> Int64
+```
+
+Gespeicherter ps_result des Controllers; vor run() null, daher auch executed() prüfen.
+
+Überall verfügbar.
+
+## Batch.completed
+
+```text
+Batch.completed() -> Int64
+```
+
+Zahl validierter und journalierter Läufe einschließlich fehlender Endwerte.
+
+Überall verfügbar.
+
+## Batch.directory
+
+```text
+Batch.directory() -> String
+```
+
+Kopierter Ausgabeordner der Konfiguration.
+
+Überall verfügbar.
+
+## Batch.dt
+
+```text
+Batch.dt() -> Float64
+```
+
+Fester beziehungsweise anfänglicher Zeitschritt in Sekunden.
+
+Überall verfügbar.
+
+## Batch.endTime
+
+```text
+Batch.endTime() -> Float64
+```
+
+Gemeinsame Zielzeit; 0 bedeutet feste Schrittanzahl.
+
+Überall verfügbar.
+
+## Batch.error
+
+```text
+Batch.error() -> String
+```
+
+Kopierte begrenzte Fehlermeldung des Controllers.
+
+Überall verfügbar.
+
+## Batch.executed
+
+```text
+Batch.executed() -> Bool
+```
+
+Ob dieser Snapshot ein Ausführungsergebnis besitzt.
+
+Überall verfügbar.
+
+## Batch.finished
+
+```text
+Batch.finished(index: Int64) -> Bool
+```
+
+Ob der Lauf validiert und journaliert ist, einschließlich Status 2.
+
+Überall verfügbar.
+
+## Batch.limits
+
+```text
+Batch.limits(timeout: Float64, memoryMiB: Int64) -> Batch
+```
+
+Setzt das Zeitlimit je Runner (höchstens 3600 Sekunden) und die Speichergrenze in MiB (0 deaktiviert, höchstens 16384).
+
+Überall verfügbar.
+
+## Batch.module
+
+```text
+Batch.module() -> String
+```
+
+Kopierter Pfad des Experimentmoduls.
+
+Überall verfügbar.
+
+## Batch.parameter
+
+```text
+Batch.parameter(name: String, value: Float64) -> Batch
+```
+
+Setzt oder ersetzt einen festen SI-Parameter in einer neuen Konfiguration; der ursprüngliche Batch bleibt unverändert.
+
+Überall verfügbar.
+
+## Batch.peakActive
+
+```text
+Batch.peakActive() -> Int64
+```
+
+Höchste beobachtete gleichzeitige Workerzahl.
+
+Überall verfügbar.
+
+## Batch.requireSuccess
+
+```text
+Batch.requireSuccess() -> Void
+```
+
+Fordert einen ausgeführten, vollständig abgeschlossenen Batch ohne Fehler oder Abbruch. Andernfalls entsteht eine abfangbare Quelldiagnose mit dem gespeicherten Ergebniscode.
+
+Analysemodul erforderlich.
+
+## Batch.resume
+
+```text
+Batch.resume(series: String, directory: String) -> Batch
+```
+
+Lädt eine unveränderte archivierte Konfiguration für einen neuen Ausgabeordner; Fingerprints und Checkpoint-Version werden geprüft. run() übernimmt geprüfte frühere Läufe.
+
+Analysemodul erforderlich.
+
+## Batch.reused
+
+```text
+Batch.reused() -> Int64
+```
+
+Zahl aus dem alten Archiv übernommener Läufe.
+
+Überall verfügbar.
+
+## Batch.run
+
+```text
+Batch.run() -> Batch
+```
+
+Startet eine neue archivierte Serie über den expliziten Analysehost. Liefert einen neuen Ergebnis-Snapshot; code/error/finished/status bleiben auch bei Laufzeitfehlern abfragbar.
+
+Analysemodul erforderlich.
+
+## Batch.runPath
+
+```text
+Batch.runPath(index: Int64) -> String
+```
+
+Kopierter Archivpfad am nullbasierten Laufindex; das liefert auch für noch nicht fertige Läufe nur einen Pfad.
+
+Überall verfügbar.
+
+## Batch.runUntil
+
+```text
+Batch.runUntil(completions: Int64) -> Batch
+```
+
+Pausiert nach der angegebenen Zahl validierter Abschlüsse. 0 oder runs führt die ganze Serie aus; ein früherer Stopp erzeugt ein wiederaufnehmbares Journal ohne Gesamtbericht.
+
+Analysemodul erforderlich.
+
+## Batch.runs
+
+```text
+Batch.runs() -> Int64
+```
+
+Anzahl konfigurierter Läufe.
+
+Überall verfügbar.
+
+## Batch.seed
+
+```text
+Batch.seed() -> Int64
+```
+
+Ursprüngliche 64-Bit-Seedfolge als Int64-Bitfolge.
+
+Überall verfügbar.
+
+## Batch.series
+
+```text
+Batch.series() -> Series
+```
+
+Erzeugt eine SI-Datenreihe ausschließlich aus gültigen Endwerten in Laufindex-Reihenfolge. Null gültige Endpunkte werden abgewiesen; Statistik, Quantile, Histogramme und Exporte verwenden die bestehenden Series-Bindungen.
+
+Analysemodul erforderlich.
+
+## Batch.source
+
+```text
+Batch.source(path: String) -> Batch
+```
+
+Archiviert die angegebene Quelldatei beim Start zusammen mit dem verwendeten Modul. Der Pfad wird kopiert.
+
+Überall verfügbar.
+
+## Batch.started
+
+```text
+Batch.started() -> Int64
+```
+
+Zahl neu gestarteter Worker.
+
+Überall verfügbar.
+
+## Batch.status
+
+```text
+Batch.status(index: Int64) -> Int64
+```
+
+Messstatus am nullbasierten Laufindex.
+
+Überall verfügbar.
+
+## Batch.statuses
+
+```text
+Batch.statuses() -> [Int64]
+```
+
+Besitzendes Array aller Laufstatus: 0 nicht fällig, 1 gültig, 2 verworfen.
+
+Überall verfügbar.
+
+## Batch.steps
+
+```text
+Batch.steps() -> Int64
+```
+
+Schritte pro Lauf beziehungsweise akzeptiertes Schrittbudget.
+
+Überall verfügbar.
+
+## Batch.sweep
+
+```text
+Batch.sweep(name: String, start: Float64, end: Float64) -> Batch
+```
+
+Konfiguriert eine lineare Parameterstudie mit mindestens zwei Läufen und endlichen verschiedenen Grenzen in SI; Konflikte mit festen Parametern werden abgewiesen.
+
+Überall verfügbar.
+
+## Batch.target
+
+```text
+Batch.target(endTime: Float64) -> Batch
+```
+
+Setzt eine gemeinsame positive Endzeit in Sekunden; steps bleibt das akzeptierte Schrittbudget.
+
+Überall verfügbar.
+
+## Batch.unit
+
+```text
+Batch.unit() -> Unit
+```
+
+Kanonische SI-Einheit des verifizierten Kanals. Das Symbol bleibt auch nach Freigabe der Batch-Kopie für die Modul-Lebensdauer gültig.
+
+Überall verfügbar.
+
+## Batch.valid
+
+```text
+Batch.valid() -> Int64
+```
+
+Zahl gültiger Endwerte.
+
+Überall verfügbar.
+
+## Batch.value
+
+```text
+Batch.value(index: Int64) -> Float64
+```
+
+Gültiger Endwert am nullbasierten Laufindex. Nicht vorhandene oder verworfene Werte werden abgewiesen.
+
+Überall verfügbar.
+
+## Batch.values
+
+```text
+Batch.values() -> [Float64]
+```
+
+Besitzendes Array gültiger Endwerte in Laufindex-Reihenfolge; fehlende Werte werden nicht ergänzt.
+
+Überall verfügbar.
+
+## Batch.workers
+
+```text
+Batch.workers() -> Int64
+```
+
+Konfigurierter Parallelitätsgrad.
+
+Überall verfügbar.
+
 ## Bezier3
 
 ```text
@@ -3470,6 +3830,16 @@ minimizeGoldenReported(function: func(Float64) -> Float64, lower: Float64, upper
 Wie minimizeGolden mit denselben Eingaben und Fehlerregeln. ScalarResult enthält x und den zugehörigen Funktionswert value, die letzten Intervallgrenzen lower und upper sowie iterations und evaluations. Der Callback sollte deterministisch und frei von sichtbaren Seiteneffekten sein.
 
 Überall verfügbar.
+
+## outputPrefix
+
+```text
+outputPrefix() -> String
+```
+
+Kopiert das Ausgabeprefix des laufenden Analysehosts in einen besitzenden String; etwa als Grundlage für einen neuen Serienordner.
+
+Analysemodul erforderlich.
 
 ## parameter
 

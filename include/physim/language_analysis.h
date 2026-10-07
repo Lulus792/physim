@@ -1,7 +1,8 @@
 #ifndef PHYSIM_LANGUAGE_ANALYSIS_H
 #define PHYSIM_LANGUAGE_ANALYSIS_H
 #ifdef PSRT_FN_ANALYZE
-static ps_result psra_run_diagnostic(const char *const *inputs, size_t count, const char *prefix,ps_diagnostic *diagnostic) {
+static ps_result psra_run_host(const char *const *inputs,size_t count,const char *prefix,
+                              const ps_analysis_services *services,ps_diagnostic *diagnostic) {
     if(diagnostic)ps_diagnostic_clear(diagnostic);
     if ((!inputs && count) || count > PS_ANALYSIS_MAX_INPUTS || !prefix || !*prefix)
         return PS_INVALID;
@@ -20,6 +21,7 @@ static ps_result psra_run_diagnostic(const char *const *inputs, size_t count, co
     state->host.prefix = prefix;
     state->host.provenance = provenance;
     state->host.result = PS_NUMERIC;
+    state->host.services = services;
     ps_result result = ps_analysis_create(prefix, 0, &state->host.context);
     if (result != PS_OK) {
         free(state);
@@ -55,6 +57,9 @@ static ps_result psra_run_diagnostic(const char *const *inputs, size_t count, co
     free(state);
     return result;
 }
+static ps_result psra_run_diagnostic(const char *const *inputs,size_t count,const char *prefix,ps_diagnostic *diagnostic) {
+    return psra_run_host(inputs,count,prefix,NULL,diagnostic);
+}
 static ps_result psra_run_many(const char *const *inputs,size_t count,const char *prefix) {
     return psra_run_diagnostic(inputs,count,prefix,NULL);
 }
@@ -63,7 +68,7 @@ static ps_result psra_run(const char *input, const char *prefix) {
 }
 PS_EXPORT const ps_analysis_api *ps_get_analysis(void) {
     static const ps_analysis_api api = {sizeof api, PS_ABI_VERSION, PSRT_SOURCE, psra_run,
-                                        psra_run_many,psra_run_diagnostic};
+                                        psra_run_many,psra_run_diagnostic,psra_run_host};
     return &api;
 }
 #endif

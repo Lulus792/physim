@@ -1,0 +1,26 @@
+struct Request:
+    var batch: Batch
+
+let original = Batch(module: "/tmp/model.so", directory: "/tmp/series", channel: "position.x", runs: 4, steps: 20, dt: 0.01, seed: 42, workers: 2)
+let configured = original.parameter("speed",3.0).target(0.15).adaptive(0.001,0.1).limits(2,64).source("/tmp/model.phys")
+let requests = [original,configured]
+let record = Request(batch: configured)
+let selected: Batch? = Optional.some(requests[1])
+assert(original.endTime() == 0)
+assert(record.batch.endTime() == 0.15)
+assert(selected.unwrap().runs() == 4)
+assert(configured.statuses().count == 4)
+assert(configured.values().count == 0)
+assert(!configured.executed())
+let inspect = func() -> Int64:
+    return configured.workers()
+assert(inspect() == 2)
+let upperSeed = Batch("/tmp/model.so","/tmp/upper","position.x",1,1,0.01,-1,1)
+assert(upperSeed.seed() == -1)
+var editable = [record]
+let saved = editable
+editable[0].batch = original
+assert(saved[0].batch.endTime() == 0.15 && editable[0].batch.endTime() == 0)
+assert(attempt(original.adaptive(0.001,0.1)) == nil)
+assert(attempt(configured.limits(0,1)) == nil)
+print("Batch values passed")

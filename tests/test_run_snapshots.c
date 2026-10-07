@@ -5,14 +5,17 @@
 #define CHECK(x) do { if (!(x)) { fprintf(stderr, "Run snapshots line %d: %s\n", __LINE__, #x); return 1; } } while (0)
 static ps_context context;
 static ps_scene scene;
+/* Preserve the exact values supplied to the writer. Re-evaluating the arithmetic
+ * at a different optimized call site can fuse multiply/add and round differently. */
+static double expected_values[3][PS_MAX_CHANNELS],expected_time[3];
 static bool read_all(const char *path) {
     ps_run_reader r;
     if (ps_run_open(&r, path) != PS_OK) return false;
     bool ok = true;
     for (unsigned i = 0; i < 3; i++) {
         double time, values[PS_MAX_CHANNELS];
-        ok &= ps_run_next(&r, &time, values) == PS_OK && time == i * .01;
-        for (unsigned j = 0; j < PS_MAX_CHANNELS; j++) ok &= values[j] == i + .1 * j;
+        ok &= ps_run_next(&r, &time, values) == PS_OK && time == expected_time[i];
+        ok &= !memcmp(values,expected_values[i],sizeof expected_values[i]);
     }
     double time, values[PS_MAX_CHANNELS];
     ok &= ps_run_next(&r, &time, values) == PS_EOF && r.samples == 3;
@@ -70,6 +73,8 @@ int main(int argc, char **argv) {
     for (unsigned i = 0; i < 3; i++) {
         context.time_s = i * .01;
         for (unsigned j = 0; j < PS_MAX_CHANNELS; j++) context.values[j] = i + .1 * j;
+        expected_time[i]=context.time_s;
+        memcpy(expected_values[i],context.values,sizeof context.values);
         CHECK(ps_run_append(&w, context.time_s, context.values) == PS_OK);
         long at = ftell(w.file);
         context.values[0] = NAN;
@@ -82,10 +87,11 @@ int main(int argc, char **argv) {
     CHECK(ps_run_open(&r, path) == PS_OK);
     for (unsigned i = 0; i < 3; i++) {
         ps_snapshot s;
-        CHECK(ps_run_snapshot_next(&r, &s) == PS_OK && s.time == i * .01 && s.count == PS_MAX_CHANNELS);
+        CHECK(ps_run_snapshot_next(&r, &s) == PS_OK && s.time == expected_time[i] && s.count == PS_MAX_CHANNELS);
         CHECK(s.paused == (i != 1) && s.scene.count == PS_MAX_OBJECTS && s.scene.point_count == PS_MAX_SCENE_POINTS);
         context.time_s = i * .01;
-        for (unsigned j = 0; j < PS_MAX_CHANNELS; j++) { CHECK(s.values[j] == i + .1 * j); context.values[j] = s.values[j]; }
+        CHECK(!memcmp(s.values,expected_values[i],sizeof expected_values[i]));
+        memcpy(context.values,s.values,sizeof context.values);
         unsigned char a[PS_SNAPSHOT_MAX], b[PS_SNAPSHOT_MAX];
         size_t size = ps_snapshot_encode(a, &context, &scene, s.paused);
         CHECK(size == ps_snapshot_encode(b, &context, &s.scene, s.paused) && !memcmp(a, b, size));
@@ -95,8 +101,8 @@ int main(int argc, char **argv) {
     ps_run_reader_close(&r);
     CHECK(ps_run_create(&w, legacy, &context, "legacy") == PS_OK);
     for (unsigned i = 0; i < 3; i++) {
-        for (unsigned j = 0; j < PS_MAX_CHANNELS; j++) context.values[j] = i + .1 * j;
-        CHECK(ps_run_append(&w, i * .01, context.values) == PS_OK);
+        memcpy(context.values,expected_values[i],sizeof context.values);
+        CHECK(ps_run_append(&w, expected_time[i], context.values) == PS_OK);
     }
     CHECK(ps_run_close(&w) == PS_OK && read_all(legacy));
     CHECK(ps_run_open(&r, legacy) == PS_OK && ps_run_snapshot_next(&r, &s) == PS_EOF && r.samples == 3);

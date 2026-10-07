@@ -4,14 +4,23 @@ Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-07. Der Projektplan is
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
 **Aktuelle Abnahme:** Die vollständigen erneuten Release-Prüfungen einschließlich
-der Elternprozess-Abbruchprüfung bestehen auf dem Intel-Mac und unter Debian
-mit jeweils 565/565 Fällen.
+der Batch-Sprachbindung bestehen auf dem Intel-Mac und unter Debian
+mit jeweils 572/572 Fällen.
 Der anschließende [Anforderungsabgleich](project-audit.md) bewahrt sämtliche
 Planpunkte und unterscheidet Implementierung, Teilnachweise und fehlende Abnahme.
-Die Installation baut jetzt alle 61 kompilierten Sprachprodukte auch ohne
+Die Installation baut jetzt alle 63 kompilierten Sprachprodukte auch ohne
 `--examples`. Windows-Prüfungen verwenden logische Textzeilen und ein portables
 Pipe-Leseverfahren. Die erneute Remote-CI-Abnahme steht noch aus; lokale Tests
 ersetzen diese Releasegates nicht.
+
+**Batch und Monte Carlo aus Analysen:** Physim 0.178.0 bindet besitzende,
+unveränderliche Serienkonfigurationen und Ergebnisse. Ein ausdrücklicher
+Host startet den vorhandenen Controller; feste Schritte, Zielzeit, adaptive
+Budgets, SI-Parameter, Sweeps, Grenzen, Quellen, Pause und Wiederaufnahme
+verwenden dieselben archivierten Runner wie C und CLI. Messstatus und
+Teilfortschritte bleiben abfragbar. Vier Kombinationen vollständiger C-/Physim-Beispiele
+prüfen 1024 Rohtrajektorien und ihre Berichte; 40 gemischte Konfigurationen
+prüfen Fortsetzung, Fehler und Exklusivität. [Vertrag und Ablauf](batch-language.md).
 
 **Abbruch von Laufserien:** Die mitgelieferten Offline-Runner überwachen den
 Elternanschluss auch innerhalb hängender Modellcallbacks. Harter Controllerabbruch

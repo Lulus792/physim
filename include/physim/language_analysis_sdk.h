@@ -16,6 +16,7 @@ typedef struct {
     ps_dataset datasets[PS_ANALYSIS_MAX_INPUTS];
     bool recovered;
     ps_result result;
+    const ps_analysis_services *services;
 } psra_host;
 static inline void psra_check(psra_host *h, ps_result r, psrt_site site) {
     if (r != PS_OK) {
@@ -23,6 +24,7 @@ static inline void psra_check(psra_host *h, ps_result r, psrt_site site) {
         psrt_fail(site, ps_result_string(r));
     }
 }
+#include "language_batch_host.h"
 /* Handles remain owned by the analysis context. Only the returned array block
  * is a language owner; releasing a copied Series still invalidates its aliases. */
 static inline ps_series psra_mask(psra_host *h,ps_series input,ps_series selector,double accepted,psrt_site site) {
@@ -108,6 +110,9 @@ static inline void psra_path(psra_host *h, const char *suffix, const char *exten
 static inline psrt_string psra_input_path(psra_host *h,ps_allocator allocator,int64_t index,psrt_site site) {
     if(index<0 || (uint64_t)index>=h->count)psra_check(h,PS_INVALID,site);
     psrt_string result;psra_check(h,psrt_string_make(allocator,h->inputs[index],strlen(h->inputs[index]),&result),site);return result;
+}
+static inline psrt_string psra_output_prefix(psra_host *h,ps_allocator allocator,psrt_site site) {
+    psrt_string result;psra_check(h,psrt_string_make(allocator,h->prefix,strlen(h->prefix),&result),site);return result;
 }
 static inline int64_t psra_input_count(psra_host *h, psrt_site site) {
     (void)site;

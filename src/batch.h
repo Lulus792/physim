@@ -4,48 +4,7 @@
 #include "physim/experiment.h"
 #include "physim/report.h"
 
-#define PS_BATCH_MAX_RUNS 1000u
-#define PS_BATCH_MAX_SAMPLES 5000000u
-#define PS_BATCH_MAX_WORKERS 8u
-/* Private application service; all paths must be absolute. The output directory
- * must not exist. Each child has its own process and working directory. */
-typedef struct {
-    char runner[4096], module[4096], source[4096], directory[4096], channel[48];
-    char resume_from[4096]; /* Optional existing series; its files stay read-only. */
-    /* Optional immutable UTF-8 source captured by the UI before the worker starts.
-     * Borrowed for the duration of ps_batch_run; source remains its original path. */
-    const char *source_text;
-    size_t source_size;
-    uint64_t seed;
-    uint64_t memory_bytes; /* Per runner; zero disables. Platform semantics: platform.h. */
-    uint32_t runs, steps, workers; /* 1..PS_BATCH_MAX_WORKERS; capped by runs. */
-    double dt, timeout_s;
-    /* end_time=0 retains the fixed sample-count workflow. A positive target
-     * clips the final interval; steps becomes an accepted-step budget.
-     * Adaptive series require a common target, not equal step counts. */
-    bool adaptive;
-    double end_time, minimum_dt, maximum_dt;
-    /* Optional linear parameter study. Index 0 uses start, the final index end. */
-    bool sweep;
-    char sweep_name[48];
-    double sweep_start, sweep_end;
-    /* Fixed overrides applied to every run, excluding the sweep parameter. */
-    uint32_t parameter_count;
-    struct {
-        char name[48];
-        double value;
-    } parameters[PS_MAX_PARAMETERS];
-} ps_batch_options;
-typedef struct {
-    uint32_t completed, started, active, peak_active, reused, valid;
-    bool cancelled;
-    char error[256];
-    ps_channel channel;
-    ps_parameter_unit sweep_unit;
-    double values[PS_BATCH_MAX_RUNS];
-    bool finished[PS_BATCH_MAX_RUNS]; /* Journaled successful run, even if its endpoint is missing. */
-    uint8_t endpoint_status[PS_BATCH_MAX_RUNS]; /* 0=not due, 1=valid, 2=dropped. values[i] valid only at 1. */
-} ps_batch_result;
+#include "physim/batch.h"
 /* Called on the invoking thread; false requests cancellation of the entire pool.
  * completed counts fully validated, journaled runs; active counts live children
  * observed by the controller. Partial raw files remain, but only a complete

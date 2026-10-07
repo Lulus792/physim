@@ -12,6 +12,7 @@ from reference_descriptions import DESCRIPTIONS
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULES = {
+    'batch': ('Archivierte Serien und Analyse-Hostdienste', 'batch-language.md', 'Ein expliziter Analysehost stellt versionierte, synchrone Batch-Dienste bereit. Requests beschreiben getrennte Runner mit SI-Parametern, Seeds, Zeit- und Speichergrenzen. Ergebnisse enthalten validierte Teilfortschritte und Messstatus. Der Core startet keine Prozesse; der Analyse-Runner liefert die Dienste über den optionalen run_host-Tail. Geliehene Dienstzeiger leben nur während dieses Aufrufs.'),
     'contact_world': ('Persistente Kontakte und Warmstart', 'contact-world.md', 'Ein expliziter, caller-eigener Kontaktzustand erzeugt diskrete Kugel-/Box-/Ebenenkontakte. Stabile Collider-IDs und lokale Anker ordnen Kontakte zwischen erfolgreichen Schritten zu; alte Impulse werden zeitabhängig skaliert und im aktuellen Coulomb-Kegel gelöst. Keine Heapallokation, keine automatische Integration oder CCD. Körper, Cache und Ergebnisse bleiben bei Fehlern unverändert.'),
     'run_index': ('Indizierte Laufdateien', 'run-index.md', 'Ein Index besitzt eine unverändert geöffnete Messdatei und Checkpoints aus einem expliziten Allocator. Das Öffnen prüft den gesamten lesbaren Präfix einmal und rekonstruiert auch alte oder unvollständige Dateien. Gezielte Messblöcke und Szenen verwenden diese geprüften Positionen. PS_OK und PS_RECOVERED liefern beide einen zu zerstörenden Handle; andere Fehler erhalten die Ausgabe.'),
     'diagnostic': ('Strukturierte Diagnosen', 'diagnostics.md', 'Diagnosen sind eigene begrenzte UTF-8-Werte mit Fehlercode, Operation, Argument und Quellposition. Kein globaler Last-error-Zustand. Konstruktion und Decodierung sind transaktional, Dateien werden exklusiv erstellt. Experiment- und Analyse-Runner transportieren die Daten zusätzlich zur bisherigen Textausgabe.'),
@@ -500,11 +501,73 @@ for name,description in {
     'contactImpulse':'Gesamter Impuls auf A einschließlich Warmstart in N s.'
 }.items(): LANG_DESCRIPTIONS['world_'+name]=description+' Der Snapshot bleibt unverändert.'
 
+LANG_DESCRIPTIONS.update({'Batch': 'Erzeugt eine besitzende unveränderliche Serienkonfiguration. Absolute '
+          'Modul-/Ausgabepfade, 1..1000 Läufe, höchstens acht Worker und fünf Millionen Samples; '
+          'Int64-Seeds verwenden ihre 64-Bit-Bitfolge.',
+ 'batchAdaptive': 'Aktiviert adaptive Integration mit Minimum und Maximum in Sekunden; eine '
+                  'Zielzeit muss vorher gesetzt sein.',
+ 'batchLimits': 'Setzt das Zeitlimit je Runner (höchstens 3600 Sekunden) und die Speichergrenze in '
+                'MiB (0 deaktiviert, höchstens 16384).',
+ 'batchParameter': 'Setzt oder ersetzt einen festen SI-Parameter in einer neuen Konfiguration; der '
+                   'ursprüngliche Batch bleibt unverändert.',
+ 'batchRequireSuccess': 'Fordert einen ausgeführten, vollständig abgeschlossenen Batch ohne Fehler '
+                        'oder Abbruch. Andernfalls entsteht eine abfangbare Quelldiagnose mit dem '
+                        'gespeicherten Ergebniscode.',
+ 'batchResume': 'Lädt eine unveränderte archivierte Konfiguration für einen neuen Ausgabeordner; '
+                'Fingerprints und Checkpoint-Version werden geprüft. run() übernimmt geprüfte '
+                'frühere Läufe.',
+ 'batchRun': 'Startet eine neue archivierte Serie über den expliziten Analysehost. Liefert einen '
+             'neuen Ergebnis-Snapshot; code/error/finished/status bleiben auch bei Laufzeitfehlern '
+             'abfragbar.',
+ 'batchRunUntil': 'Pausiert nach der angegebenen Zahl validierter Abschlüsse. 0 oder runs führt '
+                  'die ganze Serie aus; ein früherer Stopp erzeugt ein wiederaufnehmbares Journal '
+                  'ohne Gesamtbericht.',
+ 'batchSeries': 'Erzeugt eine SI-Datenreihe ausschließlich aus gültigen Endwerten in '
+                'Laufindex-Reihenfolge. Null gültige Endpunkte werden abgewiesen; Statistik, '
+                'Quantile, Histogramme und Exporte verwenden die bestehenden Series-Bindungen.',
+ 'batchSource': 'Archiviert die angegebene Quelldatei beim Start zusammen mit dem verwendeten '
+                'Modul. Der Pfad wird kopiert.',
+ 'batchSweep': 'Konfiguriert eine lineare Parameterstudie mit mindestens zwei Läufen und endlichen '
+               'verschiedenen Grenzen in SI; Konflikte mit festen Parametern werden abgewiesen.',
+ 'batchTarget': 'Setzt eine gemeinsame positive Endzeit in Sekunden; steps bleibt das akzeptierte '
+                'Schrittbudget.',
+ 'batch_cancelled': 'Ob die Serie kontrolliert unterbrochen wurde.',
+ 'batch_code': 'Gespeicherter ps_result des Controllers; vor run() null, daher auch executed() '
+               'prüfen.',
+ 'batch_completed': 'Zahl validierter und journalierter Läufe einschließlich fehlender Endwerte.',
+ 'batch_directory': 'Kopierter Ausgabeordner der Konfiguration.',
+ 'batch_dt': 'Fester beziehungsweise anfänglicher Zeitschritt in Sekunden.',
+ 'batch_endTime': 'Gemeinsame Zielzeit; 0 bedeutet feste Schrittanzahl.',
+ 'batch_error': 'Kopierte begrenzte Fehlermeldung des Controllers.',
+ 'batch_executed': 'Ob dieser Snapshot ein Ausführungsergebnis besitzt.',
+ 'batch_finished': 'Ob der Lauf validiert und journaliert ist, einschließlich Status 2.',
+ 'batch_module': 'Kopierter Pfad des Experimentmoduls.',
+ 'batch_peakActive': 'Höchste beobachtete gleichzeitige Workerzahl.',
+ 'batch_reused': 'Zahl aus dem alten Archiv übernommener Läufe.',
+ 'batch_runPath': 'Kopierter Archivpfad am nullbasierten Laufindex; das liefert auch für noch '
+                  'nicht fertige Läufe nur einen Pfad.',
+ 'batch_runs': 'Anzahl konfigurierter Läufe.',
+ 'batch_seed': 'Ursprüngliche 64-Bit-Seedfolge als Int64-Bitfolge.',
+ 'batch_started': 'Zahl neu gestarteter Worker.',
+ 'batch_status': 'Messstatus am nullbasierten Laufindex.',
+ 'batch_statuses': 'Besitzendes Array aller Laufstatus: 0 nicht fällig, 1 gültig, 2 verworfen.',
+ 'batch_steps': 'Schritte pro Lauf beziehungsweise akzeptiertes Schrittbudget.',
+ 'batch_unit': 'Kanonische SI-Einheit des verifizierten Kanals. Das Symbol bleibt auch nach '
+               'Freigabe der Batch-Kopie für die Modul-Lebensdauer gültig.',
+ 'batch_valid': 'Zahl gültiger Endwerte.',
+ 'batch_value': 'Gültiger Endwert am nullbasierten Laufindex. Nicht vorhandene oder verworfene '
+                'Werte werden abgewiesen.',
+ 'batch_values': 'Besitzendes Array gültiger Endwerte in Laufindex-Reihenfolge; fehlende Werte '
+                 'werden nicht ergänzt.',
+ 'batch_workers': 'Konfigurierter Parallelitätsgrad.',
+ 'outputPrefix': 'Kopiert das Ausgabeprefix des laufenden Analysehosts in einen '
+                 'besitzenden String; etwa als Grundlage für einen neuen Serienordner.'})
+
 def language_reference():
     source = (ROOT / 'src/language/builtins.c').read_text(encoding='utf-8')
     table = source.split('library[] = {', 1)[1].split('static const ps_lang_builtin *library_find', 1)[0]
     pattern = re.compile(r'\{\s*"(\w+)"\s*,\s*"\w+"\s*,\s*(\w+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*\{([^}]+)\}\s*,\s*\{([^}]+)\}\s*\}', re.S)
-    types = dict(F='Float64', I='Int64', S='String', U='Unit', QUANTITY='Quantity', MEDIUM='Medium', MATERIAL='Material', SUBMERSION='Submersion', C='Channel',
+    types = dict(BATCH='Batch', B='Bool', F='Float64', I='Int64', S='String', U='Unit', QUANTITY='Quantity', MEDIUM='Medium', MATERIAL='Material', SUBMERSION='Submersion', C='Channel',
                  V2='Vec2', V3='Vec3', V4='Vec4', Q='Quat', M3='Mat3', M4='Mat4', B3='Bezier3', RNG='Rng', ODE_RESULT='OdeResult', STEP_INTERVAL='StepInterval', SCALAR_RESULT='ScalarResult', DIAGNOSTIC='Diagnostic', RUN_INDEX='RunIndex', RUN_BLOCK='RunBlock', RUN_SNAPSHOT='RunSnapshot', COLLIDER='Collider', WORLD='ContactWorld', PS_LANG_COLLIDER_ARRAY='[Collider]', VOID='Void', D='Dataset', R='Series',
                  P='Plot', TABLE='Table', DIST='Distribution', CONFIG='SensorConfig', SENSOR='Sensor',
                  BODY='Body', CONTACTS='Contacts', SOLVER='ContactSolver', RESULT='ContactResult',
@@ -521,7 +584,7 @@ def language_reference():
     methods_text = source.split('methods[] =', 1)[1].split('const ps_lang_method *ps_lang_method_find', 1)[0]
     methods = re.findall(r'\{"(\w+)", "(\w+)", (\w+), ([^}]+)\}', methods_text)
     compact = re.findall(r'\{\s*"(\w+)"\s*,\s*"(\w+)"\s*,\s*(\w+)\s*,\s*([^}]+)\}', methods_text)
-    methods += [m for m in compact if m not in methods and (m[2] in ('WORLD','COLLIDER') or m[1]=='solveWarmContacts')]
+    methods += [m for m in compact if m not in methods and (m[2] in ('WORLD','COLLIDER','BATCH') or m[1]=='solveWarmContacts')]
     factory_text = source.split('factories[] =', 1)[1].split('const ps_lang_builtin *ps_lang_builtin_find', 1)[0]
     factories = re.findall(r'\{"(\w+)", "(\w+)", "(\w+)"\}', factory_text)
     result = ['# Physim-Sprache: Bibliotheksreferenz',

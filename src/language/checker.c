@@ -97,7 +97,7 @@ static int builtin_type_name(checker *c, ps_lang_token t) {
         "Vec4", "Quat", "Mat3", "Mat4", "Bezier3", "Unit", "Quantity", "Medium", "Material",
         "Submersion", "Channel", "Dataset",
         "Series", "Plot", "Table", "Distribution", "SensorConfig", "Sensor",
-        "Measurement", "Rng", "OdeResult", "StepInterval", "ScalarResult", "Diagnostic", "RunIndex", "RunBlock", "RunSnapshot", "Collider", "ContactWorld", "Body", "Contacts", "ContactSolver", "ContactResult",
+        "Measurement", "Rng", "OdeResult", "StepInterval", "ScalarResult", "Diagnostic", "RunIndex", "RunBlock", "RunSnapshot", "Collider", "ContactWorld", "Batch", "Body", "Contacts", "ContactSolver", "ContactResult",
         "DistanceJoint", "JointResult", "ContactConstraint", "JointConstraint",
         "ConstraintResult", "Sweep", "Aabb", "CollisionPair"
     };
@@ -111,7 +111,7 @@ static int reserved_nominal_type_name(checker *c, ps_lang_token t) {
         "Int64", "Float64", "Bool", "String", "Void", "Vec2", "Vec3", "Vec4",
         "Quat", "Mat3", "Mat4", "Bezier3", "Optional", "Rng", "Unit", "Medium", "Material",
         "Submersion", "Channel",
-        "Dataset", "Series", "Plot", "OdeResult", "StepInterval", "ScalarResult", "Diagnostic", "RunIndex", "RunBlock", "RunSnapshot", "Collider", "ContactWorld"
+        "Dataset", "Series", "Plot", "OdeResult", "StepInterval", "ScalarResult", "Diagnostic", "RunIndex", "RunBlock", "RunSnapshot", "Collider", "ContactWorld", "Batch"
     };
     for (size_t i = 0; i < sizeof(names) / sizeof(names[0]); ++i)
         if (word(c, t, names[i]))
@@ -199,7 +199,7 @@ static int numeric(ps_lang_type t) { return t == PS_TYPE_INT64 || t == PS_TYPE_F
 static int vector_type(ps_lang_type t) { return ps_lang_vector_dimensions(t) != 0; }
 static int value_type(ps_lang_type t) {
     return t == PS_TYPE_BOOL || numeric(t) || t == PS_TYPE_STRING || t >= PS_TYPE_RECORD_BASE ||
-           (t >= PS_TYPE_VEC2 && t <= PS_TYPE_CONTACT_WORLD);
+           (t >= PS_TYPE_VEC2 && t <= PS_TYPE_BATCH);
 }
 static int scalar_type(ps_lang_type t) {
     return t == PS_TYPE_BOOL || numeric(t) || t == PS_TYPE_STRING;
@@ -517,6 +517,8 @@ static ps_lang_type annotation(checker *c, size_t id, int allow_void) {
             t=PS_TYPE_RUN_SNAPSHOT;
         else if (word(c,n->token,"Collider"))
             t=PS_TYPE_COLLIDER;
+        else if (word(c,n->token,"Batch"))
+            t=PS_TYPE_BATCH;
         else if (word(c,n->token,"ContactWorld"))
             t=PS_TYPE_CONTACT_WORLD;
         else if (word(c, n->token, "Channel"))
@@ -5279,7 +5281,7 @@ static void check_record(checker *c, size_t id) {
             part = 16;
         if (c->info[f].type == PS_TYPE_ODE_RESULT)
             part = 128;
-        if (c->info[f].type == PS_TYPE_CONTACT_WORLD) part=64;
+        if (c->info[f].type == PS_TYPE_CONTACT_WORLD || c->info[f].type == PS_TYPE_BATCH) part=64;
         if (c->info[f].type == PS_TYPE_COLLIDER) part=64;
         if (c->info[f].type == PS_TYPE_RUN_INDEX) part=8;
         if (c->info[f].type == PS_TYPE_RUN_BLOCK) part=64;
