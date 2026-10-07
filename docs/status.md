@@ -13,6 +13,14 @@ Die Installation baut jetzt alle 75 kompilierten Sprachprodukte auch ohne
 Pipe-Leseverfahren. Die erneute Remote-CI-Abnahme steht noch aus; lokale Tests
 ersetzen diese Releasegates nicht.
 
+**Nativer Projektbuilder und aktuelle Gesamtsuite:** Repository und Projektbuilder
+verwenden nun dieselben 26 Core-Module. Acht frische dokumentierte C-/Physim-
+Domänenprojekte bestehen unabhängige Lernprüfungen. Die vollständigen aktuellen
+Release-Suiten bestehen mit 608/608 auf Intel macOS und Debian; beide korrigierten
+isolierten SDK-Prüfungen bestehen einschließlich aller neun grafischen Abläufe.
+Eine weitere Apple-Silicon-Geschwindigkeitsprüfung bleibt offen.
+[Konkrete Nachweise](platform-validation.md).
+
 **GUI-Geschwindigkeitsprüfung:** Die Fenstertests berücksichtigen das begrenzte
 Zeitkonto bei Render-/Pipe-Rückstau. C und Physim bestehen zusätzliche
 Ein-Sekunden-Lesepausen unter macOS und Linux; die direkten Runnerprüfungen
@@ -64,7 +72,7 @@ UTF-8; die tatsächliche erneute Windows-CI-Abnahme steht noch aus.
 Modelllernwegen. Das Hilfefenster bietet eigene Auswahl und Startnavigation.
 Die Einstiegsprogramme, veröffentlichten Quellen und Links bestehen auf macOS
 und Debian; beide verschobenen SDKs bestehen auch alle neun grafischen
-Beispielabläufe und die Lernweg-Navigation. Der damalige Dokumentationskatalog umfasst 577 Fälle; aktuell sind es 603.
+Beispielabläufe und die Lernweg-Navigation. Der damalige Dokumentationskatalog umfasst 577 Fälle; aktuell sind es 608.
 Der zuvor vollständig geprüfte Stand mit 572 Fällen bleibt gesondert dokumentiert.
 [Konkrete Nachweise](platform-validation.md).
 

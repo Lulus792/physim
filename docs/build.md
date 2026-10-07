@@ -146,8 +146,8 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt derzeit 603 Tests ohne Fenster aus, mit `--no-app` die
-588 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
+`--test` führt derzeit 608 Tests ohne Fenster aus, mit `--no-app` die
+589 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
 Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.
@@ -415,6 +415,12 @@ und Umlaut. Sie prüft alle mitgelieferten Module, öffentliche Header einzeln,
 23 eigenständige Sprachprogramme und neu gebaute C-/Physim-Projekte samt echten
 Runnern und Mess-/Berichtsdateien. Zusätzlich werden die installierten Core-Quellen,
 alle acht C-Vorlagen samt Analyse sowie 52 Sprachmodule unabhängig neu gebaut.
+Der Repository- und der native Projektbuilder verwenden dieselben 26 Core-Module;
+`core_catalog` prüft ihre vollständigen geordneten Listen. Acht zusätzliche kalte
+Projektbuilds kompilieren die dokumentierten Thermodynamik-, RC-, Saiten- und
+Transportquellen jeweils in C und Physim mit dem tatsächlichen `physim-build`.
+Die daraus erzeugten Module bestehen dieselben unabhängigen Lernprüfungen und
+gemischten Analysen; unveränderte Folgebuilds erhalten ihre Ausgaben byteweise.
 Neun Sprachexperimente laufen mit beiden allgemeinen Sprach-Auswertungen;
 hinzu kommen die spezielle Sensoranalyse und sechs C-/Physim-Kombinationen.
 Beide Dokumentationsteile und ihre C-/Physim-Einstiegsprogramme werden aus dem

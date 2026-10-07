@@ -22,7 +22,13 @@
 #include <unistd.h>
 #endif
 #define PATH_SIZE 4096
-enum { SDK_OBJECT_COUNT = 21, ARTIFACT_COUNT = SDK_OBJECT_COUNT + 4 };
+static const char *const SDK_MODULES[] = {
+    "core", "memory", "array", "string_view", "hashmap", "math", "data", "run_index",
+    "snapshot", "analysis", "scene", "numerics", "units", "series", "report",
+    "report_export", "mechanics", "contact_world", "box_contacts", "collision",
+    "measurement", "thermodynamics", "electromagnetism", "waves", "optics", "fluid"
+};
+enum { SDK_OBJECT_COUNT = SDL_arraysize(SDK_MODULES), ARTIFACT_COUNT = SDK_OBJECT_COUNT + 4 };
 typedef struct {
     Uint64 size;
     Uint32 crc;
@@ -681,18 +687,13 @@ int main(int argc, char **argv) {
         goto done;
     if (fclose(marker))
         goto done;
-    const char *names[] = {"core",         "memory",    "array",      "string_view",   "hashmap",
-                           "math",         "data", "run_index",     "snapshot", "analysis",   "scene",         "numerics",
-                           "units",        "series",    "report",     "report_export", "mechanics",
-                           "contact_world", "box_contacts", "collision", "measurement"};
-    _Static_assert(SDL_arraysize(names) == SDK_OBJECT_COUNT, "SDK artifact catalog mismatch");
     char(*objects)[PATH_SIZE] = calloc(SDK_OBJECT_COUNT, PATH_SIZE);
     if (!objects)
         goto done;
     for (unsigned i = 0; i < SDK_OBJECT_COUNT; i++) {
         char source[PATH_SIZE];
-        snprintf(source, sizeof source, "%s/src/%s.c", sdk, names[i]);
-        snprintf(objects[i], PATH_SIZE, "%s/sdk-%s.obj", directory, names[i]);
+        snprintf(source, sizeof source, "%s/src/%s.c", sdk, SDK_MODULES[i]);
+        snprintf(objects[i], PATH_SIZE, "%s/sdk-%s.obj", directory, SDK_MODULES[i]);
         if (!compile(tc, source, objects[i], sdk, project, directory, release, false, force,
                      &changed, &artifacts[i])) {
             free(objects);

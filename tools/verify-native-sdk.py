@@ -353,6 +353,19 @@ def main():
                      transport_analyzer,transport_analysis,transport_probe,directory])
         print("Installed SDK fluid: installed/rebuilt Core, max networks/4096-cell ownership failures, six hydraulic/Fourier profiles and 48 mixed analyses passed",flush=True)
 
+        for domain,oracle,domain_probe in (
+                ("thermal",repo / "tests/test_thermal_tutorial.py",thermal_probe),
+                ("rc",repo / "tests/test_rc_tutorial.py",rc_probe),
+                ("string",repo / "tests/test_string_tutorial.py",string_probe),
+                ("transport",repo / "tests/test_transport_tutorial.py",transport_probe)):
+            checked([sys.executable,repo / "tests/test_native_domain_build.py","--domain",domain,
+                     "--builder",sdk / "bin" / ("physim-build"+suffix),"--sdk",sdk,
+                     "--compiler",sdk / "bin" / ("physimc"+suffix),
+                     "--runner",sdk / "bin" / ("physim-runner"+suffix),
+                     "--analysis-runner",sdk / "bin" / ("physim-analysis-runner"+suffix),
+                     "--oracle",oracle,"--probe",domain_probe,"--work",root / ("Documented native "+domain)])
+        print("Installed SDK native domain projects: eight cold C/Physim builds, unchanged cache reuse and four complete independent tutorial oracles passed",flush=True)
+
         shutil.copy2(sdk / "examples/spring/main.c",consumer / "spring-tutorial.c")
         shutil.copy2(sdk / "examples/documentation/spring_analysis.c",consumer / "spring-tutorial-analysis.c")
         shutil.copy2(repo / "tests/test_spring_tutorial_report.c",consumer / "spring-tutorial-probe.c")
@@ -571,6 +584,7 @@ def main():
         "Electromagnetism through installed/rebuilt Core, Coulomb/gradient/Lorentz tests, seven RC Decimal oracles and mixed reports passed.\n" +
         "Waves/optics through installed/rebuilt Core, Snell/TIR/lens invariants, owned 4096-node grids, allocation failures and mixed string reports passed.\n" +
         "Fluid through installed/rebuilt Core, anchored max networks, conservative 4096-cell transport, allocation failures and mixed tutorial reports passed.\n" +
+        "Eight cold native C/Physim domain project builds, unchanged cache reuse and four complete independent tutorial oracles passed.\n" +
         "Both complete C/Physim learning routes, eight paired model source groups and executable language introductions passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
         ("Eight C template GUI workflows, the complete Physim language GUI workflow and independent documentation route navigation passed.\n" if args.app_tests else ""), encoding="utf-8")

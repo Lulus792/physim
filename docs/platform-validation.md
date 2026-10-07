@@ -3,6 +3,85 @@
 Stand: 7. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Gemeinsamer Core im nativen Projektbuilder am 7. Oktober 2026
+
+Der native Projektbuilder enthielt noch 21 Core-Module; der Repository-Build
+und die installierten SDK-Quellen enthielten bereits 26. Ein frisches C-Projekt
+mit den veröffentlichten Thermodynamikquellen reproduziert unter Intel macOS
+den Linkfehler bei `ps_heat_flow`, `ps_ideal_gas_energy`, `ps_ideal_gas_pressure`
+und `ps_thermal_pair_step`. Der Nachweis steht in
+`build/native-domains-baseline.log`; vorhandene SDK-Prüfungen hatten diese
+Domänenmodule direkt gegen den vollständigen Core gebaut und konnten diese
+Lücke im tatsächlichen Projektbuilder daher nicht erkennen.
+
+`app/build_main.c` baut nun zusätzlich Thermodynamik, Elektromagnetismus,
+Wellen, Optik und Strömung. Die Größe des Objekt-/Integritätskatalogs wird direkt
+aus seiner Modulliste abgeleitet. `core_catalog` vergleicht beide geordneten
+Kataloge und alle Quelldateien. Ältere unvollständige Build-Caches werden
+weiterhin automatisch neu gebaut; Fehler erhalten veröffentlichte Module.
+
+Sechs gezielte Release-Prüfungen bestehen auf Intel macOS/Apple Clang 16 unter
+`build/contact-world-language-release-mac/test-results/run-h034svj9` und
+Debian/GCC 12.2 unter
+`build/contact-world-language-release-linux/test-results/run-o4eix2_s`.
+Die bestehende native Projektbuild-Prüfung bleibt erhalten, einschließlich
+Cachekorruption, Compiler-/Linkerfehlern, Quellenintegrität und C-/Physim-
+Analyseprojekten. Vier neue Domänenprüfungen bauen acht frische dokumentierte
+C-/Physim-Projekte mit dem tatsächlichen `physim-build`, prüfen unveränderte
+Cachewiederverwendung und führen anschließend die vollständigen unabhängigen
+Decimal-, Gitter-/Fourier- und hydraulischen Lernorakel mit allen gemischten
+Analysen aus. Die isolierte SDK-Prüfung enthält dieselben acht nativen Builds.
+
+Für VM-Speicher sind die früheren generierten Linux-Nachweise vollständig auf
+dem Mac gesichert. Alle Dateien wurden vor und nach dem Archivieren einzeln
+per SHA-256 verglichen; anschließend wurden ausschließlich die verifizierten
+generierten Prüfordner entfernt:
+
+- `build/fluid-final-sdk-proof-linux-evidence.tar.gz`: 13.278 Dateien,
+  SHA-256 `45cc21fc62d5d1f7f2172002a8fcb47151043085f03fdbbb90e5d59e389b1d91`.
+- `build/native-release-linux-results-evidence.tar.gz`: 64.809 Dateien,
+  SHA-256 `d0b3e370a7a7ca6da2f49d39491800a8a8c0215db126fb10e5ef492d38ad46b9`.
+
+Die vollständige aktuelle Release-Suite besteht auf Intel macOS mit **608/608**
+unter `build/contact-world-language-release-mac/test-results/run-namds9jz`.
+Der Katalog enthält außerdem 589 Fälle ohne SDL und 66 Fensterfälle; die
+Katalogzahl ersetzt keinen tatsächlichen Gesamtlauf der jeweiligen Auswahl.
+
+Die [Remote-CI des vorherigen Commits `d3120ad`](https://github.com/PhysicSimulator/physim/actions/runs/37579137856)
+besteht tatsächlich in allen vier Windows-v143-/ClangCL-Debug-/Release-Jobs.
+Unter Apple Silicon bestehen 603/603 Tests ohne Fenster und 65/66 Fensterfälle.
+Die fehlgeschlagene `speed_workflow`-Prüfung liegt nun in Stage 25 nach dem
+Live-Wechsel 4×→1×: Die kurze GUI-Messung überschreitet ihre obere Taktschranke.
+Der frühere Fehler in Stage 20 wird passiert. Dies bleibt ein eigener
+Korrekturpunkt; die lokale Prüfung beweist keine neue Apple-Silicon-Abnahme.
+Das Artefakt `build/speed-apple-silicon-ci.zip` ist gegen den API-SHA-256
+`64443cfb551131a019bf2855aaec7878c83c0afd4b8f2df7aa9167cee923955c` geprüft.
+Die absichtlich fehlschlagenden Test-Runner-Selbstprüfungen im Artefakt sind
+Testdaten und keine zusätzlichen Produktfehler.
+
+Die korrigierte isolierte 58-Dateien-Kitprüfung besteht unter macOS vollständig
+unter `build/native-domain-final-v2-sdk-proof-mac/Native SDK ä igb3kqh1`,
+einschließlich aller neun grafischen Projektabläufe und Dokumentationsnavigation.
+Die beiden ersten SDK-Läufe scheiterten an einer Variablenüberschattung in der
+neuen Prüfer-Erweiterung: Der Domänenloop ersetzte versehentlich den allgemeinen
+Berichtsprüfer. `domain_probe` hält beide Rollen getrennt; die erneute Prüfung
+läuft vom Anfang. Fehlgeschlagene Prüfläufe werden nicht als Abnahme gezählt.
+
+Die vollständige Linux-Release-Suite besteht ebenfalls mit **608/608** unter
+`build/contact-world-language-release-linux/test-results/run-n_5zynq9`.
+Beide Ergebnislisten stimmen mit sämtlichen aktuellen Katalognamen überein.
+Die korrigierte isolierte 58-Dateien-Kitprüfung besteht unter Linux vollständig
+unter `build/native-domain-final-v2-sdk-proof-linux/Native SDK ä 0l0vty1y`,
+ebenfalls mit allen neun grafischen Abläufen und Dokumentationsnavigation.
+
+Die endgültigen Pakete `build/Native domain clean SDK ä mac` und
+`build/Native domain clean SDK ä linux` enthalten weiterhin 429 Manifestdateien,
+308 geprüfte Code-/Beispieldateien und 75 kompilierte Sprachprodukte.
+Alle Code-/Beispieldateien sind bytegleich mit den vollständig geprüften
+SDK-Kopien; die Apps mit den geprüften Release-Binaries. Zum Abschluss werden
+nur Dokumentation und Manifest aktualisiert. Spätere Änderungen behalten
+eigene Nachweise; diese Gesamtläufe werden nicht nachträglich umgedeutet.
+
 ## GUI-Geschwindigkeit bei Rückstau am 7. Oktober 2026
 
 Das SHA-256-geprüfte Apple-Silicon-Artefakt des vorherigen Wellen-Commits

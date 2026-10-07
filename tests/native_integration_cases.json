@@ -6681,6 +6681,185 @@
           "timeout": 30
         }
       ]
+    },
+    {
+      "name": "core_catalog",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_core_catalog.py"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "documented_native_thermal",
+      "app": true,
+      "targets": [
+        "python",
+        "physim-build",
+        "physimc",
+        "physim-runner",
+        "physim-analysis-runner",
+        "thermal-report-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_native_domain_build.py",
+            "--domain",
+            "thermal",
+            "--sdk",
+            "{root}",
+            "--builder",
+            "{physim-build}",
+            "--compiler",
+            "{physimc}",
+            "--runner",
+            "{physim-runner}",
+            "--analysis-runner",
+            "{physim-analysis-runner}",
+            "--probe",
+            "{thermal-report-probe}",
+            "--oracle",
+            "{root}/tests/test_thermal_tutorial.py",
+            "--work",
+            "{work}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 600
+        }
+      ]
+    },
+    {
+      "name": "documented_native_rc",
+      "app": true,
+      "targets": [
+        "python",
+        "physim-build",
+        "physimc",
+        "physim-runner",
+        "physim-analysis-runner",
+        "rc-report-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_native_domain_build.py",
+            "--domain",
+            "rc",
+            "--sdk",
+            "{root}",
+            "--builder",
+            "{physim-build}",
+            "--compiler",
+            "{physimc}",
+            "--runner",
+            "{physim-runner}",
+            "--analysis-runner",
+            "{physim-analysis-runner}",
+            "--probe",
+            "{rc-report-probe}",
+            "--oracle",
+            "{root}/tests/test_rc_tutorial.py",
+            "--work",
+            "{work}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 600
+        }
+      ]
+    },
+    {
+      "name": "documented_native_string",
+      "app": true,
+      "targets": [
+        "python",
+        "physim-build",
+        "physimc",
+        "physim-runner",
+        "physim-analysis-runner",
+        "string-report-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_native_domain_build.py",
+            "--domain",
+            "string",
+            "--sdk",
+            "{root}",
+            "--builder",
+            "{physim-build}",
+            "--compiler",
+            "{physimc}",
+            "--runner",
+            "{physim-runner}",
+            "--analysis-runner",
+            "{physim-analysis-runner}",
+            "--probe",
+            "{string-report-probe}",
+            "--oracle",
+            "{root}/tests/test_string_tutorial.py",
+            "--work",
+            "{work}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 600
+        }
+      ]
+    },
+    {
+      "name": "documented_native_transport",
+      "app": true,
+      "targets": [
+        "python",
+        "physim-build",
+        "physimc",
+        "physim-runner",
+        "physim-analysis-runner",
+        "transport-report-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_native_domain_build.py",
+            "--domain",
+            "transport",
+            "--sdk",
+            "{root}",
+            "--builder",
+            "{physim-build}",
+            "--compiler",
+            "{physimc}",
+            "--runner",
+            "{physim-runner}",
+            "--analysis-runner",
+            "{physim-analysis-runner}",
+            "--probe",
+            "{transport-report-probe}",
+            "--oracle",
+            "{root}/tests/test_transport_tutorial.py",
+            "--work",
+            "{work}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 600
+        }
+      ]
     }
   ]
 }
