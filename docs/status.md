@@ -13,6 +13,12 @@ Die Installation baut jetzt alle 75 kompilierten Sprachprodukte auch ohne
 Pipe-Leseverfahren. Die erneute Remote-CI-Abnahme steht noch aus; lokale Tests
 ersetzen diese Releasegates nicht.
 
+**Menüaktion und Editorfokus:** Enter führt die beim Tastendruck gewählte
+freigegebene Aktion aus. Eine nachfolgende Pfeiltaste im selben Eingabepaket
+kann die Aktion nicht verändern. Maus-/Tastaturprüfungen bestehen auf macOS und
+Linux; nach Escape funktioniert die Texteingabe ohne erneuten Mausklick.
+[Nachweise](platform-validation.md).
+
 **Hauptmenüs per Tastatur:** F10, Pfeile, Tab/Shift+Tab, Home/End, Enter/Leertaste
 und Escape bedienen die Hauptmenüs mit sichtbarem Fokus. Deaktivierte Aktionen
 werden übersprungen; Menütasten und Text gelangen nicht in einen aktiven Editor.

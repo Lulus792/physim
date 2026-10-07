@@ -21,9 +21,8 @@ static void keyboard_menu_test_frame(app *a, const char *root, int *stage, int *
     case 10: ok=a->toolbar_keyboard_item==4;MENU_KEY(SDLK_END);break;
     case 11:
         ok=a->toolbar_keyboard_item==8;*capture="keyboard-menu-focus.bmp";MENU_KEY(SDLK_HOME);break;
-    case 12: ok=a->toolbar_keyboard_item==0 && !a->show_log;MENU_KEY(SDLK_RETURN);break;
+    case 12: ok=a->toolbar_keyboard_item==0 && !a->show_log;MENU_KEY(SDLK_RETURN);MENU_KEY(SDLK_DOWN);break;
     case 13:
-        if(a->toolbar_keyboard_activate){--*stage;return;}
         ok=a->show_log && !a->toolbar_menu && !a->toolbar_keyboard;
         MENU_KEY(SDLK_F10);break;
     case 14: MENU_KEY(SDLK_RIGHT);MENU_KEY(SDLK_RIGHT);break;
@@ -38,7 +37,6 @@ static void keyboard_menu_test_frame(app *a, const char *root, int *stage, int *
     case 19: ok=a->tab==6 && !a->toolbar_keyboard;MENU_KEY(SDLK_F10);MENU_KEY(SDLK_DOWN);MENU_KEY(SDLK_ESCAPE);break;
     case 20: ok=!a->toolbar_keyboard && !a->toolbar_menu;MENU_KEY(SDLK_F10);MENU_KEY(SDLK_DOWN);MENU_KEY(SDLK_DOWN);MENU_KEY(SDLK_SPACE);break;
     case 21:
-        if(a->toolbar_keyboard_activate){--*stage;return;}
         ok=a->project_manager && !a->toolbar_keyboard;
         a->project_manager=false;
         ok=ok && document_test_start(a,root);
@@ -66,8 +64,8 @@ static void keyboard_menu_test_frame(app *a, const char *root, int *stage, int *
         MENU_KEY(SDLK_ESCAPE);break;
     case 27:
         ok=!a->toolbar_menu && !a->toolbar_keyboard;
-        test_mouse(a,a->document_bounds[6],true);break;
-    case 28: test_mouse(a,a->document_bounds[6],false);break;
+        break; /* Return to the previously focused editor without a pointer. */
+    case 28: break;
     case 29: {
         SDL_Event text={0};text.type=SDL_EVENT_TEXT_INPUT;text.text.windowID=SDL_GetWindowID(a->window);
         text.text.text="Z";SDL_PushEvent(&text);break;
@@ -84,7 +82,6 @@ static void keyboard_menu_test_frame(app *a, const char *root, int *stage, int *
         MENU_KEY(SDLK_F10);MENU_KEY(SDLK_DOWN);MENU_KEY(SDLK_END);MENU_KEY(SDLK_UP);break;
     case 31: ok=a->toolbar_keyboard_item==4;MENU_KEY(SDLK_RETURN);break;
     case 32:
-        if(a->toolbar_keyboard_activate){--*stage;return;}
         ok=!active_document(a)->dirty && !a->toolbar_menu && !a->toolbar_keyboard;
         MENU_KEY(SDLK_F10);MENU_KEY(SDLK_DOWN);break;
     case 33: test_mouse(a,a->document_bounds[6],true);break;

@@ -343,6 +343,8 @@ werden übersprungen. **Home/End** wählen den ersten/letzten verfügbaren Eintr
 beendet die Menübedienung. Ein Rahmen markiert den Tastaturfokus. Ein Klick
 außerhalb oder ein Fokuswechsel zu einem anderen Fenster schließt das Menü.
 Währenddessen verändern die Menütasten und Texteingaben keinen geöffneten Editor.
+Enter führt die beim Tastendruck gewählte Aktion aus; nach Escape kannst du
+im zuvor aktiven Editor ohne erneuten Mausklick weiterschreiben.
 
 - **Ctrl+1 / Ctrl+2 / Ctrl+3:** Entwickeln / Simulieren / Auswerten.
 - **Ctrl+4:** Läufe und Berichte.

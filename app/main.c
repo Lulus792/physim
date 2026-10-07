@@ -181,7 +181,7 @@ typedef struct {
     struct nk_rect navigation_bounds[3];
     struct nk_rect toolbar_bounds[4], toolbar_item_bounds[6];
     int toolbar_menu; /* 0: closed, 1: File, 2: View. One popup supports direct switching. */
-    bool toolbar_keyboard, toolbar_keyboard_activate;
+    bool toolbar_keyboard;
     int toolbar_keyboard_top, toolbar_keyboard_item;
     int toolbar_popup_menu; /* Previous drawn popup, including keyboard close. */
     struct nk_rect toolbar_popup_bounds;

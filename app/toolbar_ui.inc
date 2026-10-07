@@ -63,7 +63,7 @@ static void toolbar_dispatch(app *a, toolbar_action action) {
     }
 }
 static void toolbar_keyboard_close(app *a) {
-    a->toolbar_keyboard=false;a->toolbar_keyboard_activate=false;
+    a->toolbar_keyboard=false;
     a->toolbar_keyboard_item=-1;a->toolbar_menu=0;
 }
 static void toolbar_keyboard_move(app *a, int direction, bool edge) {
@@ -108,7 +108,15 @@ static bool toolbar_keyboard_key(app *a, const SDL_KeyboardEvent *key) {
             if(top==2)open_documentation(a,1);else {a->project_manager=false;open_settings(a);}
         } else if(!a->toolbar_menu) {
             a->toolbar_menu=a->toolbar_keyboard_top+1;toolbar_keyboard_move(a,1,true);
-        } else if(a->toolbar_keyboard_item>=0) a->toolbar_keyboard_activate=true;
+        } else if(a->toolbar_keyboard_item>=0) {
+            toolbar_entry entries[9];unsigned count=toolbar_entries(a,a->toolbar_menu,entries);
+            int selected=a->toolbar_keyboard_item;
+            if((unsigned)selected<count && entries[selected].enabled) {
+                toolbar_action action=entries[selected].action;
+                toolbar_keyboard_close(a);
+                toolbar_dispatch(a,action);
+            }
+        }
     }
     return true; /* Menu input must never edit a still-focused document. */
 }
@@ -160,7 +168,7 @@ static void toolbar_popup(app *a, int previous) {
                 if(menu==2 && i>=4)a->dock_menu_bounds[i-4]=bounds;
                 bool focused=a->toolbar_keyboard && a->toolbar_keyboard_item==(int)i;
                 bool clicked=toolbar_menu_item(ui,entries[i].text,entries[i].enabled,focused);
-                if(entries[i].enabled && (clicked || (focused && a->toolbar_keyboard_activate))) {
+                if(entries[i].enabled && clicked) {
                     toolbar_action action=entries[i].action;
                     toolbar_keyboard_close(a);nk_popup_close(ui);toolbar_dispatch(a,action);
                     break;
@@ -169,7 +177,6 @@ static void toolbar_popup(app *a, int previous) {
         }
         nk_popup_end(ui);
     }
-    a->toolbar_keyboard_activate=false;
     nk_style_pop_float(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
 }
 static void toolbar_view(app *a) {
@@ -190,7 +197,6 @@ static void toolbar_view(app *a) {
     bool press = nk_input_is_mouse_pressed(&ui->input, NK_BUTTON_LEFT);
     if (press) {
         a->toolbar_keyboard = false;
-        a->toolbar_keyboard_activate = false;
     }
     int clicked = -1;
     for (int i = 0; i < 4; i++) {
@@ -199,7 +205,6 @@ static void toolbar_view(app *a) {
     }
     if (clicked >= 0) {
         a->toolbar_keyboard = false;
-        a->toolbar_keyboard_activate = false;
         if (clicked < 2)
             a->toolbar_menu = a->toolbar_menu == clicked + 1 ? 0 : clicked + 1;
         else {

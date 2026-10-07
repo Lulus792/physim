@@ -3,6 +3,38 @@
 Stand: 7. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
+## Reihenfolge der Menüaktionen und Editorfokus am 7. Oktober 2026
+
+Ein isolierter App-Build mit dem vorherigen Handler aus `03ba81d` reproduziert
+einen Fehler bei Enter und einer folgenden Pfeiltaste im selben SDL-Paket:
+Die Auswahl verschiebt sich vor der vorgemerkten Ausführung, und die verlangte
+Protokollaktion wird nicht ausgeführt. Die Ausgabe meldet Stage 13 mit Menü 2,
+Eintrag 4 und weiter aktivierter Tastaturführung. Der Nachweis steht unter
+`build/menu-previous-handler-build-v2.log` und
+`build/menu-previous-handler-output.log`. Die erste Hilfsbuild-Konfiguration
+verwendete versehentlich den aktuellen indirekt eingebundenen Handler; erst
+die isolierte Kopie von `design_ui.inc` und `toolbar_ui.inc` prüft tatsächlich
+den vorherigen Stand. Der frühere erfolglose Reproduktionsversuch ist kein
+Nachweis gegen den Fehler.
+
+Enter und Leertaste prüfen nun unmittelbar die aktuelle gemeinsame Aktionsliste
+und führen die gewählte freigegebene Aktion aus. Der vorgemerkte Bool-Zustand
+entfällt. Nachfolgende Eingaben können diese Aktion nicht mehr umdeuten.
+Der neue Eingabepakettest verlangt die richtige Protokollaktion; die Editor-
+prüfung kehrt außerdem nach Escape ohne einen Mausklick zur Texteingabe zurück.
+
+Alle fünf Maus-/Tastaturmenüprüfungen bestehen im Release-Build auf Intel
+macOS/Apple Clang 16 unter
+`build/contact-world-language-release-mac/test-results/run-4mrvw_fu` und
+Debian/GCC 12.2 unter
+`build/contact-world-language-release-linux/test-results/run-80iadmah`.
+Beide Fenstergrößen prüfen weiterhin deaktivierte Aktionen, Fokusmarkierung,
+Textisolation, Schreiben/Speichern, Mausübergang und Fokusverlust.
+Die vollständigen SDK-Prüfungen des vorherigen Menü-Meilensteins bleiben eigene
+unveränderte Nachweise. Diese anschließende Korrektur besitzt die genannten
+gezielten App-Prüfungen; eine erneute Remote-Abnahme bleibt erforderlich.
+PP-0710 und die vollständige Produktabnahme bleiben offen.
+
 ## Hauptmenüs per Tastatur am 7. Oktober 2026
 
 Die App bietet F10 für die Hauptmenüleiste, Pfeile und Tab/Shift+Tab für den
