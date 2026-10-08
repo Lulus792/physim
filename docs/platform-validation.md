@@ -1706,3 +1706,48 @@ prüft die Abhängigkeit am bestehenden SDK, kein neu erzeugtes Gesamtpaket.
 Die Korrekturen sind damit lokal auf beiden Systemen geprüft. Eine vollständige
 erneute CI-Abnahme einschließlich Windows, Apple Silicon und frisch installierter
 Debian-/Ubuntu-Pakete ist noch nicht belegt. Der gesamte Projektplan bleibt offen.
+
+## Kraftvektoren des vertikalen Pendelablaufs
+
+Die C-Pendelvorlage, alle fünf Sprachvarianten und beide Lernpfadexperimente
+zeigen Gewicht und radiale Stangenkraft mit identischen Farben und einem
+beschrifteten Maßstab von 0,05 m/N. Das C-Modell ergänzt bei eingeschaltetem
+Luftwiderstand dessen tangentiale Kraft. Stabile IDs und Elternbeziehungen
+erhalten Auswahl und Sichtbarkeit. Die Kräfte verändern weder Modellzustand
+noch Messkanäle; der vorhandene Geschwindigkeitspfeil behält seinen Maßstab.
+[Modellgleichungen](pendulum-tutorial.md#verfahren-auswählen).
+
+`pendulum_forces` lädt neun tatsächliche C-/Physim-Module, einschließlich eines
+C-Moduls mit Luftdichte 1,225 kg/m³. Drei Längen/Anfangswinkel, je 401 Szenen
+und Reset prüfen Kraftsumme gegen eine unabhängige Newton-Gegenrechnung,
+Gewichtsrichtung, dissipativen Widerstand, Pfeilursprung, Einheitenbeschriftung,
+Farben und Hierarchie. Die bestehende Integratorprüfung vergleicht weiterhin
+alle Szenenfelder und Messdaten; sie umfasst jetzt alle zwölf Lernpfadobjekte.
+
+Intel macOS 14.6.1/Apple Clang 16 besteht zunächst Kraft-/Sprach-/ID-Prüfung
+3/3 (`run-987n24li`), den vollständigen Pendellernpfad 1/1 (`run-glzge7id`)
+und abschließend Kraft-/Quellen-/Prüfpaketfälle 3/3 (`run-9qil7a7b`).
+Handbuch-/Quellengleichheit bestehen 2/2 (`run-mmp19n79`); der Runner-Selbsttest
+besteht ebenfalls. Beide C-/Physim-Lernpfadfenster bestehen gemeinsam 1/1
+(`run-r9zx8x6x`), die tatsächliche Sprachvorlage mit Build, Runner und Auswertung
+1/1 (`run-giqtz_jk`). Ihre Lernpfadbilder wurden nebeneinander visuell geprüft.
+
+Debian 12/GCC 12.2 besteht alle fünf Kraft-/Sprach-/ID-/Lernpfad-/Quellenfälle
+5/5 (`run-c_ebe3wq`) und beide Fensterabläufe 2/2 (`run-rzh8hhwe`).
+Linux/Clang 14 mit ASan/UBSan besteht die neun Module umfassende Kraftprüfung
+1/1 (`run-4i8nz9ms`), mit `detect_leaks=0` und aktiver Address-/UB-Prüfung.
+Windows und Apple Silicon wurden für diese Kraftänderung noch nicht ausgeführt.
+
+Der erste Linux-Build scheiterte an vollem Datenträger und zählt nicht als
+Nachweis. Zum Freigeben wurden 13.638 Mitglieder des älteren, vollständig
+bestandenen 78-Fälle-Laufs `run-38r48_zv` auf dem Mac archiviert. Alle
+Archivmitglieder und anschließend alle Originale wurden per SHA-256 verglichen,
+erst dann wurde ausschließlich dieser Linux-Testordner entfernt. Die kanonische
+Kopie liegt auf dem Mac unter `build/pendulum-forces-archived-linux-proofs.tar.gz`,
+SHA-256 `96aad9d1b4fbcf8db3c32e7eed36ae9bbdbfb134a11797dae48fa5d655eae346`;
+`build/pendulum-forces-archived-linux-receipt.json` enthält Pfade und Einzelhashes.
+Projektquellen und Benutzerdaten wurden nicht entfernt.
+
+PP-0776 besitzt damit einen konkreten begrenzten Nachweis für Pendel,
+Kraftvektoren und Live-Werte. Die übrigen Anforderungen des vollständigen
+vertikalen Anwendungsfalls und des Gesamtplans bleiben separat abzunehmen.

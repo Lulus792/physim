@@ -3605,7 +3605,7 @@ int main(int argc, char **argv) {
                     planes += a->scene.objects[i].shape == PS_PLANE;
                 }
                 if ((!a->language_experiment && !label) ||
-                    (test_example == 8 && (a->scene.count != 5 || a->scene.objects[2].parent_id!=101 ||
+                    (test_example == 8 && (a->scene.count != 9 || velocity_arrows != 2 || !label || a->scene.objects[2].parent_id!=101 ||
                                            a->scene.objects[3].shape!=PS_GROUP || a->scene.objects[4].parent_id!=100)) ||
                     (test_example == 9 && (a->scene.count != 5 || !path || !label)) ||
                     (test_example == 10 && (a->scene.count != 9 || contact_points != 2 ||

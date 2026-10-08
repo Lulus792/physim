@@ -77,7 +77,7 @@ static int pendulum_api(const char *path, const char *reference_path,
     }
     ps_scene scene = {0};
     api->build_scene(&a, &scene);
-    CHECK(ps_scene_valid(&scene) && scene.count == 5);
+    CHECK(ps_scene_valid(&scene) && scene.count == 9);
     CHECK(scene.objects[0].parent_id==100 && scene.objects[1].parent_id==100 &&
           scene.objects[2].parent_id==101 && scene.objects[3].shape==PS_GROUP &&
           scene.objects[3].id==100 && scene.objects[4].parent_id==100);
@@ -500,7 +500,7 @@ int main(int argc, char **argv) {
     CHECK(b.values[0] == other_angle);
     ps_scene scene = {0};
     api[0]->build_scene(&a, &scene);
-    CHECK(ps_scene_valid(&scene) && scene.count == 5 && scene.objects[2].parent_id==101);
+    CHECK(ps_scene_valid(&scene) && scene.count == 9 && scene.objects[2].parent_id==101);
     CHECK(scene.objects[2].shape == PS_SPHERE && scene.objects[2].id == 3);
     CHECK(near(scene.objects[2].a.x, a.values[2]) && near(scene.objects[2].a.y, a.values[3]));
     CHECK(api[0]->step(&a, 0) == PS_INVALID && api[0]->step(&a, NAN) == PS_INVALID);

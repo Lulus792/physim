@@ -489,3 +489,15 @@ markierungen verhindern doppelte Records; OS-Scope und Nichtverfügbarkeit sind
 explizit. Live-/gleichzeitige Baum-/Mehrworkerressourcen, GPU-Auslastung und echte
 Latenz bleiben offen. [Messvertrag](app-profiling.md). Status und Zahlen bleiben
 unverändert: 34 implementiert, 8 unvollständig, 489 ungeprüft.
+
+## Kraftvektoren im ersten Pendelablauf
+
+PP-0776 zeigt jetzt in den tatsächlichen C-/Physim-Pendelfenstern Gewichtskraft,
+Stangenkraft und Live-Werte. Das C-Modell stellt bei aktivem Luftwiderstand
+zusätzlich dessen Kraft dar. Maßstäbe sind beschriftet, Modell und Messwerte
+bleiben unabhängig von der Darstellung. Neun echte Module besitzen eine
+Newton-Gegenprobe für verschiedene Längen, Winkel und Reset; die tatsächlichen
+Fenster- und Integratorabläufe bestehen auf Intel macOS und Debian.
+[Nachweise und Plattformgrenzen](platform-validation.md#kraftvektoren-des-vertikalen-pendelablaufs).
+Aktuell: 35 implementierte, 8 unvollständige und 488 ungeprüfte Planblöcke.
+Die 531 Originalblöcke und das gesamte Projektziel bleiben erhalten.

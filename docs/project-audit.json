@@ -6264,9 +6264,19 @@
       "kind": "list",
       "scope": "planned",
       "text": "6. Simulationsansicht zeigt Pendel, Kraftvektoren und Live-Werte.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "examples/pendulum/main.c",
+        "examples/language/pendulum.phys",
+        "examples/documentation/pendulum_main.c",
+        "examples/documentation/pendulum_main.phys",
+        "tests/test_pendulum_forces.c",
+        "tests/test_pendulum_tutorial.py",
+        "app/pendulum_tutorial_tests.inc",
+        "docs/pendulum-tutorial.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Pendel, Gewicht-/Stangenkraftvektoren und Live-Werte in tatsächlichen C-/Physim-Fensterabläufen auf Intel macOS und Debian geprüft. Gemeinsamer beschrifteter Kraftmaßstab; C ergänzt optionalen Luftwiderstand. Neun Module mit Newton-Gegenprobe, drei Parameterkombinationen, Reset und Linux ASan/UBSan. Keine vollständige Abnahme der übrigen vertikalen Anforderungen oder Windows-/Apple-Silicon-Kraftänderung."
     },
     {
       "id": "PP-0777",

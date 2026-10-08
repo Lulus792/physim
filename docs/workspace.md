@@ -54,6 +54,12 @@ Pendel eignet sich für Integratoren, Wurf für Bahnen, Kugelstoß und Boxstoß 
 Kontakte, Box auf Ebene für Reibung, Feder–Masse–Dämpfer für Energie,
 Auftrieb für Medien und Wurf mit Unsicherheit beziehungsweise Sensorwurf für
 Messmodelle. Die Physim-Vorlagen sind als solche im Vorlagennamen gekennzeichnet.
+Die Pendelvorlagen zeigen Gewichtskraft und Stangenkraft als beschriftete
+Pfeile mit 0,05 m/N. Das C-Pendel zeigt bei eingeschaltetem Luftwiderstand
+zusätzlich dessen Kraft in Violett; der Widerstand wirkt entgegen der
+Tangentialgeschwindigkeit. Die roten/grünen Kräfte beziehen sich auf eine
+starre, masselose Stange und bleiben vom Geschwindigkeitspfeil unterschieden.
+Der [Pendellernpfad](pendulum-tutorial.md) erklärt Gleichungen und Maßstäbe.
 
 ## Letzten Workspace wieder öffnen
 

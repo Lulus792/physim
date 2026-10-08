@@ -27,7 +27,7 @@ def read(path):
             if kind==3:rows.append(struct.unpack('<7d',data))
             if kind==4:assert struct.unpack('<Q',data)[0]==len(rows);footer=True
             if kind==5:
-                assert struct.unpack_from('<I',data)[0]==3 and struct.unpack_from('<II',data,12)==(6,8)
+                assert struct.unpack_from('<I',data)[0]==3 and struct.unpack_from('<II',data,12)==(6,12)
                 scenes.append(data)
     assert footer and rows
     return rows,scenes,metadata
@@ -78,7 +78,7 @@ for method in range(5):
     for x,y in zip(sa,sb):
         assert x[:28]==y[:28] and len(x)==len(y)
         offset=28+6*8
-        for i in range(8):
+        for i in range(12):
             at=offset+i*176;assert x[at:at+8]==y[at:at+8] and x[at+96:at+176]==y[at+96:at+176]
             for field in range(8,96,8):assert near(struct.unpack_from('<d',x,at+field)[0],struct.unpack_from('<d',y,at+field)[0])
 # Step-halving against a nonlinear analytic Taylor expansion, independent of the integrators.

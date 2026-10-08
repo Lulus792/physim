@@ -51,6 +51,16 @@ symplektisches Euler zeigt die beiden Aktualisierungen ausdrücklich. Die Analys
 verwenden `series` und `report`. Öffentliche Core-API und Sprachsyntax werden
 für diesen Lernpfad nicht erweitert.
 
+Die Szene zeigt die Gewichtskraft rot und die Stangenkraft grün. Beide Pfeile
+beginnen an der Masse und verwenden denselben beschrifteten Maßstab von
+0,05 m pro Newton. Der gelbe Geschwindigkeitspfeil behält seinen eigenen
+Maßstab von 0,3 s. Mit `eᵣ = (sin θ, −cos θ)` gilt
+`F_G = (0, −mg)` und `F_Stange = −m(g cos θ + Lω²)eᵣ`. Zusammen erzeugen
+sie die tangentiale Pendelbeschleunigung und die radiale Zentripetalbeschleunigung.
+Das Modell besitzt eine starre Stange; die Stangenkraft ist kein Modell eines
+schlaffen Seils. Die Pfeile sind Darstellungen der Modellkräfte und ändern
+weder Integrator noch Messdaten.
+
 ## In der App ausprobieren
 
 1. Lege ein Pendelprojekt in der gewünschten Sprache an.
@@ -234,6 +244,16 @@ static void scene(ps_context *c,ps_scene *s) {
     (void)ps_scene_group(s,100,0,"Pendel");(void)ps_scene_group(s,101,100,"Bewegte Masse");
     (void)ps_scene_set_parent(s,1,100);(void)ps_scene_set_parent(s,2,100);(void)ps_scene_set_parent(s,3,101);
     (void)ps_scene_set_parent(s,4,3);(void)ps_scene_set_parent(s,5,2);(void)ps_scene_set_parent(s,6,3);
+    /* One kilogram; force arrows use 0.05 metres per newton. */
+    ps_vec3 weight_end=ps_vadd(bob,ps_v3(0,-.05*gravity,0));
+    double constraint=gravity*cos(c->values[0])+p->length*c->values[1]*c->values[1];
+    ps_vec3 rod_end=ps_vadd(bob,ps_vscale(bob,-.05*constraint/p->length));
+    ps_scene_add_id(s,7,PS_ARROW,bob,weight_end,0,0xe87979ff);
+    ps_scene_add_id(s,8,PS_ARROW,bob,rod_end,0,0x91d28aff);
+    (void)ps_scene_label_id(s,10,weight_end,"Gewicht · 0.05 m/N",0xe87979ff);
+    (void)ps_scene_label_id(s,11,rod_end,"Stangenkraft · 0.05 m/N",0x91d28aff);
+    (void)ps_scene_set_parent(s,7,3);(void)ps_scene_set_parent(s,8,3);
+    (void)ps_scene_set_parent(s,10,7);(void)ps_scene_set_parent(s,11,8);
 }
 static void destroy(ps_context *c){free(c->user);c->user=NULL;}
 PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
@@ -416,6 +436,18 @@ func scene():
     sceneParent(4,3)
     sceneParent(5,2)
     sceneParent(6,3)
+    // One kilogram; force arrows use 0.05 metres per newton.
+    let weightEnd = bob + 0.05 * Vec3(0,-gravity,0)
+    let constraint = gravity * cos(state[0]) + length * state[1] * state[1]
+    let rodEnd = bob - (0.05 * constraint / length) * bob
+    arrow(bob,weightEnd,0,0xE87979FF,7)
+    arrow(bob,rodEnd,0,0x91D28AFF,8)
+    label(weightEnd,"Gewicht · 0.05 m/N",0xE87979FF,10)
+    label(rodEnd,"Stangenkraft · 0.05 m/N",0x91D28AFF,11)
+    sceneParent(7,3)
+    sceneParent(8,3)
+    sceneParent(10,7)
+    sceneParent(11,8)
 ```
 
 ### Analyse für einen bis acht Läufe

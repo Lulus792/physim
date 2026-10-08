@@ -9,7 +9,10 @@ static const double length_m = 1.5;
 static const double mass_kg = 1.0;
 static const double gravity_m_s2 = 9.80665;
 static const double initial_angle_rad = 0.45;
-static const double air_density_kg_m3 = 0.0; /* 1.225 enables air drag */
+#ifndef PS_PENDULUM_AIR_DENSITY
+#define PS_PENDULUM_AIR_DENSITY 0.0 /* 1.225 enables air drag */
+#endif
+static const double air_density_kg_m3 = PS_PENDULUM_AIR_DENSITY;
 static const double drag_coefficient = 0.47;
 static const double area_m2 = 0.01;
 static const double sensor_noise_rad = 0.0;
@@ -146,6 +149,32 @@ static void scene(ps_context *c, ps_scene *s) {
     (void)ps_scene_set_parent(s,4,3);
     (void)ps_scene_set_parent(s,5,2);
     (void)ps_scene_set_parent(s,6,3);
+    /* Force arrows use 0.05 metres per newton; velocity keeps its own scale. */
+    const double force_scale = 0.05;
+    ps_vec3 weight = ps_v3(0, -mass_kg * gravity_m_s2, 0);
+    double constraint = mass_kg * (gravity_m_s2 * cos(c->values[0]) +
+                                  p->length * c->values[1] * c->values[1]);
+    ps_vec3 rod_force = ps_vscale(bob, -constraint / p->length);
+    ps_vec3 weight_end = ps_vadd(bob, ps_vscale(weight, force_scale));
+    ps_vec3 rod_end = ps_vadd(bob, ps_vscale(rod_force, force_scale));
+    ps_scene_add_id(s, 7, PS_ARROW, bob, weight_end, 0, 0xe87979ff);
+    ps_scene_add_id(s, 8, PS_ARROW, bob, rod_end, 0, 0x91d28aff);
+    (void)ps_scene_label_id(s, 10, weight_end, "Gewicht · 0.05 m/N", 0xe87979ff);
+    (void)ps_scene_label_id(s, 11, rod_end, "Stangenkraft · 0.05 m/N", 0x91d28aff);
+    (void)ps_scene_set_parent(s, 7, 3);
+    (void)ps_scene_set_parent(s, 8, 3);
+    (void)ps_scene_set_parent(s, 10, 7);
+    (void)ps_scene_set_parent(s, 11, 8);
+    if (air_density_kg_m3 > 0) {
+        double speed = p->length * fabs(c->values[1]);
+        ps_vec3 drag = ps_vscale(velocity, -0.5 * air_density_kg_m3 *
+                                drag_coefficient * area_m2 * speed);
+        ps_vec3 drag_end = ps_vadd(bob, ps_vscale(drag, force_scale));
+        ps_scene_add_id(s, 9, PS_ARROW, bob, drag_end, 0, 0xc499e8ff);
+        (void)ps_scene_label_id(s, 12, drag_end, "Luftwiderstand · 0.05 m/N", 0xc499e8ff);
+        (void)ps_scene_set_parent(s, 9, 3);
+        (void)ps_scene_set_parent(s, 12, 9);
+    }
 }
 static void destroy(ps_context *c) {
     free(c->user);

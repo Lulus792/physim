@@ -2700,3 +2700,12 @@ frische Paketprüfsysteme installieren die benötigte Python-D-Bus-Bindung
 ausdrücklich. Gezielte Builds und Gegenproben bestehen auf Intel macOS und
 Debian 12; die vollständige erneute CI-Abnahme bleibt ausstehend.
 [Nachweise und Grenzen](platform-validation.md#ci-testkatalog-compilerkodierung-und-linux-prüfabhängigkeit).
+
+## Kraftvektoren im Pendelfenster
+
+C-/Physim-Pendel zeigen Gewichtskraft und Stangenkraft als beschriftete Pfeile;
+das C-Modell ergänzt den eingeschalteten Luftwiderstand. Der gemeinsame
+Kraftmaßstab ist 0,05 m/N. Die Darstellung verändert keine Messwerte.
+Newton-Gegenproben, Integratorvergleiche und echte C-/Physim-Fensterabläufe
+bestehen auf macOS und Linux. [Modell](pendulum-tutorial.md),
+[ausgeführte Prüfungen](platform-validation.md#kraftvektoren-des-vertikalen-pendelablaufs).

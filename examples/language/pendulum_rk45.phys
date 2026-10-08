@@ -61,6 +61,18 @@ func scene():
     sceneParent(1, 100)
     sceneParent(2, 100)
     sceneParent(3, 101)
+    // Mass is one kilogram; force arrows use 0.05 metres per newton.
+    let weightEnd = bob + 0.05 * Vec3(0, -gravity, 0)
+    let constraint = gravity * cos(state.x) + length * state.y * state.y
+    let rodEnd = bob - (0.05 * constraint / length) * bob
+    arrow(bob, weightEnd, 0, 0xE87979FF, 7)
+    arrow(bob, rodEnd, 0, 0x91D28AFF, 8)
+    label(weightEnd, "Gewicht · 0.05 m/N", 0xE87979FF, 10)
+    label(rodEnd, "Stangenkraft · 0.05 m/N", 0x91D28AFF, 11)
+    sceneParent(7, 3)
+    sceneParent(8, 3)
+    sceneParent(10, 7)
+    sceneParent(11, 8)
 
 // One accepted Dormand-Prince step; rejected trials never update model state.
 func adaptiveDerivative(time: Float64, state: [Float64]) -> [Float64]:

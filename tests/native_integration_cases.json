@@ -2077,6 +2077,27 @@
     },
     "physim-scene-benchmark": {
       "benchmark": "physim-scene-benchmark"
+    },
+    "physim-pendulum-forces-tests": {
+      "sources": [
+        "tests/test_pendulum_forces.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "pendulum_drag_forces": {
+      "sources": [
+        "examples/pendulum/main.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_PENDULUM_AIR_DENSITY=1.225"
+      ]
     }
   },
   "tests": [
@@ -8365,6 +8386,38 @@
           "files": [
             "results.json"
           ]
+        }
+      ]
+    },
+    {
+      "name": "pendulum_forces",
+      "targets": [
+        "physim-pendulum-forces-tests",
+        "pendulum",
+        "pendulum_drag_forces",
+        "physim-language-pendulum",
+        "physim-language-pendulum-rk4",
+        "physim-language-pendulum-integrator",
+        "physim-language-pendulum-rk45",
+        "physim-language-pendulum-verlet",
+        "pendulum-tutorial-c",
+        "pendulum-tutorial-phys"
+      ],
+      "steps": [
+        {
+          "program": "physim-pendulum-forces-tests",
+          "arguments": [
+            "{pendulum}",
+            "{pendulum_drag_forces}",
+            "{physim-language-pendulum}",
+            "{physim-language-pendulum-rk4}",
+            "{physim-language-pendulum-integrator}",
+            "{physim-language-pendulum-rk45}",
+            "{physim-language-pendulum-verlet}",
+            "{pendulum-tutorial-c}",
+            "{pendulum-tutorial-phys}"
+          ],
+          "timeout": 60
         }
       ]
     }
