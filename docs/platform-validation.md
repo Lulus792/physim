@@ -2064,3 +2064,61 @@ SDK-/App-Pakete wurden für diese Änderung nicht ausgeführt.
 
 PP-0764 und PP-0773 besitzen damit begrenzte konkrete Nachweise. PP-0756,
 aktuelle vollständige Plattform-/Paketabnahme und Gesamtplan bleiben offen.
+
+## Verschobene aktuelle SDK-Pendelketten
+
+Am Implementierungsstand `a0592d5` wurden neue Release-SDKs ohne Oberfläche
+mit allen kompilierten C-/Physim-Beispielen tatsächlich gebaut: Intel macOS
+14.6.1/Apple Clang 16 und Debian 12/GCC 12.2. Die aktuelle Pendelgegenprobe
+liegt im unabhängigen Kit und wird nun auch vom vollständigen SDK-Prüfer
+aufgerufen. `--pendulum-only` führt denselben Teil isoliert aus. Der alte
+adaptive SDK-Probe erwartete sechs Kanäle; er prüft jetzt neun Kanäle,
+Geschwindigkeitsnamen/-einheiten und Kinematik. Allgemeine Sprachberichte
+behalten ihre eigenen zwei Plots ohne Tabellen; sie werden ausdrücklich
+nicht mit den gesonderten Pendelberichten verwechselt.
+
+Das Kit umfasst 146 explizite Prüfeingaben, kein Physim-Core und keine
+öffentlichen SDK-Header. Seine vollständigen Bytes wurden beim Entpacken
+gegen das enthaltene SHA-256-Manifest geprüft. Der Kit-Selbsttest besteht
+mit Grenzen, fehlenden/dynamischen Pfaden und exklusiver Veröffentlichung.
+Die Ausführung erfolgte ausschließlich mit dem aus dem Kit entpackten
+Prüfer; Compilerquellen und SDK-Header stammen aus dem verschobenen Paket.
+Das Paketmanifest wird vor dem ersten Compile vollständig geprüft.
+
+Je System werden installierte und aus Paketquellen neu gebaute Bibliothek
+getrennt geprüft. Sechs allgemeine Modelle werden mit fünf ausgewählten
+Verfahren, Vakuum und zulässigem Medium ausgeführt. Ein unabhängiger
+PSRUN-Decoder prüft CRCs, Footer, Metadaten, neun Kanalnamen, SI-Dimensionen,
+Kinematik, Tangentialbedingung und Energie. Euler/symplektischer Euler
+besitzen eigene erste Schrittformeln. Unzulässige Auswahlwerte und Verlet
+mit Luftwiderstand scheitern erwartungsgemäß. Je Bibliothek werden außerdem
+zwölf adaptive C-/Physim-Berichte gegen den aktualisierten SDK-Probe geprüft.
+
+Beide Lernpfadmodelle durchlaufen je Bibliothek die vollständige bestehende
+Gegenprobe: 40010 primäre Messzeilen, fünf Integratoren, Szenen, unabhängige
+nichtlineare Perioden-/Taylorreferenzen, Verfeinerung, adaptive Zeiten und
+beide gemischten Analysesprachen. Drei Analysemodule erzeugen jeweils 18
+Referenzberichte mit 400 Spitzen, vollständigen CSVs, Wachstum, ungleichen
+Zeiten, Plateaus, Ruhe und nur einer Spitze. Positive-Spitzen-API und reale
+Sprachbindung werden ebenfalls gegen jede Bibliothek ausgeführt.
+
+Die abschließenden verschobenen SDK-Prüfungen bestehen vollständig:
+
+- macOS: `build/pendulum-sdk-kit-final-proof-mac/Native SDK ä u1wizah6`.
+- Linux: `build/pendulum-sdk-kit-final-proof-linux/Native SDK ä wr6n9hd4`.
+
+Beide besitzen `PASSED.txt` und vollständige `verification.log`. Die getrennten
+C-Lernpfadquellen im Consumer wurden zusätzlich gegen die Paketmanifest-Hashes
+geprüft. Ein vorheriger macOS-Verifierentwurf verwendete kollidierende
+Dateinamen für C- und generierte Physim-Lernpfadquellen; dessen Lauf gilt daher
+nicht als C-/Physim-SDK-Nachweis. Die abschließenden Läufe verwenden getrennte
+Dateien und unabhängige echte C-/Physim-Module.
+
+Die Pakete sind Headless-SDKs; sie enthalten keine App oder Projektbuilder.
+Dies ist keine vollständige neue SDK-/GUI- oder Plattformmatrixabnahme.
+Windows und Apple Silicon wurden für diese Gegenprobe nicht ausgeführt.
+Der ältere offizielle Linux-Paketlauf `37780798990` am Stand `66ea2bf` besitzt
+zusätzlich tatsächlich erfolgreiche Paket-, Debian-12- und Ubuntu-24.04-Jobs;
+er ist ausdrücklich kein Nachweis für die späteren Pendeländerungen.
+PP-0756 bleibt unvollständig, und die unveränderten 531 Originalplanblöcke
+bleiben Grundlage der weiteren Umsetzung.

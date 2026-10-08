@@ -546,3 +546,10 @@ Positionsbeschleuniger keinen geschwindigkeitsabhängigen Widerstand integriert.
 Der adaptive Laufmodus verwendet weiterhin ausdrücklich Dormand–Prince,
 unabhängig von der Auswahl für feste Ausgabeschritte; seine Metadaten geben
 beide Einstellungen getrennt an.
+
+Das unabhängige SDK-Prüfkit bietet `--pendulum-only` für die komplette
+Pendel-Daten-/Analysekette: verschobenes Paket, installierte und aus den
+Paketquellen neu gebaute Bibliothek, beide Sprachen, fünf auswählbare Verfahren,
+neun SI-Kanäle, adaptive Läufe, Spitzen-API und vollständige Amplituden-CSVs.
+Der Modus prüft die Pendelkette ohne Oberfläche; die vollständige SDK-Prüfung
+enthält dieselbe Gegenprobe zusätzlich zu den übrigen Prüfungen.

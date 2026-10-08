@@ -2762,3 +2762,11 @@ Integratorgrenzen und verschiedene gleichzeitig lebende Instanzen sind
 abgedeckt. macOS/Linux bestehen je vier native und zwei App-Fälle, Linux
 zusätzlich die Methodenprüfung mit ASan/UBSan. Adaptive Parameterstudien
 behalten ihre ausdrücklich getrennte Dormand–Prince-Steuerung.
+
+Neue Headless-SDKs am Pendelstand `a0592d5` bestehen die verschobene, aus dem
+unabhängigen Kit ausgeführte Pendelprüfung auf macOS und Linux. Installierte
+und aus Paketquellen neu gebaute Bibliotheken bestehen Methodenwahl, neun
+SI-Kanäle, adaptive Berichte, fünf Integratoren des Lernpfads, vollständige
+Amplituden-CSVs und beide Spitzenbindungen. Die Gegenprobe ist auch im
+vollständigen SDK-Prüfer enthalten. Die vollständige aktuelle GUI-/Plattform-
+und Paketmatrix bleibt offen; PP-0756 bleibt unvollständig.

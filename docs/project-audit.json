@@ -6041,9 +6041,12 @@
         "tests/test_pendulum_medium.c",
         "app/pendulum_medium_tests.inc",
         "docs/workspace.md",
-        "docs/platform-validation.md"
+        "docs/platform-validation.md",
+        "tools/verify-native-sdk.py",
+        "tools/sdk_probe.c",
+        "tests/test_pendulum_sdk.py"
       ],
-      "note": "Pendelvorlagen besitzen SI-Parameter, gemeinsamen Mediumwiderstand und reproduzierbares Winkelsensorrauschen; Perioden-, Energie- und beobachtete Amplitudenabnahme werden aus gespeicherten Daten ausgewertet. Native Referenzen und tatsächliche C-/Physim-Fenster auf Intel macOS und Debian geprüft. Die gesamte vertikale und aktuelle Gesamtplattform-/Paketabnahme bleibt unvollständig; Teilnachweise heben den Gesamtstatus nicht an."
+      "note": "Pendelvorlagen besitzen SI-Parameter, gemeinsamen Mediumwiderstand und reproduzierbares Winkelsensorrauschen; Perioden-, Energie- und beobachtete Amplitudenabnahme werden aus gespeicherten Daten ausgewertet. Native Referenzen und tatsächliche C-/Physim-Fenster auf Intel macOS und Debian geprüft. Die gesamte vertikale und aktuelle Gesamtplattform-/Paketabnahme bleibt unvollständig; Teilnachweise heben den Gesamtstatus nicht an. Aktuelle Headless-SDKs mit sämtlichen Beispielen bestehen zusätzlich eine verschobene, manifestgeprüfte Kit-Gegenprobe auf Intel macOS/Debian: installierte und aus Paketquellen neu gebaute Bibliothek, fünf Verfahren, neun gespeicherte SI-Kanäle, adaptive Berichte, Lernpfad, Abnahme-CSVs und Spitzen-API. Dies ersetzt weiterhin weder vollständige GUI-/Gesamtplattform-/Paketabnahme noch die gesamte vertikale Abnahme."
     },
     {
       "id": "PP-0758",

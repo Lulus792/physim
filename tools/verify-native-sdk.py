@@ -63,6 +63,59 @@ def verify_documentation_bounds(sdk, files):
                 raise RuntimeError(f"SDK page exceeds offline viewer limit: {name}")
 
 
+def verify_pendulum(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked):
+    """Real runs/reports from installed headers and installed/source-rebuilt Core."""
+    shutil.copy2(repo / "tools/sdk_probe.c", consumer / "pendulum-sdk-probe.c")
+    shutil.copy2(repo / "tests/test_positive_peaks.c", consumer / "pendulum-peaks.c")
+    shutil.copy2(repo / "tests/create_decay_fixtures.c", consumer / "pendulum-decay-fixtures.c")
+    shutil.copy2(repo / "tests/check_decay_report.c", consumer / "pendulum-decay-probe.c")
+    shutil.copy2(repo / "tests/test_pendulum_tutorial_report.c", consumer / "pendulum-tutorial-probe.c")
+    shutil.copy2(sdk / "examples/pendulum/main.c", consumer / "pendulum-model.c")
+    shutil.copy2(sdk / "examples/pendulum/analysis.c", consumer / "pendulum-analysis.c")
+    shutil.copy2(sdk / "examples/documentation/pendulum_main.c", consumer / "pendulum-tutorial-c-model.c")
+    shutil.copy2(sdk / "examples/documentation/pendulum_analysis.c", consumer / "pendulum-tutorial-c-analysis.c")
+    sources = [(name, "--emit-experiment", sdk / "examples/language" / (name + ".phys"))
+               for name in ("pendulum", "pendulum_rk4", "pendulum_integrator", "pendulum_rk45", "pendulum_verlet")]
+    sources += [("tutorial-model", "--emit-experiment", sdk / "examples/documentation/pendulum_main.phys"),
+                ("tutorial-analysis", "--emit-analysis", sdk / "examples/documentation/pendulum_analysis.phys"),
+                ("general-analysis", "--emit-analysis", sdk / "examples/language/analysis.phys"),
+                ("peak-analysis", "--emit-analysis", repo / "tests/fixtures/language/positive_peaks.phys")]
+    for name, mode, source in sources:
+        checked([sdk / "bin" / ("physimc" + suffix), mode, source], output=consumer / ("pendulum-" + name + ".c"))
+    runner = sdk / "bin" / ("physim-runner" + suffix)
+    analyzer = sdk / "bin" / ("physim-analysis-runner" + suffix)
+    for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
+        def build(name, source, module=False, language=False):
+            return builder.executable("pendulum-" + kind + "-" + name, [source], [archive],
+                                      module=module, language=language)
+        model = build("model", "pendulum-model.c", True)
+        analysis = build("analysis", "pendulum-analysis.c", True)
+        modules = {name: build(name, "pendulum-" + name + ".c", True, True) for name, _, _ in sources}
+        probe = build("sdk-probe", "pendulum-sdk-probe.c")
+        checked([sys.executable, repo / "tests/test_pendulum_sdk.py", runner, analyzer, analysis,
+                 modules["general-analysis"], probe, consumer / ("Stored pendulum " + kind), model,
+                 *[modules[name] for name in ("pendulum", "pendulum_rk4", "pendulum_integrator", "pendulum_rk45", "pendulum_verlet")]], timeout=600)
+        tutorial_model = build("tutorial-c-model", "pendulum-tutorial-c-model.c", True)
+        tutorial_analysis = build("tutorial-c-analysis", "pendulum-tutorial-c-analysis.c", True)
+        tutorial_probe = build("tutorial-probe", "pendulum-tutorial-probe.c")
+        tutorial = consumer / ("Pendulum tutorial " + kind)
+        tutorial.mkdir()
+        checked([sys.executable, repo / "tests/test_pendulum_tutorial.py", runner, analyzer,
+                 tutorial_model, modules["tutorial-model"], tutorial_analysis, modules["tutorial-analysis"],
+                 tutorial_probe, tutorial], timeout=600)
+        fixtures = build("decay-fixtures", "pendulum-decay-fixtures.c")
+        decay_probe = build("decay-probe", "pendulum-decay-probe.c")
+        checked([sys.executable, repo / "tests/test_pendulum_decay.py", fixtures, analyzer,
+                 tutorial_analysis, modules["tutorial-analysis"], analysis, decay_probe,
+                 consumer / ("Pendulum decay " + kind)], timeout=600)
+        peaks = build("peaks", "pendulum-peaks.c")
+        checked([peaks, consumer / ("Pendulum peaks " + kind)])
+        peak_run = consumer / ("peak-input-" + kind + ".psrun")
+        checked([runner, model, peak_run, "--steps", "10"])
+        checked([analyzer, modules["peak-analysis"], peak_run, consumer / ("peak-report-" + kind)])
+    print("Relocated pendulum SDK: installed/rebuilt Core, C/Physim methods and SI runs, five-integrator tutorial, full decay CSVs and both peak bindings passed", flush=True)
+
+
 def verify_scalar_search(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked):
     """Shared full/focused acceptance against installed and SDK-source-built Core."""
     shutil.copy2(repo / "tests/test_scalar_range.c", consumer / "scalar-range-check.c")
@@ -247,6 +300,8 @@ def main():
     parser.add_argument("--work", type=Path, required=True)
     parser.add_argument("--compiler")
     parser.add_argument("--app-tests", action="store_true")
+    parser.add_argument("--pendulum-only", action="store_true",
+                        help="Verify current pendulum models, stored runs, analyses and peak APIs; no GUI or full package acceptance")
     parser.add_argument("--scalar-only", action="store_true",
                         help="Verify scalar search and module-block closures only; no GUI or other domain acceptance")
     parser.add_argument("--transform-only", action="store_true",
@@ -268,6 +323,11 @@ def main():
     parser.add_argument("--convex-only", action="store_true",
                         help="Verify convex geometry and bounded multi-body CCD bindings; no full mechanics or GUI acceptance")
     args = parser.parse_args()
+    if args.pendulum_only and any((args.scalar_only, args.transform_only, args.stream_only,
+                                  args.comparison_only, args.curve_only, args.units_only,
+                                  args.body_only, args.convex_only, args.accessibility_only,
+                                  args.migration_only, args.app_tests)):
+        parser.error("--pendulum-only cannot be combined with other focused modes or --app-tests")
     if args.migration_only and any((args.scalar_only,args.transform_only,args.stream_only,
                                   args.comparison_only,args.curve_only,args.units_only,
                                   args.body_only,args.convex_only,args.accessibility_only,args.app_tests)):
@@ -356,6 +416,13 @@ def main():
         builder.includes = [sdk / "include"]
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+        if args.pendulum_only:
+            shutil.copytree(sdk / "src", consumer / "src")
+            rebuilt_core = builder.archive("sdk-rebuilt-core", [f"src/{name}.c" for name in native.CORE])
+            verify_pendulum(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
+            (root / "PASSED.txt").write_text("Focused pendulum SDK verification passed: relocated manifest, installed/rebuilt Core, C/Physim methods, nine SI channels, tutorial and decay reports, positive-peak APIs. No full GUI or package acceptance.\n", encoding="utf-8")
+            print(f"Pendulum SDK verified: {root}")
+            return
         if args.migration_only:
             if not metadata["app"]:
                 raise RuntimeError("Project migration verification requires an app SDK")
@@ -490,6 +557,7 @@ def main():
         rebuilt_probe = builder.executable("sdk-rebuilt-probe", ["probe.c"], [rebuilt_core])
         rebuilt_series_probe=builder.executable("sdk-rebuilt-series-probe",["series-probe.c"],[rebuilt_core])
         checked([rebuilt_probe, root / "bundled-pendulum.psrun", root / "bundled-pendulum-report.psreport"])
+        verify_pendulum(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         shutil.copy2(repo / "tests/test_series_numeric_extremes.c", consumer / "series-numeric-extremes.c")
         for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
             numeric_probe = builder.executable("series-numeric-extremes-" + kind,

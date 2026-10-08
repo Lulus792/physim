@@ -576,3 +576,18 @@ die gesamte vertikale und aktuelle Gesamtplattform-/Paketabnahme bleibt offen.
 
 Alle **531 Originalblöcke** bleiben erhalten: **44 implemented**, **9 incomplete**,
 **478 unverified**. `completion_proven` bleibt `false`.
+
+## Aktuelle verschobene SDK-Pendelprüfung
+
+Der unabhängige SDK-Prüfer enthält jetzt dieselbe umfangreiche Pendelgegenprobe
+im vollständigen Lauf und separat mit `--pendulum-only`. Frisch gebaute
+Headless-SDKs am Stand `a0592d5` bestehen sie auf Intel macOS und Debian,
+mit installierter und aus Paketquellen neu gebauter Bibliothek. Das Kit
+besitzt 146 bytegeprüfte Eingaben und enthält weder Core-Implementierung
+noch öffentliche SDK-Header. Direkte Messwerte, Methodenmetadaten,
+adaptive Läufe, beide Lernpfad-/Analysesprachen, vollständige CSVs und
+Spitzenbindungen sind tatsächlich geprüft.
+
+Die gesamte vertikale, App-/Gesamtplattform- und neue Gesamtpaketabnahme
+bleibt offen. PP-0756 bleibt unvollständig; **44 implemented**, **9 incomplete**,
+**478 unverified** und `completion_proven=false` bleiben unverändert.

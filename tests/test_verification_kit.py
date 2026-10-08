@@ -16,7 +16,8 @@ spec=importlib.util.spec_from_file_location('verification_package',repo/'tools/p
 kit=importlib.util.module_from_spec(spec);spec.loader.exec_module(kit)
 root=Path(tempfile.mkdtemp(prefix='verification kit ä ',dir=args.work)).resolve()
 archive=root/'kit.tar.gz';names=kit.package(repo,archive)
-assert {'tools/sdk_series_probe.c','tests/test_saved_run_tutorial.py','tests/test_allocator.h'}<=set(names)
+assert {'tools/sdk_series_probe.c','tests/test_saved_run_tutorial.py','tests/test_allocator.h','tests/test_pendulum_sdk.py','tests/test_positive_peaks.c',
+        'tests/create_decay_fixtures.c','tests/test_pendulum_decay.py'}<=set(names)
 assert not any(name.startswith(('src/','include/','lib/')) for name in names)
 assert all(not name.startswith('app/') or name=='app/utf8.manifest' for name in names)
 with tarfile.open(archive) as file:

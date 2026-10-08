@@ -47,7 +47,13 @@ int main(int argc, char **argv) {
     double time, values[PS_MAX_CHANNELS];
     unsigned rows = 0;
     double previous=0,first=0,energy=0;bool varied=false;
-    if(adaptive)CHECK(reader.channels==6 && strstr(reader.metadata,"step_mode=adaptive\n"));
+    if(adaptive)CHECK(reader.channels==9 && strstr(reader.metadata,"step_mode=adaptive\n"));
+    if(adaptive) {
+        const char *names[]={"velocity.x","velocity.y","speed"};
+        const int8_t dimension[]={1,0,-1,0,0,0,0};
+        for(unsigned i=0;i<3;i++)CHECK(!strcmp(reader.schema[6+i].name,names[i]) &&
+            !memcmp(reader.schema[6+i].dimension,dimension,7) && !strcmp(reader.schema[6+i].unit,"m/s"));
+    }
     ps_result result;
     while ((result = ps_run_next(&reader, &time, values)) == PS_OK) {
         CHECK(rows <= (adaptive?500u:200u));
@@ -58,6 +64,9 @@ int main(int argc, char **argv) {
                 if(rows==1)first=time;else varied |= fabs(time-previous-first)>1e-6;
                 CHECK(fabs(values[4]-energy)<1e-6);
             }
+            CHECK(fabs(values[6]-1.5*cos(values[0])*values[1])<1e-10 &&
+                  fabs(values[7]-1.5*sin(values[0])*values[1])<1e-10 &&
+                  values[8]>=0 && fabs(values[8]-hypot(values[6],values[7]))<1e-10);
             previous=time;
         } else CHECK(fabs(time - rows * .005) < 1e-12);
         for (unsigned i = 0; i < reader.channels; i++)
