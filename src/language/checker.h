@@ -167,6 +167,8 @@ typedef enum ps_lang_type {
     PS_TYPE_BATCH,
     PS_TYPE_RIGID_MOTION,
     PS_TYPE_CCD_SETTINGS,
+    PS_TYPE_CCD_MODEL,
+    PS_TYPE_CCD_RESULT,
     /* Nominal record types encode PS_TYPE_RECORD_BASE + struct AST index. */
     PS_TYPE_RECORD_BASE = 256,
     /* Structural function signatures encode a canonical annotation or function AST index. */

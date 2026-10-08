@@ -2763,7 +2763,7 @@
         "docs/mechanics.md",
         "docs/platform-validation.md"
       ],
-      "note": "Kugel/Ebene/Box und geprüfte konvexe Polyeder besitzen diskrete Narrow-Phase-Verträge. Convex SAT prüft Flächen-/Kantenachsen, Enthaltensein und einzelne Oberflächenzeugen; C-/Physim-Bindungen und explizite Hauptträgheiten vorhanden. Ein einzelner Kontakt, kein Ruhemanifold. Rotierendes CCD und automatische Kontaktwelt-Integration bleiben getrennt offen."
+      "note": "Kugel/Ebene/Box und geprüfte konvexe Polyeder besitzen diskrete Narrow-Phase-Verträge. Convex SAT prüft Flächen-/Kantenachsen, Enthaltensein und einzelne Oberflächenzeugen; C-/Physim-Bindungen und explizite Hauptträgheiten vorhanden. Ein einzelner Kontakt, kein Ruhemanifold. Konvexe Ruhemanifolds und persistente konvexe Kontaktverwaltung bleiben offen."
     },
     {
       "id": "PP-0386",
@@ -2806,7 +2806,7 @@
         "tests/test_motion_sweep_oracle.py",
         "tests/fixtures/language/motion_sweep.phys"
       ],
-      "note": "Lineare Sweeps sowie konservative konstante Weltachsenrotation und quadratische Translation für konvexe Paar-/Kugel-/Ebenen-Anfragen vorhanden. Analytische erste Kontakte, volle Drehungen mit klaren Endlagen, Bewegungshüllen, Limit-/Numeric-Atomizität und C-/Physim-Werte geprüft. Allgemeine zeitabhängige Rotation/Kräfte und Mehrkörper-Ereignissteuerung fehlen; vollständige CCD-Anforderung nicht abgeschlossen."
+      "note": "Lineare Sweeps sowie konservative konstante Weltachsenrotation und quadratische Translation für konvexe Paar-/Kugel-/Ebenen-Anfragen vorhanden. Analytische erste Kontakte, volle Drehungen mit klaren Endlagen, Bewegungshüllen, Limit-/Numeric-Atomizität und C-/Physim-Werte geprüft. Atomischer Kick-Drift-Controller für mehrere Ereignisse und gleichzeitige Kontaktgruppen in C/Physim, mit rationalen 1D-Referenzen, tatsächlichen Runner-Läufen und Besitz-/Allocatorfehlern geprüft. Allgemeine zeitabhängige Rotation/Kräfte fehlen; vollständige CCD-Anforderung nicht abgeschlossen."
     },
     {
       "id": "PP-0391",

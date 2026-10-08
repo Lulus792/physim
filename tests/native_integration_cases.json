@@ -2053,6 +2053,27 @@
       "libraries": [
         "core"
       ]
+    },
+    "ccd-step-probe": {
+      "sources": [
+        "tests/ccd_step_probe.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "ccd-events": {
+      "sources": [
+        "examples/ccd_events/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "language-ccd-events": {
+      "source": "examples/language/ccd_events.phys",
+      "mode": "--emit-experiment"
     }
   },
   "tests": [
@@ -8062,6 +8083,50 @@
             "{motion-sweep-probe}"
           ],
           "timeout": 180
+        }
+      ]
+    },
+    {
+      "name": "ccd_step_oracle",
+      "targets": [
+        "python",
+        "ccd-step-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_ccd_step_oracle.py",
+            "--probe",
+            "{ccd-step-probe}"
+          ],
+          "timeout": 180
+        }
+      ]
+    },
+    {
+      "name": "ccd_event_workflow",
+      "targets": [
+        "python",
+        "physim-runner",
+        "ccd-events",
+        "language-ccd-events"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_ccd_event_workflow.py",
+            "--runner",
+            "{physim-runner}",
+            "--c-model",
+            "{ccd-events}",
+            "--phys-model",
+            "{language-ccd-events}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 120
         }
       ]
     }

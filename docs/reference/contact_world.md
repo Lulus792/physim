@@ -10,6 +10,7 @@ Einbinden: `#include "physim/contact_world.h"`. Die folgenden Signaturen, Typen 
 
 ```c
 #define PS_CONTACT_WORLD_VERSION 1u
+#define PS_CCD_MAX_EVENTS 65536u
 ```
 
 ## Typen und Funktionen
@@ -17,7 +18,7 @@ Einbinden: `#include "physim/contact_world.h"`. Die folgenden Signaturen, Typen 
 ### ps_collider_shape
 
 ```c
-typedef enum {PS_COLLIDER_SPHERE=1,PS_COLLIDER_BOX=2,PS_COLLIDER_PLANE=3} ps_collider_shape;
+typedef enum {PS_COLLIDER_SPHERE=1,PS_COLLIDER_BOX=2,PS_COLLIDER_PLANE=3,PS_COLLIDER_CONVEX=4} ps_collider_shape;
 ```
 
 ### ps_collider
@@ -123,3 +124,53 @@ ps_result ps_contact_world_solve(
 ```
 
 Generate discrete contacts through AABB broad phase and sphere/box/plane narrow phase, excluding static/static pairs. Canonical IDs survive body and collider array reorder. Match BOTH local anchors one-to-one and reject large normal changes or changed shape/mass/inertia. History contains only the prior successful call; absent contacts expire immediately. dt scales warm impulses; ratios outside [1/maximum_dt_ratio,maximum_dt_ratio] discard them. Separating contacts above bounce_threshold also discard warm impulses. Restitution uses pre-warm velocities and friction projects onto the CURRENT cone. Fixed solver budget, no convergence guarantee; inspect residuals. All bodies, world and optional result remain unchanged on failure, including capacity or numerical failures. Inputs/outputs must be disjoint. Zero counts permit NULL arrays. Limits: 128 bodies/colliders and 512 contacts. No CCD or joint solve. Use stable IDs for the same physical objects; reset after teleports, scene resets or object replacement. All state copies are independent.
+
+### ps_ccd_collider
+
+```c
+typedef struct {
+    ps_collider collider;
+    const ps_convex_mesh *mesh;
+} ps_ccd_collider;
+```
+
+Continuous step models borrow convex meshes only for the call. Sphere/box/ plane use the ordinary collider fields; convex uses zero size/normal and mesh. One model per body, distinct nonzero IDs; shared mesh storage is allowed. The persistent ContactWorld API still supports its original three shapes.
+
+### ps_ccd_step_options
+
+```c
+typedef struct {
+    ps_ccd_settings ccd;
+    uint32_t max_events;
+    double contact_offset_m;
+} ps_ccd_step_options;
+```
+
+### PS_CCD_STEP_DEFAULT
+
+```c
+extern const ps_ccd_step_options PS_CCD_STEP_DEFAULT;
+```
+
+### ps_ccd_step_result
+
+```c
+typedef struct {
+    uint32_t events, contacts;
+    double elapsed_s, max_normal_error_m_s, max_projection_error_m;
+} ps_ccd_step_result;
+```
+
+## ps_ccd_step
+
+Verarbeitet einen vollständigen Kick-Drift-Zeitschritt mit wiederholten und simultanen CCD-Ereignissen atomar.
+
+```c
+ps_result ps_ccd_step(
+    ps_body *bodies,size_t body_count,const ps_ccd_collider *models,
+    size_t model_count,const ps_vec3 *forces_n,const ps_vec3 *torques_nm,
+    double dt_s,const ps_contact_solver *velocity_solver,
+    const ps_ccd_step_options *options,ps_ccd_step_result *out);
+```
+
+Bounded kick-drift event integration: first apply full-dt external force and explicit gyroscopic/torque velocity update (same as ps_body_step), then drift with those velocities/spins between impulses. This is a first-order numerical method, not exact arbitrary-force/gyroscopic dynamics. NULL forces/torques are zero. Regenerate every candidate after each earliest event. Near-simultaneous contacts are solved together in canonical ID order, including box manifolds. The velocity solver supplies iterations/restitution/friction/bounce threshold; event projection uses zero slop/full correction and the explicit contact offset to separate solved contacts and permit later searches. CCD tolerance must be <=offset/8. No cache, hidden allocation or joint solve. Static bodies stay fixed. All body/result outputs commit only after the FULL dt succeeds. Unresolved CCD, event/contact capacity or stagnant zero-time solve returns PS_LIMIT atomically. Graph residuals are reported; PS_OK is not a convergence guarantee. All storage must be disjoint. Limits: 128 bodies/models, 512 contacts per batch.

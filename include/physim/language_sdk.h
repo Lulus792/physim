@@ -16,6 +16,7 @@
 #include "language_contact_world.h"
 #include "language_batch.h"
 #include "language_collision.h"
+#include "language_ccd.h"
 #include "language_matrix.h"
 #include "math.h"
 #include "measurement.h"

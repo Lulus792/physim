@@ -26,11 +26,11 @@ LANGUAGE = "lexer parser checker emitter builtins".split()
 APP = "accessibility accessibility_native accessibility_atspi main timeline docking layout_catalog channel_units run_import ui_backend ui_sdl ui_geometry graphics documentation library preferences workspace_state workspace_catalog workspace_tree plot_view report_image png".split()
 PROJECT = "project_file text_document autosave parameter_catalog".split()
 ZLIB = "adler32 crc32 deflate trees zutil".split()
-EXAMPLES = "pendulum projectile collision box_floor spring uncertain_projectile box_collision buoyancy".split()
+EXAMPLES = "pendulum projectile collision box_floor spring uncertain_projectile box_collision buoyancy ccd_events".split()
 LANGUAGE_PROGRAMS = "energy motion flight_phases sampling phase_space rotation_path particles rigid_body contacts convex_contacts distance_joints constraint_graph sweeps coordinate_frames optional_values optional_bindings diagnostic_values run_index_values contact_world batch_values thermodynamics electromagnetism waves_optics fluid_values".split()
 LANGUAGE_EXPERIMENTS = ("pendulum pendulum_rk4 pendulum_integrator pendulum_rk45 pendulum_verlet "
     "projectile projectile_drag collision box_collision buoyancy random_samples scene_shapes "
-    "spring sensors uncertain_projectile spinning_body box_contacts joint_pendulum coupled_bodies fast_sphere logging scene_frames diagnostic_experiment contact_stack").split()
+    "spring sensors uncertain_projectile spinning_body box_contacts joint_pendulum coupled_bodies fast_sphere logging scene_frames diagnostic_experiment contact_stack ccd_events").split()
 LANGUAGE_ANALYSES = "analysis analysis_collision analysis_box_collision analysis_buoyancy analysis_sensors analysis_integral diagnostic_analysis run_index_analysis batch_analysis".split()
 
 

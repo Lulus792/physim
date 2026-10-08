@@ -185,3 +185,213 @@ ps_result ps_contact_world_solve(ps_contact_world *world,ps_body *bodies,size_t 
     if(out)*out=report;
     return PS_OK;
 }
+
+const ps_ccd_step_options PS_CCD_STEP_DEFAULT={{1e-8,4096},128,1e-6};
+static const uint32_t event_box_triangles[][3]={{0,2,1},{0,3,2},{4,5,6},{4,6,7},{0,1,5},{0,5,4},
+    {3,7,6},{3,6,2},{0,4,7},{0,7,3},{1,2,6},{1,6,5}};
+static void event_box(ps_vec3 size,ps_vec3 vertices[8],ps_convex_mesh *mesh) {
+    static const int sign[8][3]={{-1,-1,-1},{1,-1,-1},{1,1,-1},{-1,1,-1},{-1,-1,1},{1,-1,1},{1,1,1},{-1,1,1}};
+    for(unsigned i=0;i<8;i++)vertices[i]=ps_v3(.5*size.x*sign[i][0],.5*size.y*sign[i][1],.5*size.z*sign[i][2]);
+    *mesh=(ps_convex_mesh){vertices,8,event_box_triangles,12};
+}
+static ps_result event_model_valid(const ps_ccd_collider *model,const ps_body *bodies,size_t count) {
+    const ps_collider *c=&model->collider;
+    if(c->body>=count)return PS_INVALID;
+    if(c->shape!=PS_COLLIDER_CONVEX)
+        return !model->mesh && collider_valid(c,count,bodies[c->body].mass_kg)?PS_OK:PS_INVALID;
+    if(!c->id || !zero(c->size_m) || !zero(c->plane_normal))return PS_INVALID;
+    return ps_convex_validate(model->mesh);
+}
+static ps_rigid_motion event_motion(const ps_body *body,double dt) {
+    if(!body->mass_kg)return (ps_rigid_motion){0};
+    return (ps_rigid_motion){ps_vscale(body->velocity_m_s,dt),ps_vscale(body->angular_velocity_rad_s,dt),ps_v3(0,0,0)};
+}
+static ps_result event_query(const ps_ccd_collider *ma,const ps_convex_mesh *mesh_a,
+    const ps_ccd_collider *mb,const ps_convex_mesh *mesh_b,const ps_body *bodies,double dt,
+    const ps_ccd_settings *settings,ps_sweep_hit *hit,bool *touching) {
+    const ps_collider *a=&ma->collider,*b=&mb->collider;bool reverse=false;
+    if(a->shape==PS_COLLIDER_PLANE || (a->shape!=PS_COLLIDER_SPHERE && b->shape==PS_COLLIDER_SPHERE)) {
+        const ps_collider *swap=a;a=b;b=swap;const ps_convex_mesh *m=mesh_a;mesh_a=mesh_b;mesh_b=m;reverse=true;
+    }
+    const ps_body *ba=&bodies[a->body],*bb=&bodies[b->body];
+    ps_rigid_motion da=event_motion(ba,dt),db=event_motion(bb,dt);ps_result result;
+    if(b->shape==PS_COLLIDER_PLANE) {
+        ps_vec3 n=ps_quat_rotate(rotation(bb),b->plane_normal);n=ps_vscale(n,1/length(n));
+        if(a->shape==PS_COLLIDER_SPHERE)result=ps_sweep_sphere_plane(ba,a->size_m.x,da.translation_m,bb->position_m,n,hit,touching);
+        else result=ps_sweep_convex_plane_motion(ba,mesh_a,da,bb->position_m,n,settings,hit,touching);
+    } else if(a->shape==PS_COLLIDER_SPHERE && b->shape==PS_COLLIDER_SPHERE)
+        result=ps_sweep_spheres(ba,a->size_m.x,da.translation_m,bb,b->size_m.x,db.translation_m,hit,touching);
+    else if(a->shape==PS_COLLIDER_SPHERE)
+        result=ps_sweep_sphere_convex_motion(ba,a->size_m.x,da,bb,mesh_b,db,settings,hit,touching);
+    else result=ps_sweep_convexes_motion(ba,mesh_a,da,bb,mesh_b,db,settings,hit,touching);
+    if(result==PS_OK && *touching && reverse)hit->contact.normal=ps_vscale(hit->contact.normal,-1);
+    return result;
+}
+static ps_result event_snapshot(const ps_ccd_collider *ma,const ps_convex_mesh *mesh_a,
+    const ps_ccd_collider *mb,const ps_convex_mesh *mesh_b,const ps_body *bodies,double offset,
+    const ps_ccd_settings *settings,ps_contact *contact,bool *touching) {
+    const ps_collider *a=&ma->collider,*b=&mb->collider;bool reverse=false;
+    if(a->shape==PS_COLLIDER_PLANE || (a->shape!=PS_COLLIDER_SPHERE && b->shape==PS_COLLIDER_SPHERE)) {
+        const ps_collider *swap=a;a=b;b=swap;const ps_convex_mesh *m=mesh_a;mesh_a=mesh_b;mesh_b=m;reverse=true;
+    }
+    const ps_body *ba=&bodies[a->body],*bb=&bodies[b->body];ps_result result;
+    if(a->shape==PS_COLLIDER_SPHERE && b->shape==PS_COLLIDER_SPHERE)
+        result=ps_contact_spheres(ba,a->size_m.x+offset/2,bb,b->size_m.x+offset/2,contact,touching);
+    else if(a->shape==PS_COLLIDER_SPHERE && b->shape==PS_COLLIDER_PLANE) {
+        ps_vec3 n=ps_quat_rotate(rotation(bb),b->plane_normal);n=ps_vscale(n,1/length(n));
+        result=ps_contact_sphere_plane(ba,a->size_m.x+offset,bb->position_m,n,contact,touching);
+    } else {
+        ps_ccd_settings near=*settings;near.distance_tolerance_m=offset;ps_sweep_hit event;
+        result=event_query(ma,mesh_a,mb,mesh_b,bodies,0,&near,&event,touching);
+        if(result==PS_OK && *touching)*contact=event.contact;
+        /* event_query already returns canonical orientation. */
+        return result;
+    }
+    if(result==PS_OK && *touching && reverse)contact->normal=ps_vscale(contact->normal,-1);
+    return result;
+}
+static bool event_overlap(ps_aabb a,ps_aabb b) {
+    return a.minimum_m.x<=b.maximum_m.x && b.minimum_m.x<=a.maximum_m.x &&
+           a.minimum_m.y<=b.maximum_m.y && b.minimum_m.y<=a.maximum_m.y &&
+           a.minimum_m.z<=b.maximum_m.z && b.minimum_m.z<=a.maximum_m.z;
+}
+static ps_result event_drift(ps_body *bodies,size_t count,double dt) {
+    if(!dt)return PS_OK;
+    for(size_t i=0;i<count;i++)if(bodies[i].mass_kg) {
+        ps_rigid_motion m=event_motion(&bodies[i],dt);ps_body next;
+        ps_result result=ps_body_motion_pose(&bodies[i],m,1,&next);if(result!=PS_OK)return result;
+        bodies[i]=next;
+    }
+    return PS_OK;
+}
+static ps_result event_contacts(const ps_ccd_collider *ma,const ps_ccd_collider *mb,
+    const ps_body *bodies,double tolerance,ps_contact fallback,ps_contact_manifold *contacts) {
+    const ps_collider *a=&ma->collider,*b=&mb->collider;bool reverse=false;ps_result result=PS_OK;
+    *contacts=(ps_contact_manifold){0};
+    if(a->shape==PS_COLLIDER_PLANE){const ps_collider *swap=a;a=b;b=swap;reverse=true;}
+    if(a->shape==PS_COLLIDER_BOX && b->shape==PS_COLLIDER_PLANE) {
+        ps_vec3 n=ps_quat_rotate(rotation(&bodies[b->body]),b->plane_normal);n=ps_vscale(n,1/length(n));
+        ps_vec3 point=ps_vadd(bodies[b->body].position_m,ps_vscale(n,tolerance));
+        result=ps_contacts_box_plane(&bodies[a->body],a->size_m,point,n,contacts);
+    } else if(a->shape==PS_COLLIDER_BOX && b->shape==PS_COLLIDER_BOX) {
+        ps_vec3 sa=ps_vadd(a->size_m,ps_v3(tolerance,tolerance,tolerance));
+        ps_vec3 sb=ps_vadd(b->size_m,ps_v3(tolerance,tolerance,tolerance));
+        result=ps_contacts_boxes(&bodies[a->body],sa,&bodies[b->body],sb,contacts);
+    }
+    if(result!=PS_OK)return result;
+    if(contacts->count && reverse)for(uint32_t i=0;i<contacts->count;i++)contacts->points[i].normal=ps_vscale(contacts->points[i].normal,-1);
+    if(!contacts->count){contacts->count=1;contacts->points[0]=fallback;}
+    return PS_OK;
+}
+ps_result ps_ccd_step(ps_body *bodies,size_t body_count,const ps_ccd_collider *input,size_t count,
+    const ps_vec3 *forces,const ps_vec3 *torques,double dt,const ps_contact_solver *velocity_solver,
+    const ps_ccd_step_options *supplied,ps_ccd_step_result *out) {
+    ps_ccd_step_options options=supplied?*supplied:PS_CCD_STEP_DEFAULT;
+    if((!bodies&&body_count)||(!input&&count)||!velocity_solver||!isfinite(dt)||dt<=0||
+       !isfinite(options.contact_offset_m)||options.contact_offset_m<=0||
+       !isfinite(options.ccd.distance_tolerance_m)||options.ccd.distance_tolerance_m<=0||
+       options.ccd.distance_tolerance_m>options.contact_offset_m/8||!options.max_events||!options.ccd.max_iterations)
+        return PS_INVALID;
+    if(body_count>PS_CONTACT_GRAPH_MAX_BODIES||count>PS_CONTACT_GRAPH_MAX_BODIES||
+       options.max_events>PS_CCD_MAX_EVENTS||options.ccd.max_iterations>PS_CCD_MAX_ITERATIONS)return PS_LIMIT;
+    ps_body working[PS_CONTACT_GRAPH_MAX_BODIES];
+    for(size_t i=0;i<body_count;i++) {
+        if(ps_body_validate(&bodies[i])!=PS_OK || (forces&&!finite3(forces[i])) || (torques&&!finite3(torques[i])))return PS_INVALID;
+        working[i]=bodies[i];
+    }
+    /* Validate solver settings even for an empty graph, before any velocity kick. */
+    ps_contact_graph_solution check;
+    ps_result result=ps_contacts_resolve_graph(working,body_count,NULL,0,velocity_solver,&check);
+    if(result!=PS_OK)return result;
+    ps_ccd_collider models[PS_CONTACT_GRAPH_MAX_BODIES];
+    for(size_t i=0;i<count;i++) {
+        result=event_model_valid(&input[i],bodies,body_count);if(result!=PS_OK)return result;
+        for(size_t j=0;j<i;j++)if(input[j].collider.id==input[i].collider.id || input[j].collider.body==input[i].collider.body)return PS_INVALID;
+        models[i]=input[i];
+        for(size_t j=i;j&&models[j].collider.id<models[j-1].collider.id;j--){ps_ccd_collider swap=models[j];models[j]=models[j-1];models[j-1]=swap;}
+    }
+    ps_vec3 box_vertices[PS_CONTACT_GRAPH_MAX_BODIES][8];ps_convex_mesh meshes[PS_CONTACT_GRAPH_MAX_BODIES]={0};
+    for(size_t i=0;i<count;i++) {
+        if(models[i].collider.shape==PS_COLLIDER_BOX)event_box(models[i].collider.size_m,box_vertices[i],&meshes[i]);
+        else if(models[i].collider.shape==PS_COLLIDER_CONVEX)meshes[i]=*models[i].mesh;
+    }
+    for(size_t i=0;i<body_count;i++)if(working[i].mass_kg) {
+        ps_body next=working[i];
+        result=ps_body_step(&next,forces?forces[i]:ps_v3(0,0,0),torques?torques[i]:ps_v3(0,0,0),dt);
+        if(result!=PS_OK)return result;
+        next.position_m=working[i].position_m;next.orientation=working[i].orientation;working[i]=next;
+    }
+    ps_ccd_step_result report={0};double remaining=dt;
+    while(remaining>0) {
+        double first=INFINITY;ps_aabb swept[PS_CONTACT_GRAPH_MAX_BODIES];
+        for(size_t i=0;i<count;i++)if(models[i].collider.shape!=PS_COLLIDER_PLANE) {
+            const ps_body *body=&working[models[i].collider.body];ps_rigid_motion motion=event_motion(body,remaining);
+            result=models[i].collider.shape==PS_COLLIDER_SPHERE
+                ?ps_aabb_swept_sphere(body,models[i].collider.size_m.x,motion.translation_m,&swept[i])
+                :ps_aabb_motion_convex(body,&meshes[i],motion,&swept[i]);
+            if(result!=PS_OK)return result;
+        }
+        for(size_t i=0;i<count;i++)for(size_t j=i+1;j<count;j++) {
+            if(models[i].collider.shape!=PS_COLLIDER_PLANE && models[j].collider.shape!=PS_COLLIDER_PLANE &&
+               !event_overlap(swept[i],swept[j]))continue;
+            if(!working[models[i].collider.body].mass_kg&&!working[models[j].collider.body].mass_kg)continue;
+            ps_sweep_hit event;bool hit;
+            result=event_query(&models[i],&meshes[i],&models[j],&meshes[j],working,remaining,&options.ccd,&event,&hit);
+            if(result!=PS_OK)return result;
+            if(hit)first=fmin(first,event.fraction);
+        }
+        if(!isfinite(first)) {
+            result=event_drift(working,body_count,remaining);if(result!=PS_OK)return result;
+            remaining=0;break;
+        }
+        if(report.events==options.max_events)return PS_LIMIT;
+        double elapsed=remaining*first;
+        result=event_drift(working,body_count,elapsed);if(result!=PS_OK)return result;
+        ps_contact_constraint contacts[PS_CONTACT_GRAPH_MAX_CONTACTS];size_t contact_count=0;
+        /* Gather geometrically simultaneous contacts AFTER the drift. Different
+         * approach speeds may reach the distance envelope at different fractions. */
+        for(size_t i=0;i<count;i++)for(size_t j=i+1;j<count;j++) {
+            if(!working[models[i].collider.body].mass_kg&&!working[models[j].collider.body].mass_kg)continue;
+            ps_contact contact;bool hit;
+            result=event_snapshot(&models[i],&meshes[i],&models[j],&meshes[j],working,
+                                  options.contact_offset_m,&options.ccd,&contact,&hit);
+            if(result!=PS_OK)return result;
+            if(!hit)continue;
+            if(contact_count==PS_CONTACT_GRAPH_MAX_CONTACTS)return PS_LIMIT;
+            contacts[contact_count++]=(ps_contact_constraint){models[i].collider.body,models[j].collider.body,contact};
+        }
+        if(!contact_count)return PS_NUMERIC;
+        /* Expand near box contacts into simultaneous face manifolds. */
+        ps_contact_constraint expanded[PS_CONTACT_GRAPH_MAX_CONTACTS];size_t expanded_count=0;
+        for(size_t k=0;k<contact_count;k++) {
+            size_t i=0,j=0;
+            while(models[i].collider.body!=contacts[k].a)i++;
+            while(models[j].collider.body!=contacts[k].b)j++;
+            ps_contact_manifold manifold;
+            result=event_contacts(&models[i],&models[j],working,options.contact_offset_m,contacts[k].contact,&manifold);
+            if(result!=PS_OK)return result;
+            if(manifold.count>PS_CONTACT_GRAPH_MAX_CONTACTS-expanded_count)return PS_LIMIT;
+            for(uint32_t m=0;m<manifold.count;m++) {
+                manifold.points[m].penetration_m+=options.contact_offset_m;
+                if(!isfinite(manifold.points[m].penetration_m))return PS_NUMERIC;
+                expanded[expanded_count++]=(ps_contact_constraint){contacts[k].a,contacts[k].b,manifold.points[m]};
+            }
+        }
+        ps_contact_solver solver=*velocity_solver;solver.penetration_slop_m=0;solver.correction_fraction=1;
+        ps_contact_graph_solution solution;
+        ps_body before[PS_CONTACT_GRAPH_MAX_BODIES];if(body_count)memcpy(before,working,body_count*sizeof *before);
+        result=ps_contacts_resolve_graph(working,body_count,expanded,expanded_count,&solver,&solution);
+        if(result!=PS_OK)return result;
+        if(elapsed==0 && !memcmp(before,working,body_count*sizeof *before))return PS_LIMIT;
+        report.events++;report.contacts+=(uint32_t)expanded_count;
+        report.max_normal_error_m_s=fmax(report.max_normal_error_m_s,solution.max_normal_error_m_s);
+        report.max_projection_error_m=fmax(report.max_projection_error_m,solution.max_projection_error_m);
+        double next=remaining-elapsed;
+        if(elapsed>0 && next==remaining)return PS_LIMIT;
+        remaining=next;
+    }
+    report.elapsed_s=dt;
+    if(body_count)memcpy(bodies,working,body_count*sizeof *bodies);
+    if(out)*out=report;
+    return PS_OK;
+}

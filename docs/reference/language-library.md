@@ -620,6 +620,16 @@ Erzeugt einen ruhenden Körper mit expliziter SI-Masse und drei Hauptträgheiten
 
 Überall verfügbar.
 
+## CcdCollider
+
+```text
+CcdCollider(collider: Collider) -> CcdCollider
+```
+
+Besitzender kontinuierlicher Kollidermodellwert aus einem Sphere-/Box-/Plane-Collider. Körperindex und stabile ID werden im Schritt geprüft.
+
+Überall verfügbar.
+
 ## CcdSettings
 
 ```text
@@ -3631,6 +3641,86 @@ Berechnet 0,5 C V² in J für eine positive Kapazität in F.
 
 Überall verfügbar.
 
+## ccdBodies
+
+```text
+ccdBodies(result: CcdResult) -> [Body]
+```
+
+Unabhängiger besitzender Arraywert aller Ergebniskörper.
+
+Überall verfügbar.
+
+## ccdBody
+
+```text
+ccdBody(result: CcdResult, index: Int64) -> Body
+```
+
+Kopierter Körper nach erfolgreichem vollständigem Zeitschritt; Index folgt dem ursprünglichen Körperarray.
+
+Überall verfügbar.
+
+## ccdContacts
+
+```text
+ccdContacts(result: CcdResult) -> Int64
+```
+
+Summe gelöster Kontaktbedingungen über alle Ereignisgruppen.
+
+Überall verfügbar.
+
+## ccdConvex
+
+```text
+ccdConvex(id: Int64, body: Int64, vertices: [Vec3], indices: [Int64]) -> CcdCollider
+```
+
+Kopiert ein geprüftes geschlossenes konvexes Netz in einen besitzenden CCD-Kollider; Änderungen der ursprünglichen Arrays verändern das Modell nicht.
+
+Überall verfügbar.
+
+## ccdElapsed
+
+```text
+ccdElapsed(result: CcdResult) -> Float64
+```
+
+Vollständig abgearbeitete Zeit in Sekunden; fehlgeschlagene Schritte liefern keinen Teilwert.
+
+Überall verfügbar.
+
+## ccdEvents
+
+```text
+ccdEvents(result: CcdResult) -> Int64
+```
+
+Anzahl gemeinsam gelöster Ereignisgruppen im vollständigen Schritt.
+
+Überall verfügbar.
+
+## ccdNormalError
+
+```text
+ccdNormalError(result: CcdResult) -> Float64
+```
+
+Größter normaler Solverrestfehler in m/s vor Positionskorrektur; keine Konvergenzgarantie.
+
+Überall verfügbar.
+
+## ccdProjectionError
+
+```text
+ccdProjectionError(result: CcdResult) -> Float64
+```
+
+Größter Restfehler der angeforderten Kontaktabstandskorrektur in Metern.
+
+Überall verfügbar.
+
 ## ceil
 
 ```text
@@ -5108,6 +5198,16 @@ sqrt(value: Float64) -> Float64
 ```
 
 Quadratwurzel; der Wert muss nichtnegativ sein.
+
+Überall verfügbar.
+
+## stepContinuous
+
+```text
+stepContinuous(solver: ContactSolver, bodies: [Body], colliders: [CcdCollider], forces: [Vec3], torques: [Vec3], dt: Float64, settings: CcdSettings, maxEvents: Int64, contactOffset: Float64) -> CcdResult
+```
+
+Vollständiger atomarer Kick-Drift-Zeitschritt mit wiederholter Ereignissuche, simultanem Graphsolver und explizitem Kontaktabstand. Kräfte/Drehmomente sind leer oder körperweise; Limits erhalten Eingaben.
 
 Überall verfügbar.
 

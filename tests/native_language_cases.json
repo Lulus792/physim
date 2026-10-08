@@ -5447,6 +5447,11 @@
       "name": "motion_sweep",
       "source": "tests/fixtures/language/motion_sweep.phys",
       "stdout": "Rotating/quadratic Physim motion, owned records/arrays, pose, bounds and unresolved budget passed\n"
+    },
+    {
+      "name": "ccd_step",
+      "source": "tests/fixtures/language/ccd_step.phys",
+      "stdout": "Continuous Physim event step, independent result snapshots and atomic budget passed\n"
     }
   ],
   "workflows": [

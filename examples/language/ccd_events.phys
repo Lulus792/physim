@@ -1,0 +1,61 @@
+let zero = Vec3(0,0,0)
+let identity = Quat(0,0,0,1)
+let speed = parameter("speed",10,0,100,"Initial speed")
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let velocity = Unit(1,0,-1,0,0,0,0,1,"m/s")
+let joules = Unit(2,1,-2,0,0,0,0,1,"J")
+let one = Unit(0,0,0,0,0,0,0,1,"1")
+let positions = [Channel("a.position",metres,"a.position"),Channel("b.position",metres,"b.position"),Channel("c.position",metres,"c.position")]
+let velocities = [Channel("a.velocity",velocity,"a.velocity"),Channel("b.velocity",velocity,"b.velocity"),Channel("c.velocity",velocity,"c.velocity")]
+let kinetic = Channel("energy.kinetic",joules,"energy.kinetic")
+let events = Channel("events",one,"events")
+let contacts = Channel("contacts",one,"contacts")
+let normalError = Channel("normal.error",velocity,"normal.error")
+let projectionError = Channel("projection.error",metres,"projection.error")
+let models = [CcdCollider(Collider.sphere(3,0,0.5)),CcdCollider(Collider.sphere(2,1,0.5)),CcdCollider(Collider.sphere(1,2,0.5))]
+let solver = ContactSolver(200,1,0,0,0,1)
+let forces: [Vec3] = []
+var bodies: [Body] = []
+var eventCount = 0
+var contactCount = 0
+var normal = 0.0
+var projection = 0.0
+func measure():
+    var energy = 0.0
+    for i in 0..<3:
+        positions[i].sample(bodies[i].position.x)
+        velocities[i].sample(bodies[i].velocity.x)
+        energy += bodies[i].kineticEnergy()
+    kinetic.sample(energy)
+    events.sample(Float64(eventCount))
+    contacts.sample(Float64(contactCount))
+    normalError.sample(normal)
+    projectionError.sample(projection)
+func create():
+    metadata("model=three equal homogeneous spheres in vacuum\nmass_kg=1\nradius_m=0.5\ncentres_m=-4,0,4\nrestitution=1\nfriction=0\nexternal_forces=none\nccd=earliest event batches with canonical IDs\ncontact_offset_m=0.000001\n")
+func reset():
+    bodies = []
+    for i in 0..<3:
+        var body = Body.sphere(1,0.5)
+        body.setState(Vec3(-4+4*Float64(i),0,0),Vec3(0,0,0),identity,zero)
+        if i == 0:
+            body.setState(Vec3(-4,0,0),Vec3(speed,0,0),identity,zero)
+        bodies.append(body)
+    eventCount = 0
+    contactCount = 0
+    normal = 0
+    projection = 0
+    measure()
+func step(dt: Float64):
+    let result = solver.stepContinuous(bodies,models,forces,forces,dt,CcdSettings.defaults(),128,1e-6)
+    bodies = result.bodies()
+    eventCount = result.events()
+    contactCount = result.contacts()
+    normal = result.normalError()
+    projection = result.projectionError()
+    measure()
+func scene():
+    let colors = [898227711,4071112703,1119393791]
+    for i in 0..<3:
+        sphere(bodies[i].position,0.5,colors[i],i+1)
+        arrow(bodies[i].position,bodies[i].position+bodies[i].velocity*0.1,0.008,colors[i],i+10)

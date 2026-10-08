@@ -98,8 +98,10 @@
 #define PS_LANG_ODE_CALLBACK ((ps_lang_type)139)
 #define PS_LANG_INT_ARRAY ((ps_lang_type)140)
 #define PS_LANG_COLLIDER_ARRAY ((ps_lang_type)141)
+#define PS_LANG_CCD_MODEL_ARRAY ((ps_lang_type)142)
 static inline ps_lang_type ps_lang_signature_element(ps_lang_type type) {
-    return type == PS_LANG_COLLIDER_ARRAY ? PS_TYPE_COLLIDER
+    return type == PS_LANG_CCD_MODEL_ARRAY ? PS_TYPE_CCD_MODEL
+           : type == PS_LANG_COLLIDER_ARRAY ? PS_TYPE_COLLIDER
            : type == PS_LANG_VEC3_ARRAY ? PS_TYPE_VEC3
            : type == PS_LANG_FLOAT_ARRAY ? PS_TYPE_FLOAT64
            : type == PS_LANG_INT_ARRAY ? PS_TYPE_INT64

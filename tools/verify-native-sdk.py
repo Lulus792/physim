@@ -140,6 +140,15 @@ def verify_body_range(repo, sdk, consumer, builder, library, rebuilt_core, suffi
 
 def verify_convex_contacts(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked):
     """Public geometry, impulse response and C/Physim parity from packaged Core."""
+    shutil.copy2(repo / "tests/test_ccd_step.c", consumer / "ccd-step-check.c")
+    shutil.copy2(repo / "tests/test_ccd_step_memory.c", consumer / "ccd-step-memory.c")
+    shutil.copy2(repo / "tests/test_allocator.h", consumer / "test_allocator.h")
+    shutil.copy2(repo / "tests/ccd_step_probe.c", consumer / "ccd-step-probe.c")
+    shutil.copy2(sdk / "examples/ccd_events/main.c", consumer / "ccd-events.c")
+    checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
+             repo / "tests/fixtures/language/ccd_step.phys"], output=consumer / "ccd-step-language.c")
+    checked([sdk / "bin" / ("physimc" + suffix), "--emit-experiment",
+             sdk / "examples/language/ccd_events.phys"], output=consumer / "ccd-events-language.c")
     shutil.copy2(repo / "tests/test_motion_sweep.c", consumer / "motion-sweep-check.c")
     shutil.copy2(repo / "tests/motion_sweep_probe.c", consumer / "motion-sweep-probe.c")
     checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
@@ -156,6 +165,17 @@ def verify_convex_contacts(repo, sdk, consumer, builder, library, rebuilt_core, 
              sdk / "examples/language/convex_contacts.phys"], output=consumer / "convex-example-language.c")
     checked([sdk / "bin" / ("language-convex_contacts" + suffix)])
     for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
+        ccd_check = builder.executable("ccd-step-check-" + kind, ["ccd-step-check.c"], [archive])
+        ccd_memory = builder.executable("ccd-step-memory-" + kind, ["ccd-step-memory.c"], [archive])
+        ccd_probe = builder.executable("ccd-step-probe-" + kind, ["ccd-step-probe.c"], [archive])
+        ccd_language = builder.executable("ccd-step-language-" + kind, ["ccd-step-language.c"], [archive], language=True)
+        ccd_c = builder.executable("ccd-events-" + kind, ["ccd-events.c"], [archive], module=True)
+        ccd_phys = builder.executable("ccd-events-language-" + kind, ["ccd-events-language.c"], [archive], module=True, language=True)
+        checked([ccd_check]); checked([ccd_memory]); checked([ccd_language])
+        checked([sys.executable, repo / "tests/test_ccd_step_oracle.py", "--probe", ccd_probe])
+        checked([sys.executable, repo / "tests/test_ccd_event_workflow.py",
+                 "--runner", sdk / "bin" / ("physim-runner" + suffix),
+                 "--c-model", ccd_c, "--phys-model", ccd_phys, "--work", consumer / ("ccd-runs-" + kind)])
         check = builder.executable("convex-check-" + kind, ["convex-check.c"], [archive])
         probe = builder.executable("convex-probe-" + kind, ["convex-probe.c"], [archive])
         language = builder.executable("convex-language-" + kind, ["convex-language.c"], [archive], language=True)
@@ -173,7 +193,7 @@ def verify_convex_contacts(repo, sdk, consumer, builder, library, rebuilt_core, 
         motion_language = builder.executable("motion-sweep-language-" + kind, ["motion-sweep-language.c"], [archive], language=True)
         checked([motion_check]); checked([motion_language])
         checked([sys.executable, repo / "tests/test_motion_sweep_oracle.py", "--probe", motion_probe])
-    print("Installed/rebuilt SDK convex contacts: validated closed meshes, independent SAT/witnesses, mixed contacts, explicit inertia, impulse response, C/Physim event examples, linear/rotating/quadratic sweeps, typed motion values and unresolved atomic limits passed", flush=True)
+    print("Installed/rebuilt SDK convex contacts: validated closed meshes, independent SAT/witnesses, mixed contacts, explicit inertia, impulse response, C/Physim event examples, linear/rotating/quadratic sweeps, typed motion values, multi-body full-frame event stepping, owned CCD results and unresolved atomic limits passed", flush=True)
 
 
 def main():
@@ -197,7 +217,7 @@ def main():
     parser.add_argument("--body-only", action="store_true",
                         help="Verify solid-body inertia and energy range only; no full mechanics or GUI acceptance")
     parser.add_argument("--convex-only", action="store_true",
-                        help="Verify convex geometry and bindings only; no full contact-world/rotating-CCD or GUI acceptance")
+                        help="Verify convex geometry and bounded multi-body CCD bindings; no full mechanics or GUI acceptance")
     args = parser.parse_args()
     if args.convex_only and (args.body_only or args.units_only or args.curve_only or args.comparison_only or args.stream_only or args.transform_only or args.scalar_only or args.app_tests):
         parser.error("--convex-only cannot be combined with other focused modes or --app-tests")
@@ -283,7 +303,7 @@ def main():
             shutil.copytree(sdk / "src", consumer / "src")
             rebuilt_core = builder.archive("sdk-rebuilt-core", [f"src/{name}.c" for name in native.CORE])
             verify_convex_contacts(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
-            (root / "PASSED.txt").write_text("Focused C/Physim convex SDK verification passed; installed/rebuilt Core, independent geometry witnesses, explicit inertia, mixed contacts, linear/rotating/quadratic sweeps/event examples, manifest and relocation; no full contact-world/rotating-CCD or GUI acceptance.\n", encoding="utf-8")
+            (root / "PASSED.txt").write_text("Focused C/Physim convex SDK verification passed; installed/rebuilt Core, independent geometry witnesses, explicit inertia, mixed contacts, linear/rotating/quadratic sweeps/event examples, owned full-frame CCD controller, manifest and relocation; no full mechanics or GUI acceptance.\n", encoding="utf-8")
             print(f"Convex SDK verified: {root}")
             return
         if args.body_only:
@@ -969,7 +989,7 @@ def main():
                 if any((project / name).read_bytes() != data for name, data in before.items()):
                     raise RuntimeError("Project build changed its source files")
             if args.app_tests:
-                for example in native.EXAMPLES + ["language_full"]:
+                for example in [name for name in native.EXAMPLES if name != "ccd_events"] + ["language_full"]:
                     checked([sdk / "bin" / ("physim" + suffix), "--self-test", root / ("App " + example), example])
                     print(f"Installed SDK GUI workflow: {example} passed", flush=True)
                 checked([sdk / "bin" / ("physim"+suffix),"--docs-test",root / "Documentation routes"])
@@ -1021,7 +1041,7 @@ def main():
         elif args.app_tests:
             raise RuntimeError("App tests require an SDK with the app")
     (root / "PASSED.txt").write_text(
-        "Native SDK relocation, independent headers, installed and rebuilt core archives, eight bundled and rebuilt C templates, "
+        f"Native SDK relocation, independent headers, installed and rebuilt core archives, {len(native.EXAMPLES)} bundled and rebuilt C examples, "
         f"{len(native.LANGUAGE_PROGRAMS)} language programs, {len(modules)} rebuilt language modules, nine language experiments with both general analyses, "
         "specialized sensor analysis and six C/Physim combinations passed.\n"
         "Adaptive bundled/source C and Physim pendulums, actual variable sample times, energy and both analysis languages passed.\n" +

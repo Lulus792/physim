@@ -519,8 +519,8 @@ bei Anteil `0.425`, prallt elastisch zurück und endet nach einer Sekunde bei
 induziert hier keine Rotation; es ist ein isoliertes kraftfreies Ereignis.
 
 Die folgenden Pfadsweeps ergänzen explizite Rotation und quadratische
-Translation. Allgemeine zeitabhängige Rotation und eine Ereignissteuerung für
-mehrere Körper bleiben offen. Diese Grenzen ersetzen nicht die vollständige CCD-Anforderung
+Translation. Allgemeine zeitabhängige Rotation bleibt offen; der folgende
+Controller integriert mehrere Körper mit einem begrenzten Kick-Drift-Verfahren. Diese Grenzen ersetzen nicht die vollständige CCD-Anforderung
 im Projektplan.
 
 ## Rotierende und quadratische Pfade
@@ -581,8 +581,70 @@ frei. Dazwischen erreicht ein Vertex die Ebene. Der erste Winkel erfüllt
 keine automatisch gelöste rotierende Kontaktfolge.
 
 Die vollständige CCD-Anforderung bleibt für allgemeine zeitabhängige
-Rotations-/Kraftpfade und Mehrkörper-Ereignissteuerung offen. Der explizite
-Pfadvertrag und seine Distanzhülle ersetzen diese Anforderungen nicht.
+Rotations-/Kraftpfade offen. Der explizite Pfadvertrag und seine Distanzhülle
+ersetzen diese Anforderungen nicht.
+
+## Kontinuierlicher Mehrkörperschritt
+
+`ps_ccd_step` integriert einen vollständigen Zeitschritt für bis zu 128 Körper
+und Modelle. Kugeln, Boxen, statische Ebenen und geprüfte konvexe Netze können
+kombiniert werden. `ps_ccd_collider` leiht Netze für den Aufruf; stabile eindeutige
+IDs bestimmen die Kontaktreihenfolge unabhängig von der Eingabereihenfolge.
+Pro Körper ist höchstens ein Modell erlaubt. Körper ohne Modell driften frei.
+
+Zunächst aktualisiert ein voller Kraft-/Drehmoment-Kick die Geschwindigkeiten,
+einschließlich des bestehenden expliziten gyroskopischen Terms. Danach driften
+Körper mit konstanten Geschwindigkeiten und Weltachsen-Drehgeschwindigkeiten
+bis zum nächsten Kontakt. Nach dessen Impulsantwort werden Kandidaten und
+Erstkontakte für die verbleibende Zeit neu berechnet. Kontakte innerhalb des
+Kontaktabstands werden gemeinsam durch den Graph-Solver gelöst; Boxen nutzen
+vorhandene Manifolds. Statische Körper bleiben fest. Das Verfahren ist erster
+Ordnung; zeitabhängige Kräfte, Gelenke und ein exakter gyroskopischer Pfad sind
+nicht Teil dieses Controllers. Er besitzt keinen Warmstart-Cache.
+
+Der Geschwindigkeits-Solver bestimmt Iterationen, Restitution, Reibung und
+Rückprallschwelle. Die Positionskorrektur verwendet dagegen Null-Slop und volle
+Korrektur. Ein expliziter positiver Kontaktabstand verhindert wiederholt identische
+Nullzeitkontakte; die CCD-Distanztoleranz muss höchstens ein Achtel davon sein.
+Die Defaults sind `1e-6` m Abstand, `1e-8` m CCD-Toleranz, 4096 Suchiterationen
+und 128 Ereignisgruppen. Dieser numerische Abstand verschiebt Kontaktlagen und
+kann nahe Ereignisse zusammenfassen. Er muss zur Modellgröße passen.
+
+`ps_ccd_step_result` meldet Ereignisgruppen, gelöste Kontakte, vollständige Zeit
+sowie maximale Normalgeschwindigkeits- und Projektionsresiduen. Erfolg allein
+beweist keine Solverkonvergenz. Ereignis-/Kontaktgrenzen, ausgeschöpfte CCD-Suche
+oder stagnierende Nullzeitlösungen melden `PS_LIMIT`. Sämtliche Körper und die
+optionale Berichtsausgabe bleiben bei jedem Fehler unverändert, auch wenn lokal
+bereits frühere Ereignisse gelöst wurden. Grenzen sind 512 Kontakte pro Gruppe
+und höchstens 65536 Ereignisgruppen beziehungsweise CCD-Suchiterationen.
+
+Physim besitzt die Modelle und Ergebnisse als kopierbare Werte:
+
+```physim
+let models = [CcdCollider(Collider.sphere(1,0,0.5)),
+              CcdCollider(Collider.sphere(2,1,0.5))]
+let result = ContactSolver.defaults().stepContinuous(
+    bodies,models,[],[],dt,CcdSettings.defaults(),128,1e-6)
+bodies = result.bodies()
+```
+
+Leere Kraft-/Drehmomentarrays bedeuten Null; sonst brauchen sie einen Eintrag
+pro Körper. `CcdCollider.convex(id,body,vertices,indices)` kopiert und validiert
+die Netzarrays. `CcdResult.body(index)` und `.bodies()` liefern unabhängige
+Körperwerte; `.events()`, `.contacts()`, `.elapsed()`, `.normalError()` und
+`.projectionError()` machen den Bericht zugänglich. Kopien in Strukturen,
+Optionalen und Arrays behalten ihre eigene Lebensdauer. Die bisherige persistente
+`ContactWorld` bleibt für diskrete Kugel-/Box-/Ebenenkontakte verfügbar.
+
+Die vollständigen Beispiele [C](../examples/ccd_events/main.c) und
+[Physim](../examples/language/ccd_events.phys) zeigen drei gleich schwere Kugeln:
+Bei `dt=1` s und Anfangsgeschwindigkeit 10 m/s treten zwei Stöße innerhalb eines
+Schritts auf. Endlagen sind bis auf den Kontaktabstand −1, 3 und 8 m;
+Endgeschwindigkeiten 0, 0 und 10 m/s, Energie 50 J. Ein unabhängiger Parser prüft
+beide tatsächlichen Runner-Läufe einschließlich CRC, Abschluss und elf Kanälen.
+Ein rationales 1D-Orakel prüft 181 weitere Szenarien mit 470 elastischen Ereignissen.
+Ruhekontakte unter Gravitation, gleichzeitige Kontakte, rotierende Boxen,
+ID-/Körperreihenfolge, Fehleratomizität und Besitz-/Allocatorfehler sind separat geprüft.
 
 ## Kandidatenpaare für mehrere Körper
 

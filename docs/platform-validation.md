@@ -1085,3 +1085,83 @@ Die 29 geänderten Dateien stimmen zwischen macOS und Linux per SHA-256 überein
 `build/motion-sweep-sdk-{mac,linux}-PASSED.json`. Dieser letzte Belegnachtrag
 erfolgte nach Paketierung; Implementierung, öffentliche Header und Testeingaben
 blieben unverändert. Vollständige Projektabnahme bleibt offen.
+
+
+## Kontinuierlicher Mehrkörperschritt und erneute Review-Regressionen
+
+Der externe Bericht vom 6. Oktober enthält sieben Befunde. Ihre bereits
+committierten Korrekturen sind oben im historischen Nachweis zugeordnet; am
+aktuellen Stand bestehen Core, Analysegrenzen, Autosave, Textdokumente und
+Materialtutorial erneut auf Intel macOS mit 5/5 unter `run-j0hzzzhi`.
+Debian/GCC besteht dieselben fünf Fälle zusammen mit sieben neuen CCD-/Paket-
+Regressionen mit 12/12 unter `run-o3_2r_rt`. CR-006 verwendet weiterhin die
+kontrollierte numerische Ablehnung des überlaufenden unskalierten Moments.
+Diese Nachprüfung ändert die dokumentierten Grenzen zu ACLs/xattrs nicht.
+
+`ps_ccd_step` integriert jetzt einen vollständigen Kraft-/Drehmoment-Kick und
+ereignisgeteilten Drift für Kugeln, Boxen, statische Ebenen und konvexe Netze.
+Nach jeder Kontaktgruppe werden Hüllen und Erstkontakte neu berechnet.
+ID-geordnete Graph-Lösungen erfassen nahe gleichzeitige Kontakte; Boxen nutzen
+Manifolds. C leiht Netze, Physim besitzt kopierbare Modelle und Ergebnis-Snapshots.
+Der vollständige Schritt ist atomisch. Ereignisbudget, ungelöste Suche oder
+stagnierende Nullzeitlösung erhalten alle Ausgaben. Das Verfahren erster Ordnung
+besitzt einen expliziten Kontaktabstand und Residuen; es beweist keine allgemeine
+Kraftpfad-/Gelenk-/Solverkonvergenz. [Vertrag und Beispiele](mechanics.md).
+
+Ein unabhängiges rationales 1D-Orakel prüft 181 Folgen mit 470 elastischen
+Ereignissen, Endlagen, Geschwindigkeiten, Impuls und Energie. C-/Physim-Runner
+führen tatsächlich zwei Stöße innerhalb einer Sekunde aus; ein separater Parser
+prüft elf Kanäle, vollständige Zeit, CRC und Abschluss. Weitere C-Fälle prüfen
+simultane Kontaktgruppen, ruhende Kugel/Box unter Gravitation, einen rotierenden
+Box-Ebenenstoß, Körper-/Modellreihenfolge und unveränderte Ausgaben bei Budget-,
+ID-, Kraft- und Kapazitätsfehlern. Die Besitzprüfung provoziert Allocator- und
+Referenzsättigungsfehler und behält unabhängige Ergebnis-Kopien.
+
+Die erste Budgetfixture benutzte unbeabsichtigt vorzeichenlose Anfangspositionen;
+`run-79f2_wl0` bleibt als fehlgeschlagener Prüflauf erhalten. Nach expliziter
+Double-Konvertierung besteht der Fall. Der erste Referenzlauf `run-l39o9zto`
+scheiterte 4/5 am fehlenden deutschen API-Zwecktext; dieser ist ergänzt.
+Die Allocatorfixture benutzt nach `setjmp` statischen Zustand und eine volatile
+Fehlernummer, damit `longjmp` keine unbestimmten automatischen Werte prüft.
+Die erweiterte macOS-Auswahl besteht mit 9/9 unter `run-ieqk8gfq`, Debian/GCC
+mit 9/9 unter `run-ug__cg2c`. Alle 31 Referenzdokumente sind geprüft;
+das unabhängige Prüfkit umfasst 137 manifestierte Eingaben.
+
+PP-0387 bleibt unvollständig für allgemeine zeitabhängige Kräfte/Drehungen;
+der neue Controller schließt den begrenzten Mehrkörper-Ereignisablauf.
+Aktuelle Windows-/Apple-Silicon- und vollständige Produktabnahme bleiben offen.
+
+Beim abschließenden Bau aller Sprachbeispiele wurde eine neue Emitterregression
+sichtbar: Der neue CCD-Drop-Zweig hatte den bestehenden Batch-Drop-Zweig ersetzt.
+Dieser ist wiederhergestellt. Alle Sprachbeispiele und Module werden danach
+nativ gebaut; die macOS-Auswahl besteht 10/10 (`run-mq3pp23c`), einschließlich
+eines tatsächlichen Batch-Workflows. Die vier Batch-Wert-/Fehlerprogramme bestehen
+zusätzlich unter `run-acybds0m`. Debian/GCC besteht 12/12 (`run-ix7kcrse`),
+einschließlich dieser Batch-Programme, Checker, Werte, CCD und Paketprüfungen.
+Linux/Clang/ASan/UBSan besteht die ursprüngliche 14er-Auswahl unter
+`run-gpdahpp9` und die sieben betroffenen CCD-/Batch-/Checkerprüfungen mit dem
+endgültigen Emitter/Header unter `run-o3zqb1db`. `detect_leaks=0` bleibt gesetzt;
+explizite Allocatorbilanzen prüfen die neue Besitzverwaltung zusätzlich.
+
+Die App besteht Autosave, Physim-Feder mit echtem Editor-Speicherpfad,
+Stoß-Workflow und Handbuch-Tastaturführung mit 4/4 auf macOS (`run-tamfgs7m`)
+und Linux/X11 (`run-7fevhvbf`). Der erste Linux-Fensteraufruf ohne `DISPLAY`
+scheiterte 0/4 unter `run-q4ar2y_l`; der korrigierte Aufruf verwendet tatsächlich
+Xvfb/Openbox auf `DISPLAY=:99`. Keine Plattformgleichheit wird aus CI abgeleitet.
+
+Die verschobenen SDKs enthalten jeweils 469 manifestierte Dateien. Der endgültige
+Prüfer besteht auf macOS unter
+`build/ccd-step-final-sdk-checks/Native SDK ä rj46dc_d` und Linux unter
+`build/ccd-step-final-sdk-checks/Native SDK ä ocdsm3to`. Beide prüfen installierten
+und allein aus SDK-Quellen neu gebauten Core, alle drei bestehenden unabhängigen
+Geometrie-/Sweep-Orakel, das neue rationale Ereignisorakel, C-/Physim-Werte,
+Allocatorfehler und beide tatsächlichen CCD-Experimentmodule. Unter Linux stammt
+der Prüfer allein aus `build/ccd-step-final-independent-kit` mit 137 Dateien;
+Entwicklerheader oder Implementierung gehören nicht zum Prüfkit. Das zusätzliche
+CCD-Beispiel ist kein neuer App-Projekttemplate; die bestehende achtteilige
+Template-Selbsttestauswahl bleibt getrennt. Die Paketprüfung behauptet keine
+vollständige Mechanik-/Produktabnahme.
+
+Belege liegen unter `build/ccd-step-sdk-{mac,linux}-PASSED.json` und
+`build/ccd-step-source-freeze.json`. Dieser Nachweisnachtrag erfolgt nach
+Paketierung; geprüfte Implementierung, Header und Testeingaben bleiben unverändert.

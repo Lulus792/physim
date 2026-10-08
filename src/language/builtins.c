@@ -50,6 +50,8 @@
 #define AABB PS_TYPE_AABB
 #define MOTION PS_TYPE_RIGID_MOTION
 #define CCD PS_TYPE_CCD_SETTINGS
+#define CCD_MODEL PS_TYPE_CCD_MODEL
+#define CCD_RESULT PS_TYPE_CCD_RESULT
 static const ps_lang_builtin library[] = {
     {"propertyConstant", "psrt_property_constant", QUANTITY, 6, 0, {S,S,QUANTITY,V4,F,F}, {"name","source","value","domain","temperature","pressure"}},
     {"propertyTable", "psrt_property_table", QUANTITY, 9, 0,
@@ -268,6 +270,17 @@ static const ps_lang_builtin library[] = {
      {"sphere","radius","sphereDisplacement","body","vertices","indices","meshDisplacement"}},
     {"sweptConvexBounds", "psrt_aabb_swept_convex", AABB, 4, 0,
      {BODY,PS_LANG_VEC3_ARRAY,PS_LANG_INT_ARRAY,V3}, {"body","vertices","indices","displacement"}},
+    {"CcdCollider","psrt_ccd_model_make",CCD_MODEL,1,0,{COLLIDER},{"collider"}},
+    {"ccdConvex","psrt_ccd_model_convex",CCD_MODEL,4,0,{I,I,PS_LANG_VEC3_ARRAY,PS_LANG_INT_ARRAY},{"id","body","vertices","indices"}},
+    {"stepContinuous","psrt_ccd_step",CCD_RESULT,9,0,{SOLVER,PS_LANG_BODY_ARRAY,PS_LANG_CCD_MODEL_ARRAY,PS_LANG_VEC3_ARRAY,PS_LANG_VEC3_ARRAY,F,CCD,I,F},
+     {"solver","bodies","colliders","forces","torques","dt","settings","maxEvents","contactOffset"}},
+    {"ccdBody","psrt_ccd_body",BODY,2,0,{CCD_RESULT,I},{"result","index"}},
+    {"ccdBodies","psrt_ccd_bodies",PS_LANG_BODY_ARRAY,1,0,{CCD_RESULT},{"result"}},
+    {"ccdEvents","psrt_ccd_events",I,1,0,{CCD_RESULT},{"result"}},
+    {"ccdContacts","psrt_ccd_contacts",I,1,0,{CCD_RESULT},{"result"}},
+    {"ccdElapsed","psrt_ccd_elapsed",F,1,0,{CCD_RESULT},{"result"}},
+    {"ccdNormalError","psrt_ccd_normal_error",F,1,0,{CCD_RESULT},{"result"}},
+    {"ccdProjectionError","psrt_ccd_projection_error",F,1,0,{CCD_RESULT},{"result"}},
     {"RigidMotion", "psrt_rigid_motion", MOTION, 3, 0, {V3,V3,V3}, {"translation","rotation","quadratic"}},
     {"CcdSettings", "psrt_ccd_settings", CCD, 2, 0, {F,I}, {"distanceTolerance","maxIterations"}},
     {"defaultCcdSettings", "psrt_ccd_default", CCD, 0, 0, {0}, {NULL}},
@@ -673,6 +686,15 @@ const ps_lang_builtin *ps_lang_builtin_get(size_t binding) {
                : NULL;
 }
 static const ps_lang_method methods[] = {
+    {"stepContinuous","stepContinuous",SOLVER,0},
+    {"body","ccdBody",CCD_RESULT,0},
+    {"bodies","ccdBodies",CCD_RESULT,0},
+    {"events","ccdEvents",CCD_RESULT,0},
+    {"contacts","ccdContacts",CCD_RESULT,0},
+    {"elapsed","ccdElapsed",CCD_RESULT,0},
+    {"normalError","ccdNormalError",CCD_RESULT,0},
+    {"projectionError","ccdProjectionError",CCD_RESULT,0},
+
     {"parameter","batchParameter",BATCH,0},
     {"sweep","batchSweep",BATCH,0},
     {"target","batchTarget",BATCH,0},
@@ -951,6 +973,7 @@ static const struct { const char *owner, *name, *function; } factories[] = {
     {"Sweep", "convexPlaneMotion", "sweepConvexPlaneMotion"},
     {"Sweep", "sphereConvexMotion", "sweepSphereConvexMotion"},
     {"CcdSettings", "defaults", "defaultCcdSettings"},
+    {"CcdCollider","convex","ccdConvex"},
     {"Sweep", "convexPlane", "sweepConvexPlane"},
     {"Sweep", "sphereConvex", "sweepSphereConvex"},
     {"Sweep", "spherePlane", "sweepSpherePlane"},

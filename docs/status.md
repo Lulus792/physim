@@ -2601,3 +2601,13 @@ Netz-/Kugel-/Ebenenfälle und gekrümmte Wege mit klaren Endlagen. Ausgeschöpft
 Budgets melden einen offenen Fall mit erhaltenen Ausgaben; allgemeine
 zeitabhängige Kräfte/Drehungen und Mehrkörpersteuerung bleiben offen.
 [Verträge](mechanics.md).
+
+
+Ein begrenzter kontinuierlicher Mehrkörper-Controller integriert jetzt einen
+vollständigen Kick-Drift-Schritt mit Kugeln, Boxen, Ebenen und konvexen Netzen.
+Nach jedem Ereignis berechnet er die verbleibende Bewegung neu; nahe Kontakte
+werden gemeinsam gelöst. C erhält atomische Körper-/Berichtsausgaben, Physim
+besitzt kopierbare Modelle und Ergebnis-Snapshots. Zwei tatsächliche Stöße in
+einem Schritt und 181 unabhängige rationale Szenarien prüfen den Ablauf.
+Zeitabhängige Kraft-/Rotationspfade und vollständige Produktabnahme bleiben offen.
+[Verträge, numerischer Kontaktabstand und Beispiele](mechanics.md).

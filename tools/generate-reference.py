@@ -102,6 +102,17 @@ def c_reference(module, title, guide, intro):
 
 
 LANG_DESCRIPTIONS = {
+    'CcdCollider': 'Besitzender kontinuierlicher Kollidermodellwert aus einem Sphere-/Box-/Plane-Collider. Körperindex und stabile ID werden im Schritt geprüft.',
+    'ccdConvex': 'Kopiert ein geprüftes geschlossenes konvexes Netz in einen besitzenden CCD-Kollider; Änderungen der ursprünglichen Arrays verändern das Modell nicht.',
+    'stepContinuous': 'Vollständiger atomarer Kick-Drift-Zeitschritt mit wiederholter Ereignissuche, simultanem Graphsolver und explizitem Kontaktabstand. Kräfte/Drehmomente sind leer oder körperweise; Limits erhalten Eingaben.',
+    'ccdBody': 'Kopierter Körper nach erfolgreichem vollständigem Zeitschritt; Index folgt dem ursprünglichen Körperarray.',
+    'ccdBodies': 'Unabhängiger besitzender Arraywert aller Ergebniskörper.',
+    'ccdEvents': 'Anzahl gemeinsam gelöster Ereignisgruppen im vollständigen Schritt.',
+    'ccdContacts': 'Summe gelöster Kontaktbedingungen über alle Ereignisgruppen.',
+    'ccdElapsed': 'Vollständig abgearbeitete Zeit in Sekunden; fehlgeschlagene Schritte liefern keinen Teilwert.',
+    'ccdNormalError': 'Größter normaler Solverrestfehler in m/s vor Positionskorrektur; keine Konvergenzgarantie.',
+    'ccdProjectionError': 'Größter Restfehler der angeforderten Kontaktabstandskorrektur in Metern.',
+
     'RigidMotion': 'Expliziter Pfad: translation*t+quadratic*t² in Metern und konstante Weltachsenrotation rotation*t in Radiant. Vollständige Drehungen bleiben erhalten; gespeicherte Geschwindigkeiten werden nicht integriert. Lesbare Vec3-Felder: translation, rotation und quadratic.',
     'CcdSettings': 'Positive Distanzhülle in Metern und explizites Iterationsbudget 1–65536. Nicht aufgelöste Suchfälle melden Limit und bleiben abfangbar. Lesbare Felder: distanceTolerance (Float64) und maxIterations (Int64).',
     'defaultCcdSettings': 'Distanzhülle 1e-8 m und 4096 konservative Suchschritte; Modellmaßstab und Genauigkeit ausdrücklich wählen.',
@@ -647,7 +658,7 @@ def language_reference():
                  BODY='Body', CONTACTS='Contacts', SOLVER='ContactSolver', RESULT='ContactResult',
                  JOINT='DistanceJoint', JOINT_RESULT='JointResult',
                  CONTACT_CONSTRAINT='ContactConstraint', JOINT_CONSTRAINT='JointConstraint', GRAPH_RESULT='ConstraintResult',
-                 SWEEP='Sweep', MOTION='RigidMotion', CCD='CcdSettings', AABB='Aabb', PS_LANG_AABB_ARRAY='[Aabb]', PS_LANG_PAIR_ARRAY='[CollisionPair]',
+                 SWEEP='Sweep', MOTION='RigidMotion', CCD='CcdSettings', CCD_MODEL='CcdCollider', CCD_RESULT='CcdResult', PS_LANG_CCD_MODEL_ARRAY='[CcdCollider]', AABB='Aabb', PS_LANG_AABB_ARRAY='[Aabb]', PS_LANG_PAIR_ARRAY='[CollisionPair]',
                  PS_LANG_BODY_ARRAY='[Body]', PS_LANG_CONTACT_CONSTRAINT_ARRAY='[ContactConstraint]',
                  PS_LANG_JOINT_CONSTRAINT_ARRAY='[JointConstraint]',
                  SAMPLE='Measurement', PS_TYPE_BOOL='Bool', PS_TYPE_FUNCTION='func(Float64) -> Float64',

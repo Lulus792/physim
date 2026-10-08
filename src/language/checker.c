@@ -99,7 +99,7 @@ static int builtin_type_name(checker *c, ps_lang_token t) {
         "Series", "Plot", "Table", "Distribution", "SensorConfig", "Sensor",
         "Measurement", "Rng", "OdeResult", "StepInterval", "ScalarResult", "Diagnostic", "RunIndex", "RunBlock", "RunSnapshot", "Collider", "ContactWorld", "Batch", "Body", "Contacts", "ContactSolver", "ContactResult",
         "DistanceJoint", "JointResult", "ContactConstraint", "JointConstraint",
-        "ConstraintResult", "Sweep", "Aabb", "CollisionPair", "RigidMotion", "CcdSettings"
+        "ConstraintResult", "Sweep", "Aabb", "CollisionPair", "RigidMotion", "CcdSettings", "CcdCollider", "CcdResult"
     };
     for (size_t i = 0; i < sizeof names / sizeof names[0]; i++)
         if (word(c, t, names[i]))
@@ -111,7 +111,7 @@ static int reserved_nominal_type_name(checker *c, ps_lang_token t) {
         "Int64", "Float64", "Bool", "String", "Void", "Vec2", "Vec3", "Vec4",
         "Quat", "Mat3", "Mat4", "Bezier3", "Optional", "Rng", "Unit", "Medium", "Material",
         "Submersion", "Channel",
-        "Dataset", "Series", "Plot", "OdeResult", "StepInterval", "ScalarResult", "Diagnostic", "RunIndex", "RunBlock", "RunSnapshot", "Collider", "ContactWorld", "Batch", "RigidMotion", "CcdSettings"
+        "Dataset", "Series", "Plot", "OdeResult", "StepInterval", "ScalarResult", "Diagnostic", "RunIndex", "RunBlock", "RunSnapshot", "Collider", "ContactWorld", "Batch", "RigidMotion", "CcdSettings", "CcdCollider", "CcdResult"
     };
     for (size_t i = 0; i < sizeof(names) / sizeof(names[0]); ++i)
         if (word(c, t, names[i]))
@@ -208,7 +208,7 @@ static int numeric(ps_lang_type t) { return t == PS_TYPE_INT64 || t == PS_TYPE_F
 static int vector_type(ps_lang_type t) { return ps_lang_vector_dimensions(t) != 0; }
 static int value_type(ps_lang_type t) {
     return t == PS_TYPE_BOOL || numeric(t) || t == PS_TYPE_STRING || t >= PS_TYPE_RECORD_BASE ||
-           (t >= PS_TYPE_VEC2 && t <= PS_TYPE_CCD_SETTINGS);
+           (t >= PS_TYPE_VEC2 && t <= PS_TYPE_CCD_RESULT);
 }
 static int scalar_type(ps_lang_type t) {
     return t == PS_TYPE_BOOL || numeric(t) || t == PS_TYPE_STRING;
@@ -576,6 +576,8 @@ static ps_lang_type annotation(checker *c, size_t id, int allow_void) {
             t = PS_TYPE_CONSTRAINT_RESULT;
         else if (word(c, n->token, "Sweep"))
             t = PS_TYPE_SWEEP;
+        else if (word(c, n->token, "CcdCollider"))t=PS_TYPE_CCD_MODEL;
+        else if (word(c, n->token, "CcdResult"))t=PS_TYPE_CCD_RESULT;
         else if (word(c, n->token, "RigidMotion"))
             t = PS_TYPE_RIGID_MOTION;
         else if (word(c, n->token, "CcdSettings"))
@@ -5334,6 +5336,8 @@ static void check_record(checker *c, size_t id) {
         if (c->info[f].type == PS_TYPE_AABB) part = 48;
         if (c->info[f].type == PS_TYPE_RIGID_MOTION) part = 72;
         if (c->info[f].type == PS_TYPE_CCD_SETTINGS) part = 16;
+        if (c->info[f].type == PS_TYPE_CCD_MODEL) part = 160;
+        if (c->info[f].type == PS_TYPE_CCD_RESULT) part = 48;
         if (c->info[f].type == PS_TYPE_MAT3) part = 72;
         if (c->info[f].type == PS_TYPE_MAT4) part = 128;
         if (c->info[f].type == PS_TYPE_BEZIER3) part = 96;

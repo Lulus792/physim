@@ -1,0 +1,42 @@
+let zero = Vec3(0,0,0)
+var a = Body.sphere(1,0.5)
+var b = a
+var c = a
+a.setState(Vec3(-4,0,0),Vec3(10,0,0),Quat(0,0,0,1),zero)
+b.setState(zero,zero,Quat(0,0,0,1),zero)
+c.setState(Vec3(4,0,0),zero,Quat(0,0,0,1),zero)
+let input = [a,b,c]
+let models = [CcdCollider(Collider.sphere(3,0,0.5)),CcdCollider(Collider.sphere(2,1,0.5)),CcdCollider(Collider.sphere(1,2,0.5))]
+let solver = ContactSolver(200,1,0,0,0,1)
+let force: [Vec3] = []
+let result = solver.stepContinuous(input,models,force,force,1,CcdSettings.defaults(),64,1e-6)
+assert(result.events() == 2)
+assert(isClose(result.body(0).velocity.x,0,1e-4,1e-4))
+assert(isClose(result.body(2).velocity.x,10,1e-4,1e-4))
+assert(isClose(result.body(2).position.x,8,1e-4,1e-4))
+assert(input[0].position.x == -4)
+let copy = result
+let owned = [copy,result]
+assert(owned[0].events() == 2)
+let snapshot = copy.bodies()
+assert(snapshot.count == 3)
+let limited = attempt(solver.stepContinuous(input,models,force,force,1,CcdSettings.defaults(),1,1e-6))
+assert(limited == nil)
+assert(copy.body(2).velocity.x == 10)
+print("Continuous Physim event step, independent result snapshots and atomic budget passed")
+let vertices = [Vec3(-1,-1,-1),Vec3(1,-1,-1),Vec3(1,1,-1),Vec3(-1,1,-1),Vec3(-1,-1,1),Vec3(1,-1,1),Vec3(1,1,1),Vec3(-1,1,1)]
+let indices = [0,2,1,0,3,2,4,5,6,4,6,7,0,1,5,0,5,4,3,7,6,3,6,2,0,4,7,0,7,3,1,2,6,1,6,5]
+let convex = CcdCollider.convex(2,1,vertices,indices)
+let copiedConvex = convex
+struct SceneModel:
+    let model: CcdCollider
+    let previous: CcdResult
+let kept = SceneModel(copiedConvex,copy)
+let optional = Optional.some(kept)
+assert(optional.hasValue)
+var sphere = Body.sphere(1,0.5)
+sphere.setState(Vec3(-4,0,0),Vec3(10,0,0),Quat(0,0,0,1),zero)
+let wall = Body.withInertia(0,zero)
+let mixed = solver.stepContinuous([sphere,wall],[CcdCollider(Collider.sphere(1,0,0.5)),optional.unwrap().model],force,force,0.5,CcdSettings.defaults(),64,1e-6)
+assert(mixed.events() == 1)
+assert(isClose(mixed.body(0).velocity.x,-10,1e-4,1e-4))

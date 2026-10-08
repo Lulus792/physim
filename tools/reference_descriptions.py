@@ -380,3 +380,4 @@ add('ps_run_', {
     'writer_abort': 'Schließt ohne Erfolgsfooter und invalidiert die Kennung; geschriebene valide Präfixdaten bleiben wiederherstellbar.',
     'writer_release': 'Finalisiert Index und Footer und invalidiert die Kennung auch bei einem Abschlussfehler.',
 })
+DESCRIPTIONS['ps_ccd_step']='Verarbeitet einen vollständigen Kick-Drift-Zeitschritt mit wiederholten und simultanen CCD-Ereignissen atomar.'

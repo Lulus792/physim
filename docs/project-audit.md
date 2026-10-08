@@ -399,8 +399,8 @@ Die zunächst für PP-0385 erfasste Lücke ist inzwischen implementiert:
 Geprüfte konvexe Dreiecksnetze besitzen Paar-, Kugel- und Ebenenkontakte,
 konservative Hüllgrenzen, C-/Physim-Bindungen und explizite Masseneigenschaften.
 Unabhängige SAT-/Oberflächenzeugen prüfen den diskreten Vertrag. Es handelt
-sich um einzelne repräsentative Kontakte; Ruhemanifolds, rotierendes CCD und die
-automatische Kontaktweltintegration bleiben gesondert offen. Das Audit enthält
+sich um einzelne repräsentative Kontakte; konvexe Ruhemanifolds und persistente
+konvexe Kontaktverwaltung bleiben gesondert offen. Das Audit enthält
 33 implementierte, 7 unvollständige und 491 ungeprüfte Planblöcke.
 
 
@@ -408,6 +408,7 @@ PP-0387 ist jetzt konkret incomplete: Lineare konvexe Paar-/Kugel-/Ebenen-
 Sweeps und Bewegungshüllen ergänzen die Kugelbasis. Unabhängige Zeitintervalle,
 Distanznullstellen und Oberflächenzeugen sowie echte C-/Physim-Ereignisse mit
 Restzeit sind geprüft. Konstante Weltachsenrotation und quadratische Translation sind inzwischen
-implementiert. Allgemeine zeitabhängige Rotation/Kräfte und eine
-Mehrkörper-Ereignissteuerung fehlen weiterhin; der Gesamtumfang wird durch den
-Vertrag mit festen Orientierungen nicht ersetzt.
+implementiert. Ein atomischer Kick-Drift-Controller integriert inzwischen mehrere
+Ereignisse und gleichzeitige Kontaktgruppen für Kugel/Box/Ebene/Convex in C und
+Physim. Rationale 1D-Referenzen und tatsächliche Runner-Läufe prüfen ihn. Allgemeine
+zeitabhängige Rotation/Kräfte fehlen weiterhin; der Gesamtumfang bleibt unvollständig.
