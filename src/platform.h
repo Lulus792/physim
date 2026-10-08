@@ -31,6 +31,15 @@ void *ps_module_open(const char *path);
 void *ps_module_symbol(void *module, const char *name);
 void ps_module_close(void *module);
 double ps_clock(void);
+/* Current process, all threads; excludes children. CPU is cumulative user/system
+ * time, peak resident bytes are the lifetime high-water mark, not current RAM or
+ * a phase-local allocation count. No file access or allocation. Failure preserves
+ * out. Windows working set / POSIX ru_maxrss have OS-specific accounting. */
+typedef struct {
+    double user_seconds, system_seconds;
+    uint64_t peak_resident_bytes;
+} ps_process_usage;
+bool ps_process_usage_self(ps_process_usage *out);
 void ps_sleep(unsigned ms);
 int ps_stdin_read(void *buffer, size_t capacity);
 void ps_binary_stdio(void);

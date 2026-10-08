@@ -5616,9 +5616,22 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Profiling von CPU, RAM, Datendurchsatz und Renderzeit.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "incomplete",
+      "evidence": [
+        "src/platform.c",
+        "src/platform.h",
+        "tools/benchmark.c",
+        "tools/benchmark.py",
+        "tools/benchmark_usage.h",
+        "tools/ui_benchmark.c",
+        "tools/ui_benchmark.py",
+        "tests/test_process_usage.c",
+        "tests/test_benchmark.py",
+        "docs/performance.md",
+        "docs/ui-rendering.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Tatsächliche native Referenzlasten erfassen Wandzeit, Benutzer-/System-CPU-Zeit, Lebenszeit-Peak-RAM und logische Run-Dateibytes/s. SDL/OpenGL-UI-Lasten trennen Widgetaufbau, Renderaufruf und Swap mit Median/P95/P99; Readback/Dateiausgabe sind von gemessenen Intervallen getrennt. Vollständiges App-/Runner-/Mehrworkerprofil, native Szenentessellierung/GPU-Fertigstellungszeiten, Startzeit und reale Interaktionslatenz bleiben offen; Peak-RAM ist keine phasenlokale Allokationssumme."
     },
     {
       "id": "PP-0712",

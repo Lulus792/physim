@@ -2648,3 +2648,14 @@ keine Dateien. C-/Physim-Builds behalten Quellen, Archive, Cache und Messwerte.
 [Bedienung](workspace.md#editor-und-build), [Speichervertrag](data-format.md#eigenständige-analyseprojekte)
 und [ausgeführte Prüfungen](platform-validation.md) beschreiben den begrenzten
 Nachweis; der gesamte Projektplan bleibt offen.
+
+
+## CPU-, Speicher- und Durchsatzmessung
+
+Die optionalen nativen Benchmarks erfassen nun Benutzer-/System-CPU-Zeit,
+Lebenszeit-Peak-RAM und logischen `.psrun`-Datendurchsatz. Der UI-Benchmark
+trennt Widgetaufbau, Renderaufruf und Swap; Screenshotaufnahmen liegen außerhalb
+der Messintervalle. Schema 2 erhält Rohdaten und weist ungültige Messreihen ab.
+[Verträge und Grenzen](performance.md#prozessressourcen-und-logischer-datendurchsatz)
+und [UI-Messung](ui-rendering.md) unterscheiden diese Referenzlasten von noch
+fehlender vollständiger App-/Runner-, Szenen-/GPU- und interaktiver Abnahme.

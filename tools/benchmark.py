@@ -33,7 +33,7 @@ def main():
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=False)
     metadata = {
-        "schema": 1, "utc": datetime.now(timezone.utc).isoformat(),
+        "schema": 2, "utc": datetime.now(timezone.utc).isoformat(),
         "platform": platform.platform(), "machine": platform.machine(),
         "processor": platform.processor(), "logical_cpus": os.cpu_count(),
         "executable": str(executable),
@@ -42,6 +42,8 @@ def main():
         "baseline": str(args.baseline.resolve()) if args.baseline else None,
         "max_regression": args.max_regression if args.baseline else None,
         "cache_policy": "warm OS cache; no cache flushing; all repetitions retained",
+        "resource_scope": "current native process, all threads, excludes children; peak resident bytes are lifetime high-water mark",
+        "io_scope": "logical run file bytes including metadata/chunks/footer; not physical device traffic",
         "command": [str(executable), str(args.samples), str(args.repeats)],
     }
     root = Path(__file__).resolve().parent.parent
@@ -64,8 +66,30 @@ def main():
         grouped.setdefault(row["workload"], []).append(row)
     if not grouped or any(len(group) != args.repeats for group in grouped.values()):
         raise RuntimeError("Missing or incomplete benchmark measurements")
+    expected = {"write_16_channels", "read_validate_16_channels", "analysis_snapshot",
+                "series_statistics", "series_derivative", "report_preview_8_curves",
+                "report_curve_copy", "report_curve_view"}
+    if set(grouped) != expected:
+        raise RuntimeError("Missing or unexpected benchmark workloads")
+    previous_peak = 0
+    for row in rows:
+        peak = int(row["peak_resident_bytes"])
+        if peak <= 0 or peak < previous_peak:
+            raise RuntimeError("Invalid process lifetime peak memory")
+        previous_peak = peak
+        for key in ("seconds", "units_per_second", "user_cpu_seconds", "system_cpu_seconds", "bytes_per_second"):
+            value = float(row[key])
+            if not math.isfinite(value) or value < 0:
+                raise RuntimeError(f"Invalid measurement: {key}")
+        if int(row["units"]) <= 0 or int(row["io_bytes"]) < 0 or int(row["scratch_bytes"]) < 0:
+            raise RuntimeError("Invalid workload count")
     summary = {}
     for workload, group in grouped.items():
+        if sorted(int(row["repeat"]) for row in group) != list(range(args.repeats)):
+            raise RuntimeError(f"Duplicate or missing repetitions: {workload}")
+        if any(row[key] != group[0][key] for row in group for key in
+               ("units", "io_bytes", "compiler", "configuration")):
+            raise RuntimeError(f"Inconsistent workload: {workload}")
         durations = [float(row["seconds"]) for row in group]
         median = statistics.median(durations)
         summary[workload] = {
@@ -74,6 +98,12 @@ def main():
             "scratch_bytes": max(int(row["scratch_bytes"]) for row in group),
             "compiler": group[0]["compiler"], "configuration": group[0]["configuration"],
         }
+        for key in ("user_cpu_seconds", "system_cpu_seconds", "bytes_per_second"):
+            values = [float(row[key]) for row in group]
+            summary[workload][key] = {"median": statistics.median(values),
+                                      "min": min(values), "max": max(values)}
+        summary[workload]["peak_resident_bytes"] = max(int(row["peak_resident_bytes"]) for row in group)
+        summary[workload]["io_bytes"] = int(group[0]["io_bytes"])
         print(f"{workload}: median {median:.6f} s ({len(group)} repetitions)")
     (output / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
     if args.baseline:

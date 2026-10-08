@@ -1,3 +1,7 @@
+#ifdef __APPLE__
+/* ru_maxrss is a Darwin extension hidden by the build's POSIX feature level. */
+#define _DARWIN_C_SOURCE
+#endif
 #include "platform.h"
 #include <math.h>
 #include <stdio.h>
@@ -39,6 +43,25 @@ static bool process_deadline(ps_process *p) {
 #include <fcntl.h>
 #include <io.h>
 #include <windows.h>
+#ifndef PSAPI_VERSION
+#define PSAPI_VERSION 2
+#endif
+#include <psapi.h>
+bool ps_process_usage_self(ps_process_usage *out) {
+    if (!out) return false;
+    FILETIME created, exited, kernel, user;
+    PROCESS_MEMORY_COUNTERS memory = {0};
+    memory.cb = sizeof memory;
+    if (!GetProcessTimes(GetCurrentProcess(), &created, &exited, &kernel, &user) ||
+        !K32GetProcessMemoryInfo(GetCurrentProcess(), &memory, sizeof memory))
+        return false;
+    ULARGE_INTEGER u, k;
+    u.LowPart = user.dwLowDateTime; u.HighPart = user.dwHighDateTime;
+    k.LowPart = kernel.dwLowDateTime; k.HighPart = kernel.dwHighDateTime;
+    *out = (ps_process_usage){(double)u.QuadPart / 1e7, (double)k.QuadPart / 1e7,
+                              (uint64_t)memory.PeakWorkingSetSize};
+    return true;
+}
 static wchar_t *wide(const char *s) {
     int n = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, s, -1, NULL, 0);
     if (!n)
@@ -409,6 +432,20 @@ double ps_clock(void) {
     struct timespec t;
     clock_gettime(CLOCK_MONOTONIC, &t);
     return (double)t.tv_sec + (double)t.tv_nsec / 1e9;
+}
+bool ps_process_usage_self(ps_process_usage *out) {
+    if (!out) return false;
+    struct rusage usage;
+    if (getrusage(RUSAGE_SELF, &usage) || usage.ru_maxrss < 0) return false;
+    uint64_t peak = (uint64_t)usage.ru_maxrss;
+#ifndef __APPLE__
+    if (peak > UINT64_MAX / 1024) return false;
+    peak *= 1024;
+#endif
+    *out = (ps_process_usage){(double)usage.ru_utime.tv_sec + usage.ru_utime.tv_usec / 1e6,
+                              (double)usage.ru_stime.tv_sec + usage.ru_stime.tv_usec / 1e6,
+                              peak};
+    return true;
 }
 void ps_sleep(unsigned ms) {
     struct timespec t = {(time_t)(ms / 1000), (long)(ms % 1000) * 1000000};

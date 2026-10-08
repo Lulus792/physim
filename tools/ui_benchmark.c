@@ -1,5 +1,6 @@
 /* Real SDL/Nuklear/OpenGL UI workloads. No physics or source projects are run. */
 #include "benchmark_build.h"
+#include "benchmark_usage.h"
 #include "platform.h"
 #include "ui.h"
 #include <math.h>
@@ -107,7 +108,8 @@ int main(int argc, char **argv) {
         goto cleanup;
     nk_style_set_font(ui, &font->handle);
     fprintf(output, "workload,frame,total_seconds,conversion_seconds,upload_seconds,allocations,"
-                    "vertex_bytes,index_bytes,retained_bytes\n");
+                    "vertex_bytes,index_bytes,retained_bytes,construction_seconds,present_seconds,frame_seconds,"
+                    "user_cpu_seconds,system_cpu_seconds,peak_resident_bytes\n");
     const char *names[] = {"empty", "dense", "plot"};
     unsigned frames = smoke ? 6u : 300u;
     for (unsigned kind = 0; kind < 3; kind++) {
@@ -117,31 +119,51 @@ int main(int argc, char **argv) {
             ps_ui_render_stats before, after;
             if (!ps_graphics_ui_stats(graphics, &before))
                 goto cleanup;
+            Uint64 construction_start = SDL_GetTicksNS();
             draw(ui, kind);
-            Uint64 start = SDL_GetTicksNS();
+            double construction = (double)(SDL_GetTicksNS() - construction_start) / 1e9;
+            ps_benchmark_mark start;
+            if (!ps_benchmark_begin(&start)) goto cleanup;
             if (!nk_sdl_render(ui))
                 goto cleanup;
-            double elapsed = (double)(SDL_GetTicksNS() - start) / 1e9;
+            double elapsed;
+            ps_process_usage usage;
+            if (!ps_benchmark_end(start, &elapsed, &usage)) goto cleanup;
             if (!ps_graphics_ui_stats(graphics, &after))
                 goto cleanup;
             if (frame >= 10 && after.allocations != before.allocations) {
                 SDL_SetError("Steady UI frame allocated conversion storage");
                 goto cleanup;
             }
-            if (frame >= 10)
-                fprintf(output, "%s,%u,%.9f,%.9f,%.9f,%llu,%zu,%zu,%zu\n", names[kind], frame - 10,
-                        elapsed, after.conversion_seconds, after.upload_seconds,
-                        (unsigned long long)(after.allocations - before.allocations),
-                        after.vertex_bytes, after.index_bytes, after.retained_bytes);
-            if (frame == 10 || frame == frames + 9) {
+            if (frame == 9) {
                 snprintf(path, sizeof path, "%s/%s-%s.bmp", argv[1], names[kind],
-                         frame == 10 ? "first" : "last");
+                         "first");
                 if (!ps_graphics_capture(graphics, path))
                     goto cleanup;
             }
             /* The submission is timed without swap, which drains/queues GPU work. */
+            Uint64 present_start = SDL_GetTicksNS();
             if (!ps_graphics_present(graphics))
                 goto cleanup;
+            double present = (double)(SDL_GetTicksNS() - present_start) / 1e9;
+            if (frame >= 10)
+                fprintf(output, "%s,%u,%.9f,%.9f,%.9f,%llu,%zu,%zu,%zu,%.9f,%.9f,%.9f,%.9f,%.9f,%llu\n",
+                        names[kind], frame - 10, elapsed, after.conversion_seconds,
+                        after.upload_seconds,
+                        (unsigned long long)(after.allocations - before.allocations),
+                        after.vertex_bytes, after.index_bytes, after.retained_bytes,
+                        construction, present, construction + elapsed + present,
+                        usage.user_seconds, usage.system_seconds,
+                        (unsigned long long)usage.peak_resident_bytes);
+            if (frame == frames + 9) {
+                /* Readback drains GPU work: use an additional untimed frame,
+                 * keeping it out of measured submission/present intervals. */
+                draw(ui, kind);
+                if (!nk_sdl_render(ui)) goto cleanup;
+                snprintf(path, sizeof path, "%s/%s-last.bmp", argv[1], names[kind]);
+                if (!ps_graphics_capture(graphics, path) || !ps_graphics_present(graphics))
+                    goto cleanup;
+            }
         }
     }
     /* A second context (PNG export) and resize must not leave stale geometry in

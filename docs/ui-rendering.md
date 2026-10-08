@@ -60,8 +60,17 @@ Aufwärmbilder plus 300 protokollierte Bilder:
 gesamten Aufruf von `nk_sdl_render`, außerdem erfolgreiche Vertex-/Indexallokationen,
 übertragene Bytes und vorgehaltene Kapazität. Der Wrapper schreibt Median, P95/P99
 (Nearest-Rank), Compiler-/GL-Protokoll, Hostdaten, Binär- und Quellfingerabdrücke.
-Zeitmessungen schließen Widgetaufbau, Swap/VSync und GPU-Fertigstellung aus.
-Sie messen weder vollständige App-Framezeit noch Eingabelatenz.
+Die bisherigen Renderzeiten schließen Widgetaufbau, Swap/VSync und
+GPU-Fertigstellung aus. Messschema 2 ergänzt separate Wandzeiten für Widgetaufbau
+und Swap sowie deren Summe mit dem Renderaufruf. Diese Summe schließt
+Ereignisverarbeitung, Messinstrumentierung und Screenshotaufnahmen aus; sie ist
+keine vollständige App-Framezeit oder Eingabelatenz. Benutzer-/System-CPU-Zeit
+bezieht sich auf den Renderaufruf aller Prozessthreads. Peak-RAM ist der
+Lebenszeithöchstwert des Prozesses, einschließlich früherer Fälle und Aufnahmen.
+[Prozessressourcen und Grenzen](performance.md#prozessressourcen-und-logischer-datendurchsatz).
+Der erste Bildvergleich erfolgt am letzten Aufwärmbild, der letzte auf einem
+zusätzlichen Bild nach Abschluss der Messreihe. Dadurch liegen GPU-Readback und
+Dateiausgabe außerhalb aller gemessenen Render-/Swapintervalle.
 
 Für jedes Messbild nach dem Aufwärmen müssen die Vertex-/Indexallokationen null
 sein. Die Bilder am Anfang und Ende jedes Falls müssen bytegleich sein. Nach

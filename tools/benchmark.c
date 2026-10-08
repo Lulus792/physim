@@ -1,4 +1,5 @@
 #include "benchmark_build.h"
+#include "benchmark_usage.h"
 #include "physim/report.h"
 #include "platform.h"
 #include <math.h>
@@ -21,11 +22,18 @@ static int failed;
         }                                                                                          \
     } while (0)
 
-static void row(const char *name, unsigned repeat, uint64_t units, double start, uint64_t scratch) {
-    double seconds = ps_clock() - start;
-    printf("%s,%u,%llu,%.9f,%.3f,%llu,%s,%s\n", name, repeat, (unsigned long long)units, seconds,
+static bool row(const char *name, unsigned repeat, uint64_t units,
+                 ps_benchmark_mark start, uint64_t scratch, uint64_t bytes) {
+    double seconds;
+    ps_process_usage usage;
+    if (!ps_benchmark_end(start, &seconds, &usage)) return false;
+    printf("%s,%u,%llu,%.9f,%.3f,%llu,%s,%s,%.9f,%.9f,%llu,%llu,%.3f\n",
+           name, repeat, (unsigned long long)units, seconds,
            seconds > 0 ? (double)units / seconds : 0, (unsigned long long)scratch,
-           PS_BENCH_COMPILER, PS_BENCH_CONFIG);
+           PS_BENCH_COMPILER, PS_BENCH_CONFIG, usage.user_seconds, usage.system_seconds,
+           (unsigned long long)usage.peak_resident_bytes, (unsigned long long)bytes,
+           seconds > 0 ? (double)bytes / seconds : 0);
+    return true;
 }
 
 static void run(unsigned repeat, uint64_t count) {
@@ -45,7 +53,8 @@ static void run(unsigned repeat, uint64_t count) {
         snprintf(name, sizeof name, "channel%u", c);
         CHECK(ps_channel_add(&context, name, PS_METRE, "linear reference") == (int)c);
     }
-    double start = ps_clock();
+    ps_benchmark_mark start;
+    CHECK(ps_benchmark_begin(&start));
     CHECK(ps_run_create(&writer, path, &context, "performance-reference") == PS_OK);
     for (uint64_t i = 0; i < count; ++i) {
         double values[PS_MAX_CHANNELS];
@@ -54,10 +63,27 @@ static void run(unsigned repeat, uint64_t count) {
         CHECK(ps_run_append(&writer, (double)i * 0.125, values) == PS_OK);
     }
     CHECK(ps_run_close(&writer) == PS_OK);
-    row("write_16_channels", repeat, count, start, 0);
+    /* File length is measured outside the writing interval, including headers,
+     * chunk checksums and footer; no claim about physical device I/O/cache misses. */
+    double write_seconds;
+    ps_process_usage write_usage;
+    CHECK(ps_benchmark_end(start, &write_seconds, &write_usage));
+    FILE *sized = fopen(path, "rb");
+    CHECK(sized != NULL);
+    bool measured = !fseek(sized, 0, SEEK_END);
+    long size = measured ? ftell(sized) : -1;
+    measured = !fclose(sized) && measured;
+    CHECK(measured && size > 0);
+    uint64_t file_bytes = (uint64_t)size;
+    printf("write_16_channels,%u,%llu,%.9f,%.3f,0,%s,%s,%.9f,%.9f,%llu,%llu,%.3f\n",
+           repeat, (unsigned long long)count, write_seconds,
+           write_seconds > 0 ? (double)count / write_seconds : 0,
+           PS_BENCH_COMPILER, PS_BENCH_CONFIG, write_usage.user_seconds,
+           write_usage.system_seconds, (unsigned long long)write_usage.peak_resident_bytes,
+           (unsigned long long)file_bytes, write_seconds > 0 ? file_bytes / write_seconds : 0);
 
     /* Full roundtrip validation, including every channel and final marker. */
-    start = ps_clock();
+    CHECK(ps_benchmark_begin(&start));
     CHECK(ps_run_open(&reader, path) == PS_OK);
     CHECK(reader.channels == PS_MAX_CHANNELS);
     for (uint64_t i = 0; i < count; ++i) {
@@ -71,25 +97,25 @@ static void run(unsigned repeat, uint64_t count) {
     CHECK(ps_run_next(&reader, &time, values) == PS_EOF);
     CHECK(reader.complete && reader.samples == count);
     ps_run_reader_close(&reader);
-    row("read_validate_16_channels", repeat, count, start, 0);
+    CHECK(row("read_validate_16_channels", repeat, count, start, 0, file_bytes));
 
     CHECK(ps_analysis_create(prefix, 0, &analysis) == PS_OK);
     ps_dataset dataset;
-    start = ps_clock();
+    CHECK(ps_benchmark_begin(&start));
     CHECK(ps_analysis_open_run(analysis, path, &dataset) == PS_OK);
-    row("analysis_snapshot", repeat, count, start, ps_analysis_scratch_bytes(analysis));
+    CHECK(row("analysis_snapshot", repeat, count, start, ps_analysis_scratch_bytes(analysis), file_bytes));
     ps_series x, y, derivative;
     CHECK(ps_dataset_series(analysis, dataset, "time", &x) == PS_OK);
     CHECK(ps_dataset_series(analysis, dataset, "channel15", &y) == PS_OK);
     ps_statistics stats = {0};
-    start = ps_clock();
+    CHECK(ps_benchmark_begin(&start));
     CHECK(ps_series_statistics(analysis, y, &stats) == PS_OK);
     CHECK(stats.count == count && stats.min == 0 && stats.max == 2.0 * (double)(count - 1));
     CHECK(fabs(stats.mean - (double)(count - 1)) < 1e-9);
-    row("series_statistics", repeat, count, start, ps_analysis_scratch_bytes(analysis));
-    start = ps_clock();
+    CHECK(row("series_statistics", repeat, count, start, ps_analysis_scratch_bytes(analysis), 0));
+    CHECK(ps_benchmark_begin(&start));
     CHECK(ps_series_derivative(analysis, y, x, &derivative) == PS_OK);
-    row("series_derivative", repeat, count, start, ps_analysis_scratch_bytes(analysis));
+    CHECK(row("series_derivative", repeat, count, start, ps_analysis_scratch_bytes(analysis), 0));
     CHECK(ps_series_statistics(analysis, derivative, &stats) == PS_OK);
     CHECK(stats.count == count && stats.min == 16 && stats.max == 16);
 
@@ -102,40 +128,40 @@ static void run(unsigned repeat, uint64_t count) {
     CHECK(ps_report_unit_from(PS_METRE, &info.y_unit) == PS_OK);
     ps_plot_handle plot;
     CHECK(ps_report_add_plot(report, &info, &plot) == PS_OK);
-    start = ps_clock();
+    CHECK(ps_benchmark_begin(&start));
     for (unsigned c = 0; c < PS_REPORT_MAX_CURVES; ++c) {
         char label[32];
         snprintf(label, sizeof label, "curve%u", c);
         CHECK(ps_report_add_series(report, plot, analysis, x, y, label, PS_PLOT_LINE) == PS_OK);
     }
-    row("report_preview_8_curves", repeat, count * PS_REPORT_MAX_CURVES, start,
-        ps_analysis_scratch_bytes(analysis));
+    CHECK(row("report_preview_8_curves", repeat, count * PS_REPORT_MAX_CURVES, start,
+        ps_analysis_scratch_bytes(analysis), 0));
     curve = malloc(sizeof *curve);
     CHECK(curve != NULL);
     CHECK(ps_report_curve_read(report, 0, 0, curve) == PS_OK);
     CHECK(curve->source_count == count && curve->count <= PS_REPORT_MAX_POINTS);
     CHECK(curve->x[0] == 0 && curve->y[curve->count - 1] == 2.0 * (double)(count - 1));
-    start = ps_clock();
+    CHECK(ps_benchmark_begin(&start));
     for (unsigned frame = 0; frame < 10000; ++frame)
         for (unsigned c = 0; c < PS_REPORT_MAX_CURVES; ++c) {
             CHECK(ps_report_curve_read(report, 0, c, curve) == PS_OK);
             sink += curve->y[curve->count - 1];
         }
-    row("report_curve_copy", repeat, 10000 * PS_REPORT_MAX_CURVES, start, 0);
+    CHECK(row("report_curve_copy", repeat, 10000 * PS_REPORT_MAX_CURVES, start, 0, 0));
     for (unsigned c = 0; c < PS_REPORT_MAX_CURVES; ++c) {
         const ps_curve_data *view = NULL;
         CHECK(ps_report_curve_view(report, 0, c, &view) == PS_OK);
         CHECK(ps_report_curve_read(report, 0, c, curve) == PS_OK);
         CHECK(!memcmp(view, curve, sizeof *curve));
     }
-    start = ps_clock();
+    CHECK(ps_benchmark_begin(&start));
     for (unsigned frame = 0; frame < 10000; ++frame)
         for (unsigned c = 0; c < PS_REPORT_MAX_CURVES; ++c) {
             const ps_curve_data *view = NULL;
             CHECK(ps_report_curve_view(report, 0, c, &view) == PS_OK);
             sink += view->y[view->count - 1];
         }
-    row("report_curve_view", repeat, 10000 * PS_REPORT_MAX_CURVES, start, 0);
+    CHECK(row("report_curve_view", repeat, 10000 * PS_REPORT_MAX_CURVES, start, 0, 0));
 cleanup:
     free(curve);
     ps_report_destroy(report);
@@ -185,7 +211,7 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Cannot create benchmark directory\n");
         return 1;
     }
-    printf("workload,repeat,units,seconds,units_per_second,scratch_bytes,compiler,configuration\n");
+    printf("workload,repeat,units,seconds,units_per_second,scratch_bytes,compiler,configuration,user_cpu_seconds,system_cpu_seconds,peak_resident_bytes,io_bytes,bytes_per_second\n");
     for (unsigned i = 0; i < repeats && !failed; ++i)
         run(i, samples);
     fprintf(stderr, "Benchmark %s; private directory: %s\n", failed ? "FAILED" : "verified",

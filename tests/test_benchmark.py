@@ -6,6 +6,11 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import csv
+import math
+import importlib.util
+import io
+from unittest.mock import patch
 
 
 driver = Path(sys.argv[1]).resolve()
@@ -31,6 +36,22 @@ with tempfile.TemporaryDirectory(prefix="benchmark-driver-", dir=workspace) as d
     for name in ("tools/build.py", "tools/benchmark_build.h"):
         assert sources[name] == hashlib.sha256((driver.parent.parent / name).read_bytes()).hexdigest()
     baseline = json.loads((root / "baseline/summary.json").read_text())
+    assert metadata["schema"] == 2 and "excludes children" in metadata["resource_scope"]
+    rows = list(csv.DictReader((root / "baseline/raw.csv").open()))
+    peaks = [int(row["peak_resident_bytes"]) for row in rows]
+    assert min(peaks) > 0 and peaks == sorted(peaks)
+    file_sizes = [baseline[name]["io_bytes"] for name in
+          ("write_16_channels", "read_validate_16_channels", "analysis_snapshot")]
+    # The logical file includes 257 time samples, sixteen values each, plus framing.
+    assert file_sizes[0] == file_sizes[1] == file_sizes[2] and file_sizes[0] > 257 * 17 * 8
+    for row in rows:
+        assert math.isfinite(float(row["user_cpu_seconds"])) and float(row["user_cpu_seconds"]) >= 0
+        assert math.isfinite(float(row["system_cpu_seconds"])) and float(row["system_cpu_seconds"]) >= 0
+        if int(row["io_bytes"]):
+            assert math.isclose(float(row["bytes_per_second"]),
+                                int(row["io_bytes"]) / float(row["seconds"]), rel_tol=1e-4)
+        else:
+            assert float(row["bytes_per_second"]) == 0
     for item in baseline.values():
         assert item["configuration"] in ("", "Debug", "Release", "RelWithDebInfo", "MinSizeRel")
         assert item["compiler"].startswith(("MSVC-", "ClangCL-", "Clang-", "AppleClang-", "GCC-"))
@@ -54,6 +75,49 @@ with tempfile.TemporaryDirectory(prefix="benchmark-driver-", dir=workspace) as d
     metadata_path.write_text(json.dumps(metadata))
     result = invoke("incompatible", "--baseline", str(root / "baseline"), expected=1)
     assert "Incompatible baseline: samples" in result.stderr
+    metadata = json.loads(original)
+    metadata["schema"] = 1
+    metadata_path.write_text(json.dumps(metadata))
+    result = invoke("legacy-baseline", "--baseline", str(root / "baseline"), expected=1)
+    assert "Incompatible baseline: schema" in result.stderr
+    # Inject corrupted native records into the real driver. A successful child
+    # exit alone must not publish a summary containing NaN CPU or invalid memory.
+    spec = importlib.util.spec_from_file_location("resource_benchmark_driver", driver)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    native_run = subprocess.run
+    for fault in ("nan-cpu", "decreasing-peak", "duplicate-repeat", "missing-workload"):
+        corrupted = [dict(row) for row in rows]
+        if fault == "nan-cpu":
+            corrupted[0]["user_cpu_seconds"] = "nan"
+        elif fault == "decreasing-peak":
+            corrupted[1]["peak_resident_bytes"] = "1"
+        elif fault == "duplicate-repeat":
+            corrupted[0]["repeat"] = "1"
+        else:
+            corrupted.pop()
+        buffer = io.StringIO()
+        writer = csv.DictWriter(buffer, fieldnames=rows[0].keys())
+        writer.writeheader()
+        writer.writerows(corrupted)
+
+        def fake_native(command, **kwargs):
+            if command[0] != str(executable):
+                return native_run(command, **kwargs)
+            kwargs["stdout"].write(buffer.getvalue().encode())
+            return subprocess.CompletedProcess(command, 0)
+
+        target = root / fault
+        with patch.object(sys, "argv", [str(driver), str(executable), "--samples", "257",
+                                       "--repeats", "1", "--output", str(target)]), \
+                patch.object(module.subprocess, "run", fake_native):
+            try:
+                module.main()
+            except RuntimeError:
+                pass
+            else:
+                raise AssertionError("Corrupted measurements accepted: " + fault)
+        assert (target / "raw.csv").is_file() and not (target / "summary.json").exists()
     # The driver must work in a source tree without any CMake configuration.
     independent = root / "without cmake"
     (independent / "tools").mkdir(parents=True)

@@ -1413,3 +1413,54 @@ Linux/Clang 14 mit ASan/UBSan besteht die zwei Fensterabläufe 2/2
 `ASAN_OPTIONS=detect_leaks=0` bleibt gesetzt; Address- und UndefinedBehavior-
 Prüfungen bleiben aktiv. macOS-Sanitizer wurden wegen des bereits dokumentierten
 fehlenden `ld64.lld` nicht ausgeführt.
+
+
+## Ressourcenmessung für native Daten- und UI-Referenzlasten
+
+Der private Plattformdienst liest Benutzer-/System-CPU-Zeit und Lebenszeit-Peak-
+RAM des eigenen Prozesses, einschließlich aller Threads, ohne Kindprozesse.
+macOS/Linux verwenden `getrusage` mit OS-spezifischer Byteumrechnung; Windows
+besitzt den K32-/Prozesszeitenpfad, wurde hier aber nicht ausgeführt. Core-API/ABI,
+Sprache und Dateiformate ändern sich nicht. Die fachlichen acht Datenlasten
+bleiben unverändert. Schreib-/Lese-/Snapshotfälle messen vollständige logische
+Run-Dateibytes/s; andere Fälle deklarieren null Dateibytes. Der SDL/OpenGL-
+Prüfer ergänzt Aufbau-/Swapzeiten und CPU/Peak-RAM; GPU-Readback und Bildschreiben
+finden außerhalb gemessener Frames statt. [Messvertrag](performance.md#prozessressourcen-und-logischer-datendurchsatz)
+und [UI-Grenzen](ui-rendering.md).
+
+Intel macOS 14.6.1/Apple Clang 16 und Debian 12/GCC 12.2 bestehen die drei
+Prozess-/Benchmark-Smoke-/Wrapperfälle jeweils 3/3 (`run-66m_8r9u` und
+`run-zccqr80w`). Die Prozessprüfung berührt 32 MiB, verbraucht CPU und prüft
+monotone Prozesszeiten sowie nach Freigabe erhaltenen Peak. Der Wrapper prüft
+gleiche logische Run-Dateigrößen bei Schreiben/Lesen/Snapshot und berechneten
+Durchsatz. Injizierte NaN-CPU-Werte, rückläufige Peaks, ungültige Wiederholungen
+und fehlende Fälle müssen Rohdaten erhalten und dürfen keine Zusammenfassung
+veröffentlichen. Schema-1-Baselines werden ausdrücklich abgewiesen.
+
+Die OpenGL-Smokes bestehen auf macOS 1/1 (`run-xpnif057`) und Linux/X11 1/1
+(`run-emlwce68`). Beide führen Bildvergleiche, Null-Allokationsprüfung im warmen
+Konvertierungspfad, PNG-Export und Größenwechsel aus. Die vollständigen Release-
+Messungen laufen auf beiden Systemen mit 100.000 Samples / drei Wiederholungen
+und je 300 UI-Messbildern pro Fall. Sie bestehen alle fachlichen und pixelgenauen
+Referenzen. Die Linux-VM verwendet Mesa 22.3.6/llvmpipe; Ergebnisse sind kein
+nativer GPU- oder plattformübergreifender Geschwindigkeitsvergleich.
+Zeitwerte und Rohdatenpfade stehen unter [Leistungsmessung](performance.md#ausgeführte-referenzmessungen-8-oktober-2026).
+
+Der erste macOS-Compile zeigte das durch POSIX-Featureflags verdeckte Darwin-
+`ru_maxrss`-Feld; der Plattformdienst fordert jetzt die Darwin-Erweiterung an.
+Zwei Fehler im zusätzlichen Python-Testaufbau (überschriebener Modulname und
+zu breit abgefangene Hilfsprozesse) sind korrigiert; die abschließenden drei
+Prüfungen bestehen auf beiden Systemen. Es handelt sich um tatsächliche Läufe,
+keine Ableitung aus vorhandenen CI-Jobs.
+
+PP-0711 bleibt unvollständig für vollständige App-/Runner-/Mehrworkerprofile,
+native Szenentessellierung, GPU-Fertigstellung, Startzeit und echte interaktive
+Latenz. Peak-RAM ist ein Prozesshöchstwert, kein phasenlokales Allokationsbudget.
+Windows und Apple Silicon wurden in dieser Etappe nicht ausgeführt. Alle 531
+Originalplanblöcke bleiben erhalten: 34 implementiert, 8 unvollständig und
+489 ungeprüft. Das Gesamtziel bleibt offen.
+
+Linux/Clang 14 mit ASan/UBSan besteht die drei Prozess-/Daten-/Wrapperfälle
+3/3 (`run-xqn_3z3j`) und den OpenGL-Fall 1/1 (`run-lb11kl4r`).
+`detect_leaks=0` ist gesetzt; Address-/UB-Prüfungen bleiben aktiv. macOS-
+Sanitizer wurden wegen des dokumentierten fehlenden `ld64.lld` nicht ausgeführt.

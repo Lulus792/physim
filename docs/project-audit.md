@@ -450,3 +450,13 @@ Builds und App-Aktionen erhalten Quellen, Archive, Cache und Messwerte.
 und verschobenen SDKs. Künftige Formatverträge werden damit nicht vorweggenommen.
 Aktuell: 34 implementierte, 7 unvollständige und 490 ungeprüfte Planblöcke.
 Alle 531 Originaltexte und der Plan-Hash bleiben erhalten; das Gesamtziel bleibt offen.
+
+
+PP-0711 ist durch die ergänzte Ressourcenmessung jetzt konkret als unvollständig
+erfasst. Native Referenzlasten besitzen CPU-, Lebenszeit-Peak-RAM- und logische
+Dateidurchsatzmessung; der UI-Benchmark trennt Aufbau, Renderaufruf und Swap.
+Vollständige App-/Runner-/Mehrworker-, Szenen-/GPU-, Startzeit- und reale
+Interaktionsmessung bleiben offen. [Messvertrag](performance.md) und
+[Plattformnachweise](platform-validation.md) begrenzen diese Fortschritte.
+Aktuell: 34 implementierte, 8 unvollständige und 489 ungeprüfte Planblöcke.
+Alle 531 Originaltexte und der vollständige Projektumfang bleiben erhalten.

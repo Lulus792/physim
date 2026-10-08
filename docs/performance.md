@@ -46,6 +46,7 @@ eine ungültige Eingabe oder einen fehlgeschlagenen Vergleich.
 ## Auswertung und Vergleich
 
 Der Wrapper archiviert Rohdaten, stderr, Median/Minimum/Maximum, Scratchvolumen,
+Benutzer-/System-CPU-Zeit, Peak-RAM und logischen Dateidurchsatz,
 OS/CPU-Identifikation, Compiler, Buildkonfiguration sowie den SHA-256-Fingerabdruck
 der ausführbaren Datei. Zusätzlich erfasst er Hashes des aktuellen Quellstands;
 diese ersetzen keinen Buildnachweis. Vor einer Abnahmemessung stets neu bauen.
@@ -79,7 +80,7 @@ in der [Berichtsreferenz](reference/report.md) und unter [Berichte](reports.md).
 PERF-001 ist damit teilweise umgesetzt. Ein zusätzlicher
 [UI-Benchmark](ui-rendering.md) misst inzwischen den CPU-Konvertierungs-/Uploadpfad
 und prüft wiederverwendbare Zeichenpuffer. Native Szenentessellierung/GPU-Zeiten,
-UI-P95/P99 bei echter Interaktion, Startzeit, Peak-RAM und Acht-Worker-Batches
+UI-P95/P99 bei echter Interaktion, Startzeit und Acht-Worker-Batches
 benötigen eigene Messstrecken. `scratch_bytes` misst den logischen Payload des
 Analysekontexts, nicht Peak-RAM oder physisch belegte Datenträgerblöcke.
 Der Benchmark-Smoke wird in der Windows-/Linux-CI konfiguriert; ein lokal
@@ -114,3 +115,73 @@ Die vorherige Messung ist unter
 Der portable App-Test bestätigt zusätzlich fünf bytegleiche PNG-Exporte und
 pixelgleiche Diagrammbereiche in elf Screenshots gegenüber dem bisherigen Build.
 Projektname und Statuszeile liegen außerhalb des verglichenen Diagrammbereichs.
+
+
+## Prozessressourcen und logischer Datendurchsatz
+
+Messschema 2 ergänzt alle acht nativen Fälle um `user_cpu_seconds`,
+`system_cpu_seconds` und `peak_resident_bytes`. CPU-Zeit summiert alle Threads
+des nativen Benchmarkprozesses; Kindprozesse sind ausgeschlossen. Sie kann größer
+als die verstrichene Zeit sein. Die OS-Abfragen stehen außerhalb des gemessenen
+Wandzeitintervalls; ihre geringe CPU-Kosten gehen in die CPU-Differenz ein.
+macOS/Linux verwenden `getrusage`, mit expliziter Byteumrechnung der Linux-KiB.
+Windows verwendet Prozesszeiten und den höchsten Working Set über
+[K32GetProcessMemoryInfo](https://learn.microsoft.com/en-us/windows/win32/api/psapi/nf-psapi-getprocessmemoryinfo).
+Die Windows-Anbindung wurde in dieser Etappe nicht ausgeführt.
+
+Peak-RAM ist der bisherige Höchstwert seit Prozessstart. Er wird nicht als
+Differenz zweier Höchstwerte und nicht als Speicherbedarf eines einzelnen Falls
+interpretiert. Spätere Wiederholungen können dieselbe Spitze übernehmen; auch
+vorherige Fälle, Bibliotheken und Ausgaberoutinen gehören zum Prozess. OS-
+Working-Set-/RSS-Regeln unterscheiden sich, einschließlich gemeinsam verwendeter
+Seiten. Der Wert misst keine Allokationssumme, keinen aktuellen Speicherstand,
+keinen GPU-Speicher und keine Summe von App und Runnern.
+
+`io_bytes` ist bei Schreiben, Lesen und Analyse-Snapshot die tatsächliche
+vollständige Größe der erzeugten `.psrun`-Datei, einschließlich Metadaten,
+Chunkköpfen, Prüfsummen, Index und Abschluss. Die Dateigröße wird außerhalb des
+Schreibintervalls erfasst. `bytes_per_second` dividiert diese Größe durch die
+Wandzeit des jeweiligen Falls. Der Snapshotfall enthält zusätzlich dessen
+Analysearbeit und Scratchschreiben; er misst keine reine Leserate. Die anderen
+Fälle besitzen `io_bytes=0`. OS-Cache und bestehende Flush-Regeln bleiben erhalten;
+es handelt sich um logischen Durchsatz, nicht um physische Datenträger-I/O.
+
+Schema-1-Baselines werden ausdrücklich als inkompatibel abgewiesen; für Vergleiche
+ist eine neue Schema-2-Baseline nötig. Die acht bestehenden fachlichen Referenzen
+bleiben erhalten. Der Wrapper weist fehlende/unerwartete Fälle, doppelte
+Wiederholungen, nichtfinite/negative Werte, rückläufige Lebenszeitspitzen und
+widersprüchliche Fallmetadaten ab. Rohdaten und stderr bleiben bei Fehlern erhalten.
+Die Prozessprüfung berührt 32 MiB Speicher, verbraucht CPU und prüft den nach der
+Freigabe erhaltenen Höchstwert ohne Geschwindigkeitsschwelle.
+
+
+## Ausgeführte Referenzmessungen, 8. Oktober 2026
+
+Je drei Wiederholungen mit 100.000 Samples, Release, ohne parallele Builds/Tests
+oder gleichzeitig laufende Benchmarks. Die vollständige logische Run-Datei ist
+auf beiden Systemen 14.815.424 Bytes groß. Mediane:
+
+| Umgebung / Fall | Wandzeit s | Benutzer-CPU s | System-CPU s | Logischer Durchsatz MB/s |
+| --- | ---: | ---: | ---: | ---: |
+| Intel macOS 14.6.1 / Schreiben | 0,911481 | 0,134392 | 0,611860 | 16,254 |
+| Intel macOS / Lesen + Validieren | 0,045162 | 0,040476 | 0,004116 | 328,051 |
+| Intel macOS / Analyse-Snapshot | 0,155921 | 0,046455 | 0,105982 | 95,019 |
+| Debian 12 VM / Schreiben | 1,902024 | 0,362208 | 0,083308 | 7,789 |
+| Debian VM / Lesen + Validieren | 0,054773 | 0,054781 | 0,000000 | 270,488 |
+| Debian VM / Analyse-Snapshot | 0,064070 | 0,061981 | 0,004306 | 231,238 |
+
+MB verwendet hier 1.000.000 Bytes. Die drei CPU-/Wandzeitmediane sind separat
+gebildet und gehören nicht zwangsläufig zur selben Wiederholung. Die gemeldeten
+Lebenszeitspitzen für den Snapshotfall betragen höchstens 1.228.800 Bytes auf
+macOS und 18.518.016 Bytes in der VM; sie sind keine isolierten Snapshotbudgets
+und wegen OS-/Launcher-/VM-Unterschieden kein Plattform-Leistungsvergleich.
+Die UI-Referenzlasten liefen anschließend mit je 300 Messbildern. Der Median
+der Summe Aufbau + Renderaufruf + Swap beträgt für die Diagrammansicht
+6,277 ms auf macOS und 26,454 ms unter Debian/X11/Mesa-llvmpipe; P99 beträgt
+8,053 bzw. 29,503 ms. Diese Werte beschreiben synthetische unsichtbare Fenster,
+keine tatsächliche App-Interaktion oder GPU-Fertigstellungszeit.
+
+Rohdaten, Metadaten und Zusammenfassungen bleiben unter
+`build/resource-profiling-measurements-{mac,linux}` und
+`build/resource-profiling-ui-measurements-{mac,linux}` erhalten. Die ausgeführten
+Testbelege und verbleibenden Messlücken stehen im [Plattformnachweis](platform-validation.md).
