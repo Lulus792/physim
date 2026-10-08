@@ -259,6 +259,47 @@ def collision_tutorial(flow,directory):
         flow.run("--workspace-state-test",path,"collision-tutorial-"+language,timeout=130,
                  marker="COLLISION TUTORIAL SELF-TEST: PASSED")
 
+def pendulum_c_energy(flow, directory):
+    directory.mkdir()
+    previous = flow.env.get("PHYSIM_TEST_LONG")
+    flow.env["PHYSIM_TEST_LONG"] = "1"
+    try:
+        for mode in ("pendulum", "language_pendulum"):
+            project = directory / mode
+            flow.run("--self-test", project, mode, timeout=210, marker="APP SELF-TEST: PASSED")
+            require((project / "analysis-energy.bmp").is_file(), "Energy window capture missing")
+            images = list(project.rglob("*.png"))
+            require(images, "Energy PNG export missing")
+            for image in images:
+                data = image.read_bytes()
+                require(data[:8] == b"\x89PNG\r\n\x1a\n", "Energy PNG signature failed")
+                at, compressed, width, height = 8, [], 0, 0
+                while at < len(data):
+                    length = struct.unpack_from(">I", data, at)[0]
+                    kind, payload = data[at+4:at+8], data[at+8:at+8+length]
+                    require(zlib.crc32(kind+payload) == struct.unpack_from(">I", data, at+8+length)[0],
+                            "Energy PNG CRC failed")
+                    if kind == b"IHDR":
+                        width, height, depth, color, compression, filtering, interlace = struct.unpack(">IIBBBBB", payload)
+                        require((depth, color, compression, filtering, interlace) == (8, 2, 0, 0, 0),
+                                "Energy PNG encoding failed")
+                    elif kind == b"IDAT":
+                        compressed.append(payload)
+                    at += 12 + length
+                require(at == len(data) and width > 0 and height > 0, "Energy PNG layout failed")
+                pixels = zlib.decompress(b"".join(compressed))
+                stride = width * 3 + 1
+                require(len(pixels) == height * stride and
+                        all(pixels[y*stride] == 0 for y in range(height)), "Energy PNG scanlines failed")
+            require(any("Mechanische Energieänderung" in read(path) for path in project.rglob("*.svg")),
+                    "Energy SVG export missing")
+    finally:
+        if previous is None:
+            flow.env.pop("PHYSIM_TEST_LONG", None)
+        else:
+            flow.env["PHYSIM_TEST_LONG"] = previous
+
+
 def pendulum_tutorial(flow,directory):
     for language in ("c","phys"):
         path=directory/language;path.mkdir(parents=True)
@@ -941,7 +982,7 @@ def autosave(flow, root):
             exact(project / ".physim-autosave", "damaged snapshot")
 
 
-SPECIAL = {"project_manager_keyboard_workflow": project_manager_keyboard,"settings_keyboard_workflow": settings_keyboard,"ui_typography_workflow": ui_typography,"saved_run_tutorial_workflow": saved_run_tutorial,"monte_carlo_tutorial_workflow": monte_carlo_tutorial,"collision_tutorial_workflow": collision_tutorial,"pendulum_tutorial_workflow": pendulum_tutorial,"spring_tutorial_workflow": spring_tutorial,"material_tutorial_workflow": material_tutorial,"contact_world_language_workflow": contact_world_language,"contact_world_workflow": contact_world, "diagnostic_workflow": diagnostics, "scene_frames_workflow": scene_frames, "logging_workflow": logging, "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
+SPECIAL = {"pendulum_c_energy_workflow": pendulum_c_energy,"project_manager_keyboard_workflow": project_manager_keyboard,"settings_keyboard_workflow": settings_keyboard,"ui_typography_workflow": ui_typography,"saved_run_tutorial_workflow": saved_run_tutorial,"monte_carlo_tutorial_workflow": monte_carlo_tutorial,"collision_tutorial_workflow": collision_tutorial,"pendulum_tutorial_workflow": pendulum_tutorial,"spring_tutorial_workflow": spring_tutorial,"material_tutorial_workflow": material_tutorial,"contact_world_language_workflow": contact_world_language,"contact_world_workflow": contact_world, "diagnostic_workflow": diagnostics, "scene_frames_workflow": scene_frames, "logging_workflow": logging, "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}

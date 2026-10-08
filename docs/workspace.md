@@ -70,6 +70,15 @@ Periodendauer; die Zusammenfassung und seine Kurven bleiben sichtbar.
 Vorhandene Projektquellen werden beim Öffnen nicht ersetzt. Andere Vorlagen
 verwenden weiterhin ihre zum Modell passende Auswertung.
 
+Die C-Standardauswertung ergänzt bei Pendeldaten das Diagramm **Mechanische
+Energieänderung** mit `E - E(0)` in Joule. Im Vakuum zeigt es den numerischen
+Energiefehler; mit Luftwiderstand enthält die Änderung auch dissipierte Energie.
+Die Tabelle enthält die maximale Energieabweichung und, bei genügend positiven
+Nulldurchgängen, die mittlere Periodendauer. Neben den Diagrammexporten wird
+`<Analysepräfix>-energy.csv` mit sämtlichen Zeit-, Energie- und Änderungswerten
+geschrieben. Die vorhandene Energiebilanz gedämpfter Modelle bleibt getrennt
+auswertbar. [Nachweise](platform-validation.md#energieplot-und-vollständiger-csv-im-c-pendelablauf).
+
 ## Letzten Workspace wieder öffnen
 
 Beim normalen Beenden merkt sich Physim den zuletzt geöffneten Hauptordner und

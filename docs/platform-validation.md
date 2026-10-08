@@ -1813,3 +1813,59 @@ Dies belegt den geänderten Zweig, keine neue vollständige SDK-Abnahme. Die
 Prüfpaket-Gegenproben bestehen auf beiden Hosts mit unverändert 140 manifestierten
 Eingaben. Windows/Apple Silicon und frisch erzeugte Gesamtpakete dieser
 Vorlagenänderung bleiben separat zu prüfen. Der Gesamtplan bleibt offen.
+
+## Bestätigte Windows-Ressourcenprüfung
+
+Der [C17-Lauf 37780045308](https://github.com/PhysicSimulator/physim/actions/runs/37780045308)
+am Stand `9e85dfde8af9f99a811b296fb5c17a733c735c22` besteht den vollständigen
+MSVC-Debug-Job. Das Ergebnisartefakt enthält 676/676 bestandene native Fälle
+(`run-ntop68h6`) und 10/10 gezielte AddressSanitizer-Fälle (`run-cdjpb81e`).
+Der zuvor fehlgeschlagene Prozessressourcentest meldet jetzt 0,046875 s Benutzer-
+CPU und einen Peak von 36.712.448 Bytes bei 33.554.432 berührten Bytes. Das
+Artefakt wurde gegen den offiziellen SHA-256-Digest
+`009a6f884d2c8a6a2e460ee235ec583e088cae51e88e36a3570031c1edd3cbf4` geprüft.
+Die absichtlich fehlschlagenden Runner-Selbsttestfixtures bleiben Testdaten.
+Diese Abnahme gilt für diesen Stand; sie beweist keine spätere Änderung oder
+vollständige Gleichheit der noch laufenden gesamten Plattformmatrix.
+
+## Energieplot und vollständiger CSV im C-Pendelablauf
+
+Die C-Standardanalyse ergänzt für Läufe mit Winkel und Energie ein Diagramm
+`E - E(0)` mit Zeit in Sekunden und Energieänderung in Joule. Die bestehende
+Bilanzdarstellung für Modelle mit `energy.balance` bleibt erhalten. Ein
+gesonderter `-energy.csv` enthält alle ursprünglichen Zeit-/Energiewerte und
+die Änderung, unabhängig von der reduzierten Berichtsvorschau. Im konservativen
+Pendel dient die Änderung als Energiefehler; im Widerstandsmodell enthält sie
+auch physikalische Dissipation. Es entsteht keine Dämpfungsabschätzung aus
+diesem Plot allein.
+
+Der erweiterte `pendulum_template_analysis` prüft Standard-C- und Standard-
+Physim-Läufe durch beide Analysemodule sowie einen ruhenden Lauf. Ein
+unabhängiger C-Prüfer vergleicht den neuen Plot, SI-Achsen und sämtliche
+Energie-/Periodenmetriken mit den ursprünglichen Daten. Ein unabhängiger
+PSRUN-/CRC-/CSV-Decoder vergleicht jede exportierte Zeile, darunter sämtliche
+6001 Werte des längeren C-Laufs. Die abschließenden nativen Fälle bestehen
+auf Intel macOS/Apple Clang 16 1/1 (`run-oghr8d4n`) und Debian 12/GCC 12.2
+1/1 (`run-mdlhi87f`). Linux/Clang 14 mit ASan/UBSan besteht die Gegenprobe
+1/1 (`run-31o70csc`, `detect_leaks=0`); anschließend wurde nur das sichtbare
+Minuszeichen der Beschriftung geändert, keine Rechnung oder Speicherlogik.
+
+`pendulum_c_energy_workflow` erstellt tatsächliche C- und Physim-Pendelprojekte
+mit C-Auswertung, führt je mindestens 20 s simulierte Zeit aus und prüft Build,
+Runner, Energietabelle, bekannte nichtlineare Referenzperiode des C-Modells,
+Plot, vollständigen CSV, gespeicherten Bericht und Wiederöffnen aus der
+Bibliothek. SVG- und PNG-Exporte werden über echte Buttons gestartet. Der
+Prüfer kontrolliert PNG-CRC, Kodierung, Abmessungen und sämtliche Scanlines
+sowie den SVG-Titel. Beide Abläufe bestehen gemeinsam auf macOS 1/1
+(`run-ehmtvfaw`) und Linux 1/1 (`run-8me4chhy`). App-Aufnahme und PNG wurden
+visuell geprüft. Ein fehlender Test-Elternordner wurde korrigiert; die davor
+gescheiterten Läufe sind keine erfolgreichen Nachweise. Die Bildprüfung führte
+zur lesbaren ASCII-Beschriftung `E - E(0)`; die finalen Fensterläufe prüfen
+diese Fassung. Der native Runner-Selbsttest besteht mit dem neuen Displayfall.
+
+PP-0667, PP-0779 und PP-0780 besitzen damit konkrete begrenzte Nachweise für
+gespeicherte Pendeldaten, Energie-/Periodenanalyse, Plot/Tabelle und Exporte.
+Eine vollständige Dämpfungsanalyse und die übrigen Anforderungen des vertikalen
+Anwendungsfalls bleiben getrennt offen. Windows/Apple Silicon dieser neuen
+C-Energieplotänderung wurden noch nicht ausgeführt; der zuvor bestätigte
+Windows-Job ist kein Nachweis für den späteren Quellstand.

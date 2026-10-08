@@ -513,3 +513,16 @@ läufe, Ruhefälle und alle Vorlagenkombinationen bestehen auf macOS und Linux.
 Dies ersetzt keine vollständige Abnahme der C-Standardauswertung, der Dämpfung
 oder aller Schritte des vertikalen Anwendungsfalls. Die Gesamtzahlen bleiben
 unverändert: 35 implementiert, 8 unvollständig, 488 ungeprüft.
+
+## C-Standardpendel: Energieplot, Periodentabelle und Export
+
+PP-0667, PP-0779 und PP-0780 sind jetzt mit der tatsächlichen C-Standard-
+auswertung und der Physim-Pendelanalyse verbunden. Die C-Auswertung ergänzt
+Energieänderung und vollständigen CSV. Unabhängige Prüfer vergleichen beide
+Analysemodule mit originalen C-/Physim-Läufen, Ruhefällen und 6001 exportierten
+Messpunkten. Beide Experimentsprachen durchlaufen zudem die echte App mit
+C-Auswertung, Energietabelle, SVG-/PNG-Buttons und gespeicherter Bibliothek.
+[Nachweise und Grenzen](platform-validation.md#energieplot-und-vollständiger-csv-im-c-pendelablauf).
+Aktuell: 38 implementierte, 8 unvollständige und 485 ungeprüfte Planblöcke.
+Die 531 Originaltexte und das gesamte Ziel bleiben erhalten; insbesondere
+Dämpfungsabschätzung und der vollständige vertikale Ablauf bleiben offen.

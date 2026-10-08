@@ -3860,7 +3860,7 @@ int main(int argc, char **argv) {
                 uint32_t plots = 0, tables = 0;
                 if (!a->analysis_report ||
                     ps_report_describe(a->analysis_report, NULL, NULL, &plots, &tables) != PS_OK ||
-                    plots != (test_example == 4 || test_example == 5 || test_example == 7 ? 4u : 3u) || !tables)
+                    plots != (test_example == 0 || test_example == 8 || test_example == 4 || test_example == 5 || test_example == 7 ? 4u : 3u) || !tables)
                     exit_code = 1;
                 capture = "analysis.bmp";
                 test_stage = 30;
@@ -3881,7 +3881,7 @@ int main(int argc, char **argv) {
             } else if (test_stage == 34) {
                 if (!exists(a->result_export) || !strstr(a->result_export, ".svg"))
                     exit_code = 1;
-                a->result_view = test_example == 4 || test_example == 5 || test_example == 7 ? 4 : 3;
+                a->result_view = test_example == 0 || test_example == 8 || test_example == 4 || test_example == 5 || test_example == 7 ? 4 : 3;
                 capture = "analysis-table.bmp";
                 test_stage = 35;
             } else if (test_stage == 35) {
@@ -3893,7 +3893,7 @@ int main(int argc, char **argv) {
             } else if (test_stage == 37) {
                 if (!exists(a->result_export) || !strstr(a->result_export, ".csv"))
                     exit_code = 1;
-                a->result_view = test_example == 4 || test_example == 5 || test_example == 7 ? 5 : 4;
+                a->result_view = test_example == 0 || test_example == 8 || test_example == 4 || test_example == 5 || test_example == 7 ? 5 : 4;
                 capture = "analysis-metrics.bmp";
                 if (SDL_getenv("PHYSIM_TEST_LONG") && test_example == 0) {
                     ps_table_row metrics;
@@ -3901,7 +3901,7 @@ int main(int argc, char **argv) {
                         metrics.values[0] > 1e-8 || fabs(metrics.values[1] - 2.488805869) > 2e-6)
                         exit_code = 1;
                 }
-                test_stage = test_example == 4 || test_example == 7 ? 39 : test_example == 5 ? 41 : 40;
+                test_stage = test_example == 0 || test_example == 8 || test_example == 4 || test_example == 7 ? 39 : test_example == 5 ? 41 : 40;
             } else if (test_stage == 41) {
                 a->result_view = 3;
                 capture = "analysis-sensor.bmp";
@@ -3930,8 +3930,44 @@ int main(int argc, char **argv) {
                 capture = "analysis-energy.bmp";
                 ps_table_row row;
                 if (ps_report_row_read(a->analysis_report, 1, 0, &row) != PS_OK ||
-                    row.values[0] > 1e-7)
+                    row.values[0] > (test_example == 8 ? .02 : 1e-7))
                     exit_code = 1;
+                if (test_example == 0 || test_example == 8) {
+                    const ps_curve_data *energy;
+                    ps_plot_info plot;
+                    char path[4200];snprintf(path, sizeof path, "%s-energy.csv", a->report);
+                    if (!exists(path) ||
+                        ps_report_plot_read(a->analysis_report, 3, &plot) != PS_OK ||
+                        strcmp(plot.title, "Mechanische Energieänderung") ||
+                        plot.y_unit.dimension[0] != 2 || plot.y_unit.dimension[1] != 1 ||
+                        plot.y_unit.dimension[2] != -2 ||
+                        ps_report_curve_view(a->analysis_report, 3, 0, &energy) != PS_OK ||
+                        energy->source_count != a->data.total || fabs(energy->y[0]) > 1e-14)
+                        exit_code = 1;
+                }
+                test_stage = test_example == 0 || test_example == 8 ? 170 : 40;
+            } else if (test_stage == 170) {
+                test_mouse(a, a->result_export_bounds[1], true);
+                test_stage = 171;
+            } else if (test_stage == 171) {
+                test_mouse(a, a->result_export_bounds[1], false);
+                test_stage = 172;
+            } else if (test_stage == 172) {
+                if (!exists(a->result_export) || !strstr(a->result_export, ".svg"))
+                    exit_code = 1;
+                test_mouse(a, a->result_export_bounds[2], true);
+                test_stage = 173;
+            } else if (test_stage == 173) {
+                test_mouse(a, a->result_export_bounds[2], false);
+                test_stage = 174;
+            } else if (test_stage == 174) {
+                unsigned char header[24];
+                FILE *png = fopen(a->result_export, "rb");
+                if (!png || !strstr(a->result_export, ".png") ||
+                    fread(header, 1, sizeof header, png) != sizeof header ||
+                    memcmp(header, "\x89PNG\r\n\x1a\n", 8) || memcmp(header + 12, "IHDR", 4))
+                    exit_code = 1;
+                if (png) fclose(png);
                 test_stage = 40;
             } else if (test_stage == 40) {
                 test_previous_report = a->analysis_report;
@@ -4247,7 +4283,7 @@ int main(int argc, char **argv) {
                 uint32_t plots = 0;
                 if (strcmp(a->loaded_report_path, test_original_report) ||
                     ps_report_describe(a->analysis_report, NULL, NULL, &plots, NULL) != PS_OK ||
-                    plots != (test_example == 4 || test_example == 5 || test_example == 7 ? 4u : 3u) || a->built)
+                    plots != (test_example == 0 || test_example == 8 || test_example == 4 || test_example == 5 || test_example == 7 ? 4u : 3u) || a->built)
                     exit_code = 1;
                 capture = "library-reopened-report.bmp";
                 test_stage = 63;

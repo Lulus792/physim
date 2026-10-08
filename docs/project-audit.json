@@ -5197,9 +5197,18 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Er berechnet Energiefehler und Periodendauer.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "examples/pendulum/analysis.c",
+        "examples/documentation/pendulum_analysis.phys",
+        "app/main.c",
+        "tests/test_pendulum_c_energy_report.c",
+        "tests/verify_pendulum_energy_csv.py",
+        "tests/native_integration_cases.json",
+        "tests/check_display_workflow.py",
+        "docs/platform-validation.md"
+      ],
+      "note": "C-/Physim-Standardläufe durch beide Analysemodule geprüft: originale Messwerte, Energieabweichung, positive Nulldurchgangsperioden, Ruhefälle und vollständiger Energie-CSV mit 6001 Zeilen. Echte App-Build-/Runner-/Analyse-/Tabellenabläufe für beide Experimentsprachen mit C-Auswertung und SVG-/PNG-Buttons auf Intel macOS und Debian bestanden; Physim-Auswertung separat in ihren tatsächlichen Projektabläufen geprüft. PNG-CRC/Scanlines und sichtbare Achsenbeschriftung geprüft. Begrenzter Nachweis dieses Pendelablaufs, keine gesamte Plattform-/Dämpfungs-/Projektabnahme."
     },
     {
       "id": "PP-0668",
@@ -6319,16 +6328,18 @@
       "kind": "list",
       "scope": "planned",
       "text": "9. Analysecode lädt den Lauf und berechnet Periodendauer sowie Energiefehler.\n",
-      "status": "unverified",
+      "status": "implemented",
       "evidence": [
-        "app/main.c",
+        "examples/pendulum/analysis.c",
         "examples/documentation/pendulum_analysis.phys",
-        "tests/check_display_workflow.py",
+        "app/main.c",
+        "tests/test_pendulum_c_energy_report.c",
+        "tests/verify_pendulum_energy_csv.py",
         "tests/native_integration_cases.json",
-        "tests/test_pendulum_tutorial_report.c",
+        "tests/check_display_workflow.py",
         "docs/platform-validation.md"
       ],
-      "note": "Neue Pendelprojekte mit Physim-Auswertung verwenden die vollständige Pendelanalyse für C-/Physim-Experimente. Lange Standardläufe, Ruhefälle, tatsächliche App-Abläufe und alle 32 Vorlagen-/Sprachpaare plus zwei unabhängige Analysen bei 16/22 px auf Intel macOS und Debian geprüft; Linux ASan/UBSan bestanden. Der vollständige Umfang einschließlich C-Standardauswertung und aktueller Gesamtplattformabnahme bleibt separat ungeprüft; Status nicht aus Teilnachweisen auf vollständige Abnahme angehoben."
+      "note": "C-/Physim-Standardläufe durch beide Analysemodule geprüft: originale Messwerte, Energieabweichung, positive Nulldurchgangsperioden, Ruhefälle und vollständiger Energie-CSV mit 6001 Zeilen. Echte App-Build-/Runner-/Analyse-/Tabellenabläufe für beide Experimentsprachen mit C-Auswertung und SVG-/PNG-Buttons auf Intel macOS und Debian bestanden; Physim-Auswertung separat in ihren tatsächlichen Projektabläufen geprüft. PNG-CRC/Scanlines und sichtbare Achsenbeschriftung geprüft. Begrenzter Nachweis dieses Pendelablaufs, keine gesamte Plattform-/Dämpfungs-/Projektabnahme."
     },
     {
       "id": "PP-0780",
@@ -6341,9 +6352,18 @@
       "kind": "list",
       "scope": "planned",
       "text": "10. App zeigt Plot und Tabelle und exportiert auf Wunsch CSV/Bild.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "examples/pendulum/analysis.c",
+        "examples/documentation/pendulum_analysis.phys",
+        "app/main.c",
+        "tests/test_pendulum_c_energy_report.c",
+        "tests/verify_pendulum_energy_csv.py",
+        "tests/native_integration_cases.json",
+        "tests/check_display_workflow.py",
+        "docs/platform-validation.md"
+      ],
+      "note": "C-/Physim-Standardläufe durch beide Analysemodule geprüft: originale Messwerte, Energieabweichung, positive Nulldurchgangsperioden, Ruhefälle und vollständiger Energie-CSV mit 6001 Zeilen. Echte App-Build-/Runner-/Analyse-/Tabellenabläufe für beide Experimentsprachen mit C-Auswertung und SVG-/PNG-Buttons auf Intel macOS und Debian bestanden; Physim-Auswertung separat in ihren tatsächlichen Projektabläufen geprüft. PNG-CRC/Scanlines und sichtbare Achsenbeschriftung geprüft. Begrenzter Nachweis dieses Pendelablaufs, keine gesamte Plattform-/Dämpfungs-/Projektabnahme."
     },
     {
       "id": "PP-0782",

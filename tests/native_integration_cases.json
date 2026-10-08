@@ -2098,6 +2098,14 @@
       "defines": [
         "PS_PENDULUM_AIR_DENSITY=1.225"
       ]
+    },
+    "pendulum-c-energy-probe": {
+      "sources": [
+        "tests/test_pendulum_c_energy_report.c"
+      ],
+      "libraries": [
+        "core"
+      ]
     }
   },
   "tests": [
@@ -8429,7 +8437,10 @@
         "pendulum",
         "physim-language-pendulum",
         "pendulum-tutorial-analysis-phys",
-        "pendulum-tutorial-report-probe"
+        "pendulum-tutorial-report-probe",
+        "pendulum_analysis",
+        "pendulum-c-energy-probe",
+        "python"
       ],
       "steps": [
         {
@@ -8438,7 +8449,7 @@
             "{pendulum}",
             "{work}/c.psrun",
             "--steps",
-            "4000",
+            "6000",
             "--dt",
             ".005"
           ],
@@ -8520,6 +8531,114 @@
             "{work}/rest.psrun"
           ],
           "timeout": 60
+        },
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{pendulum_analysis}",
+            "{work}/c.psrun",
+            "{work}/c-c"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "pendulum-c-energy-probe",
+          "arguments": [
+            "{work}/c-c.psreport",
+            "{work}/c.psrun"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{pendulum_analysis}",
+            "{work}/phys.psrun",
+            "{work}/c-phys"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "pendulum-c-energy-probe",
+          "arguments": [
+            "{work}/c-phys.psreport",
+            "{work}/phys.psrun"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{pendulum_analysis}",
+            "{work}/rest.psrun",
+            "{work}/c-rest"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "pendulum-c-energy-probe",
+          "arguments": [
+            "{work}/c-rest.psreport",
+            "{work}/rest.psrun"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/verify_pendulum_energy_csv.py",
+            "{work}/c.psrun",
+            "{work}/c-c-energy.csv"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/verify_pendulum_energy_csv.py",
+            "{work}/phys.psrun",
+            "{work}/c-phys-energy.csv"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/verify_pendulum_energy_csv.py",
+            "{work}/rest.psrun",
+            "{work}/c-rest-energy.csv"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "pendulum_c_energy_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "pendulum_c_energy_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 440,
+          "files": [
+            "app-steps.json"
+          ]
         }
       ]
     }

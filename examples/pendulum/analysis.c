@@ -216,6 +216,41 @@ static ps_result make_report(ps_analysis_context *ctx, ps_dataset run, ps_series
             result =
                 ps_report_add_series(report, handle, ctx, time, series[i], labels[i], PS_PLOT_LINE);
     }
+    if (result == PS_OK && balance_result == PS_INVALID) {
+        ps_series angle = {0}, change = {0};
+        ps_result present = ps_dataset_series(ctx, run, "angle", &angle);
+        if (present == PS_OK)
+            present = ps_dataset_series(ctx, run, "energy", &mechanical);
+        if (present != PS_OK && present != PS_INVALID)
+            result = present;
+        if (present == PS_OK) {
+            double initial = 0;
+            size_t count = 0;
+            result = ps_series_read(ctx, mechanical, 0, &initial, 1, &count);
+            if (result == PS_OK && count != 1)
+                result = PS_INVALID;
+            if (result == PS_OK)
+                result = ps_series_affine(ctx, mechanical, 1,
+                                          (ps_quantity){-initial, PS_JOULE}, &change);
+            memset(&plot, 0, sizeof plot);
+            strcpy(plot.title, "Mechanische Energieänderung");
+            strcpy(plot.x_label, "Zeit");
+            strcpy(plot.y_label, "E - E(0)");
+            ps_report_unit_from(PS_SECOND, &plot.x_unit);
+            ps_report_unit_from(PS_JOULE, &plot.y_unit);
+            if (result == PS_OK)
+                result = ps_report_add_plot(report, &plot, &handle);
+            if (result == PS_OK)
+                result = ps_report_add_series(report, handle, ctx, time, change,
+                                              "Energieänderung", PS_PLOT_LINE);
+            char path[4096];
+            int size = snprintf(path, sizeof path, "%s-energy.csv", prefix);
+            ps_series columns[] = {time, mechanical, change};
+            if (result == PS_OK)
+                result = size < 0 || (size_t)size >= sizeof path ? PS_LIMIT
+                    : ps_series_export_csv(ctx, columns, 3, path);
+        }
+    }
     ps_table_info table = {0};
     strcpy(table.title, "Geschwindigkeit · vollständiger Lauf");
     table.columns = 4;

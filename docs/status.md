@@ -2718,3 +2718,11 @@ Sie arbeitet mit C- und Physim-Experimenten; kurze oder ruhende Läufe erhalten
 keine erfundene Periode. Die tatsächlichen Fensterabläufe und sämtliche
 Vorlagenkombinationen bei 16/22 px bestehen auf macOS und Linux.
 [Bedienung](workspace.md), [Nachweise und Grenzen](platform-validation.md#pendelanalyse-als-physim-projektvorlage).
+
+## Energieplot der C-Standardauswertung
+
+Die C-Pendelauswertung zeigt `E - E(0)` in Joule und schreibt sämtliche Zeit-,
+Energie- und Änderungswerte in einen eigenen CSV. Energie- und Periodentabellen
+verwenden weiterhin die ursprünglichen Messwerte. Beide Experimentsprachen
+besitzen ausgeführte App-Abläufe einschließlich SVG-/PNG-Buttons auf macOS und
+Linux. [Messumfang](workspace.md), [Prüfungen](platform-validation.md#energieplot-und-vollständiger-csv-im-c-pendelablauf).
