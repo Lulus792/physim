@@ -3482,3 +3482,103 @@ allen 20 Dateien in `build/scalar-source-freeze.json`; die fortgeschriebene
 Prüfchronik ist davon bewusst ausgenommen. Der gezielte SDK-Nachweis ersetzt
 keinen neuen vollständigen SDK-Domänen-/GUI-Lauf und keine aktuelle Windows-
 oder Apple-Silicon-Abnahme. Der Gesamtplan bleibt unvollständig.
+
+
+## Transformationsbereiche und Mathematikzuordnung (PP-0357)
+
+Ausgangspunkt am 8. Oktober 2026 ist
+`e33094d920708b85991842f6cedfdaf90429172a`. Die lokalen API-/Quellen-/Testprüfungen
+ordnen Vec2/3/4, Mat3/4, Quaternionen und Transformationen konkret zu. Die
+bestehenden 2000er-Inversions-, Rodrigues-, Slerp- und Senkrechtstellungsprüfungen
+bleiben aktiv. Der gesamte Plan und die übrigen Mathematikblöcke bleiben offen.
+
+Drei direkte C-Gegenbeispiele lieferten zuvor `PS_NUMERIC` bei endlichen
+Ergebnissen: `DBL_MAX*2-DBL_MAX`, der projektive Quotient
+`(DBL_MAX*2)/DBL_MAX` und die normierte Richtung der invers-transponierten
+Skalierung `diag(DBL_TRUE_MIN,1,1)`. Ein weiterer Fall verlor den kleinsten
+Rest zwischen `DBL_MAX` und `-DBL_MAX`. Die Zeilensummen behalten nun exakte
+binäre Produkte/Summen. Projektive Punkte dividieren den exakten Zähler durch
+die exakte homogene Koordinate; Ausgabe wird einmal nearest-even gerundet.
+Ein eigens provozierter halber kleinster Zahlenwert plus positiver Rest belegte
+auch doppelte Rundung; die finale Konvertierung erhält diesen Rest korrekt.
+
+Normalen lösen das transponierte System nach Zeilenskalierung der ursprünglichen
+Matrix direkt mit unabhängigen Lösungsexponenten. Eine überlaufende vollständige
+Inverse ist dafür nicht erforderlich. Der interne lineare Solver wurde ohne
+Änderung seiner Elimination/Pivotregeln in ein privates gemeinsames Header
+überführt; die öffentliche Lösung konvertiert weiterhin atomar nach Double und
+meldet echte nichtdarstellbare Ausgaben. Normalen bleiben durch die dokumentierte
+Double-Koeffizienten-/Pivot-/Konditionsgenauigkeit begrenzt.
+
+Die dauerhafte unabhängige Gegenprobe umfasst **1288 C**- und **100 Physim**-
+Fälle. Fraction bestimmt die exakt gerundeten Punkt-/Richtungswerte, rationale
+Elimination und 100-stellige Decimal-Normierung bestimmen Normalen. Enthalten
+sind allgemeine projektive Matrizen, Auslöschung, subnormale Halbwege, negative
+homogene Koordinaten, starke Skalierungsunterschiede/Scherungen und atomare
+Fehler. Zusätzliche vorbereitete C-Prüfungen bestanden für 3000 gemischte und
+3000 allgemeine projektive Fälle sowie 1770 Rundungsgrenzen.
+
+Vor der abschließenden Beschleunigung bestehen auf Intel-macOS **10/10** relevante
+Mathematik-/Transformations-/Linear-/Scalar-/Referenzfälle in `run-dq6ziv03`
+(`build/transform-final-targeted-mac.log`) und unter Linux/Clang/Debug/ASan/UBSan
+**10/10** in `run-j3sb1yjj` (`build/transform-final-asan-linux.log`). Die früheren
+sechsteiligen Nachweise `run-zwsfs74t` und `run-_oxj56zk` liegen vor den finalen
+Fast-Path-/Dokumentationsänderungen. Der erste vierteilige Regressionstest
+`run-crffb4gf` lag noch vor der exakten Zeilen-/Quotientenrechnung.
+
+Die ersten vier tatsächlichen Intel-macOS-Grafikprüfungen bestehen **4/4** in
+`run-m8k_1_vt` (`build/transform-gui-mac.log`): Grafik/Picking, UI-Renderer,
+Hierarchie und Szenenframes. Die Mikroprüfung zeigte dennoch erhebliche
+Mehrarbeit der ausschließlich ganzzahligen affinen Rechnung. Der finale Pfad
+verwendet gewöhnliche fehlerfreie Produkt-/Summenentwicklungen und fällt nur
+bei kleinen Produkten oder überlaufenden Entwicklungsstufen auf Ganzzahlen
+zurück. Alle 15000 zusätzlich vorbereiteten gewöhnlichen C-Summen stimmen
+weiterhin mit rationalen Referenzen überein. Diese Grafikprüfung lag vor der
+zusätzlichen Beschleunigung; deren finale Numerik-/Grafiknachweise folgen separat.
+
+Für 10000 affine Punkttransformationen mit Scherung 0,2 und Translation 10
+braucht die ältere Apple-Clang-O2-Probe rund 0,000294 Sekunden. Die reine
+Ganzzahlfassung brauchte 0,034–0,036 Sekunden, die finale Entwicklung
+0,000868–0,000917 Sekunden. Das sind in dieser bewusst kleinen Probe rund
+0,06 Mikrosekunden zusätzliche Zeit pro Punkt; keine allgemeine Garantie für
+andere Matrizen/Callsites. Werte: `build/transform-benchmark-proof.json`.
+
+
+Die finale beschleunigte Intel-macOS-Numerikprüfung besteht **10/10** in
+`run-ysdfd81_` (`build/transform-expansion-final-mac.log`), ihre vier tatsächlichen
+Grafik-/Szenenprüfungen bestehen **4/4** in `run-ng4ovmww`
+(`build/transform-expansion-gui-mac.log`). Unter Linux/Clang/Debug/ASan/UBSan
+bestehen dieselben zehn finalen Numerikfälle in `run-19keu_1u`
+(`build/transform-expansion-asan-linux.log`). Die Linux-Numerik-/Grafikläufe vor
+der Beschleunigung bestehen **10/10** in `run-2n32hh01` und **4/4** in
+`run-rh_pczdj`; sie werden nicht als finale Fast-Path-Prüfung ausgegeben.
+
+Das finale Intel-macOS-SDK `Transform SDK ä mac 822s18g_` besteht seine
+Manifest-/Bytehash-Prüfung und das unabhängig entpackte Verification-Kit.
+Der gezielte `--transform-only`-Prüfer verschiebt das Paket und prüft die
+1288 C-/100 Physim-Gegenproben sowie atomare C-Fehler mit installiertem und
+allein aus Paketquellen neu gebautem Core. Receipt:
+`build/transform-sdk-mac-PASSED.json`. Kein Repository-Implementierungscode
+wird zum Neubau herangezogen; der gezielte Modus ist keine vollständige
+SDK-Domänen- oder Grafikabnahme.
+
+
+Die finale beschleunigte Debian/GCC-Release-Numerik besteht **10/10** in
+`run-3_5kpyom` (`build/transform-expansion-release-linux.log`); ihre tatsächlichen
+Grafik-/Picking-/Hierarchie-/Szenenprüfungen bestehen **4/4** in `run-o36d9nbr`
+(`build/transform-expansion-gui-linux.log`). Damit liegen für den finalen Pfad
+gezielte Release-Numerik-/Grafiknachweise auf beiden Plattformen und die
+Linux-ASan-/UBSan-Gegenprobe vor. Keine vollständige neue Core-/Windows-/
+Apple-Silicon-Abnahme wird daraus abgeleitet.
+
+
+Das finale Debian/GCC-SDK `Transform SDK ä linux r2044mtc` besteht den gleichen
+gezielten Paketnachweis: **453 SDK-Dateien**, **104 unabhängige Kit-Dateien**,
+verschobene Paketkopie sowie öffentliche C-/Physim-Gegenproben mit installiertem
+und allein aus Paketquellen neu gebautem Core. Alle drei äußeren Schritte
+(Install, Kit, Verify) und die vier jeweiligen C-/Orakel-Ausführungen bestehen.
+Receipts: `build/transform-sdk-linux-PASSED.json` und
+`build/transform-sdk-mac-PASSED.json`. Beide passen zu den 19 unveränderten Dateien
+in `build/transform-source-freeze.json`; diese fortgeschriebene Prüfchronik ist
+bewusst ausgenommen. Die Quellen und Originaltexte aller 531 Planblöcke bleiben
+erhalten. PP-0357 ist begrenzt implementiert; der Gesamtplan bleibt offen.

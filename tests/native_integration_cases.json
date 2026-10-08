@@ -1968,6 +1968,18 @@
     "scalar-range-language": {
       "source": "tests/fixtures/language/scalar_range.phys",
       "mode": "--emit-c"
+    },
+    "transform-range-probe": {
+      "sources": [
+        "tests/transform_range_probe.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "transform-range-language": {
+      "source": "tests/fixtures/language/transform_range.phys",
+      "mode": "--emit-c"
     }
   },
   "tests": [
@@ -7808,6 +7820,29 @@
             "{root}/tests/fixtures/language/scalar_range.phys"
           ],
           "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "transform_range_oracle",
+      "targets": [
+        "python",
+        "transform-range-probe",
+        "transform-range-language"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_transform_range_oracle.py",
+            "--c",
+            "{transform-range-probe}",
+            "--language",
+            "{transform-range-language}",
+            "--fixture",
+            "{root}/tests/fixtures/language/transform_range.phys"
+          ],
+          "timeout": 180
         }
       ]
     }

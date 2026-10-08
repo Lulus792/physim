@@ -1,5 +1,7 @@
 #include "physim/math.h"
+#include "linear_numeric.h"
 #include "physim/numerics.h"
+#include "transform_numeric.h"
 #include <math.h>
 
 /* Convex interpolation without overflowing b-a for opposite-signed endpoints. */
@@ -55,13 +57,27 @@ ps_result ps_bezier3_split(const ps_bezier3 *curve, double t, ps_bezier3 *left, 
     return PS_OK;
 }
 
-ps_vec2 ps_v2(double x, double y) { return (ps_vec2){x, y}; }
-ps_vec2 ps_v2add(ps_vec2 a, ps_vec2 b) { return ps_v2(a.x + b.x, a.y + b.y); }
-ps_vec2 ps_v2sub(ps_vec2 a, ps_vec2 b) { return ps_v2(a.x - b.x, a.y - b.y); }
-ps_vec2 ps_v2scale(ps_vec2 a, double s) { return ps_v2(a.x * s, a.y * s); }
-double ps_v2dot(ps_vec2 a, ps_vec2 b) { return a.x * b.x + a.y * b.y; }
-double ps_v2cross(ps_vec2 a, ps_vec2 b) { return a.x * b.y - a.y * b.x; }
-double ps_v2length(ps_vec2 a) { return hypot(a.x, a.y); }
+ps_vec2 ps_v2(double x, double y) {
+    return (ps_vec2){x, y};
+}
+ps_vec2 ps_v2add(ps_vec2 a, ps_vec2 b) {
+    return ps_v2(a.x + b.x, a.y + b.y);
+}
+ps_vec2 ps_v2sub(ps_vec2 a, ps_vec2 b) {
+    return ps_v2(a.x - b.x, a.y - b.y);
+}
+ps_vec2 ps_v2scale(ps_vec2 a, double s) {
+    return ps_v2(a.x * s, a.y * s);
+}
+double ps_v2dot(ps_vec2 a, ps_vec2 b) {
+    return a.x * b.x + a.y * b.y;
+}
+double ps_v2cross(ps_vec2 a, ps_vec2 b) {
+    return a.x * b.y - a.y * b.x;
+}
+double ps_v2length(ps_vec2 a) {
+    return hypot(a.x, a.y);
+}
 ps_vec2 ps_v2normalize(ps_vec2 a) {
     if (!isfinite(a.x) || !isfinite(a.y))
         return ps_v2(NAN, NAN);
@@ -72,12 +88,24 @@ ps_vec2 ps_v2normalize(ps_vec2 a) {
     double n = ps_v2length(a);
     return ps_v2(a.x / n, a.y / n);
 }
-ps_vec4 ps_v4(double x, double y, double z, double w) { return (ps_vec4){x, y, z, w}; }
-ps_vec4 ps_v4add(ps_vec4 a, ps_vec4 b) { return ps_v4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w); }
-ps_vec4 ps_v4sub(ps_vec4 a, ps_vec4 b) { return ps_v4(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w); }
-ps_vec4 ps_v4scale(ps_vec4 a, double s) { return ps_v4(a.x * s, a.y * s, a.z * s, a.w * s); }
-double ps_v4dot(ps_vec4 a, ps_vec4 b) { return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w; }
-double ps_v4length(ps_vec4 a) { return hypot(hypot(a.x, a.y), hypot(a.z, a.w)); }
+ps_vec4 ps_v4(double x, double y, double z, double w) {
+    return (ps_vec4){x, y, z, w};
+}
+ps_vec4 ps_v4add(ps_vec4 a, ps_vec4 b) {
+    return ps_v4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
+}
+ps_vec4 ps_v4sub(ps_vec4 a, ps_vec4 b) {
+    return ps_v4(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
+}
+ps_vec4 ps_v4scale(ps_vec4 a, double s) {
+    return ps_v4(a.x * s, a.y * s, a.z * s, a.w * s);
+}
+double ps_v4dot(ps_vec4 a, ps_vec4 b) {
+    return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+}
+double ps_v4length(ps_vec4 a) {
+    return hypot(hypot(a.x, a.y), hypot(a.z, a.w));
+}
 ps_vec4 ps_v4normalize(ps_vec4 a) {
     if (!isfinite(a.x) || !isfinite(a.y) || !isfinite(a.z) || !isfinite(a.w))
         return ps_v4(NAN, NAN, NAN, NAN);
@@ -102,7 +130,9 @@ bool ps_close(double a, double b, double absolute, double relative) {
         return (difference - absolute) / scale <= relative;
     return fabs(a / scale - b / scale) <= absolute / scale + relative;
 }
-ps_mat3 ps_mat3_identity(void) { return (ps_mat3){{1, 0, 0, 0, 1, 0, 0, 0, 1}}; }
+ps_mat3 ps_mat3_identity(void) {
+    return (ps_mat3){{1, 0, 0, 0, 1, 0, 0, 0, 1}};
+}
 ps_mat3 ps_mat3_multiply(ps_mat3 a, ps_mat3 b) {
     ps_mat3 r = {{0}};
     for (int c = 0; c < 3; c++)
@@ -168,8 +198,12 @@ ps_result ps_mat4_inverse(ps_mat4 a, double tolerance, ps_mat4 *out) {
         *out = r;
     return e;
 }
-ps_quat ps_quat_identity(void) { return (ps_quat){0, 0, 0, 1}; }
-ps_quat ps_quat_conjugate(ps_quat q) { return (ps_quat){-q.x, -q.y, -q.z, q.w}; }
+ps_quat ps_quat_identity(void) {
+    return (ps_quat){0, 0, 0, 1};
+}
+ps_quat ps_quat_conjugate(ps_quat q) {
+    return (ps_quat){-q.x, -q.y, -q.z, q.w};
+}
 ps_quat ps_quat_multiply(ps_quat a, ps_quat b) {
     return (ps_quat){a.w * b.x + a.x * b.w + a.y * b.z - a.z * b.y,
                      a.w * b.y - a.x * b.z + a.y * b.w + a.z * b.x,
@@ -227,14 +261,18 @@ ps_result ps_mat4_rotation(ps_quat q, ps_mat4 *out) {
     *out = r;
     return PS_OK;
 }
-static bool finite3(ps_vec3 v) { return isfinite(v.x) && isfinite(v.y) && isfinite(v.z); }
+static bool finite3(ps_vec3 v) {
+    return isfinite(v.x) && isfinite(v.y) && isfinite(v.z);
+}
 static bool finite4(ps_mat4 a) {
     for (int i = 0; i < 16; i++)
         if (!isfinite(a.m[i]))
             return false;
     return true;
 }
-static bool affine(ps_mat4 a) { return a.m[3] == 0 && a.m[7] == 0 && a.m[11] == 0 && a.m[15] == 1; }
+static bool affine(ps_mat4 a) {
+    return a.m[3] == 0 && a.m[7] == 0 && a.m[11] == 0 && a.m[15] == 1;
+}
 ps_result ps_mat4_trs(ps_vec3 t, ps_quat q, ps_vec3 s, ps_mat4 *out) {
     ps_mat4 r;
     if (!out || !finite3(t) || !finite3(s) || ps_mat4_rotation(q, &r) != PS_OK)
@@ -252,15 +290,31 @@ ps_result ps_mat4_trs(ps_vec3 t, ps_quat q, ps_vec3 s, ps_mat4 *out) {
     *out = r;
     return PS_OK;
 }
+/* Row products retain independent exponents through the homogeneous divide. */
+static transform_exact transform_row(ps_mat4 a, size_t row, ps_vec3 v, bool point) {
+    double values[4] = {v.x, v.y, v.z, point ? 1 : 0};
+    double weights[4] = {a.m[row], a.m[4 + row], a.m[8 + row], a.m[12 + row]};
+    return transform_dot(values, weights, 4);
+}
+static double transform_affine_row(ps_mat4 a, size_t row, ps_vec3 v, bool point) {
+    double values[4] = {v.x, v.y, v.z, point ? 1 : 0};
+    double weights[4] = {a.m[row], a.m[4 + row], a.m[8 + row], a.m[12 + row]}, direct;
+    if (transform_direct(values, weights, 4, &direct))
+        return direct;
+    return transform_double(transform_dot(values, weights, 4));
+}
 ps_result ps_transform_point(ps_mat4 a, ps_vec3 v, ps_vec3 *out) {
     if (!out || !finite4(a) || !finite3(v))
         return PS_INVALID;
-    ps_vec4 h = ps_mat4_apply(a, ps_v4(v.x, v.y, v.z, 1));
-    if (!isfinite(h.x) || !isfinite(h.y) || !isfinite(h.z) || !isfinite(h.w))
-        return PS_NUMERIC;
-    if (h.w == 0)
+    transform_exact w = affine(a) ? (transform_exact){{0}, 1} : transform_row(a, 3, v, true);
+    if (!w.sign)
         return PS_SINGULAR;
-    ps_vec3 r = ps_v3(h.x / h.w, h.y / h.w, h.z / h.w);
+    double result[3];
+    for (size_t i = 0; i < 3; i++) {
+        result[i] = affine(a) ? transform_affine_row(a, i, v, true)
+                              : transform_quotient(transform_row(a, i, v, true), w);
+    }
+    ps_vec3 r = ps_v3(result[0], result[1], result[2]);
     if (!finite3(r))
         return PS_NUMERIC;
     *out = r;
@@ -269,8 +323,8 @@ ps_result ps_transform_point(ps_mat4 a, ps_vec3 v, ps_vec3 *out) {
 ps_result ps_transform_direction(ps_mat4 a, ps_vec3 v, ps_vec3 *out) {
     if (!out || !finite4(a) || !finite3(v) || !affine(a))
         return PS_INVALID;
-    ps_vec4 h = ps_mat4_apply(a, ps_v4(v.x, v.y, v.z, 0));
-    ps_vec3 r = ps_v3(h.x, h.y, h.z);
+    ps_vec3 r = ps_v3(transform_affine_row(a, 0, v, false), transform_affine_row(a, 1, v, false),
+                      transform_affine_row(a, 2, v, false));
     if (!finite3(r))
         return PS_NUMERIC;
     *out = r;
@@ -279,18 +333,36 @@ ps_result ps_transform_direction(ps_mat4 a, ps_vec3 v, ps_vec3 *out) {
 ps_result ps_transform_normal(ps_mat4 a, ps_vec3 v, ps_vec3 *out) {
     if (!out || !finite4(a) || !finite3(v) || !affine(a) || (v.x == 0 && v.y == 0 && v.z == 0))
         return PS_INVALID;
-    ps_mat3 linear = {{a.m[0], a.m[1], a.m[2], a.m[4], a.m[5], a.m[6], a.m[8], a.m[9], a.m[10]}};
-    ps_result e = ps_mat3_inverse(linear, 0, &linear);
+    /* Solve A^T*n'=n directly, retaining each result's exponent. The full
+     * inverse need not be representable when only the normal direction matters. */
+    double transpose[9], scales[3], rhs[3] = {v.x, v.y, v.z};
+    for (size_t row = 0; row < 3; row++) {
+        scales[row] = fmax(fabs(a.m[row]), fmax(fabs(a.m[4 + row]), fabs(a.m[8 + row])));
+        if (scales[row] == 0)
+            return PS_SINGULAR;
+        for (size_t col = 0; col < 3; col++)
+            transpose[col * 3 + row] = a.m[col * 4 + row] / scales[row];
+    }
+    linear_value solved[3];
+    ps_result e = linear_solve_scaled(transpose, rhs, 3, 0, solved);
     if (e != PS_OK)
         return e;
-    /* Only direction matters: scale inverse and input before the dot products. */
-    double scale = 0;
-    for (int i = 0; i < 9; i++)
-        scale = fmax(scale, fabs(linear.m[i]));
-    for (int i = 0; i < 9; i++)
-        linear.m[i] /= scale;
-    ps_vec3 r = ps_mat3_apply(ps_mat3_transpose(linear), ps_vnormalize(v));
-    if (!finite3(r) || (r.x == 0 && r.y == 0 && r.z == 0))
+    for (size_t i = 0; i < 3; i++)
+        solved[i] = linear_divide(solved[i], scales[i]);
+    int maximum = 0;
+    bool any = false;
+    for (size_t i = 0; i < 3; i++)
+        if (solved[i].mantissa != 0) {
+            if (!any || solved[i].exponent > maximum)
+                maximum = solved[i].exponent;
+            any = true;
+        }
+    if (!any)
+        return PS_NUMERIC;
+    ps_vec3 r = ps_v3(scalbn(solved[0].mantissa, solved[0].exponent - maximum),
+                      scalbn(solved[1].mantissa, solved[1].exponent - maximum),
+                      scalbn(solved[2].mantissa, solved[2].exponent - maximum));
+    if (!finite3(r))
         return PS_NUMERIC;
     *out = ps_vnormalize(r);
     return PS_OK;

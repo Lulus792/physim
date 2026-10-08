@@ -96,7 +96,7 @@ Es gibt bewusst drei verschiedene Operationen:
   mathematisch erlaubt; sichtbares Kamera-Clipping gehört weiterhin zum Renderer.
 - `ps_transform_direction`: multipliziert `(x,y,z,0)`. Translation verändert eine
   Richtung nicht. Länge kann sich durch Skalierung ändern.
-- `ps_transform_normal`: verwendet die invers-transponierte lineare 3×3-Matrix und
+- `ps_transform_normal`: löst das invers-transponierte lineare 3×3-System und
   normalisiert das Ergebnis. Das erhält die Senkrechtstellung zu transformierten
   Tangenten auch bei Scherung oder ungleichmäßiger Skalierung. Eine Nullnormale ist
   ungültig; eine singuläre lineare Matrix wird abgewiesen. Bei Spiegelung ist eine
@@ -111,11 +111,30 @@ große Translationen ändern die Normale nicht.
 Funktionen mit Rückgabewert `ps_result` lassen ihre Ausgabe bei **jedem** Fehler
 unverändert. Ein- und Ausgabe dürfen dieselbe Variable sein. Null-Ausgabezeiger,
 NaN, Unendlichkeiten und verletzte Parametergrenzen ergeben `PS_INVALID`.
-Nicht darstellbare Zwischenergebnisse ergeben `PS_NUMERIC`; abgelehnte Pivots oder
+Nicht darstellbare Endergebnisse ergeben `PS_NUMERIC`; abgelehnte Pivots oder
 w=0 ergeben `PS_SINGULAR`. Unterlauf einzelner Komponenten auf null wird nicht
-generell als Fehler behandelt. Es gibt keine beliebige Präzision oder Kompensation
-für Auslöschung. Auch ein theoretisch darstellbares Endergebnis kann durch überlaufende
-Zwischenergebnisse scheitern.
+generell als Fehler behandelt.
+
+Punkte und Richtungen behalten Produkte und Summen ihrer höchstens vier
+binären Terme exakt in einem festen Ganzzahlakkumulator. Auslöschungsreste,
+auch weit unter den einzelnen Produkten, bleiben bis zur Ausgabe erhalten.
+Punkte dividieren den exakten Zähler durch die exakte homogene Koordinate;
+das Ergebnis wird einmal auf Double gerundet, bei Gleichstand zur geraden
+Mantisse. Dies schließt unnötige Zwischenüberläufe und doppeltes Runden nahe
+Null. Gewöhnliche affine Zeilen verwenden kurze, fehlerfreie Gleitkomma-
+Entwicklungen aus Produkten und Summen; kleine Produkte oder überlaufende
+Zwischenstufen fallen auf den Ganzzahlakkumulator zurück. Keine Heap-Allokation, kein
+breiterer Gleitkommatyp; ungeprüfte Matrixarithmetik bleibt gewöhnliche Double-
+Arithmetik. Rundung kleiner Endwerte auf null ist zulässig.
+
+Normalen brauchen keine vollständig darstellbare Inverse. Nach Zeilenskalierung
+der ursprünglichen Matrix wird das transponierte System gelöst; die separaten
+Exponenten seiner Lösung werden erst nach gemeinsamer Skalierung normiert.
+Die Pivotprüfung verwendet die relative Standardschwelle `3*DBL_EPSILON` im
+zeilenskalierten System. Das kann eine stark ungleichmäßig skalierte Matrix
+anders beurteilen als das explizite Invertieren. Schlecht konditionierte oder
+durch Koeffizientennormierung informationsarme Matrizen bleiben begrenzt;
+es gibt keine allgemeine exakte Normalen- oder Konditionsgarantie.
 
 Ungeprüfte arithmetische Funktionen, Matrixprodukte und Konstruktoren ohne
 `ps_result` geben die normalen Gleitkommaergebnisse zurück; sie können überlaufen.

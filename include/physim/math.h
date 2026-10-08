@@ -83,7 +83,12 @@ ps_result ps_mat4_rotation(ps_quat rotation, ps_mat4 *out);
 ps_result ps_mat4_trs(ps_vec3 translation, ps_quat rotation, ps_vec3 scale, ps_mat4 *out);
 /* Point: homogeneous divide by w (zero w -> PS_SINGULAR).
  * Direction/normal require an affine last row [0,0,0,1] exactly.
- * Normal uses inverse-transpose and returns a unit vector; zero normal invalid. */
+ * Point/direction rows use exact binary products and sums, followed by one
+ * nearest-even rounding; point division retains the exact homogeneous ratio.
+ * Normal solves the row-equilibrated inverse-transpose system and returns a
+ * unit vector. Intermediate inverse/solution magnitudes need not fit Double;
+ * final direction and solver conditioning still follow Double precision.
+ * Zero normal invalid. Outputs unchanged on every error. */
 ps_result ps_transform_point(ps_mat4 transform, ps_vec3 point, ps_vec3 *out);
 ps_result ps_transform_direction(ps_mat4 transform, ps_vec3 direction, ps_vec3 *out);
 ps_result ps_transform_normal(ps_mat4 transform, ps_vec3 normal, ps_vec3 *out);

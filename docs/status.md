@@ -2517,3 +2517,10 @@ werden geprüft. Modulblock-Closures übernehmen lokale Werte jetzt als besitzen
 Snapshots; echte Modulglobals behalten ihren globalen Speicher.
 [Methoden und Grenzen](numerics.md) begrenzen diesen Implementierungsnachweis;
 der gesamte Projektplan bleibt weiterhin offen.
+
+
+Vektoren, Matrizen und Transformationen (§7.2 / PP-0357) sind den gemeinsamen
+C-/Physim-APIs und unabhängigen Referenzen zugeordnet. Punkte/Richtungen erhalten
+exakte binäre Zeilensummen und projektive Quotienten; Normalen werden direkt aus
+dem skalierten transponierten System berechnet. [Konventionen und Grenzen](math.md)
+begrenzen diesen Nachweis; der vollständige Projektplan bleibt offen.

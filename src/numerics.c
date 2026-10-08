@@ -1,6 +1,7 @@
 #include "physim/numerics.h"
 #include "ode_numeric.h"
 #include "scalar_numeric.h"
+#include "linear_numeric.h"
 #include <float.h>
 #include <limits.h>
 #include <math.h>
@@ -12,96 +13,16 @@ static bool finite_vector(const double *v, size_t n) {
             return false;
     return true;
 }
-/* Private mantissa/exponent values keep each right-hand component independent.
- * They extend range, not precision: cancellation still follows Double rounding. */
-typedef struct {double mantissa;int exponent;} linear_value;
-static linear_value linear_normalize(double value,int exponent) {
-    int shift;double mantissa=frexp(value,&shift);
-    return (linear_value){mantissa,value==0?0:exponent+shift};
-}
-static linear_value linear_divide(linear_value value,double divisor) {
-    int exponent;double mantissa=frexp(divisor,&exponent);
-    return linear_normalize(value.mantissa/mantissa,value.exponent-exponent);
-}
-/* Up to 32 finite scaled terms with finite weights. */
-static linear_value linear_sum(const linear_value *values,const double *weights,size_t n) {
-    double terms[32],errors[32];int exponents[32],maximum=0;bool any=false;
+ps_result ps_linear_solve(const double *a,const double *b,size_t n,double tol,double *x) {
+    if(!x)return PS_INVALID;
+    linear_value scaled[32];double result[32];
+    ps_result status=linear_solve_scaled(a,b,n,tol,scaled);
+    if(status!=PS_OK)return status;
     for(size_t i=0;i<n;i++) {
-        if(values[i].mantissa==0 || weights[i]==0) {
-            terms[i]=errors[i]=0;exponents[i]=0;continue;
-        }
-        int e;double w=frexp(weights[i],&e);
-        terms[i]=values[i].mantissa*w;
-        errors[i]=fma(values[i].mantissa,w,-terms[i]);
-        exponents[i]=values[i].exponent+e;
-        if(!any || exponents[i]>maximum)maximum=exponents[i];
-        any=true;
+        result[i]=linear_double(scaled[i]);
+        if(!isfinite(result[i]))return PS_NUMERIC;
     }
-    if(!any)return (linear_value){0,0};
-    double sum=0,compensation=0;
-    for(size_t i=0;i<n;i++)if(terms[i]!=0) {
-        double term=scalbn(terms[i],exponents[i]-maximum),next=sum+term;
-        compensation+=fabs(sum)>=fabs(term)?(sum-next)+term:(term-next)+sum;
-        compensation+=scalbn(errors[i],exponents[i]-maximum);sum=next;
-    }
-    return linear_normalize(sum+compensation,maximum);
-}
-ps_result ps_linear_solve(const double *a, const double *b, size_t n, double tol, double *x) {
-    if (!a || !b || !x || !n || n > 32 || !isfinite(tol) || tol < 0 || tol >= 1)
-        return PS_INVALID;
-    if (!finite_vector(a, n * n) || !finite_vector(b, n))
-        return PS_INVALID;
-    double m[32][32], result[32];linear_value rhs[32],solved[32];
-    if (tol == 0)
-        tol = n * DBL_EPSILON;
-    for (size_t i = 0; i < n; i++) {
-        double scale = 0;
-        for (size_t j = 0; j < n; j++)
-            scale = fmax(scale, fabs(a[i * n + j]));
-        if (scale == 0)
-            return PS_SINGULAR;
-        for (size_t j = 0; j < n; j++)
-            m[i][j] = a[i * n + j] / scale;
-        rhs[i]=linear_divide(linear_normalize(b[i],0),scale);
-    }
-    for (size_t k = 0; k < n; k++) {
-        size_t pivot = k;
-        for (size_t i = k + 1; i < n; i++)
-            if (fabs(m[i][k]) > fabs(m[pivot][k]))
-                pivot = i;
-        if (fabs(m[pivot][k]) <= tol)
-            return PS_SINGULAR;
-        if (pivot != k) {
-            for (size_t j = k; j < n; j++) {
-                double tmp = m[k][j];
-                m[k][j] = m[pivot][j];
-                m[pivot][j] = tmp;
-            }
-            linear_value tmp=rhs[k];rhs[k]=rhs[pivot];rhs[pivot]=tmp;
-        }
-        for (size_t i = k + 1; i < n; i++) {
-            double factor = m[i][k] / m[k][k];
-            for (size_t j = k + 1; j < n; j++) {
-                m[i][j] = fma(-factor,m[k][j],m[i][j]);
-                if (!isfinite(m[i][j]))
-                    return PS_NUMERIC;
-            }
-            rhs[i]=linear_sum((const linear_value[]){rhs[i],rhs[k]},
-                              (const double[]){1,-factor},2);
-        }
-    }
-    for (size_t i = n; i-- > 0;) {
-        linear_value values[32];double weights[32];size_t count=1;
-        values[0]=rhs[i];weights[0]=1;
-        for (size_t j = i + 1; j < n; j++) {
-            values[count]=solved[j];weights[count++]=-m[i][j];
-        }
-        solved[i]=linear_divide(linear_sum(values,weights,count),m[i][i]);
-        result[i]=scalbn(solved[i].mantissa,solved[i].exponent);
-        if (!isfinite(result[i]))
-            return PS_NUMERIC;
-    }
-    memcpy(x, result, n * sizeof *x);
+    memcpy(x,result,n*sizeof *x);
     return PS_OK;
 }
 static bool scalar_args(ps_scalar_fn fn, double lo, double hi, double abs_x, double rel_x,

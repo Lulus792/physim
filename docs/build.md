@@ -940,3 +940,16 @@ arbeitet mit einer verschobenen Paketkopie und ausschließlich deren Headern,
 Compiler und Bibliotheksquellen. Das Verification-Kit enthält die unabhängigen
 Gegenproben. Dieser gezielte Modus ersetzt keine vollständige SDK-/Domänen-
 oder GUI-Abnahme; ohne `--scalar-only` bleiben alle normalen SDK-Prüfungen aktiv.
+
+
+### Transformationsgrenzen aus einem SDK prüfen
+
+```sh
+python3 tools/verify-native-sdk.py --sdk build/package --work build/transform-package-checks --transform-only
+```
+
+Der gezielte Modus verschiebt das SDK und prüft installierten sowie ausschließlich
+aus Paketquellen neu gebauten Core gegen rationale C-/Physim-Transformationen und
+Decimal-Normalenreferenzen. Auslöschung, projektive Quotienten, kleinste/große Werte,
+Rundungsgrenzen und atomare Fehler sind enthalten. Er ersetzt keine vollständige
+SDK-Domänen- oder Grafikabnahme und lässt sich nicht mit `--app-tests` kombinieren.

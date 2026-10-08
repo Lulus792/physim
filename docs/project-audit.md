@@ -275,3 +275,16 @@ Der dabei belegte Capture-Fehler für Modulblock-Closures ist ebenfalls geschlos
 retained Schleifen-/Blockwerte werden als besitzende Snapshots geprüft.
 Aktuell: 27 implementierte, fünf unvollständige und 499 ungeprüfte Planblöcke.
 Der vollständige Projektplan und die Plattform-/Produktabnahme bleiben offen.
+
+
+## Vektoren, Matrizen und Transformationen (§7.2 / PP-0357)
+
+Vec2/3/4, Mat3/4, Quaternionen und Transformationen sind konkret den C-/Physim-
+APIs und Referenzprüfungen zugeordnet. Die bestehende Rodrigues-, Slerp-,
+Inversions- und Senkrechtstellungsprüfung wird um rationale und Decimal-
+Grenzreferenzen ergänzt. Belegte Zwischenüberläufe, verlorene Auslöschungsreste
+und Rundungsfehler nahe Null sind geschlossen; Normalen benötigen keine
+vollständig darstellbare Inverse. [Verträge und Grenzen](math.md) halten
+Konventionen, Einheiten und Konditions-/Pivotgrenzen fest.
+Aktuell: 28 implementierte, fünf unvollständige und 498 ungeprüfte Planblöcke.
+Die übrigen Mathematikforderungen und der gesamte Projektplan bleiben offen.

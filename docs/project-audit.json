@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-08",
-  "inspected_revision": "c07e4b832d504d85581284cd74f453f4bcf1ceb2",
+  "inspected_revision": "e33094d920708b85991842f6cedfdaf90429172a",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2285,9 +2285,23 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Vektoren 2D/3D/4D, Matrizen, Quaternionen und Transformationen.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/core.h",
+        "include/physim/math.h",
+        "src/core.c",
+        "src/math.c",
+        "src/linear_numeric.h",
+        "src/transform_numeric.h",
+        "include/physim/language_matrix.h",
+        "tests/test_math.c",
+        "tests/test_transform_range.c",
+        "tests/test_transform_range_oracle.py",
+        "tests/fixtures/language/transform_range.phys",
+        "examples/language/coordinate_frames.phys",
+        "docs/math.md"
+      ],
+      "note": "Vec2/3/4, Mat3/4, Quaternionen und affine/projektive Transformationen sind in C und Physim ausführbar. Existierende analytische, Inversionsresidual-, Rodrigues-, Slerp- und Senkrechtstellungsprüfungen ergänzen rationale Punkt-/Richtungs- und Decimal-Normalenreferenzen. Exakte viertermige Zeilensummen und homogene Quotienten schließen belegte Zwischenüberläufe, Auslöschungsverluste und doppelte Rundung. Normalen werden aus einem zeilenskalierten transponierten System mit unabhängigen Lösungsexponenten normiert. Konventionen, Einheiten, Aliasierung/Fehlererhaltung, Pivot-/Konditionsgrenzen und ungeprüfte Arithmetik sind dokumentiert. Begrenzter Implementierungsnachweis; keine vollständige Mathematik-/Plattform-/Produktabnahme."
     },
     {
       "id": "PP-0358",

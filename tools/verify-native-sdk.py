@@ -32,6 +32,23 @@ def verify_scalar_search(repo, sdk, consumer, builder, library, rebuilt_core, su
     print("Installed/rebuilt SDK scalar search: exact binary tolerance decisions, C/Physim reports, callback bounds/counters and owned module-block closures passed", flush=True)
 
 
+def verify_transform_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked):
+    """Exact point/direction and independent normal references for packaged Core."""
+    shutil.copy2(repo / "tests/test_transform_range.c", consumer / "transform-range-check.c")
+    shutil.copy2(repo / "tests/transform_range_probe.c", consumer / "transform-range-probe.c")
+    checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
+             repo / "tests/fixtures/language/transform_range.phys"],
+            output=consumer / "transform-range-language.c")
+    for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
+        check = builder.executable("transform-range-check-" + kind, ["transform-range-check.c"], [archive])
+        probe = builder.executable("transform-range-probe-" + kind, ["transform-range-probe.c"], [archive])
+        language = builder.executable("transform-range-language-" + kind, ["transform-range-language.c"], [archive], language=True)
+        checked([check])
+        checked([sys.executable, repo / "tests/test_transform_range_oracle.py", "--c", probe,
+                 "--language", language, "--fixture", repo / "tests/fixtures/language/transform_range.phys"])
+    print("Installed/rebuilt SDK transforms: exact point/direction rounding, Decimal normals, cancellation and atomic errors passed", flush=True)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sdk", type=Path, required=True)
@@ -40,7 +57,11 @@ def main():
     parser.add_argument("--app-tests", action="store_true")
     parser.add_argument("--scalar-only", action="store_true",
                         help="Verify scalar search and module-block closures only; no GUI or other domain acceptance")
+    parser.add_argument("--transform-only", action="store_true",
+                        help="Verify checked transformation range only; no GUI or full domain acceptance")
     args = parser.parse_args()
+    if args.transform_only and (args.scalar_only or args.app_tests):
+        parser.error("--transform-only cannot be combined with --scalar-only or --app-tests")
     if args.scalar_only and args.app_tests:
         parser.error("--scalar-only cannot be combined with --app-tests")
     repo = Path(__file__).resolve().parent.parent
@@ -106,6 +127,13 @@ def main():
         builder.includes = [sdk / "include"]
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+        if args.transform_only:
+            shutil.copytree(sdk / "src", consumer / "src")
+            rebuilt_core = builder.archive("sdk-rebuilt-core", [f"src/{name}.c" for name in native.CORE])
+            verify_transform_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
+            (root / "PASSED.txt").write_text("Focused transformation range SDK verification passed; installed/rebuilt Core, exact rational C/Physim points/directions, Decimal normals, manifest and relocation; no full domain or GUI acceptance.\n", encoding="utf-8")
+            print(f"Transformation SDK verified: {root}")
+            return
         if args.scalar_only:
             shutil.copytree(sdk / "src", consumer / "src")
             rebuilt_core = builder.archive("sdk-rebuilt-core", [f"src/{name}.c" for name in native.CORE])
@@ -212,6 +240,7 @@ def main():
                      "--fixture", repo / "tests/fixtures/language/ode_range.phys"])
         print("Installed/rebuilt SDK ODE range: five C/Physim methods, 244 exact constant-solution references, 32 states and true overflow rollback passed", flush=True)
         verify_scalar_search(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
+        verify_transform_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         shutil.copy2(repo / "tests/test_linear_range.c", consumer / "linear-range-check.c")
         shutil.copy2(repo / "tests/linear_range_probe.c", consumer / "linear-range-probe.c")
         checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
