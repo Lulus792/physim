@@ -439,3 +439,14 @@ Fokusrahmen, Enter/Space/Tab/Pfeile sowie Sperren und verdeckende Fenster besitz
 gezielte Modell-/AppKit-/AT-SPI-/App-Nachweise. Text-/Editor-/Menü-/Dropdownfokus
 und praktische Screenreader-Abnahme bleiben gesondert offen; PP-0710 bleibt
 unvollständig.
+
+
+PP-0708 besitzt nun die ausdrückliche Migration zwischen den vorhandenen
+Projektformaten 1 und 2, bedienbar in App und Builder. Exakte Manifest-/Backupbytes,
+Dateirechte, Wiederholung, unbekannte Versionen, Größen-/Schreibfehler und
+Konflikte mit dem geöffneten Snapshot sind geprüft. Tatsächliche C-/Physim-
+Builds und App-Aktionen erhalten Quellen, Archive, Cache und Messwerte.
+[Plattformnachweise](platform-validation.md) nennen die ausgeführten Umgebungen
+und verschobenen SDKs. Künftige Formatverträge werden damit nicht vorweggenommen.
+Aktuell: 34 implementierte, 7 unvollständige und 490 ungeprüfte Planblöcke.
+Alle 531 Originaltexte und der Plan-Hash bleiben erhalten; das Gesamtziel bleibt offen.

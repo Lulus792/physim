@@ -5523,9 +5523,20 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Projektmigration zwischen Formatversionen.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/project_file.c",
+        "app/project_file.h",
+        "app/build_main.c",
+        "app/main.c",
+        "app/design_ui.inc",
+        "tests/test_project_migration.c",
+        "tests/test_project_migration_workflow.py",
+        "tests/test_project_migration_app.py",
+        "tools/verify-native-sdk.py",
+        "docs/platform-validation.md"
+      ],
+      "note": "Ausdrückliche Migration zwischen den vorhandenen Projektformaten 1 und 2 in App und Builder: Manifestbackup, bytegleiche Erhaltung anderer Einträge, Snapshotkonflikte und unveränderter Format-2-Leerlauf. Tatsächliche C-/Physim-Builds prüfen Quellen/Archive/Cache und identische Messwerte auf Intel-macOS und Debian/X11; keine Annahme künftiger Formatverträge oder vollständiger Produktabnahme."
     },
     {
       "id": "PP-0709",

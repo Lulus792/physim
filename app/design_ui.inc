@@ -349,7 +349,14 @@ static void sidebar_panel(app *a) {
                         a->tab = 2;
                         a->analysis_tab = 1;
                     }
-                    if (nk_tree_push(ui, NK_TREE_TAB, "Build-Einstellungen", NK_MINIMIZED)) {
+                    if (nk_tree_state_push(ui, NK_TREE_TAB, "Build-Einstellungen", &a->project_build_disclosure)) {
+                        nk_layout_row_dynamic(ui,24,1);char version[80];snprintf(version,sizeof version,"Projektformat %u",a->project_format_version);
+                        nk_label(ui,version,NK_TEXT_LEFT);
+                        if(a->project_format_version==1) {
+                            nk_layout_row_dynamic(ui,30,1);
+                            a->migration_bounds=nk_widget_bounds(ui);
+                            if(action_button(ui,"Projektformat aktualisieren",idle(a) && !a->dirty && !a->analysis_dirty && !a->project_settings_dirty))migrate_current_project(a);
+                        }
                         nk_layout_row_dynamic(ui, 32, 1);
                         const char *profiles[] = {"Debug", "Release"};
                         select_build_profile(a, nk_combo(ui, profiles, 2, a->profile, 28,

@@ -1031,7 +1031,7 @@ und veraltete Fenstermanager-Einträge geprüft. Die erneute Linux-CI steht aus.
 | Analyse | eigener C-Editor/Runner, eigenständige C-/Physim-Analyseprojekte ohne Experiment mit geprüftem Dateiimport, Dataset-/Series-Handles, blockweise Transformationen mit Einheitenprüfung, eigene Ergebnisplots/-tabellen, Linien/Punkte/Histogramme mit Zoom am Mauszeiger, Verschieben, separaten Ausschnitten und Achsenoffsets, PNG-/SVG-Export des sichtbaren Ausschnitts, CSV/SVG und verlustfrei komprimiertes PNG mit vier Größen von 1200 × 850 bis 4800 × 3400 Pixeln, Statistik, Ableitung, Integral, gleitendes Mittel, Periode, Energieabweichung, Auswahl und Vergleich von bis zu acht Läufen, gemeinsame Statusauswahl von Datenreihen, lineares, Nearest-/Previous- und monotones kubisches Resampling (PCHIP) in C/Physim und Differenzkurven, frühere Berichte öffnen | weitere Interpolationsverfahren/Transformationen |
 | Mechanik | starre Körper mit Kugel-/Boxträgheit, Quaternionrotation, Drehmomente/Impulse, Kugel–Kugel/Kugel–Ebene/Kugel–Box/Box–Ebene/Box–Box, iterative Paar- und Graph-Solver mit Coulomb-Reibung/Restitution (bis zu 128 Körper und 512 Kontakte), persistente diskrete C-/Physim-Kontaktverwaltung mit stabilen IDs und projizierten Warmimpulsen, Distanzgelenk mit lokalen Ankern und Driftkorrektur, gemeinsamer Geschwindigkeits-Solver für Kontakte und bis zu 256 Gelenke, Feder/Dämpfung, Stokes-/quadratischer Widerstand, Kugelstoß-, Boxstoß- und Bodenkontaktvorlagen mit Debug-Vektoren, Feder–Masse–Dämpfer mit dissipierter Arbeit und Energiebilanz, archimedischer Auftrieb und Kugel-Eintauchvolumen samt Auftriebsmittelpunkt, Auftriebsvorlage mit Kraftanzeige und Energiebilanz | persistente Feature-IDs/Kontaktinseln, Gelenk-Warmstart, gemeinsame nichtlineare Positionsprojektion, weitere Gelenke, Box-CCD, erweiterte Stoffmodelle |
 | Unsicherheit | PCG32, geprüfte konstante/uniforme/normale Verteilungen, öffentliche Sensor-API mit Einheiten, Zeitraster, Auflösung, Offset, Drift, Rauschen, Ausfällen und Standardunsicherheit, getrennte Modell-/Soll-/Messwerte, gültigkeitsbewusste Vorschau/Statistik/CSV, Batchcontroller in App/CLI mit bis zu acht Runnern, expliziten Seeds, eigenen Arbeitsordnern, Abbruch und fester Auswertungsreihenfolge, Endwert-Histogramm/Typ-7-Quantile, Normalnäherung des Mittelwert-KI ab 200 gültigen Endwerten und lineare Parameterstudien in CLI und App mit Kurvenbericht, geprüfte Wiederaufnahme journalisierter Läufe aus archivierten Konfigurationen in neue Serienordner, gültigkeitsbewusste Endwertaggregation mit Messstatus-CSV und Messabdeckung einschließlich vollständig fehlender Messungen, explizite Masken in transformierten C-/Physim-Datenreihen und Berichten mit erhaltenen Segmentgrenzen | korrelierte Sensor-/Unsicherheitsmodelle, weitere Konfidenzverfahren und Verteilungsdiagnostik |
-| Produktreife | Quellen-Snapshots, versionierte Dateien, Backup beim Speichern, Autosave beider C-Editoren mit wählbarem Intervall (Standard 30 Sekunden), Wiederherstellung mit Erkennung extern geänderter Quellen | gleichzeitige Autoren/Dateizusammenführung, Projektmigration, Installer, Leistungsbudget, abdeckungsgeführte Langzeit-Fuzzing-Kampagne |
+| Produktreife | Quellen-Snapshots, versionierte Dateien, Backup beim Speichern, Autosave beider C-Editoren mit wählbarem Intervall (Standard 30 Sekunden), Wiederherstellung mit Erkennung extern geänderter Quellen, ausdrückliche Projektmigration 1 → 2 | gleichzeitige Autoren/Dateizusammenführung, Installer, Leistungsbudget, abdeckungsgeführte Langzeit-Fuzzing-Kampagne |
 
 Keine Kennzeichnung als stabile 1.0 und keine Behauptung, dass alle 25 Starttickets
 oder die Phasen 0–10 bereits abgenommen sind. Die offene Arbeit bleibt nachvollziehbar
@@ -2637,3 +2637,14 @@ ein sichtbarer Rahmen und Enter/Leertaste/Tab/Pfeiltasten verbinden die native
 Schnittstelle mit der tatsächlichen Tastaturbedienung. Gesperrte, verdeckte und
 veraltete Ziele werden erneut geprüft. Text-/Editor-/Menüfokus und praktische
 Screenreader-Abnahme bleiben offen. [Verträge](accessibility.md).
+
+## Ausdrückliche Projektmigration 1 → 2
+
+Neue Projekte verwenden Format 2; bestehende Format-1-Experimente bleiben lesbar.
+App und nativer Builder aktualisieren die Projektbeschreibung auf ausdrücklichen
+Auftrag und sichern die vorherige Fassung. Snapshotkonflikte, ungültige Dateien
+und unbekannte Versionen werden abgewiesen. Wiederholung bei Format 2 schreibt
+keine Dateien. C-/Physim-Builds behalten Quellen, Archive, Cache und Messwerte.
+[Bedienung](workspace.md#editor-und-build), [Speichervertrag](data-format.md#eigenständige-analyseprojekte)
+und [ausgeführte Prüfungen](platform-validation.md) beschreiben den begrenzten
+Nachweis; der gesamte Projektplan bleibt offen.

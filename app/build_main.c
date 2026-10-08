@@ -535,7 +535,19 @@ static bool link_module(toolchain *tc, const char *module, const char *object,
     fflush(stdout);
     return !run(args, directory, NULL, NULL, 0);
 }
+static int migrate_project(const char *project) {
+    char directory[PATH_SIZE],path[PATH_SIZE];
+    if(strlen(project)>1800 || !absolute_path(project,directory) || !path_join(path,directory,"physim.project")) {
+        fputs("Invalid or overlong project path\n",stderr);return 2;
+    }
+    ps_project_migration report;
+    ps_document_result result=ps_project_migrate_file(path,&report);
+    if(result!=PS_DOCUMENT_OK){fprintf(stderr,"Project migration failed (%u); project source files are preserved\n",(unsigned)result);return 1;}
+    printf("Project format %u -> %u: %s\n",report.from_version,report.to_version,report.changed?"migrated; previous manifest saved as physim.project.bak":"already current; no files written");return 0;
+}
 int main(int argc, char **argv) {
+    if(argc==4 && !strcmp(argv[1],"--migrate-project") && !strcmp(argv[2],"--project"))return migrate_project(argv[3]);
+    if(argc==4 && !strcmp(argv[1],"--project") && !strcmp(argv[3],"--migrate-project"))return migrate_project(argv[2]);
     const char *project = NULL, *sdk = NULL, *directory = NULL, *language_compiler = NULL;
     const char *cc = SDL_getenv("PHYSIM_CC"), *profile = NULL;
     for (int i = 1; i < argc; i += 2) {
@@ -559,7 +571,8 @@ int main(int argc, char **argv) {
     if (!project || !sdk || !directory || !language_compiler ||
         (profile && strcmp(profile, "Debug") && strcmp(profile, "Release"))) {
         fputs("Usage: physim-build --project directory --sdk directory --output cache-directory "
-              "--physimc executable [--profile Debug|Release] [--cc executable]\n",
+              "--physimc executable [--profile Debug|Release] [--cc executable]\n"
+              "       physim-build --migrate-project --project directory\n",
               stderr);
         return 2;
     }

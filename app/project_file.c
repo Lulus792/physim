@@ -31,6 +31,7 @@ bool ps_project_step_bounds_valid(const ps_project_settings *s) {
            s->minimum_timestep<=s->timestep && s->timestep<=s->maximum_timestep));
 }
 static ps_document_result parse(const ps_text_document *document, ps_project_settings *out) {
+    if(document->length>256u*1024u)return PS_DOCUMENT_LIMIT;
     ps_project_settings settings = {.timestep = .005, .seed = 42, .speed = 1,
                                     .minimum_timestep=1e-8,.maximum_timestep=.1};
     bool seen[10] = {false};
@@ -119,8 +120,13 @@ static ps_document_result parse(const ps_text_document *document, ps_project_set
     }
     if (!index || (version==2 && !seen[9]) || (settings.analysis_only && (version!=2 || seen[0])) || !ps_project_step_bounds_valid(&settings))
         return PS_DOCUMENT_INVALID;
+    settings.format_version=version;
     *out = settings;
     return PS_DOCUMENT_OK;
+}
+ps_document_result ps_project_settings_read_document(const ps_text_document *document,ps_project_settings *settings) {
+    if(!document || !document->saved || !settings)return PS_DOCUMENT_INVALID;
+    return parse(document,settings);
 }
 ps_document_result ps_project_settings_read(const char *path, ps_project_settings *settings) {
     if (!path || !settings)
@@ -226,4 +232,46 @@ ps_document_result ps_project_settings_save(const char *path, const ps_project_s
     free(text);
     ps_text_document_destroy(&document);
     return result;
+}
+
+ps_document_result ps_project_migrate_document(ps_text_document *document,ps_project_migration *out) {
+    if(!document || !document->saved || !document->path[0])return PS_DOCUMENT_INVALID;
+    ps_project_settings settings;
+    ps_document_result result=parse(document,&settings);if(result!=PS_DOCUMENT_OK)return result;
+    ps_project_migration report={settings.format_version,PS_PROJECT_CURRENT_VERSION,false};
+    if(settings.format_version==PS_PROJECT_CURRENT_VERSION) {
+        ps_text_document current={0};result=ps_text_document_open(&current,document->path);
+        if(result==PS_DOCUMENT_OK && (current.length!=document->length || memcmp(current.saved,document->saved,document->length)))result=PS_DOCUMENT_CONFLICT;
+        ps_text_document_destroy(&current);if(result==PS_DOCUMENT_OK && out)*out=report;return result;
+    }
+    size_t header=0;while(header<document->length && document->saved[header]!='\n')header++;
+    const char *newline=header && document->saved[header-1]=='\r'?"\r\n":"\n";
+    size_t first_end=header<document->length?header+1:header;bool kind=false;
+    for(size_t position=first_end;position<document->length;) {
+        if(document->length-position>=5 && !memcmp(document->saved+position,"kind=",5))kind=true;
+        while(position<document->length && document->saved[position]!='\n')position++;
+        if(position<document->length)position++;
+    }
+    size_t header_newline=header==document->length?(header && document->saved[header-1]=='\r'?1:strlen(newline)):0;
+    size_t extra=kind?0:strlen("kind=experiment")+strlen(newline)+header_newline;
+    if(document->length>256u*1024u-extra)return PS_DOCUMENT_LIMIT;
+    size_t length=document->length+extra;char *text=malloc(length+1);if(!text)return PS_DOCUMENT_MEMORY;
+    memcpy(text,document->saved,first_end);text[15]='2';size_t used=first_end;
+    if(!kind) {
+        if(header==document->length){const char *ending=header_newline==1?"\n":newline;memcpy(text+used,ending,header_newline);used+=header_newline;}
+        memcpy(text+used,"kind=experiment",15);used+=15;
+        memcpy(text+used,newline,strlen(newline));used+=strlen(newline);
+    }
+    memcpy(text+used,document->saved+first_end,document->length-first_end);text[length]=0;
+    ps_text_document proposed={0};proposed.saved=text;proposed.length=length;ps_project_settings verified;
+    result=parse(&proposed,&verified);
+    if(result==PS_DOCUMENT_OK)result=ps_text_document_save(document,text,length);
+    free(text);
+    if(result==PS_DOCUMENT_OK){report.changed=true;if(out)*out=report;}
+    return result;
+}
+ps_document_result ps_project_migrate_file(const char *path,ps_project_migration *out) {
+    ps_text_document document={0};ps_document_result result=ps_text_document_open(&document,path);
+    if(result==PS_DOCUMENT_OK)result=ps_project_migrate_document(&document,out);
+    ps_text_document_destroy(&document);return result;
 }

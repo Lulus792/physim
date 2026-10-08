@@ -1352,3 +1352,64 @@ Paketierung; geprüfte Implementierung und Testeingaben bleiben unverändert.
 PP-0710 bleibt für Text-/Editor-/Menü-/Dropdownfokus, virtuelle Listen,
 Scroll-to-Reveal, Windows/UIA, Wayland und praktische VoiceOver-/Orca-Abnahme
 unvollständig. Alle 531 Originalblöcke des vollständigen Plans bleiben erhalten.
+
+
+## Projektmigration der vorhandenen Formate 1 → 2
+
+Gültige Format-1-Experimente lassen sich ausdrücklich über Build-Einstellungen
+oder `physim-build --migrate-project --project DIR` aktualisieren. Neue App-
+Projekte verwenden Format 2. Öffnen und normales Speichern erhalten das jeweilige
+Format. Migration schreibt nur die Projektbeschreibung und deren vorherige
+Fassung als Backup; Format 2 ist ein unveränderter Leerlauf. Der App-Snapshot
+stammt vom Öffnen; externe Änderungen blockieren die Migration. Ungespeicherte
+Experiment-/Analyse-/Einstellungsänderungen, laufende Jobs und Wiederherstellung
+sperren die Aktion. [Bedienung](workspace.md#editor-und-build) und
+[Dateivertrag](data-format.md#eigenständige-analyseprojekte).
+
+Der Modelltest vergleicht unabhängige Sollbytes für LF/CRLF, fehlenden letzten
+Zeilenumbruch, Unicodekommentare, Erweiterungseinträge, schon vorhandenen Typ,
+maximalen Seed sowie gemischte C-/Physim-Quellen. Er prüft Originalbackup und
+POSIX-Rechte 0700, veraltete Snapshots bei beiden Versionen, unbekannte/ungültige
+Versionen, Größenlimit und nicht schreibbaren Backuppfad mit erhaltenen Ausgaben.
+Der Workflow baut tatsächliche C- und Physim-Pendel vor und nach der Migration.
+Er erhält Quellen, vorhandene Archive und sämtliche Cachebytes und belegt
+identische Mess-/Abschlusspayloads mit eigenständiger Chunk-CRC-Prüfung. Der zweite
+Build kompiliert/verlinkt nicht erneut. Die App-Prüfung klickt den sichtbaren
+Button und prüft normales Upgrade, extern veränderten Snapshot und schmutzige
+Einstellungen; Quellen und Archivbytes bleiben erhalten.
+
+Intel macOS 14.6.1/Apple Clang 16 besteht die fünf Projekt-/Dokument-/Workflow-/
+Prüfpaketfälle 5/5 (`run-u25vvaxz`) und die zwei App-/Einstellungsabläufe
+2/2 (`run-im0_bati`). Debian 12/GCC 12.2 besteht dieselben fünf Fälle 5/5
+(`run-i4wemoul`) und beide Appabläufe unter X11 2/2 (`run-y218evs3`).
+Die Handbuch-/Prüfpaketfälle bestehen auf macOS 2/2 (`run-s62q_b99`), die
+Referenzprüfung separat 1/1 (`run-mwn6d6aw`). Dies sind fokussierte Läufe,
+keine vollständige neue Testmatrix.
+
+Die verschobenen SDKs bestehen unter
+`build/project-migration-sdk-checks/Native SDK ä 3p6m72wk` (macOS) und
+`build/project-migration-sdk-checks/Native SDK ä 9z54pmav` (Linux). Beide enthalten
+469 manifestierte Dateien. Der unabhängige Linux-Prüfer verwendet ausschließlich
+`build/project-migration-independent-kit` mit 140 manifestierten Testeingaben,
+ohne Implementierung oder Entwicklerheader. Er baut beide Quellsprachen,
+vergleicht Messdaten/Cache/Dateien und führt die tatsächlichen drei Appfälle aus.
+Die echten Abschlussmarker und Protokolle sind mit SHA-256 in
+`build/project-migration-sdk-{mac,linux}-PASSED.json` erfasst; der eingefrorene
+Quellstand steht in `build/project-migration-source-freeze-final.json`.
+Dieser Dokumentationsnachtrag erfolgt nach Paketierung; die geprüfte
+Implementierung und Testeingaben bleiben unverändert.
+
+PP-0708 gilt für die vorhandenen Formate 1 und 2 als implementiert. Unbekannte
+künftige Versionen werden erhalten und abgewiesen. Der bestehende Textwriter
+besitzt weiterhin ein letztes Vergleich-/Umbenennungsfenster gegenüber parallelen
+Autoren und keine Stromausfallgarantie. ACLs/erweiterte Attribute/besondere
+Modusbits sind nicht Teil der Rechteerhaltung. Windows, Apple Silicon und die
+vollständige Produktabnahme wurden hier nicht erneut ausgeführt. Alle 531
+Originalplanblöcke bleiben erhalten: 34 implementiert, 7 unvollständig und
+490 ungeprüft; das Gesamtziel bleibt offen.
+
+Linux/Clang 14 mit ASan/UBSan besteht die zwei Fensterabläufe 2/2
+(`run-poh95ran`) und die vier Projekt-/Datei-/Buildfälle 4/4 (`run-j9hjo4th`).
+`ASAN_OPTIONS=detect_leaks=0` bleibt gesetzt; Address- und UndefinedBehavior-
+Prüfungen bleiben aktiv. macOS-Sanitizer wurden wegen des bereits dokumentierten
+fehlenden `ld64.lld` nicht ausgeführt.

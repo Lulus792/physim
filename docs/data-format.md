@@ -271,7 +271,8 @@ unverändert.
 
 ## Eigenständige Analyseprojekte
 
-Bestehende Experimentprojekte behalten `physim_project=1`. Format 2 verlangt einen
+Beim Öffnen und normalen Speichern behalten bestehende Experimentprojekte
+`physim_project=1`. Neu angelegte Projekte verwenden Format 2. Format 2 verlangt einen
 expliziten Typ `kind=analysis` oder `kind=experiment`. Analyseprojekte verwenden:
 
 ```text
@@ -292,6 +293,19 @@ Quellsprache an einer geöffneten Projektbeschreibung verlangen erneutes Öffnen
 Der native Buildcache enthält den Projekttyp und hält ungenutzte Experiment-
 Digestplätze leer. Neue Analyseprojekte bauen kein Experimentmodul. API/ABI,
 Sprachvertrag und Messdatei-Format bleiben unverändert.
+
+Die ausdrückliche Projektmigration aktualisiert gültige Experimente von Format 1
+auf Format 2 und ergänzt bei Bedarf `kind=experiment` direkt nach der Kopfzeile.
+Alle anderen Manifestbytes bleiben erhalten, einschließlich fremder Einträge,
+Kommentare, UTF-8 und LF/CRLF. Die vorherige Fassung wird als
+`physim.project.bak` gesichert. Format 2 ist ein unveränderter Leerlauf; unbekannte
+Versionen und ungültige Beschreibungen werden abgewiesen. Quellen, Messdateien
+und Buildcache werden nicht verändert. Die Beschreibung einschließlich Ergänzung
+darf höchstens 256 KiB groß sein. Der Austausch verwendet den bestehenden
+Textdateivertrag mit Snapshotvergleich und atomarer Umbenennung; er bietet keine
+Sperre gegen gleichzeitige Autoren im letzten Vergleich-/Umbenennungsfenster
+und keine Stromausfallgarantie. POSIX-Dateirechte werden erhalten; ACLs,
+erweiterte Attribute und besondere Modusbits sind davon nicht umfasst.
 
 Importierte Messdateien bleiben bytegleich. Der Import kopiert blockweise in
 eine exklusive temporäre Datei, prüft die komplette Zeitachse und die gespeicherten

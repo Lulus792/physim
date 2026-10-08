@@ -10,6 +10,41 @@ import sys
 import tempfile
 
 
+def verify_project_migration(repo, sdk, root, suffix, checked):
+    checked(
+        [
+            sys.executable,
+            repo / "tests/test_project_migration_workflow.py",
+            "--builder",
+            sdk / "bin" / ("physim-build" + suffix),
+            "--sdk",
+            sdk,
+            "--compiler",
+            sdk / "bin" / ("physimc" + suffix),
+            "--runner",
+            sdk / "bin" / ("physim-runner" + suffix),
+            "--work",
+            root / "Migration builds",
+        ],
+        timeout=480,
+    )
+    checked(
+        [
+            sys.executable,
+            repo / "tests/test_project_migration_app.py",
+            "--app",
+            sdk / "bin" / ("physim" + suffix),
+            "--work",
+            root / "Migration UI",
+        ],
+        timeout=150,
+    )
+    print(
+        "Relocated SDK migration: actual C/Physim builds and identical measurements, source/run/cache preservation, no-op/future versions and UI stale/dirty guards passed",
+        flush=True,
+    )
+
+
 def verify_accessibility_checkbox(repo,sdk,root,suffix,checked):
     checked([sys.executable,repo / "tests/test_accessibility_checkbox_app.py",
              "--app",sdk / "bin" / ("physim"+suffix),"--work",root / "Native checkbox"],timeout=90)
@@ -226,11 +261,17 @@ def main():
                         help="Verify unit conversion and diagnostics only; no GUI or full domain acceptance")
     parser.add_argument("--body-only", action="store_true",
                         help="Verify solid-body inertia and energy range only; no full mechanics or GUI acceptance")
+    parser.add_argument("--migration-only", action="store_true",
+                        help="Verify actual project format migration/build/UI from the SDK; requires a display")
     parser.add_argument("--accessibility-only", action="store_true",
                         help="Verify the packaged app's actual native checkbox and radio settings; requires a display")
     parser.add_argument("--convex-only", action="store_true",
                         help="Verify convex geometry and bounded multi-body CCD bindings; no full mechanics or GUI acceptance")
     args = parser.parse_args()
+    if args.migration_only and any((args.scalar_only,args.transform_only,args.stream_only,
+                                  args.comparison_only,args.curve_only,args.units_only,
+                                  args.body_only,args.convex_only,args.accessibility_only,args.app_tests)):
+        parser.error("--migration-only cannot be combined with other focused modes or --app-tests")
     if args.accessibility_only and any((args.scalar_only,args.transform_only,args.stream_only,
                                       args.comparison_only,args.curve_only,args.units_only,
                                       args.body_only,args.convex_only,args.app_tests)):
@@ -315,6 +356,15 @@ def main():
         builder.includes = [sdk / "include"]
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+        if args.migration_only:
+            if not metadata["app"]:
+                raise RuntimeError("Project migration verification requires an app SDK")
+            verify_project_migration(repo,sdk,root,suffix,checked)
+            (root / "PASSED.txt").write_text(
+                "Focused SDK project migration verification passed; relocated manifest, actual C/Physim build/run/cache invariants, upgrade/no-op/future version guards and actual UI stale/dirty guards; no full platform or product acceptance.\n",
+                encoding="utf-8")
+            print(f"Native SDK project migration verification passed: {root}",flush=True)
+            return
         if args.accessibility_only:
             if not metadata["app"] or sys.platform not in ("darwin","linux"):
                 raise RuntimeError("Native checkbox verification requires a macOS/Linux app SDK")
@@ -1048,6 +1098,7 @@ def main():
                     if "SETTINGS KEYBOARD SELF-TEST: PASSED" not in output.read_text(encoding="utf-8"):
                         raise RuntimeError("Installed SDK keyboard settings did not complete")
                 print("Installed SDK settings: keyboard-only traversal, all toggles, restart, cancellation and large-font focus scrolling passed",flush=True)
+                verify_project_migration(repo,sdk,root,suffix,checked)
                 if sys.platform in ("darwin","linux"):
                     verify_accessibility_checkbox(repo,sdk,root,suffix,checked)
                 for mode in ("docs-keyboard","docs-keyboard-22","docs-keyboard-delayed"):

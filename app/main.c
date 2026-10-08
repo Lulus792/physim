@@ -251,6 +251,10 @@ typedef struct {
     ps_process job, runner;
     ps_parameter_catalog parameters;
     bool project_settings_dirty;
+    uint32_t project_format_version;
+    ps_text_document project_manifest_snapshot;
+    enum nk_collapse_states project_build_disclosure;
+    struct nk_rect migration_bounds;
     char parameter_output[8192];
     size_t parameter_output_used;
     bool parameter_output_overflow;
@@ -657,7 +661,11 @@ static bool save_project_settings(app *a) {
                                    .adaptive=a->adaptive_steps,.minimum_timestep=a->minimum_dt,
                                    .maximum_timestep=a->maximum_dt};
     if (!ps_project_seed_parse(a->seed, &settings.seed)) return false;
-    return ps_project_settings_save(path, &settings) == PS_DOCUMENT_OK;
+    if(ps_project_settings_save(path,&settings)!=PS_DOCUMENT_OK)return false;
+    if(ps_text_document_open(&a->project_manifest_snapshot,path)!=PS_DOCUMENT_OK)return false;
+    ps_project_settings verified;
+    if(ps_project_settings_read_document(&a->project_manifest_snapshot,&verified)!=PS_DOCUMENT_OK)return false;
+    a->project_format_version=verified.format_version;return true;
 }
 static bool simulation_settings_valid(app *a) {
     uint64_t seed;
@@ -806,6 +814,7 @@ static bool jobs_idle(app *a) {
 }
 static bool idle(app *a) { return !a->reset_pending && jobs_idle(a); }
 static void clear_project(app *a) {
+    ps_text_document_destroy(&a->project_manifest_snapshot);a->project_format_version=0;
     ps_report_destroy(a->analysis_report);
     a->analysis_report = NULL;
     ps_library_destroy(a->library);
@@ -850,6 +859,19 @@ static void refresh_workspace_entries(app *a) {
                  "Dateibaum nicht vollständig geladen (%s). Betroffene Ordner sind markiert.",
                  ps_result_string(r));
 }
+static bool migrate_current_project(app *a) {
+    if(!a->loaded || !idle(a) || a->library_thread || a->recovery)return false;
+    /* Migrating the manifest must not implicitly save unrelated editor changes. */
+    if(a->dirty || a->analysis_dirty || a->project_settings_dirty) {
+        status(a,"Vor der Formataktualisierung Änderungen speichern oder verwerfen.");return false;
+    }
+    char path[4096];join(path,sizeof path,a->project,"physim.project");ps_project_migration report;
+    if(!ps_text_document_same_file(path,a->project_manifest_snapshot.path))return false;
+    ps_document_result result=ps_project_migrate_document(&a->project_manifest_snapshot,&report);
+    if(result!=PS_DOCUMENT_OK){status(a,result==PS_DOCUMENT_CONFLICT?"Projektbeschreibung wurde extern geändert. Projekt erneut öffnen.":"Projektformat konnte nicht aktualisiert werden; vorhandene Dateien bleiben erhalten.");return false;}
+    a->project_format_version=report.to_version;
+    status(a,report.changed?"Projektformat auf Version 2 aktualisiert. Sicherung: physim.project.bak.":"Projektformat ist bereits aktuell; keine Dateien geändert.");return true;
+}
 static bool open_project(app *a) {
     bool leaving_manager = a->project_manager;
     if (a->recovery)
@@ -865,8 +887,10 @@ static bool open_project(app *a) {
     if (!documents_save_all(a)) return false;
     char p[4096];
     join(p, sizeof p, a->project_input, "physim.project");
-    ps_project_settings project_settings;
-    if (ps_project_settings_read(p, &project_settings) != PS_DOCUMENT_OK) {
+    ps_project_settings project_settings;ps_text_document manifest_snapshot={0};
+    if (ps_text_document_open(&manifest_snapshot,p)!=PS_DOCUMENT_OK ||
+        ps_project_settings_read_document(&manifest_snapshot,&project_settings)!=PS_DOCUMENT_OK) {
+        ps_text_document_destroy(&manifest_snapshot);
         status(a, "Projektdatei fehlt oder ist ungültig. Quellen und Einstellungen bleiben erhalten.");
         return false;
     }
@@ -880,14 +904,14 @@ static bool open_project(app *a) {
         nk_textedit_free(&experiment);
         nk_textedit_free(&analysis);
         status(a, "Experimentquelle konnte nicht geladen werden (UTF-8, maximal 256 KiB).");
-        return false;
+        ps_text_document_destroy(&manifest_snapshot);return false;
     }
     join(p, sizeof p, a->project_input, analysis_language ? "analysis.phys" : "analysis.c");
     if (!load_editor(&analysis, p)) {
         nk_textedit_free(&experiment);
         nk_textedit_free(&analysis);
         status(a, "Analysequelle konnte nicht geladen werden.");
-        return false;
+        ps_text_document_destroy(&manifest_snapshot);return false;
     }
     char *saved[2] = {copy_editor_text(&experiment), copy_editor_text(&analysis)};
     if (!saved[0] || !saved[1]) {
@@ -896,7 +920,7 @@ static bool open_project(app *a) {
         nk_textedit_free(&experiment);
         nk_textedit_free(&analysis);
         status(a, "Projekt konnte nicht geladen werden: Speicher erschöpft.");
-        return false;
+        ps_text_document_destroy(&manifest_snapshot);return false;
     }
     documents_clear(a);
     clear_project(a);
@@ -910,6 +934,8 @@ static bool open_project(app *a) {
     a->language_experiment = language;
     a->language_analysis = analysis_language;
     a->analysis_only=project_settings.analysis_only;
+    a->project_format_version=project_settings.format_version;
+    a->project_manifest_snapshot=manifest_snapshot;
     a->analysis = analysis;
     snprintf(a->project, sizeof a->project, "%s", a->project_input);
     snprintf(a->workspace, sizeof a->workspace, "%s", a->project_input);
@@ -1026,7 +1052,7 @@ static void new_project(app *a) {
     }
     bool written = a->manager_analysis_only
         ? fprintf(f,"physim_project=2\nkind=analysis\nanalysis=%s\nmodules=core,units,data,analysis\nprofile=Debug\n",analysis_language?"analysis.phys":"analysis.c")>0
-        : fprintf(f, "physim_project=1\nexperiment=%s\nanalysis=%s\nmodules=core,units,mechanics,"
+        : fprintf(f, "physim_project=2\nkind=experiment\nexperiment=%s\nanalysis=%s\nmodules=core,units,mechanics,"
                "data,analysis\nprofile=Debug\nsimulation.dt=0.005\nsimulation.seed=42\n", language ? "main.phys" : "main.c",
                analysis_language ? "analysis.phys" : "analysis.c") > 0;
     if (fclose(f)) written = false;
@@ -2657,6 +2683,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "documentation_keyboard_tests.inc"
 #include "project_manager_keyboard_tests.inc"
 #include "project_settings_tests.inc"
+#include "project_migration_tests.inc"
 #include "reset_tests.inc"
 #include "speed_tests.inc"
 #include "timeline_tests.inc"
@@ -2698,6 +2725,8 @@ int main(int argc, char **argv) {
     bool syntax_preview_test = argc > 1 && !strcmp(argv[1], "--syntax-preview-test");
     if (syntax_preview_test && argc != 4)
         return 2;
+    bool migration_test=argc>1 && !strcmp(argv[1],"--project-migration-test");
+    if(migration_test && (argc!=4 || (strcmp(argv[3],"normal") && strcmp(argv[3],"stale") && strcmp(argv[3],"dirty"))))return 2;
     bool settings_test = argc > 1 && !strcmp(argv[1], "--settings-test");
     if (settings_test && (argc != 4 || (strcmp(argv[3], "write") && strcmp(argv[3], "read") &&
         strcmp(argv[3], "keyboard") && strcmp(argv[3], "keyboard-read") &&
@@ -2990,7 +3019,7 @@ int main(int argc, char **argv) {
     a->history_stride = 1;
     status(a, "Bereit. Ordner öffnen oder ein neues Projekt anlegen.");
     bool smoke = argc > 1 && !strcmp(argv[1], "--smoke");
-    bool self_test = settings_test || plot_test || batch_test || docs_test || recovery_test ||
+    bool self_test = migration_test || settings_test || plot_test || batch_test || docs_test || recovery_test ||
                      workspace_test || workspace_state_test || syntax_preview_test ||
                      (argc > 2 && !strcmp(argv[1], "--self-test"));
     if (self_test && SDL_getenv("PHYSIM_TEST_SMALL"))
@@ -3031,6 +3060,9 @@ int main(int argc, char **argv) {
             a->quitting = true;
         }
         test_stage = 100;
+    } else if(migration_test) {
+        snprintf(a->project_input,sizeof a->project_input,"%s",argv[2]);
+        if(!open_project(a)){exit_code=1;a->quitting=true;}
     } else if (settings_test) {
         snprintf(a->project, sizeof a->project, "%s", argv[2]);
         char path[4096];
@@ -3327,6 +3359,9 @@ int main(int argc, char **argv) {
                 printf("WORKSPACE UI SELF-TEST: %s\n", exit_code ? "FAILED" : "PASSED");
                 a->quitting = true;
             }
+        } else if(migration_test) {
+            if(ps_clock()-test_started>20){exit_code=1;a->quitting=true;}
+            else project_migration_test_frame(a,argv[3],&test_stage,&exit_code);
         } else if (settings_test) {
             if (ps_clock() - test_started > 20) {
                 exit_code = 1;
@@ -4316,6 +4351,7 @@ int main(int argc, char **argv) {
                 test_stage, a->status, a->tab, a->batch_sweep, a->batch_sweep_ready,
                 a->built, idle(a), a->batch_options.runs, a->batch_start_bounds.x,
                 a->batch_start_bounds.y, a->batch_start_bounds.w, a->batch_start_bounds.h);
+    ps_text_document_destroy(&a->project_manifest_snapshot);
     nk_textedit_free(&a->experiment);
     nk_textedit_free(&a->analysis);
     free(a->documentation);

@@ -8221,6 +8221,62 @@
           ]
         }
       ]
+    },
+    {
+      "name": "project_migration_workflow",
+      "app": true,
+      "targets": [
+        "python",
+        "physim-build",
+        "physimc",
+        "physim-runner"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_project_migration_workflow.py",
+            "--builder",
+            "{physim-build}",
+            "--sdk",
+            "{root}",
+            "--compiler",
+            "{physimc}",
+            "--runner",
+            "{physim-runner}",
+            "--work",
+            "{work}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 480,
+          "files": [
+            "results.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "project_migration_app",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_project_migration_app.py",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 150
+        }
+      ]
     }
   ]
 }

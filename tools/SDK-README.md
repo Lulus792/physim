@@ -54,6 +54,21 @@ zur Mac-Architektur passen (Apple Silicon oder Intel). Geprüft wird macOS 15.
 Die App verwendet OpenGL 4.1 Core. Die lokalen App-Pakete sind ad hoc signiert;
 Developer-ID-Signierung und Notarisierung für öffentliche Releases sind noch offen.
 
+## Bestehendes Projektformat aktualisieren
+
+Gültige Experimentprojekte im Format 1 lassen sich ausdrücklich auf Format 2
+aktualisieren. Im Terminal aus dem Paketordner:
+
+```sh
+./bin/physim-build --migrate-project --project /pfad/zum/projekt
+```
+
+Unter Windows lautet das Programm `bin/physim-build.exe`. Die vorherige
+Beschreibung bleibt als `physim.project.bak` erhalten. Quellen, Messdateien und
+Buildcache bleiben unverändert; Format 2 wird nicht erneut geschrieben.
+Die App bietet dieselbe Aktion unter **Build-Einstellungen**.
+[Vertrag und Grenzen](docs/data-format.md#eigenständige-analyseprojekte).
+
 ## Eigenes Projekt
 
 Für neue C- und Physim-Projekte ist zusätzlich ein C17-Compiler erforderlich:

@@ -168,6 +168,18 @@ und Analyse im Hintergrund. Ein Stern beziehungsweise der Hinweis auf ungespeich
 Nach Änderungen muss neu gebaut werden, damit der nächste Lauf sie verwendet.
 Unter **Build-Einstellungen** stehen Debug und Release zur Verfügung.
 
+Dort wird auch das Projektformat angezeigt. Bei Format 1 aktualisiert
+**Projektformat aktualisieren** die Beschreibung ausdrücklich auf Format 2 und
+legt die vorherige Fassung als `physim.project.bak` ab. Vorher müssen Änderungen
+an Experiment, Analyse und Projekteinstellungen gespeichert oder verworfen sein.
+Laufende Jobs und ungelöste Wiederherstellungen sperren die Aktion. Wurde die
+Beschreibung seit dem Öffnen extern geändert, muss das Projekt erneut geöffnet
+werden; die externe Fassung wird nicht überschrieben. Quellen und archivierte
+Läufe bleiben erhalten. Öffnen und normales Speichern migrieren nicht automatisch.
+Für die Kommandozeile: `physim-build --migrate-project --project PROJEKTORDNER`.
+Dieser eigenständige Befehl benötigt keinen Compiler und startet keinen Build.
+[Format und Speichergrenzen](data-format.md#eigenständige-analyseprojekte).
+
 **Ctrl+F** öffnet die Suche im aktuellen Editor. Die Suchleiste bietet Suchen und
 Ersetzen; kontrolliere insbesondere bei Ersetzungen von kurzen Namen das Ergebnis.
 Das Protokoll zeigt Compilerfehler. Anklickbare Quelldiagnosen führen zur betroffenen

@@ -3,7 +3,9 @@
 #include "parameter_catalog.h"
 #include "text_document.h"
 
+enum { PS_PROJECT_CURRENT_VERSION = 2 };
 typedef struct {
+    uint32_t format_version; /* Read-only format information; save preserves the on-disk version. */
     bool language_experiment, language_analysis, release;
     bool analysis_only;
     double timestep, speed;
@@ -20,6 +22,7 @@ typedef struct {
  * defaults main.c, analysis.c, Debug, 0.005 seconds, seed 42, speed 1.
  * Failed reads leave settings unchanged. */
 ps_document_result ps_project_settings_read(const char *path, ps_project_settings *settings);
+ps_document_result ps_project_settings_read_document(const ps_text_document *document,ps_project_settings *settings);
 /* Updates profile, simulation settings and parameter selections, preserving all other entries
  * and comments. Reads the latest file, validates it, then uses the document
  * writer's conflict check, atomic replacement and backup. */
@@ -29,4 +32,12 @@ ps_document_result ps_project_settings_save(const char *path, const ps_project_s
 bool ps_project_seed_parse(const char *text, uint64_t *seed);
 bool ps_project_timestep_valid(double timestep);
 bool ps_project_step_bounds_valid(const ps_project_settings *settings);
+typedef struct {uint32_t from_version,to_version;bool changed;} ps_project_migration;
+/* Explicit v1 -> v2 experiment migration. Preserves all other bytes, including
+ * extension entries/comments/newlines. Current v2 is an unchanged no-op. Unknown
+ * or invalid versions fail. Uses the supplied document snapshot for conflict
+ * detection and the existing atomic replacement/backup contract. Failure leaves
+ * document/report unchanged. No source, run, build or auxiliary file is migrated. */
+ps_document_result ps_project_migrate_document(ps_text_document *document,ps_project_migration *out);
+ps_document_result ps_project_migrate_file(const char *path,ps_project_migration *out);
 #endif
