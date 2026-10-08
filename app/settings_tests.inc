@@ -187,8 +187,39 @@ static void test_settings_checkbox_frame(app *a,bool remote,int *stage,int *code
     }
     if(!ok){fprintf(stderr,"Settings checkbox failed stage %d\n",*stage);*code=1;a->quitting=true;}
 }
+static void test_settings_options_frame(app *a,bool remote,int *stage,int *code) {
+    static unsigned choice;
+    const char *groups[]={"Schriftgröße der Oberfläche","Schriftgröße der Oberfläche","Darstellung","Darstellung","Schriftgröße im Code-Editor","Schriftgröße im Code-Editor"};
+    const char *labels[]={"22 px","16 px","Hell","Dunkel","20 px","16 px"};
+    bool ok=true;
+    switch(*stage) {
+    case 0:
+        SDL_SetWindowSize(a->window,1080,740);open_settings(a);choice=0;
+        ok=a->preferences.ui_size==16 && a->preferences.editor_size==16 && a->preferences.theme==PS_THEME_DARK;
+        (*stage)++;break;
+    case 1:nk_window_set_focus(a->ui,"workspace");(*stage)++;break;
+    case 2:
+        if(!settings_test_reveal(a,a->settings_focus_bounds[choice<2?0:choice<4?4:5]))return;
+        ok=nk_sdl_accessibility_available(a->ui);
+        printf("RADIO READY %u\n",choice);fflush(stdout);
+        if(!remote)ok=ok && nk_sdl_accessibility_choose(a->ui,groups[choice],labels[choice]);
+        (*stage)++;break;
+    case 3: {
+        bool arrived=choice<2?a->settings_draft.ui_size==(choice==0?22u:16u)
+                      :choice<4?a->settings_draft.theme==(choice==2?PS_THEME_LIGHT:PS_THEME_DARK)
+                               :a->settings_draft.editor_size==(choice==4?20u:16u);
+        if(!arrived)return;
+        ok=a->preferences.ui_size==16 && a->preferences.editor_size==16 && a->preferences.theme==PS_THEME_DARK;
+        printf("RADIO SELECTED %u\n",choice);fflush(stdout);choice++;
+        if(choice==6){a->quitting=true;puts("SETTINGS RADIO SELF-TEST: PASSED");}else *stage=2;
+        break;
+    }
+    }
+    if(!ok){fprintf(stderr,"Settings radio failed stage %d choice %u\n",*stage,choice);*code=1;a->quitting=true;}
+}
 static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
                                const char **capture) {
+    if(!strncmp(mode,"options-",8)){test_settings_options_frame(a,!strcmp(mode,"options-remote"),stage,code);return;}
     if(!strncmp(mode,"checkbox-",9)){test_settings_checkbox_frame(a,!strcmp(mode,"checkbox-remote"),stage,code);return;}
     if(!strncmp(mode,"keyboard",8)){test_settings_keyboard_frame(a,strstr(mode,"-read")!=NULL,stage,code,capture);return;}
     if(!strncmp(mode,"ui-size-",8)) {

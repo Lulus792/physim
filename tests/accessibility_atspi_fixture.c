@@ -8,7 +8,7 @@ typedef struct {
     ps_graphics *graphics;
     struct nk_context *ui;
     bool visible, disabled, checked;
-    unsigned presses,toggles;
+    unsigned presses,toggles,options[2];
 } fixture_window;
 static bool fallback;
 static bool create(fixture_window *f, const char *title) {
@@ -52,6 +52,13 @@ static bool draw(fixture_window *f, char name) {
             nk_layout_row_dynamic(f->ui,24,1);
             bool toggled=nk_checkbox_label(f->ui,"Vektoren",&f->checked);
             if(toggled){f->toggles++;printf("TOGGLE %c %u %u\n",name,f->toggles,f->checked);fflush(stdout);}
+            const char *groups[]={"Darstellung","Code"};
+            for(unsigned g=0;g<2;g++) {
+                unsigned before=f->options[g];nk_layout_row_dynamic(f->ui,24,2);
+                if(ps_ui_option_label(f->ui,groups[g],"16 px",f->options[g]==0))f->options[g]=0;
+                if(ps_ui_option_label(f->ui,groups[g],"22 px",f->options[g]==1))f->options[g]=1;
+                if(before!=f->options[g]){printf("CHOICE %c %u %u\n",name,g,f->options[g]);fflush(stdout);}
+            }
             if (f->disabled)
                 nk_widget_disable_end(f->ui);
             if (pressed) {

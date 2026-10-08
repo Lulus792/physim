@@ -47,10 +47,11 @@ struct nk_sdl {
     ps_a11y_native *accessibility_native;
 };
 static bool accessibility_widget(void *user,const char *window,const char *label,
-                                 int role,const float bounds[4],bool enabled,bool checked) {
+                                 int role,const float bounds[4],bool enabled,bool checked,const char *group,bool activated) {
     struct nk_sdl *sdl=user;if(!sdl->accessibility)return false;
     SDL_LockMutex(sdl->accessibility_mutex);
-    bool pressed=ps_a11y_record_state(sdl->accessibility,window,label,(ps_a11y_role)role,bounds,enabled,checked);
+    bool pressed=group?ps_a11y_record_option(sdl->accessibility,window,group,label,bounds,enabled,checked,activated)
+                      :ps_a11y_record_state(sdl->accessibility,window,label,(ps_a11y_role)role,bounds,enabled,checked);
     SDL_UnlockMutex(sdl->accessibility_mutex);return pressed;
 }
 static void *ui_alloc(nk_handle user, void *old, nk_size size) {
@@ -107,6 +108,11 @@ bool nk_sdl_accessibility_press(struct nk_context *ctx,const char *label) {
     if(!ctx || !ctx->userdata.ptr)return false;
     struct nk_sdl *sdl=ctx->userdata.ptr;
     return ps_a11y_native_press_label(sdl->accessibility_native,label);
+}
+bool nk_sdl_accessibility_choose(struct nk_context *ctx,const char *group,const char *label) {
+    if(!ctx || !ctx->userdata.ptr)return false;
+    struct nk_sdl *sdl=ctx->userdata.ptr;
+    return ps_a11y_native_press_choice(sdl->accessibility_native,group,label);
 }
 void nk_sdl_set_ui_size(struct nk_context *ctx,unsigned size) {
     if(ctx && ctx->userdata.ptr && size>=16 && size<=22 && size%2==0)

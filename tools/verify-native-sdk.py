@@ -13,7 +13,9 @@ import tempfile
 def verify_accessibility_checkbox(repo,sdk,root,suffix,checked):
     checked([sys.executable,repo / "tests/test_accessibility_checkbox_app.py",
              "--app",sdk / "bin" / ("physim"+suffix),"--work",root / "Native checkbox"],timeout=90)
-    print("Relocated SDK native checkbox: actual settings draft, AppKit/AT-SPI toggles and applied view flags passed",flush=True)
+    checked([sys.executable,repo / "tests/test_accessibility_checkbox_app.py",
+             "--app",sdk / "bin" / ("physim"+suffix),"--work",root / "Native options","--options"],timeout=90)
+    print("Relocated SDK native checkbox: actual settings drafts, AppKit/AT-SPI checkbox/radio actions and applied configuration passed",flush=True)
 
 
 def verify_documentation_bounds(sdk, files):
@@ -223,7 +225,7 @@ def main():
     parser.add_argument("--body-only", action="store_true",
                         help="Verify solid-body inertia and energy range only; no full mechanics or GUI acceptance")
     parser.add_argument("--accessibility-only", action="store_true",
-                        help="Verify the packaged app's actual native settings checkbox; requires a display")
+                        help="Verify the packaged app's actual native checkbox and radio settings; requires a display")
     parser.add_argument("--convex-only", action="store_true",
                         help="Verify convex geometry and bounded multi-body CCD bindings; no full mechanics or GUI acceptance")
     args = parser.parse_args()
@@ -315,7 +317,7 @@ def main():
             if not metadata["app"] or sys.platform not in ("darwin","linux"):
                 raise RuntimeError("Native checkbox verification requires a macOS/Linux app SDK")
             verify_accessibility_checkbox(repo,sdk,root,suffix,checked)
-            (root / "PASSED.txt").write_text("Focused native settings checkbox SDK verification passed; relocated manifest, actual AppKit/AT-SPI actions and settings draft, applied view flags preserved; no full screenreader or product acceptance.\n",encoding="utf-8")
+            (root / "PASSED.txt").write_text("Focused native settings checkbox SDK verification passed; relocated manifest, actual AppKit/AT-SPI checkbox/radio actions and settings drafts, applied configuration preserved; no full screenreader or product acceptance.\n",encoding="utf-8")
             print(f"Native checkbox SDK verified: {root}")
             return
         if args.convex_only:

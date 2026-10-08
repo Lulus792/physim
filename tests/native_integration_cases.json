@@ -8159,6 +8159,37 @@
           ]
         }
       ]
+    },
+    {
+      "name": "accessibility_options_app",
+      "app": true,
+      "display": true,
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_accessibility_checkbox_app.py",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--options"
+          ],
+          "timeout": 90,
+          "files": [
+            "app.stdout",
+            "app.stderr"
+          ]
+        }
+      ]
     }
   ]
 }

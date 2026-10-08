@@ -164,7 +164,7 @@ try:
     cache = dbus.Interface(
         raw_bus.get_object(provider, "/org/a11y/atspi/cache"), "org.a11y.atspi.Cache"
     ).GetItems()
-    assert len(cache) == 9 and sum(int(item[7]) == 43 for item in cache) == 2
+    assert len(cache) == 21 and sum(int(item[7]) == 43 for item in cache) == 2
     object_path = next(str(item[0][1]) for item in cache if str(item[6]) == "Öffnen …")
     proxy = raw_bus.get_object(provider, object_path)
     for iface, method, signature, args, expected in [
@@ -260,11 +260,74 @@ try:
     wait(lambda: not checkbox.getState().contains(pyatspi.STATE_CHECKED), "unchecked notification")
     wait(lambda: "TOGGLE A 2 0" in (a.work / "fixture.stdout").read_text(), "second checkbox value")
     assert sum(int(item[7]) == 7 for item in cache) == 2
+    group = wait(lambda: named(wa, "Darstellung"), "radio group")
+    code_group = wait(lambda: named(wa, "Code"), "independent group")
+    radio = wait(lambda: named(group, "22 px"), "radio child")
+    peer = wait(lambda: named(group, "16 px"), "selected peer")
+    assert group.getRole() == pyatspi.ROLE_GROUPING and group.childCount == 2
+    assert radio.getRole() == pyatspi.ROLE_RADIO_BUTTON and radio.parent == group
+    assert radio.getIndexInParent() == 1 and peer.getIndexInParent() == 0
+    assert peer.getState().contains(pyatspi.STATE_CHECKED) and not radio.getState().contains(
+        pyatspi.STATE_CHECKED
+    )
+    assert radio.queryAction().getName(0) == "select" and radio.queryAction().doAction(0)
+    wait(
+        lambda: radio.getState().contains(pyatspi.STATE_CHECKED)
+        and not peer.getState().contains(pyatspi.STATE_CHECKED),
+        "exclusive radio selection",
+    )
+    wait(
+        lambda: "CHOICE A 0 1" in (a.work / "fixture.stdout").read_text(), "actual radio selection"
+    )
+    assert named(code_group, "16 px").getState().contains(pyatspi.STATE_CHECKED)
+    assert named(named(wb, "Darstellung"), "16 px").getState().contains(pyatspi.STATE_CHECKED)
+    assert radio.queryAction().doAction(0)
+    time.sleep(0.08)
+    pump()
+    assert radio.getState().contains(pyatspi.STATE_CHECKED)
+    rwindow = radio.queryComponent().getExtents(pyatspi.WINDOW_COORDS)
+    gwindow = group.queryComponent().getExtents(pyatspi.WINDOW_COORDS)
+    rparent = radio.queryComponent().getExtents(2)
+    assert rparent.x == rwindow.x - gwindow.x and rparent.y == rwindow.y - gwindow.y
+    assert (
+        group.queryComponent().getAccessibleAtPoint(
+            rwindow.x + 1, rwindow.y + 1, pyatspi.WINDOW_COORDS
+        )
+        == radio
+    )
+    pwindow = peer.queryComponent().getExtents(pyatspi.WINDOW_COORDS)
+    assert pwindow.x + pwindow.width + 1 < rwindow.x, "fixture needs an actual gap between options"
+    assert (
+        group.queryComponent().getAccessibleAtPoint(
+            pwindow.x + pwindow.width + 1, rwindow.y + 1, pyatspi.WINDOW_COORDS
+        )
+        == group
+    )
+    assert peer.queryAction().doAction(0)
+    wait(
+        lambda: peer.getState().contains(pyatspi.STATE_CHECKED)
+        and not radio.getState().contains(pyatspi.STATE_CHECKED),
+        "reverse radio selection",
+    )
+    wait(
+        lambda: "CHOICE A 0 0" in (a.work / "fixture.stdout").read_text(),
+        "actual reverse radio selection",
+    )
+    assert (
+        sum(int(item[7]) == 44 for item in cache) == 8
+        and sum(int(item[7]) == 99 for item in cache) == 4
+    )
+    try:
+        group.queryAction()
+        raise AssertionError("group advertises Action")
+    except NotImplementedError:
+        pass
     assert button.queryAction().doAction(0)
     wait(lambda: "PRESS A 1" in (a.work / "fixture.stdout").read_text(), "real UI press delivery")
     wait(lambda: not enabled(button), "disabled state notification")
     assert not button.queryAction().doAction(0)
     assert not checkbox.queryAction().doAction(0)
+    assert not radio.queryAction().doAction(0)
     assert enabled(other)
     assert other.queryAction().doAction(0)
     wait(
@@ -279,6 +342,7 @@ try:
     wait(lambda: not showing(button), "hidden window state notification")
     assert not button.queryAction().doAction(0)
     assert not checkbox.queryAction().doAction(0)
+    assert not radio.queryAction().doAction(0)
     process.stdin.write(b"s")
     process.stdin.flush()
     wait(lambda: showing(button), "shown window state notification")
@@ -293,6 +357,11 @@ try:
     process.stdin.flush()
     wait(lambda: named(wa, "Öffnen …") is None, "removed control cache invalidation")
     wait(lambda: named(wa, "Vektoren") is None, "removed checkbox")
+    wait(lambda: named(wa, "Darstellung") is None, "removed group")
+    try:
+        assert not radio.queryAction().doAction(0)
+    except (GLib.Error, NotImplementedError):
+        pass
     try:
         assert not checkbox.queryAction().doAction(0)
     except (GLib.Error, NotImplementedError):
@@ -308,6 +377,7 @@ try:
     assert "PRESS A 2" not in (a.work / "fixture.stdout").read_text()
     checks = [
         "checkbox role, actual two-way toggle, checked events and independent windows",
+        "radio hierarchy, sibling indices, parent geometry, exclusive/idempotent selection and independent groups",
         "registry discovery",
         "single application/two windows",
         "UTF-8 roles",

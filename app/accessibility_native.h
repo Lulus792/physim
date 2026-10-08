@@ -13,4 +13,5 @@ void ps_a11y_native_destroy(ps_a11y_native *bridge);
 bool ps_a11y_native_test(SDL_Window *window);
 /* Exercise the published native action, never directly enqueue a model press. */
 bool ps_a11y_native_press_label(ps_a11y_native *bridge,const char *label);
+bool ps_a11y_native_press_choice(ps_a11y_native *bridge,const char *group,const char *label);
 #endif

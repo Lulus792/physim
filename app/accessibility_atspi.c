@@ -140,7 +140,7 @@ static bool find_object(ax_server *s, const char *path, ps_a11y_native **window,
             const ps_a11y_node *live = ps_a11y_find((*window)->model, key);
             if (live) {
                 *node = *live;
-                *index = (size_t)(live - (*window)->model->nodes);
+                *index = ps_a11y_index((*window)->model,live->id);
             }
             SDL_UnlockMutex((*window)->mutex);
             return live != NULL;
@@ -148,7 +148,7 @@ static bool find_object(ax_server *s, const char *path, ps_a11y_native **window,
     return false;
 }
 static unsigned role(ps_a11y_native *w, const ps_a11y_node *node) {
-    return !w ? 75 : !node->id ? 23 : node->role == PS_A11Y_BUTTON ? 43 : node->role == PS_A11Y_CHECKBOX ? 7 : 29;
+    return !w ? 75 : !node->id ? 23 : node->role == PS_A11Y_BUTTON ? 43 : node->role == PS_A11Y_CHECKBOX ? 7 : node->role == PS_A11Y_RADIO ? 44 : node->role == PS_A11Y_RADIO_GROUP ? 99 : 29;
 }
 static const char *role_name(unsigned r, bool localized) {
     switch (r) {
@@ -156,6 +156,10 @@ static const char *role_name(unsigned r, bool localized) {
         return localized ? "Anwendung" : "application";
     case 23:
         return localized ? "Fenster" : "frame";
+    case 44:
+        return localized ? "Optionsfeld" : "radio button";
+    case 99:
+        return localized ? "Auswahlgruppe" : "grouping";
     case 7:
         return localized ? "Kontrollkästchen" : "check box";
     case 43:
@@ -167,10 +171,8 @@ static const char *role_name(unsigned r, bool localized) {
 static size_t child_count(ax_server *s, ps_a11y_native *w, const ps_a11y_node *node) {
     if (!w)
         return s->count;
-    if (node->id)
-        return 0;
     SDL_LockMutex(w->mutex);
-    size_t count = w->model->count;
+    size_t count = ps_a11y_child_count(w->model,node->id);
     SDL_UnlockMutex(w->mutex);
     return count;
 }
@@ -184,11 +186,11 @@ static void states(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
         first |= (1u << 8) | (1u << 24);
     if (!w || w->visible)
         first |= (1u << 25) | (1u << 30);
-    if(node->role==PS_A11Y_CHECKBOX && node->checked)first |= 1u << 4;
+    if((node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) && node->checked)first |= 1u << 4;
     DBusMessageIter a;
     open_container(r, iter, DBUS_TYPE_ARRAY, "u", &a);
     unsigned_number(r, &a, first);
-    unsigned_number(r, &a, node->role==PS_A11Y_CHECKBOX ? 1u << (41-32) : 0);
+    unsigned_number(r, &a, (node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) ? 1u << (41-32) : 0);
     close_container(r, iter, &a);
 }
 static void interfaces(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
@@ -209,7 +211,7 @@ static void parent_reference(ax_reply *r, DBusMessageIter *iter, ax_server *s, p
     if (!w)
         reference(r, iter, "org.a11y.atspi.Registry", AX_ROOT);
     else
-        local_reference(r, iter, s, node->id ? w->window_id : 0, 0);
+        local_reference(r, iter, s, node->id ? w->window_id : 0, node->parent);
 }
 static void cache_item(ax_reply *r, DBusMessageIter *iter, ax_server *s, ps_a11y_native *w,
                        const ps_a11y_node *node, int index) {
@@ -364,6 +366,11 @@ static bool bounds(ps_a11y_native *w, const ps_a11y_node *node, unsigned coordin
     if (screen) {
         x += w->x;
         y += w->y;
+    }
+    if(coordinate==2 && node->parent) {
+        SDL_LockMutex(w->mutex);const ps_a11y_node *parent=ps_a11y_find(w->model,node->parent);
+        if(parent){x-=floor(parent->bounds[0]);y-=floor(parent->bounds[1]);}
+        SDL_UnlockMutex(w->mutex);if(!parent)return false;
     }
     double values[] = {x, y, width, height};
     for (size_t i = 0; i < 4; i++) {
@@ -532,7 +539,8 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             ps_a11y_node empty = {0};
             cache_item(&r, &array, s, window, &empty, (int)i);
             for (size_t j = 0; j < window->model->count; j++)
-                cache_item(&r, &array, s, window, &window->model->nodes[j], (int)j);
+                cache_item(&r, &array, s, window, &window->model->nodes[j],
+                           (int)ps_a11y_index(window->model,window->model->nodes[j].id));
             SDL_UnlockMutex(window->mutex);
         }
         close_container(&r, &r.root, &array);
@@ -629,8 +637,9 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
                 local_reference(&r, &r.root, s, s->windows[child]->window_id, 0);
             else {
                 SDL_LockMutex(w->mutex);
-                if ((size_t)child < w->model->count)
-                    local_reference(&r, &r.root, s, w->window_id, w->model->nodes[child].id);
+                const ps_a11y_node *found=ps_a11y_child_at(w->model,node.id,(size_t)child);
+                if (found)
+                    local_reference(&r, &r.root, s, w->window_id, found->id);
                 else
                     failure = DBUS_ERROR_INVALID_ARGS;
                 SDL_UnlockMutex(w->mutex);
@@ -643,10 +652,11 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             if (!w)
                 for (size_t i = 0; i < s->count; i++)
                     local_reference(&r, &array, s, s->windows[i]->window_id, 0);
-            else if (!node.id) {
+            else {
                 SDL_LockMutex(w->mutex);
                 for (size_t i = 0; i < w->model->count; i++)
-                    local_reference(&r, &array, s, w->window_id, w->model->nodes[i].id);
+                    if(w->model->nodes[i].parent==node.id)
+                        local_reference(&r, &array, s, w->window_id, w->model->nodes[i].id);
                 SDL_UnlockMutex(w->mutex);
             }
             close_container(&r, &r.root, &array);
@@ -723,17 +733,18 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
                      (int64_t)x >= (int64_t)rectangle[0] + rectangle[2] ||
                      (int64_t)y >= (int64_t)rectangle[1] + rectangle[3])
                 reference(&r, &r.root, "", AX_NULL);
-            else if (node.id)
+            else if (node.id && node.role!=PS_A11Y_RADIO_GROUP)
                 local_reference(&r, &r.root, s, w->window_id, node.id);
             else {
-                uint64_t hit = 0;
+                uint64_t hit = node.id;
                 SDL_LockMutex(w->mutex);
                 for (size_t i = w->model->count; i > 0; i--) {
                     int child_bounds[4];
                     const ps_a11y_node *child = &w->model->nodes[i - 1];
+                    if(child->parent!=node.id)continue;
                     /* Window parent coordinates use the screen; child parent
                      * coordinates use the window. Compare in the caller's space. */
-                    unsigned child_coordinate = coordinate == 2 ? 0 : coordinate;
+                    unsigned child_coordinate = coordinate == 2 ? (node.id?1:0) : coordinate;
                     if (bounds(w, child, child_coordinate, child_bounds) &&
                         (int64_t)x >= child_bounds[0] && (int64_t)y >= child_bounds[1] &&
                         (int64_t)x < (int64_t)child_bounds[0] + child_bounds[2] &&
@@ -772,7 +783,7 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             DBusMessageIter a, c;
             open_container(&r, &r.root, DBUS_TYPE_ARRAY, "(sss)", &a);
             open_container(&r, &a, DBUS_TYPE_STRUCT, NULL, &c);
-            text(&r, &c, node.role==PS_A11Y_CHECKBOX?"Umschalten":"Klicken");
+            text(&r, &c, node.role==PS_A11Y_CHECKBOX?"Umschalten":node.role==PS_A11Y_RADIO?"Auswählen":"Klicken");
             text(&r, &c, "");
             text(&r, &c, "");
             close_container(&r, &a, &c);
@@ -788,9 +799,9 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
                 SDL_UnlockMutex(w->mutex);
                 boolean(&r, &r.root, accepted);
             } else if (!strcmp(method, "GetName"))
-                text(&r, &r.root, node.role==PS_A11Y_CHECKBOX?"toggle":"click");
+                text(&r, &r.root, node.role==PS_A11Y_CHECKBOX?"toggle":node.role==PS_A11Y_RADIO?"select":"click");
             else if (!strcmp(method, "GetLocalizedName"))
-                text(&r, &r.root, node.role==PS_A11Y_CHECKBOX?"Umschalten":"Klicken");
+                text(&r, &r.root, node.role==PS_A11Y_CHECKBOX?"Umschalten":node.role==PS_A11Y_RADIO?"Auswählen":"Klicken");
             else if (!strcmp(method, "GetDescription") || !strcmp(method, "GetKeyBinding"))
                 text(&r, &r.root, "");
             else
@@ -971,7 +982,9 @@ void ps_a11y_native_publish(ps_a11y_native *b, bool changed) {
         for (size_t i = 0; i < b->previous_count; i++)
             if (!ps_a11y_find(b->model, b->previous[i].id)) {
                 cache_signal(s, b, &b->previous[i], (int)i, false);
-                event_reference(s, window_path, "ChildrenChanged", "remove", (int)i, b->window_id,
+                char parent_path[128];path_for(parent_path,b->window_id,b->previous[i].parent);
+                size_t sibling=0;for(size_t j=0;j<i;j++)if(b->previous[j].parent==b->previous[i].parent)sibling++;
+                event_reference(s, parent_path, "ChildrenChanged", "remove", (int)sibling, b->window_id,
                                 b->previous[i].id);
             }
         for (size_t i = 0; i < b->model->count; i++) {
@@ -985,9 +998,9 @@ void ps_a11y_native_publish(ps_a11y_native *b, bool changed) {
                     break;
                 }
             if (added) {
-                cache_signal(s, b, node, (int)i, true);
-                event_reference(s, window_path, "ChildrenChanged", "add", (int)i, b->window_id,
-                                node->id);
+                int sibling=(int)ps_a11y_index(b->model,node->id);cache_signal(s,b,node,sibling,true);
+                char parent_path[128];path_for(parent_path,b->window_id,node->parent);
+                event_reference(s,parent_path,"ChildrenChanged","add",sibling,b->window_id,node->id);
             }
             char node_path[128];
             path_for(node_path, b->window_id, node->id);
@@ -995,7 +1008,7 @@ void ps_a11y_native_publish(ps_a11y_native *b, bool changed) {
                 event_state(s, node_path, "enabled", node->enabled);
                 event_state(s, node_path, "sensitive", node->enabled);
             }
-            if(old && node->role==PS_A11Y_CHECKBOX && old->checked!=node->checked)
+            if(old && (node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) && old->checked!=node->checked)
                 event_state(s,node_path,"checked",node->checked);
             if (moved || (old && memcmp(old->bounds, node->bounds, sizeof node->bounds)))
                 event_bounds(s, node_path, b, node);
@@ -1054,6 +1067,9 @@ bool ps_a11y_native_press_label(ps_a11y_native *bridge, const char *label) {
     (void)bridge;
     (void)label;
     return false;
+}
+bool ps_a11y_native_press_choice(ps_a11y_native *bridge,const char *group,const char *label) {
+    (void)bridge;(void)group;(void)label;return false;
 }
 bool ps_a11y_native_test(SDL_Window *window) {
     (void)window;

@@ -193,7 +193,7 @@ static void settings_view(app *a) {
     const char *ui_sizes[]={"16 px","18 px","20 px","22 px"};
     for(unsigned i=0;i<4;i++) {
         a->ui_size_bounds[i]=nk_widget_bounds(ui);
-        if(nk_option_label(ui,ui_sizes[i],p->ui_size==16+i*2))p->ui_size=16+i*2;
+        if(ps_ui_option_label(ui,"Schriftgröße der Oberfläche",ui_sizes[i],p->ui_size==16+i*2))p->ui_size=16+i*2;
     }
     ui_group.w=4*ui_group.w+3*ui->style.window.spacing.x;settings_focus_draw(a,0,ui_group);
     nk_layout_row_dynamic(ui, 36, a->preferences.ui_size>=20?2:3);
@@ -222,7 +222,7 @@ static void settings_view(app *a) {
     const char *themes[] = {"Dunkel", "Hell", "Hoher Kontrast"};
     for (unsigned i = 0; i < PS_THEME_COUNT; i++) {
         a->theme_bounds[i] = nk_widget_bounds(ui);
-        if (nk_option_label(ui, themes[i], p->theme == i))
+        if (ps_ui_option_label(ui,"Darstellung", themes[i], p->theme == i))
             p->theme = i;
         if(p->theme==i)settings_focus_draw(a,4,a->theme_bounds[i]);
     }
@@ -234,7 +234,7 @@ static void settings_view(app *a) {
         if (i == 2)
             a->settings_bounds[1] = nk_widget_bounds(ui);
         struct nk_rect bounds=nk_widget_bounds(ui);
-        if (nk_option_label(ui, sizes[i], p->editor_size == 16 + i * 2))
+        if (ps_ui_option_label(ui,"Schriftgröße im Code-Editor", sizes[i], p->editor_size == 16 + i * 2))
             p->editor_size = 16 + i * 2;
         if(p->editor_size==16+i*2)settings_focus_draw(a,5,bounds);
     }

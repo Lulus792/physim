@@ -2620,3 +2620,12 @@ Namen. Tatsächliche App-/AppKit-/AT-SPI-Prüfungen belegen Wertänderungen und
 Ablehnung deaktivierter, verborgener und veralteter Ziele. Editoren, Auswahlfelder,
 Fokusdienste, Windows/UIA und praktische Screenreader-Abnahme bleiben offen.
 [Umfang und Grenzen](accessibility.md).
+
+
+Native Optionsgruppen machen Darstellung und beide Schriftgrößengruppen auf
+macOS und Linux erreichbar. Rollen, Eltern-/Kindbeziehungen, Auswahlwerte und
+native Select-Aktionen sind an gezeichneten Controls und am tatsächlichen
+Einstellungsentwurf geprüft. Gleichlautende Optionen besitzen unterschiedliche
+Gruppen; erneute Auswahl schaltet den Wert nicht ab. Vollständige Fokus-,
+Dropdown-, Editor- und praktische Screenreader-Abnahme bleiben offen.
+[Verträge und Grenzen](accessibility.md).

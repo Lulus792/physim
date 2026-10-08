@@ -17,7 +17,7 @@ veraltete Elemente lösen keine Aktion aus. Eine angenommene Aktion wird genau
 einmal im nächsten UI-Frame an den passenden Control übergeben.
 
 Dieser Einstieg deckt noch keine vollständige VoiceOver-Bedienung ab.
-Textfelder, Editoren, Menüs, Auswahlfelder, Regler, Szenen, Diagramme und
+Textfelder, Editoren, Menüs, Dropdowns, Regler, Szenen, Diagramme und
 programmatische Fokusführung benötigen weitere semantische Anbindungen.
 Die bestehende Sichtbarkeits-/Deaktivierungslogik wird berücksichtigt, sodass
 dieser Einstieg keine Aktivierung gesperrter oder momentan schreibgeschützter
@@ -137,3 +137,50 @@ bestehenden Tastaturprüfer abgedeckt. Der SDK-Prüfer besitzt dafür `--accessi
 Linux verwendet einen eigenen Accessibility-Bus und einen unabhängigen Client.
 Diese Nachweise ersetzen keine praktische VoiceOver-/Orca-Abnahme und schließen
 den gesamten Barrierefreiheitsblock des Projektplans nicht ab.
+
+
+## Benannte Optionsgruppen
+
+Darstellung sowie Schriftgrößen der Oberfläche und des Code-Editors besitzen
+jetzt native Optionsgruppen mit höchstens einem sichtbaren ausgewählten Wert. Die Gruppen
+heißen wie ihre sichtbaren Überschriften. Gleichlautende Optionen wie `16 px`
+bleiben anhand ihres Elternobjekts unterscheidbar. Gruppen und Optionen besitzen
+stabile Kennungen, echte Eltern-/Kindbeziehungen und Geschwisterindizes.
+
+macOS meldet `AXRadioGroup` und `AXRadioButton`. Die Optionen liefern `NSNumber`
+0/1; die Gruppe liefert ihre Kinder und ausgewählten Kinder. Änderungen melden
+`AXValueChanged` und `AXSelectedChildrenChanged`. Die nativen Rahmen der Kinder
+beziehen sich auf die Gruppe. [Apples Radio-Button-Vertrag](https://developer.apple.com/documentation/appkit/nsaccessibilityradiobutton)
+verlangt den booleschen Auswahlwert und Wertänderungsmitteilungen. Linux meldet
+`grouping` und `radio button`, `checkable` und gegebenenfalls `checked`.
+[Die AT-SPI-Rollen](https://gnome.pages.gitlab.gnome.org/at-spi2-core/libatspi/enum.Role.html)
+unterscheiden benannte Gruppen von ihren auswählbaren Kindern. Cache, Eltern,
+Kindabfragen, Geschwisterindizes, Zustandsereignisse und Rahmen in Fenster-/Eltern-
+koordinaten folgen dieser Hierarchie. Die Aktion heißt `select` beziehungsweise
+`Auswählen`; eine Auswahlgruppe selbst besitzt keine Aktion.
+
+Auswahl aktiviert eine Option und deaktiviert die übrigen derselben Gruppe.
+Erneutes Aktivieren der ausgewählten Option wählt sie weiter aus. Eine native
+Auswahl innerhalb des Frames überschreibt später übermittelte alte Auswahlflags;
+eine ausdrücklich danach erfolgte Pointerauswahl kann sie wieder ablösen.
+Dadurch besitzen veröffentlichter Snapshot und der tatsächliche UI-Wert dieselbe
+Auswahl. Separate Gruppen und Fenster beeinflussen einander nicht. Gesperrte,
+verborgene und veraltete Optionen folgen denselben Aktionsregeln wie Checkboxen.
+
+`ps_ui_option_label` ist eine private UI-Bindung mit explizitem Gruppennamen.
+Wie andere Controls werden nur sichtbare Optionen veröffentlicht. Liegt die
+aktuelle Auswahl außerhalb des sichtbaren Ausschnitts, enthält die veröffentlichte
+Gruppe keinen ausgewählten sichtbaren Wert. Die Gruppenknoten zählen zum bestehenden Budget von 256 Elementen pro Modell;
+fehlender Platz für eine neue Gruppe und ihre erste Option veröffentlicht keine
+leere Gruppe. Die portable Prüfung deckt Gruppenidentität, Indizes, exklusive
+und idempotente Auswahl, gemischte Pointer-/Native-Ereignisse, UTF-8 und Grenzen ab.
+AppKit-Prüfungen lesen Rollen, Eltern, Kinder, ausgewählte Kinder, echte Rahmen
+und Werte. Der unabhängige AT-SPI-Prüfer verwendet zwei gezeichnete Fenster mit
+je zwei gleichlautenden Optionsgruppen und prüft beide Auswahlrichtungen.
+
+Der tatsächliche App-Prüfer führt zusätzlich sechs native Auswahlen aus:
+Oberfläche 22→16 px, Darstellung Hell→Dunkel und Code-Editor 20→16 px. Er prüft
+Änderungen am Entwurf und erhält die angewandte Konfiguration. Der SDK-Prüfer
+führt denselben Ablauf mit dem verschobenen App-Paket aus. Dropdowns, Listen,
+Text-/Editorinterfaces, programmatische Fokusführung und praktische VoiceOver-/
+Orca-Abnahme bleiben gesondert offen.

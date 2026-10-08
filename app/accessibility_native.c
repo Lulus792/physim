@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 #ifdef __APPLE__
 #include <objc/runtime.h>
 #include <objc/message.h>
@@ -11,7 +12,7 @@
 extern void NSAccessibilityPostNotification(id element,id notification);
 struct ps_a11y_native {
  SDL_Window *window;ps_a11y_model *model;SDL_Mutex *mutex;SDL_AtomicInt references;
- id view,children;uint64_t ids[PS_A11Y_MAX_NODES];bool checked[PS_A11Y_MAX_NODES];size_t count;
+ id view,children;uint64_t ids[PS_A11Y_MAX_NODES],parents[PS_A11Y_MAX_NODES];bool checked[PS_A11Y_MAX_NODES];size_t count;
 };
 #if OBJC_BOOL_IS_BOOL
 #define PS_AX_BOOL "B"
@@ -53,23 +54,43 @@ static BOOL element_valid(id object,SEL selector) {(void)selector;ps_a11y_node n
 static BOOL element_enabled(id object,SEL selector) {(void)selector;ps_a11y_node node;return node_copy(object,&node)&&node.enabled;}
 static id element_role(id object,SEL selector) {
  (void)selector;ps_a11y_node node;if(!node_copy(object,&node))return nil;
- return string(node.role==PS_A11Y_BUTTON?"AXButton":node.role==PS_A11Y_CHECKBOX?"AXCheckBox":"AXStaticText");
+ return string(node.role==PS_A11Y_BUTTON?"AXButton":node.role==PS_A11Y_CHECKBOX?"AXCheckBox":node.role==PS_A11Y_RADIO?"AXRadioButton":node.role==PS_A11Y_RADIO_GROUP?"AXRadioGroup":"AXStaticText");
 }
 static id element_label(id object,SEL selector) {
  (void)selector;ps_a11y_node node;return node_copy(object,&node)?string(node.label):nil;
 }
 static id element_value(id object,SEL selector) {
  (void)selector;ps_a11y_node node;if(!node_copy(object,&node))return nil;
- if(node.role==PS_A11Y_CHECKBOX)
+ if(node.role==PS_A11Y_CHECKBOX || node.role==PS_A11Y_RADIO)
   return ((id(*)(id,SEL,BOOL))objc_msgSend)((id)objc_getClass("NSNumber"),sel_registerName("numberWithBool:"),node.checked);
  return node.role==PS_A11Y_TEXT?string(node.label):nil;
 }
 static id element_identifier(id object,SEL selector) {
  (void)selector;char text[64];snprintf(text,sizeof text,"physim-control-%llu",(unsigned long long)identifier(object));return string(text);
 }
+static id element_for(ps_a11y_native *b,uint64_t id_value) {
+ for(size_t i=0;i<b->count;i++)if(b->ids[i]==id_value)
+  return ((id(*)(id,SEL,unsigned long))objc_msgSend)(b->children,sel_registerName("objectAtIndex:"),(unsigned long)i);
+ return nil;
+}
+static id children_for(id object,bool selected) {
+ ps_a11y_native *b=owner(object);if(!b)return nil;SDL_LockMutex(b->mutex);
+ id children=send0((id)objc_getClass("NSMutableArray"),"array");
+ const ps_a11y_node *parent=b->model?ps_a11y_find(b->model,identifier(object)):NULL;
+ if(parent && parent->role==PS_A11Y_RADIO_GROUP)for(size_t i=0;i<b->model->count;i++) {
+  const ps_a11y_node *child=&b->model->nodes[i];
+  if(child->parent==parent->id && (!selected || child->checked)) {
+   id element=element_for(b,child->id);if(element)send1(children,"addObject:",element);
+  }
+ }
+ SDL_UnlockMutex(b->mutex);return children;
+}
+static id element_children(id object,SEL selector){(void)selector;return children_for(object,false);}
+static id element_selected_children(id object,SEL selector){(void)selector;return children_for(object,true);}
 static id element_parent(id object,SEL selector) {
  (void)selector;ps_a11y_native *b=owner(object);if(!b)return nil;SDL_LockMutex(b->mutex);
- id parent=b->model?send0(b->view,"retain"):nil;SDL_UnlockMutex(b->mutex);
+ const ps_a11y_node *node=b->model?ps_a11y_find(b->model,identifier(object)):NULL;
+ id parent=node?send0(node->parent?element_for(b,node->parent):b->view,"retain"):nil;SDL_UnlockMutex(b->mutex);
  return parent?send0(parent,"autorelease"):nil;
 }
 static CGRect element_frame(id object,SEL selector) {
@@ -105,6 +126,8 @@ static bool make_class(void) {
  class_addMethod(element_class,sel_registerName("accessibilityValue"),(IMP)element_value,"@@:");
  class_addMethod(element_class,sel_registerName("accessibilityIdentifier"),(IMP)element_identifier,"@@:");
  class_addMethod(element_class,sel_registerName("accessibilityParent"),(IMP)element_parent,"@@:");
+ class_addMethod(element_class,sel_registerName("accessibilityChildren"),(IMP)element_children,"@@:");
+ class_addMethod(element_class,sel_registerName("accessibilitySelectedChildren"),(IMP)element_selected_children,"@@:");
  class_addMethod(element_class,sel_registerName("accessibilityFrame"),(IMP)element_frame,"{CGRect={CGPoint=dd}{CGSize=dd}}@:");
  class_addMethod(element_class,sel_registerName("accessibilityPerformPress"),(IMP)element_press,PS_AX_BOOL "@:");
  class_addMethod(element_class,sel_registerName("isAccessibilitySelectorAllowed:"),(IMP)element_allowed,PS_AX_BOOL "@::");
@@ -125,24 +148,41 @@ ps_a11y_native *ps_a11y_native_create(SDL_Window *window,ps_a11y_model *model,SD
 void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
  if(!b || !changed)return;
  id pool=send0(send0((id)objc_getClass("NSAutoreleasePool"),"alloc"),"init");
- id children=send0((id)objc_getClass("NSMutableArray"),"new");
- int height;SDL_GetWindowSize(b->window,NULL,&height);
- BOOL flipped=((BOOL(*)(id,SEL))objc_msgSend)(b->view,sel_registerName("isFlipped"));
+ id children=send0((id)objc_getClass("NSMutableArray"),"new");bool value_changed[PS_A11Y_MAX_NODES]={0};bool selection_changed[PS_A11Y_MAX_NODES]={0};
+ SDL_LockMutex(b->mutex);
  for(size_t i=0;i<b->model->count;i++) {
-  const ps_a11y_node *node=&b->model->nodes[i];id element=nil;bool value_changed=false;
-  for(size_t j=0;j<b->count;j++)if(b->ids[j]==node->id) {element=((id(*)(id,SEL,unsigned long))objc_msgSend)(b->children,sel_registerName("objectAtIndex:"),(unsigned long)j);value_changed=node->role==PS_A11Y_CHECKBOX && node->checked!=b->checked[j];break;}
+  const ps_a11y_node *node=&b->model->nodes[i];id element=element_for(b,node->id);
+  if(node->role==PS_A11Y_RADIO_GROUP) {
+   uint64_t old_selected=0,new_selected=0;
+   for(size_t j=0;j<b->count;j++)if(b->parents[j]==node->id && b->checked[j])old_selected=b->ids[j];
+   for(size_t j=0;j<b->model->count;j++)if(b->model->nodes[j].parent==node->id && b->model->nodes[j].checked)new_selected=b->model->nodes[j].id;
+   selection_changed[i]=old_selected!=new_selected;
+  }
+  for(size_t j=0;j<b->count;j++)if(b->ids[j]==node->id)
+   value_changed[i]=(node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) && node->checked!=b->checked[j];
   if(!element) {
    element=send0((id)element_class,"new");SDL_AddAtomicInt(&b->references,1);
    memcpy((char*)element+ivar_getOffset(owner_ivar),&b,sizeof b);memcpy((char*)element+ivar_getOffset(id_ivar),&node->id,sizeof node->id);
-   send1(element,"setAccessibilityParent:",b->view);
    send1(children,"addObject:",element);send0(element,"release");
   } else send1(children,"addObject:",element);
-  CGRect bounds=CGRectMake(node->bounds[0],flipped?node->bounds[1]:height-node->bounds[1]-node->bounds[3],node->bounds[2],node->bounds[3]);
-  ((void(*)(id,SEL,CGRect))objc_msgSend)(element,sel_registerName("setAccessibilityFrameInParentSpace:"),bounds);
-  if(value_changed)NSAccessibilityPostNotification(element,string("AXValueChanged"));
  }
- send1(b->view,"setAccessibilityChildren:",children);if(b->children)send0(b->children,"release");b->children=children;
- b->count=b->model->count;for(size_t i=0;i<b->count;i++){b->ids[i]=b->model->nodes[i].id;b->checked[i]=b->model->nodes[i].checked;}
+ if(b->children)send0(b->children,"release");b->children=children;
+ b->count=b->model->count;for(size_t i=0;i<b->count;i++){b->ids[i]=b->model->nodes[i].id;b->checked[i]=b->model->nodes[i].checked;b->parents[i]=b->model->nodes[i].parent;}
+ id roots=send0((id)objc_getClass("NSMutableArray"),"array");int height;SDL_GetWindowSize(b->window,NULL,&height);
+ BOOL flipped=((BOOL(*)(id,SEL))objc_msgSend)(b->view,sel_registerName("isFlipped"));
+ for(size_t i=0;i<b->count;i++) {
+  const ps_a11y_node *node=&b->model->nodes[i];id element=element_for(b,node->id);
+  const ps_a11y_node *parent=node->parent?ps_a11y_find(b->model,node->parent):NULL;
+  send1(element,"setAccessibilityParent:",parent?element_for(b,parent->id):b->view);
+  if(!parent)send1(roots,"addObject:",element);
+  CGRect bounds=parent?CGRectMake(node->bounds[0]-parent->bounds[0],
+       parent->bounds[1]+parent->bounds[3]-node->bounds[1]-node->bounds[3],node->bounds[2],node->bounds[3])
+       :CGRectMake(node->bounds[0],flipped?node->bounds[1]:height-node->bounds[1]-node->bounds[3],node->bounds[2],node->bounds[3]);
+  ((void(*)(id,SEL,CGRect))objc_msgSend)(element,sel_registerName("setAccessibilityFrameInParentSpace:"),bounds);
+ }
+ send1(b->view,"setAccessibilityChildren:",roots);SDL_UnlockMutex(b->mutex);
+ for(size_t i=0;i<b->count;i++)if(value_changed[i])NSAccessibilityPostNotification(element_for(b,b->ids[i]),string("AXValueChanged"));
+ for(size_t i=0;i<b->count;i++)if(selection_changed[i])NSAccessibilityPostNotification(element_for(b,b->ids[i]),string("AXSelectedChildrenChanged"));
  NSAccessibilityPostNotification(b->view,string("AXLayoutChanged"));send0(pool,"drain");
 }
 void ps_a11y_native_destroy(ps_a11y_native *b) {
@@ -162,6 +202,18 @@ bool ps_a11y_native_press_label(ps_a11y_native *b,const char *label) {
   ps_a11y_node node;
   if(node_copy(element,&node) && ps_a11y_actionable(node.role) && !strcmp(node.label,label))
    return ((BOOL(*)(id,SEL))objc_msgSend)(element,sel_registerName("accessibilityPerformPress"));
+ }
+ return false;
+}
+bool ps_a11y_native_press_choice(ps_a11y_native *b,const char *group,const char *label) {
+ if(!b || !group || !label)return false;
+ for(size_t i=0;i<b->count;i++) {
+  id element=element_for(b,b->ids[i]);ps_a11y_node node,parent;
+  if(node_copy(element,&node) && node.role==PS_A11Y_RADIO && !strcmp(node.label,label)) {
+   id group_element=element_for(b,node.parent);
+   if(group_element && node_copy(group_element,&parent) && !strcmp(parent.label,group))
+    return ((BOOL(*)(id,SEL))objc_msgSend)(element,sel_registerName("accessibilityPerformPress"));
+  }
  }
  return false;
 }
@@ -202,9 +254,47 @@ bool ps_a11y_native_test(SDL_Window *window) {
  ps_a11y_publish(model);ps_a11y_native_publish(b,true);
  okay &= !((BOOL(*)(id,SEL))objc_msgSend)(checkbox,sel_registerName("accessibilityPerformPress"));
 
+ ps_a11y_begin(model);bounds[0]=10;bounds[1]=20;
+ ps_a11y_record_option(model,"main","Surface","16 px",bounds,true,true,false);
+ bounds[0]=110;ps_a11y_record_option(model,"main","Surface","22 px",bounds,true,false,false);
+ bounds[0]=10;bounds[1]=80;ps_a11y_record_option(model,"main","Code","16 px",bounds,true,true,false);
+ bounds[0]=110;ps_a11y_record_option(model,"main","Code","22 px",bounds,true,false,false);
+ ps_a11y_publish(model);ps_a11y_native_publish(b,true);
+ uint64_t group_id=model->nodes[0].id,radio_id=model->nodes[2].id;
+ id group_element=element_for(b,group_id),radio=send0(element_for(b,radio_id),"retain");
+ const char *group_role=((const char*(*)(id,SEL))objc_msgSend)(send0(group_element,"accessibilityRole"),sel_registerName("UTF8String"));
+ const char *radio_role=((const char*(*)(id,SEL))objc_msgSend)(send0(radio,"accessibilityRole"),sel_registerName("UTF8String"));
+ okay &= group_role && !strcmp(group_role,"AXRadioGroup") && radio_role && !strcmp(radio_role,"AXRadioButton") &&
+  send0(radio,"accessibilityParent")==group_element &&
+  ((unsigned long(*)(id,SEL))objc_msgSend)(send0(group_element,"accessibilityChildren"),sel_registerName("count"))==2 &&
+  ((unsigned long(*)(id,SEL))objc_msgSend)(send0(group_element,"accessibilitySelectedChildren"),sel_registerName("count"))==1 &&
+  ((unsigned long(*)(id,SEL))objc_msgSend)(send0(b->view,"accessibilityChildren"),sel_registerName("count"))==2 &&
+  !((BOOL(*)(id,SEL))objc_msgSend)(group_element,sel_registerName("accessibilityPerformPress"));
+ CGRect radio_frame=((CGRect(*)(id,SEL))frame_method)(radio,frame_selector);
+ CGRect group_frame=((CGRect(*)(id,SEL))frame_method)(group_element,frame_selector);
+ okay &= fabs(radio_frame.origin.x-group_frame.origin.x-100)<.01 && radio_frame.size.height==24;
+ okay &= ps_a11y_native_press_choice(b,"Surface","22 px");
+ ps_a11y_begin(model);bounds[0]=10;bounds[1]=20;
+ ps_a11y_record_option(model,"main","Surface","16 px",bounds,true,true,false);bounds[0]=110;
+ okay &= ps_a11y_record_option(model,"main","Surface","22 px",bounds,true,false,false);
+ bounds[0]=10;bounds[1]=80;ps_a11y_record_option(model,"main","Code","16 px",bounds,true,true,false);
+ bounds[0]=110;ps_a11y_record_option(model,"main","Code","22 px",bounds,true,false,false);
+ ps_a11y_publish(model);ps_a11y_native_publish(b,true);
+ okay &= ((BOOL(*)(id,SEL))objc_msgSend)(send0(radio,"accessibilityValue"),sel_registerName("boolValue")) &&
+  !ps_a11y_child_at(model,group_id,0)->checked && ps_a11y_child_at(model,model->nodes[3].id,0)->checked;
+ id selected=send0(group_element,"accessibilitySelectedChildren");
+ okay &= ((unsigned long(*)(id,SEL))objc_msgSend)(selected,sel_registerName("count"))==1 &&
+  ((id(*)(id,SEL,unsigned long))objc_msgSend)(selected,sel_registerName("objectAtIndex:"),0)==radio;
+ /* The selected child can leave the visible snapshot while its group remains. */
+ ps_a11y_begin(model);bounds[0]=10;bounds[1]=20;
+ ps_a11y_record_option(model,"main","Surface","16 px",bounds,true,false,false);
+ ps_a11y_publish(model);ps_a11y_native_publish(b,true);
+ okay &= ((unsigned long(*)(id,SEL))objc_msgSend)(send0(group_element,"accessibilitySelectedChildren"),sel_registerName("count"))==0 &&
+  !((BOOL(*)(id,SEL))objc_msgSend)(radio,sel_registerName("accessibilityPerformPress"));
  ps_a11y_native_destroy(b);okay &= !((BOOL(*)(id,SEL))objc_msgSend)(element,sel_registerName("accessibilityPerformPress"));
  okay &= !((BOOL(*)(id,SEL))objc_msgSend)(checkbox,sel_registerName("accessibilityPerformPress"));
- send0(checkbox,"release");send0(element,"release");free(model);return okay;
+ okay &= !((BOOL(*)(id,SEL))objc_msgSend)(radio,sel_registerName("accessibilityPerformPress"));
+ send0(radio,"release");send0(checkbox,"release");send0(element,"release");free(model);return okay;
 }
 #elif !defined(__linux__)
 struct ps_a11y_native {int unused;};
@@ -213,4 +303,5 @@ void ps_a11y_native_publish(ps_a11y_native *bridge,bool changed) {(void)bridge;(
 void ps_a11y_native_destroy(ps_a11y_native *bridge) {(void)bridge;}
 bool ps_a11y_native_test(SDL_Window *window) {(void)window;return false;}
 bool ps_a11y_native_press_label(ps_a11y_native *bridge,const char *label) {(void)bridge;(void)label;return false;}
+bool ps_a11y_native_press_choice(ps_a11y_native *bridge,const char *group,const char *label) {(void)bridge;(void)group;(void)label;return false;}
 #endif

@@ -70,8 +70,10 @@ unter `build/contact-world-language-release-linux/test-results/run-dbd70ucn`.
 Das ist ein Nachweis für diesen Stand und diese Umgebungen. Die anschließenden
 Änderungen an Laufzeitsupport und Prüfern benötigen eigene Nachweise; eine
 nachträgliche Änderung der Zahl macht den alten Lauf nicht zu einem aktuellen
-Gesamtlauf. Der aktuelle Katalog enthält mit den zusätzlichen Lernwegprüfungen
-621 Fälle ohne Fenster, 601 ohne SDL und 77 Fensterfälle.
+Gesamtlauf. Der am 8. Oktober auf macOS gezählte Katalog enthält inzwischen
+669 Fälle ohne Fenster, 647 ohne SDL und 81 Fensterfälle. Diese aktuelle
+Katalogzählung ist kein neuer Gesamtlauf; die oben genannten alten Läufe behalten
+ihren damaligen Prüfumfang.
 
 Die Abnahme bleibt offen, bis sämtliche konkreten Anforderungen passende
 aktuelle Implementierungs-, Laufzeit- und Plattformnachweise besitzen.
@@ -420,3 +422,12 @@ AppKit-/AT-SPI- und App-Einstellungsabläufe geprüft. Die Bibliotheksauswahl be
 native Laufnamen trotz optisch leerer Checkboxbeschriftung. Bestehende Dock-
 Aktivierung bleibt erforderlich; Text-/Editor-/Fokusdienste und praktische
 Screenreader-Abnahme bleiben offen. PP-0710 bleibt ausdrücklich unvollständig.
+
+
+Native Optionsgruppen ergänzen PP-0710 um Darstellung und beide Schriftgrößen.
+Echte Eltern-/Kindbeziehungen, Auswahlwerte und Aktionen sind durch portable,
+AppKit-/AT-SPI- und tatsächliche App-Einstellungsprüfungen belegt. Die Gruppen
+trennen gleichlautende Werte, behalten eine Auswahl bei wiederholter Aktivierung
+und berücksichtigen native sowie Pointer-Ereignisse. Dropdowns, Text-/Editor-
+und Fokusdienste sowie praktische Screenreader-Abnahme bleiben offen; der Block
+bleibt unvollständig.
