@@ -2,11 +2,20 @@
 /* ru_maxrss is a Darwin extension hidden by the build's POSIX feature level. */
 #define _DARWIN_C_SOURCE
 #endif
+#ifdef __linux__
+#define _DEFAULT_SOURCE
+#endif
 #include "platform.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+bool ps_process_usage_final(const ps_process *p, ps_process_usage *out,
+                            ps_process_usage_scope *scope) {
+    if (!p || !out || !scope || p->running || !p->usage_valid) return false;
+    *out = p->final_usage; *scope = p->usage_scope;
+    return true;
+}
 bool ps_process_start(ps_process *p, const char *const *argv, const char *dir) {
     return ps_process_start_limited(p, argv, dir, NULL);
 }
@@ -47,13 +56,13 @@ static bool process_deadline(ps_process *p) {
 #define PSAPI_VERSION 2
 #endif
 #include <psapi.h>
-bool ps_process_usage_self(ps_process_usage *out) {
+static bool process_usage_handle(HANDLE process, ps_process_usage *out) {
     if (!out) return false;
     FILETIME created, exited, kernel, user;
     PROCESS_MEMORY_COUNTERS memory = {0};
     memory.cb = sizeof memory;
-    if (!GetProcessTimes(GetCurrentProcess(), &created, &exited, &kernel, &user) ||
-        !K32GetProcessMemoryInfo(GetCurrentProcess(), &memory, sizeof memory))
+    if (!GetProcessTimes(process, &created, &exited, &kernel, &user) ||
+        !K32GetProcessMemoryInfo(process, &memory, sizeof memory))
         return false;
     ULARGE_INTEGER u, k;
     u.LowPart = user.dwLowDateTime; u.HighPart = user.dwHighDateTime;
@@ -62,6 +71,7 @@ bool ps_process_usage_self(ps_process_usage *out) {
                               (uint64_t)memory.PeakWorkingSetSize};
     return true;
 }
+bool ps_process_usage_self(ps_process_usage *out) { return process_usage_handle(GetCurrentProcess(), out); }
 static wchar_t *wide(const char *s) {
     int n = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, s, -1, NULL, 0);
     if (!n)
@@ -158,6 +168,7 @@ bool ps_process_start_limited(ps_process *p, const char *const *argv, const char
     CloseHandle(out_w);
     CloseHandle(pi.hThread);
     p->handle = pi.hProcess;
+    p->pid = (int)pi.dwProcessId;
     p->input = in_w;
     p->output = out_r;
     p->running = true;
@@ -196,6 +207,8 @@ bool ps_process_poll(ps_process *p) {
     GetExitCodeProcess(p->handle, &code);
     p->exit_code = (int)code;
     p->running = false;
+    p->usage_valid = process_usage_handle(p->handle, &p->final_usage);
+    p->usage_scope = PS_USAGE_WINDOWS_PROCESS;
     return false;
 }
 void ps_process_kill(ps_process *p) {
@@ -307,6 +320,17 @@ bool ps_executable_path(char *out, size_t cap) {
 #ifdef __APPLE__
 #include <mach-o/dyld.h>
 #endif
+static bool resource_usage(const struct rusage *usage, ps_process_usage *out) {
+    if (usage->ru_maxrss < 0) return false;
+    uint64_t peak = (uint64_t)usage->ru_maxrss;
+#ifndef __APPLE__
+    if (peak > UINT64_MAX / 1024) return false;
+    peak *= 1024;
+#endif
+    *out = (ps_process_usage){(double)usage->ru_utime.tv_sec + usage->ru_utime.tv_usec / 1e6,
+                              (double)usage->ru_stime.tv_sec + usage->ru_stime.tv_usec / 1e6, peak};
+    return true;
+}
 static int fd(void *p) { return (int)(intptr_t)p - 1; }
 static void *handle(int f) { return (void *)(intptr_t)(f + 1); }
 bool ps_process_start_limited(ps_process *p, const char *const *argv, const char *dir,
@@ -393,12 +417,15 @@ bool ps_process_poll(ps_process *p) {
     if (!p->running)
         return false;
     int status;
-    pid_t r = waitpid(p->pid, &status, WNOHANG);
+    struct rusage usage;
+    pid_t r = wait4(p->pid, &status, WNOHANG, &usage);
     if (!r)
         return process_deadline(p);
     if (r < 0 && errno == EINTR)
         return true;
     p->running = false;
+    p->usage_valid = r == p->pid && resource_usage(&usage, &p->final_usage);
+    p->usage_scope = PS_USAGE_POSIX_WAIT4;
     p->exit_code = r < 0 ? -1 : WIFEXITED(status) ? WEXITSTATUS(status) : 128 + WTERMSIG(status);
     return false;
 }
@@ -407,9 +434,13 @@ void ps_process_kill(ps_process *p) {
         kill(-p->pid, SIGKILL);
         kill(p->pid, SIGKILL);
         int s;
-        while (waitpid(p->pid, &s, 0) < 0 && errno == EINTR) {
+        struct rusage usage;
+        pid_t waited;
+        while ((waited = wait4(p->pid, &s, 0, &usage)) < 0 && errno == EINTR) {
         }
         p->running = false;
+        p->usage_valid = waited == p->pid && resource_usage(&usage, &p->final_usage);
+        p->usage_scope = PS_USAGE_POSIX_WAIT4;
         p->exit_code = 137;
     }
 }
@@ -436,16 +467,7 @@ double ps_clock(void) {
 bool ps_process_usage_self(ps_process_usage *out) {
     if (!out) return false;
     struct rusage usage;
-    if (getrusage(RUSAGE_SELF, &usage) || usage.ru_maxrss < 0) return false;
-    uint64_t peak = (uint64_t)usage.ru_maxrss;
-#ifndef __APPLE__
-    if (peak > UINT64_MAX / 1024) return false;
-    peak *= 1024;
-#endif
-    *out = (ps_process_usage){(double)usage.ru_utime.tv_sec + usage.ru_utime.tv_usec / 1e6,
-                              (double)usage.ru_stime.tv_sec + usage.ru_stime.tv_usec / 1e6,
-                              peak};
-    return true;
+    return !getrusage(RUSAGE_SELF, &usage) && resource_usage(&usage, out);
 }
 void ps_sleep(unsigned ms) {
     struct timespec t = {(time_t)(ms / 1000), (long)(ms % 1000) * 1000000};

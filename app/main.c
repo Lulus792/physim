@@ -252,6 +252,8 @@ typedef struct {
     ps_process job, runner;
     ps_parameter_catalog parameters;
     ps_app_profile *profiler;
+    bool profile_job_recorded, profile_runner_recorded;
+    double profile_started_at;
     ps_app_profile_frame profile_frame;
     bool project_settings_dirty;
     uint32_t project_format_version;
@@ -1127,6 +1129,7 @@ static void build_project(app *a) {
     a->diagnostic_used = 0;
     a->build_revision = a->source_revision;
     if (ps_process_start(&a->job, args, a->project)) {
+        a->profile_job_recorded = false;
         a->job_kind = 2;
         status(a,a->analysis_only?"Physim baut die Analyse ...":"Physim baut Experiment und Analyse ...");
     } else
@@ -1197,6 +1200,7 @@ static bool discover_parameters(app *a) {
     a->parameter_output_overflow = false;
     if (!ps_process_start_limited(&a->job, args, a->project, &limits))
         return false;
+    a->profile_job_recorded = false;
     a->job_kind = 5;
     status(a, "Build erfolgreich. Experimentparameter werden gelesen ...");
     return true;
@@ -1281,6 +1285,7 @@ static bool start_run_mode(app *a, bool paused) {
         return false;
     }
     if (ps_process_start_limited(&a->runner, args, a->project, &limits)) {
+        a->profile_runner_recorded = false;
         snprintf(a->reset_previous_run, sizeof a->reset_previous_run, "%s", a->last_run);
         snprintf(a->last_run, sizeof a->last_run, "%s", next_run);
         a->start_paused = a->reset_starting = paused;
@@ -1502,6 +1507,7 @@ static void analyze(app *a, bool csv) {
         return;
     }
     if (ps_process_start_limited(&a->job, args, a->project, &limits)) {
+        a->profile_job_recorded = false;
         if (!csv && strcmp(input, a->last_run)) {
             snprintf(a->last_run, sizeof a->last_run, "%s", input);
             request_dataset(a);
@@ -1549,6 +1555,18 @@ static void import_run(app *a,const char *path) {
     unique_path(a,a->import_destination,sizeof a->import_destination,"-import.psrun");
     SDL_SetAtomicInt(&a->import_done,0);a->import_thread=SDL_CreateThread(import_worker,"physim-import",a);
     status(a,a->import_thread?"Messlauf wird kopiert und geprüft …":"Import konnte nicht gestartet werden.");
+}
+static void profile_process_finished(app *a,ps_process *p,int kind,bool *recorded) {
+    if (*recorded || p->running || !p->pid) return;
+    *recorded = true;
+    if (!a->profiler) return;
+    ps_app_profile_process row = {0};
+    row.process_id = (uint32_t)p->pid;
+    row.time_seconds = ps_clock() - a->profile_started_at;
+    row.kind = kind; row.exit_code = p->exit_code; row.timed_out = p->timed_out;
+    row.scope = p->usage_scope;
+    row.available = ps_process_usage_final(p, &row.usage, &row.scope);
+    ps_app_profile_record_process(a->profiler, &row);
 }
 static void pump(app *a) {
     if(a->import_thread && SDL_GetAtomicInt(&a->import_done)) {
@@ -1600,6 +1618,7 @@ static void pump(app *a) {
             log_line(a, "%s", buf);
         }
         if (!ps_process_poll(&a->job)) {
+            profile_process_finished(a, &a->job, a->job_kind, &a->profile_job_recorded);
             int code = a->job.exit_code;
             ps_process_close(&a->job);
             if(code && (a->job_kind==3 || a->job_kind==4)) {
@@ -1765,6 +1784,7 @@ static void pump(app *a) {
                    "Runner nach Stop-Timeout beendet. Vollstaendige Messbloecke bleiben lesbar.");
         }
         if (!ps_process_poll(&a->runner)) {
+            profile_process_finished(a, &a->runner, 0, &a->profile_runner_recorded);
             int code = a->runner.exit_code;
             ps_process_close(&a->runner);
             a->paused = true;
@@ -3162,6 +3182,7 @@ int main(int argc, char **argv) {
         fprintf(stderr, "APP TEST TRACE: initial stage %d, status %s\n", test_stage, a->status);
     const char *profile_directory = SDL_getenv("PHYSIM_PROFILE_DIR");
     bool profile_requested = profile_directory && *profile_directory;
+    a->profile_started_at = profile_app_started;
     if (profile_requested) {
         a->profiler = ps_app_profile_start(profile_directory);
         if (!a->profiler) fprintf(stderr, "App profiling could not start; app continues.\n");
@@ -4386,6 +4407,8 @@ int main(int argc, char **argv) {
     }
     ps_process_close(&a->runner);
     ps_process_close(&a->job);
+    profile_process_finished(a, &a->runner, 0, &a->profile_runner_recorded);
+    profile_process_finished(a, &a->job, a->job_kind, &a->profile_job_recorded);
     if (a->batch_thread) {
         SDL_SetAtomicInt(&a->batch_cancel, 1);
         SDL_WaitThread(a->batch_thread, NULL);
@@ -4443,9 +4466,11 @@ int main(int argc, char **argv) {
     if (profile_requested && !profile_started) profile_result.failed = true;
     a->profiler = NULL;
     if (profile_requested)
-        fprintf(stderr, "App profiling: %llu frames written, %llu dropped, failed=%u\n",
+        fprintf(stderr, "App profiling: %llu frames written, %llu dropped, failed=%u; %llu child records, %llu child records dropped\n",
                 (unsigned long long)profile_result.written, (unsigned long long)profile_result.dropped,
-                profile_result.failed ? 1u : 0u);
+                profile_result.failed ? 1u : 0u,
+                (unsigned long long)profile_result.process_written,
+                (unsigned long long)profile_result.process_dropped);
     nk_sdl_shutdown(a->ui);
     SDL_SetWindowHitTest(window, NULL, NULL);
     free(a);

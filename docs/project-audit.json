@@ -5640,9 +5640,12 @@
         "tools/app_profile.py",
         "tests/test_app_profiling.c",
         "tests/test_app_profiling_workflow.py",
-        "docs/app-profiling.md"
+        "docs/app-profiling.md",
+        "tests/test_child_usage.c",
+        "src/platform.c",
+        "src/platform.h"
       ],
-      "note": "Native Referenzlasten und tatsächliche App-Abläufe erfassen CPU-/Wandzeit, Lebenszeit-Peak-RAM und logischen Durchsatz. Die App zeichnet opt-in Framephasen, Startbereitschaft ab main, aktuelle Szene/UI und empfangene Experiment-/Jobpipebytes über eine begrenzte atomare Queue asynchron auf; Drops und fehlende Abschlussdaten bleiben ausdrücklich unvollständig. C-/vollständige Physim-Appabläufe, Decodergegenproben, deaktivierte und abgewiesene Aufzeichnungen sind geprüft. Vollständige Kindprozess-/Mehrworkerressourcen, GPU-Auslastung, OS-Start vor main und echte Eingabe-bis-Anzeige-Latenz bleiben offen; der Block bleibt unvollständig."
+      "note": "App- und Referenzlasten erfassen Wandzeit, CPU, Peak-RAM und logischen Durchsatz. Schema 2 ergänzt abgeschlossene eigene Experiment-/Build-/Analyse-/Beschreibungsprozesse um PID-/Lebenszyklusgebundene, bei Reaping/Handleclose gecachte Ressourcen mit explizitem OS-Abrechnungsumfang und Nichtverfügbarkeit. Live-/gleichzeitige Prozessbaum- und vollständige Mehrworkerressourcen, GPU-Auslastung, OS-Start vor main und echte Eingabe-bis-Anzeige-Latenz bleiben offen; PP-0711 bleibt unvollständig."
     },
     {
       "id": "PP-0712",

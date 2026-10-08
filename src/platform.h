@@ -4,11 +4,19 @@
 #include <stddef.h>
 #include <stdint.h>
 typedef struct {
+    double user_seconds, system_seconds;
+    uint64_t peak_resident_bytes;
+} ps_process_usage;
+typedef enum { PS_USAGE_NONE, PS_USAGE_WINDOWS_PROCESS, PS_USAGE_POSIX_WAIT4 } ps_process_usage_scope;
+typedef struct {
     void *handle, *input, *output, *job;
     int pid, exit_code;
     bool running;
     double deadline;
     bool timed_out;
+    ps_process_usage final_usage;
+    ps_process_usage_scope usage_scope;
+    bool usage_valid;
 } ps_process;
 typedef struct {
     uint64_t memory_bytes; /* 0 disables. Windows: job commit; Linux: per-process RLIMIT_AS. */
@@ -35,11 +43,14 @@ double ps_clock(void);
  * time, peak resident bytes are the lifetime high-water mark, not current RAM or
  * a phase-local allocation count. No file access or allocation. Failure preserves
  * out. Windows working set / POSIX ru_maxrss have OS-specific accounting. */
-typedef struct {
-    double user_seconds, system_seconds;
-    uint64_t peak_resident_bytes;
-} ps_process_usage;
 bool ps_process_usage_self(ps_process_usage *out);
+/* Finished owned child only, captured while reaping/before handle close. No live
+ * PID lookup or cumulative RUSAGE_CHILDREN. Poll/kill/close retain this snapshot
+ * until the next start; failed starts invalidate it. Failure preserves outputs.
+ * POSIX wait4 may include waited descendants; Windows describes the direct
+ * process. Peak RSS/working set is not a simultaneous tree memory sum. */
+bool ps_process_usage_final(const ps_process *process, ps_process_usage *out,
+                            ps_process_usage_scope *scope);
 void ps_sleep(unsigned ms);
 int ps_stdin_read(void *buffer, size_t capacity);
 void ps_binary_stdio(void);

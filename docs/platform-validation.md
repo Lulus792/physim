@@ -1599,3 +1599,66 @@ Handbuch-/Tastaturabläufen 3/3 (`run-styn44n8`). Linux besteht dieselben Gruppe
 5/5 (`run-ibfwh7fz`) und 3/3 (`run-czhcayip`). Die neue Handbuchseite ist am
 Ende des Offlinekatalogs ergänzt und wird beim Fensterablauf mit allen Themen
 geladen. Dieser Nachtrag ändert die geprüfte Implementierung nicht.
+
+
+## Ressourcen abgeschlossener eigener Runner-/Jobprozesse
+
+Der private Prozessdienst cached Benutzer-/System-CPU und Peakbytes beim
+Reaping beziehungsweise vor dem Handleclose. POSIX verwendet pid-spezifisches
+`wait4`, Windows Prozesszeiten/Working-Set-Abrechnung. Keine spätere PID-Suche
+oder kumulative App-`RUSAGE_CHILDREN` wird verwendet. Getter erhalten Outputs
+bei laufenden/fehlenden/ungültigen Daten; Close erhält den Cache und Neustart
+invalidiert ihn. Kill und shutdownbedingtes Close erfassen ebenfalls Abschlüsse.
+Die POSIX-/Windows-Scopes bleiben ausdrücklich verschieden und Peaks sind keine
+gleichzeitige Baumsumme. [Vertrag](app-profiling.md#ressourcen-abgeschlossener-eigener-prozesse).
+
+Schema 2 schreibt Frame- und Prozessrecords über dieselbe atomare Queue in
+getrennte CSVs, mit getrennten geschriebenen/ausgelassenen Zählern. Ein neuer
+Lebenszyklus setzt die App-Markierung zurück, sodass normales Polling und späterer
+Shutdown keine doppelten Records erzeugen. Sequenzen unterscheiden spätere
+PID-Wiederverwendung. Fehlende Ressourcen bleiben leer/null. Schema 1 bleibt
+mit ausschließlich seinen Framewerten lesbar. Die Ressourcen stammen aus
+abgeschlossenen eigenen Experiment-, Build-, Parameterbeschreibungs-, Analyse-
+und Exportprozessen; intern verwaltete Batchworker sind nicht vollständig erfasst.
+
+Die native Gegenprobe lässt zwei eigene Kinder 32/64 MiB berühren und CPU
+verbrauchen. Selbstauskünfte werden gegen Finalwerte verglichen. Ein zunächst
+blockiertes zweites Kind endet erst nach dem ersten; dessen Cache muss unverändert
+bleiben. Wiederholte Getter, Getter nach Close, fehlgeschlagener Neustart, Kill
+und Close eines laufenden Kindes sind geprüft. Queuegegenproben vergleichen
+verfügbare und ausdrücklich fehlende Prozessfelder im tatsächlichen Writer.
+
+Intel macOS 14.6.1/Apple Clang 16 besteht drei Ressourcen-/Kind-/Queuefälle 3/3
+(`run-lv294fub`), Debian 12/GCC 12.2 dieselben 3/3 (`run-hphxtiy1`). Die initiale
+macOS-Gegenprobe mit bestehender Parent-Watch-Prüfung besteht 3/3 (`run-hzs5uuwn`).
+Die App-Abläufe für C und vollständiges Physim mit echter Kompilierung, Runnern,
+Analyse und Bibliothek protokollieren verfügbare Experiment-/Builder-/Analysewerte
+sowie den erwarteten Compilerfehler. Sie bestehen zunächst auf beiden Systemen
+1/1 (`run-jm8d9a02`, `run-6eytro6m`). Die erweiterte macOS-Gegenprobe besteht
+1/1 (`run-v7j_1bra`): NaN-Prozesszeiten, abgeschnittene Prozess-CSV und erfundene
+Werte bei Nichtverfügbarkeit werden abgewiesen; tatsächliche Nichtverfügbarkeit
+und Schema 1 bleiben korrekt auswertbar.
+
+Linux/Clang 14 mit ASan/UBSan besteht alle vier Ressourcen-/Kind-/Queue-/
+Parent-Watch-Fälle 4/4 (`run-rsvz7fng`) und den erweiterten App-Prüfer 1/1
+(`run-f9beqjjt`). `detect_leaks=0` bleibt gesetzt; Address-/UB-Prüfungen bleiben
+aktiv. Diese Läufe sind keine ThreadSanitizer-Abnahme. macOS-Sanitizer bleiben
+wegen fehlendem `ld64.lld` ungeprüft; Windows/Apple Silicon wurden nicht ausgeführt.
+
+Zur Freigabe des Linux-Prüfraums wurden 504 Dateien der bereits bestandenen
+älteren Läufe `run-rmvt1uw_` und `run-9_tqrbcn` in
+`build/child-profiling-previous-results.tar.gz` archiviert. Alle Datei-/Symlink-
+mitglieder wurden gegen Originale und alle Originalhashes vor Entfernen erneut
+geprüft. `build/child-profiling-previous-results.json` enthält den vollständigen
+Wiederherstellungsnachweis. Es wurden nur diese archivierten Testoriginale entfernt.
+
+PP-0711 bleibt für Live-/gleichzeitige Prozessbaum-/Mehrworkerressourcen,
+GPU-Auslastung, OS-Start vor `main` und echte Eingabe-bis-Anzeige-Latenz
+unvollständig. Die 531 Originalplanblöcke und das gesamte Ziel bleiben erhalten.
+
+Die abschließenden sieben Ressourcen-/Kind-/Queue-/Parent-Watch-/Handbuch-/
+Referenz-/Prüfpaketfälle bestehen auf macOS 7/7 (`run-uhxr6m61`) und Linux
+7/7 (`run-hxwfq40o`). Der erweiterte Linux-App-Prüfer besteht außerdem
+1/1 (`run-ha6zki2c`). Die getestete Implementierung und Testeingaben bleiben
+bei diesem Dokumentationsnachtrag unverändert;
+`build/child-profiling-final-code-freeze.json` erfasst ihren Quellstand.

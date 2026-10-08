@@ -18,7 +18,7 @@ def distribution(values):
 def analyze(directory, allow_partial=False):
     raw = directory / "frames.csv"
     status = json.loads((directory / "status.json").read_text(encoding="utf-8"))
-    if type(status.get("schema")) is not int or status["schema"] != 1:
+    if type(status.get("schema")) is not int or status["schema"] not in (1, 2):
         raise ValueError("Unsupported app profile schema")
     if not isinstance(status.get("complete"), bool) or not isinstance(status.get("scope"), str):
         raise ValueError("Invalid app profile status")
@@ -67,7 +67,7 @@ def analyze(directory, allow_partial=False):
                 if row[key] < previous[key]:
                     raise ValueError("Nonmonotone process snapshot")
         previous = row
-    if status["complete"] and [r["frame"] for r in rows] != list(range(len(rows))):
+    if status["dropped"] == 0 and [r["frame"] for r in rows] != list(range(len(rows))):
         raise ValueError("Complete trace has missing frames")
     if status["dropped"] < 0 or (status["complete"] and status["dropped"]):
         raise ValueError("Inconsistent dropped-frame status")
@@ -92,6 +92,51 @@ def analyze(directory, allow_partial=False):
                           "render_seconds", "present_seconds", "documentation_seconds")} if steady else {}
     result["receive_rates_bytes_per_second"] = {k: distribution([r[k] / r["interval_seconds"] for r in rows])
                                                for k in ("runner_bytes", "job_bytes")}
+    result["processes"] = []
+    if status["schema"] == 2:
+        for key in ("process_written", "process_dropped"):
+            if type(status.get(key)) is not int or status[key] < 0:
+                raise ValueError("Invalid process record count")
+        if status["complete"] and status["process_dropped"]:
+            raise ValueError("Complete trace has dropped process records")
+        process_file = directory / "processes.csv"
+        with process_file.open(encoding="utf-8", newline="") as file:
+            processes = list(csv.DictReader(file))
+        if len(processes) != status["process_written"]:
+            raise ValueError("Truncated process trace")
+        previous_sequence = -1
+        previous_time = 0
+        for record in processes:
+            for key in ("sequence", "process_id", "kind", "exit_code", "usage_scope"):
+                record[key] = int(record[key])
+            record["time_seconds"] = float(record["time_seconds"])
+            if record["sequence"] <= previous_sequence or record["process_id"] <= 0 or record["kind"] < 0:
+                raise ValueError("Invalid process identity/order")
+            if not math.isfinite(record["time_seconds"]) or record["time_seconds"] < previous_time:
+                raise ValueError("Invalid process timestamp")
+            if record["usage_scope"] not in (0, 1, 2):
+                raise ValueError("Unsupported process accounting scope")
+            for key in ("timed_out", "usage_available"):
+                if record[key] not in ("0", "1"):
+                    raise ValueError("Invalid process state")
+                record[key] = record[key] == "1"
+            for key in ("user_cpu_seconds", "system_cpu_seconds", "peak_resident_bytes"):
+                if not record["usage_available"]:
+                    if record[key]: raise ValueError("Unavailable process usage fabricated")
+                    record[key] = None
+                else:
+                    record[key] = int(record[key]) if key == "peak_resident_bytes" else float(record[key])
+                    if not math.isfinite(record[key]) or record[key] < 0:
+                        raise ValueError("Invalid process usage")
+            if record["usage_available"] and (record["usage_scope"] == 0 or record["peak_resident_bytes"] == 0):
+                raise ValueError("Missing available process accounting")
+            previous_sequence, previous_time = record["sequence"], record["time_seconds"]
+        if not status["process_dropped"] and [r["sequence"] for r in processes] != list(range(len(processes))):
+            raise ValueError("Missing process records")
+        result["processes"] = processes
+        result["process_records_dropped"] = status["process_dropped"]
+        result["process_resources_unavailable"] = sum(not r["usage_available"] for r in processes)
+        result["process_raw_sha256"] = hashlib.sha256(process_file.read_bytes()).hexdigest()
     return result
 
 

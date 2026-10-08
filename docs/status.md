@@ -2681,3 +2681,12 @@ meldet ausgelassene Frames; bestehende Dateien bleiben geschützt. Der Reporter
 prüft vollständige Aufzeichnungen und kennzeichnet ausdrücklich erlaubte
 Teilaufzeichnungen. [Messumfang und Grenzen](app-profiling.md) erhalten die
 Unterscheidung zu fehlenden Kindprozess-/Mehrworker- und echten Latenzmessungen.
+
+
+## Ressourcen abgeschlossener Runner und Jobs
+
+Die App-Profilaufzeichnung ergänzt abgeschlossene eigene Experiment-, Builder-,
+Analyse-, Parameterbeschreibungs- und CSV-Prozesse mit gecachten OS-Ressourcen.
+Ein eigener Prozessrecord enthält Exit-/Timeoutzustand und expliziten
+Abrechnungsumfang. Fehlende Werte bleiben leer/null; Schema 1 bleibt lesbar.
+[Vertrag und verbleibende Messlücken](app-profiling.md#ressourcen-abgeschlossener-eigener-prozesse).

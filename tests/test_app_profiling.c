@@ -31,6 +31,20 @@ int main(int argc,char **argv) {
     uint64_t saved=hash(path);CHECK(saved);
     p=ps_app_profile_start(root);CHECK(p);result=ps_app_profile_finish(p);
     CHECK(result.failed && !result.written && hash(path)==saved);
+    snprintf(root,sizeof root,"%s/process-profile",argv[1]);
+    p=ps_app_profile_start(root);CHECK(p);
+    row.frame=0;CHECK(ps_app_profile_record(p,&row));
+    ps_app_profile_process child={.process_id=123,.time_seconds=1,.kind=0,.exit_code=7,
+        .available=true,.usage={.1,.2,1024},.scope=PS_USAGE_POSIX_WAIT4};
+    CHECK(ps_app_profile_record_process(p,&child));
+    child.process_id=321;child.time_seconds=2;child.kind=3;child.available=false;
+    child.scope=PS_USAGE_WINDOWS_PROCESS;CHECK(ps_app_profile_record_process(p,&child));
+    result=ps_app_profile_finish(p);CHECK(!result.failed && result.written==1 && result.process_written==2 && !result.process_dropped);
+    snprintf(path,sizeof path,"%s/processes.csv",root);f=fopen(path,"rb");CHECK(f);
+    CHECK(fgets(line,sizeof line,f) && strstr(line,"usage_available"));
+    CHECK(fgets(line,sizeof line,f) && strstr(line,"0,123,") && strstr(line,"0.100000000,0.200000000,1024"));
+    CHECK(fgets(line,sizeof line,f) && strstr(line,"1,321,") && strstr(line,",0,1,,,"));
+    CHECK(!fgets(line,sizeof line,f) && !fclose(f));
     CHECK(!ps_app_profile_finish(NULL).failed);
     SDL_Quit();puts("Profiler queue: concurrent FIFO, exact accepted/dropped counts, drain and existing-file preservation verified");return 0;
 }

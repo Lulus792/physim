@@ -17,7 +17,7 @@ Normales Öffnen eines Projekts und sämtliche Bedienaktionen bleiben verfügbar
 ## Aufzeichnung und Fehlerverhalten
 
 Ein eigener SDL-Thread erstellt den Ausgabeordner exklusiv und schreibt
-`frames.csv`. Der UI-Thread stellt ausschließlich Kopien numerischer Messwerte
+`frames.csv` und unter Schema 2 `processes.csv`. Der UI-Thread stellt ausschließlich Kopien numerischer Messwerte
 in eine Queue mit maximal 1.024 Frames. Ein Produzent und ein Consumer verwenden
 SDL-Atomics mit Speicherbarrieren; im UI-Pfad gibt es keine Mutex-/Dateiwartezeit.
 Der Writer kopiert höchstens 32 Frames pro Batch und gibt Slots erst danach frei.
@@ -27,7 +27,9 @@ der ausgelassene Frame gezählt. Dateien wachsen mit der Dauer der Aufzeichnung.
 Beim normalen Beenden werden zuerst die bisherigen Projekt-/Workspace-/Einstellungs-
 Speicherabläufe und Jobabschlüsse ausgeführt. Danach leert und schließt der Writer
 die Profilqueue. Er erstellt `status.json` mit geschriebenen/ausgelassenen Frames,
-Vollständigkeitsflag und Messumfang. Ein Crash, Abbruch oder Schreibfehler kann
+Vollständigkeitsflag und Messumfang. Frame- und Prozessrecords besitzen getrennte
+Geschrieben-/Ausgelassen-Zähler; das gemeinsame Flag verlangt beide vollständigen
+Recordfolgen. Ein Crash, Abbruch oder Schreibfehler kann
 eine unvollständige CSV ohne Abschlussstatus hinterlassen. Die App meldet
 Profilfehler über stderr und setzt ihre normale Arbeit fort. Bestehende
 Ausgabeordner und Dateien werden nicht überschrieben.
@@ -62,7 +64,8 @@ Jobbytes können Compiler-/Analyseausgabe enthalten. Dies misst die beobachtete
 Leserate der App, keine physische Datei-/Netzrate oder produzierte Samples/s.
 Batchworker-Pipes, ausgehende Steuernachrichten und direkt geschriebene Messdateien
 sind nicht enthalten. Bei ausgelassenen Frames fehlen deren Bytewerte ausdrücklich.
-Runner-/Compiler-/Analyse-Kindprozess-CPU und deren RAM sind nicht enthalten.
+Runner-/Compiler-/Analysewerte gehören nicht zu den App-Prozesssnapshots.
+Sie werden nach beobachtetem Prozessabschluss separat erfasst; siehe unten.
 
 Szenenzeiten sind Teil der UI-Aufbauzeit; UI-Konvertierungs-/Uploadzeiten sind
 Teil der Renderzeit. Sie dürfen nicht zusätzlich zur Frameaufteilung summiert
@@ -98,6 +101,47 @@ anzahl bleibt sichtbar. CPU-Differenzen reichen vom ersten bis letzten erhaltene
 Snapshot und schließen daher den vorherigen Startaufwand aus. Rohdaten-/Status-
 SHA-256 identifizieren die unveränderten Eingaben.
 
-Vollständige Kindprozess-/Mehrworkerressourcen, echte Eingabe-bis-Anzeige-Latenz,
+Live-/gleichzeitige Prozessbaum- und vollständige Mehrworkerressourcen, echte Eingabe-bis-Anzeige-Latenz,
 GPU-Auslastung und OS-Prozessstart vor `main` benötigen weitere Messstrecken.
 [Ausgeführte Prüfungen und Grenzen](platform-validation.md).
+
+
+## Ressourcen abgeschlossener eigener Prozesse
+
+Schema 2 ergänzt `processes.csv`. Jedes beobachtete Ende eines von der App
+verwalteten Experiments oder Jobs ergibt genau einen Record, auch bei Fehler,
+Timeout, erzwungenem Stop oder beim Schließen noch laufender Prozesse. Die
+Reihenfolge ist unabhängig von Frameindizes. PID, beobachtete Abschlusszeit,
+Jobart, App-Exitcode, Timeout und verfügbare Ressourcen stehen im Record.
+Ein monotoner Sequenzindex unterscheidet Records auch bei späterer PID-Wiederverwendung.
+Die App setzt die Lebenszyklusmarkierung bei jedem erfolgreichen Start zurück.
+
+Jobart 0 bezeichnet das Experiment, 2 den Builder, 5 die Parameterbeschreibung,
+3 Analyse und 4 CSV-Export. CPU-Zeiten sind kumulierte Benutzer-/Systemzeiten,
+Peakbytes ein OS-Höchstwert. `usage_available=false` lässt alle drei Nutzungsfelder
+in der CSV leer; JSON verwendet null. Nicht verfügbare Werte sind keine gemessenen
+Nullwerte. Im Bericht bleiben Art und Anzahl fehlender Ressourcenauskünfte sichtbar.
+
+Der private Plattformdienst erfasst Werte beim Reaping beziehungsweise vor dem
+Schließen des Prozesshandles. Er fragt keine später möglicherweise wiederverwendete
+PID ab und verwendet nicht das kumulative `RUSAGE_CHILDREN` des App-Prozesses.
+Der Cache bleibt nach Poll/Kill/Close gültig und wird beim nächsten Start oder
+fehlgeschlagenen Start invalidiert; fehlgeschlagene Getter ändern keine Ausgaben.
+
+`usage_scope=2` bezeichnet die [POSIX-wait4-Abrechnung](https://man7.org/linux/man-pages/man2/wait4.2.html).
+Diese kann abgewartete Nachfahren enthalten. Der Peak ist kein gleichzeitig
+aufsummierter Prozessbaum-RAM; die [Linux-Abrechnung](https://man7.org/linux/man-pages/man2/getrusage.2.html)
+verwendet Höchstwerte und rechnet KiB ausdrücklich in Bytes um. Fork-/Startaufwand
+und OS-Regeln können die Werte beeinflussen. macOS liefert Bytewerte.
+`usage_scope=1` bezeichnet den direkten Windows-Prozess mit Prozesszeiten und
+Working-Set-Abrechnung; dieser Pfad wurde in dieser Etappe nicht ausgeführt.
+Scope 0 bedeutet fehlende Zuordnung. Die Plattformen werden nicht durch eine
+bloße gemeinsame Feldbezeichnung als funktionsgleich erklärt.
+
+Die Reporterfassung prüft Prozesszeilenzahl, Sequenzfolge, endliche Werte, Zeitfolge,
+Scope und konsistente Nichtverfügbarkeit. Ausgelassene Prozessrecords machen
+auch bei lückenlosen Frames die Aufzeichnung unvollständig. Schema 1 bleibt ohne
+Prozess-CSV lesbar und erzeugt keine erfundenen Kindprozesswerte.
+Die abgeschlossenen Werte sind keine Live-Auslastungsanzeige, kein gleichzeitig
+beobachteter Gesamtbaum und keine vollständige Aufzeichnung intern verwalteter
+Batchworker. GPU-Auslastung und Eingabe-bis-Anzeige-Latenz bleiben eigene Messstrecken.

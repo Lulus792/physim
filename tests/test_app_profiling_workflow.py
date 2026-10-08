@@ -46,6 +46,14 @@ for mode in ("pendulum", "language_full"):
     assert summary["job_bytes_observed"] > 0 and not summary["render_failures"]
     assert summary["captured_frames"] > 0 and summary["uncaptured_rendered_frames"] > 0
     assert summary["user_cpu_seconds_observed"] >= 0 and summary["system_cpu_seconds_observed"] >= 0
+    assert summary["processes"] and not summary["process_records_dropped"]
+    assert any(r["kind"] == 0 and r["usage_available"] for r in summary["processes"])
+    assert any(r["kind"] == 2 and r["usage_available"] for r in summary["processes"])
+    assert any(r["kind"] in (3, 4) and r["usage_available"] for r in summary["processes"])
+    assert any(r["exit_code"] != 0 for r in summary["processes"])
+    for r in summary["processes"]:
+        if r["usage_available"]:
+            assert r["peak_resident_bytes"] > 0 and r["usage_scope"] in (1, 2)
     (a.work / (mode + " summary.json")).write_text(json.dumps(summary, indent=2) + "\n")
     summaries[mode] = summary
     if mode == "pendulum":
@@ -78,6 +86,41 @@ for mode in ("pendulum", "language_full"):
         reject = subprocess.run([sys.executable, str(a.root / "tools/app_profile.py"), str(profile),
                                  "--output", str(protected), "--allow-partial"], capture_output=True)
         assert reject.returncode != 0 and protected.read_bytes() == b"existing owner report"
+        for fault in ("process-nan", "process-truncated", "process-unavailable"):
+            corrupt = a.work / fault
+            shutil.copytree(profile, corrupt)
+            with (corrupt / "processes.csv").open(newline="") as file:
+                records = list(csv.DictReader(file))
+            if fault == "process-nan": records[0]["user_cpu_seconds"] = "nan"
+            elif fault == "process-truncated": records.pop()
+            else:
+                records[0]["usage_available"] = "0"
+            with (corrupt / "processes.csv").open("w", newline="") as file:
+                writer = csv.DictWriter(file, fieldnames=records[0].keys())
+                writer.writeheader(); writer.writerows(records)
+            try: report.analyze(corrupt, allow_partial=True)
+            except ValueError: pass
+            else: raise AssertionError("Corrupt process trace accepted: " + fault)
+        missing = a.work / "process genuinely unavailable"
+        shutil.copytree(profile, missing)
+        with (missing / "processes.csv").open(newline="") as file:
+            records = list(csv.DictReader(file))
+        records[0].update(usage_available="0", user_cpu_seconds="", system_cpu_seconds="", peak_resident_bytes="")
+        with (missing / "processes.csv").open("w", newline="") as file:
+            writer = csv.DictWriter(file, fieldnames=records[0].keys())
+            writer.writeheader(); writer.writerows(records)
+        unavailable = report.analyze(missing, allow_partial=True)
+        assert unavailable["process_resources_unavailable"] == 1
+        assert unavailable["processes"][0]["user_cpu_seconds"] is None
+        # Schema 1 remains readable with no fabricated child records.
+        legacy = a.work / "legacy frame profile"
+        shutil.copytree(profile, legacy)
+        status = json.loads((legacy / "status.json").read_text())
+        status["schema"] = 1
+        status.pop("process_written"); status.pop("process_dropped")
+        (legacy / "status.json").write_text(json.dumps(status))
+        (legacy / "processes.csv").unlink()
+        assert not report.analyze(legacy, allow_partial=True)["processes"]
     # Completion marker and the original raw trace survive a rejected reuse.
     before = {q.name: q.read_bytes() for q in profile.iterdir() if q.is_file()}
     failed = launch(a.work / (mode + " reused project"), mode, profile, state=True)

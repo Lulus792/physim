@@ -480,3 +480,12 @@ C-/Physim-Workflows und Reportergegenproben erweitern den Nachweis. Kindprozess-
 Mehrworkerressourcen, GPU-Auslastung, OS-Start vor `main` und tatsächliche
 Eingabe-bis-Anzeige-Latenz bleiben offen. [Vertrag](app-profiling.md).
 Die Gesamtzahlen bleiben unverändert: 34 implementiert, 8 unvollständig, 489 ungeprüft.
+
+
+Schema 2 der App-Aufzeichnung ergänzt PP-0711 um abgeschlossene eigene Runner-/
+Jobressourcen. Der Plattformdienst erfasst sie bei Reaping/Handleabschluss,
+erhält sie nach Close und invalidiert sie bei Neustart. Eigene Lebenszyklus-
+markierungen verhindern doppelte Records; OS-Scope und Nichtverfügbarkeit sind
+explizit. Live-/gleichzeitige Baum-/Mehrworkerressourcen, GPU-Auslastung und echte
+Latenz bleiben offen. [Messvertrag](app-profiling.md). Status und Zahlen bleiben
+unverändert: 34 implementiert, 8 unvollständig, 489 ungeprüft.
