@@ -2670,3 +2670,14 @@ Optionale GL-Zeitabfragen melden ein Serverintervall und sammeln Ergebnisse
 außerhalb des CPU-Intervalls; ohne verfügbare Abfrage bleibt der GPU-Wert fehlend.
 [Vertrag und Grenzen](scene-rendering.md) unterscheiden diese Referenzmessungen
 von noch fehlender vollständiger App- und interaktiver Leistungsabnahme.
+
+
+## Opt-in-Profilaufzeichnung der App
+
+`PHYSIM_PROFILE_DIR` aktiviert eine asynchrone numerische Frameaufzeichnung mit
+Startbereitschaft, Eingabe-/Arbeits-/UI-/Render-/Swap-/Handbuchzeiten, App-CPU,
+Prozess-Peak-RAM und tatsächlich empfangenen Pipebytes. Eine begrenzte Queue
+meldet ausgelassene Frames; bestehende Dateien bleiben geschützt. Der Reporter
+prüft vollständige Aufzeichnungen und kennzeichnet ausdrücklich erlaubte
+Teilaufzeichnungen. [Messumfang und Grenzen](app-profiling.md) erhalten die
+Unterscheidung zu fehlenden Kindprozess-/Mehrworker- und echten Latenzmessungen.

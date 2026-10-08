@@ -1,6 +1,6 @@
 # Reproduzierbare Leistungsmessung
 
-Weitere Messungen: [UI-Zeichenpuffer](ui-rendering.md), [3D-Szenenrenderer](scene-rendering.md) und
+Weitere Messungen: [UI-Zeichenpuffer](ui-rendering.md), [3D-Szenenrenderer](scene-rendering.md), [tatsächliche App-Abläufe](app-profiling.md) und
 [CRC32 mit unverändertem Dateiformat](crc.md).
 
 `physim-benchmark` misst produktive C-APIs mit deterministischen Referenzdaten.

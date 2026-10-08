@@ -1529,3 +1529,73 @@ Kollisionsreferenz. Sie sucht nun die beiden erwarteten Dokumentpfade und prüft
 weiterhin Treffer, Nichttreffer und Scrollnavigation. Fenster-/Tastaturprüfungen
 bestehen abschließend jeweils 2/2 (`run-cn45y4n7`, `run-jg6unw4x`), einschließlich
 des erfolgreichen Ladens sämtlicher registrierter Themen.
+
+
+## Opt-in-Aufzeichnung tatsächlicher App-Abläufe
+
+Die App zeichnet bei gesetztem `PHYSIM_PROFILE_DIR` numerische Framephasen,
+Startbereitschaft ab `main`, eigene Prozess-CPU/Peak-RAM, die aktuelle Szene/UI
+und tatsächlich aus Experiment-/Jobpipes gelesene Bytes auf. Ein eigener Writer
+verwendet eine atomare Queue mit 1.024 nutzbaren Slots; Produzent/Consumer warten
+nicht aufeinander, und nur der Worker greift auf Profildateien zu. End-of-stream
+prüft nach dem Stopflag nochmals den letzten veröffentlichten Schreibindex.
+Ausgelassene Frames und fehlende Abschlussdaten sind nicht vollständig.
+Projekt-/Workspace-/Einstellungs-Speicherung und Jobabschlüsse kommen vor dem
+Profilwriter-Join. [Vertrag und Auswertung](app-profiling.md).
+
+Der native Test stellt 30.000 Records unter konkurrierendem Schreiben ein und
+prüft FIFO über Queueumlauf, genaue angenommene/ausgelassene Anzahl, vollständiges
+Drain und bytegleiche Erhaltung eines bestehenden Ausgabeordners. Prozess-/
+Queueprüfungen bestehen auf Intel macOS 14.6.1/Apple Clang 16 mit 2/2
+(`run-i9obrlvr`) und Debian 12/GCC 12.2 mit 2/2 (`run-hoehqqfl`).
+
+Der tatsächliche App-Prüfer führt C- und vollständige Physim-Pendel inklusive
+Compilerfehlerprüfung, Neubau, Simulation, Analyse, Szenen, Exporten und
+Bibliotheksaktionen aus. Beide erhalten erfolgreiche fachliche Abschlussmarker
+und Profile mit positiver Startbereitschaft, Szene-/Aufnahme-/normalen Frames,
+CPU/RAM und empfangenen Runner-/Jobbytes. Je ein kurzer Tastaturablauf prüft
+ausgeschaltete Aufzeichnung und abgewiesene Wiederverwendung eines bestehenden
+Profils mit bytegleich erhaltenen Dateien. NaN, abgeschnittene CSV, alte
+Szenenwerte ohne Szene und widersprüchliche Intervalle werden abgewiesen.
+Teilaufzeichnungen verlangen ausdrücklich erlaubte Auswertung mit erhaltenem
+Flag; bestehende Berichtdateien werden nicht überschrieben.
+
+Dieser Workflow besteht auf macOS 1/1 (`run-7683ntty`) und Linux/X11 1/1
+(`run-rmvt1uw_`). Die macOS-Referenz enthält 1.016 C-Frames und 819 Physim-Frames,
+jeweils ohne Drops. Startbereitschaft beträgt 0,491 bzw. 0,601 Sekunden; dies
+sind instrumentierte Selbsttests mit Einrichtung, kein Clean-Machine-Startbudget.
+Die beobachteten Runnerbytes betragen 136.848 bzw. 13.905; wallclock-gesteuerte
+Pause-/Stopaktionen erklären unterschiedliche Mengen, diese Zahlen beweisen
+keine fachliche C-/Physim-Abweichung. Rohdaten stehen in den beiden Workflow-
+Ordnern unter `run-7683ntty/app_profiling_workflow/files ä`.
+
+Linux/Clang 14 mit ASan/UBSan besteht die zwei Prozess-/Queuefälle 2/2
+(`run-rnt8hi2g`) und den gesamten App-Prüfer 1/1 (`run-9_tqrbcn`).
+`detect_leaks=0` bleibt gesetzt; Address-/UB-Prüfungen bleiben aktiv. Diese
+Läufe sind keine ThreadSanitizer-Abnahme. macOS-Sanitizer bleiben wegen fehlendem
+`ld64.lld` ungeprüft. Windows und Apple Silicon wurden hier nicht ausgeführt.
+
+Der erste App-Versuch wurde wegen vollem Hostdatenträger abgebrochen (Exit 120),
+kein erfolgreicher Nachweis. Zwei identische Archivkopien wurden vor Löschung
+auf beiden Hosts per SHA-256 geprüft: Accessibility-Archiv
+`d35026022c4ac2a13bfc77ea3ff3acfbaed3c6c564a5a6ee62228955f57bbc50` bleibt
+auf `physim-debian-test:/home/physim/project/build/accessibility-archived-proofs.tar.gz`;
+Motion-Archiv `bf58a19bc9bef46775bb7ddaa18a1566421dba8e3d356a992b2460f523e8e4ba`
+bleibt unter `build/motion-space-archived-proofs.tar.gz` auf dem Mac. Die jeweils
+zweite Kopie wurde entfernt; Inventare und Belege bleiben erhalten. Zusätzlich
+wurden 276 Dateien des bereits bestandenen älteren Linux-Laufs `run-lhhzsves`
+in `build/app-profiling-previous-results.tar.gz` archiviert, jedes Archivmitglied
+gegen die Originalhashes geprüft und die Originale nochmals vor Entfernen
+geprüft. `build/app-profiling-previous-results.json` hält den vollständigen
+Wiederherstellungsnachweis. Keine Projektquellen oder Benutzerdaten wurden gelöscht.
+
+PP-0711 bleibt für Kindprozess-/Mehrworkerressourcen, GPU-Auslastung, OS-Start
+vor `main` und echte Eingabe-bis-Anzeige-Latenz unvollständig. Das gesamte
+Projektziel bleibt offen; alle 531 Originalplanblöcke bleiben erhalten.
+
+Die abschließende kombinierte Abnahme besteht auf macOS mit fünf Prozess-/
+Queue-/Handbuch-/Referenz-/Prüfpaketfällen 5/5 (`run-ov14epno`) und drei App-/
+Handbuch-/Tastaturabläufen 3/3 (`run-styn44n8`). Linux besteht dieselben Gruppen
+5/5 (`run-ibfwh7fz`) und 3/3 (`run-czhcayip`). Die neue Handbuchseite ist am
+Ende des Offlinekatalogs ergänzt und wird beim Fensterablauf mit allen Themen
+geladen. Dieser Nachtrag ändert die geprüfte Implementierung nicht.

@@ -7,6 +7,7 @@
 #include "physim/analysis.h"
 #include "physim/report.h"
 #include "platform.h"
+#include "profiling.h"
 #include "plot_view.h"
 #include "parameter_catalog.h"
 #include "project_file.h"
@@ -250,6 +251,8 @@ typedef struct {
     unsigned library_visible_count;
     ps_process job, runner;
     ps_parameter_catalog parameters;
+    ps_app_profile *profiler;
+    ps_app_profile_frame profile_frame;
     bool project_settings_dirty;
     uint32_t project_format_version;
     ps_text_document project_manifest_snapshot;
@@ -1583,6 +1586,7 @@ static void pump(app *a) {
         char buf[4096];
         int n;
         for (int i = 0; i < 16 && (n = ps_process_read(&a->job, buf, sizeof buf - 1)) > 0; i++) {
+            if (a->profiler) a->profile_frame.job_bytes += (uint64_t)n;
             buf[n] = 0;
             if (a->job_kind == 5) {
                 if ((size_t)n < sizeof a->parameter_output - a->parameter_output_used) {
@@ -1642,8 +1646,10 @@ static void pump(app *a) {
     if (a->runner.running) {
         int got = ps_process_read(&a->runner, a->wire.data + a->wire.used,
                                   sizeof a->wire.data - a->wire.used);
-        if (got > 0)
+        if (got > 0) {
             a->wire.used += (size_t)got;
+            if (a->profiler) a->profile_frame.runner_bytes += (uint64_t)got;
+        }
         uint32_t type, n;
         const unsigned char *p;
         int r = 0;
@@ -1992,6 +1998,7 @@ static void viewport(app *a, float height) {
     }
     unsigned texture = ps_graphics_scene(a->graphics, &visible, &camera, width, pixels);
     if (texture) {
+        if (a->profiler) a->profile_frame.has_scene = ps_graphics_scene_stats(a->graphics, &a->profile_frame.scene);
         bool picking = widget_state == NK_WIDGET_VALID && nk_input_is_mouse_hovering_rect(input, r) &&
                        nk_input_is_mouse_pressed(input, NK_BUTTON_LEFT);
         scene_selection_sync(a);
@@ -2714,6 +2721,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "workspace_tests.inc"
 // clang-format on
 int main(int argc, char **argv) {
+    double profile_app_started = ps_clock();
     bool workspace_test = argc > 1 && !strcmp(argv[1], "--workspace-test");
     bool workspace_state_test = argc > 1 && !strcmp(argv[1], "--workspace-state-test");
     if (workspace_state_test && argc != 4)
@@ -3152,8 +3160,22 @@ int main(int argc, char **argv) {
     }
     if (trace_test)
         fprintf(stderr, "APP TEST TRACE: initial stage %d, status %s\n", test_stage, a->status);
+    const char *profile_directory = SDL_getenv("PHYSIM_PROFILE_DIR");
+    bool profile_requested = profile_directory && *profile_directory;
+    if (profile_requested) {
+        a->profiler = ps_app_profile_start(profile_directory);
+        if (!a->profiler) fprintf(stderr, "App profiling could not start; app continues.\n");
+    }
+    double profile_ready = 0;
+    Uint64 profile_previous = a->profiler ? SDL_GetTicksNS() : 0;
     unsigned frames = 0;
     while (!a->quitting) {
+        Uint64 profile_frame_started = a->profiler ? SDL_GetTicksNS() : 0;
+        Uint64 profile_phase = profile_frame_started;
+        if (a->profiler) {
+            a->profile_frame = (ps_app_profile_frame){0};
+            a->profile_frame.frame = frames;
+        }
         nk_input_begin(a->ui);
         if (a->doc_ui)
             nk_input_begin(a->doc_ui);
@@ -3276,6 +3298,11 @@ int main(int argc, char **argv) {
         if (a->doc_ui)
             nk_input_end(a->doc_ui);
         if(nk_sdl_accessibility_has_focus(a->ui)){a->settings_keyboard=false;toolbar_keyboard_close(a);}
+        if (a->profiler) {
+            Uint64 now = SDL_GetTicksNS();
+            a->profile_frame.event_seconds = (double)(now - profile_phase) / 1e9;
+            profile_phase = now;
+        }
         pump(a);
         autosave_tick(a, ps_clock());
         documents_autosave_tick(a, ps_clock());
@@ -4259,15 +4286,33 @@ int main(int argc, char **argv) {
                             "(tab=%d, selected=%u, samples=%llu, report=%d, query=%s)\n",
                     checked_stage, test_stage, a->status, a->tab, a->selected_count,
                     (unsigned long long)a->data.total, a->show_report, a->library_query);
+        if (a->profiler) {
+            Uint64 now = SDL_GetTicksNS();
+            a->profile_frame.work_seconds = (double)(now - profile_phase) / 1e9;
+            profile_phase = now;
+        }
         int w, h;
         SDL_GetWindowSize(window, &w, &h);
         draw_ui(a, w, h);
         preferences_capture(a);
         nk_sdl_update_TextInput(a->ui);
-        if (!nk_sdl_render(a->ui)) {
+        if (a->profiler) {
+            Uint64 now = SDL_GetTicksNS();
+            a->profile_frame.ui_seconds = (double)(now - profile_phase) / 1e9;
+            profile_phase = now;
+        }
+        bool profile_rendered = nk_sdl_render(a->ui);
+        if (!profile_rendered) {
             fprintf(stderr, "Rendering: %s\n", SDL_GetError());
             exit_code = 1;
             a->quitting = true;
+        }
+        if (a->profiler) {
+            Uint64 now = SDL_GetTicksNS();
+            a->profile_frame.render_seconds = (double)(now - profile_phase) / 1e9;
+            a->profile_frame.rendered = profile_rendered;
+            if (profile_rendered) ps_graphics_ui_stats(graphics, &a->profile_frame.ui);
+            profile_phase = now;
         }
         bool doc_capture = capture && (strncmp(capture, "docs-", 5) == 0 ||
                                        strcmp(capture, "batch-documentation.bmp") == 0);
@@ -4277,9 +4322,20 @@ int main(int argc, char **argv) {
             if (!ps_graphics_capture(graphics, path))
                 exit_code = 1;
         }
+        if (a->profiler) {
+            Uint64 now = SDL_GetTicksNS();
+            a->profile_frame.capture_seconds = (double)(now - profile_phase) / 1e9;
+            a->profile_frame.captured = capture != NULL;
+            profile_phase = now;
+        }
         if (!ps_graphics_present(graphics)) {
             exit_code = 1;
             a->quitting = true;
+        }
+        if (a->profiler) {
+            Uint64 now = SDL_GetTicksNS();
+            a->profile_frame.present_seconds = (double)(now - profile_phase) / 1e9;
+            profile_phase = now;
         }
         char doc_capture_path[4096];
         if (doc_capture)
@@ -4288,6 +4344,19 @@ int main(int argc, char **argv) {
             fprintf(stderr, "Documentation rendering: %s\n", SDL_GetError());
             exit_code = 1;
             a->quitting = true;
+        }
+        if (a->profiler) {
+            Uint64 now = SDL_GetTicksNS();
+            a->profile_frame.documentation_seconds = (double)(now - profile_phase) / 1e9;
+            a->profile_frame.frame_seconds = (double)(now - profile_frame_started) / 1e9;
+            a->profile_frame.interval_seconds = (double)(now - profile_previous) / 1e9;
+            a->profile_frame.time_seconds = ps_clock() - profile_app_started;
+            if (!profile_ready) profile_ready = a->profile_frame.time_seconds;
+            a->profile_frame.startup_ready_seconds = profile_ready;
+            if (ps_process_usage_self(&a->profile_frame.usage))
+                ps_app_profile_record(a->profiler, &a->profile_frame);
+            else ps_app_profile_record(a->profiler, NULL);
+            profile_previous = now;
         }
         frames++;
         if (smoke && frames >= 8)
@@ -4369,6 +4438,14 @@ int main(int argc, char **argv) {
     ps_workspace_tree_destroy(&a->workspace_tree);
     documents_clear(a);
     documentation_window_destroy(a);
+    bool profile_started = a->profiler != NULL;
+    ps_app_profile_result profile_result = ps_app_profile_finish(a->profiler);
+    if (profile_requested && !profile_started) profile_result.failed = true;
+    a->profiler = NULL;
+    if (profile_requested)
+        fprintf(stderr, "App profiling: %llu frames written, %llu dropped, failed=%u\n",
+                (unsigned long long)profile_result.written, (unsigned long long)profile_result.dropped,
+                profile_result.failed ? 1u : 0u);
     nk_sdl_shutdown(a->ui);
     SDL_SetWindowHitTest(window, NULL, NULL);
     free(a);

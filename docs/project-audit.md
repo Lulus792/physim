@@ -470,3 +470,13 @@ explizit fehlend. Vollständige App-/Runner-/Mehrworker-, Startzeit-, reale
 Interaktions- und GPU-Auslastungsmessung bleiben offen. Der Block und die Zahlen
 bleiben unverändert: 34 implementiert, 8 unvollständig, 489 ungeprüft.
 [Vertrag](scene-rendering.md) und [Nachweise](platform-validation.md).
+
+
+PP-0711 besitzt nun auch eine opt-in-Aufzeichnung tatsächlicher App-Frames mit
+Phasen, Startbereitschaft ab `main`, App-CPU/Peak-RAM und empfangenen Pipebytes.
+Ein asynchroner Writer mit begrenzter atomarer Queue schützt den UI-Pfad; Drops
+und Schreib-/Abschlussfehler bleiben ausdrücklich unvollständig. Die realen
+C-/Physim-Workflows und Reportergegenproben erweitern den Nachweis. Kindprozess-/
+Mehrworkerressourcen, GPU-Auslastung, OS-Start vor `main` und tatsächliche
+Eingabe-bis-Anzeige-Latenz bleiben offen. [Vertrag](app-profiling.md).
+Die Gesamtzahlen bleiben unverändert: 34 implementiert, 8 unvollständig, 489 ungeprüft.

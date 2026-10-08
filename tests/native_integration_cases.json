@@ -8337,6 +8337,35 @@
           ]
         }
       ]
+    },
+    {
+      "name": "app_profiling_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_app_profiling_workflow.py",
+            "--app",
+            "{physim}",
+            "--root",
+            "{root}",
+            "--work",
+            "{work}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 1000,
+          "files": [
+            "results.json"
+          ]
+        }
+      ]
     }
   ]
 }

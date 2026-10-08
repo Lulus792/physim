@@ -44,6 +44,8 @@ class Case:
 def catalog():
     cases = []
     cases.append(Case("process_usage", ("tests/test_process_usage.c",)))
+    cases.append(Case("app_profiling", ("tests/test_app_profiling.c", "app/profiling.c"),
+                      app=True, arguments=("{work}",)))
     if sys.platform == "darwin":
         cases.append(Case("accessibility_native", ("tests/test_accessibility_native.c", "app/accessibility.c", "app/accessibility_native.c"),app=True,display=True))
         cases.append(Case("accessibility_ui", ("tests/test_accessibility_ui.c", "app/accessibility.c", "app/accessibility_native.c", "app/ui_backend.c", "app/ui_sdl.c", "app/ui_geometry.c", "app/graphics.c", "app/png.c"),libraries=("platform","zlib","core"),defines=("Z_PREFIX",),app=True,display=True))
