@@ -704,9 +704,9 @@ static inline ps_unit psrt_unit(int64_t l, int64_t m, int64_t t, int64_t i, int6
 }
 static inline void psrt_unit_result(ps_result result, psrt_site site) {
     if (result == PS_INVALID)
-        psrt_fail(site, "Unit exponent exceeds Int8 range or invalid unit");
+        psrt_fail_code(site, result, "Unit exponent exceeds Int8 range or invalid unit");
     if (result != PS_OK)
-        psrt_fail(site, "Unit scale is not positive and finite");
+        psrt_fail_code(site, result, "Unit scale is not positive and finite");
 }
 static inline ps_unit psrt_unit_multiply(ps_unit left, ps_unit right, const char *symbol,
                                         psrt_site site) {
@@ -739,9 +739,9 @@ static inline ps_quantity psrt_quantity(double value, ps_unit unit, psrt_site si
 }
 static inline void psrt_quantity_result(ps_result result, psrt_site site) {
     if (result == PS_INVALID)
-        psrt_fail(site, "Invalid quantity operation: incompatible units, zero divisor or exponent overflow");
+        psrt_fail_code(site, result, "Invalid quantity operation: incompatible units, zero divisor or exponent overflow");
     if (result != PS_OK)
-        psrt_fail(site, "Quantity result or scale is not representable");
+        psrt_fail_code(site, result, "Quantity result or scale is not representable");
 }
 static inline ps_quantity psrt_quantity_convert(ps_quantity value, ps_unit target, psrt_site site) {
     ps_quantity result;
@@ -783,8 +783,10 @@ static inline ps_quantity psrt_quantity_divide(ps_quantity left, ps_quantity rig
 }
 static inline double psrt_convert(double value, ps_unit from, ps_unit to, psrt_site site) {
     double result;
-    if (ps_convert(value, from, to, &result) != PS_OK)
-        psrt_fail(site, "Incompatible unit conversion");
+    ps_result status = ps_convert(value, from, to, &result);
+    if (status != PS_OK)
+        psrt_fail_code(site, status, status == PS_INVALID ? "Incompatible unit conversion"
+                                                        : "Unit conversion result is not representable");
     return psrt_finite(result, site);
 }
 static inline psrt_channel psrt_add_channel(psrt_host *host, const char *name, ps_unit unit,

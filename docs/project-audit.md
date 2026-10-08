@@ -341,3 +341,25 @@ Parameterbereich, Extrapolationsgrenzen und Fehlererhaltung sind dokumentiert;
 automatische Bogenlängenparametrisierung ist nicht enthalten. Die Originaltexte
 aller 531 Planblöcke bleiben erhalten; PP-0365 und die gesamte Algorithmus-,
 Modell-, Plattform- und Produktabnahme bleiben offen.
+
+
+## SI-Definitionen und Konvertierung (§7.3 / PP-0369, PP-0373)
+
+Die sieben SI-Basiskonstanten, benannten abgeleiteten Einheiten und allgemeine
+Dimensions-/Skalenalgebra sind konkret gegen Basisvektoren, Symbole und
+abgeleitete Dimensionen geprüft. `ps_convert` konnte bisher selbst beim
+Umrechnen in dieselbe Einheit Werte um ein Bit verändern: 220 von 2000
+Identitätsfällen; die umfassendere rationale Gegenprobe findet 540 abweichende
+Fälle bei 8214 Eingaben. Die Konvertierung rundet nun das exakte binäre Verhältnis
+einmal abschließend und erhält Identitäten sowie signierte Null. 264 Physim-Fälle
+prüfen denselben Core. Fehler erhalten Ausgaben; ursprüngliche Invalid-/Numeric-
+Codes gelangen in die strukturierten Runtime-Diagnosen.
+
+Dimensionsformatierung, persistente Anzeigeeinheiten, SI-Reihen, Berichts-/CSV-
+Export und Parameter-Einheiten sind konkret geprüft. PP-0369 und PP-0373 sind mit
+diesen begrenzten Nachweisen implementiert: aktuell 32 implementierte, sechs
+unvollständige und 493 ungeprüfte Planblöcke. PP-0370/0371/0372/0375 bleiben für
+ihren gesamten Umfang ungeprüft; temporäre Quantity-Darstellungen und fest
+kanonische Run-Kanäle müssen von allen übrigen Datenpfaden unterschieden werden.
+Die Originaltexte aller 531 Blöcke bleiben erhalten. Die vollständige
+Plattform-/Modell-/Produktabnahme wird aus diesen Einzelnachweisen nicht abgeleitet.

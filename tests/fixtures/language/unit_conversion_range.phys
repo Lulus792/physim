@@ -1,0 +1,5017 @@
+// Exact binary inputs, with independent Fraction references.
+func conversionCase0():
+    let a = Unit(1,0,0,0,0,0,0,(1.462031776601127 * pow(2,-359)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.462031776601127 * pow(2,-359)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.0218779403928115 * pow(2,732)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.0218779403928115 * pow(2,732)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase1():
+    let a = Unit(1,0,0,0,0,0,0,(1.2116608286997255 * pow(2,376)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.2116608286997255 * pow(2,376)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.6401551003442165 * pow(2,306)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.6401551003442165 * pow(2,306)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase2():
+    let a = Unit(1,0,0,0,0,0,0,(1.7787258678199702 * pow(2,-880)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.7787258678199702 * pow(2,-880)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.6715416063696296 * pow(2,364)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.6715416063696296 * pow(2,364)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase3():
+    let a = Unit(1,0,0,0,0,0,0,(1.7176377362474633 * pow(2,-627)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.7176377362474633 * pow(2,-627)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.2019765264547111 * pow(2,760)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.2019765264547111 * pow(2,760)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase4():
+    let a = Unit(1,0,0,0,0,0,0,(1.7782249208081577 * pow(2,670)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.7782249208081577 * pow(2,670)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.4381723106434947 * pow(2,527)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.4381723106434947 * pow(2,527)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase5():
+    let a = Unit(1,0,0,0,0,0,0,(1.5917901991785415 * pow(2,-431)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.5917901991785415 * pow(2,-431)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.8400422008220643 * pow(2,35)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.8400422008220643 * pow(2,35)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase6():
+    let a = Unit(1,0,0,0,0,0,0,(1.3308990144936064 * pow(2,673)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.3308990144936064 * pow(2,673)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.5120619043256287 * pow(2,81)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.5120619043256287 * pow(2,81)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase7():
+    let a = Unit(1,0,0,0,0,0,0,(1.5406117131381083 * pow(2,-887)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.5406117131381083 * pow(2,-887)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.8982985527832419 * pow(2,309)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.8982985527832419 * pow(2,309)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase8():
+    let a = Unit(1,0,0,0,0,0,0,(1.743405717906845 * pow(2,-476)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.743405717906845 * pow(2,-476)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.4356832492243505 * pow(2,231)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.4356832492243505 * pow(2,231)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase9():
+    let a = Unit(1,0,0,0,0,0,0,(1.8883421209183404 * pow(2,851)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.8883421209183404 * pow(2,851)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.2058250213979784 * pow(2,-999)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.2058250213979784 * pow(2,-999)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase10():
+    let a = Unit(1,0,0,0,0,0,0,(1.2412205398591805 * pow(2,988)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.2412205398591805 * pow(2,988)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.6691313760394211 * pow(2,376)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.6691313760394211 * pow(2,376)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase11():
+    let a = Unit(1,0,0,0,0,0,0,(1.4168289952795921 * pow(2,801)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.4168289952795921 * pow(2,801)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.3118682944600595 * pow(2,-496)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.3118682944600595 * pow(2,-496)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase12():
+    let a = Unit(1,0,0,0,0,0,0,(1.7850057082126549 * pow(2,-684)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.7850057082126549 * pow(2,-684)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.201271237869328 * pow(2,-507)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.201271237869328 * pow(2,-507)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase13():
+    let a = Unit(1,0,0,0,0,0,0,(1.4403203359544283 * pow(2,-424)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.4403203359544283 * pow(2,-424)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.6004125256665662 * pow(2,620)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.6004125256665662 * pow(2,620)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase14():
+    let a = Unit(1,0,0,0,0,0,0,(1.8125 * pow(2,-1070)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.8125 * pow(2,-1070)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.3588802592519826 * pow(2,784)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.3588802592519826 * pow(2,784)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase15():
+    let a = Unit(1,0,0,0,0,0,0,(1.1904389992850928 * pow(2,-10)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.2489722296153933 * pow(2,-312)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.5309783769752112 * pow(2,-796)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.5309783769752112 * pow(2,-796)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase16():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.8540646902289828 * pow(2,-97)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.447190713216008 * pow(2,69)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.447190713216008 * pow(2,69)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase17():
+    let a = Unit(1,0,0,0,0,0,0,(1.9957745000720024 * pow(2,-1046)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.0548801188150496 * pow(2,-650)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.0548801188150496 * pow(2,-650)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase18():
+    let a = Unit(1,0,0,0,0,0,0,(1.8676852261789847 * pow(2,-387)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.260248336785712 * pow(2,413)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.0348755931512748 * pow(2,298)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.0348755931512748 * pow(2,298)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase19():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.0587761325562914 * pow(2,729)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.0445240887272687 * pow(2,857)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.0445240887272687 * pow(2,857)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase20():
+    let a = Unit(1,0,0,0,0,0,0,(1.818513721976319 * pow(2,92)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.2451857553392376 * pow(2,155)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.2451857553392376 * pow(2,155)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase21():
+    let a = Unit(1,0,0,0,0,0,0,(1.76387802121698 * pow(2,-704)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.7257675842531779 * pow(2,-153)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9728075237365261 * pow(2,-748)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9728075237365261 * pow(2,-748)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase22():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.6336332435479395 * pow(2,-419)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.4282388682031204 * pow(2,-932)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.4282388682031204 * pow(2,-932)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase23():
+    let a = Unit(1,0,0,0,0,0,0,(1.2898095066859578 * pow(2,-270)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9130866280717029 * pow(2,640)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9130866280717029 * pow(2,640)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase24():
+    let a = Unit(1,0,0,0,0,0,0,(1.6768344632606478 * pow(2,-901)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.6555439834299102 * pow(2,224)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9029121042850008 * pow(2,-442)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9029121042850008 * pow(2,-442)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase25():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.0304258887221533 * pow(2,939)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.5001927939780462 * pow(2,-341)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.5001927939780462 * pow(2,-341)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase26():
+    let a = Unit(1,0,0,0,0,0,0,(1.3726483685066833 * pow(2,-694)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.4143847527947755 * pow(2,164)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.4143847527947755 * pow(2,164)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase27():
+    let a = Unit(1,0,0,0,0,0,0,(1.9853498078435261 * pow(2,347)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.5331968966177967 * pow(2,947)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.7736963054964883 * pow(2,665)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.7736963054964883 * pow(2,665)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase28():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.5470692602374685 * pow(2,-726)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.4915673855079259 * pow(2,-22)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.4915673855079259 * pow(2,-22)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase29():
+    let a = Unit(1,0,0,0,0,0,0,(1.258164364566583 * pow(2,159)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.544802056203582 * pow(2,-379)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.544802056203582 * pow(2,-379)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase30():
+    let a = Unit(1,0,0,0,0,0,0,(1.1762709366227555 * pow(2,-839)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.014556884765625 * pow(2,-1059)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.5065736306474924 * pow(2,725)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.5065736306474924 * pow(2,725)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase31():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.4575882227178463 * pow(2,439)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.7964968722532824 * pow(2,-928)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.7964968722532824 * pow(2,-928)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase32():
+    let a = Unit(1,0,0,0,0,0,0,(1.1284196133174866 * pow(2,49)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.3125 * pow(2,-1069)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.3125 * pow(2,-1069)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase33():
+    let a = Unit(1,0,0,0,0,0,0,(1.5757483584252461 * pow(2,546)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.7966575504377162 * pow(2,231)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.6548415363807019 * pow(2,900)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.6548415363807019 * pow(2,900)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase34():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.5229493022040568 * pow(2,144)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.1559943769152454 * pow(2,-481)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.1559943769152454 * pow(2,-481)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase35():
+    let a = Unit(1,0,0,0,0,0,0,(1.5647436047387022 * pow(2,-916)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.6683429664604774 * pow(2,779)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.6683429664604774 * pow(2,779)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase36():
+    let a = Unit(1,0,0,0,0,0,0,(1.3643406034555552 * pow(2,-347)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.7883873270080368 * pow(2,-509)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.7473887769126804 * pow(2,988)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.7473887769126804 * pow(2,988)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase37():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.5438766466063512 * pow(2,-454)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.4490279697312722 * pow(2,136)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.4490279697312722 * pow(2,136)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase38():
+    let a = Unit(1,0,0,0,0,0,0,(1.8372659203038471 * pow(2,115)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.4728274415159746 * pow(2,789)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.4728274415159746 * pow(2,789)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase39():
+    let a = Unit(1,0,0,0,0,0,0,(1.4932678847523779 * pow(2,624)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.0015556566741106 * pow(2,166)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.5816242829471721 * pow(2,-40)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.5816242829471721 * pow(2,-40)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase40():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.6060124165151399 * pow(2,-896)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.6792966053588225 * pow(2,446)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.6792966053588225 * pow(2,446)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase41():
+    let a = Unit(1,0,0,0,0,0,0,(1.4071165531341774 * pow(2,270)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.200760696019028 * pow(2,718)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.200760696019028 * pow(2,718)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase42():
+    let a = Unit(1,0,0,0,0,0,0,(1.1028464018574589 * pow(2,259)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9165914401630366 * pow(2,-179)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.4100418686890777 * pow(2,-367)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.4100418686890777 * pow(2,-367)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase43():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.2540564997223456 * pow(2,-490)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.0567913656419616 * pow(2,626)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.0567913656419616 * pow(2,626)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase44():
+    let a = Unit(1,0,0,0,0,0,0,(1.0294354977015421 * pow(2,-279)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.2857788581177214 * pow(2,-987)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.2857788581177214 * pow(2,-987)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase45():
+    let a = Unit(1,0,0,0,0,0,0,(1.9608449710856388 * pow(2,811)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.5982222297332203 * pow(2,357)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.6091886703403695 * pow(2,102)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.6091886703403695 * pow(2,102)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase46():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.8765070242167221 * pow(2,678)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.5966259375333132 * pow(2,-619)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.5966259375333132 * pow(2,-619)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase47():
+    let a = Unit(1,0,0,0,0,0,0,(1.3906056429995939 * pow(2,35)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.4536428549870593 * pow(2,-186)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.4536428549870593 * pow(2,-186)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase48():
+    let a = Unit(1,0,0,0,0,0,0,(1.6768833415596629 * pow(2,-482)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.1291685507940517 * pow(2,-263)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.4750088593346731 * pow(2,-302)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.4750088593346731 * pow(2,-302)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase49():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.3729895353317261 * pow(2,-1051)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.3265104557779388 * pow(2,-967)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.3265104557779388 * pow(2,-967)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase50():
+    let a = Unit(1,0,0,0,0,0,0,(1.0375296022305118 * pow(2,264)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.0111975737235612 * pow(2,-833)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.0111975737235612 * pow(2,-833)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase51():
+    let a = Unit(1,0,0,0,0,0,0,(1.3015835312961708 * pow(2,398)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9967099662494925 * pow(2,488)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.5557121263989231 * pow(2,-555)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.5557121263989231 * pow(2,-555)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase52():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.4501825820581451 * pow(2,-473)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.6027518251484452 * pow(2,-801)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.6027518251484452 * pow(2,-801)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase53():
+    let a = Unit(1,0,0,0,0,0,0,(1.9074121833381086 * pow(2,-1004)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.2890981579861971 * pow(2,529)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.2890981579861971 * pow(2,529)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase54():
+    let a = Unit(1,0,0,0,0,0,0,(1.2984246416292797 * pow(2,-863)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.8974971987121911 * pow(2,1002)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.0891018707355009 * pow(2,-763)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.0891018707355009 * pow(2,-763)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase55():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.7890555102429522 * pow(2,-258)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.3707868088832447 * pow(2,-861)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.3707868088832447 * pow(2,-861)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase56():
+    let a = Unit(1,0,0,0,0,0,0,(1.7152738897123174 * pow(2,174)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.1941938968017252 * pow(2,68)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.1941938968017252 * pow(2,68)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase57():
+    let a = Unit(1,0,0,0,0,0,0,(1.0439046336451234 * pow(2,-507)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.8125 * pow(2,-1069)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.0107137994655031 * pow(2,175)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.0107137994655031 * pow(2,175)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase58():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.0974515648685625 * pow(2,475)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.5289897087100082 * pow(2,771)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.5289897087100082 * pow(2,771)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase59():
+    let a = Unit(1,0,0,0,0,0,0,(1.0809857033939183 * pow(2,488)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.4846983801934699 * pow(2,-541)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.4846983801934699 * pow(2,-541)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase60():
+    let a = Unit(1,0,0,0,0,0,0,(1.2484241087912791 * pow(2,-21)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.139415611651462 * pow(2,-727)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.1974751897527405 * pow(2,-132)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.1974751897527405 * pow(2,-132)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase61():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.8146446235293716 * pow(2,-574)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.6427889912623646 * pow(2,-845)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.6427889912623646 * pow(2,-845)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase62():
+    let a = Unit(1,0,0,0,0,0,0,(1.7724701168824799 * pow(2,-650)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.980839529644939 * pow(2,152)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.980839529644939 * pow(2,152)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase63():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase64():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase65():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase66():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase67():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase68():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase69():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase70():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase71():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase72():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase73():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase74():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase75():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase76():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase77():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase78():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase79():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase80():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase81():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase82():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase83():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase84():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase85():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase86():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase87():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase88():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase89():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase90():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase91():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase92():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase93():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase94():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase95():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase96():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase97():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase98():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase99():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase100():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase101():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase102():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase103():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase104():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase105():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase106():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase107():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase108():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase109():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase110():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase111():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase112():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-0.0,dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-0.0,a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase113():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase114():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase115():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase116():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase117():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase118():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase119():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase120():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase121():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase122():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase123():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase124():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase125():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase126():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase127():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase128():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase129():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase130():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase131():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase132():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase133():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase134():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase135():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase136():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase137():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase138():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase139():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase140():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase141():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase142():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase143():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase144():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase145():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase146():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase147():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase148():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase149():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase150():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase151():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase152():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase153():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase154():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase155():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase156():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase157():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase158():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase159():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase160():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase161():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase162():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,-1074)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,-1074)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase163():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase164():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase165():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase166():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase167():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase168():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase169():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase170():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase171():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase172():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase173():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase174():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase175():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase176():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase177():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase178():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase179():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase180():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase181():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase182():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase183():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase184():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase185():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase186():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase187():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase188():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase189():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase190():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase191():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase192():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase193():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase194():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase195():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase196():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase197():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase198():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase199():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase200():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase201():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase202():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase203():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase204():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase205():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase206():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase207():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase208():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase209():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase210():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase211():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase212():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase213():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase214():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase215():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase216():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase217():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase218():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase219():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase220():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase221():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase222():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase223():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase224():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase225():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase226():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase227():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase228():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase229():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase230():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase231():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase232():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase233():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase234():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase235():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase236():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase237():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase238():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase239():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase240():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase241():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase242():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase243():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase244():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase245():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase246():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase247():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase248():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase249():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase250():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase251():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase252():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase253():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase254():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase255():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase256():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase257():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase258():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1074)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase259():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,-1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase260():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase261():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1 * pow(2,1)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase262():
+    let a = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"from")
+    let b = Unit(1,0,0,0,0,0,0,(1.9999999999999998 * pow(2,1023)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert(-(1.9999999999999998 * pow(2,1023)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity(-(1.9999999999999998 * pow(2,1023)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+func conversionCase263():
+    let a = Unit(1,0,0,0,0,0,0,(1 * pow(2,0)),"from")
+    let b = Unit(0,0,1,0,0,0,0,(1 * pow(2,0)),"to")
+    func dynamicTarget() -> Unit:
+        return b
+    let converted = attempt(a.convert((1 * pow(2,0)),dynamicTarget()))
+    if let result = converted:
+        print("ok")
+        print(result)
+    else:
+        print("error")
+    let quantity = attempt(Quantity((1 * pow(2,0)),a).converted(dynamicTarget()))
+    if let result = quantity:
+        print("ok")
+        print(result.value)
+    else:
+        print("error")
+
+conversionCase0()
+conversionCase1()
+conversionCase2()
+conversionCase3()
+conversionCase4()
+conversionCase5()
+conversionCase6()
+conversionCase7()
+conversionCase8()
+conversionCase9()
+conversionCase10()
+conversionCase11()
+conversionCase12()
+conversionCase13()
+conversionCase14()
+conversionCase15()
+conversionCase16()
+conversionCase17()
+conversionCase18()
+conversionCase19()
+conversionCase20()
+conversionCase21()
+conversionCase22()
+conversionCase23()
+conversionCase24()
+conversionCase25()
+conversionCase26()
+conversionCase27()
+conversionCase28()
+conversionCase29()
+conversionCase30()
+conversionCase31()
+conversionCase32()
+conversionCase33()
+conversionCase34()
+conversionCase35()
+conversionCase36()
+conversionCase37()
+conversionCase38()
+conversionCase39()
+conversionCase40()
+conversionCase41()
+conversionCase42()
+conversionCase43()
+conversionCase44()
+conversionCase45()
+conversionCase46()
+conversionCase47()
+conversionCase48()
+conversionCase49()
+conversionCase50()
+conversionCase51()
+conversionCase52()
+conversionCase53()
+conversionCase54()
+conversionCase55()
+conversionCase56()
+conversionCase57()
+conversionCase58()
+conversionCase59()
+conversionCase60()
+conversionCase61()
+conversionCase62()
+conversionCase63()
+conversionCase64()
+conversionCase65()
+conversionCase66()
+conversionCase67()
+conversionCase68()
+conversionCase69()
+conversionCase70()
+conversionCase71()
+conversionCase72()
+conversionCase73()
+conversionCase74()
+conversionCase75()
+conversionCase76()
+conversionCase77()
+conversionCase78()
+conversionCase79()
+conversionCase80()
+conversionCase81()
+conversionCase82()
+conversionCase83()
+conversionCase84()
+conversionCase85()
+conversionCase86()
+conversionCase87()
+conversionCase88()
+conversionCase89()
+conversionCase90()
+conversionCase91()
+conversionCase92()
+conversionCase93()
+conversionCase94()
+conversionCase95()
+conversionCase96()
+conversionCase97()
+conversionCase98()
+conversionCase99()
+conversionCase100()
+conversionCase101()
+conversionCase102()
+conversionCase103()
+conversionCase104()
+conversionCase105()
+conversionCase106()
+conversionCase107()
+conversionCase108()
+conversionCase109()
+conversionCase110()
+conversionCase111()
+conversionCase112()
+conversionCase113()
+conversionCase114()
+conversionCase115()
+conversionCase116()
+conversionCase117()
+conversionCase118()
+conversionCase119()
+conversionCase120()
+conversionCase121()
+conversionCase122()
+conversionCase123()
+conversionCase124()
+conversionCase125()
+conversionCase126()
+conversionCase127()
+conversionCase128()
+conversionCase129()
+conversionCase130()
+conversionCase131()
+conversionCase132()
+conversionCase133()
+conversionCase134()
+conversionCase135()
+conversionCase136()
+conversionCase137()
+conversionCase138()
+conversionCase139()
+conversionCase140()
+conversionCase141()
+conversionCase142()
+conversionCase143()
+conversionCase144()
+conversionCase145()
+conversionCase146()
+conversionCase147()
+conversionCase148()
+conversionCase149()
+conversionCase150()
+conversionCase151()
+conversionCase152()
+conversionCase153()
+conversionCase154()
+conversionCase155()
+conversionCase156()
+conversionCase157()
+conversionCase158()
+conversionCase159()
+conversionCase160()
+conversionCase161()
+conversionCase162()
+conversionCase163()
+conversionCase164()
+conversionCase165()
+conversionCase166()
+conversionCase167()
+conversionCase168()
+conversionCase169()
+conversionCase170()
+conversionCase171()
+conversionCase172()
+conversionCase173()
+conversionCase174()
+conversionCase175()
+conversionCase176()
+conversionCase177()
+conversionCase178()
+conversionCase179()
+conversionCase180()
+conversionCase181()
+conversionCase182()
+conversionCase183()
+conversionCase184()
+conversionCase185()
+conversionCase186()
+conversionCase187()
+conversionCase188()
+conversionCase189()
+conversionCase190()
+conversionCase191()
+conversionCase192()
+conversionCase193()
+conversionCase194()
+conversionCase195()
+conversionCase196()
+conversionCase197()
+conversionCase198()
+conversionCase199()
+conversionCase200()
+conversionCase201()
+conversionCase202()
+conversionCase203()
+conversionCase204()
+conversionCase205()
+conversionCase206()
+conversionCase207()
+conversionCase208()
+conversionCase209()
+conversionCase210()
+conversionCase211()
+conversionCase212()
+conversionCase213()
+conversionCase214()
+conversionCase215()
+conversionCase216()
+conversionCase217()
+conversionCase218()
+conversionCase219()
+conversionCase220()
+conversionCase221()
+conversionCase222()
+conversionCase223()
+conversionCase224()
+conversionCase225()
+conversionCase226()
+conversionCase227()
+conversionCase228()
+conversionCase229()
+conversionCase230()
+conversionCase231()
+conversionCase232()
+conversionCase233()
+conversionCase234()
+conversionCase235()
+conversionCase236()
+conversionCase237()
+conversionCase238()
+conversionCase239()
+conversionCase240()
+conversionCase241()
+conversionCase242()
+conversionCase243()
+conversionCase244()
+conversionCase245()
+conversionCase246()
+conversionCase247()
+conversionCase248()
+conversionCase249()
+conversionCase250()
+conversionCase251()
+conversionCase252()
+conversionCase253()
+conversionCase254()
+conversionCase255()
+conversionCase256()
+conversionCase257()
+conversionCase258()
+conversionCase259()
+conversionCase260()
+conversionCase261()
+conversionCase262()
+conversionCase263()

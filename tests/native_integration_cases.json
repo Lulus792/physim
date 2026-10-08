@@ -2004,6 +2004,18 @@
     "curve-range-language": {
       "source": "tests/fixtures/language/curve_range.phys",
       "mode": "--emit-c"
+    },
+    "unit-conversion-probe": {
+      "sources": [
+        "tests/unit_conversion_probe.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "unit-conversion-language": {
+      "source": "tests/fixtures/language/unit_conversion_range.phys",
+      "mode": "--emit-c"
     }
   },
   "tests": [
@@ -7911,6 +7923,29 @@
             "{curve-range-language}",
             "--fixture",
             "{root}/tests/fixtures/language/curve_range.phys"
+          ],
+          "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "unit_conversion_oracle",
+      "targets": [
+        "python",
+        "unit-conversion-probe",
+        "unit-conversion-language"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_unit_conversion_oracle.py",
+            "--c",
+            "{unit-conversion-probe}",
+            "--language",
+            "{unit-conversion-language}",
+            "--fixture",
+            "{root}/tests/fixtures/language/unit_conversion_range.phys"
           ],
           "timeout": 120
         }

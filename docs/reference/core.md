@@ -194,6 +194,8 @@ Konvertiert value zwischen dimensionskompatiblen Einheiten und schreibt das Erge
 ps_result ps_convert(double value, ps_unit from, ps_unit to, double *output);
 ```
 
+Matching dimensions, finite value and positive finite scales required. Convert exact binary value*from.scale/to.scale with one nearest-even rounding in the default floating environment. Identity conversions preserve all bits. Nonfinite final result or nonzero value rounding to zero -> PS_NUMERIC. Every failure preserves output; signed zero and output aliasing supported.
+
 ### ps_rng
 
 ```c

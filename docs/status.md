@@ -2547,3 +2547,11 @@ kleinen Tangenten in Zwischenstufen. C und Physim teilen den Vertrag;
 `controlPoint(index)` liefert geprüfte kopierte Sprachwerte. Die unabhängige
 rationale Gegenprobe ergänzt die bestehenden Interpolations-/Kurventests.
 [Einheiten, Grenzen und Methoden](math.md).
+
+
+Einheitenkonvertierung erhält nun identische Eingabewerte bitgenau und rundet
+allgemeine binäre Skalenverhältnisse einmal abschließend. Core und Quantity
+teilen den Vertrag; Physim bewahrt die ursprünglichen Invalid-/Numeric-Codes
+in Runtime-Diagnosen. Unabhängige rationale C-/Physim-Proben, SI-Basisdefinitionen,
+Anzeigeeinheiten und Exporte sind konkret geprüft. Die neue [SI-Anleitung](units.md)
+ist im Offline-Handbuch erreichbar; globale SI-/Metadatenabnahme bleibt offen.

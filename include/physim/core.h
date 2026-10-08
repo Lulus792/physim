@@ -52,6 +52,11 @@ typedef struct {
     const char *symbol;
 } ps_unit;
 extern const ps_unit PS_METRE, PS_SECOND, PS_KILOGRAM, PS_RADIAN, PS_JOULE, PS_VELOCITY;
+/* Matching dimensions, finite value and positive finite scales required.
+ * Convert exact binary value*from.scale/to.scale with one nearest-even rounding
+ * in the default floating environment. Identity conversions preserve all bits.
+ * Nonfinite final result or nonzero value rounding to zero -> PS_NUMERIC.
+ * Every failure preserves output; signed zero and output aliasing supported. */
 ps_result ps_convert(double value, ps_unit from, ps_unit to, double *output);
 /* Explicit PCG32 state, copied by value; no hidden cache/global random state.
  * Initialize with ps_rng_seed before drawing. Seed fixes the odd increment;

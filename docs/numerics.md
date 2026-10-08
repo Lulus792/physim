@@ -218,8 +218,9 @@ Quantity-Funktionen verwenden dieselbe C-Rechnung; Fehler sind mit `attempt`
 abfangbar. Die eigenständige Konvertierung `ps_convert` behält ihren bisherigen
 Bereichsvertrag. Auch Produkt-/Quotientenoperationen behalten ihren Vertrag.
 
-`ps_convert` vermeidet vermeidbare Zwischenüberläufe durch Mantissen-/Exponenten-
-Zerlegung. Überlauf oder vollständiger Unterlauf des Ergebnisses wird gemeldet.
+`ps_convert` berechnet das exakte binäre Skalenverhältnis mit einer abschließenden
+Rundung; Identitäten erhalten sämtliche Bits. Überlauf oder vollständiger Unterlauf
+des Ergebnisses wird gemeldet. [SI-Grenzen und Konvertierungsvertrag](units.md).
 Eigene Einheitensymbole werden nicht kopiert; ihre Lebensdauer liegt beim Aufrufer.
 `ps_unit_format_dimension` erzeugt eine kanonische SI-Dimensionsangabe. Affine
 Temperaturskalen und die automatische Dimensionsprüfung kompletter Analyseskripte

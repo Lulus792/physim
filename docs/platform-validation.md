@@ -3800,3 +3800,90 @@ PP-0359 ist mit den genannten Interpolations-/Kurvennachweisen implementiert.
 Der gesamte Projektplan, die allgemeine Algorithmusabnahme PP-0365 und weitere
 Plattformen bleiben offen. Die fokussierten Läufe beweisen keine aktuelle
 Windows-/Apple-Silicon-, allgemeine GUI- oder macOS-Sanitizer-Abnahme.
+
+## Einheitenkonvertierung am 8. Oktober 2026
+
+Die bisherige Konvertierung verändert bei 220 von 2000 Identitätsfällen den
+Eingabewert um ein Bit. Die breitere unabhängige Fraction-Gegenprobe findet
+540 abweichende Fälle bei 8214 Eingaben (`build/unit-baseline.log`). Core und
+Quantity konvertieren nun das exakte binäre Verhältnis mit einer abschließenden
+Rundung; gleiche Skalen erhalten jedes Bit, einschließlich signierter Null.
+Konvertierung in SI beziehungsweise aus SI verwendet eine einzelne
+Multiplikation/Division, allgemeine Verhältnisse begrenzte exakte Hilfen.
+[SI-Grenzen und Verträge](units.md).
+
+8214 C-Fälle und 264 Physim-Fälle prüfen Identitäten, Exponentengrenzen, direkte
+SI-Pfade, Dimensions-/Bereichsfehler, Aliasierung und unveränderte Fehlerausgaben.
+Der separate Host-Trap-Test prüft sieben SI-Basisvektoren, benannte abgeleitete
+Dimensionen, Formatierung und ursprüngliche Invalid-/Numeric-Codes samt
+strukturierten Diagnosen und Quellposition. Unit-/Quantity-Wrapper bewahren jetzt
+die tatsächlichen C-Codes, statt numerische Fehler als ungültige Eingaben zu melden.
+
+Intel macOS 14.6.1/Apple Clang 16 besteht 15 ausgewählte Release-Fälle unter
+`build/contact-world-language-release-mac/test-results/run-dgl3cubi`.
+Die erweiterte Definitions-/Formatierungsgegenprobe besteht separat unter
+`run-rdv_oss6` (1/1). Berichte, SI-Reihen, CSV-Export, Anzeigeeinheiten,
+Units-/Parameter-Sprachprüfungen bestehen zusätzlich mit 11/11 unter `run-914vc28f`.
+Der erste neue Orakelaufruf scheitert unter `run-6yegrvh9` mit 14/15, weil die
+Fixture einen internen globalen Builtin-Namen statt der veröffentlichten
+`Unit.convert`-Methode verwendet. Die Fixture und Anleitung sind korrigiert;
+der fehlgeschlagene Lauf wird nicht als bestanden gewertet.
+
+Debian 12/Clang 14 besteht dieselbe Fünfzehnerauswahl mit ASan/UBSan unter
+`build/atspi-asan-linux/test-results/run-mut9n60w`.
+Debian 12/GCC 12.2 besteht die erweiterte Release-Auswahl mit 23/23 unter
+`build/contact-world-language-release-linux/test-results/run-qjnqrlge`.
+`ASAN_OPTIONS=detect_leaks=0` lässt Address-/UndefinedBehavior-Prüfungen aktiv.
+macOS-Sanitizer bleiben wegen fehlendem `ld64.lld` ungeprüft.
+
+Anzeigeeinheiten-Workflow und Handbuch-Tastaturführung bestehen auf macOS mit
+2/2 unter `run-8rzs0e8e`. Die neue SI-Anleitung und beide C-Referenzseiten sind
+im Offline-Handbuch erreichbar; alle 31 generierten Referenzdokumente sind geprüft.
+Die unabhängige Prüfkiterstellung umfasst 115 Dateien mit SHA-256, Grenzen und
+exklusiver Veröffentlichung.
+
+Die älteren abgeschlossenen SDK-Prüfstände `CI regression SDK ä linux h05lz9j2`
+und `Scalar search SDK ä linux pe_dtue1` sind vollständig archiviert:
+`build/units-old-archived-proofs.tar.gz`, 96393124 Bytes, 1592 Dateien/Links,
+SHA-256 `0c837d63f9cf9cdceebeace9fe75288f0ab6d02559de3a77006f24971b0e8c93`.
+Mac- und Linux-Kopie wurden gegen das Inhaltsinventar vollständig geprüft;
+Originale vor dem Entfernen erneut gehasht. Inventar, Prüf- und Löschbelege
+liegen unter `build/units-old-*`. Jüngere Transform-, Run-Stream-, Vergleichs-
+und Kurvennachweise bleiben separat vorhanden.
+
+Die beiden betroffenen GUI-Fälle bestehen auch unter Linux/X11 mit 2/2 unter
+`build/contact-world-language-release-linux/test-results/run-d3qdbc80`.
+Beide SDKs besitzen 459 manifestierte Dateien einschließlich der SI-Anleitung.
+Die verschobene fokussierte Abnahme besteht auf macOS unter
+`build/unit-sdk-checks/Native SDK ä 55xqlecr` und auf Linux unter
+`build/unit-sdk-checks/Native SDK ä d5p64sin`. Der Paketcompiler übersetzt die
+264 Physim-Fälle. Derselbe rationale Probe und Host-Trap-Test bestehen gegen
+installierte und ausschließlich aus Paketquellen neu gebaute Bibliotheken.
+
+Der erste Linux-SDK-Aufruf unter `Native SDK ä z9sd1tyk` scheitert beim Schreiben
+der temporären Compiler-Assembly mit „No space left on device“
+(`build/unit-sdk-verify-linux.log`). Er bleibt ein fehlgeschlagener Nachweis.
+Weitere vollständig archivierte Prüfstände schaffen Platz für die anschließende
+bestandene Abnahme:
+
+- `Transform SDK ä linux r2044mtc`: `build/units-space-archived-proofs.tar.gz`,
+  70562996 Bytes, 1139 Dateien/Links,
+  SHA-256 `01093cd2336a9cba527ae52210c0b441a38c169173246dd9b9c1c0b971793480`.
+- `run-stream-sdk-checks`, `close-sdk-checks`, `curve-sdk-checks` mit allen
+  vier bestandenen SDK-Unterverzeichnissen: `build/units-recent-archived-proofs.tar.gz`,
+  144444440 Bytes, 2305 Dateien/Links,
+  SHA-256 `0a066cc47d494736a4b97c7ad1f944896c1e8e37042d16ba5998a0d4e82f617e`.
+
+Jeder Bestand wurde vollständig auf macOS gegen sein Inhaltsinventar geprüft;
+Originale vor Entfernen erneut gehasht. Weil zunächst selbst der Platz für eine
+zweite Archivkopie fehlte, erfolgte das Entfernen nach der verifizierten Mac-
+Sicherung. Danach wurden beide Archive zurück auf Linux kopiert und dort erneut
+vollständig geprüft. Aktuelle Inventare und Lösch-/Prüfbelege liegen unter
+`build/units-space-*` und `build/units-recent-*`; die früher genannten Pfade
+sind daraus wiederherstellbar. Es wurden keine Quell-/Test-/Asset-Dateien entfernt.
+
+Die 21 geänderten Dateien stimmen zwischen macOS und Linux per SHA-256 überein
+(`build/units-source-freeze.json`). PP-0369 und PP-0373 sind mit den genannten
+Nachweisen implementiert; vollständige SI-/Metadatenabnahme aller Datenpfade,
+Windows/Apple Silicon, Kalibrierung, affine Temperaturskalen und gesamte
+Produktabnahme werden daraus nicht abgeleitet.

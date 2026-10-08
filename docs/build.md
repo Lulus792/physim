@@ -992,3 +992,16 @@ Unterteilungskontrollpunkte mit unabhängigen rationalen Referenzen gegen
 installierten und aus verschobenen SDK-Quellen neu gebauten Core. Er prüft
 Manifest und Verschiebung; vollständige SDK-/GUI-Abnahme bleibt gesondert.
 Andere fokussierte Modi können nicht gleichzeitig gewählt werden.
+
+
+### Einheiten aus einem SDK prüfen
+
+```sh
+python3 tools/verify-native-sdk.py --sdk build/package --work build/unit-package-checks --units-only
+```
+
+Der fokussierte Modus prüft exakte C-/Physim-Konvertierung gegen rationale
+Referenzen, SI-Basisdefinitionen und ursprüngliche Runtime-Diagnosecodes mit
+installiertem und aus verschobenen Paketquellen gebautem Core. Manifest und
+Verschiebung sind enthalten; vollständige SDK-/GUI-Abnahme bleibt gesondert.
+Andere fokussierte Modi können nicht gleichzeitig gewählt werden.

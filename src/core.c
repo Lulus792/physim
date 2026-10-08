@@ -4,6 +4,7 @@
 #include "text_validation.h"
 #include "number_parse.h"
 #include "ode_numeric.h"
+#include "transform_numeric.h"
 #include <errno.h>
 #include <math.h>
 #include <stdio.h>
@@ -81,9 +82,20 @@ ps_result ps_convert(double v, ps_unit a, ps_unit b, double *out) {
     if (!out || !isfinite(v) || memcmp(a.dimension, b.dimension, 7) || !isfinite(a.scale) ||
         !isfinite(b.scale) || a.scale <= 0 || b.scale <= 0)
         return PS_INVALID;
-    int ev, ea, eb;
-    double mv = frexp(v, &ev), ma = frexp(a.scale, &ea), mb = frexp(b.scale, &eb);
-    double result = scalbn(mv * ma / mb, ev + ea - eb);
+    double result;
+    if (v == 0 || a.scale == b.scale)
+        result = v;
+    else if (b.scale == 1)
+        result = v * a.scale;
+    else if (a.scale == 1)
+        result = v / b.scale;
+    else {
+        /* Exact binary product/quotient: avoid changing identity conversions
+         * or rejecting a representable result through intermediate rounding. */
+        double one = 1;
+        result = transform_quotient(transform_dot(&v, &a.scale, 1),
+                                    transform_dot(&b.scale, &one, 1));
+    }
     if (!isfinite(result) || (v != 0 && result == 0))
         return PS_NUMERIC;
     *out = result;

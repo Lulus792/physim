@@ -56,6 +56,7 @@ static const documentation_topic documentation_topics[] = {
     {"C: Experiment & Szene", "docs/reference/experiment.md", false},
     {"C: Numerik", "docs/reference/numerics.md", false},
     {"C: Einheiten", "docs/reference/units.md", false},
+    {"SI-Einheiten und Konvertierung", "docs/units.md", false},
     {"C: Datenreihen", "docs/reference/series.md", false},
     {"C: Dateien & Daten", "docs/reference/data.md", false},
     {"C: Statistik & Analyse", "docs/reference/analysis.md", false},

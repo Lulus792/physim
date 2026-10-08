@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-08",
-  "inspected_revision": "4ddf244bf1570db5bd293650677471526119111f",
+  "inspected_revision": "b9955a3d1cb308be8cebaaacd7dee415e1b9e9e8",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2503,9 +2503,23 @@
       "kind": "list",
       "scope": "planned",
       "text": "- SI-Basiseinheiten und abgeleitete Einheiten.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/core.h",
+        "include/physim/units.h",
+        "src/core.c",
+        "src/units.c",
+        "include/physim/language_sdk.h",
+        "tests/test_unit_runtime_codes.c",
+        "tests/unit_conversion_probe.c",
+        "tests/test_unit_conversion_oracle.py",
+        "tests/fixtures/language/unit_conversion_range.phys",
+        "tests/test_numerics.c",
+        "tests/test_channel_units.c",
+        "tests/test_report.c",
+        "docs/units.md"
+      ],
+      "note": "Sieben SI-Basiskonstanten, benannte abgeleitete Einheiten und geprüfte Algebra über sieben Int8-Exponenten mit positiver endlicher Skala sind vorhanden. Konkrete Basisvektoren, Skalierung, Symbole und abgeleitete Dimensionen sind gegen unabhängige SI-Erwartungen geprüft; keine Stoff-/Kalibriertabellen oder affine Temperaturkonvertierung."
     },
     {
       "id": "PP-0370",
@@ -2529,7 +2543,7 @@
         "tests/test_series_si_report.c",
         "docs/series.md"
       ],
-      "note": "Der konkrete Series-Gegenbefund wird durch kanonischen SI-Import korrigiert: 50 cm werden als 0.5 m gespeichert und zu 1 m als 1.5 m addiert. C-/Physim-Analysen prüfen blockweise Algebra, Kalkül, Masken, Resampling und Report/CSV mit Skala 1 sowie Quota-/Konvertierungsrollback. Die Gesamtforderung an alle internen Speicherschichten bleibt ungeprüft; dieser begrenzte Nachweis ist keine globale Einheitenabnahme."
+      "note": "Kanäle, Parameter, Reihen, Anzeigeeinheiten und typisierte Unit-/Quantity-APIs besitzen konkrete SI-/Dimensionsgrenzen. Temporäre Quantity-Darstellungen können nichtkanonische Skalen tragen; Kanalskala ist im Run-Format fest 1, Parameter-/Series-/Berichtsmetadaten tragen weitere Skalen. Die umfassende Reichweite dieser Anforderung ist noch nicht für alle öffentlichen Datenpfade einzeln abgenommen; keine Ableitung aus der Konvertierungsgegenprobe."
     },
     {
       "id": "PP-0371",
@@ -2543,8 +2557,14 @@
       "scope": "planned",
       "text": "- Dimensionen und Skalierung sind Teil der Metadaten.\n",
       "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "evidence": [
+        "docs/units.md",
+        "src/core.c",
+        "src/series.c",
+        "tests/test_series_si.c",
+        "tests/test_unit_runtime_codes.c"
+      ],
+      "note": "Kanäle, Parameter, Reihen, Anzeigeeinheiten und typisierte Unit-/Quantity-APIs besitzen konkrete SI-/Dimensionsgrenzen. Temporäre Quantity-Darstellungen können nichtkanonische Skalen tragen; Kanalskala ist im Run-Format fest 1, Parameter-/Series-/Berichtsmetadaten tragen weitere Skalen. Die umfassende Reichweite dieser Anforderung ist noch nicht für alle öffentlichen Datenpfade einzeln abgenommen; keine Ableitung aus der Konvertierungsgegenprobe."
     },
     {
       "id": "PP-0372",
@@ -2575,7 +2595,7 @@
         "tests/fixtures/quantity_sum_cases.json",
         "tests/fixtures/language/quantity_sum_values.phys"
       ],
-      "note": "Konkrete Kanalgrenze korrigiert: C und Physim verlangen Skala 1, kopieren begrenzte UTF-8-Metadaten ohne Kürzung, weisen doppelte Namen ab und erhalten den Kontext bei Fehlern. Tatsächliche Läufe und CSV prüfen explizite Umrechnung von 125 cm nach 1.25 m. Die gesamte Forderung an sämtliche API-Grenzen und Analyseoperationen bleibt ungeprüft; dieser Teilnachweis ist keine vollständige Einheitenabnahme. Quantity-Summen sind zusätzlich normiert und kompensiert: endliche Summen trotz nichtdarstellbarer Einzelkonvertierung, Subnormalgrenzen und Ausgabenintegrität werden gegen unabhängige exakte Fraction-Referenzen geprüft. Keine allgemeine Garantie exakter Rundung oder vollständige Einheitenabnahme."
+      "note": "Kanäle, Parameter, Reihen, Anzeigeeinheiten und typisierte Unit-/Quantity-APIs besitzen konkrete SI-/Dimensionsgrenzen. Temporäre Quantity-Darstellungen können nichtkanonische Skalen tragen; Kanalskala ist im Run-Format fest 1, Parameter-/Series-/Berichtsmetadaten tragen weitere Skalen. Die umfassende Reichweite dieser Anforderung ist noch nicht für alle öffentlichen Datenpfade einzeln abgenommen; keine Ableitung aus der Konvertierungsgegenprobe."
     },
     {
       "id": "PP-0373",
@@ -2588,9 +2608,23 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Formatierung und Konvertierung für Anzeige und Export.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/core.h",
+        "include/physim/units.h",
+        "src/core.c",
+        "src/units.c",
+        "include/physim/language_sdk.h",
+        "tests/test_unit_runtime_codes.c",
+        "tests/unit_conversion_probe.c",
+        "tests/test_unit_conversion_oracle.py",
+        "tests/fixtures/language/unit_conversion_range.phys",
+        "tests/test_numerics.c",
+        "tests/test_channel_units.c",
+        "tests/test_report.c",
+        "docs/units.md"
+      ],
+      "note": "Kanonische Dimensionsformatierung, getrennte persistente App-Anzeigeeinheiten, Berichts-/CSV-Einheiten und exakte binäre Core-/Quantity-Konvertierung sind konkret geprüft. 8214 rationale C-Fälle und 264 Physim-Fälle prüfen Identitäten, signierte Null, Bereichs-/Dimensionsfehler, Aliasierung und Ausgabeerhaltung; Host-Traps bewahren ursprüngliche Fehlercodes. SI-Normalisierung und Anzeige aus SI nutzen einzelne Hardwareoperationen, andere Verhältnisse exakte begrenzte Produkt-/Quotientenhilfen. Keine allgemeine Datenpfad-, Plattform- oder Kalibrierungsabnahme."
     },
     {
       "id": "PP-0375",
@@ -2604,8 +2638,14 @@
       "scope": "planned",
       "text": "C kann Dimensionen nur begrenzt statisch prüfen. Deshalb wird nicht vorgegeben, dass ein `double` allein seine Einheit kennt. Öffentliche APIs nutzen entweder klar benannte SI-Felder oder Wert-plus-Dimensions-Metadaten.\n",
       "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "evidence": [
+        "docs/units.md",
+        "src/core.c",
+        "src/series.c",
+        "tests/test_series_si.c",
+        "tests/test_unit_runtime_codes.c"
+      ],
+      "note": "Kanäle, Parameter, Reihen, Anzeigeeinheiten und typisierte Unit-/Quantity-APIs besitzen konkrete SI-/Dimensionsgrenzen. Temporäre Quantity-Darstellungen können nichtkanonische Skalen tragen; Kanalskala ist im Run-Format fest 1, Parameter-/Series-/Berichtsmetadaten tragen weitere Skalen. Die umfassende Reichweite dieser Anforderung ist noch nicht für alle öffentlichen Datenpfade einzeln abgenommen; keine Ableitung aus der Konvertierungsgegenprobe."
     },
     {
       "id": "PP-0379",
