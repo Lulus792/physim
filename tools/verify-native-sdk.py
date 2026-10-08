@@ -71,6 +71,7 @@ def verify_pendulum(repo, sdk, consumer, builder, library, rebuilt_core, suffix,
     shutil.copy2(repo / "tests/create_decay_fixtures.c", consumer / "pendulum-decay-fixtures.c")
     shutil.copy2(repo / "tests/check_decay_report.c", consumer / "pendulum-decay-probe.c")
     shutil.copy2(repo / "tests/test_pendulum_tutorial_report.c", consumer / "pendulum-tutorial-probe.c")
+    shutil.copy2(repo / "tests/check_pendulum_labels.c", consumer / "pendulum-label-probe.c")
     shutil.copy2(sdk / "examples/pendulum/main.c", consumer / "pendulum-model.c")
     shutil.copy2(sdk / "examples/pendulum/analysis.c", consumer / "pendulum-analysis.c")
     shutil.copy2(sdk / "examples/documentation/pendulum_main.c", consumer / "pendulum-tutorial-c-model.c")
@@ -107,6 +108,10 @@ def verify_pendulum(repo, sdk, consumer, builder, library, rebuilt_core, suffix,
         tutorial_model = build("tutorial-c-model", "pendulum-tutorial-c-model.c", True)
         tutorial_analysis = build("tutorial-c-analysis", "pendulum-tutorial-c-analysis.c", True)
         tutorial_probe = build("tutorial-probe", "pendulum-tutorial-probe.c")
+        label_probe = build("label-probe", "pendulum-label-probe.c")
+        checked([sys.executable, repo / "tests/test_pendulum_report_labels.py", runner, analyzer,
+                 model, modules["pendulum"], tutorial_model, modules["tutorial-model"], tutorial_analysis,
+                 modules["tutorial-analysis"], label_probe, consumer / ("Pendulum labels " + kind)], timeout=300)
         tutorial = consumer / ("Pendulum tutorial " + kind)
         tutorial.mkdir()
         checked([sys.executable, repo / "tests/test_pendulum_tutorial.py", runner, analyzer,

@@ -617,3 +617,16 @@ je 681 native sowie zehn Sanitizerfälle. Die gesamte neue Plattform-/SDK-/
 GUI-Abnahme bleibt offen; gestartete Gesamtläufe werden bis zum tatsächlichen
 Ergebnis nicht als bestanden bewertet. Planumfang und Statuszahlen bleiben
 unverändert: **45 implemented**, **9 incomplete**, **477 unverified**.
+
+
+## Berichtsverfahren und Migrationstest
+
+Beide lokalen Release-Gesamtsuiten bestehen 681/681. Zusätzlich besitzen
+PP-0779/0780 tatsächliche gemischte Verfahrenslegendenprüfungen einschließlich
+adaptiver und älterer Läufe. Der Migrationstest besteht zwölf Varianten mit
+zwei Fenstergrößen und gezielt eingestreuten fremden Eingabeereignissen auf
+macOS und Linux. Der neue SDK-Prüfer übernimmt die Legendengegenprobe gegen
+beide Bibliotheken. Die vollständige neue SDK-/Plattformabnahme bleibt offen.
+Die 531 Originalblöcke, Planprüfsumme und Statuszahlen bleiben unverändert:
+**45 implemented**, **9 incomplete**, **477 unverified**;
+`completion_proven` bleibt `false`.

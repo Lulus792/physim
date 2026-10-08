@@ -1,6 +1,7 @@
 """Actual migration button: legacy upgrade, stale snapshot and dirty guard."""
 
 import argparse
+import os
 from pathlib import Path
 import subprocess
 
@@ -9,9 +10,10 @@ p.add_argument("--app", type=Path, required=True)
 p.add_argument("--work", type=Path, required=True)
 a = p.parse_args()
 a.work.mkdir(parents=True, exist_ok=True)
-for mode in ("normal", "stale", "dirty"):
-    root = a.work / mode
-    root.mkdir()
+for size, noisy, mode in ((size, noisy, mode) for size in ("large", "small")
+                         for noisy in (False, True) for mode in ("normal", "stale", "dirty")):
+    root = a.work / ("noisy" if noisy else "quiet") / size / mode
+    root.mkdir(parents=True)
     manifest = root / "physim.project"
     old = b"physim_project=1\n# retained\n"
     manifest.write_bytes(old)
@@ -19,16 +21,24 @@ for mode in ("normal", "stale", "dirty"):
     (root / "analysis.c").write_bytes(b"/* retained analysis */\n")
     (root / "runs").mkdir()
     (root / "runs/keep.psrun").write_bytes(b"archive retained")
+    environment = dict(os.environ)
+    environment.pop("PHYSIM_TEST_SMALL", None)
+    environment.pop("PHYSIM_TEST_MIGRATION_NOISE", None)
+    if size == "small":
+        environment["PHYSIM_TEST_SMALL"] = "1"
+    if noisy:
+        environment["PHYSIM_TEST_MIGRATION_NOISE"] = "1"
     r = subprocess.run(
         [str(a.app.resolve()), "--project-migration-test", str(root.resolve()), mode],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         timeout=45,
+        env=environment,
     )
     (root / "app.stdout").write_bytes(r.stdout)
     (root / "app.stderr").write_bytes(r.stderr)
     assert r.returncode == 0 and b"PROJECT MIGRATION UI SELF-TEST: PASSED" in r.stdout, (
-        mode,
+        (size, noisy, mode),
         r.stdout,
         r.stderr,
     )
@@ -48,5 +58,5 @@ for mode in ("normal", "stale", "dirty"):
         and (root / "runs/keep.psrun").read_bytes() == b"archive retained"
     )
 print(
-    "Actual app project migration: visible button upgrades legacy projects, preserves source/run files and rejects stale or dirty descriptions"
+    "Actual app project migration: twelve quiet/noisy cases at two window sizes, visible button, source/run preservation and stale/dirty guards passed"
 )

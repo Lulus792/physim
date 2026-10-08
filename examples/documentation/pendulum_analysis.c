@@ -4,9 +4,21 @@
 #include <string.h>
 static const char *methods[]={"Euler","symplectic Euler","RK4","velocity Verlet","Dormand-Prince 5(4)"};
 static ps_result label(const ps_dataset_info *info,size_t index,char text[96]) {
+    bool adaptive=strstr(info->metadata,"\nstep_mode=adaptive\n")!=NULL;
+    const char *key=adaptive?"adaptive_integrator":"integrator";
     for(unsigned i=0;i<5;i++) {
-        char token[64];snprintf(token,sizeof token,"\nintegrator=%s\n",methods[i]);
-        if(strstr(info->metadata,token)) {snprintf(text,96,"Run %u / %s",(unsigned)index+1,methods[i]);return PS_OK;}
+        char token[80];snprintf(token,sizeof token,"\n%s=%s\n",key,methods[i]);
+        if(strstr(info->metadata,token)) {
+            snprintf(text,96,"Run %u / %s%s",(unsigned)index+1,methods[i],adaptive?" (adaptive)":"");
+            return PS_OK;
+        }
+    }
+    /* Older vacuum tutorial runs used integrator=RK45 for their adaptive-only
+     * entry. Do not infer an adaptive method from another fixed selection. */
+    if(adaptive && !strstr(info->metadata,"\nadaptive_integrator=") &&
+       strstr(info->metadata,"\nintegrator=Dormand-Prince 5(4)\n")) {
+        snprintf(text,96,"Run %u / Dormand-Prince 5(4) (adaptive)",(unsigned)index+1);
+        return PS_OK;
     }
     return PS_INVALID;
 }

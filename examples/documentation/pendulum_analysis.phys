@@ -1,10 +1,15 @@
 let methods = ["Euler","symplectic Euler","RK4","velocity Verlet","Dormand-Prince 5(4)"]
 func runLabel(run: Dataset, index: Int64) -> String:
     let text = run.metadata()
+    let adaptive = text.contains("\nstep_mode=adaptive\n")
+    let key = adaptive ? "adaptive_integrator" : "integrator"
     for method in methods:
-        if text.contains("\nintegrator=" + method + "\n"):
-            return "Run " + String(index + 1) + " / " + method
-    assert(false,"Pendulum integrator metadata required")
+        if text.contains("\n" + key + "=" + method + "\n"):
+            let suffix = adaptive ? " (adaptive)" : ""
+            return "Run " + String(index + 1) + " / " + method + suffix
+    if adaptive && !text.contains("\nadaptive_integrator=") && text.contains("\nintegrator=Dormand-Prince 5(4)\n"):
+        return "Run " + String(index + 1) + " / Dormand-Prince 5(4) (adaptive)"
+    assert(false,"Pendulum executed integrator metadata required")
     return ""
 func analyze():
     assert(inputCount() > 0,"Select at least one pendulum run")

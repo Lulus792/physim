@@ -2030,7 +2030,6 @@
       "mode": "--emit-c"
     },
     "convex-probe": {
-      "kind": "executable",
       "sources": [
         "tests/convex_probe.c"
       ],
@@ -2131,6 +2130,14 @@
     "decay-report-probe": {
       "sources": [
         "tests/check_decay_report.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "pendulum-label-probe": {
+      "sources": [
+        "tests/check_pendulum_labels.c"
       ],
       "libraries": [
         "core"
@@ -8790,6 +8797,40 @@
             "{work}/decay"
           ],
           "timeout": 560
+        }
+      ]
+    },
+    {
+      "name": "pendulum_report_labels",
+      "targets": [
+        "python",
+        "physim-runner",
+        "physim-analysis-runner",
+        "pendulum",
+        "physim-language-pendulum",
+        "pendulum-tutorial-c",
+        "pendulum-tutorial-phys",
+        "pendulum-tutorial-analysis-c",
+        "pendulum-tutorial-analysis-phys",
+        "pendulum-label-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_pendulum_report_labels.py",
+            "{physim-runner}",
+            "{physim-analysis-runner}",
+            "{pendulum}",
+            "{physim-language-pendulum}",
+            "{pendulum-tutorial-c}",
+            "{pendulum-tutorial-phys}",
+            "{pendulum-tutorial-analysis-c}",
+            "{pendulum-tutorial-analysis-phys}",
+            "{pendulum-label-probe}",
+            "{work}/labels"
+          ],
+          "timeout": 240
         }
       ]
     }

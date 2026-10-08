@@ -112,6 +112,19 @@ Report-Vertrag reduzieren; `source_count` und vollständiges CSV bleiben verfüg
 Winkel, Energie und `E−E(0)` mit Einheiten. Auch gespeicherte C-Läufe sind in der
 Physim-Analyse und gespeicherte Sprachläufe in der C-Analyse verwendbar.
 
+## Verfahren in Berichtslegenden
+
+Die Legenden und Tabellen nennen bei festen Schritten den ausgewählten
+Integrator. Für adaptive Läufe verwenden sie das gespeicherte tatsächlich
+adaptive Verfahren und den Zusatz `(adaptive)`. Bei allgemeinen Vorlagen
+kann dieses Verfahren von der festen Integratorauswahl abweichen: Eine
+Auswahl `integrator=0` mit adaptiver Laufsteuerung ist dort ein adaptiver
+Dormand–Prince-Lauf und wird im Bericht entsprechend benannt.
+Ältere Vakuumlernpfad-Läufe mit `integrator=Dormand-Prince 5(4)` bleiben auch
+ohne gesondertes `adaptive_integrator` lesbar. Für andere adaptive Läufe
+muss das adaptive Verfahren ausdrücklich bekannt sein; fehlende oder
+unbekannte Angaben werden nicht durch die feste Auswahl ersetzt.
+
 ## Gespeicherte lineare Geschwindigkeit
 
 Alle Pendelvorlagen und beide Lernpfadmodelle speichern neben Winkel,
@@ -336,9 +349,21 @@ PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
 #include <string.h>
 static const char *methods[]={"Euler","symplectic Euler","RK4","velocity Verlet","Dormand-Prince 5(4)"};
 static ps_result label(const ps_dataset_info *info,size_t index,char text[96]) {
+    bool adaptive=strstr(info->metadata,"\nstep_mode=adaptive\n")!=NULL;
+    const char *key=adaptive?"adaptive_integrator":"integrator";
     for(unsigned i=0;i<5;i++) {
-        char token[64];snprintf(token,sizeof token,"\nintegrator=%s\n",methods[i]);
-        if(strstr(info->metadata,token)) {snprintf(text,96,"Run %u / %s",(unsigned)index+1,methods[i]);return PS_OK;}
+        char token[80];snprintf(token,sizeof token,"\n%s=%s\n",key,methods[i]);
+        if(strstr(info->metadata,token)) {
+            snprintf(text,96,"Run %u / %s%s",(unsigned)index+1,methods[i],adaptive?" (adaptive)":"");
+            return PS_OK;
+        }
+    }
+    /* Older vacuum tutorial runs used integrator=RK45 for their adaptive-only
+     * entry. Do not infer an adaptive method from another fixed selection. */
+    if(adaptive && !strstr(info->metadata,"\nadaptive_integrator=") &&
+       strstr(info->metadata,"\nintegrator=Dormand-Prince 5(4)\n")) {
+        snprintf(text,96,"Run %u / Dormand-Prince 5(4) (adaptive)",(unsigned)index+1);
+        return PS_OK;
     }
     return PS_INVALID;
 }
@@ -574,10 +599,15 @@ func scene():
 let methods = ["Euler","symplectic Euler","RK4","velocity Verlet","Dormand-Prince 5(4)"]
 func runLabel(run: Dataset, index: Int64) -> String:
     let text = run.metadata()
+    let adaptive = text.contains("\nstep_mode=adaptive\n")
+    let key = adaptive ? "adaptive_integrator" : "integrator"
     for method in methods:
-        if text.contains("\nintegrator=" + method + "\n"):
-            return "Run " + String(index + 1) + " / " + method
-    assert(false,"Pendulum integrator metadata required")
+        if text.contains("\n" + key + "=" + method + "\n"):
+            let suffix = adaptive ? " (adaptive)" : ""
+            return "Run " + String(index + 1) + " / " + method + suffix
+    if adaptive && !text.contains("\nadaptive_integrator=") && text.contains("\nintegrator=Dormand-Prince 5(4)\n"):
+        return "Run " + String(index + 1) + " / Dormand-Prince 5(4) (adaptive)"
+    assert(false,"Pendulum executed integrator metadata required")
     return ""
 func analyze():
     assert(inputCount() > 0,"Select at least one pendulum run")

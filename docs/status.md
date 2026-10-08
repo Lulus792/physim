@@ -1,6 +1,6 @@
 # Umsetzungsstand
 
-Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-07. Der Projektplan ist die Roadmap;
+Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-08. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
 **Gewichtete ODE-Zustände:** Euler, symplektischer Euler, RK4, Verlet und RK45
@@ -2786,3 +2786,14 @@ Bibliotheken mit zwölf adaptiven Studien je System. Vollständige lokale
 Release-Läufe sind gestartet; Intel macOS besteht inzwischen alle 681/681
 nativen Fälle. Der Linux-Gesamtlauf und die gesamte neue SDK-/GUI-/Plattformmatrix
 bleiben bis zur tatsächlichen Prüfung offen.
+
+
+Die lokale Release-Gesamtsuite besteht inzwischen auf Intel macOS und Debian
+je **681/681**. Die Lernpfadberichte beschriften adaptive Läufe jetzt mit dem
+tatsächlich ausgeführten Verfahren; acht gemischte Läufe sowie alte und
+ungültige Metadaten besitzen unabhängige Legendenprüfungen. Der Migrationstest
+filtert fremde Eingabeereignisse wie die anderen Skripttests und besteht zwölf
+Varianten auf beiden Systemen. Die betroffenen nativen, App- und Linux-
+Sanitizerprüfungen bestehen. Ein neues vollständiges macOS-App-SDK ist gebaut;
+seine Gesamtprüfung und die aktuelle gesamte Plattformmatrix bleiben offen.
+[Konkrete Nachweise](platform-validation.md#ausgeführte-verfahren-und-störfeste-migrationstests).

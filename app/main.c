@@ -3222,7 +3222,7 @@ int main(int argc, char **argv) {
                 }
                 continue;
             }
-            if ((plot_test || toolbar_test || settings_test || docs_test ||
+            if ((migration_test || plot_test || toolbar_test || settings_test || docs_test ||
                  (workspace_state_test && strncmp(argv[3],"native-dialog",13) &&
                   strcmp(argv[3],"documents-unfiltered"))) && test_scripted_external_input(&e)) continue;
             if (self_test && e.type == SDL_EVENT_TEXT_INPUT) {

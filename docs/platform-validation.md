@@ -2260,14 +2260,16 @@ Archiv bleibt deshalb erhalten. Linux hatte danach wieder rund 2 GB Platz.
 Die zusätzliche Platzbereinigung auf dem Mac bewahrt vollständig die älteren
 Verzeichnisse `build/Quantity sums SDK ä mac cv7rk3x8` und
 `build/Linear systems SDK ä mac izmu2853` unter
-`physim-debian-test:/home/physim/project/build/historical-mac-sdk-proofs.tar.gz`.
+`build/historical-mac-sdk-proofs.tar.gz` auf dem Mac.
 Das Archiv enthält 29148 reguläre Dateien mit ursprünglich 1495530695 Bytes,
 ist 431791069 Bytes groß und besitzt SHA-256
 `0381599e5db1fe5b9a02f03958820b3c21cc26bf92835cce6e8c0e344a5d07dd`.
 Die Receipt liegt auf beiden Systemen. Alle Archivmitglieder und anschließend
 sämtliche Originale wurden byteweise gegen ihre Prüfsummen abgeglichen;
 erst danach wurden ausschließlich diese zwei Mac-Verzeichnisse entfernt.
-Die einzige Archivkopie liegt in der Linux-VM und bleibt deshalb erhalten.
+Die Archivkopie wurde vollständig per SHA-256 zurück auf den Mac geprüft,
+bevor die VM-Kopie entfernt wurde. Die einzige Archivkopie liegt jetzt auf dem
+Mac und bleibt deshalb erhalten.
 Die nebenliegenden Receipts und `build/app-profiling-proof-locations.json`
 dokumentieren beide Archive und die Wiederherstellungspfade.
 
@@ -2290,3 +2292,64 @@ bestehen. Der direkte Dokumentationscheck besteht nach deren Bereinigung.
 Ein neuer vollständiger Linux-Lauf auf dem bereinigten Baum mit den korrigierten
 SDK-Prüfern wurde gestartet und bleibt bis zu seinem Ende offen. Die 680/681
 werden ausdrücklich nicht zu einem bestandenen Gesamtlauf umetikettiert.
+
+
+## Ausgeführte Verfahren und störfeste Migrationstests
+
+Die unverkürzten lokalen Release-Nativsuiten des Ausgangsstands bestehen
+auf Intel macOS 14.6.1/Apple Clang 16 **681/681** in
+`build/contact-world-language-release-mac/test-results/run-q5rzlvo1` und auf
+Debian 12/GCC 12.2 **681/681** in
+`build/contact-world-language-release-linux/test-results/run-r9u97k77`.
+Der zweite Linux-Lauf verwendet den bereinigten Transferbaum; der frühere
+680/681-Versuch bleibt als Fehlversuch erhalten.
+
+Ein tatsächlicher allgemeiner C-Lauf mit `integrator=0 --adaptive` speicherte
+korrekt Dormand–Prince als adaptive Methode, wurde im Lernpfadbericht jedoch
+als Euler beschriftet (`build/pendulum-label-repro/oldreport.psreport`).
+C- und Physim-Auswertung wählen jetzt bei `step_mode=adaptive` die ausgeführte
+adaptive Methode und kennzeichnen sie als adaptiv. Ältere feste Läufe bleiben
+lesbar; ältere adaptive Lernpfadläufe werden nur beim belegten RK45-Verfahren
+akzeptiert. Unbekannte oder fehlende adaptive Methoden anderer Verfahren
+werden abgewiesen, ohne einen fertigen Bericht zu veröffentlichen.
+
+`pendulum_report_labels` prüft acht tatsächlich gerechnete gemischte C-/Physim-
+Läufe gegen unabhängig vorgegebene Legenden in beiden Plots und allen drei
+Tabellen. Hinzu kommen alte feste Metadaten, der ältere adaptive Lernpfad und
+vier abgewiesene Berichte. Die vier betroffenen nativen Pendelfälle bestehen
+auf macOS **4/4** in `build/pendulum-template-native-mac/test-results/run-c923sd_m`
+und Linux **4/4** in `build/pendulum-template-native-linux/test-results/run-66ap9b1a`.
+Der tatsächliche Lernpfad-Appfall besteht jeweils **1/1** in
+`run-_79kpcta` (macOS) und `run-1p5xz0wj` (Linux), jeweils unter dem
+`contact-world-language-release-*`-Testverzeichnis. Linux/Clang 14 Debug mit
+ASan/UBSan besteht die neue Legendenprüfung **1/1** in
+`build/atspi-asan-linux/test-results/run-zvu17tpk`;
+`ASAN_OPTIONS=detect_leaks=0` bleibt auf SDL/Mesa-Leaks begrenzt.
+
+Der zweite vollständige alte macOS-SDK-Versuch in
+`build/current-complete-sdk-proof-mac/Native SDK ä 0qyzod7z` besteht die
+vorangehenden Library-/Modell- und neun Appabläufe sowie Dokumentations-,
+Typografie- und Einstellungstests, scheitert aber beim normalen Migrationstest
+in Stufe 3. Seine Ergebnisse sind kein vollständiger SDK-Nachweis. Der
+Migrationstest fehlte im vorhandenen Filter für fremde Eingabeereignisse.
+Gezielt eingestreute native Mausbewegungs-/Fokusereignisse reproduzieren den
+Stufe-3-Fehler vor der Korrektur (`build/migration-noise-before-mac.log`).
+Die Filterergänzung gilt für den ausdrücklich gestarteten Testmodus.
+Der reguläre Produkt-Eingabepfad bleibt unverändert. Eine Aufzeichnung des
+ursprünglichen externen Ereignisses liegt nicht vor.
+
+Die dauerhafte Gegenprobe führt zwölf tatsächliche Migrationen durch:
+zwei Fenstergrößen, mit/ohne fremde Ereignisse, jeweils normal, extern
+geändert oder mit ungespeicherten Einstellungen. Sie prüft Backup und
+Manifest byteweise sowie erhaltene Quellen/Laufdaten und beide Schutzfälle.
+Der native Katalogfall besteht auf macOS **1/1** in `run-c_zd5i8i` und Linux
+**1/1** in `run-znf7v7vt`, jeweils im `contact-world-language-release-*`-
+Testverzeichnis. Die separat ausgeführten zwölf Fälle bestehen ebenfalls
+auf beiden Systemen (`build/migration-integrated-proof-{mac,linux}.log`).
+
+Die unabhängige SDK-Prüfmappe enthält jetzt 148 verifizierte Eingaben und
+prüft die Verfahrenslegenden gegen installierte und neu gebaute Bibliotheken.
+Ein neues App-SDK ist unter `build/report-method-migration-sdk-mac` gebaut.
+Seine vollständige Prüfung läuft in
+`build/report-method-migration-sdk-proof-mac/Native SDK ä u9ms4eew`;
+ein begonnenes Prüfverfahren ist bis zum tatsächlichen Ende kein Nachweis.
