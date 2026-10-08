@@ -10,15 +10,15 @@ typedef enum {PS_A11Y_TEXT,PS_A11Y_BUTTON,PS_A11Y_CHECKBOX,PS_A11Y_RADIO,PS_A11Y
 typedef struct {
  uint64_t id,key,parent;unsigned occurrence;ps_a11y_role role;
  char window[PS_A11Y_WINDOW_BYTES],label[PS_A11Y_LABEL_BYTES];
- float bounds[4];bool enabled,checked;
+ float bounds[4];bool enabled,checked,focusable,focused;
 } ps_a11y_node;
 /* UI thread owns the draft; callers serialize all operations. Published nodes
  * are immutable until publish. IDs persist across geometry changes, expire when
  * controls disappear, and never get reused during this model's lifetime. */
 typedef struct {
  ps_a11y_node nodes[PS_A11Y_MAX_NODES],draft[PS_A11Y_MAX_NODES];
- size_t count,draft_count;uint64_t next_id,pending_press,selection_parent,selection_id;unsigned dropped;
- bool building;
+ size_t count,draft_count;uint64_t next_id,pending_press,selection_parent,selection_id,pending_focus,focused_id;unsigned dropped;
+ bool building,keyboard_focus;
 } ps_a11y_model;
 static inline bool ps_a11y_actionable(ps_a11y_role role) {
  return role==PS_A11Y_BUTTON || role==PS_A11Y_CHECKBOX || role==PS_A11Y_RADIO;
@@ -43,4 +43,9 @@ const ps_a11y_node *ps_a11y_find(const ps_a11y_model *model,uint64_t id);
 /* Queue at most one press, delivered only on a live, enabled matching control
  * next frame. Stale, disabled and text nodes cannot activate anything. */
 bool ps_a11y_press(ps_a11y_model *model,uint64_t id);
+bool ps_a11y_focus(ps_a11y_model *model,uint64_t id);
+void ps_a11y_blur(ps_a11y_model *model,uint64_t id);
+/* direction is -1/+1; Tab stops visit only the selected radio in a group. */
+bool ps_a11y_focus_move(ps_a11y_model *model,int direction,bool radio_only);
+
 #endif

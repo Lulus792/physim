@@ -186,6 +186,7 @@ static void dock_input(app *a,unsigned panel,struct nk_rect r,struct nk_window *
     if(enabled) { window->flags &= ~(nk_flags)NK_WINDOW_ROM;window->layout->flags &= ~(nk_flags)NK_WINDOW_ROM; }
     else { window->flags |= NK_WINDOW_ROM;window->layout->flags |= NK_WINDOW_ROM; }
     window->layout->has_scrolling=mouse;
+    ps_ui_accessibility_route(ui,!covered && !popup);
 }
 static bool dock_begin(app *a,unsigned panel) {
     struct nk_rect r=a->dock_panels[panel];r.y+=24;r.h=fmaxf(1,r.h-24);

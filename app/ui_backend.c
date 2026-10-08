@@ -38,6 +38,11 @@ float nk_sdl_row_height(const struct nk_context *ctx,float requested) {
     unsigned size=layout->ui_size;
     return size>16 && requested<(float)size+4?(float)size+4:requested;
 }
+void ps_ui_accessibility_route(struct nk_context *ctx,bool allowed) {
+ if(!ctx || !ctx->userdata.ptr)return;
+ ps_ui_font_layout *layout=ctx->userdata.ptr;if(layout->magic!=PS_UI_LAYOUT_MAGIC)return;
+ layout->accessibility_route_window=ctx->current;layout->accessibility_route_allowed=allowed;
+}
 static bool accessibility_widget(struct nk_context *ctx,const char *text,int role,struct nk_rect bounds,bool checked,const char *group,bool activated) {
     if(!ctx || !ctx->userdata.ptr || !ctx->current || !ctx->current->layout || !text)return false;
     const ps_ui_font_layout *layout=ctx->userdata.ptr;
@@ -47,8 +52,18 @@ static bool accessibility_widget(struct nk_context *ctx,const char *text,int rol
     float right=fminf(bounds.x+bounds.w,clip.x+clip.w),bottom=fminf(bounds.y+bounds.h,clip.y+clip.h);
     if(right<=left || bottom<=top)return false;
     float visible[]={left,top,right-left,bottom-top};
-    bool enabled=!ctx->current->widgets_disabled && !(ctx->current->flags&NK_WINDOW_ROM);
-    return layout->accessibility(layout->accessibility_user,ctx->current->name_string,text,role,visible,enabled,checked,group,activated);
+    bool routed=layout->accessibility_route_window==ctx->current;
+    bool enabled=!ctx->current->widgets_disabled && (routed?layout->accessibility_route_allowed:!(ctx->current->flags&NK_WINDOW_ROM));
+    /* A native target must not activate a control underneath a higher window. */
+    for(const struct nk_window *above=ctx->current->next;above && enabled;above=above->next) {
+        if(above->flags&(NK_WINDOW_HIDDEN|NK_WINDOW_MINIMIZED|NK_WINDOW_CLOSED))continue;
+        struct nk_rect cover=above->bounds;
+        if(cover.x<right && cover.x+cover.w>left && cover.y<bottom && cover.y+cover.h>top)enabled=false;
+    }
+    unsigned result=layout->accessibility(layout->accessibility_user,ctx->current->name_string,text,role,visible,enabled,checked,group,activated);
+    if(result&2u)nk_window_set_focus(ctx,ctx->current->name_string);
+    if((result&4u) && right-left>3 && bottom-top>3)nk_stroke_rect(nk_window_get_canvas(ctx),nk_rect(left+1,top+1,right-left-2,bottom-top-2),3,2,ctx->style.button.text_normal);
+    return (result&1u)!=0;
 }
 nk_bool ps_ui_option_label(struct nk_context *ctx,const char *group,const char *text,nk_bool active) {
     if(!ctx)return active;

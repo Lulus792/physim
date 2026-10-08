@@ -15,7 +15,9 @@ def verify_accessibility_checkbox(repo,sdk,root,suffix,checked):
              "--app",sdk / "bin" / ("physim"+suffix),"--work",root / "Native checkbox"],timeout=90)
     checked([sys.executable,repo / "tests/test_accessibility_checkbox_app.py",
              "--app",sdk / "bin" / ("physim"+suffix),"--work",root / "Native options","--options"],timeout=90)
-    print("Relocated SDK native checkbox: actual settings drafts, AppKit/AT-SPI checkbox/radio actions and applied configuration passed",flush=True)
+    checked([sys.executable,repo / "tests/test_accessibility_checkbox_app.py",
+             "--app",sdk / "bin" / ("physim"+suffix),"--work",root / "Native focus","--focus"],timeout=90)
+    print("Relocated SDK native checkbox: actual settings drafts, AppKit/AT-SPI checkbox/radio actions, actual keyboard focus/activation and applied configuration passed",flush=True)
 
 
 def verify_documentation_bounds(sdk, files):
@@ -317,7 +319,7 @@ def main():
             if not metadata["app"] or sys.platform not in ("darwin","linux"):
                 raise RuntimeError("Native checkbox verification requires a macOS/Linux app SDK")
             verify_accessibility_checkbox(repo,sdk,root,suffix,checked)
-            (root / "PASSED.txt").write_text("Focused native settings checkbox SDK verification passed; relocated manifest, actual AppKit/AT-SPI checkbox/radio actions and settings drafts, applied configuration preserved; no full screenreader or product acceptance.\n",encoding="utf-8")
+            (root / "PASSED.txt").write_text("Focused native settings checkbox SDK verification passed; relocated manifest, actual AppKit/AT-SPI checkbox/radio actions and settings drafts, keyboard focus/activation and applied configuration preserved; no full screenreader or product acceptance.\n",encoding="utf-8")
             print(f"Native checkbox SDK verified: {root}")
             return
         if args.convex_only:

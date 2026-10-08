@@ -217,8 +217,36 @@ static void test_settings_options_frame(app *a,bool remote,int *stage,int *code)
     }
     if(!ok){fprintf(stderr,"Settings radio failed stage %d choice %u\n",*stage,choice);*code=1;a->quitting=true;}
 }
+static void test_settings_focus_frame(app *a,bool remote,int *stage,int *code,const char **capture) {
+ bool ok=true;
+ switch(*stage) {
+ case 0:SDL_SetWindowSize(a->window,1080,740);open_settings(a);a->settings_draft.theme=PS_THEME_LIGHT;(*stage)++;break;
+ case 1:
+  if(a->settings_bounds[5].w<=0)return;
+  ok=!a->ui->active || strcmp(a->ui->active->name_string,"workspace");
+  puts("FOCUS READY");fflush(stdout);
+  if(!remote)ok=ok && nk_sdl_accessibility_focus(a->ui,NULL,"Standardwerte");
+  (*stage)++;break;
+ case 2:
+  if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"Standardwerte"))return;
+  ok=a->ui->active && !strcmp(a->ui->active->name_string,"workspace") && a->settings_draft.theme==PS_THEME_LIGHT;
+  *capture="native-focus.bmp";puts("FOCUS APPLIED");fflush(stdout);test_window_key_mod(a->window,SDLK_SPACE,0);(*stage)++;break;
+ case 3:
+  if(a->settings_draft.theme!=PS_THEME_DARK)return;
+  test_window_key_mod(a->window,SDLK_TAB,0);(*stage)++;break;
+ case 4:
+  if(!nk_sdl_accessibility_is_focused(a->ui,"Darstellung","Dunkel"))return;
+  test_window_key_mod(a->window,SDLK_RIGHT,0);(*stage)++;break;
+ case 5:
+  if(a->settings_draft.theme!=PS_THEME_LIGHT)return;
+  ok=a->preferences.theme==PS_THEME_DARK && a->preferences.ui_size==16 && a->preferences.editor_size==16;
+  if(ok)puts("SETTINGS FOCUS SELF-TEST: PASSED");a->quitting=true;break;
+ }
+ if(!ok){fprintf(stderr,"Settings focus failed stage %d\n",*stage);*code=1;a->quitting=true;}
+}
 static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
                                const char **capture) {
+    if(!strncmp(mode,"focus-",6)){test_settings_focus_frame(a,!strcmp(mode,"focus-remote"),stage,code,capture);return;}
     if(!strncmp(mode,"options-",8)){test_settings_options_frame(a,!strcmp(mode,"options-remote"),stage,code);return;}
     if(!strncmp(mode,"checkbox-",9)){test_settings_checkbox_frame(a,!strcmp(mode,"checkbox-remote"),stage,code);return;}
     if(!strncmp(mode,"keyboard",8)){test_settings_keyboard_frame(a,strstr(mode,"-read")!=NULL,stage,code,capture);return;}

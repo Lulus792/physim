@@ -1,7 +1,7 @@
 #include "ui.h"
 #include <stdio.h>
 #define CHECK(x) do {if(!(x)){fprintf(stderr,"a11y UI %d: %s (%s)\n",__LINE__,#x,SDL_GetError());return 1;}}while(0)
-static bool checked,selected;
+static bool checked,selected,overlay;
 static unsigned option;
 static int draw(struct nk_context *ui,bool button,bool disabled) {
  nk_input_begin(ui);nk_input_end(ui);int pressed=0;
@@ -18,7 +18,9 @@ static int draw(struct nk_context *ui,bool button,bool disabled) {
    if(disabled)nk_widget_disable_end(ui);
   }
  }
- nk_end(ui);if(!nk_sdl_render(ui))return -1;return pressed;
+ nk_end(ui);
+ if(overlay){if(nk_begin(ui,"overlay",nk_rect(0,0,400,220),NK_WINDOW_NO_SCROLLBAR)){nk_layout_row_dynamic(ui,24,1);nk_label(ui,"Modal",NK_TEXT_LEFT);}nk_end(ui);}
+ if(!nk_sdl_render(ui))return -1;return pressed;
 }
 int main(void) {
  CHECK(SDL_Init(SDL_INIT_VIDEO));
@@ -31,6 +33,12 @@ int main(void) {
  CHECK(nk_sdl_font_stash_end(ui));nk_style_set_font(ui,&font->handle);
  CHECK(draw(ui,true,false)==0);CHECK(nk_sdl_accessibility_press(ui,"Öffnen …"));
  CHECK(draw(ui,true,false)==1);CHECK(draw(ui,true,false)==0);
+ CHECK(nk_sdl_accessibility_focus(ui,NULL,"Vektoren"));CHECK(draw(ui,true,false)==0);
+ SDL_Event key={0};key.type=SDL_EVENT_KEY_DOWN;key.key.windowID=SDL_GetWindowID(window);key.key.key=SDLK_SPACE;
+ CHECK(nk_sdl_accessibility_event(ui,&key));CHECK(draw(ui,true,false)==2 && checked);
+ CHECK(nk_sdl_accessibility_event(ui,&key));CHECK(draw(ui,true,false)==2 && !checked);
+ key.key.repeat=true;CHECK(nk_sdl_accessibility_event(ui,&key));CHECK(draw(ui,true,false)==0 && !checked);key.key.repeat=false;
+ CHECK(!nk_sdl_accessibility_focus(ui,NULL,"Bereit"));
  CHECK(!nk_sdl_accessibility_press(ui,"Bereit"));
  CHECK(nk_sdl_accessibility_choose(ui,"Theme","Light"));CHECK(draw(ui,true,false)==0 && option==1);
  CHECK(nk_sdl_accessibility_choose(ui,"Theme","Light"));CHECK(draw(ui,true,false)==0 && option==1);
@@ -43,6 +51,7 @@ int main(void) {
  CHECK(draw(ui,true,false)==0);CHECK(nk_sdl_accessibility_press(ui,"Öffnen …"));
  CHECK(draw(ui,false,false)==0);CHECK(!nk_sdl_accessibility_press(ui,"Öffnen …"));
  CHECK(draw(ui,true,false)==0);CHECK(!nk_sdl_accessibility_press(ui,"missing"));
+ overlay=true;CHECK(draw(ui,true,false)==0);CHECK(!nk_sdl_accessibility_focus(ui,NULL,"Vektoren"));CHECK(!nk_sdl_accessibility_press(ui,"Öffnen …"));
  nk_sdl_shutdown(ui);ps_graphics_destroy(graphics);SDL_DestroyWindow(window);SDL_Quit();
  puts("macOS native UI accessibility: actual rendered Nuklear labels/buttons, native press delivery once, disabled/removed controls and teardown passed");return 0;
 }

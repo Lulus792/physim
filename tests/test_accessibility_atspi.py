@@ -322,11 +322,25 @@ try:
         raise AssertionError("group advertises Action")
     except NotImplementedError:
         pass
+    assert checkbox.queryComponent().grabFocus()
+    wait(lambda: checkbox.getState().contains(pyatspi.STATE_FOCUSED), "actual keyboard focus")
+    assert checkbox.getState().contains(pyatspi.STATE_FOCUSABLE)
+    assert not button.getState().contains(pyatspi.STATE_FOCUSED)
+    assert not text.queryComponent().grabFocus() and not group.queryComponent().grabFocus()
+    process.stdin.write(b"k")
+    process.stdin.flush()
+    wait(
+        lambda: "TOGGLE A 3 1" in (a.work / "fixture.stdout").read_text(),
+        "keyboard activation of focused checkbox",
+    )
+    assert checkbox.queryAction().doAction(0)
+    wait(lambda: "TOGGLE A 4 0" in (a.work / "fixture.stdout").read_text(), "restore checkbox")
     assert button.queryAction().doAction(0)
     wait(lambda: "PRESS A 1" in (a.work / "fixture.stdout").read_text(), "real UI press delivery")
     wait(lambda: not enabled(button), "disabled state notification")
     assert not button.queryAction().doAction(0)
     assert not checkbox.queryAction().doAction(0)
+    assert not checkbox.queryComponent().grabFocus()
     assert not radio.queryAction().doAction(0)
     assert enabled(other)
     assert other.queryAction().doAction(0)
@@ -378,6 +392,7 @@ try:
     checks = [
         "checkbox role, actual two-way toggle, checked events and independent windows",
         "radio hierarchy, sibling indices, parent geometry, exclusive/idempotent selection and independent groups",
+        "actual keyboard focus, focus states, keyboard activation and non-focusable rejection",
         "registry discovery",
         "single application/two windows",
         "UTF-8 roles",

@@ -46,13 +46,20 @@ struct nk_sdl {
     SDL_Mutex *accessibility_mutex;
     ps_a11y_native *accessibility_native;
 };
-static bool accessibility_widget(void *user,const char *window,const char *label,
+static unsigned accessibility_widget(void *user,const char *window,const char *label,
                                  int role,const float bounds[4],bool enabled,bool checked,const char *group,bool activated) {
     struct nk_sdl *sdl=user;if(!sdl->accessibility)return false;
+    enabled=enabled && !(SDL_GetWindowFlags(sdl->win)&(SDL_WINDOW_HIDDEN|SDL_WINDOW_MINIMIZED));
     SDL_LockMutex(sdl->accessibility_mutex);
+    uint64_t pending=sdl->accessibility->pending_focus;
     bool pressed=group?ps_a11y_record_option(sdl->accessibility,window,group,label,bounds,enabled,checked,activated)
                       :ps_a11y_record_state(sdl->accessibility,window,label,(ps_a11y_role)role,bounds,enabled,checked);
-    SDL_UnlockMutex(sdl->accessibility_mutex);return pressed;
+    ps_a11y_model *model=sdl->accessibility;
+    bool granted=pending && !model->pending_focus && model->focused_id==pending && model->draft_count && model->draft[model->draft_count-1].focusable;
+    bool focused=model->draft_count && model->draft[model->draft_count-1].id==model->focused_id && model->draft[model->draft_count-1].focusable && model->keyboard_focus && (!pending || pending==model->focused_id);
+    SDL_UnlockMutex(sdl->accessibility_mutex);
+    if(granted){SDL_RaiseWindow(sdl->win);nk_edit_unfocus(&sdl->ctx);}
+    return (pressed?1u:0u)|(granted?2u:0u)|(focused?4u:0u);
 }
 static void *ui_alloc(nk_handle user, void *old, nk_size size) {
     (void)user;
@@ -109,10 +116,52 @@ bool nk_sdl_accessibility_press(struct nk_context *ctx,const char *label) {
     struct nk_sdl *sdl=ctx->userdata.ptr;
     return ps_a11y_native_press_label(sdl->accessibility_native,label);
 }
+bool nk_sdl_accessibility_focus(struct nk_context *ctx,const char *group,const char *label) {
+ if(!ctx || !ctx->userdata.ptr)return false;
+ struct nk_sdl *sdl=ctx->userdata.ptr;
+ return ps_a11y_native_focus_label(sdl->accessibility_native,group,label);
+}
 bool nk_sdl_accessibility_choose(struct nk_context *ctx,const char *group,const char *label) {
     if(!ctx || !ctx->userdata.ptr)return false;
     struct nk_sdl *sdl=ctx->userdata.ptr;
     return ps_a11y_native_press_choice(sdl->accessibility_native,group,label);
+}
+bool nk_sdl_accessibility_is_focused(struct nk_context *ctx,const char *group,const char *label) {
+ if(!ctx || !ctx->userdata.ptr || !label)return false;
+ struct nk_sdl *sdl=ctx->userdata.ptr;
+ if(!sdl->accessibility)return false;
+ SDL_LockMutex(sdl->accessibility_mutex);
+ const ps_a11y_node *node=ps_a11y_find(sdl->accessibility,sdl->accessibility->focused_id);
+ const ps_a11y_node *parent=node?ps_a11y_find(sdl->accessibility,node->parent):NULL;
+ bool focused=node && node->focused && !strcmp(node->label,label) && (!group || (parent && !strcmp(parent->label,group)));
+ SDL_UnlockMutex(sdl->accessibility_mutex);return focused;
+}
+bool nk_sdl_accessibility_has_focus(struct nk_context *ctx) {
+ if(!ctx || !ctx->userdata.ptr)return false;
+ struct nk_sdl *sdl=ctx->userdata.ptr;
+ if(!sdl->accessibility)return false;
+ SDL_LockMutex(sdl->accessibility_mutex);
+ bool focused=sdl->accessibility->focused_id!=0;SDL_UnlockMutex(sdl->accessibility_mutex);return focused;
+}
+bool nk_sdl_accessibility_event(struct nk_context *ctx,const SDL_Event *event) {
+ if(!ctx || !ctx->userdata.ptr || !event)return false;
+ struct nk_sdl *sdl=ctx->userdata.ptr;
+ if(!sdl->accessibility || SDL_GetWindowFromEvent(event)!=sdl->win)return false;
+ SDL_LockMutex(sdl->accessibility_mutex);ps_a11y_model *m=sdl->accessibility;bool handled=false;
+ if(event->type==SDL_EVENT_WINDOW_FOCUS_LOST || event->type==SDL_EVENT_MOUSE_BUTTON_DOWN)ps_a11y_blur(m,0);
+ else if(m->focused_id && event->type==SDL_EVENT_TEXT_INPUT)handled=true;
+ else if(m->focused_id && (event->type==SDL_EVENT_KEY_DOWN || event->type==SDL_EVENT_KEY_UP) &&
+         !(event->key.mod&(SDL_KMOD_CTRL|SDL_KMOD_GUI|SDL_KMOD_ALT))) {
+  SDL_Keycode key=event->key.key;bool down=event->type==SDL_EVENT_KEY_DOWN;
+  if(key==SDLK_RETURN || key==SDLK_KP_ENTER || key==SDLK_SPACE){handled=true;if(down && !event->key.repeat)ps_a11y_press(m,m->focused_id);}
+  else if(key==SDLK_TAB){handled=true;if(down)ps_a11y_focus_move(m,event->key.mod&SDL_KMOD_SHIFT?-1:1,false);}
+  else if(key==SDLK_ESCAPE)ps_a11y_blur(m,0);
+  else if(key==SDLK_LEFT || key==SDLK_RIGHT || key==SDLK_UP || key==SDLK_DOWN) {
+   const ps_a11y_node *node=ps_a11y_find(m,m->focused_id);
+   if(node && node->role==PS_A11Y_RADIO){handled=true;if(down)ps_a11y_focus_move(m,key==SDLK_LEFT || key==SDLK_UP?-1:1,true);}
+  }
+ }
+ SDL_UnlockMutex(sdl->accessibility_mutex);return handled;
 }
 void nk_sdl_set_ui_size(struct nk_context *ctx,unsigned size) {
     if(ctx && ctx->userdata.ptr && size>=16 && size<=22 && size%2==0)
@@ -144,6 +193,22 @@ bool nk_sdl_render(struct nk_context *ctx) {
     bool ok = ps_graphics_ui(sdl->graphics, ctx, &sdl->commands, &sdl->null_texture);
     if(sdl->accessibility) {
         SDL_LockMutex(sdl->accessibility_mutex);
+        /* Recheck the completed stack, including windows first drawn later in
+         * this frame. Their presence must invalidate a covered native target. */
+        for(size_t i=0;i<sdl->accessibility->draft_count;i++) {
+            ps_a11y_node *node=&sdl->accessibility->draft[i];if(!node->focusable)continue;
+            struct nk_window *window=nk_window_find(ctx,node->window);
+            if(!window){node->enabled=false;node->focusable=false;continue;}
+            for(struct nk_window *above=window->next;above;above=above->next) {
+                if(above->flags&(NK_WINDOW_HIDDEN|NK_WINDOW_MINIMIZED|NK_WINDOW_CLOSED))continue;
+                struct nk_rect cover=above->bounds;
+                if(cover.x<node->bounds[0]+node->bounds[2] && cover.x+cover.w>node->bounds[0] &&
+                   cover.y<node->bounds[1]+node->bounds[3] && cover.y+cover.h>node->bounds[1]) {
+                    node->enabled=false;node->focusable=false;break;
+                }
+            }
+        }
+        sdl->accessibility->keyboard_focus=SDL_GetKeyboardFocus()==sdl->win;
         bool changed=ps_a11y_publish(sdl->accessibility);
         SDL_UnlockMutex(sdl->accessibility_mutex);
         ps_a11y_native_publish(sdl->accessibility_native,changed);

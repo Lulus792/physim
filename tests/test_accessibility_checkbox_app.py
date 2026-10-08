@@ -13,12 +13,14 @@ parser.add_argument("--app", type=Path, required=True)
 parser.add_argument("--work", type=Path, required=True)
 parser.add_argument("--inner", action="store_true")
 parser.add_argument("--options", action="store_true")
+parser.add_argument("--focus", action="store_true")
 a = parser.parse_args()
 a.work.mkdir(parents=True, exist_ok=True)
 app = a.app.resolve()
 work = a.work.resolve()
-mode = "options" if a.options else "checkbox"
-marker = (
+assert not (a.focus and a.options)
+mode = "focus" if a.focus else "options" if a.options else "checkbox"
+marker = b"SETTINGS FOCUS SELF-TEST: PASSED" if a.focus else (
     b"SETTINGS RADIO SELF-TEST: PASSED" if a.options else b"SETTINGS CHECKBOX SELF-TEST: PASSED"
 )
 (work / "settings").mkdir(exist_ok=True)
@@ -53,6 +55,8 @@ if not a.inner:
     ]
     if a.options:
         command.append("--options")
+    if a.focus:
+        command.append("--focus")
     raise SystemExit(subprocess.call(command, env=dict(os.environ, GSETTINGS_BACKEND="memory")))
 import dbus
 
@@ -105,7 +109,29 @@ def find():
 
 
 try:
-    if a.options:
+    if a.focus:
+        wait(lambda: "FOCUS READY" in (work / "app.stdout").read_text(), "focus ready")
+
+        def focus_target():
+            for application in pyatspi.Registry.getDesktop(0):
+                if application.name == "Physim" and application.get_process_id() == process.pid:
+                    for window in application:
+                        for child in window:
+                            if (
+                                child.name == "Standardwerte"
+                                and child.getRole() == pyatspi.ROLE_PUSH_BUTTON
+                            ):
+                                return child
+            return None
+
+        target = wait(focus_target, "unfocused dock control")
+        assert target.getState().contains(
+            pyatspi.STATE_FOCUSABLE
+        ) and not target.getState().contains(pyatspi.STATE_FOCUSED)
+        assert target.queryComponent().grabFocus()
+        assert process.wait(timeout=15) == 0
+        assert marker.decode() in (work / "app.stdout").read_text()
+    elif a.options:
         steps = [
             ("Schriftgröße der Oberfläche", "22 px"),
             ("Schriftgröße der Oberfläche", "16 px"),

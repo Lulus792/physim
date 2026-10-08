@@ -1285,3 +1285,70 @@ Paketierung; geprüfte Implementierung und Testeingaben bleiben unverändert.
 Der vollständige Plan bleibt erhalten. PP-0710 bleibt für Dropdowns, Listen,
 Text-/Editor-/Fokusdienste, Windows/UIA, Wayland und praktische Screenreader-
 Abnahme unvollständig. Die Zahl ungeprüfter Planblöcke bleibt unverändert.
+
+
+## Nativer Tastaturfokus für einfache Controls
+
+Buttons, Checkboxen und Optionen besitzen jetzt Fokusanforderungen, eindeutige
+veröffentlichte Fokuszustände und Tastaturaktivierung. AppKit bietet Focus-Getter/
+Setter und Fokusmitteilungen; AT-SPI bietet GrabFocus und Fokuszustandsereignisse.
+Die D-Bus-Anforderung wartet höchstens eine Sekunde auf den tatsächlichen UI-
+Fokus, gibt währenddessen die Servermutex frei und verwirft offene Anfragen bei
+Misserfolg. Der UI-Thread aktiviert das besitzende Nuklear-/SDL-Fenster und
+veröffentlicht Fokus nur bei tatsächlicher Tastatureigentümerschaft. Echte
+Sperren, verdeckende Fenster, verschwundene Ziele und die abgeschlossene
+Fensterreihenfolge werden erneut geprüft. Eine erst später im Frame gezeichnete
+Überdeckung beendet Fokus und Bedienbarkeit. [Verträge](accessibility.md).
+
+Enter/Leertaste aktiviert einmal, Key-Repeats wiederholen keine Aktivierung.
+Tab/Shift+Tab führt durch sichtbare einfache Controls; pro Optionsgruppe ist
+nur die ausgewählte sichtbare Option ein Tab-Stopp. Pfeile ändern Auswahl und
+Fokus innerhalb der Optionsgruppe. Globale modifizierte App-Tastenkürzel bleiben
+verfügbar. Pointerbetätigung und SDL-Fokusverlust geben diesen Fokus frei.
+Texte/Container besitzen keine Fokusaktion. Die vorhandene Einstellungen-
+Tastaturführung bleibt geprüft. Core-API/ABI, Sprache und Dateiformate ändern
+sich nicht; der vollständige Barrierefreiheitsblock bleibt unvollständig.
+
+Die portable Prüfung belegt aufgeschobene/eindeutige Zustellung, Tab-/Options-
+navigation, Keyboard-Ownership und deaktivierte/veraltete Ziele. Die gezeichnete
+AppKit/UI-Prüfung fokussiert eine Checkbox per Setter, aktiviert sie mit
+Leertaste, unterdrückt Key-Repeat und weist ein verdeckendes Fenster ab. Der
+unabhängige AT-SPI-Client prüft die bestätigte GrabFocus-Anforderung, Zustände,
+Keyboardaktivierung und nicht fokussierbare Ziele an realen Fenstern.
+Der tatsächliche App-Prüfer fokussiert `Standardwerte` im zuvor inaktiven Dock-
+Bereich. Leertaste, Tab und Pfeiltaste verändern danach den Einstellungsentwurf;
+die angewandte Konfiguration bleibt erhalten. Das macOS-Fokusbild unter
+`run-nsvjxlco/accessibility_focus_app/files ä/settings/native-focus.bmp` wurde
+verlustfrei nach `build/a11y-focus-preview-mac.png` konvertiert und visuell geprüft:
+Der helle Rahmen um `Standardwerte` ist deutlich sichtbar.
+
+Der erste zusätzliche App-Prüfer scheiterte auf macOS 5/6 (`run-smsr4jgq`) und
+Linux 4/5 (`run-v17hz4cc`) an einem falschen erwarteten Abschlussmarker. Beide
+Apps meldeten bereits den richtigen Focus-PASS und Exit 0. Der Marker ist
+korrigiert. Die erste abschließende Stackprüfung verwendete irrtümlich Nuklears
+private Fenster-Suche; der C17-Compile wies sie ab. Sie verwendet jetzt die
+öffentliche `nk_window_find`-API.
+
+Intel macOS 14.6.1/Apple Clang 16 besteht die sieben Modell-/Geometrie-/Handbuch-/
+Referenz-/Paketprüfungen 7/7 (`run-engor7h7`) und die sechs AppKit-/UI-/App-/
+Tastaturabläufe 6/6 (`run-nsvjxlco`). Debian 12/GCC 12.2 besteht dieselben sieben
+Prüfungen ohne Fenster 7/7 (`run-dp8i68pk`), die abschließenden fünf AT-SPI-/App-/
+Tastaturabläufe 5/5 (`run-q1_75fjw`). Linux/Clang 14/ASan/UBSan besteht diese
+fünf Fensterprüfungen 5/5 (`run-6q7lnxgu`) und vier Modell-/Geometrieprüfungen
+4/4 (`run-ut14me1r`). `detect_leaks=0` bleibt gesetzt; Address-/UB-Prüfungen
+bleiben aktiv. macOS-Sanitizer bleiben wegen fehlendem `ld64.lld` ungeprüft.
+
+Die verschobenen SDKs bestehen auf macOS unter
+`build/a11y-focus-sdk-checks/Native SDK ä _mum46hk` und Linux unter
+`build/a11y-focus-sdk-checks/Native SDK ä 96353203`. Beide enthalten 469
+manifestierte Dateien und führen die tatsächlichen Checkbox-/Options-/Fokus-
+Appabläufe aus. Linux verwendet ausschließlich `build/a11y-focus-independent-kit`
+mit 138 manifestierten Eingaben, ohne Entwicklerheader oder Implementierung.
+Die fokussierte Prüfung ist keine vollständige neue SDK-/Produktabnahme.
+Belege stehen in `build/a11y-focus-source-freeze.json` und
+`build/a11y-focus-sdk-{mac,linux}-PASSED.json`. Dieser Nachtrag erfolgt nach
+Paketierung; geprüfte Implementierung und Testeingaben bleiben unverändert.
+
+PP-0710 bleibt für Text-/Editor-/Menü-/Dropdownfokus, virtuelle Listen,
+Scroll-to-Reveal, Windows/UIA, Wayland und praktische VoiceOver-/Orca-Abnahme
+unvollständig. Alle 531 Originalblöcke des vollständigen Plans bleiben erhalten.

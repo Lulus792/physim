@@ -180,10 +180,12 @@ static void states(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
                    const ps_a11y_node *node) {
     /* AtspiStateType: checked=4, enabled=8, sensitive=24, showing=25,
      * visible=30, checkable=41.
-     * Focusable is deliberately absent until programmatic focus is implemented. */
+     * Focus is published only after the UI frame owns keyboard input. */
     unsigned first = 0;
     if (!node->id || node->enabled)
         first |= (1u << 8) | (1u << 24);
+    if(node->focusable)first |= 1u << 11;
+    if(node->focused)first |= 1u << 12;
     if (!w || w->visible)
         first |= (1u << 25) | (1u << 30);
     if((node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) && node->checked)first |= 1u << 4;
@@ -773,8 +775,31 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
         } else if (!strcmp(method, "GetAlpha")) {
             double alpha = w->visible ? 1 : 0;
             basic(&r, &r.root, DBUS_TYPE_DOUBLE, &alpha);
-        } else if (!strcmp(method, "GrabFocus"))
-            boolean(&r, &r.root, false);
+        } else if (!strcmp(method,"GrabFocus")) {
+            SDL_LockMutex(w->mutex);bool queued=w->visible && ps_a11y_focus(w->model,node.id);SDL_UnlockMutex(w->mutex);
+            unsigned window_id=w->window_id;bool completed=false;
+            if(queued) {
+                SDL_UnlockMutex(s->mutex);Uint64 start=SDL_GetTicks();
+                while(SDL_GetTicks()-start<1000) {
+                    SDL_LockMutex(s->mutex);bool waiting=false;
+                    for(size_t i=0;i<s->count;i++)if(s->windows[i]->window_id==window_id) {
+                        ps_a11y_native *live_window=s->windows[i];SDL_LockMutex(live_window->mutex);
+                        const ps_a11y_node *live=ps_a11y_find(live_window->model,node.id);
+                        completed=live_window->visible && live && live->focused;
+                        waiting=live_window->visible && live && live->focusable &&
+                            (live_window->model->pending_focus==node.id || live_window->model->focused_id==node.id);
+                        SDL_UnlockMutex(live_window->mutex);break;
+                    }
+                    SDL_UnlockMutex(s->mutex);if(completed || !waiting)break;SDL_Delay(5);
+                }
+                SDL_LockMutex(s->mutex);
+                if(!completed)for(size_t i=0;i<s->count;i++)if(s->windows[i]->window_id==window_id) {
+                    ps_a11y_native *live=s->windows[i];SDL_LockMutex(live->mutex);
+                    ps_a11y_blur(live->model,node.id);SDL_UnlockMutex(live->mutex);break;
+                }
+            }
+            boolean(&r,&r.root,completed);
+        }
         else
             failure = DBUS_ERROR_UNKNOWN_METHOD;
     } else if (!cache && node.id && ps_a11y_actionable(node.role) &&
@@ -1008,6 +1033,7 @@ void ps_a11y_native_publish(ps_a11y_native *b, bool changed) {
                 event_state(s, node_path, "enabled", node->enabled);
                 event_state(s, node_path, "sensitive", node->enabled);
             }
+            if(old && old->focused!=node->focused)event_state(s,node_path,"focused",node->focused);
             if(old && (node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) && old->checked!=node->checked)
                 event_state(s,node_path,"checked",node->checked);
             if (moved || (old && memcmp(old->bounds, node->bounds, sizeof node->bounds)))
@@ -1068,6 +1094,7 @@ bool ps_a11y_native_press_label(ps_a11y_native *bridge, const char *label) {
     (void)label;
     return false;
 }
+bool ps_a11y_native_focus_label(ps_a11y_native *bridge,const char *group,const char *label){(void)bridge;(void)group;(void)label;return false;}
 bool ps_a11y_native_press_choice(ps_a11y_native *bridge,const char *group,const char *label) {
     (void)bridge;(void)group;(void)label;return false;
 }

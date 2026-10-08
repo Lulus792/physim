@@ -2703,6 +2703,7 @@ int main(int argc, char **argv) {
         strcmp(argv[3], "keyboard") && strcmp(argv[3], "keyboard-read") &&
         strcmp(argv[3], "checkbox-native") && strcmp(argv[3], "checkbox-remote") &&
         strcmp(argv[3], "options-native") && strcmp(argv[3], "options-remote") &&
+        strcmp(argv[3], "focus-native") && strcmp(argv[3], "focus-remote") &&
         strcmp(argv[3], "reset") && strcmp(argv[3], "defaults") && strcmp(argv[3], "corrupt") &&
         strcmp(argv[3], "maxwrite") && strcmp(argv[3], "maxread") &&
         strcmp(argv[3], "theme-light") && strcmp(argv[3], "theme-light-read") &&
@@ -3152,6 +3153,8 @@ int main(int argc, char **argv) {
                 doc_input_bytes += (unsigned)strlen(e.text.text);
             }
             SDL_Window *event_window = SDL_GetWindowFromEvent(&e);
+            if(event_window==a->window && nk_sdl_accessibility_event(a->ui,&e))continue;
+            if(event_window==a->doc_window && a->doc_ui && nk_sdl_accessibility_event(a->doc_ui,&e))continue;
             if (event_window == a->window && e.type == SDL_EVENT_WINDOW_FOCUS_LOST)
                 { toolbar_keyboard_close(a);a->settings_keyboard=false; }
             if (a->doc_window && event_window == a->doc_window) {
@@ -3240,6 +3243,7 @@ int main(int argc, char **argv) {
         nk_input_end(a->ui);
         if (a->doc_ui)
             nk_input_end(a->doc_ui);
+        if(nk_sdl_accessibility_has_focus(a->ui)){a->settings_keyboard=false;toolbar_keyboard_close(a);}
         pump(a);
         autosave_tick(a, ps_clock());
         documents_autosave_tick(a, ps_clock());

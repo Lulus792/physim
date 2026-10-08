@@ -2629,3 +2629,11 @@ Einstellungsentwurf geprüft. Gleichlautende Optionen besitzen unterschiedliche
 Gruppen; erneute Auswahl schaltet den Wert nicht ab. Vollständige Fokus-,
 Dropdown-, Editor- und praktische Screenreader-Abnahme bleiben offen.
 [Verträge und Grenzen](accessibility.md).
+
+
+Native Fokusanforderungen erreichen jetzt einfache Buttons, Checkboxen und
+Optionen, einschließlich inaktiver Dock-Bereiche. Veröffentlichte Fokuszustände,
+ein sichtbarer Rahmen und Enter/Leertaste/Tab/Pfeiltasten verbinden die native
+Schnittstelle mit der tatsächlichen Tastaturbedienung. Gesperrte, verdeckte und
+veraltete Ziele werden erneut geprüft. Text-/Editor-/Menüfokus und praktische
+Screenreader-Abnahme bleiben offen. [Verträge](accessibility.md).

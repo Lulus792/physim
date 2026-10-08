@@ -431,3 +431,11 @@ trennen gleichlautende Werte, behalten eine Auswahl bei wiederholter Aktivierung
 und berücksichtigen native sowie Pointer-Ereignisse. Dropdowns, Text-/Editor-
 und Fokusdienste sowie praktische Screenreader-Abnahme bleiben offen; der Block
 bleibt unvollständig.
+
+
+Ein nativer Fokusdienst ergänzt einfache Controls um tatsächliche Tastatur-
+eigentümerschaft und Aktivierung in zuvor inaktiven Dock-Bereichen. Native Zustände,
+Fokusrahmen, Enter/Space/Tab/Pfeile sowie Sperren und verdeckende Fenster besitzen
+gezielte Modell-/AppKit-/AT-SPI-/App-Nachweise. Text-/Editor-/Menü-/Dropdownfokus
+und praktische Screenreader-Abnahme bleiben gesondert offen; PP-0710 bleibt
+unvollständig.

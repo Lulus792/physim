@@ -18,7 +18,7 @@ einmal im nächsten UI-Frame an den passenden Control übergeben.
 
 Dieser Einstieg deckt noch keine vollständige VoiceOver-Bedienung ab.
 Textfelder, Editoren, Menüs, Dropdowns, Regler, Szenen, Diagramme und
-programmatische Fokusführung benötigen weitere semantische Anbindungen.
+Fokusführung für weitere Widgettypen benötigen zusätzliche semantische Anbindungen.
 Die bestehende Sichtbarkeits-/Deaktivierungslogik wird berücksichtigt, sodass
 dieser Einstieg keine Aktivierung gesperrter oder momentan schreibgeschützter
 UI-Bereiche ermöglicht. Eine vollständige praktische VoiceOver-Abnahme steht
@@ -75,7 +75,7 @@ und Busverbindung. Ohne passenden Accessibility-Bus bleibt die normale GUI
 verfügbar. `NO_AT_BRIDGE=1` deaktiviert diese Desktop-Anbindung ausdrücklich.
 
 Es gibt höchstens acht native Fenster pro Prozess und die bestehenden 256
-Elemente/1023 Label-Byte je Modell. Fokus, komplexe Widgets und vollständige
+Elemente/1023 Label-Byte je Modell. Fokus für weitere Widgettypen, komplexe Widgets und vollständige
 Text-/Editorinterfaces bleiben offen. Bildschirmkoordinaten werden nur
 geliefert, wenn SDL die Fensterposition kennt; anderenfalls folgt ein
 `NotSupported`-Fehler statt einer erfundenen Position. Der bisher ausgeführte
@@ -119,9 +119,9 @@ verwerfen Aktionen. Späte Aktionen zwischen Zeichnen und Veröffentlichung blei
 für den nächsten Besuch erhalten. Eine Checkbox bleibt bei Wertänderungen unter
 derselben Kennung erreichbar. Zwei Fenster besitzen unabhängige Werte. Es gibt
 weiterhin höchstens eine ausstehende Aktion pro Modell, keine Tri-State-Checkbox
-und keinen programmatischen Fokusdienst. Dock-Panels folgen weiterhin ihrer
-bestehenden Aktivierungs-/Eingabepolitik; der App-Prüfer aktiviert zuerst den
-Einstellungsbereich, bevor er native Checkbox-Aktionen ausführt.
+und den unten beschriebenen Fokusdienst für einfache Controls. Der ältere
+Checkbox-Prüfer aktiviert zuerst den Einstellungsbereich; der neue Fokusprüfer
+benutzt dafür die native Fokusanforderung.
 
 Die portable Modellprüfung provoziert späte, doppelte und gesperrte Aktionen.
 AppKit-Prüfungen lesen tatsächliche Rollen und Zahlenwerte, prüfen Aktivierung,
@@ -182,5 +182,54 @@ Der tatsächliche App-Prüfer führt zusätzlich sechs native Auswahlen aus:
 Oberfläche 22→16 px, Darstellung Hell→Dunkel und Code-Editor 20→16 px. Er prüft
 Änderungen am Entwurf und erhält die angewandte Konfiguration. Der SDK-Prüfer
 führt denselben Ablauf mit dem verschobenen App-Paket aus. Dropdowns, Listen,
-Text-/Editorinterfaces, programmatische Fokusführung und praktische VoiceOver-/
+Text-/Editorinterfaces, Fokusführung für weitere Widgettypen und praktische VoiceOver-/
 Orca-Abnahme bleiben gesondert offen.
+
+
+## Fokus und Tastatur für einfache Controls
+
+Sichtbare aktivierte Buttons, Checkboxen und Optionen können jetzt nativen
+Tastaturfokus erhalten. macOS bietet `isAccessibilityFocused` und den erlaubten
+Setter `setAccessibilityFocused:`; Fokuswechsel werden mit
+`AXFocusedUIElementChanged` gemeldet. Linux bietet `Component.GrabFocus`, die
+Zustände `focusable`/`focused` und Fokuszustandsereignisse. Die AT-SPI-Anforderung
+wartet höchstens eine Sekunde auf den tatsächlich veröffentlichten UI-Fokus und
+meldet andernfalls Misserfolg; eine offene Anforderung wird dann verworfen.
+Fokusanforderungen an Texte, Gruppen, deaktivierte, verborgene, verdeckte und
+veraltete Ziele werden abgewiesen. Die gemeinsame UI-Verarbeitung validiert das
+Ziel beim Zeichnen und den fertigen Fensterstapel vor Veröffentlichung erneut.
+
+Der Fokusdienst aktiviert das besitzende Nuklear-Fenster und hebt das SDL-Fenster
+an. Die Fokuszustände gelten nur, wenn dieses Fenster tatsächlich Tastatureingaben
+erhält. Ein sichtbarer Rahmen markiert das einfache Control. Inaktive Dock-
+Bereiche veröffentlichen ihre sonst bedienbaren Controls; Maus-Routing und echte
+Sperren bleiben getrennt. Ein Popup oder ein höheres überlappendes UI-Fenster
+verhindert eine native Aktivierung. Ein neues, erst später im Frame gezeichnetes
+Fenster wird bei der abschließenden Prüfung ebenfalls berücksichtigt.
+
+Enter oder Leertaste aktiviert das fokussierte Control einmal; Key-Repeats
+lösen dabei keine wiederholte Aktivierung aus. Tab/Shift+Tab besucht die aktuell
+sichtbaren fokussierbaren Controls. Eine Optionsgruppe besitzt einen Tab-Stopp
+beim ausgewählten sichtbaren Wert, andernfalls bei ihrer ersten sichtbaren
+Option. Pfeiltasten wechseln innerhalb der fokussierten Optionsgruppe Auswahl
+und Fokus. Escape gibt den nativen Fokus frei und läuft durch die vorhandene
+App-Behandlung weiter. Eine Pointerbetätigung, Fokusverlust des SDL-Fensters,
+Entfernen oder Sperren des Controls beendet diesen Fokus. Modifizierte globale
+App-Tastenkürzel bleiben verfügbar; einfache Texteingabe landet nicht im
+Code-Editor unter einem fokussierten Button.
+
+Die portable Prüfung deckt aufgeschobene, eindeutige und verworfene Anfragen,
+Tab-/Optionsnavigation und tatsächliche Tastatureigentümerschaft ab. Die
+AppKit-/UI-Prüfung aktiviert ein gezeichnetes Control per Fokus-Setter und
+Leertaste, prüft Key-Repeat und ein später gezeichnetes verdeckendes Fenster.
+Ein unabhängiger AT-SPI-Client prüft GrabFocus, veröffentlichte Fokuszustände und
+Tastaturaktivierung an tatsächlich gezeichneten Fenstern. Der zusätzliche
+App-/SDK-Prüfer fokussiert `Standardwerte` im zuvor inaktiven Einstellungsbereich,
+aktiviert es mit Leertaste und wechselt mit Tab/Pfeiltaste zur Darstellung.
+Entwürfe ändern sich, die angewandte Konfiguration bleibt erhalten. Ein
+Fokus-Screenshot gehört zu den lokalen Testausgaben.
+
+Dieser Dienst deckt einfache Controls ab. Text-/Editorfokus, Menüs, Dropdowns,
+virtuelle Listen, Scroll-to-Reveal, Windows/UIA, Wayland und praktische
+VoiceOver-/Orca-Abnahme bleiben offen. Eine vollständige Barrierefreiheitsabnahme
+wird dadurch nicht behauptet.

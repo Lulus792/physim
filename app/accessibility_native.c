@@ -12,7 +12,7 @@
 extern void NSAccessibilityPostNotification(id element,id notification);
 struct ps_a11y_native {
  SDL_Window *window;ps_a11y_model *model;SDL_Mutex *mutex;SDL_AtomicInt references;
- id view,children;uint64_t ids[PS_A11Y_MAX_NODES],parents[PS_A11Y_MAX_NODES];bool checked[PS_A11Y_MAX_NODES];size_t count;
+ id view,children;uint64_t ids[PS_A11Y_MAX_NODES],parents[PS_A11Y_MAX_NODES];bool checked[PS_A11Y_MAX_NODES];uint64_t focused_id;size_t count;
 };
 #if OBJC_BOOL_IS_BOOL
 #define PS_AX_BOOL "B"
@@ -101,11 +101,21 @@ static BOOL element_press(id object,SEL selector) {
  (void)selector;ps_a11y_native *b=owner(object);if(!b)return NO;SDL_LockMutex(b->mutex);
  bool accepted=b->model && ps_a11y_press(b->model,identifier(object));SDL_UnlockMutex(b->mutex);return accepted;
 }
+static BOOL element_focused(id object,SEL selector) {(void)selector;ps_a11y_node node;return node_copy(object,&node)&&node.focused;}
+static void element_set_focused(id object,SEL selector,BOOL focused) {
+ (void)selector;ps_a11y_native *b=owner(object);if(!b)return;
+ SDL_LockMutex(b->mutex);
+ if(b->model && !(SDL_GetWindowFlags(b->window)&(SDL_WINDOW_HIDDEN|SDL_WINDOW_MINIMIZED))) {
+  if(focused)ps_a11y_focus(b->model,identifier(object));else ps_a11y_blur(b->model,identifier(object));
+ }
+ SDL_UnlockMutex(b->mutex);
+}
 static BOOL element_allowed(id object,SEL selector,SEL requested) {
  (void)selector;
  if(requested==sel_registerName("accessibilityPerformPress")) {
   ps_a11y_node node;return node_copy(object,&node)&&ps_a11y_actionable(node.role)&&node.enabled;
  }
+ if(requested==sel_registerName("setAccessibilityFocused:")){ps_a11y_node node;return node_copy(object,&node)&&node.focusable;}
  const char *name=sel_getName(requested);
  if(!strncmp(name,"setAccessibility",16) || !strncmp(name,"accessibilityPerform",20))return NO;
  return YES;
@@ -121,6 +131,8 @@ static bool make_class(void) {
  class_addMethod(element_class,sel_registerName("dealloc"),(IMP)element_dealloc,"v@:");
  class_addMethod(element_class,sel_registerName("isAccessibilityElement"),(IMP)element_valid,PS_AX_BOOL "@:");
  class_addMethod(element_class,sel_registerName("isAccessibilityEnabled"),(IMP)element_enabled,PS_AX_BOOL "@:");
+ class_addMethod(element_class,sel_registerName("isAccessibilityFocused"),(IMP)element_focused,PS_AX_BOOL "@:");
+ class_addMethod(element_class,sel_registerName("setAccessibilityFocused:"),(IMP)element_set_focused,"v@:" PS_AX_BOOL);
  class_addMethod(element_class,sel_registerName("accessibilityRole"),(IMP)element_role,"@@:");
  class_addMethod(element_class,sel_registerName("accessibilityLabel"),(IMP)element_label,"@@:");
  class_addMethod(element_class,sel_registerName("accessibilityValue"),(IMP)element_value,"@@:");
@@ -150,6 +162,8 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
  id pool=send0(send0((id)objc_getClass("NSAutoreleasePool"),"alloc"),"init");
  id children=send0((id)objc_getClass("NSMutableArray"),"new");bool value_changed[PS_A11Y_MAX_NODES]={0};bool selection_changed[PS_A11Y_MAX_NODES]={0};
  SDL_LockMutex(b->mutex);
+ uint64_t previous_focus=b->focused_id,new_focus=0;
+ for(size_t i=0;i<b->model->count;i++)if(b->model->nodes[i].focused)new_focus=b->model->nodes[i].id;
  for(size_t i=0;i<b->model->count;i++) {
   const ps_a11y_node *node=&b->model->nodes[i];id element=element_for(b,node->id);
   if(node->role==PS_A11Y_RADIO_GROUP) {
@@ -183,6 +197,8 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
  send1(b->view,"setAccessibilityChildren:",roots);SDL_UnlockMutex(b->mutex);
  for(size_t i=0;i<b->count;i++)if(value_changed[i])NSAccessibilityPostNotification(element_for(b,b->ids[i]),string("AXValueChanged"));
  for(size_t i=0;i<b->count;i++)if(selection_changed[i])NSAccessibilityPostNotification(element_for(b,b->ids[i]),string("AXSelectedChildrenChanged"));
+ b->focused_id=new_focus;
+ if(previous_focus!=new_focus)NSAccessibilityPostNotification(new_focus?element_for(b,new_focus):b->view,string("AXFocusedUIElementChanged"));
  NSAccessibilityPostNotification(b->view,string("AXLayoutChanged"));send0(pool,"drain");
 }
 void ps_a11y_native_destroy(ps_a11y_native *b) {
@@ -202,6 +218,18 @@ bool ps_a11y_native_press_label(ps_a11y_native *b,const char *label) {
   ps_a11y_node node;
   if(node_copy(element,&node) && ps_a11y_actionable(node.role) && !strcmp(node.label,label))
    return ((BOOL(*)(id,SEL))objc_msgSend)(element,sel_registerName("accessibilityPerformPress"));
+ }
+ return false;
+}
+bool ps_a11y_native_focus_label(ps_a11y_native *b,const char *group,const char *label) {
+ if(!b || !label)return false;
+ for(size_t i=0;i<b->count;i++) {
+  id element=element_for(b,b->ids[i]);ps_a11y_node node,parent;
+  if(!node_copy(element,&node) || !node.focusable || strcmp(node.label,label))continue;
+  if(group && (!node.parent || !node_copy(element_for(b,node.parent),&parent) || strcmp(group,parent.label)))continue;
+  ((void(*)(id,SEL,BOOL))objc_msgSend)(element,sel_registerName("setAccessibilityFocused:"),YES);
+  SDL_LockMutex(b->mutex);bool queued=b->model && (b->model->pending_focus==node.id || b->model->focused_id==node.id);SDL_UnlockMutex(b->mutex);
+  return queued;
  }
  return false;
 }
@@ -304,4 +332,5 @@ void ps_a11y_native_destroy(ps_a11y_native *bridge) {(void)bridge;}
 bool ps_a11y_native_test(SDL_Window *window) {(void)window;return false;}
 bool ps_a11y_native_press_label(ps_a11y_native *bridge,const char *label) {(void)bridge;(void)label;return false;}
 bool ps_a11y_native_press_choice(ps_a11y_native *bridge,const char *group,const char *label) {(void)bridge;(void)group;(void)label;return false;}
+bool ps_a11y_native_focus_label(ps_a11y_native *bridge,const char *group,const char *label) {(void)bridge;(void)group;(void)label;return false;}
 #endif

@@ -102,6 +102,8 @@ int main(int argc, char **argv) {
     while (SDL_GetTicks() - start < 60000) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
+            if(a.ui)nk_sdl_accessibility_event(a.ui,&e);
+            if(b.ui)nk_sdl_accessibility_event(b.ui,&e);
         }
         char command;
         ssize_t n = read(STDIN_FILENO, &command, 1);
@@ -122,6 +124,10 @@ int main(int argc, char **argv) {
                 SDL_HideWindow(a.window);
             if (command == 's')
                 SDL_ShowWindow(a.window);
+            if(command=='k') {
+                SDL_Window *focused=SDL_GetKeyboardFocus();SDL_Event key={0};key.type=SDL_EVENT_KEY_DOWN;
+                key.key.windowID=focused?SDL_GetWindowID(focused):0;key.key.key=SDLK_SPACE;SDL_PushEvent(&key);
+            }
             if (command == 'c')
                 close_window(&b);
         }
