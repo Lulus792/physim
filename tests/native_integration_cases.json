@@ -8239,6 +8239,7 @@
           "program": "python",
           "arguments": [
             "{root}/tests/test_project_migration_workflow.py",
+            "--inject-oem-output",
             "--builder",
             "{physim-build}",
             "--sdk",

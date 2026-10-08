@@ -2690,3 +2690,13 @@ Analyse-, Parameterbeschreibungs- und CSV-Prozesse mit gecachten OS-Ressourcen.
 Ein eigener Prozessrecord enthält Exit-/Timeoutzustand und expliziten
 Abrechnungsumfang. Fehlende Werte bleiben leer/null; Schema 1 bleibt lesbar.
 [Vertrag und verbleibende Messlücken](app-profiling.md#ressourcen-abgeschlossener-eigener-prozesse).
+
+## Korrekturen der CI-Prüfungen
+
+Der Runner-Selbsttest berücksichtigt die ergänzten Displayabläufe. Die
+Projektmigrationsprüfung verarbeitet weitergereichte Compilerdiagnosen als
+Originalbytes und prüft auch absichtlich eingemischte OEM-Bytes. Linux-CI und
+frische Paketprüfsysteme installieren die benötigte Python-D-Bus-Bindung
+ausdrücklich. Gezielte Builds und Gegenproben bestehen auf Intel macOS und
+Debian 12; die vollständige erneute CI-Abnahme bleibt ausstehend.
+[Nachweise und Grenzen](platform-validation.md#ci-testkatalog-compilerkodierung-und-linux-prüfabhängigkeit).

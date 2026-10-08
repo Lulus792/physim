@@ -14,6 +14,7 @@ p = argparse.ArgumentParser(description=__doc__)
 for name in ("builder", "sdk", "compiler", "runner", "work"):
     p.add_argument("--" + name, type=Path, required=True)
 p.add_argument("--cc")
+p.add_argument("--inject-oem-output", action="store_true")
 a = p.parse_args()
 a.work.mkdir(parents=True, exist_ok=True)
 module = ".dll" if os.name == "nt" else ".so"
@@ -24,7 +25,11 @@ def command(args, ok=True):
         list(map(str, args)), stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=180
     )
     assert (r.returncode == 0) == ok, (args, r.returncode, r.stdout, r.stderr)
-    return r.stdout.decode()
+    if a.inject_oem_output and Path(args[0]) == a.builder:
+        r.stdout += b"\nCompiler diagnostic in OEM encoding: \x84\xff\n"
+    # Forwarded compiler diagnostics may use an OEM code page on Windows.
+    # This workflow checks ASCII machine markers; retain the original bytes.
+    return r.stdout
 
 
 def digest(path):
@@ -100,7 +105,7 @@ for lang in ("c", "phys"):
         if q.is_file()
     }
     output = command([a.builder, "--migrate-project", "--project", root])
-    assert "1 -> 2: migrated" in output
+    assert b"1 -> 2: migrated" in output
     expected = original.replace(
         b"physim_project=1\r\n", b"physim_project=2\r\nkind=experiment\r\n", 1
     )
@@ -109,7 +114,7 @@ for lang in ("c", "phys"):
     )
     assert all(digest(root / name) == h for name, h in protected.items())
     output = command(build)
-    assert "Compile:" not in output and "Link:" not in output, output
+    assert b"Compile:" not in output and b"Link:" not in output, output
     assert cached == {
         q.relative_to(root / "build").as_posix(): digest(q)
         for q in (root / "build").rglob("*")
@@ -119,7 +124,7 @@ for lang in ("c", "phys"):
     command([a.runner, model, second, "--steps", "20", "--dt", ".01"])
     assert samples(first) == samples(second)
     output = command([a.builder, "--project", root, "--migrate-project"])
-    assert "already current" in output and (root / "physim.project.bak").read_bytes() == original
+    assert b"already current" in output and (root / "physim.project.bak").read_bytes() == original
     assert manifest.read_bytes() == expected and all(
         digest(root / name) == h for name, h in protected.items()
     )

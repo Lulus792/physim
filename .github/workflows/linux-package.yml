@@ -112,7 +112,7 @@ jobs:
         run: |
           # Openbox itself depends on Python; install it only after the
           # package's independent startup check without Python has passed.
-          apt-get install -y --no-install-recommends build-essential python3 python3-pyatspi at-spi2-core dbus-x11 openbox xdotool scrot
+          apt-get install -y --no-install-recommends build-essential python3 python3-dbus python3-pyatspi at-spi2-core dbus-x11 openbox xdotool scrot
           gcc --version > evidence/compiler.txt
           dpkg-query -W >> evidence/compiler.txt
       - name: Verify relocated SDK and all nine GUI project workflows

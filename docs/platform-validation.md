@@ -1662,3 +1662,47 @@ Referenz-/Prüfpaketfälle bestehen auf macOS 7/7 (`run-uhxr6m61`) und Linux
 1/1 (`run-ha6zki2c`). Die getestete Implementierung und Testeingaben bleiben
 bei diesem Dokumentationsnachtrag unverändert;
 `build/child-profiling-final-code-freeze.json` erfasst ihren Quellstand.
+
+## CI-Testkatalog, Compilerkodierung und Linux-Prüfabhängigkeit
+
+Die tatsächlichen Ergebnisse von [C17-Lauf 37773257771](https://github.com/PhysicSimulator/physim/actions/runs/37773257771)
+am Stand `0678f6057f6b7f1d68f98585595f4a2b1f36331b` zeigen 675/675 bestandene
+native Fälle unter Linux/Clang und macOS/Apple Silicon. Der anschließende
+Test-Runner-Selbsttest scheiterte am veralteten erwarteten Displaykatalog; dieser
+Fehler wurde auf dem lokalen Intel-Mac reproduziert. Der Katalog erfasst nun
+auch Migration, App-Profiling und die plattformspezifischen Checkbox-/Options-/
+Fokusabläufe und prüft weiterhin exakte Fallmengen, Skripte und benötigte Argumente.
+
+Windows/MSVC Debug bestand 674/675 Fälle. Der Migrationstest scheiterte beim
+UTF-8-Decodieren der weitergereichten OEM-Compilerausgabe. Der Prüfer erhält
+jetzt Originalbytes und prüft ASCII-Marker als Bytes; die bestehende Kontrolle
+von Quellen, Backup, Cache und Messwerten bleibt erhalten. Der Integrationsfall
+mischt zusätzlich absichtlich ungültige UTF-8-Diagnosebytes in echte
+Builderausgaben. Dies prüft die Kodierungsgrenze auch auf macOS und Linux.
+
+Die drei heruntergeladenen Artefakte wurden vor Auswertung gegen die SHA-256-
+Digests der offiziellen GitHub-Artefaktmetadaten geprüft:
+
+- `sdk-windows-v143-Debug`: `d3623863966e4b3901cca3e578cc0302f4f8793512dbe158d52a4c89e061eaad`
+- `linux-ui-clang`: `65cdada87d8e0b02dd2f22797034840c6c5da7ffd4a145c8471232b65ae442b6`
+- `macos-macos-15`: `30a967415fac215d408659be2076dfa6b0b9098cc01af06397854d14b597720c`
+
+Im [Linux-Paketlauf 37762643835](https://github.com/PhysicSimulator/physim/actions/runs/37762643835)
+erreichte das Debian-12-Prüfpaket alle neun GUI-Projektabläufe sowie Handbuch,
+Migration und Einstellungen, scheiterte dann aber beim Import von `dbus` im
+nativen Checkboxprüfer. Das Debian-Artefakt wurde gegen den offiziellen Digest
+`d6a8a980863bf206519c365dcd014da14141391deb588b8a0ab87708161f8360` geprüft.
+Beide Linux-Workflows installieren `python3-dbus` jetzt ausdrücklich. Im
+Paketworkflow geschieht dies weiterhin erst nach der Startprüfung ohne Python.
+
+Intel macOS 14.6.1/Apple Clang 16 und Debian 12/GCC 12.2 bestehen jeweils den
+Runner-Selbsttest und die direkten Bootstrap-Build-Gegenproben. Migration mit
+eingemischten OEM-Bytes und Prüfpaket bestehen jeweils 2/2 (`run-j9l4p4oh`,
+`run-ocqcofxc`). Auf Debian bestehen außerdem die drei tatsächlichen nativen
+Checkbox-/Options-/Fokusabläufe mit dem bereits vorhandenen verlagerten SDK
+und unabhängigen Prüfpaket (`build/ci-dbus-sdk-checks`). Dieser letzte Lauf
+prüft die Abhängigkeit am bestehenden SDK, kein neu erzeugtes Gesamtpaket.
+
+Die Korrekturen sind damit lokal auf beiden Systemen geprüft. Eine vollständige
+erneute CI-Abnahme einschließlich Windows, Apple Silicon und frisch installierter
+Debian-/Ubuntu-Pakete ist noch nicht belegt. Der gesamte Projektplan bleibt offen.

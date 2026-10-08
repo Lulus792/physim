@@ -118,11 +118,27 @@ def main():
     native_display = {case.name for case in runner.catalog() if case.display and not case.integration}
     assert native_display <= {"accessibility_native", "accessibility_ui"}, native_display
     provider_display = {"accessibility_atspi"} if sys.platform == "linux" else set()
-    expected_display = display_names | direct_display | provider_display
+    specialized_display = {
+        "project_migration_app": ("tests/test_project_migration_app.py", ()),
+        "app_profiling_workflow": ("tests/test_app_profiling_workflow.py", ()),
+    }
+    if sys.platform in ("darwin", "linux"):
+        specialized_display.update({
+            "accessibility_checkbox_app": ("tests/test_accessibility_checkbox_app.py", ()),
+            "accessibility_options_app": ("tests/test_accessibility_checkbox_app.py", ("--options",)),
+            "accessibility_focus_app": ("tests/test_accessibility_checkbox_app.py", ("--focus",)),
+        })
+    expected_display = display_names | direct_display | provider_display | specialized_display.keys()
     assert actual_display == expected_display, {
         "missing": sorted(expected_display - actual_display),
         "extra": sorted(actual_display - expected_display)}
     for case in runner.catalog():
+        if case.name in specialized_display:
+            script, flags = specialized_display[case.name]
+            step = case.integration["steps"][0]
+            assert step["program"] == "python" and step["arguments"][0] == "{root}/" + script
+            assert "--app" in step["arguments"] and "{physim}" in step["arguments"]
+            assert all(flag in step["arguments"] for flag in flags)
         if case.name in direct_display:
             step = case.integration["steps"][0]
             assert step["program"] == "physim" and step["exit_code"] == 1

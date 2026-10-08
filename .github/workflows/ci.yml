@@ -252,7 +252,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Platform dependencies
-        run: sudo apt-get update && sudo apt-get install -y ninja-build libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxi-dev libxfixes-dev libxss-dev libxtst-dev libwayland-dev libxkbcommon-dev libegl1-mesa-dev libgl1-mesa-dev libdbus-1-dev python3-pyatspi at-spi2-core dbus-x11 xvfb openbox x11-utils strace
+        run: sudo apt-get update && sudo apt-get install -y ninja-build libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxi-dev libxfixes-dev libxss-dev libxtst-dev libwayland-dev libxkbcommon-dev libegl1-mesa-dev libgl1-mesa-dev libdbus-1-dev python3-dbus python3-pyatspi at-spi2-core dbus-x11 xvfb openbox x11-utils strace
       - name: Direct libFuzzer campaign
         if: matrix.compiler == 'clang'
         run: |
