@@ -753,7 +753,9 @@ def project_manager_keyboard(flow, directory):
                 source=source.with_suffix(".phys") if experiment else source / "main.c"
                 require((project / ("main.phys" if experiment else "main.c")).read_bytes()==source.read_bytes(),"Keyboard selected wrong template")
                 require("analysis="+("analysis.phys" if analysis else "analysis.c") in manifest,"Keyboard selected wrong analysis language")
-                expected="examples/pendulum/analysis.c" if not analysis else "examples/language/"+({2:"analysis_collision.phys",5:"analysis_sensors.phys",6:"analysis_box_collision.phys",7:"analysis_buoyancy.phys"}.get(template,"analysis.phys"))
+                expected=("examples/pendulum/analysis.c" if not analysis else
+                          "examples/documentation/pendulum_analysis.phys" if template==0 else
+                          "examples/language/"+({2:"analysis_collision.phys",5:"analysis_sensors.phys",6:"analysis_box_collision.phys",7:"analysis_buoyancy.phys"}.get(template,"analysis.phys")))
                 require((project / ("analysis.phys" if analysis else "analysis.c")).read_bytes()==(flow.root / expected).read_bytes(),"Keyboard selected wrong analysis template")
 
 
@@ -975,6 +977,10 @@ def main():
         require(not (directory / "CMakeLists.txt").exists() and not (directory / "build/CMakeCache.txt").exists(),
                 "App generated CMake files")
         require((directory / "build/Debug").is_dir(), "Missing native project build directory")
+        if mode in ("language_full", "language_mixed"):
+            require((directory / "analysis.phys").read_bytes()==
+                    (flow.root / "examples/documentation/pendulum_analysis.phys").read_bytes(),
+                    "Pendulum project did not select the energy/period analysis")
         artifacts = [experiment, "analysis.phys", "diagnostics.bmp", "editor.bmp", "simulation.bmp",
                      "language-analysis.bmp", "language-analysis-editor.bmp"]
         if mode == "language_sensors":

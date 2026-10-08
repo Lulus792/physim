@@ -1038,7 +1038,8 @@ static void new_project(app *a) {
     join(src, sizeof src, a->root, a->manager_analysis_only
         ? (analysis_language?"examples/analysis_only/analysis.phys":"examples/analysis_only/analysis.c")
         : analysis_language
-        ? (a->example == 10 || a->example == 5 ? "examples/language/analysis_sensors.phys"
+        ? (a->example == 0 || a->example == 8 ? "examples/documentation/pendulum_analysis.phys"
+           : a->example == 10 || a->example == 5 ? "examples/language/analysis_sensors.phys"
            : a->example == 18 || a->example == 2 ? "examples/language/analysis_collision.phys"
            : a->example == 19 || a->example == 6 ? "examples/language/analysis_box_collision.phys"
            : a->example == 17 || a->example == 7 ? "examples/language/analysis_buoyancy.phys"
@@ -3710,13 +3711,30 @@ int main(int argc, char **argv) {
                 if (!a->analysis_report || a->data.total < 10 ||
                     ps_report_describe(a->analysis_report, NULL, NULL, &plots, &tables) != PS_OK ||
                     plots != (test_example == 17 ? 3u : 2u) ||
-                    tables != (test_example == 10 ? 2u : 0u))
+                    tables != (test_example == 10 || test_example == 8 || test_example == 0 ? 2u : 0u))
                     exit_code = 1;
-                snprintf(path, sizeof path, "%s-position.svg", a->report);
+                bool pendulum_analysis = test_example == 0 || test_example == 8;
+                snprintf(path, sizeof path, pendulum_analysis ? "%s.psreport" : "%s-position.svg", a->report);
                 if (!exists(path)) exit_code = 1;
                 snprintf(path, sizeof path, "%s-%s.csv", a->report,
-                         test_example == 10 ? "sensor" : test_example == 17 ? "position" : "velocity");
+                         pendulum_analysis ? "pendulum_1" : test_example == 10 ? "sensor"
+                         : test_example == 17 ? "position" : "velocity");
                 if (!exists(path)) exit_code = 1;
+                if (pendulum_analysis) {
+                    ps_table_info summary, periods;
+                    ps_table_row row;
+                    const ps_curve_data *energy;
+                    if (ps_report_table_read(a->analysis_report, 0, &summary) != PS_OK ||
+                        strcmp(summary.title, "Run comparison") || summary.rows != 1 ||
+                        ps_report_row_read(a->analysis_report, 0, 0, &row) != PS_OK ||
+                        row.values[0] != (double)a->data.total || row.values[1] < 0 ||
+                        ps_report_table_read(a->analysis_report, 1, &periods) != PS_OK ||
+                        strcmp(periods.title, "Measured periods") ||
+                        periods.rows != (row.values[3] > 0 ? 1u : 0u) ||
+                        ps_report_curve_view(a->analysis_report, 1, 0, &energy) != PS_OK ||
+                        energy->source_count != a->data.total || fabs(energy->y[0]) > 1e-14)
+                        exit_code = 1;
+                }
                 if (test_example == 10) {
                     snprintf(path, sizeof path, "%s-availability.csv", a->report);
                     if (!exists(path)) exit_code = 1;

@@ -61,6 +61,15 @@ Tangentialgeschwindigkeit. Die roten/grünen Kräfte beziehen sich auf eine
 starre, masselose Stange und bleiben vom Geschwindigkeitspfeil unterschieden.
 Der [Pendellernpfad](pendulum-tutorial.md) erklärt Gleichungen und Maßstäbe.
 
+Neue Pendelprojekte mit Physim-Auswertung verwenden automatisch die
+Pendelanalyse aus dem Lernpfad. Sie zeigt Winkel und Energieabweichung,
+vergleicht gespeicherte Läufe und berechnet die mittlere Periodendauer aus
+positiven Nulldurchgängen. Das gilt auch für ein C-Experiment mit
+Physim-Auswertung. Ein kurzer oder ruhender Lauf erhält keine erfundene
+Periodendauer; die Zusammenfassung und seine Kurven bleiben sichtbar.
+Vorhandene Projektquellen werden beim Öffnen nicht ersetzt. Andere Vorlagen
+verwenden weiterhin ihre zum Modell passende Auswertung.
+
 ## Letzten Workspace wieder öffnen
 
 Beim normalen Beenden merkt sich Physim den zuletzt geöffneten Hauptordner und

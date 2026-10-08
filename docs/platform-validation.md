@@ -1775,3 +1775,41 @@ beschreiben CPU-Abrechnung; sie sind keine Wandzeituhr.
 Die Korrektur besteht auf Intel macOS/Apple Clang 16 1/1 (`run-zhos1g1r`)
 und Debian 12/GCC 12.2 1/1 (`run-zed_431v`). Die erneute tatsächliche
 Windows-Abnahme dieser Korrektur steht noch aus.
+
+## Pendelanalyse als Physim-Projektvorlage
+
+Neue Pendelprojekte mit Physim-Auswertung kopieren die bereits gepflegte
+`examples/documentation/pendulum_analysis.phys`. Das gilt für C- und Physim-
+Experimente. Die Analyse lädt die gespeicherten Läufe, zeigt Winkel und
+Energieabweichung, berechnet positive Nulldurchgangsperioden und exportiert die
+vollständigen CSV-Spalten. Kurze oder ruhende Läufe erhalten keinen erfundenen
+Periodenwert. Vorhandene Projekte werden nicht umgeschrieben. Andere Modelle
+und unabhängige Analyseprojekte behalten ihre eigene Vorlagenauswahl.
+
+Die tatsächlichen `language_full_workflow`-/`language_mixed_workflow`-Fenster
+prüfen kopierte Quellen, Build, Runner, gespeicherte Quelldateien, Bericht,
+Energie-Kurvenlänge, Stichprobenzahl und Periodentabelle. Die Tastaturgegenprobe
+baut, startet und analysiert alle 32 Vorlagen-/Sprachpaare und beide unabhängigen
+Analysen bei 16 und 22 px, insgesamt 68 Projekte je Host. Alle drei Fälle
+bestehen auf Intel macOS 14.6.1/Apple Clang 16 3/3 (`run-dgrqglsx`) und
+Debian 12/GCC 12.2 3/3 (`run-ybh1ocsn`). Das tatsächlich geöffnete
+Physim-Analysefenster wurde anhand seiner Aufnahme visuell geprüft.
+
+`pendulum_template_analysis` prüft außerdem die echten Standardexperimente:
+4000 Schritte des C-Pendels und des Physim-Pendels sowie zehn Schritte eines
+ruhenden Modells. Die Physim-Auswertung und ein unabhängiger C-Berichtsprüfer
+vergleichen die ursprünglichen Läufe mit Kurven, Energieabweichung, SI-Einheiten
+und Periodentabelle. Zusammen mit Quellengleichheit und Prüfpaket bestehen
+die drei nativen Fälle 3/3 auf macOS (`run-xl8ful2s`) und Linux
+(`run-sn4h2119`). Linux/Clang 14 besteht den neuen Integrationsfall mit
+ASan/UBSan 1/1 (`run-l6a9ae5i`, `detect_leaks=0`). Ein zuvor parallel
+gestarteter macOS-Build wurde vom Buildlock abgewiesen und zählt nicht als
+erfolgreicher Test; der erfolgreiche native Lauf verwendet einen eigenen Buildordner.
+
+Die aktualisierte `check_modules`-Funktion des SDK-Prüfers wurde mit den
+tatsächlichen Runner-/Analysemodulen des bereits vorhandenen installierten
+macOS-SDK ausgeführt (`build/pendulum-analysis-sdk-branch-mac/results.json`).
+Dies belegt den geänderten Zweig, keine neue vollständige SDK-Abnahme. Die
+Prüfpaket-Gegenproben bestehen auf beiden Hosts mit unverändert 140 manifestierten
+Eingaben. Windows/Apple Silicon und frisch erzeugte Gesamtpakete dieser
+Vorlagenänderung bleiben separat zu prüfen. Der Gesamtplan bleibt offen.

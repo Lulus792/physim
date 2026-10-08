@@ -63,6 +63,12 @@ weder Integrator noch Messdaten.
 
 ## In der App ausprobieren
 
+Neue Pendelprojekte mit Physim-Auswertung enthalten die folgende Analyse
+bereits, auch bei einem C-Experiment. Für diesen Vergleich wird anschließend
+die Experimentquelle durch das Modell mit frei wählbarem Integrator ersetzt.
+Die Standardvorlagen behalten ihre bisherigen Integratoren. Bereits vorhandene
+Projekte behalten ihre gespeicherten Analysequellen.
+
 1. Lege ein Pendelprojekt in der gewünschten Sprache an.
 2. Ersetze die Experimentquelle durch die vollständige entsprechende Quelle
    unten und die Analysequelle durch deren Analysegegenstück. Beide Quellen

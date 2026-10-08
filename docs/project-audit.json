@@ -6320,8 +6320,15 @@
       "scope": "planned",
       "text": "9. Analysecode lädt den Lauf und berechnet Periodendauer sowie Energiefehler.\n",
       "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "evidence": [
+        "app/main.c",
+        "examples/documentation/pendulum_analysis.phys",
+        "tests/check_display_workflow.py",
+        "tests/native_integration_cases.json",
+        "tests/test_pendulum_tutorial_report.c",
+        "docs/platform-validation.md"
+      ],
+      "note": "Neue Pendelprojekte mit Physim-Auswertung verwenden die vollständige Pendelanalyse für C-/Physim-Experimente. Lange Standardläufe, Ruhefälle, tatsächliche App-Abläufe und alle 32 Vorlagen-/Sprachpaare plus zwei unabhängige Analysen bei 16/22 px auf Intel macOS und Debian geprüft; Linux ASan/UBSan bestanden. Der vollständige Umfang einschließlich C-Standardauswertung und aktueller Gesamtplattformabnahme bleibt separat ungeprüft; Status nicht aus Teilnachweisen auf vollständige Abnahme angehoben."
     },
     {
       "id": "PP-0780",

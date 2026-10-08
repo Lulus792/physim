@@ -8420,6 +8420,108 @@
           "timeout": 60
         }
       ]
+    },
+    {
+      "name": "pendulum_template_analysis",
+      "targets": [
+        "physim-runner",
+        "physim-analysis-runner",
+        "pendulum",
+        "physim-language-pendulum",
+        "pendulum-tutorial-analysis-phys",
+        "pendulum-tutorial-report-probe"
+      ],
+      "steps": [
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{pendulum}",
+            "{work}/c.psrun",
+            "--steps",
+            "4000",
+            "--dt",
+            ".005"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{pendulum-tutorial-analysis-phys}",
+            "{work}/c.psrun",
+            "{work}/c"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "pendulum-tutorial-report-probe",
+          "arguments": [
+            "{work}/c.psreport",
+            "{work}/c.psrun"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{physim-language-pendulum}",
+            "{work}/phys.psrun",
+            "--steps",
+            "4000",
+            "--dt",
+            ".005"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{pendulum-tutorial-analysis-phys}",
+            "{work}/phys.psrun",
+            "{work}/phys"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "pendulum-tutorial-report-probe",
+          "arguments": [
+            "{work}/phys.psreport",
+            "{work}/phys.psrun"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{physim-language-pendulum}",
+            "{work}/rest.psrun",
+            "--steps",
+            "10",
+            "--dt",
+            ".005",
+            "--param",
+            "initialAngle=0"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{pendulum-tutorial-analysis-phys}",
+            "{work}/rest.psrun",
+            "{work}/rest"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "pendulum-tutorial-report-probe",
+          "arguments": [
+            "{work}/rest.psreport",
+            "{work}/rest.psrun"
+          ],
+          "timeout": 60
+        }
+      ]
     }
   ]
 }

@@ -501,3 +501,15 @@ Fenster- und Integratorabläufe bestehen auf Intel macOS und Debian.
 [Nachweise und Plattformgrenzen](platform-validation.md#kraftvektoren-des-vertikalen-pendelablaufs).
 Aktuell: 35 implementierte, 8 unvollständige und 488 ungeprüfte Planblöcke.
 Die 531 Originalblöcke und das gesamte Projektziel bleiben erhalten.
+
+## Physim-Auswertung im neuen Pendelprojekt
+
+PP-0779 besitzt nun einen weiteren konkreten Nachweis für die Physim-Auswertung
+neu erstellter C-/Physim-Pendelprojekte. Die ausgewählte Standardanalyse berechnet
+Energieabweichung und Periodendauer, statt ausschließlich Position und daraus
+abgeleitete Geschwindigkeit zu zeigen. Tatsächliche App-Abläufe, lange Standard-
+läufe, Ruhefälle und alle Vorlagenkombinationen bestehen auf macOS und Linux.
+[Prüfumfang](platform-validation.md#pendelanalyse-als-physim-projektvorlage).
+Dies ersetzt keine vollständige Abnahme der C-Standardauswertung, der Dämpfung
+oder aller Schritte des vertikalen Anwendungsfalls. Die Gesamtzahlen bleiben
+unverändert: 35 implementiert, 8 unvollständig, 488 ungeprüft.

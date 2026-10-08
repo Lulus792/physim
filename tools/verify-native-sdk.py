@@ -463,7 +463,12 @@ def main():
             run = root / (name + ".psrun")
             checked([sdk / "bin" / ("physim-runner" + suffix), experiment, run,
                      "--steps", "200", "--dt", ".005", "--seed", "42"])
-            check_analysis(run, name, analysis, "language" if language else None)
+            if language:
+                report = root / (name + "-report")
+                checked([sdk / "bin" / ("physim-analysis-runner" + suffix), analysis, run, report])
+                checked([pendulum_probe, report.with_suffix(".psreport"), run])
+            else:
+                check_analysis(run, name, analysis)
             print(f"Installed SDK: {name} passed", flush=True)
 
         for name in native.EXAMPLES:
@@ -1043,7 +1048,7 @@ def main():
                 language = name == "language"
                 extension = ".phys" if language else ".c"
                 experiment = sdk / ("examples/language/pendulum.phys" if language else f"examples/{name}/main.c")
-                analysis = sdk / ("examples/language/analysis.phys" if language else "examples/pendulum/analysis.c")
+                analysis = sdk / ("examples/documentation/pendulum_analysis.phys" if language else "examples/pendulum/analysis.c")
                 shutil.copy2(experiment, project / ("main" + extension))
                 shutil.copy2(analysis, project / ("analysis" + extension))
                 (project / "physim.project").write_text(

@@ -2709,3 +2709,12 @@ Kraftmaßstab ist 0,05 m/N. Die Darstellung verändert keine Messwerte.
 Newton-Gegenproben, Integratorvergleiche und echte C-/Physim-Fensterabläufe
 bestehen auf macOS und Linux. [Modell](pendulum-tutorial.md),
 [ausgeführte Prüfungen](platform-validation.md#kraftvektoren-des-vertikalen-pendelablaufs).
+
+## Passende Physim-Auswertung neuer Pendelprojekte
+
+Neue Pendelprojekte mit Physim-Auswertung enthalten die gepflegte Pendelanalyse
+mit Winkel-/Energieplots, Energieabweichung, Periodendauer und vollständigem CSV.
+Sie arbeitet mit C- und Physim-Experimenten; kurze oder ruhende Läufe erhalten
+keine erfundene Periode. Die tatsächlichen Fensterabläufe und sämtliche
+Vorlagenkombinationen bei 16/22 px bestehen auf macOS und Linux.
+[Bedienung](workspace.md), [Nachweise und Grenzen](platform-validation.md#pendelanalyse-als-physim-projektvorlage).
