@@ -22,6 +22,13 @@ int main(void) {
         for (unsigned i = 1; i < 10000; ++i) result += sqrt((double)i);
     } while (ps_clock() - start < .04);
     CHECK(ps_process_usage_self(&after));
+    fprintf(stderr,
+            "Resources before: user=%.9f system=%.9f peak=%llu; "
+            "after: user=%.9f system=%.9f peak=%llu; allocation=%llu\n",
+            before.user_seconds, before.system_seconds,
+            (unsigned long long)before.peak_resident_bytes,
+            after.user_seconds, after.system_seconds,
+            (unsigned long long)after.peak_resident_bytes, (unsigned long long)size);
     CHECK(after.user_seconds >= before.user_seconds &&
           after.system_seconds >= before.system_seconds &&
           after.user_seconds + after.system_seconds > before.user_seconds + before.system_seconds &&
