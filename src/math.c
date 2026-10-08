@@ -2,21 +2,9 @@
 #include "linear_numeric.h"
 #include "physim/numerics.h"
 #include "transform_numeric.h"
+#include "curve_numeric.h"
 #include <math.h>
 
-/* Convex interpolation without overflowing b-a for opposite-signed endpoints. */
-static double curve_lerp(double a, double b, double t) {
-    if (t == 0)
-        return a;
-    if (t == 1)
-        return b;
-    if ((a < 0) != (b < 0))
-        return (1 - t) * a + t * b;
-    return a + t * (b - a);
-}
-static ps_vec3 curve_mix(ps_vec3 a, ps_vec3 b, double t) {
-    return ps_v3(curve_lerp(a.x, b.x, t), curve_lerp(a.y, b.y, t), curve_lerp(a.z, b.z, t));
-}
 static bool curve_valid(const ps_bezier3 *curve, double t) {
     if (!curve || !isfinite(t) || t < 0 || t > 1)
         return false;
@@ -27,21 +15,49 @@ static bool curve_valid(const ps_bezier3 *curve, double t) {
     }
     return true;
 }
+static const int curve_position[4][4] = {
+    {1, 0, 0, 0}, {-3, 3, 0, 0}, {3, -6, 3, 0}, {-1, 3, -3, 1}};
+static const int curve_tangent[4][4] = {
+    {-3, 3, 0, 0}, {6, -12, 6, 0}, {-3, 9, -9, 3}, {0, 0, 0, 0}};
+static const int curve_left1[4][4] = {{1, 0, 0, 0}, {-1, 1, 0, 0}};
+static const int curve_left2[4][4] = {{1, 0, 0, 0}, {-2, 2, 0, 0}, {1, -2, 1, 0}};
+static const int curve_right1[4][4] = {{0, 1, 0, 0}, {0, -2, 2, 0}, {0, 1, -2, 1}};
+static const int curve_right2[4][4] = {{0, 0, 1, 0}, {0, 0, -1, 1}};
+static ps_vec3 curve_value(const ps_bezier3 *c, double t, const int coefficients[4][4],
+                            unsigned degree) {
+    double x[4], y[4], z[4];
+    for (unsigned i = 0; i < 4; i++) {
+        x[i] = c->points[i].x;
+        y[i] = c->points[i].y;
+        z[i] = c->points[i].z;
+    }
+    return ps_v3(curve_polynomial(x, t, coefficients, degree),
+                 curve_polynomial(y, t, coefficients, degree),
+                 curve_polynomial(z, t, coefficients, degree));
+}
 static void curve_subdivide(const ps_bezier3 *c, double t, ps_bezier3 *left, ps_bezier3 *right) {
-    ps_vec3 a = curve_mix(c->points[0], c->points[1], t);
-    ps_vec3 b = curve_mix(c->points[1], c->points[2], t);
-    ps_vec3 d = curve_mix(c->points[2], c->points[3], t);
-    ps_vec3 e = curve_mix(a, b, t), f = curve_mix(b, d, t), p = curve_mix(e, f, t);
-    *left = (ps_bezier3){{c->points[0], a, e, p}};
-    *right = (ps_bezier3){{p, f, d, c->points[3]}};
+    if (t == 0) {
+        *left = (ps_bezier3){{c->points[0], c->points[0], c->points[0], c->points[0]}};
+        *right = *c;
+        return;
+    }
+    if (t == 1) {
+        *left = *c;
+        *right = (ps_bezier3){{c->points[3], c->points[3], c->points[3], c->points[3]}};
+        return;
+    }
+    ps_vec3 p = curve_value(c, t, curve_position, 3);
+    *left = (ps_bezier3){{c->points[0], curve_value(c, t, curve_left1, 1),
+                        curve_value(c, t, curve_left2, 2), p}};
+    *right = (ps_bezier3){{p, curve_value(c, t, curve_right1, 2),
+                         curve_value(c, t, curve_right2, 1), c->points[3]}};
 }
 ps_result ps_bezier3_evaluate(const ps_bezier3 *curve, double t, ps_curve_sample3 *out) {
     if (!out || !curve_valid(curve, t))
         return PS_INVALID;
-    ps_bezier3 left, right;
-    curve_subdivide(curve, t, &left, &right);
-    ps_curve_sample3 result = {left.points[3],
-                               ps_vscale(ps_vsub(right.points[1], left.points[2]), 3)};
+    ps_curve_sample3 result = {
+        t == 0 ? curve->points[0] : t == 1 ? curve->points[3] : curve_value(curve, t, curve_position, 3),
+        curve_value(curve, t, curve_tangent, 2)};
     if (!isfinite(result.tangent.x) || !isfinite(result.tangent.y) || !isfinite(result.tangent.z))
         return PS_NUMERIC;
     *out = result;

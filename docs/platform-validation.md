@@ -3709,3 +3709,94 @@ PP-0358 ist mit diesen begrenzten Nachweisen als implementiert erfasst. Die
 Originaltexte und Umfänge aller 531 Planblöcke bleiben erhalten; PP-0365 und die
 vollständige Algorithmus-/Produkt-/Plattformabnahme bleiben offen. Die Nachweise
 enthalten keine aktuelle Windows-, Apple-Silicon- oder macOS-Sanitizer-Abnahme.
+
+## Kurvenauswertung am 8. Oktober 2026
+
+Die unabhängige rationale Kurvenprobe findet in der bisherigen Core-Bibliothek
+627 abweichende Fälle bei 956 Eingaben (`build/curve-baseline.log`). Besonders
+kleine Tangenten zwischen benachbarten großen Kontrollpunkten gehen in gerundeten
+De-Casteljau-Zwischenstufen verloren; bei Subnormalzahlen kann das Vorzeichen kippen.
+Position, analytische Tangente und Unterteilungskontrollpunkte verwenden jetzt
+exakte binäre Polynome und jeweils eine abschließende nearest-even-Rundung.
+Begrenzte Integerarrays decken vier Double-Faktoren samt kleinen Koeffizienten
+ab; Heapallokation und breitere Fließkommapräzision sind nicht erforderlich.
+[Einheiten und Kurvenvertrag](math.md).
+
+956 C-Fälle vergleichen Position, Tangente und alle acht Unterteilungskontrollpunkte
+mit einer unabhängig implementierten rationalen De-Casteljau-Referenz. Die
+77 Physim-Fälle prüfen denselben Core und kopierte `controlPoint(index)`-Werte;
+negative/zu große Indizes werden abgefangen. Tangentenüberlauf erhält die gesamte
+C-Ausgabe; die Unterteilung kann trotzdem gelingen. Bestehende Kurvenprüfungen
+sichern Aliasierung, Parameterfehler und die analytische Kurve `(t,t²,t³)`.
+
+Intel macOS 14.6.1/Apple Clang 16 besteht alle zehn ausgewählten Release-Fälle
+unter `build/contact-world-language-release-mac/test-results/run-86mgjon4`.
+Debian 12/Clang 14 besteht dieselben zehn Fälle mit ASan/UBSan unter
+`build/atspi-asan-linux/test-results/run-dosv5bmb`. Die Auswahl enthält Math,
+lineares Resampling, PCHIP, dessen Physim-Analyse, vier bestehende native Physim-
+Bézierfälle, Referenzdokumentation und das neue rationale Orakel.
+`ASAN_OPTIONS=detect_leaks=0` lässt Address-/UndefinedBehavior-Prüfungen aktiv;
+macOS-Sanitizer bleiben wegen fehlendem `ld64.lld` ungeprüft.
+
+Die zusätzliche kleine C-Laufzeitprobe verwendet dieselbe vierpunktige Kurve
+bei 10000 Parametern. Alte Auswertung: 0,000976–0,001257 CPU-Sekunden;
+neue exakte Auswertung: 0,033960 in einem ersten und 0,042365–0,042924 Sekunden
+in drei weiteren Läufen (`build/curve-benchmark-proof.json`). Das entspricht
+rund 3,4–4,3 µs pro Auswertung; 33 Punkte rechnerisch etwa 0,11–0,14 ms.
+Dies ist ein konkreter Genauigkeits-/Laufzeittradeoff eines einzelnen Kernels,
+kein Nachweis allgemeiner Renderer- oder Simulationsleistung.
+
+Zwei ältere abgeschlossene SDK-Prüfstände sind zur Platzgewinnung vollständig
+archiviert: `AT-SPI SDK ä linux chlu_b3p` und `Accessibility SDK ä linux od5pk550`.
+`build/curve-old-archived-proofs.tar.gz` enthält 948 geprüfte Dateien/Links,
+63833110 Bytes, SHA-256
+`0520c56ffe7aeca4a6caca7b0cfc44b42f9455cd325679a4580299654738ad61`.
+Mac- und Linux-Kopie sind vollständig gegen das Inhaltsinventar geprüft;
+Originale wurden vor Entfernen erneut gehasht. Inventar und Löschbeleg liegen
+unter `build/curve-old-archived-proof-inventory.json` beziehungsweise
+`build/curve-old-archive-removed.json`. Die jüngsten Scalar-/Transform-/Run-Stream-
+und Vergleichsnachweise bleiben separat vorhanden.
+
+Die endgültige Gegenprobe vergleicht Double-Bits einschließlich signierter Null
+an kopierten Endpunkten. Der erste Fixture-Generator hatte negative Null als
+positive Null ausgegeben; die Literale sind korrigiert. Der alte Core weicht in
+der verschärften Prüfung bei 629 Fällen ab (`build/curve-baseline-bits.log`),
+davon zwei zusätzliche Unterschiede der Nullvorzeichen gegenüber der ersten
+rein numerischen Gegenprobe.
+
+Der während dieser Testverschärfung bereits laufende erste GCC-Release-Aufruf
+endet unter `run-p194e12o` mit 9/10: sein übersetztes Programm enthält noch die
+alten Null-Literale und scheitert am neuen Bitvergleich. Dieser Lauf wird nicht
+nachträglich als bestanden gewertet. Das sehr große ursprüngliche Main benötigt
+zudem mehrere Minuten Variablen-Tracking/Optimierung. Die Fixture erzeugt nun
+für jeden der unverändert 77 Fälle eine eigene Funktion und ruft alle in derselben
+Reihenfolge auf; Referenzwerte und Abdeckung bleiben erhalten.
+
+Die endgültige Fixture besteht auf macOS unter `run-jfdbgack` und auf Linux mit
+ASan/UBSan unter `run-p6o3rk9h` (je 1/1 Orakel). Die gesamte endgültige
+Linux-Release-Auswahl besteht mit 10/10 unter
+`build/contact-world-language-release-linux/test-results/run-emecok__`.
+Die jeweilige ältere Zehnerauswahl und die endgültige Bitprüfung sind getrennte
+Nachweise; Änderungen an der Fixture werden nicht früheren Programmen zugerechnet.
+
+Das macOS-SDK enthält 458 manifestierte Dateien einschließlich `curve_numeric.h`.
+Die endgültige fokussierte Abnahme verschiebt es nach
+`build/curve-sdk-checks/Native SDK ä cwuq2v11` und besteht mit installierter sowie
+allein aus Paketquellen neu gebauter Bibliothek: 956 C- und 77 Physim-Fälle,
+bitgleiche Positionen/Tangenten/Unterteilungskontrollpunkte, Fehlererhaltung,
+kopierte Endpunkte und geprüfte Kontrollpunktindizes. Der ausgelieferte Compiler
+übersetzt die endgültige Physim-Fixture selbst. Das unabhängige Kit umfasst
+111 Dateien und besteht Paketgrenzen, SHA-256 und exklusives Veröffentlichen.
+
+Das Linux-SDK enthält ebenfalls 458 manifestierte Dateien. Die endgültige
+verschobene Abnahme unter `build/curve-sdk-checks/Native SDK ä 7mi0ajrh`
+besteht dieselbe bitgenaue C-/Physim-Gegenprobe gegen installierten und aus
+Paketquellen neu gebauten Core. Alle 20 geänderten Dateien stimmen zwischen
+macOS und Linux per SHA-256 überein (`build/curve-source-freeze.json`).
+Die Quellen, Tests, Referenzen und SDK-Hilfen werden gemeinsam versioniert;
+SDK-Kopien, Archive und Laufdaten bleiben ignorierte Build-Nachweise.
+
+PP-0359 ist mit den genannten Interpolations-/Kurvennachweisen implementiert.
+Der gesamte Projektplan, die allgemeine Algorithmusabnahme PP-0365 und weitere
+Plattformen bleiben offen. Die fokussierten Läufe beweisen keine aktuelle
+Windows-/Apple-Silicon-, allgemeine GUI- oder macOS-Sanitizer-Abnahme.

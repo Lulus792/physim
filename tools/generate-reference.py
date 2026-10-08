@@ -168,6 +168,7 @@ LANG_DESCRIPTIONS = {
     'sceneFrame': 'Erzeugt einen expliziten lokalen TRS-Koordinatenrahmen. Nur im scene-Callback; parent 0 bezeichnet die Wurzel. Endliche Translation, nonzero Quaternion und endliche nonzero Scale; Nachfahren werden für Darstellung und Picking transformiert.',
     'sceneParent': 'Ordnet einen Szeneneintrag einer Eltern-ID zu; parent 0 löst ihn zur Wurzel. Fehlende IDs und Zyklen erzeugen eine Quelldiagnose, ohne die Szene zu verändern.',
     'Bezier3': 'Kubische räumliche Bézierkurve aus vier endlichen Kontrollpunkten. Der Wert ist unabhängig kopierbar. Alle Koordinaten verwenden dieselbe Längeneinheit des Aufrufers.',
+    'bezierControlPoint': 'Kopiert einen Kontrollpunkt mit Index 0..3; ungültige Indizes werfen einen Fehler.',
     'bezierPosition': 'Position bei dimensionslosem t im inklusiven Intervall [0, 1]. Die Auswertung verwendet die De-Casteljau-Implementierung der C-Bibliothek.',
     'bezierTangent': 'Ableitung der Position nach dem dimensionslosen Parameter t. Sie ist weder normiert noch eine physikalische Geschwindigkeit. Ein nicht darstellbares Ergebnis erzeugt eine Quelldiagnose.',
     'bezierSplitLeft': 'Linke Teilkurve von 0 bis t, mit eigenem Parameterbereich [0, 1]. Ungültiges t erzeugt eine Quelldiagnose.',

@@ -153,8 +153,11 @@ Ungeprüfte arithmetische Funktionen, Matrixprodukte und Konstruktoren ohne
 `ps_bezier3_evaluate` wertet die kubische Bézierkurve für einen dimensionslosen
 Parameter `t` von 0 bis 1 aus. Die Endpunkte werden exakt übernommen; die mittleren
 Kontrollpunkte steuern die Tangenten und liegen im Allgemeinen nicht auf der Kurve.
-Die Berechnung verwendet das De-Casteljau-Verfahren aus konvexen Interpolationen.
-Es vermeidet einen unnötigen Überlauf der Differenz entgegengesetzt großer Werte.
+Position, Ableitung und Unterteilungskontrollpunkte verwenden die exakten binären
+Polynome mit jeweils einer abschließenden Round-to-nearest-even-Rundung. Feste
+Integerarrays erhalten auch kleine Reste zwischen großen Kontrollpunkten und
+Ergebnisse unterhalb einer Zwischenstufenauflösung. Weder Heapallokation noch
+breitere Fließkommapräzision sind erforderlich. Endpunkte werden direkt kopiert.
 
 Die Ausgabe enthält Position und `dPosition/dt`. Die Tangente ist weder normiert
 noch eine physikalische Geschwindigkeit. Bei gleichmäßigem Durchlaufen in einer
@@ -192,7 +195,18 @@ wenn die Position noch darstellbar wäre. Alle Ausgaben bleiben bei Fehlern
 unverändert. Die Unterteilung benötigt keine Tangenten und kann daher auch in
 diesem Fall gelingen. Konstante Kurven und Nulltangenten sind gültig.
 
-Die Kurvenprüfung verwendet die unabhängige Referenz `(t,t²,t³)` samt Ableitung,
+Physim `curve.controlPoint(index)` liefert einen unabhängigen Kontrollpunktwert
+für Index 0 bis 3; andere Indizes werfen einen `PS_INVALID`-Fehler. Damit lassen
+sich Unterteilungsergebnisse auch dann untersuchen, wenn ihre Endtangente den
+Double-Bereich überschreitet. Die bisherigen position/tangent/splitLeft/splitRight-
+Methoden nutzen dieselbe Core-Berechnung.
+
+`tests/test_curve_range_oracle.py` vergleicht 956 C- und 77 Physim-Fälle mit
+unabhängiger rationaler De-Casteljau-Auswertung: genaue Positionen, Ableitungen
+und alle acht Unterteilungskontrollpunkte, Subnormalwerte, benachbarte große
+Werte, gemischte Exponenten, Auslöschung und atomare Bereichsfehler.
+
+Die bestehende Kurvenprüfung verwendet außerdem die unabhängige Referenz `(t,t²,t³)` samt Ableitung,
 1.000 deterministische Unterteilungen mit jeweils elf Auswertungen pro Hälfte,
 Endpunkte, degenerierte Kurven, extreme Zahlenwerte und Aliasierung.
 

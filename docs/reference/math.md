@@ -199,7 +199,7 @@ Wertet eine kubische Bézierkurve bei t aus und liefert Position sowie Ableitung
 ps_result ps_bezier3_evaluate(const ps_bezier3 *curve, double t, ps_curve_sample3 *out);
 ```
 
-Cubic Bezier with four finite world-space control points, t in [0,1]. All coordinates share the caller's length unit. Tangent is d(position)/dt, not a normalized direction or physical velocity. No arc-length parametrization. De Casteljau evaluation preserves endpoints, including degenerate curves. No allocation. Invalid inputs -> PS_INVALID, nonfinite result -> PS_NUMERIC; all outputs remain unchanged on error.
+Cubic Bezier with four finite world-space control points, t in [0,1]. All coordinates share the caller's length unit. Tangent is d(position)/dt, not a normalized direction or physical velocity. No arc-length parametrization. Position, tangent and subdivision controls use exact binary polynomials and one nearest-even rounding per output component. Endpoints are copied. No allocation. Invalid inputs -> PS_INVALID, nonfinite result -> PS_NUMERIC; all outputs remain unchanged on error.
 
 ## ps_bezier3_split
 

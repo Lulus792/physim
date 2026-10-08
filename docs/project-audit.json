@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-08",
-  "inspected_revision": "2c0b136f9f894d5269c0ea498f59e6efb71bd8b8",
+  "inspected_revision": "4ddf244bf1570db5bd293650677471526119111f",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2347,9 +2347,25 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Interpolation und Kurven.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/math.h",
+        "src/math.c",
+        "src/curve_numeric.h",
+        "src/pchip.h",
+        "src/series.c",
+        "include/physim/language_sdk.h",
+        "tests/test_math.c",
+        "tests/test_resample.c",
+        "tests/test_pchip.c",
+        "tests/curve_range_probe.c",
+        "tests/test_curve_range_oracle.py",
+        "tests/fixtures/language/curve_range.phys",
+        "tests/fixtures/language/bezier_curve.phys",
+        "docs/math.md",
+        "docs/series.md"
+      ],
+      "note": "Lineares/nearest/previous Resampling, monotones kubisches PCHIP, Quaternion-Slerp und räumliche kubische Bezierkurven sind vorhanden und mit konkreten Referenzen geprüft. Bezierposition, analytische Tangente und Unterteilungskontrollpunkte verwenden exakte binäre Polynome mit einer abschließenden Rundung; 956 unabhängige rationale C-Fälle und 77 Physim-Fälle prüfen Extreme, Auslöschung und Bereichsfehler. Kontrollpunkte sind kopierte Sprachwerte mit geprüften Indizes. Einheiten, Parameterbereich, Extrapolationsgrenzen und Fehlererhaltung sind dokumentiert; keine automatische Bogenlängenparametrisierung oder globale Plattform-/Modellabnahme."
     },
     {
       "id": "PP-0360",

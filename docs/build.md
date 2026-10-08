@@ -979,3 +979,16 @@ Der fokussierte Modus vergleicht C-/Physim-Toleranzentscheidungen mit unabhängi
 rationalen Referenzen gegen installierten und aus verschobenen SDK-Quellen neu
 gebauten Core. Er prüft Manifest und Paketverschiebung, ersetzt keine vollständige
 SDK-/GUI-Abnahme und ist mit anderen fokussierten Modi nicht kombinierbar.
+
+
+### Kubische Kurven aus einem SDK prüfen
+
+```sh
+python3 tools/verify-native-sdk.py --sdk build/package --work build/curve-package-checks --curve-only
+```
+
+Der fokussierte Modus vergleicht C-/Physim-Position, Tangente und alle
+Unterteilungskontrollpunkte mit unabhängigen rationalen Referenzen gegen
+installierten und aus verschobenen SDK-Quellen neu gebauten Core. Er prüft
+Manifest und Verschiebung; vollständige SDK-/GUI-Abnahme bleibt gesondert.
+Andere fokussierte Modi können nicht gleichzeitig gewählt werden.

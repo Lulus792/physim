@@ -320,3 +320,24 @@ PP-0358 ist mit diesen begrenzten Nachweisen implementiert: aktuell 29
 implementierte, sechs unvollständige und 496 ungeprüfte Planblöcke.
 Die Originaltexte aller 531 Blöcke bleiben erhalten; PP-0365 und die vollständige
 Algorithmus-/Plattform-/Produktabnahme bleiben offen.
+
+
+## Interpolation und Kurven (§7.2 / PP-0359)
+
+Lineares/nearest/previous Resampling, monotones kubisches PCHIP, Quaternion-Slerp
+und räumliche kubische Bézierkurven besitzen konkrete Referenz-/Grenzprüfungen.
+Die neue rationale Kurvenprobe findet in der bisherigen Implementierung 627
+abweichende Fälle bei 956 Eingaben: Zwischenrundung kann große benachbarte
+Kontrollpunkte zu einer Nulltangente machen oder bei Subnormalwerten deren
+Vorzeichen umkehren. Position, analytische Tangente und Unterteilungskontrollpunkte
+werden nun als exakte binäre Polynome ausgewertet und einmal abschließend gerundet.
+77 Physim-Fälle prüfen denselben Vertrag und kopierte Kontrollpunkte mit gültigen
+sowie ungültigen Indizes. Unterteilung aliasiert weiterhin ihre Eingabe und kann
+auch bei nichtdarstellbarer Tangente gelingen; Fehler erhalten Ausgaben.
+
+PP-0359 ist mit diesen begrenzten Nachweisen implementiert: aktuell 30
+implementierte, sechs unvollständige und 495 ungeprüfte Planblöcke. Einheiten,
+Parameterbereich, Extrapolationsgrenzen und Fehlererhaltung sind dokumentiert;
+automatische Bogenlängenparametrisierung ist nicht enthalten. Die Originaltexte
+aller 531 Planblöcke bleiben erhalten; PP-0365 und die gesamte Algorithmus-,
+Modell-, Plattform- und Produktabnahme bleiben offen.

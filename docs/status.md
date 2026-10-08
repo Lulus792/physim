@@ -2538,3 +2538,12 @@ mit exakten Grenzentscheidungen für binäre Double-Eingaben. Subnormalwerte und
 überlaufende Differenzen/Produkte verändern die Entscheidung nicht. Eine
 unabhängige rationale Gegenprobe prüft C und Physim. Die gesamte Modell- und
 Algorithmusabnahme wird daraus nicht abgeleitet; [Verträge](math.md).
+
+
+Kubische Bézierkurven erhalten jetzt Position, analytische Tangente und
+Unterteilungskontrollpunkte aus exakten binären Polynomen mit abschließender
+Rundung. Große benachbarte Punkte und Subnormalwerte verlieren dadurch keine
+kleinen Tangenten in Zwischenstufen. C und Physim teilen den Vertrag;
+`controlPoint(index)` liefert geprüfte kopierte Sprachwerte. Die unabhängige
+rationale Gegenprobe ergänzt die bestehenden Interpolations-/Kurventests.
+[Einheiten, Grenzen und Methoden](math.md).

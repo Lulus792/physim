@@ -1992,6 +1992,18 @@
     "close-range-language": {
       "source": "tests/fixtures/language/close_range.phys",
       "mode": "--emit-c"
+    },
+    "curve-range-probe": {
+      "sources": [
+        "tests/curve_range_probe.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "curve-range-language": {
+      "source": "tests/fixtures/language/curve_range.phys",
+      "mode": "--emit-c"
     }
   },
   "tests": [
@@ -7876,6 +7888,29 @@
             "{close-range-language}",
             "--fixture",
             "{root}/tests/fixtures/language/close_range.phys"
+          ],
+          "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "curve_range_oracle",
+      "targets": [
+        "python",
+        "curve-range-probe",
+        "curve-range-language"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_curve_range_oracle.py",
+            "--c",
+            "{curve-range-probe}",
+            "--language",
+            "{curve-range-language}",
+            "--fixture",
+            "{root}/tests/fixtures/language/curve_range.phys"
           ],
           "timeout": 120
         }

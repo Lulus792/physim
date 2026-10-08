@@ -440,6 +440,16 @@ Kubische räumliche Bézierkurve aus vier endlichen Kontrollpunkten. Der Wert is
 
 Überall verfügbar.
 
+## Bezier3.controlPoint
+
+```text
+Bezier3.controlPoint(index: Int64) -> Vec3
+```
+
+Kopiert einen Kontrollpunkt mit Index 0..3; ungültige Indizes werfen einen Fehler.
+
+Überall verfügbar.
+
 ## Bezier3.position
 
 ```text

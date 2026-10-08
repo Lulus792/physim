@@ -515,6 +515,11 @@ static inline ps_bezier3 psrt_bezier3(ps_vec3 start, ps_vec3 control1, ps_vec3 c
                          psrt_vec3(control2.x, control2.y, control2.z, site),
                          psrt_vec3(end.x, end.y, end.z, site)}};
 }
+static inline ps_vec3 psrt_bezier_control_point(ps_bezier3 curve, int64_t index, psrt_site site) {
+    if (index < 0 || index >= 4)
+        psrt_fail_code(site, PS_INVALID, "Bezier control point index must be in [0, 3]");
+    return curve.points[index];
+}
 static inline ps_curve_sample3 psrt_bezier_sample(ps_bezier3 curve, double t, psrt_site site) {
     ps_curve_sample3 sample;
     ps_result result = ps_bezier3_evaluate(&curve, t, &sample);
