@@ -40,7 +40,7 @@ Erzeugt Masse und Hauptträgheit einer homogenen Kugel.
 ps_result ps_body_sphere(double mass_kg, double radius_m, ps_body *out);
 ```
 
-Homogeneous solid sphere/box, initially at rest at origin. Box sizes are full extents, not half sizes. mass>=0, strictly positive radius/extents.
+Homogeneous solid sphere/box, initially at rest at origin. Box sizes are full extents, not half sizes. mass>=0, strictly positive radius/extents. Dynamic inertias round the exact binary-input rational formulas once (nearest-even); zero-rounded/overflowed positive inertias return PS_NUMERIC atomically.
 
 ## ps_body_box
 
@@ -65,6 +65,8 @@ Berechnet translatorische plus rotatorische kinetische Energie.
 ```c
 ps_result ps_body_kinetic_energy(const ps_body *body, double *joules);
 ```
+
+Sum of translational and principal-axis rotational energy. Identity-frame terms round once; general rotation uses a normalized quaternion and scaled binary64 rotation before summation. Zero-rounded energy is valid; overflow returns PS_NUMERIC without changing joules. No full-range dynamics guarantee.
 
 ## ps_body_point_velocity
 

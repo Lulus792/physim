@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-08",
-  "inspected_revision": "71a9e6a425c9c0747d29828ef32fcc33375afd59",
+  "inspected_revision": "74a2ed3f0faebcf7477fc7bd1e6d58cd81742245",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2699,8 +2699,15 @@
       "scope": "planned",
       "text": "2. starre Körper, Trägheitstensor, Lage und Winkelgeschwindigkeit.\n",
       "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "evidence": [
+        "include/physim/mechanics.h",
+        "src/mechanics.c",
+        "src/body_numeric.h",
+        "tests/test_body_range_oracle.py",
+        "docs/mechanics.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Kugel-/Boxträgheit und kinetische Energie besitzen unabhängige rationale C-/Physim- sowie Decimal-Rotationsreferenzen. Bereichsgarantie auf Konstruktoren/Energie begrenzt; umfassende Lage-/Winkelgeschwindigkeits-/Dynamikabnahme bleibt offen."
     },
     {
       "id": "PP-0383",
@@ -2743,9 +2750,13 @@
       "kind": "list",
       "scope": "planned",
       "text": "5. Narrow Phase für Kugel, Ebene, Box und konvexe Körper.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "incomplete",
+      "evidence": [
+        "include/physim/mechanics.h",
+        "include/physim/contact_world.h",
+        "src/box_contacts.c"
+      ],
+      "note": "Kugel-, Ebenen- und orientierte Boxdetektoren vorhanden. Allgemeine konvexe Körper besitzen noch keinen Shape-/Narrow-Phase-Vertrag; contact_world.h schließt convex shapes ausdrücklich aus."
     },
     {
       "id": "PP-0386",

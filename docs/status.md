@@ -2563,3 +2563,12 @@ Konvertierungsbereich, Besitzer und Samplingphase werden abgeglichen. Sensorwert
 und Unsicherheit aus Zentimetereinheiten werden in echten C-/Physim-Läufen als
 Meterwerte persistiert. Die Sensor-Wurfbeispiele nutzen den Pfad; Statusmasken
 bleiben für Platzhalter erforderlich. [Verträge](measurement.md).
+
+
+Kugel- und Boxträgheiten runden jetzt die analytischen rationalen Formeln einmal
+abschließend. Kinetische Energie vermeidet überlaufende Geschwindigkeitsquadrate
+und erhält Ausgaben bei Bereichsfehlern. Unabhängige C-/Physim-Referenzen prüfen
+Hauptachsen; Decimal-Referenzen prüfen gedrehte Körper mit dokumentierter
+Double-Rotationsgenauigkeit. Die gesamte Starrkörperdynamik bleibt separat
+abzunehmen; allgemeine konvexe Narrow-Phase-Geometrie fehlt noch.
+[Verträge](mechanics.md).

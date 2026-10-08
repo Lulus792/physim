@@ -2016,6 +2016,18 @@
     "unit-conversion-language": {
       "source": "tests/fixtures/language/unit_conversion_range.phys",
       "mode": "--emit-c"
+    },
+    "body-range-probe": {
+      "sources": [
+        "tests/body_range_probe.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "body-range-language": {
+      "source": "tests/fixtures/language/body_range.phys",
+      "mode": "--emit-c"
     }
   },
   "tests": [
@@ -7946,6 +7958,29 @@
             "{unit-conversion-language}",
             "--fixture",
             "{root}/tests/fixtures/language/unit_conversion_range.phys"
+          ],
+          "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "body_range_oracle",
+      "targets": [
+        "python",
+        "body-range-probe",
+        "body-range-language"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_body_range_oracle.py",
+            "--c",
+            "{body-range-probe}",
+            "--language",
+            "{body-range-language}",
+            "--fixture",
+            "{root}/tests/fixtures/language/body_range.phys"
           ],
           "timeout": 120
         }

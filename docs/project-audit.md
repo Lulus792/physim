@@ -386,3 +386,16 @@ Quantity-/Measurement-Darstellungen, eigene Reportachsen und bereits kanonische
 Mess-/Analysewerte sind nicht gleichzusetzen; rohe Zahlen bleiben ohne
 prüfbare Dimension. Aktuell unverändert: 32 implementierte, sechs unvollständige
 und 493 ungeprüfte Planblöcke. Die Originaltexte aller 531 Blöcke bleiben erhalten.
+
+
+## Starrkörper: begrenzter Bereichsnachweis und konkrete Geometrielücke
+
+PP-0382 bleibt für den gesamten Umfang unverified. Kugel-/Boxkonstruktoren
+und Energie besitzen jetzt unabhängige rationale sowie Decimal-Referenzen,
+ohne daraus eine vollständige Abnahme der Integration und Kontaktlösung
+abzuleiten. Die [Mechanikverträge](mechanics.md) trennen diese Grenzen.
+
+PP-0385 ist konkret incomplete: Kugel, Ebene und orientierte Box sind vorhanden,
+allgemeine konvexe Körper haben noch keine Shape-/Narrow-Phase-API. Der aktuelle
+Kontaktweltvertrag schließt sie ausdrücklich aus. Das Audit enthält damit
+32 implementierte, 7 unvollständige und 492 ungeprüfte Planblöcke.

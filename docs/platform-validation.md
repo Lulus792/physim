@@ -3957,3 +3957,63 @@ alle Datenpfade einzeln offen. Der neue typisierte Übergang beweist die genannt
 konkreten Pfade; er macht aus rohen Doubles keine dimensionsgeprüften Werte.
 Weitere Plattformen, allgemeine Produkt-/Modellabnahme und macOS-Sanitizer sind
 mit diesen fokussierten Nachweisen nicht abgenommen.
+
+## Starrkörperträgheit und Energiebereich am 8. Oktober 2026
+
+Die alten Formeln liefern in 253 von 1046 unabhängigen rationalen Fällen andere
+Rundungen oder Bereichsentscheidungen (`build/body-range-baseline.log`). Konkret
+scheitert eine Box mit Masse `1e-300` kg und Kanten `1e200` m am vorzeitig
+überlaufenden Quadrat, obwohl ihre Trägheiten endlich sind. Bei einer Kugel mit
+kleinster positiver Double-Masse und Radius `1e160` m rundet der alte Vorfaktor
+zu null. Die neue positive Integerakkumulation rundet die rationalen
+Kugel-/Boxformeln einmal. Identitätsenergie nutzt dieselbe Summation;
+allgemeine Quaternionrotation bleibt eine skalierte Binary64-Näherung.
+[Vertrag und Grenzen](mechanics.md).
+
+Die unabhängige Prüfung enthält 1046 rationale C-Fälle, 48 Physim-Fälle und
+260 gedrehte Körper gegen eine 120-stellige Decimal-Rotationsmatrix. Für die
+allgemeine Rotation gilt in diesen Referenzen relative Toleranz `2e-14` und
+absolute Toleranz von zwei kleinsten Subnormalwerten, keine Bitgleichheitszusage.
+Körper und Energieausgaben bleiben bei Fehlern unverändert. Die erste Sprach-
+Fixture wurde wegen einer verbotenen Mutation eines erfassten Werts abgewiesen
+(`run-__uaslei`); korrigierte Funktionen verwenden eigene lokale Körperkopien.
+Der korrigierte Mac-Vorlauf besteht 4/4 (`run-kwelpa5e`), der zusätzliche
+Rotationslauf 1/1 (`run-rbobnntl`).
+
+Die erweiterte native Auswahl besteht auf Intel macOS 14.6.1/Apple Clang 16 mit
+26/26 unter `build/contact-world-language-release-mac/test-results/run-3v6rc0qy`
+und auf Debian 12/GCC 12.2 mit 26/26 unter
+`build/contact-world-language-release-linux/test-results/run-vwkp9oqa`.
+Sie umfasst Mechanik, Box-/Paar-/Graphkontakte, Gelenke, Kontaktverwaltung,
+Broad Phase, C-/Physim-Stoßparität, echte Stoß-/Boxläufe und Prüfkiterstellung.
+Linux/Clang 14 besteht dieselbe Auswahl mit zusätzlicher Kugel-Sweep-Prüfung
+unter ASan/UBSan mit 27/27 in
+`build/atspi-asan-linux/test-results/run-k9oardvp`.
+`ASAN_OPTIONS=detect_leaks=0` lässt Address-/UB-Prüfungen aktiv. macOS-Sanitizer
+bleiben wegen fehlendem `ld64.lld` ungeprüft.
+
+Die tatsächlichen Physim-App-Workflows für Kugel- und Boxstöße bestehen auf
+macOS mit 2/2 (`run-ab687ilq`) und Linux/X11 mit 2/2 (`run-h5p7p25i`) in den
+jeweiligen Release-Testverzeichnissen. Alle 31 Referenzdokumente sind geprüft.
+Die unabhängige Prüfkiterstellung besteht mit 119 genau manifestierten Eingaben,
+SHA-256, Paketgrenzen, fehlenden/dynamischen Pfaden und exklusiver Erstellung.
+Ein parallel zum GUI-Build gestarteter SDK-Build wurde durch die Build-Sperre
+korrekt zurückgewiesen; erst nach Abschluss dieses Builds wurde er gestartet.
+
+PP-0382 bleibt für umfassende Lage-/Winkelgeschwindigkeits-/Dynamikabnahme offen.
+PP-0385 besitzt eine konkrete Lücke: Allgemeine konvexe Körper fehlen im
+Narrow-Phase-Vertrag. Keine vollständige Mechanik-, Windows-, Apple-Silicon-
+oder gesamte Produktabnahme wird aus diesen fokussierten Nachweisen abgeleitet.
+
+Das macOS-SDK besteht `--body-only` unter
+`build/body-sdk-checks/Native SDK ä jn4ccpv4`, das Linux-SDK unter
+`build/body-sdk-checks/Native SDK ä 5nk_v3fm`. Beide enthalten 460 manifestierte
+Dateien. Installierter und allein aus SDK-Quellen neu gebauter Core bestehen
+jeweils rationale C-/Physim- und Decimal-Rotationsgegenproben. Der Paketcompiler
+übersetzt die Sprach-Fixture selbst. Unter Linux läuft der Prüfer ausschließlich
+aus `build/body-independent-kit`, ohne Implementierung oder Entwicklerheader im
+Prüfkit. Die letzte Belegergänzung dieser Dokumentation erfolgte nach Paketierung;
+Implementierung, öffentliche Header und Testeingaben blieben unverändert.
+Die 16 geänderten Dateien stimmen zwischen macOS und Linux per SHA-256 überein
+(`build/body-source-freeze.json`); SDK-Belege liegen unter
+`build/body-sdk-{mac,linux}-PASSED.json`.

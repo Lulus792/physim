@@ -1005,3 +1005,13 @@ Referenzen, SI-Basisdefinitionen und ursprüngliche Runtime-Diagnosecodes mit
 installiertem und aus verschobenen Paketquellen gebautem Core. Manifest und
 Verschiebung sind enthalten; vollständige SDK-/GUI-Abnahme bleibt gesondert.
 Andere fokussierte Modi können nicht gleichzeitig gewählt werden.
+
+Die fokussierte Körperprüfung umfasst rationale Kugel-/Boxträgheit, Energie in
+Hauptachsen und unabhängige Decimal-Referenzen für gedrehte Körper, jeweils
+gegen installierten und aus SDK-Quellen neu gebauten Core:
+
+```sh
+python3 tools/verify-native-sdk.py --sdk build/package --work build/body-package-checks --body-only
+```
+
+Sie bestätigt keine vollständige Mechanik- oder GUI-Abnahme.

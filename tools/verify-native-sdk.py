@@ -117,6 +117,19 @@ def verify_unit_conversion(repo, sdk, consumer, builder, library, rebuilt_core, 
                  "--language", language, "--fixture", repo / "tests/fixtures/language/unit_conversion_range.phys"])
     print("Installed/rebuilt SDK units: exact rational conversions, SI definitions, identity bits, range/dimension failures, aliases, typed diagnostics, typed SI channel sampling, actual C/Physim sensor runs/CSV and parity passed", flush=True)
 
+def verify_body_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked):
+    """Independent solid-body and rotated-energy references for packaged Core."""
+    shutil.copy2(repo / "tests/body_range_probe.c", consumer / "body-range-probe.c")
+    checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
+             repo / "tests/fixtures/language/body_range.phys"], output=consumer / "body-range-language.c")
+    for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
+        probe = builder.executable("body-range-probe-" + kind, ["body-range-probe.c"], [archive])
+        language = builder.executable("body-range-language-" + kind, ["body-range-language.c"], [archive], language=True)
+        checked([sys.executable, repo / "tests/test_body_range_oracle.py", "--c", probe,
+                 "--language", language, "--fixture", repo / "tests/fixtures/language/body_range.phys"])
+    print("Installed/rebuilt SDK bodies: rational sphere/box inertia, identity energy, independent Decimal rotated energy and atomic range errors passed", flush=True)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sdk", type=Path, required=True)
@@ -135,7 +148,11 @@ def main():
                         help="Verify exact cubic curves only; no GUI or full domain acceptance")
     parser.add_argument("--units-only", action="store_true",
                         help="Verify unit conversion and diagnostics only; no GUI or full domain acceptance")
+    parser.add_argument("--body-only", action="store_true",
+                        help="Verify solid-body inertia and energy range only; no full mechanics or GUI acceptance")
     args = parser.parse_args()
+    if args.body_only and (args.scalar_only or args.transform_only or args.stream_only or args.comparison_only or args.curve_only or args.units_only or args.app_tests):
+        parser.error("--body-only cannot be combined with other focused modes or --app-tests")
     if args.units_only and (args.scalar_only or args.transform_only or args.stream_only or args.comparison_only or args.curve_only or args.app_tests):
         parser.error("--units-only cannot be combined with other focused modes or --app-tests")
     if args.curve_only and (args.scalar_only or args.transform_only or args.stream_only or args.comparison_only or args.app_tests):
@@ -211,6 +228,13 @@ def main():
         builder.includes = [sdk / "include"]
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+        if args.body_only:
+            shutil.copytree(sdk / "src", consumer / "src")
+            rebuilt_core = builder.archive("sdk-rebuilt-core", [f"src/{name}.c" for name in native.CORE])
+            verify_body_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
+            (root / "PASSED.txt").write_text("Focused C/Physim body SDK verification passed; installed/rebuilt Core, rational inertia/identity energy, Decimal rotated energy, manifest and relocation; no full mechanics or GUI acceptance.\n", encoding="utf-8")
+            print(f"Body SDK verified: {root}")
+            return
         if args.units_only:
             shutil.copytree(sdk / "src", consumer / "src")
             rebuilt_core = builder.archive("sdk-rebuilt-core", [f"src/{name}.c" for name in native.CORE])
@@ -351,6 +375,7 @@ def main():
                      "--cases", repo / "tests/fixtures/ode_range_cases.json",
                      "--fixture", repo / "tests/fixtures/language/ode_range.phys"])
         print("Installed/rebuilt SDK ODE range: five C/Physim methods, 244 exact constant-solution references, 32 states and true overflow rollback passed", flush=True)
+        verify_body_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_unit_conversion(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_curve_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_close_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)

@@ -1,4 +1,5 @@
 #include "physim/mechanics.h"
+#include "body_numeric.h"
 #include <math.h>
 #include <string.h>
 
@@ -27,7 +28,7 @@ ps_result ps_body_sphere(double mass, double radius, ps_body *out) {
     ps_body b = {0};
     b.mass_kg = mass;
     b.orientation.w = 1;
-    double inertia = mass ? .4 * mass * radius * radius : 0;
+    double inertia = mass ? body_inertia(mass, radius, 0, true) : 0;
     b.inertia_kg_m2 = ps_v3(inertia, inertia, inertia);
     if (ps_body_validate(&b) != PS_OK)
         return PS_NUMERIC;
@@ -41,9 +42,9 @@ ps_result ps_body_box(double mass, ps_vec3 size, ps_body *out) {
     b.mass_kg = mass;
     b.orientation.w = 1;
     if (mass) {
-        b.inertia_kg_m2 = ps_v3(mass / 12 * (size.y * size.y + size.z * size.z),
-                                mass / 12 * (size.x * size.x + size.z * size.z),
-                                mass / 12 * (size.x * size.x + size.y * size.y));
+        b.inertia_kg_m2 = ps_v3(body_inertia(mass, size.y, size.z, false),
+                                body_inertia(mass, size.x, size.z, false),
+                                body_inertia(mass, size.x, size.y, false));
     }
     if (ps_body_validate(&b) != PS_OK)
         return PS_NUMERIC;
@@ -85,9 +86,41 @@ ps_result ps_body_force_torque(const ps_body *b, ps_vec3 f, ps_vec3 p, ps_vec3 *
 ps_result ps_body_kinetic_energy(const ps_body *b, double *out) {
     if (ps_body_validate(b) != PS_OK || !out)
         return PS_INVALID;
-    double energy =
-        .5 * b->mass_kg * ps_vdot(b->velocity_m_s, b->velocity_m_s) +
-        .5 * ps_vdot(b->angular_velocity_rad_s, inertia_world(b, b->angular_velocity_rad_s, false));
+    uint32_t sum[BODY_WORDS] = {0};
+    double velocity[3] = {b->velocity_m_s.x, b->velocity_m_s.y, b->velocity_m_s.z};
+    for (unsigned i = 0; i < 3; i++) {
+        double factors[3] = {b->mass_kg, velocity[i], velocity[i]};
+        body_add_product(sum, factors, 3, 1);
+    }
+    if (b->orientation.x == 0 && b->orientation.y == 0 && b->orientation.z == 0) {
+        double angular[3] = {b->angular_velocity_rad_s.x, b->angular_velocity_rad_s.y,
+                             b->angular_velocity_rad_s.z};
+        double inertia[3] = {b->inertia_kg_m2.x, b->inertia_kg_m2.y, b->inertia_kg_m2.z};
+        for (unsigned i = 0; i < 3; i++) {
+            double factors[3] = {inertia[i], angular[i], angular[i]};
+            body_add_product(sum, factors, 3, 1);
+        }
+    } else {
+        double scale = fmax(fabs(b->angular_velocity_rad_s.x),
+                            fmax(fabs(b->angular_velocity_rad_s.y), fabs(b->angular_velocity_rad_s.z)));
+        if (scale) {
+            ps_quat q = b->orientation;
+            double qlength = quat_norm(q);
+            q.x /= qlength; q.y /= qlength; q.z /= qlength; q.w /= qlength;
+            ps_quat conjugate = {-q.x, -q.y, -q.z, q.w};
+            ps_vec3 normalized = ps_v3(b->angular_velocity_rad_s.x / scale,
+                                       b->angular_velocity_rad_s.y / scale,
+                                       b->angular_velocity_rad_s.z / scale);
+            ps_vec3 local = ps_quat_rotate(conjugate, normalized);
+            double components[3] = {local.x, local.y, local.z};
+            double inertia[3] = {b->inertia_kg_m2.x, b->inertia_kg_m2.y, b->inertia_kg_m2.z};
+            for (unsigned i = 0; i < 3; i++) {
+                double factors[5] = {inertia[i], scale, scale, components[i], components[i]};
+                body_add_product(sum, factors, 5, 1);
+            }
+        }
+    }
+    double energy = body_value(sum, 2);
     if (!isfinite(energy))
         return PS_NUMERIC;
     *out = energy;

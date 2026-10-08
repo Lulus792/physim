@@ -9,6 +9,30 @@ Der vollständige [Lernpfad zum elastischen und inelastischen Stoß](collision-t
 führt durch ein zentrales Vakuummodell mit wählbaren Massen, Geschwindigkeiten
 und Restitution sowie vollständigen C-/Physim-Quellen und Analysen.
 
+## Trägheit und Energiebereich
+
+Die homogene Vollkugel verwendet `I = 2*m*r²/5`, die Box mit vollen
+Kantenlängen beispielsweise `Ix = m*(y²+z²)/12`. Die Konstruktoren summieren
+Produkte der binären Eingaben exakt und runden die rationale Formel einmal
+auf den nächsten Binary64-Wert, bei Gleichstand zum geraden Wert.
+Zwischenprodukte dürfen den Double-Bereich überschreiten. Nur wenn die positive
+Endträgheit zu null rundet oder überläuft, folgt `PS_NUMERIC`; der Ausgabekörper
+bleibt unverändert. Masse null erzeugt weiterhin einen ruhenden statischen Körper.
+
+`ps_body_kinetic_energy` summiert Translation und Rotation in den gespeicherten
+Hauptachsen. Bei identischer Orientierung werden die binären Produkte exakt
+summiert und einmal gerundet. Für gedrehte Körper wird die Winkelgeschwindigkeit
+zunächst skaliert und mit dem normalisierten Quaternion in die Hauptachsen
+transformiert. Diese Rotation hat weiterhin Double-Rundungsfehler; ihre
+anschließenden Energieprodukte werden exakt summiert. So bleibt beispielsweise
+Energie bei sehr großer Geschwindigkeit und sehr kleiner Masse darstellbar,
+obwohl das unskalierte Geschwindigkeitsquadrat überlaufen würde.
+
+Eine zu null gerundete Energie ist gültig. Ein Energieüberlauf erhält den
+Ausgabeparameter. Diese Bereichsgarantien betreffen Konstruktoren und Energie;
+Schrittintegration, Drehmomente, Impulse und Kontaktlösung haben eigene
+Zwischenwerte und Genauigkeitsgrenzen.
+
 ## Stoßexperiment in der App
 
 1. Vorlage **Kugelstoß & Medien** anlegen und mit F5 bauen.

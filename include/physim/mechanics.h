@@ -13,10 +13,16 @@ typedef struct {
     ps_vec3 inertia_kg_m2;
 } ps_body;
 /* Homogeneous solid sphere/box, initially at rest at origin. Box sizes are full
- * extents, not half sizes. mass>=0, strictly positive radius/extents. */
+ * extents, not half sizes. mass>=0, strictly positive radius/extents. Dynamic
+ * inertias round the exact binary-input rational formulas once (nearest-even);
+ * zero-rounded/overflowed positive inertias return PS_NUMERIC atomically. */
 ps_result ps_body_sphere(double mass_kg, double radius_m, ps_body *out);
 ps_result ps_body_box(double mass_kg, ps_vec3 size_m, ps_body *out);
 ps_result ps_body_validate(const ps_body *body);
+/* Sum of translational and principal-axis rotational energy. Identity-frame
+ * terms round once; general rotation uses a normalized quaternion and scaled
+ * binary64 rotation before summation. Zero-rounded energy is valid; overflow
+ * returns PS_NUMERIC without changing joules. No full-range dynamics guarantee. */
 ps_result ps_body_kinetic_energy(const ps_body *body, double *joules);
 ps_result ps_body_point_velocity(const ps_body *body, ps_vec3 point_m, ps_vec3 *velocity_m_s);
 /* A force at a world-space point contributes (point-center) x force torque. */
