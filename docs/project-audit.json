@@ -6116,9 +6116,22 @@
       "kind": "list",
       "scope": "planned",
       "text": "- erzeugt Position, Geschwindigkeit, Winkel und Energie als Messkanäle.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "examples/pendulum/main.c",
+        "examples/language/pendulum.phys",
+        "examples/language/pendulum_rk4.phys",
+        "examples/language/pendulum_integrator.phys",
+        "examples/language/pendulum_rk45.phys",
+        "examples/language/pendulum_verlet.phys",
+        "examples/documentation/pendulum_main.c",
+        "examples/documentation/pendulum_main.phys",
+        "tests/test_pendulum_medium.c",
+        "tests/test_pendulum_tutorial.py",
+        "tests/test_language_experiment.c",
+        "docs/platform-validation.md"
+      ],
+      "note": "Neun kanonische SI-Messkanäle einschließlich direkter linearer Komponenten und nichtnegativem Betrag; bisherige sechs Indizes erhalten. Neun allgemeine Module/fünf Paare und beide Lernpfadmodelle mit fünf Integratoren, geänderter Länge/Amplitude, Ruhe, adaptiver Zeit, unabhängiger Kinematik/Tangential-/Energieprüfung, tatsächlich gespeicherten Läufen und C-/Physim-Appfenstern geprüft. Intel macOS und Debian bestanden; Linux ASan/UBSan bestanden. Aktuelle Windows/Arm-/Gesamtpaketabnahme fehlt weiterhin."
     },
     {
       "id": "PP-0764",

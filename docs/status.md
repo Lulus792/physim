@@ -2746,3 +2746,11 @@ ruhende Läufe erhalten keinen erfundenen Wert. 18 Referenzberichte und echte
 Mediumfenster bestehen auf macOS und Linux.
 [Verfahren](pendulum-tutorial.md#beobachtete-amplitudenabnahme),
 [ausgeführte Prüfungen](platform-validation.md#beobachtete-amplitudenabnahme-gespeicherter-pendelläufe).
+
+Die Pendelmodelle speichern jetzt zusätzlich lineare Geschwindigkeitskomponenten
+und den Betrag in `m/s`. Die neuen Kanäle sind gegen Kinematik, Tangentialbedingung
+und Energie sowie in tatsächlichen C-/Physim-Läufen geprüft. macOS und Linux
+bestehen je fünf native und drei App-Fälle, Linux zusätzlich zwei ASan/UBSan-
+Fälle. Ein veralteter Berichtstest aus dem Linux-Paketlauf wurde auf vier Plots
+und drei Tabellen erweitert und besteht auf beiden Systemen. Aktuelle neue
+Gesamtpakete und Windows/Apple-Silicon-Abnahme bleiben offen.

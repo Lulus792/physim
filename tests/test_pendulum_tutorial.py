@@ -18,18 +18,23 @@ def read(path):
             assert len(data)==size and zlib.crc32(data)==crc
             if kind==1:metadata=data.decode()
             if kind==2:
-                assert size==4+6*167
-                names=['angle','angular_velocity','position.x','position.y','energy','sensor.angle']
-                dimensions=[(0,0,0),(0,0,-1),(1,0,0),(1,0,0),(2,1,-2),(0,0,0)]
+                assert size==4+9*167
+                names=['angle','angular_velocity','position.x','position.y','energy','sensor.angle','velocity.x','velocity.y','speed']
+                dimensions=[(0,0,0),(0,0,-1),(1,0,0),(1,0,0),(2,1,-2),(0,0,0),(1,0,-1),(1,0,-1),(1,0,-1)]
                 for i,(name,dimension) in enumerate(zip(names,dimensions)):
                     at=4+i*167;assert data[at:at+48].split(b'\0')[0].decode()==name
                     assert struct.unpack_from('<7b',data,at+160)==dimension+(0,0,0,0)
-            if kind==3:rows.append(struct.unpack('<7d',data))
+            if kind==3:rows.append(struct.unpack('<10d',data))
             if kind==4:assert struct.unpack('<Q',data)[0]==len(rows);footer=True
             if kind==5:
-                assert struct.unpack_from('<I',data)[0]==3 and struct.unpack_from('<II',data,12)==(6,12)
+                assert struct.unpack_from('<I',data)[0]==3 and struct.unpack_from('<II',data,12)==(9,12)
                 scenes.append(data)
     assert footer and rows
+    length=float(dict(line.split('=',1) for line in metadata.splitlines() if '=' in line)['length_m'])
+    for t,a,w,x,y,e,sensor,vx,vy,speed in rows:
+        assert near(vx,length*math.cos(a)*w) and near(vy,length*math.sin(a)*w)
+        assert speed>=0 and near(speed,length*abs(w)) and near(speed,math.hypot(vx,vy))
+        assert near(x*vx+y*vy,0) and near(e,.5*speed*speed+9.80665*(y+length))
     return rows,scenes,metadata
 
 def near(x,y,tol=1e-12):return math.isfinite(x) and math.isfinite(y) and abs(x-y)<=tol*max(1,abs(x),abs(y))
@@ -63,7 +68,7 @@ for method in range(5):
         assert len(rows)==4001 and len(scenes)>100 and f'integrator={methods[method]}\n' in metadata
         for name,unit,dimension in [('length','m','1,0,0,0,0,0,0'),('initialAngle','rad','0,0,0,0,0,0,0'),('integrator','1','0,0,0,0,0,0,0')]:
             assert f'parameter_unit.{name}={unit}\n' in metadata and f'parameter_dimension.{name}={dimension}\n' in metadata
-        for i,(t,a,w,x,y,e,sensor) in enumerate(rows):
+        for i,(t,a,w,x,y,e,sensor,vx,vy,speed) in enumerate(rows):
             assert t==i*.005 and near(x,1.5*math.sin(a)) and near(y,-1.5*math.cos(a)) and near(sensor,a)
             assert near(e,.5*1.5**2*w*w+9.80665*1.5*(1-math.cos(a)))
         drift=max(abs(r[5]-rows[0][5]) for r in rows);drifts[language,method]=drift
@@ -77,7 +82,7 @@ for method in range(5):
     assert len(sa)==len(sb)
     for x,y in zip(sa,sb):
         assert x[:28]==y[:28] and len(x)==len(y)
-        offset=28+6*8
+        offset=28+9*8
         for i in range(12):
             at=offset+i*176;assert x[at:at+8]==y[at:at+8] and x[at+96:at+176]==y[at+96:at+176]
             for field in range(8,96,8):assert near(struct.unpack_from('<d',x,at+field)[0],struct.unpack_from('<d',y,at+field)[0])

@@ -28,6 +28,13 @@ static int units(ps_context *c) {
         ps_parameter_unit unit;CHECK(at<c->parameter_count && ps_parameter_unit_read(c,at,&unit)==PS_OK);
         CHECK(!memcmp(unit.dimension,dimensions[i],7) && unit.scale==1);
     }
+    const char *channels[]={"velocity.x","velocity.y","speed"};
+    const int8_t velocity_dimension[]={1,0,-1,0,0,0,0};
+    for(unsigned i=0;i<3;i++) {
+        CHECK(!strcmp(c->channels[6+i].name,channels[i]) &&
+              !memcmp(c->channels[6+i].dimension,velocity_dimension,7) &&
+              !strcmp(c->channels[6+i].unit,"m/s"));
+    }
     return 0;
 }
 static int forces(const ps_experiment_api *api,ps_context *c,double density) {
@@ -55,12 +62,19 @@ static int pair(const char *c_path,const char *phys_path,bool verlet) {
     double density=verlet?0:1.225;
     for(unsigned i=0;i<2;i++) {
         CHECK(!parameters(&c[i],density) && api[i]->create(&c[i])==PS_OK && ps_parameter_finalize(&c[i])==PS_OK);
-        CHECK(!units(&c[i]) && c[i].channel_count==6);
+        CHECK(!units(&c[i]) && c[i].channel_count==9);
     }
-    double initial[6];memcpy(initial,c[0].values,sizeof initial);
+    double initial[9];memcpy(initial,c[0].values,sizeof initial);
     ps_statistics noise={0};
     for(unsigned step=0;step<=5000;step++) {
-        for(unsigned channel=0;channel<6;channel++)CHECK(near(c[0].values[channel],c[1].values[channel]));
+        for(unsigned channel=0;channel<9;channel++)CHECK(near(c[0].values[channel],c[1].values[channel]));
+        for(unsigned i=0;i<2;i++) {
+            double a=c[i].values[0],w=c[i].values[1],vx=c[i].values[6],vy=c[i].values[7],speed=c[i].values[8];
+            CHECK(near(vx,1.2*cos(a)*w) && near(vy,1.2*sin(a)*w));
+            CHECK(speed>=0 && near(speed,1.2*fabs(w)) && near(speed,hypot(vx,vy)));
+            CHECK(near(c[i].values[2]*vx+c[i].values[3]*vy,0));
+            CHECK(near(c[i].values[4],.5*2*speed*speed+2*9.80665*(c[i].values[3]+1.2)));
+        }
         ps_statistics_push(&noise,c[0].values[5]-c[0].values[0]);
         if(step%1000==0)for(unsigned i=0;i<2;i++)CHECK(!forces(api[i],&c[i],density));
         if(step<5000)for(unsigned i=0;i<2;i++) {
@@ -71,16 +85,16 @@ static int pair(const char *c_path,const char *phys_path,bool verlet) {
     if(density)CHECK(c[0].values[4]<initial[4]*.99);
     for(unsigned i=0;i<2;i++) {
         ps_context peer={.struct_size=sizeof peer,.api_version=PS_API_VERSION,.seed=1007};
-        double held[6];memcpy(held,c[i].values,sizeof held);ps_rng held_rng=c[i].rng;
+        double held[9];memcpy(held,c[i].values,sizeof held);ps_rng held_rng=c[i].rng;
         CHECK(ps_parameter_override(&peer,"mass",.25)==PS_OK &&
               ps_parameter_override(&peer,"length",.7)==PS_OK &&
               ps_parameter_override(&peer,"initialAngle",-.5)==PS_OK);
         CHECK(api[i]->create(&peer)==PS_OK && api[i]->step(&peer,.01)==PS_OK);
         CHECK(!memcmp(held,c[i].values,sizeof held) && !memcmp(&held_rng,&c[i].rng,sizeof held_rng));
         CHECK(api[i]->reset(&c[i])==PS_OK);
-        for(unsigned channel=0;channel<6;channel++)CHECK(near(c[i].values[channel],initial[channel]));
+        for(unsigned channel=0;channel<9;channel++)CHECK(near(c[i].values[channel],initial[channel]));
         api[i]->destroy(&peer);
-        double saved[6];memcpy(saved,c[i].values,sizeof saved);ps_rng rng=c[i].rng;
+        double saved[9];memcpy(saved,c[i].values,sizeof saved);ps_rng rng=c[i].rng;
         CHECK(api[i]->step(&c[i],NAN)==PS_INVALID && !memcmp(saved,c[i].values,sizeof saved) && !memcmp(&rng,&c[i].rng,sizeof rng));
         CHECK(api[i]->step(&c[i],1e155)!=PS_OK && !memcmp(saved,c[i].values,sizeof saved) &&
               !memcmp(&rng,&c[i].rng,sizeof rng));

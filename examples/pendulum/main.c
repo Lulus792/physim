@@ -40,13 +40,14 @@ static ps_result measure(ps_context *c, const double state[2]) {
     double a = state[0], w = state[1];
     double values[] = {a, w, p->length * sin(a), -p->length * cos(a),
         0.5 * p->mass * p->length * p->length * w * w +
-        p->mass * gravity_m_s2 * p->length * (1 - cos(a)), a};
-    for (unsigned i = 0; i < 6; i++)
+        p->mass * gravity_m_s2 * p->length * (1 - cos(a)), a,
+        p->length * cos(a) * w, p->length * sin(a) * w, p->length * fabs(w)};
+    for (unsigned i = 0; i < 9; i++)
         if (!isfinite(values[i])) return PS_NUMERIC;
     ps_rng rng = c->rng;
     if (p->noise) values[5] += ps_rng_normal(&rng, 0, p->noise);
     if (!isfinite(values[5])) return PS_NUMERIC;
-    for (unsigned i = 0; i < 6; i++) c->values[i] = values[i];
+    for (unsigned i = 0; i < 9; i++) c->values[i] = values[i];
     c->rng = rng;
     return PS_OK;
 }
@@ -100,6 +101,10 @@ static ps_result create(ps_context *c) {
     ps_channel_add(c, "position.y", PS_METRE, "Vertical position");
     ps_channel_add(c, "energy", PS_JOULE, "Kinetic plus gravitational potential energy");
     ps_channel_add(c, "sensor.angle", PS_RADIAN, "Angle with independent Gaussian sensor noise");
+    ps_unit velocity = {{1, 0, -1, 0, 0, 0, 0}, 1, "m/s"};
+    ps_channel_add(c, "velocity.x", velocity, "Horizontal velocity");
+    ps_channel_add(c, "velocity.y", velocity, "Vertical velocity");
+    ps_channel_add(c, "speed", velocity, "Nonnegative tangential speed");
     snprintf(
         c->model_metadata, sizeof c->model_metadata,
         "model=point pendulum, massless rigid rod, uniform "

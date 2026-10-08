@@ -112,6 +112,21 @@ Report-Vertrag reduzieren; `source_count` und vollständiges CSV bleiben verfüg
 Winkel, Energie und `E−E(0)` mit Einheiten. Auch gespeicherte C-Läufe sind in der
 Physim-Analyse und gespeicherte Sprachläufe in der C-Analyse verwendbar.
 
+## Gespeicherte lineare Geschwindigkeit
+
+Alle Pendelvorlagen und beide Lernpfadmodelle speichern neben Winkel,
+Winkelgeschwindigkeit, Position, Energie und Sensorwinkel drei direkte
+Messkanäle in `m/s`: `velocity.x`, `velocity.y` und `speed`. Bei
+`x = L sin(φ)` und `y = −L cos(φ)` gilt
+`vx = L cos(φ) ω`, `vy = L sin(φ) ω`, `speed = L |ω|`.
+Der Geschwindigkeitsvektor steht damit senkrecht zur Stange; sein Betrag
+ist nichtnegativ, während die Komponenten ihre Richtung behalten.
+Diese Werte stammen aus dem akzeptierten Modellzustand. Eine numerische
+Ableitung gespeicherter Positionen bleibt eine unabhängige Schätzung mit
+Zeitschrittfehlern. Winkelsensorrauschen verändert diese wahren Modellkanäle
+nicht. Die bisherigen sechs Kanäle behalten ihre Indizes; die neuen Kanäle
+stehen am Ende und erfordern keine Änderung des `.psrun`-Formats.
+
 ## Beobachtete Amplitudenabnahme
 
 Die dritte Tabelle **Observed amplitude decay** ergänzt die Energie- und
@@ -227,9 +242,10 @@ static void acceleration(double time,const double *q,double *out,void *user) {
 static ps_result measure(ps_context *c,const double state[2]) {
     pendulum *p=c->user;double a=state[0],w=state[1];
     double values[]={a,w,p->length*sin(a),-p->length*cos(a),
-        .5*p->length*p->length*w*w+gravity*p->length*(1-cos(a)),a};
-    for(unsigned i=0;i<6;i++)if(!isfinite(values[i]))return PS_NUMERIC;
-    for(unsigned i=0;i<6;i++)c->values[i]=values[i];
+        .5*p->length*p->length*w*w+gravity*p->length*(1-cos(a)),a,
+        p->length*cos(a)*w,p->length*sin(a)*w,p->length*fabs(w)};
+    for(unsigned i=0;i<9;i++)if(!isfinite(values[i]))return PS_NUMERIC;
+    for(unsigned i=0;i<9;i++)c->values[i]=values[i];
     return PS_OK;
 }
 static ps_result reset(ps_context *c) {
@@ -244,9 +260,10 @@ static ps_result create(ps_context *c) {
     if(r!=PS_OK)return r;
     if(p->method!=floor(p->method)){snprintf(c->error,sizeof c->error,"Integrator must be an integer from 0 to 4");return PS_INVALID;}
     ps_unit rate={{0,0,-1,0,0,0,0},1,"rad/s"};
-    const char *names[]={"angle","angular_velocity","position.x","position.y","energy","sensor.angle"};
-    ps_unit units[]={PS_RADIAN,rate,PS_METRE,PS_METRE,PS_JOULE,PS_RADIAN};
-    for(unsigned i=0;i<6;i++)if(ps_channel_add(c,names[i],units[i],names[i])!=(int)i)return PS_LIMIT;
+    ps_unit velocity={{1,0,-1,0,0,0,0},1,"m/s"};
+    const char *names[]={"angle","angular_velocity","position.x","position.y","energy","sensor.angle","velocity.x","velocity.y","speed"};
+    ps_unit units[]={PS_RADIAN,rate,PS_METRE,PS_METRE,PS_JOULE,PS_RADIAN,velocity,velocity,velocity};
+    for(unsigned i=0;i<9;i++)if(ps_channel_add(c,names[i],units[i],names[i])!=(int)i)return PS_LIMIT;
     snprintf(c->model_metadata,sizeof c->model_metadata,
         "model=point pendulum, massless rigid rod, vacuum\nlength_m=%.17g\ninitial_angle_rad=%.17g\nmass_kg=1\ngravity_m_s2=9.80665\nintegrator=%s\nrk45_absolute_tolerance=1e-10\nrk45_relative_tolerance=1e-8\nexcluded=drag, drive, rod inertia, contacts, sensor noise\n",p->length,p->angle,methods[(unsigned)p->method]);
     return reset(c);
@@ -466,6 +483,10 @@ let cx = Channel("position.x",metres,"position.x")
 let cy = Channel("position.y",metres,"position.y")
 let ce = Channel("energy",joules,"energy")
 let cs = Channel("sensor.angle",radians,"sensor.angle")
+let velocityUnit = Unit(1,0,-1,0,0,0,0,1,"m/s")
+let cvx = Channel("velocity.x",velocityUnit,"Horizontal velocity")
+let cvy = Channel("velocity.y",velocityUnit,"Vertical velocity")
+let cspeed = Channel("speed",velocityUnit,"Nonnegative tangential speed")
 var state = [initialAngle,0.0]
 func slope(time: Float64, value: [Float64]) -> [Float64]:
     return [value[1],-gravity / length * sin(value[0])]
@@ -481,6 +502,9 @@ func measure(value: [Float64]):
     cy.sample(y)
     ce.sample(energy)
     cs.sample(value[0])
+    cvx.sample(length * cos(value[0]) * value[1])
+    cvy.sample(length * sin(value[0]) * value[1])
+    cspeed.sample(length * abs(value[1]))
 func create():
     assert(method == floor(method),"Integrator must be an integer from 0 to 4")
     metadata("model=point pendulum, massless rigid rod, vacuum\nlength_m=" + String(length) + "\ninitial_angle_rad=" + String(initialAngle) + "\nmass_kg=1\ngravity_m_s2=9.80665\nintegrator=" + methods[Int64(method)] + "\nrk45_absolute_tolerance=1e-10\nrk45_relative_tolerance=1e-8\nexcluded=drag, drive, rod inertia, contacts, sensor noise\n")

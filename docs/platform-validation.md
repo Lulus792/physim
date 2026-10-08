@@ -1973,3 +1973,50 @@ Gesamtpakete dieser API-/Analyseänderung wurden noch nicht ausgeführt.
 PP-0767 besitzt damit einen begrenzten Nachweis für Periodendauer, beobachtete
 Amplitudenabnahme und Energieabweichung. Dies ist keine vollständige Abnahme
 des gesamten vertikalen Anwendungsfalls oder des Gesamtplans.
+
+## Direkte lineare Pendelgeschwindigkeit und Berichtsgegenprobe
+
+Die allgemeine C-Vorlage, alle fünf Physim-Pendelvorlagen sowie beide
+Lernpfadmodelle speichern nun `velocity.x`, `velocity.y` und `speed` als
+kanonische SI-Kanäle in `m/s`. Die ursprünglichen sechs Kanalindizes bleiben
+erhalten; neun Kanäle werden ohne Format-/ABI-Änderung geschrieben. Komponenten
+folgen der Ableitung der Kreisbahn, der Betrag ist `L |ω|`. Messwerte stammen
+vom akzeptierten Modellzustand, nicht von einer Ableitung des gespeicherten
+Sensorsignals. C prüft sämtliche neun Werte vor dem Commit; fehlgeschlagene
+Schritte erhalten auch die neuen Kanäle und den RNG-Zustand.
+
+`pendulum_medium` vergleicht neun Module in fünf C-/Physim-Paaren über je 5001
+Zustände. Kanalnamen und SI-Dimensionen, Vektorbetrag, Orthogonalität zur Stange
+und Energie aus der linearen Geschwindigkeit werden unabhängig geprüft,
+zusammen mit Mediumkräften, Rauschen, Reset und Fehlergrenzen. Der Lernpfadtest
+prüft die neuen Werte in allen gespeicherten Zeilen, einschließlich fünf
+Integratoren, geänderter Länge/Amplitude, Ruhe und adaptiver Zeiten. Seine
+PSRUN-/Szenen-Gegenprobe bleibt unabhängig vom Bibliotheksreader. Der
+Sprachintegrationstest prüft zusätzliche echte Runnerdateien.
+
+Intel macOS 14.6.1/Apple Clang 16 besteht fünf native Fälle 5/5
+(`run-c624o33a`); Debian 12/GCC 12.2 dieselben 5/5 (`run-7kzt1qd5`).
+Linux/Clang 14 mit ASan/UBSan besteht Lernpfad und Medium 2/2
+(`run-wjjohn89`, `detect_leaks=0`). Die tatsächlichen Standard-Sprach-, Lernpfad-
+und Mediumfenster bestehen macOS 3/3 (`run-cabirlw8`) und Linux 3/3
+(`run-5s3oovhd`). Alle 14 geänderten Implementierungs-/Testeingaben wurden
+zwischen beiden Testsystemen per SHA-256 abgeglichen.
+
+Der offizielle Linux-Paketlauf `37790113179` am vorherigen Stand `4ac9028`
+endete mit 677/678 bestandenen nativen Fällen. Das Artefakt
+`linux-release-build-tests` wurde vor dem Lesen gegen den offiziellen Digest
+`e0cdfa246f5b5a2d2851ceb001af94bd8e80aa8625fb83167d4e6331bd76ce50`
+geprüft. `derived_reference` erwartete noch drei Plots/zwei Tabellen, obwohl
+die Energieänderung und die neue Amplitudenabnahme den Bericht auf vier
+Plots/drei Tabellen erweitert haben. Die Gegenprobe prüft jetzt zusätzlich
+Energieeinheit, vollständige Kurvenquellen und kleine Vakuumenergieabweichung
+sowie Titel, Intervalle, Rate und Einheit der Abnahmetabelle. Sie besteht
+macOS 1/1 (`run-y7_q8fd7`) und Linux 1/1 (`run-cxzh78ag`). Ein zwischenzeitlicher
+zweiter Linux-Build wurde von der aktiven Buildsperre abgewiesen und erst nach
+Abschluss des ersten Builds erneut erfolgreich ausgeführt; dies ist kein
+zusätzlicher erfolgreicher Testlauf.
+
+PP-0763 ist damit im beschriebenen Umfang nachgewiesen. PP-0756 und die
+vollständige Plattform-/Paketabnahme bleiben offen; Windows und Apple Silicon
+wurden für diese Änderung nicht ausgeführt. Der neue Gesamtpaketlauf ist noch
+kein bestätigter Nachweis.

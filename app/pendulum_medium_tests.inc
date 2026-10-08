@@ -30,7 +30,10 @@ static void pendulum_medium_frame(app *a,int *stage,int *code,const char **captu
         ok &= fabs(initial-2*9.80665*1.5*(1-cos(.45)))<1e-12 && command(a,PS_MSG_RUN);break;
     case 3:
         if(a->simulation_time<6)return;
-        ok=a->values[4]<initial*.99;
+        ok=a->values[4]<initial*.99 && a->channel_count==9 &&
+           fabs(a->values[6]-1.5*cos(a->values[0])*a->values[1])<1e-12 &&
+           fabs(a->values[7]-1.5*sin(a->values[0])*a->values[1])<1e-12 &&
+           fabs(a->values[8]-hypot(a->values[6],a->values[7]))<1e-12;
         {unsigned drag=0;for(unsigned i=0;i<a->scene.count;i++)drag+=a->scene.objects[i].id==9 && a->scene.objects[i].shape==PS_ARROW;
          ok &= drag==1;}
         *capture="pendulum-medium-scene.bmp";ok &= command(a,PS_MSG_STOP);break;

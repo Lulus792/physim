@@ -529,3 +529,9 @@ Für C-Experimente wählen Kugelstoß, Wurf mit Unsicherheit und Boxstoß nun di
 passenden Physim-Auswertungen wie ihre Physim-Experimentvorlagen. Die allgemeine
 Positionsanalyse benötigt `position.x`; Kugelstoß stellt stattdessen
 `a.position`/`b.position` bereit und benötigt die eigene Stoßauswertung.
+
+Pendelprojekte speichern `velocity.x`, `velocity.y` und `speed` direkt in `m/s`.
+Die Komponenten behalten das Vorzeichen, der Betrag ist nichtnegativ und
+entspricht `length * abs(angular_velocity)`. Sie erscheinen wie die übrigen
+Messkanäle in Live-Werten, gespeicherten Läufen und Rohdatenexporten; die
+positionsbasierte Ableitung in der Auswertung bleibt eine eigene Schätzung.

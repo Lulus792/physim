@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
     uint32_t plots = 0, tables = 0;
     ps_report_describe(report, NULL, NULL, &plots, &tables);
     ps_curve_data curve;
-    ok = ok && plots == 3 && tables == 2;
+    ok = ok && plots == 4 && tables == 3;
     if (ps_report_curve_read(report, 0, 0, &curve) != PS_OK)
         ok = false;
     else {
@@ -81,6 +81,26 @@ int main(int argc, char **argv) {
             sum += curve.y[i];
         ok = ok && sum == 4001;
     }
+    ps_plot_info energy_plot;
+    if(ps_report_plot_read(report,3,&energy_plot)!=PS_OK ||
+       strcmp(energy_plot.title,"Mechanische Energieänderung") ||
+       energy_plot.y_unit.dimension[0]!=2 || energy_plot.y_unit.dimension[1]!=1 ||
+       energy_plot.y_unit.dimension[2]!=-2 ||
+       ps_report_curve_read(report,3,0,&curve)!=PS_OK)
+        ok=false;
+    else {
+        ok=ok && curve.source_count==4001 && curve.y[0]==0;
+        for(uint32_t i=0;i<curve.count;i++)ok=ok && fabs(curve.y[i])<1e-8;
+    }
+    ps_table_info decay;
+    ps_table_row decay_row;
+    if(ps_report_table_read(report,2,&decay)!=PS_OK ||
+       strcmp(decay.title,"Observed amplitude decay") || decay.columns!=5 || decay.rows!=1 ||
+       ps_report_row_read(report,2,0,&decay_row)!=PS_OK)
+        ok=false;
+    else
+        ok=ok && decay_row.values[0]>=6 && fabs(decay_row.values[2])<1e-5 &&
+           decay.column[2].unit.dimension[2]==-1;
     ps_table_row metrics;
     if (ps_report_row_read(report, 1, 0, &metrics) != PS_OK)
         ok = false;

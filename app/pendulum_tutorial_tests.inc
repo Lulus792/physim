@@ -28,7 +28,7 @@ static void pendulum_tutorial_frame(app *a,int *stage,int *code,const char **cap
     case 3:
         if(a->simulation_time<=held)return;
         if(steps<40){*stage=2;return;}
-        ok=a->paused && a->channel_count==6 && a->values[0]<.45 && a->values[1]<0 &&
+        ok=a->paused && a->channel_count==9 && a->values[0]<.45 && a->values[1]<0 &&
             fabs(a->values[4]-initial)<1e-4 && a->scene.count==12;
         *capture="pendulum-verlet-scene.bmp";ok &= command(a,PS_MSG_STOP);break;
     case 4:

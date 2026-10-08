@@ -15,6 +15,10 @@ let cx = Channel("position.x",metres,"position.x")
 let cy = Channel("position.y",metres,"position.y")
 let ce = Channel("energy",joules,"energy")
 let cs = Channel("sensor.angle",radians,"sensor.angle")
+let velocityUnit = Unit(1,0,-1,0,0,0,0,1,"m/s")
+let cvx = Channel("velocity.x",velocityUnit,"Horizontal velocity")
+let cvy = Channel("velocity.y",velocityUnit,"Vertical velocity")
+let cspeed = Channel("speed",velocityUnit,"Nonnegative tangential speed")
 var state = [initialAngle,0.0]
 func slope(time: Float64, value: [Float64]) -> [Float64]:
     return [value[1],-gravity / length * sin(value[0])]
@@ -30,6 +34,9 @@ func measure(value: [Float64]):
     cy.sample(y)
     ce.sample(energy)
     cs.sample(value[0])
+    cvx.sample(length * cos(value[0]) * value[1])
+    cvy.sample(length * sin(value[0]) * value[1])
+    cspeed.sample(length * abs(value[1]))
 func create():
     assert(method == floor(method),"Integrator must be an integer from 0 to 4")
     metadata("model=point pendulum, massless rigid rod, vacuum\nlength_m=" + String(length) + "\ninitial_angle_rad=" + String(initialAngle) + "\nmass_kg=1\ngravity_m_s2=9.80665\nintegrator=" + methods[Int64(method)] + "\nrk45_absolute_tolerance=1e-10\nrk45_relative_tolerance=1e-8\nexcluded=drag, drive, rod inertia, contacts, sensor noise\n")

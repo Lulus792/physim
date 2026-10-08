@@ -552,3 +552,16 @@ Ein konstantes physikalisches Dämpfungsmodell wird nicht aus quadratischem
 Widerstand vorausgesetzt. PP-0756 bleibt für die gesamte vertikale Abnahme
 offen. Aktuell: 41 implementierte, 9 unvollständige und 481 ungeprüfte Blöcke.
 Alle 531 Originaltexte bleiben erhalten.
+
+## Direkte Pendelgeschwindigkeit
+
+PP-0763 besitzt jetzt einen konkreten Nachweis: neun SI-Kanäle, darunter
+`velocity.x`, `velocity.y` und `speed`, in allen allgemeinen Pendelvorlagen
+und beiden Lernpfadmodellen. Kinematik, Tangentialbedingung und Energie werden
+gegen die tatsächlichen Modellzustände und gespeicherten Dateien geprüft.
+macOS/Linux bestehen native und tatsächliche App-Fälle, Linux zusätzlich
+ASan/UBSan. Ein veralteter Paket-Berichtsvergleich wurde ebenfalls korrigiert.
+Die vollständigen Plattform-/Paket- und vertikalen Abnahmen bleiben offen.
+
+Alle **531 Originalblöcke** bleiben erhalten: **42 implemented**, **9 incomplete**,
+**480 unverified**. `completion_proven` bleibt `false`.

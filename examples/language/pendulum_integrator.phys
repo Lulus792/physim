@@ -23,6 +23,10 @@ let xChannel = Channel("position.x", metres, "Horizontal position")
 let yChannel = Channel("position.y", metres, "Vertical position")
 let energyChannel = Channel("energy", joules, "Kinetic plus gravitational potential energy")
 let sensorChannel = Channel("sensor.angle", radians, "Angle with independent Gaussian sensor noise")
+let velocityUnit = Unit(1, 0, -1, 0, 0, 0, 0, 1, "m/s")
+let vxChannel = Channel("velocity.x", velocityUnit, "Horizontal velocity")
+let vyChannel = Channel("velocity.y", velocityUnit, "Vertical velocity")
+let speedChannel = Channel("speed", velocityUnit, "Nonnegative tangential speed")
 struct PendulumState:
     let phase: Vec2
     func advanced(time: Float64, dt: Float64) -> PendulumState:
@@ -47,6 +51,9 @@ func measure():
         if sensorNoise > 0:
             sensed += randomNormal(0, sensorNoise)
         sensorChannel.sample(sensed)
+        vxChannel.sample(length * cos(state.x) * state.y)
+        vyChannel.sample(length * sin(state.x) * state.y)
+        speedChannel.sample(length * abs(state.y))
 
 func create():
     metadata("model=point pendulum, massless rigid rod, uniform gravity\nlength_m=" + String(length) + "\ninitial_angle_rad=" + String(initialAngle) + "\nmass_kg=" + String(mass) + "\nmedium_density_kg_m3=" + String(airDensity) + "\ndrag_coefficient=" + String(dragCoefficient) + "\narea_m2=" + String(area) + "\ngravity_m_s2=9.80665\nintegrator=RK4\nsensor_noise_rad=" + String(sensorNoise) + "\nadaptive_integrator=Dormand-Prince 5(4)\nadaptive_absolute_tolerance=1e-10\nadaptive_relative_tolerance=1e-8")

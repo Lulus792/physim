@@ -23,6 +23,10 @@ let xChannel = Channel("position.x", metres, "Horizontal position")
 let yChannel = Channel("position.y", metres, "Vertical position")
 let energyChannel = Channel("energy", joules, "Kinetic plus gravitational potential energy")
 let sensorChannel = Channel("sensor.angle", radians, "Angle with independent Gaussian sensor noise")
+let velocityUnit = Unit(1, 0, -1, 0, 0, 0, 0, 1, "m/s")
+let vxChannel = Channel("velocity.x", velocityUnit, "Horizontal velocity")
+let vyChannel = Channel("velocity.y", velocityUnit, "Vertical velocity")
+let speedChannel = Channel("speed", velocityUnit, "Nonnegative tangential speed")
 struct PendulumState:
     let phase: Vec2
     func advanced(time: Float64, dt: Float64) -> PendulumState:
@@ -47,6 +51,9 @@ func measure():
         if sensorNoise > 0:
             sensed += randomNormal(0, sensorNoise)
         sensorChannel.sample(sensed)
+        vxChannel.sample(length * cos(state.x) * state.y)
+        vyChannel.sample(length * sin(state.x) * state.y)
+        speedChannel.sample(length * abs(state.y))
 
 func create():
     assert(airDensity == 0 || dragCoefficient == 0 || area == 0,"Velocity Verlet requires zero velocity-dependent drag")

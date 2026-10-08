@@ -62,7 +62,7 @@ static int pendulum_api(const char *path, const char *reference_path,
     CHECK(api && reference);
     ps_context a = context(), b = context();
     CHECK(api->create(&a) == PS_OK && reference->create(&b) == PS_OK);
-    CHECK(a.channel_count == 6 && a.channel_count == b.channel_count);
+    CHECK(a.channel_count == 9 && a.channel_count == b.channel_count);
     CHECK(strstr(a.model_metadata, integrator_name));
     for (unsigned step = 0; step <= 4000; step++) {
         for (uint32_t channel = 0; channel < a.channel_count; channel++) {
@@ -369,7 +369,7 @@ static int runner(const char *runner_path, const char *module_path, const char *
     CHECK(code == 0);
     ps_run_reader reader;
     CHECK(ps_run_open(&reader, path) == PS_OK);
-    CHECK(reader.channels == (pendulum == 2 ? 2u : pendulum ? 6u : 5u));
+    CHECK(reader.channels == (pendulum == 2 ? 2u : pendulum ? 9u : 5u));
     CHECK(strstr(reader.metadata, "language=physim-0.182.0\ncompiler=physimc-0.1.0-dev"));
     CHECK(strstr(reader.metadata, "source_fnv1a64=") && strstr(reader.metadata, "module_fnv1a64="));
     if (pendulum == 3)
@@ -383,6 +383,12 @@ static int runner(const char *runner_path, const char *module_path, const char *
         double time, values[PS_MAX_CHANNELS];
         CHECK(ps_run_next(&reader, &time, values) == PS_OK);
         CHECK(near(time, frame * 0.005));
+        if (pendulum && pendulum!=2) {
+            CHECK(near(values[6],1.5*cos(values[0])*values[1]));
+            CHECK(near(values[7],1.5*sin(values[0])*values[1]));
+            CHECK(values[8]>=0 && near(values[8],1.5*fabs(values[1])) &&
+                  near(values[8],hypot(values[6],values[7])));
+        }
         if (pendulum == 2) {
             double uniform, normal;
             CHECK(ps_distribution_sample((ps_distribution){PS_DIST_UNIFORM, -2, 3}, &random,
@@ -480,7 +486,7 @@ int main(int argc, char **argv) {
     CHECK(api[0]->create(&a) == PS_OK && api[0]->create(&b) == PS_OK);
     CHECK(a.user && b.user && a.user != b.user);
     CHECK(api[1]->create(&reference) == PS_OK);
-    CHECK(a.channel_count == reference.channel_count && a.channel_count == 6);
+    CHECK(a.channel_count == reference.channel_count && a.channel_count == 9);
     for (uint32_t ch = 0; ch < a.channel_count; ch++) {
         CHECK(!strcmp(a.channels[ch].name, reference.channels[ch].name));
         CHECK(!memcmp(a.channels[ch].dimension, reference.channels[ch].dimension, 7));
