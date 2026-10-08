@@ -415,7 +415,7 @@ und Umlaut. Sie prüft alle mitgelieferten Module, öffentliche Header einzeln,
 23 eigenständige Sprachprogramme und neu gebaute C-/Physim-Projekte samt echten
 Runnern und Mess-/Berichtsdateien. Zusätzlich werden die installierten Core-Quellen,
 alle acht C-Vorlagen samt Analyse sowie 52 Sprachmodule unabhängig neu gebaut.
-Der Repository- und der native Projektbuilder verwenden dieselben 26 Core-Module;
+Der Repository- und der native Projektbuilder verwenden dieselben 28 Core-Module;
 `core_catalog` prüft ihre vollständigen geordneten Listen. Acht zusätzliche kalte
 Projektbuilds kompilieren die dokumentierten Thermodynamik-, RC-, Saiten- und
 Transportquellen jeweils in C und Physim mit dem tatsächlichen `physim-build`.
@@ -953,3 +953,17 @@ aus Paketquellen neu gebauten Core gegen rationale C-/Physim-Transformationen un
 Decimal-Normalenreferenzen. Auslöschung, projektive Quotienten, kleinste/große Werte,
 Rundungsgrenzen und atomare Fehler sind enthalten. Er ersetzt keine vollständige
 SDK-Domänen- oder Grafikabnahme und lässt sich nicht mit `--app-tests` kombinieren.
+
+### Run-Streams aus einem SDK prüfen
+
+Die zusätzliche fokussierte Run-Stream-Prüfung verifiziert opake Reader-/Writer-
+Handles, Allocatorfehler, alte/fremde Handles, Slotgrenzen, transaktionale
+Messzeilen, Snapshots und abgebrochene Läufe gegen die installierte und aus
+SDK-Quellen neu gebaute Core-Bibliothek:
+
+```sh
+python3 tools/verify-native-sdk.py --sdk build/package --work build/stream-package-checks --stream-only
+```
+
+Sie prüft Manifestintegrität und Verschiebbarkeit. Sie ersetzt keine vollständige
+SDK- oder GUI-Abnahme und kann nicht mit anderen fokussierten Modi kombiniert werden.

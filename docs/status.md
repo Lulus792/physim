@@ -2524,3 +2524,10 @@ C-/Physim-APIs und unabhängigen Referenzen zugeordnet. Punkte/Richtungen erhalt
 exakte binäre Zeilensummen und projektive Quotienten; Normalen werden direkt aus
 dem skalierten transponierten System berechnet. [Konventionen und Grenzen](math.md)
 begrenzen diesen Nachweis; der vollständige Projektplan bleibt offen.
+
+
+Run-Dateien besitzen nun eine zusätzliche opake Streaming-API mit explizitem
+Store, geprüften Generationen und kopierten Statuswerten. Experiment-Runner und
+Importvalidierung benutzen sie; Abbruch erhält unvollständige Präfixdaten.
+[Lebensdauer und offene Migration](run-streams.md) begrenzen diesen Fortschritt;
+Legacy-Dateideskriptoren und die allgemeine Handle-Forderung bleiben offen.

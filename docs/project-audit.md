@@ -20,7 +20,7 @@ Umfang nicht ersetzen.
 | Planbereich | Aktuelle Grundlage | Noch erforderlicher Nachweis oder Arbeit |
 | --- | --- | --- |
 | Plattformen und Pakete (§2, Phase 10) | Ausgeführte Intel-macOS-/Debian-Builds, verschobene SDKs und historische CI-Nachweise in [Plattformprüfung](platform-validation.md) | Aktuelle vollständige Windows-/Apple-Silicon-/Intel-/Linux-Matrix; frische Systeme. Signierung/Notarisierung bleibt an Entwicklerzugänge gebunden. |
-| Direkte Projektbuilds (§2) | `app/build_main.c`, `tools/build.py`, `tests/test_bootstrap_build.py`; einheitlich geprüfte 27 Core-Module, zwölf native Domänenprojekte mit unabhängigen Lernorakeln und verschobene SDKs | Gegen sämtliche aktuellen Plattformen prüfen. Alte CMake-Skizzen sind durch die ausdrückliche Ergänzung zu direkten Builds abgelöst. |
+| Direkte Projektbuilds (§2) | `app/build_main.c`, `tools/build.py`, `tests/test_bootstrap_build.py`; einheitlich geprüfte 28 Core-Module, zwölf native Domänenprojekte mit unabhängigen Lernorakeln und verschobene SDKs | Gegen sämtliche aktuellen Plattformen prüfen. Alte CMake-Skizzen sind durch die ausdrückliche Ergänzung zu direkten Builds abgelöst. |
 | Kern und Numerik (§7) | Öffentliche GUI-unabhängige Header, Referenz-, Konvergenz- und Fehlertests | Jede explizite Algorithmusforderung und ihr dokumentiertes Fehler-/Einheitenverhalten einzeln zuordnen; keine Ableitung aus bloßer Funktionszahl. |
 | Sprache und Bindungen (§10, LANG-001..007) | Version 0.182.0, Lexer/Parser/Checker/C17-Backend, typisierte Werte, Module, Generics, Runner- und Analysebindungen | Vollständigen semantischen Vertrag und C-/Physim-Funktionsparität prüfen. `LANG-005` besitzt jetzt explizite Batch-Hostdienste und besitzende Sprachwerte mit Start, Pause, Wiederaufnahme, Archivabfragen, Statistik, Diagrammen und Export. Die vollständige Sprach-/Produktabnahme und neue Remote-Matrix bleiben offen. |
 | Barrierefreiheit (Phase 10, PP-0710) | Themes, Code-Schriftgröße, Tastenkürzel und vollständige Hauptmenüführung per F10/Pfeilen/Enter sowie Einstellungsgruppen, Handbuch und Projekterstellung per Tab/Pfeilen/Enter mit sichtbarem, automatisch gescrolltem Fokus; `app/preferences.h`, `app/settings_ui.inc`, `app/toolbar_ui.inc` | UI-Schriftgröße ist unabhängig einstellbar; vollständige Tastaturführung und grundlegender Screenreader-Zugang bleiben offen. |
@@ -128,7 +128,7 @@ verbrauchsfreie degenerierte Verteilungen, Snapshots und unabhängige Wertkopien
 von plattformabhängiger libm-Rundung.
 
 PP-0352 bleibt ungeprüft für seinen gesamten Umfang. Series/Dataset und
-Reportelemente besitzen geprüfte generationale Handles; Reader/Writer und weitere
+Reportelemente besitzen append-only Besitzer-/Index-Handles; Reader/Writer und weitere
 Deskriptoren enthalten weiterhin öffentliche Zustandsfelder. Einzelne sichere
 Handle-APIs beweisen nicht automatisch die allgemeine Anforderung. Auch die
 vollständige Allocator-Anbindung sämtlicher Subsysteme und die aktuelle gesamte
@@ -288,3 +288,14 @@ vollständig darstellbare Inverse. [Verträge und Grenzen](math.md) halten
 Konventionen, Einheiten und Konditions-/Pivotgrenzen fest.
 Aktuell: 28 implementierte, fünf unvollständige und 498 ungeprüfte Planblöcke.
 Die übrigen Mathematikforderungen und der gesamte Projektplan bleiben offen.
+
+
+## Opake Run-Streams (§7.1 / PP-0352)
+
+Die konkrete Lücke in öffentlichen Reader-/Writer-Zuständen wird durch opake
+Store-Objekte und owner/slot/generation-Kennungen bearbeitet. Runner und Import
+nutzen sie tatsächlich; alte Kopien, Fremdbesitzer, begrenzte Slots, Allocator-
+Fehler und atomare Streaming-Ausgaben werden geprüft. [Vertrag und Umstieg](run-streams.md)
+halten die verbleibenden Legacy-Zustände und Besitzerlebensdauer ausdrücklich fest.
+PP-0352 ist nun als unvollständig erfasst: 28 implementierte, sechs unvollständige
+und 497 ungeprüfte Planblöcke. Der vollständige Plan ist weiterhin offen.

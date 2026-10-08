@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-08",
-  "inspected_revision": "e33094d920708b85991842f6cedfdaf90429172a",
+  "inspected_revision": "63548b10dcbbe061a0bdd588c2f31f5a700a94d7",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2240,15 +2240,21 @@
       "kind": "list",
       "scope": "planned",
       "text": "- versionierte Handles statt frei erreichbarer interner Strukturen.\n",
-      "status": "unverified",
+      "status": "incomplete",
       "evidence": [
         "include/physim/series.h",
         "src/series.c",
         "include/physim/report.h",
         "include/physim/data.h",
-        "tests/test_series.c"
+        "tests/test_series.c",
+        "include/physim/run_stream.h",
+        "src/run_stream.c",
+        "runners/experiment.c",
+        "app/run_import.c",
+        "tests/test_run_stream.c",
+        "docs/run-streams.md"
       ],
-      "note": "Series/Dataset und Reportelemente besitzen owner/slot/generation mit Prüfungen auf alte Slots. Reader/Writer und andere Deskriptoren besitzen weiterhin öffentliche Zustandsfelder. Die vollständige Reichweite der allgemeinen Handle-Anforderung ist noch nicht einzeln abgenommen; keine Ableitung aus einzelnen generationalen APIs."
+      "note": "Dataset/Series besitzen owner/slot/generation; Reportelemente sind append-only owner/index-Handles ohne eigene Generation. Neue opake Run-Stream-Stores verbergen FILE-/Zählerzustände und prüfen owner/slot/generation, alte Kopien, Wiederverwendung, terminale Zustände und begrenzte Kapazität. Experiment-Runner und App-Importvalidierung sind darauf umgestellt. Legacy-Reader/Writer aus data.h und andere öffentliche Ressourcenzustände bleiben vorhanden; die allgemeine Handle-Migration sowie zusätzliche direkte Low-Level-Sprachbindungen sind nicht abgeschlossen. Handles müssen innerhalb der Besitzerlebensdauer verwendet werden."
     },
     {
       "id": "PP-0353",

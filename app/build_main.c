@@ -23,7 +23,7 @@
 #endif
 #define PATH_SIZE 4096
 static const char *const SDK_MODULES[] = {
-    "core", "memory", "array", "string_view", "hashmap", "math", "data", "run_index",
+    "core", "memory", "array", "string_view", "hashmap", "math", "data", "run_stream", "run_index",
     "snapshot", "analysis", "scene", "numerics", "units", "series", "report",
     "report_export", "mechanics", "contact_world", "box_contacts", "collision",
     "measurement", "thermodynamics", "electromagnetism", "waves", "optics", "fluid", "properties"

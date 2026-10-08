@@ -78,6 +78,8 @@ def catalog():
         Case("scene_hierarchy", ("tests/test_scene_hierarchy.c",), arguments=("{work}",)),
         Case("docking", ("tests/test_docking.c", "app/docking.c")),
         Case("timeline", ("tests/test_timeline.c", "app/timeline.c")),
+        Case("run_stream_retirement", ("tests/test_run_stream_retirement.c",), arguments=("{work}",)),
+        Case("run_stream", ("tests/test_run_stream.c",), arguments=("{work}",)),
         Case("run_snapshots", ("tests/test_run_snapshots.c",), arguments=("{work}",)),
         Case("adaptive", ("tests/test_adaptive.c",)),
         Case("pchip", ("tests/test_pchip.c",)),

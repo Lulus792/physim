@@ -1,5 +1,5 @@
 #include "physim/experiment.h"
-#include "physim/data.h"
+#include "physim/run_stream.h"
 #include "platform.h"
 #include "protocol.h"
 #include "pacing.h"
@@ -31,7 +31,7 @@ static void report(bool interactive,bool structured,const char *path,const ps_co
         else send_message(PS_MSG_ERROR,error,(uint32_t)strlen(error));
     } else fprintf(stderr,"%s\n",error);
 }
-static ps_result snapshot(const ps_experiment_api *api, ps_context *c, ps_run_writer *writer,
+static ps_result snapshot(const ps_experiment_api *api, ps_context *c, ps_run_store *store, ps_run_write_handle writer,
                           bool paused, bool emit) {
     ps_scene scene = {0};
     c->error[0] = 0;ps_diagnostic_clear(&c->diagnostic);
@@ -48,7 +48,7 @@ static ps_result snapshot(const ps_experiment_api *api, ps_context *c, ps_run_wr
     if(!(api->capabilities&PS_EXPERIMENT_SCENE_FRAMES))
         for(uint32_t i=0;i<scene.count;i++)if(scene.objects[i].shape==PS_FRAME)return PS_VERSION;
     if(!ps_scene_valid(&scene)) return PS_INVALID;
-    ps_result result = ps_run_append_snapshot(writer, c, &scene, paused);
+    ps_result result = ps_run_writer_snapshot(store, writer, c, &scene, paused);
     if (result != PS_OK) return result;
     last_snapshot_time = c->time_s;
     if (!emit) return PS_OK;
@@ -261,18 +261,20 @@ int main(int argc, char **argv) {
         api->destroy(&c);runner_log_close(&logs,c.time_s);
         ps_module_close(module);return 5;
     }
-    ps_run_writer writer;
-    result = ps_run_create(&writer, argv[2], &c, api->name);
+    ps_run_store *store=NULL;ps_run_write_handle writer;
+    result = ps_run_store_create(ps_allocator_default(),&store);
+    if(result==PS_OK)result=ps_run_writer_create(store,argv[2],&c,api->name,&writer);
     if (result != PS_OK) {
-        report(interactive,diagnostics,diagnostic_path,&c,PS_IO,"run.create","Cannot create run (path missing or file already exists)");
+        report(interactive,diagnostics,diagnostic_path,&c,result,"run.create","Cannot create run stream (allocation, invalid schema or occupied path)");
+        if(store)ps_run_store_destroy(store);
         api->destroy(&c);
         runner_log_close(&logs,c.time_s);
         ps_module_close(module);
         return 6;
     }
-    result = ps_run_append(&writer, 0, c.values);
+    result = ps_run_writer_append(store, writer, 0, c.values, c.channel_count);
     if (result == PS_OK && record_scenes && !interactive)
-        result = snapshot(api, &c, &writer, true, false);
+        result = snapshot(api, &c, store, writer, true, false);
     bool paused = true, stop = false, handshake = false;
     uint64_t tick = 0;
     ps_wire_buffer wire = {0};
@@ -303,7 +305,7 @@ int main(int argc, char **argv) {
                 if (type == PS_MSG_HELLO && n == 4 && ps_get_u32(p) == PS_ABI_VERSION &&
                     !handshake) {
                     handshake = true;
-                    result = snapshot(api, &c, &writer, paused, true);
+                    result = snapshot(api, &c, store, writer, paused, true);
                     if (result != PS_OK)
                         break;
                 } else if (handshake && type == PS_MSG_SPEED && n == 8 &&
@@ -318,7 +320,7 @@ int main(int argc, char **argv) {
                     pacer.running = true;
                     ps_pacer_restart(&pacer, now);
                     /* Report control state even when a slow, large dt is not due yet. */
-                    result = snapshot(api, &c, &writer, false, true);
+                    result = snapshot(api, &c, store, writer, false, true);
                     if (result != PS_OK)
                         break;
                     last_frame = now;
@@ -326,7 +328,7 @@ int main(int argc, char **argv) {
                     paused = true;
                     pacer.running = false;
                     ps_pacer_restart(&pacer, now);
-                    result = snapshot(api, &c, &writer, true, true);
+                    result = snapshot(api, &c, store, writer, true, true);
                     if (result != PS_OK)
                         break;
                 } else if (type == PS_MSG_STEP && paused)
@@ -403,9 +405,9 @@ int main(int argc, char **argv) {
         tick++;
         c.time_s = adaptive ? previous_time+accepted_dt : terminal?end_time:(double)tick * dt;
         if(adaptive || until_option) c.dt_s=accepted_dt;
-        result = ps_run_append(&writer, c.time_s, c.values);
+        result = ps_run_writer_append(store, writer, c.time_s, c.values, c.channel_count);
         if (interactive && (single || now - last_frame >= 1.0 / 60)) {
-            ps_result scene_result = snapshot(api, &c, &writer, paused, true);
+            ps_result scene_result = snapshot(api, &c, store, writer, paused, true);
             if (scene_result != PS_OK) {
                 result = scene_result;
                 break;
@@ -413,18 +415,16 @@ int main(int argc, char **argv) {
             last_frame = now;
         }
         if (!interactive && record_scenes && c.time_s - last_snapshot_time >= 1.0 / 60) {
-            ps_result scene_result = snapshot(api, &c, &writer, false, false);
+            ps_result scene_result = snapshot(api, &c, store, writer, false, false);
             if (scene_result != PS_OK) result = scene_result;
         }
     }
     if (result == PS_OK && last_snapshot_time >= 0 && c.time_s > last_snapshot_time)
-        result = snapshot(api, &c, &writer, true, interactive);
+        result = snapshot(api, &c, store, writer, true, interactive);
     if (result == PS_OK)
-        result = ps_run_close(&writer);
-    else {
-        fclose(writer.file);
-        writer.file = NULL;
-    }
+        result = ps_run_writer_release(store,writer);
+    else (void)ps_run_writer_abort(store,writer);
+    (void)ps_run_store_destroy(store);
     if (result != PS_OK)
         report(interactive,diagnostics,diagnostic_path,&c,result,"step",c.error[0]?c.error:ps_result_string(result));
     api->destroy(&c);

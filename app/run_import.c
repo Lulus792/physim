@@ -1,5 +1,5 @@
 #include "run_import.h"
-#include "physim/data.h"
+#include "physim/run_stream.h"
 #include <SDL3/SDL_timer.h>
 #include <SDL3/SDL_filesystem.h>
 #include <errno.h>
@@ -34,18 +34,22 @@ static bool publish(const char *temporary,const char *destination) {
 #endif
 }
 static ps_result validate(const char *path) {
-    ps_run_reader reader;ps_result r=ps_run_open(&reader,path);if(r!=PS_OK)return r;
-    double time,values[PS_MAX_CHANNELS],previous=0;bool have=false;
-    while((r=ps_run_next(&reader,&time,values))==PS_OK) {
+    ps_run_store *store;ps_result r=ps_run_store_create(ps_allocator_default(),&store);
+    if(r!=PS_OK)return r;
+    ps_run_read_handle reader;r=ps_run_reader_open(store,path,&reader);
+    if(r!=PS_OK){ps_run_store_destroy(store);return r;}
+    double time,values[PS_MAX_CHANNELS],previous=0;bool have=false;size_t count;
+    while((r=ps_run_reader_next(store,reader,&time,values,PS_MAX_CHANNELS,&count))==PS_OK) {
         if(have && time<=previous){r=PS_CORRUPT;break;}previous=time;have=true;
     }
-    ps_run_reader_close(&reader);
-    if(r!=PS_EOF && r!=PS_RECOVERED)return r;
+    ps_run_reader_release(store,reader);
+    if(r!=PS_EOF && r!=PS_RECOVERED){ps_run_store_destroy(store);return r;}
     bool recovered=r==PS_RECOVERED;
-    r=ps_run_open(&reader,path);if(r!=PS_OK)return r;
+    r=ps_run_reader_open(store,path,&reader);
+    if(r!=PS_OK){ps_run_store_destroy(store);return r;}
     ps_snapshot snapshot;
-    while((r=ps_run_snapshot_next(&reader,&snapshot))==PS_OK){}
-    ps_run_reader_close(&reader);
+    while((r=ps_run_reader_snapshot_next(store,reader,&snapshot))==PS_OK){}
+    ps_run_reader_release(store,reader);ps_run_store_destroy(store);
     return r==PS_EOF || r==PS_RECOVERED?(recovered || r==PS_RECOVERED?PS_RECOVERED:PS_OK):r;
 }
 ps_result ps_run_import(const char *source,const char *destination) {

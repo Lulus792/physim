@@ -266,3 +266,10 @@ Lorentzkraft, ideale Widerstände, Kondensatorenergie und exakte RC-Schritte.
 `physim/fluid.h` liefert Poiseuille-Rohre, Reynolds/Hydrostatik, passive Drucknetze
 und konservativen periodischen 1D-Tracertransport.
 [SI-Verträge, Grenzen und vollständige Quellen](fluid.md).
+
+
+`physim/run_stream.h` bietet opake, generationale Run-Reader/-Writer über einen
+expliziten Store. Kopierte Metadaten, atomare Streaming-Zeilen, Snapshots,
+Abschluss und ausdrücklicher Abbruch ersetzen direkten Zugriff auf `FILE*`.
+[Lebensdauer, Grenzen und Umstieg](run-streams.md) dokumentieren die Nutzung;
+die älteren Deskriptoren aus `data.h` bleiben zunächst kompatibel verfügbar.

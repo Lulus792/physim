@@ -348,3 +348,19 @@ add('ps_', {
     'vdw_gas_energy': 'Wertet U=n cv T-an²/V in J bei konstantem a,cv aus; Referenz T→0,V→∞ und signierte Ergebnisse.',
     'vdw_gas_entropy_change': 'Berechnet die Entropiedifferenz mit freiem Volumen V-nb bei konstantem cv,b; keine Entropieproduktion oder Phasenkoexistenz.',
 })
+
+add('ps_run_', {
+    'store_create': 'Erzeugt einen opaken Stream-Store aus einem expliziten Allocator; Ausgabe bleibt bei Fehlern unverändert.',
+    'store_destroy': 'Schließt Reader, finalisiert noch lebende Writer und gibt alle Ressourcen frei; erster Abschlussfehler wird zurückgegeben.',
+    'reader_open': 'Öffnet einen Run-Reader in einem freien generationierten Slot; Ausgabe bleibt bei Fehlern unverändert.',
+    'reader_describe': 'Kopiert Kanalplan, Metadaten und aktuellen Lesestatus eines gültigen Reader-Handles.',
+    'reader_next': 'Liest eine vollständig validierte Messzeile atomar; alle anderen Status erhalten Zeit, Werte und Anzahl.',
+    'reader_snapshot_next': 'Liest den nächsten validierten Snapshot über denselben Cursor; Fehler erhalten die Ausgabe.',
+    'reader_release': 'Schließt den Reader und invalidiert sämtliche Kopien seiner Kennung.',
+    'writer_create': 'Erzeugt eine exklusive Laufdatei in einem freien generationierten Writer-Slot.',
+    'writer_describe': 'Kopiert Kanalzahl und Zahl geschriebener Messzeilen eines gültigen Writers.',
+    'writer_append': 'Schreibt genau den deklarierten Kanalplan als endliche Messzeile; I/O-Fehler können einen unvollständigen Präfix hinterlassen.',
+    'writer_snapshot': 'Schreibt einen validierten Szenenzustand ohne neue Messzeile.',
+    'writer_abort': 'Schließt ohne Erfolgsfooter und invalidiert die Kennung; geschriebene valide Präfixdaten bleiben wiederherstellbar.',
+    'writer_release': 'Finalisiert Index und Footer und invalidiert die Kennung auch bei einem Abschlussfehler.',
+})

@@ -3582,3 +3582,75 @@ Receipts: `build/transform-sdk-linux-PASSED.json` und
 in `build/transform-source-freeze.json`; diese fortgeschriebene Prüfchronik ist
 bewusst ausgenommen. Die Quellen und Originaltexte aller 531 Planblöcke bleiben
 erhalten. PP-0357 ist begrenzt implementiert; der Gesamtplan bleibt offen.
+
+## Opake Run-Streams am 8. Oktober 2026
+
+`run_stream.h` ergänzt einen explizit allozierten opaken Store mit jeweils acht
+Reader-/Writer-Slots und Besitzer-/Slot-/Generationsprüfung. Schließen invalidiert
+alle Handlekopien; eine erschöpfte Generation wird stillgelegt. Fehler erhalten
+Reader-Ausgaben, bekannte Fehlerläufe lassen sich ohne Erfolgsfooter abbrechen.
+Experiment-Runner und Run-Importvalidierung verwenden die Schnittstelle tatsächlich.
+Die alte `data.h`-API und weitere öffentliche Ressourcenzustände bleiben bestehen;
+PP-0352 ist deshalb weiterhin unvollständig. [Verträge](run-streams.md).
+
+Intel macOS 14.6.1/Apple Clang 16 mit SDL 3.2.30 besteht die 20 ausgewählten
+Release-Integrationsfälle einschließlich C-/Physim-Runner, Run-Import, Snapshots,
+Core-Katalog und nativem Projektbuild unter
+`build/contact-world-language-release-mac/test-results/run-drpye0_5`.
+Die zusätzliche Generationsgrenze und öffentliche API bestehen zusammen mit der
+Referenzprüfung unter `run-q_t_abw5` (drei Fälle). Der abschließende Test der
+formatierten Grenzfixture und des unabhängigen Prüfkits besteht unter
+`run-3qh4h8f7` (zwei Fälle). Der gemeinsame Katalog umfasst jetzt 28 Core-Module.
+
+Debian 12/GCC 12.2 besteht die entsprechende Release-Auswahl einschließlich der
+Generationsgrenze mit 21/21 Fällen unter
+`build/contact-world-language-release-linux/test-results/run-1dszgzhw`.
+Clang 14 mit ASan/UBSan besteht 20/20 ausgewählte API-, Import-, Snapshot-,
+Runner-, Katalog- und Referenzprüfungen unter
+`build/atspi-asan-linux/test-results/run-v95w1uph`; der längere native Projektbuild
+ist dort nicht Teil der Auswahl. `ASAN_OPTIONS=detect_leaks=0` deaktiviert nur
+Leak-Prüfung, nicht Address-/UndefinedBehavior-Prüfungen. macOS-Sanitizer sind
+weiterhin wegen des fehlenden `ld64.lld` nicht nachgewiesen.
+
+Analyseprojekte mit Run-Import, gespeicherter Run-Lernpfad und Handbuch-Tastatur-
+führung bestehen jeweils 3/3 auf macOS unter `run-isqgpkfk` und auf Linux/X11
+unter `run-obxfnhkn` in den jeweiligen Release-Testverzeichnissen. Der erste
+Linux-GUI-Aufruf ohne `DISPLAY` scheitert mit „No available video device“ unter
+`run-uoizmvbz` (0/3); er wird nicht als bestanden gewertet. Der nachfolgende
+Aufruf verwendet den tatsächlich laufenden Xvfb-/Openbox-Desktop mit `DISPLAY=:99`.
+
+Die zusätzlich ausgeführte Selbstprüfung des nativen Test-Runners deckt zwei
+bestehende Katalogannahmen auf: macOS-Accessibility-Unitfälle besitzen keinen
+Integrationseintrag, der Linux-AT-SPI-Fall verwendet einen eigenen Client statt
+des Workflow-Wrappers. Die Zuordnung ist korrigiert; sämtliche erwarteten Fehler,
+Timeouts, Start-/Buildfehler und vollständigen Ergebnisberichte bestehen danach
+auf beiden Plattformen (`build/run-stream-test-runner-final-mac.log` und
+`build/run-stream-test-runner.log` auf Linux). Die Prüfkiterstellung bestätigt
+105 unabhängige Eingaben mit SHA-256, Paketgrenzen und exklusiver Veröffentlichung.
+
+Das macOS-SDK enthält 457 manifestierte Dateien einschließlich öffentlichem
+Stream-Header und Stream-Implementierung. Die fokussierte `--stream-only`-Prüfung
+verschiebt es nach `build/run-stream-sdk-checks/Native SDK ä j0z8_tve` und baut
+Core ausschließlich aus dessen Quellen neu. Derselbe öffentliche API-Test besteht
+gegen installierte und neu gebaute Bibliothek. Ownership, alte/fremde/gefälschte
+Handles, Slotgrenzen, Allocatorfehler, atomare Reads, Snapshots, Release und
+recoverable Abort sind enthalten. Dieser Nachweis ersetzt keine vollständige
+SDK-Domänenabnahme; direkte Low-Level-Physim-Bindungen sind nicht ergänzt.
+
+Das Linux-SDK besteht denselben Test mit 457 manifestierten Dateien unter
+`build/run-stream-sdk-checks/Native SDK ä 8zn5r21_`. GCC warnt dabei in der
+Legacy-Kompatibilitätsgegenprobe wegen eines Zweierarrays am alten Parameter
+`double values[PS_MAX_CHANNELS]`. Die Testfixture verwendet abschließend ein
+Array in der dort deklarierten Größe; die Kapazitäts-/Fehlerprüfungen der neuen
+API bleiben bestehen. Der endgültige öffentliche Test besteht unter macOS in
+`run-728edbkz` und unter Linux-ASan/UBSan in `run-g800s406` (je 1/1).
+Beide verschobenen SDKs mit installierter und aus Paketquellen gebauter Bibliothek
+bestehen danach erneut: macOS `Native SDK ä b9b9zvd3`, Linux `Native SDK ä kfyip904`.
+Das endgültige unabhängige Kit besitzt weiterhin 105 exakt manifestierte Dateien
+und besteht den Paketgrenzentest auf beiden Plattformen.
+
+Die geänderten Quellen sind zwischen macOS und Linux per SHA-256 abgeglichen
+(`build/run-stream-source-freeze.json`). Laufdaten, SDK-Kopien und Prüfberichte
+bleiben ignorierte Nachweise im Build-Verzeichnis. Aktuelle Windows-, Apple-
+Silicon-, Wayland- und praktische Screenreader-Nachweise entstehen durch diese
+fokussierten Läufe nicht.

@@ -114,8 +114,11 @@ def main():
     # failed focus lookup instead of using the success-only workflow wrapper.
     direct_display = {"documentation_keyboard_unreachable"}
     actual_display = {case.name for case in runner.catalog()
-                      if case.display and not case.integration.get("benchmark")}
-    expected_display = display_names | direct_display
+                      if case.display and case.integration and not case.integration.get("benchmark")}
+    native_display = {case.name for case in runner.catalog() if case.display and not case.integration}
+    assert native_display <= {"accessibility_native", "accessibility_ui"}, native_display
+    provider_display = {"accessibility_atspi"} if sys.platform == "linux" else set()
+    expected_display = display_names | direct_display | provider_display
     assert actual_display == expected_display, {
         "missing": sorted(expected_display - actual_display),
         "extra": sorted(actual_display - expected_display)}
