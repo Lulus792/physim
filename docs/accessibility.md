@@ -8,13 +8,13 @@ UI-Schriftgrößen von 16, 18, 20 und 22 Pixeln sind unabhängig von der Codegr�
 
 ## Nativer macOS-Einstieg
 
-Die macOS-App veröffentlicht sichtbare einfache Schaltflächen und Beschriftungen
-nun über AppKit als native Accessibility-Elemente. Beschriftungen besitzen
-UTF-8-Namen und die Rollen Schaltfläche oder statischer Text. Die sichtbaren
+Die macOS-App veröffentlicht sichtbare einfache Schaltflächen, Checkboxen und Beschriftungen
+über AppKit als native Accessibility-Elemente. Beschriftungen besitzen
+UTF-8-Namen und die Rollen Schaltfläche, Checkbox oder statischer Text. Die sichtbaren
 Rahmen folgen dem Fenster und der aktuellen Darstellung. Aktivierte Buttons
 können eine native Press-Aktion entgegennehmen; deaktivierte, entfernte oder
 veraltete Elemente lösen keine Aktion aus. Eine angenommene Aktion wird genau
-einmal im nächsten UI-Frame an den passenden Button übergeben.
+einmal im nächsten UI-Frame an den passenden Control übergeben.
 
 Dieser Einstieg deckt noch keine vollständige VoiceOver-Bedienung ab.
 Textfelder, Editoren, Menüs, Auswahlfelder, Regler, Szenen, Diagramme und
@@ -57,10 +57,10 @@ Prüfungen ersetzen keine Abnahme mit einem laufenden Screenreader.
 
 Die App registriert einen gemeinsamen Anwendungsroot am Accessibility-Bus.
 Hauptfenster und Handbuch sind getrennte Fenster mit eigenen Objektpfaden;
-sichtbare Texte und einfache Buttons verwenden denselben geprüften Frame-
+sichtbare Texte, einfache Buttons und Checkboxen verwenden denselben geprüften Frame-
 Snapshot wie macOS. Rollen, UTF-8-Namen, Zustände, Index-/Elternbeziehungen,
 Fenster-/Bildschirmrahmen und Hit-Tests werden über die Standardinterfaces
-`Accessible`, `Application`, `Component` und bei Buttons `Action` angeboten.
+`Accessible`, `Application`, `Component` und bei Buttons/Checkboxen `Action` angeboten.
 Ein Bulk-Cache und Ereignisse für hinzugefügte/entfernte Controls, Zustände und
 Rahmen halten Clientansichten aktuell. Eine fremde oder veraltete Kennung,
 ein verborgenes Fenster oder ein deaktivierter Button aktiviert nichts.
@@ -92,3 +92,48 @@ den unabhängigen PyAT-SPI-Client und explizite D-Bus-Gegenproben an zwei
 tatsächlich gezeichneten Fenstern. Er prüft getrennte gleichnamige Buttons,
 native UI-Aktionen, Zustands-/Cacheänderungen, verborgene Fenster, unzulässige
 RPC-Signaturen und schreibgeschützte Properties.
+
+
+## Checkboxen und Zustände
+
+Beschriftete Checkboxen in Einstellungen, Szenenbaum, Darstellung und Batch-
+Steuerung veröffentlichen nun ihren aktuellen booleschen Wert. Auch die optisch
+unbeschriftete Lauf-Auswahl der Bibliothek besitzt den jeweiligen Laufnamen als
+nativen Namen. Sichtbare Darstellung und Klickverhalten bleiben erhalten.
+
+macOS meldet `AXCheckBox` mit einem `NSNumber`-Wert 0/1 und `AXValueChanged` bei
+Wertänderungen. `accessibilityPerformPress` schaltet den aktuellen Wert einmal
+um; direkte Fremdschreibzugriffe auf `accessibilityValue` sind gesperrt.
+[Apples Checkbox-Vertrag](https://developer.apple.com/documentation/appkit/nsaccessibilitycheckbox)
+trennt Wert und native Aktivierung. Linux meldet `check box`, `checkable` und
+gegebenenfalls `checked`. Die Aktion heißt maschinenlesbar `toggle`, lokalisiert
+`Umschalten`; `StateChanged:checked` aktualisiert Clients in beiden Richtungen.
+[AT-SPI-Zustände](https://gnome.pages.gitlab.gnome.org/at-spi2-core/libatspi/enum.StateType.html)
+und [Aktionen](https://gnome.pages.gitlab.gnome.org/at-spi2-core/devel-docs/doc-org.a11y.atspi.Action.html)
+definieren die verwendeten Protokollwerte und Rückgaben.
+
+Eine angenommene Aktion verändert den Wert erst beim normalen Besuch des noch
+lebenden Controls. Der veröffentlichte Snapshot berücksichtigt den umgeschalteten
+Wert. Deaktivierte, verborgene, entfernte oder nachträglich gesperrte Ziele
+verwerfen Aktionen. Späte Aktionen zwischen Zeichnen und Veröffentlichung bleiben
+für den nächsten Besuch erhalten. Eine Checkbox bleibt bei Wertänderungen unter
+derselben Kennung erreichbar. Zwei Fenster besitzen unabhängige Werte. Es gibt
+weiterhin höchstens eine ausstehende Aktion pro Modell, keine Tri-State-Checkbox
+und keinen programmatischen Fokusdienst. Dock-Panels folgen weiterhin ihrer
+bestehenden Aktivierungs-/Eingabepolitik; der App-Prüfer aktiviert zuerst den
+Einstellungsbereich, bevor er native Checkbox-Aktionen ausführt.
+
+Die portable Modellprüfung provoziert späte, doppelte und gesperrte Aktionen.
+AppKit-Prüfungen lesen tatsächliche Rollen und Zahlenwerte, prüfen Aktivierung,
+Readonly-Selektoren und zurückbehaltene ungültige Referenzen. Der gerenderte UI-
+Prüfer schaltet sowohl eine beschriftete als auch eine optisch unbeschriftete
+Checkbox über die native Schnittstelle. Ein unabhängiger PyAT-SPI-Client prüft
+zwei tatsächlich gezeichnete Fenster, zwei Wertwechsel, Cache und Zustandsereignisse
+sowie deaktivierte, verborgene und entfernte Checkboxen.
+`tests/test_accessibility_checkbox_app.py` führt außerdem die tatsächliche App aus:
+Native Aktionen verändern den Einstellungsentwurf zweimal und erhalten die
+bereits angewandten Darstellungsflags. Speichern und Neustart werden durch den
+bestehenden Tastaturprüfer abgedeckt. Der SDK-Prüfer besitzt dafür `--accessibility-only`;
+Linux verwendet einen eigenen Accessibility-Bus und einen unabhängigen Client.
+Diese Nachweise ersetzen keine praktische VoiceOver-/Orca-Abnahme und schließen
+den gesamten Barrierefreiheitsblock des Projektplans nicht ab.

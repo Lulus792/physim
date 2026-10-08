@@ -44,7 +44,7 @@ bool nk_sdl_accessibility_available(struct nk_context *ctx);
 void nk_sdl_set_ui_size(struct nk_context *ctx, unsigned size);
 enum { PS_UI_LAYOUT_MAGIC = 0x50534C59u };
 typedef bool (*ps_ui_a11y_hook)(void *user,const char *window,const char *label,
-                                int role,const float bounds[4],bool enabled);
+                                int role,const float bounds[4],bool enabled,bool checked);
 typedef struct {
     unsigned magic,ui_size;
     ps_ui_a11y_hook accessibility;
@@ -54,6 +54,8 @@ typedef struct {
 void ps_ui_flush_edit(struct nk_context *ctx,const char *window,char *text,size_t capacity,struct nk_rect bounds);
 float nk_sdl_row_height(const struct nk_context *ctx, float requested);
 void ps_ui_label_wrap(struct nk_context *ctx,const char *text);
+nk_bool ps_ui_checkbox_named(struct nk_context *ctx,const char *text,const char *name,nk_bool *active);
+nk_bool ps_ui_checkbox_label(struct nk_context *ctx,const char *text,nk_bool *active);
 nk_bool ps_ui_button_label(struct nk_context *ctx,const char *text);
 void ps_ui_label(struct nk_context *ctx,const char *text,nk_flags alignment);
 void ps_ui_label_colored(struct nk_context *ctx,const char *text,nk_flags alignment,struct nk_color color);
@@ -72,6 +74,7 @@ static inline void ps_ui_row_begin(struct nk_context *ctx,enum nk_layout_format 
 #define nk_layout_row_static ps_ui_row_static
 #define nk_layout_row_begin ps_ui_row_begin
 #define nk_label_wrap ps_ui_label_wrap
+#define nk_checkbox_label ps_ui_checkbox_label
 #define nk_button_label ps_ui_button_label
 #define nk_label ps_ui_label
 #define nk_label_colored ps_ui_label_colored

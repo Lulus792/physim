@@ -2611,3 +2611,12 @@ besitzt kopierbare Modelle und Ergebnis-Snapshots. Zwei tatsächliche Stöße in
 einem Schritt und 181 unabhängige rationale Szenarien prüfen den Ablauf.
 Zeitabhängige Kraft-/Rotationspfade und vollständige Produktabnahme bleiben offen.
 [Verträge, numerischer Kontaktabstand und Beispiele](mechanics.md).
+
+
+Native Checkboxen ergänzen den macOS-/Linux-Barrierefreiheitseinstieg mit
+booleschen Werten, Änderungsmitteilungen und einer Umschaltaktion. Die vorhandenen
+UI-Checkboxen und die optisch unbeschriftete Bibliotheksauswahl erhalten native
+Namen. Tatsächliche App-/AppKit-/AT-SPI-Prüfungen belegen Wertänderungen und
+Ablehnung deaktivierter, verborgener und veralteter Ziele. Editoren, Auswahlfelder,
+Fokusdienste, Windows/UIA und praktische Screenreader-Abnahme bleiben offen.
+[Umfang und Grenzen](accessibility.md).

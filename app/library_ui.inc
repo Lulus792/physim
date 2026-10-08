@@ -80,7 +80,7 @@ static void library_view(app *a, float height) {
                 nk_begin_disabled(ui, !idle(a));
                 if (item->kind == PS_LIBRARY_RUN) {
                     bool selected = selected_run(a, path) >= 0;
-                    if (nk_checkbox_label(ui, "", &selected))
+                    if (ps_ui_checkbox_named(ui, "", item->name, &selected))
                         select_run(a, path, selected);
                 } else
                     nk_label_colored(ui, "•", NK_TEXT_CENTERED, UI_COLOR(muted));

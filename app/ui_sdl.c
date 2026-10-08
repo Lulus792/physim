@@ -47,10 +47,10 @@ struct nk_sdl {
     ps_a11y_native *accessibility_native;
 };
 static bool accessibility_widget(void *user,const char *window,const char *label,
-                                 int role,const float bounds[4],bool enabled) {
+                                 int role,const float bounds[4],bool enabled,bool checked) {
     struct nk_sdl *sdl=user;if(!sdl->accessibility)return false;
     SDL_LockMutex(sdl->accessibility_mutex);
-    bool pressed=ps_a11y_record(sdl->accessibility,window,label,(ps_a11y_role)role,bounds,enabled);
+    bool pressed=ps_a11y_record_state(sdl->accessibility,window,label,(ps_a11y_role)role,bounds,enabled,checked);
     SDL_UnlockMutex(sdl->accessibility_mutex);return pressed;
 }
 static void *ui_alloc(nk_handle user, void *old, nk_size size) {

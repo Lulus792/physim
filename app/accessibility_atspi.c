@@ -148,7 +148,7 @@ static bool find_object(ax_server *s, const char *path, ps_a11y_native **window,
     return false;
 }
 static unsigned role(ps_a11y_native *w, const ps_a11y_node *node) {
-    return !w ? 75 : !node->id ? 23 : node->role == PS_A11Y_BUTTON ? 43 : 29;
+    return !w ? 75 : !node->id ? 23 : node->role == PS_A11Y_BUTTON ? 43 : node->role == PS_A11Y_CHECKBOX ? 7 : 29;
 }
 static const char *role_name(unsigned r, bool localized) {
     switch (r) {
@@ -156,6 +156,8 @@ static const char *role_name(unsigned r, bool localized) {
         return localized ? "Anwendung" : "application";
     case 23:
         return localized ? "Fenster" : "frame";
+    case 7:
+        return localized ? "Kontrollkästchen" : "check box";
     case 43:
         return localized ? "Schaltfläche" : "push button";
     default:
@@ -174,17 +176,19 @@ static size_t child_count(ax_server *s, ps_a11y_native *w, const ps_a11y_node *n
 }
 static void states(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
                    const ps_a11y_node *node) {
-    /* AtspiStateType: enabled=8, sensitive=24, showing=25, visible=30.
+    /* AtspiStateType: checked=4, enabled=8, sensitive=24, showing=25,
+     * visible=30, checkable=41.
      * Focusable is deliberately absent until programmatic focus is implemented. */
     unsigned first = 0;
     if (!node->id || node->enabled)
         first |= (1u << 8) | (1u << 24);
     if (!w || w->visible)
         first |= (1u << 25) | (1u << 30);
+    if(node->role==PS_A11Y_CHECKBOX && node->checked)first |= 1u << 4;
     DBusMessageIter a;
     open_container(r, iter, DBUS_TYPE_ARRAY, "u", &a);
     unsigned_number(r, &a, first);
-    unsigned_number(r, &a, 0);
+    unsigned_number(r, &a, node->role==PS_A11Y_CHECKBOX ? 1u << (41-32) : 0);
     close_container(r, iter, &a);
 }
 static void interfaces(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
@@ -196,7 +200,7 @@ static void interfaces(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
         text(r, &a, AX_PREFIX "Application");
     else
         text(r, &a, AX_PREFIX "Component");
-    if (node->id && node->role == PS_A11Y_BUTTON)
+    if (node->id && ps_a11y_actionable(node->role))
         text(r, &a, AX_PREFIX "Action");
     close_container(r, iter, &a);
 }
@@ -314,7 +318,7 @@ static void property_value(ax_reply *r, DBusMessageIter *iter, ax_server *s, ps_
         return;
     }
     if (!strcmp(name, "NActions")) {
-        number(r, iter, node->id && node->role == PS_A11Y_BUTTON ? 1 : 0);
+        number(r, iter, node->id && ps_a11y_actionable(node->role) ? 1 : 0);
         return;
     }
     char id[128];
@@ -347,7 +351,7 @@ static bool interface_supported(ps_a11y_native *w, const ps_a11y_node *node, con
     if (!strcmp(iface, AX_PREFIX "Component"))
         return w != NULL;
     if (!strcmp(iface, AX_PREFIX "Action"))
-        return node->id && node->role == PS_A11Y_BUTTON;
+        return node->id && ps_a11y_actionable(node->role);
     return false;
 }
 static bool bounds(ps_a11y_native *w, const ps_a11y_node *node, unsigned coordinate, int out[4]) {
@@ -510,7 +514,7 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             cache ? ""
             : !w  ? application_xml
                   : component_xml,
-            cache || !node.id || node.role != PS_A11Y_BUTTON ? "" : action_xml, properties_xml,
+            cache || !node.id || !ps_a11y_actionable(node.role) ? "" : action_xml, properties_xml,
             "<interface name='org.freedesktop.DBus.Introspectable'><method name='Introspect'><arg "
             "type='s' direction='out'/></method></interface>");
         if (length < 0 || (size_t)length >= sizeof xml)
@@ -762,13 +766,13 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             boolean(&r, &r.root, false);
         else
             failure = DBUS_ERROR_UNKNOWN_METHOD;
-    } else if (!cache && node.id && node.role == PS_A11Y_BUTTON &&
+    } else if (!cache && node.id && ps_a11y_actionable(node.role) &&
                !strcmp(iface, AX_PREFIX "Action")) {
         if (!strcmp(method, "GetActions") && dbus_message_has_signature(message, "")) {
             DBusMessageIter a, c;
             open_container(&r, &r.root, DBUS_TYPE_ARRAY, "(sss)", &a);
             open_container(&r, &a, DBUS_TYPE_STRUCT, NULL, &c);
-            text(&r, &c, "Klicken");
+            text(&r, &c, node.role==PS_A11Y_CHECKBOX?"Umschalten":"Klicken");
             text(&r, &c, "");
             text(&r, &c, "");
             close_container(&r, &a, &c);
@@ -784,9 +788,9 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
                 SDL_UnlockMutex(w->mutex);
                 boolean(&r, &r.root, accepted);
             } else if (!strcmp(method, "GetName"))
-                text(&r, &r.root, "click");
+                text(&r, &r.root, node.role==PS_A11Y_CHECKBOX?"toggle":"click");
             else if (!strcmp(method, "GetLocalizedName"))
-                text(&r, &r.root, "Klicken");
+                text(&r, &r.root, node.role==PS_A11Y_CHECKBOX?"Umschalten":"Klicken");
             else if (!strcmp(method, "GetDescription") || !strcmp(method, "GetKeyBinding"))
                 text(&r, &r.root, "");
             else
@@ -991,6 +995,8 @@ void ps_a11y_native_publish(ps_a11y_native *b, bool changed) {
                 event_state(s, node_path, "enabled", node->enabled);
                 event_state(s, node_path, "sensitive", node->enabled);
             }
+            if(old && node->role==PS_A11Y_CHECKBOX && old->checked!=node->checked)
+                event_state(s,node_path,"checked",node->checked);
             if (moved || (old && memcmp(old->bounds, node->bounds, sizeof node->bounds)))
                 event_bounds(s, node_path, b, node);
             if (old_visible != b->visible) {

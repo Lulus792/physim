@@ -7,8 +7,8 @@ typedef struct {
     SDL_Window *window;
     ps_graphics *graphics;
     struct nk_context *ui;
-    bool visible, disabled;
-    unsigned presses;
+    bool visible, disabled, checked;
+    unsigned presses,toggles;
 } fixture_window;
 static bool fallback;
 static bool create(fixture_window *f, const char *title) {
@@ -49,6 +49,9 @@ static bool draw(fixture_window *f, char name) {
             if (f->disabled)
                 nk_widget_disable_begin(f->ui);
             bool pressed = nk_button_label(f->ui, "Öffnen …");
+            nk_layout_row_dynamic(f->ui,24,1);
+            bool toggled=nk_checkbox_label(f->ui,"Vektoren",&f->checked);
+            if(toggled){f->toggles++;printf("TOGGLE %c %u %u\n",name,f->toggles,f->checked);fflush(stdout);}
             if (f->disabled)
                 nk_widget_disable_end(f->ui);
             if (pressed) {

@@ -412,3 +412,11 @@ implementiert. Ein atomischer Kick-Drift-Controller integriert inzwischen mehrer
 Ereignisse und gleichzeitige Kontaktgruppen für Kugel/Box/Ebene/Convex in C und
 Physim. Rationale 1D-Referenzen und tatsächliche Runner-Läufe prüfen ihn. Allgemeine
 zeitabhängige Rotation/Kräfte fehlen weiterhin; der Gesamtumfang bleibt unvollständig.
+
+
+Der begrenzte native Barrierefreiheitseinstieg besitzt jetzt zusätzlich Checkboxen:
+Rollen, boolesche Werte und native Umschaltaktionen sind durch tatsächliche
+AppKit-/AT-SPI- und App-Einstellungsabläufe geprüft. Die Bibliotheksauswahl besitzt
+native Laufnamen trotz optisch leerer Checkboxbeschriftung. Bestehende Dock-
+Aktivierung bleibt erforderlich; Text-/Editor-/Fokusdienste und praktische
+Screenreader-Abnahme bleiben offen. PP-0710 bleibt ausdrücklich unvollständig.

@@ -154,8 +154,42 @@ static void test_settings_keyboard_frame(app *a,bool reading,int *stage,int *cod
     if(!ok){fprintf(stderr,"Settings keyboard failure stage %d focus %d tab %d interval %u\n",*stage-1,a->settings_focus,a->tab,a->settings_draft.autosave_seconds);*code=1;a->quitting=true;}
 #undef SETTINGS_KEY
 }
+/* Exercise the real settings draft through native checkbox activation. On
+ * Linux the independent AT-SPI client drives checkbox-remote; AppKit drives
+ * checkbox-native directly. Existing keyboard tests cover commit/restart. */
+static void test_settings_checkbox_frame(app *a,bool remote,int *stage,int *code) {
+    static uint32_t initial;
+    bool ok=true;
+    switch(*stage) {
+    case 0:
+        SDL_SetWindowSize(a->window,1080,740);
+        open_settings(a);initial=a->preferences.view_flags;(*stage)++;break;
+    case 1:
+        /* Dock input follows the active panel; activate it before publishing
+         * actionable settings controls. No checkbox pointer click is used. */
+        nk_window_set_focus(a->ui,"workspace");(*stage)++;break;
+    case 2:
+        if(!settings_test_reveal(a,a->settings_focus_bounds[7]))return;
+        ok=nk_sdl_accessibility_available(a->ui);
+        if(ok){printf("CHECKBOX READY %u\n",!!(initial&PS_VIEW_VECTORS));fflush(stdout);}
+        if(!remote)ok=ok && nk_sdl_accessibility_press(a->ui,"Vektoren");
+        (*stage)++;break;
+    case 3:
+        if(a->settings_draft.view_flags==initial)return;
+        ok=a->settings_draft.view_flags==(initial^PS_VIEW_VECTORS) && a->preferences.view_flags==initial;
+        puts("CHECKBOX TOGGLED");fflush(stdout);
+        if(!remote)ok=ok && nk_sdl_accessibility_press(a->ui,"Vektoren");
+        (*stage)++;break;
+    case 4:
+        if(a->settings_draft.view_flags!=initial)return;
+        ok=a->preferences.view_flags==initial;
+        a->quitting=true;puts("SETTINGS CHECKBOX SELF-TEST: PASSED");break;
+    }
+    if(!ok){fprintf(stderr,"Settings checkbox failed stage %d\n",*stage);*code=1;a->quitting=true;}
+}
 static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
                                const char **capture) {
+    if(!strncmp(mode,"checkbox-",9)){test_settings_checkbox_frame(a,!strcmp(mode,"checkbox-remote"),stage,code);return;}
     if(!strncmp(mode,"keyboard",8)){test_settings_keyboard_frame(a,strstr(mode,"-read")!=NULL,stage,code,capture);return;}
     if(!strncmp(mode,"ui-size-",8)) {
         test_ui_size_frame(a,mode,stage,code,capture);return;

@@ -1165,3 +1165,64 @@ vollständige Mechanik-/Produktabnahme.
 Belege liegen unter `build/ccd-step-sdk-{mac,linux}-PASSED.json` und
 `build/ccd-step-source-freeze.json`. Dieser Nachweisnachtrag erfolgt nach
 Paketierung; geprüfte Implementierung, Header und Testeingaben bleiben unverändert.
+
+
+## Native Checkboxen und tatsächlicher Einstellungsentwurf
+
+Die native Accessibility-Schicht veröffentlicht nun zweistufige Checkboxen mit
+Namen, aktuellen booleschen Werten und genau einer Umschaltaktion. AppKit meldet
+`AXCheckBox`, `NSNumber` 0/1 und Wertänderungen. AT-SPI meldet Rolle 7,
+`checkable` (41), gegebenenfalls `checked` (4), `toggle`/`Umschalten` und
+Checked-Zustandsereignisse. Die AT-SPI-Werte wurden zusätzlich gegen die tatsächlich
+installierten PyAT-SPI-Konstanten geprüft. Optisch unbeschriftete Bibliotheks-
+Checkboxen erhalten den jeweiligen Laufnamen. Core-API/ABI, Sprachvertrag und
+Dateiformate bleiben unverändert. [Verträge und Grenzen](accessibility.md).
+
+Die portable Modellprüfung prüft Wertänderungen unter stabiler Kennung, späte
+Aktionen nach dem Zeichnen, Einzelzustellung und gesperrte/veraltete Ziele.
+Der tatsächliche AppKit-Prüfer liest Zahlenwerte und Rollen, prüft Press-Aktionen,
+Readonly-Selektoren und zurückbehaltene ungültige Elemente. Der gerenderte UI-
+Prüfer schaltet beschriftete und optisch unbeschriftete Controls. Der unabhängige
+PyAT-SPI-Client prüft zwei reale Fenster, unabhängige Werte, Checkable-/Checked-
+Zustände, zwei Richtungen der Wertänderungsereignisse sowie deaktivierte,
+verborgene und entfernte Checkboxen.
+
+Ein zusätzlicher Prüfer führt die tatsächliche App aus. Native Aktionen ändern
+den Einstellungsentwurf zweimal und erhalten die bereits angewandten
+Darstellungsflags. Bestehende Tastaturprüfungen prüfen Speichern und Neustart.
+Die ersten Zusatzprüfer scheiterten auf macOS mit 3/4 (`run-bveppbp9`) und
+Linux mit 2/3 (`run-99bzum0f`), weil sie eine noch inaktive Dock-Fläche aktivieren
+wollten. Deren Snapshot meldete korrekt deaktivierte Controls. Der korrigierte
+Prüfer aktiviert zuerst den Einstellungsbereich; Checkbox-Klicks erfolgen danach
+weiterhin ausschließlich über die native Schnittstelle. Das Hilfsverzeichnis
+für Testeinstellungen wird vor dem Appstart angelegt.
+
+Intel macOS 14.6.1/Apple Clang 16 besteht Modell, Geometrie, Handbuch, Referenzen
+und Prüfkit 5/5 (`run-_qbv8k1s`), die abschließenden AppKit-/UI-/App- und
+Einstellungstastaturabläufe 4/4 (`run-8aatbj7v`). Debian 12/GCC 12.2 besteht
+die fünf Prüfungen ohne Fenster 5/5 (`run-0y02erkz`) und AT-SPI, tatsächliche App
+sowie Einstellungstastaturführung 3/3 (`run-pxt0xohr`). Linux/Clang 14 mit
+ASan/UBSan besteht dieselben drei Fensterprüfungen 3/3 (`run-xfv89loo`) und
+Modell/Geometrie 2/2 (`run-fds_hcl3`). `detect_leaks=0` bleibt gesetzt;
+Address-/UB-Prüfungen sind aktiv. macOS-Sanitizer, Windows/UIA, Wayland und
+praktische VoiceOver-/Orca-Abnahme bleiben ungeprüft. PP-0710 bleibt unvollständig.
+
+
+Das verschobene macOS-SDK besteht unter
+`build/a11y-checkbox-final-sdk-checks/Native SDK ä _mmkcqy6`, das Linux-SDK unter
+`build/a11y-checkbox-final-sdk-checks/Native SDK ä xu7hiise`. Beide enthalten 469
+manifestierte Dateien und führen den tatsächlichen nativen Einstellungsablauf aus.
+Der endgültige gemeinsame Prüfschritt wird sowohl von `--accessibility-only` als
+auch der vollständigen SDK-Prüfung mit `--app-tests` verwendet. Die fokussierten
+Nachweise sind keine erneute vollständige SDK-/Produktabnahme. Unter Linux kommt
+der Prüfer ausschließlich aus `build/a11y-checkbox-final-independent-kit` mit 138
+manifestierten Eingaben, ohne Entwicklerheader oder Physim-Implementierung.
+Alle 31 Referenzdokumente sind weiterhin geprüft. Die letzten Handbuch-/Referenz-
+und Paketgrenzen bestehen auf macOS mit 3/3 unter `run-h_mcwa4b`.
+
+Quellgleichheit steht in `build/a11y-checkbox-source-freeze.json`, SDK-Belege in
+`build/a11y-checkbox-sdk-{mac,linux}-PASSED.json`. Dieser Nachtrag erfolgt nach
+Paketierung; geprüfte App-Implementierung und Testeingaben bleiben unverändert.
+Der Plan behält alle 531 Originalblöcke; 33 besitzen Implementierungsnachweise,
+7 bleiben konkret unvollständig und 491 weiterhin ungeprüft. Native Checkboxen
+ersetzen keine vollständige Tastatur-/Fokus-/Screenreader- oder Plattformabnahme.

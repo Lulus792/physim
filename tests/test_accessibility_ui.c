@@ -1,6 +1,7 @@
 #include "ui.h"
 #include <stdio.h>
 #define CHECK(x) do {if(!(x)){fprintf(stderr,"a11y UI %d: %s (%s)\n",__LINE__,#x,SDL_GetError());return 1;}}while(0)
+static bool checked,selected;
 static int draw(struct nk_context *ui,bool button,bool disabled) {
  nk_input_begin(ui);nk_input_end(ui);int pressed=0;
  if(nk_begin(ui,"controls",nk_rect(0,0,400,240),NK_WINDOW_NO_SCROLLBAR)) {
@@ -8,6 +9,8 @@ static int draw(struct nk_context *ui,bool button,bool disabled) {
   if(button) {
    if(disabled)nk_widget_disable_begin(ui);
    pressed=nk_button_label(ui,"Öffnen …");
+   nk_layout_row_dynamic(ui,24,1);if(nk_checkbox_label(ui,"Vektoren",&checked))pressed|=2;
+   nk_layout_row_dynamic(ui,24,1);if(ps_ui_checkbox_named(ui,"","Auswahl Lauf A",&selected))pressed|=4;
    if(disabled)nk_widget_disable_end(ui);
   }
  }
@@ -25,7 +28,10 @@ int main(void) {
  CHECK(draw(ui,true,false)==0);CHECK(nk_sdl_accessibility_press(ui,"Öffnen …"));
  CHECK(draw(ui,true,false)==1);CHECK(draw(ui,true,false)==0);
  CHECK(!nk_sdl_accessibility_press(ui,"Bereit"));
- CHECK(draw(ui,true,true)==0);CHECK(!nk_sdl_accessibility_press(ui,"Öffnen …"));
+ CHECK(!checked && nk_sdl_accessibility_press(ui,"Vektoren"));CHECK(draw(ui,true,false)==2 && checked);
+ CHECK(draw(ui,true,false)==0 && checked);CHECK(nk_sdl_accessibility_press(ui,"Vektoren"));CHECK(draw(ui,true,false)==2 && !checked);
+ CHECK(!selected && nk_sdl_accessibility_press(ui,"Auswahl Lauf A"));CHECK(draw(ui,true,false)==4 && selected);CHECK(draw(ui,true,false)==0 && selected);
+ CHECK(draw(ui,true,true)==0);CHECK(!nk_sdl_accessibility_press(ui,"Öffnen …"));CHECK(!nk_sdl_accessibility_press(ui,"Vektoren") && !checked);
  CHECK(draw(ui,true,false)==0);CHECK(nk_sdl_accessibility_press(ui,"Öffnen …"));
  CHECK(draw(ui,false,false)==0);CHECK(!nk_sdl_accessibility_press(ui,"Öffnen …"));
  CHECK(draw(ui,true,false)==0);CHECK(!nk_sdl_accessibility_press(ui,"missing"));

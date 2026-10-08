@@ -3932,7 +3932,7 @@
           "arguments": [
             "{root}/tests/verify_png.py",
             "{work}",
-            "{work}/workflow ä"
+            "{work}/workflow \u00e4"
           ],
           "timeout": 60
         }
@@ -3979,7 +3979,7 @@
           "arguments": [
             "{root}/tests/verify_png.py",
             "{work}",
-            "{work}/workflow ä"
+            "{work}/workflow \u00e4"
           ],
           "timeout": 60
         }
@@ -5996,7 +5996,7 @@
         {
           "program": "run-index-memory",
           "arguments": [
-            "{work}/index α.psrun"
+            "{work}/index \u03b1.psrun"
           ],
           "timeout": 60
         },
@@ -8127,6 +8127,36 @@
             "{work}"
           ],
           "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "accessibility_checkbox_app",
+      "app": true,
+      "display": true,
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_accessibility_checkbox_app.py",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 90,
+          "files": [
+            "app.stdout",
+            "app.stderr"
+          ]
         }
       ]
     }

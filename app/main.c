@@ -2701,6 +2701,7 @@ int main(int argc, char **argv) {
     bool settings_test = argc > 1 && !strcmp(argv[1], "--settings-test");
     if (settings_test && (argc != 4 || (strcmp(argv[3], "write") && strcmp(argv[3], "read") &&
         strcmp(argv[3], "keyboard") && strcmp(argv[3], "keyboard-read") &&
+        strcmp(argv[3], "checkbox-native") && strcmp(argv[3], "checkbox-remote") &&
         strcmp(argv[3], "reset") && strcmp(argv[3], "defaults") && strcmp(argv[3], "corrupt") &&
         strcmp(argv[3], "maxwrite") && strcmp(argv[3], "maxread") &&
         strcmp(argv[3], "theme-light") && strcmp(argv[3], "theme-light-read") &&

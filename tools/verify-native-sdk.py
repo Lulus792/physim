@@ -10,6 +10,12 @@ import sys
 import tempfile
 
 
+def verify_accessibility_checkbox(repo,sdk,root,suffix,checked):
+    checked([sys.executable,repo / "tests/test_accessibility_checkbox_app.py",
+             "--app",sdk / "bin" / ("physim"+suffix),"--work",root / "Native checkbox"],timeout=90)
+    print("Relocated SDK native checkbox: actual settings draft, AppKit/AT-SPI toggles and applied view flags passed",flush=True)
+
+
 def verify_documentation_bounds(sdk, files):
     """All packaged Markdown pages fit the actual offline viewer byte budget."""
     for name in files:
@@ -216,9 +222,15 @@ def main():
                         help="Verify unit conversion and diagnostics only; no GUI or full domain acceptance")
     parser.add_argument("--body-only", action="store_true",
                         help="Verify solid-body inertia and energy range only; no full mechanics or GUI acceptance")
+    parser.add_argument("--accessibility-only", action="store_true",
+                        help="Verify the packaged app's actual native settings checkbox; requires a display")
     parser.add_argument("--convex-only", action="store_true",
                         help="Verify convex geometry and bounded multi-body CCD bindings; no full mechanics or GUI acceptance")
     args = parser.parse_args()
+    if args.accessibility_only and any((args.scalar_only,args.transform_only,args.stream_only,
+                                      args.comparison_only,args.curve_only,args.units_only,
+                                      args.body_only,args.convex_only,args.app_tests)):
+        parser.error("--accessibility-only cannot be combined with other focused modes or --app-tests")
     if args.convex_only and (args.body_only or args.units_only or args.curve_only or args.comparison_only or args.stream_only or args.transform_only or args.scalar_only or args.app_tests):
         parser.error("--convex-only cannot be combined with other focused modes or --app-tests")
     if args.body_only and (args.scalar_only or args.transform_only or args.stream_only or args.comparison_only or args.curve_only or args.units_only or args.app_tests):
@@ -299,6 +311,13 @@ def main():
         builder.includes = [sdk / "include"]
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+        if args.accessibility_only:
+            if not metadata["app"] or sys.platform not in ("darwin","linux"):
+                raise RuntimeError("Native checkbox verification requires a macOS/Linux app SDK")
+            verify_accessibility_checkbox(repo,sdk,root,suffix,checked)
+            (root / "PASSED.txt").write_text("Focused native settings checkbox SDK verification passed; relocated manifest, actual AppKit/AT-SPI actions and settings draft, applied view flags preserved; no full screenreader or product acceptance.\n",encoding="utf-8")
+            print(f"Native checkbox SDK verified: {root}")
+            return
         if args.convex_only:
             shutil.copytree(sdk / "src", consumer / "src")
             rebuilt_core = builder.archive("sdk-rebuilt-core", [f"src/{name}.c" for name in native.CORE])
@@ -1025,6 +1044,8 @@ def main():
                     if "SETTINGS KEYBOARD SELF-TEST: PASSED" not in output.read_text(encoding="utf-8"):
                         raise RuntimeError("Installed SDK keyboard settings did not complete")
                 print("Installed SDK settings: keyboard-only traversal, all toggles, restart, cancellation and large-font focus scrolling passed",flush=True)
+                if sys.platform in ("darwin","linux"):
+                    verify_accessibility_checkbox(repo,sdk,root,suffix,checked)
                 for mode in ("docs-keyboard","docs-keyboard-22","docs-keyboard-delayed"):
                     directory=root / mode;directory.mkdir();output=root / (mode+".txt")
                     checked([sdk / "bin" / ("physim"+suffix),"--workspace-state-test",directory,mode],output=output)
