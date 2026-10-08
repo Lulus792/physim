@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-08",
-  "inspected_revision": "6ae7db549ba321fb55af8dbaa4606ced407a4476",
+  "inspected_revision": "7035041f92c7cbf437d3f1cf32ed6d240754dd9e",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2801,9 +2801,12 @@
         "examples/convex_contacts/main.c",
         "examples/language/convex_contacts.phys",
         "docs/mechanics.md",
-        "docs/platform-validation.md"
+        "docs/platform-validation.md",
+        "tests/test_motion_sweep.c",
+        "tests/test_motion_sweep_oracle.py",
+        "tests/fixtures/language/motion_sweep.phys"
       ],
-      "note": "Lineare Kugel-/Ebenen- und konvexe Paar-/Kugel-/Ebenen-Sweeps mit festen Orientierungen vorhanden. Unabhängige Eintrittszeit-/Distanz-/Oberflächenreferenzen und echte C-/Physim-Ereignisantwort mit Restzeit geprüft. Allgemeine rotierende/beschleunigte Pfade und Mehrkörper-Ereignissteuerung fehlen; vollständige CCD-Anforderung nicht abgeschlossen."
+      "note": "Lineare Sweeps sowie konservative konstante Weltachsenrotation und quadratische Translation für konvexe Paar-/Kugel-/Ebenen-Anfragen vorhanden. Analytische erste Kontakte, volle Drehungen mit klaren Endlagen, Bewegungshüllen, Limit-/Numeric-Atomizität und C-/Physim-Werte geprüft. Allgemeine zeitabhängige Rotation/Kräfte und Mehrkörper-Ereignissteuerung fehlen; vollständige CCD-Anforderung nicht abgeschlossen."
     },
     {
       "id": "PP-0391",

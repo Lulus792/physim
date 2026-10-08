@@ -2580,7 +2580,7 @@ werden auf Konvexität, Orientierung und Grenzen geprüft; Fehler erhalten
 Ausgaben. C und Physim teilen die Kontaktprüfung, Hauptträgheiten sind für
 eigene Formen explizit vorgebbar. Unabhängige Trennachsen und Oberflächenzeugen
 prüfen gedrehte und enthaltene Netze. Einzelkontakte ersetzen keine
-Ruhemanifolds; rotierendes CCD und automatische Kontaktverwaltung bleiben offen.
+Ruhemanifolds; allgemeine zeitabhängige Rotation und automatische Kontaktverwaltung bleiben offen.
 [Beispiele und Grenzen](mechanics.md).
 
 
@@ -2589,5 +2589,15 @@ des gesamten Bewegungswegs. Flächen-/Kanten-Zeitintervalle beziehungsweise
 Flächen-/Kanten-/Vertexeintritt erfassen Durchtunneln bei fester Orientierung.
 Die C-/Physim-Beispiele bewegen eine Kugel zum Ereignis, lösen den elastischen
 Impuls und integrieren die Restzeit gegen unabhängige Position-/Energiereferenzen.
-Rotation, beschleunigte Bahnen und Mehrkörper-Ereignissteuerung bleiben offen.
+Allgemeine zeitabhängige Rotation/Kräfte und Mehrkörper-Ereignissteuerung bleiben offen.
 [Verträge und Beispiele](mechanics.md).
+
+
+Konservative CCD unterstützt nun explizite Weltachsenrotation einschließlich
+voller Drehungen sowie quadratische Translation. C und Physim teilen
+`RigidMotion`, Genauigkeits-/Iterationsvorgaben, kopierte Pfadlagen und
+konservative Bewegungshüllen. Analytische Erstkontakte prüfen rotierende
+Netz-/Kugel-/Ebenenfälle und gekrümmte Wege mit klaren Endlagen. Ausgeschöpfte
+Budgets melden einen offenen Fall mit erhaltenen Ausgaben; allgemeine
+zeitabhängige Kräfte/Drehungen und Mehrkörpersteuerung bleiben offen.
+[Verträge](mechanics.md).

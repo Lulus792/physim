@@ -31,6 +31,15 @@ int main(void) {
        ps_body_step(&sphere,ps_v3(0,0,0),ps_v3(0,0,0),1-event.fraction)!=PS_OK)return 7;
     double energy;
     if(ps_body_kinetic_energy(&sphere,&energy)!=PS_OK || fabs(energy-200)>1e-10 || fabs(sphere.position_m.x-13)>1e-10)return 8;
+    /* A full-turn tetrahedron is clear at both endpoints but reaches the plane
+     * between them. Its earliest vertex height solves sin(theta)+cos(theta)=1.2. */
+    ps_body rotor;
+    if(ps_body_with_inertia(1,ps_v3(.4,.4,.4),&rotor)!=PS_OK)return 9;
+    rotor.position_m.y=1.2;rotor.angular_velocity_rad_s.z=2*PS_PI;
+    ps_rigid_motion spin={ps_v3(0,0,0),ps_v3(0,0,2*PS_PI),ps_v3(0,0,0)};
+    if(ps_sweep_convex_plane_motion(&rotor,&mesh,spin,ps_v3(0,0,0),ps_v3(0,1,0),NULL,&event,&hit)!=PS_OK || !hit)return 10;
+    double reference=(asin(1.2/sqrt(2.0))-PS_PI/4)/(2*PS_PI);
+    if(fabs(event.fraction-reference)>1e-7)return 11;
     puts("Convex tetrahedron geometry passed");
     return 0;
 }

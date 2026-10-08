@@ -90,6 +90,48 @@ ps_result ps_sweep_sphere_convex(const ps_body *sphere, double radius_m,
 ps_result ps_aabb_swept_convex(const ps_body *body, const ps_convex_mesh *mesh,
                                ps_vec3 displacement_m, ps_aabb *out);
 
+/* Explicit path over fraction t in [0,1]: position=p0+t*translation+t*t*quadratic;
+ * orientation=exp(t*rotation_rad)*q0. The rotation vector is a WORLD axis times
+ * total radians, so full turns are preserved rather than endpoint-slerped away.
+ * Stored velocities, masses and inertia do not define this geometric path. */
+typedef struct {
+    ps_vec3 translation_m, rotation_rad, quadratic_m;
+} ps_rigid_motion;
+typedef struct {
+    double distance_tolerance_m;
+    uint32_t max_iterations;
+} ps_ccd_settings;
+#define PS_CCD_MAX_ITERATIONS 65536u
+extern const ps_ccd_settings PS_CCD_DEFAULT;
+/* Pose only; all other body fields are copied. Static poses may be prescribed.
+ * Invalid/unrepresentable inputs preserve out. fraction must be in [0,1]. */
+ps_result ps_body_motion_pose(const ps_body *body, ps_rigid_motion motion,
+                              double fraction, ps_body *out);
+/* Conservative advancement with an explicit distance envelope and work budget.
+ * One contact at separation <=distance_tolerance_m (or initial overlap at zero).
+ * No hit means the WHOLE remaining path was excluded by a separation/speed bound.
+ * PS_LIMIT means unresolved, never a no-hit result: all outputs stay unchanged.
+ * Numeric uncertainty exceeding the requested envelope returns PS_NUMERIC.
+ * Constant world-axis rotation and quadratic translation; no force integration
+ * or automatic event response. Both meshes may rotate through multiple turns.
+ * settings=NULL chooses PS_CCD_DEFAULT. Same borrowed meshes/atomic outputs. */
+ps_result ps_sweep_convexes_motion(const ps_body *a, const ps_convex_mesh *mesh_a,
+                                   ps_rigid_motion motion_a, const ps_body *b,
+                                   const ps_convex_mesh *mesh_b, ps_rigid_motion motion_b,
+                                   const ps_ccd_settings *settings, ps_sweep_hit *hit, bool *touching);
+ps_result ps_sweep_convex_plane_motion(const ps_body *body, const ps_convex_mesh *mesh,
+                                      ps_rigid_motion motion, ps_vec3 plane_point_m,
+                                      ps_vec3 plane_normal, const ps_ccd_settings *settings,
+                                      ps_sweep_hit *hit, bool *touching);
+ps_result ps_sweep_sphere_convex_motion(const ps_body *sphere, double radius_m,
+                                        ps_rigid_motion sphere_motion, const ps_body *body,
+                                        const ps_convex_mesh *mesh, ps_rigid_motion mesh_motion,
+                                        const ps_ccd_settings *settings, ps_sweep_hit *hit, bool *touching);
+/* Bounding sphere around the mesh origin contains every rotated vertex.
+ * Quadratic translation extrema on every coordinate are included. */
+ps_result ps_aabb_motion_convex(const ps_body *body, const ps_convex_mesh *mesh,
+                                ps_rigid_motion motion, ps_aabb *out);
+
 /* Bounds for the whole linearly translated sphere, suitable for broad_phase.
  * Current-pose bounds alone can miss CCD candidates. Transactional output. */
 ps_result ps_aabb_swept_sphere(const ps_body *body, double radius_m, ps_vec3 displacement_m,

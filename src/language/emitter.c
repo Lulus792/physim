@@ -177,6 +177,8 @@ static const char *type(emitter *e, ps_lang_type t) {
         return "ps_scalar_report";
     case PS_TYPE_SWEEP: return "psrt_sweep";
     case PS_TYPE_AABB: return "ps_aabb";
+    case PS_TYPE_RIGID_MOTION: return "ps_rigid_motion";
+    case PS_TYPE_CCD_SETTINGS: return "ps_ccd_settings";
     case PS_TYPE_COLLISION_PAIR: return "ps_collision_pair";
     case PS_TYPE_CHANNEL:
         return "psrt_channel";
@@ -4099,13 +4101,13 @@ static ps_lang_check_result emit(FILE *output, const char *source_path,
             info[id].optional_element == PS_TYPE_STRING)
             e.strings = e.arrays = 1;
         if ((info[id].type >= PS_TYPE_BOOL && info[id].type <= PS_TYPE_STRING) ||
-            (info[id].type >= PS_TYPE_VEC2 && info[id].type <= PS_TYPE_BATCH))
+            (info[id].type >= PS_TYPE_VEC2 && info[id].type <= PS_TYPE_CCD_SETTINGS))
             e.primitive_types |= UINT64_C(1) << info[id].type;
         if ((info[id].array_element >= PS_TYPE_BOOL && info[id].array_element <= PS_TYPE_STRING) ||
-            (info[id].array_element >= PS_TYPE_VEC2 && info[id].array_element <= PS_TYPE_BATCH))
+            (info[id].array_element >= PS_TYPE_VEC2 && info[id].array_element <= PS_TYPE_CCD_SETTINGS))
             e.primitive_types |= UINT64_C(1) << info[id].array_element;
         if ((info[id].optional_element >= PS_TYPE_BOOL && info[id].optional_element <= PS_TYPE_STRING) ||
-            (info[id].optional_element >= PS_TYPE_VEC2 && info[id].optional_element <= PS_TYPE_BATCH))
+            (info[id].optional_element >= PS_TYPE_VEC2 && info[id].optional_element <= PS_TYPE_CCD_SETTINGS))
             e.primitive_types |= UINT64_C(1) << info[id].optional_element;
         const ps_lang_builtin *builtin = ps_lang_builtin_get(info[id].binding);
         if (builtin) {
@@ -4115,7 +4117,7 @@ static ps_lang_check_result emit(FILE *output, const char *source_path,
             else if (builtin->host && builtin->host != (unsigned)experiment)
                 fail(&e, id, "Host API is unavailable in this module kind");
         }
-        if (info[id].type >= PS_TYPE_VEC2 && info[id].type <= PS_TYPE_BATCH)
+        if (info[id].type >= PS_TYPE_VEC2 && info[id].type <= PS_TYPE_CCD_SETTINGS)
             e.sdk = 1;
         if (info[id].type >= PS_TYPE_DATASET && info[id].type <= PS_TYPE_TABLE && experiment != 2)
             fail(&e, id, "Analysis handles require --emit-analysis");

@@ -518,9 +518,71 @@ bei Anteil `0.425`, prallt elastisch zurück und endet nach einer Sekunde bei
 `x=13` m mit unveränderter kinetischer Energie von 200 J. Der zentrale Impuls
 induziert hier keine Rotation; es ist ein isoliertes kraftfreies Ereignis.
 
-Allgemeine rotierende Sweeps und eine Ereignissteuerung für mehrere Körper
-bleiben offen. Diese Grenzen ersetzen nicht die vollständige CCD-Anforderung
+Die folgenden Pfadsweeps ergänzen explizite Rotation und quadratische
+Translation. Allgemeine zeitabhängige Rotation und eine Ereignissteuerung für
+mehrere Körper bleiben offen. Diese Grenzen ersetzen nicht die vollständige CCD-Anforderung
 im Projektplan.
+
+## Rotierende und quadratische Pfade
+
+`ps_rigid_motion` beschreibt eine explizite geometrische Bahn über `t` von 0 bis 1:
+`position = p0 + t*translation_m + t²*quadratic_m`. `rotation_rad` ist eine
+Weltachse multipliziert mit dem gesamten Drehwinkel; die Orientierung ist die
+Quaternion-Exponentialrotation bei `t*rotation_rad` vor der Anfangsorientierung.
+Vollständige Drehungen bleiben dadurch erhalten, auch wenn Anfangs- und Endlage
+gleich sind. `ps_body_motion_pose` liefert eine Körperkopie auf dieser Bahn.
+Gespeicherte Geschwindigkeiten, Masse und Hauptträgheiten werden dabei kopiert;
+die Funktion integriert weder Kräfte noch Geschwindigkeiten.
+
+`ps_sweep_convexes_motion`, `ps_sweep_sphere_convex_motion` und
+`ps_sweep_convex_plane_motion` verwenden
+[konservative Abstandsschritte](https://box2d.org/files/ErinCatto_ContinuousCollision_GDC2013.pdf).
+Ein Welt-Trennachsenabstand ist eine untere Abstandsschranke. Sie wird mit einer
+oberen Geschwindigkeitsschranke für relative Translation, quadratische Bewegung
+und `|rotation_rad| * maximaler Vertexradius` kombiniert. Die Suche schreitet
+innerhalb des ausgeschlossenen Intervalls voran; Flächen-/Kantenprojektionen und
+eine zusätzliche Zeugenrichtung aktualisieren die Schranke in jeder Lage.
+Rundungsunsicherheit wird vor dem nächsten Schritt abgezogen.
+
+`ps_ccd_settings` legt eine positive Distanzhülle in Metern und ein Budget von
+1 bis 65536 Iterationen fest. Standard sind `1e-8` m und 4096 Iterationen.
+Ein neuer Treffer besitzt Abstand innerhalb dieser Hülle, Anteil 0–1 und
+Eindringtiefe null. Sein gemeinsamer Punkt liegt zwischen den beiden nahen
+Oberflächen; innerhalb der Hülle kann die Impulsantwort etwas vor der idealen
+Berührung erfolgen. Anfangsüberlappungen behalten den diskreten Kontakt bei null.
+Ein freier Weg wird erst gemeldet, wenn die Abstandsschranke größer als die
+maximal verbleibende Bewegung ist. Sehr knappe Streifkontakte können ein hohes
+Budget benötigen. **`PS_LIMIT` bedeutet einen offenen Suchfall** und erhält
+Trefferwert und Flag; das Modell muss Budget/Zeitschritt anpassen oder stoppen.
+`PS_NUMERIC` meldet eine nicht auflösbare Bahn oder eine für Koordinatenmaßstab
+und Rundungsunsicherheit zu kleine Distanzhülle. Alle Fehler erhalten Körper
+und Netzspeicher.
+
+`ps_aabb_motion_convex` umfasst einen konservativen Vertexradius für alle
+Orientierungen und sämtliche Koordinatenextrema der quadratischen Translation.
+Die Hülle ist größer als die lineare Endpunktvereinigung, enthält aber auch
+Drehungen zwischen identischen Endlagen. Sie kann in die Broad Phase eingehen.
+Masse null verhindert die Vorgabe einer geometrischen Bahn nicht; eine bewegte
+kinematische Umgebung benötigt für physikalische Impulsantwort ein geeignetes
+Modell ihrer Kontaktgeschwindigkeit.
+
+Physim benutzt `RigidMotion(translation,rotation,quadratic)`,
+`CcdSettings(distanceTolerance,maxIterations)`, `CcdSettings.defaults()`,
+`Body.pose(motion,fraction)`, `Sweep.convexesMotion`, `Sweep.sphereConvexMotion`,
+`Sweep.convexPlaneMotion` und `Aabb.motionConvex`. Diese Bewegungs-/Einstellungs-
+werte lassen sich in eigenen Strukturen, optionalen Werten und Arrays speichern.
+Die vorhandenen linearen Sweeps bleiben für feste Orientierungen verfügbar.
+
+Die C-/Physim-Tetraederbeispiele prüfen zusätzlich eine volle Drehung über einer
+Ebene: Der Schwerpunkt liegt 1,2 m hoch, alle Vertices sind bei beiden Endlagen
+frei. Dazwischen erreicht ein Vertex die Ebene. Der erste Winkel erfüllt
+`sin(theta)+cos(theta)=1.2`; die Gegenprobe berechnet den Anteil unabhängig mit
+`(asin(1.2/sqrt(2))-pi/4)/(2*pi)`. Das ist eine geometrische Ereignissuche,
+keine automatisch gelöste rotierende Kontaktfolge.
+
+Die vollständige CCD-Anforderung bleibt für allgemeine zeitabhängige
+Rotations-/Kraftpfade und Mehrkörper-Ereignissteuerung offen. Der explizite
+Pfadvertrag und seine Distanzhülle ersetzen diese Anforderungen nicht.
 
 ## Kandidatenpaare für mehrere Körper
 

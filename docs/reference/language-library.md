@@ -40,6 +40,16 @@ Liefert nach außen gerundete Weltgrenzen eines geprüften konvexen Netzes. Indi
 
 Überall verfügbar.
 
+## Aabb.motionConvex
+
+```text
+Aabb.motionConvex(body: Body, vertices: [Vec3], indices: [Int64], motion: RigidMotion) -> Aabb
+```
+
+Konservative Kugelhülle aller rotierenden Netzvertices plus sämtliche quadratischen Translationsextrema für die Broad Phase.
+
+Überall verfügbar.
+
 ## Aabb.pairs
 
 ```text
@@ -560,6 +570,16 @@ Weltgeschwindigkeit in m/s an einem Weltpunkt in m, einschließlich Rotation.
 
 Überall verfügbar.
 
+## Body.pose
+
+```text
+Body.pose(motion: RigidMotion, fraction: Float64) -> Body
+```
+
+Kopierter Körper mit Lage auf dem expliziten Pfad bei Anteil 0–1. Masse, Trägheiten und gespeicherte Geschwindigkeiten bleiben erhalten.
+
+Überall verfügbar.
+
 ## Body.setState
 
 ```text
@@ -597,6 +617,26 @@ Body.withInertia(mass: Float64, principalInertia: Vec3) -> Body
 ```
 
 Erzeugt einen ruhenden Körper mit expliziter SI-Masse und drei Hauptträgheiten. Geometrie, Schwerpunkt und Hauptachsen werden vom Modell vorgegeben.
+
+Überall verfügbar.
+
+## CcdSettings
+
+```text
+CcdSettings(distanceTolerance: Float64, maxIterations: Int64) -> CcdSettings
+```
+
+Positive Distanzhülle in Metern und explizites Iterationsbudget 1–65536. Nicht aufgelöste Suchfälle melden Limit und bleiben abfangbar. Lesbare Felder: distanceTolerance (Float64) und maxIterations (Int64).
+
+Überall verfügbar.
+
+## CcdSettings.defaults
+
+```text
+CcdSettings.defaults() -> CcdSettings
+```
+
+Distanzhülle 1e-8 m und 4096 konservative Suchschritte; Modellmaßstab und Genauigkeit ausdrücklich wählen.
 
 Überall verfügbar.
 
@@ -1940,6 +1980,16 @@ Sphärische Rotationsinterpolation mit fraction in [0,1].
 
 Überall verfügbar.
 
+## RigidMotion
+
+```text
+RigidMotion(translation: Vec3, rotation: Vec3, quadratic: Vec3) -> RigidMotion
+```
+
+Expliziter Pfad: translation*t+quadratic*t² in Metern und konstante Weltachsenrotation rotation*t in Radiant. Vollständige Drehungen bleiben erhalten; gespeicherte Geschwindigkeiten werden nicht integriert. Lesbare Vec3-Felder: translation, rotation und quadratic.
+
+Überall verfügbar.
+
 ## Rng
 
 ```text
@@ -2752,6 +2802,16 @@ Erster Kontakt eines linear verschobenen konvexen Netzes mit einem festen Halbra
 
 Überall verfügbar.
 
+## Sweep.convexPlaneMotion
+
+```text
+Sweep.convexPlaneMotion(body: Body, vertices: [Vec3], indices: [Int64], motion: RigidMotion, point: Vec3, normal: Vec3, settings: CcdSettings) -> Sweep
+```
+
+Konservative rotierende/quadratische Netz-Halbraum-Suche; Normale zeigt in den freien Raum.
+
+Überall verfügbar.
+
 ## Sweep.convexes
 
 ```text
@@ -2759,6 +2819,16 @@ Sweep.convexes(bodyA: Body, verticesA: [Vec3], indicesA: [Int64], displacementA:
 ```
 
 Erster Kontakt zweier konvexer Netze entlang expliziter linearer Verschiebungen in Metern. Orientierung bleibt fest; Anfangsüberlappung zählt bei fraction()=0.
+
+Überall verfügbar.
+
+## Sweep.convexesMotion
+
+```text
+Sweep.convexesMotion(bodyA: Body, verticesA: [Vec3], indicesA: [Int64], motionA: RigidMotion, bodyB: Body, verticesB: [Vec3], indicesB: [Int64], motionB: RigidMotion, settings: CcdSettings) -> Sweep
+```
+
+Konservative rotierende/quadratische Netz-Netz-Suche mit Distanzhülle. Limit bedeutet offen, niemals kein Treffer.
 
 Überall verfügbar.
 
@@ -2779,6 +2849,16 @@ Sweep.sphereConvex(sphere: Body, radius: Float64, sphereDisplacement: Vec3, body
 ```
 
 Erster Kugelkontakt mit einem konvexen Netz bei beiden expliziten Verschiebungen und fester Netzorientierung; testet Flächen, Kanten und Vertices.
+
+Überall verfügbar.
+
+## Sweep.sphereConvexMotion
+
+```text
+Sweep.sphereConvexMotion(sphere: Body, radius: Float64, sphereMotion: RigidMotion, body: Body, vertices: [Vec3], indices: [Int64], meshMotion: RigidMotion, settings: CcdSettings) -> Sweep
+```
+
+Konservative Kugel-Netz-Suche mit rotierendem Netz und quadratischen Translationen; Kugelrotation beeinflusst die Geometrie nicht.
 
 Überall verfügbar.
 

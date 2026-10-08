@@ -99,7 +99,7 @@ static int builtin_type_name(checker *c, ps_lang_token t) {
         "Series", "Plot", "Table", "Distribution", "SensorConfig", "Sensor",
         "Measurement", "Rng", "OdeResult", "StepInterval", "ScalarResult", "Diagnostic", "RunIndex", "RunBlock", "RunSnapshot", "Collider", "ContactWorld", "Batch", "Body", "Contacts", "ContactSolver", "ContactResult",
         "DistanceJoint", "JointResult", "ContactConstraint", "JointConstraint",
-        "ConstraintResult", "Sweep", "Aabb", "CollisionPair"
+        "ConstraintResult", "Sweep", "Aabb", "CollisionPair", "RigidMotion", "CcdSettings"
     };
     for (size_t i = 0; i < sizeof names / sizeof names[0]; i++)
         if (word(c, t, names[i]))
@@ -111,7 +111,7 @@ static int reserved_nominal_type_name(checker *c, ps_lang_token t) {
         "Int64", "Float64", "Bool", "String", "Void", "Vec2", "Vec3", "Vec4",
         "Quat", "Mat3", "Mat4", "Bezier3", "Optional", "Rng", "Unit", "Medium", "Material",
         "Submersion", "Channel",
-        "Dataset", "Series", "Plot", "OdeResult", "StepInterval", "ScalarResult", "Diagnostic", "RunIndex", "RunBlock", "RunSnapshot", "Collider", "ContactWorld", "Batch"
+        "Dataset", "Series", "Plot", "OdeResult", "StepInterval", "ScalarResult", "Diagnostic", "RunIndex", "RunBlock", "RunSnapshot", "Collider", "ContactWorld", "Batch", "RigidMotion", "CcdSettings"
     };
     for (size_t i = 0; i < sizeof(names) / sizeof(names[0]); ++i)
         if (word(c, t, names[i]))
@@ -208,7 +208,7 @@ static int numeric(ps_lang_type t) { return t == PS_TYPE_INT64 || t == PS_TYPE_F
 static int vector_type(ps_lang_type t) { return ps_lang_vector_dimensions(t) != 0; }
 static int value_type(ps_lang_type t) {
     return t == PS_TYPE_BOOL || numeric(t) || t == PS_TYPE_STRING || t >= PS_TYPE_RECORD_BASE ||
-           (t >= PS_TYPE_VEC2 && t <= PS_TYPE_BATCH);
+           (t >= PS_TYPE_VEC2 && t <= PS_TYPE_CCD_SETTINGS);
 }
 static int scalar_type(ps_lang_type t) {
     return t == PS_TYPE_BOOL || numeric(t) || t == PS_TYPE_STRING;
@@ -576,6 +576,10 @@ static ps_lang_type annotation(checker *c, size_t id, int allow_void) {
             t = PS_TYPE_CONSTRAINT_RESULT;
         else if (word(c, n->token, "Sweep"))
             t = PS_TYPE_SWEEP;
+        else if (word(c, n->token, "RigidMotion"))
+            t = PS_TYPE_RIGID_MOTION;
+        else if (word(c, n->token, "CcdSettings"))
+            t = PS_TYPE_CCD_SETTINGS;
         else if (word(c, n->token, "Aabb"))
             t = PS_TYPE_AABB;
         else if (word(c, n->token, "CollisionPair"))
@@ -638,6 +642,13 @@ static size_t field_lookup(checker *c, ps_lang_type type, ps_lang_token name) {
                : word(c, name, "reachedTime") ? PS_LANG_MEMBER_ODE_REACHED_TIME
                : word(c, name, "nextStep") ? PS_LANG_MEMBER_ODE_NEXT_STEP
                : word(c, name, "errorNorm") ? PS_LANG_MEMBER_ODE_ERROR_NORM : 0;
+    if (type == PS_TYPE_RIGID_MOTION)
+        return word(c,name,"translation")?PS_LANG_MEMBER_MOTION_TRANSLATION
+             : word(c,name,"rotation")?PS_LANG_MEMBER_MOTION_ROTATION
+             : word(c,name,"quadratic")?PS_LANG_MEMBER_MOTION_QUADRATIC:0;
+    if (type == PS_TYPE_CCD_SETTINGS)
+        return word(c,name,"distanceTolerance")?PS_LANG_MEMBER_CCD_TOLERANCE
+             : word(c,name,"maxIterations")?PS_LANG_MEMBER_CCD_ITERATIONS:0;
     if (type == PS_TYPE_SWEEP)
         return word(c, name, "hit") ? PS_LANG_MEMBER_SWEEP_HIT : 0;
     if (type == PS_TYPE_AABB)
@@ -757,6 +768,9 @@ static ps_lang_type field_type(checker *c, size_t field, size_t member) {
         return PS_TYPE_VEC3;
     if (field == PS_LANG_MEMBER_RESULT_A || field == PS_LANG_MEMBER_RESULT_B)
         return PS_TYPE_BODY;
+    if(field<=PS_LANG_MEMBER_MOTION_TRANSLATION && field>=PS_LANG_MEMBER_MOTION_QUADRATIC)return PS_TYPE_VEC3;
+    if(field==PS_LANG_MEMBER_CCD_TOLERANCE)return PS_TYPE_FLOAT64;
+    if(field==PS_LANG_MEMBER_CCD_ITERATIONS)return PS_TYPE_INT64;
     if (field == PS_LANG_MEMBER_CONTACT_COUNT || field == PS_LANG_MEMBER_RESULT_COUNT ||
         field == PS_LANG_MEMBER_SOLVER_ITERATIONS)
         return PS_TYPE_INT64;
@@ -4118,6 +4132,7 @@ static int mutable_target(checker *c, size_t id) {
                 field == PS_LANG_MEMBER_SUBMERSION_VOLUME ||
                 field == PS_LANG_MEMBER_SUBMERSION_CENTROID ||
                 field == PS_LANG_MEMBER_STEP_ELAPSED || field == PS_LANG_MEMBER_STEP_NEXT ||
+                (field<=PS_LANG_MEMBER_MOTION_TRANSLATION && field>=PS_LANG_MEMBER_CCD_ITERATIONS) ||
                 (field <= PS_LANG_MEMBER_MATERIAL_DENSITY &&
                  field >= PS_LANG_MEMBER_MATERIAL_FRICTION) ||
                 (field <= PS_LANG_MEMBER_MEASUREMENT_VALUE && field >= PS_LANG_MEMBER_SKIPPED) ||
@@ -5317,6 +5332,8 @@ static void check_record(checker *c, size_t id) {
             part = 120;
         if (c->info[f].type == PS_TYPE_SWEEP) part = 72;
         if (c->info[f].type == PS_TYPE_AABB) part = 48;
+        if (c->info[f].type == PS_TYPE_RIGID_MOTION) part = 72;
+        if (c->info[f].type == PS_TYPE_CCD_SETTINGS) part = 16;
         if (c->info[f].type == PS_TYPE_MAT3) part = 72;
         if (c->info[f].type == PS_TYPE_MAT4) part = 128;
         if (c->info[f].type == PS_TYPE_BEZIER3) part = 96;

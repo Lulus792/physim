@@ -2045,6 +2045,14 @@
       "libraries": [
         "core"
       ]
+    },
+    "motion-sweep-probe": {
+      "sources": [
+        "tests/motion_sweep_probe.c"
+      ],
+      "libraries": [
+        "core"
+      ]
     }
   },
   "tests": [
@@ -8036,6 +8044,24 @@
             "{convex-sweep-probe}"
           ],
           "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "motion_sweep_oracle",
+      "targets": [
+        "python",
+        "motion-sweep-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_motion_sweep_oracle.py",
+            "--probe",
+            "{motion-sweep-probe}"
+          ],
+          "timeout": 180
         }
       ]
     }

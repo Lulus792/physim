@@ -1,0 +1,47 @@
+let rod = [Vec3(-2,-0.1,-0.1),Vec3(2,-0.1,-0.1),Vec3(2,0.1,-0.1),Vec3(-2,0.1,-0.1),Vec3(-2,-0.1,0.1),Vec3(2,-0.1,0.1),Vec3(2,0.1,0.1),Vec3(-2,0.1,0.1)]
+let target = [Vec3(-0.1,-0.1,-0.1),Vec3(0.1,-0.1,-0.1),Vec3(0.1,0.1,-0.1),Vec3(-0.1,0.1,-0.1),Vec3(-0.1,-0.1,0.1),Vec3(0.1,-0.1,0.1),Vec3(0.1,0.1,0.1),Vec3(-0.1,0.1,0.1)]
+let indices = [0,2,1,0,3,2,4,5,6,4,6,7,0,1,5,0,5,4,3,7,6,3,6,2,0,4,7,0,7,3,1,2,6,1,6,5]
+let zero = Vec3(0,0,0)
+let spin = RigidMotion(zero,Vec3(0,0,3.141592653589793),zero)
+let still = RigidMotion(zero,zero,zero)
+struct Query:
+    let motion: RigidMotion
+    let settings: CcdSettings
+let query = Query(spin,CcdSettings.defaults())
+assert(query.motion.translation.x == 0)
+assert(isClose(query.motion.rotation.z,3.141592653589793,1e-12,1e-12))
+assert(query.motion.quadratic.y == 0)
+assert(query.settings.distanceTolerance == 1e-8)
+assert(query.settings.maxIterations == 4096)
+let motions = [query.motion,still]
+func copied(value: RigidMotion) -> RigidMotion?:
+    return Optional.some(value)
+let optional: RigidMotion? = copied(query.motion)
+assert(optional.hasValue)
+let savedMotion = optional.unwrap()
+let configured: CcdSettings? = Optional.some(query.settings)
+assert(configured.hasValue)
+let a = Body.withInertia(1,Vec3(1,1,1))
+var b = a
+b.setState(Vec3(0,1.5,0),zero,Quat(0,0,0,1),zero)
+let event = Sweep.convexesMotion(a,rod,indices,motions[0],b,target,indices,motions[1],query.settings)
+assert(event.hit)
+assert(event.fraction() > 0)
+assert(event.fraction() < 0.5)
+let pose = a.pose(savedMotion,0.5)
+assert(isClose(pose.orientation.rotate(Vec3(1,0,0)).y,1,1e-12,1e-12))
+let bounds = Aabb.motionConvex(a,rod,indices,spin)
+assert(bounds.maximum.y > 2)
+let unresolved = attempt(Sweep.convexesMotion(a,rod,indices,spin,b,target,indices,still,CcdSettings(1e-8,1)))
+assert(unresolved == nil)
+var falling = a
+falling.setState(Vec3(0,3,0),zero,Quat(0,0,0,1),zero)
+let fall = RigidMotion(zero,zero,Vec3(0,-4,0))
+let plane = Sweep.convexPlaneMotion(falling,rod,indices,fall,zero,Vec3(0,1,0),query.settings)
+assert(plane.hit)
+assert(isClose(plane.fraction(),sqrt(2.9/4),1e-7,1e-7))
+var sphere = Body.sphere(1,0.2)
+sphere.setState(Vec3(0,1.5,0),zero,Quat(0,0,0,1),zero)
+let mixed = Sweep.sphereConvexMotion(sphere,0.2,still,a,rod,indices,spin,query.settings)
+assert(mixed.hit)
+print("Rotating/quadratic Physim motion, owned records/arrays, pose, bounds and unresolved budget passed")

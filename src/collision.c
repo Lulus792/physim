@@ -454,6 +454,27 @@ static ps_result cv_contact(ps_vec3 origin, double scale, ps_vec3 point, ps_vec3
     *out = result; *touching = true;
     return PS_OK;
 }
+static double cv_nearest_geometry(const cv_geometry *ga,const cv_geometry *gb,ps_vec3 *pa,ps_vec3 *pb) {
+    double distance = INFINITY;
+    for (size_t i = 0; i < ga->mesh->vertex_count; i++)
+        for (size_t j = 0; j < gb->mesh->triangle_count; j++) {
+            const uint32_t *t = gb->mesh->triangles[j];
+            cv_nearer(ga->vertices[i], cv_triangle_point(ga->vertices[i], gb->vertices[t[0]],
+                      gb->vertices[t[1]], gb->vertices[t[2]], gb->normals[j]), &distance, pa, pb);
+        }
+    for (size_t i = 0; i < gb->mesh->vertex_count; i++)
+        for (size_t j = 0; j < ga->mesh->triangle_count; j++) {
+            const uint32_t *t = ga->mesh->triangles[j];
+            cv_nearer(cv_triangle_point(gb->vertices[i], ga->vertices[t[0]], ga->vertices[t[1]],
+                      ga->vertices[t[2]], ga->normals[j]), gb->vertices[i], &distance, pa, pb);
+        }
+    for (size_t i = 0; i < ga->edge_count; i++)
+        for (size_t j = 0; j < gb->edge_count; j++)
+            cv_edges_closest(ga->vertices[ga->edges[i][0]], ga->vertices[ga->edges[i][1]],
+                             gb->vertices[gb->edges[j][0]], gb->vertices[gb->edges[j][1]],
+                             &distance, pa, pb);
+    return distance;
+}
 static ps_result cv_witness(cv_geometry *ga, cv_geometry *gb, ps_vec3 origin,
                              double scale, ps_vec3 normal, double depth,
                              double tolerance, ps_contact *out, bool *touching) {
@@ -461,24 +482,7 @@ static ps_result cv_witness(cv_geometry *ga, cv_geometry *gb, ps_vec3 origin,
      * then return their midpoint in the original overlapped configuration. */
     ps_vec3 shift = ps_vscale(normal, depth);
     for (size_t i = 0; i < gb->mesh->vertex_count; i++) gb->vertices[i] = ps_vadd(gb->vertices[i], shift);
-    double distance = INFINITY; ps_vec3 pa = {0}, pb = {0};
-    for (size_t i = 0; i < ga->mesh->vertex_count; i++)
-        for (size_t j = 0; j < gb->mesh->triangle_count; j++) {
-            const uint32_t *t = gb->mesh->triangles[j];
-            cv_nearer(ga->vertices[i], cv_triangle_point(ga->vertices[i], gb->vertices[t[0]],
-                      gb->vertices[t[1]], gb->vertices[t[2]], gb->normals[j]), &distance, &pa, &pb);
-        }
-    for (size_t i = 0; i < gb->mesh->vertex_count; i++)
-        for (size_t j = 0; j < ga->mesh->triangle_count; j++) {
-            const uint32_t *t = ga->mesh->triangles[j];
-            cv_nearer(cv_triangle_point(gb->vertices[i], ga->vertices[t[0]], ga->vertices[t[1]],
-                      ga->vertices[t[2]], ga->normals[j]), gb->vertices[i], &distance, &pa, &pb);
-        }
-    for (size_t i = 0; i < ga->edge_count; i++)
-        for (size_t j = 0; j < gb->edge_count; j++)
-            cv_edges_closest(ga->vertices[ga->edges[i][0]], ga->vertices[ga->edges[i][1]],
-                             gb->vertices[gb->edges[j][0]], gb->vertices[gb->edges[j][1]],
-                             &distance, &pa, &pb);
+    ps_vec3 pa={0},pb={0};double distance=cv_nearest_geometry(ga,gb,&pa,&pb);
     if (!isfinite(depth) || distance > tolerance)
         return PS_NUMERIC;
     return cv_contact(origin, scale, ps_vscale(ps_vsub(ps_vadd(pa, pb), shift), .5),
@@ -828,4 +832,183 @@ ps_result ps_sweep_sphere_convex(const ps_body *sphere, double radius, ps_vec3 d
     candidate.fraction=first;candidate.contact=(ps_contact){world_point,normal,0};
     *hit=candidate;*touching=true;
     return PS_OK;
+}
+
+const ps_ccd_settings PS_CCD_DEFAULT = {1e-8, 4096};
+static bool cv_motion_valid(ps_rigid_motion m) {
+    return finite3(m.translation_m) && finite3(m.rotation_rad) && finite3(m.quadratic_m) &&
+           isfinite(length3(m.rotation_rad));
+}
+ps_result ps_body_motion_pose(const ps_body *body, ps_rigid_motion m, double fraction, ps_body *out) {
+    if (!out || ps_body_validate(body)!=PS_OK || !cv_motion_valid(m) ||
+        !isfinite(fraction) || fraction<0 || fraction>1) return PS_INVALID;
+    ps_body result=*body;
+    result.orientation=cv_rotation(body);
+    double square=fraction*fraction;
+    result.position_m=ps_v3(fma(square,m.quadratic_m.x,fma(fraction,m.translation_m.x,body->position_m.x)),
+                           fma(square,m.quadratic_m.y,fma(fraction,m.translation_m.y,body->position_m.y)),
+                           fma(square,m.quadratic_m.z,fma(fraction,m.translation_m.z,body->position_m.z)));
+    double angle=length3(m.rotation_rad);
+    if (angle) {
+        ps_vec3 v=ps_vscale(cv_div(m.rotation_rad,angle),sin(.5*fraction*angle));
+        double w=cos(.5*fraction*angle);ps_quat q=cv_rotation(body);ps_vec3 qv=ps_v3(q.x,q.y,q.z);
+        ps_vec3 xyz=ps_vadd(ps_vadd(ps_vscale(qv,w),ps_vscale(v,q.w)),ps_vcross(v,qv));
+        result.orientation=(ps_quat){xyz.x,xyz.y,xyz.z,w*q.w-ps_vdot(v,qv)};
+        double n=hypot(hypot(result.orientation.x,result.orientation.y),hypot(result.orientation.z,result.orientation.w));
+        result.orientation.x/=n;result.orientation.y/=n;result.orientation.z/=n;result.orientation.w/=n;
+    }
+    if(ps_body_validate(&result)!=PS_OK)return PS_NUMERIC;
+    *out=result;return PS_OK;
+}
+static double cv_mesh_radius(const cv_geometry *g) {
+    double radius=0;
+    for(size_t i=0;i<g->mesh->vertex_count;i++)radius=fmax(radius,length3(g->vertices[i]));
+    return nextafter(radius,INFINITY);
+}
+static double cv_polynomial(double base,double linear,double quadratic,double t) {
+    return fma(t*t,quadratic,fma(t,linear,base));
+}
+ps_result ps_aabb_motion_convex(const ps_body *body,const ps_convex_mesh *mesh,ps_rigid_motion m,ps_aabb *out) {
+    if(!out || ps_body_validate(body)!=PS_OK || !cv_motion_valid(m))return PS_INVALID;
+    cv_geometry g;ps_result result=cv_prepare(mesh,&g);if(result!=PS_OK)return result;
+    double radius=nextafter((cv_mesh_radius(&g)+4*cv_tol)*g.scale,INFINITY);
+    if(!isfinite(radius))return PS_NUMERIC;
+    double p[3]={body->position_m.x,body->position_m.y,body->position_m.z};
+    double d[3]={m.translation_m.x,m.translation_m.y,m.translation_m.z};
+    double a[3]={m.quadratic_m.x,m.quadratic_m.y,m.quadratic_m.z},lo[3],hi[3];
+    for(unsigned i=0;i<3;i++) {
+        double end=cv_polynomial(p[i],d[i],a[i],1);
+        lo[i]=fmin(p[i],end);hi[i]=fmax(p[i],end);
+        if(a[i]) {
+            double t=-.5*(d[i]/a[i]);
+            if(t>0 && t<1) {double v=cv_polynomial(p[i],d[i],a[i],t);lo[i]=fmin(lo[i],v);hi[i]=fmax(hi[i],v);}
+        }
+        double pad=radius+4*cv_tol*fmax(fabs(p[i]),fmax(fabs(d[i]),fabs(a[i])));
+        lo[i]=nextafter(lo[i]-pad,-INFINITY);hi[i]=nextafter(hi[i]+pad,INFINITY);
+        if(!isfinite(end)||!isfinite(lo[i])||!isfinite(hi[i]))return PS_NUMERIC;
+    }
+    *out=(ps_aabb){ps_v3(lo[0],lo[1],lo[2]),ps_v3(hi[0],hi[1],hi[2])};return PS_OK;
+}
+
+static double cv_gap_axis(const cv_geometry *a,const cv_geometry *b,ps_vec3 axis) {
+    double n=length3(axis);if(n<=32*DBL_EPSILON)return 0;
+    axis=cv_div(axis,n);double al,ah,bl,bh;
+    cv_interval(a,axis,&al,&ah);cv_interval(b,axis,&bl,&bh);
+    return fmax(0,fmax(bl-ah,al-bh));
+}
+static double cv_gap(const cv_geometry *a,const cv_geometry *b) {
+    double gap=0;
+    for(size_t i=0;i<a->mesh->triangle_count;i++)gap=fmax(gap,cv_gap_axis(a,b,a->normals[i]));
+    for(size_t i=0;i<b->mesh->triangle_count;i++)gap=fmax(gap,cv_gap_axis(a,b,b->normals[i]));
+    for(size_t i=0;i<a->edge_count;i++) {
+        ps_vec3 u=ps_vsub(a->vertices[a->edges[i][1]],a->vertices[a->edges[i][0]]);u=cv_div(u,length3(u));
+        for(size_t j=0;j<b->edge_count;j++) {
+            ps_vec3 v=ps_vsub(b->vertices[b->edges[j][1]],b->vertices[b->edges[j][0]]);v=cv_div(v,length3(v));
+            gap=fmax(gap,cv_gap_axis(a,b,ps_vcross(u,v)));
+        }
+    }
+    return gap;
+}
+/* kind 0: mesh/mesh; 1: sphere/mesh; 2: mesh/fixed halfspace. */
+static ps_result cv_motion_initial(unsigned kind,const ps_body *a,const ps_convex_mesh *ma,double radius,
+    const ps_body *b,const ps_convex_mesh *mb,ps_vec3 point,ps_vec3 normal,ps_contact *contact,bool *touching) {
+    if(kind==0)return ps_contact_convexes(a,ma,b,mb,contact,touching);
+    if(kind==1)return ps_contact_sphere_convex(a,radius,b,mb,contact,touching);
+    return ps_contact_convex_plane(a,ma,point,normal,contact,touching);
+}
+static ps_result cv_motion_query(unsigned kind,const ps_body *a,const ps_convex_mesh *ma,double radius,
+    ps_rigid_motion motion_a,const ps_body *b,const ps_convex_mesh *mb,ps_rigid_motion motion_b,
+    ps_vec3 point,ps_vec3 normal,const ps_ccd_settings *supplied,ps_sweep_hit *hit,bool *touching) {
+    ps_ccd_settings settings=supplied?*supplied:PS_CCD_DEFAULT;
+    if(!hit||!touching||!cv_motion_valid(motion_a)||!cv_motion_valid(motion_b)||
+       !isfinite(settings.distance_tolerance_m)||settings.distance_tolerance_m<=0||!settings.max_iterations)
+        return PS_INVALID;
+    if(settings.max_iterations>PS_CCD_MAX_ITERATIONS)return PS_LIMIT;
+    ps_sweep_hit candidate={0};bool initial;
+    ps_result result=cv_motion_initial(kind,a,ma,radius,b,mb,point,normal,&candidate.contact,&initial);
+    if(result!=PS_OK)return result;
+    if(initial){*hit=candidate;*touching=true;return PS_OK;}
+    cv_geometry base_a={0},base_b={0};double scale;
+    if(kind!=1){result=cv_prepare(ma,&base_a);if(result!=PS_OK)return result;}
+    if(kind!=2){result=cv_prepare(mb,&base_b);if(result!=PS_OK)return result;}
+    scale=kind==0?fmax(base_a.scale,base_b.scale):kind==1?fmax(radius,base_b.scale):base_a.scale;
+    double tol=settings.distance_tolerance_m/scale;
+    if(!isfinite(tol)||tol<16*cv_tol)return PS_NUMERIC;
+    double angle_a=kind==1?0:length3(motion_a.rotation_rad),angle_b=kind==2?0:length3(motion_b.rotation_rad);
+    double ra=kind==1?0:cv_mesh_radius(&base_a)*(base_a.scale/scale);
+    double rb=kind==2?0:cv_mesh_radius(&base_b)*(base_b.scale/scale);
+    ps_vec3 linear=ps_vsub(cv_div(motion_a.translation_m,scale),cv_div(motion_b.translation_m,scale));
+    ps_vec3 quadratic=ps_vsub(cv_div(motion_a.quadratic_m,scale),cv_div(motion_b.quadratic_m,scale));
+    double bound=(length3(linear)+2*length3(quadratic)+angle_a*ra+angle_b*rb)*(1+1e-12);
+    if(!isfinite(bound))return PS_NUMERIC;
+    double pose_coordinates=fmax(cv_max(a->position_m)/scale,
+        fmax(cv_max(motion_a.translation_m)/scale,cv_max(motion_a.quadratic_m)/scale));
+    if(kind!=2)pose_coordinates=fmax(pose_coordinates,fmax(cv_max(b->position_m)/scale,
+        fmax(cv_max(motion_b.translation_m)/scale,cv_max(motion_b.quadratic_m)/scale)));
+    else pose_coordinates=fmax(pose_coordinates,cv_max(point)/scale);
+    double t=0;
+    for(uint32_t iteration=0;iteration<settings.max_iterations;iteration++) {
+        ps_body pa,pb={0};
+        result=ps_body_motion_pose(a,motion_a,t,&pa);if(result!=PS_OK)return result;
+        if(kind!=2){result=ps_body_motion_pose(b,motion_b,t,&pb);if(result!=PS_OK)return result;}
+        cv_geometry ga=base_a,gb=base_b;ps_vec3 origin=pa.position_m;
+        if(kind!=1){result=cv_world(&ga,&pa,kind==2?point:origin,scale);if(result!=PS_OK)return result;}
+        if(kind!=2){result=cv_world(&gb,&pb,origin,scale);if(result!=PS_OK)return result;}
+        ps_vec3 wa={0},wb={0},direction={0};double upper,lower,coordinates=fmax(1,3*pose_coordinates);
+        if(kind==0) {
+            upper=cv_nearest_geometry(&ga,&gb,&wa,&wb);lower=cv_gap(&ga,&gb);
+            if(upper>0){direction=cv_div(ps_vsub(wb,wa),upper);lower=fmax(lower,cv_gap_axis(&ga,&gb,direction));}
+        } else if(kind==1) {
+            double distance=INFINITY;
+            for(size_t i=0;i<mb->triangle_count;i++) {
+                const uint32_t *tri=mb->triangles[i];
+                ps_vec3 p=cv_triangle_point(ps_v3(0,0,0),gb.vertices[tri[0]],gb.vertices[tri[1]],gb.vertices[tri[2]],gb.normals[i]);
+                double d=length3(p);if(d<distance){distance=d;wb=p;}
+            }
+            if(distance==0)return PS_NUMERIC;
+            direction=cv_div(wb,distance);wa=ps_vscale(direction,radius/scale);
+            upper=fmax(0,distance-radius/scale);double lo,hi;cv_interval(&gb,direction,&lo,&hi);lower=fmax(0,lo-radius/scale);
+        } else {
+            size_t nearest=0;double distance=ps_vdot(ga.vertices[0],normal);
+            for(size_t i=1;i<ma->vertex_count;i++){double d=ps_vdot(ga.vertices[i],normal);if(d<distance){nearest=i;distance=d;}}
+            wa=ga.vertices[nearest];wb=ps_vsub(wa,ps_vscale(normal,distance));direction=ps_vscale(normal,-1);
+            upper=lower=fmax(0,distance);origin=point;
+        }
+        if(kind!=1)for(size_t i=0;i<ma->vertex_count;i++)coordinates=fmax(coordinates,cv_max(ga.vertices[i]));
+        if(kind!=2)for(size_t i=0;i<mb->vertex_count;i++)coordinates=fmax(coordinates,cv_max(gb.vertices[i]));
+        double error=cv_tol*(coordinates+angle_a*ra+angle_b*rb+1);
+        if(!isfinite(upper)||!isfinite(lower)||!isfinite(error)||error>tol/8)return PS_NUMERIC;
+        if(lower<=error) {
+            bool overlapping;ps_contact discrete;
+            result=cv_motion_initial(kind,&pa,ma,radius,kind==2?NULL:&pb,mb,point,normal,&discrete,&overlapping);
+            if(result!=PS_OK)return result;
+            if(overlapping){candidate.contact=discrete;candidate.contact.penetration_m=t?0:discrete.penetration_m;candidate.fraction=t;*hit=candidate;*touching=true;return PS_OK;}
+        }
+        if(upper<=tol && length3(direction)>0) {
+            bool found;
+            result=cv_contact(origin,scale,ps_vscale(ps_vadd(wa,wb),.5),direction,0,&candidate.contact,&found);
+            if(result!=PS_OK)return result;
+            candidate.fraction=t;*hit=candidate;*touching=true;return PS_OK;
+        }
+        double safe=fmax(0,lower-error);
+        if(safe>bound*(1-t) || bound==0){*touching=false;return PS_OK;}
+        if(!safe)return PS_LIMIT;
+        double next=t+.8*(safe/bound);
+        if(!isfinite(next)||next<=t)return PS_LIMIT;
+        t=fmin(next,1);
+    }
+    return PS_LIMIT;
+}
+ps_result ps_sweep_convexes_motion(const ps_body *a,const ps_convex_mesh *ma,ps_rigid_motion da,
+    const ps_body *b,const ps_convex_mesh *mb,ps_rigid_motion db,const ps_ccd_settings *settings,ps_sweep_hit *hit,bool *touching) {
+    return cv_motion_query(0,a,ma,0,da,b,mb,db,ps_v3(0,0,0),ps_v3(0,0,0),settings,hit,touching);
+}
+ps_result ps_sweep_convex_plane_motion(const ps_body *body,const ps_convex_mesh *mesh,ps_rigid_motion motion,
+    ps_vec3 point,ps_vec3 normal,const ps_ccd_settings *settings,ps_sweep_hit *hit,bool *touching) {
+    double n=length3(normal);if(!finite3(normal)||fabs(n-1)>1e-8)return PS_INVALID;
+    return cv_motion_query(2,body,mesh,0,motion,NULL,NULL,(ps_rigid_motion){0},point,cv_div(normal,n),settings,hit,touching);
+}
+ps_result ps_sweep_sphere_convex_motion(const ps_body *sphere,double radius,ps_rigid_motion ds,
+    const ps_body *body,const ps_convex_mesh *mesh,ps_rigid_motion db,const ps_ccd_settings *settings,ps_sweep_hit *hit,bool *touching) {
+    return cv_motion_query(1,sphere,NULL,radius,ds,body,mesh,db,ps_v3(0,0,0),ps_v3(0,0,0),settings,hit,touching);
 }

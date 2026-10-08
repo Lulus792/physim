@@ -26,4 +26,11 @@ sphere = response.bodyA
 sphere.step(Vec3(0,0,0),Vec3(0,0,0),1-event.fraction())
 assert(isClose(sphere.position.x,13,1e-10,1e-10))
 assert(isClose(sphere.kineticEnergy(),200,1e-10,1e-10))
+var rotor = Body.withInertia(1,Vec3(0.4,0.4,0.4))
+rotor.setState(Vec3(0,1.2,0),Vec3(0,0,0),Quat(0,0,0,1),Vec3(0,0,6.283185307179586))
+let spin = RigidMotion(Vec3(0,0,0),Vec3(0,0,6.283185307179586),Vec3(0,0,0))
+let turning = Sweep.convexPlaneMotion(rotor,vertices,indices,spin,Vec3(0,0,0),Vec3(0,1,0),CcdSettings.defaults())
+assert(turning.hit)
+let reference = (asin(1.2/sqrt(2))-0.7853981633974483)/6.283185307179586
+assert(isClose(turning.fraction(),reference,1e-7,1e-7))
 print("Convex tetrahedron geometry passed")

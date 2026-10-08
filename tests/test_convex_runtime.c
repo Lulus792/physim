@@ -25,6 +25,13 @@ static int rejected(unsigned operation,ps_result expected) {
         if(operation==5)(void)psrt_sweep_convexes(a,vertices,4,indices,12,ps_v3(NAN,0,0),b,vertices,4,indices,12,ps_v3(0,0,0),site);
         if(operation==6){b.position_m.x=10;(void)psrt_sweep_convexes(a,vertices,4,indices,12,ps_v3(DBL_MAX,0,0),b,vertices,4,indices,12,ps_v3(-DBL_MAX,0,0),site);}
         if(operation==7)(void)psrt_aabb_swept_convex(a,vertices,65,indices,12,ps_v3(1,0,0),site);
+        if(operation==8){b.position_m.x=10;(void)psrt_sweep_convexes_motion(a,vertices,4,indices,12,
+            (ps_rigid_motion){ps_v3(20,0,0),ps_v3(0,0,0),ps_v3(0,0,0)},b,vertices,4,indices,12,(ps_rigid_motion){0},(ps_ccd_settings){1e-8,1},site);}
+        if(operation==9){b.position_m.x=10;(void)psrt_sweep_convexes_motion(a,vertices,4,indices,12,
+            (ps_rigid_motion){0},b,vertices,4,indices,12,(ps_rigid_motion){0},(ps_ccd_settings){1e-20,4096},site);}
+        if(operation==10)(void)psrt_ccd_settings(-1,10,site);
+        if(operation==11)(void)psrt_rigid_motion(ps_v3(0,0,0),ps_v3(NAN,0,0),ps_v3(0,0,0),site);
+        if(operation==12)(void)psrt_ccd_settings(1e-8,65537,site);
         psrt_current=NULL;CHECK(false);
     }
     psrt_current=NULL;
@@ -37,6 +44,8 @@ int main(void) {
     CHECK(rejected(0,PS_INVALID)==0);CHECK(rejected(1,PS_LIMIT)==0);
     CHECK(rejected(2,PS_NUMERIC)==0);CHECK(rejected(3,PS_INVALID)==0);CHECK(rejected(4,PS_INVALID)==0);
     CHECK(rejected(5,PS_INVALID)==0);CHECK(rejected(6,PS_NUMERIC)==0);CHECK(rejected(7,PS_LIMIT)==0);
+    CHECK(rejected(8,PS_LIMIT)==0);CHECK(rejected(9,PS_NUMERIC)==0);CHECK(rejected(10,PS_INVALID)==0);
+    CHECK(rejected(11,PS_INVALID)==0);CHECK(rejected(12,PS_LIMIT)==0);
     puts("Convex runtime: original status codes, structured diagnostics, source sites and clean traps passed");
     return 0;
 }

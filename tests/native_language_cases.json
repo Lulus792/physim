@@ -5173,6 +5173,23 @@
           "stderr_pattern": "type"
         }
       ]
+    },
+    {
+      "name": "motion_types",
+      "checks": [
+        {
+          "name": "motion_readonly",
+          "source": "var m = RigidMotion(Vec3(0,0,0),Vec3(0,0,0),Vec3(0,0,0))\nm.rotation.x = 1\n",
+          "exit_code": 1,
+          "stderr_pattern": "Assignment requires a mutable var binding"
+        },
+        {
+          "name": "settings_readonly",
+          "source": "var settings = CcdSettings(1e-8,4096)\nsettings.maxIterations = 1\n",
+          "exit_code": 1,
+          "stderr_pattern": "Assignment requires a mutable var binding"
+        }
+      ]
     }
   ],
   "programs": [
@@ -5425,6 +5442,11 @@
       "name": "convex_example",
       "source": "examples/language/convex_contacts.phys",
       "stdout": "Convex tetrahedron geometry passed\n"
+    },
+    {
+      "name": "motion_sweep",
+      "source": "tests/fixtures/language/motion_sweep.phys",
+      "stdout": "Rotating/quadratic Physim motion, owned records/arrays, pose, bounds and unresolved budget passed\n"
     }
   ],
   "workflows": [

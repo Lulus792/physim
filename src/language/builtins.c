@@ -48,6 +48,8 @@
 #define GRAPH_RESULT PS_TYPE_CONSTRAINT_RESULT
 #define SWEEP PS_TYPE_SWEEP
 #define AABB PS_TYPE_AABB
+#define MOTION PS_TYPE_RIGID_MOTION
+#define CCD PS_TYPE_CCD_SETTINGS
 static const ps_lang_builtin library[] = {
     {"propertyConstant", "psrt_property_constant", QUANTITY, 6, 0, {S,S,QUANTITY,V4,F,F}, {"name","source","value","domain","temperature","pressure"}},
     {"propertyTable", "psrt_property_table", QUANTITY, 9, 0,
@@ -266,6 +268,21 @@ static const ps_lang_builtin library[] = {
      {"sphere","radius","sphereDisplacement","body","vertices","indices","meshDisplacement"}},
     {"sweptConvexBounds", "psrt_aabb_swept_convex", AABB, 4, 0,
      {BODY,PS_LANG_VEC3_ARRAY,PS_LANG_INT_ARRAY,V3}, {"body","vertices","indices","displacement"}},
+    {"RigidMotion", "psrt_rigid_motion", MOTION, 3, 0, {V3,V3,V3}, {"translation","rotation","quadratic"}},
+    {"CcdSettings", "psrt_ccd_settings", CCD, 2, 0, {F,I}, {"distanceTolerance","maxIterations"}},
+    {"defaultCcdSettings", "psrt_ccd_default", CCD, 0, 0, {0}, {NULL}},
+    {"motionPose", "psrt_motion_pose", BODY, 3, 0, {BODY,MOTION,F}, {"body","motion","fraction"}},
+    {"sweepConvexesMotion", "psrt_sweep_convexes_motion", SWEEP, 9, 0,
+     {BODY,PS_LANG_VEC3_ARRAY,PS_LANG_INT_ARRAY,MOTION,BODY,PS_LANG_VEC3_ARRAY,PS_LANG_INT_ARRAY,MOTION,CCD},
+     {"bodyA","verticesA","indicesA","motionA","bodyB","verticesB","indicesB","motionB","settings"}},
+    {"sweepConvexPlaneMotion", "psrt_sweep_convex_plane_motion", SWEEP, 7, 0,
+     {BODY,PS_LANG_VEC3_ARRAY,PS_LANG_INT_ARRAY,MOTION,V3,V3,CCD},
+     {"body","vertices","indices","motion","point","normal","settings"}},
+    {"sweepSphereConvexMotion", "psrt_sweep_sphere_convex_motion", SWEEP, 8, 0,
+     {BODY,F,MOTION,BODY,PS_LANG_VEC3_ARRAY,PS_LANG_INT_ARRAY,MOTION,CCD},
+     {"sphere","radius","sphereMotion","body","vertices","indices","meshMotion","settings"}},
+    {"motionConvexBounds", "psrt_aabb_motion_convex", AABB, 4, 0,
+     {BODY,PS_LANG_VEC3_ARRAY,PS_LANG_INT_ARRAY,MOTION}, {"body","vertices","indices","motion"}},
     {"sweepFraction", "psrt_sweep_fraction", F, 1, 0, {SWEEP}, {"sweep"}},
     {"sweepContacts", "psrt_sweep_contacts", CONTACTS, 1, 0, {SWEEP}, {"sweep"}},
     {"sphereBounds", "psrt_aabb_sphere", AABB, 2, 0, {BODY, F}, {"body", "radius"}},
@@ -806,6 +823,7 @@ static const ps_lang_method methods[] = {
                                          {"resolve", "resolveContacts", CONTACTS, 0},
                                          {"resolveSingle", "resolveSingleContact", CONTACTS, 0},
                                          {"impulse", "contactImpulse", RESULT, 0},
+                                         {"pose", "motionPose", BODY, 0},
                                          {"setState", "bodySetState", BODY, PS_LANG_METHOD_MUTATING},
                                          {"applyImpulse", "bodyApplyImpulse", BODY, PS_LANG_METHOD_MUTATING},
                                          {"step", "bodyStep", BODY, PS_LANG_METHOD_MUTATING},
@@ -929,6 +947,10 @@ static const struct { const char *owner, *name, *function; } factories[] = {
     {"Mat4", "trs", "trsMat4"},
     {"Sweep", "spheres", "sweepSpheres"},
     {"Sweep", "convexes", "sweepConvexes"},
+    {"Sweep", "convexesMotion", "sweepConvexesMotion"},
+    {"Sweep", "convexPlaneMotion", "sweepConvexPlaneMotion"},
+    {"Sweep", "sphereConvexMotion", "sweepSphereConvexMotion"},
+    {"CcdSettings", "defaults", "defaultCcdSettings"},
     {"Sweep", "convexPlane", "sweepConvexPlane"},
     {"Sweep", "sphereConvex", "sweepSphereConvex"},
     {"Sweep", "spherePlane", "sweepSpherePlane"},
@@ -937,6 +959,7 @@ static const struct { const char *owner, *name, *function; } factories[] = {
     {"Aabb", "convex", "convexBounds"},
     {"Aabb", "sweptSphere", "sweptSphereBounds"},
     {"Aabb", "sweptConvex", "sweptConvexBounds"},
+    {"Aabb", "motionConvex", "motionConvexBounds"},
     {"Aabb", "pairs", "collisionPairs"},
     {"ContactSolver", "defaults", "defaultContactSolver"},
     {"Batch", "resume", "batchResume"},
@@ -985,6 +1008,12 @@ const ps_lang_builtin *ps_lang_static_method_find(const void *type, size_t type_
     return NULL;
 }
 const char *ps_lang_member_name(size_t binding) {
+    if(binding==PS_LANG_MEMBER_MOTION_TRANSLATION)return "translation_m";
+    if(binding==PS_LANG_MEMBER_MOTION_ROTATION)return "rotation_rad";
+    if(binding==PS_LANG_MEMBER_MOTION_QUADRATIC)return "quadratic_m";
+    if(binding==PS_LANG_MEMBER_CCD_TOLERANCE)return "distance_tolerance_m";
+    if(binding==PS_LANG_MEMBER_CCD_ITERATIONS)return "max_iterations";
+
     if(binding==PS_LANG_MEMBER_STEP_ELAPSED) return "elapsed_s";
     if(binding==PS_LANG_MEMBER_STEP_NEXT) return "next_s";
     if (binding == PS_LANG_MEMBER_SUBMERSION_VOLUME) return "volume_m3";

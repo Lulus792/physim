@@ -1026,5 +1026,5 @@ python3 tools/verify-native-sdk.py --sdk build/package --work build/convex-packa
 
 Der fokussierte Modus baut den Core zusätzlich nur aus Paketquellen neu und
 prüft unabhängige Kontaktzeugen, lineare Sweep-Zeitreferenzen und Ereignis-
-Restzeit in C-/Physim-Beispielen. Kontaktwelt, rotierendes CCD und vollständige
+Restzeit in C-/Physim-Beispielen. Kontaktwelt, allgemeine zeitabhängige Rotation und vollständige
 GUI-Abnahme sind gesonderte Anforderungen.

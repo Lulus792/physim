@@ -102,6 +102,15 @@ def c_reference(module, title, guide, intro):
 
 
 LANG_DESCRIPTIONS = {
+    'RigidMotion': 'Expliziter Pfad: translation*t+quadratic*t² in Metern und konstante Weltachsenrotation rotation*t in Radiant. Vollständige Drehungen bleiben erhalten; gespeicherte Geschwindigkeiten werden nicht integriert. Lesbare Vec3-Felder: translation, rotation und quadratic.',
+    'CcdSettings': 'Positive Distanzhülle in Metern und explizites Iterationsbudget 1–65536. Nicht aufgelöste Suchfälle melden Limit und bleiben abfangbar. Lesbare Felder: distanceTolerance (Float64) und maxIterations (Int64).',
+    'defaultCcdSettings': 'Distanzhülle 1e-8 m und 4096 konservative Suchschritte; Modellmaßstab und Genauigkeit ausdrücklich wählen.',
+    'motionPose': 'Kopierter Körper mit Lage auf dem expliziten Pfad bei Anteil 0–1. Masse, Trägheiten und gespeicherte Geschwindigkeiten bleiben erhalten.',
+    'sweepConvexesMotion': 'Konservative rotierende/quadratische Netz-Netz-Suche mit Distanzhülle. Limit bedeutet offen, niemals kein Treffer.',
+    'sweepConvexPlaneMotion': 'Konservative rotierende/quadratische Netz-Halbraum-Suche; Normale zeigt in den freien Raum.',
+    'sweepSphereConvexMotion': 'Konservative Kugel-Netz-Suche mit rotierendem Netz und quadratischen Translationen; Kugelrotation beeinflusst die Geometrie nicht.',
+    'motionConvexBounds': 'Konservative Kugelhülle aller rotierenden Netzvertices plus sämtliche quadratischen Translationsextrema für die Broad Phase.',
+
     'sweepConvexes': 'Erster Kontakt zweier konvexer Netze entlang expliziter linearer Verschiebungen in Metern. Orientierung bleibt fest; Anfangsüberlappung zählt bei fraction()=0.',
     'sweepConvexPlane': 'Erster Kontakt eines linear verschobenen konvexen Netzes mit einem festen Halbraum. Die Normale zeigt in den freien Raum.',
     'sweepSphereConvex': 'Erster Kugelkontakt mit einem konvexen Netz bei beiden expliziten Verschiebungen und fester Netzorientierung; testet Flächen, Kanten und Vertices.',
@@ -638,7 +647,7 @@ def language_reference():
                  BODY='Body', CONTACTS='Contacts', SOLVER='ContactSolver', RESULT='ContactResult',
                  JOINT='DistanceJoint', JOINT_RESULT='JointResult',
                  CONTACT_CONSTRAINT='ContactConstraint', JOINT_CONSTRAINT='JointConstraint', GRAPH_RESULT='ConstraintResult',
-                 SWEEP='Sweep', AABB='Aabb', PS_LANG_AABB_ARRAY='[Aabb]', PS_LANG_PAIR_ARRAY='[CollisionPair]',
+                 SWEEP='Sweep', MOTION='RigidMotion', CCD='CcdSettings', AABB='Aabb', PS_LANG_AABB_ARRAY='[Aabb]', PS_LANG_PAIR_ARRAY='[CollisionPair]',
                  PS_LANG_BODY_ARRAY='[Body]', PS_LANG_CONTACT_CONSTRAINT_ARRAY='[ContactConstraint]',
                  PS_LANG_JOINT_CONSTRAINT_ARRAY='[JointConstraint]',
                  SAMPLE='Measurement', PS_TYPE_BOOL='Bool', PS_TYPE_FUNCTION='func(Float64) -> Float64',

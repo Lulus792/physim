@@ -182,4 +182,55 @@ static inline ps_aabb psrt_aabb_swept_convex(ps_body body, const ps_vec3 *vertic
     if(status!=PS_OK)psrt_fail_code(site,status,"Swept convex bounds failed");
     return result;
 }
+static inline ps_rigid_motion psrt_rigid_motion(ps_vec3 translation,ps_vec3 rotation,ps_vec3 quadratic,psrt_site site) {
+    if(!isfinite(translation.x)||!isfinite(translation.y)||!isfinite(translation.z)||
+       !isfinite(rotation.x)||!isfinite(rotation.y)||!isfinite(rotation.z)||
+       !isfinite(hypot(hypot(rotation.x,rotation.y),rotation.z))||
+       !isfinite(quadratic.x)||!isfinite(quadratic.y)||!isfinite(quadratic.z))
+        psrt_fail_code(site,PS_INVALID,"Non-finite rigid motion");
+    return (ps_rigid_motion){translation,rotation,quadratic};
+}
+static inline ps_ccd_settings psrt_ccd_settings(double tolerance,int64_t iterations,psrt_site site) {
+    if(!isfinite(tolerance)||tolerance<=0||iterations<=0)psrt_fail_code(site,PS_INVALID,"Invalid CCD tolerance or budget");
+    if(iterations>PS_CCD_MAX_ITERATIONS)psrt_fail_code(site,PS_LIMIT,"CCD iteration capacity exceeded");
+    return (ps_ccd_settings){tolerance,(uint32_t)iterations};
+}
+static inline ps_ccd_settings psrt_ccd_default(psrt_site site){(void)site;return PS_CCD_DEFAULT;}
+static inline ps_body psrt_motion_pose(ps_body body,ps_rigid_motion motion,double fraction,psrt_site site){
+    ps_body result;ps_result status=ps_body_motion_pose(&body,motion,fraction,&result);
+    if(status!=PS_OK)psrt_fail_code(site,status,"Rigid motion pose failed");
+    return result;
+}
+static inline psrt_sweep psrt_sweep_convexes_motion(ps_body a,const ps_vec3 *va,size_t na,const int64_t *ia,size_t ca,
+    ps_rigid_motion da,ps_body b,const ps_vec3 *vb,size_t nb,const int64_t *ib,size_t cb,ps_rigid_motion db,
+    ps_ccd_settings settings,psrt_site site){
+    uint32_t ta[PS_CONVEX_MAX_TRIANGLES][3],tb[PS_CONVEX_MAX_TRIANGLES][3];
+    ps_convex_mesh ma=psrt_convex_mesh(va,na,ia,ca,ta,site),mb=psrt_convex_mesh(vb,nb,ib,cb,tb,site);
+    psrt_sweep result={0};ps_result status=ps_sweep_convexes_motion(&a,&ma,da,&b,&mb,db,&settings,&result.value,&result.hit);
+    if(status!=PS_OK)psrt_fail_code(site,status,"Rotating convex sweep unresolved or invalid");
+    return result;
+}
+static inline psrt_sweep psrt_sweep_convex_plane_motion(ps_body body,const ps_vec3 *vertices,size_t count,
+    const int64_t *indices,size_t index_count,ps_rigid_motion motion,ps_vec3 point,ps_vec3 normal,
+    ps_ccd_settings settings,psrt_site site){
+    uint32_t triangles[PS_CONVEX_MAX_TRIANGLES][3];ps_convex_mesh mesh=psrt_convex_mesh(vertices,count,indices,index_count,triangles,site);
+    psrt_sweep result={0};ps_result status=ps_sweep_convex_plane_motion(&body,&mesh,motion,point,normal,&settings,&result.value,&result.hit);
+    if(status!=PS_OK)psrt_fail_code(site,status,"Rotating convex-plane sweep unresolved or invalid");
+    return result;
+}
+static inline psrt_sweep psrt_sweep_sphere_convex_motion(ps_body sphere,double radius,ps_rigid_motion ds,
+    ps_body body,const ps_vec3 *vertices,size_t count,const int64_t *indices,size_t index_count,
+    ps_rigid_motion db,ps_ccd_settings settings,psrt_site site){
+    uint32_t triangles[PS_CONVEX_MAX_TRIANGLES][3];ps_convex_mesh mesh=psrt_convex_mesh(vertices,count,indices,index_count,triangles,site);
+    psrt_sweep result={0};ps_result status=ps_sweep_sphere_convex_motion(&sphere,radius,ds,&body,&mesh,db,&settings,&result.value,&result.hit);
+    if(status!=PS_OK)psrt_fail_code(site,status,"Rotating sphere-convex sweep unresolved or invalid");
+    return result;
+}
+static inline ps_aabb psrt_aabb_motion_convex(ps_body body,const ps_vec3 *vertices,size_t count,
+    const int64_t *indices,size_t index_count,ps_rigid_motion motion,psrt_site site){
+    uint32_t triangles[PS_CONVEX_MAX_TRIANGLES][3];ps_convex_mesh mesh=psrt_convex_mesh(vertices,count,indices,index_count,triangles,site);
+    ps_aabb result;ps_result status=ps_aabb_motion_convex(&body,&mesh,motion,&result);
+    if(status!=PS_OK)psrt_fail_code(site,status,"Rigid motion bounds failed");
+    return result;
+}
 #endif

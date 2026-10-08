@@ -979,3 +979,109 @@ Die 29 geänderten Dateien stimmen zwischen macOS und Linux per SHA-256 überein
 `build/convex-sweep-sdk-{mac,linux}-PASSED.json`. Der letzte Dokumentationsnachtrag
 erfolgte nach Paketierung; Programmcode, öffentliche Header und Testeingaben
 blieben unverändert. Die historischen 207181 Bytes bleiben bytegleich erhalten.
+
+## Konservative rotierende und quadratische CCD am 8. Oktober 2026
+
+`ps_rigid_motion` erhält vollständige Weltachsenrotationen und quadratische
+Translation. `ps_body_motion_pose` kopiert Lage und Orientierung auf dem
+expliziten Pfad, ohne Kräfte oder gespeicherte Geschwindigkeiten zu integrieren.
+Konvexe Paar-/Kugel-/Ebenen-Anfragen verwenden konservative Abstandsschritte,
+Trennachsen und Zeugenrichtungen mit einer oberen Bewegungsschranke. Erfolg
+innerhalb der expliziten Distanzhülle liefert einen Kontakt; ein freier Restweg
+wird erst nach Ausschluss durch die Schranke gemeldet. `PS_LIMIT` erhält alle
+Ausgaben und bedeutet einen offenen Suchfall. Eine nicht auflösbare
+Koordinaten-/Rotationsgenauigkeit liefert `PS_NUMERIC` statt eines freien Wegs.
+[Pfad, Hülle, Budgets und Grenzen](mechanics.md).
+
+Die unabhängige analytische Gegenprobe enthält 234 Fälle mit 220 Erstkontakten:
+60 Größenfamilien jeweils als rotierender Stab gegen Ebene, Kugel und Box;
+40 quadratische Wege mit gleicher Anfangs-/Endhöhe und innerem Ebenenkontakt;
+zwölf vollständig ausgeschlossene Pfade sowie Budget-/Invalid-Fälle.
+Winkel reichen bis zu sechs vollständigen Drehungen. Referenzen lösen die
+Sinus-/Kosinus-/Quadratikbedingungen des ersten Kontakts separat und vergleichen
+mit der gewählten Distanzhülle, Kontaktpunkt und Normalen. Ein neuer Treffer darf
+zwischen der analytischen Hüllgrenze und der idealen Berührung liegen.
+Zusätzliche C-Fälle prüfen volle Drehungen mit identischen Endorientierungen,
+Posen, konservative Radien/Translationsextrema, 1608 tatsächlich transformierte
+Vertices im Bewegungs-AABB, fehlende Auflösung und atomare Budgetfehler.
+
+Physim besitzt `RigidMotion` und `CcdSettings` als kopierbare Werte mit lesbaren,
+geschützten Feldern. Strukturen, Arrays, optionale Werte, annotierte Funktionen,
+Posen und alle Sweep-/Bounds-Aufrufe laufen tatsächlich. Negative Compilerfälle
+verwerfen Feldmutation. 13 Host-Traps prüfen ursprüngliche Invalid-/Limit-/
+Numeric-Codes, strukturierte Diagnosen, Quellpositionen und abgewickelte Cleanups.
+Die C-/Physim-Tetraederbeispiele prüfen zusätzlich eine volle Drehung mit freien
+Endlagen gegen eine Ebene und vergleichen den ersten Anteil mit einer unabhängigen
+Winkelreferenz. Die bereits geprüfte lineare elastische Ereignis-/Restzeit bleibt
+enthalten; eine automatisch gelöste rotierende Kontaktfolge wird nicht behauptet.
+
+Die erste Sprachfixture scheiterte mit 1/2 unter `run-i6p2tusj`, weil die neuen
+Werttypen noch nicht in allen Checker-/Emitter-Grenzen registriert waren.
+Die Typgrenzen, Deskriptorerfassung und Größenabschätzung umfassen sie jetzt;
+zugleich nutzt die Fixture die bestehende Quaternion-Rotationsmethode.
+Die erste Orakelversion benutzte irrtümlich Code 7 für `PS_LIMIT`; die tatsächliche
+Enumposition ist 9. Dieser Prüferfehler bleibt unter `run-lw5p8o5d` erhalten.
+Die korrigierte analytische Auswahl besteht mit 3/3 (`run-iznldat5`), die
+optionale Typprüfung mit 1/1 (`run-j4gkp9e_`).
+
+Intel macOS 14.6.1/Apple Clang 16 besteht die endgültige Auswahl mit 16/16 unter
+`build/contact-world-language-release-mac/test-results/run-l9g_yi27`.
+Debian 12/GCC 12.2 besteht 16/16 unter
+`build/contact-world-language-release-linux/test-results/run-03p9fphg`.
+Clang 14/ASan/UBSan besteht 16/16 unter
+`build/atspi-asan-linux/test-results/run-1w5wnt0d`.
+Die Auswahl enthält neue C-/Physim-Pfade, Compiler-/Wertregressionen,
+Diagnosecodes, Tetraederbeispiele, 1014 diskrete Geometriefälle,
+705 lineare Sweep-Fälle, Referenzdokumentation und Prüfkiterstellung.
+`ASAN_OPTIONS=detect_leaks=0` lässt Address-/UB-Prüfungen aktiv. macOS-Sanitizer
+bleiben wegen fehlendem `ld64.lld` ungeprüft. Die anschließende Aufteilung
+mehrdeutiger einzeiliger Rückgaben ist rein formatierend; Paketprüfungen bauen
+und prüfen diese endgültigen Header/Probes erneut.
+
+Stoß-Workflow und Handbuch-Tastaturführung bestehen auf macOS mit 2/2 unter
+`run-gg79ead_` und Linux/X11 mit 2/2 unter `run-r3zytq2y` in den jeweiligen
+Release-Testverzeichnissen. Alle 31 Referenzdokumente sind geprüft. Das
+unabhängige Prüfkit umfasst jetzt 131 genau manifestierte Eingaben.
+
+Drei bereits vollständig bestandene ältere SDK-Prüfstände sind vollständig
+archiviert: `parent-watch-sdk-proof-linux/Native SDK ä m7a3cycd`,
+`collision-tutorial-sdk-proof-linux/Native SDK ä 4sht9ghs` und
+`monte-carlo-tutorial-sdk-proof-linux/Native SDK ä 9_kllbwq`.
+`build/motion-space-archived-proofs.tar.gz` besitzt 559487548 Bytes,
+20873 Dateien/Links und SHA-256
+`bf58a19bc9bef46775bb7ddaa18a1566421dba8e3d356a992b2460f523e8e4ba`.
+Alle Inhalte/Links wurden auf macOS gegen das Inventar geprüft, Originale vor
+Entfernen erneut vollständig gehasht. Danach wurde das Archiv zurück nach Linux
+kopiert und dort vollständig geprüft. Belege liegen unter `build/motion-space-*`;
+die ursprünglichen Pfade bleiben wiederherstellbar. Keine Quellen wurden entfernt.
+
+PP-0387 bleibt unvollständig für allgemeine zeitabhängige Rotations-/Kraftpfade
+und Mehrkörper-Ereignissteuerung. Der explizite Pfadvertrag, Distanzhülle und
+Work-Budget ersetzen diese Anforderungen nicht. Aktuelle Windows-/Apple-Silicon-
+und gesamte Produktabnahme bleiben gesondert offen.
+
+Die abschließende Posenprüfung normiert auch bei Nullrotation gültige,
+fast einheitliche Anfangsquaternionen, damit Pose und Bewegungshülle denselben
+Rotationsvertrag verwenden. Der zusätzliche C-Fall prüft dies ausdrücklich.
+Die drei betroffenen C-/Physim-/Analytikfälle bestehen anschließend auf macOS
+mit 3/3 (`run-twvtgor0`), Linux/Release mit 3/3 (`run-0be1rdv_`) und
+Linux/ASan/UBSan mit 3/3 (`run-ycufv4hc`). Andere Algorithmen und Tests blieben
+gegenüber der erweiterten 16er-Auswahl unverändert.
+
+Das verschobene macOS-SDK besteht unter
+`build/motion-sweep-sdk-checks/Native SDK ä s4jc0vbz`, das Linux-SDK unter
+`build/motion-sweep-sdk-checks/Native SDK ä ydssmug2`. Beide besitzen 464
+manifestierte Dateien. Installierter und ausschließlich aus SDK-Quellen neu
+gebauter Core bestehen die drei unabhängigen Geometrie-/Sweep-Orakel,
+C-/Physim-Beispiele, typisierte Bewegungs-/Einstellungswerte und erhaltene
+Invalid-/Limit-/Numeric-Diagnosen. Der Paketcompiler übersetzt die Quellen selbst;
+das installierte Sprachbeispiel läuft zusätzlich direkt. Unter Linux stammt der
+Prüfer allein aus `build/motion-sweep-independent-kit`, ohne Entwicklerheader
+oder Implementierung im Prüfkit. Die endgültigen Header/Probes besitzen die
+formatierend aufgeteilten Rückgaben; die Paketkompilierung prüft diesen Stand.
+
+Die 29 geänderten Dateien stimmen zwischen macOS und Linux per SHA-256 überein
+(`build/motion-sweep-source-freeze.json`). SDK-Belege liegen unter
+`build/motion-sweep-sdk-{mac,linux}-PASSED.json`. Dieser letzte Belegnachtrag
+erfolgte nach Paketierung; Implementierung, öffentliche Header und Testeingaben
+blieben unverändert. Vollständige Projektabnahme bleibt offen.

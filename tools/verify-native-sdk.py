@@ -140,6 +140,10 @@ def verify_body_range(repo, sdk, consumer, builder, library, rebuilt_core, suffi
 
 def verify_convex_contacts(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked):
     """Public geometry, impulse response and C/Physim parity from packaged Core."""
+    shutil.copy2(repo / "tests/test_motion_sweep.c", consumer / "motion-sweep-check.c")
+    shutil.copy2(repo / "tests/motion_sweep_probe.c", consumer / "motion-sweep-probe.c")
+    checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
+             repo / "tests/fixtures/language/motion_sweep.phys"], output=consumer / "motion-sweep-language.c")
     shutil.copy2(repo / "tests/test_convex.c", consumer / "convex-check.c")
     shutil.copy2(repo / "tests/test_convex_sweep.c", consumer / "convex-sweep-check.c")
     shutil.copy2(repo / "tests/convex_sweep_probe.c", consumer / "convex-sweep-probe.c")
@@ -164,7 +168,12 @@ def verify_convex_contacts(repo, sdk, consumer, builder, library, rebuilt_core, 
         sweep_probe = builder.executable("convex-sweep-probe-" + kind, ["convex-sweep-probe.c"], [archive])
         checked([sweep_check])
         checked([sys.executable, repo / "tests/test_convex_sweep_oracle.py", "--probe", sweep_probe])
-    print("Installed/rebuilt SDK convex contacts: validated closed meshes, independent SAT/witnesses, mixed contacts, explicit inertia, impulse response, C/Physim event examples, linear convex/sphere sweeps and atomic errors passed", flush=True)
+        motion_check = builder.executable("motion-sweep-check-" + kind, ["motion-sweep-check.c"], [archive])
+        motion_probe = builder.executable("motion-sweep-probe-" + kind, ["motion-sweep-probe.c"], [archive])
+        motion_language = builder.executable("motion-sweep-language-" + kind, ["motion-sweep-language.c"], [archive], language=True)
+        checked([motion_check]); checked([motion_language])
+        checked([sys.executable, repo / "tests/test_motion_sweep_oracle.py", "--probe", motion_probe])
+    print("Installed/rebuilt SDK convex contacts: validated closed meshes, independent SAT/witnesses, mixed contacts, explicit inertia, impulse response, C/Physim event examples, linear/rotating/quadratic sweeps, typed motion values and unresolved atomic limits passed", flush=True)
 
 
 def main():
@@ -274,7 +283,7 @@ def main():
             shutil.copytree(sdk / "src", consumer / "src")
             rebuilt_core = builder.archive("sdk-rebuilt-core", [f"src/{name}.c" for name in native.CORE])
             verify_convex_contacts(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
-            (root / "PASSED.txt").write_text("Focused C/Physim convex SDK verification passed; installed/rebuilt Core, independent geometry witnesses, explicit inertia, mixed contacts, linear sweeps/event examples, manifest and relocation; no full contact-world/rotating-CCD or GUI acceptance.\n", encoding="utf-8")
+            (root / "PASSED.txt").write_text("Focused C/Physim convex SDK verification passed; installed/rebuilt Core, independent geometry witnesses, explicit inertia, mixed contacts, linear/rotating/quadratic sweeps/event examples, manifest and relocation; no full contact-world/rotating-CCD or GUI acceptance.\n", encoding="utf-8")
             print(f"Convex SDK verified: {root}")
             return
         if args.body_only:

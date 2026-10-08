@@ -79,6 +79,11 @@
 #define PS_LANG_MEMBER_STEP_ELAPSED (SIZE_MAX - 174)
 #define PS_LANG_MEMBER_STEP_NEXT (SIZE_MAX - 175)
 /* Signature-only markers, resolved to canonical array types by the checker. */
+#define PS_LANG_MEMBER_MOTION_TRANSLATION (SIZE_MAX - 176)
+#define PS_LANG_MEMBER_MOTION_ROTATION (SIZE_MAX - 177)
+#define PS_LANG_MEMBER_MOTION_QUADRATIC (SIZE_MAX - 178)
+#define PS_LANG_MEMBER_CCD_TOLERANCE (SIZE_MAX - 179)
+#define PS_LANG_MEMBER_CCD_ITERATIONS (SIZE_MAX - 180)
 #define PS_LANG_VEC3_ARRAY ((ps_lang_type)128)
 #define PS_LANG_SERIES_ARRAY ((ps_lang_type)129)
 #define PS_LANG_STRING_ARRAY ((ps_lang_type)130)

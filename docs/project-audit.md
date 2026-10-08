@@ -407,6 +407,7 @@ automatische Kontaktweltintegration bleiben gesondert offen. Das Audit enthält
 PP-0387 ist jetzt konkret incomplete: Lineare konvexe Paar-/Kugel-/Ebenen-
 Sweeps und Bewegungshüllen ergänzen die Kugelbasis. Unabhängige Zeitintervalle,
 Distanznullstellen und Oberflächenzeugen sowie echte C-/Physim-Ereignisse mit
-Restzeit sind geprüft. Allgemeine Rotation, beschleunigte Bahnen und eine
+Restzeit sind geprüft. Konstante Weltachsenrotation und quadratische Translation sind inzwischen
+implementiert. Allgemeine zeitabhängige Rotation/Kräfte und eine
 Mehrkörper-Ereignissteuerung fehlen weiterhin; der Gesamtumfang wird durch den
 Vertrag mit festen Orientierungen nicht ersetzt.
