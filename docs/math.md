@@ -33,11 +33,19 @@ Auch ein Vektor aus `DBL_MAX`-Komponenten oder subnormalen Zahlen wird normiert.
 Der Nullvektor bleibt Null; eine nichtendliche Komponente liefert ausschließlich NaN.
 
 `ps_close(a,b,absolute,relative)` prüft die symmetrische Bedingung
-`abs(a-b) <= absolute + relative * max(abs(a),abs(b))`, mit skalierter Rechnung bei
-extremen Werten. Beide Toleranzen müssen endlich und nichtnegativ sein. Nichtendliche
+`abs(a-b) <= absolute + relative * max(abs(a),abs(b))`, für die exakten binären Eingabewerte.
+Beide Toleranzen müssen endlich und nichtnegativ sein. Nichtendliche
 Vergleichswerte liefern immer `false`, auch zwei gleiche Unendlichkeiten. Die absolute
 Toleranz hat die Einheit der Werte, die relative ist dimensionslos. Beide null verlangen
-exakte Gleichheit. Nahe der Grenze bleibt die übliche Rundung der Gleitkommarechnung.
+exakte Gleichheit einschließlich signierter Null. Ein konservatives Fehlerintervall
+entscheidet gewöhnliche Fälle; an der Grenze und bei Über-/Unterlauf werden
+Produkte und Summen mit begrenzten Integerarrays exakt verglichen. Kein Heap und
+keine breitere Fließkommapräzision werden benötigt.
+
+Physim bietet denselben Vertrag mit `isClose(left,right,absoluteTolerance,relativeTolerance)`.
+Ungültige Werte/Toleranzen ergeben `false`; es gibt keine versteckte Standardtoleranz.
+`tests/test_close_range_oracle.py` vergleicht C- und Physim-Ergebnisse mit unabhängigen
+rationalen Referenzen einschließlich der benachbarten Double-Werte beiderseits der Grenze.
 
 ## Quaternionen
 

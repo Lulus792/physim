@@ -3654,3 +3654,58 @@ Die geänderten Quellen sind zwischen macOS und Linux per SHA-256 abgeglichen
 bleiben ignorierte Nachweise im Build-Verzeichnis. Aktuelle Windows-, Apple-
 Silicon-, Wayland- und praktische Screenreader-Nachweise entstehen durch diese
 fokussierten Läufe nicht.
+
+## Exakte Toleranzvergleiche am 8. Oktober 2026
+
+`ps_close` und Physim `isClose` entscheiden die symmetrische absolute/relative
+Bedingung für exakte binäre Eingabewerte. Ein konservatives Fehlerintervall
+beschleunigt eindeutige Fälle; die vorhandenen begrenzten Integer-Hilfen erhalten
+kritische Differenzen, Produkte und Summen ohne Heapallokation. Beide Toleranzen
+null verlangen exakte Gleichheit; nichtendliche Werte/Toleranzen und negative
+Toleranzen ergeben false. [Einheiten und Grenzvertrag](math.md).
+
+Die unabhängige Fraction-Gegenprobe findet beim bisherigen, im Run-Stream-SDK
+aufbewahrten Core 1751 abweichende Grenzentscheidungen in 9176 Fällen
+(`build/close-baseline-final.log`). Darunter sind 1 gegen den negativen kleinsten
+Subnormalwert bei absoluter Toleranz 1 und entgegengesetzte `DBL_MAX`-Werte
+knapp unter der kombinierten Toleranzgrenze. Die endgültige Probe prüft jede
+C-Eingabe in beiden Vergleichsrichtungen; die Sprachfixture umfasst 263 aus
+binären Mantissen/Exponenten exakt rekonstruierbare Eingaben. Referenzen werden
+mit Python Fraction unabhängig von der Produktionsimplementierung berechnet.
+
+Intel macOS 14.6.1/Apple Clang 16 besteht sechs ausgewählte Release-Fälle unter
+`build/contact-world-language-release-mac/test-results/run-13xdmja8`:
+Math, Sprachchecker, Referenzdokumentation sowie skalare Suche, Transformationen
+und Zahlenvergleich mit unabhängigen Orakeln. Debian 12/Clang 14 besteht dieselbe
+Auswahl unter ASan/UBSan in
+`build/atspi-asan-linux/test-results/run-nuynpn3v` (6/6).
+`ASAN_OPTIONS=detect_leaks=0` lässt Address-/UndefinedBehavior-Prüfungen aktiv;
+macOS-Sanitizer bleiben wegen fehlendem `ld64.lld` unbestätigt.
+
+Das macOS-SDK besitzt 457 manifestierte Dateien. Die fokussierte Prüfung
+`--comparison-only` verschiebt es nach
+`build/close-sdk-checks/Native SDK ä 5gngu1fr`, prüft dessen Manifest und baut
+Core ausschließlich aus Paketquellen neu. Der Paketcompiler übersetzt die
+263 Physim-Eingaben. C-/Physim-Programme bestehen gegen installierte und neu
+gebaute Bibliothek dieselbe rationale Gegenprobe. Das unabhängige Prüfkit
+umfasst 108 Dateien und besteht Paketgrenzen, SHA-256, fehlende/dynamische
+Eingaben und exklusives Veröffentlichen.
+
+Debian 12/GCC 12.2 besteht dieselben sechs Release-Fälle unter
+`build/contact-world-language-release-linux/test-results/run-mx8_srnb`.
+Die großen bestehenden Such-/Transformations-Sprachfixtures benötigen längere
+Optimierung; GCC meldet ein erschöpftes Variablen-Tracking-Budget und kompiliert
+diese Dateien anschließend ohne dieses optionale Debug-Tracking. Der tatsächlich
+abgeschlossene Gesamtlauf besteht inklusive der neuen Vergleichsfixture (6/6).
+
+Das Linux-SDK enthält ebenfalls 457 manifestierte Dateien. Die verschobene
+Prüfung unter `build/close-sdk-checks/Native SDK ä 5x7emncm` besteht dieselbe
+C-/Physim-Gegenprobe gegen installierten und ausschließlich aus Paketquellen
+neu gebauten Core. Alle 18 geänderten Dateien stimmen zwischen macOS und Linux
+per SHA-256 überein (`build/close-source-freeze.json`). Die endgültige
+Prüfkiterstellung mit 108 Dateien besteht auf beiden Plattformen.
+
+PP-0358 ist mit diesen begrenzten Nachweisen als implementiert erfasst. Die
+Originaltexte und Umfänge aller 531 Planblöcke bleiben erhalten; PP-0365 und die
+vollständige Algorithmus-/Produkt-/Plattformabnahme bleiben offen. Die Nachweise
+enthalten keine aktuelle Windows-, Apple-Silicon- oder macOS-Sanitizer-Abnahme.

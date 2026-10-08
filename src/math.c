@@ -122,13 +122,29 @@ bool ps_close(double a, double b, double absolute, double relative) {
         return false;
     if (a == b)
         return true;
-    double difference = fabs(a - b), scale = fmax(fabs(a), fabs(b));
-    if (difference <= absolute)
-        return true;
-    /* Subtract absolute before dividing so neither the bound nor a-b overflows. */
-    if (isfinite(difference))
-        return (difference - absolute) / scale <= relative;
-    return fabs(a / scale - b / scale) <= absolute / scale + relative;
+    double hi = fmax(a, b), lo = fmin(a, b);
+    double scale = fmax(fabs(a), fabs(b));
+    double difference = fabs(a - b), tolerance = absolute + relative * scale;
+    double margin = (16 * DBL_EPSILON) * fmax(scale, fmax(difference, tolerance));
+    /* The normal error enclosure covers subtraction, product, sum and final
+     * subtraction, including their subnormal rounding. Ambiguous boundaries
+     * and overflowing intermediates fall through to exact accumulation. */
+    if (margin >= DBL_MIN && isfinite(margin) && isfinite(difference) && isfinite(tolerance)) {
+        double gap = difference - tolerance;
+        if (gap > margin)
+            return false;
+        if (gap < -margin)
+            return true;
+    }
+    /* Compare exact binary inputs without rounding the tolerance boundary.
+     * Separate positive/negative fixed-size sums also cover overflowing
+     * differences/products and tolerances below the least subnormal. */
+    uint32_t positive[TRANSFORM_WORDS] = {0}, negative[TRANSFORM_WORDS] = {0};
+    transform_add_double(hi >= 0 ? positive : negative, hi, 0);
+    transform_add_double(lo >= 0 ? negative : positive, lo, 0);
+    transform_add_double(negative, absolute, 0);
+    transform_add_product(negative, relative, scale);
+    return transform_compare(positive, negative) <= 0;
 }
 ps_mat3 ps_mat3_identity(void) {
     return (ps_mat3){{1, 0, 0, 0, 1, 0, 0, 0, 1}};

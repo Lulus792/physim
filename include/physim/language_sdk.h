@@ -635,6 +635,11 @@ static inline ps_submersion psrt_sphere_submersion(double radius, double center_
                                            : "Sphere submersion requires finite height and positive radius");
     return result;
 }
+static inline bool psrt_is_close(double left, double right, double absolute, double relative,
+                                 psrt_site site) {
+    (void)site;
+    return ps_close(left, right, absolute, relative);
+}
 static inline ps_quat psrt_quat(double x, double y, double z, double w, psrt_site site) {
     return (ps_quat){psrt_finite(x, site), psrt_finite(y, site), psrt_finite(z, site),
                      psrt_finite(w, site)};

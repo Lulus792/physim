@@ -1980,6 +1980,18 @@
     "transform-range-language": {
       "source": "tests/fixtures/language/transform_range.phys",
       "mode": "--emit-c"
+    },
+    "close-range-probe": {
+      "sources": [
+        "tests/close_range_probe.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "close-range-language": {
+      "source": "tests/fixtures/language/close_range.phys",
+      "mode": "--emit-c"
     }
   },
   "tests": [
@@ -7843,6 +7855,29 @@
             "{root}/tests/fixtures/language/transform_range.phys"
           ],
           "timeout": 180
+        }
+      ]
+    },
+    {
+      "name": "close_range_oracle",
+      "targets": [
+        "python",
+        "close-range-probe",
+        "close-range-language"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_close_range_oracle.py",
+            "--c",
+            "{close-range-probe}",
+            "--language",
+            "{close-range-language}",
+            "--fixture",
+            "{root}/tests/fixtures/language/close_range.phys"
+          ],
+          "timeout": 120
         }
       ]
     }

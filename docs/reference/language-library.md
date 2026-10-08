@@ -3781,6 +3781,16 @@ Liefert einen eigenen UTF-8-String mit dem ausgewählten Eingabepfad. Nullbasier
 
 Analysemodul erforderlich.
 
+## isClose
+
+```text
+isClose(left: Float64, right: Float64, absoluteTolerance: Float64, relativeTolerance: Float64) -> Bool
+```
+
+Prüft die exakte symmetrische absolute/relative Toleranzbedingung für binäre Double-Eingaben; ungültige Werte liefern false.
+
+Überall verfügbar.
+
 ## label
 
 ```text

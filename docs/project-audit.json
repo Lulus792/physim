@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-08",
-  "inspected_revision": "63548b10dcbbe061a0bdd588c2f31f5a700a94d7",
+  "inspected_revision": "2c0b136f9f894d5269c0ea498f59e6efb71bd8b8",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2320,9 +2320,21 @@
       "kind": "list",
       "scope": "planned",
       "text": "- robuste Vergleiche und definierte Toleranzen.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/math.h",
+        "src/math.c",
+        "src/transform_numeric.h",
+        "include/physim/language_sdk.h",
+        "src/language/builtins.c",
+        "tests/test_math.c",
+        "tests/close_range_probe.c",
+        "tests/test_close_range_oracle.py",
+        "tests/fixtures/language/close_range.phys",
+        "docs/math.md",
+        "docs/numerics.md"
+      ],
+      "note": "ps_close und Physim isClose entscheiden die explizite symmetrische absolute/relative Toleranzbedingung für binäre Double-Eingaben exakt. Ein konservativer Fehlerfilter beschleunigt eindeutige Fälle; feste Integerarrays sichern Grenzen, Subnormalwerte und überlaufende Differenzen/Produkte. Ungültige Eingaben liefern false, beide Toleranzen null verlangen exakte Gleichheit. Unabhängige Fraction-Referenzen prüfen 9176 C-Fälle in beiden Richtungen und 263 Physim-Fälle. Solver-/ODE-Toleranzen bleiben jeweils getrennte dokumentierte Algorithmusverträge; keine Behauptung, dass alle physikalischen Modellgrenzen damit abgenommen sind."
     },
     {
       "id": "PP-0359",

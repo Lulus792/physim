@@ -967,3 +967,15 @@ python3 tools/verify-native-sdk.py --sdk build/package --work build/stream-packa
 
 Sie prüft Manifestintegrität und Verschiebbarkeit. Sie ersetzt keine vollständige
 SDK- oder GUI-Abnahme und kann nicht mit anderen fokussierten Modi kombiniert werden.
+
+
+### Zahlenvergleiche aus einem SDK prüfen
+
+```sh
+python3 tools/verify-native-sdk.py --sdk build/package --work build/comparison-package-checks --comparison-only
+```
+
+Der fokussierte Modus vergleicht C-/Physim-Toleranzentscheidungen mit unabhängigen
+rationalen Referenzen gegen installierten und aus verschobenen SDK-Quellen neu
+gebauten Core. Er prüft Manifest und Paketverschiebung, ersetzt keine vollständige
+SDK-/GUI-Abnahme und ist mit anderen fokussierten Modi nicht kombinierbar.

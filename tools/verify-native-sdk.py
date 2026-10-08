@@ -61,6 +61,19 @@ def verify_run_stream(repo, consumer, builder, library, rebuilt_core, checked):
         checked([executable, work])
     print("Installed/rebuilt SDK run streams: ownership, generation reuse, bounded slots, allocation failure, atomic reads, snapshots and recoverable abort passed", flush=True)
 
+
+def verify_close_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked):
+    """Independent exact tolerance decisions against packaged C and Physim APIs."""
+    shutil.copy2(repo / "tests/close_range_probe.c", consumer / "close-range-probe.c")
+    checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
+             repo / "tests/fixtures/language/close_range.phys"], output=consumer / "close-range-language.c")
+    for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
+        probe = builder.executable("close-range-probe-" + kind, ["close-range-probe.c"], [archive])
+        language = builder.executable("close-range-language-" + kind, ["close-range-language.c"], [archive], language=True)
+        checked([sys.executable, repo / "tests/test_close_range_oracle.py", "--c", probe,
+                 "--language", language, "--fixture", repo / "tests/fixtures/language/close_range.phys"])
+    print("Installed/rebuilt SDK comparisons: exact rational boundaries, symmetry, subnormals, overflow and C/Physim parity passed", flush=True)
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sdk", type=Path, required=True)
@@ -73,7 +86,11 @@ def main():
                         help="Verify checked transformation range only; no GUI or full domain acceptance")
     parser.add_argument("--stream-only", action="store_true",
                         help="Verify opaque Run stream handles only; no GUI or full domain acceptance")
+    parser.add_argument("--comparison-only", action="store_true",
+                        help="Verify exact C/Physim tolerance decisions only; no GUI or full domain acceptance")
     args = parser.parse_args()
+    if args.comparison_only and (args.scalar_only or args.transform_only or args.stream_only or args.app_tests):
+        parser.error("--comparison-only cannot be combined with other focused modes or --app-tests")
     if args.stream_only and (args.scalar_only or args.transform_only or args.app_tests):
         parser.error("--stream-only cannot be combined with other focused modes or --app-tests")
     if args.transform_only and (args.scalar_only or args.app_tests):
@@ -143,6 +160,13 @@ def main():
         builder.includes = [sdk / "include"]
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+        if args.comparison_only:
+            shutil.copytree(sdk / "src", consumer / "src")
+            rebuilt_core = builder.archive("sdk-rebuilt-core", [f"src/{name}.c" for name in native.CORE])
+            verify_close_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
+            (root / "PASSED.txt").write_text("Focused C/Physim comparison SDK verification passed; installed/rebuilt Core, exact rational oracle, manifest and relocation; no full domain or GUI acceptance.\n", encoding="utf-8")
+            print(f"Comparison SDK verified: {root}")
+            return
         if args.stream_only:
             shutil.copytree(sdk / "src", consumer / "src")
             rebuilt_core = builder.archive("sdk-rebuilt-core", [f"src/{name}.c" for name in native.CORE])
@@ -262,6 +286,7 @@ def main():
                      "--cases", repo / "tests/fixtures/ode_range_cases.json",
                      "--fixture", repo / "tests/fixtures/language/ode_range.phys"])
         print("Installed/rebuilt SDK ODE range: five C/Physim methods, 244 exact constant-solution references, 32 states and true overflow rollback passed", flush=True)
+        verify_close_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_run_stream(repo, consumer, builder, library, rebuilt_core, checked)
         verify_scalar_search(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_transform_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)

@@ -299,3 +299,24 @@ Fehler und atomare Streaming-Ausgaben werden geprüft. [Vertrag und Umstieg](run
 halten die verbleibenden Legacy-Zustände und Besitzerlebensdauer ausdrücklich fest.
 PP-0352 ist nun als unvollständig erfasst: 28 implementierte, sechs unvollständige
 und 497 ungeprüfte Planblöcke. Der vollständige Plan ist weiterhin offen.
+
+
+## Exakte Zahlenvergleiche (§7.2 / PP-0358)
+
+`ps_close` und Physim `isClose` prüfen nun dieselbe explizite Bedingung
+`abs(a-b) <= absolute + relative*max(abs(a),abs(b))` für exakte binäre
+Eingabewerte. Beide Toleranzen null verlangen exakte Gleichheit. Nichtendliche
+Werte und negative/nichtendliche Toleranzen ergeben false. Die absolute
+Toleranz besitzt die Einheit der Zahlen, die relative ist dimensionslos.
+Ein konservativer Fehlerfilter entscheidet gewöhnliche Fälle; feste Integerarrays
+bewahren Entscheidungen unmittelbar an der Grenze, auch unterhalb des kleinsten
+Subnormalwertes und bei überlaufender Differenz oder relativem Produkt.
+
+Die unabhängige Fraction-Gegenprobe findet im bisherigen Vergleich 1751 falsche
+Grenzentscheidungen bei 9176 Fällen. Derselbe C-Probe prüft nun beide
+Vergleichsrichtungen; 263 exakt rekonstruierbare Physim-Eingaben prüfen die
+Sprachbindung. Weitere Solver- und ODE-Toleranzverträge sind separat dokumentiert.
+PP-0358 ist mit diesen begrenzten Nachweisen implementiert: aktuell 29
+implementierte, sechs unvollständige und 496 ungeprüfte Planblöcke.
+Die Originaltexte aller 531 Blöcke bleiben erhalten; PP-0365 und die vollständige
+Algorithmus-/Plattform-/Produktabnahme bleiben offen.

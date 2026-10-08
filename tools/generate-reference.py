@@ -303,6 +303,7 @@ LANG_DESCRIPTIONS = {
     'Vec4': 'Vektor aus vier Komponenten.', 'Quat': 'Quaternion in Komponentenreihenfolge x, y, z, w.',
     'axisAngle': 'Erzeugt eine Rotation aus Achse und Winkel in Radiant.',
     'rotate': 'Rotiert einen dreidimensionalen Vektor.',
+    'isClose': 'Prüft die exakte symmetrische absolute/relative Toleranzbedingung für binäre Double-Eingaben; ungültige Werte liefern false.',
     'normalizeQuat': 'Normiert eine gültige, von null verschiedene Quaternion.',
     'conjugateQuat': 'Konjugierte Quaternion; bei Einheitsquaternion die inverse Rotation.',
     'multiplyQuat': 'Komponiert Rotationen; die rechte Rotation wird zuerst angewandt.',

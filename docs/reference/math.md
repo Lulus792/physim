@@ -170,6 +170,8 @@ bool ps_close(double a, double b, double absolute_tolerance, double relative_tol
 
 Length avoids spurious square overflow/underflow. Normalize rescales first, including subnormals and vectors whose length exceeds DBL_MAX. Zero maps to zero; nonfinite input maps to all-NaN. The same contract holds for Vec3.
 
+Exact symmetric binary64 condition: abs(a-b) <= absolute + relative*max(abs(a),abs(b)). Finite inputs and nonnegative finite tolerances required, else false. Absolute has the values' unit; relative is dimensionless. Both zero demand exact equality, including signed zero. No allocation or hidden tolerance.
+
 ### ps_bezier3
 
 ```c

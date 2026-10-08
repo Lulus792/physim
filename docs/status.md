@@ -2531,3 +2531,10 @@ Store, geprüften Generationen und kopierten Statuswerten. Experiment-Runner und
 Importvalidierung benutzen sie; Abbruch erhält unvollständige Präfixdaten.
 [Lebensdauer und offene Migration](run-streams.md) begrenzen diesen Fortschritt;
 Legacy-Dateideskriptoren und die allgemeine Handle-Forderung bleiben offen.
+
+
+`ps_close` und Physim `isClose` verwenden jetzt explizite symmetrische Toleranzen
+mit exakten Grenzentscheidungen für binäre Double-Eingaben. Subnormalwerte und
+überlaufende Differenzen/Produkte verändern die Entscheidung nicht. Eine
+unabhängige rationale Gegenprobe prüft C und Physim. Die gesamte Modell- und
+Algorithmusabnahme wird daraus nicht abgeleitet; [Verträge](math.md).

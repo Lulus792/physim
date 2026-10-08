@@ -422,6 +422,7 @@ static const ps_lang_builtin library[] = {
     {"verletStep", "psrt_verlet_step", PS_LANG_FLOAT_ARRAY, 4, 0,
      {PS_LANG_ODE_CALLBACK, PS_LANG_FLOAT_ARRAY, F, F},
      {"acceleration", "phase", "time", "dt"}},
+    {"isClose", "psrt_is_close", B, 4, 0, {F, F, F, F}, {"left", "right", "absoluteTolerance", "relativeTolerance"}},
     {"Vec2", "psrt_vec2", V2, 2, 0, {F, F}, {"x", "y"}},
     {"Vec3", "psrt_vec3", V3, 3, 0, {F, F, F}, {"x", "y", "z"}},
     {"Vec4", "psrt_vec4", V4, 4, 0, {F, F, F, F}, {"x", "y", "z", "w"}},
