@@ -1152,6 +1152,11 @@ def main():
                 for example in [name for name in native.EXAMPLES if name != "ccd_events"] + ["language_full"]:
                     checked([sdk / "bin" / ("physim" + suffix), "--self-test", root / ("App " + example), example])
                     print(f"Installed SDK GUI workflow: {example} passed", flush=True)
+                isolation = root / "Workflow input isolation"; isolation.mkdir()
+                checked([sys.executable, repo / "tests/check_display_workflow.py",
+                         "workflow_pointer_isolation", "--app", sdk / "bin" / ("physim"+suffix),
+                         "--work", isolation, "--root", sdk, "--cc", args.compiler], timeout=330)
+                print("Installed SDK workflow input isolation: report/run reopen with foreign pointer/focus events at both window sizes passed", flush=True)
                 checked([sdk / "bin" / ("physim"+suffix),"--docs-test",root / "Documentation routes"])
                 print("Installed SDK documentation window: both learning route buttons, shared links, route home and small-window rendering passed",flush=True)
                 previous_small=env.pop("PHYSIM_TEST_SMALL",None)

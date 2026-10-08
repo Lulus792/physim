@@ -8833,6 +8833,36 @@
           "timeout": 240
         }
       ]
+    },
+    {
+      "name": "workflow_pointer_isolation",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "workflow_pointer_isolation",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 330,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
     }
   ]
 }

@@ -630,3 +630,11 @@ beide Bibliotheken. Die vollständige neue SDK-/Plattformabnahme bleibt offen.
 Die 531 Originalblöcke, Planprüfsumme und Statuszahlen bleiben unverändert:
 **45 implemented**, **9 incomplete**, **477 unverified**;
 `completion_proven` bleibt `false`.
+
+
+Der allgemeine App-Skripttest besitzt jetzt denselben Ereignisfilter wie die
+anderen Skripttests. Eine kontrollierte Stufe-62-Reproduktion scheitert vor
+der Korrektur und besteht danach beim Wiederöffnen von Lauf und Bericht auf
+macOS/Linux bei zwei Fenstergrößen. Die älteren frischen Linux-Pakete
+`40712ce` bestehen vollständig, ersetzen aber nicht die Abnahme der aktuellen
+Korrektur. Statuszahlen und Originalblöcke bleiben unverändert.

@@ -2350,6 +2350,85 @@ auf beiden Systemen (`build/migration-integrated-proof-{mac,linux}.log`).
 Die unabhängige SDK-Prüfmappe enthält jetzt 148 verifizierte Eingaben und
 prüft die Verfahrenslegenden gegen installierte und neu gebaute Bibliotheken.
 Ein neues App-SDK ist unter `build/report-method-migration-sdk-mac` gebaut.
-Seine vollständige Prüfung läuft in
-`build/report-method-migration-sdk-proof-mac/Native SDK ä u9ms4eew`;
-ein begonnenes Prüfverfahren ist bis zum tatsächlichen Ende kein Nachweis.
+Seine vollständige Prüfung in
+`build/report-method-migration-sdk-proof-mac/Native SDK ä u9ms4eew` endet mit
+Fehler im Projektil-Appfall, Stufe 62 beim Wiederöffnen eines gespeicherten
+Berichts. Zuvor bestehen die Library-/Modellprüfungen einschließlich der
+neuen Legendenkontrolle gegen beide Bibliotheken, adaptive Studien, alle neun
+neu gebauten Beispielprojekte und der Pendel-Appablauf. Das SDK besitzt kein
+`PASSED.txt` und zählt nicht als vollständiger Paketnachweis. Der Fehler und
+`verification.log` bleiben erhalten; die ursprüngliche Ereignisursache ist
+noch offen.
+
+
+## Frische Linux-Pakete und Windows-SDK am Studiengate
+
+Die Paket-CI am Commit `40712ce` besteht auf frischen Ubuntu-24.04- und
+Debian-12-Systemen. Die offiziellen Artefakte wurden vor dem Lesen anhand
+ihrer API-SHA-256-Digests geprüft:
+
+- `build/sdk-gate-installed-linux-ubuntu-24.04.zip`:
+  `839f76f46b930dd7e7464c827b23a29d63fe91d866142fb8a7fff34111ca6b77`;
+  vollständiger SDK-Nachweis in `Native SDK ä 4egw6igf/PASSED.txt`.
+- `build/sdk-gate-installed-linux-debian-12.zip`:
+  `bef76388b2b63c57a3cc2a149a9cdefcf5c11f22a59ff98c012507d30914eef3`;
+  vollständiger SDK-Nachweis in `Native SDK ä eueq3f7v/PASSED.txt`.
+
+Beide Archive enthalten tatsächlich ausgeführte App-, Tastatur-,
+Projektmanager- und alte Migrationstests sowie eigene bestandene Zenity-
+Dateidialogprüfungen mit Unicodepfaden, Abbruch und fehlendem Backend.
+[CI-Paketlauf](https://github.com/PhysicSimulator/physim/actions/runs/37809527308).
+Die zwölf neuen störbehafteten Migrationen und Verfahrenslegenden gehören
+zum späteren Commit `005339a` und werden diesen älteren Paketen nicht zugerechnet.
+
+Auch Windows/MSVC Release besitzt am Commit `40712ce` eine bestandene
+vollständige SDK-Prüfung ohne App-Displaytests in
+`native/Native SDK ä avl5n_zi/PASSED.txt`. Das zugehörige offizielle Archiv
+`build/report-label-windows-v143-release.zip` ist gegen SHA-256
+`f1dc4065340ee61614388cdb3c15c747e000f47b3997c47e5a13ae5a62883840`
+geprüft. Der [gesamte Windows-Job](https://github.com/PhysicSimulator/physim/actions/runs/37809527284/job/113422452838)
+scheitert erst im separaten Schritt `Record verified Release workloads`.
+Die konkrete Benchmarkursache ist nicht belegt; der Joblogzugriff liefert
+HTTP 403 und es liegt kein Benchmarkartefakt vor. Dieser Job wird trotz
+bestandenem SDK ausdrücklich nicht als vollständig erfolgreich bewertet.
+
+
+## Fremde Ereignisse beim Wiederöffnen im allgemeinen Appskript
+
+Der fehlgeschlagene SDK-Projektilfall oben besitzt eine kontrollierte
+Gegenprobe: `build/workflow-noise-before-absolute-mac.log` reproduziert exakt
+Stufe 62 mit leerem Bericht nach fremden Mausbewegungs-, Freigabe-, Rad- und
+Fokusereignissen unmittelbar nach dem tatsächlichen Öffnen-Button.
+Der allgemeine `--self-test`-Ablauf fehlte ebenfalls im vorhandenen Filter.
+Er ist jetzt ausdrücklich eingeschlossen; reale Nutzerabläufe und die
+bestehenden absichtlich ungefilterten Dialog-/Dokumenttests ändern sich nicht.
+Der ursprüngliche native Ereignisstrom des SDK-Fehlversuchs wurde nicht
+aufgezeichnet; die kontrollierte Gegenprobe beweist diese Fehlerklasse.
+
+Der neue Katalogfall `workflow_pointer_isolation` öffnet jeweils den
+ursprünglichen Bericht und Lauf mit genau diesen Ereignissen erneut, bei
+1440×940 und 1080×740. Er prüft die vollständigen bestehenden Appablauf-
+Assertions sowie beide tatsächlichen Ereignisinjektionen, Screenshotdateien
+und erhaltene zusammengehörige Lauf-/Berichtsartefakte. Intel macOS besteht **1/1** in
+`build/contact-world-language-release-mac/test-results/run-fn2v62mb` und
+Debian/GCC **1/1** in
+`build/contact-world-language-release-linux/test-results/run-x6jkhejg`.
+Die Logs liegen unter `build/workflow-input-isolation-{mac,linux}-proof.log`.
+Ein früherer Harnessversuch ohne angelegten Elternordner und ein Linux-
+Aufruf mit falschem SDL-Prefix starteten die Gegenprobe nicht erfolgreich;
+sie werden nicht als Produktnachweise gezählt.
+
+Der vollständige SDK-Prüfer übernimmt dieselbe Gegenprobe. Das neue App-SDK
+`build/workflow-input-sdk-mac` ist tatsächlich gebaut; die vorherige
+SDK-Gesamtprüfung bleibt fehlgeschlagen. Eine nachfolgende vollständige
+Prüfung wird erst nach ihrem tatsächlichen Ende bewertet.
+
+
+Die neue unabhängige Prüfmappe besteht ihren Paketgrenzen-Selbsttest mit
+**149** exakten Eingaben, SHA-256, fehlenden/dynamischen Pfaden und exklusiver
+Veröffentlichung (`build/workflow-input-kit-selftest.log`). Die extrahierten
+149 Dateien wurden vollständig gegen ihr Manifest abgeglichen. Die neue
+vollständige macOS-App-SDK-Prüfung läuft aus dieser Mappe unter
+`build/workflow-input-sdk-proof-mac`; ihr Log ist
+`build/workflow-input-sdk-full-mac.log`. Solange sie nicht erfolgreich endet,
+bleibt dieser vollständige Paketnachweis offen.

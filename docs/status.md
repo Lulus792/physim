@@ -2795,5 +2795,17 @@ ungültige Metadaten besitzen unabhängige Legendenprüfungen. Der Migrationstes
 filtert fremde Eingabeereignisse wie die anderen Skripttests und besteht zwölf
 Varianten auf beiden Systemen. Die betroffenen nativen, App- und Linux-
 Sanitizerprüfungen bestehen. Ein neues vollständiges macOS-App-SDK ist gebaut;
-seine Gesamtprüfung und die aktuelle gesamte Plattformmatrix bleiben offen.
+seine Gesamtprüfung scheitert später im Projektil-Appfall beim Wiederöffnen
+eines Berichts. Die aktuelle gesamte Plattformmatrix bleibt offen.
 [Konkrete Nachweise](platform-validation.md#ausgeführte-verfahren-und-störfeste-migrationstests).
+
+
+Die Stufe-62-SDK-Störung ist mit gezielt eingestreuten fremden Eingabeereignissen
+reproduziert. Der allgemeine App-Skripttest ist nun ebenfalls vom vorhandenen
+Eingabefilter erfasst und besteht das Wiederöffnen von Lauf und Bericht bei
+zwei Fenstergrößen auf macOS und Linux. Der ursprüngliche SDK-Fehlversuch
+bleibt erhalten. Frische Linux-Pakete am vorherigen Commit `40712ce` bestehen
+auf Ubuntu 24.04 und Debian 12 einschließlich kompletter SDK-/App-Prüfungen;
+Windows/MSVC Release besteht dort das SDK, scheitert anschließend im
+Benchmark-Schritt mit noch ungeklärter Ursache. Die aktuelle gesamte
+Plattform-/Paketabnahme bleibt offen.

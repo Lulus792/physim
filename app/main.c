@@ -3049,9 +3049,10 @@ int main(int argc, char **argv) {
     a->history_stride = 1;
     status(a, "Bereit. Ordner öffnen oder ein neues Projekt anlegen.");
     bool smoke = argc > 1 && !strcmp(argv[1], "--smoke");
+    bool workflow_test = argc > 2 && !strcmp(argv[1], "--self-test");
     bool self_test = migration_test || settings_test || plot_test || batch_test || docs_test || recovery_test ||
                      workspace_test || workspace_state_test || syntax_preview_test ||
-                     (argc > 2 && !strcmp(argv[1], "--self-test"));
+                     workflow_test;
     if (self_test && SDL_getenv("PHYSIM_TEST_SMALL"))
         SDL_SetWindowSize(window, 1080, 740);
     if (argc < 2 || strncmp(argv[1], "--", 2)) {
@@ -3222,7 +3223,7 @@ int main(int argc, char **argv) {
                 }
                 continue;
             }
-            if ((migration_test || plot_test || toolbar_test || settings_test || docs_test ||
+            if ((workflow_test || migration_test || plot_test || toolbar_test || settings_test || docs_test ||
                  (workspace_state_test && strncmp(argv[3],"native-dialog",13) &&
                   strcmp(argv[3],"documents-unfiltered"))) && test_scripted_external_input(&e)) continue;
             if (self_test && e.type == SDL_EVENT_TEXT_INPUT) {
@@ -4354,6 +4355,11 @@ int main(int argc, char **argv) {
             }
         }
         if(docs_noise)test_pointer_noise(a);
+        if (workflow_test && SDL_getenv("PHYSIM_TEST_WORKFLOW_NOISE") &&
+            (checked_stage == 60 || checked_stage == 64) && test_stage != checked_stage) {
+            test_pointer_noise(a);
+            fprintf(stderr, "WORKFLOW INPUT NOISE: reopen %s\n", checked_stage == 60 ? "report" : "run");
+        }
         if (trace_test && test_stage != checked_stage)
             fprintf(stderr, "APP TEST TRACE: stage %d -> %d, status %s\n",
                     checked_stage, test_stage, a->status);
