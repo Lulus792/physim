@@ -12,16 +12,22 @@ int main(void) {
     CHECK(isfinite(before.user_seconds) && before.user_seconds >= 0 &&
           isfinite(before.system_seconds) && before.system_seconds >= 0 &&
           before.peak_resident_bytes > 0);
-    /* Commit pages, then consume actual CPU. No hardware-specific time/RAM gate. */
+    /* Touch a 32 MiB working set, then consume accounted CPU. */
     size_t size = 32u * 1024u * 1024u;
     volatile unsigned char *memory = malloc(size);
     CHECK(memory);
     for (size_t i = 0; i < size; i += 4096) memory[i] = (unsigned char)i;
-    double start = ps_clock();
+    /* Wall time includes descheduling. Keep doing work until the OS accounts
+       actual process CPU, with a bounded deadline for a broken counter. */
+    double start = ps_clock(), cpu_before = before.user_seconds + before.system_seconds;
     do {
         for (unsigned i = 1; i < 10000; ++i) result += sqrt((double)i);
-    } while (ps_clock() - start < .04);
-    CHECK(ps_process_usage_self(&after));
+        CHECK(ps_process_usage_self(&after));
+        CHECK(isfinite(after.user_seconds) && isfinite(after.system_seconds) &&
+              after.user_seconds >= before.user_seconds &&
+              after.system_seconds >= before.system_seconds);
+    } while (after.user_seconds + after.system_seconds < cpu_before + .04 &&
+             ps_clock() - start < 20);
     fprintf(stderr,
             "Resources before: user=%.9f system=%.9f peak=%llu; "
             "after: user=%.9f system=%.9f peak=%llu; allocation=%llu\n",
@@ -29,6 +35,7 @@ int main(void) {
             (unsigned long long)before.peak_resident_bytes,
             after.user_seconds, after.system_seconds,
             (unsigned long long)after.peak_resident_bytes, (unsigned long long)size);
+    CHECK(after.user_seconds + after.system_seconds >= cpu_before + .04);
     CHECK(after.user_seconds >= before.user_seconds &&
           after.system_seconds >= before.system_seconds &&
           after.user_seconds + after.system_seconds > before.user_seconds + before.system_seconds &&

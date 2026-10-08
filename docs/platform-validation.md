@@ -1751,3 +1751,27 @@ Projektquellen und Benutzerdaten wurden nicht entfernt.
 PP-0776 besitzt damit einen konkreten begrenzten Nachweis für Pendel,
 Kraftvektoren und Live-Werte. Die übrigen Anforderungen des vollständigen
 vertikalen Anwendungsfalls und des Gesamtplans bleiben separat abzunehmen.
+
+## CPU-Prüflast unter Windows/MSVC
+
+Der [C17-Lauf 37777889619](https://github.com/PhysicSimulator/physim/actions/runs/37777889619)
+am Stand `c229e359c94f70082e56b028448f24d39db7f1b7` liefert unter MSVC Debug
+675/676 bestandene native Fälle. Die ergänzten Diagnosewerte des verbleibenden
+`process_usage`-Fehlers zeigen jeweils 0 s Benutzer-/System-CPU vor und nach
+der Last, aber einen korrekt gestiegenen Peak von 3.162.112 auf 36.728.832 Bytes
+bei 33.554.432 berührten Bytes. Das heruntergeladene Artefakt wurde gegen den
+offiziellen SHA-256-Digest
+`791bb51edb33e5e694109ae94b21616a93dcc82a147114aab61bb80ad45505ba` geprüft.
+
+Der Test beendete die Last nach 40 ms Wandzeit, ohne dass die OS-Abrechnung
+CPU-Zeit veröffentlicht hatte. Er arbeitet jetzt bis mindestens 40 ms
+zusätzliche Prozess-CPU erfasst sind, höchstens 20 s Wandzeit. Endliche,
+monotone Benutzer-/Systemwerte werden bei jeder Abfrage geprüft. Die
+Speicheruntergrenze, Lebenszeit-Peak-Erhaltung und Prüfung nach Freigabe bleiben
+erhalten. Die API-Implementierung wird durch diese Testkorrektur nicht geändert.
+[Prozesszeiten](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getprocesstimes)
+beschreiben CPU-Abrechnung; sie sind keine Wandzeituhr.
+
+Die Korrektur besteht auf Intel macOS/Apple Clang 16 1/1 (`run-zhos1g1r`)
+und Debian 12/GCC 12.2 1/1 (`run-zed_431v`). Die erneute tatsächliche
+Windows-Abnahme dieser Korrektur steht noch aus.
