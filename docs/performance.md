@@ -1,6 +1,6 @@
 # Reproduzierbare Leistungsmessung
 
-Weitere Messungen: [UI-Zeichenpuffer](ui-rendering.md) und
+Weitere Messungen: [UI-Zeichenpuffer](ui-rendering.md), [3D-Szenenrenderer](scene-rendering.md) und
 [CRC32 mit unverändertem Dateiformat](crc.md).
 
 `physim-benchmark` misst produktive C-APIs mit deterministischen Referenzdaten.
@@ -79,8 +79,9 @@ in der [Berichtsreferenz](reference/report.md) und unter [Berichte](reports.md).
 
 PERF-001 ist damit teilweise umgesetzt. Ein zusätzlicher
 [UI-Benchmark](ui-rendering.md) misst inzwischen den CPU-Konvertierungs-/Uploadpfad
-und prüft wiederverwendbare Zeichenpuffer. Native Szenentessellierung/GPU-Zeiten,
-UI-P95/P99 bei echter Interaktion, Startzeit und Acht-Worker-Batches
+und prüft wiederverwendbare Zeichenpuffer. Native Szenentessellierung und ein optionales OpenGL-Serverintervall besitzen
+inzwischen einen eigenen [Szenenbenchmark](scene-rendering.md). Vollständige
+GPU-Auslastung, UI-P95/P99 bei echter Interaktion, Startzeit und Acht-Worker-Batches
 benötigen eigene Messstrecken. `scratch_bytes` misst den logischen Payload des
 Analysekontexts, nicht Peak-RAM oder physisch belegte Datenträgerblöcke.
 Der Benchmark-Smoke wird in der Windows-/Linux-CI konfiguriert; ein lokal

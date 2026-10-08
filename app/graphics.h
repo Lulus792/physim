@@ -14,6 +14,16 @@ typedef struct {
     size_t vertex_bytes, index_bytes, retained_bytes;
 } ps_ui_render_stats;
 bool ps_graphics_ui_stats(const ps_graphics *g, ps_ui_render_stats *out);
+/* Last successful scene call. CPU wall times: validation/target setup,
+ * tessellation/transforms, then GL upload/draw/sort/resolve submission. Excludes
+ * GPU completion, UI composition, capture and swap. Failure invalidates stats.
+ * Retained bytes count the three dynamic CPU geometry arrays, excluding the
+ * graphics struct, driver and GPU allocations. */
+typedef struct {
+    double setup_seconds, tessellation_seconds, submission_seconds;
+    size_t vertices, vertex_bytes, index_bytes, retained_bytes;
+} ps_scene_render_stats;
+bool ps_graphics_scene_stats(const ps_graphics *g, ps_scene_render_stats *out);
 typedef struct {
     float yaw, pitch, distance;
     ps_vec3 target;

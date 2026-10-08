@@ -130,6 +130,7 @@ static const documentation_topic documentation_topics[] = {
     {"Reale Gase: Van der Waals", "docs/real-gas.md", false},
     {"Barrierefreiheit", "docs/accessibility.md", false},
     {"Historische Plattformnachweise", "docs/platform-validation-history.md", false},
+    {"3D-Szenenmessung", "docs/scene-rendering.md", false},
 };
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27

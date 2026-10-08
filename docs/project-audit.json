@@ -5629,9 +5629,14 @@
         "tests/test_benchmark.py",
         "docs/performance.md",
         "docs/ui-rendering.md",
-        "docs/platform-validation.md"
+        "docs/platform-validation.md",
+        "app/graphics.c",
+        "app/graphics.h",
+        "tools/scene_benchmark.c",
+        "tools/scene_benchmark.py",
+        "docs/scene-rendering.md"
       ],
-      "note": "Tatsächliche native Referenzlasten erfassen Wandzeit, Benutzer-/System-CPU-Zeit, Lebenszeit-Peak-RAM und logische Run-Dateibytes/s. SDL/OpenGL-UI-Lasten trennen Widgetaufbau, Renderaufruf und Swap mit Median/P95/P99; Readback/Dateiausgabe sind von gemessenen Intervallen getrennt. Vollständiges App-/Runner-/Mehrworkerprofil, native Szenentessellierung/GPU-Fertigstellungszeiten, Startzeit und reale Interaktionslatenz bleiben offen; Peak-RAM ist keine phasenlokale Allokationssumme."
+      "note": "Native Referenzlasten erfassen Wandzeit, Benutzer-/System-CPU-Zeit, Lebenszeit-Peak-RAM und logische Run-Dateibytes/s. SDL/OpenGL-UI-Lasten trennen Aufbau, Renderaufruf und Swap. Der Szenenbenchmark misst produktive Vorbereitung, Tessellierung und Submission, überprüft unabhängige Geometriemengen/Bilder und sammelt optionale GL_TIME_ELAPSED-Serverintervalle einschließlich Stalls mit explizitem Nichtverfügbarkeitsfall. Vollständige App-/Runner-/Mehrworkerprofile, GPU-Auslastung, Startzeit und reale Interaktionslatenz bleiben offen; synthetische Lasten und Prozesshöchstwerte sind keine umfassende Produktabnahme."
     },
     {
       "id": "PP-0712",

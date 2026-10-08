@@ -3959,9 +3959,16 @@ int main(int argc, char **argv) {
                 if (a->doc_topic != 30) exit_code = 1;
                 snprintf(a->doc_filter, sizeof a->doc_filter, "ps_sweep_spheres");
                 documentation_filter(a);
-                if (!documentation_hits[10] || !documentation_hits[58] || documentation_hits[1])
+                int mechanics_topic = -1, collision_reference = -1;
+                for (int i = 0; i < DOCUMENTATION_TOPIC_COUNT; ++i) {
+                    if (!strcmp(documentation_topics[i].path, "docs/mechanics.md")) mechanics_topic = i;
+                    if (!strcmp(documentation_topics[i].path, "docs/reference/collision.md")) collision_reference = i;
+                }
+                if (mechanics_topic < 0 || collision_reference < 0 ||
+                    !documentation_hits[mechanics_topic] || !documentation_hits[collision_reference] ||
+                    documentation_hits[1])
                     exit_code = 1;
-                open_documentation(a, 58);
+                open_documentation(a, collision_reference);
                 snprintf(a->doc_query, sizeof a->doc_query, "%s", a->doc_filter);
                 capture = "docs-global.bmp";
                 test_stage = 231;

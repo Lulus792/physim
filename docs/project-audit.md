@@ -460,3 +460,13 @@ Interaktionsmessung bleiben offen. [Messvertrag](performance.md) und
 [Plattformnachweise](platform-validation.md) begrenzen diese Fortschritte.
 Aktuell: 34 implementierte, 8 unvollständige und 489 ungeprüfte Planblöcke.
 Alle 531 Originaltexte und der vollständige Projektumfang bleiben erhalten.
+
+
+PP-0711 ergänzt jetzt den produktiven 3D-Szenenpfad um Vorbereitung, Tessellierung
+und Submission. Vier Referenzlasten besitzen unabhängig erwartete Geometriemengen
+und wiederholte Bildvergleiche. Ein optionales OpenGL-Serverintervall trennt
+Ergebnissammlung und CPU-Intervalle; deaktivierte/nicht verfügbare Messwerte sind
+explizit fehlend. Vollständige App-/Runner-/Mehrworker-, Startzeit-, reale
+Interaktions- und GPU-Auslastungsmessung bleiben offen. Der Block und die Zahlen
+bleiben unverändert: 34 implementiert, 8 unvollständig, 489 ungeprüft.
+[Vertrag](scene-rendering.md) und [Nachweise](platform-validation.md).

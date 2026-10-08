@@ -2659,3 +2659,14 @@ der Messintervalle. Schema 2 erhält Rohdaten und weist ungültige Messreihen ab
 [Verträge und Grenzen](performance.md#prozessressourcen-und-logischer-datendurchsatz)
 und [UI-Messung](ui-rendering.md) unterscheiden diese Referenzlasten von noch
 fehlender vollständiger App-/Runner-, Szenen-/GPU- und interaktiver Abnahme.
+
+
+## Szenenprofiling
+
+Der optionale Szenenbenchmark misst Vorbereitung, Geometrieaufbau und OpenGL-
+Submission des tatsächlichen Renderers. Statische Kugel-, Transparenz-/Hierarchie-
+und Polyline-Lasten besitzen bekannte Geometriemengen und wiederholte Bildvergleiche.
+Optionale GL-Zeitabfragen melden ein Serverintervall und sammeln Ergebnisse
+außerhalb des CPU-Intervalls; ohne verfügbare Abfrage bleibt der GPU-Wert fehlend.
+[Vertrag und Grenzen](scene-rendering.md) unterscheiden diese Referenzmessungen
+von noch fehlender vollständiger App- und interaktiver Leistungsabnahme.

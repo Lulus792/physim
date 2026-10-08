@@ -349,7 +349,7 @@ class Builder:
                 command += ["-ldl", "-pthread"]
             if sdl:
                 command += ["-Wl,-rpath,@executable_path" if MAC else "-Wl,-rpath,$ORIGIN"]
-            if MAC and (name in ("physim","physim-ui-benchmark") or any(str(p).endswith("accessibility_native.c") for p in sources)):
+            if MAC and (name in ("physim","physim-ui-benchmark","physim-scene-benchmark") or any(str(p).endswith("accessibility_native.c") for p in sources)):
                 command += ["-framework","AppKit","-framework","CoreGraphics","-lobjc"]
             if not MAC and any(str(p).endswith("accessibility_atspi.c") for p in sources):
                 command += run(["pkg-config", "--libs", "dbus-1"], self.env, capture=True).split()
@@ -364,8 +364,9 @@ class Builder:
     def benchmark(self, name, libraries):
         if name == "physim-benchmark":
             return self.executable(name, ["tools/benchmark.c"], [libraries["platform"], libraries["core"]])
-        if name == "physim-ui-benchmark":
-            return self.executable(name, ["tools/ui_benchmark.c", "app/graphics.c", "app/ui_geometry.c",
+        if name in ("physim-ui-benchmark", "physim-scene-benchmark"):
+            source = "tools/ui_benchmark.c" if name == "physim-ui-benchmark" else "tools/scene_benchmark.c"
+            return self.executable(name, [source, "app/graphics.c", "app/ui_geometry.c",
                                          "app/ui_backend.c", "app/ui_sdl.c", "app/accessibility.c", "app/accessibility_native.c", "app/accessibility_atspi.c", "app/png.c"],
                                    [libraries["platform"], libraries["zlib"], libraries["core"]],
                                    sdl=True, defines=("Z_PREFIX",))
@@ -432,6 +433,7 @@ class Builder:
             self.benchmark("physim-benchmark", libraries)
             if not self.args.no_app:
                 self.benchmark("physim-ui-benchmark", libraries)
+                self.benchmark("physim-scene-benchmark", libraries)
         if self.args.test or self.args.test_display:
             spec = importlib.util.spec_from_file_location("native_tests", Path(__file__).with_name("native_tests.py"))
             tests = importlib.util.module_from_spec(spec)

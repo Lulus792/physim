@@ -109,6 +109,7 @@ struct ps_graphics {
     alpha_triangle *alpha_triangles;
     uint32_t *scene_indices;
     size_t alpha_capacity;
+    size_t alpha_triangle_capacity, scene_index_capacity;
     size_t pick_ranges[PS_MAX_OBJECTS + 1];
     uint32_t pick_count;
     bool pick_valid;
@@ -116,6 +117,8 @@ struct ps_graphics {
     mesh_vertex sphere[24 * 16 * 6];
     size_t sphere_count;
     ps_ui_render_stats ui_stats;
+    ps_scene_render_stats scene_stats;
+    bool scene_stats_valid;
     ps_ui_geometry ui_geometry;
 };
 void ps_graphics_background(ps_graphics *g, uint8_t red, uint8_t green, uint8_t blue) {
@@ -687,6 +690,7 @@ static bool draw_scene_geometry(ps_graphics *g, const ps_camera *camera) {
     bool has_alpha = false;
     for (size_t i = 0; i < g->count; i += 3)
         has_alpha |= g->vertices[i].color[3] < 1;
+    g->scene_stats.index_bytes = has_alpha ? g->count * sizeof *g->scene_indices : 0;
     if (!has_alpha) {
         g->DrawArrays(GL_TRIANGLES, 0, (GLsizei)g->count);
         return true;
@@ -696,10 +700,12 @@ static bool draw_scene_geometry(ps_graphics *g, const ps_camera *camera) {
         if (!triangles)
             return false;
         g->alpha_triangles = triangles;
+        g->alpha_triangle_capacity = g->count / 3;
         uint32_t *indices = realloc(g->scene_indices, g->count * sizeof *indices);
         if (!indices)
             return false;
         g->scene_indices = indices;
+        g->scene_index_capacity = g->count;
         g->alpha_capacity = g->count;
     }
     ps_vec3 backward = ps_v3(sin(camera->yaw) * cos(camera->pitch), sin(camera->pitch),
@@ -739,6 +745,9 @@ static bool draw_scene_geometry(ps_graphics *g, const ps_camera *camera) {
 }
 unsigned ps_graphics_scene(ps_graphics *g, const ps_scene *scene, const ps_camera *camera,
                            int width, int height) {
+    if (!g) return 0;
+    g->scene_stats_valid = false;
+    Uint64 started = SDL_GetTicksNS();
     g->pick_valid = false;
     if (!ps_scene_valid(scene) || !camera || !finite_vector(camera->target) ||
         !isfinite(camera->yaw) || !isfinite(camera->pitch) || !isfinite(camera->distance) ||
@@ -757,6 +766,7 @@ unsigned ps_graphics_scene(ps_graphics *g, const ps_scene *scene, const ps_camer
     g->DepthFunc(GL_LESS);
     g->ClearColor(12 / 255.f, 22 / 255.f, 33 / 255.f, 1);
     g->Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    Uint64 geometry_started = SDL_GetTicksNS();
     g->count = 0;g->transform_active=false;
     if (camera->grid) {
         for (int i = -8; i <= 8; i++) {
@@ -836,6 +846,7 @@ unsigned ps_graphics_scene(ps_graphics *g, const ps_scene *scene, const ps_camer
     float matrix[16];
     for (int i = 0; i < 16; i++)
         matrix[i] = (float)m.m[i];
+    Uint64 submission_started = SDL_GetTicksNS();
     g->UseProgram(g->scene_program);
     g->UniformMatrix4fv(g->scene_projection, 1, GL_FALSE, matrix);
     g->BindVertexArray(g->scene_vao);
@@ -854,7 +865,23 @@ unsigned ps_graphics_scene(ps_graphics *g, const ps_scene *scene, const ps_camer
     if (!gl_ok(g, "scene render"))
         return 0;
     g->pick_valid = ps_mat4_inverse(m, 0, &g->pick_inverse) == PS_OK;
+    Uint64 ended = SDL_GetTicksNS();
+    size_t index_bytes = g->scene_stats.index_bytes;
+    g->scene_stats = (ps_scene_render_stats){
+        (double)(geometry_started - started) / 1e9,
+        (double)(submission_started - geometry_started) / 1e9,
+        (double)(ended - submission_started) / 1e9,
+        g->count, g->count * sizeof *g->vertices,
+        index_bytes,
+        SCENE_CAPACITY * sizeof *g->vertices + g->scene_index_capacity * sizeof *g->scene_indices +
+            g->alpha_triangle_capacity * sizeof *g->alpha_triangles};
+    g->scene_stats_valid = true;
     return g->scene_texture;
+}
+bool ps_graphics_scene_stats(const ps_graphics *g, ps_scene_render_stats *out) {
+    if (!g || !out || !g->scene_stats_valid) return false;
+    *out = g->scene_stats;
+    return true;
 }
 static double triangle_hit(const scene_vertex *v, ps_vec3 origin, ps_vec3 direction) {
     ps_vec3 a = ps_v3(v[0].p[0], v[0].p[1], v[0].p[2]);

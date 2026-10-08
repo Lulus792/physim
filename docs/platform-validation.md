@@ -1464,3 +1464,68 @@ Linux/Clang 14 mit ASan/UBSan besteht die drei Prozess-/Daten-/Wrapperfälle
 3/3 (`run-xqn_3z3j`) und den OpenGL-Fall 1/1 (`run-lb11kl4r`).
 `detect_leaks=0` ist gesetzt; Address-/UB-Prüfungen bleiben aktiv. macOS-
 Sanitizer wurden wegen des dokumentierten fehlenden `ld64.lld` nicht ausgeführt.
+
+
+## Produktiver Szenenpfad und optionale OpenGL-Serverzeit
+
+Der Renderer veröffentlicht die letzte erfolgreiche Vorbereitung, Tessellierung
+und Submission samt Vertices, übertragenen Geometriebytes und drei dynamischen
+CPU-Pufferkapazitäten. Fehler invalidieren die Statistik; fehlgeschlagene Getter
+ändern keine Ausgabe. Alpha-/Indexkapazitäten werden getrennt erfasst, damit
+teilweise erfolgreiche Reservevergrößerungen nicht unterschlagen werden.
+Der normale Appbetrieb erstellt keine Timerqueries oder wartet auf sie.
+
+`physim-scene-benchmark` verwendet vier feste Szenen: leer, 32 Kugeln,
+31 gemischt transparente Boxen unter einem rotierten/skalierten Frame und eine
+96-Punkte-Polyline mit Pfeil. Unabhängige Vertex-/Indexmengen müssen exakt passen.
+Bytegleiche Aufnahmen vor/nach jeder Reihe und unterschiedliche Bilder für alle
+vier Szenen prüfen die sichtbaren Ergebnisse. Der optionale GL_TIME_ELAPSED-
+Timer umschließt den Szenenaufruf und sammelt Ergebnisse separat, mit Frist und
+konservativer Überlaufprüfung. Nicht verfügbare/deaktivierte Zeitabfragen ergeben
+fehlende GPU-Zeiten; CPU-/Geometrie-/Bildprüfungen laufen weiter.
+[Vertrag](scene-rendering.md).
+
+Intel macOS 14.6.1/Apple Clang 16 besteht die vier Grafik-/UI-/Szenen-/ohne-GPU-
+Prüfungen 4/4 (`run-34589clt`); Debian 12/GCC 12.2 unter X11 dieselben 4/4
+(`run-c7sm5eib`). Linux/Clang 14 mit ASan/UBSan besteht diese vier Fälle 4/4
+(`run-t2bujbm7`). `detect_leaks=0` bleibt gesetzt; Address-/UB-Prüfungen bleiben
+aktiv. macOS-Sanitizer bleiben wegen fehlendem `ld64.lld` ungeprüft.
+Die Grafikprüfung bewahrt bestehende Tiefe-/Transparenz-/Picking-/Projektion-/
+Framebufferprüfungen; der UI-Fall prüft Konvertierung, Exporte und Größenwechsel.
+
+Die vollständigen Release-Referenzläufe bestehen auf beiden Systemen mit je
+60 Messbildern pro Fall, jeweils mit und ohne Timer. Alle vier Bildhashes bleiben
+zwischen beiden Modi je Plattform identisch. Die Zähler sind auf Intel/Iris-
+macOS 32 Bit und unter Mesa/llvmpipe 64 Bit breit. Die Linux-VM liefert
+Software-Serverzeiten, keine native GPU-Abnahme. Zeiten, Rohdaten und archivierte
+Fingerprintpfade stehen im [Szenenbericht](scene-rendering.md#lokale-referenz-8-oktober-2026).
+Die macOS-Aufnahmen wurden visuell als sichtbare Kugeln, transformierte Boxen
+und Polyline/Pfeil geprüft.
+
+Die ersten Referenzdaten überschritten die vorhandenen Limits von 32 Objekten
+und 96 Punkten; die Boxhierarchie verwendete außerdem Slotnummern statt
+Objekt-IDs. Die Fixtures sind korrigiert und Geometrievergleiche bleiben strikt.
+Ein späterer macOS-Lauf 3/4 (`run-2zi31922`) wies einen realen Messfehler nach:
+Die äußere CLOCK_MONOTONIC-Uhr war gröber als SDL_GetTicksNS, sodass Teilzeiten
+gelegentlich größer als die Gesamtzeit erschienen. Beide Wandzeitintervalle
+verwenden jetzt dieselbe SDL-Uhr; die Intervallprüfung bleibt unverändert.
+Die abschließenden 4/4-Prüfungen und vollständigen Referenzläufe bestehen.
+Quellbelege stehen in `build/scene-profiling-final-source-freeze.json`; dieser
+Dokumentationsnachtrag ändert die geprüfte Implementierung nicht.
+
+PP-0711 bleibt für vollständige App-/Runner-/Mehrworkerprofile, Startzeit,
+echte Interaktionslatenz und GPU-Auslastung unvollständig. Das gemessene
+Serverintervall einschließlich Stalls ersetzt diese Anforderungen nicht.
+Windows und Apple Silicon wurden hier nicht ausgeführt. Alle 531 Originaltexte
+bleiben erhalten: 34 implementierte, 8 unvollständige und 489 ungeprüfte Blöcke.
+Das gesamte Projektziel bleibt offen.
+
+Die Handbuch-/Referenz-/Prüfpaketfälle bestehen zusätzlich auf macOS 3/3
+(`run-aa1ap1qg`) und Linux 3/3 (`run-31d7l_2o`). Die neue Seite ist im Offline-
+Themenkatalog registriert und am Ende ergänzt, um vorhandene numerische Verweise
+zu erhalten. Die Fensterprüfung enthielt unabhängig davon einen veralteten
+Suchverweis auf die Mechanikreferenz; `ps_sweep_spheres` steht inzwischen in der
+Kollisionsreferenz. Sie sucht nun die beiden erwarteten Dokumentpfade und prüft
+weiterhin Treffer, Nichttreffer und Scrollnavigation. Fenster-/Tastaturprüfungen
+bestehen abschließend jeweils 2/2 (`run-cn45y4n7`, `run-jg6unw4x`), einschließlich
+des erfolgreichen Ladens sämtlicher registrierter Themen.

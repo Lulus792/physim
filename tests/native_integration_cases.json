@@ -2074,6 +2074,9 @@
     "language-ccd-events": {
       "source": "examples/language/ccd_events.phys",
       "mode": "--emit-experiment"
+    },
+    "physim-scene-benchmark": {
+      "benchmark": "physim-scene-benchmark"
     }
   },
   "tests": [
@@ -8275,6 +8278,63 @@
             "{work}"
           ],
           "timeout": 150
+        }
+      ]
+    },
+    {
+      "name": "scene_rendering",
+      "benchmark": true,
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim-scene-benchmark"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tools/scene_benchmark.py",
+            "{physim-scene-benchmark}",
+            "--output",
+            "{work}/measurements",
+            "--smoke"
+          ],
+          "timeout": 190,
+          "files": [
+            "measurements/metadata.json",
+            "measurements/summary.json",
+            "measurements/native/frames.csv"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "scene_rendering_no_gpu",
+      "benchmark": true,
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim-scene-benchmark"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tools/scene_benchmark.py",
+            "{physim-scene-benchmark}",
+            "--output",
+            "{work}/measurements",
+            "--smoke",
+            "--no-gpu"
+          ],
+          "timeout": 190,
+          "files": [
+            "measurements/metadata.json",
+            "measurements/summary.json",
+            "measurements/native/frames.csv"
+          ]
         }
       ]
     }
