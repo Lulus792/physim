@@ -223,7 +223,7 @@ typedef struct {
     int result_view;
     bool show_report;
     char result_path[4096], loaded_report_path[4096], result_error[192], result_export[4096];
-    struct nk_rect result_export_bounds[3];
+    struct nk_rect result_export_bounds[3], raw_export_bounds;
     int png_scale;
     struct nk_rect png_region_bounds;
     struct nk_rect svg_region_bounds;

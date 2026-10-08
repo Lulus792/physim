@@ -2122,3 +2122,56 @@ zusätzlich tatsächlich erfolgreiche Paket-, Debian-12- und Ubuntu-24.04-Jobs;
 er ist ausdrücklich kein Nachweis für die späteren Pendeländerungen.
 PP-0756 bleibt unvollständig, und die unveränderten 531 Originalplanblöcke
 bleiben Grundlage der weiteren Umsetzung.
+
+## Tatsächliche Medium-Pendelexporte aus der App
+
+Der vorhandene C-/Physim-Mediumworkflow endet jetzt nach den tatsächlich
+betätigten Exportknöpfen für Abnahmetabelle als CSV, Energiediagramm als SVG
+und PNG sowie sämtliche Rohmessdaten als CSV. Die App behält den bisherigen
+Exportpfad; lediglich die Bounds des Rohdatenknopfes werden für die tatsächliche
+Eingabegegenprobe erfasst. Berichtansicht, Projektbuild, Parameterwahl, isolierter
+Runner, Simulation, finalisierte Daten und beide Analysesprachen liegen in
+jeweils derselben tatsächlichen Projektkette.
+
+`tests/check_pendulum_exports.py` dekodiert die Originaldatei unabhängig vom
+Physim-Reader. Er prüft CRCs, Footer, alle neun Kanalnamen/Dimensionen, Lauf-
+und Parameterdaten, Kinematik, Energie und Sensorrauschstatistik. Die über den
+Appknopf exportierte Rohdaten-CSV stimmt in jeder Originalzeile und Spalte
+exakt überein. Vollständige Energie-/Änderungs-CSVs, lokale positive Spitzen,
+alle Dekremente/Raten und sämtliche Werte der exportierten Zusammenfassung
+werden ebenfalls unabhängig verglichen. Die gespeicherte Datei bleibt während
+der Gegenprobe per SHA-256 unverändert.
+
+Die manuell über die App angeforderten SVGs werden als XML gelesen und auf
+Energietitel/Einheit geprüft. Die PNGs in der tatsächlichen Standardgröße
+2400 × 1700 besitzen geprüfte Chunk-CRCs, IEND, vollständige dekodierte RGB-
+Scanlines und Bildinhalt. Ein tatsächliches C-Energie-PNG wurde visuell geprüft:
+Titel, Zeit-/Jouleachsen, abnehmende Energie und Quellenzeilenzahl sind lesbar.
+Die Darstellung bezeichnet ihre reduzierten Berichtsdaten ausdrücklich;
+volle Originaldaten stehen in den getrennten CSVs.
+
+Intel macOS 14.6.1/Apple Clang 16 besteht `pendulum_medium_workflow` 1/1
+(`run-1apm3hbv`) mit tatsächlichem C- und Physim-Projekt. Debian 12/GCC 12.2
+besteht denselben Workflow 1/1 (`run-41feacy4`). Die abschließende unabhängige
+Gegenprobe einschließlich der danach ergänzten vollständigen Energie-CSV-
+Vergleiche wurde gegen alle vier tatsächlichen Projekte ausgeführt:
+
+- macOS C: 3070 originale Rohdaten-/Energiezeilen.
+- macOS Physim: 3091 originale Rohdaten-/Energiezeilen.
+- Linux C: 3157 originale Rohdaten-/Energiezeilen.
+- Linux Physim: 3035 originale Rohdaten-/Energiezeilen.
+
+Alle vier besitzen zwei echte positive Spitzen und ein positives beobachtetes
+Abnahmeintervall. Unterschiedliche Zeilenzahlen stammen vom interaktiv
+angeforderten Stop nach mindestens sechs Sekunden; die Prüfung vergleicht
+jedes Projekt gegen seine vollständige eigene Zeitachse. Die fünf geänderten
+Implementierungs-/Prüfeingaben stimmen zwischen beiden Systemen per SHA-256
+überein. Zunächst zählte der neue Prüfer auch ein automatisch von der C-Analyse
+geschriebenes SVG mit; die Gegenprobe wurde auf die tatsächlichen `-diagramm`
+Buttonexporte korrigiert. Die zunächst fehlgeschlagenen Gesamtläufe werden
+nicht als erfolgreiche Nachweise gezählt.
+
+PP-0777 ist damit konkret nachgewiesen; PP-0779/0780 besitzen zusätzliche
+Medium-/Exportnachweise. Windows/Apple Silicon und neue gesamte Pakete wurden
+für diese Änderung nicht ausgeführt. Die gesamte vertikale Plattformabnahme
+und der Gesamtprojektplan bleiben offen.

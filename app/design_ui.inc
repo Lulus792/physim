@@ -759,6 +759,7 @@ static void workspace_panel(app *a) {
                 analyze(a, false);
             nk_end_disabled(ui);
             nk_begin_disabled(ui, !idle(a) || !a->last_run[0]);
+            a->raw_export_bounds=nk_widget_bounds(ui);
             if (nk_button_label(ui, "CSV exportieren"))
                 analyze(a, true);
             nk_end_disabled(ui);

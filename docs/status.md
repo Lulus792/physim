@@ -2770,3 +2770,10 @@ SI-Kanäle, adaptive Berichte, fünf Integratoren des Lernpfads, vollständige
 Amplituden-CSVs und beide Spitzenbindungen. Die Gegenprobe ist auch im
 vollständigen SDK-Prüfer enthalten. Die vollständige aktuelle GUI-/Plattform-
 und Paketmatrix bleibt offen; PP-0756 bleibt unvollständig.
+
+Die tatsächlichen C-/Physim-Medium-Appketten sind nun bis zum Export geprüft:
+alle Rohdaten- und Energiezeilen, beobachtete Spitzen/Abnahmeraten, exportierte
+Tabellenwerte und gültige SVG-/PNG-Dateien. Beide Projektsprachen bestehen
+auf Intel macOS und Debian. Die PNGs sind tatsächlich dekodiert, und der
+CSV-Vergleich umfasst jede Originalzeile. Dies ergänzt die vertikale Abnahme;
+die aktuelle gesamte Plattform-/Paketmatrix bleibt offen.

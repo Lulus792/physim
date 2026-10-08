@@ -305,6 +305,10 @@ def pendulum_medium(flow,directory):
         path=directory/language;path.mkdir(parents=True)
         flow.run("--workspace-state-test",path,"pendulum-medium-"+language,timeout=130,
                  marker="PENDULUM MEDIUM SELF-TEST: PASSED")
+        result=subprocess.run([sys.executable,str(flow.root / "tests/check_pendulum_exports.py"),str(path / "project")],
+                              capture_output=True,text=True,timeout=30)
+        require(result.returncode==0,"Independent medium export check failed: "+result.stdout+result.stderr)
+        print(result.stdout,end="",flush=True)
 
 
 def pendulum_tutorial(flow,directory):

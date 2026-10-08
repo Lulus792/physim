@@ -591,3 +591,16 @@ Spitzenbindungen sind tatsächlich geprüft.
 Die gesamte vertikale, App-/Gesamtplattform- und neue Gesamtpaketabnahme
 bleibt offen. PP-0756 bleibt unvollständig; **44 implemented**, **9 incomplete**,
 **478 unverified** und `completion_proven=false` bleiben unverändert.
+
+## Medium-Appketten bis zum Export
+
+PP-0777 ist durch tatsächliche C-/Physim-Mediumprojekte und unabhängige
+PSRUN-/Rohdaten-CSV-Gegenproben konkret nachgewiesen. PP-0779/0780 besitzen
+zusätzliche vollständige Energie-/Abnahme-CSV-, Tabellen- und tatsächliche
+SVG-/PNG-Buttonexportnachweise auf Intel macOS und Debian. Jede Originalzeile
+wird geprüft; eine reduzierte Bildkurve wird nicht als vollständiger Rohdatensatz
+behandelt. Die gesamte aktuelle Plattform-/Paket- und vertikale Abnahme bleibt
+weiterhin offen.
+
+Alle **531 Originalblöcke** bleiben erhalten: **45 implemented**, **9 incomplete**,
+**477 unverified**. `completion_proven` bleibt `false`.

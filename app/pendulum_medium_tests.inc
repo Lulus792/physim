@@ -65,8 +65,27 @@ static void pendulum_medium_frame(app *a,int *stage,int *code,const char **captu
         ok=ps_report_table_read(a->analysis_report,2,&info)==PS_OK &&
            !strcmp(info.title,"Observed amplitude decay") && info.rows==1 &&
            ps_report_row_read(a->analysis_report,2,0,&row)==PS_OK && row.values[0]>=1 && row.values[2]>0;
-        *capture="pendulum-medium-decay.bmp";a->quitting=true;break;
+        *capture="pendulum-medium-decay.bmp";break;
     }
+    case 9:test_mouse(a,a->result_export_bounds[0],true);break;
+    case 10:test_mouse(a,a->result_export_bounds[0],false);break;
+    case 11:
+        ok=exists(a->result_export) && strstr(a->result_export,".csv");
+        a->result_view=a->language_analysis?1:3;break;
+    case 12:test_mouse(a,a->result_export_bounds[1],true);break;
+    case 13:test_mouse(a,a->result_export_bounds[1],false);break;
+    case 14:
+        ok=exists(a->result_export) && strstr(a->result_export,".svg");
+        test_mouse(a,a->result_export_bounds[2],true);break;
+    case 15:test_mouse(a,a->result_export_bounds[2],false);break;
+    case 16:
+        ok=exists(a->result_export) && strstr(a->result_export,".png");
+        test_mouse(a,a->raw_export_bounds,true);break;
+    case 17:test_mouse(a,a->raw_export_bounds,false);break;
+    case 18:
+        if(!idle(a) || a->library_thread)return;
+        ok=a->job_kind==4 && exists(a->report) && strstr(a->report,".csv");
+        *capture="pendulum-medium-exports.bmp";a->quitting=true;break;
     }
     if(!ok){fprintf(stderr,"Pendulum medium stage %d: %s\n",*stage,a->status);*code=1;a->quitting=true;}
     if(a->quitting)printf("PENDULUM MEDIUM SELF-TEST: %s\n",*code?"FAILED":"PASSED");
