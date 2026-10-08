@@ -2020,3 +2020,47 @@ PP-0763 ist damit im beschriebenen Umfang nachgewiesen. PP-0756 und die
 vollständige Plattform-/Paketabnahme bleiben offen; Windows und Apple Silicon
 wurden für diese Änderung nicht ausgeführt. Der neue Gesamtpaketlauf ist noch
 kein bestätigter Nachweis.
+
+## Laufparameter für allgemeine Pendel-Integratoren
+
+Die C-Pendelvorlage und alle fünf Physim-Pendelvorlagen besitzen jetzt einen
+zusätzlichen dimensionslosen Parameter `integrator` mit ganzzahligem Bereich
+0..4: Euler, symplektischer Euler, RK4, Velocity Verlet, Dormand–Prince 5(4).
+Die bisherigen Standardverfahren bleiben erhalten; `PS_PENDULUM_METHOD`
+bestimmt weiterhin den C-Standard. Die gewählte Methode gehört zur jeweiligen
+Instanz und erscheint in deren Laufmetadaten. Nichtganzzahlige Werte und
+Werte außerhalb des Bereichs werden abgewiesen. Verlet mit positiven Werten
+für Dichte, Widerstandskoeffizient und Fläche bleibt auch bei unterlaufendem
+Produkt unzulässig. Die adaptive Laufsteuerung verwendet weiterhin getrennt
+Dormand–Prince; feste Integratorwahl und adaptive Methode sind beide dokumentiert.
+
+Die Medium-Gegenprobe prüft jede der fünf Physim-Vorlagen gegen dasselbe
+C-Modell mit allen fünf ausgewählten Verfahren, Vakuum und zulässigem Medium
+über 500 Schritte je Konfiguration. Euler und symplektischer Euler besitzen
+zusätzlich eine unabhängige erste Schrittformel. Namen der gewählten Methode,
+alle neun Messwerte, reproduzierbares Rauschen und Reset werden verglichen.
+Gleichzeitig lebende Instanzen verwenden verschiedene Integratoren und
+Parameter; ein Euler-Schritt der zweiten Instanz erhält die erste unverändert.
+Negative, zu große und nichtganzzahlige Auswahlen sowie die Verletgrenzen
+werden für jede Vorlage provoziert.
+
+Intel macOS 14.6.1/Apple Clang 16 besteht die abschließenden vier Fälle
+`language_experiment`, `derived_reference`, `pendulum_template_analysis` und
+`pendulum_medium` 4/4 (`run-0w_kykim`). Debian 12/GCC 12.2 besteht dieselben
+4/4 (`run-4mgo3rcq`). Linux/Clang 14 ASan/UBSan besteht die vollständige
+Medium-/Methodengegenprobe 1/1 (`run-1nmkd17f`, `detect_leaks=0`).
+Eine zunächst fest gebliebene RK45-Metadatenangabe wurde vom neuen Test
+entdeckt und korrigiert; davor fehlgeschlagene Läufe gelten nicht als Nachweis.
+Die neun geänderten Implementierungs-/Testeingaben stimmen zwischen macOS
+und Linux per SHA-256 überein.
+
+Die tatsächlichen App-Workflows bestehen macOS 2/2 (`run-5aoagl1r`) und
+Linux 2/2 (`run-djqqn6dr`). Das C-/Physim-Mediumfenster wählt `integrator=2`
+im Parameterformular, speichert die Auswahl und prüft sie zusammen mit der
+RK4-Metadatenangabe, Messkanälen, Kräften und Auswertung. Die adaptive
+Parameterstudie bleibt für beide Sprachen einschließlich cm-Eingaben und
+Wiederöffnung erfolgreich. Windows/Apple Silicon und neue vollständige
+SDK-/App-Pakete wurden für diese Änderung nicht ausgeführt.
+
+PP-0764 und PP-0773 besitzen damit begrenzte konkrete Nachweise. PP-0756,
+aktuelle vollständige Plattform-/Paketabnahme und Gesamtplan bleiben offen.

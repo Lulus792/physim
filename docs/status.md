@@ -2754,3 +2754,11 @@ bestehen je fünf native und drei App-Fälle, Linux zusätzlich zwei ASan/UBSan-
 Fälle. Ein veralteter Berichtstest aus dem Linux-Paketlauf wurde auf vier Plots
 und drei Tabellen erweitert und besteht auf beiden Systemen. Aktuelle neue
 Gesamtpakete und Windows/Apple-Silicon-Abnahme bleiben offen.
+
+Die allgemeinen Pendelvorlagen erlauben jetzt die Integratorwahl 0..4 als
+Laufparameter, mit bisherigen Standards und instanzlokaler Methode. Alle fünf
+Physim-Vorlagen sind gegen C im Vakuum und mit zulässigem Medium geprüft;
+Integratorgrenzen und verschiedene gleichzeitig lebende Instanzen sind
+abgedeckt. macOS/Linux bestehen je vier native und zwei App-Fälle, Linux
+zusätzlich die Methodenprüfung mit ASan/UBSan. Adaptive Parameterstudien
+behalten ihre ausdrücklich getrennte Dormand–Prince-Steuerung.

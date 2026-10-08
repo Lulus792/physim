@@ -22,12 +22,17 @@ static int units(ps_context *c) {
     const char *names[]={"length","initialAngle","mass","airDensity","dragCoefficient","area","sensorNoise"};
     const int8_t dimensions[][7]={{1,0,0,0,0,0,0},{0},{0,1,0,0,0,0,0},
         {-3,1,0,0,0,0,0},{0},{2,0,0,0,0,0,0},{0}};
-    CHECK(c->parameter_count==7);
+    CHECK(c->parameter_count==8);
     for(unsigned i=0;i<7;i++) {
         unsigned at=0;while(at<c->parameter_count && strcmp(c->parameters[at].name,names[i]))at++;
         ps_parameter_unit unit;CHECK(at<c->parameter_count && ps_parameter_unit_read(c,at,&unit)==PS_OK);
         CHECK(!memcmp(unit.dimension,dimensions[i],7) && unit.scale==1);
     }
+    unsigned method=0;while(method<c->parameter_count && strcmp(c->parameters[method].name,"integrator"))method++;
+    ps_parameter_unit method_unit;
+    CHECK(method<c->parameter_count && ps_parameter_unit_read(c,method,&method_unit)==PS_OK);
+    const int8_t dimensionless[7]={0};
+    CHECK(!memcmp(method_unit.dimension,dimensionless,7) && method_unit.scale==1);
     const char *channels[]={"velocity.x","velocity.y","speed"};
     const int8_t velocity_dimension[]={1,0,-1,0,0,0,0};
     for(unsigned i=0;i<3;i++) {
@@ -86,10 +91,13 @@ static int pair(const char *c_path,const char *phys_path,bool verlet) {
     for(unsigned i=0;i<2;i++) {
         ps_context peer={.struct_size=sizeof peer,.api_version=PS_API_VERSION,.seed=1007};
         double held[9];memcpy(held,c[i].values,sizeof held);ps_rng held_rng=c[i].rng;
-        CHECK(ps_parameter_override(&peer,"mass",.25)==PS_OK &&
+        CHECK(ps_parameter_override(&peer,"integrator",0)==PS_OK &&
+              ps_parameter_override(&peer,"mass",.25)==PS_OK &&
               ps_parameter_override(&peer,"length",.7)==PS_OK &&
               ps_parameter_override(&peer,"initialAngle",-.5)==PS_OK);
-        CHECK(api[i]->create(&peer)==PS_OK && api[i]->step(&peer,.01)==PS_OK);
+        CHECK(api[i]->create(&peer)==PS_OK && api[i]->step(&peer,.01)==PS_OK &&
+              strstr(peer.model_metadata,"\nintegrator=Euler\n") && near(peer.values[0],-.5) &&
+              near(peer.values[1],-.01*9.80665/.7*sin(-.5)));
         CHECK(!memcmp(held,c[i].values,sizeof held) && !memcmp(&held_rng,&c[i].rng,sizeof held_rng));
         CHECK(api[i]->reset(&c[i])==PS_OK);
         for(unsigned channel=0;channel<9;channel++)CHECK(near(c[i].values[channel],initial[channel]));
@@ -121,11 +129,63 @@ static int pair(const char *c_path,const char *phys_path,bool verlet) {
     }
     return 0;
 }
+static int selectable(const char *c_path,const char *phys_path) {
+    void *modules[2];const ps_experiment_api *api[]={load(c_path,&modules[0]),load(phys_path,&modules[1])};
+    const char *labels[]={"Euler","symplectic Euler","RK4","velocity Verlet","Dormand-Prince 5(4)"};
+    CHECK(api[0] && api[1]);
+    for(unsigned method=0;method<5;method++)for(unsigned medium=0;medium<2;medium++) {
+        ps_context c[2]={{.struct_size=sizeof(ps_context),.api_version=PS_API_VERSION,.seed=42}};c[1]=c[0];
+        for(unsigned i=0;i<2;i++) {
+            CHECK(!parameters(&c[i],medium?1.225:0) && ps_parameter_override(&c[i],"integrator",method)==PS_OK);
+            ps_result result=api[i]->create(&c[i]);
+            if(method==3 && medium) {
+                CHECK(result!=PS_OK && strstr(c[i].error,"Velocity Verlet requires zero velocity-dependent drag"));
+            } else {
+                CHECK(result==PS_OK && ps_parameter_finalize(&c[i])==PS_OK && !units(&c[i]));
+                char entry[80];snprintf(entry,sizeof entry,"\nintegrator=%s\n",labels[method]);
+                if(!strstr(c[i].model_metadata,entry))fprintf(stderr,"Expected %s in %s\n",entry,c[i].model_metadata);
+                CHECK(strstr(c[i].model_metadata,entry));
+            }
+        }
+        if(method!=3 || !medium) {
+            double initial[9];memcpy(initial,c[0].values,sizeof initial);
+            for(unsigned step=0;step<500;step++) {
+                for(unsigned i=0;i<2;i++){CHECK(api[i]->step(&c[i],.002)==PS_OK);c[i].time_s=(step+1)*.002;}
+                for(unsigned channel=0;channel<9;channel++)CHECK(near(c[0].values[channel],c[1].values[channel]));
+                if(step==0 && method<2) {
+                    double w=-.002*9.80665/1.2*sin(.6);
+                    CHECK(near(c[0].values[1],w) && near(c[0].values[0],method==0?.6:.6+.002*w));
+                }
+            }
+            for(unsigned i=0;i<2;i++) {
+                CHECK(api[i]->reset(&c[i])==PS_OK);
+                for(unsigned channel=0;channel<9;channel++)CHECK(near(c[i].values[channel],initial[channel]));
+            }
+        }
+        for(unsigned i=0;i<2;i++)api[i]->destroy(&c[i]);
+    }
+    for(unsigned i=0;i<2;i++) {
+        const double invalid[]={-1,1.5,5};
+        for(unsigned j=0;j<3;j++) {
+            ps_context c={.struct_size=sizeof c,.api_version=PS_API_VERSION};
+            CHECK(ps_parameter_override(&c,"integrator",invalid[j])==PS_OK && api[i]->create(&c)!=PS_OK);
+            api[i]->destroy(&c);
+        }
+        ps_context c={.struct_size=sizeof c,.api_version=PS_API_VERSION};
+        CHECK(ps_parameter_override(&c,"integrator",3)==PS_OK &&
+              ps_parameter_override(&c,"airDensity",1e-200)==PS_OK &&
+              ps_parameter_override(&c,"area",1e-200)==PS_OK && api[i]->create(&c)!=PS_OK);
+        api[i]->destroy(&c);
+        ps_module_close(modules[i]);
+    }
+    return 0;
+}
 int main(int argc,char **argv) {
     CHECK(argc==10);
     CHECK(!pair(argv[1],argv[5],false));
     CHECK(!pair(argv[2],argv[6],false) && !pair(argv[2],argv[7],false));
     CHECK(!pair(argv[3],argv[8],false) && !pair(argv[4],argv[9],true));
-    puts("Pendulum medium: seven SI parameters, C/Physim drag/noise parity, force sums, seeded reset and Verlet guards passed");
+    for(unsigned i=5;i<10;i++)CHECK(!selectable(argv[2],argv[i]));
+    puts("Pendulum medium: eight SI parameters, selectable five methods, C/Physim drag/noise parity, force sums, seeded reset and Verlet guards passed");
     return 0;
 }

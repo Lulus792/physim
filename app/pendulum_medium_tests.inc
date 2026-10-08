@@ -12,10 +12,10 @@ static void pendulum_medium_frame(app *a,int *stage,int *code,const char **captu
     case 0:build_project(a);break;
     case 1: {
         if(!idle(a) || a->library_thread)return;
-        ok=a->built && a->parameters.count==7;
-        const char *names[]={"mass","airDensity","dragCoefficient","area","sensorNoise"};
-        const char *values[]={"2","1.225","0.8","0.08","0.02"};
-        for(unsigned j=0;j<5;j++) {
+        ok=a->built && a->parameters.count==8;
+        const char *names[]={"mass","airDensity","dragCoefficient","area","sensorNoise","integrator"};
+        const char *values[]={"2","1.225","0.8","0.08","0.02","2"};
+        for(unsigned j=0;j<6;j++) {
             bool found=false;
             for(unsigned i=0;i<a->parameters.count;i++)if(!strcmp(a->parameters.entries[i].name,names[j])) {
                 snprintf(a->parameters.selected[i],sizeof a->parameters.selected[i],"%s",values[j]);found=true;
@@ -45,7 +45,9 @@ static void pendulum_medium_frame(app *a,int *stage,int *code,const char **captu
                strstr(reader.metadata,"\nparameter.airDensity=1.225") &&
                strstr(reader.metadata,"\nparameter.sensorNoise=0.02") &&
                strstr(reader.metadata,"parameter_unit.airDensity=kg/m3\n") &&
-               strstr(reader.metadata,"parameter_unit.mass=kg\n");
+               strstr(reader.metadata,"parameter_unit.mass=kg\n") &&
+               strstr(reader.metadata,"\nintegrator=RK4\n") &&
+               strstr(reader.metadata,"\nparameter.integrator=2\n");
             ps_run_reader_close(&reader);
         }
         if(ok)analyze(a,false);break;

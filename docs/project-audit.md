@@ -565,3 +565,14 @@ Die vollständigen Plattform-/Paket- und vertikalen Abnahmen bleiben offen.
 
 Alle **531 Originalblöcke** bleiben erhalten: **42 implemented**, **9 incomplete**,
 **480 unverified**. `completion_proven` bleibt `false`.
+
+## Integratorwahl im allgemeinen Pendelprojekt
+
+PP-0764 und PP-0773 sind mit instanzlokaler Integratorauswahl 0..4,
+Methoden-/Medium-Gegenproben, tatsächlich gespeicherten Appauswahlen und
+weiterhin funktionierenden adaptiven Parameterstudien nachgewiesen.
+macOS/Linux- und Linux-Sanitizer-Prüfungen sind tatsächlich ausgeführt;
+die gesamte vertikale und aktuelle Gesamtplattform-/Paketabnahme bleibt offen.
+
+Alle **531 Originalblöcke** bleiben erhalten: **44 implemented**, **9 incomplete**,
+**478 unverified**. `completion_proven` bleibt `false`.

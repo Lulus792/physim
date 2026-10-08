@@ -12,6 +12,8 @@ let airDensity = parameterWithUnit("airDensity", densityUnit, 0.0, 0.0, 1000, "M
 let dragCoefficient = parameterWithUnit("dragCoefficient", one, 0.47, 0.0, 2, "Quadratic drag coefficient")
 let area = parameterWithUnit("area", areaUnit, 0.01, 0.0, 1, "Drag cross-section in square metres")
 let sensorNoise = parameterWithUnit("sensorNoise", radians, 0.0, 0.0, 0.5, "Gaussian angle sensor standard deviation")
+let method = parameterWithUnit("integrator", one, 2, 0, 4, "0 Euler; 1 symplectic; 2 RK4; 3 Verlet; 4 RK45")
+let methods = ["Euler", "symplectic Euler", "RK4", "velocity Verlet", "Dormand-Prince 5(4)"]
 let medium = Medium(airDensity, 0)
 let gravity: Float64 = 9.80665
 func angularAcceleration(angle: Float64, rate: Float64) -> Float64:
@@ -34,18 +36,34 @@ let vyChannel = Channel("velocity.y", velocityUnit, "Vertical velocity")
 let speedChannel = Channel("speed", velocityUnit, "Nonnegative tangential speed")
 struct PendulumState:
     let phase: Vec2
-    func advanced(dt: Float64) -> PendulumState:
-        let k1 = slope(self.phase)
-        let k2 = slope(self.phase + dt * k1 / 2)
-        let k3 = slope(self.phase + dt * k2 / 2)
-        let k4 = slope(self.phase + dt * k3)
-        return PendulumState(self.phase + dt * (k1 + 2 * k2 + 2 * k3 + k4) / 6)
-    mutating func advance(dt: Float64):
-        self = self.advanced(dt)
+    func advanced(time: Float64, dt: Float64) -> PendulumState:
+        let value = [self.phase.x, self.phase.y]
+        var next = value
+        if method == 0:
+            next = eulerStep(pendulumDerivative, value, time, dt)
+        else if method == 1:
+            let rate = self.phase.y + dt * angularAcceleration(self.phase.x, self.phase.y)
+            next = [self.phase.x + dt * rate, rate]
+        else if method == 2:
+            next = rk4Step(pendulumDerivative, value, time, dt)
+        else if method == 3:
+            next = verletStep(pendulumAcceleration, value, time, dt)
+        else:
+            next = rk45IntegrateWithSteps(pendulumDerivative, value, time, time + dt,
+                1e-10, 1e-8, 100000, dt, min(1e-14, dt), dt)
+        return PendulumState(Vec2(next[0], next[1]))
+    mutating func advance(time: Float64, dt: Float64):
+        self = self.advanced(time, dt)
 var states = [PendulumState(Vec2(initialAngle, 0))]
 
 func slope(phase: Vec2) -> Vec2:
     return Vec2(phase.y, angularAcceleration(phase.x, phase.y))
+
+func pendulumDerivative(time: Float64, state: [Float64]) -> [Float64]:
+    return [state[1], angularAcceleration(state[0], state[1])]
+
+func pendulumAcceleration(time: Float64, position: [Float64]) -> [Float64]:
+    return [-gravity / length * sin(position[0])]
 
 func measure():
     for value in states:
@@ -64,7 +82,9 @@ func measure():
         speedChannel.sample(length * abs(state.y))
 
 func create():
-    metadata("model=point pendulum, massless rigid rod, uniform gravity\nlength_m=" + String(length) + "\ninitial_angle_rad=" + String(initialAngle) + "\nmass_kg=" + String(mass) + "\nmedium_density_kg_m3=" + String(airDensity) + "\ndrag_coefficient=" + String(dragCoefficient) + "\narea_m2=" + String(area) + "\ngravity_m_s2=9.80665\nintegrator=RK4\nsensor_noise_rad=" + String(sensorNoise) + "\nadaptive_integrator=Dormand-Prince 5(4)\nadaptive_absolute_tolerance=1e-10\nadaptive_relative_tolerance=1e-8")
+    assert(method == floor(method), "Integrator must be an integer from 0 to 4")
+    assert(method != 3 || airDensity == 0 || dragCoefficient == 0 || area == 0, "Velocity Verlet requires zero velocity-dependent drag")
+    metadata("model=point pendulum, massless rigid rod, uniform gravity\nlength_m=" + String(length) + "\ninitial_angle_rad=" + String(initialAngle) + "\nmass_kg=" + String(mass) + "\nmedium_density_kg_m3=" + String(airDensity) + "\ndrag_coefficient=" + String(dragCoefficient) + "\narea_m2=" + String(area) + "\ngravity_m_s2=9.80665\nintegrator=" + methods[Int64(method)] + "\nsensor_noise_rad=" + String(sensorNoise) + "\nadaptive_integrator=Dormand-Prince 5(4)\nadaptive_absolute_tolerance=1e-10\nadaptive_relative_tolerance=1e-8")
 
 func reset():
     states = []
@@ -72,7 +92,7 @@ func reset():
     measure()
 
 func step(dt: Float64):
-    states[0].advance(dt)
+    states[0].advance(simulationTime(), dt)
     measure()
 
 func scene():

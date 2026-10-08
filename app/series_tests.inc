@@ -58,7 +58,7 @@ static void series_test_frame(app *a,const char *mode,int *stage,int *code,const
     case 0:build_project(a);break;
     case 1:
         if(!idle(a) || a->library_thread)return;
-        ok=a->built && a->parameters.count==7;
+        ok=a->built && a->parameters.count==8;
         if(ok && scaled) {
             double selected;
             ok=ps_parameter_catalog_value(&a->parameters,0,&selected)==PS_OK && selected==.29 &&

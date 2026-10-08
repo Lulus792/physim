@@ -19,10 +19,10 @@ static const double sensor_noise_rad = 0.0;
 #ifndef PS_PENDULUM_METHOD
 #define PS_PENDULUM_METHOD PS_RK4
 #endif
-static const ps_integrator integrator = PS_PENDULUM_METHOD;
+static const ps_integrator default_integrator = PS_PENDULUM_METHOD;
 static const double absolute_tolerance = 1e-10, relative_tolerance = 1e-8;
 typedef struct {
-    double y[2], length, initial_angle, mass, density, coefficient, area, noise;
+    double y[2], length, initial_angle, mass, density, coefficient, area, noise, method;
 } pendulum;
 static void derivative(double t, const double *y, double *dy, void *u) {
     (void)t;
@@ -67,7 +67,7 @@ static ps_result reset(ps_context *c) {
 static ps_result create(ps_context *c) {
     if (length_m <= 0 || mass_kg <= 0 || air_density_kg_m3 < 0 || sensor_noise_rad < 0)
         return PS_INVALID;
-    if (integrator < PS_EULER || integrator > PS_RK45)
+    if (default_integrator < PS_EULER || default_integrator > PS_RK45)
         return PS_INVALID;
     c->user = calloc(1, sizeof(pendulum));
     if (!c->user)
@@ -89,7 +89,14 @@ static ps_result create(ps_context *c) {
         parameter=ps_parameter_define_unit(c,"area","Drag cross-section in square metres",area,area_m2,0,1,&p->area);
     if(parameter==PS_OK)
         parameter=ps_parameter_define_unit(c,"sensorNoise","Gaussian angle sensor standard deviation",PS_RADIAN,sensor_noise_rad,0,.5,&p->noise);
+    if(parameter==PS_OK)
+        parameter=ps_parameter_define_unit(c,"integrator","0 Euler; 1 symplectic; 2 RK4; 3 Verlet; 4 RK45",PS_ONE,default_integrator,0,4,&p->method);
     if(parameter!=PS_OK) return parameter;
+    if(p->method!=floor(p->method)) {
+        snprintf(c->error,sizeof c->error,"Integrator must be an integer from 0 to 4");
+        return PS_INVALID;
+    }
+    ps_integrator integrator=(ps_integrator)(unsigned)p->method;
     if(integrator==PS_VERLET && p->density>0 && p->coefficient>0 && p->area>0) {
         snprintf(c->error,sizeof c->error,"Velocity Verlet requires zero velocity-dependent drag");
         return PS_INVALID;
@@ -124,6 +131,7 @@ static ps_result create(ps_context *c) {
 static ps_result step(ps_context *c, double dt) {
     pendulum *p = c->user;
     if (!isfinite(dt) || dt <= 0) return PS_INVALID;
+    ps_integrator integrator=(ps_integrator)(unsigned)p->method;
     double next[] = {p->y[0], p->y[1]};
     ps_result r = PS_OK;
     if (integrator == PS_SYMPLECTIC) {

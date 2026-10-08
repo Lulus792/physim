@@ -535,3 +535,14 @@ Die Komponenten behalten das Vorzeichen, der Betrag ist nichtnegativ und
 entspricht `length * abs(angular_velocity)`. Sie erscheinen wie die übrigen
 Messkanäle in Live-Werten, gespeicherten Läufen und Rohdatenexporten; die
 positionsbasierte Ableitung in der Auswertung bleibt eine eigene Schätzung.
+
+Allgemeine Pendelprojekte besitzen zusätzlich den Laufparameter `integrator`:
+`0` Euler, `1` symplektischer Euler, `2` RK4, `3` Velocity Verlet,
+`4` Dormand–Prince 5(4). Wähle eine ganze Zahl im Parameterformular; die
+Vorlagen behalten ihre bisherigen Standardverfahren. Jede Instanz erhält ihre
+eigene Auswahl, die auch in den Laufmetadaten steht. Verlet benötigt
+`airDensity = 0`, `dragCoefficient = 0` oder `area = 0`, weil dieser
+Positionsbeschleuniger keinen geschwindigkeitsabhängigen Widerstand integriert.
+Der adaptive Laufmodus verwendet weiterhin ausdrücklich Dormand–Prince,
+unabhängig von der Auswahl für feste Ausgabeschritte; seine Metadaten geben
+beide Einstellungen getrennt an.

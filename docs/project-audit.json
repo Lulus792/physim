@@ -6144,9 +6144,20 @@
       "kind": "list",
       "scope": "planned",
       "text": "- erlaubt Vergleich von Euler, symplektischem Euler und RK4.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "examples/pendulum/main.c",
+        "examples/language/pendulum.phys",
+        "examples/language/pendulum_rk4.phys",
+        "examples/language/pendulum_integrator.phys",
+        "examples/language/pendulum_rk45.phys",
+        "examples/language/pendulum_verlet.phys",
+        "tests/test_pendulum_medium.c",
+        "app/pendulum_medium_tests.inc",
+        "app/series_tests.inc",
+        "docs/platform-validation.md"
+      ],
+      "note": "Allgemeine C-/Physim-Pendelvorlagen besitzen instanzlokalen ganzzahligen Integratorparameter 0..4, beibehaltene Standards und ausgewählte Methode in Laufmetadaten. Alle fünf Physim-Vorlagen gegen dasselbe C-Modell mit fünf Methoden, Vakuum/zulässigem Medium, Euler-/symplektischem Einzelschritt, unabhängigen gleichzeitig lebenden Methoden, Reset und ungültigen Auswahl-/Verletgrenzen geprüft. Tatsächliche Appauswahl für Mediumlauf sowie adaptive Parameterstudien einschließlich cm-Eingaben auf Intel macOS/Debian bestanden; Linux ASan/UBSan bestanden. Adaptive Laufsteuerung verwendet ausdrücklich separat Dormand-Prince; Gesamtplattform-/Paketabnahme weiterhin offen."
     },
     {
       "id": "PP-0765",
@@ -6276,9 +6287,20 @@
       "kind": "list",
       "scope": "planned",
       "text": "3. Nutzer ändert Länge, Masse oder Integrator.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "examples/pendulum/main.c",
+        "examples/language/pendulum.phys",
+        "examples/language/pendulum_rk4.phys",
+        "examples/language/pendulum_integrator.phys",
+        "examples/language/pendulum_rk45.phys",
+        "examples/language/pendulum_verlet.phys",
+        "tests/test_pendulum_medium.c",
+        "app/pendulum_medium_tests.inc",
+        "app/series_tests.inc",
+        "docs/platform-validation.md"
+      ],
+      "note": "Allgemeine C-/Physim-Pendelvorlagen besitzen instanzlokalen ganzzahligen Integratorparameter 0..4, beibehaltene Standards und ausgewählte Methode in Laufmetadaten. Alle fünf Physim-Vorlagen gegen dasselbe C-Modell mit fünf Methoden, Vakuum/zulässigem Medium, Euler-/symplektischem Einzelschritt, unabhängigen gleichzeitig lebenden Methoden, Reset und ungültigen Auswahl-/Verletgrenzen geprüft. Tatsächliche Appauswahl für Mediumlauf sowie adaptive Parameterstudien einschließlich cm-Eingaben auf Intel macOS/Debian bestanden; Linux ASan/UBSan bestanden. Adaptive Laufsteuerung verwendet ausdrücklich separat Dormand-Prince; Gesamtplattform-/Paketabnahme weiterhin offen."
     },
     {
       "id": "PP-0774",
