@@ -102,6 +102,11 @@ def c_reference(module, title, guide, intro):
 
 
 LANG_DESCRIPTIONS = {
+    'sweepConvexes': 'Erster Kontakt zweier konvexer Netze entlang expliziter linearer Verschiebungen in Metern. Orientierung bleibt fest; Anfangsüberlappung zählt bei fraction()=0.',
+    'sweepConvexPlane': 'Erster Kontakt eines linear verschobenen konvexen Netzes mit einem festen Halbraum. Die Normale zeigt in den freien Raum.',
+    'sweepSphereConvex': 'Erster Kugelkontakt mit einem konvexen Netz bei beiden expliziten Verschiebungen und fester Netzorientierung; testet Flächen, Kanten und Vertices.',
+    'sweptConvexBounds': 'Hülle der gesamten linearen Netzverschiebung bei fester Orientierung für die Broad Phase; kein Rotationsweg.',
+
     'bodyWithInertia': 'Erzeugt einen ruhenden Körper mit expliziter SI-Masse und drei Hauptträgheiten. Geometrie, Schwerpunkt und Hauptachsen werden vom Modell vorgegeben.' ,
 
     'convexContacts': 'Prüft zwei Körper mit konvexen Dreiecksnetzen aus Array<Vec3> und flachen Array<Int64>-Indizes. Ein repräsentativer Kontakt, kein Ruhemanifold; Geometrie ist körperlokal in Metern.',

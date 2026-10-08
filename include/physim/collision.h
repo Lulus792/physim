@@ -36,7 +36,7 @@ ps_result ps_convex_validate(const ps_convex_mesh *mesh);
  * for ps_contact_resolve. It is not a multi-point resting manifold. Touching is
  * closed within scale-dependent roundoff tolerance. No hit changes only touching;
  * errors preserve both outputs. Inputs/output storage must be disjoint.
- * Bodies, mesh storage and plane geometry are unchanged. No convex CCD. */
+ * Bodies, mesh storage and plane geometry are unchanged. Discrete query. */
 ps_result ps_contact_convexes(const ps_body *a, const ps_convex_mesh *mesh_a,
                               const ps_body *b, const ps_convex_mesh *mesh_b,
                               ps_contact *out, bool *touching);
@@ -68,6 +68,28 @@ ps_result ps_sweep_spheres(const ps_body *a, double radius_a_m, ps_vec3 displace
 ps_result ps_sweep_sphere_plane(const ps_body *body, double radius_m, ps_vec3 displacement_m,
                                 ps_vec3 plane_point_m, ps_vec3 plane_normal, ps_sweep_hit *hit,
                                 bool *touching);
+/* Convex sweeps translate the supplied meshes with FIXED orientations. Stored
+ * angular/linear velocities are not integrated. Initial overlap follows the
+ * discrete query (fraction=0); new hits have zero penetration. Face and edge
+ * interval entry/exit times are intersected, including grazing contact. One
+ * representative contact. Same ownership, error and no-hit rules as above.
+ * Rotation, acceleration and multi-body event scheduling require caller work. */
+ps_result ps_sweep_convexes(const ps_body *a, const ps_convex_mesh *mesh_a,
+                            ps_vec3 displacement_a_m, const ps_body *b,
+                            const ps_convex_mesh *mesh_b, ps_vec3 displacement_b_m,
+                            ps_sweep_hit *hit, bool *touching);
+ps_result ps_sweep_convex_plane(const ps_body *body, const ps_convex_mesh *mesh,
+                                ps_vec3 displacement_m, ps_vec3 plane_point_m,
+                                ps_vec3 plane_normal, ps_sweep_hit *hit, bool *touching);
+/* Sphere is A; both bodies translate and the mesh orientation stays fixed.
+ * Tests face, edge-cylinder and vertex-ball entry, then returns one contact. */
+ps_result ps_sweep_sphere_convex(const ps_body *sphere, double radius_m,
+                                 ps_vec3 sphere_displacement_m, const ps_body *body,
+                                 const ps_convex_mesh *mesh, ps_vec3 mesh_displacement_m,
+                                 ps_sweep_hit *hit, bool *touching);
+ps_result ps_aabb_swept_convex(const ps_body *body, const ps_convex_mesh *mesh,
+                               ps_vec3 displacement_m, ps_aabb *out);
+
 /* Bounds for the whole linearly translated sphere, suitable for broad_phase.
  * Current-pose bounds alone can miss CCD candidates. Transactional output. */
 ps_result ps_aabb_swept_sphere(const ps_body *body, double radius_m, ps_vec3 displacement_m,

@@ -311,7 +311,7 @@ erzeugt ein Release-Paket für **x86-64**. Es wird unter Debian 12 gebaut und in
 frischen Debian-12- und Ubuntu-24.04-Systemen geprüft. Für ein geprüftes Paket einen
 vollständig erfolgreichen Lauf öffnen und unter **Artifacts** die Datei
 `physim-linux-release-x86_64.zip` herunterladen. Der aktuelle Nachweis steht im
-[Plattformprüfstand](docs/platform-validation.md#release-paket-auf-frischen-linux-systemen).
+[Plattformprüfstand](docs/platform-validation-history.md).
 
 Für die erste Installation in einer grafischen Desktop-Sitzung:
 

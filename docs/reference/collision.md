@@ -85,7 +85,7 @@ ps_result ps_contact_convexes(
     bool *touching);
 ```
 
-Discrete SAT over face normals and all edge cross products, including full containment. One representative shared contact, normal A toward B, suitable for ps_contact_resolve. It is not a multi-point resting manifold. Touching is closed within scale-dependent roundoff tolerance. No hit changes only touching; errors preserve both outputs. Inputs/output storage must be disjoint. Bodies, mesh storage and plane geometry are unchanged. No convex CCD.
+Discrete SAT over face normals and all edge cross products, including full containment. One representative shared contact, normal A toward B, suitable for ps_contact_resolve. It is not a multi-point resting manifold. Touching is closed within scale-dependent roundoff tolerance. No hit changes only touching; errors preserve both outputs. Inputs/output storage must be disjoint. Bodies, mesh storage and plane geometry are unchanged. Discrete query.
 
 ## ps_contact_convex_plane
 
@@ -169,6 +169,69 @@ ps_result ps_sweep_sphere_plane(
     ps_vec3 plane_normal,
     ps_sweep_hit *hit,
     bool *touching);
+```
+
+## ps_sweep_convexes
+
+Ermittelt den ersten Kontakt zweier linear verschobener konvexer Netze bei festen Orientierungen.
+
+```c
+ps_result ps_sweep_convexes(
+    const ps_body *a,
+    const ps_convex_mesh *mesh_a,
+    ps_vec3 displacement_a_m,
+    const ps_body *b,
+    const ps_convex_mesh *mesh_b,
+    ps_vec3 displacement_b_m,
+    ps_sweep_hit *hit,
+    bool *touching);
+```
+
+Convex sweeps translate the supplied meshes with FIXED orientations. Stored angular/linear velocities are not integrated. Initial overlap follows the discrete query (fraction=0); new hits have zero penetration. Face and edge interval entry/exit times are intersected, including grazing contact. One representative contact. Same ownership, error and no-hit rules as above. Rotation, acceleration and multi-body event scheduling require caller work.
+
+## ps_sweep_convex_plane
+
+Ermittelt den ersten Kontakt eines linear verschobenen konvexen Netzes mit einem festen Halbraum.
+
+```c
+ps_result ps_sweep_convex_plane(
+    const ps_body *body,
+    const ps_convex_mesh *mesh,
+    ps_vec3 displacement_m,
+    ps_vec3 plane_point_m,
+    ps_vec3 plane_normal,
+    ps_sweep_hit *hit,
+    bool *touching);
+```
+
+## ps_sweep_sphere_convex
+
+Ermittelt den ersten Kugelkontakt mit einem linear verschobenen konvexen Netz über Flächen, Kanten und Vertices.
+
+```c
+ps_result ps_sweep_sphere_convex(
+    const ps_body *sphere,
+    double radius_m,
+    ps_vec3 sphere_displacement_m,
+    const ps_body *body,
+    const ps_convex_mesh *mesh,
+    ps_vec3 mesh_displacement_m,
+    ps_sweep_hit *hit,
+    bool *touching);
+```
+
+Sphere is A; both bodies translate and the mesh orientation stays fixed. Tests face, edge-cylinder and vertex-ball entry, then returns one contact.
+
+## ps_aabb_swept_convex
+
+Vereinigt gepufferte Anfangs-/Endgrenzen zur Hülle einer linearen Verschiebung bei fester Orientierung.
+
+```c
+ps_result ps_aabb_swept_convex(
+    const ps_body *body,
+    const ps_convex_mesh *mesh,
+    ps_vec3 displacement_m,
+    ps_aabb *out);
 ```
 
 ## ps_aabb_swept_sphere

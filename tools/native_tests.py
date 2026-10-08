@@ -47,7 +47,7 @@ def catalog():
         cases.append(Case("accessibility_native", ("tests/test_accessibility_native.c", "app/accessibility.c", "app/accessibility_native.c"),app=True,display=True))
         cases.append(Case("accessibility_ui", ("tests/test_accessibility_ui.c", "app/accessibility.c", "app/accessibility_native.c", "app/ui_backend.c", "app/ui_sdl.c", "app/ui_geometry.c", "app/graphics.c", "app/png.c"),libraries=("platform","zlib","core"),defines=("Z_PREFIX",),app=True,display=True))
     for name in ("core", "linear_range", "transform_range", "scalar_range", "ode_range", "quantity_sum", "real_gas", "properties", "numerics", "mechanics", "thermodynamics", "electromagnetism", "waves_optics", "fluid", "hashmap", "string_view", "array",
-                 "memory", "memory_owners", "math", "box_contacts", "convex", "contact_graph",
+                 "memory", "memory_owners", "math", "box_contacts", "convex", "convex_sweep", "contact_graph",
                  "distance_joint", "constraint_graph", "contact_world", "broad_phase", "measurement",
                  "buoyancy", "contacts", "resample", "series", "report", "scene_view"):
         cases.append(Case(name, (f"tests/test_{name}.c",)))
@@ -89,7 +89,8 @@ def catalog():
         Case("pchip", ("tests/test_pchip.c",)),
         Case("pacing", ("tests/test_pacing.c",)),
         Case("parameter_catalog", ("tests/test_parameter_catalog.c", "app/parameter_catalog.c")),
-        Case("documentation", ("tests/test_documentation.c", "app/documentation.c")),
+        Case("documentation", ("tests/test_documentation.c", "app/documentation.c"),
+             arguments=("{source}/docs/platform-validation.md", "{source}/docs/platform-validation-history.md")),
         Case("plot_view", ("tests/test_plot_view.c", "app/plot_view.c")),
         Case("crc", ("tests/test_crc.c",)),
         Case("crc_report_roundtrip", ("tests/test_crc.c",),

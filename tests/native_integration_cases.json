@@ -2037,6 +2037,14 @@
       "libraries": [
         "core"
       ]
+    },
+    "convex-sweep-probe": {
+      "sources": [
+        "tests/convex_sweep_probe.c"
+      ],
+      "libraries": [
+        "core"
+      ]
     }
   },
   "tests": [
@@ -8008,6 +8016,24 @@
             "{root}/tests/test_convex_oracle.py",
             "--probe",
             "{convex-probe}"
+          ],
+          "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "convex_sweep_oracle",
+      "targets": [
+        "python",
+        "convex-sweep-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_convex_sweep_oracle.py",
+            "--probe",
+            "{convex-sweep-probe}"
           ],
           "timeout": 120
         }

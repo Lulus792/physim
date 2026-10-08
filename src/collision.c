@@ -454,6 +454,36 @@ static ps_result cv_contact(ps_vec3 origin, double scale, ps_vec3 point, ps_vec3
     *out = result; *touching = true;
     return PS_OK;
 }
+static ps_result cv_witness(cv_geometry *ga, cv_geometry *gb, ps_vec3 origin,
+                             double scale, ps_vec3 normal, double depth,
+                             double tolerance, ps_contact *out, bool *touching) {
+    /* Translate B by the minimum separating displacement, find surface witnesses,
+     * then return their midpoint in the original overlapped configuration. */
+    ps_vec3 shift = ps_vscale(normal, depth);
+    for (size_t i = 0; i < gb->mesh->vertex_count; i++) gb->vertices[i] = ps_vadd(gb->vertices[i], shift);
+    double distance = INFINITY; ps_vec3 pa = {0}, pb = {0};
+    for (size_t i = 0; i < ga->mesh->vertex_count; i++)
+        for (size_t j = 0; j < gb->mesh->triangle_count; j++) {
+            const uint32_t *t = gb->mesh->triangles[j];
+            cv_nearer(ga->vertices[i], cv_triangle_point(ga->vertices[i], gb->vertices[t[0]],
+                      gb->vertices[t[1]], gb->vertices[t[2]], gb->normals[j]), &distance, &pa, &pb);
+        }
+    for (size_t i = 0; i < gb->mesh->vertex_count; i++)
+        for (size_t j = 0; j < ga->mesh->triangle_count; j++) {
+            const uint32_t *t = ga->mesh->triangles[j];
+            cv_nearer(cv_triangle_point(gb->vertices[i], ga->vertices[t[0]], ga->vertices[t[1]],
+                      ga->vertices[t[2]], ga->normals[j]), gb->vertices[i], &distance, &pa, &pb);
+        }
+    for (size_t i = 0; i < ga->edge_count; i++)
+        for (size_t j = 0; j < gb->edge_count; j++)
+            cv_edges_closest(ga->vertices[ga->edges[i][0]], ga->vertices[ga->edges[i][1]],
+                             gb->vertices[gb->edges[j][0]], gb->vertices[gb->edges[j][1]],
+                             &distance, &pa, &pb);
+    if (!isfinite(depth) || distance > tolerance)
+        return PS_NUMERIC;
+    return cv_contact(origin, scale, ps_vscale(ps_vsub(ps_vadd(pa, pb), shift), .5),
+                      normal, depth, out, touching);
+}
 ps_result ps_contact_convexes(const ps_body *a, const ps_convex_mesh *ma,
                               const ps_body *b, const ps_convex_mesh *mb,
                               ps_contact *out, bool *touching) {
@@ -483,32 +513,7 @@ ps_result ps_contact_convexes(const ps_body *a, const ps_convex_mesh *ma,
             if (!cv_axis(&ga, &gb, ps_vcross(u, v), &depth, &normal)) goto separated;
         }
     }
-    /* Translate B by the minimum separating displacement, find surface witnesses,
-     * then return their midpoint in the original overlapped configuration. */
-    ps_vec3 shift = ps_vscale(normal, depth);
-    for (size_t i = 0; i < mb->vertex_count; i++) gb.vertices[i] = ps_vadd(gb.vertices[i], shift);
-    double distance = INFINITY; ps_vec3 pa = {0}, pb = {0};
-    for (size_t i = 0; i < ma->vertex_count; i++)
-        for (size_t j = 0; j < mb->triangle_count; j++) {
-            const uint32_t *t = mb->triangles[j];
-            cv_nearer(ga.vertices[i], cv_triangle_point(ga.vertices[i], gb.vertices[t[0]],
-                      gb.vertices[t[1]], gb.vertices[t[2]], gb.normals[j]), &distance, &pa, &pb);
-        }
-    for (size_t i = 0; i < mb->vertex_count; i++)
-        for (size_t j = 0; j < ma->triangle_count; j++) {
-            const uint32_t *t = ma->triangles[j];
-            cv_nearer(cv_triangle_point(gb.vertices[i], ga.vertices[t[0]], ga.vertices[t[1]],
-                      ga.vertices[t[2]], ga.normals[j]), gb.vertices[i], &distance, &pa, &pb);
-        }
-    for (size_t i = 0; i < ga.edge_count; i++)
-        for (size_t j = 0; j < gb.edge_count; j++)
-            cv_edges_closest(ga.vertices[ga.edges[i][0]], ga.vertices[ga.edges[i][1]],
-                             gb.vertices[gb.edges[j][0]], gb.vertices[gb.edges[j][1]],
-                             &distance, &pa, &pb);
-    if (!isfinite(depth) || distance > 8 * cv_tol)
-        return PS_NUMERIC;
-    return cv_contact(a->position_m, scale, ps_vscale(ps_vsub(ps_vadd(pa, pb), shift), .5),
-                      normal, depth, out, touching);
+    return cv_witness(&ga, &gb, a->position_m, scale, normal, depth, 8 * cv_tol, out, touching);
 separated:
     *touching = false;
     return PS_OK;
@@ -594,5 +599,233 @@ ps_result ps_aabb_convex(const ps_body *body, const ps_convex_mesh *mesh, ps_aab
                             nextafter(fma(hi.z + cv_tol, g.scale, body->position_m.z), INFINITY));
     if (!finite3(bounds.minimum_m) || !finite3(bounds.maximum_m)) return PS_NUMERIC;
     *out = bounds;
+    return PS_OK;
+}
+
+/* Intersect the closed time interval for each stationary-orientation SAT axis.
+ * Infinite quotients mean entry/exit outside the finite [0,1] query interval. */
+static ps_result cv_sweep_axis(const cv_geometry *a, const cv_geometry *b, ps_vec3 axis,
+                               ps_vec3 relative, double *first, double *last,
+                               ps_vec3 *normal, bool *possible) {
+    double n = length3(axis);
+    if (n <= 32 * DBL_EPSILON)
+        return PS_OK;
+    axis = cv_div(axis, n);
+    double al, ah, bl, bh;
+    cv_interval(a, axis, &al, &ah); cv_interval(b, axis, &bl, &bh);
+    double speed = ps_vdot(relative, axis);
+    if (!isfinite(al) || !isfinite(ah) || !isfinite(bl) || !isfinite(bh) || !isfinite(speed))
+        return PS_NUMERIC;
+    if (speed == 0) {
+        if (bl - ah > cv_tol || al - bh > cv_tol)
+            *possible = false;
+        return PS_OK;
+    }
+    double enter, leave;
+    ps_vec3 direction;
+    if (speed > 0) {
+        enter = (al - bh) / speed; leave = (ah - bl) / speed;
+        direction = ps_vscale(axis, -1);
+    } else {
+        enter = (ah - bl) / speed; leave = (al - bh) / speed;
+        direction = axis;
+    }
+    if (enter > *first) { *first = enter; *normal = direction; }
+    *last = fmin(*last, leave);
+    if (*first > *last)
+        *possible = false;
+    return PS_OK;
+}
+ps_result ps_sweep_convexes(const ps_body *a, const ps_convex_mesh *ma, ps_vec3 da,
+                            const ps_body *b, const ps_convex_mesh *mb, ps_vec3 db,
+                            ps_sweep_hit *hit, bool *touching) {
+    if (!hit || !touching || !finite3(da) || !finite3(db))
+        return PS_INVALID;
+    ps_sweep_hit candidate = {0}; bool initial;
+    ps_result result = ps_contact_convexes(a, ma, b, mb, &candidate.contact, &initial);
+    if (result != PS_OK) return result;
+    if (initial) { *hit = candidate; *touching = true; return PS_OK; }
+    cv_geometry ga, gb;
+    result = cv_prepare(ma, &ga); if (result != PS_OK) return result;
+    result = cv_prepare(mb, &gb); if (result != PS_OK) return result;
+    double scale = fmax(ga.scale, gb.scale);
+    result = cv_world(&ga, a, a->position_m, scale); if (result != PS_OK) return result;
+    result = cv_world(&gb, b, a->position_m, scale); if (result != PS_OK) return result;
+    ps_vec3 motion_a = cv_div(da, scale), motion_b = cv_div(db, scale);
+    ps_vec3 relative = ps_vsub(motion_b, motion_a);
+    if (!finite3(motion_a) || !finite3(motion_b) || !finite3(relative)) return PS_NUMERIC;
+    double first = 0, last = 1; bool possible = true; ps_vec3 normal = {0};
+    for (size_t i = 0; i < ma->triangle_count && possible; i++) {
+        result = cv_sweep_axis(&ga, &gb, ga.normals[i], relative, &first, &last, &normal, &possible);
+        if (result != PS_OK) return result;
+    }
+    for (size_t i = 0; i < mb->triangle_count && possible; i++) {
+        result = cv_sweep_axis(&ga, &gb, gb.normals[i], relative, &first, &last, &normal, &possible);
+        if (result != PS_OK) return result;
+    }
+    for (size_t i = 0; i < ga.edge_count && possible; i++) {
+        ps_vec3 u = ps_vsub(ga.vertices[ga.edges[i][1]], ga.vertices[ga.edges[i][0]]);
+        u = cv_div(u, length3(u));
+        for (size_t j = 0; j < gb.edge_count && possible; j++) {
+            ps_vec3 v = ps_vsub(gb.vertices[gb.edges[j][1]], gb.vertices[gb.edges[j][0]]);
+            v = cv_div(v, length3(v));
+            result = cv_sweep_axis(&ga, &gb, ps_vcross(u, v), relative, &first, &last, &normal, &possible);
+            if (result != PS_OK) return result;
+        }
+    }
+    if (!possible) { *touching = false; return PS_OK; }
+    if (!isfinite(first) || first < 0 || first > 1 || length3(normal) == 0) return PS_NUMERIC;
+    /* Work in A's moving frame. fma limits cancellation in long relative paths. */
+    double uncertainty = cv_tol;
+    for (size_t i = 0; i < mb->vertex_count; i++) {
+        ps_vec3 p = gb.vertices[i];
+        gb.vertices[i] = advance(p, relative, first);
+        uncertainty = fmax(uncertainty, DBL_EPSILON * fmax(cv_max(p), cv_max(relative) * first));
+        if (!finite3(gb.vertices[i])) return PS_NUMERIC;
+    }
+    ps_vec3 origin = advance(a->position_m, da, first);
+    if (!finite3(origin)) return PS_NUMERIC;
+    bool found;
+    result = cv_witness(&ga, &gb, origin, scale, normal, 0, 8 * uncertainty, &candidate.contact, &found);
+    if (result != PS_OK) return result;
+    candidate.fraction = first;
+    *hit = candidate; *touching = true;
+    return PS_OK;
+}
+ps_result ps_sweep_convex_plane(const ps_body *body, const ps_convex_mesh *mesh,
+                                ps_vec3 displacement, ps_vec3 point, ps_vec3 normal,
+                                ps_sweep_hit *hit, bool *touching) {
+    if (!hit || !touching || !finite3(displacement)) return PS_INVALID;
+    ps_sweep_hit candidate = {0}; bool initial;
+    ps_result result = ps_contact_convex_plane(body, mesh, point, normal, &candidate.contact, &initial);
+    if (result != PS_OK) return result;
+    if (initial) { *hit = candidate; *touching = true; return PS_OK; }
+    cv_geometry g;
+    result = cv_prepare(mesh, &g); if (result != PS_OK) return result;
+    result = cv_world(&g, body, point, g.scale); if (result != PS_OK) return result;
+    size_t nearest = 0;
+    double distance = ps_vdot(g.vertices[0], normal);
+    for (size_t i = 1; i < mesh->vertex_count; i++) {
+        double d = ps_vdot(g.vertices[i], normal);
+        if (d < distance) { distance = d; nearest = i; }
+    }
+    ps_vec3 motion = cv_div(displacement, g.scale);
+    double closing = -ps_vdot(motion, normal);
+    if (!isfinite(distance) || !isfinite(closing) || !finite3(motion)) return PS_NUMERIC;
+    if (closing <= 0 || distance > closing) { *touching = false; return PS_OK; }
+    candidate.fraction = distance / closing;
+    ps_vec3 contact = advance(g.vertices[nearest], motion, candidate.fraction);
+    /* Project away root rounding in the plane-normal component. */
+    contact = ps_vsub(contact, ps_vscale(normal, ps_vdot(contact, normal)));
+    bool found;
+    result = cv_contact(point, g.scale, contact, ps_vscale(normal, -1), 0, &candidate.contact, &found);
+    if (result != PS_OK) return result;
+    *hit = candidate; *touching = true;
+    return PS_OK;
+}
+ps_result ps_aabb_swept_convex(const ps_body *body, const ps_convex_mesh *mesh,
+                               ps_vec3 displacement, ps_aabb *out) {
+    if (!out || !finite3(displacement)) return PS_INVALID;
+    ps_aabb start, end;
+    ps_result result = ps_aabb_convex(body, mesh, &start);
+    if (result != PS_OK) return result;
+    ps_body moved = *body;
+    moved.position_m = advance(body->position_m, displacement, 1);
+    if (!finite3(moved.position_m)) return PS_NUMERIC;
+    result = ps_aabb_convex(&moved, mesh, &end);
+    if (result != PS_OK) return result;
+    *out = (ps_aabb){
+        ps_v3(fmin(start.minimum_m.x, end.minimum_m.x), fmin(start.minimum_m.y, end.minimum_m.y), fmin(start.minimum_m.z, end.minimum_m.z)),
+        ps_v3(fmax(start.maximum_m.x, end.maximum_m.x), fmax(start.maximum_m.y, end.maximum_m.y), fmax(start.maximum_m.z, end.maximum_m.z))};
+    return PS_OK;
+}
+
+/* Entry of a ray moving from zero towards a ball centered at separation.
+ * Closest-approach geometry avoids quadratic-discriminant cancellation. */
+static ps_result cv_ray_ball(ps_vec3 separation, ps_vec3 motion, double radius,
+                             double *fraction, bool *found) {
+    double distance = length3(separation), speed = length3(motion);
+    *found = false;
+    if (!isfinite(distance) || !isfinite(speed)) return PS_NUMERIC;
+    if (distance <= radius) { *fraction = 0; *found = true; return PS_OK; }
+    if (!speed) return PS_OK;
+    ps_vec3 u = cv_div(motion, speed), p = cv_div(separation, distance);
+    double along = ps_vdot(p, u), r = radius / distance;
+    if (along <= 0) return PS_OK;
+    if (!(r > 0)) return PS_NUMERIC;
+    ps_vec3 perpendicular = ps_v3(fma(-along,u.x,p.x),fma(-along,u.y,p.y),fma(-along,u.z,p.z));
+    double away = length3(perpendicular);
+    if (away > r) return PS_OK;
+    double half = sqrt(r-away)*sqrt(r+away);
+    double entry = fmax(0, along-half), travel = speed/distance;
+    if (entry > travel) return PS_OK;
+    if (!isfinite(travel) || travel == 0) return PS_NUMERIC;
+    *fraction = entry/travel; *found = true;
+    return PS_OK;
+}
+static bool cv_triangle_contains(ps_vec3 p, ps_vec3 a, ps_vec3 b, ps_vec3 c, ps_vec3 n) {
+    return ps_vdot(ps_vcross(ps_vsub(b,a),ps_vsub(p,a)),n)>=-cv_tol &&
+           ps_vdot(ps_vcross(ps_vsub(c,b),ps_vsub(p,b)),n)>=-cv_tol &&
+           ps_vdot(ps_vcross(ps_vsub(a,c),ps_vsub(p,c)),n)>=-cv_tol;
+}
+ps_result ps_sweep_sphere_convex(const ps_body *sphere, double radius, ps_vec3 ds,
+                                 const ps_body *body, const ps_convex_mesh *mesh, ps_vec3 db,
+                                 ps_sweep_hit *hit, bool *touching) {
+    if (!hit || !touching || !finite3(ds) || !finite3(db)) return PS_INVALID;
+    ps_sweep_hit candidate = {0}; bool initial;
+    ps_result result = ps_contact_sphere_convex(sphere,radius,body,mesh,&candidate.contact,&initial);
+    if (result != PS_OK) return result;
+    if (initial) { *hit=candidate; *touching=true; return PS_OK; }
+    cv_geometry g;
+    result=cv_prepare(mesh,&g); if(result!=PS_OK)return result;
+    double scale=fmax(g.scale,radius),r=radius/scale;
+    result=cv_world(&g,body,sphere->position_m,scale); if(result!=PS_OK)return result;
+    ps_vec3 motion=ps_vsub(cv_div(ds,scale),cv_div(db,scale));
+    if (!finite3(motion) || !(r>0)) return PS_NUMERIC;
+    double first=INFINITY;
+    for(size_t i=0;i<mesh->triangle_count;i++) {
+        const uint32_t *t=mesh->triangles[i];ps_vec3 n=g.normals[i],p=g.vertices[t[0]];
+        double distance=-ps_vdot(n,p),closing=-ps_vdot(n,motion);
+        if(!isfinite(distance)||!isfinite(closing))return PS_NUMERIC;
+        if(distance<r || closing<=0)continue;
+        double entry=(distance-r)/closing;
+        if(entry<0 || entry>1 || entry>=first)continue;
+        ps_vec3 center=ps_vscale(motion,entry),point=ps_vsub(center,ps_vscale(n,r));
+        if(cv_triangle_contains(point,p,g.vertices[t[1]],g.vertices[t[2]],n))first=entry;
+    }
+    for(size_t i=0;i<g.edge_count;i++) {
+        ps_vec3 a=g.vertices[g.edges[i][0]],b=g.vertices[g.edges[i][1]],edge=ps_vsub(b,a);
+        double length=length3(edge);ps_vec3 u=cv_div(edge,length);
+        double along=ps_vdot(a,u),velocity=ps_vdot(motion,u);
+        ps_vec3 radial_a=ps_v3(fma(-along,u.x,a.x),fma(-along,u.y,a.y),fma(-along,u.z,a.z));
+        ps_vec3 radial_v=ps_v3(fma(-velocity,u.x,motion.x),fma(-velocity,u.y,motion.y),fma(-velocity,u.z,motion.z));
+        double entry;bool found;
+        result=cv_ray_ball(radial_a,radial_v,r,&entry,&found);if(result!=PS_OK)return result;
+        if(!found || entry>=first)continue;
+        double parameter=fma(velocity,entry,-along);
+        if(parameter>=0 && parameter<=length)first=entry;
+    }
+    for(size_t i=0;i<mesh->vertex_count;i++) {
+        double entry;bool found;
+        result=cv_ray_ball(g.vertices[i],motion,r,&entry,&found);if(result!=PS_OK)return result;
+        if(found && entry<first)first=entry;
+    }
+    if(!isfinite(first)){*touching=false;return PS_OK;}
+    /* Reconstruct the nearest mesh surface at the chosen entry in its frame. */
+    ps_vec3 center=ps_vscale(motion,first),closest={0};double distance=INFINITY;
+    for(size_t i=0;i<mesh->triangle_count;i++) {
+        const uint32_t *t=mesh->triangles[i];
+        ps_vec3 point=cv_triangle_point(center,g.vertices[t[0]],g.vertices[t[1]],g.vertices[t[2]],g.normals[i]);
+        double d=length3(ps_vsub(point,center));
+        if(d<distance){distance=d;closest=point;}
+    }
+    double uncertainty=8*fmax(cv_tol,DBL_EPSILON*cv_max(center));
+    if(!isfinite(distance)||distance==0||fabs(distance-r)>uncertainty)return PS_NUMERIC;
+    ps_vec3 normal=cv_div(ps_vsub(closest,center),distance);
+    ps_vec3 world_center=advance(sphere->position_m,ds,first);
+    ps_vec3 world_point=ps_v3(fma(normal.x,radius,world_center.x),fma(normal.y,radius,world_center.y),fma(normal.z,radius,world_center.z));
+    if(!finite3(world_center)||!finite3(world_point))return PS_NUMERIC;
+    candidate.fraction=first;candidate.contact=(ps_contact){world_point,normal,0};
+    *hit=candidate;*touching=true;
     return PS_OK;
 }

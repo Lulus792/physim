@@ -1,5 +1,5 @@
 // Uniform regular tetrahedron: centroid at origin, each inertia = 2*m/5.
-// Discrete geometry example, no integration or resting manifold.
+// Geometry plus one force-free linear sweep event; no resting manifold.
 let vertices = [Vec3(1,1,1),Vec3(1,-1,-1),Vec3(-1,1,-1),Vec3(-1,-1,1)]
 let indices = [0,1,2,0,3,1,0,2,3,1,3,2]
 var body = Body.withInertia(1,Vec3(0.4,0.4,0.4))
@@ -15,4 +15,15 @@ body.setState(Vec3(0,0,0),Vec3(0,0,0),Quat.axisAngle(Vec3(0,0,1),0.4),Vec3(0,0,0
 let plane = Contacts.convexPlane(body,vertices,indices,Vec3(0,0,-0.8),Vec3(0,0,1))
 assert(plane.count == 1)
 assert(isClose(plane.penetration(0),0.2,1e-12,1e-12))
+let wall = Body.withInertia(0,Vec3(0,0,0))
+sphere.setState(Vec3(10,1,1),Vec3(-20,0,0),Quat(0,0,0,1),Vec3(0,0,0))
+let event = Sweep.sphereConvex(sphere,0.5,Vec3(-20,0,0),wall,vertices,indices,Vec3(0,0,0))
+assert(event.hit)
+assert(isClose(event.fraction(),0.425,1e-12,1e-12))
+sphere.step(Vec3(0,0,0),Vec3(0,0,0),event.fraction())
+let response = event.contacts().resolveSingle(sphere,wall,1,0)
+sphere = response.bodyA
+sphere.step(Vec3(0,0,0),Vec3(0,0,0),1-event.fraction())
+assert(isClose(sphere.position.x,13,1e-10,1e-10))
+assert(isClose(sphere.kineticEnergy(),200,1e-10,1e-10))
 print("Convex tetrahedron geometry passed")

@@ -143,4 +143,43 @@ static inline ps_aabb psrt_aabb_convex(ps_body body, const ps_vec3 *vertices, si
     if (status != PS_OK) psrt_fail_code(site, status, "Convex bounds failed");
     return result;
 }
+static inline psrt_sweep psrt_sweep_convexes(ps_body a, const ps_vec3 *va, size_t na,
+    const int64_t *ia, size_t ca, ps_vec3 da, ps_body b, const ps_vec3 *vb, size_t nb,
+    const int64_t *ib, size_t cb, ps_vec3 db, psrt_site site) {
+    uint32_t ta[PS_CONVEX_MAX_TRIANGLES][3], tb[PS_CONVEX_MAX_TRIANGLES][3];
+    ps_convex_mesh ma = psrt_convex_mesh(va,na,ia,ca,ta,site), mb = psrt_convex_mesh(vb,nb,ib,cb,tb,site);
+    psrt_sweep result = {0};
+    ps_result status = ps_sweep_convexes(&a,&ma,da,&b,&mb,db,&result.value,&result.hit);
+    if(status!=PS_OK)psrt_fail_code(site,status,"Convex sweep failed");
+    return result;
+}
+static inline psrt_sweep psrt_sweep_convex_plane(ps_body body, const ps_vec3 *vertices, size_t count,
+    const int64_t *indices, size_t index_count, ps_vec3 displacement, ps_vec3 point, ps_vec3 normal,
+    psrt_site site) {
+    uint32_t triangles[PS_CONVEX_MAX_TRIANGLES][3];
+    ps_convex_mesh mesh=psrt_convex_mesh(vertices,count,indices,index_count,triangles,site);
+    psrt_sweep result={0};
+    ps_result status=ps_sweep_convex_plane(&body,&mesh,displacement,point,normal,&result.value,&result.hit);
+    if(status!=PS_OK)psrt_fail_code(site,status,"Convex-plane sweep failed");
+    return result;
+}
+static inline psrt_sweep psrt_sweep_sphere_convex(ps_body sphere, double radius, ps_vec3 ds,
+    ps_body body, const ps_vec3 *vertices, size_t count, const int64_t *indices, size_t index_count,
+    ps_vec3 db, psrt_site site) {
+    uint32_t triangles[PS_CONVEX_MAX_TRIANGLES][3];
+    ps_convex_mesh mesh=psrt_convex_mesh(vertices,count,indices,index_count,triangles,site);
+    psrt_sweep result={0};
+    ps_result status=ps_sweep_sphere_convex(&sphere,radius,ds,&body,&mesh,db,&result.value,&result.hit);
+    if(status!=PS_OK)psrt_fail_code(site,status,"Sphere-convex sweep failed");
+    return result;
+}
+static inline ps_aabb psrt_aabb_swept_convex(ps_body body, const ps_vec3 *vertices, size_t count,
+    const int64_t *indices, size_t index_count, ps_vec3 displacement, psrt_site site) {
+    uint32_t triangles[PS_CONVEX_MAX_TRIANGLES][3];
+    ps_convex_mesh mesh=psrt_convex_mesh(vertices,count,indices,index_count,triangles,site);
+    ps_aabb result;
+    ps_result status=ps_aabb_swept_convex(&body,&mesh,displacement,&result);
+    if(status!=PS_OK)psrt_fail_code(site,status,"Swept convex bounds failed");
+    return result;
+}
 #endif

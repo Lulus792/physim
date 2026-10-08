@@ -41,7 +41,7 @@ sudo apt-get install -y zenity fonts-dejavu-core libx11-6 libxext6 libxrandr2 li
 Zum Öffnen der App sind Python, CMake und ein Compiler nicht erforderlich.
 Zenity ermöglicht Datei- und Ordnerdialoge, wenn kein XDG-Portal verfügbar ist.
 Die jeweiligen Paketprüfungen und Grenzen stehen im
-[Plattformprüfstand](docs/platform-validation.md#release-paket-auf-frischen-linux-systemen).
+[Plattformprüfstand](docs/platform-validation-history.md).
 
 **macOS, Terminal:**
 

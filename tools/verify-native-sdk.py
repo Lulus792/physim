@@ -10,6 +10,14 @@ import sys
 import tempfile
 
 
+def verify_documentation_bounds(sdk, files):
+    """All packaged Markdown pages fit the actual offline viewer byte budget."""
+    for name in files:
+        if name.endswith(".md") and (name.startswith("docs/") or name in ("README.md", "Physim_Projektplan.md")):
+            if (sdk / name).stat().st_size > 256 * 1024:
+                raise RuntimeError(f"SDK page exceeds offline viewer limit: {name}")
+
+
 def verify_scalar_search(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked):
     """Shared full/focused acceptance against installed and SDK-source-built Core."""
     shutil.copy2(repo / "tests/test_scalar_range.c", consumer / "scalar-range-check.c")
@@ -133,6 +141,8 @@ def verify_body_range(repo, sdk, consumer, builder, library, rebuilt_core, suffi
 def verify_convex_contacts(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked):
     """Public geometry, impulse response and C/Physim parity from packaged Core."""
     shutil.copy2(repo / "tests/test_convex.c", consumer / "convex-check.c")
+    shutil.copy2(repo / "tests/test_convex_sweep.c", consumer / "convex-sweep-check.c")
+    shutil.copy2(repo / "tests/convex_sweep_probe.c", consumer / "convex-sweep-probe.c")
     shutil.copy2(repo / "tests/test_convex_runtime.c", consumer / "convex-runtime.c")
     shutil.copy2(repo / "tests/convex_probe.c", consumer / "convex-probe.c")
     shutil.copy2(sdk / "examples/convex_contacts/main.c", consumer / "convex-example.c")
@@ -150,7 +160,11 @@ def verify_convex_contacts(repo, sdk, consumer, builder, library, rebuilt_core, 
         runtime = builder.executable("convex-runtime-" + kind, ["convex-runtime.c"], [archive])
         checked([check]); checked([runtime]); checked([language]); checked([example]); checked([example_language])
         checked([sys.executable, repo / "tests/test_convex_oracle.py", "--probe", probe])
-    print("Installed/rebuilt SDK convex contacts: validated closed meshes, independent SAT/witnesses, mixed contacts, explicit inertia, impulse response, C/Physim examples and atomic errors passed", flush=True)
+        sweep_check = builder.executable("convex-sweep-check-" + kind, ["convex-sweep-check.c"], [archive])
+        sweep_probe = builder.executable("convex-sweep-probe-" + kind, ["convex-sweep-probe.c"], [archive])
+        checked([sweep_check])
+        checked([sys.executable, repo / "tests/test_convex_sweep_oracle.py", "--probe", sweep_probe])
+    print("Installed/rebuilt SDK convex contacts: validated closed meshes, independent SAT/witnesses, mixed contacts, explicit inertia, impulse response, C/Physim event examples, linear convex/sphere sweeps and atomic errors passed", flush=True)
 
 
 def main():
@@ -174,7 +188,7 @@ def main():
     parser.add_argument("--body-only", action="store_true",
                         help="Verify solid-body inertia and energy range only; no full mechanics or GUI acceptance")
     parser.add_argument("--convex-only", action="store_true",
-                        help="Verify convex geometry and bindings only; no full contact-world/CCD or GUI acceptance")
+                        help="Verify convex geometry and bindings only; no full contact-world/rotating-CCD or GUI acceptance")
     args = parser.parse_args()
     if args.convex_only and (args.body_only or args.units_only or args.curve_only or args.comparison_only or args.stream_only or args.transform_only or args.scalar_only or args.app_tests):
         parser.error("--convex-only cannot be combined with other focused modes or --app-tests")
@@ -212,6 +226,7 @@ def main():
         path = (sdk / name).resolve()
         if sdk not in path.parents or hashlib.sha256(path.read_bytes()).hexdigest() != digest:
             raise RuntimeError(f"SDK integrity check failed: {name}")
+    verify_documentation_bounds(sdk, metadata["files"])
     suffix = ".exe" if sys.platform == "win32" else ""
     module_suffix = ".dll" if sys.platform == "win32" else ".so"
     spec = importlib.util.spec_from_file_location("physim_build", repo / "tools/build.py")
@@ -259,7 +274,7 @@ def main():
             shutil.copytree(sdk / "src", consumer / "src")
             rebuilt_core = builder.archive("sdk-rebuilt-core", [f"src/{name}.c" for name in native.CORE])
             verify_convex_contacts(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
-            (root / "PASSED.txt").write_text("Focused C/Physim convex SDK verification passed; installed/rebuilt Core, independent geometry witnesses, explicit inertia, mixed contacts, examples, manifest and relocation; no full contact-world/CCD or GUI acceptance.\n", encoding="utf-8")
+            (root / "PASSED.txt").write_text("Focused C/Physim convex SDK verification passed; installed/rebuilt Core, independent geometry witnesses, explicit inertia, mixed contacts, linear sweeps/event examples, manifest and relocation; no full contact-world/rotating-CCD or GUI acceptance.\n", encoding="utf-8")
             print(f"Convex SDK verified: {root}")
             return
         if args.body_only:

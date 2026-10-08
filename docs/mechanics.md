@@ -459,8 +459,9 @@ Halbraum der Ebene. Bei einem neuen Kontakt ist die Eindringtiefe null.
 Die Funktionen verändern keine Körper. Der Aufrufer bewegt sie zunächst bis
 zum Kontakt, löst dessen Impulsantwort und berechnet anschließend die Bewegung
 für die verbleibende Zeit neu. Beschleunigte oder gekrümmte Bahnen erfordern eine
-geeignete Unterteilung oder einen anderen Detektor. Boxrotation, Kugel–Box-CCD
-und eine automatische Ereignissteuerung für mehrere Körper bleiben offen.
+geeignete Unterteilung oder einen anderen Detektor. Boxrotation und eine automatische Ereignissteuerung für mehrere Körper bleiben
+offen. Lineare Kugel–Box-Bewegung kann mit einer Box als konvexem Netz über den
+unten beschriebenen Kugel–Netz-Sweep geprüft werden.
 
 Bereits berührende oder überlappende Körper melden Anteil 0, auch wenn sie sich
 entfernen. Eine Ereignisschleife muss diese Anfangskontakte behandeln und
@@ -479,6 +480,47 @@ Partner, Kontakt am Intervallende, Vorbeiflug, unveränderte Ausgaben bei Fehler
 und lange Bahnen mit kleinen Zielkugeln. Eine elastisch an einer Ebene reflektierte
 Kugel wird bis zum Ereignis und durch die Restzeit bewegt; Endposition und
 kinetische Energie werden gegen die analytische Lösung geprüft.
+
+## Lineare konvexe Sweeps
+
+`ps_sweep_convexes` schneidet die Zeitintervalle aller Flächen- und
+Kantenkreuzprodukt-Trennachsen über den geschlossenen Anteil `[0,1]`.
+`ps_sweep_convex_plane` verwendet den ersten Vertexkontakt zum festen Halbraum.
+`ps_sweep_sphere_convex` ermittelt Eintrittszeiten gegen Dreiecksflächen,
+Kantenzylinder und Vertexkugeln; dadurch zählen auch Kanten-/Eckkontakte,
+die ein Test nur gegen aufgeweitete Flächenebenen falsch klassifizieren würde.
+Das Netz besitzt während der gesamten Anfrage **feste Orientierung**.
+Beide Körper können sich entlang ihrer expliziten Verschiebung bewegen.
+Gespeicherte lineare und angulare Geschwindigkeiten werden nicht integriert.
+
+Anfangsberührung und Überlappung zählen bei `fraction=0`, auch bei Trennung;
+die Eindringtiefe stammt dann aus der diskreten Abfrage. Neue Treffer haben
+Eindringtiefe null und einen einzelnen Kontakt. Erfolg ohne Treffer ändert
+nur `touching=false`; Fehler erhalten Trefferwert und Flag sowie sämtliche
+Körper-/Netzdaten. Invalid-/Limit-/Numeric-Codes entsprechen den diskreten
+Geometrieverträgen. Sehr unterschiedliche Größen und lange Bewegungswege
+begrenzen Kontaktort und Zeitgenauigkeit; der Zeugenvergleich berücksichtigt
+Rundung der Bewegung. Eine unverändert grüne Anfrage ist keine Aussage über
+rotierende oder beschleunigte Bahnen.
+
+`ps_aabb_swept_convex` vereinigt gepufferte Anfangs-/Endgrenzen, die bei fester
+Orientierung den gesamten linearen Vertexweg enthalten. Diese Hülle gehört
+in die Broad Phase. Anfangs-/Endhüllen einzeln können trotz eines Kontakts
+zwischen den Zeitpunkten getrennt bleiben. Die Hülle deckt keinen Rotationsweg ab.
+
+Physim verwendet `Sweep.convexes`, `Sweep.convexPlane`, `Sweep.sphereConvex`
+und `Aabb.sweptConvex` mit besitzenden Vertex-/Indexarrays. `Sweep.hit`,
+`fraction()` und `contacts()` folgen dem bestehenden Kugelvertrag. Ein Modell
+bewegt Körper bis zum Ereignis, löst den Impuls und integriert die Restzeit mit
+der neuen Bewegung. Die C-/Physim-Tetraederbeispiele tun dies tatsächlich:
+Die Kugel startet bei `(10,1,1)` mit `vx=-20` m/s, erreicht den statischen Vertex
+bei Anteil `0.425`, prallt elastisch zurück und endet nach einer Sekunde bei
+`x=13` m mit unveränderter kinetischer Energie von 200 J. Der zentrale Impuls
+induziert hier keine Rotation; es ist ein isoliertes kraftfreies Ereignis.
+
+Allgemeine rotierende Sweeps und eine Ereignissteuerung für mehrere Körper
+bleiben offen. Diese Grenzen ersetzen nicht die vollständige CCD-Anforderung
+im Projektplan.
 
 ## Kandidatenpaare für mehrere Körper
 
@@ -542,7 +584,8 @@ Ungültige Netze liefern `PS_INVALID`, übergroße Netze `PS_LIMIT`, nicht
 auflösbare transformierte Geometrie oder Ausgaben `PS_NUMERIC`. Fehler erhalten
 Körper und beide Ausgaben; Erfolg ohne Treffer ändert nur `touching`.
 Die Reihenfolge der Netzdaten bestimmt Gleichstandsentscheidungen. Die
-Prüfung ist diskret; konvexes CCD bleibt offen. Die persistente Kontaktwelt
+Kontaktabfrage ist diskret; die oben beschriebenen Sweeps ergänzen lineare Bewegung.
+Die persistente Kontaktwelt
 verwaltet weiterhin Kugeln, Boxen und Ebenen; eigene konvexe Kontakte können
 über die öffentliche Graph-API eingebunden werden.
 
@@ -556,13 +599,14 @@ passen. Physim benutzt besitzende `Array<Vec3>`-Vertices und flache
 `Contacts.convexPlane` und `Aabb.convex`. Die Arrays bleiben bei jeder Abfrage
 unverändert; Fehlercodes bleiben in abfangbaren Runtime-Diagnosen erhalten.
 
-Die vollständigen diskreten Beispiele sind
+Die vollständigen Beispiele sind
 [C](../examples/convex_contacts/main.c) und
 [Physim](../examples/language/convex_contacts.phys). Ein homogener regulärer
 Tetraeder mit den dortigen Vertices hat Schwerpunkt null und drei
 Hauptträgheiten `2*m/5` kg·m²: Der Mittelwert von jedem Koordinatenquadrat ist
 `1/5`, also ist beispielsweise `Ix=m*(E[y²]+E[z²])`. Beide Beispiele prüfen
-Kugelkontakt, gedrehte Geometrie gegen eine Ebene und konservative Hüllgrenzen.
+Kugelkontakt, gedrehte Geometrie gegen eine Ebene, konservative Hüllgrenzen und
+ein elastisches Kugelereignis gegen den statischen Tetraeder mit Restzeit.
 
 ## Fehler und Prüfungen
 

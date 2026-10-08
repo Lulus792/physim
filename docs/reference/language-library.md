@@ -60,6 +60,16 @@ Nach außen gerundete Welt-AABB einer Kugel. minimum/maximum sind schreibgeschü
 
 Überall verfügbar.
 
+## Aabb.sweptConvex
+
+```text
+Aabb.sweptConvex(body: Body, vertices: [Vec3], indices: [Int64], displacement: Vec3) -> Aabb
+```
+
+Hülle der gesamten linearen Netzverschiebung bei fester Orientierung für die Broad Phase; kein Rotationsweg.
+
+Überall verfügbar.
+
 ## Aabb.sweptSphere
 
 ```text
@@ -2732,6 +2742,26 @@ Ein Kontakt am berechneten Ereignis oder ein leeres Contacts bei fehlendem Treff
 
 Überall verfügbar.
 
+## Sweep.convexPlane
+
+```text
+Sweep.convexPlane(body: Body, vertices: [Vec3], indices: [Int64], displacement: Vec3, point: Vec3, normal: Vec3) -> Sweep
+```
+
+Erster Kontakt eines linear verschobenen konvexen Netzes mit einem festen Halbraum. Die Normale zeigt in den freien Raum.
+
+Überall verfügbar.
+
+## Sweep.convexes
+
+```text
+Sweep.convexes(bodyA: Body, verticesA: [Vec3], indicesA: [Int64], displacementA: Vec3, bodyB: Body, verticesB: [Vec3], indicesB: [Int64], displacementB: Vec3) -> Sweep
+```
+
+Erster Kontakt zweier konvexer Netze entlang expliziter linearer Verschiebungen in Metern. Orientierung bleibt fest; Anfangsüberlappung zählt bei fraction()=0.
+
+Überall verfügbar.
+
 ## Sweep.fraction
 
 ```text
@@ -2739,6 +2769,16 @@ Sweep.fraction() -> Float64
 ```
 
 Anteil der vorgegebenen Verschiebung bis zum ersten Kontakt in 0..1. Ohne Treffer ist der Aufruf ein Laufzeitfehler; vorher hit prüfen.
+
+Überall verfügbar.
+
+## Sweep.sphereConvex
+
+```text
+Sweep.sphereConvex(sphere: Body, radius: Float64, sphereDisplacement: Vec3, body: Body, vertices: [Vec3], indices: [Int64], meshDisplacement: Vec3) -> Sweep
+```
+
+Erster Kugelkontakt mit einem konvexen Netz bei beiden expliziten Verschiebungen und fester Netzorientierung; testet Flächen, Kanten und Vertices.
 
 Überall verfügbar.
 

@@ -633,7 +633,7 @@ Programm, beschädigte Cacheausgaben und die Sperre gleichzeitiger Builds.
 Der direkte Buildschritt besteht außerdem in allen acht CI-Kombinationen unter
 Windows (MSVC/ClangCL, Debug/Release), Linux (GCC/Clang) und macOS (Apple Silicon/Intel).
 Die Linux-/Mac-Prüfung schließt vollständige C- und Physim-App-Abläufe ein.
-[Nachweise und genaue Abdeckung](platform-validation.md#direkter-build-von-physim).
+[Nachweise und genaue Abdeckung](platform-validation-history.md).
 Der direkte Testkatalog umfasst alle 528 übernommenen Prüfungen: 493 ohne Fenster
 und 35 Fenster-/Grafiktests. Ohne SDL bleiben 482 Prüfungen verfügbar. Die bisherigen
 Repository-Dateien für CMake sind entfernt. Die CI verwendet jetzt ausschließlich
@@ -2580,5 +2580,14 @@ werden auf Konvexität, Orientierung und Grenzen geprüft; Fehler erhalten
 Ausgaben. C und Physim teilen die Kontaktprüfung, Hauptträgheiten sind für
 eigene Formen explizit vorgebbar. Unabhängige Trennachsen und Oberflächenzeugen
 prüfen gedrehte und enthaltene Netze. Einzelkontakte ersetzen keine
-Ruhemanifolds; konvexes CCD und automatische Kontaktverwaltung bleiben offen.
+Ruhemanifolds; rotierendes CCD und automatische Kontaktverwaltung bleiben offen.
 [Beispiele und Grenzen](mechanics.md).
+
+
+Lineare konvexe Sweeps ergänzen Paar-, Kugel- und Ebenenkontakte sowie Hüllen
+des gesamten Bewegungswegs. Flächen-/Kanten-Zeitintervalle beziehungsweise
+Flächen-/Kanten-/Vertexeintritt erfassen Durchtunneln bei fester Orientierung.
+Die C-/Physim-Beispiele bewegen eine Kugel zum Ereignis, lösen den elastischen
+Impuls und integrieren die Restzeit gegen unabhängige Position-/Energiereferenzen.
+Rotation, beschleunigte Bahnen und Mehrkörper-Ereignissteuerung bleiben offen.
+[Verträge und Beispiele](mechanics.md).

@@ -9,7 +9,20 @@
             return 1;                                                                              \
         }                                                                                          \
     } while (0)
-int main(void) {
+int main(int argc, char **argv) {
+    for (int i = 1; i < argc; i++) {
+        FILE *file = fopen(argv[i], "rb");
+        CHECK(file && fseek(file, 0, SEEK_END) == 0);
+        long length = ftell(file);
+        CHECK(length >= 0 && length <= PS_DOC_MAX_BYTES && fseek(file, 0, SEEK_SET) == 0);
+        char *text = malloc((size_t)length + 1);
+        CHECK(text && fread(text, 1, (size_t)length, file) == (size_t)length && fclose(file) == 0);
+        text[length] = 0;
+        ps_document *page = NULL;
+        CHECK(ps_document_parse(text, (size_t)length, false, &page) == PS_OK && page->count > 0);
+        printf("Parsed bundled page: %s (%ld bytes, %zu blocks)\n", argv[i], length, page->count);
+        free(page); free(text);
+    }
     const char *input =
         "# API\r\n\r\nA **clear** paragraph\ncontinued with `code`.\n\n```c\nif (x < 4) {\n    "
         "x++;\n}\n```\n\n[Units](units.md) and [Source](https://example.org).\n";

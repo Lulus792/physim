@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-08",
-  "inspected_revision": "effb00ef31a6d324e9177bfbcce96ff4fac62d1d",
+  "inspected_revision": "6ae7db549ba321fb55af8dbaa4606ced407a4476",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2763,7 +2763,7 @@
         "docs/mechanics.md",
         "docs/platform-validation.md"
       ],
-      "note": "Kugel/Ebene/Box und geprüfte konvexe Polyeder besitzen diskrete Narrow-Phase-Verträge. Convex SAT prüft Flächen-/Kantenachsen, Enthaltensein und einzelne Oberflächenzeugen; C-/Physim-Bindungen und explizite Hauptträgheiten vorhanden. Ein einzelner Kontakt, kein Ruhemanifold. Convex CCD und automatische Kontaktwelt-Integration bleiben getrennt offen."
+      "note": "Kugel/Ebene/Box und geprüfte konvexe Polyeder besitzen diskrete Narrow-Phase-Verträge. Convex SAT prüft Flächen-/Kantenachsen, Enthaltensein und einzelne Oberflächenzeugen; C-/Physim-Bindungen und explizite Hauptträgheiten vorhanden. Ein einzelner Kontakt, kein Ruhemanifold. Rotierendes CCD und automatische Kontaktwelt-Integration bleiben getrennt offen."
     },
     {
       "id": "PP-0386",
@@ -2791,9 +2791,19 @@
       "kind": "list",
       "scope": "planned",
       "text": "7. kontinuierliche Kollisionserkennung für schnelle Objekte.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "incomplete",
+      "evidence": [
+        "include/physim/collision.h",
+        "src/collision.c",
+        "include/physim/language_collision.h",
+        "tests/test_convex_sweep.c",
+        "tests/test_convex_sweep_oracle.py",
+        "examples/convex_contacts/main.c",
+        "examples/language/convex_contacts.phys",
+        "docs/mechanics.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Lineare Kugel-/Ebenen- und konvexe Paar-/Kugel-/Ebenen-Sweeps mit festen Orientierungen vorhanden. Unabhängige Eintrittszeit-/Distanz-/Oberflächenreferenzen und echte C-/Physim-Ereignisantwort mit Restzeit geprüft. Allgemeine rotierende/beschleunigte Pfade und Mehrkörper-Ereignissteuerung fehlen; vollständige CCD-Anforderung nicht abgeschlossen."
     },
     {
       "id": "PP-0391",
