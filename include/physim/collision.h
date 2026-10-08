@@ -15,6 +15,42 @@ typedef struct {
  * must be tested separately. Bounds describe the current pose, not swept motion. */
 ps_result ps_aabb_sphere(const ps_body *body, double radius_m, ps_aabb *out);
 ps_result ps_aabb_box(const ps_body *body, ps_vec3 size_m, ps_aabb *out);
+#define PS_CONVEX_MAX_VERTICES 64u
+#define PS_CONVEX_MAX_TRIANGLES 128u
+/* Borrowed body-local SI vertices and outward-wound triangle indices. The mesh
+ * must be a closed, connected, strictly three-dimensional convex surface. Every
+ * vertex is used; each undirected edge has exactly two opposite incidences.
+ * Coplanar face triangulation is allowed. Caller retains all storage; no hull
+ * generation, hidden allocation or inferred mass/inertia. Counts are bounded.
+ * Validation uses coordinates scaled by their largest absolute component and
+ * 128*DBL_EPSILON tolerance; unresolved thin/degenerate geometry is rejected. */
+typedef struct {
+    const ps_vec3 *vertices_m;
+    size_t vertex_count;
+    const uint32_t (*triangles)[3];
+    size_t triangle_count;
+} ps_convex_mesh;
+ps_result ps_convex_validate(const ps_convex_mesh *mesh);
+/* Discrete SAT over face normals and all edge cross products, including full
+ * containment. One representative shared contact, normal A toward B, suitable
+ * for ps_contact_resolve. It is not a multi-point resting manifold. Touching is
+ * closed within scale-dependent roundoff tolerance. No hit changes only touching;
+ * errors preserve both outputs. Inputs/output storage must be disjoint.
+ * Bodies, mesh storage and plane geometry are unchanged. No convex CCD. */
+ps_result ps_contact_convexes(const ps_body *a, const ps_convex_mesh *mesh_a,
+                              const ps_body *b, const ps_convex_mesh *mesh_b,
+                              ps_contact *out, bool *touching);
+ps_result ps_contact_convex_plane(const ps_body *body, const ps_convex_mesh *mesh,
+                                  ps_vec3 plane_point_m, ps_vec3 plane_normal,
+                                  ps_contact *out, bool *touching);
+/* Sphere is A, convex mesh B. Interior centers use the nearest exit surface.
+ * Deep initial containment is geometric overlap, not a physical impact. */
+ps_result ps_contact_sphere_convex(const ps_body *sphere, double radius_m,
+                                   const ps_body *body, const ps_convex_mesh *mesh,
+                                   ps_contact *out, bool *touching);
+/* Bounds contain every transformed mesh vertex, padded and rounded outward. */
+ps_result ps_aabb_convex(const ps_body *body, const ps_convex_mesh *mesh, ps_aabb *out);
+
 typedef struct {
     double fraction; /* First contact in closed [0,1] of the supplied displacement. */
     ps_contact contact;

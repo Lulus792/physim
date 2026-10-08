@@ -83,4 +83,64 @@ static inline psrt_array psrt_collision_pairs(ps_allocator allocator, const ps_a
     }
     return result;
 }
+/* Arrays stay borrowed for one call. Indices are copied to a bounded C buffer;
+ * no owning result is allocated, and trapped errors cannot leak mesh storage. */
+static inline ps_convex_mesh psrt_convex_mesh(const ps_vec3 *vertices, size_t count,
+                                              const int64_t *indices, size_t index_count,
+                                              uint32_t triangles[PS_CONVEX_MAX_TRIANGLES][3],
+                                              psrt_site site) {
+    if (count > PS_CONVEX_MAX_VERTICES || index_count > 3 * PS_CONVEX_MAX_TRIANGLES)
+        psrt_fail_code(site, PS_LIMIT, "Convex mesh capacity exceeded");
+    if ((count && !vertices) || (index_count && !indices) || index_count % 3)
+        psrt_fail_code(site, PS_INVALID, "Invalid convex mesh arrays");
+    for (size_t i = 0; i < index_count; i++) {
+        if (indices[i] < 0 || (uint64_t)indices[i] >= count)
+            psrt_fail_code(site, PS_INVALID, "Convex triangle index out of bounds");
+        triangles[i / 3][i % 3] = (uint32_t)indices[i];
+    }
+    return (ps_convex_mesh){vertices, count, (const uint32_t (*)[3])triangles, index_count / 3};
+}
+static inline ps_contact_manifold psrt_contacts_convexes(ps_body a, const ps_vec3 *va, size_t na,
+    const int64_t *ia, size_t ca, ps_body b, const ps_vec3 *vb, size_t nb,
+    const int64_t *ib, size_t cb, psrt_site site) {
+    uint32_t ta[PS_CONVEX_MAX_TRIANGLES][3], tb[PS_CONVEX_MAX_TRIANGLES][3];
+    ps_convex_mesh ma = psrt_convex_mesh(va, na, ia, ca, ta, site);
+    ps_convex_mesh mb = psrt_convex_mesh(vb, nb, ib, cb, tb, site);
+    ps_contact_manifold result = {0}; bool hit;
+    ps_result status = ps_contact_convexes(&a, &ma, &b, &mb, &result.points[0], &hit);
+    if (status != PS_OK) psrt_fail_code(site, status, "Convex contact detection failed");
+    result.count = hit ? 1 : 0;
+    return result;
+}
+static inline ps_contact_manifold psrt_contacts_convex_plane(ps_body body, const ps_vec3 *vertices,
+    size_t count, const int64_t *indices, size_t index_count, ps_vec3 point, ps_vec3 normal,
+    psrt_site site) {
+    uint32_t triangles[PS_CONVEX_MAX_TRIANGLES][3];
+    ps_convex_mesh mesh = psrt_convex_mesh(vertices, count, indices, index_count, triangles, site);
+    ps_contact_manifold result = {0}; bool hit;
+    ps_result status = ps_contact_convex_plane(&body, &mesh, point, normal, &result.points[0], &hit);
+    if (status != PS_OK) psrt_fail_code(site, status, "Convex-plane contact detection failed");
+    result.count = hit ? 1 : 0;
+    return result;
+}
+static inline ps_contact_manifold psrt_contacts_sphere_convex(ps_body sphere, double radius,
+    ps_body body, const ps_vec3 *vertices, size_t count, const int64_t *indices, size_t index_count,
+    psrt_site site) {
+    uint32_t triangles[PS_CONVEX_MAX_TRIANGLES][3];
+    ps_convex_mesh mesh = psrt_convex_mesh(vertices, count, indices, index_count, triangles, site);
+    ps_contact_manifold result = {0}; bool hit;
+    ps_result status = ps_contact_sphere_convex(&sphere, radius, &body, &mesh, &result.points[0], &hit);
+    if (status != PS_OK) psrt_fail_code(site, status, "Sphere-convex contact detection failed");
+    result.count = hit ? 1 : 0;
+    return result;
+}
+static inline ps_aabb psrt_aabb_convex(ps_body body, const ps_vec3 *vertices, size_t count,
+    const int64_t *indices, size_t index_count, psrt_site site) {
+    uint32_t triangles[PS_CONVEX_MAX_TRIANGLES][3];
+    ps_convex_mesh mesh = psrt_convex_mesh(vertices, count, indices, index_count, triangles, site);
+    ps_aabb result;
+    ps_result status = ps_aabb_convex(&body, &mesh, &result);
+    if (status != PS_OK) psrt_fail_code(site, status, "Convex bounds failed");
+    return result;
+}
 #endif

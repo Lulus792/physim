@@ -30,6 +30,16 @@ Nach außen gepolsterte Welt-AABB eines gedrehten Quaders; size sind volle lokal
 
 Überall verfügbar.
 
+## Aabb.convex
+
+```text
+Aabb.convex(body: Body, vertices: [Vec3], indices: [Int64]) -> Aabb
+```
+
+Liefert nach außen gerundete Weltgrenzen eines geprüften konvexen Netzes. Indizes sind nach außen orientierte Dreieckstripel.
+
+Überall verfügbar.
+
 ## Aabb.pairs
 
 ```text
@@ -570,6 +580,16 @@ Bewegt den Empfänger mit Weltkraft in N und Drehmoment in N m um positives dt i
 
 Überall verfügbar.
 
+## Body.withInertia
+
+```text
+Body.withInertia(mass: Float64, principalInertia: Vec3) -> Body
+```
+
+Erzeugt einen ruhenden Körper mit expliziter SI-Masse und drei Hauptträgheiten. Geometrie, Schwerpunkt und Hauptachsen werden vom Modell vorgegeben.
+
+Überall verfügbar.
+
 ## Channel
 
 ```text
@@ -1040,6 +1060,26 @@ Bindet einen nullbasierten Kontaktpunkt an Körperindizes bodyA/bodyB. Nur bodyB
 
 Überall verfügbar.
 
+## Contacts.convexPlane
+
+```text
+Contacts.convexPlane(body: Body, vertices: [Vec3], indices: [Int64], point: Vec3, normal: Vec3) -> Contacts
+```
+
+Prüft ein geschlossenes konvexes Netz gegen einen festen Halbraum; die Welt-Normale zeigt in den freien Raum.
+
+Überall verfügbar.
+
+## Contacts.convexes
+
+```text
+Contacts.convexes(bodyA: Body, verticesA: [Vec3], indicesA: [Int64], bodyB: Body, verticesB: [Vec3], indicesB: [Int64]) -> Contacts
+```
+
+Prüft zwei Körper mit konvexen Dreiecksnetzen aus Array<Vec3> und flachen Array<Int64>-Indizes. Ein repräsentativer Kontakt, kein Ruhemanifold; Geometrie ist körperlokal in Metern.
+
+Überall verfügbar.
+
 ## Contacts.normal
 
 ```text
@@ -1097,6 +1137,16 @@ Contacts.sphereBox(sphere: Body, radius: Float64, box: Body, size: Vec3) -> Cont
 ```
 
 Kontakt der Kugel A mit einem orientierten Quader B; size sind die vollen lokalen Seitenlängen in m.
+
+Überall verfügbar.
+
+## Contacts.sphereConvex
+
+```text
+Contacts.sphereConvex(sphere: Body, radius: Float64, body: Body, vertices: [Vec3], indices: [Int64]) -> Contacts
+```
+
+Prüft Kugel gegen konvexes Netz; innere Kugelmittelpunkte verwenden die nächstgelegene Austrittsfläche.
 
 Überall verfügbar.
 

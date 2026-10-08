@@ -395,7 +395,10 @@ und Energie besitzen jetzt unabhängige rationale sowie Decimal-Referenzen,
 ohne daraus eine vollständige Abnahme der Integration und Kontaktlösung
 abzuleiten. Die [Mechanikverträge](mechanics.md) trennen diese Grenzen.
 
-PP-0385 ist konkret incomplete: Kugel, Ebene und orientierte Box sind vorhanden,
-allgemeine konvexe Körper haben noch keine Shape-/Narrow-Phase-API. Der aktuelle
-Kontaktweltvertrag schließt sie ausdrücklich aus. Das Audit enthält damit
-32 implementierte, 7 unvollständige und 492 ungeprüfte Planblöcke.
+Die zunächst für PP-0385 erfasste Lücke ist inzwischen implementiert:
+Geprüfte konvexe Dreiecksnetze besitzen Paar-, Kugel- und Ebenenkontakte,
+konservative Hüllgrenzen, C-/Physim-Bindungen und explizite Masseneigenschaften.
+Unabhängige SAT-/Oberflächenzeugen prüfen den diskreten Vertrag. Es handelt
+sich um einzelne repräsentative Kontakte; Ruhemanifolds, konvexes CCD und die
+automatische Kontaktweltintegration bleiben gesondert offen. Das Audit enthält
+33 implementierte, 6 unvollständige und 492 ungeprüfte Planblöcke.

@@ -102,6 +102,13 @@ def c_reference(module, title, guide, intro):
 
 
 LANG_DESCRIPTIONS = {
+    'bodyWithInertia': 'Erzeugt einen ruhenden Körper mit expliziter SI-Masse und drei Hauptträgheiten. Geometrie, Schwerpunkt und Hauptachsen werden vom Modell vorgegeben.' ,
+
+    'convexContacts': 'Prüft zwei Körper mit konvexen Dreiecksnetzen aus Array<Vec3> und flachen Array<Int64>-Indizes. Ein repräsentativer Kontakt, kein Ruhemanifold; Geometrie ist körperlokal in Metern.',
+    'convexPlaneContacts': 'Prüft ein geschlossenes konvexes Netz gegen einen festen Halbraum; die Welt-Normale zeigt in den freien Raum.',
+    'sphereConvexContacts': 'Prüft Kugel gegen konvexes Netz; innere Kugelmittelpunkte verwenden die nächstgelegene Austrittsfläche.',
+    'convexBounds': 'Liefert nach außen gerundete Weltgrenzen eines geprüften konvexen Netzes. Indizes sind nach außen orientierte Dreieckstripel.',
+
     'propertyConstant': 'Wertet eine konstante SI-Quantity im geschlossenen T/P-Gültigkeitsbereich domain=(Tmin,Tmax,Pmin,Pmax) aus; name/source sind explizite Metadaten. Außerhalb des Bereichs entsteht ein abfangbarer Fehler.',
     'propertyTable': 'Interpoliert temperatur-/druckabhängige SI-Eigenschaftsdaten mit je 1–64 streng steigenden Achsen und temperaturweise angeordneten Werten. Eine Einpunktachse bedeutet Unabhängigkeit von dieser Koordinate; keine Extrapolation. Arrays und Metadaten können in eigenen besitzenden Wertstrukturen gespeichert werden.',
     'pipeConductance': 'Berechnet π r⁴/(8 μ L) in m³/(s Pa) für ein ideales laminares kreiszylindrisches Rohr. Positive SI-Radius-, Längen- und Viskositätswerte.',

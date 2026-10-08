@@ -509,6 +509,61 @@ Positions- oder Orientierungsänderungen neu erzeugt. Die Prüfung beschreibt nu
 den aktuellen Zeitpunkt; schnelle Bewegungen benötigen weiterhin CCD oder
 ausreichend kleine Zeitschritte. Die Kontaktantwort erfolgt anschließend mit dem Paar- oder Graph-Solver.
 
+## Allgemeine konvexe Polyeder
+
+`ps_convex_mesh` leiht bis zu 64 körperlokale Vertices in Metern und 128
+nach außen orientierte Dreiecke. Das Netz muss ein geschlossenes, dreidimensionales
+konvexes Volumen bilden. Jede Kante tritt zweimal mit entgegengesetzter Richtung
+auf; alle Vertices werden benutzt. Koplanare Flächen dürfen trianguliert sein.
+Die Prüfung verwirft offene, konkave, doppelte und degenerierte Geometrie.
+Sie erzeugt keine konvexe Hülle aus einer beliebigen Punktwolke.
+
+`ps_contact_convexes` prüft Flächennormalen und Kantenkreuzprodukte nach dem
+[Trennachsenverfahren von David Eberly](https://www.geometrictools.com/Documentation/MethodOfSeparatingAxes.pdf).
+Auch vollständiges Enthaltensein ergibt eine Eindringtiefe. Zur gewählten
+minimalen Trennverschiebung werden Oberflächenzeugen bestimmt; ihr gemeinsamer
+Mittelpunkt in der ursprünglichen Lage wird als **ein Kontakt** ausgegeben.
+Dieser lässt sich mit `ps_contact_resolve` beziehungsweise als einzelne
+Graphbedingung lösen. Die Repräsentation bildet kein stabiles Mehrpunktmanifold
+für ruhende Flächenkontakte. Für Boxstapel bleibt das Boxmanifold geeignet.
+
+`ps_contact_sphere_convex` ermittelt die nächste Dreiecksoberfläche für äußere
+und innere Kugelmittelpunkte. `ps_contact_convex_plane` liefert den tiefsten
+Vertexkontakt zum festen Halbraum; die Ebenennormale zeigt in den freien Raum.
+`ps_aabb_convex` enthält alle transformierten Vertices mit Rundungspuffer und
+kann an die vorhandene Broad Phase übergeben werden. Eine Box ist bei Bedarf
+selbst ein konvexes Netz mit acht Vertices; die vorhandenen Boxdetektoren bleiben
+für ihre Mehrpunktkontakte verfügbar.
+
+Geometrie wird vor Kreuzprodukten skaliert. Toleranz ist `128*DBL_EPSILON` in
+den normierten Koordinaten. Sehr dünne Dreiecke, fast zusammenfallende Vertices
+oder nach gemeinsamer Skalierung nicht mehr auflösbare Kanten werden verworfen.
+Ungültige Netze liefern `PS_INVALID`, übergroße Netze `PS_LIMIT`, nicht
+auflösbare transformierte Geometrie oder Ausgaben `PS_NUMERIC`. Fehler erhalten
+Körper und beide Ausgaben; Erfolg ohne Treffer ändert nur `touching`.
+Die Reihenfolge der Netzdaten bestimmt Gleichstandsentscheidungen. Die
+Prüfung ist diskret; konvexes CCD bleibt offen. Die persistente Kontaktwelt
+verwaltet weiterhin Kugeln, Boxen und Ebenen; eigene konvexe Kontakte können
+über die öffentliche Graph-API eingebunden werden.
+
+Masse, Schwerpunkt und Hauptträgheiten gehören zum Modell. Mit
+`ps_body_with_inertia` beziehungsweise `Body.withInertia(mass,principalInertia)`
+entsteht ein ruhender Körper mit expliziten Masseneigenschaften. Positive Masse
+verlangt drei positive endliche Hauptträgheiten; Masse null verlangt Nullträgheit.
+Die Netzkoordinaten müssen zum Schwerpunkt und zu den gewählten Hauptachsen
+passen. Physim benutzt besitzende `Array<Vec3>`-Vertices und flache
+`Array<Int64>`-Dreieckstripel für `Contacts.convexes`, `Contacts.sphereConvex`,
+`Contacts.convexPlane` und `Aabb.convex`. Die Arrays bleiben bei jeder Abfrage
+unverändert; Fehlercodes bleiben in abfangbaren Runtime-Diagnosen erhalten.
+
+Die vollständigen diskreten Beispiele sind
+[C](../examples/convex_contacts/main.c) und
+[Physim](../examples/language/convex_contacts.phys). Ein homogener regulärer
+Tetraeder mit den dortigen Vertices hat Schwerpunkt null und drei
+Hauptträgheiten `2*m/5` kg·m²: Der Mittelwert von jedem Koordinatenquadrat ist
+`1/5`, also ist beispielsweise `Ix=m*(E[y²]+E[z²])`. Beide Beispiele prüfen
+Kugelkontakt, gedrehte Geometrie gegen eine Ebene und konservative Hüllgrenzen.
+
 ## Fehler und Prüfungen
 
 Die Mechanikfunktionen allokieren keinen Speicher und übernehmen Ausgaben erst nach Erfolg.

@@ -58,6 +58,19 @@ Prüft Masse, Hauptträgheit, Pose und Geschwindigkeiten eines Körpers.
 ps_result ps_body_validate(const ps_body *body);
 ```
 
+## ps_body_with_inertia
+
+Erzeugt einen ruhenden Körper mit expliziter Masse und Hauptträgheiten für eigene Formen.
+
+```c
+ps_result ps_body_with_inertia(
+    double mass_kg,
+    ps_vec3 principal_inertia_kg_m2,
+    ps_body *out);
+```
+
+Explicit mass and principal inertia for caller-defined shapes. Initially at rest at origin with identity orientation. Positive mass requires three finite positive principal inertias; static mass=0 requires zero inertia. No inferred density/center/principal-axis calculation. Invalid inputs preserve out.
+
 ## ps_body_kinetic_energy
 
 Berechnet translatorische plus rotatorische kinetische Energie.

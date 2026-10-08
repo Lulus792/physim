@@ -2028,6 +2028,15 @@
     "body-range-language": {
       "source": "tests/fixtures/language/body_range.phys",
       "mode": "--emit-c"
+    },
+    "convex-probe": {
+      "kind": "executable",
+      "sources": [
+        "tests/convex_probe.c"
+      ],
+      "libraries": [
+        "core"
+      ]
     }
   },
   "tests": [
@@ -7981,6 +7990,24 @@
             "{body-range-language}",
             "--fixture",
             "{root}/tests/fixtures/language/body_range.phys"
+          ],
+          "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "convex_oracle",
+      "targets": [
+        "python",
+        "convex-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_convex_oracle.py",
+            "--probe",
+            "{convex-probe}"
           ],
           "timeout": 120
         }

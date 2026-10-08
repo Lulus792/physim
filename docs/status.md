@@ -2570,5 +2570,15 @@ abschließend. Kinetische Energie vermeidet überlaufende Geschwindigkeitsquadra
 und erhält Ausgaben bei Bereichsfehlern. Unabhängige C-/Physim-Referenzen prüfen
 Hauptachsen; Decimal-Referenzen prüfen gedrehte Körper mit dokumentierter
 Double-Rotationsgenauigkeit. Die gesamte Starrkörperdynamik bleibt separat
-abzunehmen; allgemeine konvexe Narrow-Phase-Geometrie fehlt noch.
+abzunehmen.
 [Verträge](mechanics.md).
+
+
+Allgemeine konvexe Polyeder besitzen nun diskrete Paar-, Kugel- und
+Ebenenkontakte sowie konservative Hüllgrenzen. Geschlossene Dreiecksnetze
+werden auf Konvexität, Orientierung und Grenzen geprüft; Fehler erhalten
+Ausgaben. C und Physim teilen die Kontaktprüfung, Hauptträgheiten sind für
+eigene Formen explizit vorgebbar. Unabhängige Trennachsen und Oberflächenzeugen
+prüfen gedrehte und enthaltene Netze. Einzelkontakte ersetzen keine
+Ruhemanifolds; konvexes CCD und automatische Kontaktverwaltung bleiben offen.
+[Beispiele und Grenzen](mechanics.md).

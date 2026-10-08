@@ -130,6 +130,29 @@ def verify_body_range(repo, sdk, consumer, builder, library, rebuilt_core, suffi
     print("Installed/rebuilt SDK bodies: rational sphere/box inertia, identity energy, independent Decimal rotated energy and atomic range errors passed", flush=True)
 
 
+def verify_convex_contacts(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked):
+    """Public geometry, impulse response and C/Physim parity from packaged Core."""
+    shutil.copy2(repo / "tests/test_convex.c", consumer / "convex-check.c")
+    shutil.copy2(repo / "tests/test_convex_runtime.c", consumer / "convex-runtime.c")
+    shutil.copy2(repo / "tests/convex_probe.c", consumer / "convex-probe.c")
+    shutil.copy2(sdk / "examples/convex_contacts/main.c", consumer / "convex-example.c")
+    checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
+             repo / "tests/fixtures/language/convex.phys"], output=consumer / "convex-language.c")
+    checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
+             sdk / "examples/language/convex_contacts.phys"], output=consumer / "convex-example-language.c")
+    checked([sdk / "bin" / ("language-convex_contacts" + suffix)])
+    for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
+        check = builder.executable("convex-check-" + kind, ["convex-check.c"], [archive])
+        probe = builder.executable("convex-probe-" + kind, ["convex-probe.c"], [archive])
+        language = builder.executable("convex-language-" + kind, ["convex-language.c"], [archive], language=True)
+        example = builder.executable("convex-example-" + kind, ["convex-example.c"], [archive])
+        example_language = builder.executable("convex-example-language-" + kind, ["convex-example-language.c"], [archive], language=True)
+        runtime = builder.executable("convex-runtime-" + kind, ["convex-runtime.c"], [archive])
+        checked([check]); checked([runtime]); checked([language]); checked([example]); checked([example_language])
+        checked([sys.executable, repo / "tests/test_convex_oracle.py", "--probe", probe])
+    print("Installed/rebuilt SDK convex contacts: validated closed meshes, independent SAT/witnesses, mixed contacts, explicit inertia, impulse response, C/Physim examples and atomic errors passed", flush=True)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sdk", type=Path, required=True)
@@ -150,7 +173,11 @@ def main():
                         help="Verify unit conversion and diagnostics only; no GUI or full domain acceptance")
     parser.add_argument("--body-only", action="store_true",
                         help="Verify solid-body inertia and energy range only; no full mechanics or GUI acceptance")
+    parser.add_argument("--convex-only", action="store_true",
+                        help="Verify convex geometry and bindings only; no full contact-world/CCD or GUI acceptance")
     args = parser.parse_args()
+    if args.convex_only and (args.body_only or args.units_only or args.curve_only or args.comparison_only or args.stream_only or args.transform_only or args.scalar_only or args.app_tests):
+        parser.error("--convex-only cannot be combined with other focused modes or --app-tests")
     if args.body_only and (args.scalar_only or args.transform_only or args.stream_only or args.comparison_only or args.curve_only or args.units_only or args.app_tests):
         parser.error("--body-only cannot be combined with other focused modes or --app-tests")
     if args.units_only and (args.scalar_only or args.transform_only or args.stream_only or args.comparison_only or args.curve_only or args.app_tests):
@@ -228,6 +255,13 @@ def main():
         builder.includes = [sdk / "include"]
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+        if args.convex_only:
+            shutil.copytree(sdk / "src", consumer / "src")
+            rebuilt_core = builder.archive("sdk-rebuilt-core", [f"src/{name}.c" for name in native.CORE])
+            verify_convex_contacts(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
+            (root / "PASSED.txt").write_text("Focused C/Physim convex SDK verification passed; installed/rebuilt Core, independent geometry witnesses, explicit inertia, mixed contacts, examples, manifest and relocation; no full contact-world/CCD or GUI acceptance.\n", encoding="utf-8")
+            print(f"Convex SDK verified: {root}")
+            return
         if args.body_only:
             shutil.copytree(sdk / "src", consumer / "src")
             rebuilt_core = builder.archive("sdk-rebuilt-core", [f"src/{name}.c" for name in native.CORE])
@@ -375,6 +409,7 @@ def main():
                      "--cases", repo / "tests/fixtures/ode_range_cases.json",
                      "--fixture", repo / "tests/fixtures/language/ode_range.phys"])
         print("Installed/rebuilt SDK ODE range: five C/Physim methods, 244 exact constant-solution references, 32 states and true overflow rollback passed", flush=True)
+        verify_convex_contacts(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_body_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_unit_conversion(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_curve_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)

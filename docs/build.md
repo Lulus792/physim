@@ -1015,3 +1015,15 @@ python3 tools/verify-native-sdk.py --sdk build/package --work build/body-package
 ```
 
 Sie bestätigt keine vollständige Mechanik- oder GUI-Abnahme.
+
+
+Konvexe Netzgeometrie, gemischte Kontakte, explizite Trägheiten, Diagnosecodes
+und die C-/Physim-Beispiele lassen sich gegen ein verschobenes SDK prüfen:
+
+```sh
+python3 tools/verify-native-sdk.py --sdk build/package --work build/convex-package-checks --convex-only
+```
+
+Der fokussierte Modus baut den Core zusätzlich nur aus Paketquellen neu und
+prüft unabhängige Kontaktzeugen. Kontaktwelt, konvexes CCD und vollständige
+GUI-Abnahme sind gesonderte Anforderungen.

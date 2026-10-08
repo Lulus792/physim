@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-08",
-  "inspected_revision": "74a2ed3f0faebcf7477fc7bd1e6d58cd81742245",
+  "inspected_revision": "effb00ef31a6d324e9177bfbcce96ff4fac62d1d",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2750,13 +2750,20 @@
       "kind": "list",
       "scope": "planned",
       "text": "5. Narrow Phase für Kugel, Ebene, Box und konvexe Körper.\n",
-      "status": "incomplete",
+      "status": "implemented",
       "evidence": [
-        "include/physim/mechanics.h",
-        "include/physim/contact_world.h",
-        "src/box_contacts.c"
+        "include/physim/collision.h",
+        "src/collision.c",
+        "include/physim/language_collision.h",
+        "tests/test_convex.c",
+        "tests/test_convex_oracle.py",
+        "tests/fixtures/language/convex.phys",
+        "examples/convex_contacts/main.c",
+        "examples/language/convex_contacts.phys",
+        "docs/mechanics.md",
+        "docs/platform-validation.md"
       ],
-      "note": "Kugel-, Ebenen- und orientierte Boxdetektoren vorhanden. Allgemeine konvexe Körper besitzen noch keinen Shape-/Narrow-Phase-Vertrag; contact_world.h schließt convex shapes ausdrücklich aus."
+      "note": "Kugel/Ebene/Box und geprüfte konvexe Polyeder besitzen diskrete Narrow-Phase-Verträge. Convex SAT prüft Flächen-/Kantenachsen, Enthaltensein und einzelne Oberflächenzeugen; C-/Physim-Bindungen und explizite Hauptträgheiten vorhanden. Ein einzelner Kontakt, kein Ruhemanifold. Convex CCD und automatische Kontaktwelt-Integration bleiben getrennt offen."
     },
     {
       "id": "PP-0386",

@@ -19,6 +19,11 @@ typedef struct {
 ps_result ps_body_sphere(double mass_kg, double radius_m, ps_body *out);
 ps_result ps_body_box(double mass_kg, ps_vec3 size_m, ps_body *out);
 ps_result ps_body_validate(const ps_body *body);
+/* Explicit mass and principal inertia for caller-defined shapes. Initially at
+ * rest at origin with identity orientation. Positive mass requires three finite
+ * positive principal inertias; static mass=0 requires zero inertia. No inferred
+ * density/center/principal-axis calculation. Invalid inputs preserve out. */
+ps_result ps_body_with_inertia(double mass_kg, ps_vec3 principal_inertia_kg_m2, ps_body *out);
 /* Sum of translational and principal-axis rotational energy. Identity-frame
  * terms round once; general rotation uses a normalized quaternion and scaled
  * binary64 rotation before summation. Zero-rounded energy is valid; overflow

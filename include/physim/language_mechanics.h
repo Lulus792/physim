@@ -163,6 +163,13 @@ static inline ps_vec3 psrt_contact_impulse(psrt_contact_result result, int64_t i
     return result.solution.impulse_on_a_ns[index];
 }
 
+static inline ps_body psrt_body_with_inertia(double mass, ps_vec3 inertia, psrt_site site) {
+    ps_body result;
+    ps_result status = ps_body_with_inertia(mass, inertia, &result);
+    if (status != PS_OK)
+        psrt_fail_code(site, status, "Invalid explicit body mass or principal inertia");
+    return result;
+}
 static inline ps_body psrt_body_sphere(double mass, double radius, psrt_site site) {
     ps_body body;
     if (ps_body_sphere(mass, radius, &body) != PS_OK)

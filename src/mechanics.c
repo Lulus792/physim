@@ -22,6 +22,18 @@ ps_result ps_body_validate(const ps_body *b) {
                    : PS_INVALID;
     return positive3(b->inertia_kg_m2) ? PS_OK : PS_INVALID;
 }
+ps_result ps_body_with_inertia(double mass, ps_vec3 inertia, ps_body *out) {
+    if (!out)
+        return PS_INVALID;
+    ps_body body = {0};
+    body.mass_kg = mass;
+    body.inertia_kg_m2 = inertia;
+    body.orientation.w = 1;
+    if (ps_body_validate(&body) != PS_OK)
+        return PS_INVALID;
+    *out = body;
+    return PS_OK;
+}
 ps_result ps_body_sphere(double mass, double radius, ps_body *out) {
     if (!out || !isfinite(mass) || mass < 0 || !isfinite(radius) || radius <= 0)
         return PS_INVALID;

@@ -4017,3 +4017,76 @@ Implementierung, öffentliche Header und Testeingaben blieben unverändert.
 Die 16 geänderten Dateien stimmen zwischen macOS und Linux per SHA-256 überein
 (`build/body-source-freeze.json`); SDK-Belege liegen unter
 `build/body-sdk-{mac,linux}-PASSED.json`.
+
+## Konvexe Narrow Phase am 8. Oktober 2026
+
+`ps_convex_mesh` ergänzt geschlossene, nach außen orientierte konvexe
+Dreiecksnetze bis zu 64 Vertices und 128 Dreiecken. Paarprüfung benutzt Flächen-
+und Kantenkreuzproduktachsen; minimale Trennverschiebung und Oberflächenzeugen
+liefern einen repräsentativen gemeinsamen Kontakt. Kugel-/Ebenenkontakte und
+konservative Hüllgrenzen ergänzen die API. `Body.withInertia` beziehungsweise
+`ps_body_with_inertia` erlauben eigene positive Hauptträgheiten. Die C- und
+Physim-Beispiele prüfen einen homogenen regulären Tetraeder; Masseneigenschaften
+werden ausdrücklich angegeben, keine Punktwolkenhülle oder Trägheit erraten.
+[Netzvertrag, Beispiele und Grenzen](mechanics.md).
+
+Die unabhängige Welt-Vertex-Projektion prüft 1014 Box-/Tetraeder-/Oktaederpaare,
+darunter vertauschte Partner. 24 getrennte Paare verlangen Kantenkreuzprodukt-
+Trennachsen; Flächennormalen allein reichen dort nicht. Alle 230 erkannten
+Kontakte besitzen unabhängig rekonstruierte Zeugen auf beiden ursprünglichen
+Oberflächen. Separate analytische Fälle prüfen Kugelkontakte an Flächen/Kanten,
+innere und grenzständige Kugelmittelpunkte, Enthaltensein, ein geschlossenes
+64-Vertex-/124-Dreieck-Netz, SI-Skalen `1e-200` und `1e200`, offene/konkave/
+falsch orientierte Netze, Index-/Kapazitätsgrenzen, Numeric-Fehleratomizität,
+konservative AABBs und echte Impulsantwort mit dem bestehenden Solver.
+
+Die ersten Physim-Fixtures benutzten einmal einen nur als Methode verfügbaren
+Solvernamen und anschließend einen durch die statische Aabb-Methode verdeckten
+Funktionsnamen. Diese Prüferfehler sind unter `run-hc5exynr` und `run-c974ua32`
+erhalten; korrigierte Aufrufe verwenden `resolveSingle` und `Aabb.convex`.
+Der erste Diagnoseprüfer dereferenzierte nach Entfernen des aktiven Traps noch
+das trapabhängige Cleanup-Makro und scheiterte auf beiden Plattformen:
+macOS `run-0b9x0n7w`, Linux `run-ndq11iik`, jeweils 22/23. Der Prüfer liest jetzt
+den erhaltenen `trap.cleanup` direkt. Ein vorläufiger Feldnamen-Tippfehler wurde
+vom Compiler zurückgewiesen (`build/convex-runtime-corrected-mac.log`).
+Die fünf endgültigen Trapfälle prüfen Invalid-/Limit-/Numeric-Codes,
+strukturierte Diagnosen, Quellpositionen und vollständig abgewickelte Cleanup-
+Zustände. Der Debuggernachweis liegt unter `build/convex-runtime-assembly.log`.
+
+Die endgültige native Auswahl besteht auf Intel macOS 14.6.1/Apple Clang 16 mit
+23/23 unter `build/contact-world-language-release-mac/test-results/run-ilp0uvf2`
+und Debian 12/GCC 12.2 mit 23/23 unter
+`build/contact-world-language-release-linux/test-results/run-yelx7jkf`.
+Linux/Clang 14 besteht 23/23 mit ASan/UBSan unter
+`build/atspi-asan-linux/test-results/run-i3y8hd1q`.
+Die Auswahl umfasst neue C-/Physim-Geometrie, Beispiele und Diagnosecodes,
+bestehende Mechanik-, Box-/Kontakt-/Graph-/Constraint-, Broad-Phase-/Sweep-
+Prüfungen, C-/Physim-Stoßparität, echte Stoßläufe, Energieorakel und Prüfkiterstellung.
+`ASAN_OPTIONS=detect_leaks=0` lässt Address-/UB-Prüfungen aktiv. macOS-Sanitizer
+bleiben wegen fehlendem `ld64.lld` ungeprüft.
+
+Stoß-Workflow und Handbuch-Tastaturführung bestehen auf macOS mit 2/2 unter
+`run-lf9yfvyb` und Linux/X11 mit 2/2 unter `run-4llri2qu` in den jeweiligen
+Release-Testverzeichnissen. Alle 31 Referenzdokumente sind geprüft. Das endgültige
+unabhängige Prüfkit enthält 124 manifestierte Eingaben; Paketgrenzen, SHA-256,
+fehlende/dynamische Pfade und exklusive Erstellung sind geprüft.
+
+PP-0385 ist für die genannten diskreten Geometrieverträge implementiert.
+Ein repräsentativer Kontakt ist kein Ruhemanifold; automatische konvexe
+Kontaktweltverwaltung, konvexes CCD, aktuelle Windows-/Apple-Silicon- und gesamte
+Produktabnahme bleiben gesondert offen. Das Gesamtziel ist nicht erreicht.
+
+Die verschobene SDK-Abnahme `--convex-only` besteht auf macOS unter
+`build/convex-sdk-checks/Native SDK ä ply2mr4r` und Linux unter
+`build/convex-sdk-checks/Native SDK ä 6hvnic_q`. Beide SDKs enthalten 463
+manifestierte Dateien. Installierter und ausschließlich aus Paketquellen neu
+gebauter Core bestehen die unabhängigen Geometriegegenproben, Invalid-/Limit-/
+Numeric-Diagnosecodes und C-/Physim-Tetraederbeispiele. Der Paketcompiler
+übersetzt die Sprachquellen selbst. Die SDK-Sprachbeispiel-Binärdatei läuft
+zusätzlich direkt. Unter Linux stammt der Prüfer ausschließlich aus
+`build/convex-independent-kit`, ohne Entwicklerheader oder Implementierung
+im Prüfkit. Die letzten Paketbelege wurden nach Paketierung ergänzt;
+Implementierung, Header und Testeingaben blieben unverändert.
+Die 30 geänderten Dateien stimmen zwischen macOS und Linux per SHA-256 überein
+(`build/convex-source-freeze.json`). SDK-Prüfbelege liegen unter
+`build/convex-sdk-{mac,linux}-PASSED.json`.

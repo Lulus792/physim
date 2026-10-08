@@ -5415,6 +5415,16 @@
     {
       "name": "module_block_closures_runtime",
       "source": "tests/fixtures/language/module_block_closures.phys"
+    },
+    {
+      "name": "convex",
+      "source": "tests/fixtures/language/convex.phys",
+      "stdout": "Convex Physim contacts, bounds, response and trapped invalid mesh passed\n"
+    },
+    {
+      "name": "convex_example",
+      "source": "examples/language/convex_contacts.phys",
+      "stdout": "Convex tetrahedron geometry passed\n"
     }
   ],
   "workflows": [
