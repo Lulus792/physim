@@ -2777,3 +2777,12 @@ Tabellenwerte und gültige SVG-/PNG-Dateien. Beide Projektsprachen bestehen
 auf Intel macOS und Debian. Die PNGs sind tatsächlich dekodiert, und der
 CSV-Vergleich umfasst jede Originalzeile. Dies ergänzt die vertikale Abnahme;
 die aktuelle gesamte Plattform-/Paketmatrix bleibt offen.
+
+Die aktuelle CI besteht am Stand `7fea5f2` je 681 native Fälle unter Linux/GCC,
+Linux/Clang sowie Windows/MSVC Debug und Clang-Cl Debug. Die Linux-SDK-Prüfung
+scheiterte an einer verbliebenen Sechs-Kanal-Annahme des Studienprüfers.
+Dieser Probe ist korrigiert und besteht auf macOS/Linux gegen beide SDK-
+Bibliotheken mit zwölf adaptiven Studien je System. Vollständige lokale
+Release-Läufe sind gestartet; Intel macOS besteht inzwischen alle 681/681
+nativen Fälle. Der Linux-Gesamtlauf und die gesamte neue SDK-/GUI-/Plattformmatrix
+bleiben bis zur tatsächlichen Prüfung offen.

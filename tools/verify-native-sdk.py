@@ -66,6 +66,7 @@ def verify_documentation_bounds(sdk, files):
 def verify_pendulum(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked):
     """Real runs/reports from installed headers and installed/source-rebuilt Core."""
     shutil.copy2(repo / "tools/sdk_probe.c", consumer / "pendulum-sdk-probe.c")
+    shutil.copy2(repo / "tools/sdk_series_probe.c", consumer / "pendulum-series-probe.c")
     shutil.copy2(repo / "tests/test_positive_peaks.c", consumer / "pendulum-peaks.c")
     shutil.copy2(repo / "tests/create_decay_fixtures.c", consumer / "pendulum-decay-fixtures.c")
     shutil.copy2(repo / "tests/check_decay_report.c", consumer / "pendulum-decay-probe.c")
@@ -92,9 +93,17 @@ def verify_pendulum(repo, sdk, consumer, builder, library, rebuilt_core, suffix,
         analysis = build("analysis", "pendulum-analysis.c", True)
         modules = {name: build(name, "pendulum-" + name + ".c", True, True) for name, _, _ in sources}
         probe = build("sdk-probe", "pendulum-sdk-probe.c")
+        series_probe = build("series-probe", "pendulum-series-probe.c")
         checked([sys.executable, repo / "tests/test_pendulum_sdk.py", runner, analyzer, analysis,
                  modules["general-analysis"], probe, consumer / ("Stored pendulum " + kind), model,
                  *[modules[name] for name in ("pendulum", "pendulum_rk4", "pendulum_integrator", "pendulum_rk45", "pendulum_verlet")]], timeout=600)
+        for index, experiment in enumerate([model, *[modules[name] for name in
+                ("pendulum", "pendulum_rk4", "pendulum_integrator", "pendulum_rk45", "pendulum_verlet")]]):
+            series = consumer / ("Target pendulum " + kind + " " + str(index))
+            checked([sdk / "bin" / ("physim-batch" + suffix), runner, experiment, series,
+                     "angle", "3", "1000", ".1", "42", "--until", ".7", "--adaptive",
+                     "--min-dt", "1e-6", "--max-dt", ".2", "--sweep", "length=.5:2.5", "--workers", "3"])
+            checked([series_probe, series, kind])
         tutorial_model = build("tutorial-c-model", "pendulum-tutorial-c-model.c", True)
         tutorial_analysis = build("tutorial-c-analysis", "pendulum-tutorial-c-analysis.c", True)
         tutorial_probe = build("tutorial-probe", "pendulum-tutorial-probe.c")

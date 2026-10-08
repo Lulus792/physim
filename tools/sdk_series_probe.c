@@ -24,7 +24,13 @@ int main(int argc,char **argv) {
     double endpoints[3];unsigned counts[3];char path[4096];
     for(unsigned i=0;i<3;i++) {
         snprintf(path,sizeof path,"%s/run-%04u.psrun",argv[1],i+1);
-        ps_run_reader r;CHECK(ps_run_open(&r,path)==PS_OK && r.channels==6);
+        ps_run_reader r;CHECK(ps_run_open(&r,path)==PS_OK && r.channels==9);
+        const char *names[]={"angle","angular_velocity","position.x","position.y","energy",
+                             "sensor.angle","velocity.x","velocity.y","speed"};
+        for(unsigned channel=0;channel<9;channel++)CHECK(!strcmp(r.schema[channel].name,names[channel]));
+        const int8_t dimension[]={1,0,-1,0,0,0,0};
+        for(unsigned channel=6;channel<9;channel++)
+            CHECK(!memcmp(r.schema[channel].dimension,dimension,7) && !strcmp(r.schema[channel].unit,"m/s"));
         ps_parameter_unit unit;
         CHECK(ps_parameter_unit_parse(r.metadata,"length",&unit)==PS_OK && unit.declared &&
               unit.scale==1 && unit.dimension[0]==1 && !strcmp(unit.symbol,"m"));
@@ -35,6 +41,10 @@ int main(int argc,char **argv) {
         while((status=ps_run_next(&r,&t,v))==PS_OK) {
             CHECK(t>previous && t<=.7);
             if(!n){CHECK(t==0);energy=v[4];}else CHECK(fabs(v[4]-energy)<1e-6);
+            double length_m=.5+i;
+            CHECK(fabs(v[6]-length_m*cos(v[0])*v[1])<1e-10 &&
+                  fabs(v[7]-length_m*sin(v[0])*v[1])<1e-10 && v[8]>=0 &&
+                  fabs(v[8]-hypot(v[6],v[7]))<1e-10);
             previous=t;endpoints[i]=v[0];n++;
         }
         CHECK(status==PS_EOF && previous==.7 && n>5 && n<=1001);counts[i]=n;ps_run_reader_close(&r);

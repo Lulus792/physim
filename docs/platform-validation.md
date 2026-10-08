@@ -2175,3 +2175,118 @@ PP-0777 ist damit konkret nachgewiesen; PP-0779/0780 besitzen zusätzliche
 Medium-/Exportnachweise. Windows/Apple Silicon und neue gesamte Pakete wurden
 für diese Änderung nicht ausgeführt. Die gesamte vertikale Plattformabnahme
 und der Gesamtprojektplan bleiben offen.
+
+## SDK-Studiengate und aktuelle Plattformnachweise
+
+Der offizielle C17-Lauf `37800124412` am Stand `7fea5f2` besteht unter
+Linux/GCC und Linux/Clang jeweils alle 681 nativen Fälle (`run-fy9xavxm`,
+`run-frebudc9`). Beide nachfolgenden SDK-Prüfungen scheitern konkret am
+unveränderten `tools/sdk_series_probe.c`: Die tatsächlich erzeugte adaptive
+Pendelstudie besitzt neun Kanäle; der Probe erwartet noch sechs. Die Archive
+`linux-ui-gcc` und `linux-ui-clang` wurden vor dem Lesen gegen die offiziellen
+SHA-256-Digests geprüft:
+
+- GCC: `ea9b8847ad07bc902591ce8b4e8c9022ed0738ae5e8b4c2fea84c4f5c6297578`.
+- Clang: `9cb55d724356106927041ea911cafef248c87bba985c0b8ded1cc80806655301`.
+
+Die Studiengegenprobe erwartet jetzt neun Kanäle und prüft sämtliche Namen,
+Geschwindigkeitseinheiten/-dimensionen und Komponenten/Betrag an jeder
+Originalzeile. Die bisherigen PCHIP-, Sweep-, variablen Schrittzahl-, exakten
+Endzeit-, Energie-, Studienkurven- und SVG-Prüfungen bleiben bestehen.
+Die unabhängige Pendel-SDK-Prüfung führt zusätzlich denselben tatsächlichen
+Batchpfad mit sechs Modellen, je drei Längen und drei Workern aus, gegen
+installierte und aus Paketquellen neu gebaute Bibliothek.
+
+Die aus dem bytegeprüften unabhängigen Kit entpackte Gegenprobe besteht:
+
+- Intel macOS/Apple Clang 16:
+  `build/target-pendulum-proof-mac/Native SDK ä bh2do0yk`.
+- Debian 12/GCC 12.2:
+  `build/target-pendulum-proof-linux/Native SDK ä mpym0irx`.
+
+Je System bestehen zwölf komplette Studien mit insgesamt 36 Läufen, alle
+bisherigen Pendel-SDK-Referenzen und beide Bibliotheken. Das Kit besitzt
+weiterhin 146 unabhängige Eingaben; sein Selbsttest besteht. Dies belegt die
+konkrete Korrektur des fehlgeschlagenen Gates, nicht den gesamten danach
+folgenden SDK-/GUI-Lauf.
+
+Derselbe offizielle Stand `7fea5f2` besteht unter Windows/MSVC Debug und
+Clang-Cl Debug jeweils 681/681 native Fälle (`run-7wyphq5w`, `run-dx0a1n89`)
+sowie jeweils 10/10 gezielte Sanitizerfälle (`run-w7j5mk58`, `run-mu2544k5`).
+Die Artefaktdigests wurden vor der Auswertung geprüft:
+
+- MSVC Debug: `f3f09fdb33c9db9cad236ab333b4554307f2a462bf2b163f2ccb0df029e7a4b7`.
+- Clang-Cl Debug: `a90e2ff57a77f041a1dc2fb8bed876253a0a5c900329dd3ae745ac853651f7d9`.
+
+Absichtlich scheiternde Nested-Runnerfälle bleiben Teil der Selbstprüfung,
+keine Produktfehler. Windows/Clang-Cl Release scheitert laut offiziellem
+Jobstatus ebenfalls im Schritt „Native SDK package and relocation“; sein
+konkretes Diagnoseartefakt war noch nicht lesbar, daher wird keine identische
+Ursache behauptet. Die macOS-Matrixjobs waren beim letzten Abruf weiterhin
+queued. Eine vollständige neue Matrix-/Release-Paketabnahme ist nicht bewiesen.
+
+Am Stand `35793ee` wurden beide lokalen vollständigen nativen Release-Läufe
+mit SDL gestartet. Intel macOS/Apple Clang 16 besteht alle **681/681** Fälle
+in `run-q5rzlvo1` (`build/current-complete-native-mac.log`). Linux ist noch
+nicht als erfolgreicher Gesamtlauf abgenommen. Alle 1295 Git-Dateien wurden
+zuvor zwischen Mac und VM per SHA-256 abgeglichen. Die während der laufenden
+Nativsuite korrigierten SDK-Harnessdateien sind keine Compiler-Eingaben
+jener Nativfälle und werden separat wie oben geprüft.
+Beim Linux-Lauf übertrug das macOS-Tar zusätzlich 735 AppleDouble-Begleitdateien;
+dadurch scheiterte die Headerinventur des Dokumentationschecks. Diese
+Transferdateien wurden nach Magic-/Gegenstückprüfung bytegeprüft unter
+`build/source-transfer-metadata.tar.gz` gesichert und ausschließlich daraus
+bereinigt. Der direkte Referenzcheck besteht danach mit 31 Seiten. Der bereits
+fehlgeschlagene Gesamtlauf wird nicht als bestanden gezählt oder verschwiegen.
+
+## Wiederherstellbare ältere Linux-SDK-Nachweise
+
+Die älteren Prüfverzeichnisse `build/project-manager-keyboard-sdk-proof-linux`,
+`build/saved-run-tutorial-sdk-proof-linux` und
+`build/pendulum-tutorial-sdk-final-linux` sind vollständig unter
+`/Users/lulus/Projects/physim/build/historical-linux-sdk-proofs.tar.gz`
+auf dem Mac erhalten. Das Archiv ist 457044705 Bytes groß, umfasst 17060
+reguläre Dateien mit ursprünglich 1692191898 Bytes und besitzt SHA-256
+`cdf5854385d6ab93b411f602c8de5e8d318dcca1df685ada3c94d8c8f8661886`.
+Die nebenliegende `historical-linux-sdk-proofs-receipt.json` enthält jede
+Originaldatei mit Größe/Prüfsumme und den Wiederherstellungspfad. Die Receipt
+liegt auch in der VM. Alle Archivmitglieder wurden vollständig gegen die
+Originale geprüft; vor der Bereinigung wurden die Originaldateien nochmals
+vollständig abgeglichen. Nur danach wurden diese drei VM-Verzeichnisse entfernt.
+Die Dateien können mit ihren ursprünglichen projektbezogenen Archivpfaden
+wiederhergestellt werden. Die einzige Archivkopie liegt auf dem Mac; das
+Archiv bleibt deshalb erhalten. Linux hatte danach wieder rund 2 GB Platz.
+
+Die zusätzliche Platzbereinigung auf dem Mac bewahrt vollständig die älteren
+Verzeichnisse `build/Quantity sums SDK ä mac cv7rk3x8` und
+`build/Linear systems SDK ä mac izmu2853` unter
+`physim-debian-test:/home/physim/project/build/historical-mac-sdk-proofs.tar.gz`.
+Das Archiv enthält 29148 reguläre Dateien mit ursprünglich 1495530695 Bytes,
+ist 431791069 Bytes groß und besitzt SHA-256
+`0381599e5db1fe5b9a02f03958820b3c21cc26bf92835cce6e8c0e344a5d07dd`.
+Die Receipt liegt auf beiden Systemen. Alle Archivmitglieder und anschließend
+sämtliche Originale wurden byteweise gegen ihre Prüfsummen abgeglichen;
+erst danach wurden ausschließlich diese zwei Mac-Verzeichnisse entfernt.
+Die einzige Archivkopie liegt in der Linux-VM und bleibt deshalb erhalten.
+Die nebenliegenden Receipts und `build/app-profiling-proof-locations.json`
+dokumentieren beide Archive und die Wiederherstellungspfade.
+
+Ein neues vollständiges macOS-App-SDK wurde tatsächlich gebaut unter
+`build/current-complete-sdk-mac`. Seine erste komplette Prüfung in
+`build/current-complete-sdk-proof-mac/Native SDK ä ljx1_xif` scheiterte beim
+Anlegen der Datei `phys-3.psrun`, während die verfügbare Mac-Kapazität zuvor
+auf ungefähr 124 MB gefallen war. Der Runner meldete nur den allgemeinen
+Run-Create-Fehler; Speicherplatz als genaue Ursache ist damit nicht bewiesen.
+Der gleiche Runner-/Modul-/Verletfall besteht direkt mit 4001 Samples unter
+einem neuen Dateinamen. Der Fehlversuch bleibt erhalten und zählt nicht als
+Gesamtpaketnachweis. Nach der verifizierten Archivierung hatte der Mac rund
+4,3 GB frei; ein neuer vollständiger SDK-Lauf wurde in einem neuen, getrennten
+Prüfverzeichnis gestartet. Dieser bleibt bis zu seinem tatsächlichen Ende offen.
+
+Der erste lokale Linux-Release-Gesamtlauf endet mit **680/681** in
+`run-8axb5g8f`. Ausschließlich `documentation_reference` scheitert wegen der
+oben belegten AppleDouble-Transferdateien; alle nativen Compiler-/Laufzeitfälle
+bestehen. Der direkte Dokumentationscheck besteht nach deren Bereinigung.
+Ein neuer vollständiger Linux-Lauf auf dem bereinigten Baum mit den korrigierten
+SDK-Prüfern wurde gestartet und bleibt bis zu seinem Ende offen. Die 680/681
+werden ausdrücklich nicht zu einem bestandenen Gesamtlauf umetikettiert.

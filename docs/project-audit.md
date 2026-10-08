@@ -604,3 +604,16 @@ weiterhin offen.
 
 Alle **531 Originalblöcke** bleiben erhalten: **45 implemented**, **9 incomplete**,
 **477 unverified**. `completion_proven` bleibt `false`.
+
+## Weiteres SDK-Studiengate
+
+Die aktuellen Linux-CI-Nativsuiten bestehen 681/681 je Compiler; beide SDK-
+Prüfungen scheitern an einer verbliebenen Sechs-Kanal-Annahme im Studienprobe.
+Die korrigierte Gegenprobe prüft jetzt auch alle neuen Geschwindigkeitskanäle
+und wird vom unabhängigen Pendel-SDK-Test tatsächlich über sechs Modelle und
+beide Bibliotheken ausgeführt. Zwölf Studien je System bestehen auf Intel
+macOS und Debian. Windows/MSVC und Clang-Cl Debug bestehen am selben CI-Stand
+je 681 native sowie zehn Sanitizerfälle. Die gesamte neue Plattform-/SDK-/
+GUI-Abnahme bleibt offen; gestartete Gesamtläufe werden bis zum tatsächlichen
+Ergebnis nicht als bestanden bewertet. Planumfang und Statuszahlen bleiben
+unverändert: **45 implemented**, **9 incomplete**, **477 unverified**.
