@@ -526,3 +526,16 @@ C-Auswertung, Energietabelle, SVG-/PNG-Buttons und gespeicherter Bibliothek.
 Aktuell: 38 implementierte, 8 unvollständige und 485 ungeprüfte Planblöcke.
 Die 531 Originaltexte und das gesamte Ziel bleiben erhalten; insbesondere
 Dämpfungsabschätzung und der vollständige vertikale Ablauf bleiben offen.
+
+## Pendelmedium und Winkelsensorrauschen
+
+PP-0765 und PP-0766 sind mit einstellbarer Mediumdichte, gemeinsamer Drag-API
+und unabhängigem gaußverteiltem Winkelsensor verknüpft. Sieben SI-Parameter,
+C-/Physim-Parität, Newton-Kraftsumme, Rauschstatistik, Reset und getrennte
+Instanzen besitzen ausgeführte native und tatsächliche App-Nachweise auf
+macOS und Debian; Linux-Fehlergrenzen bestehen mit ASan/UBSan.
+[Prüfumfang](platform-validation.md#einstellbares-medium-und-winkelsensorrauschen-des-pendels).
+PP-0756 ist ausdrücklich unvollständig für das gesamte erste Experiment,
+insbesondere die noch fehlende vollständige Dämpfungsabschätzung. Aktuell:
+40 implementierte, 9 unvollständige und 482 ungeprüfte Planblöcke.
+Der ursprüngliche Gesamtplan bleibt erhalten.

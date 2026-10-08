@@ -26,6 +26,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
     if(!strncmp(mode,"monte-carlo-tutorial-",21))return monte_carlo_tutorial_start(a,root,mode);
     if(!strncmp(mode,"collision-tutorial-",19))return collision_tutorial_start(a,root,mode);
     if(!strncmp(mode,"pendulum-tutorial-",18))return pendulum_tutorial_start(a,root,mode);
+    if(!strncmp(mode,"pendulum-medium-",16))return pendulum_medium_start(a,root,mode);
     if(!strncmp(mode,"spring-tutorial-",16))return spring_tutorial_start(a,root,mode);
     if(!strncmp(mode,"material-",9))return material_test_start(a,root,mode);
     if(!strncmp(mode,"mask-",5))return series_mask_test_start(a,root,mode);
@@ -134,6 +135,7 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
     if(!strncmp(mode,"monte-carlo-tutorial-",21)){monte_carlo_tutorial_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"collision-tutorial-",19)){collision_tutorial_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"pendulum-tutorial-",18)){pendulum_tutorial_frame(a,stage,code,capture);return;}
+    if(!strncmp(mode,"pendulum-medium-",16)){pendulum_medium_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"spring-tutorial-",16)){spring_tutorial_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"material-",9)){material_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"contact-world") || !strcmp(mode,"contact-world-phys")){contact_world_test_frame(a,stage,code,capture);return;}

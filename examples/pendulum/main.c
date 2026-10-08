@@ -22,26 +22,33 @@ static const double sensor_noise_rad = 0.0;
 static const ps_integrator integrator = PS_PENDULUM_METHOD;
 static const double absolute_tolerance = 1e-10, relative_tolerance = 1e-8;
 typedef struct {
-    double y[2], length, initial_angle;
+    double y[2], length, initial_angle, mass, density, coefficient, area, noise;
 } pendulum;
 static void derivative(double t, const double *y, double *dy, void *u) {
     (void)t;
     const pendulum *p=u;
     dy[0] = y[1];
-    dy[1] = -gravity_m_s2 / p->length * sin(y[0]) - 0.5 * air_density_kg_m3 * drag_coefficient *
-                                                       area_m2 * p->length / mass_kg * y[1] *
-                                                       fabs(y[1]);
+    dy[1] = -gravity_m_s2 / p->length * sin(y[0]);
+    if (p->density > 0 && p->coefficient > 0 && p->area > 0) {
+        ps_medium medium = {p->density, 0, "uniform pendulum medium"};
+        ps_vec3 drag = ps_drag_force(ps_v3(p->length * y[1], 0, 0), medium, p->coefficient, p->area);
+        dy[1] += drag.x / (p->mass * p->length);
+    }
 }
-static void measure(ps_context *c) {
+static ps_result measure(ps_context *c, const double state[2]) {
     pendulum *p = c->user;
-    double a = p->y[0], w = p->y[1];
-    c->values[0] = a;
-    c->values[1] = w;
-    c->values[2] = p->length * sin(a);
-    c->values[3] = -p->length * cos(a);
-    c->values[4] = 0.5 * mass_kg * p->length * p->length * w * w +
-                   mass_kg * gravity_m_s2 * p->length * (1 - cos(a));
-    c->values[5] = a + (sensor_noise_rad ? ps_rng_normal(&c->rng, 0, sensor_noise_rad) : 0);
+    double a = state[0], w = state[1];
+    double values[] = {a, w, p->length * sin(a), -p->length * cos(a),
+        0.5 * p->mass * p->length * p->length * w * w +
+        p->mass * gravity_m_s2 * p->length * (1 - cos(a)), a};
+    for (unsigned i = 0; i < 6; i++)
+        if (!isfinite(values[i])) return PS_NUMERIC;
+    ps_rng rng = c->rng;
+    if (p->noise) values[5] += ps_rng_normal(&rng, 0, p->noise);
+    if (!isfinite(values[5])) return PS_NUMERIC;
+    for (unsigned i = 0; i < 6; i++) c->values[i] = values[i];
+    c->rng = rng;
+    return PS_OK;
 }
 static void acceleration(double t, const double *q, double *a, void *user) {
     (void)t;
@@ -50,17 +57,16 @@ static void acceleration(double t, const double *q, double *a, void *user) {
 }
 static ps_result reset(ps_context *c) {
     pendulum *p = c->user;
-    p->y[0] = p->initial_angle;
-    p->y[1] = 0;
+    double initial[] = {p->initial_angle, 0};
     ps_rng_seed(&c->rng, c->seed);
-    measure(c);
-    return PS_OK;
+    ps_result result = measure(c, initial);
+    if (result == PS_OK) { p->y[0] = initial[0]; p->y[1] = 0; }
+    return result;
 }
 static ps_result create(ps_context *c) {
     if (length_m <= 0 || mass_kg <= 0 || air_density_kg_m3 < 0 || sensor_noise_rad < 0)
         return PS_INVALID;
-    if (integrator < PS_EULER || integrator > PS_RK45 ||
-        (integrator == PS_VERLET && air_density_kg_m3 != 0))
+    if (integrator < PS_EULER || integrator > PS_RK45)
         return PS_INVALID;
     c->user = calloc(1, sizeof(pendulum));
     if (!c->user)
@@ -69,7 +75,24 @@ static ps_result create(ps_context *c) {
     ps_result parameter=ps_parameter_define_unit(c,"length","Pendulum length in metres",PS_METRE,length_m,.1,10,&p->length);
     if(parameter==PS_OK)
         parameter=ps_parameter_define_unit(c,"initialAngle","Initial angle in radians",PS_RADIAN,initial_angle_rad,-1.5,1.5,&p->initial_angle);
+    ps_unit kilogram = {{0,1,0,0,0,0,0},1,"kg"};
+    ps_unit density = {{-3,1,0,0,0,0,0},1,"kg/m3"};
+    ps_unit area = {{2,0,0,0,0,0,0},1,"m2"};
+    if(parameter==PS_OK)
+        parameter=ps_parameter_define_unit(c,"mass","Bob mass in kilograms",kilogram,mass_kg,.001,1000,&p->mass);
+    if(parameter==PS_OK)
+        parameter=ps_parameter_define_unit(c,"airDensity","Medium density; zero disables drag",density,air_density_kg_m3,0,1000,&p->density);
+    if(parameter==PS_OK)
+        parameter=ps_parameter_define_unit(c,"dragCoefficient","Quadratic drag coefficient",PS_ONE,drag_coefficient,0,2,&p->coefficient);
+    if(parameter==PS_OK)
+        parameter=ps_parameter_define_unit(c,"area","Drag cross-section in square metres",area,area_m2,0,1,&p->area);
+    if(parameter==PS_OK)
+        parameter=ps_parameter_define_unit(c,"sensorNoise","Gaussian angle sensor standard deviation",PS_RADIAN,sensor_noise_rad,0,.5,&p->noise);
     if(parameter!=PS_OK) return parameter;
+    if(integrator==PS_VERLET && p->density>0 && p->coefficient>0 && p->area>0) {
+        snprintf(c->error,sizeof c->error,"Velocity Verlet requires zero velocity-dependent drag");
+        return PS_INVALID;
+    }
     ps_unit angular_velocity = {{0, 0, -1, 0, 0, 0, 0}, 1, "rad/s"};
     ps_channel_add(c, "angle", PS_RADIAN, "True pendulum angle");
     ps_channel_add(c, "angular_velocity", angular_velocity, "Angular velocity");
@@ -83,8 +106,8 @@ static ps_result create(ps_context *c) {
         "gravity\nlength_m=%.17g\nmass_kg=%.17g\ngravity_m_s2=%.17g\ninitial_angle_rad=%."
         "17g\nmedium_density_kg_m3=%.17g\ndrag_coefficient=%.17g\narea_m2=%.17g\nsensor_noise_"
         "rad=%.17g\nintegrator=%s\nadaptive_integrator=Dormand-Prince 5(4)\nrk45_absolute_tolerance=%.17g\nrk45_relative_tolerance=%.17g",
-        p->length, mass_kg, gravity_m_s2, p->initial_angle, air_density_kg_m3, drag_coefficient,
-        area_m2, sensor_noise_rad,
+        p->length, p->mass, gravity_m_s2, p->initial_angle, p->density, p->coefficient,
+        p->area, p->noise,
         integrator == PS_RK4      ? "RK4"
         : integrator == PS_EULER  ? "Euler"
         : integrator == PS_VERLET ? "velocity Verlet"
@@ -95,40 +118,47 @@ static ps_result create(ps_context *c) {
 }
 static ps_result step(ps_context *c, double dt) {
     pendulum *p = c->user;
+    if (!isfinite(dt) || dt <= 0) return PS_INVALID;
+    double next[] = {p->y[0], p->y[1]};
     ps_result r = PS_OK;
     if (integrator == PS_SYMPLECTIC) {
         double d[2];
-        derivative(c->time_s, p->y, d, p);
-        ps_symplectic_step(&p->y[0], &p->y[1], d[1], dt);
+        derivative(c->time_s, next, d, p);
+        ps_symplectic_step(&next[0], &next[1], d[1], dt);
     } else if (integrator == PS_VERLET) {
-        r = ps_verlet_step(acceleration, p, c->time_s, dt, &p->y[0], &p->y[1], 1);
+        r = ps_verlet_step(acceleration, p, c->time_s, dt, &next[0], &next[1], 1);
     } else if (integrator == PS_RK45) {
         ps_ode_options options = ps_ode_options_default();
         options.absolute_tolerance = absolute_tolerance;
         options.relative_tolerance = relative_tolerance;
         options.initial_step = options.maximum_step = dt;
-        r = ps_ode_integrate(derivative, p, c->time_s, c->time_s + dt, p->y, 2, &options, NULL);
+        r = ps_ode_integrate(derivative, p, c->time_s, c->time_s + dt, next, 2, &options, NULL);
     } else
-        r = ps_ode_step(integrator, derivative, p, c->time_s, dt, p->y, 2);
-    if (r == PS_OK)
-        measure(c);
+        r = ps_ode_step(integrator, derivative, p, c->time_s, dt, next, 2);
+    if (r == PS_OK) r = measure(c, next);
+    if (r == PS_OK) { p->y[0] = next[0]; p->y[1] = next[1]; }
     return r;
 }
 static ps_result adaptive_step(ps_context *c,double proposed,double minimum,double maximum,
                                 ps_step_interval *interval) {
     pendulum *p=c->user;
+    double next[] = {p->y[0], p->y[1]};
     ps_ode_options options=ps_ode_options_default();
     options.absolute_tolerance=absolute_tolerance;options.relative_tolerance=relative_tolerance;
     options.initial_step=proposed;options.minimum_step=minimum;options.maximum_step=maximum;
     ps_ode_report report;ps_ode_diagnostic diagnostic;
     ps_result result=ps_ode_step_diagnosed(derivative,p,c->time_s,c->time_s+proposed,
-                                          p->y,2,&options,&report,&diagnostic);
+                                          next,2,&options,&report,&diagnostic);
     if(result!=PS_OK) {
         snprintf(c->error,sizeof c->error,"%s",ps_ode_diagnostic_string(diagnostic.reason));
         return result;
     }
-    measure(c);*interval=(ps_step_interval){report.reached_time-c->time_s,report.next_step};
-    return PS_OK;
+    result = measure(c, next);
+    if (result == PS_OK) {
+        p->y[0] = next[0]; p->y[1] = next[1];
+        *interval=(ps_step_interval){report.reached_time-c->time_s,report.next_step};
+    }
+    return result;
 }
 static void scene(ps_context *c, ps_scene *s) {
     const pendulum *p=c->user;
@@ -151,8 +181,8 @@ static void scene(ps_context *c, ps_scene *s) {
     (void)ps_scene_set_parent(s,6,3);
     /* Force arrows use 0.05 metres per newton; velocity keeps its own scale. */
     const double force_scale = 0.05;
-    ps_vec3 weight = ps_v3(0, -mass_kg * gravity_m_s2, 0);
-    double constraint = mass_kg * (gravity_m_s2 * cos(c->values[0]) +
+    ps_vec3 weight = ps_v3(0, -p->mass * gravity_m_s2, 0);
+    double constraint = p->mass * (gravity_m_s2 * cos(c->values[0]) +
                                   p->length * c->values[1] * c->values[1]);
     ps_vec3 rod_force = ps_vscale(bob, -constraint / p->length);
     ps_vec3 weight_end = ps_vadd(bob, ps_vscale(weight, force_scale));
@@ -165,10 +195,9 @@ static void scene(ps_context *c, ps_scene *s) {
     (void)ps_scene_set_parent(s, 8, 3);
     (void)ps_scene_set_parent(s, 10, 7);
     (void)ps_scene_set_parent(s, 11, 8);
-    if (air_density_kg_m3 > 0) {
-        double speed = p->length * fabs(c->values[1]);
-        ps_vec3 drag = ps_vscale(velocity, -0.5 * air_density_kg_m3 *
-                                drag_coefficient * area_m2 * speed);
+    if (p->density > 0 && p->coefficient > 0 && p->area > 0) {
+        ps_medium medium = {p->density, 0, "uniform pendulum medium"};
+        ps_vec3 drag = ps_drag_force(velocity, medium, p->coefficient, p->area);
         ps_vec3 drag_end = ps_vadd(bob, ps_vscale(drag, force_scale));
         ps_scene_add_id(s, 9, PS_ARROW, bob, drag_end, 0, 0xc499e8ff);
         (void)ps_scene_label_id(s, 12, drag_end, "Luftwiderstand · 0.05 m/N", 0xc499e8ff);

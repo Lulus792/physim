@@ -3,7 +3,18 @@ let radians = Unit(0, 0, 0, 0, 0, 0, 0, 1, "rad")
 let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
 let length = parameterWithUnit("length", metres, 1.5, 0.1, 10, "Pendulum length in metres")
 let initialAngle = parameterWithUnit("initialAngle", radians, 0.45, -1.5, 1.5, "Initial angle in radians")
+let kilograms = Unit(0, 1, 0, 0, 0, 0, 0, 1, "kg")
+let densityUnit = Unit(-3, 1, 0, 0, 0, 0, 0, 1, "kg/m3")
+let areaUnit = Unit(2, 0, 0, 0, 0, 0, 0, 1, "m2")
+let one = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
+let mass = parameterWithUnit("mass", kilograms, 1.0, 0.001, 1000, "Bob mass in kilograms")
+let airDensity = parameterWithUnit("airDensity", densityUnit, 0.0, 0.0, 1000, "Medium density; zero disables drag")
+let dragCoefficient = parameterWithUnit("dragCoefficient", one, 0.47, 0.0, 2, "Quadratic drag coefficient")
+let area = parameterWithUnit("area", areaUnit, 0.01, 0.0, 1, "Drag cross-section in square metres")
+let sensorNoise = parameterWithUnit("sensorNoise", radians, 0.0, 0.0, 0.5, "Gaussian angle sensor standard deviation")
 let gravity: Float64 = 9.80665
+func angularAcceleration(angle: Float64, rate: Float64) -> Float64:
+    return -gravity / length * sin(angle) - 0.5 * airDensity * dragCoefficient * area * length / mass * rate * abs(rate)
 let angularRate = Unit(0, 0, -1, 0, 0, 0, 0, 1, "rad/s")
 let joules = Unit(2, 1, -2, 0, 0, 0, 0, 1, "J")
 let angleChannel = Channel("angle", radians, "True pendulum angle")
@@ -11,7 +22,7 @@ let rateChannel = Channel("angular_velocity", angularRate, "Angular velocity")
 let xChannel = Channel("position.x", metres, "Horizontal position")
 let yChannel = Channel("position.y", metres, "Vertical position")
 let energyChannel = Channel("energy", joules, "Kinetic plus gravitational potential energy")
-let sensorChannel = Channel("sensor.angle", radians, "Angle without sensor noise")
+let sensorChannel = Channel("sensor.angle", radians, "Angle with independent Gaussian sensor noise")
 struct PendulumState:
     let phase: Vec2
     func advanced(time: Float64, dt: Float64) -> PendulumState:
@@ -24,7 +35,7 @@ struct PendulumState:
 var states = [PendulumState(Vec2(initialAngle, 0))]
 
 func pendulumDerivative(time: Float64, state: [Float64]) -> [Float64]:
-    return [state[1], -gravity / length * sin(state[0])]
+    return [state[1], angularAcceleration(state[0], state[1])]
 
 func measure():
     for value in states:
@@ -33,11 +44,14 @@ func measure():
         rateChannel.sample(state.y)
         xChannel.sample(length * sin(state.x))
         yChannel.sample(-length * cos(state.x))
-        energyChannel.sample(0.5 * length * length * state.y * state.y + gravity * length * (1 - cos(state.x)))
-        sensorChannel.sample(state.x)
+        energyChannel.sample(mass * (0.5 * length * length * state.y * state.y + gravity * length * (1 - cos(state.x))))
+        var sensed = state.x
+        if sensorNoise > 0:
+            sensed += randomNormal(0, sensorNoise)
+        sensorChannel.sample(sensed)
 
 func create():
-    metadata("model=point pendulum, vacuum\nlength_m=" + String(length) + "\ninitial_angle_rad=" + String(initialAngle) + "\nmass_kg=1\ngravity_m_s2=9.80665\nintegrator=Dormand-Prince 5(4)\nrk45_absolute_tolerance=1e-10\nrk45_relative_tolerance=1e-8\nsensor_noise_rad=0\nadaptive_integrator=Dormand-Prince 5(4)\nadaptive_absolute_tolerance=1e-10\nadaptive_relative_tolerance=1e-8")
+    metadata("model=point pendulum, massless rigid rod, uniform gravity\nlength_m=" + String(length) + "\ninitial_angle_rad=" + String(initialAngle) + "\nmass_kg=" + String(mass) + "\nmedium_density_kg_m3=" + String(airDensity) + "\ndrag_coefficient=" + String(dragCoefficient) + "\narea_m2=" + String(area) + "\ngravity_m_s2=9.80665\nintegrator=Dormand-Prince 5(4)\nrk45_absolute_tolerance=1e-10\nrk45_relative_tolerance=1e-8\nsensor_noise_rad=" + String(sensorNoise) + "\nadaptive_integrator=Dormand-Prince 5(4)\nadaptive_absolute_tolerance=1e-10\nadaptive_relative_tolerance=1e-8")
 
 func reset():
     states = []
@@ -61,9 +75,9 @@ func scene():
     sceneParent(1, 100)
     sceneParent(2, 100)
     sceneParent(3, 101)
-    // Mass is one kilogram; force arrows use 0.05 metres per newton.
-    let weightEnd = bob + 0.05 * Vec3(0, -gravity, 0)
-    let constraint = gravity * cos(state.x) + length * state.y * state.y
+    // Force arrows use 0.05 metres per newton.
+    let weightEnd = bob + 0.05 * Vec3(0, -mass * gravity, 0)
+    let constraint = mass * (gravity * cos(state.x) + length * state.y * state.y)
     let rodEnd = bob - (0.05 * constraint / length) * bob
     arrow(bob, weightEnd, 0, 0xE87979FF, 7)
     arrow(bob, rodEnd, 0, 0x91D28AFF, 8)
@@ -73,10 +87,18 @@ func scene():
     sceneParent(8, 3)
     sceneParent(10, 7)
     sceneParent(11, 8)
+    if airDensity > 0 && dragCoefficient > 0 && area > 0:
+        let velocity = Vec3(length * cos(state.x) * state.y, length * sin(state.x) * state.y, 0)
+        let speed = length * abs(state.y)
+        let dragEnd = bob - (0.05 * 0.5 * airDensity * dragCoefficient * area * speed) * velocity
+        arrow(bob, dragEnd, 0, 0xC499E8FF, 9)
+        label(dragEnd, "Luftwiderstand · 0.05 m/N", 0xC499E8FF, 12)
+        sceneParent(9, 3)
+        sceneParent(12, 9)
 
 // One accepted Dormand-Prince step; rejected trials never update model state.
 func adaptiveDerivative(time: Float64, state: [Float64]) -> [Float64]:
-    return [state[1], -gravity / length * sin(state[0])]
+    return [state[1], angularAcceleration(state[0], state[1])]
 
 func adaptiveStep(dt: Float64, minimum: Float64, maximum: Float64) -> StepInterval:
     let phase = states[0].phase

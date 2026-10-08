@@ -18,9 +18,9 @@ func analyze():
     let firstEnergy = first.series("energy")
     let firstDrift = firstEnergy.affine(1,-firstEnergy.value(0),joules)
     let anglePlot = firstAngle.plot(firstTime,"Angle",runLabel(first,0))
-    let energyPlot = firstDrift.plot(firstTime,"Energy drift",runLabel(first,0))
+    let energyPlot = firstDrift.plot(firstTime,"Energy change",runLabel(first,0))
     first.close()
-    let summary = Table("Run comparison",["Samples","Maximum energy drift","Duration","Period intervals"],[one,joules,seconds,one])
+    let summary = Table("Run comparison",["Samples","Maximum energy change","Duration","Period intervals"],[one,joules,seconds,one])
     let periods = Table("Measured periods",["Mean positive-crossing period"],[seconds])
     for index in 0..<inputCount():
         let run = Dataset(index)

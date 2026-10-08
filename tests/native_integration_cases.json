@@ -2106,6 +2106,15 @@
       "libraries": [
         "core"
       ]
+    },
+    "pendulum-medium-tests": {
+      "sources": [
+        "tests/test_pendulum_medium.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
     }
   },
   "tests": [
@@ -8636,6 +8645,68 @@
             "{cc}"
           ],
           "timeout": 440,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pendulum_medium",
+      "targets": [
+        "pendulum-medium-tests",
+        "physim-language-pendulum-reference",
+        "pendulum",
+        "pendulum_rk45",
+        "pendulum_verlet",
+        "physim-language-pendulum",
+        "physim-language-pendulum-rk4",
+        "physim-language-pendulum-integrator",
+        "physim-language-pendulum-rk45",
+        "physim-language-pendulum-verlet"
+      ],
+      "steps": [
+        {
+          "program": "pendulum-medium-tests",
+          "arguments": [
+            "{physim-language-pendulum-reference}",
+            "{pendulum}",
+            "{pendulum_rk45}",
+            "{pendulum_verlet}",
+            "{physim-language-pendulum}",
+            "{physim-language-pendulum-rk4}",
+            "{physim-language-pendulum-integrator}",
+            "{physim-language-pendulum-rk45}",
+            "{physim-language-pendulum-verlet}"
+          ],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "pendulum_medium_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "pendulum_medium_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 280,
           "files": [
             "app-steps.json"
           ]

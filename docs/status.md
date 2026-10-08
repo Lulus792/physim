@@ -2726,3 +2726,13 @@ Energie- und Änderungswerte in einen eigenen CSV. Energie- und Periodentabellen
 verwenden weiterhin die ursprünglichen Messwerte. Beide Experimentsprachen
 besitzen ausgeführte App-Abläufe einschließlich SVG-/PNG-Buttons auf macOS und
 Linux. [Messumfang](workspace.md), [Prüfungen](platform-validation.md#energieplot-und-vollständiger-csv-im-c-pendelablauf).
+
+## Einstellbarer Pendelwiderstand und Winkelsensor
+
+Die allgemeinen C-/Physim-Pendelvorlagen besitzen sieben gemeinsame SI-Parameter
+mit Masse, Mediumdichte, Widerstandskoeffizient, Querschnitt und Rauschstandardabweichung.
+Die gemeinsame Medium-API berechnet Kräfte; ein eigener Winkelsensorkanal enthält
+das aus dem Laufseed wiederholbare Rauschen. Velocity Verlet weist aktiven
+geschwindigkeitsabhängigen Widerstand ab. Native Paritäts-/Fehlerprüfungen und
+echte Projektabläufe bestehen auf macOS und Linux. [Parameter](workspace.md),
+[Nachweise und verbleibende Grenzen](platform-validation.md#einstellbares-medium-und-winkelsensorrauschen-des-pendels).

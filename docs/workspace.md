@@ -79,6 +79,31 @@ Nulldurchgängen, die mittlere Periodendauer. Neben den Diagrammexporten wird
 geschrieben. Die vorhandene Energiebilanz gedämpfter Modelle bleibt getrennt
 auswertbar. [Nachweise](platform-validation.md#energieplot-und-vollständiger-csv-im-c-pendelablauf).
 
+Neue C- und Physim-Pendelvorlagen besitzen dieselben sieben Parameter:
+
+| Parameter | Einheit | Standard | Bedeutung |
+| --- | --- | --- | --- |
+| `length` | m | 1,5 | Stangenlänge |
+| `initialAngle` | rad | 0,45 | Anfangsauslenkung |
+| `mass` | kg | 1 | Masse des Pendelkörpers |
+| `airDensity` | kg/m3 | 0 | Homogene Mediumdichte; 1,225 aktiviert die Referenzluft |
+| `dragCoefficient` | 1 | 0,47 | Konstanter quadratischer Widerstandskoeffizient |
+| `area` | m2 | 0,01 | Angeströmter Querschnitt |
+| `sensorNoise` | rad | 0 | Standardabweichung des gaußverteilten Winkelsensorrauschens |
+
+Die gemeinsame Medium-API berechnet den Widerstand entgegen der Geschwindigkeit.
+Ein positiver Widerstand benötigt positive Dichte, positiven Koeffizienten und
+positiven Querschnitt. Velocity Verlet unterstützt diesen geschwindigkeitsabhängigen
+Term nicht; die Vorlage weist diese Kombination beim Start ab. Die übrigen
+Pendelvarianten verwenden denselben Term auch in adaptiven Schritten.
+
+`angle` bleibt der wahre Modellwinkel; `sensor.angle` enthält zusätzliches
+Messrauschen. Derselbe Laufseed und dieselbe Schrittfolge liefern nach Reset
+dieselben Messwerte. Rauschen verändert keine Kräfte oder Zustandsintegration.
+Das Modell verwendet eine masselose starre Stange und ein homogenes ruhendes
+Medium mit konstantem Widerstandskoeffizienten; es enthält keine Strömungs- oder
+Reynoldsmodellierung. Der Vakuumlernpfad zum Integratorvergleich bleibt gesondert.
+
 ## Letzten Workspace wieder öffnen
 
 Beim normalen Beenden merkt sich Physim den zuletzt geöffneten Hauptordner und

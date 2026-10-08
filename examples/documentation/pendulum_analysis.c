@@ -23,12 +23,12 @@ static ps_result analyze_many(const char *const *inputs,size_t count,const char 
     if(!count || count>8)return PS_INVALID;
     ps_analysis_context *c=NULL;ps_report *report=NULL;bool recovered=false;
     ps_result r=ps_analysis_create(prefix,0,&c);
-    if(r==PS_OK)r=ps_report_create("Pendulum integrators","Vacuum motion, energy drift and crossing periods",&report);
+    if(r==PS_OK)r=ps_report_create("Pendulum integrators","Mechanical energy changes and positive crossing periods",&report);
     ps_plot_handle angle_plot={0},energy_plot={0};ps_table_handle summary={0},periods={0};
     if(r==PS_OK)r=plot(report,"Angle",PS_RADIAN,&angle_plot);
-    if(r==PS_OK)r=plot(report,"Energy drift",PS_JOULE,&energy_plot);
+    if(r==PS_OK)r=plot(report,"Energy change",PS_JOULE,&energy_plot);
     ps_table_info info={0};strcpy(info.title,"Run comparison");info.columns=4;
-    const char *titles[]={"Samples","Maximum energy drift","Duration","Period intervals"};
+    const char *titles[]={"Samples","Maximum energy change","Duration","Period intervals"};
     ps_unit units[]={PS_ONE,PS_JOULE,PS_SECOND,PS_ONE};
     for(unsigned i=0;r==PS_OK && i<4;i++){strcpy(info.column[i].label,titles[i]);r=ps_report_unit_from(units[i],&info.column[i].unit);}
     if(r==PS_OK)r=ps_report_add_table(report,&info,&summary);

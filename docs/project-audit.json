@@ -6033,9 +6033,17 @@
       "kind": "paragraph",
       "scope": "planned",
       "text": "Das erste vollständige Experiment ist ein **Pendel mit optionalem Luftwiderstand**.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "incomplete",
+      "evidence": [
+        "examples/pendulum/main.c",
+        "examples/language/pendulum.phys",
+        "examples/language/pendulum_rk4.phys",
+        "tests/test_pendulum_medium.c",
+        "app/pendulum_medium_tests.inc",
+        "docs/workspace.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Allgemeine C-/Physim-Pendelvorlagen besitzen sieben SI-Parameter, gemeinsame Medium-Drag-API und separaten gaußverteilten Winkelsensorkanal. Neun Module/fünf Paare, Kraftsumme, Rauschstatistik, Reset, getrennte Instanzen, Parameter-/Verlet-/Fehlergrenzen sowie tatsächliche App-/Parameterstudien auf Intel macOS und Debian geprüft; Linux ASan/UBSan bestanden. Keine vollständige Dämpfungsabschätzung, gesamte vertikale oder aktuelle Gesamtplattformabnahme; PP-0756 bleibt für den Gesamtumfang unvollständig."
     },
     {
       "id": "PP-0758",
@@ -6138,9 +6146,17 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Luftdichte und Widerstand zeigen das Medienkonzept.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "examples/pendulum/main.c",
+        "examples/language/pendulum.phys",
+        "examples/language/pendulum_rk4.phys",
+        "tests/test_pendulum_medium.c",
+        "app/pendulum_medium_tests.inc",
+        "docs/workspace.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Allgemeine C-/Physim-Pendelvorlagen besitzen sieben SI-Parameter, gemeinsame Medium-Drag-API und separaten gaußverteilten Winkelsensorkanal. Neun Module/fünf Paare, Kraftsumme, Rauschstatistik, Reset, getrennte Instanzen, Parameter-/Verlet-/Fehlergrenzen sowie tatsächliche App-/Parameterstudien auf Intel macOS und Debian geprüft; Linux ASan/UBSan bestanden. Keine vollständige Dämpfungsabschätzung, gesamte vertikale oder aktuelle Gesamtplattformabnahme; PP-0756 bleibt für den Gesamtumfang unvollständig."
     },
     {
       "id": "PP-0766",
@@ -6153,9 +6169,17 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Rauschen am Winkelsensor zeigt Messunsicherheit.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "examples/pendulum/main.c",
+        "examples/language/pendulum.phys",
+        "examples/language/pendulum_rk4.phys",
+        "tests/test_pendulum_medium.c",
+        "app/pendulum_medium_tests.inc",
+        "docs/workspace.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Allgemeine C-/Physim-Pendelvorlagen besitzen sieben SI-Parameter, gemeinsame Medium-Drag-API und separaten gaußverteilten Winkelsensorkanal. Neun Module/fünf Paare, Kraftsumme, Rauschstatistik, Reset, getrennte Instanzen, Parameter-/Verlet-/Fehlergrenzen sowie tatsächliche App-/Parameterstudien auf Intel macOS und Debian geprüft; Linux ASan/UBSan bestanden. Keine vollständige Dämpfungsabschätzung, gesamte vertikale oder aktuelle Gesamtplattformabnahme; PP-0756 bleibt für den Gesamtumfang unvollständig."
     },
     {
       "id": "PP-0767",

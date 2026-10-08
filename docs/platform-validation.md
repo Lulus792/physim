@@ -1869,3 +1869,55 @@ Eine vollständige Dämpfungsanalyse und die übrigen Anforderungen des vertikal
 Anwendungsfalls bleiben getrennt offen. Windows/Apple Silicon dieser neuen
 C-Energieplotänderung wurden noch nicht ausgeführt; der zuvor bestätigte
 Windows-Job ist kein Nachweis für den späteren Quellstand.
+
+## Einstellbares Medium und Winkelsensorrauschen des Pendels
+
+Die allgemeine C-Pendelvorlage und alle fünf Physim-Varianten besitzen dieselben
+sieben SI-Parameter: Länge, Anfangswinkel, Masse, Mediumdichte, konstanter
+Widerstandskoeffizient, Querschnitt und Rauschstandardabweichung. Instanzwerte
+ersetzen ausschließlich die bisherigen festen Defaults; Vakuum und ausgeschaltetes
+Rauschen bleiben Standard. Die gemeinsame `ps_medium`-/`Medium`-Drag-API wirkt
+entgegen der Tangentialgeschwindigkeit. Kraftpfeile berücksichtigen die ausgewählte
+Masse und zeigen aktiven Widerstand. Positive Dichte, Koeffizient und Querschnitt
+werden einzeln geprüft; ein unterlaufendes Produkt kann Velocity Verlet keinen
+geschwindigkeitsabhängigen Term vortäuschen. Ein exakt ausgeschalteter Term ist
+auch bei positiver Dichte zulässig.
+
+Der wahre Winkel bleibt von `sensor.angle` getrennt. Gaußrauschen wird nur bei
+positiver Standardabweichung gemessen, aus dem Laufseed wiederholbar zurückgesetzt
+und beeinflusst keine Integration. Die C-Vorlage übernimmt Zustand, Messwerte
+und Zufallszustand erst nach erfolgreichen endlichen Berechnungen. Die gepflegten
+Pendelanalysen nennen die mechanische Änderung nun `Energy change`; tatsächliche
+Dissipation wird damit nicht als ausschließlich numerischer Drift bezeichnet.
+[Parameter und Modellannahmen](workspace.md).
+
+`pendulum_medium` vergleicht neun tatsächliche Module in fünf C-/Physim-Paaren,
+je 5001 Messungen mit ausgewählter Masse, Medium und Rauschen. Die Gegenprobe
+prüft sieben Dimensionen, Kraftsummen gegen Newtons tangentiale/radiale Rechnung,
+Energieverlust, Rauschmittelwert/-standardabweichung, Reset, getrennte Instanzen,
+ungültige Masse und Verlet-Grenzen. Tiny-positive Eingaben werden bei Verlet
+abgewiesen; exakt null Widerstandskoeffizient bleibt erlaubt. NaN und sehr große
+Schritte erhalten Messwerte und Zufallszustand bei Fehlern.
+
+Intel macOS 14.6.1/Apple Clang 16 und Debian 12/GCC 12.2 bestehen alle sechs
+Medium-/Sprach-/Kraft-/Standardanalyse-/Lernpfad-/Quellenfälle 6/6
+(`run-1ul01yjy`, `run-f14lhjrd`). Die erweiterten Fehlergrenzen bestehen danach
+auf macOS 1/1 (`run-zn_wzl4q`) und Linux/Clang 14 mit ASan/UBSan 1/1
+(`run-hqir8mmd`, `detect_leaks=0`). Die vorherige Sanitizergegenprobe besteht
+ebenfalls 1/1 (`run-nq90ooq9`). Der Runner-Selbsttest besteht mit dem neuen Fensterfall.
+
+Die tatsächlichen Fensterabläufe bauen C-/Physim-Projekte, wählen Masse 2 kg,
+Dichte 1,225 kg/m3, Koeffizient 0,8, Querschnitt 0,08 m2 und Rauschen 0,02 rad,
+führen mindestens 6 s aus und prüfen gespeicherte Parameter/Einheiten, Kräfte,
+Energieabnahme und Analyseberichte. Zusammen mit den bestehenden Parameterstudien
+(einschließlich cm-Eingabe) und der Standard-Sprachvorlage bestehen sie auf
+macOS 3/3 (`run-f2d7tdvv`) und Linux 3/3 (`run-sfh67nn3`). Die tatsächliche
+Physim-Szene mit Widerstandskraft wurde visuell geprüft. Eine fehlende Test-
+Headerdeklaration und ein ungültiger doppelter Override im Prüfer wurden korrigiert;
+die zuvor fehlgeschlagenen Läufe zählen nicht als erfolgreiche Nachweise.
+
+PP-0765/0766 besitzen jetzt begrenzte Nachweise für das Mediumkonzept und
+Winkelsensorrauschen. PP-0756 bleibt als gesamtes erstes Experiment unvollständig:
+insbesondere eine vollständige Dämpfungsabschätzung und die übrige vertikale
+Abnahme bleiben offen. Diese Änderung wurde noch nicht unter Windows oder
+Apple Silicon ausgeführt. Alle 531 Originalplanblöcke bleiben erhalten.
