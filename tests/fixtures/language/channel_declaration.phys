@@ -1,19 +1,40 @@
 let metre = Unit(1,0,0,0,0,0,0,1,"m")
 let centimetre = Unit(1,0,0,0,0,0,0,0.01,"cm")
+let second = Unit(0,0,1,0,0,0,0,1,"s")
 let rejectedScale = attempt(Channel("wrong_scale",centimetre,"cm must be explicitly converted"))
 let rejectedName = attempt(Channel("bad\nname",metre,"test"))
 let rejectedLength = attempt(Channel("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",metre,"test"))
 let length = Channel("length",metre,"SI value converted from cm")
 let rejectedDuplicate = attempt(Channel("length",metre,"duplicate"))
 let after = Channel("after",Unit(0,0,0,0,0,0,0,1,"1"),"successful declaration after errors")
+let uncertainty = Channel("uncertainty",metre,"SI standard uncertainty from cm")
+var sensor = Sensor(SensorConfig(centimetre,4,0,0,0,0,Distribution.constant(0),0,1,0),4)
+var clock = 0.0
+func invalidDimension() -> Bool:
+    length.sampleQuantity(Quantity(1,second))
+    return true
+func invalidRange() -> Bool:
+    length.sampleQuantity(Quantity(1.7976931348623157 * pow(2,1023),Unit(1,0,0,0,0,0,0,2,"double m")))
+    return true
+func publish():
+    let reading = sensor.read(clock,Quantity(1.25,metre))
+    assert(reading.isValid())
+    length.sampleQuantity(reading.value)
+    uncertainty.sampleQuantity(Quantity(reading.standardUncertainty,reading.value.unit))
+    let badDimension = attempt(invalidDimension())
+    let badRange = attempt(invalidRange())
+    assert(badDimension == nil && badRange == nil)
+    after.sample(7)
 func create():
     assert(rejectedScale == nil && rejectedName == nil && rejectedLength == nil && rejectedDuplicate == nil)
-    metadata("model=canonical SI channel declaration\ninput=125 cm\nstored=1.25 m\n")
+    metadata("model=canonical SI channel declaration\ninput=125 cm\nstored=1.25 m\nuncertainty=1 cm -> 0.01 m\n")
     reset()
 func reset():
-    length.sample(centimetre.convert(125,metre))
-    after.sample(7)
+    sensor.reset(4)
+    clock = 0
+    publish()
 func step(dt: Float64):
-    reset()
+    clock += dt
+    publish()
 func scene():
     sphere(Vec3(0,0,0),0.1,0x53aeefff,1)

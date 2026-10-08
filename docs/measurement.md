@@ -38,6 +38,38 @@ ist geliehen und muss so lange wie Sensor und ausgegebene Messungen gültig blei
 Eigene Instanzen dürfen parallel laufen; eine einzelne Instanz benötigt bei
 gleichzeitigen Zugriffen Synchronisierung. Fehler lassen Zustand und Ausgabe unverändert.
 
+## Messungen typisiert nach SI veröffentlichen
+
+Die Sensor-Ausgabe bleibt in der konfigurierten Einheit, auch die absolute
+Standardunsicherheit. Für einen Meterkanal kann ein Zentimetersensor deshalb
+über `ps_channel_sample_quantity` beziehungsweise `Channel.sampleQuantity`
+veröffentlicht werden. Dimensionen werden geprüft und beide Zahlen nach SI
+konvertiert; falsche Dimensionen und nicht darstellbare SI-Werte erhalten den
+vorherigen Kanalwert.
+
+```c
+if (sample.state == PS_MEASUREMENT_VALID) {
+    result = ps_channel_sample_quantity(context, value_channel, sample.value);
+    if (result != PS_OK) return result;
+    result = ps_channel_sample_quantity(context, uncertainty_channel,
+        (ps_quantity){sample.standard_uncertainty, sample.value.unit});
+    if (result != PS_OK) return result;
+}
+```
+
+```physim
+if reading.isValid():
+    length.sampleQuantity(reading.value)
+    uncertainty.sampleQuantity(Quantity(reading.standardUncertainty,reading.value.unit))
+```
+
+Der Setter erkennt Quantity-Dimensionen, nicht den Messstatus. Platzhalter für
+NOT_DUE/DROPPED bleiben ausdrücklich durch den eigenen Statuskanal markiert;
+der Setter macht daraus keine gültigen Messwerte. Die Sensor-Wurfbeispiele
+benutzen den typisierten Pfad für Wert und Standardunsicherheit tatsächlich.
+Der C-Wurf verwendet dabei einen lokalen Context zum Staging, damit mehrere
+Kanalupdates gemeinsam mit dem Modellzustand zurückgenommen werden können.
+
 ## Abtastraster und Gültigkeit
 
 Das Raster ist `start_time_s + index / rate_hz`. Modellzeitschritt und Sensorfrequenz

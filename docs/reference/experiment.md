@@ -223,6 +223,19 @@ int ps_channel_add(
 
 Declare a canonical SI channel: unit.scale must equal 1. Samples are SI numbers; convert display-unit inputs explicitly before storing in values. Copies bounded UTF-8 metadata without truncation: name 1..47 bytes, symbol 0..15, description 0..95. Name/symbol have no controls; descriptions permit tab/newline. Names must be unique. Returns index or -1, preserving the entire context on failure. No allocation or retained pointers. Legacy raw schemas retain their existing file-format semantics; this validates declarations.
 
+## ps_channel_sample_quantity
+
+Prüft Kanaldimension und Quantity, konvertiert deren Skala nach SI und aktualisiert atomar genau einen Kanalwert; Fehler erhalten den Kontext.
+
+```c
+ps_result ps_channel_sample_quantity(
+    ps_context *context,
+    uint32_t channel,
+    ps_quantity value);
+```
+
+Typed sampling into the canonical SI channel. Dimensions must match; converts Quantity's declared scale before committing one value. Requires the complete values prefix; shorter contexts -> PS_VERSION. Invalid context/schema/index or Quantity -> PS_INVALID; conversion range failure -> PS_NUMERIC. Every failure preserves the entire context. No allocation or retained pointers. Phase/ownership checks belong to the calling runner or language host.
+
 ## ps_parameter_override
 
 Hinterlegt vor create einen endlichen Wert für einen eindeutigen Parameternamen. Der Name muss später definiert werden; der Kontext benötigt die optionale ABI-3-Erweiterung.

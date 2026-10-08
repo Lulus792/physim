@@ -38,6 +38,15 @@ speichert Kanalname, Dimension, Symbol und Beschreibung; die Skala ist im
 kanonischen Kanalformat fest 1. Einheiten-Symbole werden nicht als versteckte
 Umrechnungsregeln benutzt. [Kanäle und Metadatengrenzen](workspace.md).
 
+`ps_channel_sample_quantity(context,index,quantity)` und Physim
+`channel.sampleQuantity(quantity)` übernehmen diese SI-Grenze atomar: Sie prüfen
+Dimensionen, konvertieren die Eingabeskala und ändern erst danach den einen
+Kanalwert. `PS_INVALID`, `PS_NUMERIC` und ein zu kurzer Context-Prefix
+(`PS_VERSION`) erhalten den gesamten C-Kontext. Die Sprachseite prüft zusätzlich
+Besitzer, Index und Samplingphase. Der rohe `channel.sample(number)`-Weg erwartet
+weiterhin bereits konvertierte SI-Zahlen; ohne Einheit kann er keine Dimension
+prüfen.
+
 Analyse-Reihen aus `ps_series_from_values` konvertieren nichtkanonische Eingaben
 blockweise in eigenständige SI-Daten mit Skala 1. Reihenoperationen verbinden
 Dimensionen und prüfen die zugehörigen Handles. Dimensionen und Anzeigeeinheit

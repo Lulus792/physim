@@ -30,7 +30,7 @@ static void ode(double t, const double *y, double *d, void *user) {
     d[2] = 0;
     d[3] = -9.80665;
 }
-static ps_result measure(projectile *p, double values[PS_MAX_CHANNELS]) {
+static ps_result measure(projectile *p, const ps_context *context, double values[PS_MAX_CHANNELS]) {
     ps_measurement samples[2];
     for (unsigned i = 0; i < 2; i++) {
         ps_result r = ps_sensor_read(&p->sensor[i], p->time, (ps_quantity){p->state[i], PS_METRE},
@@ -44,13 +44,23 @@ static ps_result measure(projectile *p, double values[PS_MAX_CHANNELS]) {
         .5 * (p->state[2] * p->state[2] + p->state[3] * p->state[3]) + 9.80665 * p->state[1];
     values[5] = -2 + 3 * p->time;
     values[6] = 5 * p->time - .5 * 9.80665 * p->time * p->time;
-    values[7] = samples[0].value.value;
-    values[8] = samples[1].value.value;
+    /* Stage the typed SI boundary; rejected sampling never changes live values. */
+    ps_context staged = *context;
+    for (unsigned i = 0; i < 2; i++) {
+        ps_result r = ps_channel_sample_quantity(&staged, 7 + i, samples[i].value);
+        if (r == PS_OK)
+            r = ps_channel_sample_quantity(&staged, 12 + i,
+                (ps_quantity){samples[i].standard_uncertainty, samples[i].value.unit});
+        if (r != PS_OK)
+            return r;
+    }
+    values[7] = staged.values[7];
+    values[8] = staged.values[8];
     values[9] = samples[0].state;
     values[10] = samples[1].state;
     values[11] = p->time;
-    values[12] = samples[0].standard_uncertainty;
-    values[13] = samples[1].standard_uncertainty;
+    values[12] = staged.values[12];
+    values[13] = staged.values[13];
     values[14] = (double)samples[0].skipped;
     if (samples[0].state == PS_MEASUREMENT_VALID && samples[1].state == PS_MEASUREMENT_VALID) {
         p->last_sensor = ps_v3(values[7], values[8], 0);
@@ -89,7 +99,7 @@ static ps_result reset(ps_context *c) {
     p->trail[0] = ps_v3(-2, 0, 0);
     p->count = 1;
     double values[PS_MAX_CHANNELS] = {0};
-    r = measure(p, values);
+    r = measure(p, c, values);
     if (r != PS_OK)
         return r;
     snprintf(
@@ -148,7 +158,7 @@ static ps_result step(ps_context *c, double dt) {
     if (!isfinite(next.time) || next.time > 100000)
         return PS_LIMIT;
     double values[PS_MAX_CHANNELS] = {0};
-    r = measure(&next, values);
+    r = measure(&next, c, values);
     if (r != PS_OK)
         return r;
     if (++next.ticks % 10 == 0) {

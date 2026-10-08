@@ -273,3 +273,10 @@ expliziten Store. Kopierte Metadaten, atomare Streaming-Zeilen, Snapshots,
 Abschluss und ausdrücklicher Abbruch ersetzen direkten Zugriff auf `FILE*`.
 [Lebensdauer, Grenzen und Umstieg](run-streams.md) dokumentieren die Nutzung;
 die älteren Deskriptoren aus `data.h` bleiben zunächst kompatibel verfügbar.
+
+
+`ps_channel_sample_quantity` verbindet Quantity-Werte mit der kanonischen
+SI-Kanalgrenze: Dimensionen prüfen, Skala konvertieren, einen Wert atomar
+übernehmen. Physim `Channel.sampleQuantity` ergänzt Besitzer-/Phasenprüfung.
+[Vertrag und Abgrenzung zum rohen Sampler](units.md),
+[Sensorwert und Unsicherheit veröffentlichen](measurement.md).

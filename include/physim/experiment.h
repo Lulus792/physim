@@ -1,6 +1,7 @@
 #ifndef PHYSIM_EXPERIMENT_H
 #define PHYSIM_EXPERIMENT_H
 #include "core.h"
+#include "units.h"
 #include "log.h"
 #include "diagnostic.h"
 #define PS_MAX_CHANNELS 16
@@ -132,6 +133,13 @@ ps_result ps_experiment_diagnostic(const ps_context *context, ps_diagnostic *out
  * context on failure. No allocation or retained pointers. Legacy raw schemas
  * retain their existing file-format semantics; this validates declarations. */
 int ps_channel_add(ps_context *context, const char *name, ps_unit unit, const char *description);
+/* Typed sampling into the canonical SI channel. Dimensions must match; converts
+ * Quantity's declared scale before committing one value. Requires the complete
+ * values prefix; shorter contexts -> PS_VERSION. Invalid context/schema/index
+ * or Quantity -> PS_INVALID; conversion range failure -> PS_NUMERIC.
+ * Every failure preserves the entire context. No allocation or retained pointers.
+ * Phase/ownership checks belong to the calling runner or language host. */
+ps_result ps_channel_sample_quantity(ps_context *context, uint32_t channel, ps_quantity value);
 ps_result ps_parameter_override(ps_context *context, const char *name, double value);
 ps_result ps_parameter_define(ps_context *context, const char *name, const char *description,
                               double default_value, double minimum, double maximum,

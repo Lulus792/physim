@@ -45,16 +45,16 @@ func measure():
     ce.sample(0.5 * (state.z * state.z + state.w * state.w) + gravity * state.y)
     cnx.sample(-2 + 3 * time)
     cny.sample(5 * time - 0.5 * gravity * time * time)
-    csx.sample(x.value.value)
-    csy.sample(y.value.value)
+    csx.sampleQuantity(x.value)
+    csy.sampleQuantity(y.value)
     csxs.sample(Float64(x.state))
     csys.sample(Float64(y.state))
     cst.sample(time)
-    csxu.sample(x.standardUncertainty)
-    csyu.sample(y.standardUncertainty)
+    csxu.sampleQuantity(Quantity(x.standardUncertainty,x.value.unit))
+    csyu.sampleQuantity(Quantity(y.standardUncertainty,y.value.unit))
     css.sample(Float64(x.skipped))
     if x.isValid() && y.isValid():
-        lastMeasured = Optional.some(Vec3(x.value.value, y.value.value, 0))
+        lastMeasured = Optional.some(Vec3(x.value.converted(metres).value, y.value.converted(metres).value, 0))
 
 func create():
     metadata("model=uncertain vacuum projectile\nmass_kg=1\ng_m_s2=9.80665\nground=none\nintegrator=RK4\nvx_distribution=normal\nvx_mean_m_s=3\nvx_stddev_m_s=0.15\nvy_distribution=normal\nvy_mean_m_s=5\nvy_stddev_m_s=0.25\nmeasurement_api=1\nsensor_rate_hz=100\nsensor_distribution=normal\nsensor_stddev_m=0.02\nsensor_seed_x=seed XOR 0xa0761d6478bd642f\nsensor_seed_y=seed XOR 0xe7037ed1a0b428db\nsensor_offset_m=0.01\nsensor_drift_m_s=0.002\nsensor_resolution_m=0.005\nsensor_dropout_probability=0.05\nsensor_u_absolute_m=0.003\nsensor_u_relative=0.001\nsensor_status=0:not_due,1:valid,2:dropped; invalid values are zero placeholders")

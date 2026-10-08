@@ -1,7 +1,7 @@
 {
   "format": 1,
   "date": "2026-10-08",
-  "inspected_revision": "b9955a3d1cb308be8cebaaacd7dee415e1b9e9e8",
+  "inspected_revision": "71a9e6a425c9c0747d29828ef32fcc33375afd59",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
   "completion_proven": false,
@@ -2541,9 +2541,12 @@
         "tests/fixtures/language/analysis_series_si.phys",
         "tests/test_series_si_workflow.py",
         "tests/test_series_si_report.c",
-        "docs/series.md"
+        "docs/series.md",
+        "include/physim/experiment.h",
+        "tests/test_channel_quantity.c",
+        "tests/test_channel_declaration_workflow.py"
       ],
-      "note": "Kanäle, Parameter, Reihen, Anzeigeeinheiten und typisierte Unit-/Quantity-APIs besitzen konkrete SI-/Dimensionsgrenzen. Temporäre Quantity-Darstellungen können nichtkanonische Skalen tragen; Kanalskala ist im Run-Format fest 1, Parameter-/Series-/Berichtsmetadaten tragen weitere Skalen. Die umfassende Reichweite dieser Anforderung ist noch nicht für alle öffentlichen Datenpfade einzeln abgenommen; keine Ableitung aus der Konvertierungsgegenprobe."
+      "note": "Der neue Quantity-Sampler prüft Dimensionsmetadaten, konvertiert nach SI und übernimmt genau einen Wert atomar; Physim ergänzt Besitzer-/Phasenprüfung. Echte C-/Physim-Sensorläufe persistieren Zentimeterwerte und deren Unsicherheit in Meterkanälen, falsche Dimensionen/Bereichsfehler erhalten Werte. Messungen bleiben externe Darstellungen in der Sensoreinheit, Berichte können eigene Achseneinheiten besitzen; Run-Kanalskala ist fest 1. Die umfassende Reichweite dieser Anforderung bleibt für alle öffentlichen Datenpfade noch einzeln abzugleichen; rohe Doubles tragen keine prüfbare Einheit."
     },
     {
       "id": "PP-0371",
@@ -2562,9 +2565,12 @@
         "src/core.c",
         "src/series.c",
         "tests/test_series_si.c",
-        "tests/test_unit_runtime_codes.c"
+        "tests/test_unit_runtime_codes.c",
+        "include/physim/experiment.h",
+        "tests/test_channel_quantity.c",
+        "tests/test_channel_declaration_workflow.py"
       ],
-      "note": "Kanäle, Parameter, Reihen, Anzeigeeinheiten und typisierte Unit-/Quantity-APIs besitzen konkrete SI-/Dimensionsgrenzen. Temporäre Quantity-Darstellungen können nichtkanonische Skalen tragen; Kanalskala ist im Run-Format fest 1, Parameter-/Series-/Berichtsmetadaten tragen weitere Skalen. Die umfassende Reichweite dieser Anforderung ist noch nicht für alle öffentlichen Datenpfade einzeln abgenommen; keine Ableitung aus der Konvertierungsgegenprobe."
+      "note": "Der neue Quantity-Sampler prüft Dimensionsmetadaten, konvertiert nach SI und übernimmt genau einen Wert atomar; Physim ergänzt Besitzer-/Phasenprüfung. Echte C-/Physim-Sensorläufe persistieren Zentimeterwerte und deren Unsicherheit in Meterkanälen, falsche Dimensionen/Bereichsfehler erhalten Werte. Messungen bleiben externe Darstellungen in der Sensoreinheit, Berichte können eigene Achseneinheiten besitzen; Run-Kanalskala ist fest 1. Die umfassende Reichweite dieser Anforderung bleibt für alle öffentlichen Datenpfade noch einzeln abzugleichen; rohe Doubles tragen keine prüfbare Einheit."
     },
     {
       "id": "PP-0372",
@@ -2593,9 +2599,10 @@
         "tests/quantity_sum_probe.c",
         "tests/test_quantity_sum_oracle.py",
         "tests/fixtures/quantity_sum_cases.json",
-        "tests/fixtures/language/quantity_sum_values.phys"
+        "tests/fixtures/language/quantity_sum_values.phys",
+        "tests/test_channel_quantity.c"
       ],
-      "note": "Kanäle, Parameter, Reihen, Anzeigeeinheiten und typisierte Unit-/Quantity-APIs besitzen konkrete SI-/Dimensionsgrenzen. Temporäre Quantity-Darstellungen können nichtkanonische Skalen tragen; Kanalskala ist im Run-Format fest 1, Parameter-/Series-/Berichtsmetadaten tragen weitere Skalen. Die umfassende Reichweite dieser Anforderung ist noch nicht für alle öffentlichen Datenpfade einzeln abgenommen; keine Ableitung aus der Konvertierungsgegenprobe."
+      "note": "Der neue Quantity-Sampler prüft Dimensionsmetadaten, konvertiert nach SI und übernimmt genau einen Wert atomar; Physim ergänzt Besitzer-/Phasenprüfung. Echte C-/Physim-Sensorläufe persistieren Zentimeterwerte und deren Unsicherheit in Meterkanälen, falsche Dimensionen/Bereichsfehler erhalten Werte. Messungen bleiben externe Darstellungen in der Sensoreinheit, Berichte können eigene Achseneinheiten besitzen; Run-Kanalskala ist fest 1. Die umfassende Reichweite dieser Anforderung bleibt für alle öffentlichen Datenpfade noch einzeln abzugleichen; rohe Doubles tragen keine prüfbare Einheit."
     },
     {
       "id": "PP-0373",
@@ -2643,9 +2650,12 @@
         "src/core.c",
         "src/series.c",
         "tests/test_series_si.c",
-        "tests/test_unit_runtime_codes.c"
+        "tests/test_unit_runtime_codes.c",
+        "include/physim/experiment.h",
+        "tests/test_channel_quantity.c",
+        "tests/test_channel_declaration_workflow.py"
       ],
-      "note": "Kanäle, Parameter, Reihen, Anzeigeeinheiten und typisierte Unit-/Quantity-APIs besitzen konkrete SI-/Dimensionsgrenzen. Temporäre Quantity-Darstellungen können nichtkanonische Skalen tragen; Kanalskala ist im Run-Format fest 1, Parameter-/Series-/Berichtsmetadaten tragen weitere Skalen. Die umfassende Reichweite dieser Anforderung ist noch nicht für alle öffentlichen Datenpfade einzeln abgenommen; keine Ableitung aus der Konvertierungsgegenprobe."
+      "note": "Der neue Quantity-Sampler prüft Dimensionsmetadaten, konvertiert nach SI und übernimmt genau einen Wert atomar; Physim ergänzt Besitzer-/Phasenprüfung. Echte C-/Physim-Sensorläufe persistieren Zentimeterwerte und deren Unsicherheit in Meterkanälen, falsche Dimensionen/Bereichsfehler erhalten Werte. Messungen bleiben externe Darstellungen in der Sensoreinheit, Berichte können eigene Achseneinheiten besitzen; Run-Kanalskala ist fest 1. Die umfassende Reichweite dieser Anforderung bleibt für alle öffentlichen Datenpfade noch einzeln abzugleichen; rohe Doubles tragen keine prüfbare Einheit."
     },
     {
       "id": "PP-0379",

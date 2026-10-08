@@ -92,6 +92,11 @@ def verify_unit_conversion(repo, sdk, consumer, builder, library, rebuilt_core, 
     """Exact conversion plus typed runtime diagnostics from packaged APIs."""
     shutil.copy2(repo / "tests/unit_conversion_probe.c", consumer / "unit-conversion-probe.c")
     shutil.copy2(repo / "tests/test_unit_runtime_codes.c", consumer / "unit-runtime-codes.c")
+    shutil.copy2(repo / "tests/test_channel_quantity.c", consumer / "channel-quantity.c")
+    shutil.copy2(repo / "tests/fixtures/channel_declaration.c", consumer / "channel-declaration.c")
+    shutil.copy2(repo / "tests/channel_export_probe.c", consumer / "channel-export.c")
+    checked([sdk / "bin" / ("physimc" + suffix), "--emit-experiment",
+             repo / "tests/fixtures/language/channel_declaration.phys"], output=consumer / "channel-declaration-language.c")
     checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
              repo / "tests/fixtures/language/unit_conversion_range.phys"], output=consumer / "unit-conversion-language.c")
     for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
@@ -99,9 +104,18 @@ def verify_unit_conversion(repo, sdk, consumer, builder, library, rebuilt_core, 
         runtime = builder.executable("unit-runtime-codes-" + kind, ["unit-runtime-codes.c"], [archive])
         language = builder.executable("unit-conversion-language-" + kind, ["unit-conversion-language.c"], [archive], language=True)
         checked([runtime])
+        sampler = builder.executable("channel-quantity-" + kind, ["channel-quantity.c"], [archive])
+        c_model = builder.executable("channel-declaration-" + kind, ["channel-declaration.c"], [archive], module=True)
+        phys_model = builder.executable("channel-declaration-language-" + kind, ["channel-declaration-language.c"], [archive], language=True, module=True)
+        exporter = builder.executable("channel-export-" + kind, ["channel-export.c"], [archive])
+        checked([sampler])
+        checked([sys.executable, repo / "tests/test_channel_declaration_workflow.py",
+                 "--runner", sdk / "bin" / ("physim-runner" + suffix), "--c-model", c_model,
+                 "--phys-model", phys_model, "--exporter", exporter,
+                 "--work", consumer / ("Typed channel runs ä " + kind)])
         checked([sys.executable, repo / "tests/test_unit_conversion_oracle.py", "--c", probe,
                  "--language", language, "--fixture", repo / "tests/fixtures/language/unit_conversion_range.phys"])
-    print("Installed/rebuilt SDK units: exact rational conversions, SI definitions, identity bits, range/dimension failures, aliases, typed diagnostics and C/Physim parity passed", flush=True)
+    print("Installed/rebuilt SDK units: exact rational conversions, SI definitions, identity bits, range/dimension failures, aliases, typed diagnostics, typed SI channel sampling, actual C/Physim sensor runs/CSV and parity passed", flush=True)
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)

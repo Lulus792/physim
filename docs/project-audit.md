@@ -363,3 +363,26 @@ ihren gesamten Umfang ungeprüft; temporäre Quantity-Darstellungen und fest
 kanonische Run-Kanäle müssen von allen übrigen Datenpfaden unterschieden werden.
 Die Originaltexte aller 531 Blöcke bleiben erhalten. Die vollständige
 Plattform-/Modell-/Produktabnahme wird aus diesen Einzelnachweisen nicht abgeleitet.
+
+
+## Typisierte SI-Kanalgrenze (§7.3 / PP-0370..0375)
+
+`ps_channel_sample_quantity` und Physim `Channel.sampleQuantity` ergänzen einen
+geprüften Pfad von externen Quantity-Darstellungen in kanonische SI-Kanäle.
+Dimensionen, Kontextprefix, Index und Schema werden vor der Konvertierung
+geprüft; Fehler erhalten den gesamten Kontext. Die Sprachseite prüft Besitzer
+und Callbackphase und bewahrt Invalid-/Numeric-/Version-Codes.
+
+Die echten C-/Physim-Runner-Fälle lesen einen Zentimetersensor samt absoluter
+Standardunsicherheit und persistieren 1,25 m sowie 0,01 m. Unabhängige Run-/CRC-/
+Schema-/CSV-Prüfung zeigt dieselben Werte auf beiden Sprachwegen; abgefangene
+Dimensions-/Bereichsfehler ersetzen keinen früheren Wert. Die Sensor-Wurfbeispiele
+benutzen den neuen Pfad für Wert und Unsicherheit tatsächlich. Der C-Wurf staged
+Kanalupdates zusammen mit dem Modellzustand, der Physim-Wurf hält Statusmasken
+und konvertierte Szenenpositionen ausdrücklich fest.
+
+PP-0370/0371/0372/0375 bleiben für ihren gesamten Umfang ungeprüft. Externe
+Quantity-/Measurement-Darstellungen, eigene Reportachsen und bereits kanonische
+Mess-/Analysewerte sind nicht gleichzusetzen; rohe Zahlen bleiben ohne
+prüfbare Dimension. Aktuell unverändert: 32 implementierte, sechs unvollständige
+und 493 ungeprüfte Planblöcke. Die Originaltexte aller 531 Blöcke bleiben erhalten.

@@ -806,6 +806,16 @@ static inline void psrt_sample(psrt_host *host, psrt_channel channel, double val
         psrt_fail(site, "Invalid channel handle or sampling phase");
     host->context->values[channel.index] = psrt_finite(value, site);
 }
+static inline void psrt_sample_quantity(psrt_host *host, psrt_channel channel, ps_quantity value,
+                                         psrt_site site) {
+    if (!host || !host->context || host->phase == PSRT_SCENE || channel.owner != host->context ||
+        channel.index >= host->context->channel_count)
+        psrt_fail_code(site, PS_INVALID, "Invalid channel handle or sampling phase");
+    ps_result status = ps_channel_sample_quantity(host->context, channel.index, value);
+    if (status != PS_OK)
+        psrt_fail_code(site, status, status == PS_NUMERIC ? "Channel quantity exceeds SI numeric range"
+                                                        : "Channel quantity has incompatible dimensions or invalid schema");
+}
 static inline uint32_t psrt_u32(int64_t value, psrt_site site) {
     if (value < 0 || (uint64_t)value > UINT32_MAX)
         psrt_fail(site, "Scene ID or color exceeds UInt32 range");

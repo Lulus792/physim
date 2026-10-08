@@ -79,6 +79,7 @@ def catalog():
         Case("docking", ("tests/test_docking.c", "app/docking.c")),
         Case("timeline", ("tests/test_timeline.c", "app/timeline.c")),
         Case("run_stream_retirement", ("tests/test_run_stream_retirement.c",), arguments=("{work}",)),
+        Case("channel_quantity", ("tests/test_channel_quantity.c",)),
         Case("unit_runtime_codes", ("tests/test_unit_runtime_codes.c",)),
         Case("run_stream", ("tests/test_run_stream.c",), arguments=("{work}",)),
         Case("run_snapshots", ("tests/test_run_snapshots.c",), arguments=("{work}",)),

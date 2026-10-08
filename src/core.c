@@ -235,6 +235,28 @@ int ps_channel_add(ps_context *c, const char *name, ps_unit unit, const char *de
     return (int)index;
 }
 
+ps_result ps_channel_sample_quantity(ps_context *c, uint32_t channel, ps_quantity value) {
+    if (!c)
+        return PS_INVALID;
+    if (c->struct_size < offsetof(ps_context, values) + sizeof c->values)
+        return PS_VERSION;
+    if (c->channel_count > PS_MAX_CHANNELS || channel >= c->channel_count)
+        return PS_INVALID;
+    const ps_channel *schema = &c->channels[channel];
+    if (!schema->name[0] || !ps_text_valid(schema->name, sizeof schema->name, false) ||
+        !ps_text_valid(schema->unit, sizeof schema->unit, false) ||
+        !ps_text_valid(schema->description, sizeof schema->description, true))
+        return PS_INVALID;
+    ps_unit target = {{0}, 1, schema->unit};
+    memcpy(target.dimension, schema->dimension, sizeof target.dimension);
+    double converted;
+    ps_result status = ps_convert(value.value, value.unit, target, &converted);
+    if (status != PS_OK)
+        return status;
+    c->values[channel] = converted;
+    return PS_OK;
+}
+
 static bool parameter_context(const ps_context *c) {
     return c && c->struct_size >=
                     offsetof(ps_context, parameters) + sizeof c->parameters &&

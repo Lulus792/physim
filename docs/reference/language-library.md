@@ -590,6 +590,16 @@ Setzt den aktuellen Messwert des Kanals in seiner deklarierten Einheit. Auch den
 
 Experimentmodul erforderlich.
 
+## Channel.sampleQuantity
+
+```text
+Channel.sampleQuantity(value: Quantity) -> Void
+```
+
+Prüft Dimensionen und Samplingphase, konvertiert eine Quantity nach SI und aktualisiert den eigenen Kanal atomar.
+
+Experimentmodul erforderlich.
+
 ## Collider.body
 
 ```text

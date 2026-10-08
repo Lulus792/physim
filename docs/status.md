@@ -2555,3 +2555,11 @@ teilen den Vertrag; Physim bewahrt die ursprünglichen Invalid-/Numeric-Codes
 in Runtime-Diagnosen. Unabhängige rationale C-/Physim-Proben, SI-Basisdefinitionen,
 Anzeigeeinheiten und Exporte sind konkret geprüft. Die neue [SI-Anleitung](units.md)
 ist im Offline-Handbuch erreichbar; globale SI-/Metadatenabnahme bleibt offen.
+
+
+Quantity-Werte lassen sich nun mit `ps_channel_sample_quantity` und Physim
+`Channel.sampleQuantity` geprüft und atomar in SI-Kanäle übernehmen. Dimensionen,
+Konvertierungsbereich, Besitzer und Samplingphase werden abgeglichen. Sensorwerte
+und Unsicherheit aus Zentimetereinheiten werden in echten C-/Physim-Läufen als
+Meterwerte persistiert. Die Sensor-Wurfbeispiele nutzen den Pfad; Statusmasken
+bleiben für Platzhalter erforderlich. [Verträge](measurement.md).

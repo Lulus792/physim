@@ -33,12 +33,12 @@ func measure():
     let y = sensors[1].read(time, Quantity(position.y, metres))
     xChannel.sample(position.x)
     yChannel.sample(position.y)
-    sxChannel.sample(x.value.value)
-    syChannel.sample(y.value.value)
+    sxChannel.sampleQuantity(x.value)
+    syChannel.sampleQuantity(y.value)
     xsChannel.sample(Float64(x.state))
     ysChannel.sample(Float64(y.state))
-    uxChannel.sample(x.standardUncertainty)
-    uyChannel.sample(y.standardUncertainty)
+    uxChannel.sampleQuantity(Quantity(x.standardUncertainty,x.value.unit))
+    uyChannel.sampleQuantity(Quantity(y.standardUncertainty,y.value.unit))
     timeChannel.sample(time)
     skippedChannel.sample(Float64(x.skipped))
     indexChannel.sample(Float64(x.index))
@@ -48,7 +48,7 @@ func measure():
     let vy = 5 - 9.80665 * time
     energyChannel.sample(0.5 * (velocity * velocity + vy * vy) + 9.80665 * position.y)
     if x.isValid() && y.isValid():
-        lastMeasured = Optional.some(Vec3(x.value.value, y.value.value, 0))
+        lastMeasured = Optional.some(Vec3(x.value.converted(metres).value, y.value.converted(metres).value, 0))
 
 func create():
     metadata("model=uncertain vacuum projectile; analytical trajectory\ngravity_m_s2=9.80665\ninitial_vx=normal(3,0.15); recorded in velocity.x\nsensor_rate_hz=100\nsensor_noise=normal(0,0.02)\nsensor_resolution_m=0.005\nsensor_offset_m=0.01\nsensor_drift_m_s=0.002\nsensor_dropout=0.2\nsensor_u_absolute_m=0.003\nsensor_u_relative=0.001\nsensor_seed_x=run seed XOR 17\nsensor_seed_y=run seed XOR 29\nsensor_status=0:not_due,1:valid,2:dropped; invalid values are zero placeholders")
