@@ -333,7 +333,7 @@ class Builder:
                         "/PDBALTPATH:" + output.with_suffix(".pdb").name,
                         "user32.lib", "shell32.lib", "advapi32.lib"]
             inputs += [manifest]
-            if name in ("physim", "physim-ui-benchmark"):
+            if name in ("physim", "physim-ui-benchmark", "physim-scene-benchmark"):
                 command.append("dwmapi.lib")
             if self.fuzzing and name == "physim-protocol-libfuzzer":
                 # LLVM's Windows fuzzer archive uses the static CRT by default;

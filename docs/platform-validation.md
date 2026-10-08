@@ -2432,3 +2432,29 @@ vollständige macOS-App-SDK-Prüfung läuft aus dieser Mappe unter
 `build/workflow-input-sdk-proof-mac`; ihr Log ist
 `build/workflow-input-sdk-full-mac.log`. Solange sie nicht erfolgreich endet,
 bleibt dieser vollständige Paketnachweis offen.
+
+
+## Explizite Windows-Linkabhängigkeit des Szenenbenchmarks
+
+Der direkte MSVC-/Clang-Cl-Builder verknüpfte `physim-scene-benchmark` mit
+`app/ui_sdl.c`, gab diesem Ziel aber im Gegensatz zur App und zum UI-Benchmark
+keine `dwmapi.lib`. `window_chrome` ruft dort unmittelbar
+`DwmSetWindowAttribute` auf; [Microsoft nennt Dwmapi.lib als erforderliche Importbibliothek](https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/nf-dwmapi-dwmsetwindowattribute).
+Die explizite Linkliste enthält nun alle drei Ziele. Es werden keine
+Bibliotheken in der GUI-freien Physim Library ergänzt.
+
+Alle drei tatsächlichen Release-Benchmarkziele bauen mit Apple Clang 16
+auf Intel macOS und GCC 12.2 auf Debian. Die vorhandenen Szenenprüfungen
+mit/ohne GPU-Zeitabfrage bestehen auf beiden Systemen **2/2**:
+`build/contact-world-language-release-mac/test-results/run-_7hwhkyq` und
+`build/contact-world-language-release-linux/test-results/run-rp_ogf66`.
+Die echten Referenzlasten und der unabhängige Benchmarktreiber bestehen je
+**2/2** in `run-55nywkeq` (macOS) und `run-vfgmtp54` (Linux), jeweils unter
+demselben Release-Testverzeichnis. Build- und Testlogs sind
+`build/scene-benchmark-link-{build,tests}-{mac,linux}.log` und
+`build/scene-benchmark-workloads-{mac,linux}.log`.
+Diese tatsächlich ausgeführten Prüfungen belegen keinen Windows-Build.
+Die fehlende direkte Importbibliothek ist durch die Quellen belegt; die
+konkrete Ursache des oben fehlgeschlagenen Windows-CI-Jobs bleibt ohne Joblog
+offen. Der aktuelle MSVC-Link-/Benchmarknachweis bleibt bis zu ausgeführter
+CI offen.
