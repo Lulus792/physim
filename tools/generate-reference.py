@@ -268,6 +268,7 @@ LANG_DESCRIPTIONS = {
     'seriesValidity': 'Liefert eine ausgerichtete, unmaskierte Reihe aus 0/1-Gültigkeitsflags.',
     'seriesHasMask': 'Prüft die ausdrücklich gespeicherte Maske der Reihe, auch wenn alle Werte gültig sind.',
     'seriesIsValid': 'Prüft die Gültigkeit am nullbasierten Zeilenindex; ungültige Handles oder Indizes sind Quellfehler.',
+    'positivePeaks': 'Liefert [Zeit, Amplitude, Segment] positiver beobachteter Maxima mit neuem gemeinsamem Alignment. Flache Spitzen erscheinen einmal in ihrer Zeitmitte; Randwerte und konstante Segmente sind keine Maxima. Fehlende Zeilen trennen Segmente. Zeit muss in Sekunden streng steigen; keine Interpolation oder Dämpfungsannahme.',
     'selectSeries': 'Filtert mehrere ausgerichtete Reihen gemeinsam nach dem exakten Selektorwert, etwa Status 1. Ergebnisreihen behalten dieselbe Zeilenzuordnung.',
     'Table': 'Erstellt eine Berichtstabelle mit Spaltennamen und Einheiten. Beide Arrays müssen gleich lang sein.',
     'tableRow': 'Fügt eine benannte Tabellenzeile mit passenden Quantity-Werten hinzu.',

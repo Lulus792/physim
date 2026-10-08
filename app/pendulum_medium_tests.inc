@@ -51,9 +51,17 @@ static void pendulum_medium_frame(app *a,int *stage,int *code,const char **captu
         if(!idle(a) || a->report_thread)return;
         {uint32_t plots=0,tables=0;ok=a->analysis_report &&
             ps_report_describe(a->analysis_report,NULL,NULL,&plots,&tables)==PS_OK &&
-            plots==(a->language_analysis?2u:4u) && tables==2;}
+            plots==(a->language_analysis?2u:4u) && tables==3;}
         a->tab=2;a->result_view=a->language_analysis?1:3;break;
-    case 6:*capture="pendulum-medium-energy.bmp";a->quitting=true;break;
+    case 6:*capture="pendulum-medium-energy.bmp";break;
+    case 7:a->result_view=a->language_analysis?4:6;break;
+    case 8: {
+        ps_table_info info;ps_table_row row;
+        ok=ps_report_table_read(a->analysis_report,2,&info)==PS_OK &&
+           !strcmp(info.title,"Observed amplitude decay") && info.rows==1 &&
+           ps_report_row_read(a->analysis_report,2,0,&row)==PS_OK && row.values[0]>=1 && row.values[2]>0;
+        *capture="pendulum-medium-decay.bmp";a->quitting=true;break;
+    }
     }
     if(!ok){fprintf(stderr,"Pendulum medium stage %d: %s\n",*stage,a->status);*code=1;a->quitting=true;}
     if(a->quitting)printf("PENDULUM MEDIUM SELF-TEST: %s\n",*code?"FAILED":"PASSED");

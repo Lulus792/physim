@@ -97,7 +97,7 @@ Projekte behalten ihre gespeicherten Analysequellen.
    abgewiesen. Siehe [adaptive Schritte](workspace.md#adaptive-simulationsschritte) und [Numerik](numerics.md).
 
 Die Analyse erzeugt zwei Plots mit gemeinsam dargestellten Winkel- beziehungsweise
-Energieabweichungskurven und zwei Tabellen: Stichprobenzahl, maximale absolute
+Energieabweichungskurven und drei Tabellen: Stichprobenzahl, maximale absolute
 Energieabweichung, Dauer und Zahl der Periodenintervalle; daneben die gemessenen
 Perioden, soweit vorhanden. Ein positiver Nulldurchgang wird linear zwischen
 benachbarten Punkten interpoliert. Erst zwei solche Durchgänge liefern ein
@@ -111,6 +111,40 @@ Report-Vertrag reduzieren; `source_count` und vollständiges CSV bleiben verfüg
 `<prefix>-pendulum_1.csv` bis `_8.csv` enthalten jeweils alle Werte für Zeit,
 Winkel, Energie und `E−E(0)` mit Einheiten. Auch gespeicherte C-Läufe sind in der
 Physim-Analyse und gespeicherte Sprachläufe in der C-Analyse verwendbar.
+
+## Beobachtete Amplitudenabnahme
+
+Die dritte Tabelle **Observed amplitude decay** ergänzt die Energie- und
+Periodenwerte. Die gemeinsame C-/Physim-Funktion `positivePeaks` erkennt
+positive gemessene Maxima nach einem Anstieg und anschließendem Abfall. Eine
+flache Spitze wird einmal in ihrer Zeitmitte aufgenommen. Randwerte und
+konstante Abschnitte liefern keine Spitze; Messlücken beginnen neue Segmente.
+Die Auswertung verbindet nur Spitzen desselben Segments.
+
+Für zwei erkannte Amplituden A₁ und A₂ bei t₁ und t₂ berechnet sie
+`δ = ln(A₁) - ln(A₂)` und `r = δ / (t₂ - t₁)` in 1/s. Das
+[logarithmische Dekrement](https://archive.nptel.ac.in/content/storage2/courses/112101096/Mod%2010/Lect3/10.3_2.html)
+beschreibt das Verhältnis aufeinanderfolgender Amplituden. Beim exponentiellen
+Abklingen ist r konstant. Das nichtlineare Pendel mit quadratischem Widerstand
+kann veränderliche Werte besitzen; die Tabelle zeigt daher Mittelwert und
+Spannweite beobachteter Raten. Negative Werte zeigen Amplitudenwachstum,
+beispielsweise durch instabiles explizites Euler.
+
+`<prefix>-peaks_1.csv` bis `_8.csv` enthalten alle Spitzenzeiten, Amplituden
+und Segmentnummern. `-decay_1.csv` bis `_8.csv` enthalten jedes verfügbare
+Intervall mit beiden Zeiten, Amplituden, Dekrement und Rate. Die Tabelle
+besitzt höchstens eine Zusammenfassungszeile pro Lauf. Weniger als zwei
+geeignete Spitzen liefern keinen erfundenen Dämpfungswert; die CSVs erhalten
+weiter ihre Spaltenköpfe und vorhandenen Spitzen.
+
+Die Schätzung benutzt den wahren Kanal `angle`, dessen Gleichgewicht bei null
+liegt. Sie enthält keine Spitzeninterpolation, Rauschfilterung oder Anpassung
+eines physikalischen Widerstandskoeffizienten. Zeitraster und numerischer
+Integrator beeinflussen die gemessenen Spitzen; kleinerer Zeitschritt verbessert
+hier die Auflösung. Für andere Signale muss die bekannte Gleichgewichtslage
+zunächst abgezogen und eine geeignete Gültigkeitsmaske ausdrücklich gesetzt
+werden. Ein konstanter viskoser Dämpfungsgrad wird aus diesen Raten nicht
+angenommen. Die ursprünglichen Messwerte bleiben verfügbar.
 
 ## Über Konsole bauen und vergleichen
 
@@ -300,12 +334,57 @@ static ps_result plot(ps_report *report,const char *title,ps_unit unit,ps_plot_h
 static ps_result scalar(ps_analysis_context *c,ps_series s,uint64_t at,double *value) {
     size_t n=0;ps_result r=ps_series_read(c,s,at,value,1,&n);return r==PS_OK && n!=1?PS_INVALID:r;
 }
+static ps_result decay_table(ps_report *report,ps_table_handle *out) {
+    ps_table_info info={0};strcpy(info.title,"Observed amplitude decay");info.columns=5;
+    const char *labels[]={"Peak intervals","Mean log decrement","Mean rate","Minimum rate","Maximum rate"};
+    ps_unit units[]={PS_ONE,PS_ONE,PS_HERTZ,PS_HERTZ,PS_HERTZ};
+    for(unsigned i=0;i<5;i++) {strcpy(info.column[i].label,labels[i]);ps_report_unit_from(units[i],&info.column[i].unit);}
+    return ps_report_add_table(report,&info,out);
+}
+static ps_result add_decay(ps_analysis_context *c,ps_series angle,ps_series time,
+                           ps_report *report,ps_table_handle table,const char *name,
+                           const char *prefix,unsigned index) {
+    ps_series peaks[3];ps_result r=ps_series_positive_peaks(c,angle,time,peaks);
+    if(r!=PS_OK)return r;
+    ps_series_info info;r=ps_series_describe(c,peaks[0],&info);
+    char path[4096];int n=snprintf(path,sizeof path,"%s-peaks_%u.csv",prefix,index+1);
+    if(r==PS_OK)r=n<0 || (size_t)n>=sizeof path?PS_LIMIT:ps_series_export_csv(c,peaks,3,path);
+    n=snprintf(path,sizeof path,"%s-decay_%u.csv",prefix,index+1);
+    if(r==PS_OK && (n<0 || (size_t)n>=sizeof path))r=PS_LIMIT;
+    FILE *csv=r==PS_OK?fopen(path,"wx"):NULL;
+    if(r==PS_OK && !csv)r=PS_IO;
+    if(r==PS_OK && fputs("start_s,end_s,start_amplitude_rad,end_amplitude_rad,log_decrement,rate_per_s,segment\n",csv)<0)r=PS_IO;
+    ps_statistics decrements={0},rates={0};double previous[3]={0};
+    for(uint64_t at=0;r==PS_OK && at<info.count;at++) {
+        double current[3];
+        for(unsigned i=0;i<3 && r==PS_OK;i++) {size_t count=0;r=ps_series_read(c,peaks[i],at,&current[i],1,&count);if(r==PS_OK && count!=1)r=PS_CORRUPT;}
+        if(r!=PS_OK)break;
+        if(at && current[2]==previous[2]) {
+            double interval=current[0]-previous[0];
+            double decrement=log(previous[1])-log(current[1]);
+            double rate=decrement/interval;
+            if(interval<=0 || !isfinite(interval) || !isfinite(rate)){r=PS_NUMERIC;break;}
+            ps_statistics_push(&decrements,decrement);ps_statistics_push(&rates,rate);
+            if(fprintf(csv,"%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g\n",previous[0],current[0],previous[1],current[1],decrement,rate,current[2])<0)r=PS_IO;
+        }
+        memcpy(previous,current,sizeof previous);
+    }
+    if(csv && fclose(csv))r=PS_IO;
+    if(r==PS_OK && decrements.count) {
+        ps_table_row row={0};snprintf(row.label,sizeof row.label,"%s",name);
+        row.values[0]=(double)decrements.count;row.values[1]=decrements.mean;
+        row.values[2]=rates.mean;row.values[3]=rates.min;row.values[4]=rates.max;
+        r=ps_report_add_row(report,table,&row);
+    }
+    for(unsigned i=0;i<3;i++)(void)ps_series_release(c,peaks[i]);
+    return r;
+}
 static ps_result analyze_many(const char *const *inputs,size_t count,const char *prefix) {
     if(!count || count>8)return PS_INVALID;
     ps_analysis_context *c=NULL;ps_report *report=NULL;bool recovered=false;
     ps_result r=ps_analysis_create(prefix,0,&c);
     if(r==PS_OK)r=ps_report_create("Pendulum integrators","Mechanical energy changes and positive crossing periods",&report);
-    ps_plot_handle angle_plot={0},energy_plot={0};ps_table_handle summary={0},periods={0};
+    ps_plot_handle angle_plot={0},energy_plot={0};ps_table_handle summary={0},periods={0},decay={0};
     if(r==PS_OK)r=plot(report,"Angle",PS_RADIAN,&angle_plot);
     if(r==PS_OK)r=plot(report,"Energy change",PS_JOULE,&energy_plot);
     ps_table_info info={0};strcpy(info.title,"Run comparison");info.columns=4;
@@ -317,6 +396,7 @@ static ps_result analyze_many(const char *const *inputs,size_t count,const char 
     strcpy(info.column[0].label,"Mean positive-crossing period");
     if(r==PS_OK)r=ps_report_unit_from(PS_SECOND,&info.column[0].unit);
     if(r==PS_OK)r=ps_report_add_table(report,&info,&periods);
+    if(r==PS_OK)r=decay_table(report,&decay);
     for(size_t i=0;r==PS_OK && i<count;i++) {
         ps_dataset dataset={0};ps_series time={0},angle={0},energy={0},drift={0};ps_dataset_info details;
         r=ps_analysis_open_run(c,inputs[i],&dataset);if(r==PS_RECOVERED){recovered=true;r=PS_OK;}
@@ -351,6 +431,7 @@ static ps_result analyze_many(const char *const *inputs,size_t count,const char 
         char path[4096];int n=snprintf(path,sizeof path,"%s-pendulum_%u.csv",prefix,(unsigned)i+1);
         ps_series columns[]={time,angle,energy,drift};
         if(r==PS_OK)r=n<0 || (size_t)n>=sizeof path?PS_LIMIT:ps_series_export_csv(c,columns,4,path);
+        if(r==PS_OK)r=add_decay(c,angle,time,report,decay,name,prefix,(unsigned)i);
         if(dataset.owner)ps_dataset_close(c,dataset);
     }
     if(r==PS_OK){char path[4096];int n=snprintf(path,sizeof path,"%s.psreport",prefix);r=n<0 || (size_t)n>=sizeof path?PS_LIMIT:ps_report_save(report,path);}
@@ -490,6 +571,9 @@ func analyze():
     first.close()
     let summary = Table("Run comparison",["Samples","Maximum energy change","Duration","Period intervals"],[one,joules,seconds,one])
     let periods = Table("Measured periods",["Mean positive-crossing period"],[seconds])
+    let rateUnit = Unit(0,0,-1,0,0,0,0,1,"Hz")
+    let radians = Unit(0,0,0,0,0,0,0,1,"rad")
+    let decay = Table("Observed amplitude decay",["Peak intervals","Mean log decrement","Mean rate","Minimum rate","Maximum rate"],[one,one,rateUnit,rateUnit,rateUnit])
     for index in 0..<inputCount():
         let run = Dataset(index)
         let name = runLabel(run,index)
@@ -521,6 +605,48 @@ func analyze():
         if intervals > 0:
             periods.row(name,[Quantity(periodSum / Float64(intervals),seconds)])
         Series.exportColumns([time,angle,energy,drift],"pendulum_" + String(index + 1))
+        let peaks = angle.positivePeaks(time)
+        Series.exportColumns(peaks,"peaks_" + String(index + 1))
+        var starts: [Float64] = []
+        var ends: [Float64] = []
+        var firstAmplitudes: [Float64] = []
+        var lastAmplitudes: [Float64] = []
+        var decrements: [Float64] = []
+        var rates: [Float64] = []
+        var segments: [Float64] = []
+        for i in 1..<peaks[0].count():
+            if peaks[2].value(i) == peaks[2].value(i - 1):
+                let start = peaks[0].value(i - 1)
+                let end = peaks[0].value(i)
+                let firstAmplitude = peaks[1].value(i - 1)
+                let lastAmplitude = peaks[1].value(i)
+                let decrement = log(firstAmplitude) - log(lastAmplitude)
+                assert(end > start,"Peak times must increase")
+                starts.append(start)
+                ends.append(end)
+                firstAmplitudes.append(firstAmplitude)
+                lastAmplitudes.append(lastAmplitude)
+                decrements.append(decrement)
+                rates.append(decrement / (end - start))
+                segments.append(peaks[2].value(i))
+        let startSeries = Series.fromValues(starts,seconds,"start_s")
+        let endSeries = startSeries.alignedValues(ends,seconds,"end_s")
+        let firstSeries = startSeries.alignedValues(firstAmplitudes,radians,"start_amplitude_rad")
+        let lastSeries = startSeries.alignedValues(lastAmplitudes,radians,"end_amplitude_rad")
+        let decrementSeries = startSeries.alignedValues(decrements,one,"log_decrement")
+        let rateSeries = startSeries.alignedValues(rates,rateUnit,"rate_per_s")
+        let segmentSeries = startSeries.alignedValues(segments,one,"segment")
+        Series.exportColumns([startSeries,endSeries,firstSeries,lastSeries,decrementSeries,rateSeries,segmentSeries],"decay_" + String(index + 1))
+        if starts.count > 0:
+            decay.row(name,[Quantity(Float64(starts.count),one),Quantity(decrementSeries.mean(),one),
+                Quantity(rateSeries.mean(),rateUnit),Quantity(rateSeries.minimum(),rateUnit),Quantity(rateSeries.maximum(),rateUnit)])
+        startSeries.release()
+        endSeries.release()
+        firstSeries.release()
+        lastSeries.release()
+        decrementSeries.release()
+        rateSeries.release()
+        segmentSeries.release()
         run.close()
 ```
 

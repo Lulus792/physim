@@ -596,6 +596,101 @@ cleanup:
         fclose(drafts[i].file);
     return result;
 }
+static ps_result positive_peaks_pass(ps_analysis_context *c, series_slot *signal,
+                                     series_slot *time, FILE *files[3], uint64_t *count) {
+    double y[PS_SERIES_BLOCK_SIZE], x[PS_SERIES_BLOCK_SIZE];
+    uint8_t y_valid[PS_SERIES_BLOCK_SIZE], x_valid[PS_SERIES_BLOCK_SIZE];
+    bool previous_valid=false, seen_time=false, rising=false;
+    double previous_y=0, previous_t=0, plateau_first=0, last_time=0;
+    uint64_t peaks=0, segment=0;
+    for(uint64_t at=0;at<signal->info.count;) {
+        size_t n=(size_t)(signal->info.count-at>PS_SERIES_BLOCK_SIZE?PS_SERIES_BLOCK_SIZE:signal->info.count-at);
+        ps_result r=read_values(c,signal,at,n,y);
+        if(r==PS_OK)r=read_values(c,time,at,n,x);
+        if(r==PS_OK)r=read_validity(signal,at,n,y_valid);
+        if(r==PS_OK)r=read_validity(time,at,n,x_valid);
+        if(r!=PS_OK)return r;
+        for(size_t i=0;i<n;i++) {
+            if(!y_valid[i] || !x_valid[i]) {
+                if(previous_valid) {
+                    if(segment==UINT64_C(9007199254740992))return PS_LIMIT;
+                    segment++;
+                }
+                previous_valid=false;rising=false;continue;
+            }
+            if(!isfinite(y[i]) || !isfinite(x[i]))return PS_NUMERIC;
+            if(seen_time && x[i]<=last_time)return PS_INVALID;
+            last_time=x[i];seen_time=true;
+            if(previous_valid) {
+                if(y[i]>previous_y) {rising=true;plateau_first=x[i];}
+                else if(y[i]<previous_y) {
+                    if(rising && previous_y>0) {
+                        double span=previous_t-plateau_first;
+                        double peak_time=isfinite(span)?plateau_first+.5*span:
+                                                       .5*plateau_first+.5*previous_t;
+                        if(!isfinite(peak_time))return PS_NUMERIC;
+                        if(peaks==UINT64_MAX)return PS_LIMIT;
+                        if(files) {
+                            double values[]={peak_time,previous_y,(double)segment};
+                            for(unsigned j=0;j<3;j++)
+                                if(fwrite(&values[j],sizeof(double),1,files[j])!=1)return PS_IO;
+                        }
+                        peaks++;
+                    }
+                    rising=false;
+                }
+            }
+            previous_y=y[i];previous_t=x[i];previous_valid=true;
+        }
+        at+=n;
+    }
+    *count=peaks;return PS_OK;
+}
+ps_result ps_series_positive_peaks(ps_analysis_context *c, ps_series signal_handle,
+                                   ps_series time_handle, ps_series out[3]) {
+    series_slot *signal=series_get(c,signal_handle), *time=series_get(c,time_handle);
+    if(!signal || !time || !out || !aligned(signal,time))return PS_INVALID;
+    if(memcmp(time->info.dimension,PS_SECOND.dimension,7))return PS_INVALID;
+    int slots[3];unsigned available=0;
+    for(unsigned i=0;i<PS_ANALYSIS_MAX_SERIES && available<3;i++)
+        if(!c->series[i].live && c->series[i].generation!=UINT32_MAX)slots[available++]=(int)i;
+    if(available!=3 || c->alignment_serial==UINT64_MAX)return PS_LIMIT;
+    uint64_t count=0;
+    ps_result result=positive_peaks_pass(c,signal,time,NULL,&count);
+    if(result!=PS_OK)return result;
+    if(count>(c->limit-c->bytes)/24)return PS_LIMIT;
+    series_slot drafts[3];FILE *files[3]={0};unsigned opened=0;
+    const char *names[]={"peak.time","peak.amplitude","peak.segment"};
+    for(unsigned i=0;i<3;i++) {
+        drafts[i]=i==1?*signal:*time;
+        files[i]=scratch(c);if(!files[i]){result=PS_IO;goto cleanup;}
+        opened++;
+        drafts[i].file=files[i];drafts[i].first=0;
+        drafts[i].generation=c->series[slots[i]].generation+1;
+        drafts[i].alignment=c->alignment_serial+1;
+        drafts[i].masked=false;drafts[i].mask_source=NULL;drafts[i].mask_written=false;
+        drafts[i].info.count=count;drafts[i].bytes=count*8;
+        snprintf(drafts[i].info.name,sizeof drafts[i].info.name,"%s",names[i]);
+        if(i==2) {
+            memset(drafts[i].info.dimension,0,7);
+            drafts[i].info.scale=1;strcpy(drafts[i].info.symbol,"1");
+        }
+    }
+    uint64_t written=0;
+    result=positive_peaks_pass(c,signal,time,files,&written);
+    if(result!=PS_OK)goto cleanup;
+    if(written!=count){result=PS_CORRUPT;goto cleanup;}
+    for(unsigned i=0;i<3;i++)if(fflush(files[i])){result=PS_IO;goto cleanup;}
+    c->alignment_serial++;
+    for(unsigned i=0;i<3;i++) {
+        c->series[slots[i]]=drafts[i];c->bytes+=drafts[i].bytes;
+        out[i]=(ps_series){c,(uint32_t)slots[i],drafts[i].generation};
+    }
+    return PS_OK;
+cleanup:
+    for(unsigned i=0;i<opened;i++)fclose(files[i]);
+    return result;
+}
 ps_result ps_series_is_masked(ps_analysis_context *c,ps_series input,bool *out) {
     series_slot *s=series_get(c,input);if(!s || !out)return PS_INVALID;*out=s->masked;return PS_OK;
 }

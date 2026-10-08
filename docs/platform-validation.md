@@ -1921,3 +1921,55 @@ Winkelsensorrauschen. PP-0756 bleibt als gesamtes erstes Experiment unvollständ
 insbesondere eine vollständige Dämpfungsabschätzung und die übrige vertikale
 Abnahme bleiben offen. Diese Änderung wurde noch nicht unter Windows oder
 Apple Silicon ausgeführt. Alle 531 Originalplanblöcke bleiben erhalten.
+
+## Beobachtete Amplitudenabnahme gespeicherter Pendelläufe
+
+`ps_series_positive_peaks` und `Series.positivePeaks` liefern gemeinsam
+ausgerichtete Zeit-/Amplituden-/Segmentreihen. Ein Anstieg mit folgendem Abfall
+erkennt eine positive Spitze; flache Spitzen erscheinen einmal in ihrer Zeitmitte.
+Randwerte und konstante Segmente bleiben ausgeschlossen. Fehlende Signal-/Zeit-
+zeilen trennen Segmente. Die Zeit muss über gültige Zeilen streng steigen.
+Blockweise zwei Durchläufe benötigen 24 Scratchbytes je Spitze; Fehler erhalten
+Ausgaben und Quota. Die Ausgaben besitzen eine neue Samplezuordnung und können
+die Eingabehandles des Aufrufers überschreiben. API-/Bibliotheksreferenzen sind
+regeneriert und geprüft.
+
+Die C-Standardauswertung und beide Lernpfadanalysemodule berechnen aus zwei
+geeigneten Spitzen δ = ln(A₁) − ln(A₂) und r = δ/(t₂−t₁). Nur Spitzen desselben
+Segments werden verbunden. Eine Tabelle pro Bericht fasst Intervallzahl,
+mittleres Dekrement und Mittelwert/Spannweite der Raten zusammen. Volle Spitzen-
+und Intervall-CSVs bleiben unabhängig von Tabellen- und Plotgrenzen erhalten.
+Wachstum besitzt negative Raten; unzureichende Spitzen liefern keine Zeile.
+Es werden beobachtete Werte ohne Spitzeninterpolation, Rauschfilter oder
+Anpassung eines konstanten viskosen Dämpfungsmodells ausgewiesen.
+[Herleitung und Grenzen](pendulum-tutorial.md#beobachtete-amplitudenabnahme).
+
+Die native Gegenprobe prüft flache Spitzen, Blockgrenzen, fehlende Segmente,
+strenge Zeit, leere Ergebnisse, Eingabe-/Ausgabealias und Quota. Die tatsächliche
+Physim-Analysebindung besitzt dieselben bekannten Spitzen- und Maskenwerte.
+Sechs synthetische Dateien erzeugen bekannte exponentielle Amplitudenhüllen,
+Wachstum, unregelmäßige Zeiten, flache Spitzen, Ruhe und nur eine Spitze. Drei
+reale Analysemodule erzeugen daraus 18 unabhängig geprüfte Berichte. Je 400
+Spitzen und 399 Intervalle übersteigen die 256 Tabellenzeilen; alle CSV-Zeiten,
+Amplituden und signierten Raten werden trotzdem vollständig verglichen.
+Diese Dateien sind ausdrücklich synthetische Signale, keine physikalischen Pendel.
+
+Intel macOS 14.6.1/Apple Clang 16 besteht die abschließenden sechs Spitzen-/
+Bindungs-/Referenz-/Standardanalyse-/Lernpfad-/Quellenfälle 6/6 (`run-kwnuc3yy`),
+Debian 12/GCC 12.2 dieselben 6/6 (`run-si18cisp`). Linux/Clang 14 mit ASan/UBSan
+besteht Spitzen, Bindung und die 18 Referenzberichte 3/3 (`run-xb4hqrcy`,
+`detect_leaks=0`). Ein zunächst veralteter Handbuch-Codeblock wurde mit der
+getesteten Quelle abgeglichen; der davor fehlgeschlagene Quellenfall gilt nicht
+als erfolgreicher Nachweis. Der native Runner-Selbsttest besteht ebenfalls.
+
+Die tatsächlichen Standard-Sprach-, Vakuumlernpfad- und Mediumfenster bestehen
+auf macOS 3/3 (`run-1zs7qsy_`) und Linux 3/3 (`run-6cgec3wr`). C- und Physim-
+Mediumprojekte zeigen nach mindestens sechs Sekunden positive beobachtete
+Abnahmeraten in ihrer dritten Tabelle; die tatsächlich geöffnete Physim-Tabelle
+wurde visuell geprüft. Fehlende Dämpfung in Ruhe-/Kurzläufen bleibt ausdrücklich
+von einer gemessenen Rate null verschieden. Windows/Apple Silicon und neue
+Gesamtpakete dieser API-/Analyseänderung wurden noch nicht ausgeführt.
+
+PP-0767 besitzt damit einen begrenzten Nachweis für Periodendauer, beobachtete
+Amplitudenabnahme und Energieabweichung. Dies ist keine vollständige Abnahme
+des gesamten vertikalen Anwendungsfalls oder des Gesamtplans.

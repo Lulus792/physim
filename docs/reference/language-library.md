@@ -2330,6 +2330,16 @@ Erstellt ein Liniendiagramm aus ausgerichteten x/y-Reihen. Der Empfänger der Me
 
 Analysemodul erforderlich.
 
+## Series.positivePeaks
+
+```text
+Series.positivePeaks(time: Series) -> [Series]
+```
+
+Liefert [Zeit, Amplitude, Segment] positiver beobachteter Maxima mit neuem gemeinsamem Alignment. Flache Spitzen erscheinen einmal in ihrer Zeitmitte; Randwerte und konstante Segmente sind keine Maxima. Fehlende Zeilen trennen Segmente. Zeit muss in Sekunden streng steigen; keine Interpolation oder Dämpfungsannahme.
+
+Analysemodul erforderlich.
+
 ## Series.quantile
 
 ```text

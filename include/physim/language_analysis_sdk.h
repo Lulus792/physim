@@ -57,6 +57,16 @@ static inline psrt_array psra_select(psra_host *h, ps_allocator allocator,
     psra_check(h, psrt_array_replace(&result, 0, 0, selected, count), site);
     return result;
 }
+static inline psrt_array psra_positive_peaks(psra_host *h, ps_allocator allocator,
+                                             ps_series signal, ps_series time, psrt_site site) {
+    ps_series selected[3];
+    psra_check(h, ps_series_positive_peaks(h->context, signal, time, selected), site);
+    static const psrt_element_type element = {sizeof(ps_series), NULL, NULL};
+    psrt_array result;
+    psra_check(h, psrt_array_init(&element, allocator, 0, &result), site);
+    psra_check(h, psrt_array_replace(&result, 0, 0, selected, 3), site);
+    return result;
+}
 static inline ps_table_handle psra_table(psra_host *h, const char *title,
     const char *const *labels, size_t count, const ps_unit *units, size_t unit_count, psrt_site site) {
     if (!count || count > PS_REPORT_MAX_COLUMNS || count != unit_count)

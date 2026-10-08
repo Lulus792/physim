@@ -2736,3 +2736,13 @@ das aus dem Laufseed wiederholbare Rauschen. Velocity Verlet weist aktiven
 geschwindigkeitsabhängigen Widerstand ab. Native Paritäts-/Fehlerprüfungen und
 echte Projektabläufe bestehen auf macOS und Linux. [Parameter](workspace.md),
 [Nachweise und verbleibende Grenzen](platform-validation.md#einstellbares-medium-und-winkelsensorrauschen-des-pendels).
+
+## Dämpfungsabschätzung aus gespeicherten Pendelläufen
+
+C-/Physim-Auswertungen erkennen positive Amplitudenspitzen und berichten
+logarithmisches Dekrement sowie beobachtete Abnahmeraten. Volle Spitzen- und
+Intervall-CSVs behalten alle Werte; Messlücken trennen Segmente. Kurze oder
+ruhende Läufe erhalten keinen erfundenen Wert. 18 Referenzberichte und echte
+Mediumfenster bestehen auf macOS und Linux.
+[Verfahren](pendulum-tutorial.md#beobachtete-amplitudenabnahme),
+[ausgeführte Prüfungen](platform-validation.md#beobachtete-amplitudenabnahme-gespeicherter-pendelläufe).

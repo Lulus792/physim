@@ -37,7 +37,7 @@ static void pendulum_tutorial_frame(app *a,int *stage,int *code,const char **cap
     case 5: {
         if(!idle(a))return;
         uint32_t plots=0,tables=0;ps_table_row row;ps_table_info periods;
-        ok=a->analysis_report && ps_report_describe(a->analysis_report,NULL,NULL,&plots,&tables)==PS_OK && plots==2 && tables==2 &&
+        ok=a->analysis_report && ps_report_describe(a->analysis_report,NULL,NULL,&plots,&tables)==PS_OK && plots==2 && tables==3 &&
             ps_report_row_read(a->analysis_report,0,0,&row)==PS_OK && row.values[0]==41 && row.values[1]<1e-4 && row.values[3]==0 &&
             ps_report_table_read(a->analysis_report,1,&periods)==PS_OK && periods.rows==0;
         a->tab=2;a->result_view=1;break;

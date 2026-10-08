@@ -150,6 +150,51 @@ static ps_result add_sensor_report(ps_analysis_context *ctx, ps_dataset run, ps_
     }
     return r;
 }
+static ps_result decay_table(ps_report *report,ps_table_handle *out) {
+    ps_table_info info={0};strcpy(info.title,"Observed amplitude decay");info.columns=5;
+    const char *labels[]={"Peak intervals","Mean log decrement","Mean rate","Minimum rate","Maximum rate"};
+    ps_unit units[]={PS_ONE,PS_ONE,PS_HERTZ,PS_HERTZ,PS_HERTZ};
+    for(unsigned i=0;i<5;i++) {strcpy(info.column[i].label,labels[i]);ps_report_unit_from(units[i],&info.column[i].unit);}
+    return ps_report_add_table(report,&info,out);
+}
+static ps_result add_decay(ps_analysis_context *c,ps_series angle,ps_series time,
+                           ps_report *report,ps_table_handle table,const char *name,
+                           const char *prefix,unsigned index) {
+    ps_series peaks[3];ps_result r=ps_series_positive_peaks(c,angle,time,peaks);
+    if(r!=PS_OK)return r;
+    ps_series_info info;r=ps_series_describe(c,peaks[0],&info);
+    char path[4096];int n=snprintf(path,sizeof path,"%s-peaks_%u.csv",prefix,index+1);
+    if(r==PS_OK)r=n<0 || (size_t)n>=sizeof path?PS_LIMIT:ps_series_export_csv(c,peaks,3,path);
+    n=snprintf(path,sizeof path,"%s-decay_%u.csv",prefix,index+1);
+    if(r==PS_OK && (n<0 || (size_t)n>=sizeof path))r=PS_LIMIT;
+    FILE *csv=r==PS_OK?fopen(path,"wx"):NULL;
+    if(r==PS_OK && !csv)r=PS_IO;
+    if(r==PS_OK && fputs("start_s,end_s,start_amplitude_rad,end_amplitude_rad,log_decrement,rate_per_s,segment\n",csv)<0)r=PS_IO;
+    ps_statistics decrements={0},rates={0};double previous[3]={0};
+    for(uint64_t at=0;r==PS_OK && at<info.count;at++) {
+        double current[3];
+        for(unsigned i=0;i<3 && r==PS_OK;i++) {size_t count=0;r=ps_series_read(c,peaks[i],at,&current[i],1,&count);if(r==PS_OK && count!=1)r=PS_CORRUPT;}
+        if(r!=PS_OK)break;
+        if(at && current[2]==previous[2]) {
+            double interval=current[0]-previous[0];
+            double decrement=log(previous[1])-log(current[1]);
+            double rate=decrement/interval;
+            if(interval<=0 || !isfinite(interval) || !isfinite(rate)){r=PS_NUMERIC;break;}
+            ps_statistics_push(&decrements,decrement);ps_statistics_push(&rates,rate);
+            if(fprintf(csv,"%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g\n",previous[0],current[0],previous[1],current[1],decrement,rate,current[2])<0)r=PS_IO;
+        }
+        memcpy(previous,current,sizeof previous);
+    }
+    if(csv && fclose(csv))r=PS_IO;
+    if(r==PS_OK && decrements.count) {
+        ps_table_row row={0};snprintf(row.label,sizeof row.label,"%s",name);
+        row.values[0]=(double)decrements.count;row.values[1]=decrements.mean;
+        row.values[2]=rates.mean;row.values[3]=rates.min;row.values[4]=rates.max;
+        r=ps_report_add_row(report,table,&row);
+    }
+    for(unsigned i=0;i<3;i++)(void)ps_series_release(c,peaks[i]);
+    return r;
+}
 static ps_result make_report(ps_analysis_context *ctx, ps_dataset run, ps_series time,
                              ps_series position, ps_series velocity, ps_series filtered,
                              const char *input, const char *prefix) {
@@ -339,6 +384,16 @@ static ps_result make_report(ps_analysis_context *ctx, ps_dataset run, ps_series
     }
     if (result == PS_OK)
         result = add_sensor_report(ctx, run, report, prefix);
+    if (result == PS_OK) {
+        ps_series angle={0},energy={0};
+        ps_result present=ps_dataset_series(ctx,run,"angle",&angle);
+        if(present==PS_OK)present=ps_dataset_series(ctx,run,"energy",&energy);
+        if(present!=PS_OK && present!=PS_INVALID)result=present;
+        if(present==PS_OK) {
+            ps_table_handle decay={0};result=decay_table(report,&decay);
+            if(result==PS_OK)result=add_decay(ctx,angle,time,report,decay,"Run",prefix,0);
+        }
+    }
     if (result == PS_OK) {
         char path[4096];
         n = snprintf(path, sizeof path, "%s.psreport", prefix);

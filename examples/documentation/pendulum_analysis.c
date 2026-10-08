@@ -19,12 +19,57 @@ static ps_result plot(ps_report *report,const char *title,ps_unit unit,ps_plot_h
 static ps_result scalar(ps_analysis_context *c,ps_series s,uint64_t at,double *value) {
     size_t n=0;ps_result r=ps_series_read(c,s,at,value,1,&n);return r==PS_OK && n!=1?PS_INVALID:r;
 }
+static ps_result decay_table(ps_report *report,ps_table_handle *out) {
+    ps_table_info info={0};strcpy(info.title,"Observed amplitude decay");info.columns=5;
+    const char *labels[]={"Peak intervals","Mean log decrement","Mean rate","Minimum rate","Maximum rate"};
+    ps_unit units[]={PS_ONE,PS_ONE,PS_HERTZ,PS_HERTZ,PS_HERTZ};
+    for(unsigned i=0;i<5;i++) {strcpy(info.column[i].label,labels[i]);ps_report_unit_from(units[i],&info.column[i].unit);}
+    return ps_report_add_table(report,&info,out);
+}
+static ps_result add_decay(ps_analysis_context *c,ps_series angle,ps_series time,
+                           ps_report *report,ps_table_handle table,const char *name,
+                           const char *prefix,unsigned index) {
+    ps_series peaks[3];ps_result r=ps_series_positive_peaks(c,angle,time,peaks);
+    if(r!=PS_OK)return r;
+    ps_series_info info;r=ps_series_describe(c,peaks[0],&info);
+    char path[4096];int n=snprintf(path,sizeof path,"%s-peaks_%u.csv",prefix,index+1);
+    if(r==PS_OK)r=n<0 || (size_t)n>=sizeof path?PS_LIMIT:ps_series_export_csv(c,peaks,3,path);
+    n=snprintf(path,sizeof path,"%s-decay_%u.csv",prefix,index+1);
+    if(r==PS_OK && (n<0 || (size_t)n>=sizeof path))r=PS_LIMIT;
+    FILE *csv=r==PS_OK?fopen(path,"wx"):NULL;
+    if(r==PS_OK && !csv)r=PS_IO;
+    if(r==PS_OK && fputs("start_s,end_s,start_amplitude_rad,end_amplitude_rad,log_decrement,rate_per_s,segment\n",csv)<0)r=PS_IO;
+    ps_statistics decrements={0},rates={0};double previous[3]={0};
+    for(uint64_t at=0;r==PS_OK && at<info.count;at++) {
+        double current[3];
+        for(unsigned i=0;i<3 && r==PS_OK;i++) {size_t count=0;r=ps_series_read(c,peaks[i],at,&current[i],1,&count);if(r==PS_OK && count!=1)r=PS_CORRUPT;}
+        if(r!=PS_OK)break;
+        if(at && current[2]==previous[2]) {
+            double interval=current[0]-previous[0];
+            double decrement=log(previous[1])-log(current[1]);
+            double rate=decrement/interval;
+            if(interval<=0 || !isfinite(interval) || !isfinite(rate)){r=PS_NUMERIC;break;}
+            ps_statistics_push(&decrements,decrement);ps_statistics_push(&rates,rate);
+            if(fprintf(csv,"%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g\n",previous[0],current[0],previous[1],current[1],decrement,rate,current[2])<0)r=PS_IO;
+        }
+        memcpy(previous,current,sizeof previous);
+    }
+    if(csv && fclose(csv))r=PS_IO;
+    if(r==PS_OK && decrements.count) {
+        ps_table_row row={0};snprintf(row.label,sizeof row.label,"%s",name);
+        row.values[0]=(double)decrements.count;row.values[1]=decrements.mean;
+        row.values[2]=rates.mean;row.values[3]=rates.min;row.values[4]=rates.max;
+        r=ps_report_add_row(report,table,&row);
+    }
+    for(unsigned i=0;i<3;i++)(void)ps_series_release(c,peaks[i]);
+    return r;
+}
 static ps_result analyze_many(const char *const *inputs,size_t count,const char *prefix) {
     if(!count || count>8)return PS_INVALID;
     ps_analysis_context *c=NULL;ps_report *report=NULL;bool recovered=false;
     ps_result r=ps_analysis_create(prefix,0,&c);
     if(r==PS_OK)r=ps_report_create("Pendulum integrators","Mechanical energy changes and positive crossing periods",&report);
-    ps_plot_handle angle_plot={0},energy_plot={0};ps_table_handle summary={0},periods={0};
+    ps_plot_handle angle_plot={0},energy_plot={0};ps_table_handle summary={0},periods={0},decay={0};
     if(r==PS_OK)r=plot(report,"Angle",PS_RADIAN,&angle_plot);
     if(r==PS_OK)r=plot(report,"Energy change",PS_JOULE,&energy_plot);
     ps_table_info info={0};strcpy(info.title,"Run comparison");info.columns=4;
@@ -36,6 +81,7 @@ static ps_result analyze_many(const char *const *inputs,size_t count,const char 
     strcpy(info.column[0].label,"Mean positive-crossing period");
     if(r==PS_OK)r=ps_report_unit_from(PS_SECOND,&info.column[0].unit);
     if(r==PS_OK)r=ps_report_add_table(report,&info,&periods);
+    if(r==PS_OK)r=decay_table(report,&decay);
     for(size_t i=0;r==PS_OK && i<count;i++) {
         ps_dataset dataset={0};ps_series time={0},angle={0},energy={0},drift={0};ps_dataset_info details;
         r=ps_analysis_open_run(c,inputs[i],&dataset);if(r==PS_RECOVERED){recovered=true;r=PS_OK;}
@@ -70,6 +116,7 @@ static ps_result analyze_many(const char *const *inputs,size_t count,const char 
         char path[4096];int n=snprintf(path,sizeof path,"%s-pendulum_%u.csv",prefix,(unsigned)i+1);
         ps_series columns[]={time,angle,energy,drift};
         if(r==PS_OK)r=n<0 || (size_t)n>=sizeof path?PS_LIMIT:ps_series_export_csv(c,columns,4,path);
+        if(r==PS_OK)r=add_decay(c,angle,time,report,decay,name,prefix,(unsigned)i);
         if(dataset.owner)ps_dataset_close(c,dataset);
     }
     if(r==PS_OK){char path[4096];int n=snprintf(path,sizeof path,"%s.psreport",prefix);r=n<0 || (size_t)n>=sizeof path?PS_LIMIT:ps_report_save(report,path);}

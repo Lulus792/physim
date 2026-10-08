@@ -32,7 +32,7 @@ int main(int argc,char **argv) {
     ps_run_reader_close(&reader);
     ps_report *report=NULL;CHECK(ps_report_load(argv[1],&report)==PS_OK);
     uint32_t plots,tables;CHECK(ps_report_describe(report,NULL,NULL,&plots,&tables)==PS_OK);
-    CHECK(plots==4 && tables==2);
+    CHECK(plots==4 && tables==3);
     ps_plot_info plot;const ps_curve_data *curve;
     CHECK(ps_report_plot_read(report,3,&plot)==PS_OK && plot.curves==1 &&
           !strcmp(plot.title,"Mechanische Energieänderung"));

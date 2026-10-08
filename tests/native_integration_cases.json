@@ -2115,6 +2115,26 @@
         "platform",
         "core"
       ]
+    },
+    "positive-peaks-language": {
+      "source": "tests/fixtures/language/positive_peaks.phys",
+      "mode": "--emit-analysis"
+    },
+    "decay-fixtures": {
+      "sources": [
+        "tests/create_decay_fixtures.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "decay-report-probe": {
+      "sources": [
+        "tests/check_decay_report.c"
+      ],
+      "libraries": [
+        "core"
+      ]
     }
   },
   "tests": [
@@ -8710,6 +8730,66 @@
           "files": [
             "app-steps.json"
           ]
+        }
+      ]
+    },
+    {
+      "name": "positive_peaks_language",
+      "targets": [
+        "positive-peaks-language",
+        "physim-runner",
+        "physim-analysis-runner",
+        "pendulum"
+      ],
+      "steps": [
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{pendulum}",
+            "{work}/input.psrun",
+            "--steps",
+            "10",
+            "--dt",
+            ".005"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{positive-peaks-language}",
+            "{work}/input.psrun",
+            "{work}/checked"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "pendulum_decay",
+      "targets": [
+        "python",
+        "decay-fixtures",
+        "decay-report-probe",
+        "physim-analysis-runner",
+        "pendulum-tutorial-analysis-c",
+        "pendulum-tutorial-analysis-phys",
+        "pendulum_analysis"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_pendulum_decay.py",
+            "{decay-fixtures}",
+            "{physim-analysis-runner}",
+            "{pendulum-tutorial-analysis-c}",
+            "{pendulum-tutorial-analysis-phys}",
+            "{pendulum_analysis}",
+            "{decay-report-probe}",
+            "{work}/decay"
+          ],
+          "timeout": 560
         }
       ]
     }

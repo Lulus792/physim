@@ -539,3 +539,16 @@ PP-0756 ist ausdrücklich unvollständig für das gesamte erste Experiment,
 insbesondere die noch fehlende vollständige Dämpfungsabschätzung. Aktuell:
 40 implementierte, 9 unvollständige und 482 ungeprüfte Planblöcke.
 Der ursprüngliche Gesamtplan bleibt erhalten.
+
+## Beobachtete Pendeldämpfung
+
+PP-0767 ergänzt Energie-/Periodenwerte um erkannte positive Spitzen,
+logarithmisches Dekrement und beobachtete Abnahmeraten. C und Physim verwenden
+dieselbe blockweise, segmentbewusste API; vollständige Spitzen-/Intervall-CSVs
+bleiben erhalten. 18 Referenzberichte und tatsächliche Mediumfenster belegen
+Abnahme, Wachstum und Nichtverfügbarkeit auf macOS/Linux, zusätzlich mit
+Linux ASan/UBSan. [Prüfumfang](platform-validation.md#beobachtete-amplitudenabnahme-gespeicherter-pendelläufe).
+Ein konstantes physikalisches Dämpfungsmodell wird nicht aus quadratischem
+Widerstand vorausgesetzt. PP-0756 bleibt für die gesamte vertikale Abnahme
+offen. Aktuell: 41 implementierte, 9 unvollständige und 481 ungeprüfte Blöcke.
+Alle 531 Originaltexte bleiben erhalten.

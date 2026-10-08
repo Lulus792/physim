@@ -4,7 +4,7 @@
 #define CHECK(x) do{if(!(x)){fprintf(stderr,"Pendulum report %d: %s\n",__LINE__,#x);return 1;}}while(0)
 int main(int argc,char **argv) {
     CHECK(argc>=3 && argc<=10);ps_report *report=NULL;CHECK(ps_report_load(argv[1],&report)==PS_OK);
-    uint32_t plots,tables;CHECK(ps_report_describe(report,NULL,NULL,&plots,&tables)==PS_OK && plots==2 && tables==2);
+    uint32_t plots,tables;CHECK(ps_report_describe(report,NULL,NULL,&plots,&tables)==PS_OK && plots==2 && tables==3);
     unsigned period_row=0;
     for(int i=2;i<argc;i++) {
         const ps_curve_data *a,*e;ps_plot_info info;

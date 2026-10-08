@@ -6043,7 +6043,7 @@
         "docs/workspace.md",
         "docs/platform-validation.md"
       ],
-      "note": "Allgemeine C-/Physim-Pendelvorlagen besitzen sieben SI-Parameter, gemeinsame Medium-Drag-API und separaten gaußverteilten Winkelsensorkanal. Neun Module/fünf Paare, Kraftsumme, Rauschstatistik, Reset, getrennte Instanzen, Parameter-/Verlet-/Fehlergrenzen sowie tatsächliche App-/Parameterstudien auf Intel macOS und Debian geprüft; Linux ASan/UBSan bestanden. Keine vollständige Dämpfungsabschätzung, gesamte vertikale oder aktuelle Gesamtplattformabnahme; PP-0756 bleibt für den Gesamtumfang unvollständig."
+      "note": "Pendelvorlagen besitzen SI-Parameter, gemeinsamen Mediumwiderstand und reproduzierbares Winkelsensorrauschen; Perioden-, Energie- und beobachtete Amplitudenabnahme werden aus gespeicherten Daten ausgewertet. Native Referenzen und tatsächliche C-/Physim-Fenster auf Intel macOS und Debian geprüft. Die gesamte vertikale und aktuelle Gesamtplattform-/Paketabnahme bleibt unvollständig; Teilnachweise heben den Gesamtstatus nicht an."
     },
     {
       "id": "PP-0758",
@@ -6192,9 +6192,20 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Analyse kann Periodendauer, Dämpfung und Energiefehler bestimmen.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "src/series.c",
+        "include/physim/series.h",
+        "include/physim/language_analysis_sdk.h",
+        "examples/pendulum/analysis.c",
+        "examples/documentation/pendulum_analysis.c",
+        "examples/documentation/pendulum_analysis.phys",
+        "tests/test_positive_peaks.c",
+        "tests/test_pendulum_decay.py",
+        "tests/check_decay_report.c",
+        "docs/platform-validation.md"
+      ],
+      "note": "Gemeinsame segmentbewusste Spitzen-API für C/Physim mit strenger Zeit, Plateau-Mitte, Quota- und Alias-Gegenproben. Auswertungen berichten Periodendauer, Energieänderung und beobachtetes logarithmisches Dekrement/Abnahmerate; volle CSVs und ausdrückliche Nichtverfügbarkeit. 18 synthetische Referenzberichte mit 400 Spitzen, Wachstum, unregelmäßigen Zeiten und Ruhe sowie tatsächliche Mediumfenster auf Intel macOS/Debian geprüft; Linux ASan/UBSan bestanden. Kein konstantes viskoses Modell oder vollständige Gesamtplattformabnahme."
     },
     {
       "id": "PP-0769",

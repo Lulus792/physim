@@ -323,6 +323,20 @@ ps_result ps_series_select(
 
 Keep rows whose dimensionless selector equals accepted exactly (expressed in selector's stored units, e.g. status=1). Select 1..32 aligned columns together, including their x axis. All columns and selector must be aligned. No implicit handling of .status channels: the caller chooses the selector explicitly. Outputs preserve units and row order, own their data, and share a NEW alignment identity. Separate calls are not aligned, even if they select identical rows. Empty selections succeed; downstream operations keep their normal minimum count requirements. Derivatives/integrals connect retained samples across gaps. Outputs and scratch usage are unchanged on failure. Input/output arrays may alias. Bounded block memory; selected data counts against the scratch quota.
 
+## ps_series_positive_peaks
+
+Erzeugt gemeinsam ausgerichtete Reihen für Zeit, Amplitude und Segment positiver beobachteter Maxima; flache Spitzen werden einmal in ihrer Zeitmitte erfasst, Lücken trennen Segmente. Keine Interpolation oder physikalische Dämpfung wird angenommen.
+
+```c
+ps_result ps_series_positive_peaks(
+    ps_analysis_context *ctx,
+    ps_series signal,
+    ps_series time,
+    ps_series out[3]);
+```
+
+Sampled positive local maxima of aligned signal/time series. A rise followed by a fall identifies one peak; a flat top uses its timestamp midpoint. Endpoints and constant segments are excluded. Time has second dimensions and must strictly increase across valid rows. Missing signal/time rows break the segment: out[2] contains an exact dimensionless segment ordinal for each peak. out[0]=time, out[1]=amplitude, out[2]=segment share a NEW alignment. Empty results succeed. No interpolation, noise rejection or physical damping model is inferred. Bounded block memory; 24 scratch bytes/peak. All outputs and quota are unchanged on failure. The three output handles may alias inputs.
+
 ## ps_series_affine
 
 Skaliert eine Reihe mit dimensionslosem Faktor und addiert einen dimensionsgeprüften Offset.

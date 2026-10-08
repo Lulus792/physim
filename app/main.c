@@ -3712,7 +3712,7 @@ int main(int argc, char **argv) {
                 if (!a->analysis_report || a->data.total < 10 ||
                     ps_report_describe(a->analysis_report, NULL, NULL, &plots, &tables) != PS_OK ||
                     plots != (test_example == 17 ? 3u : 2u) ||
-                    tables != (test_example == 10 || test_example == 8 || test_example == 0 ? 2u : 0u))
+                    tables != (test_example == 8 || test_example == 0 ? 3u : test_example == 10 ? 2u : 0u))
                     exit_code = 1;
                 bool pendulum_analysis = test_example == 0 || test_example == 8;
                 snprintf(path, sizeof path, pendulum_analysis ? "%s.psreport" : "%s-position.svg", a->report);

@@ -162,6 +162,7 @@ add('ps_series_', {
     'aligned': 'Prüft, ob zwei Reihen dieselbe Samplezuordnung besitzen.',
     'read': 'Kopiert einen Ausschnitt ab einem Sampleindex in den Puffer des Aufrufers.',
     'slice': 'Erzeugt eine neue Reihe für einen zusammenhängenden Samplebereich.',
+    'positive_peaks': 'Erzeugt gemeinsam ausgerichtete Reihen für Zeit, Amplitude und Segment positiver beobachteter Maxima; flache Spitzen werden einmal in ihrer Zeitmitte erfasst, Lücken trennen Segmente. Keine Interpolation oder physikalische Dämpfung wird angenommen.',
     'select': 'Filtert mehrere Reihen gemeinsam nach einem exakten Selektorwert, etwa gültigem Sensorstatus 1.',
     'affine': 'Skaliert eine Reihe mit dimensionslosem Faktor und addiert einen dimensionsgeprüften Offset.',
     'combine': 'Verknüpft gepaarte Reihen per Summe, Differenz, Produkt oder Quotient und prüft ihre Einheiten.',

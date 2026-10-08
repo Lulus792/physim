@@ -114,6 +114,17 @@ ps_result ps_series_slice(ps_analysis_context *ctx, ps_series input, uint64_t fi
  * alias. Bounded block memory; selected data counts against the scratch quota. */
 ps_result ps_series_select(ps_analysis_context *ctx, const ps_series *columns, size_t count,
                            ps_series selector, double accepted, ps_series *out);
+/* Sampled positive local maxima of aligned signal/time series. A rise followed
+ * by a fall identifies one peak; a flat top uses its timestamp midpoint.
+ * Endpoints and constant segments are excluded. Time has second dimensions and
+ * must strictly increase across valid rows. Missing signal/time rows break the
+ * segment: out[2] contains an exact dimensionless segment ordinal for each peak.
+ * out[0]=time, out[1]=amplitude, out[2]=segment share a NEW alignment. Empty
+ * results succeed. No interpolation, noise rejection or physical damping model
+ * is inferred. Bounded block memory; 24 scratch bytes/peak. All outputs and
+ * quota are unchanged on failure. The three output handles may alias inputs. */
+ps_result ps_series_positive_peaks(ps_analysis_context *ctx, ps_series signal,
+                                   ps_series time, ps_series out[3]);
 /* Factor is dimensionless; offset is converted/combined per valid SI row using
  * Quantity addition. Masked rows are not evaluated. Factor*value must itself be
  * finite; this is not an arbitrary-range three-factor fused operation. */

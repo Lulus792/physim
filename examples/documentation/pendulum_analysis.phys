@@ -22,6 +22,9 @@ func analyze():
     first.close()
     let summary = Table("Run comparison",["Samples","Maximum energy change","Duration","Period intervals"],[one,joules,seconds,one])
     let periods = Table("Measured periods",["Mean positive-crossing period"],[seconds])
+    let rateUnit = Unit(0,0,-1,0,0,0,0,1,"Hz")
+    let radians = Unit(0,0,0,0,0,0,0,1,"rad")
+    let decay = Table("Observed amplitude decay",["Peak intervals","Mean log decrement","Mean rate","Minimum rate","Maximum rate"],[one,one,rateUnit,rateUnit,rateUnit])
     for index in 0..<inputCount():
         let run = Dataset(index)
         let name = runLabel(run,index)
@@ -53,4 +56,46 @@ func analyze():
         if intervals > 0:
             periods.row(name,[Quantity(periodSum / Float64(intervals),seconds)])
         Series.exportColumns([time,angle,energy,drift],"pendulum_" + String(index + 1))
+        let peaks = angle.positivePeaks(time)
+        Series.exportColumns(peaks,"peaks_" + String(index + 1))
+        var starts: [Float64] = []
+        var ends: [Float64] = []
+        var firstAmplitudes: [Float64] = []
+        var lastAmplitudes: [Float64] = []
+        var decrements: [Float64] = []
+        var rates: [Float64] = []
+        var segments: [Float64] = []
+        for i in 1..<peaks[0].count():
+            if peaks[2].value(i) == peaks[2].value(i - 1):
+                let start = peaks[0].value(i - 1)
+                let end = peaks[0].value(i)
+                let firstAmplitude = peaks[1].value(i - 1)
+                let lastAmplitude = peaks[1].value(i)
+                let decrement = log(firstAmplitude) - log(lastAmplitude)
+                assert(end > start,"Peak times must increase")
+                starts.append(start)
+                ends.append(end)
+                firstAmplitudes.append(firstAmplitude)
+                lastAmplitudes.append(lastAmplitude)
+                decrements.append(decrement)
+                rates.append(decrement / (end - start))
+                segments.append(peaks[2].value(i))
+        let startSeries = Series.fromValues(starts,seconds,"start_s")
+        let endSeries = startSeries.alignedValues(ends,seconds,"end_s")
+        let firstSeries = startSeries.alignedValues(firstAmplitudes,radians,"start_amplitude_rad")
+        let lastSeries = startSeries.alignedValues(lastAmplitudes,radians,"end_amplitude_rad")
+        let decrementSeries = startSeries.alignedValues(decrements,one,"log_decrement")
+        let rateSeries = startSeries.alignedValues(rates,rateUnit,"rate_per_s")
+        let segmentSeries = startSeries.alignedValues(segments,one,"segment")
+        Series.exportColumns([startSeries,endSeries,firstSeries,lastSeries,decrementSeries,rateSeries,segmentSeries],"decay_" + String(index + 1))
+        if starts.count > 0:
+            decay.row(name,[Quantity(Float64(starts.count),one),Quantity(decrementSeries.mean(),one),
+                Quantity(rateSeries.mean(),rateUnit),Quantity(rateSeries.minimum(),rateUnit),Quantity(rateSeries.maximum(),rateUnit)])
+        startSeries.release()
+        endSeries.release()
+        firstSeries.release()
+        lastSeries.release()
+        decrementSeries.release()
+        rateSeries.release()
+        segmentSeries.release()
         run.close()

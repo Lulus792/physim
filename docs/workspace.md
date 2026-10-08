@@ -104,6 +104,15 @@ Das Modell verwendet eine masselose starre Stange und ein homogenes ruhendes
 Medium mit konstantem Widerstandskoeffizienten; es enthält keine Strömungs- oder
 Reynoldsmodellierung. Der Vakuumlernpfad zum Integratorvergleich bleibt gesondert.
 
+Die Pendelauswertungen ergänzen die Tabelle **Observed amplitude decay** mit
+erkannter Spitzenzahl, mittlerem logarithmischem Dekrement und beobachteter
+Abnahmerate samt Spannweite. Spitzen- und Intervall-CSVs behalten sämtliche
+Werte. Wachsende Amplituden liefern negative Raten, kurze oder ruhende Läufe
+keinen erfundenen Wert. Die Auswertung benutzt den wahren Modellwinkel;
+Messraster und Integrator beeinflussen die beobachteten Spitzen. Sie passt
+keinen konstanten physikalischen Widerstandskoeffizienten an.
+[Verfahren und Grenzen](pendulum-tutorial.md#beobachtete-amplitudenabnahme).
+
 ## Letzten Workspace wieder öffnen
 
 Beim normalen Beenden merkt sich Physim den zuletzt geöffneten Hauptordner und
