@@ -3183,3 +3183,30 @@ unter `build/7b08-linux-gcc-proof-excerpt.log`.
 Dies ist eine tatsächliche Linux-GCC-Ausführung am genannten Commit. Spätere
 Parameter- und Tastaturänderungen sowie die beiden noch laufenden macOS-Jobs
 werden damit nicht als vollständig geprüft bezeichnet.
+
+
+## Build-Herkunft: Compiler, Profil und ausgewählte SDK-Versionen
+
+Am 11. Oktober 2026 erweitert der native Projektbuilder seine erfolgreiche
+`build.config` um `api_version` und `abi_version`. Die Werte werden aus dem
+Core-Header des tatsächlich gewählten SDK gelesen. Der gemeinsame Leser
+`ps_project_build_info_read` akzeptiert frühere Konfigurationen ohne diese
+Felder, prüft Pflichtfelder, Duplikate, leere/ungültige Compilerpfade und
+Versionsgrenzen und erhält Ausgabe und Quelldatei bei Fehlern.
+
+AppleClang Release besteht **2/2** native Katalogfälle `project_file` und
+`native_project_build`; Ergebnisse
+`build/current-release-mac/test-results/run-tgoypdr_`, Log
+`build/current-build-info-complete-native-mac.log`. Der echte Builder baut
+C-/Physim-Projekte und unabhängige Analysen in Debug/Release, prüft
+Headeränderungen, unveränderte Cache-Builds, Fehlerschutz, Locks und Verschieben.
+Jeder erfolgreiche Aufruf vergleicht gespeicherten Compiler/Profil mit dem
+tatsächlichen Aufruf und SDK-Versionen mit den Headern. Ein zusätzliches
+kopiertes SDK mit API **4** und ABI **5** baut erfolgreich eine Analyse und
+zeichnet genau diese Versionen auf. Der Parser prüft daneben CRLF, Unicode,
+Windows-Pfade, frühere Konfigurationen, zehn fehlerhafte Konfigurationen sowie
+fehlende Dateien und Argumente.
+
+Dies ist ein nativer Intel-macOS-Nachweis der Build-Herkunft. Die anschließende
+Anzeige in der App ist noch gesondert zu prüfen; die bereits laufende eingefrorene
+SDK-Gesamtprüfung enthält diese spätere Änderung nicht.

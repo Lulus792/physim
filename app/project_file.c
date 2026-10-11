@@ -7,6 +7,57 @@
 #include <stdlib.h>
 #include <string.h>
 
+bool ps_project_build_info_read(const char *path, ps_project_build_info *out) {
+    if (!path || !out) return false;
+    ps_text_document document = {0};
+    if (ps_text_document_open(&document, path) != PS_DOCUMENT_OK) return false;
+    ps_project_build_info info = {0};
+    unsigned seen = 0;
+    bool valid = document.length <= 256u * 1024u;
+    for (size_t position = 0; valid && position < document.length;) {
+        size_t end = position;
+        while (end < document.length && document.saved[end] != '\n') ++end;
+        size_t length = end - position;
+        if (length && document.saved[position + length - 1] == '\r') --length;
+        const char *line = document.saved + position;
+        const char *keys[] = {"physim_native_build=", "compiler=", "profile=", "api_version=", "abi_version="};
+        for (unsigned i = 0; i < 5; ++i) {
+            size_t prefix = strlen(keys[i]);
+            if (length < prefix || memcmp(line, keys[i], prefix)) continue;
+            if (seen & (1u << i)) { valid = false; break; }
+            seen |= 1u << i;
+            const char *value = line + prefix;
+            size_t count = length - prefix;
+            if (i == 0) valid = count == 1 && value[0] == '1';
+            else if (i == 1) {
+                valid = count && count < sizeof info.compiler;
+                for (size_t j = 0; valid && j < count; ++j)
+                    valid = (unsigned char)value[j] >= 32 && value[j] != 127;
+                if (valid) { memcpy(info.compiler, value, count); info.compiler[count] = 0; }
+            } else if (i == 2) {
+                info.release = count == 7 && !memcmp(value, "Release", 7);
+                valid = info.release || (count == 5 && !memcmp(value, "Debug", 5));
+            } else {
+                uint64_t version = 0;
+                valid = count && count <= 10;
+                for (size_t j = 0; valid && j < count; ++j) {
+                    valid = value[j] >= '0' && value[j] <= '9';
+                    if (valid) version = version * 10 + (unsigned)(value[j] - '0');
+                }
+                valid = valid && version && version <= UINT32_MAX;
+                if (valid) { if (i == 3) info.api_version = (uint32_t)version;
+                             else info.abi_version = (uint32_t)version; }
+            }
+            break;
+        }
+        position = end < document.length ? end + 1 : end;
+    }
+    valid = valid && (seen & 7u) == 7u && ((seen & 24u) == 0 || (seen & 24u) == 24u);
+    ps_text_document_destroy(&document);
+    if (valid) *out = info;
+    return valid;
+}
+
 bool ps_project_seed_parse(const char *text, uint64_t *seed) {
     if (!text || !*text || !seed)
         return false;

@@ -33,6 +33,37 @@ int main(int argc, char **argv) {
     CHECK(SDL_GetCurrentTime(&timestamp));
     snprintf(root, sizeof root, "%s/project-file-%llu ä", argv[1], (unsigned long long)timestamp);
     CHECK(SDL_CreateDirectory(root));
+    char build_path[4096];snprintf(build_path,sizeof build_path,"%s/build.config",root);
+    ps_project_build_info build_info={0};
+    const char *build_text="physim_native_build=1\r\ncompiler=/SDK ä/bin/clang\r\nprofile=Release\r\napi_version=3\r\nabi_version=3\r\nlib=first\r\nlib=second\r\n";
+    CHECK(write_text(build_path,build_text));
+    CHECK(ps_project_build_info_read(build_path,&build_info));
+    CHECK(build_info.release && build_info.api_version==3 && build_info.abi_version==3 &&
+          !strcmp(build_info.compiler,"/SDK ä/bin/clang") && matches(build_path,build_text));
+    const char *bad_builds[]={
+        "physim_native_build=1\ncompiler=clang\nprofile=Debug\ncompiler=other\n",
+        "physim_native_build=1\ncompiler=\nprofile=Debug\n",
+        "physim_native_build=2\ncompiler=clang\nprofile=Debug\n",
+        "compiler=clang\nprofile=Debug\n",
+        "physim_native_build=1\ncompiler=clang\nprofile=Other\n",
+        "physim_native_build=1\ncompiler=clang\nprofile=Debug\napi_version=3\n",
+        "physim_native_build=1\ncompiler=clang\nprofile=Debug\napi_version=4294967296\nabi_version=3\n",
+        "physim_native_build=1\ncompiler=clang\nprofile=Debug\napi_version=0\nabi_version=3\n",
+        "physim_native_build=1\ncompiler=clang\nprofile=Debug\napi_version=3x\nabi_version=3\n",
+        "physim_native_build=1\ncompiler=cl\t.exe\nprofile=Debug\n"
+    };
+    for(unsigned i=0;i<sizeof bad_builds/sizeof bad_builds[0];++i) {
+        CHECK(write_text(build_path,bad_builds[i]));
+        ps_project_build_info previous=build_info;
+        CHECK(!ps_project_build_info_read(build_path,&build_info) && !memcmp(&previous,&build_info,sizeof previous));
+        CHECK(matches(build_path,bad_builds[i]));
+    }
+    CHECK(write_text(build_path,"physim_native_build=1\ncompiler=C:\\Program Files\\cl.exe\nprofile=Debug"));
+    CHECK(ps_project_build_info_read(build_path,&build_info) && !build_info.release &&
+          !build_info.api_version && !build_info.abi_version && !strcmp(build_info.compiler,"C:\\Program Files\\cl.exe"));
+    CHECK(!ps_project_build_info_read(NULL,&build_info) && !ps_project_build_info_read(build_path,NULL));
+    CHECK(SDL_RemovePath(build_path));
+    CHECK(!ps_project_build_info_read(build_path,&build_info));
     snprintf(path, sizeof path, "%s/physim.project", root);
     snprintf(backup, sizeof backup, "%s.bak", path);
     ps_project_settings settings = {0};

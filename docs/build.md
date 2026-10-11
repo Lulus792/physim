@@ -40,6 +40,12 @@ Projektdatei gespeichert. Beim erneuten Öffnen wird es zusammen mit den
 Experimentparametern wiederhergestellt. Ältere Projektdateien ohne Profileintrag
 verwenden Debug. Auch `physim-build` liest dieses Profil; ein explizites
 `--profile` überschreibt es für den jeweiligen Aufruf.
+Ein erfolgreicher Build zeichnet unter `build/<Profil>/build.config` den
+tatsächlich verwendeten Compilerpfad und das Profil auf. `api_version` und
+`abi_version` stammen aus `include/physim/core.h` des ausgewählten SDK, auch
+wenn dieses vom Build-Service abweicht. Die Konfiguration wird zusammen mit
+dem erfolgreichen Build veröffentlicht; ein fehlgeschlagener Build ersetzt
+die letzte vollständige Konfiguration nicht.
 App und Builder verwenden denselben Leser für das Projektformat. Doppelte oder
 ungültige bekannte Einträge werden abgewiesen. Kommentare und zusätzliche
 Projekteinträge bleiben beim Speichern erhalten; ein unverändertes Speichern

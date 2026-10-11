@@ -42,4 +42,12 @@ typedef struct {uint32_t from_version,to_version;bool changed;} ps_project_migra
  * document/report unchanged. No source, run, build or auxiliary file is migrated. */
 ps_document_result ps_project_migrate_document(ps_text_document *document,ps_project_migration *out);
 ps_document_result ps_project_migrate_file(const char *path,ps_project_migration *out);
+typedef struct {
+    char compiler[4096];
+    bool release;
+    uint32_t api_version, abi_version; /* Zero when an older build did not record versions. */
+} ps_project_build_info;
+/* Reads a completed builder configuration. Unknown fields are ignored; duplicate,
+ * missing or malformed required fields fail without changing the output. */
+bool ps_project_build_info_read(const char *path, ps_project_build_info *out);
 #endif

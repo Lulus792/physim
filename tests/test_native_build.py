@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -40,6 +41,14 @@ def build(project, profile="Debug", success=True):
     if args.cc:
         argv += ["--cc", args.cc]
     output = command(argv, success)
+    if success:
+        recorded = dict(line.split("=", 1) for line in (project / "build" / profile / "build.config").read_text(encoding="utf-8").splitlines() if "=" in line)
+        header = (args.sdk / "include/physim/core.h").read_text(encoding="utf-8")
+        for key, macro in (("api_version", "PS_API_VERSION"), ("abi_version", "PS_ABI_VERSION")):
+            expected = re.search(r"#define\s+" + macro + r"\s+(\d+)u?", header)
+            assert expected and int(recorded[key]) == int(expected.group(1)), (key, recorded)
+        assert recorded["profile"] == profile and Path(recorded["compiler"]).is_file()
+        assert "Compiler: " + recorded["compiler"] + "\n" in output
     print(f"{project.name} / {profile}: {'passed' if success else 'expected failure'}", flush=True)
     return output
 
@@ -260,3 +269,26 @@ for language in ("c", "phys"):
     module_hash = fingerprint(output / ("analysis" + extension))
     build(analysis_project, success=False)
     assert fingerprint(output / ("analysis" + extension)) == module_hash
+
+# The recorded versions belong to the selected SDK, independently of the builder.
+versioned_sdk = root / "SDK with distinct API ä"
+versioned_sdk.mkdir()
+for directory in ("include", "src"):
+    shutil.copytree(args.sdk / directory, versioned_sdk / directory)
+version_header = versioned_sdk / "include/physim/core.h"
+version_header.write_text(re.sub(r"(#define\s+PS_API_VERSION\s+)\d+u?", r"\g<1>4u",
+                                re.sub(r"(#define\s+PS_ABI_VERSION\s+)\d+u?", r"\g<1>5u",
+                                       version_header.read_text(encoding="utf-8"))), encoding="utf-8")
+version_project = root / "Distinct SDK analysis"
+version_project.mkdir()
+shutil.copyfile(args.sdk / "examples/analysis_only/analysis.c", version_project / "analysis.c")
+(version_project / "physim.project").write_text("physim_project=2\nkind=analysis\nanalysis=analysis.c\n", encoding="utf-8")
+original_sdk = args.sdk
+try:
+    args.sdk = versioned_sdk
+    assert "Build successful" in build(version_project)
+finally:
+    args.sdk = original_sdk
+recorded = (version_project / "build/Debug/build.config").read_text(encoding="utf-8")
+assert "api_version=4\n" in recorded and "abi_version=5\n" in recorded
+print("Native builder provenance: actual compiler/profile and selected SDK API/ABI, including a distinct SDK, passed")

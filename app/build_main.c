@@ -10,6 +10,7 @@
 #include "project_file.h"
 #include <SDL3/SDL.h>
 #include <errno.h>
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -22,6 +23,43 @@
 #include <unistd.h>
 #endif
 #define PATH_SIZE 4096
+static bool sdk_versions(const char *sdk, uint32_t *api, uint32_t *abi) {
+    char path[PATH_SIZE];
+    if (snprintf(path, sizeof path, "%s/include/physim/core.h", sdk) >= PATH_SIZE) return false;
+    ps_text_document header = {0};
+    if (ps_text_document_open(&header, path) != PS_DOCUMENT_OK) return false;
+    const char *macros[] = {"PS_API_VERSION", "PS_ABI_VERSION"};
+    uint32_t versions[2] = {0};
+    bool valid = true;
+    for (size_t position = 0; valid && position < header.length;) {
+        size_t end = position;
+        while (end < header.length && header.saved[end] != '\n') ++end;
+        const char *p = header.saved + position, *limit = header.saved + end;
+        while (p < limit && isspace((unsigned char)*p)) ++p;
+        if (limit - p >= 7 && !memcmp(p, "#define", 7) && p + 7 < limit && isspace((unsigned char)p[7])) {
+            p += 7;
+            while (p < limit && isspace((unsigned char)*p)) ++p;
+            for (unsigned i = 0; i < 2; ++i) {
+                size_t length = strlen(macros[i]);
+                if ((size_t)(limit - p) <= length || memcmp(p, macros[i], length) || !isspace((unsigned char)p[length])) continue;
+                p += length;
+                while (p < limit && isspace((unsigned char)*p)) ++p;
+                uint64_t value = 0; unsigned digits = 0;
+                while (p < limit && *p >= '0' && *p <= '9' && digits < 10) { value = value * 10 + (unsigned)(*p++ - '0'); ++digits; }
+                if (p < limit && (*p == 'u' || *p == 'U')) ++p;
+                while (p < limit && isspace((unsigned char)*p)) ++p;
+                valid = !versions[i] && digits && value && value <= UINT32_MAX && p == limit;
+                if (valid) versions[i] = (uint32_t)value;
+                break;
+            }
+        }
+        position = end < header.length ? end + 1 : end;
+    }
+    ps_text_document_destroy(&header);
+    if (!valid || !versions[0] || !versions[1]) return false;
+    *api = versions[0]; *abi = versions[1];
+    return true;
+}
 static const char *const SDK_MODULES[] = {
     "core", "memory", "array", "string_view", "hashmap", "math", "data", "run_stream", "run_index",
     "snapshot", "analysis", "scene", "numerics", "units", "series", "report",
@@ -647,6 +685,11 @@ int main(int argc, char **argv) {
         fputs("Cannot allocate toolchain configuration\n", stderr);
         goto done;
     }
+    uint32_t sdk_api, sdk_abi;
+    if (!sdk_versions(sdk, &sdk_api, &sdk_abi)) {
+        fputs("Cannot read API/ABI version constants from SDK include/physim/core.h\n", stderr);
+        goto done;
+    }
     if (!discover(tc, cc)) {
         fputs("No C17 toolchain found. ", stderr);
 #ifdef _WIN32
@@ -676,9 +719,9 @@ int main(int argc, char **argv) {
     SDL_GetPathInfo(tc->linker, &linker_info);
     bool settings_ok =
         fprintf(settings,
-                "physim_native_build=1\nproject=%s\nsdk=%s\ncompiler=%s\n"
+                "physim_native_build=1\napi_version=%u\nabi_version=%u\nproject=%s\nsdk=%s\ncompiler=%s\n"
                 "compiler_time=%lld\nlinker=%s\nlinker_time=%lld\nprofile=%s\nbuilder_time=%lld\nkind=%s\n",
-                project, sdk, tc->compiler, (long long)compiler_info.modify_time, tc->linker,
+                sdk_api, sdk_abi, project, sdk, tc->compiler, (long long)compiler_info.modify_time, tc->linker,
                 (long long)linker_info.modify_time, profile,
                 (long long)builder_info.modify_time, project_settings.analysis_only?"analysis":"experiment") > 0;
     for (unsigned i = 0; i < tc->library_count; i++)
