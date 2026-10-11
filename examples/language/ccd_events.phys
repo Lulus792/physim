@@ -1,8 +1,8 @@
 let zero = Vec3(0,0,0)
 let identity = Quat(0,0,0,1)
-let speed = parameter("speed",10,0,100,"Initial speed")
 let metres = Unit(1,0,0,0,0,0,0,1,"m")
 let velocity = Unit(1,0,-1,0,0,0,0,1,"m/s")
+let speed = parameterWithUnit("speed",velocity,10,0,100,"Initial speed")
 let joules = Unit(2,1,-2,0,0,0,0,1,"J")
 let one = Unit(0,0,0,0,0,0,0,1,"1")
 let positions = [Channel("a.position",metres,"a.position"),Channel("b.position",metres,"b.position"),Channel("c.position",metres,"c.position")]
@@ -32,7 +32,7 @@ func measure():
     normalError.sample(normal)
     projectionError.sample(projection)
 func create():
-    metadata("model=three equal homogeneous spheres in vacuum\nmass_kg=1\nradius_m=0.5\ncentres_m=-4,0,4\nrestitution=1\nfriction=0\nexternal_forces=none\nccd=earliest event batches with canonical IDs\ncontact_offset_m=0.000001\n")
+    metadata("model=three equal homogeneous spheres in vacuum\nmass_kg=1\nradius_m=0.5\ncentres_m=-4,0,4\nrestitution=1\nfriction=0\nexternal_forces=none\nccd=earliest event batches with canonical IDs\ncontact_offset_m=0.000001\ninitial_speed_m_s="+String(speed)+"\n")
 func reset():
     bodies = []
     for i in 0..<3:

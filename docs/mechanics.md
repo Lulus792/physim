@@ -641,7 +641,14 @@ Die vollständigen Beispiele [C](../examples/ccd_events/main.c) und
 Bei `dt=1` s und Anfangsgeschwindigkeit 10 m/s treten zwei Stöße innerhalb eines
 Schritts auf. Endlagen sind bis auf den Kontaktabstand −1, 3 und 8 m;
 Endgeschwindigkeiten 0, 0 und 10 m/s, Energie 50 J. Ein unabhängiger Parser prüft
-beide tatsächlichen Runner-Läufe einschließlich CRC, Abschluss und elf Kanälen.
+zwölf tatsächliche Runner-Läufe einschließlich CRC, Abschluss und elf Kanälen.
+Der Laufparameter `speed` hat die Einheit m/s, den Standardwert 10 und den
+Bereich 0..100. Der tatsächlich gewählte Wert steht zusätzlich als
+`initial_speed_m_s` in den Modellmetadaten. Die Geschwindigkeiten 0, 2, 4, 10,
+20 und 100 m/s prüfen Ruhe, freien Flug sowie einen oder zwei elastische
+Stöße gegen die analytischen Kontaktzeiten 3/u und 6/u; Impuls und Energie
+bleiben erhalten. Werte außerhalb des Bereichs werden vor dem Schreiben
+einer Laufdatei abgewiesen.
 Ein rationales 1D-Orakel prüft 181 weitere Szenarien mit 470 elastischen Ereignissen.
 Ruhekontakte unter Gravitation, gleichzeitige Kontakte, rotierende Boxen,
 ID-/Körperreihenfolge, Fehleratomizität und Besitz-/Allocatorfehler sind separat geprüft.

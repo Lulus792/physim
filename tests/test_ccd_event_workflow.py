@@ -1,4 +1,4 @@
-"""Actual C/Physim runs: two impacts inside one dt plus sample/CRC parity."""
+"""Actual C/Physim CCD runs: analytic impacts, SI provenance and CRC parity."""
 
 import argparse
 import math
@@ -13,22 +13,17 @@ for name in ("runner", "c-model", "phys-model", "work"):
 a = p.parse_args()
 work = Path(a.work)
 work.mkdir(parents=True, exist_ok=True)
-runs = []
-for label, model in [("c", a.c_model), ("phys", a.phys_model)]:
-    path = work / (label + ".psrun")
-    r = subprocess.run(
-        [a.runner, model, str(path), "--steps", "1", "--dt", "1"], capture_output=True, timeout=60
-    )
-    assert r.returncode == 0, (r.returncode, r.stderr)
-    rows = []
-    footer = False
-    schema = False
+def read(path):
+    rows, metadata = [], None
+    footer = schema = False
     with path.open("rb") as f:
         assert f.read(16) == b"PSRUN17\n" + struct.pack("<II", 1, 0x01020304)
         while h := f.read(12):
             kind, size, crc = struct.unpack("<III", h)
             data = f.read(size)
-            assert len(data) == size and zlib.crc32(data) == crc
+            assert size <= 8192 and len(data) == size and zlib.crc32(data) == crc
+            if kind == 1:
+                metadata = dict(line.split("=", 1) for line in data.decode().splitlines() if "=" in line)
             if kind == 2:
                 assert struct.unpack_from("<I", data)[0] == 11
                 schema = True
@@ -37,17 +32,46 @@ for label, model in [("c", a.c_model), ("phys", a.phys_model)]:
             if kind == 4:
                 assert struct.unpack("<Q", data)[0] == 2
                 footer = True
-    assert schema and footer and len(rows) == 2
-    assert rows[0][:7] == (0, -4, 0, 4, 10, 0, 0)
-    final = rows[1]
-    assert final[0] == 1
-    for actual, expected in zip(final[1:7], [-1, 3, 8, 0, 0, 10]):
-        assert math.isclose(actual, expected, abs_tol=1e-4), (label, final)
-    assert math.isclose(final[7], 50, abs_tol=1e-8) and final[8] == 2 and final[9] == 2
-    assert final[10] < 1e-8 and final[11] < 1e-8
-    runs.append(rows)
-for c, phys in zip(*runs):
-    assert all(math.isclose(x, y, abs_tol=1e-10) for x, y in zip(c, phys)), (c, phys)
-print(
-    "Actual C/Physim CCD runs: two sequential events within one dt, conserved energy, full-step positions, CRC/footer and channel parity passed"
-)
+    assert schema and footer and len(rows) == 2 and metadata is not None
+    return rows, metadata
+
+for speed in (0, 2, 4, 10, 20, 100):
+    runs = []
+    for label, model in [("c", a.c_model), ("phys", a.phys_model)]:
+        path = work / f"{label}-{speed}.psrun"
+        r = subprocess.run([a.runner, model, str(path), "--steps", "1", "--dt", "1",
+                            "--seed", "42", "--param", f"speed={speed}"], capture_output=True, timeout=60)
+        assert r.returncode == 0, (r.returncode, r.stderr)
+        rows, metadata = read(path)
+        assert float(metadata['parameter.speed']) == speed == float(metadata['initial_speed_m_s'])
+        assert float(metadata['parameter_default.speed']) == 10
+        assert float(metadata['parameter_min.speed']) == 0 and float(metadata['parameter_max.speed']) == 100
+        assert metadata.get('parameter_unit.speed') == 'm/s', metadata
+        assert float(metadata['parameter_scale.speed']) == 1 and metadata['parameter_dimension.speed'] == '1,0,-1,0,0,0,0'
+        assert float(metadata['dt_s']) == 1 and int(metadata['seed']) == 42
+        assert rows[0][:7] == (0, -4, 0, 4, speed, 0, 0)
+        # Independent equal-mass elastic transfer: impacts at 3/u and 6/u.
+        if speed < 3:
+            expected, events = [-4 + speed, 0, 4, speed, 0, 0], 0
+        elif speed < 6:
+            expected, events = [-1, speed - 3, 4, 0, speed, 0], 1
+        else:
+            expected, events = [-1, 3, speed - 2, 0, 0, speed], 2
+        final = rows[1]
+        assert final[0] == 1
+        for actual, value in zip(final[1:7], expected):
+            assert math.isclose(actual, value, abs_tol=1e-4), (label, speed, final)
+        assert math.isclose(sum(final[4:7]), speed, abs_tol=1e-8)
+        assert math.isclose(final[7], .5 * speed * speed, abs_tol=1e-8)
+        assert final[8] == events and final[9] == events and final[10] < 1e-8 and final[11] < 1e-8
+        runs.append(rows)
+    for c, phys in zip(*runs):
+        assert all(math.isclose(x, y, abs_tol=1e-10) for x, y in zip(c, phys)), (c, phys)
+
+for label, model in [("c", a.c_model), ("phys", a.phys_model)]:
+    for speed in (-.1, 100.1):
+        path = work / f"invalid-{label}-{speed}.psrun"
+        r = subprocess.run([a.runner, model, str(path), "--steps", "1", "--param", f"speed={speed}"],
+                           capture_output=True, timeout=60)
+        assert r.returncode == 5 and not path.exists(), (label, speed, r.returncode, r.stderr)
+print("Actual C/Physim CCD: 12 complete runs, free flight/one/two analytic impacts, momentum/energy, SI provenance, CRC/footer parity and four preflight rejections passed")

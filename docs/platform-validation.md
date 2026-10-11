@@ -3115,3 +3115,32 @@ unabhängigen Mappe und demselben eingefrorenen Paket läuft tatsächlich unter
 Ende offen; gleichzeitig wird auf diesem Host keine weitere GUI-Suite gestartet.
 Die aktuelle andere Plattformmatrix und vollständige Barrierefreiheit bleiben
 weiterhin offen.
+
+
+## CCD-Beispiel: typisierte Startgeschwindigkeit und vollständige Laufherkunft
+
+Am 11. Oktober 2026 fehlten im C-/Physim-CCD-Beispiel die Geschwindigkeitseinheit
+am Laufparameter und der tatsächlich gewählte Startwert in den Modellmetadaten.
+Der erweiterte Test scheiterte mit den bisherigen Modulen an
+`initial_speed_m_s`; das Reproduktionslog liegt unter
+`build/current-ccd-provenance-before-mac.log`.
+
+Beide Beispiele deklarieren `speed` jetzt als m/s mit Standard 10 und Grenzen
+0..100. Die Modellbeschreibung speichert `initial_speed_m_s` aus dem tatsächlichen
+Laufparameter. Geometrie, Solver und Standardphysik bleiben unverändert.
+
+Der tatsächlich ausgeführte AppleClang-Release-Build ohne App besteht
+`ccd_event_workflow`: **1/1 Katalogfall**, Ergebnisse
+`build/current-headless-mac/test-results/run-f5stc8ip`, Log
+`build/current-ccd-provenance-after-mac.log`. Der Fall führt **zwölf** vollständige
+C-/Physim-Runnerläufe mit 0, 2, 4, 10, 20 und 100 m/s aus. Ein unabhängiges
+1D-Orakel prüft freie Bewegung sowie erste und zweite elastische Impulsübertragung
+bei den Kontaktzeiten 3/u und 6/u, Endlagen, Geschwindigkeiten, Ereignis-/Kontaktzahl,
+Impuls und Energie. Beide Sprachwege stimmen überein. Der Parser prüft CRC,
+Schema, zwei vollständige Samples, Abschlusszähler, dt, Seed und tatsächliche
+Parameterwerte samt Standard, Grenzen, Einheit, Skala und Dimensionsvektor.
+Vier Einstellungen außerhalb des Bereichs scheitern vor dem Anlegen einer Laufdatei.
+
+Diese Prüfung gilt für Intel macOS. Die weiterhin laufende Gesamt-SDK-Prüfung
+verwendet zuvor eingefrorene Eingaben und beweist diese spätere Beispieländerung
+nicht. Eine aktuelle SDK-/Linux-/Windows-Gesamtmatrix bleibt offen.

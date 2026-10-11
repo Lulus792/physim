@@ -17,11 +17,11 @@ static ps_result reset(ps_context *c){
 }
 static ps_result create(ps_context *c){
     experiment *e=calloc(1,sizeof *e);if(!e)return PS_MEMORY;c->user=e;
-    ps_result result=ps_parameter_define(c,"speed","Initial speed",10,0,100,&e->speed);if(result!=PS_OK)return result;
+    ps_result result=ps_parameter_define_unit(c,"speed","Initial speed",PS_VELOCITY,10,0,100,&e->speed);if(result!=PS_OK)return result;
     e->solver=PS_CONTACT_SOLVER_DEFAULT;e->solver.iterations=200;e->solver.restitution=1;e->solver.friction=0;e->solver.bounce_threshold_m_s=0;
     const char *names[]={"a.position","b.position","c.position","a.velocity","b.velocity","c.velocity","energy.kinetic","events","contacts","normal.error","projection.error"};
     for(unsigned i=0;i<11;i++){ps_unit unit=i<3 || i==10?PS_METRE:i<6 || i==9?PS_VELOCITY:i==6?PS_JOULE:PS_ONE;if(ps_channel_add(c,names[i],unit,names[i])<0)return PS_INVALID;}
-    snprintf(c->model_metadata,sizeof c->model_metadata,"model=three equal homogeneous spheres in vacuum\nmass_kg=1\nradius_m=0.5\ncentres_m=-4,0,4\nrestitution=1\nfriction=0\nexternal_forces=none\nccd=earliest event batches with canonical IDs\ncontact_offset_m=0.000001\n");return reset(c);
+    snprintf(c->model_metadata,sizeof c->model_metadata,"model=three equal homogeneous spheres in vacuum\nmass_kg=1\nradius_m=0.5\ncentres_m=-4,0,4\nrestitution=1\nfriction=0\nexternal_forces=none\nccd=earliest event batches with canonical IDs\ncontact_offset_m=0.000001\ninitial_speed_m_s=%.17g\n",e->speed);return reset(c);
 }
 static ps_result step(ps_context *c,double dt){
     experiment *e=c->user;ps_body candidate[3];memcpy(candidate,e->bodies,sizeof candidate);ps_ccd_step_result report;
