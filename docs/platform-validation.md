@@ -4099,3 +4099,40 @@ Zu frühe/verspätete Aufrufe, falsche Dimensionen, ungültige Rate, nicht
 darstellbare Raster, Seed-/Reset-/Kopieverhalten und Zustandserhaltung sind
 ebenfalls ausgeführt. Dies ist ein begrenzter Bibliotheks-/Persistenznachweis;
 die ganze aktuelle Plattformabnahme bleibt offen.
+
+
+## Gesamtbuild und Zielzeit-Serien nach der Energiebilanz-Erweiterung
+
+Der eingefrorene Intel-macOS-/AppleClang-16-Release-Build am
+`1a1a42d65227f8ed05f936f9902e281bfc599d59` endet tatsächlich mit
+**705/705 bestandenen nativen Fällen**. Ergebnisse:
+`build/current-full-build-1a1a42d-mac/test-results/run-7yavie3l/results.json`;
+Log: `build/current-full-build-1a1a42d-mac.log`. Alle 705 Ergebniszustände sind
+einzeln als bestanden gelesen. Dieser Stand liegt vor RunWriter und dem
+zusätzlichen Messkanal-Persistenznachweis. Das SDK wurde installiert.
+
+Die anschließende ganze SDK-Prüfung
+`build/current-full-sdk-1a1a42d-mac.log` endet dagegen mit Fehler: der
+Zielzeit-Serienprüfer verlangt noch neun Kanäle statt der elf aktuellen
+Pendelkanäle. Sie erreicht die vollständige App-Prüfung nicht. Der eingefrorene
+Stand und seine Fehlerbelege bleiben erhalten; diese Prüfung wurde nicht
+stillschweigend mit veränderten Eingaben fortgesetzt.
+
+Der korrigierte Prüfer verlangt genau elf Namen, die SI-Geschwindigkeits-
+und Joule-Schemata, endliche Werte, Vakuumverlust exakt null und Bilanz
+exakt gleich mechanischer Energie. Vorhandene PCHIP-Referenzwerte,
+Parameter-/Adaptive-Metadaten, strikt steigende variable Zeiten, exakter
+gemeinsamer Endpunkt, Energiedrift, kinematische Identitäten und Studienbericht
+bleiben geprüft. Ein neuer Repositoryfall führt diese Zielzeit-Serien mit
+allen sechs C-/Physim-Pendelmodellen aus: 18 tatsächliche Läufe.
+
+`build/current-pendulum-target-ledger-native-mac.log`, Release-Ergebnisse
+`build/current-headless-mac/test-results/run-ye471cw9`: **2/2 bestanden**,
+Parameterläufe und neuer Zielzeit-Serienfall.
+`build/current-pendulum-series-ledger-sdk-mac.log`, Consumer
+`build/current-pendulum-series-ledger-sdk-mac/Native SDK ä zyl4ip7m`:
+**47/47 protokollierte Kommandos bestanden** gegen installiertes und aus
+SDK-Quellen neu gebautes Core-Archiv. Dies umfasst 36 Zielzeit-Läufe,
+C-/Physim-Verfahrens-/Medienparität, gemischte Berichte, den Integrator-Lernpfad,
+Abklingauswertung und beide Peak-Bindungen. Die ganze aktuelle SDK-/App-/
+Plattformabnahme bleibt offen.

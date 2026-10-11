@@ -2492,6 +2492,15 @@
       "source": "tests/fixtures/language/run_writer.phys",
       "mode": "--emit-c",
       "memory_balance": true
+    },
+    "pendulum-series-probe": {
+      "sources": [
+        "tools/sdk_series_probe.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
     }
   },
   "tests": [
@@ -10063,6 +10072,220 @@
           "arguments": [
             "{root}/tests/check_language_writer_parity.py",
             "{work}"
+          ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "pendulum_target_series",
+      "targets": [
+        "physim-batch",
+        "physim-runner",
+        "pendulum-series-probe",
+        "pendulum",
+        "physim-language-pendulum",
+        "physim-language-pendulum-rk4",
+        "physim-language-pendulum-integrator",
+        "physim-language-pendulum-rk45",
+        "physim-language-pendulum-verlet"
+      ],
+      "steps": [
+        {
+          "program": "physim-batch",
+          "arguments": [
+            "{physim-runner}",
+            "{pendulum}",
+            "{work}/target-0",
+            "angle",
+            "3",
+            "1000",
+            ".1",
+            "42",
+            "--until",
+            ".7",
+            "--adaptive",
+            "--min-dt",
+            "1e-6",
+            "--max-dt",
+            ".2",
+            "--sweep",
+            "length=.5:2.5",
+            "--workers",
+            "3"
+          ],
+          "timeout": 90
+        },
+        {
+          "program": "pendulum-series-probe",
+          "arguments": [
+            "{work}/target-0",
+            "native"
+          ],
+          "timeout": 30
+        },
+        {
+          "program": "physim-batch",
+          "arguments": [
+            "{physim-runner}",
+            "{physim-language-pendulum}",
+            "{work}/target-1",
+            "angle",
+            "3",
+            "1000",
+            ".1",
+            "42",
+            "--until",
+            ".7",
+            "--adaptive",
+            "--min-dt",
+            "1e-6",
+            "--max-dt",
+            ".2",
+            "--sweep",
+            "length=.5:2.5",
+            "--workers",
+            "3"
+          ],
+          "timeout": 90
+        },
+        {
+          "program": "pendulum-series-probe",
+          "arguments": [
+            "{work}/target-1",
+            "native"
+          ],
+          "timeout": 30
+        },
+        {
+          "program": "physim-batch",
+          "arguments": [
+            "{physim-runner}",
+            "{physim-language-pendulum-rk4}",
+            "{work}/target-2",
+            "angle",
+            "3",
+            "1000",
+            ".1",
+            "42",
+            "--until",
+            ".7",
+            "--adaptive",
+            "--min-dt",
+            "1e-6",
+            "--max-dt",
+            ".2",
+            "--sweep",
+            "length=.5:2.5",
+            "--workers",
+            "3"
+          ],
+          "timeout": 90
+        },
+        {
+          "program": "pendulum-series-probe",
+          "arguments": [
+            "{work}/target-2",
+            "native"
+          ],
+          "timeout": 30
+        },
+        {
+          "program": "physim-batch",
+          "arguments": [
+            "{physim-runner}",
+            "{physim-language-pendulum-integrator}",
+            "{work}/target-3",
+            "angle",
+            "3",
+            "1000",
+            ".1",
+            "42",
+            "--until",
+            ".7",
+            "--adaptive",
+            "--min-dt",
+            "1e-6",
+            "--max-dt",
+            ".2",
+            "--sweep",
+            "length=.5:2.5",
+            "--workers",
+            "3"
+          ],
+          "timeout": 90
+        },
+        {
+          "program": "pendulum-series-probe",
+          "arguments": [
+            "{work}/target-3",
+            "native"
+          ],
+          "timeout": 30
+        },
+        {
+          "program": "physim-batch",
+          "arguments": [
+            "{physim-runner}",
+            "{physim-language-pendulum-rk45}",
+            "{work}/target-4",
+            "angle",
+            "3",
+            "1000",
+            ".1",
+            "42",
+            "--until",
+            ".7",
+            "--adaptive",
+            "--min-dt",
+            "1e-6",
+            "--max-dt",
+            ".2",
+            "--sweep",
+            "length=.5:2.5",
+            "--workers",
+            "3"
+          ],
+          "timeout": 90
+        },
+        {
+          "program": "pendulum-series-probe",
+          "arguments": [
+            "{work}/target-4",
+            "native"
+          ],
+          "timeout": 30
+        },
+        {
+          "program": "physim-batch",
+          "arguments": [
+            "{physim-runner}",
+            "{physim-language-pendulum-verlet}",
+            "{work}/target-5",
+            "angle",
+            "3",
+            "1000",
+            ".1",
+            "42",
+            "--until",
+            ".7",
+            "--adaptive",
+            "--min-dt",
+            "1e-6",
+            "--max-dt",
+            ".2",
+            "--sweep",
+            "length=.5:2.5",
+            "--workers",
+            "3"
+          ],
+          "timeout": 90
+        },
+        {
+          "program": "pendulum-series-probe",
+          "arguments": [
+            "{work}/target-5",
+            "native"
           ],
           "timeout": 30
         }

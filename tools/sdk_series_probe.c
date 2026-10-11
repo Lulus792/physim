@@ -7,7 +7,7 @@
 #include <string.h>
 #define CHECK(x) do{if(!(x)){fprintf(stderr,"SDK target series line %d: %s\n",__LINE__,#x);return 1;}}while(0)
 int main(int argc,char **argv) {
-    CHECK(argc==3 && (!strcmp(argv[2],"installed") || !strcmp(argv[2],"rebuilt")));
+    CHECK(argc==3 && (!strcmp(argv[2],"installed") || !strcmp(argv[2],"rebuilt") || !strcmp(argv[2],"native")));
     ps_analysis_context *ctx=NULL;
     char prefix[4096];snprintf(prefix,sizeof prefix,"%s/pchip-%s",argv[1],argv[2]);
     CHECK(ps_analysis_create(prefix,0,&ctx)==PS_OK);
@@ -24,13 +24,17 @@ int main(int argc,char **argv) {
     double endpoints[3];unsigned counts[3];char path[4096];
     for(unsigned i=0;i<3;i++) {
         snprintf(path,sizeof path,"%s/run-%04u.psrun",argv[1],i+1);
-        ps_run_reader r;CHECK(ps_run_open(&r,path)==PS_OK && r.channels==9);
+        ps_run_reader r;CHECK(ps_run_open(&r,path)==PS_OK && r.channels==11);
         const char *names[]={"angle","angular_velocity","position.x","position.y","energy",
-                             "sensor.angle","velocity.x","velocity.y","speed"};
-        for(unsigned channel=0;channel<9;channel++)CHECK(!strcmp(r.schema[channel].name,names[channel]));
+                             "sensor.angle","velocity.x","velocity.y","speed",
+                             "energy.dissipated","energy.balance"};
+        for(unsigned channel=0;channel<11;channel++)CHECK(!strcmp(r.schema[channel].name,names[channel]));
         const int8_t dimension[]={1,0,-1,0,0,0,0};
         for(unsigned channel=6;channel<9;channel++)
             CHECK(!memcmp(r.schema[channel].dimension,dimension,7) && !strcmp(r.schema[channel].unit,"m/s"));
+        const int8_t joules[]={2,1,-2,0,0,0,0};
+        for(unsigned channel=9;channel<11;channel++)
+            CHECK(!memcmp(r.schema[channel].dimension,joules,7) && !strcmp(r.schema[channel].unit,"J"));
         ps_parameter_unit unit;
         CHECK(ps_parameter_unit_parse(r.metadata,"length",&unit)==PS_OK && unit.declared &&
               unit.scale==1 && unit.dimension[0]==1 && !strcmp(unit.symbol,"m"));
@@ -40,6 +44,8 @@ int main(int argc,char **argv) {
         double t,v[PS_MAX_CHANNELS],previous=-1,energy=0;unsigned n=0;ps_result status;
         while((status=ps_run_next(&r,&t,v))==PS_OK) {
             CHECK(t>previous && t<=.7);
+            for(unsigned channel=0;channel<11;channel++)CHECK(isfinite(v[channel]));
+            CHECK(v[9]==0 && v[10]==v[4]);
             if(!n){CHECK(t==0);energy=v[4];}else CHECK(fabs(v[4]-energy)<1e-6);
             double length_m=.5+i;
             CHECK(fabs(v[6]-length_m*cos(v[0])*v[1])<1e-10 &&
@@ -60,5 +66,5 @@ int main(int argc,char **argv) {
     size_t length=fread(svg,1,sizeof svg-1,svg_file);svg[length]=0;CHECK(!fclose(svg_file));
     CHECK(strstr(svg,">length [m]</text>") && strstr(svg,">angle [rad]</text>"));
     ps_report_destroy(report);
-    puts("Installed target-time series: variable step counts, exact common endpoint, energy and study report passed");return 0;
+    puts("Installed target-time series: eleven SI channels, vacuum loss/balance, variable step counts, exact common endpoint, energy and study report passed");return 0;
 }
