@@ -493,62 +493,8 @@ ersetzen keine vollständige Tastatur-/Fokus-/Screenreader- oder Plattformabnahm
 
 ## Native benannte Optionsgruppen
 
-Darstellung und beide Schriftgrößen besitzen nun echte native Gruppen mit
-Eltern-/Kindbeziehungen, Geschwisterindizes und boolescher Auswahl. macOS meldet
-`AXRadioGroup`/`AXRadioButton`, Zahlenwerte und ausgewählte Kinder; Werte und
-Änderungen der ausgewählten Kinder werden gemeldet, auch wenn die ausgewählte
-Option aus dem sichtbaren Snapshot verschwindet. AT-SPI meldet `grouping` (99)
-und `radio button` (44), `checkable`/`checked`, Select-Aktionen, hierarchische
-Caches, Indizes und Rahmen in Fenster-/Elternkoordinaten. Gruppenknoten zählen
-zum bestehenden 256er-Budget. Core-API/ABI, Sprachvertrag und Dateiformate bleiben
-unverändert. [Verträge und Grenzen](accessibility.md).
-
-Die portable Gruppenprüfung belegt unterschiedliche Eltern für gleichlautende
-Optionen, exklusive/idempotente Auswahl, späte/gesperrte Aktionen, Kapazität,
-UTF-8 und einen ausdrücklich späteren Pointerwechsel nach einer nativen Auswahl.
-Die AppKit-Prüfung liest Rollen, Eltern, Kinder, ausgewählte Kinder, echte Rahmen
-und Zahlenwerte; eine zurückbehaltene, verschwundene Auswahl kann nicht aktiviert
-werden. Der UI-Prüfer nutzt tatsächlich gezeichnete Optionen. Der unabhängige
-AT-SPI-Client prüft zwei Fenster mit je zwei gleichlautenden Optionsgruppen,
-beide Richtungen der Auswahl, unabhängige Gruppen/Fenster, Parent-Koordinaten,
-Zustandsereignisse und deaktivierte/verborgene/veraltete Ziele.
-
-Die tatsächliche App führt sechs native Auswahlen aus: Oberfläche 22→16 px,
-Darstellung Hell→Dunkel und Editor 20→16 px. Entwürfe ändern sich; angewandte
-Konfiguration bleibt erhalten. Speichern und Neustart bleiben im vorhandenen
-Einstellungstastaturprüfer abgedeckt. Die ausgeführten nativen Prüfer sind keine
-praktische VoiceOver-/Orca-Abnahme oder ein programmatischer Fokusdienst.
-
-Intel macOS 14.6.1/Apple Clang 16 besteht Modell, Gruppenmodell, Geometrie,
-Handbuch, Referenzen und Prüfkit 6/6 (`run-0yzbnazn`). Der endgültige AppKit-/UI-/
-App-/Einstellungstastaturstand mit ausgewählten Kindern und verschwundener
-Auswahl besteht 5/5 (`run-dhdot21h`). Debian 12/GCC 12.2 besteht die sechs
-Prüfungen ohne Fenster 6/6 (`run-adj892wc`) und die vier AT-SPI-/App-/
-Tastaturabläufe 4/4 (`run-h8b1xqqr`). Linux/Clang 14/ASan/UBSan besteht dieselben
-vier Fensterprüfungen 4/4 (`run-zjum7e5z`) und die drei Modell-/Geometrieprüfungen
-3/3 (`run-kl573nta`). `detect_leaks=0` bleibt gesetzt; Address-/UB-Prüfungen
-bleiben aktiv. Eine abschließende Hit-Test-Korrektur gibt in Leerraum zwischen
-Optionen die Gruppe selbst zurück. Der Prüfer verlangt ausdrücklich einen
-realen Zwischenraum; der zusätzliche AT-SPI-Lauf besteht auf Linux/Release 1/1
-(`run-5jwtme3r`) und ASan/UBSan 1/1 (`run-6lpnk13l`).
-
-Die endgültigen verschobenen SDKs bestehen auf macOS unter
-`build/a11y-radio-final-sdk-checks/Native SDK ä c4tfdtu1` und Linux unter
-`build/a11y-radio-checked-sdk-checks/Native SDK ä ksz3mret`. Beide enthalten 469
-manifestierte Dateien und führen die tatsächliche App mit Checkbox- und beiden
-Richtungen der sechs Optionsauswahlen aus. Linux verwendet ausschließlich
-`build/a11y-radio-checked-independent-kit` mit 138 manifestierten Eingaben, ohne
-Entwicklerheader oder Physim-Implementierung. Derselbe fokussierte Prüfschritt
-gehört auch zur vollständigen SDK-Prüfung mit `--app-tests`; diese fokussierten
-Läufe sind keine erneute vollständige SDK-/Produktabnahme.
-
-Belege stehen in `build/a11y-radio-source-freeze.json` und
-`build/a11y-radio-sdk-{mac,linux}-PASSED.json`. Dieser Nachtrag erfolgt nach
-Paketierung; geprüfte Implementierung und Testeingaben bleiben unverändert.
-Der vollständige Plan bleibt erhalten. PP-0710 bleibt für Dropdowns, Listen,
-Text-/Editor-/Fokusdienste, Windows/UIA, Wayland und praktische Screenreader-
-Abnahme unvollständig. Die Zahl ungeprüfter Planblöcke bleibt unverändert.
-
+Der vollständige historische Nachweis bleibt im
+[Plattformarchiv](platform-validation-history.md#native-benannte-optionsgruppen) erhalten.
 
 ## Nativer Tastaturfokus für einfache Controls
 
@@ -4133,3 +4079,52 @@ Intel macOS 14.6.1 / AppleClang 16, tatsächlich ausgeführt:
 Diese Belege schließen begrenzte Bibliotheksanforderungen; Sensor-
 Standardunsicherheit ist weiterhin kein Konfidenzintervall oder vollständiges
 Kalibrierungsmodell. Die gesamte aktuelle Plattform-/Produktabnahme bleibt offen.
+
+
+## Feder- und Auftriebs-Appketten mit numerischer Bilanzkurve
+
+Die gesamte SDK-Prüfung am eingefrorenen 03a58b3 endet tatsächlich mit Fehler
+im App-Selftest spring: Stufe 7 verlangt vier Diagramme, obwohl die Analyse
+korrekt fünf erzeugt. `build/current-full-sdk-03a58b3-mac.log` und Consumer
+`build/current-full-sdk-03a58b3-consumer-mac/Native SDK ä _2xoj5hq` bewahren
+den Fehler. **562 von 563** protokollierten Kommandos enden mit 0; der
+letzte endet mit 1, kein PASSED-Marker ist vorhanden. Die vier vorherigen
+GUI-Ketten pendulum/projectile/collision/box_floor bestehen. Der Stand ist
+damit ausdrücklich keine gesamte SDK-/App-Abnahme.
+
+Feder und Auftrieb sind lokal mit denselben veralteten Erwartungen
+nachvollzogen: `build/current-other-balance-workflows-before-mac.log`,
+Ergebnisse `build/current-release-mac/test-results/run-ddeehtor`: **0/2**.
+Die Korrektur verlangt genau fünf Diagramme und prüft die numerische
+Joule-Bilanzkurve unabhängig gegen sämtliche gespeicherten Messzeilen und
+den vollständigen Maximalfehler. Der ganze Bilanz-CSV muss vorhanden sein.
+Der neue spring_workflow ist jetzt auch im Repository-Displaykatalog
+registriert; beide Fälle kommen zusätzlich in die fokussierte Linux-CI.
+
+`build/current-other-balance-workflows-after-mac.log`, Release-Ergebnisse
+`build/current-release-mac/test-results/run-16f_ncqh`: **4/4 bestanden** auf
+Intel macOS 14.6.1 / AppleClang 16: Feder, Auftrieb und beide Pendel-
+Sprachkombinationen. Ein neu installiertes SDK besteht Feder und Auftrieb
+ebenfalls mit jeweils einem vollständigen Appprozess (Exit 0):
+`build/current-general-balance-sdk-install-mac.log`,
+`build/current-general-balance-sdk-spring-mac.log` und
+`build/current-general-balance-sdk-floating-mac.log`. Aktuelle ganze
+Plattform-/SDK-Abnahme bleibt offen; die erneute CI ist ein gesonderter Gate.
+
+## Monte-Carlo mit explizitem Seed (PP-0404)
+
+Der Originalblock ist gegen Controller, C-/Physim-Modelle, archivierte Seeds
+und unabhängige numerische Referenzen geprüft.
+`build/current-monte-carlo-seed-plan-mac.log`, Ergebnisse
+`build/current-headless-mac/test-results/run-3ujom15v`: **1/1 bestanden**
+auf Intel macOS / AppleClang 16. **1536 archivierte Läufe** werden mit einem
+eigenen PCG-/Box-Muller- und analytischen Ballistik-Orakel geprüft.
+Ein und vier Worker erzeugen identische Journale; beide Sprachen liefern
+gleichwertige Trajektorien. Hochbit-/maximale Seeds, konstante Populationen,
+acht gemischte Analysen, Szenen sowie abgewiesene unvollständige oder
+inkonsistente Ensembles sind enthalten.
+`build/current-monte-carlo-seed-batch-controls-mac.log`, Ergebnisse
+`build/current-headless-mac/test-results/run-mkgya14g`: **2/2 bestanden**,
+Batch-Referenzen und parallele Worker; Seedüberlauf wird vor Start abgewiesen.
+Dies belegt die begrenzte Bibliotheks-/Controlleranforderung; die gesamte
+aktuelle Plattform- und Produktabnahme bleibt offen.

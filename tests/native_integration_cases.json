@@ -10392,6 +10392,36 @@
           "timeout": 180
         }
       ]
+    },
+    {
+      "name": "spring_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "spring_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 160,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
     }
   ]
 }

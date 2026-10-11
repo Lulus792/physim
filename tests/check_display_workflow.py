@@ -20,6 +20,7 @@ SIMPLE = {
     "sphere_collision_workflow": (["--self-test", "{directory}", "collision"], 150, True),
     "box_collision_workflow": (["--self-test", "{directory}", "box_collision"], 150, True),
     "floating_workflow": (["--self-test", "{directory}", "buoyancy"], 150, True),
+    "spring_workflow": (["--self-test", "{directory}", "spring"], 150, True),
     "plot_workflow": (["--plot-test", "{directory}"], 35, True),
     "plot_input_isolation": (["--plot-test-noise", "{directory}"], 35, True),
     "graphics": (["--renderer-test"], 30, False),

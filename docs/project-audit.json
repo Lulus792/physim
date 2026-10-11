@@ -3522,9 +3522,20 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Monte-Carlo-Ausführung mit explizitem Seed.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/batch.h",
+        "src/batch.c",
+        "runners/batch.c",
+        "tests/test_batch.c",
+        "tests/test_monte_carlo_tutorial.py",
+        "tests/test_monte_carlo_tutorial_instances.c",
+        "tests/test_monte_carlo_tutorial_report.c",
+        "examples/documentation/monte_carlo_main.c",
+        "examples/documentation/monte_carlo_main.phys",
+        "docs/monte-carlo.md"
+      ],
+      "note": "Expliziter Startseed und deterministische Indexseeds sind im Controller implementiert; Überlauf wird vor Start abgewiesen. 1536 tatsächliche C-/Physim-Archive mit unabhängigen PCG-/Box-Muller-/Ballistik-Orakeln, identischen Ein-/Vierworker-Journalen, vollständigen Seeds/Szenen und acht gemischten Berichten sind aktuell auf Intel macOS ausgeführt. Zusätzliche Batch-/Parallelitätsreferenzen bestehen. Das Modell entscheidet ausdrücklich über Seednutzung; ganze aktuelle Plattform-/Produktabnahme bleibt offen."
     },
     {
       "id": "PP-0405",

@@ -1048,3 +1048,15 @@ Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **100 implemented**, **13 incomplete**, **418 unverified**;
 `completion_proven` bleibt `false`. Die ganze Plattform- und Produktabnahme
 bleibt offen.
+
+
+## Explizite Monte-Carlo-Seeds (PP-0404)
+
+Ein-/Vierworker-Reproduzierbarkeit, Seedüberlauf und tatsächliche C-/Physim-
+Archive sind gegen unabhängige RNG-/Bewegungsorakel neu ausgeführt. Der
+Planblock erhält diesen begrenzten Controller-/Bibliotheksnachweis.
+[Nachweise und Grenzen](platform-validation.md#monte-carlo-mit-explizitem-seed-pp-0404).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**101 implemented**, **13 incomplete**, **417 unverified**;
+`completion_proven` bleibt `false`. Die vollständige Plattform- und
+Produktabnahme bleibt offen.

@@ -59,7 +59,7 @@ jobs:
           xvfb-run -a -s '-screen 0 1920x1080x24' sh -c '
             openbox > build/window-manager.log 2>&1 &
             python3 tools/wait-window-manager.py &&
-            python3 tools/build.py --compiler "${{ matrix.compiler }}" --sanitizers --test-display --test-filter project_tree_workflow --test-filter completion_workflow --test-filter api_reference_workflow --test-filter language_full_workflow --test-filter language_mixed_workflow
+            python3 tools/build.py --compiler "${{ matrix.compiler }}" --sanitizers --test-display --test-filter project_tree_workflow --test-filter completion_workflow --test-filter api_reference_workflow --test-filter language_full_workflow --test-filter language_mixed_workflow --test-filter spring_workflow --test-filter floating_workflow
           '
       - name: Archive focused evidence
         if: always()

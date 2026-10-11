@@ -2922,6 +2922,39 @@ static bool test_pendulum_balance_report(const app *a) {
        row.values[0]==last_loss && row.values[1]==max_error;
     ps_run_reader_close(&reader);return ok;
 }
+static bool test_general_balance_report(const app *a) {
+    const ps_curve_data *curve=NULL;ps_plot_info plot;ps_table_info table;ps_table_row row;
+    const int8_t joules[]={2,1,-2,0,0,0,0};
+    if(ps_report_plot_read(a->analysis_report,4,&plot)!=PS_OK ||
+       strcmp(plot.title,"Numerischer Energiebilanzfehler") || plot.curves!=1 ||
+       memcmp(plot.y_unit.dimension,joules,7) ||
+       ps_report_curve_view(a->analysis_report,4,0,&curve)!=PS_OK ||
+       curve->kind!=PS_PLOT_LINE || !curve->count || curve->source_count!=a->data.total ||
+       ps_report_table_read(a->analysis_report,1,&table)!=PS_OK ||
+       strcmp(table.column[0].label,"Max. Bilanzabweichung") || table.rows!=1 ||
+       memcmp(table.column[0].unit.dimension,joules,7) ||
+       ps_report_row_read(a->analysis_report,1,0,&row)!=PS_OK)return false;
+    ps_run_reader reader;if(ps_run_open(&reader,a->last_run)!=PS_OK)return false;
+    int energy=-1,loss=-1,balance=-1;
+    for(uint32_t i=0;i<reader.channels;i++) {
+        if(!strcmp(reader.schema[i].name,"energy"))energy=(int)i;
+        if(!strcmp(reader.schema[i].name,"energy.dissipated"))loss=(int)i;
+        if(!strcmp(reader.schema[i].name,"energy.balance"))balance=(int)i;
+    }
+    bool ok=energy>=0 && loss>=0 && balance>=0;
+    if(ok)ok=!memcmp(reader.schema[balance].dimension,joules,7) && !memcmp(reader.schema[loss].dimension,joules,7);
+    double time,values[PS_MAX_CHANNELS],initial=0,max_error=0;uint64_t count=0;
+    uint32_t point=0;ps_result status=PS_INVALID;
+    while(ok && (status=ps_run_next(&reader,&time,values))==PS_OK) {
+        if(!count)initial=values[balance];
+        double error=values[balance]-initial;count++;
+        ok=values[loss]>=0 && values[balance]==values[energy]+values[loss];
+        max_error=fmax(max_error,fabs(error));
+        if(point<curve->count && curve->x[point]==time){ok=ok && curve->y[point]==error;point++;}
+    }
+    ok=ok && status==PS_EOF && count==a->data.total && point==curve->count && row.values[0]==max_error;
+    ps_run_reader_close(&reader);return ok;
+}
 int main(int argc, char **argv) {
     double profile_app_started = ps_clock();
     bool workspace_test = argc > 1 && !strcmp(argv[1], "--workspace-test");
@@ -4067,8 +4100,13 @@ int main(int argc, char **argv) {
                 uint32_t plots = 0, tables = 0;
                 if (!a->analysis_report ||
                     ps_report_describe(a->analysis_report, NULL, NULL, &plots, &tables) != PS_OK ||
-                    plots != (test_example == 0 || test_example == 8 ? 5u : test_example == 4 || test_example == 5 || test_example == 7 ? 4u : 3u) || !tables)
+                    plots != (test_example == 0 || test_example == 8 || test_example == 4 || test_example == 7 ? 5u : test_example == 5 ? 4u : 3u) || !tables)
                     exit_code = 1;
+                if(test_example==0 || test_example==8 || test_example==4 || test_example==7) {
+                    if(!test_general_balance_report(a))exit_code=1;
+                    snprintf(report,sizeof report,"%s-balance.csv",a->report);
+                    if(!exists(report))exit_code=1;
+                }
                 capture = "analysis.bmp";
                 test_stage = 30;
             } else if (test_stage == 30) {
@@ -4490,7 +4528,7 @@ int main(int argc, char **argv) {
                 uint32_t plots = 0;
                 if (strcmp(a->loaded_report_path, test_original_report) ||
                     ps_report_describe(a->analysis_report, NULL, NULL, &plots, NULL) != PS_OK ||
-                    plots != (test_example == 0 || test_example == 8 ? 5u : test_example == 4 || test_example == 5 || test_example == 7 ? 4u : 3u) || a->built)
+                    plots != (test_example == 0 || test_example == 8 || test_example == 4 || test_example == 7 ? 5u : test_example == 5 ? 4u : 3u) || a->built)
                     exit_code = 1;
                 capture = "library-reopened-report.bmp";
                 test_stage = 63;
