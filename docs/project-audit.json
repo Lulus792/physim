@@ -2747,9 +2747,13 @@
         "runners/experiment.c",
         "app/run_import.c",
         "tests/test_run_stream.c",
-        "docs/run-streams.md"
+        "docs/run-streams.md",
+        "include/physim/language_run_stream.h",
+        "tests/test_language_run_stream.c",
+        "tests/fixtures/language/run_stream.phys",
+        "tests/check_language_stream_host.c"
       ],
-      "note": "Dataset/Series besitzen owner/slot/generation; Reportelemente sind append-only owner/index-Handles ohne eigene Generation. Neue opake Run-Stream-Stores verbergen FILE-/Zählerzustände und prüfen owner/slot/generation, alte Kopien, Wiederverwendung, terminale Zustände und begrenzte Kapazität. Experiment-Runner und App-Importvalidierung sind darauf umgestellt. Legacy-Reader/Writer aus data.h und andere öffentliche Ressourcenzustände bleiben vorhanden; die allgemeine Handle-Migration sowie zusätzliche direkte Low-Level-Sprachbindungen sind nicht abgeschlossen. Handles müssen innerhalb der Besitzerlebensdauer verwendet werden."
+      "note": "Dataset/Series besitzen owner/slot/generation; Reportelemente sind append-only owner/index-Handles ohne eigene Generation. Neue opake Run-Stream-Stores verbergen FILE-/Zählerzustände und prüfen owner/slot/generation, alte Kopien, Wiederverwendung, terminale Zustände und begrenzte Kapazität. Experiment-Runner und App-Importvalidierung sind darauf umgestellt. Legacy-Reader/Writer aus data.h und andere öffentliche Ressourcenzustände bleiben vorhanden; die allgemeine Handle-Migration sowie zusätzliche direkte Low-Level-Sprachbindungen sind nicht abgeschlossen. Handles müssen innerhalb der Besitzerlebensdauer verwendet werden. RunStore und RunReader binden den opaken Lesezugang jetzt auch in Physim: geteilte Besitzer/Cursor, ungültige alte Kopien, unabhängige Zeilen/Szenen, Recovery und tatsächliche Experiment-/Analyse-Runner sind lokal geprüft. Writer bleiben C-only; vollständige Migration und Funktionsparität bleiben offen."
     },
     {
       "id": "PP-0353",

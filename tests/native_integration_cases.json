@@ -2447,6 +2447,37 @@
       "defines": [
         "PS_BACKPRESSURE_STEP_DELAY_MS=15"
       ]
+    },
+    "language-run-stream-memory": {
+      "sources": [
+        "tests/test_language_run_stream.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "language-run-stream-values": {
+      "source": "tests/fixtures/language/run_stream.phys",
+      "mode": "--emit-c",
+      "memory_balance": true
+    },
+    "language-run-stream-experiment": {
+      "source": "tests/fixtures/language/run_stream_experiment.phys",
+      "mode": "--emit-experiment"
+    },
+    "language-run-stream-analysis": {
+      "source": "tests/fixtures/language/run_stream_analysis.phys",
+      "mode": "--emit-analysis"
+    },
+    "language-run-stream-host-check": {
+      "sources": [
+        "tests/check_language_stream_host.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
     }
   },
   "tests": [
@@ -9930,6 +9961,71 @@
             "{work}"
           ],
           "timeout": 720
+        }
+      ]
+    },
+    {
+      "name": "language_run_stream",
+      "targets": [
+        "python",
+        "language-run-stream-memory",
+        "language-run-stream-values",
+        "physim-runner",
+        "physim-analysis-runner",
+        "language-run-stream-experiment",
+        "language-run-stream-analysis",
+        "language-run-stream-host-check"
+      ],
+      "steps": [
+        {
+          "program": "language-run-stream-memory",
+          "arguments": [
+            "{work}"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/prepare_language_stream_corruption.py",
+            "{work}"
+          ],
+          "timeout": 30
+        },
+        {
+          "program": "language-run-stream-values",
+          "stdout": "Language run stream checks passed\n",
+          "timeout": 60,
+          "arguments": []
+        },
+        {
+          "program": "physim-runner",
+          "arguments": [
+            "{language-run-stream-experiment}",
+            "{work}/replay.psrun",
+            "--steps",
+            "3",
+            "--dt",
+            ".125"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{language-run-stream-analysis}",
+            "{work}/stream \u03b1.psrun",
+            "{work}/reader-report"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "language-run-stream-host-check",
+          "arguments": [
+            "{work}/replay.psrun",
+            "{work}/reader-report.psreport"
+          ],
+          "timeout": 60
         }
       ]
     }

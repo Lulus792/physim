@@ -1,0 +1,15 @@
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let output = Channel("replayed",metres,"Position read from an opaque cursor")
+let store = RunStore()
+var reader = store.openReader("stream α.psrun")
+func create():
+    metadata("model=opaque stream replay\nsource=stream α.psrun")
+func reset():
+    reader.close()
+    reader = store.openReader("stream α.psrun")
+    output.sample(0)
+func step(dt: Float64):
+    assert(reader.next(),"Expected one complete recorded row")
+    output.sample(reader.row().value(0,0))
+func scene():
+    return

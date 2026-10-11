@@ -1,0 +1,14 @@
+func analyze():
+    let store = RunStore()
+    let reader = store.openReader(inputPath(0))
+    let metre = Unit(1,0,0,0,0,0,0,1,"m")
+    let second = Unit(0,0,1,0,0,0,0,1,"s")
+    report("Opaque stream analysis")
+    let table = Table("Recorded rows",["Time","Position"],[second,metre])
+    var index = 0
+    while reader.next():
+        let row = reader.row()
+        table.row("row " + String(index),[Quantity(row.time(0),second),Quantity(row.value(0,0),metre)])
+        index += 1
+    assert(index == 3 && reader.isComplete())
+    store.close()

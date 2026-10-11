@@ -3,6 +3,7 @@
 #include "language_runtime.h"
 #include "language_diagnostic.h"
 #include "language_run_index.h"
+#include "language_run_stream.h"
 #include "language_array.h"
 #include "experiment.h"
 #include "language_measurement.h"

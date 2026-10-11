@@ -3006,6 +3006,16 @@ keine Hostdiagnose. [Vertrag, Methoden und Beispiele](diagnostics.md).
 
 ## Indizierte Läufe und Szenen
 
+`RunStore` und `RunReader` ergänzen fortlaufenden Zugriff mit opaken, besitzenden
+Referenzhandles. Kopien teilen Store beziehungsweise Cursor. `close()` invalidiert
+alle betreffenden Kopien; letzte Besitzer geben Dateien automatisch frei.
+`next()`/`nextSnapshot()` akzeptieren vollständige Werte oder melden terminale
+EOF-/Recovery-Zustände. `row()` und `snapshot()` erzeugen unabhängige Werte;
+ein Kopierfehler verbraucht keine weitere Messzeile. Kanalmetadaten sind
+laufzeitgeprüft. Der erste Traversierungsaufruf legt den Cursor auf Messzeilen
+oder Szenen fest. Schreibende Low-Level-Streams sind noch nicht sprachgebunden.
+[Vollständiger Vertrag und Beispiel](run-streams.md#fortlaufend-in-physim-lesen).
+
 `RunIndex(path, maximumEntries)` besitzt einen validierten Lauf samt Checkpoints;
 `read(first, count)` liefert einen unabhängigen `RunBlock`, `snapshot(ordinal)`
 einen vollständigen `RunSnapshot`. In Analysen erschließt `inputPath(index)` die

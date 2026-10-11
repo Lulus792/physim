@@ -2090,6 +2090,16 @@ RunIndex(path: String, maximumEntries: Int64) -> RunIndex
 
 Überall verfügbar.
 
+## RunStore
+
+```text
+RunStore() -> RunStore
+```
+
+Erzeugt einen besitzenden Store für opake Laufdatei-Lesehandles. Kopien teilen den Store; close invalidiert alle zugehörigen Handles.
+
+Überall verfügbar.
+
 ## Sensor
 
 ```text
@@ -4871,6 +4881,166 @@ Liefert das Kanalsymbol als eigenen String. Kanalindizes sind nullbasiert; gesch
 
 Überall verfügbar.
 
+## runReaderChannels
+
+```text
+runReaderChannels(reader: RunReader) -> Int64
+```
+
+Anzahl aufgezeichneter Kanäle.
+
+Überall verfügbar.
+
+## runReaderClose
+
+```text
+runReaderClose(reader: RunReader) -> Void
+```
+
+Schließt den gemeinsamen Cursor und invalidiert seine Handle-Kopien.
+
+Überall verfügbar.
+
+## runReaderComplete
+
+```text
+runReaderComplete(reader: RunReader) -> Bool
+```
+
+Zeigt an, ob ein gültiger Abschluss gelesen wurde.
+
+Überall verfügbar.
+
+## runReaderDescription
+
+```text
+runReaderDescription(reader: RunReader, channel: Int64) -> String
+```
+
+Kopiert die Beschreibung am nullbasierten Kanalindex.
+
+Überall verfügbar.
+
+## runReaderDimension
+
+```text
+runReaderDimension(reader: RunReader, channel: Int64, axis: Int64) -> Int64
+```
+
+Liest einen der sieben SI-Dimensionsexponenten eines aufgezeichneten Kanals.
+
+Überall verfügbar.
+
+## runReaderIsOpen
+
+```text
+runReaderIsOpen(reader: RunReader) -> Bool
+```
+
+Prüft Store, Slot und Generation des Lesers.
+
+Überall verfügbar.
+
+## runReaderMetadata
+
+```text
+runReaderMetadata(reader: RunReader) -> String
+```
+
+Kopiert die vollständigen Laufmetadaten in einen besitzenden String.
+
+Überall verfügbar.
+
+## runReaderName
+
+```text
+runReaderName(reader: RunReader, channel: Int64) -> String
+```
+
+Kopiert den Namen am nullbasierten Kanalindex.
+
+Überall verfügbar.
+
+## runReaderNext
+
+```text
+runReaderNext(reader: RunReader) -> Bool
+```
+
+Liest eine vollständige Messzeile in den Cursor. EOF oder Recovery liefert false; andere Fehler sind fangbar.
+
+Überall verfügbar.
+
+## runReaderNextSnapshot
+
+```text
+runReaderNextSnapshot(reader: RunReader) -> Bool
+```
+
+Liest eine vollständige Szenenkopie in den Cursor. Sample- und Snapshot-Traversierung dürfen auf einem Cursor nicht gemischt werden.
+
+Überall verfügbar.
+
+## runReaderRecovered
+
+```text
+runReaderRecovered(reader: RunReader) -> Bool
+```
+
+Prüft, ob die Traversierung an einem unvollständigen oder beschädigten Rest endete.
+
+Überall verfügbar.
+
+## runReaderRow
+
+```text
+runReaderRow(reader: RunReader) -> RunBlock
+```
+
+Kopiert die letzte akzeptierte Messzeile in einen unabhängigen RunBlock. Allokationsfehler verbrauchen keine weitere Zeile.
+
+Überall verfügbar.
+
+## runReaderSamples
+
+```text
+runReaderSamples(reader: RunReader) -> Int64
+```
+
+Anzahl bisher vom Core-Leser verarbeiteter Messsamples; übergroße Werte liefern PS_LIMIT.
+
+Überall verfügbar.
+
+## runReaderSnapshot
+
+```text
+runReaderSnapshot(reader: RunReader) -> RunSnapshot
+```
+
+Kopiert die letzte akzeptierte Szene als unabhängigen RunSnapshot.
+
+Überall verfügbar.
+
+## runReaderStatus
+
+```text
+runReaderStatus(reader: RunReader) -> Int64
+```
+
+Aktueller Core-Status der Traversierung als Resultcode.
+
+Überall verfügbar.
+
+## runReaderSymbol
+
+```text
+runReaderSymbol(reader: RunReader, channel: Int64) -> String
+```
+
+Kopiert das SI-Einheitensymbol am nullbasierten Kanalindex.
+
+Überall verfügbar.
+
 ## runSeed
 
 ```text
@@ -5078,6 +5248,36 @@ runSnapshot_world_point(snapshot: RunSnapshot, index: Int64, local: Vec3) -> Vec
 ```
 
 Liefert den Weltpunkt aus lokalem Punkt und Objektslot aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runStoreClose
+
+```text
+runStoreClose(store: RunStore) -> Void
+```
+
+Schließt den gemeinsamen Store und alle Leser. Alle Kopien werden ungültig; Dateien und Speicher werden freigegeben.
+
+Überall verfügbar.
+
+## runStoreIsOpen
+
+```text
+runStoreIsOpen(store: RunStore) -> Bool
+```
+
+Prüft, ob der gemeinsame Store noch geöffnet ist.
+
+Überall verfügbar.
+
+## runStoreReader
+
+```text
+runStoreReader(store: RunStore, path: String) -> RunReader
+```
+
+Öffnet einen fortlaufenden Leser mit eigenem Cursor im Store. Höchstens acht Leser sind gleichzeitig geöffnet.
 
 Überall verfügbar.
 

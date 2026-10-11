@@ -67,6 +67,76 @@ verfügbar. Ihr öffentlicher Zustand wird durch diese Erweiterung nicht nachtr�
 opak. Auch weitere Ressourcenschnittstellen müssen noch gegen die allgemeine
 Handle-Forderung des Projektplans abgeglichen werden. Dataset/Series besitzen
 bereits Generationen; Reportelemente sind append-only Besitzer-/Index-Handles.
-Diese Erweiterung behauptet keine abgeschlossene gesamte Handle-Migration oder
-zusätzliche direkte Physim-Sprachbindungen für Low-Level-Streams. C- und Physim-
-Experimente nutzen den gemeinsamen umgestellten Runner.
+Diese Erweiterung behauptet keine abgeschlossene gesamte Handle-Migration.
+C- und Physim-Experimente nutzen den gemeinsamen umgestellten Runner.
+
+## Fortlaufend in Physim lesen
+
+`RunStore()` erzeugt einen besitzenden Store. `store.openReader(path)` öffnet
+einen `RunReader` mit eigenem Dateicursor. Beide Werte sind Referenzhandles:
+Kopien eines Stores teilen den Store, Kopien eines Readers teilen seinen
+Cursor. `reader.close()` schließt diesen Cursor für alle Kopien;
+`store.close()` schließt sämtliche zugehörigen Reader für alle Storekopien.
+Diese Methoden sind daher auch auf `let`-Werten erlaubt. `isOpen()` prüft
+den tatsächlich lebenden Store beziehungsweise Slot und Generation.
+
+```physim
+let store = RunStore()
+let reader = store.openReader("experiment.psrun")
+while reader.next():
+    let row = reader.row()
+    let time = row.time(0)
+    let firstChannel = row.value(0,0)
+    // row ist ein unabhängiger RunBlock mit genau einer Messzeile.
+if reader.isRecovered():
+    // Der validierte Präfix ist vorhanden; der Rest war unvollständig/beschädigt.
+    let acceptedSamples = reader.sampleCount()
+reader.close()
+store.close()
+```
+
+`next()` liefert true für eine vollständig akzeptierte Messzeile und false
+für `PS_EOF` oder `PS_RECOVERED`. Ein gültiger gelesener Abschluss ist über
+`isComplete()` erkennbar. `statusCode()` nennt den unveränderten Core-Resultcode;
+andere Fehler sind mit `attempt` fangbar. Ein terminaler Cursor bleibt terminal.
+`row()` kopiert die letzte akzeptierte Zeile als besitzenden `RunBlock`.
+Ein Fehler beim Kopieren verbraucht keine neue Zeile; dieselbe akzeptierte Zeile
+kann danach erneut kopiert werden. Vor dem ersten erfolgreichen `next()` ist
+`row()` ungültig. Nach EOF/Recovery bleibt die letzte akzeptierte Zeile erhalten.
+
+Für Szenen öffnet man einen eigenen Reader und verwendet
+`nextSnapshot()` sowie `snapshot()`. Der zurückgegebene `RunSnapshot` kopiert
+sämtliche Szenenwerte, IDs, Hierarchie und Punkte. Er bleibt nach dem nächsten
+Leseschritt und nach dem Schließen verwendbar. Messzeilen- und Szenentraversierung
+dürfen auf einem Physim-Cursor nicht gemischt werden; der erste Aufruf legt
+seinen Modus fest. Ein abgewiesener Moduswechsel verändert weder Cursor noch
+letzten akzeptierten Wert. Separate Reader erlauben beide Durchläufe.
+
+`metadata()`, `channelName(index)`, `channelSymbol(index)` und
+`channelDescription(index)` liefern unabhängige besitzende Strings.
+`channelDimension(index,axis)` liest einen der sieben SI-Exponenten;
+`channelCount()` nennt die aufgezeichneten Kanäle. Indizes sind nullbasiert;
+die synthetische Analysezeitachse zählt hier nicht mit. `sampleCount()` nennt
+die vom Core bereits verarbeiteten Messzeilen und meldet `PS_LIMIT`, wenn die
+Zahl nicht mehr in Int64 passt. Ein neuer Reader startet am Dateianfang.
+
+Ein Store erlaubt höchstens acht gleichzeitig offene Reader. Geschlossene Slots
+sind wiederverwendbar; alte Readerkopien bleiben ungültig. Letzte Besitzer
+geben Dateien und explizit allokierten Speicher automatisch frei. Temporäre
+Werte dürfen wie andere Sprachwerte bis zum Ende ihres Blocks leben; `close()`
+ist der ausdrückliche Weg, Dateicursor und Slots früher freizugeben. Arrays,
+Optionals, generische Strukturen, Rückgabewerte und Funktionsübergaben behalten
+dieselben Besitzregeln. Ein Reader hält seinen Store bis zur letzten Readerkopie
+am Leben, auch wenn der ursprüngliche Storewert seinen Gültigkeitsbereich verlässt.
+
+Der Allocator des Stores verwaltet seine Readerbesitzer. Jede Operation benötigt
+externe Serialisierung, falls ein solcher Store außerhalb des normalen
+einthreadigen Sprachablaufs geteilt wird. C-stdio-/OS-Puffer zählen weiterhin
+nicht zur Sprach-Speicherbilanz. Die C-/Physim-Tests provozieren Store-, Reader-
+und Zeilenallokationsfehler, prüfen sämtliche Slots und zählen die nach
+Programmende verbleibenden expliziten Bytes.
+
+Die schreibenden Low-Level-Stream-Funktionen bleiben in dieser Stufe C-APIs.
+Die neue Lesebindung ersetzt weder den bestehenden `RunIndex` für wahlfreien
+Zugriff noch Dataset/Series für Analysen und schließt die allgemeine
+C-/Physim-Funktionsparität des Projektplans noch nicht vollständig ab.

@@ -272,7 +272,8 @@ def integration_steps(record, builder, libraries, source, work, steps):
         elif "source" in artifact:
             mode = artifact["mode"]
             program = build_language_program("integration-" + name, source / artifact["source"], mode,
-                                             mode != "--emit-c", builder, [libraries["core"]], work, steps)
+                                             mode != "--emit-c", builder, [libraries["core"]], work, steps,
+                                             memory_balance=artifact.get("memory_balance", False))
             if program is None:
                 return
         else:
