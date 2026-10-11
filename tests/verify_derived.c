@@ -2,6 +2,7 @@
 #include "physim/report.h"
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 int main(int argc, char **argv) {
     if (argc != 4)
@@ -46,7 +47,7 @@ int main(int argc, char **argv) {
     uint32_t plots = 0, tables = 0;
     ps_report_describe(report, NULL, NULL, &plots, &tables);
     ps_curve_data curve;
-    ok = ok && plots == 4 && tables == 3;
+    ok = ok && plots == 5 && tables == 3;
     if (ps_report_curve_read(report, 0, 0, &curve) != PS_OK)
         ok = false;
     else {
@@ -82,16 +83,35 @@ int main(int argc, char **argv) {
         ok = ok && sum == 4001;
     }
     ps_plot_info energy_plot;
-    if(ps_report_plot_read(report,3,&energy_plot)!=PS_OK ||
-       strcmp(energy_plot.title,"Mechanische Energieänderung") ||
+    if(ps_report_plot_read(report,4,&energy_plot)!=PS_OK || energy_plot.curves!=1 ||
+       strcmp(energy_plot.title,"Numerischer Energiebilanzfehler") ||
        energy_plot.y_unit.dimension[0]!=2 || energy_plot.y_unit.dimension[1]!=1 ||
        energy_plot.y_unit.dimension[2]!=-2 ||
-       ps_report_curve_read(report,3,0,&curve)!=PS_OK)
+       ps_report_curve_read(report,4,0,&curve)!=PS_OK)
         ok=false;
     else {
         ok=ok && curve.source_count==4001 && curve.y[0]==0;
         for(uint32_t i=0;i<curve.count;i++)ok=ok && fabs(curve.y[i])<1e-8;
     }
+    ps_curve_data *balance = malloc(sizeof *balance);
+    if (!balance || ps_report_plot_read(report, 3, &energy_plot) != PS_OK ||
+        strcmp(energy_plot.title, "Energiebilanz mit Dämpfung") || energy_plot.curves != 3 ||
+        ps_report_curve_read(report, 3, 2, balance) != PS_OK)
+        ok = false;
+    else {
+        ok = ok && balance->count == curve.count && balance->source_count == 4001;
+        for (uint32_t i = 0; i < balance->count && i < curve.count; i++)
+            ok = ok && balance->x[i] == curve.x[i] &&
+                 balance->y[i] - balance->y[0] == curve.y[i];
+        if (ps_report_curve_read(report, 3, 0, balance) != PS_OK)
+            ok = false;
+        else {
+            ok = ok && balance->source_count == 4001;
+            for (uint32_t i = 0; i < balance->count; i++)
+                ok = ok && fabs(balance->y[i] - balance->y[0]) < 1e-8;
+        }
+    }
+    free(balance);
     ps_table_info decay;
     ps_table_row decay_row;
     if(ps_report_table_read(report,2,&decay)!=PS_OK ||

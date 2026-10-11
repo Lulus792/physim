@@ -150,7 +150,7 @@ int main(int argc, char **argv) {
     ps_report *report = NULL;
     uint32_t plots, tables;
     CHECK(ps_report_load("spring-report.psreport", &report) == PS_OK);
-    CHECK(ps_report_describe(report, NULL, NULL, &plots, &tables) == PS_OK && plots == 4 &&
+    CHECK(ps_report_describe(report, NULL, NULL, &plots, &tables) == PS_OK && plots == 5 &&
           tables == 2);
     ps_plot_info plot;
     CHECK(ps_report_plot_read(report, 3, &plot) == PS_OK && plot.curves == 3 &&
@@ -166,6 +166,17 @@ int main(int argc, char **argv) {
             CHECK(fabs(curve->y[i] - (j == 0 ? energy : j == 1 ? .98 - energy : .98)) < 1e-7);
         }
     }
+    ps_curve_data *error_curve = malloc(sizeof *error_curve);
+    CHECK(error_curve);
+    CHECK(ps_report_plot_read(report, 4, &plot) == PS_OK && plot.curves == 1 &&
+          !strcmp(plot.title, "Numerischer Energiebilanzfehler") &&
+          !strcmp(plot.y_unit.symbol, "J"));
+    CHECK(ps_report_curve_read(report, 4, 0, error_curve) == PS_OK &&
+          error_curve->count == curve->count && error_curve->source_count == 2001);
+    for (unsigned i = 0; i < curve->count; i++)
+        CHECK(error_curve->x[i] == curve->x[i] &&
+              error_curve->y[i] == curve->y[i] - curve->y[0]);
+    free(error_curve);
     free(curve);
     ps_table_row row;
     ps_table_info table;

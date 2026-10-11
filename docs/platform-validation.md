@@ -4010,7 +4010,7 @@ C17-Bibliotheken, Modell-/Einheitenverträgen, Ressourcen/Handles, Feldarchiven,
 C-/Physim-Parität, analytischen Referenzen, Konvergenzmaßen, Meilensteinen und
 Plattform-/Paketabnahmen. Die bestehenden Lehrmodelle bleiben als solche benannt;
 eine Planungsanforderung wird nicht als bereits implementierter Solver gewertet.
-Beide Seiten sind in den Projektunterlagen des Offline-Handbuchs registriert
+Beide Seiten sind in den Projektunterlagen des Offline-Handbuchs registriert.
 Der SDK-Packager verwendet hierfür seine bestehende Dokumentkopie.
 
 `build/current-domain-plans-docs-mac.log`, Release-Ergebnisse
@@ -4050,3 +4050,29 @@ Die eingefrorene Gesamtprüfung an e0f8f27 ist inzwischen mit **701/704**
 beendet. Drei Berichtstests erwarten noch die Struktur vor der zusätzlichen
 Energiebilanzkurve. Die nachgeschaltete SDK-Prüfung wurde nicht gestartet.
 Dieser Teilnachweis ersetzt keine vollständige aktuelle Plattformabnahme.
+
+
+## Berichtregressionen nach der Energiebilanz-Erweiterung
+
+Die vollständige Intel-macOS-Prüfung am eingefrorenen e0f8f27 endet mit
+**701/704** (`build/current-full-build-e0f8f27-mac.log`, Ergebnisse
+`build/current-full-build-e0f8f27-mac/test-results/run-utr4rylx`).
+Die neuen Diagramme sind korrekt erzeugt; floating_reference, spring_reference
+und derived_reference erwarten noch die alte Berichtstruktur.
+Die SDK-Prüfung wurde wegen dieser Fehler nicht begonnen.
+
+Die drei Referenzprüfer verlangen jetzt genau fünf Diagramme und prüfen die
+zusätzliche Joule-Fehlerkurve einschließlich Zeitwerten und exakter Differenz
+zur Anfangsbilanz. Bestehende analytische Bewegungs-, Energie-, RK4-, CSV-,
+Histogramm-, Perioden- und Abklingprüfungen bleiben erhalten.
+`build/current-energy-report-regressions-final-mac.log`, Release-Ergebnisse
+`build/current-headless-mac/test-results/run-4xjim5ar`: **3/3 bestanden**.
+
+Auch die frischen Linux-Paketläufe
+[38174646112](https://github.com/PhysicSimulator/physim/actions/runs/38174646112)
+an 103207b (**700/703**) und
+[38176617548](https://github.com/PhysicSimulator/physim/actions/runs/38176617548)
+an a7917ae (**701/704**) enden mit drei nativen Fehlern vor der Installation.
+Ihre vollständigen Logs sind gelesen; ein erfolgreicher frischer Paketnachweis
+kann daraus nicht abgeleitet werden. Eine erneute vollständige Prüfung und
+SDK-Abnahme des korrigierten Standes bleiben erforderlich.

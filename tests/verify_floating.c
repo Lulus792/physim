@@ -160,7 +160,7 @@ int main(int argc, char **argv) {
     ps_report *report = NULL;
     CHECK(ps_report_load(report_path, &report) == PS_OK);
     uint32_t plots, tables;
-    CHECK(ps_report_describe(report, NULL, NULL, &plots, &tables) == PS_OK && plots == 4 &&
+    CHECK(ps_report_describe(report, NULL, NULL, &plots, &tables) == PS_OK && plots == 5 &&
           tables == 2);
     ps_table_row metrics;
     CHECK(ps_report_row_read(report, 1, 0, &metrics) == PS_OK && metrics.values[0] < 2e-7);
@@ -169,6 +169,18 @@ int main(int argc, char **argv) {
     CHECK(ps_report_curve_read(report, 3, 2, curve) == PS_OK && curve->count == 2001);
     for (unsigned i = 0; i < curve->count; i++)
         CHECK(fabs(curve->y[i] - curve->y[0]) < 2e-7);
+    ps_curve_data *error_curve = malloc(sizeof *error_curve);
+    CHECK(error_curve);
+    ps_plot_info error_plot;
+    CHECK(ps_report_plot_read(report, 4, &error_plot) == PS_OK && error_plot.curves == 1 &&
+          !strcmp(error_plot.title, "Numerischer Energiebilanzfehler") &&
+          !strcmp(error_plot.y_unit.symbol, "J"));
+    CHECK(ps_report_curve_read(report, 4, 0, error_curve) == PS_OK &&
+          error_curve->count == curve->count && error_curve->source_count == 2001);
+    for (unsigned i = 0; i < curve->count; i++)
+        CHECK(error_curve->x[i] == curve->x[i] &&
+              error_curve->y[i] == curve->y[i] - curve->y[0]);
+    free(error_curve);
     free(curve);
     ps_report_destroy(report);
     puts("Floating sphere: scene, reset, 6086 samples, independent motion reference, energy and "
