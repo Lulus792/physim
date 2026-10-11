@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* Einstellungen ändern und F5 drücken. 0=Vakuum, 1=Luft, 2=Wasser, 3=eigenes Medium. */
+/* Compile-time defaults for the editable C/Physim run parameters. */
 #ifndef PS_COLLISION_MEDIUM
 #define PS_COLLISION_MEDIUM 0
 #endif
@@ -19,7 +19,7 @@
 #define PS_COLLISION_SPIN 0.0 /* rad/s, Kugel A; mit Reibung entsteht Tangentialimpuls */
 #endif
 #ifndef PS_COLLISION_CCD
-#define PS_COLLISION_CCD (PS_COLLISION_MEDIUM == 0) /* lineare Bewegung im Vakuum */
+#define PS_COLLISION_CCD -1 /* automatic: continuous only in vacuum */
 #endif
 #ifndef PS_COLLISION_SPEED
 #define PS_COLLISION_SPEED 0.6 /* m/s je Kugel, aufeinander zu */
@@ -32,7 +32,8 @@ typedef struct {
     ps_medium medium;
     ps_vec3 force_a, force_b, impulse_a;
     ps_contact last_contact;
-    bool had_contact;
+    bool had_contact, continuous;
+    double speed, medium_mode, drag_mode, friction, spin, ccd_mode, custom_density, custom_viscosity;
 } collision;
 static ps_result measure(ps_context *c) {
     collision *p = c->user;
@@ -57,11 +58,12 @@ static ps_result measure(ps_context *c) {
 }
 static ps_result reset(ps_context *c) {
     collision *p = c->user;
-    *p = (collision){0};
-    p->medium = PS_COLLISION_MEDIUM == 0   ? PS_VACUUM
-                : PS_COLLISION_MEDIUM == 1 ? PS_AIR
-                : PS_COLLISION_MEDIUM == 2 ? PS_WATER
-                                           : custom_medium;
+    p->force_a = p->force_b = p->impulse_a = ps_v3(0,0,0);
+    p->last_contact = (ps_contact){0}; p->had_contact = false;
+    p->medium = p->medium_mode == 0 ? PS_VACUUM
+                : p->medium_mode == 1 ? PS_AIR
+                : p->medium_mode == 2 ? PS_WATER
+                : (ps_medium){p->custom_density,p->custom_viscosity,custom_medium.name};
     ps_result r = ps_body_sphere(mass_kg, radius_m, &p->a);
     if (r == PS_OK)
         r = ps_body_sphere(mass_kg, radius_m, &p->b);
@@ -69,28 +71,43 @@ static ps_result reset(ps_context *c) {
         return r;
     p->a.position_m = ps_v3(-1, -.5, 0);
     p->b.position_m = ps_v3(1, -.5, 0);
-    p->a.velocity_m_s = ps_v3(PS_COLLISION_SPEED, 0, 0);
-    p->b.velocity_m_s = ps_v3(-PS_COLLISION_SPEED, 0, 0);
-    p->a.angular_velocity_rad_s.z = PS_COLLISION_SPIN;
+    p->a.velocity_m_s = ps_v3(p->speed, 0, 0);
+    p->b.velocity_m_s = ps_v3(-p->speed, 0, 0);
+    p->a.angular_velocity_rad_s.z = p->spin;
     return measure(c);
 }
 static ps_result create(ps_context *c) {
-    if (PS_COLLISION_MEDIUM < 0 || PS_COLLISION_MEDIUM > 3 || PS_COLLISION_DRAG < PS_DRAG_NONE ||
-        PS_COLLISION_DRAG > PS_DRAG_QUADRATIC || !isfinite(PS_COLLISION_FRICTION) ||
-        PS_COLLISION_FRICTION < 0 || !isfinite(PS_COLLISION_SPIN) ||
-        !isfinite(PS_COLLISION_SPEED) || PS_COLLISION_SPEED <= 0 ||
-        (PS_COLLISION_CCD != 0 && PS_COLLISION_CCD != 1) ||
-        (PS_COLLISION_CCD && PS_COLLISION_MEDIUM != 0))
-        return PS_INVALID;
     c->user = calloc(1, sizeof(collision));
-    if (!c->user)
-        return PS_MEMORY;
+    if (!c->user) return PS_MEMORY;
+    collision *p = c->user;
+    const ps_unit angular_velocity = {{0,0,-1,0,0,0,0},1,"rad/s"};
+    const ps_unit density = {{-3,1,0,0,0,0,0},1,"kg/m^3"};
+    const ps_unit viscosity = {{-1,1,-1,0,0,0,0},1,"Pa s"};
+    ps_result parameter = ps_parameter_define_unit(c,"speed","Initial speed of each sphere in m/s",
+                                                   PS_VELOCITY,PS_COLLISION_SPEED,.000001,1000,&p->speed);
+    if(parameter==PS_OK)parameter=ps_parameter_define_unit(c,"mediumMode","0 vacuum, 1 air, 2 water, 3 custom",
+                                                         PS_ONE,PS_COLLISION_MEDIUM,0,3,&p->medium_mode);
+    if(parameter==PS_OK)parameter=ps_parameter_define_unit(c,"dragMode","0 none, 1 Stokes, 2 quadratic",
+                                                         PS_ONE,PS_COLLISION_DRAG,0,2,&p->drag_mode);
+    if(parameter==PS_OK)parameter=ps_parameter_define_unit(c,"friction","Coulomb friction coefficient",
+                                                         PS_ONE,PS_COLLISION_FRICTION,0,10,&p->friction);
+    if(parameter==PS_OK)parameter=ps_parameter_define_unit(c,"spin","Initial angular speed of sphere A in rad/s",
+                                                         angular_velocity,PS_COLLISION_SPIN,-1000,1000,&p->spin);
+    if(parameter==PS_OK)parameter=ps_parameter_define_unit(c,"ccdMode","-1 automatic, 0 discrete, 1 continuous",
+                                                         PS_ONE,PS_COLLISION_CCD,-1,1,&p->ccd_mode);
+    if(parameter==PS_OK)parameter=ps_parameter_define_unit(c,"customDensity","Custom medium density in kg/m^3",
+                                                         density,custom_medium.density_kg_m3,0,100000,&p->custom_density);
+    if(parameter==PS_OK)parameter=ps_parameter_define_unit(c,"customViscosity","Custom medium viscosity in Pa s",
+                                                         viscosity,custom_medium.viscosity_pa_s,0,100000,&p->custom_viscosity);
+    if(parameter!=PS_OK)return parameter;
+    p->continuous = p->ccd_mode==1 || (p->ccd_mode==-1 && p->medium_mode==0);
+    if(p->medium_mode!=floor(p->medium_mode) || p->drag_mode!=floor(p->drag_mode) ||
+       p->ccd_mode!=floor(p->ccd_mode) || (p->continuous && p->medium_mode!=0))return PS_INVALID;
     ps_channel_add(c, "a.position", PS_METRE, "Sphere A X");
     ps_channel_add(c, "b.position", PS_METRE, "Sphere B X");
     ps_channel_add(c, "a.velocity", PS_VELOCITY, "Sphere A X velocity");
     ps_channel_add(c, "b.velocity", PS_VELOCITY, "Sphere B X velocity");
     ps_channel_add(c, "energy", PS_JOULE, "Total translational and rotational kinetic energy");
-    const ps_unit angular_velocity = {{0, 0, -1, 0, 0, 0, 0}, 1, "rad/s"};
     const ps_unit momentum = {{1, 1, -1, 0, 0, 0, 0}, 1, "kg m/s"};
     const ps_unit force = {{1, 1, -2, 0, 0, 0, 0}, 1, "N"};
     ps_channel_add(c, "a.spin_z", angular_velocity, "Sphere A world angular velocity Z");
@@ -103,7 +120,6 @@ static ps_result create(ps_context *c) {
     ps_result r = reset(c);
     if (r != PS_OK)
         return r;
-    collision *p = c->user;
     snprintf(
         c->model_metadata, sizeof c->model_metadata,
         "model=two homogeneous rigid spheres\nintegrator=symplectic Euler + quaternion rotation\n"
@@ -112,22 +128,22 @@ static ps_result create(ps_context *c) {
         "medium=%s\ndensity_kg_m3=%.17g\nviscosity_pa_s=%.17g\ndrag=%s\n"
         "fluid_velocity_m_s=%.17g,%.17g,%.17g\nmass_kg=%.17g\nradius_m=%.17g\n"
         "restitution=%.17g\nfriction=%.17g\na_initial_spin_rad_s=%.17g\nCd=%.17g\n",
-        PS_COLLISION_CCD ? "continuous" : "discrete",
-        PS_COLLISION_CCD ? "linear sphere sweep + remaining time" : "none",
-        (double)PS_COLLISION_SPEED, p->medium.name, p->medium.density_kg_m3,
+        p->continuous ? "continuous" : "discrete",
+        p->continuous ? "linear sphere sweep + remaining time" : "none",
+        p->speed, p->medium.name, p->medium.density_kg_m3,
         p->medium.viscosity_pa_s,
-        PS_COLLISION_DRAG == PS_DRAG_NONE     ? "none"
-        : PS_COLLISION_DRAG == PS_DRAG_STOKES ? "Stokes"
+        p->drag_mode == PS_DRAG_NONE     ? "none"
+        : p->drag_mode == PS_DRAG_STOKES ? "Stokes"
                                               : "quadratic",
         fluid_velocity_m_s.x, fluid_velocity_m_s.y, fluid_velocity_m_s.z, mass_kg, radius_m,
-        restitution, (double)PS_COLLISION_FRICTION, (double)PS_COLLISION_SPIN, drag_coefficient);
+        restitution, p->friction, p->spin, drag_coefficient);
     return PS_OK;
 }
 static ps_result step(ps_context *c, double dt) {
     if (!isfinite(dt) || dt <= 0)
         return PS_INVALID;
     collision *p = c->user, next = *p;
-    bool continuous = PS_COLLISION_CCD != 0;
+    bool continuous = p->continuous;
     if (continuous) {
         ps_sweep_hit hit;
         bool touching;
@@ -145,7 +161,7 @@ static ps_result step(ps_context *c, double dt) {
             result = ps_body_step(&next.b, zero, zero, first);
         if (result == PS_OK && touching) {
             result = ps_contact_resolve(&next.a, &next.b, &hit.contact, restitution,
-                                        PS_COLLISION_FRICTION, &next.impulse_a);
+                                        next.friction, &next.impulse_a);
             next.last_contact = hit.contact;
             next.had_contact = true;
             double remaining = dt - first;
@@ -160,10 +176,10 @@ static ps_result step(ps_context *c, double dt) {
         return measure(c);
     }
     ps_result r = ps_sphere_drag(ps_vsub(next.a.velocity_m_s, fluid_velocity_m_s), next.medium,
-                                 PS_COLLISION_DRAG, radius_m, drag_coefficient, &next.force_a);
+                                 (ps_drag_model)next.drag_mode, radius_m, drag_coefficient, &next.force_a);
     if (r == PS_OK)
         r = ps_sphere_drag(ps_vsub(next.b.velocity_m_s, fluid_velocity_m_s), next.medium,
-                           PS_COLLISION_DRAG, radius_m, drag_coefficient, &next.force_b);
+                           (ps_drag_model)next.drag_mode, radius_m, drag_coefficient, &next.force_b);
     if (r == PS_OK)
         r = ps_body_step(&next.a, next.force_a, ps_v3(0, 0, 0), dt);
     if (r == PS_OK)
@@ -174,7 +190,7 @@ static ps_result step(ps_context *c, double dt) {
         r = ps_contact_spheres(&next.a, radius_m, &next.b, radius_m, &contact, &touching);
     next.impulse_a = ps_v3(0, 0, 0);
     if (r == PS_OK && touching) {
-        r = ps_contact_resolve(&next.a, &next.b, &contact, restitution, PS_COLLISION_FRICTION,
+        r = ps_contact_resolve(&next.a, &next.b, &contact, restitution, next.friction,
                                &next.impulse_a);
         next.last_contact = contact;
         next.had_contact = true;

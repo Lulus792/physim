@@ -3566,7 +3566,7 @@ int main(int argc, char **argv) {
                             a->project_settings_dirty = true;
                         }
                     }
-                    if (test_example == 18) {
+                    if (test_example == 2 || test_example == 18) {
                         bool found_friction = false, found_spin = false;
                         for (uint32_t i = 0; i < a->parameters.count; i++) {
                             if (!strcmp(a->parameters.entries[i].name, "friction")) {
@@ -3697,7 +3697,7 @@ int main(int argc, char **argv) {
                         ps_run_reader_close(&reader);
                     }
                 }
-                if (test_example == 18) {
+                if (test_example == 2 || test_example == 18) {
                     ps_run_reader reader;
                     if (ps_run_open(&reader, a->last_run) != PS_OK)
                         exit_code = 1;
@@ -3705,7 +3705,11 @@ int main(int argc, char **argv) {
                         char friction[96], spin[96];
                         snprintf(friction, sizeof friction, "\nparameter.friction=%.17g\n", 0.3);
                         snprintf(spin, sizeof spin, "\nparameter.spin=%.17g\n", 1.0);
-                        if (!strstr(reader.metadata, friction) || !strstr(reader.metadata, spin))
+                        if (!strstr(reader.metadata, friction) || !strstr(reader.metadata, spin) ||
+                            !strstr(reader.metadata,"\nparameter_unit.speed=m/s\n") ||
+                            !strstr(reader.metadata,"\nparameter_unit.spin=rad/s\n") ||
+                            !strstr(reader.metadata,"\nparameter_unit.customDensity=kg/m^3\n") ||
+                            !strstr(reader.metadata,"\nparameter_unit.customViscosity=Pa s\n"))
                             exit_code = 1;
                         ps_run_reader_close(&reader);
                     }

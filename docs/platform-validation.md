@@ -2915,3 +2915,53 @@ deren SHA-256 stimmt mit der veröffentlichten Prüfsummenliste überein:
 `5b44c3bc2255115c9b69e30efc0fecdf498fdb63c5d58e17084fd5f16324c644`.
 Optionale ShellCheck-/Pyflakes-Prüfungen wurden dabei nicht ausgeführt.
 Dieser statische Nachweis ist keine tatsächlich ausgeführte neue gesamte CI.
+
+## Kugelstoß: C-/Physim-Laufparameter für Medien, Rotation und CCD
+
+Der C-Runner am Stand `375eca4` weist `mediumMode=1` noch mit Exit 5 als
+unbekannten Experimentparameter ab; die tatsächlich ausgeführte Gegenprobe
+ist `build/current-sphere-parameters-before-mac/observed.json`.
+Beide Vorlagen deklarieren jetzt dieselben **acht** Laufparameter mit SI-
+Einheiten: Geschwindigkeit, Medium-/Widerstands-/CCD-Modus, Coulomb-Reibung,
+Anfangsrotation und Dichte/Viskosität des eigenen Mediums. Die Mode-Felder
+verlangen Ganzzahlen. Kontinuierliches CCD ist ausschließlich im Vakuum
+zulässig; automatische Wahl verwendet dort den linearen Sweep und in Medien
+diskrete Kontakte. C-Makros bleiben Startwerte innerhalb der gemeinsamen
+Grenzen. Ohne explizites CCD-Makro ist der C-Startwert jetzt −1; die tatsächlich
+ausgeführte Standardphysik im Vakuum beziehungsweise Medium bleibt erhalten.
+Reset erhält die Parameter und leert nur Körper-/Kontaktzustände.
+
+Die finale native Release-Prüfung besteht **3/3** in
+`build/current-headless-mac/test-results/run-4xe9tw7t`, Log
+`build/current-sphere-parameters-native-final-mac.log`: erweiterte Sprach-
+Parität, unabhängige Kugelstoßreferenz und unabhängige grobe/feine CCD-
+Referenz einschließlich absichtlichem diskreten Tunneln. **20** wirkliche
+C-/Physim-Runnerläufe vergleichen jeweils alle **401** Zeitpunkte und **elf**
+Kanäle: Standardvakuum, Luft, eigenes Medium, Reibung/Spin, entsprechende
+C-Laufparameter statt Makro-Neubau, Wasser ohne Widerstand, eigenes Stokes-
+Medium mit geänderter Dichte/Viskosität und diskreter Stoß mit anderer
+Geschwindigkeit. Die Gegenprobe liest gewählte Parameter, SI-Deklarationen,
+alle Dimensionen und tatsächliche Modell-Eigenschaften direkt aus den Dateien.
+
+Zwei gleichzeitig lebende Instanzen je Sprache behalten unterschiedliche
+Geschwindigkeit, Medium, Widerstandsmodell und Spin über zwei Resetzyklen;
+die Gegenprobe prüft beide Anfangszustände nach jedem Reset sowie tatsächliche
+Schritte und Kontakte. Alle **40** ungültigen Einstellungen werden mit Exit 5
+vor Messdateianlage abgewiesen: Bereichsüberschreitungen, gebrochene Mode-Werte
+und erzwungenes kontinuierliches CCD im Medium. Bestehende Szenen-, Report-
+und CSV-Dateianlageprüfungen bleiben erhalten; letzteres ist keine zusätzliche
+vollständige CSV-Inhaltsprüfung.
+
+Die tatsächlichen Release-Appketten bestehen **2/2** in
+`build/current-release-mac/test-results/run-r1ycks7m`, Log
+`build/current-sphere-parameters-app-mac.log`. C und Physim wählen Reibung `.3`
+und Spin `1`, bauen ihre Projektquellen, simulieren, lesen den aufgezeichneten
+Lauf, prüfen Einheiten für Geschwindigkeit/Rotation/eigene Mediumswerte und
+öffnen die Auswertung. Der neue C-Fall prüft zusätzlich beide gespeicherten
+Werte in `physim.project`; der bestehende Physim-Fall öffnet das Projekt mit
+den Einstellungen erneut. Die Änderung benötigt keine neue ABI-, Projekt-
+oder Messdateiversion. Dies belegt Intel macOS; ganze aktuelle SDK-/Linux-/
+Windows-Abnahme und die übrigen Vorlagen bleiben offen. PP-0066 bleibt
+unvollständig. Der ältere C17-Lauf `7b08c04` hat inzwischen alle vier Windows-
+Jobs einschließlich MSVC Release erfolgreich beendet; er prüft diese neue
+Kugelstoß-Erweiterung noch nicht.

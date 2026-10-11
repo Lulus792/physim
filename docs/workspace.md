@@ -611,3 +611,36 @@ erhält die Einstellung; parallel lebende Modellinstanzen bleiben unabhängig.
 Die C-Makros `PS_BOX_ANGLE`, `PS_BOX_OFFSET`, `PS_BOX_RESTITUTION` und
 `PS_BOX_FRICTION` können weiterhin Startwerte innerhalb dieser Grenzen setzen.
 Quellcode-Snapshots und die vorherigen Laufdateien bleiben erhalten.
+
+## Kugelstoß mit Laufparametern
+
+C und Physim bieten dieselben acht Experimentparameter vor dem Start.
+Änderungen benötigen keinen neuen Build; der nächste Lauf erhält die
+gewählten Werte mit SI-Einheiten, Standards, Grenzen und Modellbeschreibung.
+
+| Parameter | Einheit | Standard | Grenzen / Bedeutung |
+| --- | --- | --- | --- |
+| `speed` | m/s | 0,6 | 0,000001 bis 1000; Geschwindigkeit je Kugel |
+| `mediumMode` | 1 | 0 | Ganzzahl: 0 Vakuum, 1 Luft, 2 Wasser, 3 eigenes Medium |
+| `dragMode` | 1 | 2 | Ganzzahl: 0 keiner, 1 Stokes, 2 quadratisch |
+| `friction` | 1 | 0 | 0 bis 10; Coulomb-Reibung |
+| `spin` | rad/s | 0 | −1000 bis 1000; Anfangsrotation von Kugel A |
+| `ccdMode` | 1 | −1 | Ganzzahl: −1 automatisch, 0 diskret, 1 kontinuierlich |
+| `customDensity` | kg/m^3 | 5 | 0 bis 100000; nur beim eigenen Medium verwendet |
+| `customViscosity` | Pa s | 0,005 | 0 bis 100000; nur beim eigenen Medium verwendet |
+
+Automatisches CCD verwendet im Vakuum den linearen Kugelsweep und bei den
+anderen Medien diskrete Kontakte. Kontinuierliches CCD lässt sich nur im
+Vakuum erzwingen, da dieser Sweep konstante Geschwindigkeit zwischen den
+Kontaktereignissen voraussetzt. Mode-Felder akzeptieren ausschließlich die
+aufgeführten Ganzzahlen. Stokes- und quadratischer Widerstand verwenden die
+gemeinsamen Kraftfunktionen; Viskosität beeinflusst Stokes, Dichte beeinflusst
+den quadratischen Widerstand. Die Fluidgeschwindigkeit bleibt hier null.
+
+Reset erhält die Parameter und setzt nur die Körper-/Kontaktzustände zurück.
+Mehrere gleichzeitig lebende Instanzen dürfen unterschiedliche Medien und
+Eigenschaften besitzen. Die bisherigen `PS_COLLISION_*`-Makros setzen weiterhin
+C-Startwerte innerhalb dieser Grenzen. Ohne explizites `PS_COLLISION_CCD`
+ist der Startwert jetzt ebenfalls −1; die Standardphysik bleibt gleich:
+kontinuierlich im Vakuum, diskret im Medium. Explizite Makrowerte 0 und 1
+bleiben verfügbar. Quellcode-Snapshots und frühere Datensätze bleiben erhalten.

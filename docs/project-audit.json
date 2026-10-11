@@ -500,9 +500,13 @@
         "examples/box_collision/main.c",
         "examples/language/box_collision.phys",
         "tests/test_box_collision_language_parity.c",
-        "docs/platform-validation.md#boxkollision-gleiche-laufparameter-und-si-metadaten"
+        "docs/platform-validation.md#boxkollision-gleiche-laufparameter-und-si-metadaten",
+        "examples/collision/main.c",
+        "examples/language/collision.phys",
+        "tests/test_collision_language_parity.c",
+        "docs/platform-validation.md#kugelstoß-c-physim-laufparameter-für-medien-rotation-und-ccd"
       ],
-      "note": "Material-Lernpfad: 14 vollständige C-/Physim-Dateien prüfen strukturierte Einheiten, Werte/Standards/Grenzen, Modell-Eigenschaften, Namen, dt und UInt64-Seed; beide tatsächlichen Appketten prüfen die übertragenen SI-Parameterdeklarationen. Aktuelle andere Vorlagen und Linux-/Windows-/Gesamt-SDK-Abnahme bleiben offen. Wurfmodell: C-/Physim-Beiwertparität, tatsächliche Cd-Metadaten, acht komplette Läufe, unabhängige Vakuumreferenz, instanzlokaler Reset, Bereichsablehnung und alle vier gemischten Analysen geprüft; drei echte Appketten bestehen auf Intel macOS. Boxkollision: zehn reale Runnerläufe vergleichen C-Makro-/Laufparameter und Physim, 16 Bereichsablehnungen, SI-/Modellmetadaten sowie instanzlokale Pose über Reset; separate echte C-/Physim-Appfälle bestehen. Andere Vorlagen und aktuelle Plattform-/Gesamt-SDK-Prüfung offen."
+      "note": "Material-Lernpfad: 14 vollständige C-/Physim-Dateien prüfen strukturierte Einheiten, Werte/Standards/Grenzen, Modell-Eigenschaften, Namen, dt und UInt64-Seed; beide tatsächlichen Appketten prüfen die übertragenen SI-Parameterdeklarationen. Aktuelle andere Vorlagen und Linux-/Windows-/Gesamt-SDK-Abnahme bleiben offen. Wurfmodell: C-/Physim-Beiwertparität, tatsächliche Cd-Metadaten, acht komplette Läufe, unabhängige Vakuumreferenz, instanzlokaler Reset, Bereichsablehnung und alle vier gemischten Analysen geprüft; drei echte Appketten bestehen auf Intel macOS. Boxkollision: zehn reale Runnerläufe vergleichen C-Makro-/Laufparameter und Physim, 16 Bereichsablehnungen, SI-/Modellmetadaten sowie instanzlokale Pose über Reset; separate echte C-/Physim-Appfälle bestehen. Andere Vorlagen und aktuelle Plattform-/Gesamt-SDK-Prüfung offen. Kugelstoß: acht gleiche SI-Laufparameter, 20 vollständige C-/Physim-Dateien mit tatsächlichen Modell-Eigenschaften, 40 abgewiesene Einstellungen, unabhängige Kugelstoß-/CCD-Orakel und zwei echte Appketten auf Intel macOS; Parameter bleiben instanzlokal über Reset. Gesamte neue Plattform-/SDK-Matrix und weitere Vorlagen offen."
     },
     {
       "id": "PP-0067",

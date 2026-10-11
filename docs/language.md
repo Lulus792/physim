@@ -2507,7 +2507,11 @@ Sprachauswertung zeigt Position und Geschwindigkeit beider Kugeln und
 exportiert SVG und CSV. Der Paritätstest wertet zusätzlich den C-Lauf in Physim
 und den Physim-Lauf in C aus. Der App-Workflow prüft das Sprachprojekt unter MSVC
 und Clang. Medium, Widerstandsmodell, Reibung, Rotation, Geschwindigkeit und
-CCD lassen sich im Sprachprojekt als geprüfte Experimentparameter wählen. Der
+CCD lassen sich in beiden Experimentsprachen ohne Neubau als geprüfte
+Laufparameter wählen. Die [Parameterübersicht](workspace.md#kugelstoß-mit-laufparametern)
+nennt die gleichen Grenzen und SI-Einheiten. Mode-Felder verlangen Ganzzahlen;
+kontinuierliches CCD ist nur im Vakuum zulässig. Material-/Mediumswerte in den
+Metadaten beschreiben die tatsächlich gewählte Einstellung. Der
 App-Test wählt Reibung und Anfangsrotation, prüft die gespeicherten Laufwerte
 und öffnet das Projekt mit denselben Werten erneut.
 

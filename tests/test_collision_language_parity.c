@@ -12,7 +12,7 @@
 } } while (0)
 
 static int run(const char *runner, const char *module, const char *path, const char *work,
-               const char *const *parameters) {
+               const char *const *parameters, int expected_code) {
     const char *args[24] = {runner, module, path, "--steps", "400", "--dt", "0.005",
                             "--seed", "42"};
     unsigned count = 9;
@@ -35,7 +35,7 @@ static int run(const char *runner, const char *module, const char *path, const c
         ps_process_kill(&child);
     int code = child.exit_code;
     ps_process_close(&child);
-    CHECK(code == 0);
+    CHECK(code == expected_code);
     return 0;
 }
 static const ps_experiment_api *load(const char *path, void **module) {
@@ -47,6 +47,30 @@ static const ps_experiment_api *load(const char *path, void **module) {
     if (symbol)
         memcpy(&entry, &symbol, sizeof entry);
     return entry ? entry() : NULL;
+}
+static int instances(const char *path) {
+    void *module=NULL;const ps_experiment_api *api=load(path,&module);CHECK(api);
+    ps_context c[2]={{0},{0}};
+    const char *names[]={"speed","mediumMode","dragMode","friction","spin","customDensity","customViscosity"};
+    const double values[]={1.2,3,1,.3,1,7.5,.0125};
+    for(unsigned i=0;i<2;i++) {
+        c[i].struct_size=sizeof c[i];c[i].api_version=PS_API_VERSION;c[i].dt_s=.005;c[i].seed=42;
+        if(i)for(unsigned j=0;j<7;j++)CHECK(ps_parameter_override(&c[i],names[j],values[j])==PS_OK);
+        CHECK(api->create(&c[i])==PS_OK && ps_parameter_finalize(&c[i])==PS_OK);
+    }
+    for(unsigned cycle=0;cycle<3;cycle++) {
+        for(unsigned i=0;i<2;i++) {
+            CHECK(c[i].channel_count==11 && fabs(c[i].values[2]-(i?1.2:.6))<1e-12 && c[i].values[5]==(i?1:0));
+            CHECK(strstr(c[i].model_metadata,i?"medium=custom medium\n":"medium=vacuum\n"));
+        }
+        if(cycle==2)break;
+        for(unsigned step=0;step<200;step++)for(unsigned i=0;i<2;i++) {
+            CHECK(api->step(&c[i],.005)==PS_OK);c[i].time_s=(step+1)*.005;
+        }
+        CHECK(fabs(c[0].values[2]-.6)<1e-12 && c[1].values[2]<0);
+        for(unsigned i=0;i<2;i++){CHECK(api->reset(&c[i])==PS_OK);c[i].time_s=0;}
+    }
+    for(unsigned i=0;i<2;i++)api->destroy(&c[i]);ps_module_close(module);return 0;
 }
 static int compare_scene(const ps_scene *c, const ps_scene *language, unsigned count) {
     CHECK(ps_scene_valid(c) && ps_scene_valid(language));
@@ -136,21 +160,25 @@ int main(int argc, char **argv) {
     const char *air[] = {"mediumMode=1", NULL};
     const char *custom[] = {"mediumMode=3", NULL};
     const char *friction[] = {"friction=0.3", "spin=1", NULL};
-    const char *const *parameters[] = {NULL, air, custom, friction};
-    const char *modules[] = {argv[2], argv[7], argv[8], argv[9]};
-    const char *media[] = {"medium=vacuum", "medium=air at 15 C, sea level",
-                           "medium=custom medium", "medium=vacuum"};
-    const char *ccd[] = {"ccd=linear sphere sweep + remaining time", "ccd=none",
-                         "ccd=none", "ccd=linear sphere sweep + remaining time"};
-    for (unsigned mode = 0; mode < 4; mode++) {
+    const char *water[] = {"mediumMode=2","dragMode=0",NULL};
+    const char *stokes[] = {"mediumMode=3","dragMode=1","customDensity=7.5","customViscosity=0.0125",NULL};
+    const char *discrete[] = {"speed=1.2","ccdMode=0",NULL};
+    const char *const *parameters[] = {NULL, air, custom, friction, air, custom, friction, water, stokes, discrete};
+    const char *const *c_parameters[] = {NULL,NULL,NULL,NULL,air,custom,friction,water,stokes,discrete};
+    const char *modules[] = {argv[2],argv[7],argv[8],argv[9],argv[2],argv[2],argv[2],argv[2],argv[2],argv[2]};
+    const double medium_modes[]={0,1,3,0,1,3,0,2,3,0};
+    const double drag_modes[]={2,2,2,2,2,2,2,0,1,2};
+    const double frictions[]={0,0,0,.3,0,0,.3,0,0,0};
+    const double spins[]={0,0,0,1,0,0,1,0,0,0};
+    for (unsigned mode = 0; mode < 10; mode++) {
         int n = snprintf(c_path, sizeof c_path, "%s/collision-c-%u-%llu.psrun",
                          argv[10], mode, stamp);
         CHECK(n > 0 && (size_t)n < sizeof c_path);
         n = snprintf(language_path, sizeof language_path,
                      "%s/collision-language-%u-%llu.psrun", argv[10], mode, stamp);
         CHECK(n > 0 && (size_t)n < sizeof language_path);
-        CHECK(!run(argv[1], modules[mode], c_path, argv[10], NULL));
-        CHECK(!run(argv[1], argv[3], language_path, argv[10], parameters[mode]));
+        CHECK(!run(argv[1], modules[mode], c_path, argv[10], c_parameters[mode],0));
+        CHECK(!run(argv[1], argv[3], language_path, argv[10], parameters[mode],0));
         ps_run_reader c, language;
         CHECK(ps_run_open(&c, c_path) == PS_OK &&
               ps_run_open(&language, language_path) == PS_OK);
@@ -158,8 +186,32 @@ int main(int argc, char **argv) {
         CHECK(strstr(c.metadata, "model=two homogeneous rigid spheres") &&
               strstr(language.metadata, "model=two homogeneous rigid spheres") &&
               strstr(language.metadata, "language=physim-0.182.0") &&
-              strstr(c.metadata, media[mode]) && strstr(language.metadata, media[mode]) &&
-              strstr(c.metadata, ccd[mode]) && strstr(language.metadata, ccd[mode]));
+              strstr(c.metadata,"gravity=none") && strstr(language.metadata,"gravity=none"));
+        const char *names[]={"speed","mediumMode","dragMode","friction","spin","ccdMode","customDensity","customViscosity"};
+        const char *symbols[]={"m/s","1","1","1","rad/s","1","kg/m^3","Pa s"};
+        const int8_t dimensions[][7]={{1,0,-1,0,0,0,0},{0},{0},{0},{0,0,-1,0,0,0,0},{0},{-3,1,0,0,0,0,0},{-1,1,-1,0,0,0,0}};
+        const double selected[]={mode==9?1.2:.6,medium_modes[mode],drag_modes[mode],frictions[mode],spins[mode],mode==9?0:-1,mode==8?7.5:5,mode==8?.0125:.005};
+        const char *media[]={"medium=vacuum\n","medium=air at 15 C, sea level\n","medium=water at 20 C\n","medium=custom medium\n"};
+        bool continuous=mode!=9 && medium_modes[mode]==0;
+        for(unsigned model=0;model<2;model++) {
+            const char *metadata=model?language.metadata:c.metadata;char expected[128];
+            CHECK(strstr(metadata,media[(unsigned)medium_modes[mode]]) &&
+                  strstr(metadata,continuous?"ccd=linear sphere sweep + remaining time\n":"ccd=none\n"));
+            for(unsigned parameter=0;parameter<8;parameter++) {
+                snprintf(expected,sizeof expected,"\nparameter.%s=%.17g\n",names[parameter],selected[parameter]);
+                CHECK(strstr(metadata,expected));ps_parameter_unit unit;
+                CHECK(ps_parameter_unit_parse(metadata,names[parameter],&unit)==PS_OK && unit.declared && unit.scale==1 &&
+                      !strcmp(unit.symbol,symbols[parameter]) && !memcmp(unit.dimension,dimensions[parameter],7));
+            }
+            const char *keys[]={"initial_speed_m_s","friction","a_initial_spin_rad_s","density_kg_m3","viscosity_pa_s"};
+            const double density[]={0,1.225,998.2,selected[6]},viscosity[]={0,1.81e-5,1.002e-3,selected[7]};
+            const double values[]={selected[0],selected[3],selected[4],density[(unsigned)selected[1]],viscosity[(unsigned)selected[1]]};
+            for(unsigned property=0;property<5;property++) {
+                snprintf(expected,sizeof expected,"\n%s=%.17g\n",keys[property],values[property]);CHECK(strstr(metadata,expected));
+            }
+            const char *drag_names[]={"drag=none\n","drag=Stokes\n","drag=quadratic\n"};
+            CHECK(strstr(metadata,drag_names[(unsigned)selected[2]]));
+        }
         for (uint32_t i = 0; i < 11; i++) {
             CHECK(!strcmp(c.schema[i].name, language.schema[i].name));
             CHECK(!memcmp(c.schema[i].dimension, language.schema[i].dimension, 7));
@@ -193,5 +245,15 @@ int main(int argc, char **argv) {
         }
     }
     CHECK(!scenes(argv[2], argv[3]));
+    CHECK(!instances(argv[2]) && !instances(argv[3]));
+    const char *invalid[]={"speed=0","speed=1000.1","mediumMode=-1","mediumMode=4","dragMode=-1","dragMode=3",
+        "friction=-0.001","friction=10.01","spin=-1001","spin=1001","ccdMode=-2","ccdMode=2",
+        "customDensity=-1","customDensity=100001","customViscosity=-1","customViscosity=100001",
+        "mediumMode=1.5","dragMode=0.5","ccdMode=-0.5"};
+    for(unsigned model=0;model<2;model++)for(unsigned i=0;i<20;i++) {
+        char path[4096];snprintf(path,sizeof path,"%s/sphere-invalid-%u-%u.psrun",argv[10],model,i);
+        const char *bad[]={i<19?invalid[i]:"mediumMode=1",i<19?NULL:"ccdMode=1",NULL};
+        CHECK(!run(argv[1],argv[model+2],path,argv[10],bad,5));FILE *file=fopen(path,"rb");CHECK(!file);
+    }
     return 0;
 }
