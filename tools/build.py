@@ -507,6 +507,9 @@ class Builder:
 
 
 def main() -> int:
+    # Native diagnostics and source paths remain UTF-8 in captured Windows jobs.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"): stream.reconfigure(encoding="utf-8", errors="replace")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", choices=("Debug", "Release"), default="Debug")
     parser.add_argument("--build-dir", type=Path)

@@ -12,6 +12,13 @@ a=parser.parse_args();a.work.mkdir(parents=True,exist_ok=True)
 repo=Path(__file__).resolve().parent.parent
 spec=importlib.util.spec_from_file_location('bitmap_archive',repo/'tools/archive_bitmaps.py')
 module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+# Exercise the same CP1252 default as a captured Windows Python process.
+original_read_text = Path.read_text
+def legacy_read_text(path, *args, **kwargs):
+    if not args and kwargs.get('encoding') is None: kwargs['encoding'] = 'cp1252'
+    return original_read_text(path, *args, **kwargs)
+legacy_encoding = patch.object(Path, 'read_text', legacy_read_text)
+legacy_encoding.start()
 root=a.work/'Generated evidence ä';root.mkdir()
 original=root/'view β.bmp';data=b'BM'+bytes(range(256))*4000
 original.write_bytes(data)
@@ -25,7 +32,7 @@ assert module.restore_bitmaps(root)==0
 # New captures retain both compressed versions; recovery selects the latest.
 new=data+b'latest';original.write_bytes(new)
 assert module.archive_bitmaps(root,[protected],phase=2)[0]==1
-state=json.loads((root/'bitmap-archive.json').read_text());assert len(state['files'])==2
+state=json.loads((root/'bitmap-archive.json').read_text(encoding='utf-8'));assert len(state['files'])==2
 assert len(list(root.glob('view β.bmp.*.gz')))==2
 assert module.restore_bitmaps(root)==1 and original.read_bytes()==new
 original.write_bytes(b'BM foreign owner')
@@ -60,8 +67,10 @@ except FileExistsError:pass
 assert temporary.read_bytes()==b'foreign' and original.read_bytes()==data+b'next'
 # Untrusted receipt paths cannot reach a file outside the proof root.
 invalid = dict(state['files'][-1]); invalid['original'] = '../external.bmp'
-(root/'bitmap-archive.json').write_text(json.dumps({'format':1,'files':[invalid]}))
+(root/'bitmap-archive.json').write_text(json.dumps({'format':1,'files':[invalid]}),encoding='utf-8')
 try:module.restore_bitmaps(root);raise AssertionError('Escaping receipt accepted')
 except ValueError:pass
 assert external.read_bytes()==data
 print('Bitmap archive: exact bytes, latest capture recovery, protected SDK/assets, symlinks, corrupted archives and publication failures passed')
+
+legacy_encoding.stop()

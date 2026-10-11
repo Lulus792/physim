@@ -31,7 +31,7 @@ def archive_bitmaps(root, protected=(), phase=0):
     root = Path(root).resolve(); protected = [Path(p).resolve() for p in protected]
     receipt = root/'bitmap-archive.json'
     if receipt.is_symlink(): raise ValueError('Receipt must not be a symlink')
-    state = json.loads(receipt.read_text()) if receipt.exists() else {'format':1, 'files':[]}
+    state = json.loads(receipt.read_text(encoding="utf-8")) if receipt.exists() else {'format':1, 'files':[]}
     if state.get('format') != 1 or not isinstance(state.get('files'), list):
         raise ValueError('Invalid bitmap archive receipt')
     count = saved = 0
@@ -75,7 +75,7 @@ def archive_bitmaps(root, protected=(), phase=0):
 def restore_bitmaps(root):
     root = Path(root).resolve(); receipt = root/'bitmap-archive.json'
     if receipt.is_symlink(): raise ValueError('Receipt must not be a symlink')
-    state = json.loads(receipt.read_text())
+    state = json.loads(receipt.read_text(encoding="utf-8"))
     if state.get('format') != 1: raise ValueError('Invalid bitmap archive receipt')
     count = 0
     # A repeated capture may share a path; restore the last recorded version.
