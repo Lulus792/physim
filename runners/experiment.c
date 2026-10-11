@@ -281,7 +281,7 @@ int main(int argc, char **argv) {
     int provenance=snprintf(c.model_metadata + used, sizeof c.model_metadata - used,
              "\nmodule_fnv1a64=%016llx\nrunner_build=%s %s", (unsigned long long)hash, __DATE__,
              __TIME__);
-    if((adaptive || until_option || breakpoint_option) && (provenance<0 || (size_t)provenance>=sizeof c.model_metadata-used)) {
+    if(provenance<0 || (size_t)provenance>=sizeof c.model_metadata-used) {
         report(interactive,diagnostics,diagnostic_path,&c,PS_LIMIT,"metadata","Model metadata has no room for module provenance");
         api->destroy(&c);runner_log_close(&logs,c.time_s);
         ps_module_close(module);return 5;

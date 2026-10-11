@@ -3244,3 +3244,29 @@ konkret zugeordnet. Der Plan-Codeblock ist ein Entwurf; die endgültige Schnitts
 verwendet `ps_result`, `ps_scene`, Größenfelder, Capability-Bits und eine optionale
 adaptive Erweiterung. Die Originaltexte im Audit bleiben erhalten. Diese
 Einzelabnahme ersetzt keine ganze Plattform- oder Produktabnahme.
+
+
+## Feste Läufe: Herkunftsangaben werden nicht stillschweigend abgeschnitten
+
+Am 11. Oktober 2026 erzeugte der bisherige Runner mit `fault=8` aus dem
+vorhandenen Metadatengrenzfall einen festen Lauf mit Exit 0. Der unabhängig
+CRC-geprüfte Metadatenchunk umfasste 2206 Bytes; `module_fnv1a64` und
+`runner_build` fehlten. Die tatsächliche Reproduktion ist dokumentiert in
+`build/current-fixed-provenance-before-mac.json`, der Lauf liegt unter
+`build/current-fixed-provenance-before-mac/truncated.psrun`.
+
+Die bereits vorhandene Kapazitätsprüfung für die ergänzten Herkunftsangaben
+gilt nun ohne Sonderbedingung. Feste und interaktive feste Läufe brechen bei
+zu langen Modellmetadaten vor dem Writer mit Exit 5 ab und geben den Modulzustand
+frei. Die vorhandenen Prüfungen für adaptive Läufe, Zielzeit und Breakpoints
+bleiben erhalten. Dateiformat, Modul-ABI und normale Metadaten ändern sich nicht.
+
+AppleClang Release ohne App besteht **3/3** aktuelle Katalogfälle:
+`runner_adaptive`, `runner_target_time` und `runner_experiment_abi`; Ergebnisse
+`build/current-headless-mac/test-results/run-gakt_3dj`, Log
+`build/current-fixed-provenance-after-mac.log`. Zwei neue Fälle verlangen Exit 5
+und das Fehlen einer Laufdatei bei festen beziehungsweise interaktiven festen
+Läufen mit maximaler Modellbeschreibung. Die bestehenden C-/Physim-Prüfungen
+validieren adaptive Intervalle, Pause/Einzelschritt, Zielzeiten, gespeicherte
+Daten und ABI-Grenzen. Der Nachweis gilt für Intel macOS; die laufende eingefrorene
+SDK-Suite und andere Plattformen enthalten diese spätere Änderung noch nicht.

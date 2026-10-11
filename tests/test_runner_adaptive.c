@@ -121,6 +121,14 @@ static int errors(const char *runner,const char *module,const char *legacy,const
     const char *metadata[]={runner,module,path,"--adaptive","--param","fault=8",NULL};
     CHECK(!launch(metadata,work,5));
     ps_run_reader absent;CHECK(ps_run_open(&absent,path)==PS_IO);
+    snprintf(path,sizeof path,"%s/fixed-metadata-too-long.psrun",work);
+    const char *fixed_metadata[]={runner,module,path,"--steps","1","--param","fault=8",NULL};
+    CHECK(!launch(fixed_metadata,work,5));
+    CHECK(ps_run_open(&absent,path)==PS_IO);
+    snprintf(path,sizeof path,"%s/interactive-fixed-metadata-too-long.psrun",work);
+    const char *interactive_metadata[]={runner,module,path,"--interactive","--param","fault=8",NULL};
+    CHECK(!launch(interactive_metadata,work,5));
+    CHECK(ps_run_open(&absent,path)==PS_IO);
     for(unsigned fault=1;fault<=7;fault++) {
         char parameter[32];snprintf(parameter,sizeof parameter,"fault=%u",fault);
         snprintf(path,sizeof path,"%s/bad-interval-%u.psrun",work,fault);
