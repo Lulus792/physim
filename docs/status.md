@@ -1,7 +1,20 @@
 # Umsetzungsstand
 
-Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-11. Der Projektplan ist die Roadmap;
+Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-12. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
+
+**Fortlaufende Laufdateien in beiden Sprachen:** RunStore, RunReader und
+RunWriter verbinden opake versionierte Handles mit geteilten Besitzern,
+unabhängigen Zeilen/Szenen, expliziten SI-Schemata und Dateiabschlüssen.
+Bytegenaue C-/Physim-Archive, Grenzfälle und verschobene SDKs sind lokal geprüft.
+[Verträge](run-streams.md). Die gesamte Ressourcenmigration bleibt offen.
+
+**Student-t-Mittelwertintervalle:** C und Physim verwenden denselben
+Berechnungspfad aus Stichprobenkennzahlen oder maskierten Series. Annahmen,
+Zahlenbereich und Fehlererhaltung sind dokumentiert; unabhängige
+Dichtequadratur und verschobene SDK-/Analyseprüfungen bestehen auf Intel macOS.
+[Vertrag und Einsatz](measurement.md). Die gesamte aktuelle Plattform- und
+Produktabnahme bleibt offen.
 
 **Gewichtete ODE-Zustände:** Euler, symplektischer Euler, RK4, Verlet und RK45
 verwenden skalierte Produkt-/Summenrechnung für problematische Größenordnungen.
@@ -34,15 +47,15 @@ und Stoffkalibrierung bleiben offen. [Quellen und Grenzen](real-gas.md).
 Tabellen besitzen Quelle, Einheit und geschlossenen Gültigkeitsbereich.
 C-/Physim-Modelle wählen die benötigten Daten ausdrücklich; Beispiele speichern
 vollständige Tabellenmetadaten und erzeugen gemischte Analysen. Keine Extrapolation
-oder erfundenen Stoffdaten. Library und native Projektbuilds verwenden 27
+oder erfundenen Stoffdaten. Library und native Projektbuilds verwenden 28
 Core-Module. [Vollständige Quellen und Grenzen](properties.md),
 [ausgeführte Nachweise](platform-validation.md).
 
 **Basis und explizite RNG-Zustände:** Fünf Basisanforderungen sind konkreten
 Implementierungen und Referenztests zugeordnet. Der Normalgenerator legt die
 Reihenfolge seiner zwei Ziehungen ausdrücklich fest; unabhängige C-/Physim-Probes
-prüfen Zustände, vollständige Seeds und Wertkopien. Die allgemeine Handle-Anforderung
-bleibt gesondert ungeprüft. Lokale Referenzen, Sanitizer und isolierte SDK-Prüfungen
+prüfen Zustände, vollständige Seeds und Wertkopien. Die allgemeine Handle-Migration
+bleibt gesondert unvollständig. Lokale Referenzen, Sanitizer und isolierte SDK-Prüfungen
 bestehen. [Vertrag](measurement.md) und [Nachweise](platform-validation.md).
 
 **Belastbare Timingprüfungen:** Offline-Runner werden anhand fehlender

@@ -51,63 +51,8 @@ Der vollständige historische Nachweis bleibt im
 
 ## Starrkörperträgheit und Energiebereich am 8. Oktober 2026
 
-Die alten Formeln liefern in 253 von 1046 unabhängigen rationalen Fällen andere
-Rundungen oder Bereichsentscheidungen (`build/body-range-baseline.log`). Konkret
-scheitert eine Box mit Masse `1e-300` kg und Kanten `1e200` m am vorzeitig
-überlaufenden Quadrat, obwohl ihre Trägheiten endlich sind. Bei einer Kugel mit
-kleinster positiver Double-Masse und Radius `1e160` m rundet der alte Vorfaktor
-zu null. Die neue positive Integerakkumulation rundet die rationalen
-Kugel-/Boxformeln einmal. Identitätsenergie nutzt dieselbe Summation;
-allgemeine Quaternionrotation bleibt eine skalierte Binary64-Näherung.
-[Vertrag und Grenzen](mechanics.md).
-
-Die unabhängige Prüfung enthält 1046 rationale C-Fälle, 48 Physim-Fälle und
-260 gedrehte Körper gegen eine 120-stellige Decimal-Rotationsmatrix. Für die
-allgemeine Rotation gilt in diesen Referenzen relative Toleranz `2e-14` und
-absolute Toleranz von zwei kleinsten Subnormalwerten, keine Bitgleichheitszusage.
-Körper und Energieausgaben bleiben bei Fehlern unverändert. Die erste Sprach-
-Fixture wurde wegen einer verbotenen Mutation eines erfassten Werts abgewiesen
-(`run-__uaslei`); korrigierte Funktionen verwenden eigene lokale Körperkopien.
-Der korrigierte Mac-Vorlauf besteht 4/4 (`run-kwelpa5e`), der zusätzliche
-Rotationslauf 1/1 (`run-rbobnntl`).
-
-Die erweiterte native Auswahl besteht auf Intel macOS 14.6.1/Apple Clang 16 mit
-26/26 unter `build/contact-world-language-release-mac/test-results/run-3v6rc0qy`
-und auf Debian 12/GCC 12.2 mit 26/26 unter
-`build/contact-world-language-release-linux/test-results/run-vwkp9oqa`.
-Sie umfasst Mechanik, Box-/Paar-/Graphkontakte, Gelenke, Kontaktverwaltung,
-Broad Phase, C-/Physim-Stoßparität, echte Stoß-/Boxläufe und Prüfkiterstellung.
-Linux/Clang 14 besteht dieselbe Auswahl mit zusätzlicher Kugel-Sweep-Prüfung
-unter ASan/UBSan mit 27/27 in
-`build/atspi-asan-linux/test-results/run-k9oardvp`.
-`ASAN_OPTIONS=detect_leaks=0` lässt Address-/UB-Prüfungen aktiv. macOS-Sanitizer
-bleiben wegen fehlendem `ld64.lld` ungeprüft.
-
-Die tatsächlichen Physim-App-Workflows für Kugel- und Boxstöße bestehen auf
-macOS mit 2/2 (`run-ab687ilq`) und Linux/X11 mit 2/2 (`run-h5p7p25i`) in den
-jeweiligen Release-Testverzeichnissen. Alle 31 Referenzdokumente sind geprüft.
-Die unabhängige Prüfkiterstellung besteht mit 119 genau manifestierten Eingaben,
-SHA-256, Paketgrenzen, fehlenden/dynamischen Pfaden und exklusiver Erstellung.
-Ein parallel zum GUI-Build gestarteter SDK-Build wurde durch die Build-Sperre
-korrekt zurückgewiesen; erst nach Abschluss dieses Builds wurde er gestartet.
-
-PP-0382 bleibt für umfassende Lage-/Winkelgeschwindigkeits-/Dynamikabnahme offen.
-PP-0385 besitzt eine konkrete Lücke: Allgemeine konvexe Körper fehlen im
-Narrow-Phase-Vertrag. Keine vollständige Mechanik-, Windows-, Apple-Silicon-
-oder gesamte Produktabnahme wird aus diesen fokussierten Nachweisen abgeleitet.
-
-Das macOS-SDK besteht `--body-only` unter
-`build/body-sdk-checks/Native SDK ä jn4ccpv4`, das Linux-SDK unter
-`build/body-sdk-checks/Native SDK ä 5nk_v3fm`. Beide enthalten 460 manifestierte
-Dateien. Installierter und allein aus SDK-Quellen neu gebauter Core bestehen
-jeweils rationale C-/Physim- und Decimal-Rotationsgegenproben. Der Paketcompiler
-übersetzt die Sprach-Fixture selbst. Unter Linux läuft der Prüfer ausschließlich
-aus `build/body-independent-kit`, ohne Implementierung oder Entwicklerheader im
-Prüfkit. Die letzte Belegergänzung dieser Dokumentation erfolgte nach Paketierung;
-Implementierung, öffentliche Header und Testeingaben blieben unverändert.
-Die 16 geänderten Dateien stimmen zwischen macOS und Linux per SHA-256 überein
-(`build/body-source-freeze.json`); SDK-Belege liegen unter
-`build/body-sdk-{mac,linux}-PASSED.json`.
+Der vollständige historische Nachweis bleibt im
+[Plattformarchiv](platform-validation-history.md) erhalten.
 
 ## Konvexe Narrow Phase am 8. Oktober 2026
 
@@ -4119,3 +4064,39 @@ Die vorhandenen Type-7-Quantile und Histogramme besitzen separate Series-/
 Reportnachweise. PP-0405 ist damit als begrenzte Bibliotheksumsetzung belegt;
 die ganze aktuelle Plattform- und Produktabnahme bleibt offen. Die eingefrorene
 Gesamtprüfung an 03a58b3 läuft unabhängig auf ihrem Stand vor MeanInterval.
+
+
+## App-Berichtserwartungen nach der Pendelbilanz-Erweiterung
+
+Die C17-CI am genau belegten 03a58b3 besteht unter Linux/Clang und Linux/GCC
+jeweils **706/706 native Fälle**, scheitert anschließend jedoch im tatsächlichen
+App-Selftest language_full bei Stufe 7. Vollständige Logs sind gelesen:
+[Run 38180960909](https://github.com/PhysicSimulator/physim/actions/runs/38180960909),
+Jobs 114596665718 (Clang, `run-i9accbke`) und 114596665624
+(GCC, `run-inyer4gm`). Die beiden Jobs sind fehlgeschlagen; ihre nativen
+Erfolge sind keine ganze Plattformabnahme.
+
+Die App-Funktion erzeugt korrekt den zusätzlichen numerischen Bilanzplot
+und die Verlust-/Fehlertabelle. Der alte Selbsttest verlangt noch zwei Plots
+und drei Tabellen. Er ist auf Intel macOS für beide Sprachkombinationen
+lokal reproduziert: `build/current-language-balance-workflow-before-mac.log`,
+Ergebnisse `build/current-release-mac/test-results/run-dlh9388_`: **0/2**.
+Die vorherige erfolgreiche Gesamtnative-Suite enthielt diese Display-Fälle nicht.
+
+Die korrigierte Erwartung verlangt genau drei Plots und vier Tabellen und
+behält die mechanische Energie-/Periodenprüfung bei. Eine neue unabhängige
+Archivprüfung liest alle Messzeilen: elf Kanäle, Joule-Schemata,
+E + Verlust = Bilanz, nichtnegative Verluste, sämtliche gezeichneten
+Fehlerpunkte und die vollständigen Endverlust-/Maximalfehlerwerte.
+Der zusätzliche vollständige Bilanz-CSV muss vorhanden sein.
+
+`build/current-language-balance-workflow-after-mac.log`, Release-Ergebnisse
+`build/current-release-mac/test-results/run-1i1w3nmq`: **2/2 bestanden**.
+Auch ein tatsächlich installiertes SDK besteht dieselben realen
+App-/Projektbuild-/Runner-/Berichtsabläufe mit ausschließlich seinen
+Quellen, Headern und Programmen: `build/current-language-balance-sdk-install-mac.log`,
+`build/current-language-balance-sdk-full-mac.log` und
+`build/current-language-balance-sdk-mixed-mac.log`. Beide app-steps.json
+protokollieren jeweils einen Appprozess mit Exit 0. Der fokussierte
+Linux-Sanitizerworkflow registriert die beiden Fälle zusätzlich; seine
+Konfiguration gilt noch nicht als ausgeführter Nachweis der Korrektur.

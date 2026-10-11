@@ -51,7 +51,7 @@ jobs:
           cmake --install build-sdl
       - name: Sanitized UTF-8 and editor primitives
         run: python3 tools/build.py --compiler "${{ matrix.compiler }}" --sanitizers --test --test-filter utf8_string_bounds --test-filter editor_clipboard --test-filter editor_readonly
-      - name: Sanitized project-tree, completion and reference workflows
+      - name: Sanitized project-tree, reference and pendulum-analysis workflows
         env:
           ASAN_OPTIONS: detect_leaks=0
           LIBGL_ALWAYS_SOFTWARE: "1"
@@ -59,7 +59,7 @@ jobs:
           xvfb-run -a -s '-screen 0 1920x1080x24' sh -c '
             openbox > build/window-manager.log 2>&1 &
             python3 tools/wait-window-manager.py &&
-            python3 tools/build.py --compiler "${{ matrix.compiler }}" --sanitizers --test-display --test-filter project_tree_workflow --test-filter completion_workflow --test-filter api_reference_workflow
+            python3 tools/build.py --compiler "${{ matrix.compiler }}" --sanitizers --test-display --test-filter project_tree_workflow --test-filter completion_workflow --test-filter api_reference_workflow --test-filter language_full_workflow --test-filter language_mixed_workflow
           '
       - name: Archive focused evidence
         if: always()

@@ -2888,6 +2888,40 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "native_dialog_tests.inc"
 #include "workspace_tests.inc"
 // clang-format on
+/* Independent archive check for the optional tutorial energy-ledger report. */
+static bool test_pendulum_balance_report(const app *a) {
+    const ps_curve_data *curve=NULL;ps_plot_info plot;ps_table_info table;ps_table_row row;
+    const int8_t joules[]={2,1,-2,0,0,0,0};
+    if(ps_report_plot_read(a->analysis_report,2,&plot)!=PS_OK ||
+       strcmp(plot.title,"Energy balance error") || plot.curves!=1 ||
+       memcmp(plot.y_unit.dimension,joules,7) || strcmp(plot.y_unit.symbol,"J") ||
+       ps_report_curve_view(a->analysis_report,2,0,&curve)!=PS_OK ||
+       curve->kind!=PS_PLOT_LINE || !curve->count || curve->source_count!=a->data.total ||
+       ps_report_table_read(a->analysis_report,3,&table)!=PS_OK ||
+       strcmp(table.title,"Energy balance") || table.columns!=2 || table.rows!=1 ||
+       memcmp(table.column[0].unit.dimension,joules,7) ||
+       memcmp(table.column[1].unit.dimension,joules,7) ||
+       ps_report_row_read(a->analysis_report,3,0,&row)!=PS_OK)return false;
+    ps_run_reader reader;
+    if(ps_run_open(&reader,a->last_run)!=PS_OK)return false;
+    bool ok=reader.channels==11 && !strcmp(reader.schema[9].name,"energy.dissipated") &&
+            !strcmp(reader.schema[10].name,"energy.balance") &&
+            !memcmp(reader.schema[9].dimension,joules,7) && !memcmp(reader.schema[10].dimension,joules,7);
+    double time,values[PS_MAX_CHANNELS],initial=0,last_loss=0,max_error=0;
+    uint64_t count=0;uint32_t point=0;ps_result status=PS_INVALID;
+    while(ok && (status=ps_run_next(&reader,&time,values))==PS_OK) {
+        if(!count)initial=values[10];
+        double error=values[10]-initial;
+        ok=values[9]>=0 && values[10]==values[4]+values[9];
+        max_error=fmax(max_error,fabs(error));last_loss=values[9];count++;
+        if(point<curve->count && curve->x[point]==time) {
+            ok=ok && curve->y[point]==error;point++;
+        }
+    }
+    ok=ok && status==PS_EOF && count==a->data.total && point==curve->count &&
+       row.values[0]==last_loss && row.values[1]==max_error;
+    ps_run_reader_close(&reader);return ok;
+}
 int main(int argc, char **argv) {
     double profile_app_started = ps_clock();
     bool workspace_test = argc > 1 && !strcmp(argv[1], "--workspace-test");
@@ -3874,16 +3908,16 @@ int main(int argc, char **argv) {
             } else if (test_stage == 7 && idle(a) && test_language_analysis) {
                 char path[4200];
                 uint32_t plots = 0, tables = 0;
+                bool pendulum_analysis = test_example == 0 || test_example == 8;
                 if (test_example == 10 && (a->data.channel_count != 15 ||
                     a->data.stats[7].count == 0 || a->data.stats[7].count >= a->data.total ||
                     a->data.stats[0].count != a->data.total))
                     exit_code = 1;
                 if (!a->analysis_report || a->data.total < 10 ||
                     ps_report_describe(a->analysis_report, NULL, NULL, &plots, &tables) != PS_OK ||
-                    plots != (test_example == 17 ? 3u : 2u) ||
-                    tables != (test_example == 8 || test_example == 0 ? 3u : test_example == 10 ? 2u : 0u))
+                    plots != (pendulum_analysis || test_example == 17 ? 3u : 2u) ||
+                    tables != (pendulum_analysis ? 4u : test_example == 10 ? 2u : 0u))
                     exit_code = 1;
-                bool pendulum_analysis = test_example == 0 || test_example == 8;
                 snprintf(path, sizeof path, pendulum_analysis ? "%s.psreport" : "%s-position.svg", a->report);
                 if (!exists(path)) exit_code = 1;
                 snprintf(path, sizeof path, "%s-%s.csv", a->report,
@@ -3891,6 +3925,9 @@ int main(int argc, char **argv) {
                          : test_example == 17 ? "position" : "velocity");
                 if (!exists(path)) exit_code = 1;
                 if (pendulum_analysis) {
+                    if(!test_pendulum_balance_report(a))exit_code=1;
+                    snprintf(path,sizeof path,"%s-balance_1.csv",a->report);
+                    if(!exists(path))exit_code=1;
                     ps_table_info summary, periods;
                     ps_table_row row;
                     const ps_curve_data *energy;
