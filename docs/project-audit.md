@@ -638,3 +638,19 @@ der Korrektur und besteht danach beim Wiederöffnen von Lauf und Bericht auf
 macOS/Linux bei zwei Fenstergrößen. Die älteren frischen Linux-Pakete
 `40712ce` bestehen vollständig, ersetzen aber nicht die Abnahme der aktuellen
 Korrektur. Statuszahlen und Originalblöcke bleiben unverändert.
+
+
+## Schritt-Haltepunkte und aktuelle Beleglage (11. Oktober)
+
+PP-0257 besitzt eine tatsächlich implementierte und auf Intel macOS neu
+geprüfte Runner-/App-/SDK-Kette: beide Sprachen, feste/adaptive Schritte,
+Einzelschritt, Fortsetzen, Reset und gespeicherte Einstellungen. Die aktuelle
+Linux-/Windows-Prüfung bleibt offen; der Block bleibt **incomplete**.
+Die zuvor ignorierten lokalen Belege sind beim aktuellen Wiederaufbau nicht
+mehr vorhanden und werden ausdrücklich nicht als erneut inspizierte aktuelle
+Nachweise ausgegeben. Verifizierte CI am älteren `e8774bd` und die neuen
+macOS-Verzeichnisse sind in der Plattformprüfung getrennt dokumentiert.
+
+Alle **531 Originalblöcke** und die Originalplanprüfsumme bleiben erhalten:
+**45 implemented**, **10 incomplete**, **476 unverified**.
+`completion_proven` bleibt `false`.

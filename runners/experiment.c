@@ -3,6 +3,7 @@
 #include "platform.h"
 #include "protocol.h"
 #include "pacing.h"
+#include "step_breakpoints.h"
 #include <errno.h>
 #include "number_parse.h"
 #include <float.h>
@@ -56,11 +57,16 @@ static ps_result snapshot(const ps_experiment_api *api, ps_context *c, ps_run_st
     size_t n = ps_snapshot_encode(p, c, &scene, paused);
     return n && send_message(PS_MSG_SNAPSHOT, p, (uint32_t)n) ? PS_OK : PS_IO;
 }
+static void breakpoint_log(const ps_context *context, uint64_t step) {
+    char message[96];
+    snprintf(message, sizeof message, "Step breakpoint reached: %llu", (unsigned long long)step);
+    (void)ps_experiment_log(context, PS_LOG_INFO, message);
+}
 int main(int argc, char **argv) {
     if (argc < 3) {
         fprintf(stderr, "Usage: physim-runner module output.psrun [--steps N | --interactive] "
                         "[--dt seconds] [--seed N] [--param name=value]... "
-                        "[--speed 0|0.1..16 (interactive only)] [--log-events] [--diagnostics] (interactive only) [--record-scenes] "
+                        "[--break-at-steps N,N,... (interactive only)] [--speed 0|0.1..16 (interactive only)] [--log-events] [--diagnostics] (interactive only) [--record-scenes] "
                         "[--adaptive [--min-dt seconds] [--max-dt seconds]] "
                         "[--until seconds (offline; --steps is the step budget)] [--parent-watch (offline pipe)]\n"
                         "       physim-runner module --describe\n");
@@ -70,7 +76,8 @@ int main(int argc, char **argv) {
     bool interactive = false, record_scenes = false, adaptive = false, step_bounds = false, log_events=false,diagnostics=false;
     uint64_t steps = 4000, seed = 42;
     double dt = 0.005, speed = 1, minimum_dt=1e-8, maximum_dt=.1, end_time=0;
-    bool until_option=false;
+    bool until_option=false, breakpoint_option=false;
+    ps_step_breakpoints breakpoints = {0};
     bool speed_option = false, parent_watch = false;
     ps_context c = {0};
     c.struct_size = sizeof c;
@@ -96,6 +103,10 @@ int main(int argc, char **argv) {
             return 2;
         const char *key = argv[i++];
         errno = 0;
+        if (!strcmp(key, "--break-at-steps")) {
+            if (breakpoint_option || !ps_step_breakpoints_parse(argv[i], &breakpoints)) return 2;
+            breakpoint_option = true; continue;
+        }
         if (!strcmp(key, "--param")) {
             const char *equals = strchr(argv[i], '=');
             if (!equals || equals == argv[i] || equals - argv[i] >=
@@ -139,7 +150,7 @@ int main(int argc, char **argv) {
         (step_bounds && !adaptive) || (adaptive &&
          (!isfinite(minimum_dt) || minimum_dt<DBL_MIN || !isfinite(maximum_dt) ||
           maximum_dt>1 || minimum_dt>dt || dt>maximum_dt)) ||
-        !ps_speed_valid(speed) || (speed_option && !interactive) || ((log_events || diagnostics) && !interactive) ||
+        (breakpoint_option && !interactive) || !ps_speed_valid(speed) || (speed_option && !interactive) || ((log_events || diagnostics) && !interactive) ||
         (parent_watch && (interactive || !strcmp(argv[2],"--describe"))))
         return 2;
     ps_binary_stdio();
@@ -253,10 +264,24 @@ int main(int argc, char **argv) {
         }
         used=strlen(c.model_metadata);
     }
+    if (breakpoint_option) {
+        char text[384] = {0}; size_t length = 0;
+        for (unsigned i = 0; i < breakpoints.count; i++)
+            length += (size_t)snprintf(text + length, sizeof text - length, "%s%llu",
+                                      i ? "," : "", (unsigned long long)breakpoints.step[i]);
+        int added = snprintf(c.model_metadata + used, sizeof c.model_metadata - used,
+                             "\nbreak_at_steps=%s", text);
+        if (added < 0 || (size_t)added >= sizeof c.model_metadata - used) {
+            report(interactive, diagnostics, diagnostic_path, &c, PS_LIMIT, "metadata",
+                   "Model metadata has no room for step breakpoints");
+            api->destroy(&c); runner_log_close(&logs, c.time_s); ps_module_close(module); return 5;
+        }
+        used = strlen(c.model_metadata);
+    }
     int provenance=snprintf(c.model_metadata + used, sizeof c.model_metadata - used,
              "\nmodule_fnv1a64=%016llx\nrunner_build=%s %s", (unsigned long long)hash, __DATE__,
              __TIME__);
-    if((adaptive || until_option) && (provenance<0 || (size_t)provenance>=sizeof c.model_metadata-used)) {
+    if((adaptive || until_option || breakpoint_option) && (provenance<0 || (size_t)provenance>=sizeof c.model_metadata-used)) {
         report(interactive,diagnostics,diagnostic_path,&c,PS_LIMIT,"metadata","Model metadata has no room for module provenance");
         api->destroy(&c);runner_log_close(&logs,c.time_s);
         ps_module_close(module);return 5;
@@ -316,11 +341,12 @@ int main(int argc, char **argv) {
                     result = PS_VERSION;
                     break;
                 } else if (type == PS_MSG_RUN) {
-                    paused = false;
-                    pacer.running = true;
+                    paused = ps_step_breakpoint_hit(&breakpoints, tick);
+                    pacer.running = !paused;
                     ps_pacer_restart(&pacer, now);
+                    if (paused) breakpoint_log(&c, tick);
                     /* Report control state even when a slow, large dt is not due yet. */
-                    result = snapshot(api, &c, store, writer, false, true);
+                    result = snapshot(api, &c, store, writer, paused, true);
                     if (result != PS_OK)
                         break;
                     last_frame = now;
@@ -406,7 +432,13 @@ int main(int argc, char **argv) {
         c.time_s = adaptive ? previous_time+accepted_dt : terminal?end_time:(double)tick * dt;
         if(adaptive || until_option) c.dt_s=accepted_dt;
         result = ps_run_writer_append(store, writer, c.time_s, c.values, c.channel_count);
-        if (interactive && (single || now - last_frame >= 1.0 / 60)) {
+        if (result != PS_OK) break;
+        bool breakpoint_hit = interactive && ps_step_breakpoint_hit(&breakpoints, tick);
+        if (breakpoint_hit) {
+            paused = true; pacer.running = false; ps_pacer_restart(&pacer, ps_clock());
+            breakpoint_log(&c, tick);
+        }
+        if (interactive && (single || breakpoint_hit || now - last_frame >= 1.0 / 60)) {
             ps_result scene_result = snapshot(api, &c, store, writer, paused, true);
             if (scene_result != PS_OK) {
                 result = scene_result;

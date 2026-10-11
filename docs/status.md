@@ -1,6 +1,6 @@
 # Umsetzungsstand
 
-Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-08. Der Projektplan ist die Roadmap;
+Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-11. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
 **Gewichtete ODE-Zustände:** Euler, symplektischer Euler, RK4, Verlet und RK45
@@ -2809,3 +2809,16 @@ auf Ubuntu 24.04 und Debian 12 einschließlich kompletter SDK-/App-Prüfungen;
 Windows/MSVC Release besteht dort das SDK, scheitert anschließend im
 Benchmark-Schritt mit noch ungeklärter Ursache. Die aktuelle gesamte
 Plattform-/Paketabnahme bleibt offen.
+
+
+## Haltepunkte an akzeptierten Simulationsschritten
+
+C-/Physim-Läufe unterstützen bis zu 32 gespeicherte Schritt-Haltepunkte mit
+Pause, Einzelschritt, Fortsetzen und erneutem Aktivieren beim Zurücksetzen.
+Feste und adaptive Runner sowie tatsächliche App- und verschobene SDK-Abläufe
+bestehen nach dem Neuaufbau auf Intel macOS. Die aktuelle Linux-/Windows-
+Prüfung und die gesamte neue SDK-/Plattformmatrix bleiben offen. PP-0257
+ist deshalb vorerst unvollständig. [Bedienung](workspace.md#haltepunkte-für-simulationsschritte),
+[aktuelle Nachweise und fehlende historische lokale Belege](platform-validation.md#wiederaufbau-und-schritt-haltepunkte-am-11-oktober-2026).
+Die unabhängige SDK-Mappe erhält die genaue Bitmap-Evidenz jetzt optional
+verlustfrei komprimiert und prüft deren Wiederherstellung und Dateieigentum.

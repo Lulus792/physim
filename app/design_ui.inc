@@ -249,6 +249,21 @@ static void camera_inspector(app *a) {
         nk_layout_row_dynamic(ui, 32, 1);
         nk_edit_string_zero_terminated(ui, NK_EDIT_FIELD, a->seed, sizeof a->seed,
                                        nk_filter_decimal);
+        if (!a->analysis_only && nk_tree_state_push(ui, NK_TREE_TAB, "Haltepunkte", &a->breakpoint_disclosure)) {
+            char previous[sizeof a->step_breakpoints]; strcpy(previous, a->step_breakpoints);
+            nk_layout_row_dynamic(ui, 54, 1);
+            nk_label_wrap(ui, "Akzeptierte Schritte:\n10,100,500 · leer: aus");
+            nk_layout_row_dynamic(ui, 32, 1); a->breakpoint_bounds = nk_widget_bounds(ui);
+            nk_edit_string_zero_terminated(ui, NK_EDIT_FIELD, a->step_breakpoints,
+                                           sizeof a->step_breakpoints, nk_filter_default);
+            if (a->loaded && strcmp(previous, a->step_breakpoints)) a->project_settings_dirty = true;
+            ps_step_breakpoints points;
+            if (!ps_step_breakpoints_parse(a->step_breakpoints, &points)) {
+                nk_layout_row_dynamic(ui, 54, 1);
+                nk_label_wrap(ui, "Bis zu 32 verschiedene ganze Zahlen von 0 bis 1000000000 eingeben.");
+            }
+            nk_tree_pop(ui);
+        }
         nk_end_disabled(ui);
         if (a->loaded && (previous_dt != a->dt || strcmp(previous_seed, a->seed)))
             a->project_settings_dirty = true;

@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "date": "2026-10-08",
+  "date": "2026-10-11",
   "inspected_revision": "7035041f92c7cbf437d3f1cf32ed6d240754dd9e",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
@@ -1529,9 +1529,22 @@
       "kind": "list",
       "scope": "later",
       "text": "- einfache Breakpoints für Simulationsschritte, nicht sofort ein vollständiger nativer Debugger.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "incomplete",
+      "evidence": [
+        "src/step_breakpoints.h",
+        "runners/experiment.c",
+        "app/design_ui.inc",
+        "app/project_file.c",
+        "app/step_breakpoint_tests.inc",
+        "tests/test_runner_breakpoints.py",
+        "tests/test_step_breakpoints.c",
+        "tests/test_project_file.c",
+        "tests/check_display_workflow.py",
+        "tools/verify-native-sdk.py",
+        "docs/workspace.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Bis zu 32 run-lokale, einmalige Haltepunkte an akzeptierten Schritten; initialer Schritt 0, feste/adaptive C-/Physim-Läufe, Einzelschritt/Fortsetzen/Zurücksetzen und gespeicherte Projekteinstellungen implementiert. Am 2026-10-11 auf Intel macOS tatsächlich neu gebaut und mit nativen, App- und verschobenen unabhängigen SDK-Prüfungen nachgewiesen. Die aktuellen Linux-/Windows-Läufe und die gesamte neue SDK-/Plattformabnahme sind noch offen; frühere inzwischen lokal fehlende Linux-Belege ersetzen diese aktuelle Prüfung nicht."
     },
     {
       "id": "PP-0258",

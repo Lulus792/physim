@@ -2142,6 +2142,14 @@
       "libraries": [
         "core"
       ]
+    },
+    "physim-step-breakpoint-tests": {
+      "sources": [
+        "tests/test_step_breakpoints.c"
+      ],
+      "libraries": [
+        "core"
+      ]
     }
   },
   "tests": [
@@ -8861,6 +8869,88 @@
           "files": [
             "app-steps.json"
           ]
+        }
+      ]
+    },
+    {
+      "name": "step_breakpoint_schedule",
+      "targets": [
+        "physim-step-breakpoint-tests"
+      ],
+      "steps": [
+        {
+          "program": "physim-step-breakpoint-tests",
+          "arguments": [],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "runner_step_breakpoints",
+      "targets": [
+        "python",
+        "physim-runner",
+        "pendulum",
+        "physim-language-pendulum"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_runner_breakpoints.py",
+            "{physim-runner}",
+            "{pendulum}",
+            "{physim-language-pendulum}",
+            "{work}"
+          ],
+          "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "step_breakpoints_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "step_breakpoints_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 650,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "bitmap_archive",
+      "targets": [
+        "python"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_bitmap_archive.py",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 60
         }
       ]
     }

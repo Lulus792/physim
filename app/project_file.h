@@ -2,6 +2,7 @@
 #define PHYSIM_PROJECT_FILE_H
 #include "parameter_catalog.h"
 #include "text_document.h"
+#include "step_breakpoints.h"
 
 enum { PS_PROJECT_CURRENT_VERSION = 2 };
 typedef struct {
@@ -12,6 +13,7 @@ typedef struct {
     bool adaptive;
     double minimum_timestep, maximum_timestep;
     uint64_t seed;
+    char breakpoints[PS_STEP_BREAKPOINT_TEXT];
     ps_parameter_catalog parameters;
 } ps_project_settings;
 

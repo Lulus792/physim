@@ -553,3 +553,34 @@ Paketquellen neu gebaute Bibliothek, beide Sprachen, fünf auswählbare Verfahre
 neun SI-Kanäle, adaptive Läufe, Spitzen-API und vollständige Amplituden-CSVs.
 Der Modus prüft die Pendelkette ohne Oberfläche; die vollständige SDK-Prüfung
 enthält dieselbe Gegenprobe zusätzlich zu den übrigen Prüfungen.
+
+
+## Haltepunkte für Simulationsschritte
+
+Vor dem Start öffnest du im Inspector **Laufeinstellungen → Haltepunkte**.
+Trage zum Beispiel `10,100,500` ein. Der Runner pausiert nach genau diesen
+akzeptierten Physikschritten. Ein leerer Eintrag deaktiviert die Haltepunkte.
+Es sind bis zu 32 verschiedene ganze Zahlen von 0 bis 1000000000 zulässig;
+die Reihenfolge der Eingabe ist beliebig. `0` hält beim Start am Anfangszustand.
+Abgelehnte Versuche eines adaptiven Integrators zählen nicht als Schritte.
+
+An einem Haltepunkt kannst du **Einzelschritt**, **Fortsetzen**, **Stoppen**
+oder **Zurücksetzen** verwenden. Jeder Haltepunkt gilt einmal pro Lauf;
+Fortsetzen bleibt deshalb nicht am selben Punkt hängen. Zurücksetzen beginnt
+mit einer neuen Laufdatei und aktiviert dieselbe Liste erneut. Während eines
+laufenden oder pausierten Experiments ist das Feld gesperrt. Stoppe den Lauf,
+um seine nächste Haltepunktliste zu ändern.
+
+Die Liste wird mit den übrigen Projekteinstellungen gespeichert und beim
+Wiederöffnen geladen. Sie erfordert keinen neuen Modellbuild. Der optionale
+Projektdateieintrag lautet `simulation.breakpoints=10,100,500`; alte Projekte
+starten ohne Haltepunkte. Die Messdatei speichert die sortierte Liste als
+`break_at_steps`, und das Laufprotokoll meldet jeden erreichten Schritt.
+C- und Physim-Experimente verwenden dieselbe Runnersteuerung. Haltepunkte
+verändern weder akzeptierte Zeitschritte noch Seed oder Modellzustand.
+
+Der native Runner erlaubt dieselbe Steuerung über
+`--interactive --break-at-steps "10,100,500"`. Die Option ist auf interaktive
+Läufe beschränkt; ein Offline-Lauf ohne Steuerverbindung würde sonst dauerhaft
+auf Fortsetzen warten. Die vorhandenen Pipe-Nachrichten für Einzelschritt und
+Fortsetzen sowie Pipe-Version 5 und Experiment-ABI 3 bleiben unverändert.

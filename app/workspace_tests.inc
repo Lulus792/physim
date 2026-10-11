@@ -40,6 +40,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
         return docking_test_start(a, root, mode);
     if (!strncmp(mode, "timeline-", 9))
         return timeline_test_start(a, root, mode);
+    if (!strncmp(mode, "breakpoints-", 12)) return breakpoint_test_start(a,root,mode);
     if (!strncmp(mode, "speed-", 6))
         return speed_test_start(a, root, mode);
     if (!strncmp(mode, "reset-", 6))
@@ -162,6 +163,7 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
         timeline_test_frame(a, mode, stage, code, capture);
         return;
     }
+    if (!strncmp(mode, "breakpoints-", 12)) {breakpoint_test_frame(a,mode,stage,code,capture);return;}
     if (!strncmp(mode, "speed-", 6)) {
         speed_test_frame(a, mode, stage, code, capture);
         return;

@@ -124,3 +124,21 @@ Der vollständige Quellcode der App und ihre Entwicklungswerkzeuge liegen im
 [Physim-Repository](https://github.com/PhysicSimulator/physim). Dessen README enthält
 die Befehle, um Physim selbst zu bauen. Dieses Paket enthält die ausgelieferten
 Programme und das SDK, nicht den vollständigen Entwicklungs-Checkout.
+
+
+## Accepted-step breakpoints
+
+The runner accepts `--interactive --break-at-steps "10,100,500"`. Up to 32
+unique integers in 0..1000000000 pause the model after accepted steps;
+adaptive rejections do not count. Step 0 pauses at the initial state. Existing
+single-step and resume messages keep working; each stop fires once per run.
+The app saves these values as `simulation.breakpoints` and re-arms them when
+resetting. C and Physim modules use the same host controls.
+
+Developer verification can isolate this feature with
+`python3 tools/verify-native-sdk.py --sdk SDK --work proof --breakpoints-only --app-tests --archive-bitmaps`.
+The focused marker does not imply full SDK or platform acceptance.
+`--archive-bitmaps` preserves generated screenshots byte-for-byte in verified
+gzip files and `bitmap-archive.json`; SDK input assets stay protected. Restore
+with `python3 tools/archive_bitmaps.py proof-directory --restore`. Existing
+foreign files are never replaced. CI publishes the archives and receipts.

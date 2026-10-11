@@ -1,6 +1,6 @@
 # Plattformprüfung
 
-Stand: 8. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
+Stand: 11. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
 Die [historischen Plattformnachweise](platform-validation-history.md) enthalten
@@ -2458,3 +2458,76 @@ Die fehlende direkte Importbibliothek ist durch die Quellen belegt; die
 konkrete Ursache des oben fehlgeschlagenen Windows-CI-Jobs bleibt ohne Joblog
 offen. Der aktuelle MSVC-Link-/Benchmarknachweis bleibt bis zu ausgeführter
 CI offen.
+
+
+## Wiederaufbau und Schritt-Haltepunkte am 11. Oktober 2026
+
+Bei der erneuten Bestandsaufnahme enthält `build/` nur noch Finder-Metadaten.
+Die zuvor ignorierten lokalen SDKs, Prüflogs, Bitmaparchive und die SSH-/Image-
+Konfiguration der Debian-VM sind nicht vorhanden. Der Quellcode bleibt erhalten.
+Die oben dokumentierten Läufe und Prüfsummen bleiben historische Aussagen;
+ihre lokalen Belegpfade und die als alleinige Kopien bezeichneten Archive
+sind aktuell nicht verfügbar. Es wurde keine neue Linux-VM-Prüfung daraus
+abgeleitet. Die aktuelle Prüfung wird in neuen Verzeichnissen aufgebaut.
+
+SDL 3.2.30 wurde erneut aus dem offiziellen `release-3.2.30`-Quellstand unter
+`build/deps/` gebaut und installiert. Intel macOS 14.6.1/Apple Clang 16
+besteht die neuen Runner-/Haltepunkt-/Bitmapfälle **3/3** in
+`build/current-headless-mac/test-results/run-0pp11wvc`, Projektdatei und
+Migration **2/2** in `build/current-release-mac/test-results/run-8mc1lryw`
+sowie Haltepunkt-Appkette und verzögerten Dokumentationstest **2/2** in
+`build/current-release-mac/test-results/run-bu7fets6`. Die vier bestehenden
+Runner-Steuerungsfälle bestehen **4/4** in `run-xqkfm_nw` desselben Release-
+Testverzeichnisses. Details: `build/current-{breakpoint-native,project-tests,window-tests,runner-regression}-mac.log`.
+
+Die Haltepunktliste enthält bis zu 32 verschiedene akzeptierte Schrittzahlen
+von 0 bis 1000000000. Tests rechnen tatsächlich C- und Physim-Modelle mit
+festen und adaptiven Schritten, halten bei 0/3/7, prüfen Einzelschritt und
+Fortsetzen, vergleichen alle gespeicherten Messzeilen exakt mit einem Lauf
+ohne Haltepunkte und weisen zwölf ungültige CLI-Konfigurationen vor jeder
+Laufdateianlage ab. Die Appprüfung bedient die echte Eingabe sowie Start-,
+Einzelschritt-, Fortsetzen-, Reset- und Stop-Buttons für beide Sprachen bei
+zwei Fenstergrößen und prüft gespeichert erneut geöffnete Einstellungen.
+
+Das neu gebaute App-SDK `build/current-sdk-mac` besteht außerdem die
+verschobene Gegenprobe aus einer **151 Eingaben** umfassenden, vollständig
+SHA-256-geprüften unabhängigen Mappe ohne Physim-Implementierung. Der Compiler
+wird dabei automatisch erkannt; der Aufruf benötigt kein `--compiler`.
+Nachweis: `build/current-breakpoint-sdk-proof-mac/Native SDK ä y6g_pzoq/PASSED.txt`
+und `verification.log`; Log: `build/current-breakpoint-sdk-proof-mac.log`.
+Dies ist eine fokussierte SDK-Abnahme, keine gesamte Plattform-/Produktabnahme.
+
+`--archive-bitmaps` komprimiert nur bereits beendeter Prüfkommandos erzeugte
+BMPs. SDK-Eingaben bleiben geschützt. Komprimierte und wiederhergestellte
+Bytes werden vor dem Entfernen des Originals gegen SHA-256 geprüft; eine
+atomar veröffentlichte `bitmap-archive.json` erhält Originalpfad, Größe,
+Prüfsumme, Archivpfad und Prüfphase. Die 16 echten SDK-Screenshots behalten
+alle **275560608 Originalbytes** in **8023502 komprimierten Bytes**; jedes
+Archiv wurde zusätzlich nach dem SDK-Lauf vollständig nachgeprüft. Die
+Bilder lassen sich mit `python3 tools/archive_bitmaps.py PRÜFVERZEICHNIS --restore`
+bytegetreu zurückholen; fremde vorhandene Dateien werden nicht ersetzt.
+Paketgrenzen-Selbsttest und korruptions-/Unterbrechungs-/Pfad-/Eigentümer-
+Gegenproben bestehen. Die CI archiviert auch Receipts und komprimierte BMPs.
+
+## Spätere CI am Commit e8774bd
+
+Der [C17-Lauf](https://github.com/PhysicSimulator/physim/actions/runs/37821695246)
+besteht Linux/GCC, Linux/Clang, Apple-Silicon-macOS sowie MSVC/Clang-Cl Debug
+und Release. Windows/MSVC Release besteht jetzt auch den separaten Benchmark-
+Schritt. Das offizielle Artefakt `build/e877-windows-release-benchmark.zip`
+ist gegen SHA-256
+`2dfc60e0ba491898016ca5b773927679147bc5c1e44433b2e2a38244ea536742`
+geprüft und enthält alle acht Referenzlasten in `summary.json`.
+Die API-Job-/Artefaktinformationen liegen unter `build/e877-ci-*.json`.
+Diese Ergebnisse betreffen `e8774bd`, noch nicht die neue Haltepunktfunktion.
+
+Nur der Intel-macOS-Job endet mit Fehler: `docs-keyboard-delayed` überschreitet
+mit absichtlich 80 ms Verzögerung je Bild und Apple Software Renderer die
+60 Sekunden nahe dem letzten Schritt 30. Der authentifiziert gelesene
+[Joblog](https://github.com/PhysicSimulator/physim/actions/runs/37821695246/job/113464056502)
+belegt diese Stelle; der Auszug liegt in `build/e877-intel-sdk-failure-excerpt.log`.
+Das Budget ist ausschließlich für diesen verzögerten Test auf 120 Sekunden
+mit 135 Sekunden äußerem Prozesslimit angehoben. Alle Fokus-, Eingabe-,
+Clipboard-, Navigations- und Fehlerprüfungen bleiben erhalten; die normalen
+Dokumentationsmodi behalten 60 Sekunden. Eine neue tatsächlich ausgeführte
+Intel-CI-/Gesamtpaketprüfung bleibt bis zu ihrem Ergebnis offen.

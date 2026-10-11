@@ -121,7 +121,7 @@ jobs:
           xvfb-run -a -s '-screen 0 1920x1080x24' sh -c '
             openbox > evidence/openbox.log 2>&1 &
             python3 verifier/tools/wait-window-manager.py || exit 1
-            python3 verifier/tools/verify-native-sdk.py --sdk "Installed package ä/Physim" --work evidence --compiler gcc --app-tests
+            python3 verifier/tools/verify-native-sdk.py --sdk "Installed package ä/Physim" --work evidence --compiler gcc --app-tests --archive-bitmaps
           '
       - name: Verify native file and folder dialogs
         run: |
@@ -146,5 +146,7 @@ jobs:
             evidence/Native dialogs*/**
             evidence/Native SDK*/verification.log
             evidence/Native SDK*/PASSED.txt
+            evidence/Native SDK*/bitmap-archive.json
+            evidence/Native SDK*/**/*.bmp.*.gz
             evidence/Native SDK*/App */*.bmp
           if-no-files-found: ignore

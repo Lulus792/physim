@@ -10,6 +10,28 @@ import sys
 import tempfile
 
 
+def verify_step_breakpoints(repo, sdk, root, suffix, checked, app_tests=False, compiler=None):
+    module_suffix = ".dll" if sys.platform == "win32" else ".so"
+    checked([sys.executable, repo / "tests/test_runner_breakpoints.py",
+             sdk / "bin" / ("physim-runner" + suffix),
+             sdk / "bin" / ("pendulum" + module_suffix),
+             sdk / "bin" / ("language-pendulum" + module_suffix),
+             root / "Step breakpoint runners"], timeout=120)
+    if app_tests:
+        verify_step_breakpoint_app(repo, sdk, root, suffix, checked, compiler)
+    print("Installed SDK step breakpoints: real C/Physim accepted-step stops, resume, fixed/adaptive persisted parity and preflight errors passed", flush=True)
+
+
+def verify_step_breakpoint_app(repo, sdk, root, suffix, checked, compiler):
+    work = root / "Step breakpoint app"; work.mkdir()
+    command = [sys.executable, repo / "tests/check_display_workflow.py",
+               "step_breakpoints_workflow", "--app", sdk / "bin" / ("physim" + suffix),
+               "--root", sdk, "--work", work]
+    if compiler: command += ["--cc", compiler]
+    checked(command, timeout=650)
+    print("Installed SDK step breakpoint app: both languages/window sizes, actual edit/run/step/resume/reset buttons and persisted reopening passed", flush=True)
+
+
 def verify_project_migration(repo, sdk, root, suffix, checked):
     checked(
         [
@@ -314,6 +336,8 @@ def main():
     parser.add_argument("--work", type=Path, required=True)
     parser.add_argument("--compiler")
     parser.add_argument("--app-tests", action="store_true")
+    parser.add_argument("--archive-bitmaps", action="store_true",
+                        help="Losslessly archive completed commands' generated BMP evidence; protects SDK input files")
     parser.add_argument("--pendulum-only", action="store_true",
                         help="Verify current pendulum models, stored runs, analyses and peak APIs; no GUI or full package acceptance")
     parser.add_argument("--scalar-only", action="store_true",
@@ -336,7 +360,13 @@ def main():
                         help="Verify the packaged app's actual native checkbox and radio settings; requires a display")
     parser.add_argument("--convex-only", action="store_true",
                         help="Verify convex geometry and bounded multi-body CCD bindings; no full mechanics or GUI acceptance")
+    parser.add_argument("--breakpoints-only", action="store_true",
+                        help="Verify actual C/Physim runner step stops; optional --app-tests covers settings, persistence and reset")
     args = parser.parse_args()
+    if args.breakpoints_only and any((args.pendulum_only, args.scalar_only, args.transform_only,
+        args.stream_only, args.comparison_only, args.curve_only, args.units_only, args.body_only,
+        args.migration_only, args.accessibility_only, args.convex_only)):
+        parser.error("--breakpoints-only cannot be combined with other focused modes")
     if args.pendulum_only and any((args.scalar_only, args.transform_only, args.stream_only,
                                   args.comparison_only, args.curve_only, args.units_only,
                                   args.body_only, args.convex_only, args.accessibility_only,
@@ -410,10 +440,21 @@ def main():
                                  config=metadata["config"], no_app=True, jobs=4)
     env = native.compiler_environment()
     log = root / "verification.log"
+    bitmap_archive = None
+    if args.archive_bitmaps:
+        archive_spec = importlib.util.spec_from_file_location("bitmap_archive", repo / "tools/archive_bitmaps.py")
+        bitmap_archive = importlib.util.module_from_spec(archive_spec); archive_spec.loader.exec_module(bitmap_archive)
+    checked_phase = 0
+
 
     def checked(command, *, output=None, timeout=300):
+        nonlocal checked_phase
         result = subprocess.run([str(p) for p in command], cwd=root, env=env,
                                 capture_output=True, timeout=timeout)
+        checked_phase += 1
+        if bitmap_archive:
+            count, freed = bitmap_archive.archive_bitmaps(root, [sdk], checked_phase)
+            if count: print(f"Archived {count} exact BMPs after command {checked_phase}; freed {freed} bytes", flush=True)
         with log.open("ab") as file:
             file.write(("COMMAND: " + repr([str(p) for p in command]) + "\n").encode("utf-8"))
             if output is None:
@@ -430,6 +471,16 @@ def main():
         builder.includes = [sdk / "include"]
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+        if args.breakpoints_only:
+            if args.app_tests and not metadata["app"]:
+                raise RuntimeError("Step breakpoint app verification requires an app SDK")
+            verify_step_breakpoints(repo, sdk, root, suffix, checked, args.app_tests, args.compiler)
+            (root / "PASSED.txt").write_text(
+                "Focused SDK step breakpoint verification passed: relocated manifest, C/Physim fixed/adaptive accepted-step stops, single-step/resume and persisted parity. " +
+                ("App controls at two window sizes, settings persistence, reopening and reset passed. " if args.app_tests else "") +
+                "No full platform or product acceptance.\n", encoding="utf-8")
+            print(f"Step breakpoint SDK verified: {root}", flush=True)
+            return
         if args.pendulum_only:
             shutil.copytree(sdk / "src", consumer / "src")
             rebuilt_core = builder.archive("sdk-rebuilt-core", [f"src/{name}.c" for name in native.CORE])
@@ -571,6 +622,7 @@ def main():
         rebuilt_probe = builder.executable("sdk-rebuilt-probe", ["probe.c"], [rebuilt_core])
         rebuilt_series_probe=builder.executable("sdk-rebuilt-series-probe",["series-probe.c"],[rebuilt_core])
         checked([rebuilt_probe, root / "bundled-pendulum.psrun", root / "bundled-pendulum-report.psreport"])
+        verify_step_breakpoints(repo, sdk, root, suffix, checked)
         verify_pendulum(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         shutil.copy2(repo / "tests/test_series_numeric_extremes.c", consumer / "series-numeric-extremes.c")
         for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
@@ -1153,9 +1205,11 @@ def main():
                     checked([sdk / "bin" / ("physim" + suffix), "--self-test", root / ("App " + example), example])
                     print(f"Installed SDK GUI workflow: {example} passed", flush=True)
                 isolation = root / "Workflow input isolation"; isolation.mkdir()
-                checked([sys.executable, repo / "tests/check_display_workflow.py",
+                isolation_command = [sys.executable, repo / "tests/check_display_workflow.py",
                          "workflow_pointer_isolation", "--app", sdk / "bin" / ("physim"+suffix),
-                         "--work", isolation, "--root", sdk, "--cc", args.compiler], timeout=330)
+                         "--work", isolation, "--root", sdk]
+                if args.compiler: isolation_command += ["--cc", args.compiler]
+                checked(isolation_command, timeout=330)
                 print("Installed SDK workflow input isolation: report/run reopen with foreign pointer/focus events at both window sizes passed", flush=True)
                 checked([sdk / "bin" / ("physim"+suffix),"--docs-test",root / "Documentation routes"])
                 print("Installed SDK documentation window: both learning route buttons, shared links, route home and small-window rendering passed",flush=True)
@@ -1190,6 +1244,7 @@ def main():
                     if "SETTINGS KEYBOARD SELF-TEST: PASSED" not in output.read_text(encoding="utf-8"):
                         raise RuntimeError("Installed SDK keyboard settings did not complete")
                 print("Installed SDK settings: keyboard-only traversal, all toggles, restart, cancellation and large-font focus scrolling passed",flush=True)
+                verify_step_breakpoint_app(repo, sdk, root, suffix, checked, args.compiler)
                 verify_project_migration(repo,sdk,root,suffix,checked)
                 if sys.platform in ("darwin","linux"):
                     verify_accessibility_checkbox(repo,sdk,root,suffix,checked)
@@ -1214,6 +1269,7 @@ def main():
         "specialized sensor analysis and six C/Physim combinations passed.\n"
         "Adaptive bundled/source C and Physim pendulums, actual variable sample times, energy and both analysis languages passed.\n" +
         "Common-target-time parameter studies from bundled/source C and Physim pendulums passed with installed and rebuilt probes.\n" +
+        "Accepted-step breakpoints in fixed/adaptive C/Physim runners, initial-state stop, single-step/resume and exact persisted parity passed.\n" +
         "Logging through installed/rebuilt C Core and Physim passed with exclusive JSONL and opt-in wire events.\n" +
         "Structured diagnostics through installed/rebuilt Core, C/Physim runners and legacy ABI passed.\n" +
         "Run indexes through installed/rebuilt Core, legacy/recovered files, allocator failures and million-row independent codec passed.\n" +

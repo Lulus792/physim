@@ -34,7 +34,7 @@ static ps_document_result parse(const ps_text_document *document, ps_project_set
     if(document->length>256u*1024u)return PS_DOCUMENT_LIMIT;
     ps_project_settings settings = {.timestep = .005, .seed = 42, .speed = 1,
                                     .minimum_timestep=1e-8,.maximum_timestep=.1};
-    bool seen[10] = {false};
+    bool seen[11] = {false};
     size_t position = 0;
     unsigned index = 0, version=1;
     while (position < document->length) {
@@ -109,6 +109,11 @@ static ps_document_result parse(const ps_text_document *document, ps_project_set
             if(errno || number_end==value+1 || *number_end || !ps_project_timestep_valid(dt))
                 return PS_DOCUMENT_INVALID;
             if(which==7) settings.minimum_timestep=dt;else settings.maximum_timestep=dt;
+        } else if (!strncmp(line, "simulation.breakpoints=", 23)) {
+            ps_step_breakpoints points;
+            if (seen[10] || strlen(value + 1) >= sizeof settings.breakpoints ||
+                !ps_step_breakpoints_parse(value + 1, &points)) return PS_DOCUMENT_INVALID;
+            seen[10] = true; strcpy(settings.breakpoints, value + 1);
         } else if (!strncmp(line, "parameter.", 10)) {
             if (!value)
                 return PS_DOCUMENT_INVALID;
@@ -142,6 +147,9 @@ ps_document_result ps_project_settings_save(const char *path, const ps_project_s
     if (!path || !settings || !ps_project_timestep_valid(settings->timestep) ||
         !ps_speed_valid(settings->speed) || !ps_project_step_bounds_valid(settings))
         return PS_DOCUMENT_INVALID;
+    ps_step_breakpoints breakpoints;
+    if (!memchr(settings->breakpoints, 0, sizeof settings->breakpoints) ||
+        !ps_step_breakpoints_parse(settings->breakpoints, &breakpoints)) return PS_DOCUMENT_INVALID;
     const ps_parameter_catalog *parameters = &settings->parameters;
     if (parameters->count > PS_MAX_PARAMETERS)
         return PS_DOCUMENT_INVALID;
@@ -156,7 +164,7 @@ ps_document_result ps_project_settings_save(const char *path, const ps_project_s
         ps_text_document_destroy(&document);
         return result;
     }
-    size_t capacity = document.length + PS_MAX_PARAMETERS * 160 + 384, used = 0;
+    size_t capacity = document.length + PS_MAX_PARAMETERS * 160 + 1024, used = 0;
     char *text = malloc(capacity);
     if (!text) {
         ps_text_document_destroy(&document);
@@ -173,7 +181,7 @@ ps_document_result ps_project_settings_save(const char *path, const ps_project_s
         if (strncmp(line, "profile=", 8) && strncmp(line, "parameter.", 10) &&
             strncmp(line, "simulation.dt=", 14) && strncmp(line, "simulation.seed=", 16) &&
             strncmp(line, "simulation.speed=", 17) && strncmp(line,"simulation.steps=",17) &&
-            strncmp(line,"simulation.minimum_dt=",22) && strncmp(line,"simulation.maximum_dt=",22)) {
+            strncmp(line,"simulation.minimum_dt=",22) && strncmp(line,"simulation.maximum_dt=",22) && strncmp(line,"simulation.breakpoints=",23)) {
             memcpy(text + used, line, end - position);
             used += end - position;
         }
@@ -196,6 +204,10 @@ ps_document_result ps_project_settings_save(const char *path, const ps_project_s
                    "simulation.steps=adaptive%ssimulation.minimum_dt=%.17g%ssimulation.maximum_dt=%.17g%s",
                    newline,settings->minimum_timestep,newline,settings->maximum_timestep,newline);
         if(n<0 || (size_t)n>=capacity-used) result=PS_DOCUMENT_LIMIT;else used+=(size_t)n;
+    }
+    if (result == PS_DOCUMENT_OK && breakpoints.count) {
+        n = snprintf(text + used, capacity - used, "simulation.breakpoints=%s%s", settings->breakpoints, newline);
+        if (n < 0 || (size_t)n >= capacity - used) result = PS_DOCUMENT_LIMIT; else used += (size_t)n;
     }
     for (uint32_t i = 0; result == PS_DOCUMENT_OK && i < parameters->count; i++) {
         double value;

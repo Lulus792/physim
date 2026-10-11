@@ -201,6 +201,32 @@ int main(int argc, char **argv) {
     double si_value;
     CHECK(!strcmp(restored.parameters.selected[0],"50") &&
           ps_parameter_catalog_value(&restored.parameters,0,&si_value)==PS_OK && si_value==.5);
+    char breakpoint_path[4096];snprintf(breakpoint_path,sizeof breakpoint_path,"%s/breakpoints.project",root);
+    const char *breakpoint_original="physim_project=2\r\nkind=experiment\r\n# preserved\r\nextension=keep\r\n";
+    CHECK(write_text(breakpoint_path,breakpoint_original));
+    CHECK(ps_project_settings_read(breakpoint_path,&settings)==PS_DOCUMENT_OK && !settings.breakpoints[0]);
+    strcpy(settings.breakpoints,"7, 0,3");
+    CHECK(ps_project_settings_save(breakpoint_path,&settings)==PS_DOCUMENT_OK);
+    CHECK(ps_project_settings_read(breakpoint_path,&restored)==PS_DOCUMENT_OK && !strcmp(restored.breakpoints,"7, 0,3"));
+    char breakpoint_backup[4096];snprintf(breakpoint_backup,sizeof breakpoint_backup,"%s.bak",breakpoint_path);
+    CHECK(matches(breakpoint_backup,breakpoint_original));
+    ps_text_document breakpoint_document={0};
+    CHECK(ps_text_document_open(&breakpoint_document,breakpoint_path)==PS_DOCUMENT_OK);
+    CHECK(strstr(breakpoint_document.saved,"extension=keep\r\n") &&
+          strstr(breakpoint_document.saved,"simulation.breakpoints=7, 0,3\r\n"));
+    strcpy(settings.breakpoints,"3,3");
+    CHECK(ps_project_settings_save(breakpoint_path,&settings)==PS_DOCUMENT_INVALID);
+    CHECK(matches(breakpoint_path,breakpoint_document.saved));
+    memset(settings.breakpoints,'1',sizeof settings.breakpoints);
+    CHECK(ps_project_settings_save(breakpoint_path,&settings)==PS_DOCUMENT_INVALID);
+    CHECK(matches(breakpoint_path,breakpoint_document.saved));
+    ps_text_document_destroy(&breakpoint_document);
+    settings=restored;settings.breakpoints[0]=0;
+    CHECK(ps_project_settings_save(breakpoint_path,&settings)==PS_DOCUMENT_OK);
+    CHECK(ps_project_settings_read(breakpoint_path,&restored)==PS_DOCUMENT_OK && !restored.breakpoints[0]);
+    CHECK(write_text(breakpoint_path,"physim_project=2\nkind=experiment\nsimulation.breakpoints=3\nsimulation.breakpoints=7\n"));
+    before=restored;
+    CHECK(ps_project_settings_read(breakpoint_path,&restored)==PS_DOCUMENT_INVALID && !memcmp(&before,&restored,sizeof before));
     puts("Project defaults, profiles, parameters, preserved extensions, invalid input and write "
          "failures passed.");
     return 0;
