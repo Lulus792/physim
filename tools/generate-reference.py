@@ -393,6 +393,7 @@ LANG_DESCRIPTIONS = {
     'datasetRecovered': 'Wahr, wenn nur ein gültiger Teil einer unvollständigen Laufdatei gelesen wurde.',
     'datasetMetadata': 'Kopiert die gespeicherten Laufmetadaten als UTF-8-String. Die Kopie bleibt nach dem Schließen des Datasets gültig.',
     'series': 'Holt einen Kanal über seinen exakten Namen. Der reservierte Name time liefert die Zeitachse.',
+    'datasetChannelSeries': 'Holt den aufgezeichneten Messkanal am nullbasierten Schemaindex; die synthetische Zeitachse zählt nicht mit. Damit ist auch ein Messkanal namens time eindeutig zugänglich. Name, Einheit und Samplezuordnung bleiben erhalten; ungültige Indizes sind Fehler.',
     'seriesCount': 'Anzahl der Samples der Reihe.',
     'seriesName': 'Kopiert den Reihennamen als eigenen UTF-8-String. Die Kopie bleibt nach Freigabe der Reihe gültig.',
     'seriesUnitSymbol': 'Kopiert das gespeicherte oder bei abgeleiteten Reihen formatierte Einheitensymbol als eigenen UTF-8-String.',

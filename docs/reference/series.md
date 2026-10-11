@@ -166,7 +166,21 @@ ps_result ps_dataset_series(
     ps_series *out);
 ```
 
-"time" is the time axis, otherwise an exact channel name. .psrun v1 values are SI; unit scales are 1. Duplicate/ambiguous channel names are rejected.
+"time" is the time axis, otherwise an exact channel name. .psrun v1 values are SI; unit scales are 1. Duplicate recorded channel names are rejected. A recorded channel named "time" is accessible by channel index below.
+
+## ps_dataset_channel_series
+
+Liefert den aufgezeichneten Kanal am nullbasierten Schemaindex als Series-Handle. Die synthetische Zeitachse zählt nicht mit; ein Messkanal namens time bleibt damit zugänglich. Name, SI-Einheit, Samplezuordnung und Dataset-Lebensdauer bleiben erhalten. Ungültige Indizes oder Handles ergeben PS_INVALID bei unverändertem Ausgabehandle.
+
+```c
+ps_result ps_dataset_channel_series(
+    ps_analysis_context *ctx,
+    ps_dataset dataset,
+    uint32_t channel_index,
+    ps_series *out);
+```
+
+Recorded channel at zero-based schema index; excludes the synthetic time axis and preserves the recorded name/unit. PS_INVALID for an invalid handle, index or output pointer. Every failure preserves the output handle.
 
 ## ps_series_from_values
 

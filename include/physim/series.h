@@ -58,9 +58,15 @@ ps_result ps_dataset_describe(ps_analysis_context *ctx, ps_dataset dataset, ps_d
 /* Closes the dataset and invalidates ALL its source and derived series. */
 ps_result ps_dataset_close(ps_analysis_context *ctx, ps_dataset dataset);
 /* "time" is the time axis, otherwise an exact channel name. .psrun v1 values
- * are SI; unit scales are 1. Duplicate/ambiguous channel names are rejected. */
+ * are SI; unit scales are 1. Duplicate recorded channel names are rejected.
+ * A recorded channel named "time" is accessible by channel index below. */
 ps_result ps_dataset_series(ps_analysis_context *ctx, ps_dataset dataset, const char *name,
                             ps_series *out);
+/* Recorded channel at zero-based schema index; excludes the synthetic time
+ * axis and preserves the recorded name/unit. PS_INVALID for an invalid handle,
+ * index or output pointer. Every failure preserves the output handle. */
+ps_result ps_dataset_channel_series(ps_analysis_context *ctx, ps_dataset dataset,
+                                    uint32_t channel_index, ps_series *out);
 /* Convert finite inputs from the declared unit to canonical SI scratch values.
  * Described/output unit.scale is always 1 and the symbol is the SI dimension
  * spelling. Input arrays are preserved. Unrepresentable nonzero SI conversion

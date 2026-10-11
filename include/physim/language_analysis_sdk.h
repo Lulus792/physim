@@ -225,6 +225,13 @@ static inline ps_series psra_series(psra_host *h, ps_dataset dataset, const char
     psra_check(h, ps_dataset_series(h->context, dataset, name, &result), site);
     return result;
 }
+static inline ps_series psra_dataset_channel_series(psra_host *h, ps_dataset dataset,
+                                                     int64_t index, psrt_site site) {
+    if (index < 0 || (uint64_t)index > UINT32_MAX) psra_check(h, PS_INVALID, site);
+    ps_series result;
+    psra_check(h, ps_dataset_channel_series(h->context, dataset, (uint32_t)index, &result), site);
+    return result;
+}
 static inline ps_series psra_series_from_values(psra_host *h, const double *values, size_t count,
                                                 ps_unit unit, const char *name, psrt_site site) {
     ps_series result;

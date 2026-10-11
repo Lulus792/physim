@@ -992,3 +992,19 @@ aktuellen Stand unterschieden.
 [Nachweise und Grenzen](platform-validation.md#linux-sanitizerfehler-in-utf-8-und-editorfixtures).
 Der Gesamtplan bleibt offen; alle **531** Originalblöcke und die Planprüfsumme
 bleiben erhalten, `completion_proven` bleibt `false`.
+
+
+## Eindeutige Kanalindizes und Einheitengrenzen
+
+GCC und Clang bestätigen die vorige UI-Korrektur `12c2462` tatsächlich
+mit jeweils drei nativen und drei GUI-Sanitizergruppen. Bei der folgenden
+Kanalprüfung ist ein neuer Indexzugriff ergänzt: eine aufgezeichnete
+Messgerätezeit namens `time` bleibt zugänglich, während `series("time")`
+die Laufzeitachse liefert. C/Physim, Schema/Einheiten, Alignment,
+Lebensdauer und Fehlererhaltung sind ausgeführt.
+PP-0371/0372 besitzen konkrete lokale Metadaten-/Einheitengrenzen-
+Nachweise. [Umfang und Grenzen](platform-validation.md#linux-sanitizernachweis-und-kanalzugriff-per-index).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**94 implemented**, **13 incomplete**, **424 unverified**;
+`completion_proven` bleibt `false`. Die vollständige Projekt- und aktuelle
+Plattformabnahme bleibt offen.

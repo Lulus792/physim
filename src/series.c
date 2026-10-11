@@ -180,7 +180,7 @@ ps_result ps_analysis_open_run(ps_analysis_context *c, const char *path, ps_data
     if (r != PS_OK)
         return r;
     for (uint32_t i = 0; i < reader.channels; i++) {
-        if (!reader.schema[i].name[0] || !strcmp(reader.schema[i].name, "time")) {
+        if (!reader.schema[i].name[0]) {
             r = PS_INVALID;
             goto close_reader;
         }
@@ -260,22 +260,8 @@ ps_result ps_dataset_close(ps_analysis_context *c, ps_dataset h) {
     d->bytes = 0;
     return PS_OK;
 }
-ps_result ps_dataset_series(ps_analysis_context *c, ps_dataset h, const char *name,
-                            ps_series *out) {
-    dataset_slot *d = dataset_get(c, h);
-    if (!d || !name || !out)
-        return PS_INVALID;
-    uint32_t col = UINT32_MAX;
-    if (!strcmp(name, "time"))
-        col = 0;
-    else
-        for (uint32_t i = 0; i < d->info.channel_count; i++)
-            if (!strcmp(name, d->info.channels[i].name)) {
-                col = i + 1;
-                break;
-            }
-    if (col == UINT32_MAX)
-        return PS_INVALID;
+static ps_result dataset_column_series(ps_analysis_context *c, ps_dataset h, dataset_slot *d,
+                                       uint32_t col, const char *name, ps_series *out) {
     int slot = free_series(c);
     if (slot < 0)
         return PS_LIMIT;
@@ -299,6 +285,23 @@ ps_result ps_dataset_series(ps_analysis_context *c, ps_dataset h, const char *na
     }
     *out = (ps_series){c, (uint32_t)slot, generation};
     return PS_OK;
+}
+ps_result ps_dataset_series(ps_analysis_context *c, ps_dataset h, const char *name,
+                            ps_series *out) {
+    dataset_slot *d = dataset_get(c, h);
+    if (!d || !name || !out) return PS_INVALID;
+    if (!strcmp(name, "time"))
+        return dataset_column_series(c, h, d, 0, name, out);
+    for (uint32_t i = 0; i < d->info.channel_count; i++)
+        if (!strcmp(name, d->info.channels[i].name))
+            return dataset_column_series(c, h, d, i + 1, name, out);
+    return PS_INVALID;
+}
+ps_result ps_dataset_channel_series(ps_analysis_context *c, ps_dataset h,
+                                    uint32_t channel_index, ps_series *out) {
+    dataset_slot *d = dataset_get(c, h);
+    if (!d || !out || channel_index >= d->info.channel_count) return PS_INVALID;
+    return dataset_column_series(c, h, d, channel_index + 1, d->info.channels[channel_index].name, out);
 }
 ps_result ps_series_describe(ps_analysis_context *c, ps_series h, ps_series_info *out) {
     series_slot *s = series_get(c, h);

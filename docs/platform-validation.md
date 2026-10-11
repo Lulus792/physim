@@ -4030,3 +4030,61 @@ gehört zu **162f5e5b974ca693106878b0faa7a4fde23aa0a3**. Paketbau und
 beide Prüfjobs auf frischem Debian 12 und Ubuntu 24.04 bestehen. Dies ist
 ein positiver historischer Paket-/Relokationsnachweis, kein aktueller
 Sanitizer- oder gesamter Plattformnachweis der jetzigen Änderung.
+
+
+## Linux-Sanitizernachweis und Kanalzugriff per Index
+
+Der [fokussierte Linux-Lauf 38167610199](https://github.com/PhysicSimulator/physim/actions/runs/38167610199)
+ist für **12c24626c4f7fde43d906661b32a61a46920ba19** tatsächlich beendet.
+Clang-Job **114553322481** besteht **3/3** Sanitizer-Primitivefälle in
+`run-i6duowk2` und **3/3** Sanitizer-GUI-Gruppen in `run-cqibikmd`.
+GCC-Job **114553322669** besteht dieselben Gruppen in `run-d9jxugop`
+und `run-ghd6c9t9`. Joblogs sind gelesen: UTF-8-Ranges, Clipboard,
+Readonly-Editor, Projektbaum, Completion und API-Referenz bestehen ohne
+ASan-/UBSan-Fehler. Grafik verwendet Xvfb/Mesa/Openbox und deaktiviert
+nur dort LeakSanitizer. Dies bestätigt die konkrete UI-Korrektur unter
+beiden Linux-Compilern, nicht die gesamte aktuelle Matrix.
+
+Bei der folgenden Kanalprüfung zeigte sich eine andere Inkonsistenz:
+Experimente dürfen einen Messkanal `time` deklarieren, die Analyseöffnung
+wies solche gültigen Laufdateien aber wegen ihrer reservierten Zeitachse
+ab. Die tatsächliche Gegenprobe `run-i3warwhz`, Log
+`build/current-dataset-clock-before-mac.log`, erzeugt einen solchen Lauf
+und scheitert beim Öffnen. Statt bestehende Kanalnamen zu verbieten,
+öffnet die Analyse diese Dateien nun und bietet
+`ps_dataset_channel_series` beziehungsweise `Dataset.channelSeries(index)`.
+Der nullbasierte Index adressiert ausschließlich aufgezeichnete Kanäle;
+`series("time")` bleibt die synthetische Laufzeitachse. Doppelte
+aufgezeichnete Namen bleiben ungültig. Metadaten, Einheit, Alignment und
+Generation/Lebensdauer bleiben erhalten; API-/ABI-/Dateiformate bleiben
+unverändert, die Erweiterung ist additiv.
+
+Auf Intel macOS 14.6.1 / AppleClang 16 besteht die Abschlussgruppe **6/6**
+in `build/current-headless-mac/test-results/run-h4bsfjcr`, Log
+`build/current-dataset-channel-index-verified-mac.log`: neue C-/Physim-
+Indexerfälle, Completion-/Referenzkataloge, C-/Physim-Kanaldeklarationen
+und SI-Reihenworkflow. Eine vorherige Gruppe besteht **7/7** in
+`run-y9m5128n`, Log `build/current-dataset-channel-index-mac.log`:
+Indexerfälle, Basisreihen, SI-Reihen, Kanaldeklaration, Quantity-Kanäle
+und kompilierte Sprachanalyse. Die Indexerprobe unterscheidet für 513
+Samples Laufzeit `0.125*i` von Messgerätezeit `1000+5*i`. Derselbe
+Positionsverlauf hat daher Geschwindigkeit **16 m/s** über der Laufzeit
+und **0.4 m/s** über der Messgerätezeit. Reportdaten werden unabhängig
+gelesen und gegen alle Messpunkte geprüft. Blockgrenzen, SI-Dimensionen,
+fremde/geschlossene/neu belegte Datasets, ungültige Indizes und volle
+128 Reihenplätze erhalten Ausgaben und Scratch-Quota.
+
+Die abschließende Handbuchparser-/Referenzgruppe besteht **2/2** in
+`run-3oef9bhn`, Log `build/current-channel-index-docs-mac.log`.
+
+Die SI-/Quantity-/Parametereinheiten-Orakel bestehen **3/3** in
+`run-0x3aqf5o`, Log `build/current-si-boundaries-oracles-mac.log`.
+Die GUI-Gruppe besteht **3/3** in
+`build/current-release-mac/test-results/run-vga08yn2`, Log
+`build/current-dataset-channel-index-gui-mac.log`: Anzeigeeinheiten mit
+C/Physim und Neustart, Completion und API-Referenz. Die generierten
+Kataloge enthalten jetzt **622 C-** und **547 Physim-Symbole** und sind
+auf Aktualität geprüft. PP-0371/0372 besitzen begrenzte lokale
+Metadaten-/Einheitengrenzen-Nachweise. Der neue Indexer hat noch keine
+aktuelle gesamte Linux-/Windows-/Apple-Silicon-Abnahme; der positive
+Linux-Lauf oben gehört ausdrücklich zur vorausgehenden UI-Korrektur.

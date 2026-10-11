@@ -1,5 +1,6 @@
 """Reviewed German purpose statements for each public C function."""
 DESCRIPTIONS = {}
+DESCRIPTIONS['ps_dataset_channel_series'] = 'Liefert den aufgezeichneten Kanal am nullbasierten Schemaindex als Series-Handle. Die synthetische Zeitachse zählt nicht mit; ein Messkanal namens time bleibt damit zugänglich. Name, SI-Einheit, Samplezuordnung und Dataset-Lebensdauer bleiben erhalten. Ungültige Indizes oder Handles ergeben PS_INVALID bei unverändertem Ausgabehandle.'
 
 
 def add(prefix, entries):

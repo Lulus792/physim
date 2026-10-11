@@ -1280,6 +1280,16 @@ Kopiert den exakten Namen eines nullbasierten Messkanals als UTF-8-String. Ungü
 
 Analysemodul erforderlich.
 
+## Dataset.channelSeries
+
+```text
+Dataset.channelSeries(index: Int64) -> Series
+```
+
+Holt den aufgezeichneten Messkanal am nullbasierten Schemaindex; die synthetische Zeitachse zählt nicht mit. Damit ist auch ein Messkanal namens time eindeutig zugänglich. Name, Einheit und Samplezuordnung bleiben erhalten; ungültige Indizes sind Fehler.
+
+Analysemodul erforderlich.
+
 ## Dataset.channelUnitSymbol
 
 ```text

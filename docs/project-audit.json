@@ -3052,18 +3052,17 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Dimensionen und Skalierung sind Teil der Metadaten.\n",
-      "status": "unverified",
+      "status": "implemented",
       "evidence": [
-        "docs/units.md",
-        "src/core.c",
-        "src/series.c",
+        "include/physim/units.h",
+        "include/physim/core.h",
+        "include/physim/series.h",
+        "tests/test_channel_declaration.c",
         "tests/test_series_si.c",
-        "tests/test_unit_runtime_codes.c",
-        "include/physim/experiment.h",
-        "tests/test_channel_quantity.c",
-        "tests/test_channel_declaration_workflow.py"
+        "docs/units.md",
+        "docs/platform-validation.md#linux-sanitizernachweis-und-kanalzugriff-per-index"
       ],
-      "note": "Der neue Quantity-Sampler prüft Dimensionsmetadaten, konvertiert nach SI und übernimmt genau einen Wert atomar; Physim ergänzt Besitzer-/Phasenprüfung. Echte C-/Physim-Sensorläufe persistieren Zentimeterwerte und deren Unsicherheit in Meterkanälen, falsche Dimensionen/Bereichsfehler erhalten Werte. Messungen bleiben externe Darstellungen in der Sensoreinheit, Berichte können eigene Achseneinheiten besitzen; Run-Kanalskala ist fest 1. Die umfassende Reichweite dieser Anforderung bleibt für alle öffentlichen Datenpfade noch einzeln abzugleichen; rohe Doubles tragen keine prüfbare Einheit."
+      "note": "Dimensionen und Skalierung sind explizite Unit/Quantity-/Series-/Reportmetadaten; kanonische Messdateikanäle speichern SI-Dimensionen, Symbol und Skala implizit 1. C-/Physim-Kanaldeklarations- und SI-Reihenworkflow run-h4bsfjcr sowie GUI-Anzeigeeinheiten mit unveränderten Rohdaten/Neustart run-vga08yn2 tatsächlich auf Intel macOS ausgeführt. Weitere Plattform-/Produktabnahme offen."
     },
     {
       "id": "PP-0372",
@@ -3076,26 +3075,17 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Laufzeitprüfung an API-Grenzen und in der Analyse.\n",
-      "status": "unverified",
+      "status": "implemented",
       "evidence": [
-        "src/core.c",
-        "include/physim/experiment.h",
-        "include/physim/language_sdk.h",
-        "tests/test_channel_declaration.c",
-        "tests/test_channel_declaration_workflow.py",
-        "tests/fixtures/channel_declaration.c",
-        "tests/fixtures/language/channel_declaration.phys",
-        "docs/numerics.md",
-        "src/units.c",
         "include/physim/units.h",
-        "tests/test_quantity_sum.c",
-        "tests/quantity_sum_probe.c",
-        "tests/test_quantity_sum_oracle.py",
-        "tests/fixtures/quantity_sum_cases.json",
-        "tests/fixtures/language/quantity_sum_values.phys",
-        "tests/test_channel_quantity.c"
+        "include/physim/core.h",
+        "include/physim/series.h",
+        "tests/test_channel_declaration.c",
+        "tests/test_series_si.c",
+        "docs/units.md",
+        "docs/platform-validation.md#linux-sanitizernachweis-und-kanalzugriff-per-index"
       ],
-      "note": "Der neue Quantity-Sampler prüft Dimensionsmetadaten, konvertiert nach SI und übernimmt genau einen Wert atomar; Physim ergänzt Besitzer-/Phasenprüfung. Echte C-/Physim-Sensorläufe persistieren Zentimeterwerte und deren Unsicherheit in Meterkanälen, falsche Dimensionen/Bereichsfehler erhalten Werte. Messungen bleiben externe Darstellungen in der Sensoreinheit, Berichte können eigene Achseneinheiten besitzen; Run-Kanalskala ist fest 1. Die umfassende Reichweite dieser Anforderung bleibt für alle öffentlichen Datenpfade noch einzeln abzugleichen; rohe Doubles tragen keine prüfbare Einheit."
+      "note": "C- und Physim-Grenzen prüfen Unit-Dimensionen/Skalen und numeric ranges: Quantity-Kanalwerte, Sensorunsicherheit, Series-Import/Algebra/Analyse-/Reportachsen. Native sieben/sechs Fälle run-y9m5128n/run-h4bsfjcr und drei unabhängige SI-/Quantity-/Parametereinheiten-Orakel run-0x3aqf5o bestanden. Fehler erhalten Werte/Handles/Quota oder erzeugen strukturierte Sprachfehler. Begrenzte Intel-macOS-Nachweise, keine vollständige Plattformabnahme."
     },
     {
       "id": "PP-0373",

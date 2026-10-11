@@ -50,7 +50,30 @@ Der Context wird auch nach einem Fehler zerstört.
 `ps_analysis_open_run` validiert die Quelldatei und erstellt einen unveränderlichen
 temporären Datensnapshot. Zeitwerte müssen streng steigen. Metadaten und
 Kanaldefinitionen liefert `ps_dataset_describe` als Kopie. Ein fehlender oder
-doppeldeutiger Kanalname ist ein Fehler. `time` ist für die Zeitachse reserviert.
+doppeldeutiger aufgezeichneter Kanalname ist ein Fehler. `ps_dataset_series`
+mit `time` liefert immer die synthetische Zeitachse der Laufdatei.
+
+`ps_dataset_channel_series(ctx, run, index, &series)` greift stattdessen über
+den nullbasierten Schemaindex auf einen aufgezeichneten Kanal zu. Die Zeitachse
+zählt nicht zu diesen Indizes. Dadurch bleibt auch ein Messkanal mit dem Namen
+`time` zugänglich, etwa die Zeit eines unabhängigen Messgeräts. Name,
+SI-Dimension, Symbol, Samplezuordnung und Lebensdauer bleiben erhalten.
+Ein ungültiger Index, ein geschlossenes oder fremdes Dataset und erschöpfte
+Reihenplätze verändern das Ausgabehandle nicht.
+
+```physim
+let run = Dataset(0)
+let simulationTime = run.series("time")
+let instrumentTime = run.channelSeries(0)
+let position = run.channelSeries(1)
+let instrumentVelocity = position.derivative(instrumentTime)
+```
+
+Im Beispiel enthält Schemaindex 0 die Messgerätezeit und Index 1 die Position.
+Die Analyse muss diese Auswahl anhand der Kanalmetadaten treffen.
+Simulation und Messgerät dürfen verschiedene Zeitwerte besitzen; die API
+ersetzt oder synchronisiert diese Werte nicht automatisch. Mehrere
+aufgezeichnete Kanäle mit demselben Namen bleiben ungültig.
 
 `ps_series_read` kopiert einen beliebigen Ausschnitt ab einem Sampleindex in einen
 Puffer des Aufrufers. Eine Anfrage am Ende liefert erfolgreich null Werte; hinter

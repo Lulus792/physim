@@ -44,6 +44,7 @@ class Case:
 def catalog():
     cases = []
     cases.append(Case("utf8_string_bounds", ("tests/test_utf8_string_bounds.c",), libraries=()))
+    cases.append(Case("dataset_channel_index", ("tests/test_dataset_channel_index.c",)))
     cases.append(Case("process_usage", ("tests/test_process_usage.c",)))
     cases.append(Case("compiler_diagnostic", ("tests/test_compiler_diagnostic.c", "app/compiler_diagnostic.c")))
     cases.append(Case("completion", ("tests/test_completion.c", "app/completion.c")))

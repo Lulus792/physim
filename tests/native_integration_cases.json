@@ -2394,6 +2394,19 @@
     "physim-language-quantile-streaming": {
       "source": "tests/fixtures/language/analysis_quantile_streaming.phys",
       "mode": "--emit-analysis"
+    },
+    "dataset-channel-index-check": {
+      "sources": [
+        "tests/test_dataset_channel_index.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "physim-language-channel-index": {
+      "source": "tests/fixtures/language/analysis_channel_index.phys",
+      "mode": "--emit-analysis"
     }
   },
   "tests": [
@@ -9728,6 +9741,24 @@
           "files": [
             "app-steps.json"
           ]
+        }
+      ]
+    },
+    {
+      "name": "language_dataset_channel_index",
+      "targets": [
+        "dataset-channel-index-check",
+        "physim-language-channel-index",
+        "physim-analysis-runner"
+      ],
+      "steps": [
+        {
+          "program": "dataset-channel-index-check",
+          "arguments": [
+            "{physim-analysis-runner}",
+            "{physim-language-channel-index}"
+          ],
+          "timeout": 60
         }
       ]
     }
