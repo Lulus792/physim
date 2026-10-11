@@ -544,7 +544,7 @@ static void workspace_panel(app *a) {
                 create_managed_project(a);
             project_manager_focus_draw(a,7,a->project_create_bounds);
             struct nk_rect cancel_bounds=nk_widget_bounds(ui);
-            if (nk_button_label(ui, "Zurück zum Workspace"))
+            if (nk_button_label(ui, "Abbrechen"))
                 a->project_manager = false;
             project_manager_focus_draw(a,8,cancel_bounds);
             if(a->manager_error[0]) {

@@ -110,7 +110,7 @@ static void project_manager_error_test_frame(app *a,const char *root,int *stage,
     case 15: {if(a->manager_error_reveal){--*stage;return;}*capture="manager-keyboard-existing-error.bmp";size_t bytes=0;char *text=load_utf8_text(original,&bytes);ok=a->project_manager && strstr(a->status,"existieren bereits") && text && !strcmp(text,"keep this file ä\n");free(text);FORM_KEY(SDLK_ESCAPE);break;}
     case 16: ok=!a->project_manager;FORM_KEY(SDLK_F10);FORM_KEY(SDLK_DOWN);*stage=19;break;
     case 20: FORM_KEY(SDLK_TAB);test_window_key_mod(a->window,SDLK_TAB,SDL_KMOD_SHIFT);break;
-    case 21: if(a->manager_focus_reveal){--*stage;return;}ok=a->manager_focus==8;FORM_KEY(SDLK_RETURN);break;
+    case 21: if(a->manager_focus_reveal){--*stage;return;}ok=a->manager_focus==8;*capture="manager-keyboard-cancel.bmp";FORM_KEY(SDLK_RETURN);break;
     case 22: ok=!a->project_manager;a->quitting=true;printf("PROJECT MANAGER ERRORS SELF-TEST: %s\n",*code?"FAILED":"PASSED");break;
     }
     if(!ok){fprintf(stderr,"Project manager error fixture stage %d focus=%d: %s\n",*stage-1,a->manager_focus,a->status);*code=1;a->quitting=true;}

@@ -3496,3 +3496,67 @@ meldet ebenfalls `31 reference documents verified`. PP-0246 ist damit für
 den grundlegenden Offline-API-Browser belegt. Autovervollständigung, sämtliche
 Symbol-/Darstellungsvarianten und die aktuelle Linux-/Windows-/ARM-Matrix
 werden durch diese Einzelprüfung nicht abgenommen.
+
+
+## Tatsächlich beendete Intel-macOS-CI am Stand 7b08c04
+
+Der authentifiziert gelesene [Intel-Job 114433017247](https://github.com/PhysicSimulator/physim/actions/runs/38126895020/job/114433017247)
+ist inzwischen erfolgreich beendet. Sein tatsächlicher Log belegt **685/685**
+native Debug-Fälle, **91/91** Fensterfälle und **660/660** Fälle im App-freien
+`Debug-sanitized`-Build. Der Paket-/Relokationslauf endet erfolgreich unter
+`Native SDK ä vealxjl_`, LaunchServices unter `LaunchServices ä j66_loab`.
+Projektvorlagen per Tastatur, Schritt-Breakpoints und Runner-Isolation sind
+im Fensterlog ausdrücklich erfolgreich. Der lokale Auszug liegt unter
+`build/7b08-macos-intel-proof-excerpt.log`.
+
+Die Jobs-Abfrage bestätigt damit alle acht Jobs dieses älteren Laufs als
+erfolgreich abgeschlossen: Linux Clang/GCC, Intel-/ARM-macOS und die vier
+Windows-Compiler-/Profilkombinationen. Die oben einzeln dokumentierten
+Testzahlen stammen aus tatsächlichen Logs. Diese Ergebnisse bleiben dem
+Quellstand `7b08c04` zugeordnet; später gepushte Änderungen benötigen ihre
+eigenen Nachweise. Eine vorhandene oder grüne Konfiguration ist weiterhin
+kein Beweis für den ganzen aktuellen Projektplan.
+
+
+## Experimentvorlagen tatsächlich anlegen, bauen und auswerten
+
+Am 11. Oktober 2026 besteht auf Intel macOS mit AppleClang Release der
+aktuelle Fall `project_manager_keyboard_workflow`: Ergebnisse
+`build/current-release-mac/test-results/run-fyuan1ee`, Log
+`build/current-experiment-templates-mac.log`. Zwei echte App-Prozesse legen
+bei **16/22 px** jeweils **32** Kombinationen aus acht Modellen, zwei
+Experimentsprachen und zwei Auswertungssprachen an. Dazu kommen je zwei
+eigenständige Analyseprojekte, insgesamt **68** Projekte. Alle werden
+über F10, Pfeile, Tab und Enter im Projektmanager erstellt, mit F5 gebaut,
+als Experiment aufgezeichnet beziehungsweise mit Messdaten versorgt und
+an einem tatsächlich erzeugten Bericht mit mindestens einem Plot geprüft.
+Der Python-Harness vergleicht Experiment- und Analysequellen bytegenau mit
+der gewählten Vorlage und prüft Manifest, Sprache und Buildordner.
+
+Die vollständigen Fortschrittsdateien nennen beide Male exakt die Projekte
+00–33. Die Eingabequittung `build/current-experiment-templates-input-receipt.json`
+ordnet die Prüfung dem App-Stand `678003a` und seinem während der Prüfung
+unveränderten Binary-Hash zu. Diese Projektprüfung ist keine neue vollständige
+fachliche Abnahme jedes physikalischen Modells.
+
+Bei der Bildkontrolle war **Zurück zum Workspace** im 22-px-Formular
+abgeschnitten. Die Beschriftung lautet nun **Abbrechen**; die Wirkung bleibt
+das Schließen des Formulars. Der vorhandene Fehlerfall wurde um 22 px und
+eine Aufnahme des fokussierten Abbrechen-Buttons ergänzt. Die abschließende
+Prüfung `project_manager_keyboard_errors` besteht mit zwei echten App-Prozessen
+bei **16/22 px**: Ergebnisse
+`build/current-release-mac/test-results/run-9dw60_z8`, Log
+`build/current-experiment-template-errors-final-mac.log`. Ungültiger Name,
+Datei statt Zielordner und vorhandene Projektquelle ergeben einen Fehler;
+der vollständige Originalinhalt der vorhandenen Quelle bleibt unverändert.
+Escape sowie Tab/Shift+Tab/Enter schließen das Formular tatsächlich. Beide
+Abbrechen-Aufnahmen wurden geprüft; die Beschriftung ist nun vollständig
+sichtbar. PNG-Vorschauen: `build/current-experiment-templates-preview`.
+Die vorherige unveränderte Fehlerprüfung bestand ebenfalls unter `run-afsfsaqw`.
+
+Die Bedienungsanleitung beschreibt jetzt die getrennte Experiment-/
+Auswertungssprache und den aktuellen Abbrechen-Button. PP-0245 ist für seinen
+grundlegenden Vorlagenumfang belegt. Der einzelne kurze Beschriftungswechsel
+erfordert keine erneuten 68 unveränderten Modellbuilds; dafür ist die aktuelle
+Formularprüfung ausgeführt. Andere Plattformen und umfassende UI-/Modellabnahmen
+bleiben ihren getrennten Anforderungen zugeordnet.

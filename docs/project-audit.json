@@ -1489,9 +1489,20 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Vorlagen für ein neues Experiment.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/main.c",
+        "app/design_ui.inc",
+        "app/project_manager_ui.inc",
+        "app/project_manager_keyboard_tests.inc",
+        "tests/check_display_workflow.py",
+        "tests/native_integration_cases.json",
+        "examples/pendulum/main.c",
+        "examples/language/pendulum.phys",
+        "docs/workspace.md",
+        "docs/platform-validation.md#experimentvorlagen-tatsächlich-anlegen-bauen-und-auswerten"
+      ],
+      "note": "Acht Experimentvorlagen mit frei kombinierbarer C-/Physim-Experiment- und Auswertungssprache. 32 Kombinationen plus zwei eigenständige Analyseprojekte wurden jeweils bei 16/22 px per echter Tastatur angelegt, bytegenau mit den Vorlagen verglichen, gebaut, aufgezeichnet und analysiert (68 Projekte, Intel macOS). Fehlerfälle erhalten vorhandene Quellen; aktuelle andere Plattformen und vollständige fachliche Modellabnahmen bleiben separat offen."
     },
     {
       "id": "PP-0246",

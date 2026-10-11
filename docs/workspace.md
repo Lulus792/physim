@@ -53,7 +53,9 @@ Bauen und normales Beenden übernehmen die Auswahl in `physim.project`; erneutes
 Pendel eignet sich für Integratoren, Wurf für Bahnen, Kugelstoß und Boxstoß für
 Kontakte, Box auf Ebene für Reibung, Feder–Masse–Dämpfer für Energie,
 Auftrieb für Medien und Wurf mit Unsicherheit beziehungsweise Sensorwurf für
-Messmodelle. Die Physim-Vorlagen sind als solche im Vorlagennamen gekennzeichnet.
+Messmodelle. **Sprache des Experiments** wählt C oder Physim unabhängig von
+**Sprache der Auswertung**. Die Vorlagenliste zeigt die für diese
+Experimentsprache verfügbaren Modelle.
 Die Pendelvorlagen zeigen Gewichtskraft und Stangenkraft als beschriftete
 Pfeile mit 0,05 m/N. Das C-Pendel zeigt bei eingeschaltetem Luftwiderstand
 zusätzlich dessen Kraft in Violett; der Widerstand wirkt entgegen der
@@ -551,11 +553,11 @@ das Handbuch. Ein Mausklick setzt die Zeigerbedienung fort.
 
 Öffne **Datei → Neues Projekt** mit F10, Pfeiltasten und Enter. Tab führt durch
 Zielordner, Ordnerwahl, Namen, Projekttyp, Vorlage, Experiment- und Auswertungssprache,
-Anlegen und Zurück. Shift+Tab geht rückwärts; reine Analyseprojekte überspringen
+Anlegen und Abbrechen. Shift+Tab geht rückwärts; reine Analyseprojekte überspringen
 Vorlage und Experimentsprache. Der sichtbare Fokus scrollt im kleinen Fenster mit.
 Pfeile wechseln die Auswahl eines Felds; Enter oder Leertaste bedient die Aktionen.
 In den Textfeldern bleiben die üblichen Text- und Clipboard-Befehle verfügbar.
-Tab schließt bereits eingegangene Texteingaben ab. Escape und Zurück verlassen
+Tab schließt bereits eingegangene Texteingaben ab. Escape und Abbrechen verlassen
 das Formular. Validierungsfehler erscheinen vollständig im Formular; vorhandene
 Projektdateien werden erhalten. **Ordner wählen** verwendet denselben nativen
 Dialog wie bei Mausbedienung.

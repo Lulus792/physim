@@ -810,3 +810,17 @@ prüft dessen Kopieren. Die bestehende Handbuchbedienung bleibt separat geprüft
 Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **62 implemented**, **13 incomplete**, **456 unverified**;
 `completion_proven` bleibt `false`.
+
+
+## Experimentvorlagen (§6.1)
+
+PP-0245 ist konkret belegt: acht Vorlagen mit frei kombinierbarer C-/Physim-
+Experiment- und Auswertungssprache. Bei 16/22 px sind jeweils 32 Kombinationen
+und zwei eigenständige Analyseprojekte über die echte Projektverwaltung
+erstellt, gebaut, mit Laufdaten versorgt und analysiert, insgesamt 68 Projekte.
+Die Erhaltung vorhandener Quellen und Abbrechen sind aktuell in beiden Größen
+geprüft. Die abgeschnittene Abbrechen-Beschriftung und die veraltete Anleitung
+sind korrigiert. [Nachweise und Grenzen](platform-validation.md#experimentvorlagen-tatsächlich-anlegen-bauen-und-auswerten).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**63 implemented**, **13 incomplete**, **455 unverified**;
+`completion_proven` bleibt `false`.

@@ -29,7 +29,6 @@ SIMPLE = {
     "documents_build": (["--workspace-state-test", "{directory}", "documents-build"], 130, False),
     "documentation_window": (["--docs-test", "{directory}"], 30, True),
 }
-SIMPLE["project_manager_keyboard_errors"] = (["--workspace-state-test", "{directory}", "manager-errors"], 35, True)
 SIMPLE["documentation_pointer_isolation"] = (["--docs-test-noise", "{directory}"], 35, True)
 SIMPLE["documentation_keyboard_delayed"] = (["--workspace-state-test", "{directory}", "docs-keyboard-delayed"], 135, True)
 SIMPLE["documentation_keyboard_22"] = (["--workspace-state-test", "{directory}", "docs-keyboard-22"], 75, True)
@@ -841,6 +840,15 @@ def project_manager_keyboard(flow, directory):
                 require((project / ("analysis.phys" if analysis else "analysis.c")).read_bytes()==(flow.root / expected).read_bytes(),"Keyboard selected wrong analysis template")
 
 
+def project_manager_errors(flow, directory):
+    directory.mkdir()
+    for size in (16,22):
+        root=directory / ("Errors UI "+str(size));root.mkdir()
+        flow.run("--workspace-state-test",root,"manager-errors"+("-22" if size==22 else ""),
+                 timeout=35,marker="PROJECT MANAGER ERRORS SELF-TEST: PASSED")
+        require((root / "manager-keyboard-cancel.bmp").is_file(),"Missing focused cancel view")
+
+
 def settings_keyboard(flow, directory):
     directory.mkdir()
     flow.run("--settings-test", directory, "keyboard", timeout=35, marker="SETTINGS KEYBOARD SELF-TEST: PASSED")
@@ -1093,7 +1101,7 @@ def workflow_pointer_isolation(flow, directory):
                 "Actual paired run/report artifacts missing")
 
 
-SPECIAL = {"api_browser_workflow": api_browser,"editor_replace_workflow": editor_replace,"runner_keyboard_workflow": runner_keyboard,"runner_isolation_workflow": runner_isolation,"step_breakpoints_workflow": step_breakpoints,"workflow_pointer_isolation": workflow_pointer_isolation,"pendulum_medium_workflow": pendulum_medium,"pendulum_c_energy_workflow": pendulum_c_energy,"project_manager_keyboard_workflow": project_manager_keyboard,"settings_keyboard_workflow": settings_keyboard,"ui_typography_workflow": ui_typography,"saved_run_tutorial_workflow": saved_run_tutorial,"monte_carlo_tutorial_workflow": monte_carlo_tutorial,"collision_tutorial_workflow": collision_tutorial,"pendulum_tutorial_workflow": pendulum_tutorial,"spring_tutorial_workflow": spring_tutorial,"material_tutorial_workflow": material_tutorial,"contact_world_language_workflow": contact_world_language,"contact_world_workflow": contact_world, "diagnostic_workflow": diagnostics, "scene_frames_workflow": scene_frames, "logging_workflow": logging, "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
+SPECIAL = {"project_manager_keyboard_errors": project_manager_errors,"api_browser_workflow": api_browser,"editor_replace_workflow": editor_replace,"runner_keyboard_workflow": runner_keyboard,"runner_isolation_workflow": runner_isolation,"step_breakpoints_workflow": step_breakpoints,"workflow_pointer_isolation": workflow_pointer_isolation,"pendulum_medium_workflow": pendulum_medium,"pendulum_c_energy_workflow": pendulum_c_energy,"project_manager_keyboard_workflow": project_manager_keyboard,"settings_keyboard_workflow": settings_keyboard,"ui_typography_workflow": ui_typography,"saved_run_tutorial_workflow": saved_run_tutorial,"monte_carlo_tutorial_workflow": monte_carlo_tutorial,"collision_tutorial_workflow": collision_tutorial,"pendulum_tutorial_workflow": pendulum_tutorial,"spring_tutorial_workflow": spring_tutorial,"material_tutorial_workflow": material_tutorial,"contact_world_language_workflow": contact_world_language,"contact_world_workflow": contact_world, "diagnostic_workflow": diagnostics, "scene_frames_workflow": scene_frames, "logging_workflow": logging, "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}

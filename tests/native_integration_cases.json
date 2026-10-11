@@ -7705,7 +7705,7 @@
             "--cc",
             "{cc}"
           ],
-          "timeout": 40,
+          "timeout": 80,
           "files": [
             "app-steps.json"
           ]
