@@ -4077,3 +4077,43 @@ ClangCL/MSVC aus. Ihre YAML und sechs Matrixeinträge sind lokal geprüft;
 Remote-Ausführung dieses neuen Workflows ist noch kein Nachweis. Die übrige
 vollständige Plattform-/Paketabnahme bleibt offen. Der historische Run-Stream-
 Abschnitt wurde vollständig ins Plattformarchiv verschoben; seine Anker bleiben.
+
+## CI-Rückstau: Gesamtzeit und Stillstand getrennt
+
+Die gezielte [CI 38175226720](https://github.com/PhysicSimulator/physim/actions/runs/38175226720)
+am exakt belegten `e0f8f2728dd3faeafea6364cba6d3d0dee79d929` liefert erstmals
+vier Plattform-/Compiler-Gegenprüfungen: Linux/Clang (Job 114576103747,
+`run-_t_086pi`), Linux/GCC (114576103919, `run-98oekrjz`), Windows/ClangCL
+(114576104025, `run-qcp97_5u`) und Windows/MSVC (114576104055,
+`run-8rpatrb6`) bestehen jeweils **2/2** Debug-Fälle. Die vollständigen Joblogs
+sind gelesen; beide normalen/langsamen Fälle wurden tatsächlich ausgeführt.
+Dies ist weiterhin keine vollständige Windows-/Linux-Abnahme.
+
+macOS/Intel (114576103977, `run-useoa1bw`) und Apple Silicon
+(114576104099, `run-dxn3adym`) bestehen den normalen Fall. Der künstliche
+15-ms-Fall erreicht nach 45 Sekunden aber erst Checkpoint 736 beziehungsweise
+576. Damit ist auch der frühere Gesamtzeitrahmen auf diesen Hosts zu knapp.
+Die neue Prüfung trennt nun einen Gesamtdeckel von **180 Sekunden pro Modus**
+von einer **15-Sekunden-Stillstandsgrenze** zwischen tatsächlichen
+Schrittcheckpoints. Unverändert werden derselbe Zielschritt UND alle vollständigen
+PSRUN-Samples bei ungelesenem stdout verlangt. Jeder neue Checkpoint setzt nur
+die Stillstandsgrenze zurück; die Gesamtgrenze bleibt fest. Gesamt-Testgrenze:
+720 Sekunden; gezielter Workflow: 30 Minuten. Fehlende Fortschritte werden
+somit früh erkannt, auch wenn der gesamte gesunde Lauf länger dauern darf.
+
+Lokale Intel-macOS-/AppleClang-16-Gegenprüfungen:
+
+- `build/current-runner-progress-idle-verified-mac.log`, Debug-Ergebnisse
+  `build/current-backpressure-debug-mac/test-results/run-k0iyx_h9`:
+  **2/2 bestanden**, normale und 15-ms-Schritte, alle sechs Transportmodi.
+- `build/current-runner-progress-idle-negative-mac.log`: historischer synchroner
+  Runner aus `770dd5d^` steht bei Checkpoint 96 und wird nach **15.47 Sekunden**
+  durch die neue Stillstandsprüfung abgewiesen. Die große Gesamtgrenze lässt
+  diesen echten blockierenden Ausgabepfad weiterhin nicht bestehen.
+
+Die zusätzliche 60-ms-Gegenprobe `build/current-runner-progress-sixty-ms-mac.log`
+besteht alle sechs Transportmodi: vollständige Live-Daten nach 75.840/75.338 s,
+0.25×-Fall nach 25.171 s. Sie überschreitet tatsächlich die alten 45 Sekunden.
+
+Der Produktcode ist unverändert. Die macOS-CI-Gegenprüfung der neuen Grenzen
+und die vollständige Plattform-/SDK-Abnahme bleiben noch offen.

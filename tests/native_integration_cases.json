@@ -9702,7 +9702,7 @@
             "{runner-output-probe}",
             "{work}"
           ],
-          "timeout": 240
+          "timeout": 720
         }
       ]
     },
@@ -9929,7 +9929,7 @@
             "{runner-output-probe}",
             "{work}"
           ],
-          "timeout": 240
+          "timeout": 720
         }
       ]
     }

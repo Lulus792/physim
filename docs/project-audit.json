@@ -273,9 +273,11 @@
         "docs/platform-validation.md#frische-linux-gesamtpakete-am-stand-35fea55",
         "docs/platform-validation.md#wiederaufbau-und-schritt-haltepunkte-am-11-oktober-2026",
         ".github/workflows/ci.yml",
-        ".github/workflows/linux-package.yml"
+        ".github/workflows/linux-package.yml",
+        ".github/workflows/runner-backpressure.yml",
+        "tests/test_runner_backpressure.py"
       ],
-      "note": "Frische Debian-12-/Ubuntu-24.04-Systeme bestehen tatsächlich vollständiges SDK, GUI und Dialoge am exakt belegten Commit 35fea55; Intel macOS besitzt neue SDK-/gezielte Appnachweise. Ganze aktuelle Windows-/Apple-Silicon-/Intel-/Linux-Matrix nach späteren Änderungen noch nicht vollständig beendet; Windows-GPU-/GUI-Prüfung bleibt separat offen. CI-Konfiguration oder statisches Workflowlint sind kein Funktionsgleichheitsnachweis."
+      "note": "Frische Debian-12-/Ubuntu-24.04-Systeme bestehen tatsächlich vollständiges SDK, GUI und Dialoge am exakt belegten Commit 35fea55; Intel macOS besitzt neue SDK-/gezielte Appnachweise. Ganze aktuelle Windows-/Apple-Silicon-/Intel-/Linux-Matrix nach späteren Änderungen noch nicht vollständig beendet; Windows-GPU-/GUI-Prüfung bleibt separat offen. CI-Konfiguration oder statisches Workflowlint sind kein Funktionsgleichheitsnachweis. Die gezielte Rückstau-CI am e0f8f27 besteht unter Linux/GCC/Clang und Windows/MSVC/ClangCL jeweils zwei tatsächlich ausgeführte Debug-Fälle. Beide macOS-Hosts bestehen den normalen Fall; der künstlich langsame Fall überschreitet dort den Zeitrahmen. Dies beweist keine vollständige Plattformabnahme."
     },
     {
       "id": "PP-0055",

@@ -73,16 +73,18 @@ def blocked_progress(stream,root,path,target):
     # Sleep(1) and nanosleep(1 ms) can take much longer on shared CI hosts.
     # Keep stdout unread until the same exact step/file requirement is met.
     # A synchronous stdout producer still stalls well before this target.
-    started=time.monotonic();deadline=started+45;progress=0;data=None
+    started=time.monotonic();deadline=started+180;advanced=started;progress=0;data=None
     assert stream.reader_paused.wait(5),'The stdout reader did not stop'
     while time.monotonic()<deadline:
         assert stream.child.poll() is None,('Runner exited while stdout was blocked',stream.child.returncode)
         try:
             current=int((root/'backpressure-progress.txt').read_text())
             assert progress<=current<=target,('Unexpected accepted-step progress',progress,current,target)
+            if current>progress:advanced=time.monotonic()
             progress=current
         except (FileNotFoundError,ValueError,PermissionError):
             pass  # The checkpoint file may be between truncate, write and close.
+        assert time.monotonic()-advanced<15,('Blocked stdout stalled accepted-step progress',root.name,progress,target)
         if progress>=target-target%32:
             # The checkpoint is written INSIDE step; wait for its corresponding
             # complete PSRUN sample as well, rather than racing the step return.
