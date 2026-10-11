@@ -1552,9 +1552,17 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Build-Schaltfläche und Tastenkürzel.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/main.c",
+        "app/design_ui.inc",
+        "app/project_settings_tests.inc",
+        "app/build_main.c",
+        "tests/check_display_workflow.py",
+        "tests/native_integration_cases.json",
+        "docs/platform-validation.md#build-schaltfläche-f5-und-debug-release-tatsächlich-bedienen"
+      ],
+      "note": "Build-Schaltfläche und unmodifiziertes F5 sind durch tatsächliche App-Eingaben einzeln geprüft; beide Wege erzeugen erfolgreiche native Builds. Ein Profilwechsel invalidiert den bisherigen Build und F6 bleibt bis zum Neubuild gesperrt. Intel macOS ist ausgeführt, aktuelle andere Plattformen bleiben separat offen."
     },
     {
       "id": "PP-0248",
@@ -1595,9 +1603,17 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Auswahl Debug/Release.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/main.c",
+        "app/design_ui.inc",
+        "app/project_settings_tests.inc",
+        "app/build_main.c",
+        "tests/check_display_workflow.py",
+        "tests/native_integration_cases.json",
+        "docs/platform-validation.md#build-schaltfläche-f5-und-debug-release-tatsächlich-bedienen"
+      ],
+      "note": "Debug/Release werden über echte Mausklicks im Profilfeld ausgewählt. Erfolgreiche Builds erzeugen getrennte Verzeichnisse und tatsächliche Build-Konfigurationen; die Auswahl Debug wird beim normalen Beenden gespeichert und nach Neustart mit F5 erneut gebaut. Die C-Quellen bleiben bytegenau erhalten. Intel-macOS-Einzelprüfung, keine vollständige Tastatur-/Plattformabnahme."
     },
     {
       "id": "PP-0250",

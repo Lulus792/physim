@@ -838,3 +838,17 @@ C-/Physim-Zeitleistenfälle bestehen ebenfalls.
 Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **64 implemented**, **13 incomplete**, **454 unverified**;
 `completion_proven` bleibt `false`.
+
+
+## Build-Bedienung und Profilauswahl (§6.1)
+
+PP-0247/0249 sind einzeln belegt: F5 und die tatsächliche Build-Schaltfläche
+erzeugen erfolgreiche Builds. Echte Profil-Klicks wechseln Debug/Release,
+invalidieren den Build und werden beim normalen Beenden gespeichert. Ein
+Neustart stellt Debug wieder her und baut es erneut mit F5. Konfigurationen,
+Compilerpfad, Moduldateien und unveränderte Quellen sind geprüft; die
+bisherigen Projekt-Einstellungen bestehen in drei weiteren App-Prozessen.
+[Nachweise und Grenzen](platform-validation.md#build-schaltfläche-f5-und-debug-release-tatsächlich-bedienen).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**66 implemented**, **13 incomplete**, **452 unverified**;
+`completion_proven` bleibt `false`.

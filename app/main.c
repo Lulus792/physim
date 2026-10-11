@@ -268,6 +268,7 @@ typedef struct {
     ps_text_document project_manifest_snapshot;
     enum nk_collapse_states project_build_disclosure;
     struct nk_rect migration_bounds;
+    struct nk_rect project_profile_bounds,project_profile_choices[2],editor_build_bounds;
     char parameter_output[8192];
     size_t parameter_output_used;
     bool parameter_output_overflow;

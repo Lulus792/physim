@@ -3613,3 +3613,55 @@ Abnahme aller binären Asset-Vorschauen, der vollständigen Tastatur-/UI-
 Bedienung oder anderer aktueller Plattformen. Die frühe Headerprüfung
 verspricht auch keine Erhaltung früherer Messdaten bei Fehlern, die erst
 während der vollständigen Hintergrunddekodierung entdeckt werden.
+
+
+## Build-Schaltfläche, F5 und Debug/Release tatsächlich bedienen
+
+Am 11. Oktober 2026 besteht auf Intel macOS mit AppleClang Release der neue
+Fall `build_controls_workflow`: Ergebnisse
+`build/current-release-mac/test-results/run-7b5p5bo6`, Log
+`build/current-build-controls-mac.log`. Zwei echte App-Prozesse prüfen den
+Mindestumfang PP-0247/0249 über tatsächliche Eingaben. Der erste baut ein
+C-Pendelprojekt mit unmodifiziertem F5 in Debug, öffnet die Profilauswahl
+per Maus und wählt Release. Die Auswahl invalidiert den vorhandenen Build;
+F6 startet vor dem Neubuild keinen Runner und erzeugt keine Laufdatei. Ein
+anschließender echter Klick auf **Build** erzeugt den erfolgreichen Release-
+Build. Der Profilwechsel zurück zu Debug wird durch normales SDL-Quit mit
+der bestehenden Projekt-Speicherlogik übernommen.
+
+Der zweite Prozess öffnet dasselbe Projekt mit wiederhergestelltem Debug
+und baut es per F5 erneut. Alle drei erfolgreichen Builds besitzen API/ABI,
+tatsächlichen Compilerpfad, passende Moduldatei, passenden Profilwert und
+übereinstimmende Quell-/Buildrevision. Der Python-Harness prüft beide
+`build/Debug/build.config` und `build/Release/build.config`, die gespeicherte
+Debug-Auswahl in `physim.project`, den existierenden Compiler und die
+bytegenau unveränderten Experiment-/Analysequellen. Beide Buildkonfigurationen
+nennen `/usr/bin/clang` und API 3/ABI 3.
+
+Die UI nutzt für das Profilfeld jetzt dieselben Nuklear-Comboelemente
+explizit, damit die tatsächlichen Rechtecke für Mausklicks erfasst werden
+können. Zeilenhöhe, Begrenzung des Popovers und Profilauswahl bleiben nach
+dem bisherigen Nuklear-Comboablauf erhalten. Auch der tatsächliche
+Editor-Buildbutton wird für diesen Ablauf erfasst; der Test ruft seine
+Buildaktion und die Profilauswahl nicht direkt auf. Die bestehende
+Parameter-/Build-Speicherlogik ist unverändert.
+
+Die bisherige Regression `project_settings_workflow` besteht ebenfalls
+**1/1** mit drei echten App-Prozessen: Ergebnisse
+`build/current-release-mac/test-results/run-ftzavw7d`, Log
+`build/current-build-controls-regression-mac.log`. Sie prüft weiterhin
+Release-Build, Profilwechsel, Persistenz, maximale Seedwerte, fehlerhafte
+Seedablehnung, Zeitschritt, Parameter und Erhaltung eigener Manifestfelder
+und Quellen. Drei aktuelle Screenshots zeigen Debug, Release und nach
+Neustart wiederhergestelltes Debug samt App-/Build-API, Compiler und
+Build-Schaltfläche; PNGs unter `build/current-build-controls-preview` wurden
+visuell geprüft.
+
+PP-0247/0249 besitzen damit begrenzte Einzelbelege. Dies beweist weder alle
+Tastatur-/Schriftvarianten noch andere aktuelle Plattformen oder sämtliche
+Compileroptimierungen. Die authentifizierte Actions-Abfrage für den
+vorherigen Projektbaumstand `5a0a893` meldet dessen Läufe `38143321676`
+(C17) und `38143321671` (Linux-Pakete) beim Abruf als pending. Der ältere
+Paketlauf `38140783654` am Stand `1624d75` besitzt bereits einen erfolgreichen
+Paketjob, seine Ubuntu-/Debian-SDK-/Fensterprüfungen liefen beim Abruf noch.
+Diese Zustände sind keine abgeschlossenen Plattformnachweise.

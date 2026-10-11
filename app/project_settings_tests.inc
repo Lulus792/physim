@@ -1,4 +1,55 @@
+static bool project_controls_test_start(app *a,const char *root,const char *mode) {
+    join(a->project_input,sizeof a->project_input,root,"project");
+    if(!strcmp(mode,"project-settings-controls-write")){a->example=0;new_project(a);}
+    else open_project(a);
+    a->workspace_disclosure=NK_MINIMIZED;a->project_build_disclosure=NK_MAXIMIZED;
+    SDL_SetWindowSize(a->window,1080,740);
+    return a->loaded && a->profile==0 && !a->built && !a->project_settings_dirty;
+}
+static bool project_controls_build(app *a,bool release) {
+    char module[4096];join(module,sizeof module,a->project,release?"build/Release/experiment" MODULE_EXT:"build/Debug/experiment" MODULE_EXT);
+    return a->built && a->profile==(int)release && a->build_info_valid && a->build_info.release==release &&
+        a->build_info.api_version==PS_API_VERSION && a->build_info.abi_version==PS_ABI_VERSION &&
+        a->build_info.compiler[0] && exists(module) && a->source_revision==a->build_revision && !a->project_settings_dirty;
+}
+static void project_controls_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    bool read=!strcmp(mode,"project-settings-controls-read"),ok=true;
+    if(a->library_thread)return;
+    switch((*stage)++) {
+    case 0:test_window_key_mod(a->window,SDLK_F5,0);break;
+    case 1:
+        if(!idle(a)){--*stage;return;}
+        ok=project_controls_build(a,false);*capture=read?"build-control-restored-debug.bmp":"build-control-debug.bmp";
+        if(read){a->quitting=true;break;}
+        break;
+    case 2:ok=a->project_profile_bounds.w>0;test_mouse(a,a->project_profile_bounds,true);break;
+    case 3:test_mouse(a,a->project_profile_bounds,false);break;
+    case 4:ok=a->project_profile_choices[1].w>0;test_mouse(a,a->project_profile_choices[1],true);break;
+    case 5:test_mouse(a,a->project_profile_choices[1],false);break;
+    case 6:
+        ok=a->profile==1 && !a->built && a->project_settings_dirty && a->build_info_valid && !a->build_info.release;
+        test_window_key_mod(a->window,SDLK_F6,0);break;
+    case 7:
+        ok=!a->runner.running && !a->last_run[0] && !a->built && a->editor_build_bounds.w>0;
+        test_mouse(a,a->editor_build_bounds,true);break;
+    case 8:test_mouse(a,a->editor_build_bounds,false);break;
+    case 9:
+        if(!idle(a)){--*stage;return;}
+        ok=project_controls_build(a,true);*capture="build-control-release.bmp";break;
+    case 10:test_mouse(a,a->project_profile_bounds,true);break;
+    case 11:test_mouse(a,a->project_profile_bounds,false);break;
+    case 12:ok=a->project_profile_choices[0].w>0;test_mouse(a,a->project_profile_choices[0],true);break;
+    case 13:test_mouse(a,a->project_profile_choices[0],false);break;
+    case 14:
+        ok=a->profile==0 && !a->built && a->project_settings_dirty && a->build_info_valid && a->build_info.release;
+        if(ok){SDL_Event event={0};event.type=SDL_EVENT_QUIT;ok=SDL_PushEvent(&event);}
+        printf("BUILD CONTROLS SELF-TEST: %s\n",ok?"PASSED":"FAILED");break;
+    }
+    if(!ok){fprintf(stderr,"Build controls stage=%d profile=%d built=%u dirty=%u status=%s\n",*stage-1,a->profile,a->built,a->project_settings_dirty,a->status);*code=1;a->quitting=true;}
+    if(read && a->quitting)printf("BUILD CONTROLS SELF-TEST: %s\n",*code?"FAILED":"PASSED");
+}
 static bool project_settings_test_start(app *a, const char *root, const char *mode) {
+    if(!strncmp(mode,"project-settings-controls-",26))return project_controls_test_start(a,root,mode);
     join(a->project_input, sizeof a->project_input, root, "project");
     if (!strcmp(mode, "project-settings-write")) {
         a->example = 18; /* Collision language template exposes friction. */
@@ -27,6 +78,7 @@ static bool project_settings_test_start(app *a, const char *root, const char *mo
     return restored;
 }
 static void project_settings_test_frame(app *a, const char *mode, int *stage, int *code, const char **capture) {
+    if(!strncmp(mode,"project-settings-controls-",26)){project_controls_test_frame(a,mode,stage,code,capture);return;}
     static int reported_stage = -1;
     if (*stage != reported_stage) {
         fprintf(stderr, "Project settings %s stage %d: %s\n", mode, *stage, a->status);

@@ -378,8 +378,16 @@ static void sidebar_panel(app *a) {
                         }
                         nk_layout_row_dynamic(ui, 32, 1);
                         const char *profiles[] = {"Debug", "Release"};
-                        select_build_profile(a, nk_combo(ui, profiles, 2, a->profile, 28,
-                                                       nk_vec2(180, 110)));
+                        a->project_profile_bounds=nk_widget_bounds(ui);
+                        float profile_height=56+2*ui->style.window.spacing.y+ui->style.window.combo_padding.y+2*ui->style.window.combo_border;
+                        if(nk_combo_begin_label(ui,profiles[a->profile],nk_vec2(180,fminf(110,profile_height)))) {
+                            nk_layout_row_dynamic(ui,28,1);
+                            for(int profile=0;profile<2;profile++) {
+                                a->project_profile_choices[profile]=nk_widget_bounds(ui);
+                                if(nk_combo_item_label(ui,profiles[profile],NK_TEXT_LEFT))select_build_profile(a,profile);
+                            }
+                            nk_combo_end(ui);
+                        }
                         nk_layout_row_dynamic(ui, 24, 1);
                         char api[96];
                         snprintf(api, sizeof api, "App: API %u · ABI %u", PS_API_VERSION, PS_ABI_VERSION);
@@ -621,6 +629,7 @@ static void workspace_panel(app *a) {
             if (nk_button_label(ui, "Speichern"))
                 save_project(a);
             nk_layout_row_push(ui, .18f);
+            a->editor_build_bounds=nk_widget_bounds(ui);
             if (action_button(ui, "Build", true))
                 build_project(a);
             nk_end_disabled(ui);
