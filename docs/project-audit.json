@@ -1462,9 +1462,20 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Editor mit Zeilennummern, Undo/Redo, Suchen/Ersetzen und C-Syntaxhervorhebung.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/main.c",
+        "app/design_ui.inc",
+        "app/document_ui.inc",
+        "app/editor_replace_tests.inc",
+        "third_party/nuklear.h",
+        "third_party/README.md",
+        "tests/test_editor_clipboard.c",
+        "tests/check_display_workflow.py",
+        "docs/workspace.md",
+        "docs/platform-validation.md#editor-ausgewählter-treffer-und-zusammenhängende-undo-redo-schritte"
+      ],
+      "note": "Grundlegende C-Editoren mit Zeilennummern, Syntaxfarben, Suche/Ersetzen und Undo/Redo. Zwei tatsächliche Gegenfälle belegen falsche Trefferwahl und beschädigtes Undo. Passende Auswahl und atomare UTF-8-Ersetzung korrigiert; opt-in Fokus-Historie nur für dauerhafte Code-Editoren. Echte Klicks/Command-Tasten prüfen drei Editorbereiche, Suchumlauf, leeren Ersatz und exakte Undo-/Redo-Texte; zwei native Speicher-/UTF-Prüfungen und kleine/große Dokumentregression bestehen auf Intel macOS. Visuelle C-Syntax-/Zeilennummern-Nachweise vorhanden; keine ganze Syntax-, Glyphen- oder andere Plattformabnahme."
     },
     {
       "id": "PP-0245",

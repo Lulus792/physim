@@ -304,6 +304,7 @@ typedef struct {
     char diagnostic_line[8192];
     struct nk_rect diagnostic_bounds[64];
     struct nk_rect diagnostic_mode_bounds;
+    struct nk_rect search_bounds,replace_bounds,source_editor_bounds;
     size_t diagnostic_used;
     ps_wire_buffer wire;
     uint32_t command_seq;
@@ -2251,9 +2252,21 @@ static void find_text(app *a, struct nk_text_edit *edit, bool replace) {
     const char *cur = nk_str_at_const(&edit->string, edit->cursor, &rune, &len);
     if (cur)
         start = copy + (cur - text);
-    char *found = strstr(start, a->find);
-    if (!found)
-        found = strstr(copy, a->find);
+    char *found = NULL;
+    if(replace) {
+        int first=edit->select_start<edit->select_end?edit->select_start:edit->select_end;
+        int last=edit->select_start<edit->select_end?edit->select_end:edit->select_start;
+        if(first>=0 && first<last && last<=nk_str_len(&edit->string)) {
+            const char *begin=nk_str_at_const(&edit->string,first,&rune,&len);
+            const char *end=last==nk_str_len(&edit->string)?text+bytes:nk_str_at_const(&edit->string,last,&rune,&len);
+            if(begin && end && (size_t)(end-begin)==strlen(a->find) && !memcmp(begin,a->find,(size_t)(end-begin)))
+                found=copy+(begin-text);
+        }
+    }
+    if(!found) {
+        found=strstr(start,a->find);
+        if(!found)found=strstr(copy,a->find);
+    }
     if (found) {
         int at = nk_utf_len(copy, (int)(found - copy)),
             n = nk_utf_len(a->find, (int)strlen(a->find));
@@ -2268,8 +2281,12 @@ static void find_text(app *a, struct nk_text_edit *edit, bool replace) {
         edit->scrollbar.x = 0;
         if (replace) {
             edit->mode = NK_TEXT_EDIT_MODE_INSERT;
-            nk_textedit_delete_selection(edit);
-            nk_textedit_text(edit, a->replace, (int)strlen(a->replace));
+            int replacement_bytes=(int)strlen(a->replace);
+            if(replacement_bytes) {
+                if(!nk_textedit_paste(edit,a->replace,replacement_bytes)) {
+                    status(a,"Ersetzen fehlgeschlagen. Der Quelltext bleibt erhalten.");free(copy);return;
+                }
+            } else nk_textedit_delete_selection(edit);
             if (edit == &a->experiment) {
                 a->dirty = true;
                 invalidate_build(a);
@@ -2457,6 +2474,7 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
     uint32_t hash =
         ps_crc32((const unsigned char *)nk_str_get_const(&edit->string), (size_t)before);
     struct nk_rect editor_bounds = nk_widget_bounds(ui);
+    a->source_editor_bounds=editor_bounds;
     if (active_document(a) && edit == &active_document(a)->edit)
         a->document_bounds[6] = editor_bounds;
     struct nk_color transparent = nk_rgba(0, 0, 0, 0);
@@ -2465,7 +2483,7 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
     nk_style_push_color(ui, &ui->style.edit.text_active, transparent);
     nk_style_push_color(ui, &ui->style.edit.selected_text_normal, transparent);
     nk_style_push_color(ui, &ui->style.edit.selected_text_hover, transparent);
-    nk_edit_buffer(ui, NK_EDIT_BOX | NK_EDIT_ALLOW_TAB, edit, nk_filter_default);
+    nk_edit_buffer(ui, NK_EDIT_BOX | NK_EDIT_ALLOW_TAB | NK_EDIT_PRESERVE_UNDO, edit, nk_filter_default);
     for (int i = 0; i < 5; i++)
         nk_style_pop_color(ui);
     syntax_text(a, edit, editor_bounds);
@@ -2784,6 +2802,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "pendulum_medium_tests.inc"
 #include "collision_tutorial_tests.inc"
 #include "diagnostic_tests.inc"
+#include "editor_replace_tests.inc"
 #include "adaptive_tests.inc"
 #include "series_tests.inc"
 #include "monte_carlo_tutorial_tests.inc"

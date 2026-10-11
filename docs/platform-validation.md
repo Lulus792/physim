@@ -3405,3 +3405,53 @@ Dies ist ein tatsächlicher ARM64-macOS-Nachweis am genannten früheren Commit.
 Die späteren Parameter-, Tastatur-, Metadaten-, ABI-Prüfungs-, Compileranzeigen-
 und Diagnoseänderungen sowie die ganze aktuelle Plattformmatrix bleiben gesondert
 zu prüfen. Der Intel-macOS-Job desselben Laufs war beim letzten Abruf noch aktiv.
+
+
+## Editor: ausgewählter Treffer und zusammenhängende Undo-/Redo-Schritte
+
+Am 11. Oktober 2026 ersetzt die bisherige Suche nach einem tatsächlichen Klick
+auf **Suchen**/**Ersetzen** den späteren Treffer im Kommentar statt des markierten
+Treffers im Code. Die echte Reproduktion liegt in
+`build/current-editor-replace-before3-mac.log` und
+`build/current-release-mac/test-results/run-m6db4gm1`. Nach der Korrektur der
+Trefferwahl bestätigt ein weiterer tatsächlicher Durchlauf das fehlerhafte Undo:
+Aus `ä😀LONG` wird `ALTä😀LONG`, statt den Originaltext wiederherzustellen;
+Log `build/current-editor-replace-atomic-before2-mac.log`, Ergebnisse `run-p3v6uwcl`.
+Die Testeingaben wurden zuvor um die notwendigen Renderframes für widgetbasierte
+Tastaturaktionen ergänzt; frühere Testinitialisierungs-/Timingfehler sind keine
+Produktgegenbelege.
+
+Ersetzen verwendet nun eine passende aktuelle Auswahl und die bereits atomare
+UTF-8-Pasteoperation; leere Ersetzungen löschen die Auswahl in einem Undo-Schritt.
+Ein fehlgeschlagenes Reservieren erhält den Quelltext. Die optionale lokale
+Nuklear-Flagge `NK_EDIT_PRESERVE_UNDO` bewahrt die eingebettete Historie beim
+Reaktivieren caller-eigener Code-Editoren. Kurzlebige `nk_edit_string`-Felder
+behalten ihr bisheriges Resetverhalten. Neue Editorinitialisierung, Quellneuladen
+und die vorhandenen Historiengrößen werden nicht geändert; der Patch ist in
+`third_party/README.md` beschrieben.
+
+AppleClang Release besteht **3/3** aktuelle GUI-Fälle `documents_small`,
+`documents_large` und `editor_replace_workflow`, Ergebnisse
+`build/current-release-mac/test-results/run-hj1q4pvl`, Log
+`build/current-editor-replace-complete-mac.log`. Die abschließende Prüfung mit
+expliziter sauberer Draftinitialisierung besteht **1/1** unter
+`build/current-release-mac/test-results/run-or_jij56`, Log
+`build/current-editor-replace-ready-mac.log`. Ein tatsächlicher App-Prozess
+prüft Experiment-, Analyse- und zusätzlichen Editor: Cmd+F, echte Such-/
+Ersetzen-Klicks, Rückkehr per Maus, Cmd+Z/Cmd+Shift+Z, exakten UTF-8-Text,
+leeren Ersatz, Suchumlauf sowie alle Undo-/Redo-Endzustände. Die bestehenden
+Dokumentfälle prüfen weiter Tab, Undo/Redo und Dokumentbedienung in zwei Größen.
+
+Zwei native Fälle `editor_clipboard` und `ui_text_tail` bestehen ebenfalls:
+`build/current-release-mac/test-results/run-t1vgxm7j`, Log
+`build/current-editor-replace-native-mac.log`. Fixed-Buffer-Erschöpfung,
+dynamische Allokationsfehler, UTF-8 und atomare Auswahlersetzung bleiben geprüft.
+Drei tatsächliche Screenshots zeigen Suchleiste, Zeilennummern und die
+C-Syntaxfarben für Kommentare, Schlüsselwörter und Stringliterale; die PNG-
+Vorschauen unter `build/current-editor-replace-preview` wurden visuell geprüft.
+Die Schrift zeigt für nicht enthaltene Emoji-Glyphen einen Platzhalter; die
+UTF-8-Bytes bleiben im Test exakt erhalten.
+
+PP-0244 ist damit für seinen grundlegenden Editorumfang konkret belegt.
+Andere Plattformen, jede Syntax-/Schriftvariante und die neue Gesamt-SDK-Matrix
+werden durch diese Intel-macOS-Einzelprüfung nicht pauschal abgenommen.

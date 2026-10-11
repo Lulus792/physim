@@ -629,10 +629,12 @@ static void workspace_panel(app *a) {
                 nk_layout_row_dynamic(ui, 30, 4);
                 nk_edit_string_zero_terminated(ui, NK_EDIT_FIELD, a->find, sizeof a->find,
                                                nk_filter_default);
+                a->search_bounds=nk_widget_bounds(ui);
                 if (nk_button_label(ui, "Suchen"))
                     find_text(a, edit, false);
                 nk_edit_string_zero_terminated(ui, NK_EDIT_FIELD, a->replace, sizeof a->replace,
                                                nk_filter_default);
+                a->replace_bounds=nk_widget_bounds(ui);
                 if (nk_button_label(ui, "Ersetzen"))
                     find_text(a, edit, true);
             }

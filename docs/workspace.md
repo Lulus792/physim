@@ -246,7 +246,11 @@ Dieser eigenständige Befehl benötigt keinen Compiler und startet keinen Build.
 [Format und Speichergrenzen](data-format.md#eigenständige-analyseprojekte).
 
 **Ctrl+F** öffnet die Suche im aktuellen Editor. Die Suchleiste bietet Suchen und
-Ersetzen; kontrolliere insbesondere bei Ersetzungen von kurzen Namen das Ergebnis.
+Ersetzen. Nach **Suchen** ersetzt **Ersetzen** den aktuell markierten passenden
+Treffer. Ohne passende Auswahl wird ab dem Cursor gesucht und am Dateiende
+zum Anfang zurückgesprungen. Eine Ersetzung, auch mit leerem Ersatztext, lässt
+sich mit einem Undo rückgängig machen und mit einem Redo wiederholen. Der
+Verlauf bleibt beim Wechsel zwischen Suchleiste und Code-Editor erhalten.
 Das Protokoll zeigt Compilerfehler. Anklickbare Quelldiagnosen führen zur betroffenen
 Stelle. Dies gilt auch für eingebundene Header und Hilfsquellen: Der Klick
 öffnet die tatsächliche Datei im Texteditor und wählt die betroffene Zeile.

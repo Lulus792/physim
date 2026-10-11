@@ -49,6 +49,13 @@ Local patch (2026-09-28): the Tab handler uses the same transactional insertion
 to insert four spaces as one undo record, including selection replacement.
 Both project editors and additional documents use this handler. The
 `documents_small` and `documents_large` SDL tests cover Tab, undo and redo.
+Local patch (2026-10-11): `NK_EDIT_PRESERVE_UNDO` retains the undo/redo state
+when a caller-owned persistent `nk_edit_buffer` is reactivated. Physim enables
+this only for its code editors; transient `nk_edit_string` fields retain the
+upstream reset behavior. Editor initialization, source reload and existing
+history size limits are unchanged. `editor_replace_workflow` checks actual
+search/replace, focus return, single-step undo/redo and empty replacement in
+experiment, analysis and additional-document editors.
 Local patch (2026-09-28): a singleton off-curve TrueType contour wraps to its
 own point instead of reading the next contour or beyond the temporary vertex
 array. AddressSanitizer found this during system-font baking; the synthetic

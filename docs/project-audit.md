@@ -784,3 +784,16 @@ App-Prozesse und die native Formaterkennung bestehen auf Intel macOS;
 Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **60 implemented**, **13 incomplete**, **458 unverified**;
 `completion_proven` bleibt `false`.
+
+
+## Editorgrundumfang (§6.1)
+
+PP-0244 ist konkret zugeordnet: drei echte Editorbereiche mit Suchleiste,
+Zeilennummern, C-Syntaxfarben und ausgeführten Undo-/Redo-Aktionen. Die tatsächlich
+falsche Trefferwahl und das beschädigte Undo sind korrigiert. Suche/Ersetzen,
+Fokuswechsel, leerer Ersatz und exakte UTF-8-Endzustände bestehen zusammen mit
+nativen Speicherprüfungen und kleinen/großen Dokumentregressionen.
+[Nachweise und Grenzen](platform-validation.md#editor-ausgewählter-treffer-und-zusammenhängende-undo-redo-schritte).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**61 implemented**, **13 incomplete**, **457 unverified**;
+`completion_proven` bleibt `false`.

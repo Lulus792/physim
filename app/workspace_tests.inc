@@ -8,6 +8,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
     document_drafts_start(a, path);
     if (a->workspace_open || a->loaded || a->project_input[0])
         return false;
+    if(!strcmp(mode,"editor-replace"))return editor_replace_start(a,root);
     if (!strcmp(mode, "native-dialogs") || !strcmp(mode, "native-dialog-error"))
         return native_dialog_test_start(root);
     if(!strncmp(mode,"inspector-",10))return inspector_test_start(a,root,mode);
@@ -123,6 +124,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
 }
 static void workspace_test_frame(app *a, const char *mode, int *stage, int *code,
                                 const char **capture) {
+    if(!strcmp(mode,"editor-replace")){editor_replace_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"inspector-",10)){inspector_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"layouts-",8)){layout_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"named-",6)){workspace_catalog_test_frame(a,mode,stage,code,capture);return;}

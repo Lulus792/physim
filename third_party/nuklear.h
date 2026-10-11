@@ -3735,7 +3735,9 @@ enum nk_edit_flags {
     NK_EDIT_NO_HORIZONTAL_SCROLL    = NK_FLAG(8),
     NK_EDIT_ALWAYS_INSERT_MODE      = NK_FLAG(9),
     NK_EDIT_MULTILINE               = NK_FLAG(10),
-    NK_EDIT_GOTO_END_ON_ACTIVATE    = NK_FLAG(11)
+    NK_EDIT_GOTO_END_ON_ACTIVATE    = NK_FLAG(11),
+    /* Physim: only for caller-owned persistent nk_edit_buffer editors. */
+    NK_EDIT_PRESERVE_UNDO           = NK_FLAG(12)
 };
 enum nk_edit_types {
     NK_EDIT_SIMPLE  = NK_EDIT_ALWAYS_INSERT_MODE,
@@ -28647,7 +28649,11 @@ nk_do_edit(nk_flags *state, struct nk_command_buffer *out,
             NK_TEXT_EDIT_MULTI_LINE: NK_TEXT_EDIT_SINGLE_LINE;
         /* keep scroll position when re-activating edit widget */
         struct nk_vec2 oldscrollbar = edit->scrollbar;
-        nk_textedit_clear_state(edit, type, filter);
+        if (flags & NK_EDIT_PRESERVE_UNDO) {
+            struct nk_text_undo_state history = edit->undo;
+            nk_textedit_clear_state(edit, type, filter);
+            edit->undo = history;
+        } else nk_textedit_clear_state(edit, type, filter);
         edit->scrollbar = oldscrollbar;
         if (flags & NK_EDIT_AUTO_SELECT)
             select_all = nk_true;
