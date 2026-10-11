@@ -1045,8 +1045,11 @@ C-/Physim-Projektfälle: Fehler beziehungsweise Endlosschleife beim Erzeugen
 und im Schritt. Die App muss danach per Tastatur bedienbar sein, einen neuen
 Lauf erzeugen und gespeicherte Messblöcke sowie beide Quell-Snapshots erhalten.
 Frühe Fehler dürfen keinen Ladeversuch auf eine fehlende Messdatei auslösen.
-C verwendet `abort()`, Physim einen kontrollierten Laufzeitfehler. Die
-vollständige SDK-Prüfung mit `--app-tests` enthält dieselbe Gegenprobe.
+C verwendet `abort()`, Physim einen kontrollierten Laufzeitfehler. Zusätzlich
+prüft der fokussierte Aufruf F6/F7/F8/F9 in beiden Sprachen und Fenstergrößen,
+ignorierte Wiederholtasten/Modifier, Eingaben aus Editor und Hilfefenster,
+gespeicherte Wiederöffnungen und F9 vor HELLO bei zwei hängenden Initialisierungen.
+Die vollständige SDK-Prüfung mit `--app-tests` enthält dieselben Gegenproben.
 `--isolation-only` lässt sich nicht mit anderen fokussierten Modi oder
 `--app-tests` kombinieren. `PASSED.txt` benennt den begrenzten Prüfumfang;
 komprimierte Screenshots und Receipt bleiben bei der optionalen Archivierung

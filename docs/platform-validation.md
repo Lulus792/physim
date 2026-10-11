@@ -3077,3 +3077,41 @@ Die absichtlich fehlgeschlagenen inneren 1/3-Fälle des Testtreiber-Selbsttests
 sind kontrollierte Prüfdaten und werden nicht als Produktfehler umgedeutet.
 Dieser Linux-Nachweis betrifft `7b08c04`, nicht die spätere Parameter- oder
 F8/F9-Erweiterung. Die aktuelle gesamte Plattformmatrix bleibt offen.
+
+## Tastatursteuerung im verschobenen aktuellen SDK
+
+Ein neues Release-App-SDK wurde tatsächlich installiert unter
+`build/current-controls-sdk-mac`. Alle **471** Manifestdateien stimmen mit ihren
+SHA-256-Werten überein. Die unabhängige Mappe besteht den Paketgrenzen-Selbsttest
+mit **151** Eingaben (`build/current-controls-kit-selftest.log`); jede entpackte
+Datei wurde erneut gegen ihr Manifest geprüft. Ihr SDK-Prüfer ist bytegleich
+mit der neuen Quellfassung. Die Physim-Implementierung kommt aus dem Paket.
+
+Der tatsächlich ausgeführte Prüfer aus `build/current-controls-verification-kit`
+endet mit **PASSED** in
+`build/current-controls-sdk-proof-mac/Native SDK ä nj6teowq`.
+Der Aufruf verwendet `--isolation-only --archive-bitmaps` und erkennt den
+Compiler automatisch. `PASSED.txt`, `verification.log`, beide `app-steps.json`
+und `build/current-controls-sdk-proof-mac.log` belegen **18** erfolgreiche
+App-Prozesse: acht create/step-Abbruch-/Endlosschleifenfälle sowie vier
+C-/Physim-/Fenstergrößen-Tastaturketten, vier gespeicherte Wiederöffnungen
+und zwei weitere hängende Initialisierungen mit Tastaturstop vor HELLO und
+gesundem Neustart. Die F6/F7/F8/F9-Aktionen und ignorierten Repeat-/Command-/
+Editor-/Hilfefenster-Eingaben laufen gegen die tatsächlich verschobene App.
+Projektbuilder, Compiler, Beispiele und Core-Dateien stammen aus dem SDK.
+
+Alle **42** BMP-Archive wurden danach vollständig gestreamt und gegen
+Originalgröße sowie Original-/Archiv-SHA-256 nachgeprüft:
+**608031396 Originalbytes**, **18033713 komprimierte Bytes**. SDK-Eingaben
+bleiben geschützt. Der fokussierte Marker nennt seinen begrenzten Umfang;
+er ist keine ganze Produkt- oder Plattformabnahme.
+
+Die gemeinsame Isolationsfunktion des SDK-Prüfers führt nun auch die
+Tastaturketten aus, sowohl unter `--isolation-only` als auch in der ganzen
+`--app-tests`-Prüfung. Die neue unverkürzte Gesamtprüfung aus derselben
+unabhängigen Mappe und demselben eingefrorenen Paket läuft tatsächlich unter
+`build/current-controls-full-sdk-proof-mac/Native SDK ä eq6mmrib`, Log
+`build/current-controls-full-sdk-proof-mac.log`. Sie ist bis zum tatsächlichen
+Ende offen; gleichzeitig wird auf diesem Host keine weitere GUI-Suite gestartet.
+Die aktuelle andere Plattformmatrix und vollständige Barrierefreiheit bleiben
+weiterhin offen.

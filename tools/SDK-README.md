@@ -152,3 +152,7 @@ measurement files. C uses a native `abort()`; Physim uses a controlled runtime
 assertion. Early failures must retain their diagnostic without trying to load
 a missing measurement file. The full `--app-tests` verification includes
 these workflows too; the focused result does not imply full acceptance.
+The same verification also checks actual F6/F7/F8/F9 controls for C/Physim
+at both window sizes, ignored repeat/modified/editor/help input, persisted
+reopening and keyboard stop before HELLO in two hung-create cases. F8 performs
+one paused simulation step; F9 stops the runner in the simulation workspace.

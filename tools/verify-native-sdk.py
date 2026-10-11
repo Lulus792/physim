@@ -40,6 +40,13 @@ def verify_runner_isolation_app(repo, sdk, root, suffix, checked, compiler):
     if compiler: command += ["--cc", compiler]
     checked(command, timeout=1080)
     print("Installed SDK runner isolation: eight real C/Physim create/step abort/hang cases, early failure diagnostics, live keyboard help, preserved source/run data and healthy restart passed", flush=True)
+    keyboard_work = root / "Runner keyboard app"; keyboard_work.mkdir()
+    command = [sys.executable, repo / "tests/check_display_workflow.py",
+               "runner_keyboard_workflow", "--app", sdk / "bin" / ("physim" + suffix),
+               "--root", sdk, "--work", keyboard_work]
+    if compiler: command += ["--cc", compiler]
+    checked(command, timeout=980)
+    print("Installed SDK runner keyboard: C/Physim at both sizes, actual F6/F7/F8/F9, exact samples, modifier/repeat/editor/help isolation, persisted reopening and stop before HELLO passed", flush=True)
 
 
 def verify_project_migration(repo, sdk, root, suffix, checked):
@@ -493,7 +500,7 @@ def main():
                 raise RuntimeError("Runner isolation verification requires an app SDK")
             verify_runner_isolation_app(repo, sdk, root, suffix, checked, args.compiler)
             (root / "PASSED.txt").write_text(
-                "Focused SDK runner isolation verification passed: relocated manifest, eight actual C/Physim create/step abort/hang cases, early failure messages, keyboard help, healthy restart and unchanged source snapshots/persisted runs. No full platform or product acceptance.\n",
+                "Focused SDK runner isolation verification passed: relocated manifest, eight actual C/Physim create/step abort/hang cases, early failure messages, keyboard help, healthy restart and unchanged source snapshots/persisted runs. Keyboard F6/F7/F8/F9 at both window sizes, input isolation, saved reopening and two additional hung-create stops before HELLO passed. No full platform or product acceptance.\n",
                 encoding="utf-8")
             print(f"Runner isolation SDK verified: {root}", flush=True)
             return
