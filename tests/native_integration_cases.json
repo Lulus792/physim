@@ -2540,6 +2540,32 @@
     "mean-interval-oracle-language": {
       "source": "tests/fixtures/language/mean_interval_oracle.phys",
       "mode": "--emit-c"
+    },
+    "positive-distribution-check": {
+      "sources": [
+        "tests/test_positive_distributions.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "positive-distribution-probe": {
+      "sources": [
+        "tests/positive_distribution_probe.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "positive-distribution-language": {
+      "source": "tests/fixtures/language/positive_distributions.phys",
+      "mode": "--emit-c"
+    },
+    "positive-distribution-oracle-language": {
+      "source": "tests/fixtures/language/positive_distribution_oracle.phys",
+      "mode": "--emit-c"
     }
   },
   "tests": [
@@ -10420,6 +10446,41 @@
           "files": [
             "app-steps.json"
           ]
+        }
+      ]
+    },
+    {
+      "name": "positive_distributions",
+      "targets": [
+        "python",
+        "positive-distribution-check",
+        "positive-distribution-probe",
+        "positive-distribution-language",
+        "positive-distribution-oracle-language"
+      ],
+      "steps": [
+        {
+          "program": "positive-distribution-check",
+          "arguments": [],
+          "timeout": 30
+        },
+        {
+          "program": "positive-distribution-language",
+          "arguments": [],
+          "timeout": 30
+        },
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_positive_distribution_oracle.py",
+            "--c",
+            "{positive-distribution-probe}",
+            "--language",
+            "{positive-distribution-oracle-language}",
+            "--fixture",
+            "{root}/tests/fixtures/language/positive_distribution_oracle.phys"
+          ],
+          "timeout": 90
         }
       ]
     }

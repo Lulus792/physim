@@ -1,0 +1,1261 @@
+// Generated transformed-distribution reference inputs.
+var rng0 = Rng(0)
+let dist0 = attempt(Distribution.exponential(pow(2,-1074)))
+if dist0 != nil:
+    let dist = dist0.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng0.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng0.sample(Distribution.uniform(0,1)))
+var rng1 = Rng(0)
+let dist1 = attempt(Distribution.exponential(2.0))
+if dist1 != nil:
+    let dist = dist1.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng1.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng1.sample(Distribution.uniform(0,1)))
+var rng2 = Rng(0)
+let dist2 = attempt(Distribution.exponential(1e-300))
+if dist2 != nil:
+    let dist = dist2.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng2.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng2.sample(Distribution.uniform(0,1)))
+var rng3 = Rng(0)
+let dist3 = attempt(Distribution.exponential(1.7976931348623157e+308))
+if dist3 != nil:
+    let dist = dist3.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng3.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng3.sample(Distribution.uniform(0,1)))
+var rng4 = Rng(0)
+let dist4 = attempt(Distribution.logNormal(0.25,0.5))
+if dist4 != nil:
+    let dist = dist4.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng4.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng4.sample(Distribution.uniform(0,1)))
+var rng5 = Rng(0)
+let dist5 = attempt(Distribution.logNormal(0.0,0.0))
+if dist5 != nil:
+    let dist = dist5.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng5.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng5.sample(Distribution.uniform(0,1)))
+var rng6 = Rng(0)
+let dist6 = attempt(Distribution.logNormal(0.0,1e-200))
+if dist6 != nil:
+    let dist = dist6.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng6.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng6.sample(Distribution.uniform(0,1)))
+var rng7 = Rng(0)
+let dist7 = attempt(Distribution.logNormal(-800.0,30.0))
+if dist7 != nil:
+    let dist = dist7.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng7.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng7.sample(Distribution.uniform(0,1)))
+var rng8 = Rng(0)
+let dist8 = attempt(Distribution.logNormal(-400.0,25.0))
+if dist8 != nil:
+    let dist = dist8.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng8.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng8.sample(Distribution.uniform(0,1)))
+var rng9 = Rng(0)
+let dist9 = attempt(Distribution.logNormal(600.0,0.001))
+if dist9 != nil:
+    let dist = dist9.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng9.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng9.sample(Distribution.uniform(0,1)))
+var rng10 = Rng(0)
+let dist10 = attempt(Distribution.logNormal(-1000.0,0.0))
+if dist10 != nil:
+    let dist = dist10.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng10.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng10.sample(Distribution.uniform(0,1)))
+var rng11 = Rng(0)
+let dist11 = attempt(Distribution.logNormal(1000.0,0.0))
+if dist11 != nil:
+    let dist = dist11.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng11.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng11.sample(Distribution.uniform(0,1)))
+var rng12 = Rng(0)
+let dist12 = attempt(Distribution.exponential(0.0))
+if dist12 != nil:
+    let dist = dist12.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng12.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng12.sample(Distribution.uniform(0,1)))
+var rng13 = Rng(0)
+let dist13 = attempt(Distribution.exponential(-1.0))
+if dist13 != nil:
+    let dist = dist13.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng13.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng13.sample(Distribution.uniform(0,1)))
+var rng14 = Rng(0)
+let dist14 = attempt(Distribution.logNormal(0.0,-1.0))
+if dist14 != nil:
+    let dist = dist14.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng14.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng14.sample(Distribution.uniform(0,1)))
+var rng15 = Rng(42)
+let dist15 = attempt(Distribution.exponential(pow(2,-1074)))
+if dist15 != nil:
+    let dist = dist15.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng15.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng15.sample(Distribution.uniform(0,1)))
+var rng16 = Rng(42)
+let dist16 = attempt(Distribution.exponential(2.0))
+if dist16 != nil:
+    let dist = dist16.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng16.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng16.sample(Distribution.uniform(0,1)))
+var rng17 = Rng(42)
+let dist17 = attempt(Distribution.exponential(1e-300))
+if dist17 != nil:
+    let dist = dist17.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng17.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng17.sample(Distribution.uniform(0,1)))
+var rng18 = Rng(42)
+let dist18 = attempt(Distribution.exponential(1.7976931348623157e+308))
+if dist18 != nil:
+    let dist = dist18.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng18.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng18.sample(Distribution.uniform(0,1)))
+var rng19 = Rng(42)
+let dist19 = attempt(Distribution.logNormal(0.25,0.5))
+if dist19 != nil:
+    let dist = dist19.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng19.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng19.sample(Distribution.uniform(0,1)))
+var rng20 = Rng(42)
+let dist20 = attempt(Distribution.logNormal(0.0,0.0))
+if dist20 != nil:
+    let dist = dist20.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng20.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng20.sample(Distribution.uniform(0,1)))
+var rng21 = Rng(42)
+let dist21 = attempt(Distribution.logNormal(0.0,1e-200))
+if dist21 != nil:
+    let dist = dist21.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng21.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng21.sample(Distribution.uniform(0,1)))
+var rng22 = Rng(42)
+let dist22 = attempt(Distribution.logNormal(-800.0,30.0))
+if dist22 != nil:
+    let dist = dist22.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng22.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng22.sample(Distribution.uniform(0,1)))
+var rng23 = Rng(42)
+let dist23 = attempt(Distribution.logNormal(-400.0,25.0))
+if dist23 != nil:
+    let dist = dist23.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng23.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng23.sample(Distribution.uniform(0,1)))
+var rng24 = Rng(42)
+let dist24 = attempt(Distribution.logNormal(600.0,0.001))
+if dist24 != nil:
+    let dist = dist24.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng24.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng24.sample(Distribution.uniform(0,1)))
+var rng25 = Rng(42)
+let dist25 = attempt(Distribution.logNormal(-1000.0,0.0))
+if dist25 != nil:
+    let dist = dist25.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng25.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng25.sample(Distribution.uniform(0,1)))
+var rng26 = Rng(42)
+let dist26 = attempt(Distribution.logNormal(1000.0,0.0))
+if dist26 != nil:
+    let dist = dist26.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng26.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng26.sample(Distribution.uniform(0,1)))
+var rng27 = Rng(42)
+let dist27 = attempt(Distribution.exponential(0.0))
+if dist27 != nil:
+    let dist = dist27.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng27.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng27.sample(Distribution.uniform(0,1)))
+var rng28 = Rng(42)
+let dist28 = attempt(Distribution.exponential(-1.0))
+if dist28 != nil:
+    let dist = dist28.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng28.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng28.sample(Distribution.uniform(0,1)))
+var rng29 = Rng(42)
+let dist29 = attempt(Distribution.logNormal(0.0,-1.0))
+if dist29 != nil:
+    let dist = dist29.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng29.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng29.sample(Distribution.uniform(0,1)))
+var rng30 = Rng(-9223372036854775808)
+let dist30 = attempt(Distribution.exponential(pow(2,-1074)))
+if dist30 != nil:
+    let dist = dist30.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng30.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng30.sample(Distribution.uniform(0,1)))
+var rng31 = Rng(-9223372036854775808)
+let dist31 = attempt(Distribution.exponential(2.0))
+if dist31 != nil:
+    let dist = dist31.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng31.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng31.sample(Distribution.uniform(0,1)))
+var rng32 = Rng(-9223372036854775808)
+let dist32 = attempt(Distribution.exponential(1e-300))
+if dist32 != nil:
+    let dist = dist32.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng32.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng32.sample(Distribution.uniform(0,1)))
+var rng33 = Rng(-9223372036854775808)
+let dist33 = attempt(Distribution.exponential(1.7976931348623157e+308))
+if dist33 != nil:
+    let dist = dist33.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng33.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng33.sample(Distribution.uniform(0,1)))
+var rng34 = Rng(-9223372036854775808)
+let dist34 = attempt(Distribution.logNormal(0.25,0.5))
+if dist34 != nil:
+    let dist = dist34.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng34.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng34.sample(Distribution.uniform(0,1)))
+var rng35 = Rng(-9223372036854775808)
+let dist35 = attempt(Distribution.logNormal(0.0,0.0))
+if dist35 != nil:
+    let dist = dist35.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng35.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng35.sample(Distribution.uniform(0,1)))
+var rng36 = Rng(-9223372036854775808)
+let dist36 = attempt(Distribution.logNormal(0.0,1e-200))
+if dist36 != nil:
+    let dist = dist36.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng36.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng36.sample(Distribution.uniform(0,1)))
+var rng37 = Rng(-9223372036854775808)
+let dist37 = attempt(Distribution.logNormal(-800.0,30.0))
+if dist37 != nil:
+    let dist = dist37.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng37.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng37.sample(Distribution.uniform(0,1)))
+var rng38 = Rng(-9223372036854775808)
+let dist38 = attempt(Distribution.logNormal(-400.0,25.0))
+if dist38 != nil:
+    let dist = dist38.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng38.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng38.sample(Distribution.uniform(0,1)))
+var rng39 = Rng(-9223372036854775808)
+let dist39 = attempt(Distribution.logNormal(600.0,0.001))
+if dist39 != nil:
+    let dist = dist39.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng39.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng39.sample(Distribution.uniform(0,1)))
+var rng40 = Rng(-9223372036854775808)
+let dist40 = attempt(Distribution.logNormal(-1000.0,0.0))
+if dist40 != nil:
+    let dist = dist40.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng40.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng40.sample(Distribution.uniform(0,1)))
+var rng41 = Rng(-9223372036854775808)
+let dist41 = attempt(Distribution.logNormal(1000.0,0.0))
+if dist41 != nil:
+    let dist = dist41.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng41.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng41.sample(Distribution.uniform(0,1)))
+var rng42 = Rng(-9223372036854775808)
+let dist42 = attempt(Distribution.exponential(0.0))
+if dist42 != nil:
+    let dist = dist42.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng42.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng42.sample(Distribution.uniform(0,1)))
+var rng43 = Rng(-9223372036854775808)
+let dist43 = attempt(Distribution.exponential(-1.0))
+if dist43 != nil:
+    let dist = dist43.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng43.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng43.sample(Distribution.uniform(0,1)))
+var rng44 = Rng(-9223372036854775808)
+let dist44 = attempt(Distribution.logNormal(0.0,-1.0))
+if dist44 != nil:
+    let dist = dist44.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng44.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng44.sample(Distribution.uniform(0,1)))
+var rng45 = Rng(-1)
+let dist45 = attempt(Distribution.exponential(pow(2,-1074)))
+if dist45 != nil:
+    let dist = dist45.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng45.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng45.sample(Distribution.uniform(0,1)))
+var rng46 = Rng(-1)
+let dist46 = attempt(Distribution.exponential(2.0))
+if dist46 != nil:
+    let dist = dist46.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng46.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng46.sample(Distribution.uniform(0,1)))
+var rng47 = Rng(-1)
+let dist47 = attempt(Distribution.exponential(1e-300))
+if dist47 != nil:
+    let dist = dist47.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng47.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng47.sample(Distribution.uniform(0,1)))
+var rng48 = Rng(-1)
+let dist48 = attempt(Distribution.exponential(1.7976931348623157e+308))
+if dist48 != nil:
+    let dist = dist48.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng48.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng48.sample(Distribution.uniform(0,1)))
+var rng49 = Rng(-1)
+let dist49 = attempt(Distribution.logNormal(0.25,0.5))
+if dist49 != nil:
+    let dist = dist49.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng49.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng49.sample(Distribution.uniform(0,1)))
+var rng50 = Rng(-1)
+let dist50 = attempt(Distribution.logNormal(0.0,0.0))
+if dist50 != nil:
+    let dist = dist50.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng50.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng50.sample(Distribution.uniform(0,1)))
+var rng51 = Rng(-1)
+let dist51 = attempt(Distribution.logNormal(0.0,1e-200))
+if dist51 != nil:
+    let dist = dist51.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng51.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng51.sample(Distribution.uniform(0,1)))
+var rng52 = Rng(-1)
+let dist52 = attempt(Distribution.logNormal(-800.0,30.0))
+if dist52 != nil:
+    let dist = dist52.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng52.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng52.sample(Distribution.uniform(0,1)))
+var rng53 = Rng(-1)
+let dist53 = attempt(Distribution.logNormal(-400.0,25.0))
+if dist53 != nil:
+    let dist = dist53.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng53.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng53.sample(Distribution.uniform(0,1)))
+var rng54 = Rng(-1)
+let dist54 = attempt(Distribution.logNormal(600.0,0.001))
+if dist54 != nil:
+    let dist = dist54.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng54.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng54.sample(Distribution.uniform(0,1)))
+var rng55 = Rng(-1)
+let dist55 = attempt(Distribution.logNormal(-1000.0,0.0))
+if dist55 != nil:
+    let dist = dist55.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng55.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng55.sample(Distribution.uniform(0,1)))
+var rng56 = Rng(-1)
+let dist56 = attempt(Distribution.logNormal(1000.0,0.0))
+if dist56 != nil:
+    let dist = dist56.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng56.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng56.sample(Distribution.uniform(0,1)))
+var rng57 = Rng(-1)
+let dist57 = attempt(Distribution.exponential(0.0))
+if dist57 != nil:
+    let dist = dist57.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng57.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng57.sample(Distribution.uniform(0,1)))
+var rng58 = Rng(-1)
+let dist58 = attempt(Distribution.exponential(-1.0))
+if dist58 != nil:
+    let dist = dist58.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng58.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng58.sample(Distribution.uniform(0,1)))
+var rng59 = Rng(-1)
+let dist59 = attempt(Distribution.logNormal(0.0,-1.0))
+if dist59 != nil:
+    let dist = dist59.unwrap()
+    let mean = attempt(dist.mean())
+    let sd = attempt(dist.standardDeviation())
+    if mean != nil && sd != nil:
+        print("moment ok")
+        print(mean.unwrap())
+        print(sd.unwrap())
+    else:
+        print("moment error")
+    let value = attempt(rng59.sample(dist))
+    if value != nil:
+        print("sample ok")
+        print(value.unwrap())
+    else:
+        print("sample error")
+else:
+    print("invalid")
+print(rng59.sample(Distribution.uniform(0,1)))

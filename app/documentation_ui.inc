@@ -134,6 +134,7 @@ static const documentation_topic documentation_topics[] = {
     {"FEM Teilprojekt", "docs/fem-project-plan.md", false},
     {"3D-Szenenmessung", "docs/scene-rendering.md", false},
     {"App-Profilaufzeichnung", "docs/app-profiling.md", false},
+    {"Historische Plattformnachweise: Band 2", "docs/platform-validation-history-2.md", false},
 };
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27

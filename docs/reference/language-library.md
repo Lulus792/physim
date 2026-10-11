@@ -1420,6 +1420,26 @@ Konstante Verteilung ohne Streuung.
 
 Überall verfügbar.
 
+## Distribution.exponential
+
+```text
+Distribution.exponential(mean: Float64) -> Distribution
+```
+
+Positive Exponentialverteilung mit endlichem positivem Mittelwert und gleicher Standardabweichung. Eine Ziehung verbraucht ein offenes PCG-Uniform.
+
+Überall verfügbar.
+
+## Distribution.logNormal
+
+```text
+Distribution.logNormal(logMean: Float64, logStandardDeviation: Float64) -> Distribution
+```
+
+Positive Lognormalverteilung aus Mittelwert und Standardabweichung des natürlichen Logarithmus des Zahlenwerts. Nicht entartete Ziehungen verbrauchen zwei PCG-Werte; logarithmische Streuung null verbraucht keine.
+
+Überall verfügbar.
+
 ## Distribution.mean
 
 ```text

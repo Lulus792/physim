@@ -29,6 +29,10 @@ ps_result ps_distribution_validate(ps_distribution d) {
         return d.a <= d.b ? PS_OK : PS_INVALID;
     case PS_DIST_NORMAL:
         return d.b >= 0 ? PS_OK : PS_INVALID;
+    case PS_DIST_EXPONENTIAL:
+        return d.a>0 && d.b==0?PS_OK:PS_INVALID;
+    case PS_DIST_LOGNORMAL:
+        return d.b>=0?PS_OK:PS_INVALID;
     default:
         return PS_INVALID;
     }
@@ -43,7 +47,11 @@ ps_result ps_distribution_sample(ps_distribution d, ps_rng *rng, double *out) {
         value = (1 - u) * d.a + u * d.b; /* Finite interval may have an overflowing width. */
     } else if (d.kind == PS_DIST_NORMAL && d.b)
         value = ps_rng_normal(&next, d.a, d.b);
-    if (!isfinite(value))
+    else if(d.kind==PS_DIST_EXPONENTIAL)
+        value=-d.a*log(ps_rng_uniform(&next));
+    else if(d.kind==PS_DIST_LOGNORMAL)
+        value=exp(d.b?ps_rng_normal(&next,d.a,d.b):d.a);
+    if (!isfinite(value) || ((d.kind==PS_DIST_EXPONENTIAL || d.kind==PS_DIST_LOGNORMAL) && value<=0))
         return PS_NUMERIC;
     *rng = next;
     *out = value;
@@ -58,6 +66,18 @@ ps_result ps_distribution_moments(ps_distribution d, double *mean, double *stdde
         s = (d.b / 2 - d.a / 2) / sqrt(3);
     } else if (d.kind == PS_DIST_NORMAL)
         s = d.b;
+    else if(d.kind==PS_DIST_EXPONENTIAL)s=d.a;
+    else if(d.kind==PS_DIST_LOGNORMAL) {
+        double variance=d.b*d.b;
+        if(!isfinite(variance))return PS_NUMERIC;
+        m=exp(d.a+.5*variance);
+        if(d.b==0)s=0;
+        else if(d.b<1e-4)
+            s=m*d.b*(1+.25*variance); /* Avoid losing a representable sd when b*b underflows. */
+        else
+            s=exp(d.a+variance+.5*log(-expm1(-variance)));
+        if(m<=0 || (d.b>0 && s<=0))return PS_NUMERIC;
+    }
     if (!isfinite(m) || !isfinite(s))
         return PS_NUMERIC;
     *mean = m;

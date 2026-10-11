@@ -278,6 +278,8 @@ LANG_DESCRIPTIONS = {
     'constantDistribution': 'Konstante Verteilung ohne Streuung.',
     'uniformDistribution': 'Gleichverteilung zwischen Minimum und Maximum.',
     'normalDistribution': 'Normalverteilung mit Mittelwert und nichtnegativer Standardabweichung.',
+    'exponentialDistribution': 'Positive Exponentialverteilung mit endlichem positivem Mittelwert und gleicher Standardabweichung. Eine Ziehung verbraucht ein offenes PCG-Uniform.',
+    'lognormalDistribution': 'Positive Lognormalverteilung aus Mittelwert und Standardabweichung des natürlichen Logarithmus des Zahlenwerts. Nicht entartete Ziehungen verbrauchen zwei PCG-Werte; logarithmische Streuung null verbraucht keine.',
     'distributionMean': 'Erwartungswert der Verteilung.',
     'distributionDeviation': 'Standardabweichung der Verteilung.',
     'SensorConfig': 'Definiert Einheit, Abtastrate in Hz, Startzeit in s, Auflösung, Offset, Drift pro Sekunde, Rauschen, Ausfallwahrscheinlichkeit und absolute/relative Standardunsicherheit. Auflösung, Offset, Drift und Rauschen beziehen sich auf die Sensoreinheit.',

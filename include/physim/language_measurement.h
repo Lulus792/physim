@@ -41,6 +41,12 @@ static inline ps_distribution psrt_distribution_normal(double mean, double devia
                                                        psrt_site site) {
     return psrt_distribution(PS_DIST_NORMAL, mean, deviation, site);
 }
+static inline ps_distribution psrt_distribution_exponential(double mean,psrt_site site) {
+    return psrt_distribution(PS_DIST_EXPONENTIAL,mean,0,site);
+}
+static inline ps_distribution psrt_distribution_lognormal(double mean,double deviation,psrt_site site) {
+    return psrt_distribution(PS_DIST_LOGNORMAL,mean,deviation,site);
+}
 static inline double psrt_distribution_mean(ps_distribution value, psrt_site site) {
     double mean, deviation;
     if (ps_distribution_moments(value, &mean, &deviation) != PS_OK)

@@ -1060,3 +1060,16 @@ Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **101 implemented**, **13 incomplete**, **417 unverified**;
 `completion_proven` bleibt `false`. Die vollständige Plattform- und
 Produktabnahme bleibt offen.
+
+
+## Fünf Verteilungen in C und Physim (PP-0403)
+
+Konstant, uniform und normal sind um Exponential- und Lognormalverteilung
+erweitert. Unabhängige Referenzen prüfen Momente, Ziehungen, vollständige Seeds,
+degenerierte Fälle und Fehleratomicität. Native und verschobene SDK-Prüfungen
+sind auf Intel macOS ausgeführt.
+[Nachweise und Grenzen](platform-validation.md#positive-verteilungen-in-c-und-physim-pp-0403).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**102 implemented**, **13 incomplete**, **416 unverified**;
+`completion_proven` bleibt `false`. Die gesamte Projekt- und Plattformabnahme
+bleibt offen.

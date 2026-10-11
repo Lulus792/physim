@@ -3507,9 +3507,18 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Verteilungen: konstant, uniform, normal; später weitere.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/measurement.h",
+        "src/measurement.c",
+        "include/physim/language_measurement.h",
+        "src/language/builtins.c",
+        "tests/test_positive_distributions.c",
+        "tests/test_positive_distribution_oracle.py",
+        "tests/fixtures/language/positive_distribution_oracle.phys",
+        "docs/measurement.md"
+      ],
+      "note": "Konstante, uniforme und normale Verteilungen sowie Exponential- und Lognormalverteilung stehen in C/Physim bereit. 60 unabhängige PCG-/Transformations-/Decimal-Referenzfälle, RNG-/Ausgabeatomicität, degenerierte Werte und indiziertes Sensorrauschen sind auf Intel macOS ausgeführt; installierte und neu gebaute SDK-Bibliotheken bestehen dieselben Prüfungen. Numerische Gleichheit zwischen Plattform-libm ist nicht zugesichert; aktuelle ganze Plattformabnahme bleibt offen."
     },
     {
       "id": "PP-0404",

@@ -433,6 +433,8 @@ static const ps_lang_builtin library[] = {
     {"uniformDistribution", "psrt_distribution_uniform", DIST, 2, 0, {F, F}, {"min", "max"}},
     {"normalDistribution", "psrt_distribution_normal", DIST, 2, 0,
      {F, F}, {"mean", "standardDeviation"}},
+    {"exponentialDistribution", "psrt_distribution_exponential", DIST, 1, 0, {F}, {"mean"}},
+    {"lognormalDistribution", "psrt_distribution_lognormal", DIST, 2, 0, {F,F}, {"logMean","logStandardDeviation"}},
     {"distributionMean", "psrt_distribution_mean", F, 1, 0, {DIST}, {"distribution"}},
     {"distributionDeviation", "psrt_distribution_deviation", F, 1, 0, {DIST}, {"distribution"}},
     {"SensorConfig", "psrt_sensor_config", CONFIG, 10, 0,
@@ -1101,6 +1103,8 @@ static const struct { const char *owner, *name, *function; } factories[] = {
     {"Distribution", "constant", "constantDistribution"},
     {"Distribution", "uniform", "uniformDistribution"},
     {"Distribution", "normal", "normalDistribution"},
+    {"Distribution", "exponential", "exponentialDistribution"},
+    {"Distribution", "logNormal", "lognormalDistribution"},
     {"Sensor", "forRun", "sensorForRun"},
     {"Rng", "forRun", "rngForRun"}};
 const ps_lang_builtin *ps_lang_builtin_find(const void *name, size_t length, size_t *binding) {

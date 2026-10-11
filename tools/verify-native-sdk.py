@@ -209,6 +209,24 @@ def verify_transform_range(repo, sdk, consumer, builder, library, rebuilt_core, 
 
 
 
+def verify_positive_distributions(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked):
+    shutil.copy2(repo / "tests/test_positive_distributions.c",consumer / "positive-distribution-check.c")
+    shutil.copy2(repo / "tests/positive_distribution_probe.c",consumer / "positive-distribution-probe.c")
+    checked([sdk / "bin" / ("physimc"+suffix),"--emit-c",
+             repo / "tests/fixtures/language/positive_distributions.phys"],output=consumer / "positive-distribution-language.c")
+    checked([sdk / "bin" / ("physimc"+suffix),"--emit-c",
+             repo / "tests/fixtures/language/positive_distribution_oracle.phys"],output=consumer / "positive-distribution-oracle.c")
+    for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+        check=builder.executable("positive-distribution-check-"+kind,["positive-distribution-check.c"],[archive])
+        probe=builder.executable("positive-distribution-probe-"+kind,["positive-distribution-probe.c"],[archive])
+        language=builder.executable("positive-distribution-language-"+kind,["positive-distribution-language.c"],[archive],language=True)
+        oracle=builder.executable("positive-distribution-oracle-"+kind,["positive-distribution-oracle.c"],[archive],language=True)
+        checked([check]);checked([language])
+        checked([sys.executable,repo / "tests/test_positive_distribution_oracle.py","--c",probe,"--language",oracle,
+                 "--fixture",repo / "tests/fixtures/language/positive_distribution_oracle.phys"],timeout=90)
+    print("Installed/rebuilt SDK positive distributions: Decimal moments, independent PCG/transform references, full seeds, degenerate draws and sensor/RNG/error atomicity passed",flush=True)
+
+
 def verify_mean_interval(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked):
     shutil.copy2(repo / "tests/test_mean_interval.c", consumer / "mean-interval-check.c")
     shutil.copy2(repo / "tests/mean_interval_probe.c", consumer / "mean-interval-probe.c")
@@ -438,6 +456,8 @@ def main():
                         help="Verify opaque Run stream handles only; no GUI or full domain acceptance")
     parser.add_argument("--interval-only",action="store_true",
                         help="Verify Student-t mean intervals, independent numerical references and actual analysis report only")
+    parser.add_argument("--distributions-only",action="store_true",
+                        help="Verify positive exponential/lognormal C/Physim distributions and independent references only")
     parser.add_argument("--comparison-only", action="store_true",
                         help="Verify exact C/Physim tolerance decisions only; no GUI or full domain acceptance")
     parser.add_argument("--curve-only", action="store_true",
@@ -457,6 +477,10 @@ def main():
     parser.add_argument("--isolation-only", action="store_true",
                         help="Verify eight actual C/Physim runner failure/restart app workflows; requires an app SDK and display")
     args = parser.parse_args()
+    if args.distributions_only and any((args.pendulum_only,args.scalar_only,args.transform_only,args.stream_only,
+        args.comparison_only,args.curve_only,args.units_only,args.body_only,args.migration_only,
+        args.accessibility_only,args.convex_only,args.breakpoints_only,args.isolation_only,args.app_tests,args.interval_only)):
+        parser.error("--distributions-only cannot be combined with other focused modes or --app-tests")
     if args.interval_only and any((args.pendulum_only,args.scalar_only,args.transform_only,args.stream_only,
         args.comparison_only,args.curve_only,args.units_only,args.body_only,args.migration_only,
         args.accessibility_only,args.convex_only,args.breakpoints_only,args.isolation_only,args.app_tests)):
@@ -575,6 +599,13 @@ def main():
         builder.includes = [sdk / "include"]
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+        if args.distributions_only:
+            shutil.copytree(sdk / "src",consumer / "src")
+            rebuilt_core=builder.archive("sdk-rebuilt-core",[f"src/{name}.c" for name in native.CORE])
+            verify_positive_distributions(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
+            (root / "PASSED.txt").write_text("Focused positive distribution SDK verification passed; installed/rebuilt Core, Decimal moments, independent PCG/transform references, full-width seeds and C/Physim/sensor atomicity; no full platform/product acceptance.\n",encoding="utf-8")
+            print(f"Positive distribution SDK verified: {root}")
+            return
         if args.interval_only:
             shutil.copytree(sdk / "src",consumer / "src")
             rebuilt_core=builder.archive("sdk-rebuilt-core",[f"src/{name}.c" for name in native.CORE])
@@ -792,6 +823,7 @@ def main():
         verify_close_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_run_stream(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_mean_interval(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
+        verify_positive_distributions(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
         verify_scalar_search(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_transform_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         shutil.copy2(repo / "tests/test_linear_range.c", consumer / "linear-range-check.c")

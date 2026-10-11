@@ -108,6 +108,7 @@ def catalog():
         Case("parameter_catalog", ("tests/test_parameter_catalog.c", "app/parameter_catalog.c")),
         Case("documentation", ("tests/test_documentation.c", "app/documentation.c"),
              arguments=("{source}/docs/platform-validation.md", "{source}/docs/platform-validation-history.md",
+                        "{source}/docs/platform-validation-history-2.md",
                         "{source}/docs/cfd-project-plan.md", "{source}/docs/fem-project-plan.md")),
         Case("plot_view", ("tests/test_plot_view.c", "app/plot_view.c")),
         Case("crc", ("tests/test_crc.c",)),

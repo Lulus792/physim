@@ -156,6 +156,8 @@ Die API simuliert einen Rohsensor, keine vollständige metrologische Kalibrierun
 | `PS_DIST_CONSTANT` | Wert | 0 |
 | `PS_DIST_UNIFORM` | Minimum | Maximum |
 | `PS_DIST_NORMAL` | Mittelwert | Standardabweichung ≥ 0 |
+| `PS_DIST_EXPONENTIAL` | Mittelwert > 0 | 0 |
+| `PS_DIST_LOGNORMAL` | Mittelwert des natürlichen Logarithmus | Standardabweichung des Logarithmus ≥ 0 |
 
 `ps_distribution_sample` nutzt einen explizit initialisierten `ps_rng`.
 Konstante beziehungsweise entartete Verteilungen verbrauchen keine Zufallsziehung.
@@ -289,3 +291,52 @@ In einer Analyse liefert `series.meanInterval(0.95)` denselben Werttyp.
 `confidence()` und `criticalValue()` machen die verwendeten Kennzahlen sichtbar.
 Grenzen und Streuungen sind bei Series in der gespeicherten SI-Einheit;
 Berichtsspalten müssen diese Einheit ausdrücklich tragen.
+
+## Positive Verteilungen
+
+`Distribution.exponential(mean)` verwendet einen endlichen positiven Mittelwert;
+Mittelwert und Standardabweichung sind beide `mean`. Eine Ziehung verwendet genau
+ein offenes PCG-Uniform und `-mean * log(u)`.
+
+`Distribution.logNormal(logMean, logStandardDeviation)` setzt den natürlichen
+Logarithmus des Zahlenwerts als normalverteilt voraus. Beide Parameter sind
+endlich, die logarithmische Standardabweichung ist nichtnegativ. Der Zahlenwert
+bezieht sich auf die ausdrücklich vom Aufrufer gewählte Einheit; ein Wechsel
+der Einheit verlangt die entsprechende Anpassung von logMean. Eine nicht
+entartete Ziehung exponentiert eine Normalziehung und verbraucht genau zwei
+PCG-Ziehungen. Bei logarithmischer Streuung null wird exp(logMean) ohne
+Zufallsziehung geliefert.
+
+Beide Verteilungen liefern strikt positive endliche Werte. Nicht darstellbare
+positive Werte oder Momente, einschließlich Unterlauf auf null, liefern
+PS_NUMERIC und erhalten Ausgabe sowie RNG. Parametervalidierung ist getrennt
+von der numerischen Darstellbarkeit einer Ziehung oder ihrer Momente.
+Als additives Sensorrauschen haben diese Verteilungen einen positiven Mittelwert;
+der Sensor zieht ihn nicht automatisch ab und behandelt ihn nicht als weitere
+Standardunsicherheit. Die bekannte Modellannahme bleibt ausdrücklich beim Aufrufer.
+
+Die Verteilungen und Momente folgen den NIST-Referenzen zu
+[Exponentialverteilung](https://itl.nist.gov/div898/handbook/eda/section3/eda3667.htm)
+und [Lognormalverteilung](https://itl.nist.gov/div898/handbook/apr/section1/apr164.htm).
+
+
+Die lognormalen Momente werden in einer stabilen logarithmischen Form
+berechnet. Eine große Zwischenvarianz darf nicht allein wegen exp(variance)
+überlaufen; ein sehr kleines logSigma darf durch dessen unterlaufendes Quadrat
+keine darstellbare Standardabweichung verlieren. Dennoch müssen beide
+ausgegebenen Momente als positive/zulässige Double-Werte darstellbar bleiben.
+Numerische Transzendentalfunktionen besitzen keine bitgleiche Zusage zwischen
+verschiedenen libm-Implementierungen.
+
+```c
+ps_distribution waiting_time = {PS_DIST_EXPONENTIAL, 2, 0};
+ps_distribution positive_factor = {PS_DIST_LOGNORMAL, .25, .5};
+```
+
+```physim
+let waitingTime = Distribution.exponential(mean: 2)
+let factor = Distribution.logNormal(logMean: 0.25, logStandardDeviation: 0.5)
+var rng = Rng(42)
+print(rng.sample(waitingTime))
+print(rng.sample(factor))
+```

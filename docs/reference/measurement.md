@@ -15,7 +15,10 @@ Dieses Modul definiert keine zusätzlichen Zahlenkonstanten.
 ### ps_distribution_kind
 
 ```c
-typedef enum { PS_DIST_CONSTANT, PS_DIST_UNIFORM, PS_DIST_NORMAL } ps_distribution_kind;
+typedef enum {
+    PS_DIST_CONSTANT, PS_DIST_UNIFORM, PS_DIST_NORMAL,
+    PS_DIST_EXPONENTIAL, PS_DIST_LOGNORMAL
+} ps_distribution_kind;
 ```
 
 ### ps_distribution
@@ -27,7 +30,7 @@ typedef struct {
 } ps_distribution;
 ```
 
-CONSTANT: a=value, b=0. UNIFORM: a=min, b=max. NORMAL: a=mean, b=stddev.
+CONSTANT: a=value,b=0; UNIFORM: a=min,b=max; NORMAL: a=mean,b=stddev. EXPONENTIAL: a=mean>0,b=0. LOGNORMAL: ln(numeric value)~Normal(a,b), finite log-mean and log-standard-deviation b>=0. Caller chooses the numeric output unit; changing units requires adjusting log-mean.
 
 ## ps_distribution_validate
 
@@ -48,7 +51,7 @@ ps_result ps_distribution_sample(
     double *out);
 ```
 
-Caller seeds the RNG. Constant/degenerate distributions consume no draws. Checked functions leave all outputs, RNGs and sensor state unchanged on error.
+Caller seeds the RNG. Constant/degenerate distributions consume no draws. Exponential uses one open uniform; nondegenerate lognormal uses two draws through Box-Muller. Lognormal b=0 uses no draws. Positive distributions reject overflow/underflow-to-zero with PS_NUMERIC, preserving RNG/output. Their positive mean is not automatically removed when used as additive sensor noise. Checked functions leave all outputs, RNGs and sensor state unchanged on error.
 
 ## ps_distribution_moments
 
