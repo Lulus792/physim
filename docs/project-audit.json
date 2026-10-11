@@ -1867,9 +1867,22 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Mitte: 3D-Viewport.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/design_ui.inc",
+        "app/main.c",
+        "app/timeline_ui.inc",
+        "app/logging_tests.inc",
+        "app/hierarchy_tests.inc",
+        "app/reset_tests.inc",
+        "app/speed_tests.inc",
+        "app/adaptive_tests.inc",
+        "app/step_breakpoint_tests.inc",
+        "tests/check_display_workflow.py",
+        "docs/workspace.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "3D-Viewport in der Mitte des Simulationsbereichs; tatsächlich gerenderte C-/Physim-Szenen und Koordinatenrahmen, gespeicherte Wiedergabe und geometrische Widgetpositionen geprüft. Am 2026-10-11 auf Intel macOS tatsächlich gebaut: 8/8 GUI-Fälle (40 App-Prozesse), abschließende Typografie-/Bediennachprüfung 4/4 (18 App-Prozesse), native Taktung 1/1 und Runner-Taktung/Logging 5/5. Aktuelle Linux-/Windows-/ARM-Ausführung und alle benutzerdefinierten Dockvarianten offen."
     },
     {
       "id": "PP-0283",
@@ -1883,9 +1896,22 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Links oder oben: Szenenhierarchie und Kameraoptionen.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/design_ui.inc",
+        "app/main.c",
+        "app/timeline_ui.inc",
+        "app/logging_tests.inc",
+        "app/hierarchy_tests.inc",
+        "app/reset_tests.inc",
+        "app/speed_tests.inc",
+        "app/adaptive_tests.inc",
+        "app/step_breakpoint_tests.inc",
+        "tests/check_display_workflow.py",
+        "docs/workspace.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Szenenbaum, Darstellungs- und Kameraoptionen im Simulationsbereich links; echte Baumklicks klappen Eltern/Nachfahren auf und schalten Sichtbarkeit ohne Änderung von Zustand oder Daten. Andere Arbeitsbereiche behalten die Inspektoroptionen. Am 2026-10-11 auf Intel macOS tatsächlich gebaut: 8/8 GUI-Fälle (40 App-Prozesse), abschließende Typografie-/Bediennachprüfung 4/4 (18 App-Prozesse), native Taktung 1/1 und Runner-Taktung/Logging 5/5. Aktuelle Linux-/Windows-/ARM-Ausführung und alle benutzerdefinierten Dockvarianten offen."
     },
     {
       "id": "PP-0284",
@@ -1899,9 +1925,22 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Rechts: Parameter, aktuelle Messwerte und Ereignisse.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/design_ui.inc",
+        "app/main.c",
+        "app/timeline_ui.inc",
+        "app/logging_tests.inc",
+        "app/hierarchy_tests.inc",
+        "app/reset_tests.inc",
+        "app/speed_tests.inc",
+        "app/adaptive_tests.inc",
+        "app/step_breakpoint_tests.inc",
+        "tests/check_display_workflow.py",
+        "docs/workspace.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Parameter, ausgewählter Messwert samt Anzeigeeinheit und Kurve sowie begrenzte Ereignisvorschau im rechten Inspektor. Metadatenformular, Einheitenauswahl, Schweregrad, Zeit und bleibende Warnung bei Meldungsflut tatsächlich geprüft. Am 2026-10-11 auf Intel macOS tatsächlich gebaut: 8/8 GUI-Fälle (40 App-Prozesse), abschließende Typografie-/Bediennachprüfung 4/4 (18 App-Prozesse), native Taktung 1/1 und Runner-Taktung/Logging 5/5. Aktuelle Linux-/Windows-/ARM-Ausführung und alle benutzerdefinierten Dockvarianten offen."
     },
     {
       "id": "PP-0285",
@@ -1915,9 +1954,22 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Unten: Zeitleiste, Log und Steuerung.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/design_ui.inc",
+        "app/main.c",
+        "app/timeline_ui.inc",
+        "app/logging_tests.inc",
+        "app/hierarchy_tests.inc",
+        "app/reset_tests.inc",
+        "app/speed_tests.inc",
+        "app/adaptive_tests.inc",
+        "app/step_breakpoint_tests.inc",
+        "tests/check_display_workflow.py",
+        "docs/workspace.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Zeitleiste und Laufsteuerung unter dem mittleren Viewport, Protokollbereich unten; echte Start-/Pause-/Schritt-/Reset-/Stop-/Geschwindigkeitsaktionen und Wiedergabe geprüft. Viewport nutzt die verfügbare Panehöhe; große Schrift erhält breitere Wiedergabeschaltfläche. Am 2026-10-11 auf Intel macOS tatsächlich gebaut: 8/8 GUI-Fälle (40 App-Prozesse), abschließende Typografie-/Bediennachprüfung 4/4 (18 App-Prozesse), native Taktung 1/1 und Runner-Taktung/Logging 5/5. Aktuelle Linux-/Windows-/ARM-Ausführung und alle benutzerdefinierten Dockvarianten offen."
     },
     {
       "id": "PP-0289",
@@ -1931,9 +1983,22 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Start, Pause, Fortsetzen, Stoppen.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/design_ui.inc",
+        "app/main.c",
+        "app/timeline_ui.inc",
+        "app/logging_tests.inc",
+        "app/hierarchy_tests.inc",
+        "app/reset_tests.inc",
+        "app/speed_tests.inc",
+        "app/adaptive_tests.inc",
+        "app/step_breakpoint_tests.inc",
+        "tests/check_display_workflow.py",
+        "docs/workspace.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Start, Pause, Fortsetzen und Stoppen über tatsächliche Widgets/Shortcuts mit C-/Physim-Runnern geprüft; Daten und vorherige Läufe bleiben erhalten. Auch Stoppen vor HELLO und Runner-Initialisierung sind in der Tastaturgruppe enthalten. Am 2026-10-11 auf Intel macOS tatsächlich gebaut: 8/8 GUI-Fälle (40 App-Prozesse), abschließende Typografie-/Bediennachprüfung 4/4 (18 App-Prozesse), native Taktung 1/1 und Runner-Taktung/Logging 5/5. Aktuelle Linux-/Windows-/ARM-Ausführung und alle benutzerdefinierten Dockvarianten offen."
     },
     {
       "id": "PP-0290",
@@ -1947,9 +2012,22 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Einzelschritt.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/design_ui.inc",
+        "app/main.c",
+        "app/timeline_ui.inc",
+        "app/logging_tests.inc",
+        "app/hierarchy_tests.inc",
+        "app/reset_tests.inc",
+        "app/speed_tests.inc",
+        "app/adaptive_tests.inc",
+        "app/step_breakpoint_tests.inc",
+        "tests/check_display_workflow.py",
+        "docs/workspace.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Tatsächlicher Maus-/F8-Einzelschritt in pausierten festen/adaptiven C-/Physim-Läufen; genau ein fester beziehungsweise ein akzeptierter adaptiver Schritt, fortgesetzte Pause und gespeicherte Daten geprüft. Am 2026-10-11 auf Intel macOS tatsächlich gebaut: 8/8 GUI-Fälle (40 App-Prozesse), abschließende Typografie-/Bediennachprüfung 4/4 (18 App-Prozesse), native Taktung 1/1 und Runner-Taktung/Logging 5/5. Aktuelle Linux-/Windows-/ARM-Ausführung und alle benutzerdefinierten Dockvarianten offen."
     },
     {
       "id": "PP-0291",
@@ -1963,9 +2041,22 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Zurücksetzen auf Anfangszustand.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/design_ui.inc",
+        "app/main.c",
+        "app/timeline_ui.inc",
+        "app/logging_tests.inc",
+        "app/hierarchy_tests.inc",
+        "app/reset_tests.inc",
+        "app/speed_tests.inc",
+        "app/adaptive_tests.inc",
+        "app/step_breakpoint_tests.inc",
+        "tests/check_display_workflow.py",
+        "docs/workspace.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Tatsächliches Zurücksetzen startet einen frischen pausierten Anfangszustand in einer neuen Datei; gleiche erste Werte/Schritte, Seed/Parameter und alte Datei erhalten. C, Physim, Parameterfall und hängender Runner, fehlgeschlagener Start und Wiederholung geprüft. Am 2026-10-11 auf Intel macOS tatsächlich gebaut: 8/8 GUI-Fälle (40 App-Prozesse), abschließende Typografie-/Bediennachprüfung 4/4 (18 App-Prozesse), native Taktung 1/1 und Runner-Taktung/Logging 5/5. Aktuelle Linux-/Windows-/ARM-Ausführung und alle benutzerdefinierten Dockvarianten offen."
     },
     {
       "id": "PP-0292",
@@ -1979,9 +2070,16 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Simulationsgeschwindigkeit unabhängig von der Rendergeschwindigkeit.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "incomplete",
+      "evidence": [
+        "src/pacing.c",
+        "runners/experiment.c",
+        "tests/test_pacing.c",
+        "tests/test_runner_pacing.c",
+        "app/speed_tests.inc",
+        "docs/platform-validation.md"
+      ],
+      "note": "Eigene Runner-Taktung, Pause, Live-Geschwindigkeitswechsel und Offline-Modus implementiert; alle 201 Referenzzeitpunkte/Kanalwerte bei unterschiedlichen Geschwindigkeiten und verzögertem Leser identisch. Native und GUI-Geschwindigkeitstests bestehen auf Intel macOS. Die strengere Unabhängigkeit von blockiertem Rendering bleibt unvollständig: Vorschauübertragung verwendet fwrite/fflush synchron im Runner-Physikpfad; ein voller IPC-Ausgabekanal kann den Runner bremsen. Numerische Gleichheit und begrenztes Scheduling-Aufholen beweisen keine vollständige Entkopplung. Vorschau-Backpressure muss noch separat umgesetzt und mit blockiertem Empfänger geprüft werden."
     },
     {
       "id": "PP-0293",
@@ -1995,9 +2093,22 @@
       "kind": "list",
       "scope": "planned",
       "text": "- feste oder adaptive Simulationsschritte.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/design_ui.inc",
+        "app/main.c",
+        "app/timeline_ui.inc",
+        "app/logging_tests.inc",
+        "app/hierarchy_tests.inc",
+        "app/reset_tests.inc",
+        "app/speed_tests.inc",
+        "app/adaptive_tests.inc",
+        "app/step_breakpoint_tests.inc",
+        "tests/check_display_workflow.py",
+        "docs/workspace.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Feste und adaptive Schritte im UI mit echten C-/Physim-Modulen gebaut und bedient. Grenzen/ungültige Einstellungen, Pause, akzeptierter Einzelschritt, Reset, gespeicherte Einstellungen und Replay geprüft. Am 2026-10-11 auf Intel macOS tatsächlich gebaut: 8/8 GUI-Fälle (40 App-Prozesse), abschließende Typografie-/Bediennachprüfung 4/4 (18 App-Prozesse), native Taktung 1/1 und Runner-Taktung/Logging 5/5. Aktuelle Linux-/Windows-/ARM-Ausführung und alle benutzerdefinierten Dockvarianten offen."
     },
     {
       "id": "PP-0294",
@@ -2187,9 +2298,22 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Die UI zeigt aktuelle Werte, kleine Live-Kurven und Warnungen.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/design_ui.inc",
+        "app/main.c",
+        "app/timeline_ui.inc",
+        "app/logging_tests.inc",
+        "app/hierarchy_tests.inc",
+        "app/reset_tests.inc",
+        "app/speed_tests.inc",
+        "app/adaptive_tests.inc",
+        "app/step_breakpoint_tests.inc",
+        "tests/check_display_workflow.py",
+        "docs/workspace.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Aktueller Wert, Anzeigeeinheit und kleine Kurve rechts; Sensorstatusbehandlung bleibt erhalten. Neueste acht Laufmeldungen mit Zeit/Schweregrad und letzte Warnung/Fehler sichtbar. Meldungsflut erhält Warnung und persistierte Daten; Reset startet neue Vorschau, vorherige Datei bytegenau erhalten. Am 2026-10-11 auf Intel macOS tatsächlich gebaut: 8/8 GUI-Fälle (40 App-Prozesse), abschließende Typografie-/Bediennachprüfung 4/4 (18 App-Prozesse), native Taktung 1/1 und Runner-Taktung/Logging 5/5. Aktuelle Linux-/Windows-/ARM-Ausführung und alle benutzerdefinierten Dockvarianten offen."
     },
     {
       "id": "PP-0312",

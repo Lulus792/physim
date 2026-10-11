@@ -129,7 +129,7 @@ static void parameter_form_view(app *a) {
     struct nk_context *ui=a->ui;
     if(!a->built || !a->parameters.count)return;
     struct nk_rect content=nk_window_get_content_region(ui);
-    bool expanded=nk_tree_state_push(ui, NK_TREE_TAB, "Experimentparameter", &a->parameter_disclosure);
+    bool expanded=nk_tree_state_push(ui, NK_TREE_TAB, "Parameter", &a->parameter_disclosure);
     struct nk_panel *layout=ui->current->layout;
     a->parameter_header_bounds=nk_rect(content.x,layout->at_y-(float)*layout->offset_y,content.w,
                                       ui->style.font->height+2*ui->style.tab.padding.y);
@@ -176,9 +176,104 @@ static void parameter_form_view(app *a) {
         nk_tree_pop(ui);
     }
 }
-static void camera_inspector(app *a) {
-    struct nk_context *ui = a->ui;
-    parameter_form_view(a);
+static ps_display_unit channel_display_unit(app *a,const ps_channel *ch);
+static void channel_unit_open(app *a,const ps_channel *ch);
+static void channel_display_text(const ps_display_unit *u,double value,char *text,size_t size);
+static bool channel_display_values(const ps_display_unit *u,const double *source,size_t n,double *out);
+static void live_measurements_view(app *a) {
+    struct nk_context *ui=a->ui;
+    nk_layout_row_dynamic(ui,28,1);
+    a->live_measurement_bounds=nk_widget_bounds(ui);
+    nk_label(ui,"Messwerte",NK_TEXT_LEFT);
+    nk_layout_row_dynamic(ui, 28, 1);
+    if (a->channel_count) {
+        const char *names[PS_MAX_CHANNELS];char labels[PS_MAX_CHANNELS][128];
+        for (uint32_t i = 0; i < a->channel_count; i++) {
+            ps_display_unit label_unit=channel_display_unit(a,&a->live_channels[i]);
+            snprintf(labels[i],sizeof labels[i],"%s [%s]",a->live_channels[i].name,label_unit.symbol);
+            names[i]=labels[i];
+        }
+        if (a->plot_channel >= (int)a->channel_count)
+            a->plot_channel = 0;
+        a->plot_channel = nk_combo(ui, names, (int)a->channel_count, a->plot_channel, 26,
+                                   nk_vec2(280, 240));
+        nk_layout_row_dynamic(ui,28,2);
+        a->channel_unit_buttons[0]=nk_widget_bounds(ui);
+        if(nk_button_label(ui,"Einheit …"))channel_unit_open(a,&a->live_channels[a->plot_channel]);
+        ps_display_unit unit=channel_display_unit(a,&a->live_channels[a->plot_channel]);
+        char value[96];
+        const double *shown = display_values(a);
+        channel_display_text(&unit,shown[a->plot_channel],value,sizeof value);
+        int mask = a->channel_status[a->plot_channel];
+        if (mask >= 0 && shown[mask] != 1)
+            snprintf(value, sizeof value, "%s",
+                     shown[mask] == 2 ? "Messung ausgefallen" : "Keine neue Messung");
+        nk_label(ui, value, NK_TEXT_RIGHT);
+        double displayed[PREVIEW];
+        bool represented=channel_display_values(&unit,a->history_v[a->plot_channel],a->history_count,displayed);
+        char title[160];snprintf(title,sizeof title,"Live-Messwerte [%s]%s",unit.symbol,represented?"":" · Werte nicht darstellbar");
+        plot(a, a->history_t, displayed, a->history_count, 150,
+             title, mask >= 0, NULL);
+    } else {
+        nk_label_wrap(ui,"Messwerte erscheinen während des Laufs.");
+
+    }
+    if (a->runner.running && ps_clock() - a->heartbeat > 3) {
+        nk_layout_row_dynamic(ui, 28, 1);
+        nk_label_colored(ui, "Keine Antwort. Mit Stoppen den Lauf beenden.", NK_TEXT_LEFT,
+                         UI_COLOR(error));
+    }
+}
+static const char *live_event_level(ps_log_level level) {
+    return level==PS_LOG_ERROR?"Fehler":level==PS_LOG_WARNING?"Warnung":level==PS_LOG_INFO?"Info":"Debug";
+}
+static void live_event_text(app *a,const ps_log_record *record) {
+    struct nk_context *ui=a->ui;char heading[96];
+    snprintf(heading,sizeof heading,"%s · %.6g s",live_event_level(record->level),record->time_s);
+    nk_layout_row_dynamic(ui,24,1);nk_label_colored(ui,heading,NK_TEXT_LEFT,
+        record->level>=PS_LOG_WARNING?UI_COLOR(error):muted());
+    char text[4*PS_LOG_MESSAGE_MAX+1];size_t used=0;
+    for(size_t i=0;record->message[i];i++) {
+        if(record->message[i]=='\t'){memcpy(text+used,"    ",4);used+=4;}
+        else if(record->message[i]=='\r'){text[used++]='\n';if(record->message[i+1]=='\n')i++;}
+        else text[used++]=record->message[i];
+    }
+    text[used]=0;float width=fmaxf(40,nk_window_get_content_region(ui).w-16);
+    nk_layout_row_dynamic(ui,documentation_height(a->font_ui,text,used,width)+8,1);
+    struct nk_rect bounds;
+    if(nk_widget(&bounds,ui)!=NK_WIDGET_INVALID) {
+        size_t at=0;float y=bounds.y+4;
+        do{size_t length,consumed=documentation_line(a->font_ui,text+at,used-at,width,&length);
+            nk_draw_text(nk_window_get_canvas(ui),nk_rect(bounds.x+8,y,width,a->font_ui->height+6),
+                         text+at,(int)length,a->font_ui,nk_rgba(0,0,0,0),UI_COLOR(text));
+            at+=consumed;y+=a->font_ui->height+6;
+        }while(at<used);
+    }
+}
+static void live_events_view(app *a) {
+    struct nk_context *ui=a->ui;
+    a->live_warning_bounds=nk_rect(0,0,0,0);
+    if(a->live_warning_valid) {
+        nk_layout_row_dynamic(ui,100,1);a->live_warning_bounds=nk_widget_bounds(ui);
+        if(nk_group_begin(ui,"live-warning",NK_WINDOW_BORDER)){live_event_text(a,&a->live_warning);nk_group_end(ui);}
+    }
+    bool large=a->preferences.ui_size>=20;
+    nk_layout_row_dynamic(ui,28,large?1:2);nk_label(ui,"Ereignisse",NK_TEXT_LEFT);
+    if(large)nk_layout_row_dynamic(ui,28,1);
+    if(nk_button_label(ui,"Protokoll")){a->show_log=true;dock_show(a,PS_DOCK_LOG);}
+    if(!a->live_event_count){nk_layout_row_dynamic(ui,38,1);nk_label_wrap(ui,"Noch keine Experimentmeldungen.");return;}
+    nk_layout_row_dynamic(ui,140,1);a->live_event_bounds=nk_widget_bounds(ui);
+    if(nk_group_scrolled_offset_begin(ui,&a->live_event_scroll_x,&a->live_event_scroll_y,"live-events",NK_WINDOW_BORDER)) {
+        for(unsigned i=a->live_event_count;i>0;i--)live_event_text(a,&a->live_events[i-1]);
+        nk_group_end(ui);
+    }
+    if(a->live_event_omitted) {
+        char note[128];snprintf(note,sizeof note,"%llu ältere Meldungen in der Protokolldatei.",(unsigned long long)a->live_event_omitted);
+        nk_layout_row_dynamic(ui,48,1);nk_label_wrap(ui,note);
+    }
+}
+static void scene_controls_view(app *a) {
+    struct nk_context *ui=a->ui;
     scene_selection_sync(a);
     if (a->scene_selected && a->scene_selected_slot < display_scene(a)->count) {
         char selected[96];
@@ -265,6 +360,12 @@ static void camera_inspector(app *a) {
                           "Alt + Bild auf/ab: zoomen. Alt + Pos1: Standard.");
         nk_tree_pop(ui);
     }
+}
+static void camera_inspector(app *a) {
+    struct nk_context *ui=a->ui;
+    parameter_form_view(a);
+    if(a->tab==1){if(!a->analysis_only){live_measurements_view(a);live_events_view(a);}}
+    else scene_controls_view(a);
     a->breakpoint_input_active=false;
     if (nk_tree_state_push(ui, NK_TREE_TAB, "Laufeinstellungen", &a->steps_disclosure)) {
         nk_layout_row_dynamic(ui, 24, 1);
@@ -341,6 +442,7 @@ static void camera_inspector(app *a) {
 static void sidebar_panel(app *a) {
     struct nk_context *ui=a->ui;
     if (dock_begin(a, PS_DOCK_SIDEBAR)) {
+        if(a->loaded && a->tab==1 && !a->project_manager)scene_controls_view(a);
         {
             if (nk_tree_state_push(ui, NK_TREE_TAB, "Workspace", &a->workspace_disclosure)) {
                 if (a->workspace_open) {
@@ -690,6 +792,9 @@ static void workspace_panel(app *a) {
             nk_label_colored(ui, time, NK_TEXT_RIGHT, muted());
             nk_layout_row_end(ui);
             bool compact_controls=nk_window_get_content_region(ui).w<480;
+            viewport(a,fmaxf(96,nk_window_get_content_region(ui).h-252-(a->preferences.ui_size>=20?80:0)-(compact_controls?34:0)-
+                       (nk_window_get_content_region(ui).w<560?30:0)));
+            timeline_controls(a);
             nk_layout_row_dynamic(ui, 34, compact_controls?2:3);
             a->run_control_bounds[0] = nk_widget_bounds(ui);
             nk_begin_disabled(ui, a->runner.running || !idle(a));
@@ -762,48 +867,6 @@ static void workspace_panel(app *a) {
                 nk_combo_end(ui);
             }
             nk_end_disabled(ui);
-            float plot_height = fmaxf(96, content * .21f);
-            viewport(a,fmaxf(160,content-plot_height-308-(compact_controls?34:0)-
-                       (nk_window_get_content_region(ui).w<560?30:0)));
-            timeline_controls(a);
-            nk_layout_row_dynamic(ui, 28, 3);
-            if (a->channel_count) {
-                const char *names[PS_MAX_CHANNELS];char labels[PS_MAX_CHANNELS][128];
-                for (uint32_t i = 0; i < a->channel_count; i++) {
-                    ps_display_unit label_unit=channel_display_unit(a,&a->live_channels[i]);
-                    snprintf(labels[i],sizeof labels[i],"%s [%s]",a->live_channels[i].name,label_unit.symbol);
-                    names[i]=labels[i];
-                }
-                if (a->plot_channel >= (int)a->channel_count)
-                    a->plot_channel = 0;
-                a->plot_channel = nk_combo(ui, names, (int)a->channel_count, a->plot_channel, 26,
-                                           nk_vec2(280, 240));
-                a->channel_unit_buttons[0]=nk_widget_bounds(ui);
-                if(nk_button_label(ui,"Einheit …"))channel_unit_open(a,&a->live_channels[a->plot_channel]);
-                ps_display_unit unit=channel_display_unit(a,&a->live_channels[a->plot_channel]);
-                char value[96];
-                const double *shown = display_values(a);
-                channel_display_text(&unit,shown[a->plot_channel],value,sizeof value);
-                int mask = a->channel_status[a->plot_channel];
-                if (mask >= 0 && shown[mask] != 1)
-                    snprintf(value, sizeof value, "%s",
-                             shown[mask] == 2 ? "Messung ausgefallen" : "Keine neue Messung");
-                nk_label(ui, value, NK_TEXT_RIGHT);
-                double displayed[PREVIEW];
-                bool represented=channel_display_values(&unit,a->history_v[a->plot_channel],a->history_count,displayed);
-                char title[160];snprintf(title,sizeof title,"Live-Messwerte [%s]%s",unit.symbol,represented?"":" · Werte nicht darstellbar");
-                plot(a, a->history_t, displayed, a->history_count, plot_height,
-                     title, mask >= 0, NULL);
-            } else {
-                nk_label_colored(ui, "Messwerte erscheinen während des Laufs.", NK_TEXT_LEFT,
-                                 muted());
-                nk_spacer(ui);nk_spacer(ui);
-            }
-            if (a->runner.running && ps_clock() - a->heartbeat > 3) {
-                nk_layout_row_dynamic(ui, 28, 1);
-                nk_label_colored(ui, "Keine Antwort. Mit Stoppen den Lauf beenden.", NK_TEXT_LEFT,
-                                 UI_COLOR(error));
-            }
         } else {
             nk_layout_row_dynamic(ui, 34, 2);
             nk_style_push_font(ui, a->font_title);

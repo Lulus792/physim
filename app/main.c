@@ -265,6 +265,12 @@ typedef struct {
     unsigned library_visible_count;
     ps_process job, runner;
     ps_parameter_catalog parameters;
+    ps_log_record live_events[8],live_warning;
+    unsigned live_event_count;
+    uint64_t live_event_omitted;
+    bool live_warning_valid;
+    nk_uint live_event_scroll_x,live_event_scroll_y;
+    struct nk_rect live_measurement_bounds,live_event_bounds,live_warning_bounds;
     enum nk_collapse_states parameter_disclosure;
     struct nk_rect parameter_header_bounds,parameter_input_bounds[PS_MAX_PARAMETERS],parameter_default_bounds[PS_MAX_PARAMETERS];
     ps_app_profile *profiler;
@@ -877,6 +883,7 @@ static void clear_project(app *a) {
     memset(&a->build_info, 0, sizeof a->build_info);
     a->project_settings_dirty = false;
     memset(&a->parameters, 0, sizeof a->parameters);
+    a->live_event_count=0;a->live_event_omitted=0;a->live_warning_valid=false;
     a->language_experiment = a->language_analysis = a->analysis_only = false;
     a->selected_count = a->channel_count = 0;
     a->history_count = 0;
@@ -1331,6 +1338,8 @@ static bool start_run_mode(app *a, bool paused) {
         return false;
     }
     if (ps_process_start_limited(&a->runner, args, a->project, &limits)) {
+        a->live_event_count=0;a->live_event_omitted=0;a->live_warning_valid=false;
+        a->live_event_scroll_x=a->live_event_scroll_y=0;
         a->profile_runner_recorded = false;
         snprintf(a->reset_previous_run, sizeof a->reset_previous_run, "%s", a->last_run);
         snprintf(a->last_run, sizeof a->last_run, "%s", next_run);
@@ -1819,6 +1828,12 @@ static void pump(app *a) {
             } else if(type==PS_MSG_LOG) {
                 ps_log_record record;
                 if(!ps_wire_log_decode(p,n,&record)){r=-1;break;}
+                if(a->live_event_count==sizeof a->live_events/sizeof *a->live_events) {
+                    memmove(a->live_events,a->live_events+1,(a->live_event_count-1)*sizeof *a->live_events);
+                    a->live_event_count--;a->live_event_omitted++;
+                }
+                a->live_events[a->live_event_count++]=record;
+                if(record.level>=PS_LOG_WARNING){a->live_warning=record;a->live_warning_valid=true;}
                 log_line(a,"Experiment [%s, t=%.17g s]: %s",ps_log_level_name(record.level),record.time_s,record.message);
             } else if(type==PS_MSG_DIAGNOSTIC) {
                 ps_diagnostic record;if(ps_diagnostic_decode(p,n,&record)!=PS_OK){r=-1;break;}
@@ -3465,7 +3480,7 @@ int main(int argc, char **argv) {
              * Keep its bounded keyboard assertions; allow their extra wall time. */
             if (ps_clock() - test_started >
                 (!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
-                  !strncmp(argv[3], "isolation-", 10) || !strncmp(argv[3], "breakpoints-", 12) || !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || (!strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"pendulum-medium-",16)) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strcmp(argv[3],"logging-c") || !strcmp(argv[3],"logging-phys") || !strcmp(argv[3],"logging-flood") || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
+                  !strncmp(argv[3], "isolation-", 10) || !strncmp(argv[3], "breakpoints-", 12) || !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || (!strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"pendulum-medium-",16)) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strncmp(argv[3],"logging-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15))) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
                         argv[3], ps_clock() - test_started);

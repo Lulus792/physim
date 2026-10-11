@@ -3851,3 +3851,84 @@ Ausführung dieser Änderung sowie alle Schrift- und Dockvarianten sind
 noch offen. Die laufende Linux-Paketprüfung des vorherigen Commits
 `80972a1` und dessen noch ausstehende C17-Matrix ersetzen diese Prüfung
 nicht. Der Gesamtplan bleibt offen.
+
+
+## Simulationslayout, Live-Werte und Laufereignisse
+
+Am 11. Oktober 2026 folgt der Simulationsbereich dem Planlayout: Szenenbaum,
+Darstellung und Kameraoptionen links, 3D-Viewport in der Mitte, Parameter
+sowie Live-Messwert, Anzeigeeinheit, Kurve und Laufereignisse rechts.
+Zeitleiste und Laufsteuerung liegen unter dem Viewport; der Protokollbereich
+bleibt unten. Individuelle Dockanordnungen sind weiterhin möglich. Die
+Live-Anzeige benutzt denselben Kanal und dieselbe Einheitenkonvertierung
+wie zuvor, die Messdatei bleibt SI. Die Viewporthöhe berücksichtigt die
+tatsächlich verfügbare Panehöhe und große Schrift. Der Parameterabschnitt
+heißt jetzt kurz „Parameter“; Wiedergabe und Protokollbutton vermeiden
+die in echten 22-Punkt-Ansichten beobachteten ungünstigen Wortumbrüche.
+
+Die App besitzt eine Vorschau der neuesten acht validierten Experiment-
+meldungen. Eine zusätzliche letzte Warnung/Fehlermeldung bleibt bestehen,
+auch wenn Debugmeldungen die Acht-Eintrag-Liste verdrängen. Schweregrad
+und Simulationszeit werden angezeigt. Der Textrenderer berücksichtigt
+UTF-8, Zeilenumbrüche, CRLF und als Leerraum dargestellte Tabulatoren.
+Die archivierte .pslog-Datei und Loggerbudget/Unterdrückungszusammenfassung
+werden durch diese Vorschau nicht geändert. Ein erfolgreich gestarteter
+neuer Runner und Projektwechsel leeren die Vorschau; Reset erzeugt wie
+bisher einen neuen Lauf.
+
+Die erste Regression besteht **5/5** unter
+`build/current-release-mac/test-results/run-i1wte4hg`, Log
+`build/current-simulation-layout-actions-mac.log`: Hierarchie, Inspektor,
+Einheitenwechsel, Logging und Parameterformular. Die anschließend erweiterte
+Gesamtgruppe besteht **8/8**, Ergebnisse
+`build/current-release-mac/test-results/run-pjt375za`, Log
+`build/current-simulation-layout-final-mac.log`. Ihre **40 echten App-
+Prozesse** prüfen `reset_workflow`, `speed_workflow`, `hierarchy_workflow`,
+`adaptive_workflow`, `logging_workflow`, `scene_frames_workflow`,
+`runner_keyboard_workflow` und `live_inspector_22_workflow`. Tatsächliche
+Widgets/Shortcuts bedienen Start, Pause/Fortsetzen, Schritt, Stop und Reset
+in C/Physim. Feste/adaptive Daten, Parameter-/Seed-Erhaltung, hängende
+Initialisierung und fehlgeschlagene Resetstarts, kleine/große Fenster,
+Zeitleistenwiedergabe und Koordinatenrahmen sind enthalten. Die neuen
+Geometrieprüfungen lokalisieren den Szenenbaum links, Live-Werte rechts
+und Steuerung unter dem Viewport. Baumklicks erhalten den Snapshot und
+die archivierte Datei. Der gemeinsame Scroll-Klickhelper verwendet nun
+den tatsächlich betroffenen Bereich, einschließlich unverändert rechts
+verbliebener Lauf- und Haltepunkteinstellungen.
+
+Nach den abschließenden Typografieanpassungen bestehen **4/4** weitere
+Fälle mit **18 App-Prozessen**: Geschwindigkeit, Logging, Parameterformular
+und große Live-Ansicht, Ergebnisse
+`build/current-release-mac/test-results/run-uvq9urtx`, Log
+`build/current-simulation-layout-typography-mac.log`. C/Physim und eine
+5000-Meldungen-Probe zeigen dieselben zwei gespeicherten Samples
+(0 s/142, 0.25 s/142.25). Mehr als 4000 aus der UI-Vorschau verdrängte
+Meldungen entfernen deren Warnung nicht; die Protokolldatei enthält weiterhin
+die budgetierten 4096 Meldungen samt Unterdrückungszusammenfassung.
+Die 22-Punkt-Fälle setzen danach tatsächlich zurück, zeigen 142 bei 0 s
+ohne alte Warnung und ohne alte Verdrängungszahl und erhalten die vorherige
+Messdatei per CRC. Reale Fensterbilder unter
+`build/current-simulation-layout-preview` wurden auf normale/große Schrift,
+mehrzeilige Warnung, Steuerung und linken Szenenbaum visuell geprüft.
+
+Die native Taktung besteht **1/1** unter
+`build/current-headless-mac/test-results/run-63gg7dn_`, Log
+`build/current-simulation-layout-native-mac.log`. Runner-Taktung und
+Logging bestehen **5/5** unter
+`build/current-headless-mac/test-results/run-sybmsbba`, Log
+`build/current-simulation-layout-runner-mac.log`. C-/Physim-Runner vergleichen
+alle ersten **201** Zeitpunkte und Kanalwerte mit dem Offline-Referenzlauf
+bei 0.5×, 4×, Offline und verzögertem Leser. Pause, Live-Geschwindigkeits-
+wechsel, einzelner Schritt, begrenztes Scheduling-Aufholen, große Schritte
+und ungültige Geschwindigkeiten sind ebenfalls geprüft.
+
+PP-0282/0283/0284/0285, PP-0289/0290/0291/0293 und PP-0311 besitzen damit
+begrenzte konkrete Intel-macOS-Nachweise. PP-0292 bleibt **incomplete**:
+`send_message` verwendet fwrite/fflush synchron; ein blockierter Vorschau-
+Empfänger kann die Runner-Schleife bremsen. Identische Zahlenfolgen und
+separate Taktung beweisen keine vollständige Unabhängigkeit des Durchsatzes
+vom Rendering. Eine asynchrone/begrenzt ausdünnbare Vorschauübertragung
+mit zuverlässigen Steuerungs-/Lognachrichten und vollständig erhaltenem
+Messstrom ist als nächster konkreter Teil noch offen. Aktuelle Linux-/
+Windows-/ARM-Ausführung dieser Änderung und alle benutzerdefinierten
+Dockvarianten sind nicht abgenommen.

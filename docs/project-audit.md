@@ -894,3 +894,23 @@ Inspektor-, Projekt- und API-Referenzregressionen bestehen.
 Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **69 implemented**, **13 incomplete**, **449 unverified**;
 `completion_proven` bleibt `false`.
+
+
+## Simulationslayout, Live-Werte und Laufsteuerung (§6.2)
+
+PP-0282/0283/0284/0285 und PP-0311 sind konkret belegt: Szene/Kamera
+links, 3D-Viewport in der Mitte, Parameter/Werte/Kurve/Ereignisse rechts
+und Zeitleiste/Steuerung/Protokoll unten. Warnungen bleiben bei Meldungsflut
+sichtbar; die begrenzte Vorschau verändert weder Messdatei noch Protokoll.
+PP-0289/0290/0291/0293 besitzen tatsächliche C-/Physim-Bediennachweise
+für Start/Pause/Fortsetzen/Stop, Einzelschritt, Reset und feste/adaptive
+Schritte. Native und GUI-Prüfungen sowie Fensterbilder sind ausgewertet.
+[Nachweise und Grenzen](platform-validation.md#simulationslayout-live-werte-und-laufereignisse).
+
+PP-0292 bleibt ausdrücklich **incomplete**: numerische Gleichheit bei
+verschiedenen Geschwindigkeiten ist belegt, die synchrone Vorschauausgabe
+kann bei vollem IPC-Kanal aber den Runner bremsen. Der Gesamtplan verlangt
+noch eine stärkere Entkopplung.
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**78 implemented**, **14 incomplete**, **439 unverified**;
+`completion_proven` bleibt `false`.

@@ -8,7 +8,8 @@ static bool hierarchy_test_start(app *a,const char *root,const char *mode) {
     a->dt=.01;a->project_settings_dirty=true;select_build_profile(a,1);return true;
 }
 static bool hierarchy_test_click(app *a,struct nk_rect r) {
-    struct nk_rect panel=a->dock_panels[PS_DOCK_INSPECTOR];
+    struct nk_rect panel=a->dock_panels[PS_DOCK_INSPECTOR],sidebar=a->dock_panels[PS_DOCK_SIDEBAR];
+    if(r.x>=sidebar.x && r.x+r.w<=sidebar.x+sidebar.w)panel=sidebar;
     if(r.y<panel.y+32 || r.y+r.h>panel.y+panel.h-12) {
         test_plot_wheel(a,panel.x+panel.w/2,panel.y+panel.h/2,r.y<panel.y+32?1:-1);return false;
     }
@@ -43,6 +44,7 @@ static void hierarchy_test_frame(app *a,const char *mode,int *stage,int *code,co
     case 3: test_mouse(a,a->run_control_bounds[1],false);break;
     case 4: {
         if(!a->paused) return;
+        ok=a->scene_visibility_bounds[root].x+a->scene_visibility_bounds[root].w<=a->scene_viewport_bounds.x;
         held=a->simulation_time;ps_snapshot snapshot={.time=held,.count=a->channel_count,.scene=a->scene,.paused=true};
         memcpy(snapshot.values,a->values,sizeof snapshot.values);crc=timeline_test_crc(&snapshot);
         *capture="hierarchy-expanded.bmp";break;

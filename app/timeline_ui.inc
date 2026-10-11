@@ -29,7 +29,8 @@ static void timeline_controls(app *a) {
     a->timeline_bounds[2] = nk_widget_bounds(ui);
     nk_begin_disabled(ui, !ready);
     if (action_button(ui, a->runner.running ? "Live" : "Letzter", !a->timeline_browsing)) timeline_live(a);
-    nk_layout_row_push(ui,compact?112:.20f);
+    float play_width=fmaxf(112,a->font_ui->width(a->font_ui->userdata,a->font_ui->height,"Abspielen",9)+2*ui->style.button.padding.x+8);
+    nk_layout_row_push(ui,compact?play_width:.20f);
     a->timeline_bounds[3] = nk_widget_bounds(ui);
     nk_begin_disabled(ui, count < 2);
     if (nk_button_label(ui, a->timeline_playing ? "Anhalten" : "Abspielen"))

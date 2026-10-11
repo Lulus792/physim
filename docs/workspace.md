@@ -322,7 +322,13 @@ die Wiederherstellung an. Extern geänderte Dateien werden als Konflikt angezeig
 
 ## Simulation steuern
 
-Nach einem erfolgreichen Build erscheint **Experimentparameter** als eigener
+Im Bereich **Simulieren** stehen Szenenbaum, Darstellung und Kameraoptionen
+in der linken Seitenleiste. In der Mitte liegt der 3D-Viewport; Zeitleiste und
+Laufsteuerung stehen darunter. Rechts zeigt der Inspektor Experimentparameter,
+ausgewählte Messwerte und eine kleine Kurve. Das Protokoll bleibt im unteren
+Bereich erreichbar. Alle Bereiche lassen sich weiterhin verschieben.
+
+Nach einem erfolgreichen Build erscheint **Parameter** als eigener
 Abschnitt im Inspektor, wenn das Experiment Parameter deklariert. Namen,
 Beschreibungen, Standardwerte, Grenzen und Anzeigeeinheiten stammen aus
 dessen Metadaten. Klicke in ein Feld, markiere mit **Ctrl+A / Cmd+A** und
@@ -420,6 +426,10 @@ ihr letzter Block nur teilweise geschrieben wurde.
 
 ## Szene untersuchen
 
+Im Simulationsbereich findest du **Szeneneinträge**, **Darstellung** und
+**Kamera** links. In den übrigen Arbeitsbereichen bleiben diese Optionen im
+Inspektor.
+
 - Rechte Maustaste ziehen: Kamera um das Ziel drehen.
 - Mittlere Maustaste ziehen: Kameraziel verschieben.
 - Mausrad: heran- oder herauszoomen.
@@ -437,6 +447,24 @@ bleibt erhalten. Die Auswahl eines Objekts öffnet seinen Weg im Baum. Szene und
 Messdaten bleiben beim Umordnen der Anzeige unverändert. Alte aufgezeichnete
 Szenen ohne Beziehungen erscheinen als flache Liste.
 [Kameratastatur und Darstellung](settings.md)
+
+### Live-Werte und Laufereignisse
+
+Im rechten Inspektor wählst du den Messkanal und seine Anzeigeeinheit.
+Wert und kleine Kurve verwenden dieselbe Einheit; die Messdatei behält ihre
+SI-Werte. Sensorstatusmeldungen ersetzen einen Wert, wenn eine Messung
+ausgefallen oder noch nicht neu ist. Die Zeitleiste kann weiterhin frühere
+Zustände anzeigen.
+
+**Ereignisse** zeigt die jüngsten acht Experimentmeldungen mit Schweregrad
+und Simulationszeit. Die letzte Warnung oder Fehlermeldung bleibt zusätzlich
+sichtbar, auch wenn spätere Debugmeldungen sie aus dieser Vorschau verdrängen.
+Zeilenumbrüche und Tabulatoren bleiben lesbar. **Protokoll** öffnet die
+vollständige Textansicht; die `.pslog`-Datei gehört zum gespeicherten Lauf.
+Der Hinweis auf ältere Meldungen bezeichnet die begrenzte Vorschau.
+Die bestehende Loggerbegrenzung mit ihrer Unterdrückungszusammenfassung
+gilt weiterhin. Ein neuer Lauf oder Reset beginnt eine neue Ereignisvorschau;
+die vorherige Datei bleibt erhalten.
 
 ## Messdaten und eigene Berichte
 
