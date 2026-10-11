@@ -361,11 +361,17 @@ static void documentation_link(app *a, const char *target) {
 /* Stable semantic IDs are rebuilt from current content for each key event. */
 enum { DOC_C=1,DOC_PHYSIM,DOC_TOPICS,DOC_CONTENTS,DOC_FILTER,DOC_GROUP,DOC_BACK,DOC_HOME,DOC_WORKSPACE,DOC_SEARCH,DOC_PREVIOUS,DOC_NEXT,DOC_BODY,
        DOC_TOPIC=10000,DOC_HEADING=20000,DOC_COPY=30000,DOC_LINK=40000 };
+static bool documentation_contents_heading(const app *a,const ps_doc_block *block) {
+    unsigned depth=2;
+    if(a->doc_topic>=0 && a->doc_topic<DOCUMENTATION_TOPIC_COUNT &&
+       !strncmp(documentation_topics[a->doc_topic].path,"docs/reference/",15))depth=3;
+    return block->kind==PS_DOC_HEADING && block->level<=depth;
+}
 static unsigned documentation_focus_list(app *a,int *entries) {
     unsigned count=0;entries[count++]=DOC_C;entries[count++]=DOC_PHYSIM;
     entries[count++]=DOC_TOPICS;entries[count++]=DOC_CONTENTS;
     if(a->doc_contents && a->documentation) {
-        for(size_t i=0;i<a->documentation->count;i++)if(a->documentation->blocks[i].kind==PS_DOC_HEADING && a->documentation->blocks[i].level<=2)entries[count++]=DOC_HEADING+(int)i;
+        for(size_t i=0;i<a->documentation->count;i++)if(documentation_contents_heading(a,&a->documentation->blocks[i]))entries[count++]=DOC_HEADING+(int)i;
     } else {
         entries[count++]=DOC_FILTER;entries[count++]=DOC_GROUP;
         for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(a->doc_filter[0]?documentation_hits[i] && !documentation_topics[i].code:documentation_group(i)==a->doc_group)entries[count++]=DOC_TOPIC+i;
@@ -499,7 +505,7 @@ static void documentation_sidebar(app *a) {
         nk_label_wrap(ui, documentation_topics[a->doc_topic].title);
         for (size_t i = 0; i < a->documentation->count; i++) {
             ps_doc_block *b = &a->documentation->blocks[i];
-            if (b->kind != PS_DOC_HEADING || b->level > 2)
+            if (!documentation_contents_heading(a,b))
                 continue;
             nk_layout_row_dynamic(ui, 36, 1);
             struct nk_rect bounds=nk_widget_bounds(ui);

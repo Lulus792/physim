@@ -797,3 +797,16 @@ nativen Speicherprüfungen und kleinen/großen Dokumentregressionen.
 Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **61 implemented**, **13 incomplete**, **457 unverified**;
 `completion_proven` bleibt `false`.
+
+
+## API-Browser (§6.1)
+
+PP-0246 ist konkret belegt: 31 generierte Offline-Referenzen werden gegen
+öffentliche Header und Verlinkungen geprüft. Die Inhaltsnavigation zeigt nun
+auch Datentypen auf Ebene 3. Ein tatsächlicher App-Test navigiert zu einem
+Modul, Datentyp, einer Funktion, dem Einheitentyp und einem Codebeispiel und
+prüft dessen Kopieren. Die bestehende Handbuchbedienung bleibt separat geprüft.
+[Nachweis und Grenzen](platform-validation.md#api-browser-module-datentypen-funktionen-einheiten-und-beispiele).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**62 implemented**, **13 incomplete**, **456 unverified**;
+`completion_proven` bleibt `false`.

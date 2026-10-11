@@ -9362,6 +9362,36 @@
           ]
         }
       ]
+    },
+    {
+      "name": "api_browser_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "api_browser_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 90,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
     }
   ]
 }

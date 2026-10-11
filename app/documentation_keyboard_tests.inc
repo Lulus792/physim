@@ -24,7 +24,84 @@ static bool documentation_test_seek(app *a,int id,int *stage,int *code) {
     }
     test_window_key_mod(a->doc_window,SDLK_TAB,0);--*stage;return false;
 }
+static void documentation_api_test_frame(app *a,int *stage,int *code,const char **capture) {
+    static int core,units,guide,type,function,unit_type,example;
+    bool ok=true;
+#define API_KEY(key) test_window_key_mod(a->doc_window,key,0)
+    switch((*stage)++) {
+    case 0:test_window_key_mod(a->window,SDLK_F1,0);break;
+    case 1:
+        core=units=guide=-1;
+        for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++) {
+            if(!strcmp(documentation_topics[i].path,"docs/reference/core.md"))core=i;
+            if(!strcmp(documentation_topics[i].path,"docs/reference/units.md"))units=i;
+            if(!strcmp(documentation_topics[i].path,"docs/units.md"))guide=i;
+        }
+        ok=a->doc_visible && core>=0 && units>=0 && guide>=0;SDL_SetWindowSize(a->doc_window,760,540);
+        if(!documentation_test_seek(a,DOC_GROUP,stage,code))return;
+        API_KEY(SDLK_RIGHT);API_KEY(SDLK_RIGHT);break;
+    case 2:
+        ok=a->doc_group==2;
+        if(!documentation_test_seek(a,DOC_TOPIC+core,stage,code))return;
+        API_KEY(SDLK_RETURN);break;
+    case 3:
+        ok=a->doc_topic==core;type=function=-1;
+        for(size_t i=0;i<a->documentation->count;i++) {
+            ps_doc_block *b=&a->documentation->blocks[i];
+            if(b->kind==PS_DOC_HEADING && !strcmp(a->documentation->text+b->text,"ps_vec3"))type=(int)i;
+            if(b->kind==PS_DOC_HEADING && !strcmp(a->documentation->text+b->text,"ps_vadd"))function=(int)i;
+        }
+        ok &= type>=0 && function>=0 && a->documentation->blocks[type].level==3;
+        if(!documentation_test_seek(a,DOC_CONTENTS,stage,code))return;API_KEY(SDLK_RETURN);break;
+    case 4:
+        ok=a->doc_contents;
+        if(!documentation_test_seek(a,DOC_HEADING+type,stage,code))return;API_KEY(SDLK_RETURN);break;
+    case 5:
+        if(a->doc_jump_block>=0){--*stage;return;}
+        ok=a->doc_scroll_y>0;*capture="docs-api-type.bmp";break;
+    case 6:
+        if(!documentation_test_seek(a,DOC_HEADING+function,stage,code))return;API_KEY(SDLK_RETURN);break;
+    case 7:
+        if(a->doc_jump_block>=0){--*stage;return;}
+        ok=a->doc_scroll_y>0;*capture="docs-api-function.bmp";break;
+    case 8:
+        if(!documentation_test_seek(a,DOC_TOPICS,stage,code))return;API_KEY(SDLK_RETURN);break;
+    case 9:
+        if(!documentation_test_seek(a,DOC_TOPIC+units,stage,code))return;API_KEY(SDLK_RETURN);break;
+    case 10:
+        ok=a->doc_topic==units;unit_type=example=-1;
+        for(size_t i=0;i<a->documentation->count;i++) {
+            ps_doc_block *b=&a->documentation->blocks[i];
+            if(b->kind==PS_DOC_HEADING && !strcmp(a->documentation->text+b->text,"ps_quantity"))unit_type=(int)i;
+            if(example<0 && b->kind==PS_DOC_LINK)example=(int)i;
+        }
+        ok &= unit_type>=0 && example>=0;
+        if(!documentation_test_seek(a,DOC_CONTENTS,stage,code))return;API_KEY(SDLK_RETURN);break;
+    case 11:
+        if(!documentation_test_seek(a,DOC_HEADING+unit_type,stage,code))return;API_KEY(SDLK_RETURN);break;
+    case 12:
+        if(a->doc_jump_block>=0){--*stage;return;}
+        ok=a->doc_scroll_y>0;*capture="docs-api-unit.bmp";break;
+    case 13:
+        if(!documentation_test_seek(a,DOC_LINK+example,stage,code))return;API_KEY(SDLK_RETURN);break;
+    case 14:
+        ok=a->doc_topic==guide;example=-1;
+        for(size_t i=0;i<a->documentation->count;i++)if(a->documentation->blocks[i].kind==PS_DOC_CODE){example=(int)i;break;}
+        ok &= example>=0;
+        if(!documentation_test_seek(a,DOC_COPY+example,stage,code))return;
+        break;
+    case 15:
+        *capture="docs-api-example.bmp";SDL_SetClipboardText("sentinel");API_KEY(SDLK_SPACE);break;
+    case 16:
+        {char *text=SDL_GetClipboardText();ok=text && !strcmp(text,a->documentation->text+a->documentation->blocks[example].text);SDL_free(text);}
+        a->quitting=true;break;
+    }
+    if(!ok){fprintf(stderr,"API browser stage %d: topic=%d focus=%d\n",*stage-1,a->doc_topic,a->doc_focus);*code=1;a->quitting=true;}
+    if(a->quitting)printf("API BROWSER SELF-TEST: %s\n",*code?"FAILED":"PASSED");
+#undef API_KEY
+}
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strcmp(mode,"docs-keyboard-api")){documentation_api_test_frame(a,stage,code,capture);return;}
     static int copy_block,link_block,link_topic,heading,tutorial_topic;
     static nk_uint before_scroll;
     bool ok=true;

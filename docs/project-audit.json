@@ -1505,9 +1505,19 @@
       "kind": "list",
       "scope": "planned",
       "text": "- API-Browser mit Modulen, Datentypen, Funktionen, Einheiten und Beispielen.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/documentation_ui.inc",
+        "app/documentation_keyboard_tests.inc",
+        "tests/check_display_workflow.py",
+        "tests/native_integration_cases.json",
+        "tools/generate-reference.py",
+        "docs/reference/core.md",
+        "docs/reference/units.md",
+        "docs/units.md",
+        "docs/platform-validation.md#api-browser-module-datentypen-funktionen-einheiten-und-beispiele"
+      ],
+      "note": "Offline-Modulreferenzen mit Headerabgleich; Typen auf Ebene 3 sind über Inhalt per Tastatur und Maus erreichbar. Tatsächlicher Intel-macOS-App-Test navigiert Module, Typen, Funktion und Einheiten und kopiert ein Codebeispiel. Plattformmatrix und Autovervollständigung sind separat offen."
     },
     {
       "id": "PP-0247",

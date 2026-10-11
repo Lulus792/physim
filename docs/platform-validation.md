@@ -3455,3 +3455,44 @@ UTF-8-Bytes bleiben im Test exakt erhalten.
 PP-0244 ist damit für seinen grundlegenden Editorumfang konkret belegt.
 Andere Plattformen, jede Syntax-/Schriftvariante und die neue Gesamt-SDK-Matrix
 werden durch diese Intel-macOS-Einzelprüfung nicht pauschal abgenommen.
+
+
+## API-Browser: Module, Datentypen, Funktionen, Einheiten und Beispiele
+
+Am 11. Oktober 2026 scheitert der neue tatsächliche Handbuchtest vor der
+Korrektur: `ps_vec3` ist auf der Referenzseite als Überschrift der Ebene 3
+vorhanden, fehlt aber in der Inhaltsnavigation. `documentation_test_seek`
+meldet am Schritt 4 das unerreichbare Ziel 20015. Log
+`build/current-api-browser-before-mac.log`, Ergebnisse
+`build/current-release-mac/test-results/run-dgzitkqu`. Die vorhandene
+Modulauswahl war zuvor erfolgreich; dies ist ein konkreter Navigationsfehler.
+
+Referenzseiten unter `docs/reference/` nehmen nun Überschriften bis Ebene 3
+in sichtbare Inhaltsbuttons und dieselbe Tastatur-Fokusliste auf. Andere
+Handbuchseiten behalten ihre bisherige Tiefe. Die vorhandenen 31 generierten
+C-/Physim-Referenzen enthalten Modulbezeichnungen, öffentliche Typen,
+Funktionssignaturen und verlinkte Anleitungen/Beispiele; der Generator prüft
+sie gegen Header, registrierte Themen, Offline-Verweise und Dokumentgrenzen.
+
+AppleClang Release auf Intel macOS besteht abschließend **5/5** echte
+Fensterfälle: `api_browser_workflow`, `documentation_keyboard`,
+`documentation_keyboard_22`, `documentation_keyboard_delayed` und die
+beabsichtigte Unerreichbarkeitsprüfung `documentation_keyboard_unreachable`.
+Ergebnisse: `build/current-release-mac/test-results/run-foi5iuan`; Log:
+`build/current-api-browser-complete-mac.log`. Der neue Fall öffnet F1, wählt
+per Tab/Return die Referenzgruppe und das Core-Modul, springt zu `ps_vec3`
+und `ps_vadd`, wechselt zur Einheitenreferenz und `ps_quantity` und folgt
+zur Einheitenanleitung. Dort wird ein tatsächlicher Codeblock angesteuert
+und per Leertaste kopiert; der vollständige Zwischenablagetext muss exakt
+mit dem Dokumentcode übereinstimmen. Vier Screenshots aus dem echten
+Handbuchfenster wurden visuell geprüft, PNG-Vorschauen liegen unter
+`build/current-api-browser-preview`. Das abschließende Beispielbild zeigt
+den Konvertierungscode und den fokussierten Kopierbutton.
+
+Die nativen Fälle `documentation` und `documentation_reference` bestehen
+**2/2**, Ergebnisse `build/current-headless-mac/test-results/run-sefkiz3m`,
+Log `build/current-api-browser-native-mac.log`. Der separate Generatorlauf
+meldet ebenfalls `31 reference documents verified`. PP-0246 ist damit für
+den grundlegenden Offline-API-Browser belegt. Autovervollständigung, sämtliche
+Symbol-/Darstellungsvarianten und die aktuelle Linux-/Windows-/ARM-Matrix
+werden durch diese Einzelprüfung nicht abgenommen.
