@@ -136,6 +136,7 @@ static const char *type(emitter *e, ps_lang_type t) {
     case PS_TYPE_RUN_STORE: return "psrt_stream_store";
     case PS_TYPE_RUN_READER: return "psrt_stream_reader";
     case PS_TYPE_RUN_WRITER: return "psrt_stream_writer";
+    case PS_TYPE_MEAN_INTERVAL: return "ps_mean_interval";
     case PS_TYPE_RUN_BLOCK: return "psrt_run_block";
     case PS_TYPE_RUN_SNAPSHOT: return "ps_snapshot";
     case PS_TYPE_DIAGNOSTIC:
@@ -4121,13 +4122,13 @@ static ps_lang_check_result emit(FILE *output, const char *source_path,
             info[id].optional_element == PS_TYPE_STRING)
             e.strings = e.arrays = 1;
         if ((info[id].type >= PS_TYPE_BOOL && info[id].type <= PS_TYPE_STRING) ||
-            (info[id].type >= PS_TYPE_VEC2 && info[id].type <= PS_TYPE_RUN_WRITER))
+            (info[id].type >= PS_TYPE_VEC2 && info[id].type <= PS_TYPE_MEAN_INTERVAL))
             e.primitive_types |= UINT64_C(1) << info[id].type;
         if ((info[id].array_element >= PS_TYPE_BOOL && info[id].array_element <= PS_TYPE_STRING) ||
-            (info[id].array_element >= PS_TYPE_VEC2 && info[id].array_element <= PS_TYPE_RUN_WRITER))
+            (info[id].array_element >= PS_TYPE_VEC2 && info[id].array_element <= PS_TYPE_MEAN_INTERVAL))
             e.primitive_types |= UINT64_C(1) << info[id].array_element;
         if ((info[id].optional_element >= PS_TYPE_BOOL && info[id].optional_element <= PS_TYPE_STRING) ||
-            (info[id].optional_element >= PS_TYPE_VEC2 && info[id].optional_element <= PS_TYPE_RUN_WRITER))
+            (info[id].optional_element >= PS_TYPE_VEC2 && info[id].optional_element <= PS_TYPE_MEAN_INTERVAL))
             e.primitive_types |= UINT64_C(1) << info[id].optional_element;
         const ps_lang_builtin *builtin = ps_lang_builtin_get(info[id].binding);
         if (builtin) {
@@ -4137,7 +4138,7 @@ static ps_lang_check_result emit(FILE *output, const char *source_path,
             else if (builtin->host && builtin->host != (unsigned)experiment)
                 fail(&e, id, "Host API is unavailable in this module kind");
         }
-        if (info[id].type >= PS_TYPE_VEC2 && info[id].type <= PS_TYPE_RUN_WRITER)
+        if (info[id].type >= PS_TYPE_VEC2 && info[id].type <= PS_TYPE_MEAN_INTERVAL)
             e.sdk = 1;
         if (info[id].type >= PS_TYPE_DATASET && info[id].type <= PS_TYPE_TABLE && experiment != 2)
             fail(&e, id, "Analysis handles require --emit-analysis");

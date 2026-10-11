@@ -172,6 +172,7 @@ typedef enum ps_lang_type {
     PS_TYPE_RUN_STORE,
     PS_TYPE_RUN_READER,
     PS_TYPE_RUN_WRITER,
+    PS_TYPE_MEAN_INTERVAL,
     /* Nominal record types encode PS_TYPE_RECORD_BASE + struct AST index. */
     PS_TYPE_RECORD_BASE = 256,
     /* Structural function signatures encode a canonical annotation or function AST index. */

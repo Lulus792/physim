@@ -654,6 +654,19 @@ LANG_DESCRIPTIONS.update({'Batch': 'Erzeugt eine besitzende unveränderliche Ser
 
 LANG_DESCRIPTIONS.update({'RunStore': 'Erzeugt einen besitzenden Store für opake Laufdatei-Lese- und Schreibhandles. Kopien teilen den Store; close invalidiert alle zugehörigen Handles.', 'runStoreClose': 'Schließt den gemeinsamen Store, alle Leser und finalisiert seine Writer. Alle Handle-Kopien werden ungültig; Core-Dateien und Core-Ressourcen werden freigegeben. Referenzbesitzer leben bis zur letzten Kopie.', 'runStoreIsOpen': 'Prüft, ob der gemeinsame Store noch geöffnet ist.', 'runStoreReader': 'Öffnet einen fortlaufenden Leser mit eigenem Cursor im Store. Höchstens acht Leser sind gleichzeitig geöffnet.', 'runReaderClose': 'Schließt den gemeinsamen Cursor und invalidiert seine Handle-Kopien.', 'runReaderIsOpen': 'Prüft Store, Slot und Generation des Lesers.', 'runReaderNext': 'Liest eine vollständige Messzeile in den Cursor. EOF oder Recovery liefert false; andere Fehler sind fangbar.', 'runReaderNextSnapshot': 'Liest eine vollständige Szenenkopie in den Cursor. Sample- und Snapshot-Traversierung dürfen auf einem Cursor nicht gemischt werden.', 'runReaderRow': 'Kopiert die letzte akzeptierte Messzeile in einen unabhängigen RunBlock. Allokationsfehler verbrauchen keine weitere Zeile.', 'runReaderSnapshot': 'Kopiert die letzte akzeptierte Szene als unabhängigen RunSnapshot.', 'runReaderSamples': 'Anzahl bisher vom Core-Leser verarbeiteter Messsamples; übergroße Werte liefern PS_LIMIT.', 'runReaderChannels': 'Anzahl aufgezeichneter Kanäle.', 'runReaderComplete': 'Zeigt an, ob ein gültiger Abschluss gelesen wurde.', 'runReaderRecovered': 'Prüft, ob die Traversierung an einem unvollständigen oder beschädigten Rest endete.', 'runReaderStatus': 'Aktueller Core-Status der Traversierung als Resultcode.', 'runReaderMetadata': 'Kopiert die vollständigen Laufmetadaten in einen besitzenden String.', 'runReaderName': 'Kopiert den Namen am nullbasierten Kanalindex.', 'runReaderSymbol': 'Kopiert das SI-Einheitensymbol am nullbasierten Kanalindex.', 'runReaderDescription': 'Kopiert die Beschreibung am nullbasierten Kanalindex.', 'runReaderDimension': 'Liest einen der sieben SI-Dimensionsexponenten eines aufgezeichneten Kanals.'})
 LANG_DESCRIPTIONS.update({
+ 'sampleMeanInterval': 'Berechnet ein zweiseitiges Student-t-Mittelwertintervall aus Mittelwert, Stichprobenstreuung, Anzahl und Konfidenzniveau. Setzt unabhängige normalverteilte Beobachtungen voraus.',
+ 'seriesMeanInterval': 'Berechnet ein Student-t-Mittelwertintervall aus gültigen Series-Werten; rohe Statusspalten müssen ausdrücklich maskiert werden.',
+ 'meanIntervalMean': 'Stichprobenmittelwert in der Eingabeeinheit.',
+ 'meanIntervalSD': 'Stichprobenstandardabweichung in der Eingabeeinheit.',
+ 'meanIntervalSE': 'Geschätzter Standardfehler des Mittelwerts, s/sqrt(n).',
+ 'meanIntervalConfidence': 'Explizites zweiseitiges Konfidenzniveau zwischen 0 und 1.',
+ 'meanIntervalCritical': 'Numerisch berechneter positiver Student-t-Kritikalwert mit n-1 Freiheitsgraden.',
+ 'meanIntervalLower': 'Untere Grenze des Mittelwertintervalls in der Eingabeeinheit.',
+ 'meanIntervalUpper': 'Obere Grenze des Mittelwertintervalls in der Eingabeeinheit.',
+ 'meanIntervalCount': 'Anzahl verwendeter gültiger Beobachtungen.'
+})
+
+LANG_DESCRIPTIONS.update({
     'runStoreConfigure': 'Konfiguriert einen positiven endlichen Zeitschritt, Seed und begrenzte UTF-8-Metadaten für künftig erzeugte Writer. Fehler erhalten die Konfiguration.',
     'runStoreChannel': 'Deklariert einen eindeutigen kanonischen SI-Kanal für künftig erzeugte Writer und liefert seinen Index. Höchstens 16 Kanäle; Fehler sind atomar.',
     'runStoreWriter': 'Erzeugt eine exklusive Laufdatei aus dem konfigurierten Store-Schema. Höchstens acht Writer; vorhandene Dateien werden nicht ersetzt.',
@@ -672,7 +685,7 @@ def language_reference():
     table = source.split('library[] = {', 1)[1].split('static const ps_lang_builtin *library_find', 1)[0]
     pattern = re.compile(r'\{\s*"(\w+)"\s*,\s*"\w+"\s*,\s*(\w+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*\{([^}]+)\}\s*,\s*\{([^}]+)\}\s*\}', re.S)
     types = dict(BATCH='Batch', B='Bool', F='Float64', I='Int64', S='String', U='Unit', QUANTITY='Quantity', MEDIUM='Medium', MATERIAL='Material', SUBMERSION='Submersion', C='Channel',
-                 V2='Vec2', V3='Vec3', V4='Vec4', Q='Quat', M3='Mat3', M4='Mat4', B3='Bezier3', RNG='Rng', ODE_RESULT='OdeResult', STEP_INTERVAL='StepInterval', SCALAR_RESULT='ScalarResult', DIAGNOSTIC='Diagnostic', RUN_STORE='RunStore', RUN_READER='RunReader', RUN_WRITER='RunWriter', RUN_INDEX='RunIndex', RUN_BLOCK='RunBlock', RUN_SNAPSHOT='RunSnapshot', COLLIDER='Collider', WORLD='ContactWorld', PS_LANG_COLLIDER_ARRAY='[Collider]', VOID='Void', D='Dataset', R='Series',
+                 V2='Vec2', V3='Vec3', V4='Vec4', Q='Quat', M3='Mat3', M4='Mat4', B3='Bezier3', RNG='Rng', ODE_RESULT='OdeResult', STEP_INTERVAL='StepInterval', SCALAR_RESULT='ScalarResult', DIAGNOSTIC='Diagnostic', RUN_STORE='RunStore', RUN_READER='RunReader', RUN_WRITER='RunWriter', MEAN_INTERVAL='MeanInterval', RUN_INDEX='RunIndex', RUN_BLOCK='RunBlock', RUN_SNAPSHOT='RunSnapshot', COLLIDER='Collider', WORLD='ContactWorld', PS_LANG_COLLIDER_ARRAY='[Collider]', VOID='Void', D='Dataset', R='Series',
                  P='Plot', TABLE='Table', DIST='Distribution', CONFIG='SensorConfig', SENSOR='Sensor',
                  BODY='Body', CONTACTS='Contacts', SOLVER='ContactSolver', RESULT='ContactResult',
                  JOINT='DistanceJoint', JOINT_RESULT='JointResult',

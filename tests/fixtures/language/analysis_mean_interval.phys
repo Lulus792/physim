@@ -1,0 +1,10 @@
+func analyze():
+    let metres = Unit(1,0,0,0,0,0,0,1,"m")
+    let one = Unit(0,0,0,0,0,0,0,1,"1")
+    let values = Series.fromValues([1.0,2.0,3.0,4.0,5.0],metres,"sample")
+    let interval = values.meanInterval(0.95)
+    assert(interval.sampleCount() == 5 && interval.mean() == 3)
+    assert(abs(interval.criticalValue()-2.776445105197799) < 2e-12)
+    report("Student-t mean interval under IID normal assumptions")
+    let table = Table("Mean interval",["Mean","Lower","Upper","Confidence"],[metres,metres,metres,one])
+    table.row("IID normal mean",[Quantity(interval.mean(),metres),Quantity(interval.lower(),metres),Quantity(interval.upper(),metres),Quantity(interval.confidence(),one)])

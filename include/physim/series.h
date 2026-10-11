@@ -3,6 +3,7 @@
 #include "analysis.h"
 #include "memory.h"
 #include "units.h"
+#include "measurement.h"
 
 #define PS_ANALYSIS_MAX_DATASETS 8u
 #define PS_ANALYSIS_MAX_SERIES 128u
@@ -179,6 +180,13 @@ typedef enum { PS_RESAMPLE_LINEAR, PS_RESAMPLE_NEAREST, PS_RESAMPLE_PREVIOUS,
 ps_result ps_series_resample(ps_analysis_context *ctx, ps_series y, ps_series x, ps_series target_x,
                              ps_resample_method method, ps_series *out);
 ps_result ps_series_statistics(ps_analysis_context *ctx, ps_series input, ps_statistics *out);
+/* Student-t mean interval in the series' stored SI unit; validity masks are
+ * honored, raw measurement status columns are not applied automatically.
+ * At least two valid values; same statistical assumptions/error contract as
+ * ps_student_mean_interval. Welford variance range applies. Underflowed zero
+ * variance for distinct values returns PS_NUMERIC. Every error preserves out. */
+ps_result ps_series_mean_interval(ps_analysis_context *ctx, ps_series input,
+                                  double confidence, ps_mean_interval *out);
 /* Type-7 quantile for a nonempty series. probability must be finite in [0, 1].
  * Uses only valid rows; all-missing input is PS_INVALID. Up to one block is
  * sorted in memory; larger inputs select exact adjacent order statistics with

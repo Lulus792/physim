@@ -22,7 +22,10 @@ assert {'tools/sdk_series_probe.c','tests/test_saved_run_tutorial.py','tests/tes
         'tests/fixtures/language/run_stream.phys','tests/fixtures/language/run_stream_experiment.phys',
         'tests/fixtures/language/run_stream_analysis.phys','tests/language_memory_balance.h',
         'tests/prepare_language_stream_corruption.py','tests/test_language_run_writer.c',
-        'tests/fixtures/language/run_writer.phys','tests/check_language_writer_parity.py'}<=set(names)
+        'tests/fixtures/language/run_writer.phys','tests/check_language_writer_parity.py',
+        'tests/test_mean_interval.c','tests/mean_interval_probe.c','tests/check_mean_interval_report.c',
+        'tests/test_mean_interval_oracle.py','tests/fixtures/language/mean_interval.phys',
+        'tests/fixtures/language/mean_interval_oracle.phys','tests/fixtures/language/analysis_mean_interval.phys'}<=set(names)
 assert not any(name.startswith(('src/','include/','lib/')) for name in names)
 assert all(not name.startswith('app/') or name=='app/utf8.manifest' for name in names)
 with tarfile.open(archive) as file:

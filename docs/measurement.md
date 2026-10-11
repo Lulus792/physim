@@ -236,3 +236,56 @@ Verteilungen sowie deren Ziehungsverbrauch. Die C-/Physim-Probes prüfen zusätz
 Snapshots, Wertkopien und unbeeinflusste interleavte Ströme. Integer-Zustände
 werden exakt verglichen; Normalwerte verwenden eine absolute/relative Toleranz
 von `2e-14`. Die bisherige statistische Momentenprüfung bleibt daneben erhalten.
+
+## Student-t-Intervall für den Mittelwert
+
+Ein zweiseitiges Mittelwertintervall verwendet `mean ± t * s / sqrt(n)` mit
+`n-1` Freiheitsgraden. Das explizite Konfidenzniveau liegt zwischen 0 und 1;
+`n >= 2`, endliche Mittelwerte und nichtnegative Stichprobenstreuung sind nötig.
+Die Zahlen besitzen dieselbe Einheit wie die Eingabewerte. Der Vertrag setzt
+unabhängige normalverteilte Beobachtungen voraus. Er ist kein Vorhersageintervall,
+keine Wahrscheinlichkeit für den bereits festen Mittelwert und kein Intervall
+für einzelne Sensorwerte. Zeitkorrelation, Drift, systematischer Bias und
+informative Ausfälle erfüllen diese Annahmen nicht automatisch.
+
+`ps_student_mean_interval` verwendet explizite Stichprobenkennzahlen.
+`ps_series_mean_interval` ermittelt sie aus einer Series; Status-Platzhalter
+müssen vorher ausdrücklich gefiltert werden. Eine konstante Series liefert
+Streuung null und ein zusammengefallenes Intervall. Bestehende Grenzen des
+Welford-Varianzakkumulators gelten weiter. Nicht darstellbare positive Breiten,
+zusammengefallene positive Endpunkte oder Überläufe liefern PS_NUMERIC;
+Iterationsgrenzen liefern PS_LIMIT. Fehler erhalten den Ausgabewert.
+Keine Allokation, Zufallsziehung oder versteckte Statistikzustände.
+
+Kleine ganzzahlige Freiheitsgrade verwenden spezielle geschlossene Fälle und
+regulierte Betafunktionen; ab 100000 Freiheitsgraden wird eine asymptotische
+Student-t-Korrektur zum Normalquantil verwendet. Der Wert ist eine numerische
+Approximation, keine exakte Rundungszusage. Die unabhängige Referenzprüfung integriert die Student-t-Dichte und verwendet
+ganzzahlige Binomialkoeffizienten bis 100000 Freiheitsgraden sowie eine eigene
+Wallis-Normierungsentwicklung darüber. Sie teilt weder
+Betakettenbruch noch Quantil-Inversion mit dem Core.
+
+Die Formel und Interpretation folgen
+[NIST: Confidence Limits for the Mean](https://itl.nist.gov/div898/handbook/eda/section3/eda352.htm).
+Die Betafunktionsdarstellung und Kettenbrüche sind in
+[NIST DLMF 8.17](https://dlmf.nist.gov/8.17) beschrieben.
+
+
+```c
+ps_mean_interval interval;
+ps_result result = ps_student_mean_interval(3, sqrt(2.5), 5, .95, &interval);
+/* Use lower/upper only if result == PS_OK; inputs share one physical unit. */
+```
+
+```physim
+let interval = MeanInterval.fromSample(mean: 3, standardDeviation: sqrt(2.5),
+                                       count: 5, confidence: 0.95)
+print(interval.lower())
+print(interval.upper())
+```
+
+In einer Analyse liefert `series.meanInterval(0.95)` denselben Werttyp.
+`mean()`, `standardDeviation()`, `standardError()`, `sampleCount()`,
+`confidence()` und `criticalValue()` machen die verwendeten Kennzahlen sichtbar.
+Grenzen und Streuungen sind bei Series in der gespeicherten SI-Einheit;
+Berichtsspalten müssen diese Einheit ausdrücklich tragen.

@@ -363,6 +363,11 @@ static inline double psra_mean(psra_host *h, ps_series input, psrt_site site) {
         psra_check(h, PS_INVALID, site);
     return psrt_finite(stats.mean, site);
 }
+static inline ps_mean_interval psra_mean_interval(psra_host *h,ps_series input,double confidence,psrt_site site) {
+    ps_mean_interval value;
+    psra_check(h,ps_series_mean_interval(h->context,input,confidence,&value),site);
+    return value;
+}
 static inline double psra_stddev(psra_host *h, ps_series input, psrt_site site) {
     ps_statistics stats;
     psra_check(h, ps_series_statistics(h->context, input, &stats), site);

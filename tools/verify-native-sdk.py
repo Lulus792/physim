@@ -209,6 +209,32 @@ def verify_transform_range(repo, sdk, consumer, builder, library, rebuilt_core, 
 
 
 
+def verify_mean_interval(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked):
+    shutil.copy2(repo / "tests/test_mean_interval.c", consumer / "mean-interval-check.c")
+    shutil.copy2(repo / "tests/mean_interval_probe.c", consumer / "mean-interval-probe.c")
+    shutil.copy2(repo / "tests/check_mean_interval_report.c", consumer / "mean-interval-report-check.c")
+    checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
+             repo / "tests/fixtures/language/mean_interval.phys"], output=consumer / "mean-interval-language.c")
+    checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
+             repo / "tests/fixtures/language/mean_interval_oracle.phys"], output=consumer / "mean-interval-oracle.c")
+    checked([sdk / "bin" / ("physimc" + suffix), "--emit-analysis",
+             repo / "tests/fixtures/language/analysis_mean_interval.phys"], output=consumer / "mean-interval-analysis.c")
+    for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+        check=builder.executable("mean-interval-check-"+kind,["mean-interval-check.c"],[archive])
+        probe=builder.executable("mean-interval-probe-"+kind,["mean-interval-probe.c"],[archive])
+        language=builder.executable("mean-interval-language-"+kind,["mean-interval-language.c"],[archive],language=True)
+        oracle=builder.executable("mean-interval-oracle-"+kind,["mean-interval-oracle.c"],[archive],language=True)
+        analysis=builder.executable("mean-interval-analysis-"+kind,["mean-interval-analysis.c"],[archive],language=True,module=True)
+        report_check=builder.executable("mean-interval-report-check-"+kind,["mean-interval-report-check.c"],[archive])
+        work=consumer/("Mean interval ä "+kind);work.mkdir()
+        checked([check,work]);checked([language])
+        checked([sys.executable,repo / "tests/test_mean_interval_oracle.py","--c",probe,"--language",oracle,
+                 "--fixture",repo / "tests/fixtures/language/mean_interval_oracle.phys"],timeout=180)
+        checked([sdk / "bin" / ("physim-analysis-runner"+suffix),analysis,"--runs",work / "interval-report"])
+        checked([report_check,work / "interval-report.psreport"])
+    print("Installed/rebuilt SDK mean intervals: independent Student-t density quadrature, C/Physim values, masked SI series, numeric/atomic errors and actual analysis report passed",flush=True)
+
+
 def verify_run_stream(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked):
     """Exercise opaque public handles using only packaged headers and archives."""
     shutil.copy2(repo / "tests/test_run_stream.c", consumer / "run-stream-check.c")
@@ -410,6 +436,8 @@ def main():
                         help="Verify checked transformation range only; no GUI or full domain acceptance")
     parser.add_argument("--stream-only", action="store_true",
                         help="Verify opaque Run stream handles only; no GUI or full domain acceptance")
+    parser.add_argument("--interval-only",action="store_true",
+                        help="Verify Student-t mean intervals, independent numerical references and actual analysis report only")
     parser.add_argument("--comparison-only", action="store_true",
                         help="Verify exact C/Physim tolerance decisions only; no GUI or full domain acceptance")
     parser.add_argument("--curve-only", action="store_true",
@@ -429,6 +457,10 @@ def main():
     parser.add_argument("--isolation-only", action="store_true",
                         help="Verify eight actual C/Physim runner failure/restart app workflows; requires an app SDK and display")
     args = parser.parse_args()
+    if args.interval_only and any((args.pendulum_only,args.scalar_only,args.transform_only,args.stream_only,
+        args.comparison_only,args.curve_only,args.units_only,args.body_only,args.migration_only,
+        args.accessibility_only,args.convex_only,args.breakpoints_only,args.isolation_only,args.app_tests)):
+        parser.error("--interval-only cannot be combined with other focused modes or --app-tests")
     if args.isolation_only and any((args.pendulum_only, args.scalar_only, args.transform_only,
         args.stream_only, args.comparison_only, args.curve_only, args.units_only, args.body_only,
         args.migration_only, args.accessibility_only, args.convex_only, args.breakpoints_only,
@@ -543,6 +575,13 @@ def main():
         builder.includes = [sdk / "include"]
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+        if args.interval_only:
+            shutil.copytree(sdk / "src",consumer / "src")
+            rebuilt_core=builder.archive("sdk-rebuilt-core",[f"src/{name}.c" for name in native.CORE])
+            verify_mean_interval(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
+            (root / "PASSED.txt").write_text("Focused Student-t mean interval SDK verification passed; installed/rebuilt Core, independent density quadrature, C/Physim values, SI/masks and actual analysis report; no full platform/product acceptance.\n",encoding="utf-8")
+            print(f"Mean interval SDK verified: {root}")
+            return
         if args.isolation_only:
             if not metadata["app"]:
                 raise RuntimeError("Runner isolation verification requires an app SDK")
@@ -752,6 +791,7 @@ def main():
         verify_curve_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_close_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_run_stream(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
+        verify_mean_interval(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_scalar_search(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_transform_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         shutil.copy2(repo / "tests/test_linear_range.c", consumer / "linear-range-check.c")

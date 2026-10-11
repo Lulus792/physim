@@ -473,6 +473,20 @@ ps_result ps_series_statistics(
     ps_statistics *out);
 ```
 
+## ps_series_mean_interval
+
+Berechnet ein Student-t-Mittelwertintervall aus gültigen Series-Werten in ihrer gespeicherten SI-Einheit. Masken gelten; rohe Statusspalten werden nicht automatisch angewendet. Varianzbereich und Annahmen sind explizit; Fehler erhalten die Ausgabe.
+
+```c
+ps_result ps_series_mean_interval(
+    ps_analysis_context *ctx,
+    ps_series input,
+    double confidence,
+    ps_mean_interval *out);
+```
+
+Student-t mean interval in the series' stored SI unit; validity masks are honored, raw measurement status columns are not applied automatically. At least two valid values; same statistical assumptions/error contract as ps_student_mean_interval. Welford variance range applies. Underflowed zero variance for distinct values returns PS_NUMERIC. Every error preserves out.
+
 ## ps_series_quantile
 
 Berechnet das Typ-7-Quantil einer nichtleeren Reihe für eine endliche Wahrscheinlichkeit in [0, 1]. Verwendet temporären Speicher des Analyseallocators.

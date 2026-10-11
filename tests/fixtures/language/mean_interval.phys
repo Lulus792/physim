@@ -1,0 +1,17 @@
+let interval = MeanInterval.fromSample(mean: 3, standardDeviation: sqrt(2.5), count: 5, confidence: 0.95)
+assert(interval.sampleCount() == 5 && interval.mean() == 3 && interval.confidence() == 0.95)
+assert(abs(interval.criticalValue()-2.776445105197799) < 2e-12)
+assert(abs(interval.standardDeviation()-sqrt(2.5)) < 1e-14)
+assert(abs(interval.standardError()-sqrt(0.5)) < 1e-14)
+assert(interval.lower() < 3 && interval.upper() > 3)
+assert(attempt(MeanInterval.fromSample(0,1,1,0.95)) == nil)
+assert(attempt(MeanInterval.fromSample(0,-1,2,0.95)) == nil)
+assert(attempt(MeanInterval.fromSample(0,1,2,1)) == nil)
+struct Box<T>:
+    let value: T
+let boxes = [Box<MeanInterval>(value: interval)]
+let optional: MeanInterval? = Optional.some(interval)
+assert(boxes[0].value.lower() == optional.unwrap().lower())
+let constant = MeanInterval.fromSample(4,0,20,0.9)
+assert(constant.lower() == 4 && constant.upper() == 4)
+print("MeanInterval language values passed")

@@ -16,6 +16,7 @@
 #define RUN_STORE PS_TYPE_RUN_STORE
 #define RUN_READER PS_TYPE_RUN_READER
 #define RUN_WRITER PS_TYPE_RUN_WRITER
+#define MEAN_INTERVAL PS_TYPE_MEAN_INTERVAL
 #define RUN_BLOCK PS_TYPE_RUN_BLOCK
 #define RUN_SNAPSHOT PS_TYPE_RUN_SNAPSHOT
 #define SUBMERSION PS_TYPE_SUBMERSION
@@ -168,6 +169,15 @@ static const ps_lang_builtin library[] = {
     {"world_contactImpulse", "psrt_world_impulse", V3, 2, 0, {WORLD,I}, {"world","index"}},
     {"world_contactPenetration", "psrt_world_penetration", F, 2, 0, {WORLD,I}, {"world","index"}},
     {"worldBodies", "psrt_world_bodies", PS_LANG_BODY_ARRAY, 1, 0, {WORLD}, {"world"}},
+    {"sampleMeanInterval", "psrt_mean_interval", MEAN_INTERVAL, 4, 0, {F,F,I,F}, {"mean","standardDeviation","count","confidence"}},
+    {"meanIntervalMean", "psrt_interval_mean", F, 1, 0, {MEAN_INTERVAL}, {"interval"}},
+    {"meanIntervalSD", "psrt_interval_sd", F, 1, 0, {MEAN_INTERVAL}, {"interval"}},
+    {"meanIntervalSE", "psrt_interval_se", F, 1, 0, {MEAN_INTERVAL}, {"interval"}},
+    {"meanIntervalConfidence", "psrt_interval_confidence", F, 1, 0, {MEAN_INTERVAL}, {"interval"}},
+    {"meanIntervalCritical", "psrt_interval_critical", F, 1, 0, {MEAN_INTERVAL}, {"interval"}},
+    {"meanIntervalLower", "psrt_interval_lower", F, 1, 0, {MEAN_INTERVAL}, {"interval"}},
+    {"meanIntervalUpper", "psrt_interval_upper", F, 1, 0, {MEAN_INTERVAL}, {"interval"}},
+    {"meanIntervalCount", "psrt_interval_count", I, 1, 0, {MEAN_INTERVAL}, {"interval"}},
     {"RunIndex", "psrt_run_index_open", RUN_INDEX, 2, 0, {S,I}, {"path","maximumEntries"}},
     {"RunStore", "psrt_stream_store_make", RUN_STORE, 0, 0, {0}, {0}},
     {"runStoreClose", "psrt_stream_store_close", VOID, 1, 0, {RUN_STORE}, {"store"}},
@@ -682,6 +692,7 @@ static const ps_lang_builtin library[] = {
     {"seriesValue", "psra_value", F, 2, 2, {R, I}, {"input", "index"}},
     {"seriesValues", "psra_values", PS_LANG_FLOAT_ARRAY, 3, 2,
      {R, I, I}, {"input", "first", "count"}},
+    {"seriesMeanInterval", "psra_mean_interval", MEAN_INTERVAL, 2, 2, {R,F}, {"input","confidence"}},
     {"mean", "psra_mean", F, 1, 2, {R}, {"input"}},
     {"stddev", "psra_stddev", F, 1, 2, {R}, {"input"}},
     {"quantile", "psra_quantile", F, 2, 2, {R, F}, {"input", "probability"}},
@@ -797,6 +808,15 @@ static const ps_lang_method methods[] = {
     {"contactPenetration","world_contactPenetration",WORLD,0},
     {"bodies","worldBodies",WORLD,0},
     {"close","runIndexClose",RUN_INDEX,PS_LANG_METHOD_MUTATING},
+    {"mean","meanIntervalMean",MEAN_INTERVAL,0},
+    {"standardDeviation","meanIntervalSD",MEAN_INTERVAL,0},
+    {"standardError","meanIntervalSE",MEAN_INTERVAL,0},
+    {"confidence","meanIntervalConfidence",MEAN_INTERVAL,0},
+    {"criticalValue","meanIntervalCritical",MEAN_INTERVAL,0},
+    {"lower","meanIntervalLower",MEAN_INTERVAL,0},
+    {"upper","meanIntervalUpper",MEAN_INTERVAL,0},
+    {"sampleCount","meanIntervalCount",MEAN_INTERVAL,0},
+    {"meanInterval","seriesMeanInterval",R,0},
     {"close","runStoreClose",RUN_STORE,0},
     {"isOpen","runStoreIsOpen",RUN_STORE,0},
     {"openReader","runStoreReader",RUN_STORE,0},
@@ -1027,6 +1047,7 @@ static const struct { const char *owner, *name, *function; } factories[] = {
     {"Diagnostic","here","diagnosticHere"}, {"Diagnostic","empty","emptyDiagnostic"}, {"Diagnostic","decode","diagnosticDecoded"}, {"Diagnostic","load","loadDiagnostic"},
     {"Int64", "abs", "intAbs"},
     {"Int64", "min", "intMin"},
+    {"MeanInterval","fromSample","sampleMeanInterval"},
     {"Int64", "max", "intMax"},
     {"Int64", "clamp", "intClamp"},
     {"Submersion", "sphere", "sphereSubmersion"},

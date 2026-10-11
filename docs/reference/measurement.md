@@ -61,6 +61,31 @@ ps_result ps_distribution_moments(
     double *stddev);
 ```
 
+### ps_mean_interval
+
+```c
+typedef struct {
+    uint64_t count;
+    double mean, standard_deviation, standard_error, confidence, critical_value;
+    double lower, upper;
+} ps_mean_interval;
+```
+
+## ps_student_mean_interval
+
+Berechnet ein zweiseitiges Student-t-Intervall für den Mittelwert aus expliziten Stichprobenkennzahlen und Konfidenzniveau. Unabhängige normalverteilte Beobachtungen, mindestens zwei Werte und konsistente Eingabeeinheiten sind vorausgesetzt; Fehler erhalten die Ausgabe.
+
+```c
+ps_result ps_student_mean_interval(
+    double mean,
+    double sample_standard_deviation,
+    uint64_t count,
+    double confidence,
+    ps_mean_interval *out);
+```
+
+Two-sided Student-t mean interval for independent normal observations with unknown variance. All locations/spreads share the caller's unit. count>=2, finite mean/sd, sd>=0, finite 0<confidence<1. Zero sd gives [mean,mean]. df=1/2 closed forms; other integer df<100000 use regularized incomplete beta; larger df use a third-order asymptotic correction to the normal quantile. Approximate binary64 arithmetic, not an exact-rounding/coverage guarantee. No allocation/RNG/state. PS_NUMERIC for unrepresentable nonzero spreads, collapsed positive interval endpoints or overflow; PS_LIMIT for exhausted iteration budgets. Every error preserves out. This is not a prediction interval; correlation, bias and missing-data selection require separate models.
+
 ### ps_sensor_config
 
 ```c

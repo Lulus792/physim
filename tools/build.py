@@ -488,6 +488,7 @@ class Builder:
         shutil.copy2(ROOT / "src/curve_numeric.h", staging / "src/curve_numeric.h")
         shutil.copy2(ROOT / "src/body_numeric.h", staging / "src/body_numeric.h")
         shutil.copy2(ROOT / "src/run_index_internal.h", staging / "src/run_index_internal.h")
+        shutil.copy2(ROOT / "src/student_interval.h", staging / "src/student_interval.h")
         (staging / "licenses").mkdir()
         for source, name in (("third_party/Nuklear-LICENSE", "Nuklear-LICENSE"),
                              ("third_party/zlib-1.3.2/LICENSE", "zlib-LICENSE.txt"),

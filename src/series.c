@@ -1258,6 +1258,15 @@ ps_result ps_series_statistics(ps_analysis_context *c, ps_series h, ps_statistic
     *out = stats;
     return PS_OK;
 }
+ps_result ps_series_mean_interval(ps_analysis_context *c,ps_series input,double confidence,ps_mean_interval *out) {
+    if(!out || !isfinite(confidence) || confidence<=0 || confidence>=1)return PS_INVALID;
+    ps_statistics stats;
+    ps_result r=ps_series_statistics(c,input,&stats);
+    if(r!=PS_OK)return r;
+    double sd=ps_statistics_stddev(&stats);
+    if(sd==0 && stats.min!=stats.max)return PS_NUMERIC;
+    return ps_student_mean_interval(stats.mean,sd,stats.count,confidence,out);
+}
 static int compare_finite_double(const void *left, const void *right) {
     double a = *(const double *)left, b = *(const double *)right;
     return (a > b) - (a < b);

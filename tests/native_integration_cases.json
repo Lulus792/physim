@@ -2501,6 +2501,45 @@
         "platform",
         "core"
       ]
+    },
+    "mean-interval-check": {
+      "sources": [
+        "tests/test_mean_interval.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "mean-interval-probe": {
+      "sources": [
+        "tests/mean_interval_probe.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "mean-interval-language": {
+      "source": "tests/fixtures/language/mean_interval.phys",
+      "mode": "--emit-c"
+    },
+    "mean-interval-analysis": {
+      "source": "tests/fixtures/language/analysis_mean_interval.phys",
+      "mode": "--emit-analysis"
+    },
+    "mean-interval-report-check": {
+      "sources": [
+        "tests/check_mean_interval_report.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "mean-interval-oracle-language": {
+      "source": "tests/fixtures/language/mean_interval_oracle.phys",
+      "mode": "--emit-c"
     }
   },
   "tests": [
@@ -10288,6 +10327,69 @@
             "native"
           ],
           "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "mean_interval",
+      "targets": [
+        "mean-interval-check",
+        "mean-interval-language",
+        "physim-analysis-runner",
+        "mean-interval-analysis",
+        "mean-interval-report-check"
+      ],
+      "steps": [
+        {
+          "program": "mean-interval-check",
+          "arguments": [
+            "{work}"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "mean-interval-language",
+          "arguments": [],
+          "timeout": 60
+        },
+        {
+          "program": "physim-analysis-runner",
+          "arguments": [
+            "{mean-interval-analysis}",
+            "--runs",
+            "{work}/interval-report"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "mean-interval-report-check",
+          "arguments": [
+            "{work}/interval-report.psreport"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "mean_interval_oracle",
+      "targets": [
+        "python",
+        "mean-interval-probe",
+        "mean-interval-oracle-language"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_mean_interval_oracle.py",
+            "--c",
+            "{mean-interval-probe}",
+            "--language",
+            "{mean-interval-oracle-language}",
+            "--fixture",
+            "{root}/tests/fixtures/language/mean_interval_oracle.phys"
+          ],
+          "timeout": 180
         }
       ]
     }

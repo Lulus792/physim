@@ -3,6 +3,26 @@
 /* Experimental value bindings for generated C17; not a stable public ABI. */
 #include "language_runtime.h"
 #include "measurement.h"
+static inline ps_mean_interval psrt_mean_interval(double mean,double sd,int64_t count,double confidence,psrt_site site) {
+    if(count<2)psrt_fail_code(site,PS_INVALID,"MeanInterval requires at least two observations");
+    ps_mean_interval value;
+    ps_result r=ps_student_mean_interval(mean,sd,(uint64_t)count,confidence,&value);
+    if(r!=PS_OK)psrt_fail_code(site,r,"Student-t mean interval failed");
+    return value;
+}
+#define PSRT_INTERVAL_FIELD(name,field) static inline double psrt_interval_##name(ps_mean_interval v,psrt_site s){(void)s;return v.field;}
+PSRT_INTERVAL_FIELD(mean,mean)
+PSRT_INTERVAL_FIELD(sd,standard_deviation)
+PSRT_INTERVAL_FIELD(se,standard_error)
+PSRT_INTERVAL_FIELD(confidence,confidence)
+PSRT_INTERVAL_FIELD(critical,critical_value)
+PSRT_INTERVAL_FIELD(lower,lower)
+PSRT_INTERVAL_FIELD(upper,upper)
+#undef PSRT_INTERVAL_FIELD
+static inline int64_t psrt_interval_count(ps_mean_interval value,psrt_site site) {
+    if(value.count>INT64_MAX)psrt_fail_code(site,PS_LIMIT,"MeanInterval count exceeds Int64");
+    return (int64_t)value.count;
+}
 
 static inline ps_distribution psrt_distribution(ps_distribution_kind kind, double a, double b,
                                                 psrt_site site) {

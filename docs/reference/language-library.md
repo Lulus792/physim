@@ -4251,6 +4251,86 @@ Größerer Wert; bei Gleichheit bleibt der linke Wert erhalten.
 
 Überall verfügbar.
 
+## meanIntervalConfidence
+
+```text
+meanIntervalConfidence(interval: MeanInterval) -> Float64
+```
+
+Explizites zweiseitiges Konfidenzniveau zwischen 0 und 1.
+
+Überall verfügbar.
+
+## meanIntervalCount
+
+```text
+meanIntervalCount(interval: MeanInterval) -> Int64
+```
+
+Anzahl verwendeter gültiger Beobachtungen.
+
+Überall verfügbar.
+
+## meanIntervalCritical
+
+```text
+meanIntervalCritical(interval: MeanInterval) -> Float64
+```
+
+Numerisch berechneter positiver Student-t-Kritikalwert mit n-1 Freiheitsgraden.
+
+Überall verfügbar.
+
+## meanIntervalLower
+
+```text
+meanIntervalLower(interval: MeanInterval) -> Float64
+```
+
+Untere Grenze des Mittelwertintervalls in der Eingabeeinheit.
+
+Überall verfügbar.
+
+## meanIntervalMean
+
+```text
+meanIntervalMean(interval: MeanInterval) -> Float64
+```
+
+Stichprobenmittelwert in der Eingabeeinheit.
+
+Überall verfügbar.
+
+## meanIntervalSD
+
+```text
+meanIntervalSD(interval: MeanInterval) -> Float64
+```
+
+Stichprobenstandardabweichung in der Eingabeeinheit.
+
+Überall verfügbar.
+
+## meanIntervalSE
+
+```text
+meanIntervalSE(interval: MeanInterval) -> Float64
+```
+
+Geschätzter Standardfehler des Mittelwerts, s/sqrt(n).
+
+Überall verfügbar.
+
+## meanIntervalUpper
+
+```text
+meanIntervalUpper(interval: MeanInterval) -> Float64
+```
+
+Obere Grenze des Mittelwertintervalls in der Eingabeeinheit.
+
+Überall verfügbar.
+
 ## metadata
 
 ```text
@@ -5381,6 +5461,16 @@ Schreibt eine vorhandene Szenenkopie einschließlich Zeit, Werten und Pause; gle
 
 Überall verfügbar.
 
+## sampleMeanInterval
+
+```text
+sampleMeanInterval(mean: Float64, standardDeviation: Float64, count: Int64, confidence: Float64) -> MeanInterval
+```
+
+Berechnet ein zweiseitiges Student-t-Mittelwertintervall aus Mittelwert, Stichprobenstreuung, Anzahl und Konfidenzniveau. Setzt unabhängige normalverteilte Beobachtungen voraus.
+
+Überall verfügbar.
+
 ## saveDiagnostic
 
 ```text
@@ -5458,6 +5548,16 @@ seriesIsValid(input: Series, index: Int64) -> Bool
 ```
 
 Prüft die Gültigkeit am nullbasierten Zeilenindex; ungültige Handles oder Indizes sind Quellfehler.
+
+Analysemodul erforderlich.
+
+## seriesMeanInterval
+
+```text
+seriesMeanInterval(input: Series, confidence: Float64) -> MeanInterval
+```
+
+Berechnet ein Student-t-Mittelwertintervall aus gültigen Series-Werten; rohe Statusspalten müssen ausdrücklich maskiert werden.
 
 Analysemodul erforderlich.
 

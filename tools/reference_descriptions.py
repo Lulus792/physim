@@ -385,3 +385,6 @@ add('ps_run_', {
     'writer_release': 'Finalisiert Index und Footer und invalidiert die Kennung auch bei einem Abschlussfehler.',
 })
 DESCRIPTIONS['ps_ccd_step']='Verarbeitet einen vollständigen Kick-Drift-Zeitschritt mit wiederholten und simultanen CCD-Ereignissen atomar.'
+
+DESCRIPTIONS['ps_student_mean_interval'] = 'Berechnet ein zweiseitiges Student-t-Intervall für den Mittelwert aus expliziten Stichprobenkennzahlen und Konfidenzniveau. Unabhängige normalverteilte Beobachtungen, mindestens zwei Werte und konsistente Eingabeeinheiten sind vorausgesetzt; Fehler erhalten die Ausgabe.'
+DESCRIPTIONS['ps_series_mean_interval'] = 'Berechnet ein Student-t-Mittelwertintervall aus gültigen Series-Werten in ihrer gespeicherten SI-Einheit. Masken gelten; rohe Statusspalten werden nicht automatisch angewendet. Varianzbereich und Annahmen sind explizit; Fehler erhalten die Ausgabe.'

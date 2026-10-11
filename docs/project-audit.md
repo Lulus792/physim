@@ -1021,3 +1021,17 @@ Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **96 implemented**, **13 incomplete**, **422 unverified**;
 `completion_proven` bleibt `false`. Die vollständige Plattform- und
 Produktabnahme bleibt offen.
+
+
+## Mittelwertintervalle, Quantile und Histogramme (PP-0405)
+
+Der fehlende Intervallpfad ist in C und Physim ergänzt. Er dokumentiert die
+IID-Normalitätsannahmen und bewahrt Ausgaben bei Fehlern. Unabhängige
+Dichtequadratur, tatsächliche SI-Analyseberichte und verschobene SDKs sind
+auf Intel macOS ausgeführt. Bestehende Quantile und Histogramme sind zusätzlich
+gegen ihre konkreten Series-/Reporttests abgeglichen.
+[Nachweise und Grenzen](platform-validation.md#student-t-mittelwertintervalle-in-c-und-physim-pp-0405).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**97 implemented**, **13 incomplete**, **421 unverified**;
+`completion_proven` bleibt `false`. Die gesamte Projekt- und Plattformabnahme
+bleibt offen.

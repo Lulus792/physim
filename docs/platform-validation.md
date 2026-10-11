@@ -46,73 +46,8 @@ Der vollständige historische Nachweis bleibt im
 
 ## Quantity-Werte an der SI-Kanalgrenze am 8. Oktober 2026
 
-`ps_channel_sample_quantity` prüft Kontextprefix, Index, Schema und Dimensionen,
-konvertiert die Eingabeskala nach SI und aktualisiert erst danach genau einen
-Kanalwert. Jeder Fehler erhält den gesamten Kontext. Physim
-`Channel.sampleQuantity` ergänzt Besitzer-/Samplingphasenprüfung und erhält die
-ursprünglichen Invalid-/Numeric-/Version-Codes. Der rohe Sampler verlangt
-weiterhin bereits in SI vorliegende Zahlen; deren Dimension kann er nicht erraten.
-[SI-Grenze](units.md), [Messwert und Unsicherheit veröffentlichen](measurement.md).
-
-Die echte C-/Physim-Runner-Gegenprobe liest einen Zentimetersensor samt
-Standardunsicherheit und persistiert 1,25 m sowie 0,01 m. Ein unabhängiger Parser
-prüft Run-Header, sämtliche CRCs, Schema, Zeilen, Footer und CSV-Einheiten/Werte.
-Abgefangene Dimensions-/Bereichsfehler ändern keine zuvor gespeicherte Länge.
-Der separate C-Test prüft ganze Kontexte, verkürzte Prefixe, malformed Schema,
-Indexgrenzen, signierte Null, Sensor-/Unsicherheitsübergang, falsche Besitzer,
-Samplingphase und strukturierte Diagnosecodes samt Quellposition.
-
-Die Sensor-Wurfbeispiele verwenden den typisierten Weg für Messwert und
-Unsicherheit tatsächlich. Der C-Wurf sammelt Werte in einem lokalen Kontext und
-committet sie zusammen mit dem Modellzustand. Die Physim-Würfe erhalten separate
-Statuskanäle und konvertieren gültige Szenenpositionen ausdrücklich in Meter.
-Platzhalter werden durch den Quantity-Setter nicht zu gültigen Messungen.
-
-Intel macOS 14.6.1/Apple Clang 16 besteht die endgültige native Auswahl mit 12/12
-unter `build/contact-world-language-release-mac/test-results/run-ds5n4hbw`.
-Debian 12/GCC 12.2 besteht dieselbe Auswahl mit 12/12 unter
-`build/contact-world-language-release-linux/test-results/run-kn0htfu5`.
-Clang 14/ASan/UBSan besteht 12/12 unter
-`build/atspi-asan-linux/test-results/run-srg3k2uq`. Die Auswahl enthält C- und
-Physim-Kanalläufe, Measurement, Sensor-Nativfälle, Sensor-Wurfparität und
-Referenzdokumentation. `ASAN_OPTIONS=detect_leaks=0` lässt Address-/UB-Prüfungen
-aktiv; macOS-Sanitizer bleiben wegen fehlendem `ld64.lld` ungeprüft.
-
-Sensor-Workflow und Handbuch-Tastaturführung bestehen auf macOS mit 2/2 unter
-`run-d6hx8l5h` und auf Linux/X11 mit 2/2 unter `run-g625xyws` in den jeweiligen
-Release-Testverzeichnissen. Alle 31 generierten Referenzdokumente sind geprüft.
-Die unabhängige Prüfkiterstellung enthält 116 genau manifestierte Eingaben und
-besteht Paketgrenzen, SHA-256, fehlende/dynamische Pfade und exklusive Erstellung.
-
-Der ältere vollständig bestandene SDK-Prüfstand
-`build/ui-size-sdk-proof-linux/Native SDK ä 91etu6ft` ist vollständig archiviert:
-`build/channel-space-archived-proofs.tar.gz`, 305565157 Bytes, 14467 Dateien/Links,
-SHA-256 `2b1dc34c0a197032c2e5934ba7d5a71ecb79137c2ddf2c5faf07745e7d2850e4`.
-Inhalt und Links wurden auf macOS vollständig gegen das Inventar geprüft;
-Originale vor Entfernen erneut gehasht. Danach wurde das Archiv zurück auf Linux
-kopiert und dort vollständig nachgeprüft. Inventar und Lösch-/Prüfbelege liegen
-unter `build/channel-space-*`; der alte Prüfstand bleibt wiederherstellbar.
-Dadurch stehen wieder rund zwei GiB für tatsächliche Linux-Builds zur Verfügung.
-
-Das Linux-SDK besteht die erweiterte `--units-only`-Abnahme unter
-`build/channel-quantity-sdk-checks/Native SDK ä 7jqcwary`: installierter und
-allein aus Paketquellen neu gebauter Core, Quantity-Sampler, ursprüngliche
-Diagnosecodes, exakte Konvertierung sowie echte C-/Physim-Runner und CSV-Export.
-Der Paketcompiler übersetzt die unabhängigen Physim-Fixtures selbst.
-
-Die erweiterte macOS-SDK-Abnahme besteht unter
-`build/channel-quantity-sdk-checks/Native SDK ä x8hnbi_r` gegen installierten und
-nur aus Paketquellen neu gebauten Core, einschließlich echter C-/Physim-
-Sensorläufe und CSV-Gegenprobe. Beide SDKs besitzen weiterhin 459 manifestierte
-Dateien; der neue öffentliche Sampler benötigt keinen ABI-Strukturumbau.
-Alle 24 geänderten Dateien stimmen zwischen macOS und Linux per SHA-256 überein
-(`build/channel-quantity-source-freeze.json`).
-
-Die umfassenden SI-/Metadatenanforderungen PP-0370/0371/0372/0375 bleiben für
-alle Datenpfade einzeln offen. Der neue typisierte Übergang beweist die genannten
-konkreten Pfade; er macht aus rohen Doubles keine dimensionsgeprüften Werte.
-Weitere Plattformen, allgemeine Produkt-/Modellabnahme und macOS-Sanitizer sind
-mit diesen fokussierten Nachweisen nicht abgenommen.
+Der vollständige historische Nachweis bleibt im
+[Plattformarchiv](platform-validation-history.md#quantity-werte-an-der-si-kanalgrenze-am-8-oktober-2026) erhalten.
 
 ## Starrkörperträgheit und Energiebereich am 8. Oktober 2026
 
@@ -4136,3 +4071,51 @@ SDK-Quellen neu gebautes Core-Archiv. Dies umfasst 36 Zielzeit-Läufe,
 C-/Physim-Verfahrens-/Medienparität, gemischte Berichte, den Integrator-Lernpfad,
 Abklingauswertung und beide Peak-Bindungen. Die ganze aktuelle SDK-/App-/
 Plattformabnahme bleibt offen.
+
+
+## Student-t-Mittelwertintervalle in C und Physim (PP-0405)
+
+Der bisher fehlende Intervallpfad ist ergänzt: explizite Stichprobenkennzahlen
+oder gültige Series-Werte liefern ein zweiseitiges Student-t-Intervall mit
+Konfidenzniveau und n-1 Freiheitsgraden. MeanInterval ist ein kopierbarer
+Sprachwert; tatsächliche Analysen können die Grenzen mit SI-Spalten ausgeben.
+Unabhängige normalverteilte Beobachtungen, Statusfilterung, Varianz-/
+Darstellbarkeitsgrenzen und Fehleratomizität sind ausdrücklich dokumentiert.
+Der Algorithmus interpretiert keine korrelierte Zeitserie automatisch als IID.
+
+Intel macOS 14.6.1 / AppleClang 16, tatsächlich ausgeführt:
+
+- `build/current-mean-interval-confirmed-native-mac.log`, Release-Ergebnisse
+  `build/current-headless-mac/test-results/run-70zqphsv`: **6/6 bestanden**.
+  Messungen, Series, numerische Grenzfälle, Sensorparität, Intervallwerte und
+  der unabhängige Oracle-Fall sind ausgeführt. **66 C-/Physim-Fälle** vergleichen
+  kritische Werte über direkte Dichtequadratur, exakte ganzzahlige
+  Binomialnormalisierung bis 100000 Freiheitsgraden und eigene Wallis-
+  Normierungsentwicklung darüber; kein Core-Betakettenbruch wird wiederverwendet.
+  Extreme Konfidenz, große Freiheitsgrade und ungültige Eingaben sind enthalten.
+- Der eigentliche Analyse-Runner schreibt einen Bericht; ein unabhängiger
+  C-Prüfer kontrolliert seine Intervallgrenzen und SI-Spalten. Masken,
+  konstante Werte, zu wenige Beobachtungen, veraltete Handles, Varianzunterlauf,
+  positive zusammengefallene Grenzen und unveränderte Fehlerausgaben sind geprüft.
+- `build/current-mean-interval-existing-report-mac.log`, Ergebnisse
+  `build/current-headless-mac/test-results/run-9efteyhc`: **1/1 bestanden**,
+  bestehende Berichte, Histogrammzählung, konstante Daten und Exporte.
+- `build/current-mean-interval-asan.log`: direkte C-Intervall-/Series-Prüfung
+  mit AddressSanitizer und UBSan bestanden; LeakSanitizer deaktiviert.
+- `build/current-mean-interval-app-docs-mac.log`, App-Ergebnisse
+  `build/current-release-mac/test-results/run-t2xjuj1g`: **4/4 bestanden**,
+  Completion, API-Referenz, Handbuchparser und Referenzgenerator.
+- `build/current-mean-interval-sdk-install-mac.log` und
+  `build/current-mean-interval-sdk-verify-mac.log` bestehen. Consumer:
+  `build/current-mean-interval-sdk-consumer-mac/Native SDK ä qsjbzpgi`,
+  **13/13 protokollierte Kommandos bestanden**. Der installierte Compiler,
+  öffentliche SDK-Header und installiertes/neues Core-Archiv prüfen dieselben
+  unabhängigen Referenzen und tatsächlichen Analyseberichte. Das benötigte
+  private numerische Header wird im SDK mit den Core-Quellen ausgeliefert.
+- `build/current-mean-interval-kit-mac.log`: unabhängiges Verifikationspaket
+  mit **168** exakt erfassten Dateien und kontrollierten Paketgrenzen bestanden.
+
+Die vorhandenen Type-7-Quantile und Histogramme besitzen separate Series-/
+Reportnachweise. PP-0405 ist damit als begrenzte Bibliotheksumsetzung belegt;
+die ganze aktuelle Plattform- und Produktabnahme bleibt offen. Die eingefrorene
+Gesamtprüfung an 03a58b3 läuft unabhängig auf ihrem Stand vor MeanInterval.

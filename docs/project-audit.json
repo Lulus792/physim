@@ -3517,9 +3517,23 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Vertrauensintervalle, Quantile und Histogramme.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/measurement.h",
+        "src/student_interval.h",
+        "include/physim/series.h",
+        "src/series.c",
+        "src/report.c",
+        "include/physim/language_measurement.h",
+        "tests/test_mean_interval.c",
+        "tests/test_mean_interval_oracle.py",
+        "tests/test_series.c",
+        "tests/test_report.c",
+        "tests/check_mean_interval_report.c",
+        "tools/verify-native-sdk.py",
+        "docs/measurement.md"
+      ],
+      "note": "Zweiseitige Student-t-Mittelwertintervalle aus expliziten Stichprobenkennzahlen oder maskierten Series-Werten sind in C/Physim implementiert, mit dokumentierten IID-Normalitätsannahmen, Varianz-/Zahlenbereichsfehlern und atomarer Ausgabe. 66 unabhängige Dichtequadraturfälle, tatsächlicher SI-Analysebericht und installierter/neuer SDK-Core sind auf Intel macOS ausgeführt. Type-7-Quantile sowie Histogrammzählung und Berichtsexporte besitzen separate geprüfte Series-/Reportpfade. Keine automatische Intervallinterpretation korrelierter Zeitreihen; ganze aktuelle Plattform-/Produktabnahme bleibt offen."
     },
     {
       "id": "PP-0406",

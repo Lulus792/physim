@@ -4,6 +4,21 @@
 #include <string.h>
 #define SENSOR_INITIALIZED UINT32_C(0x50534d31)
 #define MAX_INDEX UINT64_C(4503599627370495)
+#include "student_interval.h"
+ps_result ps_student_mean_interval(double mean,double sd,uint64_t count,double confidence,ps_mean_interval *out) {
+    if(!out || !isfinite(mean) || !isfinite(sd) || sd<0 || count<2 ||
+        !isfinite(confidence) || confidence<=0 || confidence>=1)return PS_INVALID;
+    ps_mean_interval value={0};value.count=count;value.mean=mean;value.standard_deviation=sd;
+    value.confidence=confidence;
+    ps_result r=ps_student_critical(count-1,confidence,&value.critical_value);
+    if(r!=PS_OK)return r;
+    value.standard_error=sd/sqrt((double)count);
+    double half=value.standard_error*value.critical_value;
+    value.lower=mean-half;value.upper=mean+half;
+    if(!isfinite(value.critical_value) || !isfinite(half) || !isfinite(value.lower) ||
+       !isfinite(value.upper) || (sd>0 && (value.standard_error==0 || half==0 || value.lower==mean || value.upper==mean)))return PS_NUMERIC;
+    *out=value;return PS_OK;
+}
 ps_result ps_distribution_validate(ps_distribution d) {
     if (!isfinite(d.a) || !isfinite(d.b))
         return PS_INVALID;
