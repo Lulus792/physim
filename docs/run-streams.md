@@ -140,3 +140,10 @@ Die schreibenden Low-Level-Stream-Funktionen bleiben in dieser Stufe C-APIs.
 Die neue Lesebindung ersetzt weder den bestehenden `RunIndex` für wahlfreien
 Zugriff noch Dataset/Series für Analysen und schließt die allgemeine
 C-/Physim-Funktionsparität des Projektplans noch nicht vollständig ab.
+
+
+Der SDK-Prüfer (`tools/verify-native-sdk.py --stream-only`) prüft den C- und
+Physim-Lesezugang auch nach Verschiebung des Pakets. Er verwendet ausschließlich
+installierte öffentliche Header, das installierte Archiv und einen aus den
+SDK-Quellen neu gebauten Core. Standalone-Speicherbereinigung, beschädigte
+Dateien und tatsächliche Experiment-/Analyse-Runner gehören zu dieser Prüfung.

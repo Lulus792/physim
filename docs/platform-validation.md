@@ -4076,3 +4076,33 @@ an a7917ae (**701/704**) enden mit drei nativen Fehlern vor der Installation.
 Ihre vollständigen Logs sind gelesen; ein erfolgreicher frischer Paketnachweis
 kann daraus nicht abgeleitet werden. Eine erneute vollständige Prüfung und
 SDK-Abnahme des korrigierten Standes bleiben erforderlich.
+
+
+## Verschobenes SDK mit RunStore und RunReader am 12. Oktober 2026
+
+Intel macOS 14.6.1 / AppleClang 16: der Release-SDK-Build und eine tatsächliche
+Verschiebung des SDKs in einen UTF-8-/Leerzeichenpfad sind ausgeführt.
+`build/current-language-reader-sdk-install-mac.log` und
+`build/current-language-reader-sdk-verify-mac.log` enden erfolgreich.
+Der Consumer-Nachweis liegt in
+`build/current-language-reader-sdk-consumer-mac/Native SDK ä 3pwmazgb`;
+alle **17** protokollierten Prüfkommandos in `verification.log` enden mit 0.
+
+Der Prüfer emittiert Standalone-, Experiment- und Analyse-C mit dem
+installierten Physim-Compiler und kompiliert jeweils gegen die installierte
+Core-Bibliothek und einen aus den SDK-Quellen neu gebauten Core. Öffentliche
+Header kommen ausschließlich aus dem SDK. C-Allokationsfehler, geteilte
+Cursor, Besitzerbereinigung, ungültige Aliase, acht Slots, Szenen, beschädigte
+CRC und Recovery sowie unabhängige Zeilen sind geprüft. Die generierte
+Standalone-Physim-Ausgabe prüft erfasste Restallokationen am Programmende.
+Tatsächliche Runner erzeugen anschließend einen Replay-Lauf und einen
+Analysebericht; ein unabhängiger C-Prüfer kontrolliert alle Samples, Zeiten
+und SI-Spalten. Das neue Sprachruntime-Header ist im verschobenen SDK vorhanden.
+
+`build/current-language-reader-verification-kit-mac.log` besteht mit **158**
+exakt erfassten Dateien, SHA-256 und den Paketgrenzen. Neue Reader-Fixtures
+sind im unabhängigen Verifikationspaket enthalten; Implementierung und
+öffentliche Header werden weiterhin aus dem SDK bezogen. Der fokussierte
+Nachweis ersetzt keine ganze GUI-, Linux-, Windows- oder Produktabnahme.
+Die Gesamtprüfung und anschließende SDK-/App-Prüfung am eingefrorenen
+`1a1a42d65227f8ed05f936f9902e281bfc599d59` laufen noch separat.

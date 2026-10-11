@@ -209,16 +209,48 @@ def verify_transform_range(repo, sdk, consumer, builder, library, rebuilt_core, 
 
 
 
-def verify_run_stream(repo, consumer, builder, library, rebuilt_core, checked):
+def verify_run_stream(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked):
     """Exercise opaque public handles using only packaged headers and archives."""
     shutil.copy2(repo / "tests/test_run_stream.c", consumer / "run-stream-check.c")
     shutil.copy2(repo / "tests/test_allocator.h", consumer / "test_allocator.h")
+    shutil.copy2(repo / "tests/test_language_run_stream.c", consumer / "run-stream-owner-check.c")
+    shutil.copy2(repo / "tests/check_language_stream_host.c", consumer / "run-stream-host-check.c")
+    generated = consumer / "run-stream-language.c"
+    checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
+             repo / "tests/fixtures/language/run_stream.phys"], output=generated)
+    generated.write_text("#define main ps_test_main\n" + generated.read_text(encoding="utf-8") +
+                         "\n" + (repo / "tests/language_memory_balance.h").read_text(encoding="utf-8"),
+                         encoding="utf-8")
+    checked([sdk / "bin" / ("physimc" + suffix), "--emit-experiment",
+             repo / "tests/fixtures/language/run_stream_experiment.phys"],
+             output=consumer / "run-stream-experiment.c")
+    checked([sdk / "bin" / ("physimc" + suffix), "--emit-analysis",
+             repo / "tests/fixtures/language/run_stream_analysis.phys"],
+             output=consumer / "run-stream-analysis.c")
     for kind, archive in (("installed", library), ("rebuilt", rebuilt_core)):
         executable = builder.executable("run-stream-check-" + kind, ["run-stream-check.c"], [archive])
         work = consumer / ("Run streams ä " + kind)
         work.mkdir()
         checked([executable, work])
-    print("Installed/rebuilt SDK run streams: ownership, generation reuse, bounded slots, allocation failure, atomic reads, snapshots and recoverable abort passed", flush=True)
+        owner_check = builder.executable("run-stream-owner-check-" + kind,
+                                        ["run-stream-owner-check.c"], [archive])
+        language = builder.executable("run-stream-language-" + kind,
+                                      ["run-stream-language.c"], [archive], language=True)
+        experiment = builder.executable("run-stream-experiment-" + kind,
+            ["run-stream-experiment.c"], [archive], language=True, module=True)
+        analysis = builder.executable("run-stream-analysis-" + kind,
+            ["run-stream-analysis.c"], [archive], language=True, module=True)
+        host_check = builder.executable("run-stream-host-check-" + kind,
+                                       ["run-stream-host-check.c"], [archive])
+        checked([owner_check, work])
+        checked([sys.executable, repo / "tests/prepare_language_stream_corruption.py", work])
+        checked([language], cwd=work)
+        checked([sdk / "bin" / ("physim-runner" + suffix), experiment,
+                 work / "replay.psrun", "--steps", "3", "--dt", ".125"], cwd=work)
+        checked([sdk / "bin" / ("physim-analysis-runner" + suffix), analysis,
+                 work / "stream α.psrun", work / "reader-report"], cwd=work)
+        checked([host_check, work / "replay.psrun", work / "reader-report.psreport"])
+    print("Installed/rebuilt SDK run streams: C/Physim ownership, generation reuse, bounded slots, allocation failure, independent values, snapshots, damaged-tail recovery and actual experiment/analysis hosts passed", flush=True)
 
 
 def verify_close_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked):
@@ -471,9 +503,9 @@ def main():
     checked_phase = 0
 
 
-    def checked(command, *, output=None, timeout=300):
+    def checked(command, *, output=None, timeout=300, cwd=None):
         nonlocal checked_phase
-        result = subprocess.run([str(p) for p in command], cwd=root, env=env,
+        result = subprocess.run([str(p) for p in command], cwd=root if cwd is None else cwd, env=env,
                                 capture_output=True, timeout=timeout)
         checked_phase += 1
         if bitmap_archive:
@@ -481,6 +513,7 @@ def main():
             if count: print(f"Archived {count} exact BMPs after command {checked_phase}; freed {freed} bytes", flush=True)
         with log.open("ab") as file:
             file.write(("COMMAND: " + repr([str(p) for p in command]) + "\n").encode("utf-8"))
+            file.write(("CWD: " + str(root if cwd is None else cwd) + "\n").encode("utf-8"))
             if output is None:
                 file.write(result.stdout)
             file.write(result.stderr)
@@ -575,8 +608,8 @@ def main():
         if args.stream_only:
             shutil.copytree(sdk / "src", consumer / "src")
             rebuilt_core = builder.archive("sdk-rebuilt-core", [f"src/{name}.c" for name in native.CORE])
-            verify_run_stream(repo, consumer, builder, library, rebuilt_core, checked)
-            (root / "PASSED.txt").write_text("Focused Run stream SDK verification passed; installed/rebuilt Core, opaque handles, manifest and relocation; no full domain or GUI acceptance.\n", encoding="utf-8")
+            verify_run_stream(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
+            (root / "PASSED.txt").write_text("Focused Run stream SDK verification passed; installed/rebuilt Core, C/Physim reader ownership, damaged-tail recovery, actual experiment/analysis hosts, manifest and relocation; no full domain or GUI acceptance.\n", encoding="utf-8")
             print(f"Run stream SDK verified: {root}")
             return
         if args.transform_only:
@@ -703,7 +736,7 @@ def main():
         verify_unit_conversion(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_curve_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_close_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
-        verify_run_stream(repo, consumer, builder, library, rebuilt_core, checked)
+        verify_run_stream(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_scalar_search(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_transform_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         shutil.copy2(repo / "tests/test_linear_range.c", consumer / "linear-range-check.c")
