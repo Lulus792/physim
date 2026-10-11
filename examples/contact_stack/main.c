@@ -38,8 +38,8 @@ static ps_result reset(ps_context *c) {
 static ps_result create(ps_context *c) {
     experiment *e=calloc(1,sizeof *e);if(!e)return PS_MEMORY;c->user=e;
     e->solver=PS_CONTACT_SOLVER_DEFAULT;double iterations=4;
-    ps_result result=ps_parameter_define(c,"warmStart","Warmstart fraction",1,0,1,&e->warm_fraction);
-    if(result==PS_OK)result=ps_parameter_define(c,"iterations","Velocity/projection iterations",4,1,256,&iterations);
+    ps_result result=ps_parameter_define_unit(c,"warmStart","Warmstart fraction",PS_ONE,1,0,1,&e->warm_fraction);
+    if(result==PS_OK)result=ps_parameter_define_unit(c,"iterations","Velocity/projection iterations",PS_ONE,4,1,256,&iterations);
     if(result!=PS_OK)return result;
     if(iterations!=floor(iterations))return PS_INVALID;
     e->solver.iterations=(uint32_t)iterations;
@@ -48,7 +48,7 @@ static ps_result create(ps_context *c) {
         ps_unit unit=i<2 || i==10?PS_METRE:i==2 || i==9?PS_VELOCITY:i==3?PS_JOULE:PS_ONE;
         if(ps_channel_add(c,names[i],unit,names[i])<0)return PS_INVALID;
     }
-    snprintf(c->model_metadata,sizeof c->model_metadata,"model=four homogeneous unit boxes on a static plane\ngravity_m_s2=-9.80665\ncontacts=automatic sphere/box/plane discrete\ncontact_ids=stable collider IDs with local anchors\nsolver=projected graph impulses with warm history\nccd=none\n");
+    snprintf(c->model_metadata,sizeof c->model_metadata,"model=four homogeneous unit boxes on a static plane\ngravity_m_s2=-9.80665\ncontacts=automatic sphere/box/plane discrete\ncontact_ids=stable collider IDs with local anchors\nsolver=projected graph impulses with warm history\nccd=none\nbox_mass_kg=1\nbox_side_m=1\nwarm_start_fraction=%.17g\nsolver_iterations=%u\nrestitution=%.17g\nfriction=%.17g\nbounce_threshold_m_s=%.17g\npenetration_slop_m=%.17g\ncorrection_fraction=%.17g\n",e->warm_fraction,e->solver.iterations,e->solver.restitution,e->solver.friction,e->solver.bounce_threshold_m_s,e->solver.penetration_slop_m,e->solver.correction_fraction);
     return reset(c);
 }
 static ps_result step(ps_context *c,double dt) {

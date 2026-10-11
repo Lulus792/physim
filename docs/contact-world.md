@@ -73,7 +73,10 @@ und bestehende Struktur-/Modul-ABI bleiben unverändert.
 
 Das [C-Stapelbeispiel](../examples/contact_stack/main.c) integriert vier Boxen
 unter Gravitation und lässt Kontakte automatisch erzeugen. `warmStart=0..1`
-und `iterations=1..256` sind normale Experimentparameter. Kanäle zeigen Höhen,
+und `iterations=1..256` sind dimensionslose Experimentparameter mit der Einheit
+`1`; Iterationen verlangen ganze Zahlen. Standardwerte sind 1 beziehungsweise 4.
+Die Laufdatei dokumentiert zusätzlich den tatsächlichen Warmstartanteil, das
+Iterationsbudget, Boxmasse/-größe und alle verwendeten Solver-Konstanten. Kanäle zeigen Höhen,
 Geschwindigkeit, kinetische Energie, Kontaktlebensdauer und Solverreste;
 aufgezeichnete Szenen zeigen Körper, Kontaktpunkte und Normalen. Die App-Prüfung
 baut dieses Projekt und führt kontrollierte Einzelschritte aus.
@@ -145,6 +148,10 @@ Die bisherige `solve()`-Bindung bleibt unverändert.
 [Werte-/Besitzbeispiel](../examples/language/contact_world.phys) und
 [Physim-Stapel](../examples/language/contact_stack.phys) sind ausführbar.
 Der Stapel verwendet dieselben Parameter, 11 Messkanäle und vollständigen
-Szenen wie das C-Beispiel. Ein unabhängiger Parser vergleicht beide Modi über
-je 1001 Messungen und alle aufgezeichneten Objektfelder mit 1e-12 relativer/
-absoluter Toleranz; Quaternionnormalisierung kann letzte Bits verändern.
+Szenen wie das C-Beispiel. Ein unabhängiger Parser vergleicht acht Läufe
+(warm/kalt mit vier Iterationen sowie halber Warmstart mit einer und 16
+Iterationen) über je 1001 Messungen und alle aufgezeichneten Objektfelder mit
+1e-12 relativer/absoluter Toleranz; Quaternionnormalisierung kann letzte Bits
+verändern. CRC, Schema, Abschlusszähler, dt, Seed und strukturierte Parameter-/
+Modellmetadaten werden geprüft. Zehn Bereichs-/Ganzzahlfehler werden vor dem
+Anlegen einer Laufdatei abgewiesen.

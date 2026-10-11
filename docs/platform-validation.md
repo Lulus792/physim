@@ -3144,3 +3144,42 @@ Vier Einstellungen außerhalb des Bereichs scheitern vor dem Anlegen einer Laufd
 Diese Prüfung gilt für Intel macOS. Die weiterhin laufende Gesamt-SDK-Prüfung
 verwendet zuvor eingefrorene Eingaben und beweist diese spätere Beispieländerung
 nicht. Eine aktuelle SDK-/Linux-/Windows-Gesamtmatrix bleibt offen.
+
+
+## Kontaktstapel: tatsächliche Warmstart- und Solver-Einstellungen
+
+Am 11. Oktober 2026 reproduzierte der erweiterte Parser fehlende Modellmetadaten
+mit `KeyError: warm_start_fraction` gegen die bisherigen C-/Physim-Module;
+Log `build/current-contact-provenance-before-mac.log`. Beide Beispiele verwenden
+nun dimensionslose SI-Parameter mit Einheit `1`. Die Modellbeschreibung speichert
+Warmstartanteil, Iterationsbudget, Boxmasse/-größe sowie Restitution, Reibung,
+Bounce-Schwelle, Penetrationstoleranz und Projektionsanteil. Der C-Weg liest
+seine tatsächlichen Solverwerte; Physim beschreibt die Werte seines Konstruktors.
+
+AppleClang Release ohne App besteht **2/2** Katalogfälle:
+`runner_contact_world` und `contact_world_language_parity`, Ergebnisse
+`build/current-headless-mac/test-results/run-1fdkdxxd`, Log
+`build/current-contact-provenance-after-mac.log`. Die bestehende unabhängige
+Warm-/Kaltprüfung bewahrt den Bodenkontakt, validiert Kontaktlebensdauer und
+aufgezeichnete Geometrie und verlangt geringere Warmstartreste. Der erweiterte
+Sprachvergleich führt acht vollständige Läufe über je 1001 Samples aus:
+kalt/warm mit vier Iterationen und halber Warmstart mit einer beziehungsweise
+16 Iterationen. Alle Messwerte und Szenenfelder stimmen überein; CRC, Schema,
+Abschluss, dt, Seed, Werte/Standards/Grenzen und SI-Dimensionen werden geprüft.
+Zehn ungültige Bereichs-/Ganzzahleinstellungen erzeugen keine Laufdatei.
+Die zuvor eingefrorene Gesamt-SDK-Prüfung enthält diese spätere Änderung nicht;
+aktuelle andere Plattformen bleiben für diesen Änderungsumfang offen.
+
+## Ausgeführte Linux-GCC-Gesamtprüfung am Stand 7b08c04
+
+Der authentifiziert gelesene Actions-Job `114433017302` im Lauf `38126895020`
+ist erfolgreich abgeschlossen. Der tatsächliche Log belegt **685/685** native
+und **90/90** Fenstertests, jeweils auch unter Sanitizern. Runner-Isolation und
+Schritt-Breakpoints bestehen in beiden Fenstersuiten. Die verschobene SDK-Prüfung
+endet mit `Native SDK verified` unter `Native SDK ä q820fiwp`; sie umfasst die
+32 Vorlagen-/Sprachpaare und reale Appketten. Der gefilterte lokale Nachweis liegt
+unter `build/7b08-linux-gcc-proof-excerpt.log`.
+
+Dies ist eine tatsächliche Linux-GCC-Ausführung am genannten Commit. Spätere
+Parameter- und Tastaturänderungen sowie die beiden noch laufenden macOS-Jobs
+werden damit nicht als vollständig geprüft bezeichnet.
