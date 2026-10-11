@@ -724,3 +724,18 @@ Runs bleiben erhalten. Statisches actionlint ersetzt keine Ausführung.
 Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **48 implemented**, **13 incomplete**, **470 unverified**;
 `completion_proven` bleibt `false`.
+
+## Einzelabnahme der drei Arbeitsbereiche und Grundsteuerung
+
+PP-0057..0060 sowie PP-0064/0065 sind für ihren knappen Grundumfang konkret
+zugeordnet: tatsächlicher C-/Physim-Editor und Build, 2D-Modelle in der 3D-Szene,
+Steuerung/Livewerte und eigener Analysecode mit realen Kurven/Tabellen.
+Zwei zusätzliche aktuelle Appgesamtwege bestehen; der Physim-Bericht wird
+unabhängig gegen seine ursprünglichen Messwerte geprüft, die C-Tabelle ist
+tatsächlich dargestellt. Die Quell-/Artefakt-/Bildzuordnung und alle Grenzen
+stehen im [Plattformnachweis](platform-validation.md#grundanforderungen-der-drei-arbeitsbereiche).
+Die detaillierten Anforderungen in Abschnitt 6 und die ganze Plattform-/
+Sprach-/UX-Abnahme werden dadurch nicht als erledigt gewertet.
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**54 implemented**, **13 incomplete**, **464 unverified**;
+`completion_proven` bleibt `false`.

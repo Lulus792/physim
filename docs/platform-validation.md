@@ -2965,3 +2965,57 @@ Windows-Abnahme und die übrigen Vorlagen bleiben offen. PP-0066 bleibt
 unvollständig. Der ältere C17-Lauf `7b08c04` hat inzwischen alle vier Windows-
 Jobs einschließlich MSVC Release erfolgreich beendet; er prüft diese neue
 Kugelstoß-Erweiterung noch nicht.
+
+## Grundanforderungen der drei Arbeitsbereiche
+
+Die aktuelle Release-App am Quellstand `06a30c9` besteht zwei zusätzliche
+wirkliche Gesamtwege ohne Quelländerung: `pendulum` (C-Experiment und C-
+Analyse) sowie `language_full` (Physim-Experiment und Physim-Analyse).
+Die Prüfprojekte sind `build/current-workspace-core-proof-{c,phys}`;
+Logs sind `build/current-workspace-core-proof-{c,phys}.log`, Ergebnissammlung
+`build/current-workspace-core-proof-results.json`. Beide Prozesse enden mit
+`APP SELF-TEST: PASSED`. Die Wege erzeugen absichtlich Compilerdiagnosen,
+stellen die Quellen wieder her, bauen, simulieren, pausieren, führen einen
+Einzelschritt aus, stoppen, laden ihre Datensätze, berechnen Berichte und
+öffnen Dateien beziehungsweise Ergebnisse erneut. Der C-Weg zeigt zusätzlich
+seine tatsächliche Berichtstabelle und exportiert ihre Daten.
+
+Die konkrete Zuordnung zum Grundumfang ist:
+
+| Planblock | Inspizierte Umsetzung und ausgeführter Nachweis |
+| --- | --- |
+| PP-0057: drei Hauptarbeitsbereiche | `app/toolbar_ui.inc` bietet genau Entwickeln, Simulieren, Auswerten; `app/design_ui.inc` wählt deren tatsächliche Inhalte. Aktuelle Bilder und beide Gesamtwege zeigen die Auswahl. |
+| PP-0058: Experimenteditor für beide Sprachen | `document_language` in `app/document_actions.inc` unterscheidet Experiment-/Analyseeditor und Dateiendung. `syntax_text`/`editor` in `app/main.c` färben C beziehungsweise Physim und erhalten Cursor, Zeilennummern und Änderungen. C- und Physim-Quellen werden tatsächlich gebaut. |
+| PP-0059: Simulation, 3D, Steuerung, Livewerte | Die aktuellen Kugelstoßbilder enthalten perspektivische Szene, Körper, Vektoren, Pause/Step/Fortsetzen/Stop und gemessene Position. Beide Gesamtwege prüfen tatsächlich fortschreitende und pausierte Zeit, Szeneninhalte, Einzelschritt und gespeicherte Werte. |
+| PP-0060: eigener Analysecode, Daten, Tabellen, Plots | Aktueller C-/Physim-Code erzeugt und lädt Berichte. `app/report_ui.inc` liest tatsächliche Plot-/Tabellenobjekte; die neue C-Aufnahme zeigt SI-beschriftete Tabellenwerte. Der aktuelle Physim-Bericht wird zusätzlich unabhängig gegen seine ursprüngliche Laufdatei geprüft. |
+| PP-0064: 2D-Modell in 3D-Szene | Der Kugelstoß bewegt Körper in XY bei Z=0; `viewport` und `app/graphics.c` verwenden dieselben 3D-Objekte, Tiefentest, Kamera und Projektionsmatrix. Aktuelle C-/Physim-Szenenbilder zeigen diesen echten Renderweg. |
+| PP-0065: Start/Pause/Step/Fortsetzen/Stop | Gemeinsame IPC-/Buttonpfade sind inspiziert. Aktuelle Gesamtwege prüfen Start/Pause/Step/Stop; die dokumentierte Haltepunkt-Appkette prüft den echten Fortsetzen-Button und Reset für beide Sprachen/Fenstergrößen. |
+
+Die zusätzliche tatsächliche Physim-Experimenteditor-Vorschau aus der aktuellen
+`examples/language/collision.phys` endet erfolgreich:
+`build/current-phys-experiment-preview.log` und `unicode-editor.bmp` im zugehörigen
+Prüfordner. Sie zeigt `main.phys` mit sprachgerechter Syntaxfarbe und Zeilennummern.
+Der frühere Screenshot `editor.bmp` aus dem Physim-Gesamtweg zeigte tatsächlich
+den Analyseeditor; er wird nicht fälschlich als Experimenteditor-Nachweis verwendet.
+Die sechs Kugelstoßaufnahmen und die neue Vorschau werden zur visuellen Prüfung
+als PNG dekodiert unter `build/current-three-workspaces-preview/`.
+`build/current-three-workspaces-receipt.json` erhält die Hashes der tatsächlich
+gebauten Quellen, Szenenaufnahmen und Berichte am Stand `06a30c9`.
+
+Der unabhängige öffentliche-API-Prüfer
+`integration-pendulum-tutorial-report-probe` liest zusätzlich den gerade von der
+Physim-App erzeugten Bericht und seine eigene Messdatei vollständig: zwei Plots,
+drei Tabellen, SI-Achsen, vollständige Kurven, Energieabweichung, Messpunktzahlen
+und Periodenwerte stimmen mit der ursprünglichen Messreihe überein.
+Log: `build/current-workspace-phys-report-proof.log`. Der Physim-Appablauf erzeugt
+kein eigenes Tabellen-Screenshot; seine Tabellen sind durch den realen Bericht
+und diesen Datenvergleich belegt. Der C-Appablauf zeigt und exportiert die Tabelle.
+Eine bytegetreu restaurierte ältere SDK-Tabellenaufnahme wurde ebenfalls angesehen;
+sie wird vom aktuellen C-Bild getrennt gehalten.
+
+Diese Zuordnung belegt die sechs knappen Grundanforderungen als vorhandene
+Funktionen. Sie ersetzt weder sämtliche detaillierten Editor-/Analyseforderungen
+in Abschnitt 6 noch eine vollständige UX-, Sprach-, Plattform- oder Produktabnahme.
+Die neue unverkürzte Headless-Suite läuft separat unter
+`build/current-headless-mac`, Log `build/current-parameters-complete-native-mac.log`;
+ein Gesamtergebnis wird erst nach ihrem tatsächlichen Ende behauptet.

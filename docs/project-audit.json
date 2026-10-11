@@ -328,9 +328,13 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Die App hat drei Hauptarbeitsbereiche:\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/toolbar_ui.inc",
+        "app/design_ui.inc",
+        "docs/platform-validation.md#grundanforderungen-der-drei-arbeitsbereiche"
+      ],
+      "note": "Drei Hauptarbeitsbereiche sind im Toolbar-/Inhaltspfad und in den tatsächlich ausgeführten aktuellen C-/Physim-Appgesamtwegen belegt. Begrenzte Grundanforderung; die Detailforderungen in Abschnitt 6 und aktuelle gesamte Plattformabnahme bleiben separat offen."
     },
     {
       "id": "PP-0058",
@@ -344,9 +348,14 @@
       "kind": "list",
       "scope": "planned",
       "text": "  - **Entwickeln**: spezialisierter Editor für Experimente in C und der eigenen Sprache.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/main.c",
+        "app/document_actions.inc",
+        "app/design_ui.inc",
+        "docs/platform-validation.md#grundanforderungen-der-drei-arbeitsbereiche"
+      ],
+      "note": "C-/Physim-Experimenteditor mit Sprachumschaltung, Syntaxdarstellung und Zeilennummern inspiziert; beide tatsächlichen Projektbuilds und zusätzliche aktuelle Physim-Experimentvorschau bestehen. Einzelprüfung des Grundumfangs; vollständige IDE-/Sprachabnahme nicht daraus abgeleitet."
     },
     {
       "id": "PP-0059",
@@ -360,9 +369,14 @@
       "kind": "list",
       "scope": "planned",
       "text": "  - **Simulieren**: Ausführung, 3D-Ansicht, Steuerung und Live-Messwerte.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/main.c",
+        "app/design_ui.inc",
+        "app/graphics.c",
+        "docs/platform-validation.md#grundanforderungen-der-drei-arbeitsbereiche"
+      ],
+      "note": "Aktuelle C-/Physim-Appketten rechnen echte Modelle, zeigen 3D-Szenen und Livewerte, prüfen Pause, Einzelschritt, Stop und geladene Messdaten. Kamera-/Render-/Steuerungspfade inspiziert. Gesamte Plattform-/Grafikabnahme bleibt offen."
     },
     {
       "id": "PP-0060",
@@ -376,9 +390,14 @@
       "kind": "list",
       "scope": "planned",
       "text": "  - **Auswerten**: eigener Code in beiden Sprachen, Datenzugriff, Berechnungen, Tabellen und Plots.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/report_ui.inc",
+        "tests/test_pendulum_tutorial_report.c",
+        "examples/documentation/pendulum_analysis.phys",
+        "docs/platform-validation.md#grundanforderungen-der-drei-arbeitsbereiche"
+      ],
+      "note": "Aktuelle C-/Physim-Analysequellen erzeugen wirkliche Berichte; C-Tabelle visuell gelesen, tatsächlicher Physim-Bericht zusätzlich mit unabhängigen Kurven-/Tabellen-/Energie-/Periodenprüfer gegen Originalmessungen validiert. Gemeinsame Darstellung inspiziert. Detaillierter Analyseumfang und ganze Plattformmatrix bleiben separat offen."
     },
     {
       "id": "PP-0061",
@@ -453,9 +472,15 @@
       "kind": "list",
       "scope": "planned",
       "text": "- 2D-Experimente können in einer 3D-Szene betrachtet werden.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "examples/collision/main.c",
+        "examples/language/collision.phys",
+        "app/graphics.c",
+        "app/main.c",
+        "docs/platform-validation.md#grundanforderungen-der-drei-arbeitsbereiche"
+      ],
+      "note": "Aktuelle XY-Kugelstoßmodelle bei Z=0 werden als echte 3D-Objekte mit Kamera, Projektionsmatrix und Tiefentest gerendert; beide Appbilder und Szenenassertions geprüft. Begrenzter 2D-in-3D-Grundnachweis, keine gesamte Renderer-/Plattformabnahme."
     },
     {
       "id": "PP-0065",
@@ -469,9 +494,15 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Simulationen können gestartet, pausiert, schrittweise ausgeführt, fortgesetzt und abgebrochen werden.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/design_ui.inc",
+        "app/main.c",
+        "app/step_breakpoint_tests.inc",
+        "runners/experiment.c",
+        "docs/platform-validation.md#grundanforderungen-der-drei-arbeitsbereiche"
+      ],
+      "note": "Gemeinsame Start/Pause/Step/Run/Stop-IPC und Buttonpfade inspiziert; aktuelle reale C-/Physim-Gesamtwege und dokumentierte Haltepunkt-Appkette mit Fortsetzen/Reset belegen die Funktionen. Gesamte neue Plattformmatrix bleibt offen."
     },
     {
       "id": "PP-0066",
