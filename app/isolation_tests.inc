@@ -50,7 +50,8 @@ static void isolation_test_frame(app *a,const char *mode,int *stage,int *code,co
     case 6: {
         if(!idle(a) || a->library_thread)return;
         ok=!a->hello && a->paused && (hang || a->runner.exit_code!=0);
-        if(create)ok &= !exists(failed);
+        if(create)ok &= !exists(failed) && !a->data.thread &&
+                       strstr(a->status,"keine Messdatei")!=NULL;
         else {
             ps_run_reader reader;ok &= ps_run_open(&reader,failed)==PS_OK;
             if(ok) {

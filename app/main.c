@@ -1807,13 +1807,20 @@ static void pump(app *a) {
             a->hello = false;
             char message[200];
             bool failed_reset = a->reset_starting;
+            bool recorded_run = exists(a->last_run);
             if (failed_reset) {
                 snprintf(a->last_run, sizeof a->last_run, "%s", a->reset_previous_run);
                 a->reset_previous_run[0] = 0;
                 a->reset_starting = false;
                 snprintf(message, sizeof message,
                          "Zurücksetzen fehlgeschlagen (Exit %d). Der bisherige Zustand bleibt erhalten.", code);
-            } else if (a->runner.timed_out)
+            } else if (!recorded_run && a->runner.timed_out)
+                snprintf(message, sizeof message,
+                         "Runner nach Zeitlimit beendet; keine Messdatei angelegt. Details im Protokoll.");
+            else if (!recorded_run)
+                snprintf(message, sizeof message,
+                         "Runner beendet (Exit %d); keine Messdatei angelegt. Details im Protokoll.", code);
+            else if (a->runner.timed_out)
                 snprintf(message, sizeof message,
                          "Runner nach Zeitlimit beendet. Vollständige Messblöcke bleiben lesbar.");
             else
@@ -1821,7 +1828,7 @@ static void pump(app *a) {
                          "Runner beendet (Exit %d). Lauf gespeichert bzw. bis zum letzten Block "
                          "rekonstruierbar.", code);
             status(a, message);
-            if (!failed_reset)
+            if (!failed_reset && recorded_run)
                 request_dataset(a);
             refresh_library(a);
         }

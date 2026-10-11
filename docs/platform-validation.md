@@ -2641,3 +2641,35 @@ bestehen ebenfalls frisch **2/2** in
 `build/current-release-mac/test-results/run-v_t569c2`, Log
 `build/current-review-persistence-mac.log`. Die sieben ursprünglichen
 Review-Reparaturen aus `903135e` bleiben erhalten.
+
+## Fehlender Datensatz nach frühem Experimentabbruch
+
+Die stärkere Gegenprobe am Stand `7b08c04` weist einen irreführenden Abschluss
+nach: Ein echter C-Abbruch beim Erzeugen hinterlässt keine Messdatei. Die App
+startete dennoch einen Datensatz-Worker und ersetzte den Runner-Hinweis durch
+„Datensatz konnte nicht vollständig gelesen werden“. Der tatsächliche Versuch
+endet in Stufe 6 mit Exit 1; Log:
+`build/current-no-measurement-before-absolute-mac.log`. Ein zuvor mit relativem
+Projektpfad gestarteter Harnessversuch scheiterte bereits am Projektbuild und
+ist kein Nachweis dieser Fehlerursache.
+
+Die App prüft nun nach dem Prozessende, ob eine Messdatei vorhanden ist.
+Ohne Datei bleibt „keine Messdatei angelegt“ mit Exit-Code beziehungsweise
+Zeitlimit und Verweis auf das Protokoll erhalten; ein Datensatz-Worker wird
+nicht gestartet. Vorhandene Dateien werden weiterhin geladen und bei Bedarf
+rekonstruiert. Fehlgeschlagene Reset-Läufe behalten ihren bestehenden eigenen
+Pfad zur Wiederherstellung des vorherigen Zustands. Quell-Snapshots und
+Laufgrenzen werden nicht gelöscht. Die create-Fälle des Isolationstests
+prüfen den erhaltenen Hinweis zusätzlich zu fehlender Messdatei, beendetem
+Runner, bedienbarem Handbuch und erfolgreichem neuen Lauf.
+
+Die korrigierte Release-App besteht **2/2** Katalogfälle in
+`build/current-release-mac/test-results/run-dbnlt5_d`, Log
+`build/current-no-measurement-recovery-mac.log`: alle **acht** realen
+C-/Physim-Isolationsfälle und **vier** Resetvarianten. Die vier frühen
+Fehlerfälle enthalten den richtigen Hinweis und keinen nachfolgenden
+generischen Datensatzfehler; alle zwölf App-Prozesse enden erfolgreich.
+Der Screenshot `isolation-recovered.bmp` des C-create-Abbruchs wurde zusätzlich
+als PNG-Vorschau dekodiert und visuell geprüft: vollständiger Fehlerhinweis,
+weiter verfügbare Steuerung und keine erfundenen Messwerte.
+Dies belegt Intel macOS; die aktuelle andere Plattformmatrix bleibt offen.

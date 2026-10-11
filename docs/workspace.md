@@ -329,6 +329,11 @@ begrenzen. Null bedeutet ohne Grenze. Die Zeit schließt Pausen ein; Änderungen
 gelten für neu gestartete Simulationen und Auswertungen. Monte-Carlo-Serien haben
 ein eigenes Zeitlimit. Ein abgebrochener Lauf kann als teilweise wiederhergestellt
 lesbar sein; kennzeichne solche Daten bei der Interpretation.
+Scheitert das Experiment vor dem Anlegen seiner Messdatei, meldet die App
+„keine Messdatei angelegt“ mit dem Prozess-Ergebnis. Quellcode-Snapshot und
+Laufgrenzen bleiben zur Fehlersuche erhalten; ein neuer Start erhält einen
+eigenen Namen. Vorhandene Messdateien werden weiterhin eingelesen, auch wenn
+ihr letzter Block nur teilweise geschrieben wurde.
 
 ## Szene untersuchen
 
