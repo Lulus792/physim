@@ -130,6 +130,8 @@ static const documentation_topic documentation_topics[] = {
     {"Reale Gase: Van der Waals", "docs/real-gas.md", false},
     {"Barrierefreiheit", "docs/accessibility.md", false},
     {"Historische Plattformnachweise", "docs/platform-validation-history.md", false},
+    {"CFD Teilprojekt", "docs/cfd-project-plan.md", false},
+    {"FEM Teilprojekt", "docs/fem-project-plan.md", false},
     {"3D-Szenenmessung", "docs/scene-rendering.md", false},
     {"App-Profilaufzeichnung", "docs/app-profiling.md", false},
 };

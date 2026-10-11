@@ -31,58 +31,8 @@ Der vollständige historische Nachweis mit allen Testpfaden bleibt im
 
 ## Exakte Toleranzvergleiche am 8. Oktober 2026
 
-`ps_close` und Physim `isClose` entscheiden die symmetrische absolute/relative
-Bedingung für exakte binäre Eingabewerte. Ein konservatives Fehlerintervall
-beschleunigt eindeutige Fälle; die vorhandenen begrenzten Integer-Hilfen erhalten
-kritische Differenzen, Produkte und Summen ohne Heapallokation. Beide Toleranzen
-null verlangen exakte Gleichheit; nichtendliche Werte/Toleranzen und negative
-Toleranzen ergeben false. [Einheiten und Grenzvertrag](math.md).
-
-Die unabhängige Fraction-Gegenprobe findet beim bisherigen, im Run-Stream-SDK
-aufbewahrten Core 1751 abweichende Grenzentscheidungen in 9176 Fällen
-(`build/close-baseline-final.log`). Darunter sind 1 gegen den negativen kleinsten
-Subnormalwert bei absoluter Toleranz 1 und entgegengesetzte `DBL_MAX`-Werte
-knapp unter der kombinierten Toleranzgrenze. Die endgültige Probe prüft jede
-C-Eingabe in beiden Vergleichsrichtungen; die Sprachfixture umfasst 263 aus
-binären Mantissen/Exponenten exakt rekonstruierbare Eingaben. Referenzen werden
-mit Python Fraction unabhängig von der Produktionsimplementierung berechnet.
-
-Intel macOS 14.6.1/Apple Clang 16 besteht sechs ausgewählte Release-Fälle unter
-`build/contact-world-language-release-mac/test-results/run-13xdmja8`:
-Math, Sprachchecker, Referenzdokumentation sowie skalare Suche, Transformationen
-und Zahlenvergleich mit unabhängigen Orakeln. Debian 12/Clang 14 besteht dieselbe
-Auswahl unter ASan/UBSan in
-`build/atspi-asan-linux/test-results/run-nuynpn3v` (6/6).
-`ASAN_OPTIONS=detect_leaks=0` lässt Address-/UndefinedBehavior-Prüfungen aktiv;
-macOS-Sanitizer bleiben wegen fehlendem `ld64.lld` unbestätigt.
-
-Das macOS-SDK besitzt 457 manifestierte Dateien. Die fokussierte Prüfung
-`--comparison-only` verschiebt es nach
-`build/close-sdk-checks/Native SDK ä 5gngu1fr`, prüft dessen Manifest und baut
-Core ausschließlich aus Paketquellen neu. Der Paketcompiler übersetzt die
-263 Physim-Eingaben. C-/Physim-Programme bestehen gegen installierte und neu
-gebaute Bibliothek dieselbe rationale Gegenprobe. Das unabhängige Prüfkit
-umfasst 108 Dateien und besteht Paketgrenzen, SHA-256, fehlende/dynamische
-Eingaben und exklusives Veröffentlichen.
-
-Debian 12/GCC 12.2 besteht dieselben sechs Release-Fälle unter
-`build/contact-world-language-release-linux/test-results/run-mx8_srnb`.
-Die großen bestehenden Such-/Transformations-Sprachfixtures benötigen längere
-Optimierung; GCC meldet ein erschöpftes Variablen-Tracking-Budget und kompiliert
-diese Dateien anschließend ohne dieses optionale Debug-Tracking. Der tatsächlich
-abgeschlossene Gesamtlauf besteht inklusive der neuen Vergleichsfixture (6/6).
-
-Das Linux-SDK enthält ebenfalls 457 manifestierte Dateien. Die verschobene
-Prüfung unter `build/close-sdk-checks/Native SDK ä 5x7emncm` besteht dieselbe
-C-/Physim-Gegenprobe gegen installierten und ausschließlich aus Paketquellen
-neu gebauten Core. Alle 18 geänderten Dateien stimmen zwischen macOS und Linux
-per SHA-256 überein (`build/close-source-freeze.json`). Die endgültige
-Prüfkiterstellung mit 108 Dateien besteht auf beiden Plattformen.
-
-PP-0358 ist mit diesen begrenzten Nachweisen als implementiert erfasst. Die
-Originaltexte und Umfänge aller 531 Planblöcke bleiben erhalten; PP-0365 und die
-vollständige Algorithmus-/Produkt-/Plattformabnahme bleiben offen. Die Nachweise
-enthalten keine aktuelle Windows-, Apple-Silicon- oder macOS-Sanitizer-Abnahme.
+Der vollständige historische Nachweis mit allen Testpfaden bleibt im
+[Plattformarchiv](platform-validation-history.md#exakte-toleranzvergleiche-am-8-oktober-2026) erhalten.
 
 ## Kurvenauswertung am 8. Oktober 2026
 
@@ -4117,3 +4067,41 @@ besteht alle sechs Transportmodi: vollständige Live-Daten nach 75.840/75.338 s,
 
 Der Produktcode ist unverändert. Die macOS-CI-Gegenprüfung der neuen Grenzen
 und die vollständige Plattform-/SDK-Abnahme bleiben noch offen.
+
+
+## Gezielte Rückstauprüfung auf sechs Plattformen und Compilern
+
+Die [erneute CI 38175743829](https://github.com/PhysicSimulator/physim/actions/runs/38175743829)
+am exakt belegten `ac5e162154fd5437992fee7eb015b789fd886fbe` ist tatsächlich
+auf allen sechs Matrixeinträgen erfolgreich abgeschlossen. Vollständige Joblogs
+wurden gelesen; normale und künstlich langsame Rückstaufälle bestehen jeweils
+**2/2** mit Debug-Builds:
+
+| Host und Compiler | Job | Native Ergebnisse |
+| --- | --- | --- |
+| macOS Intel, AppleClang | 114577640961 | `run-1em4bgwj` |
+| macOS Apple Silicon, AppleClang | 114577641124 | `run-azoc8y5h` |
+| Linux GCC | 114577641064 | `run-orn4ykgo` |
+| Linux Clang | 114577641181 | `run-y3ktl5br` |
+| Windows MSVC | 114577641202 | `run-9_ir9cv1` |
+| Windows ClangCL | 114577641259 | `run-xy9mam1z` |
+
+Dieser Nachweis schließt den gezielten Rückstaufehler einschließlich der beiden
+macOS-CI-Hosts. Er ersetzt keine vollständige C17-/GUI-/SDK-/Paketmatrix.
+
+## Eigenständige CFD und FEM Planung
+
+PP-0417 besitzt jetzt zwei getrennte Teilprojektpläne mit optionalen
+C17-Bibliotheken, Modell-/Einheitenverträgen, Ressourcen/Handles, Feldarchiven,
+C-/Physim-Parität, analytischen Referenzen, Konvergenzmaßen, Meilensteinen und
+Plattform-/Paketabnahmen. Die bestehenden Lehrmodelle bleiben als solche benannt;
+eine Planungsanforderung wird nicht als bereits implementierter Solver gewertet.
+Beide Seiten sind in den Projektunterlagen des Offline-Handbuchs registriert
+Der SDK-Packager verwendet hierfür seine bestehende Dokumentkopie.
+
+`build/current-domain-plans-docs-mac.log`, Release-Ergebnisse
+`build/current-release-mac/test-results/run-gtp2e4lp`: **2/2 bestanden**.
+Der App-Build ist tatsächlich ausgeführt; der Handbuchparser liest auch beide
+neuen Seiten. Die Referenzgeneratorprüfung besteht. Dies ist keine tatsächliche
+CFD-/FEM-Solverprüfung und keine neue verschobene SDK-Abnahme. Der vollständige
+lokale Build und SDK-Prüfer am eingefrorenen e0f8f27 laufen noch unabhängig weiter.

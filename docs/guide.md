@@ -62,6 +62,11 @@ ausgewählten Weg zurück. Die gemeinsamen Modellannahmen bleiben einmal dokumen
 
 ## Das Handbuch verwenden
 
+Die späteren räumlichen Solver besitzen getrennte Anforderungen und Abnahmen:
+[CFD für inkompressible Strömung](cfd-project-plan.md) und
+[FEM für elastische Körper](fem-project-plan.md). Diese Teilprojektpläne
+beschreiben geplante Arbeit und die Grenzen ihrer ersten Modelle.
+
 **F1** oder **Handbuch & Referenz** öffnet ein eigenes Fenster. Du kannst es neben
 dem Editor lassen; die Simulation bleibt unabhängig bedienbar. **Themen** bietet
 die Bereiche Lernen, Fachthemen, Funktionsreferenz und Projektunterlagen.

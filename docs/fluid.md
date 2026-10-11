@@ -3,8 +3,9 @@
 Physim 0.182.0 ergänzt dieselben SI-Funktionen wie C für laminare Rohre,
 passive stationäre Drucknetze und periodischen Tracertransport.
 [C-Referenz](reference/fluid.md), [Sprachbindungen](reference/language-library.md).
-Dies sind ausdrücklich Lehrmodelle. CFD und FEM bleiben entsprechend dem
-Projektplan eigene größere Vorhaben.
+Dies sind ausdrücklich Lehrmodelle. Die eigenständigen
+[CFD-Anforderungen und Abnahmen](cfd-project-plan.md) und der
+[FEM-Teilprojektplan](fem-project-plan.md) beschreiben den späteren Ausbau.
 
 ## Rohre, Stoffdaten und Gültigkeit
 

@@ -277,7 +277,7 @@
         ".github/workflows/runner-backpressure.yml",
         "tests/test_runner_backpressure.py"
       ],
-      "note": "Frische Debian-12-/Ubuntu-24.04-Systeme bestehen tatsächlich vollständiges SDK, GUI und Dialoge am exakt belegten Commit 35fea55; Intel macOS besitzt neue SDK-/gezielte Appnachweise. Ganze aktuelle Windows-/Apple-Silicon-/Intel-/Linux-Matrix nach späteren Änderungen noch nicht vollständig beendet; Windows-GPU-/GUI-Prüfung bleibt separat offen. CI-Konfiguration oder statisches Workflowlint sind kein Funktionsgleichheitsnachweis. Die gezielte Rückstau-CI am e0f8f27 besteht unter Linux/GCC/Clang und Windows/MSVC/ClangCL jeweils zwei tatsächlich ausgeführte Debug-Fälle. Beide macOS-Hosts bestehen den normalen Fall; der künstlich langsame Fall überschreitet dort den Zeitrahmen. Dies beweist keine vollständige Plattformabnahme."
+      "note": "Frische Debian-12-/Ubuntu-24.04-Systeme bestehen tatsächlich vollständiges SDK, GUI und Dialoge am exakt belegten Commit 35fea55; Intel macOS besitzt neue SDK-/gezielte Appnachweise. Ganze aktuelle Windows-/Apple-Silicon-/Intel-/Linux-Matrix nach späteren Änderungen noch nicht vollständig beendet; Windows-GPU-/GUI-Prüfung bleibt separat offen. CI-Konfiguration oder statisches Workflowlint sind kein Funktionsgleichheitsnachweis. Die gezielte Rückstau-CI am e0f8f27 besteht unter Linux/GCC/Clang und Windows/MSVC/ClangCL jeweils zwei tatsächlich ausgeführte Debug-Fälle. Beide macOS-Hosts bestehen den normalen Fall; der künstlich langsame Fall überschreitet dort den Zeitrahmen. Dies beweist keine vollständige Plattformabnahme. Die erneute gezielte Rückstau-CI am ac5e162 besteht auch auf macOS/Intel und Apple Silicon: alle sechs Host-/Compilerkombinationen haben die zwei Debug-Fälle erfolgreich ausgeführt. Die volle Matrix und SDK-Abnahme bleiben getrennte Gates."
     },
     {
       "id": "PP-0055",
@@ -3653,9 +3653,16 @@
       "kind": "paragraph",
       "scope": "later",
       "text": "CFD und FEM müssen jeweils als eigene große Teilprojekte geplant werden. Sie sollten nicht als Nebenfunktion in den ersten Kern gezwängt werden.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "docs/cfd-project-plan.md",
+        "docs/fem-project-plan.md",
+        "docs/fluid.md",
+        "docs/guide.md",
+        "app/documentation_ui.inc",
+        "tools/native_tests.py"
+      ],
+      "note": "CFD und FEM sind als getrennte Teilprojekte mit Modell-/Einheitenverträgen, Ressourcen/Handles, optionalen C17-Bibliotheken, Feldarchiven, C-/Physim-Parität, unabhängigen Referenzen, Konvergenzmaßen, Meilensteinen und Plattform-/Paketabnahmen geplant. Die Planungsanforderung ist umgesetzt; die geplanten Solver und deren Abnahmen bleiben spätere offene Arbeit."
     },
     {
       "id": "PP-0425",
