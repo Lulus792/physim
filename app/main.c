@@ -1327,6 +1327,19 @@ static bool start_run_mode(app *a, bool paused) {
     return false;
 }
 static void start_run(app *a) { (void)start_run_mode(a, false); }
+static bool runner_control_ready(const app *a) {
+    return a->runner.running && a->hello && !a->reset_starting && a->stop_at==0;
+}
+static bool runner_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
+    if(a->tab!=1 || (key->key!=SDLK_F8 && key->key!=SDLK_F9))return false;
+    if(!key->repeat && !(key->mod & (SDL_KMOD_CTRL|SDL_KMOD_GUI|SDL_KMOD_ALT|SDL_KMOD_SHIFT))) {
+        if(key->key==SDLK_F8 && runner_control_ready(a) && a->paused)command(a,PS_MSG_STEP);
+        if(key->key==SDLK_F9 && a->runner.running && !a->stop_at) {
+            command(a,PS_MSG_STOP);a->stop_at=ps_clock();
+        }
+    }
+    return true;
+}
 /* A reset owns the stop/reap/load/relaunch sequence. Other actions remain idle-gated. */
 static bool reset_available(app *a) {
     return a->loaded && !a->analysis_only && a->built && build_inputs_current(a) && !a->recovery &&
@@ -3295,6 +3308,7 @@ int main(int argc, char **argv) {
                 if (toolbar_keyboard_key(a, &e.key)) continue;
                 if (settings_keyboard_key(a, &e.key)) continue;
                 if (project_manager_keyboard_key(a, &e.key)) continue;
+                if (runner_keyboard_key(a, &e.key)) continue;
                 if (a->dock_drag && e.key.key==SDLK_ESCAPE) { a->dock_drag=0;a->dock_dragging=false;continue; }
                 if (scene_shortcut(a, &e.key)) continue;
                 if (a->tab == 1 && e.key.key == SDLK_SPACE && !e.key.repeat &&

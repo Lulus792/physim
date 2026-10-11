@@ -654,8 +654,7 @@ static void workspace_panel(app *a) {
                     build_project(a);
             }
             nk_end_disabled(ui);
-            bool run_control_ready = a->runner.running && a->hello && !a->reset_starting &&
-                                     a->stop_at == 0;
+            bool run_control_ready = runner_control_ready(a);
             nk_begin_disabled(ui, !run_control_ready);
             a->run_control_bounds[1] = nk_widget_bounds(ui);
             if (action_button(ui, a->paused ? "Fortsetzen" : "Pause", run_control_ready))
@@ -666,6 +665,8 @@ static void workspace_panel(app *a) {
                 command(a, PS_MSG_STEP);
             nk_end_disabled(ui);
             nk_end_disabled(ui);
+            if(nk_input_is_mouse_hovering_rect(&ui->input,a->run_control_bounds[2]))
+                nk_tooltip(ui,"F8: Einzelschritt in einer pausierten Simulation");
             if(!compact_controls)nk_layout_row_dynamic(ui, 34, 3);
             a->run_control_bounds[3] = nk_widget_bounds(ui);
             nk_begin_disabled(ui, !reset_available(a));
@@ -680,6 +681,8 @@ static void workspace_panel(app *a) {
                 a->stop_at = ps_clock();
             }
             nk_end_disabled(ui);
+            if(nk_input_is_mouse_hovering_rect(&ui->input,a->run_control_bounds[4]))
+                nk_tooltip(ui,"F9: Lauf stoppen, auch während der Initialisierung");
             a->run_control_bounds[5] = nk_widget_bounds(ui);
             if (nk_button_label(ui, "Auswerten")) {
                 a->tab = 2;

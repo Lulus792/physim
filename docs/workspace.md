@@ -427,11 +427,20 @@ im zuvor aktiven Editor ohne erneuten Mausklick weiterschreiben.
 - **Ctrl+F:** In der aktuellen Ansicht suchen.
 - **Ctrl+L:** Protokoll ein- oder ausblenden.
 - **F5:** Speichern und bauen.
-- **F6:** Simulation starten oder pausieren.
+- **F6:** Simulation starten, pausieren oder fortsetzen.
 - **F7:** Simulation auf den pausierten Anfangszustand zurücksetzen.
+- **F8:** Im Arbeitsbereich Simulieren genau einen Schritt der pausierten Simulation ausführen.
+- **F9:** Im Arbeitsbereich Simulieren den Lauf stoppen, auch während der Initialisierung.
 - **F1:** Eigenständiges Handbuchfenster öffnen.
 - **F10:** Hauptmenüleiste mit der Tastatur bedienen.
 - **Ctrl+,**: Einstellungen.
+
+F8/F9 wirken nur im Hauptfenster unter **Simulieren** und ohne Ctrl/Cmd, Alt
+oder Shift. Wiederholtasten lösen keine weiteren Schritte oder Stop-Anforderungen
+aus. Im Editor und Hilfefenster verändern sie die Simulation nicht. Einzelschritt
+verlangt einen pausierten, fertig initialisierten Runner; Stoppen funktioniert
+auch bei einer festhängenden Initialisierung und verwendet denselben Stop-Timeout
+wie der Button. Die Tooltips der beiden Buttons nennen die Kürzel.
 
 Im Texteditor gelten außerdem die plattformüblichen Sprungbefehle:
 

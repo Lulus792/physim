@@ -30,12 +30,14 @@ static bool isolation_test_start(app *a,const char *root,const char *mode) {
 static void isolation_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
     static char failed[4096];static double started;static uint32_t digest;static bool saved;
     bool create=strstr(mode,"-create-")!=NULL,hang=strstr(mode,"-hang")!=NULL,ok=true;
+    bool keyboard=strstr(mode,"-keyboard")!=NULL;
     switch(*stage) {
     case 0:build_project(a);break;
     case 1:if(!idle(a) || a->library_thread)return;
         ok=a->built && isolation_test_angle(a,"1.5");
-        a->project_settings_dirty=true;test_mouse(a,a->run_control_bounds[0],true);break;
-    case 2:test_mouse(a,a->run_control_bounds[0],false);break;
+        a->project_settings_dirty=true;
+        if(keyboard)test_window_key_mod(a->window,SDLK_F6,0);else test_mouse(a,a->run_control_bounds[0],true);break;
+    case 2:if(!keyboard)test_mouse(a,a->run_control_bounds[0],false);break;
     case 3:
         if(!a->runner.running && !a->last_run[0])return;
         snprintf(failed,sizeof failed,"%s",a->last_run);started=ps_clock();break;
@@ -43,10 +45,11 @@ static void isolation_test_frame(app *a,const char *mode,int *stage,int *code,co
         if(hang) {
             if(ps_clock()-started<.5)return;
             ok=a->runner.running && (create?!a->hello:a->hello);
-            *capture="isolation-hung.bmp";test_mouse(a,a->run_control_bounds[4],true);
+            *capture="isolation-hung.bmp";
+            if(keyboard)test_window_key_mod(a->window,SDLK_F9,0);else test_mouse(a,a->run_control_bounds[4],true);
         }
         break;
-    case 5:if(hang)test_mouse(a,a->run_control_bounds[4],false);break;
+    case 5:if(hang && !keyboard)test_mouse(a,a->run_control_bounds[4],false);break;
     case 6: {
         if(!idle(a) || a->library_thread)return;
         ok=!a->hello && a->paused && (hang || a->runner.exit_code!=0);
@@ -69,12 +72,13 @@ static void isolation_test_frame(app *a,const char *mode,int *stage,int *code,co
     case 8:ok=!a->doc_visible && isolation_test_angle(a,"0.45");
         a->project_settings_dirty=true;
         snprintf(a->step_breakpoints,sizeof a->step_breakpoints,"7");
-        test_mouse(a,a->run_control_bounds[0],true);break;
-    case 9:test_mouse(a,a->run_control_bounds[0],false);break;
+        if(keyboard)test_window_key_mod(a->window,SDLK_F6,0);else test_mouse(a,a->run_control_bounds[0],true);break;
+    case 9:if(!keyboard)test_mouse(a,a->run_control_bounds[0],false);break;
     case 10:if(!a->hello || !a->paused || a->simulation_time==0)return;
         ok=strcmp(failed,a->last_run) && a->simulation_time==7*.005;
-        *capture="isolation-restarted.bmp";test_mouse(a,a->run_control_bounds[4],true);break;
-    case 11:test_mouse(a,a->run_control_bounds[4],false);break;
+        *capture="isolation-restarted.bmp";
+        if(keyboard)test_window_key_mod(a->window,SDLK_F9,0);else test_mouse(a,a->run_control_bounds[4],true);break;
+    case 11:if(!keyboard)test_mouse(a,a->run_control_bounds[4],false);break;
     case 12: {
         if(!idle(a) || a->library_thread)return;
         ps_run_reader reader;ok=ps_run_open(&reader,a->last_run)==PS_OK;

@@ -3019,3 +3019,61 @@ in Abschnitt 6 noch eine vollständige UX-, Sprach-, Plattform- oder Produktabna
 Die neue unverkürzte Headless-Suite läuft separat unter
 `build/current-headless-mac`, Log `build/current-parameters-complete-native-mac.log`;
 ein Gesamtergebnis wird erst nach ihrem tatsächlichen Ende behauptet.
+
+## Vollständige Headless-Abnahme nach den Parameteränderungen
+
+Die neue unverkürzte Intel-macOS-Release-Suite ist tatsächlich beendet:
+**660/660** in `build/current-headless-mac/test-results/run-oggi4py0`, Log
+`build/current-parameters-complete-native-mac.log`. Alle 660 Ergebnisobjekte
+haben Status `passed`. Sie erfasst die neuen C-/Physim-Material-, Wurf-, Box-
+und Kugelstoßparameter sowie die bestehenden Core-/Sprach-/Runner-/Orakel-
+und Dokumentationsfälle. Quellgrundlage ist `06a30c9`; danach änderten sich
+zunächst nur die Auditdokumente. Die folgende App-Tastaturerweiterung ist
+keine Eingabe der ohne SDL/App ausgeführten Suite und wird daraus nicht
+als GUI-Abnahme abgeleitet.
+
+## F8/F9 für tatsächliche Simulationssteuerung
+
+Im Hauptfenster unter Simulieren führt **F8** genau einen Schritt eines
+pausierten, fertig initialisierten Runners aus. **F9** verwendet denselben
+Stop-/Timeoutpfad wie der Button und funktioniert auch vor HELLO bei hängender
+Initialisierung. Gemeinsame Bereitschaftsprüfung verhindert einen Step bei
+nicht verfügbarer Steuerung; wiederholte oder modifizierte Tasten werden
+ignoriert. Editor, Handbuch und andere Hauptarbeitsbereiche lösen damit keine
+Simulationsaktion aus. Beide Button-Tooltips und das Handbuch nennen die Kürzel.
+
+Die tatsächliche Release-App besteht **2/2** Katalogfälle in
+`build/current-release-mac/test-results/run-ivh7y06y`, Log
+`build/current-runner-keyboard-mac.log`. Der bestehende Maus-Haltepunktfall
+besteht für beide Sprachen und Fenstergrößen mit seinen vollständigen alten
+Messdaten-/Speicher-/Reopen-Assertions. Der neue Tastaturfall führt **zehn**
+erfolgreiche App-Prozesse aus: vier C-/Physim-/Fenstergrößenfälle, vier
+gespeicherte Wiederöffnungen und zwei tatsächliche hängende create-Callbacks
+mit F9-Stop und gesundem Neustart im selben App-Prozess.
+
+Die vier Tastaturketten betätigen F6/F8/F6/F7/F6/F9 über wirkliche SDL-
+Tastaturereignisse. Sie prüfen alle gespeicherten Messzeilen bei 3, 4 und 7
+akzeptierten Schritten, gehaltene Zeit und erhaltene Quellen/Einstellungen.
+Zusätzlich bleiben Runner und Messzeit unter wiederholtem F8/F9, dem macOS-
+Command-Modifikator, F8/F9 im echten Hilfefenster sowie F8/F9 nach Cmd+1 im
+Editor unverändert. Nach Cmd+2 arbeiten die Kürzel wieder. Die hängenden
+C-/Physim-Fälle besitzen vor F9 tatsächlich noch kein HELLO; der Stop-Timeout
+beendet den Runner, und der neue gesunde Lauf enthält exakt acht Messpunkte.
+Dies ist eine konkrete zusätzliche Tastaturabnahme auf Intel macOS, keine
+vollständige Barrierefreiheits-, SDK- oder gesamte Plattformabnahme.
+
+## Linux/Clang am Stand 7b08c04 vollständig erfolgreich
+
+Der [Linux-/Clang-Job 114433017259](https://github.com/PhysicSimulator/physim/actions/runs/38126895020/job/114433017259)
+ist erfolgreich abgeschlossen. Sein authentifiziert gelesener Log belegt
+**685/685** native Fälle und **90/90** Displayfälle, nochmals **685/685** mit
+Sanitizern sowie **90/90** Sanitizer-Displayfälle. Der komplette verschobene
+App-SDK-Lauf endet ebenfalls erfolgreich in `Native SDK ä xeqtytld`.
+Beide Display-Suiten enthalten den tatsächlich bestandenen
+`runner_isolation_workflow`; auch der zuvor gestörte Haltepunkt-Appfall bei
+beiden Sprachen/Fenstergrößen besteht. Der genaue Auszug ist
+`build/7b08-linux-clang-proof-excerpt.log`.
+Die absichtlich fehlgeschlagenen inneren 1/3-Fälle des Testtreiber-Selbsttests
+sind kontrollierte Prüfdaten und werden nicht als Produktfehler umgedeutet.
+Dieser Linux-Nachweis betrifft `7b08c04`, nicht die spätere Parameter- oder
+F8/F9-Erweiterung. Die aktuelle gesamte Plattformmatrix bleibt offen.

@@ -3,7 +3,7 @@ static bool breakpoint_test_start(app *a,const char *root,const char *mode) {
     if (!strcmp(mode,"breakpoints-read")) {
         open_project(a);return a->loaded && !strcmp(a->step_breakpoints,"3,7") && !a->project_settings_dirty;
     }
-    a->example=!strcmp(mode,"breakpoints-c")?0:8;new_project(a);
+    a->example=strstr(mode,"-phys")?8:0;new_project(a);
     if (!a->loaded || a->step_breakpoints[0])return false;
     a->preferences.sidebar_width=360;ps_dock_hide(&a->preferences.dock,PS_DOCK_LOG);
     a->view_disclosure=NK_MINIMIZED;a->steps_disclosure=NK_MAXIMIZED;
@@ -22,6 +22,7 @@ static bool breakpoint_test_rows(app *a,unsigned expected) {
 }
 static void breakpoint_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
     static double held,wall;static char original[4096];static unsigned focus_attempts;bool ok=true;
+    bool keyboard=strstr(mode,"-keyboard")!=NULL;
     if(!strcmp(mode,"breakpoints-read")){puts("STEP BREAKPOINT UI SELF-TEST: PASSED");a->quitting=true;return;}
     switch(*stage) {
     case 0:if(a->breakpoint_bounds.w<=0 || !hierarchy_test_click(a,a->breakpoint_bounds))return;break;
@@ -43,30 +44,51 @@ static void breakpoint_test_frame(app *a,const char *mode,int *stage,int *code,c
         if(!ok)fprintf(stderr,"Breakpoint edit text=%s dirty=%d active=%d\n",a->step_breakpoints,a->project_settings_dirty,a->breakpoint_input_active);
         *capture="breakpoints-configured.bmp";save_project(a);ok &= !a->project_settings_dirty;build_project(a);break;
     case 5:if(!idle(a) || a->library_thread)return;ok=a->built;
-        test_mouse(a,a->run_control_bounds[0],true);break;
-    case 6:test_mouse(a,a->run_control_bounds[0],false);break;
+        if(keyboard)test_window_key_mod(a->window,SDLK_F6,0);else test_mouse(a,a->run_control_bounds[0],true);break;
+    case 6:if(!keyboard)test_mouse(a,a->run_control_bounds[0],false);break;
     case 7:if(!a->hello || !a->paused || a->simulation_time==0)return;
         ok=breakpoint_test_rows(a,4);held=a->simulation_time;wall=ps_clock();
-        snprintf(original,sizeof original,"%s",a->last_run);break;
+        snprintf(original,sizeof original,"%s",a->last_run);
+        if(keyboard){test_window_key_mod(a->window,SDLK_F1,0);*stage=70;return;}break;
+    case 70:
+        ok=a->doc_visible;
+        test_window_key_mod(a->doc_window,SDLK_F8,0);test_window_key_mod(a->doc_window,SDLK_F9,0);
+        test_window_key_mod(a->window,SDLK_F8,PS_UI_COMMAND_MOD);test_window_key_mod(a->window,SDLK_F9,PS_UI_COMMAND_MOD);
+        for(unsigned i=0;i<2;i++) {
+            SDL_Event e={0};e.type=SDL_EVENT_KEY_DOWN;e.key.windowID=SDL_GetWindowID(a->window);
+            e.key.key=i?SDLK_F9:SDLK_F8;e.key.repeat=true;ok &= SDL_PushEvent(&e);
+            e.type=SDL_EVENT_KEY_UP;e.key.repeat=false;ok &= SDL_PushEvent(&e);
+        }
+        break;
+    case 71:
+        ok=a->runner.running && a->paused && a->simulation_time==held;
+        test_window_key_mod(a->doc_window,SDLK_ESCAPE,0);break;
+    case 72:
+        ok=!a->doc_visible;test_window_key_mod(a->window,SDLK_1,PS_UI_COMMAND_MOD);
+        test_window_key_mod(a->window,SDLK_F8,0);test_window_key_mod(a->window,SDLK_F9,0);break;
+    case 73:
+        ok=a->tab==0 && a->runner.running && a->paused && a->simulation_time==held;
+        test_window_key_mod(a->window,SDLK_2,PS_UI_COMMAND_MOD);*stage=8;
+        if(!ok){*code=1;a->quitting=true;}return;
     case 8:if(ps_clock()-wall<.1)return;
         ok=a->paused && a->simulation_time==held && breakpoint_test_rows(a,4);
-        *capture="breakpoint-first.bmp";test_mouse(a,a->run_control_bounds[2],true);break;
-    case 9:test_mouse(a,a->run_control_bounds[2],false);break;
+        *capture="breakpoint-first.bmp";if(keyboard)test_window_key_mod(a->window,SDLK_F8,0);else test_mouse(a,a->run_control_bounds[2],true);break;
+    case 9:if(!keyboard)test_mouse(a,a->run_control_bounds[2],false);break;
     case 10:if(a->simulation_time==held)return;ok=a->paused && breakpoint_test_rows(a,5);
-        test_mouse(a,a->run_control_bounds[1],true);break;
-    case 11:test_mouse(a,a->run_control_bounds[1],false);break;
+        if(keyboard)test_window_key_mod(a->window,SDLK_F6,0);else test_mouse(a,a->run_control_bounds[1],true);break;
+    case 11:if(!keyboard)test_mouse(a,a->run_control_bounds[1],false);break;
     case 12:if(!a->paused || a->simulation_time<=held+.005)return;
         ok=breakpoint_test_rows(a,8);*capture="breakpoint-second.bmp";
-        test_mouse(a,a->run_control_bounds[3],true);break;
-    case 13:test_mouse(a,a->run_control_bounds[3],false);break;
+        if(keyboard)test_window_key_mod(a->window,SDLK_F7,0);else test_mouse(a,a->run_control_bounds[3],true);break;
+    case 13:if(!keyboard)test_mouse(a,a->run_control_bounds[3],false);break;
     case 14:if(a->reset_pending || a->reset_starting || !a->hello || !strcmp(original,a->last_run))return;
         ok=a->paused && a->simulation_time==0 && !strcmp(a->step_breakpoints,"3,7");
-        test_mouse(a,a->run_control_bounds[1],true);break;
-    case 15:test_mouse(a,a->run_control_bounds[1],false);break;
+        if(keyboard)test_window_key_mod(a->window,SDLK_F6,0);else test_mouse(a,a->run_control_bounds[1],true);break;
+    case 15:if(!keyboard)test_mouse(a,a->run_control_bounds[1],false);break;
     case 16:if(!a->paused || a->simulation_time==0)return;
         ok=breakpoint_test_rows(a,4);*capture="breakpoint-reset.bmp";
-        test_mouse(a,a->run_control_bounds[4],true);break;
-    case 17:test_mouse(a,a->run_control_bounds[4],false);break;
+        if(keyboard)test_window_key_mod(a->window,SDLK_F9,0);else test_mouse(a,a->run_control_bounds[4],true);break;
+    case 17:if(!keyboard)test_mouse(a,a->run_control_bounds[4],false);break;
     case 18:if(a->runner.running || a->library_thread || a->data.thread)return;
         ok=!a->project_settings_dirty;puts("STEP BREAKPOINT UI SELF-TEST: PASSED");a->quitting=true;break;
     default:ok=false;break;

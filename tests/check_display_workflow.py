@@ -1016,14 +1016,14 @@ def runner_isolation(flow, directory):
                         (project / "isolation-restarted.bmp").exists(), "Live app recovery screenshots missing")
 
 
-def step_breakpoints(flow, directory):
+def step_breakpoints(flow, directory, keyboard=False):
     directory.mkdir()
     for size in ("large", "small"):
         flow.env.pop("PHYSIM_TEST_SMALL", None)
         if size == "small": flow.env["PHYSIM_TEST_SMALL"] = "1"
         for language in ("c", "phys"):
             project = directory / (size + "-" + language)
-            flow.run("--workspace-state-test", project, "breakpoints-" + language, timeout=130,
+            flow.run("--workspace-state-test", project, "breakpoints-" + language + ("-keyboard" if keyboard else ""), timeout=130,
                      marker="STEP BREAKPOINT UI SELF-TEST: PASSED")
             manifest = read(project / "project/physim.project")
             require("simulation.breakpoints=3,7\n" in manifest, "Step stops were not persisted")
@@ -1033,6 +1033,14 @@ def step_breakpoints(flow, directory):
             flow.run("--workspace-state-test", project, "breakpoints-read", timeout=20,
                      marker="STEP BREAKPOINT UI SELF-TEST: PASSED")
             require(digests == [fingerprint(path) for path in sources], "Reopen changed project sources")
+
+
+def runner_keyboard(flow, directory):
+    step_breakpoints(flow, directory, keyboard=True)
+    for language in ("c", "phys"):
+        flow.run("--workspace-state-test", directory / ("hang-" + language),
+                 "isolation-" + language + "-create-hang-keyboard", timeout=130,
+                 marker="RUNNER ISOLATION UI SELF-TEST: PASSED")
 
 
 def workflow_pointer_isolation(flow, directory):
@@ -1057,7 +1065,7 @@ def workflow_pointer_isolation(flow, directory):
                 "Actual paired run/report artifacts missing")
 
 
-SPECIAL = {"runner_isolation_workflow": runner_isolation,"step_breakpoints_workflow": step_breakpoints,"workflow_pointer_isolation": workflow_pointer_isolation,"pendulum_medium_workflow": pendulum_medium,"pendulum_c_energy_workflow": pendulum_c_energy,"project_manager_keyboard_workflow": project_manager_keyboard,"settings_keyboard_workflow": settings_keyboard,"ui_typography_workflow": ui_typography,"saved_run_tutorial_workflow": saved_run_tutorial,"monte_carlo_tutorial_workflow": monte_carlo_tutorial,"collision_tutorial_workflow": collision_tutorial,"pendulum_tutorial_workflow": pendulum_tutorial,"spring_tutorial_workflow": spring_tutorial,"material_tutorial_workflow": material_tutorial,"contact_world_language_workflow": contact_world_language,"contact_world_workflow": contact_world, "diagnostic_workflow": diagnostics, "scene_frames_workflow": scene_frames, "logging_workflow": logging, "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
+SPECIAL = {"runner_keyboard_workflow": runner_keyboard,"runner_isolation_workflow": runner_isolation,"step_breakpoints_workflow": step_breakpoints,"workflow_pointer_isolation": workflow_pointer_isolation,"pendulum_medium_workflow": pendulum_medium,"pendulum_c_energy_workflow": pendulum_c_energy,"project_manager_keyboard_workflow": project_manager_keyboard,"settings_keyboard_workflow": settings_keyboard,"ui_typography_workflow": ui_typography,"saved_run_tutorial_workflow": saved_run_tutorial,"monte_carlo_tutorial_workflow": monte_carlo_tutorial,"collision_tutorial_workflow": collision_tutorial,"pendulum_tutorial_workflow": pendulum_tutorial,"spring_tutorial_workflow": spring_tutorial,"material_tutorial_workflow": material_tutorial,"contact_world_language_workflow": contact_world_language,"contact_world_workflow": contact_world, "diagnostic_workflow": diagnostics, "scene_frames_workflow": scene_frames, "logging_workflow": logging, "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}
