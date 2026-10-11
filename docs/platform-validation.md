@@ -4078,3 +4078,24 @@ und generierter Referenz besteht **4/4**:
 `build/current-language-run-writer-app-docs-mac.log`,
 `build/current-release-mac/test-results/run-f86hxmxo`.
 Diese lokalen Nachweise ersetzen keine aktuelle ganze Plattformabnahme.
+
+
+## Messkanalvertrag mit Einheit, Abtastrate und Zeitstempel (PP-0400)
+
+Der ursprüngliche Planblock ist einzeln gegen SensorConfig/Measurement, die
+C-/Physim-Bindungen, Dokumentation und tatsächliche Daten geprüft. Konfigurierte
+Rate und Startzeit sind vom Modellschritt getrennt; Messungen tragen reale
+Aufrufzeit, Index und übersprungene Rasterplätze. Das Sensor-Wurfbeispiel
+archiviert die Rate ausdrücklich als Modellmetadaten und den Zeitstempel
+als Sekundenkanal; Channel selbst startet keine automatische Abtastung.
+
+`build/current-measurement-rate-timestamp-mac.log`, native Release-Ergebnisse
+`build/current-headless-mac/test-results/run-m557ek2a`: **7/7 bestanden** auf
+Intel macOS 14.6.1 / AppleClang 16. Ausgeführt sind Kernmessungen, fünf
+Physim-Wert-/Fehlerfälle und C-/Physim-Sensorparität samt echtem Runnerarchiv.
+Die zusätzliche Archivprüfung verlangt `sensor_rate_hz=100`, Meter- und
+Sekundenschema und vergleicht sämtliche 201 Zeilen mit dem C-Sensormodell.
+Zu frühe/verspätete Aufrufe, falsche Dimensionen, ungültige Rate, nicht
+darstellbare Raster, Seed-/Reset-/Kopieverhalten und Zustandserhaltung sind
+ebenfalls ausgeführt. Dies ist ein begrenzter Bibliotheks-/Persistenznachweis;
+die ganze aktuelle Plattformabnahme bleibt offen.

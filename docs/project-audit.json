@@ -3433,9 +3433,18 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Messkanäle mit Einheit, Abtastrate und Zeitstempel.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/measurement.h",
+        "src/measurement.c",
+        "include/physim/language_measurement.h",
+        "examples/language/sensors.phys",
+        "tests/test_measurement.c",
+        "tests/test_language_sensor.c",
+        "tests/fixtures/language/sensors.phys",
+        "docs/measurement.md"
+      ],
+      "note": "SensorConfig deklariert Einheit, positive Abtastrate und Startzeit; Measurement trägt die tatsächliche Abtastzeit, Rasterindex und übersprungene Termine. C-/Physim-Parität, unterschiedliche Modell-/Sensorraten, zu frühe/verspätete Aufrufe, Einheitenablehnung und erhaltener Zustand sind auf Intel macOS tatsächlich geprüft. Der gespeicherte Runnerlauf prüft zusätzlich 100-Hz-Metadaten und Meter-/Sekunden-Schema einschließlich aller 201 Zeilen. Kanäle erhalten die Rate ausdrücklich über Modellmetadaten und den Zeitkanal; Channel deklariert keine automatische Sensorabtastung. Die gesamte aktuelle Plattform-/Produktabnahme bleibt separat offen."
     },
     {
       "id": "PP-0401",

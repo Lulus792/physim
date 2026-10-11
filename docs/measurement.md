@@ -103,6 +103,21 @@ der Rohdaten-CSV-Export erhalten alle Zeilen einschließlich Platzhaltern. Sie f
 nicht automatisch, da sonst die Ausrichtung zu Modell und Zeitachse verloren ginge.
 Das Analysebeispiel zeigt blockweises Lesen, explizites Filtern und vollständigen Export.
 
+## Abtastrate und Zeitstempel archivieren
+
+Ein `Channel` legt SI-Einheit, Namen und Beschreibung fest; ein `Sensor`
+konfiguriert das Abtastraster. Das Sensor-Wurfbeispiel speichert die tatsächliche
+Sensorfrequenz als `sensor_rate_hz=100` in den Modellmetadaten und die
+Aufrufzeit als eigenen Sekundenkanal `sensor.time`. Rasterindex und übersprungene
+Termine werden ebenfalls gespeichert. Die Rate wird ausdrücklich dokumentiert;
+eine Channel-Deklaration startet keine automatische Abtastung.
+
+Der Persistenzprüfer liest einen tatsächlichen Runnerlauf mit 201 Zeilen und
+prüft Rate, Meter-/Sekundenschema, Zeiten, Zustände und Werte gegen das C-Sensormodell.
+Die Kernprüfung enthält außerdem unterschiedliche Modell-/Sensorfrequenzen und
+verspätete Aufrufe; sie erwartet tatsächliche Zeiten statt erfundener vergangener Werte.
+[Ausgeführter Nachweis](platform-validation.md#messkanalvertrag-mit-einheit-abtastrate-und-zeitstempel-pp-0400).
+
 ## Messmodell und Unsicherheit
 
 Der Sensor konvertiert das ideale Signal in seine konfigurierte Einheit und bildet:

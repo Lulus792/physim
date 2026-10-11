@@ -1008,3 +1008,16 @@ Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **94 implemented**, **13 incomplete**, **424 unverified**;
 `completion_proven` bleibt `false`. Die vollständige Projekt- und aktuelle
 Plattformabnahme bleibt offen.
+
+
+## Einzeln belegter Messkanalvertrag (PP-0400)
+
+SensorConfig und Measurement bilden Einheit, Abtastrate und tatsächliche Zeit
+explizit ab. Eine neue Persistenzprüfung bestätigt Rate und SI-Zeitkanal im
+wirklich erzeugten Runnerarchiv; sämtliche 201 Zeilen werden mit dem C-Modell
+verglichen. Sieben aktuelle native Fälle bestehen auf Intel macOS.
+[Nachweis und Grenzen](platform-validation.md#messkanalvertrag-mit-einheit-abtastrate-und-zeitstempel-pp-0400).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**96 implemented**, **13 incomplete**, **422 unverified**;
+`completion_proven` bleibt `false`. Die vollständige Plattform- und
+Produktabnahme bleibt offen.

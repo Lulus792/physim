@@ -142,6 +142,11 @@ static int run_file(const char *runner, const char *module, const char *work) {
     CHECK(ps_run_open(&reader, path) == PS_OK && reader.channels == 15);
     CHECK(strstr(reader.metadata, "language=physim-0.182.0\ncompiler=physimc-0.1.0-dev") &&
           strstr(reader.metadata, "sensor_seed_x=run seed XOR 17"));
+    CHECK(strstr(reader.metadata, "sensor_rate_hz=100\n"));
+    CHECK(!strcmp(reader.schema[2].name, "sensor.x") &&
+          !strcmp(reader.schema[2].unit, "m") && reader.schema[2].dimension[0] == 1 &&
+          !strcmp(reader.schema[8].name, "sensor.time") &&
+          !strcmp(reader.schema[8].unit, "s") && reader.schema[8].dimension[2] == 1);
     reference r;
     CHECK(initialize(&r, UINT64_MAX) == 0);
     unsigned states[3] = {0};
