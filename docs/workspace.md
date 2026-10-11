@@ -249,6 +249,23 @@ bleibt stehen. Wähle die Methode passend zum Typ deiner Variablen. Der
 Compiler prüft ihren Einsatz beim Build. In Kommentaren, Stringliteralen
 und einfachen Textdateien werden keine API-Vorschläge eingefügt.
 
+### API-Dokumentation neben dem Code
+
+Setze den Cursor in einen API-Namen und drücke **Shift+F1** oder klicke
+**API-Referenz** unter dem Editor. Der Inspektor zeigt den passenden
+Dokumentationsabschnitt mit Signatur und Beschreibung. Der Code bleibt
+bearbeitbar; die Referenz bleibt beim Tippen und Rückgängigmachen geöffnet.
+Bei mehreren passenden Typen öffnet sich die Vorschlagsliste: Wähle den
+gewünschten Eintrag und klicke dort **Referenz**. Der Name wird dabei nicht
+in den Code eingefügt.
+
+**Handbuch** öffnet denselben Abschnitt im vollständigen Handbuchfenster.
+Seine Navigation verändert die angeheftete Referenz nicht. **Schließen**
+gibt den Inspektor für die übrigen Ansichten frei. Die Referenz ist für
+C- und Physim-Experiment-, Analyse- und zusätzliche Quelldateien verfügbar.
+Sprachtypen ohne eigenen Bibliothekseintrag führen zum Typabschnitt des
+Sprachhandbuchs. Fehlende Dokumentation erhält die bisherige Referenz.
+
 **Ctrl+S** speichert. **F5 / Build** speichert beide Quellen und baut Experiment
 und Analyse im Hintergrund. Ein Stern beziehungsweise der Hinweis auf ungespeicherte
 Änderungen bedeutet, dass der Editor neuer als die gespeicherte Quelle ist.

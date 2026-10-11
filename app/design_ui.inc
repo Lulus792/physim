@@ -449,7 +449,9 @@ static void sidebar_panel(app *a) {
 static void inspector_panel(app *a) {
     struct nk_context *ui=a->ui;
     if(dock_begin(a,PS_DOCK_INSPECTOR)) {
-        if(a->loaded) {
+        if(a->api_reference && !a->project_manager && (a->tab==0 || (a->tab==2 && a->analysis_tab==1) || a->tab==8))
+            api_reference_view(a);
+        else if(a->loaded) {
             camera_inspector(a);
             if (nk_tree_state_push(ui, NK_TREE_TAB, "Laufgrenzen", &a->limits_disclosure)) {
                 nk_begin_disabled(ui, !idle(a));

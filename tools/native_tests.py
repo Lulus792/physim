@@ -46,6 +46,7 @@ def catalog():
     cases.append(Case("process_usage", ("tests/test_process_usage.c",)))
     cases.append(Case("compiler_diagnostic", ("tests/test_compiler_diagnostic.c", "app/compiler_diagnostic.c")))
     cases.append(Case("completion", ("tests/test_completion.c", "app/completion.c")))
+    cases.append(Case("api_reference", ("tests/test_api_reference.c", "app/documentation.c", "app/completion.c"), arguments=("{source}",)))
     cases.append(Case("positive_peaks", ("tests/test_positive_peaks.c",), arguments=("{work}/peaks",)))
     cases.append(Case("child_usage", ("tests/test_child_usage.c",)))
     cases.append(Case("app_profiling", ("tests/test_app_profiling.c", "app/profiling.c"),

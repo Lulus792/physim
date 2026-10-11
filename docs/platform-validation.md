@@ -3745,3 +3745,51 @@ sprachsemantischer Editor, alle Darstellungsvarianten und die aktuelle
 Linux-/Windows-/ARM-SDK-Matrix sind mit dieser Intel-macOS-Einzelprüfung
 nicht abgenommen. PP-0255 ist für die geforderte Bibliotheks-Symboltabelle
 mit Autovervollständigung konkret belegt.
+
+
+## API-Dokumentation neben dem Code
+
+Am 11. Oktober 2026 zeigt der Inspektor API-Dokumentation direkt neben
+dem aktiven C-/Physim-Editor. Shift+F1 beziehungsweise **API-Referenz**
+ermittelt den Namen an der Cursorposition. Mehrdeutige Instanzmethoden
+werden über die bestehende Vorschlagsliste gewählt; **Referenz** öffnet
+den ausgewählten Eintrag ohne Übernahme in den Code. Die API-Tabelle und
+die vorhandenen Referenzdateien liefern Namen, Signaturen und Beschreibungen.
+Die Seitenreferenz besitzt einen eigenen Parserbuffer und Scrollzustand.
+**Handbuch** öffnet denselben Abschnitt im unabhängigen Handbuchfenster;
+**Schließen** gibt den Inspektor wieder frei. Ladefehler veröffentlichen
+keinen halbfertigen Zustand und erhalten die vorherige Referenz.
+
+Die nativen Fälle `api_reference` und `documentation` bestehen **2/2**,
+Ergebnisse `build/current-headless-mac/test-results/run-4u5yooy1`, Log
+`build/current-api-reference-all-symbols-final-mac.log`. Neben exakten
+Bezeichnergrenzen und Ausgabeerhaltung prüfen sie gemeinsame C-Konstanten,
+PS_EXPORT als Textvertrag, benachbarte Sprachüberladungen und Typfamilien.
+Alle **1.167** generierten API-Einträge lassen sich gegen die tatsächlich
+gebündelten Seiten auflösen; **12** Sprachtypen benutzen den Abschnitt
+„Statische Prüfung 0.1“ des Sprachhandbuchs.
+
+Die abschließenden GUI-Fälle `api_reference_workflow`, `completion_workflow`
+und `documentation_keyboard` bestehen **3/3**, Ergebnisse
+`build/current-release-mac/test-results/run-6bf3k1rm`, Log
+`build/current-api-reference-verified-mac.log`. Zwei echte App-Prozesse
+prüfen die Seitenreferenz in Experiment-, Analyse- und Zusatzeditor jeweils
+in C/Physim. Shift+F1, Editorbutton und echter Maus-Klick auf **Referenz**,
+Handbuchsprung und Schließen sind tatsächlich bedient. Editorbytes und
+Dirty-Zustände bleiben durch Referenzaktionen erhalten; eine zusätzliche
+Texteingabe und ihr einzelner Undo-Schritt erhalten die angeheftete Referenz.
+Sechs reale Fensterbilder aus `run-_uca9ujs` wurden unter
+`build/current-api-reference-preview` visuell geprüft.
+
+Ein echter Fehler wurde bei vier Vorschlägen sichtbar: Die neue Fußzeile
+ragte aus dem bisherigen 250-Pixel-Listenbereich; der Referenz-Klick schloss
+dadurch die Liste statt die Dokumentation zu öffnen (`run-29e57dsb`).
+Der 280-Pixel-Bereich umfasst nun auch diese Fußzeile; der betreffende
+Physim-Instanzmethoden-Klick besteht samt Vorschlagsregression. Frühere
+Prüfungen vor dem ersten Renderframe waren Fixturefehler; mehrere simulierte
+Zeicheneingaben benötigen mehrere Undo-Schritte und wurden für die gezielte
+Einzel-Undo-Prüfung durch eine Eingabe ersetzt.
+
+Diese Prüfung belegt PP-0258 auf Intel macOS mit AppleClang und SDL3.
+Aktuelle Linux-/Windows-/ARM-Läufe, vollständige IDE-Sprachsemantik und
+alle Dock-/Schriftgrößenvarianten sind damit nicht abgenommen.

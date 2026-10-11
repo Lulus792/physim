@@ -79,14 +79,14 @@ static bool completion_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
 }
 static void completion_pointer_event(app *a,const SDL_MouseButtonEvent *event) {
     if(!a->completion_active){if(a->completion_focus_edit)completion_close(a);return;}
-    const struct nk_rect regions[]={a->source_editor_bounds,a->completion_list_bounds,a->completion_button_bounds};
-    for(unsigned i=0;i<3;i++)if(event->x>=regions[i].x && event->x<regions[i].x+regions[i].w &&
+    const struct nk_rect regions[]={a->source_editor_bounds,a->completion_list_bounds,a->completion_button_bounds,a->api_reference_button_bounds};
+    for(unsigned i=0;i<4;i++)if(event->x>=regions[i].x && event->x<regions[i].x+regions[i].w &&
         event->y>=regions[i].y && event->y<regions[i].y+regions[i].h)return;
     completion_close(a);
 }
 static void completion_view(app *a) {
     struct nk_context *ui=a->ui;
-    nk_layout_row_dynamic(ui,250,1);
+    nk_layout_row_dynamic(ui,280,1);
     a->completion_list_bounds=nk_widget_bounds(ui);
     if(nk_group_begin(ui,"api-completion",NK_WINDOW_BORDER)) {
         char title[128];snprintf(title,sizeof title,"%zu/%zu · Pfeile wählen · Enter/Tab übernehmen",a->completion_selected+1,a->completion_count);
@@ -100,7 +100,12 @@ static void completion_view(app *a) {
         }
         const ps_completion_symbol *symbol=ps_completion_at(a->completion_indices[a->completion_selected]);
         nk_layout_row_dynamic(ui,48,1);nk_label_wrap(ui,symbol->signature);
-        nk_layout_row_dynamic(ui,28,1);
+        nk_layout_row_dynamic(ui,28,2);
+        a->completion_reference_bounds=nk_widget_bounds(ui);
+        if(nk_button_label(ui,"Referenz")) {
+            struct nk_text_edit *edit=a->completion_edit;
+            if(api_reference_open(a,symbol)){completion_close(a);a->completion_focus_edit=edit;}
+        }
         if(nk_button_label(ui,"Schließen · Esc")){struct nk_text_edit *edit=a->completion_edit;completion_close(a);a->completion_focus_edit=edit;}
         nk_group_end(ui);
     }

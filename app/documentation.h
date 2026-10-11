@@ -28,4 +28,7 @@ typedef struct {
  * Transactional parse: out is unchanged on failure; free successful documents. */
 ps_result ps_document_parse(const char *source, size_t size, bool code, ps_document **out);
 const char *ps_document_find(const char *text, const char *query);
+/* Locate API entries, including adjacent language overloads/type members.
+ * C constants may live in a shared declaration. Failure preserves outputs. */
+ps_result ps_document_api_section(const ps_document *document,const char *name,bool language,size_t *first,size_t *end);
 #endif

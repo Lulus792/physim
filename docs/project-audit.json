@@ -1754,9 +1754,18 @@
       "kind": "list",
       "scope": "later",
       "text": "- API-Dokumentation direkt neben dem Code.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/api_reference_ui.inc",
+        "app/completion_ui.inc",
+        "app/documentation.c",
+        "tests/test_api_reference.c",
+        "app/api_reference_tests.inc",
+        "tests/check_display_workflow.py",
+        "docs/workspace.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "API-Referenz im Inspektor neben C-/Physim-Code: Shift+F1, Editorbutton und Vorschlagsauswahl; unabhängiges Handbuch am selben Abschnitt, Schließen und Bearbeiten/Undo ohne Inhaltsänderung durch Referenzaktionen. Am 2026-10-11 Intel macOS tatsächlich gebaut: alle 1167 generierten API-Einträge auflösbar (12 Sprachtypen mit Typführer-Fallback), 2/2 native und 3/3 GUI-Fälle; sechs Editoransichten visuell geprüft. Aktuelle Linux-/Windows-/ARM-Ausführung für diese Änderung noch offen."
     },
     {
       "id": "PP-0262",

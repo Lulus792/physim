@@ -866,3 +866,17 @@ Regressionen bestehen. [Nachweise und Grenzen](platform-validation.md#api-autove
 Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **67 implemented**, **13 incomplete**, **451 unverified**;
 `completion_proven` bleibt `false`.
+
+
+## API-Dokumentation neben dem Code (§6.1)
+
+PP-0258 ist konkret belegt: die angeheftete Referenz im Inspektor öffnet
+C-/Physim-Abschnitte per Shift+F1, Editorbutton oder Vorschlagsauswahl.
+Quellen und Dirty-Zustände bleiben beim Öffnen unverändert; Bearbeiten/Undo
+und ein unabhängiges Handbuch sind tatsächlich geprüft. Alle 1.167
+generierten Symbole besitzen einen auflösbaren Abschnitt, einschließlich
+gemeinsamer Konstanten, Sprachüberladungen und Typführer-Fallbacks.
+[Nachweise und Grenzen](platform-validation.md#api-dokumentation-neben-dem-code).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**68 implemented**, **13 incomplete**, **450 unverified**;
+`completion_proven` bleibt `false`.

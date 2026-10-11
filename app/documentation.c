@@ -213,3 +213,35 @@ limit:
     free(d);
     return PS_LIMIT;
 }
+static bool api_heading(const char *heading,const char *name,bool language,bool members) {
+    size_t n=strlen(name);
+    if(strncmp(heading,name,n))return false;
+    return !heading[n] || (language && (heading[n]=='(' || (members && heading[n]=='.')));
+}
+static bool api_word(unsigned char c){return isalnum(c) || c=='_';}
+ps_result ps_document_api_section(const ps_document *d,const char *name,bool language,size_t *first,size_t *end) {
+    if(!d || !name || !*name || !first || !end)return PS_INVALID;
+    size_t begin=d->count;bool members=false;
+    for(unsigned pass=0;pass<(language?2u:1u) && begin==d->count;pass++) {
+        members=pass!=0;
+        for(size_t i=0;i<d->count;i++)if(d->blocks[i].kind==PS_DOC_HEADING &&
+            api_heading(d->text+d->blocks[i].text,name,language,members)){begin=i;break;}
+    }
+    if(begin==d->count && !language)for(unsigned pass=0;pass<2 && begin==d->count;pass++)for(size_t i=0;i<d->count;i++) {
+        if(d->blocks[i].kind!=(pass?PS_DOC_TEXT:PS_DOC_CODE))continue;
+        const char *text=d->text+d->blocks[i].text,*at=text;size_t n=strlen(name);
+        while((at=strstr(at,name))!=NULL) {
+            if((at==text || !api_word((unsigned char)at[-1])) && !api_word((unsigned char)at[n])){begin=i;break;}
+            at++;
+        }
+        if(begin<d->count)break;
+    }
+    if(begin==d->count)return PS_INVALID;
+    size_t stop=begin+1;
+    while(stop<d->count) {
+        const ps_doc_block *block=&d->blocks[stop];
+        if(block->kind==PS_DOC_HEADING && !(language && api_heading(d->text+block->text,name,true,members)))break;
+        stop++;
+    }
+    *first=begin;*end=stop;return PS_OK;
+}
