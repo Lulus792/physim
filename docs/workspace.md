@@ -30,6 +30,12 @@ Unterordner vor Dateien, jeweils nach ihrem Namen sortiert. Zusätzliche Dateien
 und Ordner erscheinen als eigene Wurzeleinträge unter **Hinzugefügt**.
 Der Mauszeiger zeigt den vollständigen Pfad als Hinweis.
 
+Experiment- und Analysequellen öffnen ihre zugehörigen Projekteditoren;
+weitere Textdateien, etwa unter `assets`, öffnen einen eigenen Editor.
+Ein Klick auf eine `.psrun`-Datei lädt bei geöffnetem Projekt den Messlauf
+in **Auswerten** mit seinen Kanälen, Einheiten und Zeitwerten. Dabei bleibt
+die Datei an ihrem bisherigen Speicherort.
+
 **Dateibaum aktualisieren** liest externe Änderungen ein und behält die gerade
 aufgeklappten Zweige bei. Geschlossene Unterordner werden erst beim Öffnen gelesen.
 Nicht erreichbare Pfade und Lesefehler werden im Baum angezeigt. Die Anzeige ist

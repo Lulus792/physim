@@ -89,6 +89,22 @@ static void open_library(app *a) {
     a->tab = 4;
     refresh_library(a);
 }
+static bool open_run_path(app *a,const char *path) {
+    if(!a->loaded){status(a,"Zuerst ein Projekt öffnen oder anlegen.");return false;}
+    if(!idle(a)){status(a,"Zum Öffnen einer Laufdatei zuerst den laufenden Job beenden.");return false;}
+    if(!path || !*path || strlen(path)>=sizeof a->last_run){status(a,"Laufdateipfad ist ungültig oder zu lang.");return false;}
+    char run[sizeof a->last_run];snprintf(run,sizeof run,"%s",path);
+    /* Check the bounded header before replacing the displayed run. Records and
+     * their CRCs are still decoded by the existing background dataset worker. */
+    ps_run_reader reader;ps_result result=ps_run_open(&reader,run);
+    if(result!=PS_OK){status(a,"Laufdatei konnte nicht geöffnet werden. Bisherige Daten bleiben erhalten.");return false;}
+    ps_run_reader_close(&reader);
+    a->tab=2;a->analysis_tab=0;
+    timeline_clear(a);a->scene.count=0;a->channel_count=0;a->history_count=0;
+    snprintf(a->last_run,sizeof a->last_run,"%s",run);a->show_report=false;
+    request_dataset(a);
+    return true;
+}
 static void open_library_item(app *a, size_t index) {
     if (!idle(a) || !a->library || index >= a->library->count)
         return;
@@ -97,17 +113,10 @@ static void open_library_item(app *a, size_t index) {
         status(a, "Dateipfad ist zu lang.");
         return;
     }
-    a->tab = 2;
-    a->analysis_tab = 0;
-    if (a->library->items[index].kind == PS_LIBRARY_REPORT)
+    if (a->library->items[index].kind == PS_LIBRARY_REPORT) {
+        a->tab = 2;
+        a->analysis_tab = 0;
         request_report_path(a, path);
-    else {
-        timeline_clear(a);
-        a->scene.count = 0;
-        a->channel_count = 0;
-        a->history_count = 0;
-        snprintf(a->last_run, sizeof a->last_run, "%s", path);
-        a->show_report = false;
-        request_dataset(a);
-    }
+    } else
+        open_run_path(a,path);
 }

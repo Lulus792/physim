@@ -397,6 +397,7 @@ static void timeline_toggle_play(app *a) {
 }
 static void refresh_library(app *a);
 static void open_library(app *a);
+static bool open_run_path(app *a,const char *path);
 static bool action_button(struct nk_context *ui, const char *label, bool primary);
 static void open_settings(app *a);
 enum { PS_DIALOG_OPEN_FOLDER = 1, PS_DIALOG_ADD_FILE, PS_DIALOG_ADD_FOLDER,

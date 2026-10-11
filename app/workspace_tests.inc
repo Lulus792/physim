@@ -51,6 +51,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
         return project_settings_test_start(a, root, mode);
     if (!strncmp(mode, "drafts-", 7))
         return document_recovery_test_start(a, root, mode);
+    if (!strcmp(mode,"project-tree"))return project_tree_test_start(a,root);
     if (!strcmp(mode, "tree"))
         return workspace_tree_test_start(a, root);
     if (!strcmp(mode, "documents") || !strcmp(mode,"documents-noise") || !strcmp(mode,"documents-unfiltered"))
@@ -197,6 +198,7 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
         if(strcmp(mode,"documents")) test_pointer_noise(a);
         return;
     }
+    if(!strcmp(mode,"project-tree")){project_tree_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"manager-errors") || !strcmp(mode,"manager-errors-22")){project_manager_error_test_frame(a,a->manager_parent,stage,code,capture);return;}
     if(!strncmp(mode,"manager-keyboard",16)){project_manager_keyboard_test_frame(a,a->manager_parent,stage,code,capture);return;}
     if (!strncmp(mode,"docs-keyboard",13)) {documentation_keyboard_test_frame(a,mode,stage,code,capture);return;}

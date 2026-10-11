@@ -1446,9 +1446,19 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Projektbaum für Experimentquellen, Analysequellen, Assets und Läufe.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/workspace_tree.c",
+        "app/workspace_tree_ui.inc",
+        "app/workspace_tree_tests.inc",
+        "app/document_actions.inc",
+        "app/library_actions.inc",
+        "tests/check_display_workflow.py",
+        "tests/native_integration_cases.json",
+        "docs/workspace.md",
+        "docs/platform-validation.md#projektbaum-quellen-assets-und-messläufe-bedienen"
+      ],
+      "note": "Dateibaum mit Experiment-/Analysequellen, Asset- und Laufordnern. Tatsächliche Intel-macOS-Klicks öffnen vorhandene Projekteditoren ohne Duplikate, einen eigenen Textasset-Editor und einen .PSRUN-Messlauf in der Auswertung. Headerfehler erhalten angezeigte Daten und ungespeicherte Änderungen; Quellen und Assetdatei bleiben bytegenau erhalten. Allgemeiner Baum und C-/Physim-Zeitleistenregression bestehen. Weitere Asset-Vorschauen, vollständige Tastatur-/UI-Abnahme und aktuelle andere Plattformen bleiben separat offen."
     },
     {
       "id": "PP-0244",

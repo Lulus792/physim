@@ -824,3 +824,17 @@ sind korrigiert. [Nachweise und Grenzen](platform-validation.md#experimentvorlag
 Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **63 implemented**, **13 incomplete**, **455 unverified**;
 `completion_proven` bleibt `false`.
+
+
+## Projektbaum (§6.1)
+
+PP-0243 ist konkret belegt: tatsächliche Baum-Klicks öffnen Experiment- und
+Analyseeditor, Textasset und einen Messlauf. Der zuvor als Text abgewiesene
+Messlauf wird nun in der Auswertung mit korrekten Zeiten, Werten und Einheit
+geöffnet. Ungültige Header erhalten Daten und ungespeicherte Änderungen;
+Quellen und Assetdatei bleiben bytegenau erhalten. Allgemeiner Dateibaum und
+C-/Physim-Zeitleistenfälle bestehen ebenfalls.
+[Nachweise und Grenzen](platform-validation.md#projektbaum-quellen-assets-und-messläufe-bedienen).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**64 implemented**, **13 incomplete**, **454 unverified**;
+`completion_proven` bleibt `false`.

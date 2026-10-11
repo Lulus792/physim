@@ -308,6 +308,14 @@ static void preview_workspace_path(app *a, const char *path) {
             return;
         }
     }
+    const char *extension=strrchr(path,'.');
+    if(extension && !SDL_strcasecmp(extension,".psrun")) {
+        if(open_run_path(a,path)) {
+            a->project_manager=false;
+            snprintf(a->workspace_preview_path,sizeof a->workspace_preview_path,"%s",path);
+        }
+        return;
+    }
     for (unsigned i = 0; i < a->document_count; i++) {
         if (!strcmp(path, a->documents[i].path) ||
             document_matches(path, a->documents[i].file.path)) {

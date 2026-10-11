@@ -3560,3 +3560,56 @@ grundlegenden Vorlagenumfang belegt. Der einzelne kurze Beschriftungswechsel
 erfordert keine erneuten 68 unveränderten Modellbuilds; dafür ist die aktuelle
 Formularprüfung ausgeführt. Andere Plattformen und umfassende UI-/Modellabnahmen
 bleiben ihren getrennten Anforderungen zugeordnet.
+
+
+## Projektbaum: Quellen, Assets und Messläufe bedienen
+
+Am 11. Oktober 2026 reproduziert `project_tree_workflow` einen konkreten
+Fehler: Quellen und Textasset sind per Baum-Klick erreichbar, ein gültiger
+Messlauf wird aber als Textdatei behandelt und mit **Kein gültiger UTF-8-Text**
+abgewiesen. Die App bleibt beim Asset-Editor und hat keine Messpunkte.
+Ergebnisse: `build/current-release-mac/test-results/run-cmg6zqbb`; Log:
+`build/current-project-tree-before-mac.log`. Das Testprojekt enthält
+`main.c`, `analysis.c`, `assets/note α.txt` sowie einen über die echte
+Core-Schreibschnittstelle erzeugten Lauf mit drei Zeilen und gültigem Footer.
+
+Die Dateinavigation erkennt nun `.psrun` unabhängig von Groß-/Kleinschreibung
+und öffnet den Lauf über denselben Weg wie **Läufe & Berichte**. Der gemeinsame
+`open_run_path` prüft geöffnetes Projekt, laufende Jobs, Pfadlänge und den
+begrenzten Dateiheader vor dem Wechsel. Die bestehenden Hintergrundworker
+lesen Messpunkte, Szenen und CRCs weiter. Ein ungültiger Header verändert
+vorhandene Messdaten, Editorinhalte und Laufpfad nicht. Der Pfad wird vor
+Zustandswechseln kopiert. Die geöffneten Dateien bleiben an ihrem Speicherort;
+der Öffnungsvorgang ist kein Messdatenimport.
+
+AppleClang Release auf Intel macOS besteht **3/3** Fälle
+`project_tree_workflow`, `workspace_tree_workflow` und `timeline_workflow`,
+Ergebnisse `build/current-release-mac/test-results/run-y1k3m3hi`, Log
+`build/current-project-tree-complete-mac.log`. Der vorhandene Zeitleistenfall
+führt je Sprache fünf echte App-Prozesse aus: neuer Lauf, Wiederöffnung,
+Legacy ohne Szenenchunks, negative Legacy-Zeit und rekonstruierbares Ende.
+Originaldateien bleiben nach deren Hashprüfung erhalten. Der allgemeine
+Baumfall prüft verschachtelte Ordner und hinzugefügte Wurzeln.
+
+Die abschließende Projektbaumprüfung mit zusätzlichem bytegenauen
+Quell-/Assetvergleich besteht **1/1** unter
+`build/current-release-mac/test-results/run-x9xx3xou`, Log
+`build/current-project-tree-final-mac.log`. Acht tatsächliche Mausklicks
+öffnen Experimenteditor, Analyseeditor, Assetordner, Textasset, schließen
+dessen Ordner, öffnen den Laufordner und wählen gültigen beziehungsweise
+headerungültigen Lauf. Die Projektquellen erzeugen keine zusätzlichen
+Dokumente. Der gültige Lauf mit der Endung `.PSRUN` zeigt exakt Werte 4/5/6,
+Zeiten 0/0,01/0,02 s, den Kanal `position.x`, Meterdimension und erfolgreich
+gelesenen Footer. Der ungültige Header erhält alle drei Messpunkte und die
+noch ungespeicherte Assetänderung. Der Harness prüft anschließend beide
+Projektquellen gegen ihre Vorlagen und die unveränderte Assetdatei.
+
+Drei echte Fensteraufnahmen sind visuell geprüft; die abschließenden PNGs
+unter `build/current-project-tree-preview` zeigen Baum, Textasset und die
+Messdatenkurve. Vor der Aufnahme wird der Mauszeiger aus dem Dateibaum
+bewegt, damit dessen langer Pfadtooltip die Darstellung nicht verdeckt.
+PP-0243 ist für den grundlegenden Projektbaum konkret belegt. Dies ist keine
+Abnahme aller binären Asset-Vorschauen, der vollständigen Tastatur-/UI-
+Bedienung oder anderer aktueller Plattformen. Die frühe Headerprüfung
+verspricht auch keine Erhaltung früherer Messdaten bei Fehlern, die erst
+während der vollständigen Hintergrunddekodierung entdeckt werden.
