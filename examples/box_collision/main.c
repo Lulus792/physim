@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* Winkel in rad, Versatz in m. Ändern und mit F5 neu bauen. */
+/* Compile-time defaults; the same values are editable run parameters. */
 #ifndef PS_BOX_ANGLE
 #define PS_BOX_ANGLE 0.0
 #endif
@@ -24,6 +24,7 @@ typedef struct {
     ps_contact_solver solver;
     ps_contact_manifold contacts, last_contacts;
     ps_contact_solution solution, last_solution;
+    double angle, offset, restitution, friction;
 } experiment;
 static ps_result measure(ps_context *c) {
     experiment *e = c->user;
@@ -56,33 +57,40 @@ static ps_result measure(ps_context *c) {
 }
 static ps_result reset(ps_context *c) {
     experiment *e = c->user;
-    *e = (experiment){0};
+    e->contacts = e->last_contacts = (ps_contact_manifold){0};
+    e->solution = e->last_solution = (ps_contact_solution){0};
     ps_result r = ps_body_box(mass_kg, size_m, &e->a);
     if (r == PS_OK)
         r = ps_body_box(mass_kg, size_m, &e->b);
     if (r != PS_OK)
         return r;
     e->a.position_m = ps_v3(-1, 0, 0);
-    e->b.position_m = ps_v3(1, PS_BOX_OFFSET, 0);
+    e->b.position_m = ps_v3(1, e->offset, 0);
     e->a.velocity_m_s = ps_v3(.6, 0, 0);
     e->b.velocity_m_s = ps_v3(-.6, 0, 0);
-    e->b.orientation = ps_quat_axis_angle(ps_v3(0, 0, 1), PS_BOX_ANGLE);
+    e->b.orientation = ps_quat_axis_angle(ps_v3(0, 0, 1), e->angle);
     e->solver = PS_CONTACT_SOLVER_DEFAULT;
     e->solver.iterations = 128;
-    e->solver.restitution = PS_BOX_RESTITUTION;
-    e->solver.friction = PS_BOX_FRICTION;
+    e->solver.restitution = e->restitution;
+    e->solver.friction = e->friction;
     e->solver.penetration_slop_m = 0;
     e->solver.correction_fraction = 1;
     return measure(c);
 }
 static ps_result create(ps_context *c) {
-    if (!isfinite(PS_BOX_ANGLE) || !isfinite(PS_BOX_OFFSET) || !isfinite(PS_BOX_RESTITUTION) ||
-        PS_BOX_RESTITUTION < 0 || PS_BOX_RESTITUTION > 1 || !isfinite(PS_BOX_FRICTION) ||
-        PS_BOX_FRICTION < 0)
-        return PS_INVALID;
     c->user = calloc(1, sizeof(experiment));
     if (!c->user)
         return PS_MEMORY;
+    experiment *e = c->user;
+    ps_result parameter = ps_parameter_define_unit(c,"angle","Initial rotation of box B around Z in rad",
+                                                   PS_RADIAN,PS_BOX_ANGLE,-2*PS_PI,2*PS_PI,&e->angle);
+    if(parameter==PS_OK)parameter=ps_parameter_define_unit(c,"offset","Initial Y offset of box B in m",
+                                                         PS_METRE,PS_BOX_OFFSET,-10,10,&e->offset);
+    if(parameter==PS_OK)parameter=ps_parameter_define_unit(c,"restitution","Coefficient of restitution",
+                                                         PS_ONE,PS_BOX_RESTITUTION,0,1,&e->restitution);
+    if(parameter==PS_OK)parameter=ps_parameter_define_unit(c,"friction","Coulomb friction coefficient",
+                                                         PS_ONE,PS_BOX_FRICTION,0,10,&e->friction);
+    if(parameter!=PS_OK)return parameter;
     const ps_unit angular = {{0, 0, -1, 0, 0, 0, 0}, 1, "rad/s"};
     const ps_unit momentum = {{1, 1, -1, 0, 0, 0, 0}, 1, "kg m/s"};
     const ps_unit one = {{0}, 1, "1"};
@@ -104,7 +112,6 @@ static ps_result create(ps_context *c) {
     ps_result r = reset(c);
     if (r != PS_OK)
         return r;
-    experiment *e = c->user;
     snprintf(c->model_metadata, sizeof c->model_metadata,
              "model=two homogeneous oriented rigid boxes\nmedium=vacuum\ngravity=none\n"
              "contact=15-axis SAT + clipped face / closest edge manifold\n"
@@ -115,7 +122,7 @@ static ps_result create(ps_context *c) {
              "b_initial_velocity_m_s=-0.6,0,0\nb_angle_z_rad=%.17g\n"
              "initial_spin_rad_s=0\nrestitution=%.17g\nfriction=%.17g\niterations=%u\n"
              "bounce_threshold_m_s=%.17g\npenetration_slop_m=0\ncorrection_fraction=1\n",
-             mass_kg, size_m.x, size_m.y, size_m.z, (double)PS_BOX_OFFSET, (double)PS_BOX_ANGLE,
+             mass_kg, size_m.x, size_m.y, size_m.z, e->offset, e->angle,
              e->solver.restitution, e->solver.friction, e->solver.iterations,
              e->solver.bounce_threshold_m_s);
     return PS_OK;

@@ -16,6 +16,7 @@ import zlib
 LANGUAGE_MODES = ("full", "mixed", "projectile", "sensors", "body", "contact", "joint",
                   "graph", "sweep", "spring", "buoyancy", "collision", "box_collision")
 SIMPLE = {
+    "box_collision_workflow": (["--self-test", "{directory}", "box_collision"], 150, True),
     "floating_workflow": (["--self-test", "{directory}", "buoyancy"], 150, True),
     "plot_workflow": (["--plot-test", "{directory}"], 35, True),
     "plot_input_isolation": (["--plot-test-noise", "{directory}"], 35, True),
@@ -1105,7 +1106,10 @@ def main():
         arguments, timeout, _ = SIMPLE[args.case]
         paths = dict(directory=str(directory), root=str(flow.root))
         flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)
-        if args.case in ("documents_small", "documents_large"):
+        if args.case == "box_collision_workflow":
+            require("parameter.restitution=0.5\n" in read(directory / "physim.project"),
+                    "C box collision did not persist the selected restitution")
+        elif args.case in ("documents_small", "documents_large"):
             exact(directory / "notes α.txt", "Saved on close: γ\n")
             exact(directory / "notes α.txt.bak", "Text über SDL: β = 2\n")
             exact(directory / "second.txt", "external")

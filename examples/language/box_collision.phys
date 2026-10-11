@@ -1,21 +1,22 @@
 // C reference: examples/box_collision/main.c, including its inelastic and oblique variants.
 let size = Vec3(0.8, 0.6, 0.6)
 let mass = 1.0
-let angle = parameter("angle", 0, -6.283185307179586, 6.283185307179586,
+let radians = Unit(0,0,0,0,0,0,0,1,"rad")
+let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
+let one = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
+let angle = parameterWithUnit("angle", radians, 0, -6.283185307179586, 6.283185307179586,
     "Initial rotation of box B around Z in rad")
-let offset = parameter("offset", 0, -10, 10, "Initial Y offset of box B in m")
-let restitution = parameter("restitution", 1, 0, 1, "Coefficient of restitution")
-let friction = parameter("friction", 0, 0, 10, "Coulomb friction coefficient")
+let offset = parameterWithUnit("offset", metres, 0, -10, 10, "Initial Y offset of box B in m")
+let restitution = parameterWithUnit("restitution", one, 1, 0, 1, "Coefficient of restitution")
+let friction = parameterWithUnit("friction", one, 0, 0, 10, "Coulomb friction coefficient")
 let zero = Vec3(0, 0, 0)
 let identity = Quat(0, 0, 0, 1)
 let defaults = ContactSolver.defaults()
 let solver = ContactSolver(128, restitution, friction, defaults.bounceThreshold, 0, 1)
-let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
 let speed = Unit(1, 0, -1, 0, 0, 0, 0, 1, "m/s")
 let joules = Unit(2, 1, -2, 0, 0, 0, 0, 1, "J")
 let angularSpeed = Unit(0, 0, -1, 0, 0, 0, 0, 1, "rad/s")
 let momentum = Unit(1, 1, -1, 0, 0, 0, 0, 1, "kg m/s")
-let one = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
 let ax = Channel("position.x", metres, "Box A X")
 let ay = Channel("position.y", metres, "Box A Y")
 let az = Channel("position.z", metres, "Box A Z")

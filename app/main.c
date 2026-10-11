@@ -3587,7 +3587,7 @@ int main(int argc, char **argv) {
                             a->project_settings_dirty = true;
                         }
                     }
-                    if (test_example == 19) {
+                    if (test_example == 6 || test_example == 19) {
                         bool found_restitution = false;
                         for (uint32_t i = 0; i < a->parameters.count; i++) {
                             if (!strcmp(a->parameters.entries[i].name, "restitution")) {
@@ -3710,13 +3710,18 @@ int main(int argc, char **argv) {
                         ps_run_reader_close(&reader);
                     }
                 }
-                if (test_example == 19) {
+                if (test_example == 6 || test_example == 19) {
                     ps_run_reader reader;
                     if (ps_run_open(&reader, a->last_run) != PS_OK)
                         exit_code = 1;
                     else {
                         if (!strstr(reader.metadata, "\nparameter.restitution=0.5\n") ||
-                            !strstr(reader.metadata, "\nparameter_default.restitution=1\n"))
+                            !strstr(reader.metadata, "\nparameter_default.restitution=1\n") ||
+                            !strstr(reader.metadata, "\nrestitution=0.5\n") ||
+                            !strstr(reader.metadata, "\nparameter_unit.angle=rad\n") ||
+                            !strstr(reader.metadata, "\nparameter_unit.offset=m\n") ||
+                            !strstr(reader.metadata, "\nparameter_unit.restitution=1\n") ||
+                            !strstr(reader.metadata, "\nparameter_unit.friction=1\n"))
                             exit_code = 1;
                         ps_run_reader_close(&reader);
                     }

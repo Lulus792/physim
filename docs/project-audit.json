@@ -491,9 +491,13 @@
         "examples/projectile/main.c",
         "examples/language/projectile_drag.phys",
         "tests/test_projectile_drag_parity.c",
-        "docs/platform-validation.md#änderbarer-wurfwiderstand-mit-korrekter-modellbeschreibung"
+        "docs/platform-validation.md#änderbarer-wurfwiderstand-mit-korrekter-modellbeschreibung",
+        "examples/box_collision/main.c",
+        "examples/language/box_collision.phys",
+        "tests/test_box_collision_language_parity.c",
+        "docs/platform-validation.md#boxkollision-gleiche-laufparameter-und-si-metadaten"
       ],
-      "note": "Material-Lernpfad: 14 vollständige C-/Physim-Dateien prüfen strukturierte Einheiten, Werte/Standards/Grenzen, Modell-Eigenschaften, Namen, dt und UInt64-Seed; beide tatsächlichen Appketten prüfen die übertragenen SI-Parameterdeklarationen. Aktuelle andere Vorlagen und Linux-/Windows-/Gesamt-SDK-Abnahme bleiben offen. Wurfmodell: C-/Physim-Beiwertparität, tatsächliche Cd-Metadaten, acht komplette Läufe, unabhängige Vakuumreferenz, instanzlokaler Reset, Bereichsablehnung und alle vier gemischten Analysen geprüft; drei echte Appketten bestehen auf Intel macOS."
+      "note": "Material-Lernpfad: 14 vollständige C-/Physim-Dateien prüfen strukturierte Einheiten, Werte/Standards/Grenzen, Modell-Eigenschaften, Namen, dt und UInt64-Seed; beide tatsächlichen Appketten prüfen die übertragenen SI-Parameterdeklarationen. Aktuelle andere Vorlagen und Linux-/Windows-/Gesamt-SDK-Abnahme bleiben offen. Wurfmodell: C-/Physim-Beiwertparität, tatsächliche Cd-Metadaten, acht komplette Läufe, unabhängige Vakuumreferenz, instanzlokaler Reset, Bereichsablehnung und alle vier gemischten Analysen geprüft; drei echte Appketten bestehen auf Intel macOS. Boxkollision: zehn reale Runnerläufe vergleichen C-Makro-/Laufparameter und Physim, 16 Bereichsablehnungen, SI-/Modellmetadaten sowie instanzlokale Pose über Reset; separate echte C-/Physim-Appfälle bestehen. Andere Vorlagen und aktuelle Plattform-/Gesamt-SDK-Prüfung offen."
     },
     {
       "id": "PP-0067",

@@ -2801,3 +2801,53 @@ Wurfparameters steht noch aus; PP-0066 bleibt unvollständig. Am vorherigen
 [Stand 7b08c04](https://github.com/PhysicSimulator/physim/actions/runs/38126895020)
 endet Windows/Clang-Cl Release inzwischen erfolgreich; dieser Lauf prüft
 noch nicht die anschließende Wurf-/Material-Erweiterung.
+
+## Boxkollision: gleiche Laufparameter und SI-Metadaten
+
+Am Stand `0531eb8` weist der vorhandene C-Runner `restitution=0.5` als
+unbekannten Parameter mit Exit 5 ab. Die tatsächliche Gegenprobe liegt in
+`build/current-box-parameters-before-mac/observed.json`. Physim besaß bereits
+vier Laufparameter; C verlangte für diese Werte einen Neubau mit Makros.
+Die C-Vorlage deklariert nun ebenfalls `angle`, `offset`, `restitution` und
+`friction`. Beide Fassungen speichern explizite SI-Deklarationen (`rad`, `m`,
+`1`, `1`) und verwenden die gewählten Werte in Initialzustand, Solver und
+Modellbeschreibung. C-Makros bleiben Startwerte innerhalb der gemeinsamen
+Grenzen. Reset leert Kontaktzustände, erhält aber die gewählten Parameter.
+
+Die finale native Release-Paritätsprüfung besteht **1/1** in
+`build/current-headless-mac/test-results/run-_02x7k7a`, Log
+`build/current-box-parameters-model-metadata-final-mac.log`. Zehn wirkliche
+Runnerläufe vergleichen jeweils alle **401** Messzeilen und **15** Kanäle für
+Standard, unelastischen und schrägen Stoß: die bisherigen kompilierten C-
+Makrovarianten und zusätzliche Laufparameteränderungen der unverändert
+gebauten C-Basis werden gegen Physim geprüft. Alle gewählten Werte stimmen
+mit ihren Modellbeschreibungen überein; Einheitensymbole, SI-Skalierungen und
+alle Dimensionsexponenten werden direkt aus den Dateien gelesen. Zwei
+gleichzeitig lebende Instanzen pro Sprache bleiben in Pose und Einstellungen
+auch über zwei Resetzyklen unabhängig. Alle **16** ungültigen Bereichswahlen
+enden mit Exit 5 vor Messdateianlage. Die bestehenden Szenen-, Report- und
+CSV-Dateianlageprüfungen bleiben erhalten; sie sind keine zusätzliche
+vollständige CSV-Inhaltsprüfung.
+
+Die unabhängige physikalische Boxreferenz und die vorherige Paritätsfassung
+bestehen zusammen **2/2** in `run-d0c4tqi6` desselben Headless-Verzeichnisses,
+Log `build/current-box-parameters-native-complete-mac.log`.
+Der erste Ausbau des Paritätsharness scheiterte am doppelten lokalen Namen
+`values`; nach Korrektur besteht die oben genannte finale Fassung. Dieser
+Harness-Compilefehler wird nicht als Produktfehler oder bestandener Test gezählt.
+
+Die tatsächlichen Release-Appketten bestehen mit gewählter Restitution `.5`:
+Physim **1/1** in `build/current-release-mac/test-results/run-ptei2imp`, Log
+`build/current-box-parameters-app-mac.log`, sowie C **1/1** in `run-oky2vnou`
+desselben Verzeichnisses, Log `build/current-box-parameters-c-app-final-mac.log`.
+Beide bauen ihre Projektquellen, simulieren, lesen den Lauf, prüfen sämtliche
+vier Einheiteneinträge und den tatsächlichen Rückprallwert in den Metadaten
+und öffnen die Auswertung. Der neue C-Katalogfall prüft zusätzlich den
+gespeicherten Wert in `physim.project`; der Physim-Fall öffnet das Projekt mit
+dem Wert erneut. Die C- und Physim-Appfälle sind separat ausgeführt; der erste
+kombinierte Aufruf hatte den gerade erst hinzugefügten C-Katalogfall noch
+nicht ausgewählt und wird ausdrücklich nur als Physim **1/1** gezählt.
+
+Diese Nachweise gelten für Intel macOS. Aktuelle Linux-/Windows- und vollständige
+SDK-Abnahme dieser Erweiterung bleiben offen. PP-0066 bleibt unvollständig;
+alle 531 ursprünglichen Planblöcke behalten ihren Umfang.

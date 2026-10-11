@@ -2512,7 +2512,11 @@ App-Test wählt Reibung und Anfangsrotation, prüft die gespeicherten Laufwerte
 und öffnet das Projekt mit denselben Werten erneut.
 
 `examples/language/box_collision.phys` bildet auch die C-Boxstoßvorlage ab.
-Winkel, Höhenversatz, Rückprall und Reibung sind Experimentparameter. Alle
+Winkel, Höhenversatz, Rückprall und Reibung sind in beiden Experimentsprachen
+Laufparameter mit expliziten Einheiten: `rad`, `m` und zweimal `1`.
+Die [Parameterübersicht](workspace.md#boxkollision-vor-dem-lauf-einstellen) nennt
+Standards und Grenzen. Änderungen benötigen keinen neuen Build; Reset erhält
+sie. Die C-Makros bleiben als Startwerte verfügbar. Alle
 15 Messkanäle und die Szene mit den letzten Kontaktpunkten entsprechen der
 C-Referenz. Der Paritätstest prüft elastischen, unelastischen und schrägen
 Stoß mit Reibung über jeweils 401 Zeitpunkte. Die Auswertung zeigt Positionen

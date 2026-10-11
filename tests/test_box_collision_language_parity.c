@@ -12,7 +12,7 @@
 } } while (0)
 
 static int run(const char *runner, const char *module, const char *path, const char *work,
-               const char *const *parameters) {
+               const char *const *parameters, int expected_code) {
     const char *args[20] = {runner, module, path, "--steps", "400", "--dt", "0.005",
                             "--seed", "42"};
     unsigned count = 9;
@@ -35,7 +35,7 @@ static int run(const char *runner, const char *module, const char *path, const c
         ps_process_kill(&child);
     int code = child.exit_code;
     ps_process_close(&child);
-    CHECK(code == 0);
+    CHECK(code == expected_code);
     return 0;
 }
 
@@ -48,6 +48,34 @@ static const ps_experiment_api *load(const char *path, void **module) {
     if (symbol)
         memcpy(&entry, &symbol, sizeof entry);
     return entry ? entry() : NULL;
+}
+
+static int instances(const char *path) {
+    void *module=NULL;const ps_experiment_api *api=load(path,&module);CHECK(api);
+    ps_context contexts[2]={{0},{0}};
+    for(unsigned i=0;i<2;i++) {
+        ps_context *c=&contexts[i];c->struct_size=sizeof *c;c->api_version=PS_API_VERSION;c->dt_s=.005;
+        if(i) {
+            CHECK(ps_parameter_override(c,"angle",.35)==PS_OK && ps_parameter_override(c,"offset",.12)==PS_OK);
+            CHECK(ps_parameter_override(c,"restitution",.6)==PS_OK && ps_parameter_override(c,"friction",.3)==PS_OK);
+        }
+        CHECK(api->create(c)==PS_OK && ps_parameter_finalize(c)==PS_OK);
+    }
+    for(unsigned cycle=0;cycle<2;cycle++) {
+        for(unsigned i=0;i<2;i++) {
+            ps_scene scene={0};api->build_scene(&contexts[i],&scene);bool found=false;
+            for(unsigned j=0;j<scene.count;j++)if(scene.objects[j].id==20) {
+                const ps_object *box=&scene.objects[j];found=true;
+                CHECK(fabs(box->a.y-(i?.12:0))<1e-12 && fabs(box->orientation.z-sin(i?.35/2:0))<1e-12);
+            }
+            CHECK(found);
+        }
+        for(unsigned step=0;step<270;step++)for(unsigned i=0;i<2;i++) {
+            CHECK(api->step(&contexts[i],.005)==PS_OK);contexts[i].time_s=(step+1)*.005;
+        }
+        for(unsigned i=0;i<2;i++){CHECK(api->reset(&contexts[i])==PS_OK);contexts[i].time_s=0;}
+    }
+    for(unsigned i=0;i<2;i++)api->destroy(&contexts[i]);ps_module_close(module);return 0;
 }
 
 static int compare_scene(const ps_scene *c, const ps_scene *language, unsigned count) {
@@ -148,10 +176,13 @@ int main(int argc, char **argv) {
     const char *inelastic[] = {"restitution=0.5", NULL};
     const char *oblique[] = {"angle=0.35", "offset=0.12", "restitution=0.6",
                              "friction=0.3", NULL};
-    const char *const *parameters[] = {NULL, inelastic, oblique};
-    const char *modules[] = {argv[2], argv[6], argv[7]};
+    const char *const *parameters[] = {NULL, inelastic, oblique, inelastic, oblique};
+    const char *const *c_parameters[] = {NULL, NULL, NULL, inelastic, oblique};
+    const char *modules[] = {argv[2], argv[6], argv[7], argv[2], argv[2]};
+    const double angles[]={0,0,.35,0,.35},offsets[]={0,0,.12,0,.12};
+    const double restitutions[]={1,.5,.6,.5,.6},frictions[]={0,0,.3,0,.3};
     unsigned long long stamp = (unsigned long long)(ps_clock() * 1000000);
-    for (unsigned mode = 0; mode < 3; mode++) {
+    for (unsigned mode = 0; mode < 5; mode++) {
         char c_path[4096], language_path[4096];
         int n = snprintf(c_path, sizeof c_path, "%s/box-c-%u-%llu.psrun",
                          argv[8], mode, stamp);
@@ -159,8 +190,8 @@ int main(int argc, char **argv) {
         n = snprintf(language_path, sizeof language_path,
                      "%s/box-language-%u-%llu.psrun", argv[8], mode, stamp);
         CHECK(n > 0 && (size_t)n < sizeof language_path);
-        CHECK(!run(argv[1], modules[mode], c_path, argv[8], NULL));
-        CHECK(!run(argv[1], argv[3], language_path, argv[8], parameters[mode]));
+        CHECK(!run(argv[1], modules[mode], c_path, argv[8], c_parameters[mode],0));
+        CHECK(!run(argv[1], argv[3], language_path, argv[8], parameters[mode],0));
         ps_run_reader c, language;
         CHECK(ps_run_open(&c, c_path) == PS_OK &&
               ps_run_open(&language, language_path) == PS_OK);
@@ -169,6 +200,22 @@ int main(int argc, char **argv) {
               strstr(language.metadata, "contact=15-axis SAT") &&
               strstr(language.metadata, "language=physim-0.182.0") &&
               strstr(language.metadata, "iterations=128"));
+        const char *names[]={"angle","offset","restitution","friction"};
+        const char *symbols[]={"rad","m","1","1"};
+        const double selected_values[]={angles[mode],offsets[mode],restitutions[mode],frictions[mode]};
+        for(unsigned model=0;model<2;model++)for(unsigned parameter=0;parameter<4;parameter++) {
+            const char *metadata=model?language.metadata:c.metadata;char expected[128];
+            snprintf(expected,sizeof expected,"\nparameter.%s=%.17g\n",names[parameter],selected_values[parameter]);
+            CHECK(strstr(metadata,expected));
+            if(parameter==0)snprintf(expected,sizeof expected,"\nb_angle_z_rad=%.17g\n",selected_values[parameter]);
+            else if(parameter==1)snprintf(expected,sizeof expected,"\nb_initial_position_m=1,%.17g,0\n",selected_values[parameter]);
+            else snprintf(expected,sizeof expected,"\n%s=%.17g\n",names[parameter],selected_values[parameter]);
+            CHECK(strstr(metadata,expected));
+            ps_parameter_unit unit;CHECK(ps_parameter_unit_parse(metadata,names[parameter],&unit)==PS_OK);
+            const int8_t dimension[7]={parameter==1?1:0,0,0,0,0,0,0};
+            CHECK(unit.declared && unit.scale==1 && !strcmp(unit.symbol,symbols[parameter]) &&
+                  !memcmp(unit.dimension,dimension,7));
+        }
         for (uint32_t i = 0; i < 15; i++) {
             CHECK(!strcmp(c.schema[i].name, language.schema[i].name));
             CHECK(!memcmp(c.schema[i].dimension, language.schema[i].dimension, 7));
@@ -201,5 +248,14 @@ int main(int argc, char **argv) {
         }
     }
     CHECK(!scenes(argv[2], argv[3]));
+    CHECK(!instances(argv[2]) && !instances(argv[3]));
+    const char *invalid[]={"angle=-7","angle=7","offset=-11","offset=11",
+                           "restitution=-0.001","restitution=1.001","friction=-0.001","friction=10.001"};
+    for(unsigned model=0;model<2;model++)for(unsigned i=0;i<8;i++) {
+        const char *invalid_parameters[]={invalid[i],NULL};char path[4096];
+        CHECK(snprintf(path,sizeof path,"%s/box-invalid-%u-%u.psrun",argv[8],model,i)<(int)sizeof path);
+        CHECK(!run(argv[1],argv[model+2],path,argv[8],invalid_parameters,5));
+        FILE *file=fopen(path,"rb");CHECK(!file);
+    }
     return 0;
 }

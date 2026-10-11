@@ -589,3 +589,25 @@ Der native Runner erlaubt dieselbe Steuerung über
 Läufe beschränkt; ein Offline-Lauf ohne Steuerverbindung würde sonst dauerhaft
 auf Fortsetzen warten. Die vorhandenen Pipe-Nachrichten für Einzelschritt und
 Fortsetzen sowie Pipe-Version 5 und Experiment-ABI 3 bleiben unverändert.
+
+## Boxkollision vor dem Lauf einstellen
+
+Die C- und Physim-Vorlagen der Boxkollision bieten dieselben vier
+Experimentparameter im Inspector. Änderungen gelten für den nächsten Lauf;
+ein neuer Build ist dafür nicht erforderlich.
+
+| Parameter | Einheit | Standard | Grenzen |
+| --- | --- | --- | --- |
+| `angle` | rad | 0 | −2π bis 2π |
+| `offset` | m | 0 | −10 bis 10 |
+| `restitution` | 1 | 1 | 0 bis 1 |
+| `friction` | 1 | 0 | 0 bis 10 |
+
+`angle` dreht Box B um Z; `offset` versetzt sie entlang Y. Die Koeffizienten
+steuern Rückprall und Coulomb-Reibung. Die Messdatei enthält gewählte Werte,
+Standardwerte und Grenzen sowie Einheitensymbol, SI-Skalierung und Dimensionen.
+Die Modellbeschreibung verwendet die tatsächlich gewählten Werte. Reset
+erhält die Einstellung; parallel lebende Modellinstanzen bleiben unabhängig.
+Die C-Makros `PS_BOX_ANGLE`, `PS_BOX_OFFSET`, `PS_BOX_RESTITUTION` und
+`PS_BOX_FRICTION` können weiterhin Startwerte innerhalb dieser Grenzen setzen.
+Quellcode-Snapshots und die vorherigen Laufdateien bleiben erhalten.
