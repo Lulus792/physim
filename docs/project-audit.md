@@ -683,3 +683,16 @@ der neue Isolationstest wird daraus nicht abgeleitet.
 [Ausgeführte Gegenproben](platform-validation.md#runner-isolation-und-wiederaufnahme-in-der-tatsächlichen-app).
 Alle **531** Originalblöcke behalten ihre Planprüfsumme: **47 implemented**,
 **11 incomplete**, **473 unverified**; `completion_proven` bleibt `false`.
+
+## Architekturabnahme der getrennten Projektprozesse
+
+PP-0061 ist durch die gemeinsamen Prozessstartpfade und die tatsächlich
+gebauten C-/Physim-Projekte im frisch verschobenen macOS-SDK nachgewiesen.
+Builder, native Compiler und Experimentrunner werden außerhalb der App
+gestartet; acht Fehler-/Wiederaufnahmefälle bewahren den App-Prozess.
+Die fokussierte SDK-Prüfung ist Teil des vollständigen App-Prüfers, ersetzt
+aber keine neue Gesamtabnahme. PP-0062 behält seine offene Plattformprüfung.
+[Ausgeführte Nachweise](platform-validation.md#runner-isolation-aus-der-unabhängigen-sdk-prüfmappe).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**48 implemented**, **11 incomplete**, **472 unverified**;
+`completion_proven` bleibt `false`.

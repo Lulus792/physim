@@ -32,6 +32,16 @@ def verify_step_breakpoint_app(repo, sdk, root, suffix, checked, compiler):
     print("Installed SDK step breakpoint app: both languages/window sizes, actual edit/run/step/resume/reset buttons and persisted reopening passed", flush=True)
 
 
+def verify_runner_isolation_app(repo, sdk, root, suffix, checked, compiler):
+    work = root / "Runner isolation app"; work.mkdir()
+    command = [sys.executable, repo / "tests/check_display_workflow.py",
+               "runner_isolation_workflow", "--app", sdk / "bin" / ("physim" + suffix),
+               "--root", sdk, "--work", work]
+    if compiler: command += ["--cc", compiler]
+    checked(command, timeout=1080)
+    print("Installed SDK runner isolation: eight real C/Physim create/step abort/hang cases, early failure diagnostics, live keyboard help, preserved source/run data and healthy restart passed", flush=True)
+
+
 def verify_project_migration(repo, sdk, root, suffix, checked):
     checked(
         [
@@ -362,7 +372,14 @@ def main():
                         help="Verify convex geometry and bounded multi-body CCD bindings; no full mechanics or GUI acceptance")
     parser.add_argument("--breakpoints-only", action="store_true",
                         help="Verify actual C/Physim runner step stops; optional --app-tests covers settings, persistence and reset")
+    parser.add_argument("--isolation-only", action="store_true",
+                        help="Verify eight actual C/Physim runner failure/restart app workflows; requires an app SDK and display")
     args = parser.parse_args()
+    if args.isolation_only and any((args.pendulum_only, args.scalar_only, args.transform_only,
+        args.stream_only, args.comparison_only, args.curve_only, args.units_only, args.body_only,
+        args.migration_only, args.accessibility_only, args.convex_only, args.breakpoints_only,
+        args.app_tests)):
+        parser.error("--isolation-only cannot be combined with other focused modes or --app-tests")
     if args.breakpoints_only and any((args.pendulum_only, args.scalar_only, args.transform_only,
         args.stream_only, args.comparison_only, args.curve_only, args.units_only, args.body_only,
         args.migration_only, args.accessibility_only, args.convex_only)):
@@ -471,6 +488,15 @@ def main():
         builder.includes = [sdk / "include"]
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+        if args.isolation_only:
+            if not metadata["app"]:
+                raise RuntimeError("Runner isolation verification requires an app SDK")
+            verify_runner_isolation_app(repo, sdk, root, suffix, checked, args.compiler)
+            (root / "PASSED.txt").write_text(
+                "Focused SDK runner isolation verification passed: relocated manifest, eight actual C/Physim create/step abort/hang cases, early failure messages, keyboard help, healthy restart and unchanged source snapshots/persisted runs. No full platform or product acceptance.\n",
+                encoding="utf-8")
+            print(f"Runner isolation SDK verified: {root}", flush=True)
+            return
         if args.breakpoints_only:
             if args.app_tests and not metadata["app"]:
                 raise RuntimeError("Step breakpoint app verification requires an app SDK")
@@ -1245,6 +1271,7 @@ def main():
                         raise RuntimeError("Installed SDK keyboard settings did not complete")
                 print("Installed SDK settings: keyboard-only traversal, all toggles, restart, cancellation and large-font focus scrolling passed",flush=True)
                 verify_step_breakpoint_app(repo, sdk, root, suffix, checked, args.compiler)
+                verify_runner_isolation_app(repo, sdk, root, suffix, checked, args.compiler)
                 verify_project_migration(repo,sdk,root,suffix,checked)
                 if sys.platform in ("darwin","linux"):
                     verify_accessibility_checkbox(repo,sdk,root,suffix,checked)
@@ -1295,7 +1322,7 @@ def main():
         "Twelve cold native C/Physim domain project builds, unchanged cache reuse and six complete independent tutorial oracles passed.\n" +
         "Both complete C/Physim learning routes, eight paired model source groups and executable language introductions passed.\n" +
         ("Nine projects rebuilt without CMake; sources unchanged and outputs confined to build/.\n" if metadata["app"] else "") +
-        ("Eight C template GUI workflows, the complete Physim language GUI workflow, independent documentation route navigation, keyboard menus in both window sizes and four UI typography sizes with restart, keyboard settings, keyboard documentation and keyboard project matrix passed.\n" if args.app_tests else ""), encoding="utf-8")
+        ("Eight C template GUI workflows, the complete Physim language GUI workflow, independent documentation route navigation, keyboard menus in both window sizes and four UI typography sizes with restart, keyboard settings, keyboard documentation, keyboard project matrix and eight runner isolation/restart workflows passed.\n" if args.app_tests else ""), encoding="utf-8")
     print(f"Native SDK verified: {root}")
 
 

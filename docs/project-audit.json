@@ -387,9 +387,17 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Experimente werden getrennt von der App kompiliert und ausgeführt.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/main.c",
+        "app/build_main.c",
+        "src/platform.c",
+        "runners/experiment.c",
+        "app/isolation_tests.inc",
+        "tools/verify-native-sdk.py",
+        "docs/platform-validation.md#runner-isolation-aus-der-unabhängigen-sdk-prüfmappe"
+      ],
+      "note": "Getrennter physim-build mit externen Compilerprozessen und separater physim-runner; gemeinsame Windows/POSIX-Prozessimplementierung. Acht echte C-/Physim-Appketten aus dem frisch verschobenen Intel-macOS-SDK bauen, überstehen native Abbrüche/Hänger und starten erneut. Begrenzte Architekturabnahme; gesamte aktuelle Plattformmatrix bleibt offen."
     },
     {
       "id": "PP-0062",

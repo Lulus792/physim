@@ -2673,3 +2673,45 @@ Der Screenshot `isolation-recovered.bmp` des C-create-Abbruchs wurde zusätzlich
 als PNG-Vorschau dekodiert und visuell geprüft: vollständiger Fehlerhinweis,
 weiter verfügbare Steuerung und keine erfundenen Messwerte.
 Dies belegt Intel macOS; die aktuelle andere Plattformmatrix bleibt offen.
+
+## Runner-Isolation aus der unabhängigen SDK-Prüfmappe
+
+Ein neues Release-App-SDK unter `build/current-isolation-sdk-mac` wurde mit
+Apple Clang auf Intel macOS gebaut und installiert. Alle **471** Manifestdateien
+wurden vollständig gegen SHA-256 geprüft. Der unabhängige Kit-Selbsttest
+besteht mit **151** Eingaben (`build/current-isolation-kit-selftest.log`);
+alle entpackten Dateien wurden erneut vollständig gegen ihr Kitmanifest
+verglichen. Der entpackte Prüfer ist bytegleich mit der neuen Quellfassung.
+
+Der tatsächlich ausgeführte Aufruf aus `build/current-isolation-verification-kit`
+mit `--isolation-only --archive-bitmaps` und automatischer Compilererkennung
+endet mit **PASSED** in
+`build/current-isolation-sdk-proof-mac/Native SDK ä f58alae6`.
+`PASSED.txt`, `verification.log`, `Runner isolation app/app-steps.json` und
+`build/current-isolation-sdk-proof-mac.log` belegen alle **acht** realen
+C-/Physim-create/step-Abbruch-/Endlosschleifenfälle, frühe Fehlerhinweise,
+Handbuchbedienung, gesunden Neustart und unveränderte Lauf-/Quellartefakte.
+Die Projekte werden innerhalb der verschobenen SDK-Kopie mit dem ausgelieferten
+Builder und Compiler neu gebaut; SDK-Quellen und Header kommen aus dem Paket.
+Es ist keine Wiederholung gegen Repository-Binärdateien.
+
+Alle **20** BMP-Archive sind nach Abschluss erneut gestreamt und gegen
+Originalgröße sowie Original-/Archiv-SHA-256 geprüft:
+**255746760 Originalbytes**, **7751387 komprimierte Bytes**. Die neue
+fokussierte Prüfung benennt ihre Grenze ausdrücklich; sie ersetzt keine
+vollständige SDK- oder Plattformabnahme. Die vollständige Prüfung mit
+`--app-tests` ruft dieselbe Isolationsfunktion auf. Unzulässige Kombinationen
+mit anderen fokussierten Modi oder `--app-tests` werden vor jedem Kopieren
+abgewiesen. Der gesamte neue SDK-Prüfer wurde nach dieser Ergänzung noch
+nicht vollständig durchlaufen.
+
+PP-0061 besitzt damit einen konkreten Architekturnachweis: `build_project`
+in `app/main.c` startet `physim-build` als getrennten Prozess; dessen
+Compileraufrufe in `app/build_main.c` starten ihrerseits getrennte Prozesse.
+`start_run_mode` startet ausschließlich den externen `physim-runner`.
+`src/platform.c` verwendet dafür `CreateProcessW` beziehungsweise `fork` und
+`exec`; Experimentmodule werden in `runners/experiment.c` geladen.
+Die echte App baut beide Sprachen aus dem verschobenen SDK, übersteht den
+nativen C-Prozessabbruch und bedient im selben App-Prozess danach das Handbuch
+und einen gesunden Lauf. Dieser Nachweis beschränkt sich auf die Prozessgrenze;
+aktuelle gesamte Linux-/Windows-/macOS-Funktionsgleichheit bleibt offen.

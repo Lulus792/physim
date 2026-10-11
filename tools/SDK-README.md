@@ -142,3 +142,13 @@ The focused marker does not imply full SDK or platform acceptance.
 gzip files and `bitmap-archive.json`; SDK input assets stay protected. Restore
 with `python3 tools/archive_bitmaps.py proof-directory --restore`. Existing
 foreign files are never replaced. CI publishes the archives and receipts.
+
+Developer verification of real runner failures uses
+`python3 tools/verify-native-sdk.py --sdk SDK --work proof --isolation-only --archive-bitmaps`.
+It requires an app SDK and a graphical desktop. Eight C/Physim workflows
+inject create/step aborts and infinite loops, stop hung runners, operate
+keyboard help, restart healthy runs and check preserved source snapshots and
+measurement files. C uses a native `abort()`; Physim uses a controlled runtime
+assertion. Early failures must retain their diagnostic without trying to load
+a missing measurement file. The full `--app-tests` verification includes
+these workflows too; the focused result does not imply full acceptance.

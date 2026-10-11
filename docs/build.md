@@ -1028,3 +1028,26 @@ Der fokussierte Modus baut den Core zusätzlich nur aus Paketquellen neu und
 prüft unabhängige Kontaktzeugen, lineare Sweep-Zeitreferenzen und Ereignis-
 Restzeit in C-/Physim-Beispielen. Kontaktwelt, allgemeine zeitabhängige Rotation und vollständige
 GUI-Abnahme sind gesonderte Anforderungen.
+
+## Runner-Isolation im verschobenen App-SDK prüfen
+
+Aus der unabhängigen SDK-Prüfmappe lässt sich die Prozessfehlerbehandlung
+gezielt ausführen, ohne eine gesamte Plattformabnahme daraus abzuleiten:
+
+```sh
+python3 verifier/tools/verify-native-sdk.py --sdk build/package \
+  --work build/isolation-package-checks --isolation-only --archive-bitmaps
+```
+
+Der Aufruf benötigt ein App-SDK, einen C17-Compiler und eine grafische Sitzung.
+Er prüft das Manifest, verschiebt eine SDK-Kopie und baut dort acht wirkliche
+C-/Physim-Projektfälle: Fehler beziehungsweise Endlosschleife beim Erzeugen
+und im Schritt. Die App muss danach per Tastatur bedienbar sein, einen neuen
+Lauf erzeugen und gespeicherte Messblöcke sowie beide Quell-Snapshots erhalten.
+Frühe Fehler dürfen keinen Ladeversuch auf eine fehlende Messdatei auslösen.
+C verwendet `abort()`, Physim einen kontrollierten Laufzeitfehler. Die
+vollständige SDK-Prüfung mit `--app-tests` enthält dieselbe Gegenprobe.
+`--isolation-only` lässt sich nicht mit anderen fokussierten Modi oder
+`--app-tests` kombinieren. `PASSED.txt` benennt den begrenzten Prüfumfang;
+komprimierte Screenshots und Receipt bleiben bei der optionalen Archivierung
+bytegetreu wiederherstellbar.
