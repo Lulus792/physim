@@ -3793,3 +3793,61 @@ Einzel-Undo-Prüfung durch eine Eingabe ersetzt.
 Diese Prüfung belegt PP-0258 auf Intel macOS mit AppleClang und SDL3.
 Aktuelle Linux-/Windows-/ARM-Läufe, vollständige IDE-Sprachsemantik und
 alle Dock-/Schriftgrößenvarianten sind damit nicht abgenommen.
+
+
+## Parameterformular aus Experimentmetadaten
+
+Am 11. Oktober 2026 ist **Experimentparameter** als eigener Abschnitt
+oben im Inspektor erreichbar. Das bereits vorhandene Formular lag zuvor
+innerhalb der aufgeklappten Laufeinstellungen. Name, Beschreibung,
+Standard und inklusive Grenzen stammen weiterhin aus der realen
+`--describe`-Abfrage des gebauten Moduls, einschließlich Anzeigeeinheiten.
+Namen und Beschreibungen besitzen jetzt zur Breite passende umbrochene
+Zeilen; ungültige Werte erhalten einen umbrochenen farbigen Hinweis.
+Eingaben und Standardbutton gelten vor dem nächsten Lauf. Während des
+Laufs und eines ausstehenden Resets bleiben die Bedienelemente gesperrt.
+
+`parameter_catalog` und `language_parameters` bestehen **2/2**, Ergebnisse
+`build/current-headless-mac/test-results/run-lghbit5t`, Log
+`build/current-parameter-form-native-mac.log`. Die nativen Fälle prüfen
+Atomizität fehlerhafter Metadaten, gültige und ungültige Auswahl, neue
+Grenzen nach Rebuild, Dimensions-/Anzeigeeinheitenwechsel, genaue SI-
+Standard-/Grenzwerte, Vorzeichen von Null, Unterlauf und Sprach-Runner-
+Parameter. Die Filteranforderung `parameters` wählte keinen eigenen Fall;
+die genannten zwei Fälle sind die tatsächlich ausgeführten Prüfungen.
+
+Die abschließende GUI-Regressionsgruppe besteht **4/4**:
+`parameter_form_workflow`, `project_settings_workflow`, `inspector_workflow`
+und `api_reference_workflow`, Ergebnisse
+`build/current-release-mac/test-results/run-k44cmzjy`, Log
+`build/current-parameter-form-regression-mac.log`. Das neue Formular wird
+in vier realen App-Prozessen bedient: C und Physim, jeweils Erstöffnung
+und Neustart. F5 baut tatsächliche Module und liefert zwei deklarierte
+Parameter. Ein echter Klick öffnet das Formular; Mausfokus, Cmd+A und
+SDL-Texteingaben bearbeiten die Felder. `9 cm` liegt unter der inklusiven
+Grenze `10 cm` und F6 startet keinen Lauf. **Standard** stellt `50 cm`
+wieder her. `75 cm` und ein unskalierter Wert `3.5` werden ausgewählt,
+per F6 gestartet und als **0.75 SI** beziehungsweise **3.5** in jedem
+gespeicherten Sample samt Parametermetadaten geprüft. Ein tatsächlicher
+Standardbutton-Klick während des Laufs bleibt wirkungslos. F9 beendet
+den Lauf; normale Beendigung speichert die Auswahl. Der Neustart und F5
+stellen `75`/`3.5` in den Metadatenfeldern wieder her. Genau ein Lauf
+entsteht je Sprache, die Quelldateien bleiben bytegenau erhalten und die
+Neustartprüfung ändert den gespeicherten Lauf nicht.
+
+Default-, Fehler-, Auswahl- und Wiederöffnungsansichten in C/Physim wurden
+visuell geprüft; acht finale Fensterbilder liegen unter
+`build/current-parameter-form-preview`. Ein zunächst falscher Test-Klickbereich
+vor dem automatisch gerenderten Tree-Header wurde korrigiert
+(`run-rclj5a5h`). Der erste Physim-Fixture fehlte der verpflichtende
+create-Callback; der Compiler wies sie korrekt ab (`run-p_bd41q5`).
+Beide Fehler waren in Testansteuerung/Testquelle, nicht Parameterberechnung.
+Der vollständige C-/Physim-Workflow bestand zunächst unter `run-50ncs71e`;
+der finale Lauf prüft auch den farbigen, dynamisch umbrochenen Fehlerhinweis.
+
+PP-0256 ist für das Metadatenformular auf Intel macOS 14.6.1 mit
+AppleClang 16 und SDL3 konkret belegt. Die aktuelle Linux-/Windows-/ARM-
+Ausführung dieser Änderung sowie alle Schrift- und Dockvarianten sind
+noch offen. Die laufende Linux-Paketprüfung des vorherigen Commits
+`80972a1` und dessen noch ausstehende C17-Matrix ersetzen diese Prüfung
+nicht. Der Gesamtplan bleibt offen.

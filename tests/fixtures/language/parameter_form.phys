@@ -1,0 +1,16 @@
+let cm = Unit(1, 0, 0, 0, 0, 0, 0, 0.01, "cm")
+let metre = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
+let scalar = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
+let distanceChannel = Channel("distance", metre, "Selected distance in SI")
+let gainChannel = Channel("gain", scalar, "Selected gain")
+let distance = parameterWithUnit("distance", cm, 0.5, 0.1, 2, "Abstand in Zentimetern für die Messung")
+let gain = parameter("gain", 2, 0, 5, "Verstärkung ohne Einheit")
+func create():
+    metadata("model=parameter form fixture")
+func reset():
+    distanceChannel.sample(distance)
+    gainChannel.sample(gain)
+func step(dt: Float64):
+    reset()
+func scene():
+    return

@@ -322,6 +322,22 @@ die Wiederherstellung an. Extern geänderte Dateien werden als Konflikt angezeig
 
 ## Simulation steuern
 
+Nach einem erfolgreichen Build erscheint **Experimentparameter** als eigener
+Abschnitt im Inspektor, wenn das Experiment Parameter deklariert. Namen,
+Beschreibungen, Standardwerte, Grenzen und Anzeigeeinheiten stammen aus
+dessen Metadaten. Klicke in ein Feld, markiere mit **Ctrl+A / Cmd+A** und
+gib den gewünschten Wert ein. **Standard** setzt dieses Feld zurück.
+Ungültige oder außerhalb der Grenzen liegende Werte werden angezeigt und
+blockieren den Start.
+
+Eingaben verwenden die angegebene Anzeigeeinheit: Bei einem Feld in `cm`
+bedeutet `75` einen SI-Wert von `0.75 m`. Rohdaten und Parameter-Metadaten
+des Laufs speichern SI-Werte. Während eines Laufs sind die Felder gesperrt;
+Änderungen davor gelten für den nächsten Lauf und werden im Projekt gespeichert.
+Nach einem Neustart stellt der nächste erfolgreiche Build die Auswahl mit
+den aktuellen Metadaten und Grenzen wieder her. Quellcode muss dafür nicht
+geändert werden.
+
 Stelle vor dem Start im Inspector **Laufeinstellungen** Zeitschritt und Seed ein.
 Der Zeitschritt ist die Simulationszeit pro Schritt in Sekunden, keine Wartezeit
 der Oberfläche. Ein kleinerer Wert erzeugt mehr Messpunkte und kostet Rechenzeit.

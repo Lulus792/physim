@@ -9528,6 +9528,36 @@
           ]
         }
       ]
+    },
+    {
+      "name": "parameter_form_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "parameter_form_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 550,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
     }
   ]
 }

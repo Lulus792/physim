@@ -880,3 +880,17 @@ gemeinsamer Konstanten, Sprachüberladungen und Typführer-Fallbacks.
 Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **68 implemented**, **13 incomplete**, **450 unverified**;
 `completion_proven` bleibt `false`.
+
+
+## Metadatenformular für Experimentparameter (§6.1)
+
+PP-0256 ist konkret belegt: das Formular ist direkt im Inspektor erreichbar
+und zeigt Namen, Beschreibung, Anzeigeeinheit, Grenzen und Standardwerte
+aus dem Experiment. Vier tatsächliche C-/Physim-App-Prozesse prüfen
+Feldeingabe, ungültigen Start, Standard, Laufwerte in SI, Sperre während
+des Laufs und Wiederherstellung nach Neustart. Der Quellcode bleibt erhalten;
+Inspektor-, Projekt- und API-Referenzregressionen bestehen.
+[Nachweise und Grenzen](platform-validation.md#parameterformular-aus-experimentmetadaten).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**69 implemented**, **13 incomplete**, **449 unverified**;
+`completion_proven` bleibt `false`.

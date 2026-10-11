@@ -1709,9 +1709,19 @@
       "kind": "list",
       "scope": "later",
       "text": "- Parameterformular, das aus Metadaten des Experiments entsteht.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/design_ui.inc",
+        "app/parameter_catalog.c",
+        "app/parameter_form_tests.inc",
+        "tests/fixtures/parameter_form.c",
+        "tests/fixtures/language/parameter_form.phys",
+        "tests/test_parameter_catalog.c",
+        "tests/check_display_workflow.py",
+        "docs/workspace.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Eigenes Metadatenformular im Inspektor: Namen, Beschreibung, Anzeigeeinheit, Standardwert und Grenzen aus echter Runner-Abfrage; gültige Auswahl bleibt ohne Quellcodeänderung erhalten. Am 2026-10-11 Intel macOS tatsächlich gebaut und bedient: vier C-/Physim-App-Prozesse mit F5, Maus/Feldeingabe, Standard, ungültigem Start, SI-Laufdaten, Laufsperre und Neustart; 4/4 GUI-Regressionen und 2/2 native Parameterfälle bestehen. Weitere aktuelle Plattformausführungen und alle Schrift-/Dockvarianten offen."
     },
     {
       "id": "PP-0257",

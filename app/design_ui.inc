@@ -125,8 +125,60 @@ static const char *workspace_name(const char *path) {
 #include "docking_ui.inc"
 #include "scene_tree_ui.inc"
 // clang-format on
+static void parameter_form_view(app *a) {
+    struct nk_context *ui=a->ui;
+    if(!a->built || !a->parameters.count)return;
+    struct nk_rect content=nk_window_get_content_region(ui);
+    bool expanded=nk_tree_state_push(ui, NK_TREE_TAB, "Experimentparameter", &a->parameter_disclosure);
+    struct nk_panel *layout=ui->current->layout;
+    a->parameter_header_bounds=nk_rect(content.x,layout->at_y-(float)*layout->offset_y,content.w,
+                                      ui->style.font->height+2*ui->style.tab.padding.y);
+    if (expanded) {
+        nk_begin_disabled(ui, a->runner.running || a->reset_pending);
+        for (uint32_t i = 0; i < a->parameters.count; i++) {
+            const ps_parameter *parameter = &a->parameters.entries[i];
+            const ps_parameter_unit *unit=&a->parameters.units[i];
+            double scale=unit->declared?unit->scale:1;
+            char detail[256];
+            snprintf(detail,sizeof detail,"%s%s%s%s",parameter->name,
+                     unit->declared?" [":"",unit->symbol,unit->declared?"]":"");
+            nk_layout_row_dynamic(ui,documentation_height(a->font_ui,detail,strlen(detail),fmaxf(40,nk_window_get_content_region(ui).w-16))+8,1);
+            nk_label_wrap(ui, detail);
+            snprintf(detail, sizeof detail, "%s · Bereich %.6g bis %.6g · Standard %.6g",
+                     parameter->description, parameter->minimum/scale, parameter->maximum/scale,
+                     parameter->default_value/scale);
+            nk_layout_row_dynamic(ui,documentation_height(a->font_ui,detail,strlen(detail),fmaxf(40,nk_window_get_content_region(ui).w-16))+8,1);
+            nk_label_wrap(ui, detail);
+            nk_layout_row_dynamic(ui, 32, 2);
+            char previous[sizeof a->parameters.selected[i]];
+            snprintf(previous, sizeof previous, "%s", a->parameters.selected[i]);
+            a->parameter_input_bounds[i]=nk_widget_bounds(ui);
+            nk_edit_string_zero_terminated(ui, NK_EDIT_FIELD, a->parameters.selected[i],
+                                           sizeof a->parameters.selected[i], nk_filter_default);
+            if (strcmp(previous, a->parameters.selected[i]))
+                a->project_settings_dirty = true;
+            a->parameter_default_bounds[i]=nk_widget_bounds(ui);
+            if (nk_button_label(ui, "Standard")) {
+                snprintf(a->parameters.selected[i], sizeof a->parameters.selected[i], "%.17g",
+                         parameter->default_value/scale);
+                a->project_settings_dirty = true;
+            }
+            double selected;
+            if (ps_parameter_catalog_value(&a->parameters, i, &selected) != PS_OK) {
+                const char *message="Endlichen Wert innerhalb des gültigen Bereichs eingeben.";
+                nk_layout_row_dynamic(ui,documentation_height(a->font_ui,message,strlen(message),fmaxf(40,nk_window_get_content_region(ui).w-16))+8,1);
+                nk_style_push_color(ui,&ui->style.text.color,UI_COLOR(error));
+                nk_label_wrap(ui, message);
+                nk_style_pop_color(ui);
+            }
+        }
+        nk_end_disabled(ui);
+        nk_tree_pop(ui);
+    }
+}
 static void camera_inspector(app *a) {
     struct nk_context *ui = a->ui;
+    parameter_form_view(a);
     scene_selection_sync(a);
     if (a->scene_selected && a->scene_selected_slot < display_scene(a)->count) {
         char selected[96];
@@ -275,45 +327,6 @@ static void camera_inspector(app *a) {
         if (!ps_project_seed_parse(a->seed, &parsed_seed)) {
             nk_layout_row_dynamic(ui, 52, 1);
             nk_label_wrap(ui, "Seed: ganze Zahl von 0 bis 18446744073709551615 eingeben.");
-        }
-        if (a->built && a->parameters.count &&
-            nk_tree_push(ui, NK_TREE_TAB, "Experimentparameter", NK_MINIMIZED)) {
-            nk_begin_disabled(ui, a->runner.running || a->reset_pending);
-            for (uint32_t i = 0; i < a->parameters.count; i++) {
-                const ps_parameter *parameter = &a->parameters.entries[i];
-                const ps_parameter_unit *unit=&a->parameters.units[i];
-                double scale=unit->declared?unit->scale:1;
-                nk_layout_row_dynamic(ui, 24, 1);
-                char detail[256];
-                snprintf(detail,sizeof detail,"%s%s%s%s",parameter->name,
-                         unit->declared?" [":"",unit->symbol,unit->declared?"]":"");
-                nk_label(ui, detail, NK_TEXT_LEFT);
-                snprintf(detail, sizeof detail, "%s · Bereich %.6g bis %.6g · Standard %.6g",
-                         parameter->description, parameter->minimum/scale, parameter->maximum/scale,
-                         parameter->default_value/scale);
-                nk_layout_row_dynamic(ui, 52, 1);
-                nk_label_wrap(ui, detail);
-                nk_layout_row_dynamic(ui, 32, 2);
-                char previous[sizeof a->parameters.selected[i]];
-                snprintf(previous, sizeof previous, "%s", a->parameters.selected[i]);
-                nk_edit_string_zero_terminated(ui, NK_EDIT_FIELD, a->parameters.selected[i],
-                                               sizeof a->parameters.selected[i], nk_filter_default);
-                if (strcmp(previous, a->parameters.selected[i]))
-                    a->project_settings_dirty = true;
-                if (nk_button_label(ui, "Standard")) {
-                    snprintf(a->parameters.selected[i], sizeof a->parameters.selected[i], "%.17g",
-                             parameter->default_value/scale);
-                    a->project_settings_dirty = true;
-                }
-                double selected;
-                if (ps_parameter_catalog_value(&a->parameters, i, &selected) != PS_OK) {
-                    nk_layout_row_dynamic(ui, 24, 1);
-                    nk_label_colored(ui, "Wert außerhalb des gültigen Bereichs", NK_TEXT_LEFT,
-                                     UI_COLOR(error));
-                }
-            }
-            nk_end_disabled(ui);
-            nk_tree_pop(ui);
         }
         nk_tree_pop(ui);
     }
