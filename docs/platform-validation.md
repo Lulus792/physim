@@ -4128,3 +4128,22 @@ inkonsistente Ensembles sind enthalten.
 Batch-Referenzen und parallele Worker; Seedüberlauf wird vor Start abgewiesen.
 Dies belegt die begrenzte Bibliotheks-/Controlleranforderung; die gesamte
 aktuelle Plattform- und Produktabnahme bleibt offen.
+
+
+## Linux-Sanitizernachweis für die Pendel-Sprachanalyse
+
+Die [fokussierte CI 38183381868](https://github.com/PhysicSimulator/physim/actions/runs/38183381868)
+am exakt belegten `2f4a46af10a5a65320037dd89e9988f72c4081f9` ist unter
+GCC und Clang erfolgreich beendet. Vollständige Joblogs sind gelesen.
+Beide führen **3/3 native** und **5/5 grafische** Sanitizerfälle tatsächlich
+aus, einschließlich language_full_workflow und language_mixed_workflow:
+
+| Compiler | Job | Native | Grafisch |
+| --- | --- | --- | --- |
+| Clang | 114600480800 | `run-ihoop7oq` | `run-ihf3rn7c` |
+| GCC | 114600480941 | `run-cpyd43g7` | `run-ej5zlx95` |
+
+Damit besitzt die lokale Stufe-7-Korrektur einen tatsächlichen Linux-
+ASan-/UBSan-Appnachweis. Die später ergänzten Feder-/Auftriebsfälle sind
+in diesem Stand noch nicht enthalten. Die gesamte neue C17-/SDK-/GUI-
+Matrix bleibt eine getrennte Abnahme.
