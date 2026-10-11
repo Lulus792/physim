@@ -9700,6 +9700,36 @@
           "timeout": 120
         }
       ]
+    },
+    {
+      "name": "report_details_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "report_details_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 260,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
     }
   ]
 }

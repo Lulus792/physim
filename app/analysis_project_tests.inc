@@ -49,7 +49,33 @@ static void analysis_project_test_frame(app *a,const char *root,const char *mode
         if(!idle(a) || a->library_thread)return;
         ok=a->analysis_report && a->show_report;
         if(ok){uint32_t plots=0,tables=0;ok=ps_report_describe(a->analysis_report,NULL,NULL,&plots,&tables)==PS_OK && plots==2;}
-        *capture="analysis-only-report.bmp";a->quitting=true;break;
+        if(ok && !a->report_details_bounds.w)return;
+        *capture="analysis-only-report.bmp";test_mouse(a,a->report_details_bounds,true);break;
+    case 16:test_mouse(a,a->report_details_bounds,false);break;
+    case 17:
+        ok=a->report_details_text && a->report_details_length>0;
+        test_mouse(a,a->report_details_tabs[1],true);break;
+    case 18:test_mouse(a,a->report_details_tabs[1],false);break;
+    case 19: {
+        char path[4096];size_t length=0;join(path,sizeof path,a->project,analysis_source(a));
+        char *source=load_utf8_text(path,&length);
+        ok=source && a->report_details_text && length==a->report_details_length &&
+            !memcmp(source,a->report_details_text,length);free(source);
+        *capture="analysis-only-source-copy.bmp";test_mouse(a,a->report_details_tabs[2],true);break;
+    }
+    case 20:test_mouse(a,a->report_details_tabs[2],false);break;
+    case 21:
+        ok=a->report_details_text && strstr(a->report_details_text,"role,index,path,bytes,fnv1a64\n")==a->report_details_text &&
+            strstr(a->report_details_text,a->last_run);
+        *capture="analysis-only-inputs.bmp";test_mouse(a,a->report_details_tabs[3],true);break;
+    case 22:test_mouse(a,a->report_details_tabs[3],false);break;
+    case 23: {
+        char path[4096];size_t length=0;join(path,sizeof path,a->build_directory,"build.config");
+        char *build=load_utf8_text(path,&length);
+        ok=build && a->report_details_text && length==a->report_details_length &&
+            !memcmp(build,a->report_details_text,length) && strstr(build,a->profile?"profile=Release\n":"profile=Debug\n");free(build);
+        *capture="analysis-only-build-copy.bmp";a->quitting=true;break;
+    }
     }
     if(!ok){fprintf(stderr,"Analysis project stage %d failed: %s\n",*stage,a->status);*code=1;a->quitting=true;}
     if(a->quitting)printf("ANALYSIS PROJECT %s SELF-TEST: %s\n",mode,*code?"FAILED":"PASSED");(*stage)++;

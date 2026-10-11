@@ -2497,9 +2497,17 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Erzeugung von Tabellen und Plotserien.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/report_ui.inc",
+        "app/report_details.inc",
+        "app/analysis_project_tests.inc",
+        "tests/test_report.c",
+        "tests/test_language_report.c",
+        "app/plot_tests.inc",
+        "docs/platform-validation.md#berichtdetails-buildkopien-und-exportnachweise"
+      ],
+      "note": "C-/Physim-Report-API erzeugt kopierte Tabellen/Plotserien; tatsächlich ausgeführte native Report- und Sprach-Report-Prüfungen run-__qb8_17. GUI-Plotworkflow run-9hae5h6r bestanden, echte C-/Physim-Analyseprojekte run-k1y770v1 mit Bericht und Neustart. Begrenzte Intel-macOS-Nachweise; vollständige Plattform-/Produktabnahme offen."
     },
     {
       "id": "PP-0324",
@@ -2513,9 +2521,17 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Linien-, Punkt- und Histogramm-Plots.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/report_ui.inc",
+        "app/report_details.inc",
+        "app/analysis_project_tests.inc",
+        "tests/test_report.c",
+        "tests/test_language_report.c",
+        "app/plot_tests.inc",
+        "docs/platform-validation.md#berichtdetails-buildkopien-und-exportnachweise"
+      ],
+      "note": "Linien, Scatterpunkte und Histogramme sind in API, validiertem Reportformat, Anzeige und SVG/PNG-Export implementiert. Native Report/Sprach-Report-Prüfungen run-__qb8_17 sowie echter Plotworkflow mit unabhängiger PNG-Prüfung in run-9hae5h6r bestanden. Intel macOS; weitere Plattformen offen."
     },
     {
       "id": "PP-0325",
@@ -2529,9 +2545,17 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Export von CSV und Bilddateien.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/report_ui.inc",
+        "app/report_details.inc",
+        "app/analysis_project_tests.inc",
+        "tests/test_report.c",
+        "tests/test_language_report.c",
+        "app/plot_tests.inc",
+        "docs/platform-validation.md#berichtdetails-buildkopien-und-exportnachweise"
+      ],
+      "note": "CSV für vollständige Series/Messdaten sowie gespeicherte Diagrammpunkte/Tabellen und SVG/PNG für ganze Plots/Ausschnitte. Die Unterschiede sind sichtbar dokumentiert. Native Report-Exporte run-__qb8_17 und GUI-Plotworkflow run-9hae5h6r mit echten Exportaktionen, Größen/Ausschnitten und unabhängiger PNG-Pixel-/CRC-Prüfung bestanden. Weitere Plattformen offen."
     },
     {
       "id": "PP-0326",
@@ -2545,9 +2569,17 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Ergebnisse werden mit Analysequellcode, Build-Informationen und Eingabedatensatz verknüpft.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/report_ui.inc",
+        "app/report_details.inc",
+        "app/analysis_project_tests.inc",
+        "tests/test_report.c",
+        "tests/test_language_report.c",
+        "app/plot_tests.inc",
+        "docs/platform-validation.md#berichtdetails-buildkopien-und-exportnachweise"
+      ],
+      "note": "Neue Analysen archivieren Quellkopie und Build-Konfiguration, Runner erfasst Modul/Eingänge mit Größen/FNV-Identität. Details zeigt Herkunft/Quellkopie/Eingänge/Build schreibgeschützt, auch bei leeren Berichten; fremde Herkunftspfade werden ignoriert. Echte C-/Physim-Analyseprojekte und Restart mit unveränderten Archivfingerabdrücken sowie lange/missing/readonly-Detailfälle bei UI 16/22 in run-k1y770v1. Native readonly/Clipboard run-iujqd4bl. Alte Buildkopien optional; keine kryptographische Vollabsicherung, weitere Plattformen offen."
     },
     {
       "id": "PP-0330",

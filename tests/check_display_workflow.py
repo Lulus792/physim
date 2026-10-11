@@ -352,6 +352,25 @@ def api_browser(flow,directory):
         require((directory/name).is_file(),"Missing actual API navigation view: "+name)
 
 
+def report_details(flow, directory):
+    for size in (16, 22):
+        for language in ("c", "phys"):
+            root = directory / f"{language}-{size}"
+            root.mkdir(parents=True)
+            flow.run("--workspace-state-test", root,
+                     "report-details-" + language + ("-22" if size == 22 else ""),
+                     timeout=60, marker="REPORT DETAILS SELF-TEST: PASSED")
+            runs = root / "project/runs"
+            text = (runs / ("details.source." + language)).read_bytes()
+            require(text.endswith("// LAST_SOURCE_α\r\n".encode()), "Readonly archive lost its final text")
+            require(b"ATTEMPTED CHANGE" not in text, "Readonly preview changed the archive")
+            require((runs / ("empty.source." + language)).read_bytes() == "// EMPTY_ARCHIVE_α\n".encode(),
+                    "Changing reports modified archived source")
+            for name in ("report-provenance", "report-source", "report-source-end", "report-inputs", "report-build", "report-empty",
+                         "report-empty-source", "report-missing-companion"):
+                require((root / (name + ".bmp")).is_file(), "Missing actual report details view: " + name)
+
+
 def library_selection(flow, directory):
     for size in (16, 22):
         for language in ("c", "phys"):
@@ -588,7 +607,11 @@ def analysis_projects(flow, directory):
         require(len(originals) == len(imports) == 1 and fingerprint(originals[0]) == fingerprint(imports[0]), "Import changed data")
         reports = list((project / "runs").glob("*.psreport"))
         require(len(reports) == 1, "Independent analysis result missing")
-        protected = originals + imports + reports + [project / ("analysis." + language)]
+        companions = [* (project / "runs").glob("*.source.*"),
+                      * (project / "runs").glob("*.inputs.csv"),
+                      * (project / "runs").glob("*.build.txt")]
+        require(len(companions) == 3, "Independent analysis provenance companions missing")
+        protected = originals + imports + reports + companions + [project / ("analysis." + language)]
         hashes = [fingerprint(path) for path in protected]
         flow.run("--workspace-state-test", root, "analysis-project-read", timeout=130,
                  marker="ANALYSIS PROJECT analysis-project-read SELF-TEST: PASSED")
@@ -1208,7 +1231,7 @@ def workflow_pointer_isolation(flow, directory):
                 "Actual paired run/report artifacts missing")
 
 
-SPECIAL = {"library_selection_workflow": library_selection, "api_reference_workflow": api_reference,
+SPECIAL = {"report_details_workflow": report_details, "library_selection_workflow": library_selection, "api_reference_workflow": api_reference,
     "parameter_form_workflow": parameter_form,"completion_workflow": completion,"build_controls_workflow": build_controls,"project_tree_workflow": project_tree,"project_manager_keyboard_errors": project_manager_errors,"api_browser_workflow": api_browser,"editor_replace_workflow": editor_replace,"runner_keyboard_workflow": runner_keyboard,"runner_isolation_workflow": runner_isolation,"step_breakpoints_workflow": step_breakpoints,"workflow_pointer_isolation": workflow_pointer_isolation,"pendulum_medium_workflow": pendulum_medium,"pendulum_c_energy_workflow": pendulum_c_energy,"project_manager_keyboard_workflow": project_manager_keyboard,"settings_keyboard_workflow": settings_keyboard,"ui_typography_workflow": ui_typography,"saved_run_tutorial_workflow": saved_run_tutorial,"monte_carlo_tutorial_workflow": monte_carlo_tutorial,"collision_tutorial_workflow": collision_tutorial,"pendulum_tutorial_workflow": pendulum_tutorial,"spring_tutorial_workflow": spring_tutorial,"material_tutorial_workflow": material_tutorial,"contact_world_language_workflow": contact_world_language,"contact_world_workflow": contact_world, "diagnostic_workflow": diagnostics, "scene_frames_workflow": scene_frames, "logging_workflow": logging, "live_inspector_22_workflow": lambda flow,directory: logging(flow,directory,True), "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,

@@ -961,3 +961,18 @@ Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **88 implemented**, **13 incomplete**, **430 unverified**;
 `completion_proven` bleibt `false`. Weitere Plattformen und vollständige
 Produktabnahme bleiben offen.
+
+
+## Reportanzeige, Exporte und vollständige Ergebnisdetails (§6.3)
+
+PP-0323/0324/0325/0326 besitzen lokale Nachweise: Tabellen, Linien/Punkte/
+Histogramme und CSV-/SVG-/PNG-Exporte sowie echte C-/Physim-Analyseprojekte.
+**Details** zeigt vollständige Herkunft, Quellkopie, Eingabemanifest und
+neu archivierte Buildinformationen. Lange/fehlende Quellen, leere oder
+ungültige Berichte, schreibgeschützte Navigation/Kopie und unveränderte
+Archive/Projekteditoren sind tatsächlich geprüft.
+[Nachweise und Grenzen](platform-validation.md#berichtdetails-buildkopien-und-exportnachweise).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**92 implemented**, **13 incomplete**, **426 unverified**;
+`completion_proven` bleibt `false`. Aktuelle weitere Plattformen,
+allgemeine Barrierefreiheit und vollständige Produktabnahme bleiben offen.

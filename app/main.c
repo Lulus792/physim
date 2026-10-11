@@ -238,6 +238,13 @@ typedef struct {
     bool show_report;
     char result_path[4096], loaded_report_path[4096], result_error[192], result_export[4096];
     struct nk_rect result_export_bounds[3], raw_export_bounds;
+    char *report_details_text, *report_details_display;
+    size_t report_details_length, report_details_display_length;
+    char report_details_path[4096], report_details_error[192];
+    int report_details_tab, report_details_loaded;
+    bool report_details_ready, report_details_active;
+    struct nk_rect report_details_bounds, report_details_tabs[4], report_details_copy_bounds,
+        report_details_text_bounds;
     int png_scale;
     struct nk_rect png_region_bounds;
     struct nk_rect svg_region_bounds;
@@ -677,6 +684,7 @@ static bool load_editor(struct nk_text_edit *edit, const char *path) {
     free(text);
     return ok;
 }
+#include "report_details.inc"
 static bool save_editor(struct nk_text_edit *edit, const char *path) {
     int n = nk_str_len_char(&edit->string);
     if (n < 0) return false;
@@ -893,6 +901,7 @@ static void clear_project(app *a) {
     a->scene_view = (ps_scene_view){0};
     a->scene_selected = false;
     a->loaded_report_path[0] = a->result_error[0] = 0;
+    report_details_clear(a);
     memset(a->live_channels,0,sizeof a->live_channels);
     ps_timeline_destroy(&a->data.timeline);
     memset(&a->data, 0, sizeof a->data);
@@ -1027,6 +1036,7 @@ static bool open_project(app *a) {
     ps_report_destroy(a->analysis_report);
     a->analysis_report = NULL;
     a->show_report = false;
+    report_details_clear(a);
     a->result_error[0] = 0;
     ps_timeline_destroy(&a->data.timeline);
     memset(&a->data, 0, sizeof a->data);
@@ -1263,6 +1273,7 @@ static void begin_run_view(app *a) {
     ps_report_destroy(a->analysis_report);
     a->analysis_report = NULL;
     a->show_report = false;
+    report_details_clear(a);
     a->result_error[0] = 0;
     a->history_count = 0;
     a->history_seen = 0;
@@ -1561,6 +1572,12 @@ static void analyze(app *a, bool csv) {
         args[count + 4] = NULL;
     }
     if (!csv) {
+        join(source, sizeof source, a->build_directory, "build.config");
+        int n = snprintf(snapshot_path, sizeof snapshot_path, "%s.build.txt", a->report);
+        if (n < 0 || (size_t)n >= sizeof snapshot_path || !copy_file_exclusive(source, snapshot_path)) {
+            status(a, "Analyse-Buildinformationen konnten nicht archiviert werden.");
+            return;
+        }
         join(source, sizeof source, a->project, analysis_source(a));
         snprintf(snapshot_path, sizeof snapshot_path, "%s.source.%s", a->report,
                  a->language_analysis ? "phys" : "c");
@@ -1653,6 +1670,7 @@ static void pump(app *a) {
         SDL_WaitThread(a->report_thread, NULL);
         a->report_thread = NULL;
         if (a->report_result == PS_OK) {
+            report_details_clear(a);
             ps_report_destroy(a->analysis_report);
             a->analysis_report = a->pending_report;
             a->pending_report = NULL;
@@ -2846,6 +2864,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "channel_units_tests.inc"
 #include "analysis_project_tests.inc"
 #include "library_selection_tests.inc"
+#include "report_details_tests.inc"
 #include "batch_resume_tests.inc"
 #include "batch_missing_tests.inc"
 #include "series_mask_tests.inc"
@@ -3481,7 +3500,7 @@ int main(int argc, char **argv) {
             /* The deliberate 80 ms frame delay also runs on hosted software GL.
              * Keep its bounded keyboard assertions; allow their extra wall time. */
             if (ps_clock() - test_started >
-                (!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
+                (!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
                   !strncmp(argv[3], "isolation-", 10) || !strncmp(argv[3], "breakpoints-", 12) || !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || (!strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"pendulum-medium-",16)) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strncmp(argv[3],"logging-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15))) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
@@ -4653,6 +4672,7 @@ int main(int argc, char **argv) {
     ps_timeline_destroy(&a->timeline);
     ps_timeline_destroy(&a->data.timeline);
     ps_report_destroy(a->analysis_report);
+    report_details_clear(a);
     if (self_test)
         puts(a->log);
     if (self_test && exit_code)

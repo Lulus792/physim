@@ -119,6 +119,31 @@ den Grenzen abgeschnitten; die Quelldaten bleiben vollständig erhalten.
 Die Vorschau bleibt gegebenenfalls reduziert; Zoom rekonstruiert keine
 zuvor ausgelassenen Punkte. Sensorpunkte mit ungültigem Status bleiben ausgeblendet.
 
+## Herkunft und archivierte Quellen ansehen
+
+**Details** neben der Diagramm-/Tabellenauswahl öffnet **Herkunft & Quellen**.
+Diese Ansicht steht auch für Berichte ohne Diagramme und Tabellen zur Verfügung.
+**Herkunft** zeigt alle gespeicherten Angaben in einem scrollbaren Textfeld.
+**Quellkopie** zeigt den archivierten C- oder Physim-Analysecode; **Eingänge**
+zeigt das CSV-Manifest mit Modul, ausgewählten Läufen, Dateigrößen und
+Fingerabdrücken. **Build** zeigt die beim Analysestart archivierte
+Build-Konfiguration einschließlich Compiler, SDK und Profil.
+
+Die Ansichten sind schreibgeschützt, unterstützen Auswahl, Kopieren und
+Navigation. **Kopieren** übernimmt den gesamten aktiven Text einschließlich
+seiner ursprünglichen Zeilenenden. Die Anzeige vereinheitlicht CRLF/CR zu
+Zeilenumbrüchen. Der Dateiname steht über dem Text; der Tooltip nennt den
+vollständigen Pfad. Begleittexte dürfen bis zu 256 KiB groß sein und müssen
+gültiges UTF-8 enthalten. Fehlende oder ungültige Begleitdateien verhindern
+das Öffnen vorhandener Diagramme und Tabellen nicht.
+
+Die App liest ausschließlich `<präfix>.source.c` beziehungsweise
+`<präfix>.source.phys`, `<präfix>.inputs.csv` und `<präfix>.build.txt` neben
+dem geöffneten `<präfix>.psreport`. Pfade im Herkunftstext werden nicht
+interpretiert. Ältere Ergebnisse besitzen möglicherweise keine Buildkopie.
+Projekteditoren und ihre ungespeicherten Änderungen bleiben erhalten;
+eine Quellkopie wird weder bearbeitet noch ausgeführt.
+
 ## Lebensdauer und Dateivertrag
 
 Ein Bericht besitzt bis zu 16 Diagramme mit je acht Kurven und acht Tabellen.

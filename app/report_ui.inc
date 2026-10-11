@@ -169,12 +169,8 @@ static void report_view(app *a, float height) {
     ps_report_describe(a->analysis_report, title, provenance, &plots, &tables);
     nk_layout_row_dynamic(ui, 26, 1);
     nk_label(ui, title, NK_TEXT_LEFT);
-    if (!plots && !tables) {
-        nk_label(ui, "Die Analyse hat einen leeren Bericht erzeugt.", NK_TEXT_LEFT);
-        return;
-    }
-    char titles[PS_REPORT_MAX_PLOTS + PS_REPORT_MAX_TABLES][224];
-    const char *names[PS_REPORT_MAX_PLOTS + PS_REPORT_MAX_TABLES];
+    char titles[PS_REPORT_MAX_PLOTS + PS_REPORT_MAX_TABLES + 1][224];
+    const char *names[PS_REPORT_MAX_PLOTS + PS_REPORT_MAX_TABLES + 1];
     for (uint32_t i = 0; i < plots + tables; i++) {
         if (i < plots) {
             ps_plot_info p;
@@ -187,11 +183,28 @@ static void report_view(app *a, float height) {
         }
         names[i] = titles[i];
     }
-    if (a->result_view < 0 || (uint32_t)a->result_view >= plots + tables)
+    names[plots + tables] = "Herkunft & Quellen";
+    if (a->result_view < 0 || (uint32_t)a->result_view > plots + tables)
         a->result_view = 0;
-    nk_layout_row_dynamic(ui, 32, 1);
+    nk_layout_row_begin(ui, NK_DYNAMIC, 32, 2);
+    nk_layout_row_push(ui, .75f);
     a->result_view =
-        nk_combo(ui, names, (int)(plots + tables), a->result_view, 30, nk_vec2(580, 260));
+        nk_combo(ui, names, (int)(plots + tables + 1), a->result_view, 30, nk_vec2(580, 260));
+    nk_layout_row_push(ui, .25f);
+    a->report_details_bounds = nk_widget_bounds(ui);
+    if (action_button(ui, "Details", (uint32_t)a->result_view == plots + tables))
+        a->result_view = (int)(plots + tables);
+    if (nk_input_is_mouse_hovering_rect(&ui->input, a->report_details_bounds))
+        nk_tooltip(ui, "Herkunft, archivierte Quellkopie und Eingabemanifest");
+    nk_layout_row_end(ui);
+    if ((uint32_t)a->result_view == plots + tables) {
+        if (!plots && !tables) {
+            nk_layout_row_dynamic(ui, 28, 1);
+            nk_label_colored(ui, "Der Bericht enthält keine Diagramme oder Tabellen.", NK_TEXT_LEFT, UI_COLOR(muted));
+        }
+        report_details_view(a, provenance, height);
+        return;
+    }
     nk_layout_row_dynamic(ui, 30, a->preferences.ui_size>=20?2:3);
     bool is_plot = (uint32_t)a->result_view < plots;
     bool cropped = is_plot && ps_plot_view_changed(&a->report_views[a->result_view]);
@@ -268,10 +281,5 @@ static void report_view(app *a, float height) {
             }
             nk_group_end(ui);
         }
-    }
-    if (nk_tree_push(ui, NK_TREE_TAB, "Herkunft des Ergebnisses", NK_MINIMIZED)) {
-        nk_layout_row_dynamic(ui, 180, 1);
-        nk_label_wrap(ui, provenance);
-        nk_tree_pop(ui);
     }
 }

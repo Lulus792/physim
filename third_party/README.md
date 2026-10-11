@@ -56,6 +56,15 @@ upstream reset behavior. Editor initialization, source reload and existing
 history size limits are unchanged. `editor_replace_workflow` checks actual
 search/replace, focus return, single-step undo/redo and empty replacement in
 experiment, analysis and additional-document editors.
+Local patch (2026-10-11): readonly edit widgets retain mouse selection,
+copy, navigation and scrolling. A filtered input copy rejects text, deletion,
+paste/cut, undo/redo and edit-mode changes; disabled widgets and ROM windows
+remain inert. Consumed mouse scrolling is propagated to the parent input;
+keyboard scroll commands stay in the active field. Cursor
+jumps reveal the target row directly instead of scrolling just one row.
+`report_details_workflow` checks actual readonly focus, attempted changes,
+end scrolling, full clipboard contents and preserved dirty project editors.
+
 Local patch (2026-09-28): a singleton off-curve TrueType contour wraps to its
 own point instead of reading the next contour or beyond the temporary vertex
 array. AddressSanitizer found this during system-font baking; the synthetic

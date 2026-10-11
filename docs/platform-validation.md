@@ -3817,7 +3817,7 @@ Die nativen Regressionen bestehen **4/4** unter
 `build/current-headless-mac/test-results/run-ytgc0p5n`, Log
 `build/current-library-analysis-regression-mac.log`: `language_analysis`,
 `analysis_isolation`, `run_comparison`, `documentation_reference`.
-Die aktualisierte Bedienungsdokumentation besteht zusätzlich **1/1** unter
+Die Prüfung der generierten API-Referenz besteht zusätzlich **1/1** unter
 `run-ef5vccdt`, Log `build/current-library-selection-docs-final-mac.log`.
 PP-0319/0320 besitzen damit begrenzte lokale Nachweise. Aktuelle Linux-,
 Windows- und Apple-Silicon-Ausführung dieser Änderung, allgemeine
@@ -3873,9 +3873,89 @@ Abschnitte der aktuellen Plattformchronik wurden mit unverändertem
 Nachweistext ins Archiv verschoben; ihre ursprünglichen Anker verweisen
 weiterhin dorthin. Beide Seiten bleiben unter der Handbuchgrenze.
 
-Die abschließende Handbuchprüfung besteht **1/1** unter `run-8ly8e53a`,
+Die abschließende Prüfung der generierten API-Referenz besteht **1/1**
+unter `run-8ly8e53a`,
 Log `build/current-quantile-docs-mac.log`.
 
 PP-0321/0322/0340 besitzen damit begrenzte lokale Funktionsnachweise.
 Aktuelle Linux-/Windows-/Apple-Silicon-Ausführung dieser Änderung sowie
 vollständige Plattform-, Sprach- und Planabnahme bleiben offen.
+
+
+## Berichtdetails, Buildkopien und Exportnachweise
+
+Am 2026-10-11 auf Intel macOS 14.6.1 / AppleClang 16 tatsächlich gebaut:
+**Details** beziehungsweise **Herkunft & Quellen** zeigt vollständige,
+scrollbare Herkunftsangaben und die zugehörige Quellkopie, Eingabemanifest
+und Buildkopie. Leere Berichte besitzen dieselbe Ansicht. Begleitpfade
+werden ausschließlich vom geöffneten Berichtsnamen abgeleitet; Pfade im
+Herkunftstext werden nicht interpretiert. Neue Analysen archivieren
+`build.config` exklusiv als `<präfix>.build.txt`, zusätzlich zu Quellkopie,
+Eingabemanifest und vorhandenen Laufgrenzen. Ältere Begleitdateien bleiben
+optional. Anzeige und Kopieren führen keine Quellen aus und verändern
+keine Projekteditoren oder Archive. Der Textzugriff bleibt auf 256 KiB
+und gültiges UTF-8 begrenzt; CRLF/CR wird nur für die Anzeige vereinheitlicht.
+
+Die Abschlussgruppe besteht **3/3** unter
+`build/current-release-mac/test-results/run-k1y770v1`, Log
+`build/current-report-details-confirmed-mac.log`: `report_details_workflow`,
+`analysis_projects_workflow`, `editor_replace_workflow`. Die Detailgruppe
+startet vier Apps für C-/Physim-Quellkopien bei UI-Schrift 16/22 im Fenster
+1080×740. Sie kopiert alle langen Herkunftsangaben und sämtliche originalen
+Quell-/Manifest-/Buildbytes, bestätigt echten Textfokus, versucht Eingabe
+und Löschen und scrollt zum sichtbaren letzten Quellmarker. Unsaved-
+Projekttexte, Dirty-Status und archivierte Dateien bleiben erhalten.
+Ein ungültiger Bericht erhält bisherigen Bericht und Cache; ein gültiger
+leerer Bericht ersetzt beide. Fehlende Begleitdateien zeigen eine Erklärung
+und deaktivieren Kopieren, ohne das Ergebnis zu verwerfen. Eine gefälschte
+Quellpfadangabe im Herkunftstext wird ignoriert. Fensterbilder sind geprüft.
+
+Der echte unabhängige Analyseworkflow startet vier weitere Apps in C/Physim:
+Producer, Import, eigener Analysebuild, Bericht, Anzeige der Quellkopie,
+Eingänge und Buildkopie sowie erneutes Öffnen. Archivierte Quellen und
+Builddateien stimmen bytegenau mit den tatsächlichen Build-Eingängen und
+Konfigurationen überein. Python prüft unveränderte Fingerabdrücke aller
+Begleitdateien, Rohdaten und Berichte nach Neustart. Der unabhängige Editor-
+Workflow prüft zusätzlich atomare Änderung, Fokuswechsel und Undo/Redo.
+
+Die erste sichtbare Detailgruppe und Plotgruppe bestanden **2/2** unter
+`run-3l384yly`; eine strengere Fokusprobe deckte anschließend auf, dass
+Nuklear bei readonly Feldern alle Eingaben einschließlich Navigation
+unterdrückte (`run-kjfh_5y9`/`run-d6kfuhaa`). Der vendorte Patch filtert
+nun gezielt Mutationen und erhält Auswahl, Kopieren und Navigation.
+Ein weiterer echter Durchlauf `run-9hae5h6r` zeigte, dass Scroll-End sowohl
+Textfeld als auch äußeres Panel bewegte; aktive Felder konsumieren jetzt
+die Scrolltasten. Die Layoutberechnung wächst beim äußeren Scrollen nicht.
+Der falsche Release-Sollwert im unabhängigen Projektfixture wurde auf das
+tatsächlich gewählte Debug-/Release-Profil korrigiert. Diese Fehlversuche
+werden nicht als bestandene aktuelle Produktprüfungen gezählt.
+
+`editor_readonly` und `editor_clipboard` bestehen **2/2** unter
+`build/current-release-mac/test-results/run-iujqd4bl`, Log
+`build/current-editor-readonly-tested-mac.log`. Das native Widgetfixture
+prüft echte Aktivierung, Auswahl/Kopieren, unterdrückte Texteingabe,
+Delete/Backspace, Cut/Paste, Undo/Redo, Insert-/Replace-Modus, Enter/Tab,
+direktes Scrollen zur Zielzeile, konsumierte Scrolltasten und inaktive
+Disabled-Felder. Quellen und Undo-Historie bleiben erhalten.
+
+Native Report-/Sprach-Report-/Plot-View-/Handbuchparser-Regressionen bestehen
+**4/4** unter `build/current-headless-mac/test-results/run-__qb8_17`, Log
+`build/current-report-regression-mac.log`. Die GUI-Gruppe `run-9hae5h6r`
+besitzt **3** bestandene Fälle (bei insgesamt zwei weiteren fehlgeschlagenen
+Detailfixtures): Plotworkflow, Logging und Editorwechsel. Der Plotworkflow
+prüft reale Linien-/Punkt-/Histogramm-Anzeige, Zoom/Pan, wieder geladene
+Berichte, CSV-/SVG-/PNG-Exporte, Bildgrößen und Ausschnitte; PNG-Dateien
+werden unabhängig auf Pixel, Kompression und CRC geprüft. Logging deckt
+die ebenfalls schreibgeschützte Protokollansicht ab. Die Referenzgenerator-
+Prüfungen früherer Abschnitte wurden in ihrer Benennung korrigiert: sie
+waren keine Parserläufe. Die tatsächliche Prüfung beider großen Handbuch-
+seiten besteht separat in `run-s5mo0ln_`, Log
+`build/current-report-doc-parser-mac.log` und der genannten Vierergruppe.
+
+Die abschließende Parser- und Referenzprüfung besteht **2/2** in
+`build/current-headless-mac/test-results/run-na6sakbf`, Log
+`build/current-report-details-docs-mac.log`.
+
+PP-0323/0324/0325/0326 besitzen damit konkrete lokale Nachweise.
+Aktuelle Linux-/Windows-/Apple-Silicon-Ausführung dieser Änderungen,
+vollständige Barrierefreiheit und gesamte Projektabnahme bleiben offen.

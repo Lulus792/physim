@@ -28940,7 +28940,7 @@ nk_do_edit(nk_flags *state, struct nk_command_buffer *out,
                     if (cursor_pos.y < edit->scrollbar.y)
                         edit->scrollbar.y = NK_MAX(0.0f, cursor_pos.y);
                     if (cursor_pos.y > edit->scrollbar.y + area.h - row_height)
-                        edit->scrollbar.y = edit->scrollbar.y + row_height;
+                        edit->scrollbar.y = cursor_pos.y - area.h + row_height;
                 } else edit->scrollbar.y = 0;
             }
 
@@ -29222,6 +29222,8 @@ nk_edit_buffer(struct nk_context *ctx, nk_flags flags,
     struct nk_window *win;
     struct nk_style *style;
     struct nk_input *in;
+    struct nk_input readonly_input;
+    struct nk_input *readonly_original = 0;
 
     enum nk_widget_layout_states state;
     struct nk_rect bounds;
@@ -29263,9 +29265,41 @@ nk_edit_buffer(struct nk_context *ctx, nk_flags flags,
 
     filter = (!filter) ? nk_filter_default: filter;
     prev_state = (unsigned char)edit->active;
-    in = (flags & NK_EDIT_READ_ONLY) ? 0: in;
+    /* Physim: readonly fields still accept selection, copy and navigation.
+     * Filter every mutation, including mode switches and undo/redo, instead
+     * of disabling all input. Disabled widgets and ROM windows stay inert. */
+    if (state == NK_WIDGET_DISABLED) in = 0;
+    else if ((flags & NK_EDIT_READ_ONLY) && in) {
+        int key;
+        readonly_original = in;
+        readonly_input = *in;
+        readonly_input.keyboard.text_len = 0;
+        for (key = 0; key < NK_KEY_MAX; ++key) {
+            switch (key) {
+            case NK_KEY_SHIFT: case NK_KEY_CTRL: case NK_KEY_ALT:
+            case NK_KEY_COPY: case NK_KEY_TEXT_SELECT_ALL:
+            case NK_KEY_UP: case NK_KEY_DOWN: case NK_KEY_LEFT: case NK_KEY_RIGHT:
+            case NK_KEY_TEXT_LINE_START: case NK_KEY_TEXT_LINE_END:
+            case NK_KEY_TEXT_START: case NK_KEY_TEXT_END:
+            case NK_KEY_TEXT_WORD_LEFT: case NK_KEY_TEXT_WORD_RIGHT:
+            case NK_KEY_SCROLL_START: case NK_KEY_SCROLL_END:
+            case NK_KEY_SCROLL_DOWN: case NK_KEY_SCROLL_UP: break;
+            default: nk_zero(&readonly_input.keyboard.keys[key], sizeof readonly_input.keyboard.keys[key]); break;
+            }
+        }
+        in = &readonly_input;
+    }
     ret_flags = nk_do_edit(&ctx->last_widget_state, &win->buffer, bounds, flags,
                     filter, edit, &style->edit, in, style->font);
+    if (readonly_original) {
+        readonly_original->mouse.scroll_delta = readonly_input.mouse.scroll_delta;
+        if (edit->active) {
+            nk_zero(&readonly_original->keyboard.keys[NK_KEY_SCROLL_START], sizeof(struct nk_key));
+            nk_zero(&readonly_original->keyboard.keys[NK_KEY_SCROLL_END], sizeof(struct nk_key));
+            nk_zero(&readonly_original->keyboard.keys[NK_KEY_SCROLL_DOWN], sizeof(struct nk_key));
+            nk_zero(&readonly_original->keyboard.keys[NK_KEY_SCROLL_UP], sizeof(struct nk_key));
+        }
+    }
 
     if (ctx->last_widget_state & NK_WIDGET_STATE_HOVER)
         ctx->style.cursor_active = ctx->style.cursors[NK_CURSOR_TEXT];
