@@ -45,9 +45,16 @@ static void diagnostic_test_frame(app *a,const char *mode,int *stage,int *code,c
                 document->edit.select_end>document->edit.select_start && strstr(document->file.saved,"#error compiler navigation sentinel");
             *capture="compiler-helper-jump.bmp";break;
         }
-        case 5: {
+        case 5:test_mouse(a,a->diagnostic_mode_bounds,true);break;
+        case 6:test_mouse(a,a->diagnostic_mode_bounds,false);break;
+        case 7:
+            ok=a->diagnostic_raw && strstr(a->log,"compiler navigation sentinel") && a->diagnostic_count>0;
+            *capture="compiler-helper-output.bmp";
+            test_mouse(a,a->diagnostic_mode_bounds,true);break;
+        case 8:test_mouse(a,a->diagnostic_mode_bounds,false);break;
+        case 9: {
             workspace_document *document=active_document(a);
-            ok=document!=NULL;
+            ok=document!=NULL && !a->diagnostic_raw;
             if(ok) {
                 document->edit.mode=NK_TEXT_EDIT_MODE_INSERT;
                 nk_textedit_delete_selection(&document->edit);
@@ -56,14 +63,14 @@ static void diagnostic_test_frame(app *a,const char *mode,int *stage,int *code,c
             }
             break;
         }
-        case 6:
+        case 10:
             if(a->job.running)return;
             ok=a->built && !a->dirty && !a->analysis_dirty && !documents_dirty(a);
             if(ok)test_window_key_mod(a->window,SDLK_F6,0);break;
-        case 7:
+        case 11:
             if(!a->hello || a->simulation_time<.01)return;
             test_window_key_mod(a->window,SDLK_F9,0);break;
-        case 8: {
+        case 12: {
             if(!idle(a))return;
             ps_run_reader run;
             ok=a->last_run[0] && ps_run_open(&run,a->last_run)==PS_OK;

@@ -911,8 +911,8 @@ static void log_panel(app *a) {
     float footer=fmaxf(68,a->dock_panels[PS_DOCK_LOG].h-16);
     nk_style_push_vec2(ui, &ui->style.window.padding, nk_vec2(16, 8));
     if (dock_begin(a, PS_DOCK_LOG)) {
-        nk_layout_row_begin(ui, NK_DYNAMIC, 28, 3);
-        nk_layout_row_push(ui, .60f);
+        nk_layout_row_begin(ui, NK_DYNAMIC, 28, 4);
+        nk_layout_row_push(ui, .42f);
         nk_label_colored(ui, a->status, NK_TEXT_LEFT, muted());
         nk_layout_row_push(ui, .16f);
         if (a->job.running) {
@@ -923,6 +923,11 @@ static void log_panel(app *a) {
             }
         } else
             nk_spacer(ui);
+        nk_layout_row_push(ui, .18f);
+        a->diagnostic_mode_bounds=nk_widget_bounds(ui);
+        if(expanded_log && a->diagnostic_count) {
+            if(nk_button_label(ui,a->diagnostic_raw?"Diagnosen":"Ausgabe"))a->diagnostic_raw=!a->diagnostic_raw;
+        } else nk_spacer(ui);
         nk_layout_row_push(ui, .24f);
         if (nk_button_label(ui, expanded_log ? "Weniger" : "Protokoll")) {
             a->show_log = !expanded_log;
@@ -930,7 +935,7 @@ static void log_panel(app *a) {
         nk_layout_row_end(ui);
         if (expanded_log) {
             nk_layout_row_dynamic(ui, footer - 66, 1);
-            if (a->diagnostic_count) {
+            if (a->diagnostic_count && !a->diagnostic_raw) {
                 if (nk_group_begin(ui, "Compilerdiagnosen", 0)) {
                     nk_layout_row_dynamic(ui, 30, 1);
                     for (int i = 0; i < a->diagnostic_count; i++) {

@@ -188,7 +188,7 @@ typedef struct {
     bool language_analysis;
     int template_analysis_language;
     bool show_paths, show_points, show_labels;
-    bool show_log, show_search;
+    bool show_log, show_search, diagnostic_raw;
     char *saved_source[2];
     ps_autosave *recovery;
     bool recovery_conflict, autosave_blocked, autosave_current;
@@ -303,6 +303,7 @@ typedef struct {
     int diagnostic_count;
     char diagnostic_line[8192];
     struct nk_rect diagnostic_bounds[64];
+    struct nk_rect diagnostic_mode_bounds;
     size_t diagnostic_used;
     ps_wire_buffer wire;
     uint32_t command_seq;
@@ -850,6 +851,7 @@ static void clear_project(app *a) {
     }
     a->project[0] = a->last_run[0] = a->report[0] = 0;
     a->loaded = a->built = a->dirty = a->analysis_dirty = false;
+    a->diagnostic_raw=false;
     a->build_info_valid = false;
     memset(&a->build_info, 0, sizeof a->build_info);
     a->project_settings_dirty = false;

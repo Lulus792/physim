@@ -251,6 +251,11 @@ Das Protokoll zeigt Compilerfehler. Anklickbare Quelldiagnosen führen zur betro
 Stelle. Dies gilt auch für eingebundene Header und Hilfsquellen: Der Klick
 öffnet die tatsächliche Datei im Texteditor und wählt die betroffene Zeile.
 Gleichnamige Dateien in unterschiedlichen Ordnern behalten getrennte Diagnosen.
+Im ausgeklappten Protokoll wechselt **Ausgabe** zur gesammelten Textausgabe,
+**Diagnosen** zurück zur anklickbaren Liste. So bleiben auch Compilerkontext
+und Meldungen ohne Datei-/Zeilenangabe lesbar. Die Textausgabe ist schreibgeschützt
+und scroll- sowie kopierbar. Ihr bestehender Speicherpuffer ist auf 64 KiB
+begrenzt; bei längeren Ausgaben werden ältere Zeilen verworfen.
 Ein fehlgeschlagener Build sperrt den Laufstart; nach einer Reparatur muss das
 Projekt erneut erfolgreich gebaut werden.
 **Analysecode bearbeiten** öffnet den zweiten Editor; **Zum Bericht** führt zurück.

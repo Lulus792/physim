@@ -3361,3 +3361,47 @@ PP-0248 und PP-0251 sind damit für Build-Fehlernavigation und Startfreigabe nac
 erfolgreichem Build konkret belegt. Dies ist ein Intel-macOS-Nachweis. Aktuelle
 Linux-/Windows-Appketten, die neue Gesamt-SDK-Matrix und alle denkbaren
 Compiler-Ausgabeformate werden dadurch nicht pauschal abgenommen.
+
+
+## Build-Protokoll neben anklickbaren Diagnosen lesen
+
+Am 11. Oktober 2026 verdeckte die Diagnoseansicht die sonstige gesammelte
+Textausgabe, sobald mindestens eine anklickbare Meldung vorhanden war. Das
+Protokoll bietet jetzt **Ausgabe**/**Diagnosen** zum Wechsel. Die Ausgabe nutzt
+denselben bestehenden schreibgeschützten, scrollbar kopierbaren 64-KiB-Puffer;
+die Diagnoseeinträge bleiben beim Wechsel erhalten. Ein Projektwechsel stellt
+die anfängliche Diagnoseansicht wieder her. Dies ist keine unbeschränkte
+Archivierung des gesamten Prozessoutputs.
+
+AppleClang Release besteht `diagnostic_workflow`: **1/1** Katalogfall mit
+**sechs** echten App-Prozessen, Ergebnisse
+`build/current-release-mac/test-results/run-jetkmn04`, Log
+`build/current-build-output-ui-mac.log`. Der echte Headerfehler wird angeklickt,
+dann per tatsächlicher Maustaste die Textausgabe geöffnet. Der Fall prüft
+den enthaltenen Compilerfehler und weiterhin vorhandene Diagnosen, zeichnet
+`compiler-helper-output.bmp` auf, wechselt zurück und führt Reparatur, Neubuild
+und gesunden Lauf vollständig aus. Die PNG-Vorschau
+`build/current-build-output-preview/compiler-output.png` wurde visuell geprüft.
+Die vier C-/Physim-Runtimewege und die fremde Quelle bestehen ebenfalls.
+Andere Plattform-/SDK-Gesamtprüfungen für diese spätere UI-Ergänzung bleiben offen.
+
+## Tatsächlich ausgeführte Apple-Silicon-Gesamtprüfung am Stand 7b08c04
+
+Der authentifiziert gelesene Actions-Job `114433017309` im Lauf `38126895020`
+ist erfolgreich beendet. Sein Log nennt ausdrücklich `Image: macos-15-arm64`
+und belegt **685/685** native Debug-Prüfungen, **91/91** Fenstertests sowie
+**660/660** Prüfungen im Build `Debug-sanitized`. Die Sanitizerprüfung dieses
+Jobs ist ohne App; sie ist keine Sanitizer-GUI-Abnahme.
+
+Die gesamte verschobene SDK-Prüfung endet mit `Native SDK verified` unter
+`Native SDK ä 3_pkglyh` und umfasst die 32 Vorlagen-/Sprachpaare mit tatsächlichen
+Builds, Läufen und unabhängigen Analysen bei 16/22 px. LaunchServices startet
+die gepackte App tatsächlich für Pendel- und vollständige Physim-Abläufe;
+`LaunchServices verification complete` nennt `LaunchServices ä c4xd47kd`.
+Schritt-Breakpoints und Runner-Isolation bestehen in den Fenstertests. Der
+gefilterte lokale Logbeleg liegt in `build/7b08-macos-arm-proof-excerpt.log`.
+
+Dies ist ein tatsächlicher ARM64-macOS-Nachweis am genannten früheren Commit.
+Die späteren Parameter-, Tastatur-, Metadaten-, ABI-Prüfungs-, Compileranzeigen-
+und Diagnoseänderungen sowie die ganze aktuelle Plattformmatrix bleiben gesondert
+zu prüfen. Der Intel-macOS-Job desselben Laufs war beim letzten Abruf noch aktiv.

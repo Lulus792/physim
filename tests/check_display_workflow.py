@@ -335,6 +335,7 @@ def diagnostics(flow,directory):
     flow.run("--workspace-state-test",root,"diagnostic-build-helper",timeout=160,
              marker="COMPILER HELPER SELF-TEST: PASSED")
     require((root/"compiler-helper-jump.bmp").is_file(),"Missing actual compiler diagnostic click")
+    require((root/"compiler-helper-output.bmp").is_file(),"Missing actual raw compiler output toggle")
     require("/* repaired helper */" in read(root/"project/include/helper α.h"),"Helper repair was not saved")
     require(len(list((root/"project/runs").glob("*.psrun")))==1,"Failed build started a run or repaired build did not run")
     root=directory/"foreign"
