@@ -670,3 +670,16 @@ keine vollständige SDK- oder Plattformabnahme.
 Alle 531 Originalblöcke und die Planprüfsumme bleiben erhalten:
 **47 implemented**, **10 incomplete**, **474 unverified**;
 `completion_proven` bleibt `false`.
+
+## Reale Runnerfehler mit weiter bedienbarer App
+
+PP-0062 besitzt jetzt acht tatsächliche C-/Physim-Appketten: Fehler beim
+Erzeugen und im Schritt, jeweils Abbruch und Endlosschleife, Beenden per
+Stop-Timeout, Handbuchbedienung sowie erfolgreicher neuer Lauf. Gespeicherte
+Messblöcke und beide Quellsnapshots bleiben erhalten. Intel macOS besteht;
+aktuelle Linux-/Windows-Isolation bleibt offen. Der Block ist **incomplete**.
+Der vollständige vorher eingefrorene macOS-SDK-Lauf ist inzwischen bestanden;
+der neue Isolationstest wird daraus nicht abgeleitet.
+[Ausgeführte Gegenproben](platform-validation.md#runner-isolation-und-wiederaufnahme-in-der-tatsächlichen-app).
+Alle **531** Originalblöcke behalten ihre Planprüfsumme: **47 implemented**,
+**11 incomplete**, **473 unverified**; `completion_proven` bleibt `false`.

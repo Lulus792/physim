@@ -403,9 +403,14 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Ein Absturz oder eine Endlosschleife im Experiment darf die App nicht beenden.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "incomplete",
+      "evidence": [
+        "app/isolation_tests.inc",
+        "tests/check_display_workflow.py",
+        "tests/native_integration_cases.json",
+        "docs/platform-validation.md#runner-isolation-und-wiederaufnahme-in-der-tatsächlichen-app"
+      ],
+      "note": "Intel macOS: acht reale C-/Physim-Runnerfehler beim Erzeugen/Schritt, Stop-Timeout, bedienbares Handbuch, gesunder Neustart und unveränderte Messblöcke/Quellsnapshots geprüft. C abort und kontrollierter Physim-Laufzeitfehler sind getrennt benannt. Aktuelle Linux-/Windows-Ausführung offen."
     },
     {
       "id": "PP-0063",

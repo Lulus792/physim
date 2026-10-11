@@ -2822,3 +2822,12 @@ ist deshalb vorerst unvollständig. [Bedienung](workspace.md#haltepunkte-für-si
 [aktuelle Nachweise und fehlende historische lokale Belege](platform-validation.md#wiederaufbau-und-schritt-haltepunkte-am-11-oktober-2026).
 Die unabhängige SDK-Mappe erhält die genaue Bitmap-Evidenz jetzt optional
 verlustfrei komprimiert und prüft deren Wiederherstellung und Dateieigentum.
+
+Die neu aufgebaute macOS-Headless-Suite besteht **660/660**; das vollständig
+verschobene App-SDK besteht einschließlich beider Lernpfade und aller
+Vorlagen. Acht zusätzliche echte C-/Physim-Runnerfehler lassen die App
+bedienbar und erlauben einen neuen Lauf mit erhaltenen Messblöcken und
+Quellsnapshots. Windows/MSVC und Clang-Cl Debug bestehen am Stand `35fea55`.
+Der Linux-SDK-Haltepunktfall erhält eine bestätigte Editorfokusprüfung;
+die aktuelle gesamte Plattformabnahme und Linux-/Windows-Isolation bleiben
+offen. [Aktuelle Nachweise](platform-validation.md#runner-isolation-und-wiederaufnahme-in-der-tatsächlichen-app).

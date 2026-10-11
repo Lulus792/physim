@@ -21,17 +21,26 @@ static bool breakpoint_test_rows(app *a,unsigned expected) {
     ps_run_reader_close(&reader);return ok;
 }
 static void breakpoint_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
-    static double held,wall;static char original[4096];bool ok=true;
+    static double held,wall;static char original[4096];static unsigned focus_attempts;bool ok=true;
     if(!strcmp(mode,"breakpoints-read")){puts("STEP BREAKPOINT UI SELF-TEST: PASSED");a->quitting=true;return;}
     switch(*stage) {
     case 0:if(a->breakpoint_bounds.w<=0 || !hierarchy_test_click(a,a->breakpoint_bounds))return;break;
     case 1:test_mouse(a,a->breakpoint_bounds,false);break;
     case 2: {
+        if(!a->breakpoint_input_active) {
+            if(++focus_attempts>16) {
+                fprintf(stderr,"Breakpoint edit never focused: rect %.3f/%.3f/%.3f/%.3f\n",
+                        a->breakpoint_bounds.x,a->breakpoint_bounds.y,a->breakpoint_bounds.w,a->breakpoint_bounds.h);
+                *code=1;a->quitting=true;
+            } else *stage=0;
+            return;
+        }
         SDL_Event e={0};e.type=SDL_EVENT_TEXT_INPUT;e.text.windowID=SDL_GetWindowID(a->window);e.text.text="3,7";
         ok=SDL_PushEvent(&e);break;
     }
     case 3:break;
     case 4:ok=!strcmp(a->step_breakpoints,"3,7") && a->project_settings_dirty;
+        if(!ok)fprintf(stderr,"Breakpoint edit text=%s dirty=%d active=%d\n",a->step_breakpoints,a->project_settings_dirty,a->breakpoint_input_active);
         *capture="breakpoints-configured.bmp";save_project(a);ok &= !a->project_settings_dirty;build_project(a);break;
     case 5:if(!idle(a) || a->library_thread)return;ok=a->built;
         test_mouse(a,a->run_control_bounds[0],true);break;

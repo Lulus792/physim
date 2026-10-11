@@ -2552,9 +2552,92 @@ zugeordnet; Shell-/Git-Darstellungsquotierung gilt nicht als fehlende Datei.
 Damit ist PP-0067 konkret nachgewiesen. Diese begrenzten Einzelabnahmen
 behaupten keine bestandene vollständige Produkt-/Plattformprüfung.
 
-Die neue unverkürzte lokale Headless-Release-Suite läuft unter
-`build/current-headless-mac` mit Log `build/current-complete-native-mac.log`.
-Die neue vollständige SDK-Prüfung läuft aus der finalen unabhängigen Mappe in
-`build/current-full-sdk-proof-mac/Native SDK ä i6gbzrb2`, Log
-`build/current-full-sdk-proof-mac.log`, mit `--app-tests --archive-bitmaps`.
-Beide bleiben bis zu ihrem tatsächlichen Ende offene Gesamtnachweise.
+Die neue unverkürzte lokale Headless-Release-Suite besteht **660/660** in
+`build/current-headless-mac/test-results/run-ur_wxs0o`, Log
+`build/current-complete-native-mac.log`. Dieser Aufruf baut ohne SDL/App;
+die ausgelassenen App-/Displayfälle sind darin nicht als bestanden gezählt.
+
+Die vollständige SDK-Prüfung aus der finalen unabhängigen Mappe endet mit
+**PASSED** in `build/current-full-sdk-proof-mac/Native SDK ä i6gbzrb2`.
+`PASSED.txt`, `verification.log` und `build/current-full-sdk-proof-mac.log`
+belegen die tatsächlich ausgeführte Prüfung mit `--app-tests --archive-bitmaps`:
+installierte und aus Paketquellen neu gebaute Bibliotheken, beide vollständigen
+Lernpfade, reale C-/Physim-Runner, neun GUI-Experimente, Migration, native
+Barrierefreiheitsaktionen, Haltepunkte, Dokumentation sowie alle 32
+Vorlagen-/Sprachpaare und zwei unabhängige Analysen bei 16 und 22 px.
+Das zuvor eingefrorene SDK prüft den Stand vor der folgenden Fokus-/
+Isolationstest-Erweiterung; es belegt diese neuen Änderungen nicht.
+Alle **365** BMP-Archive wurden anschließend erneut vollständig gestreamt und
+gegen Originalgröße, Original-SHA-256 und komprimierten SHA-256 geprüft:
+**6418763970 Originalbytes**, **194853871 komprimierte Bytes**.
+
+## Windows-UTF-8 und nachgewiesener Linux-Eingabefokus
+
+Die Debug-Jobs des [C17-Laufs am Stand bfb7967](https://github.com/PhysicSimulator/physim/actions/runs/38124281696)
+bestehen die neuen nativen Haltepunktprüfungen, scheitern aber beim
+Bitmaparchiv-Selbsttest. Der authentifiziert gelesene Joblog und das gegen
+SHA-256 `6f408511383115fe79232ffe522b1f7f4c6fb2693868d901b73bfb0eb2d2414d`
+geprüfte offizielle Artefakt `build/bfb-windows-debug-evidence.zip` belegen:
+Die UTF-8-Receipt wurde mit dem lokalen cp1252-Standard gelesen; Unicode-
+Dateipfade waren dadurch beschädigt. Die Receipt-Lesewege geben jetzt UTF-8
+explizit an. Eine Gegenprobe erzwingt cp1252 als Standard und besteht.
+Der Python-Testtreiber schreibt seine Diagnoseausgabe ebenfalls explizit
+als UTF-8; zuvor verdeckte ein zusätzlicher UnicodeEncodeError die Ursache.
+Der Treiber-Selbsttest besteht mit kontrollierten inneren Fehlerfällen.
+Die tatsächliche aktuelle Windows-Gesamtprüfung bleibt bis zum CI-Ende offen.
+
+Der Linux-/Clang-SDK-Job desselben Laufs erreicht den kleinen C-Haltepunkt-
+Appfall, nimmt dort aber keine Texteingabe entgegen. Das offizielle Artefakt
+`build/bfb-linux-clang-evidence.zip` ist gegen SHA-256
+`d694b0e37bd9955c415f2e7f72d57bbb105f417d2a224ea9024c1bcd40b47d39` geprüft.
+Der tatsächliche Screenshot zeigt ein leeres Feld ohne Caret; die Auswertung
+scheitert in Stufe 4. Der Harness wartet nun vor der Texteingabe auf den
+wirklichen Nuklear-Editorfokus und wiederholt den Mausklick höchstens 16-mal.
+Texteingabe-, Speicher-, Lauf- und Messdatenassertions bleiben unverändert.
+Der Hinweis erhält zwei einzelne Labelzeilen, da der vorherige Zeilenumbruch
+als Fragezeichen gerendert wurde. Die neue Linux-Gegenprobe bleibt offen.
+
+Am nachfolgenden [Stand 35fea55](https://github.com/PhysicSimulator/physim/actions/runs/38125861907)
+enden Windows/MSVC Debug und Windows/Clang-Cl Debug erfolgreich. Das ist ein
+ausgeführter Nachweis der UTF-8-Korrektur, einschließlich der nativen Suite.
+Linux/GCC erreicht im [Job 114429971568](https://github.com/PhysicSimulator/physim/actions/runs/38125861907/job/114429971568)
+wieder denselben kleinen C-Haltepunkt-Appfall und scheitert in Stufe 4.
+Der authentifiziert gelesene Log belegt den Fehler vor der Fokuskorrektur;
+er ist kein Nachweis gegen die anschließend geänderte Harnessfassung.
+
+## Runner-Isolation und Wiederaufnahme in der tatsächlichen App
+
+Die neue Release-Appprüfung besteht **2/2** in
+`build/current-release-mac/test-results/run-qwbgjr0b`, Log
+`build/current-focus-isolation-mac.log`: die Haltepunkt-Appkette mit bestätigtem
+Editorfokus und `runner_isolation_workflow` mit **acht** tatsächlich getrennt
+gestarteten Fehler-/Wiederaufnahmefällen auf Intel macOS.
+C und Physim werden jeweils beim Erzeugen und während des Schritts geprüft,
+mit Absturz und Endlosschleife. C verwendet einen echten `abort()`-Prozessabbruch;
+Physim löst einen kontrollierten Laufzeitfehler mit `assert(false, ...)` aus.
+Die Physim-Fälle sind kein Nachweis eines nativen Speicherzugriffsfehlers.
+Die hängenden Runner werden über den echten Stop-Button und dessen Timeout
+beendet. Danach öffnen und schließen die Tests das Handbuch per Tastatur
+und starten im selben App-Prozess einen gesunden Lauf bis Schritt 7.
+
+Fehler beim Erzeugen hinterlassen keine scheinbar gültige Messdatei.
+Schrittfehler erhalten lesbare, streng zeitlich geordnete vollständige
+Messblöcke; deren Dateiprüfsumme bleibt nach dem neuen Lauf unverändert.
+Der erfolgreiche neue Lauf enthält exakt acht Messpunkte einschließlich des
+Anfangszustands. Alle acht Fälle bewahren beide unveränderten Quell-Snapshots
+und eigene Laufnamen; Wiederaufnahme ersetzt keinen vorherigen Lauf.
+Der erste Harnessversuch verwendete die Katalog-Restore-API nach erfolgter
+Parametererkennung und wurde korrekt abgewiesen. Die Gegenprobe wählt nun
+den vorhandenen validierten Parameter; dieser Fehlversuch zählt nicht als
+Produktfehler oder bestandener Nachweis. Linux-/Windows-Isolation bleibt
+bis zur tatsächlichen Ausführung offen.
+
+Die frische Gegenprobe zu den priorisierten Review-Korrekturen besteht
+`analysis_extremes` und `material_tutorial` **2/2** in
+`build/current-headless-mac/test-results/run-x9thngvs`, Log
+`build/current-review-regressions-mac.log`.
+Die beiden schreibenden Review-Gegenproben `autosave` und `text_document`
+bestehen ebenfalls frisch **2/2** in
+`build/current-release-mac/test-results/run-v_t569c2`, Log
+`build/current-review-persistence-mac.log`. Die sieben ursprünglichen
+Review-Reparaturen aus `903135e` bleiben erhalten.
