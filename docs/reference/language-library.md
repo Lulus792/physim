@@ -520,6 +520,16 @@ Ableitung der Position nach dem dimensionslosen Parameter t. Sie ist weder normi
 
 Überall verfügbar.
 
+## Body.angularMomentum
+
+```text
+Body.angularMomentum(origin: Vec3) -> Vec3
+```
+
+Drehimpuls um den angegebenen Weltursprung in kg*m²/s, einschließlich Bahn- und Eigendrehimpuls. Die Produktsumme erhält endliche Auslöschungen; Fehler sind fangbar.
+
+Überall verfügbar.
+
 ## Body.applyImpulse
 
 ```text
@@ -557,6 +567,16 @@ Body.kineticEnergy() -> Float64
 ```
 
 Summe der translatorischen und rotatorischen kinetischen Energie in J.
+
+Überall verfügbar.
+
+## Body.linearMomentum
+
+```text
+Body.linearMomentum() -> Vec3
+```
+
+Weltimpuls m*v in kg*m/s; ungültiger Körper und Überlauf liefern einen fangbaren Fehler.
 
 Überall verfügbar.
 

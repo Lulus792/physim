@@ -29,6 +29,15 @@ ps_result ps_body_with_inertia(double mass_kg, ps_vec3 principal_inertia_kg_m2, 
  * binary64 rotation before summation. Zero-rounded energy is valid; overflow
  * returns PS_NUMERIC without changing joules. No full-range dynamics guarantee. */
 ps_result ps_body_kinetic_energy(const ps_body *body, double *joules);
+/* World-space p=m*v in kg*m/s, and L=(center-origin) x p + R*I*R^T*omega
+ * in kg*m^2/s. Static bodies return zero. Angular momentum uses a normalized
+ * quaternion, binary64 rotation coefficients and exact signed product sums
+ * rounded once per component, preserving finite cancellation of oversized terms.
+ * Finite origin required. Invalid inputs or overflow preserve output; no allocation.
+ * These queries do not extend the numeric range of the dynamics solvers. */
+ps_result ps_body_linear_momentum(const ps_body *body, ps_vec3 *momentum_kg_m_s);
+ps_result ps_body_angular_momentum(const ps_body *body, ps_vec3 origin_m,
+                                   ps_vec3 *momentum_kg_m2_s);
 ps_result ps_body_point_velocity(const ps_body *body, ps_vec3 point_m, ps_vec3 *velocity_m_s);
 /* A force at a world-space point contributes (point-center) x force torque. */
 ps_result ps_body_force_torque(const ps_body *body, ps_vec3 force_n, ps_vec3 point_m,

@@ -81,6 +81,27 @@ ps_result ps_body_kinetic_energy(const ps_body *body, double *joules);
 
 Sum of translational and principal-axis rotational energy. Identity-frame terms round once; general rotation uses a normalized quaternion and scaled binary64 rotation before summation. Zero-rounded energy is valid; overflow returns PS_NUMERIC without changing joules. No full-range dynamics guarantee.
 
+## ps_body_linear_momentum
+
+Berechnet den Weltimpuls m*v in kg*m/s. Ungültige Eingaben und Überlauf erhalten die Ausgabe.
+
+```c
+ps_result ps_body_linear_momentum(const ps_body *body, ps_vec3 *momentum_kg_m_s);
+```
+
+World-space p=m*v in kg*m/s, and L=(center-origin) x p + R*I*R^T*omega in kg*m^2/s. Static bodies return zero. Angular momentum uses a normalized quaternion, binary64 rotation coefficients and exact signed product sums rounded once per component, preserving finite cancellation of oversized terms. Finite origin required. Invalid inputs or overflow preserve output; no allocation. These queries do not extend the numeric range of the dynamics solvers.
+
+## ps_body_angular_momentum
+
+Berechnet Bahn- und Eigendrehimpuls um einen endlichen Weltursprung in kg*m²/s mit normierter Rotation und exakt summierten Produkten. Fehler erhalten die Ausgabe; keine Allokation.
+
+```c
+ps_result ps_body_angular_momentum(
+    const ps_body *body,
+    ps_vec3 origin_m,
+    ps_vec3 *momentum_kg_m2_s);
+```
+
 ## ps_body_point_velocity
 
 Berechnet die Weltgeschwindigkeit eines Punkts einschließlich Rotation.

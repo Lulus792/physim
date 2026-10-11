@@ -211,6 +211,20 @@ static inline double psrt_body_kinetic_energy(ps_body body, psrt_site site) {
         psrt_fail(site, "Body kinetic energy is not representable");
     return value;
 }
+static inline ps_vec3 psrt_body_linear_momentum(ps_body body, psrt_site site) {
+    ps_vec3 value;
+    ps_result status = ps_body_linear_momentum(&body, &value);
+    if (status != PS_OK)
+        psrt_fail_code(site, status, "Body linear momentum failed");
+    return value;
+}
+static inline ps_vec3 psrt_body_angular_momentum(ps_body body, ps_vec3 origin, psrt_site site) {
+    ps_vec3 value;
+    ps_result status = ps_body_angular_momentum(&body, origin, &value);
+    if (status != PS_OK)
+        psrt_fail_code(site, status, "Body angular momentum failed");
+    return value;
+}
 static inline ps_vec3 psrt_body_point_velocity(ps_body body, ps_vec3 point, psrt_site site) {
     ps_vec3 value;
     if (ps_body_point_velocity(&body, point, &value) != PS_OK)

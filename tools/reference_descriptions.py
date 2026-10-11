@@ -218,6 +218,8 @@ add('ps_', {
     'body_validate': 'Prüft Masse, Hauptträgheit, Pose und Geschwindigkeiten eines Körpers.',
     'body_with_inertia': 'Erzeugt einen ruhenden Körper mit expliziter Masse und Hauptträgheiten für eigene Formen.' ,
     'body_kinetic_energy': 'Berechnet translatorische plus rotatorische kinetische Energie.',
+    'body_linear_momentum': 'Berechnet den Weltimpuls m*v in kg*m/s. Ungültige Eingaben und Überlauf erhalten die Ausgabe.',
+    'body_angular_momentum': 'Berechnet Bahn- und Eigendrehimpuls um einen endlichen Weltursprung in kg*m²/s mit normierter Rotation und exakt summierten Produkten. Fehler erhalten die Ausgabe; keine Allokation.',
     'body_point_velocity': 'Berechnet die Weltgeschwindigkeit eines Punkts einschließlich Rotation.',
     'body_force_torque': 'Berechnet das Drehmoment einer an einem Weltpunkt angreifenden Kraft.',
     'body_apply_impulse': 'Ändert lineare und rotatorische Geschwindigkeit durch einen Impuls am Weltpunkt.',

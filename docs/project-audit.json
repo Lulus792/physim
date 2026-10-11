@@ -3167,8 +3167,18 @@
       "scope": "planned",
       "text": "1. Punktmasse, Kräfte, Impuls und Energie.\n",
       "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "evidence": [
+        "include/physim/mechanics.h",
+        "src/mechanics.c",
+        "src/body_numeric.h",
+        "include/physim/language_mechanics.h",
+        "tests/test_body_momentum.c",
+        "tests/test_body_momentum_oracle.py",
+        "tests/fixtures/language/body_momentum.phys",
+        "docs/mechanics.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft. Lineare und gesamte Drehimpulsabfragen ergänzen analytische, Stoß-, C-/Physim- und 1012 exakte rationale Bereichsreferenzen; die umfassende Mechanikabnahme bleibt offen."
     },
     {
       "id": "PP-0382",
@@ -3188,9 +3198,13 @@
         "src/body_numeric.h",
         "tests/test_body_range_oracle.py",
         "docs/mechanics.md",
-        "docs/platform-validation.md"
+        "docs/platform-validation.md",
+        "include/physim/language_mechanics.h",
+        "tests/test_body_momentum.c",
+        "tests/test_body_momentum_oracle.py",
+        "tests/fixtures/language/body_momentum.phys"
       ],
-      "note": "Kugel-/Boxträgheit und kinetische Energie besitzen unabhängige rationale C-/Physim- sowie Decimal-Rotationsreferenzen. Bereichsgarantie auf Konstruktoren/Energie begrenzt; umfassende Lage-/Winkelgeschwindigkeits-/Dynamikabnahme bleibt offen."
+      "note": "Kugel-/Boxträgheit und kinetische Energie besitzen unabhängige rationale C-/Physim- sowie Decimal-Rotationsreferenzen. Bereichsgarantie auf Konstruktoren/Energie begrenzt; umfassende Lage-/Winkelgeschwindigkeits-/Dynamikabnahme bleibt offen. Lineare und gesamte Drehimpulsabfragen ergänzen analytische, Stoß-, C-/Physim- und 1012 exakte rationale Bereichsreferenzen; die umfassende Mechanikabnahme bleibt offen."
     },
     {
       "id": "PP-0383",

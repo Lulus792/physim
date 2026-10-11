@@ -49,6 +49,15 @@ static inline void body_add_product(uint32_t sum[BODY_WORDS], const double *valu
 static inline unsigned body_bit(const uint32_t *value, size_t bit) {
     return (value[bit / 32] >> (bit % 32)) & 1u;
 }
+/* Signed momentum terms use the same exact product lattice. Rotation factors
+ * are bounded; four factors and cancellation fit without intermediate overflow. */
+static inline void body_add_signed_product(uint32_t positive[BODY_WORDS],
+                                           uint32_t negative[BODY_WORDS],
+                                           const double *values, unsigned count, bool minus) {
+    for (unsigned i = 0; i < count; i++)
+        minus ^= signbit(values[i]) != 0;
+    body_add_product(minus ? negative : positive, values, count, 1);
+}
 /* Exact division by the small analytic denominator, followed by one rounding.
  * The division remainder breaks ties below the integer accumulation lattice. */
 static inline double body_value(uint32_t sum[BODY_WORDS], unsigned denominator) {
@@ -86,6 +95,27 @@ static inline double body_value(uint32_t sum[BODY_WORDS], unsigned denominator) 
     if (body_bit(sum, shift - 1) && (sticky || (significand & 1)))
         significand++;
     return scalbn((double)significand, BODY_BASE + (int)shift);
+}
+static inline double body_signed_value(uint32_t positive[BODY_WORDS],
+                                       uint32_t negative[BODY_WORDS]) {
+    int comparison = 0;
+    for (size_t i = BODY_WORDS; i > 0; i--)
+        if (positive[i - 1] != negative[i - 1]) {
+            comparison = positive[i - 1] > negative[i - 1] ? 1 : -1;
+            break;
+        }
+    if (!comparison)
+        return 0;
+    uint32_t *large = comparison > 0 ? positive : negative;
+    uint32_t *small = comparison > 0 ? negative : positive;
+    uint64_t borrow = 0;
+    for (size_t i = 0; i < BODY_WORDS; i++) {
+        uint64_t sub = (uint64_t)small[i] + borrow;
+        borrow = (uint64_t)large[i] < sub;
+        large[i] = (uint32_t)((uint64_t)large[i] - sub);
+    }
+    double value = body_value(large, 1);
+    return comparison < 0 ? -value : value;
 }
 static inline double body_inertia(double mass, double a, double b, bool sphere) {
     uint32_t sum[BODY_WORDS] = {0};

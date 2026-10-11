@@ -21,102 +21,8 @@ Der vollständige historische Nachweis mit allen Testpfaden bleibt im
 
 ## Transformationsbereiche und Mathematikzuordnung (PP-0357)
 
-Ausgangspunkt am 8. Oktober 2026 ist
-`e33094d920708b85991842f6cedfdaf90429172a`. Die lokalen API-/Quellen-/Testprüfungen
-ordnen Vec2/3/4, Mat3/4, Quaternionen und Transformationen konkret zu. Die
-bestehenden 2000er-Inversions-, Rodrigues-, Slerp- und Senkrechtstellungsprüfungen
-bleiben aktiv. Der gesamte Plan und die übrigen Mathematikblöcke bleiben offen.
-
-Drei direkte C-Gegenbeispiele lieferten zuvor `PS_NUMERIC` bei endlichen
-Ergebnissen: `DBL_MAX*2-DBL_MAX`, der projektive Quotient
-`(DBL_MAX*2)/DBL_MAX` und die normierte Richtung der invers-transponierten
-Skalierung `diag(DBL_TRUE_MIN,1,1)`. Ein weiterer Fall verlor den kleinsten
-Rest zwischen `DBL_MAX` und `-DBL_MAX`. Die Zeilensummen behalten nun exakte
-binäre Produkte/Summen. Projektive Punkte dividieren den exakten Zähler durch
-die exakte homogene Koordinate; Ausgabe wird einmal nearest-even gerundet.
-Ein eigens provozierter halber kleinster Zahlenwert plus positiver Rest belegte
-auch doppelte Rundung; die finale Konvertierung erhält diesen Rest korrekt.
-
-Normalen lösen das transponierte System nach Zeilenskalierung der ursprünglichen
-Matrix direkt mit unabhängigen Lösungsexponenten. Eine überlaufende vollständige
-Inverse ist dafür nicht erforderlich. Der interne lineare Solver wurde ohne
-Änderung seiner Elimination/Pivotregeln in ein privates gemeinsames Header
-überführt; die öffentliche Lösung konvertiert weiterhin atomar nach Double und
-meldet echte nichtdarstellbare Ausgaben. Normalen bleiben durch die dokumentierte
-Double-Koeffizienten-/Pivot-/Konditionsgenauigkeit begrenzt.
-
-Die dauerhafte unabhängige Gegenprobe umfasst **1288 C**- und **100 Physim**-
-Fälle. Fraction bestimmt die exakt gerundeten Punkt-/Richtungswerte, rationale
-Elimination und 100-stellige Decimal-Normierung bestimmen Normalen. Enthalten
-sind allgemeine projektive Matrizen, Auslöschung, subnormale Halbwege, negative
-homogene Koordinaten, starke Skalierungsunterschiede/Scherungen und atomare
-Fehler. Zusätzliche vorbereitete C-Prüfungen bestanden für 3000 gemischte und
-3000 allgemeine projektive Fälle sowie 1770 Rundungsgrenzen.
-
-Vor der abschließenden Beschleunigung bestehen auf Intel-macOS **10/10** relevante
-Mathematik-/Transformations-/Linear-/Scalar-/Referenzfälle in `run-dq6ziv03`
-(`build/transform-final-targeted-mac.log`) und unter Linux/Clang/Debug/ASan/UBSan
-**10/10** in `run-j3sb1yjj` (`build/transform-final-asan-linux.log`). Die früheren
-sechsteiligen Nachweise `run-zwsfs74t` und `run-_oxj56zk` liegen vor den finalen
-Fast-Path-/Dokumentationsänderungen. Der erste vierteilige Regressionstest
-`run-crffb4gf` lag noch vor der exakten Zeilen-/Quotientenrechnung.
-
-Die ersten vier tatsächlichen Intel-macOS-Grafikprüfungen bestehen **4/4** in
-`run-m8k_1_vt` (`build/transform-gui-mac.log`): Grafik/Picking, UI-Renderer,
-Hierarchie und Szenenframes. Die Mikroprüfung zeigte dennoch erhebliche
-Mehrarbeit der ausschließlich ganzzahligen affinen Rechnung. Der finale Pfad
-verwendet gewöhnliche fehlerfreie Produkt-/Summenentwicklungen und fällt nur
-bei kleinen Produkten oder überlaufenden Entwicklungsstufen auf Ganzzahlen
-zurück. Alle 15000 zusätzlich vorbereiteten gewöhnlichen C-Summen stimmen
-weiterhin mit rationalen Referenzen überein. Diese Grafikprüfung lag vor der
-zusätzlichen Beschleunigung; deren finale Numerik-/Grafiknachweise folgen separat.
-
-Für 10000 affine Punkttransformationen mit Scherung 0,2 und Translation 10
-braucht die ältere Apple-Clang-O2-Probe rund 0,000294 Sekunden. Die reine
-Ganzzahlfassung brauchte 0,034–0,036 Sekunden, die finale Entwicklung
-0,000868–0,000917 Sekunden. Das sind in dieser bewusst kleinen Probe rund
-0,06 Mikrosekunden zusätzliche Zeit pro Punkt; keine allgemeine Garantie für
-andere Matrizen/Callsites. Werte: `build/transform-benchmark-proof.json`.
-
-
-Die finale beschleunigte Intel-macOS-Numerikprüfung besteht **10/10** in
-`run-ysdfd81_` (`build/transform-expansion-final-mac.log`), ihre vier tatsächlichen
-Grafik-/Szenenprüfungen bestehen **4/4** in `run-ng4ovmww`
-(`build/transform-expansion-gui-mac.log`). Unter Linux/Clang/Debug/ASan/UBSan
-bestehen dieselben zehn finalen Numerikfälle in `run-19keu_1u`
-(`build/transform-expansion-asan-linux.log`). Die Linux-Numerik-/Grafikläufe vor
-der Beschleunigung bestehen **10/10** in `run-2n32hh01` und **4/4** in
-`run-rh_pczdj`; sie werden nicht als finale Fast-Path-Prüfung ausgegeben.
-
-Das finale Intel-macOS-SDK `Transform SDK ä mac 822s18g_` besteht seine
-Manifest-/Bytehash-Prüfung und das unabhängig entpackte Verification-Kit.
-Der gezielte `--transform-only`-Prüfer verschiebt das Paket und prüft die
-1288 C-/100 Physim-Gegenproben sowie atomare C-Fehler mit installiertem und
-allein aus Paketquellen neu gebautem Core. Receipt:
-`build/transform-sdk-mac-PASSED.json`. Kein Repository-Implementierungscode
-wird zum Neubau herangezogen; der gezielte Modus ist keine vollständige
-SDK-Domänen- oder Grafikabnahme.
-
-
-Die finale beschleunigte Debian/GCC-Release-Numerik besteht **10/10** in
-`run-3_5kpyom` (`build/transform-expansion-release-linux.log`); ihre tatsächlichen
-Grafik-/Picking-/Hierarchie-/Szenenprüfungen bestehen **4/4** in `run-o36d9nbr`
-(`build/transform-expansion-gui-linux.log`). Damit liegen für den finalen Pfad
-gezielte Release-Numerik-/Grafiknachweise auf beiden Plattformen und die
-Linux-ASan-/UBSan-Gegenprobe vor. Keine vollständige neue Core-/Windows-/
-Apple-Silicon-Abnahme wird daraus abgeleitet.
-
-
-Das finale Debian/GCC-SDK `Transform SDK ä linux r2044mtc` besteht den gleichen
-gezielten Paketnachweis: **453 SDK-Dateien**, **104 unabhängige Kit-Dateien**,
-verschobene Paketkopie sowie öffentliche C-/Physim-Gegenproben mit installiertem
-und allein aus Paketquellen neu gebautem Core. Alle drei äußeren Schritte
-(Install, Kit, Verify) und die vier jeweiligen C-/Orakel-Ausführungen bestehen.
-Receipts: `build/transform-sdk-linux-PASSED.json` und
-`build/transform-sdk-mac-PASSED.json`. Beide passen zu den 19 unveränderten Dateien
-in `build/transform-source-freeze.json`; diese fortgeschriebene Prüfchronik ist
-bewusst ausgenommen. Die Quellen und Originaltexte aller 531 Planblöcke bleiben
-erhalten. PP-0357 ist begrenzt implementiert; der Gesamtplan bleibt offen.
+Der vollständige historische Nachweis mit allen Testpfaden bleibt im
+[Plattformarchiv](platform-validation-history.md#transformationsbereiche-und-mathematikzuordnung-pp-0357) erhalten.
 
 ## Opake Run-Streams am 8. Oktober 2026
 
@@ -4088,3 +3994,42 @@ auf Aktualität geprüft. PP-0371/0372 besitzen begrenzte lokale
 Metadaten-/Einheitengrenzen-Nachweise. Der neue Indexer hat noch keine
 aktuelle gesamte Linux-/Windows-/Apple-Silicon-Abnahme; der positive
 Linux-Lauf oben gehört ausdrücklich zur vorausgehenden UI-Korrektur.
+
+## Lineare und gesamte Drehimpulsabfragen (PP-0381/0382)
+
+Ausgangspunkt am 11. Oktober 2026 ist
+`5283d5e930dd230a8c4065c863533127fb3fb8d2`. Zwei additive öffentliche
+C-Abfragen und Physim-Methoden liefern Weltimpuls sowie Bahn- und Eigendrehimpuls
+um einen beliebigen endlichen Weltpunkt. Körperlayout, ABI und Dateiformate
+bleiben unverändert. Die Drehimpulssumme verwendet exakt akkumulierte binäre
+Produkte nach einer normalisierten Double-Rotation; deren Rundungsfehler bleiben.
+Fehler erhalten die C-Ausgabe. Es entsteht kein Heap-Speicherbedarf.
+
+Tatsächlich ausgeführt auf Intel macOS 14.6.1 mit AppleClang 16, Release:
+
+- `build/current-body-momentum-verified-mac.log`, Ergebnisse
+  `build/current-headless-mac/test-results/run-a8x2gq36`: **7/7 bestanden**.
+  Neue analytische C-Prüfung und kompilierte Physim-Ausführung; bestehende
+  Mechanik-, Kontaktgraph-, Zwangsgraph-, Kontakt- und Körperbereichsreferenzen.
+  Analytische Werte, gedrehte anisotrope Trägheit, Verschiebung des Ursprungs,
+  außermittiger Impuls sowie Gesamtimpuls/Drehimpuls bei elastischem,
+  inelastischem und reibendem Kontakt ohne Positionskorrektur sind geprüft.
+- `build/current-body-momentum-oracle-mac.log`, Ergebnisse
+  `build/current-headless-mac/test-results/run-mys4gcdy`: **1/1 bestanden**.
+  `tests/test_body_momentum_oracle.py` vergleicht **1012** Fälle mit unabhängigen
+  exakten Python-Fraction-Referenzen für Identitätsorientierung. Zufallswerte
+  über den Binary64-Bereich, überlaufende Einzelterme mit endlichem Rest,
+  kleinste Unterlaufwerte und atomare echte Überlauffehler sind enthalten.
+- `build/current-body-momentum-asan.log`: direkter AppleClang-Build der
+  Mechanik/Core-Quellen und des neuen C-Tests mit AddressSanitizer und
+  UndefinedBehaviorSanitizer **bestanden**. LeakSanitizer ist auf diesem
+  macOS-Host nicht unterstützt und war deaktiviert.
+- `build/current-body-momentum-docs-mac.log`, Ergebnisse
+  `build/current-release-mac/test-results/run-386336hk`: **4/4 bestanden**.
+  App gebaut; Completion-, API-Referenz-, tatsächlicher Handbuchparser- und
+  Referenzgenerator-Test erfolgreich. 624 C- und 549 Physim-Symbole.
+
+Diese Änderung besitzt noch keinen ausgeführten Linux-/Windows-Nachweis.
+Die umfassende Mechanikabnahme und der Gesamtplan bleiben offen. Der frühere
+Transformationsnachweis wurde vollständig in das Plattformarchiv verschoben,
+um beide Handbuchseiten unter der Parsergrößengrenze zu halten.

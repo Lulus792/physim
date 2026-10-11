@@ -2407,6 +2407,15 @@
     "physim-language-channel-index": {
       "source": "tests/fixtures/language/analysis_channel_index.phys",
       "mode": "--emit-analysis"
+    },
+    "body-momentum-probe": {
+      "sources": [
+        "tests/body_momentum_probe.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
     }
   },
   "tests": [
@@ -9759,6 +9768,23 @@
             "{physim-language-channel-index}"
           ],
           "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "body_momentum_oracle",
+      "targets": [
+        "python",
+        "body-momentum-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_body_momentum_oracle.py",
+            "{body-momentum-probe}"
+          ],
+          "timeout": 120
         }
       ]
     }

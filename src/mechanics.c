@@ -138,6 +138,57 @@ ps_result ps_body_kinetic_energy(const ps_body *b, double *out) {
     *out = energy;
     return PS_OK;
 }
+ps_result ps_body_linear_momentum(const ps_body *b, ps_vec3 *out) {
+    if (ps_body_validate(b) != PS_OK || !out)
+        return PS_INVALID;
+    ps_vec3 value = ps_vscale(b->velocity_m_s, b->mass_kg);
+    if (!finite3(value))
+        return PS_NUMERIC;
+    *out = value;
+    return PS_OK;
+}
+ps_result ps_body_angular_momentum(const ps_body *b, ps_vec3 origin, ps_vec3 *out) {
+    if (ps_body_validate(b) != PS_OK || !finite3(origin) || !out)
+        return PS_INVALID;
+    ps_quat q = b->orientation;
+    double length = quat_norm(q);
+    q.x /= length; q.y /= length; q.z /= length; q.w /= length;
+    double rotation[3][3];
+    for (unsigned i = 0; i < 3; i++) {
+        ps_vec3 axis = ps_v3(i == 0, i == 1, i == 2);
+        ps_vec3 column = ps_quat_rotate(q, axis);
+        rotation[0][i] = column.x;
+        rotation[1][i] = column.y;
+        rotation[2][i] = column.z;
+    }
+    double position[3] = {b->position_m.x, b->position_m.y, b->position_m.z};
+    double reference[3] = {origin.x, origin.y, origin.z};
+    double velocity[3] = {b->velocity_m_s.x, b->velocity_m_s.y, b->velocity_m_s.z};
+    double inertia[3] = {b->inertia_kg_m2.x, b->inertia_kg_m2.y, b->inertia_kg_m2.z};
+    double omega[3] = {b->angular_velocity_rad_s.x, b->angular_velocity_rad_s.y,
+                       b->angular_velocity_rad_s.z};
+    double result[3];
+    for (unsigned k = 0; k < 3; k++) {
+        uint32_t positive[BODY_WORDS] = {0}, negative[BODY_WORDS] = {0};
+        unsigned j = (k + 1) % 3, l = (k + 2) % 3;
+        double orbital[4][3] = {{position[j], b->mass_kg, velocity[l]},
+                                 {reference[j], b->mass_kg, velocity[l]},
+                                 {position[l], b->mass_kg, velocity[j]},
+                                 {reference[l], b->mass_kg, velocity[j]}};
+        for (unsigned i = 0; i < 4; i++)
+            body_add_signed_product(positive, negative, orbital[i], 3, i == 1 || i == 2);
+        for (unsigned i = 0; i < 3; i++)
+            for (unsigned v = 0; v < 3; v++) {
+                double spin[4] = {rotation[k][i], inertia[i], rotation[v][i], omega[v]};
+                body_add_signed_product(positive, negative, spin, 4, false);
+            }
+        result[k] = body_signed_value(positive, negative);
+        if (!isfinite(result[k]))
+            return PS_NUMERIC;
+    }
+    *out = ps_v3(result[0], result[1], result[2]);
+    return PS_OK;
+}
 static void impulse(ps_body *b, ps_vec3 j, ps_vec3 p) {
     if (!b || !b->mass_kg)
         return;

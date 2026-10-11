@@ -262,6 +262,8 @@ LANG_DESCRIPTIONS = {
     'bodyApplyImpulse': 'Wendet einen Impuls in N s an einem Weltpunkt in m an; verändert Translation und Rotation des Empfängers.',
     'bodyStep': 'Bewegt den Empfänger mit Weltkraft in N und Drehmoment in N m um positives dt in s. Symplektische Translation, explizite gyroskopische Rotation; Schrittweite verfeinern.',
     'bodyKineticEnergy': 'Summe der translatorischen und rotatorischen kinetischen Energie in J.',
+    'bodyLinearMomentum': 'Weltimpuls m*v in kg*m/s; ungültiger Körper und Überlauf liefern einen fangbaren Fehler.',
+    'bodyAngularMomentum': 'Drehimpuls um den angegebenen Weltursprung in kg*m²/s, einschließlich Bahn- und Eigendrehimpuls. Die Produktsumme erhält endliche Auslöschungen; Fehler sind fangbar.',
     'bodyPointVelocity': 'Weltgeschwindigkeit in m/s an einem Weltpunkt in m, einschließlich Rotation.',
     'bodyForceTorque': 'Drehmoment in N m einer Weltkraft in N an einem Weltpunkt in m; verändert den Körper nicht.',
     'maskSeries': 'Erhält alle Zeilen und markiert Werte nur dann gültig, wenn Eingabe und Selektor gültig sind und der Selektor exakt accepted entspricht.',

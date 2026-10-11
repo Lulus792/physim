@@ -33,6 +33,42 @@ Ausgabeparameter. Diese Bereichsgarantien betreffen Konstruktoren und Energie;
 Schrittintegration, Drehmomente, Impulse und Kontaktlösung haben eigene
 Zwischenwerte und Genauigkeitsgrenzen.
 
+## Impuls und Drehimpuls abfragen
+
+`ps_body_linear_momentum` / `body.linearMomentum()` liefert `p = m*v` in
+kg·m/s. `ps_body_angular_momentum` / `body.angularMomentum(origin)` liefert
+den Drehimpuls um einen endlichen Weltpunkt in kg·m²/s:
+`L = (center-origin) × p + R*I*Rᵀ*omega`. Der zweite Term verwendet die
+Hauptträgheiten des Körpers und seine Orientierung. Die zugrunde liegende
+[MIT-Darstellung](https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/37-4-summary-of-angular-momentum-and-kinetic-energy/)
+trennt Bahn- und Eigendrehimpuls; in drei Dimensionen ist die Trägheit ein Tensor.
+
+```c
+ps_vec3 momentum, angular;
+ps_result status = ps_body_linear_momentum(&body, &momentum);
+if (status == PS_OK)
+    status = ps_body_angular_momentum(&body, ps_v3(0,0,0), &angular);
+```
+
+```physim
+let momentum = body.linearMomentum()
+let angular = body.angularMomentum(Vec3(0,0,0))
+```
+
+Statische Körper liefern null. Ungültige Eingaben ergeben `PS_INVALID`, ein
+nicht darstellbares Ergebnis `PS_NUMERIC`; C-Ausgaben bleiben bei Fehlern
+unverändert. In Physim sind diese Fehler mit `attempt` fangbar. Die Abfragen
+allokieren keinen Speicher. Für den Drehimpuls werden die Koeffizienten der
+normierten Rotation in Double berechnet, anschließend alle vorzeichenbehafteten
+Produkte exakt summiert und je Komponente einmal gerundet. Dadurch können
+überlaufende Bahnterme auslöschen und einen kleinen Eigendrehimpuls erhalten.
+Die Rotation selbst hat weiterhin Double-Rundungsfehler.
+
+Bei isolierten Körperpaaren erhalten gemeinsame, entgegengesetzte Kontaktimpulse
+Gesamtimpuls und Gesamtdrehimpuls. Positionskorrekturen, äußere Kräfte und
+festgehaltene Weltkörper müssen beim Vergleich ausdrücklich berücksichtigt werden.
+Diese Abfragen erweitern nicht den Zahlenbereich der Integratoren oder Solver.
+
 ## Stoßexperiment in der App
 
 1. Vorlage **Kugelstoß & Medien** anlegen und mit F5 bauen.
