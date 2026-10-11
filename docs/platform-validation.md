@@ -2715,3 +2715,40 @@ Die echte App baut beide Sprachen aus dem verschobenen SDK, übersteht den
 nativen C-Prozessabbruch und bedient im selben App-Prozess danach das Handbuch
 und einen gesunden Lauf. Dieser Nachweis beschränkt sich auf die Prozessgrenze;
 aktuelle gesamte Linux-/Windows-/macOS-Funktionsgleichheit bleibt offen.
+
+## Strukturierte Material-/Mediumseinheiten im Lernpfad
+
+Die neue unabhängige Metadaten-Gegenprobe scheitert am bisherigen Stand
+`2f0f9a4`: Der tatsächliche C-Lauf speichert Material-/Mediumswerte, aber keine
+`parameter_unit.materialDensity`-Deklaration. Log:
+`build/current-material-units-before-mac.log`. Einheiten in Beschreibungstexten
+ersetzen keine strukturierten Dimensionen. Die C- und Physim-Materialquellen
+deklarieren jetzt Radius in `m`, beide Dichten in `kg/m^3` und dynamische
+Viskosität in `Pa s` mit SI-Skalierung 1. Parameterwerte, Grenzen und Modell-
+Rechnung bleiben gleich; Dateiformat und ABI erhalten keine neue Version.
+
+Die native Release-Prüfung besteht **1/1** in
+`build/current-headless-mac/test-results/run-70_3wxc7`, Log
+`build/current-material-units-native-mac.log`. Ihr unabhängiger Binärparser
+prüft alle CRCs und Schemaeinheiten sowie für **14** vollständige C-/Physim-
+Läufe in sieben Konfigurationen: gewählte Werte, Standardwerte, Grenzen,
+Einheitensymbol, Skalierung, alle sieben SI-Dimensionen, Modell-Eigenschaftswerte,
+Material-/Mediumsnamen, tatsächlichen Zeitschritt und verlustfreien Seed.
+Das kleinere-Kugel-Paar verwendet den maximalen UInt64-Seed
+`18446744073709551615`; andere Fälle verwenden 42. Analytische Referenzen,
+1001 Messzeilen je Lauf, C-/Physim-Parität, alle vier gemischten Auswertungen,
+18 hochpräzise Review-Gegenproben und sechs abgewiesene Modellbereiche bleiben
+vollständig geprüft. Die bytegleichen vier Quellblöcke des Handbuchs bestehen
+`documentation_material_source` nach Aktualisierung ebenfalls.
+
+Die tatsächliche Release-Appkette besteht ebenfalls **1/1** in
+`build/current-release-mac/test-results/run-ct1qe27h`, Log
+`build/current-material-units-app-mac.log`. Beide separat gebauten C-/Physim-
+Projekte erkennen genau vier Parameter mit den erwarteten Einheitensymbolen,
+SI-Skalierungen und Dimensionen, rechnen 40 tatsächliche Einzelschritte,
+lesen den aufgezeichneten Lauf wieder ein und öffnen den Analysebericht.
+Der erhöhte Prüfvertrag wird auch durch den bestehenden vollständigen
+SDK-Prüfer gegen installierte und neu gebaute Core-Archive ausgeführt; ein
+neuer gesamter SDK-/Linux-/Windows-Lauf nach dieser Ergänzung liegt noch
+nicht vor. PP-0066 ist damit für diesen konkreten Modellweg nachgewiesen,
+bleibt für alle Vorlagen und die aktuelle Plattformmatrix unvollständig.

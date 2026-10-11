@@ -17,9 +17,11 @@ def read(path):
                 assert size==4+13*167 and struct.unpack_from('<I',data)[0]==13
                 names=['position.y','velocity.y','mass','force.weight','force.buoyancy','force.drag','reynolds','energy.kinetic','energy.dissipated','energy.potential','energy.balance','reference.y','reference.velocity']
                 dimensions=[(1,0,0),(1,0,-1),(0,1,0),(1,1,-2),(1,1,-2),(1,1,-2),(0,0,0),(2,1,-2),(2,1,-2),(2,1,-2),(2,1,-2),(1,0,0),(1,0,-1)]
+                units=['m','m/s','kg','N','N','N','1','J','J','J','J','m','m/s']
                 for i,(name,dimension) in enumerate(zip(names,dimensions)):
                     offset=4+i*167
                     assert data[offset:offset+48].split(b'\0',1)[0].decode()==name
+                    assert data[offset+48:offset+64].split(b'\0',1)[0].decode()==units[i]
                     assert struct.unpack_from('<7b',data,offset+160)==dimension+(0,0,0,0)
             if kind==3:rows.append(struct.unpack('<14d',data))
             if kind==4:assert struct.unpack('<Q',data)[0]==len(rows);footer=True
@@ -30,6 +32,27 @@ def read(path):
     assert footer and len(rows)==1001 and len(scenes)>10
     return rows,scenes,metadata
 def close(x,y,tol=1e-12):return math.isfinite(x) and math.isfinite(y) and abs(x-y)<=tol*max(1,abs(x),abs(y))
+def provenance(metadata,props,dt,seed):
+    fields={}
+    for line in metadata.splitlines():
+        if not line:continue
+        key,separator,value=line.partition('=')
+        assert separator and key not in fields,(key,metadata)
+        fields[key]=value
+    assert fields['format']=='1' and float(fields['dt_s'])==dt and int(fields['seed'])==seed
+    assert fields['material']=='custom sphere' and fields['medium']=='custom viscous fluid'
+    definitions={
+        'materialDensity':(2500,1,10000,'kg/m^3','-3,1,0,0,0,0,0','material_density_kg_m3'),
+        'mediumDensity':(1000,0,10000,'kg/m^3','-3,1,0,0,0,0,0','medium_density_kg_m3'),
+        'viscosity':(100,0,10000,'Pa s','-1,1,-1,0,0,0,0','viscosity_pa_s'),
+        'radius':(.05,.001,1,'m','1,0,0,0,0,0,0','radius_m'),
+    }
+    for key,(default,minimum,maximum,symbol,dimension,model_key) in definitions.items():
+        assert float(fields['parameter.'+key])==props[key]==float(fields[model_key])
+        assert float(fields['parameter_default.'+key])==default
+        assert float(fields['parameter_min.'+key])==minimum and float(fields['parameter_max.'+key])==maximum
+        assert fields.get('parameter_unit.'+key)==symbol,(key,metadata)
+        assert float(fields['parameter_scale.'+key])==1 and fields['parameter_dimension.'+key]==dimension
 settings=[('default',{},.001),('rising',{'materialDensity':500},.0005),('neutral',{'materialDensity':1000},.001),('viscous',{'viscosity':200},.0005),('smaller',{'radius':.025,'viscosity':50},.0005),('vacuum',{'mediumDensity':0,'viscosity':0},.001),('half-step',{},.0005)]
 errors={};runs={}
 for name,changes,dt in settings:
@@ -39,11 +62,13 @@ for name,changes,dt in settings:
     drag_coefficient=6*math.pi*props['viscosity']*props['radius'];rate=drag_coefficient/mass
     acceleration=(weight+buoyancy)/mass
     pair=[]
+    seed=18446744073709551615 if name=='smaller' else 42
     for language,module in [('c',c_model),('phys',phys_model)]:
-        path=work/f'{name}-{language}.psrun';args=[runner,module,path,'--steps','1000','--dt',str(dt),'--seed','42','--record-scenes']
+        path=work/f'{name}-{language}.psrun';args=[runner,module,path,'--steps','1000','--dt',str(dt),'--seed',str(seed),'--record-scenes']
         for key,value in changes.items():args+=['--param',f'{key}={value}']
         result=run(args);assert result.returncode==0,(name,language,result.stderr)
         rows,scenes,metadata=read(path);pair.append((rows,scenes));runs[name,language]=path
+        provenance(metadata,props,dt,seed)
         for text in ('integrator=RK4','forces=weight, full-volume buoyancy, Stokes drag','validity=Re<=0.1; lambda*dt<=0.25','excluded=walls, contacts, surface, added mass, history force, non-Newtonian rheology'):assert text in metadata
         maximum=0
         for i,row in enumerate(rows):

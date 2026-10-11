@@ -480,9 +480,16 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Einheiten, Zeitschritt, Zufalls-Seed, Material- und Mediumseigenschaften werden mit dem Datensatz gespeichert.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "incomplete",
+      "evidence": [
+        "src/data.c",
+        "examples/documentation/material_main.c",
+        "examples/documentation/material_main.phys",
+        "tests/test_material_tutorial.py",
+        "app/material_tutorial_tests.inc",
+        "docs/platform-validation.md#strukturierte-material-mediumseinheiten-im-lernpfad"
+      ],
+      "note": "Material-Lernpfad: 14 vollständige C-/Physim-Dateien prüfen strukturierte Einheiten, Werte/Standards/Grenzen, Modell-Eigenschaften, Namen, dt und UInt64-Seed; beide tatsächlichen Appketten prüfen die übertragenen SI-Parameterdeklarationen. Aktuelle andere Vorlagen und Linux-/Windows-/Gesamt-SDK-Abnahme bleiben offen."
     },
     {
       "id": "PP-0067",

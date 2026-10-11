@@ -74,10 +74,12 @@ static ps_result create(ps_context *c) {
     settling *s = calloc(1, sizeof *s); if (!s) return PS_MEMORY; c->user = s;
     s->material = (ps_material){2500, 0, 0, "custom sphere"};
     s->medium = (ps_medium){1000, 100, "custom viscous fluid"};
-    ps_result r = ps_parameter_define(c, "materialDensity", "Material density in kg/m^3", 2500, 1, 10000, &s->material.density_kg_m3);
-    if (r == PS_OK) r = ps_parameter_define(c, "mediumDensity", "Medium density in kg/m^3", 1000, 0, 10000, &s->medium.density_kg_m3);
-    if (r == PS_OK) r = ps_parameter_define(c, "viscosity", "Dynamic viscosity in Pa s", 100, 0, 10000, &s->medium.viscosity_pa_s);
-    if (r == PS_OK) r = ps_parameter_define(c, "radius", "Sphere radius in m", .05, .001, 1, &s->radius);
+    ps_unit density = {{-3,1,0,0,0,0,0},1,"kg/m^3"};
+    ps_unit viscosity = {{-1,1,-1,0,0,0,0},1,"Pa s"};
+    ps_result r = ps_parameter_define_unit(c, "materialDensity", "Material density in kg/m^3", density, 2500, 1, 10000, &s->material.density_kg_m3);
+    if (r == PS_OK) r = ps_parameter_define_unit(c, "mediumDensity", "Medium density in kg/m^3", density, 1000, 0, 10000, &s->medium.density_kg_m3);
+    if (r == PS_OK) r = ps_parameter_define_unit(c, "viscosity", "Dynamic viscosity in Pa s", viscosity, 100, 0, 10000, &s->medium.viscosity_pa_s);
+    if (r == PS_OK) r = ps_parameter_define_unit(c, "radius", "Sphere radius in m", PS_METRE, .05, .001, 1, &s->radius);
     if (r != PS_OK) return r;
     if (s->medium.density_kg_m3 > 0 && s->medium.viscosity_pa_s == 0) {
         snprintf(c->error, sizeof c->error, "Nonzero fluid density requires positive viscosity"); return PS_INVALID;

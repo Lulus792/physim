@@ -696,3 +696,17 @@ aber keine neue Gesamtabnahme. PP-0062 behält seine offene Plattformprüfung.
 Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **48 implemented**, **11 incomplete**, **472 unverified**;
 `completion_proven` bleibt `false`.
+
+## Gespeicherte Material-/Mediumsparameter mit SI-Metadaten
+
+PP-0066 besitzt jetzt eine konkrete durchgehende Gegenprobe des Material-
+Lernpfads: sieben Konfigurationen in beiden Sprachen speichern Werte, Standards,
+Grenzen, SI-Einheiten und Dimensionen, Modell-Eigenschaften, Zeitschritt und
+Seed einschließlich UInt64-Maximum. Beide Appketten übernehmen die typisierten
+Einheiten, simulieren und öffnen den Bericht. Der vorhandene vollständige
+SDK-Prüfer verwendet denselben stärkeren Binärparser. Weitere Vorlagen und die
+neue gesamte Plattform-/SDK-Abnahme bleiben offen; PP-0066 ist **incomplete**.
+[Nachweise](platform-validation.md#strukturierte-material-mediumseinheiten-im-lernpfad).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**48 implemented**, **12 incomplete**, **471 unverified**;
+`completion_proven` bleibt `false`.

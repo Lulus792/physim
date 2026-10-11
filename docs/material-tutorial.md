@@ -7,6 +7,11 @@ kombiniere die gemeinsamen Kraftfunktionen. Vergleiche einen idealen Vakuumfall
 mit einem viskosen Medium. Experiment und Auswertung dürfen unabhängig C oder
 Physim verwenden. Der Quellcode und alle veränderten Parameter werden im Lauf
 archiviert; ein Seed von 42 wird hier nicht für Zufallszahlen verwendet.
+Die vier Parameter deklarieren SI-Einheiten: Dichten in `kg/m^3`, dynamische
+Viskosität in `Pa s` und Radius in `m`. Der Datensatz speichert neben den
+Werten auch Standardwerte, Grenzen, Einheitensymbol, SI-Skalierung und alle
+sieben Dimensionsexponenten. Die Modell-Metadaten erhalten zusätzlich die
+Material-/Mediumsnamen und die tatsächlich verwendeten Eigenschaftswerte.
 
 ## Modell und Gültigkeit
 
@@ -109,7 +114,11 @@ berechnet die exakte Lösung, Masse, Kräfte und Energien. Ort muss innerhalb
 Geschwindigkeitsfehler mindestens um Faktor 14 verkleinern. Alle vier gemischten
 Analysewege werden einschließlich drei Plots, sieben vollständigen Kurven,
 SI-Dimensionen und CSV geprüft. Unzulässige Viskosität, Reynolds-Zahl und
-Zeitschritte werden in beiden Sprachen abgewiesen.
+Zeitschritte werden in beiden Sprachen abgewiesen. Die gespeicherten
+Metadaten werden für alle sieben Konfigurationen direkt geprüft, einschließlich
+des vollständigen 64-Bit-Seeds `18446744073709551615` in der kleineren Kugel.
+Die Appgegenprobe verlangt außerdem die identischen Einheitendeklarationen
+im vom Runner erkannten Parameterkatalog.
 
 `documentation_material_source` verlangt bytegetreue Übereinstimmung der
 folgenden Codeblöcke mit den tatsächlich gebauten Quellen.
@@ -197,10 +206,12 @@ static ps_result create(ps_context *c) {
     settling *s = calloc(1, sizeof *s); if (!s) return PS_MEMORY; c->user = s;
     s->material = (ps_material){2500, 0, 0, "custom sphere"};
     s->medium = (ps_medium){1000, 100, "custom viscous fluid"};
-    ps_result r = ps_parameter_define(c, "materialDensity", "Material density in kg/m^3", 2500, 1, 10000, &s->material.density_kg_m3);
-    if (r == PS_OK) r = ps_parameter_define(c, "mediumDensity", "Medium density in kg/m^3", 1000, 0, 10000, &s->medium.density_kg_m3);
-    if (r == PS_OK) r = ps_parameter_define(c, "viscosity", "Dynamic viscosity in Pa s", 100, 0, 10000, &s->medium.viscosity_pa_s);
-    if (r == PS_OK) r = ps_parameter_define(c, "radius", "Sphere radius in m", .05, .001, 1, &s->radius);
+    ps_unit density = {{-3,1,0,0,0,0,0},1,"kg/m^3"};
+    ps_unit viscosity = {{-1,1,-1,0,0,0,0},1,"Pa s"};
+    ps_result r = ps_parameter_define_unit(c, "materialDensity", "Material density in kg/m^3", density, 2500, 1, 10000, &s->material.density_kg_m3);
+    if (r == PS_OK) r = ps_parameter_define_unit(c, "mediumDensity", "Medium density in kg/m^3", density, 1000, 0, 10000, &s->medium.density_kg_m3);
+    if (r == PS_OK) r = ps_parameter_define_unit(c, "viscosity", "Dynamic viscosity in Pa s", viscosity, 100, 0, 10000, &s->medium.viscosity_pa_s);
+    if (r == PS_OK) r = ps_parameter_define_unit(c, "radius", "Sphere radius in m", PS_METRE, .05, .001, 1, &s->radius);
     if (r != PS_OK) return r;
     if (s->medium.density_kg_m3 > 0 && s->medium.viscosity_pa_s == 0) {
         snprintf(c->error, sizeof c->error, "Nonzero fluid density requires positive viscosity"); return PS_INVALID;
@@ -251,16 +262,18 @@ PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
 ```physim
 // Same RK4 state, forces and validity limits as material_main.c.
 let gravity = 9.80665
-let radius = parameter("radius",0.05,0.001,1,"Sphere radius in m")
-let density = parameter("materialDensity",2500,1,10000,"Material density in kg/m^3")
-let fluidDensity = parameter("mediumDensity",1000,0,10000,"Medium density in kg/m^3")
-let viscosity = parameter("viscosity",100,0,10000,"Dynamic viscosity in Pa s")
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let densityUnit = Unit(-3,1,0,0,0,0,0,1,"kg/m^3")
+let viscosityUnit = Unit(-1,1,-1,0,0,0,0,1,"Pa s")
+let radius = parameterWithUnit("radius",metres,0.05,0.001,1,"Sphere radius in m")
+let density = parameterWithUnit("materialDensity",densityUnit,2500,1,10000,"Material density in kg/m^3")
+let fluidDensity = parameterWithUnit("mediumDensity",densityUnit,1000,0,10000,"Medium density in kg/m^3")
+let viscosity = parameterWithUnit("viscosity",viscosityUnit,100,0,10000,"Dynamic viscosity in Pa s")
 let material = Material(density,0,0)
 let medium = Medium(fluidDensity,viscosity)
 let volume = 4.0 / 3.0 * 3.14159265358979323846 * radius * radius * radius
 let mass = material.density * volume
 let lambda = 6 * 3.14159265358979323846 * medium.viscosity * radius / mass
-let metres = Unit(1,0,0,0,0,0,0,1,"m")
 let speed = Unit(1,0,-1,0,0,0,0,1,"m/s")
 let kilograms = Unit(0,1,0,0,0,0,0,1,"kg")
 let newtons = Unit(1,1,-2,0,0,0,0,1,"N")

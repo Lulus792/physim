@@ -1,15 +1,17 @@
 // Same RK4 state, forces and validity limits as material_main.c.
 let gravity = 9.80665
-let radius = parameter("radius",0.05,0.001,1,"Sphere radius in m")
-let density = parameter("materialDensity",2500,1,10000,"Material density in kg/m^3")
-let fluidDensity = parameter("mediumDensity",1000,0,10000,"Medium density in kg/m^3")
-let viscosity = parameter("viscosity",100,0,10000,"Dynamic viscosity in Pa s")
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let densityUnit = Unit(-3,1,0,0,0,0,0,1,"kg/m^3")
+let viscosityUnit = Unit(-1,1,-1,0,0,0,0,1,"Pa s")
+let radius = parameterWithUnit("radius",metres,0.05,0.001,1,"Sphere radius in m")
+let density = parameterWithUnit("materialDensity",densityUnit,2500,1,10000,"Material density in kg/m^3")
+let fluidDensity = parameterWithUnit("mediumDensity",densityUnit,1000,0,10000,"Medium density in kg/m^3")
+let viscosity = parameterWithUnit("viscosity",viscosityUnit,100,0,10000,"Dynamic viscosity in Pa s")
 let material = Material(density,0,0)
 let medium = Medium(fluidDensity,viscosity)
 let volume = 4.0 / 3.0 * 3.14159265358979323846 * radius * radius * radius
 let mass = material.density * volume
 let lambda = 6 * 3.14159265358979323846 * medium.viscosity * radius / mass
-let metres = Unit(1,0,0,0,0,0,0,1,"m")
 let speed = Unit(1,0,-1,0,0,0,0,1,"m/s")
 let kilograms = Unit(0,1,0,0,0,0,0,1,"kg")
 let newtons = Unit(1,1,-2,0,0,0,0,1,"N")

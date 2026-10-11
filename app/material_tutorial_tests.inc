@@ -1,3 +1,19 @@
+static bool material_test_units(const ps_parameter_catalog *catalog) {
+    if(catalog->count!=4)return false;
+    for(uint32_t i=0;i<catalog->count;i++) {
+        const char *name=catalog->entries[i].name,*symbol;
+        int8_t dimension[7]={0};
+        if(!strcmp(name,"radius")){symbol="m";dimension[0]=1;}
+        else if(!strcmp(name,"viscosity")){symbol="Pa s";dimension[0]=-1;dimension[1]=1;dimension[2]=-1;}
+        else if(!strcmp(name,"materialDensity") || !strcmp(name,"mediumDensity")) {
+            symbol="kg/m^3";dimension[0]=-3;dimension[1]=1;
+        } else return false;
+        const ps_parameter_unit *unit=&catalog->units[i];
+        if(!unit->declared || unit->scale!=1 || strcmp(unit->symbol,symbol) ||
+           memcmp(unit->dimension,dimension,sizeof dimension))return false;
+    }
+    return true;
+}
 static bool material_test_start(app *a,const char *root,const char *mode) {
     char path[4096];join(path,sizeof path,root,"preferences.bin");preferences_start(a,path);
     bool language=!strcmp(mode,"material-phys");a->template_analysis_language=language?1:0;
@@ -13,7 +29,7 @@ static void material_test_frame(app *a,int *stage,int *code,const char **capture
     case 0:steps=0;held=0;build_project(a);break;
     case 1:
         if(!idle(a) || a->library_thread)return;
-        ok=a->built && a->parameters.count==4 && start_run_mode(a,true);
+        ok=a->built && material_test_units(&a->parameters) && start_run_mode(a,true);
         a->camera_target=ps_v3(0,.35,0);a->yaw=.3f;a->pitch=.1f;a->zoom=1.6;break;
     case 2:
         if(!a->hello || !a->history_count)return;
