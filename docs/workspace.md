@@ -357,6 +357,15 @@ der Oberfläche. Ein kleinerer Wert erzeugt mehr Messpunkte und kostet Rechenzei
 ungefähr einer realen Sekunde, sofern das Modell schnell genug berechnet wird.
 Offline berechnet ohne Zeitvorgabe so schnell wie möglich. Die Ansicht erhält
 höchstens 60 reguläre Momentaufnahmen pro Sekunde; jeder Physikschritt wird gespeichert.
+Die Vorschauausgabe läuft in einem eigenen Thread. Wenn die Oberfläche langsam
+liest, ersetzt der Runner noch nicht gesendete reguläre Vorschauframes durch
+neuere. Pause, Einzelschritte, Haltepunkte, Fehler und Logmeldungen bleiben
+geordnet; Messwerte und aufgezeichnete Szenen werden weiterhin in der Laufdatei
+gespeichert. Die Ausgabewarteschlange ist auf 8 MiB begrenzt. Ein geschlossener
+Empfänger oder eine überlastete Warteschlange wird als Fehler gemeldet. Kann
+beim Beenden zwei Sekunden lang keine Ausgabe abgeschlossen werden, endet der
+Runner mit Fehlerstatus; bereits geschriebene Messdaten bleiben erhalten.
+
 Du kannst die Geschwindigkeit im laufenden oder pausierten Modell ändern.
 Eine Änderung startet weder einen neuen Lauf noch setzt sie einen pausierten Lauf fort.
 **Einzelschritt** berechnet im festen Modus genau den eingestellten Zeitschritt.

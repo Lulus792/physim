@@ -404,7 +404,7 @@ class Builder:
                             defines=("PS_FUZZ_STANDALONE",))
             print(f"Fuzzer build complete: {self.bin}")
             return
-        platform = self.archive("physim-platform", ["src/platform.c", "src/protocol.c"])
+        platform = self.archive("physim-platform", ["src/platform.c", "src/protocol.c", "src/runner_output.c"])
         language = self.archive("physim-language", [f"src/language/{name}.c" for name in LANGUAGE])
         batch = self.archive("physim-batch", ["src/batch.c"])
         zlib = self.archive("physim-zlib", [f"third_party/zlib-1.3.2/{name}.c" for name in ZLIB], ("Z_PREFIX",))

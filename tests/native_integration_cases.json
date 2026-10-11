@@ -2354,6 +2354,33 @@
       "defines": [
         "PS_TEST_ABI_CASE=16"
       ]
+    },
+    "runner-backpressure-model": {
+      "sources": [
+        "tests/fixtures/runner_backpressure.c"
+      ],
+      "module": true,
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "backpressure-data": {
+      "sources": [
+        "tests/test_backpressure_data.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "runner-output-probe": {
+      "sources": [
+        "tests/test_runner_output.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
     }
   },
   "tests": [
@@ -9586,6 +9613,30 @@
           "files": [
             "app-steps.json"
           ]
+        }
+      ]
+    },
+    {
+      "name": "runner_backpressure",
+      "targets": [
+        "python-logging",
+        "physim-runner",
+        "runner-backpressure-model",
+        "backpressure-data",
+        "runner-output-probe"
+      ],
+      "steps": [
+        {
+          "program": "python-logging",
+          "arguments": [
+            "{root}/tests/test_runner_backpressure.py",
+            "{physim-runner}",
+            "{runner-backpressure-model}",
+            "{backpressure-data}",
+            "{runner-output-probe}",
+            "{work}"
+          ],
+          "timeout": 40
         }
       ]
     }

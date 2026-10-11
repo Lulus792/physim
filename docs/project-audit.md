@@ -914,3 +914,21 @@ noch eine stärkere Entkopplung.
 Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **78 implemented**, **14 incomplete**, **439 unverified**;
 `completion_proven` bleibt `false`.
+
+
+## Vorschau-Backpressure und unabhängiger Messstrom (§6.2)
+
+PP-0292/0300/0301/0312/0313 sind konkret belegt: ein eigener Ausgabethread
+mit begrenzter Queue ersetzt alte Vorschauframes, erhält zuverlässige
+Nachrichten in Reihenfolge und hält den Writer vom blockierten Leser frei.
+Die tatsächliche Gegenprobe stockte vorher nach vier Sekunden bei Schritt 96;
+sie speichert nun alle 1200 Schritte offline beziehungsweise 400 Schritte
+bei 0,25×, bevor die Ausgabe wieder gelesen wird. Immutable Payloads,
+vollständige Daten, Pause/Schritt/Logs/BYE und lückenlose Sequenzen sind
+geprüft. Geschlossene/dauerhaft blockierte Leser und Queueüberlast enden
+explizit; vorher geschriebene Daten bleiben erhalten.
+[Nachweise und Grenzen](platform-validation.md#asynchrone-runnerausgabe-und-vorschau-backpressure).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**83 implemented**, **13 incomplete**, **435 unverified**;
+`completion_proven` bleibt `false`. Aktuelle weitere Plattformen und die
+lokale Sanitizer-Ausführung dieser Änderung sind noch offen.

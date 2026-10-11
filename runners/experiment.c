@@ -4,18 +4,21 @@
 #include "protocol.h"
 #include "pacing.h"
 #include "step_breakpoints.h"
+#include "runner_output.h"
 #include <errno.h>
 #include "number_parse.h"
 #include <float.h>
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
-static uint32_t sequence;
+static ps_runner_output *output;
+static void finish_output(void) {
+    if(!ps_runner_output_finish(output,2))_Exit(7);
+    output=NULL;
+}
 static double last_snapshot_time = -1;
 static bool send_message(uint32_t type, const void *p, uint32_t n) {
-    unsigned char b[PS_WIRE_MAX + 20];
-    size_t size = ps_wire_encode(b, type, sequence++, p, n);
-    return size && fwrite(b, 1, size, stdout) == size && !fflush(stdout);
+    return ps_runner_output_send(output,type,p,n,false);
 }
 #include "logging.inc"
 static void report(bool interactive,bool structured,const char *path,const ps_context *context,
@@ -33,7 +36,7 @@ static void report(bool interactive,bool structured,const char *path,const ps_co
     } else fprintf(stderr,"%s\n",error);
 }
 static ps_result snapshot(const ps_experiment_api *api, ps_context *c, ps_run_store *store, ps_run_write_handle writer,
-                          bool paused, bool emit) {
+                          bool paused, bool emit,bool reliable) {
     ps_scene scene = {0};
     c->error[0] = 0;ps_diagnostic_clear(&c->diagnostic);
     api->build_scene(c, &scene);
@@ -55,7 +58,7 @@ static ps_result snapshot(const ps_experiment_api *api, ps_context *c, ps_run_st
     if (!emit) return PS_OK;
     unsigned char p[PS_WIRE_MAX];
     size_t n = ps_snapshot_encode(p, c, &scene, paused);
-    return n && send_message(PS_MSG_SNAPSHOT, p, (uint32_t)n) ? PS_OK : PS_IO;
+    return n && ps_runner_output_send(output,PS_MSG_SNAPSHOT,p,(uint32_t)n,!reliable) ? PS_OK : PS_IO;
 }
 static void breakpoint_log(const ps_context *context, uint64_t step) {
     char message[96];
@@ -154,6 +157,10 @@ int main(int argc, char **argv) {
         (parent_watch && (interactive || !strcmp(argv[2],"--describe"))))
         return 2;
     ps_binary_stdio();
+    if(interactive) {
+        output=ps_runner_output_create();
+        if(!output || atexit(finish_output)){fprintf(stderr,"Cannot start runner output transport\n");_Exit(7);}
+    }
     if(parent_watch && !ps_parent_watch_start()) {
         fprintf(stderr,"Cannot monitor parent stdin pipe\n");return 125;
     }
@@ -299,7 +306,7 @@ int main(int argc, char **argv) {
     }
     result = ps_run_writer_append(store, writer, 0, c.values, c.channel_count);
     if (result == PS_OK && record_scenes && !interactive)
-        result = snapshot(api, &c, store, writer, true, false);
+        result = snapshot(api, &c, store, writer, true, false,true);
     bool paused = true, stop = false, handshake = false;
     uint64_t tick = 0;
     ps_wire_buffer wire = {0};
@@ -319,6 +326,7 @@ int main(int argc, char **argv) {
         bool single = false;
         double now = ps_clock();
         if (interactive) {
+            if(!ps_runner_output_healthy(output)){result=PS_IO;break;}
             int got = ps_stdin_read(wire.data + wire.used, sizeof wire.data - wire.used);
             if (got < 0)
                 break;
@@ -330,7 +338,7 @@ int main(int argc, char **argv) {
                 if (type == PS_MSG_HELLO && n == 4 && ps_get_u32(p) == PS_ABI_VERSION &&
                     !handshake) {
                     handshake = true;
-                    result = snapshot(api, &c, store, writer, paused, true);
+                    result = snapshot(api, &c, store, writer, paused, true,true);
                     if (result != PS_OK)
                         break;
                 } else if (handshake && type == PS_MSG_SPEED && n == 8 &&
@@ -346,7 +354,7 @@ int main(int argc, char **argv) {
                     ps_pacer_restart(&pacer, now);
                     if (paused) breakpoint_log(&c, tick);
                     /* Report control state even when a slow, large dt is not due yet. */
-                    result = snapshot(api, &c, store, writer, paused, true);
+                    result = snapshot(api, &c, store, writer, paused, true,true);
                     if (result != PS_OK)
                         break;
                     last_frame = now;
@@ -354,7 +362,7 @@ int main(int argc, char **argv) {
                     paused = true;
                     pacer.running = false;
                     ps_pacer_restart(&pacer, now);
-                    result = snapshot(api, &c, store, writer, true, true);
+                    result = snapshot(api, &c, store, writer, true, true,true);
                     if (result != PS_OK)
                         break;
                 } else if (type == PS_MSG_STEP && paused)
@@ -439,7 +447,7 @@ int main(int argc, char **argv) {
             breakpoint_log(&c, tick);
         }
         if (interactive && (single || breakpoint_hit || now - last_frame >= 1.0 / 60)) {
-            ps_result scene_result = snapshot(api, &c, store, writer, paused, true);
+            ps_result scene_result = snapshot(api, &c, store, writer, paused, true,single || breakpoint_hit);
             if (scene_result != PS_OK) {
                 result = scene_result;
                 break;
@@ -447,12 +455,12 @@ int main(int argc, char **argv) {
             last_frame = now;
         }
         if (!interactive && record_scenes && c.time_s - last_snapshot_time >= 1.0 / 60) {
-            ps_result scene_result = snapshot(api, &c, store, writer, false, false);
+            ps_result scene_result = snapshot(api, &c, store, writer, false, false,false);
             if (scene_result != PS_OK) result = scene_result;
         }
     }
     if (result == PS_OK && last_snapshot_time >= 0 && c.time_s > last_snapshot_time)
-        result = snapshot(api, &c, store, writer, true, interactive);
+        result = snapshot(api, &c, store, writer, true, interactive,true);
     if (result == PS_OK)
         result = ps_run_writer_release(store,writer);
     else (void)ps_run_writer_abort(store,writer);

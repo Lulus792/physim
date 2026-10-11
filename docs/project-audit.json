@@ -2070,16 +2070,21 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Simulationsgeschwindigkeit unabhängig von der Rendergeschwindigkeit.\n",
-      "status": "incomplete",
+      "status": "implemented",
       "evidence": [
-        "src/pacing.c",
+        "src/runner_output.c",
+        "src/runner_output.h",
         "runners/experiment.c",
-        "tests/test_pacing.c",
+        "tests/test_runner_backpressure.py",
+        "tests/fixtures/runner_backpressure.c",
+        "tests/test_backpressure_data.c",
+        "tests/test_runner_output.c",
         "tests/test_runner_pacing.c",
-        "app/speed_tests.inc",
+        "tests/native_integration_cases.json",
+        "docs/workspace.md",
         "docs/platform-validation.md"
       ],
-      "note": "Eigene Runner-Taktung, Pause, Live-Geschwindigkeitswechsel und Offline-Modus implementiert; alle 201 Referenzzeitpunkte/Kanalwerte bei unterschiedlichen Geschwindigkeiten und verzögertem Leser identisch. Native und GUI-Geschwindigkeitstests bestehen auf Intel macOS. Die strengere Unabhängigkeit von blockiertem Rendering bleibt unvollständig: Vorschauübertragung verwendet fwrite/fflush synchron im Runner-Physikpfad; ein voller IPC-Ausgabekanal kann den Runner bremsen. Numerische Gleichheit und begrenztes Scheduling-Aufholen beweisen keine vollständige Entkopplung. Vorschau-Backpressure muss noch separat umgesetzt und mit blockiertem Empfänger geprüft werden."
+      "note": "Eigene Runner-Taktung und asynchroner Stdout-Thread; ein blockierter Vorschauempfänger hält den Physik-/Writerpfad nicht mehr an. Reale Pipe-Gegenprobe: davor nach vier Sekunden nur 96 Schritte, danach alle 1200 Schritte offline und 400 Schritte bei 0.25x samt vollständiger Datei vor erneutem Lesen. Taktung/Live-Wechsel/Offline, C-/Physim-Referenzdaten und App-Geschwindigkeitsprüfungen bestehen. Am 2026-10-11 tatsächlich auf Intel macOS gebaut: sechs Blockade-/Fehler-/Queue-Proben, 7/7 Runner-Regressionsfälle, 4/4 Snapshot-/Diagnose-/Blockadefälle, 1/1 ABI-Matrix mit 17 Modulen und 4/4 GUI-Fälle. Aktuelle Linux-/Windows-/ARM-Ausführung und lokale Sanitizer-Prüfung noch offen; kein Gesamtabschluss."
     },
     {
       "id": "PP-0293",
@@ -2170,9 +2175,21 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Physikschritt und Rendering sind unabhängig.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "src/runner_output.c",
+        "src/runner_output.h",
+        "runners/experiment.c",
+        "tests/test_runner_backpressure.py",
+        "tests/fixtures/runner_backpressure.c",
+        "tests/test_backpressure_data.c",
+        "tests/test_runner_output.c",
+        "tests/test_runner_pacing.c",
+        "tests/native_integration_cases.json",
+        "docs/workspace.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Physik/Writer und Renderer bleiben in getrennten Prozessen; ein eigener Ausgabethread entkoppelt nun auch eine volle Vorschaupipe vom Physikpfad. Reale gestoppte Leser verhindern weder Offline- noch getaktete Fortschritte; Steuerungsbestätigungen und unveränderte Messdateien sind geprüft. Am 2026-10-11 tatsächlich auf Intel macOS gebaut: sechs Blockade-/Fehler-/Queue-Proben, 7/7 Runner-Regressionsfälle, 4/4 Snapshot-/Diagnose-/Blockadefälle, 1/1 ABI-Matrix mit 17 Modulen und 4/4 GUI-Fälle. Aktuelle Linux-/Windows-/ARM-Ausführung und lokale Sanitizer-Prüfung noch offen; kein Gesamtabschluss."
     },
     {
       "id": "PP-0301",
@@ -2186,9 +2203,21 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Der Runner liefert unveränderliche **Scene Snapshots**; die App rendert sie.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "src/runner_output.c",
+        "src/runner_output.h",
+        "runners/experiment.c",
+        "tests/test_runner_backpressure.py",
+        "tests/fixtures/runner_backpressure.c",
+        "tests/test_backpressure_data.c",
+        "tests/test_runner_output.c",
+        "tests/test_runner_pacing.c",
+        "tests/native_integration_cases.json",
+        "docs/workspace.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Der Producer kopiert vollständige validierte Scene-Snapshot-Payloads in eigene Queuespeicher; der Ausgabethread ändert nur den Frame-Header mit seiner Sequenznummer. Bei gleichzeitig weiter mutierendem Modell stimmen jedes übertragene Zeit-/Wertepaar, alle 32 Objektpositionen und 96 Punkte kohärent überein. Native C-/Physim-Snapshotfälle und App-Rendering bestehen. Am 2026-10-11 tatsächlich auf Intel macOS gebaut: sechs Blockade-/Fehler-/Queue-Proben, 7/7 Runner-Regressionsfälle, 4/4 Snapshot-/Diagnose-/Blockadefälle, 1/1 ABI-Matrix mit 17 Modulen und 4/4 GUI-Fälle. Aktuelle Linux-/Windows-/ARM-Ausführung und lokale Sanitizer-Prüfung noch offen; kein Gesamtabschluss."
     },
     {
       "id": "PP-0302",
@@ -2327,9 +2356,21 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Der Writer speichert unabhängig vom Plot; langsames Zeichnen darf keine Messwerte verlieren.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "src/runner_output.c",
+        "src/runner_output.h",
+        "runners/experiment.c",
+        "tests/test_runner_backpressure.py",
+        "tests/fixtures/runner_backpressure.c",
+        "tests/test_backpressure_data.c",
+        "tests/test_runner_output.c",
+        "tests/test_runner_pacing.c",
+        "tests/native_integration_cases.json",
+        "docs/workspace.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Der persistente Writer schreibt alle akzeptierten Schritte vor der Vorschauveröffentlichung. Bei tatsächlich blockierter Ausgabe besitzen die noch offenen Dateien bereits alle 1201 beziehungsweise 401 Samples mit exakten Zeitpunkten und beiden Kanalwerten. Nach Einzelschritt/Stop sind alle 1202 beziehungsweise 402 Samples vollständig; permanente Blockade und geschlossener Leser erhalten vollständige/recoverbare Dateien. Am 2026-10-11 tatsächlich auf Intel macOS gebaut: sechs Blockade-/Fehler-/Queue-Proben, 7/7 Runner-Regressionsfälle, 4/4 Snapshot-/Diagnose-/Blockadefälle, 1/1 ABI-Matrix mit 17 Modulen und 4/4 GUI-Fälle. Aktuelle Linux-/Windows-/ARM-Ausführung und lokale Sanitizer-Prüfung noch offen; kein Gesamtabschluss."
     },
     {
       "id": "PP-0313",
@@ -2343,9 +2384,21 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Backpressure-Regeln: plotbare Vorschau darf ausgedünnt werden, der persistierte Datenstrom nicht.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "src/runner_output.c",
+        "src/runner_output.h",
+        "runners/experiment.c",
+        "tests/test_runner_backpressure.py",
+        "tests/fixtures/runner_backpressure.c",
+        "tests/test_backpressure_data.c",
+        "tests/test_runner_output.c",
+        "tests/test_runner_pacing.c",
+        "tests/native_integration_cases.json",
+        "docs/workspace.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Begrenzte 8-MiB-Ausgabequeue einschließlich Knotenspeicher: höchstens eine wartende reguläre Vorschau und ein Heartbeat werden ersetzt; neuere Vorschau wird nach zuverlässigen Nachrichten angehängt. HELLO, Steuerungs-/Einzelschritt-/Haltepunktsnapshots, Diagnosen, Logs und BYE bleiben FIFO. Sequenzen entstehen erst beim Schreiben, daher keine Lücken durch Ausdünnen. Überlast/Pipefehler sind explizit; begrenzter Abschluss erhält vorher geschriebene Daten. Am 2026-10-11 tatsächlich auf Intel macOS gebaut: sechs Blockade-/Fehler-/Queue-Proben, 7/7 Runner-Regressionsfälle, 4/4 Snapshot-/Diagnose-/Blockadefälle, 1/1 ABI-Matrix mit 17 Modulen und 4/4 GUI-Fälle. Aktuelle Linux-/Windows-/ARM-Ausführung und lokale Sanitizer-Prüfung noch offen; kein Gesamtabschluss."
     },
     {
       "id": "PP-0319",
