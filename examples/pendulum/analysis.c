@@ -260,6 +260,39 @@ static ps_result make_report(ps_analysis_context *ctx, ps_dataset run, ps_series
         for (unsigned i = 0; i < 3 && result == PS_OK; i++)
             result =
                 ps_report_add_series(report, handle, ctx, time, series[i], labels[i], PS_PLOT_LINE);
+        ps_series error = {0}, change = {0};
+        double initial = 0;
+        size_t count = 0;
+        if (result == PS_OK)
+            result = ps_series_read(ctx, balance, 0, &initial, 1, &count);
+        if (result == PS_OK && count != 1)
+            result = PS_INVALID;
+        if (result == PS_OK)
+            result = ps_series_affine(ctx, balance, 1, (ps_quantity){-initial, PS_JOULE}, &error);
+        strcpy(plot.title, "Numerischer Energiebilanzfehler");
+        strcpy(plot.y_label, "E + Verlust - E(0)");
+        if (result == PS_OK)
+            result = ps_report_add_plot(report, &plot, &handle);
+        if (result == PS_OK)
+            result = ps_report_add_series(report, handle, ctx, time, error,
+                                          "Bilanzfehler", PS_PLOT_LINE);
+        char path[4096];
+        int size = snprintf(path, sizeof path, "%s-balance.csv", prefix);
+        ps_series columns[] = {time, mechanical, dissipated, balance, error};
+        if (result == PS_OK)
+            result = size < 0 || (size_t)size >= sizeof path ? PS_LIMIT
+                : ps_series_export_csv(ctx, columns, 5, path);
+        if (result == PS_OK)
+            result = ps_series_read(ctx, mechanical, 0, &initial, 1, &count);
+        if (result == PS_OK)
+            result = ps_series_affine(ctx, mechanical, 1, (ps_quantity){-initial, PS_JOULE}, &change);
+        size = snprintf(path, sizeof path, "%s-energy.csv", prefix);
+        ps_series mechanical_columns[] = {time, mechanical, change};
+        if (result == PS_OK)
+            result = size < 0 || (size_t)size >= sizeof path ? PS_LIMIT
+                : ps_series_export_csv(ctx, mechanical_columns, 3, path);
+        if (error.owner) ps_series_release(ctx, error);
+        if (change.owner) ps_series_release(ctx, change);
     }
     if (result == PS_OK && balance_result == PS_INVALID) {
         ps_series angle = {0}, change = {0};

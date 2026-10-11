@@ -4030,7 +4030,7 @@ int main(int argc, char **argv) {
                 uint32_t plots = 0, tables = 0;
                 if (!a->analysis_report ||
                     ps_report_describe(a->analysis_report, NULL, NULL, &plots, &tables) != PS_OK ||
-                    plots != (test_example == 0 || test_example == 8 || test_example == 4 || test_example == 5 || test_example == 7 ? 4u : 3u) || !tables)
+                    plots != (test_example == 0 || test_example == 8 ? 5u : test_example == 4 || test_example == 5 || test_example == 7 ? 4u : 3u) || !tables)
                     exit_code = 1;
                 capture = "analysis.bmp";
                 test_stage = 30;
@@ -4051,7 +4051,7 @@ int main(int argc, char **argv) {
             } else if (test_stage == 34) {
                 if (!exists(a->result_export) || !strstr(a->result_export, ".svg"))
                     exit_code = 1;
-                a->result_view = test_example == 0 || test_example == 8 || test_example == 4 || test_example == 5 || test_example == 7 ? 4 : 3;
+                a->result_view = test_example == 0 || test_example == 8 ? 5 : test_example == 4 || test_example == 5 || test_example == 7 ? 4 : 3;
                 capture = "analysis-table.bmp";
                 test_stage = 35;
             } else if (test_stage == 35) {
@@ -4063,7 +4063,7 @@ int main(int argc, char **argv) {
             } else if (test_stage == 37) {
                 if (!exists(a->result_export) || !strstr(a->result_export, ".csv"))
                     exit_code = 1;
-                a->result_view = test_example == 0 || test_example == 8 || test_example == 4 || test_example == 5 || test_example == 7 ? 5 : 4;
+                a->result_view = test_example == 0 || test_example == 8 ? 6 : test_example == 4 || test_example == 5 || test_example == 7 ? 5 : 4;
                 capture = "analysis-metrics.bmp";
                 if (SDL_getenv("PHYSIM_TEST_LONG") && test_example == 0) {
                     ps_table_row metrics;
@@ -4096,7 +4096,7 @@ int main(int argc, char **argv) {
                 capture = "sensor-errors.bmp";
                 test_stage = 40;
             } else if (test_stage == 39) {
-                a->result_view = 3;
+                a->result_view = test_example == 0 || test_example == 8 ? 4 : 3;
                 capture = "analysis-energy.bmp";
                 ps_table_row row;
                 if (ps_report_row_read(a->analysis_report, 1, 0, &row) != PS_OK ||
@@ -4107,11 +4107,11 @@ int main(int argc, char **argv) {
                     ps_plot_info plot;
                     char path[4200];snprintf(path, sizeof path, "%s-energy.csv", a->report);
                     if (!exists(path) ||
-                        ps_report_plot_read(a->analysis_report, 3, &plot) != PS_OK ||
-                        strcmp(plot.title, "Mechanische Energieänderung") ||
+                        ps_report_plot_read(a->analysis_report, 4, &plot) != PS_OK ||
+                        strcmp(plot.title, "Numerischer Energiebilanzfehler") ||
                         plot.y_unit.dimension[0] != 2 || plot.y_unit.dimension[1] != 1 ||
                         plot.y_unit.dimension[2] != -2 ||
-                        ps_report_curve_view(a->analysis_report, 3, 0, &energy) != PS_OK ||
+                        ps_report_curve_view(a->analysis_report, 4, 0, &energy) != PS_OK ||
                         energy->source_count != a->data.total || fabs(energy->y[0]) > 1e-14)
                         exit_code = 1;
                 }
@@ -4453,7 +4453,7 @@ int main(int argc, char **argv) {
                 uint32_t plots = 0;
                 if (strcmp(a->loaded_report_path, test_original_report) ||
                     ps_report_describe(a->analysis_report, NULL, NULL, &plots, NULL) != PS_OK ||
-                    plots != (test_example == 0 || test_example == 8 || test_example == 4 || test_example == 5 || test_example == 7 ? 4u : 3u) || a->built)
+                    plots != (test_example == 0 || test_example == 8 ? 5u : test_example == 4 || test_example == 5 || test_example == 7 ? 4u : 3u) || a->built)
                     exit_code = 1;
                 capture = "library-reopened-report.bmp";
                 test_stage = 63;

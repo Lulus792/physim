@@ -22,7 +22,7 @@ def command(args, success=True):
 def read(path):
     rows, metadata, footer = [], {}, False
     names = ["angle", "angular_velocity", "position.x", "position.y", "energy",
-             "sensor.angle", "velocity.x", "velocity.y", "speed"]
+             "sensor.angle", "velocity.x", "velocity.y", "speed", "energy.dissipated", "energy.balance"]
     with path.open("rb") as file:
         assert file.read(16) == b"PSRUN17\n" + struct.pack("<II", 1, 0x01020304)
         while header := file.read(12):
@@ -32,15 +32,15 @@ def read(path):
             if kind == 1:
                 metadata = dict(line.split("=", 1) for line in data.decode().splitlines() if "=" in line)
             elif kind == 2:
-                assert struct.unpack_from("<I", data)[0] == 9 and size == 4 + 9 * 167
+                assert struct.unpack_from("<I", data)[0] == 11 and size == 4 + 11 * 167
                 for i, name in enumerate(names):
                     at = 4 + i * 167
                     assert data[at:at+48].split(b"\0")[0].decode() == name
-                    if i >= 6:
+                    if 6 <= i <= 8:
                         assert data[at+48:at+64].split(b"\0")[0] == b"m/s"
                         assert struct.unpack_from("<7b", data, at+160) == (1, 0, -1, 0, 0, 0, 0)
             elif kind == 3:
-                rows.append(struct.unpack("<10d", data))
+                rows.append(struct.unpack("<12d", data))
             elif kind == 4:
                 assert struct.unpack("<Q", data)[0] == len(rows)
                 footer = True
@@ -71,8 +71,10 @@ for model_index, model in enumerate(models):
             assert metadata["integrator"] == methods[method] and metadata["parameter.integrator"] == str(method)
             assert metadata["parameter_dimension.integrator"] == "0,0,0,0,0,0,0"
             assert len(rows) == 201
-            for i, (time, angle, omega, x, y, energy, sensor, vx, vy, speed) in enumerate(rows):
+            for i, (time, angle, omega, x, y, energy, sensor, vx, vy, speed, dissipated, balance) in enumerate(rows):
                 assert time == i*.005
+                assert dissipated >= 0 and near(balance,energy+dissipated)
+                if density == 0: assert dissipated == 0
                 assert near(x, 1.2*math.sin(angle)) and near(y, -1.2*math.cos(angle))
                 assert near(vx, 1.2*math.cos(angle)*omega) and near(vy, 1.2*math.sin(angle)*omega)
                 assert speed >= 0 and near(speed, 1.2*abs(omega)) and near(speed, math.hypot(vx, vy))
@@ -99,4 +101,4 @@ for model_index, model in enumerate(models):
         command([analysis, module, path, prefix])
         command([probe, path, str(prefix)+".psreport", mode])
 
-print("SDK pendulum: six models, five selectable methods, nine stored SI channels, medium parity, rejected choices and twelve adaptive reports passed")
+print("SDK pendulum: six models, five selectable methods, eleven stored SI channels, medium parity, rejected choices and twelve adaptive reports passed")

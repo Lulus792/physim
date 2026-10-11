@@ -78,14 +78,19 @@ Periodendauer; die Zusammenfassung und seine Kurven bleiben sichtbar.
 Vorhandene Projektquellen werden beim Öffnen nicht ersetzt. Andere Vorlagen
 verwenden weiterhin ihre zum Modell passende Auswertung.
 
-Die C-Standardauswertung ergänzt bei Pendeldaten das Diagramm **Mechanische
-Energieänderung** mit `E - E(0)` in Joule. Im Vakuum zeigt es den numerischen
-Energiefehler; mit Luftwiderstand enthält die Änderung auch dissipierte Energie.
-Die Tabelle enthält die maximale Energieabweichung und, bei genügend positiven
+Die aktuellen Pendelvorlagen speichern mechanische Energie, mitintegrierten
+Widerstandsverlust und deren Summe. Die C-Standardauswertung zeigt diese
+**Energiebilanz** und den **Numerischen Energiebilanzfehler** getrennt.
+Bei älteren Läufen ohne Bilanzkanäle zeigt sie die **Mechanische Energieänderung**
+`E - E(0)`, die mit Widerstand auch physikalische Dissipation enthält.
+Die Tabelle enthält die maximale Bilanzabweichung beziehungsweise Energieänderung und, bei genügend positiven
 Nulldurchgängen, die mittlere Periodendauer. Neben den Diagrammexporten wird
 `<Analysepräfix>-energy.csv` mit sämtlichen Zeit-, Energie- und Änderungswerten
 geschrieben. Die vorhandene Energiebilanz gedämpfter Modelle bleibt getrennt
-auswertbar. [Nachweise](platform-validation.md#energieplot-und-vollständiger-csv-im-c-pendelablauf).
+auswertbar. Zusätzlich enthält `<Analysepräfix>-balance.csv` alle ursprünglichen
+Zeit-, Energie-, Verlust-, Bilanz- und Fehlerwerte. Die Physim-Auswertung ergänzt
+ebenfalls einen Bilanzplot, eine Tabelle und vollständige CSVs.
+[Modell, Verfahren und Grenzen](pendulum-tutorial.md#gedämpfte-bewegung-und-energiebilanz).
 
 Neue C- und Physim-Pendelvorlagen besitzen dieselben sieben Parameter:
 
@@ -686,7 +691,7 @@ beide Einstellungen getrennt an.
 Das unabhängige SDK-Prüfkit bietet `--pendulum-only` für die komplette
 Pendel-Daten-/Analysekette: verschobenes Paket, installierte und aus den
 Paketquellen neu gebaute Bibliothek, beide Sprachen, fünf auswählbare Verfahren,
-neun SI-Kanäle, adaptive Läufe, Spitzen-API und vollständige Amplituden-CSVs.
+elf SI-Kanäle, adaptive Läufe, Spitzen-API und vollständige Amplituden-CSVs.
 Der Modus prüft die Pendelkette ohne Oberfläche; die vollständige SDK-Prüfung
 enthält dieselbe Gegenprobe zusätzlich zu den übrigen Prüfungen.
 

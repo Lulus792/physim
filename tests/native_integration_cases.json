@@ -2416,6 +2416,24 @@
         "platform",
         "core"
       ]
+    },
+    "pendulum-energy-balance-tests": {
+      "sources": [
+        "tests/test_pendulum_energy_balance.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "pendulum-sdk-probe": {
+      "sources": [
+        "tools/sdk_probe.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
     }
   },
   "tests": [
@@ -9783,6 +9801,96 @@
           "arguments": [
             "{root}/tests/test_body_momentum_oracle.py",
             "{body-momentum-probe}"
+          ],
+          "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "pendulum_energy_balance",
+      "targets": [
+        "pendulum-energy-balance-tests",
+        "pendulum",
+        "physim-language-pendulum-rk4"
+      ],
+      "steps": [
+        {
+          "program": "pendulum-energy-balance-tests",
+          "arguments": [
+            "{pendulum}",
+            "{physim-language-pendulum-rk4}"
+          ],
+          "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "pendulum_balance_reports",
+      "targets": [
+        "python",
+        "physim-runner",
+        "physim-analysis-runner",
+        "pendulum",
+        "physim-language-pendulum-rk4",
+        "pendulum_analysis",
+        "pendulum-tutorial-analysis-phys",
+        "pendulum-c-energy-probe",
+        "pendulum-label-probe",
+        "pendulum-tutorial-analysis-c"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_pendulum_balance_reports.py",
+            "{physim-runner}",
+            "{physim-analysis-runner}",
+            "{pendulum}",
+            "{physim-language-pendulum-rk4}",
+            "{pendulum_analysis}",
+            "{pendulum-tutorial-analysis-c}",
+            "{pendulum-tutorial-analysis-phys}",
+            "{pendulum-c-energy-probe}",
+            "{pendulum-label-probe}",
+            "{work}/balance"
+          ],
+          "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "pendulum_parameter_runs",
+      "targets": [
+        "python",
+        "physim-runner",
+        "physim-analysis-runner",
+        "pendulum_analysis",
+        "physim-language-analysis",
+        "pendulum-sdk-probe",
+        "pendulum",
+        "physim-language-pendulum",
+        "physim-language-pendulum-rk4",
+        "physim-language-pendulum-integrator",
+        "physim-language-pendulum-rk45",
+        "physim-language-pendulum-verlet"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_pendulum_sdk.py",
+            "{physim-runner}",
+            "{physim-analysis-runner}",
+            "{pendulum_analysis}",
+            "{physim-language-analysis}",
+            "{pendulum-sdk-probe}",
+            "{work}/parameters",
+            "{pendulum}",
+            "{physim-language-pendulum}",
+            "{physim-language-pendulum-rk4}",
+            "{physim-language-pendulum-integrator}",
+            "{physim-language-pendulum-rk45}",
+            "{physim-language-pendulum-verlet}"
           ],
           "timeout": 120
         }

@@ -6546,9 +6546,15 @@
         "docs/platform-validation.md",
         "tools/verify-native-sdk.py",
         "tools/sdk_probe.c",
-        "tests/test_pendulum_sdk.py"
+        "tests/test_pendulum_sdk.py",
+        "examples/pendulum/analysis.c",
+        "examples/documentation/pendulum_analysis.c",
+        "examples/documentation/pendulum_analysis.phys",
+        "tests/test_pendulum_energy_balance.c",
+        "tests/test_pendulum_balance_reports.py",
+        "docs/pendulum-tutorial.md"
       ],
-      "note": "Pendelvorlagen besitzen SI-Parameter, gemeinsamen Mediumwiderstand und reproduzierbares Winkelsensorrauschen; Perioden-, Energie- und beobachtete Amplitudenabnahme werden aus gespeicherten Daten ausgewertet. Native Referenzen und tatsächliche C-/Physim-Fenster auf Intel macOS und Debian geprüft. Die gesamte vertikale und aktuelle Gesamtplattform-/Paketabnahme bleibt unvollständig; Teilnachweise heben den Gesamtstatus nicht an. Aktuelle Headless-SDKs mit sämtlichen Beispielen bestehen zusätzlich eine verschobene, manifestgeprüfte Kit-Gegenprobe auf Intel macOS/Debian: installierte und aus Paketquellen neu gebaute Bibliothek, fünf Verfahren, neun gespeicherte SI-Kanäle, adaptive Berichte, Lernpfad, Abnahme-CSVs und Spitzen-API. Dies ersetzt weiterhin weder vollständige GUI-/Gesamtplattform-/Paketabnahme noch die gesamte vertikale Abnahme."
+      "note": "Pendelvorlagen besitzen SI-Parameter, gemeinsamen Mediumwiderstand und reproduzierbares Winkelsensorrauschen; Perioden-, Energie- und beobachtete Amplitudenabnahme werden aus gespeicherten Daten ausgewertet. Native Referenzen und tatsächliche C-/Physim-Fenster auf Intel macOS und Debian geprüft. Die gesamte vertikale und aktuelle Gesamtplattform-/Paketabnahme bleibt unvollständig; Teilnachweise heben den Gesamtstatus nicht an. Aktuelle Headless-SDKs mit sämtlichen Beispielen bestehen zusätzlich eine verschobene, manifestgeprüfte Kit-Gegenprobe auf Intel macOS/Debian: installierte und aus Paketquellen neu gebaute Bibliothek, fünf Verfahren, neun gespeicherte SI-Kanäle, adaptive Berichte, Lernpfad, Abnahme-CSVs und Spitzen-API. Dies ersetzt weiterhin weder vollständige GUI-/Gesamtplattform-/Paketabnahme noch die gesamte vertikale Abnahme. Die allgemeinen C-/Physim-Pendelvorlagen integrieren Widerstandsverlust als Zustand und speichern mechanische Energie, Verlust und Bilanz; Analysen trennen numerischen Bilanzfehler. Drei Schrittweiten und vollständige gemischte Berichtsexporte ergänzen die Nachweise; gesamte aktuelle Plattform-/Paketabnahme bleibt offen."
     },
     {
       "id": "PP-0758",
@@ -6732,9 +6738,14 @@
         "tests/test_positive_peaks.c",
         "tests/test_pendulum_decay.py",
         "tests/check_decay_report.c",
-        "docs/platform-validation.md"
+        "docs/platform-validation.md",
+        "examples/pendulum/main.c",
+        "examples/language/pendulum.phys",
+        "tests/test_pendulum_energy_balance.c",
+        "tests/test_pendulum_balance_reports.py",
+        "docs/pendulum-tutorial.md"
       ],
-      "note": "Gemeinsame segmentbewusste Spitzen-API für C/Physim mit strenger Zeit, Plateau-Mitte, Quota- und Alias-Gegenproben. Auswertungen berichten Periodendauer, Energieänderung und beobachtetes logarithmisches Dekrement/Abnahmerate; volle CSVs und ausdrückliche Nichtverfügbarkeit. 18 synthetische Referenzberichte mit 400 Spitzen, Wachstum, unregelmäßigen Zeiten und Ruhe sowie tatsächliche Mediumfenster auf Intel macOS/Debian geprüft; Linux ASan/UBSan bestanden. Kein konstantes viskoses Modell oder vollständige Gesamtplattformabnahme."
+      "note": "Gemeinsame segmentbewusste Spitzen-API für C/Physim mit strenger Zeit, Plateau-Mitte, Quota- und Alias-Gegenproben. Auswertungen berichten Periodendauer, Energieänderung und beobachtetes logarithmisches Dekrement/Abnahmerate; volle CSVs und ausdrückliche Nichtverfügbarkeit. 18 synthetische Referenzberichte mit 400 Spitzen, Wachstum, unregelmäßigen Zeiten und Ruhe sowie tatsächliche Mediumfenster auf Intel macOS/Debian geprüft; Linux ASan/UBSan bestanden. Kein konstantes viskoses Modell oder vollständige Gesamtplattformabnahme. Die allgemeinen C-/Physim-Pendelvorlagen integrieren Widerstandsverlust als Zustand und speichern mechanische Energie, Verlust und Bilanz; Analysen trennen numerischen Bilanzfehler. Drei Schrittweiten und vollständige gemischte Berichtsexporte ergänzen die Nachweise; gesamte aktuelle Plattform-/Paketabnahme bleibt offen."
     },
     {
       "id": "PP-0769",
@@ -6927,9 +6938,15 @@
         "app/design_ui.inc",
         "tests/check_pendulum_exports.py",
         "tests/check_pendulum_labels.c",
-        "tests/test_pendulum_report_labels.py"
+        "tests/test_pendulum_report_labels.py",
+        "examples/pendulum/main.c",
+        "examples/language/pendulum.phys",
+        "examples/documentation/pendulum_analysis.c",
+        "tests/test_pendulum_energy_balance.c",
+        "tests/test_pendulum_balance_reports.py",
+        "docs/pendulum-tutorial.md"
       ],
-      "note": "C-/Physim-Standardläufe durch beide Analysemodule geprüft: originale Messwerte, Energieabweichung, positive Nulldurchgangsperioden, Ruhefälle und vollständiger Energie-CSV mit 6001 Zeilen. Echte App-Build-/Runner-/Analyse-/Tabellenabläufe für beide Experimentsprachen mit C-Auswertung und SVG-/PNG-Buttons auf Intel macOS und Debian bestanden; Physim-Auswertung separat in ihren tatsächlichen Projektabläufen geprüft. PNG-CRC/Scanlines und sichtbare Achsenbeschriftung geprüft. Begrenzter Nachweis dieses Pendelablaufs, keine gesamte Plattform-/Dämpfungs-/Projektabnahme. Zusätzlich tatsächliche C-/Physim-Medium-Appketten mit Rohdaten- und Energie-CSVs, allen beobachteten Spitzen/Abnahmeintervallen, über Buttons exportierter Abnahmetabelle und Energie-SVG/PNG auf Intel macOS/Debian geprüft; vollständige CSV-Werte gegen unabhängige Originaldateidekodierung, PNG-CRC/Scanlines und SVG-Struktur geprüft. Die Lernpfadauswertungen besitzen zusätzlich unabhängige Legendenprüfungen für acht gemischte tatsächliche C-/Physim-Läufe, adaptive Methoden, alte Daten und abgewiesene ungültige Metadaten auf Intel macOS und Debian; Linux auch mit ASan/UBSan. Keine vollständige neue SDK-/Plattformabnahme."
+      "note": "C-/Physim-Standardläufe durch beide Analysemodule geprüft: originale Messwerte, Energieabweichung, positive Nulldurchgangsperioden, Ruhefälle und vollständiger Energie-CSV mit 6001 Zeilen. Echte App-Build-/Runner-/Analyse-/Tabellenabläufe für beide Experimentsprachen mit C-Auswertung und SVG-/PNG-Buttons auf Intel macOS und Debian bestanden; Physim-Auswertung separat in ihren tatsächlichen Projektabläufen geprüft. PNG-CRC/Scanlines und sichtbare Achsenbeschriftung geprüft. Begrenzter Nachweis dieses Pendelablaufs, keine gesamte Plattform-/Dämpfungs-/Projektabnahme. Zusätzlich tatsächliche C-/Physim-Medium-Appketten mit Rohdaten- und Energie-CSVs, allen beobachteten Spitzen/Abnahmeintervallen, über Buttons exportierter Abnahmetabelle und Energie-SVG/PNG auf Intel macOS/Debian geprüft; vollständige CSV-Werte gegen unabhängige Originaldateidekodierung, PNG-CRC/Scanlines und SVG-Struktur geprüft. Die Lernpfadauswertungen besitzen zusätzlich unabhängige Legendenprüfungen für acht gemischte tatsächliche C-/Physim-Läufe, adaptive Methoden, alte Daten und abgewiesene ungültige Metadaten auf Intel macOS und Debian; Linux auch mit ASan/UBSan. Keine vollständige neue SDK-/Plattformabnahme. Die allgemeinen C-/Physim-Pendelvorlagen integrieren Widerstandsverlust als Zustand und speichern mechanische Energie, Verlust und Bilanz; Analysen trennen numerischen Bilanzfehler. Drei Schrittweiten und vollständige gemischte Berichtsexporte ergänzen die Nachweise; gesamte aktuelle Plattform-/Paketabnahme bleibt offen."
     },
     {
       "id": "PP-0780",

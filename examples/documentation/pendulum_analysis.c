@@ -94,6 +94,7 @@ static ps_result analyze_many(const char *const *inputs,size_t count,const char 
     if(r==PS_OK)r=ps_report_unit_from(PS_SECOND,&info.column[0].unit);
     if(r==PS_OK)r=ps_report_add_table(report,&info,&periods);
     if(r==PS_OK)r=decay_table(report,&decay);
+    bool has_balance=false;ps_plot_handle balance_plot={0};ps_table_handle balance_table={0};
     for(size_t i=0;r==PS_OK && i<count;i++) {
         ps_dataset dataset={0};ps_series time={0},angle={0},energy={0},drift={0};ps_dataset_info details;
         r=ps_analysis_open_run(c,inputs[i],&dataset);if(r==PS_RECOVERED){recovered=true;r=PS_OK;}
@@ -109,6 +110,33 @@ static ps_result analyze_many(const char *const *inputs,size_t count,const char 
         if(r==PS_OK)r=ps_series_affine(c,energy,1,(ps_quantity){-initial,PS_JOULE},&drift);
         if(r==PS_OK)r=ps_report_add_series(report,angle_plot,c,time,angle,name,PS_PLOT_LINE);
         if(r==PS_OK)r=ps_report_add_series(report,energy_plot,c,time,drift,name,PS_PLOT_LINE);
+        ps_series balance={0};
+        ps_result present=r==PS_OK?ps_dataset_series(c,dataset,"energy.balance",&balance):r;
+        if(r==PS_OK && present!=PS_OK && present!=PS_INVALID)r=present;
+        if(r==PS_OK && present==PS_OK) {
+            ps_series dissipated={0},error={0};double start=0,loss=0;ps_statistics errors={0};
+            r=ps_dataset_series(c,dataset,"energy.dissipated",&dissipated);
+            if(r==PS_OK)r=scalar(c,balance,0,&start);
+            if(r==PS_OK)r=ps_series_affine(c,balance,1,(ps_quantity){-start,PS_JOULE},&error);
+            if(r==PS_OK && !has_balance) {
+                r=plot(report,"Energy balance error",PS_JOULE,&balance_plot);
+                ps_table_info table={0};strcpy(table.title,"Energy balance");table.columns=2;
+                strcpy(table.column[0].label,"Final dissipated energy");
+                strcpy(table.column[1].label,"Maximum balance error");
+                for(unsigned k=0;r==PS_OK && k<2;k++)r=ps_report_unit_from(PS_JOULE,&table.column[k].unit);
+                if(r==PS_OK)r=ps_report_add_table(report,&table,&balance_table);
+                has_balance=r==PS_OK;
+            }
+            if(r==PS_OK)r=ps_report_add_series(report,balance_plot,c,time,error,name,PS_PLOT_LINE);
+            if(r==PS_OK)r=scalar(c,dissipated,details.samples-1,&loss);
+            if(r==PS_OK)r=ps_series_statistics(c,error,&errors);
+            ps_table_row row={0};snprintf(row.label,sizeof row.label,"%s",name);
+            row.values[0]=loss;row.values[1]=fmax(fabs(errors.min),fabs(errors.max));
+            if(r==PS_OK)r=ps_report_add_row(report,balance_table,&row);
+            char path[4096];int n=snprintf(path,sizeof path,"%s-balance_%u.csv",prefix,(unsigned)i+1);
+            ps_series columns[]={time,energy,dissipated,balance,error};
+            if(r==PS_OK)r=n<0 || (size_t)n>=sizeof path?PS_LIMIT:ps_series_export_csv(c,columns,5,path);
+        }
         ps_statistics stats={0};if(r==PS_OK)r=ps_series_statistics(c,drift,&stats);
         double previous_a=0,previous_t=0,last_cross=0,sum=0;unsigned intervals=0;bool crossed=false;
         for(uint64_t at=0;r==PS_OK && at<details.samples;at++) {

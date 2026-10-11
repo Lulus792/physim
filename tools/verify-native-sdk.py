@@ -518,7 +518,7 @@ def main():
             shutil.copytree(sdk / "src", consumer / "src")
             rebuilt_core = builder.archive("sdk-rebuilt-core", [f"src/{name}.c" for name in native.CORE])
             verify_pendulum(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
-            (root / "PASSED.txt").write_text("Focused pendulum SDK verification passed: relocated manifest, installed/rebuilt Core, C/Physim methods, nine SI channels, tutorial and decay reports, positive-peak APIs. No full GUI or package acceptance.\n", encoding="utf-8")
+            (root / "PASSED.txt").write_text("Focused pendulum SDK verification passed: relocated manifest, installed/rebuilt Core, C/Physim methods, eleven SI channels, tutorial and decay reports, positive-peak APIs. No full GUI or package acceptance.\n", encoding="utf-8")
             print(f"Pendulum SDK verified: {root}")
             return
         if args.migration_only:

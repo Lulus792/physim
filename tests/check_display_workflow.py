@@ -312,7 +312,7 @@ def pendulum_c_energy(flow, directory):
                 stride = width * 3 + 1
                 require(len(pixels) == height * stride and
                         all(pixels[y*stride] == 0 for y in range(height)), "Energy PNG scanlines failed")
-            require(any("Mechanische Energieänderung" in read(path) for path in project.rglob("*.svg")),
+            require(any("Numerischer Energiebilanzfehler" in read(path) for path in project.rglob("*.svg")),
                     "Energy SVG export missing")
     finally:
         if previous is None:

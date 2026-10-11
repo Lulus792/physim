@@ -37,6 +37,41 @@ behandeln exakte Reihen für Bewegung und Periode. Der Test dieses Lernpfads
 berechnet K selbst durch Simpsonquadratur und verwendet eine unabhängig
 rekursive Taylorreihe für den Zustand bei t=0,5 s.
 
+## Gedämpfte Bewegung und Energiebilanz
+
+Die allgemeinen Vorlagen `examples/pendulum/main.c` und
+`examples/language/pendulum*.phys` erlauben zusätzlich Luftwiderstand und
+Winkelsensorrauschen. Stelle beispielsweise `mass=2`, `airDensity=1.225`,
+`dragCoefficient=0.8`, `area=0.08` und `integrator=2` ein. Vergleiche einen Lauf
+mit `airDensity=0` und einen mit Widerstand; mindestens acht Sekunden zeigen
+mehrere Schwingungen und eine messbare Amplitudenabnahme.
+
+Diese Vorlagen speichern elf SI-Kanäle. `energy` enthält mechanische Energie,
+`energy.dissipated` den mitintegrierten Verlust, `energy.balance` ihre Summe.
+Aus der [NASA-Widerstandsgleichung](https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation/)
+und der [mechanischen Leistung](https://ocw.mit.edu/courses/16-07-dynamics-fall-2009/resources/mit16_07f09_lec12/)
+folgt für das ruhende homogene Medium:
+`D′ = −F_drag·v = ½ρ Cd A |Lω|³`, `D(0)=0`.
+Die exakte Modellbilanz ist `E(t)+D(t)=E(0)`.
+
+Euler, RK4 und RK45 integrieren D als dritte Zustandskomponente; die
+symplektische Variante verwendet für D dieselbe alte Geschwindigkeit wie für
+die Widerstandsbeschleunigung. Bei Verlet ist Widerstand ausgeschlossen und D
+bleibt null. Adaptive RK45-Fehlerschätzung berücksichtigt alle drei Komponenten;
+die absolute Toleranz gilt damit numerisch auch für D in Joule. Kleine Schritte
+bleiben erforderlich. Die Bilanz ist ein unabhängiges physikalisches Prüfkriterium,
+kein Beweis exakter Integration: auch die integrierte Verlustgröße hat Fehler.
+
+Die C-Analyse zeigt mechanische Energie, Verlust, Bilanz und einen eigenen
+Bilanzfehlerplot. Ihre Energiekennzahl verwendet bei vorhandener Bilanz
+`max |E+D−E(0)|`. Die Physim-Analyse ergänzt einen Bilanzfehlerplot und eine
+Tabelle mit Endverlust und maximalem Bilanzfehler. Die bisherigen Energieänderungs-
+und Amplitudenberichte bleiben verfügbar. CSVs `-balance.csv` (C) beziehungsweise
+`-balance_1.csv` bis `_8.csv` (Physim) enthalten sämtliche originalen Messpunkte,
+mechanische Energie, Verlust, Bilanz und Bilanzfehler. Alte Läufe ohne diese
+Kanäle behalten ihre bisherigen Berichte; bei gemischten Eingaben erscheinen
+nur die entsprechend ausgestatteten Läufe im zusätzlichen Bilanzbericht.
+
 ## Verfahren auswählen
 
 Alle Modellinstanzen besitzen die typisierten Parameter `length` (m, 0,1..10),
@@ -439,6 +474,7 @@ static ps_result analyze_many(const char *const *inputs,size_t count,const char 
     if(r==PS_OK)r=ps_report_unit_from(PS_SECOND,&info.column[0].unit);
     if(r==PS_OK)r=ps_report_add_table(report,&info,&periods);
     if(r==PS_OK)r=decay_table(report,&decay);
+    bool has_balance=false;ps_plot_handle balance_plot={0};ps_table_handle balance_table={0};
     for(size_t i=0;r==PS_OK && i<count;i++) {
         ps_dataset dataset={0};ps_series time={0},angle={0},energy={0},drift={0};ps_dataset_info details;
         r=ps_analysis_open_run(c,inputs[i],&dataset);if(r==PS_RECOVERED){recovered=true;r=PS_OK;}
@@ -454,6 +490,33 @@ static ps_result analyze_many(const char *const *inputs,size_t count,const char 
         if(r==PS_OK)r=ps_series_affine(c,energy,1,(ps_quantity){-initial,PS_JOULE},&drift);
         if(r==PS_OK)r=ps_report_add_series(report,angle_plot,c,time,angle,name,PS_PLOT_LINE);
         if(r==PS_OK)r=ps_report_add_series(report,energy_plot,c,time,drift,name,PS_PLOT_LINE);
+        ps_series balance={0};
+        ps_result present=r==PS_OK?ps_dataset_series(c,dataset,"energy.balance",&balance):r;
+        if(r==PS_OK && present!=PS_OK && present!=PS_INVALID)r=present;
+        if(r==PS_OK && present==PS_OK) {
+            ps_series dissipated={0},error={0};double start=0,loss=0;ps_statistics errors={0};
+            r=ps_dataset_series(c,dataset,"energy.dissipated",&dissipated);
+            if(r==PS_OK)r=scalar(c,balance,0,&start);
+            if(r==PS_OK)r=ps_series_affine(c,balance,1,(ps_quantity){-start,PS_JOULE},&error);
+            if(r==PS_OK && !has_balance) {
+                r=plot(report,"Energy balance error",PS_JOULE,&balance_plot);
+                ps_table_info table={0};strcpy(table.title,"Energy balance");table.columns=2;
+                strcpy(table.column[0].label,"Final dissipated energy");
+                strcpy(table.column[1].label,"Maximum balance error");
+                for(unsigned k=0;r==PS_OK && k<2;k++)r=ps_report_unit_from(PS_JOULE,&table.column[k].unit);
+                if(r==PS_OK)r=ps_report_add_table(report,&table,&balance_table);
+                has_balance=r==PS_OK;
+            }
+            if(r==PS_OK)r=ps_report_add_series(report,balance_plot,c,time,error,name,PS_PLOT_LINE);
+            if(r==PS_OK)r=scalar(c,dissipated,details.samples-1,&loss);
+            if(r==PS_OK)r=ps_series_statistics(c,error,&errors);
+            ps_table_row row={0};snprintf(row.label,sizeof row.label,"%s",name);
+            row.values[0]=loss;row.values[1]=fmax(fabs(errors.min),fabs(errors.max));
+            if(r==PS_OK)r=ps_report_add_row(report,balance_table,&row);
+            char path[4096];int n=snprintf(path,sizeof path,"%s-balance_%u.csv",prefix,(unsigned)i+1);
+            ps_series columns[]={time,energy,dissipated,balance,error};
+            if(r==PS_OK)r=n<0 || (size_t)n>=sizeof path?PS_LIMIT:ps_series_export_csv(c,columns,5,path);
+        }
         ps_statistics stats={0};if(r==PS_OK)r=ps_series_statistics(c,drift,&stats);
         double previous_a=0,previous_t=0,last_cross=0,sum=0;unsigned intervals=0;bool crossed=false;
         for(uint64_t at=0;r==PS_OK && at<details.samples;at++) {
@@ -628,6 +691,8 @@ func analyze():
     let rateUnit = Unit(0,0,-1,0,0,0,0,1,"Hz")
     let radians = Unit(0,0,0,0,0,0,0,1,"rad")
     let decay = Table("Observed amplitude decay",["Peak intervals","Mean log decrement","Mean rate","Minimum rate","Maximum rate"],[one,one,rateUnit,rateUnit,rateUnit])
+    var balancePlot: Plot? = nil
+    var balanceTable: Table? = nil
     for index in 0..<inputCount():
         let run = Dataset(index)
         let name = runLabel(run,index)
@@ -635,6 +700,17 @@ func analyze():
         let angle = run.series("angle")
         let energy = run.series("energy")
         let drift = energy.affine(1,-energy.value(0),joules)
+        if let balance = attempt(run.series("energy.balance")):
+            let dissipated = run.series("energy.dissipated")
+            let error = balance.affine(1,-balance.value(0),joules)
+            if let plot = balancePlot:
+                plot.curve(time,error,name)
+            else:
+                balancePlot = Optional.some(error.plot(time,"Energy balance error",name))
+                balanceTable = Optional.some(Table("Energy balance",["Final dissipated energy","Maximum balance error"],[joules,joules]))
+            if let table = balanceTable:
+                table.row(name,[Quantity(dissipated.value(dissipated.count()-1),joules),Quantity(max(abs(error.minimum()),abs(error.maximum())),joules)])
+            Series.exportColumns([time,energy,dissipated,balance,error],"balance_" + String(index + 1))
         if index > 0:
             anglePlot.curve(time,angle,name)
             energyPlot.curve(time,drift,name)

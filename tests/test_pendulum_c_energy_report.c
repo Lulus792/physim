@@ -9,12 +9,14 @@ static bool near(double a,double b) {
 int main(int argc,char **argv) {
     CHECK(argc==3);
     ps_run_reader reader;CHECK(ps_run_open(&reader,argv[2])==PS_OK);
-    int angle=-1,energy=-1;
+    int angle=-1,energy=-1,balance=-1;
     for(unsigned i=0;i<reader.channels;i++) {
         if(!strcmp(reader.schema[i].name,"angle"))angle=(int)i;
         if(!strcmp(reader.schema[i].name,"energy"))energy=(int)i;
+        if(!strcmp(reader.schema[i].name,"energy.balance"))balance=(int)i;
     }
     CHECK(angle>=0 && energy>=0);
+    if(balance>=0)energy=balance;
     double t,v[PS_MAX_CHANNELS],first=0,last=0,initial=0,maximum=0,previous=0,
            last_cross=0,period_sum=0;
     uint64_t samples=0;unsigned intervals=0;bool crossed=false;ps_result result;
@@ -32,20 +34,20 @@ int main(int argc,char **argv) {
     ps_run_reader_close(&reader);
     ps_report *report=NULL;CHECK(ps_report_load(argv[1],&report)==PS_OK);
     uint32_t plots,tables;CHECK(ps_report_describe(report,NULL,NULL,&plots,&tables)==PS_OK);
-    CHECK(plots==4 && tables==3);
+    CHECK(plots==(balance>=0?5u:4u) && tables==3);
     ps_plot_info plot;const ps_curve_data *curve;
-    CHECK(ps_report_plot_read(report,3,&plot)==PS_OK && plot.curves==1 &&
-          !strcmp(plot.title,"Mechanische Energieänderung"));
+    CHECK(ps_report_plot_read(report,balance>=0?4:3,&plot)==PS_OK && plot.curves==1 &&
+          !strcmp(plot.title,balance>=0?"Numerischer Energiebilanzfehler":"Mechanische Energieänderung"));
     CHECK(plot.x_unit.dimension[2]==1 && plot.x_unit.scale==1 &&
           plot.y_unit.dimension[0]==2 && plot.y_unit.dimension[1]==1 &&
           plot.y_unit.dimension[2]==-2 && plot.y_unit.scale==1);
-    CHECK(ps_report_curve_view(report,3,0,&curve)==PS_OK &&
+    CHECK(ps_report_curve_view(report,balance>=0?4:3,0,&curve)==PS_OK &&
           curve->source_count==samples && curve->x[0]==first &&
           curve->x[curve->count-1]==last && near(curve->y[0],0));
     ps_table_info metrics;ps_table_row row;
     CHECK(ps_report_table_read(report,1,&metrics)==PS_OK && metrics.rows==1 &&
           metrics.columns==(intervals?2u:1u) &&
-          !strcmp(metrics.column[0].label,"Max. Energieabweichung"));
+          !strcmp(metrics.column[0].label,balance>=0?"Max. Bilanzabweichung":"Max. Energieabweichung"));
     CHECK(ps_report_row_read(report,1,0,&row)==PS_OK && near(row.values[0],maximum));
     if(intervals)CHECK(near(row.values[1],period_sum/intervals));
     if(samples<=PS_REPORT_MAX_POINTS) {

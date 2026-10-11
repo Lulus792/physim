@@ -30,7 +30,7 @@ static void pendulum_medium_frame(app *a,int *stage,int *code,const char **captu
         ok &= fabs(initial-2*9.80665*1.5*(1-cos(.45)))<1e-12 && command(a,PS_MSG_RUN);break;
     case 3:
         if(a->simulation_time<6)return;
-        ok=a->values[4]<initial*.99 && a->channel_count==9 &&
+        ok=a->values[4]<initial*.99 && a->channel_count==11 &&
            fabs(a->values[6]-1.5*cos(a->values[0])*a->values[1])<1e-12 &&
            fabs(a->values[7]-1.5*sin(a->values[0])*a->values[1])<1e-12 &&
            fabs(a->values[8]-hypot(a->values[6],a->values[7]))<1e-12;
@@ -56,10 +56,10 @@ static void pendulum_medium_frame(app *a,int *stage,int *code,const char **captu
         if(!idle(a) || a->report_thread)return;
         {uint32_t plots=0,tables=0;ok=a->analysis_report &&
             ps_report_describe(a->analysis_report,NULL,NULL,&plots,&tables)==PS_OK &&
-            plots==(a->language_analysis?2u:4u) && tables==3;}
+            plots==(a->language_analysis?3u:5u) && tables==(a->language_analysis?4u:3u);}
         a->tab=2;a->result_view=a->language_analysis?1:3;break;
     case 6:*capture="pendulum-medium-energy.bmp";break;
-    case 7:a->result_view=a->language_analysis?4:6;break;
+    case 7:a->result_view=a->language_analysis?5:7;break;
     case 8: {
         ps_table_info info;ps_table_row row;
         ok=ps_report_table_read(a->analysis_report,2,&info)==PS_OK &&

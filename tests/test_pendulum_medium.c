@@ -67,12 +67,12 @@ static int pair(const char *c_path,const char *phys_path,bool verlet) {
     double density=verlet?0:1.225;
     for(unsigned i=0;i<2;i++) {
         CHECK(!parameters(&c[i],density) && api[i]->create(&c[i])==PS_OK && ps_parameter_finalize(&c[i])==PS_OK);
-        CHECK(!units(&c[i]) && c[i].channel_count==9);
+        CHECK(!units(&c[i]) && c[i].channel_count==11);
     }
-    double initial[9];memcpy(initial,c[0].values,sizeof initial);
+    double initial[11];memcpy(initial,c[0].values,sizeof initial);
     ps_statistics noise={0};
     for(unsigned step=0;step<=5000;step++) {
-        for(unsigned channel=0;channel<9;channel++)CHECK(near(c[0].values[channel],c[1].values[channel]));
+        for(unsigned channel=0;channel<11;channel++)CHECK(near(c[0].values[channel],c[1].values[channel]));
         for(unsigned i=0;i<2;i++) {
             double a=c[i].values[0],w=c[i].values[1],vx=c[i].values[6],vy=c[i].values[7],speed=c[i].values[8];
             CHECK(near(vx,1.2*cos(a)*w) && near(vy,1.2*sin(a)*w));
@@ -90,7 +90,7 @@ static int pair(const char *c_path,const char *phys_path,bool verlet) {
     if(density)CHECK(c[0].values[4]<initial[4]*.99);
     for(unsigned i=0;i<2;i++) {
         ps_context peer={.struct_size=sizeof peer,.api_version=PS_API_VERSION,.seed=1007};
-        double held[9];memcpy(held,c[i].values,sizeof held);ps_rng held_rng=c[i].rng;
+        double held[11];memcpy(held,c[i].values,sizeof held);ps_rng held_rng=c[i].rng;
         CHECK(ps_parameter_override(&peer,"integrator",0)==PS_OK &&
               ps_parameter_override(&peer,"mass",.25)==PS_OK &&
               ps_parameter_override(&peer,"length",.7)==PS_OK &&
@@ -100,9 +100,9 @@ static int pair(const char *c_path,const char *phys_path,bool verlet) {
               near(peer.values[1],-.01*9.80665/.7*sin(-.5)));
         CHECK(!memcmp(held,c[i].values,sizeof held) && !memcmp(&held_rng,&c[i].rng,sizeof held_rng));
         CHECK(api[i]->reset(&c[i])==PS_OK);
-        for(unsigned channel=0;channel<9;channel++)CHECK(near(c[i].values[channel],initial[channel]));
+        for(unsigned channel=0;channel<11;channel++)CHECK(near(c[i].values[channel],initial[channel]));
         api[i]->destroy(&peer);
-        double saved[9];memcpy(saved,c[i].values,sizeof saved);ps_rng rng=c[i].rng;
+        double saved[11];memcpy(saved,c[i].values,sizeof saved);ps_rng rng=c[i].rng;
         CHECK(api[i]->step(&c[i],NAN)==PS_INVALID && !memcmp(saved,c[i].values,sizeof saved) && !memcmp(&rng,&c[i].rng,sizeof rng));
         CHECK(api[i]->step(&c[i],1e155)!=PS_OK && !memcmp(saved,c[i].values,sizeof saved) &&
               !memcmp(&rng,&c[i].rng,sizeof rng));
@@ -148,10 +148,10 @@ static int selectable(const char *c_path,const char *phys_path) {
             }
         }
         if(method!=3 || !medium) {
-            double initial[9];memcpy(initial,c[0].values,sizeof initial);
+            double initial[11];memcpy(initial,c[0].values,sizeof initial);
             for(unsigned step=0;step<500;step++) {
                 for(unsigned i=0;i<2;i++){CHECK(api[i]->step(&c[i],.002)==PS_OK);c[i].time_s=(step+1)*.002;}
-                for(unsigned channel=0;channel<9;channel++)CHECK(near(c[0].values[channel],c[1].values[channel]));
+                for(unsigned channel=0;channel<11;channel++)CHECK(near(c[0].values[channel],c[1].values[channel]));
                 if(step==0 && method<2) {
                     double w=-.002*9.80665/1.2*sin(.6);
                     CHECK(near(c[0].values[1],w) && near(c[0].values[0],method==0?.6:.6+.002*w));
@@ -159,7 +159,7 @@ static int selectable(const char *c_path,const char *phys_path) {
             }
             for(unsigned i=0;i<2;i++) {
                 CHECK(api[i]->reset(&c[i])==PS_OK);
-                for(unsigned channel=0;channel<9;channel++)CHECK(near(c[i].values[channel],initial[channel]));
+                for(unsigned channel=0;channel<11;channel++)CHECK(near(c[i].values[channel],initial[channel]));
             }
         }
         for(unsigned i=0;i<2;i++)api[i]->destroy(&c[i]);

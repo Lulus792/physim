@@ -47,7 +47,13 @@ int main(int argc, char **argv) {
     double time, values[PS_MAX_CHANNELS];
     unsigned rows = 0;
     double previous=0,first=0,energy=0;bool varied=false;
-    if(adaptive)CHECK(reader.channels==9 && strstr(reader.metadata,"step_mode=adaptive\n"));
+    if(adaptive)CHECK((reader.channels==9 || reader.channels==11) && strstr(reader.metadata,"step_mode=adaptive\n"));
+    bool accounted=reader.channels==11;
+    if(adaptive && accounted) {
+        const int8_t joules[]={2,1,-2,0,0,0,0};
+        CHECK(!strcmp(reader.schema[9].name,"energy.dissipated") && !strcmp(reader.schema[10].name,"energy.balance") &&
+              !memcmp(reader.schema[9].dimension,joules,7) && !memcmp(reader.schema[10].dimension,joules,7));
+    }
     if(adaptive) {
         const char *names[]={"velocity.x","velocity.y","speed"};
         const int8_t dimension[]={1,0,-1,0,0,0,0};
@@ -58,6 +64,7 @@ int main(int argc, char **argv) {
     while ((result = ps_run_next(&reader, &time, values)) == PS_OK) {
         CHECK(rows <= (adaptive?500u:200u));
         if(adaptive) {
+            if(accounted)CHECK(values[9]==0 && values[10]==values[4]);
             if(!rows)energy=values[4];
             else {
                 CHECK(time>previous && time<=previous+.1);

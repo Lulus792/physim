@@ -37,7 +37,7 @@ metadata(runs[1],unknown,lambda s:s.replace('adaptive_integrator=Dormand-Prince 
 missing=work/'missing-adaptive.psrun'
 metadata(runs[1],missing,lambda s:'\n'.join(line for line in s.split('\n') if not line.startswith('adaptive_integrator=')))
 for language,module in [('c',c_analysis),('phys',phys_analysis)]:
-    prefix=work/f'mixed-{language}';command([analyzer,module,'--runs',prefix,*runs]);command([probe,str(prefix)+'.psreport',*labels])
+    prefix=work/f'mixed-{language}';command([analyzer,module,'--runs',prefix,*runs]);command([probe,str(prefix)+'.psreport',*labels,'--balance-count=6'])
     prefix=work/f'legacy-{language}';command([analyzer,module,legacy,prefix]);command([probe,str(prefix)+'.psreport','Run 1 / Euler'])
     for name,run in [('unknown',unknown),('missing',missing)]:
         prefix=work/f'{name}-{language}';command([analyzer,module,run,prefix],False)

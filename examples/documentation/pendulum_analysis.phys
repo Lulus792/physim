@@ -30,6 +30,8 @@ func analyze():
     let rateUnit = Unit(0,0,-1,0,0,0,0,1,"Hz")
     let radians = Unit(0,0,0,0,0,0,0,1,"rad")
     let decay = Table("Observed amplitude decay",["Peak intervals","Mean log decrement","Mean rate","Minimum rate","Maximum rate"],[one,one,rateUnit,rateUnit,rateUnit])
+    var balancePlot: Plot? = nil
+    var balanceTable: Table? = nil
     for index in 0..<inputCount():
         let run = Dataset(index)
         let name = runLabel(run,index)
@@ -37,6 +39,17 @@ func analyze():
         let angle = run.series("angle")
         let energy = run.series("energy")
         let drift = energy.affine(1,-energy.value(0),joules)
+        if let balance = attempt(run.series("energy.balance")):
+            let dissipated = run.series("energy.dissipated")
+            let error = balance.affine(1,-balance.value(0),joules)
+            if let plot = balancePlot:
+                plot.curve(time,error,name)
+            else:
+                balancePlot = Optional.some(error.plot(time,"Energy balance error",name))
+                balanceTable = Optional.some(Table("Energy balance",["Final dissipated energy","Maximum balance error"],[joules,joules]))
+            if let table = balanceTable:
+                table.row(name,[Quantity(dissipated.value(dissipated.count()-1),joules),Quantity(max(abs(error.minimum()),abs(error.maximum())),joules)])
+            Series.exportColumns([time,energy,dissipated,balance,error],"balance_" + String(index + 1))
         if index > 0:
             anglePlot.curve(time,angle,name)
             energyPlot.curve(time,drift,name)

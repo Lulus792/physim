@@ -22,32 +22,35 @@ static const double sensor_noise_rad = 0.0;
 static const ps_integrator default_integrator = PS_PENDULUM_METHOD;
 static const double absolute_tolerance = 1e-10, relative_tolerance = 1e-8;
 typedef struct {
-    double y[2], length, initial_angle, mass, density, coefficient, area, noise, method;
+    double y[3], length, initial_angle, mass, density, coefficient, area, noise, method;
 } pendulum;
 static void derivative(double t, const double *y, double *dy, void *u) {
     (void)t;
     const pendulum *p=u;
     dy[0] = y[1];
     dy[1] = -gravity_m_s2 / p->length * sin(y[0]);
+    dy[2] = 0;
     if (p->density > 0 && p->coefficient > 0 && p->area > 0) {
         ps_medium medium = {p->density, 0, "uniform pendulum medium"};
         ps_vec3 drag = ps_drag_force(ps_v3(p->length * y[1], 0, 0), medium, p->coefficient, p->area);
         dy[1] += drag.x / (p->mass * p->length);
+        dy[2] = -drag.x * (p->length * y[1]);
     }
 }
-static ps_result measure(ps_context *c, const double state[2]) {
+static ps_result measure(ps_context *c, const double state[3]) {
     pendulum *p = c->user;
     double a = state[0], w = state[1];
     double values[] = {a, w, p->length * sin(a), -p->length * cos(a),
         0.5 * p->mass * p->length * p->length * w * w +
         p->mass * gravity_m_s2 * p->length * (1 - cos(a)), a,
-        p->length * cos(a) * w, p->length * sin(a) * w, p->length * fabs(w)};
-    for (unsigned i = 0; i < 9; i++)
+        p->length * cos(a) * w, p->length * sin(a) * w, p->length * fabs(w), state[2], 0};
+    values[10] = values[4] + state[2];
+    for (unsigned i = 0; i < 11; i++)
         if (!isfinite(values[i])) return PS_NUMERIC;
     ps_rng rng = c->rng;
     if (p->noise) values[5] += ps_rng_normal(&rng, 0, p->noise);
     if (!isfinite(values[5])) return PS_NUMERIC;
-    for (unsigned i = 0; i < 9; i++) c->values[i] = values[i];
+    for (unsigned i = 0; i < 11; i++) c->values[i] = values[i];
     c->rng = rng;
     return PS_OK;
 }
@@ -58,10 +61,10 @@ static void acceleration(double t, const double *q, double *a, void *user) {
 }
 static ps_result reset(ps_context *c) {
     pendulum *p = c->user;
-    double initial[] = {p->initial_angle, 0};
+    double initial[] = {p->initial_angle, 0, 0};
     ps_rng_seed(&c->rng, c->seed);
     ps_result result = measure(c, initial);
-    if (result == PS_OK) { p->y[0] = initial[0]; p->y[1] = 0; }
+    if (result == PS_OK) { p->y[0] = initial[0]; p->y[1] = 0; p->y[2] = 0; }
     return result;
 }
 static ps_result create(ps_context *c) {
@@ -112,9 +115,12 @@ static ps_result create(ps_context *c) {
     ps_channel_add(c, "velocity.x", velocity, "Horizontal velocity");
     ps_channel_add(c, "velocity.y", velocity, "Vertical velocity");
     ps_channel_add(c, "speed", velocity, "Nonnegative tangential speed");
+    if (ps_channel_add(c, "energy.dissipated", PS_JOULE, "Integrated quadratic drag loss") != 9 ||
+        ps_channel_add(c, "energy.balance", PS_JOULE, "Mechanical plus integrated dissipated energy") != 10)
+        return PS_LIMIT;
     snprintf(
         c->model_metadata, sizeof c->model_metadata,
-        "model=point pendulum, massless rigid rod, uniform "
+        "energy_accounting=drag power integrated with state; balance=mechanical+dissipated\nmodel=point pendulum, massless rigid rod, uniform "
         "gravity\nlength_m=%.17g\nmass_kg=%.17g\ngravity_m_s2=%.17g\ninitial_angle_rad=%."
         "17g\nmedium_density_kg_m3=%.17g\ndrag_coefficient=%.17g\narea_m2=%.17g\nsensor_noise_"
         "rad=%.17g\nintegrator=%s\nadaptive_integrator=Dormand-Prince 5(4)\nrk45_absolute_tolerance=%.17g\nrk45_relative_tolerance=%.17g",
@@ -132,12 +138,13 @@ static ps_result step(ps_context *c, double dt) {
     pendulum *p = c->user;
     if (!isfinite(dt) || dt <= 0) return PS_INVALID;
     ps_integrator integrator=(ps_integrator)(unsigned)p->method;
-    double next[] = {p->y[0], p->y[1]};
+    double next[] = {p->y[0], p->y[1], p->y[2]};
     ps_result r = PS_OK;
     if (integrator == PS_SYMPLECTIC) {
-        double d[2];
+        double d[3];
         derivative(c->time_s, next, d, p);
         ps_symplectic_step(&next[0], &next[1], d[1], dt);
+        next[2] += dt * d[2];
     } else if (integrator == PS_VERLET) {
         r = ps_verlet_step(acceleration, p, c->time_s, dt, &next[0], &next[1], 1);
     } else if (integrator == PS_RK45) {
@@ -145,30 +152,30 @@ static ps_result step(ps_context *c, double dt) {
         options.absolute_tolerance = absolute_tolerance;
         options.relative_tolerance = relative_tolerance;
         options.initial_step = options.maximum_step = dt;
-        r = ps_ode_integrate(derivative, p, c->time_s, c->time_s + dt, next, 2, &options, NULL);
+        r = ps_ode_integrate(derivative, p, c->time_s, c->time_s + dt, next, 3, &options, NULL);
     } else
-        r = ps_ode_step(integrator, derivative, p, c->time_s, dt, next, 2);
+        r = ps_ode_step(integrator, derivative, p, c->time_s, dt, next, 3);
     if (r == PS_OK) r = measure(c, next);
-    if (r == PS_OK) { p->y[0] = next[0]; p->y[1] = next[1]; }
+    if (r == PS_OK) { p->y[0] = next[0]; p->y[1] = next[1]; p->y[2] = next[2]; }
     return r;
 }
 static ps_result adaptive_step(ps_context *c,double proposed,double minimum,double maximum,
                                 ps_step_interval *interval) {
     pendulum *p=c->user;
-    double next[] = {p->y[0], p->y[1]};
+    double next[] = {p->y[0], p->y[1], p->y[2]};
     ps_ode_options options=ps_ode_options_default();
     options.absolute_tolerance=absolute_tolerance;options.relative_tolerance=relative_tolerance;
     options.initial_step=proposed;options.minimum_step=minimum;options.maximum_step=maximum;
     ps_ode_report report;ps_ode_diagnostic diagnostic;
     ps_result result=ps_ode_step_diagnosed(derivative,p,c->time_s,c->time_s+proposed,
-                                          next,2,&options,&report,&diagnostic);
+                                          next,3,&options,&report,&diagnostic);
     if(result!=PS_OK) {
         snprintf(c->error,sizeof c->error,"%s",ps_ode_diagnostic_string(diagnostic.reason));
         return result;
     }
     result = measure(c, next);
     if (result == PS_OK) {
-        p->y[0] = next[0]; p->y[1] = next[1];
+        p->y[0] = next[0]; p->y[1] = next[1]; p->y[2] = next[2];
         *interval=(ps_step_interval){report.reached_time-c->time_s,report.next_step};
     }
     return result;

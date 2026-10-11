@@ -44,9 +44,9 @@ def check(project):
     digest = hashlib.sha256(run.read_bytes()).digest()
     rows, header, metadata, finished = [], [], {}, False
     names = ["angle", "angular_velocity", "position.x", "position.y", "energy",
-             "sensor.angle", "velocity.x", "velocity.y", "speed"]
+             "sensor.angle", "velocity.x", "velocity.y", "speed", "energy.dissipated", "energy.balance"]
     dimensions = [(0,0,0), (0,0,-1), (1,0,0), (1,0,0), (2,1,-2),
-                  (0,0,0), (1,0,-1), (1,0,-1), (1,0,-1)]
+                  (0,0,0), (1,0,-1), (1,0,-1), (1,0,-1), (2,1,-2), (2,1,-2)]
     with run.open("rb") as file:
         assert file.read(16) == b"PSRUN17\n"+struct.pack("<II",1,0x01020304)
         while chunk := file.read(12):
@@ -56,18 +56,19 @@ def check(project):
             if kind == 1:
                 metadata = dict(line.split("=",1) for line in data.decode().splitlines() if "=" in line)
             elif kind == 2:
-                assert struct.unpack_from("<I",data)[0] == 9 and size == 4+9*167
+                assert struct.unpack_from("<I",data)[0] == 11 and size == 4+11*167
                 header = ["time [s]"]
                 for i, (name, dimension) in enumerate(zip(names, dimensions)):
                     at = 4+i*167
                     assert data[at:at+48].split(b"\0")[0].decode() == name
                     unit = data[at+48:at+64].split(b"\0")[0].decode()
                     assert struct.unpack_from("<7b",data,at+160) == dimension+(0,0,0,0)
-                    if i >= 6:
+                    if 6 <= i <= 8:
                         assert unit == "m/s"
+                    if i>=9: assert unit=="J"
                     header.append(f"{name} [{unit}]")
             elif kind == 3:
-                rows.append(struct.unpack("<10d",data))
+                rows.append(struct.unpack("<12d",data))
             elif kind == 4:
                 assert struct.unpack("<Q",data)[0] == len(rows)
                 finished = True
@@ -75,11 +76,13 @@ def check(project):
     assert metadata["integrator"] == "RK4" and metadata["parameter.integrator"] == "2"
     assert float(metadata["parameter.mass"]) == 2 and float(metadata["parameter.airDensity"]) == 1.225
     assert float(metadata["parameter.sensorNoise"]) == .02
-    for t, angle, omega, x, y, energy, sensed, vx, vy, speed in rows:
+    for t, angle, omega, x, y, energy, sensed, vx, vy, speed, dissipated, balance in rows:
         assert near(x,1.5*math.sin(angle)) and near(y,-1.5*math.cos(angle))
         assert near(vx,1.5*math.cos(angle)*omega) and near(vy,1.5*math.sin(angle)*omega)
         assert speed >= 0 and near(speed,math.hypot(vx,vy))
         assert near(energy,speed*speed+2*9.80665*(y+1.5))
+        assert dissipated >= 0 and near(balance,energy+dissipated)
+        assert abs(balance-rows[0][11]) < 1e-8
     assert rows[-1][5] < rows[0][5]*.99
     noise = [r[6]-r[1] for r in rows]
     mean = sum(noise)/len(noise)
@@ -99,6 +102,12 @@ def check(project):
     for line, row in zip(energy_exports[0][1:],rows):
         expected = (row[0],row[5],row[5]-rows[0][5]) if columns == 3 else (row[0],row[1],row[5],row[5]-rows[0][5])
         assert len(line) == columns and all(near(float(a),b) for a,b in zip(line,expected))
+    balance_exports = [values for path,values in exports.items()
+                       if path.name.endswith("-balance.csv") or "-balance_" in path.name]
+    assert len(balance_exports)==1 and len(balance_exports[0])==len(rows)+1
+    for line,row in zip(balance_exports[0][1:],rows):
+        expected=(row[0],row[5],row[10],row[11],row[11]-rows[0][11])
+        assert len(line)==5 and all(near(float(a),b) for a,b in zip(line,expected))
     peaks = [rows[i] for i in range(1,len(rows)-1)
              if rows[i-1][1] < rows[i][1] > rows[i+1][1] and rows[i][1] > 0]
     assert len(peaks) >= 2
@@ -121,7 +130,7 @@ def check(project):
     assert len(svgs) == len(images) == 1
     svg = ET.fromstring(svgs[0].read_bytes())
     text = " ".join(svg.itertext())
-    assert "Mechanische Energieänderung" in text or "Energy change" in text
+    assert "Energiebilanz" in text or "Energy change" in text
     assert "J" in text and svg.tag.endswith("svg")
     png(images[0])
     assert hashlib.sha256(run.read_bytes()).digest() == digest

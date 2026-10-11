@@ -4033,3 +4033,64 @@ Diese Änderung besitzt noch keinen ausgeführten Linux-/Windows-Nachweis.
 Die umfassende Mechanikabnahme und der Gesamtplan bleiben offen. Der frühere
 Transformationsnachweis wurde vollständig in das Plattformarchiv verschoben,
 um beide Handbuchseiten unter der Parsergrößengrenze zu halten.
+
+## Pendel: Verlustenergie und numerische Bilanz (PP-0756/0767/0779)
+
+Ausgangspunkt am 11. Oktober 2026 ist
+`50cb4bf3aafec29a41b64627998b31980545996d`. Allgemeine C-/Physim-Pendelvorlagen
+integrieren neben Winkel und Winkelgeschwindigkeit den Widerstandsverlust D:
+`D'=0.5*rho*Cd*A*|L*omega|^3`, `D(0)=0`. Zwei zusätzliche SI-Kanäle speichern
+`energy.dissipated` und `energy.balance=energy+D`. Die ursprünglichen neun
+Kanäle behalten Reihenfolge und Bedeutung; aktuelle Vorlagen besitzen elf.
+Neue Projekte erhalten die Quellen; bereits vorhandene Projektquellen werden
+weiterhin erhalten. ABI und Dateiformate bleiben unverändert.
+
+Euler/RK4/RK45 integrieren den dritten Zustand mit ihren Bewegungsstufen.
+Symplektisches Euler verwendet für den Verlust die alte Geschwindigkeit wie
+bei der expliziten Widerstandsbeschleunigung. Verlet bleibt auf widerstandsfreie
+Bewegung beschränkt. Adaptive RK45-Fehlerkontrolle umfasst drei Komponenten;
+absolute Toleranz gilt numerisch auch in Joule. Die Bilanz ist ein physikalisches
+Prüfkriterium, keine Zusage exakter Bewegung oder exakter Verlustintegration.
+
+C-Standardanalyse und beide Lernanalysen zeigen den numerischen Bilanzfehler
+getrennt von mechanischer Energieänderung und Amplitudenabnahme. Vollständige
+Bilanz-CSVs behalten jedes gespeicherte Zeitraster. Ältere Läufe ohne diese
+Kanäle und gemischte aktuelle/ältere Eingaben funktionieren weiter; der
+zusätzliche Bilanzbericht enthält nur entsprechend ausgestattete Läufe.
+
+Tatsächlich ausgeführt auf Intel macOS 14.6.1, AppleClang 16, Release:
+
+- `build/current-pendulum-ledger-confirmed-native-mac.log`, Ergebnisse
+  `build/current-headless-mac/test-results/run-yyrxbxki`: **14/14 bestanden**.
+  Ganze native Pendelgruppe und Sprach-Experimentregression: analytische
+  Perioden/Energie, adaptive und Verlet-Referenzen, Lernpfad, Instanzen, Kräfte,
+  Vorlagenanalyse, Medium/Rauschen/Reset, Abnahme/Legacyberichte und Codeblöcke.
+- Neue `pendulum_energy_balance`-Prüfung: **30** C-/Physim-Integrationen,
+  fünf Verfahren bei dt=0.08/0.04/0.02 s über vier Sekunden; monotone
+  Verlustgröße, SI-Dimensionen, unabhängige Modellbilanz, Parität und Reset.
+  RK4-Maximalfehler der Bilanz: 0.000276831278 / 0.0000069609172 /
+  0.000000135272161 J. Verlet im Vakuum zeigt zweite Ordnung; adaptive RK45
+  bleibt bei feinster Auswahl unter 2e-7 J. Die Energiebilanz kann schneller
+  konvergieren als der Zustand; keine allgemeine Ordnungsgarantie wird abgeleitet.
+- Neue `pendulum_balance_reports`-Prüfung: zwei tatsächlich gespeicherte
+  C-/Physim-Runs mit je **2001** Samples, sechs gemischte Berichte in C und
+  Physim, **12006** vollständige exportierte Bilanzzeilen. Unabhängiger
+  PSRUN-/CRC-/Footerdecoder vergleicht jeden Energie-, Verlust-, Bilanz- und
+  Fehlerwert; native Berichtsprüfer kontrollieren Kurven, Einheiten und Tabellen.
+- Neue `pendulum_parameter_runs` führt den bestehenden SDK-Pendelprüfer
+  zusätzlich im Repository aus: sechs Modelle, alle fünf Verfahren, Vakuum/
+  Widerstand, **54** gültige feste Runs, **18** abgewiesene Einstellungen,
+  sechs adaptive Runs und zwölf adaptive Berichte. Dies ist keine neue
+  verschobene SDK-/Paketabnahme.
+- `build/current-pendulum-ledger-gui-final-mac.log`, Ergebnisse
+  `build/current-release-mac/test-results/run-3pwe1d50`: **2/2 bestanden**.
+  Tatsächliche C-/Physim-Appketten für C-Energieauswertung sowie beide
+  Widerstands-/Rauschvorlagen. Build, Parameter, Runner, Szene, Speicherung,
+  Analyse, vollständige rohe/abgeleitete CSVs, Amplitudenintervalle, SVG und
+  vollständig dekodierte PNGs geprüft. Bildschirminhalt und Energieexport
+  wurden zusätzlich visuell geprüft.
+
+Für diese Änderung liegt noch kein aktueller Linux-/Windows-/Apple-Silicon-
+Nachweis vor. Gesamtplan und vollständige vertikale Plattform-/Paketabnahme
+bleiben offen. Der Lernpfad dokumentiert Gleichungen, Quellen, Toleranzumfang
+und die Trennung von physikalischer Dissipation und numerischem Bilanzfehler.
