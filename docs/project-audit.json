@@ -300,9 +300,16 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Die Physikbibliothek besitzt keine GUI-Abhängigkeit.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "tools/build.py",
+        "include/physim",
+        "src",
+        "tools/sdk_probe.c",
+        "tools/verify-native-sdk.py",
+        "docs/platform-validation.md"
+      ],
+      "note": "Alle 52 öffentlichen Header und 28 Core-Quellmodule auf GUI-Includes geprüft; im tatsächlich ohne SDL/App gebauten Core-Archiv fehlen SDL-/Nuklear-/OpenGL-/AppKit-Symbolabhängigkeiten. Unabhängige SDK-Probes linken gegen installierte und aus SDK-Quellen neu gebaute Core-Archive. Beleg am 2026-10-11: build/current-base-requirement-receipt.json, tatsächlicher Headless-Build und laufende SDK-Libraryprüfungen. Dieser Block betrifft nur die GUI-freie Bibliothek, nicht die gesamte Plattformabnahme."
     },
     {
       "id": "PP-0057",
@@ -476,9 +483,15 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Beispielprojekte und automatisierte Tests gehören zum Repository.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "examples",
+        "tests",
+        "tests/native_integration_cases.json",
+        "tools/native_tests.py",
+        "docs/platform-validation.md"
+      ],
+      "note": "636 Beispiel-/Testdateien sind mit Git verfolgt, einschließlich aller 635 gegenwärtig erforderlichen C-/Physim-/Python-/Header-/Konfigurations-/Dokument-/Asseteingaben. Die tatsächlich ausgeführten nativen und SDK-Tests verwenden diese Eingaben. Die Bestandsprüfung verwendet NUL-separierte Git-Dateinamen und erhält Unicodepfade. Beleg am 2026-10-11: build/current-base-requirement-receipt.json; generierte Builds und Laufdaten bleiben ignoriert."
     },
     {
       "id": "PP-0071",

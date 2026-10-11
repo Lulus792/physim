@@ -2531,3 +2531,30 @@ mit 135 Sekunden äußerem Prozesslimit angehoben. Alle Fokus-, Eingabe-,
 Clipboard-, Navigations- und Fehlerprüfungen bleiben erhalten; die normalen
 Dokumentationsmodi behalten 60 Sekunden. Eine neue tatsächlich ausgeführte
 Intel-CI-/Gesamtpaketprüfung bleibt bis zu ihrem Ergebnis offen.
+
+
+## Aktuelle Library-/Repository-Grenzen
+
+`build/current-base-requirement-receipt.json` ordnet die Bestandsprüfung dem
+Commit `bfb7967a9e142400a744a60d26967a2325c4dedb` zu. Alle 52 öffentlichen
+Header und 28 Core-Quellmodule enthalten keine direkten SDL-/Nuklear-/OpenGL-/
+AppKit-Includes. Die Imports des tatsächlich ohne SDL/App gebauten
+`build/current-headless-mac/lib/libphysim-core.a` enthalten keine entsprechenden
+GUI-Symbole; dessen SHA-256 ist
+`c8a9918448ff15361a0f2f266c8a2da6587bf390b10e433f9b87d2df8b2c5144`.
+Die SDK-Library-Probes linken ohne GUI gegen installierte und neu gebaute
+Core-Archive. Damit ist die Library-Grenze PP-0056 konkret nachgewiesen.
+
+Die NUL-separierte Git-Inventur belegt 636 verfolgte Beispiel-/Testdateien
+und alle 635 erforderlichen Code-, Header-, Physim-, Python-, Konfigurations-,
+Dokument- und Assetdateien dieses Baums. Auch `Größe.phys` wird bytegetreu
+zugeordnet; Shell-/Git-Darstellungsquotierung gilt nicht als fehlende Datei.
+Damit ist PP-0067 konkret nachgewiesen. Diese begrenzten Einzelabnahmen
+behaupten keine bestandene vollständige Produkt-/Plattformprüfung.
+
+Die neue unverkürzte lokale Headless-Release-Suite läuft unter
+`build/current-headless-mac` mit Log `build/current-complete-native-mac.log`.
+Die neue vollständige SDK-Prüfung läuft aus der finalen unabhängigen Mappe in
+`build/current-full-sdk-proof-mac/Native SDK ä i6gbzrb2`, Log
+`build/current-full-sdk-proof-mac.log`, mit `--app-tests --archive-bitmaps`.
+Beide bleiben bis zu ihrem tatsächlichen Ende offene Gesamtnachweise.

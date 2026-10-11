@@ -654,3 +654,19 @@ macOS-Verzeichnisse sind in der Plattformprüfung getrennt dokumentiert.
 Alle **531 Originalblöcke** und die Originalplanprüfsumme bleiben erhalten:
 **45 implemented**, **10 incomplete**, **476 unverified**.
 `completion_proven` bleibt `false`.
+
+
+## Einzelabnahme der Bibliotheksgrenze und Repository-Eingaben
+
+PP-0056 ist für die GUI-freie Library nachgewiesen: 52 öffentliche Header,
+28 Core-Quellmodule und die Imports des tatsächlich ohne SDL/App gebauten
+Core-Archivs enthalten keine GUI-Abhängigkeit. PP-0067 ist durch die aktuelle
+NUL-separierte Git-Bestandsprüfung von 636 Beispiel-/Testdateien einschließlich
+aller 635 erforderlichen Code-/Konfigurations-/Dokument-/Asseteingaben belegt.
+Unicodepfade bleiben korrekt erhalten. Die Receipt und das konkrete Archiv
+sind in der Plattformprüfung dokumentiert. Diese Einzelabnahmen ersetzen
+keine vollständige SDK- oder Plattformabnahme.
+
+Alle 531 Originalblöcke und die Planprüfsumme bleiben erhalten:
+**47 implemented**, **10 incomplete**, **474 unverified**;
+`completion_proven` bleibt `false`.
