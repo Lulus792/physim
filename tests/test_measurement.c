@@ -115,6 +115,26 @@ int main(void) {
     c = config();
     c.rate_hz = DBL_MIN / 4;
     CHECK(ps_sensor_config_validate(&c) == PS_NUMERIC);
+    /* Invalid uncertainty/sensor controls cannot partly replace an instance. */
+    for(unsigned bad=0;bad<8;bad++) {
+        c=config();
+        switch(bad) {
+        case 0:c.uncertainty_absolute=-.01;break;
+        case 1:c.uncertainty_relative=-.01;break;
+        case 2:c.dropout_probability=-.01;break;
+        case 3:c.dropout_probability=1.01;break;
+        case 4:c.resolution=-.01;break;
+        case 5:c.resolution=NAN;break;
+        case 6:c.offset=INFINITY;break;
+        default:c.drift_per_s=NAN;break;
+        }
+        CHECK(ps_sensor_config_validate(&c)==PS_INVALID);
+        CHECK(ps_sensor_init(&sensor,&c,0)==PS_INVALID && !memcmp(&sensor,&snapshot,sizeof sensor));
+    }
+    c=config();c.uncertainty_absolute=1e308;
+    CHECK(ps_sensor_init(&sensor,&c,42)==PS_OK);
+    CHECK(ps_sensor_read(&sensor,0,(ps_quantity){1,PS_METRE},&m)==PS_OK &&
+          m.state==PS_MEASUREMENT_VALID && m.value.value==1 && m.standard_uncertainty==1e308);
     c = config();
     c.resolution = .5;
     CHECK(ps_sensor_init(&sensor, &c, 0) == PS_OK);

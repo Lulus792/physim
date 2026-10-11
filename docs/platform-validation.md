@@ -4100,3 +4100,36 @@ Quellen, Headern und Programmen: `build/current-language-balance-sdk-install-mac
 protokollieren jeweils einen Appprozess mit Exit 0. Der fokussierte
 Linux-Sanitizerworkflow registriert die beiden Fälle zusätzlich; seine
 Konfiguration gilt noch nicht als ausgeführter Nachweis der Korrektur.
+
+
+## Unsicherheit, Sensorparameter und getrennte Modelle (PP-0401/0402/0406)
+
+Die ursprünglichen Planblöcke sind einzeln gegen die vorhandenen
+Standardunsicherheits-/Sensor-/Messdatenpfade abgeglichen. Neue negative
+Konfigurationsfälle prüfen absolute/relative Unsicherheit, Auflösung,
+Dropout-Wahrscheinlichkeit, Offset und Drift samt vollständiger
+Zustandserhaltung. Ein einzelner absoluter Beitrag von **1e308** wird
+korrekt ausgegeben, obwohl sein Quadrat nicht als Double darstellbar wäre.
+Bestehende unabhängige C-/Physim-Sensor-/Bewegungsreferenzen bleiben erhalten.
+
+Intel macOS 14.6.1 / AppleClang 16, tatsächlich ausgeführt:
+
+- `build/current-measurement-uncertainty-model-mac.log`, Release-Ergebnisse
+  `build/current-headless-mac/test-results/run-_tgsqax9`: **7/7 bestanden**.
+  Einheitenskalierung, RSS-Beiträge, Quantisierungsgleichstände, Drift/Offset,
+  indexbasiertes Rauschen/Dropout, Sparse-/Vollraster, vier vollständige
+  64-Bit-Seeds, Reset/Kopien, Bereichsfehler und Ausgabeerhaltung sind geprüft.
+- `build/current-measurement-uncertainty-model-asan.log`: direkter
+  C-Messungstest mit AddressSanitizer/UBSan bestanden; LeakSanitizer deaktiviert.
+- `build/current-measurement-model-separation-reports-mac.log`, Ergebnisse
+  `build/current-headless-mac/test-results/run-83v_4dvz`: **2/2 bestanden**,
+  tatsächliche C-/Physim-Wurfläufe samt Analysen und eigenständige
+  Status-/Messfehlerberichte. Ideale Kurven und gültige Messpunkte bleiben
+  getrennt; Histogramme/Statistik behandeln leere und einzelne gültige Werte.
+- `build/current-measurement-model-separation-analysis-mac.log`, Ergebnisse
+  `build/current-headless-mac/test-results/run-xy8zjsj0`: **1/1 bestanden**,
+  bisheriger Sprach-Analysepfad zusätzlich ausgeführt.
+
+Diese Belege schließen begrenzte Bibliotheksanforderungen; Sensor-
+Standardunsicherheit ist weiterhin kein Konfidenzintervall oder vollständiges
+Kalibrierungsmodell. Die gesamte aktuelle Plattform-/Produktabnahme bleibt offen.

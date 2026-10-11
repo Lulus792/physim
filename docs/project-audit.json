@@ -3457,9 +3457,19 @@
       "kind": "list",
       "scope": "planned",
       "text": "- absolute und relative Unsicherheit.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/measurement.h",
+        "src/measurement.c",
+        "tests/test_measurement.c",
+        "tests/test_language_sensor.c",
+        "tests/test_uncertain_projectile_parity.c",
+        "tests/test_language_report.c",
+        "examples/language/sensors.phys",
+        "examples/language/analysis_sensors.phys",
+        "docs/measurement.md"
+      ],
+      "note": "SensorConfig besitzt absolute und relative Standardunsicherheit. Die RSS-Rechnung verwendet den idealen Signalbetrag, unabhängige Rausch-/Auflösungskomponenten und die konfigurierte Einheit; Bias/Drift sind davon getrennt. C-/Physim-Werte, Zentimeter-/Meterkonvertierung, ungültige negative Angaben, atomare Fehler und eine darstellbare absolute Unsicherheit von 1e308 sind auf Intel macOS tatsächlich geprüft. Keine automatische Konfidenz-/Kalibrierungsaussage; aktuelle ganze Plattformabnahme bleibt offen."
     },
     {
       "id": "PP-0402",
@@ -3472,9 +3482,19 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Sensorauflösung, Offset, Drift, Rauschen und Ausfallmodell.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/measurement.h",
+        "src/measurement.c",
+        "tests/test_measurement.c",
+        "tests/test_language_sensor.c",
+        "tests/test_uncertain_projectile_parity.c",
+        "tests/test_language_report.c",
+        "examples/language/sensors.phys",
+        "examples/language/analysis_sensors.phys",
+        "docs/measurement.md"
+      ],
+      "note": "Auflösung mit nearest-even-Quantisierung, Offset, lineare Drift, explizite Rauschverteilung und indexbasierter Bernoulli-Ausfall sind implementiert. C-/Physim-Parität, Raster-/Seed-/Reset-/Kopierverhalten, unabhängige Rausch-/Dropout-Streams, dünne und vollständige Abtastung, Bereichsablehnung und Fehleratomizität sind auf Intel macOS ausgeführt. Der Sensor verändert das physikalische Idealmodell nicht; aktuelle ganze Plattformabnahme bleibt offen."
     },
     {
       "id": "PP-0403",
@@ -3546,9 +3566,19 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Ideales Modell und Messmodell bleiben getrennt, sodass ihr Einfluss vergleichbar ist.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/measurement.h",
+        "src/measurement.c",
+        "tests/test_measurement.c",
+        "tests/test_language_sensor.c",
+        "tests/test_uncertain_projectile_parity.c",
+        "tests/test_language_report.c",
+        "examples/language/sensors.phys",
+        "examples/language/analysis_sensors.phys",
+        "docs/measurement.md"
+      ],
+      "note": "Ideale Position, nominaler Erwartungswert, gültige Sensorwerte, Unsicherheit und Status bleiben eigene gespeicherte Kanäle. Tatsächliche C-/Physim-Wurfläufe werden gegen getrennte physikalische und Sensormodelle geprüft. Analysen vergleichen ideale Kurven, gültige Messpunkte und Messfehlerhistogramme; Null-/Einzelwertfälle und Statusfilterung sind geprüft. Neue aktuelle Intel-macOS-Nachweise bestehen; vollständige Plattform-/Produktabnahme bleibt offen."
     },
     {
       "id": "PP-0410",

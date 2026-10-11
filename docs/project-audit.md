@@ -1035,3 +1035,16 @@ Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **97 implemented**, **13 incomplete**, **421 unverified**;
 `completion_proven` bleibt `false`. Die gesamte Projekt- und Plattformabnahme
 bleibt offen.
+
+
+## Einzeln belegte Unsicherheits- und Messmodellverträge
+
+PP-0401/0402/0406 besitzen jetzt konkrete Code- und Laufnachweise für absolute/
+relative Standardunsicherheit, Sensorparameter und getrennte Ideal-/Messkanäle.
+Neue negative Konfigurationen und ein darstellbarer sehr großer Einzelbeitrag
+bestehen; unabhängige C-/Physim-Läufe und Messfehlerberichte sind ausgeführt.
+[Nachweise und Grenzen](platform-validation.md#unsicherheit-sensorparameter-und-getrennte-modelle-pp-040104020406).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**100 implemented**, **13 incomplete**, **418 unverified**;
+`completion_proven` bleibt `false`. Die ganze Plattform- und Produktabnahme
+bleibt offen.
