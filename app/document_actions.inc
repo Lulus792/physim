@@ -5,6 +5,7 @@ static workspace_document *active_document(app *a) {
 static void document_select(app *a, unsigned index) {
     if (index >= a->document_count)
         return;
+    completion_close(a);
     a->document_active = index;
     a->document_pending = 0;
     a->project_manager = false;
@@ -217,6 +218,7 @@ static bool documents_save_all(app *a) {
     return true;
 }
 static void document_remove(app *a) {
+    completion_close(a);
     unsigned index = a->document_active;
     workspace_document *doc = active_document(a);
     if (!doc)

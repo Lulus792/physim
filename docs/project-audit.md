@@ -852,3 +852,17 @@ bisherigen Projekt-Einstellungen bestehen in drei weiteren App-Prozessen.
 Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **66 implemented**, **13 incomplete**, **452 unverified**;
 `completion_proven` bleibt `false`.
+
+
+## Generierte API-Autovervollständigung (§6.1)
+
+PP-0255 ist umgesetzt: eine aus Referenzheadern und Compilerregistrierung
+generierte Tabelle liefert C-/Physim-Vorschläge in allen drei Editorarten.
+Öffnen per Shortcut/Button, Auswahl, Enter/Tab/Maus, dynamische Texteingabe
+und atomare Übernahme samt Undo/Redo sind tatsächlich geprüft. Statische
+Fabriken und Instanzmethoden werden unterschieden; Build und Tests erkennen
+veraltete Tabellen. Native Suche sowie kleine/große Dokument- und Ersetzen-
+Regressionen bestehen. [Nachweise und Grenzen](platform-validation.md#api-autovervollständigung-aus-generierter-symboltabelle).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**67 implemented**, **13 incomplete**, **451 unverified**;
+`completion_proven` bleibt `false`.

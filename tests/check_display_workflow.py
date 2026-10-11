@@ -351,6 +351,14 @@ def api_browser(flow,directory):
         require((directory/name).is_file(),"Missing actual API navigation view: "+name)
 
 
+def completion(flow,directory):
+    for language in ("c","phys"):
+        root=directory/language;root.mkdir(parents=True)
+        flow.run("--workspace-state-test",root,"completion-"+language,timeout=75,marker="COMPLETION SELF-TEST: PASSED")
+        for name in ("completion-experiment.bmp","completion-analysis.bmp","completion-document.bmp"):
+            require((root/name).is_file(),"Missing actual completion view: "+name)
+
+
 def project_tree(flow,directory):
     flow.run("--workspace-state-test",directory,"project-tree",timeout=30,marker="PROJECT TREE SELF-TEST: PASSED")
     project=directory / "project"
@@ -1126,7 +1134,7 @@ def workflow_pointer_isolation(flow, directory):
                 "Actual paired run/report artifacts missing")
 
 
-SPECIAL = {"build_controls_workflow": build_controls,"project_tree_workflow": project_tree,"project_manager_keyboard_errors": project_manager_errors,"api_browser_workflow": api_browser,"editor_replace_workflow": editor_replace,"runner_keyboard_workflow": runner_keyboard,"runner_isolation_workflow": runner_isolation,"step_breakpoints_workflow": step_breakpoints,"workflow_pointer_isolation": workflow_pointer_isolation,"pendulum_medium_workflow": pendulum_medium,"pendulum_c_energy_workflow": pendulum_c_energy,"project_manager_keyboard_workflow": project_manager_keyboard,"settings_keyboard_workflow": settings_keyboard,"ui_typography_workflow": ui_typography,"saved_run_tutorial_workflow": saved_run_tutorial,"monte_carlo_tutorial_workflow": monte_carlo_tutorial,"collision_tutorial_workflow": collision_tutorial,"pendulum_tutorial_workflow": pendulum_tutorial,"spring_tutorial_workflow": spring_tutorial,"material_tutorial_workflow": material_tutorial,"contact_world_language_workflow": contact_world_language,"contact_world_workflow": contact_world, "diagnostic_workflow": diagnostics, "scene_frames_workflow": scene_frames, "logging_workflow": logging, "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
+SPECIAL = {"completion_workflow": completion,"build_controls_workflow": build_controls,"project_tree_workflow": project_tree,"project_manager_keyboard_errors": project_manager_errors,"api_browser_workflow": api_browser,"editor_replace_workflow": editor_replace,"runner_keyboard_workflow": runner_keyboard,"runner_isolation_workflow": runner_isolation,"step_breakpoints_workflow": step_breakpoints,"workflow_pointer_isolation": workflow_pointer_isolation,"pendulum_medium_workflow": pendulum_medium,"pendulum_c_energy_workflow": pendulum_c_energy,"project_manager_keyboard_workflow": project_manager_keyboard,"settings_keyboard_workflow": settings_keyboard,"ui_typography_workflow": ui_typography,"saved_run_tutorial_workflow": saved_run_tutorial,"monte_carlo_tutorial_workflow": monte_carlo_tutorial,"collision_tutorial_workflow": collision_tutorial,"pendulum_tutorial_workflow": pendulum_tutorial,"spring_tutorial_workflow": spring_tutorial,"material_tutorial_workflow": material_tutorial,"contact_world_language_workflow": contact_world_language,"contact_world_workflow": contact_world, "diagnostic_workflow": diagnostics, "scene_frames_workflow": scene_frames, "logging_workflow": logging, "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}

@@ -1680,9 +1680,22 @@
       "kind": "list",
       "scope": "later",
       "text": "- Autovervollständigung aus einer generierten Physim-Symboltabelle.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "tools/generate-completions.py",
+        "app/completion_symbols.inc",
+        "app/completion.c",
+        "app/completion.h",
+        "app/completion_ui.inc",
+        "app/completion_tests.inc",
+        "app/main.c",
+        "tests/test_completion.c",
+        "tests/check_display_workflow.py",
+        "tools/build.py",
+        "docs/workspace.md",
+        "docs/platform-validation.md#api-autovervollständigung-aus-generierter-symboltabelle"
+      ],
+      "note": "Generierte Tabelle mit 621 dokumentierten C-API-Symbolen und 546 Physim-Aufrufen/Typen; App-Builds prüfen Aktualität. Tatsächliche C-/Physim-Editorbedienung über Ctrl+Leertaste und sichtbaren Button, Pfeile, Enter/Tab/Maus, Wortersetzung, dynamische Texteingabe, Fokus und Undo/Redo bestehen. Native Suche prüft UTF-8, Kommentare/Literale, statische Fabriken und Instanzmethoden. Empfängervariablen werden nicht semantisch typisiert; API-Symbolvorschläge sind durch Typbezeichnung zugeordnet. Neue andere Plattformen/SDK-Gesamtprüfung bleiben offen."
     },
     {
       "id": "PP-0256",

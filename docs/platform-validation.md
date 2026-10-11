@@ -3665,3 +3665,83 @@ vorherigen Projektbaumstand `5a0a893` meldet dessen Läufe `38143321676`
 Paketlauf `38140783654` am Stand `1624d75` besitzt bereits einen erfolgreichen
 Paketjob, seine Ubuntu-/Debian-SDK-/Fensterprüfungen liefen beim Abruf noch.
 Diese Zustände sind keine abgeschlossenen Plattformnachweise.
+
+
+## API-Autovervollständigung aus generierter Symboltabelle
+
+Am 11. Oktober 2026 besitzt die App erstmals API-Vorschläge aus einer
+generierten, mit Git verfolgten Tabelle. `tools/generate-completions.py`
+verwendet die 30 dokumentierten C-Header-Module des Referenzgenerators,
+registrierte Physim-Aufrufe und ihre Referenzsignaturen sowie die echten
+Builtin-Typnamen aus dem Checker. Das Ergebnis enthält **621 C-Symbole**
+(Funktionen, Typen, Konstanten) und **546 Physim-Aufrufe/Typen**. Registrierte
+statische Fabriken werden von Instanzmethoden unterschieden; die Tabelle
+enthält keine aus generischen Signatur-Platzhaltern erfundenen Typen.
+`--check` erkennt veraltete Tabellen; normale App-Builds führen diesen
+Abgleich vor dem Build aus. Zum Aktualisieren dient
+`python3 tools/generate-completions.py`.
+
+Eine unabhängige Kopie unter `build/current-completion-generation-h1z_cr47`
+besteht zunächst `--check`. Eine neue C-API-Deklaration in ihrer kopierten
+`core.h` macht die alte Tabelle ungültig; sowohl Generator-Abgleich als auch
+normaler App-Build enden mit Fehler, bevor ein Buildverzeichnis entsteht.
+Nach Regenerierung enthält die Kopie den neuen Namen und besteht wieder.
+Die Originalheader und Originaltabelle wurden dabei nicht geändert;
+`receipt.json` zeichnet alle fünf ausgeführten Schritte auf.
+
+Die allokationsfreie Präfixsuche arbeitet mit Bytepositionen und prüft
+UTF-8-Grenzen, Bezeichnergrenzen, Kommentare, Literale, begrenzte Präfixe
+und Empfängerschreibweise. Ein Fehler erhält die Ausgabequery. Vorschläge
+werden nach C/Physim und nach Namespace-Fabrik beziehungsweise Instanzaufruf
+gefiltert. Lokale Variablen werden hierbei nicht semantisch typisiert: Bei
+einem unbekannten Empfänger werden passende Instanzmethoden mit ihrem
+zugehörigen API-Typ angezeigt. C-Strukturfelder und lokale Projektsymbole
+sind nicht Teil dieser generierten Bibliothekstabelle.
+
+Die sichtbare Liste lässt sich per **Ctrl+Leertaste** oder Button öffnen,
+mit Pfeilen durchlaufen und per Enter, Tab oder echtem Klick übernehmen.
+Bei offenen Vorschlägen werden neue SDL-Texteingaben vor der Übernahme
+verarbeitet. Wortgrenzen reichen bis zum Ende des bestehenden Bezeichners;
+UTF-8-Präfixe und vorhandene Empfänger bleiben erhalten. Übernahme benutzt
+die atomare Nuklear-Pasteoperation und einen Undo-Schritt. Unveränderte
+Übernahmen erzeugen keinen wirkungslosen Undo-Eintrag. Nach Mausübernahme
+kehrt der Editorfokus zurück; Kontextwechsel und externe Klicks schließen
+die Liste. Textdateien ohne C-/Physim-Modus bleiben bei ihrer Textbedienung.
+
+Die abschließenden nativen Fälle `completion` und `completion_reference`
+bestehen **2/2**, Ergebnisse
+`build/current-headless-mac/test-results/run-9uwiy9jl`, Log
+`build/current-completion-native-verified-mac.log`. Sie prüfen unter anderem
+C-Funktion/Konstante/Typ, echte Sprachtypen, Instanzmethoden, statische
+Fabriken, ein Array als Empfängervariable, begrenzte Ergebnisausgaben,
+UTF-8-Positionen, Kommentare, verschachtelte Sprachkommentare, escapte
+Literale und Fehlererhaltung. Beide Generator-Abgleiche bestehen ebenfalls.
+
+Die GUI-Gesamtregression besteht **4/4**: `completion_workflow`,
+`editor_replace_workflow`, `documents_small`, `documents_large`, Ergebnisse
+`build/current-release-mac/test-results/run-r2lh9bs1`, Log
+`build/current-completion-final-regression-mac.log`. Nach dem letzten
+Empfängerabgleich besteht der Vorschlagsfall nochmals unter `run-qp6qok60`;
+die abschließende echte Button-Öffnung besteht **1/1** unter
+`build/current-release-mac/test-results/run-cn3rh8su`, Log
+`build/current-completion-ui-button-mac.log`. Die abschließende zusätzliche
+Leereditor-/Esc-Prüfung besteht **1/1** unter `run-wc13j6iy`, Log
+`build/current-completion-ui-empty-mac.log`; die zuletzt geänderte Behandlung
+leerer Buffer ist damit ebenfalls tatsächlich ausgeführt. Zwei reale App-Prozesse
+prüfen je Experiment-, Analyse- und zusätzlichen Editor in C/Physim: echte
+Ctrl+Leertaste- und Button-Öffnung, Pfeile, Enter/Tab/Maus, Übernahme mitten
+im Wort, exakte UTF-8-Endzustände, Dirty-Zustände sowie einzelne Undo-/
+Redo-Schritte. Texteingabe und Enter innerhalb desselben Ereignisframes,
+aktualisierte Vorschläge, unveränderte Übernahme und Literalsperre sind
+ebenfalls tatsächlich bedient. Sechs echte Fensterbilder unter
+`build/current-completion-preview` wurden visuell geprüft.
+
+Frühere Teststart-/Renderframefehler sind keine Produktgegenbelege: Der
+Projektstart musste zuerst die Dateiliste abwarten, Mausübernahme wird erst
+nach Release und nachfolgendem Renderframe geprüft. Danach wurde ein
+tatsächliches Fokusproblem bei Undo nach Mausübernahme sichtbar
+(`run-jrxxncd0`) und durch Rückgabe des Editorfokus behoben. Ein vollständiger
+sprachsemantischer Editor, alle Darstellungsvarianten und die aktuelle
+Linux-/Windows-/ARM-SDK-Matrix sind mit dieser Intel-macOS-Einzelprüfung
+nicht abgenommen. PP-0255 ist für die geforderte Bibliotheks-Symboltabelle
+mit Autovervollständigung konkret belegt.

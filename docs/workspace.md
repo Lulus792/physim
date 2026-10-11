@@ -228,6 +228,27 @@ die Änderungen inzwischen gespeichert wurden.
 
 ## Editor und Build
 
+### API-Namen vervollständigen
+
+Setze den Cursor in einen C- oder Physim-Bezeichner und drücke
+**Ctrl+Leertaste**, auch auf macOS, oder klicke **API-Vorschläge** unter dem
+Editor. Die Liste zeigt passende Namen mit Modul und Signatur. Pfeil auf/ab
+wechselt den Vorschlag; **Enter**, **Tab** oder ein Klick übernimmt ihn.
+**Esc** oder **Schließen** beendet die Liste. Beim Weitertippen passen sich
+die Vorschläge an. Das angefangene Wort wird vollständig ersetzt, auch wenn
+der Cursor in seiner Mitte steht. Die Übernahme lässt sich in einem Schritt
+rückgängig machen; ein bereits vollständiger Name erzeugt keinen zusätzlichen
+Undo-Schritt.
+
+Die Vorschläge stammen aus der zur App gehörenden C-API und Physim-Bibliothek.
+Beispiele sind `ps_vl` für `ps_vlength`, `PS_MET` für `PS_METRE` und
+`Mat4.trans` für die statische Fabrik `Mat4.translation`. Bei einer
+Variablen wie `direction.nor` nennt die Liste auch den Empfängertyp, etwa
+`Vec3.normalized`; eingefügt wird nur `normalized`, der vorhandene Empfänger
+bleibt stehen. Wähle die Methode passend zum Typ deiner Variablen. Der
+Compiler prüft ihren Einsatz beim Build. In Kommentaren, Stringliteralen
+und einfachen Textdateien werden keine API-Vorschläge eingefügt.
+
 **Ctrl+S** speichert. **F5 / Build** speichert beide Quellen und baut Experiment
 und Analyse im Hintergrund. Ein Stern beziehungsweise der Hinweis auf ungespeicherte
 Änderungen bedeutet, dass der Editor neuer als die gespeicherte Quelle ist.
