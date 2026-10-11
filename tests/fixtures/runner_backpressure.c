@@ -1,6 +1,9 @@
 #include "physim/experiment.h"
 #include "platform.h"
 #include <stdio.h>
+#ifndef PS_BACKPRESSURE_STEP_DELAY_MS
+#define PS_BACKPRESSURE_STEP_DELAY_MS 1
+#endif
 static unsigned steps;
 static ps_result create(ps_context *c) {
     steps=0;c->values[0]=c->values[1]=0;
@@ -13,7 +16,7 @@ static ps_result step(ps_context *c,double dt) {
     if(steps==64 || steps==128)(void)ps_experiment_log(c,PS_LOG_WARNING,steps==64?"Warning 64":"Warning 128");
     if(steps%32==0){FILE *f=fopen("backpressure-progress.txt","wb");if(!f)return PS_IO;
         bool ok=fprintf(f,"%u\n",steps)>0;ok &= fclose(f)==0;if(!ok)return PS_IO;}
-    ps_sleep(1);return PS_OK;
+    ps_sleep(PS_BACKPRESSURE_STEP_DELAY_MS);return PS_OK;
 }
 static void scene(ps_context *c,ps_scene *s) {
     for(unsigned i=0;i<PS_MAX_OBJECTS;i++)ps_scene_add(s,PS_POINT,ps_v3(i,c->values[0],0),ps_v3(0,0,0),.1,0xffffffff);

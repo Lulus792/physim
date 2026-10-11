@@ -2434,6 +2434,19 @@
         "platform",
         "core"
       ]
+    },
+    "runner-backpressure-slow-model": {
+      "sources": [
+        "tests/fixtures/runner_backpressure.c"
+      ],
+      "module": true,
+      "libraries": [
+        "platform",
+        "core"
+      ],
+      "defines": [
+        "PS_BACKPRESSURE_STEP_DELAY_MS=15"
+      ]
     }
   },
   "tests": [
@@ -9689,7 +9702,7 @@
             "{runner-output-probe}",
             "{work}"
           ],
-          "timeout": 40
+          "timeout": 240
         }
       ]
     },
@@ -9893,6 +9906,30 @@
             "{physim-language-pendulum-verlet}"
           ],
           "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "runner_backpressure_slow_advance",
+      "targets": [
+        "python-logging",
+        "physim-runner",
+        "runner-backpressure-slow-model",
+        "backpressure-data",
+        "runner-output-probe"
+      ],
+      "steps": [
+        {
+          "program": "python-logging",
+          "arguments": [
+            "{root}/tests/test_runner_backpressure.py",
+            "{physim-runner}",
+            "{runner-backpressure-slow-model}",
+            "{backpressure-data}",
+            "{runner-output-probe}",
+            "{work}"
+          ],
+          "timeout": 240
         }
       ]
     }

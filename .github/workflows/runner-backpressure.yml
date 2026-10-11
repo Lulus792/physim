@@ -1,0 +1,72 @@
+name: Runner backpressure regressions
+
+on:
+  push:
+    paths:
+      - 'src/runner_output.*'
+      - 'src/platform.*'
+      - 'runners/**'
+      - 'tests/test_runner_backpressure.py'
+      - 'tests/test_runner_output.c'
+      - 'tests/test_backpressure_data.c'
+      - 'tests/fixtures/runner_backpressure.c'
+      - 'tests/native_integration_cases.json'
+      - 'tools/build.py'
+      - 'tools/native_tests.py'
+      - '.github/workflows/runner-backpressure.yml'
+  pull_request:
+    paths:
+      - 'src/runner_output.*'
+      - 'src/platform.*'
+      - 'runners/**'
+      - 'tests/test_runner_backpressure.py'
+      - 'tests/test_runner_output.c'
+      - 'tests/test_backpressure_data.c'
+      - 'tests/fixtures/runner_backpressure.c'
+      - 'tests/native_integration_cases.json'
+      - 'tools/build.py'
+      - 'tools/native_tests.py'
+      - '.github/workflows/runner-backpressure.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  runner:
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            compiler: gcc
+            python: python3
+          - runner: ubuntu-24.04
+            compiler: clang
+            python: python3
+          - runner: macos-15
+            compiler: clang
+            python: python3
+          - runner: macos-15-intel
+            compiler: clang
+            python: python3
+          - runner: windows-2022
+            compiler: clang-cl
+            python: python
+          - runner: windows-2022
+            compiler: cl
+            python: python
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Blocked and closed pipes, normal and slow advancement
+        run: ${{ matrix.python }} tools/build.py --config Debug --compiler ${{ matrix.compiler }} --no-app --test --test-filter 'runner_backpressure*'
+      - name: Archive runner evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: runner-backpressure-${{ matrix.runner }}-${{ matrix.compiler }}
+          path: build/native/Debug/test-results/**
+          if-no-files-found: ignore

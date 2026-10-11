@@ -69,6 +69,32 @@ class Stream:
         for pipe in (self.child.stdin,self.child.stdout,self.child.stderr):pipe.close()
 
 def saved(path):return [json.loads(line) for line in Path(str(path)+'.pslog').read_text().splitlines()]
+def blocked_progress(stream,root,path,target):
+    # Sleep(1) and nanosleep(1 ms) can take much longer on shared CI hosts.
+    # Keep stdout unread until the same exact step/file requirement is met.
+    # A synchronous stdout producer still stalls well before this target.
+    started=time.monotonic();deadline=started+45;progress=0;data=None
+    assert stream.reader_paused.wait(5),'The stdout reader did not stop'
+    while time.monotonic()<deadline:
+        assert stream.child.poll() is None,('Runner exited while stdout was blocked',stream.child.returncode)
+        try:
+            current=int((root/'backpressure-progress.txt').read_text())
+            assert progress<=current<=target,('Unexpected accepted-step progress',progress,current,target)
+            progress=current
+        except (FileNotFoundError,ValueError,PermissionError):
+            pass  # The checkpoint file may be between truncate, write and close.
+        if progress>=target-target%32:
+            # The checkpoint is written INSIDE step; wait for its corresponding
+            # complete PSRUN sample as well, rather than racing the step return.
+            data=subprocess.run([checker,str(path),str(target),'live'],capture_output=True,timeout=5)
+            if data.returncode==0:
+                elapsed=time.monotonic()-started
+                print(root.name,'durable progress with stopped stdout consumption:',progress,
+                      f'after {elapsed:.3f}s',flush=True)
+                return
+        time.sleep(.025)
+    raise AssertionError(('Blocked stdout prevented complete durable progress',root.name,progress,target,
+                          None if data is None else data.stderr.decode(errors='replace')))
 def probe(mode):
     root=work/mode;root.mkdir();path=root/'blocked.psrun'
     target=400 if mode=='realtime-blocked' else 1200
@@ -84,11 +110,7 @@ def probe(mode):
             assert time.monotonic()-started<4
             subprocess.run([checker,str(path),'0','recovered'],check=True,timeout=5)
             print('Closed reader: explicit failure and recoverable durable samples passed',flush=True);return
-        time.sleep(4)
-        progress=int((root/'backpressure-progress.txt').read_text()) if (root/'backpressure-progress.txt').exists() else 0
-        print(mode,'durable progress with stopped stdout consumption:',progress,flush=True)
-        assert progress>=target-target%32,progress
-        subprocess.run([checker,str(path),str(target),'live'],check=True,timeout=5)
+        blocked_progress(stream,root,path,target)
         if mode=='permanently-blocked':
             stream.send(5);started=time.monotonic()
             assert stream.child.wait(timeout=5)==7 and time.monotonic()-started<4
