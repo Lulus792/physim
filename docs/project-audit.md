@@ -947,3 +947,17 @@ Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **85 implemented**, **13 incomplete**, **433 unverified**;
 `completion_proven` bleibt `false`. Aktuelle weitere Plattformen und
 vollständige Produktabnahme bleiben offen.
+
+
+## Große Analyseblöcke und begrenzte Quantilberechnung (§6.3)
+
+PP-0321/0322/0340 sind lokal konkret belegt: Metadaten, Schema und Blöcke
+in C/Physim sowie grundlegende Reihenoperationen für 1.048.577 Samples.
+Die Quantilfunktion benötigt nun konstanten temporären Speicher statt
+einer vollständigen RAM-Kopie. Budgetgrenzen, Masken und unabhängige
+sortierte/analytische Referenzen sind geprüft.
+[Nachweise und Grenzen](platform-validation.md#blockweise-quantile-und-analyse).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**88 implemented**, **13 incomplete**, **430 unverified**;
+`completion_proven` bleibt `false`. Weitere Plattformen und vollständige
+Produktabnahme bleiben offen.

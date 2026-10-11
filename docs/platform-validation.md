@@ -4,258 +4,20 @@ Stand: 11. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
 Die [historischen Plattformnachweise](platform-validation-history.md) enthalten
-die früheren lokalen/CI-/Paketprüfungen bis zum ersten nativen macOS-
-Accessibility-Baum. Ihr vollständiger Text und die Belegpfade bleiben erhalten.
+die früheren lokalen/CI-/Paketprüfungen einschließlich der ersten Linux-
+AT-SPI- und skalaren Suchnachweise. Ihr vollständiger Text und die Belegpfade bleiben erhalten.
 Die folgenden Abschnitte dokumentieren die neueren tatsächlich ausgeführten
 Prüfungen. Beide Seiten sind im Offline-Handbuch erreichbar.
 
 ## Linux-AT-SPI und asynchrone UI-Aktionen (PP-0710)
 
-Ausgangspunkt ist `b1d678cb6221eeb41775857c7508407542a09e53`. Linux besitzt
-jetzt eine libdbus-Anbindung für die vorhandenen einfachen Buttons und Texte.
-Ein unabhängiger PyAT-SPI-Client entdeckt zwei tatsächlich gerenderte
-SDL-/Nuklear-Fenster über die Registry und prüft UTF-8, Rollen, Eltern,
-Fenster-/Bildschirmrahmen, Hit-Tests, Bulk-Cache, native Buttonaktionen und
-Zustands-/Entfernungsereignisse. Ungültige RPC-Signaturen, Zahlenüberläufe in
-Objektpfaden und schreibgeschützte Properties werden ausdrücklich geprüft.
-Die App bleibt ohne Bus sowie mit `NO_AT_BRIDGE=1` nutzbar.
-
-Unter Debian 12/X11, Clang 14 Debug mit AddressSanitizer und
-UndefinedBehaviorSanitizer besteht diese Prüfung nach den unten beschriebenen
-Korrekturen **1/1** in `build/atspi-asan-linux/test-results/run-4sg6kclt`
-(`build/atspi-race-asan-linux.log`). `ASAN_OPTIONS=detect_leaks=0` betrifft
-SDL/Mesa-Leaks; Address-/UndefinedBehavior-Prüfungen bleiben aktiv. Die
-isolierte D-Bus-Sitzung verwendet temporäre GSettings und einen ausdrücklich
-zugeordneten Accessibility-Bus, damit X11-Sitzungsdaten keine andere
-Testsitzung auswählen.
-
-Die erste Instrumentierung belegte einen C17-Grenzfehler in der vendorten
-Nuklear-Struktur: `nk_draw_text` schrieb über `char string[2]` hinaus, obwohl
-der Befehlsbuffer bereits dynamisch genug Speicher reservierte. Ein echtes
-flexibles Array `char string[]` beschreibt jetzt diese Speicherung korrekt.
-Die neue Gegenprobe prüft eine vollständige 1500-Byte-UTF-8-Nutzlast samt NUL.
-Ein weiterer Lauf belegte eine echte Timing-Lücke: Nach dem Zeichnen
-angenommene Aktionen wurden beim Veröffentlichen gelöscht. Sie bleiben nun
-für den nächsten Besuch eines weiterhin vorhandenen, aktivierten Controls
-erhalten; verschwundene/deaktivierte Ziele verwerfen sie. Eine deterministische
-Modellprüfung deckt diesen Übergang und die einmalige Zustellung ab.
-
-Die Linux-ASan-/UBSan-Prüfungen für Modell, Textbefehle, UI-Geometrie und
-Clipboard bestehen **4/4** in `run-c8w74e68`; das frühere Textpuffer-Ergebnis
-`run-vrhrjna7` lag noch vor der Aktionskorrektur. Auf Intel-macOS bestehen die
-vier Release-Prüfungen in `run-zv47b3bg`, die zwei tatsächlichen AppKit-/UI-
-Prüfungen nach der Textpufferkorrektur in `run-colyd17p`. Der zusätzlich mit
-Apple Clang/C17/Werror gebaute Modelltest mit Aktionskorrektur besteht in
-`build/atspi-model-mac.log`. Der macOS-Sanitizer-Aufruf wurde wegen fehlendem
-`ld64.lld` vor dem Build abgewiesen und zählt nicht als ausgeführte Prüfung.
-
-Die frühen Fehlversuche bleiben erhalten: falscher Statusobjektpfad
-`run-vc5gg8bf`; Busadress-/Cacheprobleme `run-wofa__h8`, `run-zqx281r6`;
-Clientbehandlung veralteter Interfaces `run-8j42i9ay`; lokale Python-
-Signaturprüfung `run-lbuqeen1`; ungetrennte X11-Buswahl `run-fpyigr37`;
-Nuklear-Grenzfehler `run-30hri577`/`run-hxak4vac`; verlorene späte Aktion
-`run-e_nqfms8`. Die beiden letzten waren Implementierungsfehler und wurden
-behoben, ohne Sanitizer auszuschalten oder Wartezeiten zu verlängern.
-Die Release-Gegenprobe für geprüfte Objektpfade vor der zusätzlichen
-Fallback-/Aktionskorrektur bestand in `run-6wyxse59`.
-
-Dieser Nachweis gilt für Debian/X11 und Intel-macOS. Vollständige Orca-/
-VoiceOver-Bedienung, Wayland, Fokus, Textfelder und weitere Widgets sowie
-Windows/UI Automation bleiben offen. PP-0710 bleibt unvollständig; der gesamte
-Projektplan wird damit nicht abgenommen.
-
-
-Die zusätzliche externe Gegenprobe für Elternkoordinaten belegte anschließend
-noch einen Hit-Test-Fehler: Das Elternobjekt eines Fensters verwendet
-Bildschirmkoordinaten, das Elternobjekt seiner Controls Fensterkoordinaten.
-Die Child-Gegenprobe wird jetzt im Koordinatenraum des Aufrufers ausgeführt.
-`build/atspi-parent-before-2.log` hält die fehlgeschlagene echte Clientassertion
-fest; der erste Harness-Aufruf (`atspi-parent-before.log`) scheiterte bereits
-am fehlenden Legacy-PyAT-SPI-Namen für den standardisierten Koordinatentyp 2.
-Die komplette externe Prüfung inklusive Fenster-, Bildschirm- und Eltern-Hit-
-Tests besteht danach unter ASan/UBSan **1/1** in `run-fk9dyxub`
-(`build/atspi-parent-final-asan-linux.log`).
-
-
-Der vollständige Intel-macOS-Release-Fensterlauf besteht **79/79** in
-`run-ogg1ybol` (`build/atspi-all-gui-mac.log`), einschließlich aller 68
-Projektmanager-Kombinationen mit 16/22-Pixel-Schrift. Sein App-Binary wurde vor
-der zusätzlichen späten Aktionskorrektur gebaut; diese wird separat durch den
-finalen Modell-/Native-/SDK-Nachweis geprüft. Der Nuklear-Textpuffer war bereits
-korrigiert. Dadurch wird der breite GUI-Lauf nicht als neuer vollständiger
-Core- oder plattformübergreifender Screenreader-Nachweis umgedeutet.
-
-Für freien Linux-Prüfspeicher wurde ausschließlich der abgeschlossene ältere
-`Linear systems SDK ä linux lk2mfuc5`-Prüflauf archiviert. Das Archiv
-`build/atspi-linear-archived-proofs.tar.gz` enthält **14617 Dateien/Verweise**,
-ist **313895774 Byte** groß und besitzt SHA-256
-`883b00c02b36bb6941e467e025387a9e19dcb9d9096271d3ae0529bced278986`.
-Jeder Inhalt wurde gegen das Originalinventar geprüft, die Originale vor dem
-Entfernen nochmals vollständig geprüft, und die spätere Linux-Archivkopie
-hat denselben Hash. Archiv und Inventar liegen auf Mac und Linux. Wiederherstellung
-entpackt die archivierten `build/`-Pfade; der vorherige SDK-Nachweis bleibt damit
-nachprüfbar. Receipts: `build/atspi-linear-archived-proof-inventory.json`,
-`atspi-linear-archive-verified.json`, `atspi-linear-archive-removed.json` und
-`atspi-linear-archive-linux-copy-verified.json`. Der erste gleichzeitige SCP-
-Transfer wurde vor Beginn mit einem SSH-Bannerfehler abgewiesen; der serielle
-Transfer und seine Hashprüfung waren erfolgreich.
-
-
-Am **8. Oktober 2026** bestehen die finalen AppKit-/UI-Prüfungen mit der
-späten Aktionskorrektur **2/2** in `run-k5qmbdrk`
-(`build/atspi-final-native-mac.log`). Das frisch gebaute und nach
-`AT-SPI SDK ä mac 0er2rk56/Relocated SDK ä` verschobene SDK besteht seine
-Manifest-/Bytegleichheitsprüfung für 450 SDK-Dateien, das unabhängige
-Verification-Kit mit 95 Dateien sowie echte
-Menü-, Einstellungs- und Handbuch-GUI-Abläufe. Receipt:
-`build/atspi-sdk-mac-PASSED.json`. Die unveränderten UI-/Build-/Guide-Eingaben
-sind in `build/atspi-source-freeze.json` festgehalten; diese fortgeschriebene
-Prüfchronik ist bewusst nicht Teil des Freeze. Die Paketprüfung ist gezielt
-und ersetzt keinen neuen vollständigen Core- oder Screenreader-Lauf.
-
-
-Der vollständige Debian/GCC-Release-Fensterlauf besteht **78/78** in
-`run-38r48_zv` (`build/atspi-all-gui-linux.log`), einschließlich aller 68
-Projektmanager-Kombinationen und des finalen externen AT-SPI-Clients. Das
-App-Binary dieses breiten Laufs enthält die Aktions-/Textpufferkorrekturen,
-wurde aber vor der zusätzlichen Eltern-Hit-Test-Korrektur gebaut. Die letzte
-native Fixture wurde anschließend mit der korrigierten Implementierung gebaut
-und geprüft; die ASan-/UBSan-Gegenprobe `run-fk9dyxub` deckt denselben finalen
-Hit-Test-Code ab. Ein aktuelles Linux-SDK wird danach aus diesem Code neu gebaut.
-
-
-Das am 8. Oktober frisch gebaute Debian/GCC-Release-SDK wurde nach
-`AT-SPI SDK ä linux chlu_b3p/Relocated SDK ä` verschoben. Alle **450 SDK-Dateien**
-und **95 Kit-Dateien** stimmen mit ihren Manifesten überein; der App-Binary
-ist bytegleich mit dem finalen frischen Build. `ldd` löst `libdbus-1.so.3`
-auf und zeigt keine fehlende Bibliothek. Menü, Einstellungen und Handbuch
-bestehen danach als tatsächliche GUI-Abläufe aus dem verschobenen Paket.
-Alle sechs aufgezeichneten Schritte (Install, Kit, Linkage, drei GUI-Abläufe)
-bestehen; Receipt: `build/atspi-sdk-linux-PASSED.json`, zusammen mit dem
-macOS-Receipt und den 21 unveränderten Dateien in
-`build/atspi-source-freeze.json`. Dies ergänzt die native externe Clientprüfung,
-behauptet aber keine praktische Screenreader- oder vollständige Core-Abnahme.
-
+Der vollständige historische Nachweis mit allen Testpfaden bleibt im
+[Plattformarchiv](platform-validation-history.md#linux-at-spi-und-asynchrone-ui-aktionen-pp-0710) erhalten.
 
 ## Skalare Suche, exakte Toleranzen und Modulblock-Closures (PP-0361)
 
-Ausgangspunkt am 8. Oktober 2026 ist
-`c07e4b832d504d85581284cd74f453f4bcf1ceb2`. Die Abbruchbedingung von Bisection
-und Golden Section wird jetzt als exakter Vergleich der binären Werte behandelt.
-87 vorbereitete Gegenbeispiele belegten falsche Konvergenz bei subnormalen
-Intervallen. Eine einfache Differenzkorrektur schloss diese, ließ aber 1007
-relative Grenzfälle in der separaten Probe offen. Die finale Implementierung
-entscheidet klar entfernte Fälle über eine konservative Fehlerumhüllung und
-Rundungsgrenzen über einen festen Ganzzahlakkumulator, ohne Heap oder breiteren
-Gleitkommatyp. Das betrifft die Abbruchentscheidung, nicht die Präzision der
-Callback-Ergebnisse.
-
-Die öffentliche Gegenprobe `tests/test_scalar_range_oracle.py` prüft **7787 C**-
-und **243 Physim**-Berichte mit unabhängigen Fraction-Vergleichen. Sie prüft
-anfängliche sowie finale Abbruchentscheidungen, Callback-Bereiche/Zähler und
-bekannte Lösungen. Der ältere Code scheitert auch an dieser öffentlichen
-Gegenprobe (`build/scalar-original-oracle-failure.txt`). Zusätzlich bestanden
-1152 vorbereitete C-Gegenproben an den größten endlichen Intervallgrenzen.
-
-Ein weiterer belegter Grenzfehler war vorzeitige Stagnation: Bei
-`[DBL_TRUE_MIN, 4*DBL_TRUE_MIN]` vertauschten getrennt gerundete Produkte die
-Golden-Section-Punkte. Der ältere Code lieferte `PS_LIMIT` nach null Iterationen,
-obwohl zwei Innenpunkte vorhanden waren. Skalierte Mischwerte liefern nun
-geordnet die beiden Innenpunkte und nach einer Iteration `PS_OK` mit erfüllter
-Toleranz. Auch der bisezierende Mittelpunkt wird in kleinen/engen Intervallen
-stabil berechnet; gewöhnliche breite Intervalle behalten ihre normale Rechnung.
-Die neue öffentliche C-Gegenprobe enthält beide konkreten Sample-Grenzfälle.
-
-Die erste Physim-Gegenprobe belegte außerdem einen echten Compilerfehler:
-Schleifen-/Blockwerte auf Modulebene wurden wie echte Modulglobals behandelt,
-aber als C-Lokalvariablen ausgegeben. Closures referenzierten so undeclared
-Identifikatoren. Der Checker unterscheidet jetzt direkte Modulvariablen von
-Blocklocals und übernimmt letztere als besitzende Captures. Zurückbehaltene
-Schleifenwerte, veränderte lokale Entwürfe, echte lebende Modulglobals,
-verschachtelte String-Captures, lokale Funktionen mit Array-Captures und
-optionale Bindungen werden nativ ausgeführt. Der frühere Harness-Aufruf mit
-`Optional.none()` war ein Syntaxfehler der Probe; die Sprache verwendet `nil`.
-
-Die gezielte Linux-Clang-Debug-ASan-/UBSan-Prüfung vor der zusätzlichen
-Sample-Korrektur besteht **5/5** in `run-7ggfzxaa`
-(`build/scalar-final-initial-asan-linux.log`). Die frühere fünffache Prüfung
-`run-v71uny34` hatte die verstärkte anfängliche Entscheidungsgegenprobe noch
-nicht enthalten. Unter Intel-macOS/Apple Clang bestehen vor der Sample-Korrektur
-**5/5** in `run-lzvgypq1`; danach bestehen **19/19** relevante Numerik-, Scalar-,
-Closure-, ODE- und Referenzfälle in `run-h1nrywai`
-(`build/scalar-sampling-final-mac.log`).
-
-Der breite Intel-macOS-Release-Lauf besteht **640/641** in `run-b17mylss`
-(`build/scalar-full-mac.log`). Sein einziger Fehler war die veraltete erzeugte
-API-Referenz nach der Header-Vertragsänderung. `tools/generate-reference.py`
-aktualisierte nur `docs/reference/numerics.md`; alle 30 Referenzdateien bestehen
-anschließend `--check`, und die Referenzgegenprobe besteht im gezielten finalen
-Lauf. Dieser breite Lauf lag noch vor der zusätzlichen Sample-Korrektur; die
-finale 19er-Prüfung deckt diese gezielt ab. Die Fehlerbelege `run-ho7tfwlu`
-(falsche erwartete Iterationslage der neuen C-Probe), `run-823gb3qm`
-(Harness-Syntax) und `run-b5ug0q9u` (echte Capture-Lücke) bleiben erhalten.
-
-Das finale Intel-macOS-SDK `Scalar search SDK ä mac nn54utn3` besteht seinen
-Manifestnachweis für **451 SDK-Dateien** und das unabhängige Kit mit **100 Dateien**.
-Der aus dem Kit entpackte Prüfer verwendet `--scalar-only`, verschiebt das Paket
-und baut den Core ausschließlich aus dessen Quellen neu. Öffentliche C-Probe,
-Fraction-/C-/Physim-Berichte und Modulblock-Closures bestehen mit installiertem
-und frisch gebautem Core. Receipt: `build/scalar-sdk-mac-PASSED.json`. Dieser
-gezielte Paketnachweis ist keine Wiederholung der vollständigen früheren
-SDK-Domänen- oder GUI-Abnahme.
-
-Für die Linux-Prüfung wurden nur die abgeschlossenen älteren SDK-Prüfläufe
-`ODE range SDK ä linux lpk4sq92` und `Series numeric SDK ä linux p5iekc7w`
-archiviert. `build/scalar-old-archived-proofs.tar.gz` enthält **28513 Dateien/Verweise**,
-**594890472 Byte**, SHA-256
-`7cdd96fd1c440adfd32b066f8263792f74d28004bdce6aef8de6dc50742323be`.
-Inhalte wurden gegen das Inventar geprüft, Originale vor dem Entfernen nochmals
-geprüft und die Linux-Archivkopie gegen denselben Hash geprüft. Archiv und
-Inventar liegen auf Mac und Linux; Entpacken stellt die ursprünglichen `build/`-
-Pfade wieder her. Receipts: `build/scalar-old-archived-proof-inventory.json`,
-`scalar-old-archive-verified.json`, `scalar-old-archive-removed.json` und
-`scalar-old-archive-linux-copy-verified.json`.
-
-PP-0361 besitzt damit einen begrenzten Implementierungsnachweis für Bisection
-und Golden Section; globale Optimierung, weitere Mathematikforderungen und
-die gesamte Plattform-/Produktabnahme bleiben offen. Die 531 Originalplanblöcke
-bleiben vollständig erhalten: 27 implementiert, fünf unvollständig, 499 ungeprüft.
-
-
-Der breite Debian/GCC-Release-Lauf besteht **641/641** in `run-t4s0ldly`
-(`build/scalar-full-linux.log`). Die erzeugte Referenz war dort bereits
-aktualisiert. Dieser Lauf lag vor der zusätzlichen Sample-Korrektur.
-Mit dem finalen stabilen Mischwert bestehen danach die **19/19** relevanten
-Fälle sowohl unter GCC/Release in `run-h51lh8ze` als auch unter
-Clang/Debug/ASan/UBSan in `run-z0mxt__a`
-(`build/scalar-sampling-final-release-linux.log`,
-`build/scalar-sampling-final-asan-linux.log`). Es wurden keine Wartezeiten
-verlängert und keine Sanitizer-Prüfungen unterdrückt; `detect_leaks=0` ist wie
-zuvor für SDL/Mesa gesetzt, Address-/UndefinedBehavior bleiben aktiv.
-
-
-Der eng begrenzte Apple-Clang-O2-Zeitvergleich von 20000 flachen Golden-Section-
-Suchen auf `[-10,10]` mit absoluter Toleranz `1e-10` behält 53 Iterationen/
-55 Auswertungen. Drei ältere Läufe brauchen 0,00519–0,00534 Sekunden, drei finale
-0,01284–0,01531 Sekunden. Der exakte Vertrag und stabile Randpunkte verursachen
-hier etwa Faktor 2,5 im Median; das sind in dieser Probe rund 0,4 Mikrosekunden
-zusätzliche Zeit pro Suche. `build/scalar-benchmark-final.json` bewahrt die Werte.
-Dies ist kein allgemeines Leistungsversprechen für andere Callbacks/Intervalle;
-Grenzfälle verwenden zusätzliche exakte Arbeit.
-
-
-Das finale Debian/GCC-SDK `Scalar search SDK ä linux pe_dtue1` besteht ebenfalls
-seine **451 SDK-Dateien** und das unabhängige Kit mit **100 Dateien**. Der aus
-dem Kit entpackte Prüfer verschiebt es und führt `--scalar-only` mit dem
-installierten sowie allein aus Paketquellen neu gebauten Core aus. Alle drei
-äußeren Schritte (Install, Kit, Verify) bestehen; die sechs jeweiligen
-C-/Closure-/Orakel-Gegenproben bestehen. Receipt:
-`build/scalar-sdk-linux-PASSED.json`. Die beiden Plattform-Receipts passen zu
-allen 20 Dateien in `build/scalar-source-freeze.json`; die fortgeschriebene
-Prüfchronik ist davon bewusst ausgenommen. Der gezielte SDK-Nachweis ersetzt
-keinen neuen vollständigen SDK-Domänen-/GUI-Lauf und keine aktuelle Windows-
-oder Apple-Silicon-Abnahme. Der Gesamtplan bleibt unvollständig.
-
+Der vollständige historische Nachweis mit allen Testpfaden bleibt im
+[Plattformarchiv](platform-validation-history.md#skalare-suche-exakte-toleranzen-und-modulblock-closures-pp-0361) erhalten.
 
 ## Transformationsbereiche und Mathematikzuordnung (PP-0357)
 
@@ -4060,3 +3822,60 @@ Die aktualisierte Bedienungsdokumentation besteht zusätzlich **1/1** unter
 PP-0319/0320 besitzen damit begrenzte lokale Nachweise. Aktuelle Linux-,
 Windows- und Apple-Silicon-Ausführung dieser Änderung, allgemeine
 Barrierefreiheit und vollständige Planabnahme bleiben offen.
+
+
+## Blockweise Quantile und Analyse
+
+Am 2026-10-11 auf Intel macOS 14.6.1 / AppleClang 16 tatsächlich gebaut:
+Die alte Quantilfunktion lud alle Werte in einen sortierten RAM-Puffer.
+Die neue Gegenprobe scheiterte deshalb mit einem temporären 8-KiB-Budget
+bei 65.537 Werten, `build/current-headless-mac/test-results/run-d47j5uce`,
+Log `build/current-quantile-before-mac.log`. Der Projektplan verlangt
+blockweise Operationen auch für große Reihen. Kleine Eingänge bis 256
+Werte behalten die einblockige Sortierung; große Eingänge verwenden nun
+zwei feste Ranghistogramme und höchstens neun blockweise Durchläufe.
+Die Typ-7-Definition bleibt erhalten: exakte benachbarte Ordnungsstatistiken,
+anschließend dieselbe lineare Interpolation. Maskierte Beobachtungen zählen
+nicht; signierte Null ist bei großer Auswahl numerisch dieselbe Null.
+Es entstehen keine Scratch-Dateien, neuen Handles oder Quotaänderungen.
+
+Die abschließenden C-/Physim-Proben bestehen **2/2** unter
+`build/current-headless-mac/test-results/run-0xxmmwcw`, Log
+`build/current-quantile-budget-mac.log`. Unabhängig per qsort sortierte
+Referenzen umfassen 1, 255, 256, 257, 513 und 65.537 Werte, volle/teilweise
+Masken, neun Wahrscheinlichkeiten, Duplikate, negative Werte, extreme
+Exponenten, DBL_MAX, Subnormale und beide Nullzeichen. Konstantwerte,
+vollständig fehlende Beobachtungen und ein einziger gültiger Wert in
+einer großen Reihe sind geprüft. **6.400 Byte** temporäres Budget reichen;
+**6.399 Byte** und injizierte Allokationsfehler liefern PS_MEMORY bei
+unverändertem Ergebnis und Scratch-Verbrauch. Freigaben sind vollständig.
+
+Ein gesonderter Lauf enthält **1.048.577** Samples mit analytischen
+Positionswerten und Beobachtungsmaske. Die C-Analyse prüft kopierte UTF-8-
+Metadaten/Kanaldefinitionen, SI-Exponenten, blockübergreifende und verkürzte
+Endlesevorgänge, Quantile, Ableitung, Integral, gleitenden Mittelwert,
+affine Transformation und Statistik. Der gemessene Allokationsbereich
+steigt nur von **121.080** auf **127.480 Byte** und fällt nach Abschluss
+vollständig zurück. Dieses Budget erfasst die kontrollierten Core-
+Allokationen; C-stdio-/OS-Puffer, Stack und Prozess-RSS sind kein Bestandteil
+dieser Zahl. Der kompilierte Physim-Analyseprozess liest dieselbe große
+Datei, prüft Metadata/Schema/Blöcke und exakte beziehungsweise tolerierte
+Quantile und erzeugt ein Histogramm mit **524.289** gültigen Beobachtungen.
+
+Die vorausgehende Gruppe besteht **6/6** unter `run-q2y4pmsp`, Log
+`build/current-quantile-verified-mac.log`: Basisreihen, Masken, neue
+Streamingprobe, Sprach-Analyse, Sprach-Streamingprobe und API-Dokumentation.
+Die erweiterte Gruppe besteht **5/5** unter `run-qzno2xmd`, Log
+`build/current-quantile-final-mac.log`: neue C-/Physim-Proben, numerische
+Extremfälle, SI-Reihen und Masken. Generierte Referenzen und alle 1167
+Completion-Signaturen sind auf Aktualität geprüft. Die beiden ältesten
+Abschnitte der aktuellen Plattformchronik wurden mit unverändertem
+Nachweistext ins Archiv verschoben; ihre ursprünglichen Anker verweisen
+weiterhin dorthin. Beide Seiten bleiben unter der Handbuchgrenze.
+
+Die abschließende Handbuchprüfung besteht **1/1** unter `run-8ly8e53a`,
+Log `build/current-quantile-docs-mac.log`.
+
+PP-0321/0322/0340 besitzen damit begrenzte lokale Funktionsnachweise.
+Aktuelle Linux-/Windows-/Apple-Silicon-Ausführung dieser Änderung sowie
+vollständige Plattform-, Sprach- und Planabnahme bleiben offen.

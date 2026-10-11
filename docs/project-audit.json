@@ -2456,9 +2456,13 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Zugriff auf Metadaten, Kanaldefinitionen und Datenblöcke.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "tests/test_quantile_streaming.c",
+        "tests/fixtures/language/analysis_quantile_streaming.phys",
+        "docs/platform-validation.md#blockweise-quantile-und-analyse"
+      ],
+      "note": "C- und Physim-Analyse lesen Metadaten, Kanalnamen/-beschreibungen, Einheitensymbole, SI-Exponenten und Datenblöcke einer tatsächlich erzeugten Datei mit 1.048.577 Samples. C-Beschreibung als unabhängige Kopie und Ende/blockübergreifende Lesevorgänge geprüft. run-0xxmmwcw auf Intel macOS; weitere Plattformen und vollständige Abnahme offen."
     },
     {
       "id": "PP-0322",
@@ -2472,9 +2476,14 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Filter, Transformationen, Ableitungen, Integrale und statistische Kennzahlen.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "tests/test_series.c",
+        "tests/test_quantile_streaming.c",
+        "tests/fixtures/language/analysis_quantile_streaming.phys",
+        "docs/platform-validation.md#blockweise-quantile-und-analyse"
+      ],
+      "note": "Filter (gleitendes Mittel/Masken), affine Transformation, Ableitung, Integral und Statistik sind im großen C-Lauf mit unabhängigen analytischen Sollwerten ausgeführt. Kleine/unregelmäßige und maskierte numerische/Einheitenfälle sowie kompilierte Physim-Analyse bestehen in run-q2y4pmsp/run-qzno2xmd; letzte Budgetprobe run-0xxmmwcw. Intel macOS; keine gesamte Plattform-/Sprachabnahme."
     },
     {
       "id": "PP-0323",
@@ -2584,9 +2593,14 @@
       "kind": "paragraph",
       "scope": "planned",
       "text": "Operationen arbeiten blockweise, damit große Datensätze nicht vollständig in den RAM geladen werden müssen.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "src/series.c",
+        "tests/test_quantile_streaming.c",
+        "tests/fixtures/language/analysis_quantile_streaming.phys",
+        "docs/platform-validation.md#blockweise-quantile-und-analyse"
+      ],
+      "note": "Datensnapshot und grundlegende Reihenoperationen arbeiten mit festen Blöcken und Scratch-Dateien. Die bisher voll im RAM sortierende Quantilfunktion wurde durch exakte Rangauswahl mit höchstens neun Durchläufen ersetzt. Große Eingänge benötigen konstant 6400 Byte temporäre Allokation; 6399 Byte scheitern atomar. 1.048.577 Samples einschließlich maskierter Quantile, Transformation/Filter/Ableitung/Integral/Statistik tatsächlich geprüft; kontrollierter Allokationsbereich 121080 -> 127480 Byte, stdio/OS/Stack/RSS außerhalb. C-/Physim-Proben run-0xxmmwcw, weitere numerische Regressionen run-qzno2xmd. Weitere Plattformen/offizielle vollständige Abnahme offen."
     },
     {
       "id": "PP-0348",

@@ -1259,6 +1259,29 @@ static int compare_finite_double(const void *left, const void *right) {
     double a = *(const double *)left, b = *(const double *)right;
     return (a > b) - (a < b);
 }
+/* IEEE binary64 finite values have a monotone unsigned key after reversing
+ * negative encodings and flipping the positive sign bit. Collapse signed zero
+ * so both representations are one numerical observation value. */
+static uint64_t quantile_key(double value) {
+    uint64_t bits;
+    if (value == 0) value = 0;
+    memcpy(&bits, &value, sizeof bits);
+    return bits & (UINT64_C(1) << 63) ? ~bits : bits ^ (UINT64_C(1) << 63);
+}
+static double quantile_value(uint64_t key) {
+    uint64_t bits = key & (UINT64_C(1) << 63) ? key ^ (UINT64_C(1) << 63) : ~key;
+    double value;
+    memcpy(&value, &bits, sizeof value);
+    return value;
+}
+typedef struct {
+    double values[PS_SERIES_BLOCK_SIZE];
+    uint8_t valid[PS_SERIES_BLOCK_SIZE];
+    uint64_t buckets[2][256];
+} quantile_workspace;
+_Static_assert(sizeof(double) == 8 && DBL_MANT_DIG == 53 && DBL_MAX_EXP == 1024,
+               "Series quantiles require IEEE binary64");
+_Static_assert(sizeof(quantile_workspace) == 6400, "Quantile workspace budget changed");
 ps_result ps_series_quantile_with_allocator(ps_analysis_context *c, ps_series h,
                                             double probability, ps_allocator allocator,
                                             double *out) {
@@ -1266,41 +1289,103 @@ ps_result ps_series_quantile_with_allocator(ps_analysis_context *c, ps_series h,
     if (!s || !out || !s->info.count || !isfinite(probability) ||
         probability < 0 || probability > 1)
         return PS_INVALID;
-    if (s->info.count > SIZE_MAX / sizeof(double))
-        return PS_LIMIT;
-    size_t count = (size_t)s->info.count, bytes = count * sizeof(double);
-    double *values = NULL;
-    ps_result result = ps_memory_allocate(allocator, bytes, (void **)&values);
-    if (result != PS_OK)
-        return result;
-    size_t kept=0;uint8_t valid[PS_SERIES_BLOCK_SIZE];
-    for (size_t at = 0; at < count && result == PS_OK;) {
-        size_t take = count - at > PS_SERIES_BLOCK_SIZE ? PS_SERIES_BLOCK_SIZE : count - at;
-        result = read_values(c, s, at, take, values + at);
-        if(result==PS_OK)result=read_validity(s,at,take,valid);
-        for(size_t i=0;result==PS_OK && i<take;i++)if(valid[i])values[kept++]=values[at+i];
-        at += take;
-    }
-    if(result==PS_OK && !kept)result=PS_INVALID;
-    if (result == PS_OK) {
-        count=kept;
-        qsort(values, count, sizeof *values, compare_finite_double);
-        double position = (double)(count - 1) * probability;
-        size_t lower = (size_t)position;
-        double quantile;
-        if (lower >= count - 1)
-            quantile = values[count - 1];
-        else {
+    /* One-block inputs retain their small allocation and one-pass sorting. */
+    if (s->info.count <= PS_SERIES_BLOCK_SIZE) {
+        size_t count = (size_t)s->info.count, bytes = count * sizeof(double);
+        double *values = NULL;
+        ps_result result = ps_memory_allocate(allocator, bytes, (void **)&values);
+        if (result != PS_OK) return result;
+        uint8_t valid[PS_SERIES_BLOCK_SIZE];
+        result = read_values(c, s, 0, count, values);
+        if (result == PS_OK) result = read_validity(s, 0, count, valid);
+        size_t kept = 0;
+        for (size_t i = 0; result == PS_OK && i < count; i++)
+            if (valid[i]) {
+                if (!isfinite(values[i])) result = PS_NUMERIC;
+                else values[kept++] = values[i];
+            }
+        if (result == PS_OK && !kept) result = PS_INVALID;
+        if (result == PS_OK) {
+            qsort(values, kept, sizeof *values, compare_finite_double);
+            double position = (double)(kept - 1) * probability;
+            size_t lower = (size_t)position;
             double fraction = position - (double)lower;
-            quantile = fraction == 0 ? values[lower]
-                                     : (1 - fraction) * values[lower] + fraction * values[lower + 1];
+            double value = lower >= kept - 1 || fraction == 0 ? values[lower]
+                : (1 - fraction) * values[lower] + fraction * values[lower + 1];
+            if (!isfinite(value)) result = PS_NUMERIC;
+            else *out = value;
         }
-        if (!isfinite(quantile))
-            result = PS_NUMERIC;
-        else
-            *out = quantile;
+        ps_memory_free(allocator, values, bytes);
+        return result;
     }
-    ps_memory_free(allocator, values, bytes);
+    quantile_workspace *work = NULL;
+    ps_result result = ps_memory_allocate(allocator, sizeof *work, (void **)&work);
+    if (result != PS_OK) return result;
+    uint64_t count = 0, minimum = UINT64_MAX, maximum = 0;
+    /* Count valid observations independently of source length. No scratch
+     * files, quota changes or new Series/alignment identities are needed. */
+    for (uint64_t at = 0; at < s->info.count && result == PS_OK;) {
+        size_t n = (size_t)(s->info.count - at > PS_SERIES_BLOCK_SIZE
+                            ? PS_SERIES_BLOCK_SIZE : s->info.count - at);
+        result = read_values(c, s, at, n, work->values);
+        if (result == PS_OK) result = read_validity(s, at, n, work->valid);
+        for (size_t i = 0; result == PS_OK && i < n; i++) if (work->valid[i]) {
+            if (!isfinite(work->values[i])) { result = PS_NUMERIC; break; }
+            uint64_t key = quantile_key(work->values[i]);
+            if (key < minimum) minimum = key;
+            if (key > maximum) maximum = key;
+            count++;
+        }
+        at += n;
+    }
+    if (result == PS_OK && !count) result = PS_INVALID;
+    double value = 0;
+    if (result == PS_OK && (probability == 0 || probability == 1 || minimum == maximum))
+        value = quantile_value(probability == 1 ? maximum : minimum);
+    else if (result == PS_OK) {
+        double position = (double)(count - 1) * probability;
+        uint64_t lower = position >= (double)(count - 1) ? count - 1 : (uint64_t)position;
+        double fraction = lower == count - 1 ? 0 : position - (double)lower;
+        uint64_t rank[2] = {lower, fraction == 0 ? lower : lower + 1};
+        uint64_t prefix[2] = {0, 0}, mask = 0;
+        /* Eight byte-wise refinement scans select both adjacent order
+         * statistics exactly. Each histogram counts only its current prefix;
+         * rank becomes relative to the chosen bucket after each scan. */
+        for (unsigned pass = 0; pass < 8 && result == PS_OK; pass++) {
+            unsigned shift = 56 - pass * 8;
+            memset(work->buckets, 0, sizeof work->buckets);
+            for (uint64_t at = 0; at < s->info.count && result == PS_OK;) {
+                size_t n = (size_t)(s->info.count - at > PS_SERIES_BLOCK_SIZE
+                                    ? PS_SERIES_BLOCK_SIZE : s->info.count - at);
+                result = read_values(c, s, at, n, work->values);
+                if (result == PS_OK) result = read_validity(s, at, n, work->valid);
+                for (size_t i = 0; result == PS_OK && i < n; i++) if (work->valid[i]) {
+                    uint64_t key = quantile_key(work->values[i]);
+                    for (unsigned which = 0; which < 2; which++)
+                        if ((key & mask) == prefix[which])
+                            work->buckets[which][(key >> shift) & 255]++;
+                }
+                at += n;
+            }
+            for (unsigned which = 0; which < 2 && result == PS_OK; which++) {
+                unsigned bucket = 0;
+                while (bucket < 256 && rank[which] >= work->buckets[which][bucket])
+                    rank[which] -= work->buckets[which][bucket++];
+                if (bucket == 256) result = PS_CORRUPT;
+                else prefix[which] |= (uint64_t)bucket << shift;
+            }
+            mask |= UINT64_C(255) << shift;
+        }
+        if (result == PS_OK) {
+            double left = quantile_value(prefix[0]), right = quantile_value(prefix[1]);
+            value = fraction == 0 ? left : (1 - fraction) * left + fraction * right;
+        }
+    }
+    if (result == PS_OK) {
+        if (!isfinite(value)) result = PS_NUMERIC;
+        else *out = value;
+    }
+    ps_memory_free(allocator, work, sizeof *work);
     return result;
 }
 ps_result ps_series_quantile(ps_analysis_context *c, ps_series h, double probability,

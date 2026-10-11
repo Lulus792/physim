@@ -76,6 +76,7 @@ def catalog():
         Case("accessibility_options", ("tests/test_accessibility_options.c", "app/accessibility.c")),
         Case("accessibility_focus", ("tests/test_accessibility_focus.c", "app/accessibility.c")),
         Case("series_si", ("tests/test_series_si.c",),arguments=("{work}",)),
+        Case("quantile_streaming", ("tests/test_quantile_streaming.c",), timeout=120),
         Case("channel_declaration", ("tests/test_channel_declaration.c",),arguments=("{work}",)),
         Case("fluid_array_memory", ("tests/test_fluid_array_memory.c",)),
         Case("wave_array_memory", ("tests/test_wave_array_memory.c",)),

@@ -58,6 +58,21 @@ dem Ende ist der Index ungültig. `ps_series_describe` liefert Name, Anzahl,
 SI-Exponenten, Skalierung und Anzeigesymbol als Kopien.
 Eigene und ausgerichtete Series speichern Zahlenwerte einheitlich in SI: Skala 1.
 
+`ps_series_quantile` berechnet ein Typ-7-Quantil ausschließlich aus gültigen
+Beobachtungen. Bei sortierten Werten interpoliert es zwischen den benachbarten
+Rängen an der nullbasierten Position `(n - 1) * p`; `p = 0` und `p = 1` liefern
+Minimum und Maximum. Die [R-Referenz](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/quantile.html)
+beschreibt dieselbe Typ-7-Definition. Bis zu 256 Werte werden in einem kleinen
+Puffer sortiert. Größere Reihen werden in höchstens neun Durchläufen blockweise
+gelesen; zwei feste Histogramme grenzen die beiden benötigten Rangwerte ein.
+Der temporäre Allokator benötigt dafür genau 6.400 Byte, unabhängig von der
+Reihenlänge. Scratch-Dateien und Quota bleiben unverändert. Das spart RAM,
+kann aber gegenüber vollständiger Sortierung zusätzliche Dateizugriffe kosten.
+`ps_series_quantile_with_allocator` erlaubt einen eigenen temporären Allokator.
+Bei ungültigem Eingang, fehlenden gültigen Beobachtungen, I/O- oder Speicherfehlern
+bleibt der Ergebniswert erhalten. In Physim verwendet `Series.quantile(p)`
+dieselbe Implementierung mit dem Speicherbudget des Analysehosts.
+
 Handles gehören zu genau einem lebenden Context. `ps_series_release` gibt eine
 Reihe frei; daraus bereits erzeugte Reihen bleiben erhalten. `ps_dataset_close`
 invalidiert dagegen alle Quell- und Ergebnisreihen dieses Datensatzes.

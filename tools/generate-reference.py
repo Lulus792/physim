@@ -403,7 +403,7 @@ LANG_DESCRIPTIONS = {
     'seriesValue': 'Liest einen gültigen Zahlenwert am nullbasierten Index. Eine maskierte fehlende Beobachtung erzeugt einen Quellfehler.',
     'seriesValues': 'Liest count gültige Werte ab first als unabhängiges Float64-Array. Fehlende Beobachtungen, negative oder zu große Bereiche sind Fehler; ein leerer Ausschnitt am Ende ist erlaubt.',
     'mean': 'Mittelwert über alle Werte der Reihe.', 'stddev': 'Stichprobenstandardabweichung; benötigt mindestens zwei Werte.',
-    'quantile': 'Typ-7-Quantil einer nichtleeren Reihe. Die endliche Wahrscheinlichkeit muss in [0, 1] liegen; die Werte werden mit budgetiertem temporärem Speicher sortiert.',
+    'quantile': 'Typ-7-Quantil einer nichtleeren Reihe. Die endliche Wahrscheinlichkeit muss in [0, 1] liegen; nur gültige Werte zählen. Bis zu 256 Werte werden sortiert, größere Reihen mit höchstens neun blockweisen Durchläufen und konstant 6400 Byte temporärem Speicher exakt ausgewählt.',
     'minimum': 'Liefert den kleinsten endlichen Wert einer nichtleeren Reihe. Liest blockweise und benötigt keine darstellbare Varianz.',
     'maximum': 'Liefert den größten endlichen Wert einer nichtleeren Reihe. Liest blockweise und benötigt keine darstellbare Varianz.',
     'derivative': 'Sekantenableitung dy/dx; x muss streng steigen. Die Einheit wird abgeleitet.',

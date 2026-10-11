@@ -2346,7 +2346,7 @@ Analysemodul erforderlich.
 Series.quantile(probability: Float64) -> Float64
 ```
 
-Typ-7-Quantil einer nichtleeren Reihe. Die endliche Wahrscheinlichkeit muss in [0, 1] liegen; die Werte werden mit budgetiertem temporärem Speicher sortiert.
+Typ-7-Quantil einer nichtleeren Reihe. Die endliche Wahrscheinlichkeit muss in [0, 1] liegen; nur gültige Werte zählen. Bis zu 256 Werte werden sortiert, größere Reihen mit höchstens neun blockweisen Durchläufen und konstant 6400 Byte temporärem Speicher exakt ausgewählt.
 
 Analysemodul erforderlich.
 

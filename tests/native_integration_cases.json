@@ -2381,6 +2381,19 @@
         "platform",
         "core"
       ]
+    },
+    "quantile-streaming-check": {
+      "sources": [
+        "tests/test_quantile_streaming.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "physim-language-quantile-streaming": {
+      "source": "tests/fixtures/language/analysis_quantile_streaming.phys",
+      "mode": "--emit-analysis"
     }
   },
   "tests": [
@@ -9667,6 +9680,24 @@
           "files": [
             "app-steps.json"
           ]
+        }
+      ]
+    },
+    {
+      "name": "language_quantile_streaming",
+      "targets": [
+        "quantile-streaming-check",
+        "physim-language-quantile-streaming",
+        "physim-analysis-runner"
+      ],
+      "steps": [
+        {
+          "program": "quantile-streaming-check",
+          "arguments": [
+            "{physim-analysis-runner}",
+            "{physim-language-quantile-streaming}"
+          ],
+          "timeout": 120
         }
       ]
     }

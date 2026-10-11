@@ -174,9 +174,10 @@ ps_result ps_series_resample(ps_analysis_context *ctx, ps_series y, ps_series x,
                              ps_resample_method method, ps_series *out);
 ps_result ps_series_statistics(ps_analysis_context *ctx, ps_series input, ps_statistics *out);
 /* Type-7 quantile for a nonempty series. probability must be finite in [0, 1].
- * Uses only valid rows; all-missing input is PS_INVALID. Reads the whole series
- * into allocator-backed temporary memory; output is
- * unchanged on error. */
+ * Uses only valid rows; all-missing input is PS_INVALID. Up to one block is
+ * sorted in memory; larger inputs select exact adjacent order statistics with
+ * at most nine blockwise scans and a fixed 6400-byte allocator workspace.
+ * No scratch files/quota changes. Output is unchanged on error. */
 ps_result ps_series_quantile(ps_analysis_context *ctx, ps_series input, double probability,
                              double *out);
 /* Variant for hosts with a separate temporary-memory budget. */

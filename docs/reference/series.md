@@ -471,7 +471,7 @@ ps_result ps_series_quantile(
     double *out);
 ```
 
-Type-7 quantile for a nonempty series. probability must be finite in [0, 1]. Uses only valid rows; all-missing input is PS_INVALID. Reads the whole series into allocator-backed temporary memory; output is unchanged on error.
+Type-7 quantile for a nonempty series. probability must be finite in [0, 1]. Uses only valid rows; all-missing input is PS_INVALID. Up to one block is sorted in memory; larger inputs select exact adjacent order statistics with at most nine blockwise scans and a fixed 6400-byte allocator workspace. No scratch files/quota changes. Output is unchanged on error.
 
 ## ps_series_quantile_with_allocator
 
