@@ -12,7 +12,8 @@ static bool completion_test_start(app *a,const char *root,const char *mode) {
     SDL_SetWindowSize(a->window,1080,740);return true;
 }
 static bool completion_test_equal(struct nk_text_edit *edit,const char *text) {
-    return nk_str_len_char(&edit->string)==(int)strlen(text) && !memcmp(nk_str_get_const(&edit->string),text,strlen(text));
+    size_t length=strlen(text);const char *actual=nk_str_get_const(&edit->string);
+    return nk_str_len_char(&edit->string)==(int)length && (!length || (actual && !memcmp(actual,text,length)));
 }
 static void completion_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
     static unsigned target,seeks;static bool prepared;bool language=!strcmp(mode,"completion-phys"),ok=true;

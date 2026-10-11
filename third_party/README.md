@@ -23,6 +23,14 @@ included as `licenses/zlib-LICENSE.txt` in the portable package.
 
 ## Nuklear snapshot
 
+Local patch (2026-10-11): UTF-8 range deletion resolves both rune endpoints
+against the original byte buffer instead of shifting its pointer while
+retaining the original byte length. Suffix removal uses the exact byte
+span, and clearing all runes also clears the byte count. The standalone
+`utf8_string_bounds` test checks every deletion range in an exactly sized,
+unterminated multi-byte buffer, suffix removal and invalid ranges. An
+AddressSanitizer counterexample reproduces the former end-buffer read.
+
 The local text command uses a C17 flexible array for its dynamically allocated
 text tail. UBSan exposed fixed `char[2]` indexing beyond the declared member
 during actual rendered UTF-8 labels; the existing allocation already reserves

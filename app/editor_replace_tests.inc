@@ -13,7 +13,7 @@ static bool editor_replace_start(app *a,const char *root) {
 }
 static bool editor_replace_equal(struct nk_text_edit *edit,const char *text) {
     int length=nk_str_len_char(&edit->string);return length==(int)strlen(text) &&
-        !memcmp(nk_str_get_const(&edit->string),text,(size_t)length);
+        (!length || !memcmp(nk_str_get_const(&edit->string),text,(size_t)length));
 }
 static void editor_replace_frame(app *a,int *stage,int *code,const char **capture) {
     static unsigned target;static bool prepared;bool ok=true;

@@ -1,0 +1,72 @@
+name: Linux UI sanitizer regressions
+
+on:
+  push:
+    paths:
+      - 'app/**'
+      - 'third_party/nuklear.h'
+      - 'tests/test_utf8_string_bounds.c'
+      - 'tests/test_editor_*.c'
+      - 'tests/check_display_workflow.py'
+      - 'tools/build.py'
+      - 'tools/native_tests.py'
+      - '.github/workflows/linux-ui-sanitizers.yml'
+  pull_request:
+    paths:
+      - 'app/**'
+      - 'third_party/nuklear.h'
+      - 'tests/test_utf8_string_bounds.c'
+      - 'tests/test_editor_*.c'
+      - 'tests/check_display_workflow.py'
+      - 'tools/build.py'
+      - 'tools/native_tests.py'
+      - '.github/workflows/linux-ui-sanitizers.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  linux-ui:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [gcc, clang]
+    env:
+      CC: ${{ matrix.compiler }}
+      PHYSIM_CC: ${{ matrix.compiler }}
+      UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Platform dependencies
+        run: sudo apt-get update && sudo apt-get install -y ninja-build libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxi-dev libxfixes-dev libxss-dev libxtst-dev libwayland-dev libxkbcommon-dev libegl1-mesa-dev libgl1-mesa-dev libdbus-1-dev xvfb openbox x11-utils
+      - name: SDL3 pinned source
+        run: |
+          git clone --depth 1 --branch release-3.2.30 https://github.com/libsdl-org/SDL.git build-sdl-source
+          cmake -S build-sdl-source -B build-sdl -G Ninja -DCMAKE_BUILD_TYPE=Release -DSDL_TESTS=OFF -DCMAKE_INSTALL_PREFIX="$PWD/build-sdl-install"
+          cmake --build build-sdl --parallel 4
+          cmake --install build-sdl
+      - name: Sanitized UTF-8 and editor primitives
+        run: python3 tools/build.py --compiler "${{ matrix.compiler }}" --sanitizers --test --test-filter utf8_string_bounds --test-filter editor_clipboard --test-filter editor_readonly
+      - name: Sanitized project-tree, completion and reference workflows
+        env:
+          ASAN_OPTIONS: detect_leaks=0
+          LIBGL_ALWAYS_SOFTWARE: "1"
+        run: |
+          xvfb-run -a -s '-screen 0 1920x1080x24' sh -c '
+            openbox > build/window-manager.log 2>&1 &
+            python3 tools/wait-window-manager.py &&
+            python3 tools/build.py --compiler "${{ matrix.compiler }}" --sanitizers --test-display --test-filter project_tree_workflow --test-filter completion_workflow --test-filter api_reference_workflow
+          '
+      - name: Archive focused evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-ui-sanitizers-${{ matrix.compiler }}
+          path: |
+            build/native/Debug-sanitized/test-results/**
+            build/window-manager.log
+          if-no-files-found: error

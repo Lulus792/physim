@@ -82,7 +82,8 @@ static void project_tree_test_frame(app *a,int *stage,int *code,const char **cap
             pending_capture="project-tree-run.bmp";}
         else if(item==7){char path[4096];join(path,sizeof path,a->project,"runs/recorded ä.PSRUN");workspace_document *doc=active_document(a);
             ok=a->tab==2 && a->analysis_tab==0 && !strcmp(a->last_run,path) && a->data.total==3 && a->document_count==1 &&
-               doc && doc->dirty && !strcmp(nk_str_get_const(&doc->edit.string),"Asset edit α\n") && strstr(a->status,"Laufdatei");
+               doc && doc->dirty && nk_str_len_char(&doc->edit.string)==(int)strlen("Asset edit α\n") &&
+               !memcmp(nk_str_get_const(&doc->edit.string),"Asset edit α\n",strlen("Asset edit α\n")) && strstr(a->status,"Laufdatei");
             pending_capture="project-tree-invalid.bmp";}
         item++;
         if(pending_capture){test_mouse(a,nk_rect(900,700,1,1),false);*stage=5;}

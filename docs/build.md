@@ -256,6 +256,15 @@ LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a -s '-screen 0 1920x1080x24' sh -c \
   'openbox > /tmp/physim-openbox.log 2>&1 & python3 tools/wait-window-manager.py && python3 tools/build.py --test-display'
 ```
 
+Der zusätzliche Workflow **Linux UI sanitizer regressions** prüft unter GCC
+und Clang gezielt UTF-8-Strings, Clipboard und schreibgeschützte Editoren sowie
+die Projektbaum-, Completion- und API-Referenz-Workflows mit ASan/UBSan.
+Er läuft bei Änderungen an den betreffenden Quellen und unabhängig von der
+vollständigen C17-Matrix. So werden diese Fehler vor den langen SDK- und
+gesamten Grafikprüfungen sichtbar. Die vollständige Matrix bleibt erforderlich.
+Der Workflow archiviert alle einzelnen Resultate und Fensterbelege;
+seine Konfiguration allein ist kein Nachweis eines bestandenen Linux-Laufs.
+
 Vor dem App-Start prüft der Aufruf den lebenden Fenstermanager anhand der
 [EWMH-Eigenschaft `_NET_SUPPORTING_WM_CHECK`](https://specifications.freedesktop.org/wm/1.5/ar01s03.html).
 Der App-Prüfer setzt außerdem `PHYSIM_TEST_TRACE=1`, damit Start und Testphasen

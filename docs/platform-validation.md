@@ -3959,3 +3959,74 @@ Die abschließende Parser- und Referenzprüfung besteht **2/2** in
 PP-0323/0324/0325/0326 besitzen damit konkrete lokale Nachweise.
 Aktuelle Linux-/Windows-/Apple-Silicon-Ausführung dieser Änderungen,
 vollständige Barrierefreiheit und gesamte Projektabnahme bleiben offen.
+
+
+## Linux-Sanitizerfehler in UTF-8 und Editorfixtures
+
+Der tatsächlich beendete [C17-Lauf 38152656546](https://github.com/PhysicSimulator/physim/actions/runs/38152656546)
+gehört zu **bb1a369e41175b41b49e297b3c27d77ea8d2bb9f**, nicht zum aktuellen
+HEAD. Beide macOS-Jobs und alle vier Windows-Jobs bestehen. Unter Linux
+bestehen mit GCC/Clang jeweils **690/690** normale native Fälle,
+**100/100** normale Grafikfälle und **690/690** native Sanitizerfälle.
+Die Sanitizer-Grafikgruppen enden jedoch jeweils mit **97/100**:
+`project_tree_workflow`, `completion_workflow`, `api_reference_workflow`.
+GCC-Job **114517919387**: normale native/Grafik- sowie Sanitizer-native/Grafik-
+Resultate `run-omf7yb2x`, `run-0uf3ucin`, `run-z3d01fq6`, `run-mmleuqvj`.
+Clang-Job **114517919564**: `run-0oeesjjj`, `run-x7i762gl`,
+`run-2g9mv5jz`, `run-_nz5v88b`. Die vollständigen Joblogs wurden gelesen;
+absichtlich fehlgeschlagene Selbstprüfungen des Test-Runners werden nicht
+als Produktfehler gezählt.
+
+Der API-Referenzfall deckt einen echten Heap-Überlauf beim Undo auf:
+`nk_textedit_undo → nk_str_delete_runes → nk_str_at_rune → nk_utf_decode`.
+Beim Löschen verschob Nuklear den Bytebufferzeiger zum Anfang des Bereichs,
+behielt aber die ursprüngliche Byteanzahl. Die neue Gegenprobe liest daher
+hinter einem exakt dimensionierten 15-Byte-Buffer. Auf Intel macOS mit
+AppleClang 16 ist derselbe Überlauf tatsächlich mit ASan reproduziert,
+Log `build/current-utf8-string-before-asan.log`; die Grenze und Stackfolge
+entsprechen den Linux-Logs. Beide Endpunkte werden jetzt gegen den
+ursprünglichen Buffer aufgelöst. Suffixentfernung verwendet eine exakte
+Byteanzahl, und vollständiges Entfernen setzt Byte- und Runeanzahl zurück.
+
+Die beiden übrigen CI-Fehler liegen in den Prüfungen: ein Vergleich rief
+`memcmp(NULL, ..., 0)` auf; ein anderer verwendete `strcmp` auf einem
+längenbasierten, nicht nullterminierten Editorbuffer. Beide verwenden
+jetzt dieselbe strikte Textgleichheit mit expliziter Länge und behandeln
+leere Texte ohne ungültigen Pointeraufruf. Ein entsprechender leerer
+Vergleich im Editorwechsel-Fixture ist ebenfalls korrigiert.
+
+Lokale tatsächliche Nachweise auf Intel macOS 14.6.1:
+
+- Exakte UTF-8-Bufferranges und Suffixentfernung mit ASan/UBSan, Log
+  `build/current-utf8-string-verified-asan.log`.
+- Clipboard/Unicode/Undo/Redo/Ersetzung und readonly Fokus/Kopie/
+  Mutationsabwehr ebenfalls tatsächlich mit ASan/UBSan, Logs
+  `build/current-editor-clipboard-asan.log` und
+  `build/current-editor-readonly-asan.log`. Diese isolierten Compilerläufe
+  verwenden AppleClang und benötigen keinen ld64.lld. LeakSanitizer ist
+  auf diesem Host nicht unterstützt, daher `detect_leaks=0`; das ist kein
+  Leck- oder vollständiger App-Sanitizernachweis.
+- Die drei nativen Regressionen bestehen **3/3** unter
+  `build/current-release-mac/test-results/run-nw1q08gx`, Log
+  `build/current-utf8-native-regression-mac.log`.
+- Die drei betroffenen echten GUI-Workflows plus Editorwechsel bestehen
+  **4/4** unter `run-mame86d7`, Log
+  `build/current-linux-failure-regression-mac.log`, einschließlich C/Physim,
+  leerem Completion-Editor und zusätzlichem Textdokument.
+
+Die tatsächliche Handbuchparser-/Referenzgruppe besteht **2/2** in
+`build/current-headless-mac/test-results/run-tkhbp63t`, Log
+`build/current-linux-fixes-docs-mac.log`.
+
+Für die tatsächliche Linux-Nachprüfung ergänzt ein eigenständiger Workflow
+GCC/Clang mit drei Sanitizer-Primitivefällen und den drei betroffenen
+Sanitizer-GUI-Gruppen. Er benutzt dieselbe gepinnte SDL-Version, Xvfb/Mesa
+und Openbox; die vollständige C17-Matrix bleibt erhalten. Die YAML-Struktur
+und Compilermatrix sind lokal geprüft. Ein aktuelles Linux-Ergebnis der
+Korrektur wird erst nach tatsächlicher Ausführung als bestanden gewertet.
+
+Der ebenfalls beendete [Linux-Paketlauf 38156557421](https://github.com/PhysicSimulator/physim/actions/runs/38156557421)
+gehört zu **162f5e5b974ca693106878b0faa7a4fde23aa0a3**. Paketbau und
+beide Prüfjobs auf frischem Debian 12 und Ubuntu 24.04 bestehen. Dies ist
+ein positiver historischer Paket-/Relokationsnachweis, kein aktueller
+Sanitizer- oder gesamter Plattformnachweis der jetzigen Änderung.

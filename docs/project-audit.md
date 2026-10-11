@@ -976,3 +976,19 @@ Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **92 implemented**, **13 incomplete**, **426 unverified**;
 `completion_proven` bleibt `false`. Aktuelle weitere Plattformen,
 allgemeine Barrierefreiheit und vollständige Produktabnahme bleiben offen.
+
+
+## Beendete Plattformläufe und konkrete Linux-Sanitizerfehler
+
+Die C17-Matrix für `bb1a369` endet mit sechs erfolgreichen macOS-/Windows-
+Jobs und zwei fehlgeschlagenen Linux-Sanitizer-Grafikgruppen. Normale
+Linux-Prüfungen und native Sanitizergruppen bestehen. Ein tatsächlicher
+UTF-8-Überlauf beim Undo sowie zwei ungültige Fixturevergleiche sind
+lokal nachvollzogen und korrigiert; isolierte ASan/UBSan- und GUI-Proben
+bestehen. Ein kürzerer eigener Linux-Sanitizerlauf prüft diese Fälle
+unabhängig von der gesamten Matrix. Der Paketlauf für `162f5e5` besteht
+auf frischem Debian/Ubuntu. Beide historischen Revisionen werden vom
+aktuellen Stand unterschieden.
+[Nachweise und Grenzen](platform-validation.md#linux-sanitizerfehler-in-utf-8-und-editorfixtures).
+Der Gesamtplan bleibt offen; alle **531** Originalblöcke und die Planprüfsumme
+bleiben erhalten, `completion_proven` bleibt `false`.

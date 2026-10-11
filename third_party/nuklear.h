@@ -9106,14 +9106,14 @@ nk_str_remove_runes(struct nk_str *str, int len)
     NK_ASSERT(len >= 0);
     if (!str || len < 0) return;
     if (len >= str->len) {
-        str->len = 0;
+        nk_str_clear(str);
         return;
     }
 
     index = str->len - len;
     begin = nk_str_at_rune(str, index, &unicode, &len);
     end = (const char*)str->buffer.memory.ptr + str->buffer.allocated;
-    nk_str_remove_chars(str, (int)(end-begin)+1);
+    if (begin) nk_str_remove_chars(str, (int)(end-begin));
 }
 NK_API void
 nk_str_delete_chars(struct nk_str *s, int pos, int len)
@@ -9135,26 +9135,24 @@ nk_str_delete_chars(struct nk_str *s, int pos, int len)
 NK_API void
 nk_str_delete_runes(struct nk_str *s, int pos, int len)
 {
-    char *temp;
     nk_rune unicode;
     char *begin;
     char *end;
     int unused;
 
     NK_ASSERT(s);
-    NK_ASSERT(s->len >= pos + len);
-    if (s->len < pos + len)
-        len = NK_CLAMP(0, (s->len - pos), s->len);
+    if (!s || pos < 0 || pos > s->len || len <= 0) return;
+    if (len > s->len - pos)
+        len = s->len - pos;
     if (!len) return;
 
-    temp = (char *)s->buffer.memory.ptr;
+    /* Resolve both endpoints against the original byte range. Moving only
+     * memory.ptr makes allocated include bytes beyond the shifted buffer. */
     begin = nk_str_at_rune(s, pos, &unicode, &unused);
     if (!begin) return;
-    s->buffer.memory.ptr = begin;
-    end = nk_str_at_rune(s, len, &unicode, &unused);
-    s->buffer.memory.ptr = temp;
+    end = nk_str_at_rune(s, pos + len, &unicode, &unused);
     if (!end) return;
-    nk_str_delete_chars(s, (int)(begin - temp), (int)(end - begin));
+    nk_str_delete_chars(s, (int)(begin - (char *)s->buffer.memory.ptr), (int)(end - begin));
 }
 NK_API char*
 nk_str_at_char(struct nk_str *s, int pos)
