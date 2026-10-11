@@ -46,14 +46,16 @@ static void library_view(app *a, float height) {
         snprintf(detail, sizeof detail, "%zu Dateien im Projekt · neueste zuerst · " PS_UI_SHORTCUT "F filtert",
                  a->library ? a->library->count : 0);
     nk_label_colored(ui, detail, NK_TEXT_LEFT, UI_COLOR(muted));
-    nk_layout_row_dynamic(ui, 34, 3);
+    nk_layout_row_dynamic(ui, 26, 1);
     snprintf(detail, sizeof detail, "%u von 8 Läufen ausgewählt", a->selected_count);
     nk_label(ui, detail, NK_TEXT_LEFT);
+    nk_layout_row_dynamic(ui, 34, 2);
     nk_begin_disabled(ui, !idle(a) || !a->selected_count);
+    a->library_clear_bounds = nk_widget_bounds(ui);
     if (nk_button_label(ui, "Auswahl leeren"))
         a->selected_count = 0;
     a->library_analyze_bounds = nk_widget_bounds(ui);
-    if (action_button(ui, a->selected_count > 1 ? "Auswahl vergleichen" : "Auswahl analysieren",
+    if (action_button(ui, a->selected_count > 1 ? "Vergleichen" : "Analysieren",
                       true)) {
         a->tab = 2;
         a->analysis_tab = 0;
@@ -61,7 +63,7 @@ static void library_view(app *a, float height) {
     }
     nk_end_disabled(ui);
     a->library_visible_count = 0;
-    nk_layout_row_dynamic(ui, fmaxf(120, height - 230), 1);
+    nk_layout_row_dynamic(ui, fmaxf(120, height - 256), 1);
     if (nk_group_begin(ui, "library-files", 0)) {
         size_t shown = 0;
         if (a->library)
@@ -104,11 +106,13 @@ static void library_view(app *a, float height) {
                     open_library_item(a, i);
                 nk_end_disabled(ui);
                 nk_layout_row_end(ui);
+                int visible = -1;
                 if (a->library_visible_count < 8 &&
                     open_bounds.y >= nk_window_get_content_region(ui).y &&
                     open_bounds.y + open_bounds.h <=
                         nk_window_get_content_region(ui).y + nk_window_get_content_region(ui).h) {
                     unsigned at = a->library_visible_count++;
+                    visible = (int)at;
                     a->library_visible_indices[at] = i;
                     a->library_open_bounds[at] = open_bounds;
                     a->library_select_bounds[at] = select_bounds;
@@ -119,8 +123,21 @@ static void library_view(app *a, float height) {
                 if (local)
                     strftime(date, sizeof date, "%d.%m.%Y · %H:%M:%S", local);
                 snprintf(detail, sizeof detail, "%s · %.1f KiB", date, (double)item->bytes / 1024);
-                nk_layout_row_dynamic(ui, 22, 1);
+                nk_layout_row_begin(ui, NK_DYNAMIC, 30, selection >= 0 ? 2 : 1);
+                nk_layout_row_push(ui, selection >= 0 ? .65f : 1.f);
                 nk_label_colored(ui, detail, NK_TEXT_LEFT, UI_COLOR(muted));
+                if (selection >= 0) {
+                    nk_layout_row_push(ui, .35f);
+                    struct nk_rect reference_bounds = nk_widget_bounds(ui);
+                    nk_begin_disabled(ui, !idle(a) || selection == 0);
+                    if (nk_button_label(ui, selection == 0 ? "Referenz" : "Als Referenz"))
+                        reference_run(a, path);
+                    nk_end_disabled(ui);
+                    if (visible >= 0)
+                        a->library_reference_bounds[visible] = reference_bounds;
+                } else if (visible >= 0)
+                    a->library_reference_bounds[visible] = nk_rect(0, 0, 0, 0);
+                nk_layout_row_end(ui);
             }
         if (!shown) {
             nk_layout_row_dynamic(ui, 70, 1);

@@ -4010,3 +4010,53 @@ Dies ist keine Sanitizer-Prüfung und kein Beleg für deren Bestehen. Aktuelle
 Linux-/Windows-/ARM-Builds dieser Änderung sind ebenfalls noch offen.
 PP-0292/0300/0301/0312/0313 besitzen damit konkrete lokale Funktionsnachweise;
 volle Plattform-/SDK-Abnahme und Gesamtplan bleiben offen.
+
+
+## Analyseprojekte und Laufauswahl
+
+Am 2026-10-11 auf Intel macOS 14.6.1 / AppleClang 16 tatsächlich gebaut
+und ausgeführt: `library_selection_workflow` und `workflow_pointer_isolation`
+bestehen **2/2** unter `build/current-release-mac/test-results/run-w0g5v3vw`,
+Log `build/current-library-selection-final-mac.log`. Die erste Gruppe startet
+vier Apps: C-/Physim-Analyse mit UI-Schrift 16 und 22 im Fenster 1080×740.
+Neun gültige Laufdateien enthalten je fünf analytisch bekannte Positionen
+mit unterschiedlichen Zeitrastern und Geschwindigkeiten. Echte Kästchen
+wählen acht Läufe; der neunte bleibt mit explizitem Hinweis abgewiesen.
+**Als Referenz** verschiebt den gewählten Lauf nach vorn und erhält die
+übrige Reihenfolge. Entfernen der Referenz, Nachrücken und Nachauswahl
+werden ebenfalls über die GUI geprüft. Die letzte Reihenfolge lautet
+9, 1, 2, 3, 4, 5, 7, 8. Die echte Analyseaktion übergibt diese Reihenfolge
+an den separaten Runner; sämtliche acht abgeleiteten Geschwindigkeitskurven
+haben die unabhängigen Sollwerte 9, 1, 2, 3, 4, 5, 7, 8. Nach **Auswahl
+leeren** folgt eine echte Einlaufanalyse mit Geschwindigkeit 3.
+
+Python prüft beide Eingabemanifeste unabhängig: einbasierte Indizes,
+Pfadreihenfolge, Dateigrößen und neu berechnete FNV-1a-64-Fingerabdrücke
+von Modul und Eingängen sowie identische archivierte Analysequellen und
+vorhandene Berichte. Die App prüft die gemessene Textbreite der Referenz-
+und Analyseaktion. Fensterbilder sind ausgewertet; die Auswahlanzahl hat
+nun eine eigene Zeile, die kurzen Aktionen passen bei beiden Schriftgrößen.
+Die zweite Gruppe öffnet gespeicherte Läufe/Berichte in zwei Fenstergrößen
+und provoziert fremde Fenstereingaben; Auswahl und bestehende Ergebnisse
+bleiben unabhängig.
+
+Der vorausgehende Stand besteht **3/3** unter `run-by6ntkxk`, Log
+`build/current-library-selection-verified-mac.log`: Laufauswahl,
+Fenstereingabeisolation und `analysis_projects_workflow`. Letzteres startet
+vier Apps für unabhängige C-/Physim-Analyseprojekte: Erstellung, eigener
+Build ohne Experimentmodul, Import unveränderter Rohdaten, echter Bericht
+und erneutes Öffnen. Die erste Auswahlprobe `run-todk41yi` scheiterte in
+Physim, weil synthetische Positionsdaten ohne Winkel/Energie irrtümlich
+mit der Pendelvorlage analysiert wurden. Das Fixture verwendet jetzt
+explizit die allgemeine Positionsanalyse; die Ablehnung wird nicht als
+Produktfehler umgedeutet.
+
+Die nativen Regressionen bestehen **4/4** unter
+`build/current-headless-mac/test-results/run-ytgc0p5n`, Log
+`build/current-library-analysis-regression-mac.log`: `language_analysis`,
+`analysis_isolation`, `run_comparison`, `documentation_reference`.
+Die aktualisierte Bedienungsdokumentation besteht zusätzlich **1/1** unter
+`run-ef5vccdt`, Log `build/current-library-selection-docs-final-mac.log`.
+PP-0319/0320 besitzen damit begrenzte lokale Nachweise. Aktuelle Linux-,
+Windows- und Apple-Silicon-Ausführung dieser Änderung, allgemeine
+Barrierefreiheit und vollständige Planabnahme bleiben offen.

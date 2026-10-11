@@ -8,7 +8,7 @@ Schreiben ab. Die `.psrun`-Metadaten speichern je Parameter den wirksamen Wert
 unter `parameter.<name>` sowie Standardwert und Grenzen unter
 `parameter_default.<name>`, `parameter_min.<name>` und `parameter_max.<name>`.
 Nach einem erfolgreichen Build zeigt die App die vom Experiment gemeldeten
-Parameter unter **Simulieren → Inspector → Laufeinstellungen → Experimentparameter**.
+Parameter unter **Simulieren → Inspector → Parameter**.
 Werte können innerhalb der angezeigten Grenzen bearbeitet oder auf den Standard
 zurückgesetzt werden. Die App prüft die Eingaben vor dem Start und übergibt sie
 dem isolierten Runner. Speichern, Starten und Schließen schreiben gültige
@@ -43,7 +43,7 @@ werden erst beim Öffnen geprüft.
 
 1. Mit F5 die aktuelle `analysis.c` beziehungsweise `analysis.phys` bauen.
 2. Unter **Messläufe** zwei bis acht Dateien mit den Kästchen auswählen.
-3. **Auswahl vergleichen** startet die Analyse im separaten Prozess.
+3. **Vergleichen** startet die Analyse im separaten Prozess.
 4. In der Auswertung zwischen Diagrammen und Kennzahlentabelle wechseln.
 
 Die mitgelieferte Vorlage vergleicht Position und abgeleitete Geschwindigkeit.
@@ -59,8 +59,11 @@ Zeitachsen werden nicht verschoben und außerhalb der Quelle wird nicht extrapol
 Ohne gemeinsame Zielzeitpunkte entfallen Differenzkurve und Tabellenzeile.
 Bei einem einzigen gemeinsamen Zeitpunkt erscheint ein Punkt mit Standardabweichung 0.
 Die Tabelle gewichtet jeden Zielmesspunkt gleich; sie ist kein zeitgewichteter Mittelwert.
-Eine Änderung der Auswahlreihenfolge ändert die Referenz. Auswahl leeren und die
-gewünschte Referenz zuerst anhaken, um sie zu wechseln.
+Eine Änderung der Auswahlreihenfolge ändert die Referenz. **Als Referenz** unter
+einem ausgewählten Lauf verschiebt ihn an die erste Stelle; die übrigen Läufe
+behalten ihre relative Reihenfolge. Die bereits aktive Referenz ist mit
+**Referenz** gekennzeichnet. Entfernst du sie aus der Auswahl, übernimmt der
+nächste ausgewählte Lauf diese Rolle. Während eines Jobs ist die Auswahl gesperrt.
 
 Auswahl und Ansicht sind unabhängig: **Ansehen** ändert die Vergleichsauswahl nicht.
 Ein neuer Simulationslauf ersetzt die Auswahl durch diesen Lauf. **Auswahl leeren**
@@ -99,12 +102,14 @@ Vor dem Callback schreibt der Runner `<präfix>.inputs.csv` mit Modul und Eingä
 Rolle, Index, Pfad, Dateigröße und FNV-1a-64-Fingerabdruck. Bestehende Ausgaben werden
 nicht überschrieben. FNV identifiziert Inhalte, ist jedoch kein kryptographischer
 Nachweis. Externe Änderungen zwischen Fingerabdruck und Analyse werden nicht gesperrt.
-Die App kopiert außerdem den Analysequellcode nach `<präfix>.source.c`.
+Die App kopiert außerdem den Analysequellcode nach `<präfix>.source.c` beziehungsweise
+`<präfix>.source.phys`.
 
 ## Grenzen
 
 Die Liste durchsucht nur den direkten `runs`-Ordner und zeigt höchstens 4096 Dateien.
 Bei Überschreitung erscheint eine Warnung; die enthaltene Teilmenge ist nicht
 garantiert die neueste. Ungültige oder unlesbare Einträge werden übersprungen und
-gezählt. Projektübergreifende Auswahl, weitere Interpolationsverfahren und Plotzoom
-sind offen.
+gezählt. Projektübergreifende Auswahl und weitere Interpolationsverfahren sind
+offen. [Plotzoom und Diagrammexport](reports.md) verändern die gespeicherten
+Messwerte nicht.

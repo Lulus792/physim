@@ -502,7 +502,9 @@ vorhandene Ausgaben werden nicht stillschweigend ersetzt.
 **Läufe & Berichte / Ctrl+4** zeigt gespeicherte Ergebnisse. Suche und Filter
 helfen beim Finden. Öffne Messdaten oder einen Bericht direkt, ohne neu zu bauen.
 Wähle bis zu acht Läufe für die Mehrlaufanalyse; der erste ausgewählte Lauf ist
-bei der Vergleichsvorlage die Referenz. Bei unterschiedlichen Zeitrastern muss
+bei der Vergleichsvorlage die Referenz. **Als Referenz** verschiebt einen
+ausgewählten Lauf an die erste Stelle und erhält die Reihenfolge der übrigen
+Läufe. Bei unterschiedlichen Zeitrastern muss
 die Analyse eine gemeinsame Zuordnung herstellen.
 [Läufe auswählen und vergleichen](runs.md)
 

@@ -2412,9 +2412,14 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Eigener Editor und eigener Build-Zieltyp für Analysecode.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/analysis_project_tests.inc",
+        "app/main.c",
+        "tests/check_display_workflow.py",
+        "docs/platform-validation.md#analyseprojekte-und-laufauswahl"
+      ],
+      "note": "Eigener Analyseeditor und Analysebuild einschließlich unabhängiger Projekte ohne Experimentquelle/-modul. Intel macOS tatsächlich ausgeführt: analysis_projects_workflow in run-by6ntkxk, vier App-Prozesse für C/Physim mit Erzeugung, Build, Import, Analyse und erneutem Öffnen. Aktuelle weitere Plattformen und vollständige Produktabnahme bleiben offen."
     },
     {
       "id": "PP-0320",
@@ -2428,9 +2433,16 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Auswahl eines oder mehrerer Läufe.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/library_actions.inc",
+        "app/library_ui.inc",
+        "app/library_selection_tests.inc",
+        "tests/check_display_workflow.py",
+        "runners/analysis.c",
+        "docs/platform-validation.md#analyseprojekte-und-laufauswahl"
+      ],
+      "note": "Ein bis acht Läufe über echte GUI-Kästchen, neunter Eingang abgewiesen. Direkter Referenzwechsel erhält übrige Reihenfolge; Entfernen der Referenz rückt den nächsten Lauf nach. Intel macOS: run-w0g5v3vw, C/Physim bei UI-Schrift 16/22, alle acht Ergebnisreihen und Einlaufanalyse numerisch geprüft. Geordnete Manifestindizes, Inhalt-Fingerabdrücke und Quellkopien unabhängig kontrolliert; Lauf-/Berichtöffnung als Regression. Weitere Plattformen und allgemeine Tastatur-/Screenreader-Abnahme bleiben offen."
     },
     {
       "id": "PP-0321",

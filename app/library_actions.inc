@@ -19,6 +19,16 @@ static void select_run(app *a, const char *path, bool selected) {
         snprintf(a->selected_runs[a->selected_count++], sizeof a->selected_runs[0], "%s", path);
     }
 }
+static void reference_run(app *a, const char *path) {
+    int index = selected_run(a, path);
+    if (index <= 0 || !idle(a))
+        return;
+    char reference[sizeof a->selected_runs[0]];
+    snprintf(reference, sizeof reference, "%s", a->selected_runs[index]);
+    memmove(a->selected_runs[1], a->selected_runs[0],
+            (size_t)index * sizeof a->selected_runs[0]);
+    snprintf(a->selected_runs[0], sizeof a->selected_runs[0], "%s", reference);
+}
 static int scan_library(void *user) {
     app *a = user;
     a->library_result = ps_library_scan(a->library_directory, &a->pending_library);

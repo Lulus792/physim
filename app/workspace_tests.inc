@@ -12,6 +12,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
     if(!strcmp(mode,"completion-c") || !strcmp(mode,"completion-phys"))return completion_test_start(a,root,mode);
     if(!strcmp(mode,"api-reference-c") || !strcmp(mode,"api-reference-phys"))return api_reference_test_start(a,root,mode);
     if(!strncmp(mode,"parameter-form-",15))return parameter_form_test_start(a,root,mode);
+    if(!strncmp(mode,"library-selection-",18))return library_selection_test_start(a,root,mode);
     if (!strcmp(mode, "native-dialogs") || !strcmp(mode, "native-dialog-error"))
         return native_dialog_test_start(root);
     if(!strncmp(mode,"inspector-",10))return inspector_test_start(a,root,mode);
@@ -136,6 +137,7 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
     if(!strcmp(mode,"completion-c") || !strcmp(mode,"completion-phys")){completion_test_frame(a,mode,stage,code,capture);return;}
     if(!strcmp(mode,"api-reference-c") || !strcmp(mode,"api-reference-phys")){api_reference_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"parameter-form-",15)){parameter_form_test_frame(a,mode,stage,code,capture);return;}
+    if(!strncmp(mode,"library-selection-",18)){library_selection_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"inspector-",10)){inspector_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"layouts-",8)){layout_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"named-",6)){workspace_catalog_test_frame(a,mode,stage,code,capture);return;}

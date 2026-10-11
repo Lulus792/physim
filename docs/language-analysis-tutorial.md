@@ -17,7 +17,7 @@ nullbasierten Index im Diagramm fest.
 
 In der App kannst du die `.psrun`-Dateien in `runs/` deines Analyseprojekts
 legen und **Läufe & Berichte** aktualisieren. Wähle unter **Messläufe** zwei bis
-acht Dateien und dann **Auswahl vergleichen**. Baue zuvor `analysis.phys` mit
+acht Dateien und dann **Vergleichen**. Baue zuvor `analysis.phys` mit
 **F5**. [Läufe & Berichte](runs.md) erklärt Auswahl und gespeicherte Ergebnisse.
 
 ## Analysecode

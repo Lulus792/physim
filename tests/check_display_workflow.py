@@ -1,5 +1,6 @@
 """Run the app's window workflows and check their persisted files without CMake."""
 import argparse
+import csv
 import hashlib
 import json
 import math
@@ -349,6 +350,48 @@ def api_browser(flow,directory):
              marker="API BROWSER SELF-TEST: PASSED")
     for name in ("docs-api-type.bmp","docs-api-function.bmp","docs-api-unit.bmp","docs-api-example.bmp"):
         require((directory/name).is_file(),"Missing actual API navigation view: "+name)
+
+
+def library_selection(flow, directory):
+    for size in (16, 22):
+        for language in ("c", "phys"):
+            root = directory / f"{language}-{size}"
+            root.mkdir(parents=True)
+            flow.run("--workspace-state-test", root,
+                     "library-selection-" + language + ("-22" if size == 22 else ""),
+                     timeout=130, marker="LIBRARY SELECTION SELF-TEST: PASSED")
+            project = root / "project"
+            manifests = list((project / "runs").glob("*.inputs.csv"))
+            require(len(manifests) == 2, "Missing single/multiple analysis manifests")
+            orders = []
+            for manifest in manifests:
+                with manifest.open(encoding="utf-8", newline="") as stream:
+                    entries = list(csv.DictReader(stream))
+                inputs = [entry for entry in entries if entry["role"] == "input"]
+                require([int(entry["index"]) for entry in inputs] == list(range(1, len(inputs) + 1)),
+                        "Manifest lost input indices")
+                orders.append([Path(entry["path"]).name for entry in inputs])
+                for entry in entries:
+                    content = Path(entry["path"]).read_bytes()
+                    require(len(content) == int(entry["bytes"]),
+                            "Input/module identity size mismatch")
+                    fnv = 14695981039346656037
+                    for byte in content:
+                        fnv = ((fnv ^ byte) * 1099511628211) & ((1 << 64) - 1)
+                    require(f"{fnv:016x}" == entry["fnv1a64"],
+                            "Analysis changed input/module contents after provenance capture")
+                prefix = Path(str(manifest).removesuffix(".inputs.csv"))
+                source = project / ("analysis." + language)
+                require(Path(str(prefix) + ".source." + language).read_bytes() == source.read_bytes(),
+                        "Analysis source provenance changed")
+                require(Path(str(prefix) + ".psreport").is_file(), "Analysis report missing")
+            expected = [["selection-3.psrun"],
+                        [f"selection-{i}.psrun" for i in (9,1,2,3,4,5,7,8)]]
+            require(sorted(orders, key=len) == expected, "Runner received incorrect selection/reference order")
+            require(len(list((project / "runs").glob("*.psrun"))) == 9, "Selection changed fixture runs")
+            for name in ("selection-limit", "selection-reference", "selection-ready",
+                         "selection-multiple-result", "selection-single", "selection-single-result"):
+                require((root / (name + ".bmp")).is_file(), "Missing actual selection view: " + name)
 
 
 def parameter_form(flow,directory):
@@ -1165,7 +1208,7 @@ def workflow_pointer_isolation(flow, directory):
                 "Actual paired run/report artifacts missing")
 
 
-SPECIAL = {"api_reference_workflow": api_reference,
+SPECIAL = {"library_selection_workflow": library_selection, "api_reference_workflow": api_reference,
     "parameter_form_workflow": parameter_form,"completion_workflow": completion,"build_controls_workflow": build_controls,"project_tree_workflow": project_tree,"project_manager_keyboard_errors": project_manager_errors,"api_browser_workflow": api_browser,"editor_replace_workflow": editor_replace,"runner_keyboard_workflow": runner_keyboard,"runner_isolation_workflow": runner_isolation,"step_breakpoints_workflow": step_breakpoints,"workflow_pointer_isolation": workflow_pointer_isolation,"pendulum_medium_workflow": pendulum_medium,"pendulum_c_energy_workflow": pendulum_c_energy,"project_manager_keyboard_workflow": project_manager_keyboard,"settings_keyboard_workflow": settings_keyboard,"ui_typography_workflow": ui_typography,"saved_run_tutorial_workflow": saved_run_tutorial,"monte_carlo_tutorial_workflow": monte_carlo_tutorial,"collision_tutorial_workflow": collision_tutorial,"pendulum_tutorial_workflow": pendulum_tutorial,"spring_tutorial_workflow": spring_tutorial,"material_tutorial_workflow": material_tutorial,"contact_world_language_workflow": contact_world_language,"contact_world_workflow": contact_world, "diagnostic_workflow": diagnostics, "scene_frames_workflow": scene_frames, "logging_workflow": logging, "live_inspector_22_workflow": lambda flow,directory: logging(flow,directory,True), "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,

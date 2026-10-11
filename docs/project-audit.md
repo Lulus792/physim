@@ -932,3 +932,18 @@ Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **83 implemented**, **13 incomplete**, **435 unverified**;
 `completion_proven` bleibt `false`. Aktuelle weitere Plattformen und die
 lokale Sanitizer-Ausführung dieser Änderung sind noch offen.
+
+
+## Analyseprojekte und explizite Referenzauswahl (§6.3)
+
+PP-0319/0320 besitzen konkrete lokale Nachweise: unabhängige Analyseprojekte
+mit eigenem Editor/Build in C und Physim sowie tatsächliche Auswahl von
+einem bis acht Läufen. Die Referenz lässt sich direkt wechseln; übrige
+Reihenfolge und Analyseprovenienz bleiben erhalten. Die GUI-Grenzfälle,
+alle acht Ergebnisreihen, Einlaufanalyse und Fenstereingabeisolation sind
+auf Intel macOS ausgeführt und die Fensterbilder ausgewertet.
+[Nachweise und Grenzen](platform-validation.md#analyseprojekte-und-laufauswahl).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**85 implemented**, **13 incomplete**, **433 unverified**;
+`completion_proven` bleibt `false`. Aktuelle weitere Plattformen und
+vollständige Produktabnahme bleiben offen.
