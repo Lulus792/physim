@@ -5,13 +5,14 @@
 #include <string.h>
 typedef struct {
     double y[4];
+    double drag_coefficient;
     ps_vec3 trail[64];
     unsigned trail_count, ticks;
 } projectile;
 static void ode(double t, const double *y, double *d, void *u) {
     (void)t;
-    (void)u;
-    ps_vec3 drag = ps_drag_force(ps_v3(y[2], y[3], 0), PS_AIR, 0.47, 0.01);
+    const projectile *p = u;
+    ps_vec3 drag = ps_drag_force(ps_v3(y[2], y[3], 0), PS_AIR, p->drag_coefficient, 0.01);
     d[0] = y[2];
     d[1] = y[3];
     d[2] = drag.x;
@@ -39,6 +40,11 @@ static ps_result create(ps_context *c) {
     c->user = calloc(1, sizeof(projectile));
     if (!c->user)
         return PS_MEMORY;
+    projectile *p = c->user;
+    ps_result parameter = ps_parameter_define_unit(c, "dragCoefficient", "Quadratic drag coefficient",
+                                                  PS_ONE, .47, 0, 2, &p->drag_coefficient);
+    if (parameter != PS_OK)
+        return parameter;
     ps_channel_add(c, "position.x", PS_METRE, "x");
     ps_channel_add(c, "position.y", PS_METRE, "y");
     ps_channel_add(c, "velocity.x", PS_VELOCITY, "vx");
@@ -46,13 +52,13 @@ static ps_result create(ps_context *c) {
     ps_channel_add(c, "energy", PS_JOULE, "Mechanical energy");
     snprintf(c->model_metadata, sizeof c->model_metadata,
              "model=projectile, gravity and quadratic drag, no "
-             "ground\nmass_kg=1\nmedium=air\ndensity_kg_m3=1.225\nCd=0.47\narea_m2=0."
-             "01\nintegrator=RK4");
+             "ground\nmass_kg=1\nmedium=air\ndensity_kg_m3=1.225\nCd=%.17g\narea_m2=0."
+             "01\nintegrator=RK4", p->drag_coefficient);
     return reset(c);
 }
 static ps_result step(ps_context *c, double dt) {
     projectile *p = c->user;
-    ps_result r = ps_ode_step(PS_RK4, ode, NULL, c->time_s, dt, p->y, 4);
+    ps_result r = ps_ode_step(PS_RK4, ode, p, c->time_s, dt, p->y, 4);
     measure(c);
     if (r == PS_OK && ++p->ticks % 10 == 0) {
         if (p->trail_count == 64) {

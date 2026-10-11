@@ -23,9 +23,11 @@ E = 0,5 · m · |v|² + m · g · y
 
 Beide Fassungen berechnen pro Zeitschritt vier RK4-Stufen aus demselben
 Zustand. Anders als beim Vakuumwurf ist `E` hier nicht konstant: Der
-Widerstand dissipiert Energie. Die C-Fassung gibt `A` direkt an
-`ps_drag_force` weiter. Die Physim-Funktion `quadraticDrag` erwartet einen
-Kugelradius; `sqrt(A/π)` stellt dieselbe Querschnittsfläche her.
+Widerstand dissipiert Energie. Die C-Fassung gibt `Cd` und `A` direkt an
+`ps_drag_force` weiter. Die Physim-Fassung verwendet dieselben Werte mit
+`Medium.air().dragForce(velocity, dragCoefficient, crossSection)`.
+Die separat verfügbare Funktion `quadraticDrag` erwartet stattdessen einen
+Kugelradius; dort würde `sqrt(A/π)` dieselbe Querschnittsfläche herstellen.
 
 ## Projekt und Ergebnis
 
@@ -36,6 +38,13 @@ startet den Lauf. Wähle `dt = 0,005 s`, stoppe nach 200 Schritten bei
 `t = 1 s` und starte die Analyse des gespeicherten Laufs. Die Quellen liegen
 unter `examples/projectile/main.c`, `examples/language/projectile_drag.phys`
 und `examples/documentation/drag_analysis.*`.
+Beide Experimentsprachen bieten vor dem Start den dimensionslosen Laufparameter
+`dragCoefficient` mit Standard `0,47` und Grenzen `0..2`. Änderungen benötigen
+keinen neuen Build. Der Lauf speichert den gewählten Wert, Standard und Grenzen
+sowie die explizite SI-Einheit `1`; auch die Modellbeschreibung `Cd` verwendet
+den tatsächlichen Wert. `Cd=0` ergibt die analytische Vakuumparabel dieses
+Modells. Reset erhält den gewählten Beiwert, und gleichzeitig lebende Modelle
+können unterschiedliche Werte verwenden.
 
 Bei `t = 1 s` liegen die Werte ungefähr bei `x = -0,009598 m`,
 `y = 0,086075 m`, `vx = 1,981052 m/s`, `vy = -4,808007 m/s` und
@@ -59,13 +68,14 @@ zehn Schritte ergänzt und auf 64 Punkte begrenzt.
 #include <string.h>
 typedef struct {
     double y[4];
+    double drag_coefficient;
     ps_vec3 trail[64];
     unsigned trail_count, ticks;
 } projectile;
 static void ode(double t, const double *y, double *d, void *u) {
     (void)t;
-    (void)u;
-    ps_vec3 drag = ps_drag_force(ps_v3(y[2], y[3], 0), PS_AIR, 0.47, 0.01);
+    const projectile *p = u;
+    ps_vec3 drag = ps_drag_force(ps_v3(y[2], y[3], 0), PS_AIR, p->drag_coefficient, 0.01);
     d[0] = y[2];
     d[1] = y[3];
     d[2] = drag.x;
@@ -93,6 +103,11 @@ static ps_result create(ps_context *c) {
     c->user = calloc(1, sizeof(projectile));
     if (!c->user)
         return PS_MEMORY;
+    projectile *p = c->user;
+    ps_result parameter = ps_parameter_define_unit(c, "dragCoefficient", "Quadratic drag coefficient",
+                                                  PS_ONE, .47, 0, 2, &p->drag_coefficient);
+    if (parameter != PS_OK)
+        return parameter;
     ps_channel_add(c, "position.x", PS_METRE, "x");
     ps_channel_add(c, "position.y", PS_METRE, "y");
     ps_channel_add(c, "velocity.x", PS_VELOCITY, "vx");
@@ -100,13 +115,13 @@ static ps_result create(ps_context *c) {
     ps_channel_add(c, "energy", PS_JOULE, "Mechanical energy");
     snprintf(c->model_metadata, sizeof c->model_metadata,
              "model=projectile, gravity and quadratic drag, no "
-             "ground\nmass_kg=1\nmedium=air\ndensity_kg_m3=1.225\nCd=0.47\narea_m2=0."
-             "01\nintegrator=RK4");
+             "ground\nmass_kg=1\nmedium=air\ndensity_kg_m3=1.225\nCd=%.17g\narea_m2=0."
+             "01\nintegrator=RK4", p->drag_coefficient);
     return reset(c);
 }
 static ps_result step(ps_context *c, double dt) {
     projectile *p = c->user;
-    ps_result r = ps_ode_step(PS_RK4, ode, NULL, c->time_s, dt, p->y, 4);
+    ps_result r = ps_ode_step(PS_RK4, ode, p, c->time_s, dt, p->y, 4);
     measure(c);
     if (r == PS_OK && ++p->ticks % 10 == 0) {
         if (p->trail_count == 64) {
@@ -150,7 +165,8 @@ App angezeigt. Arraymethoden verwalten die Punktspur.
 // Same 1 kg projectile, quadratic air drag and RK4 stages as the C example.
 let gravity = 9.80665
 let air = Medium.air()
-let dragCoefficient = parameter("dragCoefficient", 0.47, 0.0, 2.0, "Quadratic drag coefficient")
+let one = Unit(0,0,0,0,0,0,0,1,"1")
+let dragCoefficient = parameterWithUnit("dragCoefficient", one, 0.47, 0.0, 2.0, "Quadratic drag coefficient")
 let crossSection = 0.01
 let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
 let speed = Unit(1, 0, -1, 0, 0, 0, 0, 1, "m/s")
@@ -176,7 +192,7 @@ func measure():
     ce.sample(0.5 * (state.z * state.z + state.w * state.w) + gravity * state.y)
 
 func create():
-    metadata("model=projectile, gravity and quadratic drag, no ground\nmass_kg=1\nmedium=air\ndensity_kg_m3=1.225\nCd=0.47\narea_m2=0.01\nintegrator=RK4")
+    metadata("model=projectile, gravity and quadratic drag, no ground\nmass_kg=1\nmedium=air\ndensity_kg_m3=1.225\nCd=" + String(dragCoefficient) + "\narea_m2=0.01\nintegrator=RK4")
 
 func reset():
     state = Vec4(-2, 0, 2, 5)

@@ -15,9 +15,10 @@
 static int near(double a, double b) {
     return isfinite(a) && isfinite(b) && fabs(a - b) < 2e-9;
 }
-static int run(const char *runner, const char *module, const char *path, const char *work) {
+static int run(const char *runner, const char *module, const char *path, const char *work,
+               const char *parameter, int expected_code) {
     const char *args[] = {runner, module, path, "--steps", "200", "--dt", "0.005", "--seed",
-                          "42", NULL};
+                          "42", "--param", parameter, NULL};
     ps_process child = {0};
     CHECK(ps_process_start(&child, args, work));
     double deadline = ps_clock() + 20;
@@ -32,15 +33,33 @@ static int run(const char *runner, const char *module, const char *path, const c
         ps_process_kill(&child);
     int code = child.exit_code;
     ps_process_close(&child);
-    CHECK(code == 0);
+    CHECK(code == expected_code);
     return 0;
 }
-static int compare(const char *c_path, const char *language_path) {
+static int compare(const char *c_path, const char *language_path, double coefficient) {
     ps_run_reader c, language;
     CHECK(ps_run_open(&c, c_path) == PS_OK && ps_run_open(&language, language_path) == PS_OK);
     CHECK(c.channels == 5 && language.channels == 5);
     CHECK(strstr(c.metadata, "area_m2=0.01") && strstr(language.metadata, "area_m2=0.01"));
     CHECK(strstr(c.metadata, "integrator=RK4") && strstr(language.metadata, "integrator=RK4"));
+    char expected[96];
+    snprintf(expected,sizeof expected,"\nCd=%.17g\n",coefficient);
+    CHECK(strstr(c.metadata,expected) && strstr(language.metadata,expected));
+    snprintf(expected,sizeof expected,"\nparameter.dragCoefficient=%.17g\n",coefficient);
+    CHECK(strstr(c.metadata,expected) && strstr(language.metadata,expected));
+    snprintf(expected,sizeof expected,"\nparameter_default.dragCoefficient=%.17g\n",.47);
+    CHECK(strstr(c.metadata,expected) && strstr(language.metadata,expected));
+    CHECK(strstr(c.metadata,"\nparameter_min.dragCoefficient=0\n") &&
+          strstr(language.metadata,"\nparameter_min.dragCoefficient=0\n") &&
+          strstr(c.metadata,"\nparameter_max.dragCoefficient=2\n") &&
+          strstr(language.metadata,"\nparameter_max.dragCoefficient=2\n"));
+    for(unsigned model=0;model<2;model++) {
+        ps_parameter_unit unit;
+        CHECK(ps_parameter_unit_parse(model?language.metadata:c.metadata,"dragCoefficient",&unit)==PS_OK);
+        const int8_t dimensionless[7]={0};
+        CHECK(unit.declared && unit.scale==1 && !strcmp(unit.symbol,"1") &&
+              !memcmp(unit.dimension,dimensionless,7));
+    }
     for (unsigned channel = 0; channel < 5; channel++) {
         CHECK(!strcmp(c.schema[channel].name, language.schema[channel].name));
         CHECK(!memcmp(c.schema[channel].dimension, language.schema[channel].dimension, 7));
@@ -55,7 +74,11 @@ static int compare(const char *c_path, const char *language_path) {
             CHECK(near(c_values[channel], language_values[channel]));
         CHECK(c_values[4] <= previous_energy + 1e-10);
         CHECK(c_values[2] <= 2 && c_values[0] <= -2 + 2 * c_time + 1e-10);
-        if (frame == 200) {
+        if(coefficient==0) {
+            CHECK(near(c_values[0],-2+2*c_time) && near(c_values[1],5*c_time-.5*9.80665*c_time*c_time));
+            CHECK(near(c_values[2],2) && near(c_values[3],5-9.80665*c_time) && near(c_values[4],14.5));
+        }
+        if (frame == 200 && coefficient==.47) {
             const double reference[] = {-0.009597629944, 0.086074817488, 1.981051968288,
                                         -4.808006509895, 14.364852359039};
             for (unsigned channel = 0; channel < 5; channel++)
@@ -80,6 +103,27 @@ static const ps_experiment_api *load(const char *path, void **module) {
     if (symbol)
         memcpy(&entry, &symbol, sizeof entry);
     return entry ? entry() : NULL;
+}
+static int instances(const char *path) {
+    void *module=NULL;
+    const ps_experiment_api *api=load(path,&module);CHECK(api);
+    ps_context c[2]={{0},{0}};
+    for(unsigned i=0;i<2;i++) {
+        c[i].struct_size=sizeof c[i];c[i].api_version=PS_API_VERSION;c[i].dt_s=.005;c[i].seed=42;
+        CHECK(ps_parameter_override(&c[i],"dragCoefficient",i?2:0)==PS_OK);
+        CHECK(api->create(&c[i])==PS_OK && ps_parameter_finalize(&c[i])==PS_OK);
+    }
+    for(unsigned cycle=0;cycle<2;cycle++) {
+        for(unsigned step=0;step<20;step++)for(unsigned i=0;i<2;i++) {
+            CHECK(api->step(&c[i],.005)==PS_OK);c[i].time_s=(step+1)*.005;
+        }
+        CHECK(near(c[0].values[0],-1.8) && near(c[0].values[2],2));
+        CHECK(c[1].values[0]<c[0].values[0] && c[1].values[2]<c[0].values[2]);
+        CHECK(strstr(c[0].model_metadata,"\nCd=0\n") && strstr(c[1].model_metadata,"\nCd=2\n"));
+        for(unsigned i=0;i<2;i++){CHECK(api->reset(&c[i])==PS_OK);c[i].time_s=0;}
+    }
+    for(unsigned i=0;i<2;i++)api->destroy(&c[i]);
+    ps_module_close(module);return 0;
 }
 static int scenes(const char *c_path, const char *language_path) {
     void *modules[2] = {0};
@@ -155,12 +199,30 @@ int main(int argc, char **argv) {
           (int)sizeof c_path);
     CHECK(snprintf(language_path, sizeof language_path, "%s/drag-language-%.0f.psrun", argv[6],
                    ps_clock() * 1e9) < (int)sizeof language_path);
-    CHECK(run(argv[1], argv[2], c_path, argv[6]) == 0);
-    CHECK(run(argv[1], argv[3], language_path, argv[6]) == 0);
-    CHECK(compare(c_path, language_path) == 0);
+    CHECK(run(argv[1], argv[2], c_path, argv[6],"dragCoefficient=0.47",0) == 0);
+    CHECK(run(argv[1], argv[3], language_path, argv[6],"dragCoefficient=0.47",0) == 0);
+    CHECK(compare(c_path, language_path,.47) == 0);
     CHECK(scenes(argv[2], argv[3]) == 0);
+    CHECK(!instances(argv[2]) && !instances(argv[3]));
     CHECK(analysis(argv[4], c_path, argv[6], "c") == 0);
     CHECK(analysis(argv[5], language_path, argv[6], "language") == 0);
+    CHECK(analysis(argv[4], language_path, argv[6], "c-from-language") == 0);
+    CHECK(analysis(argv[5], c_path, argv[6], "language-from-c") == 0);
+    const double coefficients[]={0,.94,2};
+    const char *parameters[]={"dragCoefficient=0","dragCoefficient=0.94","dragCoefficient=2"};
+    for(unsigned i=0;i<3;i++) {
+        CHECK(snprintf(c_path,sizeof c_path,"%s/drag-varied-c-%u.psrun",argv[6],i)<(int)sizeof c_path);
+        CHECK(snprintf(language_path,sizeof language_path,"%s/drag-varied-phys-%u.psrun",argv[6],i)<(int)sizeof language_path);
+        CHECK(!run(argv[1],argv[2],c_path,argv[6],parameters[i],0));
+        CHECK(!run(argv[1],argv[3],language_path,argv[6],parameters[i],0));
+        CHECK(!compare(c_path,language_path,coefficients[i]));
+    }
+    const char *invalid[]={"dragCoefficient=-0.001","dragCoefficient=2.001"};
+    for(unsigned model=0;model<2;model++)for(unsigned i=0;i<2;i++) {
+        CHECK(snprintf(c_path,sizeof c_path,"%s/drag-invalid-%u-%u.psrun",argv[6],model,i)<(int)sizeof c_path);
+        CHECK(!run(argv[1],argv[model+2],c_path,argv[6],invalid[i],5));
+        FILE *file=fopen(c_path,"rb");CHECK(!file);
+    }
     puts("C and Physim drag projectile: runner data, physics, scene and analysis agree");
     return 0;
 }

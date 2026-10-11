@@ -3552,9 +3552,11 @@ int main(int argc, char **argv) {
                     exit_code = 1;
                     a->quitting = true;
                 } else {
-                    if (test_example == 9) {
+                    if (test_example == 1 || test_example == 9) {
                         if (a->parameters.count != 1 ||
-                            strcmp(a->parameters.entries[0].name, "dragCoefficient")) {
+                            strcmp(a->parameters.entries[0].name, "dragCoefficient") ||
+                            !a->parameters.units[0].declared || a->parameters.units[0].scale!=1 ||
+                            strcmp(a->parameters.units[0].symbol,"1")) {
                             status(a, "SELF-TEST: Experimentparameter fehlen nach dem Build.");
                             exit_code = 1;
                             a->quitting = true;
@@ -3678,7 +3680,7 @@ int main(int argc, char **argv) {
                 a->stop_at = ps_clock();
                 test_stage = 6;
             } else if (test_stage == 6 && idle(a)) {
-                if (test_example == 9) {
+                if (test_example == 1 || test_example == 9) {
                     ps_run_reader reader;
                     if (ps_run_open(&reader, a->last_run) != PS_OK)
                         exit_code = 1;
@@ -3687,8 +3689,10 @@ int main(int argc, char **argv) {
                         snprintf(selected, sizeof selected, "\nparameter.dragCoefficient=%.17g\n", 0.6);
                         snprintf(standard, sizeof standard,
                                  "\nparameter_default.dragCoefficient=%.17g\n", 0.47);
+                        char coefficient[96];snprintf(coefficient,sizeof coefficient,"\nCd=%.17g\n",.6);
                         if (!strstr(reader.metadata, selected) ||
-                            !strstr(reader.metadata, standard))
+                            !strstr(reader.metadata, standard) || !strstr(reader.metadata,coefficient) ||
+                            !strstr(reader.metadata,"\nparameter_unit.dragCoefficient=1\n"))
                             exit_code = 1;
                         ps_run_reader_close(&reader);
                     }

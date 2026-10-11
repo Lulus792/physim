@@ -2752,3 +2752,52 @@ SDK-Prüfer gegen installierte und neu gebaute Core-Archive ausgeführt; ein
 neuer gesamter SDK-/Linux-/Windows-Lauf nach dieser Ergänzung liegt noch
 nicht vor. PP-0066 ist damit für diesen konkreten Modellweg nachgewiesen,
 bleibt für alle Vorlagen und die aktuelle Plattformmatrix unvollständig.
+
+## Änderbarer Wurfwiderstand mit korrekter Modellbeschreibung
+
+Die Gegenprobe am Stand `239adf1` belegt zwei zusammenhängende Lücken in
+`build/current-projectile-provenance-before-mac/observed.json`: C weist
+`dragCoefficient=0` als unbekannten Parameter mit Exit 5 ab. Physim akzeptiert
+den Wert und speichert `parameter.dragCoefficient=0`, meldet aber irreführend
+`Cd=0.47` in der Modellbeschreibung. Ältere entsprechende Physim-Dateien
+werden nicht umgeschrieben; ihr gespeicherter Parameterwert beschreibt die
+tatsächlich verwendete Einstellung, die alte konstante Cd-Angabe nicht.
+
+Beide Experimentquellen deklarieren jetzt `dragCoefficient` als instanzlokalen,
+explizit dimensionslosen SI-Parameter mit Standard `.47` und Grenzen `0..2`.
+C übergibt den gewählten Wert in jeder RK4-Stufe an die Kraftfunktion; beide
+Modellbeschreibungen speichern den tatsächlichen Wert. Reset erhält ihn,
+mehrere gleichzeitig lebende Instanzen bleiben unabhängig. ABI, Projekt-
+und Messdateiformat ändern sich nicht. Die bisherigen Standard-Referenzwerte
+bleiben in der Gegenprobe erhalten.
+
+Die finale native Release-Gegenprobe besteht **1/1** in
+`build/current-headless-mac/test-results/run-b4mp02oc`, Log
+`build/current-projectile-provenance-mixed-final-mac.log`. Sie prüft **acht**
+wirkliche C-/Physim-Runnerläufe mit `Cd=0/.47/.94/2`, jeweils alle 201 Zeilen,
+Modell-/Parametergleichheit, Standard/Grenzen, kanonische Einheit und Dimension,
+Energiedissipation und die unabhängige analytische Vakuumparabel. Zwei gleichzeitig
+lebende Instanzen pro Sprache werden vor und nach Reset unabhängig berechnet.
+Vier ungültige Bereichswahlen werden vor Messdateianlage abgewiesen. Alle
+**vier** gemischten Experiment-/Analysewege prüfen sämtliche Reportkurvenpunkte
+gegen die Laufdaten und die Erzeugung der jeweiligen CSV-Datei. Der CSV-Inhalt
+wird in diesem Test nicht separat vollständig eingelesen. Frühere Zwischenläufe ohne diese finalen Zusatzassertions
+bleiben auf ihren jeweiligen Prüfumfang beschränkt.
+
+Die Release-App besteht **2/2** Katalogfälle in
+`build/current-release-mac/test-results/run-fsnpa919`, Log
+`build/current-projectile-provenance-app-mac.log`: Physim-Projekt inklusive
+Parameterstudie und gespeichertem erneut geöffnetem Parameter sowie C-Projekt
+bei beiden Fenstergrößen mit tatsächlicher Wiederöffnung von Lauf/Bericht
+unter fremden Eingabeereignissen. Beide Sprachen wählen `.6`; das neue App-
+Testassert prüft die erkannte Einheit und die genaue Übereinstimmung von
+gewähltem Parameter und gespeichertem `Cd`. Die drei realen Appprozesse
+enden erfolgreich. Beide vollständigen Handbuchquellen bestehen
+`documentation_projectile_drag_source`; die Erklärung nennt nun die tatsächlich
+verwendete flächenbasierte `Medium.dragForce`-Schnittstelle.
+
+Dies belegt Intel macOS. Die neue ganze SDK-/Linux-/Windows-Abnahme dieses
+Wurfparameters steht noch aus; PP-0066 bleibt unvollständig. Am vorherigen
+[Stand 7b08c04](https://github.com/PhysicSimulator/physim/actions/runs/38126895020)
+endet Windows/Clang-Cl Release inzwischen erfolgreich; dieser Lauf prüft
+noch nicht die anschließende Wurf-/Material-Erweiterung.

@@ -487,9 +487,13 @@
         "examples/documentation/material_main.phys",
         "tests/test_material_tutorial.py",
         "app/material_tutorial_tests.inc",
-        "docs/platform-validation.md#strukturierte-material-mediumseinheiten-im-lernpfad"
+        "docs/platform-validation.md#strukturierte-material-mediumseinheiten-im-lernpfad",
+        "examples/projectile/main.c",
+        "examples/language/projectile_drag.phys",
+        "tests/test_projectile_drag_parity.c",
+        "docs/platform-validation.md#änderbarer-wurfwiderstand-mit-korrekter-modellbeschreibung"
       ],
-      "note": "Material-Lernpfad: 14 vollständige C-/Physim-Dateien prüfen strukturierte Einheiten, Werte/Standards/Grenzen, Modell-Eigenschaften, Namen, dt und UInt64-Seed; beide tatsächlichen Appketten prüfen die übertragenen SI-Parameterdeklarationen. Aktuelle andere Vorlagen und Linux-/Windows-/Gesamt-SDK-Abnahme bleiben offen."
+      "note": "Material-Lernpfad: 14 vollständige C-/Physim-Dateien prüfen strukturierte Einheiten, Werte/Standards/Grenzen, Modell-Eigenschaften, Namen, dt und UInt64-Seed; beide tatsächlichen Appketten prüfen die übertragenen SI-Parameterdeklarationen. Aktuelle andere Vorlagen und Linux-/Windows-/Gesamt-SDK-Abnahme bleiben offen. Wurfmodell: C-/Physim-Beiwertparität, tatsächliche Cd-Metadaten, acht komplette Läufe, unabhängige Vakuumreferenz, instanzlokaler Reset, Bereichsablehnung und alle vier gemischten Analysen geprüft; drei echte Appketten bestehen auf Intel macOS."
     },
     {
       "id": "PP-0067",

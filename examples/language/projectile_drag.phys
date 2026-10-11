@@ -1,7 +1,8 @@
 // Same 1 kg projectile, quadratic air drag and RK4 stages as the C example.
 let gravity = 9.80665
 let air = Medium.air()
-let dragCoefficient = parameter("dragCoefficient", 0.47, 0.0, 2.0, "Quadratic drag coefficient")
+let one = Unit(0,0,0,0,0,0,0,1,"1")
+let dragCoefficient = parameterWithUnit("dragCoefficient", one, 0.47, 0.0, 2.0, "Quadratic drag coefficient")
 let crossSection = 0.01
 let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
 let speed = Unit(1, 0, -1, 0, 0, 0, 0, 1, "m/s")
@@ -27,7 +28,7 @@ func measure():
     ce.sample(0.5 * (state.z * state.z + state.w * state.w) + gravity * state.y)
 
 func create():
-    metadata("model=projectile, gravity and quadratic drag, no ground\nmass_kg=1\nmedium=air\ndensity_kg_m3=1.225\nCd=0.47\narea_m2=0.01\nintegrator=RK4")
+    metadata("model=projectile, gravity and quadratic drag, no ground\nmass_kg=1\nmedium=air\ndensity_kg_m3=1.225\nCd=" + String(dragCoefficient) + "\narea_m2=0.01\nintegrator=RK4")
 
 func reset():
     state = Vec4(-2, 0, 2, 5)
