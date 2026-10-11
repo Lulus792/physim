@@ -1558,9 +1558,20 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Anzeige der verwendeten Physim-API-Version und des Compilers.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/design_ui.inc",
+        "app/main.c",
+        "app/build_main.c",
+        "app/project_file.c",
+        "app/project_settings_tests.inc",
+        "tests/check_display_workflow.py",
+        "tests/test_native_build.py",
+        "tests/test_project_file.c",
+        "docs/workspace.md",
+        "docs/platform-validation.md#sichtbare-compiler-und-api-angaben-in-den-build-einstellungen"
+      ],
+      "note": "App-API/ABI sowie tatsächlicher Compilerpfad, Profil und ausgewählte SDK-Versionen des letzten erfolgreichen Builds sichtbar. Nativer Builder/Parser inklusive abweichendem SDK (API4/ABI5) und drei tatsächliche App-Prozesse mit Neustart, Build, Runner und Profilwechsel auf Intel macOS geprüft. Abschließender Screenshot zeigt alle Angaben vollständig im kleinen Fenster; kein pauschaler Nachweis aller Schrift-/Pfadvarianten oder anderer Plattformen."
     },
     {
       "id": "PP-0251",

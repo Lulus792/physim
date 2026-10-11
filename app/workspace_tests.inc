@@ -175,7 +175,7 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
         return;
     }
     if (!strncmp(mode, "project-settings-", 17)) {
-        project_settings_test_frame(a, mode, stage, code);
+        project_settings_test_frame(a, mode, stage, code, capture);
         return;
     }
     if (!strncmp(mode, "drafts-", 7)) {

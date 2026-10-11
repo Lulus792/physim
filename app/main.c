@@ -143,6 +143,8 @@ typedef struct {
     struct nk_text_edit experiment, analysis;
     char root[4096], bin[4096], project[4096], project_input[4096], last_run[4096], report[4096];
     char build_directory[4096];
+    ps_project_build_info build_info;
+    bool build_info_valid;
     char workspace[4096], workspace_preview_path[4096];
     workspace_document documents[WORKSPACE_DOCUMENTS];
     unsigned document_count, document_active;
@@ -845,6 +847,8 @@ static void clear_project(app *a) {
     }
     a->project[0] = a->last_run[0] = a->report[0] = 0;
     a->loaded = a->built = a->dirty = a->analysis_dirty = false;
+    a->build_info_valid = false;
+    memset(&a->build_info, 0, sizeof a->build_info);
     a->project_settings_dirty = false;
     memset(&a->parameters, 0, sizeof a->parameters);
     a->language_experiment = a->language_analysis = a->analysis_only = false;
@@ -1655,6 +1659,9 @@ static void pump(app *a) {
                 if(ps_diagnostic_load(path,&record)==PS_OK)structured_diagnostic(a,&record,true);
             }
             if (!code && a->job_kind == 2) {
+                char configuration[4096];
+                join(configuration, sizeof configuration, a->build_directory, "build.config");
+                a->build_info_valid = ps_project_build_info_read(configuration, &a->build_info);
                 if (!a->diagnostic_count)
                     a->show_log = false;
                 if (!build_inputs_current(a))

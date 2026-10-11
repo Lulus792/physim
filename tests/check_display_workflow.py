@@ -134,6 +134,10 @@ def project_settings(flow, directory):
         require(not any((project / name).exists() for name in ("main.phys.bak", "analysis.c.bak", "CMakeLists.txt")),
                 "Settings created source backups or CMake files")
     require("profile=Release" in read(project / "build/Release/build.config"), "Restored profile was not built")
+    configuration = dict(line.split("=", 1) for line in read(project / "build/Release/build.config").splitlines() if "=" in line)
+    require(configuration.get("api_version") == "3" and configuration.get("abi_version") == "3", "Missing actual build API/ABI")
+    require(Path(configuration["compiler"]).is_file(), "Recorded compiler is unavailable")
+    require((directory / "build-info.bmp").is_file(), "Missing rendered build information")
 
 
 def timed_series(flow, directory, scaled=False):

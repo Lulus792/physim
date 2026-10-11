@@ -3,7 +3,7 @@ static bool project_settings_test_start(app *a, const char *root, const char *mo
     if (!strcmp(mode, "project-settings-write")) {
         a->example = 18; /* Collision language template exposes friction. */
         new_project(a);
-        if (!a->loaded || a->profile != 0)
+        if (!a->loaded || a->profile != 0 || a->build_info_valid)
             return false;
         select_build_profile(a, 1);
         a->dt = .125;
@@ -12,7 +12,7 @@ static bool project_settings_test_start(app *a, const char *root, const char *mo
                ps_parameter_catalog_restore(&a->parameters, "friction", "0.25");
     }
     open_project(a);
-    if (!a->loaded || a->project_settings_dirty)
+    if (!a->loaded || a->project_settings_dirty || a->build_info_valid)
         return false;
     int expected = strcmp(mode, "project-settings-debug") != 0;
     if (a->profile != expected)
@@ -26,7 +26,7 @@ static bool project_settings_test_start(app *a, const char *root, const char *mo
             restored = true;
     return restored;
 }
-static void project_settings_test_frame(app *a, const char *mode, int *stage, int *code) {
+static void project_settings_test_frame(app *a, const char *mode, int *stage, int *code, const char **capture) {
     static int reported_stage = -1;
     if (*stage != reported_stage) {
         fprintf(stderr, "Project settings %s stage %d: %s\n", mode, *stage, a->status);
@@ -55,11 +55,14 @@ static void project_settings_test_frame(app *a, const char *mode, int *stage, in
             return;
         char path[4096];
         join(path, sizeof path, a->project, "build/Release/experiment" MODULE_EXT);
-        if (!a->built || a->profile != 1 || !exists(path)) {
+        if (!a->built || a->profile != 1 || !exists(path) || !a->build_info_valid ||
+            !a->build_info.release || !a->build_info.compiler[0] ||
+            a->build_info.api_version!=PS_API_VERSION || a->build_info.abi_version!=PS_ABI_VERSION) {
             *code = 1;
             a->quitting = true;
             return;
         }
+        a->project_build_disclosure=NK_MAXIMIZED;
         snprintf(a->seed, sizeof a->seed, "18446744073709551616");
         a->project_settings_dirty = true;
         start_run(a);
@@ -137,8 +140,17 @@ static void project_settings_test_frame(app *a, const char *mode, int *stage, in
             a->quitting = true;
             return;
         }
+        a->tab=0;
+        a->workspace_disclosure=NK_MINIMIZED;
+        *capture="build-info.bmp";
+        *stage=5;
+        return;
+    }
+    if (read && *stage == 5) {
         select_build_profile(a, 0);
-        if (a->built || !a->project_settings_dirty) {
+        if (a->built || !a->project_settings_dirty || !a->build_info_valid ||
+            !a->build_info.release || a->build_info.api_version!=PS_API_VERSION ||
+            a->build_info.abi_version!=PS_ABI_VERSION) {
             *code = 1;
             a->quitting = true;
             return;

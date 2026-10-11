@@ -3109,12 +3109,28 @@ er ist keine ganze Produkt- oder Plattformabnahme.
 Die gemeinsame Isolationsfunktion des SDK-Prüfers führt nun auch die
 Tastaturketten aus, sowohl unter `--isolation-only` als auch in der ganzen
 `--app-tests`-Prüfung. Die neue unverkürzte Gesamtprüfung aus derselben
-unabhängigen Mappe und demselben eingefrorenen Paket läuft tatsächlich unter
-`build/current-controls-full-sdk-proof-mac/Native SDK ä eq6mmrib`, Log
-`build/current-controls-full-sdk-proof-mac.log`. Sie ist bis zum tatsächlichen
-Ende offen; gleichzeitig wird auf diesem Host keine weitere GUI-Suite gestartet.
-Die aktuelle andere Plattformmatrix und vollständige Barrierefreiheit bleiben
-weiterhin offen.
+unabhängigen Mappe und demselben eingefrorenen Paket ist erfolgreich beendet:
+`build/current-controls-full-sdk-proof-mac/Native SDK ä eq6mmrib/PASSED.txt`, Log
+`build/current-controls-full-sdk-proof-mac.log`, vollständiges `verification.log`.
+Die Prüfung umfasst installierten und aus SDK-Quellen neu gebauten Core,
+unabhängige Fachorakel, tatsächliche native C-/Physim-Projektbuilds, neun
+Appgesamtwege, Dokumentation, Typografie, Migration, Breakpoints, Runner-Isolation,
+F6/F7/F8/F9 sowie sämtliche 32 Vorlagen-/Sprachpaare und unabhängige Analysen
+bei 16/22 px. Weitere GUI-Prüfungen begannen erst nach dem terminalen Exit 0.
+
+Alle **407** Screenshotarchive sind danach unabhängig vollständig gestreamt
+und gegen Originalgröße, Original-SHA-256 und Archiv-SHA-256 geprüft:
+**7026795366 Originalbytes**, **213113174 komprimierte Bytes**. Der Nachweis
+steht in `build/current-controls-full-sdk-proof-archive-receipt.json`.
+Jeweils alle **471** Manifestdateien im ursprünglichen und verschobenen SDK
+sowie alle **151** Eingaben der unabhängigen Prüfmappe stimmen weiterhin mit
+ihren SHA-256 überein; Eingangsbeleg
+`build/current-controls-full-sdk-input-receipt.json`.
+
+Dieser vollständige Lauf prüft seine zuvor eingefrorenen Eingaben. Die späteren
+CCD-/Kontaktstapel-/Build-Herkunfts-/ABI-Prüfungs-/Metadaten- und Compileranzeigen-
+Änderungen sind dadurch nicht als SDK-geprüft bezeichnet. Die aktuelle andere
+Plattformmatrix und vollständige Barrierefreiheit bleiben weiterhin offen.
 
 
 ## CCD-Beispiel: typisierte Startgeschwindigkeit und vollständige Laufherkunft
@@ -3208,7 +3224,7 @@ Windows-Pfade, frühere Konfigurationen, zehn fehlerhafte Konfigurationen sowie
 fehlende Dateien und Argumente.
 
 Dies ist ein nativer Intel-macOS-Nachweis der Build-Herkunft. Die anschließende
-Anzeige in der App ist noch gesondert zu prüfen; die bereits laufende eingefrorene
+App-Anzeige ist nun separat geprüft (siehe unten). Die zuvor eingefrorene
 SDK-Gesamtprüfung enthält diese spätere Änderung nicht.
 
 
@@ -3270,3 +3286,34 @@ Läufen mit maximaler Modellbeschreibung. Die bestehenden C-/Physim-Prüfungen
 validieren adaptive Intervalle, Pause/Einzelschritt, Zielzeiten, gespeicherte
 Daten und ABI-Grenzen. Der Nachweis gilt für Intel macOS; die laufende eingefrorene
 SDK-Suite und andere Plattformen enthalten diese spätere Änderung noch nicht.
+
+
+## Sichtbare Compiler- und API-Angaben in den Build-Einstellungen
+
+Am 11. Oktober 2026 zeigt die App in den Build-Einstellungen ihre API/ABI und
+nach einem erfolgreichen Build dessen tatsächlich gespeicherten Compilerpfad,
+Profil und SDK-API/ABI. Vor dem ersten Build fehlen keine scheinbar gültigen
+Compilerangaben: Die UI fordert ausdrücklich einen erfolgreichen Build an.
+Projektwechsel leeren die Anzeige; ein Profilwechsel erhält die als **Letzter
+Build** bezeichneten Angaben und verlangt erneut einen Build.
+
+AppleClang Release besteht den tatsächlich ausgeführten
+`project_settings_workflow`: **1/1** Katalogfall, drei App-Prozesse mit Schreiben,
+Neustart/Build/Runner und erneutem Öffnen des geänderten Profils. Ergebnisse
+`build/current-release-mac/test-results/run-h5qj6l6z`, Log
+`build/current-build-info-ui-final-mac.log`. Das Modul wird wirklich gebaut,
+seine Laufdatei mit exaktem Zeitschritt/UInt64-Seed gelesen und die tatsächlichen
+Build-Angaben vor sowie nach dem Profilwechsel geprüft. Der Python-Nachprüfer
+vergleicht die gespeicherten API/ABI-Felder und den vorhandenen Compilerpfad.
+
+Die erste Darstellung schnitt die ABI ab und legte die Build-Version unterhalb
+des sichtbaren Bereichs ab. Kürzere Beschriftungen und eine zusammenhängende
+Anordnung beheben dies. Der abschließend tatsächlich gerenderte Screenshot
+`build-info.bmp` des genannten Falls zeigt App-API/ABI, Build-API/ABI, Release
+und `/usr/bin/clang` vollständig im kleinen 1080×740-Fenster. Die daraus erstellte
+PNG-Vorschau `build/current-build-info-preview/build-info-final.png` wurde visuell
+geprüft. Lange Compilerpfade besitzen zusätzlich einen vollständigen Tooltip.
+
+PP-0250 ist damit für die geforderte Anzeige konkret belegt. Es handelt sich
+um eine Intel-macOS-Einzelprüfung; neue andere Plattformen, jede Schrift-/Pfad-
+Variante und die gesamte neue SDK-Matrix werden damit nicht pauschal abgenommen.

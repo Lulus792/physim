@@ -380,6 +380,27 @@ static void sidebar_panel(app *a) {
                         const char *profiles[] = {"Debug", "Release"};
                         select_build_profile(a, nk_combo(ui, profiles, 2, a->profile, 28,
                                                        nk_vec2(180, 110)));
+                        nk_layout_row_dynamic(ui, 24, 1);
+                        char api[96];
+                        snprintf(api, sizeof api, "App: API %u · ABI %u", PS_API_VERSION, PS_ABI_VERSION);
+                        nk_label(ui, api, NK_TEXT_LEFT);
+                        if (a->build_info_valid) {
+                            if (a->build_info.api_version) {
+                                snprintf(api, sizeof api, "Build: API %u · ABI %u", a->build_info.api_version, a->build_info.abi_version);
+                                nk_layout_row_dynamic(ui, 24, 1);
+                                nk_label(ui, api, NK_TEXT_LEFT);
+                            }
+                            nk_layout_row_dynamic(ui, 24, 1);
+                            nk_label(ui, a->build_info.release ? "Letzter Build: Release" : "Letzter Build: Debug", NK_TEXT_LEFT);
+                            char compiler_label[sizeof a->build_info.compiler+16];
+                            snprintf(compiler_label, sizeof compiler_label, "Compiler: %s", a->build_info.compiler);
+                            nk_layout_row_dynamic(ui, 48, 1);
+                            nk_label_wrap(ui, compiler_label);
+                            if (nk_widget_is_hovered(ui)) nk_tooltip(ui, a->build_info.compiler);
+                        } else {
+                            nk_layout_row_dynamic(ui, 42, 1);
+                            nk_label_wrap(ui, "Der Compiler wird nach einem erfolgreichen Build angezeigt.");
+                        }
                         nk_tree_pop(ui);
                     }
                     nk_layout_row_dynamic(ui, 48, 1);

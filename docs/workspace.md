@@ -224,7 +224,14 @@ die Änderungen inzwischen gespeichert wurden.
 und Analyse im Hintergrund. Ein Stern beziehungsweise der Hinweis auf ungespeicherte
 Änderungen bedeutet, dass der Editor neuer als die gespeicherte Quelle ist.
 Nach Änderungen muss neu gebaut werden, damit der nächste Lauf sie verwendet.
-Unter **Build-Einstellungen** stehen Debug und Release zur Verfügung.
+Unter **Build-Einstellungen** stehen Debug und Release zur Verfügung. Dort
+werden die API-/ABI-Version der App und nach einem erfolgreichen Build der
+tatsächlich verwendete Compiler mit vollständigem Pfad, Buildprofil und
+API-/ABI-Version angezeigt. Ein langer Compilerpfad ist zusätzlich beim
+Darüberfahren vollständig lesbar. **Letzter Build** bezeichnet den zuletzt
+erfolgreichen Build dieser Sitzung; Änderungen am Profil oder am Quelltext
+werden erst durch erneutes Bauen übernommen. Vor dem ersten erfolgreichen
+Build wird ausdrücklich auf die noch fehlende Compilerangabe hingewiesen.
 
 Dort wird auch das Projektformat angezeigt. Bei Format 1 aktualisiert
 **Projektformat aktualisieren** die Beschreibung ausdrücklich auf Format 2 und
