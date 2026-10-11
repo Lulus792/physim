@@ -2851,3 +2851,67 @@ nicht ausgewählt und wird ausdrücklich nur als Physim **1/1** gezählt.
 Diese Nachweise gelten für Intel macOS. Aktuelle Linux-/Windows- und vollständige
 SDK-Abnahme dieser Erweiterung bleiben offen. PP-0066 bleibt unvollständig;
 alle 531 ursprünglichen Planblöcke behalten ihren Umfang.
+
+## Frische Linux-Gesamtpakete am Stand 35fea55
+
+Der [Paketlauf 38125861913](https://github.com/PhysicSimulator/physim/actions/runs/38125861913)
+endet für Bau, Debian 12 und Ubuntu 24.04 erfolgreich. Die authentifiziert
+gelesenen Logs der [Debian-Prüfung](https://github.com/PhysicSimulator/physim/actions/runs/38125861913/job/114434334933)
+und [Ubuntu-Prüfung](https://github.com/PhysicSimulator/physim/actions/runs/38125861913/job/114434334936)
+belegen tatsächlich ausgeführte SDK-/GUI-/Dialogprüfungen. Die offiziellen
+Artefaktinformationen ordnen sie exakt
+`35fea551bc73d38e8c7835d61efc692951bd0d96` zu; sie enthalten noch nicht die
+später ergänzten Isolations-, Material-, Wurf- und Boxparameterprüfungen.
+
+Die heruntergeladenen ZIPs wurden vor der Inhaltsprüfung gegen die im Lauf
+veröffentlichten SHA-256-Werte geprüft:
+
+| Frisches System | Lokales offizielles Artefakt | SHA-256 |
+| --- | --- | --- |
+| Debian 12 / Mesa 22.3.6 | `build/35fea-installed-linux-debian-12.zip` | `b5809d0f79a3d0c0cc5f34bbab9ae6c90bda9e448ee9ab815948c8967caa3cd0` |
+| Ubuntu 24.04 / Mesa 25.2.8 | `build/35fea-installed-linux-ubuntu-24.04.zip` | `98d5b71dce054e58f2b5355c7672bec2815d7cf68308c4e7efc7f1930faeb4f5` |
+
+Beide Systeminventuren und App-Bibliothekslisten sind gelesen; fehlende
+Laufzeitbibliotheken liegen nicht vor. Die App startet vor Installation von
+Compiler und Python. Danach bestehen installierte und neu gebaute Core-
+Verbraucher, beide Lernpfade, neun GUI-Projektabläufe, Haltepunkte bei beiden
+Sprachen und Fenstergrößen, Migration, native Barrierefreiheit, Dokumentation,
+Tastaturbedienung und alle 32 Vorlagen-/Sprachpaare bei 16/22 px.
+Die echten Zenity-Dialogprüfungen bestehen Unicode-Pfade, Auswahl, Abbruch
+und nicht verfügbares Backend. Die Archive enthalten beide Erfolgsmarker:
+`Native SDK ä w_nr8d2t/PASSED.txt` und `Native dialogs ä jzydeotz/PASSED.txt`
+(Debian), `Native SDK ä ii0dl2zc/PASSED.txt` und
+`Native dialogs ä ju9rzcqe/PASSED.txt` (Ubuntu).
+
+Alle **365** komprimierten BMPs je System wurden anschließend direkt aus den
+ZIPs gestreamt und gegen Originalgröße sowie Original-/Archiv-SHA-256 geprüft.
+Je System sind **1604728770** Originalbytes vollständig erhalten, in
+**50213393** (Debian) beziehungsweise **50190175** (Ubuntu) gzip-Bytes.
+`build/35fea-fresh-linux-proof-receipt.json` erhält die genaue Zuordnung;
+`build/35fea-packages-{jobs-current,artifacts}.json` erhält die API-Metadaten.
+Dies sind neue tatsächlich inspizierte Belege nach dem lokalen Wiederaufbau;
+es wurden keine fehlenden historischen VM-Artefakte dafür vorausgesetzt.
+
+## CI-Warteschlange mit erhaltenen laufenden Prüfungen
+
+Die API-Bestandsaufnahme `build/current-ci-queue.json` zeigt zahlreiche
+vollständige, noch wartende Läufe aufeinanderfolgender Hauptbranch-Commits.
+Beide Workflows gruppieren künftig nach Workflowname, Ereignis und Git-Ref.
+Mit `cancel-in-progress: false` bleibt ein bereits laufender Gruppentest
+erhalten; ein neuer Commit ersetzt den älteren noch wartenden Lauf derselben
+Gruppe. Push-, Pull-Request- und manuell gestartete Prüfungen sowie verschiedene
+Branches und Workflows teilen keine Gruppe. Das entspricht der
+[GitHub-Konkurrenzsteuerung](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency).
+Bereits vor dieser Konfigurationsänderung ausgelöste Runs werden dadurch nicht
+nachträglich umgruppiert oder abgebrochen; es wurden keine laufenden Jobs
+manuell gestoppt. Die neuen Workflows werden erst nach ihrem tatsächlichen
+Remote-Ende als neue Plattformnachweise bewertet.
+
+Beide YAML-Dateien sind geparst, und die Workflow-/Ausdrucksprüfung mit dem
+offiziellen **actionlint 1.7.12** endet ohne Befund, Log
+`build/current-ci-workflow-lint.log`. Das macOS-Tool wurde lokal unter
+`build/deps/actionlint/` aus der offiziellen Release-Datei eingerichtet;
+deren SHA-256 stimmt mit der veröffentlichten Prüfsummenliste überein:
+`5b44c3bc2255115c9b69e30efc0fecdf498fdb63c5d58e17084fd5f16324c644`.
+Optionale ShellCheck-/Pyflakes-Prüfungen wurden dabei nicht ausgeführt.
+Dieser statische Nachweis ist keine tatsächlich ausgeführte neue gesamte CI.

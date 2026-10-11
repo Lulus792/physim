@@ -268,9 +268,14 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Physim läuft unter Windows, Linux und macOS.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "incomplete",
+      "evidence": [
+        "docs/platform-validation.md#frische-linux-gesamtpakete-am-stand-35fea55",
+        "docs/platform-validation.md#wiederaufbau-und-schritt-haltepunkte-am-11-oktober-2026",
+        ".github/workflows/ci.yml",
+        ".github/workflows/linux-package.yml"
+      ],
+      "note": "Frische Debian-12-/Ubuntu-24.04-Systeme bestehen tatsächlich vollständiges SDK, GUI und Dialoge am exakt belegten Commit 35fea55; Intel macOS besitzt neue SDK-/gezielte Appnachweise. Ganze aktuelle Windows-/Apple-Silicon-/Intel-/Linux-Matrix nach späteren Änderungen noch nicht vollständig beendet; Windows-GPU-/GUI-Prüfung bleibt separat offen. CI-Konfiguration oder statisches Workflowlint sind kein Funktionsgleichheitsnachweis."
     },
     {
       "id": "PP-0055",

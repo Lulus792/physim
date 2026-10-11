@@ -710,3 +710,17 @@ neue gesamte Plattform-/SDK-Abnahme bleiben offen; PP-0066 ist **incomplete**.
 Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **48 implemented**, **12 incomplete**, **471 unverified**;
 `completion_proven` bleibt `false`.
+
+## Frische Plattformnachweise und begrenzte CI-Warteschlange
+
+PP-0054 besitzt jetzt neu inspizierte vollständige Debian-12-/Ubuntu-24.04-
+Paketnachweise am genau zugeordneten Stand `35fea55`: SDK, GUI, native Dialoge
+und 730 bytegetreu verifizierte Screenshotarchive. Spätere Änderungen und die
+aktuelle gesamte Windows-/macOS-/Linux-Matrix sind dadurch nicht abgenommen;
+PP-0054 ist **incomplete**. Die CI behält künftig laufende Gruppentests und nur
+den jüngsten wartenden Folgelauf pro Workflow/Ereignis/Ref. Vorher ausgelöste
+Runs bleiben erhalten. Statisches actionlint ersetzt keine Ausführung.
+[Ausgeführte Paketnachweise](platform-validation.md#frische-linux-gesamtpakete-am-stand-35fea55).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**48 implemented**, **13 incomplete**, **470 unverified**;
+`completion_proven` bleibt `false`.
