@@ -1664,9 +1664,19 @@
       "kind": "paragraph",
       "scope": "planned",
       "text": "Ein Experiment exportiert genau eine versionierte Beschreibung mit Callbacks:\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/experiment.h",
+        "runners/experiment.c",
+        "tests/fixtures/experiment_abi.c",
+        "tests/test_experiment_abi.py",
+        "tests/test_language_experiment.c",
+        "tests/test_runner_hierarchy.c",
+        "tests/test_runner_adaptive.c",
+        "docs/api.md",
+        "docs/platform-validation.md#einzelabnahme-des-versionierten-experiment-lebenszyklus"
+      ],
+      "note": "Versionierter einzelner Entry mit Create/Reset/Step/Scene/Destroy; endgültige API mit Größenfeld, ABI-Version, 64-Bit-Capabilities und ps_result. Planprototyp ist ein Entwurf und wird im finalen Vertrag durch ps_scene/ps_result und die optionale adaptive Erweiterung konkretisiert. 17 reale Runner-Module prüfen aktuelle/längere/Grund-Beschreibungen, unbekannte Capability, zwölf Abweisungen vor Create und Destroy nach fehlgeschlagenem Create; drei aktuelle C-/Physim-/Legacy-/adaptive Katalogfälle bestehen auf Intel macOS. Keine ganze Plattform-/Produktabnahme."
     },
     {
       "id": "PP-0264",
@@ -1680,9 +1690,19 @@
       "kind": "code",
       "scope": "design_example",
       "text": "```c\ntypedef struct ps_experiment_api {\n    uint32_t api_version;\n    const char *name;\n    bool (*create)(ps_context *ctx);\n    bool (*reset)(ps_context *ctx);\n    bool (*step)(ps_context *ctx, double dt);\n    void (*build_scene)(ps_context *ctx, ps_scene_writer *scene);\n    void (*destroy)(ps_context *ctx);\n} ps_experiment_api;\n```\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/experiment.h",
+        "runners/experiment.c",
+        "tests/fixtures/experiment_abi.c",
+        "tests/test_experiment_abi.py",
+        "tests/test_language_experiment.c",
+        "tests/test_runner_hierarchy.c",
+        "tests/test_runner_adaptive.c",
+        "docs/api.md",
+        "docs/platform-validation.md#einzelabnahme-des-versionierten-experiment-lebenszyklus"
+      ],
+      "note": "Versionierter einzelner Entry mit Create/Reset/Step/Scene/Destroy; endgültige API mit Größenfeld, ABI-Version, 64-Bit-Capabilities und ps_result. Planprototyp ist ein Entwurf und wird im finalen Vertrag durch ps_scene/ps_result und die optionale adaptive Erweiterung konkretisiert. 17 reale Runner-Module prüfen aktuelle/längere/Grund-Beschreibungen, unbekannte Capability, zwölf Abweisungen vor Create und Destroy nach fehlgeschlagenem Create; drei aktuelle C-/Physim-/Legacy-/adaptive Katalogfälle bestehen auf Intel macOS. Keine ganze Plattform-/Produktabnahme."
     },
     {
       "id": "PP-0276",
@@ -1696,9 +1716,19 @@
       "kind": "paragraph",
       "scope": "planned",
       "text": "Die endgültige API muss zusätzlich Größenfelder, Capability-Bits und Fehlerwerte besitzen, damit spätere Versionen kompatibel erweitert werden können.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/experiment.h",
+        "runners/experiment.c",
+        "tests/fixtures/experiment_abi.c",
+        "tests/test_experiment_abi.py",
+        "tests/test_language_experiment.c",
+        "tests/test_runner_hierarchy.c",
+        "tests/test_runner_adaptive.c",
+        "docs/api.md",
+        "docs/platform-validation.md#einzelabnahme-des-versionierten-experiment-lebenszyklus"
+      ],
+      "note": "Versionierter einzelner Entry mit Create/Reset/Step/Scene/Destroy; endgültige API mit Größenfeld, ABI-Version, 64-Bit-Capabilities und ps_result. Planprototyp ist ein Entwurf und wird im finalen Vertrag durch ps_scene/ps_result und die optionale adaptive Erweiterung konkretisiert. 17 reale Runner-Module prüfen aktuelle/längere/Grund-Beschreibungen, unbekannte Capability, zwölf Abweisungen vor Create und Destroy nach fehlgeschlagenem Create; drei aktuelle C-/Physim-/Legacy-/adaptive Katalogfälle bestehen auf Intel macOS. Keine ganze Plattform-/Produktabnahme."
     },
     {
       "id": "PP-0282",

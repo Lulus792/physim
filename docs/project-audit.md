@@ -739,3 +739,19 @@ Sprach-/UX-Abnahme werden dadurch nicht als erledigt gewertet.
 Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **54 implemented**, **13 incomplete**, **464 unverified**;
 `completion_proven` bleibt `false`.
+
+
+## Versionierter Experimentvertrag (§6.1)
+
+PP-0262/0264/0276 sind einzeln belegt: der endgültige Entry, fünf Pflichtcallbacks,
+Größenfelder, ABI-Version, Capabilities und Fehlerwerte besitzen tatsächliche
+C-/Physim- und Legacy-Prüfungen. Ein neuer Runnerfall lädt 17 kompilierte Module;
+vier gültige Varianten schreiben vollständige Daten, zwölf ungültige führen
+keinen Callback aus, ein fehlgeschlagenes Create führt genau einmal Destroy aus.
+Drei zusätzliche aktuelle Sprach-/Hierarchie-/Adaptive-Fälle bestehen.
+Der Planprototyp bleibt als Originaltext erhalten; die endgültige API nutzt
+`ps_result` und `ps_scene` mit optionalem adaptiven Tail.
+[Einzelbelege und Grenzen](platform-validation.md#einzelabnahme-des-versionierten-experiment-lebenszyklus).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**57 implemented**, **13 incomplete**, **461 unverified**;
+`completion_proven` bleibt `false`.

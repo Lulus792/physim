@@ -2150,6 +2150,210 @@
       "libraries": [
         "core"
       ]
+    },
+    "experiment-abi-0": {
+      "sources": [
+        "tests/fixtures/experiment_abi.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_TEST_ABI_CASE=0"
+      ]
+    },
+    "experiment-abi-1": {
+      "sources": [
+        "tests/fixtures/experiment_abi.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_TEST_ABI_CASE=1"
+      ]
+    },
+    "experiment-abi-2": {
+      "sources": [
+        "tests/fixtures/experiment_abi.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_TEST_ABI_CASE=2"
+      ]
+    },
+    "experiment-abi-3": {
+      "sources": [
+        "tests/fixtures/experiment_abi.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_TEST_ABI_CASE=3"
+      ]
+    },
+    "experiment-abi-4": {
+      "sources": [
+        "tests/fixtures/experiment_abi.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_TEST_ABI_CASE=4"
+      ]
+    },
+    "experiment-abi-5": {
+      "sources": [
+        "tests/fixtures/experiment_abi.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_TEST_ABI_CASE=5"
+      ]
+    },
+    "experiment-abi-6": {
+      "sources": [
+        "tests/fixtures/experiment_abi.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_TEST_ABI_CASE=6"
+      ]
+    },
+    "experiment-abi-7": {
+      "sources": [
+        "tests/fixtures/experiment_abi.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_TEST_ABI_CASE=7"
+      ]
+    },
+    "experiment-abi-8": {
+      "sources": [
+        "tests/fixtures/experiment_abi.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_TEST_ABI_CASE=8"
+      ]
+    },
+    "experiment-abi-9": {
+      "sources": [
+        "tests/fixtures/experiment_abi.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_TEST_ABI_CASE=9"
+      ]
+    },
+    "experiment-abi-10": {
+      "sources": [
+        "tests/fixtures/experiment_abi.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_TEST_ABI_CASE=10"
+      ]
+    },
+    "experiment-abi-11": {
+      "sources": [
+        "tests/fixtures/experiment_abi.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_TEST_ABI_CASE=11"
+      ]
+    },
+    "experiment-abi-12": {
+      "sources": [
+        "tests/fixtures/experiment_abi.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_TEST_ABI_CASE=12"
+      ]
+    },
+    "experiment-abi-13": {
+      "sources": [
+        "tests/fixtures/experiment_abi.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_TEST_ABI_CASE=13"
+      ]
+    },
+    "experiment-abi-14": {
+      "sources": [
+        "tests/fixtures/experiment_abi.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_TEST_ABI_CASE=14"
+      ]
+    },
+    "experiment-abi-15": {
+      "sources": [
+        "tests/fixtures/experiment_abi.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_TEST_ABI_CASE=15"
+      ]
+    },
+    "experiment-abi-16": {
+      "sources": [
+        "tests/fixtures/experiment_abi.c"
+      ],
+      "module": true,
+      "libraries": [
+        "core"
+      ],
+      "defines": [
+        "PS_TEST_ABI_CASE=16"
+      ]
     }
   },
   "tests": [
@@ -9071,6 +9275,61 @@
           "files": [
             "app-steps.json"
           ]
+        }
+      ]
+    },
+    {
+      "name": "runner_experiment_abi",
+      "targets": [
+        "python",
+        "physim-runner",
+        "experiment-abi-0",
+        "experiment-abi-1",
+        "experiment-abi-2",
+        "experiment-abi-3",
+        "experiment-abi-4",
+        "experiment-abi-5",
+        "experiment-abi-6",
+        "experiment-abi-7",
+        "experiment-abi-8",
+        "experiment-abi-9",
+        "experiment-abi-10",
+        "experiment-abi-11",
+        "experiment-abi-12",
+        "experiment-abi-13",
+        "experiment-abi-14",
+        "experiment-abi-15",
+        "experiment-abi-16"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_experiment_abi.py",
+            "--runner",
+            "{physim-runner}",
+            "--work",
+            "{work}",
+            "--modules",
+            "{experiment-abi-0}",
+            "{experiment-abi-1}",
+            "{experiment-abi-2}",
+            "{experiment-abi-3}",
+            "{experiment-abi-4}",
+            "{experiment-abi-5}",
+            "{experiment-abi-6}",
+            "{experiment-abi-7}",
+            "{experiment-abi-8}",
+            "{experiment-abi-9}",
+            "{experiment-abi-10}",
+            "{experiment-abi-11}",
+            "{experiment-abi-12}",
+            "{experiment-abi-13}",
+            "{experiment-abi-14}",
+            "{experiment-abi-15}",
+            "{experiment-abi-16}"
+          ],
+          "timeout": 120
         }
       ]
     }

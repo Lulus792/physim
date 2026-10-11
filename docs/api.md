@@ -70,6 +70,17 @@ Verträge, Integrationsgenauigkeit und Anleitung zur Stoßvorlage:
 den Context und die Szene, das Modul besitzt `context->user` und gibt diesen Speicher
 in `destroy` frei – auch wenn `create` teilweise fehlgeschlagen ist.
 
+Die endgültige Beschreibung beginnt mit `struct_size`, `abi_version` und
+64-Bit-`capabilities`. Für den Grundvertrag muss `struct_size` mindestens
+`PS_EXPERIMENT_API_BASE_SIZE` betragen und `abi_version` dem Host entsprechen.
+`create`, `reset` und `step` liefern `ps_result`; Szene und Freigabe bleiben
+`void`-Callbacks. Der Host weist fehlende Namen/Callbacks und widersprüchliche
+Scene-Frame-/Hierarchie-Fähigkeiten vor `create` ab. Die optionale adaptive
+Erweiterung braucht ihr Capability-Bit, die vollständige Größe und einen
+`adaptive_step`-Callback. Unbekannte Capability-Bits und größere Beschreibungen
+werden im bekannten Grundumfang akzeptiert; unbekannte Felder werden nicht gelesen.
+Der eingefrorene ABI-3-Grundpräfix bleibt ohne adaptive Erweiterung nutzbar.
+
 `ps_context` enthält als optionale ABI-3-Erweiterung bis zu 16 Parameter. Der Host
 setzt vor `create` mit `ps_parameter_override` eindeutige Werte. Das Modul ruft
 in `create` für jeden Parameter einmal `ps_parameter_define` mit Name,

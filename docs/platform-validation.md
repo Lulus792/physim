@@ -3210,3 +3210,37 @@ fehlende Dateien und Argumente.
 Dies ist ein nativer Intel-macOS-Nachweis der Build-Herkunft. Die anschließende
 Anzeige in der App ist noch gesondert zu prüfen; die bereits laufende eingefrorene
 SDK-Gesamtprüfung enthält diese spätere Änderung nicht.
+
+
+## Einzelabnahme des versionierten Experiment-Lebenszyklus
+
+Am 11. Oktober 2026 besteht AppleClang Release ohne App den neuen
+`runner_experiment_abi`-Katalogfall: **1/1**, Ergebnisse
+`build/current-headless-mac/test-results/run-27gn52kx`, Log
+`build/current-experiment-abi-mac.log`. 17 tatsächlich kompilierte und vom
+Runner geladene Module prüfen den aktuellen Grundvertrag. Vier gültige
+Beschreibungen (aktuelle Größe, unbekanntes Capability-Bit, tatsächlich längere
+Beschreibung und eingefrorene Grundgröße) erzeugen vollständige Laufdateien mit
+exakten Zeiten/Werten, Schema, CRC und Abschluss. Alle Create-/Reset-/Step-/
+Scene-/Destroy-Aufrufe werden im Modul selbst protokolliert.
+
+Zwölf ungültige Varianten werden mit Exit 4 vor jedem Callback und ohne
+Laufdatei abgewiesen: zu kurze Grundgröße, falsche ABI, fehlender Name,
+fehlende Pflichtcallbacks, Scene Frames ohne Hierarchie, fehlender adaptiver
+Callback, zu kurze adaptive Erweiterung und null Beschreibung. Ein gültiger
+Vertrag mit fehlgeschlagenem `create` liefert Exit 5 und ruft genau einmal
+`destroy` auf, ohne eine Laufdatei anzulegen.
+
+Zusätzlich bestehen **3/3** aktuelle Fälle `language_experiment`,
+`runner_hierarchy` und `runner_adaptive`; Ergebnisse
+`build/current-headless-mac/test-results/run-qcaoxf8d`, Log
+`build/current-experiment-abi-language-mac.log`. Sie prüfen tatsächliche
+C-/Physim-Lebenszyklen, Create-/Step-/Scene-Fehler, Messwerte, Szene und Besitz,
+die alte ABI-3-Szenenbeschreibung sowie feste/adaptive Läufe mit zu kurzer
+adaptiver Beschreibung. Die neuen Module ändern keine Produktions-ABI.
+
+PP-0262/0264/0276 sind damit für den grundlegenden, versionierten Callbackvertrag
+konkret zugeordnet. Der Plan-Codeblock ist ein Entwurf; die endgültige Schnittstelle
+verwendet `ps_result`, `ps_scene`, Größenfelder, Capability-Bits und eine optionale
+adaptive Erweiterung. Die Originaltexte im Audit bleiben erhalten. Diese
+Einzelabnahme ersetzt keine ganze Plattform- oder Produktabnahme.
