@@ -4,6 +4,16 @@ static bool diagnostic_test_start(app *a,const char *root,const char *mode) {
     bool analysis=strstr(mode,"analysis")!=NULL,language=strstr(mode,"phys")!=NULL;
     a->manager_analysis_only=analysis;a->template_analysis_language=language;a->example=language?10:0;
     new_project(a);if(!a->loaded)return false;
+    if(!strcmp(mode,"diagnostic-build-helper")) {
+        join(path,sizeof path,a->project,"include");if(!ps_make_directory(path))return false;
+        join(path,sizeof path,a->project,"include/helper α.h");
+        FILE *file=fopen(path,"wb");if(!file)return false;
+        bool ok=fputs("/* helper source */\n#error compiler navigation sentinel\n",file)>=0;
+        ok &= fclose(file)==0;if(!ok)return false;
+        const char *include="\n#include \"include/helper α.h\"\n";
+        nk_str_append_text_char(&a->experiment.string,include,(int)strlen(include));
+        a->dirty=true;select_build_profile(a,1);SDL_SetWindowSize(a->window,1080,740);return true;
+    }
     join(path,sizeof path,a->root,analysis?(language?"examples/language/diagnostic_analysis.phys":"examples/diagnostics/analysis.c"):
         (language?"examples/language/diagnostic_experiment.phys":"examples/diagnostics/main.c"));
     if(!load_editor(analysis?&a->analysis:&a->experiment,path))return false;
@@ -12,6 +22,63 @@ static bool diagnostic_test_start(app *a,const char *root,const char *mode) {
 }
 static void diagnostic_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
     bool analysis=strstr(mode,"analysis")!=NULL,ok=true;
+    if(!strcmp(mode,"diagnostic-build-helper")) {
+        static int selected=-1,reported=-1;
+        if(reported!=*stage){fprintf(stderr,"Compiler helper stage %d: %s\n",*stage,a->status);reported=*stage;}
+        char path[4096];join(path,sizeof path,a->project,"include/helper α.h");
+        switch(*stage) {
+        case 0:test_window_key_mod(a->window,SDLK_F5,0);break;
+        case 1:
+            if(a->job.running)return;
+            ok=!a->built && !a->runner.running;
+            for(int i=0;i<a->diagnostic_count;i++)
+                if(a->diagnostics[i].foreign && a->diagnostics[i].line==2 && strstr(a->diagnostics[i].text,"compiler navigation sentinel"))selected=i;
+            ok &= selected>=0;
+            test_window_key_mod(a->window,SDLK_F6,0);break;
+        case 2:
+            ok=!a->runner.running && !a->last_run[0] && selected>=0 && a->diagnostic_bounds[selected].w>0;
+            if(ok)test_mouse(a,a->diagnostic_bounds[selected],true);break;
+        case 3:test_mouse(a,a->diagnostic_bounds[selected],false);break;
+        case 4: {
+            workspace_document *document=active_document(a);
+            ok=a->tab==8 && document && ps_text_document_same_file(path,document->file.path) &&
+                document->edit.select_end>document->edit.select_start && strstr(document->file.saved,"#error compiler navigation sentinel");
+            *capture="compiler-helper-jump.bmp";break;
+        }
+        case 5: {
+            workspace_document *document=active_document(a);
+            ok=document!=NULL;
+            if(ok) {
+                document->edit.mode=NK_TEXT_EDIT_MODE_INSERT;
+                nk_textedit_delete_selection(&document->edit);
+                nk_textedit_text(&document->edit,"/* repaired helper */",21);
+                document_changed(a,&document->edit);test_window_key_mod(a->window,SDLK_F5,0);
+            }
+            break;
+        }
+        case 6:
+            if(a->job.running)return;
+            ok=a->built && !a->dirty && !a->analysis_dirty && !documents_dirty(a);
+            if(ok)test_window_key_mod(a->window,SDLK_F6,0);break;
+        case 7:
+            if(!a->hello || a->simulation_time<.01)return;
+            test_window_key_mod(a->window,SDLK_F9,0);break;
+        case 8: {
+            if(!idle(a))return;
+            ps_run_reader run;
+            ok=a->last_run[0] && ps_run_open(&run,a->last_run)==PS_OK;
+            if(ok) {
+                double time,values[PS_MAX_CHANNELS];unsigned rows=0;ps_result result;
+                while((result=ps_run_next(&run,&time,values))==PS_OK)rows++;
+                ok=result==PS_EOF && rows>=3;ps_run_reader_close(&run);
+            }
+            *capture="compiler-helper-repaired.bmp";a->quitting=true;break;
+        }
+        }
+        if(!ok){fprintf(stderr,"Compiler helper stage %d: diagnostics=%d selected=%d %s\n",*stage,a->diagnostic_count,selected,a->status);*code=1;a->quitting=true;}
+        if(a->quitting)printf("COMPILER HELPER SELF-TEST: %s\n",*code?"FAILED":"PASSED");
+        (*stage)++;return;
+    }
     if(!strcmp(mode,"diagnostic-foreign")) {
         char path[4096];join(path,sizeof path,a->project,"helper α.c");
         if(*stage==0) {
@@ -19,6 +86,16 @@ static void diagnostic_test_frame(app *a,const char *mode,int *stage,int *code,c
             if(file){const char *text="// helper\n// failing α expression\n";ok=fwrite(text,1,strlen(text),file)==strlen(text);ok &= fclose(file)==0;}
             ps_diagnostic record;ok &= ps_diagnostic_set(&record,PS_INVALID,"step","value","helper α.c",2,4,"Invalid α") == PS_OK;
             if(ok){structured_diagnostic(a,&record,false);ok=a->diagnostic_count==1 && a->diagnostics[0].foreign;if(ok)jump_to_diagnostic(a,&a->diagnostics[0]);}
+            if(ok) {
+                char nested[4096];join(nested,sizeof nested,a->project,"nested");ok=ps_make_directory(nested);
+                join(nested,sizeof nested,a->project,"nested/main.c");FILE *file=fopen(nested,"wb");ok &= file!=NULL;
+                if(file){ok &= fputs("// nested\n// diagnostic source\n",file)>=0;ok &= fclose(file)==0;}
+                parse_diagnostic(a,"nested/main.c:2:4: warning: nested source");
+                ok &= a->diagnostic_count==2 && a->diagnostics[1].foreign;
+                ok &= ps_diagnostic_set(&record,PS_INVALID,"step","value","main.c",2,4,"Different main source") == PS_OK;
+                if(ok)structured_diagnostic(a,&record,false);
+                ok &= a->diagnostic_count==3 && a->diagnostics[1].foreign && !a->diagnostics[2].foreign;
+            }
         } else {
             ok=a->tab==8 && a->document_count==1 && ps_text_document_same_file(path,a->documents[0].file.path) &&
                 a->documents[0].edit.select_end>a->documents[0].edit.select_start;

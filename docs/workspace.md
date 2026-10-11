@@ -248,7 +248,12 @@ Dieser eigenständige Befehl benötigt keinen Compiler und startet keinen Build.
 **Ctrl+F** öffnet die Suche im aktuellen Editor. Die Suchleiste bietet Suchen und
 Ersetzen; kontrolliere insbesondere bei Ersetzungen von kurzen Namen das Ergebnis.
 Das Protokoll zeigt Compilerfehler. Anklickbare Quelldiagnosen führen zur betroffenen
-Stelle. **Analysecode bearbeiten** öffnet den zweiten Editor; **Zum Bericht** führt zurück.
+Stelle. Dies gilt auch für eingebundene Header und Hilfsquellen: Der Klick
+öffnet die tatsächliche Datei im Texteditor und wählt die betroffene Zeile.
+Gleichnamige Dateien in unterschiedlichen Ordnern behalten getrennte Diagnosen.
+Ein fehlgeschlagener Build sperrt den Laufstart; nach einer Reparatur muss das
+Projekt erneut erfolgreich gebaut werden.
+**Analysecode bearbeiten** öffnet den zweiten Editor; **Zum Bericht** führt zurück.
 Einzelne Quelldateien dürfen höchstens 256 KiB UTF-8-Text enthalten.
 **Tab** fügt vier Leerzeichen als einen Bearbeitungsschritt ein. **Ctrl+Z** macht
 ihn rückgängig; **Ctrl+Shift+Z**, **Ctrl+Y** oder **Ctrl+R** stellt ihn wieder her.

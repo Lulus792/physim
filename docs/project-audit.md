@@ -771,3 +771,16 @@ nachgeprüft. Dieser Lauf umfasst die späteren Änderungen nicht automatisch.
 Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **58 implemented**, **13 incomplete**, **460 unverified**;
 `completion_proven` bleibt `false`.
+
+
+## Build-Diagnosen und Laufstartfreigabe (§6.1)
+
+PP-0248/0251 sind einzeln belegt: Compilerfehler aus Headern und Hilfsquellen
+sind tatsächlich anklickbar. Ein fehlgeschlagener Build sperrt F6; Reparatur,
+F5-Neubuild und der anschließend vollständig gespeicherte gesunde Lauf sind
+in der App geprüft. Diagnosen gleichnamiger Dateien bleiben getrennt. Sechs
+App-Prozesse und die native Formaterkennung bestehen auf Intel macOS;
+[Nachweise und Plattformgrenzen](platform-validation.md#build-fehler-in-headern-und-hilfsdateien-tatsächlich-anklicken).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**60 implemented**, **13 incomplete**, **458 unverified**;
+`completion_proven` bleibt `false`.

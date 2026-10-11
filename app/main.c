@@ -11,6 +11,7 @@
 #include "plot_view.h"
 #include "parameter_catalog.h"
 #include "project_file.h"
+#include "compiler_diagnostic.h"
 #include "report_image.h"
 #include "scene_view.h"
 #include "preferences.h"
@@ -98,7 +99,7 @@ typedef struct {
 typedef struct {
     int line, column;
     bool analysis;
-    char text[2048],source[PS_DIAGNOSTIC_SOURCE_MAX+1u];
+    char text[2048],source[4096];
     ps_result code;
     bool foreign,structured;
 } diagnostic;
@@ -301,6 +302,7 @@ typedef struct {
     diagnostic diagnostics[64];
     int diagnostic_count;
     char diagnostic_line[8192];
+    struct nk_rect diagnostic_bounds[64];
     size_t diagnostic_used;
     ps_wire_buffer wire;
     uint32_t command_seq;
@@ -417,14 +419,26 @@ static const char *analysis_source(const app *a) {
     return a->language_analysis ? "analysis.phys" : "analysis.c";
 }
 static void preview_workspace_path(app *a,const char *path);
+static void join(char *out, size_t n, const char *base, const char *leaf);
 static const char *diagnostic_basename(const char *path) {
     const char *base=path;for(const char *p=path;*p;p++)if(*p=='/' || *p=='\\')base=p+1;return base;
+}
+static bool diagnostic_same_source(const app *a,const char *left,const char *right) {
+    char paths[2][4096];const char *sources[]={left,right};
+    for(unsigned i=0;i<2;i++) {
+        int length;
+        if(sources[i][0]=='/' || sources[i][0]=='\\' || (sources[i][0] && sources[i][1]==':'))
+            length=snprintf(paths[i],sizeof paths[i],"%s",sources[i]);
+        else length=snprintf(paths[i],sizeof paths[i],"%s/%s",a->project,sources[i]);
+        if(length<0 || (size_t)length>=sizeof paths[i])return false;
+    }
+    return !strcmp(paths[0],paths[1]) || ps_text_document_same_file(paths[0],paths[1]);
 }
 static void structured_diagnostic(app *a,const ps_diagnostic *record,bool analysis) {
     if(!ps_diagnostic_valid(record) || record->code==PS_OK || a->diagnostic_count>=64)return;
     /* Prefer a typed record over a legacy line already received from stderr. */
     for(int i=0;i<a->diagnostic_count;i++)if(a->diagnostics[i].analysis==analysis &&
-        !strcmp(diagnostic_basename(a->diagnostics[i].source),diagnostic_basename(record->source)) &&
+        diagnostic_same_source(a,a->diagnostics[i].source,record->source) &&
         (a->diagnostics[i].line==(int)record->line || (!a->diagnostics[i].structured && strstr(a->diagnostics[i].text,"runtime error")))) {
         memmove(a->diagnostics+i,a->diagnostics+i+1,(size_t)(a->diagnostic_count-i-1)*sizeof a->diagnostics[0]);a->diagnostic_count--;break;
     }
@@ -445,36 +459,25 @@ static void structured_diagnostic(app *a,const ps_diagnostic *record,bool analys
     (void)ps_diagnostic_format(&display,d->text,sizeof d->text);a->show_log=true;
 }
 static void parse_diagnostic(app *a, const char *line) {
-    const char *source = experiment_source(a);
-    const char *p = strstr(line, source);
-    bool analysis = false;
-    if (!p) {
-        source = analysis_source(a);
-        p = strstr(line, source);
-        analysis = true;
-    }
-    if (!p || a->diagnostic_count >= 64)
-        return;
-    p += strlen(source);
-    int row = 0, column = 1;
-    if (*p == '(') {
-        if (sscanf(p + 1, "%d,%d", &row, &column) < 1)
-            return;
-    } else if (*p == ':') {
-        if (sscanf(p + 1, "%d:%d", &row, &column) < 1)
-            return;
-    } else
-        return;
-    if (row <= 0 || (!strstr(p, "error") && !strstr(p, "warning")))
-        return;
+    ps_compiler_diagnostic record;
+    if(a->diagnostic_count>=64 || !ps_compiler_diagnostic_parse(line,&record))return;
+    char actual[4096],experiment[4096],analysis[4096];
+    int length;
+    if(record.source[0]=='/' || record.source[0]=='\\' || record.source[1]==':')
+        length=snprintf(actual,sizeof actual,"%s",record.source);
+    else length=snprintf(actual,sizeof actual,"%s/%s",a->project,record.source);
+    if(length<0 || (size_t)length>=sizeof actual)return;
+    join(experiment,sizeof experiment,a->project,experiment_source(a));
+    join(analysis,sizeof analysis,a->project,analysis_source(a));
+    bool main_source=!strcmp(actual,experiment) || ps_text_document_same_file(actual,experiment);
+    bool analysis_source_file=!strcmp(actual,analysis) || ps_text_document_same_file(actual,analysis);
     diagnostic *d = &a->diagnostics[a->diagnostic_count++];
+    memset(d,0,sizeof *d);
     a->show_log = true;
-    d->line = row;
-    d->column = column;
-    d->analysis = analysis;d->foreign=false;d->structured=false;d->code=PS_INVALID;
-    snprintf(d->source,sizeof d->source,"%s",source);
-    snprintf(d->text, sizeof d->text, "%s:%d:%d %s", source, row,
-             column, p);
+    d->line=record.line;d->column=record.column;
+    d->analysis=analysis_source_file;d->foreign=!main_source && !analysis_source_file;d->code=PS_INVALID;
+    snprintf(d->source,sizeof d->source,"%s",record.source);
+    snprintf(d->text,sizeof d->text,"%s:%d:%d %s",diagnostic_basename(record.source),record.line,record.column,record.message);
 }
 static void diagnostic_bytes(app *a, const char *text, size_t size) {
     for (size_t i = 0; i < size; i++) {

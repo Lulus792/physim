@@ -3317,3 +3317,47 @@ geprüft. Lange Compilerpfade besitzen zusätzlich einen vollständigen Tooltip.
 PP-0250 ist damit für die geforderte Anzeige konkret belegt. Es handelt sich
 um eine Intel-macOS-Einzelprüfung; neue andere Plattformen, jede Schrift-/Pfad-
 Variante und die gesamte neue SDK-Matrix werden damit nicht pauschal abgenommen.
+
+
+## Build-Fehler in Headern und Hilfsdateien tatsächlich anklicken
+
+Am 11. Oktober 2026 suchte die App bei textuellen Diagnosen ausschließlich nach
+der Haupt- oder Analysequelldatei. Dadurch fehlten Compilerfehler aus eingebundenen
+Headern/Hilfsquellen in der anklickbaren Liste. Der neue eigenständige Parser
+liest GCC-/Clang- und MSVC-Datei-/Zeilen-/Spaltenformate sowie frühere
+`runtime error`-Zeilen. Die App erhält den vollständigen Quellpfad bis 4095 Bytes,
+ordnet ihn anhand der tatsächlichen Datei der Hauptquelle, Analyse oder einem
+zusätzlichen Dokument zu und öffnet fremde Quellen beim Klick. Strukturierte
+Diagnosen ersetzen nur Meldungen derselben Datei; gleiche Basenamen genügen nicht.
+
+Die native AppleClang-Release-Prüfung `compiler_diagnostic` besteht **1/1**;
+Ergebnisse `build/current-headless-mac/test-results/run-eo5js2qx`, Log
+`build/current-compiler-diagnostic-parser-final-mac.log`. Zehn Formatfälle prüfen
+relative/absolute Pfade, Leerzeichen, Unicode, Windows-Laufwerkspfade,
+Klammernamen, fehlende Spalten und maximale positive int-Koordinaten. Sechzehn
+ungültige Zeilen, ein zu langer Pfad und null Argumente werden atomar abgewiesen.
+MSVC-/GCC-Formatfälle sind hier Parserdaten, keine Ausführung dieser Compiler.
+
+Die endgültige App-Prüfung `diagnostic_workflow` besteht **1/1** Katalogfall mit
+**sechs** tatsächlich gestarteten App-Prozessen; Ergebnisse
+`build/current-release-mac/test-results/run-kzfsw535`, Log
+`build/current-compiler-diagnostic-identity-mac.log`, `app-steps.json`.
+Ein echter Clang-Build scheitert an `include/helper α.h`, Zeile 2. F6 startet
+weder Runner noch Laufdatei. Ein tatsächlicher Mausklick auf die Diagnose öffnet
+den richtigen Header und wählt seine Fehlerzeile. Nach der Reparatur speichert
+F5 das Dokument und baut das Projekt; F6/F9 starten und stoppen einen gesunden
+Pendel-Lauf mit vollständigem Footer und mindestens drei Samples. Die Nachprüfung
+findet genau eine Laufdatei und den gespeicherten reparierten Header.
+
+Der fremde Quellenfall prüft zusätzlich `nested/main.c` und die tatsächliche
+Hauptdatei `main.c`: Ihre gleichnamigen Diagnosen bleiben beide erhalten.
+Die vier vorhandenen C-/Physim-Experiment-/Analysefälle bestehen mit strukturierten
+Fehlern, Integritätsprüfung der Sidecars und Navigation zur richtigen Quelle.
+Der Screenshot `compiler-helper-jump.bmp` zeigt den geöffneten Header, Zeile 2
+und den anklickbaren tatsächlichen Compilerfehler. Die Darstellung wurde anhand
+der PNG-Vorschau visuell geprüft.
+
+PP-0248 und PP-0251 sind damit für Build-Fehlernavigation und Startfreigabe nach
+erfolgreichem Build konkret belegt. Dies ist ein Intel-macOS-Nachweis. Aktuelle
+Linux-/Windows-Appketten, die neue Gesamt-SDK-Matrix und alle denkbaren
+Compiler-Ausgabeformate werden dadurch nicht pauschal abgenommen.

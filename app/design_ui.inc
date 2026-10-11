@@ -933,9 +933,11 @@ static void log_panel(app *a) {
             if (a->diagnostic_count) {
                 if (nk_group_begin(ui, "Compilerdiagnosen", 0)) {
                     nk_layout_row_dynamic(ui, 30, 1);
-                    for (int i = 0; i < a->diagnostic_count; i++)
+                    for (int i = 0; i < a->diagnostic_count; i++) {
+                        a->diagnostic_bounds[i]=nk_widget_bounds(ui);
                         if (nk_button_label(ui, a->diagnostics[i].text))
                             jump_to_diagnostic(a, &a->diagnostics[i]);
+                    }
                     nk_group_end(ui);
                 }
             } else {

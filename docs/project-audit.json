@@ -1526,9 +1526,19 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Build-Ausgabe mit anklickbaren Datei-/Zeilenfehlern.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/compiler_diagnostic.c",
+        "app/compiler_diagnostic.h",
+        "app/main.c",
+        "app/design_ui.inc",
+        "app/diagnostic_tests.inc",
+        "tests/test_compiler_diagnostic.c",
+        "tests/check_display_workflow.py",
+        "docs/workspace.md",
+        "docs/platform-validation.md#build-fehler-in-headern-und-hilfsdateien-tatsächlich-anklicken"
+      ],
+      "note": "Tatsächlicher fehlgeschlagener Clang-Build in einem Unicode-Header, blockierter F6-Laufstart, echter Klick zur richtigen Datei/Zeile, gespeicherte Reparatur, F5-Neubuild und vollständiger gesunder F6/F9-Lauf auf Intel macOS geprüft. Gleichnamige Dateien bleiben getrennt; vier C-/Physim-Runtime-Diagnoseketten und fremde Quelle bestehen. Native Parserfälle prüfen GCC/Clang/MSVC-Formate, Koordinatengrenzen und Fehleratomizität; Parserdaten sind keine andere Compiler-/Plattformausführung. Neue andere Plattform-/SDK-Gesamtabnahme bleibt separat offen."
     },
     {
       "id": "PP-0249",
@@ -1585,9 +1595,19 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Starten des Experiments erst nach erfolgreichem Build.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/compiler_diagnostic.c",
+        "app/compiler_diagnostic.h",
+        "app/main.c",
+        "app/design_ui.inc",
+        "app/diagnostic_tests.inc",
+        "tests/test_compiler_diagnostic.c",
+        "tests/check_display_workflow.py",
+        "docs/workspace.md",
+        "docs/platform-validation.md#build-fehler-in-headern-und-hilfsdateien-tatsächlich-anklicken"
+      ],
+      "note": "Tatsächlicher fehlgeschlagener Clang-Build in einem Unicode-Header, blockierter F6-Laufstart, echter Klick zur richtigen Datei/Zeile, gespeicherte Reparatur, F5-Neubuild und vollständiger gesunder F6/F9-Lauf auf Intel macOS geprüft. Gleichnamige Dateien bleiben getrennt; vier C-/Physim-Runtime-Diagnoseketten und fremde Quelle bestehen. Native Parserfälle prüfen GCC/Clang/MSVC-Formate, Koordinatengrenzen und Fehleratomizität; Parserdaten sind keine andere Compiler-/Plattformausführung. Neue andere Plattform-/SDK-Gesamtabnahme bleibt separat offen."
     },
     {
       "id": "PP-0255",
