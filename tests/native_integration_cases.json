@@ -2478,6 +2478,20 @@
         "platform",
         "core"
       ]
+    },
+    "language-run-writer-memory": {
+      "sources": [
+        "tests/test_language_run_writer.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "language-run-writer-values": {
+      "source": "tests/fixtures/language/run_writer.phys",
+      "mode": "--emit-c",
+      "memory_balance": true
     }
   },
   "tests": [
@@ -9974,11 +9988,20 @@
         "physim-analysis-runner",
         "language-run-stream-experiment",
         "language-run-stream-analysis",
-        "language-run-stream-host-check"
+        "language-run-stream-host-check",
+        "language-run-writer-memory",
+        "language-run-writer-values"
       ],
       "steps": [
         {
           "program": "language-run-stream-memory",
+          "arguments": [
+            "{work}"
+          ],
+          "timeout": 60
+        },
+        {
+          "program": "language-run-writer-memory",
           "arguments": [
             "{work}"
           ],
@@ -10023,9 +10046,25 @@
           "program": "language-run-stream-host-check",
           "arguments": [
             "{work}/replay.psrun",
-            "{work}/reader-report.psreport"
+            "{work}/reader-report.psreport",
+            "{work}/experiment-stream-copy.psrun",
+            "{work}/reader-report-stream-copy.psrun"
           ],
           "timeout": 60
+        },
+        {
+          "program": "language-run-writer-values",
+          "arguments": [],
+          "stdout": "Language run writer checks passed\n",
+          "timeout": 60
+        },
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_language_writer_parity.py",
+            "{work}"
+          ],
+          "timeout": 30
         }
       ]
     }

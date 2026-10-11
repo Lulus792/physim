@@ -99,7 +99,7 @@ static int builtin_type_name(checker *c, ps_lang_token t) {
         "Series", "Plot", "Table", "Distribution", "SensorConfig", "Sensor",
         "Measurement", "Rng", "OdeResult", "StepInterval", "ScalarResult", "Diagnostic", "RunIndex", "RunBlock", "RunSnapshot", "Collider", "ContactWorld", "Batch", "Body", "Contacts", "ContactSolver", "ContactResult",
         "DistanceJoint", "JointResult", "ContactConstraint", "JointConstraint",
-        "ConstraintResult", "Sweep", "Aabb", "CollisionPair", "RigidMotion", "CcdSettings", "CcdCollider", "CcdResult", "RunStore", "RunReader"
+        "ConstraintResult", "Sweep", "Aabb", "CollisionPair", "RigidMotion", "CcdSettings", "CcdCollider", "CcdResult", "RunStore", "RunReader", "RunWriter"
     };
     for (size_t i = 0; i < sizeof names / sizeof names[0]; i++)
         if (word(c, t, names[i]))
@@ -111,7 +111,7 @@ static int reserved_nominal_type_name(checker *c, ps_lang_token t) {
         "Int64", "Float64", "Bool", "String", "Void", "Vec2", "Vec3", "Vec4",
         "Quat", "Mat3", "Mat4", "Bezier3", "Optional", "Rng", "Unit", "Medium", "Material",
         "Submersion", "Channel",
-        "Dataset", "Series", "Plot", "OdeResult", "StepInterval", "ScalarResult", "Diagnostic", "RunIndex", "RunBlock", "RunSnapshot", "Collider", "ContactWorld", "Batch", "RigidMotion", "CcdSettings", "CcdCollider", "CcdResult", "RunStore", "RunReader"
+        "Dataset", "Series", "Plot", "OdeResult", "StepInterval", "ScalarResult", "Diagnostic", "RunIndex", "RunBlock", "RunSnapshot", "Collider", "ContactWorld", "Batch", "RigidMotion", "CcdSettings", "CcdCollider", "CcdResult", "RunStore", "RunReader", "RunWriter"
     };
     for (size_t i = 0; i < sizeof(names) / sizeof(names[0]); ++i)
         if (word(c, t, names[i]))
@@ -208,7 +208,7 @@ static int numeric(ps_lang_type t) { return t == PS_TYPE_INT64 || t == PS_TYPE_F
 static int vector_type(ps_lang_type t) { return ps_lang_vector_dimensions(t) != 0; }
 static int value_type(ps_lang_type t) {
     return t == PS_TYPE_BOOL || numeric(t) || t == PS_TYPE_STRING || t >= PS_TYPE_RECORD_BASE ||
-           (t >= PS_TYPE_VEC2 && t <= PS_TYPE_RUN_READER);
+           (t >= PS_TYPE_VEC2 && t <= PS_TYPE_RUN_WRITER);
 }
 static int scalar_type(ps_lang_type t) {
     return t == PS_TYPE_BOOL || numeric(t) || t == PS_TYPE_STRING;
@@ -520,6 +520,8 @@ static ps_lang_type annotation(checker *c, size_t id, int allow_void) {
             t = PS_TYPE_SUBMERSION;
         else if (word(c,n->token,"RunStore"))
             t=PS_TYPE_RUN_STORE;
+        else if (word(c,n->token,"RunWriter"))
+            t=PS_TYPE_RUN_WRITER;
         else if (word(c,n->token,"RunReader"))
             t=PS_TYPE_RUN_READER;
         else if (word(c,n->token,"RunIndex"))
@@ -3182,7 +3184,10 @@ static ps_lang_type call(checker *c, size_t id, ps_lang_type expected) {
         c->info[n->a].receiver_slot = 1;
         return PS_TYPE_VOID;
     }
+    size_t receiver_method_binding = 0;
     if (callee->kind == PS_AST_MEMBER &&
+        !ps_lang_method_find(member_owner, c->source + callee->token.offset,
+                             callee->token.length, &receiver_method_binding) &&
         (word(c, callee->token, "append") || word(c, callee->token, "remove"))) {
         if (n->c) {
             fail(c, n->c, "Explicit type arguments require a generic function or method");
@@ -5313,7 +5318,7 @@ static void check_record(checker *c, size_t id) {
             part = 128;
         if (c->info[f].type == PS_TYPE_CONTACT_WORLD || c->info[f].type == PS_TYPE_BATCH) part=64;
         if (c->info[f].type == PS_TYPE_COLLIDER) part=64;
-        if (c->info[f].type == PS_TYPE_RUN_INDEX || c->info[f].type == PS_TYPE_RUN_STORE || c->info[f].type == PS_TYPE_RUN_READER) part=8;
+        if (c->info[f].type == PS_TYPE_RUN_INDEX || c->info[f].type == PS_TYPE_RUN_STORE || c->info[f].type == PS_TYPE_RUN_READER || c->info[f].type == PS_TYPE_RUN_WRITER) part=8;
         if (c->info[f].type == PS_TYPE_RUN_BLOCK) part=64;
         if (c->info[f].type == PS_TYPE_RUN_SNAPSHOT) part=8192;
         if (c->info[f].type == PS_TYPE_SCALAR_RESULT)

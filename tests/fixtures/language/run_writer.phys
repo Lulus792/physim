@@ -1,0 +1,101 @@
+let metre = Unit(1,0,0,0,0,0,0,1,"m")
+let joule = Unit(2,1,-2,0,0,0,0,1,"J")
+let second = Unit(0,0,1,0,0,0,0,1,"s")
+let store = RunStore()
+assert(attempt(store.createWriter("language-writer-reference.psrun","writer fixture")) == nil)
+func invalidConfigure() -> Bool:
+    store.configure(0,42,"bad")
+    return true
+assert(attempt(invalidConfigure()) == nil)
+store.configure(0.125,42,"writer_source=reference")
+assert(store.addChannel("position.x",metre,"Measured x α") == 0)
+assert(store.addChannel("energy",joule,"Energy") == 1)
+assert(attempt(store.addChannel("position.x",metre,"duplicate")) == nil)
+func appendAttempt(writer: RunWriter, time: Float64, values: [Float64]) -> Bool:
+    writer.append(time,values)
+    return true
+func closeAttempt(writer: RunWriter) -> Bool:
+    writer.close()
+    return true
+let writer = store.createWriter("language-writer-reference.psrun","writer fixture")
+let alias = writer
+assert(attempt(store.createWriter("language-writer-reference.psrun","duplicate")) == nil)
+assert(attempt(appendAttempt(writer,0,[1.0])) == nil && writer.sampleCount() == 0)
+assert(attempt(appendAttempt(writer,0,[1.0,2.0,3.0])) == nil && writer.sampleCount() == 0)
+assert(attempt(appendAttempt(writer,0,[])) == nil && writer.sampleCount() == 0)
+for i in 0..<3:
+    alias.append(Float64(i)*0.125,[10+2*Float64(i),20+3*Float64(i)])
+assert(writer.sampleCount() == 3 && writer.channelCount() == 2)
+let source = store.openReader("stream α.psrun")
+while source.nextSnapshot():
+    writer.appendSnapshot(source.snapshot())
+assert(writer.sampleCount() == 3)
+alias.close()
+assert(!writer.isOpen() && attempt(closeAttempt(writer)) == nil)
+assert(attempt(appendAttempt(writer,1,[1.0,2.0])) == nil)
+source.close()
+
+let partial = store.createWriter("language-writer-aborted.psrun","partial")
+partial.append(0,[3,4])
+let partialAlias = partial
+partial.abort()
+assert(!partialAlias.isOpen())
+let recovered = store.openReader("language-writer-aborted.psrun")
+assert(recovered.next() && recovered.row().value(0,0) == 3)
+assert(!recovered.next() && recovered.isRecovered() && !recovered.isComplete())
+recovered.close()
+
+func escapedWriter() -> RunWriter:
+    let local = RunStore()
+    local.configure(0.25,7,"owner=escaped")
+    assert(local.addChannel("x",metre,"x") == 0)
+    return local.createWriter("language-writer-escaped.psrun","escaped")
+let escaped = escapedWriter()
+escaped.append(0.25,[17])
+escaped.close()
+let escapedRead = store.openReader("language-writer-escaped.psrun")
+assert(escapedRead.next() && escapedRead.row().value(0,0) == 17)
+assert(!escapedRead.next() && escapedRead.isComplete())
+escapedRead.close()
+
+func automaticClose():
+    let temporary = store.createWriter("language-writer-automatic.psrun","automatic")
+    temporary.append(0,[5,6])
+automaticClose()
+let automaticRead = store.openReader("language-writer-automatic.psrun")
+assert(automaticRead.next() && !automaticRead.next() && automaticRead.isComplete())
+automaticRead.close()
+
+struct WriterBox<T>:
+    let value: T
+var boxes: [WriterBox<RunWriter>] = []
+let slotPaths = ["slot0.psrun","slot1.psrun","slot2.psrun","slot3.psrun","slot4.psrun","slot5.psrun","slot6.psrun","slot7.psrun"]
+for i in 0..<8:
+    let slot = store.createWriter(slotPaths[i],"slot")
+    boxes.append(WriterBox<RunWriter>(value: slot))
+assert(attempt(store.createWriter("language-writer-overflow.psrun","overflow")) == nil)
+let removed = boxes.removeLast()
+removed.value.abort()
+let replacement = store.createWriter("language-writer-overflow.psrun","replacement")
+assert(!removed.value.isOpen())
+let optional: RunWriter? = Optional.some(replacement)
+assert(optional != nil)
+store.configure(0.5,9,"future=only")
+assert(store.addChannel("extra",second,"future channel") == 2)
+assert(replacement.channelCount() == 2)
+replacement.append(0,[7,8])
+replacement.close()
+let future = store.createWriter("language-writer-future.psrun","future")
+assert(future.channelCount() == 3)
+future.append(0,[9,10,11])
+store.close()
+assert(!replacement.isOpen() && !future.isOpen() && !boxes[0].value.isOpen())
+assert(attempt(appendAttempt(future,1,[9.0,10.0,11.0])) == nil)
+let verification = RunStore()
+let futureRead = verification.openReader("language-writer-future.psrun")
+assert(futureRead.metadata().contains("dt_s=0.5") && futureRead.metadata().contains("seed=9"))
+assert(futureRead.channelCount() == 3 && futureRead.channelName(2) == "extra")
+assert(futureRead.next() && futureRead.row().value(0,2) == 11)
+assert(!futureRead.next() && futureRead.isComplete())
+verification.close()
+print("Language run writer checks passed")

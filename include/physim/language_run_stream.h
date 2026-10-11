@@ -8,6 +8,8 @@ typedef struct {
     size_t references;
     ps_allocator allocator;
     ps_run_store *store;
+    ps_context schema;
+    bool configured;
 } psrt_stream_store_owner;
 typedef struct {psrt_stream_store_owner *owner;} psrt_stream_store;
 typedef struct {
@@ -21,6 +23,12 @@ typedef struct {
     ps_snapshot snapshot;
 } psrt_stream_reader_owner;
 typedef struct {psrt_stream_reader_owner *owner;} psrt_stream_reader;
+typedef struct {
+    size_t references;
+    psrt_stream_store_owner *store;
+    ps_run_write_handle handle;
+} psrt_stream_writer_owner;
+typedef struct {psrt_stream_writer_owner *owner;} psrt_stream_writer;
 static inline void psrt_stream_store_release(psrt_stream_store_owner *owner) {
     if(owner && !--owner->references) {
         if(owner->store)ps_run_store_destroy(owner->store);
@@ -50,7 +58,9 @@ static inline psrt_stream_store psrt_stream_store_make(ps_allocator allocator,ps
     if(r!=PS_OK)psrt_fail_code(site,r,"RunStore allocation failed");
     r=ps_run_store_create(allocator,&owner->store);
     if(r!=PS_OK){ps_memory_free(allocator,owner,sizeof *owner);psrt_fail_code(site,r,"RunStore creation failed");}
-    owner->references=1;owner->allocator=allocator;return (psrt_stream_store){owner};
+    owner->references=1;owner->allocator=allocator;
+    owner->schema.struct_size=sizeof owner->schema;owner->schema.api_version=PS_API_VERSION;
+    return (psrt_stream_store){owner};
 }
 static inline void psrt_stream_store_close(psrt_stream_store value,psrt_site site) {
     ps_run_store *store=psrt_stream_store_get(value,site);
@@ -60,6 +70,99 @@ static inline void psrt_stream_store_close(psrt_stream_store value,psrt_site sit
 }
 static inline bool psrt_stream_store_open(psrt_stream_store value,psrt_site site) {
     (void)site;return value.owner && value.owner->store;
+}
+static inline void psrt_stream_store_configure(psrt_stream_store value,double dt,int64_t seed,
+                                               const char *metadata,psrt_site site) {
+    (void)psrt_stream_store_get(value,site);
+    if(!isfinite(dt) || dt<=0 || !metadata)psrt_fail_code(site,PS_INVALID,"RunStore requires a positive finite time step and metadata");
+    size_t size=strlen(metadata);
+    if(size>=sizeof value.owner->schema.model_metadata)psrt_fail_code(site,PS_LIMIT,"RunStore metadata capacity exceeded");
+    if(!psrt_string_utf8_valid(metadata,size))psrt_fail_code(site,PS_INVALID,"RunStore metadata must be valid UTF-8");
+    /* Inputs may refer to the destination. All validation precedes commit. */
+    memmove(value.owner->schema.model_metadata,metadata,size+1);
+    value.owner->schema.dt_s=dt;value.owner->schema.seed=(uint64_t)seed;value.owner->configured=true;
+}
+static inline int64_t psrt_stream_store_channel(psrt_stream_store value,const char *name,
+                                                ps_unit unit,const char *description,psrt_site site) {
+    (void)psrt_stream_store_get(value,site);
+    if(value.owner->schema.channel_count>=PS_MAX_CHANNELS)psrt_fail_code(site,PS_LIMIT,"RunStore channel capacity exceeded");
+    int index=ps_channel_add(&value.owner->schema,name,unit,description);
+    if(index<0)psrt_fail_code(site,PS_INVALID,"RunStore requires unique bounded UTF-8 channels and canonical SI units");
+    return index;
+}
+static inline void psrt_stream_writer_drop(void *value) {
+    psrt_stream_writer *writer=value;psrt_stream_writer_owner *owner=writer->owner;
+    if(owner && !--owner->references) {
+        psrt_stream_store_owner *store=owner->store;ps_allocator allocator=store->allocator;
+        if(store->store)ps_run_writer_release(store->store,owner->handle);
+        ps_memory_free(allocator,owner,sizeof *owner);psrt_stream_store_release(store);
+    }
+    writer->owner=NULL;
+}
+static inline ps_result psrt_stream_writer_copy(void *out,const void *source) {
+    psrt_stream_writer value=*(const psrt_stream_writer *)source;
+    if(value.owner){if(value.owner->references==SIZE_MAX)return PS_LIMIT;value.owner->references++;}
+    *(psrt_stream_writer *)out=value;return PS_OK;
+}
+static inline void psrt_stream_writer_keep(psrt_stream_writer *value,psrt_site site) {
+    psrt_stream_writer copy;ps_result r=psrt_stream_writer_copy(&copy,value);
+    if(r!=PS_OK)psrt_fail_code(site,r,"RunWriter ownership limit exceeded");
+    *value=copy;
+}
+static inline psrt_stream_writer psrt_stream_writer_make(ps_allocator allocator,psrt_stream_store value,
+                                                         const char *path,const char *name,psrt_site site) {
+    ps_run_store *store=psrt_stream_store_get(value,site);(void)allocator;
+    if(!value.owner->configured || !value.owner->schema.channel_count)psrt_fail_code(site,PS_INVALID,"RunStore requires configured metadata and channels before creating a writer");
+    if(value.owner->references==SIZE_MAX)psrt_fail_code(site,PS_LIMIT,"RunStore ownership limit exceeded");
+    psrt_stream_writer_owner *owner=NULL;
+    ps_result r=ps_memory_zero(value.owner->allocator,1,sizeof *owner,(void **)&owner);
+    if(r!=PS_OK)psrt_fail_code(site,r,"RunWriter allocation failed");
+    r=ps_run_writer_create(store,path,&value.owner->schema,name,&owner->handle);
+    if(r!=PS_OK){ps_memory_free(value.owner->allocator,owner,sizeof *owner);psrt_fail_code(site,r,"RunWriter creation failed");}
+    owner->references=1;owner->store=value.owner;value.owner->references++;
+    return (psrt_stream_writer){owner};
+}
+static inline ps_run_write_info psrt_stream_writer_info(psrt_stream_writer value,psrt_site site) {
+    ps_run_write_info info;
+    if(!value.owner || !value.owner->store->store)psrt_fail_code(site,PS_INVALID,"RunWriter is closed");
+    ps_result r=ps_run_writer_describe(value.owner->store->store,value.owner->handle,&info);
+    if(r!=PS_OK)psrt_fail_code(site,r,"RunWriter is closed");
+    return info;
+}
+static inline bool psrt_stream_writer_open(psrt_stream_writer value,psrt_site site) {
+    (void)site;ps_run_write_info info;
+    return value.owner && value.owner->store->store &&
+        ps_run_writer_describe(value.owner->store->store,value.owner->handle,&info)==PS_OK;
+}
+static inline void psrt_stream_writer_close(psrt_stream_writer value,psrt_site site) {
+    (void)psrt_stream_writer_info(value,site);
+    ps_result r=ps_run_writer_release(value.owner->store->store,value.owner->handle);
+    if(r!=PS_OK)psrt_fail_code(site,r,"RunWriter finalization failed");
+}
+static inline void psrt_stream_writer_abort(psrt_stream_writer value,psrt_site site) {
+    (void)psrt_stream_writer_info(value,site);
+    ps_result r=ps_run_writer_abort(value.owner->store->store,value.owner->handle);
+    if(r!=PS_OK)psrt_fail_code(site,r,"RunWriter abort failed");
+}
+static inline int64_t psrt_stream_writer_channels(psrt_stream_writer value,psrt_site s){return psrt_stream_writer_info(value,s).channels;}
+static inline int64_t psrt_stream_writer_samples(psrt_stream_writer value,psrt_site s) {
+    uint64_t count=psrt_stream_writer_info(value,s).samples;
+    if(count>INT64_MAX)psrt_fail_code(s,PS_LIMIT,"RunWriter sample count exceeds Int64");
+    return (int64_t)count;
+}
+static inline void psrt_stream_writer_append(psrt_stream_writer value,double time,const double *values,size_t count,psrt_site site) {
+    (void)psrt_stream_writer_info(value,site);
+    ps_result r=ps_run_writer_append(value.owner->store->store,value.owner->handle,time,
+                                     values,count);
+    if(r!=PS_OK)psrt_fail_code(site,r,"RunWriter append failed");
+}
+static inline void psrt_stream_writer_snapshot(psrt_stream_writer value,ps_snapshot snapshot,psrt_site site) {
+    ps_run_write_info info=psrt_stream_writer_info(value,site);
+    if(snapshot.count!=info.channels)psrt_fail_code(site,PS_INVALID,"RunWriter snapshot channel count differs from schema");
+    ps_context context={0};context.time_s=snapshot.time;context.channel_count=snapshot.count;
+    memcpy(context.values,snapshot.values,snapshot.count*sizeof(double));
+    ps_result r=ps_run_writer_snapshot(value.owner->store->store,value.owner->handle,&context,&snapshot.scene,snapshot.paused);
+    if(r!=PS_OK)psrt_fail_code(site,r,"RunWriter snapshot append failed");
 }
 static inline void psrt_stream_reader_drop(void *value) {
     psrt_stream_reader *reader=value;psrt_stream_reader_owner *owner=reader->owner;

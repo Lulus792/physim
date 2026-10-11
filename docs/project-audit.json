@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "date": "2026-10-11",
+  "date": "2026-10-12",
   "inspected_revision": "7035041f92c7cbf437d3f1cf32ed6d240754dd9e",
   "plan": "Physim_Projektplan.md",
   "plan_sha256": "da922b93657b3cb44dcf4be88375d0dc52f8a89c3beee2020911cb425fa8da64",
@@ -2751,9 +2751,12 @@
         "include/physim/language_run_stream.h",
         "tests/test_language_run_stream.c",
         "tests/fixtures/language/run_stream.phys",
-        "tests/check_language_stream_host.c"
+        "tests/check_language_stream_host.c",
+        "tests/test_language_run_writer.c",
+        "tests/fixtures/language/run_writer.phys",
+        "tests/check_language_writer_parity.py"
       ],
-      "note": "Dataset/Series besitzen owner/slot/generation; Reportelemente sind append-only owner/index-Handles ohne eigene Generation. Neue opake Run-Stream-Stores verbergen FILE-/Zählerzustände und prüfen owner/slot/generation, alte Kopien, Wiederverwendung, terminale Zustände und begrenzte Kapazität. Experiment-Runner und App-Importvalidierung sind darauf umgestellt. Legacy-Reader/Writer aus data.h und andere öffentliche Ressourcenzustände bleiben vorhanden; die allgemeine Handle-Migration sowie zusätzliche direkte Low-Level-Sprachbindungen sind nicht abgeschlossen. Handles müssen innerhalb der Besitzerlebensdauer verwendet werden. RunStore und RunReader binden den opaken Lesezugang jetzt auch in Physim: geteilte Besitzer/Cursor, ungültige alte Kopien, unabhängige Zeilen/Szenen, Recovery und tatsächliche Experiment-/Analyse-Runner sind lokal geprüft. Writer bleiben C-only; vollständige Migration und Funktionsparität bleiben offen."
+      "note": "Dataset/Series besitzen owner/slot/generation; Reportelemente sind append-only owner/index-Handles ohne eigene Generation. Neue opake Run-Stream-Stores verbergen FILE-/Zählerzustände und prüfen owner/slot/generation, alte Kopien, Wiederverwendung, terminale Zustände und begrenzte Kapazität. Experiment-Runner und App-Importvalidierung sind darauf umgestellt. Legacy-Reader/Writer aus data.h und andere öffentliche Ressourcenzustände bleiben vorhanden; die allgemeine Handle-Migration sowie zusätzliche direkte Low-Level-Sprachbindungen sind nicht abgeschlossen. Handles müssen innerhalb der Besitzerlebensdauer verwendet werden. RunStore und RunReader binden den opaken Lesezugang jetzt auch in Physim: geteilte Besitzer/Cursor, ungültige alte Kopien, unabhängige Zeilen/Szenen, Recovery und tatsächliche Experiment-/Analyse-Runner sind lokal geprüft. RunWriter bindet jetzt auch Konfiguration, kanonische SI-Schemata, exklusive Erstellung, Samples, Szenenkopien, Finale und Abort. Bytegenaue C-/Physim-Archivparität sowie Besitzer-/Grenzfälle sind lokal sowie gegen installierte und aus SDK-Quellen neu gebaute Archive ausgeführt; vollständige allgemeine Migration und Funktionsparität bleiben offen."
     },
     {
       "id": "PP-0353",

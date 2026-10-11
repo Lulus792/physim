@@ -3,12 +3,19 @@ func analyze():
     let reader = store.openReader(inputPath(0))
     let metre = Unit(1,0,0,0,0,0,0,1,"m")
     let second = Unit(0,0,1,0,0,0,0,1,"s")
+    let joule = Unit(2,1,-2,0,0,0,0,1,"J")
+    store.configure(0.125,42,"writer_source=analysis")
+    assert(store.addChannel("position.x",metre,"Measured x α") == 0)
+    assert(store.addChannel("energy",joule,"Energy") == 1)
+    let writer = store.createWriter(outputPrefix()+"-stream-copy.psrun","Analysis stream copy")
     report("Opaque stream analysis")
     let table = Table("Recorded rows",["Time","Position"],[second,metre])
     var index = 0
     while reader.next():
         let row = reader.row()
         table.row("row " + String(index),[Quantity(row.time(0),second),Quantity(row.value(0,0),metre)])
+        writer.append(row.time(0),[row.value(0,0),row.value(0,1)])
         index += 1
     assert(index == 3 && reader.isComplete())
+    writer.close()
     store.close()

@@ -147,3 +147,56 @@ Physim-Lesezugang auch nach Verschiebung des Pakets. Er verwendet ausschließlic
 installierte öffentliche Header, das installierte Archiv und einen aus den
 SDK-Quellen neu gebauten Core. Standalone-Speicherbereinigung, beschädigte
 Dateien und tatsächliche Experiment-/Analyse-Runner gehören zu dieser Prüfung.
+
+## Fortlaufend in Physim schreiben
+
+`RunStore.configure(dt, seed, modelMetadata)` konfiguriert vor der ersten
+Writer-Erstellung einen endlichen positiven Zeitschritt, den Seed und höchstens
+2047 UTF-8-Metadatenbytes. Der Int64-Seed wird wie beim RNG als 64-Bit-
+Bitmuster übernommen. `addChannel(name, unit, description)` deklariert
+höchstens 16 eindeutige kanonische SI-Kanäle; es liefert den nullbasierten Index.
+Konfiguration und Schema gehören zum gemeinsamen Store. Änderungen gelten nur
+für künftig erzeugte Writer; jede Datei erfasst bei ihrer Erstellung das dann
+vorliegende Schema. Bestehende Leser werden dadurch nicht verändert.
+
+`createWriter(path, name)` erzeugt einen `RunWriter` exklusiv; vorhandene Dateien
+werden nicht ersetzt. Ein konfigurierter Zeitschritt und mindestens ein Kanal
+sind erforderlich. Höchstens acht Writer sind gleichzeitig geöffnet. Kopien
+teilen den Writer und seinen Zähler. Ein Writer hält den Store am Leben, auch
+wenn die ursprüngliche Store-Variable ihren Gültigkeitsbereich verlässt.
+
+`append(time, values)` schreibt genau eine vollständige endliche SI-Messzeile.
+Die Zahl der Float64-Werte muss exakt dem erfassten Schema entsprechen.
+`appendSnapshot(snapshot)` schreibt einen unabhängigen vorhandenen RunSnapshot,
+mit gleicher Kanalzahl, samt Zeit, Messwerten, Pause und Szene. Ein Snapshot
+fügt keine Messzeile hinzu. `sampleCount()` und `channelCount()` lesen die
+Core-Zähler. `close()` finalisiert die Datei; `abort()` schließt ohne Footer.
+Beide Operationen invalidieren sämtliche Kopien, auch bei einem I/O-Fehler.
+Alte Kopien bleiben nach Wiederverwendung eines Slots ungültig.
+
+Ungültige Eingaben und fehlgeschlagene Besitzerallokationen ändern keinen
+bestehenden Writer und erzeugen keine Datei. Fehlgeschlagene Datei-I/O kann
+entsprechend dem C-Vertrag einen recoverbaren unvollständigen Rest hinterlassen.
+Explizites Schließen meldet Finalisierungsfehler als fangbaren Fehler. Bei der
+letzten automatischen Besitzerfreigabe werden Dateien finalisiert und Ressourcen
+auch bei I/O-Fehlern freigegeben; dieser Destruktor liefert keinen Fehler zurück.
+Für einen überprüften Abschluss ist daher `close()` erforderlich. Store-close
+finalisiert alle noch lebenden Writer und invalidiert Leser und Writer gemeinsam.
+
+
+```physim
+let store = RunStore()
+store.configure(0.01, 42, "model=measured-motion")
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let channel = store.addChannel("position.x", metres, "Measured position")
+let writer = store.createWriter("measured-motion.psrun", "Recorded motion")
+writer.append(0, [1.0])
+writer.append(0.01, [1.1])
+writer.close()
+store.close()
+```
+
+Der SDK-Prüfer prüft ebenfalls Writer, Besitzerallokationen und bytegenaue
+C-/Physim-Archivparität einschließlich Szenen und Index. Der Schreibzugang ist
+in Standalone-, Experiment- und Analysemodulen verfügbar; die allgemeine
+Sprach- und Ressourcenmigration bleibt davon unabhängig.

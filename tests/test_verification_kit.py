@@ -21,7 +21,8 @@ assert {'tools/sdk_series_probe.c','tests/test_saved_run_tutorial.py','tests/tes
         'tests/test_language_run_stream.c','tests/check_language_stream_host.c',
         'tests/fixtures/language/run_stream.phys','tests/fixtures/language/run_stream_experiment.phys',
         'tests/fixtures/language/run_stream_analysis.phys','tests/language_memory_balance.h',
-        'tests/prepare_language_stream_corruption.py'}<=set(names)
+        'tests/prepare_language_stream_corruption.py','tests/test_language_run_writer.c',
+        'tests/fixtures/language/run_writer.phys','tests/check_language_writer_parity.py'}<=set(names)
 assert not any(name.startswith(('src/','include/','lib/')) for name in names)
 assert all(not name.startswith('app/') or name=='app/utf8.manifest' for name in names)
 with tarfile.open(archive) as file:

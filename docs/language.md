@@ -3013,7 +3013,10 @@ alle betreffenden Kopien; letzte Besitzer geben Dateien automatisch frei.
 EOF-/Recovery-Zustände. `row()` und `snapshot()` erzeugen unabhängige Werte;
 ein Kopierfehler verbraucht keine weitere Messzeile. Kanalmetadaten sind
 laufzeitgeprüft. Der erste Traversierungsaufruf legt den Cursor auf Messzeilen
-oder Szenen fest. Schreibende Low-Level-Streams sind noch nicht sprachgebunden.
+oder Szenen fest. `RunWriter` ergänzt exklusive Dateien, endliche vollständige
+SI-Zeilen und Szenenkopien. Der Store erfasst vorher ausdrücklich konfigurierte
+Metadaten und kanonische SI-Kanäle. Kopien teilen den Writer; close/abort
+invalidieren alle Aliase. Ein explizites close meldet Finalisierungsfehler.
 [Vollständiger Vertrag und Beispiel](run-streams.md#fortlaufend-in-physim-lesen).
 
 `RunIndex(path, maximumEntries)` besitzt einen validierten Lauf samt Checkpoints;

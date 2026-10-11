@@ -15,6 +15,7 @@
 #define RUN_INDEX PS_TYPE_RUN_INDEX
 #define RUN_STORE PS_TYPE_RUN_STORE
 #define RUN_READER PS_TYPE_RUN_READER
+#define RUN_WRITER PS_TYPE_RUN_WRITER
 #define RUN_BLOCK PS_TYPE_RUN_BLOCK
 #define RUN_SNAPSHOT PS_TYPE_RUN_SNAPSHOT
 #define SUBMERSION PS_TYPE_SUBMERSION
@@ -172,6 +173,16 @@ static const ps_lang_builtin library[] = {
     {"runStoreClose", "psrt_stream_store_close", VOID, 1, 0, {RUN_STORE}, {"store"}},
     {"runStoreIsOpen", "psrt_stream_store_open", PS_TYPE_BOOL, 1, 0, {RUN_STORE}, {"store"}},
     {"runStoreReader", "psrt_stream_reader_make", RUN_READER, 2, 0, {RUN_STORE,S}, {"store","path"}},
+    {"runStoreConfigure", "psrt_stream_store_configure", VOID, 4, 0, {RUN_STORE,F,I,S}, {"store","dt","seed","modelMetadata"}},
+    {"runStoreChannel", "psrt_stream_store_channel", I, 4, 0, {RUN_STORE,S,U,S}, {"store","name","unit","description"}},
+    {"runStoreWriter", "psrt_stream_writer_make", RUN_WRITER, 3, 0, {RUN_STORE,S,S}, {"store","path","name"}},
+    {"runWriterClose", "psrt_stream_writer_close", VOID, 1, 0, {RUN_WRITER}, {"writer"}},
+    {"runWriterAbort", "psrt_stream_writer_abort", VOID, 1, 0, {RUN_WRITER}, {"writer"}},
+    {"runWriterIsOpen", "psrt_stream_writer_open", PS_TYPE_BOOL, 1, 0, {RUN_WRITER}, {"writer"}},
+    {"runWriterSamples", "psrt_stream_writer_samples", I, 1, 0, {RUN_WRITER}, {"writer"}},
+    {"runWriterChannels", "psrt_stream_writer_channels", I, 1, 0, {RUN_WRITER}, {"writer"}},
+    {"runWriterAppend", "psrt_stream_writer_append", VOID, 3, 0, {RUN_WRITER,F,PS_LANG_FLOAT_ARRAY}, {"writer","time","values"}},
+    {"runWriterSnapshot", "psrt_stream_writer_snapshot", VOID, 2, 0, {RUN_WRITER,RUN_SNAPSHOT}, {"writer","snapshot"}},
     {"runReaderClose", "psrt_stream_reader_close", VOID, 1, 0, {RUN_READER}, {"reader"}},
     {"runReaderIsOpen", "psrt_stream_reader_open", PS_TYPE_BOOL, 1, 0, {RUN_READER}, {"reader"}},
     {"runReaderNext", "psrt_stream_reader_next", PS_TYPE_BOOL, 1, 0, {RUN_READER}, {"reader"}},
@@ -789,6 +800,16 @@ static const ps_lang_method methods[] = {
     {"close","runStoreClose",RUN_STORE,0},
     {"isOpen","runStoreIsOpen",RUN_STORE,0},
     {"openReader","runStoreReader",RUN_STORE,0},
+    {"configure","runStoreConfigure",RUN_STORE,0},
+    {"addChannel","runStoreChannel",RUN_STORE,0},
+    {"createWriter","runStoreWriter",RUN_STORE,0},
+    {"close","runWriterClose",RUN_WRITER,0},
+    {"abort","runWriterAbort",RUN_WRITER,0},
+    {"isOpen","runWriterIsOpen",RUN_WRITER,0},
+    {"sampleCount","runWriterSamples",RUN_WRITER,0},
+    {"channelCount","runWriterChannels",RUN_WRITER,0},
+    {"append","runWriterAppend",RUN_WRITER,0},
+    {"appendSnapshot","runWriterSnapshot",RUN_WRITER,0},
     {"close","runReaderClose",RUN_READER,0},
     {"isOpen","runReaderIsOpen",RUN_READER,0},
     {"next","runReaderNext",RUN_READER,0},

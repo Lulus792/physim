@@ -2096,7 +2096,7 @@ RunIndex(path: String, maximumEntries: Int64) -> RunIndex
 RunStore() -> RunStore
 ```
 
-Erzeugt einen besitzenden Store für opake Laufdatei-Lesehandles. Kopien teilen den Store; close invalidiert alle zugehörigen Handles.
+Erzeugt einen besitzenden Store für opake Laufdatei-Lese- und Schreibhandles. Kopien teilen den Store; close invalidiert alle zugehörigen Handles.
 
 Überall verfügbar.
 
@@ -5251,13 +5251,33 @@ Liefert den Weltpunkt aus lokalem Punkt und Objektslot aus dem vollständigen Sn
 
 Überall verfügbar.
 
+## runStoreChannel
+
+```text
+runStoreChannel(store: RunStore, name: String, unit: Unit, description: String) -> Int64
+```
+
+Deklariert einen eindeutigen kanonischen SI-Kanal für künftig erzeugte Writer und liefert seinen Index. Höchstens 16 Kanäle; Fehler sind atomar.
+
+Überall verfügbar.
+
 ## runStoreClose
 
 ```text
 runStoreClose(store: RunStore) -> Void
 ```
 
-Schließt den gemeinsamen Store und alle Leser. Alle Kopien werden ungültig; Dateien und Speicher werden freigegeben.
+Schließt den gemeinsamen Store, alle Leser und finalisiert seine Writer. Alle Handle-Kopien werden ungültig; Core-Dateien und Core-Ressourcen werden freigegeben. Referenzbesitzer leben bis zur letzten Kopie.
+
+Überall verfügbar.
+
+## runStoreConfigure
+
+```text
+runStoreConfigure(store: RunStore, dt: Float64, seed: Int64, modelMetadata: String) -> Void
+```
+
+Konfiguriert einen positiven endlichen Zeitschritt, Seed und begrenzte UTF-8-Metadaten für künftig erzeugte Writer. Fehler erhalten die Konfiguration.
 
 Überall verfügbar.
 
@@ -5278,6 +5298,86 @@ runStoreReader(store: RunStore, path: String) -> RunReader
 ```
 
 Öffnet einen fortlaufenden Leser mit eigenem Cursor im Store. Höchstens acht Leser sind gleichzeitig geöffnet.
+
+Überall verfügbar.
+
+## runStoreWriter
+
+```text
+runStoreWriter(store: RunStore, path: String, name: String) -> RunWriter
+```
+
+Erzeugt eine exklusive Laufdatei aus dem konfigurierten Store-Schema. Höchstens acht Writer; vorhandene Dateien werden nicht ersetzt.
+
+Überall verfügbar.
+
+## runWriterAbort
+
+```text
+runWriterAbort(writer: RunWriter) -> Void
+```
+
+Schließt ohne Footer und invalidiert alle Kopien. Der gültige Präfix bleibt recoverbar.
+
+Überall verfügbar.
+
+## runWriterAppend
+
+```text
+runWriterAppend(writer: RunWriter, time: Float64, values: [Float64]) -> Void
+```
+
+Schreibt eine endliche Zeit und exakt eine vollständige Float64-SI-Zeile passend zum erfassten Schema.
+
+Überall verfügbar.
+
+## runWriterChannels
+
+```text
+runWriterChannels(writer: RunWriter) -> Int64
+```
+
+Anzahl der bei Erstellung erfassten SI-Kanäle.
+
+Überall verfügbar.
+
+## runWriterClose
+
+```text
+runWriterClose(writer: RunWriter) -> Void
+```
+
+Finalisiert den gemeinsamen Writer und invalidiert alle Kopien, auch bei einem I/O-Fehler.
+
+Überall verfügbar.
+
+## runWriterIsOpen
+
+```text
+runWriterIsOpen(writer: RunWriter) -> Bool
+```
+
+Prüft Store, Slot und Generation des gemeinsamen Writers.
+
+Überall verfügbar.
+
+## runWriterSamples
+
+```text
+runWriterSamples(writer: RunWriter) -> Int64
+```
+
+Anzahl vom Core gezählter Messzeilen; ein abschließender Flushfehler kann trotz gezählter Zeile auftreten. Übergroße Zähler liefern PS_LIMIT.
+
+Überall verfügbar.
+
+## runWriterSnapshot
+
+```text
+runWriterSnapshot(writer: RunWriter, snapshot: RunSnapshot) -> Void
+```
+
+Schreibt eine vorhandene Szenenkopie einschließlich Zeit, Werten und Pause; gleiche Kanalzahl ist erforderlich und die Samplezahl bleibt unverändert.
 
 Überall verfügbar.
 

@@ -214,11 +214,18 @@ def verify_run_stream(repo, sdk, consumer, builder, library, rebuilt_core, suffi
     shutil.copy2(repo / "tests/test_run_stream.c", consumer / "run-stream-check.c")
     shutil.copy2(repo / "tests/test_allocator.h", consumer / "test_allocator.h")
     shutil.copy2(repo / "tests/test_language_run_stream.c", consumer / "run-stream-owner-check.c")
+    shutil.copy2(repo / "tests/test_language_run_writer.c", consumer / "run-writer-owner-check.c")
     shutil.copy2(repo / "tests/check_language_stream_host.c", consumer / "run-stream-host-check.c")
     generated = consumer / "run-stream-language.c"
     checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
              repo / "tests/fixtures/language/run_stream.phys"], output=generated)
     generated.write_text("#define main ps_test_main\n" + generated.read_text(encoding="utf-8") +
+                         "\n" + (repo / "tests/language_memory_balance.h").read_text(encoding="utf-8"),
+                         encoding="utf-8")
+    writer_generated = consumer / "run-writer-language.c"
+    checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
+             repo / "tests/fixtures/language/run_writer.phys"], output=writer_generated)
+    writer_generated.write_text("#define main ps_test_main\n" + writer_generated.read_text(encoding="utf-8") +
                          "\n" + (repo / "tests/language_memory_balance.h").read_text(encoding="utf-8"),
                          encoding="utf-8")
     checked([sdk / "bin" / ("physimc" + suffix), "--emit-experiment",
@@ -249,8 +256,16 @@ def verify_run_stream(repo, sdk, consumer, builder, library, rebuilt_core, suffi
                  work / "replay.psrun", "--steps", "3", "--dt", ".125"], cwd=work)
         checked([sdk / "bin" / ("physim-analysis-runner" + suffix), analysis,
                  work / "stream α.psrun", work / "reader-report"], cwd=work)
-        checked([host_check, work / "replay.psrun", work / "reader-report.psreport"])
-    print("Installed/rebuilt SDK run streams: C/Physim ownership, generation reuse, bounded slots, allocation failure, independent values, snapshots, damaged-tail recovery and actual experiment/analysis hosts passed", flush=True)
+        checked([host_check, work / "replay.psrun", work / "reader-report.psreport",
+                 work / "experiment-stream-copy.psrun", work / "reader-report-stream-copy.psrun"])
+        writer_owner = builder.executable("run-writer-owner-check-" + kind,
+                                         ["run-writer-owner-check.c"], [archive])
+        writer_language = builder.executable("run-writer-language-" + kind,
+                                            ["run-writer-language.c"], [archive], language=True)
+        checked([writer_owner, work])
+        checked([writer_language], cwd=work)
+        checked([sys.executable, repo / "tests/check_language_writer_parity.py", work])
+    print("Installed/rebuilt SDK run streams: C/Physim reader/writer ownership, exact archive parity, generation reuse, bounded slots, allocation failure, independent values, snapshots, damaged-tail recovery and actual experiment/analysis hosts passed", flush=True)
 
 
 def verify_close_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked):
@@ -609,7 +624,7 @@ def main():
             shutil.copytree(sdk / "src", consumer / "src")
             rebuilt_core = builder.archive("sdk-rebuilt-core", [f"src/{name}.c" for name in native.CORE])
             verify_run_stream(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
-            (root / "PASSED.txt").write_text("Focused Run stream SDK verification passed; installed/rebuilt Core, C/Physim reader ownership, damaged-tail recovery, actual experiment/analysis hosts, manifest and relocation; no full domain or GUI acceptance.\n", encoding="utf-8")
+            (root / "PASSED.txt").write_text("Focused Run stream SDK verification passed; installed/rebuilt Core, C/Physim reader/writer ownership, exact archive parity, damaged-tail recovery, actual experiment/analysis hosts, manifest and relocation; no full domain or GUI acceptance.\n", encoding="utf-8")
             print(f"Run stream SDK verified: {root}")
             return
         if args.transform_only:

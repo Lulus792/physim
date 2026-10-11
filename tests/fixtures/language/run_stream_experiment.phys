@@ -4,6 +4,15 @@ let store = RunStore()
 var reader = store.openReader("stream α.psrun")
 func create():
     metadata("model=opaque stream replay\nsource=stream α.psrun")
+    store.configure(0.125,42,"writer_source=experiment")
+    let joule = Unit(2,1,-2,0,0,0,0,1,"J")
+    assert(store.addChannel("position.x",metres,"Measured x α") == 0)
+    assert(store.addChannel("energy",joule,"Energy") == 1)
+    let writer = store.createWriter("experiment-stream-copy.psrun","Experiment stream copy")
+    while reader.next():
+        let row = reader.row()
+        writer.append(row.time(0),[row.value(0,0),row.value(0,1)])
+    writer.close()
 func reset():
     reader.close()
     reader = store.openReader("stream α.psrun")
