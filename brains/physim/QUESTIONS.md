@@ -2,7 +2,8 @@
 
 - Der vollständige [Projektplan](../../Physim_Projektplan.md) ist noch nicht abgeschlossen.
 - Eine aktuelle gesamte Plattformabnahme bleibt offen; einzelne CI-Gruppen ersetzen sie nicht.
-- User Guide, Examples und visuelle Lernmaterialien werden gerade überarbeitet.
+- Die neue Dokumentation braucht bei späteren Funktionsänderungen weiterhin
+  einen Abgleich ihrer Bedienfolgen und Modellgrenzen.
 - Bilder und interaktive 3D-Inhalte sind in SecondBrain aktuell keine direkt
   gerenderten Dokumentblöcke. Die Anbindung erhält deshalb lesbare Markdown-Inhalte.
 

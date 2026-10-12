@@ -226,6 +226,7 @@ typedef struct {
     bool doc_visible;
     int doc_topic, doc_match, doc_jump_block;
     nk_uint doc_scroll_x, doc_scroll_y;
+    float doc_scroll_adjustment;
     char doc_query[128], doc_last_query[128], doc_error[160];
     bool doc_search_focus, doc_search_active, doc_move_match, doc_reset_sidebar;
     bool doc_keyboard,doc_focus_reveal,doc_filter_focus;
@@ -235,6 +236,11 @@ typedef struct {
     bool doc_filter_active, doc_contents;
     int doc_group, doc_previous, doc_track;
     struct nk_rect doc_track_bounds[2],doc_home_bounds;
+    float doc_theta,doc_length,doc_omega,doc_yaw,doc_pitch,doc_zoom;
+    bool doc_model_initialized,doc_orthographic;
+    struct nk_rect doc_visual_bounds[11];
+    ps_scene doc_visual_scene;
+    struct nk_rect doc_diagram_bounds;
     struct nk_rect documentation_bounds;
     ps_report *analysis_report, *pending_report;
     SDL_Thread *report_thread;

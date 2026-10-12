@@ -687,6 +687,15 @@ Im Lesebereich scrollen Pfeile und Bild auf/ab; Home und End springen zum Anfang
 und Ende. Ctrl+F (macOS Cmd+F) fokussiert die Dokumentensuche. Escape schließt
 das Handbuch. Ein Mausklick setzt die Zeigerbedienung fort.
 
+Der [User Guide](user-guide.md) und die [Examples](examples.md) ergänzen die
+Lernwege. Diagramme werden direkt im Lesebereich gezeichnet. Unter
+[Räumliche Modelle verstehen](spatial-explanations.md) erreichst du die
+eingebettete 3D-Pendelszene mit Tab. Pfeile ändern Reglerwerte; in der Szene
+drehen sie die Kamera. Bild auf/ab zoomt, Pos1 setzt die Kamera zurück.
+Die rechte Maustaste dreht die Ansicht ebenfalls. Die Erklärung besitzt einen
+eigenen Zustand und verändert keine laufende Simulation oder gespeicherten Werte.
+Externe Quellenlinks kopieren ihre Adresse, ohne einen Browser zu öffnen.
+
 ### Projekte per Tastatur anlegen
 
 Öffne **Datei → Neues Projekt** mit F10, Pfeiltasten und Enter. Tab führt durch

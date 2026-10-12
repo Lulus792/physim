@@ -9,7 +9,8 @@ typedef enum {
     PS_DOC_CODE,
     PS_DOC_LINK,
     PS_DOC_RULE,
-    PS_DOC_TABLE_ROW
+    PS_DOC_TABLE_ROW,
+    PS_DOC_IMAGE
 } ps_doc_kind;
 typedef struct {
     ps_doc_kind kind;
@@ -24,7 +25,8 @@ typedef struct {
     char text[PS_DOC_MAX_BYTES * 2];
 } ps_document;
 /* Small, inert Markdown reader for the bundled documentation. Caller validates
- * UTF-8. No HTML, scripts, images, network access or automatic URL navigation.
+ * UTF-8. Images retain their alt text and inert target for the native renderer.
+ * No HTML, scripts, network access or automatic URL navigation.
  * Transactional parse: out is unchanged on failure; free successful documents. */
 ps_result ps_document_parse(const char *source, size_t size, bool code, ps_document **out);
 const char *ps_document_find(const char *text, const char *query);

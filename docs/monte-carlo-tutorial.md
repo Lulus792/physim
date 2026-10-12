@@ -104,6 +104,24 @@ Stichprobenmittelwerte und Quantile müssen nicht exakt auf der Referenz liegen.
 enthalten weiterhin sämtliche 33 Messpunkte. Große dt-Werte verändern die
 Abtastung der Bahn, nicht die hier exakt berechnete Endposition.
 
+## Streuung und Wissen über den Mittelwert
+
+Führe zunächst einen einzelnen [Vakuumwurf](projectile-tutorial.md) aus.
+Für die Serie benötigst du zusätzlich den Monte-Carlo-Ablauf oben.
+
+Sage vor dem Serienstart voraus, ob alle Endpunkte gleich sein werden und
+welche Modellstreuung bei t=1 s gilt. Vergleiche anschließend Histogramm,
+Stichprobenstandardabweichung und Intervall des Mittelwerts. Erkläre in eigenen
+Worten, warum dieses Intervall keinen einzelnen zukünftigen Wurf begrenzt.
+
+Setze für einen zweiten Versuch nur die beiden σ-Parameter auf null und
+behalte Seeds, Laufzahl und Endzeit bei. Prüfe, ob Endwerte und Intervallbreite
+deine Vorhersage erfüllen. Wenn du später die Laufzahl änderst, passe die beiden
+Analysequellen wie oben beschrieben gemeinsam an; die Modellstreuung bleibt
+gleich, während die Unsicherheit des Mittelwerts mit `1/√n` skaliert.
+
+[Weitere Beispiele](examples.md) · [Messunsicherheit](measurement.md)
+
 ## Aus einem SDK bauen und auswerten
 
 Die Befehle gelten in einem SDK-Verzeichnis unter macOS/Linux. Verwende neue

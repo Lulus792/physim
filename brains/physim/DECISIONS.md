@@ -16,4 +16,7 @@ bleibt zum Nachschlagen getrennt. Testchroniken stehen bei den Projektunterlagen
 
 Jede Grafik bekommt eine Beschreibung. SecondBrain zeigt derzeit Bild-
 Alternativtexte und führt HTML nicht aus. Räumliche und interaktive Erklärungen
-bekommen daher zusätzlich eine verständliche Textfassung und einen separaten Zugang.
+bekommen daher zusätzlich eine verständliche Textfassung. In Physim selbst
+erscheinen Diagramme und die interaktive 3D-Erklärung direkt in der nativen
+F1-Hilfe. Die Dokumentation öffnet keinen Browser; externe Quellenadressen
+werden auf ausdrückliche Betätigung kopiert.

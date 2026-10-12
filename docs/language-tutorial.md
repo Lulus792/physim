@@ -6,6 +6,19 @@ Aus den gespeicherten Positionen berechnen wir anschließend die Geschwindigkeit
 und zeigen sie als Diagramm. Das [C-Tutorial](experiment-tutorial.md) verwendet
 dasselbe Modell und dieselben Referenzwerte.
 
+## Vorhersage und eigener Versuch
+
+Der [User Guide](user-guide.md) erklärt Projekt, Build, Lauf und Bericht.
+Beginne mit den vollständigen Quellen; Variablen, Funktionen und die verwendeten
+API-Aufrufe werden anschließend am selben Modell erklärt.
+
+Sage die Position nach zwei Sekunden voraus, bevor du den Lauf aufzeichnest.
+Prüfe danach Position und abgeleitete Geschwindigkeit im Bericht. Erkläre,
+warum die Geschwindigkeit hier konstant ist, obwohl das Modell bei jedem
+Schritt einen neuen Ort erhält. Ändere dann nur die Geschwindigkeit in der
+Experimentquelle, baue neu und prüfe deine neue Vorhersage. Die Analysequelle
+kann unverändert bleiben, weil sie die gespeicherte Position verarbeitet.
+
 ## Projekt vorbereiten
 
 Lege in der App ein **Pendel · Physim-Sprache**-Projekt in einem neuen Ordner an

@@ -21,7 +21,7 @@ nicht überschrieben werden.
 
 | Du suchst | Einstieg |
 | --- | --- |
-| Bedienung und erstes Ergebnis | [Handbuch](guide.md) und [Arbeitsbereich](workspace.md) |
+| Bedienung und erstes Ergebnis | [User Guide](user-guide.md) und [Examples](examples.md) |
 | Eigene Experimente | [C Lernweg](c-guide.md) oder [Physim Lernweg](physim-guide.md) |
 | Aktuellen Projektauftrag | [PROJECT](../brains/physim/PROJECT.md) |
 | Stand und nächste Arbeit | [STATE](../brains/physim/STATE.md) |
@@ -54,7 +54,9 @@ Links. Im derzeitigen Leser erscheinen die Alternativtexte von Bildern;
 Bilddateien werden noch nicht selbst gerendert. HTML wird als Text behandelt
 und nicht ausgeführt. Deshalb bleibt jeder Lernschritt in Text und Zahlen
 verständlich. Ergänzende SVGs, Bilder und räumliche Ansichten gehören zur
-Physim-Dokumentation und erhalten aussagekräftige Beschreibungen.
+Physim-Dokumentation und erhalten aussagekräftige Beschreibungen. Physim selbst
+zeigt die gebündelten Diagramme und die interaktive Pendelansicht direkt in der
+F1-Hilfe; dafür ist kein Browser erforderlich.
 
 ## Nachweis der Anbindung
 

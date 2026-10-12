@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 260" role="img" aria-labelledby="title desc">
+<title id="title">Vom Modell zum überprüften Ergebnis</title><desc id="desc">Quellen und Parameter führen über Build und Simulation zur gespeicherten Laufdatei. Eine Analyse liest den Lauf und erzeugt einen Bericht. Eine andere Analyse kann denselben gespeicherten Lauf erneut lesen.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#385b75"/></marker></defs>
+<rect width="1000" height="260" rx="18" fill="#f4f7fa"/>
+<g font-family="system-ui,sans-serif" text-anchor="middle" fill="#173247">
+<g fill="#fff" stroke="#b3c7d7" stroke-width="2"><rect x="20" y="56" width="174" height="94" rx="12"/><rect x="217" y="56" width="174" height="94" rx="12"/><rect x="414" y="56" width="174" height="94" rx="12"/><rect x="611" y="56" width="174" height="94" rx="12"/><rect x="808" y="56" width="174" height="94" rx="12"/></g>
+<g font-size="22" font-weight="600"><text x="107" y="92">Modell</text><text x="304" y="92">Build</text><text x="501" y="92">Simulation</text><text x="698" y="92">Laufdatei</text><text x="895" y="92">Analyse</text></g>
+<g font-size="17"><text x="107" y="121">Quellen + Parameter</text><text x="304" y="121">ausführbare Module</text><text x="501" y="121">Zustand + Messung</text><text x="698" y="121">Archiv .psrun</text><text x="895" y="121">Bericht + Export</text></g>
+<g stroke="#385b75" stroke-width="2" marker-end="url(#arrow)"><path d="M194 104H211"/><path d="M391 104H408"/><path d="M588 104H605"/><path d="M785 104H802"/></g>
+<path d="M895 153V190H698V155" fill="none" stroke="#385b75" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="974" y="229" text-anchor="end" font-size="18">Denselben Lauf mit einer anderen Analyse lesen</text>
+<text x="24" y="30" text-anchor="start" font-size="16">Erst das Modell bauen, dann Messdaten erhalten und prüfen.</text>
+</g></svg>

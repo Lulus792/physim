@@ -5,6 +5,11 @@ Experiment und Analyse dürfen beide C bleiben. Die gleichen physikalischen
 Referenzmodelle stehen im [Physim-Lernweg](physim-guide.md); du brauchst für diesen
 Teil keine Physim-Syntax zu lernen. API/ABI 3, Entwicklungsstand 0.1.0-dev.
 
+Wähle im [User Guide](user-guide.md) zuerst den Bedienablauf oder in den
+[Examples](examples.md) eine physikalische Frage. Dieser Lernweg erklärt danach
+die Programmierung in sieben aufeinander aufbauenden Kapiteln. Prüfe nach jedem
+Beispiel eine eigene Vorhersage, bevor du das nächste Modell ergänzt.
+
 ## 1. Einrichten und das erste Projekt öffnen
 
 Installiere auf macOS die Xcode Command Line Tools, unter Windows Visual Studio

@@ -4,6 +4,27 @@ Lernziel: Berechne dasselbe nichtlineare Pendel mit fünf numerischen Verfahren,
 vergleiche Winkel und Energiefehler und bestimme seine Schwingungsdauer aus den
 Messwerten. Experiment und Mehrlaufanalyse liegen vollständig in C und Physim vor.
 
+![Pendel: theta beginnt an der Senkrechten; x zeigt nach rechts und y nach oben. Gewicht wirkt nach unten, die Stangenkraft zum Aufhängepunkt.](visuals/pendulum.svg)
+
+## Vorhersagen, beobachten, erklären
+
+Du benötigst einen gebauten Pendellauf und die Auswahl gespeicherter Läufe aus
+dem [User Guide](user-guide.md). Beginne mit zwei Verfahren, bevor du alle fünf
+vergleichst: Euler und RK4 bei gleichen Anfangswerten und gleicher Schrittweite.
+
+1. **Vorhersage:** Welche Kurve sollte ihre Amplitude behalten, wenn das Modell
+   weder Widerstand noch Antrieb besitzt? Notiere deine Erwartung zur Energie.
+2. **Beobachtung:** Vergleiche Winkel und `E−E(0)` beider Läufe. Die farbigen
+   Kraftpfeile zeigen Kräfte; der Energieplot prüft den Verlauf über die Zeit.
+3. **Erklärung:** Begründe einen Energieanstieg mit dem numerischen Verfahren.
+   Wiederhole mit halbem Zeitschritt, bevor du eine Aussage über Genauigkeit machst.
+4. **Eigener Versuch:** Verdopple nur die Länge. Die Kleinwinkelnäherung sagt
+   eine um den Faktor √2 längere Periode voraus. Vergleiche diese Vorhersage mit
+   der gemessenen Periode und beachte die endliche Anfangsauslenkung.
+
+Die [räumliche Erklärung](spatial-explanations.md) verbindet Winkel, Koordinaten
+und Kräfte vor dem ersten Integratorvergleich.
+
 ## Modell und Gleichungen
 
 Eine Punktmasse von 1 kg hängt an einer masselosen starren Stange. Die Länge ist

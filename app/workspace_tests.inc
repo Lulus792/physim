@@ -70,7 +70,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
         return true;
     }
     if(!strncmp(mode,"manager-keyboard",16)){snprintf(a->manager_parent,sizeof a->manager_parent,"%s",root);if(!strcmp(mode,"manager-keyboard-22")){ps_preferences p=a->preferences;p.ui_size=22;preferences_apply(a,&p);}return true;}
-    if (!strncmp(mode,"docs-keyboard",13)){snprintf(a->project,sizeof a->project,"%s",root);if(!strcmp(mode,"docs-keyboard-22")){ps_preferences p=a->preferences;p.ui_size=22;preferences_apply(a,&p);}return true;}
+    if (!strncmp(mode,"docs-keyboard",13)){snprintf(a->project,sizeof a->project,"%s",root);if(!strcmp(mode,"docs-keyboard-22") || !strcmp(mode,"docs-keyboard-media-22")){ps_preferences p=a->preferences;p.ui_size=22;preferences_apply(a,&p);}return true;}
     if (!strcmp(mode,"toolbar-keyboard")) {
         snprintf(a->manager_parent,sizeof a->manager_parent,"%s",root);return true;
     }

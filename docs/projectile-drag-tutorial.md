@@ -54,6 +54,21 @@ fällt im Auswertungsdiagramm leicht ab. Ein einzelner Lauf beweist die
 Genauigkeit des numerischen Verfahrens nicht; prüfe für eigene Parameter
 auch halbierte Schrittweiten.
 
+## Kontrollierter eigener Versuch
+
+Beginne mit dem [Vakuumwurf](projectile-tutorial.md), wenn Build und Analyse
+noch neu sind. Vergleiche anschließend zwei Läufe bei gleicher Anfangslage,
+Endzeit und Schrittweite: `dragCoefficient=0` und `dragCoefficient=0,47`.
+
+Sage vor dem Start voraus, wie sich horizontale Geschwindigkeit und mechanische
+Energie unterscheiden. Prüfe die Kurven und die Endwerte aus dem Abschnitt oben.
+Erkläre, warum ein Energieverlust hier physikalisch erwartet wird. Halbiere
+danach nur den Zeitschritt: So trennst du die Änderung des Widerstandsmodells
+von der Änderung seiner numerischen Näherung. Eine kleinere Schrittweite
+entfernt die physikalische Dissipation nicht.
+
+[Weitere Beispiele](examples.md) · [User Guide](user-guide.md)
+
 ## Experiment in C
 
 Das C-Modul verwendet `ps_ode_step(PS_RK4, ...)`, Messkanäle und die

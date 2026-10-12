@@ -1798,6 +1798,12 @@ def main():
                     if "DOCUMENTATION KEYBOARD SELF-TEST: PASSED" not in output.read_text(encoding="utf-8"):
                         raise RuntimeError("Installed SDK keyboard documentation did not complete")
                 print("Installed SDK documentation: keyboard learning tracks, topics, contents, links, code copy, search and input order at 16/22 px passed",flush=True)
+                for mode in ("docs-keyboard-media","docs-keyboard-media-22"):
+                    directory=root / mode;directory.mkdir();output=root / (mode+".txt")
+                    checked([sdk / "bin" / ("physim"+suffix),"--workspace-state-test",directory,mode],output=output,timeout=90)
+                    if "DOCUMENTATION NATIVE MEDIA SELF-TEST: PASSED" not in output.read_text(encoding="utf-8"):
+                        raise RuntimeError("Installed SDK native documentation media did not complete")
+                print("Installed SDK documentation media: native vector diagrams, real GPU pendulum, keyboard parameters/camera/projection and preserved experiment state at 16/22 px passed",flush=True)
                 for mode in ("manager-keyboard","manager-keyboard-22","manager-errors"):
                     directory=root / mode;directory.mkdir();output=root / (mode+".txt")
                     checked([sdk / "bin" / ("physim"+suffix),"--workspace-state-test",directory,mode],output=output,timeout=910)

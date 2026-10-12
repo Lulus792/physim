@@ -5,6 +5,18 @@ Position auf, berechnen daraus die Geschwindigkeit und zeigen sie in einem eigen
 Bericht. Nach einer Sekunde erwarten wir 1,5 m, nach zwei Sekunden 3 m.
 Es gibt keine Kräfte und keine Kollisionen; der Zeitschritt ist für dieses Modell exakt.
 
+## Vor dem Quellcode
+
+Der [User Guide](user-guide.md) erklärt die Bedienfolge. Für dieses Tutorial
+genügen C-Funktionen, Strukturen und Zeiger; arbeite zuerst mit den vollständigen
+Quellen, bevor du einzelne Aufrufe veränderst.
+
+Sage die Position nach zwei Sekunden voraus und prüfe sie anschließend im
+gespeicherten Lauf. Erkläre, warum die aus der Position berechnete Geschwindigkeit
+konstant ist. Ändere danach nur die Anfangsgeschwindigkeit, baue neu und prüfe
+deine neue Vorhersage mit derselben Analyse. So erkennst du, welche Aufgabe
+Experiment, Messkanal und Bericht jeweils übernehmen.
+
 ## Projekt vorbereiten
 
 Lege in der App ein **Pendel**-Projekt mit **C-Auswertung** in einem neuen Ordner an.

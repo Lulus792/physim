@@ -6,6 +6,8 @@ und die ausführbaren Beispiele bleiben im Physim-Repository die Originalquellen
 
 ## Lernen und benutzen
 
+- [User Guide](../../docs/user-guide.md): Bedienung und erster Versuch.
+- [Examples](../../docs/examples.md): Modelle nach der physikalischen Frage wählen.
 - [Handbuch und Lernwege](../../docs/guide.md): erster Lauf, C und Physim.
 - [Bedienung](../../docs/workspace.md): Projekte, Simulation und Auswertung.
 - [Dokumentationsübersicht](knowledge/dokumentation.md): wo welche Antwort steht.

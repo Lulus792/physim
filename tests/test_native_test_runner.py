@@ -120,6 +120,7 @@ def main():
     provider_display = {"accessibility_atspi"} if sys.platform == "linux" else set()
     specialized_display = {
         "project_migration_app": ("tests/test_project_migration_app.py", ()),
+        "project_identity_app": ("tests/test_project_migration_app.py", ("--identities",)),
         "app_profiling_workflow": ("tests/test_app_profiling_workflow.py", ()),
     }
     if sys.platform in ("darwin", "linux"):

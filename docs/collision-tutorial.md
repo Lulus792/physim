@@ -151,6 +151,21 @@ Tangentialreibung, Materialabhängigkeit der Restitution, Wände, mehrere Kugeln
 und nachfolgende Kontakte ausdrücklich aus. Dafür stehen gesonderte
 [Mechanik- und Kontaktmodelle](contact-world.md) zur Verfügung.
 
+## Mit einer Vorhersage vergleichen
+
+Du solltest einen einzelnen Lauf bauen und auswerten können;
+der [User Guide](user-guide.md) führt durch diese Bedienfolge.
+Wähle zuerst die Standardwerte und ändere anschließend nur die Restitution.
+
+Sage vor dem Start voraus, welche Größe bei `e=1` erhalten bleibt und welche
+bei `e=0` abnimmt. Vergleiche den Gesamtimpuls und die kinetische Energie vor
+und nach dem Kontakt. Erkläre die Energieänderung anhand des Stoßmodells;
+sie ist beim inelastischen Stoß kein Beleg für einen Integrationsfehler.
+Übertrage anschließend die Impulsgleichung auf eine andere Masse und prüfe
+deine vorher berechneten Endgeschwindigkeiten im Bericht.
+
+[Weitere Beispiele](examples.md) · [Modellgrenzen und erwartete Werte](#erwartete-ergebnisse-und-grenzen)
+
 ## Vollständiger C-Quellcode
 
 ### Experiment

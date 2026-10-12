@@ -86,6 +86,7 @@ static bool paragraph(ps_document *d, const char *s, size_t n, ps_doc_kind kind,
             if (close && close + 1 < s + n && close[1] == '(') {
                 const char *end = memchr(close + 2, ')', (size_t)(s + n - close - 2));
                 if (end) {
+                    if(i && s[i-1]=='!' && used && plain[used-1]=='!')--used;
                     size_t length = (size_t)(close - (s + i + 1));
                     memcpy(plain + used, s + i + 1, length);
                     used += length;
@@ -106,7 +107,7 @@ static bool paragraph(ps_document *d, const char *s, size_t n, ps_doc_kind kind,
             if (close && close + 1 < s + n && close[1] == '(') {
                 const char *end = memchr(close + 2, ')', (size_t)(s + n - close - 2));
                 if (end) {
-                    if (!append(d, PS_DOC_LINK, 0, s + i + 1, (size_t)(close - s - i - 1),
+                    if (!append(d, i && s[i-1]=='!' ? PS_DOC_IMAGE : PS_DOC_LINK, 0, s + i + 1, (size_t)(close - s - i - 1),
                                 close + 2, (size_t)(end - close - 2)))
                         return false;
                     i = (size_t)(end - s);

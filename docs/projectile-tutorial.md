@@ -25,6 +25,25 @@ Anfangswert: 201 Zeilen bis `t = 1 s`. Dann erwarten wir `x = 0 m`,
 Die horizontale Geschwindigkeit der abgeleiteten Position ist stets
 `2 m/s`.
 
+## Dein erster Vergleich
+
+Die [Bedienfolge](user-guide.md) erklärt Projekt, Build, Lauf und Analyse.
+Für dieses Beispiel genügt eine der beiden Sprachen; die andere Fassung dient
+anschließend zum Vergleich derselben Modellidee.
+
+1. **Vorhersage:** Bleibt `vx` konstant? Wann erreicht die Masse ihren höchsten
+   Punkt? Verwende `vy=0`, bevor du den Lauf startest.
+2. **Beobachtung:** Prüfe nach einer Sekunde die oben genannten Endwerte und
+   den horizontalen Geschwindigkeitsplot.
+3. **Erklärung:** Die Masse fällt weiter, wenn sie y=0 unterschreitet: Dieses
+   Modell besitzt keinen Boden. Erkläre außerdem, warum Energie trotz wechselnder
+   Höhe und Geschwindigkeit erhalten bleibt.
+4. **Eigener Versuch:** Ändere nur die anfängliche horizontale Geschwindigkeit
+   im Quellcode, baue erneut und sage die neue Endposition voraus.
+
+Danach ergänzt der [Wurf mit Luftwiderstand](projectile-drag-tutorial.md) genau
+die bisher ausgeschlossene Widerstandskraft.
+
 ## Projekt anlegen und ausführen
 
 Lege in Physim einen neuen Projektordner an. Wähle für Experiment und Analyse

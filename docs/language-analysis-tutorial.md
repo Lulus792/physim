@@ -20,6 +20,20 @@ legen und **Läufe & Berichte** aktualisieren. Wähle unter **Messläufe** zwei 
 acht Dateien und dann **Vergleichen**. Baue zuvor `analysis.phys` mit
 **F5**. [Läufe & Berichte](runs.md) erklärt Auswahl und gespeicherte Ergebnisse.
 
+## Was dein Vergleich aussagt
+
+Notiere vor der Analyse die erwarteten Endpositionen aus den beiden Läufen.
+Prüfe sie anschließend in Tabelle und CSV. Vertausche nur die Eingabereihenfolge
+und erkläre, welche Zuordnung im Diagramm sich ändert und welche gespeicherten
+Werte gleich bleiben.
+
+Ein gemeinsamer Kanalname und eine Einheit machen Dateien technisch passend.
+Für einen physikalischen Vergleich brauchst du außerdem passende Anfangswerte,
+Modellannahmen und Endzeiten. Das Histogramm beschreibt hier die gewählten
+Laufendwerte; zwei ausgewählte Läufe sind noch keine belastbare Schätzung einer
+Population. [Monte Carlo](monte-carlo-tutorial.md) behandelt diese zusätzliche
+statistische Frage.
+
 ## Analysecode
 
 Ersetze `analysis.phys` durch den folgenden Inhalt. Die getestete Quelldatei

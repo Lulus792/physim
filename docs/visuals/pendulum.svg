@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 540" role="img" aria-labelledby="title desc">
+<title id="title">Pendelgeometrie und Messgrößen</title><desc id="desc">Eine Masse hängt an einer Stange der Länge L. Der Winkel theta wird von der nach unten gerichteten Senkrechten gemessen. x ist L sin theta, y ist minus L cos theta. Die Gewichtskraft zeigt nach unten; die Stangenkraft zum Aufhängepunkt. Die positive y-Achse zeigt nach oben.</desc>
+<defs><marker id="red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#b33434"/></marker><marker id="green" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#21755c"/></marker><marker id="axis" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#526c80"/></marker></defs>
+<rect width="840" height="540" rx="18" fill="#f4f7fa"/>
+<g font-family="system-ui,sans-serif" fill="#173247">
+<text x="30" y="42" font-size="25" font-weight="600">Vom Winkel zur Position</text>
+<g stroke="#526c80" stroke-width="2" fill="none" marker-end="url(#axis)"><path d="M230 100H545"/><path d="M230 100V52"/></g>
+<g font-size="18"><text x="554" y="106">+x</text><text x="241" y="65">+y</text><text x="174" y="90">O</text></g>
+<path d="M230 100V420" stroke="#93a7b6" stroke-width="2" stroke-dasharray="6 6"/>
+<path d="M230 100L370 390" stroke="#173247" stroke-width="6"/>
+<path d="M230 164A64 64 0 0 0 258 157" fill="none" stroke="#476a88" stroke-width="3"/>
+<text x="249" y="192" font-size="24">θ</text><text x="316" y="240" font-size="24">L</text>
+<circle cx="230" cy="100" r="7" fill="#173247"/><circle cx="370" cy="390" r="20" fill="#4d91bd"/>
+<path d="M370 390V495" stroke="#b33434" stroke-width="4" marker-end="url(#red)"/>
+<path d="M370 390L328 303" stroke="#21755c" stroke-width="4" marker-end="url(#green)"/>
+<text x="387" y="475" font-size="18" fill="#b33434">Gewicht F_G</text><text x="385" y="326" font-size="18" fill="#21755c">Stangenkraft</text>
+<g font-size="21"><text x="515" y="188">x = L sin θ</text><text x="515" y="225">y = −L cos θ</text><text x="515" y="280">θ = 0: Masse direkt</text><text x="515" y="312">unter der Aufhängung</text></g>
+<text x="30" y="515" font-size="17">Schematische Kraftpfeile; der Winkel beginnt an der Senkrechten.</text>
+</g></svg>

@@ -2,7 +2,9 @@
 
 ## Ich möchte die App benutzen
 
-Beginne im [Handbuch](../../../docs/guide.md). Der
+Beginne im [User Guide](../../../docs/user-guide.md) oder wähle ein
+[Example](../../../docs/examples.md). Das [Handbuch](../../../docs/guide.md)
+verbindet die verschiedenen Zugänge. Der
 [Arbeitsbereich](../../../docs/workspace.md) erklärt Projekte, Kamera,
 Messwerte und Auswertung. [Einstellungen](../../../docs/settings.md) behandeln
 Darstellung und Eingaben, [Fehlerbehebung](../../../docs/troubleshooting.md) die Diagnose.

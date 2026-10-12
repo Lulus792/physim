@@ -6,6 +6,11 @@ für die unterstützten Aufgaben keinen C-Code nachzuschreiben. Die Sprache ist
 weiter ein Entwicklungsvertrag. Dieselben Modelle und Archive verwendet
 [Teil I – C](c-guide.md); Quellsprachen dürfen im Projekt kombiniert werden.
 
+Der [User Guide](user-guide.md) führt durch die App; die
+[Examples](examples.md) helfen bei der Modellwahl. Dieser Lernweg vertieft die
+Programmierung in sieben Kapiteln. Bearbeite zuerst die vollständige Fassung
+eines Beispiels und überprüfe anschließend eine selbst gewählte Änderung.
+
 ## 1. Einrichten und die Sprache wählen
 
 Die App liefert `physimc`, Runner, Builder und SDK mit. Für die native Übersetzung

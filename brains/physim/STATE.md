@@ -17,10 +17,15 @@ Revisionen, echten Testläufe und Grenzen.
 
 ## Laufend
 
-Der eingefrorene Gesamtlauf für c60cced prüft den vorherigen Stand; die spätere
-Sichtbarkeitserweiterung gehört nicht dazu. Der Dokumentationsauftrag beginnt
-mit dieser SecondBrain-Anbindung. Danach folgen die Überarbeitung des Einstiegs,
-User Guide, Examples und gezielte visuelle Erklärungen.
+Der eingefrorene Gesamtlauf für c60cced ist erfolgreich: 724 native Fälle und
+714 SDK-Befehle. Die spätere Sichtbarkeit und neue Dokumentation gehören nicht
+zu diesem Stand und besitzen eigene Gegenproben.
+
+Die Dokumentation enthält jetzt [User Guide](../../docs/user-guide.md),
+[Examples](../../docs/examples.md), Vorhersage-/Vergleichsübungen in zehn Tutorials
+und native Diagramme. Die [3D-Erklärung](../../docs/spatial-explanations.md)
+erscheint mit Reglern direkt in der F1-Hilfe. Der Browserentwurf wurde entfernt.
+Aktuelle Einzelprüfungen stehen in den Plattformnachweisen.
 
 ## Nächster Einstieg
 

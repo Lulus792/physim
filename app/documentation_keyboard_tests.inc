@@ -2,7 +2,7 @@
 static bool documentation_test_seek(app *a,int id,int *stage,int *code) {
     static unsigned seeks,attempts;
     static int target,last_topic=-1,last_stage=-1;
-    int entries[2*PS_DOC_MAX_BLOCKS+DOCUMENTATION_TOPIC_COUNT+16];
+    int entries[12*PS_DOC_MAX_BLOCKS+DOCUMENTATION_TOPIC_COUNT+16];
     unsigned count=documentation_focus_list(a,entries);
     if(target!=id || last_topic!=a->doc_topic || last_stage!=*stage) {
         attempts=0;target=id;last_topic=a->doc_topic;last_stage=*stage;
@@ -100,7 +100,71 @@ static void documentation_api_test_frame(app *a,int *stage,int *code,const char 
     if(a->quitting)printf("API BROWSER SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 #undef API_KEY
 }
+static void documentation_media_test_frame(app *a,int *stage,int *code,const char **capture) {
+    static int topic,block,guide,diagram;
+    static ps_scene original;
+    static double original_time;
+    static float theta,omega,yaw;
+    bool ok=true;
+#define MEDIA_KEY(key) test_window_key_mod(a->doc_window,key,0)
+    switch((*stage)++) {
+    case 0: original=a->scene;original_time=a->simulation_time;test_window_key_mod(a->window,SDLK_F1,0);break;
+    case 1:
+        topic=guide=-1;
+        for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++) {
+            if(!strcmp(documentation_topics[i].path,"docs/spatial-explanations.md"))topic=i;
+            if(!strcmp(documentation_topics[i].path,"docs/user-guide.md"))guide=i;
+        }
+        ok=a->doc_visible && topic>=0 && guide>=0;
+        SDL_SetWindowSize(a->doc_window,1000,760);open_documentation(a,topic);break;
+    case 2:
+        block=-1;for(size_t i=0;i<a->documentation->count;i++)if(a->documentation->blocks[i].kind==PS_DOC_IMAGE && documentation_media_kind(a->documentation->text+a->documentation->blocks[i].target)==3)block=(int)i;
+        ok=block>=0;if(!ok)break;
+        if(!documentation_test_seek(a,DOC_VISUAL+block*16,stage,code))return;
+        theta=a->doc_theta;MEDIA_KEY(SDLK_RIGHT);break;
+    case 3:
+        ok=fabsf(a->doc_theta-theta-.01f)<1e-6f;
+        if(!documentation_test_seek(a,DOC_VISUAL+block*16+2,stage,code))return;
+        omega=a->doc_omega;MEDIA_KEY(SDLK_RIGHT);break;
+    case 4:
+        ok=fabsf(a->doc_omega-omega-.05f)<1e-6f;
+        if(!documentation_test_seek(a,DOC_VISUAL+block*16+6,stage,code))return;MEDIA_KEY(SDLK_RETURN);break;
+    case 5:
+        ok=a->doc_yaw==0 && a->doc_pitch==0;
+        if(!documentation_test_seek(a,DOC_VISUAL+block*16+9,stage,code))return;MEDIA_KEY(SDLK_SPACE);break;
+    case 6:
+        ok=a->doc_orthographic;
+        if(!documentation_test_seek(a,DOC_VISUAL+block*16+10,stage,code))return;
+        yaw=a->doc_yaw;MEDIA_KEY(SDLK_RIGHT);break;
+    case 7: {
+        ok=fabsf(a->doc_yaw-yaw-.08f)<1e-6f;
+        ps_scene_render_stats stats;
+        ok=ok && a->doc_visual_scene.count==8 && ps_scene_valid(&a->doc_visual_scene) &&
+           ps_graphics_scene_stats(a->doc_graphics,&stats) && stats.vertices>0;
+        ps_vec3 bob=a->doc_visual_scene.objects[1].a;
+        ok=ok && fabs(bob.x-a->doc_length*sin(a->doc_theta))<1e-12 &&
+           fabs(bob.y+a->doc_length*cos(a->doc_theta))<1e-12;
+        *capture="docs-native-3d.bmp";break;
+    }
+    case 8: MEDIA_KEY(SDLK_HOME);break;
+    case 9:
+        ok=a->doc_yaw==.58f && a->doc_pitch==.23f && a->doc_zoom==5;
+        open_documentation(a,guide);break;
+    case 10:
+        diagram=-1;for(size_t i=0;i<a->documentation->count;i++)if(a->documentation->blocks[i].kind==PS_DOC_IMAGE && documentation_media_kind(a->documentation->text+a->documentation->blocks[i].target)==1)diagram=(int)i;
+        ok=diagram>=0;a->doc_jump_block=diagram;break;
+    case 11:
+        ok=a->doc_diagram_bounds.w>100 && a->doc_diagram_bounds.h==320;
+        *capture="docs-native-workflow.bmp";break;
+    case 12:
+        ok=!memcmp(&a->scene,&original,sizeof original) && a->simulation_time==original_time;
+        a->quitting=true;printf("DOCUMENTATION NATIVE MEDIA SELF-TEST: %s\n",*code || !ok?"FAILED":"PASSED");break;
+    }
+    if(!ok){fprintf(stderr,"Native documentation media stage %d failed\n",*stage-1);*code=1;a->quitting=true;}
+#undef MEDIA_KEY
+}
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strncmp(mode,"docs-keyboard-media",19)){documentation_media_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-api")){documentation_api_test_frame(a,stage,code,capture);return;}
     static int copy_block,link_block,link_topic,heading,tutorial_topic;
     static nk_uint before_scroll;

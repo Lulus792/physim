@@ -127,6 +127,21 @@ führt jeweils 40 Einzelschritte aus und öffnet den aufgezeichneten Lauf und
 seinen Analysebericht. Tatsächlich ausgeführte Plattformprüfungen stehen im
 [Plattformnachweis](platform-validation.md).
 
+## Dichteverhältnisse selbst erklären
+
+Nach dem [User Guide](user-guide.md) kannst du zunächst die Standardkugel
+ohne Quellcodeänderung ausführen. Sage vor jeder Änderung voraus, ob die Kugel
+sinkt, steigt oder ruht: Vergleiche Material- und Fluiddichte.
+
+Prüfe die drei Dichtefälle aus der Bedienfolge im Geschwindigkeitsplot.
+Erkläre anhand von Gewicht und Auftrieb, warum Dichtegleichheit bei diesem
+Anfangszustand keine Bewegung erzeugt. Ändere danach nur die Viskosität und
+vergleiche die erreichte Geschwindigkeit mit der analytischen Referenz.
+Beachte die Reynolds- und Schrittweitengrenzen: Ein abgewiesener Lauf ist kein
+Messwert für ein anderes Strömungsmodell.
+
+[Weitere Beispiele](examples.md) · [Auftrieb](buoyancy.md)
+
 ## Experiment in C
 
 ```c

@@ -150,6 +150,11 @@ static const documentation_topic documentation_topics[] = {
     {"Physim Projektanweisungen", "AGENTS.md", true},
     {"SecondBrain Metadaten", "brains/physim/brain.json", true},
     {"Beispielquellen Katalog", "tests/tutorial_sources.json", true},
+    {"Physim User Guide", "docs/user-guide.md", false},
+    {"Physim Examples", "docs/examples.md", false},
+    {"Grundlagen der Physim Dokumentation", "docs/documentation-research.md", false},
+    {"Räumliche Modelle verstehen", "docs/spatial-explanations.md", false},
+    {"Frühere Physim Einführung", "docs/readme-history.md", false},
 };
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27
@@ -167,7 +172,10 @@ static int documentation_learning_topic(unsigned track) {
 static char *documentation_index[DOCUMENTATION_TOPIC_COUNT];
 static bool documentation_hits[DOCUMENTATION_TOPIC_COUNT];
 static int documentation_group(int topic) {
-    if(!strcmp(documentation_topics[topic].path,"docs/c-guide.md") ||
+    if(!strcmp(documentation_topics[topic].path,"docs/user-guide.md") ||
+       !strcmp(documentation_topics[topic].path,"docs/examples.md") ||
+       !strcmp(documentation_topics[topic].path,"docs/spatial-explanations.md") ||
+       !strcmp(documentation_topics[topic].path,"docs/c-guide.md") ||
        !strcmp(documentation_topics[topic].path,"docs/physim-guide.md") ||
        !strcmp(documentation_topics[topic].path,"docs/c-workflow.md") ||
        !strcmp(documentation_topics[topic].path,"docs/physim-workflow.md"))return 0;
@@ -352,7 +360,8 @@ static float documentation_table(app *a, const ps_doc_block *block, const char *
 }
 static void documentation_link(app *a, const char *target) {
     if (!strncmp(target, "https://", 8) || !strncmp(target, "http://", 7)) {
-        SDL_OpenURL(target);
+        SDL_SetClipboardText(target);
+        status(a,"Quellenadresse kopiert. Das Handbuch bleibt in Physim geöffnet.");
         return;
     }
     char resolved[4096];
@@ -378,7 +387,13 @@ static void documentation_link(app *a, const char *target) {
 }
 /* Stable semantic IDs are rebuilt from current content for each key event. */
 enum { DOC_C=1,DOC_PHYSIM,DOC_TOPICS,DOC_CONTENTS,DOC_FILTER,DOC_GROUP,DOC_BACK,DOC_HOME,DOC_WORKSPACE,DOC_SEARCH,DOC_PREVIOUS,DOC_NEXT,DOC_BODY,
-       DOC_TOPIC=10000,DOC_HEADING=20000,DOC_COPY=30000,DOC_LINK=40000 };
+       DOC_TOPIC=10000,DOC_HEADING=20000,DOC_COPY=30000,DOC_LINK=40000,DOC_VISUAL=50000 };
+static int documentation_media_kind(const char *target) {
+    if(!strcmp(target,"visuals/workflow.svg"))return 1;
+    if(!strcmp(target,"visuals/pendulum.svg"))return 2;
+    if(!strcmp(target,"visuals/pendulum-3d.svg"))return 3;
+    return 0;
+}
 static bool documentation_contents_heading(const app *a,const ps_doc_block *block) {
     unsigned depth=2;
     if(a->doc_topic>=0 && a->doc_topic<DOCUMENTATION_TOPIC_COUNT &&
@@ -400,6 +415,8 @@ static unsigned documentation_focus_list(app *a,int *entries) {
     if(a->documentation)for(size_t i=0;i<a->documentation->count;i++) {
         ps_doc_kind kind=a->documentation->blocks[i].kind;
         if(kind==PS_DOC_CODE || kind==PS_DOC_LINK)entries[count++]=(kind==PS_DOC_CODE?DOC_COPY:DOC_LINK)+(int)i;
+        if(kind==PS_DOC_IMAGE && documentation_media_kind(a->documentation->text+a->documentation->blocks[i].target)==3)
+            for(int part=0;part<11;part++)entries[count++]=DOC_VISUAL+(int)i*16+part;
     }
     return count;
 }
@@ -418,14 +435,15 @@ static bool documentation_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
             ps_ui_flush_edit(a->doc_ui,search?"document":"topics",search?a->doc_query:a->doc_filter,sizeof a->doc_query,a->doc_focus_bounds);
             if(!search && strcmp(a->doc_filter,a->doc_last_filter))documentation_filter(a);
         }
-        int entries[2*PS_DOC_MAX_BLOCKS+DOCUMENTATION_TOPIC_COUNT+16];unsigned count=documentation_focus_list(a,entries),selected=count;
+        int entries[12*PS_DOC_MAX_BLOCKS+DOCUMENTATION_TOPIC_COUNT+16];unsigned count=documentation_focus_list(a,entries),selected=count;
         for(unsigned i=0;i<count;i++)if(entries[i]==a->doc_focus){selected=i;break;}
         int direction=key->mod&SDL_KMOD_SHIFT?-1:1;
         selected=!a->doc_keyboard || selected==count?(direction>0?0:count-1):(selected+count+direction)%count;
         a->doc_keyboard=true;a->doc_focus=entries[selected];a->doc_focus_reveal=true;
         a->doc_search_active=a->doc_filter_active=false;
         a->doc_search_focus=a->doc_focus==DOC_SEARCH;a->doc_filter_focus=a->doc_focus==DOC_FILTER;
-        if(a->doc_focus>=DOC_COPY)a->doc_jump_block=a->doc_focus%10000;
+        if(a->doc_focus>=DOC_VISUAL)a->doc_jump_block=(a->doc_focus-DOC_VISUAL)/16;
+        else if(a->doc_focus>=DOC_COPY)a->doc_jump_block=a->doc_focus%10000;
         return true;
     }
     if(!a->doc_keyboard || a->doc_focus==DOC_SEARCH || a->doc_focus==DOC_FILTER)return false;
@@ -433,6 +451,25 @@ static bool documentation_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
     int direction=key->key==SDLK_LEFT || key->key==SDLK_UP?-1:key->key==SDLK_RIGHT || key->key==SDLK_DOWN?1:0;
     if(activate && key->repeat)return true;
     int focus=a->doc_focus;
+    if(focus>=DOC_VISUAL) {
+        int part=(focus-DOC_VISUAL)%16;
+        float *values[]={&a->doc_theta,&a->doc_length,&a->doc_omega,&a->doc_yaw,&a->doc_pitch,&a->doc_zoom};
+        const float minimum[]={-1.2f,.5f,-3,-(float)PS_PI,-1.5f,2};
+        const float maximum[]={1.2f,3,3,(float)PS_PI,1.5f,12};
+        const float step[]={.01f,.05f,.05f,.08f,.08f,.2f};
+        if(part<6 && direction)*values[part]=fmaxf(minimum[part],fminf(maximum[part],*values[part]+direction*step[part]));
+        else if(activate && part>=6 && part<=8) {
+            a->doc_yaw=part==7?.58f:0;a->doc_pitch=part==8?(float)PS_PI/2:part==7?.23f:0;
+            a->doc_zoom=5;
+        } else if(activate && part==9)a->doc_orthographic=!a->doc_orthographic;
+        else if(part==10) {
+            if(key->key==SDLK_LEFT || key->key==SDLK_RIGHT)a->doc_yaw=remainderf(a->doc_yaw+direction*.08f,2*(float)PS_PI);
+            if(key->key==SDLK_UP || key->key==SDLK_DOWN)a->doc_pitch=fmaxf(-1.5f,fminf(1.5f,a->doc_pitch-direction*.08f));
+            if(key->key==SDLK_PAGEUP || key->key==SDLK_PAGEDOWN)a->doc_zoom=fmaxf(2,fminf(12,a->doc_zoom+(key->key==SDLK_PAGEUP?-.2f:.2f)));
+            if(key->key==SDLK_HOME){a->doc_yaw=.58f;a->doc_pitch=.23f;a->doc_zoom=5;}
+        }
+        return true;
+    }
     if(focus==DOC_BODY) {
         int w,h;SDL_GetWindowSize(a->doc_window,&w,&h);(void)w;
         double delta=key->key==SDLK_PAGEUP?-h*.7:key->key==SDLK_PAGEDOWN?h*.7:direction*48;
@@ -484,10 +521,11 @@ static void documentation_focus_draw(app *a,int id,struct nk_rect bounds,bool bo
     struct nk_rect clip=nk_window_get_content_region(ui);float delta=0;
     if(bounds.y<clip.y)delta=bounds.y-clip.y;
     else if(bounds.y+bounds.h>clip.y+clip.h)delta=bounds.y+bounds.h-clip.y-clip.h;
-    if(body) {if(delta)a->doc_scroll_y=(nk_uint)fmaxf(0,(float)a->doc_scroll_y+delta);}
+    if(body) {if(delta)a->doc_scroll_adjustment=delta;}
     else {nk_uint x,y;nk_window_get_scroll(ui,&x,&y);if(delta)nk_window_set_scroll(ui,x,(nk_uint)fmaxf(0,(float)y+delta));}
     if(!delta)a->doc_focus_reveal=false;
 }
+#include "documentation_media.inc"
 static void documentation_sidebar(app *a) {
     struct nk_context *ui = a->doc_ui;
     nk_layout_row_dynamic(ui, 28, 1);
@@ -683,6 +721,8 @@ static void documentation_view(app *a, float height) {
                     b->height =
                         b->kind == PS_DOC_TABLE_ROW
                             ? documentation_table(a, b, d->text + b->text, width, NULL)
+                        : b->kind == PS_DOC_IMAGE && documentation_media_kind(d->text+b->target)==3 ? 900
+                        : b->kind == PS_DOC_IMAGE && documentation_media_kind(d->text+b->target) ? (documentation_media_kind(d->text+b->target)==1?320:480)
                         : b->kind == PS_DOC_RULE ? 14
                         : b->kind == PS_DOC_LINK
                             ? 32
@@ -729,12 +769,16 @@ static void documentation_view(app *a, float height) {
                         SDL_SetClipboardText(text);
                     documentation_focus_draw(a,DOC_COPY+(int)i,copy_bounds,true);
                 }
+                if(b->kind==PS_DOC_IMAGE && documentation_media_kind(d->text+b->target)==3) {
+                    documentation_pendulum(a,(int)i,width,b->height);
+                    continue;
+                }
                 nk_layout_row_dynamic(ui, b->height, 1);
                 if (b->kind == PS_DOC_LINK) {
                     bool external = !strncmp(d->text + b->target, "http", 4);
                     char label[240];
                     snprintf(label, sizeof label, "%s%s",
-                             external ? "Im Browser öffnen: " : "Öffnen: ", text);
+                             external ? "Quellenadresse kopieren: " : "Öffnen: ", text);
                     struct nk_rect link_bounds=nk_widget_bounds(ui);
                     if (nk_button_label(ui, label)) {
                         /* Loading another document frees d; stop traversal immediately. */
@@ -747,7 +791,9 @@ static void documentation_view(app *a, float height) {
                     enum nk_widget_layout_states state = nk_widget(&rect, ui);
                     if (state != NK_WIDGET_INVALID) {
                         struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
-                        if (b->kind == PS_DOC_TABLE_ROW)
+                        if(b->kind==PS_DOC_IMAGE && documentation_media_kind(d->text+b->target))
+                            documentation_diagram(a,documentation_media_kind(d->text+b->target),rect);
+                        else if (b->kind == PS_DOC_TABLE_ROW)
                             documentation_table(a, b, text, width, &rect);
                         else if (b->kind == PS_DOC_RULE)
                             nk_stroke_line(canvas, rect.x, rect.y + 7, rect.x + rect.w, rect.y + 7,
@@ -779,5 +825,9 @@ static void documentation_view(app *a, float height) {
             a->doc_move_match = false;
         }
         nk_group_scrolled_end(ui);
+    }
+    if(a->doc_scroll_adjustment) {
+        a->doc_scroll_y=(nk_uint)fmaxf(0,(float)a->doc_scroll_y+a->doc_scroll_adjustment);
+        a->doc_scroll_adjustment=0;
     }
 }

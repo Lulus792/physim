@@ -97,6 +97,21 @@ Sensor-Kalibrierung: Es kontrolliert nur die Verarbeitung derselben Positionsdat
 Diagramme enthalten höchstens 2048 Vorschaupunkte pro Kurve; CSV enthält alle
 berechneten Zeilen. Einheiten und Achsen bleiben im Bericht erhalten.
 
+## Verarbeitung und Physik auseinanderhalten
+
+Baue und speichere zunächst den Beispielablauf aus dem
+[User Guide](user-guide.md). Sage vor der Analyse voraus, welche Geschwindigkeit
+aus der linearen Position folgen muss und wie die rekonstruierte Position aussieht.
+
+Prüfe `1,5 m/s`, die Endposition `3 m` und das Residuum im Bericht.
+Öffne den Bericht anschließend erneut, ohne einen Lauf zu starten. Erkläre,
+welche Daten dabei aus dem Archiv stammen und welche erst die Analyse erzeugt.
+Ändere für einen zweiten Versuch nur die Anfangsgeschwindigkeit im erzeugenden
+Modell und baue es neu. Verwende dieselbe Analyse: Ein kleines Residuum prüft
+die Datenverarbeitung, belegt aber keine richtige physikalische Modellannahme.
+
+[Weitere Beispiele](examples.md) · [Laufarchive](runs.md)
+
 ## Aus einem SDK bauen
 
 Die folgenden Befehle gelten in einem SDK-Verzeichnis unter macOS/Linux.

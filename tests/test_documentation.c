@@ -40,6 +40,13 @@ int main(int argc, char **argv) {
     ps_document *unchanged = d;
     CHECK(ps_document_parse("x\0y", 3, false, &unchanged) == PS_INVALID && unchanged == d);
     free(d);
+    const char *image="![Pendel: x nach rechts, y nach oben](visuals/pendulum.svg)\n\n[Modell](pendulum-tutorial.md)\n";
+    CHECK(ps_document_parse(image,strlen(image),false,&d)==PS_OK);
+    CHECK(d->count==4 && d->blocks[0].kind==PS_DOC_TEXT &&
+        !strcmp(d->text+d->blocks[0].text,"Pendel: x nach rechts, y nach oben") &&
+        d->blocks[1].kind==PS_DOC_IMAGE && !strcmp(d->text+d->blocks[1].target,"visuals/pendulum.svg") &&
+        d->blocks[3].kind==PS_DOC_LINK && !strcmp(d->text+d->blocks[3].target,"pendulum-tutorial.md"));
+    free(d);
     CHECK(ps_document_parse("before\n---\nafter", 16, false, &d) == PS_OK);
     CHECK(d->count == 3 && !strcmp(d->text + d->blocks[0].text, "before") &&
           d->blocks[1].kind == PS_DOC_RULE);

@@ -2506,81 +2506,8 @@ Dockvarianten sind nicht abgenommen.
 
 ## Asynchrone Runnerausgabe und Vorschau-Backpressure
 
-Am 11. Oktober 2026 wurde eine tatsächliche blockierte Pipe provoziert.
-Der vorherige Runner schrieb Vorschauframes synchron mit fwrite/fflush
-im Physikpfad. Nach vier Sekunden ohne Stdoutverbrauch meldete die Probe
-nur **96** Schritte statt des vorgesehenen Haltepunkts 1200. Ergebnisse
-`build/current-headless-mac/test-results/run-d7vb9o03`, Log
-`build/current-runner-backpressure-before-mac.log`; der Test scheitert am
-unzureichenden Fortschritt. Dies ist ein Produktgegenbeleg, kein Fixturefehler.
-
-`src/runner_output.c` besitzt nun einen eigenen Stdout-Thread. Der Producer
-kopiert Framepayloads vor Veröffentlichung und hält keinen I/O-Lock beim
-Schreiben. Die Queue belegt höchstens **8 MiB einschließlich Knotenspeicher**,
-zuzüglich eines In-flight-Frames, eines noch nicht veröffentlichten Frames,
-kleinem Zustandsobjekt, Threadstack und Allokator-/OS-Verwaltungsdaten. Es wartet höchstens eine ersetzbare
-reguläre Vorschau und ein Heartbeat. Ein älteres Queuepreview wird entfernt,
-das neuere am Ende angehängt; Ersetzen an alter Position könnte sonst einen
-neuen laufenden Zustand vor eine ältere zuverlässige Pause verschieben.
-HELLO, Steuerungsbestätigungen, initiale/pausierte Einzelschritt- und
-Haltepunktsnapshots, Diagnosen, Logs und BYE bleiben FIFO. Der Writer vergibt
-Sequenznummern erst beim tatsächlichen Schreiben. Queueüberlast und Pipefehler
-werden explizit erkannt. Beim Abschluss wird höchstens zwei Sekunden auf
-Drain/Join gewartet; bleibt der Thread in I/O blockiert, endet der Prozess
-mit Status 7 nach Abschluss der persistenten Writer-/Logdateien. Es wird
-kein laufender Thread mit freigegebenem Speicher zurückgelassen.
-
-Die aktuelle Blockadegruppe besteht **1/1 mit sechs echten Proben**, Ergebnisse
-`build/current-headless-mac/test-results/run-z_4zn4f8`, Log
-`build/current-runner-backpressure-snapshots-mac.log`. Offline erreicht sie
-Haltepunkt 1200, bei **0,25× Echtzeit** Haltepunkt 400, während ein Leser
-vier Sekunden nicht konsumiert. Vor erneutem Lesen prüft ein separater
-C-Reader bereits **1201** beziehungsweise **401** persistierte Samples
-samt exakten Zeiten und zwei unabhängigen Kanalwerten. Anschließend kommen
-die Haltepunktsbestätigung, Pause, Einzelschritt, sämtliche fünf Logs und
-BYE mit lückenlosen Sequenzen an. Die endgültigen Dateien enthalten **1202**
-beziehungsweise **402** Samples. Während das Modell seine Werte weiter
-ändert, bleiben pro übertragenem Frame beide Kanalwerte, Zeit, **32**
-Objektpositionen und **96** Szenenpunkte konsistent. Ein dauerhaft blockierter
-Leser erlaubt dieselben gespeicherten Fortschritte und einen begrenzten
-Fehlerabschluss mit vollständiger Datei. Ein geschlossener Leser erzeugt
-expliziten Fehlerstatus mit recoverbarer Datei. Separate Transportproben
-prüfen Vorschauersetzung um eine zuverlässige Barriere, neueste Vorschau,
-Sequenzkontinuität, begrenzten Producer und explizite Queueüberlast. Die
-kleine Fortschrittsdatei aktualisiert sich nur alle 32 Schritte (1184/384);
-der C-Reader beweist die tatsächlichen 1200/400 akzeptierten Schritte.
-
-Die Regressionen bestehen **7/7** unter
-`build/current-headless-mac/test-results/run-mauxwcuu`, Log
-`build/current-runner-output-regression-mac.log`: C-/Physim-Taktung und
-Logging, verzögerter Offline-Beobachter, Haltepunkte und erste Blockadeprobe.
-C-/Physim-Snapshots, Runnerdiagnose und erweiterte Fehlerproben bestehen
-**4/4** unter `run-culwwvr2`, Log `build/current-runner-output-protocol-mac.log`.
-Die tatsächliche ABI-Matrix mit **17** kompilierten Modulen besteht **1/1**
-unter `run-72jc5fbc`, Log `build/current-runner-output-abi-mac.log`; frühe
-Fehler vor HELLO werden weiterhin ausgeliefert. Die App-Gruppe besteht
-**4/4** unter `build/current-release-mac/test-results/run-uzss0cx1`, Log
-`build/current-runner-output-gui-mac.log`: Geschwindigkeit, adaptive Schritte,
-Logging und Runner-Tastatursteuerung einschließlich kleiner/großer Fenster,
-F8/F9-Isolation, Reset und Stoppen vor HELLO.
-
-Die erste zusätzliche Python-Leserprobe erzeugte beim bewusst geschlossenen
-FD einen Thread-ValueError trotz erfolgreicher Produktprüfungen. Das Fixture
-behandelt die erwartete Schließung jetzt ohne unkontrollierte Ausnahme; die
-letzte Probe besitzt leeres stderr. Der Ready-Beleg der kleinen Queueprobe
-wird außerdem nach geschlossenem Schreiben atomar umbenannt.
-
-Diese Nachweise gelten für Intel macOS 14.6.1 mit AppleClang 16. Die lokale
-Sanitizer-Ausführung konnte nicht starten: der Builder verlangt ld64.lld,
-das nicht installiert ist (`build/current-runner-output-sanitize-mac.log`).
-Ein LLD-Installationsversuch hätte mehrere globale Entwicklungsabhängigkeiten
-aktualisiert und wurde beendet (Exit 130); LLD wurde nicht installiert,
-LLVM blieb 23.1.2 und kein unvollständiger OpenSSL-Präfix blieb bestehen.
-Dies ist keine Sanitizer-Prüfung und kein Beleg für deren Bestehen. Aktuelle
-Linux-/Windows-/ARM-Builds dieser Änderung sind ebenfalls noch offen.
-PP-0292/0300/0301/0312/0313 besitzen damit konkrete lokale Funktionsnachweise;
-volle Plattform-/SDK-Abnahme und Gesamtplan bleiben offen.
-
+Der vollständige geprüfte Nachweis bleibt in
+[Archivband 2](platform-validation-history-2.md#asynchrone-runnerausgabe-und-vorschau-backpressure) erhalten.
 
 ## Analyseprojekte und Laufauswahl
 
@@ -4228,7 +4155,55 @@ Der eingefrorene Stand c60cced3888c3d305ff12b759407efb8dc77d753 besteht
 AppleClang Release **724/724**, `run-dx2sis73`,
 `build/current-full-build-c60cced-mac.log`. Alle Ergebnisstatus, **1417**
 Quellprüfsummen und die TAR-Prüfsumme sind unabhängig bestätigt.
-Die zugehörige vollständige verschobene SDK-/App-Prüfung läuft unter
-`build/current-full-sdk-c60cced-mac.log`; ihr Ergebnis bleibt offen.
+Die zugehörige vollständige verschobene SDK-/App-Prüfung ist ebenfalls erfolgreich:
+**714/714** protokollierte Befehle, kein fehlgeschlagener Ergebnisstatus,
+`build/current-full-sdk-c60cced-mac.log`. Die Prüfung umfasst die tatsächliche
+Oberfläche einschließlich aller 32 Vorlagen-/Sprachpaare und beider Analysearten
+bei 16/22 px. Der Verbraucher liegt unter
+`build/current-full-sdk-c60cced-consumer-mac/Native SDK ä q3j4a2m9`.
+Alle **438** BMP-Archivbelege wurden unabhängig dekomprimiert: **7435401244**
+Originalbytes, identische Original- und Archivprüfsummen. Die **1417**
+eingefrorenen Quellprüfsummen und die TAR-Prüfsumme sind erneut bestätigt;
+`build/current-full-c60cced-independent-proof.json` enthält die Zählung.
 Spätere Sichtbarkeits- und Dokumentationserweiterungen gehören nicht zu diesem
 Stand. Der gesamte Projektplan bleibt offen.
+
+## Native Dokumentation und SecondBrain-Lernwege
+
+Am 12. Oktober 2026 wurden auf Intel macOS 14.6.1 mit AppleClang 16 die
+überarbeiteten User-Guide-/Example-Seiten und zehn ergänzte Tutorials geprüft.
+Alle veröffentlichten Codeblöcke der zehn Tutorials sind gegenüber dem vorherigen
+Stand unverändert. Beide Lernwege behalten sieben Kapitel und acht gemeinsame
+C-/Physim-Modellgruppen. Referenz, Dokumentationsparser, Lernwege und unabhängiges
+Prüfungspaket bestehen **4/4**, `run-hokakdqk`,
+`build/current-documentation-native-sdk-mac.log`.
+
+Die native F1-Hilfe zeichnet die gebündelten Vektordiagramme und eine echte
+GPU-Pendelszene mit eigenem Modell-/Kamerazustand. Regler, Kameratasten,
+Projektion und Szene sind per Tastatur bedienbar; Experimentzustand und Zeit
+bleiben erhalten. Die Medien-/Scroll-Gegenproben bestehen bei 16/22 px
+zusammen mit den bisherigen Tastatur-Lernwegen **4/4**, `run-x4804ujz`.
+Die Bildschirmaufnahmen wurden visuell geprüft; ein Überlappen nach der
+Schriftgrößenanpassung wurde korrigiert. Der Browserentwurf ist entfernt;
+Quellenlinks kopieren ausschließlich ihre Adresse.
+
+Das installierte SDK wurde nach `build/Documentation SDK ü/Relocated SDK ä`
+verschoben. Die vier tatsächlichen App-Fälle `docs-keyboard-media`,
+`docs-keyboard-media-22`, `docs-keyboard`, `docs-keyboard-22` bestehen dort.
+Der echte SecondBrain-C-Kern prüft Erkennung, Kontext und Suche; relative
+Originalquellenlinks bleiben gültig. Alle **506** SDK-Dateien bleiben
+SHA-256-identisch. Die letzten redaktionellen Nachweistexte und SVG-Titel
+ändern dieses vorher installierte Paket nicht nachträglich.
+
+Die neuen Medienfälle sind in der Linux-Sanitizer-CI und SDK-Gesamtprüfung
+registriert. Für diese Erweiterung wird hier ausschließlich die tatsächlich
+lokal ausgeführte macOS-Prüfung behauptet. Der vollständige Projektplan und
+seine 531 Originaldatensätze bleiben offen und unverändert.
+
+Der abschließende redaktionelle Stand besteht erneut **4/4**, `run-7p1u2nwf`,
+`build/current-documentation-native-final-sdk-mac.log`. Alle 506 Prüfsummen des
+abschließenden SDK sind gültig; seine App ist bytegleich zur verschobenen
+GUI-Gegenprobe. Der Dokumentationsparser besteht zusätzlich lokale ASan-/UBSan-
+Prüfungen. Die eigenständige Runnerprüfung besteht nach Ergänzung der bereits
+vorhandenen Projektidentitäts-GUI-Gegenprobe in ihrem Erwartungskatalog;
+`build/current-documentation-runner-check-final.log`.
