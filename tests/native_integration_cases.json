@@ -10611,6 +10611,63 @@
           "timeout": 90
         }
       ]
+    },
+    {
+      "name": "project_identity_workflow",
+      "app": true,
+      "targets": [
+        "python",
+        "physim-build",
+        "physimc",
+        "physim-runner"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_project_identity_workflow.py",
+            "--builder",
+            "{physim-build}",
+            "--sdk",
+            "{root}",
+            "--compiler",
+            "{physimc}",
+            "--runner",
+            "{physim-runner}",
+            "--work",
+            "{work}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 480,
+          "files": [
+            "results.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "project_identity_app",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_project_migration_app.py",
+            "--identities",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 600
+        }
+      ]
     }
   ]
 }

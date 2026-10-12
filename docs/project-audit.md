@@ -1100,3 +1100,15 @@ Der Block bleibt **incomplete**, weil Bestandsprojekt-Vergabe und typisierte
 Herkunft für frei programmierte Writer noch fehlen. Alle **531** Originalblöcke
 bleiben erhalten: **103 implemented**, **14 incomplete**, **414 unverified**.
 `completion_proven` bleibt `false`.
+
+
+## Explizite ID-Vergabe für Bestandsprojekte (PP-0446)
+
+CLI und Build-Einstellungen können nun fehlende IDs gezielt ergänzen.
+Vorhandene IDs, sämtliche alten Manifestbytes, Formatversion und andere
+Projektdateien bleiben erhalten. Wiederholung schreibt keine neue Sicherung.
+Konflikte und Schreibfehler bewahren Manifest und Ergebnis.
+[Nachweise](platform-validation.md#explizite-id-vergabe-bei-bestandsprojekten-pp-0446).
+Der Block bleibt **incomplete** wegen der noch fehlenden typisierten Herkunft
+freier Core-/Physim-Writer. Die Gesamtzählung bleibt **103 implemented**,
+**14 incomplete**, **414 unverified** bei **531** Originalblöcken.

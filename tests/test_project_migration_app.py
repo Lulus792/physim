@@ -2,12 +2,14 @@
 
 import argparse
 import os
+import re
 from pathlib import Path
 import subprocess
 
 p = argparse.ArgumentParser(description=__doc__)
 p.add_argument("--app", type=Path, required=True)
 p.add_argument("--work", type=Path, required=True)
+p.add_argument("--identities",action="store_true")
 a = p.parse_args()
 a.work.mkdir(parents=True, exist_ok=True)
 for size, noisy, mode in ((size, noisy, mode) for size in ("large", "small")
@@ -29,7 +31,7 @@ for size, noisy, mode in ((size, noisy, mode) for size in ("large", "small")
     if noisy:
         environment["PHYSIM_TEST_MIGRATION_NOISE"] = "1"
     r = subprocess.run(
-        [str(a.app.resolve()), "--project-migration-test", str(root.resolve()), mode],
+        [str(a.app.resolve()), "--project-identity-test" if a.identities else "--project-migration-test", str(root.resolve()), mode],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         timeout=45,
@@ -37,12 +39,16 @@ for size, noisy, mode in ((size, noisy, mode) for size in ("large", "small")
     )
     (root / "app.stdout").write_bytes(r.stdout)
     (root / "app.stderr").write_bytes(r.stderr)
-    assert r.returncode == 0 and b"PROJECT MIGRATION UI SELF-TEST: PASSED" in r.stdout, (
+    assert r.returncode == 0 and (b"PROJECT IDENTITY UI SELF-TEST: PASSED" if a.identities else b"PROJECT MIGRATION UI SELF-TEST: PASSED") in r.stdout, (
         (size, noisy, mode),
         r.stdout,
         r.stderr,
     )
-    if mode == "normal":
+    if mode == "normal" and a.identities:
+        raw=manifest.read_bytes();assert raw.startswith(old) and (root / "physim.project.bak").read_bytes()==old
+        fields=dict(line.split('=',1) for line in raw.decode().splitlines() if '=' in line)
+        assert fields['physim_project']=='1' and re.fullmatch('[0-9a-f]{32}',fields['project.id']) and re.fullmatch('[0-9a-f]{32}',fields['experiment.id'])
+    elif mode == "normal":
         assert (
             manifest.read_bytes() == b"physim_project=2\nkind=experiment\n# retained\n"
             and (root / "physim.project.bak").read_bytes() == old
@@ -58,5 +64,5 @@ for size, noisy, mode in ((size, noisy, mode) for size in ("large", "small")
         and (root / "runs/keep.psrun").read_bytes() == b"archive retained"
     )
 print(
-    "Actual app project migration: twelve quiet/noisy cases at two window sizes, visible button, source/run preservation and stale/dirty guards passed"
+    ("Actual app project identity assignment" if a.identities else "Actual app project migration")+": twelve quiet/noisy cases at two window sizes, visible button, source/run preservation and stale/dirty guards passed"
 )

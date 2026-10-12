@@ -491,6 +491,10 @@ static void sidebar_panel(app *a) {
                             a->migration_bounds=nk_widget_bounds(ui);
                             if(action_button(ui,"Projektformat aktualisieren",idle(a) && !a->dirty && !a->analysis_dirty && !a->project_settings_dirty))migrate_current_project(a);
                         }
+                        if(!a->project_id[0] || (!a->analysis_only && !a->experiment_id[0])) {
+                            nk_layout_row_dynamic(ui,30,1);a->identity_assignment_bounds=nk_widget_bounds(ui);
+                            if(action_button(ui,"Projekt-IDs vergeben",idle(a) && !a->dirty && !a->analysis_dirty && !a->project_settings_dirty))assign_current_project_ids(a);
+                        }
                         nk_layout_row_dynamic(ui, 32, 1);
                         const char *profiles[] = {"Debug", "Release"};
                         a->project_profile_bounds=nk_widget_bounds(ui);

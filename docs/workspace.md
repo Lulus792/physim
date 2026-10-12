@@ -801,6 +801,19 @@ werden abgewiesen. Modellmetadaten dürfen diese vom Host besetzten Namen nicht
 Ältere Projektdateien ohne IDs bleiben lesbar und werden beim Öffnen nicht
 umgeschrieben. Runner-Läufe ohne entsprechende Herkunft tragen ausdrücklich
 `unavailable`; es wird keine verlässliche historische Identität erfunden.
-Eine zusätzliche explizite Vergabe für Bestandsprojekte und typisierte
-Herkunftsangaben für frei programmierte Core-Writer bleiben noch offen.
+Bestandsprojekte können IDs ausdrücklich mit „Projekt-IDs vergeben“ in den
+Build-Einstellungen erhalten. Die Aktion ist bei ungespeicherten Änderungen,
+laufenden Jobs oder Konflikten nicht verfügbar. Sie ergänzt nur fehlende IDs,
+erhält vorhandene IDs/Formatversion/Kommentare und sichert das vorherige Manifest
+als `physim.project.bak`. Wiederholung ist ein geprüfter No-op ohne neue Sicherung.
+Typisierte Herkunftsangaben für frei programmierte Core-Writer bleiben offen.
+
+```sh
+physim-build --assign-project-ids --project /path/to/project
+```
+
+Der CLI-Befehl benötigt weder SDK-/Compileroptionen noch einen Build. Analyse-
+projekte erhalten nur eine Projekt-ID. Experimentprojekte erhalten fehlende
+Projekt-/Experiment-IDs. Quellen, vorhandene Laufarchive und Build-Dateien
+werden nicht verändert; Formatmigration ist weiterhin eine separate Aktion.
 Die Generatorgrenzen beschreibt die [SDL-Dokumentation](https://wiki.libsdl.org/SDL3/SDL_rand_bits).

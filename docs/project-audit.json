@@ -3826,9 +3826,13 @@
         "tests/test_runner_identity.py",
         "tests/fixtures/run_identity_collision.c",
         "docs/workspace.md",
-        "docs/data-format.md"
+        "docs/data-format.md",
+        "app/build_main.c",
+        "app/design_ui.inc",
+        "tests/test_project_identity_assignment.c",
+        "tests/test_project_identity_workflow.py"
       ],
-      "note": "Neue App-Projekte speichern dauerhafte 32-Hex-Projekt-/Experiment-IDs im Manifest und übergeben sie an den Runner. Parser-/Speicher-, tatsächliche C-/Physim-App- und CLI-Nachweise bestehen auf Intel macOS; ungültige/doppelte Werte und kollidierende Modellmetadaten werden vor Laufdateierstellung abgewiesen. Legacyprojekte und freie Runner-Aufrufe kennzeichnen fehlende Herkunft mit unavailable. Explizite ID-Vergabe für Bestandsprojekte und typisierte Identität für beliebige Core-/Sprach-Writer sind noch offen; der gesamte Block bleibt unvollständig."
+      "note": "Neue App-Projekte speichern dauerhafte Projekt-/Experiment-IDs; CLI/App können fehlende IDs in Bestandsprojekten ausdrücklich ergänzen. Vorhandene IDs, Manifestbytes, Formatversion, Quellen, Archive und Build-Dateien bleiben erhalten. Parser-/Save-/Fehler-/ASan-/SDK- und tatsächliche C-/Physim- sowie zwölf neue App-Buttonfälle sind auf Intel macOS ausgeführt. Archive übernehmen genau die Host-IDs; ungültige/doppelte Angaben und Modellmetadaten-Kollisionen werden abgewiesen. Fehlende Herkunft ist unavailable. Typisierte Herkunft für frei programmierte Core-/Physim-Writer bleibt offen; der Block bleibt unvollständig."
     },
     {
       "id": "PP-0447",

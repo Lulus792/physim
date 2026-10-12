@@ -46,6 +46,18 @@ typedef struct {uint32_t from_version,to_version;bool changed;} ps_project_migra
 ps_document_result ps_project_migrate_document(ps_text_document *document,ps_project_migration *out);
 ps_document_result ps_project_migrate_file(const char *path,ps_project_migration *out);
 typedef struct {
+    bool changed,project_created,experiment_created;
+    char project_id[33],experiment_id[33];
+} ps_project_identity_assignment;
+/* Explicitly fills missing identities; preserves existing IDs and every input
+ * byte. Analysis projects receive only a project ID. Uses snapshot conflict
+ * detection, atomic replacement and backup. Format version is not migrated.
+ * Failure preserves the document/report; an already complete manifest is a
+ * verified no-op, including no backup replacement. */
+ps_document_result ps_project_assign_ids_document(ps_text_document *document,
+                                                  ps_project_identity_assignment *out);
+ps_document_result ps_project_assign_ids_file(const char *path,ps_project_identity_assignment *out);
+typedef struct {
     char compiler[4096];
     bool release;
     uint32_t api_version, abi_version; /* Zero when an older build did not record versions. */

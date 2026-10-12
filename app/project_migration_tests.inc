@@ -6,7 +6,7 @@ static void migration_test_mouse(app *a,struct nk_rect bounds,bool down) {
   e.type=SDL_EVENT_WINDOW_FOCUS_LOST;e.window.windowID=SDL_GetWindowID(a->window);e.window.data1=0;SDL_PushEvent(&e);
  }
 }
-static void project_migration_test_frame(app *a,const char *mode,int *stage,int *code) {
+static void project_migration_test_frame(app *a,const char *mode,bool identities,int *stage,int *code) {
  bool ok=true;bool stale=!strcmp(mode,"stale"),dirty=!strcmp(mode,"dirty");
  switch(*stage) {
  case 0:
@@ -15,14 +15,15 @@ static void project_migration_test_frame(app *a,const char *mode,int *stage,int 
    if(f){ok=ok && fputs("# external change\n",f)>=0;ok=!fclose(f) && ok;}}
   if(dirty)a->project_settings_dirty=true;
   (*stage)++;break;
- case 1:if(a->migration_bounds.w<=0)return;migration_test_mouse(a,a->migration_bounds,true);(*stage)++;break;
- case 2:migration_test_mouse(a,a->migration_bounds,false);(*stage)++;break;
+ case 1:{struct nk_rect bounds=identities?a->identity_assignment_bounds:a->migration_bounds;if(bounds.w<=0)return;migration_test_mouse(a,bounds,true);(*stage)++;break;}
+ case 2:migration_test_mouse(a,identities?a->identity_assignment_bounds:a->migration_bounds,false);(*stage)++;break;
  case 3:
-  if(!stale && !dirty && a->project_format_version!=2)return;
+  if(!stale && !dirty && (identities?!a->project_id[0]:a->project_format_version!=2))return;
   if(stale)ok=a->project_format_version==1 && strstr(a->status,"extern")!=NULL;
-  else if(dirty){ok=a->project_format_version==1 && a->project_settings_dirty && !migrate_current_project(a);a->project_settings_dirty=false;}
+  else if(dirty){ok=a->project_format_version==1 && a->project_settings_dirty && !(identities?assign_current_project_ids(a):migrate_current_project(a));a->project_settings_dirty=false;}
+  else if(identities)ok=a->project_format_version==1 && ps_run_identity_valid(a->project_id) && ps_run_identity_valid(a->experiment_id) && !strncmp(a->project_manifest_snapshot.saved,"physim_project=1",16);
   else ok=a->project_format_version==2 && !strncmp(a->project_manifest_snapshot.saved,"physim_project=2",16);
-  a->quitting=true;if(ok)puts("PROJECT MIGRATION UI SELF-TEST: PASSED");break;
+  a->quitting=true;if(ok)puts(identities?"PROJECT IDENTITY UI SELF-TEST: PASSED":"PROJECT MIGRATION UI SELF-TEST: PASSED");break;
  }
  if(!ok){fprintf(stderr,"Project migration UI failed stage %d mode %s\n",*stage,mode);*code=1;a->quitting=true;}
 }

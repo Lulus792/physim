@@ -126,6 +126,8 @@ def catalog():
         Case("run_import", ("tests/test_run_import.c", "app/run_import.c"), arguments=("{work}",), app=True),
         Case("project_file", ("tests/test_project_file.c",), ("project", "core"),
              arguments=("{work}",), app=True),
+        Case("project_identity_assignment", ("tests/test_project_identity_assignment.c",), ("project", "core"),
+             app=True,arguments=("{work}",)),
         Case("project_migration", ("tests/test_project_migration.c",), ("project", "core"),
              app=True,arguments=("{work}",)),
         Case("ui_geometry", ("tests/test_ui_geometry.c", "app/ui_geometry.c", "app/ui_backend.c"), app=True),

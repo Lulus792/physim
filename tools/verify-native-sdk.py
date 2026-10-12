@@ -220,6 +220,11 @@ def verify_run_identity(repo,sdk,consumer,builder,library,rebuilt_core,suffix,ch
         collision=builder.executable("identity-collision-"+kind,["identity-collision.c"],[archive],module=True)
         work=consumer / ("identity-"+kind);work.mkdir()
         checked([sys.executable,repo / "tests/test_runner_identity.py",sdk / "bin" / ("physim-runner"+suffix),c,language,collision,work])
+    legacy_command=[sys.executable,repo / "tests/test_project_identity_workflow.py","--builder",sdk / "bin" / ("physim-build"+suffix),
+                    "--sdk",sdk,"--compiler",sdk / "bin" / ("physimc"+suffix),"--runner",sdk / "bin" / ("physim-runner"+suffix),
+                    "--work",consumer / "legacy-identity-projects"]
+    if builder.args.compiler:legacy_command += ["--cc",builder.args.compiler]
+    checked(legacy_command,timeout=480)
     print("Installed/rebuilt SDK identities: actual C/Physim runners, exact IDs, invalid options and host-field collisions passed",flush=True)
 
 

@@ -3920,7 +3920,7 @@ Einzelergebnisse haben Status `passed`; Log und Bericht liegen unter
 `build/current-full-build-03ca6a2-mac.log` und
 `build/current-full-build-03ca6a2-mac/test-results/run-gm64me3l/results.json`.
 Die 1366 Quelldateien des eingefrorenen Eingangs bleiben getrennt von späteren
-Änderungen; seine vollständige verschobene SDK-/GUI-Prüfung läuft noch.
+Änderungen; seine vollständige verschobene SDK-/GUI-Prüfung ist ebenfalls erfolgreich abgeschlossen.
 
 [Linux-UI-Sanitizer-CI](https://github.com/PhysicSimulator/physim/actions/runs/38184378499)
 führt auf genau demselben Commit tatsächlich aus:
@@ -4063,3 +4063,76 @@ tatsächlich auf allen sechs Host-/Compilerkombinationen erfolgreich aus:
 Dies belegt die benannten Abläufe. Die komplette neue C17-/Paket-/SDK-Matrix
 ist damit nicht abgenommen. Die spätere Projekt-ID-Erweiterung benötigt eigene
 Remote-Nachweise.
+
+
+## Explizite ID-Vergabe bei Bestandsprojekten (PP-0446)
+
+`physim-build --assign-project-ids --project PATH` und die App-Aktion
+„Projekt-IDs vergeben“ ergänzen fehlende IDs. Vorhandene IDs und sämtliche
+vorherigen Manifestbytes bleiben erhalten; die Formatversion wird nicht
+umgestellt. Analyseprojekte erhalten nur eine Projekt-ID. Die atomare
+Dokumentspeicherung sichert das alte Manifest und erkennt externe Änderungen.
+Wiederholung ist ein verifizierter No-op ohne Backupersetzung.
+
+Ausgeführte Intel-macOS-Nachweise:
+
+- Native Vertrags-/Parser-/Migrationsgruppen **3/3**, `run-gb74rv1u`,
+  `build/current-legacy-ids-first-mac.log`. LF, CRLF, fehlender letzter
+  Zeilenumbruch, teilweise vorhandene IDs, Analyseprojekte, Dateirechte,
+  veraltete Snapshots, Größenlimit und Backupfehler sind konkrete Gegenfälle.
+  Fehler bewahren Manifest, Snapshot und Ergebnis.
+- Tatsächliche C-/Physim-CLI-Projekte **1/1**, `run-457b0ffm`,
+  `build/current-legacy-ids-workflow-mac.log`: Quellen, vorhandene Archive
+  und Build-Dateien sind vor/nach Vergabe byteweise unverändert. Anschließend
+  bauen beide Projekte und zeichnen mit genau den vergebenen IDs auf.
+- Direkter AppleClang-ASan/UBSan-Lauf von Vergabe/Parser/Dokumentersetzung
+  besteht unter `build/current-legacy-ids-asan.log`; LeakSanitizer ist deaktiviert.
+- Verschobenes SDK mit installierter und separat neu gebauter Bibliothek:
+  **4/4** Verbraucherbefehle unter `build/current-legacy-ids-sdk-verify-mac.log`.
+  Verbraucher: `build/current-legacy-ids-sdk-consumer-mac/Native SDK ä w6wo7d47`.
+  Darunter laufen die echte CLI-Vergabe und folgende C-/Physim-Projektbuilds
+  aus dem installierten Paket.
+
+Die installierte SDK-App besteht dieselben zwölf ID-Buttonfälle unter
+`build/current-legacy-ids-sdk-app-mac.log`; Marker
+`Actual app project identity assignment: twelve quiet/noisy cases ... passed`.
+Der unabhängige Verification-Kit-Lauf umfasst **183** genaue Eingänge,
+`build/current-legacy-ids-kit-mac.log`; Referenzgenerator **31/31** Dokumente.
+
+Die neue Display-Suite besteht **1/1**, `run-h1cxrul7`, unter
+`build/current-legacy-ids-app-confirmed-mac.log`: zwölf tatsächliche ruhige/
+gestörte App-Prozesse bei zwei Fenstergrößen prüfen den sichtbaren Button,
+vergebene IDs, unveränderte Quellen/Archive sowie Stale-/Dirty-Guards.
+Die bisherige Formatmigrations-Appgruppe besteht ebenfalls unter
+`run-f4z766mb`; nur die falsche Artefaktpfad-Deklaration der neuen Gruppe wurde
+anschließend korrigiert. Typisierte Herkunft frei programmierter Core-/Physim-
+Writer bleibt offen; PP-0446 ist weiterhin unvollständig.
+
+
+## Abgeschlossener vollständiger Intel-macOS-SDK-Nachweis für 03ca6a2
+
+Der exakt eingefrorene Stand `03ca6a252bd0816b5a91ae25f5732bf9f3eb7dfc`
+besteht nach **708/708** nativen Release-Tests auch die vollständige verschobene
+SDK-Prüfung mit App: **608/608** Verbraucherbefehle haben Exit 0.
+`PASSED.txt` ist vorhanden. SDK-Log: `build/current-full-sdk-03ca6a2-mac.log`;
+Verbraucher: `build/current-full-sdk-03ca6a2-consumer-mac/Native SDK ä nkyc0ydr`.
+Alle **1366** Quellhashes und die ursprüngliche Tar-Prüfsumme sind danach
+unverändert; die Eingänge wurden während der Prüfung nicht repariert.
+
+Der Lauf enthält installierte und aus SDK-Quellen neu gebaute Cores, alle
+C-/Physim-Lernorakel, Mittelwertintervalle, Reader/Writer-Besitz, zwölf kalte
+native Domänenprojekte und die tatsächlichen App-Abläufe. Die abschließende
+Tastatur-Projektmatrix baut/zeichnet/analysiert alle **32** Template-/Sprachpaare
+und zwei unabhängige Analysen bei 16/22 px. Menü-/Handbuch-/Einstellungs-/
+Schrittbreakpoint-/Runner-Isolations-/Accessibility-Abläufe sind ausgeführt.
+Die früheren allgemeinen Feder-/Auftriebs-Berichtsfehler treten dabei nicht auf.
+
+**408** genaue Bitmaparchive umfassen **7 048 453 104** unkomprimierte Bytes.
+Alle Gzip-Dateihashes sowie die rückgewonnenen Bytezahlen und SHA-256-Werte
+bestehen gegen `bitmap-archive.json`; Nachweis:
+`build/current-full-sdk-03ca6a2-bitmap-integrity.log`.
+
+Dies ist die volle lokale Intel-macOS-Abnahme dieser Suite und dieses
+Quellstands. Die späteren positiven Verteilungen, Ereignisblöcke und Projekt-
+IDs gehören zu anderen, gezielt geprüften Ständen. Aktuelle gesamte Linux-/
+Windows-/Apple-Silicon-Pakete sowie die ganze Projektplan-Abnahme bleiben offen.

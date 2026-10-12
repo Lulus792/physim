@@ -583,7 +583,18 @@ static int migrate_project(const char *project) {
     if(result!=PS_DOCUMENT_OK){fprintf(stderr,"Project migration failed (%u); project source files are preserved\n",(unsigned)result);return 1;}
     printf("Project format %u -> %u: %s\n",report.from_version,report.to_version,report.changed?"migrated; previous manifest saved as physim.project.bak":"already current; no files written");return 0;
 }
+static int assign_project_ids(const char *project) {
+    char directory[PATH_SIZE],path[PATH_SIZE];
+    if(strlen(project)>1800 || !absolute_path(project,directory) || !path_join(path,directory,"physim.project"))return 2;
+    ps_project_identity_assignment report;
+    ps_document_result result=ps_project_assign_ids_file(path,&report);
+    if(result!=PS_DOCUMENT_OK){fprintf(stderr,"Project identity assignment failed (%u); existing files are preserved\n",(unsigned)result);return 1;}
+    printf("Project identities: %s\nproject_id=%s\nexperiment_id=%s\n",report.changed?"assigned; previous manifest saved as physim.project.bak":"already assigned; no files written",report.project_id,report.experiment_id[0]?report.experiment_id:"not applicable");
+    return 0;
+}
 int main(int argc, char **argv) {
+    if(argc==4 && !strcmp(argv[1],"--assign-project-ids") && !strcmp(argv[2],"--project"))return assign_project_ids(argv[3]);
+    if(argc==4 && !strcmp(argv[1],"--project") && !strcmp(argv[3],"--assign-project-ids"))return assign_project_ids(argv[2]);
     if(argc==4 && !strcmp(argv[1],"--migrate-project") && !strcmp(argv[2],"--project"))return migrate_project(argv[3]);
     if(argc==4 && !strcmp(argv[1],"--project") && !strcmp(argv[3],"--migrate-project"))return migrate_project(argv[2]);
     const char *project = NULL, *sdk = NULL, *directory = NULL, *language_compiler = NULL;

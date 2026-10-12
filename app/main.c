@@ -291,7 +291,7 @@ typedef struct {
     char project_id[33],experiment_id[33];
     ps_text_document project_manifest_snapshot;
     enum nk_collapse_states project_build_disclosure;
-    struct nk_rect migration_bounds;
+    struct nk_rect migration_bounds,identity_assignment_bounds;
     struct nk_rect project_profile_bounds,project_profile_choices[2],editor_build_bounds;
     char parameter_output[8192];
     size_t parameter_output_used;
@@ -925,6 +925,14 @@ static void refresh_workspace_entries(app *a) {
         snprintf(a->workspace_tree_error, sizeof a->workspace_tree_error,
                  "Dateibaum nicht vollständig geladen (%s). Betroffene Ordner sind markiert.",
                  ps_result_string(r));
+}
+static bool assign_current_project_ids(app *a) {
+    if(!a->loaded || !idle(a) || a->library_thread || a->recovery || a->dirty || a->analysis_dirty || a->project_settings_dirty)return false;
+    ps_project_identity_assignment report;
+    ps_document_result result=ps_project_assign_ids_document(&a->project_manifest_snapshot,&report);
+    if(result!=PS_DOCUMENT_OK){status(a,result==PS_DOCUMENT_CONFLICT?"Projektbeschreibung wurde extern geändert. Projekt erneut öffnen.":"Projekt-IDs konnten nicht gespeichert werden. Vorhandene Dateien bleiben erhalten.");return false;}
+    memcpy(a->project_id,report.project_id,33);memcpy(a->experiment_id,report.experiment_id,33);
+    status(a,report.changed?"Projekt-IDs gespeichert. Sicherung: physim.project.bak.":"Projekt-IDs sind bereits vorhanden.");return true;
 }
 static bool migrate_current_project(app *a) {
     if(!a->loaded || !idle(a) || a->library_thread || a->recovery)return false;
@@ -2986,7 +2994,8 @@ int main(int argc, char **argv) {
     bool syntax_preview_test = argc > 1 && !strcmp(argv[1], "--syntax-preview-test");
     if (syntax_preview_test && argc != 4)
         return 2;
-    bool migration_test=argc>1 && !strcmp(argv[1],"--project-migration-test");
+    bool identity_test=argc>1 && !strcmp(argv[1],"--project-identity-test");
+    bool migration_test=identity_test || (argc>1 && !strcmp(argv[1],"--project-migration-test"));
     if(migration_test && (argc!=4 || (strcmp(argv[3],"normal") && strcmp(argv[3],"stale") && strcmp(argv[3],"dirty"))))return 2;
     bool settings_test = argc > 1 && !strcmp(argv[1], "--settings-test");
     if (settings_test && (argc != 4 || (strcmp(argv[3], "write") && strcmp(argv[3], "read") &&
@@ -3652,7 +3661,7 @@ int main(int argc, char **argv) {
             }
         } else if(migration_test) {
             if(ps_clock()-test_started>20){exit_code=1;a->quitting=true;}
-            else project_migration_test_frame(a,argv[3],&test_stage,&exit_code);
+            else project_migration_test_frame(a,argv[3],identity_test,&test_stage,&exit_code);
         } else if (settings_test) {
             if (ps_clock() - test_started > 20) {
                 exit_code = 1;

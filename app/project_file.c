@@ -348,3 +348,43 @@ ps_document_result ps_project_migrate_file(const char *path,ps_project_migration
     if(result==PS_DOCUMENT_OK)result=ps_project_migrate_document(&document,out);
     ps_text_document_destroy(&document);return result;
 }
+
+ps_document_result ps_project_assign_ids_document(ps_text_document *document,ps_project_identity_assignment *out) {
+    if(!document || !document->saved || !document->path[0])return PS_DOCUMENT_INVALID;
+    ps_project_settings settings;
+    ps_document_result result=parse(document,&settings);if(result!=PS_DOCUMENT_OK)return result;
+    ps_text_document current={0};result=ps_text_document_open(&current,document->path);
+    if(result==PS_DOCUMENT_OK && (current.length!=document->length || memcmp(current.saved,document->saved,document->length)))result=PS_DOCUMENT_CONFLICT;
+    ps_text_document_destroy(&current);if(result!=PS_DOCUMENT_OK)return result;
+    ps_project_identity_assignment report={0};
+    memcpy(report.project_id,settings.project_id,33);memcpy(report.experiment_id,settings.experiment_id,33);
+    report.project_created=!settings.project_id[0];
+    report.experiment_created=!settings.analysis_only && !settings.experiment_id[0];
+    report.changed=report.project_created || report.experiment_created;
+    if(!report.changed){if(out)*out=report;return PS_DOCUMENT_OK;}
+    const char *first=strchr(document->saved,'\n');
+    const char *newline=(first && first>document->saved && first[-1]=='\r') ||
+        (!first && document->length && document->saved[document->length-1]=='\r')?"\r\n":"\n";
+    size_t ending=strlen(newline);
+    size_t separator=document->length && document->saved[document->length-1]!='\n'?
+        (document->saved[document->length-1]=='\r'?1:ending):0;
+    size_t extra=separator+(report.project_created?11+32+ending:0)+(report.experiment_created?14+32+ending:0);
+    if(document->length>256u*1024u-extra)return PS_DOCUMENT_LIMIT;
+    char *text=malloc(document->length+extra+1);if(!text)return PS_DOCUMENT_MEMORY;
+    if(report.project_created)ps_project_id_generate(report.project_id);
+    if(report.experiment_created)ps_project_id_generate(report.experiment_id);
+    size_t used=document->length;memcpy(text,document->saved,used);
+    if(separator){memcpy(text+used,separator==1?"\n":newline,separator);used+=separator;}
+    if(report.project_created)used+=(size_t)sprintf(text+used,"project.id=%s%s",report.project_id,newline);
+    if(report.experiment_created)used+=(size_t)sprintf(text+used,"experiment.id=%s%s",report.experiment_id,newline);
+    text[used]=0;
+    ps_text_document proposed={0};proposed.saved=text;proposed.length=used;ps_project_settings verified;
+    result=parse(&proposed,&verified);
+    if(result==PS_DOCUMENT_OK)result=ps_text_document_save(document,text,used);
+    free(text);if(result==PS_DOCUMENT_OK && out)*out=report;return result;
+}
+ps_document_result ps_project_assign_ids_file(const char *path,ps_project_identity_assignment *out) {
+    ps_text_document document={0};ps_document_result result=ps_text_document_open(&document,path);
+    if(result==PS_DOCUMENT_OK)result=ps_project_assign_ids_document(&document,out);
+    ps_text_document_destroy(&document);return result;
+}
