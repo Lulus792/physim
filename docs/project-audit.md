@@ -1087,3 +1087,16 @@ Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **103 implemented**, **13 incomplete**, **415 unverified**;
 `completion_proven` bleibt `false`. Die gesamte Projekt- und Plattformabnahme
 bleibt offen.
+
+
+## Dauerhafte IDs für neue Projekte (PP-0446)
+
+Die App erzeugt Projekt-/Experiment-IDs einmal im Manifest und übergibt sie
+in C-/Physim-Läufe. Parser, Speicherung, CLI und zwei tatsächliche App-Abläufe
+sind ausgeführt. Ein Modell kann Host-IDs nicht über eigene Metadaten ersetzen.
+Legacyprojekte bleiben lesbar und kennzeichnen fehlende Herkunft ausdrücklich.
+[Nachweise und offene Teile](platform-validation.md#dauerhafte-projekt--und-experiment-ids-pp-0446).
+Der Block bleibt **incomplete**, weil Bestandsprojekt-Vergabe und typisierte
+Herkunft für frei programmierte Writer noch fehlen. Alle **531** Originalblöcke
+bleiben erhalten: **103 implemented**, **14 incomplete**, **414 unverified**.
+`completion_proven` bleibt `false`.

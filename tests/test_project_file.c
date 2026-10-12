@@ -1,4 +1,5 @@
 #include "project_file.h"
+#include "physim/detail/run_identity.h"
 #include <SDL3/SDL.h>
 #include <float.h>
 #include <math.h>
@@ -34,12 +35,31 @@ int main(int argc, char **argv) {
     snprintf(root, sizeof root, "%s/project-file-%llu ä", argv[1], (unsigned long long)timestamp);
     CHECK(SDL_CreateDirectory(root));
     char build_path[4096];snprintf(build_path,sizeof build_path,"%s/build.config",root);
+    char project_id[33],experiment_id[33];ps_project_id_generate(project_id);ps_project_id_generate(experiment_id);
+    CHECK(ps_run_identity_valid(project_id) && ps_run_identity_valid(experiment_id) && strcmp(project_id,experiment_id));
     ps_project_build_info build_info={0};
     const char *build_text="physim_native_build=1\r\ncompiler=/SDK ä/bin/clang\r\nprofile=Release\r\napi_version=3\r\nabi_version=3\r\nlib=first\r\nlib=second\r\n";
     CHECK(write_text(build_path,build_text));
     CHECK(ps_project_build_info_read(build_path,&build_info));
     CHECK(build_info.release && build_info.api_version==3 && build_info.abi_version==3 &&
           !strcmp(build_info.compiler,"/SDK ä/bin/clang") && matches(build_path,build_text));
+    char identity_path[4096],identity_text[512];snprintf(identity_path,sizeof identity_path,"%s/identity.project",root);
+    snprintf(identity_text,sizeof identity_text,"physim_project=2\nkind=experiment\nproject.id=%s\nexperiment.id=%s\n",project_id,experiment_id);
+    CHECK(write_text(identity_path,identity_text));ps_project_settings identities;
+    CHECK(ps_project_settings_read(identity_path,&identities)==PS_DOCUMENT_OK &&
+        !strcmp(identities.project_id,project_id) && !strcmp(identities.experiment_id,experiment_id));
+    identities.timestep=.01;identities.seed=42;identities.speed=1;
+    CHECK(ps_project_settings_save(identity_path,&identities)==PS_DOCUMENT_OK);
+    ps_project_settings identity_restored;CHECK(ps_project_settings_read(identity_path,&identity_restored)==PS_DOCUMENT_OK &&
+        !strcmp(identity_restored.project_id,project_id) && !strcmp(identity_restored.experiment_id,experiment_id));
+    const char *bad_identities[]={"", "123", "0123456789012345678901234567890AB", "012345678901234567890123456789012", "../project", "01234567890123456789012345678901\t"};
+    for(unsigned i=0;i<sizeof bad_identities/sizeof *bad_identities;i++) {
+        snprintf(identity_text,sizeof identity_text,"physim_project=2\nkind=experiment\nproject.id=%s\n",bad_identities[i]);
+        CHECK(write_text(identity_path,identity_text));ps_project_settings saved=identity_restored;
+        CHECK(ps_project_settings_read(identity_path,&identity_restored)==PS_DOCUMENT_INVALID && !memcmp(&saved,&identity_restored,sizeof saved));
+    }
+    snprintf(identity_text,sizeof identity_text,"physim_project=2\nkind=experiment\nproject.id=%s\nproject.id=%s\n",project_id,project_id);
+    CHECK(write_text(identity_path,identity_text) && ps_project_settings_read(identity_path,&identity_restored)==PS_DOCUMENT_INVALID);
     const char *bad_builds[]={
         "physim_native_build=1\ncompiler=clang\nprofile=Debug\ncompiler=other\n",
         "physim_native_build=1\ncompiler=\nprofile=Debug\n",

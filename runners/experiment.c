@@ -5,6 +5,7 @@
 #include "pacing.h"
 #include "step_breakpoints.h"
 #include "runner_output.h"
+#include "physim/detail/run_identity.h"
 #include <errno.h>
 #include "number_parse.h"
 #include <float.h>
@@ -68,7 +69,7 @@ static void breakpoint_log(const ps_context *context, uint64_t step) {
 int main(int argc, char **argv) {
     if (argc < 3) {
         fprintf(stderr, "Usage: physim-runner module output.psrun [--steps N | --interactive] "
-                        "[--dt seconds] [--seed N] [--param name=value]... "
+                        "[--dt seconds] [--seed N] [--project-id hex32] [--experiment-id hex32] [--param name=value]... "
                         "[--break-at-steps N,N,... (interactive only)] [--speed 0|0.1..16 (interactive only)] [--log-events] [--diagnostics] (interactive only) [--record-scenes] "
                         "[--adaptive [--min-dt seconds] [--max-dt seconds]] "
                         "[--until seconds (offline; --steps is the step budget)] [--parent-watch (offline pipe)]\n"
@@ -77,6 +78,7 @@ int main(int argc, char **argv) {
     }
     bool describe = argc == 3 && !strcmp(argv[2], "--describe");
     bool interactive = false, record_scenes = false, adaptive = false, step_bounds = false, log_events=false,diagnostics=false;
+    const char *project_id=NULL,*experiment_id=NULL;
     uint64_t steps = 4000, seed = 42;
     double dt = 0.005, speed = 1, minimum_dt=1e-8, maximum_dt=.1, end_time=0;
     bool until_option=false, breakpoint_option=false;
@@ -106,6 +108,11 @@ int main(int argc, char **argv) {
             return 2;
         const char *key = argv[i++];
         errno = 0;
+        if(!strcmp(key,"--project-id") || !strcmp(key,"--experiment-id")) {
+            const char **identity=!strcmp(key,"--project-id")?&project_id:&experiment_id;
+            if(*identity || !ps_run_identity_valid(argv[i]))return 2;
+            *identity=argv[i];continue;
+        }
         if (!strcmp(key, "--break-at-steps")) {
             if (breakpoint_option || !ps_step_breakpoints_parse(argv[i], &breakpoints)) return 2;
             breakpoint_option = true; continue;
@@ -284,6 +291,22 @@ int main(int argc, char **argv) {
             api->destroy(&c); runner_log_close(&logs, c.time_s); ps_module_close(module); return 5;
         }
         used = strlen(c.model_metadata);
+    }
+    {
+        for(const char *line=c.model_metadata;*line;) {
+            if(!strncmp(line,"project_id=",11) || !strncmp(line,"experiment_id=",14)) {
+                report(interactive,diagnostics,diagnostic_path,&c,PS_INVALID,"metadata","Model metadata uses host-owned identity fields");
+                api->destroy(&c);runner_log_close(&logs,c.time_s);ps_module_close(module);return 5;
+            }
+            const char *end=line+strcspn(line,"\r\n");if(!*end)break;line=end+1;
+        }
+        int ids=snprintf(c.model_metadata+used,sizeof c.model_metadata-used,
+            "\nproject_id=%s\nexperiment_id=%s",project_id?project_id:"unavailable",experiment_id?experiment_id:"unavailable");
+        if(ids<0 || (size_t)ids>=sizeof c.model_metadata-used) {
+            report(interactive,diagnostics,diagnostic_path,&c,PS_LIMIT,"metadata","Model metadata has no room for project identities");
+            api->destroy(&c);runner_log_close(&logs,c.time_s);ps_module_close(module);return 5;
+        }
+        used=strlen(c.model_metadata);
     }
     int provenance=snprintf(c.model_metadata + used, sizeof c.model_metadata - used,
              "\nmodule_fnv1a64=%016llx\nrunner_build=%s %s", (unsigned long long)hash, __DATE__,

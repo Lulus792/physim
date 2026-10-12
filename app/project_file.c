@@ -1,5 +1,7 @@
 #include "project_file.h"
 #include "pacing.h"
+#include "physim/detail/run_identity.h"
+#include <SDL3/SDL_stdinc.h>
 #include <errno.h>
 #include <float.h>
 #include <math.h>
@@ -7,6 +9,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+void ps_project_id_generate(char out[33]) {
+    snprintf(out,33,"%08x%08x%08x%08x",(unsigned)SDL_rand_bits(),(unsigned)SDL_rand_bits(),
+             (unsigned)SDL_rand_bits(),(unsigned)SDL_rand_bits());
+}
 bool ps_project_build_info_read(const char *path, ps_project_build_info *out) {
     if (!path || !out) return false;
     ps_text_document document = {0};
@@ -85,7 +91,7 @@ static ps_document_result parse(const ps_text_document *document, ps_project_set
     if(document->length>256u*1024u)return PS_DOCUMENT_LIMIT;
     ps_project_settings settings = {.timestep = .005, .seed = 42, .speed = 1,
                                     .minimum_timestep=1e-8,.maximum_timestep=.1};
-    bool seen[11] = {false};
+    bool seen[11] = {false},identity_seen[2]={false};
     size_t position = 0;
     unsigned index = 0, version=1;
     while (position < document->length) {
@@ -107,7 +113,11 @@ static ps_document_result parse(const ps_text_document *document, ps_project_set
             continue;
         }
         const char *value = strchr(line, '=');
-        if (!strncmp(line,"kind=",5)) {
+        if(!strncmp(line,"project.id=",11) || !strncmp(line,"experiment.id=",14)) {
+            unsigned which=!strncmp(line,"experiment.id=",14);
+            if(identity_seen[which] || !ps_run_identity_valid(value+1))return PS_DOCUMENT_INVALID;
+            identity_seen[which]=true;memcpy(which?settings.experiment_id:settings.project_id,value+1,33);
+        } else if (!strncmp(line,"kind=",5)) {
             if(seen[9] || (strcmp(value+1,"analysis") && strcmp(value+1,"experiment")))return PS_DOCUMENT_INVALID;
             seen[9]=true;settings.analysis_only=!strcmp(value+1,"analysis");
         } else if (!strncmp(line, "experiment=", 11) || !strncmp(line, "analysis=", 9)) {

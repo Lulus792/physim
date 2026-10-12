@@ -3815,9 +3815,20 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Projekt- und Experiment-ID.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "incomplete",
+      "evidence": [
+        "app/project_file.h",
+        "app/project_file.c",
+        "app/main.c",
+        "runners/experiment.c",
+        "include/physim/detail/run_identity.h",
+        "tests/test_project_file.c",
+        "tests/test_runner_identity.py",
+        "tests/fixtures/run_identity_collision.c",
+        "docs/workspace.md",
+        "docs/data-format.md"
+      ],
+      "note": "Neue App-Projekte speichern dauerhafte 32-Hex-Projekt-/Experiment-IDs im Manifest und übergeben sie an den Runner. Parser-/Speicher-, tatsächliche C-/Physim-App- und CLI-Nachweise bestehen auf Intel macOS; ungültige/doppelte Werte und kollidierende Modellmetadaten werden vor Laufdateierstellung abgewiesen. Legacyprojekte und freie Runner-Aufrufe kennzeichnen fehlende Herkunft mit unavailable. Explizite ID-Vergabe für Bestandsprojekte und typisierte Identität für beliebige Core-/Sprach-Writer sind noch offen; der gesamte Block bleibt unvollständig."
     },
     {
       "id": "PP-0447",

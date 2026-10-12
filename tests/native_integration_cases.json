@@ -2608,6 +2608,15 @@
         "platform",
         "core"
       ]
+    },
+    "run-identity-collision": {
+      "sources": [
+        "tests/fixtures/run_identity_collision.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
     }
   },
   "tests": [
@@ -10576,6 +10585,30 @@
             "{work}/events-c.psrun"
           ],
           "timeout": 20
+        }
+      ]
+    },
+    {
+      "name": "runner_identity",
+      "targets": [
+        "python",
+        "physim-runner",
+        "logging-c",
+        "logging-phys",
+        "run-identity-collision"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_runner_identity.py",
+            "{physim-runner}",
+            "{logging-c}",
+            "{logging-phys}",
+            "{run-identity-collision}",
+            "{work}"
+          ],
+          "timeout": 90
         }
       ]
     }

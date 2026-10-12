@@ -29,7 +29,8 @@ assert {'tools/sdk_series_probe.c','tests/test_saved_run_tutorial.py','tests/tes
         'tests/test_positive_distributions.c','tests/positive_distribution_probe.c','tests/test_positive_distribution_oracle.py',
         'tests/fixtures/language/positive_distributions.phys','tests/fixtures/language/positive_distribution_oracle.phys',
         'tests/test_run_events.c','tests/run_event_probe.c','tests/run_event_legacy_probe.c','tests/test_run_event_codec.py',
-        'tests/fixtures/language/run_events.phys','tests/fixtures/run_event_failure.c','tests/test_run_event_failure.py'}<=set(names)
+        'tests/fixtures/language/run_events.phys','tests/fixtures/run_event_failure.c','tests/test_run_event_failure.py',
+        'tests/test_runner_identity.py','tests/fixtures/run_identity_collision.c'}<=set(names)
 assert not any(name.startswith(('src/','include/','lib/')) for name in names)
 assert all(not name.startswith('app/') or name=='app/utf8.manifest' for name in names)
 with tarfile.open(archive) as file:

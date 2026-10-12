@@ -65,110 +65,7 @@ Der vollständige Nachweis bleibt im [Plattformarchiv](platform-validation-histo
 
 ## Konservative rotierende und quadratische CCD am 8. Oktober 2026
 
-`ps_rigid_motion` erhält vollständige Weltachsenrotationen und quadratische
-Translation. `ps_body_motion_pose` kopiert Lage und Orientierung auf dem
-expliziten Pfad, ohne Kräfte oder gespeicherte Geschwindigkeiten zu integrieren.
-Konvexe Paar-/Kugel-/Ebenen-Anfragen verwenden konservative Abstandsschritte,
-Trennachsen und Zeugenrichtungen mit einer oberen Bewegungsschranke. Erfolg
-innerhalb der expliziten Distanzhülle liefert einen Kontakt; ein freier Restweg
-wird erst nach Ausschluss durch die Schranke gemeldet. `PS_LIMIT` erhält alle
-Ausgaben und bedeutet einen offenen Suchfall. Eine nicht auflösbare
-Koordinaten-/Rotationsgenauigkeit liefert `PS_NUMERIC` statt eines freien Wegs.
-[Pfad, Hülle, Budgets und Grenzen](mechanics.md).
-
-Die unabhängige analytische Gegenprobe enthält 234 Fälle mit 220 Erstkontakten:
-60 Größenfamilien jeweils als rotierender Stab gegen Ebene, Kugel und Box;
-40 quadratische Wege mit gleicher Anfangs-/Endhöhe und innerem Ebenenkontakt;
-zwölf vollständig ausgeschlossene Pfade sowie Budget-/Invalid-Fälle.
-Winkel reichen bis zu sechs vollständigen Drehungen. Referenzen lösen die
-Sinus-/Kosinus-/Quadratikbedingungen des ersten Kontakts separat und vergleichen
-mit der gewählten Distanzhülle, Kontaktpunkt und Normalen. Ein neuer Treffer darf
-zwischen der analytischen Hüllgrenze und der idealen Berührung liegen.
-Zusätzliche C-Fälle prüfen volle Drehungen mit identischen Endorientierungen,
-Posen, konservative Radien/Translationsextrema, 1608 tatsächlich transformierte
-Vertices im Bewegungs-AABB, fehlende Auflösung und atomare Budgetfehler.
-
-Physim besitzt `RigidMotion` und `CcdSettings` als kopierbare Werte mit lesbaren,
-geschützten Feldern. Strukturen, Arrays, optionale Werte, annotierte Funktionen,
-Posen und alle Sweep-/Bounds-Aufrufe laufen tatsächlich. Negative Compilerfälle
-verwerfen Feldmutation. 13 Host-Traps prüfen ursprüngliche Invalid-/Limit-/
-Numeric-Codes, strukturierte Diagnosen, Quellpositionen und abgewickelte Cleanups.
-Die C-/Physim-Tetraederbeispiele prüfen zusätzlich eine volle Drehung mit freien
-Endlagen gegen eine Ebene und vergleichen den ersten Anteil mit einer unabhängigen
-Winkelreferenz. Die bereits geprüfte lineare elastische Ereignis-/Restzeit bleibt
-enthalten; eine automatisch gelöste rotierende Kontaktfolge wird nicht behauptet.
-
-Die erste Sprachfixture scheiterte mit 1/2 unter `run-i6p2tusj`, weil die neuen
-Werttypen noch nicht in allen Checker-/Emitter-Grenzen registriert waren.
-Die Typgrenzen, Deskriptorerfassung und Größenabschätzung umfassen sie jetzt;
-zugleich nutzt die Fixture die bestehende Quaternion-Rotationsmethode.
-Die erste Orakelversion benutzte irrtümlich Code 7 für `PS_LIMIT`; die tatsächliche
-Enumposition ist 9. Dieser Prüferfehler bleibt unter `run-lw5p8o5d` erhalten.
-Die korrigierte analytische Auswahl besteht mit 3/3 (`run-iznldat5`), die
-optionale Typprüfung mit 1/1 (`run-j4gkp9e_`).
-
-Intel macOS 14.6.1/Apple Clang 16 besteht die endgültige Auswahl mit 16/16 unter
-`build/contact-world-language-release-mac/test-results/run-l9g_yi27`.
-Debian 12/GCC 12.2 besteht 16/16 unter
-`build/contact-world-language-release-linux/test-results/run-03p9fphg`.
-Clang 14/ASan/UBSan besteht 16/16 unter
-`build/atspi-asan-linux/test-results/run-1w5wnt0d`.
-Die Auswahl enthält neue C-/Physim-Pfade, Compiler-/Wertregressionen,
-Diagnosecodes, Tetraederbeispiele, 1014 diskrete Geometriefälle,
-705 lineare Sweep-Fälle, Referenzdokumentation und Prüfkiterstellung.
-`ASAN_OPTIONS=detect_leaks=0` lässt Address-/UB-Prüfungen aktiv. macOS-Sanitizer
-bleiben wegen fehlendem `ld64.lld` ungeprüft. Die anschließende Aufteilung
-mehrdeutiger einzeiliger Rückgaben ist rein formatierend; Paketprüfungen bauen
-und prüfen diese endgültigen Header/Probes erneut.
-
-Stoß-Workflow und Handbuch-Tastaturführung bestehen auf macOS mit 2/2 unter
-`run-gg79ead_` und Linux/X11 mit 2/2 unter `run-r3zytq2y` in den jeweiligen
-Release-Testverzeichnissen. Alle 31 Referenzdokumente sind geprüft. Das
-unabhängige Prüfkit umfasst jetzt 131 genau manifestierte Eingaben.
-
-Drei bereits vollständig bestandene ältere SDK-Prüfstände sind vollständig
-archiviert: `parent-watch-sdk-proof-linux/Native SDK ä m7a3cycd`,
-`collision-tutorial-sdk-proof-linux/Native SDK ä 4sht9ghs` und
-`monte-carlo-tutorial-sdk-proof-linux/Native SDK ä 9_kllbwq`.
-`build/motion-space-archived-proofs.tar.gz` besitzt 559487548 Bytes,
-20873 Dateien/Links und SHA-256
-`bf58a19bc9bef46775bb7ddaa18a1566421dba8e3d356a992b2460f523e8e4ba`.
-Alle Inhalte/Links wurden auf macOS gegen das Inventar geprüft, Originale vor
-Entfernen erneut vollständig gehasht. Danach wurde das Archiv zurück nach Linux
-kopiert und dort vollständig geprüft. Belege liegen unter `build/motion-space-*`;
-die ursprünglichen Pfade bleiben wiederherstellbar. Keine Quellen wurden entfernt.
-
-PP-0387 bleibt unvollständig für allgemeine zeitabhängige Rotations-/Kraftpfade
-und Mehrkörper-Ereignissteuerung. Der explizite Pfadvertrag, Distanzhülle und
-Work-Budget ersetzen diese Anforderungen nicht. Aktuelle Windows-/Apple-Silicon-
-und gesamte Produktabnahme bleiben gesondert offen.
-
-Die abschließende Posenprüfung normiert auch bei Nullrotation gültige,
-fast einheitliche Anfangsquaternionen, damit Pose und Bewegungshülle denselben
-Rotationsvertrag verwenden. Der zusätzliche C-Fall prüft dies ausdrücklich.
-Die drei betroffenen C-/Physim-/Analytikfälle bestehen anschließend auf macOS
-mit 3/3 (`run-twvtgor0`), Linux/Release mit 3/3 (`run-0be1rdv_`) und
-Linux/ASan/UBSan mit 3/3 (`run-ycufv4hc`). Andere Algorithmen und Tests blieben
-gegenüber der erweiterten 16er-Auswahl unverändert.
-
-Das verschobene macOS-SDK besteht unter
-`build/motion-sweep-sdk-checks/Native SDK ä s4jc0vbz`, das Linux-SDK unter
-`build/motion-sweep-sdk-checks/Native SDK ä ydssmug2`. Beide besitzen 464
-manifestierte Dateien. Installierter und ausschließlich aus SDK-Quellen neu
-gebauter Core bestehen die drei unabhängigen Geometrie-/Sweep-Orakel,
-C-/Physim-Beispiele, typisierte Bewegungs-/Einstellungswerte und erhaltene
-Invalid-/Limit-/Numeric-Diagnosen. Der Paketcompiler übersetzt die Quellen selbst;
-das installierte Sprachbeispiel läuft zusätzlich direkt. Unter Linux stammt der
-Prüfer allein aus `build/motion-sweep-independent-kit`, ohne Entwicklerheader
-oder Implementierung im Prüfkit. Die endgültigen Header/Probes besitzen die
-formatierend aufgeteilten Rückgaben; die Paketkompilierung prüft diesen Stand.
-
-Die 29 geänderten Dateien stimmen zwischen macOS und Linux per SHA-256 überein
-(`build/motion-sweep-source-freeze.json`). SDK-Belege liegen unter
-`build/motion-sweep-sdk-{mac,linux}-PASSED.json`. Dieser letzte Belegnachtrag
-erfolgte nach Paketierung; Implementierung, öffentliche Header und Testeingaben
-blieben unverändert. Vollständige Projektabnahme bleibt offen.
-
+Der vollständige Nachweis bleibt im [Plattformarchiv](platform-validation-history.md#konservative-rotierende-und-quadratische-ccd-am-8-oktober-2026) erhalten.
 
 ## Kontinuierlicher Mehrkörperschritt und erneute Review-Regressionen
 
@@ -4093,3 +3990,76 @@ aktuelle Plattform-/Produktabnahme. Vor erfolgreicher Laufdateierstellung gibt
 es nur die Begleitdatei. Ein Stromausfall kann Daten seit dem letzten OS-Sync
 verlieren. Ereignisse besitzen einen sequentiellen Cursor; ihre Anzeige beim
 Offline-Import und ein eigener Ereignisindex sind daraus nicht abgeleitet.
+
+
+## Dauerhafte Projekt- und Experiment-IDs (PP-0446)
+
+Neue App-Projekte speichern `project.id` und Experimentprojekte zusätzlich
+`experiment.id` einmal in `physim.project`. IDs bestehen aus 32 kleinen
+Hexadezimalzeichen ohne Pfadbestandteile. Save/Build erhalten sie; Kopien
+des Projektordners behalten die Identität. Der UI-Generator ist getrennt
+vom Simulations-RNG. IDs dienen der Herkunftszuordnung, nicht Authentifizierung.
+
+Der Runner erhält `--project-id` / `--experiment-id` und speichert genau diese
+Werte im CRC-geschützten Metadatenchunk. Ohne Herkunft stehen beide Felder auf
+`unavailable`. Ungültige/doppelte Optionen erzeugen keine Datei. Modelle dürfen
+die Hostfelder nicht deklarieren; direkte oder über CR eingeschobene Kollisionen
+werden vor dem Anlegen der Laufdatei abgewiesen.
+
+Ausgeführte Intel-macOS-Nachweise:
+
+- Parser/Save, unveränderte Formatmigration, tatsächliche C-/Physim-Logger und
+  ID-CLI **5/5**, `run-3mh51hba`,
+  `build/current-project-identity-final-install-mac.log`. Ungültige Länge,
+  Großbuchstaben, Pfade, Tab, Unicode und doppelte IDs sind konkrete Gegenfälle.
+  Parsefehler bewahren die vollständigen vorherigen Settings.
+- App-Gesamtketten für C-Feder und Physim-Pendel **2/2**, `run-mfa15p_e`,
+  `build/current-project-identity-workflows-mac.log`. Der echte Archivreader
+  bestätigt beide Manifest-IDs in den Metadaten der ausgeführten Läufe.
+  Bestehende Bilanz-/Berichtsprüfungen bleiben enthalten.
+
+Ältere Projekte werden beim Öffnen nicht umgeschrieben. Eine zusätzliche
+explizite ID-Vergabe für Bestandsprojekte und typisierte Herkunftsangaben für
+beliebige Core-/Physim-Writer bleiben offen; PP-0446 bleibt unvollständig.
+Das verschobene SDK mit installierter und separat neu gebauter Bibliothek
+besteht **3/3** Verbraucherbefehle: `build/current-project-identity-sdk-verify-mac.log`,
+Verbraucher `build/current-project-identity-sdk-consumer-mac/Native SDK ä ckvbf5oa`.
+Hier werden die tatsächlichen C-/Physim-Runner mit denselben ID-/Manipulations-
+gegenfällen ausgeführt. Die ganzen aktuellen Linux-/macOS-/Windows-/SDK-Gates
+sind damit nicht abgenommen.
+
+Die anschließenden Parser-/Offline-Referenz-/Kit-/Completion-Prüfungen bestehen
+**5/5**, `run-anay7i_c`, `build/current-project-identity-docs-mac.log`.
+Das unabhängige Verification Kit umfasst **182** exakte Quellen einschließlich
+aller neuen Manipulationsproben. Die private gemeinsame Lexikprüfung ist im
+SDK-Include-Verzeichnis enthalten.
+
+
+## Linux-GUI und sechs Rückstau-Hosts am Stand 6648ee9
+
+Die vollständigen Logs der folgenden CI-Jobs sind gelesen. Sie gelten für
+`6648ee9615f322ed6f2681bb8745faaf768d7e58`, einschließlich Ereignisaufzeichnung,
+vor der späteren Projekt-ID-Erweiterung.
+
+[Linux-UI-Sanitizer](https://github.com/PhysicSimulator/physim/actions/runs/38186529506):
+GCC Job 114609929200 besteht **3/3** native (`run-lfg0rdlb`) und **7/7** GUI
+(`run-8yg_2vl2`); Clang Job 114609929346 besteht **3/3** native (`run-zk3ldkop`)
+und **7/7** GUI (`run-k74jmfs8`). Die sieben Abläufe enthalten Projektbaum,
+Completion, API-Referenz, beide Physim-Auswertungen, Feder und Auftrieb.
+
+[Rückstau-CI](https://github.com/PhysicSimulator/physim/actions/runs/38186529531)
+führt `runner_backpressure` und `runner_backpressure_slow_advance` in Debug
+tatsächlich auf allen sechs Host-/Compilerkombinationen erfolgreich aus:
+
+| Umgebung | Job | Ergebnisverzeichnis | Fälle |
+| --- | --- | --- | --- |
+| Linux/GCC | 114609929534 | run-c0gnqk0t | 2/2 |
+| Linux/Clang | 114609929553 | run-r5jphijd | 2/2 |
+| macOS/Apple Silicon | 114609929370 | run-lew2uolc | 2/2 |
+| macOS/Intel | 114609929706 | run-ymj3504v | 2/2 |
+| Windows/ClangCL | 114609929628 | run-bh6ofqoj | 2/2 |
+| Windows/MSVC | 114609929677 | run-z5tqonu1 | 2/2 |
+
+Dies belegt die benannten Abläufe. Die komplette neue C17-/Paket-/SDK-Matrix
+ist damit nicht abgenommen. Die spätere Projekt-ID-Erweiterung benötigt eigene
+Remote-Nachweise.

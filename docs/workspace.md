@@ -780,3 +780,27 @@ C-Startwerte innerhalb dieser Grenzen. Ohne explizites `PS_COLLISION_CCD`
 ist der Startwert jetzt ebenfalls −1; die Standardphysik bleibt gleich:
 kontinuierlich im Vakuum, diskret im Medium. Explizite Makrowerte 0 und 1
 bleiben verfügbar. Quellcode-Snapshots und frühere Datensätze bleiben erhalten.
+
+## Dauerhafte Projekt- und Experiment-IDs
+
+Neu angelegte Projekte erhalten `project.id`; Experimentprojekte zusätzlich
+`experiment.id`. Beide Werte bestehen aus 32 kleinen Hexadezimalzeichen.
+Sie werden einmal im Projektmanifest gespeichert und beim normalen Speichern,
+bei einem Build oder Sprachwechsel erhalten. Eine Kopie des Projektordners
+behält diese Identität; „Neues Projekt“ erzeugt neue Werte. Die IDs enthalten
+keine lokalen Pfade. Die Generierung verwendet SDL auf dem UI-Thread, getrennt
+vom expliziten Simulations-RNG. Sie dienen der Herkunftszuordnung; sie sind
+keine Authentifizierungsmerkmale.
+
+Die App übergibt die Werte beim Experimentstart mit `--project-id` und
+`--experiment-id` an den Runner. Dieser speichert sie als `project_id` und
+`experiment_id` in der Laufdatei. Ungültige oder doppelte Manifest-/CLI-Werte
+werden abgewiesen. Modellmetadaten dürfen diese vom Host besetzten Namen nicht
+überschreiben, auch nicht über eingeschobene Zeilenumbrüche.
+
+Ältere Projektdateien ohne IDs bleiben lesbar und werden beim Öffnen nicht
+umgeschrieben. Runner-Läufe ohne entsprechende Herkunft tragen ausdrücklich
+`unavailable`; es wird keine verlässliche historische Identität erfunden.
+Eine zusätzliche explizite Vergabe für Bestandsprojekte und typisierte
+Herkunftsangaben für frei programmierte Core-Writer bleiben noch offen.
+Die Generatorgrenzen beschreibt die [SDL-Dokumentation](https://wiki.libsdl.org/SDL3/SDL_rand_bits).

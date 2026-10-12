@@ -12,6 +12,7 @@
 #include "parameter_catalog.h"
 #include "project_file.h"
 #include "compiler_diagnostic.h"
+#include "physim/detail/run_identity.h"
 #include "completion.h"
 #include "report_image.h"
 #include "scene_view.h"
@@ -287,6 +288,7 @@ typedef struct {
     ps_app_profile_frame profile_frame;
     bool project_settings_dirty;
     uint32_t project_format_version;
+    char project_id[33],experiment_id[33];
     ps_text_document project_manifest_snapshot;
     enum nk_collapse_states project_build_disclosure;
     struct nk_rect migration_bounds;
@@ -717,7 +719,8 @@ static bool save_project_settings(app *a) {
     if(ps_text_document_open(&a->project_manifest_snapshot,path)!=PS_DOCUMENT_OK)return false;
     ps_project_settings verified;
     if(ps_project_settings_read_document(&a->project_manifest_snapshot,&verified)!=PS_DOCUMENT_OK)return false;
-    a->project_format_version=verified.format_version;return true;
+    a->project_format_version=verified.format_version;
+    memcpy(a->project_id,verified.project_id,33);memcpy(a->experiment_id,verified.experiment_id,33);return true;
 }
 static bool simulation_settings_valid(app *a) {
     uint64_t seed;
@@ -873,6 +876,7 @@ static bool idle(app *a) { return !a->reset_pending && jobs_idle(a); }
 static void clear_project(app *a) {
     completion_close(a);
     ps_text_document_destroy(&a->project_manifest_snapshot);a->project_format_version=0;
+    a->project_id[0]=a->experiment_id[0]=0;
     ps_report_destroy(a->analysis_report);
     a->analysis_report = NULL;
     ps_library_destroy(a->library);
@@ -998,6 +1002,7 @@ static bool open_project(app *a) {
     a->language_analysis = analysis_language;
     a->analysis_only=project_settings.analysis_only;
     a->project_format_version=project_settings.format_version;
+    memcpy(a->project_id,project_settings.project_id,33);memcpy(a->experiment_id,project_settings.experiment_id,33);
     a->project_manifest_snapshot=manifest_snapshot;
     a->analysis = analysis;
     snprintf(a->project, sizeof a->project, "%s", a->project_input);
@@ -1116,11 +1121,14 @@ static void new_project(app *a) {
         status(a, "Projektbeschreibung konnte nicht geschrieben werden.");
         return;
     }
+    char project_id[33],experiment_id[33];ps_project_id_generate(project_id);ps_project_id_generate(experiment_id);
     bool written = a->manager_analysis_only
         ? fprintf(f,"physim_project=2\nkind=analysis\nanalysis=%s\nmodules=core,units,data,analysis\nprofile=Debug\n",analysis_language?"analysis.phys":"analysis.c")>0
         : fprintf(f, "physim_project=2\nkind=experiment\nexperiment=%s\nanalysis=%s\nmodules=core,units,mechanics,"
                "data,analysis\nprofile=Debug\nsimulation.dt=0.005\nsimulation.seed=42\n", language ? "main.phys" : "main.c",
                analysis_language ? "analysis.phys" : "analysis.c") > 0;
+    if(written && fprintf(f,"project.id=%s\n",project_id)<0)written=false;
+    if(written && !a->manager_analysis_only && fprintf(f,"experiment.id=%s\n",experiment_id)<0)written=false;
     if (fclose(f)) written = false;
     if (!written) {
         status(a, "Projektbeschreibung konnte nicht vollständig gespeichert werden.");
@@ -1309,10 +1317,12 @@ static bool start_run_mode(app *a, bool paused) {
     snprintf(minimum,sizeof minimum,"%.17g",a->minimum_dt);
     snprintf(maximum,sizeof maximum,"%.17g",a->maximum_dt);
     char parameter_arguments[PS_MAX_PARAMETERS][128];
-    const char *args[20 + 2 * PS_MAX_PARAMETERS] = {
+    const char *args[24 + 2 * PS_MAX_PARAMETERS] = {
         runner, module, next_run, "--interactive", "--log-events", "--diagnostics", "--dt", dt, "--seed", a->seed,
         "--speed", speed};
     size_t argument_count = 12;
+    if(a->project_id[0]){args[argument_count++]="--project-id";args[argument_count++]=a->project_id;}
+    if(a->experiment_id[0]){args[argument_count++]="--experiment-id";args[argument_count++]=a->experiment_id;}
     if (a->step_breakpoints[0]) {
         args[argument_count++] = "--break-at-steps"; args[argument_count++] = a->step_breakpoints;
     }
@@ -2889,6 +2899,14 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "workspace_tests.inc"
 // clang-format on
 /* Independent archive check for the optional tutorial energy-ledger report. */
+static bool test_project_run_identity(const app *a) {
+    if(!ps_run_identity_valid(a->project_id) || !ps_run_identity_valid(a->experiment_id))return false;
+    ps_run_reader reader;if(ps_run_open(&reader,a->last_run)!=PS_OK)return false;
+    char project[64],experiment[64];snprintf(project,sizeof project,"\nproject_id=%s\n",a->project_id);
+    snprintf(experiment,sizeof experiment,"\nexperiment_id=%s\n",a->experiment_id);
+    bool ok=strstr(reader.metadata,project)!=NULL && strstr(reader.metadata,experiment)!=NULL;
+    ps_run_reader_close(&reader);return ok;
+}
 static bool test_pendulum_balance_report(const app *a) {
     const ps_curve_data *curve=NULL;ps_plot_info plot;ps_table_info table;ps_table_row row;
     const int8_t joules[]={2,1,-2,0,0,0,0};
@@ -3939,6 +3957,7 @@ int main(int argc, char **argv) {
                 analyze(a, false);
                 test_stage = 7;
             } else if (test_stage == 7 && idle(a) && test_language_analysis) {
+                if(!test_project_run_identity(a))exit_code=1;
                 char path[4200];
                 uint32_t plots = 0, tables = 0;
                 bool pendulum_analysis = test_example == 0 || test_example == 8;
@@ -4090,6 +4109,7 @@ int main(int argc, char **argv) {
                 capture = "language-analysis-editor.bmp";
                 test_stage = 19;
             } else if (test_stage == 7 && idle(a)) {
+                if(!test_project_run_identity(a))exit_code=1;
                 char report[4096];
                 snprintf(report, sizeof report, "%s-plot.svg", a->report);
                 if (a->data.total < 10 || a->data.result != PS_EOF || !exists(report))

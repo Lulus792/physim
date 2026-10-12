@@ -32,7 +32,14 @@ Zeilen `parameter.<name>`, `parameter_default.<name>`,
 Unbekannte Chunktypen innerhalb dieser Obergrenze werden nach CRC-Prüfung übersprungen.
 Eine Schemaänderung innerhalb eines Laufs ist nicht zulässig.
 
-Der Experimentrunner ergänzt `module_fnv1a64` und `runner_build` vor dem
+Der Experimentrunner ergänzt `project_id` und `experiment_id` aus den
+entsprechenden CLI-Optionen (je 32 kleine Hexadezimalzeichen). Ohne passende
+Herkunft lautet der Wert ausdrücklich `unavailable`. Neu angelegte App-Projekte
+besitzen dauerhafte IDs im Manifest; [Details](workspace.md#dauerhafte-projekt--und-experiment-ids).
+Modellmetadaten dürfen diese Hostfelder nicht selbst deklarieren; Kollisionen
+werden vor dem Anlegen der Datei abgewiesen.
+
+Der Experimentrunner ergänzt außerdem `module_fnv1a64` und `runner_build` vor dem
 Anlegen der Laufdatei. Der FNV-Wert dient der Herkunftszuordnung, nicht der
 Authentifizierung. Passen diese Angaben nicht vollständig in die begrenzten
 Modellmetadaten, scheitert der Lauf mit `PS_LIMIT`/Exit 5, auch bei festen

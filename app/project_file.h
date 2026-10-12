@@ -6,6 +6,7 @@
 
 enum { PS_PROJECT_CURRENT_VERSION = 2 };
 typedef struct {
+    char project_id[33],experiment_id[33]; /* Read-only stable identities; save preserves them. Empty in legacy files. */
     uint32_t format_version; /* Read-only format information; save preserves the on-disk version. */
     bool language_experiment, language_analysis, release;
     bool analysis_only;
@@ -23,6 +24,8 @@ typedef struct {
  * Absent source/profile entries retain the legacy
  * defaults main.c, analysis.c, Debug, 0.005 seconds, seed 42, speed 1.
  * Failed reads leave settings unchanged. */
+/* Main-thread generation for newly created projects; not a simulation RNG. */
+void ps_project_id_generate(char out[33]);
 ps_document_result ps_project_settings_read(const char *path, ps_project_settings *settings);
 ps_document_result ps_project_settings_read_document(const ps_text_document *document,ps_project_settings *settings);
 /* Updates profile, simulation settings and parameter selections, preserving all other entries
