@@ -44,5 +44,24 @@ int main(void) {
  ps_a11y_begin(m);ps_a11y_publish(m);CHECK(!ps_a11y_press(m,toggle));
  ps_a11y_begin(m);for(unsigned i=0;i<PS_A11Y_MAX_NODES+2;i++)ps_a11y_record(m,"main","same",PS_A11Y_BUTTON,box,true);ps_a11y_publish(m);CHECK(m->count==PS_A11Y_MAX_NODES && m->dropped==2);
  CHECK(ps_a11y_press(m,m->nodes[0].id));ps_a11y_begin(m);ps_a11y_publish(m);CHECK(!m->pending_press);
+ /* Scalar values remain queued until the corresponding live UI visit. */
+ double value=.5;ps_a11y_begin(m);CHECK(!ps_a11y_record_range(m,"help","Winkel θ",box,true,-1,1,.25,&value));CHECK(ps_a11y_publish(m));
+ uint64_t slider=m->nodes[0].id;CHECK(m->nodes[0].role==PS_A11Y_SLIDER && m->nodes[0].focusable && m->nodes[0].value==.5);
+ CHECK(!ps_a11y_press(m,slider));CHECK(!ps_a11y_set_value(m,slider,NAN));CHECK(!ps_a11y_set_value(m,slider,2));
+ CHECK(ps_a11y_adjust(m,slider,1));CHECK(value==.5 && !ps_a11y_set_value(m,slider,0));
+ ps_a11y_begin(m);CHECK(ps_a11y_record_range(m,"help","Winkel θ",box,true,-1,1,.25,&value));CHECK(value==.75);CHECK(ps_a11y_publish(m));
+ CHECK(m->nodes[0].id==slider && m->nodes[0].value==.75 && !m->pending_value_id);
+ ps_a11y_begin(m);CHECK(!ps_a11y_record_range(m,"help","Winkel θ",box,true,-1,1,.25,&value));
+ CHECK(ps_a11y_set_value(m,slider,1));CHECK(!ps_a11y_publish(m) && m->pending_value_id==slider);
+ ps_a11y_begin(m);CHECK(ps_a11y_record_range(m,"help","Winkel θ",box,true,-1,1,.25,&value));CHECK(ps_a11y_publish(m) && value==1);
+ CHECK(ps_a11y_adjust(m,slider,1));ps_a11y_begin(m);CHECK(!ps_a11y_record_range(m,"help","Winkel θ",box,true,-1,1,.25,&value));ps_a11y_publish(m);CHECK(value==1 && !m->pending_value_id);
+ CHECK(ps_a11y_set_value(m,slider,-.5));ps_a11y_begin(m);CHECK(!ps_a11y_record_range(m,"help","Winkel θ",box,false,-1,1,.25,&value));ps_a11y_publish(m);CHECK(value==1 && !m->pending_value_id && !ps_a11y_set_value(m,slider,0));
+ ps_a11y_begin(m);CHECK(!ps_a11y_record_range(m,"help","Winkel θ",box,true,-1,1,.25,&value));ps_a11y_publish(m);
+ CHECK(ps_a11y_set_value(m,slider,-.5));ps_a11y_begin(m);CHECK(!ps_a11y_record_range(m,"help","Winkel θ",box,true,0,1,.25,&value));ps_a11y_publish(m);CHECK(value==1 && !m->pending_value_id);
+ ps_a11y_begin(m);ps_a11y_model *snapshot=malloc(sizeof *m);CHECK(snapshot);*snapshot=*m;
+ CHECK(!ps_a11y_record_range(m,"help","Winkel θ",box,true,1,-1,.25,&value));CHECK(!ps_a11y_record_range(m,"help","Winkel θ",box,true,0,1,0,&value));
+ CHECK(!memcmp(snapshot,m,sizeof *m) && value==1);free(snapshot);
+ ps_a11y_begin(m);ps_a11y_publish(m);CHECK(!ps_a11y_set_value(m,slider,0));
+ ps_a11y_begin(m);CHECK(!ps_a11y_record_range(m,"help","Winkel θ",box,true,-1,1,.25,&value));ps_a11y_publish(m);CHECK(m->nodes[0].id!=slider);
  free(m);puts("Accessibility model: immutable publication, stable/expired IDs, disabled/stale activation, duplicate scoping, UTF-8 and capacity passed");return 0;
 }

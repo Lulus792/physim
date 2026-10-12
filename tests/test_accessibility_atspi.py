@@ -128,7 +128,7 @@ def event(e):
 
 
 pyatspi.Registry.registerEventListener(
-    event, "object:children-changed", "object:state-changed", "object:bounds-changed"
+    event, "object:children-changed", "object:state-changed", "object:bounds-changed", "object:property-change"
 )
 try:
     app = wait(app_find, "registered application")
@@ -164,7 +164,7 @@ try:
     cache = dbus.Interface(
         raw_bus.get_object(provider, "/org/a11y/atspi/cache"), "org.a11y.atspi.Cache"
     ).GetItems()
-    assert len(cache) == 21 and sum(int(item[7]) == 43 for item in cache) == 2
+    assert len(cache) == 23 and sum(int(item[7]) == 43 for item in cache) == 2
     object_path = next(str(item[0][1]) for item in cache if str(item[6]) == "Öffnen …")
     proxy = raw_bus.get_object(provider, object_path)
     for iface, method, signature, args, expected in [
@@ -241,6 +241,29 @@ try:
         )
         == button
     )
+    slider = wait(lambda: named(wa, "Winkel θ"), "native scalar control")
+    peer_slider = wait(lambda: named(wb, "Winkel θ"), "independent scalar control")
+    assert slider.getRole() == pyatspi.ROLE_SLIDER
+    assert slider.getState().contains(pyatspi.STATE_EDITABLE)
+    value_iface = slider.queryValue()
+    assert value_iface.minimumValue == -1 and value_iface.maximumValue == 1
+    assert value_iface.minimumIncrement == 0.25 and value_iface.currentValue == 0.5
+    scalar_path = next(str(item[0][1]) for item in cache if str(item[6]) == "Winkel θ")
+    scalar_props = dbus.Interface(raw_bus.get_object(provider, scalar_path), "org.freedesktop.DBus.Properties")
+    snapshot = scalar_props.GetAll("org.a11y.atspi.Value")
+    assert snapshot["CurrentValue"] == 0.5 and snapshot["MinimumIncrement"] == 0.25
+    scalar_props.Set("org.a11y.atspi.Value", "CurrentValue", dbus.Double(0.75))
+    wait(lambda: value_iface.currentValue == 0.75, "scalar value delivery")
+    wait(lambda: "VALUE A 0.75" in (a.work / "fixture.stdout").read_text(), "actual rendered scalar")
+    assert peer_slider.queryValue().currentValue == 0.5
+    wait(lambda: any(e["type"].startswith("object:property-change") for e in events), "scalar value notification")
+    for bad in (dbus.Double(float("nan")), dbus.Double(2), dbus.String("0.5")):
+        try:
+            scalar_props.Set("org.a11y.atspi.Value", "CurrentValue", bad)
+            raise AssertionError("Invalid scalar request accepted")
+        except dbus.DBusException as error:
+            assert error.get_dbus_name() == "org.freedesktop.DBus.Error.InvalidArgs"
+    assert value_iface.currentValue == 0.75
     try:
         text.queryAction()
         raise AssertionError("static text advertises Action")
@@ -341,6 +364,11 @@ try:
     assert not button.queryAction().doAction(0)
     assert not checkbox.queryAction().doAction(0)
     assert not checkbox.queryComponent().grabFocus()
+    try:
+        scalar_props.Set("org.a11y.atspi.Value", "CurrentValue", dbus.Double(0))
+        raise AssertionError("Disabled scalar request accepted")
+    except dbus.DBusException:
+        pass
     assert not radio.queryAction().doAction(0)
     assert enabled(other)
     assert other.queryAction().doAction(0)
@@ -391,6 +419,7 @@ try:
     assert "PRESS A 2" not in (a.work / "fixture.stdout").read_text()
     checks = [
         "checkbox role, actual two-way toggle, checked events and independent windows",
+        "slider role, finite bounds/increment/current value, actual value delivery and notification, independent windows and invalid/disabled requests",
         "radio hierarchy, sibling indices, parent geometry, exclusive/idempotent selection and independent groups",
         "actual keyboard focus, focus states, keyboard activation and non-focusable rejection",
         "registry discovery",

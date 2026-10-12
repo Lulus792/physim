@@ -43,7 +43,7 @@ void ps_ui_accessibility_route(struct nk_context *ctx,bool allowed) {
  ps_ui_font_layout *layout=ctx->userdata.ptr;if(layout->magic!=PS_UI_LAYOUT_MAGIC)return;
  layout->accessibility_route_window=ctx->current;layout->accessibility_route_allowed=allowed;
 }
-static bool accessibility_widget(struct nk_context *ctx,const char *text,int role,struct nk_rect bounds,bool checked,const char *group,bool activated) {
+static bool accessibility_emit(struct nk_context *ctx,const char *text,int role,struct nk_rect bounds,bool checked,const char *group,bool activated,double *range) {
     if(!ctx || !ctx->userdata.ptr || !ctx->current || !ctx->current->layout || !text)return false;
     const ps_ui_font_layout *layout=ctx->userdata.ptr;
     if(layout->magic!=PS_UI_LAYOUT_MAGIC || !layout->accessibility)return false;
@@ -60,10 +60,22 @@ static bool accessibility_widget(struct nk_context *ctx,const char *text,int rol
         struct nk_rect cover=above->bounds;
         if(cover.x<right && cover.x+cover.w>left && cover.y<bottom && cover.y+cover.h>top)enabled=false;
     }
-    unsigned result=layout->accessibility(layout->accessibility_user,ctx->current->name_string,text,role,visible,enabled,checked,group,activated);
+    unsigned result=range?(layout->accessibility_range?layout->accessibility_range(layout->accessibility_user,ctx->current->name_string,text,visible,enabled,range):0)
+        :layout->accessibility(layout->accessibility_user,ctx->current->name_string,text,role,visible,enabled,checked,group,activated);
     if(result&2u)nk_window_set_focus(ctx,ctx->current->name_string);
     if((result&4u) && right-left>3 && bottom-top>3)nk_stroke_rect(nk_window_get_canvas(ctx),nk_rect(left+1,top+1,right-left-2,bottom-top-2),3,2,ctx->style.button.text_normal);
     return (result&1u)!=0;
+}
+static bool accessibility_widget(struct nk_context *ctx,const char *text,int role,struct nk_rect bounds,bool checked,const char *group,bool activated) {
+    return accessibility_emit(ctx,text,role,bounds,checked,group,activated,NULL);
+}
+nk_bool ps_ui_slider_named(struct nk_context *ctx,const char *name,float minimum,float *value,float maximum,float increment) {
+    if(!ctx || !value)return nk_false;
+    struct nk_rect bounds=nk_widget_bounds(ctx);
+    nk_bool changed=nk_slider_float(ctx,minimum,value,maximum,increment);
+    double range[]={*value,minimum,maximum,increment};
+    if(accessibility_emit(ctx,name,5,bounds,false,NULL,false,range)){*value=(float)range[0];changed=nk_true;}
+    return changed;
 }
 nk_bool ps_ui_option_label(struct nk_context *ctx,const char *group,const char *text,nk_bool active) {
     if(!ctx)return active;

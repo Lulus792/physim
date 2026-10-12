@@ -13,6 +13,7 @@ extern void NSAccessibilityPostNotification(id element,id notification);
 struct ps_a11y_native {
  SDL_Window *window;ps_a11y_model *model;SDL_Mutex *mutex;SDL_AtomicInt references;
  id view,children;uint64_t ids[PS_A11Y_MAX_NODES],parents[PS_A11Y_MAX_NODES];bool checked[PS_A11Y_MAX_NODES];uint64_t focused_id;size_t count;
+ double values[PS_A11Y_MAX_NODES];
 };
 #if OBJC_BOOL_IS_BOOL
 #define PS_AX_BOOL "B"
@@ -54,7 +55,7 @@ static BOOL element_valid(id object,SEL selector) {(void)selector;ps_a11y_node n
 static BOOL element_enabled(id object,SEL selector) {(void)selector;ps_a11y_node node;return node_copy(object,&node)&&node.enabled;}
 static id element_role(id object,SEL selector) {
  (void)selector;ps_a11y_node node;if(!node_copy(object,&node))return nil;
- return string(node.role==PS_A11Y_BUTTON?"AXButton":node.role==PS_A11Y_CHECKBOX?"AXCheckBox":node.role==PS_A11Y_RADIO?"AXRadioButton":node.role==PS_A11Y_RADIO_GROUP?"AXRadioGroup":"AXStaticText");
+ return string(node.role==PS_A11Y_BUTTON?"AXButton":node.role==PS_A11Y_CHECKBOX?"AXCheckBox":node.role==PS_A11Y_RADIO?"AXRadioButton":node.role==PS_A11Y_RADIO_GROUP?"AXRadioGroup":node.role==PS_A11Y_SLIDER?"AXSlider":"AXStaticText");
 }
 static id element_label(id object,SEL selector) {
  (void)selector;ps_a11y_node node;return node_copy(object,&node)?string(node.label):nil;
@@ -63,6 +64,7 @@ static id element_value(id object,SEL selector) {
  (void)selector;ps_a11y_node node;if(!node_copy(object,&node))return nil;
  if(node.role==PS_A11Y_CHECKBOX || node.role==PS_A11Y_RADIO)
   return ((id(*)(id,SEL,BOOL))objc_msgSend)((id)objc_getClass("NSNumber"),sel_registerName("numberWithBool:"),node.checked);
+ if(node.role==PS_A11Y_SLIDER)return ((id(*)(id,SEL,double))objc_msgSend)((id)objc_getClass("NSNumber"),sel_registerName("numberWithDouble:"),node.value);
  return node.role==PS_A11Y_TEXT?string(node.label):nil;
 }
 static id element_identifier(id object,SEL selector) {
@@ -101,6 +103,25 @@ static BOOL element_press(id object,SEL selector) {
  (void)selector;ps_a11y_native *b=owner(object);if(!b)return NO;SDL_LockMutex(b->mutex);
  bool accepted=b->model && ps_a11y_press(b->model,identifier(object));SDL_UnlockMutex(b->mutex);return accepted;
 }
+static id element_range_bound(id object,SEL selector) {
+ ps_a11y_node node;if(!node_copy(object,&node) || node.role!=PS_A11Y_SLIDER)return nil;
+ double value=selector==sel_registerName("accessibilityMinValue")?node.minimum:node.maximum;
+ return ((id(*)(id,SEL,double))objc_msgSend)((id)objc_getClass("NSNumber"),sel_registerName("numberWithDouble:"),value);
+}
+static BOOL element_adjust(id object,SEL selector) {
+ ps_a11y_native *b=owner(object);if(!b)return NO;SDL_LockMutex(b->mutex);
+ bool accepted=b->model && !(SDL_GetWindowFlags(b->window)&(SDL_WINDOW_HIDDEN|SDL_WINDOW_MINIMIZED)) &&
+     ps_a11y_adjust(b->model,identifier(object),selector==sel_registerName("accessibilityPerformIncrement")?1:-1);
+ SDL_UnlockMutex(b->mutex);return accepted;
+}
+static void element_set_value(id object,SEL selector,id value) {
+ (void)selector;ps_a11y_native *b=owner(object);if(!b || !value ||
+     !((BOOL(*)(id,SEL,Class))objc_msgSend)(value,sel_registerName("isKindOfClass:"),objc_getClass("NSNumber")))return;
+ double scalar=((double(*)(id,SEL))objc_msgSend)(value,sel_registerName("doubleValue"));
+ SDL_LockMutex(b->mutex);
+ if(b->model && !(SDL_GetWindowFlags(b->window)&(SDL_WINDOW_HIDDEN|SDL_WINDOW_MINIMIZED)))ps_a11y_set_value(b->model,identifier(object),scalar);
+ SDL_UnlockMutex(b->mutex);
+}
 static BOOL element_focused(id object,SEL selector) {(void)selector;ps_a11y_node node;return node_copy(object,&node)&&node.focused;}
 static void element_set_focused(id object,SEL selector,BOOL focused) {
  (void)selector;ps_a11y_native *b=owner(object);if(!b)return;
@@ -116,6 +137,9 @@ static BOOL element_allowed(id object,SEL selector,SEL requested) {
   ps_a11y_node node;return node_copy(object,&node)&&ps_a11y_actionable(node.role)&&node.enabled;
  }
  if(requested==sel_registerName("setAccessibilityFocused:")){ps_a11y_node node;return node_copy(object,&node)&&node.focusable;}
+ if(requested==sel_registerName("setAccessibilityValue:") || requested==sel_registerName("accessibilityPerformIncrement") || requested==sel_registerName("accessibilityPerformDecrement")) {
+  ps_a11y_node node;return node_copy(object,&node)&&node.role==PS_A11Y_SLIDER&&node.enabled;
+ }
  const char *name=sel_getName(requested);
  if(!strncmp(name,"setAccessibility",16) || !strncmp(name,"accessibilityPerform",20))return NO;
  return YES;
@@ -136,6 +160,11 @@ static bool make_class(void) {
  class_addMethod(element_class,sel_registerName("accessibilityRole"),(IMP)element_role,"@@:");
  class_addMethod(element_class,sel_registerName("accessibilityLabel"),(IMP)element_label,"@@:");
  class_addMethod(element_class,sel_registerName("accessibilityValue"),(IMP)element_value,"@@:");
+ class_addMethod(element_class,sel_registerName("setAccessibilityValue:"),(IMP)element_set_value,"v@:@");
+ class_addMethod(element_class,sel_registerName("accessibilityMinValue"),(IMP)element_range_bound,"@@:");
+ class_addMethod(element_class,sel_registerName("accessibilityMaxValue"),(IMP)element_range_bound,"@@:");
+ class_addMethod(element_class,sel_registerName("accessibilityPerformIncrement"),(IMP)element_adjust,PS_AX_BOOL "@:");
+ class_addMethod(element_class,sel_registerName("accessibilityPerformDecrement"),(IMP)element_adjust,PS_AX_BOOL "@:");
  class_addMethod(element_class,sel_registerName("accessibilityIdentifier"),(IMP)element_identifier,"@@:");
  class_addMethod(element_class,sel_registerName("accessibilityParent"),(IMP)element_parent,"@@:");
  class_addMethod(element_class,sel_registerName("accessibilityChildren"),(IMP)element_children,"@@:");
@@ -173,7 +202,7 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
    selection_changed[i]=old_selected!=new_selected;
   }
   for(size_t j=0;j<b->count;j++)if(b->ids[j]==node->id)
-   value_changed[i]=(node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) && node->checked!=b->checked[j];
+   value_changed[i]=((node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) && node->checked!=b->checked[j]) || (node->role==PS_A11Y_SLIDER && node->value!=b->values[j]);
   if(!element) {
    element=send0((id)element_class,"new");SDL_AddAtomicInt(&b->references,1);
    memcpy((char*)element+ivar_getOffset(owner_ivar),&b,sizeof b);memcpy((char*)element+ivar_getOffset(id_ivar),&node->id,sizeof node->id);
@@ -181,7 +210,7 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
   } else send1(children,"addObject:",element);
  }
  if(b->children)send0(b->children,"release");b->children=children;
- b->count=b->model->count;for(size_t i=0;i<b->count;i++){b->ids[i]=b->model->nodes[i].id;b->checked[i]=b->model->nodes[i].checked;b->parents[i]=b->model->nodes[i].parent;}
+ b->count=b->model->count;for(size_t i=0;i<b->count;i++){b->ids[i]=b->model->nodes[i].id;b->checked[i]=b->model->nodes[i].checked;b->parents[i]=b->model->nodes[i].parent;b->values[i]=b->model->nodes[i].value;}
  id roots=send0((id)objc_getClass("NSMutableArray"),"array");int height;SDL_GetWindowSize(b->window,NULL,&height);
  BOOL flipped=((BOOL(*)(id,SEL))objc_msgSend)(b->view,sel_registerName("isFlipped"));
  for(size_t i=0;i<b->count;i++) {
@@ -319,10 +348,28 @@ bool ps_a11y_native_test(SDL_Window *window) {
  ps_a11y_publish(model);ps_a11y_native_publish(b,true);
  okay &= ((unsigned long(*)(id,SEL))objc_msgSend)(send0(group_element,"accessibilitySelectedChildren"),sel_registerName("count"))==0 &&
   !((BOOL(*)(id,SEL))objc_msgSend)(radio,sel_registerName("accessibilityPerformPress"));
+ double scalar=.5;ps_a11y_begin(model);
+ ps_a11y_record_range(model,"main","Winkel θ",bounds,true,-1,1,.25,&scalar);ps_a11y_publish(model);ps_a11y_native_publish(b,true);
+ id slider=send0(element_for(b,model->nodes[0].id),"retain");
+ const char *slider_role=((const char*(*)(id,SEL))objc_msgSend)(send0(slider,"accessibilityRole"),sel_registerName("UTF8String"));
+ okay &= slider_role && !strcmp(slider_role,"AXSlider") &&
+  ((double(*)(id,SEL))objc_msgSend)(send0(slider,"accessibilityValue"),sel_registerName("doubleValue"))==.5 &&
+  ((double(*)(id,SEL))objc_msgSend)(send0(slider,"accessibilityMinValue"),sel_registerName("doubleValue"))==-1 &&
+  ((double(*)(id,SEL))objc_msgSend)(send0(slider,"accessibilityMaxValue"),sel_registerName("doubleValue"))==1 &&
+  ((BOOL(*)(id,SEL))objc_msgSend)(slider,sel_registerName("accessibilityPerformIncrement"));
+ ps_a11y_begin(model);okay &= ps_a11y_record_range(model,"main","Winkel θ",bounds,true,-1,1,.25,&scalar);
+ ps_a11y_publish(model);ps_a11y_native_publish(b,true);okay &= scalar==.75;
+ id number=((id(*)(id,SEL,double))objc_msgSend)((id)objc_getClass("NSNumber"),sel_registerName("numberWithDouble:"),-.5);
+ send1(slider,"setAccessibilityValue:",number);ps_a11y_begin(model);
+ okay &= ps_a11y_record_range(model,"main","Winkel θ",bounds,true,-1,1,.25,&scalar);ps_a11y_publish(model);ps_a11y_native_publish(b,true);okay &= scalar==-.5;
+ send1(slider,"setAccessibilityValue:",string("invalid"));okay &= !model->pending_value_id;
+ ps_a11y_begin(model);ps_a11y_publish(model);ps_a11y_native_publish(b,true);
+ okay &= !((BOOL(*)(id,SEL))objc_msgSend)(slider,sel_registerName("accessibilityPerformDecrement"));
  ps_a11y_native_destroy(b);okay &= !((BOOL(*)(id,SEL))objc_msgSend)(element,sel_registerName("accessibilityPerformPress"));
  okay &= !((BOOL(*)(id,SEL))objc_msgSend)(checkbox,sel_registerName("accessibilityPerformPress"));
  okay &= !((BOOL(*)(id,SEL))objc_msgSend)(radio,sel_registerName("accessibilityPerformPress"));
- send0(radio,"release");send0(checkbox,"release");send0(element,"release");free(model);return okay;
+ okay &= !((BOOL(*)(id,SEL))objc_msgSend)(slider,sel_registerName("accessibilityPerformIncrement"));
+ send0(slider,"release");send0(radio,"release");send0(checkbox,"release");send0(element,"release");free(model);return okay;
 }
 #elif !defined(__linux__)
 struct ps_a11y_native {int unused;};

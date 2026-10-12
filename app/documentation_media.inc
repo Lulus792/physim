@@ -85,12 +85,12 @@ static void documentation_pendulum(app *a,int block,float width,float height) {
     float row=fmaxf(34,a->doc_font_ui->height+12),y=0;
     const char *labels[]={"Winkel θ (rad)","Länge L (m)","Winkeltempo ω (rad/s)","Kamera seitlich (rad)","Kamera hoch (rad)","Kameraabstand (m)"};
     float *values[]={&a->doc_theta,&a->doc_length,&a->doc_omega,&a->doc_yaw,&a->doc_pitch,&a->doc_zoom};
-    float lo[]={-1.2f,.5f,-3,-(float)PS_PI,-1.5f,2},hi[]={1.2f,3,3,(float)PS_PI,1.5f,12},step[]={.01f,.05f,.05f,.08f,.08f,.2f};
+    float lo[]={-1.2f,.5f,-3,-(float)PS_PI,-(float)PS_PI/2,2},hi[]={1.2f,3,3,(float)PS_PI,(float)PS_PI/2,12},step[]={.01f,.05f,.05f,.08f,.08f,.2f};
     for(int i=0;i<6;i++,y+=row+8) {
         char label[128];snprintf(label,sizeof label,"%s: %.2f",labels[i],*values[i]);
         nk_layout_space_push(ui,nk_rect(0,y,width*.56f,row));documentation_space_text(a,label,false);
         nk_layout_space_push(ui,nk_rect(width*.57f,y,width*.42f,row));
-        a->doc_visual_bounds[i]=nk_widget_bounds(ui);nk_slider_float(ui,lo[i],values[i],hi[i],step[i]);
+        a->doc_visual_bounds[i]=nk_widget_bounds(ui);ps_ui_slider_named(ui,labels[i],lo[i],values[i],hi[i],step[i]);
         documentation_focus_draw(a,DOC_VISUAL+block*16+i,a->doc_visual_bounds[i],true);
     }
     const char *buttons[]={"Vorne","Raum","Oben"};
@@ -107,7 +107,7 @@ static void documentation_pendulum(app *a,int block,float width,float height) {
     if(state!=NK_WIDGET_INVALID) {
         if(state==NK_WIDGET_VALID && nk_input_is_mouse_hovering_rect(&ui->input,r) && nk_input_is_mouse_down(&ui->input,NK_BUTTON_RIGHT)) {
             a->doc_yaw=remainderf(a->doc_yaw-ui->input.mouse.delta.x*.008f,2*(float)PS_PI);
-            a->doc_pitch=fmaxf(-1.5f,fminf(1.5f,a->doc_pitch+ui->input.mouse.delta.y*.008f));
+            a->doc_pitch=fmaxf(-(float)PS_PI/2,fminf((float)PS_PI/2,a->doc_pitch+ui->input.mouse.delta.y*.008f));
         }
         documentation_model_scene(a);
         ps_camera camera={a->doc_yaw,a->doc_pitch,a->doc_zoom,ps_v3(0,-a->doc_length*.5,0),a->doc_orthographic,true,true};
@@ -120,9 +120,9 @@ static void documentation_pendulum(app *a,int block,float width,float height) {
             nk_push_scissor(canvas,nk_rect(left,top,fmaxf(0,right-left),fmaxf(0,bottom-top)));
             const char *axes[]={"+x","+y","+z"};
             for(int axis=0;axis<3;axis++) {
-                float x,y;
-                if(ps_graphics_project(&camera,a->doc_visual_scene.objects[5+axis].b,(double)r.w/r.h,&x,&y))
-                    documentation_diagram_text(a,nk_rect(r.x+x*r.w+5,r.y+y*r.h,48,30),axes[axis],UI_COLOR(doc_text));
+                float projected_x,projected_y;
+                if(ps_graphics_project(&camera,a->doc_visual_scene.objects[5+axis].b,(double)r.w/r.h,&projected_x,&projected_y))
+                    documentation_diagram_text(a,nk_rect(r.x+projected_x*r.w+5,r.y+projected_y*r.h,48,30),axes[axis],UI_COLOR(doc_text));
             }
             nk_push_scissor(canvas,previous);
         }

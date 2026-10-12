@@ -61,6 +61,19 @@ static unsigned accessibility_widget(void *user,const char *window,const char *l
     if(granted){SDL_RaiseWindow(sdl->win);nk_edit_unfocus(&sdl->ctx);}
     return (pressed?1u:0u)|(granted?2u:0u)|(focused?4u:0u);
 }
+static unsigned accessibility_range_widget(void *user,const char *window,const char *label,const float bounds[4],bool enabled,double values[4]) {
+    struct nk_sdl *sdl=user;SDL_LockMutex(sdl->accessibility_mutex);
+    ps_a11y_model *model=sdl->accessibility;uint64_t pending=model->pending_focus;size_t before=model->draft_count;
+    bool changed=ps_a11y_record_range(model,window,label,bounds,enabled,values[1],values[2],values[3],&values[0]);
+    bool recorded=model->draft_count>before;
+    /* The rendered slider owns a float; publish its actual rounded value. */
+    values[0]=(double)(float)values[0];if(recorded)model->draft[before].value=values[0];
+    bool granted=recorded && pending && !model->pending_focus && model->focused_id==pending && model->draft[before].id==pending;
+    bool focused=recorded && model->draft[before].id==model->focused_id && model->draft[before].focusable && model->keyboard_focus;
+    SDL_UnlockMutex(sdl->accessibility_mutex);
+    if(granted){SDL_RaiseWindow(sdl->win);nk_edit_unfocus(&sdl->ctx);}
+    return (changed?1u:0u)|(granted?2u:0u)|(focused?4u:0u);
+}
 static void *ui_alloc(nk_handle user, void *old, nk_size size) {
     (void)user;
     (void)old;
@@ -100,6 +113,7 @@ struct nk_context *nk_sdl_init(SDL_Window *window, ps_graphics *graphics) {
     }
     if(sdl->accessibility_native) {
         sdl->font_layout.accessibility=accessibility_widget;
+        sdl->font_layout.accessibility_range=accessibility_range_widget;
         sdl->font_layout.accessibility_user=sdl;
     } else {
         free(sdl->accessibility);sdl->accessibility=NULL;
@@ -159,6 +173,7 @@ bool nk_sdl_accessibility_event(struct nk_context *ctx,const SDL_Event *event) {
   else if(key==SDLK_LEFT || key==SDLK_RIGHT || key==SDLK_UP || key==SDLK_DOWN) {
    const ps_a11y_node *node=ps_a11y_find(m,m->focused_id);
    if(node && node->role==PS_A11Y_RADIO){handled=true;if(down)ps_a11y_focus_move(m,key==SDLK_LEFT || key==SDLK_UP?-1:1,true);}
+   if(node && node->role==PS_A11Y_SLIDER){handled=true;if(down)ps_a11y_adjust(m,node->id,key==SDLK_LEFT || key==SDLK_DOWN?-1:1);}
   }
  }
  SDL_UnlockMutex(sdl->accessibility_mutex);return handled;

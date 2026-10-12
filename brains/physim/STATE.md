@@ -27,6 +27,12 @@ und native Diagramme. Die [3D-Erklärung](../../docs/spatial-explanations.md)
 erscheint mit Reglern direkt in der F1-Hilfe. Der Browserentwurf wurde entfernt.
 Aktuelle Einzelprüfungen stehen in den Plattformnachweisen.
 
+Der Dokumentationsstand 9c93312 besteht inzwischen auch die tatsächlichen
+Linux-Sanitizergruppen mit GCC und Clang. Sein vollständiger eingefrorener
+macOS-/SDK-Lauf ist noch aktiv. Spätere native Accessibility-Regler besitzen
+eigene portable und macOS-Gegenproben; ihre neue Linux-Value-Anbindung braucht
+noch den aktuellen ausgeführten CI-Nachweis.
+
 ## Nächster Einstieg
 
 Prüfe zuerst den tatsächlichen Laufstatus und den aktuellen Git-Stand.

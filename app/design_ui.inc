@@ -368,12 +368,12 @@ static void scene_controls_view(app *a) {
             nk_label(ui,planes[a->camera_plane],NK_TEXT_LEFT);
         } else {
             nk_label(ui, "Orbit", NK_TEXT_LEFT);
-            nk_slider_float(ui, -3.14f, &a->yaw, 3.14f, .02f);
+            ps_ui_slider_named(ui,"Kamera seitlich (rad)",-3.14f,&a->yaw,3.14f,.02f);
             nk_label(ui, "Neigung", NK_TEXT_LEFT);
-            nk_slider_float(ui, -(float)PS_PI / 2, &a->pitch, (float)PS_PI / 2, .02f);
+            ps_ui_slider_named(ui,"Kamera hoch (rad)",-(float)PS_PI/2,&a->pitch,(float)PS_PI/2,.02f);
         }
         nk_label(ui, "Zoom", NK_TEXT_LEFT);
-        nk_slider_float(ui, 1.5f, &a->zoom, 12, .1f);
+        ps_ui_slider_named(ui,"Kameraabstand (m)",1.5f,&a->zoom,12,.1f);
         nk_layout_row_dynamic(ui, 60, 1);
         nk_label_wrap(ui,a->camera_2d?"Rechts/Mitte ziehen: verschieben\nMausrad: zoomen":"Rechts ziehen: drehen\nMitte ziehen: verschieben\nMausrad: zoomen");
         nk_layout_row_dynamic(ui, 112, 1);

@@ -6,11 +6,12 @@
 #define PS_A11Y_MAX_NODES 256u
 #define PS_A11Y_LABEL_BYTES 1024u
 #define PS_A11Y_WINDOW_BYTES 96u
-typedef enum {PS_A11Y_TEXT,PS_A11Y_BUTTON,PS_A11Y_CHECKBOX,PS_A11Y_RADIO,PS_A11Y_RADIO_GROUP} ps_a11y_role;
+typedef enum {PS_A11Y_TEXT,PS_A11Y_BUTTON,PS_A11Y_CHECKBOX,PS_A11Y_RADIO,PS_A11Y_RADIO_GROUP,PS_A11Y_SLIDER} ps_a11y_role;
 typedef struct {
  uint64_t id,key,parent;unsigned occurrence;ps_a11y_role role;
  char window[PS_A11Y_WINDOW_BYTES],label[PS_A11Y_LABEL_BYTES];
  float bounds[4];bool enabled,checked,focusable,focused;
+ double value,minimum,maximum,increment;
 } ps_a11y_node;
 /* UI thread owns the draft; callers serialize all operations. Published nodes
  * are immutable until publish. IDs persist across geometry changes, expire when
@@ -19,6 +20,7 @@ typedef struct {
  ps_a11y_node nodes[PS_A11Y_MAX_NODES],draft[PS_A11Y_MAX_NODES];
  size_t count,draft_count;uint64_t next_id,pending_press,selection_parent,selection_id,pending_focus,focused_id;unsigned dropped;
  bool building,keyboard_focus;
+ uint64_t pending_value_id;double pending_value;
 } ps_a11y_model;
 static inline bool ps_a11y_actionable(ps_a11y_role role) {
  return role==PS_A11Y_BUTTON || role==PS_A11Y_CHECKBOX || role==PS_A11Y_RADIO;
@@ -35,6 +37,14 @@ bool ps_a11y_record_state(ps_a11y_model *model,const char *window,const char *la
                      ps_a11y_role role,const float bounds[4],bool enabled,bool checked);
 bool ps_a11y_record_option(ps_a11y_model *model,const char *window,const char *group,
                      const char *label,const float bounds[4],bool enabled,bool selected,bool activated);
+/* Finite bounded scalar controls; names stay stable while values change.
+ * Queued changes are applied only when the same visible enabled control is
+ * recorded again. Invalid declarations preserve model and caller value. */
+bool ps_a11y_record_range(ps_a11y_model *model,const char *window,const char *label,
+                         const float bounds[4],bool enabled,double minimum,double maximum,
+                         double increment,double *value);
+bool ps_a11y_set_value(ps_a11y_model *model,uint64_t id,double value);
+bool ps_a11y_adjust(ps_a11y_model *model,uint64_t id,int direction);
 size_t ps_a11y_child_count(const ps_a11y_model *model,uint64_t parent);
 const ps_a11y_node *ps_a11y_child_at(const ps_a11y_model *model,uint64_t parent,size_t index);
 size_t ps_a11y_index(const ps_a11y_model *model,uint64_t id);

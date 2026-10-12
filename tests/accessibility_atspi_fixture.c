@@ -9,10 +9,11 @@ typedef struct {
     struct nk_context *ui;
     bool visible, disabled, checked;
     unsigned presses,toggles,options[2];
+    float scalar;
 } fixture_window;
 static bool fallback;
 static bool create(fixture_window *f, const char *title) {
-    f->window = SDL_CreateWindow(title, 400, 200, SDL_WINDOW_OPENGL);
+    f->window = SDL_CreateWindow(title, 400, 260, SDL_WINDOW_OPENGL);
     if (!f->window) {
         fprintf(stderr, "create window: %s\n", SDL_GetError());
         return false;
@@ -33,6 +34,7 @@ static bool create(fixture_window *f, const char *title) {
         return false;
     nk_style_set_font(f->ui, &font->handle);
     f->visible = true;
+    f->scalar=.5f;
     return true;
 }
 static bool draw(fixture_window *f, char name) {
@@ -42,7 +44,7 @@ static bool draw(fixture_window *f, char name) {
         return false;
     nk_input_begin(f->ui);
     nk_input_end(f->ui);
-    if (nk_begin(f->ui, "controls", nk_rect(0, 0, 400, 200), NK_WINDOW_NO_SCROLLBAR)) {
+    if (nk_begin(f->ui, "controls", nk_rect(0, 0, 400, 260), NK_WINDOW_NO_SCROLLBAR)) {
         nk_layout_row_dynamic(f->ui, 24, 1);
         nk_label(f->ui, "Bereit 🌍", NK_TEXT_LEFT);
         if (f->visible) {
@@ -52,6 +54,8 @@ static bool draw(fixture_window *f, char name) {
             nk_layout_row_dynamic(f->ui,24,1);
             bool toggled=nk_checkbox_label(f->ui,"Vektoren",&f->checked);
             if(toggled){f->toggles++;printf("TOGGLE %c %u %u\n",name,f->toggles,f->checked);fflush(stdout);}
+            nk_layout_row_dynamic(f->ui,24,1);
+            if(ps_ui_slider_named(f->ui,"Winkel θ",-1,&f->scalar,1,.25f)){printf("VALUE %c %.2f\n",name,(double)f->scalar);fflush(stdout);}
             const char *groups[]={"Darstellung","Code"};
             for(unsigned g=0;g<2;g++) {
                 unsigned before=f->options[g];nk_layout_row_dynamic(f->ui,24,2);

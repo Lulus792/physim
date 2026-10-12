@@ -148,10 +148,11 @@ static bool find_object(ax_server *s, const char *path, ps_a11y_native **window,
     return false;
 }
 static unsigned role(ps_a11y_native *w, const ps_a11y_node *node) {
-    return !w ? 75 : !node->id ? 23 : node->role == PS_A11Y_BUTTON ? 43 : node->role == PS_A11Y_CHECKBOX ? 7 : node->role == PS_A11Y_RADIO ? 44 : node->role == PS_A11Y_RADIO_GROUP ? 99 : 29;
+    return !w ? 75 : !node->id ? 23 : node->role == PS_A11Y_BUTTON ? 43 : node->role == PS_A11Y_CHECKBOX ? 7 : node->role == PS_A11Y_RADIO ? 44 : node->role == PS_A11Y_RADIO_GROUP ? 99 : node->role == PS_A11Y_SLIDER ? 51 : 29;
 }
 static const char *role_name(unsigned r, bool localized) {
     switch (r) {
+    case 51:return localized ? "Regler" : "slider";
     case 75:
         return localized ? "Anwendung" : "application";
     case 23:
@@ -186,6 +187,7 @@ static void states(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
         first |= (1u << 8) | (1u << 24);
     if(node->focusable)first |= 1u << 11;
     if(node->focused)first |= 1u << 12;
+    if(node->role==PS_A11Y_SLIDER && node->enabled)first |= 1u << 7;
     if (!w || w->visible)
         first |= (1u << 25) | (1u << 30);
     if((node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) && node->checked)first |= 1u << 4;
@@ -206,6 +208,7 @@ static void interfaces(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
         text(r, &a, AX_PREFIX "Component");
     if (node->id && ps_a11y_actionable(node->role))
         text(r, &a, AX_PREFIX "Action");
+    if(node->id && node->role==PS_A11Y_SLIDER)text(r,&a,AX_PREFIX "Value");
     close_container(r, iter, &a);
 }
 static void parent_reference(ax_reply *r, DBusMessageIter *iter, ax_server *s, ps_a11y_native *w,
@@ -299,12 +302,20 @@ static const char *property_signature(const char *iface, const char *name) {
         if (!strcmp(name, "ToolkitName") || !strcmp(name, "ToolkitVersion") ||
             !strcmp(name, "Version") || !strcmp(name, "AtspiVersion"))
             return "s";
+    } else if(!strcmp(iface,AX_PREFIX "Value")) {
+        if(!strcmp(name,"Text"))return "s";
+        if(!strcmp(name,"MinimumValue") || !strcmp(name,"MaximumValue") || !strcmp(name,"CurrentValue") || !strcmp(name,"MinimumIncrement"))return "d";
     } else if (!strcmp(iface, AX_PREFIX "Action") && !strcmp(name, "NActions"))
         return "i";
     return NULL;
 }
 static void property_value(ax_reply *r, DBusMessageIter *iter, ax_server *s, ps_a11y_native *w,
                            const ps_a11y_node *node, const char *iface, const char *name) {
+    if(!strcmp(iface,AX_PREFIX "Value") && strcmp(name,"version")) {
+        if(!strcmp(name,"Text")){text(r,iter,"");return;}
+        double value=!strcmp(name,"MinimumValue")?node->minimum:!strcmp(name,"MaximumValue")?node->maximum:!strcmp(name,"MinimumIncrement")?node->increment:node->value;
+        basic(r,iter,DBUS_TYPE_DOUBLE,&value);return;
+    }
     if (!strcmp(name, "version") || !strcmp(name, "InterfaceVersion")) {
         unsigned_number(r, iter, 1);
         return;
@@ -356,6 +367,7 @@ static bool interface_supported(ps_a11y_native *w, const ps_a11y_node *node, con
         return w != NULL;
     if (!strcmp(iface, AX_PREFIX "Action"))
         return node->id && ps_a11y_actionable(node->role);
+    if(!strcmp(iface,AX_PREFIX "Value"))return node->id && node->role==PS_A11Y_SLIDER;
     return false;
 }
 static bool bounds(ps_a11y_native *w, const ps_a11y_node *node, unsigned coordinate, int out[4]) {
@@ -400,6 +412,13 @@ static void event_state(ax_server *s, const char *path, const char *state, bool 
     if (r.okay)
         dbus_connection_send(s->connection, r.message, NULL);
     dbus_message_unref(r.message);
+}
+static void event_value(ax_server *s,const char *path,double value) {
+    ax_reply r={.message=dbus_message_new_signal(path,AX_PREFIX "Event.Object","PropertyChange"),.okay=true};
+    if(!r.message)return;
+    dbus_message_iter_init_append(r.message,&r.root);text(&r,&r.root,"accessible-value");number(&r,&r.root,0);number(&r,&r.root,0);
+    DBusMessageIter scalar;open_container(&r,&r.root,DBUS_TYPE_VARIANT,"d",&scalar);basic(&r,&scalar,DBUS_TYPE_DOUBLE,&value);close_container(&r,&r.root,&scalar);
+    empty_properties(&r,&r.root);if(r.okay)dbus_connection_send(s->connection,r.message,NULL);dbus_message_unref(r.message);
 }
 static void event_bounds(ax_server *s, const char *path, ps_a11y_native *w,
                          const ps_a11y_node *node) {
@@ -477,6 +496,11 @@ static const char *action_xml =
     "type='i' direction='in'/><arg type='s' direction='out'/></method><method "
     "name='GetActions'><arg type='a(sss)' direction='out'/></method><method name='DoAction'><arg "
     "type='i' direction='in'/><arg type='b' direction='out'/></method></interface>";
+static const char *value_xml =
+    "<interface name='org.a11y.atspi.Value'><property name='version' type='u' access='read'/>"
+    "<property name='MinimumValue' type='d' access='read'/><property name='MaximumValue' type='d' access='read'/>"
+    "<property name='MinimumIncrement' type='d' access='read'/><property name='CurrentValue' type='d' access='readwrite'/>"
+    "<property name='Text' type='s' access='read'/></interface>";
 static const char *properties_xml =
     "<interface name='org.freedesktop.DBus.Properties'><method name='Get'><arg type='s' "
     "direction='in'/><arg type='s' direction='in'/><arg type='v' direction='out'/></method><method "
@@ -515,7 +539,7 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
         dbus_message_has_signature(message, "")) {
         char xml[8192];
         int length = snprintf(
-            xml, sizeof xml, "<node>%s%s%s%s%s</node>",
+            xml, sizeof xml, "<node>%s%s%s%s%s%s</node>",
             cache ? "<interface name='org.a11y.atspi.Cache'><property name='version' type='u' "
                     "access='read'/><method name='GetItems'><arg type='a((so)(so)(so)iiassusau)' "
                     "direction='out'/></method></interface>"
@@ -523,7 +547,8 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             cache ? ""
             : !w  ? application_xml
                   : component_xml,
-            cache || !node.id || !ps_a11y_actionable(node.role) ? "" : action_xml, properties_xml,
+            cache || !node.id || !ps_a11y_actionable(node.role) ? "" : action_xml,
+            cache || !node.id || node.role!=PS_A11Y_SLIDER ? "" : value_xml,properties_xml,
             "<interface name='org.freedesktop.DBus.Introspectable'><method name='Introspect'><arg "
             "type='s' direction='out'/></method></interface>");
         if (length < 0 || (size_t)length >= sizeof xml)
@@ -583,9 +608,11 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
                                          NULL};
             const char *action[] = {"version", "NActions", NULL};
             const char *component[] = {"version", NULL};
+            const char *scalar[] = {"version","MinimumValue","MaximumValue","MinimumIncrement","CurrentValue","Text",NULL};
             const char **names = !strcmp(property_iface, AX_PREFIX "Application") ? application
                                  : !strcmp(property_iface, AX_PREFIX "Action")    ? action
                                  : !strcmp(property_iface, AX_PREFIX "Component") ? component
+                                 : !strcmp(property_iface, AX_PREFIX "Value") ? scalar
                                                                                   : accessible;
             if (cache && !strcmp(property_iface, AX_PREFIX "Cache")) {
                 DBusMessageIter array, entry, value;
@@ -625,7 +652,14 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             if (!cache && !w && !strcmp(property_iface, AX_PREFIX "Application") &&
                 !strcmp(name, "Id") && dbus_message_iter_get_arg_type(&value) == DBUS_TYPE_INT32)
                 dbus_message_iter_get_basic(&value, &s->application_id);
-            else
+            else if(!cache && w && node.id && node.role==PS_A11Y_SLIDER && !strcmp(property_iface,AX_PREFIX "Value") && !strcmp(name,"CurrentValue")) {
+                if(dbus_message_iter_get_arg_type(&value)!=DBUS_TYPE_DOUBLE)failure=DBUS_ERROR_INVALID_ARGS;
+                else {
+                    double scalar;dbus_message_iter_get_basic(&value,&scalar);SDL_LockMutex(w->mutex);
+                    bool accepted=w->visible && ps_a11y_set_value(w->model,node.id,scalar);SDL_UnlockMutex(w->mutex);
+                    if(!accepted)failure=DBUS_ERROR_INVALID_ARGS;
+                }
+            } else
                 failure = DBUS_ERROR_PROPERTY_READ_ONLY;
         } else
             failure = DBUS_ERROR_INVALID_ARGS;
@@ -1036,6 +1070,7 @@ void ps_a11y_native_publish(ps_a11y_native *b, bool changed) {
             if(old && old->focused!=node->focused)event_state(s,node_path,"focused",node->focused);
             if(old && (node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) && old->checked!=node->checked)
                 event_state(s,node_path,"checked",node->checked);
+            if(old && node->role==PS_A11Y_SLIDER && old->value!=node->value)event_value(s,node_path,node->value);
             if (moved || (old && memcmp(old->bounds, node->bounds, sizeof node->bounds)))
                 event_bounds(s, node_path, b, node);
             if (old_visible != b->visible) {

@@ -51,9 +51,12 @@ void nk_sdl_set_ui_size(struct nk_context *ctx, unsigned size);
 enum { PS_UI_LAYOUT_MAGIC = 0x50534C59u };
 typedef unsigned (*ps_ui_a11y_hook)(void *user,const char *window,const char *label,
                                 int role,const float bounds[4],bool enabled,bool checked,const char *group,bool activated);
+typedef unsigned (*ps_ui_a11y_range_hook)(void *user,const char *window,const char *label,
+                                const float bounds[4],bool enabled,double values[4]);
 typedef struct {
     unsigned magic,ui_size;
     ps_ui_a11y_hook accessibility;
+    ps_ui_a11y_range_hook accessibility_range;
     void *accessibility_user;
     const struct nk_window *accessibility_route_window;
     bool accessibility_route_allowed;
@@ -66,6 +69,7 @@ nk_bool ps_ui_option_label(struct nk_context *ctx,const char *group,const char *
 nk_bool ps_ui_checkbox_named(struct nk_context *ctx,const char *text,const char *name,nk_bool *active);
 nk_bool ps_ui_checkbox_label(struct nk_context *ctx,const char *text,nk_bool *active);
 nk_bool ps_ui_button_label(struct nk_context *ctx,const char *text);
+nk_bool ps_ui_slider_named(struct nk_context *ctx,const char *name,float minimum,float *value,float maximum,float increment);
 void ps_ui_label(struct nk_context *ctx,const char *text,nk_flags alignment);
 void ps_ui_label_colored(struct nk_context *ctx,const char *text,nk_flags alignment,struct nk_color color);
 /* Keep short label/control rows readable with enlarged UI fonts. Spacer and

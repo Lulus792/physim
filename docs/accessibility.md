@@ -6,6 +6,34 @@ und beide Dokumentationswege bleibt verfügbar. F10 öffnet die Hauptmenüs;
 Pfeiltasten, Tab/Shift+Tab und Enter bedienen die jeweils dokumentierten Bereiche.
 UI-Schriftgrößen von 16, 18, 20 und 22 Pixeln sind unabhängig von der Codegröße.
 
+## Benannte Regler
+
+Die sechs Regler der [räumlichen Pendelerklärung](spatial-explanations.md)
+und die Kamera- und Laufpositionsregler veröffentlichen einen stabilen Namen, aktuellen Wert, Minimum, Maximum und
+Schrittweite. Namen bleiben beim Ändern der Werte gleich. Die Grenzen und Werte
+sind endlich; unzulässige Werte werden abgewiesen. Eine native Änderung wird erst
+beim nächsten Besuch desselben sichtbaren, aktiven Controls übernommen. Entfernte,
+veraltete, verdeckte und deaktivierte Ziele können keine Werte verändern.
+
+macOS verwendet die Rolle `AXSlider`, numerische Werte und Grenzen sowie
+Erhöhen, Verringern und Wertsetzen. Die tatsächliche AppKit-Gegenprobe prüft
+diese Aktionen und zurückbehaltene Referenzen. Nativ fokussierte Regler lassen
+sich außerdem mit Pfeiltasten verändern. Grundlage ist Apples
+[Slider-Protokoll](https://developer.apple.com/documentation/appkit/nsaccessibilityslider?language=objc).
+
+Linux ergänzt die Rolle Slider und das standardisierte
+[AT-SPI Value-Interface](https://docs.gtk.org/atspi2/iface.Value.html) mit
+`MinimumValue`, `MaximumValue`, `MinimumIncrement`, `CurrentValue` und einer
+Wertänderungsmitteilung. Der unabhängige PyAT-SPI-Prüfer kontrolliert echte
+Wertlieferung, zwei Fenster sowie falsche und deaktivierte Anfragen. Die
+aktuelle Ausführung dieser Erweiterung unter Linux bleibt bis zum abgeschlossenen
+CI-Nachweis offen. Eine konfigurierte Prüfung ersetzt keinen ausgeführten Test.
+
+Das portable Modell besteht die neuen Range-Grenzfälle unter ASan/UBSan.
+Die native macOS-/UI-Gegenprobe und die beiden Dokumentationsgrößen bestehen
+vier tatsächlich ausgeführte Fälle. Andere numerische Eingabefelder, virtuelle
+Listen und praktische VoiceOver-/Orca-Abnahme bleiben eigene Aufgaben.
+
 ## Nativer macOS-Einstieg
 
 Die macOS-App veröffentlicht sichtbare einfache Schaltflächen, Checkboxen und Beschriftungen

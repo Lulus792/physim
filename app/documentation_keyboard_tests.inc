@@ -146,17 +146,22 @@ static void documentation_media_test_frame(app *a,int *stage,int *code,const cha
            fabs(bob.y+a->doc_length*cos(a->doc_theta))<1e-12;
         *capture="docs-native-3d.bmp";break;
     }
-    case 8: MEDIA_KEY(SDLK_HOME);break;
+    case 8:
+        if(!documentation_test_seek(a,DOC_VISUAL+block*16+8,stage,code))return;MEDIA_KEY(SDLK_RETURN);break;
     case 9:
+        ok=a->doc_pitch==(float)PS_PI/2 && a->doc_yaw==0;
+        *capture="docs-native-top.bmp";
+        if(!documentation_test_seek(a,DOC_VISUAL+block*16+10,stage,code))return;MEDIA_KEY(SDLK_HOME);break;
+    case 10:
         ok=a->doc_yaw==.58f && a->doc_pitch==.23f && a->doc_zoom==5;
         open_documentation(a,guide);break;
-    case 10:
+    case 11:
         diagram=-1;for(size_t i=0;i<a->documentation->count;i++)if(a->documentation->blocks[i].kind==PS_DOC_IMAGE && documentation_media_kind(a->documentation->text+a->documentation->blocks[i].target)==1)diagram=(int)i;
         ok=diagram>=0;a->doc_jump_block=diagram;break;
-    case 11:
+    case 12:
         ok=a->doc_diagram_bounds.w>100 && a->doc_diagram_bounds.h==320;
         *capture="docs-native-workflow.bmp";break;
-    case 12:
+    case 13:
         ok=!memcmp(&a->scene,&original,sizeof original) && a->simulation_time==original_time;
         a->quitting=true;printf("DOCUMENTATION NATIVE MEDIA SELF-TEST: %s\n",*code || !ok?"FAILED":"PASSED");break;
     }

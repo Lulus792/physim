@@ -51,7 +51,7 @@ static void timeline_controls(app *a) {
         timeline_select(a, selected);
     }
     float position = count > 1 ? (float)selected / (count - 1) : 0;
-    if (nk_slider_float(ui, 0, &position, 1, count > 1 ? 1.f / (count - 1) : 1)) {
+    if (ps_ui_slider_named(ui,"Position im gespeicherten Lauf",0,&position,1,count>1?1.f/(count-1):1)) {
         a->timeline_playing = false;
         timeline_select(a, (uint32_t)lroundf(position * (count ? count - 1 : 0)));
     }

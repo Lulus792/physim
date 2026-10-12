@@ -454,17 +454,18 @@ static bool documentation_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
     if(focus>=DOC_VISUAL) {
         int part=(focus-DOC_VISUAL)%16;
         float *values[]={&a->doc_theta,&a->doc_length,&a->doc_omega,&a->doc_yaw,&a->doc_pitch,&a->doc_zoom};
-        const float minimum[]={-1.2f,.5f,-3,-(float)PS_PI,-1.5f,2};
-        const float maximum[]={1.2f,3,3,(float)PS_PI,1.5f,12};
+        const float minimum[]={-1.2f,.5f,-3,-(float)PS_PI,-(float)PS_PI/2,2};
+        const float maximum[]={1.2f,3,3,(float)PS_PI,(float)PS_PI/2,12};
         const float step[]={.01f,.05f,.05f,.08f,.08f,.2f};
-        if(part<6 && direction)*values[part]=fmaxf(minimum[part],fminf(maximum[part],*values[part]+direction*step[part]));
+        int scalar_direction=key->key==SDLK_LEFT || key->key==SDLK_DOWN?-1:key->key==SDLK_RIGHT || key->key==SDLK_UP?1:0;
+        if(part<6 && scalar_direction)*values[part]=fmaxf(minimum[part],fminf(maximum[part],*values[part]+scalar_direction*step[part]));
         else if(activate && part>=6 && part<=8) {
             a->doc_yaw=part==7?.58f:0;a->doc_pitch=part==8?(float)PS_PI/2:part==7?.23f:0;
             a->doc_zoom=5;
         } else if(activate && part==9)a->doc_orthographic=!a->doc_orthographic;
         else if(part==10) {
             if(key->key==SDLK_LEFT || key->key==SDLK_RIGHT)a->doc_yaw=remainderf(a->doc_yaw+direction*.08f,2*(float)PS_PI);
-            if(key->key==SDLK_UP || key->key==SDLK_DOWN)a->doc_pitch=fmaxf(-1.5f,fminf(1.5f,a->doc_pitch-direction*.08f));
+            if(key->key==SDLK_UP || key->key==SDLK_DOWN)a->doc_pitch=fmaxf(-(float)PS_PI/2,fminf((float)PS_PI/2,a->doc_pitch-direction*.08f));
             if(key->key==SDLK_PAGEUP || key->key==SDLK_PAGEDOWN)a->doc_zoom=fmaxf(2,fminf(12,a->doc_zoom+(key->key==SDLK_PAGEUP?-.2f:.2f)));
             if(key->key==SDLK_HOME){a->doc_yaw=.58f;a->doc_pitch=.23f;a->doc_zoom=5;}
         }
