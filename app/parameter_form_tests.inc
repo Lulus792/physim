@@ -2,10 +2,16 @@ static bool parameter_form_test_start(app *a,const char *root,const char *mode) 
     bool language=strstr(mode,"-phys")!=NULL,read=strstr(mode,"-read")!=NULL;char path[4096];
     join(path,sizeof path,root,"preferences.bin");preferences_start(a,path);
     join(a->project_input,sizeof a->project_input,root,"project");
-    if(read)open_project(a);
+    if(read) {
+        open_project(a);
+        if(a->parameters.count!=2 || !a->parameters.entries[0].defined ||
+           !a->parameters.units[0].declared || strcmp(a->parameters.units[0].symbol,"cm") ||
+           a->parameters.entries[0].default_value!=.5 || a->parameters.entries[0].minimum!=.1 ||
+           a->parameters.entries[0].maximum!=2 || strcmp(a->parameters.selected[0],"75"))return false;
+    }
     else {
         a->example=language?8:0;a->template_analysis_language=language?1:0;new_project(a);
-        join(path,sizeof path,a->root,language?"tests/fixtures/language/parameter_form.phys":"tests/fixtures/parameter_form.c");
+        join(path,sizeof path,root,language?"parameter_form.phys":"parameter_form.c");
         if(!load_editor(&a->experiment,path))return false;a->dirty=true;
         select_build_profile(a,1);a->dt=.01;a->project_settings_dirty=true;
     }
@@ -58,9 +64,9 @@ static void parameter_form_test_frame(app *a,const char *mode,int *stage,int *co
         ok=!strcmp(a->parameters.selected[0],"9") && ps_parameter_catalog_value(&a->parameters,0,&distance)==PS_INVALID && a->project_settings_dirty;
         *capture="parameters-invalid.bmp";test_window_key_mod(a->window,SDLK_F6,0);break;
     case 10:ok=!a->runner.running && !a->last_run[0] && a->built;break;
-    case 11:test_mouse(a,a->parameter_default_bounds[0],true);break;
+    case 11:scene_camera_2d(a,true);test_mouse(a,a->parameter_default_bounds[0],true);break;
     case 12:test_mouse(a,a->parameter_default_bounds[0],false);break;
-    case 13:ok=!strcmp(a->parameters.selected[0],"50") && ps_parameter_catalog_value(&a->parameters,0,&distance)==PS_OK && distance==.5;break;
+    case 13:ok=a->camera_2d && !strcmp(a->parameters.selected[0],"50") && ps_parameter_catalog_value(&a->parameters,0,&distance)==PS_OK && distance==.5;break;
     case 14:test_mouse(a,a->parameter_input_bounds[0],true);break;
     case 15:test_mouse(a,a->parameter_input_bounds[0],false);break;
     case 16:test_key(a,SDLK_A);break;

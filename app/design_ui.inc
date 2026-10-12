@@ -158,9 +158,7 @@ static void parameter_form_view(app *a) {
             if (strcmp(previous, a->parameters.selected[i]))
                 a->project_settings_dirty = true;
             a->parameter_default_bounds[i]=nk_widget_bounds(ui);
-            a->camera_preset_bounds[0]=nk_widget_bounds(ui);
-        if (nk_button_label(ui, "Standard")) {
-            a->camera_2d=false;
+            if (nk_button_label(ui, "Standard")) {
                 snprintf(a->parameters.selected[i], sizeof a->parameters.selected[i], "%.17g",
                          parameter->default_value/scale);
                 a->project_settings_dirty = true;

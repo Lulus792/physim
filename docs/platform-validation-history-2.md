@@ -1218,3 +1218,111 @@ Nachweise. Eine neue Gesamtplattformabnahme wird daraus nicht abgeleitet.
 
 Die Dokumentations-/Referenzprüfung dieses Ergebnisberichts besteht **2/2**,
 `run-cp0x8cjh`, `build/current-full-0cab455-record-docs-mac.log`.
+
+## Neun ausgelieferte Materialeigenschaften (PP-0393)
+
+C-/Physim-Programme demonstrieren Dichte, dynamische/kinematische Viskosität,
+Reibung, Restitution, Wärmeleitfähigkeit, spezifische Wärmekapazität,
+elektrische Leitfähigkeit und Permittivität als explizite synthetische Daten.
+SI-Algebra und separate kanonische Dimensionen, Quelle/T/P-Bereich, beide
+Bereichsränder und innerer Punkt, Fehleratomizität, physikalische
+Konsumentenregeln und ν=μ/ρ sind geprüft. Die Programme werden bei
+`--examples` und jeder SDK-Installation als ausführbare Beispiele geliefert.
+
+Intel macOS/AppleClang Release:
+
+- Beispiel-/Eigenschafts-/Dokumentations-/Kitgruppen **5/5**, `run-llrq_1hy`,
+  `build/current-material-property-install-mac.log`.
+- Explizite Bytekopie für das Fehleratomizitätsorakel, **1/1** `run-jvv0wrum`,
+  `build/current-material-property-atomic-mac.log`; finale SDK-/Beispiel-/
+  Kitprüfung **2/2** `run-id2jqwt8`,
+  `build/current-material-property-final-install-mac.log`.
+- Unabhängiges **205**-Dateien-Kit, verschobenes SDK, **4/4** Befehle und
+  **162** reale Eigenschaftsabfragen über gelieferte Binärdateien und aus dem
+  Paket mit installierter/neu gebauter Core-Bibliothek kompilierte Programme:
+  `build/current-material-property-final-sdk-verify-mac.log`, Verbraucher
+  `build/current-material-property-final-sdk-consumer-mac/Native SDK ä mn6m_uw5`.
+
+Die [gezielte 0cab455-CI](platform-validation-history.md#gezielte-ci-am-stand-0cab455)
+ist aus vollständigen Logs geprüft; sie enthält diese späteren Beispiele noch
+nicht. Der Linux-Sanitizerfokus wird um Materialbeispiele und beide 2D-Kamerafälle
+erweitert und besteht nun auf Linux/GCC und Linux/Clang mit 4/4 nativen und
+9/9 grafischen Fällen; die vollständigen Logs stehen im verlinkten Archiv. Die
+ganze Plattformabnahme bleibt offen. Aktueller Audit: **124 implemented**,
+**14 incomplete**, **393 unverified** bei 531 unveränderten Originaltexten und
+ursprünglicher Planprüfsumme; `completion_proven=false`.
+
+Die abschließenden Dokumentations-/Referenz-/Kit-/Beispielgruppen bestehen
+**4/4**, `run-rrnk1_xf`, `build/current-material-property-final-docs-mac.log`.
+
+## Projekt-Anzeigevorgaben aus der Oberfläche
+
+**Als Projektvorgabe speichern** übernimmt 2D/3D, Ebene, Projektion und die
+fünf Darstellungsschalter in die optionale Projektdateigruppe. Der Job hält
+einen eigenen Snapshot und speichert außerhalb der UI-Schleife. Nach Erfolg
+wird der Manifest-Snapshot aktualisiert; externe Bearbeitung bleibt als
+Konflikt erhalten. Ungespeicherte Quellen, Quellenrevision und Buildprofil
+werden dabei nicht gespeichert. Projekte ohne Anzeigegruppe erhalten beim
+Öffnen die globalen Vorgaben statt der Ansicht des zuvor geöffneten Projekts.
+
+Intel macOS/AppleClang Release besteht **4/4** reale Fensterabläufe:
+`run-y5e1oghs`, `build/current-project-display-sized-button-ui-mac.log`.
+Die bestehenden Kamerafälle und neue Speichern-/Neustart-/Konfliktfälle laufen
+jeweils mit 16 und 22 Pixeln. Die neue Schaltfläche bekommt bei großer Schrift
+ausreichend Höhe für ihren umbrochenen Text. Die Tests verwenden stabile
+Maus-Drückpositionen und warten auf die Verarbeitung von Scrollereignissen.
+Das wiedergeöffnete 22-Pixel-Fenster wurde zusätzlich visuell geprüft.
+
+Die abschließende SDK-Installation besteht **5/5** native Projektdatei-,
+Anzeigegruppen-, Dokumentations-, Referenz- und Kit-Prüfungen,
+`run-75srv2dd`, `build/current-project-display-verified-install-mac.log`.
+Das frische unabhängige **205**-Dateien-Kit prüft die verschobene Installation
+in **2/2** Befehlen mit je drei App-Prozessen (Speichern, Neustart, Konflikt):
+`build/current-project-display-sdk-verify-mac.log`, Consumer
+`build/current-project-display-sdk-consumer-mac/Native SDK ä srowz6sa`.
+Die Quelldateien bleiben in allen Prozessen bytegleich zur SDK-Vorlage.
+
+Die [Linux-Sanitizer-CI für cb2adb1](https://github.com/PhysicSimulator/physim/actions/runs/38213014749)
+besteht tatsächlich auf Clang und GCC: jeweils **5/5** native und **11/11**
+grafische Fälle, einschließlich beider Kamera- und Projektvorgaben-Schriftgrößen.
+Vollständige Logs: `build/current-ci-cb2adb1-job-114691236885.log`
+(Clang: `run-hk9dp0o7`, `run-qy6vnpbi`) und
+`build/current-ci-cb2adb1-job-114691237117.log`
+(GCC: `run-e00r6cnh`, `run-1njtws7z`). ASan/UBSan ist aktiviert;
+LeakSanitizer ist für die GUI deaktiviert. Der nachfolgende Standardkamera-Fix
+gehört nicht zu diesem CI-Stand. Der vollständige
+Projektformatblock PP-0439 und die gesamte Plattform-/Produktabnahme sind
+durch die Anzeigevorgaben allein nicht abgeschlossen.
+
+Die abschließende Prüfung dieser ergänzten Nachweisseiten besteht **3/3**
+(Dokumentation, Referenzen, unabhängiges Kit), `run-sr_7mkbg`,
+`build/current-project-display-record-docs-mac.log`.
+
+## Standardkamera und freie 3D-Bedienung (PP-0294)
+
+Die Schaltfläche **Standard** beendet jetzt wie **Alt + Pos1** den 2D-Modus.
+Zuvor setzte sie nur Winkel, Zoom und Ziel zurück; anschließendes Verschieben
+verwendete weiter die Achsen der alten 2D-Ebene. Die tatsächliche Schaltfläche
+wird nun aus der XZ-Ebene gedrückt und ihre freie Standardkamera geprüft.
+
+Die erweiterten SDL-Abläufe prüfen danach Alt-Pfeil-Orbit, Alt-Shift-Pan,
+rechte Mausbewegung für Orbit, mittlere Mausbewegung für Pan und beide
+Tastatur-Zoomrichtungen. Die bestehenden XY/YZ/XZ-, Perspektiv-/Orthografie-,
+Mausrad-, Daten-/Szenenerhalt- und Projektvorgabenfälle bleiben enthalten.
+Intel macOS/AppleClang Release besteht **4/4**, `run-10amk5si`,
+`build/current-camera-standard-ui-mac.log`. Die frische SDK-Installation besteht **3/3** Dokumentations-/Referenz-/Kitfälle,
+`run-6o9he8hp`, `build/current-camera-standard-install-mac.log`.
+Die verschobene SDK-Gegenprobe besteht **2/2** Befehle (16/22 Pixel),
+`build/current-camera-standard-sdk-verify-mac.log`, Consumer
+`build/current-camera-standard-sdk-consumer-mac/Native SDK ä tj_nlntt`.
+Sie enthält auch die neuen 3D-Eingaben und ihre zusätzliche Aufnahme.
+Die aktuelle gesamte Plattformmatrix bleibt separat offen.
+
+Die [Linux-Sanitizer-CI für e3ae5b5](https://github.com/PhysicSimulator/physim/actions/runs/38213449715)
+besteht auf GCC und Clang mit je **5/5** nativen und **11/11** grafischen Fällen.
+Die vollständigen Logs belegen beide erweiterten 3D-Kamerafälle:
+`build/current-ci-e3ae5b5-job-114692622854.log`
+(GCC: `run-m345h3ht`, `run-hb7i4584`) und
+`build/current-ci-e3ae5b5-job-114692623053.log`
+(Clang: `run-23aydnfh`, `run-jeyk_gcr`). Die nachfolgende Modul-/
+Parameterdefinitionserweiterung gehört nicht zu diesem Stand.

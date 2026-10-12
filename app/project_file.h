@@ -31,13 +31,20 @@ typedef struct {
     char breakpoints[PS_STEP_BREAKPOINT_TEXT];
     ps_parameter_catalog parameters;
     ps_project_display display;
+    char modules[1024]; /* Read-only optional stable module requirements; settings save preserves the list. */
 } ps_project_settings;
+/* Syntax validation only. A builder checks names against its installed modules. */
+bool ps_project_modules_valid(const char *modules);
 
 /* Versions 1/2, UTF-8, LF or CRLF. Version 2 requires kind=analysis
  * or kind=experiment. kind=analysis selects an analysis-only
  * project without an experiment entry; version 1 defaults to experiment.
  * Absent source/profile entries retain the legacy
  * defaults main.c, analysis.c, Debug, 0.005 seconds, seed 42, speed 1.
+ * Optional parameter_definition.<name> rows use runner-v2 tab fields, without
+ * the name. Stored parameter.<name> values remain SI; definitions restore units,
+ * defaults, bounds and descriptions before any rebuild. Selections must match
+ * definitions and bounds. Absent definitions retain legacy unbounded selections.
  * Failed reads leave settings unchanged. */
 /* Main-thread generation for newly created projects; not a simulation RNG. */
 void ps_project_id_generate(char out[33]);

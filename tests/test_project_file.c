@@ -278,6 +278,75 @@ int main(int argc, char **argv) {
     CHECK(write_text(breakpoint_path,"physim_project=2\nkind=experiment\nsimulation.breakpoints=3\nsimulation.breakpoints=7\n"));
     before=restored;
     CHECK(ps_project_settings_read(breakpoint_path,&restored)==PS_DOCUMENT_INVALID && !memcmp(&before,&restored,sizeof before));
+    /* Definitions survive reopening before any module executes, including scaled
+     * units and a description containing manifest punctuation and UTF-8. */
+    const char *definition_original="physim_project=2\r\nkind=experiment\r\nmodules=core,units,properties\r\n# schema α\r\nfuture.option=keep\r\n";
+    ps_text_document document={0};
+    CHECK(SDL_RemovePath(backup)); /* Remove the intentional backup-failure directory above. */
+    CHECK(write_text(path,definition_original));
+    CHECK(ps_project_settings_read(path,&settings)==PS_DOCUMENT_OK && !strcmp(settings.modules,"core,units,properties"));
+    CHECK(ps_parameter_catalog_parse(&settings.parameters,"PHYSIM_PARAMETERS_2\n2\n"
+        "length\t0.29\t0.1\t2\tLänge = a,b; cm\tcm\t0.01\t1,0,0,0,0,0,0\n"
+        "gain\t2\t-4\t5\tGain\t\t1\t0,0,0,0,0,0,0\n"));
+    strcpy(settings.parameters.selected[0],"75");strcpy(settings.parameters.selected[1],"-0");
+    CHECK(ps_project_settings_save(path,&settings)==PS_DOCUMENT_OK);
+    CHECK(ps_project_settings_read(path,&restored)==PS_DOCUMENT_OK && restored.parameters.count==2);
+    CHECK(restored.parameters.entries[0].defined && restored.parameters.entries[0].default_value==.29 &&
+        restored.parameters.entries[0].minimum==.1 && restored.parameters.entries[0].maximum==2 &&
+        !strcmp(restored.parameters.entries[0].description,"Länge = a,b; cm") &&
+        restored.parameters.units[0].declared && !strcmp(restored.parameters.units[0].symbol,"cm") &&
+        restored.parameters.units[0].dimension[0]==1 && restored.parameters.units[0].scale==.01 &&
+        !strcmp(restored.parameters.selected[0],"75"));
+    double selection;CHECK(ps_parameter_catalog_value(&restored.parameters,0,&selection)==PS_OK && selection==.75);
+    CHECK(ps_parameter_catalog_value(&restored.parameters,1,&selection)==PS_OK && selection==0 && signbit(selection));
+    CHECK(ps_text_document_open(&document,path)==PS_DOCUMENT_OK);
+    CHECK(strstr(document.saved,"parameter_definition.length=0.28999999999999998\t") &&
+        strstr(document.saved,"future.option=keep\r\n") && !strstr(document.saved,"\nparameter_definition.length=0.29\t"));
+    CHECK(ps_project_settings_save(path,&restored)==PS_DOCUMENT_OK && matches(path,document.saved) && matches(backup,definition_original));
+    ps_text_document_destroy(&document);
+    CHECK(ps_text_document_open(&document,path)==PS_DOCUMENT_OK);
+    ps_project_display display={.defined=true,.planar=true,.plane=2,.flags=PS_PROJECT_VIEW_FLAGS};
+    CHECK(ps_project_display_save_document(&document,&display)==PS_DOCUMENT_OK);
+    CHECK(ps_project_settings_read(path,&settings)==PS_DOCUMENT_OK && settings.display.defined &&
+        settings.parameters.entries[0].default_value==.29 && settings.parameters.units[0].scale==.01 &&
+        ps_parameter_catalog_value(&settings.parameters,0,&selection)==PS_OK && selection==.75);
+    ps_text_document_destroy(&document);
+    /* Updating a definition replaces it once; malformed in-memory schemas never write. */
+    restored.parameters.entries[0].maximum=3;
+    CHECK(ps_project_settings_save(path,&restored)==PS_DOCUMENT_OK);
+    CHECK(ps_project_settings_read(path,&settings)==PS_DOCUMENT_OK && settings.parameters.entries[0].maximum==3);
+    CHECK(ps_text_document_open(&document,path)==PS_DOCUMENT_OK);
+    restored.parameters.entries[0].minimum=4;
+    CHECK(ps_project_settings_save(path,&restored)==PS_DOCUMENT_INVALID && matches(path,document.saved));
+    ps_text_document_destroy(&document);
+    const char *bad_schemas[]={
+        "modules=core,core\n", "modules=core,/tmp/units\n", "modules=core,\n", "modules=core\nmodules=units\n",
+        "parameter_definition.x=1\t0\t2\tName\t\t1\t0,0,0,0,0,0,0\nparameter.x=3\n",
+        "parameter_definition.x=1\t0\t2\tName\t\t1\t0,0,0,0,0,0,0\nparameter.y=1\n",
+        "parameter_definition.x=1\t0\t2\tName\tcm\t0\t1,0,0,0,0,0,0\n",
+        "parameter_definition.x=1\t0\t2\tName\t\t1\t0,0,0,0,0,0,0\nparameter_definition.x=1\t0\t2\tName\t\t1\t0,0,0,0,0,0,0\n"
+    };
+    for(unsigned i=0;i<sizeof bad_schemas/sizeof *bad_schemas;i++) {
+        char bad_manifest[2048];snprintf(bad_manifest,sizeof bad_manifest,"physim_project=2\nkind=experiment\n%s",bad_schemas[i]);
+        CHECK(write_text(path,bad_manifest));before=settings;
+        CHECK(ps_project_settings_read(path,&settings)==PS_DOCUMENT_INVALID && !memcmp(&before,&settings,sizeof before));
+    }
+    CHECK(ps_project_modules_valid("core,units,extension_future"));
+    CHECK(!ps_project_modules_valid("../core") && !ps_project_modules_valid("core,,units") && !ps_project_modules_valid(""));
+    char maximum_definitions[8192];size_t maximum_used=(size_t)snprintf(maximum_definitions,sizeof maximum_definitions,
+        "PHYSIM_PARAMETERS_2\n%d\n",PS_MAX_PARAMETERS);
+    for(unsigned i=0;i<PS_MAX_PARAMETERS;i++) {
+        int n=snprintf(maximum_definitions+maximum_used,sizeof maximum_definitions-maximum_used,
+            "parameter%u\t1\t-2\t3\tMaximum catalog entry %u\t\t1\t0,0,0,0,0,0,0\n",i,i);
+        CHECK(n>0 && (size_t)n<sizeof maximum_definitions-maximum_used);maximum_used+=(size_t)n;
+    }
+    CHECK(write_text(path,definition_original) && ps_project_settings_read(path,&settings)==PS_DOCUMENT_OK);
+    CHECK(ps_parameter_catalog_parse(&settings.parameters,maximum_definitions));
+    CHECK(ps_project_settings_save(path,&settings)==PS_DOCUMENT_OK && ps_project_settings_read(path,&restored)==PS_DOCUMENT_OK);
+    CHECK(restored.parameters.count==PS_MAX_PARAMETERS);
+    for(unsigned i=0;i<PS_MAX_PARAMETERS;i++)CHECK(restored.parameters.entries[i].defined &&
+        restored.parameters.entries[i].minimum==-2 && restored.parameters.entries[i].maximum==3 &&
+        ps_parameter_catalog_value(&restored.parameters,i,&selection)==PS_OK && selection==1);
     puts("Project defaults, profiles, parameters, preserved extensions, invalid input and write "
          "failures passed.");
     return 0;

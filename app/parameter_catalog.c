@@ -47,6 +47,22 @@ double ps_parameter_catalog_display(const ps_parameter_catalog *catalog,uint32_t
 static bool same_number(double a,double b) {
     return a==b && (a!=0 || !!signbit(a)==!!signbit(b));
 }
+bool ps_parameter_catalog_definition(const ps_parameter_catalog *catalog,uint32_t index,char *text,size_t capacity) {
+    if(!catalog || !text || !capacity || index>=catalog->count || index>=PS_MAX_PARAMETERS)return false;
+    const ps_parameter *p=&catalog->entries[index];const ps_parameter_unit *u=&catalog->units[index];
+    if(!p->defined || !memchr(p->name,0,sizeof p->name) || !memchr(p->description,0,sizeof p->description) ||
+       !memchr(u->symbol,0,sizeof u->symbol) || (u->declared && !u->symbol[0]))return false;
+    char line[512];
+    int n=snprintf(line,sizeof line,"%.17g\t%.17g\t%.17g\t%s\t%s\t%.17g\t%d,%d,%d,%d,%d,%d,%d",
+        p->default_value,p->minimum,p->maximum,p->description,u->declared?u->symbol:"",u->declared?u->scale:1,
+        u->declared?u->dimension[0]:0,u->declared?u->dimension[1]:0,u->declared?u->dimension[2]:0,
+        u->declared?u->dimension[3]:0,u->declared?u->dimension[4]:0,u->declared?u->dimension[5]:0,u->declared?u->dimension[6]:0);
+    if(n<0 || (size_t)n>=sizeof line || (size_t)n>=capacity)return false;
+    char description[640];n=snprintf(description,sizeof description,"PHYSIM_PARAMETERS_2\n1\n%s\t%s\n",p->name,line);
+    ps_parameter_catalog check={0};
+    if(n<0 || (size_t)n>=sizeof description || !ps_parameter_catalog_parse(&check,description))return false;
+    memcpy(text,line,strlen(line)+1);return true;
+}
 ps_result ps_parameter_catalog_input(const ps_parameter_catalog *catalog,uint32_t index,
                                      const char *text,double *value) {
     if (!catalog || !value || index >= catalog->count || index >= PS_MAX_PARAMETERS)

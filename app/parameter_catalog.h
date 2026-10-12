@@ -22,4 +22,9 @@ ps_result ps_parameter_catalog_input(const ps_parameter_catalog *catalog,uint32_
                                      const char *text,double *value);
 double ps_parameter_catalog_display(const ps_parameter_catalog *catalog,uint32_t index,
                                       double si_value);
+/* One complete definition in the runner's v2 tab-separated format, excluding
+ * the name. Defaults/bounds are SI; declared units carry symbol/scale/dimensions.
+ * No raw structure bytes or local paths are serialized. */
+bool ps_parameter_catalog_definition(const ps_parameter_catalog *catalog,uint32_t index,
+                                     char *text,size_t capacity);
 #endif

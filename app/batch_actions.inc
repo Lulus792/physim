@@ -12,9 +12,9 @@ static int batch_worker(void *user) {
 }
 static void start_batch(app *a) {
     if(a->analysis_only){status(a,"Für Monte Carlo ein Experimentprojekt öffnen.");return;}
-    if (a->project_settings_dirty)
+    if (a->project_settings_dirty || a->project_definitions_dirty)
         save_project(a);
-    if (a->project_settings_dirty)
+    if (a->project_settings_dirty || a->project_definitions_dirty)
         return;
     if (a->recovery || !idle(a) || !a->built || a->dirty) {
         status(a, "Zuerst den gespeicherten Experimentcode erfolgreich bauen.");

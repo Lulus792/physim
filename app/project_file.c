@@ -97,12 +97,32 @@ static int display_key(const char *line) {
 bool ps_project_display_valid(const ps_project_display *display) {
     return display && (!display->defined || (display->plane<3 && !(display->flags&~PS_PROJECT_VIEW_FLAGS)));
 }
+bool ps_project_modules_valid(const char *modules) {
+    if(!modules)return false;
+    size_t length=strlen(modules);if(!length || length>=1024)return false;
+    size_t start=0;
+    for(size_t i=0;i<=length;i++) {
+        unsigned char ch=(unsigned char)modules[i];
+        if(ch==',' || !ch) {
+            if(i==start || i-start>47)return false;
+            for(size_t previous=0;previous<start;) {
+                size_t end=previous;while(end<start && modules[end]!=',')end++;
+                if(end-previous==i-start && !memcmp(modules+previous,modules+start,i-start))return false;
+                previous=end+1;
+            }
+            start=i+1;
+        } else if((i==start && !(ch>='a' && ch<='z')) ||
+                  !((ch>='a' && ch<='z') || (ch>='0' && ch<='9') || ch=='_'))return false;
+    }
+    return true;
+}
 static ps_document_result parse(const ps_text_document *document, ps_project_settings *out) {
     if(document->length>256u*1024u)return PS_DOCUMENT_LIMIT;
     ps_project_settings settings = {.timestep = .005, .seed = 42, .speed = 1,
                                     .minimum_timestep=1e-8,.maximum_timestep=.1};
     bool seen[11] = {false},identity_seen[2]={false};
     unsigned display_seen=0;
+    bool modules_seen=false;char definitions[8192]={0};size_t definition_used=0;unsigned definition_count=0;
     size_t position = 0;
     unsigned index = 0, version=1;
     while (position < document->length) {
@@ -205,6 +225,15 @@ static ps_document_result parse(const ps_text_document *document, ps_project_set
                 if(strcmp(entry,"0") && strcmp(entry,"1"))return PS_DOCUMENT_INVALID;
                 if(*entry=='1')settings.display.flags|=1u<<(key-3);
             }
+        } else if(!strncmp(line,"modules=",8)) {
+            if(modules_seen || !ps_project_modules_valid(value+1))return PS_DOCUMENT_INVALID;
+            modules_seen=true;memcpy(settings.modules,value+1,strlen(value+1)+1);
+        } else if(!strncmp(line,"parameter_definition.",21)) {
+            if(!value || definition_count>=PS_MAX_PARAMETERS)return PS_DOCUMENT_INVALID;
+            line[value-line]=0;
+            int n=snprintf(definitions+definition_used,sizeof definitions-definition_used,"%s\t%s\n",line+21,value+1);
+            if(n<0 || (size_t)n>=sizeof definitions-definition_used)return PS_DOCUMENT_LIMIT;
+            definition_used+=(size_t)n;definition_count++;
         } else if (!strncmp(line, "parameter.", 10)) {
             if (!value)
                 return PS_DOCUMENT_INVALID;
@@ -218,6 +247,24 @@ static ps_document_result parse(const ps_text_document *document, ps_project_set
         return PS_DOCUMENT_INVALID;
     if(display_seen && display_seen!=255u)return PS_DOCUMENT_INVALID;
     settings.display.defined=display_seen==255u;
+    if(definition_count) {
+        char description[8256];int n=snprintf(description,sizeof description,"PHYSIM_PARAMETERS_2\n%u\n%s",definition_count,definitions);
+        ps_parameter_catalog restored=settings.parameters;
+        if(n<0 || (size_t)n>=sizeof description || !ps_parameter_catalog_parse(&restored,description))return PS_DOCUMENT_INVALID;
+        /* A stored selection must match a definition and its bounds exactly.
+         * Rebuild discovery may intentionally reset stale selections; file reads must not. */
+        for(uint32_t i=0;i<settings.parameters.count;i++) {
+            double selected;bool found=false;
+            if(ps_parameter_catalog_value(&settings.parameters,i,&selected)!=PS_OK)return PS_DOCUMENT_INVALID;
+            for(uint32_t j=0;j<restored.count;j++)if(!strcmp(settings.parameters.entries[i].name,restored.entries[j].name)) {
+                double actual;if(ps_parameter_catalog_value(&restored,j,&actual)!=PS_OK || selected!=actual ||
+                    (selected==0 && !!signbit(selected)!=!!signbit(actual)))return PS_DOCUMENT_INVALID;
+                found=true;break;
+            }
+            if(!found)return PS_DOCUMENT_INVALID;
+        }
+        settings.parameters=restored;
+    }
     settings.format_version=version;
     *out = settings;
     return PS_DOCUMENT_OK;
@@ -257,7 +304,7 @@ ps_document_result ps_project_settings_save(const char *path, const ps_project_s
         ps_text_document_destroy(&document);
         return result;
     }
-    size_t capacity = document.length + PS_MAX_PARAMETERS * 160 + 1024, used = 0;
+    size_t capacity = document.length + PS_MAX_PARAMETERS * 768 + 1024, used = 0;
     char *text = malloc(capacity);
     if (!text) {
         ps_text_document_destroy(&document);
@@ -271,7 +318,7 @@ ps_document_result ps_project_settings_save(const char *path, const ps_project_s
         if (end < document.length)
             ++end;
         const char *line = document.saved + position;
-        if (strncmp(line, "profile=", 8) && strncmp(line, "parameter.", 10) &&
+        if (strncmp(line, "profile=", 8) && strncmp(line, "parameter.", 10) && strncmp(line,"parameter_definition.",21) &&
             strncmp(line, "simulation.dt=", 14) && strncmp(line, "simulation.seed=", 16) &&
             strncmp(line, "simulation.speed=", 17) && strncmp(line,"simulation.steps=",17) &&
             strncmp(line,"simulation.minimum_dt=",22) && strncmp(line,"simulation.maximum_dt=",22) && strncmp(line,"simulation.breakpoints=",23)) {
@@ -325,6 +372,12 @@ ps_document_result ps_project_settings_save(const char *path, const ps_project_s
             result = PS_DOCUMENT_LIMIT;
         else
             used += (size_t)n;
+        if(result==PS_DOCUMENT_OK && parameters->entries[i].defined) {
+            char definition[512];
+            if(!ps_parameter_catalog_definition(parameters,i,definition,sizeof definition)){result=PS_DOCUMENT_INVALID;break;}
+            n=snprintf(text+used,capacity-used,"parameter_definition.%s=%s%s",parameters->entries[i].name,definition,newline);
+            if(n<0 || (size_t)n>=capacity-used)result=PS_DOCUMENT_LIMIT;else used+=(size_t)n;
+        }
     }
     ps_text_document proposed = {0};
     proposed.saved = text;

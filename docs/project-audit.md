@@ -1314,3 +1314,15 @@ Reale 16/22-Pixel-Eingaben und der verschobene SDK-Verbraucher bestehen
 auf Intel macOS. [Nachweis](platform-validation.md#standardkamera-und-freie-3d-bedienung-pp-0294).
 Aktuell: **125 implemented**, **15 incomplete**, **391 unverified** bei
 allen 531 Originalblöcken. Die gesamte Plattformabnahme bleibt offen.
+
+## Stabile Projektfelder ergänzt
+
+Die konkret dokumentierte Lücke in PP-0439 ist jetzt implementiert:
+Modulanforderungen werden gelesen und vom Builder validiert; vollständige
+Parameterdefinitionen einschließlich SI-Grenzen und Einheiten werden
+persistiert und vor einem erneuten Build wiederhergestellt. Native Grenz-/
+Fehlerprüfungen, echte C-/Physim-Formulare und die verschobene SDK-Gegenprobe
+bestehen lokal. [Nachweise](platform-validation.md#stabile-module-und-parameterdefinitionen-in-der-projektdatei).
+Aktuell: **126 implemented**, **14 incomplete**, **391 unverified** bei
+allen 531 unveränderten Originalblöcken und ursprünglicher Planprüfsumme.
+Die gesamte Plattform- und Produktabnahme bleibt offen.

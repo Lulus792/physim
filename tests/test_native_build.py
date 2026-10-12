@@ -183,6 +183,18 @@ assert "--cc or PHYSIM_CC" in missing_compiler
 if os.name != "nt":
     assert "Visual Studio" not in missing_compiler
 
+# Explicit stable requirements must be checked even when a cached build exists.
+published = {p: (fingerprint(p),p.stat().st_mtime_ns) for p in modules}
+for required, diagnostic in (("core,units,properties",None),
+                              ("core,future_unavailable","Required Physim module is unavailable: future_unavailable"),
+                              ("core,core","Invalid physim.project"),
+                              ("core,/tmp/units","Invalid physim.project")):
+    manifest.write_text(manifest_text+"modules="+required+"\n",encoding="utf-8")
+    output=build(project,success=diagnostic is None)
+    assert diagnostic in output if diagnostic else "Build up to date" in output
+    assert published=={p:(fingerprint(p),p.stat().st_mtime_ns) for p in modules}
+manifest.write_text(manifest_text,encoding="utf-8")
+
 # A held cache lock rejects a second writer; releasing it allows the next build.
 with (out / "build.lock").open("r+b") as lock:
     if os.name != "nt":

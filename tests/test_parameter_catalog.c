@@ -89,5 +89,14 @@ int main(void) {
     CHECK(!ps_parameter_catalog_parse(&tiny,"PHYSIM_PARAMETERS_2\n1\n"
         "length\t0.5\t0\t1\tCannot display prior selection\tm\t1e308\t1,0,0,0,0,0,0\n"));
     CHECK(!memcmp(&tiny,&unchanged,sizeof tiny));
+    char definition[512],output[512];memset(output,'x',sizeof output);
+    CHECK(ps_parameter_catalog_definition(&scaled,0,definition,sizeof definition));
+    CHECK(strstr(definition,"\tcm\t0.01\t1,0,0,0,0,0,0"));
+    CHECK(!ps_parameter_catalog_definition(&scaled,0,output,2) && output[0]=='x');
+    CHECK(!ps_parameter_catalog_definition(&scaled,scaled.count,output,sizeof output) && output[0]=='x');
+    ps_parameter_catalog invalid_definition=scaled;invalid_definition.entries[0].description[0]='\n';
+    CHECK(!ps_parameter_catalog_definition(&invalid_definition,0,output,sizeof output) && output[0]=='x');
+    invalid_definition=scaled;invalid_definition.units[0].symbol[0]=0;
+    CHECK(!ps_parameter_catalog_definition(&invalid_definition,0,output,sizeof output) && output[0]=='x');
     return 0;
 }

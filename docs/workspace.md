@@ -461,6 +461,19 @@ zoomt. **Alt + 2** schaltet zwischen 2D und freier 3D-Kamera um.
 **Standard** oder **Alt + Pos1** stellt die freie Standardkamera wieder her.
 Die Kameraansicht arbeitet mit den bestehenden Szenenobjekten und Messdaten.
 
+Die Projektdatei enthält außerdem die benötigten Physim-Module als Namen
+(`modules=core,units,...`). Der Build prüft deren Verfügbarkeit. Neue
+Experimentprojekte deklarieren alle aktuell gemeinsam verlinkten Core-Module;
+die Liste schränkt den Zugriff auf die Bibliothek nicht ein.
+Nach erfolgreicher Parameterabfrage werden vollständige Definitionen beim
+nächsten Speichern, Laufstart, Projektwechsel oder Beenden mitgeschrieben.
+`parameter_definition.<Name>` enthält SI-Standardwert, Minimum, Maximum,
+Beschreibung, Anzeigeeinheit, Skalierung und sieben SI-Dimensionen, durch
+Tabulatoren getrennt. `parameter.<Name>` enthält weiterhin den gewählten SI-Wert.
+Damit stehen die Definitionen schon beim erneuten Öffnen zur Verfügung;
+der nächste Build gleicht sie mit den aktuellen Quellen ab.
+Bestandsdateien ohne Definitionen bleiben lesbar.
+
 **Als Projektvorgabe speichern** unter **Darstellung** merkt sich 2D/3D,
 XY/YZ/XZ, Projektion und die fünf Darstellungsschalter in `physim.project`.
 Beim Öffnen werden diese Vorgaben wiederhergestellt. Verschieben, Zoom und

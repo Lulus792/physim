@@ -291,7 +291,7 @@ typedef struct {
     bool profile_job_recorded, profile_runner_recorded;
     double profile_started_at;
     ps_app_profile_frame profile_frame;
-    bool project_settings_dirty;
+    bool project_settings_dirty,project_definitions_dirty;
     uint32_t project_format_version;
     char project_id[33],experiment_id[33];
     ps_text_document project_manifest_snapshot;
@@ -887,7 +887,7 @@ static void save_project(app *a) {
     if(a->display_save_thread){status(a,"Anzeigevorgabe wird noch gespeichert; danach erneut speichern.");return;}
     if (!a->loaded || a->recovery)
         return;
-    if (!a->dirty && !a->analysis_dirty && !a->project_settings_dirty)
+    if (!a->dirty && !a->analysis_dirty && !a->project_settings_dirty && !a->project_definitions_dirty)
         return;
     if (!simulation_settings_valid(a)) return;
     char *saved[2] = {copy_editor_text(&a->experiment), copy_editor_text(&a->analysis)};
@@ -902,10 +902,10 @@ static void save_project(app *a) {
     bool ok = !a->dirty || (!a->analysis_only && save_editor(&a->experiment, p));
     join(p, sizeof p, a->project, analysis_source(a));
     ok = (!a->analysis_dirty || save_editor(&a->analysis, p)) && ok;
-    if (ok && a->project_settings_dirty)
+    if (ok && (a->project_settings_dirty || a->project_definitions_dirty))
         ok = save_project_settings(a);
     if (ok) {
-        a->dirty = a->analysis_dirty = a->project_settings_dirty = false;
+        a->dirty = a->analysis_dirty = a->project_settings_dirty = a->project_definitions_dirty = false;
         for (unsigned i = 0; i < 2; i++) {
             free(a->saved_source[i]);
             a->saved_source[i] = saved[i];
@@ -966,7 +966,7 @@ static void clear_project(app *a) {
     a->diagnostic_raw=false;
     a->build_info_valid = false;
     memset(&a->build_info, 0, sizeof a->build_info);
-    a->project_settings_dirty = false;
+    a->project_settings_dirty = a->project_definitions_dirty = false;
     memset(&a->parameters, 0, sizeof a->parameters);
     a->live_event_count=0;a->live_event_omitted=0;a->live_warning_valid=false;
     a->language_experiment = a->language_analysis = a->analysis_only = false;
@@ -1000,7 +1000,7 @@ static void refresh_workspace_entries(app *a) {
                  ps_result_string(r));
 }
 static bool assign_current_project_ids(app *a) {
-    if(!a->loaded || !idle(a) || a->library_thread || a->recovery || a->dirty || a->analysis_dirty || a->project_settings_dirty)return false;
+    if(!a->loaded || !idle(a) || a->library_thread || a->recovery || a->dirty || a->analysis_dirty || a->project_settings_dirty || a->project_definitions_dirty)return false;
     ps_project_identity_assignment report;
     ps_document_result result=ps_project_assign_ids_document(&a->project_manifest_snapshot,&report);
     if(result!=PS_DOCUMENT_OK){status(a,result==PS_DOCUMENT_CONFLICT?"Projektbeschreibung wurde extern geändert. Projekt erneut öffnen.":"Projekt-IDs konnten nicht gespeichert werden. Vorhandene Dateien bleiben erhalten.");return false;}
@@ -1010,7 +1010,7 @@ static bool assign_current_project_ids(app *a) {
 static bool migrate_current_project(app *a) {
     if(!a->loaded || !idle(a) || a->library_thread || a->recovery)return false;
     /* Migrating the manifest must not implicitly save unrelated editor changes. */
-    if(a->dirty || a->analysis_dirty || a->project_settings_dirty) {
+    if(a->dirty || a->analysis_dirty || a->project_settings_dirty || a->project_definitions_dirty) {
         status(a,"Vor der Formataktualisierung Änderungen speichern oder verwerfen.");return false;
     }
     char path[4096];join(path,sizeof path,a->project,"physim.project");ps_project_migration report;
@@ -1028,9 +1028,9 @@ static bool open_project(app *a) {
         status(a, "Zuerst den laufenden Job beenden.");
         return false;
     }
-    if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
+    if (a->dirty || a->analysis_dirty || a->project_settings_dirty || a->project_definitions_dirty)
         save_project(a);
-    if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
+    if (a->dirty || a->analysis_dirty || a->project_settings_dirty || a->project_definitions_dirty)
         return false;
     if (!documents_save_all(a)) return false;
     char p[4096];
@@ -1108,7 +1108,7 @@ static bool open_project(app *a) {
     a->maximum_dt=project_settings.maximum_timestep;
     snprintf(a->step_breakpoints, sizeof a->step_breakpoints, "%s", project_settings.breakpoints);
     snprintf(a->seed, sizeof a->seed, "%llu", (unsigned long long)project_settings.seed);
-    a->project_settings_dirty = false;
+    a->project_settings_dirty = a->project_definitions_dirty = false;
     a->batch_sweep = false;
     a->batch_target=a->batch_adaptive=false;
     a->batch_sweep_ready = false;
@@ -1207,8 +1207,9 @@ static void new_project(app *a) {
     char project_id[33],experiment_id[33];ps_project_id_generate(project_id);ps_project_id_generate(experiment_id);
     bool written = a->manager_analysis_only
         ? fprintf(f,"physim_project=2\nkind=analysis\nanalysis=%s\nmodules=core,units,data,analysis\nprofile=Debug\n",analysis_language?"analysis.phys":"analysis.c")>0
-        : fprintf(f, "physim_project=2\nkind=experiment\nexperiment=%s\nanalysis=%s\nmodules=core,units,mechanics,"
-               "data,analysis\nprofile=Debug\nsimulation.dt=0.005\nsimulation.seed=42\n", language ? "main.phys" : "main.c",
+        : fprintf(f, "physim_project=2\nkind=experiment\nexperiment=%s\nanalysis=%s\nmodules=core,memory,array,string_view,hashmap,math,data,run_stream,run_index,"
+               "snapshot,analysis,scene,numerics,units,series,report,report_export,mechanics,contact_world,box_contacts,collision,measurement,"
+               "thermodynamics,electromagnetism,waves,optics,fluid,properties\nprofile=Debug\nsimulation.dt=0.005\nsimulation.seed=42\n", language ? "main.phys" : "main.c",
                analysis_language ? "analysis.phys" : "analysis.c") > 0;
     if(written && fprintf(f,"project.id=%s\n",project_id)<0)written=false;
     if(written && !a->manager_analysis_only && fprintf(f,"experiment.id=%s\n",experiment_id)<0)written=false;
@@ -1260,7 +1261,7 @@ static void build_project(app *a) {
         return;
     if (!documents_save_all(a)) return;
     save_project(a);
-    if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
+    if (a->dirty || a->analysis_dirty || a->project_settings_dirty || a->project_definitions_dirty)
         return;
     char manifest[4096];join(manifest,sizeof manifest,a->project,"physim.project");
     ps_project_settings current;
@@ -1377,9 +1378,9 @@ static bool start_run_mode(app *a, bool paused) {
     if (a->recovery)
         return false;
     if (!simulation_settings_valid(a)) return false;
-    if (a->project_settings_dirty)
+    if (a->project_settings_dirty || a->project_definitions_dirty)
         save_project(a);
-    if (a->project_settings_dirty)
+    if (a->project_settings_dirty || a->project_definitions_dirty)
         return false;
     if (!a->built || !idle(a) || a->dirty) {
         status(a, "Zuerst das gespeicherte Projekt erfolgreich bauen.");
@@ -1824,8 +1825,10 @@ static void pump(app *a) {
                 a->built = !code && !a->job.timed_out && !a->parameter_output_overflow &&
                            ps_parameter_catalog_parse(&a->parameters, a->parameter_output) &&
                            build_inputs_current(a);
-                if (a->built)
+                if (a->built) {
                     a->batch_sweep_ready = false;
+                    a->project_definitions_dirty = true; /* Persist validated definitions without changing user-setting dirtiness. */
+                }
                 status(a, a->built ? "Build und Parameterabfrage erfolgreich. Experiment bereit."
                           : !build_inputs_current(a)
                               ? "Dateien oder Buildprofil wurden während des Builds geändert. Erneut bauen."
@@ -2767,9 +2770,9 @@ static void create_managed_project(app *a) {
         snprintf(a->manager_error,sizeof a->manager_error,"%s",a->status);a->manager_error_reveal=true;
         return;
     }
-    if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
+    if (a->dirty || a->analysis_dirty || a->project_settings_dirty || a->project_definitions_dirty)
         save_project(a);
-    if (a->dirty || a->analysis_dirty || a->project_settings_dirty) {
+    if (a->dirty || a->analysis_dirty || a->project_settings_dirty || a->project_definitions_dirty) {
         snprintf(a->manager_error,sizeof a->manager_error,"%s",a->status);a->manager_error_reveal=true;
         return;
     }
@@ -2809,9 +2812,9 @@ static bool open_workspace_path(app *a, const char *path) {
         status(a, "Zuerst den laufenden Job beenden.");
         return false;
     }
-    if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
+    if (a->dirty || a->analysis_dirty || a->project_settings_dirty || a->project_definitions_dirty)
         save_project(a);
-    if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
+    if (a->dirty || a->analysis_dirty || a->project_settings_dirty || a->project_definitions_dirty)
         return false;
     if (strlen(path) >= sizeof a->workspace) {
         status(a, "Ordnerpfad ist zu lang.");
@@ -3605,9 +3608,9 @@ int main(int argc, char **argv) {
             }
             if (e.type == SDL_EVENT_QUIT ||
                 (e.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED && event_window == a->window)) {
-                if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
+                if (a->dirty || a->analysis_dirty || a->project_settings_dirty || a->project_definitions_dirty)
                     save_project(a);
-                if (!a->dirty && !a->analysis_dirty && !a->project_settings_dirty && documents_save_all(a))
+                if (!a->dirty && !a->analysis_dirty && !a->project_settings_dirty && !a->project_definitions_dirty && documents_save_all(a))
                     a->quitting = true;
             }
             if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && (a->layout_manager || a->workspace_manager || a->channel_unit_manager || a->run_details_manager) && e.key.key == SDLK_ESCAPE) {
@@ -4830,7 +4833,7 @@ int main(int argc, char **argv) {
         SDL_Delay(workspace_state_test && !strcmp(argv[3],"docs-keyboard-delayed")?80:5);
     }
     project_display_finish(a,true);
-    if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
+    if (a->dirty || a->analysis_dirty || a->project_settings_dirty || a->project_definitions_dirty)
         save_project(a);
     if (workspace_state_save(a) != PS_OK) {
         fprintf(stderr, "%s\n", a->workspace_state_error);

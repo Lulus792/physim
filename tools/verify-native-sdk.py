@@ -274,6 +274,23 @@ def verify_project_display(repo,sdk,root,suffix,checked,compiler=None):
         checked(command,timeout=150)
     print("Relocated SDK project display: actual 16/22 px save/reopen, captured 2D/plane/projection/visibility, unsaved-source isolation and external-edit conflicts passed",flush=True)
 
+def verify_project_schema(repo,sdk,root,suffix,checked,compiler=None):
+    work=root / "Project parameter definitions";work.mkdir()
+    fixtures=root / "Parameter form fixtures";fixtures.mkdir()
+    shutil.copy2(repo / "tests/fixtures/parameter_form.c",fixtures / "parameter_form.c")
+    shutil.copy2(repo / "tests/fixtures/language/parameter_form.phys",fixtures / "parameter_form.phys")
+    command=[sys.executable,repo / "tests/check_display_workflow.py","parameter_form_workflow",
+        "--app",sdk / "bin" / ("physim"+suffix),"--work",work,"--root",sdk,"--parameter-fixtures",fixtures]
+    if compiler:command += ["--cc",compiler]
+    checked(command,timeout=600)
+    verify_project_display(repo,sdk,root,suffix,checked,compiler)
+    command=[sys.executable,repo / "tests/test_native_build.py","--builder",sdk / "bin" / ("physim-build"+suffix),
+        "--sdk",sdk,"--compiler",sdk / "bin" / ("physimc"+suffix),"--runner",sdk / "bin" / ("physim-runner"+suffix),
+        "--analysis-runner",sdk / "bin" / ("physim-analysis-runner"+suffix),"--work",root / "Project schema builds"]
+    if compiler:command += ["--cc",compiler]
+    checked(command,timeout=900)
+    print("Relocated SDK project schema: full parameter definitions before rebuild, C/Physim forms, module requirement rejection and preserved cached binaries passed",flush=True)
+
 
 def verify_camera_planes(repo,sdk,root,suffix,checked,compiler=None):
     for size in ("16","22"):
@@ -661,6 +678,7 @@ def main():
                         help="Verify Student-t mean intervals, independent numerical references and actual analysis report only")
     parser.add_argument("--series-only",action="store_true",help="Verify actual single/seeded/linear C/Physim run provenance and invalid host requests only")
     parser.add_argument("--project-display-only",action="store_true",help="Verify actual project view defaults, reopening and conflict preservation only")
+    parser.add_argument("--project-schema-only",action="store_true",help="Verify stored parameter definitions, required modules, actual forms and project display only")
     parser.add_argument("--material-examples-only",action="store_true",help="Verify nine-property C/Physim data examples through shipped and source-rebuilt programs only")
     parser.add_argument("--camera-only",action="store_true",help="Verify actual planar camera controls at 16/22 px from a relocated app SDK only")
     parser.add_argument("--examples-only",action="store_true",help="Verify additional shipped C/Physim example declarations only")
@@ -691,6 +709,8 @@ def main():
     parser.add_argument("--isolation-only", action="store_true",
                         help="Verify eight actual C/Physim runner failure/restart app workflows; requires an app SDK and display")
     args = parser.parse_args()
+    if args.project_schema_only and (args.app_tests or any(value for name,value in vars(args).items() if name.endswith("_only") and name!="project_schema_only")):
+        parser.error("--project-schema-only cannot be combined with other focused modes or --app-tests")
     if args.project_display_only and (args.app_tests or any(value for name,value in vars(args).items() if name.endswith("_only") and name!="project_display_only")):
         parser.error("--project-display-only cannot be combined with other focused modes or --app-tests")
     if args.material_examples_only and (args.app_tests or any(value for name,value in vars(args).items() if name.endswith("_only") and name!="material_examples_only")):
@@ -852,6 +872,12 @@ def main():
         builder.includes = [sdk / "include"]
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+        if args.project_schema_only:
+            if not metadata["app"]:raise RuntimeError("Project schema tests require an app SDK/display")
+            verify_project_schema(repo,sdk,root,suffix,checked,args.compiler)
+            (root / "PASSED.txt").write_text("Focused project schema SDK verification passed; no full platform/product acceptance.\n",encoding="utf-8")
+            print(f"Project schema SDK verified: {root}")
+            return
         if args.project_display_only:
             if not metadata["app"]:raise RuntimeError("Project display tests require an app SDK/display")
             verify_project_display(repo,sdk,root,suffix,checked,args.compiler)
@@ -1741,7 +1767,7 @@ def main():
                         raise RuntimeError("Installed SDK keyboard settings did not complete")
                 print("Installed SDK settings: keyboard-only traversal, all toggles, restart, cancellation and large-font focus scrolling passed",flush=True)
                 verify_camera_planes(repo,sdk,root,suffix,checked,args.compiler)
-                verify_project_display(repo,sdk,root,suffix,checked,args.compiler)
+                verify_project_schema(repo,sdk,root,suffix,checked,args.compiler)
                 verify_step_breakpoint_app(repo, sdk, root, suffix, checked, args.compiler)
                 verify_runner_isolation_app(repo, sdk, root, suffix, checked, args.compiler)
                 verify_project_migration(repo,sdk,root,suffix,checked)

@@ -2139,7 +2139,7 @@
         "docs/workspace.md",
         "docs/platform-validation.md"
       ],
-      "note": "Orbit, Pan, Zoom und Standard-/XY-/YZ-/XZ-Ansichten vorhanden. Standard beendet jetzt zuverlässig den 2D-Modus. Reale SDL-Eingaben für rechten Orbit, mittleres Pan, Mausrad und Alt-Tastatursteuerung sowie Voreinstellungen bei 16/22 Pixeln bestehen mit unveränderter Szene/Messwerten. 4/4 lokale GUI-Fälle einschließlich Projektvorgaben und 2/2 verschobene SDK-Kamerafälle auf Intel macOS/AppleClang; die aktuelle Gesamtplattformmatrix bleibt separat offen."
+      "note": "Orbit, Pan, Zoom und Standard-/XY-/YZ-/XZ-Ansichten vorhanden. Standard beendet jetzt zuverlässig den 2D-Modus. Reale SDL-Eingaben für rechten Orbit, mittleres Pan, Mausrad und Alt-Tastatursteuerung sowie Voreinstellungen bei 16/22 Pixeln bestehen mit unveränderter Szene/Messwerten. 4/4 lokale GUI-Fälle einschließlich Projektvorgaben und 2/2 verschobene SDK-Kamerafälle auf Intel macOS/AppleClang; die aktuelle Gesamtplattformmatrix bleibt separat offen. Die ausgeführte Linux-Sanitizer-CI am Stand e3ae5b5 besteht auf GCC und Clang mit je 5/5 nativen und 11/11 grafischen Fällen einschließlich beider erweiterten Kamerafälle; vollständige Joblogs sind gelesen und erhalten."
     },
     {
       "id": "PP-0295",
@@ -3825,19 +3825,21 @@
       "kind": "paragraph",
       "scope": "planned",
       "text": "Die Projektdatei enthält nur stabile Einstellungen: Formatversion, Quellen, benötigte Physim-Module, Parameterdefinitionen, Buildprofil und Anzeigevorgaben. Absolute lokale Pfade werden vermieden.\n",
-      "status": "incomplete",
+      "status": "implemented",
       "evidence": [
         "app/project_file.c",
         "app/project_file.h",
-        "app/param_catalog.c",
-        "tests/test_project_display.c",
-        "tests/test_project_file.c",
+        "app/parameter_catalog.c",
         "app/main.c",
-        "app/design_ui.inc",
+        "app/build_main.c",
+        "tests/test_project_file.c",
+        "tests/test_parameter_catalog.c",
+        "tests/test_native_build.py",
         "tests/check_display_workflow.py",
+        "tools/verify-native-sdk.py",
         "docs/platform-validation.md"
       ],
-      "note": "Formatversion, relative Haupt-/Analysequellen, Buildprofil, Parameterwerte und optionale Anzeigevorgaben sind implementiert. 384 native Anzeigekombinationen, reale Speichern-/Neustart-/Konfliktbedienung bei 16/22 Pixeln und verschobenes SDK bestehen lokal. Die benötigten Physim-Module und vollständigen Parameterdefinitionen werden derzeit aus dem Quell-/Modulkatalog abgeleitet und nicht explizit in der Projektdatei erfasst; diese geforderten Felder und die aktuelle Gesamtplattformprüfung bleiben offen."
+      "note": "Formatversion, relative Haupt-/Analysequellen, explizite stabile Modulanforderungen, vollständige Parameterdefinitionen mit SI-Grenzen/Standard/Einheit/Dimensionen, Buildprofil und Anzeigevorgaben sind implementiert. Native Schema-/Legacy-/Grenz-/No-op-Prüfungen, reale C-/Physim-Formulare samt Definitionen vor dem Wiederaufbau, Anzeigevorgaben bei 16/22 Pixeln und verschobene SDK-Verbraucher bestehen auf Intel macOS/AppleClang. Fehlende Modulanforderungen scheitern beim echten Builder ohne Änderung veröffentlichter Module. Die aktuelle vollständige Plattform- und Produktabnahme bleibt separat offen."
     },
     {
       "id": "PP-0443",

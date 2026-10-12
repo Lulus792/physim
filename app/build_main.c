@@ -672,6 +672,17 @@ int main(int argc, char **argv) {
     }
     if (!profile)
         profile = project_settings.release ? "Release" : "Debug";
+    if(project_settings.modules[0]) {
+        char required[sizeof project_settings.modules];memcpy(required,project_settings.modules,sizeof required);
+        char *name=required;
+        while(name) {
+            char *next=strchr(name,',');if(next)*next++=0;
+            bool available=false;
+            for(unsigned i=0;i<SDK_OBJECT_COUNT;i++)if(!strcmp(name,SDK_MODULES[i])){available=true;break;}
+            if(!available){fprintf(stderr,"Required Physim module is unavailable: %s\n",name);return 1;}
+            name=next;
+        }
+    }
     bool release = !strcmp(profile, "Release");
     const char *experiment = project_settings.language_experiment ? "main.phys" : "main.c";
     const char *analysis = project_settings.language_analysis ? "analysis.phys" : "analysis.c";

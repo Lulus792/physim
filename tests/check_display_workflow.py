@@ -440,13 +440,19 @@ def library_selection(flow, directory):
 def parameter_form(flow,directory):
     for language in ("c","phys"):
         root=directory/language;root.mkdir(parents=True)
+        fixture=(flow.parameter_fixtures/("parameter_form.phys" if language=="phys" else "parameter_form.c")) if flow.parameter_fixtures else \
+            flow.root/("tests/fixtures/language/parameter_form.phys" if language=="phys" else "tests/fixtures/parameter_form.c")
+        shutil.copyfile(fixture,root/("parameter_form.phys" if language=="phys" else "parameter_form.c"))
         flow.run("--workspace-state-test",root,"parameter-form-"+language,timeout=130,marker="PARAMETER FORM SELF-TEST: PASSED")
         source=root/"project"/("main.phys" if language=="phys" else "main.c")
-        fixture=flow.root/("tests/fixtures/language/parameter_form.phys" if language=="phys" else "tests/fixtures/parameter_form.c")
         require(source.read_bytes()==fixture.read_bytes(),"Parameter form changed experiment source")
         runs=list((root/"project/runs").glob("*.psrun"))
         require(len(runs)==1,"Rejected parameter started a run or valid parameter did not run")
         before=fingerprint(runs[0])
+        manifest=read(root/"project/physim.project")
+        require("parameter_definition.distance=" in manifest and "\tcm\t0.01\t1,0,0,0,0,0,0" in manifest,
+                "Saved project omitted distance definition/unit")
+        require("parameter_definition.gain=" in manifest,"Saved project omitted undeclared-unit definition")
         flow.run("--workspace-state-test",root,"parameter-form-"+language+"-read",timeout=130,marker="PARAMETER FORM SELF-TEST: PASSED")
         require(source.read_bytes()==fixture.read_bytes(),"Restoring parameter form changed experiment source")
         require(before==fingerprint(runs[0]),"Restoring parameter selection changed saved data")
@@ -1273,6 +1279,7 @@ def main():
     parser.add_argument("--app", type=Path, required=True)
     parser.add_argument("--work", type=Path, required=True)
     parser.add_argument("--root", type=Path, required=True)
+    parser.add_argument("--parameter-fixtures",type=Path,help="Independent C/Physim parameter form inputs outside the SDK")
     parser.add_argument("--cc", help="Compiler for projects created by the app")
     args = parser.parse_args()
     directory = args.work.resolve() / "workflow ä"
@@ -1280,6 +1287,7 @@ def main():
     small = SIMPLE[args.case][2] if args.case in SIMPLE else True
     flow = Workflow(args.app.resolve(), args.work.resolve(), args.root.resolve(), small, args.cc,
                     trace=os.environ.get("PHYSIM_TEST_STRACE_CASE") == args.case)
+    flow.parameter_fixtures=args.parameter_fixtures.resolve() if args.parameter_fixtures else None
     if args.case in SPECIAL:
         SPECIAL[args.case](flow, directory)
     elif args.case in language_cases:
