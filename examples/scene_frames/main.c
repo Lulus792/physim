@@ -1,6 +1,7 @@
 #include "physim/experiment.h"
+#include <stdio.h>
 #include "physim/math.h"
-static ps_result create(ps_context *c){return ps_channel_add(c,"position.x",PS_METRE,"Local position")<0?PS_INVALID:PS_OK;}
+static ps_result create(ps_context *c){snprintf(c->model_metadata,sizeof c->model_metadata,"layer.geometry=active|Synthetic hierarchical scene and coordinate transforms\nlayer.laws=omitted|Prescribed motion, not dynamics\nlayer.medium=omitted|No material or medium\nlayer.losses=omitted|No loss model\nlayer.numerics=active|Value incremented by dt and explicit transforms\nlayer.measurement=ideal|Exact local-position channel\nlayer.sampling=omitted|Deterministic model; external ensembles separate\n");return ps_channel_add(c,"position.x",PS_METRE,"Local position")<0?PS_INVALID:PS_OK;}
 static ps_result reset(ps_context *c){c->values[0]=0;return PS_OK;}
 static ps_result step(ps_context *c,double dt){c->values[0]+=dt;return PS_OK;}
 static void scene(ps_context *c,ps_scene *s) {

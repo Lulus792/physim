@@ -161,7 +161,7 @@ static ps_result create(ps_context *c) {
     const char *names[]={"position.x","position.y","velocity.x","velocity.y","nominal.x","nominal.y","uncertainty.x","uncertainty.y","energy"};
     for(unsigned i=0;i<9;i++)if(ps_channel_add(c,names[i],i==2 || i==3?PS_VELOCITY:i==8?PS_JOULE:PS_METRE,names[i])!=(int)i)return PS_LIMIT;
     snprintf(c->model_metadata,sizeof c->model_metadata,
-        "model=uncertain initial velocities, exact vacuum projectile\nmass_kg=1\ngravity_m_s2=9.80665\ninitial_position_m=-2,0\nvx_distribution=normal\nvy_distribution=normal\nvelocity_dependence=independent model draws\nintegrator=exact ballistic propagation\nuncertainty_channels=population standard deviations, not sensor errors\nexcluded=ground, drag, sensor noise, parameter drift\n");
+        "layer.geometry=ideal|Point mass; no ground contact\nlayer.laws=active|Uniform gravity\nlayer.medium=omitted|Vacuum\nlayer.losses=omitted|No drag or parameter drift\nlayer.numerics=active|Exact ballistic propagation\nlayer.measurement=ideal|Exact state; uncertainty channels are population moments, not sensor errors\nlayer.sampling=active|Independent normal launch draws; external ensembles separate\nmodel=uncertain initial velocities, exact vacuum projectile\nmass_kg=1\ngravity_m_s2=9.80665\ninitial_position_m=-2,0\nvx_distribution=normal\nvy_distribution=normal\nvelocity_dependence=independent model draws\nintegrator=exact ballistic propagation\nuncertainty_channels=population standard deviations, not sensor errors\nexcluded=ground, drag, sensor noise, parameter drift\n");
     return reset(c);
 }
 static ps_result step(ps_context *c,double dt) {
@@ -324,7 +324,7 @@ func measure(time: Float64, initialVx: Float64, initialVy: Float64):
     csy.sample(sy)
     ce.sample(energy)
 func create():
-    metadata("model=uncertain initial velocities, exact vacuum projectile\nmass_kg=1\ngravity_m_s2=9.80665\ninitial_position_m=-2,0\nvx_distribution=normal\nvy_distribution=normal\nvelocity_dependence=independent model draws\nintegrator=exact ballistic propagation\nuncertainty_channels=population standard deviations, not sensor errors\nexcluded=ground, drag, sensor noise, parameter drift\n")
+    metadata("layer.geometry=ideal|Point mass; no ground contact\nlayer.laws=active|Uniform gravity\nlayer.medium=omitted|Vacuum\nlayer.losses=omitted|No drag or parameter drift\nlayer.numerics=active|Exact ballistic propagation\nlayer.measurement=ideal|Exact state; uncertainty channels are population moments, not sensor errors\nlayer.sampling=active|Independent normal launch draws; external ensembles separate\nmodel=uncertain initial velocities, exact vacuum projectile\nmass_kg=1\ngravity_m_s2=9.80665\ninitial_position_m=-2,0\nvx_distribution=normal\nvy_distribution=normal\nvelocity_dependence=independent model draws\nintegrator=exact ballistic propagation\nuncertainty_channels=population standard deviations, not sensor errors\nexcluded=ground, drag, sensor noise, parameter drift\n")
 func reset():
     let nextVx = randomNormal(meanVx,sigmaVx)
     let nextVy = randomNormal(meanVy,sigmaVy)

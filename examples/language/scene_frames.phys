@@ -3,6 +3,7 @@ let metres = Unit(1,0,0,0,0,0,0,1,"m")
 let position = Channel("position.x", metres, "Local position")
 var value = 0.0
 func create():
+    metadata("layer.geometry=active|Synthetic hierarchical scene and coordinate transforms\nlayer.laws=omitted|Prescribed motion, not dynamics\nlayer.medium=omitted|No material or medium\nlayer.losses=omitted|No loss model\nlayer.numerics=active|Value incremented by dt and explicit transforms\nlayer.measurement=ideal|Exact local-position channel\nlayer.sampling=omitted|Deterministic model; external ensembles separate\n")
     return
 func reset():
     value = 0

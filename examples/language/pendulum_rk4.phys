@@ -93,7 +93,18 @@ func measure():
 func create():
     assert(method == floor(method), "Integrator must be an integer from 0 to 4")
     assert(method != 3 || airDensity == 0 || dragCoefficient == 0 || area == 0, "Velocity Verlet requires zero velocity-dependent drag")
-    metadata("energy_accounting=drag power integrated with state; balance=mechanical+dissipated\nmodel=point pendulum, massless rigid rod, uniform gravity\nlength_m=" + String(length) + "\ninitial_angle_rad=" + String(initialAngle) + "\nmass_kg=" + String(mass) + "\nmedium_density_kg_m3=" + String(airDensity) + "\ndrag_coefficient=" + String(dragCoefficient) + "\narea_m2=" + String(area) + "\ngravity_m_s2=9.80665\nintegrator=" + methods[Int64(method)] + "\nsensor_noise_rad=" + String(sensorNoise) + "\nadaptive_integrator=Dormand-Prince 5(4)\nadaptive_absolute_tolerance=1e-10\nadaptive_relative_tolerance=1e-8")
+    var mediumLayer = "omitted|Vacuum"
+    if airDensity > 0:
+        mediumLayer = "active|Uniform medium density"
+    var lossesLayer = "omitted|Zero quadratic drag"
+    if airDensity > 0 && dragCoefficient > 0 && area > 0:
+        lossesLayer = "active|Quadratic drag; integrated energy loss"
+    var measurementLayer = "ideal|Exact angle"
+    var samplingLayer = "omitted|No random draws in model; ensembles configured externally"
+    if sensorNoise > 0:
+        measurementLayer = "active|Gaussian angle noise"
+        samplingLayer = "active|Seeded normal draws for sensor; ensembles configured externally"
+    metadata("layer.geometry=ideal|Point mass, massless rigid rod; archived length/initial angle\nlayer.laws=active|Uniform gravity\nlayer.medium=" + mediumLayer + "\nlayer.losses=" + lossesLayer + "\nlayer.numerics=active|Recorded integrator and tolerances; step_mode selects fixed/adaptive\nlayer.measurement=" + measurementLayer + "\nlayer.sampling=" + samplingLayer + "\nenergy_accounting=drag power integrated with state; balance=mechanical+dissipated\nmodel=point pendulum, massless rigid rod, uniform gravity\nlength_m=" + String(length) + "\ninitial_angle_rad=" + String(initialAngle) + "\nmass_kg=" + String(mass) + "\nmedium_density_kg_m3=" + String(airDensity) + "\ndrag_coefficient=" + String(dragCoefficient) + "\narea_m2=" + String(area) + "\ngravity_m_s2=9.80665\nintegrator=" + methods[Int64(method)] + "\nsensor_noise_rad=" + String(sensorNoise) + "\nadaptive_integrator=Dormand-Prince 5(4)\nadaptive_absolute_tolerance=1e-10\nadaptive_relative_tolerance=1e-8")
 
 func reset():
     states = []

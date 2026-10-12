@@ -40,7 +40,7 @@ static ps_result create(ps_context *context) {
         return PS_LIMIT;
     }
     snprintf(context->model_metadata, sizeof context->model_metadata,
-             "model=projectile, vacuum\nmass_kg=1\ngravity_m_s2=9.80665\n"
+             "layer.geometry=ideal|Point mass; no ground contact\nlayer.laws=active|Uniform gravity\nlayer.medium=omitted|Vacuum\nlayer.losses=omitted|No drag\nlayer.numerics=active|Exact constant-acceleration propagation\nlayer.measurement=ideal|Exact state channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=projectile, vacuum\nmass_kg=1\ngravity_m_s2=9.80665\n"
              "integrator=exact constant acceleration");
     return reset(context);
 }

@@ -73,7 +73,7 @@ func measure():
     jointLength.sample(solution.maxJointLengthError)
 
 func create():
-    metadata("model=coupled spheres\nsolver=shared contact and distance joint iterations\niterations=128\nfriction=0.5\nrestitution=0.1\nstabilization=0.2\nstep=gravity impulse, graph solve, body drift\ncontact=discrete; no CCD")
+    metadata("layer.geometry=ideal|Linked homogeneous spheres and fixed plane\nlayer.laws=active|Gravity, contacts and distance constraints\nlayer.medium=omitted|Vacuum\nlayer.losses=active|Restitution and Coulomb friction\nlayer.numerics=active|Shared impulse iterations and stabilization; discrete contacts, no CCD\nlayer.measurement=ideal|Exact states and solver residuals\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=coupled spheres\nsolver=shared contact and distance joint iterations\niterations=128\nfriction=0.5\nrestitution=0.1\nstabilization=0.2\nstep=gravity impulse, graph solve, body drift\ncontact=discrete; no CCD")
 
 func reset():
     let initial = initialBodies()

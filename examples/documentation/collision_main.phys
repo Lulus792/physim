@@ -50,7 +50,10 @@ func measure(nextA: Body, nextB: Body, nextLost: Float64, nextImpulse: Float64, 
         count = 1
     eventCount.sample(count)
 func create():
-    metadata("model=one central collision of two rigid spheres\nmedium=vacuum\ngravity=none\nfriction=0\ninitial_spin=0\nradius_m=0.2\ninitial_positions_m=-1,1\nmass_a_kg=" + String(massA) + "\nmass_b_kg=" + String(massB) + "\nvelocity_a_m_s=" + String(velocityA) + "\nvelocity_b_m_s=" + String(velocityB) + "\nrestitution=" + String(restitution) + "\nccd=linear sphere sweep, impulse, remaining time\ndissipation=0.5*reduced_mass*(1-e^2)*closing_speed^2\nevent_time_valid=collision.count==1\nexcluded=external forces, rotation, deformation, further contacts\n")
+    var lossesLayer = "ideal"
+    if restitution < 1:
+        lossesLayer = "active"
+    metadata("layer.geometry=ideal|Two spheres and one central contact\nlayer.laws=active|Force-free translation and normal contact impulse\nlayer.medium=omitted|Vacuum\nlayer.losses=" + lossesLayer + "|Configured restitution; no friction or rotation\nlayer.numerics=active|Linear CCD, impulse and remaining-time propagation\nlayer.measurement=ideal|Exact state and event channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=one central collision of two rigid spheres\nmedium=vacuum\ngravity=none\nfriction=0\ninitial_spin=0\nradius_m=0.2\ninitial_positions_m=-1,1\nmass_a_kg=" + String(massA) + "\nmass_b_kg=" + String(massB) + "\nvelocity_a_m_s=" + String(velocityA) + "\nvelocity_b_m_s=" + String(velocityB) + "\nrestitution=" + String(restitution) + "\nccd=linear sphere sweep, impulse, remaining time\ndissipation=0.5*reduced_mass*(1-e^2)*closing_speed^2\nevent_time_valid=collision.count==1\nexcluded=external forces, rotation, deformation, further contacts\n")
 func reset():
     var initialA = Body.sphere(massA,radius)
     var initialB = Body.sphere(massB,radius)

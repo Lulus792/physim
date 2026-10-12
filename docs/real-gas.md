@@ -81,7 +81,7 @@ static ps_result create(ps_context *c) {
     ps_unit volume={{3,0,0,0,0,0,0},1,"m3"},entropy={{2,1,-2,0,-1,0,0},1,"J/K"},derivative={{-4,1,-2,0,0,0,0},1,"Pa/m3"};
     ps_unit units[]={volume,PS_PASCAL,PS_PASCAL,PS_JOULE,PS_JOULE,entropy,derivative};
     for(unsigned i=0;i<7;i++)if(ps_channel_add(c,names[i],units[i],names[i])!=(int)i)return PS_LIMIT;
-    snprintf(c->model_metadata,sizeof c->model_metadata,"model=homogeneous van der Waals vs ideal gas\nsource=synthetic coefficients; not a calibrated gas\namount=1 mol\ntemperature=450 K\nattraction=0.4 Pa m6/mol2\ncovolume=0.00004 m3/mol\nmolar_cv=20.8 J/(mol K)\nvolume=0.005 to 0.001 m3 in 1 s; then fixed\nenergy_reference=U=n cv T-a n2/V\nexcluded=phase coexistence,Maxwell construction,latent heat,temperature-dependent coefficients\n");return reset(c);
+    snprintf(c->model_metadata,sizeof c->model_metadata,"layer.geometry=ideal|Homogeneous gas with prescribed volume path\nlayer.laws=active|Van der Waals and ideal gas comparison\nlayer.medium=ideal|Synthetic constant coefficients; not calibrated gas\nlayer.losses=omitted|No phase coexistence, latent heat or Maxwell construction\nlayer.numerics=active|Direct homogeneous state evaluation\nlayer.measurement=ideal|Exact computed state channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=homogeneous van der Waals vs ideal gas\nsource=synthetic coefficients; not a calibrated gas\namount=1 mol\ntemperature=450 K\nattraction=0.4 Pa m6/mol2\ncovolume=0.00004 m3/mol\nmolar_cv=20.8 J/(mol K)\nvolume=0.005 to 0.001 m3 in 1 s; then fixed\nenergy_reference=U=n cv T-a n2/V\nexcluded=phase coexistence,Maxwell construction,latent heat,temperature-dependent coefficients\n");return reset(c);
 }
 static ps_result step(ps_context *c,double dt){return measure(c,c->time_s+dt);}
 static void scene(ps_context *c,ps_scene *out){ps_scene_add_id(out,1,PS_SPHERE,ps_v3(c->time_s,0,0),ps_v3(0,0,0),.1,0x53aeefff);}
@@ -113,7 +113,7 @@ func measure(time: Float64):
     entropy.sample(vdwGasEntropyChange(1,20.8,450,0.005,450,v,4e-5))
     derivative.sample(vdwGasPressureDerivative(1,450,v,0.4,4e-5))
 func create():
-    metadata("model=homogeneous van der Waals vs ideal gas\nsource=synthetic coefficients; not a calibrated gas\namount=1 mol\ntemperature=450 K\nattraction=0.4 Pa m6/mol2\ncovolume=0.00004 m3/mol\nmolar_cv=20.8 J/(mol K)\nvolume=0.005 to 0.001 m3 in 1 s; then fixed\nenergy_reference=U=n cv T-a n2/V\nexcluded=phase coexistence,Maxwell construction,latent heat,temperature-dependent coefficients\n")
+    metadata("layer.geometry=ideal|Homogeneous gas with prescribed volume path\nlayer.laws=active|Van der Waals and ideal gas comparison\nlayer.medium=ideal|Synthetic constant coefficients; not calibrated gas\nlayer.losses=omitted|No phase coexistence, latent heat or Maxwell construction\nlayer.numerics=active|Direct homogeneous state evaluation\nlayer.measurement=ideal|Exact computed state channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=homogeneous van der Waals vs ideal gas\nsource=synthetic coefficients; not a calibrated gas\namount=1 mol\ntemperature=450 K\nattraction=0.4 Pa m6/mol2\ncovolume=0.00004 m3/mol\nmolar_cv=20.8 J/(mol K)\nvolume=0.005 to 0.001 m3 in 1 s; then fixed\nenergy_reference=U=n cv T-a n2/V\nexcluded=phase coexistence,Maxwell construction,latent heat,temperature-dependent coefficients\n")
     reset()
 func reset():
     measure(0)

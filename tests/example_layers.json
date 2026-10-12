@@ -1,0 +1,745 @@
+[
+  {
+    "id": "extra-layers-phys-pendulum_rk4",
+    "source": "examples/language/pendulum_rk4.phys",
+    "language": "phys",
+    "profile": "pendulum_variant",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-phys-pendulum_integrator",
+    "source": "examples/language/pendulum_integrator.phys",
+    "language": "phys",
+    "profile": "pendulum_variant",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-phys-pendulum_rk45",
+    "source": "examples/language/pendulum_rk45.phys",
+    "language": "phys",
+    "profile": "pendulum_variant",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-phys-pendulum_verlet",
+    "source": "examples/language/pendulum_verlet.phys",
+    "language": "phys",
+    "profile": "pendulum_variant",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-phys-spinning_body",
+    "source": "examples/language/spinning_body.phys",
+    "language": "phys",
+    "profile": "spinning_body",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-phys-joint_pendulum",
+    "source": "examples/language/joint_pendulum.phys",
+    "language": "phys",
+    "profile": "joint_pendulum",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {
+      "numerics": "stabilization can change energy"
+    }
+  },
+  {
+    "id": "extra-layers-phys-coupled_bodies",
+    "source": "examples/language/coupled_bodies.phys",
+    "language": "phys",
+    "profile": "coupled_bodies",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "active",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {
+      "numerics": "no CCD"
+    }
+  },
+  {
+    "id": "extra-layers-phys-fast_sphere",
+    "source": "examples/language/fast_sphere.phys",
+    "language": "phys",
+    "profile": "fast_sphere",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "ideal",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {
+      "numerics": "16 events"
+    }
+  },
+  {
+    "id": "extra-layers-phys-projectile",
+    "source": "examples/language/projectile.phys",
+    "language": "phys",
+    "profile": "projectile",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-phys-random_samples",
+    "source": "examples/language/random_samples.phys",
+    "language": "phys",
+    "profile": "random_samples",
+    "states": [
+      "omitted",
+      "omitted",
+      "omitted",
+      "omitted",
+      "active",
+      "ideal",
+      "active"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-phys-scene_shapes",
+    "source": "examples/language/scene_shapes.phys",
+    "language": "phys",
+    "profile": "scene_shapes",
+    "states": [
+      "active",
+      "omitted",
+      "omitted",
+      "omitted",
+      "active",
+      "omitted",
+      "omitted"
+    ],
+    "limits": {
+      "laws": "no dynamics",
+      "numerics": "not a physics solver"
+    }
+  },
+  {
+    "id": "extra-layers-phys-sensors",
+    "source": "examples/language/sensors.phys",
+    "language": "phys",
+    "profile": "sensors",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "omitted",
+      "active",
+      "active",
+      "active"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-phys-logging",
+    "source": "examples/language/logging.phys",
+    "language": "phys",
+    "profile": "logging",
+    "states": [
+      "omitted",
+      "omitted",
+      "omitted",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-phys-scene_frames",
+    "source": "examples/language/scene_frames.phys",
+    "language": "phys",
+    "profile": "scene_frames",
+    "states": [
+      "active",
+      "omitted",
+      "omitted",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-phys-diagnostic_experiment",
+    "source": "examples/language/diagnostic_experiment.phys",
+    "language": "phys",
+    "profile": "diagnostic_experiment",
+    "states": [
+      "active",
+      "omitted",
+      "omitted",
+      "omitted",
+      "omitted",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {
+      "laws": "Deliberately failing"
+    }
+  },
+  {
+    "id": "extra-layers-phys-contact_stack",
+    "source": "examples/language/contact_stack.phys",
+    "language": "phys",
+    "profile": "contact_stack",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "active",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-phys-ccd_events",
+    "source": "examples/language/ccd_events.phys",
+    "language": "phys",
+    "profile": "ccd_events",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "ideal",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-phys-material_main",
+    "source": "examples/documentation/material_main.phys",
+    "language": "phys",
+    "profile": "material_main",
+    "states": [
+      "ideal",
+      "active",
+      "active",
+      "active",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {
+      "losses": "Reynolds"
+    }
+  },
+  {
+    "id": "extra-layers-c-material_main",
+    "source": "examples/documentation/material_main.c",
+    "language": "c",
+    "profile": "material_main",
+    "states": [
+      "ideal",
+      "active",
+      "active",
+      "active",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {
+      "losses": "Reynolds"
+    }
+  },
+  {
+    "id": "extra-layers-phys-pendulum_main",
+    "source": "examples/documentation/pendulum_main.phys",
+    "language": "phys",
+    "profile": "pendulum_main",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-c-pendulum_main",
+    "source": "examples/documentation/pendulum_main.c",
+    "language": "c",
+    "profile": "pendulum_main",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-phys-collision_main",
+    "source": "examples/documentation/collision_main.phys",
+    "language": "phys",
+    "profile": "collision_main",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "ideal",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-c-collision_main",
+    "source": "examples/documentation/collision_main.c",
+    "language": "c",
+    "profile": "collision_main",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "ideal",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-phys-monte_carlo_main",
+    "source": "examples/documentation/monte_carlo_main.phys",
+    "language": "phys",
+    "profile": "monte_carlo_main",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "omitted",
+      "active",
+      "ideal",
+      "active"
+    ],
+    "limits": {
+      "measurement": "not sensor errors"
+    }
+  },
+  {
+    "id": "extra-layers-c-monte_carlo_main",
+    "source": "examples/documentation/monte_carlo_main.c",
+    "language": "c",
+    "profile": "monte_carlo_main",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "omitted",
+      "active",
+      "ideal",
+      "active"
+    ],
+    "limits": {
+      "measurement": "not sensor errors"
+    }
+  },
+  {
+    "id": "extra-layers-phys-property_main",
+    "source": "examples/documentation/property_main.phys",
+    "language": "phys",
+    "profile": "property_main",
+    "states": [
+      "omitted",
+      "omitted",
+      "ideal",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {
+      "medium": "not measured calibration",
+      "numerics": "without extrapolation"
+    }
+  },
+  {
+    "id": "extra-layers-c-property_main",
+    "source": "examples/documentation/property_main.c",
+    "language": "c",
+    "profile": "property_main",
+    "states": [
+      "omitted",
+      "omitted",
+      "ideal",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {
+      "medium": "not measured calibration",
+      "numerics": "without extrapolation"
+    }
+  },
+  {
+    "id": "extra-layers-phys-real_gas_main",
+    "source": "examples/documentation/real_gas_main.phys",
+    "language": "phys",
+    "profile": "real_gas_main",
+    "states": [
+      "ideal",
+      "active",
+      "ideal",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {
+      "losses": "No phase coexistence"
+    }
+  },
+  {
+    "id": "extra-layers-c-real_gas_main",
+    "source": "examples/documentation/real_gas_main.c",
+    "language": "c",
+    "profile": "real_gas_main",
+    "states": [
+      "ideal",
+      "active",
+      "ideal",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {
+      "losses": "No phase coexistence"
+    }
+  },
+  {
+    "id": "extra-layers-phys-rc_main",
+    "source": "examples/documentation/rc_main.phys",
+    "language": "phys",
+    "profile": "rc_main",
+    "states": [
+      "ideal",
+      "active",
+      "ideal",
+      "active",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-c-rc_main",
+    "source": "examples/documentation/rc_main.c",
+    "language": "c",
+    "profile": "rc_main",
+    "states": [
+      "ideal",
+      "active",
+      "ideal",
+      "active",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-phys-string_main",
+    "source": "examples/documentation/string_main.phys",
+    "language": "phys",
+    "profile": "string_main",
+    "states": [
+      "ideal",
+      "active",
+      "ideal",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {
+      "numerics": "CFL bound"
+    }
+  },
+  {
+    "id": "extra-layers-c-string_main",
+    "source": "examples/documentation/string_main.c",
+    "language": "c",
+    "profile": "string_main",
+    "states": [
+      "ideal",
+      "active",
+      "ideal",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {
+      "numerics": "CFL bound"
+    }
+  },
+  {
+    "id": "extra-layers-phys-thermal_main",
+    "source": "examples/documentation/thermal_main.phys",
+    "language": "phys",
+    "profile": "thermal_main",
+    "states": [
+      "ideal",
+      "active",
+      "ideal",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-c-thermal_main",
+    "source": "examples/documentation/thermal_main.c",
+    "language": "c",
+    "profile": "thermal_main",
+    "states": [
+      "ideal",
+      "active",
+      "ideal",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-phys-transport_main",
+    "source": "examples/documentation/transport_main.phys",
+    "language": "phys",
+    "profile": "transport_main",
+    "states": [
+      "ideal",
+      "active",
+      "ideal",
+      "active",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {
+      "numerics": "not CFD"
+    }
+  },
+  {
+    "id": "extra-layers-c-transport_main",
+    "source": "examples/documentation/transport_main.c",
+    "language": "c",
+    "profile": "transport_main",
+    "states": [
+      "ideal",
+      "active",
+      "ideal",
+      "active",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {
+      "numerics": "not CFD"
+    }
+  },
+  {
+    "id": "extra-layers-c-logging",
+    "source": "examples/logging/main.c",
+    "language": "c",
+    "profile": "logging",
+    "states": [
+      "omitted",
+      "omitted",
+      "omitted",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-c-scene_frames",
+    "source": "examples/scene_frames/main.c",
+    "language": "c",
+    "profile": "scene_frames",
+    "states": [
+      "active",
+      "omitted",
+      "omitted",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-c-diagnostic_experiment",
+    "source": "examples/diagnostics/main.c",
+    "language": "c",
+    "profile": "diagnostic_experiment",
+    "states": [
+      "active",
+      "omitted",
+      "omitted",
+      "omitted",
+      "omitted",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {
+      "laws": "Deliberately failing"
+    }
+  },
+  {
+    "id": "extra-layers-c-contact_stack",
+    "source": "examples/contact_stack/main.c",
+    "language": "c",
+    "profile": "contact_stack",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "active",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-c-ccd_events",
+    "source": "examples/ccd_events/main.c",
+    "language": "c",
+    "profile": "ccd_events",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "ideal",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-c-projectile",
+    "source": "examples/documentation/vacuum_main.c",
+    "language": "c",
+    "profile": "projectile",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  },
+  {
+    "id": "extra-layers-c-uniform_motion",
+    "source": "examples/documentation/main.c",
+    "language": "c",
+    "profile": "uniform_motion",
+    "states": [
+      "ideal",
+      "active",
+      "omitted",
+      "omitted",
+      "active",
+      "ideal",
+      "omitted"
+    ],
+    "limits": {}
+  }
+]

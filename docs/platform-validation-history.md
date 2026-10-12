@@ -3840,3 +3840,74 @@ Kollisionsreferenz. Sie sucht nun die beiden erwarteten Dokumentpfade und prüft
 weiterhin Treffer, Nichttreffer und Scrollnavigation. Fenster-/Tastaturprüfungen
 bestehen abschließend jeweils 2/2 (`run-cn45y4n7`, `run-jg6unw4x`), einschließlich
 des erfolgreichen Ladens sämtlicher registrierter Themen.
+
+
+## Vollständiger 2ce2f12-Lauf und Herkunftsintegration
+
+Der unveränderte eingefrorene Stand `2ce2f12f4fb0f11df388aa8ca7b9930a2dd1e67e`
+besteht **679/716** native Release-Fälle und endet mit **37 Fehlern**, Exit 1.
+Ergebnisse: `build/current-full-build-2ce2f12-mac/test-results/run-sy3jw3h1/results.json`;
+Log: `build/current-full-build-2ce2f12-mac.log`. Alle **1.398** Quellhashes bleiben
+unverändert; Manifest: `build/current-full-source-2ce2f12-manifest.json`. Das
+SDK wurde wegen des Fehlers nicht installiert; keine SDK-Abnahme dieses Stands.
+
+Der Gesamtlauf findet Integrationslücken der Compilerherkunft: falsch gesetzte
+Capability-Bits in neun benannten C-Initialisierungen und einem Präprozessor-
+Zweig, 14 nicht synchronisierte Handbuch-Codeblöcke sowie unnötige Neubauten
+durch den volatilen Buildtext im präprozessierten Abhängigkeitsvergleich.
+Zusätzlich erwartet der Batch-Dokumentationstest vollständige Bytegleichheit
+unterschiedlicher Laufstartzeiten; eine synthetische Pendel-Fixture schiebt
+Modellmetadaten über einen mehrzeiligen Experimentnamen ein.
+
+Der folgende Arbeitsstand korrigiert die Initialisierungen und beide
+Koordinatenrahmen-Capability-Zweige, synchronisiert die tatsächlichen getesteten
+Quellen und verwendet reguläre Modellmetadaten für die Fixture. Batch-Parität
+normalisiert ausschließlich die validierten Startzeitwerte samt CRC.
+Der Projektbuilder präprozessiert mit festem `PS_BUILD_STAMP` nur für den
+Abhängigkeitsvergleich; bei nötiger Übersetzung präprozessiert/kompiliert er
+mit dem tatsächlichen Compilerliteral. Die gespeicherten Vergleichsdateien
+sind nicht der kompilierte Code. Anwender-`__DATE__`/`__TIME__` behalten ihre
+bisherige Semantik. Die tatsächlichen Laufarchive werden zusätzlich auf
+Core-/Modul-/Runner-Buildliterale und das Fehlen des Cache-Platzhalters geprüft.
+
+
+Der erste Reparaturlauf besteht **38/39**, `run-na_gxmvd`,
+`build/current-origin-integration-repair-mac.log`; allein die danach korrigierte
+Batch-Zeitannahme scheitert. Die abschließenden Gruppen bestehen **8/8**,
+`run-qj1756up`, `build/current-origin-integration-final-mac.log`, einschließlich
+nativer Cache-/Herkunftsprüfung, Batch, Migration, Property/Gas, Pendelkräften,
+Abnahme und Berichtsbezeichnungen. Der maschinelle Abgleich beider JSON-Listen
+bestätigt bestandene Nachprüfungen aller **37** zuvor gescheiterten Namen und
+**45** verschiedene bestandene Reparatur-/Folgegruppen. Das sind gezielte
+Nachprüfungen, noch kein neuer vollständiger Lauf.
+
+Die tatsächlichen C-Feder-/Physim-Pendel-Appketten bestehen **2/2**,
+`run-05cben1l`, `build/current-origin-integration-workflows-mac.log`.
+
+
+SDK-Installation mit Parser-/Referenz-/Kit-/Completion-/Katalogprüfung besteht
+**5/5**, `run-11045v5f`, `build/current-origin-repair-sdk-install-mac.log`.
+Alle **478** manifestierten SDK-Dateien wurden geprüft und nach
+`build/current-origin-repair-relocated-mac/SDK ä` verschoben. Der vollständige
+native Projektbuilder-Verbraucher besteht von dort mit echten C-/Physim- und
+Analyseprojekten, Header-/Artefaktreparatur, Fehlererholung und archivierten
+Buildliteralen: `build/current-origin-repair-sdk-consumer-mac.log`.
+
+Die abschließende Herkunftsheader-Erweiterung zeichnet dessen Größe/CRC in der
+Buildkonfiguration auf. Dadurch bleibt eine geänderte Definition trotz
+normalisiertem Datum wirksam. Native Builds/Migration bestehen **2/2**,
+`run-fpcw2u03`, `build/current-origin-cache-header-final-mac.log`; der Test
+ändert den Header im eigenen SDK, verlangt tatsächliche Neukompilierung und
+prüft den neuen Literaltext im kompilierten Core-Objekt, danach Wiederverwendung.
+
+
+Das endgültige Paket besteht erneut Parser-/Referenz-/Kit-/Completion-/Katalog
+**5/5**, `run-tzu_x0m7`, `build/current-origin-repair-final-sdk-install-mac.log`.
+Die finale verschobene 478-Dateien-SDK-Kopie besteht kalten Build, unveränderten
+Folgebuild und einen realen C-Runner mit tatsächlichen archivierten Literalen:
+`build/current-origin-repair-final-sdk-cache-mac.log`. Die Herkunftsgegenprobe
+mit installierter/neu gebauter Bibliothek besteht **3/3** Verbraucherbefehle,
+`build/current-origin-repair-final-sdk-origin-mac.log`; Verbraucher
+`build/current-origin-repair-final-sdk-origin-consumer-mac/Native SDK ä jbb3xhk_`.
+Alte adaptive und fremde längere ABI-Tails sowie ungültige Herkunft bleiben
+geprüft. Dies ersetzt weiterhin keine neue vollständige SDK-/Plattformabnahme.

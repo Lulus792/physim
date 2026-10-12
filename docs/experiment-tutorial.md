@@ -47,7 +47,7 @@ static ps_result create(ps_context *c) {
         return PS_LIMIT;
     }
     snprintf(c->model_metadata, sizeof c->model_metadata,
-             "model=uniform motion\nvelocity_m_s=1.5\nintegrator=exact");
+             "layer.geometry=ideal|Point moving along X\nlayer.laws=active|Prescribed constant velocity\nlayer.medium=omitted|No material or medium\nlayer.losses=omitted|No forces or losses\nlayer.numerics=active|Exact uniform-motion update\nlayer.measurement=ideal|Exact position channel\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=uniform motion\nvelocity_m_s=1.5\nintegrator=exact");
     return reset(c);
 }
 static ps_result step(ps_context *c, double dt) {

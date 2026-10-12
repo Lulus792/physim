@@ -45,7 +45,7 @@ func measure():
     pointSpeed.sample(body.pointVelocity(applicationPoint()).x)
 
 func create():
-    metadata("model=driven rigid box\nmass_kg=2\nintegrator=symplectic translation, explicit gyroscopic rotation\nforce_n=0.4,-1,0.2\nforce_point_body_m=0.3,0.1,-0.2\ncontact=none\ngravity=none")
+    metadata("layer.geometry=ideal|Homogeneous rigid box and fixed body force point\nlayer.laws=active|Rigid translation and rotation under prescribed force\nlayer.medium=omitted|No surrounding medium\nlayer.losses=omitted|No drag or contacts\nlayer.numerics=active|Symplectic translation and explicit gyroscopic rotation\nlayer.measurement=ideal|Exact state channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=driven rigid box\nmass_kg=2\nintegrator=symplectic translation, explicit gyroscopic rotation\nforce_n=0.4,-1,0.2\nforce_point_body_m=0.3,0.1,-0.2\ncontact=none\ngravity=none")
 
 func reset():
     body = Body.box(2, size)

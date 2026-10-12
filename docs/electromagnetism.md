@@ -111,7 +111,7 @@ static ps_result create(ps_context *c) {
     ps_unit units[]={volt,PS_AMPERE,watt,PS_JOULE,PS_JOULE,PS_JOULE,PS_JOULE};
     for(unsigned i=0;r==PS_OK && i<7;i++)if(ps_channel_add(c,names[i],units[i],names[i])!=(int)i)r=PS_LIMIT;
     if(r!=PS_OK)return r;
-    snprintf(c->model_metadata,sizeof c->model_metadata,"model=constant-source series RC\nunits=SI\nintegrator=exact exponential\nenergy_reference=zero capacitor energy at zero voltage\nsource_work=Vs*C*(V-V0); positive into circuit\nheat=exact integral of I^2*R; stable expm1\nexcluded=inductance,parasitics,nonlinear components,source switching\n");
+    snprintf(c->model_metadata,sizeof c->model_metadata,"layer.geometry=ideal|Lumped constant-source series RC circuit\nlayer.laws=active|Linear resistor and capacitor laws\nlayer.medium=ideal|Constant resistance and capacitance\nlayer.losses=active|Ohmic heating\nlayer.numerics=active|Exact exponential update and stable work/heat evaluation\nlayer.measurement=ideal|Exact electrical and energy channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=constant-source series RC\nunits=SI\nintegrator=exact exponential\nenergy_reference=zero capacitor energy at zero voltage\nsource_work=Vs*C*(V-V0); positive into circuit\nheat=exact integral of I^2*R; stable expm1\nexcluded=inductance,parasitics,nonlinear components,source switching\n");
     return reset(c);
 }
 static ps_result step(ps_context *c,double dt) {
@@ -169,7 +169,7 @@ func measure():
     sourceChannel.sample(work)
     balanceChannel.sample(energy+heat-work)
 func create():
-    metadata("model=constant-source series RC\nunits=SI\nintegrator=exact exponential\nenergy_reference=zero capacitor energy at zero voltage\nsource_work=Vs*C*(V-V0); positive into circuit\nheat=exact integral of I^2*R; stable expm1\nexcluded=inductance,parasitics,nonlinear components,source switching\n")
+    metadata("layer.geometry=ideal|Lumped constant-source series RC circuit\nlayer.laws=active|Linear resistor and capacitor laws\nlayer.medium=ideal|Constant resistance and capacitance\nlayer.losses=active|Ohmic heating\nlayer.numerics=active|Exact exponential update and stable work/heat evaluation\nlayer.measurement=ideal|Exact electrical and energy channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=constant-source series RC\nunits=SI\nintegrator=exact exponential\nenergy_reference=zero capacitor energy at zero voltage\nsource_work=Vs*C*(V-V0); positive into circuit\nheat=exact integral of I^2*R; stable expm1\nexcluded=inductance,parasitics,nonlinear components,source switching\n")
     reset()
 func reset():
     voltage = initial

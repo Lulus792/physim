@@ -25,7 +25,7 @@ func measure():
     energy.sample(idealGasEnergy(ca/12.5,12.5,temperatures.x))
     balance.sample(ca*temperatures.x+cb*temperatures.y)
 func create():
-    metadata("model=isolated constant-capacity thermal pair\nunits=Kelvin,SI\nintegrator=exact exponential\ngas=ideal; fixed volume 0.1 m^3; cv=12.5 J/(mol K); n=capacityA/cv\nexcluded=spatial gradients,radiation,latent heat,real gas\n")
+    metadata("layer.geometry=ideal|Two homogeneous lumps and fixed-volume gas reference\nlayer.laws=active|Energy-conserving thermal exchange and ideal gas law\nlayer.medium=ideal|Constant heat capacities and conductance\nlayer.losses=omitted|No radiation, spatial gradients, latent heat or real gas\nlayer.numerics=active|Exact exponential exchange\nlayer.measurement=ideal|Exact thermodynamic channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=isolated constant-capacity thermal pair\nunits=Kelvin,SI\nintegrator=exact exponential\ngas=ideal; fixed volume 0.1 m^3; cv=12.5 J/(mol K); n=capacityA/cv\nexcluded=spatial gradients,radiation,latent heat,real gas\n")
     reset()
 func reset():
     temperatures = Vec2(ta,tb)

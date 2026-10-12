@@ -32,7 +32,7 @@ func measure():
     normalError.sample(normal)
     projectionError.sample(projection)
 func create():
-    metadata("model=three equal homogeneous spheres in vacuum\nmass_kg=1\nradius_m=0.5\ncentres_m=-4,0,4\nrestitution=1\nfriction=0\nexternal_forces=none\nccd=earliest event batches with canonical IDs\ncontact_offset_m=0.000001\ninitial_speed_m_s="+String(speed)+"\n")
+    metadata("layer.geometry=ideal|Three equal homogeneous spheres\nlayer.laws=active|Force-free rigid contact impulses\nlayer.medium=omitted|Vacuum\nlayer.losses=ideal|Elastic frictionless contact\nlayer.numerics=active|Earliest CCD event batches and canonical contact groups\nlayer.measurement=ideal|Exact states and solver residuals\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=three equal homogeneous spheres in vacuum\nmass_kg=1\nradius_m=0.5\ncentres_m=-4,0,4\nrestitution=1\nfriction=0\nexternal_forces=none\nccd=earliest event batches with canonical IDs\ncontact_offset_m=0.000001\ninitial_speed_m_s="+String(speed)+"\n")
 func reset():
     bodies = []
     for i in 0..<3:

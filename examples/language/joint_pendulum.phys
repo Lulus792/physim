@@ -52,7 +52,7 @@ func measure():
     velocityError.sample(solution.velocityError)
 
 func create():
-    metadata("model=rigid joint pendulum\nmass_kg=1\ngravity_m_s2=9.81\nstabilization=0.2\nintegrator=gravity impulse, joint velocity solve, body drift\ncontact=none\nenergy=not exactly conserved; refine dt")
+    metadata("layer.geometry=ideal|Homogeneous rigid box and fixed distance-joint anchor\nlayer.laws=active|Uniform gravity and distance constraint\nlayer.medium=omitted|Vacuum\nlayer.losses=omitted|No physical damping or contacts\nlayer.numerics=active|Velocity joint solve and body drift; stabilization can change energy\nlayer.measurement=ideal|Exact state and solver residuals\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=rigid joint pendulum\nmass_kg=1\ngravity_m_s2=9.81\nstabilization=0.2\nintegrator=gravity impulse, joint velocity solve, body drift\ncontact=none\nenergy=not exactly conserved; refine dt")
 
 func reset():
     var initial = Body.box(1,size)

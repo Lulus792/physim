@@ -156,9 +156,7 @@ Alle acht Standard-Experimentvorlagen der Projekterstellung deklarieren in C
 und Physim ihre sieben Modellschichten. Die Angaben berücksichtigen die
 gewählten Dichte-, Widerstands-, Reibungs-, Restitutions- und Rauschparameter. Die
 Sampling-Angabe beschreibt den Modell-RNG; Einstellungen äußerer Batch-Ensembles
-werden dort ausdrücklich getrennt benannt. Spezielle zusätzliche Sprachbeispiele und die Zuordnung aktiver
-Batch-Verteilungen zur Laufdetails-Ansicht sind noch offen. Ältere Läufe
-ohne Deklarationen bleiben lesbar.
+werden dort ausdrücklich getrennt benannt. Auch die weiteren ausgelieferten Experimente deklarieren diese Schichten: Solvervarianten, Kontakt- und CCD-Beispiele, Messmodelle und Domänen-Lernpfade. Reine Logging-, Darstellungs- und Diagnosebeispiele benennen ihre Rolle und Modellgrenzen ausdrücklich. `scene_shapes` besitzt keine Messkanäle und erzeugt deshalb kein Messlaufarchiv; seine Deklaration gehört zum Modul. Äußere Seed-Serien und lineare Parameterstudien erscheinen als eigener Abschnitt der Laufdetails. Ältere Läufe ohne Deklarationen bleiben lesbar.
 
 
 ## Herkunft äußerer Laufserien

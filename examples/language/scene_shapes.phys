@@ -1,6 +1,6 @@
 var angle = 0.0
 func create():
-    metadata("model=scene shapes\nrotation_axis=0,0,1\nangular_speed_rad_s=1")
+    metadata("layer.geometry=active|Synthetic scene primitives and prescribed rotation\nlayer.laws=omitted|Rendering demonstration, no dynamics\nlayer.medium=omitted|No material or medium\nlayer.losses=omitted|No loss model\nlayer.numerics=active|Prescribed angle update, not a physics solver\nlayer.measurement=omitted|No measurement model\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=scene shapes\nrotation_axis=0,0,1\nangular_speed_rad_s=1")
 func reset():
     angle = 0.0
 func step(dt: Float64):

@@ -39,7 +39,7 @@ func measure():
     projectionError.sample(world.maxProjectionError())
 func create():
     assert(iterations == Float64(Int64(iterations)))
-    metadata("model=four homogeneous unit boxes on a static plane\ngravity_m_s2=-9.80665\ncontacts=automatic sphere/box/plane discrete\ncontact_ids=stable collider IDs with local anchors\nsolver=projected graph impulses with warm history\nccd=none\nbox_mass_kg=1\nbox_side_m=1\nwarm_start_fraction="+String(warm)+"\nsolver_iterations="+String(iterations)+"\nrestitution=0\nfriction=0.5\nbounce_threshold_m_s=0.5\npenetration_slop_m=0.00001\ncorrection_fraction=0.8\n")
+    metadata("layer.geometry=ideal|Four homogeneous unit boxes and fixed plane\nlayer.laws=active|Uniform gravity and rigid contact impulses\nlayer.medium=omitted|Vacuum\nlayer.losses=active|Inelastic restitution and Coulomb friction\nlayer.numerics=active|Discrete contact graph and warm-start iterations; no CCD\nlayer.measurement=ideal|Exact states and solver residuals\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=four homogeneous unit boxes on a static plane\ngravity_m_s2=-9.80665\ncontacts=automatic sphere/box/plane discrete\ncontact_ids=stable collider IDs with local anchors\nsolver=projected graph impulses with warm history\nccd=none\nbox_mass_kg=1\nbox_side_m=1\nwarm_start_fraction="+String(warm)+"\nsolver_iterations="+String(iterations)+"\nrestitution=0\nfriction=0.5\nbounce_threshold_m_s=0.5\npenetration_slop_m=0.00001\ncorrection_fraction=0.8\n")
 func reset():
     world = world.reset()
     bodies = [Body.sphere(0,0.5)]

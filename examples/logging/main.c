@@ -1,8 +1,9 @@
 #include "physim/experiment.h"
+#include <stdio.h>
 #include <stdlib.h>
 typedef struct { double burst; } model;
 static ps_result reset(ps_context *c);
-static ps_result create(ps_context *c) {
+static ps_result create(ps_context *c) {snprintf(c->model_metadata,sizeof c->model_metadata,"layer.geometry=omitted|Logging demonstration, no geometry model\nlayer.laws=omitted|Prescribed scalar progression, not physics\nlayer.medium=omitted|No material or medium\nlayer.losses=omitted|No loss model\nlayer.numerics=active|Value incremented by dt\nlayer.measurement=ideal|Exact scalar channel\nlayer.sampling=omitted|Deterministic model; external ensembles separate\n");
     model *state=calloc(1,sizeof *state);
     if(!state)return PS_MEMORY;
     c->user=state;

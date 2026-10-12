@@ -40,7 +40,7 @@ static ps_result create(ps_context *c) {
     ps_unit units[]={PS_RADIAN,rate,PS_METRE,PS_METRE,PS_JOULE,PS_RADIAN,velocity,velocity,velocity};
     for(unsigned i=0;i<9;i++)if(ps_channel_add(c,names[i],units[i],names[i])!=(int)i)return PS_LIMIT;
     snprintf(c->model_metadata,sizeof c->model_metadata,
-        "model=point pendulum, massless rigid rod, vacuum\nlength_m=%.17g\ninitial_angle_rad=%.17g\nmass_kg=1\ngravity_m_s2=9.80665\nintegrator=%s\nrk45_absolute_tolerance=1e-10\nrk45_relative_tolerance=1e-8\nexcluded=drag, drive, rod inertia, contacts, sensor noise\n",p->length,p->angle,methods[(unsigned)p->method]);
+        "layer.geometry=ideal|Point mass and massless rigid rod\nlayer.laws=active|Uniform gravity\nlayer.medium=omitted|Vacuum\nlayer.losses=omitted|No drag, drive, contacts or rod inertia\nlayer.numerics=active|Recorded integrator and tolerances\nlayer.measurement=ideal|Exact angle; no sensor noise\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=point pendulum, massless rigid rod, vacuum\nlength_m=%.17g\ninitial_angle_rad=%.17g\nmass_kg=1\ngravity_m_s2=9.80665\nintegrator=%s\nrk45_absolute_tolerance=1e-10\nrk45_relative_tolerance=1e-8\nexcluded=drag, drive, rod inertia, contacts, sensor noise\n",p->length,p->angle,methods[(unsigned)p->method]);
     return reset(c);
 }
 static ps_ode_options options(double proposed,double minimum,double maximum) {

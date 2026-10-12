@@ -1,5 +1,6 @@
 let value = Channel("value", Unit(0,0,0,0,0,0,0,1,"1"), "Initial value")
 func create():
+    metadata("layer.geometry=active|Synthetic sphere display\nlayer.laws=omitted|Deliberately failing diagnostic demonstration\nlayer.medium=omitted|No material or medium\nlayer.losses=omitted|No loss model\nlayer.numerics=omitted|Deliberate singular diagnostic, no dynamics solve\nlayer.measurement=ideal|Initial fixture channel\nlayer.sampling=omitted|Deterministic model; external ensembles separate\n")
     return
 func reset():
     value.sample(1)

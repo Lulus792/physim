@@ -53,7 +53,7 @@ static ps_result create(ps_context *c) {
     const char *names[]={"displacement.center","reference.center","error.center","energy.discrete","courant","nodes"};
     ps_unit units[]={PS_METRE,PS_METRE,PS_METRE,PS_JOULE,PS_ONE,PS_ONE};
     for(unsigned j=0;j<6;j++)if(ps_channel_add(c,names[j],units[j],names[j])!=(int)j)return PS_LIMIT;
-    snprintf(c->model_metadata,sizeof c->model_metadata,"model=linear fixed-endpoint string\nintegrator=centered second-order leapfrog\ninitial_velocity=zero; previous mode initialized with cos(theta)\nstability=c*dt/dx<=1; constant dt\nenergy=half-step kinetic plus cross-time gradient potential\nexcluded=damping,forcing,variable medium,nonlinear stretch,2D/3D PDE\n");
+    snprintf(c->model_metadata,sizeof c->model_metadata,"layer.geometry=ideal|One-dimensional fixed-endpoint string\nlayer.laws=active|Linear wave equation\nlayer.medium=ideal|Uniform tension and linear density\nlayer.losses=omitted|No damping, forcing or nonlinear stretch\nlayer.numerics=active|Centered leapfrog; fixed dt and CFL bound\nlayer.measurement=ideal|Exact grid-derived channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=linear fixed-endpoint string\nintegrator=centered second-order leapfrog\ninitial_velocity=zero; previous mode initialized with cos(theta)\nstability=c*dt/dx<=1; constant dt\nenergy=half-step kinetic plus cross-time gradient potential\nexcluded=damping,forcing,variable medium,nonlinear stretch,2D/3D PDE\n");
     return reset(c);
 }
 static ps_result step(ps_context *c,double dt) {

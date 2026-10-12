@@ -45,7 +45,7 @@ func measure():
 func create():
     assert(Float64(nodes) == countValue && nodes%2 == 1 && Float64(mode) == modeValue,"Integer mode and odd node count required")
     assert(courant <= 1,"String requires c*dt/dx <= 1")
-    metadata("model=linear fixed-endpoint string\nintegrator=centered second-order leapfrog\ninitial_velocity=zero; previous mode initialized with cos(theta)\nstability=c*dt/dx<=1; constant dt\nenergy=half-step kinetic plus cross-time gradient potential\nexcluded=damping,forcing,variable medium,nonlinear stretch,2D/3D PDE\n")
+    metadata("layer.geometry=ideal|One-dimensional fixed-endpoint string\nlayer.laws=active|Linear wave equation\nlayer.medium=ideal|Uniform tension and linear density\nlayer.losses=omitted|No damping, forcing or nonlinear stretch\nlayer.numerics=active|Centered leapfrog; fixed dt and CFL bound\nlayer.measurement=ideal|Exact grid-derived channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=linear fixed-endpoint string\nintegrator=centered second-order leapfrog\ninitial_velocity=zero; previous mode initialized with cos(theta)\nstability=c*dt/dx<=1; constant dt\nenergy=half-step kinetic plus cross-time gradient potential\nexcluded=damping,forcing,variable medium,nonlinear stretch,2D/3D PDE\n")
     reset()
 func reset():
     previous = []

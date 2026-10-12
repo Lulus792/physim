@@ -34,7 +34,7 @@ static ps_result create(ps_context *c) {
     ps_unit units[]={PS_KELVIN,PS_KELVIN,watt,PS_PASCAL,PS_JOULE,PS_JOULE};
     for(unsigned i=0;r==PS_OK && i<6;i++)if(ps_channel_add(c,names[i],units[i],names[i])!=(int)i)r=PS_LIMIT;
     if(r!=PS_OK)return r;
-    snprintf(c->model_metadata,sizeof c->model_metadata,"model=isolated constant-capacity thermal pair\nunits=Kelvin,SI\nintegrator=exact exponential\ngas=ideal; fixed volume 0.1 m^3; cv=12.5 J/(mol K); n=capacityA/cv\nexcluded=spatial gradients,radiation,latent heat,real gas\n");
+    snprintf(c->model_metadata,sizeof c->model_metadata,"layer.geometry=ideal|Two homogeneous lumps and fixed-volume gas reference\nlayer.laws=active|Energy-conserving thermal exchange and ideal gas law\nlayer.medium=ideal|Constant heat capacities and conductance\nlayer.losses=omitted|No radiation, spatial gradients, latent heat or real gas\nlayer.numerics=active|Exact exponential exchange\nlayer.measurement=ideal|Exact thermodynamic channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=isolated constant-capacity thermal pair\nunits=Kelvin,SI\nintegrator=exact exponential\ngas=ideal; fixed volume 0.1 m^3; cv=12.5 J/(mol K); n=capacityA/cv\nexcluded=spatial gradients,radiation,latent heat,real gas\n");
     return reset(c);
 }
 static ps_result step(ps_context *c,double dt) {

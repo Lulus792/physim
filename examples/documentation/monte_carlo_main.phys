@@ -37,7 +37,7 @@ func measure(time: Float64, initialVx: Float64, initialVy: Float64):
     csy.sample(sy)
     ce.sample(energy)
 func create():
-    metadata("model=uncertain initial velocities, exact vacuum projectile\nmass_kg=1\ngravity_m_s2=9.80665\ninitial_position_m=-2,0\nvx_distribution=normal\nvy_distribution=normal\nvelocity_dependence=independent model draws\nintegrator=exact ballistic propagation\nuncertainty_channels=population standard deviations, not sensor errors\nexcluded=ground, drag, sensor noise, parameter drift\n")
+    metadata("layer.geometry=ideal|Point mass; no ground contact\nlayer.laws=active|Uniform gravity\nlayer.medium=omitted|Vacuum\nlayer.losses=omitted|No drag or parameter drift\nlayer.numerics=active|Exact ballistic propagation\nlayer.measurement=ideal|Exact state; uncertainty channels are population moments, not sensor errors\nlayer.sampling=active|Independent normal launch draws; external ensembles separate\nmodel=uncertain initial velocities, exact vacuum projectile\nmass_kg=1\ngravity_m_s2=9.80665\ninitial_position_m=-2,0\nvx_distribution=normal\nvy_distribution=normal\nvelocity_dependence=independent model draws\nintegrator=exact ballistic propagation\nuncertainty_channels=population standard deviations, not sensor errors\nexcluded=ground, drag, sensor noise, parameter drift\n")
 func reset():
     let nextVx = randomNormal(meanVx,sigmaVx)
     let nextVy = randomNormal(meanVy,sigmaVy)

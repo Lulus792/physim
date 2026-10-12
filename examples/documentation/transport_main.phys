@@ -47,7 +47,7 @@ func measure(dt: Float64):
 func create():
     assert(reynolds <= 1000,"Pipe tutorial requires Reynolds <= 1000")
     assert(abs(velocity)*initialDt/dx+2*diffusion*initialDt/(dx*dx) <= 1,"Transport stability bound exceeded")
-    metadata("model=passive three-pipe split plus separate periodic tracer\nintegrator=upwind advection and explicit centered diffusion\nnetwork=fixed nodes 0,2,3; free node 1; edges 0->1,1->2,1->3\ntransport=64 periodic cells over 1 m; mean velocity from inlet pipe\nvalidity=Re<=1000; abs(v)*dt/dx+2*D*dt/dx^2<=1\nexcluded=turbulence,momentum evolution,compressibility,open tracer boundaries,CFD\n")
+    metadata("layer.geometry=ideal|Passive three-pipe network and periodic one-dimensional tracer\nlayer.laws=active|Laminar pipe conductance and conservative tracer transport\nlayer.medium=ideal|Uniform Newtonian viscosity and tracer diffusion\nlayer.losses=active|Viscous pipe pressure loss and tracer diffusion\nlayer.numerics=active|Network solve and bounded upwind/centered update; not CFD\nlayer.measurement=ideal|Exact numerical flow and concentration channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=passive three-pipe split plus separate periodic tracer\nintegrator=upwind advection and explicit centered diffusion\nnetwork=fixed nodes 0,2,3; free node 1; edges 0->1,1->2,1->3\ntransport=64 periodic cells over 1 m; mean velocity from inlet pipe\nvalidity=Re<=1000; abs(v)*dt/dx+2*D*dt/dx^2<=1\nexcluded=turbulence,momentum evolution,compressibility,open tracer boundaries,CFD\n")
     reset()
 func reset():
     concentration = []

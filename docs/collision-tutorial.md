@@ -206,7 +206,7 @@ static ps_result create(ps_context *c) {
     ps_unit units[]={PS_METRE,PS_METRE,PS_VELOCITY,PS_VELOCITY,PS_JOULE,momentum,PS_JOULE,PS_JOULE,momentum,PS_SECOND,PS_ONE};
     for(unsigned i=0;i<11;i++)if(ps_channel_add(c,names[i],units[i],names[i])!=(int)i)return PS_LIMIT;
     snprintf(c->model_metadata,sizeof c->model_metadata,
-        "model=one central collision of two rigid spheres\nmedium=vacuum\ngravity=none\nfriction=0\ninitial_spin=0\nradius_m=0.2\ninitial_positions_m=-1,1\nmass_a_kg=%.17g\nmass_b_kg=%.17g\nvelocity_a_m_s=%.17g\nvelocity_b_m_s=%.17g\nrestitution=%.17g\nccd=linear sphere sweep, impulse, remaining time\ndissipation=0.5*reduced_mass*(1-e^2)*closing_speed^2\nevent_time_valid=collision.count==1\nexcluded=external forces, rotation, deformation, further contacts\n",e->mass_a,e->mass_b,e->speed_a,e->speed_b,e->restitution);
+        "layer.geometry=ideal|Two spheres and one central contact\nlayer.laws=active|Force-free translation and normal contact impulse\nlayer.medium=omitted|Vacuum\nlayer.losses=%s|Configured restitution; no friction or rotation\nlayer.numerics=active|Linear CCD, impulse and remaining-time propagation\nlayer.measurement=ideal|Exact state and event channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=one central collision of two rigid spheres\nmedium=vacuum\ngravity=none\nfriction=0\ninitial_spin=0\nradius_m=0.2\ninitial_positions_m=-1,1\nmass_a_kg=%.17g\nmass_b_kg=%.17g\nvelocity_a_m_s=%.17g\nvelocity_b_m_s=%.17g\nrestitution=%.17g\nccd=linear sphere sweep, impulse, remaining time\ndissipation=0.5*reduced_mass*(1-e^2)*closing_speed^2\nevent_time_valid=collision.count==1\nexcluded=external forces, rotation, deformation, further contacts\n",e->restitution<1?"active":"ideal",e->mass_a,e->mass_b,e->speed_a,e->speed_b,e->restitution);
     return reset(c);
 }
 static ps_result step(ps_context *c,double dt) {
@@ -392,7 +392,10 @@ func measure(nextA: Body, nextB: Body, nextLost: Float64, nextImpulse: Float64, 
         count = 1
     eventCount.sample(count)
 func create():
-    metadata("model=one central collision of two rigid spheres\nmedium=vacuum\ngravity=none\nfriction=0\ninitial_spin=0\nradius_m=0.2\ninitial_positions_m=-1,1\nmass_a_kg=" + String(massA) + "\nmass_b_kg=" + String(massB) + "\nvelocity_a_m_s=" + String(velocityA) + "\nvelocity_b_m_s=" + String(velocityB) + "\nrestitution=" + String(restitution) + "\nccd=linear sphere sweep, impulse, remaining time\ndissipation=0.5*reduced_mass*(1-e^2)*closing_speed^2\nevent_time_valid=collision.count==1\nexcluded=external forces, rotation, deformation, further contacts\n")
+    var lossesLayer = "ideal"
+    if restitution < 1:
+        lossesLayer = "active"
+    metadata("layer.geometry=ideal|Two spheres and one central contact\nlayer.laws=active|Force-free translation and normal contact impulse\nlayer.medium=omitted|Vacuum\nlayer.losses=" + lossesLayer + "|Configured restitution; no friction or rotation\nlayer.numerics=active|Linear CCD, impulse and remaining-time propagation\nlayer.measurement=ideal|Exact state and event channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=one central collision of two rigid spheres\nmedium=vacuum\ngravity=none\nfriction=0\ninitial_spin=0\nradius_m=0.2\ninitial_positions_m=-1,1\nmass_a_kg=" + String(massA) + "\nmass_b_kg=" + String(massB) + "\nvelocity_a_m_s=" + String(velocityA) + "\nvelocity_b_m_s=" + String(velocityB) + "\nrestitution=" + String(restitution) + "\nccd=linear sphere sweep, impulse, remaining time\ndissipation=0.5*reduced_mass*(1-e^2)*closing_speed^2\nevent_time_valid=collision.count==1\nexcluded=external forces, rotation, deformation, further contacts\n")
 func reset():
     var initialA = Body.sphere(massA,radius)
     var initialB = Body.sphere(massB,radius)

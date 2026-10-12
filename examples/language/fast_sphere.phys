@@ -22,7 +22,7 @@ var body = Body.sphere(1,radius)
 var totalHits: Int64 = 0
 
 func create():
-    metadata("model=fast sphere between walls\nradius_m=0.12\nspeed_m_s=80\nwall_x_m=-1.5,1.5\nrestitution=1\nfriction=0\nacceleration=none\nccd=linear sphere-plane sweep, event response, remaining time\nmax_events_per_step=16")
+    metadata("layer.geometry=ideal|Rigid sphere between two fixed planes\nlayer.laws=active|Force-free motion and elastic impulses\nlayer.medium=omitted|Vacuum\nlayer.losses=ideal|Elastic frictionless impacts\nlayer.numerics=active|Linear CCD and remaining-time events; maximum 16 events per step\nlayer.measurement=ideal|Exact state and event channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=fast sphere between walls\nradius_m=0.12\nspeed_m_s=80\nwall_x_m=-1.5,1.5\nrestitution=1\nfriction=0\nacceleration=none\nccd=linear sphere-plane sweep, event response, remaining time\nmax_events_per_step=16")
 
 func reset():
     body = Body.sphere(1,radius)

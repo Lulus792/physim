@@ -3990,74 +3990,7 @@ keine vollständige Plattform-/SDK-Abnahme.
 
 ## Vollständiger 2ce2f12-Lauf und Herkunftsintegration
 
-Der unveränderte eingefrorene Stand `2ce2f12f4fb0f11df388aa8ca7b9930a2dd1e67e`
-besteht **679/716** native Release-Fälle und endet mit **37 Fehlern**, Exit 1.
-Ergebnisse: `build/current-full-build-2ce2f12-mac/test-results/run-sy3jw3h1/results.json`;
-Log: `build/current-full-build-2ce2f12-mac.log`. Alle **1.398** Quellhashes bleiben
-unverändert; Manifest: `build/current-full-source-2ce2f12-manifest.json`. Das
-SDK wurde wegen des Fehlers nicht installiert; keine SDK-Abnahme dieses Stands.
-
-Der Gesamtlauf findet Integrationslücken der Compilerherkunft: falsch gesetzte
-Capability-Bits in neun benannten C-Initialisierungen und einem Präprozessor-
-Zweig, 14 nicht synchronisierte Handbuch-Codeblöcke sowie unnötige Neubauten
-durch den volatilen Buildtext im präprozessierten Abhängigkeitsvergleich.
-Zusätzlich erwartet der Batch-Dokumentationstest vollständige Bytegleichheit
-unterschiedlicher Laufstartzeiten; eine synthetische Pendel-Fixture schiebt
-Modellmetadaten über einen mehrzeiligen Experimentnamen ein.
-
-Der folgende Arbeitsstand korrigiert die Initialisierungen und beide
-Koordinatenrahmen-Capability-Zweige, synchronisiert die tatsächlichen getesteten
-Quellen und verwendet reguläre Modellmetadaten für die Fixture. Batch-Parität
-normalisiert ausschließlich die validierten Startzeitwerte samt CRC.
-Der Projektbuilder präprozessiert mit festem `PS_BUILD_STAMP` nur für den
-Abhängigkeitsvergleich; bei nötiger Übersetzung präprozessiert/kompiliert er
-mit dem tatsächlichen Compilerliteral. Die gespeicherten Vergleichsdateien
-sind nicht der kompilierte Code. Anwender-`__DATE__`/`__TIME__` behalten ihre
-bisherige Semantik. Die tatsächlichen Laufarchive werden zusätzlich auf
-Core-/Modul-/Runner-Buildliterale und das Fehlen des Cache-Platzhalters geprüft.
-
-
-Der erste Reparaturlauf besteht **38/39**, `run-na_gxmvd`,
-`build/current-origin-integration-repair-mac.log`; allein die danach korrigierte
-Batch-Zeitannahme scheitert. Die abschließenden Gruppen bestehen **8/8**,
-`run-qj1756up`, `build/current-origin-integration-final-mac.log`, einschließlich
-nativer Cache-/Herkunftsprüfung, Batch, Migration, Property/Gas, Pendelkräften,
-Abnahme und Berichtsbezeichnungen. Der maschinelle Abgleich beider JSON-Listen
-bestätigt bestandene Nachprüfungen aller **37** zuvor gescheiterten Namen und
-**45** verschiedene bestandene Reparatur-/Folgegruppen. Das sind gezielte
-Nachprüfungen, noch kein neuer vollständiger Lauf.
-
-Die tatsächlichen C-Feder-/Physim-Pendel-Appketten bestehen **2/2**,
-`run-05cben1l`, `build/current-origin-integration-workflows-mac.log`.
-
-
-SDK-Installation mit Parser-/Referenz-/Kit-/Completion-/Katalogprüfung besteht
-**5/5**, `run-11045v5f`, `build/current-origin-repair-sdk-install-mac.log`.
-Alle **478** manifestierten SDK-Dateien wurden geprüft und nach
-`build/current-origin-repair-relocated-mac/SDK ä` verschoben. Der vollständige
-native Projektbuilder-Verbraucher besteht von dort mit echten C-/Physim- und
-Analyseprojekten, Header-/Artefaktreparatur, Fehlererholung und archivierten
-Buildliteralen: `build/current-origin-repair-sdk-consumer-mac.log`.
-
-Die abschließende Herkunftsheader-Erweiterung zeichnet dessen Größe/CRC in der
-Buildkonfiguration auf. Dadurch bleibt eine geänderte Definition trotz
-normalisiertem Datum wirksam. Native Builds/Migration bestehen **2/2**,
-`run-fpcw2u03`, `build/current-origin-cache-header-final-mac.log`; der Test
-ändert den Header im eigenen SDK, verlangt tatsächliche Neukompilierung und
-prüft den neuen Literaltext im kompilierten Core-Objekt, danach Wiederverwendung.
-
-
-Das endgültige Paket besteht erneut Parser-/Referenz-/Kit-/Completion-/Katalog
-**5/5**, `run-tzu_x0m7`, `build/current-origin-repair-final-sdk-install-mac.log`.
-Die finale verschobene 478-Dateien-SDK-Kopie besteht kalten Build, unveränderten
-Folgebuild und einen realen C-Runner mit tatsächlichen archivierten Literalen:
-`build/current-origin-repair-final-sdk-cache-mac.log`. Die Herkunftsgegenprobe
-mit installierter/neu gebauter Bibliothek besteht **3/3** Verbraucherbefehle,
-`build/current-origin-repair-final-sdk-origin-mac.log`; Verbraucher
-`build/current-origin-repair-final-sdk-origin-consumer-mac/Native SDK ä jbb3xhk_`.
-Alte adaptive und fremde längere ABI-Tails sowie ungültige Herkunft bleiben
-geprüft. Dies ersetzt weiterhin keine neue vollständige SDK-/Plattformabnahme.
-
+Der vollständige historische Nachweis bleibt im [Plattformarchiv](platform-validation-history.md#vollständiger-2ce2f12-lauf-und-herkunftsintegration) erhalten.
 
 ## Vollständiger nativer Intel-macOS-Lauf für c497a26
 
@@ -4231,3 +4164,52 @@ Deklaration; die ganze aktuelle Plattformabnahme bleibt offen.
 Die abschließenden Parser-/Dokumentations-/Fortsetzungs-/Kit-/Archivgruppen
 bestehen **5/5**, `run-wsbs9pb3`, `build/current-series-provenance-final-docs-mac.log`.
 Alle 531 Originalblöcke und die ursprüngliche Planprüfsumme bleiben erhalten.
+
+
+## Modellschichten der weiteren ausgelieferten Experimente
+
+Die restlichen **27 Physim-/17 C-Module** deklarieren nun die sieben Schichten.
+Zusammen mit den acht Standardpaaren sind alle 35 vom SDK gebauten Physim-
+Experimentmodule und 25 C-Beispielexperimente erfasst. Solver, Materialien,
+Messung und Domänenbeispiele nennen ihre konkreten Grenzen: Stabilisierung kann
+Energie verändern, diskrete Kontakte besitzen keine CCD, der schnelle Kugelfall
+hat eine Ereignisgrenze, Stokes benötigt Gültigkeitsgrenzen, die Saite eine
+CFL-Bedingung, synthetische Stofftabellen sind keine Kalibrierung und das
+Rohr-/Tracerbeispiel ist keine CFD. Logging, Darstellung und absichtlich
+fehlschlagende Diagnosen werden ausdrücklich so bezeichnet.
+
+`scene_shapes` hat keine Messkanäle. Der Runner lehnt die Archivierung mit
+Exit 6 ab und legt keine Datei an. Ein unabhängiger C-Verbraucher lädt das
+Modul, prüft Create/Reset, acht gültige Szenenobjekte und veränderte Geometrie
+nach Step; er liest die tatsächliche Deklaration. Es wurde kein künstlicher
+Messkanal ergänzt. Diagnosemodule werden mit null Schritten als gültige
+Initialarchive geprüft; ihr absichtlicher Fehler bleibt erhalten.
+
+Ausgeführte Intel-macOS-/AppleClang-Release-Nachweise:
+
+- **20/20** Tutorial-/Kit-/Beispielgruppen, `run-9g6z78ku`,
+  `build/current-extra-layers-final-mac.log`; alle 18 Tutorialquellgruppen stimmen
+  mit ihren ausgeführten Quellen überein.
+- **49** vollständige CRC-geprüfte Archive: 43 normale/initiale Fälle und sechs
+  Parameterwechsel für Pendel-Drag/Rauschen und inelastische Stöße. Deklarationen
+  gleicher C-/Physim-Profile stimmen exakt überein.
+- Gegen Modellquellen aus dem unveränderten `4c90a35`-Snapshot bestehen alle
+  **49** bytegleichen Kanalschemas und Messdatenblöcke mit demselben aktuellen
+  Runner/Core: `build/current-extra-layers-baseline-compare-mac.log`.
+- Das unabhängige **204**-Dateien-Kit besteht **29/29** SDK-Befehle mit
+  installierter und ausschließlich aus dem Paket neu gebauter Bibliothek,
+  **98** Archivfällen und zwei tatsächlichen kanalfreien Modulprüfungen:
+  `build/current-extra-layers-sdk-verify-mac.log`, Verbraucher
+  `build/current-extra-layers-sdk-consumer-mac/Native SDK ä w5w59uzy`.
+  `--examples-only` ist eine fokussierte Gegenprobe, keine Gesamtplattformabnahme.
+
+Die aktuelle vollständige Linux-/Windows-/macOS-Abnahme bleibt offen.
+PP-0482 bleibt deshalb im Gesamtplan unvollständig. Der parallel laufende
+vollständige eingefrorene `4c90a35`-Lauf umfasst diese späteren Deklarationen nicht.
+
+Die abschließende Dokumentations-/Kit-/Archivprüfung bestand zunächst 3/4,
+`run-vvkbtdc3`: die generierte Experimentreferenz enthielt noch die alte
+uniform-motion-Quelle. Nach Neugenerierung besteht die betreffende Referenz-
+prüfung **1/1**, `run-gix0im_m`,
+`build/current-extra-layers-reference-verified-mac.log`. Offline-Seitengrenzen,
+alle 531 Originaltexte und die ursprüngliche Planprüfsumme sind erneut geprüft.

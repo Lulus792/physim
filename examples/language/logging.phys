@@ -2,6 +2,7 @@ let metres = Unit(1,0,0,0,0,0,0,1,"m")
 let value = Channel("value", metres, "Logging leaves physics unchanged")
 var current = 100.0
 func create():
+    metadata("layer.geometry=omitted|Logging demonstration, no geometry model\nlayer.laws=omitted|Prescribed scalar progression, not physics\nlayer.medium=omitted|No material or medium\nlayer.losses=omitted|No loss model\nlayer.numerics=active|Value incremented by dt\nlayer.measurement=ideal|Exact scalar channel\nlayer.sampling=omitted|Deterministic model; external ensembles separate\n")
     logInfo("Created: α")
 func reset():
     current = 100 + Float64(runSeed())

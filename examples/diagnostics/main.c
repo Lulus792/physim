@@ -1,6 +1,7 @@
 #include "physim/experiment.h"
+#include <stdio.h>
 #include "physim/units.h"
-static ps_result create(ps_context *c){double scene;ps_result result=ps_parameter_define(c,"scene","Fail while building scene",0,0,1,&scene);if(result!=PS_OK)return result;if(ps_channel_add(c,"value",PS_ONE,"Initial value")<0)return PS_INVALID;c->values[0]=1;return PS_OK;}
+static ps_result create(ps_context *c){snprintf(c->model_metadata,sizeof c->model_metadata,"layer.geometry=active|Synthetic sphere display\nlayer.laws=omitted|Deliberately failing diagnostic demonstration\nlayer.medium=omitted|No material or medium\nlayer.losses=omitted|No loss model\nlayer.numerics=omitted|Deliberate singular diagnostic, no dynamics solve\nlayer.measurement=ideal|Initial fixture channel\nlayer.sampling=omitted|Deterministic model; external ensembles separate\n");double scene;ps_result result=ps_parameter_define(c,"scene","Fail while building scene",0,0,1,&scene);if(result!=PS_OK)return result;if(ps_channel_add(c,"value",PS_ONE,"Initial value")<0)return PS_INVALID;c->values[0]=1;return PS_OK;}
 static ps_result reset(ps_context *c){c->values[0]=1;return PS_OK;}
 static ps_result step(ps_context *c,double dt) {
     (void)dt;

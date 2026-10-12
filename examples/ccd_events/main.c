@@ -21,7 +21,7 @@ static ps_result create(ps_context *c){
     e->solver=PS_CONTACT_SOLVER_DEFAULT;e->solver.iterations=200;e->solver.restitution=1;e->solver.friction=0;e->solver.bounce_threshold_m_s=0;
     const char *names[]={"a.position","b.position","c.position","a.velocity","b.velocity","c.velocity","energy.kinetic","events","contacts","normal.error","projection.error"};
     for(unsigned i=0;i<11;i++){ps_unit unit=i<3 || i==10?PS_METRE:i<6 || i==9?PS_VELOCITY:i==6?PS_JOULE:PS_ONE;if(ps_channel_add(c,names[i],unit,names[i])<0)return PS_INVALID;}
-    snprintf(c->model_metadata,sizeof c->model_metadata,"model=three equal homogeneous spheres in vacuum\nmass_kg=1\nradius_m=0.5\ncentres_m=-4,0,4\nrestitution=1\nfriction=0\nexternal_forces=none\nccd=earliest event batches with canonical IDs\ncontact_offset_m=0.000001\ninitial_speed_m_s=%.17g\n",e->speed);return reset(c);
+    snprintf(c->model_metadata,sizeof c->model_metadata,"layer.geometry=ideal|Three equal homogeneous spheres\nlayer.laws=active|Force-free rigid contact impulses\nlayer.medium=omitted|Vacuum\nlayer.losses=ideal|Elastic frictionless contact\nlayer.numerics=active|Earliest CCD event batches and canonical contact groups\nlayer.measurement=ideal|Exact states and solver residuals\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=three equal homogeneous spheres in vacuum\nmass_kg=1\nradius_m=0.5\ncentres_m=-4,0,4\nrestitution=1\nfriction=0\nexternal_forces=none\nccd=earliest event batches with canonical IDs\ncontact_offset_m=0.000001\ninitial_speed_m_s=%.17g\n",e->speed);return reset(c);
 }
 static ps_result step(ps_context *c,double dt){
     experiment *e=c->user;ps_body candidate[3];memcpy(candidate,e->bodies,sizeof candidate);ps_ccd_step_result report;

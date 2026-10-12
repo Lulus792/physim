@@ -92,7 +92,7 @@ static ps_result reset(ps_context *c){return measure(c,0);}
 static ps_result create(ps_context *c) {
     const char *names[]={"temperature","pressure","density"};ps_unit units[]={PS_KELVIN,PS_PASCAL,density_unit};
     for(unsigned i=0;i<3;i++)if(ps_channel_add(c,names[i],units[i],names[i])!=(int)i)return PS_LIMIT;
-    snprintf(c->model_metadata,sizeof c->model_metadata,"model=synthetic material property sweep\nproperty.density.source=synthetic affine reference\nproperty.density.unit=kg/m3\nproperty.domain=273..373 K; 0..500000 Pa\nproperty.axes.temperature=273,373\nproperty.axes.pressure=0,500000\nproperty.values=1145.4,1145.9,1125.4,1125.9\nproperty.interpolation=bilinear; no extrapolation\nexcluded=measured material data,phase transitions,uncertainty\n");return reset(c);
+    snprintf(c->model_metadata,sizeof c->model_metadata,"layer.geometry=omitted|Synthetic property domain, not body geometry\nlayer.laws=omitted|Synthetic constitutive lookup, not dynamics\nlayer.medium=ideal|Synthetic affine material density table; not measured calibration\nlayer.losses=omitted|No phase transitions or uncertainty\nlayer.numerics=active|Bilinear interpolation without extrapolation\nlayer.measurement=ideal|Exact synthetic property and analytic reference\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=synthetic material property sweep\nproperty.density.source=synthetic affine reference\nproperty.density.unit=kg/m3\nproperty.domain=273..373 K; 0..500000 Pa\nproperty.axes.temperature=273,373\nproperty.axes.pressure=0,500000\nproperty.values=1145.4,1145.9,1125.4,1125.9\nproperty.interpolation=bilinear; no extrapolation\nexcluded=measured material data,phase transitions,uncertainty\n");return reset(c);
 }
 static ps_result step(ps_context *c,double dt){return measure(c,c->time_s+dt);}
 static void scene(ps_context *c,ps_scene *out){ps_scene_add_id(out,1,PS_SPHERE,ps_v3(c->time_s,0,0),ps_v3(0,0,0),.1,0x53aeefff);}
@@ -150,7 +150,7 @@ func measure(time: Float64):
     pressure.sample(p)
     density.sample(value.value)
 func create():
-    metadata("model=synthetic material property sweep\nproperty.density.source=synthetic affine reference\nproperty.density.unit=kg/m3\nproperty.domain=273..373 K; 0..500000 Pa\nproperty.axes.temperature=273,373\nproperty.axes.pressure=0,500000\nproperty.values=1145.4,1145.9,1125.4,1125.9\nproperty.interpolation=bilinear; no extrapolation\nexcluded=measured material data,phase transitions,uncertainty\n")
+    metadata("layer.geometry=omitted|Synthetic property domain, not body geometry\nlayer.laws=omitted|Synthetic constitutive lookup, not dynamics\nlayer.medium=ideal|Synthetic affine material density table; not measured calibration\nlayer.losses=omitted|No phase transitions or uncertainty\nlayer.numerics=active|Bilinear interpolation without extrapolation\nlayer.measurement=ideal|Exact synthetic property and analytic reference\nlayer.sampling=omitted|Deterministic model; external ensembles separate\nmodel=synthetic material property sweep\nproperty.density.source=synthetic affine reference\nproperty.density.unit=kg/m3\nproperty.domain=273..373 K; 0..500000 Pa\nproperty.axes.temperature=273,373\nproperty.axes.pressure=0,500000\nproperty.values=1145.4,1145.9,1125.4,1125.9\nproperty.interpolation=bilinear; no extrapolation\nexcluded=measured material data,phase transitions,uncertainty\n")
     reset()
 func reset():
     measure(0)

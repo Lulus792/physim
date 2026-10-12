@@ -1230,3 +1230,17 @@ unvollständig. Die Zählung bleibt **111 implemented**, **14 incomplete**,
 Der getrennte eingefrorene `c497a26`-Stand besteht **716/716** native Tests
 und **653/653** vollständige SDK-Befehle; alle 408 exakten Bitmaparchive sind
 geprüft. Diese Abnahme umfasst spätere Änderungen ausdrücklich nicht.
+
+
+## Weitere Experimentdeklarationen
+
+Alle weiteren 27 Physim-/17 C-Beispielmodule besitzen nun deklarierte Schichten,
+Parameterzustände und Modellgrenzen. Die Prüfung erzeugt 49 vollständige Archive
+und prüft das kanalfreie Darstellungsmodul direkt; alle 49 Schemas/Messdaten sind
+bytegleich zu den eingefrorenen Vorgänger-Modellquellen. Das unabhängige SDK-Kit
+prüft installierte und aus dem Paket neu gebaute Bibliotheken mit 29 erfolgreichen
+Befehlen. [Nachweise](platform-validation.md#modellschichten-der-weiteren-ausgelieferten-experimente).
+PP-0482 bleibt wegen der aktuellen Gesamtplattformabnahme unvollständig; die
+vorher offenen zusätzlichen Beispieldeklarationen und äußeren Serienangaben sind
+umgesetzt. Alle 531 Originaltexte und die Planprüfsumme bleiben unverändert:
+**111 implemented**, **14 incomplete**, **406 unverified**.

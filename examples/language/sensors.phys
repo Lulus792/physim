@@ -51,7 +51,7 @@ func measure():
         lastMeasured = Optional.some(Vec3(x.value.converted(metres).value, y.value.converted(metres).value, 0))
 
 func create():
-    metadata("model=uncertain vacuum projectile; analytical trajectory\ngravity_m_s2=9.80665\ninitial_vx=normal(3,0.15); recorded in velocity.x\nsensor_rate_hz=100\nsensor_noise=normal(0,0.02)\nsensor_resolution_m=0.005\nsensor_offset_m=0.01\nsensor_drift_m_s=0.002\nsensor_dropout=0.2\nsensor_u_absolute_m=0.003\nsensor_u_relative=0.001\nsensor_seed_x=run seed XOR 17\nsensor_seed_y=run seed XOR 29\nsensor_status=0:not_due,1:valid,2:dropped; invalid values are zero placeholders")
+    metadata("layer.geometry=ideal|Point mass; no ground contact\nlayer.laws=active|Uniform gravity\nlayer.medium=omitted|Vacuum\nlayer.losses=omitted|No mechanical drag\nlayer.numerics=active|Exact ballistic propagation\nlayer.measurement=active|Indexed Gaussian noise, dropout, offset, drift, quantization and uncertainty\nlayer.sampling=active|Seeded launch draw and indexed sensor draws; external ensembles separate\nmodel=uncertain vacuum projectile; analytical trajectory\ngravity_m_s2=9.80665\ninitial_vx=normal(3,0.15); recorded in velocity.x\nsensor_rate_hz=100\nsensor_noise=normal(0,0.02)\nsensor_resolution_m=0.005\nsensor_offset_m=0.01\nsensor_drift_m_s=0.002\nsensor_dropout=0.2\nsensor_u_absolute_m=0.003\nsensor_u_relative=0.001\nsensor_seed_x=run seed XOR 17\nsensor_seed_y=run seed XOR 29\nsensor_status=0:not_due,1:valid,2:dropped; invalid values are zero placeholders")
 
 func reset():
     time = 0.0

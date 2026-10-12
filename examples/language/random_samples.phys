@@ -13,7 +13,7 @@ func draw():
     normalChannel.sample(randomNormal(standardDeviation: 0.25, mean: 5))
 
 func create():
-    metadata("model=random distribution samples\nuniform_min=-2\nuniform_max=3\nnormal_mean=5\nnormal_stddev=0.25\nrng=runner seeded PCG32; draw order uniform then normal")
+    metadata("layer.geometry=omitted|Distribution samples only; display sphere is not mechanics\nlayer.laws=omitted|No dynamics model\nlayer.medium=omitted|No material or medium\nlayer.losses=omitted|No loss model\nlayer.numerics=active|PCG32 uniform and normal sample algorithms\nlayer.measurement=ideal|Exact generated samples\nlayer.sampling=active|Seeded uniform and normal draws; external ensembles separate\nmodel=random distribution samples\nuniform_min=-2\nuniform_max=3\nnormal_mean=5\nnormal_stddev=0.25\nrng=runner seeded PCG32; draw order uniform then normal")
 
 func reset():
     draw()
