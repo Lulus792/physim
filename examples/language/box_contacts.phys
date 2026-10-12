@@ -58,7 +58,7 @@ func measure():
     residual.sample(solution.maxNormalError)
 
 func create():
-    metadata("model=oriented box-plane contacts\nmedium=vacuum\nccd=none\nsolver=accumulated normal impulses and projected Coulomb cone, single body pair\nintegrator=symplectic Euler + explicit gyroscopic rotation\nmass_kg=1\nsize_m=0.8,0.5,0.6\ngravity_m_s2=9.81\niterations=64\nrestitution=0.1\nfriction=0.6\nbounce_threshold_m_s=0.5\npenetration_slop_m=0.00001\ncorrection_fraction=0.8")
+    metadata("layer.geometry=ideal|Homogeneous rigid box; fixed infinite plane\nlayer.laws=active|Uniform gravity and rigid contact impulses\nlayer.medium=omitted|Vacuum\nlayer.losses=active|Restitution and Coulomb friction\nlayer.numerics=active|Discrete contact iterations and symplectic motion; no CCD\nlayer.measurement=ideal|Exact state channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\n" + "model=oriented box-plane contacts\nmedium=vacuum\nccd=none\nsolver=accumulated normal impulses and projected Coulomb cone, single body pair\nintegrator=symplectic Euler + explicit gyroscopic rotation\nmass_kg=1\nsize_m=0.8,0.5,0.6\ngravity_m_s2=9.81\niterations=64\nrestitution=0.1\nfriction=0.6\nbounce_threshold_m_s=0.5\npenetration_slop_m=0.00001\ncorrection_fraction=0.8")
 
 func reset():
     body = initialBody()

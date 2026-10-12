@@ -45,7 +45,10 @@ func measure():
     powerChannel.sample(damping * state.y * state.y)
 
 func create():
-    metadata("model=horizontal spring-mass-damper\nintegrator=RK4\nmass_kg=1\nstiffness_n_m=16\ndamping_ns_m=" + String(damping) + "\nrest_length_m=1\ninitial_extension_m=0.35\ninitial_velocity_m_s=0\nanchor_x_m=-1\nequilibrium_x_m=0\nconstraints=prescribed 1D horizontal guide, no constraint solver\ngravity=none\ncontact=none\nspring_mass=0\nthermal_model=none\ndissipated_work=integrated c*v^2\ndomain=slider right of anchor\n")
+    var lossLayer = "omitted|Zero damping"
+    if damping > 0:
+        lossLayer = "active|Viscous damper"
+    metadata("layer.geometry=ideal|Massless spring and prescribed horizontal guide\nlayer.laws=active|Hooke spring force\nlayer.medium=omitted|No surrounding medium\nlayer.losses=" + lossLayer + "\nlayer.numerics=active|RK4; damping work integrated\nlayer.measurement=ideal|Exact state channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\n" + "model=horizontal spring-mass-damper\nintegrator=RK4\nmass_kg=1\nstiffness_n_m=16\ndamping_ns_m=" + String(damping) + "\nrest_length_m=1\ninitial_extension_m=0.35\ninitial_velocity_m_s=0\nanchor_x_m=-1\nequilibrium_x_m=0\nconstraints=prescribed 1D horizontal guide, no constraint solver\ngravity=none\ncontact=none\nspring_mass=0\nthermal_model=none\ndissipated_work=integrated c*v^2\ndomain=slider right of anchor\n")
 
 func reset():
     state = Vec3(0.35, 0, 0)

@@ -99,14 +99,15 @@ static ps_result create(ps_context *c) {
     ps_channel_add(c, "force.total.x", newton, "Total axial force from mechanics API");
     ps_channel_add(c, "power.dissipated", watt, "Nonnegative damping power c*v^2");
     snprintf(c->model_metadata, sizeof c->model_metadata,
-             "model=horizontal spring-mass-damper\nintegrator=RK4\n"
+             "layer.geometry=ideal|Massless spring and prescribed horizontal guide\nlayer.laws=active|Hooke spring force\nlayer.medium=omitted|No surrounding medium\nlayer.losses=%s\nlayer.numerics=active|RK4; damping work integrated\nlayer.measurement=ideal|Exact state channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\n"
+        "model=horizontal spring-mass-damper\nintegrator=RK4\n"
              "mass_kg=%.17g\nstiffness_n_m=%.17g\ndamping_ns_m=%.17g\n"
              "rest_length_m=%.17g\ninitial_extension_m=%.17g\ninitial_velocity_m_s=%.17g\n"
              "anchor_x_m=%.17g\nequilibrium_x_m=0\n"
              "constraints=prescribed 1D horizontal guide, no constraint solver\n"
              "gravity=none\ncontact=none\nspring_mass=0\nthermal_model=none\n"
              "dissipated_work=integrated c*v^2\ndomain=slider right of anchor\n",
-             mass_kg, stiffness_n_m, e->damping_ns_m, rest_length_m, initial_extension_m,
+             e->damping_ns_m>0?"active|Viscous damper":"omitted|Zero damping", mass_kg, stiffness_n_m, e->damping_ns_m, rest_length_m, initial_extension_m,
              initial_velocity_m_s, -rest_length_m);
     return reset(c);
 }

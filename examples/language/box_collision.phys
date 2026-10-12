@@ -60,7 +60,10 @@ func measure():
     error.sample(solution.maxNormalError)
 
 func create():
-    metadata("model=two homogeneous oriented rigid boxes\nmedium=vacuum\ngravity=none\ncontact=15-axis SAT + clipped face / closest edge manifold\nsolver=projected pair impulses, Coulomb friction, translation projection\nintegrator=symplectic Euler + quaternion rotation\nccd=none\nbody_graph=none\nmass_kg=1\nsize_m=0.8,0.6,0.6\na_initial_position_m=-1,0,0\nb_initial_position_m=1," + String(offset) + ",0\na_initial_velocity_m_s=0.6,0,0\nb_initial_velocity_m_s=-0.6,0,0\nb_angle_z_rad=" + String(angle) + "\ninitial_spin_rad_s=0\nrestitution=" + String(restitution) + "\nfriction=" + String(friction) + "\niterations=128\nbounce_threshold_m_s=" + String(defaults.bounceThreshold) + "\npenetration_slop_m=0\ncorrection_fraction=1")
+    var lossLayer = "ideal|Elastic frictionless contact"
+    if friction > 0 || restitution < 1:
+        lossLayer = "active|Friction or inelastic restitution"
+    metadata("layer.geometry=ideal|Two homogeneous oriented rigid boxes\nlayer.laws=active|Rigid contact impulses; no gravity\nlayer.medium=omitted|Vacuum\nlayer.losses=" + lossLayer + "\nlayer.numerics=active|SAT manifolds, projected impulses and symplectic motion; no CCD\nlayer.measurement=ideal|Exact state channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\n" + "model=two homogeneous oriented rigid boxes\nmedium=vacuum\ngravity=none\ncontact=15-axis SAT + clipped face / closest edge manifold\nsolver=projected pair impulses, Coulomb friction, translation projection\nintegrator=symplectic Euler + quaternion rotation\nccd=none\nbody_graph=none\nmass_kg=1\nsize_m=0.8,0.6,0.6\na_initial_position_m=-1,0,0\nb_initial_position_m=1," + String(offset) + ",0\na_initial_velocity_m_s=0.6,0,0\nb_initial_velocity_m_s=-0.6,0,0\nb_angle_z_rad=" + String(angle) + "\ninitial_spin_rad_s=0\nrestitution=" + String(restitution) + "\nfriction=" + String(friction) + "\niterations=128\nbounce_threshold_m_s=" + String(defaults.bounceThreshold) + "\npenetration_slop_m=0\ncorrection_fraction=1")
 
 func reset():
     a = Body.box(mass, size)

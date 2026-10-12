@@ -63,7 +63,10 @@ func measure():
     offsetChannel.sample(submerged.centroidOffset)
 
 func create():
-    metadata("model=hydrostatic floating sphere\nintegrator=RK4\nradius_m=0.10000000000000001\nbody_density_kg_m3=500\nfluid_density_kg_m3=1000\ngravity_m_s2=9.8100000000000005\ninitial_height_m=0.040000000000000001\ndamping_ns_m=1.2\nsurface_y_m=0\ndamping_model=-c*immersed_volume_fraction*v\nenergy=body plus ideal hydrostatic reservoir, U(0)=0\nconstraints=prescribed vertical guide\nfluid=uniform infinite reservoir\nexcluded=waves, surface tension, added mass, rotational drag, floor contact")
+    var lossLayer = "omitted|Zero damping"
+    if damping > 0:
+        lossLayer = "active|Empirical immersed-fraction damping"
+    metadata("layer.geometry=ideal|Uniform sphere on prescribed vertical guide\nlayer.laws=active|Gravity and hydrostatic buoyancy\nlayer.medium=ideal|Uniform infinite fluid reservoir\nlayer.losses=" + lossLayer + "\nlayer.numerics=active|RK4; damping work integrated\nlayer.measurement=ideal|Exact state channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\n" + "model=hydrostatic floating sphere\nintegrator=RK4\nradius_m=0.10000000000000001\nbody_density_kg_m3=500\nfluid_density_kg_m3=1000\ngravity_m_s2=9.8100000000000005\ninitial_height_m=0.040000000000000001\ndamping_ns_m=1.2\nsurface_y_m=0\ndamping_model=-c*immersed_volume_fraction*v\nenergy=body plus ideal hydrostatic reservoir, U(0)=0\nconstraints=prescribed vertical guide\nfluid=uniform infinite reservoir\nexcluded=waves, surface tension, added mass, rotational drag, floor contact")
 
 func reset():
     state = Vec3(initialHeight, 0, 0)

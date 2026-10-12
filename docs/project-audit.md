@@ -1201,3 +1201,16 @@ Der Block bleibt **incomplete**: weitere Vorlagen und aktive äußere
 Batch-Verteilungen in der Ansicht sind offen. Alle 531 Originalblöcke und die
 Planprüfsumme bleiben erhalten: **111 implemented**, **14 incomplete**,
 **406 unverified**; `completion_proven` bleibt `false`.
+
+
+## Deklarierte Standardvorlagen
+
+Alle acht Standard-Experimentvorlagen der Projekterstellung deklarieren nun
+ihre sieben Modellschichten in C und Physim. 30 echte Varianten prüfen
+parameterabhängige Zustände und Sprachparität; Kanalschema und Messwerte
+sind zusätzlich exakt gegen die eingefrorenen Vorgänger-Module verglichen.
+Der verschobene unabhängige SDK-Verbraucher prüft installierte und aus dem
+Paket neu gebaute Bibliotheken. [Nachweise](platform-validation.md#modellschichten-aller-acht-standardvorlagen).
+PP-0482 bleibt wegen zusätzlicher spezieller Sprachbeispiele und aktiver
+äußerer Batch-Verteilungen unvollständig. Die Zählung bleibt **111 implemented**,
+**14 incomplete**, **406 unverified** bei allen 531 Originalblöcken.

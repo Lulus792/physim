@@ -78,7 +78,8 @@ static ps_result create(ps_context *c) {
         return r;
     experiment *e = c->user;
     snprintf(c->model_metadata, sizeof c->model_metadata,
-             "model=oriented box-plane contacts\nmedium=vacuum\nccd=none\n"
+             "layer.geometry=ideal|Homogeneous rigid box; fixed infinite plane\nlayer.laws=active|Uniform gravity and rigid contact impulses\nlayer.medium=omitted|Vacuum\nlayer.losses=active|Restitution and Coulomb friction\nlayer.numerics=active|Discrete contact iterations and symplectic motion; no CCD\nlayer.measurement=ideal|Exact state channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\n"
+        "model=oriented box-plane contacts\nmedium=vacuum\nccd=none\n"
              "solver=accumulated normal impulses and projected Coulomb cone, single body pair\n"
              "integrator=symplectic Euler + explicit gyroscopic rotation\n"
              "mass_kg=%.17g\nsize_m=%.17g,%.17g,%.17g\ngravity_m_s2=%.17g\n"

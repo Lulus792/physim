@@ -152,9 +152,10 @@ Doppelte bekannte Felder, unbekannte Zustandswerte, eingebettete NUL-Bytes und
 ungültiges UTF-8 werden abgewiesen. Unbekannte zukünftige Schichtnamen bleiben
 in den Rohmetadaten erhalten. Datei-/API-Versionen ändern sich nicht.
 
-Die allgemeinen C-/Physim-Pendelvorlagen deklarieren die sieben Modellschichten
-mit den tatsächlich gewählten Dichte-, Widerstands- und Rauschparametern. Die
+Alle acht Standard-Experimentvorlagen der Projekterstellung deklarieren in C
+und Physim ihre sieben Modellschichten. Die Angaben berücksichtigen die
+gewählten Dichte-, Widerstands-, Reibungs-, Restitutions- und Rauschparameter. Die
 Sampling-Angabe beschreibt den Modell-RNG; Einstellungen äußerer Batch-Ensembles
-werden dort ausdrücklich getrennt benannt. Weitere Vorlagen und die Zuordnung
-aktiver Batch-Verteilungen zur Laufdetails-Ansicht sind noch offen. Ältere Läufe
+werden dort ausdrücklich getrennt benannt. Spezielle zusätzliche Sprachbeispiele und die Zuordnung aktiver
+Batch-Verteilungen zur Laufdetails-Ansicht sind noch offen. Ältere Läufe
 ohne Deklarationen bleiben lesbar.

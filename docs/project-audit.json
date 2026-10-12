@@ -4294,9 +4294,10 @@
         "examples/language/pendulum.phys",
         "tests/test_run_details.c",
         "tests/test_model_layers.py",
-        "docs/runs.md"
+        "docs/runs.md",
+        "tests/test_template_layers.py"
       ],
-      "note": "Eine tatsächliche nur lesbare App-Laufdetailsansicht zeigt sieben explizite Modellschichten, Vereinfachungen, Parameter und Herkunft; fehlende alte Deklarationen bleiben ausdrücklich nicht dokumentiert. C-/Physim-Pendelmodelle deklarieren die tatsächlichen Dichte-/Drag-/Rauschzustände, mit getrennt benannten externen Ensembles. Parser-/Fehleratomizität, acht echte sprachgleiche Archive und App-Kopier-/Schreibschutz-/Tastatur-/Altlauf-/16/22-Pixel-Prüfungen bestehen lokal. Vollständige Deklarationen aller Vorlagen und aktive externe Batch-Verteilungen in der Ansicht sowie aktuelle Gesamtplattformabnahme sind noch offen."
+      "note": "Eine tatsächliche nur lesbare App-Laufdetailsansicht zeigt sieben explizite Modellschichten, Vereinfachungen, Parameter und Herkunft; fehlende alte Deklarationen bleiben ausdrücklich nicht dokumentiert. C-/Physim-Pendelmodelle deklarieren die tatsächlichen Dichte-/Drag-/Rauschzustände, mit getrennt benannten externen Ensembles. Parser-/Fehleratomizität, acht echte sprachgleiche Archive und App-Kopier-/Schreibschutz-/Tastatur-/Altlauf-/16/22-Pixel-Prüfungen bestehen lokal. Vollständige Deklarationen aller Vorlagen und aktive externe Batch-Verteilungen in der Ansicht sowie aktuelle Gesamtplattformabnahme sind noch offen. Alle acht Standardvorlagen der Projekterstellung besitzen nun sieben C-/Physim-Deklarationen; 30 vollständige Laufvarianten prüfen tatsächliche Zustände, exakte Mess-/Schema-Gleichheit zum eingefrorenen Vorgänger und sprachübergreifende Parität. Weitere spezielle Sprachbeispiele und äußere Batch-Verteilungen bleiben offen."
     },
     {
       "id": "PP-0488",

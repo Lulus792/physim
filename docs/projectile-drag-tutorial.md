@@ -114,9 +114,10 @@ static ps_result create(ps_context *c) {
     ps_channel_add(c, "velocity.y", PS_VELOCITY, "vy");
     ps_channel_add(c, "energy", PS_JOULE, "Mechanical energy");
     snprintf(c->model_metadata, sizeof c->model_metadata,
-             "model=projectile, gravity and quadratic drag, no "
+             "layer.geometry=ideal|Point mass; no ground contact\nlayer.laws=active|Uniform gravity\nlayer.medium=active|Uniform air density\nlayer.losses=%s\nlayer.numerics=active|RK4\nlayer.measurement=ideal|Exact state channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\n"
+        "model=projectile, gravity and quadratic drag, no "
              "ground\nmass_kg=1\nmedium=air\ndensity_kg_m3=1.225\nCd=%.17g\narea_m2=0."
-             "01\nintegrator=RK4", p->drag_coefficient);
+             "01\nintegrator=RK4", p->drag_coefficient>0?"active|Quadratic drag":"omitted|Zero drag coefficient", p->drag_coefficient);
     return reset(c);
 }
 static ps_result step(ps_context *c, double dt) {
@@ -192,7 +193,10 @@ func measure():
     ce.sample(0.5 * (state.z * state.z + state.w * state.w) + gravity * state.y)
 
 func create():
-    metadata("model=projectile, gravity and quadratic drag, no ground\nmass_kg=1\nmedium=air\ndensity_kg_m3=1.225\nCd=" + String(dragCoefficient) + "\narea_m2=0.01\nintegrator=RK4")
+    var lossLayer = "omitted|Zero drag coefficient"
+    if dragCoefficient > 0:
+        lossLayer = "active|Quadratic drag"
+    metadata("layer.geometry=ideal|Point mass; no ground contact\nlayer.laws=active|Uniform gravity\nlayer.medium=active|Uniform air density\nlayer.losses=" + lossLayer + "\nlayer.numerics=active|RK4\nlayer.measurement=ideal|Exact state channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\n" + "model=projectile, gravity and quadratic drag, no ground\nmass_kg=1\nmedium=air\ndensity_kg_m3=1.225\nCd=" + String(dragCoefficient) + "\narea_m2=0.01\nintegrator=RK4")
 
 func reset():
     state = Vec4(-2, 0, 2, 5)

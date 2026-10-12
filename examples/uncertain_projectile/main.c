@@ -104,6 +104,7 @@ static ps_result reset(ps_context *c) {
         return r;
     snprintf(
         c->model_metadata, sizeof c->model_metadata,
+        "layer.geometry=ideal|Point mass; no ground contact\nlayer.laws=active|Uniform gravity\nlayer.medium=omitted|Vacuum\nlayer.losses=omitted|No mechanical drag\nlayer.numerics=active|RK4\nlayer.measurement=active|Indexed Gaussian noise, dropout, drift, quantization and uncertainty\nlayer.sampling=active|Seeded normal launch velocity and indexed sensor draws; external ensembles separate\n"
         "model=uncertain vacuum projectile\nmass_kg=1\ng_m_s2=9.80665\nground=none\n"
         "integrator=RK4\nvx_distribution=normal\nvx_mean_m_s=3\nvx_stddev_m_s=0.15\n"
         "vy_distribution=normal\nvy_mean_m_s=5\nvy_stddev_m_s=0.25\n"

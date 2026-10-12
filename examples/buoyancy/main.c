@@ -122,14 +122,15 @@ static ps_result create(ps_context *c) {
     ps_channel_add(c, "energy.balance", PS_JOULE, "Mechanical plus dissipated energy");
     ps_channel_add(c, "buoyancy.offset.y", PS_METRE, "Displaced-fluid centroid relative to center");
     snprintf(c->model_metadata, sizeof c->model_metadata,
-             "model=hydrostatic floating sphere\nintegrator=RK4\nradius_m=%.17g\n"
+             "layer.geometry=ideal|Uniform sphere on prescribed vertical guide\nlayer.laws=active|Gravity and hydrostatic buoyancy\nlayer.medium=ideal|Uniform infinite fluid reservoir\nlayer.losses=%s\nlayer.numerics=active|RK4; damping work integrated\nlayer.measurement=ideal|Exact state channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\n"
+        "model=hydrostatic floating sphere\nintegrator=RK4\nradius_m=%.17g\n"
              "body_density_kg_m3=%.17g\nfluid_density_kg_m3=%.17g\nmass_kg=%.17g\n"
              "gravity_m_s2=%.17g\ninitial_height_m=%.17g\ndamping_ns_m=%.17g\n"
              "surface_y_m=0\ndamping_model=-c*immersed_volume_fraction*v\n"
              "energy=body plus ideal hydrostatic reservoir, U(0)=0\n"
              "constraints=prescribed vertical guide\nfluid=uniform infinite reservoir\n"
              "excluded=waves, surface tension, added mass, rotational drag, floor contact\n",
-             radius, body_density, fluid_density, mass(), gravity, initial_height, damping);
+             damping>0?"active|Empirical immersed-fraction damping":"omitted|Zero damping", radius, body_density, fluid_density, mass(), gravity, initial_height, damping);
     return reset(c);
 }
 static ps_result step(ps_context *c, double dt) {

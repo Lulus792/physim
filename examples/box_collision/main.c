@@ -113,7 +113,8 @@ static ps_result create(ps_context *c) {
     if (r != PS_OK)
         return r;
     snprintf(c->model_metadata, sizeof c->model_metadata,
-             "model=two homogeneous oriented rigid boxes\nmedium=vacuum\ngravity=none\n"
+             "layer.geometry=ideal|Two homogeneous oriented rigid boxes\nlayer.laws=active|Rigid contact impulses; no gravity\nlayer.medium=omitted|Vacuum\nlayer.losses=%s\nlayer.numerics=active|SAT manifolds, projected impulses and symplectic motion; no CCD\nlayer.measurement=ideal|Exact state channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\n"
+        "model=two homogeneous oriented rigid boxes\nmedium=vacuum\ngravity=none\n"
              "contact=15-axis SAT + clipped face / closest edge manifold\n"
              "solver=projected pair impulses, Coulomb friction, translation projection\n"
              "integrator=symplectic Euler + quaternion rotation\nccd=none\nbody_graph=none\n"
@@ -122,7 +123,7 @@ static ps_result create(ps_context *c) {
              "b_initial_velocity_m_s=-0.6,0,0\nb_angle_z_rad=%.17g\n"
              "initial_spin_rad_s=0\nrestitution=%.17g\nfriction=%.17g\niterations=%u\n"
              "bounce_threshold_m_s=%.17g\npenetration_slop_m=0\ncorrection_fraction=1\n",
-             mass_kg, size_m.x, size_m.y, size_m.z, e->offset, e->angle,
+             e->solver.friction>0 || e->solver.restitution<1?"active|Friction or inelastic restitution":"ideal|Elastic frictionless contact", mass_kg, size_m.x, size_m.y, size_m.z, e->offset, e->angle,
              e->solver.restitution, e->solver.friction, e->solver.iterations,
              e->solver.bounce_threshold_m_s);
     return PS_OK;

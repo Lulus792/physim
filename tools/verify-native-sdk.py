@@ -214,6 +214,21 @@ def verify_app_workflow(repo,sdk,root,case,directory_name,suffix,checked):
     checked([sys.executable,repo / "tests/check_display_workflow.py",case,"--app",sdk / "bin" / ("physim"+suffix),"--root",sdk,"--work",work],timeout=90)
 
 
+def verify_template_layers(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked):
+    pairs=(("pendulum","pendulum"),("projectile","projectile_drag"),("collision","collision"),("box_floor","box_contacts"),
+           ("spring","spring"),("uncertain_projectile","uncertain_projectile"),("box_collision","box_collision"),("buoyancy","buoyancy"))
+    for c,phys in pairs:
+        shutil.copy2(sdk / "examples" / c / "main.c",consumer / ("template-"+c+".c"))
+        checked([sdk / "bin" / ("physimc"+suffix),"--emit-experiment",sdk / "examples/language" / (phys+".phys")],output=consumer / ("template-"+phys+"-phys.c"))
+    for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+        modules=[]
+        for c,phys in pairs:
+            modules.append(builder.executable("template-"+c+"-"+kind,["template-"+c+".c"],[archive],module=True))
+            modules.append(builder.executable("template-"+phys+"-phys-"+kind,["template-"+phys+"-phys.c"],[archive],module=True,language=True))
+        checked([sys.executable,repo / "tests/test_template_layers.py",sdk / "bin" / ("physim-runner"+suffix),consumer / ("templates-"+kind),*modules])
+    print("Installed/rebuilt SDK template layers: all eight C/Physim pairs, seven declared mechanisms and parameter-dependent states passed",flush=True)
+
+
 def verify_model_layers(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked):
     shutil.copy2(sdk / "examples/pendulum/main.c",consumer / "layers-c.c")
     checked([sdk / "bin" / ("physimc"+suffix),"--emit-experiment",sdk / "examples/language/pendulum.phys"],output=consumer / "layers-phys.c")
@@ -573,6 +588,7 @@ def main():
                         help="Verify opaque Run stream handles only; no GUI or full domain acceptance")
     parser.add_argument("--interval-only",action="store_true",
                         help="Verify Student-t mean intervals, independent numerical references and actual analysis report only")
+    parser.add_argument("--templates-only",action="store_true",help="Verify archived model layers and matching trajectories for all eight C/Physim template pairs only")
     parser.add_argument("--details-only",action="store_true",help="Verify C/Physim model layers and actual read-only app run details only; requires an app SDK/display")
     parser.add_argument("--time-only",action="store_true",help="Verify actual C/Physim archive UTC start times and independent replay references only")
     parser.add_argument("--origin-only",action="store_true",help="Verify C/Physim compiler/build provenance and legacy adaptive ABI only")
@@ -599,6 +615,11 @@ def main():
     parser.add_argument("--isolation-only", action="store_true",
                         help="Verify eight actual C/Physim runner failure/restart app workflows; requires an app SDK and display")
     args = parser.parse_args()
+    if args.templates_only and any((args.pendulum_only,args.scalar_only,args.transform_only,args.stream_only,
+        args.comparison_only,args.curve_only,args.units_only,args.body_only,args.migration_only,
+        args.accessibility_only,args.convex_only,args.breakpoints_only,args.isolation_only,args.app_tests,
+        args.interval_only,args.distributions_only,args.events_only,args.identity_only,args.origin_only,args.time_only,args.details_only)):
+        parser.error("--templates-only cannot be combined with other focused modes or --app-tests")
     if args.details_only and any((args.pendulum_only,args.scalar_only,args.transform_only,args.stream_only,
         args.comparison_only,args.curve_only,args.units_only,args.body_only,args.migration_only,
         args.accessibility_only,args.convex_only,args.breakpoints_only,args.isolation_only,args.app_tests,
@@ -742,6 +763,13 @@ def main():
         builder.includes = [sdk / "include"]
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+        if args.templates_only:
+            shutil.copytree(sdk / "src",consumer / "src")
+            rebuilt_core=builder.archive("sdk-rebuilt-core",[f"src/{name}.c" for name in native.CORE])
+            verify_template_layers(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
+            (root / "PASSED.txt").write_text("Focused eight-pair template model-layer SDK verification passed; no full platform/product acceptance.\n",encoding="utf-8")
+            print(f"Template layers SDK verified: {root}")
+            return
         if args.details_only:
             shutil.copytree(sdk / "src",consumer / "src")
             rebuilt_core=builder.archive("sdk-rebuilt-core",[f"src/{name}.c" for name in native.CORE])
@@ -1011,6 +1039,7 @@ def main():
         verify_build_origin(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
         verify_run_start_time(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
         verify_model_layers(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
+        verify_template_layers(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
         verify_scalar_search(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_transform_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         shutil.copy2(repo / "tests/test_linear_range.c", consumer / "linear-range-check.c")

@@ -122,12 +122,15 @@ static ps_result create(ps_context *c) {
         return r;
     snprintf(
         c->model_metadata, sizeof c->model_metadata,
+        "layer.geometry=ideal|Two homogeneous rigid spheres\nlayer.laws=active|Rigid contact impulses; no gravity\nlayer.medium=%s\nlayer.losses=%s\nlayer.numerics=active|Symplectic motion; archived CCD/contact mode\nlayer.measurement=ideal|Exact state channels\nlayer.sampling=omitted|Deterministic model; external ensembles separate\n"
         "model=two homogeneous rigid spheres\nintegrator=symplectic Euler + quaternion rotation\n"
         "contact=%s single normal impulse + Coulomb tangent impulse + position projection\n"
         "gravity=none\nbuoyancy=none\nrotational_drag=none\nccd=%s\ninitial_speed_m_s=%.17g\n"
         "medium=%s\ndensity_kg_m3=%.17g\nviscosity_pa_s=%.17g\ndrag=%s\n"
         "fluid_velocity_m_s=%.17g,%.17g,%.17g\nmass_kg=%.17g\nradius_m=%.17g\n"
         "restitution=%.17g\nfriction=%.17g\na_initial_spin_rad_s=%.17g\nCd=%.17g\n",
+        p->medium_mode==0?"omitted|Vacuum":"active|Selected uniform medium",
+        p->friction>0 || (p->drag_mode==PS_DRAG_STOKES && p->medium.viscosity_pa_s>0) || (p->drag_mode==PS_DRAG_QUADRATIC && p->medium.density_kg_m3>0)?"active|Contact friction or translational drag":"ideal|Elastic frictionless contact; zero drag",
         p->continuous ? "continuous" : "discrete",
         p->continuous ? "linear sphere sweep + remaining time" : "none",
         p->speed, p->medium.name, p->medium.density_kg_m3,

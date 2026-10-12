@@ -2744,6 +2744,110 @@
       "source": "tests/fixtures/language/run_start_time.phys",
       "mode": "--emit-c",
       "memory_balance": true
+    },
+    "template-layers-c-pendulum": {
+      "sources": [
+        "examples/pendulum/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "template-layers-phys-pendulum": {
+      "source": "examples/language/pendulum.phys",
+      "mode": "--emit-experiment"
+    },
+    "template-layers-c-projectile": {
+      "sources": [
+        "examples/projectile/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "template-layers-phys-projectile_drag": {
+      "source": "examples/language/projectile_drag.phys",
+      "mode": "--emit-experiment"
+    },
+    "template-layers-c-collision": {
+      "sources": [
+        "examples/collision/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "template-layers-phys-collision": {
+      "source": "examples/language/collision.phys",
+      "mode": "--emit-experiment"
+    },
+    "template-layers-c-box_floor": {
+      "sources": [
+        "examples/box_floor/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "template-layers-phys-box_contacts": {
+      "source": "examples/language/box_contacts.phys",
+      "mode": "--emit-experiment"
+    },
+    "template-layers-c-spring": {
+      "sources": [
+        "examples/spring/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "template-layers-phys-spring": {
+      "source": "examples/language/spring.phys",
+      "mode": "--emit-experiment"
+    },
+    "template-layers-c-uncertain_projectile": {
+      "sources": [
+        "examples/uncertain_projectile/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "template-layers-phys-uncertain_projectile": {
+      "source": "examples/language/uncertain_projectile.phys",
+      "mode": "--emit-experiment"
+    },
+    "template-layers-c-box_collision": {
+      "sources": [
+        "examples/box_collision/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "template-layers-phys-box_collision": {
+      "source": "examples/language/box_collision.phys",
+      "mode": "--emit-experiment"
+    },
+    "template-layers-c-buoyancy": {
+      "sources": [
+        "examples/buoyancy/main.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "template-layers-phys-buoyancy": {
+      "source": "examples/language/buoyancy.phys",
+      "mode": "--emit-experiment"
     }
   },
   "tests": [
@@ -10963,6 +11067,56 @@
             "{pendulum}",
             "{physim-language-pendulum}",
             "{work}/layers"
+          ],
+          "timeout": 180
+        }
+      ]
+    },
+    {
+      "name": "template_layers",
+      "targets": [
+        "python",
+        "physim-runner",
+        "template-layers-c-pendulum",
+        "template-layers-phys-pendulum",
+        "template-layers-c-projectile",
+        "template-layers-phys-projectile_drag",
+        "template-layers-c-collision",
+        "template-layers-phys-collision",
+        "template-layers-c-box_floor",
+        "template-layers-phys-box_contacts",
+        "template-layers-c-spring",
+        "template-layers-phys-spring",
+        "template-layers-c-uncertain_projectile",
+        "template-layers-phys-uncertain_projectile",
+        "template-layers-c-box_collision",
+        "template-layers-phys-box_collision",
+        "template-layers-c-buoyancy",
+        "template-layers-phys-buoyancy"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_template_layers.py",
+            "{physim-runner}",
+            "{work}/template-layers",
+            "{template-layers-c-pendulum}",
+            "{template-layers-phys-pendulum}",
+            "{template-layers-c-projectile}",
+            "{template-layers-phys-projectile_drag}",
+            "{template-layers-c-collision}",
+            "{template-layers-phys-collision}",
+            "{template-layers-c-box_floor}",
+            "{template-layers-phys-box_contacts}",
+            "{template-layers-c-spring}",
+            "{template-layers-phys-spring}",
+            "{template-layers-c-uncertain_projectile}",
+            "{template-layers-phys-uncertain_projectile}",
+            "{template-layers-c-box_collision}",
+            "{template-layers-phys-box_collision}",
+            "{template-layers-c-buoyancy}",
+            "{template-layers-phys-buoyancy}"
           ],
           "timeout": 180
         }
