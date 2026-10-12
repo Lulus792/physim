@@ -1244,3 +1244,15 @@ PP-0482 bleibt wegen der aktuellen Gesamtplattformabnahme unvollständig; die
 vorher offenen zusätzlichen Beispieldeklarationen und äußeren Serienangaben sind
 umgesetzt. Alle 531 Originaltexte und die Planprüfsumme bleiben unverändert:
 **111 implemented**, **14 incomplete**, **406 unverified**.
+
+
+## Zeitsteuerung und Messdaten einzeln zugeordnet
+
+Die fünf bislang unbewerteten Blöcke PP-0303/0304/0305/0309/0310 sind anhand
+von Quellen und sechs ausgeführten Prüfgruppen zugeordnet: begrenzter
+Echtzeitakkumulator, Offline-Scheduling, vollständige zeitgestempelte Messdaten,
+archivierte Kanalbeschreibungen/Float64-SI-Werte und optionale Unsicherheit mit
+Gültigkeitsmasken. [Nachweise](platform-validation.md#einzelabnahme-von-zeitsteuerung-und-messdaten-pp-03030310).
+Gesamtplattformabnahme bleibt separat offen. Aktueller Stand bei 531 unveränderten
+Originaltexten/Planprüfsumme: **116 implemented**, **14 incomplete**,
+**401 unverified**; `completion_proven` bleibt `false`.

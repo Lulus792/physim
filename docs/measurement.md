@@ -5,6 +5,18 @@ Physim trennt den idealen Modellzustand von der simulierten Messung. Die öffent
 Verteilungen sowie einen zustandsbehafteten Sensor ohne Speicherallokation.
 Diese Anleitung und die Funktionsreferenz sind offline unter F1 direkt in der App verfügbar.
 
+## Kanal- und Datenformat
+
+Kanäle werden bei der Experimentinitialisierung mit Name, SI-Einheit,
+Dimensionen und Beschreibung registriert. In Laufdateiformat 1 besitzen alle
+Kanalwerte den festen Datentyp Float64 (IEEE-binary64); unterschiedliche freie
+Datentypen pro Kanal sind nicht vorgesehen. CRC-geschützte Datenchunks enthalten
+zuerst die Simulationszeit in Sekunden, danach einen Wert pro registriertem Kanal.
+Die Standardunsicherheit ist optional und wird in einem eigenen Kanal derselben
+SI-Dimension gespeichert. `.u`/`.status` verbinden Unsicherheit und Gültigkeit
+mit dem Messwert, wie unten beschrieben. Diese Zusatzkanäle ändern weder das
+Zeitgitter noch die Zahl persistierter Datenzeilen.
+
 ## Sensor einrichten
 
 ```c

@@ -2249,9 +2249,14 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Die Simulationszeit darf bei langsamer Darstellung nicht unkontrolliert springen.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "src/pacing.h",
+        "tests/test_pacing.c",
+        "tests/test_runner_pacing.c",
+        "runners/experiment.c"
+      ],
+      "note": "Begrenzte Wallclock-Schulden nach Suspension/Backpressure; der feste Zeitschritt verändert sich nicht durch langsame Beobachter. Gefrorene Uhr und echte C-/Physim-Runner vergleichen jeden Messwert gegen Offline-Referenzen; Pause, Einzelschritt, Live-Speedwechsel und langsamer Leser bestehen in run-x43qmpw5 auf Intel macOS."
     },
     {
       "id": "PP-0304",
@@ -2265,9 +2270,14 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Bei Echtzeitmodus wird ein Akkumulator mit festem Physikzeitschritt verwendet.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "src/pacing.h",
+        "tests/test_pacing.c",
+        "tests/test_runner_pacing.c",
+        "runners/experiment.c"
+      ],
+      "note": "Echtzeitmodus akkumuliert Wallclock-Guthaben und verbraucht vollständige feste Physikschritte. Unregelmäßige Intervalle, begrenztes Nachholen, große Schritte/langsame Geschwindigkeiten und echte sprachgleiche Archive bestehen lokal in run-x43qmpw5. Adaptive Numerik bleibt ein ausdrücklich gewählter separater Modus."
     },
     {
       "id": "PP-0305",
@@ -2281,9 +2291,14 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Bei Offline-Modus läuft die Simulation so schnell wie möglich und sendet nur ausgewählte Frames.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "src/pacing.h",
+        "runners/experiment.c",
+        "tests/test_pacing.c",
+        "tests/test_runner_pacing.c"
+      ],
+      "note": "Offline-Speed 0 entfernt Scheduling-Wartepausen; interaktive Vorschau ist auf ausgewählte 60-Hz-Snapshots begrenzt, persistiert wird jeder akzeptierte Schritt. CLI-Offline sendet keine Live-Vorschau. Ein 1,5 Sekunden verzögerter Beobachter und echte Archive bestehen in run-x43qmpw5; Disk-/IPC-/Observerzeit wird nicht als absolute Geschwindigkeitsgarantie behauptet."
     },
     {
       "id": "PP-0309",
@@ -2297,9 +2312,16 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Kanäle werden beim Start mit Name, Datentyp, Einheit und Beschreibung registriert.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/experiment.h",
+        "src/core.c",
+        "src/data.c",
+        "tests/test_channel_declaration_workflow.py",
+        "tests/fixtures/channel_declaration.c",
+        "tests/fixtures/language/channel_declaration.phys"
+      ],
+      "note": "C-/Physim-Startdeklarationen registrieren besitzende Namen, SI-Einheiten/Dimensionen und Beschreibungen. Formatversion 1 legt Float64/binary64 für alle Werte fest, nicht heterogene freie Datentypen. Unabhängige CRC-/Schema-/Beschreibung-/Float64-/SI-/CSV-Prüfung besteht in run-x43qmpw5."
     },
     {
       "id": "PP-0310",
@@ -2313,9 +2335,15 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Daten kommen in Blöcken mit Simulationszeit und optionaler Unsicherheit.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "src/data.c",
+        "include/physim/data.h",
+        "tests/test_channel_declaration_workflow.py",
+        "tests/verify_sensor.c",
+        "docs/measurement.md"
+      ],
+      "note": "CRC-Datenchunks enthalten binary64-Simulationszeit und alle Kanalwerte. Optionale Unsicherheit wird als eigener SI-Kanal veröffentlicht; .u/.status markieren Standardunsicherheit und Gültigkeit ohne die persistierten Reihen auszudünnen. Echte C-/Physim-SI-Archive und drei Sensorvarianten mit jeweils 6001 Zeilen bestehen lokal in run-x43qmpw5."
     },
     {
       "id": "PP-0311",

@@ -43,8 +43,15 @@ for label, module in [("c", a.c_model), ("phys", a.phys_model)]:
                     assert data[at : at + 48].split(b"\0")[0].decode() == name
                     assert data[at + 48 : at + 64].split(b"\0")[0].decode() == unit
                     assert struct.unpack_from("<7b", data, at + 160) == dimensions
+                    expected_description = (
+                        "SI value converted from cm",
+                        "successful declaration after errors",
+                        "SI standard uncertainty from cm",
+                    )[i]
+                    assert data[at + 64:at + 160].split(b"\0")[0].decode() == expected_description
                 schema = True
             if kind == 3:
+                assert size == 8 * (1 + 3)  # Format 1: binary64 time and one binary64 per channel.
                 rows.append(struct.unpack("<4d", data))
             if kind == 4:
                 assert struct.unpack("<Q", data)[0] == 3

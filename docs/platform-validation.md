@@ -4213,3 +4213,31 @@ uniform-motion-Quelle. Nach Neugenerierung besteht die betreffende Referenz-
 prüfung **1/1**, `run-gix0im_m`,
 `build/current-extra-layers-reference-verified-mac.log`. Offline-Seitengrenzen,
 alle 531 Originaltexte und die ursprüngliche Planprüfsumme sind erneut geprüft.
+
+
+## Einzelabnahme von Zeitsteuerung und Messdaten (PP-0303..0310)
+
+Am `c0fdb33`-Stand mit ergänztem unabhängigem Schemaorakel bestehen auf
+Intel macOS/AppleClang Release **6/6**, `run-x43qmpw5`,
+`build/current-live-data-audit-mac.log`: `pacing`, beide echten C-/Physim-
+Runnerzeitsteuerungen, verzögerter Offline-Beobachter, Sensorreferenz und
+C-/Physim-Kanaldeklaration. Gefrorene Zeit prüft Akkumulator und begrenzte
+Wallclock-Schulden nach Suspension; reale Runner prüfen Pause, Einzelschritt,
+Live-Speedwechsel und vollständige Messwertgleichheit trotz langsamer Leser.
+Offline entfernt Scheduling-Warten; Disk-/IPC-/Observerlatenz besitzt keine
+absolute Laufzeitgarantie. Vorschau-Snapshots bleiben ausgewählt, jeder
+akzeptierte Physikschritt wird persistiert.
+
+Das ergänzte unabhängige Orakel prüft alle drei archivierten Beschreibungen,
+Namen, SI-Einheiten/Dimensionen und die tatsächliche binary64-Zeit/Wert-Darstellung
+in CRC-Chunks sowie CSV-Parität. Drei Sensorvarianten besitzen jeweils 6001
+vollständige Zeilen mit Unsicherheit/Gültigkeit, ohne Einfluss auf die idealen
+Modellwerte. Der Datentyp ist für Laufdateiformat 1 global Float64; Unsicherheit
+ist ein optionaler eigener SI-Kanal, keine automatische Schätzung des Writers.
+
+PP-0303/0304/0305/0309/0310 sind damit einzeln zugeordnet. Das ist keine neue
+Gesamtplattformabnahme. Die 531 Originaltexte/Planprüfsumme bleiben erhalten:
+**116 implemented**, **14 incomplete**, **401 unverified**.
+
+Die anschließenden Dokumentations-/Referenzprüfungen bestehen **2/2**,
+`run-4ai91kcy`, `build/current-live-data-docs-mac.log`.
