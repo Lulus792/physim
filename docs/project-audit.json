@@ -2155,7 +2155,7 @@
         "docs/workspace.md",
         "docs/settings.md"
       ],
-      "note": "Ein expliziter 2D-Modus richtet die Kamera an XY/YZ/XZ aus. Perspektivische oder orthografische Projektion bleibt wählbar; Drehen ist gesperrt, Maus-/Tastaturverschieben nutzt exakte Achsen ohne Drift senkrecht zur Ebene. Alt+2 toggelt, Standard/Alt+Pos1 stellt freie 3D-Kamera wieder her. Echte 16/22-Pixel-Eingaben und gerenderte Geometrie/Projektionsreferenzen, unveränderte Szene/Messwerte und verschobener SDK-Verbraucher bestehen lokal. Die gesamte aktuelle Plattformmatrix bleibt separat offen."
+      "note": "Ein expliziter 2D-Modus richtet die Kamera an XY/YZ/XZ aus. Perspektivische oder orthografische Projektion bleibt wählbar; Drehen ist gesperrt, Maus-/Tastaturverschieben nutzt exakte Achsen ohne Drift senkrecht zur Ebene. Alt+2 toggelt, Standard/Alt+Pos1 stellt freie 3D-Kamera wieder her. Echte 16/22-Pixel-Eingaben und gerenderte Geometrie/Projektionsreferenzen, unveränderte Szene/Messwerte und verschobener SDK-Verbraucher bestehen lokal. Die gesamte aktuelle Plattformmatrix bleibt separat offen. Die gezielte ccaaaf2-CI besteht mit GCC und Clang unter Linux: 4/4 native Fälle einschließlich Materialbeispielen und 9/9 UI-Fälle einschließlich tatsächlicher 16/22-Pixel-2D-Kamerabedienung; vollständige Joblogs wurden gelesen. Gesamtplattformabnahme bleibt offen."
     },
     {
       "id": "PP-0296",
@@ -3413,7 +3413,7 @@
         "tools/verify-native-sdk.py",
         "docs/properties.md"
       ],
-      "note": "Alle neun genannten Eigenschaften werden als ausgelieferte C-/Physim-Lehrdaten mit Quelle, geschlossenem T/P-Bereich und SI-Einheiten demonstriert. SI-Algebra, separate kanonische Dimensionen, 54 reale Abfragen, Zurückweisung außerhalb des Bereichs, Fehleratomizität und ν=μ/ρ sind geprüft. Konsumenten validieren physikalische Vorzeichen/Restitution ausdrücklich. Werte sind synthetisch, keine Materialkalibrierung. Aktuelle Paketgegenprobe prüft gelieferte Binärdateien und aus dem SDK mit installierter/neu gebauter Core-Bibliothek kompilierte Programme; Gesamtplattformabnahme bleibt separat offen."
+      "note": "Alle neun genannten Eigenschaften werden als ausgelieferte C-/Physim-Lehrdaten mit Quelle, geschlossenem T/P-Bereich und SI-Einheiten demonstriert. SI-Algebra, separate kanonische Dimensionen, 54 reale Abfragen, Zurückweisung außerhalb des Bereichs, Fehleratomizität und ν=μ/ρ sind geprüft. Konsumenten validieren physikalische Vorzeichen/Restitution ausdrücklich. Werte sind synthetisch, keine Materialkalibrierung. Aktuelle Paketgegenprobe prüft gelieferte Binärdateien und aus dem SDK mit installierter/neu gebauter Core-Bibliothek kompilierte Programme; Gesamtplattformabnahme bleibt separat offen. Die gezielte ccaaaf2-CI besteht mit GCC und Clang unter Linux: 4/4 native Fälle einschließlich Materialbeispielen und 9/9 UI-Fälle einschließlich tatsächlicher 16/22-Pixel-2D-Kamerabedienung; vollständige Joblogs wurden gelesen. Gesamtplattformabnahme bleibt offen."
     },
     {
       "id": "PP-0394",

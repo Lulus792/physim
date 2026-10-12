@@ -1288,6 +1288,9 @@ genannten Eigenschaften. Quellen, T/P-Bereiche, SI-Algebra, kanonische Dimension
 Vorzeichen-/Restitutionsregeln und ν=μ/ρ sind konkret geprüft. Die unabhängige
 Paketgegenprobe vergleicht gelieferte und aus dem SDK neu kompilierte Programme.
 [Nachweise](platform-validation.md#neun-ausgelieferte-materialeigenschaften-pp-0393).
-Die erweiterte Linux-Sanitizer-CI und die ganze Plattformabnahme sind weiter offen.
+Die erweiterte Linux-Sanitizer-CI besteht für Materialbeispiele und beide
+2D-Schriftgrößen auf GCC/Clang mit 4/4 nativen und 9/9 grafischen Fällen.
+[Ausgeführte Logs](platform-validation-history.md#erweiterter-linux-sanitizerfokus-am-stand-ccaaaf2).
+Die ganze Plattformabnahme bleibt offen.
 Aktuell: **124 implemented**, **14 incomplete**, **393 unverified** bei allen
 531 unveränderten Originalblöcken/Planprüfsumme.

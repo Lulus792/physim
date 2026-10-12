@@ -4206,8 +4206,9 @@ Intel macOS/AppleClang Release:
 Die [gezielte 0cab455-CI](platform-validation-history.md#gezielte-ci-am-stand-0cab455)
 ist aus vollständigen Logs geprüft; sie enthält diese späteren Beispiele noch
 nicht. Der Linux-Sanitizerfokus wird um Materialbeispiele und beide 2D-Kamerafälle
-erweitert. Seine aktuelle Ausführung bleibt gesondert nachzuweisen. Die ganze
-Plattformabnahme bleibt offen. Aktueller Audit: **124 implemented**,
+erweitert und besteht nun auf Linux/GCC und Linux/Clang mit 4/4 nativen und
+9/9 grafischen Fällen; die vollständigen Logs stehen im verlinkten Archiv. Die
+ganze Plattformabnahme bleibt offen. Aktueller Audit: **124 implemented**,
 **14 incomplete**, **393 unverified** bei 531 unveränderten Originaltexten und
 ursprünglicher Planprüfsumme; `completion_proven=false`.
 

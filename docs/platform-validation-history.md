@@ -3943,3 +3943,24 @@ Deklaration; die ganze aktuelle Plattformabnahme bleibt offen.
 Die abschließenden Parser-/Dokumentations-/Fortsetzungs-/Kit-/Archivgruppen
 bestehen **5/5**, `run-wsbs9pb3`, `build/current-series-provenance-final-docs-mac.log`.
 Alle 531 Originalblöcke und die ursprüngliche Planprüfsumme bleiben erhalten.
+
+
+## Erweiterter Linux-Sanitizerfokus am Stand ccaaaf2
+
+[Ausgeführter Lauf](https://github.com/PhysicSimulator/physim/actions/runs/38207547170)
+für `ccaaaf2a1edc4936f781c96cf510d083eab30400`; die vollständigen Logs sind
+`build/current-ci-ccaaaf2-job-114674273687.log` und
+`build/current-ci-ccaaaf2-job-114674273780.log`.
+
+GCC, Job 114674273687: native **4/4**, `run-s_6lir1q`; grafisch **9/9**,
+`run-dileks4g`. Clang, Job 114674273780: native **4/4**, `run-x5mdjr9i`;
+grafisch **9/9**, `run-0bv959pb`. Beide nativen Läufe enthalten tatsächlich
+`material_property_examples`; beide UI-Läufe enthalten tatsächlich
+`camera_plane_16` und `camera_plane_22` neben den sieben bisherigen
+Projekt-/Referenz-/Sprach-/Feder-/Auftriebsfällen. Die erfolgreichen Logs wurden
+vollständig gelesen. Das belegt die neuen Beispiele und 2D-Bedienung unter
+Ubuntu 24.04/GCC/Clang mit Sanitizern. GUI-Leakprüfung bleibt wie im Workflow
+explizit deaktiviert; diese gezielte Matrix ersetzt keine Paket-/Gesamtabnahme.
+
+Die lokalen Dokumentations-/Referenzprüfungen der aktualisierten Nachweise
+bestehen **2/2**, `build/current-ci-ccaaaf2-docs-mac.log`.
