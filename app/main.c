@@ -4,6 +4,7 @@
 #include "documentation.h"
 #include "library.h"
 #include "run_import.h"
+#include "run_details.h"
 #include "physim/analysis.h"
 #include "physim/report.h"
 #include "platform.h"
@@ -377,6 +378,11 @@ typedef struct {
     double timeline_target, timeline_wall;
     char timeline_error[160];
     struct nk_rect timeline_bounds[5];
+    bool run_details_manager,run_details_active;
+    int run_details_tab;
+    char run_details_path[4096],run_details_metadata[8192];
+    char run_details_overview[PS_RUN_DETAILS_TEXT_CAPACITY],run_details_display[PS_RUN_DETAILS_TEXT_CAPACITY];
+    struct nk_rect run_details_button,run_details_tabs[2],run_details_copy_bounds,run_details_close_bounds,run_details_text_bounds;
     dataset data;
 } app;
 static const ps_scene *display_scene(const app *a) {
@@ -907,6 +913,7 @@ static void clear_project(app *a) {
     a->loaded_report_path[0] = a->result_error[0] = 0;
     report_details_clear(a);
     memset(a->live_channels,0,sizeof a->live_channels);
+    a->run_details_manager=false;
     ps_timeline_destroy(&a->data.timeline);
     memset(&a->data, 0, sizeof a->data);
 }
@@ -1051,6 +1058,7 @@ static bool open_project(app *a) {
     a->show_report = false;
     report_details_clear(a);
     a->result_error[0] = 0;
+    a->run_details_manager=false;
     ps_timeline_destroy(&a->data.timeline);
     memset(&a->data, 0, sizeof a->data);
     timeline_clear(a);
@@ -1518,6 +1526,7 @@ static void request_dataset(app *a) {
         snprintf(a->plot_data_path, sizeof a->plot_data_path, "%s", a->last_run);
         a->plot_drag = NULL;
     }
+    a->run_details_manager=false;
     ps_timeline_destroy(&a->data.timeline);
     memset(&a->data, 0, sizeof a->data);
     snprintf(a->data.path, sizeof a->data.path, "%s", a->last_run);
@@ -2883,6 +2892,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "analysis_project_tests.inc"
 #include "library_selection_tests.inc"
 #include "report_details_tests.inc"
+#include "run_details_tests.inc"
 #include "batch_resume_tests.inc"
 #include "batch_missing_tests.inc"
 #include "series_mask_tests.inc"
@@ -3502,13 +3512,14 @@ int main(int argc, char **argv) {
                 if (!a->dirty && !a->analysis_dirty && !a->project_settings_dirty && documents_save_all(a))
                     a->quitting = true;
             }
-            if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && (a->layout_manager || a->workspace_manager || a->channel_unit_manager) && e.key.key == SDLK_ESCAPE) {
+            if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && (a->layout_manager || a->workspace_manager || a->channel_unit_manager || a->run_details_manager) && e.key.key == SDLK_ESCAPE) {
                 a->layout_manager = false;
                 a->workspace_manager = false;
                 a->channel_unit_manager = false;
+                a->run_details_manager = false;
                 continue;
             }
-            if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && !a->recovery && !a->layout_manager && !a->workspace_manager && !a->channel_unit_manager) {
+            if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && !a->recovery && !a->layout_manager && !a->workspace_manager && !a->channel_unit_manager && !a->run_details_manager) {
                 if(e.key.key==SDLK_F1 && (e.key.mod&SDL_KMOD_SHIFT) && !e.key.repeat) {
                     struct nk_text_edit *edit=completion_target(a);
                     if(edit && edit->active){api_reference_from_editor(a,edit);continue;}

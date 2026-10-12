@@ -1185,3 +1185,19 @@ Migrations-, tatsächliche App- und verschobene SDK-Prüfungen bestehen.
 [Getrennte Fehler- und Reparaturnachweise](platform-validation.md#vollständiger-2ce2f12-lauf-und-herkunftsintegration).
 Die Gesamtzählung bleibt **111 implemented**, **13 incomplete**,
 **407 unverified**; die neue vollständige Abnahme ist weiterhin offen.
+
+
+## Modellschichten in archivierten Laufdetails (PP-0482)
+
+Die tatsächliche App zeigt nun sieben deklarierte Modellschichten,
+Vereinfachungen, Parameter und Herkunft eines geöffneten Messlaufs. Vollständige
+Rohmetadaten bleiben separat lesbar und kopierbar. Fehlende alte Angaben werden
+nicht als inaktive Physik ausgegeben. Allgemeine C-/Physim-Pendelmodelle
+deklarieren die gewählten Dichte-/Drag-/Rauschzustände; acht echte Laufarchive
+und beide tatsächlichen Schriftgrößenpfade sind geprüft.
+[Vertrag](runs.md#modell-und-laufdetails) und
+[Nachweise](platform-validation.md#archivierte-modellschichten-und-app-laufdetails-pp-0482).
+Der Block bleibt **incomplete**: weitere Vorlagen und aktive äußere
+Batch-Verteilungen in der Ansicht sind offen. Alle 531 Originalblöcke und die
+Planprüfsumme bleiben erhalten: **111 implemented**, **14 incomplete**,
+**406 unverified**; `completion_proven` bleibt `false`.

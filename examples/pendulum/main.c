@@ -120,10 +120,18 @@ static ps_result create(ps_context *c) {
         return PS_LIMIT;
     snprintf(
         c->model_metadata, sizeof c->model_metadata,
+        "layer.geometry=ideal|Point mass, massless rigid rod; archived length/initial angle\n"
+        "layer.laws=active|Uniform gravity\nlayer.medium=%s\nlayer.losses=%s\n"
+        "layer.numerics=active|Recorded integrator and tolerances; step_mode selects fixed/adaptive\n"
+        "layer.measurement=%s\nlayer.sampling=%s\n"
         "energy_accounting=drag power integrated with state; balance=mechanical+dissipated\nmodel=point pendulum, massless rigid rod, uniform "
         "gravity\nlength_m=%.17g\nmass_kg=%.17g\ngravity_m_s2=%.17g\ninitial_angle_rad=%."
         "17g\nmedium_density_kg_m3=%.17g\ndrag_coefficient=%.17g\narea_m2=%.17g\nsensor_noise_"
         "rad=%.17g\nintegrator=%s\nadaptive_integrator=Dormand-Prince 5(4)\nrk45_absolute_tolerance=%.17g\nrk45_relative_tolerance=%.17g",
+        p->density>0?"active|Uniform medium density":"omitted|Vacuum",
+        p->density>0 && p->coefficient>0 && p->area>0?"active|Quadratic drag; integrated energy loss":"omitted|Zero quadratic drag",
+        p->noise>0?"active|Gaussian angle noise":"ideal|Exact angle",
+        p->noise>0?"active|Seeded normal draws for sensor; ensembles configured externally":"omitted|No random draws in model; ensembles configured externally",
         p->length, p->mass, gravity_m_s2, p->initial_angle, p->density, p->coefficient,
         p->area, p->noise,
         integrator == PS_RK4      ? "RK4"

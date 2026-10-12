@@ -35,7 +35,7 @@ assert {'tools/sdk_series_probe.c','tests/test_saved_run_tutorial.py','tests/tes
         'tests/fixtures/language/typed_run_identity.phys','tests/test_build_origin.py',
         'tests/fixtures/build_origin_legacy.c','tests/fixtures/build_origin_legacy.h','tests/fixtures/build_origin_invalid.c',
         'tests/test_run_start_time.c','tests/start_time_probe.c','tests/test_run_start_time_codec.py',
-        'tests/fixtures/language/run_start_time.phys','tests/run_archive_reference.py'}<=set(names)
+        'tests/fixtures/language/run_start_time.phys','tests/run_archive_reference.py','tests/test_model_layers.py'}<=set(names)
 assert not any(name.startswith(('src/','include/','lib/')) for name in names)
 assert all(not name.startswith('app/') or name=='app/utf8.manifest' for name in names)
 with tarfile.open(archive) as file:

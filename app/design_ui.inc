@@ -435,6 +435,7 @@ static void camera_inspector(app *a) {
 #include "document_ui.inc"
 #include "workspace_tree_ui.inc"
 #include "window_header.inc"
+#include "run_details_ui.inc"
 #include "layout_ui.inc"
 #include "channel_units_ui.inc"
 #include "workspace_catalog_ui.inc"
@@ -901,6 +902,10 @@ static void workspace_panel(app *a) {
             nk_end_disabled(ui);
             if (nk_button_label(ui, "Läufe & Berichte"))
                 open_library(a);
+            nk_layout_row_dynamic(ui,30,1);a->run_details_button=nk_widget_bounds(ui);
+            nk_begin_disabled(ui,a->data.thread!=NULL || !a->data.channel_count || !a->data.path[0]);
+            if(nk_button_label(ui,"Modell & Laufdetails …"))(void)run_details_open(a);
+            nk_end_disabled(ui);
             if (a->report_thread || a->result_error[0]) {
                 nk_layout_row_dynamic(ui, 42, 1);
                 nk_label_wrap(ui, a->report_thread ? "Analyseergebnis wird geprüft und geladen …"
@@ -1052,6 +1057,7 @@ static void log_panel(app *a) {
 }
 static void draw_ui(app *a, int width, int height) {
     struct nk_context *ui = a->ui;
+    if(a->run_details_manager) {run_details_view(a,width,height);return;}
     if(a->channel_unit_manager) { channel_unit_manager_view(a,width,height);return; }
     if(a->layout_manager) { layout_manager_view(a,width,height);return; }
     if(a->workspace_manager) { workspace_catalog_view(a,width,height);return; }

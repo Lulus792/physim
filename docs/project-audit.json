@@ -4285,9 +4285,18 @@
       "kind": "paragraph",
       "scope": "planned",
       "text": "Die UI zeigt für jeden Lauf, welche Schichten aktiv sind. Jede Vereinfachung soll sichtbar und dokumentierbar sein.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "incomplete",
+      "evidence": [
+        "app/run_details.c",
+        "app/run_details_ui.inc",
+        "app/run_details_tests.inc",
+        "examples/pendulum/main.c",
+        "examples/language/pendulum.phys",
+        "tests/test_run_details.c",
+        "tests/test_model_layers.py",
+        "docs/runs.md"
+      ],
+      "note": "Eine tatsächliche nur lesbare App-Laufdetailsansicht zeigt sieben explizite Modellschichten, Vereinfachungen, Parameter und Herkunft; fehlende alte Deklarationen bleiben ausdrücklich nicht dokumentiert. C-/Physim-Pendelmodelle deklarieren die tatsächlichen Dichte-/Drag-/Rauschzustände, mit getrennt benannten externen Ensembles. Parser-/Fehleratomizität, acht echte sprachgleiche Archive und App-Kopier-/Schreibschutz-/Tastatur-/Altlauf-/16/22-Pixel-Prüfungen bestehen lokal. Vollständige Deklarationen aller Vorlagen und aktive externe Batch-Verteilungen in der Ansicht sowie aktuelle Gesamtplattformabnahme sind noch offen."
     },
     {
       "id": "PP-0488",

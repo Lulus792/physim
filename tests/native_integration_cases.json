@@ -10895,6 +10895,78 @@
           "timeout": 30
         }
       ]
+    },
+    {
+      "name": "run_details_16",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "run_details_16",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "run_details_22",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "run_details_22",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "name": "model_layers",
+      "targets": [
+        "python",
+        "physim-runner",
+        "pendulum",
+        "physim-language-pendulum"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_model_layers.py",
+            "{physim-runner}",
+            "{pendulum}",
+            "{physim-language-pendulum}",
+            "{work}/layers"
+          ],
+          "timeout": 180
+        }
+      ]
     }
   ]
 }

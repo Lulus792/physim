@@ -48,6 +48,7 @@ def catalog():
     cases.append(Case("body_momentum", ("tests/test_body_momentum.c",)))
     cases.append(Case("language_body_momentum", (), language_source="tests/fixtures/language/body_momentum.phys",
                       stdout="Body momentum language checks passed\n"))
+    cases.append(Case("run_details", ("tests/test_run_details.c", "app/run_details.c")))
     cases.append(Case("process_usage", ("tests/test_process_usage.c",)))
     cases.append(Case("compiler_diagnostic", ("tests/test_compiler_diagnostic.c", "app/compiler_diagnostic.c")))
     cases.append(Case("completion", ("tests/test_completion.c", "app/completion.c")))

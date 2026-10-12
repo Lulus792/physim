@@ -88,64 +88,8 @@ Der vollständige historische Nachweis bleibt im
 
 ## Projektmigration der vorhandenen Formate 1 → 2
 
-Gültige Format-1-Experimente lassen sich ausdrücklich über Build-Einstellungen
-oder `physim-build --migrate-project --project DIR` aktualisieren. Neue App-
-Projekte verwenden Format 2. Öffnen und normales Speichern erhalten das jeweilige
-Format. Migration schreibt nur die Projektbeschreibung und deren vorherige
-Fassung als Backup; Format 2 ist ein unveränderter Leerlauf. Der App-Snapshot
-stammt vom Öffnen; externe Änderungen blockieren die Migration. Ungespeicherte
-Experiment-/Analyse-/Einstellungsänderungen, laufende Jobs und Wiederherstellung
-sperren die Aktion. [Bedienung](workspace.md#editor-und-build) und
-[Dateivertrag](data-format.md#eigenständige-analyseprojekte).
-
-Der Modelltest vergleicht unabhängige Sollbytes für LF/CRLF, fehlenden letzten
-Zeilenumbruch, Unicodekommentare, Erweiterungseinträge, schon vorhandenen Typ,
-maximalen Seed sowie gemischte C-/Physim-Quellen. Er prüft Originalbackup und
-POSIX-Rechte 0700, veraltete Snapshots bei beiden Versionen, unbekannte/ungültige
-Versionen, Größenlimit und nicht schreibbaren Backuppfad mit erhaltenen Ausgaben.
-Der Workflow baut tatsächliche C- und Physim-Pendel vor und nach der Migration.
-Er erhält Quellen, vorhandene Archive und sämtliche Cachebytes und belegt
-identische Mess-/Abschlusspayloads mit eigenständiger Chunk-CRC-Prüfung. Der zweite
-Build kompiliert/verlinkt nicht erneut. Die App-Prüfung klickt den sichtbaren
-Button und prüft normales Upgrade, extern veränderten Snapshot und schmutzige
-Einstellungen; Quellen und Archivbytes bleiben erhalten.
-
-Intel macOS 14.6.1/Apple Clang 16 besteht die fünf Projekt-/Dokument-/Workflow-/
-Prüfpaketfälle 5/5 (`run-u25vvaxz`) und die zwei App-/Einstellungsabläufe
-2/2 (`run-im0_bati`). Debian 12/GCC 12.2 besteht dieselben fünf Fälle 5/5
-(`run-i4wemoul`) und beide Appabläufe unter X11 2/2 (`run-y218evs3`).
-Die Handbuch-/Prüfpaketfälle bestehen auf macOS 2/2 (`run-s62q_b99`), die
-Referenzprüfung separat 1/1 (`run-mwn6d6aw`). Dies sind fokussierte Läufe,
-keine vollständige neue Testmatrix.
-
-Die verschobenen SDKs bestehen unter
-`build/project-migration-sdk-checks/Native SDK ä 3p6m72wk` (macOS) und
-`build/project-migration-sdk-checks/Native SDK ä 9z54pmav` (Linux). Beide enthalten
-469 manifestierte Dateien. Der unabhängige Linux-Prüfer verwendet ausschließlich
-`build/project-migration-independent-kit` mit 140 manifestierten Testeingaben,
-ohne Implementierung oder Entwicklerheader. Er baut beide Quellsprachen,
-vergleicht Messdaten/Cache/Dateien und führt die tatsächlichen drei Appfälle aus.
-Die echten Abschlussmarker und Protokolle sind mit SHA-256 in
-`build/project-migration-sdk-{mac,linux}-PASSED.json` erfasst; der eingefrorene
-Quellstand steht in `build/project-migration-source-freeze-final.json`.
-Dieser Dokumentationsnachtrag erfolgt nach Paketierung; die geprüfte
-Implementierung und Testeingaben bleiben unverändert.
-
-PP-0708 gilt für die vorhandenen Formate 1 und 2 als implementiert. Unbekannte
-künftige Versionen werden erhalten und abgewiesen. Der bestehende Textwriter
-besitzt weiterhin ein letztes Vergleich-/Umbenennungsfenster gegenüber parallelen
-Autoren und keine Stromausfallgarantie. ACLs/erweiterte Attribute/besondere
-Modusbits sind nicht Teil der Rechteerhaltung. Windows, Apple Silicon und die
-vollständige Produktabnahme wurden hier nicht erneut ausgeführt. Alle 531
-Originalplanblöcke bleiben erhalten: 34 implementiert, 7 unvollständig und
-490 ungeprüft; das Gesamtziel bleibt offen.
-
-Linux/Clang 14 mit ASan/UBSan besteht die zwei Fensterabläufe 2/2
-(`run-poh95ran`) und die vier Projekt-/Datei-/Buildfälle 4/4 (`run-j9hjo4th`).
-`ASAN_OPTIONS=detect_leaks=0` bleibt gesetzt; Address- und UndefinedBehavior-
-Prüfungen bleiben aktiv. macOS-Sanitizer wurden wegen des bereits dokumentierten
-fehlenden `ld64.lld` nicht ausgeführt.
-
+Der vollständige historische Nachweis bleibt im
+[Plattformarchiv](platform-validation-history.md#projektmigration-der-vorhandenen-formate-1--2) erhalten.
 
 ## Ressourcenmessung für native Daten- und UI-Referenzlasten
 
@@ -4219,3 +4163,70 @@ mit installierter/neu gebauter Bibliothek besteht **3/3** Verbraucherbefehle,
 `build/current-origin-repair-final-sdk-origin-consumer-mac/Native SDK ä jbb3xhk_`.
 Alte adaptive und fremde längere ABI-Tails sowie ungültige Herkunft bleiben
 geprüft. Dies ersetzt weiterhin keine neue vollständige SDK-/Plattformabnahme.
+
+
+## Vollständiger nativer Intel-macOS-Lauf für c497a26
+
+Der unveränderte eingefrorene Stand `c497a266987ff054f54f9f9aac0ad351365e73eb`
+besteht **716/716** native Release-Tests und installiert das SDK erfolgreich.
+Alle 716 JSON-Statuswerte sind `passed`; alle **1.398** Quellhashes bleiben
+unverändert. Ergebnisse: `build/current-full-build-c497a26-mac/test-results/run-83xrnz23/results.json`;
+Log: `build/current-full-build-c497a26-mac.log`. Die vollständige verschobene
+SDK-/App-Prüfung läuft anschließend unter `build/current-full-sdk-c497a26-mac.log`.
+Dies beweist noch keinen Abschluss dieser SDK-Prüfung. Die späteren
+Laufdetails-/Modellschichtänderungen gehören zu einem anderen Stand.
+
+## Archivierte Modellschichten und App-Laufdetails (PP-0482)
+
+Die App öffnet aus der Auswertung einen nur lesbaren Detailsbereich mit sieben
+Modellschichten, Vereinfachungen, Parametern und Lauf-/Buildherkunft. Eine
+separate Rohansicht erhält sämtliche Metadaten. Deklarationen des Moduls
+unterscheiden `active`, `ideal`, `omitted`; fehlende Angaben bleiben ausdrücklich
+nicht dokumentiert. Bekannte Duplikate, ungültige Zustände/UTF-8/NUL und
+Kapazitätsfehler erhalten die Parserausgabe. Text wird weder ausgewertet noch
+als Pfad interpretiert. C-/Physim-Pendelmodelle deklarieren tatsächliche
+Dichte-/Drag-/Rauschzustände; äußere Batch-Ensembles werden getrennt benannt.
+
+Intel-macOS-Nachweise:
+
+- Parser, acht echte C-/Physim-Archive und bestehende Pendelparametermatrix
+  **3/3**, `run-xq3r2ci7`, `build/current-run-details-models-mac.log`. Ein
+  unabhängiger Header-/Chunk-/CRC-Decoder prüft Vakuum, Drag und exakte/
+  verrauschte Messung, sämtliche sieben Deklarationen und Trajektorienparität.
+- Tatsächliche App bei 16/22 px **2/2**, `run-jvsm7a5b`,
+  `build/current-run-details-app-final-mac.log`: sichtbarer Einstieg, beide
+  Reiter, vollständige Zwischenablage, Text-/Delete-/F5-/F8-Isolation, Altlauf
+  und unveränderte Archive/Editorquellen. Der ursprüngliche kurze Text passte
+  vollständig ins Fenster; längere Annotationen ergänzen die Scrollprüfung.
+- Direkter AppleClang-ASan/UBSan-Parser besteht: `build/current-run-details-asan.log`;
+  LeakSanitizer bleibt deaktiviert.
+- Erstes verschobenes SDK besteht **5/5** Verbraucherbefehle mit installierter/
+  neu gebauter Bibliothek, 16 echten Modellarchiven und beiden App-Prüfungen:
+  `build/current-run-details-sdk-verify-mac.log`; Verbraucher
+  `build/current-run-details-sdk-consumer-mac/Native SDK ä w8bltg91`.
+
+Alle Vorlagen-Deklarationen, äußere Batch-Verteilungen in der Ansicht und die
+ganze aktuelle Plattformabnahme bleiben offen; PP-0482 ist unvollständig.
+
+
+Die abschließenden langen Apptexte bestehen **2/2**, `run-c8m469j2`,
+`build/current-run-details-scroll-verified-mac.log`. Beide Schriftgrößen prüfen
+Ctrl+End mit positivem Scrolloffset, einen sichtbaren letzten UTF-8-Marker,
+vollständige unveränderte Zwischenablage und Rückkehr zum Altlauf. Acht
+Bildschirmaufnahmen belegen Übersicht, Rohdaten, Textende und fehlende Angaben.
+Die Endansicht bei 22 px wurde tatsächlich visuell kontrolliert; alle drei
+Fensterknöpfe sind vollständig sichtbar. Frühere zusätzliche Cursorprüfungen
+scheiterten: macOS Ctrl+End scrollt, ohne den Cursor an das Textende zu setzen.
+Die Prüfung verlangt das beobachtete Navigationsverhalten statt einer falschen
+plattformübergreifenden Cursorannahme. Das unabhängige Kit enthält **197**
+manifestierte Eingänge; keine Physim-Implementierung wird hinzugefügt.
+
+
+Das endgültige SDK besteht Installation/Parser/Modell-/Referenz-/Kit-/Completion
+**6/6**, `run-d5135t7v`, `build/current-run-details-final-sdk-install-mac.log`.
+Ausschließlich aus dem unabhängigen 197-Dateien-Kit besteht die verschobene
+Gegenprobe **5/5** Befehle mit installierter/neu gebauter Bibliothek und langen
+Apptexten: `build/current-run-details-final-sdk-verify-mac.log`; Verbraucher
+`build/current-run-details-final-sdk-consumer-mac/Native SDK ä e8q85ezb`.
+Der abschließende Offline-Parser besteht **1/1**, `run-ofu548vd`,
+`build/current-run-details-final-docs-mac.log`.

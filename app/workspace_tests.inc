@@ -13,6 +13,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
     if(!strcmp(mode,"api-reference-c") || !strcmp(mode,"api-reference-phys"))return api_reference_test_start(a,root,mode);
     if(!strncmp(mode,"parameter-form-",15))return parameter_form_test_start(a,root,mode);
     if(!strncmp(mode,"library-selection-",18))return library_selection_test_start(a,root,mode);
+    if(!strncmp(mode,"run-details-",12))return run_details_test_start(a,root,mode);
     if(!strncmp(mode,"report-details-",15))return report_details_test_start(a,root,mode);
     if (!strcmp(mode, "native-dialogs") || !strcmp(mode, "native-dialog-error"))
         return native_dialog_test_start(root);
@@ -139,6 +140,7 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
     if(!strcmp(mode,"api-reference-c") || !strcmp(mode,"api-reference-phys")){api_reference_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"parameter-form-",15)){parameter_form_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"library-selection-",18)){library_selection_test_frame(a,mode,stage,code,capture);return;}
+    if(!strncmp(mode,"run-details-",12)){run_details_test_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"report-details-",15)){report_details_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"inspector-",10)){inspector_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"layouts-",8)){layout_test_frame(a,mode,stage,code,capture);return;}

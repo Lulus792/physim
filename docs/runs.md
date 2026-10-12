@@ -113,3 +113,48 @@ garantiert die neueste. Ungültige oder unlesbare Einträge werden übersprungen
 gezählt. Projektübergreifende Auswahl und weitere Interpolationsverfahren sind
 offen. [Plotzoom und Diagrammexport](reports.md) verändern die gespeicherten
 Messwerte nicht.
+
+
+## Modell und Laufdetails
+
+Nach **Ansehen** eines Messlaufs öffnet **Auswerten → Modell & Laufdetails …**
+eine Ansicht der archivierten Modellschichten, Vereinfachungen, Parameter und
+Core-/Modul-/Runner-Herkunft. **Übersicht** ordnet die Angaben; **Alle Metadaten**
+zeigt den vollständigen gespeicherten Text, einschließlich unbekannter Felder.
+Beide Ansichten sind nur lesbar, scrollbar und vollständig kopierbar. **Esc**
+oder **Schließen** kehrt zur Auswertung zurück. Die Ansicht baut kein Modul und
+ändert keine Messdatei oder Editorquelle. Die archivierte Startzeit ist eine
+System-Wanduhrangabe; sie ist von Simulationszeit und Builddatum getrennt.
+
+Die sieben Schichten entsprechen Geometrie/Anfangszustand, idealen Gesetzen,
+Material/Medium, Verlusten/Störungen, Numerik/Toleranzen, Messung/Unsicherheit
+und Verteilungen/Monte Carlo. Es sind Deklarationen des Experimentmoduls.
+**Nicht dokumentiert** bedeutet fehlende Angaben, nicht eine inaktive Schicht.
+Ungültige bekannte Schichtangaben erzeugen einen sichtbaren Fehler; gültige
+Rohmetadaten bleiben auf dem zweiten Reiter einsehbar.
+
+C-Experimente setzen die Zeilen in `c->model_metadata`, Physim verwendet
+`metadata(text)`. Das Format lautet `layer.<name>=<state>|<Beschreibung>`:
+
+| Name | Schicht |
+| --- | --- |
+| geometry | Geometrie und Anfangszustand |
+| laws | Ideale physikalische Gesetze |
+| medium | Material und Medium |
+| losses | Verlust- und Störmodelle |
+| numerics | Numerische Methode und Toleranzen |
+| measurement | Messgerät und Unsicherheit |
+| sampling | Verteilungen und Monte Carlo |
+
+`active`, `ideal` und `omitted` werden als **Aktiv**, **Idealisiert** und
+**Nicht modelliert** dargestellt. Eine nichtleere Beschreibung ist erforderlich.
+Doppelte bekannte Felder, unbekannte Zustandswerte, eingebettete NUL-Bytes und
+ungültiges UTF-8 werden abgewiesen. Unbekannte zukünftige Schichtnamen bleiben
+in den Rohmetadaten erhalten. Datei-/API-Versionen ändern sich nicht.
+
+Die allgemeinen C-/Physim-Pendelvorlagen deklarieren die sieben Modellschichten
+mit den tatsächlich gewählten Dichte-, Widerstands- und Rauschparametern. Die
+Sampling-Angabe beschreibt den Modell-RNG; Einstellungen äußerer Batch-Ensembles
+werden dort ausdrücklich getrennt benannt. Weitere Vorlagen und die Zuordnung
+aktiver Batch-Verteilungen zur Laufdetails-Ansicht sind noch offen. Ältere Läufe
+ohne Deklarationen bleiben lesbar.

@@ -31,6 +31,8 @@ SIMPLE = {
     "documents_build": (["--workspace-state-test", "{directory}", "documents-build"], 130, False),
     "documentation_window": (["--docs-test", "{directory}"], 30, True),
 }
+for size in ("16", "22"):
+    SIMPLE["run_details_"+size] = (["--workspace-state-test", "{directory}", "run-details-"+size], 45, True)
 SIMPLE["documentation_pointer_isolation"] = (["--docs-test-noise", "{directory}"], 35, True)
 SIMPLE["documentation_keyboard_delayed"] = (["--workspace-state-test", "{directory}", "docs-keyboard-delayed"], 135, True)
 SIMPLE["documentation_keyboard_22"] = (["--workspace-state-test", "{directory}", "docs-keyboard-22"], 75, True)
@@ -1291,6 +1293,15 @@ def main():
         elif args.case == "box_collision_workflow":
             require("parameter.restitution=0.5\n" in read(directory / "physim.project"),
                     "C box collision did not persist the selected restitution")
+        elif args.case.startswith("run_details_"):
+            overview=read(directory / "overview.txt");raw=read(directory / "metadata.txt");legacy=read(directory / "legacy.txt")
+            require("RUN DETAILS: PASSED" in flow.steps[-1]["stdout"], "Missing actual run-details interaction marker")
+            require("Idealisiert · Point mass" in overview and "parameter.mass=2" in overview,"Lost layer/parameter details")
+            require("Geometrie und Anfangszustand\nNicht dokumentiert" in legacy,"Legacy layer was inferred")
+            data=(directory / "project/runs/layers.psrun").read_bytes();kind,n,crc=struct.unpack_from("<III",data,16)
+            payload=data[28:28+n];require(kind==1 and zlib.crc32(payload)==crc and payload.decode()==raw and "LAST_METADATA_α" in raw,"Copied metadata differ from archive")
+            for name in ("run-details-overview.bmp","run-details-metadata.bmp","run-details-metadata-end.bmp","run-details-legacy.bmp"):
+                require((directory / name).is_file(),"Missing run-details capture: "+name)
         elif args.case in ("documents_small", "documents_large"):
             exact(directory / "notes α.txt", "Saved on close: γ\n")
             exact(directory / "notes α.txt.bak", "Text über SDL: β = 2\n")
