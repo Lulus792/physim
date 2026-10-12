@@ -87,11 +87,22 @@ bool ps_project_step_bounds_valid(const ps_project_settings *s) {
            ps_project_timestep_valid(s->maximum_timestep) &&
            s->minimum_timestep<=s->timestep && s->timestep<=s->maximum_timestep));
 }
+static const char *const display_keys[]={"display.camera.mode=","display.camera.plane=",
+    "display.camera.projection=","display.vectors=","display.paths=","display.points=",
+    "display.labels=","display.grid="};
+static int display_key(const char *line) {
+    for(unsigned i=0;i<8;i++)if(!strncmp(line,display_keys[i],strlen(display_keys[i])))return (int)i;
+    return -1;
+}
+bool ps_project_display_valid(const ps_project_display *display) {
+    return display && (!display->defined || (display->plane<3 && !(display->flags&~PS_PROJECT_VIEW_FLAGS)));
+}
 static ps_document_result parse(const ps_text_document *document, ps_project_settings *out) {
     if(document->length>256u*1024u)return PS_DOCUMENT_LIMIT;
     ps_project_settings settings = {.timestep = .005, .seed = 42, .speed = 1,
                                     .minimum_timestep=1e-8,.maximum_timestep=.1};
     bool seen[11] = {false},identity_seen[2]={false};
+    unsigned display_seen=0;
     size_t position = 0;
     unsigned index = 0, version=1;
     while (position < document->length) {
@@ -175,6 +186,25 @@ static ps_document_result parse(const ps_text_document *document, ps_project_set
             if (seen[10] || strlen(value + 1) >= sizeof settings.breakpoints ||
                 !ps_step_breakpoints_parse(value + 1, &points)) return PS_DOCUMENT_INVALID;
             seen[10] = true; strcpy(settings.breakpoints, value + 1);
+        } else if(display_key(line)>=0) {
+            unsigned key=(unsigned)display_key(line),bit=1u<<key;
+            if(display_seen&bit)return PS_DOCUMENT_INVALID;
+            display_seen|=bit;const char *entry=value+1;
+            if(key==0) {
+                if(strcmp(entry,"2d") && strcmp(entry,"3d"))return PS_DOCUMENT_INVALID;
+                settings.display.planar=!strcmp(entry,"2d");
+            } else if(key==1) {
+                if(!strcmp(entry,"xy"))settings.display.plane=0;
+                else if(!strcmp(entry,"yz"))settings.display.plane=1;
+                else if(!strcmp(entry,"xz"))settings.display.plane=2;
+                else return PS_DOCUMENT_INVALID;
+            } else if(key==2) {
+                if(strcmp(entry,"orthographic") && strcmp(entry,"perspective"))return PS_DOCUMENT_INVALID;
+                settings.display.orthographic=!strcmp(entry,"orthographic");
+            } else {
+                if(strcmp(entry,"0") && strcmp(entry,"1"))return PS_DOCUMENT_INVALID;
+                if(*entry=='1')settings.display.flags|=1u<<(key-3);
+            }
         } else if (!strncmp(line, "parameter.", 10)) {
             if (!value)
                 return PS_DOCUMENT_INVALID;
@@ -186,6 +216,8 @@ static ps_document_result parse(const ps_text_document *document, ps_project_set
     }
     if (!index || (version==2 && !seen[9]) || (settings.analysis_only && (version!=2 || seen[0])) || !ps_project_step_bounds_valid(&settings))
         return PS_DOCUMENT_INVALID;
+    if(display_seen && display_seen!=255u)return PS_DOCUMENT_INVALID;
+    settings.display.defined=display_seen==255u;
     settings.format_version=version;
     *out = settings;
     return PS_DOCUMENT_OK;
@@ -305,6 +337,40 @@ ps_document_result ps_project_settings_save(const char *path, const ps_project_s
     free(text);
     ps_text_document_destroy(&document);
     return result;
+}
+
+ps_document_result ps_project_display_save_document(ps_text_document *document,const ps_project_display *display) {
+    if(!document || !document->saved || !document->path[0] || !ps_project_display_valid(display))return PS_DOCUMENT_INVALID;
+    ps_project_settings settings;ps_document_result result=parse(document,&settings);
+    if(result!=PS_DOCUMENT_OK)return result;
+    size_t capacity=document->length+512,used=0;char *text=malloc(capacity);
+    if(!text)return PS_DOCUMENT_MEMORY;
+    const char *newline=strstr(document->saved,"\r\n")?"\r\n":"\n";
+    for(size_t position=0;position<document->length;) {
+        size_t end=position;while(end<document->length && document->saved[end]!='\n')end++;
+        if(end<document->length)end++;
+        if(display_key(document->saved+position)<0) {
+            memcpy(text+used,document->saved+position,end-position);used+=end-position;
+        }
+        position=end;
+    }
+    if(display->defined) {
+        if(used && text[used-1]!='\n'){memcpy(text+used,newline,strlen(newline));used+=strlen(newline);}
+        const char *planes[]={"xy","yz","xz"};
+        for(unsigned key=0;key<8;key++) {
+            const char *value=key==0?(display->planar?"2d":"3d"):
+                key==1?planes[display->plane]:key==2?(display->orthographic?"orthographic":"perspective"):
+                (display->flags&(1u<<(key-3)))?"1":"0";
+            int n=snprintf(text+used,capacity-used,"%s%s%s",display_keys[key],value,newline);
+            if(n<0 || (size_t)n>=capacity-used){result=PS_DOCUMENT_LIMIT;break;}used+=(size_t)n;
+        }
+    }
+    if(result==PS_DOCUMENT_OK && used==document->length && !memcmp(text,document->saved,used)) {
+        ps_text_document current={0};result=ps_text_document_open(&current,document->path);
+        if(result==PS_DOCUMENT_OK && (current.length!=document->length || memcmp(current.saved,document->saved,document->length)))result=PS_DOCUMENT_CONFLICT;
+        ps_text_document_destroy(&current);
+    } else if(result==PS_DOCUMENT_OK)result=ps_text_document_save(document,text,used);
+    free(text);return result;
 }
 
 ps_document_result ps_project_migrate_document(ps_text_document *document,ps_project_migration *out) {

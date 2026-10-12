@@ -3964,3 +3964,25 @@ explizit deaktiviert; diese gezielte Matrix ersetzt keine Paket-/Gesamtabnahme.
 
 Die lokalen Dokumentations-/Referenzprüfungen der aktualisierten Nachweise
 bestehen **2/2**, `build/current-ci-ccaaaf2-docs-mac.log`.
+
+
+## Native Projekt-Anzeigevorgaben
+
+Die private Projektdateischicht erkennt eine optionale vollständige Gruppe aus
+2D/3D, XY/YZ/XZ, Projektion und fünf Darstellungsschaltern. Der gesonderte
+Writer ändert nur diese Schlüssel; sonstige Einstellungen/Kommentare bleiben
+erhalten. Legacydateien ohne Gruppe bleiben gültig; doppelte, ungültige und
+teilweise Gruppen werden atomar abgewiesen. No-op prüft den aktuellen Inhalt,
+ohne ein Backup zu ersetzen; externe Änderungen und Dateigrößenlimits werden
+als Fehler zurückgegeben.
+
+Intel macOS/AppleClang Release: **5/5**, `run-gla5yq2m`,
+`build/current-project-display-bounds-mac.log`, einschließlich Projektdatei,
+Dokumentation, Referenz und Kit. `project_display` prüft **384** Kombinationen,
+Backups, Legacy-/Erweiterungsbytes, ungültige Gruppen, externe Konflikte und
+beinahe volle gültige Projektdateien ohne Trunkierung. Direkte AppleClang-
+ASan/UBSan-Instrumentierung dieser Projekt-/Textwriter-/Autosave-/Parameter-
+Quellen besteht unter `build/current-project-display-asan-mac.log`;
+LeakSanitizer ist deaktiviert, die verlinkte Core-Bibliothek nicht instrumentiert.
+Die neue App-Speicherbedienung und die verschobene SDK-Gegenprobe sind noch
+nicht abgenommen. Der laufende vollständige 0cab455-SDK-Test bleibt davon getrennt.

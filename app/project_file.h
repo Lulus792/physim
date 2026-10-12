@@ -5,6 +5,20 @@
 #include "step_breakpoints.h"
 
 enum { PS_PROJECT_CURRENT_VERSION = 2 };
+enum { PS_PROJECT_VIEW_VECTORS=1u,PS_PROJECT_VIEW_PATHS=2u,PS_PROJECT_VIEW_POINTS=4u,
+       PS_PROJECT_VIEW_LABELS=8u,PS_PROJECT_VIEW_GRID=16u,PS_PROJECT_VIEW_FLAGS=31u };
+typedef struct {
+    bool defined,planar,orthographic;
+    unsigned plane; /* 0=XY, 1=YZ, 2=XZ. */
+    uint32_t flags;
+} ps_project_display;
+/* Optional complete display group; legacy projects have defined=false.
+ * Unknown future keys remain preserved. Invalid/duplicate/partial groups fail.
+ * Save updates display keys only and retains other bytes/comments/newlines.
+ * Uses the document snapshot's conflict/atomic replacement/backup contract. */
+bool ps_project_display_valid(const ps_project_display *display);
+ps_document_result ps_project_display_save_document(ps_text_document *document,const ps_project_display *display);
+
 typedef struct {
     char project_id[33],experiment_id[33]; /* Read-only stable identities; save preserves them. Empty in legacy files. */
     uint32_t format_version; /* Read-only format information; save preserves the on-disk version. */
@@ -16,6 +30,7 @@ typedef struct {
     uint64_t seed;
     char breakpoints[PS_STEP_BREAKPOINT_TEXT];
     ps_parameter_catalog parameters;
+    ps_project_display display;
 } ps_project_settings;
 
 /* Versions 1/2, UTF-8, LF or CRLF. Version 2 requires kind=analysis
