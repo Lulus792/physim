@@ -38,6 +38,7 @@ ps_result ps_run_reader_open(ps_run_store *store, const char *path, ps_run_read_
 ps_result ps_run_reader_describe(ps_run_store *store, ps_run_read_handle handle,
                                  ps_run_read_info *out);
 ps_result ps_run_reader_identity(ps_run_store *store,ps_run_read_handle handle,ps_run_identity *out);
+ps_result ps_run_reader_start_time(ps_run_store *store,ps_run_read_handle handle,ps_run_start_time *out);
 /* capacity must hold the entire schema. PS_OK commits exactly one validated
  * measurement row; every other status preserves time, values and count.
  * EOF/recovered status remains terminal for this handle. */

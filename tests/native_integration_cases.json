@@ -2721,6 +2721,29 @@
       "defines": [
         "PS_TEST_ORIGIN_CASE=4"
       ]
+    },
+    "start-time-check": {
+      "sources": [
+        "tests/test_run_start_time.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "start-time-probe": {
+      "sources": [
+        "tests/start_time_probe.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "start-time-language": {
+      "source": "tests/fixtures/language/run_start_time.phys",
+      "mode": "--emit-c",
+      "memory_balance": true
     }
   },
   "tests": [
@@ -10838,6 +10861,38 @@
             "{work}"
           ],
           "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "run_start_time",
+      "targets": [
+        "python",
+        "start-time-check",
+        "start-time-probe",
+        "start-time-language"
+      ],
+      "steps": [
+        {
+          "program": "start-time-check",
+          "arguments": [
+            "{work}"
+          ],
+          "timeout": 30
+        },
+        {
+          "program": "start-time-language",
+          "arguments": [],
+          "timeout": 30
+        },
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_run_start_time_codec.py",
+            "{work}",
+            "{start-time-probe}"
+          ],
+          "timeout": 30
         }
       ]
     }

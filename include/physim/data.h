@@ -11,6 +11,14 @@ typedef struct { char project_id[33],experiment_id[33]; } ps_run_identity;
 ps_result ps_run_identity_make(const char *project_id,const char *experiment_id,ps_run_identity *out);
 ps_result ps_run_identity_validate(const ps_run_identity *identity);
 ps_result ps_run_identity_read(const char *metadata,size_t length,ps_run_identity *out);
+/* System wall-clock UTC/POSIX epoch (1970-01-01), not simulation/monotonic time.
+ * Nanoseconds are 0..999999999; representation does not promise clock precision.
+ * Output is preserved on all failures. Missing archive fields return PS_EOF. */
+typedef struct { int64_t unix_seconds; uint32_t nanoseconds; } ps_run_start_time;
+ps_result ps_run_start_time_make(int64_t unix_seconds,uint32_t nanoseconds,ps_run_start_time *out);
+ps_result ps_run_start_time_now(ps_run_start_time *out);
+ps_result ps_run_start_time_validate(const ps_run_start_time *time);
+ps_result ps_run_start_time_read(const char *metadata,size_t length,ps_run_start_time *out);
 typedef struct {
     FILE *file;
     uint32_t channels;

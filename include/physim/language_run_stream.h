@@ -53,6 +53,28 @@ static inline psrt_string psrt_run_identity_experiment(ps_allocator a,ps_run_ide
     if(ps_run_identity_validate(&id)!=PS_OK)psrt_fail_code(s,PS_INVALID,"Invalid RunIdentity");
     return psrt_run_string(a,id.experiment_id,s);
 }
+static inline ps_run_start_time psrt_run_start_time(int64_t seconds,int64_t nanos,psrt_site site) {
+    if(nanos<0 || nanos>=1000000000)psrt_fail_code(site,PS_INVALID,"RunStartTime nanoseconds out of range");
+    ps_run_start_time time;ps_result r=ps_run_start_time_make(seconds,(uint32_t)nanos,&time);
+    if(r!=PS_OK)psrt_fail_code(site,r,"Invalid RunStartTime");return time;
+}
+static inline ps_run_start_time psrt_run_start_time_now(psrt_site site) {
+    ps_run_start_time time;ps_result r=ps_run_start_time_now(&time);
+    if(r!=PS_OK)psrt_fail_code(site,r,"System wall clock unavailable");return time;
+}
+static inline ps_run_start_time psrt_run_start_time_metadata(const char *text,size_t size,psrt_site site) {
+    ps_run_start_time time;ps_result r=ps_run_start_time_read(text,size,&time);
+    if(r!=PS_OK)psrt_fail_code(site,r,"Archive has no valid start time");return time;
+}
+static inline bool psrt_run_start_valid(ps_run_start_time time,psrt_site site) {
+    (void)site;return ps_run_start_time_validate(&time)==PS_OK;
+}
+static inline int64_t psrt_run_start_seconds(ps_run_start_time time,psrt_site site) {
+    if(ps_run_start_time_validate(&time)!=PS_OK)psrt_fail_code(site,PS_INVALID,"Invalid RunStartTime");return time.unix_seconds;
+}
+static inline int64_t psrt_run_start_nanos(ps_run_start_time time,psrt_site site) {
+    if(ps_run_start_time_validate(&time)!=PS_OK)psrt_fail_code(site,PS_INVALID,"Invalid RunStartTime");return time.nanoseconds;
+}
 static inline void psrt_stream_store_release(psrt_stream_store_owner *owner) {
     if(owner && !--owner->references) {
         if(owner->store)ps_run_store_destroy(owner->store);
@@ -254,6 +276,16 @@ static inline bool psrt_stream_reader_has_identity(psrt_stream_reader value,psrt
     if(r==PS_EOF)return false;
     if(r!=PS_OK)psrt_fail_code(site,r,"RunReader identity metadata is corrupt");
     return true;
+}
+static inline ps_run_start_time psrt_stream_reader_start_time(psrt_stream_reader value,psrt_site site) {
+    (void)psrt_stream_reader_info(value,site);ps_run_start_time time;
+    ps_result r=ps_run_reader_start_time(value.owner->store->store,value.owner->handle,&time);
+    if(r!=PS_OK)psrt_fail_code(site,r,"RunReader has no valid start time");return time;
+}
+static inline bool psrt_stream_reader_has_start_time(psrt_stream_reader value,psrt_site site) {
+    (void)psrt_stream_reader_info(value,site);ps_run_start_time time;
+    ps_result r=ps_run_reader_start_time(value.owner->store->store,value.owner->handle,&time);
+    if(r==PS_EOF)return false;if(r!=PS_OK)psrt_fail_code(site,r,"RunReader start time is corrupt");return true;
 }
 static inline bool psrt_stream_reader_open(psrt_stream_reader value,psrt_site site) {
     (void)site;ps_run_read_info info;

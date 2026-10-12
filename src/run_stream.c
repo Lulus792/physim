@@ -95,6 +95,10 @@ ps_result ps_run_reader_identity(ps_run_store *store,ps_run_read_handle h,ps_run
     if(!s || !out)return PS_INVALID;
     return ps_run_identity_read(s->reader.metadata,strlen(s->reader.metadata),out);
 }
+ps_result ps_run_reader_start_time(ps_run_store *store,ps_run_read_handle h,ps_run_start_time *out) {
+    read_slot *s=reader_slot(store,h);if(!s || !out)return PS_INVALID;
+    return ps_run_start_time_read(s->reader.metadata,strlen(s->reader.metadata),out);
+}
 ps_result ps_run_reader_next(ps_run_store *store, ps_run_read_handle h, double *time,
                              double *values, size_t capacity, size_t *count) {
     read_slot *s = reader_slot(store, h);

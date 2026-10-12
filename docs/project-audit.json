@@ -3882,13 +3882,21 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Startzeit, Simulationszeit, Zeitschritt und Seed.\n",
-      "status": "incomplete",
+      "status": "implemented",
       "evidence": [
+        "include/physim/data.h",
+        "include/physim/run_stream.h",
+        "include/physim/language_run_stream.h",
         "src/data.c",
-        "runners/experiment.c",
-        "docs/data-format.md"
+        "src/run_stream.c",
+        "tests/test_run_start_time.c",
+        "tests/test_run_start_time_codec.py",
+        "tests/run_archive_reference.py",
+        "tests/fixtures/language/run_start_time.phys",
+        "docs/data-format.md",
+        "docs/platform-validation.md"
       ],
-      "note": "Simulationszeiten in den Messzeilen sowie Zeitschritt und Seed in Metadaten sind vorhanden und separat geprüft. Kompilierungsdatum/-zeit ersetzt keine tatsächliche Laufstartzeit; eine ausdrücklich definierte Laufstartzeit im Archiv fehlt noch. Der Block bleibt unvollständig."
+      "note": "Jeder neue Core-Writer archiviert die tatsächliche System-Wanduhr unmittelbar vor exklusiver Erstellung als vorzeichenbehaftete Unixsekunden und Nanosekunden. Simulationszeiten, Zeitschritt und Seed bleiben separat erhalten. Typisierte C-/Handle-/Physim-Werte, atomare Fehlerausgaben, Legacy-/beschädigte Metadaten, reale UTC-Grenzen, numerisch unveränderte Wiederholungsarchive, verschobenes installiertes/neu gebautes SDK und tatsächliche Appketten sind auf Intel macOS geprüft. Uhrdarstellung ist keine Genauigkeitsgarantie, monotone Uhr oder ganze aktuelle Plattformabnahme."
     },
     {
       "id": "PP-0449",

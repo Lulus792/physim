@@ -687,7 +687,7 @@ def language_reference():
     table = source.split('library[] = {', 1)[1].split('static const ps_lang_builtin *library_find', 1)[0]
     pattern = re.compile(r'\{\s*"(\w+)"\s*,\s*"\w+"\s*,\s*(\w+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*\{([^}]+)\}\s*,\s*\{([^}]+)\}\s*\}', re.S)
     types = dict(BATCH='Batch', B='Bool', F='Float64', I='Int64', S='String', U='Unit', QUANTITY='Quantity', MEDIUM='Medium', MATERIAL='Material', SUBMERSION='Submersion', C='Channel',
-                 V2='Vec2', V3='Vec3', V4='Vec4', Q='Quat', M3='Mat3', M4='Mat4', B3='Bezier3', RNG='Rng', ODE_RESULT='OdeResult', STEP_INTERVAL='StepInterval', SCALAR_RESULT='ScalarResult', DIAGNOSTIC='Diagnostic', RUN_STORE='RunStore', RUN_READER='RunReader', RUN_WRITER='RunWriter', MEAN_INTERVAL='MeanInterval', RUN_IDENTITY='RunIdentity', RUN_INDEX='RunIndex', RUN_BLOCK='RunBlock', RUN_SNAPSHOT='RunSnapshot', COLLIDER='Collider', WORLD='ContactWorld', PS_LANG_COLLIDER_ARRAY='[Collider]', VOID='Void', D='Dataset', R='Series',
+                 V2='Vec2', V3='Vec3', V4='Vec4', Q='Quat', M3='Mat3', M4='Mat4', B3='Bezier3', RNG='Rng', ODE_RESULT='OdeResult', STEP_INTERVAL='StepInterval', SCALAR_RESULT='ScalarResult', DIAGNOSTIC='Diagnostic', RUN_STORE='RunStore', RUN_READER='RunReader', RUN_WRITER='RunWriter', MEAN_INTERVAL='MeanInterval', RUN_IDENTITY='RunIdentity', RUN_START_TIME='RunStartTime', RUN_INDEX='RunIndex', RUN_BLOCK='RunBlock', RUN_SNAPSHOT='RunSnapshot', COLLIDER='Collider', WORLD='ContactWorld', PS_LANG_COLLIDER_ARRAY='[Collider]', VOID='Void', D='Dataset', R='Series',
                  P='Plot', TABLE='Table', DIST='Distribution', CONFIG='SensorConfig', SENSOR='Sensor',
                  BODY='Body', CONTACTS='Contacts', SOLVER='ContactSolver', RESULT='ContactResult',
                  JOINT='DistanceJoint', JOINT_RESULT='JointResult',
@@ -1141,6 +1141,17 @@ LANG_DESCRIPTIONS.update({
  'runStoreIdentity': 'Speichert eine Wertkopie der Identität für künftig erzeugte Writer; bestehende Writer werden nicht verändert.',
  'runReaderIdentity': 'Kopiert die vollständige Reader-Identität; fehlende oder beschädigte Herkunft erzeugt einen fangbaren Fehler.',
  'runReaderHasIdentity': 'Prüft vollständige gültige Herkunft. Fehlend/unavailable liefert false; beschädigte/doppelte ID-Felder erzeugen einen fangbaren Fehler.'
+})
+
+LANG_DESCRIPTIONS.update({
+ 'RunStartTime': 'Erzeugt einen unabhängigen UTC-Epoch-Zeitwert aus Int64-Sekunden und 0..999999999 Nanosekunden.',
+ 'runStartTimeNow': 'Erfasst die aktuelle System-Wanduhr; keine Simulationszeit, kein RNG. Die Präzision wird nicht zugesichert.',
+ 'runStartTimeFromMetadata': 'Dekodiert den vollständigen Metadaten-Stringbereich; fehlende oder beschädigte Startzeit ist fangbar.',
+ 'runStartTimeIsValid': 'Prüft den Nanosekundenbereich eines unabhängigen Werts ohne Allokation oder Uhr-/RNG-Zugriff.',
+ 'runStartSeconds': 'Liefert die ganzzahligen Unixsekunden ohne Float64-Rundung.',
+ 'runStartNanos': 'Liefert den Nanosekundenanteil als Int64.',
+ 'runReaderStartTime': 'Kopiert die archivierte Writer-Startzeit ohne Cursorverbrauch.',
+ 'runReaderHasStartTime': 'Fehlende alte Herkunft liefert false; beschädigte Startzeit ist ein fangbarer Fehler.'
 })
 
 def main():

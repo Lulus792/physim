@@ -1,4 +1,5 @@
 """Exercise real C/Phys runners, their binary stream and exclusive JSONL logs."""
+from run_archive_reference import execution_independent_bytes
 import json
 import math
 import os
@@ -61,7 +62,7 @@ if 'Destroyed' in [r['message'] for r in rows]:
 foreign = work / 'foreign.psrun'
 sidecar = Path(str(foreign) + '.pslog')
 sidecar.write_bytes(b'foreign content\n')
-assert offline('foreign').read_bytes() == path.read_bytes()
+assert execution_independent_bytes(offline('foreign').read_bytes()) == execution_independent_bytes(path.read_bytes())
 assert sidecar.read_bytes() == b'foreign content\n'
 
 # JSON escaping and bounded volume are tested independently of the wire stream.

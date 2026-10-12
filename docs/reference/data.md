@@ -45,6 +45,48 @@ Dekodiert genau einen begrenzten Metadaten-Bytebereich. Fehlende/unavailable Her
 ps_result ps_run_identity_read(const char *metadata,size_t length,ps_run_identity *out);
 ```
 
+### ps_run_start_time
+
+```c
+typedef struct { int64_t unix_seconds; uint32_t nanoseconds; } ps_run_start_time;
+```
+
+System wall-clock UTC/POSIX epoch (1970-01-01), not simulation/monotonic time. Nanoseconds are 0..999999999; representation does not promise clock precision. Output is preserved on all failures. Missing archive fields return PS_EOF.
+
+## ps_run_start_time_make
+
+Erzeugt eine UTC/POSIX-Epoch-Zeitkopie aus ganzzahligen Sekunden und 0..999999999 Nanosekunden; Fehler bewahren die Ausgabe.
+
+```c
+ps_result ps_run_start_time_make(
+    int64_t unix_seconds,uint32_t nanoseconds,ps_run_start_time *out);
+```
+
+## ps_run_start_time_now
+
+Liest die aktuelle System-Wanduhr ohne RNG oder Dateizugriff. Fehler bewahren die Ausgabe; die Uhr ist nicht monoton und ihre Präzision ist OS-abhängig.
+
+```c
+ps_result ps_run_start_time_now(ps_run_start_time *out);
+```
+
+## ps_run_start_time_validate
+
+Prüft den Nanosekundenbereich eines unabhängigen Startzeitwerts.
+
+```c
+ps_result ps_run_start_time_validate(const ps_run_start_time *time);
+```
+
+## ps_run_start_time_read
+
+Dekodiert Startzeit aus einem begrenzten Metadatenbereich; fehlend liefert PS_EOF, beschädigt/teilweise/doppelt PS_CORRUPT bei unveränderter Ausgabe.
+
+```c
+ps_result ps_run_start_time_read(
+    const char *metadata,size_t length,ps_run_start_time *out);
+```
+
 ### ps_run_writer
 
 ```c

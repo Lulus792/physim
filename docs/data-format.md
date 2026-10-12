@@ -460,3 +460,32 @@ beschrieben. Der Modul-Tail wird nur mit ausdrücklicher Capability und innerhal
 gemeldeten Structgröße gelesen. Ein unbekannter längerer Tail ohne Capability
 bleibt unberührt. Die adaptive Mindestgröße bleibt am bisherigen Callback-Ende;
 zusätzliche Herkunftsfelder sind keine Voraussetzung für alte adaptive Module.
+
+## Tatsächliche Startzeit des Archivs
+
+Jeder neue Core-Writer erfasst unmittelbar vor dem exklusiven Anlegen die
+System-Wanduhr. `start_unix_seconds` speichert ganzzahlige Unixsekunden seit
+1970-01-01 UTC als Vorzeichen plus 19 Ziffern; `start_nanoseconds` den Anteil
+0–999999999 als neun Ziffern. Die feste Breite hält Indexpositionen bei
+Vergleichen unabhängig von den Werten. Negative Epoch-Werte sind darstellbar.
+Das ist weder Simulationszeit noch Kompilierungszeit oder eine monotone Uhr.
+Die Darstellung behauptet keine Nanosekundenpräzision und keine Genauigkeit
+der eingestellten Systemuhr. Wanduhränderungen sind möglich.
+
+Die Werte stehen im CRC-geschützten Metadatenchunk. Modellmetadaten dürfen sie
+nicht deklarieren; bei Kollisionen, Validierungs- oder Uhrfehlern wird keine
+Datei angelegt. `ps_run_start_time` / `RunStartTime` liefern unabhängige Werte
+und einen strengen Decoder. Alte Dateien ohne beide Felder bleiben lesbar;
+der Decoder meldet `PS_EOF`. Teilweise, doppelte, übergroße oder beschädigte
+Felder melden `PS_CORRUPT` bei unveränderter Ausgabe.
+
+POSIX verwendet [CLOCK_REALTIME](https://pubs.opengroup.org/onlinepubs/000095399/functions/clock_getres.html),
+Windows [timespec_get mit TIME_UTC](https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/timespec-get-timespec32-get-timespec64-get1?view=msvc-170).
+Die Uhr wird gelesen, nicht eingestellt; der Simulations-RNG bleibt unberührt.
+
+Zwei wiederholte Ausführungen haben eigene Startzeiten. Reproduzierbarkeit
+bezieht sich auf Modellparameter, Schema, Daten, Szenen und Auswertungen.
+Der unabhängige Testdecoder validiert beide UTC-Felder und normalisiert
+ausschließlich ihre festen Wertbereiche samt Metadaten-CRC; alle anderen
+Archivbytes, einschließlich Index/Footer, bleiben im Vergleich erhalten.
+[Typisierter Zugriff](run-streams.md#archivierte-startzeit).

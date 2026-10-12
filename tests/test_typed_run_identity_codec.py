@@ -1,11 +1,12 @@
 """Independent wire check for typed C/handle/Physim identity writers."""
+from run_archive_reference import execution_independent_bytes
 from pathlib import Path
 import struct
 import subprocess
 import sys
 import zlib
 work=Path(sys.argv[1]);probe=sys.argv[2];files=[work/name for name in ('typed-c.psrun','typed-handle-c.psrun','typed-language.psrun')]
-raw=files[0].read_bytes();assert all(p.read_bytes()==raw for p in files[1:])
+raw=files[0].read_bytes();assert all(execution_independent_bytes(p.read_bytes())==execution_independent_bytes(raw) for p in files[1:])
 assert raw[:16]==b'PSRUN17\n'+struct.pack('<II',1,0x01020304)
 at=16;rows=0;metadata=None;footer=False
 while at<len(raw):

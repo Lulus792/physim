@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #ifdef _WIN32
 #include <io.h>
 #else
@@ -190,13 +191,63 @@ ps_result ps_run_identity_read(const char *text,size_t length,ps_run_identity *o
     if(available!=3)return PS_EOF;
     *out=id;return PS_OK;
 }
+ps_result ps_run_start_time_validate(const ps_run_start_time *time) {
+    return time && time->nanoseconds<UINT32_C(1000000000)?PS_OK:PS_INVALID;
+}
+ps_result ps_run_start_time_make(int64_t seconds,uint32_t nanos,ps_run_start_time *out) {
+    if(!out || nanos>=UINT32_C(1000000000))return PS_INVALID;
+    ps_run_start_time value={0};value.unix_seconds=seconds;value.nanoseconds=nanos;*out=value;return PS_OK;
+}
+ps_result ps_run_start_time_now(ps_run_start_time *out) {
+    if(!out)return PS_INVALID;
+    struct timespec time;
+#ifdef _WIN32
+    if(timespec_get(&time,TIME_UTC)!=TIME_UTC)return PS_IO;
+#else
+    if(clock_gettime(CLOCK_REALTIME,&time))return PS_IO;
+#endif
+    _Static_assert(sizeof(time_t)<=sizeof(int64_t),"unsupported wall-clock seconds width");
+    if(((time_t)-1>0 && (uintmax_t)time.tv_sec>INT64_MAX) || time.tv_nsec<0 || time.tv_nsec>=1000000000)return PS_NUMERIC;
+    return ps_run_start_time_make((int64_t)time.tv_sec,(uint32_t)time.tv_nsec,out);
+}
+ps_result ps_run_start_time_read(const char *text,size_t length,ps_run_start_time *out) {
+    if(!out || (!text && length) || length>=8192)return PS_INVALID;
+    if(length && memchr(text,0,length))return PS_CORRUPT;
+    ps_run_start_time value={0};unsigned seen=0;
+    for(size_t at=0;at<length;) {
+        size_t end=at;while(end<length && text[end]!='\r' && text[end]!='\n')end++;
+        size_t prefix=0;unsigned field=0;
+        if(end-at>=19 && !memcmp(text+at,"start_unix_seconds=",19)){prefix=19;field=1;}
+        if(end-at>=18 && !memcmp(text+at,"start_nanoseconds=",18)){prefix=18;field=2;}
+        if(field) {
+            if(seen&field)return PS_CORRUPT;seen|=field;
+            const char *number=text+at+prefix;size_t n=end-at-prefix;
+            bool negative=field==1 && n && number[0]=='-';
+            size_t first=field==1?1:0;
+            if((field==1 && (n!=20 || (number[0]!='+' && number[0]!='-'))) || (field==2 && n!=9))return PS_CORRUPT;
+            uint64_t parsed=0,limit=field==2?UINT64_C(999999999):(uint64_t)INT64_MAX+(negative?1u:0u);
+            for(size_t i=first;i<n;i++) {
+                if(number[i]<'0' || number[i]>'9')return PS_CORRUPT;
+                unsigned digit=(unsigned)(number[i]-'0');if(parsed>(limit-digit)/10)return PS_CORRUPT;
+                parsed=parsed*10+digit;
+            }
+            if(field==1)value.unix_seconds=negative?(parsed==(uint64_t)INT64_MAX+1u?INT64_MIN:-(int64_t)parsed):(int64_t)parsed;
+            else value.nanoseconds=(uint32_t)parsed;
+        }
+        at=end<length?end+1:end;
+    }
+    if(!seen)return PS_EOF;
+    if(seen!=3)return PS_CORRUPT;
+    *out=value;return PS_OK;
+}
 static ps_result run_create(ps_run_writer *w,const char *path,const ps_context *c,const char *name,const ps_run_identity *id) {
     if (!w || !path || !c || !name || !ps_text_valid(name,256,false) || !*name || !c->channel_count || c->channel_count > PS_MAX_CHANNELS)
         return PS_INVALID;
     const char *metadata_end=memchr(c->model_metadata,0,sizeof c->model_metadata);
     if(!metadata_end)return PS_INVALID;
     for(const char *line=c->model_metadata;line<metadata_end;) {
-        if(!strncmp(line,"core_compiler=",14) || !strncmp(line,"core_build=",11))return PS_INVALID;
+        if(!strncmp(line,"core_compiler=",14) || !strncmp(line,"core_build=",11) ||
+           !strncmp(line,"start_unix_seconds=",19) || !strncmp(line,"start_nanoseconds=",18))return PS_INVALID;
         const char *end=line+strcspn(line,"\r\n");line=*end?end+1:end;
     }
     if(id) {
@@ -208,6 +259,7 @@ static ps_result run_create(ps_run_writer *w,const char *path,const ps_context *
         parameter_count = c->parameter_count;
     if (parameter_count && ps_parameter_finalize(c) != PS_OK)
         return PS_INVALID;
+    ps_run_start_time start;ps_result captured=ps_run_start_time_now(&start);if(captured!=PS_OK)return captured;
     memset(w, 0, sizeof *w);
     w->file = fopen(path, "w+bx");
     if (!w->file)
@@ -216,8 +268,8 @@ static ps_result run_create(ps_run_writer *w,const char *path,const ps_context *
     unsigned char h[16] = {'P', 'S', 'R', 'U', 'N', '1', '7', '\n', 1, 0, 0, 0, 4, 3, 2, 1};
     char meta[8192];
     int n =
-        snprintf(meta, sizeof meta, "format=1\napi=%u\ncore_compiler=%s\ncore_build=%s\nexperiment=%s\ndt_s=%.17g\nseed=%llu\n%s\n",
-                 PS_API_VERSION,PS_BUILD_COMPILER,PS_BUILD_STAMP,name,c->dt_s,(unsigned long long)c->seed,c->model_metadata);
+        snprintf(meta, sizeof meta, "format=1\napi=%u\ncore_compiler=%s\ncore_build=%s\nstart_unix_seconds=%+020lld\nstart_nanoseconds=%09u\nexperiment=%s\ndt_s=%.17g\nseed=%llu\n%s\n",
+                 PS_API_VERSION,PS_BUILD_COMPILER,PS_BUILD_STAMP,(long long)start.unix_seconds,(unsigned)start.nanoseconds,name,c->dt_s,(unsigned long long)c->seed,c->model_metadata);
     ps_result r = PS_OK;
     if (n < 0 || n >= (int)sizeof meta)
         r = PS_IO;

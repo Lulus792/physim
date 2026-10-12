@@ -274,3 +274,26 @@ beim Öffnen einer Laufdatei. Alte Dateien ohne IDs bleiben lesbar.
 Physim `hasIdentity()` liefert bei fehlender Herkunft false und bei beschädigter
 Herkunft einen fangbaren Fehler; `identity()` verlangt eine vollständige Identität.
 Die alten C-Writer-Aufrufe bleiben für bestehende Programme verfügbar.
+
+## Archivierte Startzeit
+
+`ps_run_start_time_now` liest die System-Wanduhr in Unixsekunden/Nanosekunden.
+`ps_run_reader_start_time` liefert die bei Writer-Erstellung archivierte Kopie,
+ohne den Lesecursor zu verbrauchen. `ps_run_start_time_read` dekodiert einen
+explizit begrenzten Metadatenbereich. Fehler erhalten die Ausgabe; alte
+Dateien ohne Startzeit liefern `PS_EOF`.
+
+```text
+let now = RunStartTime.now()
+let saved = reader.startTime()
+let decoded = RunStartTime.fromMetadata(reader.metadata())
+assert(saved.unixSeconds() == decoded.unixSeconds())
+assert(saved.nanoseconds() == decoded.nanoseconds())
+```
+
+`RunStartTime(seconds,nanoseconds)` erzeugt einen unabhängigen Wert.
+`isValid()`, `unixSeconds()` und `nanoseconds()` prüfen/lesen seine Felder.
+Arrays, Records und Optionals kopieren Werte unabhängig. `hasStartTime()`
+liefert bei alten Dateien false; beschädigte Startzeit ist ein fangbarer Fehler.
+Eine ausgelesene Kopie bleibt nach Reader-/Store-Close gültig.
+Zeitwerte werden als Integer gelesen, ohne Float64-Verlust.

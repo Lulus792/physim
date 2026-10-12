@@ -1,4 +1,5 @@
 """Independent .psrun event decoder and CRC-preserving malformed-file probes."""
+from run_archive_reference import execution_independent_bytes
 from pathlib import Path
 import struct
 import subprocess
@@ -28,7 +29,7 @@ def inspect(path):
     assert samples==[(0,7)] and result[-1]==(4,struct.pack('<Q',1))
     return result
 c=inspect(work/'events-c.psrun'); language=inspect(work/'events-language.psrun')
-assert c==language, 'C and Physim must emit byte-identical metadata/schema/events/index/footer'
+assert chunks(execution_independent_bytes((work/'events-c.psrun').read_bytes()))==chunks(execution_independent_bytes((work/'events-language.psrun').read_bytes())), 'C and Physim must emit byte-identical metadata/schema/events/index/footer'
 def run(path,mode,expected):
     r=subprocess.run([probe,str(path),mode],capture_output=True,text=True,timeout=5)
     assert r.returncode==0,(r.stdout,r.stderr)

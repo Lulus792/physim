@@ -18,6 +18,7 @@
 #define RUN_WRITER PS_TYPE_RUN_WRITER
 #define MEAN_INTERVAL PS_TYPE_MEAN_INTERVAL
 #define RUN_IDENTITY PS_TYPE_RUN_IDENTITY
+#define RUN_START_TIME PS_TYPE_RUN_START_TIME
 #define RUN_BLOCK PS_TYPE_RUN_BLOCK
 #define RUN_SNAPSHOT PS_TYPE_RUN_SNAPSHOT
 #define SUBMERSION PS_TYPE_SUBMERSION
@@ -180,6 +181,14 @@ static const ps_lang_builtin library[] = {
     {"meanIntervalUpper", "psrt_interval_upper", F, 1, 0, {MEAN_INTERVAL}, {"interval"}},
     {"meanIntervalCount", "psrt_interval_count", I, 1, 0, {MEAN_INTERVAL}, {"interval"}},
     {"RunIndex", "psrt_run_index_open", RUN_INDEX, 2, 0, {S,I}, {"path","maximumEntries"}},
+    {"RunStartTime", "psrt_run_start_time", RUN_START_TIME, 2, 0, {I,I}, {"unixSeconds","nanoseconds"}},
+    {"runStartTimeNow", "psrt_run_start_time_now", RUN_START_TIME, 0, 0, {0}, {0}},
+    {"runStartTimeFromMetadata", "psrt_run_start_time_metadata", RUN_START_TIME, 1, 0, {S}, {"metadata"}},
+    {"runStartTimeIsValid", "psrt_run_start_valid", PS_TYPE_BOOL, 1, 0, {RUN_START_TIME}, {"time"}},
+    {"runStartSeconds", "psrt_run_start_seconds", I, 1, 0, {RUN_START_TIME}, {"time"}},
+    {"runStartNanos", "psrt_run_start_nanos", I, 1, 0, {RUN_START_TIME}, {"time"}},
+    {"runReaderStartTime", "psrt_stream_reader_start_time", RUN_START_TIME, 1, 0, {RUN_READER}, {"reader"}},
+    {"runReaderHasStartTime", "psrt_stream_reader_has_start_time", PS_TYPE_BOOL, 1, 0, {RUN_READER}, {"reader"}},
     {"RunIdentity", "psrt_run_identity", RUN_IDENTITY, 2, 0, {S,S}, {"projectId","experimentId"}},
     {"runIdentityFromMetadata", "psrt_run_identity_metadata", RUN_IDENTITY, 1, 0, {S}, {"metadata"}},
     {"runIdentityIsValid", "psrt_run_identity_valid", PS_TYPE_BOOL, 1, 0, {RUN_IDENTITY}, {"identity"}},
@@ -833,6 +842,11 @@ static const ps_lang_method methods[] = {
     {"upper","meanIntervalUpper",MEAN_INTERVAL,0},
     {"sampleCount","meanIntervalCount",MEAN_INTERVAL,0},
     {"meanInterval","seriesMeanInterval",R,0},
+    {"isValid","runStartTimeIsValid",RUN_START_TIME,0},
+    {"unixSeconds","runStartSeconds",RUN_START_TIME,0},
+    {"nanoseconds","runStartNanos",RUN_START_TIME,0},
+    {"startTime","runReaderStartTime",RUN_READER,0},
+    {"hasStartTime","runReaderHasStartTime",RUN_READER,0},
     {"isValid","runIdentityIsValid",RUN_IDENTITY,0},
     {"projectId","runIdentityProject",RUN_IDENTITY,0},
     {"experimentId","runIdentityExperiment",RUN_IDENTITY,0},
@@ -1074,6 +1088,8 @@ static const struct { const char *owner, *name, *function; } factories[] = {
     {"Diagnostic","here","diagnosticHere"}, {"Diagnostic","empty","emptyDiagnostic"}, {"Diagnostic","decode","diagnosticDecoded"}, {"Diagnostic","load","loadDiagnostic"},
     {"Int64", "abs", "intAbs"},
     {"Int64", "min", "intMin"},
+    {"RunStartTime","now","runStartTimeNow"},
+    {"RunStartTime","fromMetadata","runStartTimeFromMetadata"},
     {"RunIdentity","fromMetadata","runIdentityFromMetadata"},
     {"MeanInterval","fromSample","sampleMeanInterval"},
     {"Int64", "max", "intMax"},

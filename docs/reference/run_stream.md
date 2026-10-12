@@ -111,6 +111,15 @@ ps_result ps_run_reader_identity(
     ps_run_store *store,ps_run_read_handle handle,ps_run_identity *out);
 ```
 
+## ps_run_reader_start_time
+
+Kopiert die gespeicherte Startzeit aus einem versionierten Reader ohne Änderung des Dateicursors; alte Dateien liefern PS_EOF.
+
+```c
+ps_result ps_run_reader_start_time(
+    ps_run_store *store,ps_run_read_handle handle,ps_run_start_time *out);
+```
+
 ## ps_run_reader_next
 
 Liest eine vollständig validierte Messzeile atomar; alle anderen Status erhalten Zeit, Werte und Anzahl.

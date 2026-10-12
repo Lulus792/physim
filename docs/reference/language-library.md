@@ -2120,6 +2120,16 @@ RunIndex(path: String, maximumEntries: Int64) -> RunIndex
 
 Überall verfügbar.
 
+## RunStartTime
+
+```text
+RunStartTime(unixSeconds: Int64, nanoseconds: Int64) -> RunStartTime
+```
+
+Erzeugt einen unabhängigen UTC-Epoch-Zeitwert aus Int64-Sekunden und 0..999999999 Nanosekunden.
+
+Überall verfügbar.
+
 ## RunStore
 
 ```text
@@ -5121,6 +5131,16 @@ Prüft vollständige gültige Herkunft. Fehlend/unavailable liefert false; besch
 
 Überall verfügbar.
 
+## runReaderHasStartTime
+
+```text
+runReaderHasStartTime(reader: RunReader) -> Bool
+```
+
+Fehlende alte Herkunft liefert false; beschädigte Startzeit ist ein fangbarer Fehler.
+
+Überall verfügbar.
+
 ## runReaderIdentity
 
 ```text
@@ -5228,6 +5248,16 @@ runReaderSnapshot(reader: RunReader) -> RunSnapshot
 ```
 
 Kopiert die letzte akzeptierte Szene als unabhängigen RunSnapshot.
+
+Überall verfügbar.
+
+## runReaderStartTime
+
+```text
+runReaderStartTime(reader: RunReader) -> RunStartTime
+```
+
+Kopiert die archivierte Writer-Startzeit ohne Cursorverbrauch.
 
 Überall verfügbar.
 
@@ -5458,6 +5488,56 @@ runSnapshot_world_point(snapshot: RunSnapshot, index: Int64, local: Vec3) -> Vec
 ```
 
 Liefert den Weltpunkt aus lokalem Punkt und Objektslot aus dem vollständigen Snapshot. Kanal-, Objekt- und Punktindizes sind nullbasiert und werden geprüft; Objektindizes sind keine IDs.
+
+Überall verfügbar.
+
+## runStartNanos
+
+```text
+runStartNanos(time: RunStartTime) -> Int64
+```
+
+Liefert den Nanosekundenanteil als Int64.
+
+Überall verfügbar.
+
+## runStartSeconds
+
+```text
+runStartSeconds(time: RunStartTime) -> Int64
+```
+
+Liefert die ganzzahligen Unixsekunden ohne Float64-Rundung.
+
+Überall verfügbar.
+
+## runStartTimeFromMetadata
+
+```text
+runStartTimeFromMetadata(metadata: String) -> RunStartTime
+```
+
+Dekodiert den vollständigen Metadaten-Stringbereich; fehlende oder beschädigte Startzeit ist fangbar.
+
+Überall verfügbar.
+
+## runStartTimeIsValid
+
+```text
+runStartTimeIsValid(time: RunStartTime) -> Bool
+```
+
+Prüft den Nanosekundenbereich eines unabhängigen Werts ohne Allokation oder Uhr-/RNG-Zugriff.
+
+Überall verfügbar.
+
+## runStartTimeNow
+
+```text
+runStartTimeNow() -> RunStartTime
+```
+
+Erfasst die aktuelle System-Wanduhr; keine Simulationszeit, kein RNG. Die Präzision wird nicht zugesichert.
 
 Überall verfügbar.
 

@@ -1137,3 +1137,22 @@ tatsächliche Startzeit des Laufs; diese konkrete Lücke ist nun erfasst.
 Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **105 implemented**, **14 incomplete**, **412 unverified**;
 `completion_proven` bleibt `false`.
+
+
+## Tatsächliche archivierte Startzeit (PP-0448)
+
+Neue Writer speichern System-Wanduhr-Unixsekunden und Nanosekunden unmittelbar
+vor dem exklusiven Anlegen. C-/Handle-/Physim-Zugriff liefert unabhängige Werte;
+strenge Decoder erhalten Ausgaben bei Fehlern und erkennen alte Archive ohne
+Zeitfelder. Simulationszeit, Zeitschritt und Seed bleiben separat gespeichert.
+Die Darstellung behauptet keine Nanosekundenpräzision der Systemuhr.
+
+Intel-macOS-Prüfungen bestehen: sechs gezielte native Gruppen, der abschließende
+Startzeittest, sieben verschobene SDK-Befehle mit installierter/neu gebauter
+Bibliothek, ASan/UBSan sowie zwei tatsächliche C-Feder-/Physim-Pendel-Appketten.
+Ein unabhängiger Decoder normalisiert nur die zwei validierten Uhrwerte und
+ihre CRC; Messdaten, Index und Footer bleiben vollständig verglichen.
+[Ausgeführte Nachweise](platform-validation.md#tatsächliche-archivierte-startzeit-pp-0448).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**106 implemented**, **13 incomplete**, **412 unverified**;
+`completion_proven` bleibt `false`.

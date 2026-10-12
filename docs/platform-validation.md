@@ -73,64 +73,8 @@ Der vollständige Nachweis bleibt im [Plattformarchiv](platform-validation-histo
 
 ## Native Checkboxen und tatsächlicher Einstellungsentwurf
 
-Die native Accessibility-Schicht veröffentlicht nun zweistufige Checkboxen mit
-Namen, aktuellen booleschen Werten und genau einer Umschaltaktion. AppKit meldet
-`AXCheckBox`, `NSNumber` 0/1 und Wertänderungen. AT-SPI meldet Rolle 7,
-`checkable` (41), gegebenenfalls `checked` (4), `toggle`/`Umschalten` und
-Checked-Zustandsereignisse. Die AT-SPI-Werte wurden zusätzlich gegen die tatsächlich
-installierten PyAT-SPI-Konstanten geprüft. Optisch unbeschriftete Bibliotheks-
-Checkboxen erhalten den jeweiligen Laufnamen. Core-API/ABI, Sprachvertrag und
-Dateiformate bleiben unverändert. [Verträge und Grenzen](accessibility.md).
-
-Die portable Modellprüfung prüft Wertänderungen unter stabiler Kennung, späte
-Aktionen nach dem Zeichnen, Einzelzustellung und gesperrte/veraltete Ziele.
-Der tatsächliche AppKit-Prüfer liest Zahlenwerte und Rollen, prüft Press-Aktionen,
-Readonly-Selektoren und zurückbehaltene ungültige Elemente. Der gerenderte UI-
-Prüfer schaltet beschriftete und optisch unbeschriftete Controls. Der unabhängige
-PyAT-SPI-Client prüft zwei reale Fenster, unabhängige Werte, Checkable-/Checked-
-Zustände, zwei Richtungen der Wertänderungsereignisse sowie deaktivierte,
-verborgene und entfernte Checkboxen.
-
-Ein zusätzlicher Prüfer führt die tatsächliche App aus. Native Aktionen ändern
-den Einstellungsentwurf zweimal und erhalten die bereits angewandten
-Darstellungsflags. Bestehende Tastaturprüfungen prüfen Speichern und Neustart.
-Die ersten Zusatzprüfer scheiterten auf macOS mit 3/4 (`run-bveppbp9`) und
-Linux mit 2/3 (`run-99bzum0f`), weil sie eine noch inaktive Dock-Fläche aktivieren
-wollten. Deren Snapshot meldete korrekt deaktivierte Controls. Der korrigierte
-Prüfer aktiviert zuerst den Einstellungsbereich; Checkbox-Klicks erfolgen danach
-weiterhin ausschließlich über die native Schnittstelle. Das Hilfsverzeichnis
-für Testeinstellungen wird vor dem Appstart angelegt.
-
-Intel macOS 14.6.1/Apple Clang 16 besteht Modell, Geometrie, Handbuch, Referenzen
-und Prüfkit 5/5 (`run-_qbv8k1s`), die abschließenden AppKit-/UI-/App- und
-Einstellungstastaturabläufe 4/4 (`run-8aatbj7v`). Debian 12/GCC 12.2 besteht
-die fünf Prüfungen ohne Fenster 5/5 (`run-0y02erkz`) und AT-SPI, tatsächliche App
-sowie Einstellungstastaturführung 3/3 (`run-pxt0xohr`). Linux/Clang 14 mit
-ASan/UBSan besteht dieselben drei Fensterprüfungen 3/3 (`run-xfv89loo`) und
-Modell/Geometrie 2/2 (`run-fds_hcl3`). `detect_leaks=0` bleibt gesetzt;
-Address-/UB-Prüfungen sind aktiv. macOS-Sanitizer, Windows/UIA, Wayland und
-praktische VoiceOver-/Orca-Abnahme bleiben ungeprüft. PP-0710 bleibt unvollständig.
-
-
-Das verschobene macOS-SDK besteht unter
-`build/a11y-checkbox-final-sdk-checks/Native SDK ä _mmkcqy6`, das Linux-SDK unter
-`build/a11y-checkbox-final-sdk-checks/Native SDK ä xu7hiise`. Beide enthalten 469
-manifestierte Dateien und führen den tatsächlichen nativen Einstellungsablauf aus.
-Der endgültige gemeinsame Prüfschritt wird sowohl von `--accessibility-only` als
-auch der vollständigen SDK-Prüfung mit `--app-tests` verwendet. Die fokussierten
-Nachweise sind keine erneute vollständige SDK-/Produktabnahme. Unter Linux kommt
-der Prüfer ausschließlich aus `build/a11y-checkbox-final-independent-kit` mit 138
-manifestierten Eingaben, ohne Entwicklerheader oder Physim-Implementierung.
-Alle 31 Referenzdokumente sind weiterhin geprüft. Die letzten Handbuch-/Referenz-
-und Paketgrenzen bestehen auf macOS mit 3/3 unter `run-h_mcwa4b`.
-
-Quellgleichheit steht in `build/a11y-checkbox-source-freeze.json`, SDK-Belege in
-`build/a11y-checkbox-sdk-{mac,linux}-PASSED.json`. Dieser Nachtrag erfolgt nach
-Paketierung; geprüfte App-Implementierung und Testeingaben bleiben unverändert.
-Der Plan behält alle 531 Originalblöcke; 33 besitzen Implementierungsnachweise,
-7 bleiben konkret unvollständig und 491 weiterhin ungeprüft. Native Checkboxen
-ersetzen keine vollständige Tastatur-/Fokus-/Screenreader- oder Plattformabnahme.
-
+Der vollständige historische Nachweis bleibt im
+[Plattformarchiv](platform-validation-history.md#native-checkboxen-und-tatsächlicher-einstellungsentwurf) erhalten.
 
 ## Native benannte Optionsgruppen
 
@@ -4160,3 +4104,47 @@ umfasst **191** exakte Eingänge; **31** Referenzen und **643 C / 607 Physim**
 Completion-Einträge sind abgeglichen.
 Der nochmals mit der endgültigen Namensprüfung instrumentierte Runner besteht
 mit kurzem altem ABI, fremdem Tail und Nullnamen: `build/current-build-origin-asan-verified.log`.
+
+
+## Tatsächliche archivierte Startzeit (PP-0448)
+
+Neue Core-Writer speichern die unmittelbar vor dem exklusiven Anlegen gelesene
+System-Wanduhr als ganzzahlige Unixsekunden/Nanosekunden im Metadatenchunk.
+C-/Handle-/Physim-Werte bleiben nach Reader-/Store-Close gültig. Der Decoder
+prüft Breite, Bereich, Duplikate, Teilfelder und eingebettete NUL-Bytes; Fehler
+erhalten die Ausgabe. Alte Dateien ohne Startzeit bleiben lesbar. Die feste
+Breite erhält Indexpositionen; Uhrwerte sind keine Simulationszeit und kein
+Versprechen über Genauigkeit oder Auflösung der Systemuhr.
+
+Ausgeführte Intel-macOS-Nachweise:
+
+- Native Herkunfts-/Identitäts-/Event-/Stream-/Batch-Gruppen **6/6**,
+  `run-0_p6o4ju`, `build/current-start-time-confirmed-native-mac.log`.
+- Endgültiger Startzeittest mit Abweisung gefälschter Hostfelder ohne Datei
+  **1/1**, `run-or03uqof`, `build/current-start-time-final-native-mac.log`.
+  Der unabhängige Pythondecoder prüft reale UTC-Grenzen, CRC-korrekte Legacy-/
+  beschädigte Varianten und INT64_MIN. Wiederholungsparität normalisiert nur
+  beide validierten Uhrwerte samt Metadaten-CRC; eine geänderte Messzahl wird
+  weiterhin erkannt, Index und Footer bleiben vollständig verglichen.
+- Verschobenes SDK mit installierter und aus SDK-Quellen neu gebauter
+  Bibliothek **7/7** Verbraucherbefehle:
+  `build/current-start-time-sdk-verify-mac.log`; Verbraucher
+  `build/current-start-time-sdk-consumer-mac/Native SDK ä zs0n2tc0`.
+- Direkter AppleClang-ASan/UBSan-Lauf besteht:
+  `build/current-start-time-asan.log`; LeakSanitizer ist lokal deaktiviert.
+- Tatsächliche C-Feder-/Physim-Pendel-Appketten **2/2**, `run-_kmqrrid`,
+  `build/current-start-time-workflows-mac.log`.
+- SDK-Installation mit Referenz-/Kit-/Completion-/Katalogabgleich **4/4**,
+  `run-av2526u_`, `build/current-start-time-sdk-install-mac.log`.
+  **31** Referenzdokumente, **649 C / 615 Physim** Completion-Einträge.
+
+API-/ABI-/Dateiversionen bleiben gleich. Diese fokussierten Nachweise ersetzen
+keine ganze aktuelle Linux-/Windows-/Apple-Silicon-/Produktabnahme.
+
+Die abschließenden Offline-Parser-/Referenz-/Kit-/Completion-/Katalogprüfungen
+bestehen **5/5**, `run-_fvbcdo_`, `build/current-start-time-final-docs-mac.log`.
+Das unabhängige Prüfkit enthält **196** genaue manifestierte Eingänge ohne
+Physim-Implementierung. Ausschließlich aus diesem entpackten Kit besteht die
+verschobene SDK-Gegenprobe erneut **7/7** Befehle:
+`build/current-start-time-independent-sdk-verify-mac.log`; Verbraucher
+`build/current-start-time-independent-sdk-consumer-mac/Native SDK ä 7am6_vcu`.

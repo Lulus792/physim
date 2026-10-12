@@ -404,3 +404,11 @@ DESCRIPTIONS.update({
  'ps_run_reader_identity': 'Liefert eine unabhängige Identitätskopie aus dem versionierten Reader. Fehlende Herkunft liefert PS_EOF; Fehler bewahren die Ausgabe.',
  'ps_run_writer_create_with_identity': 'Erzeugt ein versioniertes Writer-Handle mit validierter Host-Identität und ohne Änderung der Handle-Ausgabe bei Fehlern.'
 })
+
+DESCRIPTIONS.update({
+ 'ps_run_start_time_make': 'Erzeugt eine UTC/POSIX-Epoch-Zeitkopie aus ganzzahligen Sekunden und 0..999999999 Nanosekunden; Fehler bewahren die Ausgabe.',
+ 'ps_run_start_time_now': 'Liest die aktuelle System-Wanduhr ohne RNG oder Dateizugriff. Fehler bewahren die Ausgabe; die Uhr ist nicht monoton und ihre Präzision ist OS-abhängig.',
+ 'ps_run_start_time_validate': 'Prüft den Nanosekundenbereich eines unabhängigen Startzeitwerts.',
+ 'ps_run_start_time_read': 'Dekodiert Startzeit aus einem begrenzten Metadatenbereich; fehlend liefert PS_EOF, beschädigt/teilweise/doppelt PS_CORRUPT bei unveränderter Ausgabe.',
+ 'ps_run_reader_start_time': 'Kopiert die gespeicherte Startzeit aus einem versionierten Reader ohne Änderung des Dateicursors; alte Dateien liefern PS_EOF.'
+})
