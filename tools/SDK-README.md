@@ -41,7 +41,7 @@ sudo apt-get install -y zenity fonts-dejavu-core libx11-6 libxext6 libxrandr2 li
 Zum Öffnen der App sind Python, CMake und ein Compiler nicht erforderlich.
 Zenity ermöglicht Datei- und Ordnerdialoge, wenn kein XDG-Portal verfügbar ist.
 Die jeweiligen Paketprüfungen und Grenzen stehen im
-[Plattformprüfstand](docs/platform-validation-history.md).
+[Plattformprüfstand](../docs/platform-validation-history.md).
 
 **macOS, Terminal:**
 
@@ -67,7 +67,7 @@ Unter Windows lautet das Programm `bin/physim-build.exe`. Die vorherige
 Beschreibung bleibt als `physim.project.bak` erhalten. Quellen, Messdateien und
 Buildcache bleiben unverändert; Format 2 wird nicht erneut geschrieben.
 Die App bietet dieselbe Aktion unter **Build-Einstellungen**.
-[Vertrag und Grenzen](docs/data-format.md#eigenständige-analyseprojekte).
+[Vertrag und Grenzen](../docs/data-format.md#eigenständige-analyseprojekte).
 
 ## Eigenes Projekt
 
@@ -85,8 +85,8 @@ Projektordner unter `build/Debug` oder `build/Release`. Nutzerprojekte benötige
 weder CMake noch Python. Eigene Quelldateien und Laufdaten bleiben beim Projekt.
 
 **F1** öffnet das mitgelieferte Handbuch. Einstieg und Beispiele:
-[Lernpfade](docs/guide.md), [C-Tutorial](docs/experiment-tutorial.md) und
-[Physim-Sprachtutorial](docs/language-tutorial.md).
+[Lernpfade](../docs/guide.md), [C-Tutorial](../docs/experiment-tutorial.md) und
+[Physim-Sprachtutorial](../docs/language-tutorial.md).
 
 ## Mitgeliefertes Pendel ohne Oberfläche ausführen
 

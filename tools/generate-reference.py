@@ -1183,11 +1183,12 @@ def main():
     if stale: raise SystemExit('Stale reference; run tools/generate-reference.py: ' + ', '.join(stale))
     # Every help page and Markdown-to-Markdown link must be reachable offline.
     ui = (ROOT / 'app/documentation_ui.inc').read_text(encoding='utf-8')
-    topics = set(re.findall(r'\{"[^"]+", "([^"]+)", (?:true|false)\}', ui))
+    topic_modes = dict(re.findall(r'\{"[^"]+", "([^"]+)", (true|false)\}', ui))
+    topics = set(topic_modes)
     for topic in topics:
         page = ROOT / topic
         assert page.is_file(), f'Missing bundled page: {topic}'
-        assert len(page.read_bytes()) <= 256 * 1024, f'Page exceeds viewer limit: {topic}'
+        assert len(page.read_bytes()) <= (512 * 1024 - 2 if topic_modes[topic]=='true' else 256 * 1024), f'Page exceeds viewer limit: {topic}'
         if not topic.endswith('.md') or not topic.startswith(('docs/', 'brains/')): continue
         body = page.read_text(encoding='utf-8')
         for link in re.findall(r'\]\(([^)]+)\)', body):

@@ -12,6 +12,7 @@ import hashlib
 import importlib.util
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -450,7 +451,7 @@ class Builder:
     def install(self, products: list[Path], output: Path):
         if output.exists():
             raise RuntimeError("Installation requires a new output directory.")
-        for name in ("include", "examples", "docs", "src", "third_party"):
+        for name in ("include", "examples", "docs", "src", "app", "third_party"):
             source = (ROOT / name).resolve()
             if source == output or source in output.parents:
                 raise RuntimeError("Installation must be outside the SDK source directories.")
@@ -480,6 +481,9 @@ class Builder:
         shutil.copy2(ROOT / "src/report_internal.h", staging / "src/report_internal.h")
         shutil.copy2(ROOT / "src/report_mask.inc",staging / "src/report_mask.inc")
         shutil.copy2(ROOT / "src/text_validation.h", staging / "src/text_validation.h")
+        (staging / "app").mkdir()
+        for name in ("documentation.c", "documentation.h"):
+            shutil.copy2(ROOT / "app" / name, staging / "app" / name)
         shutil.copy2(ROOT / "src/number_parse.h", staging / "src/number_parse.h")
         shutil.copy2(ROOT / "src/run_series.h", staging / "src/run_series.h")
         shutil.copy2(ROOT / "src/pchip.h", staging / "src/pchip.h")
@@ -503,7 +507,15 @@ class Builder:
                             ignore=shutil.ignore_patterns(".DS_Store", "._*", "__pycache__", "*.pyc"))
         (staging / "tests").mkdir(exist_ok=True)
         shutil.copy2(ROOT / "tests/tutorial_sources.json", staging / "tests/tutorial_sources.json")
-        shutil.copy2(ROOT / "tools/SDK-README.md", staging / "README.md")
+        topics=re.findall(r'\{"[^"]+", "([^"]+)", (true|false)\}',(ROOT / "app/documentation_ui.inc").read_text(encoding="utf-8"))
+        (staging / "tests/documentation_topics.json").write_text(json.dumps({"format":1,"topics":[{"path":path,"code":code=="true"} for path,code in topics]},indent=2)+"\n",encoding="utf-8")
+        for name in ("tools/SDK-README.md","third_party/README.md"):
+            (staging / name).parent.mkdir(exist_ok=True)
+            shutil.copy2(ROOT / name,staging / name)
+        (staging / "README.md").write_text((ROOT / "tools/SDK-README.md").read_text(encoding="utf-8").replace("(../docs/","(docs/"),encoding="utf-8")
+        # Preserve the source handbook's platform anchors used by bundled links.
+        with (staging / "README.md").open("a",encoding="utf-8") as readme:
+            readme.write("\n\n---\n\n"+(ROOT / "README.md").read_text(encoding="utf-8"))
         for name in ("LICENSE", "Physim_Projektplan.md", "AGENTS.md"):
             shutil.copy2(ROOT / name, staging / name)
         # Relative paths and content hashes make moved packages independently auditable.

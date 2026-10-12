@@ -6,8 +6,8 @@ Für die aktuelle Nutzung beginne im [Handbuch](guide.md) oder [User Guide](user
 ## Frühere Übersicht
 
 **Installieren und mit Oberfläche starten:**
-[Windows](#schnellstart-unter-windows) · [Linux / Debian und Ubuntu](#linux) ·
-[macOS / Apple Silicon und Intel](#macos).
+[Windows](../README.md#schnellstart-unter-windows) · [Linux / Debian und Ubuntu](../README.md#linux) ·
+[macOS / Apple Silicon und Intel](../README.md#macos).
 Die Anleitungen enthalten Installation, Build, Tests und den Start der App.
 
 **Oberfläche nach der Installation erneut starten:** Im Terminal in den

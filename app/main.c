@@ -224,14 +224,14 @@ typedef struct {
     const struct nk_user_font *doc_font_ui, *doc_font_title, *doc_font_code, *doc_code_fonts[4];
     const struct nk_user_font *doc_ui_fonts[4], *doc_title_fonts[4];
     bool doc_visible;
-    int doc_topic, doc_match, doc_jump_block;
+    int doc_topic, doc_match, doc_jump_block,doc_anchor_heading;
     nk_uint doc_scroll_x, doc_scroll_y;
     float doc_scroll_adjustment;
     char doc_query[128], doc_last_query[128], doc_error[160];
-    bool doc_search_focus, doc_search_active, doc_move_match, doc_reset_sidebar;
+    bool doc_search_focus, doc_search_active, doc_move_match, doc_reset_sidebar,doc_scroll_pending;
     bool doc_keyboard,doc_focus_reveal,doc_filter_focus;
     int doc_focus;
-    struct nk_rect doc_focus_bounds;
+    struct nk_rect doc_focus_bounds,doc_anchor_bounds,doc_body_bounds;
     char doc_filter[128], doc_last_filter[128];
     bool doc_filter_active, doc_contents;
     int doc_group, doc_previous, doc_track;
@@ -640,7 +640,7 @@ static bool copy_file_mode(const char *src, const char *dst, const char *mode) {
 static bool copy_file_exclusive(const char *src, const char *dst) {
     return copy_file_mode(src, dst, "wbx");
 }
-static char *load_utf8_text(const char *path, size_t *length) {
+static char *load_utf8_text_limit(const char *path, size_t *length,size_t maximum) {
     FILE *f = fopen(path, "rb");
     if (!f)
         return NULL;
@@ -649,7 +649,7 @@ static char *load_utf8_text(const char *path, size_t *length) {
         return NULL;
     }
     long size = ftell(f);
-    if (size < 0 || size > 256 * 1024) {
+    if (size < 0 || (size_t)size > maximum) {
         fclose(f);
         return NULL;
     }
@@ -682,6 +682,9 @@ static char *load_utf8_text(const char *path, size_t *length) {
     text[n] = 0;
     *length = n;
     return text;
+}
+static char *load_utf8_text(const char *path,size_t *length) {
+    return load_utf8_text_limit(path,length,PS_DOC_MAX_BYTES);
 }
 static bool set_editor_text(struct nk_text_edit *edit, const char *text, size_t n) {
     bool ok = ps_source_text_valid(text, n);

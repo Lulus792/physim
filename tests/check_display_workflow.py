@@ -39,6 +39,8 @@ SIMPLE["documentation_keyboard_22"] = (["--workspace-state-test", "{directory}",
 SIMPLE["documentation_keyboard"] = (["--workspace-state-test", "{directory}", "docs-keyboard"], 75, True)
 SIMPLE["documentation_media_16"] = (["--workspace-state-test", "{directory}", "docs-keyboard-media"], 90, True)
 SIMPLE["documentation_media_22"] = (["--workspace-state-test", "{directory}", "docs-keyboard-media-22"], 90, True)
+SIMPLE["documentation_anchors_16"] = (["--workspace-state-test", "{directory}", "docs-keyboard-anchors"], 90, True)
+SIMPLE["documentation_anchors_22"] = (["--workspace-state-test", "{directory}", "docs-keyboard-anchors-22"], 90, True)
 for size in ("small", "large"):
     for name, mode in (("toolbar", "toolbar"), ("documents", "documents")):
         SIMPLE[f"{name}_{size}"] = (["--workspace-state-test", "{directory}", mode], 25, size == "small")

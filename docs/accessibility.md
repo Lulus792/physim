@@ -26,8 +26,10 @@ Linux ergänzt die Rolle Slider und das standardisierte
 `MinimumValue`, `MaximumValue`, `MinimumIncrement`, `CurrentValue` und einer
 Wertänderungsmitteilung. Der unabhängige PyAT-SPI-Prüfer kontrolliert echte
 Wertlieferung, zwei Fenster sowie falsche und deaktivierte Anfragen. Die
-aktuelle Ausführung dieser Erweiterung unter Linux bleibt bis zum abgeschlossenen
-CI-Nachweis offen. Eine konfigurierte Prüfung ersetzt keinen ausgeführten Test.
+Ausführung dieser Erweiterung besteht unter Linux mit Clang und GCC jeweils
+10/10 native und 19/19 GUI-Fälle einschließlich des unabhängigen AT-SPI-Prüfers
+([ausgeführter Lauf](https://github.com/PhysicSimulator/physim/actions/runs/38239448663)).
+Der separate gezeichnete UI-Prüfer läuft derzeit nur unter macOS.
 
 Das portable Modell besteht die neuen Range-Grenzfälle unter ASan/UBSan.
 Die native macOS-/UI-Gegenprobe und die beiden Dokumentationsgrößen bestehen

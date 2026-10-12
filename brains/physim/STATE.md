@@ -29,9 +29,17 @@ Aktuelle Einzelprüfungen stehen in den Plattformnachweisen.
 
 Der Dokumentationsstand 9c93312 besteht inzwischen auch die tatsächlichen
 Linux-Sanitizergruppen mit GCC und Clang. Sein vollständiger eingefrorener
-macOS-/SDK-Lauf ist noch aktiv. Spätere native Accessibility-Regler besitzen
-eigene portable und macOS-Gegenproben; ihre neue Linux-Value-Anbindung braucht
-noch den aktuellen ausgeführten CI-Nachweis.
+macOS-/SDK-Lauf besteht 724 native Fälle und 718 SDK-Befehle. Spätere native Accessibility-Regler besitzen
+eigene portable und macOS-Gegenproben. Ihre Linux-Value-Anbindung besteht
+inzwischen mit Clang und GCC die tatsächliche AT-SPI-Gegenprobe; je Compiler
+bestehen 10 native und 19 GUI-Fälle.
+
+Abschnittssprünge und Beispielquellen sind jetzt in der nativen Hilfe erreichbar. Der native
+Parser besteht 185 Links aus dem Repository und 186 aus dem verschobenen SDK.
+Alle 180 indexierten Seiten und ihre internen Links sind geprüft.
+Drei kopflose Prüfungen und fünf aktuelle native GUI-Fälle bestehen. Die
+sichtbare Zielüberschrift ist bei 16/22 Pixeln geprüft; der große Planabgleich
+ist lesbar und kopierbar. Die aktuelle Linux-Ankerprüfung bleibt gesondert offen.
 
 ## Nächster Einstieg
 

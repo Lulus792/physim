@@ -2010,7 +2010,7 @@ Remote-/Grafik-/Produktabnahme wird durch diesen Schritt nicht behauptet.
 
 ## Lineare Gleichungssysteme (§7.2 / PP-0360)
 
-Der vollständige Nachweis bleibt in [Archivband 2](platform-validation-history-2.md#lineare-gleichungssysteme-72-pp-0360) erhalten.
+Der vollständige Nachweis bleibt in [Archivband 2](platform-validation-history-2.md#lineare-gleichungssysteme-72--pp-0360) erhalten.
 
 ## Erster nativer macOS-Accessibility-Baum (PP-0710)
 

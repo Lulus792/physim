@@ -764,7 +764,7 @@ App-API/ABI sowie Compilerpfad, Profil und SDK-API/ABI des letzten erfolgreichen
 Builds. Native Prüfungen unterscheiden auch SDK und Build-Service; drei reale
 App-Prozesse prüfen Neubuild, Neustart, Laufdaten und Profilwechsel. Die zunächst
 abgeschnittenen Angaben sind in der abschließenden kleinen Fensterdarstellung
-vollständig sichtbar. [Nachweis und Grenzen](platform-validation.md#sichtbare-compiler-und-api-angaben-in-den-build-einstellungen).
+vollständig sichtbar. [Nachweis und Grenzen](platform-validation.md#sichtbare-compiler--und-api-angaben-in-den-build-einstellungen).
 Der vollständige zuvor eingefrorene SDK-Lauf ist erfolgreich beendet; alle
 407 Bildarchive und ursprünglichen/verschobenen SDK-Eingaben sind unabhängig
 nachgeprüft. Dieser Lauf umfasst die späteren Änderungen nicht automatisch.
@@ -848,7 +848,7 @@ invalidieren den Build und werden beim normalen Beenden gespeichert. Ein
 Neustart stellt Debug wieder her und baut es erneut mit F5. Konfigurationen,
 Compilerpfad, Moduldateien und unveränderte Quellen sind geprüft; die
 bisherigen Projekt-Einstellungen bestehen in drei weiteren App-Prozessen.
-[Nachweise und Grenzen](platform-validation.md#build-schaltfläche-f5-und-debug-release-tatsächlich-bedienen).
+[Nachweise und Grenzen](platform-validation.md#build-schaltfläche-f5-und-debugrelease-tatsächlich-bedienen).
 Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **66 implemented**, **13 incomplete**, **452 unverified**;
 `completion_proven` bleibt `false`.

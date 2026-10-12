@@ -614,9 +614,19 @@ Im Texteditor gelten außerdem die plattformüblichen Sprungbefehle:
 Mit zusätzlichem **Shift** wird der Text bis zum Ziel ausgewählt.
 
 Im Hilfefenster sucht Ctrl+F nur im Dokument, die linke Suche in allen Inhalten.
+Tab/Shift+Tab wechseln zwischen Lernwegen, Themen, Inhaltsverzeichnis, Suche,
+Navigation und den Aktionen im Text. Enter oder Leertaste öffnet einen Link oder
+kopiert einen Codeblock. Im Lesebereich scrollen Pfeiltasten und PageUp/PageDown;
+Home führt zum Anfang. Der Rahmen zeigt den Tastaturfokus.
+
+Links zu einem Abschnitt springen direkt zur passenden Überschrift. Verweise auf
+mitgelieferte Beispielquellen öffnen eine lesbare, kopierbare Ansicht in der Hilfe.
+Ändere dein eigenes Modell anschließend im Projekteditor. Externe Quellenlinks
+kopieren die Adresse in die Zwischenablage; die Hilfe bleibt in der App geöffnet.
+
 Esc schließt die Hilfe. Die Arbeitsbereichskürzel werden dort nicht ans Hauptfenster
-weitergegeben. Vollständige Tastaturfokussierung und Screenreader-Unterstützung
-sind noch nicht implementiert.
+weitergegeben. Die vollständige praktische Screenreader-Abnahme bleibt offen;
+den belegten Umfang beschreibt [Barrierefreiheit](accessibility.md).
 
 
 ## Adaptive Simulationsschritte

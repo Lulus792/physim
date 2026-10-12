@@ -57,12 +57,12 @@ static void documentation_api_test_frame(app *a,int *stage,int *code,const char 
         ok=a->doc_contents;
         if(!documentation_test_seek(a,DOC_HEADING+type,stage,code))return;API_KEY(SDLK_RETURN);break;
     case 5:
-        if(a->doc_jump_block>=0){--*stage;return;}
+        if(a->doc_jump_block>=0 || a->doc_scroll_pending){--*stage;return;}
         ok=a->doc_scroll_y>0;*capture="docs-api-type.bmp";break;
     case 6:
         if(!documentation_test_seek(a,DOC_HEADING+function,stage,code))return;API_KEY(SDLK_RETURN);break;
     case 7:
-        if(a->doc_jump_block>=0){--*stage;return;}
+        if(a->doc_jump_block>=0 || a->doc_scroll_pending){--*stage;return;}
         ok=a->doc_scroll_y>0;*capture="docs-api-function.bmp";break;
     case 8:
         if(!documentation_test_seek(a,DOC_TOPICS,stage,code))return;API_KEY(SDLK_RETURN);break;
@@ -80,7 +80,7 @@ static void documentation_api_test_frame(app *a,int *stage,int *code,const char 
     case 11:
         if(!documentation_test_seek(a,DOC_HEADING+unit_type,stage,code))return;API_KEY(SDLK_RETURN);break;
     case 12:
-        if(a->doc_jump_block>=0){--*stage;return;}
+        if(a->doc_jump_block>=0 || a->doc_scroll_pending){--*stage;return;}
         ok=a->doc_scroll_y>0;*capture="docs-api-unit.bmp";break;
     case 13:
         if(!documentation_test_seek(a,DOC_LINK+example,stage,code))return;API_KEY(SDLK_RETURN);break;
@@ -159,6 +159,7 @@ static void documentation_media_test_frame(app *a,int *stage,int *code,const cha
         diagram=-1;for(size_t i=0;i<a->documentation->count;i++)if(a->documentation->blocks[i].kind==PS_DOC_IMAGE && documentation_media_kind(a->documentation->text+a->documentation->blocks[i].target)==1)diagram=(int)i;
         ok=diagram>=0;a->doc_jump_block=diagram;break;
     case 12:
+        if(a->doc_jump_block>=0 || a->doc_scroll_pending){--*stage;return;}
         ok=a->doc_diagram_bounds.w>100 && a->doc_diagram_bounds.h==320;
         *capture="docs-native-workflow.bmp";break;
     case 13:
@@ -168,7 +169,78 @@ static void documentation_media_test_frame(app *a,int *stage,int *code,const cha
     if(!ok){fprintf(stderr,"Native documentation media stage %d failed\n",*stage-1);*code=1;a->quitting=true;}
 #undef MEDIA_KEY
 }
+static int documentation_test_link(const ps_document *d,const char *target) {
+    for(size_t i=0;i<d->count;i++)if(d->blocks[i].kind==PS_DOC_LINK && !strcmp(d->text+d->blocks[i].target,target))return (int)i;
+    return -1;
+}
+static void documentation_anchor_test_frame(app *a,int *stage,int *code,const char **capture) {
+    static int guide,workspace,collision,link,settle;static nk_uint scroll;static ps_document *previous;
+    bool ok=true;
+#define ANCHOR_KEY(key) test_window_key_mod(a->doc_window,key,0)
+    switch((*stage)++) {
+    case 0:test_window_key_mod(a->window,SDLK_F1,0);break;
+    case 1:
+        guide=workspace=collision=-1;
+        for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++) {
+            if(!strcmp(documentation_topics[i].path,"docs/user-guide.md"))guide=i;
+            if(!strcmp(documentation_topics[i].path,"docs/workspace.md"))workspace=i;
+            if(!strcmp(documentation_topics[i].path,"docs/collision-tutorial.md"))collision=i;
+        }
+        ok=guide>=0 && workspace>=0 && collision>=0;open_documentation(a,guide);
+        SDL_SetWindowSize(a->doc_window,760,540);break;
+    case 2:
+        link=documentation_test_link(a->documentation,"workspace.md#fenster-hilfe-und-tastenkürzel");
+        if(!documentation_test_seek(a,DOC_LINK+link,stage,code))return;
+        ANCHOR_KEY(SDLK_RETURN);break;
+    case 3:
+        if(a->doc_jump_block>=0 || a->doc_scroll_pending){--*stage;return;}
+        ok=a->doc_topic==workspace && a->doc_scroll_y>0 && !a->doc_error[0];
+        {size_t b=0;ok &= ps_document_anchor(a->documentation,"fenster-hilfe-und-tastenkürzel",&b)==PS_OK;
+         bool visible=a->doc_anchor_heading==(int)b && a->doc_anchor_bounds.y>=a->doc_body_bounds.y && a->doc_anchor_bounds.y<a->doc_body_bounds.y+32;
+         if(!visible && settle++<4){--*stage;return;}ok &= visible;}
+        *capture="docs-anchor-cross-page.bmp";break;
+    case 4:
+        scroll=a->doc_scroll_y;previous=a->documentation;
+        documentation_link(a,"workspace.md#missing-section");break;
+    case 5:
+        ok=a->documentation==previous && a->doc_scroll_y==scroll && a->doc_error[0];
+        documentation_link(a,"collision-tutorial.md#missing-section");break;
+    case 6:
+        ok=a->documentation==previous && a->doc_topic==workspace && a->doc_scroll_y==scroll;
+        documentation_link(a,"https://example.org/source#part");
+        {char *copy=SDL_GetClipboardText();ok &= copy && !strcmp(copy,"https://example.org/source#part");SDL_free(copy);}
+        open_documentation(a,collision);break;
+    case 7:
+        link=documentation_test_link(a->documentation,"#erwartete-ergebnisse-und-grenzen");
+        if(!documentation_test_seek(a,DOC_LINK+link,stage,code))return;ANCHOR_KEY(SDLK_RETURN);break;
+    case 8:
+        if(a->doc_jump_block>=0 || a->doc_scroll_pending){--*stage;return;}
+        ok=a->doc_topic==collision && a->doc_scroll_y>0 && !a->doc_error[0];
+        *capture="docs-anchor-same-page.bmp";documentation_link(a,"#");break;
+    case 9:
+        if(a->doc_jump_block>=0 || a->doc_scroll_pending){--*stage;return;}
+        ok=a->doc_scroll_y==0;documentation_link(a,"./collision-tutorial.md#erwartete-ergebnisse-und-grenzen");break;
+    case 10:
+        if(a->doc_jump_block>=0 || a->doc_scroll_pending){--*stage;return;}
+        ok=a->doc_scroll_y>0 && !a->doc_error[0];
+        {int audit=-1;for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(!strcmp(documentation_topics[i].path,"docs/project-audit.json"))audit=i;
+         ok &= audit>=0;open_documentation(a,audit);}break;
+    case 11:
+        ok=!a->doc_error[0] && a->documentation->count==1 && a->documentation->blocks[0].kind==PS_DOC_CODE && a->documentation->blocks[0].length>PS_DOC_MAX_BYTES;
+        *capture="docs-large-source.bmp";
+        if(!documentation_test_seek(a,DOC_COPY,stage,code))return;ANCHOR_KEY(SDLK_RETURN);break;
+    case 12:
+        {char *copy=SDL_GetClipboardText();ok=copy && !strcmp(copy,a->documentation->text+a->documentation->blocks[0].text);SDL_free(copy);}
+        if(!documentation_test_seek(a,DOC_BODY,stage,code))return;ANCHOR_KEY(SDLK_PAGEDOWN);break;
+    case 13:
+        ok=a->doc_scroll_y>0 && !a->doc_error[0];*capture="docs-large-source-scrolled.bmp";a->quitting=true;break;
+    }
+    if(!ok){fprintf(stderr,"Documentation anchor stage %d failed: topic=%d scroll=%u error=%s\n",*stage-1,a->doc_topic,a->doc_scroll_y,a->doc_error);*code=1;a->quitting=true;}
+    if(a->quitting)printf("DOCUMENTATION ANCHOR SELF-TEST: %s\n",*code?"FAILED":"PASSED");
+#undef ANCHOR_KEY
+}
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strncmp(mode,"docs-keyboard-anchors",21)){documentation_anchor_test_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"docs-keyboard-media",19)){documentation_media_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-api")){documentation_api_test_frame(a,stage,code,capture);return;}
     static int copy_block,link_block,link_topic,heading,tutorial_topic;

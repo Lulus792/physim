@@ -155,6 +155,34 @@ static const documentation_topic documentation_topics[] = {
     {"Grundlagen der Physim Dokumentation", "docs/documentation-research.md", false},
     {"Räumliche Modelle verstehen", "docs/spatial-explanations.md", false},
     {"Frühere Physim Einführung", "docs/readme-history.md", false},
+    {"Quelle: docs/benchmarks/2026-09-19/baseline/summary.json", "docs/benchmarks/2026-09-19/baseline/summary.json", true},
+    {"Quelle: docs/benchmarks/2026-09-19/crc/crc-summary.json", "docs/benchmarks/2026-09-19/crc/crc-summary.json", true},
+    {"Quelle: docs/benchmarks/2026-09-19/report-view/summary.json", "docs/benchmarks/2026-09-19/report-view/summary.json", true},
+    {"Quelle: docs/benchmarks/2026-09-19/ui-buffers/summary.json", "docs/benchmarks/2026-09-19/ui-buffers/summary.json", true},
+    {"Quelle: docs/project-audit.json", "docs/project-audit.json", true},
+    {"Beispiel: ccd_events/main.c", "examples/ccd_events/main.c", true},
+    {"Beispiel: contact_stack/main.c", "examples/contact_stack/main.c", true},
+    {"Beispiel: convex_contacts/main.c", "examples/convex_contacts/main.c", true},
+    {"Beispiel: diagnostics/analysis.c", "examples/diagnostics/analysis.c", true},
+    {"Beispiel: diagnostics/main.c", "examples/diagnostics/main.c", true},
+    {"Beispiel: language/ccd_events.phys", "examples/language/ccd_events.phys", true},
+    {"Beispiel: language/contact_stack.phys", "examples/language/contact_stack.phys", true},
+    {"Beispiel: language/contact_world.phys", "examples/language/contact_world.phys", true},
+    {"Beispiel: language/convex_contacts.phys", "examples/language/convex_contacts.phys", true},
+    {"Beispiel: language/diagnostic_analysis.phys", "examples/language/diagnostic_analysis.phys", true},
+    {"Beispiel: language/diagnostic_experiment.phys", "examples/language/diagnostic_experiment.phys", true},
+    {"Beispiel: language/diagnostic_values.phys", "examples/language/diagnostic_values.phys", true},
+    {"Beispiel: language/generics/main.phys", "examples/language/generics/main.phys", true},
+    {"Beispiel: language/logging.phys", "examples/language/logging.phys", true},
+    {"Beispiel: language/modules/main.phys", "examples/language/modules/main.phys", true},
+    {"Beispiel: language/run_index_analysis.phys", "examples/language/run_index_analysis.phys", true},
+    {"Beispiel: language/run_index_values.phys", "examples/language/run_index_values.phys", true},
+    {"Beispiel: language/scene_frames.phys", "examples/language/scene_frames.phys", true},
+    {"Beispiel: logging/main.c", "examples/logging/main.c", true},
+    {"Beispiel: pendulum/main.c", "examples/pendulum/main.c", true},
+    {"Beispiel: scene_frames/main.c", "examples/scene_frames/main.c", true},
+    {"Quelle: third_party/README.md", "third_party/README.md", false},
+    {"Quelle: tools/SDK-README.md", "tools/SDK-README.md", false},
 };
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27
@@ -233,7 +261,7 @@ static void open_documentation(app *a, int topic) {
     char path[4096];
     join(path, sizeof path, a->root, documentation_topics[topic].path);
     size_t length = 0;
-    char *source = load_utf8_text(path, &length);
+    char *source = load_utf8_text_limit(path, &length,documentation_topics[topic].code?PS_DOC_MAX_CODE_BYTES:PS_DOC_MAX_BYTES);
     ps_document *document = NULL;
     ps_result r = PS_IO;
     if (source)
@@ -257,6 +285,7 @@ static void open_documentation(app *a, int topic) {
     a->doc_match = 0;
     a->doc_move_match = true;
     a->doc_jump_block = -1;
+    a->doc_anchor_heading=-1;
     a->doc_group = documentation_group(topic);
 }
 static size_t documentation_line(const struct nk_user_font *font, const char *s, size_t n,
@@ -364,11 +393,17 @@ static void documentation_link(app *a, const char *target) {
         status(a,"Quellenadresse kopiert. Das Handbuch bleibt in Physim geöffnet.");
         return;
     }
-    char resolved[4096];
+    char resolved[4096],fragment[4096];
+    const char *hash=strchr(target,'#');
+    size_t path_length=hash?(size_t)(hash-target):strlen(target);
+    if(path_length>=sizeof resolved || (hash && strlen(hash+1)>=sizeof fragment)) {
+        status(a,"Dieses Linkziel ist zu lang.");return;
+    }
+    if(hash)snprintf(fragment,sizeof fragment,"%s",hash+1);
     const char *base = documentation_topics[a->doc_topic].path;
     const char *slash = strrchr(base, '/');
-    snprintf(resolved, sizeof resolved, "%.*s%s", slash ? (int)(slash - base + 1) : 0, base,
-             target);
+    int written=path_length?snprintf(resolved,sizeof resolved,"%.*s%.*s",slash?(int)(slash-base+1):0,base,(int)path_length,target):snprintf(resolved,sizeof resolved,"%s",base);
+    if(written<0 || (size_t)written>=sizeof resolved){status(a,"Dieses Linkziel ist zu lang.");return;}
     /* Resolve the few relative parent components without consulting the filesystem. */
     char *parent;
     while ((parent = strstr(resolved, "/../")) != NULL) {
@@ -377,9 +412,32 @@ static void documentation_link(app *a, const char *target) {
             --start;
         memmove(start, parent + 4, strlen(parent + 4) + 1);
     }
+    while((parent=strstr(resolved,"/./"))!=NULL)memmove(parent,parent+2,strlen(parent+2)+1);
+    while(!strncmp(resolved,"./",2))memmove(resolved,resolved+2,strlen(resolved+2)+1);
     for (int i = 0; i < DOCUMENTATION_TOPIC_COUNT; i++) {
         if (!strcmp(resolved, documentation_topics[i].path)) {
+            size_t block=0;
+            if(hash && fragment[0]) {
+                ps_document *destination=a->documentation;
+                bool temporary=i!=a->doc_topic || !destination;
+                if(temporary) {
+                    char path[4096];size_t length=0;join(path,sizeof path,a->root,documentation_topics[i].path);
+                    char *source=load_utf8_text(path,&length);destination=NULL;
+                    if(source)ps_document_parse(source,length,documentation_topics[i].code,&destination);
+                    free(source);
+                }
+                ps_result result=destination?ps_document_anchor(destination,fragment,&block):PS_IO;
+                if(temporary)free(destination);
+                if(result!=PS_OK) {
+                    snprintf(a->doc_error,sizeof a->doc_error,"Abschnitt konnte nicht geöffnet werden: %s",ps_result_string(result));
+                    status(a,a->doc_error);return;
+                }
+            }
             open_documentation(a, i);
+            if(hash && !a->doc_error[0]) {
+                a->doc_jump_block=(int)block;a->doc_move_match=false;
+                a->doc_scroll_adjustment=0;
+            }
             return;
         }
     }
@@ -624,6 +682,9 @@ static void documentation_sidebar(app *a) {
 }
 static void documentation_view(app *a, float height) {
     struct nk_context *ui = a->doc_ui;
+    float section_scroll=-1;
+    ps_document *section_document=NULL;
+    a->doc_scroll_pending=false;
     bool large=a->preferences.ui_size>=20;
     nk_layout_row_dynamic(ui, 32, large?2:3);
     struct nk_rect back_bounds=nk_widget_bounds(ui);
@@ -707,6 +768,7 @@ static void documentation_view(app *a, float height) {
     struct nk_rect remaining=nk_widget_bounds(ui),clip=nk_window_get_content_region(ui);
     nk_layout_row_dynamic(ui,fmaxf(20,fminf(height,clip.y+clip.h-remaining.y)),1);
     struct nk_rect body_bounds=nk_widget_bounds(ui);
+    a->doc_body_bounds=body_bounds;
     documentation_focus_draw(a,DOC_BODY,body_bounds,false);
     if (nk_group_scrolled_offset_begin(ui, &a->doc_scroll_x, &a->doc_scroll_y, "document-body",
                                        0)) {
@@ -735,27 +797,15 @@ static void documentation_view(app *a, float height) {
             int target = a->doc_jump_block >= 0
                              ? a->doc_jump_block
                              : (a->doc_move_match && match_count ? matches[a->doc_match] : -1);
-            float offset = 0;
-            /* Resolve the scroll position before submitting any widgets. Updating
-             * it midway through drawing mixes two offsets in the same frame. */
-            for (size_t i = 0; target >= 0 && i < d->count && (int)i <= target; i++) {
-                ps_doc_block *b = &d->blocks[i];
-                const char *text = d->text + b->text;
-                const struct nk_user_font *font = b->kind == PS_DOC_CODE      ? a->doc_font_code
-                                                  : b->kind == PS_DOC_HEADING ? a->doc_font_title
-                                                                              : a->doc_font_ui;
-                if ((int)i == target) {
-                    float prefix = 0;
-                    const char *match = ps_document_find(text, a->doc_query);
-                    if (b->kind != PS_DOC_TABLE_ROW && a->doc_jump_block < 0 && match &&
-                        match > text)
-                        prefix = fmaxf(0, documentation_height(font, text, (size_t)(match - text),
-                                                               width - 24) -
-                                              (font->height + 6));
-                    a->doc_scroll_y = (nk_uint)(offset + prefix);
-                }
-                offset += b->height + 8 + (b->kind == PS_DOC_CODE ? 36 : 0);
-            }
+            bool explicit_jump=a->doc_jump_block>=0;
+            if(explicit_jump)a->doc_anchor_heading=target;
+            float body_origin=nk_window_get_content_region(ui).y;
+            nk_uint submitted_scroll=a->doc_scroll_y;
+            section_document=d;
+            /* Wrapped buttons and copy rows determine real geometry. Apply a
+             * measured target only after this entire group has been submitted. */
+            a->doc_jump_block = -1;
+            a->doc_move_match = false;
             for (size_t i = 0; i < d->count; i++) {
                 ps_doc_block *b = &d->blocks[i];
                 const char *text = d->text + b->text;
@@ -772,9 +822,20 @@ static void documentation_view(app *a, float height) {
                 }
                 if(b->kind==PS_DOC_IMAGE && documentation_media_kind(d->text+b->target)==3) {
                     documentation_pendulum(a,(int)i,width,b->height);
+                    if((int)i==a->doc_anchor_heading)a->doc_anchor_bounds=a->doc_visual_bounds[0];
+                    if((int)i==target)section_scroll=fmaxf(0,a->doc_visual_bounds[0].y+(float)submitted_scroll-body_origin);
                     continue;
                 }
                 nk_layout_row_dynamic(ui, b->height, 1);
+                struct nk_rect block_bounds=nk_widget_bounds(ui);
+                if((int)i==a->doc_anchor_heading)a->doc_anchor_bounds=block_bounds;
+                if((int)i==target) {
+                    float prefix=0;
+                    const char *match=ps_document_find(text,a->doc_query);
+                    if(!explicit_jump && b->kind!=PS_DOC_TABLE_ROW && match && match>text)
+                        prefix=fmaxf(0,documentation_height(font,text,(size_t)(match-text),width-24)-(font->height+6));
+                    section_scroll=explicit_jump && target==0?0:fmaxf(0,block_bounds.y+(float)submitted_scroll-body_origin+prefix);
+                }
                 if (b->kind == PS_DOC_LINK) {
                     bool external = !strncmp(d->text + b->target, "http", 4);
                     char label[240];
@@ -800,21 +861,29 @@ static void documentation_view(app *a, float height) {
                             nk_stroke_line(canvas, rect.x, rect.y + 7, rect.x + rect.w, rect.y + 7,
                                            1, UI_COLOR(border));
                         else {
-                            if (b->kind == PS_DOC_CODE)
-                                nk_fill_rect(canvas, rect, 7, UI_COLOR(edit));
+                            if (b->kind == PS_DOC_CODE) {
+                                float x=fmaxf(rect.x,canvas->clip.x),y=fmaxf(rect.y,canvas->clip.y);
+                                float right=fminf(rect.x+rect.w,canvas->clip.x+canvas->clip.w);
+                                float bottom=fminf(rect.y+rect.h,canvas->clip.y+canvas->clip.h);
+                                if(right>x && bottom>y)nk_fill_rect(canvas,nk_rect(x,y,right-x,bottom-y),7,UI_COLOR(edit));
+                            }
                             size_t at = 0;
                             float y = rect.y + 8;
+                            const char *match=NULL;bool searched=false;
                             do {
                                 size_t length,
                                     used = documentation_line(font, text + at, b->length - at,
                                                               width - 24, &length);
-                                const char *match = ps_document_find(text + at, a->doc_query);
-                                struct nk_color color = match && match < text + at + length
-                                                            ? UI_COLOR(accent)
-                                                            : UI_COLOR(doc_text);
-                                nk_draw_text(
+                                if(y>canvas->clip.y+canvas->clip.h)break;
+                                if(y+font->height+6>=canvas->clip.y) {
+                                    if(!searched || (match && match<text+at)) {
+                                        match=ps_document_find(text+at,a->doc_query);searched=true;
+                                    }
+                                    struct nk_color color=match && match<text+at+length?UI_COLOR(accent):UI_COLOR(doc_text);
+                                    nk_draw_text(
                                     canvas, nk_rect(rect.x + 12, y, rect.w - 24, font->height + 6),
                                     text + at, (int)length, font, nk_rgba(0, 0, 0, 0), color);
+                                }
                                 at += used;
                                 y += font->height + 6;
                             } while (at < b->length);
@@ -822,10 +891,11 @@ static void documentation_view(app *a, float height) {
                     }
                 }
             }
-            a->doc_jump_block = -1;
-            a->doc_move_match = false;
         }
         nk_group_scrolled_end(ui);
+    }
+    if(section_scroll>=0 && a->documentation==section_document && a->doc_jump_block<0) {
+        a->doc_scroll_y=(nk_uint)section_scroll;a->doc_scroll_adjustment=0;a->doc_scroll_pending=true;
     }
     if(a->doc_scroll_adjustment) {
         a->doc_scroll_y=(nk_uint)fmaxf(0,(float)a->doc_scroll_y+a->doc_scroll_adjustment);

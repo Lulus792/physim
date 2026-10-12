@@ -1,5 +1,7 @@
 #include "documentation.h"
+#include "text_validation.h"
 #include <ctype.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -117,7 +119,7 @@ static bool paragraph(ps_document *d, const char *s, size_t n, ps_doc_kind kind,
     return true;
 }
 ps_result ps_document_parse(const char *source, size_t size, bool code, ps_document **out) {
-    if (!source || !out || size > PS_DOC_MAX_BYTES || memchr(source, 0, size))
+    if (!source || !out || size > (code?PS_DOC_MAX_CODE_BYTES:PS_DOC_MAX_BYTES) || memchr(source, 0, size))
         return PS_INVALID;
     ps_document *d = calloc(1, sizeof *d);
     char *pending = malloc(size + 1);
@@ -213,6 +215,64 @@ limit:
     free(pending);
     free(d);
     return PS_LIMIT;
+}
+typedef struct {char *name;size_t next;} doc_anchor_slot;
+static doc_anchor_slot *anchor_slot(doc_anchor_slot *slots,const char *name) {
+    uint64_t hash=UINT64_C(14695981039346656037);
+    for(const unsigned char *p=(const unsigned char *)name;*p;p++){hash^=*p;hash*=UINT64_C(1099511628211);}
+    size_t at=(size_t)hash%(2*PS_DOC_MAX_BLOCKS);
+    while(slots[at].name && strcmp(slots[at].name,name))at=(at+1)%(2*PS_DOC_MAX_BLOCKS);
+    return &slots[at];
+}
+static size_t anchor_utf8(char *out,uint32_t c) {
+    if(c<128){out[0]=(char)c;return 1;}
+    if(c<2048){out[0]=(char)(192|(c>>6));out[1]=(char)(128|(c&63));return 2;}
+    if(c<65536){out[0]=(char)(224|(c>>12));out[1]=(char)(128|((c>>6)&63));out[2]=(char)(128|(c&63));return 3;}
+    out[0]=(char)(240|(c>>18));out[1]=(char)(128|((c>>12)&63));out[2]=(char)(128|((c>>6)&63));out[3]=(char)(128|(c&63));return 4;
+}
+static int anchor_hex(unsigned char c) {
+    return c>='0' && c<='9'?c-'0':c>='a' && c<='f'?c-'a'+10:c>='A' && c<='F'?c-'A'+10:-1;
+}
+ps_result ps_document_anchor(const ps_document *d,const char *fragment,size_t *block) {
+    if(!d || !fragment || !block || d->count>PS_DOC_MAX_BLOCKS)return PS_INVALID;
+    if(*fragment=='#')fragment++;
+    size_t n=strlen(fragment);if(!n || n>4095)return PS_INVALID;
+    char query[4096];size_t used=0;
+    for(size_t i=0;i<n;i++) {
+        if(fragment[i]=='%') {
+            if(i+2>=n)return PS_INVALID;
+            int hi=anchor_hex((unsigned char)fragment[i+1]),lo=anchor_hex((unsigned char)fragment[i+2]);
+            if(hi<0 || lo<0 || !(hi*16+lo))return PS_INVALID;
+            query[used++]=(char)(hi*16+lo);i+=2;
+        } else query[used++]=fragment[i];
+    }
+    query[used]=0;if(!ps_text_valid(query,sizeof query,false))return PS_INVALID;
+    doc_anchor_slot *slots=calloc(2*PS_DOC_MAX_BLOCKS,sizeof *slots);if(!slots)return PS_MEMORY;
+    ps_result result=PS_INVALID;size_t found=0;
+    for(size_t i=0;i<d->count;i++) {
+        if(d->blocks[i].kind!=PS_DOC_HEADING)continue;
+        const char *text=d->text+d->blocks[i].text;size_t bytes=strlen(text);
+        char *base=malloc(bytes+1);if(!base){result=PS_MEMORY;break;}
+        size_t length=0;
+        while(*text) {
+            uint32_t c=folded_char(&text);
+            if(c==' ' || c=='\t')base[length++]='-';
+            else if((c<128 && (isalnum((unsigned char)c) || c=='-' || c=='_')) ||
+                    (c>=128 && c!=0xa7 && !(c>=0x2000 && c<=0x206f) && !(c>=0x2190 && c<=0x2bff) && c<0x1f000))length+=anchor_utf8(base+length,c);
+        }
+        base[length]=0;doc_anchor_slot *owner=anchor_slot(slots,base);
+        char *name=base;
+        if(owner->name) {
+            size_t suffix=owner->next;name=malloc(length+32);
+            if(!name){free(base);result=PS_MEMORY;break;}
+            do {snprintf(name,length+32,"%s-%zu",base,suffix++);}while(anchor_slot(slots,name)->name);
+            owner->next=suffix;free(base);
+        }
+        doc_anchor_slot *assigned=anchor_slot(slots,name);assigned->name=name;assigned->next=1;
+        if(!strcmp(name,query)){found=i;result=PS_OK;break;}
+    }
+    for(size_t i=0;i<2*PS_DOC_MAX_BLOCKS;i++)free(slots[i].name);
+    free(slots);if(result==PS_OK)*block=found;return result;
 }
 static bool api_heading(const char *heading,const char *name,bool language,bool members) {
     size_t n=strlen(name);

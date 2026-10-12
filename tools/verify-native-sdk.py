@@ -94,6 +94,25 @@ def verify_accessibility_checkbox(repo,sdk,root,suffix,checked):
     print("Relocated SDK native checkbox: actual settings drafts, AppKit/AT-SPI checkbox/radio actions, actual keyboard focus/activation and applied configuration passed",flush=True)
 
 
+def verify_documentation_sections(repo,sdk,consumer,builder,library,checked):
+    anchor_includes=builder.includes
+    anchor_headers=builder.headers
+    try:
+        builder.includes=[*anchor_includes,sdk / "app",sdk / "src"]
+        builder.headers=anchor_headers+native_documentation_headers(sdk)
+        shutil.copy2(sdk / "app/documentation.c",consumer / "documentation.c")
+        shutil.copy2(repo / "tests/documentation_anchor_probe.c",consumer / "documentation-anchor-probe.c")
+        anchor_probe=builder.executable("documentation-anchor-probe",["documentation-anchor-probe.c","documentation.c"],[library])
+    finally:
+        builder.includes=anchor_includes
+        builder.headers=anchor_headers
+    checked([sys.executable,repo / "tests/check_documentation_anchors.py","--root",sdk,"--probe",anchor_probe],timeout=180)
+
+def native_documentation_headers(sdk):
+    return "".join(hashlib.sha256((sdk / name).read_bytes()).hexdigest()
+                   for name in ("app/documentation.h","src/text_validation.h"))
+
+
 def verify_documentation_bounds(sdk, files):
     """All packaged Markdown pages fit the actual offline viewer byte budget."""
     for name in files:
@@ -1089,6 +1108,7 @@ def main():
                 "owned module-block closures, manifest and relocation; no full domain or GUI acceptance.\n", encoding="utf-8")
             print(f"Scalar-search SDK verified: {root}")
             return
+        verify_documentation_sections(repo,sdk,consumer,builder,library,checked)
         checked([sys.executable,repo / "tests/test_documentation_tracks.py","--root",sdk,
                  "--catalog",repo / "tests/tutorial_sources.json"])
         shutil.copy2(sdk / "examples/documentation/c_workflow.c",consumer / "c-workflow-intro.c")
@@ -1804,6 +1824,12 @@ def main():
                     if "DOCUMENTATION NATIVE MEDIA SELF-TEST: PASSED" not in output.read_text(encoding="utf-8"):
                         raise RuntimeError("Installed SDK native documentation media did not complete")
                 print("Installed SDK documentation media: native vector diagrams, real GPU pendulum, keyboard parameters/camera/projection and preserved experiment state at 16/22 px passed",flush=True)
+                for mode in ("docs-keyboard-anchors","docs-keyboard-anchors-22"):
+                    directory=root / mode;directory.mkdir();output=root / (mode+".txt")
+                    checked([sdk / "bin" / ("physim"+suffix),"--workspace-state-test",directory,mode],output=output,timeout=90)
+                    if "DOCUMENTATION ANCHOR SELF-TEST: PASSED" not in output.read_text(encoding="utf-8"):
+                        raise RuntimeError("Installed SDK documentation section links did not complete")
+                print("Installed SDK documentation anchors: local/cross-page UTF-8 sections, exact scroll, missing destinations and copied source URLs at 16/22 px passed",flush=True)
                 for mode in ("manager-keyboard","manager-keyboard-22","manager-errors"):
                     directory=root / mode;directory.mkdir();output=root / (mode+".txt")
                     checked([sdk / "bin" / ("physim"+suffix),"--workspace-state-test",directory,mode],output=output,timeout=910)

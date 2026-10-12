@@ -4175,8 +4175,13 @@ Prüfungspaket **5/5**, `run-dkt020sj`,
 
 Die Linux-Anbindung ergänzt Slider/Value, den eigentlichen skalaren Setter und
 Wertänderungsereignisse. Ein unabhängiger PyAT-SPI-Prüfer und ein echter gezeichneter
-Zweifensterfall sind registriert. Die Ausführung dieser neuen Anbindung bleibt
-bis zum aktuellen Linux-CI-Ergebnis unbewiesen. Windows/UIA und praktische
+Zweifensterfall sind registriert. Am Stand `e247bf5` besteht der ausgeführte
+[Linux-Sanitizerlauf](https://github.com/PhysicSimulator/physim/actions/runs/38239448663)
+mit Clang (Job `114778150371`, `run-7mois_x2`/`run-gletsp8x`) und GCC
+(Job `114778150748`, `run-fgc_euut`/`run-t7gv6dup`) jeweils **10/10 native**
+und **19/19 GUI-Fälle**, einschließlich `accessibility_atspi` und beider
+Dokumentationsmediengrößen. `accessibility_ui` ist derzeit nur für macOS
+registriert und wird deshalb unter Linux nicht ausgeführt. Windows/UIA und praktische
 Screenreader-Abnahme bleiben offen; PP-0710 wird weiterhin nicht abgeschlossen.
 
 Die abschließende Richtungskonsistenz besteht **4/4**, `run-acr_u_0h`,
@@ -4191,3 +4196,49 @@ besteht erneut **5/5**, `run-yvywb2gl`,
 einheitlichen Tastaturrichtungen. Die vollständige Gegenprobe für 9c93312 ist
 inzwischen nativ **724/724** erfolgreich, `run-nen1n6ic`; ihr eingefrorenes SDK
 läuft weiter und enthält diese spätere Reglerarbeit ausdrücklich nicht.
+
+## Abgeschlossener Gesamtstand 9c93312 und native Abschnittslinks
+
+Der eingefrorene Intel-macOS-Lauf für `9c93312` besteht **724/724 native Fälle**
+(`run-nen1n6ic`) und **718/718 unabhängige SDK-Befehle**. Beide echten
+Projektmatrizen mit 32 Experiment-/Sprachpaaren und zwei Analyseprojekten sind
+bei 16 und 22 Pixeln ausgeführt. Alle **456 BMP-Versionen** mit insgesamt
+**7.663.064.528 Originalbytes** wurden anhand komprimierter und wiederhergestellter
+SHA-256/Größen unabhängig geprüft. **1441 eingefrorene Quelldateien**, das
+Quell-TAR und **506 SDK-Dateien** bleiben bytegleich. Beleg:
+`build/current-full-9c93312-independent-proof.json`. Dieser vollständige Lauf
+enthält die späteren Accessibility- und Abschnittslinkänderungen nicht.
+
+Die neue Hilfe löst lokale und dokumentübergreifende UTF-8-/Prozent-Anker sowie
+wiederholte Überschriften auf. Fehlende Abschnitte erhalten Seite und Position.
+Die Sprungposition wird nach der gesamten Gruppe aus tatsächlichen Widgetrahmen
+bestimmt: umbrochene Links und Codekopierzeilen fließen damit ein. Die Gegenprobe
+prüft die sichtbare Zielüberschrift statt eines nachgebauten Summenwerts.
+Die korrigierten 16/22-Pixel-Aufnahmen wurden visuell geprüft.
+
+Alle **180 indexierten Seiten** sind mit dem nativen Parser lesbar; ihre internen
+Links sind erreichbar. **185 Abschnittslinks** im Repository und **186** im
+verschobenen SDK bestehen. Die zusätzlichen 28 Ziele enthalten Beispielquellen,
+Benchmarkdaten, Paketbeschreibung und den maschinenlesbaren Planabgleich.
+Markdown bleibt auf 256 KiB begrenzt; reine Quellen verwenden die vorhandene
+Textarena bis 512 KiB minus zwei Abschlussbytes. Eingabegrenzen anderer
+Projekt-/Editorpfade bleiben unverändert. Die Anzeige zeichnet nur sichtbare
+Textzeilen und einen begrenzten Hintergrund; der große Planabgleich ist lesbar,
+scrollbar und vollständig kopierbar.
+
+Der aktuelle native GUI-Lauf besteht **5/5**, `run-7b5pzhbc`,
+`build/current-documentation-anchors-geometry-final-gui.log`: beide Ankergrößen,
+bestehender Tastaturlernweg und beide nativen Diagramm-/3D-Größen. Parsergrenzen
+und Ankerfehler bestehen außerdem unter ASan/UBSan. Die unabhängige SDK-Prüfung
+verwendet den ausgelieferten Parser und SDK-Header, keine kopierte Implementierung
+im Prüfkit. Die neue Linux-Anker-/Indexausführung bleibt bis zu ihrem tatsächlich
+abgeschlossenen CI-Lauf offen; die vollständige Produktmatrix ebenfalls.
+
+Der abschließende Kopflose-Lauf besteht **3/3**, `run-x8lz5tf1`,
+`build/current-documentation-navigation-reviewed-sdk.log`. Das SDK wurde nach
+`build/Native documentation reviewed ü/Relocated SDK ä` verschoben. Dort bestehen
+alle sechs tatsächlichen Anker-/Medien-/Tastaturfälle bei 16/22 Pixeln. Alle
+**511** Paketdateien bleiben SHA-256-identisch. Das unabhängige 210-Dateien-Kit
+baut den gelieferten Parser ausschließlich mit gelieferten Headern und besteht
+die 180-Seiten-/186-Anker-Gegenprobe. Der echte SecondBrain-CLI besteht außerdem
+Erkennung, gespeicherten Kontext und Suche ohne Umschreiben der Notizen.
