@@ -1,12 +1,13 @@
 /* Real SDL mouse/key paths; a camera operation must preserve the scene/data. */
-static void camera_test_button(app *a,bool down) {
+static void camera_test_mouse_button(app *a,bool down,unsigned button) {
     SDL_Event event={0};event.type=down?SDL_EVENT_MOUSE_BUTTON_DOWN:SDL_EVENT_MOUSE_BUTTON_UP;
     event.button.windowID=SDL_GetWindowID(a->window);event.button.which=PS_TEST_MOUSE_ID;
-    event.button.button=SDL_BUTTON_RIGHT;event.button.down=down;
+    event.button.button=button;event.button.down=down;
     event.button.x=a->scene_viewport_bounds.x+a->scene_viewport_bounds.w/2;
     event.button.y=a->scene_viewport_bounds.y+a->scene_viewport_bounds.h/2;
     SDL_PushEvent(&event);
 }
+static void camera_test_button(app *a,bool down) {camera_test_mouse_button(a,down,SDL_BUTTON_RIGHT);}
 static struct nk_rect camera_test_pressed;
 static bool camera_test_click(app *a,struct nk_rect r) {
     static unsigned settle;
@@ -32,7 +33,7 @@ static bool camera_test_depth(app *a,bool equal) {
     return equal?difference<1e-6:difference>1e-4;
 }
 static void camera_plane_test_frame(app *a,int *stage,int *code,const char **capture) {
-    static ps_scene scene;static ps_vec3 target;static double values[PS_MAX_CHANNELS],time;static float zoom;
+    static ps_scene scene;static ps_vec3 target;static double values[PS_MAX_CHANNELS],time;static float zoom,yaw,pitch;
     bool ok=true;
     switch(*stage) {
     case 0:
@@ -94,7 +95,35 @@ static void camera_plane_test_frame(app *a,int *stage,int *code,const char **cap
     case 25:ok=!a->camera_2d && a->yaw==PS_CAMERA_DEFAULT.yaw && a->pitch==PS_CAMERA_DEFAULT.pitch && a->orthographic==PS_CAMERA_DEFAULT.orthographic;
         a->tab=0;test_scene_key(a,SDLK_2,SDL_KMOD_ALT,false);break;
     case 26:ok=!a->camera_2d;a->tab=2;test_scene_key(a,SDLK_2,SDL_KMOD_ALT,false);break;
-    case 27:ok=!a->camera_2d;break;
+    case 27:ok=!a->camera_2d;a->tab=1;test_scene_key(a,SDLK_2,SDL_KMOD_ALT,false);break;
+    case 28:ok=a->camera_2d;if(!camera_test_click(a,a->camera_preset_bounds[0]))return;break;
+    case 29:test_mouse(a,camera_test_pressed,false);break;
+    case 30:break; /* Let the Standard button consume its release. */
+    case 31:
+        ok=!a->camera_2d && a->yaw==PS_CAMERA_DEFAULT.yaw && a->pitch==PS_CAMERA_DEFAULT.pitch &&
+           a->zoom==PS_CAMERA_DEFAULT.distance && !ps_vlength(ps_vsub(a->camera_target,PS_CAMERA_DEFAULT.target));
+        yaw=a->yaw;pitch=a->pitch;target=a->camera_target;test_scene_key(a,SDLK_RIGHT,SDL_KMOD_ALT,false);break;
+    case 32:ok=a->yaw!=yaw && a->pitch==pitch && !ps_vlength(ps_vsub(target,a->camera_target));
+        yaw=a->yaw;test_scene_key(a,SDLK_UP,SDL_KMOD_ALT|SDL_KMOD_SHIFT,false);break;
+    case 33:ok=ps_vlength(ps_vsub(target,a->camera_target))>0 && a->yaw==yaw && a->pitch==pitch;
+        test_plot_motion(a,a->scene_viewport_bounds.x+a->scene_viewport_bounds.w/2,
+                           a->scene_viewport_bounds.y+a->scene_viewport_bounds.h/2);break;
+    case 34:target=a->camera_target;yaw=a->yaw;pitch=a->pitch;camera_test_button(a,true);break;
+    case 35:test_plot_motion(a,a->scene_viewport_bounds.x+a->scene_viewport_bounds.w/2+30,
+                            a->scene_viewport_bounds.y+a->scene_viewport_bounds.h/2+20);break;
+    case 36:break;
+    case 37:ok=a->yaw!=yaw && a->pitch!=pitch && !ps_vlength(ps_vsub(target,a->camera_target));
+        camera_test_button(a,false);break;
+    case 38:test_plot_motion(a,a->scene_viewport_bounds.x+a->scene_viewport_bounds.w/2,
+                            a->scene_viewport_bounds.y+a->scene_viewport_bounds.h/2);break;
+    case 39:target=a->camera_target;yaw=a->yaw;pitch=a->pitch;camera_test_mouse_button(a,true,SDL_BUTTON_MIDDLE);break;
+    case 40:test_plot_motion(a,a->scene_viewport_bounds.x+a->scene_viewport_bounds.w/2+30,
+                            a->scene_viewport_bounds.y+a->scene_viewport_bounds.h/2+20);break;
+    case 41:break;
+    case 42:ok=ps_vlength(ps_vsub(target,a->camera_target))>0 && a->yaw==yaw && a->pitch==pitch;
+        camera_test_mouse_button(a,false,SDL_BUTTON_MIDDLE);zoom=a->zoom;test_scene_key(a,SDLK_PAGEUP,SDL_KMOD_ALT,false);break;
+    case 43:ok=a->zoom<zoom;zoom=a->zoom;test_scene_key(a,SDLK_PAGEDOWN,SDL_KMOD_ALT,false);break;
+    case 44:ok=a->zoom>zoom;*capture="camera-3d-controls.bmp";break;
     default:printf("CAMERA PLANE SELF-TEST: %s\n",*code?"FAILED":"PASSED");a->quitting=true;return;
     }
     if(*stage>1) {

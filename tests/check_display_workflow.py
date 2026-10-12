@@ -159,7 +159,7 @@ def project_settings(flow, directory):
 
 def camera_plane(flow,directory,size):
     flow.run("--camera-plane-test",directory,size,timeout=35,marker="CAMERA PLANE SELF-TEST: PASSED")
-    for name in ("camera-2d-xy-orthographic.bmp","camera-2d-xy-perspective.bmp","camera-2d-yz.bmp","camera-2d-xz.bmp"):
+    for name in ("camera-2d-xy-orthographic.bmp","camera-2d-xy-perspective.bmp","camera-2d-yz.bmp","camera-2d-xz.bmp","camera-3d-controls.bmp"):
         require((directory / name).is_file(),"Missing actual planar camera view: "+name)
     require(fingerprint(directory / "camera-2d-xy-orthographic.bmp") != fingerprint(directory / "camera-2d-xy-perspective.bmp"),"Projection change did not alter rendered view")
 

@@ -4185,34 +4185,9 @@ Die abschließenden Dokumentations-/Referenz-/Kit-/Beispielgruppen bestehen
 
 ## Vollständiger nativer Intel-macOS-Lauf für 0cab455
 
-Der eingefrorene Stand `0cab455add525d2915b1135fb59d62634ca36266` besteht
-AppleClang Release **722/722**, `run-b_rc4q1r`,
-`build/current-full-build-0cab455-mac/test-results/run-b_rc4q1r/results.json`,
-`build/current-full-build-0cab455-mac.log`. Alle Ergebnisstatus sowie alle
-**1413** Quellprüfsummen und die TAR-Prüfsumme sind unabhängig bestätigt.
-Damit sind der veraltete Identitätsprüfer, zusätzliche Modellschichten und
-2D-App-Build in diesem Gesamtumfang berücksichtigt. Native Tests ohne Fenster
-belegen die grafische Bedienung nicht allein.
-
-Die vollständige verschobene SDK-/App-Gegenprobe aus dem zugehörigen
-**204**-Dateien-Kit ist erfolgreich abgeschlossen: **704/704** Befehle ohne
-Fehler, `build/current-full-sdk-0cab455-mac.log`, Consumer
-`build/current-full-sdk-0cab455-consumer-mac/Native SDK ä i2jeyz8i`.
-Darin bestehen alle 32 Vorlagen-/Sprachpaare, zwei unabhängige Analysen,
-Tastaturabläufe, Fehlerfälle, Typografie, native Barrierefreiheit,
-Dokumentation, Schritt-Haltepunkte, Runner-Isolation und die 2D-Kamera.
-Alle **424** komprimiert archivierten BMPs mit **7.256.378.512** ursprünglichen
-Bytes sind anhand komprimierter und wiederhergestellter SHA-256-Prüfsummen
-sowie Stückzahlen bestätigt; Beleg
-`build/current-full-0cab455-bitmap-integrity.log`.
-Die Pipeline ist im Zustand `complete`; Quell- und TAR-Prüfsummen bleiben
-unverändert. Die neue Projekt-Anzeigevorgabe gehört nicht zu diesem Stand.
-Die späteren neun Materialeigenschaften am Stand `ccaaaf2` gehören nicht zu
-diesem eingefrorenen Gesamtlauf; sie besitzen die oben genannten Einzel-/SDK-
-Nachweise. Eine neue Gesamtplattformabnahme wird daraus nicht abgeleitet.
-
-Die Dokumentations-/Referenzprüfung dieses Ergebnisberichts besteht **2/2**,
-`run-cp0x8cjh`, `build/current-full-0cab455-record-docs-mac.log`.
+Der vollständige Nachweis mit **722/722** nativen Tests, **704/704** SDK-Befehlen
+und allen **424** prüfsummenbestätigten Bildarchiven bleibt in
+[Archivband 2](platform-validation-history-2.md#vollständiger-nativer-intel-macos-lauf-für-0cab455) erhalten.
 
 ## Projekt-Anzeigevorgaben aus der Oberfläche
 
@@ -4241,11 +4216,38 @@ in **2/2** Befehlen mit je drei App-Prozessen (Speichern, Neustart, Konflikt):
 `build/current-project-display-sdk-consumer-mac/Native SDK ä srowz6sa`.
 Die Quelldateien bleiben in allen Prozessen bytegleich zur SDK-Vorlage.
 
-Die Linux-Sanitizer-CI enthält jetzt diese nativen und grafischen Fälle;
-ihr Ergebnis für diese Erweiterung ist noch offen. Der vollständige
+Die [Linux-Sanitizer-CI für cb2adb1](https://github.com/PhysicSimulator/physim/actions/runs/38213014749)
+besteht tatsächlich auf Clang und GCC: jeweils **5/5** native und **11/11**
+grafische Fälle, einschließlich beider Kamera- und Projektvorgaben-Schriftgrößen.
+Vollständige Logs: `build/current-ci-cb2adb1-job-114691236885.log`
+(Clang: `run-hk9dp0o7`, `run-qy6vnpbi`) und
+`build/current-ci-cb2adb1-job-114691237117.log`
+(GCC: `run-e00r6cnh`, `run-1njtws7z`). ASan/UBSan ist aktiviert;
+LeakSanitizer ist für die GUI deaktiviert. Der nachfolgende Standardkamera-Fix
+gehört nicht zu diesem CI-Stand. Der vollständige
 Projektformatblock PP-0439 und die gesamte Plattform-/Produktabnahme sind
 durch die Anzeigevorgaben allein nicht abgeschlossen.
 
 Die abschließende Prüfung dieser ergänzten Nachweisseiten besteht **3/3**
 (Dokumentation, Referenzen, unabhängiges Kit), `run-sr_7mkbg`,
 `build/current-project-display-record-docs-mac.log`.
+
+## Standardkamera und freie 3D-Bedienung (PP-0294)
+
+Die Schaltfläche **Standard** beendet jetzt wie **Alt + Pos1** den 2D-Modus.
+Zuvor setzte sie nur Winkel, Zoom und Ziel zurück; anschließendes Verschieben
+verwendete weiter die Achsen der alten 2D-Ebene. Die tatsächliche Schaltfläche
+wird nun aus der XZ-Ebene gedrückt und ihre freie Standardkamera geprüft.
+
+Die erweiterten SDL-Abläufe prüfen danach Alt-Pfeil-Orbit, Alt-Shift-Pan,
+rechte Mausbewegung für Orbit, mittlere Mausbewegung für Pan und beide
+Tastatur-Zoomrichtungen. Die bestehenden XY/YZ/XZ-, Perspektiv-/Orthografie-,
+Mausrad-, Daten-/Szenenerhalt- und Projektvorgabenfälle bleiben enthalten.
+Intel macOS/AppleClang Release besteht **4/4**, `run-10amk5si`,
+`build/current-camera-standard-ui-mac.log`. Die frische SDK-Installation besteht **3/3** Dokumentations-/Referenz-/Kitfälle,
+`run-6o9he8hp`, `build/current-camera-standard-install-mac.log`.
+Die verschobene SDK-Gegenprobe besteht **2/2** Befehle (16/22 Pixel),
+`build/current-camera-standard-sdk-verify-mac.log`, Consumer
+`build/current-camera-standard-sdk-consumer-mac/Native SDK ä tj_nlntt`.
+Sie enthält auch die neuen 3D-Eingaben und ihre zusätzliche Aufnahme.
+Die aktuelle gesamte Plattformmatrix bleibt separat offen.

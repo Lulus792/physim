@@ -2129,9 +2129,17 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Kamera: Orbit, Pan, Zoom, voreingestellte Ansichten.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/main.c",
+        "app/design_ui.inc",
+        "app/camera_plane_tests.inc",
+        "tests/check_display_workflow.py",
+        "tools/verify-native-sdk.py",
+        "docs/workspace.md",
+        "docs/platform-validation.md"
+      ],
+      "note": "Orbit, Pan, Zoom und Standard-/XY-/YZ-/XZ-Ansichten vorhanden. Standard beendet jetzt zuverlässig den 2D-Modus. Reale SDL-Eingaben für rechten Orbit, mittleres Pan, Mausrad und Alt-Tastatursteuerung sowie Voreinstellungen bei 16/22 Pixeln bestehen mit unveränderter Szene/Messwerten. 4/4 lokale GUI-Fälle einschließlich Projektvorgaben und 2/2 verschobene SDK-Kamerafälle auf Intel macOS/AppleClang; die aktuelle Gesamtplattformmatrix bleibt separat offen."
     },
     {
       "id": "PP-0295",
@@ -3817,9 +3825,19 @@
       "kind": "paragraph",
       "scope": "planned",
       "text": "Die Projektdatei enthält nur stabile Einstellungen: Formatversion, Quellen, benötigte Physim-Module, Parameterdefinitionen, Buildprofil und Anzeigevorgaben. Absolute lokale Pfade werden vermieden.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "incomplete",
+      "evidence": [
+        "app/project_file.c",
+        "app/project_file.h",
+        "app/param_catalog.c",
+        "tests/test_project_display.c",
+        "tests/test_project_file.c",
+        "app/main.c",
+        "app/design_ui.inc",
+        "tests/check_display_workflow.py",
+        "docs/platform-validation.md"
+      ],
+      "note": "Formatversion, relative Haupt-/Analysequellen, Buildprofil, Parameterwerte und optionale Anzeigevorgaben sind implementiert. 384 native Anzeigekombinationen, reale Speichern-/Neustart-/Konfliktbedienung bei 16/22 Pixeln und verschobenes SDK bestehen lokal. Die benötigten Physim-Module und vollständigen Parameterdefinitionen werden derzeit aus dem Quell-/Modulkatalog abgeleitet und nicht explizit in der Projektdatei erfasst; diese geforderten Felder und die aktuelle Gesamtplattformprüfung bleiben offen."
     },
     {
       "id": "PP-0443",

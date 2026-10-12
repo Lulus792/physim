@@ -336,7 +336,9 @@ static void scene_controls_view(app *a) {
         nk_layout_row_dynamic(ui, 22, 1);
         nk_label_colored(ui, "Blickrichtung", NK_TEXT_LEFT, muted());
         nk_layout_row_dynamic(ui, 32, 2);
+        a->camera_preset_bounds[0]=nk_widget_bounds(ui);
         if (nk_button_label(ui, "Standard")) {
+            a->camera_2d = false;
             a->yaw = PS_CAMERA_DEFAULT.yaw;
             a->pitch = PS_CAMERA_DEFAULT.pitch;
             a->zoom = PS_CAMERA_DEFAULT.distance;

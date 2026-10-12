@@ -1294,3 +1294,23 @@ Die erweiterte Linux-Sanitizer-CI besteht für Materialbeispiele und beide
 Die ganze Plattformabnahme bleibt offen.
 Aktuell: **124 implemented**, **14 incomplete**, **393 unverified** bei allen
 531 unveränderten Originalblöcken/Planprüfsumme.
+
+## Projektdatei: Anzeigevorgaben und verbleibende Felder
+
+PP-0439 ist jetzt konkret **incomplete**: Formatversion, relative Quellen,
+Buildprofil, Parameterwerte und gespeicherte Anzeigevorgaben sind vorhanden
+und gezielt geprüft. Benötigte Module und vollständige Parameterdefinitionen
+werden weiterhin aus Quellen/Modulkatalog abgeleitet; ihre explizite Erfassung
+in der Projektdatei bleibt umzusetzen. Die Nachweise stehen in der
+[Plattformprüfung](platform-validation.md#projekt-anzeigevorgaben-aus-der-oberfläche).
+Aktuell bleiben **124 implemented**, **15 incomplete**, **392 unverified**
+bei allen 531 unveränderten Originalblöcken und ursprünglicher Planprüfsumme.
+
+## Kamerabedienung einzeln zugeordnet
+
+PP-0294 besitzt jetzt einen eigenen Nachweis für Orbit, Pan, Zoom und
+Voreinstellungen einschließlich der korrigierten Standard-Schaltfläche.
+Reale 16/22-Pixel-Eingaben und der verschobene SDK-Verbraucher bestehen
+auf Intel macOS. [Nachweis](platform-validation.md#standardkamera-und-freie-3d-bedienung-pp-0294).
+Aktuell: **125 implemented**, **15 incomplete**, **391 unverified** bei
+allen 531 Originalblöcken. Die gesamte Plattformabnahme bleibt offen.

@@ -1187,3 +1187,34 @@ bleibt offen: **123 implemented**, **14 incomplete**, **394 unverified**,
 
 Abschließende Dokumentations-/Referenz-/Kitprüfung: **3/3**, `run-cgnrc5bf`,
 `build/current-camera-plane-final-docs-mac.log`.
+
+## Vollständiger nativer Intel-macOS-Lauf für 0cab455
+
+Der eingefrorene Stand `0cab455add525d2915b1135fb59d62634ca36266` besteht
+AppleClang Release **722/722**, `run-b_rc4q1r`,
+`build/current-full-build-0cab455-mac/test-results/run-b_rc4q1r/results.json`,
+`build/current-full-build-0cab455-mac.log`. Alle Ergebnisstatus sowie alle
+**1413** Quellprüfsummen und die TAR-Prüfsumme sind unabhängig bestätigt.
+Damit sind der veraltete Identitätsprüfer, zusätzliche Modellschichten und
+2D-App-Build in diesem Gesamtumfang berücksichtigt. Native Tests ohne Fenster
+belegen die grafische Bedienung nicht allein.
+
+Die vollständige verschobene SDK-/App-Gegenprobe aus dem zugehörigen
+**204**-Dateien-Kit ist erfolgreich abgeschlossen: **704/704** Befehle ohne
+Fehler, `build/current-full-sdk-0cab455-mac.log`, Consumer
+`build/current-full-sdk-0cab455-consumer-mac/Native SDK ä i2jeyz8i`.
+Darin bestehen alle 32 Vorlagen-/Sprachpaare, zwei unabhängige Analysen,
+Tastaturabläufe, Fehlerfälle, Typografie, native Barrierefreiheit,
+Dokumentation, Schritt-Haltepunkte, Runner-Isolation und die 2D-Kamera.
+Alle **424** komprimiert archivierten BMPs mit **7.256.378.512** ursprünglichen
+Bytes sind anhand komprimierter und wiederhergestellter SHA-256-Prüfsummen
+sowie Stückzahlen bestätigt; Beleg
+`build/current-full-0cab455-bitmap-integrity.log`.
+Die Pipeline ist im Zustand `complete`; Quell- und TAR-Prüfsummen bleiben
+unverändert. Die neue Projekt-Anzeigevorgabe gehört nicht zu diesem Stand.
+Die späteren neun Materialeigenschaften am Stand `ccaaaf2` gehören nicht zu
+diesem eingefrorenen Gesamtlauf; sie besitzen die oben genannten Einzel-/SDK-
+Nachweise. Eine neue Gesamtplattformabnahme wird daraus nicht abgeleitet.
+
+Die Dokumentations-/Referenzprüfung dieses Ergebnisberichts besteht **2/2**,
+`run-cp0x8cjh`, `build/current-full-0cab455-record-docs-mac.log`.
