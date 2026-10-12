@@ -1124,6 +1124,14 @@ def language_reference():
     return '\n\n'.join(result) + '\n'
 
 
+LANG_DESCRIPTIONS.update({
+ 'runWriterEvent': 'Schreibt Level 1–4, endliche logische Zeit in Sekunden und eine begrenzte UTF-8-Nachricht als CRC-geschützten Ereignisblock.',
+ 'runReaderNextEvent': 'Liest das nächste Ereignis; ein Cursor darf Ereignis-, Mess- und Szenentraversierung nicht mischen. EOF/Recovery liefert false.',
+ 'runReaderEventLevel': 'Level 1–4 des letzten akzeptierten Ereignisses; vor dem ersten Ereignis entsteht ein fangbarer Fehler.',
+ 'runReaderEventTime': 'Logische Zeit des letzten akzeptierten Ereignisses in Sekunden.',
+ 'runReaderEventMessage': 'Kopiert die UTF-8-Nachricht des letzten akzeptierten Ereignisses in einen besitzenden String.'
+})
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--check', action='store_true')

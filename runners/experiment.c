@@ -304,7 +304,8 @@ int main(int argc, char **argv) {
         ps_module_close(module);
         return 6;
     }
-    result = ps_run_writer_append(store, writer, 0, c.values, c.channel_count);
+    result = runner_log_bind(&logs,store,writer);
+    if(result==PS_OK)result = ps_run_writer_append(store, writer, 0, c.values, c.channel_count);
     if (result == PS_OK && record_scenes && !interactive)
         result = snapshot(api, &c, store, writer, true, false,true);
     bool paused = true, stop = false, handshake = false;
@@ -461,14 +462,19 @@ int main(int argc, char **argv) {
     }
     if (result == PS_OK && last_snapshot_time >= 0 && c.time_s > last_snapshot_time)
         result = snapshot(api, &c, store, writer, true, interactive,true);
+    if (result != PS_OK)
+        report(interactive,diagnostics,diagnostic_path,&c,result,"step",c.error[0]?c.error:ps_result_string(result));
+    bool archive_diagnostic=result==PS_OK;
+    api->destroy(&c);
+    runner_log_close(&logs,c.time_s);
+    if(result==PS_OK && logs.archive_failed)result=PS_IO;
     if (result == PS_OK)
         result = ps_run_writer_release(store,writer);
     else (void)ps_run_writer_abort(store,writer);
+    logs.archive=NULL;
     (void)ps_run_store_destroy(store);
-    if (result != PS_OK)
-        report(interactive,diagnostics,diagnostic_path,&c,result,"step",c.error[0]?c.error:ps_result_string(result));
-    api->destroy(&c);
-    runner_log_close(&logs,c.time_s);
+    if(result!=PS_OK && archive_diagnostic)
+        report(interactive,diagnostics,diagnostic_path,NULL,result,"archive",ps_result_string(result));
     if (interactive)
         send_message(PS_MSG_BYE, NULL, 0);
     else

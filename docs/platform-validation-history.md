@@ -3231,3 +3231,120 @@ Implementierung, Header und Testeingaben blieben unverändert.
 Die 30 geänderten Dateien stimmen zwischen macOS und Linux per SHA-256 überein
 (`build/convex-source-freeze.json`). SDK-Prüfbelege liegen unter
 `build/convex-sdk-{mac,linux}-PASSED.json`.
+
+
+## Lineare konvexe CCD am 8. Oktober 2026
+
+`ps_sweep_convexes` schneidet Eintritts-/Austrittsintervalle sämtlicher
+Flächen-/Kantenkreuzproduktachsen bei fester Orientierung. Der Ebenensweep
+verwendet den ersten Vertexkontakt. Der Kugel–Netz-Sweep prüft Flächen,
+Kantenzylinder und Vertexkugeln. Eine Bewegungshülle vereinigt gepufferte
+Anfangs-/Endgrenzen für den gesamten linearen Weg. Displacements bleiben
+explizit und unabhängig von gespeicherten Geschwindigkeiten; Fehler erhalten
+Körper, Netze, Trefferwert und Flag. Neue Treffer haben Eindringtiefe null,
+Anfangsüberlappungen behalten den diskreten Kontakt bei Anteil null.
+[Verträge und vollständige Ereignisbeispiele](mechanics.md).
+
+Die C-/Physim-Tetraederbeispiele führen ein kraftfreies elastisches Ereignis
+gegen einen statischen Vertex tatsächlich aus: Kugel von `(10,1,1)` mit
+`vx=-20` m/s, Kontakt bei Anteil `0.425`, Impulsantwort und anschließende Restzeit
+bis `x=13` m mit 200 J kinetischer Energie. Der zentrale Impuls induziert hier
+keine Rotation. Das ist ein isoliertes Ereignis, keine Mehrkörpersteuerung.
+
+Die neue unabhängige Gegenprobe enthält 705 Fälle: 500 gedrehte
+Box-/Tetraeder-/Oktaeder-Sweeps mit separaten Welt-Vertex-Zeitintervallen,
+180 Kugelpfade mit unabhängiger Distanzminimierung und Eintrittsnullstelle
+sowie 25 exakt rationale achsenparallele Zeitreferenzen. Darunter liegen
+72 Polyeder- und 20 Kugeltreffer. Neue Kontaktpunkte werden auf ursprünglichen
+Netzoberflächen zum Ereigniszeitpunkt geprüft, Kugelkontakte zusätzlich auf
+der Kugeloberfläche. Anteilvergleich verwendet `2e-9` absolute/relative Toleranz,
+Oberflächenzeugen `2e-8` absolute Toleranz in diesen Referenzfällen.
+
+Separate analytische C-/Physim-Fälle prüfen Durchtunneln, beide bewegten Partner,
+Streifkontakte, genau einen gemeinsamen Zeitanteil zweier Achsenintervalle,
+Intervallende, Anfangsüberlappung auch bei Trennung, lange Wege `1e12` m,
+Kugelkontakt an Flächen/Kanten/Vertices, Ebenen, Bewegungshüllen und atomare
+Invalid-/Numeric-Fehler. Acht strukturierte Runtime-Traps erhalten die
+Invalid-/Limit-/Numeric-Codes, Quellpositionen und vollständig abgewickelte
+Cleanup-Zustände. Die erste Orakelversion prüfte auch bei Anfangsüberlappung
+fälschlich einen nulltiefen Oberflächenkontakt und wurde unter `run-r09b_1an`
+abgewiesen; sie folgt jetzt dem dokumentierten diskreten Überlappungsvertrag.
+
+Intel macOS 14.6.1/Apple Clang 16 besteht 22/22 unter
+`build/contact-world-language-release-mac/test-results/run-zfyxprb1`.
+Debian 12/GCC 12.2 besteht 22/22 unter
+`build/contact-world-language-release-linux/test-results/run-i29eq4e7`.
+Clang 14/ASan/UBSan besteht 22/22 unter
+`build/atspi-asan-linux/test-results/run-bpqptbnl`.
+Die Auswahl enthält neue Sweeps, beide Ereignisbeispiele, Diagnosecodes,
+bestehende Mechanik-/Box-/Paar-/Broad-Phase-/Kugel-Sweep-Prüfungen,
+C-/Physim-Stoßparität, echte Stoßläufe, 1014 diskrete Geometriefälle,
+Dokumentation und Prüfkiterstellung.
+
+Die abschließend verstärkte Kugel-Netz-Zeugenprüfung besteht separat auf
+macOS mit 1/1 (`run-z4o3irvx`), Linux/Release mit 1/1 (`run-5xowqt3r`) und
+Linux/ASan/UBSan mit 1/1 (`run-un6j2n1m`) in den jeweiligen Testverzeichnissen.
+Implementierung und andere Testeingaben blieben seit der Auswahl unverändert.
+`ASAN_OPTIONS=detect_leaks=0` lässt Address-/UB-Prüfungen aktiv. macOS-Sanitizer
+bleiben wegen fehlendem `ld64.lld` ungeprüft. Alle 31 Referenzdokumente sind geprüft;
+das unabhängige Prüfkit enthält jetzt 127 genau manifestierte Eingaben.
+
+PP-0387 ist konkret unvollständig: Allgemeine rotierende und beschleunigte
+Bahnen sowie Mehrkörper-Ereignissteuerung fehlen. Lineare CCD mit festen
+Orientierungen ersetzt diese Anforderungen nicht. Keine allgemeine CCD-,
+Windows-/Apple-Silicon- oder gesamte Produktabnahme wird daraus abgeleitet.
+
+Stoß-Workflow und Handbuch-Tastaturführung bestehen auf macOS mit 2/2 unter
+`run-imop6leh` und Linux/X11 mit 2/2 unter `run-4e5sxkkx` in den jeweiligen
+Release-Testverzeichnissen. Die Prüfkiterstellung besteht mit 127 Eingaben,
+Paketgrenzen, SHA-256, fehlenden/dynamischen Pfaden und exklusiver Erstellung.
+
+Die abschließende Dokumentationsprüfung erkannte einen vorhandenen
+Paketgrenzfehler: Durch die fortgeschriebenen Nachweise war diese Seite auf
+266081 Bytes gewachsen und überschritt `PS_DOC_MAX_BYTES=256*1024`.
+`generate-reference.py --check` wies sie deshalb zurück. Die ersten SDK-
+Installationen unter `build/convex-sweep-sdk-{mac,linux}` waren zu diesem
+Zeitpunkt gebaut, wurden aber nicht als bestandene Abnahmen ausgegeben.
+Die neue SDK-Markdown-Größenprüfung weist das erste Mac-Paket zurück
+(`build/convex-sweep-sdk-document-rejection.txt`).
+
+207181 historische Bytes mit SHA-256
+`331f4bbddba84bb535ce873161f77cc9720895c8c6dabc12d2e755cf6fe6dcb9`
+sind unverändert in [Historische Plattformnachweise](platform-validation-history.md)
+übernommen. Die neue Seite besitzt 207237 Bytes einschließlich Rücklink;
+die aktuelle Seite liegt wieder deutlich unter der Grenze. Beide sind im
+Offline-Handbuch registriert. Verweise aus README, SDK-README und Status
+führen zur erhaltenen Historie. Der Abgleich liegt unter
+`build/convex-sweep-document-split.json`.
+
+Die Dokumentationsauswahl besteht nach der Aufteilung auf macOS mit 3/3
+(`run-dsedhz69`) und Linux mit 3/3 (`run-hfyar3ak`). Die GUI-Nachprüfung nach
+der zusätzlichen Offline-Seite besteht auf macOS mit 2/2 (`run-jp4qa776`)
+und Linux mit 2/2 (`run-52x7vby5`). Der echte Markdown-Parser prüft inzwischen
+zusätzlich beide ausgelieferten Plattformseiten samt Byte-/Blockgrenzen;
+diese verstärkte macOS-Auswahl besteht mit 3/3 (`run-aohfjxdw`).
+
+Die verstärkte Parserauswahl besteht auf Linux/Release mit 3/3
+(`run-28476klb`) und auf Linux/ASan/UBSan mit 1/1 (`run-36ig_aus`).
+Der historische Bericht lädt als 558 echte Markdownblöcke; die aktuelle Seite
+besitzt deutlich weniger Blöcke. Beide liegen unter den tatsächlichen
+Byte-/Blockgrenzen des ausgelieferten Parsers. Der Textnachtrag dieser Belege
+ändert weder Parser noch historische Bytes.
+
+Die korrigierten SDKs `build/convex-sweep-final-sdk-{mac,linux}` besitzen
+jeweils 464 manifestierte Dateien. `--convex-only` besteht auf macOS unter
+`build/convex-sweep-sdk-checks/Native SDK ä 0sc9q9f9` und Linux unter
+`build/convex-sweep-sdk-checks/Native SDK ä rqagd4sc`. Installierter und nur
+aus SDK-Quellen neu gebauter Core bestehen beide Geometrieorakel, lineare
+Sweeps, Diagnosecodes und die tatsächlichen C-/Physim-Ereignisbeispiele.
+Der Paketcompiler übersetzt die Sprachquellen selbst; das installierte
+Sprachbeispiel läuft zusätzlich direkt. Unter Linux stammt der Prüfer nur aus
+`build/convex-sweep-independent-kit`, ohne Implementierung oder Entwicklerheader
+im Prüfkit. Der neue Größencheck prüft die manifestierten Markdownseiten in
+allen fokussierten und vollständigen SDK-Modi.
+
+Die 29 geänderten Dateien stimmen zwischen macOS und Linux per SHA-256 überein
+(`build/convex-sweep-source-freeze.json`). SDK-Belege liegen unter
+`build/convex-sweep-sdk-{mac,linux}-PASSED.json`. Der letzte Dokumentationsnachtrag
+erfolgte nach Paketierung; Programmcode, öffentliche Header und Testeingaben
+blieben unverändert. Die historischen 207181 Bytes bleiben bytegleich erhalten.

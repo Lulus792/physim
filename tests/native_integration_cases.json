@@ -2566,6 +2566,48 @@
     "positive-distribution-oracle-language": {
       "source": "tests/fixtures/language/positive_distribution_oracle.phys",
       "mode": "--emit-c"
+    },
+    "run-events-check": {
+      "sources": [
+        "tests/test_run_events.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "run-event-probe": {
+      "sources": [
+        "tests/run_event_probe.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "run-events-language": {
+      "source": "tests/fixtures/language/run_events.phys",
+      "mode": "--emit-c",
+      "memory_balance": true
+    },
+    "run-event-failure-model": {
+      "sources": [
+        "tests/fixtures/run_event_failure.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ],
+      "module": true
+    },
+    "run-event-legacy-probe": {
+      "sources": [
+        "tests/run_event_legacy_probe.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
     }
   },
   "tests": [
@@ -4424,7 +4466,7 @@
           "arguments": [
             "{root}/tests/verify_png.py",
             "{work}",
-            "{work}/workflow \u00e4"
+            "{work}/workflow ä"
           ],
           "timeout": 60
         }
@@ -4471,7 +4513,7 @@
           "arguments": [
             "{root}/tests/verify_png.py",
             "{work}",
-            "{work}/workflow \u00e4"
+            "{work}/workflow ä"
           ],
           "timeout": 60
         }
@@ -6488,7 +6530,7 @@
         {
           "program": "run-index-memory",
           "arguments": [
-            "{work}/index \u03b1.psrun"
+            "{work}/index α.psrun"
           ],
           "timeout": 60
         },
@@ -10111,7 +10153,7 @@
           "program": "physim-analysis-runner",
           "arguments": [
             "{language-run-stream-analysis}",
-            "{work}/stream \u03b1.psrun",
+            "{work}/stream α.psrun",
             "{work}/reader-report"
           ],
           "timeout": 60
@@ -10481,6 +10523,59 @@
             "{root}/tests/fixtures/language/positive_distribution_oracle.phys"
           ],
           "timeout": 90
+        }
+      ]
+    },
+    {
+      "name": "run_events",
+      "targets": [
+        "python",
+        "run-events-check",
+        "run-event-probe",
+        "run-events-language",
+        "physim-runner",
+        "run-event-failure-model",
+        "run-event-legacy-probe"
+      ],
+      "steps": [
+        {
+          "program": "run-events-check",
+          "arguments": [
+            "{work}"
+          ],
+          "timeout": 30
+        },
+        {
+          "program": "run-events-language",
+          "arguments": [],
+          "timeout": 30
+        },
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_run_event_codec.py",
+            "{work}",
+            "{run-event-probe}"
+          ],
+          "timeout": 40
+        },
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_run_event_failure.py",
+            "{physim-runner}",
+            "{run-event-failure-model}",
+            "{run-event-probe}",
+            "{work}"
+          ],
+          "timeout": 30
+        },
+        {
+          "program": "run-event-legacy-probe",
+          "arguments": [
+            "{work}/events-c.psrun"
+          ],
+          "timeout": 20
         }
       ]
     }

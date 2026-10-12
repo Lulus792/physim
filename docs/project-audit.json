@@ -3905,9 +3905,25 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Ereignisse und Warnungen.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/data.h",
+        "include/physim/run_stream.h",
+        "src/data.c",
+        "src/run_stream.c",
+        "runners/logging.inc",
+        "runners/experiment.c",
+        "include/physim/language_run_stream.h",
+        "src/language/builtins.c",
+        "tests/test_run_events.c",
+        "tests/test_run_event_codec.py",
+        "tests/test_run_event_failure.py",
+        "tests/run_event_legacy_probe.c",
+        "tests/fixtures/language/run_events.phys",
+        "docs/data-format.md",
+        "docs/logging.md"
+      ],
+      "note": "CRC-geschützte Ereignisversion 1 in optionalem Chunk 8, mit Schweregrad, logischer Zeit und UTF-8-Nachricht, ist in C und Physim schreib-/lesbar. Tatsächliche Runner archivieren Initialisierung, Schritte, destroy und Budgetwarnung; gültige Präfixe bleiben nach kontrolliertem Fehler und abruptem Abbruch lesbar. Unabhängiger Byte-/CRC-/Mutationsdecoder, alter Core-Reader, ASan/UBSan und verschobene installierte/neu gebaute SDKs sind auf Intel macOS ausgeführt. Initialisierung vor erfolgreicher Laufdateierstellung bleibt nur in der Begleitdatei; aktuelle Gesamtmatrix bleibt offen."
     },
     {
       "id": "PP-0453",

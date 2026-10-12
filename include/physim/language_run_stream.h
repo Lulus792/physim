@@ -18,7 +18,8 @@ typedef struct {
     ps_run_read_handle handle;
     ps_result status;
     unsigned mode;
-    bool has_row,has_snapshot;
+    bool has_row,has_snapshot,has_event;
+    ps_log_record event;
     psrt_run_row row;
     ps_snapshot snapshot;
 } psrt_stream_reader_owner;
@@ -164,6 +165,15 @@ static inline void psrt_stream_writer_snapshot(psrt_stream_writer value,ps_snaps
     ps_result r=ps_run_writer_snapshot(value.owner->store->store,value.owner->handle,&context,&snapshot.scene,snapshot.paused);
     if(r!=PS_OK)psrt_fail_code(site,r,"RunWriter snapshot append failed");
 }
+static inline void psrt_stream_writer_event(psrt_stream_writer value,int64_t level,double time,const char *message,psrt_site site) {
+    (void)psrt_stream_writer_info(value,site);
+    ps_log_record record={.time_s=time};
+    if(level<PS_LOG_DEBUG || level>PS_LOG_ERROR || !message || strlen(message)>PS_LOG_MESSAGE_MAX)
+        psrt_fail_code(site,PS_INVALID,"RunWriter event fields are invalid");
+    record.level=(ps_log_level)level;memcpy(record.message,message,strlen(message)+1);
+    ps_result r=ps_run_writer_event(value.owner->store->store,value.owner->handle,&record);
+    if(r!=PS_OK)psrt_fail_code(site,r,"RunWriter event append failed");
+}
 static inline void psrt_stream_reader_drop(void *value) {
     psrt_stream_reader *reader=value;psrt_stream_reader_owner *owner=reader->owner;
     if(owner && !--owner->references) {
@@ -235,6 +245,26 @@ static inline bool psrt_stream_reader_advance(psrt_stream_reader value,bool snap
 }
 static inline bool psrt_stream_reader_next(psrt_stream_reader value,psrt_site s){return psrt_stream_reader_advance(value,false,s);}
 static inline bool psrt_stream_reader_next_snapshot(psrt_stream_reader value,psrt_site s){return psrt_stream_reader_advance(value,true,s);}
+static inline bool psrt_stream_reader_next_event(psrt_stream_reader value,psrt_site site) {
+    (void)psrt_stream_reader_info(value,site);psrt_stream_reader_owner *owner=value.owner;
+    if(owner->mode && owner->mode!=3)psrt_fail_code(site,PS_INVALID,"RunReader cannot mix event, sample and snapshot traversal");
+    owner->mode=3;
+    ps_result r=ps_run_reader_event_next(owner->store->store,owner->handle,&owner->event);
+    owner->status=r;if(r==PS_OK)owner->has_event=true;
+    if(r==PS_EOF || r==PS_RECOVERED)return false;
+    if(r!=PS_OK)psrt_fail_code(site,r,"RunReader event traversal failed");
+    return true;
+}
+static inline ps_log_record psrt_stream_reader_event(psrt_stream_reader value,psrt_site site) {
+    (void)psrt_stream_reader_info(value,site);
+    if(!value.owner->has_event)psrt_fail_code(site,PS_INVALID,"RunReader has no accepted event");
+    return value.owner->event;
+}
+static inline int64_t psrt_stream_reader_event_level(psrt_stream_reader v,psrt_site s){return psrt_stream_reader_event(v,s).level;}
+static inline double psrt_stream_reader_event_time(psrt_stream_reader v,psrt_site s){return psrt_stream_reader_event(v,s).time_s;}
+static inline psrt_string psrt_stream_reader_event_message(ps_allocator a,psrt_stream_reader v,psrt_site s) {
+    ps_log_record e=psrt_stream_reader_event(v,s);return psrt_run_string(a,e.message,s);
+}
 static inline psrt_run_block psrt_stream_reader_row(ps_allocator allocator,psrt_stream_reader value,psrt_site site) {
     ps_run_read_info info=psrt_stream_reader_info(value,site);
     if(!value.owner->has_row)psrt_fail_code(site,PS_INVALID,"RunReader has no accepted row");

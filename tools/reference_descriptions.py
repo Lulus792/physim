@@ -388,3 +388,10 @@ DESCRIPTIONS['ps_ccd_step']='Verarbeitet einen vollständigen Kick-Drift-Zeitsch
 
 DESCRIPTIONS['ps_student_mean_interval'] = 'Berechnet ein zweiseitiges Student-t-Intervall für den Mittelwert aus expliziten Stichprobenkennzahlen und Konfidenzniveau. Unabhängige normalverteilte Beobachtungen, mindestens zwei Werte und konsistente Eingabeeinheiten sind vorausgesetzt; Fehler erhalten die Ausgabe.'
 DESCRIPTIONS['ps_series_mean_interval'] = 'Berechnet ein Student-t-Mittelwertintervall aus gültigen Series-Werten in ihrer gespeicherten SI-Einheit. Masken gelten; rohe Statusspalten werden nicht automatisch angewendet. Varianzbereich und Annahmen sind explizit; Fehler erhalten die Ausgabe.'
+
+DESCRIPTIONS.update({
+ 'ps_run_append_event': 'Schreibt ein validiertes CRC-geschütztes Ereignis ohne Änderung der Messpunktzahl; ungültige Angaben schreiben keine Bytes.',
+ 'ps_run_event_next': 'Liest Ereignisse mit eigenem Cursor und bewahrt die Ausgabe bei Fehlern; übersprungene Messzeilen zählen für den Abschluss.',
+ 'ps_run_reader_event_next': 'Liest das nächste Ereignis über ein versioniertes Handle; EOF/Recovery bleiben terminal und Fehler bewahren die Ausgabe.',
+ 'ps_run_writer_event': 'Schreibt ein validiertes Ereignis über ein versioniertes Schreibhandle, ohne Messzähler oder Szene zu verändern.'
+})

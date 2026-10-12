@@ -76,3 +76,22 @@ In interaktiven Experimentmodulen sind stdout und stderr für den Runner reservi
 Beliebige `printf`-/`fprintf`-Ausgaben werden nicht in Logevents umgewandelt und
 können das Protokoll beschädigen. Verwende die Logging-API. Dieser Kanal ist keine
 OS-Sandbox und begrenzt keine anderen Ressourcen des Moduls.
+
+## Meldungen in der Laufdatei
+
+Der Experimentrunner speichert gültige Meldungen zusätzlich als
+[CRC-geschützte Ereignisblöcke](data-format.md#ereignisversion-1) in `.psrun`.
+Initialisierungsmeldungen werden bis zum Anlegen des vollständigen Kanalschemas
+in einer temporären Datei gehalten und dann in Reihenfolge übernommen.
+Meldungen aus Schritten werden unmittelbar geschrieben und geflusht. `destroy`
+und eine mögliche Budget-Warning stehen vor Index/Footer. Die Begleitdatei
+bleibt verfügbar; ein Fehler bei ihrer exklusiven Erstellung unterdrückt die
+Aufzeichnung im Laufarchiv nicht. Ihre Fehlercodes bleiben für den Aufrufer
+beobachtbar. Ein Archivschreibfehler beendet den Runner ohne gültigen Footer.
+
+Ein abrupter Prozessabbruch kann weder `destroy` noch eine Budgetzusammenfassung
+schreiben. Vollständige vorherige Ereignisblöcke bleiben mit dem Messpräfix
+lesbar; der Reader meldet `PS_RECOVERED`. Vor erfolgreicher Laufdateierstellung
+gibt es nur die Begleitdatei; `--describe` erzeugt weiterhin keine Logdateien.
+Ereignisse ändern keine Messwerte und keinen Samplezähler. Zugriff auf Level,
+Zeit und Nachricht in C/Physim: [Run-Streams](run-streams.md#ereignisse-und-warnungen).

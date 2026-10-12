@@ -20,6 +20,9 @@ typedef struct {
 ps_result ps_run_create(ps_run_writer *writer, const char *path, const ps_context *context,
                         const char *experiment_name);
 ps_result ps_run_append(ps_run_writer *writer, double time_s, const double *values);
+/* Optional event chunk: validated level, logical time and UTF-8 message.
+ * Does not change measurement counts. Invalid records do not write bytes. */
+ps_result ps_run_append_event(ps_run_writer *writer, const ps_log_record *event);
 /* Optional versioned scene chunk. Does not add a measurement row or change its
  * footer count. Existing readers skip it after CRC validation. */
 ps_result ps_run_append_snapshot(ps_run_writer *writer, const ps_context *context,
@@ -37,6 +40,9 @@ ps_result ps_run_next(ps_run_reader *reader, double *time_s, double values[PS_MA
  * counted while scanning; PS_EOF/PS_RECOVERED have the same meanings as above.
  * Legacy runs contain no snapshots. Failed reads leave snapshot unchanged. */
 ps_result ps_run_snapshot_next(ps_run_reader *reader, ps_snapshot *snapshot);
+/* Use a separate reader for events. Validates/counts skipped samples;
+ * failure preserves the event output. */
+ps_result ps_run_event_next(ps_run_reader *reader, ps_log_record *event);
 void ps_run_reader_close(ps_run_reader *reader);
 /* Optional measurement convention: <name>.status masks <name> and <name>.u.
  * States are 0=not due, 1=valid, 2=dropped. Returns index=-1 when absent;

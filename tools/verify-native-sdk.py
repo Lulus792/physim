@@ -209,6 +209,36 @@ def verify_transform_range(repo, sdk, consumer, builder, library, rebuilt_core, 
 
 
 
+def verify_run_events(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked):
+    shutil.copy2(repo / "tests/test_run_events.c",consumer / "run-events-check.c")
+    shutil.copy2(repo / "tests/run_event_probe.c",consumer / "run-event-probe.c")
+    shutil.copy2(repo / "tests/run_event_legacy_probe.c",consumer / "run-event-legacy-probe.c")
+    shutil.copy2(repo / "tests/fixtures/run_event_failure.c",consumer / "run-event-failure.c")
+    shutil.copy2(sdk / "examples/logging/main.c",consumer / "run-event-logging.c")
+    checked([sdk / "bin" / ("physimc"+suffix),"--emit-c",repo / "tests/fixtures/language/run_events.phys"],
+             output=consumer / "run-events-language.c")
+    checked([sdk / "bin" / ("physimc"+suffix),"--emit-experiment",sdk / "examples/language/logging.phys"],
+             output=consumer / "run-event-logging-language.c")
+    runner=sdk / "bin" / ("physim-runner"+suffix)
+    for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+        legacy=builder.executable("run-event-legacy-probe-"+kind,["run-event-legacy-probe.c"],[archive])
+        check=builder.executable("run-events-check-"+kind,["run-events-check.c"],[archive])
+        probe=builder.executable("run-event-probe-"+kind,["run-event-probe.c"],[archive])
+        language=builder.executable("run-events-language-"+kind,["run-events-language.c"],[archive],language=True)
+        failure=builder.executable("run-event-failure-"+kind,["run-event-failure.c"],[archive],module=True)
+        logging=builder.executable("run-event-logging-"+kind,["run-event-logging.c"],[archive],module=True)
+        logging_language=builder.executable("run-event-logging-language-"+kind,["run-event-logging-language.c"],[archive],module=True,language=True)
+        work=consumer / ("events-"+kind);work.mkdir()
+        checked([check,work]);checked([language],cwd=work)
+        checked([legacy,work / "events-c.psrun"])
+        checked([sys.executable,repo / "tests/test_run_event_codec.py",work,probe])
+        checked([sys.executable,repo / "tests/test_run_event_failure.py",runner,failure,probe,work])
+        for name,module in (("C",logging),("Physim",logging_language)):
+            directory=work / name;directory.mkdir()
+            checked([sys.executable,repo / "tests/test_runner_logging.py",runner,module,directory],timeout=90)
+    print("Installed/rebuilt SDK run events: exact C/Physim wire bytes, independent malformed-file decoder, actual logging and controlled/abrupt failure prefixes passed",flush=True)
+
+
 def verify_positive_distributions(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked):
     shutil.copy2(repo / "tests/test_positive_distributions.c",consumer / "positive-distribution-check.c")
     shutil.copy2(repo / "tests/positive_distribution_probe.c",consumer / "positive-distribution-probe.c")
@@ -456,6 +486,7 @@ def main():
                         help="Verify opaque Run stream handles only; no GUI or full domain acceptance")
     parser.add_argument("--interval-only",action="store_true",
                         help="Verify Student-t mean intervals, independent numerical references and actual analysis report only")
+    parser.add_argument("--events-only",action="store_true",help="Verify archived C/Physim events, real runner logs and failure recovery only")
     parser.add_argument("--distributions-only",action="store_true",
                         help="Verify positive exponential/lognormal C/Physim distributions and independent references only")
     parser.add_argument("--comparison-only", action="store_true",
@@ -477,6 +508,10 @@ def main():
     parser.add_argument("--isolation-only", action="store_true",
                         help="Verify eight actual C/Physim runner failure/restart app workflows; requires an app SDK and display")
     args = parser.parse_args()
+    if args.events_only and any((args.pendulum_only,args.scalar_only,args.transform_only,args.stream_only,
+        args.comparison_only,args.curve_only,args.units_only,args.body_only,args.migration_only,
+        args.accessibility_only,args.convex_only,args.breakpoints_only,args.isolation_only,args.app_tests,args.interval_only,args.distributions_only)):
+        parser.error("--events-only cannot be combined with other focused modes or --app-tests")
     if args.distributions_only and any((args.pendulum_only,args.scalar_only,args.transform_only,args.stream_only,
         args.comparison_only,args.curve_only,args.units_only,args.body_only,args.migration_only,
         args.accessibility_only,args.convex_only,args.breakpoints_only,args.isolation_only,args.app_tests,args.interval_only)):
@@ -599,6 +634,13 @@ def main():
         builder.includes = [sdk / "include"]
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+        if args.events_only:
+            shutil.copytree(sdk / "src",consumer / "src")
+            rebuilt_core=builder.archive("sdk-rebuilt-core",[f"src/{name}.c" for name in native.CORE])
+            verify_run_events(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
+            (root / "PASSED.txt").write_text("Focused archived-event SDK verification passed; installed/rebuilt C/Physim, independent byte/CRC/error references and real controlled/abrupt runner prefixes; no full platform/product acceptance.\n",encoding="utf-8")
+            print(f"Run event SDK verified: {root}")
+            return
         if args.distributions_only:
             shutil.copytree(sdk / "src",consumer / "src")
             rebuilt_core=builder.archive("sdk-rebuilt-core",[f"src/{name}.c" for name in native.CORE])
@@ -824,6 +866,7 @@ def main():
         verify_run_stream(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_mean_interval(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_positive_distributions(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
+        verify_run_events(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
         verify_scalar_search(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_transform_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         shutil.copy2(repo / "tests/test_linear_range.c", consumer / "linear-range-check.c")

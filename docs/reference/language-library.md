@@ -5031,6 +5031,36 @@ Liest einen der sieben SI-Dimensionsexponenten eines aufgezeichneten Kanals.
 
 Überall verfügbar.
 
+## runReaderEventLevel
+
+```text
+runReaderEventLevel(reader: RunReader) -> Int64
+```
+
+Level 1–4 des letzten akzeptierten Ereignisses; vor dem ersten Ereignis entsteht ein fangbarer Fehler.
+
+Überall verfügbar.
+
+## runReaderEventMessage
+
+```text
+runReaderEventMessage(reader: RunReader) -> String
+```
+
+Kopiert die UTF-8-Nachricht des letzten akzeptierten Ereignisses in einen besitzenden String.
+
+Überall verfügbar.
+
+## runReaderEventTime
+
+```text
+runReaderEventTime(reader: RunReader) -> Float64
+```
+
+Logische Zeit des letzten akzeptierten Ereignisses in Sekunden.
+
+Überall verfügbar.
+
 ## runReaderIsOpen
 
 ```text
@@ -5068,6 +5098,16 @@ runReaderNext(reader: RunReader) -> Bool
 ```
 
 Liest eine vollständige Messzeile in den Cursor. EOF oder Recovery liefert false; andere Fehler sind fangbar.
+
+Überall verfügbar.
+
+## runReaderNextEvent
+
+```text
+runReaderNextEvent(reader: RunReader) -> Bool
+```
+
+Liest das nächste Ereignis; ein Cursor darf Ereignis-, Mess- und Szenentraversierung nicht mischen. EOF/Recovery liefert false.
 
 Überall verfügbar.
 
@@ -5448,6 +5488,16 @@ runWriterClose(writer: RunWriter) -> Void
 ```
 
 Finalisiert den gemeinsamen Writer und invalidiert alle Kopien, auch bei einem I/O-Fehler.
+
+Überall verfügbar.
+
+## runWriterEvent
+
+```text
+runWriterEvent(writer: RunWriter, level: Int64, time: Float64, message: String) -> Void
+```
+
+Schreibt Level 1–4, endliche logische Zeit in Sekunden und eine begrenzte UTF-8-Nachricht als CRC-geschützten Ereignisblock.
 
 Überall verfügbar.
 

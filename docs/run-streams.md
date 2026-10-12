@@ -200,3 +200,27 @@ Der SDK-Prüfer prüft ebenfalls Writer, Besitzerallokationen und bytegenaue
 C-/Physim-Archivparität einschließlich Szenen und Index. Der Schreibzugang ist
 in Standalone-, Experiment- und Analysemodulen verfügbar; die allgemeine
 Sprach- und Ressourcenmigration bleibt davon unabhängig.
+
+## Ereignisse und Warnungen
+
+`ps_run_writer_event(store, writer, &record)` schreibt einen validierten
+`ps_log_record`. `ps_run_reader_event_next(store, reader, &record)` liest ihn
+mit eigenem Cursor. Ein Record enthält Level 1–4, endliche Sekundenzeit und
+eine begrenzte UTF-8-Nachricht. Fehler bewahren die Leseausgabe; ungültige
+Schreibangaben schreiben keine Bytes. EOF/Recovery bleiben für das Handle
+terminal. Messpunkte und Szenen werden durch Ereignisse nicht hinzugefügt.
+
+```text
+writer.appendEvent(3,0.25,"Warnung: α")
+let events = store.openReader("experiment.psrun")
+while events.nextEvent():
+    print(events.eventMessage())
+events.close()
+```
+
+Physim-Cursor erlauben jeweils nur Mess-, Szenen- oder Ereignistraversierung.
+Kopien teilen den Cursor und den letzten akzeptierten Record. Die Getters
+liefern vor dem ersten Ereignis einen fangbaren Fehler; die Nachricht wird
+als besitzender String kopiert. Nach EOF bleibt der letzte Record verfügbar.
+Nutze separate Reader, um mehrere Arten durchzulaufen. Der Low-Level-C-Reader
+erfordert ebenfalls einen separaten Cursor für jede Traversierung.

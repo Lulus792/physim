@@ -9,6 +9,7 @@ import subprocess
 import sys
 import threading
 import time
+import zlib
 
 runner, module, directory = sys.argv[1:]
 work = Path(directory)
@@ -20,6 +21,21 @@ def records(path):
     assert all(set(row) == {'level', 'time_s', 'message'} and 1 <= row['level'] <= 4
                and math.isfinite(row['time_s']) for row in rows)
     return rows
+
+def archived_records(path):
+    raw=path.read_bytes();assert raw[:16]==b'PSRUN17\n'+struct.pack('<II',1,0x01020304)
+    at=16;events=[];samples=0
+    while at<len(raw):
+        kind,n,crc=struct.unpack_from('<III',raw,at);data=raw[at+12:at+12+n]
+        assert len(data)==n and zlib.crc32(data)==crc
+        if kind==8:
+            version,level,time=struct.unpack_from('<IId',data);assert version==1
+            events.append(dict(level=level,time_s=time,message=data[16:].decode('utf-8')))
+        elif kind==3:samples+=1
+        elif kind==4:assert struct.unpack('<Q',data)[0]==samples
+        at+=12+n
+    assert at==len(raw)
+    return events
 
 def offline(name, *args):
     path = work / (name + '.psrun')
@@ -34,6 +50,7 @@ assert discovery.returncode == 0 and discovery.stdout.startswith(b'PHYSIM_PARAME
 assert not discovery.stderr and not Path('--describe.pslog').exists()
 path = offline('normal')
 rows = records(path)
+assert archived_records(path)==rows
 assert rows[0] == dict(level=2, time_s=0, message='Created: α')
 assert any(row['message'] == 'Reset "quoted"\t☃' and row['level'] == 1 for row in rows)
 assert [(r['time_s'], r['message']) for r in rows if r['level'] == 3] == [(0, 'Step\nnext line'), (.25, 'Step\nnext line')]
@@ -51,6 +68,7 @@ assert sidecar.read_bytes() == b'foreign content\n'
 if 'burst' in discovery.stdout.decode():
     flooded = offline('flood', '--param', 'burst=5000')
     flood = records(flooded)
+    assert archived_records(flooded)==flood
     assert len(flood) == 4097 and flood[-1]['level'] == 3
     assert 'suppressed 909 messages' in flood[-1]['message'], flood[-1]
     assert flood[-1]['time_s'] == .5
@@ -117,6 +135,7 @@ for enabled in (False, True):
         assert not incoming and child.wait(timeout=5) == 0 and not child.stderr.read()
         assert snapshots == 3
         saved = records(output)
+        assert archived_records(output)==saved
         assert logged == (saved if enabled else [])
         assert received[0] == (11 if enabled else 1)
         assert [(r['time_s'], r['message']) for r in saved if r['level'] == 3] == [(0, 'Step\nnext line'), (.25, 'Step\nnext line')]

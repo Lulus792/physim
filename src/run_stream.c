@@ -119,6 +119,14 @@ ps_result ps_run_reader_snapshot_next(ps_run_store *store, ps_run_read_handle h,
         s->terminal = r;
     return r;
 }
+ps_result ps_run_reader_event_next(ps_run_store *store,ps_run_read_handle h,ps_log_record *out) {
+    read_slot *s=reader_slot(store,h);
+    if(!s || !out)return PS_INVALID;
+    if(s->terminal!=PS_OK)return s->terminal;
+    ps_result r=ps_run_event_next(&s->reader,out);
+    if(r!=PS_OK)s->terminal=r;
+    return r;
+}
 ps_result ps_run_reader_release(ps_run_store *store, ps_run_read_handle h) {
     read_slot *s = reader_slot(store, h);
     if (!s)
@@ -168,6 +176,10 @@ ps_result ps_run_writer_snapshot(ps_run_store *store, ps_run_write_handle h,
     if (!s)
         return PS_INVALID;
     return ps_run_append_snapshot(&s->writer, context, scene, paused);
+}
+ps_result ps_run_writer_event(ps_run_store *store,ps_run_write_handle h,const ps_log_record *event) {
+    write_slot *s=writer_slot(store,h);
+    return s?ps_run_append_event(&s->writer,event):PS_INVALID;
 }
 ps_result ps_run_writer_abort(ps_run_store *store, ps_run_write_handle h) {
     write_slot *s = writer_slot(store, h);

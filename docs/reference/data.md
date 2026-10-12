@@ -57,6 +57,16 @@ Schreibt einen Messpunkt mit Zeit und einem Wert je registriertem Kanal.
 ps_result ps_run_append(ps_run_writer *writer, double time_s, const double *values);
 ```
 
+## ps_run_append_event
+
+Schreibt ein validiertes CRC-geschütztes Ereignis ohne Änderung der Messpunktzahl; ungültige Angaben schreiben keine Bytes.
+
+```c
+ps_result ps_run_append_event(ps_run_writer *writer, const ps_log_record *event);
+```
+
+Optional event chunk: validated level, logical time and UTF-8 message. Does not change measurement counts. Invalid records do not write bytes.
+
 ## ps_run_append_snapshot
 
 Schreibt einen optionalen versionierten Szenenblock mit zugehörigen Werten, ohne den Messpunktzähler zu verändern. Kanalzahl und Szene müssen zum Lauf passen.
@@ -111,6 +121,16 @@ ps_result ps_run_snapshot_next(ps_run_reader *reader, ps_snapshot *snapshot);
 ```
 
 Use a separate reader to stream snapshots. Measurement rows are validated and counted while scanning; PS_EOF/PS_RECOVERED have the same meanings as above. Legacy runs contain no snapshots. Failed reads leave snapshot unchanged.
+
+## ps_run_event_next
+
+Liest Ereignisse mit eigenem Cursor und bewahrt die Ausgabe bei Fehlern; übersprungene Messzeilen zählen für den Abschluss.
+
+```c
+ps_result ps_run_event_next(ps_run_reader *reader, ps_log_record *event);
+```
+
+Use a separate reader for events. Validates/counts skipped samples; failure preserves the event output.
 
 ## ps_run_reader_close
 

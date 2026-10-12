@@ -231,6 +231,17 @@ ps_result ps_run_append(ps_run_writer *w, double t, const double *v) {
         return PS_IO;
     return w->samples % 100 == 0 ? flush_file(w->file) : PS_OK;
 }
+ps_result ps_run_append_event(ps_run_writer *w,const ps_log_record *event) {
+    if(!w || !w->file || !ps_log_record_valid(event))return PS_INVALID;
+    unsigned char payload[16+PS_LOG_MESSAGE_MAX];
+    ps_put_u32(payload,1);ps_put_u32(payload+4,(uint32_t)event->level);
+    ps_put_f64(payload+8,event->time_s);
+    size_t length=strlen(event->message);
+    memcpy(payload+16,event->message,length);
+    ps_result result=chunk(w->file,8,payload,(uint32_t)(16+length));
+    if(result==PS_OK && fflush(w->file))result=PS_IO;
+    return result;
+}
 ps_result ps_run_close(ps_run_writer *w) {
     if (!w || !w->file)
         return PS_INVALID;
@@ -313,8 +324,8 @@ fail:
     r->file = NULL;
     return error;
 }
-static ps_result next_record(ps_run_reader *r, double *t, double *v, ps_snapshot *snapshot) {
-    if (!r || !r->file || (!snapshot && (!t || !v)))
+static ps_result next_record(ps_run_reader *r, double *t, double *v, ps_snapshot *snapshot,ps_log_record *event) {
+    if (!r || !r->file || (!snapshot && !event && (!t || !v)))
         return PS_INVALID;
     if (r->complete)
         return PS_EOF;
@@ -336,7 +347,7 @@ static ps_result next_record(ps_run_reader *r, double *t, double *v, ps_snapshot
                     return PS_CORRUPT;
             }
             r->samples++;
-            if (!snapshot) {
+            if (!snapshot && !event) {
                 *t = time;
                 memcpy(v, values, r->channels * sizeof *v);
                 return PS_OK;
@@ -353,6 +364,14 @@ static ps_result next_record(ps_run_reader *r, double *t, double *v, ps_snapshot
             *snapshot = decoded;
             return PS_OK;
         }
+        if(type==8) {
+            if(n<=16 || n>16+PS_LOG_MESSAGE_MAX || memchr(p+16,0,n-16))return PS_CORRUPT;
+            if(ps_get_u32(p)!=1)return PS_VERSION;
+            ps_log_record decoded={.level=(ps_log_level)ps_get_u32(p+4),.time_s=ps_get_f64(p+8)};
+            memcpy(decoded.message,p+16,n-16);
+            if(!ps_log_record_valid(&decoded))return PS_CORRUPT;
+            if(event){*event=decoded;return PS_OK;}
+        }
         if (type == 4) {
             if (n != 8 ||
                 ((uint64_t)ps_get_u32(p) | ((uint64_t)ps_get_u32(p + 4) << 32)) != r->samples)
@@ -365,11 +384,15 @@ static ps_result next_record(ps_run_reader *r, double *t, double *v, ps_snapshot
     }
 }
 ps_result ps_run_next(ps_run_reader *r, double *t, double *v) {
-    return next_record(r, t, v, NULL);
+    return next_record(r, t, v, NULL, NULL);
 }
 ps_result ps_run_snapshot_next(ps_run_reader *r, ps_snapshot *snapshot) {
     if (!snapshot) return PS_INVALID;
-    return next_record(r, NULL, NULL, snapshot);
+    return next_record(r, NULL, NULL, snapshot, NULL);
+}
+ps_result ps_run_event_next(ps_run_reader *r,ps_log_record *event) {
+    if(!event)return PS_INVALID;
+    return next_record(r,NULL,NULL,NULL,event);
 }
 void ps_run_reader_close(ps_run_reader *r) {
     if (r && r->file) {

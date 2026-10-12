@@ -1073,3 +1073,17 @@ Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **102 implemented**, **13 incomplete**, **416 unverified**;
 `completion_proven` bleibt `false`. Die gesamte Projekt- und Plattformabnahme
 bleibt offen.
+
+
+## Ereignisse und Warnungen im Laufarchiv (PP-0452)
+
+Die zuvor separate Logging-Aufzeichnung ist als CRC-geschützter Ereignisblock
+im Laufarchiv ergänzt. C und Physim können Ereignisse schreiben und streamen.
+Initialisierung, Abschluss und Budgetwarnungen sowie gültige Fehler-/Abbruch-
+präfixe sind mit tatsächlichen Runnern geprüft. Ein Reader vom früheren
+Quellstand überspringt die neuen Blöcke und liest Messwerte/Footer unverändert.
+[Nachweise und Grenzen](platform-validation.md#ereignisse-und-warnungen-in-psrun-pp-0452).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**103 implemented**, **13 incomplete**, **415 unverified**;
+`completion_proven` bleibt `false`. Die gesamte Projekt- und Plattformabnahme
+bleibt offen.

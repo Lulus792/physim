@@ -44,6 +44,8 @@ ps_result ps_run_reader_next(ps_run_store *store, ps_run_read_handle handle, dou
                              double *values, size_t capacity, size_t *count);
 ps_result ps_run_reader_snapshot_next(ps_run_store *store, ps_run_read_handle handle,
                                       ps_snapshot *out);
+ps_result ps_run_reader_event_next(ps_run_store *store, ps_run_read_handle handle,
+                                   ps_log_record *out);
 ps_result ps_run_reader_release(ps_run_store *store, ps_run_read_handle handle);
 ps_result ps_run_writer_create(ps_run_store *store, const char *path, const ps_context *context,
                                const char *name, ps_run_write_handle *out);
@@ -55,6 +57,8 @@ ps_result ps_run_writer_append(ps_run_store *store, ps_run_write_handle handle, 
                                const double *values, size_t count);
 ps_result ps_run_writer_snapshot(ps_run_store *store, ps_run_write_handle handle,
                                  const ps_context *context, const ps_scene *scene, bool paused);
+ps_result ps_run_writer_event(ps_run_store *store, ps_run_write_handle handle,
+                               const ps_log_record *event);
 /* Closes without a footer, preserving an incomplete recoverable prefix.
  * Invalidates the handle even on fclose failure. */
 ps_result ps_run_writer_abort(ps_run_store *store, ps_run_write_handle handle);

@@ -129,6 +129,17 @@ ps_result ps_run_reader_snapshot_next(
     ps_snapshot *out);
 ```
 
+## ps_run_reader_event_next
+
+Liest das nächste Ereignis über ein versioniertes Handle; EOF/Recovery bleiben terminal und Fehler bewahren die Ausgabe.
+
+```c
+ps_result ps_run_reader_event_next(
+    ps_run_store *store,
+    ps_run_read_handle handle,
+    ps_log_record *out);
+```
+
 ## ps_run_reader_release
 
 Schließt den Reader und invalidiert sämtliche Kopien seiner Kennung.
@@ -187,6 +198,17 @@ ps_result ps_run_writer_snapshot(
     const ps_context *context,
     const ps_scene *scene,
     bool paused);
+```
+
+## ps_run_writer_event
+
+Schreibt ein validiertes Ereignis über ein versioniertes Schreibhandle, ohne Messzähler oder Szene zu verändern.
+
+```c
+ps_result ps_run_writer_event(
+    ps_run_store *store,
+    ps_run_write_handle handle,
+    const ps_log_record *event);
 ```
 
 ## ps_run_writer_abort

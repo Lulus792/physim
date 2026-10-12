@@ -21,6 +21,7 @@ CRC32: reflektiertes Polynom `0xEDB88320`, Initialwert und abschließendes XOR
 | 5 | optionale Szene: Snapshotversion u32 = 1, 2 oder 3, danach Snapshotkopf, Werte, Objekte und Punkte |
 | 6 | optionale Abschlussindexseite: Version, Messstride, Eintragszahl, Checkpoints |
 | 7 | optionaler Abschlussindexkopf: Indexbeginn, Seitenzahl, Mess-/Szenenzahl |
+| 8 | optionales Ereignis: Version u32=1, Level u32=1–4, logische Zeit f64, UTF-8-Nachricht |
 
 Metadaten und Schema stehen unmittelbar nach dem Header. Strings im Schema sind
 NUL-terminiert und auf ihre Feldbreite begrenzt. Die Payloadobergrenze ist 8192 Bytes.
@@ -71,6 +72,25 @@ Blocks; stattdessen wird ein unvollständiger/CRC-fehlerhafter Endblock erkannt.
 Neue Writer ergänzen vor dem Abschlusszähler einen Zufallszugriffsindex.
 Dateien ohne Index bleiben gültig. Recovery arbeitet sequentiell bis zum letzten
 gültigen Block; die Index-API rekonstruiert die Checkpoints ohne Dateiveränderung.
+
+### Ereignisversion 1
+
+Typ 8 trägt einen 16-Byte-Kopf und 1 bis 1024 Nachrichtenbytes ohne NUL.
+Level 1–4 bedeutet Debug, Info, Warning, Error; Zeit ist endlich und in Sekunden.
+Nachrichten erlauben LF, CR und Tab, keine anderen Steuerzeichen; ungültiges UTF-8
+wird abgewiesen. CRC schützt Kopf und Nachricht gemeinsam. Ereignisse ändern
+weder Mess- noch Szenenzähler und besitzen keinen eigenen Zufallszugriffsindex.
+Alte Reader überspringen Typ 8 als unbekannten Chunk; Format 1 und Footer bleiben
+unverändert. Neue sequentielle Reader validieren bekannte Ereignisse auch beim
+Überspringen. Eine unbekannte Ereignisversion liefert `PS_VERSION`; fehlerhafte
+Felder liefern `PS_CORRUPT`, CRC-/Tailfehler `PS_RECOVERED`.
+
+`ps_run_append_event` schreibt und flusht einen validierten Record; ungültige
+Eingaben verändern die Datei nicht. `ps_run_event_next` verwendet einen separaten
+Reader für Ereignisse; übersprungene Messzeilen werden weiterhin validiert und
+für den Footer gezählt. Fehler bewahren die Ausgabe. Versionierte Handles und
+Physim-Zugriff stehen in [Run-Streams](run-streams.md); automatische Runner-
+Aufzeichnung und Budgets in [Logging](logging.md).
 
 ### Abschlussindexversion 1
 

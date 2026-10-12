@@ -61,119 +61,7 @@ Der vollständige Nachweis bleibt im [Plattformarchiv](platform-validation-histo
 
 ## Lineare konvexe CCD am 8. Oktober 2026
 
-`ps_sweep_convexes` schneidet Eintritts-/Austrittsintervalle sämtlicher
-Flächen-/Kantenkreuzproduktachsen bei fester Orientierung. Der Ebenensweep
-verwendet den ersten Vertexkontakt. Der Kugel–Netz-Sweep prüft Flächen,
-Kantenzylinder und Vertexkugeln. Eine Bewegungshülle vereinigt gepufferte
-Anfangs-/Endgrenzen für den gesamten linearen Weg. Displacements bleiben
-explizit und unabhängig von gespeicherten Geschwindigkeiten; Fehler erhalten
-Körper, Netze, Trefferwert und Flag. Neue Treffer haben Eindringtiefe null,
-Anfangsüberlappungen behalten den diskreten Kontakt bei Anteil null.
-[Verträge und vollständige Ereignisbeispiele](mechanics.md).
-
-Die C-/Physim-Tetraederbeispiele führen ein kraftfreies elastisches Ereignis
-gegen einen statischen Vertex tatsächlich aus: Kugel von `(10,1,1)` mit
-`vx=-20` m/s, Kontakt bei Anteil `0.425`, Impulsantwort und anschließende Restzeit
-bis `x=13` m mit 200 J kinetischer Energie. Der zentrale Impuls induziert hier
-keine Rotation. Das ist ein isoliertes Ereignis, keine Mehrkörpersteuerung.
-
-Die neue unabhängige Gegenprobe enthält 705 Fälle: 500 gedrehte
-Box-/Tetraeder-/Oktaeder-Sweeps mit separaten Welt-Vertex-Zeitintervallen,
-180 Kugelpfade mit unabhängiger Distanzminimierung und Eintrittsnullstelle
-sowie 25 exakt rationale achsenparallele Zeitreferenzen. Darunter liegen
-72 Polyeder- und 20 Kugeltreffer. Neue Kontaktpunkte werden auf ursprünglichen
-Netzoberflächen zum Ereigniszeitpunkt geprüft, Kugelkontakte zusätzlich auf
-der Kugeloberfläche. Anteilvergleich verwendet `2e-9` absolute/relative Toleranz,
-Oberflächenzeugen `2e-8` absolute Toleranz in diesen Referenzfällen.
-
-Separate analytische C-/Physim-Fälle prüfen Durchtunneln, beide bewegten Partner,
-Streifkontakte, genau einen gemeinsamen Zeitanteil zweier Achsenintervalle,
-Intervallende, Anfangsüberlappung auch bei Trennung, lange Wege `1e12` m,
-Kugelkontakt an Flächen/Kanten/Vertices, Ebenen, Bewegungshüllen und atomare
-Invalid-/Numeric-Fehler. Acht strukturierte Runtime-Traps erhalten die
-Invalid-/Limit-/Numeric-Codes, Quellpositionen und vollständig abgewickelte
-Cleanup-Zustände. Die erste Orakelversion prüfte auch bei Anfangsüberlappung
-fälschlich einen nulltiefen Oberflächenkontakt und wurde unter `run-r09b_1an`
-abgewiesen; sie folgt jetzt dem dokumentierten diskreten Überlappungsvertrag.
-
-Intel macOS 14.6.1/Apple Clang 16 besteht 22/22 unter
-`build/contact-world-language-release-mac/test-results/run-zfyxprb1`.
-Debian 12/GCC 12.2 besteht 22/22 unter
-`build/contact-world-language-release-linux/test-results/run-i29eq4e7`.
-Clang 14/ASan/UBSan besteht 22/22 unter
-`build/atspi-asan-linux/test-results/run-bpqptbnl`.
-Die Auswahl enthält neue Sweeps, beide Ereignisbeispiele, Diagnosecodes,
-bestehende Mechanik-/Box-/Paar-/Broad-Phase-/Kugel-Sweep-Prüfungen,
-C-/Physim-Stoßparität, echte Stoßläufe, 1014 diskrete Geometriefälle,
-Dokumentation und Prüfkiterstellung.
-
-Die abschließend verstärkte Kugel-Netz-Zeugenprüfung besteht separat auf
-macOS mit 1/1 (`run-z4o3irvx`), Linux/Release mit 1/1 (`run-5xowqt3r`) und
-Linux/ASan/UBSan mit 1/1 (`run-un6j2n1m`) in den jeweiligen Testverzeichnissen.
-Implementierung und andere Testeingaben blieben seit der Auswahl unverändert.
-`ASAN_OPTIONS=detect_leaks=0` lässt Address-/UB-Prüfungen aktiv. macOS-Sanitizer
-bleiben wegen fehlendem `ld64.lld` ungeprüft. Alle 31 Referenzdokumente sind geprüft;
-das unabhängige Prüfkit enthält jetzt 127 genau manifestierte Eingaben.
-
-PP-0387 ist konkret unvollständig: Allgemeine rotierende und beschleunigte
-Bahnen sowie Mehrkörper-Ereignissteuerung fehlen. Lineare CCD mit festen
-Orientierungen ersetzt diese Anforderungen nicht. Keine allgemeine CCD-,
-Windows-/Apple-Silicon- oder gesamte Produktabnahme wird daraus abgeleitet.
-
-Stoß-Workflow und Handbuch-Tastaturführung bestehen auf macOS mit 2/2 unter
-`run-imop6leh` und Linux/X11 mit 2/2 unter `run-4e5sxkkx` in den jeweiligen
-Release-Testverzeichnissen. Die Prüfkiterstellung besteht mit 127 Eingaben,
-Paketgrenzen, SHA-256, fehlenden/dynamischen Pfaden und exklusiver Erstellung.
-
-Die abschließende Dokumentationsprüfung erkannte einen vorhandenen
-Paketgrenzfehler: Durch die fortgeschriebenen Nachweise war diese Seite auf
-266081 Bytes gewachsen und überschritt `PS_DOC_MAX_BYTES=256*1024`.
-`generate-reference.py --check` wies sie deshalb zurück. Die ersten SDK-
-Installationen unter `build/convex-sweep-sdk-{mac,linux}` waren zu diesem
-Zeitpunkt gebaut, wurden aber nicht als bestandene Abnahmen ausgegeben.
-Die neue SDK-Markdown-Größenprüfung weist das erste Mac-Paket zurück
-(`build/convex-sweep-sdk-document-rejection.txt`).
-
-207181 historische Bytes mit SHA-256
-`331f4bbddba84bb535ce873161f77cc9720895c8c6dabc12d2e755cf6fe6dcb9`
-sind unverändert in [Historische Plattformnachweise](platform-validation-history.md)
-übernommen. Die neue Seite besitzt 207237 Bytes einschließlich Rücklink;
-die aktuelle Seite liegt wieder deutlich unter der Grenze. Beide sind im
-Offline-Handbuch registriert. Verweise aus README, SDK-README und Status
-führen zur erhaltenen Historie. Der Abgleich liegt unter
-`build/convex-sweep-document-split.json`.
-
-Die Dokumentationsauswahl besteht nach der Aufteilung auf macOS mit 3/3
-(`run-dsedhz69`) und Linux mit 3/3 (`run-hfyar3ak`). Die GUI-Nachprüfung nach
-der zusätzlichen Offline-Seite besteht auf macOS mit 2/2 (`run-jp4qa776`)
-und Linux mit 2/2 (`run-52x7vby5`). Der echte Markdown-Parser prüft inzwischen
-zusätzlich beide ausgelieferten Plattformseiten samt Byte-/Blockgrenzen;
-diese verstärkte macOS-Auswahl besteht mit 3/3 (`run-aohfjxdw`).
-
-Die verstärkte Parserauswahl besteht auf Linux/Release mit 3/3
-(`run-28476klb`) und auf Linux/ASan/UBSan mit 1/1 (`run-36ig_aus`).
-Der historische Bericht lädt als 558 echte Markdownblöcke; die aktuelle Seite
-besitzt deutlich weniger Blöcke. Beide liegen unter den tatsächlichen
-Byte-/Blockgrenzen des ausgelieferten Parsers. Der Textnachtrag dieser Belege
-ändert weder Parser noch historische Bytes.
-
-Die korrigierten SDKs `build/convex-sweep-final-sdk-{mac,linux}` besitzen
-jeweils 464 manifestierte Dateien. `--convex-only` besteht auf macOS unter
-`build/convex-sweep-sdk-checks/Native SDK ä 0sc9q9f9` und Linux unter
-`build/convex-sweep-sdk-checks/Native SDK ä rqagd4sc`. Installierter und nur
-aus SDK-Quellen neu gebauter Core bestehen beide Geometrieorakel, lineare
-Sweeps, Diagnosecodes und die tatsächlichen C-/Physim-Ereignisbeispiele.
-Der Paketcompiler übersetzt die Sprachquellen selbst; das installierte
-Sprachbeispiel läuft zusätzlich direkt. Unter Linux stammt der Prüfer nur aus
-`build/convex-sweep-independent-kit`, ohne Implementierung oder Entwicklerheader
-im Prüfkit. Der neue Größencheck prüft die manifestierten Markdownseiten in
-allen fokussierten und vollständigen SDK-Modi.
-
-Die 29 geänderten Dateien stimmen zwischen macOS und Linux per SHA-256 überein
-(`build/convex-sweep-source-freeze.json`). SDK-Belege liegen unter
-`build/convex-sweep-sdk-{mac,linux}-PASSED.json`. Der letzte Dokumentationsnachtrag
-erfolgte nach Paketierung; Programmcode, öffentliche Header und Testeingaben
-blieben unverändert. Die historischen 207181 Bytes bleiben bytegleich erhalten.
+Der vollständige Nachweis bleibt im [Plattformarchiv](platform-validation-history.md#lineare-konvexe-ccd-am-8-oktober-2026) erhalten.
 
 ## Konservative rotierende und quadratische CCD am 8. Oktober 2026
 
@@ -4125,3 +4013,83 @@ mit dem echten Offline-Parser unterhalb 256 KiB eingelesen. Referenz und
 Completion bestehen zusätzlich **2/2** (`run-434xwlk8`). Historische Abschnitts-
 überschriften bleiben als Weiterverweise erhalten, verschobene Belegtexte
 sind unverändert.
+
+
+## Vollständiger nativer Lauf und Linux-GUI am Stand 03ca6a2
+
+Der eingefrorene Quellstand `03ca6a252bd0816b5a91ae25f5732bf9f3eb7dfc`
+besteht auf Intel macOS **708/708** native Release-Tests. Alle 708 JSON-
+Einzelergebnisse haben Status `passed`; Log und Bericht liegen unter
+`build/current-full-build-03ca6a2-mac.log` und
+`build/current-full-build-03ca6a2-mac/test-results/run-gm64me3l/results.json`.
+Die 1366 Quelldateien des eingefrorenen Eingangs bleiben getrennt von späteren
+Änderungen; seine vollständige verschobene SDK-/GUI-Prüfung läuft noch.
+
+[Linux-UI-Sanitizer-CI](https://github.com/PhysicSimulator/physim/actions/runs/38184378499)
+führt auf genau demselben Commit tatsächlich aus:
+
+- GCC, Job 114603469259: native **3/3** `run-x1mchnl2`, GUI **7/7** `run-9848kjoc`.
+- Clang, Job 114603469387: native **3/3** `run-h_xytns4`, GUI **7/7** `run-qhak6xsv`.
+
+Die sieben GUI-Fälle enthalten Projektbaum, Completion, API-Referenz, beide
+Physim-Auswertungsabläufe sowie Feder und Auftrieb. Die vollständigen Joblogs
+sind gelesen; keine Sanitizerdiagnose belegt einen Fehler. Dies bestätigt die
+konkreten Abläufe auf Ubuntu 24.04 mit beiden Compilern. Exponential-/Lognormal-
+verteilungen und die spätere Ereignisaufzeichnung gehören nicht zu diesem
+Stand. Die ganze neue Plattform-/Paketabnahme bleibt offen.
+
+
+## Ereignisse und Warnungen in psrun (PP-0452)
+
+Optionaler Chunk 8 enthält Version 1, Level 1–4, endliche logische Sekundenzeit
+und begrenzten UTF-8-Text, mit CRC über den vollständigen Payload. C-Low-Level-
+und versionierte Handle-APIs sowie Physim-Writer/Reader verwenden denselben
+Core. Ungültige Records schreiben keine Bytes; Lesefehler bewahren die Ausgabe.
+Mess- und Szenenzähler bleiben getrennt. Alte Format-1-Reader überspringen den
+neuen optionalen Typ; Datei-/API-/ABI-/IPC-Versionen bleiben erhalten.
+
+Der Runner archiviert auch Meldungen vor der Schemakonfiguration über eine
+begrenzte temporäre Aufzeichnung sowie Abschluss-/Budgetwarnungen vor dem Footer.
+Ein vorhandener fremder Sidecar wird nicht überschrieben und unterdrückt die
+Laufarchiv-Aufzeichnung nicht. Nach einem abrupten Prozessabbruch gibt es keinen
+Abschluss; vollständige CRC-Blöcke bleiben als recoverbarer Präfix lesbar.
+
+Tatsächlich ausgeführte Intel-macOS-Nachweise:
+
+- **5/5** neue/bestehende native Gruppen, `run-8pfwye_p`,
+  `build/current-run-events-confirmed-mac.log`: Ereignisse, beide tatsächlichen
+  C-/Physim-Logger, Handle-Vertrag und Run-Index. Der unabhängige Decoder prüft
+  bytegleiche C-/Physim-Dateien einschließlich Header, Metadaten, Schema,
+  Ereignissen, Index und Footer. CRC, Länge, UTF-8, Level, NaN-Zeit, NUL,
+  unbekannte Ereignisversion, unbekannter Chunk und fehlender Footer sind
+  konkrete Gegenfälle. Tatsächliche kontrollierte Fehler und `abort` bewahren
+  die geschriebenen Ereignisse mit `PS_RECOVERED`; über 5000 Logaufrufe werden
+  begrenzt und mit einer archivierten Warning zusammengefasst.
+- Bestehende Sprach-Store-/Reader-/Writer-Besitz- und Runnerdiagnosen: **2/2**,
+  `run-01_vos7d`, `build/current-run-events-owner-diagnostics-mac.log`.
+- Direkter AppleClang-ASan/UBSan-Lauf von Ereignis-Writer/Reader/Store besteht
+  unter `build/current-run-events-asan.log`; LeakSanitizer ist lokal deaktiviert.
+- Ein tatsächlich gegen den unveränderten früheren Core `03ca6a2` gelinkter
+  Reader liest die neue Datei mit einer Messzeile und gültigem Footer:
+  `build/current-run-events-legacy-mac.log`. Der eingefrorene Eingang bleibt
+  unverändert; das Probeprogramm ist als Quelle versioniert.
+- App-Build, Offline-Parser, Referenz, Completion, Core-Katalog und unabhängiges
+  Verification Kit bestehen **5/5**, `run-cf75_6ea`,
+  `build/current-run-events-final-sdk-install-mac.log`. Das Kit prüft dort
+  179 exakte Eingänge; die ergänzte Legacy-Probe erhält eine eigene Nachprüfung.
+- Die abschließende Ereignisgruppe einschließlich Legacy-API-Probe besteht
+  **1/1**, `run-lhq88pod`, `build/current-run-events-final-native-mac.log`.
+- Nach Ergänzung aller Probequellen bestehen Dokumentation/Katalog/Kit/Completion
+  **5/5**, `run-hhu506d7`, `build/current-run-events-final-docs-mac.log`.
+  Das unabhängige Kit prüft jetzt **180** exakte Eingänge.
+- Das verschobene SDK und separat neu gebauter Core bestehen abschließend
+  **16/16** Verbraucherbefehle einschließlich Legacy-API-Lesern, echten
+  C-/Physim-Runnern und Fehlerpräfixen:
+  `build/current-run-events-final-sdk-verify-mac.log`, Verbraucher
+  `build/current-run-events-final-sdk-consumer-mac/Native SDK ä usuq0564`.
+
+Dies belegt den konkreten Laufdateiblock auf Intel macOS, keine vollständige
+aktuelle Plattform-/Produktabnahme. Vor erfolgreicher Laufdateierstellung gibt
+es nur die Begleitdatei. Ein Stromausfall kann Daten seit dem letzten OS-Sync
+verlieren. Ereignisse besitzen einen sequentiellen Cursor; ihre Anzeige beim
+Offline-Import und ein eigener Ereignisindex sind daraus nicht abgeleitet.
