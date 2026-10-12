@@ -98,68 +98,8 @@ Der vollständige historische Nachweis bleibt im
 
 ## Produktiver Szenenpfad und optionale OpenGL-Serverzeit
 
-Der Renderer veröffentlicht die letzte erfolgreiche Vorbereitung, Tessellierung
-und Submission samt Vertices, übertragenen Geometriebytes und drei dynamischen
-CPU-Pufferkapazitäten. Fehler invalidieren die Statistik; fehlgeschlagene Getter
-ändern keine Ausgabe. Alpha-/Indexkapazitäten werden getrennt erfasst, damit
-teilweise erfolgreiche Reservevergrößerungen nicht unterschlagen werden.
-Der normale Appbetrieb erstellt keine Timerqueries oder wartet auf sie.
-
-`physim-scene-benchmark` verwendet vier feste Szenen: leer, 32 Kugeln,
-31 gemischt transparente Boxen unter einem rotierten/skalierten Frame und eine
-96-Punkte-Polyline mit Pfeil. Unabhängige Vertex-/Indexmengen müssen exakt passen.
-Bytegleiche Aufnahmen vor/nach jeder Reihe und unterschiedliche Bilder für alle
-vier Szenen prüfen die sichtbaren Ergebnisse. Der optionale GL_TIME_ELAPSED-
-Timer umschließt den Szenenaufruf und sammelt Ergebnisse separat, mit Frist und
-konservativer Überlaufprüfung. Nicht verfügbare/deaktivierte Zeitabfragen ergeben
-fehlende GPU-Zeiten; CPU-/Geometrie-/Bildprüfungen laufen weiter.
-[Vertrag](scene-rendering.md).
-
-Intel macOS 14.6.1/Apple Clang 16 besteht die vier Grafik-/UI-/Szenen-/ohne-GPU-
-Prüfungen 4/4 (`run-34589clt`); Debian 12/GCC 12.2 unter X11 dieselben 4/4
-(`run-c7sm5eib`). Linux/Clang 14 mit ASan/UBSan besteht diese vier Fälle 4/4
-(`run-t2bujbm7`). `detect_leaks=0` bleibt gesetzt; Address-/UB-Prüfungen bleiben
-aktiv. macOS-Sanitizer bleiben wegen fehlendem `ld64.lld` ungeprüft.
-Die Grafikprüfung bewahrt bestehende Tiefe-/Transparenz-/Picking-/Projektion-/
-Framebufferprüfungen; der UI-Fall prüft Konvertierung, Exporte und Größenwechsel.
-
-Die vollständigen Release-Referenzläufe bestehen auf beiden Systemen mit je
-60 Messbildern pro Fall, jeweils mit und ohne Timer. Alle vier Bildhashes bleiben
-zwischen beiden Modi je Plattform identisch. Die Zähler sind auf Intel/Iris-
-macOS 32 Bit und unter Mesa/llvmpipe 64 Bit breit. Die Linux-VM liefert
-Software-Serverzeiten, keine native GPU-Abnahme. Zeiten, Rohdaten und archivierte
-Fingerprintpfade stehen im [Szenenbericht](scene-rendering.md#lokale-referenz-8-oktober-2026).
-Die macOS-Aufnahmen wurden visuell als sichtbare Kugeln, transformierte Boxen
-und Polyline/Pfeil geprüft.
-
-Die ersten Referenzdaten überschritten die vorhandenen Limits von 32 Objekten
-und 96 Punkten; die Boxhierarchie verwendete außerdem Slotnummern statt
-Objekt-IDs. Die Fixtures sind korrigiert und Geometrievergleiche bleiben strikt.
-Ein späterer macOS-Lauf 3/4 (`run-2zi31922`) wies einen realen Messfehler nach:
-Die äußere CLOCK_MONOTONIC-Uhr war gröber als SDL_GetTicksNS, sodass Teilzeiten
-gelegentlich größer als die Gesamtzeit erschienen. Beide Wandzeitintervalle
-verwenden jetzt dieselbe SDL-Uhr; die Intervallprüfung bleibt unverändert.
-Die abschließenden 4/4-Prüfungen und vollständigen Referenzläufe bestehen.
-Quellbelege stehen in `build/scene-profiling-final-source-freeze.json`; dieser
-Dokumentationsnachtrag ändert die geprüfte Implementierung nicht.
-
-PP-0711 bleibt für vollständige App-/Runner-/Mehrworkerprofile, Startzeit,
-echte Interaktionslatenz und GPU-Auslastung unvollständig. Das gemessene
-Serverintervall einschließlich Stalls ersetzt diese Anforderungen nicht.
-Windows und Apple Silicon wurden hier nicht ausgeführt. Alle 531 Originaltexte
-bleiben erhalten: 34 implementierte, 8 unvollständige und 489 ungeprüfte Blöcke.
-Das gesamte Projektziel bleibt offen.
-
-Die Handbuch-/Referenz-/Prüfpaketfälle bestehen zusätzlich auf macOS 3/3
-(`run-aa1ap1qg`) und Linux 3/3 (`run-31d7l_2o`). Die neue Seite ist im Offline-
-Themenkatalog registriert und am Ende ergänzt, um vorhandene numerische Verweise
-zu erhalten. Die Fensterprüfung enthielt unabhängig davon einen veralteten
-Suchverweis auf die Mechanikreferenz; `ps_sweep_spheres` steht inzwischen in der
-Kollisionsreferenz. Sie sucht nun die beiden erwarteten Dokumentpfade und prüft
-weiterhin Treffer, Nichttreffer und Scrollnavigation. Fenster-/Tastaturprüfungen
-bestehen abschließend jeweils 2/2 (`run-cn45y4n7`, `run-jg6unw4x`), einschließlich
-des erfolgreichen Ladens sämtlicher registrierter Themen.
-
+Der vollständige historische Nachweis bleibt im
+[Plattformarchiv](platform-validation-history.md#produktiver-szenenpfad-und-optionale-opengl-serverzeit) erhalten.
 
 ## Opt-in-Aufzeichnung tatsächlicher App-Abläufe
 
@@ -4221,3 +4161,73 @@ Intel macOS/AppleClang Release:
 Diese Nachweise sind keine aktuelle ganze Plattform-/SDK-Abnahme. Spezielle
 zusätzliche Sprachbeispiele und äußere Batch-Verteilungen in den Laufdetails
 bleiben offen; PP-0482 bleibt unvollständig.
+
+
+## Abgeschlossene vollständige Intel-macOS-SDK-Prüfung für c497a26
+
+Der exakt eingefrorene Stand `c497a266987ff054f54f9f9aac0ad351365e73eb` besteht
+nach **716/716** nativen Release-Tests auch die vollständige verschobene SDK-/
+App-Prüfung: **653/653** Verbraucherbefehle mit Exit 0, `PASSED.txt` vorhanden.
+Log: `build/current-full-sdk-c497a26-mac.log`; Verbraucher
+`build/current-full-sdk-c497a26-consumer-mac/Native SDK ä q7n9a00u`. Die Pipeline
+bestätigt weiterhin alle **1.398** Quellhashes und die ursprüngliche Tar-Prüfsumme.
+
+Die Suite enthält installierte/neu gebaute Bibliotheken, C-/Physim-Domänen,
+Compiler-/Buildherkunft, Ereignisse, Identitäten, tatsächliche GUI-Projekte,
+Einstellungen, Typografie, native Accessibility, Haltepunkte und Isolation.
+Die vollständige Tastaturmatrix baut/zeichnet/analysiert alle **32** Template-/
+Sprachpaare sowie zwei unabhängige Analysen bei 16/22 px, einschließlich der
+Fehler- und Dateierhaltungsfälle. Die reparierten Herkunftsinitialisierungen,
+Handbuchquellen und inkrementellen Builds scheitern hier nicht mehr.
+
+**408** genaue Bildarchive mit **7.048.453.104** unkomprimierten Bytes bestehen
+gegen ihren Beleg alle Gzip-Dateihashes und alle rekonstruierten Bytezahlen/
+SHA-256-Werte: `build/current-full-sdk-c497a26-bitmap-integrity.log`.
+Dies ist der volle lokale Nachweis dieser Suite/dieses Stands. Spätere
+Laufdetails, Standardvorlagen-Deklarationen und Serienherkunft sind andere
+gezielt geprüfte Stände; ganze aktuelle Linux-/Windows-/Apple-Silicon- und
+Produktabnahme bleiben eigenständige offene Gates.
+
+## Archivierte äußere Serienherkunft
+
+Der Batchhost übergibt begrenzte Seed-/Index-/Anzahl- und SI-Studienangaben;
+der Runner prüft sie einschließlich Überlauf, effektivem Parameterwert und
+reserviertem Namensraum vor dem Writer. Alle neuen Runnerarchive deklarieren
+`single`, `seeded` oder `linear`. Die App zeigt diese äußere Serie getrennt
+vom Modell-RNG, ohne fremde Metadatenpfade zu öffnen. Bei Fortsetzung müssen
+vorhandene Serienangaben exakt passen; alte Dateien ohne Angaben bleiben
+lesbare Legacy-Eingänge und werden nicht verändert. Versionen bleiben gleich.
+
+Intel-macOS-Nachweise:
+
+- Vorhandene Batch-/Sprach-/Parallel-/Fortsetzungs-/Abbruchgruppen **13/13**,
+  `run-4e3sut9j`, `build/current-series-provenance-batches-mac.log`.
+- Serien-, Batch- und Sprachgruppen **14/14**, `run-xyhbaoww`,
+  `build/current-series-provenance-final-batches-mac.log`.
+- Parser, Laufdetails und echte Serienarchive **4/4**, `run-8tih9d5a`,
+  `build/current-series-provenance-archive-final-mac.log`: unabhängiger
+  Header-/CRC-Decoder prüft 14 C-/Physim-Einzel-/Seed-/Studienarchive sowie
+  doppelte/gefälschte/mismatched/überlaufende Anforderungen ohne Laufdatei.
+- SDK-Installation und abschließende Gruppen **5/5**, `run-_3oexbqb`,
+  `build/current-series-provenance-confirmed-sdk-install-mac.log`. Der
+  Fortsetzungstest verfälscht den Serienindex bei korrekt neu berechneter
+  Metadaten-CRC: Wiederverwendung wird als `PS_CORRUPT` abgewiesen.
+- Direkter AppleClang-ASan/UBSan-Parser besteht; LeakSanitizer deaktiviert.
+- Actual App-Laufdetails mit linearer äußerer Serie bei 16/22 px **2/2**,
+  `run-t437q3v5`, `build/current-series-provenance-app-mac.log`: Übersicht,
+  kompletter Rohtext, Scrollende, Kopie, Schreibschutz, Tastaturisolation,
+  Altlauf und unveränderte Quellen/Archive.
+- Ausschließlich aus dem unabhängigen **201**-Dateien-Kit besteht die
+  verschobene SDK-Gegenprobe **5/5** Befehle mit installierter/neu gebauter
+  Bibliothek: `build/current-series-provenance-sdk-verify-mac.log`; Verbraucher
+  `build/current-series-provenance-sdk-consumer-mac/Native SDK ä no6bjrl8`.
+  Ein zuerst fehlender Kit-Header wurde korrigiert: der private Parserheader
+  kommt ausschließlich aus dem SDK unter Test, nicht aus dem Prüfkit.
+
+Spezielle zusätzliche Sprachbeispiele bleiben ohne vollständige Modellschicht-
+Deklaration; die ganze aktuelle Plattformabnahme bleibt offen.
+
+
+Die abschließenden Parser-/Dokumentations-/Fortsetzungs-/Kit-/Archivgruppen
+bestehen **5/5**, `run-wsbs9pb3`, `build/current-series-provenance-final-docs-mac.log`.
+Alle 531 Originalblöcke und die ursprüngliche Planprüfsumme bleiben erhalten.

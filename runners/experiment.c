@@ -5,6 +5,7 @@
 #include "pacing.h"
 #include "step_breakpoints.h"
 #include "runner_output.h"
+#include "run_series.h"
 #include "text_validation.h"
 #include "physim/detail/run_identity.h"
 #include <errno.h>
@@ -70,7 +71,7 @@ static void breakpoint_log(const ps_context *context, uint64_t step) {
 int main(int argc, char **argv) {
     if (argc < 3) {
         fprintf(stderr, "Usage: physim-runner module output.psrun [--steps N | --interactive] "
-                        "[--dt seconds] [--seed N] [--project-id hex32] [--experiment-id hex32] [--param name=value]... "
+                        "[--dt seconds] [--seed N] [--project-id hex32] [--experiment-id hex32] [--param name=value]... [--series-info encoded-host-request] "
                         "[--break-at-steps N,N,... (interactive only)] [--speed 0|0.1..16 (interactive only)] [--log-events] [--diagnostics] (interactive only) [--record-scenes] "
                         "[--adaptive [--min-dt seconds] [--max-dt seconds]] "
                         "[--until seconds (offline; --steps is the step budget)] [--parent-watch (offline pipe)]\n"
@@ -81,6 +82,7 @@ int main(int argc, char **argv) {
     bool interactive = false, record_scenes = false, adaptive = false, step_bounds = false, log_events=false,diagnostics=false;
     const char *project_id=NULL,*experiment_id=NULL;
     uint64_t steps = 4000, seed = 42;
+    const char *series_option=NULL;ps_run_series series={0};
     double dt = 0.005, speed = 1, minimum_dt=1e-8, maximum_dt=.1, end_time=0;
     bool until_option=false, breakpoint_option=false;
     ps_step_breakpoints breakpoints = {0};
@@ -118,6 +120,7 @@ int main(int argc, char **argv) {
             if (breakpoint_option || !ps_step_breakpoints_parse(argv[i], &breakpoints)) return 2;
             breakpoint_option = true; continue;
         }
+        if(!strcmp(key,"--series-info")){if(series_option)return 2;series_option=argv[i];continue;}
         if (!strcmp(key, "--param")) {
             const char *equals = strchr(argv[i], '=');
             if (!equals || equals == argv[i] || equals - argv[i] >=
@@ -156,6 +159,7 @@ int main(int argc, char **argv) {
         if (errno || !end || end == argv[i] || *end || argv[i][0] == '-')
             return 2;
     }
+    if(series_option && (interactive || !ps_series_parse(series_option,seed,&series)))return 2;
     if (!isfinite(dt) || dt < DBL_MIN || dt > 1 || steps > UINT64_C(1000000000) ||
         (until_option && (interactive || !isfinite(end_time) || end_time<=0 || end_time>1e9)) ||
         (step_bounds && !adaptive) || (adaptive &&
@@ -255,6 +259,13 @@ int main(int argc, char **argv) {
             }
         fclose(binary);
     }
+    if(series.kind==2) {
+        bool matched=false;
+        for(uint32_t i=0;i<c.parameter_count;i++)if(!strcmp(c.parameters[i].name,series.parameter)) {
+            matched=c.parameters[i].value==ps_series_value(&series);break;
+        }
+        if(!matched){report(interactive,diagnostics,diagnostic_path,&c,PS_INVALID,"series","Series value does not match effective parameter");api->destroy(&c);runner_log_close(&logs,c.time_s);ps_module_close(module);return 5;}
+    }
     size_t used = strlen(c.model_metadata);
     if(adaptive || until_option) {
         int added=snprintf(c.model_metadata+used,sizeof c.model_metadata-used,
@@ -297,10 +308,10 @@ int main(int argc, char **argv) {
     {
         for(const char *line=c.model_metadata;*line;) {
             if(!strncmp(line,"project_id=",11) || !strncmp(line,"experiment_id=",14) ||
-               !strncmp(line,"module_compiler=",16) || !strncmp(line,"module_build=",13) ||
+               !strncmp(line,"series.",7) || !strncmp(line,"module_compiler=",16) || !strncmp(line,"module_build=",13) ||
                !strncmp(line,"runner_compiler=",16) || !strncmp(line,"runner_build=",13) ||
                !strncmp(line,"module_fnv1a64=",15)) {
-                report(interactive,diagnostics,diagnostic_path,&c,PS_INVALID,"metadata","Model metadata uses host-owned identity fields or build provenance");
+                report(interactive,diagnostics,diagnostic_path,&c,PS_INVALID,"metadata","Model metadata uses host-owned identity, build or series fields");
                 api->destroy(&c);runner_log_close(&logs,c.time_s);ps_module_close(module);return 5;
             }
             const char *end=line+strcspn(line,"\r\n");if(!*end)break;line=end+1;
@@ -313,6 +324,13 @@ int main(int argc, char **argv) {
         }
         used=strlen(c.model_metadata);
     }
+    char series_text[512];int series_length=ps_series_metadata(&series,series_text,sizeof series_text);
+    used=strlen(c.model_metadata);
+    int series_added=series_length<0?-1:snprintf(c.model_metadata+used,sizeof c.model_metadata-used,"\n%s",series_text);
+    if(series_added<0 || (size_t)series_added>=sizeof c.model_metadata-used) {
+        report(interactive,diagnostics,diagnostic_path,&c,PS_LIMIT,"series","Model metadata has no room for series provenance");api->destroy(&c);runner_log_close(&logs,c.time_s);ps_module_close(module);return 5;
+    }
+    used=strlen(c.model_metadata);
     const char *module_compiler="unavailable",*module_build="unavailable";
     if(api->capabilities&PS_EXPERIMENT_BUILD_INFO) {
         if(api->compiler)module_compiler=api->compiler;

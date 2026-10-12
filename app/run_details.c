@@ -29,7 +29,7 @@ ps_result ps_run_details_format(const char *metadata,size_t length,char *out,siz
     if(length)memcpy(source,metadata,length);source[length]=0;
     if(!ps_text_valid(source,sizeof source,true))return PS_CORRUPT;
     const char *keys[]={"geometry","laws","medium","losses","numerics","measurement","sampling"};
-    const char *labels[]={"Geometrie und Anfangszustand","Ideale physikalische Gesetze","Material und Medium","Verlust- und Störmodelle","Numerische Methode und Toleranzen","Messgerät und Unsicherheit","Verteilungen und Monte Carlo"};
+    const char *labels[]={"Geometrie und Anfangszustand","Ideale physikalische Gesetze","Material und Medium","Verlust- und Störmodelle","Numerische Methode und Toleranzen","Messgerät und Unsicherheit","Verteilungen und Monte Carlo im Modell"};
     if(!append(text,&used,"MODELLSCHICHTEN\nAngaben des Experimentmoduls; fehlende Angaben bedeuten nicht, dass eine Schicht inaktiv ist.\n\n"))return PS_LIMIT;
     for(unsigned i=0;i<7;i++) {
         char key[64];snprintf(key,sizeof key,"layer.%s",keys[i]);field f={0};
@@ -46,6 +46,23 @@ ps_result ps_run_details_format(const char *metadata,size_t length,char *out,siz
         }
         if(!append(text,&used,"%s\n%s%s%.*s\n\n",labels[i],state,detail_length?" · ":"",(int)detail_length,detail))return PS_LIMIT;
     }
+    if(!append(text,&used,"ÄUSSERE LAUFSERIE\n"))return PS_LIMIT;
+    const char *series_keys[]={"series.kind","series.index","series.count","series.base_seed","series.seed_policy","series.parameter","series.start","series.end","series.value"};
+    const char *series_titles[]={"Typ","Laufindex (ab 1)","Läufe insgesamt","Basis-Seed","Seed-Regel","Studienparameter","Startwert [SI]","Endwert [SI]","Wirksamer Studienwert [SI]"};
+    bool single_series=false,seeded_series=false;
+    for(unsigned i=0;i<sizeof series_keys/sizeof *series_keys;i++) {
+        field f={0};if(!find(source,series_keys[i],&f))return PS_CORRUPT;
+        if((single_series && i>0) || (seeded_series && i>=5))continue;
+        const char *value=f.value;size_t n=f.length;
+        if(i==0 && f.value) {
+            if(n==6 && !memcmp(value,"single",6)){single_series=true;value="Einzellauf";n=strlen(value);}
+            else if(n==6 && !memcmp(value,"seeded",6)){seeded_series=true;value="Seed-Serie (wechselnder Seed; keine äußere Parameterverteilung)";n=strlen(value);}
+            else if(n==6 && !memcmp(value,"linear",6)){value="Lineare Parameterstudie";n=strlen(value);}
+            else return PS_CORRUPT;
+        }
+        if(!append(text,&used,"%s: %.*s\n",series_titles[i],(int)(value?n:strlen("Nicht dokumentiert")),value?value:"Nicht dokumentiert"))return PS_LIMIT;
+    }
+    if(!append(text,&used,"\n"))return PS_LIMIT;
     const char *names[]={"model","excluded","experiment","dt_s","seed","step_mode","integrator","adaptive_integrator","rk45_absolute_tolerance","rk45_relative_tolerance","adaptive_absolute_tolerance","adaptive_relative_tolerance","start_unix_seconds","start_nanoseconds","core_compiler","core_build","module_compiler","module_build","runner_compiler","runner_build","project_id","experiment_id"};
     const char *titles[]={"Modell","Ausgeschlossene Effekte","Experiment","Startschritt [s]","Seed","Schrittmodus","Integrator","Adaptiver Integrator","RK45 absolute Toleranz","RK45 relative Toleranz","Adaptive absolute Toleranz","Adaptive relative Toleranz","Startzeit: Unixsekunden [UTC]","Startzeit: Nanosekundenanteil","Core-Compiler","Core-Build","Modul-Compiler","Modul-Build","Runner-Compiler","Runner-Build","Projekt-ID","Experiment-ID"};
     if(!append(text,&used,"MODELL, LAUF UND HERKUNFT\n"))return PS_LIMIT;

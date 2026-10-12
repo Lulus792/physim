@@ -159,3 +159,32 @@ Sampling-Angabe beschreibt den Modell-RNG; Einstellungen äußerer Batch-Ensembl
 werden dort ausdrücklich getrennt benannt. Spezielle zusätzliche Sprachbeispiele und die Zuordnung aktiver
 Batch-Verteilungen zur Laufdetails-Ansicht sind noch offen. Ältere Läufe
 ohne Deklarationen bleiben lesbar.
+
+
+## Herkunft äußerer Laufserien
+
+**Modell & Laufdetails → Übersicht** zeigt die äußere Laufserie getrennt von
+der Zufallsziehung im Modell. Neue Runnerarchive nennen einen **Einzellauf**,
+eine **Seed-Serie** oder eine **lineare Parameterstudie**. Eine Seed-Serie
+variiert den Seed; sie behauptet keine zusätzliche äußere Parameterverteilung.
+Eine Studie speichert den Parameter und seine Start-, End- und wirksamen Werte
+in SI. Einheiten und Deklarationsgrenzen bleiben in den normalen
+`parameter.*`-Metadaten enthalten. Index und Gesamtzahl sind einsbasiert.
+
+Der Batchhost übergibt dem Runner `--series-info` als einen begrenzten
+ASCII-Datensatz: `seeded,basisSeed,index,anzahl` oder
+`linear,basisSeed,index,anzahl,parameter,start,end`. Das ist ein Hostvertrag;
+gewöhnliche Läufe benötigen diese Option nicht. Doppelte Optionen, ungültige
+Namen/Zahlen, Seed-Überläufe, falsche Index-/Anzahlwerte und eine abweichende
+wirksame Parametereinstellung werden vor dem Writer abgewiesen. Interaktive
+Läufe verwenden keine äußere Batchanforderung. Modellmetadaten dürfen den
+reservierten `series.`-Namensraum nicht deklarieren.
+
+Die archivierten `series.kind`, `series.base_seed`, `series.index`,
+`series.count`, `series.seed_policy` und bei Studien `series.parameter`,
+`series.start`, `series.end`, `series.value` bleiben beim Import Bestandteil
+des Archivs. Die App öffnet dafür keine Datei über einen Metadatenpfad.
+Fortsetzung kopiert bestehende Archive unverändert; vorhandene Serienfelder
+müssen exakt zur wieder aufgenommenen Serie passen. Alte Archive ohne diese
+Felder bleiben zulässige Legacy-Eingänge und werden nicht nachträglich ergänzt.
+Die Dateiversion bleibt 1; fehlende Herkunft wird als nicht dokumentiert gezeigt.

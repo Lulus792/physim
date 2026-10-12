@@ -78,6 +78,16 @@ int main(int argc,char **argv) {
     memcpy(damaged,original,length);damaged[length-1]^=1;CHECK(replace_bytes(a,damaged,length));
     snprintf(dest,sizeof dest,"%s/corrupt-run",argv[5]);CHECK(ps_batch_resume_load(old,o.runner,dest,&loaded)==PS_OK);
     CHECK(ps_batch_run(&loaded,NULL,NULL,&fresh)==PS_CORRUPT);CHECK(replace_bytes(a,original,length));
+    /* CRC-correct foreign series metadata must not be silently reused. */
+    memcpy(damaged,original,length);uint32_t metadata_size=ps_get_u32(damaged+20);bool altered=false;
+    CHECK(metadata_size<length-28);
+    const char series_key[]="series.index=";
+    for(size_t at=28;at+sizeof series_key<28+metadata_size;at++)if(!memcmp(damaged+at,series_key,sizeof series_key-1)) {
+        damaged[at+sizeof series_key-1]='9';altered=true;break;
+    }
+    CHECK(altered);ps_put_u32(damaged+24,ps_crc32(damaged+28,metadata_size));CHECK(replace_bytes(a,damaged,length));
+    snprintf(dest,sizeof dest,"%s/wrong-series",argv[5]);CHECK(ps_batch_resume_load(old,o.runner,dest,&loaded)==PS_OK);
+    CHECK(ps_batch_run(&loaded,NULL,NULL,&fresh)==PS_CORRUPT);CHECK(replace_bytes(a,original,length));
     /* Parameter studies keep their SI sweep and fixed options across reuse. */
     ps_batch_options study=o;study.runs=5;study.sweep=true;strcpy(study.sweep_name,"rate");study.sweep_start=.5;study.sweep_end=2;
     snprintf(study.directory,sizeof study.directory,"%s/study",argv[5]);uint32_t stop_after=2;

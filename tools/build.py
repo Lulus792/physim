@@ -479,6 +479,7 @@ class Builder:
         shutil.copy2(ROOT / "src/report_mask.inc",staging / "src/report_mask.inc")
         shutil.copy2(ROOT / "src/text_validation.h", staging / "src/text_validation.h")
         shutil.copy2(ROOT / "src/number_parse.h", staging / "src/number_parse.h")
+        shutil.copy2(ROOT / "src/run_series.h", staging / "src/run_series.h")
         shutil.copy2(ROOT / "src/pchip.h", staging / "src/pchip.h")
         shutil.copy2(ROOT / "src/analysis_numeric.h", staging / "src/analysis_numeric.h")
         shutil.copy2(ROOT / "src/ode_numeric.h", staging / "src/ode_numeric.h")

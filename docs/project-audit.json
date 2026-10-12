@@ -4295,9 +4295,14 @@
         "tests/test_run_details.c",
         "tests/test_model_layers.py",
         "docs/runs.md",
-        "tests/test_template_layers.py"
+        "tests/test_template_layers.py",
+        "src/run_series.h",
+        "src/batch.c",
+        "runners/experiment.c",
+        "tests/test_series_provenance.py",
+        "tests/test_run_series.c"
       ],
-      "note": "Eine tatsächliche nur lesbare App-Laufdetailsansicht zeigt sieben explizite Modellschichten, Vereinfachungen, Parameter und Herkunft; fehlende alte Deklarationen bleiben ausdrücklich nicht dokumentiert. C-/Physim-Pendelmodelle deklarieren die tatsächlichen Dichte-/Drag-/Rauschzustände, mit getrennt benannten externen Ensembles. Parser-/Fehleratomizität, acht echte sprachgleiche Archive und App-Kopier-/Schreibschutz-/Tastatur-/Altlauf-/16/22-Pixel-Prüfungen bestehen lokal. Vollständige Deklarationen aller Vorlagen und aktive externe Batch-Verteilungen in der Ansicht sowie aktuelle Gesamtplattformabnahme sind noch offen. Alle acht Standardvorlagen der Projekterstellung besitzen nun sieben C-/Physim-Deklarationen; 30 vollständige Laufvarianten prüfen tatsächliche Zustände, exakte Mess-/Schema-Gleichheit zum eingefrorenen Vorgänger und sprachübergreifende Parität. Weitere spezielle Sprachbeispiele und äußere Batch-Verteilungen bleiben offen."
+      "note": "Eine tatsächliche nur lesbare App-Laufdetailsansicht zeigt sieben explizite Modellschichten, Vereinfachungen, Parameter und Herkunft; fehlende alte Deklarationen bleiben ausdrücklich nicht dokumentiert. C-/Physim-Pendelmodelle deklarieren die tatsächlichen Dichte-/Drag-/Rauschzustände, mit getrennt benannten externen Ensembles. Parser-/Fehleratomizität, acht echte sprachgleiche Archive und App-Kopier-/Schreibschutz-/Tastatur-/Altlauf-/16/22-Pixel-Prüfungen bestehen lokal. Vollständige Deklarationen aller Vorlagen und aktive externe Batch-Verteilungen in der Ansicht sowie aktuelle Gesamtplattformabnahme sind noch offen. Alle acht Standardvorlagen der Projekterstellung besitzen nun sieben C-/Physim-Deklarationen; 30 vollständige Laufvarianten prüfen tatsächliche Zustände, exakte Mess-/Schema-Gleichheit zum eingefrorenen Vorgänger und sprachübergreifende Parität. Weitere spezielle Sprachbeispiele und äußere Batch-Verteilungen bleiben offen. Die aktuelle App trennt nun tatsächliche äußere Seed-Serien/lineare Parameterstudien vom Modell-RNG. Runnerprüfungen sichern Index, Seed, SI-Werte und reservierte Hostfelder; CRC-korrekt falsche Herkunft verhindert Fortsetzung. 14 echte Archive, 16/22-Pixel-App, unabhängiges installiertes/neu gebautes SDK und Sanitizer bestehen auf Intel macOS. Spezielle weitere Sprachbeispiele und aktuelle gesamte Plattformabnahme halten den Block unvollständig."
     },
     {
       "id": "PP-0488",

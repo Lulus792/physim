@@ -17,9 +17,9 @@ static bool run_details_test_start(app *a,const char *root,const char *mode) {
             "layer.geometry=ideal|Point mass and rigid rod\nlayer.laws=active|Uniform gravity\n"
             "layer.medium=omitted|Vacuum\nlayer.losses=omitted|No drag\nlayer.numerics=active|RK4\n"
             "layer.measurement=ideal|Exact angle\nlayer.sampling=omitted|One deterministic run\n"
-            "parameter.mass=2\nparameter_unit.mass=kg\nfuture_key=DO_NOT_OPEN ; source.c\n");
+            "parameter.mass=2\nparameter_unit.mass=kg\nseries.kind=linear\nseries.index=2\nseries.count=3\nseries.base_seed=41\nseries.seed_policy=base+index-1\nseries.parameter=mass\nseries.start=1\nseries.end=3\nseries.value=2\nfuture_key=DO_NOT_OPEN ; source.c\n");
         if(!legacy) {
-            for(unsigned i=0;i<45;i++) {
+            for(unsigned i=0;i<35;i++) {
                 size_t used=strlen(c.model_metadata);
                 int n=snprintf(c.model_metadata+used,sizeof c.model_metadata-used,"extra.%02u=Archived annotation α\n",i);
                 if(n<0 || (size_t)n>=sizeof c.model_metadata-used)return false;
@@ -51,7 +51,7 @@ static void run_details_test_frame(app *a,int *stage,int *code,const char **capt
     case 0:if(!a->run_details_button.w)return;test_mouse(a,a->run_details_button,true);break;
     case 1:test_mouse(a,a->run_details_button,false);break;
     case 2:
-        ok=a->run_details_manager && strstr(a->run_details_overview,"Idealisiert · Point mass") && strstr(a->run_details_overview,"Nicht modelliert · Vacuum");
+        ok=a->run_details_manager && strstr(a->run_details_overview,"Idealisiert · Point mass") && strstr(a->run_details_overview,"Nicht modelliert · Vacuum") && strstr(a->run_details_overview,"Lineare Parameterstudie") && strstr(a->run_details_overview,"Wirksamer Studienwert [SI]: 2");
         join(path,sizeof path,run_details_test_root,"overview.txt");ok &= report_details_test_write(path,a->run_details_overview);
         *capture="run-details-overview.bmp";test_mouse(a,a->run_details_copy_bounds,true);break;
     case 3:test_mouse(a,a->run_details_copy_bounds,false);break;

@@ -2,6 +2,7 @@
 #include "platform.h"
 #include <float.h>
 #include "number_parse.h"
+#include "run_series.h"
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -323,6 +324,18 @@ static ps_result open_endpoint(batch_slot *slot, const ps_batch_options *o) {
     if (r != PS_OK)
         return r;
     slot->state = SLOT_READING;
+    unsigned series_fields=0;
+    for(const char *line=slot->reader.metadata;*line;) {
+        if(!strncmp(line,"series.",7))series_fields++;
+        const char *end=line+strcspn(line,"\r\n");line=*end?end+1:end;
+    }
+    if(series_fields) {
+        ps_run_series provenance={.kind=o->sweep?2u:1u,.index=slot->index+1,.count=o->runs,.base_seed=o->seed,.start=o->sweep_start,.end=o->sweep_end};
+        if(o->sweep)snprintf(provenance.parameter,sizeof provenance.parameter,"%s",o->sweep_name);
+        char expected[514];expected[0]='\n';
+        int n=ps_series_metadata(&provenance,expected+1,sizeof expected-1);
+        if(n<0 || series_fields!=(o->sweep?9u:5u) || !strstr(slot->reader.metadata,expected))return PS_CORRUPT;
+    }
     if(*o->resume_from) {
         char expected[128];uint64_t size,hash;
         if(!batch_fingerprint(o->module,&size,&hash))return PS_IO;
@@ -608,9 +621,13 @@ static ps_result run_pool(const ps_batch_options *o, const char *module, FILE *j
             snprintf(slot->path, sizeof slot->path, "%s/run-%04u.psrun", o->directory, next + 1);
             snprintf(seed, sizeof seed, "%llu", (unsigned long long)(o->seed + next));
             char parameters[PS_MAX_PARAMETERS][128];
-            const char *args[18 + 2 * PS_MAX_PARAMETERS] = {
+            char series[512];
+            if(o->sweep)snprintf(series,sizeof series,"linear,%llu,%u,%u,%s,%.17g,%.17g",(unsigned long long)o->seed,next+1,o->runs,o->sweep_name,o->sweep_start,o->sweep_end);
+            else snprintf(series,sizeof series,"seeded,%llu,%u,%u",(unsigned long long)o->seed,next+1,o->runs);
+            const char *args[20 + 2 * PS_MAX_PARAMETERS] = {
                 o->runner, module, slot->path, "--steps", steps, "--dt", dt, "--seed", seed,"--parent-watch"};
             size_t argument_count = 10;
+            args[argument_count++]="--series-info";args[argument_count++]=series;
             if(o->end_time>0) {args[argument_count++]="--until";args[argument_count++]=target;}
             if(o->adaptive) {
                 args[argument_count++]="--adaptive";

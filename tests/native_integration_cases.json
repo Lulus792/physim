@@ -2848,6 +2848,15 @@
     "template-layers-phys-buoyancy": {
       "source": "examples/language/buoyancy.phys",
       "mode": "--emit-experiment"
+    },
+    "series-collision": {
+      "sources": [
+        "tests/fixtures/series_collision.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
     }
   },
   "tests": [
@@ -11117,6 +11126,32 @@
             "{template-layers-phys-box_collision}",
             "{template-layers-c-buoyancy}",
             "{template-layers-phys-buoyancy}"
+          ],
+          "timeout": 180
+        }
+      ]
+    },
+    {
+      "name": "series_provenance",
+      "targets": [
+        "python",
+        "physim-runner",
+        "physim-batch",
+        "pendulum",
+        "physim-language-pendulum",
+        "series-collision"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_series_provenance.py",
+            "{physim-runner}",
+            "{physim-batch}",
+            "{pendulum}",
+            "{physim-language-pendulum}",
+            "{series-collision}",
+            "{work}/series"
           ],
           "timeout": 180
         }

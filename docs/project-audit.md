@@ -1214,3 +1214,19 @@ Paket neu gebaute Bibliotheken. [Nachweise](platform-validation.md#modellschicht
 PP-0482 bleibt wegen zusätzlicher spezieller Sprachbeispiele und aktiver
 äußerer Batch-Verteilungen unvollständig. Die Zählung bleibt **111 implemented**,
 **14 incomplete**, **406 unverified** bei allen 531 Originalblöcken.
+
+
+## Äußere Serienherkunft und vollständiger eingefrorener SDK-Lauf
+
+Batch-/Runnerarchive dokumentieren nun Einzellauf, Seed-Serie oder lineare
+SI-Parameterstudie. Die App trennt äußere Serien vom Modell-RNG; neue Herkunft
+wird vor dem Writer und bei Wiederverwendung geprüft. CRC-korrekt falsche
+Serienindizes dürfen nicht weiterverwendet werden. Die aktuellen Einzel-/App-/
+SDK-/Sanitizer-Nachweise stehen im [Plattformbericht](platform-validation.md#archivierte-äußere-serienherkunft).
+PP-0482 bleibt für spezielle weitere Sprachbeispiele und die Gesamtabnahme
+unvollständig. Die Zählung bleibt **111 implemented**, **14 incomplete**,
+**406 unverified**, mit 531 unveränderten Originalblöcken/Planprüfsumme.
+
+Der getrennte eingefrorene `c497a26`-Stand besteht **716/716** native Tests
+und **653/653** vollständige SDK-Befehle; alle 408 exakten Bitmaparchive sind
+geprüft. Diese Abnahme umfasst spätere Änderungen ausdrücklich nicht.

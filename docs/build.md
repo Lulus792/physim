@@ -159,8 +159,8 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-Der aktuelle Katalog enthält unter macOS **719** Tests ohne Fenster für
-`--test`, darunter **691** Prüfungen ohne SDL-Abhängigkeit mit `--no-app`. Die C-Prüfungen decken Mathematik, Numerik,
+Der aktuelle Katalog enthält unter macOS **721** Tests ohne Fenster für
+`--test`, darunter **693** Prüfungen ohne SDL-Abhängigkeit mit `--no-app`. Die C-Prüfungen decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
 Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.
