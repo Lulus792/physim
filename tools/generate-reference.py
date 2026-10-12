@@ -1188,7 +1188,7 @@ def main():
         page = ROOT / topic
         assert page.is_file(), f'Missing bundled page: {topic}'
         assert len(page.read_bytes()) <= 256 * 1024, f'Page exceeds viewer limit: {topic}'
-        if not topic.startswith('docs/') or not topic.endswith('.md'): continue
+        if not topic.endswith('.md') or not topic.startswith(('docs/', 'brains/')): continue
         body = page.read_text(encoding='utf-8')
         for link in re.findall(r'\]\(([^)]+)\)', body):
             if link.startswith(('https://', 'http://')): continue

@@ -135,6 +135,21 @@ static const documentation_topic documentation_topics[] = {
     {"3D-Szenenmessung", "docs/scene-rendering.md", false},
     {"App-Profilaufzeichnung", "docs/app-profiling.md", false},
     {"Historische Plattformnachweise: Band 2", "docs/platform-validation-history-2.md", false},
+    {"SecondBrain Anbindung", "docs/secondbrain.md", false},
+    {"Pflege des Physim Projektgedächtnisses", "brains/physim/AGENTS.md", false},
+    {"Physim Entscheidungen", "brains/physim/DECISIONS.md", false},
+    {"Physim Auftrag", "brains/physim/PROJECT.md", false},
+    {"Physim Offene Punkte", "brains/physim/QUESTIONS.md", false},
+    {"Physim Quellen", "brains/physim/SOURCES.md", false},
+    {"Physim Projektgedächtnis", "brains/physim/START.md", false},
+    {"Physim Stand", "brains/physim/STATE.md", false},
+    {"Physim Archiv", "brains/physim/archive/README.md", false},
+    {"Physim Eingang", "brains/physim/inbox/INBOX.md", false},
+    {"Physim Übergabe vom 12 Oktober 2026", "brains/physim/journal/2026-10-12.md", false},
+    {"Physim Dokumentation finden", "brains/physim/knowledge/dokumentation.md", false},
+    {"Physim Projektanweisungen", "AGENTS.md", true},
+    {"SecondBrain Metadaten", "brains/physim/brain.json", true},
+    {"Beispielquellen Katalog", "tests/tutorial_sources.json", true},
 };
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27

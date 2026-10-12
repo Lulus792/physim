@@ -20,6 +20,9 @@ Starten per Doppelklick erstellen lässt. Linux benötigt eine grafische
 Desktop-Sitzung. `--test` prüft den Build ohne Fenster; der anschließende
 Startbefehl öffnet die Oberfläche.
 
+**Projektwissen in SecondBrain:** [Anbindung und Öffnen](docs/secondbrain.md) ·
+[Einstieg ins Projektgedächtnis](brains/physim/START.md).
+
 **Neu hier?** Das [Handbuch mit Lernpfaden](docs/guide.md) erklärt Bedienung,
 Experimente, Auswertung und alle öffentlichen Funktionen. In der App öffnet **F1**
 dieselben Inhalte offline, mit themenübergreifender Suche und kopierbaren Beispielen.

@@ -4204,3 +4204,31 @@ Die Linux-Sanitizer-CI enthält jetzt beide zusätzlichen Sichtbarkeitsfälle;
 ihr Ergebnis für diese Änderung ist noch offen. Der eingefrorene vollständige
 c60cced-Lauf gehört zum vorherigen Stand und enthält diese Erweiterung nicht.
 Die gesamte Plattform- und Produktabnahme bleibt offen.
+
+## SecondBrain Projektgedächtnis und Quellen
+
+`brains/physim` verwendet das tatsächliche Schema 1/Vorlage 1 von SecondBrain
+mit elf Markdown-Notizen, kleinem JSON und relativem `project_root`. Die Originale
+bleiben in docs/examples; der Quellenindex verweist darauf. Ein lokal gebauter
+SecondBrain-C-Kern 0.9.74, Revision 70266ae85c62, erkennt Physim, erzeugt den
+Kontext und findet die Modulanforderungsnotiz, ohne Notizen umzuschreiben.
+`tools/check-secondbrain.py` prüft außerdem alle relativen Originalquellenlinks.
+
+Die vollständige Installation besteht **3/3** Dokumentations-/Referenz-/Kitfälle,
+`run-yzhoimn7`, `build/current-secondbrain-complete-install-mac.log`. Sie enthält
+auch die Brain-Dateien, Projektanweisungen und den Quellenkatalog. Die Kopie
+unter `build/SecondBrain complete SDK ü/Relocated SDK ä` besteht denselben
+CLI-/Linktest; alle **498** SDK-Dateien bleiben SHA-256-validiert.
+Die Markdownseiten und Metadaten sind auch in der Offline-Navigation registriert.
+Die graphische SecondBrain-Leseansicht wurde hierbei nicht erneut abgenommen.
+
+## Vollständiger nativer Intel-macOS-Lauf für c60cced
+
+Der eingefrorene Stand c60cced3888c3d305ff12b759407efb8dc77d753 besteht
+AppleClang Release **724/724**, `run-dx2sis73`,
+`build/current-full-build-c60cced-mac.log`. Alle Ergebnisstatus, **1417**
+Quellprüfsummen und die TAR-Prüfsumme sind unabhängig bestätigt.
+Die zugehörige vollständige verschobene SDK-/App-Prüfung läuft unter
+`build/current-full-sdk-c60cced-mac.log`; ihr Ergebnis bleibt offen.
+Spätere Sichtbarkeits- und Dokumentationserweiterungen gehören nicht zu diesem
+Stand. Der gesamte Projektplan bleibt offen.
