@@ -32,6 +32,7 @@ for name,module in [('C',c_module),('Physim',language_module)]:
 for seed in (42,43):
     path=work/('collision'+str(seed)+'.psrun')
     result=subprocess.run([runner,collision_module,str(path),'--steps','1','--seed',str(seed),'--project-id',project],capture_output=True,timeout=5)
-    assert result.returncode==5 and b'host-owned identity fields' in result.stderr and not path.exists()
+    assert result.returncode==5 and b'host-owned' in result.stderr and b'identity' in result.stderr and not path.exists()
+    assert not Path(str(path)+'.pslog').exists()
 
 print('Runner identities: exact C/Physim metadata, explicit legacy unavailability and invalid/duplicate options create no output')
