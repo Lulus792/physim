@@ -3856,9 +3856,20 @@
       "kind": "list",
       "scope": "planned",
       "text": "- API-, Compiler- und Build-Informationen.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/detail/build_origin.h",
+        "include/physim/experiment.h",
+        "include/physim/language_experiment.h",
+        "runners/experiment.c",
+        "src/data.c",
+        "examples/logging/main.c",
+        "tests/test_build_origin.py",
+        "tests/fixtures/build_origin_legacy.c",
+        "tests/fixtures/build_origin_invalid.c",
+        "docs/data-format.md"
+      ],
+      "note": "Archivierte API-Version, getrennte Core-/Runner-/Modul-Compilerkennungen, tatsächliche Compiler-Buildliterale und Modulhash sind implementiert. C-Templates und Physim-Module deklarieren Herkunft über eine ausdrücklich aktivierte optionale ABI-3-Erweiterung; alte adaptive APIs und längere fremde Tails bleiben lesbar. Tatsächliche C-/Physim-/Legacy-/Futuremodule, unveränderte Wiederholungsarchive, ungültige/gefälschte Herkunft und ASan/UBSan sind lokal geprüft. Buildtexte sind keine Laufstartzeit, Signatur oder nachträgliche Plattformabnahme."
     },
     {
       "id": "PP-0448",
@@ -3871,9 +3882,13 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Startzeit, Simulationszeit, Zeitschritt und Seed.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "incomplete",
+      "evidence": [
+        "src/data.c",
+        "runners/experiment.c",
+        "docs/data-format.md"
+      ],
+      "note": "Simulationszeiten in den Messzeilen sowie Zeitschritt und Seed in Metadaten sind vorhanden und separat geprüft. Kompilierungsdatum/-zeit ersetzt keine tatsächliche Laufstartzeit; eine ausdrücklich definierte Laufstartzeit im Archiv fehlt noch. Der Block bleibt unvollständig."
     },
     {
       "id": "PP-0449",

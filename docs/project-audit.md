@@ -1125,3 +1125,15 @@ Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **104 implemented**, **13 incomplete**, **414 unverified**.
 `completion_proven` bleibt `false`; die komplette Plattform-/Projektabnahme
 bleibt offen.
+
+
+## Compiler- und Buildherkunft im Archiv (PP-0447/0448)
+
+Core-, Runner- und Modulherkunft sind getrennt gespeichert. Moderne C-/Physim-
+Module melden den optionalen Tail ausdrücklich; ältere adaptive oder fremde
+Erweiterungs-Tails bleiben unbehelligt. Compiler-Buildtexte ersetzen keine
+tatsächliche Startzeit des Laufs; diese konkrete Lücke ist nun erfasst.
+[Nachweise und Grenzen](platform-validation.md#compiler--und-buildherkunft-im-archiv-pp-0447).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**105 implemented**, **14 incomplete**, **412 unverified**;
+`completion_proven` bleibt `false`.

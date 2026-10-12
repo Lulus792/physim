@@ -1,5 +1,6 @@
 #ifndef PHYSIM_EXPERIMENT_H
 #define PHYSIM_EXPERIMENT_H
+#include "detail/build_origin.h"
 #include "core.h"
 #include "units.h"
 #include "log.h"
@@ -13,6 +14,7 @@
 #define PS_EXPERIMENT_SCENE_HIERARCHY UINT64_C(1)
 #define PS_EXPERIMENT_ADAPTIVE_STEPS UINT64_C(2)
 #define PS_EXPERIMENT_SCENE_FRAMES UINT64_C(4)
+#define PS_EXPERIMENT_BUILD_INFO UINT64_C(8)
 #ifdef _WIN32
 #define PS_EXPORT __declspec(dllexport)
 #else
@@ -111,8 +113,13 @@ typedef struct {
      * The host advances time and persists exactly one accepted sample. */
     ps_result (*adaptive_step)(ps_context *context, double proposed_s, double minimum_s,
                                double maximum_s, ps_step_interval *interval);
+    /* Optional ABI-3 provenance tail; advertised with PS_EXPERIMENT_BUILD_INFO. Borrowed immutable UTF-8, each <=255 bytes,
+     * no controls/newlines. NULL means unavailable in an older module. */
+    const char *compiler,*build;
 } ps_experiment_api;
 #define PS_EXPERIMENT_API_BASE_SIZE offsetof(ps_experiment_api, adaptive_step)
+#define PS_EXPERIMENT_API_ADAPTIVE_SIZE (offsetof(ps_experiment_api,adaptive_step)+sizeof(((ps_experiment_api *)0)->adaptive_step))
+#define PS_EXPERIMENT_BUILD_ORIGIN .compiler=PS_BUILD_COMPILER, .build=PS_BUILD_STAMP
 typedef const ps_experiment_api *(*ps_experiment_entry)(void);
 /* Export ps_get_experiment from each module. Context and scene are owned by host.
  * Module owns context->user and releases it in destroy, including failed create. */

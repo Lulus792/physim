@@ -177,8 +177,8 @@ static void scene(ps_context *c, ps_scene *s) {
 static void destroy(ps_context *c) { free(c->user); }
 PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
     static const ps_experiment_api api = {
-        sizeof api, PS_ABI_VERSION, 0,    "Boxstoß mit Flächen- und Kantenkontakten",
+        sizeof api, PS_ABI_VERSION, (0) | PS_EXPERIMENT_BUILD_INFO,    "Boxstoß mit Flächen- und Kantenkontakten",
         create,     reset,          step, scene,
-        destroy, NULL};
+        destroy, NULL, PS_EXPERIMENT_BUILD_ORIGIN};
     return &api;
 }

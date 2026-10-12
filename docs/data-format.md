@@ -42,6 +42,19 @@ Modellmetadaten dürfen bei typisierter Host-Identität diese Felder nicht zusä
 deklarieren; Kollisionen
 werden vor dem Anlegen der Datei abgewiesen.
 
+Alle aktuellen Core-Writer ergänzen `core_compiler` und `core_build` aus der
+Kompilierung von `data.c`. Modellmetadaten dürfen diese Hostfelder nicht
+überschreiben. Der Runner speichert zusätzlich `module_compiler`, `module_build`,
+`runner_compiler` und `runner_build`. C-Templates und Physim-Module deklarieren
+Modulherkunft über den optionalen ABI-3-Tail mit `PS_EXPERIMENT_BUILD_INFO`. Alte Module ohne diesen Tail
+tragen ausdrücklich `unavailable`; unbekannte Herkunft wird nicht erfunden.
+
+Die Compilerkennung stammt aus `__clang_version__`, `_MSC_FULL_VER` oder
+`__VERSION__`. Buildtexte sind die Compiler-Literale `__DATE__`/`__TIME__`,
+keine Laufstartzeit und ohne Behauptung einer Zeitzone. Wiederholte Läufe
+mit demselben Modul/Runner/Core erhalten dieselben Texte. Angaben beschreiben
+die jeweiligen Kompilierungen und authentifizieren sie nicht.
+
 Der Experimentrunner ergänzt außerdem `module_fnv1a64` und `runner_build` vor dem
 Anlegen der Laufdatei. Der FNV-Wert dient der Herkunftszuordnung, nicht der
 Authentifizierung. Passen diese Angaben nicht vollständig in die begrenzten
@@ -436,3 +449,14 @@ Bekannte Fehlercodes, Textgrenzen, Positionsregeln und exakte Gesamtlänge werde
 geprüft; Decoder erhalten Ausgaben bei Fehlern. Unbekannte Versionen melden
 `PS_VERSION`, beschädigte Payloads `PS_CORRUPT`. Headergrößen/ABI-Padding sind
 keine Wire-Daten. [API, Sprachbindungen und Grenzen](diagnostics.md).
+
+## Quellen der Compilerkennung
+
+Die verwendeten Makros sind in den Primärdokumentationen von
+[Clang](https://clang.llvm.org/docs/LanguageExtensions.html),
+[MSVC](https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170)
+und [GCC](https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html)
+beschrieben. Der Modul-Tail wird nur mit ausdrücklicher Capability und innerhalb seiner
+gemeldeten Structgröße gelesen. Ein unbekannter längerer Tail ohne Capability
+bleibt unberührt. Die adaptive Mindestgröße bleibt am bisherigen Callback-Ende;
+zusätzliche Herkunftsfelder sind keine Voraussetzung für alte adaptive Module.

@@ -209,6 +209,23 @@ def verify_transform_range(repo, sdk, consumer, builder, library, rebuilt_core, 
 
 
 
+def verify_build_origin(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked):
+    shutil.copy2(sdk / "examples/logging/main.c",consumer / "origin-c.c")
+    shutil.copy2(repo / "tests/fixtures/build_origin_legacy.c",consumer / "origin-legacy.c")
+    shutil.copy2(repo / "tests/fixtures/build_origin_legacy.h",consumer / "build_origin_legacy.h")
+    shutil.copy2(repo / "tests/fixtures/build_origin_invalid.c",consumer / "origin-invalid.c")
+    checked([sdk / "bin" / ("physimc"+suffix),"--emit-experiment",sdk / "examples/language/logging.phys"],output=consumer / "origin-language.c")
+    for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+        c=builder.executable("origin-c-"+kind,["origin-c.c"],[archive],module=True)
+        language=builder.executable("origin-language-"+kind,["origin-language.c"],[archive],module=True,language=True)
+        legacy=builder.executable("origin-legacy-"+kind,["origin-legacy.c"],[archive],module=True)
+        future=builder.executable("origin-future-"+kind,["origin-legacy.c"],[archive],module=True,defines=["PS_TEST_ORIGIN_LEGACY_FUTURE=1"])
+        bad=[builder.executable("origin-invalid-"+kind+str(i),["origin-invalid.c"],[archive],module=True,defines=["PS_TEST_ORIGIN_CASE="+str(i)]) for i in range(5)]
+        work=consumer / ("origin-"+kind);work.mkdir()
+        checked([sys.executable,repo / "tests/test_build_origin.py",sdk / "bin" / ("physim-runner"+suffix),c,language,legacy,future,*bad,work],timeout=90)
+    print("Installed/rebuilt SDK build origin: actual compiler/build literals, old adaptive ABI, deterministic repeats and invalid/forged provenance rejection passed",flush=True)
+
+
 def verify_typed_run_identity(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked):
     shutil.copy2(repo / "tests/test_typed_run_identity.c",consumer / "typed-identity-check.c")
     shutil.copy2(repo / "tests/typed_identity_probe.c",consumer / "typed-identity-probe.c")
@@ -522,6 +539,7 @@ def main():
                         help="Verify opaque Run stream handles only; no GUI or full domain acceptance")
     parser.add_argument("--interval-only",action="store_true",
                         help="Verify Student-t mean intervals, independent numerical references and actual analysis report only")
+    parser.add_argument("--origin-only",action="store_true",help="Verify C/Physim compiler/build provenance and legacy adaptive ABI only")
     parser.add_argument("--identity-only",action="store_true",help="Verify stable C/Physim runner identities and rejection of forged host fields only")
     parser.add_argument("--events-only",action="store_true",help="Verify archived C/Physim events, real runner logs and failure recovery only")
     parser.add_argument("--distributions-only",action="store_true",
@@ -545,6 +563,10 @@ def main():
     parser.add_argument("--isolation-only", action="store_true",
                         help="Verify eight actual C/Physim runner failure/restart app workflows; requires an app SDK and display")
     args = parser.parse_args()
+    if args.origin_only and any((args.pendulum_only,args.scalar_only,args.transform_only,args.stream_only,
+        args.comparison_only,args.curve_only,args.units_only,args.body_only,args.migration_only,
+        args.accessibility_only,args.convex_only,args.breakpoints_only,args.isolation_only,args.app_tests,args.interval_only,args.distributions_only,args.events_only,args.identity_only)):
+        parser.error("--origin-only cannot be combined with other focused modes or --app-tests")
     if args.identity_only and any((args.pendulum_only,args.scalar_only,args.transform_only,args.stream_only,
         args.comparison_only,args.curve_only,args.units_only,args.body_only,args.migration_only,
         args.accessibility_only,args.convex_only,args.breakpoints_only,args.isolation_only,args.app_tests,args.interval_only,args.distributions_only,args.events_only)):
@@ -675,6 +697,13 @@ def main():
         builder.includes = [sdk / "include"]
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+        if args.origin_only:
+            shutil.copytree(sdk / "src",consumer / "src")
+            rebuilt_core=builder.archive("sdk-rebuilt-core",[f"src/{name}.c" for name in native.CORE])
+            verify_build_origin(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
+            (root / "PASSED.txt").write_text("Focused build-origin SDK verification passed; installed/rebuilt C/Physim and actual legacy adaptive ABI; no full platform/product acceptance.\n",encoding="utf-8")
+            print(f"Build origin SDK verified: {root}")
+            return
         if args.identity_only:
             shutil.copytree(sdk / "src",consumer / "src")
             rebuilt_core=builder.archive("sdk-rebuilt-core",[f"src/{name}.c" for name in native.CORE])
@@ -918,6 +947,7 @@ def main():
         verify_run_events(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
         verify_run_identity(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
         verify_typed_run_identity(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
+        verify_build_origin(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
         verify_scalar_search(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_transform_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         shutil.copy2(repo / "tests/test_linear_range.c", consumer / "linear-range-check.c")

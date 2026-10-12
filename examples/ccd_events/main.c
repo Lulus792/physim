@@ -31,4 +31,4 @@ static ps_result step(ps_context *c,double dt){
 }
 static void scene(ps_context *c,ps_scene *s){experiment *e=c->user;const uint32_t colors[]={0x3589ddff,0xf2a83fff,0x42b897ff};for(unsigned i=0;i<3;i++){ps_vec3 p=e->bodies[i].position_m;ps_scene_add_id(s,i+1,PS_SPHERE,p,p,.5,colors[i]);ps_scene_add_id(s,10+i,PS_ARROW,p,ps_vadd(p,ps_vscale(e->bodies[i].velocity_m_s,.1)),.008,colors[i]);}}
 static void destroy(ps_context *c){free(c->user);c->user=NULL;}
-PS_EXPORT const ps_experiment_api *ps_get_experiment(void){static const ps_experiment_api api={sizeof api,PS_ABI_VERSION,0,"Continuous three-body events",create,reset,step,scene,destroy,NULL};return &api;}
+PS_EXPORT const ps_experiment_api *ps_get_experiment(void){static const ps_experiment_api api={sizeof api,PS_ABI_VERSION, (0) | PS_EXPERIMENT_BUILD_INFO,"Continuous three-body events",create,reset,step,scene,destroy,NULL, PS_EXPERIMENT_BUILD_ORIGIN};return &api;}

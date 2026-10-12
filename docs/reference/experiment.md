@@ -16,7 +16,10 @@ Einbinden: `#include "physim/experiment.h"`. Die folgenden Signaturen, Typen und
 #define PS_EXPERIMENT_SCENE_HIERARCHY UINT64_C(1)
 #define PS_EXPERIMENT_ADAPTIVE_STEPS UINT64_C(2)
 #define PS_EXPERIMENT_SCENE_FRAMES UINT64_C(4)
+#define PS_EXPERIMENT_BUILD_INFO UINT64_C(8)
 #define PS_EXPERIMENT_API_BASE_SIZE offsetof(ps_experiment_api, adaptive_step)
+#define PS_EXPERIMENT_API_ADAPTIVE_SIZE (offsetof(ps_experiment_api,adaptive_step)+sizeof(((ps_experiment_api *)0)->adaptive_step))
+#define PS_EXPERIMENT_BUILD_ORIGIN .compiler=PS_BUILD_COMPILER, .build=PS_BUILD_STAMP
 ```
 
 `PS_EXPORT` kennzeichnet den Moduleinstieg für den Export. Das SDK wählt dafür automatisch die passende Windows- beziehungsweise Unix-Deklaration.
@@ -167,10 +170,13 @@ typedef struct {
     void (*destroy)(ps_context *context);
     ps_result (*adaptive_step)(ps_context *context, double proposed_s, double minimum_s,
                                double maximum_s, ps_step_interval *interval);
+    const char *compiler,*build;
 } ps_experiment_api;
 ```
 
 Optional ABI-3 tail, advertised with PS_EXPERIMENT_ADAPTIVE_STEPS. Accept one forward step of minimum_s <= elapsed_s <= proposed_s. next_s must lie in [minimum_s, maximum_s]. The host may lower minimum_s for the clipped final target-time step. Rejected numerical trials remain internal to the model and must not publish measurements/state. On success update the model and channel values, but not context->time_s. The host advances time and persists exactly one accepted sample.
+
+Optional ABI-3 provenance tail; advertised with PS_EXPERIMENT_BUILD_INFO. Borrowed immutable UTF-8, each <=255 bytes, no controls/newlines. NULL means unavailable in an older module.
 
 ### ps_experiment_entry
 

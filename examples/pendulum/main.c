@@ -231,13 +231,12 @@ static void destroy(ps_context *c) {
 }
 PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
     static const ps_experiment_api api = {sizeof(ps_experiment_api),
-                                          PS_ABI_VERSION,
-                                          PS_EXPERIMENT_SCENE_HIERARCHY | PS_EXPERIMENT_ADAPTIVE_STEPS,
+                                          PS_ABI_VERSION, (PS_EXPERIMENT_SCENE_HIERARCHY | PS_EXPERIMENT_ADAPTIVE_STEPS) | PS_EXPERIMENT_BUILD_INFO,
                                           "Pendel",
                                           create,
                                           reset,
                                           step,
                                           scene,
-                                          destroy, adaptive_step};
+                                          destroy, adaptive_step, PS_EXPERIMENT_BUILD_ORIGIN};
     return &api;
 }

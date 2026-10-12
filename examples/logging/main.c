@@ -22,5 +22,5 @@ static ps_result step(ps_context *c,double dt) {
 static void scene(ps_context *c,ps_scene *s){(void)c;(void)s;}
 static void destroy(ps_context *c){(void)ps_experiment_log(c,PS_LOG_ERROR,"Destroyed");free(c->user);c->user=NULL;}
 PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
-    static const ps_experiment_api api={sizeof api,PS_ABI_VERSION,0,"Logging example",create,reset,step,scene,destroy,NULL};return &api;
+    static const ps_experiment_api api={sizeof api,PS_ABI_VERSION, (0) | PS_EXPERIMENT_BUILD_INFO,"Logging example",create,reset,step,scene,destroy,NULL, PS_EXPERIMENT_BUILD_ORIGIN};return &api;
 }

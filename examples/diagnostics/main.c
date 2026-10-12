@@ -11,4 +11,4 @@ static ps_result step(ps_context *c,double dt) {
 }
 static void scene(ps_context *c,ps_scene *s){if(c->parameters[0].value==1){(void)step(c,0);return;}ps_scene_add_id(s,1,PS_SPHERE,ps_v3(0,0,0),ps_v3(0,0,0),.2,UINT32_MAX);}
 static void destroy(ps_context *c){(void)c;}
-PS_EXPORT const ps_experiment_api *ps_get_experiment(void){static const ps_experiment_api api={sizeof api,PS_ABI_VERSION,0,"Diagnostic example",create,reset,step,scene,destroy,NULL};return &api;}
+PS_EXPORT const ps_experiment_api *ps_get_experiment(void){static const ps_experiment_api api={sizeof api,PS_ABI_VERSION, (0) | PS_EXPERIMENT_BUILD_INFO,"Diagnostic example",create,reset,step,scene,destroy,NULL, PS_EXPERIMENT_BUILD_ORIGIN};return &api;}

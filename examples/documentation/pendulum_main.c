@@ -96,7 +96,6 @@ static void scene(ps_context *c,ps_scene *s) {
 }
 static void destroy(ps_context *c){free(c->user);c->user=NULL;}
 PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
-    static const ps_experiment_api api={.struct_size=sizeof api,.abi_version=PS_ABI_VERSION,
-        .capabilities=PS_EXPERIMENT_SCENE_HIERARCHY|PS_EXPERIMENT_ADAPTIVE_STEPS,.name="Pendulum integrator comparison",
-        .create=create,.reset=reset,.step=step,.build_scene=scene,.destroy=destroy,.adaptive_step=adaptive_step};return &api;
+    static const ps_experiment_api api={.struct_size=sizeof api,.abi_version=PS_ABI_VERSION, (.capabilities=PS_EXPERIMENT_SCENE_HIERARCHY|PS_EXPERIMENT_ADAPTIVE_STEPS) | PS_EXPERIMENT_BUILD_INFO,.name="Pendulum integrator comparison",
+        .create=create,.reset=reset,.step=step,.build_scene=scene,.destroy=destroy,.adaptive_step=adaptive_step, PS_EXPERIMENT_BUILD_ORIGIN};return &api;
 }

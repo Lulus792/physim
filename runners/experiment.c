@@ -5,6 +5,7 @@
 #include "pacing.h"
 #include "step_breakpoints.h"
 #include "runner_output.h"
+#include "text_validation.h"
 #include "physim/detail/run_identity.h"
 #include <errno.h>
 #include "number_parse.h"
@@ -186,8 +187,9 @@ int main(int argc, char **argv) {
     memcpy(&entry, &symbol, sizeof entry);
     const ps_experiment_api *api = entry ? entry() : NULL;
     if (!api || api->struct_size < PS_EXPERIMENT_API_BASE_SIZE || api->abi_version != PS_ABI_VERSION ||
+        ((api->capabilities&PS_EXPERIMENT_BUILD_INFO) && api->struct_size<offsetof(ps_experiment_api,build)+sizeof api->build) ||
         ((api->capabilities&PS_EXPERIMENT_SCENE_FRAMES) && !(api->capabilities&PS_EXPERIMENT_SCENE_HIERARCHY)) ||
-        !api->name || !api->create || !api->step || !api->reset || !api->build_scene ||
+        !api->name || !ps_text_valid(api->name,256,false) || !*api->name || !api->create || !api->step || !api->reset || !api->build_scene ||
         !api->destroy) {
         report(interactive,diagnostics,diagnostic_path,&c,PS_VERSION,"module.abi","Experiment ABI mismatch or missing callback");
         runner_log_close(&logs,c.time_s);
@@ -195,7 +197,7 @@ int main(int argc, char **argv) {
         return 4;
     }
     if(adaptive && (!(api->capabilities&PS_EXPERIMENT_ADAPTIVE_STEPS) ||
-                    api->struct_size<sizeof *api || !api->adaptive_step)) {
+                    api->struct_size<PS_EXPERIMENT_API_ADAPTIVE_SIZE || !api->adaptive_step)) {
         report(interactive,diagnostics,diagnostic_path,&c,PS_VERSION,"adaptive_step","Experiment does not provide an adaptive_step callback");
         runner_log_close(&logs,c.time_s);
         ps_module_close(module);return 4;
@@ -294,8 +296,11 @@ int main(int argc, char **argv) {
     }
     {
         for(const char *line=c.model_metadata;*line;) {
-            if(!strncmp(line,"project_id=",11) || !strncmp(line,"experiment_id=",14)) {
-                report(interactive,diagnostics,diagnostic_path,&c,PS_INVALID,"metadata","Model metadata uses host-owned identity fields");
+            if(!strncmp(line,"project_id=",11) || !strncmp(line,"experiment_id=",14) ||
+               !strncmp(line,"module_compiler=",16) || !strncmp(line,"module_build=",13) ||
+               !strncmp(line,"runner_compiler=",16) || !strncmp(line,"runner_build=",13) ||
+               !strncmp(line,"module_fnv1a64=",15)) {
+                report(interactive,diagnostics,diagnostic_path,&c,PS_INVALID,"metadata","Model metadata uses host-owned identity fields or build provenance");
                 api->destroy(&c);runner_log_close(&logs,c.time_s);ps_module_close(module);return 5;
             }
             const char *end=line+strcspn(line,"\r\n");if(!*end)break;line=end+1;
@@ -308,9 +313,19 @@ int main(int argc, char **argv) {
         }
         used=strlen(c.model_metadata);
     }
+    const char *module_compiler="unavailable",*module_build="unavailable";
+    if(api->capabilities&PS_EXPERIMENT_BUILD_INFO) {
+        if(api->compiler)module_compiler=api->compiler;
+        if(api->build)module_build=api->build;
+        if(!ps_text_valid(module_compiler,256,false) || !*module_compiler ||
+           !ps_text_valid(module_build,256,false) || !*module_build) {
+            report(interactive,diagnostics,diagnostic_path,&c,PS_INVALID,"metadata","Invalid module build provenance");
+            api->destroy(&c);runner_log_close(&logs,c.time_s);ps_module_close(module);return 5;
+        }
+    }
     int provenance=snprintf(c.model_metadata + used, sizeof c.model_metadata - used,
-             "\nmodule_fnv1a64=%016llx\nrunner_build=%s %s", (unsigned long long)hash, __DATE__,
-             __TIME__);
+             "\nmodule_fnv1a64=%016llx\nmodule_compiler=%s\nmodule_build=%s\nrunner_compiler=%s\nrunner_build=%s",
+             (unsigned long long)hash,module_compiler,module_build,PS_BUILD_COMPILER,PS_BUILD_STAMP);
     if(provenance<0 || (size_t)provenance>=sizeof c.model_metadata-used) {
         report(interactive,diagnostics,diagnostic_path,&c,PS_LIMIT,"metadata","Model metadata has no room for module provenance");
         api->destroy(&c);runner_log_close(&logs,c.time_s);

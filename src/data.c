@@ -1,5 +1,6 @@
 #include "physim/data.h"
 #include "run_index_internal.h"
+#include "text_validation.h"
 #include "physim/detail/run_identity.h"
 #include <math.h>
 #include <stdlib.h>
@@ -190,10 +191,16 @@ ps_result ps_run_identity_read(const char *text,size_t length,ps_run_identity *o
     *out=id;return PS_OK;
 }
 static ps_result run_create(ps_run_writer *w,const char *path,const ps_context *c,const char *name,const ps_run_identity *id) {
-    if (!w || !path || !c || !name || !c->channel_count || c->channel_count > PS_MAX_CHANNELS)
+    if (!w || !path || !c || !name || !ps_text_valid(name,256,false) || !*name || !c->channel_count || c->channel_count > PS_MAX_CHANNELS)
         return PS_INVALID;
+    const char *metadata_end=memchr(c->model_metadata,0,sizeof c->model_metadata);
+    if(!metadata_end)return PS_INVALID;
+    for(const char *line=c->model_metadata;line<metadata_end;) {
+        if(!strncmp(line,"core_compiler=",14) || !strncmp(line,"core_build=",11))return PS_INVALID;
+        const char *end=line+strcspn(line,"\r\n");line=*end?end+1:end;
+    }
     if(id) {
-        const char *end=memchr(c->model_metadata,0,sizeof c->model_metadata);
+        const char *end=metadata_end;
         if(!end || identity_collision(c->model_metadata,(size_t)(end-c->model_metadata)))return PS_INVALID;
     }
     uint32_t parameter_count = 0;
@@ -209,8 +216,8 @@ static ps_result run_create(ps_run_writer *w,const char *path,const ps_context *
     unsigned char h[16] = {'P', 'S', 'R', 'U', 'N', '1', '7', '\n', 1, 0, 0, 0, 4, 3, 2, 1};
     char meta[8192];
     int n =
-        snprintf(meta, sizeof meta, "format=1\napi=%u\nexperiment=%s\ndt_s=%.17g\nseed=%llu\n%s\n",
-                 PS_API_VERSION, name, c->dt_s, (unsigned long long)c->seed, c->model_metadata);
+        snprintf(meta, sizeof meta, "format=1\napi=%u\ncore_compiler=%s\ncore_build=%s\nexperiment=%s\ndt_s=%.17g\nseed=%llu\n%s\n",
+                 PS_API_VERSION,PS_BUILD_COMPILER,PS_BUILD_STAMP,name,c->dt_s,(unsigned long long)c->seed,c->model_metadata);
     ps_result r = PS_OK;
     if (n < 0 || n >= (int)sizeof meta)
         r = PS_IO;

@@ -2640,6 +2640,87 @@
         "platform",
         "core"
       ]
+    },
+    "build-origin-legacy": {
+      "sources": [
+        "tests/fixtures/build_origin_legacy.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true
+    },
+    "build-origin-invalid-0": {
+      "sources": [
+        "tests/fixtures/build_origin_invalid.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PS_TEST_ORIGIN_CASE=0"
+      ]
+    },
+    "build-origin-invalid-1": {
+      "sources": [
+        "tests/fixtures/build_origin_invalid.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PS_TEST_ORIGIN_CASE=1"
+      ]
+    },
+    "build-origin-invalid-2": {
+      "sources": [
+        "tests/fixtures/build_origin_invalid.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PS_TEST_ORIGIN_CASE=2"
+      ]
+    },
+    "build-origin-invalid-3": {
+      "sources": [
+        "tests/fixtures/build_origin_invalid.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PS_TEST_ORIGIN_CASE=3"
+      ]
+    },
+    "build-origin-future": {
+      "sources": [
+        "tests/fixtures/build_origin_legacy.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PS_TEST_ORIGIN_LEGACY_FUTURE=1"
+      ]
+    },
+    "build-origin-invalid-4": {
+      "sources": [
+        "tests/fixtures/build_origin_invalid.c"
+      ],
+      "libraries": [
+        "core"
+      ],
+      "module": true,
+      "defines": [
+        "PS_TEST_ORIGIN_CASE=4"
+      ]
     }
   },
   "tests": [
@@ -10721,6 +10802,42 @@
             "{typed-identity-probe}"
           ],
           "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "build_origin",
+      "targets": [
+        "python",
+        "physim-runner",
+        "logging-c",
+        "logging-phys",
+        "build-origin-legacy",
+        "build-origin-invalid-0",
+        "build-origin-invalid-1",
+        "build-origin-invalid-2",
+        "build-origin-invalid-3",
+        "build-origin-future",
+        "build-origin-invalid-4"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_build_origin.py",
+            "{physim-runner}",
+            "{logging-c}",
+            "{logging-phys}",
+            "{build-origin-legacy}",
+            "{build-origin-future}",
+            "{build-origin-invalid-0}",
+            "{build-origin-invalid-1}",
+            "{build-origin-invalid-2}",
+            "{build-origin-invalid-3}",
+            "{build-origin-invalid-4}",
+            "{work}"
+          ],
+          "timeout": 120
         }
       ]
     }

@@ -67,14 +67,13 @@ static void destroy(ps_context *c) {
 }
 PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
     static const ps_experiment_api api = {sizeof(ps_experiment_api),
-                                          PS_ABI_VERSION,
-                                          0,
+                                          PS_ABI_VERSION, (0) | PS_EXPERIMENT_BUILD_INFO,
                                           "Uniform motion",
                                           create,
                                           reset,
                                           step,
                                           scene,
-                                          destroy, NULL};
+                                          destroy, NULL, PS_EXPERIMENT_BUILD_ORIGIN};
     return &api;
 }
 ```
