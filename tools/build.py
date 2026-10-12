@@ -27,7 +27,7 @@ APP = "completion compiler_diagnostic profiling accessibility accessibility_nati
 PROJECT = "project_file text_document autosave parameter_catalog".split()
 ZLIB = "adler32 crc32 deflate trees zutil".split()
 EXAMPLES = "pendulum projectile collision box_floor spring uncertain_projectile box_collision buoyancy ccd_events".split()
-LANGUAGE_PROGRAMS = "energy motion flight_phases sampling phase_space rotation_path particles rigid_body contacts convex_contacts distance_joints constraint_graph sweeps coordinate_frames optional_values optional_bindings diagnostic_values run_index_values contact_world batch_values thermodynamics electromagnetism waves_optics fluid_values".split()
+LANGUAGE_PROGRAMS = "energy motion flight_phases sampling phase_space rotation_path particles rigid_body contacts convex_contacts distance_joints constraint_graph sweeps coordinate_frames optional_values optional_bindings diagnostic_values run_index_values contact_world batch_values thermodynamics electromagnetism waves_optics fluid_values material_properties".split()
 LANGUAGE_EXPERIMENTS = ("pendulum pendulum_rk4 pendulum_integrator pendulum_rk45 pendulum_verlet "
     "projectile projectile_drag collision box_collision buoyancy random_samples scene_shapes "
     "spring sensors uncertain_projectile spinning_body box_contacts joint_pendulum coupled_bodies fast_sphere logging scene_frames diagnostic_experiment contact_stack ccd_events").split()
@@ -411,6 +411,8 @@ class Builder:
         libraries = {"core": core, "platform": platform, "language": language, "batch": batch, "zlib": zlib}
         compiler = self.executable("physimc", ["src/language/main.c", "src/language/loader.c"], [language])
         products.append(compiler)
+        if getattr(self.args,"examples",False) or getattr(self.args,"install",None):
+            products.append(self.executable("material-properties",["examples/properties/main.c"],[core]))
         # Installed SDKs ship the complete executable language example catalog.
         if getattr(self.args, "examples", False) or getattr(self.args, "install", None):
             products.extend(self.build_language_examples(compiler, core))

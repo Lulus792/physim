@@ -47,6 +47,42 @@ Bereich und Arrays gemeinsam besitzen; ihre Kopien bleiben unabhängig.
 Fehler mit `attempt`. Die beiden Funktionsbindungen sind in Programmen,
 Experimenten und Analysen verfügbar.
 
+## Neun benannte Eigenschaftsdaten
+
+Die ausgelieferten Programme `examples/properties/main.c` und
+`examples/language/material_properties.phys` zeigen alle Eigenschaften des
+Materialplans als explizite Daten. Die Werte sind synthetische Lehrdaten für
+280–320 K und 0–200000 Pa; sie beschreiben kein kalibriertes reales Material.
+Die Einheiten entstehen durch SI-Algebra und werden gegen kanonische
+Dimensionen geprüft.
+
+| Eigenschaft | Lehrwert | SI-Einheit |
+| --- | ---: | --- |
+| Dichte | 1200 | kg/m³ |
+| Dynamische Viskosität | 0,006 | Pa·s |
+| Kinematische Viskosität | 0,000005 | m²/s |
+| Reibungskoeffizient | 0,25 | 1 |
+| Restitution | 0,8 | 1 |
+| Wärmeleitfähigkeit | 0,5 | W/(m·K) |
+| Spezifische Wärmekapazität | 2000 | J/(kg·K) |
+| Elektrische Leitfähigkeit | 250 | S/m |
+| Permittivität | 0,00000000002 | F/m |
+
+Jede Eigenschaft besitzt einen Namen, eine Quelle, ihren gültigen T/P-Bereich
+und eine SI-Einheit. Die Programme fragen beide Bereichsränder und einen
+inneren Punkt ab und weisen eine ungültige Temperatur zurück. Der konsumierende
+Beispielcode prüft positive Dichte/Kapazität/Permittivität, nichtnegative
+Verlustkoeffizienten und Restitution zwischen 0 und 1. Zusätzlich wird
+`ν = μ/ρ` einschließlich ihrer Dimension geprüft. Die allgemeine Daten-API
+leitet diese physikalischen Regeln nicht aus einem Eigenschaftsnamen ab.
+
+`tools/build.py --examples` und jede SDK-Installation liefern
+`bin/material-properties` und `bin/language-material_properties`
+(unter Windows jeweils `.exe`). Beide Programme benötigen keine GUI und geben
+27 Abfragen aus. Eine unabhängige Gegenprobe vergleicht alle Werte beider
+Sprachen sowie die ausgegebenen C-Dimensionen. Die Physim-Quelle prüft ihre
+zurückgegebenen Quantity-Dimensionen gegen separate kanonische SI-Einheiten.
+
 ## Vollständiger C-/Physim-Ablauf
 
 Dieses Beispiel verwendet **synthetische** Eigenschaftsdaten. Die Dichte folgt

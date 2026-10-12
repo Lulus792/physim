@@ -3403,9 +3403,17 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Beispiele: Dichte, dynamische/kinematische Viskosität, Reibungskoeffizient, Restitution, Wärmeleitfähigkeit, Wärmekapazität, elektrische Leitfähigkeit und Permittivität.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Generische SI-Quantities können diese Größen ausdrücken; Dichte und Reibung sind konkret geprüft. Der gesamte Umfang aller aufgezählten Größen, Modelle und Stoffdaten bleibt ungeprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/properties.h",
+        "examples/properties/main.c",
+        "examples/language/material_properties.phys",
+        "tests/test_material_property_examples.py",
+        "tools/build.py",
+        "tools/verify-native-sdk.py",
+        "docs/properties.md"
+      ],
+      "note": "Alle neun genannten Eigenschaften werden als ausgelieferte C-/Physim-Lehrdaten mit Quelle, geschlossenem T/P-Bereich und SI-Einheiten demonstriert. SI-Algebra, separate kanonische Dimensionen, 54 reale Abfragen, Zurückweisung außerhalb des Bereichs, Fehleratomizität und ν=μ/ρ sind geprüft. Konsumenten validieren physikalische Vorzeichen/Restitution ausdrücklich. Werte sind synthetisch, keine Materialkalibrierung. Aktuelle Paketgegenprobe prüft gelieferte Binärdateien und aus dem SDK mit installierter/neu gebauter Core-Bibliothek kompilierte Programme; Gesamtplattformabnahme bleibt separat offen."
     },
     {
       "id": "PP-0394",

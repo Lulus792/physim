@@ -1,0 +1,53 @@
+// Nine explicit properties: synthetic teaching data, no calibrated material.
+struct PropertyData:
+    let name: String
+    let unit: Unit
+    let value: Float64
+    func at(temperature: Float64, pressure: Float64) -> Quantity:
+        return propertyConstant(self.name,"synthetic teaching data; no calibrated material",
+            Quantity(self.value,self.unit),Vec4(280,320,0,200000),temperature,pressure)
+let metre = Unit(1,0,0,0,0,0,0,1,"m")
+let kilogram = Unit(0,1,0,0,0,0,0,1,"kg")
+let second = Unit(0,0,1,0,0,0,0,1,"s")
+let ampere = Unit(0,0,0,1,0,0,0,1,"A")
+let kelvin = Unit(0,0,0,0,1,0,0,1,"K")
+let pascal = Unit(-1,1,-2,0,0,0,0,1,"Pa")
+let watt = Unit(2,1,-3,0,0,0,0,1,"W")
+let joule = Unit(2,1,-2,0,0,0,0,1,"J")
+let one = Unit(0,0,0,0,0,0,0,1,"1")
+let density = kilogram.divided(metre.powered(3,"m3"),"kg/m3")
+let dynamic = pascal.multiplied(second,"Pa s")
+let kinematic = metre.powered(2,"m2").divided(second,"m2/s")
+let thermal = watt.divided(metre.multiplied(kelvin,"m K"),"W/(m K)")
+let heat = joule.divided(kilogram.multiplied(kelvin,"kg K"),"J/(kg K)")
+let conductivity = ampere.powered(2,"A2").divided(watt.multiplied(metre,"W m"),"S/m")
+let permittivity = conductivity.multiplied(second,"F/m")
+let properties = [
+    PropertyData("density",density,1200),
+    PropertyData("dynamic_viscosity",dynamic,0.006),
+    PropertyData("kinematic_viscosity",kinematic,5e-6),
+    PropertyData("friction",one,0.25),
+    PropertyData("restitution",one,0.8),
+    PropertyData("thermal_conductivity",thermal,0.5),
+    PropertyData("specific_heat",heat,2000),
+    PropertyData("electrical_conductivity",conductivity,250),
+    PropertyData("permittivity",permittivity,2e-11),
+]
+// Independent canonical dimensions check the unit algebra used above.
+let canonical = [Unit(-3,1,0,0,0,0,0,1,"rho"),Unit(-1,1,-1,0,0,0,0,1,"mu"),
+    Unit(2,0,-1,0,0,0,0,1,"nu"),one,one,Unit(1,1,-3,0,-1,0,0,1,"k"),
+    Unit(2,0,-2,0,-1,0,0,1,"cp"),Unit(-3,-1,3,2,0,0,0,1,"sigma"),Unit(-3,-1,4,2,0,0,0,1,"epsilon")]
+let queries = [Vec2(280,0),Vec2(300,100000),Vec2(320,200000)]
+for q in 0..<queries.count:
+    var samples: [Quantity] = []
+    for i in 0..<properties.count:
+        let sample = properties[i].at(queries[q].x,queries[q].y)
+        assert(sample.unit.isCompatible(canonical[i]))
+        assert(attempt(properties[i].at(279,100000)) == nil)
+        samples.append(sample)
+        print(String(q) + "," + properties[i].name + "," + String(sample.value))
+    assert(samples[0].value > 0 && samples[1].value >= 0 && samples[2].value >= 0)
+    assert(samples[3].value >= 0 && samples[4].value >= 0 && samples[4].value <= 1)
+    assert(samples[5].value >= 0 && samples[6].value > 0 && samples[7].value >= 0 && samples[8].value > 0)
+    let ratio = samples[1].divided(samples[0],"m2/s")
+    assert(ratio.unit.isCompatible(kinematic) && abs(ratio.value - samples[2].value) < 1e-20)

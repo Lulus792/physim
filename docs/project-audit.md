@@ -1279,3 +1279,15 @@ von Szene/Messwerten bestehen bei 16/22 Pixeln sowie im verschobenen SDK.
 [Nachweise](platform-validation.md#expliziter-2d-ebenenmodus-pp-0295).
 Aktuell: **123 implemented**, **14 incomplete**, **394 unverified** bei allen
 531 unveränderten Originalblöcken/Planprüfsumme. Gesamtplattformabnahme bleibt offen.
+
+
+## Alle benannten Materialeigenschaften
+
+PP-0393 besitzt jetzt ausgelieferte C-/Physim-Datenbeispiele für alle neun
+genannten Eigenschaften. Quellen, T/P-Bereiche, SI-Algebra, kanonische Dimensionen,
+Vorzeichen-/Restitutionsregeln und ν=μ/ρ sind konkret geprüft. Die unabhängige
+Paketgegenprobe vergleicht gelieferte und aus dem SDK neu kompilierte Programme.
+[Nachweise](platform-validation.md#neun-ausgelieferte-materialeigenschaften-pp-0393).
+Die erweiterte Linux-Sanitizer-CI und die ganze Plattformabnahme sind weiter offen.
+Aktuell: **124 implemented**, **14 incomplete**, **393 unverified** bei allen
+531 unveränderten Originalblöcken/Planprüfsumme.

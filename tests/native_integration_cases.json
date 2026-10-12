@@ -3127,6 +3127,18 @@
         "core",
         "platform"
       ]
+    },
+    "material-properties-c": {
+      "sources": [
+        "examples/properties/main.c"
+      ],
+      "libraries": [
+        "core"
+      ]
+    },
+    "material-properties-phys": {
+      "source": "examples/language/material_properties.phys",
+      "mode": "--emit-c"
     }
   },
   "tests": [
@@ -11584,6 +11596,25 @@
             "{root}"
           ],
           "timeout": 45
+        }
+      ]
+    },
+    {
+      "name": "material_property_examples",
+      "targets": [
+        "python",
+        "material-properties-c",
+        "material-properties-phys"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_material_property_examples.py",
+            "{material-properties-c}",
+            "{material-properties-phys}"
+          ],
+          "timeout": 40
         }
       ]
     }

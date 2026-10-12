@@ -4009,40 +4009,7 @@ Der vollständige Nachweis bleibt im [Plattformarchiv](platform-validation-histo
 
 ## Modellschichten aller acht Standardvorlagen
 
-Pendel, Wurf mit Drag, Kugelstoß, Box/Ebene, Feder, unsicherer Wurf, Boxstoß
-und Auftrieb deklarieren jeweils sieben Schichten in beiden Sprachen. Zustände
-folgen den tatsächlichen Modellparametern: beispielsweise nuller Drag/Dämpfung,
-Reibung oder inelastische Restitution, Vakuum, reines viskoses benutzerdefiniertes
-Medium und sensorabhängige Zufallsziehung. Externe Ensembles sind ausdrücklich
-getrennt vom deterministischen oder stochastischen Modell.
-
-Intel macOS/AppleClang Release:
-
-- Vorhandene Kugel-/Box-/Auftriebs-Sprachparität und Sensorreferenz **4/4**
-  im ersten Matrixlauf `run-98t12_xl`. Die zusätzliche Matrix scheiterte
-  zunächst an unterschiedlichen voreingestellten Pendelintegratoren; die
-  Prüfung setzt nun für den Vergleich ausdrücklich denselben RK4-Parameter.
-- Endgültige Matrix **1/1**, `run-01y7hdz1`,
-  `build/current-template-layers-second-mac.log`: **30** vollständige
-  CRC-geschützte Archive mit allen sieben Angaben, Parameterzuständen und
-  numerischer C-/Physim-Parität aller acht Paare.
-- Derselbe unabhängige Decoder vergleicht zusätzlich **30** Läufe gegen
-  unveränderte Module des eingefrorenen `c497a26`-SDK: **exakt gleiche**
-  Kanalschema-Bytes und sämtliche Messwerte,
-  `build/current-template-layers-baseline-mac.log`. Herkunft/Startzeit sind
-  kein numerisches Ergebnis und werden dabei nicht als gleich behauptet.
-- SDK-Installation mit Matrix, Kit und allen Handbuchquellen **20/20**,
-  `run-g8u6pjz2`, `build/current-template-layers-sdk-install-mac.log`.
-- Ausschließlich aus dem unabhängigen **198**-Dateien-Kit besteht das
-  verschobene SDK **10/10** Verbraucherbefehle: acht Spracherzeugungen und
-  beide installierten/neu gebauten 30-Archiv-Matrizen,
-  `build/current-template-layers-sdk-verify-mac.log`; Verbraucher
-  `build/current-template-layers-sdk-consumer-mac/Native SDK ä lcvrh9z3`.
-
-Diese Nachweise sind keine aktuelle ganze Plattform-/SDK-Abnahme. Spezielle
-zusätzliche Sprachbeispiele und äußere Batch-Verteilungen in den Laufdetails
-bleiben offen; PP-0482 bleibt unvollständig.
-
+Der vollständige Nachweis bleibt im [Plattformarchiv](platform-validation-history.md#modellschichten-aller-acht-standardvorlagen) erhalten.
 
 ## Abgeschlossene vollständige Intel-macOS-SDK-Prüfung für c497a26
 
@@ -4251,3 +4218,39 @@ bleibt offen: **123 implemented**, **14 incomplete**, **394 unverified**,
 
 Abschließende Dokumentations-/Referenz-/Kitprüfung: **3/3**, `run-cgnrc5bf`,
 `build/current-camera-plane-final-docs-mac.log`.
+
+
+## Neun ausgelieferte Materialeigenschaften (PP-0393)
+
+C-/Physim-Programme demonstrieren Dichte, dynamische/kinematische Viskosität,
+Reibung, Restitution, Wärmeleitfähigkeit, spezifische Wärmekapazität,
+elektrische Leitfähigkeit und Permittivität als explizite synthetische Daten.
+SI-Algebra und separate kanonische Dimensionen, Quelle/T/P-Bereich, beide
+Bereichsränder und innerer Punkt, Fehleratomizität, physikalische
+Konsumentenregeln und ν=μ/ρ sind geprüft. Die Programme werden bei
+`--examples` und jeder SDK-Installation als ausführbare Beispiele geliefert.
+
+Intel macOS/AppleClang Release:
+
+- Beispiel-/Eigenschafts-/Dokumentations-/Kitgruppen **5/5**, `run-llrq_1hy`,
+  `build/current-material-property-install-mac.log`.
+- Explizite Bytekopie für das Fehleratomizitätsorakel, **1/1** `run-jvv0wrum`,
+  `build/current-material-property-atomic-mac.log`; finale SDK-/Beispiel-/
+  Kitprüfung **2/2** `run-id2jqwt8`,
+  `build/current-material-property-final-install-mac.log`.
+- Unabhängiges **205**-Dateien-Kit, verschobenes SDK, **4/4** Befehle und
+  **162** reale Eigenschaftsabfragen über gelieferte Binärdateien und aus dem
+  Paket mit installierter/neu gebauter Core-Bibliothek kompilierte Programme:
+  `build/current-material-property-final-sdk-verify-mac.log`, Verbraucher
+  `build/current-material-property-final-sdk-consumer-mac/Native SDK ä mn6m_uw5`.
+
+Die [gezielte 0cab455-CI](platform-validation-history.md#gezielte-ci-am-stand-0cab455)
+ist aus vollständigen Logs geprüft; sie enthält diese späteren Beispiele noch
+nicht. Der Linux-Sanitizerfokus wird um Materialbeispiele und beide 2D-Kamerafälle
+erweitert. Seine aktuelle Ausführung bleibt gesondert nachzuweisen. Die ganze
+Plattformabnahme bleibt offen. Aktueller Audit: **124 implemented**,
+**14 incomplete**, **393 unverified** bei 531 unveränderten Originaltexten und
+ursprünglicher Planprüfsumme; `completion_proven=false`.
+
+Die abschließenden Dokumentations-/Referenz-/Kit-/Beispielgruppen bestehen
+**4/4**, `run-rrnk1_xf`, `build/current-material-property-final-docs-mac.log`.

@@ -2010,161 +2010,7 @@ Remote-/Grafik-/Produktabnahme wird durch diesen Schritt nicht behauptet.
 
 ## Lineare Gleichungssysteme (§7.2 / PP-0360)
 
-Ausgangsrevision `03c42f6`. Ein getrennt gegen ihr vorheriges SDK-Archiv
-gelinkter C-Probe bestätigt den Fehler im Dreieckssystem mit Zeilen
-`(1,-1,1)`, `(0,1,0)`, `(0,0,1)` und rechter Seite `(1e308,1e308,1e308)`.
-Die endliche Lösung `(1e308,1e308,1e308)` ergibt zuvor `PS_NUMERIC` und
-unveränderte Ausgabe `(7,8,9)`. Die neue Regression scheitert am unveränderten
-Stand in `run-1s9ckng5`; der separate Probe liegt in
-`build/linear-range-before.c`/`.txt`. Auch die Elimination des Systems
-`(1,1)`, `(-1,1)` mit rechter Seite `(1e308,1e308)` läuft früher über,
-obwohl die Lösung `(0,1e308)` endlich ist. Die Ergebnisse aller 53 neuen
-Eingabesysteme gegen das alte SDK sind unter
-`build/linear-range-old-sdk-results.json` erhalten.
-
-Die Koeffizienten bleiben zeilennormierte Double-Werte mit partieller
-Pivotisierung. Jede rechte Seite und Teillösung erhält jetzt eine eigene
-Mantisse/Exponent, kompensierte gewichtete Summen und eine abschließende
-Rückskalierung. Das bewahrt auch gleichzeitig große und kleine Komponenten.
-Die vorhandene Pivottoleranz und der Zustandserhalt auf allen Fehlern bleiben.
-[Einheiten, Algorithmus und Grenzen](numerics.md) dokumentieren mögliche
-Koeffizientenverluste bei der Normierung, schlechte Kondition, subnormale
-Ergebnisrundung und die fehlende allgemeine Fehlerschranke.
-
-Der unabhängige Prüfer löst 53 binäre Eingabesysteme durch rationale Elimination
-und prüft zusätzlich ihre Residuen in C und tatsächlichem Physim. Die Systeme
-haben 1–32 Unbekannte, starke Zeilenskalierung, Zeilentausch, Auslöschung,
-Eliminationswachstum und echte Range-/Singularitätsfehler. Der separate C-Test
-prüft Eingabeintegrität, Alias x=A/x=b, unabhängige Exponenten, subnormale Eingaben
-und Zustandserhalt bei ungültigen Werten, Toleranz, Dimension oder Singularität.
-Der erste breitere macOS-Lauf besteht mit 13/13 (`run-g253hgl5`); die endgültige
-Prüfung ergänzt Dokumentation, Kit und zusätzliche C-Fehler-/Aliasfälle.
-
-Die aktuelle Remote-CI der Ausgangsrevision
-([C17 37666123958](https://github.com/PhysicSimulator/physim/actions/runs/37666123958),
-[Linux-Paket 37666123932](https://github.com/PhysicSimulator/physim/actions/runs/37666123932))
-läuft bei der ersten Abfrage noch. Die ältere fehlgeschlagene macOS-Intel-SDK-
-Abnahme bleibt getrennt offen; die lokalen Nachweise ersetzen sie nicht.
-
-### Gezielte endgültige Nachweise
-
-Intel macOS/Apple Clang besteht **15/15** Release-Fälle in
-`build/contact-world-language-release-mac/test-results/run-3eouq3yf`.
-Debian/Clang Debug mit ASan/UBSan besteht **13/13** unter
-`build/base-contract-asan-linux/test-results/run-j7kubmeb`. Die Läufe enthalten
-Core, Numerics, sämtliche bestehenden Linear-Solve-Sprachfälle, beide neuen
-C-/Physim-Prüfungen und die vollständigen ODE-Range-Referenzen. Die Release-
-Auswahl enthält zusätzlich Referenz- und Kitprüfung. Eine lediglich unklare
-Einrückung im stdin-Probe wurde anschließend korrigiert; die endgültigen
-Gesamtläufe und SDKs verwenden diesen unverändert funktionalen Probe.
-
-Die zusätzliche Linux/Clang-Debug-ASan/UBSan-Auswahl für Mathematik,
-Matrixinversionen und Transformationen besteht mit **15/15** in
-`build/base-contract-asan-linux/test-results/run-bfl5a3y7`. Das ist erforderlich,
-weil Matrixinversionen denselben linearen Solver verwenden.
-
-Eine spätere Jobabfrage der Ausgangsrevision `03c42f6` bestätigt beide
-Windows/ClangCL-Jobs erfolgreich. Windows/v143 Debug scheitert dagegen im
-separaten Crash-Dump-Nachweis
-([Job 112945682723](https://github.com/PhysicSimulator/physim/actions/runs/37666123958/job/112945682723));
-die öffentliche Annotation nennt nur Exitcode 1. Die übrigen Jobs laufen
-bei dieser Abfrage noch. Receipts: `build/linear-audit-prior-ci-jobs.json`,
-`build/linear-audit-prior-failed-job.json` und
-`build/linear-audit-prior-failed-annotations.json`. Dieser Remote-Fehler
-bleibt getrennt offen; die lokalen Solver-/SDK-Prüfungen ersetzen ihn nicht.
-
-### Kompakte Sprachfixture mit identischen Eingaben
-
-Die erste explizite Fixture erzeugt 67725 C-Zeilen mit 12535867 Byte. Der
-Linux/GCC-Compiler arbeitet damit nachweislich über 17 Minuten bei nahezu
-100 % CPU und ungefähr 1,5 GB RSS. Die Fixture wurde deshalb strukturell
-verkleinert: Eine kleine Tabelle eindeutiger binärer Koeffizienten und ein
-ASCII-Indextext rekonstruieren dieselben 53 vollständigen Matrizen. Der
-Referenzprüfer bestätigt die identische Hex-Eingabefolge beim Erzeugen und
-prüft weiterhin sämtliche Lösungen und Residuen in beiden Sprachen.
-Die kompakte Fixture erzeugt 2105931 Byte C-Code. Kein Testfall, Koeffizient,
-Toleranzwert oder Solververhalten wurde entfernt oder vereinfacht.
-
-Der überholte Linux-Build wurde gezielt wegen dieser Fixture-Änderung beendet
-(Exit 143), nicht aufgrund eines Beobachtungstimeouts. Prozess-/Ressourcendaten
-liegen in `build/linear-fixture-expanded-termination.json`, sein erzeugter Code
-in `build/linear-fixture-expanded-linux.c`. Der ursprüngliche Log bleibt unter
-`build/linear-range-targeted-linux.log` erhalten. Die Solverquellen sind während
-dieser Umstellung unverändert geblieben. Die kompakte macOS-Referenzprüfung
-besteht in `build/linear-fixture-check-mac/test-results/run-duz3g303` (1/1).
-
-Das vollständige macOS-SDK mit der ersten Fixture besteht mit **403 erfolgreichen
-Prüfbefehlen**, 449 SDK-Dateien und 95 Kit-Eingaben unter
-`build/Linear systems SDK ä mac izmu2853`, verschoben unter
-`proof/Native SDK ä 7n_29a1f/Relocated SDK ä`. Receipt:
-`build/linear-range-sdk-mac-PASSED.json`. Seine 15 ursprünglichen eingefrorenen
-Dateien bleiben im Receipt und in `build/linear-range-source-freeze-first.json`
-erhalten. Die einzige anschließende funktionale Prüferänderung ist die kompakte
-Fixture samt deren Erzeuger; die Implementierung bleibt identisch.
-
-Die kompakte Fixture besteht anschließend gegen beide bereits geprüften
-macOS-SDK-Archive in `build/Linear compact SDK ä mac 66zz_exu`. Alle sechs
-zusätzlichen Befehle bestehen: Emission durch den ausgelieferten Compiler,
-zwei unabhängige Consumer-Builds, zwei rationale C-/Physim-Prüfungen und ein
-frisches Kit mit denselben 95 erfassten Eingaben. Das SDK-Manifest bleibt
-unverändert SHA-256-validiert. Receipt:
-`build/linear-compact-sdk-mac-PASSED.json`. Die aktualisierten 15 Dateien sind
-in `build/linear-range-source-freeze.json` erfasst; die Plattformchronik wird
-separat ergänzt.
-
-Die endgültige kompakte Linux/GCC-Release-Auswahl besteht mit **15/15** unter
-`build/contact-world-language-release-linux/test-results/run-wdkjpvr0`. Die
-kompakte Sprachfixture besteht erneut unter Clang/ASan/UBSan (1/1) in
-`build/base-contract-asan-linux/test-results/run-6vz08jmm`. Die vorherigen 13
-Solver-/ODE-Sanitizerfälle und 15 Matrix-/Transformations-Sanitizerfälle bleiben
-separate Nachweise. Alle vier Linux-Receipts sind zusätzlich auf dem Mac
-als `build/linear-range-targeted-linux-results.json`,
-`linear-range-asan-linux-results.json`, `linear-range-math-asan-linux-results.json`
-und `linear-compact-asan-linux-results.json` erhalten.
-
-### Abschließender macOS-Gesamtlauf
-
-Der vollständige Intel-macOS/Apple-Clang-Release-Lauf besteht mit **636/636**
-unter `build/contact-world-language-release-mac/test-results/run-g99aohmt`.
-Er verwendet bereits die kompakte endgültige Fixture und enthält sämtliche
-bisherigen Compiler-, Runtime-, Format-, Batch-, Lernpfad- und Projektfälle.
-Zusammen mit den 403 vollständigen SDK-Prüfbefehlen, sechs ergänzenden
-SDK-/Kit-Befehlen und den gezielten Sanitizerprüfungen belegt dies den
-beschriebenen lokalen Umfang. Die 77 Fensterfälle wurden in diesem Schritt
-nicht erneut vollständig ausgeführt. API/ABI 3, Wire 5, Snapshot 3, psrun 1,
-Sprache 0.182.0 und die 27 Core-Module bleiben unverändert.
-
-### Endgültiges vollständiges Linux-SDK
-
-Das frische Linux-SDK mit der kompakten endgültigen Fixture besteht vollständig
-unter `build/Linear systems SDK ä linux lk2mfuc5`, verschoben unter
-`proof/Native SDK ä fl1nbqwq/Relocated SDK ä`. Alle **403 Prüfbefehle** enden
-erfolgreich; 449 SDK-Dateien und 95 Kit-Eingaben sind SHA-256-erfasst. Der
-Receipt `build/linear-range-sdk-linux-PASSED.json` stimmt exakt mit den 15
-endgültigen Dateien in `build/linear-range-source-freeze.json` überein. Alle
-Dateihashes bleiben auch lokal unverändert. Das vollständige Befehlslog liegt
-zusätzlich auf dem Mac als `build/linear-range-sdk-linux-verification.log`.
-Die C-/Physim-Systeme, beide Archive, zwölf kalte native Projektbuilds, Cache-
-Wiederverwendung und alle bisherigen SDK-Gates bleiben in der Abnahme enthalten.
-
-Der begrenzte Implementierungsnachweis zu PP-0360 umfasst damit die tatsächliche
-Solverausführung und SDK-Verteilung auf Intel macOS und Debian. Der Plan bleibt
-mit 26 implementierten, fünf unvollständigen und 500 ungeprüften Blöcken offen.
-Die neue gesamte Remote-/Grafik-/Produktabnahme und die dokumentierten alten
-Remote-Fehler bleiben gesonderte Anforderungen.
-
-### Abschließender Linux-Gesamtlauf
-
-Der vollständige Debian-12/GCC-Release-Lauf besteht mit **636/636** unter
-`build/contact-world-language-release-linux/test-results/run-iubzzpfg`.
-Der zusätzlich lokal erhaltene Receipt ist `build/linear-range-full-linux-results.json`.
-Er enthält die endgültige kompakte Fixture und sämtliche bisherigen Compiler-,
-Runtime-, Format-, Runner-, Batch-, Domänen- und Projektprüfungen. Zusammen mit
-dem vollständigen Linux-SDK, dem vollständigen macOS-Gesamtlauf, dem macOS-SDK
-samt kompakter Ergänzung und den getrennten Sanitizerprüfungen belegt dies
-den dokumentierten Umfang. Die Originaltexte und SHA-256 des vollständigen
-Projektplans bleiben erhalten; die gesamte Projektabnahme bleibt offen.
-
+Der vollständige Nachweis bleibt in [Archivband 2](platform-validation-history-2.md#lineare-gleichungssysteme-72-pp-0360) erhalten.
 
 ## Erster nativer macOS-Accessibility-Baum (PP-0710)
 
@@ -3993,3 +3839,62 @@ Apptexten: `build/current-run-details-final-sdk-verify-mac.log`; Verbraucher
 `build/current-run-details-final-sdk-consumer-mac/Native SDK ä e8q85ezb`.
 Der abschließende Offline-Parser besteht **1/1**, `run-ofu548vd`,
 `build/current-run-details-final-docs-mac.log`.
+
+
+## Modellschichten aller acht Standardvorlagen
+
+Pendel, Wurf mit Drag, Kugelstoß, Box/Ebene, Feder, unsicherer Wurf, Boxstoß
+und Auftrieb deklarieren jeweils sieben Schichten in beiden Sprachen. Zustände
+folgen den tatsächlichen Modellparametern: beispielsweise nuller Drag/Dämpfung,
+Reibung oder inelastische Restitution, Vakuum, reines viskoses benutzerdefiniertes
+Medium und sensorabhängige Zufallsziehung. Externe Ensembles sind ausdrücklich
+getrennt vom deterministischen oder stochastischen Modell.
+
+Intel macOS/AppleClang Release:
+
+- Vorhandene Kugel-/Box-/Auftriebs-Sprachparität und Sensorreferenz **4/4**
+  im ersten Matrixlauf `run-98t12_xl`. Die zusätzliche Matrix scheiterte
+  zunächst an unterschiedlichen voreingestellten Pendelintegratoren; die
+  Prüfung setzt nun für den Vergleich ausdrücklich denselben RK4-Parameter.
+- Endgültige Matrix **1/1**, `run-01y7hdz1`,
+  `build/current-template-layers-second-mac.log`: **30** vollständige
+  CRC-geschützte Archive mit allen sieben Angaben, Parameterzuständen und
+  numerischer C-/Physim-Parität aller acht Paare.
+- Derselbe unabhängige Decoder vergleicht zusätzlich **30** Läufe gegen
+  unveränderte Module des eingefrorenen `c497a26`-SDK: **exakt gleiche**
+  Kanalschema-Bytes und sämtliche Messwerte,
+  `build/current-template-layers-baseline-mac.log`. Herkunft/Startzeit sind
+  kein numerisches Ergebnis und werden dabei nicht als gleich behauptet.
+- SDK-Installation mit Matrix, Kit und allen Handbuchquellen **20/20**,
+  `run-g8u6pjz2`, `build/current-template-layers-sdk-install-mac.log`.
+- Ausschließlich aus dem unabhängigen **198**-Dateien-Kit besteht das
+  verschobene SDK **10/10** Verbraucherbefehle: acht Spracherzeugungen und
+  beide installierten/neu gebauten 30-Archiv-Matrizen,
+  `build/current-template-layers-sdk-verify-mac.log`; Verbraucher
+  `build/current-template-layers-sdk-consumer-mac/Native SDK ä lcvrh9z3`.
+
+Diese Nachweise sind keine aktuelle ganze Plattform-/SDK-Abnahme. Spezielle
+zusätzliche Sprachbeispiele und äußere Batch-Verteilungen in den Laufdetails
+bleiben offen; PP-0482 bleibt unvollständig.
+
+
+## Gezielte CI am Stand 0cab455
+
+Die vollständigen Logs für `0cab455add525d2915b1135fb59d62634ca36266` sind
+unter `build/current-ci-0cab455-job-<Job-ID>.log` abgelegt. Geprüft wurden echte
+Laufresultate; Erfolg der Workflow-Konfiguration allein wurde nicht verwendet.
+
+[Linux-UI-Sanitizerlauf](https://github.com/PhysicSimulator/physim/actions/runs/38205616144):
+Clang, Job 114668328665, native **3/3** `run-r49elp_9` und UI **7/7**
+`run-is2zahun`; GCC, Job 114668328781, native **3/3** `run-swykb5do` und UI
+**7/7** `run-vaqv7hqb`. Dies prüft UTF-8/Clipboard/Schreibschutz und Projektbaum,
+Completion, Referenz, C-/Physim-Pendel-, Feder- und Auftriebsabläufe. Die
+2D-Kamerafälle waren in diesem ausgeführten Fokus noch nicht enthalten.
+
+[Backpressurelauf](https://github.com/PhysicSimulator/physim/actions/runs/38205616218):
+alle sechs Jobs bestehen **2/2** (normale/langsame Fortschritte, blockierte und
+abgebrochene Pipes): Linux/Clang 114668329084 `run-e_ln27qp`, Linux/GCC
+114668329128 `run-s69j02bs`, macOS/Apple Silicon 114668329136 `run-jzj4v755`,
+macOS/Intel 114668329162 `run-_8mkkuz8`, Windows/ClangCL 114668329016
+`run-ortdid6_`, Windows/MSVC 114668329195 `run-4hvuxaga`.
+Diese gezielten Resultate ersetzen keine vollständige Plattform-/Paketabnahme.

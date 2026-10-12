@@ -251,6 +251,20 @@ def verify_example_layers(repo,sdk,consumer,builder,library,rebuilt_core,suffix,
     print("Installed/rebuilt SDK example layers: 49 real additional C/Physim archives and a channel-free scene module, explicit physical/rendering/diagnostic limits and matching declarations passed",flush=True)
 
 
+def verify_material_property_examples(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked):
+    oracle=repo / "tests/test_material_property_examples.py"
+    checked([sys.executable,oracle,sdk / "bin" / ("material-properties"+suffix),
+             sdk / "bin" / ("language-material_properties"+suffix)])
+    shutil.copy2(sdk / "examples/properties/main.c",consumer / "material-properties.c")
+    checked([sdk / "bin" / ("physimc"+suffix),"--emit-c",sdk / "examples/language/material_properties.phys"],
+            output=consumer / "material-properties-phys.c")
+    for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+        c=builder.executable("material-properties-c-"+kind,["material-properties.c"],[archive])
+        phys=builder.executable("material-properties-phys-"+kind,["material-properties-phys.c"],[archive],language=True)
+        checked([sys.executable,oracle,c,phys])
+    print("Installed/rebuilt SDK material property examples: shipped binaries and source consumers, nine synthetic properties, independent SI/value references and explicit model validation passed",flush=True)
+
+
 def verify_camera_planes(repo,sdk,root,suffix,checked,compiler=None):
     for size in ("16","22"):
         work=root / ("Camera plane "+size);work.mkdir()
@@ -636,6 +650,7 @@ def main():
     parser.add_argument("--interval-only",action="store_true",
                         help="Verify Student-t mean intervals, independent numerical references and actual analysis report only")
     parser.add_argument("--series-only",action="store_true",help="Verify actual single/seeded/linear C/Physim run provenance and invalid host requests only")
+    parser.add_argument("--material-examples-only",action="store_true",help="Verify nine-property C/Physim data examples through shipped and source-rebuilt programs only")
     parser.add_argument("--camera-only",action="store_true",help="Verify actual planar camera controls at 16/22 px from a relocated app SDK only")
     parser.add_argument("--examples-only",action="store_true",help="Verify additional shipped C/Physim example declarations only")
     parser.add_argument("--templates-only",action="store_true",help="Verify archived model layers and matching trajectories for all eight C/Physim template pairs only")
@@ -665,6 +680,8 @@ def main():
     parser.add_argument("--isolation-only", action="store_true",
                         help="Verify eight actual C/Physim runner failure/restart app workflows; requires an app SDK and display")
     args = parser.parse_args()
+    if args.material_examples_only and (args.app_tests or any(value for name,value in vars(args).items() if name.endswith("_only") and name!="material_examples_only")):
+        parser.error("--material-examples-only cannot be combined with other focused modes or --app-tests")
     if args.camera_only and (args.app_tests or any(value for name,value in vars(args).items() if name.endswith("_only") and name!="camera_only")):
         parser.error("--camera-only cannot be combined with other focused modes or --app-tests")
     if args.examples_only and (args.app_tests or any(value for name,value in vars(args).items() if name.endswith("_only") and name!="examples_only")):
@@ -822,6 +839,13 @@ def main():
         builder.includes = [sdk / "include"]
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+        if args.material_examples_only:
+            shutil.copytree(sdk / "src",consumer / "src")
+            rebuilt_core=builder.archive("sdk-rebuilt-core",[f"src/{name}.c" for name in native.CORE])
+            verify_material_property_examples(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
+            (root / "PASSED.txt").write_text("Focused material property example SDK verification passed; no full platform/product acceptance.\n",encoding="utf-8")
+            print(f"Material property examples SDK verified: {root}")
+            return
         if args.camera_only:
             if not metadata["app"]:raise RuntimeError("Planar camera tests require an app SDK/display")
             verify_camera_planes(repo,sdk,root,suffix,checked,args.compiler)
@@ -1206,6 +1230,7 @@ def main():
                      "--c-analysis", property_analysis, "--phys-analysis", sdk / "bin" / ("language-property_analysis" + module_suffix),
                      "--probe", property_probe, "--work", root / ("Property workflow " + kind)])
         print("Installed/rebuilt SDK properties: SI domains, owned C/Physim data, stored metadata and mixed analyses passed", flush=True)
+        verify_material_property_examples(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
         shutil.copy2(repo / "tests/test_real_gas.c", consumer / "real-gas-check.c")
         shutil.copy2(repo / "tests/test_real_gas_report.c", consumer / "real-gas-report-probe.c")
         checked([sdk / "bin" / ("physimc" + suffix), "--emit-c",
