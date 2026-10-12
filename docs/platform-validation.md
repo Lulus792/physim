@@ -1,6 +1,6 @@
 # Plattformprüfung
 
-Stand: 11. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
+Stand: 12. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
 Die [historischen Plattformnachweise](platform-validation-history.md) enthalten
@@ -4144,40 +4144,7 @@ wurde im eingefrorenen Verzeichnis nicht nachträglich umgeschrieben.
 
 ## Expliziter 2D-Ebenenmodus (PP-0295)
 
-Die tatsächliche App bietet unter Darstellung einen 2D-Modus. Vorne/Seite/Oben
-wählt XY/YZ/XZ; orthografische und perspektivische Projektion sind separat
-wählbar. Rechte/mittlere Maustaste und Alt-Pfeile verschieben parallel zur
-Ebene, das Mausrad zoomt. Exakte Ebenenachsen vermeiden senkrechte Drift durch
-trigonometrische Rundung. Alt+2 toggelt ohne Wiederholung; Standard/Alt+Pos1
-kehrt zur freien 3D-Kamera zurück. Die Ebene und die passenden Gesten sind im
-Kamerabereich sichtbar beschrieben.
-
-Intel-macOS-/AppleClang-Release-Nachweise:
-
-- Bisherige Diagramm-/3D-Tastatur- und neue Kameraabläufe **4/4**, `run-98768cid`,
-  `build/current-camera-plane-final-ui-mac.log`.
-- Verstärkte tatsächliche 16/22-Pixel-Kameraprüfung **2/2**, `run-cmv8u5_y`,
-  `build/current-camera-plane-rendered-ui-mac.log`: wirkliche Maus-/Tastaturwege,
-  alle drei Ebenen, beide Projektionen, feste Normalenkoordinate, Zoom, Home,
-  Modifier-/Editor-/Analyseisolation und bytegleiche Szene/Messwerte. Eine
-  anfänglich noch aktive Archivansicht wurde im Prüffixture korrigiert;
-  Rendererstatistik fordert jetzt tatsächlich gezeichnete Kugel-/Vektorgeometrie.
-  Die aufgenommenen Bilder wurden visuell geprüft.
-- SDK-Installation und Dokumentations-/Kit-/Identitäts-/Seriengruppen **5/5**,
-  `run-dia9e5_y`, `build/current-camera-plane-install-mac.log`.
-- Unabhängiges **204**-Dateien-Kit, verschobenes SDK und tatsächliche 16/22-Pixel-
-  App-Bedienung **2/2** Befehle, `build/current-camera-plane-sdk-verify-mac.log`,
-  Verbraucher `build/current-camera-plane-sdk-consumer-mac/Native SDK ä byx4eyds`.
-  `--camera-only` prüft diesen UI-Vertrag gezielt; vollständige SDK-Prüfungen
-  führen die beiden Kamerafälle ebenfalls aus.
-
-PP-0295 ist einzeln umgesetzt/geprüft. Die ganze aktuelle Plattformabnahme
-bleibt offen: **123 implemented**, **14 incomplete**, **394 unverified**,
-531 unveränderte Originaltexte/Planprüfsumme, `completion_proven=false`.
-
-Abschließende Dokumentations-/Referenz-/Kitprüfung: **3/3**, `run-cgnrc5bf`,
-`build/current-camera-plane-final-docs-mac.log`.
-
+Der vollständige Nachweis bleibt in [Archivband 2](platform-validation-history-2.md#expliziter-2d-ebenenmodus-pp-0295) erhalten.
 
 ## Neun ausgelieferte Materialeigenschaften (PP-0393)
 
@@ -4228,11 +4195,57 @@ Damit sind der veraltete Identitätsprüfer, zusätzliche Modellschichten und
 belegen die grafische Bedienung nicht allein.
 
 Die vollständige verschobene SDK-/App-Gegenprobe aus dem zugehörigen
-**204**-Dateien-Kit läuft anschließend unter
-`build/current-full-sdk-0cab455-mac.log`. Ihr Ergebnis bleibt offen.
+**204**-Dateien-Kit ist erfolgreich abgeschlossen: **704/704** Befehle ohne
+Fehler, `build/current-full-sdk-0cab455-mac.log`, Consumer
+`build/current-full-sdk-0cab455-consumer-mac/Native SDK ä i2jeyz8i`.
+Darin bestehen alle 32 Vorlagen-/Sprachpaare, zwei unabhängige Analysen,
+Tastaturabläufe, Fehlerfälle, Typografie, native Barrierefreiheit,
+Dokumentation, Schritt-Haltepunkte, Runner-Isolation und die 2D-Kamera.
+Alle **424** komprimiert archivierten BMPs mit **7.256.378.512** ursprünglichen
+Bytes sind anhand komprimierter und wiederhergestellter SHA-256-Prüfsummen
+sowie Stückzahlen bestätigt; Beleg
+`build/current-full-0cab455-bitmap-integrity.log`.
+Die Pipeline ist im Zustand `complete`; Quell- und TAR-Prüfsummen bleiben
+unverändert. Die neue Projekt-Anzeigevorgabe gehört nicht zu diesem Stand.
 Die späteren neun Materialeigenschaften am Stand `ccaaaf2` gehören nicht zu
 diesem eingefrorenen Gesamtlauf; sie besitzen die oben genannten Einzel-/SDK-
 Nachweise. Eine neue Gesamtplattformabnahme wird daraus nicht abgeleitet.
 
 Die Dokumentations-/Referenzprüfung dieses Ergebnisberichts besteht **2/2**,
 `run-cp0x8cjh`, `build/current-full-0cab455-record-docs-mac.log`.
+
+## Projekt-Anzeigevorgaben aus der Oberfläche
+
+**Als Projektvorgabe speichern** übernimmt 2D/3D, Ebene, Projektion und die
+fünf Darstellungsschalter in die optionale Projektdateigruppe. Der Job hält
+einen eigenen Snapshot und speichert außerhalb der UI-Schleife. Nach Erfolg
+wird der Manifest-Snapshot aktualisiert; externe Bearbeitung bleibt als
+Konflikt erhalten. Ungespeicherte Quellen, Quellenrevision und Buildprofil
+werden dabei nicht gespeichert. Projekte ohne Anzeigegruppe erhalten beim
+Öffnen die globalen Vorgaben statt der Ansicht des zuvor geöffneten Projekts.
+
+Intel macOS/AppleClang Release besteht **4/4** reale Fensterabläufe:
+`run-y5e1oghs`, `build/current-project-display-sized-button-ui-mac.log`.
+Die bestehenden Kamerafälle und neue Speichern-/Neustart-/Konfliktfälle laufen
+jeweils mit 16 und 22 Pixeln. Die neue Schaltfläche bekommt bei großer Schrift
+ausreichend Höhe für ihren umbrochenen Text. Die Tests verwenden stabile
+Maus-Drückpositionen und warten auf die Verarbeitung von Scrollereignissen.
+Das wiedergeöffnete 22-Pixel-Fenster wurde zusätzlich visuell geprüft.
+
+Die abschließende SDK-Installation besteht **5/5** native Projektdatei-,
+Anzeigegruppen-, Dokumentations-, Referenz- und Kit-Prüfungen,
+`run-75srv2dd`, `build/current-project-display-verified-install-mac.log`.
+Das frische unabhängige **205**-Dateien-Kit prüft die verschobene Installation
+in **2/2** Befehlen mit je drei App-Prozessen (Speichern, Neustart, Konflikt):
+`build/current-project-display-sdk-verify-mac.log`, Consumer
+`build/current-project-display-sdk-consumer-mac/Native SDK ä srowz6sa`.
+Die Quelldateien bleiben in allen Prozessen bytegleich zur SDK-Vorlage.
+
+Die Linux-Sanitizer-CI enthält jetzt diese nativen und grafischen Fälle;
+ihr Ergebnis für diese Erweiterung ist noch offen. Der vollständige
+Projektformatblock PP-0439 und die gesamte Plattform-/Produktabnahme sind
+durch die Anzeigevorgaben allein nicht abgeschlossen.
+
+Die abschließende Prüfung dieser ergänzten Nachweisseiten besteht **3/3**
+(Dokumentation, Referenzen, unabhängiges Kit), `run-sr_7mkbg`,
+`build/current-project-display-record-docs-mac.log`.

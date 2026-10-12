@@ -295,6 +295,12 @@ typedef struct {
     uint32_t project_format_version;
     char project_id[33],experiment_id[33];
     ps_text_document project_manifest_snapshot;
+    SDL_Thread *display_save_thread;
+    SDL_AtomicInt display_save_done;
+    ps_project_display display_save_value;
+    ps_text_document display_save_document;
+    ps_document_result display_save_result;
+    struct nk_rect display_save_bounds,display_vector_bounds;
     enum nk_collapse_states project_build_disclosure;
     struct nk_rect migration_bounds,identity_assignment_bounds;
     struct nk_rect project_profile_bounds,project_profile_choices[2],editor_build_bounds;
@@ -441,6 +447,7 @@ static void completion_close(app *a);
 static bool api_reference_open(app *a,const ps_completion_symbol *symbol);
 static void api_reference_from_editor(app *a,struct nk_text_edit *edit);
 static void dock_show(app *a,unsigned panel);
+static void scene_camera_plane(app *a,unsigned plane);
 static bool open_run_path(app *a,const char *path);
 static bool action_button(struct nk_context *ui, const char *label, bool primary);
 static void open_settings(app *a);
@@ -716,6 +723,60 @@ static bool save_editor(struct nk_text_edit *edit, const char *path) {
     if (!ok) SDL_RemovePath(temporary);
     return ok;
 }
+static int project_display_worker(void *user) {
+    app *a=user;
+    a->display_save_result=ps_project_display_save_document(&a->display_save_document,&a->display_save_value);
+    SDL_SetAtomicInt(&a->display_save_done,1);return 0;
+}
+static void project_display_finish(app *a,bool wait) {
+    if(!a->display_save_thread || (!wait && !SDL_GetAtomicInt(&a->display_save_done)))return;
+    SDL_WaitThread(a->display_save_thread,NULL);a->display_save_thread=NULL;
+    if(a->display_save_result==PS_DOCUMENT_OK) {
+        ps_text_document_destroy(&a->project_manifest_snapshot);
+        a->project_manifest_snapshot=a->display_save_document;
+        memset(&a->display_save_document,0,sizeof a->display_save_document);
+        status(a,"Anzeigevorgabe für dieses Projekt gespeichert.");
+    } else status(a,a->display_save_result==PS_DOCUMENT_CONFLICT?
+        "Projektdatei extern geändert; Anzeigevorgabe wurde nicht gespeichert.":"Anzeigevorgabe konnte nicht gespeichert werden.");
+    ps_text_document_destroy(&a->display_save_document);
+}
+static void project_display_save(app *a) {
+    if(!a->loaded || a->display_save_thread || !a->project_manifest_snapshot.saved || a->recovery)return;
+    const ps_text_document *source=&a->project_manifest_snapshot;
+    ps_text_document_destroy(&a->display_save_document);
+    a->display_save_document=*source;
+    a->display_save_document.saved=malloc(source->length+1);
+    if(!a->display_save_document.saved){memset(&a->display_save_document,0,sizeof a->display_save_document);status(a,"Nicht genug Speicher für Anzeigevorgabe.");return;}
+    memcpy(a->display_save_document.saved,source->saved,source->length+1);
+    a->display_save_value=(ps_project_display){.defined=true,.planar=a->camera_2d,.orthographic=a->orthographic,
+        .plane=a->camera_plane,.flags=(a->show_vectors?PS_PROJECT_VIEW_VECTORS:0)|(a->show_paths?PS_PROJECT_VIEW_PATHS:0)|
+        (a->show_points?PS_PROJECT_VIEW_POINTS:0)|(a->show_labels?PS_PROJECT_VIEW_LABELS:0)|(a->show_grid?PS_PROJECT_VIEW_GRID:0)};
+    SDL_SetAtomicInt(&a->display_save_done,0);
+    a->display_save_thread=SDL_CreateThread(project_display_worker,"physim-display-save",a);
+    if(!a->display_save_thread){ps_text_document_destroy(&a->display_save_document);status(a,"Anzeigevorgabe konnte nicht gestartet werden.");}
+    else status(a,"Anzeigevorgabe wird gespeichert …");
+}
+static void project_display_apply(app *a,const ps_project_display *display) {
+    if(!display->defined) {
+        a->camera_2d=false;a->camera_plane=0;
+        a->yaw=PS_CAMERA_DEFAULT.yaw;a->pitch=PS_CAMERA_DEFAULT.pitch;
+        a->orthographic=(a->preferences.view_flags&PS_VIEW_ORTHOGRAPHIC)!=0;
+        a->show_vectors=(a->preferences.view_flags&PS_VIEW_VECTORS)!=0;
+        a->show_paths=(a->preferences.view_flags&PS_VIEW_PATHS)!=0;
+        a->show_points=(a->preferences.view_flags&PS_VIEW_POINTS)!=0;
+        a->show_labels=(a->preferences.view_flags&PS_VIEW_LABELS)!=0;
+        a->show_grid=(a->preferences.view_flags&PS_VIEW_GRID)!=0;
+        return;
+    }
+    a->camera_2d=display->planar;a->camera_plane=display->plane;a->orthographic=display->orthographic;
+    if(display->planar)scene_camera_plane(a,display->plane);
+    else {a->yaw=PS_CAMERA_DEFAULT.yaw;a->pitch=PS_CAMERA_DEFAULT.pitch;}
+    a->show_vectors=(display->flags&PS_PROJECT_VIEW_VECTORS)!=0;
+    a->show_paths=(display->flags&PS_PROJECT_VIEW_PATHS)!=0;
+    a->show_points=(display->flags&PS_PROJECT_VIEW_POINTS)!=0;
+    a->show_labels=(display->flags&PS_PROJECT_VIEW_LABELS)!=0;
+    a->show_grid=(display->flags&PS_PROJECT_VIEW_GRID)!=0;
+}
 static bool save_project_settings(app *a) {
     char path[4096];
     join(path, sizeof path, a->project, "physim.project");
@@ -823,6 +884,7 @@ static bool test_editor_safe_save(app *a) {
 #include "autosave_actions.inc"
 // clang-format on
 static void save_project(app *a) {
+    if(a->display_save_thread){status(a,"Anzeigevorgabe wird noch gespeichert; danach erneut speichern.");return;}
     if (!a->loaded || a->recovery)
         return;
     if (!a->dirty && !a->analysis_dirty && !a->project_settings_dirty)
@@ -880,7 +942,7 @@ static bool build_inputs_current(const app *a) {
 }
 static bool jobs_idle(app *a) {
     return !a->job.running && !a->runner.running && !a->data.thread && !a->report_thread &&
-           !a->batch_thread && !a->import_thread;
+           !a->batch_thread && !a->import_thread && !a->display_save_thread;
 }
 static bool idle(app *a) { return !a->reset_pending && jobs_idle(a); }
 static void clear_project(app *a) {
@@ -1036,6 +1098,7 @@ static bool open_project(app *a) {
         a->tab = 0;
     a->loaded = true;
     a->built = false;
+    project_display_apply(a,&project_settings.display);
     a->parameters = project_settings.parameters;
     a->profile = project_settings.release ? 1 : 0;
     a->dt = project_settings.timestep;
@@ -1686,6 +1749,7 @@ static void profile_process_finished(app *a,ps_process *p,int kind,bool *recorde
     ps_app_profile_record_process(a->profiler, &row);
 }
 static void pump(app *a) {
+    project_display_finish(a,false);
     if(a->import_thread && SDL_GetAtomicInt(&a->import_done)) {
         SDL_WaitThread(a->import_thread,NULL);a->import_thread=NULL;
         if(a->import_result==PS_OK || a->import_result==PS_RECOVERED) {
@@ -4765,6 +4829,7 @@ int main(int argc, char **argv) {
         /* Deterministic slow rendering for the keyboard regression only. */
         SDL_Delay(workspace_state_test && !strcmp(argv[3],"docs-keyboard-delayed")?80:5);
     }
+    project_display_finish(a,true);
     if (a->dirty || a->analysis_dirty || a->project_settings_dirty)
         save_project(a);
     if (workspace_state_save(a) != PS_OK) {

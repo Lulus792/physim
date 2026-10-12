@@ -319,11 +319,17 @@ static void scene_controls_view(app *a) {
         if(nk_checkbox_label(ui,"2D-Modus",&planar)) scene_camera_2d(a,planar);
         a->camera_projection_bounds=nk_widget_bounds(ui);
         nk_checkbox_label(ui, "Orthografische Ansicht", &a->orthographic);
+        a->display_vector_bounds=nk_widget_bounds(ui);
         nk_checkbox_label(ui, "Vektoren", &a->show_vectors);
         nk_checkbox_label(ui, "Flugbahnen", &a->show_paths);
         nk_checkbox_label(ui, "Punkte", &a->show_points);
         nk_checkbox_label(ui, "Beschriftungen", &a->show_labels);
         nk_checkbox_label(ui, "Raster und Achsen", &a->show_grid);
+        nk_layout_row_dynamic(ui,a->preferences.ui_size>=20?60:32,1);
+        a->display_save_bounds=nk_widget_bounds(ui);
+        nk_begin_disabled(ui,!a->loaded || a->display_save_thread || a->recovery);
+        if(nk_button_label(ui,"Als Projektvorgabe speichern")) project_display_save(a);
+        nk_end_disabled(ui);
         nk_tree_state_pop(ui);
     }
     if (nk_tree_state_push(ui, NK_TREE_TAB, "Kamera", &a->camera_disclosure)) {

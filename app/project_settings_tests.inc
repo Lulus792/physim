@@ -1,3 +1,85 @@
+static bool project_display_test_start(app *a,const char *root,const char *mode) {
+    join(a->project_input,sizeof a->project_input,root,"project");
+    if(strstr(mode,"write")){a->example=0;new_project(a);}else open_project(a);
+    if(strstr(mode,"22")){ps_preferences p=a->preferences;p.ui_size=22;preferences_apply(a,&p);}
+    /* Global UI preferences must not overwrite the already loaded project view. */
+    if(!strstr(mode,"write")) {
+        ps_project_settings settings;
+        if(ps_project_settings_read_document(&a->project_manifest_snapshot,&settings)!=PS_DOCUMENT_OK)return false;
+        project_display_apply(a,&settings.display);
+    }
+    a->tab=1;a->scene_disclosure=NK_MINIMIZED;a->view_disclosure=NK_MAXIMIZED;a->camera_disclosure=NK_MAXIMIZED;
+    a->preferences.sidebar_width=360;ps_dock_hide(&a->preferences.dock,PS_DOCK_LOG);
+    return a->loaded && !a->project_settings_dirty && !a->dirty && !a->analysis_dirty;
+}
+static void project_display_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(a->library_thread)return;
+    bool write=strstr(mode,"write")!=NULL,conflict=strstr(mode,"conflict")!=NULL,ok=true;
+    static uint64_t revision;
+    if(!write && !conflict) {
+        if(*stage==0) {
+            ok=a->camera_2d && a->camera_plane==1 && !a->orthographic && !a->show_vectors &&
+                a->show_paths && a->show_points && a->show_labels && a->show_grid && a->yaw==(float)PS_PI/2 && a->pitch==0;
+            *capture="project-view-reopened.bmp";
+        } else if(*stage==1) {
+            char legacy[4096];snprintf(legacy,sizeof legacy,"%s-legacy",a->project);
+            snprintf(a->project_input,sizeof a->project_input,"%s",legacy);a->example=0;new_project(a);
+        } else {
+            ps_project_settings settings;
+            ok=!a->camera_2d && a->camera_plane==0 && a->orthographic==((a->preferences.view_flags&PS_VIEW_ORTHOGRAPHIC)!=0) &&
+                a->show_vectors==((a->preferences.view_flags&PS_VIEW_VECTORS)!=0) &&
+                ps_project_settings_read_document(&a->project_manifest_snapshot,&settings)==PS_DOCUMENT_OK && !settings.display.defined;
+            a->quitting=true;
+        }
+    } else switch(*stage) {
+    case 0:
+        if(conflict) {
+            char path[4096];join(path,sizeof path,a->project,"physim.project");FILE *file=fopen(path,"ab");
+            ok=file && fputs("# externally edited\n",file)>=0;
+            if(file)ok=fclose(file)==0 && ok;
+            test_scene_key(a,SDLK_2,SDL_KMOD_ALT,false);*stage=12;
+        } else {
+            if(!camera_test_click(a,a->camera_mode_bounds))return;
+        }
+        break;
+    case 1:test_mouse(a,camera_test_pressed,false);break;
+    case 2:ok=a->camera_2d;
+        if(!camera_test_click(a,a->camera_preset_bounds[2]))return;
+        break;
+    case 3:test_mouse(a,camera_test_pressed,false);break;
+    case 4:ok=a->camera_plane==1;
+        if(!camera_test_click(a,a->camera_projection_bounds))return;
+        break;
+    case 5:test_mouse(a,camera_test_pressed,false);break;
+    case 6:ok=a->camera_2d && !a->orthographic;
+        if(!camera_test_click(a,a->display_vector_bounds))return;
+        break;
+    case 7:test_mouse(a,camera_test_pressed,false);break;
+    case 8:
+        ok=!a->show_vectors;
+        nk_str_append_text_char(&a->experiment.string,"\n/* unsaved display isolation */\n",33);
+        a->dirty=true;revision=++a->source_revision;
+        *capture="project-view-unsaved.bmp";break;
+    case 9:if(!camera_test_click(a,a->display_save_bounds))return;break;
+    case 10:test_mouse(a,camera_test_pressed,false);break;
+    case 11:break; /* Let the real button release start its worker. */
+    case 12:if(a->display_save_thread)return;
+        ok=a->display_save_result==PS_DOCUMENT_OK && a->dirty && a->source_revision==revision && !a->project_settings_dirty;
+        {ps_project_settings settings;ok &= ps_project_settings_read_document(&a->project_manifest_snapshot,&settings)==PS_DOCUMENT_OK &&
+            settings.display.defined && settings.display.planar && settings.display.plane==1 && !settings.display.orthographic && settings.display.flags==30;}
+        a->dirty=false;a->quitting=true;break;
+    case 13:if(!camera_test_click(a,a->display_save_bounds))return;break;
+    case 14:test_mouse(a,camera_test_pressed,false);break;
+    case 15:break; /* Let the conflict save button consume its release. */
+    case 16:if(a->display_save_thread)return;
+        ok=a->display_save_result==PS_DOCUMENT_CONFLICT && strstr(a->status,"extern") && !a->dirty && !a->project_settings_dirty;
+        a->quitting=true;break;
+    default:ok=false;a->quitting=true;break;
+    }
+    if(!ok){fprintf(stderr,"Project display %s stage %d failed: %s\n",mode,*stage,a->status);*code=1;a->quitting=true;}
+    if(a->quitting)printf("PROJECT DISPLAY SELF-TEST: %s\n",*code?"FAILED":"PASSED");
+    (*stage)++;
+}
 static bool project_controls_test_start(app *a,const char *root,const char *mode) {
     join(a->project_input,sizeof a->project_input,root,"project");
     if(!strcmp(mode,"project-settings-controls-write")){a->example=0;new_project(a);}
@@ -49,6 +131,7 @@ static void project_controls_test_frame(app *a,const char *mode,int *stage,int *
     if(read && a->quitting)printf("BUILD CONTROLS SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 }
 static bool project_settings_test_start(app *a, const char *root, const char *mode) {
+    if(!strncmp(mode,"project-settings-display-",25))return project_display_test_start(a,root,mode);
     if(!strncmp(mode,"project-settings-controls-",26))return project_controls_test_start(a,root,mode);
     join(a->project_input, sizeof a->project_input, root, "project");
     if (!strcmp(mode, "project-settings-write")) {
@@ -78,6 +161,7 @@ static bool project_settings_test_start(app *a, const char *root, const char *mo
     return restored;
 }
 static void project_settings_test_frame(app *a, const char *mode, int *stage, int *code, const char **capture) {
+    if(!strncmp(mode,"project-settings-display-",25)){project_display_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"project-settings-controls-",26)){project_controls_test_frame(a,mode,stage,code,capture);return;}
     static int reported_stage = -1;
     if (*stage != reported_stage) {

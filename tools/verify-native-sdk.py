@@ -265,6 +265,16 @@ def verify_material_property_examples(repo,sdk,consumer,builder,library,rebuilt_
     print("Installed/rebuilt SDK material property examples: shipped binaries and source consumers, nine synthetic properties, independent SI/value references and explicit model validation passed",flush=True)
 
 
+def verify_project_display(repo,sdk,root,suffix,checked,compiler=None):
+    for size in ("16","22"):
+        work=root / ("Project display "+size);work.mkdir()
+        command=[sys.executable,repo / "tests/check_display_workflow.py","project_display_"+size,
+                 "--app",sdk / "bin" / ("physim"+suffix),"--work",work,"--root",sdk]
+        if compiler:command += ["--cc",compiler]
+        checked(command,timeout=150)
+    print("Relocated SDK project display: actual 16/22 px save/reopen, captured 2D/plane/projection/visibility, unsaved-source isolation and external-edit conflicts passed",flush=True)
+
+
 def verify_camera_planes(repo,sdk,root,suffix,checked,compiler=None):
     for size in ("16","22"):
         work=root / ("Camera plane "+size);work.mkdir()
@@ -650,6 +660,7 @@ def main():
     parser.add_argument("--interval-only",action="store_true",
                         help="Verify Student-t mean intervals, independent numerical references and actual analysis report only")
     parser.add_argument("--series-only",action="store_true",help="Verify actual single/seeded/linear C/Physim run provenance and invalid host requests only")
+    parser.add_argument("--project-display-only",action="store_true",help="Verify actual project view defaults, reopening and conflict preservation only")
     parser.add_argument("--material-examples-only",action="store_true",help="Verify nine-property C/Physim data examples through shipped and source-rebuilt programs only")
     parser.add_argument("--camera-only",action="store_true",help="Verify actual planar camera controls at 16/22 px from a relocated app SDK only")
     parser.add_argument("--examples-only",action="store_true",help="Verify additional shipped C/Physim example declarations only")
@@ -680,6 +691,8 @@ def main():
     parser.add_argument("--isolation-only", action="store_true",
                         help="Verify eight actual C/Physim runner failure/restart app workflows; requires an app SDK and display")
     args = parser.parse_args()
+    if args.project_display_only and (args.app_tests or any(value for name,value in vars(args).items() if name.endswith("_only") and name!="project_display_only")):
+        parser.error("--project-display-only cannot be combined with other focused modes or --app-tests")
     if args.material_examples_only and (args.app_tests or any(value for name,value in vars(args).items() if name.endswith("_only") and name!="material_examples_only")):
         parser.error("--material-examples-only cannot be combined with other focused modes or --app-tests")
     if args.camera_only and (args.app_tests or any(value for name,value in vars(args).items() if name.endswith("_only") and name!="camera_only")):
@@ -839,6 +852,12 @@ def main():
         builder.includes = [sdk / "include"]
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+        if args.project_display_only:
+            if not metadata["app"]:raise RuntimeError("Project display tests require an app SDK/display")
+            verify_project_display(repo,sdk,root,suffix,checked,args.compiler)
+            (root / "PASSED.txt").write_text("Focused project display SDK verification passed; no full platform/product acceptance.\n",encoding="utf-8")
+            print(f"Project display SDK verified: {root}")
+            return
         if args.material_examples_only:
             shutil.copytree(sdk / "src",consumer / "src")
             rebuilt_core=builder.archive("sdk-rebuilt-core",[f"src/{name}.c" for name in native.CORE])
@@ -1722,6 +1741,7 @@ def main():
                         raise RuntimeError("Installed SDK keyboard settings did not complete")
                 print("Installed SDK settings: keyboard-only traversal, all toggles, restart, cancellation and large-font focus scrolling passed",flush=True)
                 verify_camera_planes(repo,sdk,root,suffix,checked,args.compiler)
+                verify_project_display(repo,sdk,root,suffix,checked,args.compiler)
                 verify_step_breakpoint_app(repo, sdk, root, suffix, checked, args.compiler)
                 verify_runner_isolation_app(repo, sdk, root, suffix, checked, args.compiler)
                 verify_project_migration(repo,sdk,root,suffix,checked)

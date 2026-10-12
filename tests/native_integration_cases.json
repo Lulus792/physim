@@ -11617,6 +11617,56 @@
           "timeout": 40
         }
       ]
+    },
+    {
+      "name": "project_display_16",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "project_display_16",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 150
+        }
+      ]
+    },
+    {
+      "name": "project_display_22",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "project_display_22",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 150
+        }
+      ]
     }
   ]
 }

@@ -461,6 +461,15 @@ zoomt. **Alt + 2** schaltet zwischen 2D und freier 3D-Kamera um.
 **Standard** oder **Alt + Pos1** stellt die freie Standardkamera wieder her.
 Die Kameraansicht arbeitet mit den bestehenden Szenenobjekten und Messdaten.
 
+**Als Projektvorgabe speichern** unter **Darstellung** merkt sich 2D/3D,
+XY/YZ/XZ, Projektion und die fünf Darstellungsschalter in `physim.project`.
+Beim Öffnen werden diese Vorgaben wiederhergestellt. Verschieben, Zoom und
+einzelne ausgeblendete Objekte bleiben aktuelle Ansichtseinstellungen.
+Der Hintergrundjob speichert die beim Klick gewählte Vorgabe; Quellen,
+Parameter, Buildprofil und Messläufe gehören zu ihren eigenen Speicherabläufen.
+Eine extern geänderte Projektdatei wird als Konflikt gemeldet. Projekte ohne
+diese optionalen Vorgaben verwenden weiter die globalen Anzeigeeinstellungen.
+
 Unter **Szeneneinträge** kannst du Objekte einzeln ausblenden; **Alle einblenden**
 macht sie wieder sichtbar. Vektoren, Flugbahnen, Punkte, Beschriftungen und Raster
 haben zusätzliche gemeinsame Schalter. Dies verändert keine Messwerte.

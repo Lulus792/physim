@@ -7,14 +7,18 @@ static void camera_test_button(app *a,bool down) {
     event.button.y=a->scene_viewport_bounds.y+a->scene_viewport_bounds.h/2;
     SDL_PushEvent(&event);
 }
+static struct nk_rect camera_test_pressed;
 static bool camera_test_click(app *a,struct nk_rect r) {
+    static unsigned settle;
+    if(settle){settle--;return false;}
+    if(a->ui->input.mouse.scroll_delta.y!=0)return false; /* Render queued scrolling before using its old bounds. */
     struct nk_rect panel=a->dock_panels[PS_DOCK_INSPECTOR],sidebar=a->dock_panels[PS_DOCK_SIDEBAR];
     if(r.x>=sidebar.x && r.x+r.w<=sidebar.x+sidebar.w)panel=sidebar;
     if(r.h<=0) return false;
     if(r.y<panel.y+32 || r.y+r.h>panel.y+panel.h-12) {
-        test_plot_wheel(a,panel.x+panel.w/2,panel.y+panel.h/2,r.y<panel.y+32?1:-1);return false;
+        test_plot_wheel(a,panel.x+panel.w/2,panel.y+panel.h/2,r.y<panel.y+32?1:-1);settle=2;return false;
     }
-    test_mouse(a,r,true);return true;
+    camera_test_pressed=r;test_mouse(a,r,true);return true;
 }
 static bool camera_test_depth(app *a,bool equal) {
     ps_camera camera={a->yaw,a->pitch,a->zoom,a->camera_target,a->orthographic,a->show_vectors,a->show_grid};
@@ -43,13 +47,13 @@ static void camera_plane_test_frame(app *a,int *stage,int *code,const char **cap
         scene=a->scene;memcpy(values,a->values,sizeof values);time=a->simulation_time;break;
     case 1: if(!camera_test_click(a,a->camera_mode_bounds)) return;
         break;
-    case 2: test_mouse(a,a->camera_mode_bounds,false);break;
+    case 2: test_mouse(a,camera_test_pressed,false);break;
     case 3:
         ok=a->camera_2d && a->camera_plane==0 && a->yaw==0 && a->pitch==0 && a->orthographic && camera_test_depth(a,true);
         *capture="camera-2d-xy-orthographic.bmp";
         if(!camera_test_click(a,a->camera_projection_bounds)) return;
         break;
-    case 4:test_mouse(a,a->camera_projection_bounds,false);break;
+    case 4:test_mouse(a,camera_test_pressed,false);break;
     case 5:
         ok=a->camera_2d && !a->orthographic && camera_test_depth(a,false);
         *capture="camera-2d-xy-perspective.bmp";target=a->camera_target;
@@ -72,13 +76,13 @@ static void camera_plane_test_frame(app *a,int *stage,int *code,const char **cap
     case 14:ok=a->zoom<zoom && a->yaw==0 && a->pitch==0;
         if(!camera_test_click(a,a->camera_preset_bounds[2])) return;
         break;
-    case 15:test_mouse(a,a->camera_preset_bounds[2],false);break;
+    case 15:test_mouse(a,camera_test_pressed,false);break;
     case 16:ok=a->camera_2d && a->camera_plane==1 && a->yaw==(float)PS_PI/2 && a->pitch==0 && a->orthographic && camera_test_depth(a,true);
         *capture="camera-2d-yz.bmp";target=a->camera_target;test_scene_key(a,SDLK_RIGHT,SDL_KMOD_ALT,false);break;
     case 17:ok=a->camera_target.z<target.z && a->camera_target.x==target.x && a->camera_target.y==target.y;
         if(!camera_test_click(a,a->camera_preset_bounds[3])) return;
         break;
-    case 18:test_mouse(a,a->camera_preset_bounds[3],false);break;
+    case 18:test_mouse(a,camera_test_pressed,false);break;
     case 19:ok=a->camera_2d && a->camera_plane==2 && a->yaw==0 && a->pitch==(float)PS_PI/2 && camera_test_depth(a,true);
         *capture="camera-2d-xz.bmp";target=a->camera_target;test_scene_key(a,SDLK_UP,SDL_KMOD_ALT,false);break;
     case 20:ok=a->camera_target.z<target.z && a->camera_target.x==target.x && a->camera_target.y==target.y;
