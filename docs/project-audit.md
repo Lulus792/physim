@@ -1156,3 +1156,19 @@ ihre CRC; Messdaten, Index und Footer bleiben vollständig verglichen.
 Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **106 implemented**, **13 incomplete**, **412 unverified**;
 `completion_proven` bleibt `false`.
+
+
+## Header, CRC, Rekonstruktion und Dateierhaltung (§8.2)
+
+PP-0445/0451/0453/0457/0458 besitzen jetzt konkrete Einzelbelege: kanonischer
+Header, append-only CRC-Chunks, rekonstruierbarer Abschlussindex, Überspringen
+gültiger unbekannter Chunks und exklusive Erstellung bestehender Laufziele.
+Die vorhandene Umsetzung wurde am Stand `2ce2f12` erneut ausgeführt: sechs
+Archivgruppen und zwei Core-/Physim-Gruppen bestehen auf Intel macOS.
+Der unabhängige Indexdecoder prüft eine Million Zeilen und absolute Offsets;
+10.130 deterministische Mutationen prüfen beschädigte Header/CRC/Trunkierungen.
+[Nachweise und Grenzen](platform-validation.md#einzelprüfung-der-archivverträge-82).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**111 implemented**, **13 incomplete**, **407 unverified**;
+`completion_proven` bleibt `false`. Parameter-/Material-/Schemaspeicherung und
+weitere Planblöcke behalten ihre eigenständige Prüfung.

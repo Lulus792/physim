@@ -3800,9 +3800,14 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Header mit Magic, Formatversion und Endianness.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "src/data.c",
+        "tests/fuzz_run.c",
+        "tests/test_run_index_codec.py",
+        "docs/data-format.md"
+      ],
+      "note": "16-Byte-Header mit Magic PSRUN17, Formatversion 1 und Little-Endian-Marker 0x01020304 ist implementiert. Unabhängiger Pythondecoder prüft die exakten Bytes; 10130 deterministische Header-/Chunk-/CRC-/Trunkierungsfälle prüfen Reader-/Index-Ablehnung oder gültige Präfixe auf Intel macOS. Dies ist kein vollständiger Plattformnachweis."
     },
     {
       "id": "PP-0446",
@@ -3939,9 +3944,15 @@
       "kind": "list",
       "scope": "planned",
       "text": "- append-only Datenblöcke mit Prüfsumme.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "src/data.c",
+        "tests/test_core.c",
+        "tests/test_crc.c",
+        "tests/fuzz_run.c",
+        "tests/test_run_index_codec.py"
+      ],
+      "note": "Writer hängt kanonische Datenchunks mit CRC32 der Payload an und verwirft nichtendliche Messwerte. Der Standardvektor, unabhängige Bit-CRC-Referenzen, korrumpierte Payloads, sämtliche Trunkierungen und der unabhängige Million-Zeilen-Decoder sind geprüft. Es werden keine rohen C-Strukturen serialisiert; laufende Dateien werden nicht neu angelegt."
     },
     {
       "id": "PP-0452",
@@ -3985,9 +3996,15 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Abschlussindex, der nach einem Absturz rekonstruierbar ist.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "src/run_index.c",
+        "include/physim/run_index.h",
+        "tests/test_run_index.c",
+        "tests/test_run_index_codec.py",
+        "tests/test_language_run_index_memory.c"
+      ],
+      "note": "Abschlussindex mit CRC-geschützten Seiten und Kopf ist implementiert. Fehlende, beschädigte, fremde oder semantisch falsche Indexseiten werden aus gültigen Mess-/Szenenchunks rekonstruiert; unvollständige Dateien melden PS_RECOVERED ohne erfolgreichen Footer zu erfinden. Million-Zeilen-, Zufallszugriffs-, unabhängige Byte-/Offset-, Allocator-/Ausgabeatomizitäts- und C-/Physim-Prüfungen bestehen auf Intel macOS."
     },
     {
       "id": "PP-0455",
@@ -4015,9 +4032,15 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Unbekannte Chunk-Typen werden übersprungen.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "src/data.c",
+        "src/run_index.c",
+        "tests/test_core.c",
+        "tests/test_run_index.c",
+        "tests/test_run_index_codec.py"
+      ],
+      "note": "Unbekannte optionale Chunks innerhalb der Payloadgrenze werden nach CRC-Prüfung übersprungen. Echte Typ-999-/Typ-99-Dateien behalten Samples und Footer; der unabhängige Decoder und Legacy-Reader-Pfad sind geprüft. Unbekannte Header-/bekannte Snapshotversionen werden ausdrücklich abgewiesen; beschädigte Chunks werden nicht als gültige Daten übersprungen."
     },
     {
       "id": "PP-0458",
@@ -4030,9 +4053,16 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Bestehende Dateien werden niemals stillschweigend inkompatibel überschrieben.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/data.h",
+        "src/data.c",
+        "src/run_stream.c",
+        "tests/test_core.c",
+        "tests/test_run_stream.c",
+        "tests/test_language_run_writer.c"
+      ],
+      "note": "Core- und Handlewriter erstellen Laufdateien exklusiv mit w+bx. Ein vorhandenes Ziel erzeugt PS_IO und bleibt lesbar/unverändert; Handleausgaben bleiben erhalten. C-/Physim-Writer und bestehende Dateien sind geprüft. CSV-Export verwendet ebenfalls exklusive Erstellung; dies ist keine Zusicherung über fremde Dateisysteme oder konkurrierende externe Veränderungen."
     },
     {
       "id": "PP-0459",

@@ -4148,3 +4148,33 @@ Physim-Implementierung. Ausschließlich aus diesem entpackten Kit besteht die
 verschobene SDK-Gegenprobe erneut **7/7** Befehle:
 `build/current-start-time-independent-sdk-verify-mac.log`; Verbraucher
 `build/current-start-time-independent-sdk-consumer-mac/Native SDK ä 7am6_vcu`.
+
+
+## Einzelprüfung der Archivverträge (§8.2)
+
+Vorhandene Implementierung am Stand `2ce2f12f4fb0f11df388aa8ca7b9930a2dd1e67e`:
+Header mit Magic/Version/Endianness, append-only CRC-Chunks, exklusives Anlegen,
+optional übersprungene unbekannte Chunks und rekonstruierbarer Abschlussindex.
+Die gezielte Prüfung verändert keine Produktimplementierung.
+
+Intel macOS/AppleClang Release besteht CRC, RunStream, Szenen, deterministische
+Mutationen, C-Index und Physim-Index **6/6**, `run-cwjylwew`,
+`build/current-archive-contracts-mac.log`. Der Mutationstest hat **10.130** Fälle,
+**3.312** erfolgreiche Opens und **7.617** gültige gelesene Zeilen geprüft.
+Der unabhängige Pythondecoder prüft exakte Headerbytes, CRCs, paginierte
+Indexeinträge, absolute Offsets und Footer für **1.000.000** Messzeilen.
+Fehlender Index/Footer, CRC-falsche und CRC-korrekt semantisch falsche Seiten
+sowie fremde Indexversionen erzwingen validierte Rekonstruktion.
+Allocatorfehler erhalten Ausgaben und hinterlassen keine eigenen Allokationen.
+
+Core und Physim-Stream-Integration bestehen zusätzlich **2/2**, `run-j3rpjscz`,
+`build/current-archive-contracts-final-mac.log`: exklusive Erstellung vorhandener
+Ziele, CSV-Quoting, sämtliche Dateitrunkierungen, beschädigte Messpayload und
+gültiger unbekannter Typ 999 mit unveränderten Messwerten/Abschluss. C-Index
+prüft Typ 99. Beschädigte Chunks werden nicht als gültige unbekannte Daten
+übersprungen. Die Rekonstruktion erfindet keinen erfolgreichen Abschluss;
+unvollständige Dateien melden `PS_RECOVERED`.
+
+Die Nachweise gelten für diesen lokalen Intel-macOS-Stand. Sie ersetzen keine
+ganze Plattformmatrix und keine zugesicherte transaktionale Speicherung bei
+Stromausfall oder Veränderungen durch fremde Prozesse.
