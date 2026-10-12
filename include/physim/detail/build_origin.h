@@ -12,5 +12,7 @@
 #define PS_BUILD_COMPILER "unavailable"
 #endif
 /* Compiler's literal build date/time; no runtime clock or timezone claim. */
+#ifndef PS_BUILD_STAMP
 #define PS_BUILD_STAMP __DATE__ " " __TIME__
+#endif
 #endif

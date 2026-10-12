@@ -439,16 +439,17 @@ static bool emit_source(const char *compiler, const char *source, const char *ki
 static bool compile(toolchain *tc, const char *source, const char *object, const char *sdk,
                     const char *project, const char *directory, bool release, bool strict,
                     bool force, bool *changed, artifact_digest *digest) {
-    char preprocessed[PATH_SIZE], previous[PATH_SIZE], next_object[PATH_SIZE];
+    char preprocessed[PATH_SIZE], previous[PATH_SIZE], next_object[PATH_SIZE], compile_input[PATH_SIZE];
     char include[PATH_SIZE], project_include[PATH_SIZE], output[PATH_SIZE];
     if (snprintf(preprocessed, sizeof preprocessed, "%s.next.i", object) >= PATH_SIZE ||
         snprintf(previous, sizeof previous, "%s.i", object) >= PATH_SIZE ||
+        snprintf(compile_input, sizeof compile_input, "%s.compile.i", object) >= PATH_SIZE ||
         snprintf(next_object, sizeof next_object, "%s.next", object) >= PATH_SIZE ||
         snprintf(include, sizeof include, "%s/include", sdk) >= PATH_SIZE)
         return false;
     snprintf(project_include, sizeof project_include, "%s", project);
     const char *args[40];
-    unsigned n = 0;
+    unsigned n = 0, preprocess_output;
     args[n++] = tc->compiler;
     args[n++] = tc->msvc ? "/nologo" : "-std=c17";
     if (tc->msvc) {
@@ -463,6 +464,7 @@ static bool compile(toolchain *tc, const char *source, const char *object, const
         args[n++] = "/D_CRT_SECURE_NO_WARNINGS";
         args[n++] = "/P";
         snprintf(output, sizeof output, "/Fi%s", preprocessed);
+        preprocess_output = n;
         args[n++] = output;
     } else {
         args[n++] = "-D_POSIX_C_SOURCE=200809L";
@@ -474,6 +476,7 @@ static bool compile(toolchain *tc, const char *source, const char *object, const
             args[n++] = "-DNDEBUG";
         args[n++] = "-E";
         args[n++] = "-o";
+        preprocess_output = n;
         args[n++] = preprocessed;
     }
     args[n++] = tc->msvc ? "/I" : "-I";
@@ -484,6 +487,11 @@ static bool compile(toolchain *tc, const char *source, const char *object, const
         args[n++] = "/I";
         args[n++] = tc->includes[i];
     }
+    /* Compare dependencies without our volatile provenance literal. User DATE/TIME
+     * uses retain their existing semantics. Actual compilation gets the real stamp. */
+    unsigned stamp_argument = n;
+    args[n++] = tc->msvc ? "/DPS_BUILD_STAMP=\"physim-cache-build-stamp\"" :
+                           "-DPS_BUILD_STAMP=\"physim-cache-build-stamp\"";
     args[n++] = source;
     args[n] = NULL;
     if (run(args, directory, NULL, NULL, 0))
@@ -491,6 +499,16 @@ static bool compile(toolchain *tc, const char *source, const char *object, const
     if (!force && artifact_matches(object, digest) && equal_files(preprocessed, previous)) {
         SDL_RemovePath(preprocessed);
         return true;
+    }
+    args[stamp_argument] = source;
+    args[stamp_argument + 1] = NULL;
+    if (tc->msvc) {
+        snprintf(output, sizeof output, "/Fi%s", compile_input);
+        args[preprocess_output] = output;
+    } else args[preprocess_output] = compile_input;
+    if (run(args, directory, NULL, NULL, 0)) {
+        SDL_RemovePath(compile_input);
+        return false;
     }
     n = 0;
     args[n++] = tc->compiler;
@@ -522,11 +540,13 @@ static bool compile(toolchain *tc, const char *source, const char *object, const
         args[n++] = "-o";
         args[n++] = next_object;
     }
-    args[n++] = preprocessed;
+    args[n++] = compile_input;
     args[n] = NULL;
     printf("Compile: %s\n", source);
     fflush(stdout);
-    if (run(args, directory, NULL, NULL, 0) || !SDL_RenamePath(next_object, object) ||
+    int compiled = run(args, directory, NULL, NULL, 0);
+    SDL_RemovePath(compile_input);
+    if (compiled || !SDL_RenamePath(next_object, object) ||
         !SDL_RenamePath(preprocessed, previous) || !digest_file(object, digest))
         return false;
     *changed = true;
@@ -728,13 +748,24 @@ int main(int argc, char **argv) {
         SDL_GetPathInfo(builder, &builder_info);
     SDL_GetPathInfo(tc->compiler, &compiler_info);
     SDL_GetPathInfo(tc->linker, &linker_info);
+    char origin_header[PATH_SIZE];
+    artifact_digest origin_digest = {0};
+    int origin_length = snprintf(origin_header, sizeof origin_header,
+                                 "%s/include/physim/detail/build_origin.h", sdk);
+    if (origin_length < 0 || origin_length >= PATH_SIZE ||
+        (file_exists(origin_header) && !digest_file(origin_header, &origin_digest))) {
+        fclose(settings);
+        goto done;
+    }
     bool settings_ok =
         fprintf(settings,
                 "physim_native_build=1\napi_version=%u\nabi_version=%u\nproject=%s\nsdk=%s\ncompiler=%s\n"
-                "compiler_time=%lld\nlinker=%s\nlinker_time=%lld\nprofile=%s\nbuilder_time=%lld\nkind=%s\n",
+                "compiler_time=%lld\nlinker=%s\nlinker_time=%lld\nprofile=%s\nbuilder_time=%lld\nkind=%s\n"
+                "origin_header_size=%llu\norigin_header_crc=%08x\n",
                 sdk_api, sdk_abi, project, sdk, tc->compiler, (long long)compiler_info.modify_time, tc->linker,
                 (long long)linker_info.modify_time, profile,
-                (long long)builder_info.modify_time, project_settings.analysis_only?"analysis":"experiment") > 0;
+                (long long)builder_info.modify_time, project_settings.analysis_only?"analysis":"experiment",
+                (unsigned long long)origin_digest.size, origin_digest.crc) > 0;
     for (unsigned i = 0; i < tc->library_count; i++)
         settings_ok = fprintf(settings, "lib=%s\n", tc->libraries[i]) > 0 && settings_ok;
     if (fclose(settings))

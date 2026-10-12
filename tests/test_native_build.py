@@ -6,6 +6,7 @@ import re
 from pathlib import Path
 import shutil
 import subprocess
+import struct
 import sys
 import tempfile
 import uuid
@@ -63,7 +64,16 @@ def run_modules(project, profile):
     command([args.runner, output / ("experiment" + extension), "--describe"])
     command([args.runner, output / ("experiment" + extension), run.with_suffix(".psrun"), "--steps", "100"])
     command([args.analysis_runner, output / ("analysis" + extension), run.with_suffix(".psrun"), run])
-    assert run.with_suffix(".psrun").stat().st_size > 0
+    raw = run.with_suffix(".psrun").read_bytes()
+    assert raw[:16] == b"PSRUN17\n" + struct.pack("<II", 1, 0x01020304)
+    kind, length, _ = struct.unpack_from("<III", raw, 16)
+    assert kind == 1
+    metadata = dict(line.split(b"=", 1) for line in raw[28:28+length].splitlines() if b"=" in line)
+    # Dependency comparison may mask only the host build literal; compiled code
+    # must still archive actual compiler dates rather than a cache sentinel.
+    for name in (b"core_build", b"module_build", b"runner_build"):
+        assert re.fullmatch(rb"[A-Z][a-z]{2} [ 0-9][0-9] [0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2}", metadata[name]), metadata
+    assert b"physim-cache-build-stamp" not in raw[:28+length]
 
 
 project = root / "C sources"
@@ -287,6 +297,13 @@ original_sdk = args.sdk
 try:
     args.sdk = versioned_sdk
     assert "Build successful" in build(version_project)
+    assert "Build up to date" in build(version_project)
+    origin = versioned_sdk / "include/physim/detail/build_origin.h"
+    original_origin = origin.read_text(encoding="utf-8")
+    origin.write_text(original_origin.replace('__TIME__', '__TIME__ " provenance-change"'), encoding="utf-8")
+    assert "Compile:" in build(version_project)
+    assert b" provenance-change" in (version_project / "build/Debug/sdk-data.obj").read_bytes()
+    assert "Build up to date" in build(version_project)
 finally:
     args.sdk = original_sdk
 recorded = (version_project / "build/Debug/build.config").read_text(encoding="utf-8")

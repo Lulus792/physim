@@ -1,4 +1,5 @@
 """Run complete C/Physim Batch documentation with both experiment languages."""
+from run_archive_reference import execution_independent_bytes
 from pathlib import Path
 import hashlib
 import subprocess
@@ -15,7 +16,7 @@ for m,model in enumerate((c_model,phys_model)):
         series=Path(str(prefix)+'-series')
         command([probe,Path(str(prefix)+'.psreport'),'--demo',series])
         assert len(list(series.glob('run-*.psrun')))==256
-        fingerprints=[hashlib.sha256((series/f'run-{i:04d}.psrun').read_bytes()).digest() for i in range(1,257)]
+        fingerprints=[hashlib.sha256(execution_independent_bytes((series/f'run-{i:04d}.psrun').read_bytes())).digest() for i in range(1,257)]
         if a==0:first=fingerprints
         else:assert first==fingerprints
 print('Batch documentation: four complete C/Physim combinations, 1024 immutable archives, independent reports and equal trajectories passed')

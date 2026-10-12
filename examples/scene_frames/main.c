@@ -24,10 +24,11 @@ static void scene(ps_context *c,ps_scene *s) {
 }
 static void destroy(ps_context *c){(void)c;}
 PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
-    static const ps_experiment_api api={sizeof api,PS_ABI_VERSION, (#ifdef PS_TEST_FRAME_CAP_MISSING
-        PS_EXPERIMENT_SCENE_HIERARCHY) | PS_EXPERIMENT_BUILD_INFO,
+    static const ps_experiment_api api={sizeof api,PS_ABI_VERSION,
+#ifdef PS_TEST_FRAME_CAP_MISSING
+        PS_EXPERIMENT_SCENE_HIERARCHY | PS_EXPERIMENT_BUILD_INFO,
 #else
-        PS_EXPERIMENT_SCENE_HIERARCHY|PS_EXPERIMENT_SCENE_FRAMES,
+        PS_EXPERIMENT_SCENE_HIERARCHY|PS_EXPERIMENT_SCENE_FRAMES|PS_EXPERIMENT_BUILD_INFO,
 #endif
         "Coordinate frames",create,reset,step,scene,destroy,NULL, PS_EXPERIMENT_BUILD_ORIGIN};return &api;
 }

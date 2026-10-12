@@ -1172,3 +1172,16 @@ Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
 **111 implemented**, **13 incomplete**, **407 unverified**;
 `completion_proven` bleibt `false`. Parameter-/Material-/Schemaspeicherung und
 weitere Planblöcke behalten ihre eigenständige Prüfung.
+
+
+## Integrationsfehler der Herkunft geschlossen
+
+Der vollständige eingefrorene `2ce2f12`-Lauf besteht **679/716** und findet
+**37** Integrationsfehler. C-Capability-Initialisierungen, Handbuchquellen,
+Buildcache und zwei veraltete Fixture-/Zeitannahmen sind korrigiert. Der
+maschinelle Abgleich bestätigt bestandene Nachprüfungen aller 37 Namen in
+45 verschiedenen Reparatur-/Folgegruppen; zusätzliche Headerdefinition-/
+Migrations-, tatsächliche App- und verschobene SDK-Prüfungen bestehen.
+[Getrennte Fehler- und Reparaturnachweise](platform-validation.md#vollständiger-2ce2f12-lauf-und-herkunftsintegration).
+Die Gesamtzählung bleibt **111 implemented**, **13 incomplete**,
+**407 unverified**; die neue vollständige Abnahme ist weiterhin offen.

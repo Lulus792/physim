@@ -92,7 +92,14 @@ unter `build/`. Erst eine erfolgreiche Übersetzung ersetzt die bisherige Ausgab
 Eine fehlerhafte Übersetzung ersetzt den zugehörigen C-Code nicht; die lauffähigen
 Module bleiben erhalten. Unveränderte Übersetzungen erhalten auch den Zeitstempel
 der erzeugten C-Datei.
-Quellen mit zeitabhängigen Makros wie `__TIME__` können bei jedem Build erneut
+Die automatische Core-/Modulherkunft (`PS_BUILD_STAMP`) erhält beim
+Abhängigkeitsvergleich einen festen Platzhalter. Nur bei einer nötigen
+Übersetzung wird erneut mit dem tatsächlichen Compiler-Buildliteral
+vorverarbeitet und kompiliert. Ein unveränderter Build behält deshalb seine
+ursprüngliche Herkunft. Vergleichsdateien und kompilierter Code sind getrennt. Die Größe und CRC32 des
+Herkunftsheaders stehen zusätzlich in der Buildkonfiguration, damit eine
+Änderung seiner Definition einen Neubau auslöst.
+Quellen mit eigenen zeitabhängigen Makros wie `__TIME__` können bei jedem Build erneut
 übersetzt werden, weil sich ihr vorverarbeiteter Inhalt ändert.
 
 Physim selbst, seine Tests und SDK-Pakete verwenden ebenfalls den direkten Builder.
@@ -152,8 +159,8 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-`--test` führt derzeit 608 Tests ohne Fenster aus, mit `--no-app` die
-589 Prüfungen ohne SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
+Der aktuelle Katalog enthält unter macOS **716** Tests ohne Fenster für
+`--test`, darunter **688** Prüfungen ohne SDL-Abhängigkeit mit `--no-app`. Die C-Prüfungen decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
 Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.

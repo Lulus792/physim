@@ -26,6 +26,6 @@ static ps_result step(ps_context *c,double dt){return measure(c,c->time_s+dt);}
 static void scene(ps_context *c,ps_scene *out){ps_scene_add_id(out,1,PS_SPHERE,ps_v3(c->time_s,0,0),ps_v3(0,0,0),.1,0x53aeefff);}
 static void destroy(ps_context *c){(void)c;}
 PS_EXPORT const ps_experiment_api *ps_get_experiment(void) {
-    static const ps_experiment_api api={.struct_size=sizeof api,.abi_version=PS_ABI_VERSION, (.name="Real gas comparison") | PS_EXPERIMENT_BUILD_INFO,
+    static const ps_experiment_api api={.struct_size=sizeof api,.abi_version=PS_ABI_VERSION, .capabilities=PS_EXPERIMENT_BUILD_INFO,.name="Real gas comparison",
         .create=create,.reset=reset,.step=step,.build_scene=scene,.destroy=destroy, PS_EXPERIMENT_BUILD_ORIGIN};return &api;
 }

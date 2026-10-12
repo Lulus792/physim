@@ -15,8 +15,9 @@ int main(int argc,char **argv) {
         CHECK(ps_channel_add(&c,"energy",PS_JOULE,"constant fixture energy")==4);
         CHECK(ps_channel_add(&c,"sensor.angle",PS_RADIAN,"synthetic signal")==5);
         char path[4096];snprintf(path,sizeof path,"%s/%s.psrun",argv[1],names[kind]);
-        ps_run_writer writer;CHECK(ps_run_create(&writer,path,&c,
-            "model=synthetic sampled amplitude envelope, not a physical experiment\nintegrator=RK4\n")==PS_OK);
+        snprintf(c.model_metadata,sizeof c.model_metadata,
+                 "model=synthetic sampled amplitude envelope, not a physical experiment\nintegrator=RK4\n");
+        ps_run_writer writer;CHECK(ps_run_create(&writer,path,&c,"Synthetic amplitude envelope")==PS_OK);
         unsigned count=kind==4?20:kind==5?3:kind==3?2001:1601;
         for(unsigned i=0;i<count;i++) {
             double t=0,a=0;
