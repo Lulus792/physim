@@ -4098,28 +4098,7 @@ bleiben offen; PP-0482 bleibt unvollständig.
 
 ## Abgeschlossene vollständige Intel-macOS-SDK-Prüfung für c497a26
 
-Der exakt eingefrorene Stand `c497a266987ff054f54f9f9aac0ad351365e73eb` besteht
-nach **716/716** nativen Release-Tests auch die vollständige verschobene SDK-/
-App-Prüfung: **653/653** Verbraucherbefehle mit Exit 0, `PASSED.txt` vorhanden.
-Log: `build/current-full-sdk-c497a26-mac.log`; Verbraucher
-`build/current-full-sdk-c497a26-consumer-mac/Native SDK ä q7n9a00u`. Die Pipeline
-bestätigt weiterhin alle **1.398** Quellhashes und die ursprüngliche Tar-Prüfsumme.
-
-Die Suite enthält installierte/neu gebaute Bibliotheken, C-/Physim-Domänen,
-Compiler-/Buildherkunft, Ereignisse, Identitäten, tatsächliche GUI-Projekte,
-Einstellungen, Typografie, native Accessibility, Haltepunkte und Isolation.
-Die vollständige Tastaturmatrix baut/zeichnet/analysiert alle **32** Template-/
-Sprachpaare sowie zwei unabhängige Analysen bei 16/22 px, einschließlich der
-Fehler- und Dateierhaltungsfälle. Die reparierten Herkunftsinitialisierungen,
-Handbuchquellen und inkrementellen Builds scheitern hier nicht mehr.
-
-**408** genaue Bildarchive mit **7.048.453.104** unkomprimierten Bytes bestehen
-gegen ihren Beleg alle Gzip-Dateihashes und alle rekonstruierten Bytezahlen/
-SHA-256-Werte: `build/current-full-sdk-c497a26-bitmap-integrity.log`.
-Dies ist der volle lokale Nachweis dieser Suite/dieses Stands. Spätere
-Laufdetails, Standardvorlagen-Deklarationen und Serienherkunft sind andere
-gezielt geprüfte Stände; ganze aktuelle Linux-/Windows-/Apple-Silicon- und
-Produktabnahme bleiben eigenständige offene Gates.
+Der vollständige Nachweis bleibt im [Plattformarchiv](platform-validation-history.md#abgeschlossene-vollständige-intel-macos-sdk-prüfung-für-c497a26) erhalten.
 
 ## Archivierte äußere Serienherkunft
 
@@ -4241,3 +4220,30 @@ Gesamtplattformabnahme. Die 531 Originaltexte/Planprüfsumme bleiben erhalten:
 
 Die anschließenden Dokumentations-/Referenzprüfungen bestehen **2/2**,
 `run-4ai91kcy`, `build/current-live-data-docs-mac.log`.
+
+
+## Einzelabnahme der grundlegenden Mechanik (PP-0375/0381..0386)
+
+Am `e2e7ed6`-Stand bestehen auf Intel macOS/AppleClang Release **7/7**,
+`run-t05kxf_v`, `build/current-mechanics-audit-mac.log`: `mechanics`,
+`distance_joint`, `broad_phase`, `language_joint`, `language_collision_parity`,
+`spring_reference` und `collision_reference`. Die Quellenprüfung ordnet sechs
+Planblöcke einzeln zu.
+
+Punktmodelle verwenden den translationsreinen Body-Pfad; Kräfte am Schwerpunkt
+und fehlende Rotation lassen die Hauptträgheiten aus dieser Bewegung heraus.
+Analytische Kraft-/Impuls-/Energievergleiche, Kugel-/Boxträgheit, gedrehte Anker,
+freie Rotation, gyroskopische Beschleunigung, Energie-Konvergenz sowie
+Feder-/Gelenk-/Reibungs-/Restitutionsreferenzen bestehen. Die unabhängige
+Broad-Phase-Referenz vergleicht 80 vollständige Paarmengen und den maximalen
+1024-Boxen-Fall einschließlich Grenzberührung und Fehleratomizität.
+
+SI-Feldnamen und Quantity-/Kanal-Dimensionsmetadaten sind explizit; ein double
+trägt keine implizite statische Einheit. Die tatsächliche SI-Kanalgrenze ist
+zusätzlich in `run-x43qmpw5` geprüft. Diese Einzelabnahme schließt weder die
+Mehrkörper-CCD-Gesamtabnahme noch eine neue Gesamtplattformmatrix ab.
+Aktuell: **122 implemented**, **14 incomplete**, **395 unverified** bei
+531 unveränderten Originalblöcken und ursprünglicher Planprüfsumme.
+
+Die Dokumentations-/Referenzprüfung besteht **2/2**, `run-9cbs_s9b`,
+`build/current-mechanics-audit-docs-mac.log`.

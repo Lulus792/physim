@@ -3164,18 +3164,15 @@
       "kind": "paragraph",
       "scope": "planned",
       "text": "C kann Dimensionen nur begrenzt statisch prüfen. Deshalb wird nicht vorgegeben, dass ein `double` allein seine Einheit kennt. Öffentliche APIs nutzen entweder klar benannte SI-Felder oder Wert-plus-Dimensions-Metadaten.\n",
-      "status": "unverified",
+      "status": "implemented",
       "evidence": [
-        "docs/units.md",
-        "src/core.c",
-        "src/series.c",
-        "tests/test_series_si.c",
-        "tests/test_unit_runtime_codes.c",
-        "include/physim/experiment.h",
-        "tests/test_channel_quantity.c",
+        "include/physim/mechanics.h",
+        "include/physim/units.h",
+        "docs/mechanics.md",
+        "docs/measurement.md",
         "tests/test_channel_declaration_workflow.py"
       ],
-      "note": "Der neue Quantity-Sampler prüft Dimensionsmetadaten, konvertiert nach SI und übernimmt genau einen Wert atomar; Physim ergänzt Besitzer-/Phasenprüfung. Echte C-/Physim-Sensorläufe persistieren Zentimeterwerte und deren Unsicherheit in Meterkanälen, falsche Dimensionen/Bereichsfehler erhalten Werte. Messungen bleiben externe Darstellungen in der Sensoreinheit, Berichte können eigene Achseneinheiten besitzen; Run-Kanalskala ist fest 1. Die umfassende Reichweite dieser Anforderung bleibt für alle öffentlichen Datenpfade noch einzeln abzugleichen; rohe Doubles tragen keine prüfbare Einheit."
+      "note": "Öffentliche mechanische Körper-/Kraft-/Impulsfelder tragen SI-Namen; Quantity/Unit und deklarierte Kanäle besitzen Dimensions-/Skalierungsmetadaten. Ein reines double erhält keine erfundene statische Einheit. C-/Physim-SI-Grenzen, abgewiesene falsche Dimensionen und echte Archive sind in run-x43qmpw5 geprüft."
     },
     {
       "id": "PP-0379",
@@ -3203,19 +3200,14 @@
       "kind": "list",
       "scope": "planned",
       "text": "1. Punktmasse, Kräfte, Impuls und Energie.\n",
-      "status": "unverified",
+      "status": "implemented",
       "evidence": [
+        "include/physim/core.h",
         "include/physim/mechanics.h",
         "src/mechanics.c",
-        "src/body_numeric.h",
-        "include/physim/language_mechanics.h",
-        "tests/test_body_momentum.c",
-        "tests/test_body_momentum_oracle.py",
-        "tests/fixtures/language/body_momentum.phys",
-        "docs/mechanics.md",
-        "docs/platform-validation.md"
+        "tests/test_mechanics.c"
       ],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft. Lineare und gesamte Drehimpulsabfragen ergänzen analytische, Stoß-, C-/Physim- und 1012 exakte rationale Bereichsreferenzen; die umfassende Mechanikabnahme bleibt offen."
+      "note": "Punktmodelle nutzen den translationsreinen Body-Pfad mit Kräften am Schwerpunkt und ohne Rotation; Position/Geschwindigkeit/Masse sind SI-Werte. Kraftintegration, Impulsantwort und kinetische Energie werden gegen analytische Newton-/Impuls-/Energieergebnisse geprüft. run-t05kxf_v besteht lokal."
     },
     {
       "id": "PP-0382",
@@ -3228,20 +3220,14 @@
       "kind": "list",
       "scope": "planned",
       "text": "2. starre Körper, Trägheitstensor, Lage und Winkelgeschwindigkeit.\n",
-      "status": "unverified",
+      "status": "implemented",
       "evidence": [
         "include/physim/mechanics.h",
         "src/mechanics.c",
-        "src/body_numeric.h",
-        "tests/test_body_range_oracle.py",
-        "docs/mechanics.md",
-        "docs/platform-validation.md",
-        "include/physim/language_mechanics.h",
-        "tests/test_body_momentum.c",
-        "tests/test_body_momentum_oracle.py",
-        "tests/fixtures/language/body_momentum.phys"
+        "tests/test_mechanics.c",
+        "docs/mechanics.md"
       ],
-      "note": "Kugel-/Boxträgheit und kinetische Energie besitzen unabhängige rationale C-/Physim- sowie Decimal-Rotationsreferenzen. Bereichsgarantie auf Konstruktoren/Energie begrenzt; umfassende Lage-/Winkelgeschwindigkeits-/Dynamikabnahme bleibt offen. Lineare und gesamte Drehimpulsabfragen ergänzen analytische, Stoß-, C-/Physim- und 1012 exakte rationale Bereichsreferenzen; die umfassende Mechanikabnahme bleibt offen."
+      "note": "Homogene Kugel/Box und explizite Hauptträgheiten, Body-to-world-Quaternion und Welt-Winkelgeschwindigkeit. Referenzen prüfen Trägheit, gedrehte Punktgeschwindigkeit, außermittigen Impuls, freie Rotation, gyroskopische Beschleunigung und Energie-Konvergenz. run-t05kxf_v besteht auf Intel macOS."
     },
     {
       "id": "PP-0383",
@@ -3254,9 +3240,16 @@
       "kind": "list",
       "scope": "planned",
       "text": "3. einfache Constraints und Federn.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/mechanics.h",
+        "src/mechanics.c",
+        "tests/test_distance_joint.c",
+        "tests/test_language_joint.c",
+        "tests/verify_spring.c",
+        "docs/spring.md"
+      ],
+      "note": "Axiale Hooke-Feder mit viskosem Dämpfer und Abstandsgelenk mit lokalen Ankern. Geprüft sind analytische Kräfte/Impulse, gedrehte außermittige Anker, elastische/kritische/überdämpfte Referenzen und C-/Physim-Joint-Parität in run-t05kxf_v. Stabilisierung und ihre Energiegrenzen bleiben explizit."
     },
     {
       "id": "PP-0384",
@@ -3269,9 +3262,13 @@
       "kind": "list",
       "scope": "planned",
       "text": "4. Broad Phase für Kollisionen.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/collision.h",
+        "src/collision.c",
+        "tests/test_broad_phase.c"
+      ],
+      "note": "Deterministische AABB-Broad-Phase mit kanonischen Paaren und erforderlicher Kapazität. 80 unabhängige vollständige Paarvergleiche, 1024 vollständig überlappende Boxen, berührende/knapp getrennte Grenzen und Fehleratomizität bestehen in run-t05kxf_v."
     },
     {
       "id": "PP-0385",
@@ -3310,9 +3307,15 @@
       "kind": "list",
       "scope": "planned",
       "text": "6. Impulsbasierte Kollisionsantwort mit Reibung und Restitution.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "include/physim/mechanics.h",
+        "src/mechanics.c",
+        "tests/test_mechanics.c",
+        "tests/verify_collision.c",
+        "tests/test_collision_language_parity.c"
+      ],
+      "note": "Normal-/Tangentialimpulse berücksichtigen Restitution, Coulomb-Reibung und Rotation. Analytische elastische/inelastische Paarstöße, Haften/Gleiten, Gesamtimpuls/-drehimpuls und Energiedissipation sowie echte C-/Physim-Archive bestehen in run-t05kxf_v. Kontinuierliche Mehrkörperabnahme bleibt separat unter PP-0387."
     },
     {
       "id": "PP-0387",

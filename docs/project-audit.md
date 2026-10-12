@@ -1256,3 +1256,15 @@ Gültigkeitsmasken. [Nachweise](platform-validation.md#einzelabnahme-von-zeitste
 Gesamtplattformabnahme bleibt separat offen. Aktueller Stand bei 531 unveränderten
 Originaltexten/Planprüfsumme: **116 implemented**, **14 incomplete**,
 **401 unverified**; `completion_proven` bleibt `false`.
+
+
+## Mechanikgrundlagen einzeln zugeordnet
+
+Sechs weitere Planblöcke PP-0375/0381/0382/0383/0384/0386 sind anhand der
+öffentlichen Verträge und sieben ausgeführten Referenzgruppen zugeordnet:
+SI-Metadaten, translationsreine Punktmodelle, Starrkörper, Federn/Constraints,
+Broad Phase und Impulsantwort mit Reibung/Restitution.
+[Nachweise](platform-validation.md#einzelabnahme-der-grundlegenden-mechanik-pp-037503810386).
+Mehrkörper-CCD und Gesamtplattformabnahme bleiben separat offen. Die Zählung
+lautet nun **122 implemented**, **14 incomplete**, **395 unverified** bei
+allen 531 unveränderten Originalblöcken und ursprünglicher Planprüfsumme.
