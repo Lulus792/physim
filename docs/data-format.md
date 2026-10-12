@@ -36,7 +36,10 @@ Der Experimentrunner ergänzt `project_id` und `experiment_id` aus den
 entsprechenden CLI-Optionen (je 32 kleine Hexadezimalzeichen). Ohne passende
 Herkunft lautet der Wert ausdrücklich `unavailable`. Neu angelegte App-Projekte
 besitzen dauerhafte IDs im Manifest; [Details](workspace.md#dauerhafte-projekt--und-experiment-ids).
-Modellmetadaten dürfen diese Hostfelder nicht selbst deklarieren; Kollisionen
+Freie C-/Physim-Writer können dieselben Felder mit einem typisierten
+`ps_run_identity` / `RunIdentity` setzen. [Benutzung und Decoder](run-streams.md#typisierte-laufidentität).
+Modellmetadaten dürfen bei typisierter Host-Identität diese Felder nicht zusätzlich
+deklarieren; Kollisionen
 werden vor dem Anlegen der Datei abgewiesen.
 
 Der Experimentrunner ergänzt außerdem `module_fnv1a64` und `runner_build` vor dem

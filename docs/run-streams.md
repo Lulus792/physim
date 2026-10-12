@@ -224,3 +224,53 @@ liefern vor dem ersten Ereignis einen fangbaren Fehler; die Nachricht wird
 als besitzender String kopiert. Nach EOF bleibt der letzte Record verfügbar.
 Nutze separate Reader, um mehrere Arten durchzulaufen. Der Low-Level-C-Reader
 erfordert ebenfalls einen separaten Cursor für jede Traversierung.
+
+## Typisierte Laufidentität
+
+`ps_run_identity` besitzt unabhängige Kopien der Projekt-/Experiment-ID.
+`ps_run_identity_make` validiert zwei kanonische Hex32-Strings und verändert
+die Ausgabe nur bei Erfolg. `ps_run_create_with_identity` und
+`ps_run_writer_create_with_identity` speichern diese Hostfelder einmal im
+Metadatenchunk. Modellmetadaten dürfen die Felder nicht zusätzlich deklarieren;
+Validierungs-/Kollisionsfehler legen keine Datei an. Die neuen APIs bewahren
+auch Writer-/Handle-Ausgaben bei einem bestehenden Ziel oder anderen Fehlern.
+
+```c
+ps_run_identity identity;
+ps_result result = ps_run_identity_make(project_id, experiment_id, &identity);
+if (result == PS_OK)
+    result = ps_run_writer_create_with_identity(store, path, context,
+                                                "Experiment", &identity, &writer);
+```
+
+```text
+let identity = RunIdentity("0123456789abcdef0123456789abcdef",
+                           "fedcba9876543210fedcba9876543210")
+store.setIdentity(identity)
+let writer = store.createWriter("experiment.psrun","Experiment")
+let reader = store.openReader("experiment.psrun")
+if reader.hasIdentity():
+    let saved = reader.identity()
+    print(saved.projectId())
+```
+
+`RunIdentity.fromMetadata(text)` dekodiert den gesamten String-Bytebereich
+unabhängig von einem Reader. `isValid()` prüft beide Felder des Werts.
+Konstruktoren prüfen die vollständigen Stringlängen; ihre C-Übergabe enthält
+Zeiger und Länge statt stillschweigender Kürzung.
+
+Die Konfiguration gilt nur für zukünftige Writer. Bereits erzeugte Header
+bleiben erhalten. Der Wert enthält keine Zeiger; Arrays, Records, Optionals
+und Funktionsrückgaben kopieren beide IDs unabhängig. Getter kopieren Strings.
+Eine ausgelesene Identität bleibt nach Reader-/Store-Close gültig.
+
+`ps_run_identity_read(metadata,length,&identity)` dekodiert einen ausdrücklich
+begrenzten Bytebereich. `ps_run_reader_identity` verwendet die Metadaten des
+versionierten Handles. Fehlende, teilweise fehlende oder `unavailable` IDs
+liefern `PS_EOF`; ungültige/doppelte bekannte Felder `PS_CORRUPT`. Die Ausgabe
+bleibt dabei erhalten. Feldnamen sind exakt und unterscheiden Groß-/Kleinschreibung.
+Zeilen enden mit ASCII LF/CR. Eingebettete NUL-Bytes werden abgewiesen, auch
+beim Öffnen einer Laufdatei. Alte Dateien ohne IDs bleiben lesbar.
+Physim `hasIdentity()` liefert bei fehlender Herkunft false und bei beschädigter
+Herkunft einen fangbaren Fehler; `identity()` verlangt eine vollständige Identität.
+Die alten C-Writer-Aufrufe bleiben für bestehende Programme verfügbar.

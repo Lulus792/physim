@@ -37,6 +37,7 @@ ps_result ps_run_store_destroy(ps_run_store *store);
 ps_result ps_run_reader_open(ps_run_store *store, const char *path, ps_run_read_handle *out);
 ps_result ps_run_reader_describe(ps_run_store *store, ps_run_read_handle handle,
                                  ps_run_read_info *out);
+ps_result ps_run_reader_identity(ps_run_store *store,ps_run_read_handle handle,ps_run_identity *out);
 /* capacity must hold the entire schema. PS_OK commits exactly one validated
  * measurement row; every other status preserves time, values and count.
  * EOF/recovered status remains terminal for this handle. */
@@ -49,6 +50,8 @@ ps_result ps_run_reader_event_next(ps_run_store *store, ps_run_read_handle handl
 ps_result ps_run_reader_release(ps_run_store *store, ps_run_read_handle handle);
 ps_result ps_run_writer_create(ps_run_store *store, const char *path, const ps_context *context,
                                const char *name, ps_run_write_handle *out);
+ps_result ps_run_writer_create_with_identity(ps_run_store *store,const char *path,const ps_context *context,
+                                              const char *name,const ps_run_identity *identity,ps_run_write_handle *out);
 ps_result ps_run_writer_describe(ps_run_store *store, ps_run_write_handle handle,
                                  ps_run_write_info *out);
 /* Exactly the declared channel count, finite row. Existing run-format contracts

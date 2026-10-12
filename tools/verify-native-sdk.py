@@ -209,6 +209,23 @@ def verify_transform_range(repo, sdk, consumer, builder, library, rebuilt_core, 
 
 
 
+def verify_typed_run_identity(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked):
+    shutil.copy2(repo / "tests/test_typed_run_identity.c",consumer / "typed-identity-check.c")
+    shutil.copy2(repo / "tests/typed_identity_probe.c",consumer / "typed-identity-probe.c")
+    generated=consumer / "typed-identity-language.c"
+    checked([sdk / "bin" / ("physimc"+suffix),"--emit-c",repo / "tests/fixtures/language/typed_run_identity.phys"],output=generated)
+    generated.write_text("#define main ps_test_main\n"+generated.read_text(encoding="utf-8")+"\n"+
+                         (repo / "tests/language_memory_balance.h").read_text(encoding="utf-8"),encoding="utf-8")
+    for kind,archive in (("installed",library),("rebuilt",rebuilt_core)):
+        check=builder.executable("typed-identity-check-"+kind,["typed-identity-check.c"],[archive])
+        probe=builder.executable("typed-identity-probe-"+kind,["typed-identity-probe.c"],[archive])
+        language=builder.executable("typed-identity-language-"+kind,["typed-identity-language.c"],[archive],language=True)
+        work=consumer / ("typed-identity-"+kind);work.mkdir()
+        checked([check,work]);checked([language],cwd=work)
+        checked([sys.executable,repo / "tests/test_typed_run_identity_codec.py",work,probe])
+    print("Installed/rebuilt SDK typed identities: exact C/handle/Physim bytes, value/array/record/optional ownership, strict metadata decoding and atomic failures passed",flush=True)
+
+
 def verify_run_identity(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked):
     shutil.copy2(sdk / "examples/logging/main.c",consumer / "identity-logging.c")
     shutil.copy2(repo / "tests/fixtures/run_identity_collision.c",consumer / "identity-collision.c")
@@ -662,6 +679,7 @@ def main():
             shutil.copytree(sdk / "src",consumer / "src")
             rebuilt_core=builder.archive("sdk-rebuilt-core",[f"src/{name}.c" for name in native.CORE])
             verify_run_identity(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
+            verify_typed_run_identity(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
             (root / "PASSED.txt").write_text("Focused stable-identity SDK verification passed; installed/rebuilt C/Physim, exact IDs, invalid options and forged host fields; no full platform/product acceptance.\n",encoding="utf-8")
             print(f"Identity SDK verified: {root}")
             return
@@ -899,6 +917,7 @@ def main():
         verify_positive_distributions(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
         verify_run_events(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
         verify_run_identity(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
+        verify_typed_run_identity(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked)
         verify_scalar_search(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         verify_transform_range(repo, sdk, consumer, builder, library, rebuilt_core, suffix, checked)
         shutil.copy2(repo / "tests/test_linear_range.c", consumer / "linear-range-check.c")

@@ -3,6 +3,14 @@
 #include "experiment.h"
 #include "snapshot.h"
 #include <stdio.h>
+typedef struct { char project_id[33],experiment_id[33]; } ps_run_identity;
+/* Both identities are exactly 32 lower-case hexadecimal bytes plus NUL.
+ * Construction/decoding preserves output on failure. No allocation or RNG.
+ * Decode PS_EOF means absent/unavailable identity; malformed/duplicate fields
+ * return PS_CORRUPT. Metadata is an explicit bounded byte span. */
+ps_result ps_run_identity_make(const char *project_id,const char *experiment_id,ps_run_identity *out);
+ps_result ps_run_identity_validate(const ps_run_identity *identity);
+ps_result ps_run_identity_read(const char *metadata,size_t length,ps_run_identity *out);
 typedef struct {
     FILE *file;
     uint32_t channels;
@@ -19,6 +27,10 @@ typedef struct {
 /* Open exclusively: existing runs are never overwritten. Close all successful opens. */
 ps_result ps_run_create(ps_run_writer *writer, const char *path, const ps_context *context,
                         const char *experiment_name);
+/* Typed host identity. Model metadata must not declare either host ID field.
+ * Validation/collision failures create no file and preserve the writer. */
+ps_result ps_run_create_with_identity(ps_run_writer *writer,const char *path,const ps_context *context,
+                                      const char *experiment_name,const ps_run_identity *identity);
 ps_result ps_run_append(ps_run_writer *writer, double time_s, const double *values);
 /* Optional event chunk: validated level, logical time and UTF-8 message.
  * Does not change measurement counts. Invalid records do not write bytes. */

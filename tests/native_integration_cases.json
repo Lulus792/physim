@@ -2617,6 +2617,29 @@
         "core"
       ],
       "module": true
+    },
+    "typed-identity-check": {
+      "sources": [
+        "tests/test_typed_run_identity.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
+    },
+    "typed-identity-language": {
+      "source": "tests/fixtures/language/typed_run_identity.phys",
+      "mode": "--emit-c",
+      "memory_balance": true
+    },
+    "typed-identity-probe": {
+      "sources": [
+        "tests/typed_identity_probe.c"
+      ],
+      "libraries": [
+        "platform",
+        "core"
+      ]
     }
   },
   "tests": [
@@ -10666,6 +10689,38 @@
             "{work}"
           ],
           "timeout": 600
+        }
+      ]
+    },
+    {
+      "name": "typed_run_identity",
+      "targets": [
+        "python",
+        "typed-identity-check",
+        "typed-identity-language",
+        "typed-identity-probe"
+      ],
+      "steps": [
+        {
+          "program": "typed-identity-check",
+          "arguments": [
+            "{work}"
+          ],
+          "timeout": 30
+        },
+        {
+          "program": "typed-identity-language",
+          "arguments": [],
+          "timeout": 30
+        },
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_typed_run_identity_codec.py",
+            "{work}",
+            "{typed-identity-probe}"
+          ],
+          "timeout": 30
         }
       ]
     }

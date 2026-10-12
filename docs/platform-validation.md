@@ -4136,3 +4136,49 @@ Dies ist die volle lokale Intel-macOS-Abnahme dieser Suite und dieses
 Quellstands. Die späteren positiven Verteilungen, Ereignisblöcke und Projekt-
 IDs gehören zu anderen, gezielt geprüften Ständen. Aktuelle gesamte Linux-/
 Windows-/Apple-Silicon-Pakete sowie die ganze Projektplan-Abnahme bleiben offen.
+
+
+## Typisierte Laufidentität in C und Physim (PP-0446)
+
+`ps_run_identity` / `RunIdentity` speichern zwei validierte Hex32-IDs als
+unabhängigen Wert ohne RNG oder Allokation. C-Low-Level-/Handle-Writer und
+Physim `RunStore.setIdentity` archivieren die typisierten Hostfelder. Vor
+Dateierstellung werden ungültige Identitäten und kollidierende Modellmetadaten
+abgewiesen. Decoder/Reader unterscheiden vollständige Identität, fehlende/
+unavailable Herkunft und beschädigte/doppelte Felder. Eingebettetes NUL wird
+nicht als verstecktes Metadatenende akzeptiert. Der Physim-Konstruktor und
+Metadaten-Decoder übergeben ausdrücklich die ganzen String-Bytebereiche.
+
+Auf Intel macOS tatsächlich ausgeführt:
+
+- Bestehende Streams, Sprachbesitz, Ereignisse und Dateimutationen zusammen
+  mit neuen typisierten IDs **4/4**, `run-wmim9dp9`,
+  `build/current-typed-identity-confirmed-mac.log`.
+- Neue Sprachwerte einschließlich Arrays, Records, Optionals, Getter-Kopien,
+  freiem Metadaten-Decoder und zukünftiger Store-Konfiguration bestehen
+  `run-gias0zfi`, `build/current-typed-identity-span-native-mac.log`.
+  Ein unabhängiger Python-/zlib-Decoder bestätigt bytegleiche C-/Handle-/
+  Physim-Dateien einschließlich Schema, IDs, Daten, Index und Footer.
+  CRC-korrekt doppelte, ungültige, fehlende, unavailable und NUL-Metadaten
+  sowie Großschreibung sind konkrete Gegenfälle mit erhaltener Ausgabe.
+- Direkter AppleClang-ASan/UBSan-Lauf von C-Werten/Writer/Reader/Store
+  besteht unter `build/current-typed-identity-asan.log`; LeakSanitizer ist
+  lokal deaktiviert.
+- Tatsächliche C-Feder-/Physim-Pendel-App-Gesamtketten **2/2**, `run-pioeflw1`,
+  `build/current-typed-identity-workflows-mac.log`; die gespeicherten Manifest-
+  IDs und vorhandenen Bilanz-/Berichtsverträge bleiben geprüft.
+
+Die neuen APIs verändern Datei-/API-/ABI-/IPC-Versionen nicht. Alte Writer-
+Aufrufe und Dateien ohne vollständige Herkunft bleiben verfügbar; fehlende
+Identität wird nicht erfunden. Der ID-Block ist damit implementiert, die ganze
+aktuelle Linux-/Windows-/Apple-Silicon-/Produktabnahme bleibt offen.
+
+Die abschließende verschobene SDK-Prüfung besteht **11/11** Verbraucherbefehle
+mit installierter und neu gebauter Bibliothek, expliziter Legacy-Vergabe und
+typisierten C-/Handle-/Physim-Archiven: `build/current-typed-identity-final-sdk-verify-mac.log`;
+Verbraucher `build/current-typed-identity-final-sdk-consumer-mac/Native SDK ä h2h3trsh`.
+App-/Referenz-/Kit-/Completion-/Katalogprüfungen bestehen **4/4**, `run-8xxyj3dl`;
+Offline-Parser, Bestandsprojekt-Vergabe und tatsächliche Runner-IDs bestehen
+**3/3**, `run-vepyebiv`, `build/current-typed-identity-final-docs-mac.log`.
+Das unabhängige Kit prüft **187** genaue Eingänge; **31** Referenzdokumente und
+**640 C / 607 Physim** Completion-Einträge sind abgeglichen.

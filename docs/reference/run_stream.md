@@ -102,6 +102,15 @@ ps_result ps_run_reader_describe(
     ps_run_read_info *out);
 ```
 
+## ps_run_reader_identity
+
+Liefert eine unabhängige Identitätskopie aus dem versionierten Reader. Fehlende Herkunft liefert PS_EOF; Fehler bewahren die Ausgabe.
+
+```c
+ps_result ps_run_reader_identity(
+    ps_run_store *store,ps_run_read_handle handle,ps_run_identity *out);
+```
+
 ## ps_run_reader_next
 
 Liest eine vollständig validierte Messzeile atomar; alle anderen Status erhalten Zeit, Werte und Anzahl.
@@ -159,6 +168,16 @@ ps_result ps_run_writer_create(
     const ps_context *context,
     const char *name,
     ps_run_write_handle *out);
+```
+
+## ps_run_writer_create_with_identity
+
+Erzeugt ein versioniertes Writer-Handle mit validierter Host-Identität und ohne Änderung der Handle-Ausgabe bei Fehlern.
+
+```c
+ps_result ps_run_writer_create_with_identity(
+    ps_run_store *store,const char *path,const ps_context *context,
+    const char *name,const ps_run_identity *identity,ps_run_write_handle *out);
 ```
 
 ## ps_run_writer_describe

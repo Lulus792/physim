@@ -2100,6 +2100,16 @@ Zieht mutierend einen Wert aus der Verteilung; der Zufallsstrom muss als var geb
 
 Überall verfügbar.
 
+## RunIdentity
+
+```text
+RunIdentity(projectId: String, experimentId: String) -> RunIdentity
+```
+
+Erzeugt einen unabhängigen Wert aus Projekt-/Experiment-ID; beide Strings müssen kanonisches Hex32 sein.
+
+Überall verfügbar.
+
 ## RunIndex
 
 ```text
@@ -4831,6 +4841,46 @@ Liefert Messwert an nullbasierter Zeile und Kanal. Der Block bleibt nach Schlie�
 
 Überall verfügbar.
 
+## runIdentityExperiment
+
+```text
+runIdentityExperiment(identity: RunIdentity) -> String
+```
+
+Kopiert die Experiment-ID in einen besitzenden String.
+
+Überall verfügbar.
+
+## runIdentityFromMetadata
+
+```text
+runIdentityFromMetadata(metadata: String) -> RunIdentity
+```
+
+Dekodiert den vollständigen String-Bytebereich; eingebettetes NUL und doppelte/malformed IDs werden abgewiesen. Fehlende Herkunft erzeugt einen fangbaren EOF-Fehler.
+
+Überall verfügbar.
+
+## runIdentityIsValid
+
+```text
+runIdentityIsValid(identity: RunIdentity) -> Bool
+```
+
+Prüft beide kanonischen ID-Felder des unabhängigen Werts ohne Allokation oder RNG.
+
+Überall verfügbar.
+
+## runIdentityProject
+
+```text
+runIdentityProject(identity: RunIdentity) -> String
+```
+
+Kopiert die Projekt-ID in einen besitzenden String.
+
+Überall verfügbar.
+
 ## runIndexClose
 
 ```text
@@ -5058,6 +5108,26 @@ runReaderEventTime(reader: RunReader) -> Float64
 ```
 
 Logische Zeit des letzten akzeptierten Ereignisses in Sekunden.
+
+Überall verfügbar.
+
+## runReaderHasIdentity
+
+```text
+runReaderHasIdentity(reader: RunReader) -> Bool
+```
+
+Prüft vollständige gültige Herkunft. Fehlend/unavailable liefert false; beschädigte/doppelte ID-Felder erzeugen einen fangbaren Fehler.
+
+Überall verfügbar.
+
+## runReaderIdentity
+
+```text
+runReaderIdentity(reader: RunReader) -> RunIdentity
+```
+
+Kopiert die vollständige Reader-Identität; fehlende oder beschädigte Herkunft erzeugt einen fangbaren Fehler.
 
 Überall verfügbar.
 
@@ -5418,6 +5488,16 @@ runStoreConfigure(store: RunStore, dt: Float64, seed: Int64, modelMetadata: Stri
 ```
 
 Konfiguriert einen positiven endlichen Zeitschritt, Seed und begrenzte UTF-8-Metadaten für künftig erzeugte Writer. Fehler erhalten die Konfiguration.
+
+Überall verfügbar.
+
+## runStoreIdentity
+
+```text
+runStoreIdentity(store: RunStore, identity: RunIdentity) -> Void
+```
+
+Speichert eine Wertkopie der Identität für künftig erzeugte Writer; bestehende Writer werden nicht verändert.
 
 Überall verfügbar.
 

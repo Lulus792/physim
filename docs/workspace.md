@@ -806,7 +806,8 @@ Build-Einstellungen erhalten. Die Aktion ist bei ungespeicherten Änderungen,
 laufenden Jobs oder Konflikten nicht verfügbar. Sie ergänzt nur fehlende IDs,
 erhält vorhandene IDs/Formatversion/Kommentare und sichert das vorherige Manifest
 als `physim.project.bak`. Wiederholung ist ein geprüfter No-op ohne neue Sicherung.
-Typisierte Herkunftsangaben für frei programmierte Core-Writer bleiben offen.
+Typisierte Herkunftsangaben für freie C-/Physim-Writer stehen über
+[RunIdentity](run-streams.md#typisierte-laufidentität) zur Verfügung.
 
 ```sh
 physim-build --assign-project-ids --project /path/to/project

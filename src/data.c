@@ -1,5 +1,6 @@
 #include "physim/data.h"
 #include "run_index_internal.h"
+#include "physim/detail/run_identity.h"
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -146,9 +147,55 @@ static ps_result flush_file(FILE *f) {
     return fsync(fileno(f)) ? PS_IO : PS_OK;
 #endif
 }
-ps_result ps_run_create(ps_run_writer *w, const char *path, const ps_context *c, const char *name) {
+ps_result ps_run_identity_validate(const ps_run_identity *id) {
+    return id && ps_run_identity_valid(id->project_id) && ps_run_identity_valid(id->experiment_id)?PS_OK:PS_INVALID;
+}
+ps_result ps_run_identity_make(const char *project,const char *experiment,ps_run_identity *out) {
+    if(!out || !ps_run_identity_valid(project) || !ps_run_identity_valid(experiment))return PS_INVALID;
+    ps_run_identity id;memcpy(id.project_id,project,33);memcpy(id.experiment_id,experiment,33);*out=id;return PS_OK;
+}
+static unsigned identity_field(const char *line,size_t length,size_t *prefix) {
+    if(length>=11 && !memcmp(line,"project_id=",11)){*prefix=11;return 1;}
+    if(length>=14 && !memcmp(line,"experiment_id=",14)){*prefix=14;return 2;}
+    return 0;
+}
+static bool identity_collision(const char *text,size_t length) {
+    for(size_t at=0;at<length;) {
+        size_t end=at;while(end<length && text[end]!='\n' && text[end]!='\r')end++;
+        size_t prefix;if(identity_field(text+at,end-at,&prefix))return true;
+        at=end<length?end+1:end;
+    }
+    return false;
+}
+ps_result ps_run_identity_read(const char *text,size_t length,ps_run_identity *out) {
+    if(!out || (!text && length) || length>=8192)return PS_INVALID;
+    if(length && memchr(text,0,length))return PS_CORRUPT;
+    ps_run_identity id={0};unsigned seen=0,available=0;
+    for(size_t at=0;at<length;) {
+        size_t end=at;while(end<length && text[end]!='\n' && text[end]!='\r')end++;
+        size_t prefix;unsigned field=identity_field(text+at,end-at,&prefix);
+        if(field) {
+            if(seen&field)return PS_CORRUPT;seen|=field;
+            const char *value=text+at+prefix;size_t n=end-at-prefix;
+            if(n==11 && !memcmp(value,"unavailable",11)) { /* Legacy/standalone provenance. */ }
+            else {
+                if(n!=32)return PS_CORRUPT;
+                char *target=field==1?id.project_id:id.experiment_id;memcpy(target,value,32);target[32]=0;
+                if(!ps_run_identity_valid(target))return PS_CORRUPT;available|=field;
+            }
+        }
+        at=end<length?end+1:end;
+    }
+    if(available!=3)return PS_EOF;
+    *out=id;return PS_OK;
+}
+static ps_result run_create(ps_run_writer *w,const char *path,const ps_context *c,const char *name,const ps_run_identity *id) {
     if (!w || !path || !c || !name || !c->channel_count || c->channel_count > PS_MAX_CHANNELS)
         return PS_INVALID;
+    if(id) {
+        const char *end=memchr(c->model_metadata,0,sizeof c->model_metadata);
+        if(!end || identity_collision(c->model_metadata,(size_t)(end-c->model_metadata)))return PS_INVALID;
+    }
     uint32_t parameter_count = 0;
     if (c->struct_size >= offsetof(ps_context, parameters) + sizeof c->parameters)
         parameter_count = c->parameter_count;
@@ -167,6 +214,10 @@ ps_result ps_run_create(ps_run_writer *w, const char *path, const ps_context *c,
     ps_result r = PS_OK;
     if (n < 0 || n >= (int)sizeof meta)
         r = PS_IO;
+    if(r==PS_OK && id) {
+        int extra=snprintf(meta+n,sizeof meta-(size_t)n,"project_id=%s\nexperiment_id=%s\n",id->project_id,id->experiment_id);
+        if(extra<0 || extra>=(int)(sizeof meta-(size_t)n))r=PS_LIMIT;else n+=extra;
+    }
     for (uint32_t i = 0; r == PS_OK && i < parameter_count; i++) {
         const ps_parameter *p = &c->parameters[i];
         int extra = snprintf(meta + n, sizeof meta - (size_t)n,
@@ -212,6 +263,14 @@ ps_result ps_run_create(ps_run_writer *w, const char *path, const ps_context *c,
         w->file = NULL;
     }
     return r;
+}
+ps_result ps_run_create(ps_run_writer *w,const char *path,const ps_context *c,const char *name) {
+    return run_create(w,path,c,name,NULL);
+}
+ps_result ps_run_create_with_identity(ps_run_writer *w,const char *path,const ps_context *c,const char *name,const ps_run_identity *id) {
+    if(!w || ps_run_identity_validate(id)!=PS_OK)return PS_INVALID;
+    ps_run_writer draft;ps_result r=run_create(&draft,path,c,name,id);
+    if(r==PS_OK)*w=draft;return r;
 }
 ps_result ps_run_append(ps_run_writer *w, double t, const double *v) {
     if (!w || !w->file || !v || !isfinite(t))
@@ -300,7 +359,7 @@ ps_result ps_run_open(ps_run_reader *r, const char *path) {
         goto fail;
     }
     uint32_t type, n;
-    if (ps_run_chunk_read(r->file, &type, p, &n) != PS_OK || type != 1 || n >= sizeof r->metadata)
+    if (ps_run_chunk_read(r->file, &type, p, &n) != PS_OK || type != 1 || n >= sizeof r->metadata || memchr(p,0,n))
         goto fail;
     memcpy(r->metadata, p, n);
     r->metadata[n] = 0;

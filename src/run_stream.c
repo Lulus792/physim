@@ -90,6 +90,11 @@ ps_result ps_run_reader_describe(ps_run_store *store, ps_run_read_handle h, ps_r
     *out = value;
     return PS_OK;
 }
+ps_result ps_run_reader_identity(ps_run_store *store,ps_run_read_handle h,ps_run_identity *out) {
+    read_slot *s=reader_slot(store,h);
+    if(!s || !out)return PS_INVALID;
+    return ps_run_identity_read(s->reader.metadata,strlen(s->reader.metadata),out);
+}
 ps_result ps_run_reader_next(ps_run_store *store, ps_run_read_handle h, double *time,
                              double *values, size_t capacity, size_t *count) {
     read_slot *s = reader_slot(store, h);
@@ -135,8 +140,8 @@ ps_result ps_run_reader_release(ps_run_store *store, ps_run_read_handle h) {
     s->live = false;
     return PS_OK;
 }
-ps_result ps_run_writer_create(ps_run_store *store, const char *path, const ps_context *context,
-                               const char *name, ps_run_write_handle *out) {
+static ps_result writer_create(ps_run_store *store,const char *path,const ps_context *context,
+                               const char *name,const ps_run_identity *identity,ps_run_write_handle *out) {
     if (!store || !path || !context || !name || !out)
         return PS_INVALID;
     for (uint32_t i = 0; i < PS_RUN_STREAM_MAX_WRITERS; i++) {
@@ -144,7 +149,7 @@ ps_result ps_run_writer_create(ps_run_store *store, const char *path, const ps_c
         if (s->live || s->generation == UINT32_MAX)
             continue;
         ps_run_writer draft;
-        ps_result r = ps_run_create(&draft, path, context, name);
+        ps_result r = identity?ps_run_create_with_identity(&draft,path,context,name,identity):ps_run_create(&draft,path,context,name);
         if (r != PS_OK)
             return r;
         s->writer = draft;
@@ -154,6 +159,13 @@ ps_result ps_run_writer_create(ps_run_store *store, const char *path, const ps_c
         return PS_OK;
     }
     return PS_LIMIT;
+}
+ps_result ps_run_writer_create(ps_run_store *store,const char *path,const ps_context *context,const char *name,ps_run_write_handle *out) {
+    return writer_create(store,path,context,name,NULL,out);
+}
+ps_result ps_run_writer_create_with_identity(ps_run_store *store,const char *path,const ps_context *context,const char *name,const ps_run_identity *identity,ps_run_write_handle *out) {
+    if(ps_run_identity_validate(identity)!=PS_OK)return PS_INVALID;
+    return writer_create(store,path,context,name,identity,out);
 }
 ps_result ps_run_writer_describe(ps_run_store *store, ps_run_write_handle h,
                                  ps_run_write_info *out) {

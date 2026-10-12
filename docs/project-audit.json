@@ -3815,7 +3815,7 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Projekt- und Experiment-ID.\n",
-      "status": "incomplete",
+      "status": "implemented",
       "evidence": [
         "app/project_file.h",
         "app/project_file.c",
@@ -3830,9 +3830,20 @@
         "app/build_main.c",
         "app/design_ui.inc",
         "tests/test_project_identity_assignment.c",
-        "tests/test_project_identity_workflow.py"
+        "tests/test_project_identity_workflow.py",
+        "include/physim/data.h",
+        "src/data.c",
+        "include/physim/run_stream.h",
+        "src/run_stream.c",
+        "include/physim/language_run_stream.h",
+        "src/language/builtins.c",
+        "tests/test_typed_run_identity.c",
+        "tests/test_typed_run_identity_codec.py",
+        "tests/typed_identity_probe.c",
+        "tests/fixtures/language/typed_run_identity.phys",
+        "docs/run-streams.md"
       ],
-      "note": "Neue App-Projekte speichern dauerhafte Projekt-/Experiment-IDs; CLI/App können fehlende IDs in Bestandsprojekten ausdrücklich ergänzen. Vorhandene IDs, Manifestbytes, Formatversion, Quellen, Archive und Build-Dateien bleiben erhalten. Parser-/Save-/Fehler-/ASan-/SDK- und tatsächliche C-/Physim- sowie zwölf neue App-Buttonfälle sind auf Intel macOS ausgeführt. Archive übernehmen genau die Host-IDs; ungültige/doppelte Angaben und Modellmetadaten-Kollisionen werden abgewiesen. Fehlende Herkunft ist unavailable. Typisierte Herkunft für frei programmierte Core-/Physim-Writer bleibt offen; der Block bleibt unvollständig."
+      "note": "Dauerhafte IDs neuer/alter App-Projekte, explizite CLI-/App-Vergabe und typisierte C-/Physim-Writer/Reader sind implementiert. RunIdentity ist ein unabhängiger Wert mit streng validierten Hex32-Feldern, Metadaten-Decoder und zukünftiger Store-Konfiguration. Exakte C-/Handle-/Physim-Archive, Array-/Record-/Optionalbesitz, ungültige/doppelte/fehlende/embedded-NUL-Metadaten und Ausgabe-/Dateiatomizität sind auf Intel macOS geprüft. Alte Dateien ohne vollständige IDs bleiben lesbar und melden fehlende Herkunft. Installierte/neu gebaute SDK- und tatsächliche App-Nachweise gelten für ihre exakt benannten Stände; ganze aktuelle Plattform-/Projektabnahme bleibt offen."
     },
     {
       "id": "PP-0447",

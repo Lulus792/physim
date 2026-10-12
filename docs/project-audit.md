@@ -1112,3 +1112,16 @@ Konflikte und Schreibfehler bewahren Manifest und Ergebnis.
 Der Block bleibt **incomplete** wegen der noch fehlenden typisierten Herkunft
 freier Core-/Physim-Writer. Die Gesamtzählung bleibt **103 implemented**,
 **14 incomplete**, **414 unverified** bei **531** Originalblöcken.
+
+
+## Typisierte Identität freier Writer (PP-0446)
+
+Der fehlende Core-/Physim-Pfad steht jetzt als `ps_run_identity` / `RunIdentity`
+zur Verfügung. Writer speichern validierte Hostfelder; Reader/Decoder liefern
+unabhängige Werte und unterscheiden fehlende von beschädigter Herkunft.
+Der vollständige ID-Block erhält seinen begrenzten Implementierungsnachweis.
+[Nachweise und Grenzen](platform-validation.md#typisierte-laufidentität-in-c-und-physim-pp-0446).
+Alle **531** Originalblöcke und die Planprüfsumme bleiben erhalten:
+**104 implemented**, **13 incomplete**, **414 unverified**.
+`completion_proven` bleibt `false`; die komplette Plattform-/Projektabnahme
+bleibt offen.

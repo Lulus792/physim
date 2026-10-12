@@ -17,6 +17,7 @@
 #define RUN_READER PS_TYPE_RUN_READER
 #define RUN_WRITER PS_TYPE_RUN_WRITER
 #define MEAN_INTERVAL PS_TYPE_MEAN_INTERVAL
+#define RUN_IDENTITY PS_TYPE_RUN_IDENTITY
 #define RUN_BLOCK PS_TYPE_RUN_BLOCK
 #define RUN_SNAPSHOT PS_TYPE_RUN_SNAPSHOT
 #define SUBMERSION PS_TYPE_SUBMERSION
@@ -179,6 +180,14 @@ static const ps_lang_builtin library[] = {
     {"meanIntervalUpper", "psrt_interval_upper", F, 1, 0, {MEAN_INTERVAL}, {"interval"}},
     {"meanIntervalCount", "psrt_interval_count", I, 1, 0, {MEAN_INTERVAL}, {"interval"}},
     {"RunIndex", "psrt_run_index_open", RUN_INDEX, 2, 0, {S,I}, {"path","maximumEntries"}},
+    {"RunIdentity", "psrt_run_identity", RUN_IDENTITY, 2, 0, {S,S}, {"projectId","experimentId"}},
+    {"runIdentityFromMetadata", "psrt_run_identity_metadata", RUN_IDENTITY, 1, 0, {S}, {"metadata"}},
+    {"runIdentityIsValid", "psrt_run_identity_valid", PS_TYPE_BOOL, 1, 0, {RUN_IDENTITY}, {"identity"}},
+    {"runIdentityProject", "psrt_run_identity_project", S, 1, 0, {RUN_IDENTITY}, {"identity"}},
+    {"runIdentityExperiment", "psrt_run_identity_experiment", S, 1, 0, {RUN_IDENTITY}, {"identity"}},
+    {"runStoreIdentity", "psrt_stream_store_identity", VOID, 2, 0, {RUN_STORE,RUN_IDENTITY}, {"store","identity"}},
+    {"runReaderIdentity", "psrt_stream_reader_identity", RUN_IDENTITY, 1, 0, {RUN_READER}, {"reader"}},
+    {"runReaderHasIdentity", "psrt_stream_reader_has_identity", PS_TYPE_BOOL, 1, 0, {RUN_READER}, {"reader"}},
     {"RunStore", "psrt_stream_store_make", RUN_STORE, 0, 0, {0}, {0}},
     {"runStoreClose", "psrt_stream_store_close", VOID, 1, 0, {RUN_STORE}, {"store"}},
     {"runStoreIsOpen", "psrt_stream_store_open", PS_TYPE_BOOL, 1, 0, {RUN_STORE}, {"store"}},
@@ -824,6 +833,12 @@ static const ps_lang_method methods[] = {
     {"upper","meanIntervalUpper",MEAN_INTERVAL,0},
     {"sampleCount","meanIntervalCount",MEAN_INTERVAL,0},
     {"meanInterval","seriesMeanInterval",R,0},
+    {"isValid","runIdentityIsValid",RUN_IDENTITY,0},
+    {"projectId","runIdentityProject",RUN_IDENTITY,0},
+    {"experimentId","runIdentityExperiment",RUN_IDENTITY,0},
+    {"setIdentity","runStoreIdentity",RUN_STORE,0},
+    {"identity","runReaderIdentity",RUN_READER,0},
+    {"hasIdentity","runReaderHasIdentity",RUN_READER,0},
     {"close","runStoreClose",RUN_STORE,0},
     {"isOpen","runStoreIsOpen",RUN_STORE,0},
     {"openReader","runStoreReader",RUN_STORE,0},
@@ -1059,6 +1074,7 @@ static const struct { const char *owner, *name, *function; } factories[] = {
     {"Diagnostic","here","diagnosticHere"}, {"Diagnostic","empty","emptyDiagnostic"}, {"Diagnostic","decode","diagnosticDecoded"}, {"Diagnostic","load","loadDiagnostic"},
     {"Int64", "abs", "intAbs"},
     {"Int64", "min", "intMin"},
+    {"RunIdentity","fromMetadata","runIdentityFromMetadata"},
     {"MeanInterval","fromSample","sampleMeanInterval"},
     {"Int64", "max", "intMax"},
     {"Int64", "clamp", "intClamp"},

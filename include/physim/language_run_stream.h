@@ -9,7 +9,8 @@ typedef struct {
     ps_allocator allocator;
     ps_run_store *store;
     ps_context schema;
-    bool configured;
+    bool configured,has_identity;
+    ps_run_identity identity;
 } psrt_stream_store_owner;
 typedef struct {psrt_stream_store_owner *owner;} psrt_stream_store;
 typedef struct {
@@ -30,6 +31,28 @@ typedef struct {
     ps_run_write_handle handle;
 } psrt_stream_writer_owner;
 typedef struct {psrt_stream_writer_owner *owner;} psrt_stream_writer;
+static inline ps_run_identity psrt_run_identity(const char *project,size_t project_size,const char *experiment,size_t experiment_size,psrt_site site) {
+    if(project_size!=32 || experiment_size!=32)psrt_fail_code(site,PS_INVALID,"RunIdentity requires exactly 32 bytes in each ID");
+    ps_run_identity id;ps_result r=ps_run_identity_make(project,experiment,&id);
+    if(r!=PS_OK)psrt_fail_code(site,r,"RunIdentity requires two lower-case hex32 IDs");
+    return id;
+}
+static inline ps_run_identity psrt_run_identity_metadata(const char *text,size_t size,psrt_site site) {
+    ps_run_identity id;ps_result r=ps_run_identity_read(text,size,&id);
+    if(r!=PS_OK)psrt_fail_code(site,r,"Metadata has no complete valid RunIdentity");
+    return id;
+}
+static inline bool psrt_run_identity_valid(ps_run_identity id,psrt_site site) {
+    (void)site;return ps_run_identity_validate(&id)==PS_OK;
+}
+static inline psrt_string psrt_run_identity_project(ps_allocator a,ps_run_identity id,psrt_site s) {
+    if(ps_run_identity_validate(&id)!=PS_OK)psrt_fail_code(s,PS_INVALID,"Invalid RunIdentity");
+    return psrt_run_string(a,id.project_id,s);
+}
+static inline psrt_string psrt_run_identity_experiment(ps_allocator a,ps_run_identity id,psrt_site s) {
+    if(ps_run_identity_validate(&id)!=PS_OK)psrt_fail_code(s,PS_INVALID,"Invalid RunIdentity");
+    return psrt_run_string(a,id.experiment_id,s);
+}
 static inline void psrt_stream_store_release(psrt_stream_store_owner *owner) {
     if(owner && !--owner->references) {
         if(owner->store)ps_run_store_destroy(owner->store);
@@ -71,6 +94,11 @@ static inline void psrt_stream_store_close(psrt_stream_store value,psrt_site sit
 }
 static inline bool psrt_stream_store_open(psrt_stream_store value,psrt_site site) {
     (void)site;return value.owner && value.owner->store;
+}
+static inline void psrt_stream_store_identity(psrt_stream_store value,ps_run_identity id,psrt_site site) {
+    (void)psrt_stream_store_get(value,site);
+    if(ps_run_identity_validate(&id)!=PS_OK)psrt_fail_code(site,PS_INVALID,"Invalid RunIdentity");
+    value.owner->identity=id;value.owner->has_identity=true;
 }
 static inline void psrt_stream_store_configure(psrt_stream_store value,double dt,int64_t seed,
                                                const char *metadata,psrt_site site) {
@@ -118,7 +146,8 @@ static inline psrt_stream_writer psrt_stream_writer_make(ps_allocator allocator,
     psrt_stream_writer_owner *owner=NULL;
     ps_result r=ps_memory_zero(value.owner->allocator,1,sizeof *owner,(void **)&owner);
     if(r!=PS_OK)psrt_fail_code(site,r,"RunWriter allocation failed");
-    r=ps_run_writer_create(store,path,&value.owner->schema,name,&owner->handle);
+    r=value.owner->has_identity?ps_run_writer_create_with_identity(store,path,&value.owner->schema,name,&value.owner->identity,&owner->handle):
+        ps_run_writer_create(store,path,&value.owner->schema,name,&owner->handle);
     if(r!=PS_OK){ps_memory_free(value.owner->allocator,owner,sizeof *owner);psrt_fail_code(site,r,"RunWriter creation failed");}
     owner->references=1;owner->store=value.owner;value.owner->references++;
     return (psrt_stream_writer){owner};
@@ -212,6 +241,19 @@ static inline ps_run_read_info psrt_stream_reader_info(psrt_stream_reader value,
     ps_result r=ps_run_reader_describe(value.owner->store->store,value.owner->handle,&info);
     if(r!=PS_OK)psrt_fail_code(site,r,"RunReader is closed");
     return info;
+}
+static inline ps_run_identity psrt_stream_reader_identity(psrt_stream_reader value,psrt_site site) {
+    (void)psrt_stream_reader_info(value,site);ps_run_identity id;
+    ps_result r=ps_run_reader_identity(value.owner->store->store,value.owner->handle,&id);
+    if(r!=PS_OK)psrt_fail_code(site,r,"RunReader has no complete valid identity");
+    return id;
+}
+static inline bool psrt_stream_reader_has_identity(psrt_stream_reader value,psrt_site site) {
+    (void)psrt_stream_reader_info(value,site);ps_run_identity id;
+    ps_result r=ps_run_reader_identity(value.owner->store->store,value.owner->handle,&id);
+    if(r==PS_EOF)return false;
+    if(r!=PS_OK)psrt_fail_code(site,r,"RunReader identity metadata is corrupt");
+    return true;
 }
 static inline bool psrt_stream_reader_open(psrt_stream_reader value,psrt_site site) {
     (void)site;ps_run_read_info info;

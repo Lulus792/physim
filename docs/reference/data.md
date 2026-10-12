@@ -12,6 +12,39 @@ Dieses Modul definiert keine zusätzlichen Zahlenkonstanten.
 
 ## Typen und Funktionen
 
+### ps_run_identity
+
+```c
+typedef struct { char project_id[33],experiment_id[33]; } ps_run_identity;
+```
+
+## ps_run_identity_make
+
+Erzeugt eine unabhängige Identitätskopie aus zwei kanonischen Hex32-Strings; Fehler bewahren die Ausgabe. Keine Allokation oder RNG-Schritte.
+
+```c
+ps_result ps_run_identity_make(
+    const char *project_id,const char *experiment_id,ps_run_identity *out);
+```
+
+Both identities are exactly 32 lower-case hexadecimal bytes plus NUL. Construction/decoding preserves output on failure. No allocation or RNG. Decode PS_EOF means absent/unavailable identity; malformed/duplicate fields return PS_CORRUPT. Metadata is an explicit bounded byte span.
+
+## ps_run_identity_validate
+
+Prüft beide begrenzten, abgeschlossenen Projekt-/Experiment-IDs auf genau 32 kleine Hexzeichen.
+
+```c
+ps_result ps_run_identity_validate(const ps_run_identity *identity);
+```
+
+## ps_run_identity_read
+
+Dekodiert genau einen begrenzten Metadaten-Bytebereich. Fehlende/unavailable Herkunft liefert PS_EOF; doppelte oder fehlerhafte ID-Felder PS_CORRUPT, bei unveränderter Ausgabe.
+
+```c
+ps_result ps_run_identity_read(const char *metadata,size_t length,ps_run_identity *out);
+```
+
 ### ps_run_writer
 
 ```c
@@ -48,6 +81,18 @@ ps_result ps_run_create(
 ```
 
 Open exclusively: existing runs are never overwritten. Close all successful opens.
+
+## ps_run_create_with_identity
+
+Erzeugt einen exklusiven Writer mit typisierter Host-Identität. ID-Validierung und Kollisionen mit Modellmetadaten werden vor Dateierstellung geprüft.
+
+```c
+ps_result ps_run_create_with_identity(
+    ps_run_writer *writer,const char *path,const ps_context *context,
+    const char *experiment_name,const ps_run_identity *identity);
+```
+
+Typed host identity. Model metadata must not declare either host ID field. Validation/collision failures create no file and preserve the writer.
 
 ## ps_run_append
 

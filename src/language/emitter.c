@@ -137,6 +137,7 @@ static const char *type(emitter *e, ps_lang_type t) {
     case PS_TYPE_RUN_READER: return "psrt_stream_reader";
     case PS_TYPE_RUN_WRITER: return "psrt_stream_writer";
     case PS_TYPE_MEAN_INTERVAL: return "ps_mean_interval";
+    case PS_TYPE_RUN_IDENTITY: return "ps_run_identity";
     case PS_TYPE_RUN_BLOCK: return "psrt_run_block";
     case PS_TYPE_RUN_SNAPSHOT: return "ps_snapshot";
     case PS_TYPE_DIAGNOSTIC:
@@ -2170,6 +2171,9 @@ static void call(emitter *e, size_t id) {
                     else if (builtin->types[p - 1] == PS_TYPE_STRING &&
                              borrowed_symbol_builtin(builtin))
                         out(e, "pssymbol_%zu, ", id);
+                    else if (builtin->types[p - 1] == PS_TYPE_STRING &&
+                             (!strcmp(builtin->name,"RunIdentity") || !strcmp(builtin->name,"runIdentityFromMetadata")))
+                        out(e,"psrt_string_cstr(&psv_%zu), psrt_array_count(&psv_%zu)-1, ",value,value);
                     else if (builtin->types[p - 1] == PS_TYPE_STRING)
                         out(e, "psrt_string_cstr(&psv_%zu), ", value);
                     else
@@ -4122,13 +4126,13 @@ static ps_lang_check_result emit(FILE *output, const char *source_path,
             info[id].optional_element == PS_TYPE_STRING)
             e.strings = e.arrays = 1;
         if ((info[id].type >= PS_TYPE_BOOL && info[id].type <= PS_TYPE_STRING) ||
-            (info[id].type >= PS_TYPE_VEC2 && info[id].type <= PS_TYPE_MEAN_INTERVAL))
+            (info[id].type >= PS_TYPE_VEC2 && info[id].type <= PS_TYPE_RUN_IDENTITY))
             e.primitive_types |= UINT64_C(1) << info[id].type;
         if ((info[id].array_element >= PS_TYPE_BOOL && info[id].array_element <= PS_TYPE_STRING) ||
-            (info[id].array_element >= PS_TYPE_VEC2 && info[id].array_element <= PS_TYPE_MEAN_INTERVAL))
+            (info[id].array_element >= PS_TYPE_VEC2 && info[id].array_element <= PS_TYPE_RUN_IDENTITY))
             e.primitive_types |= UINT64_C(1) << info[id].array_element;
         if ((info[id].optional_element >= PS_TYPE_BOOL && info[id].optional_element <= PS_TYPE_STRING) ||
-            (info[id].optional_element >= PS_TYPE_VEC2 && info[id].optional_element <= PS_TYPE_MEAN_INTERVAL))
+            (info[id].optional_element >= PS_TYPE_VEC2 && info[id].optional_element <= PS_TYPE_RUN_IDENTITY))
             e.primitive_types |= UINT64_C(1) << info[id].optional_element;
         const ps_lang_builtin *builtin = ps_lang_builtin_get(info[id].binding);
         if (builtin) {
@@ -4138,7 +4142,7 @@ static ps_lang_check_result emit(FILE *output, const char *source_path,
             else if (builtin->host && builtin->host != (unsigned)experiment)
                 fail(&e, id, "Host API is unavailable in this module kind");
         }
-        if (info[id].type >= PS_TYPE_VEC2 && info[id].type <= PS_TYPE_MEAN_INTERVAL)
+        if (info[id].type >= PS_TYPE_VEC2 && info[id].type <= PS_TYPE_RUN_IDENTITY)
             e.sdk = 1;
         if (info[id].type >= PS_TYPE_DATASET && info[id].type <= PS_TYPE_TABLE && experiment != 2)
             fail(&e, id, "Analysis handles require --emit-analysis");

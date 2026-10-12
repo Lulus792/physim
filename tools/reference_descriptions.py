@@ -395,3 +395,12 @@ DESCRIPTIONS.update({
  'ps_run_reader_event_next': 'Liest das nächste Ereignis über ein versioniertes Handle; EOF/Recovery bleiben terminal und Fehler bewahren die Ausgabe.',
  'ps_run_writer_event': 'Schreibt ein validiertes Ereignis über ein versioniertes Schreibhandle, ohne Messzähler oder Szene zu verändern.'
 })
+
+DESCRIPTIONS.update({
+ 'ps_run_identity_make': 'Erzeugt eine unabhängige Identitätskopie aus zwei kanonischen Hex32-Strings; Fehler bewahren die Ausgabe. Keine Allokation oder RNG-Schritte.',
+ 'ps_run_identity_validate': 'Prüft beide begrenzten, abgeschlossenen Projekt-/Experiment-IDs auf genau 32 kleine Hexzeichen.',
+ 'ps_run_identity_read': 'Dekodiert genau einen begrenzten Metadaten-Bytebereich. Fehlende/unavailable Herkunft liefert PS_EOF; doppelte oder fehlerhafte ID-Felder PS_CORRUPT, bei unveränderter Ausgabe.',
+ 'ps_run_create_with_identity': 'Erzeugt einen exklusiven Writer mit typisierter Host-Identität. ID-Validierung und Kollisionen mit Modellmetadaten werden vor Dateierstellung geprüft.',
+ 'ps_run_reader_identity': 'Liefert eine unabhängige Identitätskopie aus dem versionierten Reader. Fehlende Herkunft liefert PS_EOF; Fehler bewahren die Ausgabe.',
+ 'ps_run_writer_create_with_identity': 'Erzeugt ein versioniertes Writer-Handle mit validierter Host-Identität und ohne Änderung der Handle-Ausgabe bei Fehlern.'
+})

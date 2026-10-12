@@ -1,0 +1,39 @@
+let project = "0123456789abcdef0123456789abcdef"
+let experiment = "fedcba9876543210fedcba9876543210"
+let identity = RunIdentity(project,experiment)
+assert(identity.isValid() && identity.projectId() == project && identity.experimentId() == experiment)
+assert(attempt(RunIdentity("bad",experiment)) == nil)
+let values: [RunIdentity] = [identity,identity]
+assert(values[1].projectId() == project)
+struct IdentityBox:
+    let identity: RunIdentity
+let box = IdentityBox(identity)
+assert(box.identity.experimentId() == experiment)
+func copyId(value: RunIdentity) -> RunIdentity:
+    return value
+let optional: RunIdentity? = attempt(copyId(identity))
+assert(optional != nil && optional.unwrap().projectId() == project)
+let store = RunStore()
+store.configure(0.125,42,"source=typed")
+store.addChannel("value",Unit(1,0,0,0,0,0,0,1,"m"),"")
+store.setIdentity(identity)
+let writer = store.createWriter("typed-language.psrun","typed identity")
+writer.append(0,[7.0])
+store.setIdentity(RunIdentity(experiment,project))
+let future = store.createWriter("typed-future.psrun","future")
+future.append(0,[8.0])
+future.close()
+writer.close()
+let reader = store.openReader("typed-language.psrun")
+assert(reader.hasIdentity() && reader.identity().projectId() == project)
+let nextReader = store.openReader("typed-future.psrun")
+assert(nextReader.identity().projectId() == experiment && nextReader.identity().experimentId() == project)
+nextReader.close()
+assert(RunIdentity.fromMetadata(reader.metadata()).projectId() == project)
+assert(attempt(RunIdentity.fromMetadata("")) == nil)
+let saved = reader.identity()
+reader.close()
+assert(saved.experimentId() == experiment)
+store.configure(0.125,42,"project_id=forged")
+assert(attempt(store.createWriter("collision-language.psrun","bad")) == nil)
+store.close()
