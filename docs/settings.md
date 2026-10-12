@@ -60,10 +60,11 @@ Im Arbeitsbereich **Simulation** stehen zusätzlich diese Tastenkürzel bereit:
 
 | Kürzel | Aktion |
 | --- | --- |
-| Alt + Pfeiltasten | Kamera drehen |
+| Alt + Pfeiltasten | Kamera drehen; im 2D-Modus innerhalb der Ebene verschieben |
 | Alt + Shift + Pfeiltasten | Kameraziel nach rechts/links/oben/unten verschieben |
 | Alt + Bild auf / Bild ab | Heran-/herauszoomen |
-| Alt + Pos1 | Standardkamera einschließlich Projektion wiederherstellen |
+| Alt + Pos1 | Freie Standardkamera einschließlich Projektion wiederherstellen |
+| Alt + 2 | 2D-Modus ein-/ausschalten |
 | Alt + N / Alt + P | Nächsten/vorherigen eingeblendeten Szeneneintrag auswählen |
 | Alt + H | Ausgewählten Eintrag ausblenden |
 

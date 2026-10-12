@@ -4214,3 +4214,40 @@ Prüfgruppen bestehen **2/2**, `run-zb3subru`,
 `build/current-identity-regression-mac.log`. Alle **1409** eingefrorenen Dateien
 und die TAR-Prüfsumme sind unverändert bestätigt. Die ursprüngliche Fehlprüfung
 wurde im eingefrorenen Verzeichnis nicht nachträglich umgeschrieben.
+
+
+## Expliziter 2D-Ebenenmodus (PP-0295)
+
+Die tatsächliche App bietet unter Darstellung einen 2D-Modus. Vorne/Seite/Oben
+wählt XY/YZ/XZ; orthografische und perspektivische Projektion sind separat
+wählbar. Rechte/mittlere Maustaste und Alt-Pfeile verschieben parallel zur
+Ebene, das Mausrad zoomt. Exakte Ebenenachsen vermeiden senkrechte Drift durch
+trigonometrische Rundung. Alt+2 toggelt ohne Wiederholung; Standard/Alt+Pos1
+kehrt zur freien 3D-Kamera zurück. Die Ebene und die passenden Gesten sind im
+Kamerabereich sichtbar beschrieben.
+
+Intel-macOS-/AppleClang-Release-Nachweise:
+
+- Bisherige Diagramm-/3D-Tastatur- und neue Kameraabläufe **4/4**, `run-98768cid`,
+  `build/current-camera-plane-final-ui-mac.log`.
+- Verstärkte tatsächliche 16/22-Pixel-Kameraprüfung **2/2**, `run-cmv8u5_y`,
+  `build/current-camera-plane-rendered-ui-mac.log`: wirkliche Maus-/Tastaturwege,
+  alle drei Ebenen, beide Projektionen, feste Normalenkoordinate, Zoom, Home,
+  Modifier-/Editor-/Analyseisolation und bytegleiche Szene/Messwerte. Eine
+  anfänglich noch aktive Archivansicht wurde im Prüffixture korrigiert;
+  Rendererstatistik fordert jetzt tatsächlich gezeichnete Kugel-/Vektorgeometrie.
+  Die aufgenommenen Bilder wurden visuell geprüft.
+- SDK-Installation und Dokumentations-/Kit-/Identitäts-/Seriengruppen **5/5**,
+  `run-dia9e5_y`, `build/current-camera-plane-install-mac.log`.
+- Unabhängiges **204**-Dateien-Kit, verschobenes SDK und tatsächliche 16/22-Pixel-
+  App-Bedienung **2/2** Befehle, `build/current-camera-plane-sdk-verify-mac.log`,
+  Verbraucher `build/current-camera-plane-sdk-consumer-mac/Native SDK ä byx4eyds`.
+  `--camera-only` prüft diesen UI-Vertrag gezielt; vollständige SDK-Prüfungen
+  führen die beiden Kamerafälle ebenfalls aus.
+
+PP-0295 ist einzeln umgesetzt/geprüft. Die ganze aktuelle Plattformabnahme
+bleibt offen: **123 implemented**, **14 incomplete**, **394 unverified**,
+531 unveränderte Originaltexte/Planprüfsumme, `completion_proven=false`.
+
+Abschließende Dokumentations-/Referenz-/Kitprüfung: **3/3**, `run-cgnrc5bf`,
+`build/current-camera-plane-final-docs-mac.log`.

@@ -143,6 +143,13 @@ def project_settings(flow, directory):
     require((directory / "build-info.bmp").is_file(), "Missing rendered build information")
 
 
+def camera_plane(flow,directory,size):
+    flow.run("--camera-plane-test",directory,size,timeout=35,marker="CAMERA PLANE SELF-TEST: PASSED")
+    for name in ("camera-2d-xy-orthographic.bmp","camera-2d-xy-perspective.bmp","camera-2d-yz.bmp","camera-2d-xz.bmp"):
+        require((directory / name).is_file(),"Missing actual planar camera view: "+name)
+    require(fingerprint(directory / "camera-2d-xy-orthographic.bmp") != fingerprint(directory / "camera-2d-xy-perspective.bmp"),"Projection change did not alter rendered view")
+
+
 def build_controls(flow,directory):
     for mode in ("write","read"):
         flow.run("--workspace-state-test",directory,"project-settings-controls-"+mode,timeout=130,
@@ -1234,7 +1241,7 @@ def workflow_pointer_isolation(flow, directory):
                 "Actual paired run/report artifacts missing")
 
 
-SPECIAL = {"report_details_workflow": report_details, "library_selection_workflow": library_selection, "api_reference_workflow": api_reference,
+SPECIAL = {"camera_plane_16": lambda flow,directory: camera_plane(flow,directory,"16"), "camera_plane_22": lambda flow,directory: camera_plane(flow,directory,"22"),"report_details_workflow": report_details, "library_selection_workflow": library_selection, "api_reference_workflow": api_reference,
     "parameter_form_workflow": parameter_form,"completion_workflow": completion,"build_controls_workflow": build_controls,"project_tree_workflow": project_tree,"project_manager_keyboard_errors": project_manager_errors,"api_browser_workflow": api_browser,"editor_replace_workflow": editor_replace,"runner_keyboard_workflow": runner_keyboard,"runner_isolation_workflow": runner_isolation,"step_breakpoints_workflow": step_breakpoints,"workflow_pointer_isolation": workflow_pointer_isolation,"pendulum_medium_workflow": pendulum_medium,"pendulum_c_energy_workflow": pendulum_c_energy,"project_manager_keyboard_workflow": project_manager_keyboard,"settings_keyboard_workflow": settings_keyboard,"ui_typography_workflow": ui_typography,"saved_run_tutorial_workflow": saved_run_tutorial,"monte_carlo_tutorial_workflow": monte_carlo_tutorial,"collision_tutorial_workflow": collision_tutorial,"pendulum_tutorial_workflow": pendulum_tutorial,"spring_tutorial_workflow": spring_tutorial,"material_tutorial_workflow": material_tutorial,"contact_world_language_workflow": contact_world_language,"contact_world_workflow": contact_world, "diagnostic_workflow": diagnostics, "scene_frames_workflow": scene_frames, "logging_workflow": logging, "live_inspector_22_workflow": lambda flow,directory: logging(flow,directory,True), "series_mask_workflow": series_masks, "batch_missing_workflow": batch_missing, "batch_resume_workflow": batch_resume, "analysis_projects_workflow": analysis_projects, "channel_units_workflow": channel_units, "pchip_workflow": pchip, "named_workspaces_workflow": named_workspaces, "layouts_workflow": layouts, "inspector_workflow": inspector, "timed_series_workflow": timed_series,
            "parameter_units_workflow": lambda flow,directory: timed_series(flow,directory,True), "adaptive_workflow": adaptive, "docking_workflow": docking, "hierarchy_workflow": hierarchy, "documents_input_isolation": documents_input_isolation, "timeline_workflow": timeline, "speed_workflow": speed, "reset_workflow": reset, "project_settings_workflow": project_settings, "settings_workflow": settings, "themes_workflow": themes,
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,

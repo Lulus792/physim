@@ -144,6 +144,10 @@ typedef struct {
     SDL_Window *window;
     ps_graphics *graphics;
     ps_vec3 camera_target;
+    bool camera_2d;
+    unsigned camera_plane; /* 0=XY, 1=YZ, 2=XZ. */
+    enum nk_collapse_states camera_disclosure;
+    struct nk_rect camera_mode_bounds, camera_projection_bounds, camera_preset_bounds[4];
     struct nk_text_edit experiment, analysis;
     char root[4096], bin[4096], project[4096], project_input[4096], last_run[4096], report[4096];
     char build_directory[4096];
@@ -2041,18 +2045,42 @@ static void scene_select_entry(app *a,uint32_t slot) {
         parent=ps_scene_parent_index(scene,(uint32_t)parent);
     }
 }
+static void scene_camera_plane(app *a,unsigned plane) {
+    if(plane>2) return;
+    a->camera_plane=plane;
+    a->yaw=plane==1?(float)PS_PI/2:0;
+    a->pitch=plane==2?(float)PS_PI/2:0;
+}
+static void scene_camera_2d(app *a,bool enabled) {
+    a->camera_2d=enabled;
+    if(enabled) {
+        scene_camera_plane(a,a->camera_plane);
+        a->orthographic=true;
+    }
+}
+static void scene_camera_axes(const app *a,ps_vec3 *right,ps_vec3 *up) {
+    if(a->camera_2d) {
+        *right=a->camera_plane==1?ps_v3(0,0,-1):ps_v3(1,0,0);
+        *up=a->camera_plane==2?ps_v3(0,0,-1):ps_v3(0,1,0);
+    } else {
+        *right=ps_v3(cos(a->yaw),0,-sin(a->yaw));
+        *up=ps_v3(-sin(a->yaw)*sin(a->pitch),cos(a->pitch),-cos(a->yaw)*sin(a->pitch));
+    }
+}
 static bool scene_shortcut(app *a, const SDL_KeyboardEvent *key) {
     if (a->tab != 1 || a->recovery || !(key->mod & SDL_KMOD_ALT) ||
         (key->mod & (SDL_KMOD_CTRL | SDL_KMOD_GUI)))
         return false;
     bool shift = (key->mod & SDL_KMOD_SHIFT) != 0;
+    if(key->key==SDLK_2 && !shift) {
+        if(!key->repeat) scene_camera_2d(a,!a->camera_2d);
+        return true;
+    }
     float dx = key->key == SDLK_RIGHT ? 1.f : key->key == SDLK_LEFT ? -1.f : 0.f;
     float dy = key->key == SDLK_UP ? 1.f : key->key == SDLK_DOWN ? -1.f : 0.f;
     if (dx || dy) {
-        if (shift) {
-            ps_vec3 right = ps_v3(cos(a->yaw), 0, -sin(a->yaw));
-            ps_vec3 up = ps_v3(-sin(a->yaw) * sin(a->pitch), cos(a->pitch),
-                               -cos(a->yaw) * sin(a->pitch));
+        if (shift || a->camera_2d) {
+            ps_vec3 right,up;scene_camera_axes(a,&right,&up);
             a->camera_target = ps_vadd(a->camera_target,
                 ps_vscale(ps_vadd(ps_vscale(right, dx), ps_vscale(up, dy)), a->zoom * .025));
         } else {
@@ -2069,6 +2097,7 @@ static bool scene_shortcut(app *a, const SDL_KeyboardEvent *key) {
     if (shift) return false;
     if (key->key == SDLK_HOME) {
         if (!key->repeat) {
+            a->camera_2d=false;
             a->yaw = PS_CAMERA_DEFAULT.yaw;
             a->pitch = PS_CAMERA_DEFAULT.pitch;
             a->zoom = PS_CAMERA_DEFAULT.distance;
@@ -2112,17 +2141,16 @@ static void viewport(app *a, float height) {
     a->scene_viewport_bounds = r;
     struct nk_input *input = &ui->input;
     if (widget_state == NK_WIDGET_VALID && nk_input_is_mouse_hovering_rect(input, r)) {
-        if (nk_input_is_mouse_down(input, NK_BUTTON_RIGHT)) {
+        if (!a->camera_2d && nk_input_is_mouse_down(input, NK_BUTTON_RIGHT)) {
             a->yaw -= input->mouse.delta.x * .008f;
             a->pitch += input->mouse.delta.y * .008f;
             a->pitch = fmaxf(-(float)PS_PI / 2, fminf((float)PS_PI / 2, a->pitch));
             a->yaw = remainderf(a->yaw, 2 * (float)PS_PI);
         }
-        if (nk_input_is_mouse_down(input, NK_BUTTON_MIDDLE)) {
+        if (nk_input_is_mouse_down(input, NK_BUTTON_MIDDLE) ||
+            (a->camera_2d && nk_input_is_mouse_down(input, NK_BUTTON_RIGHT))) {
             double scale = a->zoom / fmaxf(r.h, 1);
-            ps_vec3 right = ps_v3(cos(a->yaw), 0, -sin(a->yaw));
-            ps_vec3 up =
-                ps_v3(-sin(a->yaw) * sin(a->pitch), cos(a->pitch), -cos(a->yaw) * sin(a->pitch));
+            ps_vec3 right,up;scene_camera_axes(a,&right,&up);
             a->camera_target =
                 ps_vadd(a->camera_target, ps_vadd(ps_vscale(right, -input->mouse.delta.x * scale),
                                                   ps_vscale(up, input->mouse.delta.y * scale)));
@@ -2866,6 +2894,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "autosave_tests.inc"
 #include "batch_tests.inc"
 #include "plot_tests.inc"
+#include "camera_plane_tests.inc"
 #include "ui_size_tests.inc"
 #include "settings_tests.inc"
 #include "workspace_tree_tests.inc"
@@ -3020,9 +3049,11 @@ int main(int argc, char **argv) {
         strcmp(argv[3], "theme-cancel") && strcmp(argv[3], "theme-defaults") &&
         strcmp(argv[3], "theme-dark-read") && strncmp(argv[3],"ui-size-",8))))
         return 2;
+    bool camera_plane_test=argc>1 && !strcmp(argv[1],"--camera-plane-test");
+    if(camera_plane_test && (argc!=4 || (strcmp(argv[3],"16") && strcmp(argv[3],"22"))))return 2;
     bool plot_noise = argc > 1 && !strcmp(argv[1], "--plot-test-noise");
-    bool plot_test = plot_noise || (argc > 1 && !strcmp(argv[1], "--plot-test"));
-    if (plot_test && argc != 3)
+    bool plot_test = camera_plane_test || plot_noise || (argc > 1 && !strcmp(argv[1], "--plot-test"));
+    if (plot_test && !camera_plane_test && argc != 3)
         return 2;
     bool batch_test = argc > 1 && !strcmp(argv[1], "--batch-test");
     if (batch_test && argc != 3 && argc != 4)
@@ -3376,6 +3407,9 @@ int main(int argc, char **argv) {
         }
         test_stage = 80;
     } else if (plot_test) {
+        if(camera_plane_test && !strcmp(argv[3],"22")) {
+            ps_preferences p=a->preferences;p.ui_size=22;preferences_apply(a,&p);
+        }
         if (!test_plot_setup(a, argv[2])) {
             exit_code = 1;
             a->quitting = true;
@@ -3683,7 +3717,9 @@ int main(int argc, char **argv) {
             if (ps_clock() - test_started > 30) {
                 exit_code = 1;
                 a->quitting = true;
-            } else
+            } else if(camera_plane_test)
+                camera_plane_test_frame(a,&test_stage,&exit_code,&capture);
+            else
                 test_plot_frame(a, &test_stage, &exit_code, &capture);
             if (plot_noise) test_pointer_noise(a);
         } else if (batch_test) {

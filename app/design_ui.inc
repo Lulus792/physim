@@ -158,7 +158,9 @@ static void parameter_form_view(app *a) {
             if (strcmp(previous, a->parameters.selected[i]))
                 a->project_settings_dirty = true;
             a->parameter_default_bounds[i]=nk_widget_bounds(ui);
-            if (nk_button_label(ui, "Standard")) {
+            a->camera_preset_bounds[0]=nk_widget_bounds(ui);
+        if (nk_button_label(ui, "Standard")) {
+            a->camera_2d=false;
                 snprintf(a->parameters.selected[i], sizeof a->parameters.selected[i], "%.17g",
                          parameter->default_value/scale);
                 a->project_settings_dirty = true;
@@ -312,6 +314,10 @@ static void scene_controls_view(app *a) {
     }
     if (nk_tree_state_push(ui, NK_TREE_TAB, "Darstellung", &a->view_disclosure)) {
         nk_layout_row_dynamic(ui, 28, 1);
+        bool planar=a->camera_2d;
+        a->camera_mode_bounds=nk_widget_bounds(ui);
+        if(nk_checkbox_label(ui,"2D-Modus",&planar)) scene_camera_2d(a,planar);
+        a->camera_projection_bounds=nk_widget_bounds(ui);
         nk_checkbox_label(ui, "Orthografische Ansicht", &a->orthographic);
         nk_checkbox_label(ui, "Vektoren", &a->show_vectors);
         nk_checkbox_label(ui, "Flugbahnen", &a->show_paths);
@@ -320,7 +326,7 @@ static void scene_controls_view(app *a) {
         nk_checkbox_label(ui, "Raster und Achsen", &a->show_grid);
         nk_tree_state_pop(ui);
     }
-    if (nk_tree_push(ui, NK_TREE_TAB, "Kamera", NK_MINIMIZED)) {
+    if (nk_tree_state_push(ui, NK_TREE_TAB, "Kamera", &a->camera_disclosure)) {
         nk_layout_row_dynamic(ui, 22, 1);
         nk_label_colored(ui, "Blickrichtung", NK_TEXT_LEFT, muted());
         nk_layout_row_dynamic(ui, 32, 2);
@@ -331,34 +337,38 @@ static void scene_controls_view(app *a) {
             a->camera_target = PS_CAMERA_DEFAULT.target;
             a->orthographic = PS_CAMERA_DEFAULT.orthographic;
         }
+        a->camera_preset_bounds[1]=nk_widget_bounds(ui);
         if (nk_button_label(ui, "Vorne")) {
-            a->yaw = 0;
-            a->pitch = 0;
+            scene_camera_plane(a,0);
             a->orthographic = true;
         }
+        a->camera_preset_bounds[2]=nk_widget_bounds(ui);
         if (nk_button_label(ui, "Seite")) {
-            a->yaw = (float)PS_PI / 2;
-            a->pitch = 0;
+            scene_camera_plane(a,1);
             a->orthographic = true;
         }
+        a->camera_preset_bounds[3]=nk_widget_bounds(ui);
         if (nk_button_label(ui, "Oben")) {
-            a->yaw = 0;
-            a->pitch = (float)PS_PI / 2;
+            scene_camera_plane(a,2);
             a->orthographic = true;
         }
         nk_layout_row_dynamic(ui, 26, 1);
-        nk_label(ui, "Orbit", NK_TEXT_LEFT);
-        nk_slider_float(ui, -3.14f, &a->yaw, 3.14f, .02f);
-        nk_label(ui, "Neigung", NK_TEXT_LEFT);
-        nk_slider_float(ui, -(float)PS_PI / 2, &a->pitch, (float)PS_PI / 2, .02f);
+        if(a->camera_2d) {
+            const char *planes[]={"2D-Ebene: XY","2D-Ebene: YZ","2D-Ebene: XZ"};
+            nk_label(ui,planes[a->camera_plane],NK_TEXT_LEFT);
+        } else {
+            nk_label(ui, "Orbit", NK_TEXT_LEFT);
+            nk_slider_float(ui, -3.14f, &a->yaw, 3.14f, .02f);
+            nk_label(ui, "Neigung", NK_TEXT_LEFT);
+            nk_slider_float(ui, -(float)PS_PI / 2, &a->pitch, (float)PS_PI / 2, .02f);
+        }
         nk_label(ui, "Zoom", NK_TEXT_LEFT);
         nk_slider_float(ui, 1.5f, &a->zoom, 12, .1f);
         nk_layout_row_dynamic(ui, 60, 1);
-        nk_label_wrap(ui, "Rechts ziehen: drehen\nMitte ziehen: verschieben\nMausrad: zoomen");
+        nk_label_wrap(ui,a->camera_2d?"Rechts/Mitte ziehen: verschieben\nMausrad: zoomen":"Rechts ziehen: drehen\nMitte ziehen: verschieben\nMausrad: zoomen");
         nk_layout_row_dynamic(ui, 112, 1);
-        nk_label_wrap(ui, "Alt + Pfeile: drehen. Alt + Shift + Pfeile: verschieben. "
-                          "Alt + Bild auf/ab: zoomen. Alt + Pos1: Standard.");
-        nk_tree_pop(ui);
+        nk_label_wrap(ui,a->camera_2d?"Alt + Pfeile: verschieben. Alt + 2: 2D/3D. Alt + Bild auf/ab: zoomen. Alt + Pos1: Standard.":"Alt + Pfeile: drehen. Alt + Shift + Pfeile: verschieben. Alt + 2: 2D/3D. Alt + Bild auf/ab: zoomen. Alt + Pos1: Standard.");
+        nk_tree_state_pop(ui);
     }
 }
 static void camera_inspector(app *a) {

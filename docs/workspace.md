@@ -451,6 +451,16 @@ Inspektor.
 - **Vorne**, **Seite**, **Oben**, **Standard**: definierte Kameraansichten.
 - **Orthografische Ansicht**: parallele Projektion ohne perspektivische Verkleinerung.
 
+**2D-Modus** unter **Darstellung** richtet die Kamera an einer Ebene der
+3D-Szene aus. **Vorne** wählt XY, **Seite** YZ und **Oben** XZ; die aktive Ebene
+steht unter **Kamera**. Beim Einschalten startet die Ansicht orthografisch.
+Über **Orthografische Ansicht** kannst du anschließend perspektivische
+Projektion wählen. In 2D verschieben rechte/mittlere Maustaste und
+Alt + Pfeiltasten das Kameraziel innerhalb der gewählten Ebene; das Mausrad
+zoomt. **Alt + 2** schaltet zwischen 2D und freier 3D-Kamera um.
+**Standard** oder **Alt + Pos1** stellt die freie Standardkamera wieder her.
+Die Kameraansicht arbeitet mit den bestehenden Szenenobjekten und Messdaten.
+
 Unter **Szeneneinträge** kannst du Objekte einzeln ausblenden; **Alle einblenden**
 macht sie wieder sichtbar. Vektoren, Flugbahnen, Punkte, Beschriftungen und Raster
 haben zusätzliche gemeinsame Schalter. Dies verändert keine Messwerte.

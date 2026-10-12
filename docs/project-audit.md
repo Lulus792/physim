@@ -1268,3 +1268,14 @@ Broad Phase und Impulsantwort mit Reibung/Restitution.
 Mehrkörper-CCD und Gesamtplattformabnahme bleiben separat offen. Die Zählung
 lautet nun **122 implemented**, **14 incomplete**, **395 unverified** bei
 allen 531 unveränderten Originalblöcken und ursprünglicher Planprüfsumme.
+
+
+## 2D-Modus der Szene
+
+PP-0295 besitzt nun einen expliziten XY-/YZ-/XZ-Ebenenmodus mit wählbarer
+Perspektive/Orthografie, Maus-/Tastaturverschiebung, Zoom und Rückkehr zur
+freien 3D-Kamera. Echte Eingaben, gerenderte Geometrie, Projektion und Erhalt
+von Szene/Messwerten bestehen bei 16/22 Pixeln sowie im verschobenen SDK.
+[Nachweise](platform-validation.md#expliziter-2d-ebenenmodus-pp-0295).
+Aktuell: **123 implemented**, **14 incomplete**, **394 unverified** bei allen
+531 unveränderten Originalblöcken/Planprüfsumme. Gesamtplattformabnahme bleibt offen.

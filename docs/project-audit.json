@@ -2145,9 +2145,17 @@
       "kind": "list",
       "scope": "planned",
       "text": "- 2D-Modus als Ebene in der 3D-Welt mit optionaler Perspektive oder orthografischer Kamera.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/main.c",
+        "app/design_ui.inc",
+        "app/camera_plane_tests.inc",
+        "tests/check_display_workflow.py",
+        "tools/verify-native-sdk.py",
+        "docs/workspace.md",
+        "docs/settings.md"
+      ],
+      "note": "Ein expliziter 2D-Modus richtet die Kamera an XY/YZ/XZ aus. Perspektivische oder orthografische Projektion bleibt wählbar; Drehen ist gesperrt, Maus-/Tastaturverschieben nutzt exakte Achsen ohne Drift senkrecht zur Ebene. Alt+2 toggelt, Standard/Alt+Pos1 stellt freie 3D-Kamera wieder her. Echte 16/22-Pixel-Eingaben und gerenderte Geometrie/Projektionsreferenzen, unveränderte Szene/Messwerte und verschobener SDK-Verbraucher bestehen lokal. Die gesamte aktuelle Plattformmatrix bleibt separat offen."
     },
     {
       "id": "PP-0296",
