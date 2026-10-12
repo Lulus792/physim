@@ -4005,59 +4005,7 @@ Laufdetails-/Modellschichtänderungen gehören zu einem anderen Stand.
 
 ## Archivierte Modellschichten und App-Laufdetails (PP-0482)
 
-Die App öffnet aus der Auswertung einen nur lesbaren Detailsbereich mit sieben
-Modellschichten, Vereinfachungen, Parametern und Lauf-/Buildherkunft. Eine
-separate Rohansicht erhält sämtliche Metadaten. Deklarationen des Moduls
-unterscheiden `active`, `ideal`, `omitted`; fehlende Angaben bleiben ausdrücklich
-nicht dokumentiert. Bekannte Duplikate, ungültige Zustände/UTF-8/NUL und
-Kapazitätsfehler erhalten die Parserausgabe. Text wird weder ausgewertet noch
-als Pfad interpretiert. C-/Physim-Pendelmodelle deklarieren tatsächliche
-Dichte-/Drag-/Rauschzustände; äußere Batch-Ensembles werden getrennt benannt.
-
-Intel-macOS-Nachweise:
-
-- Parser, acht echte C-/Physim-Archive und bestehende Pendelparametermatrix
-  **3/3**, `run-xq3r2ci7`, `build/current-run-details-models-mac.log`. Ein
-  unabhängiger Header-/Chunk-/CRC-Decoder prüft Vakuum, Drag und exakte/
-  verrauschte Messung, sämtliche sieben Deklarationen und Trajektorienparität.
-- Tatsächliche App bei 16/22 px **2/2**, `run-jvsm7a5b`,
-  `build/current-run-details-app-final-mac.log`: sichtbarer Einstieg, beide
-  Reiter, vollständige Zwischenablage, Text-/Delete-/F5-/F8-Isolation, Altlauf
-  und unveränderte Archive/Editorquellen. Der ursprüngliche kurze Text passte
-  vollständig ins Fenster; längere Annotationen ergänzen die Scrollprüfung.
-- Direkter AppleClang-ASan/UBSan-Parser besteht: `build/current-run-details-asan.log`;
-  LeakSanitizer bleibt deaktiviert.
-- Erstes verschobenes SDK besteht **5/5** Verbraucherbefehle mit installierter/
-  neu gebauter Bibliothek, 16 echten Modellarchiven und beiden App-Prüfungen:
-  `build/current-run-details-sdk-verify-mac.log`; Verbraucher
-  `build/current-run-details-sdk-consumer-mac/Native SDK ä w8bltg91`.
-
-Alle Vorlagen-Deklarationen, äußere Batch-Verteilungen in der Ansicht und die
-ganze aktuelle Plattformabnahme bleiben offen; PP-0482 ist unvollständig.
-
-
-Die abschließenden langen Apptexte bestehen **2/2**, `run-c8m469j2`,
-`build/current-run-details-scroll-verified-mac.log`. Beide Schriftgrößen prüfen
-Ctrl+End mit positivem Scrolloffset, einen sichtbaren letzten UTF-8-Marker,
-vollständige unveränderte Zwischenablage und Rückkehr zum Altlauf. Acht
-Bildschirmaufnahmen belegen Übersicht, Rohdaten, Textende und fehlende Angaben.
-Die Endansicht bei 22 px wurde tatsächlich visuell kontrolliert; alle drei
-Fensterknöpfe sind vollständig sichtbar. Frühere zusätzliche Cursorprüfungen
-scheiterten: macOS Ctrl+End scrollt, ohne den Cursor an das Textende zu setzen.
-Die Prüfung verlangt das beobachtete Navigationsverhalten statt einer falschen
-plattformübergreifenden Cursorannahme. Das unabhängige Kit enthält **197**
-manifestierte Eingänge; keine Physim-Implementierung wird hinzugefügt.
-
-
-Das endgültige SDK besteht Installation/Parser/Modell-/Referenz-/Kit-/Completion
-**6/6**, `run-d5135t7v`, `build/current-run-details-final-sdk-install-mac.log`.
-Ausschließlich aus dem unabhängigen 197-Dateien-Kit besteht die verschobene
-Gegenprobe **5/5** Befehle mit installierter/neu gebauter Bibliothek und langen
-Apptexten: `build/current-run-details-final-sdk-verify-mac.log`; Verbraucher
-`build/current-run-details-final-sdk-consumer-mac/Native SDK ä e8q85ezb`.
-Der abschließende Offline-Parser besteht **1/1**, `run-ofu548vd`,
-`build/current-run-details-final-docs-mac.log`.
-
+Der vollständige Nachweis bleibt im [Plattformarchiv](platform-validation-history.md#archivierte-modellschichten-und-app-laufdetails-pp-0482) erhalten.
 
 ## Modellschichten aller acht Standardvorlagen
 
@@ -4247,3 +4195,22 @@ Aktuell: **122 implemented**, **14 incomplete**, **395 unverified** bei
 
 Die Dokumentations-/Referenzprüfung besteht **2/2**, `run-9cbs_s9b`,
 `build/current-mechanics-audit-docs-mac.log`.
+
+
+## Vollständiger nativer 4c90a35-Lauf: veraltetes Diagnoseorakel
+
+Der eingefrorene Stand `4c90a35591a66db0c655b804bbd5da7fcde249d4` beendet
+seinen Release-/AppleClang-Lauf mit **720/721**, `run-e7226be2`,
+`build/current-full-build-4c90a35-mac.log`. `runner_identity` erwartete den alten
+Wortlaut „host-owned identity fields“; der Runner nennt inzwischen Identität,
+Build und Serienfelder gemeinsam. Gefälschte IDs werden weiter mit Exit 5
+abgewiesen, ohne Laufdatei. Die SDK-Folgeprüfung ist wegen dieses Testfehlers
+nicht gestartet; dieser Lauf ist kein vollständiger grüner Paketnachweis.
+
+Das Orakel prüft nun Rückgabecode, Host-/Identitätskategorie und das Ausbleiben
+von Lauf-/Logdateien. Es besteht mit den unveränderten eingefrorenen Binärdateien
+unter `build/current-frozen-identity-recheck`. Aktuelle Identitäts-/Serien-
+Prüfgruppen bestehen **2/2**, `run-zb3subru`,
+`build/current-identity-regression-mac.log`. Alle **1409** eingefrorenen Dateien
+und die TAR-Prüfsumme sind unverändert bestätigt. Die ursprüngliche Fehlprüfung
+wurde im eingefrorenen Verzeichnis nicht nachträglich umgeschrieben.

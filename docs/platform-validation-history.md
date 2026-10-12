@@ -3937,3 +3937,59 @@ Dies ist der volle lokale Nachweis dieser Suite/dieses Stands. Spätere
 Laufdetails, Standardvorlagen-Deklarationen und Serienherkunft sind andere
 gezielt geprüfte Stände; ganze aktuelle Linux-/Windows-/Apple-Silicon- und
 Produktabnahme bleiben eigenständige offene Gates.
+
+
+## Archivierte Modellschichten und App-Laufdetails (PP-0482)
+
+Die App öffnet aus der Auswertung einen nur lesbaren Detailsbereich mit sieben
+Modellschichten, Vereinfachungen, Parametern und Lauf-/Buildherkunft. Eine
+separate Rohansicht erhält sämtliche Metadaten. Deklarationen des Moduls
+unterscheiden `active`, `ideal`, `omitted`; fehlende Angaben bleiben ausdrücklich
+nicht dokumentiert. Bekannte Duplikate, ungültige Zustände/UTF-8/NUL und
+Kapazitätsfehler erhalten die Parserausgabe. Text wird weder ausgewertet noch
+als Pfad interpretiert. C-/Physim-Pendelmodelle deklarieren tatsächliche
+Dichte-/Drag-/Rauschzustände; äußere Batch-Ensembles werden getrennt benannt.
+
+Intel-macOS-Nachweise:
+
+- Parser, acht echte C-/Physim-Archive und bestehende Pendelparametermatrix
+  **3/3**, `run-xq3r2ci7`, `build/current-run-details-models-mac.log`. Ein
+  unabhängiger Header-/Chunk-/CRC-Decoder prüft Vakuum, Drag und exakte/
+  verrauschte Messung, sämtliche sieben Deklarationen und Trajektorienparität.
+- Tatsächliche App bei 16/22 px **2/2**, `run-jvsm7a5b`,
+  `build/current-run-details-app-final-mac.log`: sichtbarer Einstieg, beide
+  Reiter, vollständige Zwischenablage, Text-/Delete-/F5-/F8-Isolation, Altlauf
+  und unveränderte Archive/Editorquellen. Der ursprüngliche kurze Text passte
+  vollständig ins Fenster; längere Annotationen ergänzen die Scrollprüfung.
+- Direkter AppleClang-ASan/UBSan-Parser besteht: `build/current-run-details-asan.log`;
+  LeakSanitizer bleibt deaktiviert.
+- Erstes verschobenes SDK besteht **5/5** Verbraucherbefehle mit installierter/
+  neu gebauter Bibliothek, 16 echten Modellarchiven und beiden App-Prüfungen:
+  `build/current-run-details-sdk-verify-mac.log`; Verbraucher
+  `build/current-run-details-sdk-consumer-mac/Native SDK ä w8bltg91`.
+
+Alle Vorlagen-Deklarationen, äußere Batch-Verteilungen in der Ansicht und die
+ganze aktuelle Plattformabnahme bleiben offen; PP-0482 ist unvollständig.
+
+
+Die abschließenden langen Apptexte bestehen **2/2**, `run-c8m469j2`,
+`build/current-run-details-scroll-verified-mac.log`. Beide Schriftgrößen prüfen
+Ctrl+End mit positivem Scrolloffset, einen sichtbaren letzten UTF-8-Marker,
+vollständige unveränderte Zwischenablage und Rückkehr zum Altlauf. Acht
+Bildschirmaufnahmen belegen Übersicht, Rohdaten, Textende und fehlende Angaben.
+Die Endansicht bei 22 px wurde tatsächlich visuell kontrolliert; alle drei
+Fensterknöpfe sind vollständig sichtbar. Frühere zusätzliche Cursorprüfungen
+scheiterten: macOS Ctrl+End scrollt, ohne den Cursor an das Textende zu setzen.
+Die Prüfung verlangt das beobachtete Navigationsverhalten statt einer falschen
+plattformübergreifenden Cursorannahme. Das unabhängige Kit enthält **197**
+manifestierte Eingänge; keine Physim-Implementierung wird hinzugefügt.
+
+
+Das endgültige SDK besteht Installation/Parser/Modell-/Referenz-/Kit-/Completion
+**6/6**, `run-d5135t7v`, `build/current-run-details-final-sdk-install-mac.log`.
+Ausschließlich aus dem unabhängigen 197-Dateien-Kit besteht die verschobene
+Gegenprobe **5/5** Befehle mit installierter/neu gebauter Bibliothek und langen
+Apptexten: `build/current-run-details-final-sdk-verify-mac.log`; Verbraucher
+`build/current-run-details-final-sdk-consumer-mac/Native SDK ä e8q85ezb`.
+Der abschließende Offline-Parser besteht **1/1**, `run-ofu548vd`,
+`build/current-run-details-final-docs-mac.log`.
