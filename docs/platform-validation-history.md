@@ -3898,3 +3898,48 @@ abgebrochene Pipes): Linux/Clang 114668329084 `run-e_ln27qp`, Linux/GCC
 macOS/Intel 114668329162 `run-_8mkkuz8`, Windows/ClangCL 114668329016
 `run-ortdid6_`, Windows/MSVC 114668329195 `run-4hvuxaga`.
 Diese gezielten Resultate ersetzen keine vollständige Plattform-/Paketabnahme.
+
+
+## Archivierte äußere Serienherkunft
+
+Der Batchhost übergibt begrenzte Seed-/Index-/Anzahl- und SI-Studienangaben;
+der Runner prüft sie einschließlich Überlauf, effektivem Parameterwert und
+reserviertem Namensraum vor dem Writer. Alle neuen Runnerarchive deklarieren
+`single`, `seeded` oder `linear`. Die App zeigt diese äußere Serie getrennt
+vom Modell-RNG, ohne fremde Metadatenpfade zu öffnen. Bei Fortsetzung müssen
+vorhandene Serienangaben exakt passen; alte Dateien ohne Angaben bleiben
+lesbare Legacy-Eingänge und werden nicht verändert. Versionen bleiben gleich.
+
+Intel-macOS-Nachweise:
+
+- Vorhandene Batch-/Sprach-/Parallel-/Fortsetzungs-/Abbruchgruppen **13/13**,
+  `run-4e3sut9j`, `build/current-series-provenance-batches-mac.log`.
+- Serien-, Batch- und Sprachgruppen **14/14**, `run-xyhbaoww`,
+  `build/current-series-provenance-final-batches-mac.log`.
+- Parser, Laufdetails und echte Serienarchive **4/4**, `run-8tih9d5a`,
+  `build/current-series-provenance-archive-final-mac.log`: unabhängiger
+  Header-/CRC-Decoder prüft 14 C-/Physim-Einzel-/Seed-/Studienarchive sowie
+  doppelte/gefälschte/mismatched/überlaufende Anforderungen ohne Laufdatei.
+- SDK-Installation und abschließende Gruppen **5/5**, `run-_3oexbqb`,
+  `build/current-series-provenance-confirmed-sdk-install-mac.log`. Der
+  Fortsetzungstest verfälscht den Serienindex bei korrekt neu berechneter
+  Metadaten-CRC: Wiederverwendung wird als `PS_CORRUPT` abgewiesen.
+- Direkter AppleClang-ASan/UBSan-Parser besteht; LeakSanitizer deaktiviert.
+- Actual App-Laufdetails mit linearer äußerer Serie bei 16/22 px **2/2**,
+  `run-t437q3v5`, `build/current-series-provenance-app-mac.log`: Übersicht,
+  kompletter Rohtext, Scrollende, Kopie, Schreibschutz, Tastaturisolation,
+  Altlauf und unveränderte Quellen/Archive.
+- Ausschließlich aus dem unabhängigen **201**-Dateien-Kit besteht die
+  verschobene SDK-Gegenprobe **5/5** Befehle mit installierter/neu gebauter
+  Bibliothek: `build/current-series-provenance-sdk-verify-mac.log`; Verbraucher
+  `build/current-series-provenance-sdk-consumer-mac/Native SDK ä no6bjrl8`.
+  Ein zuerst fehlender Kit-Header wurde korrigiert: der private Parserheader
+  kommt ausschließlich aus dem SDK unter Test, nicht aus dem Prüfkit.
+
+Spezielle zusätzliche Sprachbeispiele bleiben ohne vollständige Modellschicht-
+Deklaration; die ganze aktuelle Plattformabnahme bleibt offen.
+
+
+Die abschließenden Parser-/Dokumentations-/Fortsetzungs-/Kit-/Archivgruppen
+bestehen **5/5**, `run-wsbs9pb3`, `build/current-series-provenance-final-docs-mac.log`.
+Alle 531 Originalblöcke und die ursprüngliche Planprüfsumme bleiben erhalten.

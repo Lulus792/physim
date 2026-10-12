@@ -4017,48 +4017,7 @@ Der vollständige Nachweis bleibt im [Plattformarchiv](platform-validation-histo
 
 ## Archivierte äußere Serienherkunft
 
-Der Batchhost übergibt begrenzte Seed-/Index-/Anzahl- und SI-Studienangaben;
-der Runner prüft sie einschließlich Überlauf, effektivem Parameterwert und
-reserviertem Namensraum vor dem Writer. Alle neuen Runnerarchive deklarieren
-`single`, `seeded` oder `linear`. Die App zeigt diese äußere Serie getrennt
-vom Modell-RNG, ohne fremde Metadatenpfade zu öffnen. Bei Fortsetzung müssen
-vorhandene Serienangaben exakt passen; alte Dateien ohne Angaben bleiben
-lesbare Legacy-Eingänge und werden nicht verändert. Versionen bleiben gleich.
-
-Intel-macOS-Nachweise:
-
-- Vorhandene Batch-/Sprach-/Parallel-/Fortsetzungs-/Abbruchgruppen **13/13**,
-  `run-4e3sut9j`, `build/current-series-provenance-batches-mac.log`.
-- Serien-, Batch- und Sprachgruppen **14/14**, `run-xyhbaoww`,
-  `build/current-series-provenance-final-batches-mac.log`.
-- Parser, Laufdetails und echte Serienarchive **4/4**, `run-8tih9d5a`,
-  `build/current-series-provenance-archive-final-mac.log`: unabhängiger
-  Header-/CRC-Decoder prüft 14 C-/Physim-Einzel-/Seed-/Studienarchive sowie
-  doppelte/gefälschte/mismatched/überlaufende Anforderungen ohne Laufdatei.
-- SDK-Installation und abschließende Gruppen **5/5**, `run-_3oexbqb`,
-  `build/current-series-provenance-confirmed-sdk-install-mac.log`. Der
-  Fortsetzungstest verfälscht den Serienindex bei korrekt neu berechneter
-  Metadaten-CRC: Wiederverwendung wird als `PS_CORRUPT` abgewiesen.
-- Direkter AppleClang-ASan/UBSan-Parser besteht; LeakSanitizer deaktiviert.
-- Actual App-Laufdetails mit linearer äußerer Serie bei 16/22 px **2/2**,
-  `run-t437q3v5`, `build/current-series-provenance-app-mac.log`: Übersicht,
-  kompletter Rohtext, Scrollende, Kopie, Schreibschutz, Tastaturisolation,
-  Altlauf und unveränderte Quellen/Archive.
-- Ausschließlich aus dem unabhängigen **201**-Dateien-Kit besteht die
-  verschobene SDK-Gegenprobe **5/5** Befehle mit installierter/neu gebauter
-  Bibliothek: `build/current-series-provenance-sdk-verify-mac.log`; Verbraucher
-  `build/current-series-provenance-sdk-consumer-mac/Native SDK ä no6bjrl8`.
-  Ein zuerst fehlender Kit-Header wurde korrigiert: der private Parserheader
-  kommt ausschließlich aus dem SDK unter Test, nicht aus dem Prüfkit.
-
-Spezielle zusätzliche Sprachbeispiele bleiben ohne vollständige Modellschicht-
-Deklaration; die ganze aktuelle Plattformabnahme bleibt offen.
-
-
-Die abschließenden Parser-/Dokumentations-/Fortsetzungs-/Kit-/Archivgruppen
-bestehen **5/5**, `run-wsbs9pb3`, `build/current-series-provenance-final-docs-mac.log`.
-Alle 531 Originalblöcke und die ursprüngliche Planprüfsumme bleiben erhalten.
-
+Der vollständige Nachweis bleibt im [Plattformarchiv](platform-validation-history.md#archivierte-äußere-serienherkunft) erhalten.
 
 ## Modellschichten der weiteren ausgelieferten Experimente
 
@@ -4254,3 +4213,25 @@ ursprünglicher Planprüfsumme; `completion_proven=false`.
 
 Die abschließenden Dokumentations-/Referenz-/Kit-/Beispielgruppen bestehen
 **4/4**, `run-rrnk1_xf`, `build/current-material-property-final-docs-mac.log`.
+
+
+## Vollständiger nativer Intel-macOS-Lauf für 0cab455
+
+Der eingefrorene Stand `0cab455add525d2915b1135fb59d62634ca36266` besteht
+AppleClang Release **722/722**, `run-b_rc4q1r`,
+`build/current-full-build-0cab455-mac/test-results/run-b_rc4q1r/results.json`,
+`build/current-full-build-0cab455-mac.log`. Alle Ergebnisstatus sowie alle
+**1413** Quellprüfsummen und die TAR-Prüfsumme sind unabhängig bestätigt.
+Damit sind der veraltete Identitätsprüfer, zusätzliche Modellschichten und
+2D-App-Build in diesem Gesamtumfang berücksichtigt. Native Tests ohne Fenster
+belegen die grafische Bedienung nicht allein.
+
+Die vollständige verschobene SDK-/App-Gegenprobe aus dem zugehörigen
+**204**-Dateien-Kit läuft anschließend unter
+`build/current-full-sdk-0cab455-mac.log`. Ihr Ergebnis bleibt offen.
+Die späteren neun Materialeigenschaften am Stand `ccaaaf2` gehören nicht zu
+diesem eingefrorenen Gesamtlauf; sie besitzen die oben genannten Einzel-/SDK-
+Nachweise. Eine neue Gesamtplattformabnahme wird daraus nicht abgeleitet.
+
+Die Dokumentations-/Referenzprüfung dieses Ergebnisberichts besteht **2/2**,
+`run-cp0x8cjh`, `build/current-full-0cab455-record-docs-mac.log`.
