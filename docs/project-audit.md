@@ -1326,3 +1326,12 @@ bestehen lokal. [Nachweise](platform-validation.md#stabile-module-und-parameterd
 Aktuell: **126 implemented**, **14 incomplete**, **391 unverified** bei
 allen 531 unveränderten Originalblöcken und ursprünglicher Planprüfsumme.
 Die gesamte Plattform- und Produktabnahme bleibt offen.
+
+## Sichtbarkeit einzeln zugeordnet
+
+PP-0296 ist mit individuellen Einträgen und gemeinsamen Vektor-/Pfad-/Punkt-
+Schaltern umgesetzt. Rendering, Label-Overlay und Auswahl verwenden denselben
+Filter; native Kombinationen und tatsächliche 16/22-Pixel-Bedienung sowie das
+verschobene SDK bestehen lokal. [Nachweis](platform-validation.md#einzelne-und-gemeinsame-szenensichtbarkeit-pp-0296).
+Aktuell: **127 implemented**, **14 incomplete**, **390 unverified** bei
+allen 531 Originalblöcken. Die gesamte Plattform-/Produktabnahme bleibt offen.

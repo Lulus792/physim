@@ -301,6 +301,7 @@ typedef struct {
     ps_text_document display_save_document;
     ps_document_result display_save_result;
     struct nk_rect display_save_bounds,display_vector_bounds;
+    struct nk_rect display_path_bounds,display_points_bounds,display_labels_bounds,display_all_bounds;
     enum nk_collapse_states project_build_disclosure;
     struct nk_rect migration_bounds,identity_assignment_bounds;
     struct nk_rect project_profile_bounds,project_profile_choices[2],editor_build_bounds;
@@ -2094,12 +2095,7 @@ static void scene_selection_sync(app *a) {
     if (a->scene_selected_slot >= display_scene(a)->count) a->scene_selected = false;
 }
 static bool scene_entry_enabled(const app *a, uint32_t i) {
-    const ps_object *o = &display_scene(a)->objects[i];
-    return o->shape!=PS_GROUP && o->shape!=PS_FRAME && ps_scene_view_visible(&a->scene_view, i) && (o->color & 255) &&
-           (o->shape != PS_ARROW || a->show_vectors) &&
-           (o->shape != PS_POLYLINE || a->show_paths) &&
-           (o->shape != PS_POINT || a->show_points) &&
-           (o->shape != PS_LABEL || (a->show_labels && o->text[0]));
+    return ps_scene_view_enabled(&a->scene_view,display_scene(a),i,a->show_vectors,a->show_paths,a->show_points,a->show_labels);
 }
 static void scene_select_entry(app *a,uint32_t slot) {
     const ps_scene *scene=display_scene(a);
@@ -2962,6 +2958,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "batch_tests.inc"
 #include "plot_tests.inc"
 #include "camera_plane_tests.inc"
+#include "scene_visibility_tests.inc"
 #include "ui_size_tests.inc"
 #include "settings_tests.inc"
 #include "workspace_tree_tests.inc"
@@ -3117,10 +3114,11 @@ int main(int argc, char **argv) {
         strcmp(argv[3], "theme-dark-read") && strncmp(argv[3],"ui-size-",8))))
         return 2;
     bool camera_plane_test=argc>1 && !strcmp(argv[1],"--camera-plane-test");
-    if(camera_plane_test && (argc!=4 || (strcmp(argv[3],"16") && strcmp(argv[3],"22"))))return 2;
+    bool scene_visibility_test=argc>1 && !strcmp(argv[1],"--scene-visibility-test");
+    if((camera_plane_test || scene_visibility_test) && (argc!=4 || (strcmp(argv[3],"16") && strcmp(argv[3],"22"))))return 2;
     bool plot_noise = argc > 1 && !strcmp(argv[1], "--plot-test-noise");
-    bool plot_test = camera_plane_test || plot_noise || (argc > 1 && !strcmp(argv[1], "--plot-test"));
-    if (plot_test && !camera_plane_test && argc != 3)
+    bool plot_test = scene_visibility_test || camera_plane_test || plot_noise || (argc > 1 && !strcmp(argv[1], "--plot-test"));
+    if (plot_test && !camera_plane_test && !scene_visibility_test && argc != 3)
         return 2;
     bool batch_test = argc > 1 && !strcmp(argv[1], "--batch-test");
     if (batch_test && argc != 3 && argc != 4)
@@ -3474,7 +3472,7 @@ int main(int argc, char **argv) {
         }
         test_stage = 80;
     } else if (plot_test) {
-        if(camera_plane_test && !strcmp(argv[3],"22")) {
+        if((camera_plane_test || scene_visibility_test) && !strcmp(argv[3],"22")) {
             ps_preferences p=a->preferences;p.ui_size=22;preferences_apply(a,&p);
         }
         if (!test_plot_setup(a, argv[2])) {
@@ -3784,7 +3782,9 @@ int main(int argc, char **argv) {
             if (ps_clock() - test_started > 30) {
                 exit_code = 1;
                 a->quitting = true;
-            } else if(camera_plane_test)
+            } else if(scene_visibility_test)
+                scene_visibility_test_frame(a,&test_stage,&exit_code,&capture);
+            else if(camera_plane_test)
                 camera_plane_test_frame(a,&test_stage,&exit_code,&capture);
             else
                 test_plot_frame(a, &test_stage, &exit_code, &capture);

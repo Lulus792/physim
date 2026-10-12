@@ -4169,83 +4169,38 @@ Der vollständige lokale/SDK-/Linux-Nachweis bleibt in
 
 ## Stabile Module und Parameterdefinitionen in der Projektdatei
 
-Die vorhandene `modules=`-Liste wird nun gelesen, auf eindeutige stabile
-Namen geprüft und vom echten Projektbuilder gegen seine Module validiert.
-Unbekannte erforderliche Module werden auch bei bestehendem Buildcache
-abgewiesen. Quellen und bereits publizierte Module bleiben dabei erhalten.
-Neue Experimente deklarieren alle 28 derzeit gemeinsam verlinkten Core-Module;
-die Liste dient als Anforderungsangabe, nicht als Zugriffsbeschränkung.
+Der vollständige lokale/SDK-/Linux-Nachweis bleibt in
+[Archivband 2](platform-validation-history-2.md#stabile-module-und-parameterdefinitionen-in-der-projektdatei) erhalten.
 
-Beim normalen Speichern werden vollständige Parameterdefinitionen neben den
-gewählten SI-Werten geschrieben: Standard, Minimum, Maximum, Beschreibung,
-Einheit, Skalierung und sieben Dimensionen. Beim erneuten Öffnen werden sie
-vor dem nächsten Build wiederhergestellt. Ungültige Definitionen, doppelte
-Namen, unbekannte oder außerhalb ihrer Grenzen liegende gespeicherte
-Selektionen scheitern atomar. Legacydateien ohne Definitionen bleiben gültig.
-Frisch entdeckte Definitionen besitzen einen eigenen Speicherstatus und
-werden bei Speichern, Lauf-/Batchstart, Projektwechsel oder Beenden gesichert.
-Der Parameter-Standardknopf verändert die Kamera jetzt nicht mehr.
+## Einzelne und gemeinsame Szenensichtbarkeit (PP-0296)
 
-Intel macOS/AppleClang Release: **8/8** gezielte native Fälle,
-`run-5jt4mmd9`, `build/current-project-schema-install-mac.log`.
-Die Prüfungen enthalten volle 16-Parameter-Kataloge, skalierte Einheiten,
-UTF-8-Beschreibungen, Vorzeichen von Null, unveränderte Backups bei No-op,
-Schemaänderungen, fehlerhafte Module/Definitionen und den Erhalt der
-Definitionen beim gesonderten Speichern einer Anzeigevorgabe.
-Die lokale GUI-Gruppe besteht **5/5**, `run-is7icetg`,
-`build/current-project-schema-definitions-ui-mac.log`: C-/Physim-Formulare,
-Projektsettings, Buildprofil und Projektanzeige bei beiden Schriftgrößen.
-Die nachfolgende Trennung der SDK-Testeingaben wird gesondert geprüft.
+Rendering und Auswahl verwenden jetzt denselben Filter für individuelle
+Einträge, vererbte Gruppensichtbarkeit und gemeinsame Vektor-/Pfad-/Punkt-/
+Beschriftungsschalter. Der Filter prüft transparente und leere Label-Einträge
+und verändert die Szene nicht. Bestehende stabile IDs erhalten die Sichtbarkeit
+bei Umordnungen; anonyme Einträge behalten ihre bisherige Strukturpolitik.
 
-Direkte AppleClang-ASan-/UBSan-Instrumentierung der Projekt-/Parameter-/
-Textwriter-/Autosave-Quellen besteht unter
-`build/current-project-schema-asan-mac.log`. Die Core-Bibliothek bleibt in
-dieser direkten Probe uninstrumentiert; LeakSanitizer ist deaktiviert.
-Der gesamte Projektplan und eine aktuelle Gesamtplattformabnahme bleiben offen.
+Intel macOS/AppleClang Release: **2/2** echte GUI-Fälle bei 16/22 Pixeln,
+`run-c5t0nj6s`, `build/current-scene-visibility-ui-mac.log`. Jeder Fall bedient
+alle vier Schalter, die individuelle Objektcheckbox, **Alle einblenden** und
+Tastatur-Auswahl/Ausblenden. Tatsächlich eingereichte Geometrie, fehlende
+Treffer ausgeblendeter Objekte und sichtbare Label-Bounds sind geprüft.
+Ein verstecktes Objekt behält nach einer gezielten Fixture-Umordnung seine ID-
+bezogene Sichtbarkeit; Szene, Messwerte und Simulationszeit bleiben während
+aller Bedienhandlungen unverändert. Die 22-Pixel-Ansicht wurde visuell geprüft.
 
-Nach der unabhängigen Fixture-Zuführung besteht die korrigierte Installation
-**6/6**, `run-xxllokob`, `build/current-project-schema-verified-install-mac.log`.
-Der Parameterkatalog prüft zusätzlich zu kleinen Ausgabepuffern und
-ungültigen Beschreibungen eine deklarierte Einheit ohne Symbol; sie darf nicht
-beim Serialisieren in eine fehlende Einheit umgewandelt werden.
-Die direkte ASan-/UBSan-Katalogprobe besteht unter
-`build/current-project-schema-catalog-asan-mac.log` mit uninstrumentiertem Core
-und deaktiviertem LeakSanitizer.
+Die abschließende Installation besteht **6/6** native Sichtbarkeits-, Hierarchie-,
+Koordinatenrahmen-, Dokumentations-, Referenz- und Kitfälle, `run-vjvcc0ok`,
+`build/current-scene-visibility-install-mac.log`. Native Sichtbarkeitsproben
+umfassen alle **16** globalen Schalterkombinationen, einzelne/vererbte
+Sichtbarkeit, Grenzslots und ID-Erhalt. Direkte ASan-/UBSan-Instrumentierung
+des View-Filters besteht unter `build/current-scene-visibility-asan-mac.log`;
+die Core-Bibliothek ist dabei uninstrumentiert, LeakSanitizer deaktiviert.
 
-Die isolierte Gegenprobe aus dem frischen **208**-Dateien-Kit besteht mit
-**4/4** Befehlen: tatsächliche C-/Physim-Formulare (vier App-Prozesse),
-Projektanzeige (sechs App-Prozesse) und die umfassende native Projektbuilder-
-Regression einschließlich Modulverfügbarkeit, Unicode-Pfaden, beschädigten
-Artefakten, Compiler-/Linkfehlern, Cache-Sperren und Projektumzug.
-`build/current-project-schema-verified-sdk-verify-mac.log`, Consumer
-`build/current-project-schema-verified-sdk-consumer-mac/Native SDK ä z7f6i9d5`.
-Die spätere zusätzliche Ablehnung leerer deklarierter Einheitensymbole wird
-im abschließenden SDK-Paket erneut separat geprüft.
-
-Die endgültigen Definitionen verwenden `parameter_definition.<Name>` als
-optionale Erweiterung außerhalb des bisherigen `parameter.<Name>`-
-Selektionspräfixes. So interpretiert ein älterer Version-2-Leser die neuen
-Definitionen nicht als ungültige Parameternamen. Bestehende Schlüssel und die
-Formatversion bleiben erhalten.
-
-Das kompatible endgültige Paket besteht **6/6** native Fälle,
-`run-019xz1aw`, `build/current-project-schema-compatible-install-mac.log`.
-Ein tatsächlich ausgeführter älterer SDK-Builder liest die neuen optionalen
-Definitionen und baut dasselbe Version-2-Projekt erfolgreich:
-`build/current-project-schema-legacy-reader-mac.log`, frühere Installation
-`build/current-camera-standard-sdk-mac`.
-Die erweiterte Linux-Sanitizer-CI enthält jetzt auch Definitionen, echte
-Projektbuilds und Parameter-/Buildprofil-/Projektsettings-Oberflächenfälle;
-ihr Ergebnis für diese Änderung bleibt bis zur Ausführung offen.
-
-Die abschließenden Nachweisseiten bestehen **3/3** Dokumentations-/Referenz-/
-Kitprüfungen, `run-t5zg4kbn`, `build/current-project-schema-docs-mac.log`.
-Alle 531 Originalplantexte samt Zeilenbereichen und Planprüfsumme sind
-unverändert; die Offline-Seitengrößen liegen innerhalb der Viewergrenze.
-
-Die Gegenprobe des endgültigen kompatiblen SDKs besteht ebenfalls **4/4**:
-`build/current-project-schema-compatible-sdk-verify-mac.log`, Consumer
-`build/current-project-schema-compatible-sdk-consumer-mac/Native SDK ä jukwe1r3`.
-Alle ursprünglichen SDK-Dateien bleiben nach diesen Befehlen SHA-256-validiert.
-Damit ist PP-0439 mit begrenztem lokalem Implementierungsnachweis zugeordnet;
-der neue gesamte Plattform-/Produktabschluss bleibt offen.
+Das frische unabhängige **208**-Dateien-Kit besteht mit **2/2** Befehlen gegen
+das verschobene SDK: `build/current-scene-visibility-sdk-verify-mac.log`, Consumer
+`build/current-scene-visibility-sdk-consumer-mac/Native SDK ä 0oq1lw0w`.
+Die Linux-Sanitizer-CI enthält jetzt beide zusätzlichen Sichtbarkeitsfälle;
+ihr Ergebnis für diese Änderung ist noch offen. Der eingefrorene vollständige
+c60cced-Lauf gehört zum vorherigen Stand und enthält diese Erweiterung nicht.
+Die gesamte Plattform- und Produktabnahme bleibt offen.

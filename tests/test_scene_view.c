@@ -1,5 +1,6 @@
 #include "scene_view.h"
 #include <stdio.h>
+#include <string.h>
 #define CHECK(x)                                                                                   \
     do {                                                                                           \
         if (!(x)) {                                                                                \
@@ -57,6 +58,25 @@ int main(void) {
     CHECK(!ps_scene_view_visible(&view,0));
     CHECK(ps_scene_set_parent(&scene,1,0)==PS_OK);ps_scene_view_sync(&view,&scene);
     CHECK(ps_scene_view_visible(&view,0));
+    scene=(ps_scene){0};view=(ps_scene_view){0};
+    CHECK(ps_scene_add_id(&scene,1,PS_SPHERE,ps_v3(0,0,0),ps_v3(0,0,0),.1,UINT32_MAX)==PS_OK);
+    CHECK(ps_scene_add_id(&scene,2,PS_ARROW,ps_v3(0,0,0),ps_v3(1,0,0),.1,UINT32_MAX)==PS_OK);
+    ps_vec3 path[]={ps_v3(0,0,0),ps_v3(1,0,0)};
+    CHECK(ps_scene_polyline_id(&scene,3,path,2,.1,UINT32_MAX)==PS_OK);
+    CHECK(ps_scene_add_id(&scene,4,PS_POINT,ps_v3(0,0,0),ps_v3(0,0,0),.1,UINT32_MAX)==PS_OK);
+    CHECK(ps_scene_label_id(&scene,5,ps_v3(0,0,0),"Point α",UINT32_MAX)==PS_OK);
+    ps_scene_view_sync(&view,&scene);ps_scene unchanged=scene;
+    for(unsigned flags=0;flags<16;flags++) {
+        CHECK(ps_scene_view_enabled(&view,&scene,0,flags&1,flags&2,flags&4,flags&8));
+        for(unsigned i=1;i<5;i++)CHECK(ps_scene_view_enabled(&view,&scene,i,flags&1,flags&2,flags&4,flags&8)==!!(flags&(1u<<(i-1))));
+        view.hidden=UINT32_MAX;
+        for(unsigned i=0;i<5;i++)CHECK(!ps_scene_view_enabled(&view,&scene,i,flags&1,flags&2,flags&4,flags&8));
+        view.hidden=0;
+    }
+    CHECK(!memcmp(&unchanged,&scene,sizeof scene));
+    scene.objects[0].color=0;scene.objects[4].text[0]=0;
+    CHECK(!ps_scene_view_enabled(&view,&scene,0,true,true,true,true) && !ps_scene_view_enabled(&view,&scene,4,true,true,true,true));
+    CHECK(!ps_scene_view_enabled(&view,&scene,5,true,true,true,true));
     puts("Scene visibility: boundary slots, motion persistence and structure reset passed");
     return 0;
 }

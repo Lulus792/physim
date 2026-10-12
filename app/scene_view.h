@@ -47,4 +47,13 @@ static inline bool ps_scene_view_visible(const ps_scene_view *view, uint32_t slo
         slot=next;
     }
 }
+/* Render/picking filter; view choices never mutate scene objects or samples. */
+static inline bool ps_scene_view_enabled(const ps_scene_view *view,const ps_scene *scene,uint32_t slot,
+                                        bool vectors,bool paths,bool points,bool labels) {
+    if(!view || !scene || slot>=scene->count || scene->count>PS_MAX_OBJECTS)return false;
+    const ps_object *o=&scene->objects[slot];
+    return o->shape!=PS_GROUP && o->shape!=PS_FRAME && ps_scene_view_visible(view,slot) && (o->color&255) &&
+        (o->shape!=PS_ARROW || vectors) && (o->shape!=PS_POLYLINE || paths) &&
+        (o->shape!=PS_POINT || points) && (o->shape!=PS_LABEL || (labels && o->text[0]));
+}
 #endif

@@ -301,6 +301,15 @@ def verify_camera_planes(repo,sdk,root,suffix,checked,compiler=None):
         checked(command,timeout=45)
     print("Relocated SDK planar camera: real 16/22 px controls, rendered geometry, XY/YZ/XZ, both projections, exact-plane mouse/key pan, zoom and data preservation passed",flush=True)
 
+def verify_scene_visibility(repo,sdk,root,suffix,checked,compiler=None):
+    for size in ("16","22"):
+        work=root / ("Scene visibility "+size);work.mkdir()
+        command=[sys.executable,repo / "tests/check_display_workflow.py","scene_visibility_"+size,
+            "--app",sdk / "bin" / ("physim"+suffix),"--work",work,"--root",sdk]
+        if compiler:command += ["--cc",compiler]
+        checked(command,timeout=60)
+    print("Relocated SDK scene visibility: actual 16/22 px shape toggles, individual hiding, stable reordered IDs, rendered geometry, picking and preserved scene/samples passed",flush=True)
+
 
 def verify_template_layers(repo,sdk,consumer,builder,library,rebuilt_core,suffix,checked):
     pairs=(("pendulum","pendulum"),("projectile","projectile_drag"),("collision","collision"),("box_floor","box_contacts"),
@@ -681,6 +690,7 @@ def main():
     parser.add_argument("--project-schema-only",action="store_true",help="Verify stored parameter definitions, required modules, actual forms and project display only")
     parser.add_argument("--material-examples-only",action="store_true",help="Verify nine-property C/Physim data examples through shipped and source-rebuilt programs only")
     parser.add_argument("--camera-only",action="store_true",help="Verify actual planar camera controls at 16/22 px from a relocated app SDK only")
+    parser.add_argument("--visibility-only",action="store_true",help="Verify actual visibility controls, rendered geometry and picking at 16/22 px only")
     parser.add_argument("--examples-only",action="store_true",help="Verify additional shipped C/Physim example declarations only")
     parser.add_argument("--templates-only",action="store_true",help="Verify archived model layers and matching trajectories for all eight C/Physim template pairs only")
     parser.add_argument("--details-only",action="store_true",help="Verify C/Physim model layers and actual read-only app run details only; requires an app SDK/display")
@@ -709,6 +719,8 @@ def main():
     parser.add_argument("--isolation-only", action="store_true",
                         help="Verify eight actual C/Physim runner failure/restart app workflows; requires an app SDK and display")
     args = parser.parse_args()
+    if args.visibility_only and (args.app_tests or any(value for name,value in vars(args).items() if name.endswith("_only") and name!="visibility_only")):
+        parser.error("--visibility-only cannot be combined with other focused modes or --app-tests")
     if args.project_schema_only and (args.app_tests or any(value for name,value in vars(args).items() if name.endswith("_only") and name!="project_schema_only")):
         parser.error("--project-schema-only cannot be combined with other focused modes or --app-tests")
     if args.project_display_only and (args.app_tests or any(value for name,value in vars(args).items() if name.endswith("_only") and name!="project_display_only")):
@@ -872,6 +884,12 @@ def main():
         builder.includes = [sdk / "include"]
         builder.headers = native.digest_files(sorted((sdk / "include").rglob("*.h")))
         library = sdk / "lib" / ("physim-core.lib" if native.WINDOWS else "libphysim-core.a")
+        if args.visibility_only:
+            if not metadata["app"]:raise RuntimeError("Visibility tests require an app SDK/display")
+            verify_scene_visibility(repo,sdk,root,suffix,checked,args.compiler)
+            (root / "PASSED.txt").write_text("Focused scene visibility SDK verification passed; no full platform/product acceptance.\n",encoding="utf-8")
+            print(f"Scene visibility SDK verified: {root}")
+            return
         if args.project_schema_only:
             if not metadata["app"]:raise RuntimeError("Project schema tests require an app SDK/display")
             verify_project_schema(repo,sdk,root,suffix,checked,args.compiler)
@@ -1767,6 +1785,7 @@ def main():
                         raise RuntimeError("Installed SDK keyboard settings did not complete")
                 print("Installed SDK settings: keyboard-only traversal, all toggles, restart, cancellation and large-font focus scrolling passed",flush=True)
                 verify_camera_planes(repo,sdk,root,suffix,checked,args.compiler)
+                verify_scene_visibility(repo,sdk,root,suffix,checked,args.compiler)
                 verify_project_schema(repo,sdk,root,suffix,checked,args.compiler)
                 verify_step_breakpoint_app(repo, sdk, root, suffix, checked, args.compiler)
                 verify_runner_isolation_app(repo, sdk, root, suffix, checked, args.compiler)

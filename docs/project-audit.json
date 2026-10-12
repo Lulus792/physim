@@ -2177,9 +2177,19 @@
       "kind": "list",
       "scope": "planned",
       "text": "- Sichtbarkeit einzelner Objekte, Vektoren, Trajektorien und Messpunkte.\n",
-      "status": "unverified",
-      "evidence": [],
-      "note": "Noch nicht einzeln gegen Implementierung und Abnahmekriterien geprüft."
+      "status": "implemented",
+      "evidence": [
+        "app/scene_view.h",
+        "app/scene_tree_ui.inc",
+        "app/main.c",
+        "app/design_ui.inc",
+        "app/scene_visibility_tests.inc",
+        "tests/test_scene_view.c",
+        "tests/check_display_workflow.py",
+        "tools/verify-native-sdk.py",
+        "docs/platform-validation.md"
+      ],
+      "note": "Individuelle Sichtbarkeit und globale Vektor-/Pfad-/Punkt-/Label-Schalter verwenden einen gemeinsamen Render-/Auswahlfilter. Native 16 Schalterkombinationen, vererbte Gruppen, Grenzslots und ID-Erhalt geprüft; reale 16/22-Pixel-GUI-Fälle bestätigen eingereichte Geometrie, fehlende Picking-Treffer, Tastatur/Checkbox/Alle-einblenden-Bedienung und unveränderte Szene/Messwerte. Verschobenes SDK besteht 2/2. Aktuelle gesamte Plattformabnahme bleibt separat offen."
     },
     {
       "id": "PP-0300",
@@ -3839,7 +3849,7 @@
         "tools/verify-native-sdk.py",
         "docs/platform-validation.md"
       ],
-      "note": "Formatversion, relative Haupt-/Analysequellen, explizite stabile Modulanforderungen, vollständige Parameterdefinitionen mit SI-Grenzen/Standard/Einheit/Dimensionen, Buildprofil und Anzeigevorgaben sind implementiert. Native Schema-/Legacy-/Grenz-/No-op-Prüfungen, reale C-/Physim-Formulare samt Definitionen vor dem Wiederaufbau, Anzeigevorgaben bei 16/22 Pixeln und verschobene SDK-Verbraucher bestehen auf Intel macOS/AppleClang. Fehlende Modulanforderungen scheitern beim echten Builder ohne Änderung veröffentlichter Module. Die aktuelle vollständige Plattform- und Produktabnahme bleibt separat offen."
+      "note": "Formatversion, relative Haupt-/Analysequellen, explizite stabile Modulanforderungen, vollständige Parameterdefinitionen mit SI-Grenzen/Standard/Einheit/Dimensionen, Buildprofil und Anzeigevorgaben sind implementiert. Native Schema-/Legacy-/Grenz-/No-op-Prüfungen, reale C-/Physim-Formulare samt Definitionen vor dem Wiederaufbau, Anzeigevorgaben bei 16/22 Pixeln und verschobene SDK-Verbraucher bestehen auf Intel macOS/AppleClang. Fehlende Modulanforderungen scheitern beim echten Builder ohne Änderung veröffentlichter Module. Die aktuelle vollständige Plattform- und Produktabnahme bleibt separat offen. Die gezielte Linux-Sanitizer-CI für c60cced besteht auf GCC/Clang mit je 8/8 nativen und 14/14 grafischen Fällen; vollständige Logs sind gelesen und erhalten."
     },
     {
       "id": "PP-0443",

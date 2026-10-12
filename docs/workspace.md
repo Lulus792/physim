@@ -485,7 +485,9 @@ diese optionalen Vorgaben verwenden weiter die globalen Anzeigeeinstellungen.
 
 Unter **Szeneneinträge** kannst du Objekte einzeln ausblenden; **Alle einblenden**
 macht sie wieder sichtbar. Vektoren, Flugbahnen, Punkte, Beschriftungen und Raster
-haben zusätzliche gemeinsame Schalter. Dies verändert keine Messwerte.
+haben zusätzliche gemeinsame Schalter. Dies verändert keine Messwerte. Ausgeblendete Einträge werden auch beim
+Anklicken in der Szene ausgelassen. Einträge mit einer stabilen ID behalten
+ihre Sichtbarkeit bei einer Änderung der Objekt-Reihenfolge.
 Objekte mit stabiler ID bleiben auch beim Umsortieren richtig zugeordnet.
 Gruppen und Elternbeziehungen bilden einen aufklappbaren Szenenbaum. Das Ausblenden
 eines Elternknotens wirkt auf seine Nachfahren; deren eigene Sichtbarkeitswahl

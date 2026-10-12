@@ -1326,3 +1326,97 @@ Die vollständigen Logs belegen beide erweiterten 3D-Kamerafälle:
 `build/current-ci-e3ae5b5-job-114692623053.log`
 (Clang: `run-23aydnfh`, `run-jeyk_gcr`). Die nachfolgende Modul-/
 Parameterdefinitionserweiterung gehört nicht zu diesem Stand.
+
+## Stabile Module und Parameterdefinitionen in der Projektdatei
+
+Die vorhandene `modules=`-Liste wird nun gelesen, auf eindeutige stabile
+Namen geprüft und vom echten Projektbuilder gegen seine Module validiert.
+Unbekannte erforderliche Module werden auch bei bestehendem Buildcache
+abgewiesen. Quellen und bereits publizierte Module bleiben dabei erhalten.
+Neue Experimente deklarieren alle 28 derzeit gemeinsam verlinkten Core-Module;
+die Liste dient als Anforderungsangabe, nicht als Zugriffsbeschränkung.
+
+Beim normalen Speichern werden vollständige Parameterdefinitionen neben den
+gewählten SI-Werten geschrieben: Standard, Minimum, Maximum, Beschreibung,
+Einheit, Skalierung und sieben Dimensionen. Beim erneuten Öffnen werden sie
+vor dem nächsten Build wiederhergestellt. Ungültige Definitionen, doppelte
+Namen, unbekannte oder außerhalb ihrer Grenzen liegende gespeicherte
+Selektionen scheitern atomar. Legacydateien ohne Definitionen bleiben gültig.
+Frisch entdeckte Definitionen besitzen einen eigenen Speicherstatus und
+werden bei Speichern, Lauf-/Batchstart, Projektwechsel oder Beenden gesichert.
+Der Parameter-Standardknopf verändert die Kamera jetzt nicht mehr.
+
+Intel macOS/AppleClang Release: **8/8** gezielte native Fälle,
+`run-5jt4mmd9`, `build/current-project-schema-install-mac.log`.
+Die Prüfungen enthalten volle 16-Parameter-Kataloge, skalierte Einheiten,
+UTF-8-Beschreibungen, Vorzeichen von Null, unveränderte Backups bei No-op,
+Schemaänderungen, fehlerhafte Module/Definitionen und den Erhalt der
+Definitionen beim gesonderten Speichern einer Anzeigevorgabe.
+Die lokale GUI-Gruppe besteht **5/5**, `run-is7icetg`,
+`build/current-project-schema-definitions-ui-mac.log`: C-/Physim-Formulare,
+Projektsettings, Buildprofil und Projektanzeige bei beiden Schriftgrößen.
+Die nachfolgende Trennung der SDK-Testeingaben wird gesondert geprüft.
+
+Direkte AppleClang-ASan-/UBSan-Instrumentierung der Projekt-/Parameter-/
+Textwriter-/Autosave-Quellen besteht unter
+`build/current-project-schema-asan-mac.log`. Die Core-Bibliothek bleibt in
+dieser direkten Probe uninstrumentiert; LeakSanitizer ist deaktiviert.
+Der gesamte Projektplan und eine aktuelle Gesamtplattformabnahme bleiben offen.
+
+Nach der unabhängigen Fixture-Zuführung besteht die korrigierte Installation
+**6/6**, `run-xxllokob`, `build/current-project-schema-verified-install-mac.log`.
+Der Parameterkatalog prüft zusätzlich zu kleinen Ausgabepuffern und
+ungültigen Beschreibungen eine deklarierte Einheit ohne Symbol; sie darf nicht
+beim Serialisieren in eine fehlende Einheit umgewandelt werden.
+Die direkte ASan-/UBSan-Katalogprobe besteht unter
+`build/current-project-schema-catalog-asan-mac.log` mit uninstrumentiertem Core
+und deaktiviertem LeakSanitizer.
+
+Die isolierte Gegenprobe aus dem frischen **208**-Dateien-Kit besteht mit
+**4/4** Befehlen: tatsächliche C-/Physim-Formulare (vier App-Prozesse),
+Projektanzeige (sechs App-Prozesse) und die umfassende native Projektbuilder-
+Regression einschließlich Modulverfügbarkeit, Unicode-Pfaden, beschädigten
+Artefakten, Compiler-/Linkfehlern, Cache-Sperren und Projektumzug.
+`build/current-project-schema-verified-sdk-verify-mac.log`, Consumer
+`build/current-project-schema-verified-sdk-consumer-mac/Native SDK ä z7f6i9d5`.
+Die spätere zusätzliche Ablehnung leerer deklarierter Einheitensymbole wird
+im abschließenden SDK-Paket erneut separat geprüft.
+
+Die endgültigen Definitionen verwenden `parameter_definition.<Name>` als
+optionale Erweiterung außerhalb des bisherigen `parameter.<Name>`-
+Selektionspräfixes. So interpretiert ein älterer Version-2-Leser die neuen
+Definitionen nicht als ungültige Parameternamen. Bestehende Schlüssel und die
+Formatversion bleiben erhalten.
+
+Das kompatible endgültige Paket besteht **6/6** native Fälle,
+`run-019xz1aw`, `build/current-project-schema-compatible-install-mac.log`.
+Ein tatsächlich ausgeführter älterer SDK-Builder liest die neuen optionalen
+Definitionen und baut dasselbe Version-2-Projekt erfolgreich:
+`build/current-project-schema-legacy-reader-mac.log`, frühere Installation
+`build/current-camera-standard-sdk-mac`.
+Die erweiterte Linux-Sanitizer-CI enthält jetzt auch Definitionen, echte
+Projektbuilds und Parameter-/Buildprofil-/Projektsettings-Oberflächenfälle;
+ihr Ergebnis für diese Änderung bleibt bis zur Ausführung offen.
+
+Die abschließenden Nachweisseiten bestehen **3/3** Dokumentations-/Referenz-/
+Kitprüfungen, `run-t5zg4kbn`, `build/current-project-schema-docs-mac.log`.
+Alle 531 Originalplantexte samt Zeilenbereichen und Planprüfsumme sind
+unverändert; die Offline-Seitengrößen liegen innerhalb der Viewergrenze.
+
+Die Gegenprobe des endgültigen kompatiblen SDKs besteht ebenfalls **4/4**:
+`build/current-project-schema-compatible-sdk-verify-mac.log`, Consumer
+`build/current-project-schema-compatible-sdk-consumer-mac/Native SDK ä jukwe1r3`.
+Alle ursprünglichen SDK-Dateien bleiben nach diesen Befehlen SHA-256-validiert.
+Damit ist PP-0439 mit begrenztem lokalem Implementierungsnachweis zugeordnet;
+der neue gesamte Plattform-/Produktabschluss bleibt offen.
+
+Die [Linux-Sanitizer-CI für c60cced](https://github.com/PhysicSimulator/physim/actions/runs/38221465920)
+besteht tatsächlich auf Clang und GCC mit je **8/8** nativen und **14/14**
+grafischen Fällen. Die vollständigen Logs belegen Schema-/Katalog-/Builder-
+Prüfungen und tatsächliche Parameter-/Buildprofil-/Projektsettings-Bedienung:
+`build/current-ci-c60cced-job-114718473629.log`
+(Clang: `run-p0nd3enu`, `run-ph12vyrx`) und
+`build/current-ci-c60cced-job-114718473896.log`
+(GCC: `run-gqdg4g7q`, `run-ngmlmjly`). ASan/UBSan ist aktiviert;
+LeakSanitizer bleibt für die GUI deaktiviert. Die nachfolgende gesonderte
+Sichtbarkeitsprüfung gehört nicht zu diesem Stand.

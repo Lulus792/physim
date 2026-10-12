@@ -304,6 +304,7 @@ static void scene_controls_view(app *a) {
     }
     if (nk_tree_state_push(ui, NK_TREE_TAB, "Szeneneinträge", &a->scene_disclosure)) {
         nk_layout_row_dynamic(ui, 26, 1);
+        a->display_all_bounds=nk_widget_bounds(ui);
         if (nk_button_label(ui, "Alle einblenden")) a->scene_view.hidden = 0;
         nk_layout_row_dynamic(ui, 48, 1);
         nk_label_wrap(ui, "Alt + N/P: Auswahl. Alt + H: ausblenden.");
@@ -319,8 +320,11 @@ static void scene_controls_view(app *a) {
         nk_checkbox_label(ui, "Orthografische Ansicht", &a->orthographic);
         a->display_vector_bounds=nk_widget_bounds(ui);
         nk_checkbox_label(ui, "Vektoren", &a->show_vectors);
+        a->display_path_bounds=nk_widget_bounds(ui);
         nk_checkbox_label(ui, "Flugbahnen", &a->show_paths);
+        a->display_points_bounds=nk_widget_bounds(ui);
         nk_checkbox_label(ui, "Punkte", &a->show_points);
+        a->display_labels_bounds=nk_widget_bounds(ui);
         nk_checkbox_label(ui, "Beschriftungen", &a->show_labels);
         nk_checkbox_label(ui, "Raster und Achsen", &a->show_grid);
         nk_layout_row_dynamic(ui,a->preferences.ui_size>=20?60:32,1);
