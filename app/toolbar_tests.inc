@@ -120,6 +120,10 @@ static void toolbar_test_frame(app *a, int *stage, int *code, const char **captu
     case 76:
         test_mouse(a, a->toolbar_bounds[2], false);
         break;
+    case 77:
+        ok=a->toolbar_menu==3;
+        test_mouse(a,nk_rect(a->toolbar_popup_bounds.x+30,a->toolbar_popup_bounds.y+18,4,4),true);*stage=90;break;
+    case 90:test_mouse(a,nk_rect(a->toolbar_popup_bounds.x+30,a->toolbar_popup_bounds.y+18,4,4),false);*stage=78;break;
     case 78:
         ok = !a->toolbar_menu && a->doc_visible;
         documentation_window_hide(a);

@@ -3152,6 +3152,18 @@
   },
   "tests": [
     {
+      "name": "file_tabs_workflow",
+      "app": true,
+      "display": true,
+      "targets": ["python", "physim"],
+      "steps": [{
+        "program": "python",
+        "arguments": ["{root}/tests/check_display_workflow.py", "file_tabs_workflow", "--app", "{physim}", "--work", "{work}", "--root", "{root}", "--cc", "{cc}"],
+        "timeout": 65,
+        "files": ["app-steps.json"]
+      }]
+    },
+    {
       "name": "runner_snapshots_phys",
       "targets": [
         "physim-runner-snapshots-tests",

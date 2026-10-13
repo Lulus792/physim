@@ -72,6 +72,14 @@ nk_bool ps_ui_button_label(struct nk_context *ctx,const char *text);
 nk_bool ps_ui_slider_named(struct nk_context *ctx,const char *name,float minimum,float *value,float maximum,float increment);
 void ps_ui_label(struct nk_context *ctx,const char *text,nk_flags alignment);
 void ps_ui_label_colored(struct nk_context *ctx,const char *text,nk_flags alignment,struct nk_color color);
+typedef enum {
+    PS_ICON_CLOSE, PS_ICON_DRAG, PS_ICON_FILE, PS_ICON_FOLDER, PS_ICON_SEARCH,
+    PS_ICON_SAVE, PS_ICON_BUILD, PS_ICON_LEFT, PS_ICON_RIGHT, PS_ICON_ERROR,
+    PS_ICON_FUNCTION, PS_ICON_TYPE, PS_ICON_VALUE
+} ps_ui_icon;
+void ps_ui_draw_icon(struct nk_command_buffer *canvas,ps_ui_icon icon,struct nk_rect bounds,struct nk_color color);
+nk_bool ps_ui_icon_button(struct nk_context *ctx,ps_ui_icon icon,const char *name);
+nk_bool ps_ui_button_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,bool selected);
 /* Keep short label/control rows readable with enlarged UI fonts. Spacer and
  * chart/editor heights remain explicit; the default 16 px layout is unchanged. */
 static inline void ps_ui_row_dynamic(struct nk_context *ctx,float height,int columns) {

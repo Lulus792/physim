@@ -64,6 +64,7 @@ static void style(struct nk_context *ui) {
     ui->style.edit.border = 0;
     ui->style.edit.padding = nk_vec2(10, 8);
     ui->style.edit.row_padding = 4;
+    ui->style.edit.cursor_size = 1;
     ui->style.combo.rounding = PS_UI_RADIUS_FIELD;
     ui->style.combo.border = 0;
     ui->style.property.rounding = PS_UI_RADIUS_FIELD;
@@ -122,6 +123,7 @@ static const char *workspace_name(const char *path) {
 #include "settings_ui.inc"
 #include "project_manager_ui.inc"
 #include "timeline_ui.inc"
+#include "file_tabs_ui.inc"
 #include "docking_ui.inc"
 #include "scene_tree_ui.inc"
 // clang-format on
@@ -569,19 +571,6 @@ static void sidebar_panel(app *a) {
                     }
                 }
             }
-            section(ui, "Hilfe");
-            nk_layout_row_dynamic(ui, 32, 1);
-            a->documentation_bounds = nk_widget_bounds(ui);
-            if (nk_button_label(ui, "Handbuch · F1")) {
-                open_documentation(a, 1);
-            }
-            if (nk_tree_push(ui, NK_TREE_TAB, "Tastaturbefehle", NK_MINIMIZED)) {
-                nk_layout_row_dynamic(ui, 174, 1);
-                nk_label_wrap(ui, "" PS_UI_SHORTCUT "1/2/3  Arbeitsbereich\n" PS_UI_SHORTCUT "S  Speichern\n" PS_UI_SHORTCUT "F  "
-                                  "Suchen\n" PS_UI_SHORTCUT "4  Läufe & Berichte\n" PS_UI_SHORTCUT "L  Protokoll\nF5  "
-                                  "Build\nF6  Start / Pause\nF7  Zurücksetzen\nF10  Menüleiste");
-                nk_tree_pop(ui);
-            }
         }
     }
     nk_end(ui);
@@ -620,7 +609,7 @@ static void inspector_panel(app *a) {
 }
 static void workspace_panel(app *a) {
     struct nk_context *ui=a->ui;
-    float content=fmaxf(500,a->dock_panels[PS_DOCK_WORKSPACE].h-24);
+    float content=fmaxf(100,a->dock_panels[PS_DOCK_WORKSPACE].h-DOCK_HEADER_HEIGHT);
     if (a->dock_visible[PS_DOCK_WORKSPACE] && a->tab==4 && (a->library_search_focus || a->library_search_active))
         nk_window_set_focus(ui,"workspace");
     if(a->project_manager && a->manager_keyboard && !a->toolbar_keyboard && !a->toolbar_menu)
@@ -754,28 +743,6 @@ static void workspace_panel(app *a) {
         } else if (a->tab == 0 || (a->tab == 2 && a->analysis_tab == 1)) {
             bool analysis = a->tab == 2 || a->analysis_only;
             struct nk_text_edit *edit = analysis ? &a->analysis : &a->experiment;
-            nk_layout_row_begin(ui, NK_DYNAMIC, 34, 4);
-            nk_layout_row_push(ui, .46f);
-            nk_style_push_font(ui, a->font_title);
-            nk_label(ui, analysis ? analysis_source(a) : experiment_source(a), NK_TEXT_LEFT);
-            nk_style_pop_font(ui);
-            nk_layout_row_push(ui, .18f);
-            if (nk_button_label(ui, analysis ? "Zum Bericht" : "Suchen")) {
-                if (analysis)
-                    a->analysis_tab = 0;
-                else
-                    a->show_search = !a->show_search;
-            }
-            nk_begin_disabled(ui, !idle(a));
-            nk_layout_row_push(ui, .18f);
-            if (nk_button_label(ui, "Speichern"))
-                save_project(a);
-            nk_layout_row_push(ui, .18f);
-            a->editor_build_bounds=nk_widget_bounds(ui);
-            if (action_button(ui, "Build", true))
-                build_project(a);
-            nk_end_disabled(ui);
-            nk_layout_row_end(ui);
             if (a->show_search) {
                 nk_layout_row_dynamic(ui, 30, 4);
                 nk_edit_string_zero_terminated(ui, NK_EDIT_FIELD, a->find, sizeof a->find,
@@ -789,14 +756,7 @@ static void workspace_panel(app *a) {
                 if (nk_button_label(ui, "Ersetzen"))
                     find_text(a, edit, true);
             }
-            editor(a, edit, content - (a->show_search ? 150 : 112));
-            nk_layout_row_dynamic(ui, 22, 1);
-            nk_label_colored(ui,
-                             analysis ? (a->language_analysis ? "Auswertung  ·  Physim  ·  " PS_UI_SHORTCUT "S speichern" : "Auswertung  ·  C17  ·  " PS_UI_SHORTCUT "S speichern")
-                                      : a->language_experiment
-                                          ? "Experiment  ·  Physim  ·  " PS_UI_SHORTCUT "F suchen  ·  F5 bauen"
-                                          : "Experiment  ·  C17  ·  " PS_UI_SHORTCUT "F suchen  ·  F5 bauen",
-                             NK_TEXT_LEFT, muted());
+            editor(a, edit, nk_window_get_content_region(ui).h - 2*ui->style.window.padding.y - (a->show_search?38:0));
         } else if (a->tab == 1 && a->analysis_only) {
             nk_layout_row_dynamic(ui,44,1);nk_label_wrap(ui,"Gespeicherte Szene · Die Wiedergabe verändert den importierten Lauf nicht.");
             viewport(a,fmaxf(180,content-170));timeline_controls(a);
@@ -1166,4 +1126,5 @@ static void draw_ui(app *a, int width, int height) {
     if(a->tab==4 && a->library_search_active && a->dock_visible[PS_DOCK_WORKSPACE])
         nk_window_set_focus(ui,"workspace");
     dock_order(a);
+    completion_view(a,width,height);
 }

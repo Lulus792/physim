@@ -20,42 +20,7 @@ static void document_list_view(app *a) {
 static void document_view(app *a, float content) {
     struct nk_context *ui = a->ui;
     workspace_document *doc = active_document(a);
-    nk_layout_row_begin(ui, NK_DYNAMIC, 28, 4);
-    nk_layout_row_push(ui, .4f);
-    char label[4200];
-    snprintf(label, sizeof label, "%s%s", workspace_name(doc->path), doc->dirty ? " *" : "");
-    if (nk_combo_begin_label(ui, label, nk_vec2(420, 300))) {
-        nk_layout_row_dynamic(ui, 26, 1);
-        for (unsigned i = 0; i < a->document_count; i++) {
-            snprintf(label, sizeof label, "%s%s", a->documents[i].path,
-                     a->documents[i].dirty ? " *" : "");
-            if (nk_combo_item_label(ui, label, NK_TEXT_LEFT))
-                document_select(a, i);
-        }
-        nk_combo_end(ui);
-    }
-    doc = active_document(a);
-    nk_begin_disabled(ui, doc->recovery != NULL);
-    nk_layout_row_push(ui, .2f);
-    a->document_bounds[0] = nk_widget_bounds(ui);
-    if (nk_button_label(ui, "Speichern"))
-        document_save(a, a->document_active);
-    nk_layout_row_push(ui, .2f);
-    a->document_bounds[1] = nk_widget_bounds(ui);
-    if (nk_button_label(ui, "Neu laden"))
-        document_request(a, 2);
-    nk_end_disabled(ui);
-    nk_layout_row_push(ui, .2f);
-    a->document_bounds[2] = nk_widget_bounds(ui);
-    bool close = nk_button_label(ui, "Schließen");
-    nk_layout_row_end(ui);
-    if (close) {
-        document_request(a, 1);
-        return;
-    }
-    nk_layout_row_dynamic(ui, 22, 1);
-    nk_label_colored(ui, doc->path, NK_TEXT_LEFT, muted());
-    float used = 158;
+    float used = 2*ui->style.window.padding.y;
     if (doc->recovery) {
         nk_layout_row_dynamic(ui, 72, 1);
         nk_label_wrap(
@@ -138,17 +103,4 @@ static void document_view(app *a, float content) {
     nk_begin_disabled(ui, a->document_pending != 0 || doc->recovery != NULL);
     editor(a, &doc->edit, fmaxf(100, content - used));
     nk_end_disabled(ui);
-    nk_layout_row_dynamic(ui, 22, 1);
-    char autosave[96];
-    snprintf(autosave, sizeof autosave, "Autosave alle %u Sekunden",
-             a->preferences.autosave_seconds);
-    nk_label_colored(ui,
-                     doc->recovery        ? "Wiederherstellung ausstehend"
-                     : doc->draft_blocked ? "Autosave pausiert"
-                     : doc->draft_present ? "Automatische Sicherung vorhanden"
-                                          : autosave,
-                     NK_TEXT_LEFT, muted());
-    nk_layout_row_dynamic(ui, 22, 1);
-    nk_label_colored(ui, "UTF-8  ·  " PS_UI_SHORTCUT "S speichern  ·  " PS_UI_SHORTCUT "F suchen  ·  " PS_UI_SHORTCUT "W schließen",
-                     NK_TEXT_LEFT, muted());
 }

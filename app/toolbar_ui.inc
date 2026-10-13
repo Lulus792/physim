@@ -6,7 +6,8 @@ static void select_workspace_tab(app *a, int tab) {
 typedef enum {
     TOOLBAR_OPEN, TOOLBAR_ADD_FILE, TOOLBAR_ADD_FOLDER, TOOLBAR_NEW, TOOLBAR_SAVE,
     TOOLBAR_WORKSPACES, TOOLBAR_LOG, TOOLBAR_REFRESH, TOOLBAR_LIBRARY, TOOLBAR_BATCH,
-    TOOLBAR_SIDEBAR, TOOLBAR_WORKSPACE, TOOLBAR_RESET_LAYOUT, TOOLBAR_INSPECTOR, TOOLBAR_LAYOUTS
+    TOOLBAR_SIDEBAR, TOOLBAR_WORKSPACE, TOOLBAR_RESET_LAYOUT, TOOLBAR_INSPECTOR, TOOLBAR_LAYOUTS,
+    TOOLBAR_RELOAD, TOOLBAR_SEARCH, TOOLBAR_BUILD, TOOLBAR_HELP, TOOLBAR_REFERENCE, TOOLBAR_COMPLETION
 } toolbar_action;
 typedef struct { const char *text; toolbar_action action; bool enabled; } toolbar_entry;
 /* Shared action availability for mouse, keyboard and drawing. */
@@ -19,7 +20,10 @@ static unsigned toolbar_entries(app *a, int menu, toolbar_entry entries[9]) {
             {"Ordner hinzufügen …",TOOLBAR_ADD_FOLDER,choose && a->workspace_open},
             {"Neues Projekt …",TOOLBAR_NEW,choose},
             {"Speichern\t" PS_UI_SHORTCUT "S",TOOLBAR_SAVE,(a->loaded || a->document_count) && idle(a)},
-            {"Workspaces …",TOOLBAR_WORKSPACES,!a->dialog_pending}
+            {"Workspaces …",TOOLBAR_WORKSPACES,!a->dialog_pending},
+            {"Aktive Datei neu laden",TOOLBAR_RELOAD,a->tab==8 && active_document(a) && !active_document(a)->recovery},
+            {"Suchen / Ersetzen\t" PS_UI_SHORTCUT "F",TOOLBAR_SEARCH,!a->project_manager && ((a->loaded && (a->tab==0 || (a->tab==2 && a->analysis_tab==1))) || (a->tab==8 && active_document(a) && !active_document(a)->recovery))},
+            {"Build\tF5",TOOLBAR_BUILD,a->loaded && idle(a)}
         };
         memcpy(entries,file,sizeof file);return SDL_arraysize(file);
     }
@@ -36,6 +40,22 @@ static unsigned toolbar_entries(app *a, int menu, toolbar_entry entries[9]) {
             {"Panelanordnungen …",TOOLBAR_LAYOUTS,true}
         };
         memcpy(entries,view,sizeof view);return SDL_arraysize(view);
+    }
+    if(menu==3) {
+        struct nk_text_edit *edit=completion_target(a);
+        /* The menu itself is open, so inspect the selected document directly. */
+        if(!edit && !a->project_manager) {
+            if(a->tab==8 && active_document(a))edit=&active_document(a)->edit;
+            else if(a->loaded && a->tab==0)edit=a->analysis_only?&a->analysis:&a->experiment;
+            else if(a->loaded && a->tab==2 && a->analysis_tab==1)edit=&a->analysis;
+        }
+        bool code=edit && document_language(a,edit)>=0;
+        toolbar_entry help[]={
+            {"Handbuch\tF1",TOOLBAR_HELP,true},
+            {"API-Referenz\tShift+F1",TOOLBAR_REFERENCE,code},
+            {"Vervollständigen\tCtrl+Space",TOOLBAR_COMPLETION,code}
+        };
+        memcpy(entries,help,sizeof help);return SDL_arraysize(help);
     }
     return 0;
 }
@@ -60,6 +80,12 @@ static void toolbar_dispatch(app *a, toolbar_action action) {
         if(a->preferences.dock.hidden&8)dock_show(a,PS_DOCK_INSPECTOR);
         else ps_dock_hide(&a->preferences.dock,PS_DOCK_INSPECTOR);break;
     case TOOLBAR_LAYOUTS: a->layout_manager=true;break;
+    case TOOLBAR_RELOAD: document_request(a,2);break;
+    case TOOLBAR_SEARCH: a->show_search=!a->show_search;break;
+    case TOOLBAR_BUILD: build_project(a);break;
+    case TOOLBAR_HELP: open_documentation(a,1);break;
+    case TOOLBAR_REFERENCE: {struct nk_text_edit *edit=completion_target(a);if(edit)api_reference_from_editor(a,edit);break;}
+    case TOOLBAR_COMPLETION: {struct nk_text_edit *edit=completion_target(a);if(edit)completion_open(a,edit);break;}
     }
 }
 static void toolbar_keyboard_close(app *a) {
@@ -92,18 +118,18 @@ static bool toolbar_keyboard_key(app *a, const SDL_KeyboardEvent *key) {
         int direction=key->key==SDLK_LEFT || (key->key==SDLK_TAB && (key->mod&SDL_KMOD_SHIFT))?-1:1;
         bool opened=a->toolbar_menu!=0;
         a->toolbar_keyboard_top=(a->toolbar_keyboard_top+direction+4)%4;
-        a->toolbar_menu=opened && a->toolbar_keyboard_top<2?a->toolbar_keyboard_top+1:0;
+        a->toolbar_menu=opened && a->toolbar_keyboard_top<3?a->toolbar_keyboard_top+1:0;
         a->toolbar_keyboard_item=-1;
         toolbar_keyboard_move(a,1,true);
     } else if(key->key==SDLK_UP || key->key==SDLK_DOWN || key->key==SDLK_HOME || key->key==SDLK_END) {
-        if(a->toolbar_keyboard_top<2) {
+        if(a->toolbar_keyboard_top<3) {
             bool opened=a->toolbar_menu!=0;
             a->toolbar_menu=a->toolbar_keyboard_top+1;
             int direction=key->key==SDLK_UP || key->key==SDLK_END?-1:1;
             toolbar_keyboard_move(a,direction,!opened || key->key==SDLK_HOME || key->key==SDLK_END);
         }
     } else if(key->key==SDLK_RETURN || key->key==SDLK_KP_ENTER || key->key==SDLK_SPACE) {
-        if(a->toolbar_keyboard_top>=2) {
+        if(a->toolbar_keyboard_top>=3) {
             int top=a->toolbar_keyboard_top;toolbar_keyboard_close(a);
             if(top==2)open_documentation(a,1);else {a->project_manager=false;open_settings(a);}
         } else if(!a->toolbar_menu) {
@@ -145,7 +171,8 @@ static void toolbar_popup(app *a, int previous) {
     int menu=a->toolbar_menu?a->toolbar_menu:previous;
     struct nk_rect anchor=a->toolbar_bounds[menu-1];
     float factor=a->preferences.ui_size/16.f;
-    a->toolbar_popup_bounds=nk_rect(anchor.x,anchor.y+anchor.h+2,286*factor,(menu==2?296.f:200.f)+(a->preferences.ui_size-16)*(menu==2?9.f:6.f));
+    toolbar_entry available_entries[9];unsigned menu_count=toolbar_entries(a,menu,available_entries);
+    a->toolbar_popup_bounds=nk_rect(anchor.x,anchor.y+anchor.h+2,300*factor,16+menu_count*(26*factor+4)+(menu==1?8:0));
     nk_style_push_vec2(ui,&ui->style.window.popup_padding,nk_vec2(5,5));
     nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(4,4));
     nk_style_push_float(ui,&ui->style.window.rounding,9);
@@ -163,6 +190,9 @@ static void toolbar_popup(app *a, int previous) {
                 nk_layout_row_dynamic(ui,26,1);
                 struct nk_rect bounds=nk_widget_bounds(ui);
                 if(menu==1 && i<5)a->toolbar_item_bounds[i]=bounds;
+                if(menu==1 && i==6)a->document_bounds[1]=bounds;
+                if(menu==3 && i==1)a->api_reference_button_bounds=bounds;
+                if(menu==3 && i==2)a->completion_button_bounds=bounds;
                 if(menu==1 && i==5)a->workspace_menu_bounds=bounds;
                 if(menu==2 && i==0)a->toolbar_item_bounds[5]=bounds;
                 if(menu==2 && i==3)a->batch_navigation_bounds=bounds;
@@ -188,7 +218,7 @@ static void toolbar_view(app *a) {
     nk_style_push_style_item(ui, &ui->style.button.normal, nk_style_item_color(UI_COLOR(header)));
     nk_menubar_begin(ui);
     float available = nk_window_get_content_region(ui).w;
-    nk_layout_row_begin(ui, NK_STATIC, 32, 10);
+    nk_layout_row_begin(ui, NK_STATIC, 32, 13);
     nk_layout_row_push(ui, 72);
     nk_label(ui, "Physim", NK_TEXT_CENTERED);
     const char *menus[] = {"Datei", "Ansicht", "Hilfe", "Einstellungen"};
@@ -207,7 +237,7 @@ static void toolbar_view(app *a) {
     }
     if (clicked >= 0) {
         a->toolbar_keyboard = false;
-        if (clicked < 2)
+        if (clicked < 3)
             a->toolbar_menu = a->toolbar_menu == clicked + 1 ? 0 : clicked + 1;
         else {
             a->toolbar_menu = 0;
@@ -225,7 +255,7 @@ static void toolbar_view(app *a) {
     else if (a->toolbar_menu && !press &&
              !a->toolbar_keyboard &&
              (ui->input.mouse.delta.x != 0 || ui->input.mouse.delta.y != 0)) {
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             if (nk_input_is_mouse_hovering_rect(&ui->input, a->toolbar_bounds[i]))
                 a->toolbar_menu = i + 1;
         }
@@ -253,7 +283,18 @@ static void toolbar_view(app *a) {
                              font->height),
                      menus[i], (int)strlen(menus[i]), font, nk_rgba(0, 0, 0, 0), UI_COLOR(text));
     }
-    nk_layout_row_push(ui, fmaxf(100, available - 72 - (58+72+54+116)*factor - 175 - 138));
+    for(unsigned i=0;i<3;i++) {
+        nk_layout_row_push(ui,32);
+        if(i==2)a->editor_build_bounds=nk_widget_bounds(ui);
+        bool enabled=i==0?(a->loaded || a->document_count) && idle(a):i==1?(a->tab==0 || a->tab==8 || (a->tab==2 && a->analysis_tab==1)):a->loaded && idle(a);
+        nk_begin_disabled(ui,!enabled);
+        if(ps_ui_icon_button(ui,i==0?PS_ICON_SAVE:i==1?PS_ICON_SEARCH:PS_ICON_BUILD,i==0?"Speichern":i==1?"Suchen / Ersetzen":"Build"))
+            toolbar_dispatch(a,i==0?TOOLBAR_SAVE:i==1?TOOLBAR_SEARCH:TOOLBAR_BUILD);
+        nk_end_disabled(ui);
+        if(nk_input_is_mouse_hovering_rect(&ui->input,nk_rect(a->toolbar_bounds[3].x+a->toolbar_bounds[3].w+i*32,0,32,32)) && !a->toolbar_menu)
+            nk_tooltip(ui,i==0?"Speichern · " PS_UI_SHORTCUT "S":i==1?"Suchen · " PS_UI_SHORTCUT "F":"Build · F5");
+    }
+    nk_layout_row_push(ui, fmaxf(20, available - 72 - (58+72+54+116)*factor - 96 - 138 - 175));
     struct nk_rect path_bounds = nk_widget_bounds(ui);
     nk_label_colored(ui, a->workspace_open ? a->workspace : "Kein Ordner geöffnet", NK_TEXT_LEFT,
                      muted());

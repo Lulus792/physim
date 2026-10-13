@@ -70,6 +70,8 @@ static void nk_end_disabled(struct nk_context *ctx) {
 #endif
 #define PREVIEW 2048
 #define WORKSPACE_DOCUMENTS PS_WORKSPACE_DOCUMENTS
+#define FILE_TABS (WORKSPACE_DOCUMENTS + 2)
+#define DOCK_HEADER_HEIGHT 32
 typedef struct {
     ps_text_document file;
     char path[4096]; /* User-facing path; file.path resolves symbolic links for saving. */
@@ -156,6 +158,19 @@ typedef struct {
     char workspace[4096], workspace_preview_path[4096];
     workspace_document documents[WORKSPACE_DOCUMENTS];
     unsigned document_count, document_active;
+    unsigned file_tab_order[FILE_TABS];
+    unsigned file_tab_drag_order[FILE_TABS];
+    unsigned file_tab_last_active;
+    bool file_tabs_initialized, source_tab_closed[2], file_tab_dragging;
+    int file_tab_drag;
+    float file_tab_scroll;
+    struct nk_vec2 file_tab_origin;
+    struct nk_rect file_tab_bounds[FILE_TABS], file_tab_closes[FILE_TABS], file_tab_strip;
+    struct nk_rect editor_caret;
+    struct nk_text_edit *caret_edit;
+    int caret_cursor;
+    double caret_activity;
+    bool completion_typed;
     char document_drafts_directory[4096];
     uint64_t source_revision, build_revision;
     int document_pending; /* 1: close, 2: reload; discard requires an explicit choice. */
@@ -453,6 +468,7 @@ static void open_library(app *a);
 static void completion_close(app *a);
 static bool api_reference_open(app *a,const ps_completion_symbol *symbol);
 static void api_reference_from_editor(app *a,struct nk_text_edit *edit);
+static float documentation_height(const struct nk_user_font *font,const char *text,size_t n,float width);
 static void dock_show(app *a,unsigned panel);
 static void scene_camera_plane(app *a,unsigned plane);
 static bool open_run_path(app *a,const char *path);
@@ -957,6 +973,8 @@ static bool jobs_idle(app *a) {
 static bool idle(app *a) { return !a->reset_pending && jobs_idle(a); }
 static void clear_project(app *a) {
     completion_close(a);
+    a->source_tab_closed[0]=a->source_tab_closed[1]=false;
+    a->caret_edit=NULL;
     ps_text_document_destroy(&a->project_manifest_snapshot);a->project_format_version=0;
     a->project_id[0]=a->experiment_id[0]=0;
     ps_report_destroy(a->analysis_report);
@@ -2643,11 +2661,31 @@ static void syntax_text(app *a, struct nk_text_edit *edit, struct nk_rect bounds
     nk_push_scissor(canvas, previous_clip);
 }
 #include "completion_ui.inc"
+static void editor_caret(app *a,struct nk_text_edit *edit,struct nk_rect bounds,bool changed) {
+    struct nk_context *ui=a->ui;const struct nk_user_font *font=ui->style.font;
+    const char *text=nk_str_get_const(&edit->string);if(!text)text="";
+    nk_rune rune;int length;
+    const char *cursor=nk_str_at_const(&edit->string,edit->cursor,&rune,&length);
+    if(!cursor)cursor=text+nk_str_len_char(&edit->string);
+    const char *line=text;unsigned lines=0;
+    for(const char *p=text;p<cursor;p++)if(*p=='\n'){line=p+1;lines++;}
+    float x=bounds.x+ui->style.edit.padding.x+ui->style.edit.border-edit->scrollbar.x;
+    x+=font->width(font->userdata,font->height,line,(int)(cursor-line));
+    float y=bounds.y+ui->style.edit.padding.y+ui->style.edit.border-edit->scrollbar.y+lines*(font->height+ui->style.edit.row_padding)+ui->style.edit.row_padding/2;
+    a->editor_caret=nk_rect(x,y,1,font->height);
+    double now=ps_clock();
+    if(a->caret_edit!=edit || a->caret_cursor!=edit->cursor || changed || nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT))a->caret_activity=now;
+    a->caret_edit=edit;a->caret_cursor=edit->cursor;
+    if(edit->active && edit->select_start==edit->select_end && !(ui->current->layout->flags&NK_WINDOW_ROM) && fmod(now-a->caret_activity,1.05)<.60) {
+        struct nk_command_buffer *canvas=nk_window_get_canvas(ui);struct nk_rect clip=canvas->clip;
+        nk_push_scissor(canvas,nk_rect(bounds.x+ui->style.edit.padding.x,bounds.y+ui->style.edit.padding.y,bounds.w-2*ui->style.edit.padding.x-ui->style.edit.scrollbar_size.x,bounds.h-2*ui->style.edit.padding.y));
+        nk_fill_rect(canvas,a->editor_caret,0,UI_COLOR(text));nk_push_scissor(canvas,clip);
+    }
+}
 static void editor(app *a, struct nk_text_edit *edit, float height) {
     struct nk_context *ui = a->ui;
     if(a->completion_active && a->completion_edit!=edit)completion_close(a);
-    float list_height=a->completion_active?280:0;
-    height=fmaxf(100,height-34-list_height);
+    height=fmaxf(100,height);
     nk_style_push_font(ui, a->font_code);
     nk_layout_row_begin(ui, NK_STATIC, height, 2);
     nk_layout_row_push(ui, 44);
@@ -2671,16 +2709,31 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
     nk_style_push_color(ui, &ui->style.edit.text_active, transparent);
     nk_style_push_color(ui, &ui->style.edit.selected_text_normal, transparent);
     nk_style_push_color(ui, &ui->style.edit.selected_text_hover, transparent);
-    nk_edit_buffer(ui, NK_EDIT_BOX | NK_EDIT_ALLOW_TAB | NK_EDIT_PRESERVE_UNDO, edit, nk_filter_default);
+    nk_style_push_color(ui, &ui->style.edit.cursor_normal, transparent);
+    nk_style_push_color(ui, &ui->style.edit.cursor_hover, transparent);
+    nk_style_push_color(ui, &ui->style.edit.cursor_text_normal, transparent);
+    nk_style_push_color(ui, &ui->style.edit.cursor_text_hover, transparent);
+    /* The suggestion list owns pointer input, while the editor keeps its
+     * keyboard focus and processes typed text before accepting a suggestion. */
+    struct nk_mouse pointer=ui->input.mouse;
+    bool covered=a->completion_active && nk_input_is_mouse_hovering_rect(&ui->input,a->completion_list_bounds);
+    if(covered) {
+        for(unsigned i=0;i<NK_BUTTON_MAX;i++){ui->input.mouse.buttons[i].clicked=0;ui->input.mouse.buttons[i].down=0;}
+        ui->input.mouse.pos=nk_vec2(-1,-1);ui->input.mouse.scroll_delta=nk_vec2(0,0);
+    }
+    nk_edit_buffer(ui, NK_EDIT_BOX | NK_EDIT_ALLOW_TAB | NK_EDIT_PRESERVE_UNDO | NK_EDIT_ALWAYS_INSERT_MODE, edit, nk_filter_default);
+    if(covered)ui->input.mouse=pointer;
+    bool accepted=a->completion_accept_pending;
     if(a->completion_active) {
         if(completion_refresh(a) && a->completion_accept_pending)completion_commit(a);
     }
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 9; i++)
         nk_style_pop_color(ui);
     syntax_text(a, edit, editor_bounds);
     int after = nk_str_len_char(&edit->string);
-    if (before != after ||
-        hash != ps_crc32((const unsigned char *)nk_str_get_const(&edit->string), (size_t)after)) {
+    bool changed=before!=after || hash!=ps_crc32((const unsigned char *)nk_str_get_const(&edit->string),(size_t)after);
+    editor_caret(a,edit,editor_bounds,changed);
+    if(changed) {
         if (edit == &a->experiment) {
             a->dirty = true;
             invalidate_build(a);
@@ -2689,6 +2742,14 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
             invalidate_build(a);
         } else document_changed(a, edit);
     }
+    if(a->completion_typed && changed && !accepted && edit->active && completion_target(a)==edit && !a->completion_active && document_language(a,edit)>=0) {
+        const char *text=nk_str_get_const(&edit->string);nk_rune rune;int n;
+        const char *at=nk_str_at_const(&edit->string,edit->cursor,&rune,&n);
+        size_t cursor=at?(size_t)(at-text):(size_t)after;ps_completion_query query;
+        if(text && ps_completion_prepare(text,(size_t)after,cursor,document_language(a,edit)==1,&query)==PS_OK &&
+           (query.member || strlen(query.prefix)>=2) && ps_completion_matches(&query,NULL,0))completion_open(a,edit);
+    }
+    a->completion_typed=false;
     nk_layout_row_end(ui);
     struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
     nk_push_scissor(canvas, gutter);
@@ -2706,14 +2767,6 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
     }
     nk_push_scissor(canvas, nk_window_get_content_region(ui));
     nk_style_pop_font(ui);
-    nk_layout_row_dynamic(ui,28,2);
-    a->completion_button_bounds=nk_widget_bounds(ui);
-    nk_begin_disabled(ui,document_language(a,edit)<0);
-    if(nk_button_label(ui,"API-Vorschläge"))completion_open(a,edit);
-    a->api_reference_button_bounds=nk_widget_bounds(ui);
-    if(nk_button_label(ui,"API-Referenz"))api_reference_from_editor(a,edit);
-    nk_end_disabled(ui);
-    if(a->completion_active)completion_view(a);
 }
 // clang-format off
 static bool documentation_window_open(app *a);
@@ -3009,6 +3062,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "diagnostic_tests.inc"
 #include "editor_replace_tests.inc"
 #include "completion_tests.inc"
+#include "file_tabs_tests.inc"
 #include "api_reference_tests.inc"
 #include "parameter_form_tests.inc"
 #include "adaptive_tests.inc"
@@ -3589,6 +3643,7 @@ int main(int argc, char **argv) {
                 doc_input_bytes += (unsigned)strlen(e.text.text);
             }
             SDL_Window *event_window = SDL_GetWindowFromEvent(&e);
+            if(event_window==a->window && e.type==SDL_EVENT_TEXT_INPUT)a->completion_typed=true;
             if(event_window==a->window && nk_sdl_accessibility_event(a->ui,&e))continue;
             if(event_window==a->doc_window && a->doc_ui && nk_sdl_accessibility_event(a->doc_ui,&e))continue;
             if (event_window == a->window && e.type == SDL_EVENT_WINDOW_FOCUS_LOST)
@@ -3633,11 +3688,16 @@ int main(int argc, char **argv) {
                     if(edit && edit->active){api_reference_from_editor(a,edit);continue;}
                 }
                 if(completion_keyboard_key(a,&e.key))continue;
+                if(file_tabs_keyboard(a,&e.key))continue;
                 if (toolbar_keyboard_key(a, &e.key)) continue;
                 if (settings_keyboard_key(a, &e.key)) continue;
                 if (project_manager_keyboard_key(a, &e.key)) continue;
                 if (runner_keyboard_key(a, &e.key)) continue;
                 if (a->dock_drag && e.key.key==SDLK_ESCAPE) { a->dock_drag=0;a->dock_dragging=false;continue; }
+                if (a->file_tab_drag && e.key.key==SDLK_ESCAPE) {
+                    memcpy(a->file_tab_order,a->file_tab_drag_order,sizeof a->file_tab_order);
+                    a->file_tab_drag=0;a->file_tab_dragging=false;continue;
+                }
                 if (scene_shortcut(a, &e.key)) continue;
                 if (a->tab == 1 && e.key.key == SDLK_SPACE && !e.key.repeat &&
                     !(e.key.mod & (SDL_KMOD_CTRL | SDL_KMOD_GUI | SDL_KMOD_ALT)) &&
@@ -3666,8 +3726,9 @@ int main(int argc, char **argv) {
                 }
                 if (e.key.key == SDLK_S && (e.key.mod & PS_UI_COMMAND_MOD))
                     save_active_document(a);
-                if (e.key.key == SDLK_W && (e.key.mod & PS_UI_COMMAND_MOD) && a->tab == 8)
-                    document_request(a, 1);
+                if (e.key.key == SDLK_W && (e.key.mod & PS_UI_COMMAND_MOD)) {
+                    unsigned key=file_tab_active(a);if(key<FILE_TABS)file_tab_close(a,key);
+                }
                 if (e.key.key == SDLK_F5)
                     build_project(a);
                 if (e.key.key == SDLK_F1 && !e.key.repeat)

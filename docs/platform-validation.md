@@ -1,6 +1,6 @@
 # Plattformprüfung
 
-Stand: 12. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
+Stand: 13. Oktober 2026. Diese Nachweise gelten für die genannten Umgebungen
 und ersetzen keine Abnahme aller Ziele des Projektplans.
 
 Die [historischen Plattformnachweise](platform-validation-history.md) enthalten
@@ -9,6 +9,28 @@ AT-SPI- und skalaren Suchnachweise. Ihr vollständiger Text und die Belegpfade b
 Die folgenden Abschnitte dokumentieren die neueren tatsächlich ausgeführten
 Prüfungen. Alle drei Seiten sind im Offline-Handbuch erreichbar; ältere Belege
 stehen auch in [Archivband 2](platform-validation-history-2.md).
+
+## Durchgehende Panelleisten und Datei-Tabs
+
+Am 13. Oktober 2026 wurde die überarbeitete Oberfläche lokal unter Windows 11 Pro
+(10.0.26200), MSVC 14.38, SDL 3.2.30 und OpenGL auf einer NVIDIA GeForce RTX 2080 Ti
+gebaut und mit tatsächlichen SDL-Eingaben geprüft. Die ausgewählte Oberflächengruppe
+besteht **18/18** Fälle (`build/native/Debug/test-results/run-w1u4084a`): Datei-Tabs,
+Dateibaum, Build mit geänderten Dokumenten, kleine/große Fenster, Menüs,
+Eingabeisolation, Wiederherstellung, Andocken, Inspektor, Einstellungen,
+Suchen/Ersetzen, Vervollständigung und API-Referenz.
+
+Nach der abschließenden Fokuskorrektur bestehen die sieben betroffenen
+Datei-/Tastatur-/Wiederherstellungs-/Vervollständigungsabläufe erneut **7/7**
+(`run-4zojhnra`). Der neue Datei-Tab-Test prüft eigene Bearbeitungsstände und Cursor,
+Sortieren, Schließen mit Abbrechen, 16 zusätzliche offene Dateien, Überlauf,
+Tastaturwechsel, automatische Vorschläge am Cursor sowie sechsmaliges Auf- und
+Zuklappen desselben Ordners. Die erzeugten Screenshots wurden visuell geprüft.
+Die vorausgehenden sieben Bibliotheks-/UI-Geometrie-/Dokument-/Layouttests bestehen
+**7/7** (`run-m428o47g`). Generierte Dateien bleiben im ignorierten Buildverzeichnis.
+
+Für diese Oberflächenänderung wurden hier keine Linux- oder macOS-Builds und
+Fenstertests ausgeführt; die früheren Plattformbelege belegen diese Änderung nicht.
 
 ## Linux-AT-SPI und asynchrone UI-Aktionen (PP-0710)
 

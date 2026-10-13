@@ -10,6 +10,8 @@ static void document_select(app *a, unsigned index) {
     a->document_pending = 0;
     a->project_manager = false;
     a->tab = 8;
+    dock_show(a,PS_DOCK_WORKSPACE);
+    a->completion_focus_edit=&a->documents[index].edit;
     snprintf(a->workspace_preview_path, sizeof a->workspace_preview_path, "%s",
              a->documents[index].path);
 }
@@ -229,6 +231,17 @@ static void document_remove(app *a) {
     nk_textedit_free(&doc->edit);
     memmove(doc, doc + 1, (a->document_count - index - 1) * sizeof *doc);
     a->document_count--;
+    /* Tab keys address document slots; keep order stable when a slot is removed. */
+    if(a->file_tabs_initialized) {
+        unsigned removed=index+2,at=0;
+        for(unsigned i=0;i<FILE_TABS;i++) {
+            unsigned key=a->file_tab_order[i];
+            if(key==removed)continue;
+            a->file_tab_order[at++]=key>removed?key-1:key;
+        }
+        a->file_tab_order[FILE_TABS-1]=FILE_TABS-1;
+    }
+    a->file_tab_drag=0;a->file_tab_dragging=false;
     memset(&a->documents[a->document_count], 0, sizeof *doc);
     a->document_pending = 0;
     a->workspace_preview_path[0] = 0;
@@ -242,6 +255,7 @@ static void documents_clear(app *a) {
         a->document_active = a->document_count - 1;
         document_remove(a);
     }
+    a->file_tabs_initialized=false;a->file_tab_scroll=0;
 }
 static bool document_reload(app *a) {
     workspace_document *doc = active_document(a);
@@ -302,6 +316,7 @@ static void preview_workspace_path(app *a, const char *path) {
         bool experiment = !a->analysis_only && document_matches(path, source);
         join(source, sizeof source, a->project, analysis_source(a));
         if (experiment || document_matches(path, source)) {
+            dock_show(a,PS_DOCK_WORKSPACE);
             a->project_manager = false;
             a->tab = experiment ? 0 : 2;
             if (!experiment)

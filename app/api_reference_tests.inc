@@ -28,7 +28,7 @@ static void api_reference_test_frame(app *a,const char *mode,int *stage,int *cod
     case 3:
         ok=edit && completion_test_equal(edit,original);edit->cursor=nk_utf_len(original,(int)strlen(original)-4);edit->select_start=edit->select_end=edit->cursor;
         if(!target){test_window_key_mod(a->window,SDLK_F1,SDL_KMOD_SHIFT);*stage=18;}
-        else if(target==1){test_mouse(a,a->api_reference_button_bounds,true);*stage=7;}
+        else if(target==1){test_mouse(a,a->toolbar_bounds[2],true);*stage=7;}
         else test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);
         break;
     case 4:
@@ -40,8 +40,10 @@ static void api_reference_test_frame(app *a,const char *mode,int *stage,int *cod
     case 19:ok=a->completion_reference_bounds.w>0;test_mouse(a,a->completion_reference_bounds,true);break;
     case 20:test_mouse(a,a->completion_reference_bounds,false);break;
     case 21:*stage=9;break;
-    case 7:test_mouse(a,a->api_reference_button_bounds,false);break;
-    case 8:break;
+    case 7:test_mouse(a,a->toolbar_bounds[2],false);break;
+    case 8:ok=a->toolbar_menu==3;test_mouse(a,a->api_reference_button_bounds,true);*stage=40;break;
+    case 40:test_mouse(a,a->api_reference_button_bounds,false);break;
+    case 41:*stage=9;break;
     case 18:*stage=9;break;
     case 9:
         ok=a->api_reference && !strcmp(a->api_reference_name,desired) && completion_test_equal(edit,original) &&

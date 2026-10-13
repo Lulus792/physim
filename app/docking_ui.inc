@@ -74,6 +74,7 @@ static void dock_relayout(app *a,float w,float h) {
     }
 }
 static void dock_prepare(app *a,float w,float h) {
+    file_tabs_prepare(a);
     ps_dock_layout *d=&a->preferences.dock;
     if(!a->dock_started) { a->dock_last_tab=a->tab;a->dock_started=true; }
     if(a->tab!=a->dock_last_tab) { dock_show(a,PS_DOCK_WORKSPACE);a->dock_last_tab=a->tab; }
@@ -89,7 +90,7 @@ static void dock_prepare(app *a,float w,float h) {
     }
     struct nk_input *in=&a->ui->input;
     bool down=nk_input_is_mouse_down(in,NK_BUTTON_LEFT), pressed=nk_input_is_mouse_pressed(in,NK_BUTTON_LEFT);
-    if(a->toolbar_menu || (a->ui->active && a->ui->active->popup.active)) pressed=false;
+    if(a->toolbar_menu || (a->ui->active && a->ui->active->popup.active && a->ui->active->popup.type!=NK_PANEL_TOOLTIP) || a->file_tab_drag) pressed=false;
     unsigned under=PS_DOCK_NONE;
     for(unsigned p=0;p<PS_DOCK_PANELS;p++)
         if((d->floating&(1u<<p)) && nk_input_is_mouse_hovering_rect(in,a->dock_panels[p])) under=p;
@@ -129,7 +130,7 @@ static void dock_prepare(app *a,float w,float h) {
         unsigned p=(unsigned)a->dock_float_resize-1;ps_dock_float old=a->dock_resize_start;
         d->floats[p]=dock_clamp_float(p,nk_rect((float)old.x,(float)old.y,old.w+in->mouse.pos.x-a->dock_resize_mouse.x,old.h+in->mouse.pos.y-a->dock_resize_mouse.y),w,h);
     }
-    if(a->dock_drag && down && (fabsf(in->mouse.pos.x-a->dock_origin.x)>5 || fabsf(in->mouse.pos.y-a->dock_origin.y)>5)) a->dock_dragging=true;
+    if(a->dock_drag && down && (fabsf(in->mouse.pos.x-a->dock_origin.x)>6 || fabsf(in->mouse.pos.y-a->dock_origin.y)>6)) a->dock_dragging=true;
     a->dock_target=PS_DOCK_NONE;a->dock_side=PS_DOCK_NONE;
     memset(a->dock_targets,0,sizeof a->dock_targets);
     if(a->dock_dragging) {
@@ -140,6 +141,13 @@ static void dock_prepare(app *a,float w,float h) {
             if(target==panel) for(unsigned p=0;p<PS_DOCK_PANELS;p++) if(p!=panel && (d->nodes[i].panels&(1u<<p))) { target=p;break; }
             struct nk_rect r=a->dock_rects[i];float cx=r.x+r.w/2,cy=r.y+r.h/2;
             const float dx[]={0,-42,42,0,0},dy[]={0,0,0,-42,42};
+            /* The whole title strip and panel edges are useful drop targets,
+             * in addition to the explicit docking guides at the center. */
+            a->dock_target=target;
+            if(in->mouse.pos.y<r.y+DOCK_HEADER_HEIGHT)a->dock_side=PS_DOCK_TAB;
+            else if(in->mouse.pos.x<r.x+fminf(64,r.w*.2f))a->dock_side=PS_DOCK_LEFT;
+            else if(in->mouse.pos.x>r.x+r.w-fminf(64,r.w*.2f))a->dock_side=PS_DOCK_RIGHT;
+            else if(in->mouse.pos.y>r.y+r.h-fminf(64,r.h*.2f))a->dock_side=PS_DOCK_BOTTOM;
             for(unsigned side=0;side<5;side++) {
                 a->dock_targets[side]=nk_rect(cx+dx[side]-16,cy+dy[side]-16,32,32);
                 if(nk_input_is_mouse_hovering_rect(in,a->dock_targets[side])) { a->dock_target=target;a->dock_side=side; }
@@ -177,9 +185,11 @@ static void dock_input(app *a,unsigned panel,struct nk_rect r,struct nk_window *
     struct nk_context *ui=a->ui;struct nk_window *window=ui->current;
     unsigned under=dock_hover_float(a);
     bool covered=under!=PS_DOCK_NONE && under!=panel;
-    bool popup=a->toolbar_menu || (previous && previous->popup.active);
-    bool mouse=!covered && !popup && nk_input_is_mouse_hovering_rect(&ui->input,r);
+    bool popup=a->toolbar_menu || (previous && previous->popup.active && previous->popup.type!=NK_PANEL_TOOLTIP);
+    bool completion_pointer=a->completion_active && nk_input_is_mouse_hovering_rect(&ui->input,a->completion_list_bounds);
+    bool mouse=!covered && !popup && !completion_pointer && nk_input_is_mouse_hovering_rect(&ui->input,r);
     bool enabled=mouse || (body && previous==window && !covered && !popup);
+    if(a->dock_dragging || a->file_tab_dragging)enabled=false;
     /* Background windows otherwise activate even outside their bounds and consume
      * the wheel in nk_end. Keep keyboard focus and route mouse input by stacking. */
     ui->active=body && mouse?window:previous;
@@ -189,10 +199,12 @@ static void dock_input(app *a,unsigned panel,struct nk_rect r,struct nk_window *
     ps_ui_accessibility_route(ui,!covered && !popup);
 }
 static bool dock_begin(app *a,unsigned panel) {
-    struct nk_rect r=a->dock_panels[panel];r.y+=24;r.h=fmaxf(1,r.h-24);
+    struct nk_rect r=a->dock_panels[panel];r.y+=DOCK_HEADER_HEIGHT;r.h=fmaxf(1,r.h-DOCK_HEADER_HEIGHT);
     nk_window_show(a->ui,dock_windows[panel],a->dock_visible[panel]?NK_SHOWN:NK_HIDDEN);
     struct nk_window *previous=a->ui->active;
+    nk_style_push_float(a->ui,&a->ui->style.window.rounding,0);
     bool shown=nk_begin(a->ui,dock_windows[panel],r,NK_WINDOW_BACKGROUND|(a->dock_visible[panel]?0:NK_WINDOW_HIDDEN));
+    nk_style_pop_float(a->ui);
     if(shown) dock_input(a,panel,r,previous,true);
     else a->ui->active=previous;
     return shown;
@@ -208,30 +220,50 @@ static void dock_headers(app *a) {
         nk_window_show(ui,name,visible?NK_SHOWN:NK_HIDDEN);
         if(!visible) continue;
         uint32_t mask=floating?1u<<p:d->nodes[i].panels;
-        struct nk_rect r=floating?a->dock_panels[p]:a->dock_rects[i];r.h=24;
-        nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(2,0));
-        nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(2,0));
+        struct nk_rect r=floating?a->dock_panels[p]:a->dock_rects[i];r.h=DOCK_HEADER_HEIGHT;
+        nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(0,0));
+        nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(0,0));
         nk_style_push_vec2(ui,&ui->style.button.padding,nk_vec2(4,2));
+        nk_style_push_float(ui,&ui->style.window.rounding,0);
+        nk_style_push_float(ui,&ui->style.button.rounding,0);
+        nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(header)));
+        nk_style_push_style_item(ui,&ui->style.button.normal,nk_style_item_color(UI_COLOR(header)));
         struct nk_window *previous=ui->active;
         if(nk_begin(ui,name,r,NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BACKGROUND)) {
             dock_input(a,floating?p:d->nodes[i].active,r,previous,false);
             unsigned count=0;for(unsigned j=0;j<PS_DOCK_PANELS;j++) if(mask&(1u<<j)) count++;
-            float close_fraction=fminf(.25f,24.f/fmaxf(1,r.w));
-            nk_layout_row_begin(ui,NK_DYNAMIC,24,(int)count+1);
+            float close_fraction=fminf(.25f,28.f/fmaxf(1,r.w));
+            nk_layout_row_begin(ui,NK_DYNAMIC,DOCK_HEADER_HEIGHT,(int)count+1);
             for(unsigned j=0;j<PS_DOCK_PANELS;j++) if(mask&(1u<<j)) {
-                nk_layout_row_push(ui,(1-close_fraction)/count);
+                bool files=j==PS_DOCK_WORKSPACE && (floating || d->nodes[i].active==j) && !a->project_manager && (a->loaded || a->document_count);
+                float fraction=count==1 || !(mask&(1u<<PS_DOCK_WORKSPACE))?(1-close_fraction)/count:j==PS_DOCK_WORKSPACE?(1-close_fraction)*.68f:(1-close_fraction)*.32f/(count-1);
+                nk_layout_row_push(ui,fraction);
                 a->dock_headers[j]=nk_widget_bounds(ui);
-                if(action_button(ui,dock_names[j],floating || d->nodes[i].active==j)) ps_dock_select(d,j);
+                if(files) {
+                    struct nk_rect strip;nk_widget(&strip,ui);
+                    a->dock_headers[j]=nk_rect(strip.x,strip.y,24,strip.h);
+                    ps_ui_draw_icon(nk_window_get_canvas(ui),PS_ICON_DRAG,a->dock_headers[j],UI_COLOR(muted));
+                    strip.x+=24;strip.w=fmaxf(1,strip.w-24);
+                    file_tabs_view(a,strip);
+                } else {
+                    bool active=floating || d->nodes[i].active==j;
+                    if(nk_button_label(ui,dock_names[j]))ps_dock_select(d,j);
+                    if(active && count>1) {
+                        struct nk_rect b=a->dock_headers[j];
+                        nk_stroke_line(nk_window_get_canvas(ui),b.x,b.y+b.h-1,b.x+b.w,b.y+b.h-1,1,UI_COLOR(accent));
+                    }
+                }
             }
             unsigned active=floating?p:d->nodes[i].active;
             nk_layout_row_push(ui,close_fraction);
             a->dock_closes[active]=nk_widget_bounds(ui);
-            if(nk_button_label(ui,"×")) {
+            if(ps_ui_icon_button(ui,PS_ICON_CLOSE,"Panel schließen")) {
                 close=active;
             }
             nk_layout_row_end(ui);
         }
-        nk_end(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
+        nk_end(ui);nk_style_pop_style_item(ui);nk_style_pop_style_item(ui);nk_style_pop_float(ui);nk_style_pop_float(ui);
+        nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
     }
     if(close!=PS_DOCK_NONE) {
         ps_dock_hide(d,close);

@@ -11,6 +11,45 @@
 #undef nk_button_label
 #undef nk_label
 #undef nk_label_colored
+/* Resolution independent outline icons; semantic names remain available to
+ * assistive technology even when the visual control contains no text. */
+void ps_ui_draw_icon(struct nk_command_buffer *c,ps_ui_icon icon,struct nk_rect b,struct nk_color color) {
+    float x=floorf(b.x+b.w/2-7),y=floorf(b.y+b.h/2-7),t=1.25f;
+    switch(icon) {
+    case PS_ICON_CLOSE:
+        nk_stroke_line(c,x+3,y+3,x+11,y+11,t,color);nk_stroke_line(c,x+3,y+11,x+11,y+3,t,color);break;
+    case PS_ICON_DRAG:
+        for(int row=0;row<3;row++)for(int col=0;col<2;col++)nk_fill_circle(c,nk_rect(x+4+col*4,y+2+row*4,2,2),color);break;
+    case PS_ICON_FOLDER:
+        nk_stroke_rect(c,nk_rect(x+1,y+4,12,9),1,t,color);nk_stroke_line(c,x+1,y+4,x+1,y+1,t,color);
+        nk_stroke_line(c,x+1,y+1,x+6,y+1,t,color);nk_stroke_line(c,x+6,y+1,x+8,y+4,t,color);break;
+    case PS_ICON_FILE:
+        nk_stroke_rect(c,nk_rect(x+3,y+1,9,12),1,t,color);nk_stroke_line(c,x+5,y+6,x+10,y+6,t,color);
+        nk_stroke_line(c,x+5,y+9,x+10,y+9,t,color);break;
+    case PS_ICON_SEARCH:
+        nk_stroke_circle(c,nk_rect(x+1,y+1,9,9),t,color);nk_stroke_line(c,x+9,y+9,x+13,y+13,t,color);break;
+    case PS_ICON_SAVE:
+        nk_stroke_rect(c,nk_rect(x+1,y+1,12,12),1,t,color);nk_stroke_rect(c,nk_rect(x+4,y+1,6,4),0,t,color);
+        nk_stroke_rect(c,nk_rect(x+4,y+8,6,5),0,t,color);break;
+    case PS_ICON_BUILD:
+        nk_stroke_line(c,x+2,y+12,x+11,y+3,2,color);nk_stroke_line(c,x+7,y+2,x+12,y+7,3,color);break;
+    case PS_ICON_LEFT: case PS_ICON_RIGHT: {
+        float sign=icon==PS_ICON_LEFT?-1.f:1.f;
+        nk_stroke_line(c,x+7-sign*2,y+3,x+7+sign*2,y+7,t,color);
+        nk_stroke_line(c,x+7+sign*2,y+7,x+7-sign*2,y+11,t,color);break;
+    }
+    case PS_ICON_ERROR:
+        nk_stroke_circle(c,nk_rect(x+1,y+1,12,12),t,color);nk_stroke_line(c,x+7,y+4,x+7,y+8,t,color);
+        nk_fill_circle(c,nk_rect(x+6,y+10,2,2),color);break;
+    case PS_ICON_FUNCTION:
+        nk_stroke_line(c,x+5,y+2,x+2,y+7,t,color);nk_stroke_line(c,x+2,y+7,x+5,y+12,t,color);
+        nk_stroke_line(c,x+9,y+2,x+12,y+7,t,color);nk_stroke_line(c,x+12,y+7,x+9,y+12,t,color);break;
+    case PS_ICON_TYPE:
+        nk_stroke_rect(c,nk_rect(x+2,y+2,10,10),1,t,color);break;
+    case PS_ICON_VALUE:
+        nk_stroke_circle(c,nk_rect(x+3,y+3,8,8),t,color);break;
+    }
+}
 void ps_ui_flush_edit(struct nk_context *ctx,const char *name,char *text,size_t capacity,struct nk_rect bounds) {
     if(!ctx || !text || capacity<2 || !ctx->style.font)return;
     struct nk_window *window=nk_find_window(ctx,nk_murmur_hash(name,nk_strlen(name),NK_WINDOW_TITLE),name);
@@ -98,6 +137,19 @@ void ps_ui_label(struct nk_context *ctx,const char *text,nk_flags alignment) {
 }
 void ps_ui_label_colored(struct nk_context *ctx,const char *text,nk_flags alignment,struct nk_color color) {
     accessibility_widget(ctx,text,0,nk_widget_bounds(ctx),false,NULL,false);nk_label_colored(ctx,text,alignment,color);
+}
+nk_bool ps_ui_icon_button(struct nk_context *ctx,ps_ui_icon icon,const char *name) {
+    struct nk_rect bounds=nk_widget_bounds(ctx);
+    nk_bool pressed=accessibility_widget(ctx,name,1,bounds,false,NULL,false);
+    nk_bool clicked=nk_button_label(ctx,"");
+    ps_ui_draw_icon(nk_window_get_canvas(ctx),icon,bounds,ctx->style.button.text_normal);
+    return pressed || clicked;
+}
+nk_bool ps_ui_button_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,bool selected) {
+    if(bounds.w<=0 || bounds.h<=0)return nk_false;
+    nk_bool pressed=accessibility_widget(ctx,name,1,bounds,selected,NULL,false);
+    bool enabled=!(ctx->current->layout->flags&NK_WINDOW_ROM) && !ctx->current->widgets_disabled;
+    return pressed || (enabled && nk_input_is_mouse_pressed(&ctx->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ctx->input,bounds));
 }
 nk_bool ps_ui_button_label(struct nk_context *ctx,const char *text) {
     if(!ctx || !ctx->current || !text || nk_sdl_row_height(ctx,16)<=16) {

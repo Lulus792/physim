@@ -26,13 +26,15 @@ static void workspace_tree_view(app *a) {
         if (!strcmp(entry->path, a->workspace_tree_test_path))
             a->workspace_tree_test_bounds = bounds;
         char label[4200];
-        snprintf(label, sizeof label, "%s%s", entry->missing ? "? " : "   ",
+        snprintf(label, sizeof label, "      %s",
                  workspace_name(entry->path));
         nk_style_push_flags(ui, &ui->style.button.text_alignment, NK_TEXT_LEFT);
         bool selected = !strcmp(entry->path, a->workspace_preview_path);
         bool clicked = action_button(ui, label, selected);
         nk_style_pop_flags(ui);
         nk_layout_row_end(ui);
+        ps_ui_draw_icon(nk_window_get_canvas(ui),entry->missing?PS_ICON_ERROR:entry->directory?PS_ICON_FOLDER:PS_ICON_FILE,
+                        nk_rect(bounds.x+(entry->directory?16:4),bounds.y,20,bounds.h),entry->missing?UI_COLOR(error):UI_COLOR(muted));
         if (entry->directory) {
             struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
             float x = bounds.x + 8, y = bounds.y + bounds.h * .5f;

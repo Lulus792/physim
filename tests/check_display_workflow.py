@@ -17,6 +17,7 @@ import zlib
 LANGUAGE_MODES = ("full", "mixed", "projectile", "sensors", "body", "contact", "joint",
                   "graph", "sweep", "spring", "buoyancy", "collision", "box_collision")
 SIMPLE = {
+    "file_tabs_workflow": (["--workspace-state-test", "{directory}", "file-tabs"], 45, True),
     "sphere_collision_workflow": (["--self-test", "{directory}", "collision"], 150, True),
     "box_collision_workflow": (["--self-test", "{directory}", "box_collision"], 150, True),
     "floating_workflow": (["--self-test", "{directory}", "buoyancy"], 150, True),

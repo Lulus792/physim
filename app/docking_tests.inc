@@ -65,8 +65,8 @@ static void docking_test_frame(app *a,const char *mode,int *stage,int *code,cons
     case 9:
         ok=ps_dock_group(d,0)!=ps_dock_group(d,1) && a->dock_panels[0].x>a->dock_panels[1].x;
         *capture="dock-right.bmp";test_mouse(a,a->dock_headers[2],true);break;
-    case 10: test_plot_motion(a,970,100);break;
-    case 11: test_mouse(a,nk_rect(970,100,1,1),false);break;
+    case 10: test_plot_motion(a,970,400);break;
+    case 11: test_mouse(a,nk_rect(970,400,1,1),false);break;
     case 12:
         ok=(d->floating&4)!=0;drag=a->dock_float_grips[2];
         *capture="dock-floating.bmp";test_mouse(a,drag,true);break;

@@ -29,10 +29,10 @@ static void inspector_test_frame(app *a,const char *mode,int *stage,int *code,co
         ok=a->dock_visible[0] && a->dock_visible[1] && a->dock_visible[3] && ps_dock_group(d,0)!=ps_dock_group(d,3);
         *capture="inspector-docked.bmp";test_mouse(a,a->dock_headers[3],true);break;
     case 3: {
-        struct nk_rect r=a->dock_panels[1];test_plot_motion(a,r.x+r.w-10,r.y+90);break;
+        struct nk_rect r=a->dock_panels[1];test_plot_motion(a,r.x+r.w*.7f,r.y+90);break;
     }
     case 4: {
-        struct nk_rect r=a->dock_panels[1];test_mouse(a,nk_rect(r.x+r.w-10,r.y+90,1,1),false);break;
+        struct nk_rect r=a->dock_panels[1];test_mouse(a,nk_rect(r.x+r.w*.7f,r.y+90,1,1),false);break;
     }
     case 5:
         ok=(d->floating&8) && a->runner.running && !a->paused && a->simulation_time>started;
@@ -70,10 +70,10 @@ static void inspector_test_frame(app *a,const char *mode,int *stage,int *code,co
         if(d->nodes[ps_dock_group(d,0)].active==0 && !a->dock_visible[0])return;
         ok=a->dock_visible[0] && !a->dock_visible[3];test_mouse(a,a->dock_headers[3],true);break;
     case 19: {
-        struct nk_rect r=a->dock_panels[1];test_plot_motion(a,r.x+r.w-10,r.y+90);break;
+        struct nk_rect r=a->dock_panels[1];test_plot_motion(a,r.x+r.w*.7f,r.y+90);break;
     }
     case 20: {
-        struct nk_rect r=a->dock_panels[1];test_mouse(a,nk_rect(r.x+r.w-10,r.y+90,1,1),false);break;
+        struct nk_rect r=a->dock_panels[1];test_mouse(a,nk_rect(r.x+r.w*.7f,r.y+90,1,1),false);break;
     }
     case 21:
         ok=(d->floating&8) && a->runner.running && !a->paused;

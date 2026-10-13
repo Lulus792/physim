@@ -29,7 +29,7 @@ enum {
 #define PS_RGB(r, g, b) {r, g, b, 255}
 static const ps_ui_palette PS_UI_DARK = {
     PS_RGB(237, 238, 242), PS_RGB(166, 169, 177), PS_RGB(30, 31, 35),
-    PS_RGB(36, 37, 42), PS_RGB(65, 66, 73), PS_RGB(23, 24, 28),
+    PS_RGB(32, 33, 37), PS_RGB(55, 56, 62), PS_RGB(27, 28, 32),
     PS_RGB(53, 54, 60), PS_RGB(67, 69, 77), PS_RGB(78, 81, 92),
     PS_RGB(38, 86, 153), PS_RGB(69, 71, 79), PS_RGB(84, 87, 97),
     PS_RGB(100, 170, 255), PS_RGB(137, 191, 255), PS_RGB(64, 66, 74),
@@ -50,7 +50,7 @@ static const ps_ui_palette PS_UI_LIGHT = {
     .text = PS_RGB(25, 30, 38),
     .muted = PS_RGB(78, 87, 100),
     .window = PS_RGB(246, 247, 250),
-    .header = PS_RGB(238, 240, 244),
+    .header = PS_RGB(242, 243, 246),
     .border = PS_RGB(133, 143, 157),
     .edit = PS_RGB(255, 255, 255),
     .button = PS_RGB(229, 232, 238),

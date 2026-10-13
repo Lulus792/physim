@@ -123,7 +123,12 @@ Arbeitsbereich-Tabs und die Menüzeile bleiben im Fensterkopf.
 
 Ziehe eine Paneltitelzeile mit gedrückter linker Maustaste. Über einem anderen
 angedockten Panel erscheinen fünf Ziele: Die Mitte bildet eine Tabgruppe; links,
-rechts, oben und unten teilen dessen Fläche. Beim Loslassen außerhalb dieser Ziele
+rechts, oben und unten teilen dessen Fläche. Auch die Titelzeile bildet eine
+Tabgruppe, und die seitlichen beziehungsweise unteren Ränder dienen als Teilungsziele.
+Im Arbeitsbereich bewegt der Punktgriff links das Panel; die Datei-Tabs daneben
+wechseln und sortieren Dateien. Die Leisten einschließlich der Schließen-Icons
+haben eine durchgehende, dezent abgesetzte Oberfläche.
+Beim Loslassen außerhalb dieser Ziele
 bleibt das Panel frei im Hauptfenster stehen. Die Vorschau zeigt seine Position.
 **Escape** bricht das Verschieben ab. Ein Klick auf einen Paneltab wählt dessen Inhalt.
 

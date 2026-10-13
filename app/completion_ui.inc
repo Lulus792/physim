@@ -84,29 +84,54 @@ static void completion_pointer_event(app *a,const SDL_MouseButtonEvent *event) {
         event->y>=regions[i].y && event->y<regions[i].y+regions[i].h)return;
     completion_close(a);
 }
-static void completion_view(app *a) {
+static void completion_view(app *a,int width,int height) {
     struct nk_context *ui=a->ui;
-    nk_layout_row_dynamic(ui,280,1);
-    a->completion_list_bounds=nk_widget_bounds(ui);
-    if(nk_group_begin(ui,"api-completion",NK_WINDOW_BORDER)) {
-        char title[128];snprintf(title,sizeof title,"%zu/%zu · Pfeile wählen · Enter/Tab übernehmen",a->completion_selected+1,a->completion_count);
-        nk_layout_row_dynamic(ui,24,1);nk_label(ui,title,NK_TEXT_LEFT);
+    if(!a->completion_active || !a->dock_visible[PS_DOCK_WORKSPACE]) {nk_window_show(ui,"api-completion",NK_HIDDEN);return;}
+    float w=fminf(480,(float)width-24);
+    const ps_completion_symbol *selected=ps_completion_at(a->completion_indices[a->completion_selected]);
+    float signature_height=documentation_height(ui->style.font,selected->signature,strlen(selected->signature),w-20);
+    unsigned rows=(unsigned)(a->completion_count<4?a->completion_count:4);
+    float row_height=fmaxf(28,(float)a->preferences.ui_size+4);
+    float h=18+rows*(row_height+2)+signature_height+row_height+4;
+    float x=fmaxf(8,fminf(a->editor_caret.x,(float)width-w-8));
+    float y=a->editor_caret.y+a->editor_caret.h+4;
+    if(y+h>height-8)y=fmaxf(72,a->editor_caret.y-h-4);
+    a->completion_list_bounds=nk_rect(x,y,w,h);
+    struct nk_window *previous=ui->active;
+    nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(8,6));
+    nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(4,2));
+    nk_style_push_float(ui,&ui->style.button.rounding,2);
+    nk_window_show(ui,"api-completion",NK_SHOWN);
+    if(nk_begin(ui,"api-completion",a->completion_list_bounds,NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BORDER|NK_WINDOW_BACKGROUND)) {
+        ui->active=previous;
+        ui->current->flags &= ~(nk_flags)NK_WINDOW_ROM;ui->current->layout->flags &= ~(nk_flags)NK_WINDOW_ROM;
+        if(nk_input_is_mouse_hovering_rect(&ui->input,a->completion_list_bounds) && ui->input.mouse.scroll_delta.y!=0) {
+            int step=ui->input.mouse.scroll_delta.y>0?-1:1;
+            a->completion_selected=(a->completion_selected+a->completion_count+step)%a->completion_count;
+            ui->input.mouse.scroll_delta=nk_vec2(0,0);
+        }
         size_t first=(a->completion_selected/4)*4;
         for(size_t row=0;row<4 && first+row<a->completion_count;row++) {
             size_t at=first+row;const ps_completion_symbol *symbol=ps_completion_at(a->completion_indices[at]);
-            nk_layout_row_dynamic(ui,28,1);a->completion_choice_bounds[row]=nk_widget_bounds(ui);
-            char label[180];snprintf(label,sizeof label,"%s · %s",symbol->name,symbol->module);
-            if(action_button(ui,label,at==a->completion_selected)){a->completion_selected=at;a->completion_accept_pending=true;}
+            nk_layout_row_dynamic(ui,row_height,1);a->completion_choice_bounds[row]=nk_widget_bounds(ui);
+            struct nk_rect b=a->completion_choice_bounds[row];
+            if(at==a->completion_selected)nk_fill_rect(nk_window_get_canvas(ui),b,2,UI_COLOR(selection_active));
+            nk_spacer(ui);
+            ps_ui_draw_icon(nk_window_get_canvas(ui),symbol->kind==PS_COMPLETION_FUNCTION?PS_ICON_FUNCTION:symbol->kind==PS_COMPLETION_TYPE?PS_ICON_TYPE:PS_ICON_VALUE,nk_rect(b.x,b.y,22,b.h),UI_COLOR(accent));
+            nk_draw_text(nk_window_get_canvas(ui),nk_rect(b.x+26,b.y+(b.h-ui->style.font->height)/2,b.w-28,ui->style.font->height),symbol->name,(int)strlen(symbol->name),ui->style.font,nk_rgba(0,0,0,0),UI_COLOR(text));
+            if(ps_ui_button_at(ui,b,symbol->name,at==a->completion_selected)){a->completion_selected=at;a->completion_accept_pending=true;}
         }
         const ps_completion_symbol *symbol=ps_completion_at(a->completion_indices[a->completion_selected]);
-        nk_layout_row_dynamic(ui,48,1);nk_label_wrap(ui,symbol->signature);
+        nk_layout_row_dynamic(ui,signature_height,1);nk_label_wrap(ui,symbol->signature);
         nk_layout_row_dynamic(ui,28,2);
         a->completion_reference_bounds=nk_widget_bounds(ui);
         if(nk_button_label(ui,"Referenz")) {
             struct nk_text_edit *edit=a->completion_edit;
             if(api_reference_open(a,symbol)){completion_close(a);a->completion_focus_edit=edit;}
         }
-        if(nk_button_label(ui,"Schließen · Esc")){struct nk_text_edit *edit=a->completion_edit;completion_close(a);a->completion_focus_edit=edit;}
-        nk_group_end(ui);
+        nk_label_colored(ui,"Enter / Tab · Esc",NK_TEXT_RIGHT,UI_COLOR(muted));
     }
+    nk_end(ui);ui->active=previous;
+    nk_style_pop_float(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
+    nk_sdl_window_raise(ui,"api-completion");
 }

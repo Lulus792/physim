@@ -33,12 +33,13 @@ static void completion_test_frame(app *a,const char *mode,int *stage,int *code,c
     case 2:test_mouse(a,nk_rect(a->source_editor_bounds.x+20,a->source_editor_bounds.y+20,2,2),false);break;
     case 3:
         ok=completion_test_equal(edit,original);edit->cursor=nk_utf_len(original,(int)strlen(original)-4);edit->select_start=edit->select_end=edit->cursor;
-        if(target==2){test_mouse(a,a->completion_button_bounds,true);*stage=35;}
+        if(target==2){test_mouse(a,a->toolbar_bounds[2],true);*stage=35;}
         else test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);
         break;
-    case 35:test_mouse(a,a->completion_button_bounds,false);break;
-    case 36:break;
-    case 37:*stage=4;break;
+    case 35:test_mouse(a,a->toolbar_bounds[2],false);break;
+    case 36:ok=a->toolbar_menu==3;test_mouse(a,a->completion_button_bounds,true);break;
+    case 37:test_mouse(a,a->completion_button_bounds,false);*stage=40;break;
+    case 40:*stage=4;break;
     case 4: {
         const char *desired=language?(target==0?"Vec3":target==1?"Mat4.translation":"Vec3.normalized"):(target==0?"ps_vlength":target==1?"PS_METRE":"ps_memory_alignment");
         ok=a->completion_active && a->completion_count>0;

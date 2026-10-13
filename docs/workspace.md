@@ -208,15 +208,21 @@ einem Namen speichern; er wird nicht automatisch in den Katalog übernommen.
 
 ## Weitere Textdateien bearbeiten
 
-Bis zu 16 Dokumente können gleichzeitig geöffnet sein. **Geöffnete Dokumente**
-in der Seitenleiste und die Auswahl über dem Editor wechseln zwischen ihnen.
+Bis zu 16 Dokumente können gleichzeitig geöffnet sein. Ihre Datei-Tabs liegen
+in der durchgehenden Leiste des Arbeitsbereichs, zusammen mit den Projektquellen.
+Ein Klick wechselt die Datei; Ziehen ordnet die Tabs neu. Bei vielen Dateien
+scrollen Mausrad und die Pfeile durch die Leiste. **Ctrl+Tab** und
+**Ctrl+Shift+Tab** wechseln zur nächsten beziehungsweise vorherigen Datei;
+**Ctrl+Bild auf/ab** wechseln ebenfalls. **Geöffnete Dokumente** in der
+Seitenleiste bieten einen weiteren Zugang.
 Jede Datei behält ihren eigenen Bearbeitungsstand. UTF-8-Textdateien dürfen
 höchstens 256 KiB groß sein; Binärdateien und ungültiges UTF-8 werden abgewiesen.
 
 **Ctrl+S** speichert das aktive Dokument und legt die vorherige Fassung als
 `.bak` ab. Externe Änderungen blockieren das Speichern, damit sie nicht
-überschrieben werden. **Neu laden** übernimmt den aktuellen Dateiinhalt.
-**Schließen / Ctrl+W** schließt das Dokument. Bei ungespeicherten Änderungen
+überschrieben werden. **Datei → Aktive Datei neu laden** übernimmt den aktuellen
+Dateiinhalt. Das Schließen-Icon im Datei-Tab oder **Ctrl+W** schließt das Dokument.
+Bei ungespeicherten Änderungen
 bieten beide Aktionen Speichern, Verwerfen und Abbrechen.
 
 Vor Workspace-Wechsel, Build und normalem Beenden werden offene Dokumente
@@ -236,10 +242,13 @@ die Änderungen inzwischen gespeichert wurden.
 ### API-Namen vervollständigen
 
 Setze den Cursor in einen C- oder Physim-Bezeichner und drücke
-**Ctrl+Leertaste**, auch auf macOS, oder klicke **API-Vorschläge** unter dem
-Editor. Die Liste zeigt passende Namen mit Modul und Signatur. Pfeil auf/ab
+**Ctrl+Leertaste**, auch auf macOS, oder wähle **Hilfe → Vervollständigen**.
+Beim Tippen ab zwei Zeichen oder nach einem Physim-Memberpunkt erscheinen
+passende Vorschläge automatisch direkt am dünnen, blinkenden Textcursor.
+Die Liste zeigt Namen mit Typ-Icons und Signatur. Pfeil auf/ab
 wechselt den Vorschlag; **Enter**, **Tab** oder ein Klick übernimmt ihn.
-**Esc** oder **Schließen** beendet die Liste. Beim Weitertippen passen sich
+**Esc** oder ein Klick außerhalb des Editors und der Liste beendet die Liste.
+Beim Weitertippen passen sich
 die Vorschläge an. Das angefangene Wort wird vollständig ersetzt, auch wenn
 der Cursor in seiner Mitte steht. Die Übernahme lässt sich in einem Schritt
 rückgängig machen; ein bereits vollständiger Name erzeugt keinen zusätzlichen
@@ -257,7 +266,7 @@ und einfachen Textdateien werden keine API-Vorschläge eingefügt.
 ### API-Dokumentation neben dem Code
 
 Setze den Cursor in einen API-Namen und drücke **Shift+F1** oder klicke
-**API-Referenz** unter dem Editor. Der Inspektor zeigt den passenden
+**Hilfe → API-Referenz**. Der Inspektor zeigt den passenden
 Dokumentationsabschnitt mit Signatur und Beschreibung. Der Code bleibt
 bearbeitbar; die Referenz bleibt beim Tippen und Rückgängigmachen geöffnet.
 Bei mehreren passenden Typen öffnet sich die Vorschlagsliste: Wähle den

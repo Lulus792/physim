@@ -26,7 +26,7 @@ static void keyboard_menu_test_frame(app *a, const char *root, int *stage, int *
         ok=a->show_log && !a->toolbar_menu && !a->toolbar_keyboard;
         MENU_KEY(SDLK_F10);break;
     case 14: MENU_KEY(SDLK_RIGHT);MENU_KEY(SDLK_RIGHT);break;
-    case 15: ok=a->toolbar_keyboard_top==2;MENU_KEY(SDLK_RETURN);break;
+    case 15: ok=a->toolbar_keyboard_top==2;MENU_KEY(SDLK_RETURN);MENU_KEY(SDLK_RETURN);break;
     case 16:
         ok=a->doc_visible && !a->toolbar_keyboard;
         documentation_window_hide(a);SDL_RaiseWindow(a->window);ready=ps_clock()+.2;break;
@@ -79,7 +79,7 @@ static void keyboard_menu_test_frame(app *a, const char *root, int *stage, int *
         if(!ok && a->ui->active)fprintf(stderr,"Active window: %s flags=%u edit=%d textbytes=%d\n",
                                         a->ui->active->name_string,(unsigned)a->ui->active->flags,
                                         a->ui->active->edit.active,a->ui->input.keyboard.text_len);
-        MENU_KEY(SDLK_F10);MENU_KEY(SDLK_DOWN);MENU_KEY(SDLK_END);MENU_KEY(SDLK_UP);break;
+        MENU_KEY(SDLK_F10);MENU_KEY(SDLK_DOWN);MENU_KEY(SDLK_HOME);for(unsigned i=0;i<4;i++)MENU_KEY(SDLK_DOWN);break;
     case 31: ok=a->toolbar_keyboard_item==4;MENU_KEY(SDLK_RETURN);break;
     case 32:
         ok=!active_document(a)->dirty && !a->toolbar_menu && !a->toolbar_keyboard;
