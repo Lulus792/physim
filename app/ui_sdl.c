@@ -294,10 +294,13 @@ struct nk_font_atlas *nk_sdl_font_stash_begin(struct nk_context *ctx) {
 }
 bool nk_sdl_font_stash_end(struct nk_context *ctx) {
     struct nk_sdl *sdl = ctx->userdata.ptr;
-    int w, h;
-    const void *pixels = nk_font_atlas_bake(&sdl->atlas, &w, &h, NK_FONT_ATLAS_RGBA32);
-    if (!pixels)
+    int w=0,h=0,limit=ps_graphics_texture_limit(sdl->graphics);
+    const void *pixels = nk_font_atlas_bake_limited(&sdl->atlas, &w, &h, NK_FONT_ATLAS_RGBA32,limit);
+    if (!pixels) {
+        SDL_SetError("Complete font atlas cannot fit or allocate within GPU limit %d",limit);
         return false;
+    }
+    printf("Font atlas: %dx%d, %d fonts, GPU limit %d\n",w,h,sdl->atlas.font_num,limit);
     /* Nuklear may bake a partial atlas when its packing space is exhausted.
      * Successful texture allocation alone does not prove that text can render. */
     for(struct nk_font *font=sdl->atlas.fonts;font;font=font->next)

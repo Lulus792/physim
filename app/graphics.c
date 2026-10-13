@@ -338,9 +338,10 @@ void ps_graphics_destroy(ps_graphics *g) {
     free(g->scene_indices);
     free(g);
 }
+int ps_graphics_texture_limit(const ps_graphics *g) {return g?g->max_texture:0;}
 unsigned ps_graphics_texture(ps_graphics *g, const void *rgba, int w, int h) {
     if (w < 1 || h < 1 || w > g->max_texture || h > g->max_texture) {
-        SDL_SetError("Invalid texture size");
+        SDL_SetError("Invalid texture size %dx%d (GPU limit %d)",w,h,g->max_texture);
         return 0;
     }
     GLuint id = 0;

@@ -23,6 +23,15 @@ included as `licenses/zlib-LICENSE.txt` in the portable package.
 
 ## Nuklear snapshot
 
+Local patch (2026-10-14): `nk_font_atlas_bake_limited` bounds both texture axes
+by the renderer's `GL_MAX_TEXTURE_SIZE`. The packer widens and retries when the
+complete glyph set does not fit; every glyph and the custom cursor rectangle
+must be packed. A partial atlas is rejected. Packing allocations are released
+on retries and pixel allocation failure. The original bake entry point retains
+its 32768 dimension ceiling and now also requires complete packing. The embedded
+`font_atlas_limits` regression covers width growth, glyph pixels, small and
+non-power-of-two limits, allocation failures, cleanup and retry.
+
 Local patch (2026-10-11): UTF-8 range deletion resolves both rune endpoints
 against the original byte buffer instead of shifting its pointer while
 retaining the original byte length. Suffix removal uses the exact byte
@@ -82,7 +91,7 @@ requiring an installed font. The affected routine is also present in the
 Local patch (2026-09-28): undo/redo collapses the current selection to the restored
 cursor. A selection into removed text previously reached the renderer with invalid
 bounds. `editor_clipboard` and the SDL editor regression cover this case.
-Patched header SHA-256 (LF): 90ac8f20dd76de59fb5a2b83732c284bc3ffb4fe7b4555c604138071bddbb8de.
+Patched header SHA-256 (LF): 33f9821b9e5861d54f0e1847e756297bec1c95ffaa49749edd15dd1c5e83a14a.
 
 `nuklear_sdl3_renderer.h` is retained as the upstream `demo/sdl3_renderer` reference;
 it is no longer compiled into Physim. Input and clipboard handling in `app/ui_sdl.c`

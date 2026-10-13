@@ -222,7 +222,23 @@ Der Linux-Sanitizerlauf für `7ea0c66` ist tatsächlich fehlgeschlagen:
 [Clang-GUI-Lauf](https://github.com/Lulus792/physim/actions/runs/38474528096/job/115561838320).
 Die Protokolle melden `Font initialization: Invalid texture size`; 20 von 21
 GUI-Fällen scheitern, darunter F1-Medien- und Abschnittsfälle. Dieser Befund
-bleibt offen und bestätigt keine Linux-Funktionsgleichheit.
+bestätigt keine Linux-Funktionsgleichheit.
+
+Die Atlas-Packung berücksichtigt jetzt die tatsächliche GPU-Texturgrenze beider
+Achsen. Bei Platzmangel wird mit breiterer Fläche erneut gepackt; jeder Glyphen-
+und Cursorbereich muss Platz finden. Rasterisierungsfehler dürfen keinen
+unvollständigen Atlas liefern. Die Schriftauswahl und ihre Abtastung bleiben erhalten.
+Eine eingebettete Schriftprobe erzeugt einen vollständigen 2048 × 2048-Atlas,
+prüft Pixel sämtlicher sichtbarer ASCII-Glyphen, kleine und nichtpotente Grenzen,
+acht Allokationsfehler sowie RGBA-Konvertierungsfehler, Freigabe und erneutes Backen.
+
+Die beiden Fontfälle bestehen unter Windows in `run-i9w2bshn` und mit MSVC ASan
+in `build/native/F1-uia-sanitized/test-results/run-353uk564`. Zwölf tatsächliche
+GPU-/F1-Fälle bestehen in `run-aahao1yx`, darunter 16/22/32-Pixel-Schrift,
+Absätze/Code, Themes, Verlauf, native Feldauswahl und vollständiges natives Lesen.
+Die Codeaufnahme wurde visuell geprüft. Testkatalog und erwartete Fehlerfälle
+bestehen in `build/native/F1-review/font-limit-runner-proof`.
+Der korrigierte Linux- und macOS-Lauf ist zum Zeitpunkt dieses Eintrags noch offen.
 
 Offen sind natives Scrollen zu verdeckten Feldzeichen, vollständige assistive
 Feldbedienung und ihre native macOS-/Linux-Anbindung, eingebettete Link-/Tabellensemantik, vollständiges natives

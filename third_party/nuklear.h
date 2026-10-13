@@ -4375,6 +4375,9 @@ NK_API struct nk_font* nk_font_atlas_add_from_file(struct nk_font_atlas *atlas, 
 NK_API struct nk_font *nk_font_atlas_add_compressed(struct nk_font_atlas*, void *memory, nk_size size, float height, const struct nk_font_config*);
 NK_API struct nk_font* nk_font_atlas_add_compressed_base85(struct nk_font_atlas*, const char *data, float height, const struct nk_font_config *config);
 NK_API const void* nk_font_atlas_bake(struct nk_font_atlas*, int *width, int *height, enum nk_font_atlas_format);
+/* Physim: pack every declared glyph within the context's texture limit.
+ * A limit that cannot fit the complete atlas fails without a partial image. */
+NK_API const void* nk_font_atlas_bake_limited(struct nk_font_atlas*, int *width, int *height, enum nk_font_atlas_format, int max_texture_size);
 NK_API void nk_font_atlas_end(struct nk_font_atlas*, nk_handle tex, struct nk_draw_null_texture*);
 NK_API const struct nk_font_glyph* nk_font_find_glyph(const struct nk_font*, nk_rune unicode);
 NK_API void nk_font_atlas_cleanup(struct nk_font_atlas *atlas);
@@ -17060,9 +17063,9 @@ NK_INTERN int
 nk_font_bake_pack(struct nk_font_baker *baker,
     nk_size *image_memory, int *width, int *height, struct nk_recti *custom,
     const struct nk_font_config *config_list, int count,
-    const struct nk_allocator *alloc)
+    const struct nk_allocator *alloc, int texture_limit)
 {
-    NK_STORAGE const nk_size max_height = 1024 * 32;
+    int max_height = 1;
     const struct nk_font_config *config_iter, *it;
     int total_glyph_count = 0;
     int total_range_count = 0;
@@ -17076,7 +17079,11 @@ nk_font_bake_pack(struct nk_font_baker *baker,
     NK_ASSERT(count);
     NK_ASSERT(alloc);
 
-    if (!image_memory || !width || !height || !config_list || !count) return nk_false;
+    if (!image_memory || !width || !height || !config_list || !count || texture_limit<1) return nk_false;
+    /* Both axes remain powers of two and within the caller's GPU limit.
+     * The existing packed cursor/rectangle types bound dimensions to 32768. */
+    texture_limit = NK_MIN(texture_limit, 32768);
+    while (max_height <= texture_limit/2) max_height *= 2;
     for (config_iter = config_list; config_iter; config_iter = config_iter->next) {
         it = config_iter;
         do {range_count = nk_range_count(it->range);
@@ -17095,9 +17102,10 @@ nk_font_bake_pack(struct nk_font_baker *baker,
                 return nk_false;
         } while ((it = it->n) != config_iter);
     }
+    *width = NK_MIN(max_height, (total_glyph_count > 1000) ? 1024 : 512);
+retry_pack:
     *height = 0;
-    *width = (total_glyph_count > 1000) ? 1024 : 512;
-    stbtt_PackBegin(&baker->spc, 0, (int)*width, (int)max_height, 0, 1, (void*)alloc);
+    if (!stbtt_PackBegin(&baker->spc, 0, *width, max_height, 0, 1, (void*)alloc)) return nk_false;
     {
         int input_i = 0;
         int range_n = 0;
@@ -17113,6 +17121,7 @@ nk_font_bake_pack(struct nk_font_baker *baker,
 
             stbtt_PackSetOversampling(&baker->spc, 1, 1);
             stbrp_pack_rects((struct stbrp_context*)baker->spc.pack_info, &custom_space, 1);
+            if (!custom_space.was_packed) goto pack_failed;
             *height = NK_MAX(*height, (int)(custom_space.y + custom_space.h));
 
             custom->x = (short)custom_space.x;
@@ -17161,8 +17170,8 @@ nk_font_bake_pack(struct nk_font_baker *baker,
 
                 /* texture height */
                 for (i = 0; i < n; ++i) {
-                    if (tmp->rects[i].was_packed)
-                        *height = NK_MAX(*height, tmp->rects[i].y + tmp->rects[i].h);
+                    if (!tmp->rects[i].was_packed) goto pack_failed;
+                    *height = NK_MAX(*height, tmp->rects[i].y + tmp->rects[i].h);
                 }
             } while ((it = it->n) != config_iter);
         }
@@ -17173,6 +17182,11 @@ nk_font_bake_pack(struct nk_font_baker *baker,
     *height = (int)nk_round_up_pow2((nk_uint)*height);
     *image_memory = (nk_size)(*width) * (nk_size)(*height);
     return nk_true;
+pack_failed:
+    stbtt_PackEnd(&baker->spc);
+    if (*width < max_height) {*width *= 2; goto retry_pack;}
+    *width = *height = 0;
+    return nk_false;
 }
 NK_INTERN void
 nk_font_bake(struct nk_font_baker *baker, void *image_memory, int width, int height,
@@ -18049,11 +18063,33 @@ NK_API const void*
 nk_font_atlas_bake(struct nk_font_atlas *atlas, int *width, int *height,
     enum nk_font_atlas_format fmt)
 {
+    return nk_font_atlas_bake_limited(atlas, width, height, fmt, 32768);
+}
+/* stb_truetype rasterization has void-returning allocation paths. Preserve
+ * their failure so the caller never receives an incomplete glyph image. */
+struct nk_font_bake_allocator {const struct nk_allocator *base;int failed;};
+NK_INTERN void *nk_font_bake_allocate(nk_handle user,void *old,nk_size size) {
+    struct nk_font_bake_allocator *state=(struct nk_font_bake_allocator*)user.ptr;
+    void *memory=state->base->alloc(state->base->userdata,old,size);
+    if (!memory) state->failed=1;
+    return memory;
+}
+NK_INTERN void nk_font_bake_release(nk_handle user,void *memory) {
+    struct nk_font_bake_allocator *state=(struct nk_font_bake_allocator*)user.ptr;
+    state->base->free(state->base->userdata,memory);
+}
+NK_API const void*
+nk_font_atlas_bake_limited(struct nk_font_atlas *atlas, int *width, int *height,
+    enum nk_font_atlas_format fmt, int texture_limit)
+{
     int i = 0;
+    int pack_open = 0;
     void *tmp = 0;
     nk_size tmp_size, img_size;
     struct nk_font *font_iter;
-    struct nk_font_baker *baker;
+    struct nk_font_baker *baker = 0;
+    struct nk_font_bake_allocator allocation_state;
+    struct nk_allocator baking_allocator;
 
     NK_ASSERT(atlas);
     NK_ASSERT(atlas->temporary.alloc);
@@ -18063,10 +18099,13 @@ nk_font_atlas_bake(struct nk_font_atlas *atlas, int *width, int *height,
 
     NK_ASSERT(width);
     NK_ASSERT(height);
-    if (!atlas || !width || !height ||
+    if (!atlas || !width || !height || texture_limit<1 ||
         !atlas->temporary.alloc || !atlas->temporary.free ||
         !atlas->permanent.alloc || !atlas->permanent.free)
         return 0;
+    allocation_state.base=&atlas->temporary;allocation_state.failed=0;
+    baking_allocator.userdata=nk_handle_ptr(&allocation_state);
+    baking_allocator.alloc=nk_font_bake_allocate;baking_allocator.free=nk_font_bake_release;
 
 #ifdef NK_INCLUDE_DEFAULT_FONT
     /* no font added so just use default font */
@@ -18096,7 +18135,7 @@ nk_font_atlas_bake(struct nk_font_atlas *atlas, int *width, int *height,
     NK_MEMSET(tmp,0,tmp_size);
 
     /* allocate glyph memory for all fonts */
-    baker = nk_font_baker(tmp, atlas->glyph_count, atlas->font_num, &atlas->temporary);
+    baker = nk_font_baker(tmp, atlas->glyph_count, atlas->font_num, &baking_allocator);
     atlas->glyphs = (struct nk_font_glyph*)atlas->permanent.alloc(
         atlas->permanent.userdata,0, sizeof(struct nk_font_glyph)*(nk_size)atlas->glyph_count);
     NK_ASSERT(atlas->glyphs);
@@ -18107,8 +18146,9 @@ nk_font_atlas_bake(struct nk_font_atlas *atlas, int *width, int *height,
     atlas->custom.w = (NK_CURSOR_DATA_W*2)+1;
     atlas->custom.h = NK_CURSOR_DATA_H + 1;
     if (!nk_font_bake_pack(baker, &img_size, width, height, &atlas->custom,
-        atlas->config, atlas->font_num, &atlas->temporary))
+        atlas->config, atlas->font_num, &baking_allocator, texture_limit))
         goto failed;
+    pack_open = 1;
 
     /* allocate memory for the baked image font atlas */
     atlas->pixel = atlas->temporary.alloc(atlas->temporary.userdata,0, img_size);
@@ -18119,13 +18159,15 @@ nk_font_atlas_bake(struct nk_font_atlas *atlas, int *width, int *height,
     /* bake glyphs and custom white pixel into image */
     nk_font_bake(baker, atlas->pixel, *width, *height,
         atlas->glyphs, atlas->glyph_count, atlas->config, atlas->font_num);
+    pack_open = 0; /* nk_font_bake closes the packing allocation. */
+    if (allocation_state.failed) goto failed;
     nk_font_bake_custom_data(atlas->pixel, *width, *height, atlas->custom,
             nk_custom_cursor_data, NK_CURSOR_DATA_W, NK_CURSOR_DATA_H, '.', 'X');
 
     if (fmt == NK_FONT_ATLAS_RGBA32) {
         /* convert alpha8 image into rgba32 image */
         void *img_rgba = atlas->temporary.alloc(atlas->temporary.userdata,0,
-                            (nk_size)(*width * *height * 4));
+                            (nk_size)*width * (nk_size)*height * 4);
         NK_ASSERT(img_rgba);
         if (!img_rgba) goto failed;
         nk_font_bake_convert(img_rgba, *width, *height, atlas->pixel);
@@ -18171,6 +18213,7 @@ nk_font_atlas_bake(struct nk_font_atlas *atlas, int *width, int *height,
 
 failed:
     /* error so cleanup all memory */
+    if (pack_open) stbtt_PackEnd(&baker->spc);
     if (tmp) atlas->temporary.free(atlas->temporary.userdata, tmp);
     if (atlas->glyphs) {
         atlas->permanent.free(atlas->permanent.userdata, atlas->glyphs);

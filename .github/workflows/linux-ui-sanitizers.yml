@@ -7,6 +7,7 @@ on:
       - 'third_party/nuklear.h'
       - 'tests/test_utf8_string_bounds.c'
       - 'tests/test_editor_*.c'
+      - 'tests/test_font_*.c'
       - 'tests/check_display_workflow.py'
       - 'tools/build.py'
       - 'tools/native_tests.py'
@@ -17,6 +18,7 @@ on:
       - 'third_party/nuklear.h'
       - 'tests/test_utf8_string_bounds.c'
       - 'tests/test_editor_*.c'
+      - 'tests/test_font_*.c'
       - 'tests/check_display_workflow.py'
       - 'tools/build.py'
       - 'tools/native_tests.py'
@@ -50,7 +52,7 @@ jobs:
           cmake --build build-sdl --parallel 4
           cmake --install build-sdl
       - name: Sanitized UTF-8 and editor primitives
-        run: python3 tools/build.py --compiler "${{ matrix.compiler }}" --sanitizers --test --test-filter utf8_string_bounds --test-filter editor_clipboard --test-filter editor_readonly --test-filter material_property_examples --test-filter project_display --test-filter project_file --test-filter parameter_catalog --test-filter native_project_build --test-filter scene_view --test-filter accessibility --test-filter documentation --test-filter documentation_anchors
+        run: python3 tools/build.py --compiler "${{ matrix.compiler }}" --sanitizers --test --test-filter utf8_string_bounds --test-filter editor_clipboard --test-filter editor_readonly --test-filter font_shape --test-filter font_atlas_limits --test-filter material_property_examples --test-filter project_display --test-filter project_file --test-filter parameter_catalog --test-filter native_project_build --test-filter scene_view --test-filter accessibility --test-filter documentation --test-filter documentation_anchors
       - name: Sanitized project-tree, reference and pendulum-analysis workflows
         env:
           ASAN_OPTIONS: detect_leaks=0
