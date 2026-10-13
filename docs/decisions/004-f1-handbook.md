@@ -293,8 +293,14 @@ in `run-bqpq0966`. Mathematik und Zoom bestehen 2/2 mit MSVC ASan in
 Fehlerfälle bestehen in `build/native/F1-review/math-runner-proof`.
 Die abschließende Mathematikprobe einschließlich U+0378 besteht zusätzlich mit
 MSVC ASan in `build/native/F1-uia-sanitized/test-results/run-7pbhh6m_`.
-Die mathematische Zeichendeckung dieses neuen Stands auf Linux/macOS bleibt
-bis zu deren tatsächlich ausgeführten Prüfungen offen.
+Der Stand `72ff73f` besteht unter Ubuntu 24.04/X11/Xvfb mit ASan/UBSan:
+Clang **14/14 native und 22/22 GUI-Fälle** (`run-1im2mdks`, `run-l1tjzep9`),
+GCC ebenfalls **14/14 und 22/22** (`run-aoj8jg81`, `run-jd0b_5m4`).
+[Clang-Lauf](https://github.com/Lulus792/physim/actions/runs/38482055800/job/115586716595),
+[GCC-Lauf](https://github.com/Lulus792/physim/actions/runs/38482055800/job/115586716800).
+Beide bestehen die neue Zeichendeckung. Die Linux-Artefakte bestätigen 43
+Zeichen in 38 Fontvarianten; die 16-/32-Pixel-Bilder der Formel wurden visuell
+geprüft. Die mathematische Zeichendeckung unter macOS bleibt offen.
 
 Offen sind natives Scrollen zu verdeckten Feldzeichen, vollständige assistive
 Feldbedienung und ihre native macOS-/Linux-Anbindung, eingebettete Link-/Tabellensemantik, vollständiges natives
