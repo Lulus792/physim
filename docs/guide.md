@@ -42,8 +42,12 @@ Prüfungen bleiben zusammen auffindbar.
 - [Läufe](runs.md): Archive auswählen und spätere Analysen wiederholen.
 - [Einstellungen](settings.md) und [Wiederherstellung](autosave.md): Darstellung und gespeicherte Arbeit.
 
-Die weiterführenden [CFD](cfd-project-plan.md)- und [FEM](fem-project-plan.md)-
-Pläne beschreiben spätere räumliche Solver und deren eigene Abnahmen.
+Der [Physikumfang von 1.0](../Physim_Projektplan.md#23-gesamte-physik-als-verbindlicher-umfang-von-100)
+umfasst 40 Fachgebiete, gekoppelte Modelle sowie sämtliche Stufen der
+[CFD](cfd-project-plan.md)- und [FEM](fem-project-plan.md)-Pläne.
+Diese Planung erweitert das Releaseziel; sie ist keine Aussage, dass die
+beschriebenen Solver bereits verfügbar sind. Den implementierten Stand zeigt
+weiterhin der [Status](status.md).
 
 ## Offline nachschlagen und Projektwissen pflegen
 

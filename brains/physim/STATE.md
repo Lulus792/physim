@@ -1,9 +1,15 @@
 # Physim Stand
 
-Stand: 12. Oktober 2026. Physim ist in Entwicklung, keine freigegebene 1.0.
+Stand: 13. Oktober 2026. Physim ist in Entwicklung, keine freigegebene 1.0.
 
-Der [Planabgleich](../../docs/project-audit.md) führt 127 implementierte,
-14 konkret unvollständige und 390 noch nicht einzeln geprüfte Blöcke.
+Der [Planabgleich](../../docs/project-audit.md) führt 126 implementierte,
+14 konkret unvollständige und 455 noch nicht einzeln geprüfte Blöcke: insgesamt
+595. Die 531 ursprünglichen PP-IDs und ihre Ausgangsfassungen bleiben erhalten;
+64 neue Umfangsblöcke ergänzen 40 Physikgebiete, zehn gemeinsame Gates und
+14 weitere Umfangsanforderungen. Eine verbreiterte bisher implementierte
+Anforderung ist wieder ungeprüft. Die Erweiterung ist Planung, keine neue
+Solverimplementierung. Alle vereinbarten CFD-/FEM-Stufen und Mehrphysikkopplungen
+gehören jetzt zu 1.0.0.
 Die maschinenlesbaren Originaltexte stehen in
 [project audit](../../docs/project-audit.json).
 

@@ -1,5 +1,11 @@
 # Physim – vollständiger Projekt- und Entwicklungsplan
 
+Verbindliche Umfangserweiterung vom **13. Oktober 2026**: Version **1.0.0**
+umfasst den gesamten bisher später vorgesehenen Physikausbau einschließlich
+CFD, FEM und gekoppelter Modelle sowie den Fachgebietskatalog in Abschnitt 23.
+Die Reihenfolge der Umsetzung ist keine Verschiebung auf eine Version nach 1.0.
+Vorhandene Implementierungen und neue Anforderungen bleiben im Planabgleich getrennt.
+
 ## 1. Vision
 
 Physim wird eine plattformübergreifende Simulationsumgebung für Windows, Linux und macOS. Das Projekt besteht aus zwei klar getrennten Produkten:
@@ -7,11 +13,14 @@ Physim wird eine plattformübergreifende Simulationsumgebung für Windows, Linux
 1. **Physim Library** – eine modulare Physik-, Mathematik-, Mess- und Auswertungsbibliothek in C.
 2. **Physim App** – eine grafische Arbeitsumgebung, in der Experimente in C oder einer eigenen, auf Physim zugeschnittenen kompilierten Sprache entwickelt, ausgeführt, dreidimensional beobachtet, gemessen und anschließend ausgewertet werden. Die eigene Sprache ist ein verbindliches Produktziel und eine vollständige Alternative zu C für den gesamten Physim-Arbeitsablauf.
 
-Das langfristige Ziel ist nicht nur eine Sammlung fertiger Simulationen. Physim soll ein Baukasten sein, mit dem theoretische Idealmodelle und realitätsnahe Modelle aus denselben Grundbausteinen erzeugt und miteinander verglichen werden können. Dazu gehören unter anderem Einheiten, Materialien und Medien, Messunsicherheit, Wahrscheinlichkeitsverteilungen, numerische Verfahren und reproduzierbare Zufallsprozesse.
+Das Gesamtziel ist eine Arbeitsumgebung für die gesamte Breite der Physik. Physim soll ein Baukasten sein, mit dem theoretische Idealmodelle und realitätsnahe Modelle aus denselben Grundbausteinen erzeugt und miteinander verglichen werden können. Dazu gehören unter anderem Einheiten, Materialien und Medien, Messunsicherheit, Wahrscheinlichkeitsverteilungen, numerische Verfahren und reproduzierbare Zufallsprozesse. Sämtliche in Abschnitt 23 benannten Fachgebiete gehören bereits zum verbindlichen Ziel von 1.0.0; die Gesamtvision bleibt für neue Fachgebiete und Forschungsergebnisse erweiterbar.
 
 Der wichtigste Grundsatz lautet:
 
 > Erst ein kleiner, vollständig funktionierender Weg vom Quellcode bis zum Diagramm; danach schrittweise mehr Physik.
+
+Dieser Grundsatz beschreibt die Entwicklungsreihenfolge innerhalb der Entwicklung
+zu 1.0.0. Ein erfolgreicher kleiner Durchstich allein ist keine 1.0-Freigabe.
 
 ---
 
@@ -65,8 +74,13 @@ Der wichtigste Grundsatz lautet:
 - Simulationen können gestartet, pausiert, schrittweise ausgeführt, fortgesetzt und abgebrochen werden.
 - Einheiten, Zeitschritt, Zufalls-Seed, Material- und Mediumseigenschaften werden mit dem Datensatz gespeichert.
 - Beispielprojekte und automatisierte Tests gehören zum Repository.
+- Der vollständige Fachgebietskatalog aus Abschnitt 23 einschließlich aller dort genannten Modellfamilien, CFD, FEM und Mehrphysikkopplungen ist implementiert und abgenommen.
+- Jedes Fachgebiet bietet Modellaufbau, Simulation, gespeicherte Ergebnisse, Visualisierung, Analyse und einen vollständigen Lernweg in C und Physim.
 
-### 2.2 Langfristige Ziele
+### 2.2 Gesamtumfang von 1.0 und fortlaufende Gesamtvision
+
+Die folgenden Ziele gehören zu 1.0.0. Die fortlaufende Gesamtvision erweitert
+sie um neue Erkenntnisse; sie verschiebt keine bereits vereinbarte Anforderung.
 
 - Mehrere physikalische Domänen: Mechanik, Felder, Thermodynamik, Strömung und gekoppelte Modelle.
 - Idealisiertes und realitätsnahes Modell derselben Versuchsanordnung.
@@ -77,7 +91,7 @@ Der wichtigste Grundsatz lautet:
 
 ### 2.3 Bewusste Nicht-Ziele der ersten Version
 
-- Keine vollständige Alternative zu MATLAB, Mathematica, Blender oder einer industriellen CFD-/FEM-Suite.
+- Keine allgemeine Ersatzanwendung für MATLAB, Mathematica oder Blender; physikalische CFD-/FEM-Solver samt den in Abschnitt 23 vereinbarten Ausbaustufen gehören ausdrücklich zu 1.0.0. Die unterstützten Modellbereiche und Genauigkeiten werden einzeln nachgewiesen; eine industrielle Zertifizierung wird nicht durch eine Versionsnummer behauptet.
 - Keine vollständige C-IDE für beliebige Softwareprojekte.
 - Keine verteilte Simulation und kein Cloud-Dienst.
 - Keine Plugin-Ausführung aus unbekannten Quellen ohne Sicherheitswarnung.
@@ -407,14 +421,14 @@ Reihenfolge:
 
 ## 7.7 Weitere Physikdomänen
 
-Erst nach stabiler Mechanik- und Datenbasis:
+Nach stabiler Mechanik- und Datenbasis, aber vollständig vor der Freigabe von 1.0.0:
 
 - **Thermodynamik:** Wärmefluss, Zustandsgrößen, ideale und später reale Gase.
 - **Elektromagnetismus:** Felder, Ladungen, einfache Schaltungen.
 - **Wellen/Optik:** Oszillatoren, Wellenausbreitung, geometrische Optik.
 - **Strömung:** zunächst Teilchen-/Netzmodelle für Lehrzwecke; erst später ernsthafte numerische Fluidmodelle.
 
-CFD und FEM müssen jeweils als eigene große Teilprojekte geplant werden. Sie sollten nicht als Nebenfunktion in den ersten Kern gezwängt werden.
+CFD und FEM werden als eigene große Teilprojekte entwickelt und gehören mit allen vereinbarten Stufen zur Freigabe von 1.0.0. Ihre Teilpläne stehen unter [CFD](docs/cfd-project-plan.md) und [FEM](docs/fem-project-plan.md). Der vollständige zusätzliche Fachgebietskatalog und die gemeinsamen Abnahmen stehen in Abschnitt 23.
 
 ---
 
@@ -735,7 +749,12 @@ Jede Phase endet mit einem vorführbaren Ergebnis und darf erst abgeschlossen we
 - Beide Dokumentationsteile und alle Vorlagen werden mit ausgeliefert und in CI geprüft.
 - C bleibt ein gleichwertiger, gepflegter Zugang; die Sprache erfüllt sämtliche Abnahmen aus Abschnitt 10.
 
-## Phase 12+ – Domänenausbau
+## Phase 12 – Vollständiger Domänenausbau für 1.0.0
+
+Diese Phase umfasst sämtliche Fachgebiete aus Abschnitt 23, alle Stufen der
+CFD-/FEM-Teilpläne und deren Kopplungen. Eine frühe Solverstufe oder ein vorhandener
+Header erfüllt nicht die gesamte Phase. Die öffentliche Alpha aus Phase 10
+bleibt ein Zwischenstand; 1.0.0 folgt erst nach der gesamten Domänenabnahme.
 
 Jede neue Domäne durchläuft separat:
 
@@ -747,7 +766,7 @@ Jede neue Domäne durchläuft separat:
 6. Mess- und Analysebeispiel.
 7. Dokumentation der Grenzen.
 
-Reihenfolgeempfehlung: Thermodynamik → einfache Elektromagnetik → Wellen/Optik → Strömungslehre. Strömung wird bewusst spät eingeplant, weil stabile und glaubwürdige CFD numerisch sehr anspruchsvoll ist.
+Reihenfolgeempfehlung innerhalb der Entwicklung zu 1.0: gemeinsame Numerik-/Datenbasis → Thermodynamik und statistische Physik → Elektromagnetik, Wellen und Optik → CFD/FEM → Quanten-, Atom-, Festkörper- und Plasmaphysik → Relativität, Kern-/Teilchenphysik und Astrophysik → angewandte Gebiete und fachübergreifende Kopplungen. Abhängigkeiten dürfen Arbeit parallel vorbereiten; keine Domäne wird deshalb auf eine Version nach 1.0 verschoben.
 
 ---
 
@@ -890,7 +909,7 @@ Jedes Beispiel enthält:
 | numerische Ergebnisse wirken plausibel, sind aber falsch | Vertrauensverlust | analytische Referenzen, Konvergenz- und Erhaltungstests |
 | Dateiformat wird früh unbrauchbar | inkompatible Projekte | Versionierung, Chunks, Migrationstests |
 | eigene Sprache bindet Ressourcen | unvollständiger Compiler oder auseinanderlaufende Workflows | verbindliche LANG-Meilensteine, gemeinsame C-Bibliothek, schrittweise Paritätstests und Dokumentation für beide Sprachen |
-| Strömung/FEM unterschätzt | jahrelanger Nebenpfad | als eigenständige spätere Domänen behandeln |
+| Gesamter Physikumfang einschließlich CFD/FEM unterschätzt | sehr großer Entwicklungs- und Validierungsumfang vor 1.0 | eigenständige Fachpakete, Abhängigkeiten und Abnahmen planen; Vorabversionen nutzen, vereinbarten 1.0-Umfang erhalten |
 | „keine Abhängigkeiten“ kollidiert mit Compiler/GUI | unklare Distribution | Library-, Build- und Laufzeitabhängigkeiten getrennt dokumentieren |
 
 ---
@@ -986,7 +1005,7 @@ Diese Liste ist die empfohlene tatsächliche Startreihenfolge. Tickets dürfen p
 - **0.4.0 – Authoring Preview:** besserer Editor, API-Browser, Vorlagen und Projektmigration.
 - **0.5.0 – Public Alpha:** Pakete, Tutorials, Crash Recovery und stabilisierte Formate.
 - **0.6.0 – Language Preview:** spezifizierter Sprachkern, statische Typprüfung, native Kompilierung und erstes vollständiges Experiment samt Auswertung; verbleibende Sprachlücken explizit dokumentiert.
-- **1.0.0:** stabile Kern-API, dokumentierte Kompatibilitätsregeln, belastbare Mechanik-, Mess- und Analysefunktionen auf Windows, Linux und macOS sowie eigene Sprache als vollständige Alternative zu C für den Physim-Workflow einschließlich beider Dokumentationsteile und LANG-001 bis LANG-007.
+- **1.0.0:** stabile Kern-API, dokumentierte Kompatibilitätsregeln, sämtliche Fachgebiete und Modellfamilien aus Abschnitt 23 einschließlich CFD, FEM und gekoppelter Modelle auf Windows, Linux und macOS sowie eigene Sprache als vollständige Alternative zu C für alle unterstützten Workflows einschließlich beider Dokumentationsteile und LANG-001 bis LANG-007. Jede Domäne und jede vereinbarte Ausbaustufe muss die gemeinsamen Fach-, Daten-, Sprach-, App- und Plattformabnahmen bestehen.
 
 Versionsnummern sind an Fähigkeiten und Qualitätskriterien gebunden, nicht an Kalendertermine.
 
@@ -1023,4 +1042,118 @@ Physim 1.0 gilt als erreicht, wenn ein neuer Nutzer auf Windows, Linux oder macO
 10. nachvollziehen kann, welche Modellannahmen und numerischen Grenzen gelten,
 11. für beide Sprachen eine vollständige, getestete Dokumentation vom Einstieg bis zum eigenen Experiment und zur eigenen Auswertung findet.
 
-Damit ist das Fundament geschaffen, auf dem weitere Physikdomänen ohne Umbau der gesamten Anwendung ergänzt werden können.
+Zusätzlich müssen sämtliche Domänen und Modellfamilien aus Abschnitt 23 sowie alle vereinbarten CFD-/FEM-Stufen in diesem Ablauf unterstützt und fachlich abgenommen sein. Damit bietet 1.0 bereits die vereinbarte Breite der Physik; neue Forschung und zusätzliche Spezialmodelle können darauf aufbauen, ohne bestehende 1.0-Anforderungen nachträglich auszuklammern.
+
+---
+
+## 23. Gesamte Physik als verbindlicher Umfang von 1.0.0
+
+### 23.1 Auftrag und Bedeutung von Vollständigkeit
+
+Am 13. Oktober 2026 wurde der Umfang ausdrücklich erweitert: Der gesamte zuvor
+später vorgesehene Domänenausbau gehört zu **1.0.0**. Hinzu kommen die unten
+benannten weiteren Physikgebiete. Frühere Formulierungen wie „später“, „langfristig“
+oder „Phase 12+“ bezeichnen für diesen Physikumfang Entwicklungsstufen vor 1.0,
+keine Verschiebung der vereinbarten Arbeit auf einen späteren Release.
+
+„Alles, was die Physik zu bieten hat“ ist die Gesamtvision. Physik ist ein offenes
+Forschungsgebiet; eine abschließende Liste aller denkbaren Modelle oder die Lösung
+ungelöster Forschungsprobleme ist kein nachweisbares Versprechen. Deshalb benennt
+der Katalog konkrete verbindliche Modellfamilien. **Alle** genannten Familien
+benötigen ausführbare Modelle und die Abnahmen aus 23.3; ein einzelnes Beispiel
+pro Tabellenzeile, eine erklärende Seite oder eine API-Skizze reicht nicht.
+
+Für offene Forschungsthemen werden die verwendeten Kandidaten, Annahmen und
+fehlenden experimentellen Bestätigungen ausdrücklich dargestellt. Vorhersagen
+werden nur für den belegten Gültigkeitsbereich zugesagt. Das ist eine Anforderung
+an wissenschaftliche Transparenz, keine pauschale Ausnahme vom Fachgebietskatalog.
+Weitere erkannte Lücken werden mit eigenen IDs ergänzt und bewusst eingeplant.
+
+Die Einteilung orientiert sich an den Fachgebieten der
+[IUPAP](https://iupap.org/who-we-are/internal-organization/commissions/) und der
+[arXiv-Fachgebietstaxonomie](https://arxiv.org/category_taxonomy).
+Der folgende Modellumfang ist eine eigene Produktanforderung von Physim;
+die Quellen sind keine Bestätigung eines bereits vorhandenen Solvers.
+
+### 23.2 Fachgebietskatalog
+
+Alle PHYS-IDs sind verbindliche Anforderungen für **1.0.0**. Die Modellfamilien
+werden vor Implementierung in einzeln prüfbare Fachverträge zerlegt. Angegebene
+Referenzfälle sind erste unabhängige Prüfungen; sie ersetzen nicht die Validierung
+sämtlicher Familien. Bestehender Code kann Teilnachweise liefern, macht eine
+gesamte Zeile jedoch nicht automatisch vollständig.
+
+| ID | Fachgebiet | Verbindliche Modellfamilien für 1.0 | Erste Referenz- und Bilanzfälle |
+| --- | --- | --- | --- |
+| PHYS-001 | Klassische und analytische Mechanik | Punktmassen, starre Körper, Kräfte, Drehung, Zwangsbedingungen, Gelenke, Kontakt/Reibung, kontinuierliche Kollisionen, Lagrange-/Hamilton-Formulierung, Gravitation und Mehrkörperbewegung | Keplerbahn, Pendel, Kreisel, Stoß; Energie, Impuls und Drehimpuls |
+| PHYS-002 | Kontinuumsmechanik und FEM | Elastizität, 2D/3D-Netze, höhere Elementordnungen, Elastodynamik, thermische Dehnung, Kontakt, große Verformung, Plastizität und Bruch gemäß FEM-Teilplan | Patchtests, Zugstab, Balken, Eigenmoden; Kräfte und elastische Energie |
+| PHYS-003 | Strömungsmechanik und CFD | Inkompressible/kompressible Strömung, 2D/3D, Wände und offene Ränder, Wärme/Stofftransport, Auftrieb, bewegte Geometrien, freie Oberflächen, Mehrphasen- und ausdrücklich benannte Turbulenzmodelle | Wirbel, Kanal, Scherung, Stoßrohr, freie Oberflächen; Masse, Impuls und Energie |
+| PHYS-004 | Thermodynamik und Wärmeübertragung | Zustandsgrößen, ideale/reale Gase, Zustandsgleichungen, Phasengleichgewicht, Maxwell-Konstruktion, Kreisprozesse, Leitung, Konvektion und Strahlung | Gasgrenzfall, Wärmebilanz, Carnot-Grenze, Phasengleichgewicht |
+| PHYS-005 | Statistische Physik | Mikro-/kanonische/großkanonische Ensembles, klassische und Quantenstatistik, Zustandssummen, Fluktuationen, Phasenübergänge, Transport und Nichtgleichgewicht | Idealgas, Zweiniveausystem, Ising-Referenzen, detailliertes Gleichgewicht |
+| PHYS-006 | Elektromagnetische Felder | Elektro-/Magnetostatik, Maxwell-Dynamik, Ladungs-/Stromquellen, Materialantwort, Randbedingungen und elektromagnetische Wellen | Coulombfeld, Spule, ebene Welle, Poynting- und Ladungsbilanz |
+| PHYS-007 | Schaltungen und Elektronik | Lineare/nichtlineare Netzwerke, RLC, Dioden-/Transistormodelle, Wechselstrom, Übertragungsleitungen und Rauschen | RC/RLC, Kirchhoff-Bilanzen, Frequenzgang und Leitungsreflexion |
+| PHYS-008 | Wellen, Schwingungen und Akustik | Gekoppelte Schwinger, elastische/akustische Wellen in 1D/2D/3D, Dispersion, Dämpfung, Resonanz, Dopplereffekt und Streuung | Eigenmoden, laufende Welle, Rohrresonanz; Energiefluss |
+| PHYS-009 | Geometrische und Wellenoptik | Strahlverfolgung, Abbildung, Polarisation, Fresnelkoeffizienten, Interferenz, Beugung, Kohärenz und Fourieroptik | Snell/Fresnel, Doppelspalt, Aperturbeugung; optische Leistungsbilanz |
+| PHYS-010 | Photonik und Laserphysik | Resonatoren, Gaußstrahlen, Wellenleiter, Laserratengleichungen und nichtlineare Optik mit expliziten Materialkoeffizienten | Strahltaille, Resonatormoden, Laserschwelle, Frequenzkonversion |
+| PHYS-011 | Quantenmechanik | Schrödinger-Eigenwerte und Zeitentwicklung, Operatoren, Spin, Messung, Dichtematrizen, offene Systeme, Tunneln und Streuung | Potentialkasten, Oszillator, Spinpräzession; Norm und Unitarität |
+| PHYS-012 | Quanteninformation und Quantentechnologien | Qubits, Quantengatter/-schaltungen, Verschränkung, Messkanäle, Dekohärenz, Fehlerkorrektur und Quantensimulation | Bellzustand, Kanalpositivität, ausgewählte Fehlerkorrekturcodes |
+| PHYS-013 | Atomphysik | Atomare Zustände, Übergänge/Spektren, Feinstruktur, Zeeman-/Starkeffekt und Wechselwirkung mit Licht | Wasserstoffgrenzfall, Auswahlregeln, dokumentierte Spektraldaten |
+| PHYS-014 | Molekülphysik und physikalische Chemie | Rotation/Vibration, elektronische Modellzustände, Potentialflächen, molekulare Dynamik, Reaktionskinetik und spektroskopische Übergänge | Rotor/Oszillator, Zweiatompotential, Reaktions- und Energiebilanz |
+| PHYS-015 | Kondensierte Materie und Vielteilchenphysik | Klassische/Quanten-Vielteilchenmodelle, Korrelationen, Transport, kollektive Anregungen und Phasenübergänge | Freies Elektronengas, Spinmodelle, Zustandsdichte und Summenregeln |
+| PHYS-016 | Festkörperphysik und Kristallographie | Gitter, reziproker Raum, Beugung, Phononen, Bandmodelle, Defekte und elastische/thermische Eigenschaften | Braggreflexe, harmonische Kette, Bloch-/Bandreferenzen |
+| PHYS-017 | Halbleiterphysik | Band-/Ladungsträgermodelle, Drift/Diffusion, Rekombination, pn-Übergang, Solarzelle und Bauelementtransport | Gleichgewichtsneutralität, pn-Profil, Strom-/Ladungsbilanz |
+| PHYS-018 | Magnetismus und Spintronik | Dia-/Para-/Ferromagnetismus, Spinmodelle, Domänen, Magnetisierungsdynamik, Hysterese und Spintransport | Curie-Grenzfall, Präzession, ausgewählte Domänenreferenzen |
+| PHYS-019 | Tieftemperaturphysik | Bose-/Fermi-Gase, Bose-Einstein-Kondensation, Supraleitung, Josephsonmodelle, Suprafluidität und kryogene Wärmeprozesse | Ideale Quantengase, Josephsonrelationen, dokumentierte kritische Grenzen |
+| PHYS-020 | Weiche Materie und Rheologie | Polymere, Kolloide, granulare Medien, viskoelastische Modelle, Flüssigkristalle und Selbstorganisation | Brownsche Diffusion, Maxwell-/Kelvin-Voigt-Antwort, Scherreferenzen |
+| PHYS-021 | Plasmaphysik | Einzelteilchenbahnen, kinetische/Fluidmodelle, Particle-in-Cell, Debyeabschirmung, Plasmawellen, MHD und Fusion-Lehrmodelle | Gyration, Plasmafrequenz, Alfvénwelle; Ladung und Energie |
+| PHYS-022 | Spezielle Relativität | Lorentztransformation, Vierervektoren, relativistische Dynamik, Kollisionen und Feldtransformation | Invariantes Intervall, Energie-Impuls-Relation, Dopplereffekt |
+| PHYS-023 | Allgemeine Relativität und Gravitation | Metriken, Geodäten, Lichtablenkung, kompakte Objekte, Gravitationswellen und explizit begrenzte numerische Raumzeitmodelle | Minkowski-/Schwarzschildfälle, schwaches Feld, Gravitationsrotverschiebung |
+| PHYS-024 | Kernphysik | Kernstrukturmodelle, Zerfallsketten, Reaktionskinematik, Wirkungsquerschnittsdaten, Spaltung/Fusion und Neutronentransport | Exponentieller Zerfall, Bateman-Ketten, Reaktionsenergie und Bilanzen |
+| PHYS-025 | Teilchen- und Hochenergiephysik | Relativistische Streuung/Zerfälle, Standardmodell-Teilchendaten, Symmetrien, ausgewählte elektromagnetische/schwache/starke Prozessmodelle und Ereignisanalyse | Viererimpulserhaltung, Phasenraum, veröffentlichte Prozessreferenzen |
+| PHYS-026 | Quantenfeldtheorie und Forschungsmodelle | Klassische/quantisierte Modellfelder, freie Felder, ausgewählte Störungs-/Gittermodelle, effektive Theorien; gekennzeichnete Lehrmodelle für offene Vereinheitlichungs-/Quantengravitationsansätze | Freifeldgrenzen, Symmetrien, bekannte exakte oder unabhängige Gitterreferenzen |
+| PHYS-027 | Astrophysik und Himmelsmechanik | Bahnen/N-Körper, Sternstruktur-/Entwicklungsmodelle, Strahlungstransport, Akkretion und kompakte Objekte | Kepler, hydrostatisches Gleichgewicht, dokumentierte Sternreferenzen |
+| PHYS-028 | Kosmologie | FLRW-/Friedmannmodelle, Expansion, Rotverschiebung, Hintergrundstrahlung, Störungs-/Strukturbildungsmodelle und explizite Komponentenannahmen | Analytische Expansionsfälle, Distanzrelationen und Referenzparameter |
+| PHYS-029 | Astroteilchenphysik | Kosmische Strahlung, Neutrinooszillation, Teilchentransport und ausdrücklich parametrisierte Dunkle-Materie-Kandidatenmodelle | Oszillationswahrscheinlichkeit, Fluss-/Transportbilanz, Messdatenherkunft |
+| PHYS-030 | Beschleuniger- und Strahlphysik | Geladene Strahlen, Magnetoptik, Emittanz, Raumladung, RF-Beschleunigung und Synchrotronstrahlung | Transfermatrizen, geschlossene Bahn, Energie- und Emittanzreferenzen |
+| PHYS-031 | Geophysik und planetare Physik | Gravimetrie, Seismik, Wärmefluss, Material-/Schichtenmodelle und planetare Dynamik | Schichtwellen, Gravitationspotential, Wärmebilanz |
+| PHYS-032 | Atmosphären-, Ozean- und Klimaphysik | Rotierende/geophysikalische Strömung, Strahlungsbilanz, Feuchte/Phasenwechsel, Transport und begrenzte Klimamodelle | Hydrostatik, Coriolisfälle, Energie-/Wasserbilanz; Referenzdaten |
+| PHYS-033 | Biophysik | Diffusion, Membrantransport, elektrophysiologische Modelle, Biomechanik und stochastische molekulare Prozesse | Diffusionslösung, Membranpotential, Kraft- und Stoffbilanz |
+| PHYS-034 | Medizinische Physik | Bildgebungs-Lehrmodelle für Röntgen/CT, MRT und Ultraschall sowie Dosimetrie und Strahlungstransport | Kalibrierphantome, Abschwächung, Spinantwort; ausgewiesene Lehrmodellgrenzen |
+| PHYS-035 | Strahlungs- und Detektorphysik | Wechselwirkung von Strahlung mit Materie, Transport, Abschirmung, Detektorantwort, Zählstatistik und Spektroskopie | Beer-Lambert, Poissonstatistik, Energieablage und Referenzquerschnitte |
+| PHYS-036 | Nano-, Oberflächen- und Grenzflächenphysik | Oberflächenenergie, Adsorption, Kapillarität, nanoskaliger Transport und quantenbegrenzte Modellstrukturen | Young-Laplace, Adsorptionsisothermen, Tunnel-/Transportreferenzen |
+| PHYS-037 | Nichtlineare Physik und komplexe Systeme | Chaos, Bifurkationen, gekoppelte Netzwerke, Reaktions-Diffusions-Systeme, Solitonen und Musterbildung | Logistische Abbildung, Lorenzreferenzen, analytische Solitonen |
+| PHYS-038 | Mathematische und computergestützte Physik | ODE/PDE, Eigenwerte, dünn besetzte Systeme, FFT, Optimierung, stochastische Verfahren, Symmetrien und inverse Probleme | Herstellte Lösungen, Raum-/Zeitkonvergenz, Residuen und Konditionsgrenzen |
+| PHYS-039 | Experimentalphysik und Metrologie | Messketten, Sensor-/Detektormodelle, korrelierte Unsicherheit, Kalibrierung, Parameterschätzung, statistische Tests und Versuchsplanung | Rückführbare Einheiten, unabhängige Fits, Abdeckungs-/Kalibrierreferenzen |
+| PHYS-040 | Mehrphysik und Energieanwendungen | Fluid-Struktur-, Thermomechanik-, elektromagnetisch-thermische, Strahlungs-Materie- und Plasma-Kopplungen sowie elektrochemische/photovoltaische Energie-Lehrmodelle | Austauschflüsse, Gesamtenergie, Ladung/Stoff und Kopplungskonvergenz |
+
+### 23.3 Gemeinsame Abnahmen jeder Domäne
+
+- **V1-GATE-01 – Fachvertrag:** Jede genannte Modellfamilie besitzt Gleichungen, Annahmen, Quellen, Datenherkunft, SI-Einheiten, Anfangs-/Randbedingungen und messbare Gültigkeitsgrenzen. Forschungskandidaten und etablierte Modelle sind gekennzeichnet.
+- **V1-GATE-02 – Implementierung:** Öffentliche C17-API und idiomatische Physim-Bindung unterstützen dieselben Operationen und Fehlerfälle. Keine genannte Familie bleibt allein als Dokumentation oder Platzhalter vorhanden.
+- **V1-GATE-03 – Wissenschaftliche Prüfung:** Unabhängige analytische/numerische Referenzen, passende experimentelle Daten, Konvergenz und physikalische Bilanzen werden vor der Freigabe festgelegt. Genauigkeitszusagen gelten nur im tatsächlich validierten Bereich.
+- **V1-GATE-04 – Numerik und Ressourcen:** Stabilität, Solverresiduen, steife Probleme, Singularitäten, Arbeitsbudgets, Speicher und Fehlerpfade sind explizit. Ein Iterationslimit darf keinen scheinbaren Konvergenzerfolg liefern.
+- **V1-GATE-05 – Daten und Reproduktion:** Skalare Daten, Gitter, Netze, komplexe Werte, Felder und gegebenenfalls Ereignisse besitzen versionierte Archive, Herkunft, Einheiten, Quellen, Seeds und Wiederherstellung. Import/Export und Projektverschiebung erhalten alle benötigten Daten.
+- **V1-GATE-06 – App-Ablauf:** Neu anlegen, bauen, simulieren, pausieren/stoppen, speichern, wiederöffnen, darstellen und separat auswerten funktionieren in C, Physim und beiden gemischten Sprachkombinationen. Darstellungsreduktion verändert keine Rohdaten oder Analysen.
+- **V1-GATE-07 – Lernen und Bedienung:** Jede Familie ist in beiden offline verfügbaren Lernwegen mit vollständigen Quellen, Übungen und Modellgrenzen erreichbar. Feld-/Netz-/Ereignisansichten sind verständlich, per Tastatur erreichbar und grundlegend barrierefrei.
+- **V1-GATE-08 – Plattformen und Pakete:** Tatsächlich ausgeführte Windows-/Linux-/macOS-Builds, Sanitizerprüfungen, grafische Abläufe und verschobene SDKs belegen einen gemeinsamen Release-Stand. Clean-Machine-Tests umfassen Intel/Apple Silicon und mindestens zwei Linux-Distributionen.
+- **V1-GATE-09 – Kopplungen:** Datenübergaben definieren Zeitraster, Einheiten, Rauminterpolation und Flüsse. Energie-, Impuls-, Ladungs- und Stoffaustausch sind passend zum Modell bilanziert; reine getrennte Solverstarts erfüllen keine Kopplung.
+- **V1-GATE-10 – Freigabe:** Jeder PHYS-Eintrag und jede Modellfamilie besitzt eine eigene Abnahme mit Implementierungs-, Fach-, Sprach-, App- und Plattformnachweisen. Die neue Planung hebt keinen bisherigen Teilnachweis auf vollständig an. 1.0 bleibt gesperrt, solange eine vereinbarte Familie oder ein Gate offen ist.
+
+### 23.4 Ausführung und Nachweisführung
+
+Vor der Implementierung erhält jede Modellfamilie ein Fachpaket mit eigenen
+Tickets, Referenzdaten, Methodenwahl, Abhängigkeiten und Ressourcenbudgets. Die
+FEM-/CFD-Teilpläne sind solche Pakete und werden um die vollständigen obigen
+Familien erweitert. Weitere Domänen benötigen entsprechend detaillierte Pakete;
+die Katalogaufnahme ist noch keine abgeschlossene Fachspezifikation.
+
+Die Entwicklung bleibt schrittweise und darf Vorabversionen veröffentlichen.
+Versionsnummern wie 0.x kennzeichnen solche Zwischenstände. **1.0.0** bezeichnet
+erst die Abnahme des gesamten vereinbarten Umfangs, nicht lediglich die bisherige
+Mechanik-/Messbasis. Termine oder ein Fertigstellungsprozentsatz werden aus dieser
+Umfangserweiterung nicht abgeleitet.
+
+Der Planabgleich erhält stabile bisherige PP-IDs und ihre ursprünglichen Texte
+und Nachweise. Geänderte Anforderungen bewahren ihre Ausgangsfassung; neue
+PHYS-/V1-GATE-Einträge werden separat und zunächst als ungeprüft geführt.
+Historische Testzahlen gelten weiterhin nur für ihren damaligen Quellstand.

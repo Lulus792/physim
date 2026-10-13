@@ -1,5 +1,11 @@
 # CFD Teilprojekt für inkompressible Strömung
 
+**Releaseziel seit 13. Oktober 2026: 1.0.0.** Alle Stufen dieses Teilplans
+einschließlich 3D, thermischer Kopplung und der zusätzlichen Modellfamilien
+unter PHYS-003 sind vor 1.0 abzunehmen. „Später“ bezeichnet hier die Reihenfolge
+innerhalb der Entwicklung zu 1.0. Der verbindliche Gesamtumfang steht in
+[Abschnitt 23 des Projektplans](../Physim_Projektplan.md#23-gesamte-physik-als-verbindlicher-umfang-von-100).
+
 Das CFD-Teilprojekt soll räumlich und zeitlich aufgelöste Fluidbewegung in Physim
 ermöglichen. Es erhält eine eigene Bibliothek, Datenbeschreibung, Lernbeispiele
 und Abnahme. Die vorhandenen [Rohrnetze und Tracermodelle](fluid.md) bleiben
@@ -130,6 +136,15 @@ die vereinbarte konstante Eichung.
 | C und Physim | Kontext, Feldzugriff, Simulation, Analyse und Besitzerprüfung | Dieselben archivierten Felder und Fehlercodes; Speicher bleibt bei Abbruch und `attempt` frei. |
 | App und Paket | Feldarchiv, Karten, Berichte, Rohdatenexport und vollständiger Lernpfad | Neu anlegen, bauen, simulieren, stoppen, öffnen und auswerten in beiden Sprachen und gemischten Abläufen. |
 | 3D und Kopplung | Dreidimensionale Operatoren, Temperatur und explizite Kopplungsverträge | Eigene analytische Fälle, Verfeinerung und experimentelle Validierung für jeden neuen Modellbereich. |
+| Kompressible Strömung | Konservative Masse-/Impuls-/Energiegleichungen, Zustandsgleichung und Stoßbehandlung | Stoßrohr, glatte Referenzen, Positivität und Erhaltungsbilanz mit Raum-/Zeitverfeinerung. |
+| Freie Oberflächen und Mehrphasenströmung | Explizite Phasen-/Grenzflächenmodelle, Oberflächenspannung und Stoffaustausch | Ruhende Tropfen, hydrostatische Oberflächen, Referenzwellen, Phasenmassen und Energie. |
+| Bewegte Geometrie und Fluid-Struktur-Kopplung | Geometrie-/Randbewegung, Kraftübertragung und gemeinsames Zeitverfahren | Geometrische Erhaltung, unabhängige Bewegungsfälle sowie Impuls-/Energieaustausch. |
+| Turbulenzmodelle | Benannte und begrenzte Modellansätze mit eigenen Koeffizienten und Auflösungsanforderungen | Unabhängige Referenzdaten, Modell-/Gitterunsicherheit und Gültigkeitsbereich; laminare Tests allein reichen nicht. |
+
+Die zusätzlichen Stufen benötigen vor ihrer Implementierung jeweils ein eigenes
+vollständiges Fachpaket. Alle sind verbindliche 1.0-Anforderungen. Der Titel und
+der erste Solververtrag benennen weiterhin den inkompressiblen Einstieg;
+dieser Einstieg allein schließt das CFD-Teilprojekt nicht ab.
 
 Jede Freigabe benötigt tatsächlich ausgeführte Windows-, Linux- und macOS-
 Builds, Sanitizerprüfungen, verschobene SDKs und die dokumentierten

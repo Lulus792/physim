@@ -3,6 +3,13 @@
 Stand: erster Entwicklungsdurchstich, ergänzt am 2026-10-12. Der Projektplan ist die Roadmap;
 dieses Dokument unterscheidet implementierten Code von noch offenen Produktzielen.
 
+**Umfangserweiterung vom 13. Oktober 2026:** 1.0.0 umfasst jetzt sämtliche
+40 Fachgebiete und Modellfamilien aus
+[Abschnitt 23 des Projektplans](../Physim_Projektplan.md#23-gesamte-physik-als-verbindlicher-umfang-von-100),
+einschließlich aller CFD-/FEM-Stufen und Mehrphysikkopplungen. Die Aufnahme in
+den Plan ist kein Implementierungsnachweis. Die bisherigen Testzahlen und
+Teilnachweise bleiben an ihre Revision gebunden; der erweiterte Umfang ist offen.
+
 **Fortlaufende Laufdateien in beiden Sprachen:** RunStore, RunReader und
 RunWriter verbinden opake versionierte Handles mit geteilten Besitzern,
 unabhängigen Zeilen/Szenen, expliziten SI-Schemata und Dateiabschlüssen.

@@ -1,5 +1,40 @@
 # Abgleich mit dem vollständigen Projektplan
 
+## Verbindliche Umfangserweiterung vom 13. Oktober 2026
+
+Der direkte Nutzerauftrag erweitert **1.0.0** auf den gesamten bislang späteren
+Physikausbau und den [Fachgebietskatalog](../Physim_Projektplan.md#23-gesamte-physik-als-verbindlicher-umfang-von-100):
+40 Fachgebiete mit allen dort genannten Modellfamilien, vollständige CFD-/FEM-
+Stufen und Mehrphysikkopplungen. Zehn gemeinsame Freigabegates gelten für jede
+Familie. Die detaillierte Fachspezifikation und Implementierung der neuen
+Familien bleibt beauftragte Arbeit; die Katalogaufnahme erledigt sie nicht.
+
+`project-audit.json` führt jetzt **595 Blöcke**: **126 implemented**,
+**14 incomplete** und **455 unverified**. Die 531 ursprünglichen PP-IDs bleiben
+stabil. `baseline_line`/`baseline_end_line` bewahren ihre vorherigen Zeilen;
+bei geändertem Text, Abschnitt oder Prüfstatus erhalten die `baseline_*`-Felder
+die Ausgangsfassung. Aktuelle Zeilen und die neue Planprüfsumme sind abgeglichen.
+Die 64 zusätzlichen Blöcke enthalten 40 PHYS-IDs, zehn V1-GATE-IDs und 14
+ergänzende Umfangsanforderungen. Eine verbreiterte bisher implementierte
+Anforderung wird ungeprüft, statt ihre alten Teilnachweise auf den neuen Umfang
+zu übertragen. Nachweise und frühere Notizen bleiben erhalten.
+
+Die folgenden datierten Abschnitte dokumentieren den bisherigen Abgleich mit
+531 Blöcken und dessen damaligem Umfang. Ihre Zählungen und Testrevisionen sind
+historisch; sie sind keine aktuelle Gesamtabnahme des erweiterten 1.0-Ziels.
+
+Die Planänderung ist unter Windows mit MSVC/C17 geprüft: Alle 595 aktuellen
+Text-/Zeilenbereiche und die Planprüfsumme stimmen; Ausgangstexte, Prüfstatus,
+Scopes und Nachweise der 531 PP-Einträge bleiben erhalten. Der native Parser
+liest alle zehn geänderten Markdownseiten und das aktualisierte JSON im
+Quellenmodus; der neue Abschnittslink, beide Lernwege und die Brain-Quellenlinks
+bestehen. Die vollständige native Indexprüfung meldet im aktuellen und im
+unveränderten Ausgangsstand `9136e3f` dieselben 98 Fehler: Der Windows-CLI-Prüfer
+übernimmt Umlaut-Anker nicht als UTF-8, und `platform-validation.md` überschreitet
+bereits im Ausgangsstand das Markdownlimit von 256 KiB. Diese Gesamtprüfung ist
+damit ausdrücklich nicht erfolgreich; die Änderung erzeugt keine zusätzlichen
+Meldungen. Das ist Dokumentationsprüfung, keine neue Solver-/Plattformabnahme.
+
 Stand: 7. Oktober 2026, Ausgangsrevision `4841ee2`. Das Ziel bleibt die Umsetzung
 des [vollständigen Projektplans](../Physim_Projektplan.md). Ein grüner Teiltest,
 ein vorhandener Header oder eine konfigurierte CI beweist keine Produktabnahme.

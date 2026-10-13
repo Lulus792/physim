@@ -1,5 +1,12 @@
 # FEM Teilprojekt für elastische Körper
 
+**Releaseziel seit 13. Oktober 2026: 1.0.0.** Alle Stufen dieses Teilplans,
+einschließlich höherer Elementordnungen, 3D, Dynamik, thermischer Dehnung,
+Kontakt, großer Verformung, Plastizität und Bruch, gehören vor 1.0 zur Abnahme.
+„Nach dem Einstieg“ bezeichnet die Entwicklungsreihenfolge innerhalb von 1.0.
+Der verbindliche Gesamtumfang steht in
+[Abschnitt 23 des Projektplans](../Physim_Projektplan.md#23-gesamte-physik-als-verbindlicher-umfang-von-100).
+
 Das FEM-Teilprojekt soll Verformung und Spannungen kontinuierlicher Körper in
 Physim berechnen. Es erhält einen eigenen Modellvertrag, Netz- und Feldformate,
 Solver, C-/Physim-Zugang und Abnahme. Starre Körper in [Mechanik](mechanics.md)
@@ -134,6 +141,14 @@ Analyse und gemischte Sprachen.
 | App und Paket | Netze, Felder, Legenden, vollständiger Lernpfad und Exporte | Tatsächliche C-/Physim- und gemischte Appketten im verschobenen SDK. |
 | 3D und Dynamik | Neue Elemente, Massenmatrix und Zeitverfahren | Eigene Moden-/Wellenreferenzen, getrennte Raum-/Zeitverfeinerung und Energiebilanz. |
 | Nichtlineare Modelle | Zustandsgrößen, Lastschritte und spezifizierte Tangenten | Eigene Fachvalidierung, Pfadabhängigkeit, Konvergenz- und Recovery-Abnahmen. |
+| Höhere Elementordnungen | Weitere Formfunktionen, Integrationsregeln und konsistente Last-/Massenmatrizen | Eigene Patchtests, Konditionsgrenzen und gemessene Konvergenz jeder Elementfamilie. |
+| Thermische Dehnung und Materialtabellen | Temperaturfelder, Stoffbereiche und Thermomechanik | Freie/feste Ausdehnung, dokumentierte Materialreferenzen und Energieaustausch. |
+| Kontakt und große Verformung | Netzbasierter Kontakt/Reibung und geometrisch nichtlineare Kinematik | Kontakt-/Kraftbilanz, objektive Rotation, Lastpfade und Konvergenz. |
+| Plastizität und Bruch | Explizite Materialhistorie, Fließ-/Verfestigungs- und Bruchmodelle | Unabhängige Last-/Entlastungsfälle, Dissipation, Netzabhängigkeit und Referenzdaten. |
+
+Jede zusätzliche Modellfamilie erhält vor Implementierung ein vollständiges
+Fachpaket. Keine Stufe wird durch die lineare 2D-Abnahme als erledigt behandelt;
+alle genannten Stufen gehören zum verbindlichen Ziel von 1.0.0.
 
 Jede Solverfreigabe benötigt tatsächlich ausgeführte Windows-, Linux- und
 macOS-Prüfungen sowie Sanitizer, Datenmutationen und verschobene SDKs.
