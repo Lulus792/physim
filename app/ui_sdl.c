@@ -125,6 +125,29 @@ struct nk_context *nk_sdl_init(SDL_Window *window, ps_graphics *graphics) {
 bool nk_sdl_accessibility_available(struct nk_context *ctx) {
     return ctx && ctx->userdata.ptr && ((struct nk_sdl *)ctx->userdata.ptr)->accessibility_native;
 }
+bool nk_sdl_accessibility_document(struct nk_context *ctx,uint64_t version,const char *name,const char *text,struct nk_rect viewport) {
+ if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
+ float bounds[]={viewport.x,viewport.y,viewport.w,viewport.h};SDL_LockMutex(sdl->accessibility_mutex);
+ bool ok=ps_a11y_document_begin(sdl->accessibility,version,name,text,bounds);SDL_UnlockMutex(sdl->accessibility_mutex);return ok;
+}
+void nk_sdl_accessibility_text_box(struct nk_context *ctx,size_t begin,size_t end,struct nk_rect bounds) {
+ if(!ctx || !ctx->userdata.ptr)return;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return;
+ float box[]={bounds.x,bounds.y,bounds.w,bounds.h};SDL_LockMutex(sdl->accessibility_mutex);
+ ps_a11y_document_box(sdl->accessibility,begin,end,box);SDL_UnlockMutex(sdl->accessibility_mutex);
+}
+bool nk_sdl_accessibility_document_scroll(struct nk_context *ctx,uint64_t version,size_t *byte,bool *top) {
+ if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
+ SDL_LockMutex(sdl->accessibility_mutex);bool ok=ps_a11y_document_take_scroll(sdl->accessibility,version,byte);
+ if(ok && top)*top=sdl->accessibility->document_scroll_top;
+ SDL_UnlockMutex(sdl->accessibility_mutex);return ok;
+}
+bool nk_sdl_accessibility_document_visible(struct nk_context *ctx,uint64_t version,size_t byte) {
+ if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
+ SDL_LockMutex(sdl->accessibility_mutex);const ps_a11y_document *d=sdl->accessibility->document;
+ bool visible=false;if(d && d->active && d->version==version)
+  for(size_t i=0;i<d->count;i++)if(d->boxes[i].begin<=byte && d->boxes[i].end>byte){visible=true;break;}
+ SDL_UnlockMutex(sdl->accessibility_mutex);return visible;
+}
 bool nk_sdl_accessibility_press(struct nk_context *ctx,const char *label) {
     if(!ctx || !ctx->userdata.ptr)return false;
     struct nk_sdl *sdl=ctx->userdata.ptr;
@@ -268,6 +291,7 @@ void nk_sdl_shutdown(struct nk_context *ctx) {
         return;
     struct nk_sdl *sdl = ctx->userdata.ptr;
     ps_a11y_native_destroy(sdl->accessibility_native);
+    ps_a11y_destroy(sdl->accessibility);
     free(sdl->accessibility);
     ps_graphics_delete_texture(sdl->graphics, sdl->font_texture);
     if (sdl->atlas.temporary.alloc)

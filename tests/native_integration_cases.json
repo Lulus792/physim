@@ -9223,6 +9223,44 @@
       ]
     },
     {
+      "name": "accessibility_document_windows",
+      "app": true,
+      "display": true,
+      "platforms": [
+        "win32"
+      ],
+      "targets": [
+        "python",
+        "physim",
+        "accessibility-windows-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_accessibility_document_app.py",
+            "--app",
+            "{physim}",
+            "--probe",
+            "{accessibility-windows-probe}",
+            "--root",
+            "{root}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 90,
+          "files": [
+            "app.stdout",
+            "app.stderr",
+            "probe.stdout",
+            "probe.stderr",
+            "uia-document.txt",
+            "results.json"
+          ]
+        }
+      ]
+    },
+    {
       "name": "accessibility_checkbox_windows",
       "app": true,
       "display": true,

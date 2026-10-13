@@ -3,12 +3,68 @@
 #include <math.h>
 #include <float.h>
 #include <string.h>
+#include <stdlib.h>
 static uint64_t text_hash(uint64_t hash,const char *text) {
  while(*text) {hash^=(unsigned char)*text++;hash*=UINT64_C(1099511628211);}
  return hash;
 }
 void ps_a11y_init(ps_a11y_model *m) {memset(m,0,sizeof *m);m->next_id=1;m->keyboard_focus=true;}
-void ps_a11y_begin(ps_a11y_model *m) {m->draft_count=0;m->dropped=0;m->selection_parent=0;m->selection_id=0;m->building=true;}
+void ps_a11y_destroy(ps_a11y_model *m) {
+ if(!m)return;
+ if(m->document){free(m->document->text);free(m->document);}
+ if(m->document_draft){free(m->document_draft->text);free(m->document_draft);}
+ m->document=m->document_draft=NULL;m->document_scroll_version=0;
+}
+void ps_a11y_begin(ps_a11y_model *m) {
+ m->draft_count=0;m->dropped=0;m->selection_parent=0;m->selection_id=0;m->building=true;
+ if(m->document_draft){m->document_draft->active=false;m->document_draft->count=0;m->document_draft->dropped=0;}
+}
+static bool text_boundary(const char *text,size_t length,size_t at) {
+ return at<=length && (at==length || ((unsigned char)text[at]&0xc0)!=0x80);
+}
+bool ps_a11y_document_begin(ps_a11y_model *m,uint64_t version,const char *name,const char *text,const float viewport[4]) {
+ if(!m || !m->building || !version || !name || !*name || !text || !viewport ||
+    !ps_text_valid(name,256,false) || !ps_text_valid(text,PS_A11Y_DOCUMENT_BYTES+1,true))return false;
+ for(unsigned i=0;i<4;i++)if(!isfinite(viewport[i]))return false;
+ if(viewport[2]<=0 || viewport[3]<=0)return false;
+ /* A version identifies content, independently of scrolling or glyph geometry. */
+ if(m->document && m->document->version==version &&
+    (strcmp(m->document->name,name) || strcmp(m->document->text,text)))return false;
+ ps_a11y_document *draft=m->document_draft;
+ if(draft && draft->version==version &&
+    (strcmp(draft->name,name) || strcmp(draft->text,text)))return false;
+ char *copy=NULL;bool new_text=!draft || draft->version!=version;
+ if(new_text){size_t length=strlen(text);copy=malloc(length+1);if(!copy)return false;memcpy(copy,text,length+1);}
+ if(!draft){draft=calloc(1,sizeof *draft);if(!draft){free(copy);return false;}m->document_draft=draft;}
+ if(new_text){free(draft->text);draft->text=copy;draft->length=strlen(text);draft->version=version;strcpy(draft->name,name);}
+ memcpy(draft->viewport,viewport,sizeof draft->viewport);draft->count=0;draft->dropped=0;draft->active=true;return true;
+}
+bool ps_a11y_document_box(ps_a11y_model *m,size_t begin,size_t end,const float bounds[4]) {
+ ps_a11y_document *d=m && m->building?m->document_draft:NULL;
+ if(!d || !d->active || !bounds || begin>=end || !text_boundary(d->text,d->length,begin) ||
+    !text_boundary(d->text,d->length,end))return false;
+ for(unsigned i=0;i<4;i++)if(!isfinite(bounds[i]))return false;
+ if(bounds[2]<=0 || bounds[3]<=0)return false;
+ float left=fmaxf(bounds[0],d->viewport[0]),top=fmaxf(bounds[1],d->viewport[1]);
+ float right=fminf(bounds[0]+bounds[2],d->viewport[0]+d->viewport[2]);
+ float bottom=fminf(bounds[1]+bounds[3],d->viewport[1]+d->viewport[3]);
+ if(right<=left || bottom<=top)return false;
+ if(d->count==PS_A11Y_TEXT_BOXES){d->dropped++;return false;}
+ d->boxes[d->count++]=(ps_a11y_text_box){begin,end,{left,top,right-left,bottom-top}};return true;
+}
+bool ps_a11y_document_scroll(ps_a11y_model *m,uint64_t version,size_t byte) {
+ const ps_a11y_document *d=m?m->document:NULL;
+ if(!d || !d->active || !version || d->version!=version || m->document_scroll_version ||
+    !text_boundary(d->text,d->length,byte))return false;
+ m->document_scroll_version=version;m->document_scroll_byte=byte;m->document_scroll_top=true;return true;
+}
+bool ps_a11y_document_scroll_align(ps_a11y_model *m,uint64_t version,size_t byte,bool top) {
+ if(!ps_a11y_document_scroll(m,version,byte))return false;m->document_scroll_top=top;return true;
+}
+bool ps_a11y_document_take_scroll(ps_a11y_model *m,uint64_t version,size_t *byte) {
+ if(!m || !byte || !version || version!=m->document_scroll_version)return false;
+ *byte=m->document_scroll_byte;m->document_scroll_version=0;return true;
+}
 const ps_a11y_node *ps_a11y_find(const ps_a11y_model *m,uint64_t id) {
  if(!id)return NULL;
  for(size_t i=0;i<m->count;i++)if(m->nodes[i].id==id)return &m->nodes[i];
@@ -176,6 +232,12 @@ bool ps_a11y_focus_move(ps_a11y_model *m,int direction,bool radio_only) {
 bool ps_a11y_publish(ps_a11y_model *m) {
  bool changed=m->count!=m->draft_count;
  if(!m->building)return false;
+ ps_a11y_document *old=m->document,*next=m->document_draft;
+ bool old_active=old && old->active,next_active=next && next->active;
+ if(old_active!=next_active || (next_active && (old->version!=next->version || old->count!=next->count ||
+    memcmp(old->viewport,next->viewport,sizeof next->viewport) || memcmp(old->boxes,next->boxes,next->count*sizeof *next->boxes))))changed=true;
+ m->document=next;m->document_draft=old;
+ if(!next_active || next->version!=m->document_scroll_version)m->document_scroll_version=0;
  bool found=false;
  for(size_t i=0;i<m->draft_count;i++)if(m->draft[i].id==m->focused_id && m->draft[i].focusable)found=true;
  if(!found)m->focused_id=0;

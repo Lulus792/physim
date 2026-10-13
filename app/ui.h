@@ -47,6 +47,10 @@ bool nk_sdl_accessibility_has_focus(struct nk_context *ctx);
 void ps_ui_accessibility_route(struct nk_context *ctx,bool allowed);
 bool nk_sdl_accessibility_press(struct nk_context *ctx,const char *label);
 bool nk_sdl_accessibility_available(struct nk_context *ctx);
+bool nk_sdl_accessibility_document(struct nk_context *ctx,uint64_t version,const char *name,const char *text,struct nk_rect viewport);
+void nk_sdl_accessibility_text_box(struct nk_context *ctx,size_t begin,size_t end,struct nk_rect bounds);
+bool nk_sdl_accessibility_document_scroll(struct nk_context *ctx,uint64_t version,size_t *byte,bool *top);
+bool nk_sdl_accessibility_document_visible(struct nk_context *ctx,uint64_t version,size_t byte);
 void nk_sdl_set_ui_size(struct nk_context *ctx, unsigned size);
 enum { PS_UI_LAYOUT_MAGIC = 0x50534C59u };
 typedef unsigned (*ps_ui_a11y_hook)(void *user,const char *window,const char *label,

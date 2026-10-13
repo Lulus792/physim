@@ -242,6 +242,7 @@ typedef struct {
     const struct nk_user_font *doc_bold_fonts[11];
     int doc_inline_clicked;
     unsigned doc_zoom_size;
+    uint64_t doc_reading_version;
     bool doc_visible;
     int doc_topic, doc_match, doc_jump_block,doc_anchor_heading;
     nk_uint doc_scroll_x, doc_scroll_y;

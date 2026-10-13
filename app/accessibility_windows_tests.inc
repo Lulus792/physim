@@ -62,13 +62,49 @@ bool ps_a11y_native_test(SDL_Window *window) {
  uia_element *slider=uia_named(b,NULL,"Winkel θ");UIA_CHECK(slider && SUCCEEDED(IRangeValueProvider_SetValue(&slider->range,.75)));
  ps_a11y_begin(m);UIA_CHECK(ps_a11y_record_range(m,"main","Winkel θ",bounds,true,-1,1,.25,&scalar));ps_a11y_publish(m);ps_a11y_native_publish(b,true);
  UIA_CHECK(scalar==.75);if(slider)UIA_CHECK(IRangeValueProvider_SetValue(&slider->range,2)==E_INVALIDARG);
+ /* Read the whole document through COM ranges, independently of control labels. */
+ const char *reading="Intro θ\nCode\n  x = 1; 🌍\nEnd";
+ ps_a11y_begin(m);bounds[0]=10;bounds[1]=20;
+ UIA_CHECK(ps_a11y_document_begin(m,42,"Dokument",reading,bounds));
+ UIA_CHECK(ps_a11y_document_box(m,6,8,bounds));
+ ps_a11y_publish(m);ps_a11y_native_publish(b,true);
+ ITextRangeProvider *whole=NULL,*clone=NULL,*found=NULL;BSTR read=NULL;
+ UIA_CHECK(SUCCEEDED(ITextProvider_get_DocumentRange(&b->root->text,&whole)) && whole);
+ if(whole)UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetText(whole,-1,&read)) && read && !wcscmp(read,L"Intro θ\nCode\n  x = 1; 🌍\nEnd"));
+ SysFreeString(read);read=NULL;
+ if(whole)UIA_CHECK(SUCCEEDED(ITextRangeProvider_Clone(whole,&clone)) && clone);
+ BOOL equal=FALSE;if(clone)UIA_CHECK(SUCCEEDED(ITextRangeProvider_Compare(whole,clone,&equal)) && equal);
+ if(clone){UIA_CHECK(SUCCEEDED(ITextRangeProvider_ExpandToEnclosingUnit(clone,TextUnit_Format)));
+  UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetText(clone,-1,&read)) && read && !wcscmp(read,L"Intro"));SysFreeString(read);read=NULL;}
+ BSTR query=SysAllocString(L"Θ");
+ if(whole)UIA_CHECK(SUCCEEDED(ITextRangeProvider_FindText(whole,query,FALSE,TRUE,&found)) && found);
+ SysFreeString(query);
+ if(found) {
+  UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetText(found,-1,&read)) && read && !wcscmp(read,L"θ"));SysFreeString(read);read=NULL;
+  SAFEARRAY *rectangles=NULL;UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetBoundingRectangles(found,&rectangles)) && rectangles);
+  if(rectangles){LONG high=-1;SafeArrayGetUBound(rectangles,1,&high);UIA_CHECK(high==3);SafeArrayDestroy(rectangles);}
+  UIA_CHECK(SUCCEEDED(ITextRangeProvider_ScrollIntoView(found,TRUE)));
+  size_t target=99;UIA_CHECK(ps_a11y_document_take_scroll(m,42,&target) && target==6);
+  UIA_CHECK(SUCCEEDED(ITextRangeProvider_ScrollIntoView(found,FALSE)) && !m->document_scroll_top);
+  UIA_CHECK(ps_a11y_document_take_scroll(m,42,&target) && target==8);
+  ITextRangeProvider_Release(found);found=NULL;
+ }
+ query=SysAllocString(L"🌍");
+ if(whole)UIA_CHECK(SUCCEEDED(ITextRangeProvider_FindText(whole,query,FALSE,FALSE,&found)) && found);SysFreeString(query);
+ if(found){int moved=0;UIA_CHECK(SUCCEEDED(ITextRangeProvider_MoveEndpointByUnit(found,TextPatternRangeEndpoint_Start,TextUnit_Character,1,&moved)) && moved==1);
+  UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetText(found,-1,&read)) && read && !SysStringLen(read));SysFreeString(read);read=NULL;ITextRangeProvider_Release(found);found=NULL;}
+ SAFEARRAY *visible=NULL;UIA_CHECK(SUCCEEDED(ITextProvider_GetVisibleRanges(&b->root->text,&visible)) && visible);if(visible)SafeArrayDestroy(visible);
+ ps_a11y_begin(m);UIA_CHECK(ps_a11y_document_begin(m,43,"Anders","New content",bounds));ps_a11y_publish(m);ps_a11y_native_publish(b,true);
+ if(whole)UIA_CHECK(ITextRangeProvider_GetText(whole,-1,&read)==UIA_E_ELEMENTNOTAVAILABLE && !read);
  ps_a11y_native_destroy(b);
+ if(clone){UIA_CHECK(ITextRangeProvider_GetText(clone,-1,&read)==UIA_E_ELEMENTNOTAVAILABLE && !read);ITextRangeProvider_Release(clone);}
+ if(whole)ITextRangeProvider_Release(whole);
  if(button){UIA_CHECK(IInvokeProvider_Invoke(&button->invoke)==UIA_E_ELEMENTNOTAVAILABLE);uia_release(button);}
  if(checkbox){UIA_CHECK(IToggleProvider_Toggle(&checkbox->toggle)==UIA_E_ELEMENTNOTAVAILABLE);uia_release(checkbox);}
  if(radio){UIA_CHECK(ISelectionItemProvider_Select(&radio->item)==UIA_E_ELEMENTNOTAVAILABLE);uia_release(radio);}
  if(group){selection=NULL;UIA_CHECK(ISelectionProvider_GetSelection(&group->selection,&selection)==UIA_E_ELEMENTNOTAVAILABLE);uia_release(group);}
  if(slider){UIA_CHECK(IRangeValueProvider_SetValue(&slider->range,.5)==UIA_E_ELEMENTNOTAVAILABLE);uia_release(slider);}
- free(m);
+ ps_a11y_destroy(m);free(m);
 #undef UIA_CHECK
  return ok;
 }

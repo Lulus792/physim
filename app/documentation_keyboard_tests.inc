@@ -392,6 +392,7 @@ static bool documentation_inline_fixture(app *a,int topic) {
     ps_document *d=NULL;
     if(ps_document_parse(source,strlen(source),false,&d)!=PS_OK)return false;
     free(a->documentation);a->documentation=d;a->doc_topic=topic;
+    ++a->doc_reading_version;
     a->doc_query[0]=a->doc_last_query[0]=a->doc_error[0]=0;
     a->doc_jump_block=-1;a->doc_scroll_x=a->doc_scroll_y=0;
     a->doc_scroll_adjustment=0;a->doc_history_restore=0;
@@ -469,6 +470,25 @@ static void documentation_inline_test_frame(app *a,int *stage,int *code,const ch
 #undef INLINE_KEY
 }
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strcmp(mode,"docs-keyboard-reading-remote")) {
+        switch(*stage) {
+        case 0:test_window_key_mod(a->window,SDLK_F1,0);++*stage;break;
+        case 1: {
+            int topic=-1;for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(!strcmp(documentation_topics[i].path,"docs/project-audit.json"))topic=i;
+            if(topic<0){*code=1;a->quitting=true;return;}
+            open_documentation(a,topic);SDL_SetWindowSize(a->doc_window,760,540);++*stage;break;
+        }
+        case 2:puts("READING READY");fflush(stdout);++*stage;break;
+        case 3:
+            if(a->doc_scroll_y<10000 || a->doc_scroll_pending)return;
+            {size_t last=a->documentation->reading_length;
+             while(last && strchr(" \t\r\n",a->documentation->reading[last-1]))--last;
+             if(!last || !nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,last-1))return;}
+            *capture="docs-reading-end.bmp";puts("READING END");fflush(stdout);++*stage;break;
+        case 4:a->quitting=true;puts("DOCUMENTATION READING SELF-TEST: PASSED");break;
+        }
+        return;
+    }
     if(!strcmp(mode,"docs-keyboard-inline")){documentation_inline_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-zoom")){documentation_zoom_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-history")){documentation_history_test_frame(a,stage,code,capture);return;}

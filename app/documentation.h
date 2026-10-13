@@ -5,6 +5,7 @@
 #define PS_DOC_MAX_BYTES (256u * 1024u)
 #define PS_DOC_MAX_CODE_BYTES (2u * PS_DOC_MAX_BYTES - 2u)
 #define PS_DOC_MAX_SPANS 16384u
+#define PS_DOC_MAX_READING_BYTES (PS_DOC_MAX_CODE_BYTES+2u*PS_DOC_MAX_BLOCKS)
 #define PS_DOC_HISTORY_LIMIT 64u
 typedef struct {
     int topic, track, match;
@@ -36,6 +37,7 @@ typedef struct {
     unsigned level;
     size_t text, length, target;
     size_t first_span, span_count, inline_parent;
+    size_t reading_begin, reading_length;
     float height;
     float hit[4];
 } ps_doc_block;
@@ -50,6 +52,8 @@ typedef struct {
     ps_doc_block blocks[PS_DOC_MAX_BLOCKS];
     ps_doc_span spans[PS_DOC_MAX_SPANS];
     char text[PS_DOC_MAX_BYTES * 2];
+    size_t reading_length;
+    char reading[PS_DOC_MAX_READING_BYTES+1];
 } ps_document;
 /* Small, inert Markdown reader for the bundled documentation. Caller validates
  * UTF-8. Images retain their alt text and inert target for the native renderer.

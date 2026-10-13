@@ -95,6 +95,7 @@ static bool append(ps_document *d, ps_doc_kind kind, unsigned level, const char 
     b->text = d->used;
     b->length = n;
     b->inline_parent=SIZE_MAX;
+    b->reading_begin=SIZE_MAX;
     memcpy(d->text + d->used, s, n);
     d->used += n;
     d->text[d->used++] = 0;
@@ -289,6 +290,17 @@ ps_result ps_document_parse(const char *source, size_t size, bool code, ps_docum
                                : paragraph(d, pending, length, PS_DOC_TEXT, 0)))
             goto limit;
     }
+    /* One continuous reading order, without repeated link-action labels or
+     * image captions. Preserve code bytes; block separators are outside code. */
+    for(size_t i=0;i<d->count;i++) {
+        ps_doc_block *b=&d->blocks[i];
+        if(b->inline_parent!=SIZE_MAX || b->kind==PS_DOC_IMAGE || b->kind==PS_DOC_RULE)continue;
+        if(b->length+2>sizeof d->reading-1-d->reading_length)goto limit;
+        b->reading_begin=d->reading_length;b->reading_length=b->length;
+        memcpy(d->reading+d->reading_length,d->text+b->text,b->length);d->reading_length+=b->length;
+        d->reading[d->reading_length++]='\n';d->reading[d->reading_length++]='\n';
+    }
+    d->reading[d->reading_length]=0;
     free(pending);
     *out = d;
     return PS_OK;

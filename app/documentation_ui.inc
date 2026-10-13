@@ -291,6 +291,7 @@ static void open_documentation(app *a, int topic) {
     if(!a->doc_history_navigation)documentation_history_save(a);
     free(a->documentation);
     a->documentation = document;
+    ++a->doc_reading_version;
     a->doc_topic = topic;
     if(topic==DOCUMENTATION_C_GUIDE_TOPIC)a->doc_track=1;
     else if(topic==DOCUMENTATION_PHYSIM_GUIDE_TOPIC)a->doc_track=2;
@@ -421,6 +422,7 @@ static size_t documentation_rich_line(const app *a,const ps_document *d,const ps
     const char *text=d->text+b->text;size_t begin=at,space=SIZE_MAX;
     float used=0,h=documentation_block_font(a,b)->height+6,space_height=h;
     while(at<b->length) {
+        if(text[at]=='\r'){*length=at-begin;*height=h;return at-begin+(at+1<b->length && text[at+1]=='\n'?2:1);}
         if(text[at]=='\n'){*length=at-begin;*height=h;return at-begin+1;}
         const ps_doc_span *span=documentation_span_at(d,b,b->text+at);
         const struct nk_user_font *font=documentation_span_font(a,b,span);
@@ -468,6 +470,16 @@ static void documentation_rich_draw(app *a,ps_document *d,const ps_doc_block *b,
                     a->doc_inline_clicked=(int)span->link;
             }
             if(visible) {
+                if(b->reading_begin!=SIZE_MAX) {
+                    float glyph_x=x;
+                    for(size_t glyph=pos;glyph<next;) {
+                        nk_rune rune;int bytes=nk_utf_decode(text+glyph,&rune,(int)(next-glyph));if(bytes<=0)bytes=1;
+                        float glyph_width=documentation_glyph_width(font,text+glyph,bytes);
+                        nk_sdl_accessibility_text_box(ui,b->reading_begin+glyph,b->reading_begin+glyph+(size_t)bytes,
+                            nk_rect(glyph_x,y,glyph_width,font->height+6));
+                        glyph_x+=glyph_width;glyph+=(size_t)bytes;
+                    }
+                }
                 if(!searched || (match && match<text+pos)){match=ps_document_find(text+pos,a->doc_query);searched=true;}
                 bool found=match && match<text+next;
                 if(span && (span->style&PS_DOC_INLINE_CODE))
@@ -529,6 +541,7 @@ static float documentation_table(app *a, const ps_doc_block *block, const char *
     nk_fill_rect(canvas, *bounds, 4, block->level ? UI_COLOR(doc_header) : UI_COLOR(doc_body));
     for (int i = 0; i < count; i++) {
         ps_doc_block cell=*block;cell.text=block->text+(size_t)(cells[i]-text);cell.length=lengths[i];
+        if(cell.reading_begin!=SIZE_MAX)cell.reading_begin+=(size_t)(cells[i]-text);
         documentation_rich_draw(a,a->documentation,&cell,nk_rect(bounds->x+i*cell_width+10,
             bounds->y+8,fmaxf(1,cell_width-20),bounds->h-16));
     }
@@ -921,6 +934,8 @@ static void documentation_sidebar(app *a) {
 static void documentation_view(app *a, float height) {
     struct nk_context *ui = a->doc_ui;
     a->doc_inline_clicked=-1;
+    size_t reading_byte=SIZE_MAX;
+    bool reading_top=true;
     float section_scroll=-1;
     ps_document *section_document=NULL;
     a->doc_scroll_pending=false;
@@ -1000,6 +1015,10 @@ static void documentation_view(app *a, float height) {
         a->doc_move_match = true;
     }
     ps_document *d = a->documentation;
+    if(d && nk_sdl_accessibility_document_scroll(ui,a->doc_reading_version,&reading_byte,&reading_top)) {
+        for(size_t i=0;i<d->count;i++)if(d->blocks[i].reading_begin!=SIZE_MAX && d->blocks[i].reading_begin<=reading_byte)
+            a->doc_jump_block=(int)i;
+    }
     int matches[PS_DOC_MAX_BLOCKS], match_count = 0;
     if (d && a->doc_query[0])
         for (size_t i = 0; i < d->count; i++)
@@ -1033,6 +1052,7 @@ static void documentation_view(app *a, float height) {
     if (nk_group_scrolled_offset_begin(ui, &a->doc_scroll_x, &a->doc_scroll_y, "document-body",
                                        0)) {
         if (d) {
+            nk_sdl_accessibility_document(ui,a->doc_reading_version,documentation_topics[a->doc_topic].title,d->reading,nk_window_get_content_region(ui));
             for(size_t i=0;i<d->count;i++)d->blocks[i].hit[2]=0;
             float width = fmaxf(40, nk_window_get_content_region(ui).w - 8);
             if (d->layout_width != width) {
@@ -1099,12 +1119,17 @@ static void documentation_view(app *a, float height) {
                 if((int)i==a->doc_anchor_heading)a->doc_anchor_bounds=block_bounds;
                 if((int)i==target) {
                     float prefix=0;
-                    const char *match=ps_document_find(text,a->doc_query);
-                    if(!explicit_jump && b->kind!=PS_DOC_TABLE_ROW && match && match>text) {
+                    size_t reading_offset=reading_byte!=SIZE_MAX && b->reading_begin!=SIZE_MAX && reading_byte>=b->reading_begin?
+                        reading_byte-b->reading_begin:0;
+                    if(reading_offset>b->length)reading_offset=b->length;
+                    const char *match=reading_byte!=SIZE_MAX?text+reading_offset:ps_document_find(text,a->doc_query);
+                    if((!explicit_jump || reading_byte!=SIZE_MAX) && b->kind!=PS_DOC_TABLE_ROW && match && match>text) {
                         ps_doc_block preceding=*b;preceding.length=(size_t)(match-text);
                         prefix=fmaxf(0,documentation_rich_height(a,d,&preceding,width-24)-(font->height+6));
                     }
-                    section_scroll=explicit_jump && target==0?0:fmaxf(0,block_bounds.y+(float)submitted_scroll-body_origin+prefix);
+                    section_scroll=explicit_jump && target==0 && reading_byte==SIZE_MAX?0:fmaxf(0,block_bounds.y+(float)submitted_scroll-body_origin+prefix);
+                    if(reading_byte!=SIZE_MAX && !reading_top)
+                        section_scroll=fmaxf(0,section_scroll-fmaxf(0,nk_window_get_content_region(ui).h-font->height-22));
                 }
                 if (b->kind == PS_DOC_LINK) {
                     bool external = !strncmp(d->text + b->target, "http", 4);
@@ -1140,7 +1165,7 @@ static void documentation_view(app *a, float height) {
                                 float bottom=fminf(rect.y+rect.h,canvas->clip.y+canvas->clip.h);
                                 if(right>x && bottom>y)nk_fill_rect(canvas,nk_rect(x,y,right-x,bottom-y),7,UI_COLOR(edit));
                             }
-                            documentation_rich_draw(a,d,b,nk_rect(rect.x+12,rect.y+8,rect.w-24,rect.h-16));
+                            documentation_rich_draw(a,d,b,nk_rect(rect.x+12,rect.y+8,width-24,rect.h-16));
                         }
                     }
                 }

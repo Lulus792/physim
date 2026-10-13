@@ -14,16 +14,19 @@ struct ps_a11y_native {
  LONG references;bool com_initialized;double scale_x,scale_y;
  uia_element *root,*elements[PS_A11Y_MAX_NODES];
  uint64_t focused_id;char title[256];
+ uint64_t reading_version;BSTR reading_text;size_t reading_length;size_t *reading_bytes;
+ uint64_t announced_reading_version;
 };
 struct uia_element {
  IRawElementProviderSimple simple;IRawElementProviderFragment fragment;
  IRawElementProviderFragmentRoot root;IInvokeProvider invoke;IToggleProvider toggle;
  ISelectionItemProvider item;ISelectionProvider selection;IRangeValueProvider range;
+ ITextProvider text;
  LONG references;ps_a11y_native *bridge;uint64_t id;ps_a11y_role role;
 };
 static uia_element *uia_new(ps_a11y_native *b,uint64_t id,ps_a11y_role role);
 static void uia_bridge_release(ps_a11y_native *b) {
- if(!InterlockedDecrement(&b->references)){SDL_DestroyMutex(b->mutex);free(b);}
+ if(!InterlockedDecrement(&b->references)){SysFreeString(b->reading_text);free(b->reading_bytes);SDL_DestroyMutex(b->mutex);free(b);}
 }
 static ULONG uia_addref(uia_element *e){return (ULONG)InterlockedIncrement(&e->references);}
 static ULONG uia_release(uia_element *e) {
@@ -35,6 +38,7 @@ static HRESULT uia_query(uia_element *e,REFIID iid,void **out) {
  if(IsEqualIID(iid,&IID_IUnknown) || IsEqualIID(iid,&IID_IRawElementProviderSimple))*out=&e->simple;
  else if(IsEqualIID(iid,&IID_IRawElementProviderFragment))*out=&e->fragment;
  else if(!e->id && IsEqualIID(iid,&IID_IRawElementProviderFragmentRoot))*out=&e->root;
+ else if(!e->id && IsEqualIID(iid,&IID_ITextProvider))*out=&e->text;
  else if(e->id && e->role==PS_A11Y_BUTTON && IsEqualIID(iid,&IID_IInvokeProvider))*out=&e->invoke;
  else if(e->id && e->role==PS_A11Y_CHECKBOX && IsEqualIID(iid,&IID_IToggleProvider))*out=&e->toggle;
  else if(e->id && e->role==PS_A11Y_RADIO && IsEqualIID(iid,&IID_ISelectionItemProvider))*out=&e->item;
@@ -55,6 +59,7 @@ UIA_UNKNOWN(IToggleProvider,toggle,uia_toggle)
 UIA_UNKNOWN(ISelectionItemProvider,item,uia_item)
 UIA_UNKNOWN(ISelectionProvider,selection,uia_selection)
 UIA_UNKNOWN(IRangeValueProvider,range,uia_range)
+UIA_UNKNOWN(ITextProvider,text,uia_text)
 /* Caller holds the bridge mutex. Returned provider has its own COM reference. */
 static uia_element *uia_for_locked(ps_a11y_native *b,uint64_t id) {
  if(!b->model)return NULL;
@@ -92,6 +97,11 @@ static HRESULT STDMETHODCALLTYPE uia_options(IRawElementProviderSimple *p,enum P
 static HRESULT STDMETHODCALLTYPE uia_pattern(IRawElementProviderSimple *p,PATTERNID pattern,IUnknown **out) {
  if(!out)return E_POINTER;*out=NULL;uia_element *e=UIA_OWNER(IRawElementProviderSimple,simple,p);
  ps_a11y_node node;if(e->id && !uia_node(e,&node))return UIA_E_ELEMENTNOTAVAILABLE;
+ if(!e->id && pattern==UIA_TextPatternId) {
+  ps_a11y_native *b=e->bridge;SDL_LockMutex(b->mutex);
+  bool reading=b->model && b->model->document && b->model->document->active;
+  SDL_UnlockMutex(b->mutex);return reading?uia_query(e,&IID_ITextProvider,(void**)out):S_OK;
+ }
  REFIID iid=pattern==UIA_InvokePatternId?&IID_IInvokeProvider:pattern==UIA_TogglePatternId?&IID_IToggleProvider:
   pattern==UIA_SelectionItemPatternId?&IID_ISelectionItemProvider:pattern==UIA_SelectionPatternId?&IID_ISelectionProvider:
   pattern==UIA_RangeValuePatternId?&IID_IRangeValueProvider:NULL;
@@ -102,12 +112,13 @@ static HRESULT STDMETHODCALLTYPE uia_property(IRawElementProviderSimple *p,PROPE
  ps_a11y_node node={0};SDL_LockMutex(b->mutex);
  const ps_a11y_node *current=b->model && e->id?ps_a11y_find(b->model,e->id):NULL;
  bool live=b->model && (!e->id || current);HWND hwnd=b->hwnd;if(current)node=*current;
+ bool reading=b->model && b->model->document && b->model->document->active;
  SDL_UnlockMutex(b->mutex);if(!live)return UIA_E_ELEMENTNOTAVAILABLE;
  /* SDK property IDs are extern const values, not C integer constants. */
  if(property==UIA_NamePropertyId)return uia_string(e->id?node.label:b->title,out);
  if(property==UIA_FrameworkIdPropertyId)return uia_string("Physim",out);
  if(property==UIA_ControlTypePropertyId) {
-  out->vt=VT_I4;out->lVal=!e->id?UIA_PaneControlTypeId:node.role==PS_A11Y_BUTTON?UIA_ButtonControlTypeId:
+  out->vt=VT_I4;out->lVal=!e->id?(reading?UIA_DocumentControlTypeId:UIA_PaneControlTypeId):node.role==PS_A11Y_BUTTON?UIA_ButtonControlTypeId:
    node.role==PS_A11Y_CHECKBOX?UIA_CheckBoxControlTypeId:node.role==PS_A11Y_RADIO?UIA_RadioButtonControlTypeId:
    node.role==PS_A11Y_RADIO_GROUP?UIA_GroupControlTypeId:node.role==PS_A11Y_SLIDER?UIA_SliderControlTypeId:UIA_TextControlTypeId;
  } else if(property==UIA_IsEnabledPropertyId){out->vt=VT_BOOL;out->boolVal=!e->id || node.enabled?VARIANT_TRUE:VARIANT_FALSE;}
@@ -243,11 +254,13 @@ static const IToggleProviderVtbl uia_toggle_vtable={uia_toggle_query,uia_toggle_
 static const ISelectionItemProviderVtbl uia_item_vtable={uia_item_query,uia_item_addref,uia_item_release,uia_select,uia_select,uia_remove_selection,uia_selected,uia_container};
 static const ISelectionProviderVtbl uia_selection_vtable={uia_selection_query,uia_selection_addref,uia_selection_release,uia_selection_array,uia_multiple,uia_required};
 static const IRangeValueProviderVtbl uia_range_vtable={uia_range_query,uia_range_addref,uia_range_release,uia_set_value,uia_value,uia_readonly,uia_maximum,uia_minimum,uia_change,uia_change};
+#include "accessibility_windows_text.inc"
 static uia_element *uia_new(ps_a11y_native *b,uint64_t id,ps_a11y_role role) {
  uia_element *e=calloc(1,sizeof *e);if(!e)return NULL;
  e->simple.lpVtbl=&uia_simple_vtable;e->fragment.lpVtbl=&uia_fragment_vtable;e->root.lpVtbl=&uia_root_vtable;
  e->invoke.lpVtbl=&uia_invoke_vtable;e->toggle.lpVtbl=&uia_toggle_vtable;e->item.lpVtbl=&uia_item_vtable;
  e->selection.lpVtbl=&uia_selection_vtable;e->range.lpVtbl=&uia_range_vtable;
+ e->text.lpVtbl=&uia_text_vtable;
  e->references=1;e->bridge=b;e->id=id;e->role=role;InterlockedIncrement(&b->references);return e;
 }
 static LRESULT CALLBACK uia_window_proc(HWND hwnd,UINT message,WPARAM wparam,LPARAM lparam,UINT_PTR subclass,DWORD_PTR data) {
@@ -276,12 +289,15 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
  SDL_LockMutex(b->mutex);
  if(w>0 && h>0){b->scale_x=(double)(client.right-client.left)/w;b->scale_y=(double)(client.bottom-client.top)/h;}
  uint64_t focused=b->model?b->model->focused_id:0,previous=b->focused_id;b->focused_id=focused;
+ uint64_t reading=b->model && b->model->document && b->model->document->active?b->model->document->version:0;
+ bool reading_changed=reading!=b->announced_reading_version;b->announced_reading_version=reading;
  for(size_t i=0;i<PS_A11Y_MAX_NODES;i++)if(b->elements[i] && (!b->model || !ps_a11y_find(b->model,b->elements[i]->id))) {
   retired[count++]=b->elements[i];b->elements[i]=NULL;
  }
  uia_element *focus=focused && focused!=previous?uia_for_locked(b,focused):NULL;SDL_UnlockMutex(b->mutex);
  for(size_t i=0;i<count;i++){UiaDisconnectProvider(&retired[i]->simple);uia_release(retired[i]);}
  if(changed)UiaRaiseStructureChangedEvent(&b->root->simple,StructureChangeType_ChildrenInvalidated,NULL,0);
+ if(reading && reading_changed)UiaRaiseAutomationEvent(&b->root->simple,UIA_Text_TextChangedEventId);
  if(focus){UiaRaiseAutomationEvent(&focus->simple,UIA_AutomationFocusChangedEventId);uia_release(focus);}
 }
 void ps_a11y_native_destroy(ps_a11y_native *b) {

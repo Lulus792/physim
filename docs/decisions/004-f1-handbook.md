@@ -132,7 +132,42 @@ wurde im Laufzeitbild geprüft. Die native ID beschreibt die aktuelle
 Laufzeitidentität eines Elements; eine dauerhaft sprachunabhängige Automation-ID
 wird nicht vorgetäuscht.
 
-Offen sind vollständige native Lesesemantik für den Dokumenttext und die
-Suchfelder, praktische Screenreader-Abnahme
+Die F1-Ansicht veröffentlicht jetzt zusätzlich den vollständigen Text in
+Lesereihenfolge und die tatsächlich gezeichneten Zeichenpositionen. Der
+portable Entwurf und der veröffentlichte Stand bleiben getrennt; Seitenwechsel
+verwerfen alte Textbereiche und Scrollanfragen. Code behält seine Originalbytes;
+zusätzliche Absatztrennungen liegen außerhalb der kopierbaren Codeblöcke.
+
+Windows stellt diese Daten über den nativen TextPattern bereit. Ein separater
+UIA-Client liest die echte Quellseite `docs/project-audit.json` einschließlich
+aller **498605 UTF-8-Bytes** des Lesetexts. Der Vergleich mit der Originaldatei
+plus den beiden Absatztrennungen ist bytegenau. Derselbe Client klont und
+vergleicht Textbereiche, prüft sichtbare Geometrie und fordert einen Sprung zum
+Dokumentende an. Unicode-Suche, Surrogatpaare, begrenzte Zeichenbewegung und
+ungültige alte Textbereiche sind zusätzlich am nativen Provider geprüft.
+
+Die Bildabnahme erkannte zunächst einen leeren Zielbereich trotz großer
+Scrollposition. Ursache war eine abweichende Umbruchbreite zwischen Messung
+und Zeichnung. Beide verwenden jetzt dieselbe Breite; die Prüfung verlangt,
+dass das letzte inhaltliche Zeichen tatsächlich in den veröffentlichten
+Glyphenpositionen sichtbar ist. Windows-CRLF wird als eine visuelle Zeilengrenze
+behandelt und bleibt im gelesenen Quelltext erhalten. Die korrigierte Aufnahme
+zeigt den echten Dokumentabschluss (`run-f6yat_2_`).
+
+Die 19 betroffenen GUI-Fälle bestehen in `run-23izk2ps`; nach der visuellen
+Korrektur bestehen Dokumentende, Absatz-/Codeformatierung und Abschnittssprung
+erneut 3/3 (`run-f6yat_2_`). Die abschließenden zwei Provider-/Clientfälle bestehen
+in `run-3hc3s5t2`. Zwei Provider-/App-Lesefälle bestehen mit MSVC AddressSanitizer
+in `build/native/F1-uia-sanitized/test-results/run-89tndz7k`. Die portable
+Dokument-/Modell-/Parsergruppe besteht 5/5 (`run-hcb0ypz3`); auch der Testkatalog
+und dessen erwartete Fehlerfälle bestehen. Diese Nachweise bestätigen den
+beschriebenen Leseweg, keine vollständige Screenreader-Abnahme.
+Der abschließende Stand besteht zusätzlich 4/4 in `run-oxz08pfb` (Provider,
+externer Leser, 22-Pixel-Tastatur und Verlauf) sowie 6/6 Modell-/Parser-/Linkfälle
+in `run-u3ns2d1p`. Obere und untere Scrollausrichtung werden als unterschiedliche
+native Anfragen übertragen; der gezeigte externe Leseweg prüft den Dokumentabschluss.
+
+Offen sind Suchfelder, eingebettete Link-/Tabellensemantik, vollständiges natives
+Lesen auf macOS/Linux, praktische Screenreader-Abnahme
 und die Abnahmematrix für Dichte, Themes sowie Linux und macOS. Diese Liste
 beschreibt Restarbeit und erteilt keine Produktfreigabe.
