@@ -94,6 +94,7 @@ static bool append(ps_document *d, ps_doc_kind kind, unsigned level, const char 
     b->level = level;
     b->text = d->used;
     b->length = n;
+    b->inline_parent=SIZE_MAX;
     memcpy(d->text + d->used, s, n);
     d->used += n;
     d->text[d->used++] = 0;
@@ -104,51 +105,99 @@ static bool append(ps_document *d, ps_doc_kind kind, unsigned level, const char 
     d->text[d->used++] = 0;
     return true;
 }
-/* Inline decoration is reduced to readable text; links remain explicit actions. */
-static bool paragraph(ps_document *d, const char *s, size_t n, ps_doc_kind kind, unsigned level) {
-    char *plain = malloc(n + 1);
-    if (!plain)
-        return false;
-    size_t used = 0;
-    for (size_t i = 0; i < n;) {
-        if (s[i] == '`' || (s[i] == '*' && i + 1 < n && s[i + 1] == '*')) {
-            i += s[i] == '`' ? 1 : 2;
-            continue;
-        }
-        if (s[i] == '[') {
-            const char *close = memchr(s + i + 1, ']', n - i - 1);
-            if (close && close + 1 < s + n && close[1] == '(') {
-                const char *end = memchr(close + 2, ')', (size_t)(s + n - close - 2));
-                if (end) {
-                    if(i && s[i-1]=='!' && used && plain[used-1]=='!')--used;
-                    size_t length = (size_t)(close - (s + i + 1));
-                    memcpy(plain + used, s + i + 1, length);
-                    used += length;
-                    i = (size_t)(end - s) + 1;
-                    continue;
-                }
-            }
-        }
-        plain[used++] = s[i++];
+typedef struct {const char *target;size_t target_length,text,length;bool image;} inline_link;
+typedef struct {
+    ps_document *document;char *plain;size_t used,base,first_span,parent;
+    inline_link *links;size_t link_count,link_capacity;
+} inline_parser;
+static bool inline_emit(inline_parser *p,const char *s,size_t n,unsigned style,size_t link) {
+    if(!n)return true;
+    ps_document *d=p->document;
+    ps_doc_span *span=d->span_count>p->first_span?&d->spans[d->span_count-1]:NULL;
+    if(!span || span->style!=style || span->link!=link || span->text+span->length!=p->base+p->used) {
+        if(d->span_count==PS_DOC_MAX_SPANS)return false;
+        span=&d->spans[d->span_count++];
+        *span=(ps_doc_span){.text=p->base+p->used,.link=link,.style=style};
     }
-    bool ok = append(d, kind, level, plain, used, NULL, 0);
-    free(plain);
-    if (!ok)
-        return false;
-    for (size_t i = 0; i < n; i++)
-        if (s[i] == '[') {
-            const char *close = memchr(s + i + 1, ']', n - i - 1);
-            if (close && close + 1 < s + n && close[1] == '(') {
-                const char *end = memchr(close + 2, ')', (size_t)(s + n - close - 2));
-                if (end) {
-                    if (!append(d, i && s[i-1]=='!' ? PS_DOC_IMAGE : PS_DOC_LINK, 0, s + i + 1, (size_t)(close - s - i - 1),
-                                close + 2, (size_t)(end - close - 2)))
-                        return false;
-                    i = (size_t)(end - s);
+    span->length+=n;memcpy(p->plain+p->used,s,n);p->used+=n;return true;
+}
+/* Unmatched decoration stays literal. Backticks protect code from other markup. */
+static size_t inline_close(const char *s,size_t start,size_t n,const char *token,size_t length) {
+    for(size_t i=start;i+length<=n;i++) {
+        if(s[i]=='\\' && i+1<n){++i;continue;}
+        if(length==2 && s[i]=='`') {
+            const char *end=memchr(s+i+1,'`',n-i-1);
+            if(end){i=(size_t)(end-s);continue;}
+        }
+        if(!memcmp(s+i,token,length))return i;
+    }
+    return SIZE_MAX;
+}
+static bool inline_parse(inline_parser *p,const char *s,size_t n,unsigned style,size_t link,unsigned depth) {
+    if(depth>8)return inline_emit(p,s,n,style,link);
+    for(size_t i=0;i<n;) {
+        if(s[i]=='\\' && i+1<n && strchr("\\`*[]()!",s[i+1])) {
+            if(!inline_emit(p,s+i+1,1,style,link))return false;
+            i+=2;continue;
+        }
+        if(s[i]=='`') {
+            size_t end=inline_close(s,i+1,n,"`",1);
+            if(end!=SIZE_MAX) {
+                if(!inline_emit(p,s+i+1,end-i-1,style|PS_DOC_INLINE_CODE,link))return false;
+                i=end+1;continue;
+            }
+        }
+        if(s[i]=='*' && i+1<n && s[i+1]=='*') {
+            size_t end=inline_close(s,i+2,n,"**",2);
+            if(end!=SIZE_MAX) {
+                if(!inline_parse(p,s+i+2,end-i-2,style|PS_DOC_BOLD,link,depth+1))return false;
+                i=end+2;continue;
+            }
+        }
+        bool image=s[i]=='!' && i+1<n && s[i+1]=='[';
+        size_t begin=i+(image?1:0);
+        if(s[begin]=='[' && link==SIZE_MAX) {
+            size_t close=inline_close(s,begin+1,n,"]",1);
+            if(close!=SIZE_MAX && close+1<n && s[close+1]=='(') {
+                size_t end=close+2;unsigned parentheses=1;
+                for(;end<n;end++) {
+                    if(s[end]=='\\' && end+1<n){++end;continue;}
+                    if(s[end]=='(')++parentheses;
+                    if(s[end]==')' && !--parentheses)break;
+                }
+                if(end<n) {
+                    if(p->link_count==p->link_capacity)return false;
+                    size_t ordinal=p->link_count++,text=p->used;
+                    if(!inline_parse(p,s+begin+1,close-begin-1,style|(image?0:PS_DOC_INLINE_LINK),
+                        image?SIZE_MAX:p->parent+1+ordinal,depth+1))return false;
+                    p->links[ordinal]=(inline_link){s+close+2,end-close-2,text,p->used-text,image};
+                    i=end+1;continue;
                 }
             }
         }
+        if(!inline_emit(p,s+i,1,style,link))return false;
+        ++i;
+    }
     return true;
+}
+static bool paragraph(ps_document *d,const char *s,size_t n,ps_doc_kind kind,unsigned level) {
+    size_t capacity=n/4+1;if(capacity>PS_DOC_MAX_BLOCKS)capacity=PS_DOC_MAX_BLOCKS;
+    char *plain=malloc(n+1);inline_link *links=malloc(capacity*sizeof *links);
+    if(!plain || !links){free(plain);free(links);return false;}
+    inline_parser p={.document=d,.plain=plain,.base=d->used,.first_span=d->span_count,
+        .parent=d->count,.links=links,.link_capacity=capacity};
+    bool ok=inline_parse(&p,s,n,0,SIZE_MAX,0);
+    if(ok)ok=append(d,kind,level,plain,p.used,NULL,0);
+    if(ok) {
+        d->blocks[p.parent].first_span=p.first_span;
+        d->blocks[p.parent].span_count=d->span_count-p.first_span;
+        for(size_t i=0;ok && i<p.link_count;i++) {
+            inline_link *l=&links[i];
+            ok=append(d,l->image?PS_DOC_IMAGE:PS_DOC_LINK,0,plain+l->text,l->length,l->target,l->target_length);
+            if(ok && !l->image)d->blocks[d->count-1].inline_parent=p.parent;
+        }
+    }
+    free(plain);free(links);return ok;
 }
 ps_result ps_document_parse(const char *source, size_t size, bool code, ps_document **out) {
     if (!source || !out || size > (code?PS_DOC_MAX_CODE_BYTES:PS_DOC_MAX_BYTES) || memchr(source, 0, size))

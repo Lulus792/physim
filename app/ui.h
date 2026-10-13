@@ -83,6 +83,10 @@ typedef enum {
 void ps_ui_draw_icon(struct nk_command_buffer *canvas,ps_ui_icon icon,struct nk_rect bounds,struct nk_color color);
 nk_bool ps_ui_icon_button(struct nk_context *ctx,ps_ui_icon icon,const char *name);
 nk_bool ps_ui_button_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,bool selected);
+/* Publish a single semantic button for a control drawn from multiple fragments.
+ * Only queued native activation is returned; pointer hit testing stays with the
+ * renderer's actual visible fragments. */
+nk_bool ps_ui_accessibility_button(struct nk_context *ctx,struct nk_rect bounds,const char *name);
 /* Keep short label/control rows readable with enlarged UI fonts. Spacer and
  * chart/editor heights remain explicit; the default 16 px layout is unchanged. */
 static inline void ps_ui_row_dynamic(struct nk_context *ctx,float height,int columns) {

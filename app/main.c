@@ -239,6 +239,8 @@ typedef struct {
     struct nk_context *doc_ui;
     const struct nk_user_font *doc_font_ui, *doc_font_title, *doc_font_code, *doc_code_fonts[9];
     const struct nk_user_font *doc_ui_fonts[9], *doc_title_fonts[9];
+    const struct nk_user_font *doc_bold_fonts[11];
+    int doc_inline_clicked;
     unsigned doc_zoom_size;
     bool doc_visible;
     int doc_topic, doc_match, doc_jump_block,doc_anchor_heading;
@@ -2783,15 +2785,16 @@ static void layouts_start(app *a);
 static void channel_units_start(app *a);
 #include "design_ui.inc"
 // clang-format on
-static struct nk_font *system_font(struct nk_font_atlas *atlas, float size, bool code, bool title) {
+static struct nk_font *system_font_sampling(struct nk_font_atlas *atlas, float size, bool code, bool title,
+                                           unsigned char horizontal,unsigned char vertical) {
     static const nk_rune ui_ranges[] = {0x20, 0x17f, 0x300, 0x4ff, 0x1e00, 0x1eff,
                                       0x2000, 0x22ff, 0};
     static const nk_rune code_ranges[] = {0x20, 0x17f, 0x300, 0x4ff,
                                           0x1e00, 0x1eff, 0x2000, 0x22ff, 0};
     struct nk_font_config config = nk_font_config(size);
     config.range = code ? code_ranges : ui_ranges;
-    config.oversample_h = 3;
-    config.oversample_v = 2;
+    config.oversample_h = horizontal;
+    config.oversample_v = vertical;
     char path[4096];
 #ifdef _WIN32
     const char *windows = SDL_getenv("WINDIR");
@@ -2810,6 +2813,9 @@ static struct nk_font *system_font(struct nk_font_atlas *atlas, float size, bool
     struct nk_font *font =
         exists(path) ? nk_font_atlas_add_from_file(atlas, path, size, &config) : NULL;
     return font ? font : nk_font_atlas_add_default(atlas, size, NULL);
+}
+static struct nk_font *system_font(struct nk_font_atlas *atlas,float size,bool code,bool title) {
+    return system_font_sampling(atlas,size,code,title,3,2);
 }
 #include "documentation_window.inc"
 static void test_window_key_mod(SDL_Window *window, SDL_Keycode key, SDL_Keymod mod) {

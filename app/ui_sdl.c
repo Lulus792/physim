@@ -194,6 +194,16 @@ bool nk_sdl_font_stash_end(struct nk_context *ctx) {
     const void *pixels = nk_font_atlas_bake(&sdl->atlas, &w, &h, NK_FONT_ATLAS_RGBA32);
     if (!pixels)
         return false;
+    /* Nuklear may bake a partial atlas when its packing space is exhausted.
+     * Successful texture allocation alone does not prove that text can render. */
+    for(struct nk_font *font=sdl->atlas.fonts;font;font=font->next)
+        for(nk_rune c=33;c<=126;c++) {
+            const struct nk_font_glyph *glyph=nk_font_find_glyph(font,c);
+            if(!glyph || glyph->x1<=glyph->x0 || glyph->y1<=glyph->y0 || glyph->u1<=glyph->u0 || glyph->v1<=glyph->v0) {
+                SDL_SetError("Font atlas incomplete: %dx%d, size %.0f, character U+%04X",w,h,font->handle.height,(unsigned)c);
+                return false;
+            }
+        }
     sdl->font_texture = ps_graphics_texture(sdl->graphics, pixels, w, h);
     if (!sdl->font_texture)
         return false;

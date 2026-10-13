@@ -54,6 +54,13 @@ int main(int argc, char **argv) {
     CHECK(d->blocks[2].kind == PS_DOC_CODE &&
           strstr(d->text + d->blocks[2].text, "    x++;") != NULL);
     CHECK(d->blocks[4].kind == PS_DOC_LINK && !strcmp(d->text + d->blocks[4].target, "units.md"));
+    CHECK(d->blocks[1].span_count==5);
+    const ps_doc_span *bold=&d->spans[d->blocks[1].first_span+1];
+    CHECK(bold->style==PS_DOC_BOLD && bold->length==5 && !memcmp(d->text+bold->text,"clear",5));
+    const ps_doc_span *inline_code=&d->spans[d->blocks[1].first_span+3];
+    CHECK(inline_code->style==PS_DOC_INLINE_CODE && inline_code->length==4);
+    CHECK(d->blocks[4].inline_parent==3 && d->blocks[5].inline_parent==3);
+    CHECK(d->spans[d->blocks[3].first_span].link==4);
     CHECK(ps_document_find(d->text + d->blocks[1].text, "CLEAR") != NULL);
     CHECK(ps_document_find("Überblick für Größen", "überblick") != NULL);
     CHECK(ps_document_find("Überblick für Größen", "GRÖẞEN") != NULL);
@@ -61,6 +68,30 @@ int main(int argc, char **argv) {
     ps_document *unchanged = d;
     CHECK(ps_document_parse("x\0y", 3, false, &unchanged) == PS_INVALID && unchanged == d);
     free(d);
+    const char *rich="Escaped \\* and \\` remain; **bold `x[0]`** [**go**](guide.md#part) and `a **literal**`.\n";
+    CHECK(ps_document_parse(rich,strlen(rich),false,&d)==PS_OK);
+    CHECK(d->count==2 && !strcmp(d->text+d->blocks[0].text,"Escaped * and ` remain; bold x[0] go and a **literal**."));
+    bool saw_nested=false,saw_link=false;
+    for(size_t i=0;i<d->span_count;i++) {
+        const ps_doc_span *span=&d->spans[i];
+        if(span->style==(PS_DOC_BOLD|PS_DOC_INLINE_CODE))saw_nested=true;
+        if(span->style==(PS_DOC_BOLD|PS_DOC_INLINE_LINK) && span->link==1)saw_link=true;
+        CHECK(span->text+span->length<=d->used);
+    }
+    CHECK(saw_nested && saw_link && !strcmp(d->text+d->blocks[1].text,"go"));free(d);
+    const char *unmatched="Literal **half and `open [no target]";
+    CHECK(ps_document_parse(unmatched,strlen(unmatched),false,&d)==PS_OK);
+    CHECK(d->count==1 && !strcmp(d->text+d->blocks[0].text,unmatched));free(d);
+    const char *nested_url="[A](https://example.org/a(b)) and `[B](fake.md)`";
+    CHECK(ps_document_parse(nested_url,strlen(nested_url),false,&d)==PS_OK);
+    CHECK(d->count==2 && !strcmp(d->text+d->blocks[1].target,"https://example.org/a(b)"));free(d);
+    CHECK(ps_document_parse("preserved",9,false,&d)==PS_OK);
+    ps_document *before_limit=d;
+    size_t repetitions=PS_DOC_MAX_SPANS/2+1;
+    char *too_many_spans=malloc(repetitions*8);CHECK(too_many_spans);
+    for(size_t i=0;i<repetitions;i++)memcpy(too_many_spans+i*8,"x **b** ",8);
+    CHECK(ps_document_parse(too_many_spans,repetitions*8,false,&d)==PS_LIMIT && d==before_limit);
+    free(too_many_spans);free(d);
     const char *headings="# Hello, `World`!\n# Über Größen & Kräfte\n# Repeat\n# Repeat-1\n# Repeat\n# Repeat\n";
     CHECK(ps_document_parse(headings,strlen(headings),false,&d)==PS_OK);
     size_t block=SIZE_MAX;

@@ -377,7 +377,99 @@ static void documentation_zoom_test_frame(app *a,int *stage,int *code,const char
     if(!ok){fprintf(stderr,"Documentation zoom stage %d failed: size=%u body=%.1f\n",*stage-1,documentation_font_size(a),a->doc_body_bounds.h);*code=1;a->quitting=true;}
     if(a->quitting)printf("DOCUMENTATION ZOOM SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 }
+static bool documentation_inline_fixture(app *a,int topic) {
+    const char *source=
+        "# Lesen und Navigation\n\n"
+        "Normaler Text mit **deutlicher Hervorhebung**, `ps_vec3` und einem [C-Lernweg](c-guide.md). "
+        "Eine [Quelle mit einem langen beschreibenden Linktext, der auch bei doppelter Schrift und kleinem Fenster "
+        "vollständig lesbar und mit der Tastatur erreichbar bleibt, ohne andere Textstellen als Link zu behandeln](https://example.org/physim#proof).\n\n"
+        "## Bedeutung und Einheiten\n\n"
+        "Die Formel `x = l * sin(θ)` erhält ihre Zeichen. Escaped \\* bleibt sichtbar; `**literal**` bleibt Code.\n\n"
+        "| Begriff | Bedeutung |\n| --- | --- |\n"
+        "| **Länge** | `l` in Metern; [C](c-guide.md) |\n\n"
+        "```c\n// unverändert kopieren: θ\n  double x = length * sin(theta);\n```\n\n"
+        "### Prüfung\n\nDie gespeicherten Werte bestätigen das Ergebnis.\n";
+    ps_document *d=NULL;
+    if(ps_document_parse(source,strlen(source),false,&d)!=PS_OK)return false;
+    free(a->documentation);a->documentation=d;a->doc_topic=topic;
+    a->doc_query[0]=a->doc_last_query[0]=a->doc_error[0]=0;
+    a->doc_jump_block=-1;a->doc_scroll_x=a->doc_scroll_y=0;
+    a->doc_scroll_adjustment=0;a->doc_history_restore=0;
+    a->doc_contents=true;a->doc_keyboard=false;a->doc_focus=DOC_BODY;
+    return true;
+}
+static void documentation_inline_test_frame(app *a,int *stage,int *code,const char **capture) {
+    static int guide,cguide,link,external,table_link,copy;static struct nk_rect clicked;
+    bool ok=true;
+#define INLINE_KEY(key) test_window_key_mod(a->doc_window,key,0)
+    switch((*stage)++) {
+    case 0:test_window_key_mod(a->window,SDLK_F1,0);break;
+    case 1:
+        guide=cguide=-1;
+        for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++) {
+            if(!strcmp(documentation_topics[i].path,"docs/user-guide.md"))guide=i;
+            if(!strcmp(documentation_topics[i].path,"docs/c-guide.md"))cguide=i;
+        }
+        ok=guide>=0 && cguide>=0 && documentation_inline_fixture(a,guide);
+        SDL_SetWindowSize(a->doc_window,1080,780);break;
+    case 2: {
+        ps_document *d=a->documentation;link=external=table_link=copy=-1;
+        const struct nk_user_font *h1=NULL,*h2=NULL,*h3=NULL;
+        for(size_t i=0;i<d->count;i++) {
+            ps_doc_block *b=&d->blocks[i];
+            if(b->kind==PS_DOC_LINK) {
+                if(!strcmp(d->text+b->text,"C-Lernweg"))link=(int)i;
+                else if(!strncmp(d->text+b->target,"https://",8))external=(int)i;
+                else table_link=(int)i;
+                ok &= b->inline_parent<d->count && b->height==0;
+            }
+            if(b->kind==PS_DOC_CODE)copy=(int)i;
+            if(b->kind==PS_DOC_HEADING){const struct nk_user_font *f=documentation_block_font(a,b);
+                if(b->level==1)h1=f;else if(b->level==2)h2=f;else if(b->level==3)h3=f;}
+        }
+        ok &= link>=0 && external>=0 && table_link>=0 && copy>=0 && h1 && h2 && h3 && h1->height>h2->height && h2->height>h3->height;
+        if(!ok)break;
+        ps_doc_block *b=&d->blocks[link];clicked=nk_rect(b->hit[0],b->hit[1],b->hit[2],b->hit[3]);
+        ok &= clicked.w>20 && clicked.w<150 && clicked.y>=a->doc_body_bounds.y;
+        b=&d->blocks[copy];
+        printf("DOCUMENTATION INLINE CODE INK: %.0f %.0f %.0f %.0f\n",b->hit[0]+12,b->hit[1]+8,b->hit[2]-24,b->hit[3]-16);
+        *capture="docs-inline-16.bmp";test_window_mouse(a->doc_window,clicked,true);break;
+    }
+    case 3:test_window_mouse(a->doc_window,clicked,false);break;
+    case 4:
+        ok=a->doc_topic==cguide && !a->doc_error[0] && documentation_inline_fixture(a,guide);
+        SDL_SetWindowSize(a->doc_window,760,540);
+        {ps_preferences p=a->preferences;p.theme=PS_THEME_LIGHT;preferences_apply(a,&p);}
+        for(int i=0;i<8;i++)test_window_key_mod(a->doc_window,SDLK_PLUS,PS_UI_COMMAND_MOD);break;
+    case 5:
+        ok=documentation_font_size(a)==32;
+        *capture="docs-inline-32-light.bmp";break;
+    case 6:
+        if(!documentation_test_seek(a,DOC_LINK+external,stage,code))return;
+        ok=a->doc_focus_bounds.h<=a->doc_body_bounds.h && a->doc_focus_bounds.y>=a->doc_body_bounds.y &&
+           a->documentation->blocks[external].hit[3]>a->doc_body_bounds.h;
+        *capture="docs-inline-wrapped-focus.bmp";INLINE_KEY(SDLK_SPACE);break;
+    case 7:
+        ok=a->doc_topic==guide && documentation_test_clipboard("https://example.org/physim#proof");
+        if(!documentation_test_seek(a,DOC_LINK+table_link,stage,code))return;
+        *capture="docs-inline-table.bmp";INLINE_KEY(SDLK_RETURN);break;
+    case 8:
+        ok=a->doc_topic==cguide && documentation_inline_fixture(a,guide);
+        {ps_preferences p=a->preferences;p.theme=PS_THEME_HIGH_CONTRAST;preferences_apply(a,&p);}
+        test_window_key_mod(a->doc_window,SDLK_0,PS_UI_COMMAND_MOD);break;
+    case 9:
+        *capture="docs-inline-16-contrast.bmp";
+        if(!documentation_test_seek(a,DOC_COPY+copy,stage,code))return;INLINE_KEY(SDLK_RETURN);break;
+    case 10:
+        ok=documentation_test_clipboard(a->documentation->text+a->documentation->blocks[copy].text);
+        *capture="docs-inline-code.bmp";a->quitting=true;break;
+    }
+    if(!ok){fprintf(stderr,"Documentation inline stage %d failed: focus=%d size=%u topic=%d\n",*stage-1,a->doc_focus,documentation_font_size(a),a->doc_topic);*code=1;a->quitting=true;}
+    if(a->quitting)printf("DOCUMENTATION INLINE SELF-TEST: %s\n",*code?"FAILED":"PASSED");
+#undef INLINE_KEY
+}
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strcmp(mode,"docs-keyboard-inline")){documentation_inline_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-zoom")){documentation_zoom_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-history")){documentation_history_test_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"docs-keyboard-anchors",21)){documentation_anchor_test_frame(a,stage,code,capture);return;}

@@ -11920,6 +11920,36 @@
       ]
     },
     {
+      "name": "documentation_inline",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "documentation_inline",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 85,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
       "name": "documentation_anchors",
       "targets": [
         "python",

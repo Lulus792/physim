@@ -40,6 +40,7 @@ SIMPLE["documentation_keyboard_22"] = (["--workspace-state-test", "{directory}",
 SIMPLE["documentation_keyboard"] = (["--workspace-state-test", "{directory}", "docs-keyboard"], 75, True)
 SIMPLE["documentation_history"] = (["--workspace-state-test", "{directory}", "docs-keyboard-history"], 90, True)
 SIMPLE["documentation_zoom"] = (["--workspace-state-test", "{directory}", "docs-keyboard-zoom"], 90, True)
+SIMPLE["documentation_inline"] = (["--workspace-state-test", "{directory}", "docs-keyboard-inline"], 90, True)
 SIMPLE["documentation_media_16"] = (["--workspace-state-test", "{directory}", "docs-keyboard-media"], 90, True)
 SIMPLE["documentation_media_22"] = (["--workspace-state-test", "{directory}", "docs-keyboard-media-22"], 90, True)
 SIMPLE["documentation_anchors_16"] = (["--workspace-state-test", "{directory}", "docs-keyboard-anchors"], 90, True)
@@ -72,6 +73,29 @@ def documentation_zoom_bitmaps(directory):
         rgb = raw[start:start + 3]
         require(len(rgb) == 3 and (min(rgb) >= 220 if light else max(rgb) <= 10),
                 "Captured zoom theme does not match the tested state: " + name)
+
+
+def documentation_inline_ink(directory, stdout):
+    match = re.search(r"DOCUMENTATION INLINE CODE INK: (\d+) (\d+) (\d+) (\d+)", stdout)
+    require(match, "Missing measured inline code rectangle")
+    x, y, w, h = map(int, match.groups())
+    raw = (directory / "docs-inline-16.bmp").read_bytes()
+    require(raw[:2] == b"BM" and len(raw) >= 54, "Invalid inline bitmap")
+    offset = struct.unpack_from("<I", raw, 10)[0]
+    width, height = struct.unpack_from("<ii", raw, 18)
+    depth = struct.unpack_from("<H", raw, 28)[0]
+    require(depth in (24, 32) and w > 0 and h > 0 and x >= 0 and y >= 0 and
+            x + w <= width and y + h <= abs(height), "Code rectangle is outside the image")
+    stride = ((width * depth + 31) // 32) * 4
+    ink = 0
+    for line in range(y, y + h):
+        row = abs(height) - 1 - line if height > 0 else line
+        for column in range(x, x + w):
+            start = offset + row * stride + column * (depth // 8)
+            rgb = raw[start:start + 3]
+            require(len(rgb) == 3, "Truncated inline bitmap")
+            ink += min(rgb) > 80
+    require(ink >= 100, "The code rectangle contains no readable glyphs")
 
 
 def require(condition, message):
@@ -1348,6 +1372,8 @@ def main():
         flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)
         if args.case == "documentation_zoom":
             documentation_zoom_bitmaps(directory)
+        elif args.case == "documentation_inline":
+            documentation_inline_ink(directory, flow.steps[-1]["stdout"])
         if args.case == "sphere_collision_workflow":
             description=read(directory / "physim.project")
             require("parameter.friction=0.29999999999999999\n" in description and

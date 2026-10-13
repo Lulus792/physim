@@ -4,6 +4,7 @@
 #define PS_DOC_MAX_BLOCKS 4096u
 #define PS_DOC_MAX_BYTES (256u * 1024u)
 #define PS_DOC_MAX_CODE_BYTES (2u * PS_DOC_MAX_BYTES - 2u)
+#define PS_DOC_MAX_SPANS 16384u
 #define PS_DOC_HISTORY_LIMIT 64u
 typedef struct {
     int topic, track, match;
@@ -34,12 +35,20 @@ typedef struct {
     ps_doc_kind kind;
     unsigned level;
     size_t text, length, target;
+    size_t first_span, span_count, inline_parent;
     float height;
+    float hit[4];
 } ps_doc_block;
+enum { PS_DOC_BOLD=1, PS_DOC_INLINE_CODE=2, PS_DOC_INLINE_LINK=4 };
 typedef struct {
-    size_t count, used;
+    size_t text, length, link;
+    unsigned style;
+} ps_doc_span;
+typedef struct {
+    size_t count, used, span_count;
     float layout_width;
     ps_doc_block blocks[PS_DOC_MAX_BLOCKS];
+    ps_doc_span spans[PS_DOC_MAX_SPANS];
     char text[PS_DOC_MAX_BYTES * 2];
 } ps_document;
 /* Small, inert Markdown reader for the bundled documentation. Caller validates

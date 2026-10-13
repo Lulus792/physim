@@ -183,6 +183,9 @@ nk_bool ps_ui_button_at(struct nk_context *ctx,struct nk_rect bounds,const char 
     bool enabled=!(ctx->current->layout->flags&NK_WINDOW_ROM) && !ctx->current->widgets_disabled;
     return pressed || (enabled && nk_input_is_mouse_pressed(&ctx->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ctx->input,bounds));
 }
+nk_bool ps_ui_accessibility_button(struct nk_context *ctx,struct nk_rect bounds,const char *name) {
+    return accessibility_widget(ctx,name,1,bounds,false,NULL,false);
+}
 nk_bool ps_ui_button_label(struct nk_context *ctx,const char *text) {
     if(!ctx || !ctx->current || !text || nk_sdl_row_height(ctx,16)<=16) {
         struct nk_rect bounds=nk_widget_bounds(ctx);

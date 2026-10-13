@@ -384,6 +384,110 @@ static float documentation_height(const struct nk_user_font *font, const char *t
     } while (at < n);
     return lines * (font->height + 6);
 }
+static const struct nk_user_font *documentation_block_font(const app *a,const ps_doc_block *b) {
+    unsigned size=documentation_font_size(a);
+    if(b->kind==PS_DOC_CODE)return a->doc_font_code;
+    if(b->kind==PS_DOC_HEADING) {
+        if(b->level==1)return a->doc_font_title;
+        return a->doc_bold_fonts[(size-16)/2+(b->level==2?2:0)];
+    }
+    if(b->kind==PS_DOC_TABLE_ROW && b->level)return a->doc_bold_fonts[(size-16)/2];
+    return a->doc_font_ui;
+}
+static const ps_doc_span *documentation_span_at(const ps_document *d,const ps_doc_block *b,size_t at) {
+    size_t lo=b->first_span,hi=lo+b->span_count;
+    while(lo<hi){size_t mid=lo+(hi-lo)/2;if(d->spans[mid].text<=at)lo=mid+1;else hi=mid;}
+    if(lo>b->first_span){const ps_doc_span *s=&d->spans[lo-1];if(at<s->text+s->length)return s;}
+    return NULL;
+}
+static const struct nk_user_font *documentation_span_font(const app *a,const ps_doc_block *b,const ps_doc_span *s) {
+    if(b->kind==PS_DOC_HEADING)return documentation_block_font(a,b);
+    if(s && (s->style&PS_DOC_INLINE_CODE))return a->doc_font_code;
+    if(s && (s->style&PS_DOC_BOLD))return a->doc_bold_fonts[(documentation_font_size(a)-16)/2];
+    return documentation_block_font(a,b);
+}
+static float documentation_glyph_width(const struct nk_user_font *font,const char *text,int bytes) {
+    return *text=='\t'?font->width(font->userdata,font->height,"    ",4):
+        font->width(font->userdata,font->height,text,bytes);
+}
+static float documentation_text_width(const struct nk_user_font *font,const char *text,size_t n) {
+    float width=0;
+    for(size_t at=0;at<n;){nk_rune rune;int used=nk_utf_decode(text+at,&rune,(int)(n-at));if(used<=0)used=1;
+        width+=documentation_glyph_width(font,text+at,used);at+=(size_t)used;}
+    return width;
+}
+static size_t documentation_rich_line(const app *a,const ps_document *d,const ps_doc_block *b,
+    size_t at,float width,size_t *length,float *height) {
+    const char *text=d->text+b->text;size_t begin=at,space=SIZE_MAX;
+    float used=0,h=documentation_block_font(a,b)->height+6,space_height=h;
+    while(at<b->length) {
+        if(text[at]=='\n'){*length=at-begin;*height=h;return at-begin+1;}
+        const ps_doc_span *span=documentation_span_at(d,b,b->text+at);
+        const struct nk_user_font *font=documentation_span_font(a,b,span);
+        nk_rune rune;int bytes=nk_utf_decode(text+at,&rune,(int)(b->length-at));if(bytes<=0)bytes=1;
+        float glyph=documentation_glyph_width(font,text+at,bytes);
+        if(at>begin && used+glyph>width) {
+            if(space!=SIZE_MAX && space>begin){*length=space-begin;*height=space_height;return space-begin+1;}
+            *length=at-begin;*height=h;return at-begin;
+        }
+        h=fmaxf(h,font->height+6);
+        if(text[at]==' ' || text[at]=='\t'){space=at;space_height=h;}
+        used+=glyph;at+=(size_t)bytes;
+    }
+    *length=at-begin;*height=h;return at-begin;
+}
+static float documentation_rich_height(const app *a,const ps_document *d,const ps_doc_block *b,float width) {
+    size_t at=0;float total=0;
+    do {size_t length;float height;size_t used=documentation_rich_line(a,d,b,at,width,&length,&height);
+        at+=used;total+=height;}while(at<b->length);
+    return total;
+}
+static void documentation_rich_draw(app *a,ps_document *d,const ps_doc_block *b,struct nk_rect bounds) {
+    struct nk_context *ui=a->doc_ui;struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+    const char *text=d->text+b->text;size_t at=0;float y=bounds.y;
+    const char *match=NULL;bool searched=false;
+    do {
+        size_t length;float height;size_t used=documentation_rich_line(a,d,b,at,bounds.w,&length,&height);
+        size_t end=at+length,pos=at;float x=bounds.x;
+        bool visible=y<canvas->clip.y+canvas->clip.h && y+height>canvas->clip.y;
+        if(b->kind==PS_DOC_CODE && y>canvas->clip.y+canvas->clip.h)break;
+        while(pos<end) {
+            const ps_doc_span *span=documentation_span_at(d,b,b->text+pos);
+            const struct nk_user_font *font=documentation_span_font(a,b,span);
+            size_t next=span?span->text+span->length-b->text:end;if(next>end)next=end;
+            float width=documentation_text_width(font,text+pos,next-pos);
+            struct nk_rect part=nk_rect(x,y,width,font->height+6);
+            bool link=span && (span->style&PS_DOC_INLINE_LINK) && span->link<d->count;
+            if(link) {
+                ps_doc_block *action=&d->blocks[span->link];float *hit=action->hit;
+                if(hit[2]<=0){hit[0]=part.x;hit[1]=part.y;hit[2]=part.w;hit[3]=part.h;}
+                else {float right=fmaxf(hit[0]+hit[2],part.x+part.w),bottom=fmaxf(hit[1]+hit[3],part.y+part.h);
+                    hit[0]=fminf(hit[0],part.x);hit[1]=fminf(hit[1],part.y);hit[2]=right-hit[0];hit[3]=bottom-hit[1];}
+                if(visible && nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) &&
+                    nk_input_is_mouse_hovering_rect(&ui->input,part) && nk_input_is_mouse_hovering_rect(&ui->input,canvas->clip))
+                    a->doc_inline_clicked=(int)span->link;
+            }
+            if(visible) {
+                if(!searched || (match && match<text+pos)){match=ps_document_find(text+pos,a->doc_query);searched=true;}
+                bool found=match && match<text+next;
+                if(span && (span->style&PS_DOC_INLINE_CODE))
+                    nk_fill_rect(canvas,nk_rect(x-2,y-2,width+4,font->height+4),3,UI_COLOR(edit));
+                if(found)nk_stroke_rect(canvas,part,2,1,UI_COLOR(accent));
+                struct nk_color color=link || found?UI_COLOR(accent):UI_COLOR(doc_text);
+                size_t chunk=pos;float draw_x=x;
+                while(chunk<next) {
+                    const char *tab=memchr(text+chunk,'\t',next-chunk);size_t last=tab?(size_t)(tab-text):next;
+                    float run_width=documentation_text_width(font,text+chunk,last-chunk);
+                    if(last>chunk)nk_draw_text(canvas,nk_rect(draw_x,y,run_width+1,font->height+6),text+chunk,(int)(last-chunk),font,nk_rgba(0,0,0,0),color);
+                    draw_x+=run_width;if(tab)draw_x+=documentation_glyph_width(font,"\t",1);chunk=last+(tab?1:0);
+                }
+                if(link)nk_stroke_line(canvas,x,y+font->height+2,x+width,y+font->height+2,1,color);
+            }
+            x+=width;pos=next;
+        }
+        at+=used;y+=height;
+    } while(at<b->length);
+}
 /* Table columns remain real wrapped cells instead of exposing Markdown pipes. */
 static int documentation_cells(const char *text, const char **cells, size_t *lengths) {
     int count = 0;
@@ -413,31 +517,20 @@ static float documentation_table(app *a, const ps_doc_block *block, const char *
     if (!count)
         return 24;
     float cell_width = width / count, height = 24;
-    const struct nk_user_font *font = a->doc_font_ui;
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < count; i++) {
+        ps_doc_block cell=*block;cell.text=block->text+(size_t)(cells[i]-text);cell.length=lengths[i];
         height =
             fmaxf(height,
-                  documentation_height(font, cells[i], lengths[i], fmaxf(1, cell_width - 20)) + 16);
+                  documentation_rich_height(a,a->documentation,&cell,fmaxf(1,cell_width-20))+16);
+    }
     if (!bounds)
         return height;
     struct nk_command_buffer *canvas = nk_window_get_canvas(a->doc_ui);
     nk_fill_rect(canvas, *bounds, 4, block->level ? UI_COLOR(doc_header) : UI_COLOR(doc_body));
     for (int i = 0; i < count; i++) {
-        size_t at = 0;
-        float y = bounds->y + 8;
-        do {
-            size_t length, used = documentation_line(font, cells[i] + at, lengths[i] - at,
-                                                     fmaxf(1, cell_width - 20), &length);
-            const char *match = ps_document_find(cells[i] + at, a->doc_query);
-            nk_draw_text(
-                canvas,
-                nk_rect(bounds->x + i * cell_width + 10, y, cell_width - 20, font->height + 6),
-                cells[i] + at, (int)length, font, nk_rgba(0, 0, 0, 0),
-                match && match < cells[i] + at + length ? UI_COLOR(accent)
-                                                        : UI_COLOR(doc_text));
-            at += used;
-            y += font->height + 6;
-        } while (at < lengths[i]);
+        ps_doc_block cell=*block;cell.text=block->text+(size_t)(cells[i]-text);cell.length=lengths[i];
+        documentation_rich_draw(a,a->documentation,&cell,nk_rect(bounds->x+i*cell_width+10,
+            bounds->y+8,fmaxf(1,cell_width-20),bounds->h-16));
     }
     return height;
 }
@@ -673,6 +766,7 @@ static void documentation_focus_draw(app *a,int id,struct nk_rect bounds,bool bo
     struct nk_context *ui=a->doc_ui;
     if(nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ui->input,bounds)){a->doc_keyboard=false;a->doc_focus=id;}
     if(!a->doc_keyboard || a->doc_focus!=id)return;
+    if(body)bounds.h=fminf(bounds.h,nk_window_get_content_region(ui).h);
     if(id==DOC_BODY){struct nk_rect clip=nk_window_get_content_region(ui);bounds.h=fmaxf(0,fminf(bounds.h,clip.y+clip.h-bounds.y));}
     a->doc_focus_bounds=bounds;
     nk_stroke_rect(nk_window_get_canvas(ui),bounds,3,2,UI_COLOR(accent));
@@ -826,6 +920,7 @@ static void documentation_sidebar(app *a) {
 }
 static void documentation_view(app *a, float height) {
     struct nk_context *ui = a->doc_ui;
+    a->doc_inline_clicked=-1;
     float section_scroll=-1;
     ps_document *section_document=NULL;
     a->doc_scroll_pending=false;
@@ -908,7 +1003,7 @@ static void documentation_view(app *a, float height) {
     int matches[PS_DOC_MAX_BLOCKS], match_count = 0;
     if (d && a->doc_query[0])
         for (size_t i = 0; i < d->count; i++)
-            if (ps_document_find(d->text + d->blocks[i].text, a->doc_query))
+            if (d->blocks[i].inline_parent==SIZE_MAX && ps_document_find(d->text + d->blocks[i].text, a->doc_query))
                 matches[match_count++] = (int)i;
     if (match_count)
         a->doc_match = (a->doc_match % match_count + match_count) % match_count;
@@ -938,23 +1033,21 @@ static void documentation_view(app *a, float height) {
     if (nk_group_scrolled_offset_begin(ui, &a->doc_scroll_x, &a->doc_scroll_y, "document-body",
                                        0)) {
         if (d) {
+            for(size_t i=0;i<d->count;i++)d->blocks[i].hit[2]=0;
             float width = fmaxf(40, nk_window_get_content_region(ui).w - 8);
             if (d->layout_width != width) {
                 for (size_t i = 0; i < d->count; i++) {
                     ps_doc_block *b = &d->blocks[i];
-                    const struct nk_user_font *font = b->kind == PS_DOC_CODE ? a->doc_font_code
-                                                      : b->kind == PS_DOC_HEADING
-                                                          ? a->doc_font_title
-                                                          : a->doc_font_ui;
                     b->height =
                         b->kind == PS_DOC_TABLE_ROW
                             ? documentation_table(a, b, d->text + b->text, width, NULL)
                         : b->kind == PS_DOC_IMAGE && documentation_media_kind(d->text+b->target)==3 ? 900
                         : b->kind == PS_DOC_IMAGE && documentation_media_kind(d->text+b->target) ? (documentation_media_kind(d->text+b->target)==1?320:480)
                         : b->kind == PS_DOC_RULE ? 14
+                        : b->kind == PS_DOC_LINK && b->inline_parent!=SIZE_MAX ? 0
                         : b->kind == PS_DOC_LINK
                             ? 32
-                            : documentation_height(font, d->text + b->text, b->length, width - 24) +
+                            : documentation_rich_height(a,d,b,width - 24) +
                                   16;
                 }
                 d->layout_width = width;
@@ -974,9 +1067,18 @@ static void documentation_view(app *a, float height) {
             for (size_t i = 0; i < d->count; i++) {
                 ps_doc_block *b = &d->blocks[i];
                 const char *text = d->text + b->text;
-                const struct nk_user_font *font = b->kind == PS_DOC_CODE      ? a->doc_font_code
-                                                  : b->kind == PS_DOC_HEADING ? a->doc_font_title
-                                                                              : a->doc_font_ui;
+                const struct nk_user_font *font = documentation_block_font(a,b);
+                if(b->kind==PS_DOC_LINK && b->inline_parent!=SIZE_MAX) {
+                    struct nk_rect link_bounds=nk_rect(b->hit[0],b->hit[1],b->hit[2],b->hit[3]);
+                    if(link_bounds.w>0) {
+                        bool external=!strncmp(d->text+b->target,"http",4);char label[1024];
+                        snprintf(label,sizeof label,"%s%s",external?"Quellenadresse kopieren: ":"Öffnen: ",text);
+                        if(ps_ui_accessibility_button(ui,link_bounds,label))a->doc_inline_clicked=(int)i;
+                        documentation_focus_draw(a,DOC_LINK+(int)i,link_bounds,true);
+                        if((int)i==target)section_scroll=fmaxf(0,link_bounds.y+(float)submitted_scroll-body_origin);
+                    }
+                    continue;
+                }
                 if (b->kind == PS_DOC_CODE) {
                     nk_layout_row_dynamic(ui, 28, 2);
                     nk_label_colored(ui, "Code", NK_TEXT_LEFT, UI_COLOR(muted));
@@ -993,12 +1095,15 @@ static void documentation_view(app *a, float height) {
                 }
                 nk_layout_row_dynamic(ui, b->height, 1);
                 struct nk_rect block_bounds=nk_widget_bounds(ui);
+                b->hit[0]=block_bounds.x;b->hit[1]=block_bounds.y;b->hit[2]=block_bounds.w;b->hit[3]=block_bounds.h;
                 if((int)i==a->doc_anchor_heading)a->doc_anchor_bounds=block_bounds;
                 if((int)i==target) {
                     float prefix=0;
                     const char *match=ps_document_find(text,a->doc_query);
-                    if(!explicit_jump && b->kind!=PS_DOC_TABLE_ROW && match && match>text)
-                        prefix=fmaxf(0,documentation_height(font,text,(size_t)(match-text),width-24)-(font->height+6));
+                    if(!explicit_jump && b->kind!=PS_DOC_TABLE_ROW && match && match>text) {
+                        ps_doc_block preceding=*b;preceding.length=(size_t)(match-text);
+                        prefix=fmaxf(0,documentation_rich_height(a,d,&preceding,width-24)-(font->height+6));
+                    }
                     section_scroll=explicit_jump && target==0?0:fmaxf(0,block_bounds.y+(float)submitted_scroll-body_origin+prefix);
                 }
                 if (b->kind == PS_DOC_LINK) {
@@ -1016,7 +1121,10 @@ static void documentation_view(app *a, float height) {
                 } else {
                     struct nk_rect rect;
                     enum nk_widget_layout_states state = nk_widget(&rect, ui);
-                    if (state != NK_WIDGET_INVALID) {
+                    bool link_geometry=(target>=0 && d->blocks[target].inline_parent==i) ||
+                        (a->doc_keyboard && a->doc_focus>=DOC_LINK && a->doc_focus<DOC_LINK+(int)d->count &&
+                         d->blocks[a->doc_focus-DOC_LINK].inline_parent==i);
+                    if (state != NK_WIDGET_INVALID || link_geometry) {
                         struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
                         if(b->kind==PS_DOC_IMAGE && documentation_media_kind(d->text+b->target))
                             documentation_diagram(a,documentation_media_kind(d->text+b->target),rect);
@@ -1032,32 +1140,18 @@ static void documentation_view(app *a, float height) {
                                 float bottom=fminf(rect.y+rect.h,canvas->clip.y+canvas->clip.h);
                                 if(right>x && bottom>y)nk_fill_rect(canvas,nk_rect(x,y,right-x,bottom-y),7,UI_COLOR(edit));
                             }
-                            size_t at = 0;
-                            float y = rect.y + 8;
-                            const char *match=NULL;bool searched=false;
-                            do {
-                                size_t length,
-                                    used = documentation_line(font, text + at, b->length - at,
-                                                              width - 24, &length);
-                                if(y>canvas->clip.y+canvas->clip.h)break;
-                                if(y+font->height+6>=canvas->clip.y) {
-                                    if(!searched || (match && match<text+at)) {
-                                        match=ps_document_find(text+at,a->doc_query);searched=true;
-                                    }
-                                    struct nk_color color=match && match<text+at+length?UI_COLOR(accent):UI_COLOR(doc_text);
-                                    nk_draw_text(
-                                    canvas, nk_rect(rect.x + 12, y, rect.w - 24, font->height + 6),
-                                    text + at, (int)length, font, nk_rgba(0, 0, 0, 0), color);
-                                }
-                                at += used;
-                                y += font->height + 6;
-                            } while (at < b->length);
+                            documentation_rich_draw(a,d,b,nk_rect(rect.x+12,rect.y+8,rect.w-24,rect.h-16));
                         }
                     }
                 }
             }
         }
         nk_group_scrolled_end(ui);
+    }
+    if(a->doc_inline_clicked>=0 && a->documentation==d) {
+        char *target=SDL_strdup(d->text+d->blocks[a->doc_inline_clicked].target);
+        if(target){documentation_link(a,target);SDL_free(target);}
+        else snprintf(a->doc_error,sizeof a->doc_error,"Link konnte nicht geöffnet werden: %s",SDL_GetError());
     }
     if(section_scroll>=0 && a->documentation==section_document && a->doc_jump_block<0) {
         a->doc_scroll_y=(nk_uint)section_scroll;a->doc_scroll_adjustment=0;a->doc_scroll_pending=true;

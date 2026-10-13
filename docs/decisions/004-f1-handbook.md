@@ -90,7 +90,28 @@ das ursprüngliche Gegenbeispiel, bei dem der Themenwechsel vor der Aufnahme
 stattfand und die Bildnamen nicht zur dargestellten Palette passten. Die
 korrigierten Theme-Bilder wurden visuell geprüft.
 
-Offen sind verbesserte Inline-Lesedarstellung und Linkgestaltung,
-native Windows-Semantik, praktische Screenreader-Abnahme
+Inline-Texte behalten jetzt Hervorhebungen, Codezeichen und Links in ihrem
+Lesefluss. Überschriften besitzen drei sichtbare Größen; Tabellen behalten die
+Formatierung ihrer Zellen. Links lassen sich direkt anklicken oder mit Tab und
+Enter/Leertaste aktivieren. Mehrzeilige Links erhalten auch dann stabilen Fokus,
+wenn der Link höher als der kleine Lesebereich ist. Suchtreffer zählen keine
+zusätzlichen, unsichtbaren Link-Aktionsblöcke.
+
+Die Bildprüfung entdeckte einen Fehler der erweiterten Schriftpalette:
+Nuklear meldete einen nur teilweise gepackten Atlas als erfolgreich. Bei
+1024 × 32768 fehlten unter anderem die ASCII-Glyphen einer 30-Pixel-Schrift.
+Die F1-Schriften verwenden jetzt zwei horizontale und einen vertikalen
+Rasterungsschritt; das Backend prüft sichtbare ASCII-Glyphen aller geladenen
+Schriften vor der Verwendung. Die ursprüngliche leere Codedarstellung
+(`run-duh14r10`) wird durch die unabhängige Pixelprüfung abgelehnt.
+
+Die abschließenden 14 Windows-GUI-Fälle bestehen in `run-1cpt5r4u`, einschließlich
+F1-Eingabeisolation, 16/22/32-Pixel-Schrift, Links in Absätzen und Tabellen,
+Verlauf, Codekopieren und drei Themes. Die gezielten Laufzeitbilder wurden
+visuell geprüft; die Codefläche enthält tatsächlich lesbare Glyphen.
+Die 29 ausgewählten nativen Dokumentations-, Referenz-, Beispiel- und
+Accessibility-/Geometriefälle bestehen in `run-mji_rnhn`.
+
+Offen sind native Windows-Semantik, praktische Screenreader-Abnahme
 und die Abnahmematrix für Dichte, Themes sowie Linux und macOS. Diese Liste
 beschreibt Restarbeit und erteilt keine Produktfreigabe.
