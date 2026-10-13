@@ -38,6 +38,8 @@ SIMPLE["documentation_pointer_isolation"] = (["--docs-test-noise", "{directory}"
 SIMPLE["documentation_keyboard_delayed"] = (["--workspace-state-test", "{directory}", "docs-keyboard-delayed"], 135, True)
 SIMPLE["documentation_keyboard_22"] = (["--workspace-state-test", "{directory}", "docs-keyboard-22"], 75, True)
 SIMPLE["documentation_keyboard"] = (["--workspace-state-test", "{directory}", "docs-keyboard"], 75, True)
+SIMPLE["documentation_history"] = (["--workspace-state-test", "{directory}", "docs-keyboard-history"], 90, True)
+SIMPLE["documentation_zoom"] = (["--workspace-state-test", "{directory}", "docs-keyboard-zoom"], 90, True)
 SIMPLE["documentation_media_16"] = (["--workspace-state-test", "{directory}", "docs-keyboard-media"], 90, True)
 SIMPLE["documentation_media_22"] = (["--workspace-state-test", "{directory}", "docs-keyboard-media-22"], 90, True)
 SIMPLE["documentation_anchors_16"] = (["--workspace-state-test", "{directory}", "docs-keyboard-anchors"], 90, True)
@@ -50,6 +52,26 @@ for size in ("small", "large"):
 for name, fixture in (("unicode", "unicode_identifiers"), ("multiline", "multiline_strings")):
     SIMPLE[f"language_editor_{name}_preview"] = (["--syntax-preview-test", "{directory}",
         "{root}/tests/fixtures/language/" + fixture + ".phys"], 30, False)
+
+
+def documentation_zoom_bitmaps(directory):
+    # Check the rendered result after the observed theme transition. A palette
+    # variable alone would accept captures taken after switching to another theme.
+    for name, light in (("docs-200-percent-light.bmp", True),
+                        ("docs-200-percent-contrast.bmp", False)):
+        raw = (directory / name).read_bytes()
+        require(raw[:2] == b"BM" and len(raw) >= 54, "Invalid zoom bitmap: " + name)
+        offset = struct.unpack_from("<I", raw, 10)[0]
+        width, height = struct.unpack_from("<ii", raw, 18)
+        depth = struct.unpack_from("<H", raw, 28)[0]
+        require(width >= 760 and abs(height) >= 540 and depth in (24, 32),
+                "Unexpected zoom bitmap geometry: " + name)
+        stride = ((width * depth + 31) // 32) * 4
+        row = abs(height) - 13 if height > 0 else 12
+        start = offset + row * stride + 12 * (depth // 8)
+        rgb = raw[start:start + 3]
+        require(len(rgb) == 3 and (min(rgb) >= 220 if light else max(rgb) <= 10),
+                "Captured zoom theme does not match the tested state: " + name)
 
 
 def require(condition, message):
@@ -1324,6 +1346,8 @@ def main():
         arguments, timeout, _ = SIMPLE[args.case]
         paths = dict(directory=str(directory), root=str(flow.root))
         flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)
+        if args.case == "documentation_zoom":
+            documentation_zoom_bitmaps(directory)
         if args.case == "sphere_collision_workflow":
             description=read(directory / "physim.project")
             require("parameter.friction=0.29999999999999999\n" in description and

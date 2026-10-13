@@ -10,6 +10,27 @@
         }                                                                                          \
     } while (0)
 int main(int argc, char **argv) {
+    ps_doc_history history={0};
+    CHECK(!ps_doc_history_peek(&history,-1) && !ps_doc_history_move(&history,1));
+    ps_doc_location location={.topic=1,.track=1,.scroll_y=123};
+    location.match=3;
+    snprintf(location.query,sizeof location.query,"θ");
+    CHECK(ps_doc_history_visit(&history,&location));
+    location.topic=2;location.scroll_y=456;CHECK(ps_doc_history_visit(&history,&location));
+    location.topic=3;location.scroll_y=789;CHECK(ps_doc_history_visit(&history,&location));
+    CHECK(ps_doc_history_peek(&history,-1)->topic==2 && ps_doc_history_move(&history,-1));
+    CHECK(ps_doc_history_peek(&history,-1)->scroll_y==123 && ps_doc_history_move(&history,-1));
+    CHECK(!ps_doc_history_move(&history,-1) && history.entries[history.index].track==1);
+    CHECK(history.entries[history.index].match==3 && !strcmp(history.entries[history.index].query,"θ"));
+    CHECK(ps_doc_history_move(&history,1) && ps_doc_history_peek(&history,1)->scroll_y==789);
+    location.topic=4;CHECK(ps_doc_history_visit(&history,&location));
+    CHECK(!ps_doc_history_peek(&history,1) && history.count==3);
+    for(unsigned i=0;i<PS_DOC_HISTORY_LIMIT+10;i++){location.topic=(int)i+10;CHECK(ps_doc_history_visit(&history,&location));}
+    CHECK(history.count==PS_DOC_HISTORY_LIMIT && history.index==PS_DOC_HISTORY_LIMIT-1);
+    CHECK(history.entries[0].topic==20 && history.entries[history.index].topic==83);
+    ps_doc_history saved=history;location.topic=-1;
+    CHECK(!ps_doc_history_visit(&history,&location) && !memcmp(&history,&saved,sizeof history));
+    CHECK(!ps_doc_history_move(&history,0) && !memcmp(&history,&saved,sizeof history));
     for (int i = 1; i < argc; i++) {
         FILE *file = fopen(argv[i], "rb");
         CHECK(file && fseek(file, 0, SEEK_END) == 0);

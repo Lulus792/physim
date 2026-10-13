@@ -237,8 +237,9 @@ typedef struct {
     SDL_Window *doc_window;
     ps_graphics *doc_graphics;
     struct nk_context *doc_ui;
-    const struct nk_user_font *doc_font_ui, *doc_font_title, *doc_font_code, *doc_code_fonts[4];
-    const struct nk_user_font *doc_ui_fonts[4], *doc_title_fonts[4];
+    const struct nk_user_font *doc_font_ui, *doc_font_title, *doc_font_code, *doc_code_fonts[9];
+    const struct nk_user_font *doc_ui_fonts[9], *doc_title_fonts[9];
+    unsigned doc_zoom_size;
     bool doc_visible;
     int doc_topic, doc_match, doc_jump_block,doc_anchor_heading;
     nk_uint doc_scroll_x, doc_scroll_y;
@@ -250,7 +251,10 @@ typedef struct {
     struct nk_rect doc_focus_bounds,doc_anchor_bounds,doc_body_bounds;
     char doc_filter[128], doc_last_filter[128];
     bool doc_filter_active, doc_contents;
-    int doc_group, doc_previous, doc_track;
+    int doc_group, doc_track;
+    ps_doc_history doc_history;
+    bool doc_history_navigation;
+    unsigned doc_history_restore;
     struct nk_rect doc_track_bounds[2],doc_home_bounds;
     float doc_theta,doc_length,doc_omega,doc_yaw,doc_pitch,doc_zoom;
     bool doc_model_initialized,doc_orthographic;
@@ -3357,7 +3361,6 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Integrierter Fensterkopf: %s\n", SDL_GetError());
     a->preferences = PS_PREFERENCES_DEFAULT;
     a->doc_jump_block = -1;
-    a->doc_previous = -1;
     a->graphics = graphics;
     a->camera_target = PS_CAMERA_DEFAULT.target;
     a->png_scale = 2;

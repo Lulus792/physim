@@ -237,17 +237,29 @@ static int documentation_group(int topic) {
 }
 static void documentation_filter(app *a) {
     for (int i = 0; i < DOCUMENTATION_TOPIC_COUNT; i++) {
-        if (a->doc_filter[0] && !documentation_topics[i].code && !documentation_index[i]) {
+        if (a->doc_filter[0] && !documentation_index[i]) {
             char path[4096];
             size_t length = 0;
             join(path, sizeof path, a->root, documentation_topics[i].path);
-            documentation_index[i] = load_utf8_text(path, &length);
+            documentation_index[i] = load_utf8_text_limit(path, &length,
+                documentation_topics[i].code?PS_DOC_MAX_CODE_BYTES:PS_DOC_MAX_BYTES);
         }
         documentation_hits[i] = !a->doc_filter[0] ||
                                 ps_document_find(documentation_topics[i].title, a->doc_filter) ||
                                 ps_document_find(documentation_index[i], a->doc_filter);
     }
     snprintf(a->doc_last_filter, sizeof a->doc_last_filter, "%s", a->doc_filter);
+}
+static ps_doc_location documentation_location(const app *a) {
+    ps_doc_location p={.topic=a->doc_topic,.track=a->doc_track,.match=a->doc_match,
+        .scroll_x=a->doc_scroll_x,.scroll_y=a->doc_scroll_y,.contents=a->doc_contents};
+    snprintf(p.query,sizeof p.query,"%s",a->doc_query);
+    snprintf(p.filter,sizeof p.filter,"%s",a->doc_filter);return p;
+}
+static void documentation_history_save(app *a) {
+    if(a->documentation && !a->doc_history_restore) {
+        ps_doc_location p=documentation_location(a);ps_doc_history_store(&a->doc_history,&p);
+    }
 }
 static void open_documentation(app *a, int topic) {
     if (topic < 0 || topic >= DOCUMENTATION_TOPIC_COUNT)
@@ -276,7 +288,7 @@ static void open_documentation(app *a, int topic) {
         status(a, a->doc_error);
         return;
     }
-    a->doc_previous = a->documentation ? a->doc_topic : -1;
+    if(!a->doc_history_navigation)documentation_history_save(a);
     free(a->documentation);
     a->documentation = document;
     a->doc_topic = topic;
@@ -284,12 +296,51 @@ static void open_documentation(app *a, int topic) {
     else if(topic==DOCUMENTATION_PHYSIM_GUIDE_TOPIC)a->doc_track=2;
     else if(topic==1)a->doc_track=0;
     a->doc_error[0] = 0;
+    a->doc_history_restore=0;
     a->doc_scroll_x = a->doc_scroll_y = 0;
     a->doc_match = 0;
     a->doc_move_match = true;
     a->doc_jump_block = -1;
     a->doc_anchor_heading=-1;
     a->doc_group = documentation_group(topic);
+    if(!a->doc_history_navigation) {
+        ps_doc_location p=documentation_location(a);ps_doc_history_visit(&a->doc_history,&p);
+    }
+}
+static void documentation_history_go(app *a,int direction) {
+    const ps_doc_location *entry=ps_doc_history_peek(&a->doc_history,direction);
+    if(!entry)return;
+    ps_doc_location target=*entry;documentation_history_save(a);
+    a->doc_history_navigation=true;open_documentation(a,target.topic);a->doc_history_navigation=false;
+    if(a->doc_error[0] || a->doc_topic!=target.topic)return;
+    ps_doc_history_move(&a->doc_history,direction);
+    a->doc_track=target.track;a->doc_contents=target.contents;
+    snprintf(a->doc_query,sizeof a->doc_query,"%s",target.query);
+    snprintf(a->doc_last_query,sizeof a->doc_last_query,"%s",target.query);
+    a->doc_match=target.match;
+    snprintf(a->doc_filter,sizeof a->doc_filter,"%s",target.filter);documentation_filter(a);
+    a->doc_move_match=false;a->doc_jump_block=-1;a->doc_history_restore=2;
+    a->doc_scroll_x=target.scroll_x;a->doc_scroll_y=target.scroll_y;
+}
+static unsigned documentation_font_size(const app *a) {
+    return a->doc_zoom_size?a->doc_zoom_size:a->preferences.ui_size;
+}
+static unsigned documentation_code_size(const app *a) {
+    return a->doc_zoom_size?a->doc_zoom_size:a->preferences.editor_size;
+}
+static float documentation_control_height(const app *a) {
+    return (float)documentation_font_size(a)+16;
+}
+static void documentation_zoom(app *a,int direction) {
+    unsigned old=documentation_font_size(a);
+    int size=direction?(int)old+direction*2:0;
+    a->doc_zoom_size=direction?(unsigned)(size<16?16:size>32?32:size):0;
+    unsigned now=documentation_font_size(a);
+    a->doc_font_ui=a->doc_ui_fonts[(now-16)/2];
+    a->doc_font_title=a->doc_title_fonts[(now-16)/2];
+    nk_style_set_font(a->doc_ui,a->doc_font_ui);nk_sdl_set_ui_size(a->doc_ui,now);
+    if(a->documentation)a->documentation->layout_width=0;
+    a->doc_scroll_y=(nk_uint)((double)a->doc_scroll_y*now/old);
 }
 static size_t documentation_line(const struct nk_user_font *font, const char *s, size_t n,
                                  float width, size_t *length) {
@@ -436,8 +487,11 @@ static void documentation_link(app *a, const char *target) {
                     status(a,a->doc_error);return;
                 }
             }
+            bool same=a->documentation && a->doc_topic==i;
+            if(same && hash)documentation_history_save(a);
             open_documentation(a, i);
             if(hash && !a->doc_error[0]) {
+                if(same){ps_doc_location p=documentation_location(a);ps_doc_history_visit(&a->doc_history,&p);}
                 a->doc_jump_block=(int)block;a->doc_move_match=false;
                 a->doc_scroll_adjustment=0;
             }
@@ -447,7 +501,7 @@ static void documentation_link(app *a, const char *target) {
     status(a, "Dieses Linkziel ist nicht in der mitgelieferten Dokumentation enthalten.");
 }
 /* Stable semantic IDs are rebuilt from current content for each key event. */
-enum { DOC_C=1,DOC_PHYSIM,DOC_TOPICS,DOC_CONTENTS,DOC_FILTER,DOC_GROUP,DOC_BACK,DOC_HOME,DOC_WORKSPACE,DOC_SEARCH,DOC_PREVIOUS,DOC_NEXT,DOC_BODY,
+enum { DOC_C=1,DOC_PHYSIM,DOC_TOPICS,DOC_CONTENTS,DOC_FILTER,DOC_GROUP,DOC_BACK,DOC_HOME,DOC_WORKSPACE,DOC_SEARCH,DOC_PREVIOUS,DOC_NEXT,DOC_BODY,DOC_FORWARD,DOC_ZOOM_OUT,DOC_ZOOM_RESET,DOC_ZOOM_IN,
        DOC_TOPIC=10000,DOC_HEADING=20000,DOC_COPY=30000,DOC_LINK=40000,DOC_VISUAL=50000 };
 static int documentation_media_kind(const char *target) {
     if(!strcmp(target,"visuals/workflow.svg"))return 1;
@@ -461,6 +515,28 @@ static bool documentation_contents_heading(const app *a,const ps_doc_block *bloc
        !strncmp(documentation_topics[a->doc_topic].path,"docs/reference/",15))depth=3;
     return block->kind==PS_DOC_HEADING && block->level<=depth;
 }
+/* Visual and keyboard order share the same task-first catalogue. Search puts
+ * title matches before text matches without hiding bundled source pages. */
+static unsigned documentation_topic_order(const app *a,int *order) {
+    const char *priority[]={"docs/user-guide.md","docs/examples.md","docs/guide.md",
+        "docs/c-guide.md","docs/physim-guide.md","docs/troubleshooting.md",
+        "docs/spatial-explanations.md","docs/workspace.md"};
+    int base[DOCUMENTATION_TOPIC_COUNT],count=0;
+    bool placed[DOCUMENTATION_TOPIC_COUNT]={false};
+    for(unsigned p=0;p<sizeof priority/sizeof priority[0];p++)
+        for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(!strcmp(documentation_topics[i].path,priority[p])){base[count++]=i;placed[i]=true;break;}
+    for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(!placed[i])base[count++]=i;
+    unsigned found=0;
+    for(int pass=0;pass<(a->doc_filter[0]?2:1);pass++)for(int n=0;n<count;n++) {
+        int i=base[n];
+        if(a->doc_filter[0]) {
+            bool title=ps_document_find(documentation_topics[i].title,a->doc_filter)!=NULL;
+            if(!documentation_hits[i] || title!=(pass==0))continue;
+        } else if(documentation_group(i)!=a->doc_group)continue;
+        order[found++]=i;
+    }
+    return found;
+}
 static unsigned documentation_focus_list(app *a,int *entries) {
     unsigned count=0;entries[count++]=DOC_C;entries[count++]=DOC_PHYSIM;
     entries[count++]=DOC_TOPICS;entries[count++]=DOC_CONTENTS;
@@ -468,10 +544,16 @@ static unsigned documentation_focus_list(app *a,int *entries) {
         for(size_t i=0;i<a->documentation->count;i++)if(documentation_contents_heading(a,&a->documentation->blocks[i]))entries[count++]=DOC_HEADING+(int)i;
     } else {
         entries[count++]=DOC_FILTER;entries[count++]=DOC_GROUP;
-        for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(a->doc_filter[0]?documentation_hits[i] && !documentation_topics[i].code:documentation_group(i)==a->doc_group)entries[count++]=DOC_TOPIC+i;
+        int order[DOCUMENTATION_TOPIC_COUNT];unsigned topics=documentation_topic_order(a,order);
+        for(unsigned n=0;n<topics;n++)entries[count++]=DOC_TOPIC+order[n];
     }
-    if(a->doc_previous>=0)entries[count++]=DOC_BACK;
-    entries[count++]=DOC_HOME;entries[count++]=DOC_WORKSPACE;entries[count++]=DOC_SEARCH;
+    if(ps_doc_history_peek(&a->doc_history,-1))entries[count++]=DOC_BACK;
+    if(ps_doc_history_peek(&a->doc_history,1))entries[count++]=DOC_FORWARD;
+    entries[count++]=DOC_HOME;entries[count++]=DOC_WORKSPACE;
+    if(documentation_font_size(a)>16)entries[count++]=DOC_ZOOM_OUT;
+    entries[count++]=DOC_ZOOM_RESET;
+    if(documentation_font_size(a)<32)entries[count++]=DOC_ZOOM_IN;
+    entries[count++]=DOC_SEARCH;
     entries[count++]=DOC_PREVIOUS;entries[count++]=DOC_NEXT;entries[count++]=DOC_BODY;
     if(a->documentation)for(size_t i=0;i<a->documentation->count;i++) {
         ps_doc_kind kind=a->documentation->blocks[i].kind;
@@ -482,6 +564,15 @@ static unsigned documentation_focus_list(app *a,int *entries) {
     return count;
 }
 static bool documentation_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
+    if(key->mod&PS_UI_COMMAND_MOD) {
+        int zoom=key->key==SDLK_PLUS || key->key==SDLK_EQUALS || key->key==SDLK_KP_PLUS?1:
+            key->key==SDLK_MINUS || key->key==SDLK_KP_MINUS?-1:0;
+        if(zoom || key->key==SDLK_0){documentation_zoom(a,zoom);return true;}
+    }
+    if((key->mod&SDL_KMOD_ALT) && !(key->mod&(SDL_KMOD_CTRL|SDL_KMOD_GUI)) &&
+       (key->key==SDLK_LEFT || key->key==SDLK_RIGHT)) {
+        if(!key->repeat)documentation_history_go(a,key->key==SDLK_LEFT?-1:1);return true;
+    }
     if(key->mod&(SDL_KMOD_CTRL|SDL_KMOD_GUI|SDL_KMOD_ALT)) {
         if(key->key==SDLK_F && (key->mod&PS_UI_COMMAND_MOD)) {
             a->doc_keyboard=true;a->doc_focus=DOC_SEARCH;a->doc_focus_reveal=true;
@@ -549,12 +640,15 @@ static bool documentation_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
     }
     if(!activate)return true;
     if(focus==DOC_C || focus==DOC_PHYSIM) {
-        a->doc_query[0]=a->doc_filter[0]=0;documentation_filter(a);a->doc_contents=false;
         open_documentation(a,focus==DOC_C?DOCUMENTATION_C_GUIDE_TOPIC:DOCUMENTATION_PHYSIM_GUIDE_TOPIC);
+        a->doc_query[0]=a->doc_filter[0]=0;documentation_filter(a);a->doc_contents=false;
     } else if(focus==DOC_TOPICS || focus==DOC_CONTENTS)a->doc_contents=focus==DOC_CONTENTS;
-    else if(focus==DOC_BACK && a->doc_previous>=0)open_documentation(a,a->doc_previous);
+    else if(focus==DOC_BACK)documentation_history_go(a,-1);
+    else if(focus==DOC_FORWARD)documentation_history_go(a,1);
     else if(focus==DOC_HOME)open_documentation(a,a->doc_track==1?DOCUMENTATION_C_GUIDE_TOPIC:a->doc_track==2?DOCUMENTATION_PHYSIM_GUIDE_TOPIC:1);
     else if(focus==DOC_WORKSPACE)SDL_RaiseWindow(a->window);
+    else if(focus==DOC_ZOOM_OUT || focus==DOC_ZOOM_IN || focus==DOC_ZOOM_RESET)
+        documentation_zoom(a,focus==DOC_ZOOM_OUT?-1:focus==DOC_ZOOM_IN?1:0);
     else if(focus==DOC_PREVIOUS || focus==DOC_NEXT){a->doc_match+=focus==DOC_NEXT?1:-1;a->doc_move_match=true;}
     else if(focus>=DOC_LINK) {
         unsigned i=(unsigned)(focus-DOC_LINK);
@@ -591,27 +685,70 @@ static void documentation_focus_draw(app *a,int id,struct nk_rect bounds,bool bo
     if(!delta)a->doc_focus_reveal=false;
 }
 #include "documentation_media.inc"
+static bool documentation_topic_button(app *a,const char *label,bool selected) {
+    struct nk_context *ui=a->doc_ui;struct nk_rect bounds;
+    enum nk_widget_layout_states visible=nk_widget(&bounds,ui);
+    if(visible==NK_WIDGET_INVALID)return false;
+    bool pressed=ps_ui_button_at(ui,bounds,label,selected);
+    struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+    bool hover=nk_input_is_mouse_hovering_rect(&ui->input,bounds);
+    if(selected || hover)nk_fill_rect(canvas,bounds,4,selected?UI_COLOR(selection_active):UI_COLOR(button_hover));
+    const struct nk_user_font *font=a->doc_font_ui;
+    size_t at=0,n=strlen(label);float y=bounds.y+8;
+    do {
+        size_t length,used=documentation_line(font,label+at,n-at,bounds.w-20,&length);
+        nk_draw_text(canvas,nk_rect(bounds.x+10,y,bounds.w-20,font->height+6),
+            label+at,(int)length,font,nk_rgba(0,0,0,0),UI_COLOR(text));
+        at+=used;y+=font->height+6;
+    } while(at<n);
+    return pressed;
+}
+static bool documentation_zoom_button(app *a,int direction) {
+    struct nk_context *ui=a->doc_ui;struct nk_rect bounds;
+    if(nk_widget(&bounds,ui)==NK_WIDGET_INVALID)return false;
+    const char *name=direction<0?"Leseschrift verkleinern":direction>0?"Leseschrift vergrößern":"Standardleseschrift";
+    bool pressed=ps_ui_button_at(ui,bounds,name,false);
+    struct nk_command_buffer *c=nk_window_get_canvas(ui);
+    bool enabled=!ui->current->widgets_disabled;
+    bool hover=enabled && nk_input_is_mouse_hovering_rect(&ui->input,bounds);
+    nk_fill_rect(c,bounds,7,hover?UI_COLOR(button_hover):UI_COLOR(button));
+    struct nk_color color=enabled?UI_COLOR(text):UI_COLOR(muted);
+    if(direction) {
+        float x=bounds.x+bounds.w/2,y=bounds.y+bounds.h/2;
+        nk_stroke_line(c,x-8,y,x+8,y,2,color);
+        if(direction>0)nk_stroke_line(c,x,y-8,x,y+8,2,color);
+    } else {
+        char value[24];snprintf(value,sizeof value,"%u px",documentation_font_size(a));
+        float width=a->doc_font_ui->width(a->doc_font_ui->userdata,a->doc_font_ui->height,value,(int)strlen(value));
+        nk_draw_text(c,nk_rect(bounds.x+(bounds.w-width)/2,bounds.y+(bounds.h-a->doc_font_ui->height)/2,width+1,a->doc_font_ui->height),
+            value,(int)strlen(value),a->doc_font_ui,nk_rgba(0,0,0,0),color);
+    }
+    if(hover)nk_tooltip(ui,name);
+    return pressed;
+}
 static void documentation_sidebar(app *a) {
     struct nk_context *ui = a->doc_ui;
-    nk_layout_row_dynamic(ui, 28, 1);
-    nk_label_colored(ui, "PHYSIM HANDBUCH", NK_TEXT_LEFT, UI_COLOR(muted));
-    nk_layout_row_dynamic(ui,32,1);
+    nk_layout_row_dynamic(ui,documentation_height(a->doc_font_ui,"PHYSIM HANDBUCH",15,
+        nk_window_get_content_region(ui).w-8)+8,1);
+    nk_style_push_color(ui,&ui->style.text.color,UI_COLOR(muted));
+    nk_label_wrap(ui,"PHYSIM HANDBUCH");nk_style_pop_color(ui);
+    nk_layout_row_dynamic(ui,documentation_control_height(a),1);
     a->doc_track_bounds[0]=nk_widget_bounds(ui);
     bool c_selected=a->doc_track==1;
     if(nk_selectable_label(ui,"Teil I · C",NK_TEXT_LEFT,&c_selected)) {
-        a->doc_query[0]=a->doc_filter[0]=0;documentation_filter(a);a->doc_contents=false;
         open_documentation(a,DOCUMENTATION_C_GUIDE_TOPIC);
+        a->doc_query[0]=a->doc_filter[0]=0;documentation_filter(a);a->doc_contents=false;
     }
     documentation_focus_draw(a,DOC_C,a->doc_track_bounds[0],false);
-    nk_layout_row_dynamic(ui,32,1);
+    nk_layout_row_dynamic(ui,documentation_control_height(a),1);
     a->doc_track_bounds[1]=nk_widget_bounds(ui);
     bool physim_selected=a->doc_track==2;
     if(nk_selectable_label(ui,"Teil II · Physim",NK_TEXT_LEFT,&physim_selected)) {
-        a->doc_query[0]=a->doc_filter[0]=0;documentation_filter(a);a->doc_contents=false;
         open_documentation(a,DOCUMENTATION_PHYSIM_GUIDE_TOPIC);
+        a->doc_query[0]=a->doc_filter[0]=0;documentation_filter(a);a->doc_contents=false;
     }
     documentation_focus_draw(a,DOC_PHYSIM,a->doc_track_bounds[1],false);
-    nk_layout_row_dynamic(ui, 30, 2);
+    nk_layout_row_dynamic(ui, documentation_control_height(a), 2);
     struct nk_rect topic_bounds=nk_widget_bounds(ui);
     if (nk_button_label(ui, "Themen"))
         a->doc_contents = false;
@@ -636,9 +773,10 @@ static void documentation_sidebar(app *a) {
         }
         return;
     }
-    nk_layout_row_dynamic(ui, 24, 1);
-    nk_label(ui, "Alle Inhalte durchsuchen", NK_TEXT_LEFT);
-    nk_layout_row_dynamic(ui, 32, 1);
+    nk_layout_row_dynamic(ui, documentation_height(a->doc_font_ui,"Alle Inhalte durchsuchen",24,
+        nk_window_get_content_region(ui).w-8)+8,1);
+    nk_label_wrap(ui, "Alle Inhalte durchsuchen");
+    nk_layout_row_dynamic(ui, documentation_control_height(a), 1);
     if(a->doc_keyboard && a->doc_focus!=DOC_FILTER)nk_edit_unfocus(ui);
     if(a->doc_filter_focus || (a->doc_keyboard && a->doc_focus==DOC_FILTER && !ui->current->edit.active)){nk_edit_focus(ui,NK_EDIT_ALWAYS_INSERT_MODE);a->doc_filter_focus=false;}
     struct nk_rect filter_bounds=nk_widget_bounds(ui);
@@ -650,9 +788,8 @@ static void documentation_sidebar(app *a) {
         a->doc_search_active = false;
     if (strcmp(a->doc_filter, a->doc_last_filter))
         documentation_filter(a);
-    const char *groups[] = {"Lernen & Bedienung", "Fachthemen & Beispiele", "Funktionsreferenz",
-                            "Projekt & Technik", "Header (optional)"};
-    nk_layout_row_dynamic(ui, 32, 1);
+    const char *groups[] = {"App & Lernen", "Fachthemen", "Referenz", "Projekttechnik", "Quellen"};
+    nk_layout_row_dynamic(ui, documentation_control_height(a), 1);
     struct nk_rect group_bounds=nk_widget_bounds(ui);
     if (a->doc_filter[0]) {
         if (nk_button_label(ui, "Suche zurücksetzen")) {
@@ -663,15 +800,16 @@ static void documentation_sidebar(app *a) {
         a->doc_group = nk_combo(ui, groups, 5, a->doc_group, 30, nk_vec2(260, 190));
     documentation_focus_draw(a,DOC_GROUP,group_bounds,false);
     int found = 0;
-    for (int i = 0; i < DOCUMENTATION_TOPIC_COUNT; i++) {
-        if (a->doc_filter[0] ? (!documentation_hits[i] || documentation_topics[i].code)
-                             : documentation_group(i) != a->doc_group)
-            continue;
+    int order[DOCUMENTATION_TOPIC_COUNT];unsigned ordered=documentation_topic_order(a,order);
+    for (unsigned n = 0; n < ordered; n++) {
+        int i=order[n];
         found++;
-        nk_layout_row_dynamic(ui, 34, 1);
+        const char *title=documentation_topics[i].title;
+        nk_layout_row_dynamic(ui,documentation_height(a->doc_font_ui,title,strlen(title),
+            nk_window_get_content_region(ui).w-20)+16,1);
         struct nk_rect bounds=nk_widget_bounds(ui);
         bool selected = a->documentation && a->doc_topic == i;
-        if (nk_selectable_label(ui, documentation_topics[i].title, NK_TEXT_LEFT, &selected)) {
+        if (documentation_topic_button(a,title,selected)) {
             open_documentation(a, i);
             if (a->doc_filter[0]) {
                 snprintf(a->doc_query, sizeof a->doc_query, "%s", a->doc_filter);
@@ -691,25 +829,44 @@ static void documentation_view(app *a, float height) {
     float section_scroll=-1;
     ps_document *section_document=NULL;
     a->doc_scroll_pending=false;
-    bool large=a->preferences.ui_size>=20;
-    nk_layout_row_dynamic(ui, 32, large?2:3);
+    bool large=documentation_font_size(a)>=20;
+    bool compact=documentation_font_size(a)>=24;
+    bool narrow=!compact && (large || nk_window_get_content_region(ui).w<600);
+    nk_layout_row_dynamic(ui, documentation_control_height(a), narrow?2:4);
     struct nk_rect back_bounds=nk_widget_bounds(ui);
-    nk_begin_disabled(ui, a->doc_previous < 0);
-    if (nk_button_label(ui, "Zurück"))
-        open_documentation(a, a->doc_previous);
+    nk_begin_disabled(ui, !ps_doc_history_peek(&a->doc_history,-1));
+    if (compact?ps_ui_icon_button(ui,PS_ICON_LEFT,"Zurück"):nk_button_label(ui, "Zurück"))
+        documentation_history_go(a,-1);
     nk_end_disabled(ui);
     documentation_focus_draw(a,DOC_BACK,back_bounds,false);
+    struct nk_rect forward_bounds=nk_widget_bounds(ui);
+    nk_begin_disabled(ui,!ps_doc_history_peek(&a->doc_history,1));
+    if(compact?ps_ui_icon_button(ui,PS_ICON_RIGHT,"Vorwärts"):nk_button_label(ui,"Vorwärts"))documentation_history_go(a,1);
+    nk_end_disabled(ui);documentation_focus_draw(a,DOC_FORWARD,forward_bounds,false);
+    if(narrow)nk_layout_row_dynamic(ui,documentation_control_height(a),2);
     a->doc_home_bounds=nk_widget_bounds(ui);
-    if (nk_button_label(ui, "Start"))
+    if (compact?ps_ui_icon_button(ui,PS_ICON_BOOK,"Start"):nk_button_label(ui, "Start"))
         open_documentation(a,a->doc_track==1?DOCUMENTATION_C_GUIDE_TOPIC:
                             a->doc_track==2?DOCUMENTATION_PHYSIM_GUIDE_TOPIC:1);
     documentation_focus_draw(a,DOC_HOME,a->doc_home_bounds,false);
     struct nk_rect workspace_bounds=nk_widget_bounds(ui);
-    if (nk_button_label(ui, "Arbeitsbereich"))
+    if (compact?ps_ui_icon_button(ui,PS_ICON_WINDOW,"Arbeitsbereich"):nk_button_label(ui, "Arbeitsbereich"))
         SDL_RaiseWindow(a->window);
     documentation_focus_draw(a,DOC_WORKSPACE,workspace_bounds,false);
-    if(large)nk_layout_row_dynamic(ui,32,1);
-    else {nk_layout_row_begin(ui, NK_DYNAMIC, 32, 3);nk_layout_row_push(ui,.60f);}
+    nk_layout_row_dynamic(ui,documentation_control_height(a),3);
+    struct nk_rect zoom_out=nk_widget_bounds(ui);
+    nk_begin_disabled(ui,documentation_font_size(a)<=16);
+    if(documentation_zoom_button(a,-1))documentation_zoom(a,-1);
+    nk_end_disabled(ui);documentation_focus_draw(a,DOC_ZOOM_OUT,zoom_out,false);
+    struct nk_rect zoom_reset=nk_widget_bounds(ui);
+    if(documentation_zoom_button(a,0))documentation_zoom(a,0);
+    documentation_focus_draw(a,DOC_ZOOM_RESET,zoom_reset,false);
+    struct nk_rect zoom_in=nk_widget_bounds(ui);
+    nk_begin_disabled(ui,documentation_font_size(a)>=32);
+    if(documentation_zoom_button(a,1))documentation_zoom(a,1);
+    nk_end_disabled(ui);documentation_focus_draw(a,DOC_ZOOM_IN,zoom_in,false);
+    if(large && !compact)nk_layout_row_dynamic(ui,documentation_control_height(a),1);
+    else {nk_layout_row_begin(ui, NK_DYNAMIC, documentation_control_height(a), 3);nk_layout_row_push(ui,.60f);}
     if(a->doc_keyboard && a->doc_focus!=DOC_SEARCH)nk_edit_unfocus(ui);
     if (a->doc_search_focus || (a->doc_keyboard && a->doc_focus==DOC_SEARCH && !ui->current->edit.active)) {
         nk_edit_focus(ui, NK_EDIT_ALWAYS_INSERT_MODE);
@@ -721,27 +878,27 @@ static void documentation_view(app *a, float height) {
     documentation_focus_draw(a,DOC_SEARCH,search_bounds,false);
     a->doc_search_active = (search_state & NK_EDIT_ACTIVE) != 0;
     if (!a->doc_query[0] && !(search_state & NK_EDIT_ACTIVE)) {
-        const char *placeholder = "Dieses Dokument durchsuchen …";
+        const char *placeholder = compact?"Suchen …":"Dieses Dokument durchsuchen …";
         nk_draw_text(nk_window_get_canvas(ui),
                      nk_rect(search_bounds.x + 10, search_bounds.y + 8, search_bounds.w - 20, 20),
                      placeholder, (int)strlen(placeholder), a->doc_font_ui, nk_rgba(0, 0, 0, 0),
                      UI_COLOR(muted));
     }
-    if(large)nk_layout_row_dynamic(ui,32,2);else nk_layout_row_push(ui,.20f);
+    if(large && !compact)nk_layout_row_dynamic(ui,documentation_control_height(a),2);else nk_layout_row_push(ui,.20f);
     struct nk_rect previous_bounds=nk_widget_bounds(ui);
-    if (nk_button_label(ui, "Vorheriger")) {
+    if (compact?ps_ui_icon_button(ui,PS_ICON_LEFT,"Vorheriger Treffer"):nk_button_label(ui, "Vorheriger")) {
         a->doc_match--;
         a->doc_move_match = true;
     }
     documentation_focus_draw(a,DOC_PREVIOUS,previous_bounds,false);
-    if(!large)nk_layout_row_push(ui,.20f);
+    if(!large || compact)nk_layout_row_push(ui,.20f);
     struct nk_rect next_bounds=nk_widget_bounds(ui);
-    if (nk_button_label(ui, "Nächster")) {
+    if (compact?ps_ui_icon_button(ui,PS_ICON_RIGHT,"Nächster Treffer"):nk_button_label(ui, "Nächster")) {
         a->doc_match++;
         a->doc_move_match = true;
     }
     documentation_focus_draw(a,DOC_NEXT,next_bounds,false);
-    if(!large)nk_layout_row_end(ui);
+    if(!large || compact)nk_layout_row_end(ui);
     if (strcmp(a->doc_last_query, a->doc_query)) {
         snprintf(a->doc_last_query, sizeof a->doc_last_query, "%s", a->doc_query);
         a->doc_match = 0;
@@ -757,19 +914,21 @@ static void documentation_view(app *a, float height) {
         a->doc_match = (a->doc_match % match_count + match_count) % match_count;
     else
         a->doc_match = 0;
-    nk_layout_row_dynamic(ui, 24, 1);
     char detail[192];
     if (a->doc_error[0])
         snprintf(detail, sizeof detail, "%s", a->doc_error);
     else if (a->doc_query[0])
-        snprintf(detail, sizeof detail, "%s · %d Abschnitte mit Treffern%s",
-                 d ? documentation_topics[a->doc_topic].title : "", match_count,
-                 match_count ? " · blau markiert" : "");
+        snprintf(detail, sizeof detail, "%s · Treffer %d/%d Abschnitte",
+                 d ? documentation_topics[a->doc_topic].title : "",match_count?a->doc_match+1:0,match_count);
+    else if(compact)
+        snprintf(detail,sizeof detail,"%s · %u px",d?documentation_topics[a->doc_topic].title:"Dokument nicht verfügbar",documentation_font_size(a));
     else
-        snprintf(detail, sizeof detail, "%s · offline verfügbar · " PS_UI_SHORTCUT "F sucht in diesem Dokument",
-                 d ? documentation_topics[a->doc_topic].title : "Dokument nicht verfügbar");
-    if(large) {nk_style_push_color(ui,&ui->style.text.color,UI_COLOR(muted));nk_label_wrap(ui,detail);nk_style_pop_color(ui);}
-    else nk_label_colored(ui, detail, NK_TEXT_LEFT, UI_COLOR(muted));
+        snprintf(detail, sizeof detail, "%s · offline · %u px · " PS_UI_SHORTCUT "F sucht hier",
+                 d ? documentation_topics[a->doc_topic].title : "Dokument nicht verfügbar",documentation_font_size(a));
+    nk_layout_row_dynamic(ui,documentation_height(a->doc_font_ui,detail,strlen(detail),
+        fmaxf(40,nk_window_get_content_region(ui).w-8))+8,1);
+    nk_style_push_color(ui,&ui->style.text.color,a->doc_error[0]?UI_COLOR(error):UI_COLOR(muted));
+    nk_label_wrap(ui,detail);nk_style_pop_color(ui);
     nk_layout_row_dynamic(ui,16,1);
     struct nk_rect remaining=nk_widget_bounds(ui),clip=nk_window_get_content_region(ui);
     nk_layout_row_dynamic(ui,fmaxf(20,fminf(height,clip.y+clip.h-remaining.y)),1);
@@ -907,4 +1066,9 @@ static void documentation_view(app *a, float height) {
         a->doc_scroll_y=(nk_uint)fmaxf(0,(float)a->doc_scroll_y+a->doc_scroll_adjustment);
         a->doc_scroll_adjustment=0;
     }
+    if(a->doc_history_restore) {
+        const ps_doc_location *p=&a->doc_history.entries[a->doc_history.index];
+        a->doc_scroll_x=p->scroll_x;a->doc_scroll_y=p->scroll_y;
+        --a->doc_history_restore;
+    } else documentation_history_save(a);
 }

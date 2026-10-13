@@ -7,7 +7,7 @@ zeigt diese Unterscheidung mit drehbarer Ansicht, Reglern und zugehörigen Zahle
 
 ## Direkt in der App ausprobieren
 
-Drücke F1 und öffne unter **Lernen & Bedienung** das Thema **Räumliche Modelle
+Drücke F1 und öffne unter **App & Lernen** das Thema **Räumliche Modelle
 verstehen**. Die Regler und Szene erscheinen direkt in der Hilfe. Es gibt keinen
 Browser, Server oder HTML-Inhalt. Der native 3D-Renderer stellt das Modell dar;
 alle Lernschritte funktionieren offline. SecondBrain erhält dieselben Zusammenhänge

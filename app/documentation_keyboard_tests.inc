@@ -256,7 +256,130 @@ static void documentation_anchor_test_frame(app *a,int *stage,int *code,const ch
     if(a->quitting)printf("DOCUMENTATION ANCHOR SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 #undef ANCHOR_KEY
 }
+static void documentation_history_test_frame(app *a,int *stage,int *code,const char **capture) {
+    static int guide,workspace,settings,header,link;static nk_uint guide_scroll,workspace_scroll;
+    bool ok=true;
+#define HISTORY_KEY(key) test_window_key_mod(a->doc_window,key,0)
+#define HISTORY_BACK() test_window_key_mod(a->doc_window,SDLK_LEFT,SDL_KMOD_ALT)
+#define HISTORY_FORWARD() test_window_key_mod(a->doc_window,SDLK_RIGHT,SDL_KMOD_ALT)
+    switch((*stage)++) {
+    case 0:test_window_key_mod(a->window,SDLK_F1,0);break;
+    case 1:
+        guide=workspace=settings=header=-1;
+        for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++) {
+            if(!strcmp(documentation_topics[i].path,"docs/user-guide.md"))guide=i;
+            if(!strcmp(documentation_topics[i].path,"docs/workspace.md"))workspace=i;
+            if(!strcmp(documentation_topics[i].path,"docs/settings.md"))settings=i;
+            if(!strcmp(documentation_topics[i].path,"include/physim/core.h"))header=i;
+        }
+        ok=guide>=0 && workspace>=0 && settings>=0 && header>=0;open_documentation(a,guide);
+        SDL_SetWindowSize(a->doc_window,760,540);break;
+    case 2:
+        link=documentation_test_link(a->documentation,"workspace.md");
+        if(!documentation_test_seek(a,DOC_LINK+link,stage,code))return;
+        guide_scroll=a->doc_scroll_y;ok=guide_scroll>0;HISTORY_KEY(SDLK_RETURN);break;
+    case 3:
+        ok=a->doc_topic==workspace;link=documentation_test_link(a->documentation,"settings.md#panelanordnung");
+        if(!documentation_test_seek(a,DOC_LINK+link,stage,code))return;
+        workspace_scroll=a->doc_scroll_y;ok &= workspace_scroll>0;HISTORY_KEY(SDLK_RETURN);break;
+    case 4:ok=a->doc_topic==settings;HISTORY_BACK();break;
+    case 5:
+        if(a->doc_history_restore){--*stage;return;}
+        ok=a->doc_topic==workspace && a->doc_scroll_y==workspace_scroll;HISTORY_BACK();break;
+    case 6:
+        if(a->doc_history_restore){--*stage;return;}
+        ok=a->doc_topic==guide && a->doc_scroll_y==guide_scroll;
+        *capture="docs-history-restored.bmp";HISTORY_FORWARD();break;
+    case 7:
+        if(a->doc_history_restore){--*stage;return;}
+        ok=a->doc_topic==workspace && a->doc_scroll_y==workspace_scroll;HISTORY_FORWARD();break;
+    case 8:
+        if(a->doc_history_restore){--*stage;return;}
+        ok=a->doc_topic==settings && !ps_doc_history_peek(&a->doc_history,1);HISTORY_BACK();break;
+    case 9:
+        if(a->doc_history_restore){--*stage;return;}
+        if(!documentation_test_seek(a,DOC_HOME,stage,code))return;HISTORY_KEY(SDLK_RETURN);break;
+    case 10:
+        ok=a->doc_topic==1 && !ps_doc_history_peek(&a->doc_history,1);
+        if(!documentation_test_seek(a,DOC_TOPICS,stage,code))return;HISTORY_KEY(SDLK_RETURN);break;
+    case 11:if(!documentation_test_seek(a,DOC_FILTER,stage,code))return;break;
+    case 12:
+        ok=a->doc_filter_active;
+        {SDL_Event e={0};e.type=SDL_EVENT_TEXT_INPUT;e.text.windowID=SDL_GetWindowID(a->doc_window);e.text.text="ps_rng_seed";SDL_PushEvent(&e);}break;
+    case 13:
+        if(a->doc_ui->input.keyboard.text_len){--*stage;return;}
+        ok=!strcmp(a->doc_filter,"ps_rng_seed") && documentation_hits[header];
+        if(!documentation_test_seek(a,DOC_TOPIC+header,stage,code))return;HISTORY_KEY(SDLK_RETURN);break;
+    case 14:
+        ok=a->doc_topic==header && a->documentation->blocks[0].kind==PS_DOC_CODE &&
+           !strcmp(a->doc_query,"ps_rng_seed") && !a->doc_error[0];
+        *capture="docs-source-search.bmp";a->quitting=true;break;
+    }
+    if(!ok){fprintf(stderr,"Documentation history stage %d failed: topic=%d scroll=%u\n",*stage-1,a->doc_topic,a->doc_scroll_y);*code=1;a->quitting=true;}
+    if(a->quitting)printf("DOCUMENTATION HISTORY SELF-TEST: %s\n",*code?"FAILED":"PASSED");
+#undef HISTORY_KEY
+#undef HISTORY_BACK
+#undef HISTORY_FORWARD
+}
+static void documentation_zoom_test_frame(app *a,int *stage,int *code,const char **capture) {
+    bool ok=true;
+    switch((*stage)++) {
+    case 0:test_window_key_mod(a->window,SDLK_F1,0);break;
+    case 1:
+        SDL_SetWindowSize(a->doc_window,760,540);
+        for(int i=0;i<8;i++)test_window_key_mod(a->doc_window,SDLK_PLUS,PS_UI_COMMAND_MOD);
+        break;
+    case 2:
+        ok=documentation_font_size(a)==32 && documentation_code_size(a)==32 &&
+           a->doc_font_ui->height==32 && a->doc_body_bounds.h>=120 && a->preferences.ui_size==16;
+        {const nk_rune symbols[]={0x2192,0x221a,0x222b,0x2212,0x2080,0x2264};
+         for(unsigned i=0;i<sizeof symbols/sizeof symbols[0];i++) {
+             const struct nk_font_glyph *glyph=nk_font_find_glyph((struct nk_font*)a->doc_font_ui->userdata.ptr,symbols[i]);
+             ok &= glyph && glyph->codepoint==symbols[i];
+         }}
+        *capture="docs-200-percent-small.bmp";
+        test_window_key_mod(a->doc_window,SDLK_F,PS_UI_COMMAND_MOD);break;
+    case 3:
+        if(a->doc_focus_reveal){--*stage;return;}
+        ok=a->doc_search_active;
+        {SDL_Event e={0};e.type=SDL_EVENT_TEXT_INPUT;e.text.windowID=SDL_GetWindowID(a->doc_window);e.text.text="Physim";SDL_PushEvent(&e);}break;
+    case 4:
+        if(a->doc_ui->input.keyboard.text_len){--*stage;return;}
+        ok=!strcmp(a->doc_query,"Physim") && a->doc_body_bounds.h>=120;
+        *capture="docs-200-percent-search.bmp";test_window_key_mod(a->doc_window,SDLK_0,PS_UI_COMMAND_MOD);break;
+    case 5:
+        ok=documentation_font_size(a)==16 && documentation_code_size(a)==16 && a->preferences.ui_size==16;
+        *capture="docs-zoom-reset.bmp";break;
+    case 6:
+        {ps_preferences p=a->preferences;p.theme=PS_THEME_LIGHT;preferences_apply(a,&p);}
+        for(int i=0;i<8;i++)test_window_key_mod(a->doc_window,SDLK_PLUS,PS_UI_COMMAND_MOD);
+        break;
+    case 7:
+        ok=documentation_font_size(a)==32 && a->preferences.theme==PS_THEME_LIGHT && a->doc_body_bounds.h>=120;
+        *capture="docs-200-percent-light.bmp";break;
+    case 8:
+        {ps_preferences p=a->preferences;p.theme=PS_THEME_HIGH_CONTRAST;preferences_apply(a,&p);}break;
+    case 9:
+        ok=documentation_font_size(a)==32 && a->preferences.theme==PS_THEME_HIGH_CONTRAST && a->doc_body_bounds.h>=120;
+        *capture="docs-200-percent-contrast.bmp";break;
+    case 10:
+        {ps_preferences p=a->preferences;p.theme=PS_THEME_DARK;preferences_apply(a,&p);}
+        SDL_SetWindowSize(a->doc_window,1080,780);break;
+    case 11:
+        ok=documentation_font_size(a)==32 && a->doc_body_bounds.h>=300;
+        *capture="docs-200-percent-large.bmp";test_window_key_mod(a->doc_window,SDLK_ESCAPE,0);break;
+    case 12:ok=!a->doc_visible;test_window_key_mod(a->window,SDLK_F1,0);break;
+    case 13:
+        ok=a->doc_visible && documentation_font_size(a)==32;
+        test_window_key_mod(a->doc_window,SDLK_0,PS_UI_COMMAND_MOD);break;
+    case 14:ok=documentation_font_size(a)==16 && a->preferences.ui_size==16;a->quitting=true;break;
+    }
+    if(!ok){fprintf(stderr,"Documentation zoom stage %d failed: size=%u body=%.1f\n",*stage-1,documentation_font_size(a),a->doc_body_bounds.h);*code=1;a->quitting=true;}
+    if(a->quitting)printf("DOCUMENTATION ZOOM SELF-TEST: %s\n",*code?"FAILED":"PASSED");
+}
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strcmp(mode,"docs-keyboard-zoom")){documentation_zoom_test_frame(a,stage,code,capture);return;}
+    if(!strcmp(mode,"docs-keyboard-history")){documentation_history_test_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"docs-keyboard-anchors",21)){documentation_anchor_test_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"docs-keyboard-media",19)){documentation_media_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-api")){documentation_api_test_frame(a,stage,code,capture);return;}

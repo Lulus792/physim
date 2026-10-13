@@ -10,12 +10,12 @@ static void preferences_apply(app *a, const ps_preferences *p) {
     nk_sdl_set_ui_size(a->ui,p->ui_size);
     ps_graphics_background(a->graphics, UI_COLOR(canvas).r, UI_COLOR(canvas).g, UI_COLOR(canvas).b);
     if (a->doc_ui) {
-        a->doc_font_ui=a->doc_ui_fonts[(p->ui_size-16)/2];
-        a->doc_font_title=a->doc_title_fonts[(p->ui_size-16)/2];
+        a->doc_font_ui=a->doc_ui_fonts[(documentation_font_size(a)-16)/2];
+        a->doc_font_title=a->doc_title_fonts[(documentation_font_size(a)-16)/2];
         if(a->documentation)a->documentation->layout_width=0;
         style(a->doc_ui);
         nk_style_set_font(a->doc_ui, a->doc_font_ui);
-        nk_sdl_set_ui_size(a->doc_ui,p->ui_size);
+        nk_sdl_set_ui_size(a->doc_ui,documentation_font_size(a));
         ps_graphics_background(a->doc_graphics, UI_COLOR(canvas).r, UI_COLOR(canvas).g,
                                UI_COLOR(canvas).b);
     }

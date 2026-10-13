@@ -4,6 +4,23 @@
 #define PS_DOC_MAX_BLOCKS 4096u
 #define PS_DOC_MAX_BYTES (256u * 1024u)
 #define PS_DOC_MAX_CODE_BYTES (2u * PS_DOC_MAX_BYTES - 2u)
+#define PS_DOC_HISTORY_LIMIT 64u
+typedef struct {
+    int topic, track, match;
+    unsigned scroll_x, scroll_y;
+    bool contents;
+    char query[128], filter[128];
+} ps_doc_location;
+typedef struct {
+    ps_doc_location entries[PS_DOC_HISTORY_LIMIT];
+    unsigned count, index;
+} ps_doc_history;
+/* UI-owned navigation state. A new visit discards the forward branch; when
+ * full, only the oldest entry expires. Failed operations preserve the history. */
+bool ps_doc_history_visit(ps_doc_history *history,const ps_doc_location *location);
+bool ps_doc_history_store(ps_doc_history *history,const ps_doc_location *location);
+const ps_doc_location *ps_doc_history_peek(const ps_doc_history *history,int direction);
+bool ps_doc_history_move(ps_doc_history *history,int direction);
 typedef enum {
     PS_DOC_TEXT,
     PS_DOC_HEADING,

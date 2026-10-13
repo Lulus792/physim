@@ -37,15 +37,15 @@ static bool documentation_window_open(app *a) {
         if (!a->doc_ui)
             goto fail;
         struct nk_font_atlas *atlas = nk_sdl_font_stash_begin(a->doc_ui);
-        for(int i=0;i<4;i++) {
+        for(int i=0;i<9;i++) {
             struct nk_font *font=system_font(atlas,(float)(16+i*2),false,false);
             struct nk_font *title=system_font(atlas,(float)(23+i*2),false,true);
             if(!font || !title)goto fail;
             a->doc_ui_fonts[i]=&font->handle;a->doc_title_fonts[i]=&title->handle;
         }
-        a->doc_font_ui=a->doc_ui_fonts[(a->preferences.ui_size-16)/2];
-        a->doc_font_title=a->doc_title_fonts[(a->preferences.ui_size-16)/2];
-        for (int i = 0; i < 4; i++) {
+        a->doc_font_ui=a->doc_ui_fonts[(documentation_font_size(a)-16)/2];
+        a->doc_font_title=a->doc_title_fonts[(documentation_font_size(a)-16)/2];
+        for (int i = 0; i < 9; i++) {
             struct nk_font *code = system_font(atlas, (float)(16 + i * 2), true, false);
             if (!code)
                 goto fail;
@@ -55,7 +55,7 @@ static bool documentation_window_open(app *a) {
             goto fail;
         style(a->doc_ui);
         nk_style_set_font(a->doc_ui, a->doc_font_ui);
-        nk_sdl_set_ui_size(a->doc_ui,a->preferences.ui_size);
+        nk_sdl_set_ui_size(a->doc_ui,documentation_font_size(a));
         a->doc_reset_sidebar = true;
         int x, y, w, h;
         SDL_Rect usable;
@@ -110,11 +110,11 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     int w, h;
     SDL_GetWindowSize(a->doc_window, &w, &h);
     /* Font changes also invalidate cached line heights in the open document. */
-    const struct nk_user_font *code = a->doc_code_fonts[(a->preferences.editor_size - 16) / 2];
+    const struct nk_user_font *code = a->doc_code_fonts[(documentation_code_size(a) - 16) / 2];
     if (a->documentation && a->doc_font_code != code)
         a->documentation->layout_width = 0;
     a->doc_font_code = code;
-    float side = (w < 1000 ? 220.0f : 270.0f)*(a->preferences.ui_size/16.f);
+    float side = (w < 1000 ? 220.0f : 270.0f)*(documentation_font_size(a)/16.f);
     side=fminf(side,(float)w*.4f);
     nk_style_push_vec2(ui, &ui->style.window.padding, nk_vec2(14, 14));
     if (nk_begin(ui, "topics", nk_rect(8, 8, side, (float)h - 16), 0)) {

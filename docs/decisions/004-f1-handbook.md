@@ -66,7 +66,31 @@ Gegenbeispiele mit fehlenden Zeilen, verändertem Code und Einrückung bleiben F
 Ergebnisse liegen unter `build/native/F1-review/test-results` im ignorierten
 Buildverzeichnis. Dies ist eine lokale Prüfung, keine vollständige Produktabnahme.
 
-Offen sind außerdem vollständiger Verlauf, verbesserte Lesedarstellung,
-doppelte Textgröße, native Windows-Semantik, praktische Screenreader-Abnahme
+Der Verlauf enthält jetzt bis zu 64 Seiten und Abschnittsziele mit Leseposition,
+Suchbegriff, ausgewähltem Suchtreffer, Inhaltsansicht und Sprachweg. Die
+globale Suche berücksichtigt registrierte Quellseiten, ordnet Titeltreffer zuerst
+und verwendet dieselbe Reihenfolge für Anzeige und Tastatur. Bedienung und
+Beispiele stehen am Anfang der Themenliste.
+
+Die Hilfe besitzt eine eigene Leseschrift bis 32 Pixel. Bei doppelter
+Standardschrift werden Navigation und Suche kompakter; mehrzeilige Themen
+bleiben lesbar. Die 13 GUI-Fälle dieser Erweiterung bestehen in `run-9w1tddq_`;
+die abschließende Gegenprobe für Verlauf, Header-Suche und Schrift besteht
+3/3 (`run-lf_ojqxq`). Die 30 ausgewählten nativen Fälle bestehen in `run-1ay2gb5q`;
+nach Erhaltung des ausgewählten Suchtreffers bestehen die sechs betroffenen
+Modell-/Parser-/Referenz-/Geometrie-/Einstellungs-/Linkfälle erneut in `run-lrv_uo0z`.
+Die Bilder des kleinen 32-Pixel-Lesers und des wiederhergestellten Verlaufs
+wurden visuell geprüft. Das bestätigt noch keine HiDPI- oder Screenreader-Abnahme.
+
+Die abschließende 32-Pixel-Prüfung besteht zusätzlich unter Dunkel, Hell und
+hohem Kontrast, bei 760 × 540 und 1080 × 780 sowie nach Schließen und
+Wiederöffnung (`run-fohiafzg`). Die unabhängige Prüfung der tatsächlichen
+Bitmapfarben besteht in `build/native/F1-review/theme-proof`. Sie erkennt
+das ursprüngliche Gegenbeispiel, bei dem der Themenwechsel vor der Aufnahme
+stattfand und die Bildnamen nicht zur dargestellten Palette passten. Die
+korrigierten Theme-Bilder wurden visuell geprüft.
+
+Offen sind verbesserte Inline-Lesedarstellung und Linkgestaltung,
+native Windows-Semantik, praktische Screenreader-Abnahme
 und die Abnahmematrix für Dichte, Themes sowie Linux und macOS. Diese Liste
 beschreibt Restarbeit und erteilt keine Produktfreigabe.

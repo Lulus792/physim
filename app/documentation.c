@@ -5,6 +5,38 @@
 #include <stdlib.h>
 #include <string.h>
 
+static bool history_valid(const ps_doc_history *h) {
+    return h && h->count<=PS_DOC_HISTORY_LIMIT && (!h->count || h->index<h->count);
+}
+static bool location_valid(const ps_doc_location *p) {
+    return p && p->topic>=0 && p->track>=0 && p->track<=2 && p->match>=0 &&
+           memchr(p->query,0,sizeof p->query) && memchr(p->filter,0,sizeof p->filter);
+}
+bool ps_doc_history_visit(ps_doc_history *h,const ps_doc_location *p) {
+    if(!history_valid(h) || !location_valid(p))return false;
+    ps_doc_location copy=*p;
+    if(h->count)h->count=h->index+1;
+    if(h->count==PS_DOC_HISTORY_LIMIT) {
+        memmove(h->entries,h->entries+1,(PS_DOC_HISTORY_LIMIT-1)*sizeof h->entries[0]);
+        --h->count;
+    }
+    h->entries[h->count++]=copy;h->index=h->count-1;return true;
+}
+bool ps_doc_history_store(ps_doc_history *h,const ps_doc_location *p) {
+    if(!history_valid(h) || !h->count || !location_valid(p))return false;
+    h->entries[h->index]=*p;return true;
+}
+const ps_doc_location *ps_doc_history_peek(const ps_doc_history *h,int direction) {
+    if(!history_valid(h) || !h->count)return NULL;
+    if(direction==-1 && h->index)return &h->entries[h->index-1];
+    if(direction==1 && h->index+1<h->count)return &h->entries[h->index+1];
+    return NULL;
+}
+bool ps_doc_history_move(ps_doc_history *h,int direction) {
+    if(!ps_doc_history_peek(h,direction))return false;
+    h->index=direction<0?h->index-1:h->index+1;return true;
+}
+
 static uint32_t folded_char(const char **text) {
     const unsigned char *p = (const unsigned char *)*text;
     uint32_t c = *p++;

@@ -636,6 +636,20 @@ Navigation und den Aktionen im Text. Enter oder Leertaste öffnet einen Link ode
 kopiert einen Codeblock. Im Lesebereich scrollen Pfeiltasten und PageUp/PageDown;
 Home führt zum Anfang. Der Rahmen zeigt den Tastaturfokus.
 
+**Zurück / Alt+Pfeil links** und **Vorwärts / Alt+Pfeil rechts** folgen dem
+Verlauf mit bis zu 64 besuchten Seiten und Abschnittszielen. Dabei bleiben
+Leseposition, Suchbegriff, Inhaltsansicht und Sprachweg erhalten. Eine neue
+Navigation nach Zurück verwirft nur den bisherigen Vorwärtszweig.
+Die Schaltflächen **Minus** und **Plus** oder **Ctrl/Cmd + Plus/Minus** ändern
+die Leseschrift zwischen 16 und 32 Pixeln. Ein Klick auf die angezeigte
+Schriftgröße in der Mitte oder **Ctrl/Cmd+0** übernimmt wieder die
+eingestellten UI- und Codegrößen. Die Vergrößerung gilt für das Hilfefenster
+und bleibt beim Schließen und erneuten Öffnen während derselben Sitzung erhalten.
+32 Pixel entsprechen der doppelten Standardschrift von 16 Pixeln.
+Die globale Suche berücksichtigt auch die registrierten Header und Beispielquellen;
+Titeltreffer stehen vor Treffern im Inhalt. Die Seitensuche zeigt den aktuellen
+Treffer und die Anzahl der Abschnitte mit Treffern.
+
 Links zu einem Abschnitt springen direkt zur passenden Überschrift. Verweise auf
 mitgelieferte Beispielquellen öffnen eine lesbare, kopierbare Ansicht in der Hilfe.
 Ändere dein eigenes Modell anschließend im Projekteditor. Externe Quellenlinks

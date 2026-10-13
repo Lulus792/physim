@@ -179,7 +179,7 @@ bool nk_sdl_accessibility_event(struct nk_context *ctx,const SDL_Event *event) {
  SDL_UnlockMutex(sdl->accessibility_mutex);return handled;
 }
 void nk_sdl_set_ui_size(struct nk_context *ctx,unsigned size) {
-    if(ctx && ctx->userdata.ptr && size>=16 && size<=22 && size%2==0)
+    if(ctx && ctx->userdata.ptr && size>=16 && size<=32 && size%2==0)
         ((struct nk_sdl *)ctx->userdata.ptr)->font_layout.ui_size=size;
 }
 struct nk_font_atlas *nk_sdl_font_stash_begin(struct nk_context *ctx) {
