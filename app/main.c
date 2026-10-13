@@ -2673,8 +2673,11 @@ static void editor_caret(app *a,struct nk_text_edit *edit,struct nk_rect bounds,
     struct nk_context *ui=a->ui;const struct nk_user_font *font=ui->style.font;
     const char *text=nk_str_get_const(&edit->string);if(!text)text="";
     nk_rune rune;int length;
-    const char *cursor=nk_str_at_const(&edit->string,edit->cursor,&rune,&length);
-    if(!cursor)cursor=text+nk_str_len_char(&edit->string);
+    int bytes=nk_str_len_char(&edit->string);
+    /* An empty nk_str may retain allocated storage while get_const returns
+     * null. Keep line and cursor within the same fallback string object. */
+    const char *cursor=bytes>0?nk_str_at_const(&edit->string,edit->cursor,&rune,&length):NULL;
+    if(!cursor)cursor=text+bytes;
     const char *line=text;unsigned lines=0;
     for(const char *p=text;p<cursor;p++)if(*p=='\n'){line=p+1;lines++;}
     float x=bounds.x+ui->style.edit.padding.x+ui->style.edit.border-edit->scrollbar.x;

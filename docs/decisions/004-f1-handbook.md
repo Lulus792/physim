@@ -238,7 +238,31 @@ GPU-/F1-Fälle bestehen in `run-aahao1yx`, darunter 16/22/32-Pixel-Schrift,
 Absätze/Code, Themes, Verlauf, native Feldauswahl und vollständiges natives Lesen.
 Die Codeaufnahme wurde visuell geprüft. Testkatalog und erwartete Fehlerfälle
 bestehen in `build/native/F1-review/font-limit-runner-proof`.
-Der korrigierte Linux- und macOS-Lauf ist zum Zeitpunkt dieses Eintrags noch offen.
+Der korrigierte Stand `3ab6a1b` besteht unter Ubuntu 24.04, X11/Xvfb mit GCC
+und AddressSanitizer/UBSan: **14/14 Modell-/Editor-/Fontfälle** und **21/21
+GUI-Fälle**, einschließlich F1-Medien/Abschnitten und der bestehenden AT-SPI-
+Bedienprobe. [Ausgeführter GCC-Lauf](https://github.com/Lulus792/physim/actions/runs/38478702052/job/115575701645).
+Clang besteht ebenfalls 14/14 native Fälle und die vier F1-Medien-/Abschnittsfälle.
+Seine GUI-Gruppe besteht 18/21; Completion und beide Kamera-Ebenenfälle melden
+denselben globalen Pufferüberlauf in der Editor-Cursorbreitenmessung.
+[Ausgeführter Clang-Lauf](https://github.com/Lulus792/physim/actions/runs/38478702052/job/115575701905).
+Dies ist ein begrenzter X11-Nachweis, keine Wayland- oder macOS-Abnahme.
+
+Die Cursorursache ist ein leerer Editor mit behaltenem Pufferspeicher:
+`nk_str_get_const` liefert null und wird durch `""` ersetzt, während die
+Cursorabfrage noch auf den ursprünglichen Puffer zeigt. Die Subtraktion von
+Zeigern unterschiedlicher Objekte erzeugt eine falsche Messlänge. Ein leerer
+Editor verwendet jetzt durchgehend denselben leeren String als Text und
+Cursorbasis. Unter Windows bestehen Completion, beide Kamera-Ebenenfälle und
+das native F1-Feld mit MSVC ASan 4/4 in `run-9o8cfvas`. Die Clang-Regression
+dieser zusätzlichen Korrektur ist noch offen.
+
+Eine Zeicheninventur der 183 registrierten Seiten findet 43 mathematische,
+griechische oder hoch-/tiefgestellte Zeichen. U+1D63 (`ᵣ`) im Pendel-Tutorial
+fehlt im geladenen Bereich. Die Windows-Fonts Segoe UI, Segoe UI Semibold und
+Consolas enthalten laut direkter GDI-Glyphenprüfung sämtliche 43 Zeichen;
+das ersetzt keine Prüfung ihrer tatsächlich gebackenen und gezeichneten Glyphen.
+Die Erweiterung und visuelle Prüfung dieses Zeichens bleiben offen.
 
 Offen sind natives Scrollen zu verdeckten Feldzeichen, vollständige assistive
 Feldbedienung und ihre native macOS-/Linux-Anbindung, eingebettete Link-/Tabellensemantik, vollständiges natives
