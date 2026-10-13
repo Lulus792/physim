@@ -1,3 +1,20 @@
+/* SDL 3.2.30 writes CF_UNICODETEXT with CRLF under Windows. Only that
+ * representation change is equivalent; indentation and every other byte matter. */
+static bool documentation_test_same_text(const char *actual,const char *expected) {
+    if(!actual || !expected)return false;
+    while(*actual || *expected) {
+        if(actual[0]=='\r' && actual[1]=='\n')++actual;
+        if(expected[0]=='\r' && expected[1]=='\n')++expected;
+        if(*actual!=*expected)return false;
+        if(*actual){++actual;++expected;}
+    }
+    return true;
+}
+static bool documentation_test_clipboard(const char *expected) {
+    char *actual=SDL_GetClipboardText();
+    bool equal=documentation_test_same_text(actual,expected);
+    SDL_free(actual);return equal;
+}
 /* Traverse actual SDL focus events; no pointer input or direct focus assignment. */
 static bool documentation_test_seek(app *a,int id,int *stage,int *code) {
     static unsigned seeks,attempts;
@@ -93,7 +110,7 @@ static void documentation_api_test_frame(app *a,int *stage,int *code,const char 
     case 15:
         *capture="docs-api-example.bmp";SDL_SetClipboardText("sentinel");API_KEY(SDLK_SPACE);break;
     case 16:
-        {char *text=SDL_GetClipboardText();ok=text && !strcmp(text,a->documentation->text+a->documentation->blocks[example].text);SDL_free(text);}
+        ok=documentation_test_clipboard(a->documentation->text+a->documentation->blocks[example].text);
         a->quitting=true;break;
     }
     if(!ok){fprintf(stderr,"API browser stage %d: topic=%d focus=%d\n",*stage-1,a->doc_topic,a->doc_focus);*code=1;a->quitting=true;}
@@ -230,7 +247,7 @@ static void documentation_anchor_test_frame(app *a,int *stage,int *code,const ch
         *capture="docs-large-source.bmp";
         if(!documentation_test_seek(a,DOC_COPY,stage,code))return;ANCHOR_KEY(SDLK_RETURN);break;
     case 12:
-        {char *copy=SDL_GetClipboardText();ok=copy && !strcmp(copy,a->documentation->text+a->documentation->blocks[0].text);SDL_free(copy);}
+        ok=documentation_test_clipboard(a->documentation->text+a->documentation->blocks[0].text);
         if(!documentation_test_seek(a,DOC_BODY,stage,code))return;ANCHOR_KEY(SDLK_PAGEDOWN);break;
     case 13:
         ok=a->doc_scroll_y>0 && !a->doc_error[0];*capture="docs-large-source-scrolled.bmp";a->quitting=true;break;
@@ -250,7 +267,13 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
     switch((*stage)++) {
     case 0: test_window_key_mod(a->window,SDLK_F1,0);break;
     case 1: tutorial_topic=-1;for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(!strcmp(documentation_topics[i].path,"docs/experiment-tutorial.md"))tutorial_topic=i;
-        ok=a->doc_visible && tutorial_topic>=0;SDL_SetWindowSize(a->doc_window,760,540);DOC_KEY(SDLK_TAB);break;
+        ok=a->doc_visible && tutorial_topic>=0 &&
+           documentation_test_same_text("θ\r\n  x;\r\n","θ\n  x;\n") &&
+           !documentation_test_same_text("θ\r\n x;\r\n","θ\n  x;\n") &&
+           !documentation_test_same_text("θ\r\n  y;\r\n","θ\n  x;\n") &&
+           !documentation_test_same_text("θ\r\n  x;","θ\n  x;\n") &&
+           !documentation_test_same_text("θ\r  x;","θ\n  x;");
+        SDL_SetWindowSize(a->doc_window,760,540);DOC_KEY(SDLK_TAB);break;
     case 2: ok=a->doc_keyboard && a->doc_focus==DOC_C;DOC_KEY(SDLK_RETURN);break;
     case 3: ok=a->doc_topic==DOCUMENTATION_C_GUIDE_TOPIC;DOC_KEY(SDLK_TAB);DOC_KEY(SDLK_RETURN);break;
     case 4: ok=a->doc_topic==DOCUMENTATION_PHYSIM_GUIDE_TOPIC;test_window_key_mod(a->doc_window,SDLK_TAB,SDL_KMOD_SHIFT);DOC_KEY(SDLK_RETURN);break;
@@ -272,7 +295,7 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
     case 7: if(!documentation_test_seek(a,DOC_HEADING+heading,stage,code))return;DOC_KEY(SDLK_RETURN);break;
     case 8: ok=a->doc_scroll_y>0;*capture="docs-keyboard-heading.bmp";break;
     case 9: if(!documentation_test_seek(a,DOC_COPY+copy_block,stage,code))return;SDL_SetClipboardText("sentinel");DOC_KEY(SDLK_SPACE);break;
-    case 10: {char *text=SDL_GetClipboardText();ok=text && !strcmp(text,a->documentation->text+a->documentation->blocks[copy_block].text);SDL_free(text);break;}
+    case 10: ok=documentation_test_clipboard(a->documentation->text+a->documentation->blocks[copy_block].text);break;
     case 11: if(!documentation_test_seek(a,DOC_LINK+link_block,stage,code))return;DOC_KEY(SDLK_RETURN);break;
     case 12: ok=a->doc_topic==link_topic;break;
     case 13: if(!documentation_test_seek(a,DOC_BACK,stage,code))return;DOC_KEY(SDLK_RETURN);break;

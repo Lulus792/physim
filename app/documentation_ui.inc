@@ -183,6 +183,9 @@ static const documentation_topic documentation_topics[] = {
     {"Beispiel: scene_frames/main.c", "examples/scene_frames/main.c", true},
     {"Quelle: third_party/README.md", "third_party/README.md", false},
     {"Quelle: tools/SDK-README.md", "tools/SDK-README.md", false},
+    {"Befehlsmenüs und Zustände", "docs/decisions/003-command-menus.md", false},
+    {"F1 Handbuch und Abnahme", "docs/decisions/004-f1-handbook.md", false},
+    {"Historische Plattformnachweise: Band 3", "docs/platform-validation-history-3.md", false},
 };
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27
@@ -561,7 +564,10 @@ static bool documentation_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
         }
     } else if(focus>=DOC_COPY) {
         unsigned i=(unsigned)(focus-DOC_COPY);
-        if(a->documentation && i<a->documentation->count && a->documentation->blocks[i].kind==PS_DOC_CODE)SDL_SetClipboardText(a->documentation->text+a->documentation->blocks[i].text);
+        if(a->documentation && i<a->documentation->count && a->documentation->blocks[i].kind==PS_DOC_CODE) {
+            if(!SDL_SetClipboardText(a->documentation->text+a->documentation->blocks[i].text))
+                snprintf(a->doc_error,sizeof a->doc_error,"Code konnte nicht kopiert werden: %.110s",SDL_GetError());
+        }
     } else if(focus>=DOC_HEADING)a->doc_jump_block=focus-DOC_HEADING;
     else if(focus>=DOC_TOPIC) {
         open_documentation(a,focus-DOC_TOPIC);
