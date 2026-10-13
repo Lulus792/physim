@@ -342,6 +342,8 @@ static void documentation_zoom(app *a,int direction) {
     nk_style_set_font(a->doc_ui,a->doc_font_ui);nk_sdl_set_ui_size(a->doc_ui,now);
     if(a->documentation)a->documentation->layout_width=0;
     a->doc_scroll_y=(nk_uint)((double)a->doc_scroll_y*now/old);
+    /* Reflow changes the match's line position, not just its pixel scale. */
+    if(now!=old && a->doc_query[0])a->doc_move_match=true;
 }
 static size_t documentation_line(const struct nk_user_font *font, const char *s, size_t n,
                                  float width, size_t *length) {

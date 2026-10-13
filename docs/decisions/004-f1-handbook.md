@@ -254,15 +254,47 @@ Cursorabfrage noch auf den ursprünglichen Puffer zeigt. Die Subtraktion von
 Zeigern unterschiedlicher Objekte erzeugt eine falsche Messlänge. Ein leerer
 Editor verwendet jetzt durchgehend denselben leeren String als Text und
 Cursorbasis. Unter Windows bestehen Completion, beide Kamera-Ebenenfälle und
-das native F1-Feld mit MSVC ASan 4/4 in `run-9o8cfvas`. Die Clang-Regression
-dieser zusätzlichen Korrektur ist noch offen.
+das native F1-Feld mit MSVC ASan 4/4 in `run-9o8cfvas`. Der Stand `fce0249`
+besteht anschließend unter Ubuntu 24.04/X11/Xvfb mit beiden Compilern:
+Clang **14/14 native und 21/21 GUI-Fälle** (`run-4hjvqzva`, `run-cas15ah_`),
+GCC ebenfalls **14/14 und 21/21** (`run-tt2lzkxk`, `run-geqdyjui`).
+[Clang-Nachweis](https://github.com/Lulus792/physim/actions/runs/38479929845/job/115579741517),
+[GCC-Nachweis](https://github.com/Lulus792/physim/actions/runs/38479929845/job/115579741720).
+Die Linux-Artefakte des vorherigen Fontstands zeigen tatsächlich Mesa 25.2.8/
+llvmpipe mit 16384 Pixel GPU-Grenze, einen 2048 × 16384-Hauptatlas und einen
+4096 × 16384-F1-Atlas. Die Bilder der räumlichen F1-Erklärung wurden geprüft.
 
 Eine Zeicheninventur der 183 registrierten Seiten findet 43 mathematische,
 griechische oder hoch-/tiefgestellte Zeichen. U+1D63 (`ᵣ`) im Pendel-Tutorial
-fehlt im geladenen Bereich. Die Windows-Fonts Segoe UI, Segoe UI Semibold und
+fehlte im geladenen Bereich. Die Windows-Fonts Segoe UI, Segoe UI Semibold und
 Consolas enthalten laut direkter GDI-Glyphenprüfung sämtliche 43 Zeichen;
 das ersetzt keine Prüfung ihrer tatsächlich gebackenen und gezeichneten Glyphen.
-Die Erweiterung und visuelle Prüfung dieses Zeichens bleiben offen.
+U+1D63 wird jetzt für Text und Code geladen. Der neue Test `documentation_math`
+liest die registrierten Originalseiten erneut und prüft sämtliche so gefundenen
+Zeichen in allen **38 F1-Schriftvarianten**. Er verlangt einen tatsächlichen
+Codepunkt im gebackenen Atlas, einen echten Glyphenindex im Quellfont und positive
+Glyphengeometrie. Die Negativprobe U+0378 besitzt zwar einen Eintrag im deklarierten
+griechischen Bereich, wird aber als fehlender Quellglyph erkannt. Der vorherige
+Stand scheitert für U+1D63 in allen 38 Varianten (`run-pvxb2xzn`).
+
+Der Test öffnet das echte Pendel-Tutorial, sucht `eᵣ` und prüft seine sichtbare
+Glyphenposition bei 16 und 32 Pixeln. Die Bildprüfung entdeckte zunächst einen
+falschen 32-Pixel-Ausschnitt: Der Test las noch die 16-Pixel-Geometrie, während
+die Ansicht nach neuem Umbruch den Treffer verlor. Die strengere Gegenprobe
+prüft nach abgeschlossenen Layout-Frames und scheitert am vorherigen Zoom
+(`run-sq0lwnpr`). Zoom richtet einen vorhandenen Suchtreffer jetzt nach dem
+neuen Umbruch erneut aus. Beide korrigierten Laufzeitbilder zeigen `eᵣ` in der
+Formel, einschließlich 32-Pixel-Leseschrift im kleinen Fenster.
+
+Die Mathematik-, Verlauf- und Zoomfälle bestehen 3/3 in `run-edtojs15`; die
+abschließenden fünf Mathematik-/Inline-/Tastatur-/nativen Feld-/Lesefälle bestehen
+in `run-bqpq0966`. Mathematik und Zoom bestehen 2/2 mit MSVC ASan in
+`build/native/F1-uia-sanitized/test-results/run-ob6vmb6j`. Testkatalog und erwartete
+Fehlerfälle bestehen in `build/native/F1-review/math-runner-proof`.
+Die abschließende Mathematikprobe einschließlich U+0378 besteht zusätzlich mit
+MSVC ASan in `build/native/F1-uia-sanitized/test-results/run-7pbhh6m_`.
+Die mathematische Zeichendeckung dieses neuen Stands auf Linux/macOS bleibt
+bis zu deren tatsächlich ausgeführten Prüfungen offen.
 
 Offen sind natives Scrollen zu verdeckten Feldzeichen, vollständige assistive
 Feldbedienung und ihre native macOS-/Linux-Anbindung, eingebettete Link-/Tabellensemantik, vollständiges natives

@@ -2791,9 +2791,9 @@ static void channel_units_start(app *a);
 // clang-format on
 static struct nk_font *system_font_sampling(struct nk_font_atlas *atlas, float size, bool code, bool title,
                                            unsigned char horizontal,unsigned char vertical) {
-    static const nk_rune ui_ranges[] = {0x20, 0x17f, 0x300, 0x4ff, 0x1e00, 0x1eff,
+    static const nk_rune ui_ranges[] = {0x20, 0x17f, 0x300, 0x4ff, 0x1d63, 0x1d63, 0x1e00, 0x1eff,
                                       0x2000, 0x22ff, 0};
-    static const nk_rune code_ranges[] = {0x20, 0x17f, 0x300, 0x4ff,
+    static const nk_rune code_ranges[] = {0x20, 0x17f, 0x300, 0x4ff, 0x1d63, 0x1d63,
                                           0x1e00, 0x1eff, 0x2000, 0x22ff, 0};
     struct nk_font_config config = nk_font_config(size);
     config.range = code ? code_ranges : ui_ranges;

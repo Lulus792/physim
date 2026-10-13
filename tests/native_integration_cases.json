@@ -12068,6 +12068,37 @@
       ]
     },
     {
+      "name": "documentation_math",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "documentation_math",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 75,
+          "files": [
+            "app-steps.json",
+            "math-inventory.json"
+          ]
+        }
+      ]
+    },
+    {
       "name": "documentation_zoom",
       "app": true,
       "display": true,

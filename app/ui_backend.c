@@ -5,6 +5,16 @@
 #endif
 #define NK_IMPLEMENTATION
 #include "ui.h"
+bool ps_ui_font_has_glyph(const struct nk_user_font *handle,nk_rune codepoint) {
+ if(!handle || !handle->userdata.ptr || codepoint>0x10ffffu)return false;
+ const struct nk_font *font=handle->userdata.ptr;const struct nk_font_config *config=font->config;
+ if(!config || !config->ttf_blob)return false;
+ const struct nk_font_glyph *glyph=nk_font_find_glyph(font,codepoint);
+ if(!glyph || glyph->codepoint!=codepoint)return false;
+ stbtt_fontinfo info={0};const unsigned char *bytes=config->ttf_blob;
+ int offset=stbtt_GetFontOffsetForIndex(bytes,0);
+ return offset>=0 && stbtt_InitFont(&info,bytes,offset) && stbtt_FindGlyphIndex(&info,(int)codepoint)!=0;
+}
 #include <math.h>
 #undef nk_checkbox_label
 #undef nk_label_wrap

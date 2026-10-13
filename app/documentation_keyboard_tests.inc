@@ -469,7 +469,61 @@ static void documentation_inline_test_frame(app *a,int *stage,int *code,const ch
     if(a->quitting)printf("DOCUMENTATION INLINE SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 #undef INLINE_KEY
 }
+static bool documentation_math_fonts(app *a) {
+ char path[4096];join(path,sizeof path,a->project,"required-glyphs.txt");FILE *input=fopen(path,"rb");if(!input)return false;
+ unsigned value,count=0;bool ok=true;
+ /* U+0378 is in the declared Greek range but absent from these platform fonts.
+  * A baked entry bearing its codepoint alone would accept the .notdef glyph. */
+ const struct nk_font_glyph *missing=nk_font_find_glyph(a->doc_ui_fonts[0]->userdata.ptr,0x0378);
+ if(!missing || missing->codepoint!=0x0378 || ps_ui_font_has_glyph(a->doc_ui_fonts[0],0x0378))ok=false;
+ while(fscanf(input,"%x",&value)==1) {
+  ++count;
+  for(unsigned role=0;role<4;role++) {
+   const struct nk_user_font **fonts=role==0?a->doc_ui_fonts:role==1?a->doc_title_fonts:role==2?a->doc_bold_fonts:a->doc_code_fonts;
+   for(unsigned i=0;i<(role==2?11u:9u);i++) {
+    const struct nk_font_glyph *glyph=nk_font_find_glyph(fonts[i]->userdata.ptr,(nk_rune)value);
+    if(!ps_ui_font_has_glyph(fonts[i],(nk_rune)value) || !glyph || glyph->x1<=glyph->x0 || glyph->y1<=glyph->y0) {
+     fprintf(stderr,"Documentation math missing U+%04X role=%u size=%.0f\n",value,role,fonts[i]->height);ok=false;
+    }
+   }
+  }
+ }
+ if(!feof(input) || count<1)ok=false;fclose(input);
+ if(ok)printf("DOCUMENTATION MATH GLYPHS: %u characters in 38 font variants\n",count);return ok;
+}
+static void documentation_math_test_frame(app *a,int *stage,int *code,const char **capture) {
+ static unsigned zoom_frames;bool ok=true;switch((*stage)++) {
+ case 0:test_window_key_mod(a->window,SDLK_F1,0);break;
+ case 1: {
+  int topic=-1;for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(!strcmp(documentation_topics[i].path,"docs/pendulum-tutorial.md"))topic=i;
+  ok=topic>=0;open_documentation(a,topic);SDL_SetWindowSize(a->doc_window,760,540);break;
+ }
+ case 2:ok=documentation_math_fonts(a);test_window_key_mod(a->doc_window,SDLK_F,PS_UI_COMMAND_MOD);break;
+ case 3: {
+  if(!a->doc_search_active){--*stage;return;}
+  SDL_Event input={0};input.type=SDL_EVENT_TEXT_INPUT;input.text.windowID=SDL_GetWindowID(a->doc_window);input.text.text="eᵣ";SDL_PushEvent(&input);break;
+ }
+ case 4: {
+  if(a->doc_ui->input.keyboard.text_len || a->doc_scroll_pending){--*stage;return;}
+  const char *r=strstr(a->documentation->reading,"ᵣ");ok=!strcmp(a->doc_query,"eᵣ") && r &&
+   nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(r-a->documentation->reading));
+  *capture="docs-math-16.bmp";for(int i=0;i<8;i++)test_window_key_mod(a->doc_window,SDLK_PLUS,PS_UI_COMMAND_MOD);break;
+ }
+ case 5: {
+  /* The snapshot checked here belongs to a completed 32 px layout, after input
+   * and reflow have both been drawn. A 16 px snapshot accepted a wrong image. */
+  if(zoom_frames++<2){--*stage;return;}
+  if(a->doc_scroll_pending){--*stage;return;}
+  const char *r=strstr(a->documentation->reading,"ᵣ");ok=documentation_font_size(a)==32 && r &&
+   nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(r-a->documentation->reading));
+  *capture="docs-math-32.bmp";a->quitting=true;break;
+ }
+ }
+ if(!ok){fprintf(stderr,"Documentation math stage %d failed\n",*stage-1);*code=1;a->quitting=true;}
+ if(a->quitting)printf("DOCUMENTATION MATH SELF-TEST: %s\n",*code?"FAILED":"PASSED");
+}
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strcmp(mode,"docs-keyboard-math")){documentation_math_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-edit-remote")) {
         static int header;static int settle,experiment_length,analysis_length;static double simulation_time;bool ok=true;
         switch(*stage) {

@@ -11,6 +11,7 @@ import shutil
 import subprocess
 import struct
 import sys
+import unicodedata
 import zlib
 
 
@@ -54,6 +55,26 @@ for name, fixture in (("unicode", "unicode_identifiers"), ("multiline", "multili
     SIMPLE[f"language_editor_{name}_preview"] = (["--syntax-preview-test", "{directory}",
         "{root}/tests/fixtures/language/" + fixture + ".phys"], 30, False)
 
+
+def documentation_math(flow, directory):
+    registry=(flow.root/'app/documentation_ui.inc').read_text(encoding='utf-8')
+    paths=re.findall(r'\{"[^"\n]+",\s*"([^"\n]+)",\s*(?:true|false)\}',registry)
+    require(paths and len(paths)==len(set(paths)), 'Invalid documentation registry')
+    characters=set()
+    for name in paths:
+        source=(flow.root/name).read_text(encoding='utf-8')
+        for char in source:
+            label=unicodedata.name(char,'')
+            if unicodedata.category(char)=='Sm' or any(word in label for word in ('GREEK','SUBSCRIPT','SUPERSCRIPT')):
+                characters.add(char)
+    require('ᵣ' in characters, 'Pendel source no longer exercises the missing subscript')
+    directory.mkdir(parents=True)
+    (directory/'required-glyphs.txt').write_text(''.join(f'{ord(c):X}\n' for c in sorted(characters)),encoding='ascii')
+    (flow.work/'math-inventory.json').write_text(json.dumps(dict(pages=paths,characters=[dict(codepoint=f'U+{ord(c):04X}',char=c,name=unicodedata.name(c,'')) for c in sorted(characters)]),ensure_ascii=False,indent=2),encoding='utf-8')
+    flow.run('--workspace-state-test',directory,'docs-keyboard-math',timeout=45,marker='DOCUMENTATION MATH SELF-TEST: PASSED')
+    require(f'DOCUMENTATION MATH GLYPHS: {len(characters)} characters in 38 font variants' in flow.steps[-1]['stdout'], 'Incomplete real font coverage')
+    for name in ('docs-math-16.bmp','docs-math-32.bmp'):
+        require((directory/name).is_file() and (directory/name).stat().st_size>54, 'Missing mathematics image: '+name)
 
 def documentation_zoom_bitmaps(directory):
     # Check the rendered result after the observed theme transition. A palette
@@ -1323,6 +1344,8 @@ SPECIAL = {"scene_visibility_16": lambda flow,directory: scene_visibility(flow,d
            "workspace_state_workflow": workspace_state, "documents_recovery": document_recovery,
            "autosave_workflow": autosave, "toolbar_input_isolation": toolbar_input_isolation}
 
+
+SPECIAL["documentation_math"]=documentation_math
 
 def main():
     # App diagnostics and paths can contain Unicode even when Python inherits a
