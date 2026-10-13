@@ -167,7 +167,31 @@ externer Leser, 22-Pixel-Tastatur und Verlauf) sowie 6/6 Modell-/Parser-/Linkfä
 in `run-u3ns2d1p`. Obere und untere Scrollausrichtung werden als unterschiedliche
 native Anfragen übertragen; der gezeigte externe Leseweg prüft den Dokumentabschluss.
 
-Offen sind Suchfelder, eingebettete Link-/Tabellensemantik, vollständiges natives
+Die beiden F1-Suchfelder besitzen unter Windows jetzt eine Edit-Rolle, feste
+Namen, ihren aktuellen UTF-8-Wert und den nativen ValuePattern. Schreibanfragen
+werden ohne Kürzung validiert und genau einmal im passenden UI-Frame übernommen.
+Ungültiges Unicode, Zeilenumbrüche, zu lange Werte und entfernte oder deaktivierte
+Felder verändern den bisherigen Text nicht. Die native Schnittstelle meldet
+Wertänderungen; Feldnamen und Laufzeit-IDs bleiben dabei stabil.
+
+Ein unabhängiger Client bedient **Aktuelles Dokument durchsuchen** und
+**Alle Inhalte durchsuchen**. Er setzt `ps_rng_seed` und den Fokus. Die App prüft
+den tatsächlichen Suchzustand, zusätzliche Tastatureingabe und den Rückweg per
+Tab. Haupteditoren und Simulationszeit bleiben dabei unverändert. Die Bilder
+der beiden Suchansichten wurden geprüft. Eine Gegenprobe zeigte zunächst ein
+fälschlich deaktiviertes Feld im inaktiven Nachbarpanel; die native Berechtigung
+berücksichtigt jetzt sichtbare, nicht überdeckte Panels.
+
+Die 20 betroffenen GUI-Fälle bestehen in `run-l9swswr9`; die externe Feldprüfung
+besteht zusätzlich in `run-0cs6jmql`. Die sieben Modell-/Parser-/Linkfälle bestehen
+in `run-oqc3g_rw`, einschließlich Unicode, Leerwert, verspäteter Schreibanfrage,
+Kapazitätswechsel und veralteter Ziele. Provider und echter Feldablauf bestehen
+mit MSVC AddressSanitizer in
+`build/native/F1-uia-sanitized/test-results/run-nqs4wt1q`. Auch die Erweiterung
+des Testkatalogs besteht mit den erwarteten Fehlerfällen.
+
+Offen sind TextPattern, Caret und Auswahl der Suchfelder sowie ihre native
+macOS-/Linux-Anbindung, eingebettete Link-/Tabellensemantik, vollständiges natives
 Lesen auf macOS/Linux, praktische Screenreader-Abnahme
 und die Abnahmematrix für Dichte, Themes sowie Linux und macOS. Diese Liste
 beschreibt Restarbeit und erteilt keine Produktfreigabe.

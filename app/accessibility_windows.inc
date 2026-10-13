@@ -7,6 +7,8 @@
 #include <commctrl.h>
 #include <uiautomation.h>
 #include <stddef.h>
+#include <wchar.h>
+#include "text_validation.h"
 
 typedef struct uia_element uia_element;
 struct ps_a11y_native {
@@ -22,7 +24,9 @@ struct uia_element {
  IRawElementProviderFragmentRoot root;IInvokeProvider invoke;IToggleProvider toggle;
  ISelectionItemProvider item;ISelectionProvider selection;IRangeValueProvider range;
  ITextProvider text;
+ IValueProvider value;
  LONG references;ps_a11y_native *bridge;uint64_t id;ps_a11y_role role;
+ char previous_text[PS_A11Y_LABEL_BYTES];
 };
 static uia_element *uia_new(ps_a11y_native *b,uint64_t id,ps_a11y_role role);
 static void uia_bridge_release(ps_a11y_native *b) {
@@ -44,6 +48,7 @@ static HRESULT uia_query(uia_element *e,REFIID iid,void **out) {
  else if(e->id && e->role==PS_A11Y_RADIO && IsEqualIID(iid,&IID_ISelectionItemProvider))*out=&e->item;
  else if(e->id && e->role==PS_A11Y_RADIO_GROUP && IsEqualIID(iid,&IID_ISelectionProvider))*out=&e->selection;
  else if(e->id && e->role==PS_A11Y_SLIDER && IsEqualIID(iid,&IID_IRangeValueProvider))*out=&e->range;
+ else if(e->id && e->role==PS_A11Y_EDIT && IsEqualIID(iid,&IID_IValueProvider))*out=&e->value;
  if(!*out)return E_NOINTERFACE;uia_addref(e);return S_OK;
 }
 #define UIA_OWNER(type,member,p) ((uia_element*)((char*)(p)-offsetof(uia_element,member)))
@@ -60,6 +65,7 @@ UIA_UNKNOWN(ISelectionItemProvider,item,uia_item)
 UIA_UNKNOWN(ISelectionProvider,selection,uia_selection)
 UIA_UNKNOWN(IRangeValueProvider,range,uia_range)
 UIA_UNKNOWN(ITextProvider,text,uia_text)
+UIA_UNKNOWN(IValueProvider,value,uia_edit)
 /* Caller holds the bridge mutex. Returned provider has its own COM reference. */
 static uia_element *uia_for_locked(ps_a11y_native *b,uint64_t id) {
  if(!b->model)return NULL;
@@ -104,7 +110,7 @@ static HRESULT STDMETHODCALLTYPE uia_pattern(IRawElementProviderSimple *p,PATTER
  }
  REFIID iid=pattern==UIA_InvokePatternId?&IID_IInvokeProvider:pattern==UIA_TogglePatternId?&IID_IToggleProvider:
   pattern==UIA_SelectionItemPatternId?&IID_ISelectionItemProvider:pattern==UIA_SelectionPatternId?&IID_ISelectionProvider:
-  pattern==UIA_RangeValuePatternId?&IID_IRangeValueProvider:NULL;
+  pattern==UIA_RangeValuePatternId?&IID_IRangeValueProvider:pattern==UIA_ValuePatternId?&IID_IValueProvider:NULL;
  if(!iid)return S_OK;HRESULT result=uia_query(e,iid,(void**)out);return result==E_NOINTERFACE?S_OK:result;
 }
 static HRESULT STDMETHODCALLTYPE uia_property(IRawElementProviderSimple *p,PROPERTYID property,VARIANT *out) {
@@ -120,7 +126,7 @@ static HRESULT STDMETHODCALLTYPE uia_property(IRawElementProviderSimple *p,PROPE
  if(property==UIA_ControlTypePropertyId) {
   out->vt=VT_I4;out->lVal=!e->id?(reading?UIA_DocumentControlTypeId:UIA_PaneControlTypeId):node.role==PS_A11Y_BUTTON?UIA_ButtonControlTypeId:
    node.role==PS_A11Y_CHECKBOX?UIA_CheckBoxControlTypeId:node.role==PS_A11Y_RADIO?UIA_RadioButtonControlTypeId:
-   node.role==PS_A11Y_RADIO_GROUP?UIA_GroupControlTypeId:node.role==PS_A11Y_SLIDER?UIA_SliderControlTypeId:UIA_TextControlTypeId;
+   node.role==PS_A11Y_RADIO_GROUP?UIA_GroupControlTypeId:node.role==PS_A11Y_SLIDER?UIA_SliderControlTypeId:node.role==PS_A11Y_EDIT?UIA_EditControlTypeId:UIA_TextControlTypeId;
  } else if(property==UIA_IsEnabledPropertyId){out->vt=VT_BOOL;out->boolVal=!e->id || node.enabled?VARIANT_TRUE:VARIANT_FALSE;}
  else if(property==UIA_IsKeyboardFocusablePropertyId){out->vt=VT_BOOL;out->boolVal=e->id && node.focusable?VARIANT_TRUE:VARIANT_FALSE;}
  else if(property==UIA_HasKeyboardFocusPropertyId){out->vt=VT_BOOL;out->boolVal=e->id && node.focused?VARIANT_TRUE:VARIANT_FALSE;}
@@ -254,6 +260,24 @@ static const IToggleProviderVtbl uia_toggle_vtable={uia_toggle_query,uia_toggle_
 static const ISelectionItemProviderVtbl uia_item_vtable={uia_item_query,uia_item_addref,uia_item_release,uia_select,uia_select,uia_remove_selection,uia_selected,uia_container};
 static const ISelectionProviderVtbl uia_selection_vtable={uia_selection_query,uia_selection_addref,uia_selection_release,uia_selection_array,uia_multiple,uia_required};
 static const IRangeValueProviderVtbl uia_range_vtable={uia_range_query,uia_range_addref,uia_range_release,uia_set_value,uia_value,uia_readonly,uia_maximum,uia_minimum,uia_change,uia_change};
+static HRESULT STDMETHODCALLTYPE uia_edit_set(IValueProvider *p,LPCWSTR value) {
+ if(!value)return E_INVALIDARG;size_t units=wcsnlen(value,PS_A11Y_LABEL_BYTES);if(units>=PS_A11Y_LABEL_BYTES)return E_INVALIDARG;
+ char text[PS_A11Y_LABEL_BYTES];int bytes=WideCharToMultiByte(CP_UTF8,WC_ERR_INVALID_CHARS,value,(int)units,text,sizeof text-1,NULL,NULL);
+ if(units && !bytes)return E_INVALIDARG;text[bytes]=0;
+ uia_element *e=UIA_OWNER(IValueProvider,value,p);ps_a11y_native *b=e->bridge;SDL_LockMutex(b->mutex);
+ const ps_a11y_node *node=b->model?ps_a11y_find(b->model,e->id):NULL;
+ HRESULT result=!node?UIA_E_ELEMENTNOTAVAILABLE:!node->enabled || !IsWindowVisible(b->hwnd) || IsIconic(b->hwnd)?UIA_E_ELEMENTNOTENABLED:
+  !ps_text_valid(text,node->text_capacity,false)?E_INVALIDARG:ps_a11y_set_text(b->model,e->id,text)?S_OK:UIA_E_INVALIDOPERATION;
+ SDL_UnlockMutex(b->mutex);return result;
+}
+static HRESULT STDMETHODCALLTYPE uia_edit_value(IValueProvider *p,BSTR *out) {
+ if(!out)return E_POINTER;*out=NULL;ps_a11y_node node;if(!uia_node(UIA_OWNER(IValueProvider,value,p),&node))return UIA_E_ELEMENTNOTAVAILABLE;
+ VARIANT text;VariantInit(&text);HRESULT result=uia_string(node.text_value,&text);if(SUCCEEDED(result))*out=text.bstrVal;return result;
+}
+static HRESULT STDMETHODCALLTYPE uia_edit_readonly(IValueProvider *p,BOOL *out) {
+ if(!out)return E_POINTER;ps_a11y_node node;if(!uia_node(UIA_OWNER(IValueProvider,value,p),&node))return UIA_E_ELEMENTNOTAVAILABLE;*out=!node.enabled;return S_OK;
+}
+static const IValueProviderVtbl uia_edit_vtable={uia_edit_query,uia_edit_addref,uia_edit_release,uia_edit_set,uia_edit_value,uia_edit_readonly};
 #include "accessibility_windows_text.inc"
 static uia_element *uia_new(ps_a11y_native *b,uint64_t id,ps_a11y_role role) {
  uia_element *e=calloc(1,sizeof *e);if(!e)return NULL;
@@ -261,6 +285,8 @@ static uia_element *uia_new(ps_a11y_native *b,uint64_t id,ps_a11y_role role) {
  e->invoke.lpVtbl=&uia_invoke_vtable;e->toggle.lpVtbl=&uia_toggle_vtable;e->item.lpVtbl=&uia_item_vtable;
  e->selection.lpVtbl=&uia_selection_vtable;e->range.lpVtbl=&uia_range_vtable;
  e->text.lpVtbl=&uia_text_vtable;
+ e->value.lpVtbl=&uia_edit_vtable;
+ if(role==PS_A11Y_EDIT){const ps_a11y_node *node=ps_a11y_find(b->model,id);if(node)strcpy(e->previous_text,node->text_value);}
  e->references=1;e->bridge=b;e->id=id;e->role=role;InterlockedIncrement(&b->references);return e;
 }
 static LRESULT CALLBACK uia_window_proc(HWND hwnd,UINT message,WPARAM wparam,LPARAM lparam,UINT_PTR subclass,DWORD_PTR data) {
@@ -285,6 +311,7 @@ ps_a11y_native *ps_a11y_native_create(SDL_Window *window,ps_a11y_model *model,SD
 }
 void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
  if(!b)return;uia_element *retired[PS_A11Y_MAX_NODES];size_t count=0;
+ uia_element *edits[PS_A11Y_MAX_NODES];VARIANT old_text[PS_A11Y_MAX_NODES],new_text[PS_A11Y_MAX_NODES];size_t edit_count=0;
  int w=0,h=0;SDL_GetWindowSize(b->window,&w,&h);RECT client={0};if(b->hwnd)GetClientRect(b->hwnd,&client);
  SDL_LockMutex(b->mutex);
  if(w>0 && h>0){b->scale_x=(double)(client.right-client.left)/w;b->scale_y=(double)(client.bottom-client.top)/h;}
@@ -294,11 +321,24 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
  for(size_t i=0;i<PS_A11Y_MAX_NODES;i++)if(b->elements[i] && (!b->model || !ps_a11y_find(b->model,b->elements[i]->id))) {
   retired[count++]=b->elements[i];b->elements[i]=NULL;
  }
+ for(size_t i=0;i<PS_A11Y_MAX_NODES;i++)if(b->elements[i] && b->elements[i]->role==PS_A11Y_EDIT) {
+  uia_element *edit=b->elements[i];const ps_a11y_node *node=ps_a11y_find(b->model,edit->id);
+  if(node && strcmp(edit->previous_text,node->text_value)) {
+   VariantInit(&old_text[edit_count]);VariantInit(&new_text[edit_count]);
+   if(SUCCEEDED(uia_string(edit->previous_text,&old_text[edit_count])) && SUCCEEDED(uia_string(node->text_value,&new_text[edit_count]))) {
+    uia_addref(edit);edits[edit_count++]=edit;strcpy(edit->previous_text,node->text_value);
+   } else {VariantClear(&old_text[edit_count]);VariantClear(&new_text[edit_count]);}
+  }
+ }
  uia_element *focus=focused && focused!=previous?uia_for_locked(b,focused):NULL;SDL_UnlockMutex(b->mutex);
  for(size_t i=0;i<count;i++){UiaDisconnectProvider(&retired[i]->simple);uia_release(retired[i]);}
  if(changed)UiaRaiseStructureChangedEvent(&b->root->simple,StructureChangeType_ChildrenInvalidated,NULL,0);
  if(reading && reading_changed)UiaRaiseAutomationEvent(&b->root->simple,UIA_Text_TextChangedEventId);
  if(focus){UiaRaiseAutomationEvent(&focus->simple,UIA_AutomationFocusChangedEventId);uia_release(focus);}
+ for(size_t i=0;i<edit_count;i++){
+  UiaRaiseAutomationPropertyChangedEvent(&edits[i]->simple,UIA_ValueValuePropertyId,old_text[i],new_text[i]);
+  VariantClear(&old_text[i]);VariantClear(&new_text[i]);uia_release(edits[i]);
+ }
 }
 void ps_a11y_native_destroy(ps_a11y_native *b) {
  if(!b)return;if(b->hwnd)RemoveWindowSubclass(b->hwnd,uia_window_proc,(UINT_PTR)b);

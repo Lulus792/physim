@@ -56,18 +56,31 @@ static HRESULT read_document(IUIAutomationElement *control,const wchar_t *path) 
  if(last)IUIAutomationTextRange_Release(last);if(copy)IUIAutomationTextRange_Release(copy);if(whole)IUIAutomationTextRange_Release(whole);
  if(pattern)IUIAutomationTextPattern_Release(pattern);if(unknown)IUnknown_Release(unknown);return result;
 }
+static HRESULT find_edit(IUIAutomation *a,IUIAutomationElement *desktop,LONG pid,const wchar_t *label,IUIAutomationElement **out) {
+ *out=NULL;IUIAutomationCondition *condition=NULL;IUIAutomationElementArray *windows=NULL;
+ VARIANT process;VariantInit(&process);process.vt=VT_I4;process.lVal=pid;
+ HRESULT result=IUIAutomation_CreatePropertyCondition(a,UIA_ProcessIdPropertyId,process,&condition);
+ if(SUCCEEDED(result))result=IUIAutomationElement_FindAll(desktop,TreeScope_Children,condition,&windows);
+ int count=0;if(SUCCEEDED(result))result=IUIAutomationElementArray_get_Length(windows,&count);
+ for(int i=0;SUCCEEDED(result) && !*out && i<count;i++) {
+  IUIAutomationElement *window=NULL;result=IUIAutomationElementArray_GetElement(windows,i,&window);
+  if(SUCCEEDED(result))result=named(a,window,label,UIA_EditControlTypeId,out);if(window)IUIAutomationElement_Release(window);
+ }
+ if(windows)IUIAutomationElementArray_Release(windows);if(condition)IUIAutomationCondition_Release(condition);return result;
+}
 int wmain(int argc,wchar_t **argv) {
  if(argc!=4 && argc!=5)return 2;
  wchar_t *end=NULL;unsigned long pid=wcstoul(argv[1],&end,10);if(!pid || *end)return 2;
- bool focus=!wcscmp(argv[2],L"focus"),toggle=!wcscmp(argv[2],L"toggle"),select=!wcscmp(argv[2],L"select"),read=!wcscmp(argv[2],L"read");
- if(!focus && !toggle && !select && !read)return 2;if(read && argc!=5)return 2;
+ bool focus=!wcscmp(argv[2],L"focus"),toggle=!wcscmp(argv[2],L"toggle"),select=!wcscmp(argv[2],L"select"),read=!wcscmp(argv[2],L"read"),edit=!wcscmp(argv[2],L"edit");
+ if(!focus && !toggle && !select && !read && !edit)return 2;if((read || edit) && argc!=5)return 2;
  HRESULT initialized=CoInitializeEx(NULL,COINIT_MULTITHREADED);if(FAILED(initialized))return 1;
  IUIAutomation *automation=NULL;IUIAutomationElement *desktop=NULL,*window=NULL,*group=NULL,*control=NULL;
  IUnknown *unknown=NULL;bool ok=SUCCEEDED(CoCreateInstance(&CLSID_CUIAutomation,NULL,CLSCTX_INPROC_SERVER,&IID_IUIAutomation,(void**)&automation));
  if(ok)ok=SUCCEEDED(IUIAutomation_GetRootElement(automation,&desktop));
  VARIANT process;VariantInit(&process);process.vt=VT_I4;process.lVal=(LONG)pid;
  if(ok)ok=SUCCEEDED(find(automation,desktop,TreeScope_Children,UIA_ProcessIdPropertyId,process,&window)) && window;
- if(ok && read) {
+ if(ok && edit)ok=SUCCEEDED(find_edit(automation,desktop,(LONG)pid,argv[3],&control)) && control;
+ else if(ok && read) {
   IUIAutomationCondition *pid_condition=NULL,*title_condition=NULL,*both=NULL;VARIANT title;VariantInit(&title);title.vt=VT_BSTR;title.bstrVal=SysAllocString(argv[3]);
   ok=title.bstrVal && SUCCEEDED(IUIAutomation_CreatePropertyCondition(automation,UIA_ProcessIdPropertyId,process,&pid_condition)) &&
    SUCCEEDED(IUIAutomation_CreatePropertyCondition(automation,UIA_NamePropertyId,title,&title_condition)) &&
@@ -81,7 +94,15 @@ int wmain(int argc,wchar_t **argv) {
  CONTROLTYPEID role=0;BOOL enabled=FALSE,focusable=FALSE;HRESULT action=E_FAIL;
  if(ok)ok=SUCCEEDED(IUIAutomationElement_get_CurrentControlType(control,&role)) &&
   SUCCEEDED(IUIAutomationElement_get_CurrentIsEnabled(control,&enabled)) && enabled;
- if(ok && read)action=read_document(control,argv[4]);
+ if(ok && edit) {
+  IUIAutomationValuePattern *pattern=NULL;BOOL readonly=TRUE;
+  ok=role==UIA_EditControlTypeId && SUCCEEDED(IUIAutomationElement_GetCurrentPattern(control,UIA_ValuePatternId,&unknown)) && unknown &&
+   SUCCEEDED(IUnknown_QueryInterface(unknown,&IID_IUIAutomationValuePattern,(void**)&pattern)) &&
+   SUCCEEDED(IUIAutomationValuePattern_get_CurrentIsReadOnly(pattern,&readonly)) && !readonly;
+  if(ok)action=IUIAutomationValuePattern_SetValue(pattern,argv[4]);
+  if(ok && SUCCEEDED(action))action=IUIAutomationElement_SetFocus(control);
+  if(pattern)IUIAutomationValuePattern_Release(pattern);
+ } else if(ok && read)action=read_document(control,argv[4]);
  else if(ok && focus) {
   ok=SUCCEEDED(IUIAutomationElement_get_CurrentIsKeyboardFocusable(control,&focusable)) && focusable;
   if(ok)action=IUIAutomationElement_SetFocus(control);
@@ -101,6 +122,6 @@ int wmain(int argc,wchar_t **argv) {
  if(window)IUIAutomationElement_Release(window);if(desktop)IUIAutomationElement_Release(desktop);if(automation)IUIAutomation_Release(automation);
  CoUninitialize();
  if(ok)printf("INDEPENDENT WINDOWS UIA: PASSED role=%d\n",role);
- else fprintf(stderr,"Independent Windows UIA failed: pid=%lu action=0x%08lX\n",pid,(unsigned long)action);
+ else fprintf(stderr,"Independent Windows UIA failed: pid=%lu action=0x%08lX role=%d enabled=%d found=%d\n",pid,(unsigned long)action,role,enabled,control!=NULL);
  return ok?0:1;
 }

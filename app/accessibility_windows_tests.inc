@@ -62,6 +62,14 @@ bool ps_a11y_native_test(SDL_Window *window) {
  uia_element *slider=uia_named(b,NULL,"Winkel θ");UIA_CHECK(slider && SUCCEEDED(IRangeValueProvider_SetValue(&slider->range,.75)));
  ps_a11y_begin(m);UIA_CHECK(ps_a11y_record_range(m,"main","Winkel θ",bounds,true,-1,1,.25,&scalar));ps_a11y_publish(m);ps_a11y_native_publish(b,true);
  UIA_CHECK(scalar==.75);if(slider)UIA_CHECK(IRangeValueProvider_SetValue(&slider->range,2)==E_INVALIDARG);
+ char field[32]="Initial θ";ps_a11y_begin(m);
+ ps_a11y_record_edit(m,"main","Suche",bounds,true,field,sizeof field);ps_a11y_publish(m);ps_a11y_native_publish(b,true);
+ uia_element *edit=uia_named(b,NULL,"Suche");UIA_CHECK(edit!=NULL);BSTR field_value=NULL;
+ if(edit){UIA_CHECK(SUCCEEDED(IValueProvider_get_Value(&edit->value,&field_value)) && !wcscmp(field_value,L"Initial θ"));SysFreeString(field_value);
+  UIA_CHECK(SUCCEEDED(IValueProvider_SetValue(&edit->value,L"Größe 🌍")));}
+ ps_a11y_begin(m);UIA_CHECK(ps_a11y_record_edit(m,"main","Suche",bounds,true,field,sizeof field));ps_a11y_publish(m);ps_a11y_native_publish(b,true);
+ UIA_CHECK(!strcmp(field,"Größe 🌍"));if(edit){UIA_CHECK(IValueProvider_SetValue(&edit->value,L"line\nline")==E_INVALIDARG);
+  UIA_CHECK(IValueProvider_SetValue(&edit->value,L"123456789012345678901234567890123456")==E_INVALIDARG);}
  /* Read the whole document through COM ranges, independently of control labels. */
  const char *reading="Intro θ\nCode\n  x = 1; 🌍\nEnd";
  ps_a11y_begin(m);bounds[0]=10;bounds[1]=20;
@@ -97,6 +105,7 @@ bool ps_a11y_native_test(SDL_Window *window) {
  ps_a11y_begin(m);UIA_CHECK(ps_a11y_document_begin(m,43,"Anders","New content",bounds));ps_a11y_publish(m);ps_a11y_native_publish(b,true);
  if(whole)UIA_CHECK(ITextRangeProvider_GetText(whole,-1,&read)==UIA_E_ELEMENTNOTAVAILABLE && !read);
  ps_a11y_native_destroy(b);
+ if(edit){UIA_CHECK(IValueProvider_SetValue(&edit->value,L"stale")==UIA_E_ELEMENTNOTAVAILABLE);uia_release(edit);}
  if(clone){UIA_CHECK(ITextRangeProvider_GetText(clone,-1,&read)==UIA_E_ELEMENTNOTAVAILABLE && !read);ITextRangeProvider_Release(clone);}
  if(whole)ITextRangeProvider_Release(whole);
  if(button){UIA_CHECK(IInvokeProvider_Invoke(&button->invoke)==UIA_E_ELEMENTNOTAVAILABLE);uia_release(button);}

@@ -14,12 +14,13 @@ typedef struct {
  float viewport[4];ps_a11y_text_box boxes[PS_A11Y_TEXT_BOXES];size_t count;unsigned dropped;
  bool active;
 } ps_a11y_document;
-typedef enum {PS_A11Y_TEXT,PS_A11Y_BUTTON,PS_A11Y_CHECKBOX,PS_A11Y_RADIO,PS_A11Y_RADIO_GROUP,PS_A11Y_SLIDER} ps_a11y_role;
+typedef enum {PS_A11Y_TEXT,PS_A11Y_BUTTON,PS_A11Y_CHECKBOX,PS_A11Y_RADIO,PS_A11Y_RADIO_GROUP,PS_A11Y_SLIDER,PS_A11Y_EDIT} ps_a11y_role;
 typedef struct {
  uint64_t id,key,parent;unsigned occurrence;ps_a11y_role role;
  char window[PS_A11Y_WINDOW_BYTES],label[PS_A11Y_LABEL_BYTES];
  float bounds[4];bool enabled,checked,focusable,focused;
  double value,minimum,maximum,increment;
+ char text_value[PS_A11Y_LABEL_BYTES];size_t text_capacity;
 } ps_a11y_node;
 /* UI thread owns the draft; callers serialize all operations. Published nodes
  * are immutable until publish. IDs persist across geometry changes, expire when
@@ -29,6 +30,7 @@ typedef struct {
  size_t count,draft_count;uint64_t next_id,pending_press,selection_parent,selection_id,pending_focus,focused_id;unsigned dropped;
  bool building,keyboard_focus;
  uint64_t pending_value_id;double pending_value;
+ uint64_t pending_text_id;char pending_text[PS_A11Y_LABEL_BYTES];
  ps_a11y_document *document,*document_draft;
  uint64_t document_scroll_version;size_t document_scroll_byte;
  bool document_scroll_top;
@@ -66,6 +68,11 @@ bool ps_a11y_record_range(ps_a11y_model *model,const char *window,const char *la
                          double increment,double *value);
 bool ps_a11y_set_value(ps_a11y_model *model,uint64_t id,double value);
 bool ps_a11y_adjust(ps_a11y_model *model,uint64_t id,int direction);
+/* Single-line editable UTF-8 values; no truncation. Names and IDs remain stable
+ * while values change. Accepted writes apply only on the next matching UI visit. */
+bool ps_a11y_record_edit(ps_a11y_model *model,const char *window,const char *name,
+                       const float bounds[4],bool enabled,char *text,size_t capacity);
+bool ps_a11y_set_text(ps_a11y_model *model,uint64_t id,const char *text);
 size_t ps_a11y_child_count(const ps_a11y_model *model,uint64_t parent);
 const ps_a11y_node *ps_a11y_child_at(const ps_a11y_model *model,uint64_t parent,size_t index);
 size_t ps_a11y_index(const ps_a11y_model *model,uint64_t id);

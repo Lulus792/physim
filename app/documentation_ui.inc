@@ -887,8 +887,9 @@ static void documentation_sidebar(app *a) {
     if(a->doc_keyboard && a->doc_focus!=DOC_FILTER)nk_edit_unfocus(ui);
     if(a->doc_filter_focus || (a->doc_keyboard && a->doc_focus==DOC_FILTER && !ui->current->edit.active)){nk_edit_focus(ui,NK_EDIT_ALWAYS_INSERT_MODE);a->doc_filter_focus=false;}
     struct nk_rect filter_bounds=nk_widget_bounds(ui);
-    nk_flags edit = nk_edit_string_zero_terminated(ui, NK_EDIT_FIELD, a->doc_filter,
+    nk_flags edit = nk_sdl_edit_named(ui,"Alle Inhalte durchsuchen", NK_EDIT_FIELD, a->doc_filter,
                                                    sizeof a->doc_filter, nk_filter_default);
+    if(edit&PS_UI_EDIT_NATIVE_FOCUS){a->doc_focus=DOC_FILTER;a->doc_keyboard=true;}
     documentation_focus_draw(a,DOC_FILTER,filter_bounds,false);
     a->doc_filter_active = (edit & NK_EDIT_ACTIVE) != 0;
     if (a->doc_filter_active)
@@ -983,8 +984,9 @@ static void documentation_view(app *a, float height) {
         a->doc_search_focus = false;
     }
     struct nk_rect search_bounds = nk_widget_bounds(ui);
-    nk_flags search_state = nk_edit_string_zero_terminated(ui, NK_EDIT_FIELD, a->doc_query,
+    nk_flags search_state = nk_sdl_edit_named(ui,"Aktuelles Dokument durchsuchen", NK_EDIT_FIELD, a->doc_query,
                                                            sizeof a->doc_query, nk_filter_default);
+    if(search_state&PS_UI_EDIT_NATIVE_FOCUS){a->doc_focus=DOC_SEARCH;a->doc_keyboard=true;}
     documentation_focus_draw(a,DOC_SEARCH,search_bounds,false);
     a->doc_search_active = (search_state & NK_EDIT_ACTIVE) != 0;
     if (!a->doc_query[0] && !(search_state & NK_EDIT_ACTIVE)) {

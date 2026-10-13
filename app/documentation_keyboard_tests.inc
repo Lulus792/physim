@@ -470,6 +470,41 @@ static void documentation_inline_test_frame(app *a,int *stage,int *code,const ch
 #undef INLINE_KEY
 }
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strcmp(mode,"docs-keyboard-edit-remote")) {
+        static int header;static int settle,experiment_length,analysis_length;static double simulation_time;bool ok=true;
+        switch(*stage) {
+        case 0:
+            experiment_length=a->experiment.string.len;analysis_length=a->analysis.string.len;simulation_time=a->simulation_time;
+            test_window_key_mod(a->window,SDLK_F1,0);++*stage;break;
+        case 1:
+            header=-1;for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(!strcmp(documentation_topics[i].path,"include/physim/core.h"))header=i;
+            ok=header>=0;open_documentation(a,header);SDL_SetWindowSize(a->doc_window,760,540);++*stage;break;
+        case 2:puts("EDIT READY SEARCH");fflush(stdout);++*stage;break;
+        case 3:
+            if(strcmp(a->doc_query,"ps_rng_seed") || !a->doc_search_active || !nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Aktuelles Dokument durchsuchen"))return;
+            *capture="docs-native-search.bmp";puts("EDIT APPLIED SEARCH");fflush(stdout);
+            {SDL_Event input={0};input.type=SDL_EVENT_TEXT_INPUT;input.text.windowID=SDL_GetWindowID(a->doc_window);input.text.text="Z";SDL_PushEvent(&input);}++*stage;break;
+        case 4:
+            if(a->doc_ui->input.keyboard.text_len)return;
+            ok=!strcmp(a->doc_query,"ps_rng_seedZ");test_window_key_mod(a->doc_window,SDLK_TAB,0);++*stage;break;
+        case 5:
+            ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active;
+            a->doc_query[0]=0;a->doc_contents=false;a->doc_reset_sidebar=true;a->doc_filter[0]=0;documentation_filter(a);
+            ++*stage;break;
+        case 6:
+            if(settle++<2)return;puts("EDIT READY GLOBAL");fflush(stdout);++*stage;break;
+        case 7:
+            if(strcmp(a->doc_filter,"ps_rng_seed") || !a->doc_filter_active || !nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Alle Inhalte durchsuchen"))return;
+            ok=documentation_hits[header];*capture="docs-native-global-search.bmp";
+            puts("EDIT APPLIED GLOBAL");fflush(stdout);test_window_key_mod(a->doc_window,SDLK_TAB,0);++*stage;break;
+        case 8:
+            ok=a->doc_focus==DOC_GROUP && !a->doc_filter_active;
+            ok &= a->experiment.string.len==experiment_length && a->analysis.string.len==analysis_length && a->simulation_time==simulation_time;
+            a->quitting=true;puts("DOCUMENTATION EDIT SELF-TEST: PASSED");break;
+        }
+        if(!ok){fprintf(stderr,"Native documentation edit stage %d failed: focus=%d query=%s filter=%s\n",*stage,a->doc_focus,a->doc_query,a->doc_filter);*code=1;a->quitting=true;}
+        return;
+    }
     if(!strcmp(mode,"docs-keyboard-reading-remote")) {
         switch(*stage) {
         case 0:test_window_key_mod(a->window,SDLK_F1,0);++*stage;break;

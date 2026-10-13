@@ -129,6 +129,7 @@ static bool documentation_window_render(app *a, const char *capture_path) {
             nk_window_set_scroll(ui, 0, 0);
             a->doc_reset_sidebar = false;
         }
+        ps_ui_accessibility_route(ui,true);
         documentation_sidebar(a);
     }
     nk_end(ui);
@@ -137,8 +138,10 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     else if (a->doc_filter_active)
         nk_window_set_focus(ui, "topics");
     if (nk_begin(ui, "document", nk_rect(side + 16, 8, (float)w - side - 24, (float)h - 16),
-                 NK_WINDOW_NO_SCROLLBAR))
+                 NK_WINDOW_NO_SCROLLBAR)) {
+        ps_ui_accessibility_route(ui,true);
         documentation_view(a, (float)h - 16);
+    }
     nk_end(ui);
     if (a->doc_search_active)
         nk_window_set_focus(ui, "document");
