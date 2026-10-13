@@ -23,6 +23,14 @@ included as `licenses/zlib-LICENSE.txt` in the portable package.
 
 ## Nuklear snapshot
 
+Local patch (2026-10-14): `nk_edit_string_scrolled` accepts an optional persistent
+horizontal offset for an unfocused string field. Its caller owns that offset;
+the widget preserves the active field's focus, selection, cursor and value.
+The existing `nk_edit_string` entry point passes no offset and keeps its prior
+behavior. `editor_scroll` inspects actual text commands across multiple frames
+while another field retains focus and selection. F1 uses the new entry point
+for queued UIA text-range reveal requests.
+
 Local patch (2026-10-14): `nk_font_atlas_bake_limited` bounds both texture axes
 by the renderer's `GL_MAX_TEXTURE_SIZE`. The packer widens and retries when the
 complete glyph set does not fit; every glyph and the custom cursor rectangle
@@ -91,7 +99,7 @@ requiring an installed font. The affected routine is also present in the
 Local patch (2026-09-28): undo/redo collapses the current selection to the restored
 cursor. A selection into removed text previously reached the renderer with invalid
 bounds. `editor_clipboard` and the SDL editor regression cover this case.
-Patched header SHA-256 (LF): 33f9821b9e5861d54f0e1847e756297bec1c95ffaa49749edd15dd1c5e83a14a.
+Patched header SHA-256 (LF): 76efcdc927695736fa22fd4aa56cc52f73ee3e66c207465316b2d7e451c3bc09.
 
 `nuklear_sdl3_renderer.h` is retained as the upstream `demo/sdl3_renderer` reference;
 it is no longer compiled into Physim. Input and clipboard handling in `app/ui_sdl.c`

@@ -3756,6 +3756,9 @@ enum nk_edit_events {
 #define NK_EDIT_COMMITED NK_EDIT_COMMITTED
 
 NK_API nk_flags nk_edit_string(struct nk_context*, nk_flags, char *buffer, int *len, int max, nk_plugin_filter);
+/* Physim: optional persistent horizontal offset, also for unfocused fields.
+ * The caller supplies a finite nonnegative offset. No focus/selection changes. */
+NK_API nk_flags nk_edit_string_scrolled(struct nk_context*, nk_flags, char *buffer, int *len, int max, nk_plugin_filter, float *horizontal_scroll);
 NK_API nk_flags nk_edit_string_zero_terminated(struct nk_context*, nk_flags, char *buffer, int max, nk_plugin_filter);
 NK_API nk_flags nk_edit_buffer(struct nk_context*, nk_flags, struct nk_text_edit*, nk_plugin_filter);
 NK_API void nk_edit_focus(struct nk_context*, nk_flags flags);
@@ -29204,6 +29207,12 @@ NK_API nk_flags
 nk_edit_string(struct nk_context *ctx, nk_flags flags,
     char *memory, int *len, int max, nk_plugin_filter filter)
 {
+    return nk_edit_string_scrolled(ctx,flags,memory,len,max,filter,0);
+}
+NK_API nk_flags
+nk_edit_string_scrolled(struct nk_context *ctx, nk_flags flags,
+    char *memory, int *len, int max, nk_plugin_filter filter, float *horizontal_scroll)
+{
     nk_hash hash;
     nk_flags state;
     struct nk_text_edit *edit;
@@ -29239,6 +29248,7 @@ nk_edit_string(struct nk_context *ctx, nk_flags flags,
         edit->active = nk_true;
     } else edit->active = nk_false;
 
+    if (horizontal_scroll) edit->scrollbar.x = NK_MAX(0,*horizontal_scroll);
     max = NK_MAX(1, max);
     *len = NK_MIN(*len, max-1);
     nk_str_init_fixed(&edit->string, memory, (nk_size)max);
@@ -29246,6 +29256,7 @@ nk_edit_string(struct nk_context *ctx, nk_flags flags,
     edit->string.len = nk_utf_len(memory, *len);
     state = nk_edit_buffer(ctx, flags, edit, filter);
     *len = (int)edit->string.buffer.allocated;
+    if (horizontal_scroll) *horizontal_scroll = edit->scrollbar.x;
 
     if (edit->active) {
         win->edit.cursor = edit->cursor;

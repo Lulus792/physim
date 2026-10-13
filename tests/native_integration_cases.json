@@ -9223,6 +9223,39 @@
       ]
     },
     {
+      "name": "accessibility_edit_scroll_windows",
+      "app": true,
+      "display": true,
+      "platforms": [
+        "win32"
+      ],
+      "targets": [
+        "python",
+        "physim",
+        "accessibility-windows-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_accessibility_edit_scroll_app.py",
+            "--app",
+            "{physim}",
+            "--probe",
+            "{accessibility-windows-probe}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 90,
+          "files": [
+            "app.stdout",
+            "app.stderr",
+            "results.json"
+          ]
+        }
+      ]
+    },
+    {
       "name": "accessibility_edit_windows",
       "app": true,
       "display": true,

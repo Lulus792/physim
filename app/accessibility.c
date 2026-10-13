@@ -199,7 +199,7 @@ bool ps_a11y_record_edit(ps_a11y_model *m,const char *window,const char *name,
  }
  node->text_capacity=capacity;node->box_offset=m->edit_box_draft_count;
  const ps_a11y_node *old=ps_a11y_find(m,node->id);
- if(old){node->text_version=old->text_version;node->text_caret=old->text_caret;strcpy(node->text_value,old->text_value);}
+ if(old){node->text_version=old->text_version;node->text_caret=old->text_caret;node->text_scroll=old->text_scroll;strcpy(node->text_value,old->text_value);}
  ps_a11y_edit_update(m,before,text,old?old->text_start:strlen(text),old?old->text_end:strlen(text));return changed;
 }
 bool ps_a11y_set_text(ps_a11y_model *m,uint64_t id,const char *text) {
@@ -213,7 +213,7 @@ bool ps_a11y_edit_update(ps_a11y_model *m,size_t index,const char *text,size_t s
  if(!m || !m->building || index>=m->draft_count)return false;ps_a11y_node *node=&m->draft[index];
  if(node->role!=PS_A11Y_EDIT || !text || !ps_text_valid(text,node->text_capacity,false))return false;
  size_t length=strlen(text);bool changed=!node->text_version || strcmp(node->text_value,text);
- if(changed){if(!m->next_text_version)return false;node->text_version=m->next_text_version++;strcpy(node->text_value,text);node->text_caret=length;}
+ if(changed){if(!m->next_text_version)return false;node->text_version=m->next_text_version++;strcpy(node->text_value,text);node->text_caret=length;node->text_scroll=0;}
  if(!text_boundary(text,length,start) || !text_boundary(text,length,end)){if(!changed)return false;start=end=length;}
  node->text_start=start<end?start:end;node->text_end=start<end?end:start;return true;
 }
@@ -243,6 +243,21 @@ bool ps_a11y_edit_box(ps_a11y_model *m,size_t index,size_t begin,size_t end,cons
  if(m->edit_box_draft_count==PS_A11Y_EDIT_BOXES){m->dropped++;return false;}
  if(node->box_offset+node->box_count!=m->edit_box_draft_count)return false;
  m->edit_boxes_draft[m->edit_box_draft_count++]=(ps_a11y_text_box){begin,end,{left,top,right-left,bottom-top}};node->box_count++;return true;
+}
+bool ps_a11y_edit_scroll(ps_a11y_model *m,uint64_t id,uint64_t version,size_t start,size_t end,bool top) {
+ const ps_a11y_node *node=m?ps_a11y_find(m,id):NULL;
+ if(!node || node->role!=PS_A11Y_EDIT || !node->enabled || !version || node->text_version!=version ||
+    m->pending_edit_scroll_id || start>end || !text_boundary(node->text_value,strlen(node->text_value),start) ||
+    !text_boundary(node->text_value,strlen(node->text_value),end))return false;
+ m->pending_edit_scroll_id=id;m->pending_edit_scroll_version=version;
+ m->pending_edit_scroll_start=start;m->pending_edit_scroll_end=end;m->pending_edit_scroll_top=top;return true;
+}
+bool ps_a11y_edit_take_scroll(ps_a11y_model *m,size_t index,size_t *start,size_t *end,bool *top) {
+ if(!m || !m->building || index>=m->draft_count || !start || !end || !top)return false;
+ ps_a11y_node *node=&m->draft[index];if(node->id!=m->pending_edit_scroll_id)return false;
+ bool valid=node->enabled && node->text_version==m->pending_edit_scroll_version;
+ if(valid){*start=m->pending_edit_scroll_start;*end=m->pending_edit_scroll_end;*top=m->pending_edit_scroll_top;}
+ m->pending_edit_scroll_id=0;return valid;
 }
 size_t ps_a11y_child_count(const ps_a11y_model *m,uint64_t parent) {
  size_t count=0;for(size_t i=0;i<m->count;i++)if(m->nodes[i].parent==parent)count++;return count;
@@ -307,7 +322,7 @@ bool ps_a11y_publish(ps_a11y_model *m) {
  changed=a->id!=b->id || a->enabled!=b->enabled || a->checked!=b->checked || a->focused!=b->focused ||
      a->value!=b->value || a->minimum!=b->minimum || a->maximum!=b->maximum || a->increment!=b->increment ||
      a->text_capacity!=b->text_capacity || a->text_version!=b->text_version || a->text_start!=b->text_start || a->text_end!=b->text_end || a->text_caret!=b->text_caret || a->text_active!=b->text_active ||
-     a->box_count!=b->box_count || strcmp(a->text_value,b->text_value) || memcmp(a->bounds,b->bounds,sizeof a->bounds)!=0;
+     a->box_count!=b->box_count || a->text_scroll!=b->text_scroll || strcmp(a->text_value,b->text_value) || memcmp(a->bounds,b->bounds,sizeof a->bounds)!=0;
  }
  memcpy(m->nodes,m->draft,m->draft_count*sizeof *m->nodes);m->count=m->draft_count;
  if(m->edit_box_count!=m->edit_box_draft_count || memcmp(m->edit_boxes,m->edit_boxes_draft,m->edit_box_draft_count*sizeof *m->edit_boxes))changed=true;
@@ -324,5 +339,7 @@ bool ps_a11y_publish(ps_a11y_model *m) {
  if(!edit || edit->role!=PS_A11Y_EDIT || !edit->enabled || !ps_text_valid(m->pending_text,edit->text_capacity,false))m->pending_text_id=0;
  const ps_a11y_node *selected=ps_a11y_find(m,m->pending_selection_id);
  if(!selected || selected->role!=PS_A11Y_EDIT || !selected->enabled || selected->text_version!=m->pending_selection_version)m->pending_selection_id=0;
+ const ps_a11y_node *scrolled=ps_a11y_find(m,m->pending_edit_scroll_id);
+ if(!scrolled || scrolled->role!=PS_A11Y_EDIT || !scrolled->enabled || scrolled->text_version!=m->pending_edit_scroll_version)m->pending_edit_scroll_id=0;
  m->building=false;return changed;
 }

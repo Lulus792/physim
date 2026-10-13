@@ -130,10 +130,15 @@ bool nk_sdl_accessibility_available(struct nk_context *ctx) {
 static size_t nk_sdl_edit_byte(const char *text,int scalar) {
  size_t at=0;while(scalar>0 && text[at]){nk_rune rune;int n=nk_utf_decode(text+at,&rune,(int)strlen(text+at));if(n<=0)break;at+=(size_t)n;--scalar;}return at;
 }
+static float nk_sdl_edit_extent(const struct nk_user_font *font,const char *text,size_t end) {
+ float x=0;for(size_t at=0;at<end;){nk_rune rune;int n=nk_utf_decode(text+at,&rune,(int)(end-at));if(n<=0)break;
+  x+=font->width(font->userdata,font->height,text+at,n);at+=(size_t)n;}return x;
+}
 #endif
 nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flags,char *text,int capacity,nk_plugin_filter filter) {
 #ifdef _WIN32
  struct nk_sdl *sdl=ctx && ctx->userdata.ptr?ctx->userdata.ptr:NULL;size_t index=SIZE_MAX;uint64_t id=0;bool selected=false;size_t select_start=0,select_end=0;
+ bool scrolled=false,scroll_top=true;size_t scroll_start=0,scroll_end=0;float text_scroll=0;
  struct nk_rect edit_bounds=nk_widget_bounds(ctx);
  if(sdl && sdl->accessibility && ctx->current && name && text && capacity>=2) {
   struct nk_rect bounds=nk_widget_bounds(ctx),clip=ctx->current->layout->clip;
@@ -151,7 +156,9 @@ nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flag
   uint64_t pending=m->pending_focus;size_t before=m->draft_count;
   bool changed=ps_a11y_record_edit(m,ctx->current->name_string,name,box,enabled,text,(size_t)capacity);
   bool granted=m->draft_count>before && pending && !m->pending_focus && m->focused_id==pending && m->draft[before].id==pending;
-  if(m->draft_count>before){index=before;id=m->draft[before].id;selected=ps_a11y_edit_take_selection(m,index,&select_start,&select_end);}
+  if(m->draft_count>before){index=before;id=m->draft[before].id;text_scroll=m->draft[before].text_scroll;
+   selected=ps_a11y_edit_take_selection(m,index,&select_start,&select_end);
+   scrolled=ps_a11y_edit_take_scroll(m,index,&scroll_start,&scroll_end,&scroll_top);}
   SDL_UnlockMutex(sdl->accessibility_mutex);
   if(granted){SDL_RaiseWindow(sdl->win);nk_window_set_focus(ctx,ctx->current->name_string);nk_edit_unfocus(ctx);nk_edit_focus(ctx,NK_EDIT_ALWAYS_INSERT_MODE);}
   if(changed && ctx->current->edit.active){ctx->current->edit.cursor=nk_utf_len(text,(int)strlen(text));ctx->current->edit.sel_start=ctx->current->edit.sel_end=ctx->current->edit.cursor;}
@@ -159,17 +166,35 @@ nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flag
    ctx->current->edit.sel_start=nk_utf_len(text,(int)select_start);ctx->current->edit.sel_end=nk_utf_len(text,(int)select_end);
    ctx->current->edit.cursor=ctx->current->edit.sel_end;
    /* A native selection follows the same horizontal text origin as Nuklear. */
-   const struct nk_user_font *font=ctx->style.font;float x=0;
-   for(size_t at=0;at<select_end;){nk_rune rune;int n=nk_utf_decode(text+at,&rune,(int)(select_end-at));if(n<=0)break;x+=font->width(font->userdata,font->height,text+at,n);at+=(size_t)n;}
+   const struct nk_user_font *font=ctx->style.font;float x=nk_sdl_edit_extent(font,text,select_end);
    float width=edit_bounds.w-2*ctx->style.edit.padding.x-2*ctx->style.edit.border;
    float scroll=(float)ctx->current->edit.scrollbar.x;
    if(x<scroll || x>=scroll+width)ctx->current->edit.scrollbar.x=(nk_uint)fmaxf(0,x-width*.75f);
+   text_scroll=(float)ctx->current->edit.scrollbar.x;
+  }
+  if(index!=SIZE_MAX) {
+   const struct nk_user_font *font=ctx->style.font;
+   float width=fmaxf(1,edit_bounds.w-2*ctx->style.edit.padding.x-2*ctx->style.edit.border);
+   if(scrolled){
+    float start=nk_sdl_edit_extent(font,text,scroll_start),end=nk_sdl_edit_extent(font,text,scroll_end);
+    if(start==end)end+=ctx->style.edit.cursor_size;
+    if(end-start>width-2)text_scroll=scroll_top?start:fmaxf(0,end-width+2);
+    else {if(start<text_scroll)text_scroll=start;if(end>text_scroll+width-2)text_scroll=fmaxf(0,end-width+2);}
+   }
+   float maximum=fmaxf(0,nk_sdl_edit_extent(font,text,strlen(text))+ctx->style.edit.cursor_size+2-width);
+   text_scroll=fminf(fmaxf(0,text_scroll),maximum);
   }
  }
 #else
  (void)name;
 #endif
- nk_flags state=nk_edit_string_zero_terminated(ctx,flags,text,capacity,filter);
+ nk_flags state;
+#ifdef _WIN32
+ if(index!=SIZE_MAX){int length=(int)strlen(text);state=nk_edit_string_scrolled(ctx,flags,text,&length,capacity,filter,&text_scroll);text[length]=0;}
+ else state=nk_edit_string_zero_terminated(ctx,flags,text,capacity,filter);
+#else
+ state=nk_edit_string_zero_terminated(ctx,flags,text,capacity,filter);
+#endif
 #ifdef _WIN32
  if(index!=SIZE_MAX) {
   SDL_LockMutex(sdl->accessibility_mutex);ps_a11y_model *m=sdl->accessibility;
@@ -177,7 +202,7 @@ nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flag
    size_t start=m->draft[index].text_start,end=m->draft[index].text_end;
    if(state&NK_EDIT_ACTIVE){start=nk_sdl_edit_byte(text,ctx->text_edit.select_start);end=nk_sdl_edit_byte(text,ctx->text_edit.select_end);}
    if(ps_a11y_edit_update(m,index,text,start,end)) {
-    ps_a11y_node *node=&m->draft[index];node->text_active=(state&NK_EDIT_ACTIVE)!=0;
+    ps_a11y_node *node=&m->draft[index];node->text_active=(state&NK_EDIT_ACTIVE)!=0;node->text_scroll=text_scroll;
     if(node->text_active){node->text_caret=nk_sdl_edit_byte(text,ctx->text_edit.cursor);if(ctx->current==ctx->active)m->focused_id=id;}
     else if(m->focused_id==id)m->focused_id=0;
     const struct nk_style_edit *style=&ctx->style.edit;const struct nk_user_font *font=ctx->style.font;

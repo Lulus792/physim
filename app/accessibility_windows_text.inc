@@ -214,7 +214,12 @@ static HRESULT STDMETHODCALLTYPE uia_tr_children(ITextRangeProvider *p,SAFEARRAY
 }
 static HRESULT STDMETHODCALLTYPE uia_tr_scroll(ITextRangeProvider *p,BOOL top) {
  uia_text_range *r=uia_range_owner(p);ps_a11y_native *b=r->owner->bridge;SDL_LockMutex(b->mutex);HRESULT result=uia_text_range_live_locked(r);
- if(SUCCEEDED(result) && (r->owner->id || !ps_a11y_document_scroll_align(b->model,r->version,b->reading_bytes[top?r->start:r->end],top!=FALSE)))result=UIA_E_INVALIDOPERATION;
+ if(SUCCEEDED(result) && (!b->hwnd || !IsWindowVisible(b->hwnd) || IsIconic(b->hwnd)))result=UIA_E_INVALIDOPERATION;
+ if(SUCCEEDED(result)) {
+  bool accepted=r->owner->id?ps_a11y_edit_scroll(b->model,r->owner->id,r->version,b->reading_bytes[r->start],b->reading_bytes[r->end],top!=FALSE):
+   ps_a11y_document_scroll_align(b->model,r->version,b->reading_bytes[top?r->start:r->end],top!=FALSE);
+  if(!accepted)result=UIA_E_INVALIDOPERATION;
+ }
  SDL_UnlockMutex(b->mutex);return result;
 }
 static HRESULT STDMETHODCALLTYPE uia_tr_rectangles(ITextRangeProvider *p,SAFEARRAY **out) {

@@ -108,18 +108,77 @@ static HRESULT select_text(IUIAutomationElement *control,const wchar_t *query) {
  if(rectangles)SafeArrayDestroy(rectangles);SysFreeString(text);if(match)IUIAutomationTextRange_Release(match);if(whole)IUIAutomationTextRange_Release(whole);
  if(pattern)IUIAutomationTextPattern_Release(pattern);if(unknown)IUnknown_Release(unknown);return result;
 }
+static HRESULT text_selection(IUIAutomationTextPattern *pattern,IUIAutomationTextRange **out) {
+ *out=NULL;IUIAutomationTextRangeArray *ranges=NULL;int count=0;HRESULT result=IUIAutomationTextPattern_GetSelection(pattern,&ranges);
+ if(SUCCEEDED(result))result=IUIAutomationTextRangeArray_get_Length(ranges,&count);
+ if(SUCCEEDED(result))result=count==1?IUIAutomationTextRangeArray_GetElement(ranges,0,out):E_FAIL;
+ if(ranges)IUIAutomationTextRangeArray_Release(ranges);return result;
+}
+static HRESULT text_visible(IUIAutomationTextPattern *pattern,IUIAutomationTextRange *match,bool *out) {
+ *out=false;IUIAutomationTextRangeArray *ranges=NULL;int count=0;HRESULT result=IUIAutomationTextPattern_GetVisibleRanges(pattern,&ranges);
+ if(SUCCEEDED(result))result=IUIAutomationTextRangeArray_get_Length(ranges,&count);
+ for(int i=0;SUCCEEDED(result) && i<count && !*out;i++) {
+  IUIAutomationTextRange *range=NULL;int start=-1,end=1;result=IUIAutomationTextRangeArray_GetElement(ranges,i,&range);
+  if(SUCCEEDED(result))result=IUIAutomationTextRange_CompareEndpoints(match,TextPatternRangeEndpoint_Start,range,TextPatternRangeEndpoint_Start,&start);
+  if(SUCCEEDED(result))result=IUIAutomationTextRange_CompareEndpoints(match,TextPatternRangeEndpoint_End,range,TextPatternRangeEndpoint_End,&end);
+  if(SUCCEEDED(result))*out=start>=0 && end<=0;if(range)IUIAutomationTextRange_Release(range);
+ }
+ if(ranges)IUIAutomationTextRangeArray_Release(ranges);return result;
+}
+static HRESULT scroll_text(IUIAutomationElement *control,const wchar_t *query,BOOL top) {
+ IUnknown *unknown=NULL;IUIAutomationTextPattern2 *pattern=NULL;IUIAutomationTextPattern *base=NULL;IUIAutomationValuePattern *value=NULL;
+ IUIAutomationTextRange *whole=NULL,*match=NULL,*before=NULL,*after=NULL,*caret_before=NULL,*caret_after=NULL;
+ BSTR text=SysAllocString(query),old_value=NULL,new_value=NULL;BOOL old_focus=TRUE,new_focus=TRUE,old_active=TRUE,new_active=TRUE;bool visible=false;
+ HRESULT result=IUIAutomationElement_GetCurrentPattern(control,UIA_TextPattern2Id,&unknown);
+ if(SUCCEEDED(result))result=unknown?IUnknown_QueryInterface(unknown,&IID_IUIAutomationTextPattern2,(void**)&pattern):E_FAIL;
+ if(unknown){IUnknown_Release(unknown);unknown=NULL;}
+ if(SUCCEEDED(result))result=IUIAutomationElement_GetCurrentPattern(control,UIA_TextPatternId,&unknown);
+ if(SUCCEEDED(result))result=unknown?IUnknown_QueryInterface(unknown,&IID_IUIAutomationTextPattern,(void**)&base):E_FAIL;
+ if(unknown){IUnknown_Release(unknown);unknown=NULL;}
+ if(SUCCEEDED(result))result=IUIAutomationElement_GetCurrentPattern(control,UIA_ValuePatternId,&unknown);
+ if(SUCCEEDED(result))result=unknown?IUnknown_QueryInterface(unknown,&IID_IUIAutomationValuePattern,(void**)&value):E_FAIL;
+ if(SUCCEEDED(result))result=IUIAutomationValuePattern_get_CurrentValue(value,&old_value);
+ if(SUCCEEDED(result))result=IUIAutomationElement_get_CurrentHasKeyboardFocus(control,&old_focus);
+ if(SUCCEEDED(result))result=text_selection(base,&before);
+ if(SUCCEEDED(result))result=IUIAutomationTextPattern2_GetCaretRange(pattern,&old_active,&caret_before);
+ if(SUCCEEDED(result))result=IUIAutomationTextPattern_get_DocumentRange(base,&whole);
+ if(SUCCEEDED(result))result=text?IUIAutomationTextRange_FindText(whole,text,FALSE,FALSE,&match):E_OUTOFMEMORY;
+ if(SUCCEEDED(result) && !match)result=E_FAIL;
+ if(SUCCEEDED(result))result=text_visible(base,match,&visible);
+ if(SUCCEEDED(result) && (visible || old_focus || old_active))result=E_FAIL;
+ if(SUCCEEDED(result))result=IUIAutomationTextRange_ScrollIntoView(match,top);
+ ULONGLONG deadline=GetTickCount64()+4000;
+ while(SUCCEEDED(result) && !visible && GetTickCount64()<deadline){result=text_visible(base,match,&visible);if(!visible)Sleep(10);}
+ if(SUCCEEDED(result) && !visible)result=E_FAIL;
+ if(SUCCEEDED(result))result=IUIAutomationValuePattern_get_CurrentValue(value,&new_value);
+ if(SUCCEEDED(result))result=IUIAutomationElement_get_CurrentHasKeyboardFocus(control,&new_focus);
+ if(SUCCEEDED(result))result=text_selection(base,&after);
+ if(SUCCEEDED(result))result=IUIAutomationTextPattern2_GetCaretRange(pattern,&new_active,&caret_after);
+ if(SUCCEEDED(result) && (wcscmp(old_value,new_value) || old_focus!=new_focus || old_active!=new_active))result=E_FAIL;
+ IUIAutomationTextRange *left[]={before,caret_before},*right[]={after,caret_after};
+ for(int i=0;SUCCEEDED(result) && i<2;i++)for(int end=0;SUCCEEDED(result) && end<2;end++) {
+  enum TextPatternRangeEndpoint endpoint=end?TextPatternRangeEndpoint_End:TextPatternRangeEndpoint_Start;int distance=99;
+  result=IUIAutomationTextRange_CompareEndpoints(left[i],endpoint,right[i],endpoint,&distance);if(SUCCEEDED(result) && distance)result=E_FAIL;
+ }
+ if(caret_after)IUIAutomationTextRange_Release(caret_after);if(caret_before)IUIAutomationTextRange_Release(caret_before);
+ if(after)IUIAutomationTextRange_Release(after);if(before)IUIAutomationTextRange_Release(before);if(match)IUIAutomationTextRange_Release(match);if(whole)IUIAutomationTextRange_Release(whole);
+ SysFreeString(text);SysFreeString(old_value);SysFreeString(new_value);
+ if(value)IUIAutomationValuePattern_Release(value);if(base)IUIAutomationTextPattern_Release(base);if(pattern)IUIAutomationTextPattern2_Release(pattern);if(unknown)IUnknown_Release(unknown);
+ return result;
+}
 int wmain(int argc,wchar_t **argv) {
  if(argc!=4 && argc!=5)return 2;
  wchar_t *end=NULL;unsigned long pid=wcstoul(argv[1],&end,10);if(!pid || *end)return 2;
  bool focus=!wcscmp(argv[2],L"focus"),toggle=!wcscmp(argv[2],L"toggle"),select=!wcscmp(argv[2],L"select"),read=!wcscmp(argv[2],L"read"),edit=!wcscmp(argv[2],L"edit"),text_select=!wcscmp(argv[2],L"select-text");
- if(!focus && !toggle && !select && !read && !edit && !text_select)return 2;if((read || edit || text_select) && argc!=5)return 2;
+ bool scroll_start=!wcscmp(argv[2],L"scroll-text-start"),scroll_end=!wcscmp(argv[2],L"scroll-text-end");
+ if(!focus && !toggle && !select && !read && !edit && !text_select && !scroll_start && !scroll_end)return 2;if((read || edit || text_select || scroll_start || scroll_end) && argc!=5)return 2;
  HRESULT initialized=CoInitializeEx(NULL,COINIT_MULTITHREADED);if(FAILED(initialized))return 1;
  IUIAutomation *automation=NULL;IUIAutomationElement *desktop=NULL,*window=NULL,*group=NULL,*control=NULL;
  IUnknown *unknown=NULL;bool ok=SUCCEEDED(CoCreateInstance(&CLSID_CUIAutomation,NULL,CLSCTX_INPROC_SERVER,&IID_IUIAutomation,(void**)&automation));
  if(ok)ok=SUCCEEDED(IUIAutomation_GetRootElement(automation,&desktop));
  VARIANT process;VariantInit(&process);process.vt=VT_I4;process.lVal=(LONG)pid;
  if(ok)ok=SUCCEEDED(find(automation,desktop,TreeScope_Children,UIA_ProcessIdPropertyId,process,&window)) && window;
- if(ok && (edit || text_select))ok=SUCCEEDED(find_edit(automation,desktop,(LONG)pid,argv[3],&control)) && control;
+ if(ok && (edit || text_select || scroll_start || scroll_end))ok=SUCCEEDED(find_edit(automation,desktop,(LONG)pid,argv[3],&control)) && control;
  else if(ok && read) {
   IUIAutomationCondition *pid_condition=NULL,*title_condition=NULL,*both=NULL;VARIANT title;VariantInit(&title);title.vt=VT_BSTR;title.bstrVal=SysAllocString(argv[3]);
   ok=title.bstrVal && SUCCEEDED(IUIAutomation_CreatePropertyCondition(automation,UIA_ProcessIdPropertyId,process,&pid_condition)) &&
@@ -142,7 +201,8 @@ int wmain(int argc,wchar_t **argv) {
   if(ok)action=IUIAutomationValuePattern_SetValue(pattern,argv[4]);
   if(ok && SUCCEEDED(action))action=IUIAutomationElement_SetFocus(control);
   if(pattern)IUIAutomationValuePattern_Release(pattern);
- } else if(ok && text_select)action=select_text(control,argv[4]);
+ } else if(ok && (scroll_start || scroll_end))action=scroll_text(control,argv[4],scroll_start);
+ else if(ok && text_select)action=select_text(control,argv[4]);
  else if(ok && read)action=read_document(control,argv[4]);
  else if(ok && focus) {
   ok=SUCCEEDED(IUIAutomationElement_get_CurrentIsKeyboardFocusable(control,&focusable)) && focusable;

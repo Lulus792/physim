@@ -523,6 +523,33 @@ static void documentation_math_test_frame(app *a,int *stage,int *code,const char
  if(a->quitting)printf("DOCUMENTATION MATH SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 }
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strcmp(mode,"docs-keyboard-edit-scroll-remote")) {
+        static unsigned settle;bool ok=true;char path[4096];FILE *ready;
+        switch(*stage) {
+        case 0:test_window_key_mod(a->window,SDLK_F1,0);++*stage;break;
+        case 1:SDL_SetWindowSize(a->doc_window,760,540);puts("EDIT SCROLL READY VALUE");fflush(stdout);++*stage;break;
+        case 2:
+            if(strlen(a->doc_query)<90 || !strstr(a->doc_query,"Anfang θ") || !strstr(a->doc_query,"Ziel ᵣ") ||
+               !a->doc_search_active || !nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Aktuelles Dokument durchsuchen"))return;
+            test_window_key_mod(a->doc_window,SDLK_TAB,0);++*stage;break;
+        case 3:
+            if(settle++<3)return;
+            ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active && !nk_sdl_accessibility_has_focus(a->doc_ui);
+            puts("EDIT SCROLL READY END");fflush(stdout);++*stage;break;
+        case 4:
+            join(path,sizeof path,a->project,"scroll-end-applied");ready=fopen(path,"rb");if(!ready)return;fclose(ready);
+            ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active && !nk_sdl_accessibility_has_focus(a->doc_ui);
+            *capture="docs-native-edit-scroll-end.bmp";++*stage;break;
+        case 5:puts("EDIT SCROLL READY START");fflush(stdout);++*stage;break;
+        case 6:
+            join(path,sizeof path,a->project,"scroll-start-applied");ready=fopen(path,"rb");if(!ready)return;fclose(ready);
+            ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active && !nk_sdl_accessibility_has_focus(a->doc_ui);
+            *capture="docs-native-edit-scroll-start.bmp";++*stage;break;
+        case 7:puts("DOCUMENTATION EDIT SCROLL SELF-TEST: PASSED");a->quitting=true;break;
+        }
+        if(!ok){fprintf(stderr,"Native edit scroll stage %d changed keyboard focus\n",*stage);*code=1;a->quitting=true;}
+        return;
+    }
     if(!strcmp(mode,"docs-keyboard-math")){documentation_math_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-edit-remote")) {
         static int header;static int settle,experiment_length,analysis_length;static double simulation_time;bool ok=true;

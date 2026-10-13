@@ -302,8 +302,37 @@ Beide bestehen die neue Zeichendeckung. Die Linux-Artefakte bestätigen 43
 Zeichen in 38 Fontvarianten; die 16-/32-Pixel-Bilder der Formel wurden visuell
 geprüft. Die mathematische Zeichendeckung unter macOS bleibt offen.
 
-Offen sind natives Scrollen zu verdeckten Feldzeichen, vollständige assistive
-Feldbedienung und ihre native macOS-/Linux-Anbindung, eingebettete Link-/Tabellensemantik, vollständiges natives
+Windows kann jetzt auch verdeckte Textbereiche eines F1-Suchfelds per
+`ScrollIntoView` sichtbar machen. Die Anfrage bindet sich an Feld-ID und
+Inhaltsversion, validiert UTF-8-Grenzen und verfällt bei geänderten, entfernten
+oder deaktivierten Zielen. Sie verändert weder Text noch Auswahl oder Fokus.
+Der horizontale Versatz gehört zum jeweiligen Feld und bleibt beim Zeichnen
+eines unfokussierten Felds erhalten. Tastatureingabe kann den Cursor weiterhin
+normal sichtbar halten. Verborgene oder minimierte Fenster erhalten keine
+Scrollaktion über den Windows-Provider.
+
+Ein unabhängiger UIA-Prozess setzt einen langen Unicode-Suchbegriff und verlässt
+das Feld per Tab. Er bestätigt zunächst, dass der angeforderte Bereich außerhalb
+der sichtbaren Textbereiche liegt, fordert das Ende `Ziel ᵣ` und danach den Anfang
+`Anfang θ` an und verlangt deren vollständige Zugehörigkeit zu sichtbaren
+Textbereichen. Wert, beide Auswahlendpunkte, Cursorposition, aktiver Caret-Zustand
+und Tastaturfokus bleiben gleich. Die App bestätigt zusätzlich den erhaltenen
+Fokus auf „Vorheriger“. Beide Laufzeitbilder wurden geprüft.
+
+Die vier GPU-/nativen Feld-/Lesefälle bestehen in `run-zetj65o2`; die neun
+betroffenen Provider-/UI-/F1-Fälle bestehen in `run-zpr20ya4`. Fünf Modell-/Editorfälle
+bestehen in `run-1xc1a_c6`, einschließlich Unicode-Grenzen, Inhaltswechsel,
+einmaliger Auslieferung und dem tatsächlichen Zeichenversatz eines unfokussierten
+Felds bei unverändertem Fokus/Auswahl des anderen Felds. Provider und echter
+Feldscroll bestehen mit MSVC ASan 2/2 in `run-li5put2z`; Modell und Editorprimitive
+bestehen dort ebenfalls 2/2 in `run-mptcb7p_`. Beide ASan-Läufe liegen unter
+`build/native/F1-uia-sanitized/test-results`. Testkatalog und erwartete Fehlerfälle
+bestehen in `build/native/F1-review/edit-scroll-runner-proof`.
+Die abschließende Modellprobe für deaktivierte, entfernte und nach dem Zeichnen
+queued Ziele besteht mit MSVC ASan in `run-t96ly68b`.
+
+Offen sind vollständige assistive Feldbedienung und ihre native
+macOS-/Linux-Anbindung, eingebettete Link-/Tabellensemantik, vollständiges natives
 Lesen auf macOS/Linux, praktische Screenreader-Abnahme
 und die Abnahmematrix für Dichte, Themes sowie Linux und macOS. Diese Liste
 beschreibt Restarbeit und erteilt keine Produktfreigabe.

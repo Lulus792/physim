@@ -24,6 +24,7 @@ typedef struct {
  char text_value[PS_A11Y_LABEL_BYTES];size_t text_capacity;
  uint64_t text_version;size_t text_start,text_end,text_caret,box_offset,box_count;
  float caret_bounds[4];bool text_active;
+ float text_scroll;
 } ps_a11y_node;
 /* UI thread owns the draft; callers serialize all operations. Published nodes
  * are immutable until publish. IDs persist across geometry changes, expire when
@@ -36,6 +37,8 @@ typedef struct {
  uint64_t pending_text_id;char pending_text[PS_A11Y_LABEL_BYTES];
  uint64_t next_text_version,pending_selection_id,pending_selection_version;
  size_t pending_selection_start,pending_selection_end;
+ uint64_t pending_edit_scroll_id,pending_edit_scroll_version;
+ size_t pending_edit_scroll_start,pending_edit_scroll_end;bool pending_edit_scroll_top;
  ps_a11y_text_box edit_boxes[PS_A11Y_EDIT_BOXES],edit_boxes_draft[PS_A11Y_EDIT_BOXES];
  size_t edit_box_count,edit_box_draft_count;
  ps_a11y_document *document,*document_draft;
@@ -86,6 +89,10 @@ bool ps_a11y_edit_update(ps_a11y_model *model,size_t index,const char *text,size
 bool ps_a11y_edit_box(ps_a11y_model *model,size_t index,size_t begin,size_t end,const float bounds[4]);
 bool ps_a11y_edit_select(ps_a11y_model *model,uint64_t id,uint64_t version,size_t start,size_t end);
 bool ps_a11y_edit_take_selection(ps_a11y_model *model,size_t index,size_t *start,size_t *end);
+/* Read-only reveal requests retain value, selection and focus. Byte ranges
+ * expire if their control or content changes before the next UI visit. */
+bool ps_a11y_edit_scroll(ps_a11y_model *model,uint64_t id,uint64_t version,size_t start,size_t end,bool top);
+bool ps_a11y_edit_take_scroll(ps_a11y_model *model,size_t index,size_t *start,size_t *end,bool *top);
 size_t ps_a11y_child_count(const ps_a11y_model *model,uint64_t parent);
 const ps_a11y_node *ps_a11y_child_at(const ps_a11y_model *model,uint64_t parent,size_t index);
 size_t ps_a11y_index(const ps_a11y_model *model,uint64_t id);

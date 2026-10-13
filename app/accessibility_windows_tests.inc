@@ -85,6 +85,11 @@ bool ps_a11y_native_test(SDL_Window *window) {
   SAFEARRAY *ranges=NULL;UIA_CHECK(SUCCEEDED(ITextProvider_GetSelection(&edit->text,&ranges)) && ranges);
   if(ranges){ITextRangeProvider *selected_range=NULL;LONG zero=0;UIA_CHECK(SUCCEEDED(SafeArrayGetElement(ranges,&zero,&selected_range)) && selected_range);
    if(selected_range){field_value=NULL;UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetText(selected_range,-1,&field_value)) && !wcscmp(field_value,L"🌍"));SysFreeString(field_value);ITextRangeProvider_Release(selected_range);}SafeArrayDestroy(ranges);}
+  uint64_t focus=m->focused_id;UIA_CHECK(SUCCEEDED(ITextRangeProvider_ScrollIntoView(field_match,TRUE)));
+  ps_a11y_begin(m);ps_a11y_record_edit(m,"main","Suche",bounds,true,field,sizeof field);bool top=false;
+  UIA_CHECK(ps_a11y_edit_take_scroll(m,0,&start,&end,&top) && start==8 && end==12 && top);
+  ps_a11y_publish(m);ps_a11y_native_publish(b,true);
+  UIA_CHECK(m->focused_id==focus && m->nodes[0].text_start==8 && m->nodes[0].text_end==12 && !strcmp(field,"Größe 🌍"));
  }
  /* Read the whole document through COM ranges, independently of control labels. */
  const char *reading="Intro θ\nCode\n  x = 1; 🌍\nEnd";
