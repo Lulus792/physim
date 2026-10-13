@@ -190,8 +190,42 @@ mit MSVC AddressSanitizer in
 `build/native/F1-uia-sanitized/test-results/run-nqs4wt1q`. Auch die Erweiterung
 des Testkatalogs besteht mit den erwarteten Fehlerfällen.
 
-Offen sind TextPattern, Caret und Auswahl der Suchfelder sowie ihre native
-macOS-/Linux-Anbindung, eingebettete Link-/Tabellensemantik, vollständiges natives
+Die Windows-Suchfelder veröffentlichen jetzt zusätzlich TextPattern und
+TextPattern2 mit Unicode-Textbereichen, aktueller Auswahl und Cursorposition.
+Die Geometrie verwendet die Zeichenbreiten, den Textursprung und den horizontalen
+Versatz des echten Felds. Nur tatsächlich sichtbare Zeichen werden gemeldet.
+Die Cursorposition bleibt auch bei rückwärts gerichteter Auswahl getrennt von
+den sortierten Auswahlgrenzen. Text- und Auswahländerungen lösen native Ereignisse aus.
+
+Auswahlanfragen binden sich an Feld-ID und Inhaltsversion, übernehmen UTF-8-
+Skalargrenzen einmalig im UI-Frame und verfallen bei geändertem Inhalt. Der
+Windows-Textcache unterscheidet Eigentümer und Version; ein nativer Gegenfall
+prüft gleichzeitig Feld und Dokument mit identischer Versionsnummer.
+Ein externer Client wählt `θ🌍` im echten Suchfeld aus, liest die Auswahl zurück,
+prüft die aktive Cursorposition und ihre sichtbare Geometrie. Anschließende
+Tastatureingabe ersetzt genau diesen Bereich. Die Laufzeitaufnahme zeigt die
+Auswahl; ein nicht vorhandenes Emoji wird vom bestehenden Font als Ersatzglyph
+gezeichnet, während der native Text unverändert bleibt.
+
+Die 15 GUI-Regressionen bestehen in `run-l15ud31b`; weitere fünf Feld-,
+Fokus-, Zoom- und Absatzfälle bestehen in `run-ys7t4zmb`. Die vier portablen
+Dokument-/Edit-/Fokus-/Auswahlmodelle bestehen in `run-bvhbk87r`; Grundmodell
+und Editor-Clipboard bestehen in `run-7fwpnj0c`. Provider und echter Unicode-
+Feldablauf bestehen zusätzlich mit MSVC AddressSanitizer in
+`build/native/F1-uia-sanitized/test-results/run-b3n46l3_`.
+GPU-/SDL-Eingabeprüfung und externer Feldablauf bestehen abschließend 2/2 in
+`run-evxuvinw`. Die Eingabeprüfung bestätigt, dass mehrzeiliges oder tabhaltiges
+Einfügen eine bestehende einzeilige Auswahl unverändert lässt; der mehrzeilige
+Editor behält seine Navigation sowie Undo/Redo.
+
+Der Linux-Sanitizerlauf für `7ea0c66` ist tatsächlich fehlgeschlagen:
+[Clang-GUI-Lauf](https://github.com/Lulus792/physim/actions/runs/38474528096/job/115561838320).
+Die Protokolle melden `Font initialization: Invalid texture size`; 20 von 21
+GUI-Fällen scheitern, darunter F1-Medien- und Abschnittsfälle. Dieser Befund
+bleibt offen und bestätigt keine Linux-Funktionsgleichheit.
+
+Offen sind natives Scrollen zu verdeckten Feldzeichen, vollständige assistive
+Feldbedienung und ihre native macOS-/Linux-Anbindung, eingebettete Link-/Tabellensemantik, vollständiges natives
 Lesen auf macOS/Linux, praktische Screenreader-Abnahme
 und die Abnahmematrix für Dichte, Themes sowie Linux und macOS. Diese Liste
 beschreibt Restarbeit und erteilt keine Produktfreigabe.

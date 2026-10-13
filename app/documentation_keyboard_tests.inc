@@ -481,23 +481,27 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
             ok=header>=0;open_documentation(a,header);SDL_SetWindowSize(a->doc_window,760,540);++*stage;break;
         case 2:puts("EDIT READY SEARCH");fflush(stdout);++*stage;break;
         case 3:
-            if(strcmp(a->doc_query,"ps_rng_seed") || !a->doc_search_active || !nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Aktuelles Dokument durchsuchen"))return;
+            if(strcmp(a->doc_query,"ps_rng_seed θ🌍") || !a->doc_search_active || !nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Aktuelles Dokument durchsuchen"))return;
             *capture="docs-native-search.bmp";puts("EDIT APPLIED SEARCH");fflush(stdout);
-            {SDL_Event input={0};input.type=SDL_EVENT_TEXT_INPUT;input.text.windowID=SDL_GetWindowID(a->doc_window);input.text.text="Z";SDL_PushEvent(&input);}++*stage;break;
+            ++*stage;break;
         case 4:
-            if(a->doc_ui->input.keyboard.text_len)return;
-            ok=!strcmp(a->doc_query,"ps_rng_seedZ");test_window_key_mod(a->doc_window,SDLK_TAB,0);++*stage;break;
+            {char path[4096];join(path,sizeof path,a->project,"selection-applied");FILE *done=fopen(path,"rb");if(!done)return;fclose(done);}
+            *capture="docs-native-selection.bmp";
+            {SDL_Event input={0};input.type=SDL_EVENT_TEXT_INPUT;input.text.windowID=SDL_GetWindowID(a->doc_window);input.text.text="Z";SDL_PushEvent(&input);}++*stage;break;
         case 5:
+            if(a->doc_ui->input.keyboard.text_len)return;
+            ok=!strcmp(a->doc_query,"ps_rng_seed Z");test_window_key_mod(a->doc_window,SDLK_TAB,0);++*stage;break;
+        case 6:
             ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active;
             a->doc_query[0]=0;a->doc_contents=false;a->doc_reset_sidebar=true;a->doc_filter[0]=0;documentation_filter(a);
             ++*stage;break;
-        case 6:
-            if(settle++<2)return;puts("EDIT READY GLOBAL");fflush(stdout);++*stage;break;
         case 7:
+            if(settle++<2)return;puts("EDIT READY GLOBAL");fflush(stdout);++*stage;break;
+        case 8:
             if(strcmp(a->doc_filter,"ps_rng_seed") || !a->doc_filter_active || !nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Alle Inhalte durchsuchen"))return;
             ok=documentation_hits[header];*capture="docs-native-global-search.bmp";
             puts("EDIT APPLIED GLOBAL");fflush(stdout);test_window_key_mod(a->doc_window,SDLK_TAB,0);++*stage;break;
-        case 8:
+        case 9:
             ok=a->doc_focus==DOC_GROUP && !a->doc_filter_active;
             ok &= a->experiment.string.len==experiment_length && a->analysis.string.len==analysis_length && a->simulation_time==simulation_time;
             a->quitting=true;puts("DOCUMENTATION EDIT SELF-TEST: PASSED");break;

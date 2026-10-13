@@ -21,10 +21,16 @@ def wait(marker):
 try:
     for phase,name in [('SEARCH','Aktuelles Dokument durchsuchen'),('GLOBAL','Alle Inhalte durchsuchen')]:
         wait('EDIT READY '+phase)
-        result=subprocess.run([str(args.probe),str(process.pid),'edit',name,'ps_rng_seed'],capture_output=True,timeout=15)
+        value='ps_rng_seed θ🌍' if phase=='SEARCH' else 'ps_rng_seed'
+        result=subprocess.run([str(args.probe),str(process.pid),'edit',name,value],capture_output=True,timeout=15)
         probes.append(dict(field=name,exit_code=result.returncode,stdout=result.stdout.decode('utf-8'),stderr=result.stderr.decode('utf-8')))
         assert result.returncode==0,probes[-1]
         wait('EDIT APPLIED '+phase)
+        if phase=='SEARCH':
+            result=subprocess.run([str(args.probe),str(process.pid),'select-text',name,'θ🌍'],capture_output=True,timeout=15)
+            probes.append(dict(action='select-text',field=name,exit_code=result.returncode,stdout=result.stdout.decode('utf-8'),stderr=result.stderr.decode('utf-8')))
+            assert result.returncode==0,probes[-1]
+            (args.work/'reader'/'selection-applied').write_text('ready',encoding='utf-8')
     assert process.wait(timeout=15)==0
     assert 'DOCUMENTATION EDIT SELF-TEST: PASSED' in (args.work/'app.stdout').read_text(encoding='utf-8')
 finally:

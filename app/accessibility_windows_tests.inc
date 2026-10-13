@@ -70,15 +70,36 @@ bool ps_a11y_native_test(SDL_Window *window) {
  ps_a11y_begin(m);UIA_CHECK(ps_a11y_record_edit(m,"main","Suche",bounds,true,field,sizeof field));ps_a11y_publish(m);ps_a11y_native_publish(b,true);
  UIA_CHECK(!strcmp(field,"Größe 🌍"));if(edit){UIA_CHECK(IValueProvider_SetValue(&edit->value,L"line\nline")==E_INVALIDARG);
   UIA_CHECK(IValueProvider_SetValue(&edit->value,L"123456789012345678901234567890123456")==E_INVALIDARG);}
+ ITextRangeProvider *field_range=NULL,*field_match=NULL;BSTR field_query=SysAllocString(L"🌍");
+ if(edit){enum SupportedTextSelection supported=SupportedTextSelection_None;
+  UIA_CHECK(SUCCEEDED(ITextProvider_get_SupportedTextSelection(&edit->text,&supported)) && supported==SupportedTextSelection_Single);
+  UIA_CHECK(SUCCEEDED(ITextProvider_get_DocumentRange(&edit->text,&field_range)) && field_range);
+ }
+ if(field_range){field_value=NULL;UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetText(field_range,-1,&field_value)) && !wcscmp(field_value,L"Größe 🌍"));SysFreeString(field_value);
+  UIA_CHECK(SUCCEEDED(ITextRangeProvider_FindText(field_range,field_query,FALSE,FALSE,&field_match)) && field_match);}
+ SysFreeString(field_query);
+ if(field_match){UIA_CHECK(SUCCEEDED(ITextRangeProvider_Select(field_match)));
+  ps_a11y_begin(m);ps_a11y_record_edit(m,"main","Suche",bounds,true,field,sizeof field);size_t start=0,end=0;
+  UIA_CHECK(ps_a11y_edit_take_selection(m,0,&start,&end) && start==8 && end==12);UIA_CHECK(ps_a11y_edit_update(m,0,field,start,end));
+  ps_a11y_publish(m);ps_a11y_native_publish(b,true);
+  SAFEARRAY *ranges=NULL;UIA_CHECK(SUCCEEDED(ITextProvider_GetSelection(&edit->text,&ranges)) && ranges);
+  if(ranges){ITextRangeProvider *selected_range=NULL;LONG zero=0;UIA_CHECK(SUCCEEDED(SafeArrayGetElement(ranges,&zero,&selected_range)) && selected_range);
+   if(selected_range){field_value=NULL;UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetText(selected_range,-1,&field_value)) && !wcscmp(field_value,L"🌍"));SysFreeString(field_value);ITextRangeProvider_Release(selected_range);}SafeArrayDestroy(ranges);}
+ }
  /* Read the whole document through COM ranges, independently of control labels. */
  const char *reading="Intro θ\nCode\n  x = 1; 🌍\nEnd";
  ps_a11y_begin(m);bounds[0]=10;bounds[1]=20;
- UIA_CHECK(ps_a11y_document_begin(m,42,"Dokument",reading,bounds));
+ /* Equal version numbers across different owners must not share cached text. */
+ uint64_t document_version=m->nodes[0].text_version;
+ UIA_CHECK(ps_a11y_document_begin(m,document_version,"Dokument",reading,bounds));
+ ps_a11y_record_edit(m,"main","Suche",bounds,true,field,sizeof field);
  UIA_CHECK(ps_a11y_document_box(m,6,8,bounds));
  ps_a11y_publish(m);ps_a11y_native_publish(b,true);
  ITextRangeProvider *whole=NULL,*clone=NULL,*found=NULL;BSTR read=NULL;
  UIA_CHECK(SUCCEEDED(ITextProvider_get_DocumentRange(&b->root->text,&whole)) && whole);
  if(whole)UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetText(whole,-1,&read)) && read && !wcscmp(read,L"Intro θ\nCode\n  x = 1; 🌍\nEnd"));
+ if(field_range){field_value=NULL;UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetText(field_range,-1,&field_value)) && !wcscmp(field_value,L"Größe 🌍"));SysFreeString(field_value);}
+ if(whole){BSTR again=NULL;UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetText(whole,-1,&again)) && !wcscmp(again,L"Intro θ\nCode\n  x = 1; 🌍\nEnd"));SysFreeString(again);}
  SysFreeString(read);read=NULL;
  if(whole)UIA_CHECK(SUCCEEDED(ITextRangeProvider_Clone(whole,&clone)) && clone);
  BOOL equal=FALSE;if(clone)UIA_CHECK(SUCCEEDED(ITextRangeProvider_Compare(whole,clone,&equal)) && equal);
@@ -92,9 +113,9 @@ bool ps_a11y_native_test(SDL_Window *window) {
   SAFEARRAY *rectangles=NULL;UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetBoundingRectangles(found,&rectangles)) && rectangles);
   if(rectangles){LONG high=-1;SafeArrayGetUBound(rectangles,1,&high);UIA_CHECK(high==3);SafeArrayDestroy(rectangles);}
   UIA_CHECK(SUCCEEDED(ITextRangeProvider_ScrollIntoView(found,TRUE)));
-  size_t target=99;UIA_CHECK(ps_a11y_document_take_scroll(m,42,&target) && target==6);
+  size_t target=99;UIA_CHECK(ps_a11y_document_take_scroll(m,document_version,&target) && target==6);
   UIA_CHECK(SUCCEEDED(ITextRangeProvider_ScrollIntoView(found,FALSE)) && !m->document_scroll_top);
-  UIA_CHECK(ps_a11y_document_take_scroll(m,42,&target) && target==8);
+  UIA_CHECK(ps_a11y_document_take_scroll(m,document_version,&target) && target==8);
   ITextRangeProvider_Release(found);found=NULL;
  }
  query=SysAllocString(L"🌍");
@@ -104,6 +125,8 @@ bool ps_a11y_native_test(SDL_Window *window) {
  SAFEARRAY *visible=NULL;UIA_CHECK(SUCCEEDED(ITextProvider_GetVisibleRanges(&b->root->text,&visible)) && visible);if(visible)SafeArrayDestroy(visible);
  ps_a11y_begin(m);UIA_CHECK(ps_a11y_document_begin(m,43,"Anders","New content",bounds));ps_a11y_publish(m);ps_a11y_native_publish(b,true);
  if(whole)UIA_CHECK(ITextRangeProvider_GetText(whole,-1,&read)==UIA_E_ELEMENTNOTAVAILABLE && !read);
+ if(field_range){field_value=NULL;UIA_CHECK(ITextRangeProvider_GetText(field_range,-1,&field_value)==UIA_E_ELEMENTNOTAVAILABLE && !field_value);ITextRangeProvider_Release(field_range);}
+ if(field_match)ITextRangeProvider_Release(field_match);
  ps_a11y_native_destroy(b);
  if(edit){UIA_CHECK(IValueProvider_SetValue(&edit->value,L"stale")==UIA_E_ELEMENTNOTAVAILABLE);uia_release(edit);}
  if(clone){UIA_CHECK(ITextRangeProvider_GetText(clone,-1,&read)==UIA_E_ELEMENTNOTAVAILABLE && !read);ITextRangeProvider_Release(clone);}

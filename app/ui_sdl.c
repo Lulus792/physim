@@ -126,9 +126,15 @@ struct nk_context *nk_sdl_init(SDL_Window *window, ps_graphics *graphics) {
 bool nk_sdl_accessibility_available(struct nk_context *ctx) {
     return ctx && ctx->userdata.ptr && ((struct nk_sdl *)ctx->userdata.ptr)->accessibility_native;
 }
+#ifdef _WIN32
+static size_t nk_sdl_edit_byte(const char *text,int scalar) {
+ size_t at=0;while(scalar>0 && text[at]){nk_rune rune;int n=nk_utf_decode(text+at,&rune,(int)strlen(text+at));if(n<=0)break;at+=(size_t)n;--scalar;}return at;
+}
+#endif
 nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flags,char *text,int capacity,nk_plugin_filter filter) {
 #ifdef _WIN32
- struct nk_sdl *sdl=ctx && ctx->userdata.ptr?ctx->userdata.ptr:NULL;size_t index=SIZE_MAX;uint64_t id=0;
+ struct nk_sdl *sdl=ctx && ctx->userdata.ptr?ctx->userdata.ptr:NULL;size_t index=SIZE_MAX;uint64_t id=0;bool selected=false;size_t select_start=0,select_end=0;
+ struct nk_rect edit_bounds=nk_widget_bounds(ctx);
  if(sdl && sdl->accessibility && ctx->current && name && text && capacity>=2) {
   struct nk_rect bounds=nk_widget_bounds(ctx),clip=ctx->current->layout->clip;
   float left=fmaxf(bounds.x,clip.x),top=fmaxf(bounds.y,clip.y);
@@ -145,10 +151,20 @@ nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flag
   uint64_t pending=m->pending_focus;size_t before=m->draft_count;
   bool changed=ps_a11y_record_edit(m,ctx->current->name_string,name,box,enabled,text,(size_t)capacity);
   bool granted=m->draft_count>before && pending && !m->pending_focus && m->focused_id==pending && m->draft[before].id==pending;
-  if(m->draft_count>before){index=before;id=m->draft[before].id;}
+  if(m->draft_count>before){index=before;id=m->draft[before].id;selected=ps_a11y_edit_take_selection(m,index,&select_start,&select_end);}
   SDL_UnlockMutex(sdl->accessibility_mutex);
   if(granted){SDL_RaiseWindow(sdl->win);nk_window_set_focus(ctx,ctx->current->name_string);nk_edit_unfocus(ctx);nk_edit_focus(ctx,NK_EDIT_ALWAYS_INSERT_MODE);}
   if(changed && ctx->current->edit.active){ctx->current->edit.cursor=nk_utf_len(text,(int)strlen(text));ctx->current->edit.sel_start=ctx->current->edit.sel_end=ctx->current->edit.cursor;}
+  if(selected){
+   ctx->current->edit.sel_start=nk_utf_len(text,(int)select_start);ctx->current->edit.sel_end=nk_utf_len(text,(int)select_end);
+   ctx->current->edit.cursor=ctx->current->edit.sel_end;
+   /* A native selection follows the same horizontal text origin as Nuklear. */
+   const struct nk_user_font *font=ctx->style.font;float x=0;
+   for(size_t at=0;at<select_end;){nk_rune rune;int n=nk_utf_decode(text+at,&rune,(int)(select_end-at));if(n<=0)break;x+=font->width(font->userdata,font->height,text+at,n);at+=(size_t)n;}
+   float width=edit_bounds.w-2*ctx->style.edit.padding.x-2*ctx->style.edit.border;
+   float scroll=(float)ctx->current->edit.scrollbar.x;
+   if(x<scroll || x>=scroll+width)ctx->current->edit.scrollbar.x=(nk_uint)fmaxf(0,x-width*.75f);
+  }
  }
 #else
  (void)name;
@@ -157,7 +173,29 @@ nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flag
 #ifdef _WIN32
  if(index!=SIZE_MAX) {
   SDL_LockMutex(sdl->accessibility_mutex);ps_a11y_model *m=sdl->accessibility;
-  if(index<m->draft_count && m->draft[index].id==id && strlen(text)<sizeof m->draft[index].text_value)strcpy(m->draft[index].text_value,text);
+  if(index<m->draft_count && m->draft[index].id==id) {
+   size_t start=m->draft[index].text_start,end=m->draft[index].text_end;
+   if(state&NK_EDIT_ACTIVE){start=nk_sdl_edit_byte(text,ctx->text_edit.select_start);end=nk_sdl_edit_byte(text,ctx->text_edit.select_end);}
+   if(ps_a11y_edit_update(m,index,text,start,end)) {
+    ps_a11y_node *node=&m->draft[index];node->text_active=(state&NK_EDIT_ACTIVE)!=0;
+    if(node->text_active){node->text_caret=nk_sdl_edit_byte(text,ctx->text_edit.cursor);if(ctx->current==ctx->active)m->focused_id=id;}
+    else if(m->focused_id==id)m->focused_id=0;
+    const struct nk_style_edit *style=&ctx->style.edit;const struct nk_user_font *font=ctx->style.font;
+    struct nk_rect area={edit_bounds.x+style->padding.x+style->border,edit_bounds.y+style->padding.y+style->border,
+     edit_bounds.w-2*style->padding.x-2*style->border,edit_bounds.h-2*style->padding.y-2*style->border};
+    float x=area.x-ctx->text_edit.scrollbar.x,y=area.y+(area.h-font->height)/2;size_t length=strlen(text);
+    for(size_t at=0;at<length;){nk_rune rune;int n=nk_utf_decode(text+at,&rune,(int)(length-at));if(n<=0)break;
+     float width=font->width(font->userdata,font->height,text+at,n),left=fmaxf(x,area.x),right=fminf(x+width,area.x+area.w);
+     float box[]={left,fmaxf(y,area.y),right-left,fminf(y+font->height,area.y+area.h)-fmaxf(y,area.y)};
+     ps_a11y_edit_box(m,index,at,at+(size_t)n,box);x+=width;at+=(size_t)n;
+    }
+    float caret_x=area.x-ctx->text_edit.scrollbar.x;
+    for(size_t at=0;at<node->text_caret && at<length;){nk_rune rune;int n=nk_utf_decode(text+at,&rune,(int)(length-at));if(n<=0)break;caret_x+=font->width(font->userdata,font->height,text+at,n);at+=(size_t)n;}
+    float left=fmaxf(caret_x,fmaxf(area.x,node->bounds[0])),right=fminf(caret_x+style->cursor_size,fminf(area.x+area.w,node->bounds[0]+node->bounds[2]));
+    float top=fmaxf(y,fmaxf(area.y,node->bounds[1])),bottom=fminf(y+font->height,fminf(area.y+area.h,node->bounds[1]+node->bounds[3]));
+    node->caret_bounds[0]=left;node->caret_bounds[1]=top;node->caret_bounds[2]=fmaxf(0,right-left);node->caret_bounds[3]=fmaxf(0,bottom-top);
+   }
+  }
   if(m->focused_id==id && id)state|=PS_UI_EDIT_NATIVE_FOCUS;
   SDL_UnlockMutex(sdl->accessibility_mutex);
  }
@@ -346,7 +384,7 @@ void nk_sdl_shutdown(struct nk_context *ctx) {
 static bool nk_sdl_paste_text(struct nk_text_edit *edit, const char *text) {
     /* The vendored paste patch takes bytes and preserves scalar-based undo. */
     size_t bytes = strlen(text);
-    return bytes && bytes <= 262144 && nk_textedit_paste(edit, text, (int)bytes);
+    return bytes && bytes <= 262144 && (!edit->single_line || (!strchr(text,'\r') && !strchr(text,'\n') && !strchr(text,'\t'))) && nk_textedit_paste(edit, text, (int)bytes);
 }
 static void nk_sdl_clipboard_paste(nk_handle usr, struct nk_text_edit *edit) {
     char *text;
@@ -670,6 +708,7 @@ static bool test_editor_navigation(bool mac) {
     struct nk_text_edit edit;
     nk_textedit_init_fixed(&edit, buffer, sizeof buffer);
     edit.mode = NK_TEXT_EDIT_MODE_INSERT;
+    edit.single_line = 0; /* This fixture tests a multiline NK_EDIT_BOX. */
     nk_sdl_paste_text(&edit, "one two\nthree four");
     test_edit_frame(&ctx, &edit);
     SDL_Keymod command = mac ? SDL_KMOD_GUI : SDL_KMOD_CTRL;
@@ -777,6 +816,10 @@ bool nk_sdl_test_input(SDL_Window *window, ps_graphics *graphics) {
     ok = ok && nk_str_len_char(&edit.string) == 0 && edit.cursor == 0;
     nk_textedit_redo(&edit);
     ok = ok && nk_str_len_char(&edit.string) == sizeof(text) - 1 && edit.cursor == 3;
+    edit.single_line=1;edit.select_start=0;edit.select_end=3;
+    ok = ok && !nk_sdl_paste_text(&edit,"a\nb") && !nk_sdl_paste_text(&edit,"a\r\nb") && !nk_sdl_paste_text(&edit,"a\tb") &&
+         edit.select_start==0 && edit.select_end==3 && nk_str_len_char(&edit.string)==sizeof(text)-1;
+    edit.single_line=0;
     char *oversized = malloc(262146);
     if (oversized) {
         memset(oversized, 'x', 262145);

@@ -16,7 +16,7 @@ struct ps_a11y_native {
  LONG references;bool com_initialized;double scale_x,scale_y;
  uia_element *root,*elements[PS_A11Y_MAX_NODES];
  uint64_t focused_id;char title[256];
- uint64_t reading_version;BSTR reading_text;size_t reading_length;size_t *reading_bytes;
+ uint64_t reading_owner,reading_version;BSTR reading_text;size_t reading_length;size_t *reading_bytes;
  uint64_t announced_reading_version;
 };
 struct uia_element {
@@ -24,9 +24,11 @@ struct uia_element {
  IRawElementProviderFragmentRoot root;IInvokeProvider invoke;IToggleProvider toggle;
  ISelectionItemProvider item;ISelectionProvider selection;IRangeValueProvider range;
  ITextProvider text;
+ ITextProvider2 text2;
  IValueProvider value;
  LONG references;ps_a11y_native *bridge;uint64_t id;ps_a11y_role role;
  char previous_text[PS_A11Y_LABEL_BYTES];
+ size_t previous_start,previous_end,previous_caret;
 };
 static uia_element *uia_new(ps_a11y_native *b,uint64_t id,ps_a11y_role role);
 static void uia_bridge_release(ps_a11y_native *b) {
@@ -42,7 +44,8 @@ static HRESULT uia_query(uia_element *e,REFIID iid,void **out) {
  if(IsEqualIID(iid,&IID_IUnknown) || IsEqualIID(iid,&IID_IRawElementProviderSimple))*out=&e->simple;
  else if(IsEqualIID(iid,&IID_IRawElementProviderFragment))*out=&e->fragment;
  else if(!e->id && IsEqualIID(iid,&IID_IRawElementProviderFragmentRoot))*out=&e->root;
- else if(!e->id && IsEqualIID(iid,&IID_ITextProvider))*out=&e->text;
+ else if((!e->id || e->role==PS_A11Y_EDIT) && IsEqualIID(iid,&IID_ITextProvider))*out=&e->text;
+ else if(e->id && e->role==PS_A11Y_EDIT && IsEqualIID(iid,&IID_ITextProvider2))*out=&e->text2;
  else if(e->id && e->role==PS_A11Y_BUTTON && IsEqualIID(iid,&IID_IInvokeProvider))*out=&e->invoke;
  else if(e->id && e->role==PS_A11Y_CHECKBOX && IsEqualIID(iid,&IID_IToggleProvider))*out=&e->toggle;
  else if(e->id && e->role==PS_A11Y_RADIO && IsEqualIID(iid,&IID_ISelectionItemProvider))*out=&e->item;
@@ -65,6 +68,7 @@ UIA_UNKNOWN(ISelectionItemProvider,item,uia_item)
 UIA_UNKNOWN(ISelectionProvider,selection,uia_selection)
 UIA_UNKNOWN(IRangeValueProvider,range,uia_range)
 UIA_UNKNOWN(ITextProvider,text,uia_text)
+UIA_UNKNOWN(ITextProvider2,text2,uia_text2)
 UIA_UNKNOWN(IValueProvider,value,uia_edit)
 /* Caller holds the bridge mutex. Returned provider has its own COM reference. */
 static uia_element *uia_for_locked(ps_a11y_native *b,uint64_t id) {
@@ -102,12 +106,14 @@ static HRESULT STDMETHODCALLTYPE uia_options(IRawElementProviderSimple *p,enum P
 }
 static HRESULT STDMETHODCALLTYPE uia_pattern(IRawElementProviderSimple *p,PATTERNID pattern,IUnknown **out) {
  if(!out)return E_POINTER;*out=NULL;uia_element *e=UIA_OWNER(IRawElementProviderSimple,simple,p);
- ps_a11y_node node;if(e->id && !uia_node(e,&node))return UIA_E_ELEMENTNOTAVAILABLE;
+ ps_a11y_node node={0};if(e->id && !uia_node(e,&node))return UIA_E_ELEMENTNOTAVAILABLE;
  if(!e->id && pattern==UIA_TextPatternId) {
   ps_a11y_native *b=e->bridge;SDL_LockMutex(b->mutex);
   bool reading=b->model && b->model->document && b->model->document->active;
   SDL_UnlockMutex(b->mutex);return reading?uia_query(e,&IID_ITextProvider,(void**)out):S_OK;
  }
+ if(e->id && node.role==PS_A11Y_EDIT && pattern==UIA_TextPatternId)return uia_query(e,&IID_ITextProvider,(void**)out);
+ if(e->id && node.role==PS_A11Y_EDIT && pattern==UIA_TextPattern2Id)return uia_query(e,&IID_ITextProvider2,(void**)out);
  REFIID iid=pattern==UIA_InvokePatternId?&IID_IInvokeProvider:pattern==UIA_TogglePatternId?&IID_IToggleProvider:
   pattern==UIA_SelectionItemPatternId?&IID_ISelectionItemProvider:pattern==UIA_SelectionPatternId?&IID_ISelectionProvider:
   pattern==UIA_RangeValuePatternId?&IID_IRangeValueProvider:pattern==UIA_ValuePatternId?&IID_IValueProvider:NULL;
@@ -285,8 +291,9 @@ static uia_element *uia_new(ps_a11y_native *b,uint64_t id,ps_a11y_role role) {
  e->invoke.lpVtbl=&uia_invoke_vtable;e->toggle.lpVtbl=&uia_toggle_vtable;e->item.lpVtbl=&uia_item_vtable;
  e->selection.lpVtbl=&uia_selection_vtable;e->range.lpVtbl=&uia_range_vtable;
  e->text.lpVtbl=&uia_text_vtable;
+ e->text2.lpVtbl=&uia_text2_vtable;
  e->value.lpVtbl=&uia_edit_vtable;
- if(role==PS_A11Y_EDIT){const ps_a11y_node *node=ps_a11y_find(b->model,id);if(node)strcpy(e->previous_text,node->text_value);}
+ if(role==PS_A11Y_EDIT){const ps_a11y_node *node=ps_a11y_find(b->model,id);if(node){strcpy(e->previous_text,node->text_value);e->previous_start=node->text_start;e->previous_end=node->text_end;e->previous_caret=node->text_caret;}}
  e->references=1;e->bridge=b;e->id=id;e->role=role;InterlockedIncrement(&b->references);return e;
 }
 static LRESULT CALLBACK uia_window_proc(HWND hwnd,UINT message,WPARAM wparam,LPARAM lparam,UINT_PTR subclass,DWORD_PTR data) {
@@ -312,6 +319,7 @@ ps_a11y_native *ps_a11y_native_create(SDL_Window *window,ps_a11y_model *model,SD
 void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
  if(!b)return;uia_element *retired[PS_A11Y_MAX_NODES];size_t count=0;
  uia_element *edits[PS_A11Y_MAX_NODES];VARIANT old_text[PS_A11Y_MAX_NODES],new_text[PS_A11Y_MAX_NODES];size_t edit_count=0;
+ uia_element *selections[PS_A11Y_MAX_NODES];size_t selection_count=0;
  int w=0,h=0;SDL_GetWindowSize(b->window,&w,&h);RECT client={0};if(b->hwnd)GetClientRect(b->hwnd,&client);
  SDL_LockMutex(b->mutex);
  if(w>0 && h>0){b->scale_x=(double)(client.right-client.left)/w;b->scale_y=(double)(client.bottom-client.top)/h;}
@@ -323,6 +331,9 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
  }
  for(size_t i=0;i<PS_A11Y_MAX_NODES;i++)if(b->elements[i] && b->elements[i]->role==PS_A11Y_EDIT) {
   uia_element *edit=b->elements[i];const ps_a11y_node *node=ps_a11y_find(b->model,edit->id);
+  if(node && (edit->previous_start!=node->text_start || edit->previous_end!=node->text_end || edit->previous_caret!=node->text_caret)) {
+   uia_addref(edit);selections[selection_count++]=edit;edit->previous_start=node->text_start;edit->previous_end=node->text_end;edit->previous_caret=node->text_caret;
+  }
   if(node && strcmp(edit->previous_text,node->text_value)) {
    VariantInit(&old_text[edit_count]);VariantInit(&new_text[edit_count]);
    if(SUCCEEDED(uia_string(edit->previous_text,&old_text[edit_count])) && SUCCEEDED(uia_string(node->text_value,&new_text[edit_count]))) {
@@ -337,8 +348,10 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
  if(focus){UiaRaiseAutomationEvent(&focus->simple,UIA_AutomationFocusChangedEventId);uia_release(focus);}
  for(size_t i=0;i<edit_count;i++){
   UiaRaiseAutomationPropertyChangedEvent(&edits[i]->simple,UIA_ValueValuePropertyId,old_text[i],new_text[i]);
+  UiaRaiseAutomationEvent(&edits[i]->simple,UIA_Text_TextChangedEventId);
   VariantClear(&old_text[i]);VariantClear(&new_text[i]);uia_release(edits[i]);
  }
+ for(size_t i=0;i<selection_count;i++){UiaRaiseAutomationEvent(&selections[i]->simple,UIA_Text_TextSelectionChangedEventId);uia_release(selections[i]);}
 }
 void ps_a11y_native_destroy(ps_a11y_native *b) {
  if(!b)return;if(b->hwnd)RemoveWindowSubclass(b->hwnd,uia_window_proc,(UINT_PTR)b);

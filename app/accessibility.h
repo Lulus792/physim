@@ -8,6 +8,7 @@
 #define PS_A11Y_WINDOW_BYTES 96u
 #define PS_A11Y_DOCUMENT_BYTES (512u*1024u+8192u)
 #define PS_A11Y_TEXT_BOXES 8192u
+#define PS_A11Y_EDIT_BOXES 2048u
 typedef struct {size_t begin,end;float bounds[4];} ps_a11y_text_box;
 typedef struct {
  uint64_t version;char name[256];char *text;size_t length;
@@ -21,6 +22,8 @@ typedef struct {
  float bounds[4];bool enabled,checked,focusable,focused;
  double value,minimum,maximum,increment;
  char text_value[PS_A11Y_LABEL_BYTES];size_t text_capacity;
+ uint64_t text_version;size_t text_start,text_end,text_caret,box_offset,box_count;
+ float caret_bounds[4];bool text_active;
 } ps_a11y_node;
 /* UI thread owns the draft; callers serialize all operations. Published nodes
  * are immutable until publish. IDs persist across geometry changes, expire when
@@ -31,6 +34,10 @@ typedef struct {
  bool building,keyboard_focus;
  uint64_t pending_value_id;double pending_value;
  uint64_t pending_text_id;char pending_text[PS_A11Y_LABEL_BYTES];
+ uint64_t next_text_version,pending_selection_id,pending_selection_version;
+ size_t pending_selection_start,pending_selection_end;
+ ps_a11y_text_box edit_boxes[PS_A11Y_EDIT_BOXES],edit_boxes_draft[PS_A11Y_EDIT_BOXES];
+ size_t edit_box_count,edit_box_draft_count;
  ps_a11y_document *document,*document_draft;
  uint64_t document_scroll_version;size_t document_scroll_byte;
  bool document_scroll_top;
@@ -73,6 +80,12 @@ bool ps_a11y_adjust(ps_a11y_model *model,uint64_t id,int direction);
 bool ps_a11y_record_edit(ps_a11y_model *model,const char *window,const char *name,
                        const float bounds[4],bool enabled,char *text,size_t capacity);
 bool ps_a11y_set_text(ps_a11y_model *model,uint64_t id,const char *text);
+/* Selection offsets are UTF-8 scalar boundaries. Requests expire on content
+ * changes and never run against a replacement control. */
+bool ps_a11y_edit_update(ps_a11y_model *model,size_t index,const char *text,size_t start,size_t end);
+bool ps_a11y_edit_box(ps_a11y_model *model,size_t index,size_t begin,size_t end,const float bounds[4]);
+bool ps_a11y_edit_select(ps_a11y_model *model,uint64_t id,uint64_t version,size_t start,size_t end);
+bool ps_a11y_edit_take_selection(ps_a11y_model *model,size_t index,size_t *start,size_t *end);
 size_t ps_a11y_child_count(const ps_a11y_model *model,uint64_t parent);
 const ps_a11y_node *ps_a11y_child_at(const ps_a11y_model *model,uint64_t parent,size_t index);
 size_t ps_a11y_index(const ps_a11y_model *model,uint64_t id);
