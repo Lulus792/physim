@@ -336,6 +336,8 @@ class Builder:
             inputs += [manifest]
             if name in ("physim", "physim-ui-benchmark", "physim-scene-benchmark"):
                 command.append("dwmapi.lib")
+            if any(str(p).endswith(("accessibility_native.c", "accessibility_windows_probe.c")) for p in sources):
+                command += ["uiautomationcore.lib", "ole32.lib", "oleaut32.lib", "uuid.lib", "comctl32.lib", "dwmapi.lib"]
             if self.fuzzing and name == "physim-protocol-libfuzzer":
                 # LLVM's Windows fuzzer archive uses the static CRT by default;
                 # ASan and all our objects use the shared CRT.

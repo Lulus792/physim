@@ -3,7 +3,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#ifdef __APPLE__
+#ifdef _WIN32
+#include "accessibility_windows.inc"
+#elif defined(__APPLE__)
 #include <objc/runtime.h>
 #include <objc/message.h>
 #include <CoreGraphics/CoreGraphics.h>

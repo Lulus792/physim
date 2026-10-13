@@ -61,5 +61,5 @@ int main(void) {
  CHECK(draw(ui,true,false)==0);CHECK(!nk_sdl_accessibility_press(ui,"missing"));
  overlay=true;CHECK(draw(ui,true,false)==0);CHECK(!nk_sdl_accessibility_focus(ui,NULL,"Vektoren"));CHECK(!nk_sdl_accessibility_press(ui,"Öffnen …"));
  nk_sdl_shutdown(ui);ps_graphics_destroy(graphics);SDL_DestroyWindow(window);SDL_Quit();
- puts("macOS native UI accessibility: actual rendered Nuklear labels/buttons, native press delivery once, disabled/removed controls and teardown passed");return 0;
+ puts("Native UI accessibility: actual rendered Nuklear labels/buttons, native press delivery once, disabled/removed controls and teardown passed");return 0;
 }

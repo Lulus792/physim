@@ -47,6 +47,13 @@ und sichtbare Rahmen um Eingabefelder und Schaltflächen. Die neuen Paletten
 prüfen Textkontraste rechnerisch; vollständige Tastatur- und Screenreader-Bedienung
 ist weiterhin ein offenes Projektziel.
 
+Unter Windows veröffentlicht die native UI-Automation-Anbindung jetzt
+Schaltflächen, Checkboxen, Auswahlgruppen und Slider mit Namen, Rollen,
+Zuständen und Fokus. Ein unabhängiger Client hat die tatsächlichen
+Einstellungen bedient: Checkbox umschalten, Schrift-/Theme-Auswahl ändern
+und einen Button fokussieren. Das bestätigt diese Bedienabläufe; vollständiges
+Lesen der F1-Dokumentation und die Screenreader-Abnahme bleiben offen.
+
 Ein **Linksklick in die Szene** wählt das vorderste sichtbare Objekt unter dem
 Mauszeiger. Der Inspektor zeigt dessen ID beziehungsweise Listenposition und
 bietet **Auswahl ausblenden**. Ein Klick auf den Hintergrund hebt die Auswahl auf.

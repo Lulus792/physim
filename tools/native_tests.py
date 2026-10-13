@@ -59,7 +59,7 @@ def catalog():
     cases.append(Case("child_usage", ("tests/test_child_usage.c",)))
     cases.append(Case("app_profiling", ("tests/test_app_profiling.c", "app/profiling.c"),
                       app=True, arguments=("{work}",)))
-    if sys.platform == "darwin":
+    if sys.platform in ("darwin", "win32"):
         cases.append(Case("accessibility_native", ("tests/test_accessibility_native.c", "app/accessibility.c", "app/accessibility_native.c"),app=True,display=True))
         cases.append(Case("accessibility_ui", ("tests/test_accessibility_ui.c", "app/accessibility.c", "app/accessibility_native.c", "app/ui_backend.c", "app/ui_sdl.c", "app/ui_geometry.c", "app/graphics.c", "app/png.c"),libraries=("platform","zlib","core"),defines=("Z_PREFIX",),app=True,display=True))
     for name in ("core", "linear_range", "transform_range", "scalar_range", "ode_range", "quantity_sum", "real_gas", "properties", "numerics", "mechanics", "thermodynamics", "electromagnetism", "waves_optics", "fluid", "hashmap", "string_view", "array",

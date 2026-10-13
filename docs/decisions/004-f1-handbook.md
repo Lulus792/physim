@@ -112,6 +112,27 @@ visuell geprüft; die Codefläche enthält tatsächlich lesbare Glyphen.
 Die 29 ausgewählten nativen Dokumentations-, Referenz-, Beispiel- und
 Accessibility-/Geometriefälle bestehen in `run-mji_rnhn`.
 
-Offen sind native Windows-Semantik, praktische Screenreader-Abnahme
+Windows besitzt jetzt einen UI-Automation-Provider für die veröffentlichten
+Bedienelemente. Die C17-Brücke veröffentlicht Namen, Rollen, Fokus und
+Button-/Checkbox-/Auswahl-/Slider-Aktionen über den nativen Fensteranschluss.
+Ein separater UIA-Clientprozess bedient die tatsächlichen Einstellungen;
+die drei Checkbox-, Auswahlgruppen- und Fokusfälle bestehen in `run-k8519wd_`.
+Der Client identifiziert gleichnamige Gruppen und Textüberschriften anhand
+ihrer Rolle. Entfernte oder zerstörte Elemente können keine Aktion mehr auslösen.
+
+Mit aktiver Windows-Anbindung bestehen 16 Accessibility- und F1-GUI-Fälle
+(`run-sezoviel`). Die beiden nativen Provider-/Rendererfälle bestehen zusätzlich
+mit MSVC AddressSanitizer (`build/native/F1-uia-sanitized/test-results/run-ycfu0o49`).
+Die Windows-Brücke und der unabhängige Client sind reguläre Testziele; ihre
+Laufprotokolle verbleiben im ignorierten Buildverzeichnis.
+Nach dem abschließenden Review bestehen alle fünf Windows-Provider- und
+Clientfälle erneut (`run-nh1gv2ti`); die fünf Modell-/Parser-/Abschnittsfälle
+bestehen in `run-shcvhfxl`. Der sichtbare Fokus des extern bedienten Buttons
+wurde im Laufzeitbild geprüft. Die native ID beschreibt die aktuelle
+Laufzeitidentität eines Elements; eine dauerhaft sprachunabhängige Automation-ID
+wird nicht vorgetäuscht.
+
+Offen sind vollständige native Lesesemantik für den Dokumenttext und die
+Suchfelder, praktische Screenreader-Abnahme
 und die Abnahmematrix für Dichte, Themes sowie Linux und macOS. Diese Liste
 beschreibt Restarbeit und erteilt keine Produktfreigabe.

@@ -129,6 +129,12 @@ def main():
             "accessibility_options_app": ("tests/test_accessibility_checkbox_app.py", ("--options",)),
             "accessibility_focus_app": ("tests/test_accessibility_checkbox_app.py", ("--focus",)),
         })
+    if sys.platform == "win32":
+        specialized_display.update({
+            "accessibility_checkbox_windows": ("tests/test_accessibility_checkbox_app.py", ("--probe",)),
+            "accessibility_options_windows": ("tests/test_accessibility_checkbox_app.py", ("--probe", "--options")),
+            "accessibility_focus_windows": ("tests/test_accessibility_checkbox_app.py", ("--probe", "--focus")),
+        })
     expected_display = display_names | direct_display | provider_display | specialized_display.keys()
     assert actual_display == expected_display, {
         "missing": sorted(expected_display - actual_display),

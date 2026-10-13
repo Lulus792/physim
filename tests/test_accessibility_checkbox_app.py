@@ -1,4 +1,4 @@
-"""Actual settings draft: native checkbox actions through AppKit or AT-SPI."""
+"""Actual settings draft: native actions through UI Automation, AppKit or AT-SPI."""
 
 import argparse
 import json
@@ -14,6 +14,7 @@ parser.add_argument("--work", type=Path, required=True)
 parser.add_argument("--inner", action="store_true")
 parser.add_argument("--options", action="store_true")
 parser.add_argument("--focus", action="store_true")
+parser.add_argument("--probe", type=Path)
 a = parser.parse_args()
 a.work.mkdir(parents=True, exist_ok=True)
 app = a.app.resolve()
@@ -24,6 +25,59 @@ marker = b"SETTINGS FOCUS SELF-TEST: PASSED" if a.focus else (
     b"SETTINGS RADIO SELF-TEST: PASSED" if a.options else b"SETTINGS CHECKBOX SELF-TEST: PASSED"
 )
 (work / "settings").mkdir(exist_ok=True)
+if sys.platform == "win32":
+    assert a.probe and a.probe.is_file()
+    out = (work / "app.stdout").open("wb")
+    err = (work / "app.stderr").open("wb")
+    process = subprocess.Popen([str(app), "--settings-test", str(work / "settings"), mode + "-remote"], stdout=out, stderr=err)
+    probes = []
+
+    def windows_wait(text):
+        deadline = time.monotonic() + 15
+        while time.monotonic() < deadline:
+            if text in (work / "app.stdout").read_text(encoding="utf-8"):
+                return
+            assert process.poll() is None, (text, process.returncode, (work / "app.stderr").read_text(encoding="utf-8"))
+            time.sleep(.02)
+        raise AssertionError("Missing actual UI state: " + text)
+
+    def windows_action(action, label, group=None):
+        arguments = [str(a.probe.resolve()), str(process.pid), action, label]
+        if group:
+            arguments.append(group)
+        result = subprocess.run(arguments, capture_output=True, timeout=15)
+        probes.append(dict(command=arguments, exit_code=result.returncode, stdout=result.stdout.decode("utf-8"), stderr=result.stderr.decode("utf-8")))
+        assert result.returncode == 0 and b"INDEPENDENT WINDOWS UIA: PASSED" in result.stdout, probes[-1]
+
+    try:
+        if a.focus:
+            windows_wait("FOCUS READY")
+            windows_action("focus", "Standardwerte")
+        elif a.options:
+            for number, (group, label) in enumerate([
+                ("Schriftgröße der Oberfläche", "22 px"), ("Schriftgröße der Oberfläche", "16 px"),
+                ("Darstellung", "Hell"), ("Darstellung", "Dunkel"),
+                ("Schriftgröße im Code-Editor", "20 px"), ("Schriftgröße im Code-Editor", "16 px")]):
+                windows_wait(f"RADIO READY {number}")
+                windows_action("select", label, group)
+                if number < 5:
+                    windows_wait(f"RADIO SELECTED {number}")
+        else:
+            windows_wait("CHECKBOX READY")
+            windows_action("toggle", "Vektoren")
+            windows_wait("CHECKBOX TOGGLED")
+            windows_action("toggle", "Vektoren")
+        assert process.wait(timeout=15) == 0
+        assert marker.decode() in (work / "app.stdout").read_text(encoding="utf-8")
+    finally:
+        if process.poll() is None:
+            process.kill()
+            process.wait()
+        out.close()
+        err.close()
+        (work / "results.json").write_text(json.dumps(dict(probes=probes, exit_code=process.returncode), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print("Actual Windows settings: independent UI Automation " + mode + " actions and UI frame delivery passed")
+    raise SystemExit(0)
 if sys.platform == "darwin":
     result = subprocess.run(
         [str(app), "--settings-test", str(work / "settings"), mode + "-native"],

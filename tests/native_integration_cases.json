@@ -1,6 +1,12 @@
 {
   "format": 1,
   "artifacts": {
+    "accessibility-windows-probe": {
+      "sources": [
+        "tests/accessibility_windows_probe.c"
+      ],
+      "libraries": []
+    },
     "physim-collision-language-parity-tests": {
       "sources": [
         "tests/test_collision_language_parity.c"
@@ -9213,6 +9219,107 @@
             "{work}"
           ],
           "timeout": 120
+        }
+      ]
+    },
+    {
+      "name": "accessibility_checkbox_windows",
+      "app": true,
+      "display": true,
+      "platforms": [
+        "win32"
+      ],
+      "targets": [
+        "python",
+        "physim",
+        "accessibility-windows-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_accessibility_checkbox_app.py",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--probe",
+            "{accessibility-windows-probe}"
+          ],
+          "timeout": 90,
+          "files": [
+            "app.stdout",
+            "app.stderr",
+            "results.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "accessibility_options_windows",
+      "app": true,
+      "display": true,
+      "platforms": [
+        "win32"
+      ],
+      "targets": [
+        "python",
+        "physim",
+        "accessibility-windows-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_accessibility_checkbox_app.py",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--options",
+            "--probe",
+            "{accessibility-windows-probe}"
+          ],
+          "timeout": 90,
+          "files": [
+            "app.stdout",
+            "app.stderr",
+            "results.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "accessibility_focus_windows",
+      "app": true,
+      "display": true,
+      "platforms": [
+        "win32"
+      ],
+      "targets": [
+        "python",
+        "physim",
+        "accessibility-windows-probe"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_accessibility_checkbox_app.py",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--focus",
+            "--probe",
+            "{accessibility-windows-probe}"
+          ],
+          "timeout": 90,
+          "files": [
+            "app.stdout",
+            "app.stderr",
+            "results.json"
+          ]
         }
       ]
     },
