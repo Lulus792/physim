@@ -516,7 +516,28 @@ static void documentation_math_test_frame(app *a,int *stage,int *code,const char
   if(a->doc_scroll_pending){--*stage;return;}
   const char *r=strstr(a->documentation->reading,"ᵣ");ok=documentation_font_size(a)==32 && r &&
    nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(r-a->documentation->reading));
-  *capture="docs-math-32.bmp";a->quitting=true;break;
+  *capture="docs-math-32.bmp";test_window_key_mod(a->doc_window,SDLK_0,PS_UI_COMMAND_MOD);zoom_frames=0;break;
+ }
+ case 6:
+  if(zoom_frames++<2){--*stage;return;}
+  ok=documentation_font_size(a)==16;test_window_key_mod(a->doc_window,SDLK_A,PS_UI_COMMAND_MOD);break;
+ case 7:test_window_key_mod(a->doc_window,SDLK_BACKSPACE,0);zoom_frames=0;break;
+ case 8: {
+  if(a->doc_query[0] || zoom_frames++<2){--*stage;return;}
+  const char *r=strstr(a->documentation->reading,"ᵣ");ok=r && nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(r-a->documentation->reading));
+  *capture="docs-reading-16.bmp";for(int i=0;i<8;i++)test_window_key_mod(a->doc_window,SDLK_PLUS,PS_UI_COMMAND_MOD);zoom_frames=0;break;
+ }
+ case 9: {
+  if(zoom_frames++<2 || a->doc_scroll_pending){--*stage;return;}
+  const char *r=strstr(a->documentation->reading,"ᵣ");ok=!a->doc_query[0] && documentation_font_size(a)==32 && r &&
+   nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(r-a->documentation->reading));
+  *capture="docs-reading-32.bmp";test_window_key_mod(a->doc_window,SDLK_0,PS_UI_COMMAND_MOD);zoom_frames=0;break;
+ }
+ case 10: {
+  if(zoom_frames++<2 || a->doc_scroll_pending){--*stage;return;}
+  const char *r=strstr(a->documentation->reading,"ᵣ");ok=!a->doc_query[0] && documentation_font_size(a)==16 && r &&
+   nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(r-a->documentation->reading));
+  *capture="docs-reading-reset.bmp";a->quitting=true;break;
  }
  }
  if(!ok){fprintf(stderr,"Documentation math stage %d failed\n",*stage-1);*code=1;a->quitting=true;}

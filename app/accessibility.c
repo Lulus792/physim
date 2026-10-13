@@ -61,6 +61,13 @@ bool ps_a11y_document_scroll(ps_a11y_model *m,uint64_t version,size_t byte) {
 bool ps_a11y_document_scroll_align(ps_a11y_model *m,uint64_t version,size_t byte,bool top) {
  if(!ps_a11y_document_scroll(m,version,byte))return false;m->document_scroll_top=top;return true;
 }
+bool ps_a11y_document_preserve_position(ps_a11y_model *m,uint64_t version) {
+ const ps_a11y_document *d=m?m->document:NULL;
+ if(!d || !d->active || !version || d->version!=version || !d->count)return false;
+ size_t byte=d->boxes[0].begin;
+ for(size_t i=1;i<d->count;i++)if(d->boxes[i].begin<byte)byte=d->boxes[i].begin;
+ return ps_a11y_document_scroll_align(m,version,byte,true);
+}
 bool ps_a11y_document_take_scroll(ps_a11y_model *m,uint64_t version,size_t *byte) {
  if(!m || !byte || !version || version!=m->document_scroll_version)return false;
  *byte=m->document_scroll_byte;m->document_scroll_version=0;return true;

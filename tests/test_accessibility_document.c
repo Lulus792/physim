@@ -21,13 +21,28 @@ int main(void) {
  CHECK(ps_a11y_document_box(m,6,8,box));CHECK(!ps_a11y_publish(m));
  CHECK(ps_a11y_document_take_scroll(m,1,&byte) && byte==6);CHECK(!ps_a11y_document_take_scroll(m,1,&byte));
  CHECK(!ps_a11y_document_scroll(m,1,7));CHECK(!ps_a11y_document_scroll(m,2,6));
+ CHECK(!ps_a11y_document_preserve_position(NULL,1));
+ CHECK(!ps_a11y_document_preserve_position(m,0));CHECK(!ps_a11y_document_preserve_position(m,2));
+ CHECK(ps_a11y_document_preserve_position(m,1));CHECK(m->document_scroll_top);
+ CHECK(!ps_a11y_document_preserve_position(m,1));
+ CHECK(ps_a11y_document_take_scroll(m,1,&byte) && byte==6);
+ /* Preserve an explicit native scroll request, including its alignment. */
+ CHECK(ps_a11y_document_scroll_align(m,1,8,false));CHECK(!ps_a11y_document_preserve_position(m,1));
+ CHECK(!m->document_scroll_top);CHECK(ps_a11y_document_take_scroll(m,1,&byte) && byte==8);
+ /* Reading order is independent of the order in which glyph boxes arrive. */
+ ps_a11y_begin(m);CHECK(ps_a11y_document_begin(m,1,"Lesen",text,view));
+ CHECK(ps_a11y_document_box(m,11,12,box));CHECK(ps_a11y_document_box(m,6,8,box));ps_a11y_publish(m);
+ CHECK(ps_a11y_document_preserve_position(m,1));
+ CHECK(ps_a11y_document_take_scroll(m,1,&byte) && byte==6);
  ps_a11y_begin(m);CHECK(!ps_a11y_document_begin(m,1,"Lesen","Changed",view));
  CHECK(!m->document_draft->active && !strcmp(m->document->text,text));
  CHECK(ps_a11y_document_begin(m,2,"Anders","New text",view));CHECK(ps_a11y_publish(m));
  CHECK(m->document->version==2 && !strcmp(m->document->text,"New text"));
+ CHECK(!ps_a11y_document_preserve_position(m,2)); /* No visible text geometry. */
  CHECK(!ps_a11y_document_scroll(m,1,0));CHECK(ps_a11y_document_scroll(m,2,0));
  ps_a11y_begin(m);CHECK(ps_a11y_publish(m));CHECK(!m->document->active && !m->document_scroll_version);
  CHECK(!ps_a11y_document_scroll(m,2,0));
+ CHECK(!ps_a11y_document_preserve_position(m,2)); /* Hidden document. */
  ps_a11y_begin(m);view[2]=NAN;CHECK(!ps_a11y_document_begin(m,3,"Lesen",text,view));view[2]=200;
  CHECK(!ps_a11y_document_begin(m,3,"Lesen","\xc0\xaf",view));
  CHECK(ps_a11y_document_begin(m,3,"Lesen",text,view));

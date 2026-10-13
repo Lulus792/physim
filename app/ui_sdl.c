@@ -250,6 +250,12 @@ bool nk_sdl_accessibility_document_visible(struct nk_context *ctx,uint64_t versi
   for(size_t i=0;i<d->count;i++)if(d->boxes[i].begin<=byte && d->boxes[i].end>byte){visible=true;break;}
  SDL_UnlockMutex(sdl->accessibility_mutex);return visible;
 }
+bool nk_sdl_accessibility_document_preserve_position(struct nk_context *ctx,uint64_t version) {
+ if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
+ SDL_LockMutex(sdl->accessibility_mutex);
+ bool ok=ps_a11y_document_preserve_position(sdl->accessibility,version);
+ SDL_UnlockMutex(sdl->accessibility_mutex);return ok;
+}
 bool nk_sdl_accessibility_press(struct nk_context *ctx,const char *label) {
     if(!ctx || !ctx->userdata.ptr)return false;
     struct nk_sdl *sdl=ctx->userdata.ptr;

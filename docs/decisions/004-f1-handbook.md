@@ -5,6 +5,24 @@ Versuch ermöglichen als auch beim Arbeiten präzise Antworten liefern. Die
 Abnahme betrachtet Inhalt, Bedienung, Darstellung und zugängliches Lesen.
 Ein grüner Parsertest allein ist keine vollständige Abnahme.
 
+## Aktuelle Bewertung vom 14. Oktober 2026
+
+Bewertungsgrundlage sind die zentralen Skills unter `D:/Skills/skills`:
+`documentation-engineer`, `ui-ux-designer`, `accessibility-engineer`,
+`ui-implementation` und `test-engineer`. Volle Punktzahl erfordert die acht
+unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
+
+| Bereich | Belegter Stand | Rest zur vollständigen Abnahme |
+| --- | --- | --- |
+| Dokumentationszugang | 183 registrierte Seiten und 214 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
+| Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
+| Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
+| Barrierefreiheit | Windows UIA liest vollständigen Text und bedient Suchfelder; Bereiche und Fokus werden unabhängig geprüft | Native Text-/Feldbedienung auf macOS/Linux, Link-/Tabellensemantik und echte Screenreader-Aufgaben |
+
+Die Hilfe ist in den geprüften Windows-Abläufen gut nutzbar. Eine vollständige
+Bewertung mit Höchstpunktzahl ist wegen dieser offenen Abnahmefälle noch nicht
+begründet. Die folgenden Nachweise nennen jeweils ihre Revision und Umgebung.
+
 ## Nutzeraufgaben
 
 - Eine Vorlage anlegen, bauen, aufzeichnen und auswerten, mit sichtbaren
@@ -330,6 +348,39 @@ bestehen dort ebenfalls 2/2 in `run-mptcb7p_`. Beide ASan-Läufe liegen unter
 bestehen in `build/native/F1-review/edit-scroll-runner-proof`.
 Die abschließende Modellprobe für deaktivierte, entfernte und nach dem Zeichnen
 queued Ziele besteht mit MSVC ASan in `run-t96ly68b`.
+
+Der Stand `5ba0638` besteht inzwischen auch unter Ubuntu 24.04/X11/Xvfb mit
+ASan/UBSan: Clang **15/15 native und 22/22 GUI-Fälle** (`run-349e8nv_`,
+`run-otthh0xf`), GCC ebenfalls **15/15 und 22/22** (`run-o1y6jb2l`,
+`run-wgjwn5yp`).
+[Clang-Lauf](https://github.com/Lulus792/physim/actions/runs/38485919616/job/115599421224),
+[GCC-Lauf](https://github.com/Lulus792/physim/actions/runs/38485919616/job/115599421568).
+Der neue Editor-Scrolltest gehört zu den nativen Fällen. Diese Läufe prüfen
+keinen Windows-UIA-Provider unter Linux.
+
+Zoom ohne Suchbegriff bewahrt jetzt eine Textstelle aus dem veröffentlichten
+sichtbaren Lesebereich. Vor dem Umbruch wird deren UTF-8-Position gebunden an die
+Inhaltsversion vorgemerkt; das neue Layout richtet diese Textstelle aus.
+Mehrere Zoomtasten vor dem nächsten Bild ersetzen den ursprünglichen Anker
+nicht. Eine bereits vorgemerkte native Scrollaktion behält Vorrang. Ohne
+sichtbare Textgeometrie bleibt die bisherige Pixel-Skalierung als Fallback.
+Dies verspricht keine identische Pixelposition oder Anker für rein grafische
+Inhalte.
+
+Die Gegenprobe `run-vpdclvrf` verliert ohne Suchbegriff die Formel nach dem
+Zoom auf 32 Pixel. Die Korrektur besteht die erweiterte Mathematikprobe in
+`run-t_vcy24o`: Nach abgeschlossenen Layout-Frames ist die Formel mit und ohne
+Suche sichtbar, einschließlich Rückkehr zu 16 Pixeln. Alle drei zusätzlichen
+Lesebilder wurden visuell geprüft. Der Modellfall prüft Versionsbindung,
+fehlende/verborgene Geometrie, Unicode-Grenzen, unabhängige Boxreihenfolge und
+den Vorrang bestehender Scrollanfragen (`run-z87vr1aw`). Fünf betroffene
+Tastatur-/Verlauf-/Zoom-/native Feld-/Lesefälle bestehen in `run-kww751ua`.
+Die MSVC-ASan-Läufe bestehen **1/1 Modellfall** (`run-5xw41dxo`) und **2/2
+Mathematik-/Zoomfälle** (`run-1_js51y5`) unter
+`build/native/F1-uia-sanitized/test-results`. Die Prüfung des Testläufers mit
+erwarteten Gegenfehlern besteht in
+`build/native/F1-review/reading-anchor-runner-proof`.
+Linux und macOS sind für diese neue Ankerkorrektur noch nicht ausgeführt.
 
 Offen sind vollständige assistive Feldbedienung und ihre native
 macOS-/Linux-Anbindung, eingebettete Link-/Tabellensemantik, vollständiges natives

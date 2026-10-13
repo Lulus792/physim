@@ -58,6 +58,8 @@ bool ps_a11y_document_begin(ps_a11y_model *model,uint64_t version,const char *na
 bool ps_a11y_document_box(ps_a11y_model *model,size_t begin,size_t end,const float bounds[4]);
 bool ps_a11y_document_scroll(ps_a11y_model *model,uint64_t version,size_t byte);
 bool ps_a11y_document_scroll_align(ps_a11y_model *model,uint64_t version,size_t byte,bool top);
+/* Queue the earliest visible text byte before layout reflow. Existing requests win. */
+bool ps_a11y_document_preserve_position(ps_a11y_model *model,uint64_t version);
 bool ps_a11y_document_take_scroll(ps_a11y_model *model,uint64_t version,size_t *byte);
 void ps_a11y_begin(ps_a11y_model *model);
 /* Visible, clipped bounds in SDL logical window coordinates; positive sizes.
