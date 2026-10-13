@@ -6,7 +6,10 @@ static bool test_ui_wrapped_button(app *a) {
     ps_ui_font_layout layout={.magic=PS_UI_LAYOUT_MAGIC,.ui_size=a->preferences.ui_size};
     ctx.userdata=nk_handle_ptr(&layout);
     const char *label="Messdaten im Ordner öffnen";
-    if(nk_begin(&ctx,"wrap-proof",nk_rect(0,0,200,300),0)) {
+    /* The label fits at 200 px with Segoe UI 18. Force overflow using the
+     * actual font measurement, so this tests wrapping on every platform. */
+    float label_width=a->font_ui->width(a->font_ui->userdata,a->font_ui->height,label,(int)strlen(label));
+    if(nk_begin(&ctx,"wrap-proof",nk_rect(0,0,floorf(label_width*.75f),300),0)) {
         nk_layout_row_dynamic(&ctx,28,1);
         nk_button_label(&ctx,label);
     }
@@ -21,6 +24,7 @@ static bool test_ui_wrapped_button(app *a) {
         seen+=(size_t)text->length;lines++;
     }
     ok=ok && seen==strlen(label) && lines>=2;
+    if(!ok)fprintf(stderr,"Wrapped button: size=%u seen=%zu/%zu lines=%u label-width=%.1f\n",a->preferences.ui_size,seen,strlen(label),lines,a->font_ui->width(a->font_ui->userdata,a->font_ui->height,label,(int)strlen(label)));
     nk_free(&ctx);return ok;
 }
 static void test_ui_size_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
@@ -58,6 +62,8 @@ static void test_ui_size_frame(app *a,const char *mode,int *stage,int *code,cons
     case 6: test_mouse(a,a->settings_bounds[cancel || reading?4:0],false);break;
     case 8: {
         unsigned expected=cancel?previous:target;
+        if(a->font_ui->height!=expected || a->doc_font_ui->height!=expected || a->font_title->height!=expected+7 || a->doc_font_title->height!=expected+7)
+            fprintf(stderr,"UI fonts expected=%u ui=%.1f doc=%.1f title=%.1f doc-title=%.1f\n",expected,a->font_ui->height,a->doc_font_ui->height,a->font_title->height,a->doc_font_title->height);
         ok=ok && a->preferences.ui_size==expected && a->font_ui->height==expected &&
            a->doc_font_ui->height==expected && a->font_title->height==expected+7 &&
            a->doc_font_title->height==expected+7 && a->ui->style.font==a->font_ui &&

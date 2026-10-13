@@ -16,7 +16,7 @@ static void keyboard_menu_test_frame(app *a, const char *root, int *stage, int *
     case 5: ok=a->toolbar_keyboard_item==5;MENU_KEY(SDLK_DOWN);break;
     case 6: ok=a->toolbar_keyboard_item==0;MENU_KEY(SDLK_UP);break;
     case 7: ok=a->toolbar_keyboard_item==5;MENU_KEY(SDLK_HOME);break;
-    case 8: ok=a->toolbar_keyboard_item==0;MENU_KEY(SDLK_RIGHT);break;
+    case 8: ok=a->toolbar_keyboard_item==0;MENU_KEY(SDLK_RIGHT);MENU_KEY(SDLK_RIGHT);break;
     case 9: ok=a->toolbar_menu==2 && a->toolbar_keyboard_top==1 && a->toolbar_keyboard_item==0;MENU_KEY(SDLK_DOWN);break;
     case 10: ok=a->toolbar_keyboard_item==4;MENU_KEY(SDLK_END);break;
     case 11:
@@ -25,7 +25,7 @@ static void keyboard_menu_test_frame(app *a, const char *root, int *stage, int *
     case 13:
         ok=a->show_log && !a->toolbar_menu && !a->toolbar_keyboard;
         MENU_KEY(SDLK_F10);break;
-    case 14: MENU_KEY(SDLK_RIGHT);MENU_KEY(SDLK_RIGHT);break;
+    case 14: for(unsigned i=0;i<4;i++)MENU_KEY(SDLK_RIGHT);break;
     case 15: ok=a->toolbar_keyboard_top==2;MENU_KEY(SDLK_RETURN);MENU_KEY(SDLK_RETURN);break;
     case 16:
         ok=a->doc_visible && !a->toolbar_keyboard;

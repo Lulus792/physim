@@ -10,6 +10,35 @@ Die folgenden Abschnitte dokumentieren die neueren tatsächlich ausgeführten
 Prüfungen. Alle drei Seiten sind im Offline-Handbuch erreichbar; ältere Belege
 stehen auch in [Archivband 2](platform-validation-history-2.md).
 
+## Aufklappbare Befehlsmenüs
+
+Am 13. Oktober 2026 wurden die freien Speichern-/Suchen-/Build-Icons aus dem
+Fensterkopf entfernt. Die Menüs Datei, Bearbeiten, Ansicht, Build und Hilfe
+zeigen gezeichnete Icons, Aktionsgruppen und rechtsbündige Tastenkürzel.
+[Entwurf und Zustände](decisions/003-command-menus.md) dokumentieren den Vertrag.
+
+Unter Windows 11 Pro (10.0.26200), MSVC 14.38 und SDL 3.2.30 bestehen die zehn
+ausgewählten Menü-/Editor-/Theme-/Buildabläufe **10/10**
+(`build/native/Debug/test-results/run-z5gvenjl`). Sechs ergänzende Abläufe für
+Datei-Tabs, große Dokumentfenster, beide Tastatur-Menügrößen, Andocken und
+Eingabeisolation bestehen in `run-c47a8fn7`. Die dort zunächst auffällige
+Schriftprüfung bestand nach Korrektur ihrer fontabhängigen Umbruchannahme
+erneut **1/1** (`run-li1jfg41`), einschließlich 16/18/20/22-Pixel-Oberflächenschrift,
+Wiederöffnung, Abbrechen und Standardwerten. Segoe UI 18 stellte das Testlabel
+bei 200 Pixeln vollständig auf einer Zeile dar; der Umbruchtest erzwingt den
+Überlauf jetzt anhand der gemessenen Textbreite.
+
+Die abschließende Datei-/Menüprüfung besteht **1/1** (`run-tmufkejs`) mit tatsächlichen
+Maus-/Tastatureingaben und Menüaufnahmen in Dunkel, Hell und hohem Kontrast.
+Die Menüaufnahmen und das 22-Pixel-Menü wurden visuell geprüft. Der Geometrie-
+und Accessibility-Modelltest bestehen **2/2** (`run-dfw3h8ec`). Ein eigener
+Regressionsfall schützt vor zwei Aktionen durch denselben Mausklick, wenn ein
+Menü über Dateibaum oder Arbeitsbereich-Navigation schließt.
+
+Physische DPI-/Monitorwechsel, Screenreader-Bedienaufgaben und Linux-/macOS-
+Builds dieser Änderung sind noch offen. Die Screenshots belegen die tatsächlich
+ausgeführten lokalen Fensterzustände, keine allgemeine Plattformgleichheit.
+
 ## Durchgehende Panelleisten und Datei-Tabs
 
 Am 13. Oktober 2026 wurde die überarbeitete Oberfläche lokal unter Windows 11 Pro

@@ -239,6 +239,14 @@ die Änderungen inzwischen gespeichert wurden.
 
 ## Editor und Build
 
+Die Menüzeile enthält **Datei**, **Bearbeiten**, **Ansicht**, **Build**, **Hilfe**
+und **Einstellungen**. Aktionen liegen in den aufklappbaren Menüs mit einer
+einheitlichen Iconspalte links, gruppierten Einträgen und Tastenkürzeln rechts.
+**Datei → Speichern / Ctrl+S**, **Bearbeiten → Suchen / Ersetzen / Ctrl+F** und
+**Build → Projekt bauen / F5** sind die Zugänge für die Editoraktionen.
+Nicht verfügbare Einträge sind ausgegraut. F10 aktiviert die Menüzeile;
+Pfeile wechseln Menüs und Einträge, Enter führt aus, Escape schließt das Menü.
+
 ### API-Namen vervollständigen
 
 Setze den Cursor in einen C- oder Physim-Bezeichner und drücke

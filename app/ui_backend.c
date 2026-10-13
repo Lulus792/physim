@@ -48,6 +48,38 @@ void ps_ui_draw_icon(struct nk_command_buffer *c,ps_ui_icon icon,struct nk_rect 
         nk_stroke_rect(c,nk_rect(x+2,y+2,10,10),1,t,color);break;
     case PS_ICON_VALUE:
         nk_stroke_circle(c,nk_rect(x+3,y+3,8,8),t,color);break;
+    case PS_ICON_FILE_ADD: case PS_ICON_FOLDER_ADD:
+        ps_ui_draw_icon(c,icon==PS_ICON_FILE_ADD?PS_ICON_FILE:PS_ICON_FOLDER,b,color);
+        nk_stroke_line(c,x+10,y+8,x+10,y+14,2,color);nk_stroke_line(c,x+7,y+11,x+13,y+11,2,color);break;
+    case PS_ICON_WINDOW: case PS_ICON_SIDEBAR: case PS_ICON_INSPECTOR:
+        nk_stroke_rect(c,nk_rect(x+1,y+2,12,10),1,t,color);
+        nk_stroke_line(c,x+1,y+5,x+13,y+5,t,color);
+        if(icon!=PS_ICON_WINDOW)nk_stroke_line(c,x+(icon==PS_ICON_SIDEBAR?5:9),y+5,x+(icon==PS_ICON_SIDEBAR?5:9),y+12,t,color);break;
+    case PS_ICON_LAYOUT: case PS_ICON_LAYOUT_RESET:
+        nk_stroke_rect(c,nk_rect(x+1,y+2,12,10),1,t,color);
+        nk_stroke_line(c,x+5,y+2,x+5,y+12,t,color);nk_stroke_line(c,x+5,y+8,x+13,y+8,t,color);
+        if(icon==PS_ICON_LAYOUT_RESET){nk_stroke_line(c,x+9,y+1,x+13,y+1,t,color);nk_stroke_line(c,x+13,y+1,x+13,y+5,t,color);}break;
+    case PS_ICON_CONSOLE:
+        nk_stroke_rect(c,nk_rect(x+1,y+2,12,10),1,t,color);
+        nk_stroke_line(c,x+3,y+5,x+5,y+7,t,color);nk_stroke_line(c,x+5,y+7,x+3,y+9,t,color);
+        nk_stroke_line(c,x+7,y+9,x+11,y+9,t,color);break;
+    case PS_ICON_REFRESH:
+        nk_stroke_arc(c,x+7,y+7,5,0.4f,5.5f,t,color);
+        nk_stroke_line(c,x+12,y+3,x+12,y+7,t,color);nk_stroke_line(c,x+12,y+7,x+8,y+7,t,color);break;
+    case PS_ICON_CHART:
+        nk_stroke_line(c,x+1,y+1,x+1,y+13,t,color);nk_stroke_line(c,x+1,y+13,x+13,y+13,t,color);
+        nk_stroke_line(c,x+3,y+10,x+6,y+6,t,color);nk_stroke_line(c,x+6,y+6,x+9,y+8,t,color);nk_stroke_line(c,x+9,y+8,x+12,y+3,t,color);break;
+    case PS_ICON_DICE:
+        nk_stroke_rect(c,nk_rect(x+1,y+1,12,12),2,t,color);
+        for(int i=0;i<3;i++)nk_fill_circle(c,nk_rect(x+3+i*3,y+3+i*3,2,2),color);break;
+    case PS_ICON_BOOK: case PS_ICON_REFERENCE:
+        nk_stroke_rect(c,nk_rect(x+1,y+2,12,10),1,t,color);nk_stroke_line(c,x+7,y+2,x+7,y+12,t,color);
+        nk_stroke_line(c,x+3,y+5,x+5,y+5,t,color);nk_stroke_line(c,x+9,y+5,x+11,y+5,t,color);
+        if(icon==PS_ICON_REFERENCE){nk_stroke_line(c,x+3,y+8,x+5,y+8,t,color);nk_stroke_line(c,x+9,y+8,x+11,y+8,t,color);}break;
+    case PS_ICON_COMPLETION:
+        nk_stroke_line(c,x+6,y+1,x+6,y+11,t,color);nk_stroke_line(c,x+1,y+6,x+11,y+6,t,color);
+        nk_stroke_line(c,x+2,y+2,x+10,y+10,t,color);nk_stroke_line(c,x+2,y+10,x+10,y+2,t,color);
+        nk_fill_circle(c,nk_rect(x+11,y+11,2,2),color);break;
     }
 }
 void ps_ui_flush_edit(struct nk_context *ctx,const char *name,char *text,size_t capacity,struct nk_rect bounds) {

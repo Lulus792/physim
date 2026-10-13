@@ -112,12 +112,15 @@ static void project_controls_test_frame(app *a,const char *mode,int *stage,int *
         ok=a->profile==1 && !a->built && a->project_settings_dirty && a->build_info_valid && !a->build_info.release;
         test_window_key_mod(a->window,SDLK_F6,0);break;
     case 7:
-        ok=!a->runner.running && !a->last_run[0] && !a->built && a->editor_build_bounds.w>0;
-        test_mouse(a,a->editor_build_bounds,true);break;
-    case 8:test_mouse(a,a->editor_build_bounds,false);break;
+        ok=!a->runner.running && !a->last_run[0] && !a->built && a->toolbar_bounds[5].w>0;
+        test_mouse(a,a->toolbar_bounds[5],true);break;
+    case 8:test_mouse(a,a->toolbar_bounds[5],false);*stage=70;break;
+    case 70:ok=a->toolbar_menu==6 && a->editor_build_bounds.w>0;test_mouse(a,a->editor_build_bounds,true);break;
+    case 71:test_mouse(a,a->editor_build_bounds,false);break;
+    case 72:*stage=9;break;
     case 9:
         if(!idle(a)){--*stage;return;}
-        ok=project_controls_build(a,true);*capture="build-control-release.bmp";break;
+        ok=project_controls_build(a,true) && a->tab==0;*capture="build-control-release.bmp";break;
     case 10:test_mouse(a,a->project_profile_bounds,true);break;
     case 11:test_mouse(a,a->project_profile_bounds,false);break;
     case 12:ok=a->project_profile_choices[0].w>0;test_mouse(a,a->project_profile_choices[0],true);break;

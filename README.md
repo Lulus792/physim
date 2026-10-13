@@ -194,8 +194,9 @@ Ordnern, zusätzlichen Pfaden, offenen Dokumenten und Editoransichten.
 Speicherfehler und laufende Jobs verhindern den Wechsel; Wiederöffnen startet
 Build und Simulation erst auf Wunsch. [Benannte Workspaces](docs/workspace.md#benannte-workspaces).
 
-Speichern, Suchen/Ersetzen und Build liegen als Icons im oberen Fensterkopf
-und sind über Ctrl+S, Ctrl+F und F5 erreichbar. Hilfe bündelt Handbuch,
+Speichern liegt unter **Datei**, Suchen/Ersetzen unter **Bearbeiten** und
+Projekt bauen unter **Build**. Die Menüeinträge zeigen Icons und Tastenkürzel;
+Ctrl+S, Ctrl+F und F5 rufen die Aktionen direkt auf. Hilfe bündelt Handbuch,
 API-Referenz und Vervollständigung. Datei-Tabs im Arbeitsbereich wechseln,
 schließen und sortieren offene Dateien; Vorschläge erscheinen direkt am
 dünnen, blinkenden Textcursor.

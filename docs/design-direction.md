@@ -36,8 +36,11 @@ Oben im Fenster gibt es eine dauerhaft sichtbare, flache Menüzeile, die in alle
 Arbeitsbereichen verfügbar bleibt. Ihre Aktionen sind zusammengefasst:
 
 - **Datei:** Ordner öffnen, Datei oder Ordner hinzufügen, neues Projekt, speichern.
+- **Bearbeiten:** Suchen und Ersetzen im aktiven Textdokument.
 - **Ansicht:** Protokoll, Dateibaum aktualisieren, Läufe und Berichte, Monte Carlo.
-- **Hilfe** und **Einstellungen:** kompakte direkte Zugänge.
+- **Build:** Projekt bauen, einschließlich Tastenkürzel F5.
+- **Hilfe:** Handbuch, API-Referenz und Vervollständigung.
+- **Einstellungen:** direkter Zugang zur persönlichen Darstellung.
 
 Darunter liegen drei schmale, gleich breite Tabs über die gesamte Fensterbreite.
 Ihre Auswahlfläche ist leicht eingerückt, abgerundet und neutral grau.
@@ -45,17 +48,21 @@ Die Menüzeile hat einen durchgehenden Hintergrund; ihre Beschriftungen
 haben im Ruhezustand keine eigenen Buttonflächen. Nur Hover und Auswahl werden
 abgerundet hervorgehoben. Geöffnete Menüs bleiben hervorgehoben; ein Klick auf ein anderes
 Menü wechselt unmittelbar dorthin. Bei offenem Menü genügt auch das Bewegen des
-Mauszeigers zwischen Datei und Ansicht. Popup-Einträge teilen eine gemeinsame
-Fläche, mit rechts ausgerichteten Tastenkürzeln und Markierung beim Überfahren.
-Referenzen: Apples [Menüleiste](https://developer.apple.com/design/human-interface-guidelines/the-menu-bar)
+Mauszeigers zwischen den aufklappbaren Menüs. Popup-Einträge teilen eine gemeinsame
+Fläche mit einer ruhigen Iconspalte links, rechts ausgerichteten Tastenkürzeln und
+Markierung beim Überfahren. Trennlinien gruppieren verwandte Aktionen. Globale
+Aktionsicons stehen ausschließlich in den Menüeinträgen. Diese Ergänzung folgt
+dem Nutzerauftrag vom 13. Oktober 2026 und orientiert sich an Microsofts
+[Menüprinzipien für Visual Studio](https://learn.microsoft.com/en-us/visualstudio/extensibility/ux-guidelines/menus-and-commands-for-visual-studio?view=vs-2022).
+Weitere Referenzen: Apples [Menüleiste](https://developer.apple.com/design/human-interface-guidelines/the-menu-bar)
 und [Ansichtsumschalter](https://developer.apple.com/design/human-interface-guidelines/segmented-controls).
 Das normale App-Fenster erhält abgerundete
 äußere Ecken über den Windows-Compositor. Die Menüzeile sitzt direkt am oberen Fensterrand;
 der freie Bereich neben den Menüs dient zum Verschieben des Fensters.
 Die Tab-Reihe ersetzt die Arbeitsbereich-Schaltflächen der Seitenleiste; diese
 beginnt mit dem Workspace. Die Menüzeile ist die zentrale Stelle für globale Aktionen. Arbeitsbereich-
-spezifische Aktionen wie Build, Simulation oder Analyse bleiben im jeweiligen
-Kontext und werden nicht unpriorisiert in die globale Leiste verschoben.
+spezifische Aktionen wie Simulation oder Analyse bleiben im jeweiligen
+Kontext. Build ist zusätzlich über das entsprechende Hauptmenü erreichbar.
 
 ### 3. Separater Projektmanager
 

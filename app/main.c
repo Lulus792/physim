@@ -219,10 +219,11 @@ typedef struct {
     char autosave_error[192];
     struct nk_rect recovery_bounds[2];
     struct nk_rect navigation_bounds[3];
-    struct nk_rect toolbar_bounds[4], toolbar_item_bounds[6];
+    struct nk_rect toolbar_bounds[6], toolbar_item_bounds[6];
     int toolbar_menu; /* 0: closed, 1: File, 2: View. One popup supports direct switching. */
     bool toolbar_keyboard;
     int toolbar_keyboard_top, toolbar_keyboard_item;
+    bool toolbar_pointer_consumed;
     int toolbar_popup_menu; /* Previous drawn popup, including keyboard close. */
     struct nk_rect toolbar_popup_bounds;
     struct nk_rect window_control_bounds[3], window_drag_bounds;

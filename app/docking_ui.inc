@@ -185,7 +185,7 @@ static void dock_input(app *a,unsigned panel,struct nk_rect r,struct nk_window *
     struct nk_context *ui=a->ui;struct nk_window *window=ui->current;
     unsigned under=dock_hover_float(a);
     bool covered=under!=PS_DOCK_NONE && under!=panel;
-    bool popup=a->toolbar_menu || (previous && previous->popup.active && previous->popup.type!=NK_PANEL_TOOLTIP);
+    bool popup=a->toolbar_menu || a->toolbar_pointer_consumed || (previous && previous->popup.active && previous->popup.type!=NK_PANEL_TOOLTIP);
     bool completion_pointer=a->completion_active && nk_input_is_mouse_hovering_rect(&ui->input,a->completion_list_bounds);
     bool mouse=!covered && !popup && !completion_pointer && nk_input_is_mouse_hovering_rect(&ui->input,r);
     bool enabled=mouse || (body && previous==window && !covered && !popup);

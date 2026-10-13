@@ -88,7 +88,40 @@ static void file_tabs_test_frame(app *a,int *stage,int *code,const char **captur
     case 33:break;
     case 34: {
         size_t index=workspace_tree_test_find(a,"models",0);ok=index!=SIZE_MAX && a->workspace_tree.entries[index].expanded==(repeats%2==0);
-        if(++repeats<6)*stage=31;else {a->quitting=true;puts("FILE TABS SELF-TEST: PASSED");}break;
+        if(++repeats<6)*stage=31;else *stage=40;break;
+    }
+    case 40:a->show_search=false;test_mouse(a,a->toolbar_bounds[4],true);break;
+    case 41:test_mouse(a,a->toolbar_bounds[4],false);break;
+    case 42:
+        ok=a->toolbar_menu==5;
+        *capture="editor-edit-menu.bmp";
+        test_mouse(a,nk_rect(a->toolbar_popup_bounds.x+60,a->toolbar_popup_bounds.y+20,4,4),true);break;
+    case 43:test_mouse(a,nk_rect(a->toolbar_popup_bounds.x+60,a->toolbar_popup_bounds.y+20,4,4),false);break;
+    case 44:ok=a->show_search && !a->toolbar_menu;test_key(a,SDLK_F);break;
+    case 45:test_mouse(a,a->toolbar_bounds[5],true);break;
+    case 46:test_mouse(a,a->toolbar_bounds[5],false);break;
+    case 47:
+        ok=a->toolbar_menu==6 && a->editor_build_bounds.w>0;
+        *capture="editor-build-menu.bmp";test_window_key_mod(a->window,SDLK_UP,0);break;
+    case 48:ok=a->toolbar_keyboard && a->toolbar_keyboard_item==0;test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
+    case 49:test_mouse(a,a->toolbar_bounds[0],true);break;
+    case 50:test_mouse(a,a->toolbar_bounds[0],false);break;
+    case 51:ok=a->toolbar_menu==1;*capture="editor-file-menu.bmp";test_key(a,SDLK_S);break;
+    case 52: {
+        ok=!a->toolbar_menu;ps_preferences p=a->preferences;p.theme=PS_THEME_LIGHT;preferences_apply(a,&p);
+        test_mouse(a,a->toolbar_bounds[0],true);break;
+    }
+    case 53:test_mouse(a,a->toolbar_bounds[0],false);break;
+    case 54:ok=a->toolbar_menu==1;*capture="editor-file-menu-light.bmp";test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
+    case 55: {
+        ps_preferences p=a->preferences;p.theme=PS_THEME_HIGH_CONTRAST;preferences_apply(a,&p);
+        test_mouse(a,a->toolbar_bounds[0],true);break;
+    }
+    case 56:test_mouse(a,a->toolbar_bounds[0],false);break;
+    case 57:ok=a->toolbar_menu==1;*capture="editor-file-menu-contrast.bmp";test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
+    case 58: {
+        ps_preferences p=a->preferences;p.theme=PS_THEME_DARK;preferences_apply(a,&p);
+        ok=!a->toolbar_menu;a->quitting=true;puts("FILE TABS SELF-TEST: PASSED");break;
     }
     }
     if(!ok){fprintf(stderr,"File tabs failure stage %d active=%u count=%u drag=%d pending=%d completion=%d\n",*stage-1,file_tab_active(a),a->document_count,a->file_tab_drag,a->document_pending,a->completion_active);*code=1;a->quitting=true;}

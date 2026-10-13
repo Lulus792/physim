@@ -183,11 +183,12 @@ static void document_test_frame(app *a, const char *root, int *stage, int *code,
     case 23:
         test_mouse(a, a->toolbar_bounds[0], false);
         break;
-    case 24:test_mouse(a,a->document_bounds[1],true);*stage=90;break;
+    case 24:*capture="documents-file-menu.bmp";test_mouse(a,a->document_bounds[1],true);*stage=90;break;
     case 90:test_mouse(a,a->document_bounds[1],false);break;
     case 91:*stage=25;break;
     case 25:
         ok = a->document_pending == 2;
+        if(!ok)fprintf(stderr,"Reload menu: menu=%d pending=%d bounds=%.1f/%.1f/%.1f/%.1f mouse=%.1f/%.1f\n",a->toolbar_menu,a->document_pending,a->document_bounds[1].x,a->document_bounds[1].y,a->document_bounds[1].w,a->document_bounds[1].h,a->ui->input.mouse.pos.x,a->ui->input.mouse.pos.y);
         *capture = "documents-reload.bmp";
         test_mouse(a, a->document_bounds[5], true);
         break;

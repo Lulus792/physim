@@ -1098,6 +1098,7 @@ static void draw_ui(app *a, int width, int height) {
         return;
     }
     float w=(float)width,h=(float)height;
+    a->toolbar_pointer_consumed=false;
     dock_prepare(a,w,h);
     dock_order(a);
     nk_style_push_vec2(ui, &ui->style.window.padding, nk_vec2(0, 0));
