@@ -1,0 +1,49 @@
+name: Focused macOS F1 accessibility
+on:
+  push:
+    branches: [main, codex/mac-f1-reading]
+    paths:
+      - app/accessibility*
+      - tests/test_accessibility*
+      - tools/native_tests.py
+      - .github/workflows/macos-f1-accessibility.yml
+  workflow_dispatch:
+concurrency:
+  group: macos-f1-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  native-text:
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [macos-15, macos-15-intel]
+    runs-on: ${{ matrix.runner }}
+    env:
+      ASAN_OPTIONS: detect_leaks=0
+      UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+    steps:
+      - uses: actions/checkout@v4
+      - name: LLVM sanitizer linker
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+        run: |
+          brew install llvm@20 lld@20
+          echo "$(brew --prefix llvm@20)/bin" >> "$GITHUB_PATH"
+          echo "$(brew --prefix lld@20)/bin" >> "$GITHUB_PATH"
+      - name: SDL3 pinned source
+        run: |
+          git clone --depth 1 --branch release-3.2.30 https://github.com/libsdl-org/SDL.git build-sdl-source
+          cmake -S build-sdl-source -B build-sdl -G Ninja -DCMAKE_BUILD_TYPE=Release -DSDL_TESTS=OFF -DCMAKE_INSTALL_PREFIX="$PWD/build-sdl-install"
+          cmake --build build-sdl --parallel 4
+          cmake --install build-sdl
+      - name: Portable UTF-16 and document contracts
+        run: python3 tools/build.py --compiler clang --sanitizers --test --test-filter accessibility_utf16 --test-filter accessibility_document --test-filter accessibility_suspend
+      - name: Actual AppKit and rendered F1
+        run: python3 tools/build.py --compiler clang --sanitizers --test-display --test-filter accessibility_native --test-filter accessibility_ui --test-filter accessibility_document_macos --test-filter documentation_navigation --test-filter documentation_sidebar
+      - name: Archive focused evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-f1-${{ matrix.runner }}
+          path: build/native/Debug-sanitized/test-results/**
+          if-no-files-found: error

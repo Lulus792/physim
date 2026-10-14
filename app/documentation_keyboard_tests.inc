@@ -999,7 +999,7 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
         if(!ok){fprintf(stderr,"Native documentation edit stage %d failed: focus=%d query=%s filter=%s\n",*stage,a->doc_focus,a->doc_query,a->doc_filter);*code=1;a->quitting=true;}
         return;
     }
-    if(!strcmp(mode,"docs-keyboard-reading-remote")) {
+    if(!strcmp(mode,"docs-keyboard-reading-remote") || !strcmp(mode,"docs-keyboard-reading-native")) {
         switch(*stage) {
         case 0:test_window_key_mod(a->window,SDLK_F1,0);++*stage;break;
         case 1: {
@@ -1007,7 +1007,11 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
             if(topic<0){*code=1;a->quitting=true;return;}
             open_documentation(a,topic);SDL_SetWindowSize(a->doc_window,760,540);++*stage;break;
         }
-        case 2:puts("READING READY");fflush(stdout);++*stage;break;
+        case 2:
+            if(!strcmp(mode,"docs-keyboard-reading-native") && !nk_sdl_accessibility_document_native_read_test(a->doc_ui)) {
+                *code=1;a->quitting=true;puts("DOCUMENTATION READING SELF-TEST: FAILED");return;
+            }
+            puts("READING READY");fflush(stdout);++*stage;break;
         case 3:
             if(a->doc_scroll_y<10000 || a->doc_scroll_pending)return;
             {size_t last=a->documentation->reading_length;

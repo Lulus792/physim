@@ -11,6 +11,8 @@ ps_a11y_native *ps_a11y_native_create(SDL_Window *window,ps_a11y_model *model,SD
 void ps_a11y_native_publish(ps_a11y_native *bridge,bool changed);
 void ps_a11y_native_destroy(ps_a11y_native *bridge);
 bool ps_a11y_native_test(SDL_Window *window);
+/* Diagnostic: read the full real F1 source via AppKit and request native reveal. */
+bool ps_a11y_native_document_read_test(ps_a11y_native *bridge);
 /* Exercise the published native action, never directly enqueue a model press. */
 bool ps_a11y_native_press_label(ps_a11y_native *bridge,const char *label);
 bool ps_a11y_native_press_choice(ps_a11y_native *bridge,const char *group,const char *label);
