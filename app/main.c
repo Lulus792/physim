@@ -246,6 +246,8 @@ typedef struct {
     bool doc_visible;
     float doc_raster_density,doc_failed_density;
     float doc_test_density; /* diagnostic raster-density override; zero in normal operation */
+    bool doc_full_font_inventory; /* Actual all-size coverage probe, not normal startup. */
+    struct nk_allocator *doc_test_font_allocator; /* Fault probe; null in normal operation. */
     int doc_topic, doc_match, doc_jump_block,doc_anchor_heading;
     nk_uint doc_scroll_x, doc_scroll_y;
     float doc_scroll_adjustment;
@@ -2785,6 +2787,7 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
 }
 // clang-format off
 static bool documentation_window_open(app *a);
+static bool documentation_fonts_prepare(app *a,unsigned size,unsigned code_size);
 #include "documentation_ui.inc"
 #include "api_reference_ui.inc"
 #include "report_ui.inc"

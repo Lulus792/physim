@@ -335,12 +335,15 @@ static float documentation_control_height(const app *a) {
 static void documentation_zoom(app *a,int direction) {
     unsigned old=documentation_font_size(a);
     int size=direction?(int)old+direction*2:0;
-    a->doc_zoom_size=direction?(unsigned)(size<16?16:size>32?32:size):0;
-    unsigned now=documentation_font_size(a);
+    unsigned requested=direction?(unsigned)(size<16?16:size>32?32:size):0;
+    unsigned now=requested?requested:a->preferences.ui_size;
+    if(!documentation_fonts_prepare(a,now,requested?requested:a->preferences.editor_size))return;
+    a->doc_zoom_size=requested;
     if(now!=old && !a->doc_query[0] && a->documentation)
         nk_sdl_accessibility_document_preserve_position(a->doc_ui,a->doc_reading_version);
     a->doc_font_ui=a->doc_ui_fonts[(now-16)/2];
     a->doc_font_title=a->doc_title_fonts[(now-16)/2];
+    a->doc_font_code=a->doc_code_fonts[(documentation_code_size(a)-16)/2];
     nk_style_set_font(a->doc_ui,a->doc_font_ui);nk_sdl_set_ui_size(a->doc_ui,now);
     if(a->documentation)a->documentation->layout_width=0;
     a->doc_scroll_y=(nk_uint)((double)a->doc_scroll_y*now/old);

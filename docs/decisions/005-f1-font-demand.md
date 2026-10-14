@@ -1,8 +1,9 @@
 # F1-Schriften nach Bedarf und Besitz der Atlanten
 
 Architekturentscheidung vom 15. Oktober 2026. Der zusätzliche Atlasbesitz im
-Backend ist implementiert; F1s Größenwahl verwendet ihn noch nicht.
-Die vollständige Struktur ist deshalb noch nicht abgenommen. Sie folgt dem zentralen
+Backend und F1s Größenwahl verwenden den Aufbau nach Bedarf.
+Die Ausführung ist unter Windows und Linux geprüft; die macOS-Abnahme steht
+noch aus. Die Entscheidung folgt dem zentralen
 `software-architect`-Skill unter `D:/Skills/skills` und den tatsächlich
 ausgeführten Messungen in [004](004-f1-handbook.md).
 
@@ -64,10 +65,17 @@ und Größen; das Backend verantwortet Bake, Validierung, Upload und Freigabe.
 
 Das Backend besitzt jetzt bis zu 38 zusätzliche Atlanten. Die gemeinsame
 Upload-/Validierungsroutine wird auch vom bisherigen Dichteersatz verwendet.
-Danach wird F1s Größenwahl mit diesem Vertrag verbunden;
-Zoom- und Einstellungsfehler benötigen echte Rücknahme der Größenänderung.
-Die bestehende Dichteersetzung und der vollständige Inventurpfad werden an
-denselben Besitzvertrag angeschlossen.
+F1 lädt beim Öffnen die fünf benötigten Varianten. Zoom und unabhängige
+UI-/Code-Einstellungen ergänzen ausschließlich fehlende Varianten. Die alte
+Größenwahl bleibt bis zur erfolgreichen Vorbereitung gültig. Einstellungen
+bereiten Fonts vor dem Schreiben der Einstellungsdatei vor; fehlgeschlagener
+Fontaufbau verändert diese Datei nicht. Ein erfolgreicher neuer Versuch entfernt
+die zugehörige Fontfehlermeldung, ohne andere Dokumentfehler zu löschen.
+Die Vorbereitung stellt den zuvor aktiven GL-Kontext wieder her.
+
+Dichteersetzung und vollständige Inventur verwenden denselben Besitzvertrag.
+Die Inventur fordert ausdrücklich alle 38 realen Varianten an; normales Öffnen
+reduziert ausschließlich die vorab geladenen Größen, nicht deren Zeichenvorrat.
 
 Vor einer Abnahme sind erforderlich: tatsächliche Kaltstart-/F1-Zeiten mit
 derselben Schriftabdeckung, alle 38 Varianten mit System- und mitgelieferten
@@ -76,7 +84,7 @@ Einstellungen, 1/1,25/1,5/2-Dichterundlauf, vorher erzeugte gültige Textbefehle
 gezielte Allokations-/Uploadfehler und vollständige Freigabe. GPU-Bilder und
 native Lese-/Feld-/Linkabläufe müssen auf den jeweils ausgeführten Plattformen
 weiterhin bestehen. Die bisherigen Backend-Nachweise ersetzen keine Abnahme
-des noch fehlenden Aufbaupfads nach Bedarf.
+des vollständigen Produkts oder einer noch ungeprüften Zielplattform.
 
 ## Bisheriger Backend-Nachweis
 
@@ -124,3 +132,58 @@ Abbruch und Ersetzen angewendet. Die beiden dabei konkretisierten Fehlerfälle
 sind durch die genannten Gegenproben und finalen Erfolge eingegrenzt.
 Eine macOS-Ausführung des neuen Atlasbesitzes steht noch aus; die angepasste
 Workflow-Konfiguration ist allein kein Nachweis dafür.
+
+## F1-Integration und tatsächliche Abnahme
+
+Der erste Integrationslauf `run-ch6pbmjz` scheitert **0/4**: Der Standardfont
+wurde vor dem Bake aus einem erst beim Bake initialisierten Handle gelesen.
+Die Korrektur hält den tatsächlichen `nk_font`-Zeiger aus dem Add-Aufruf fest.
+Danach bestehen Windows-Linkclient, Zeicheninventur, Zoom und Dichte in
+`run-4zc48xgn` **4/4**. Die Inventur baut sowohl mit Systemschriften als auch
+ohne Systemschriften alle 38 Varianten auf. Bei normalem Öffnen meldet derselbe
+Lauf fünf Varianten und einen F1-Bake von 1,301519 Sekunden.
+
+Der neue echte App-Fall `documentation_font_demand` ergänzt gezielte
+Allokationsfehler nach bereits begonnenem Aufbau. Er bestätigt unveränderte
+aktive Handles, Zoom, native Inhaltsversion, GL-Kontext und Einstellungsdatei.
+Nach erfolgreichem erneutem Zoom bleiben alte Fontzeiger nutzbar. Ein Wechsel
+auf UI-Größe 22 und Codegröße 18 erhöht den Bestand von fünf über zehn auf
+13 Varianten. Die Rückkehr auf die Anfangsgrößen verwendet bestehende Handles.
+Der zusätzliche 2/1-Dichterundlauf ersetzt den gefüllten Cache jeweils durch
+fünf passende Varianten und erhält logische Größe, Lesetext und Editorzustand.
+
+Tatsächlich ausgeführt, jeweils mit den bisherigen Zeitgrenzen:
+
+- MSVC ASan: `run-f8izfahj` **4/4**, Bedarfstest, beide Einstellungsabläufe und
+  Navigation. `run-17g6yjzd` **29/29** umfasst alle ausgewählten F1-GUI-Fälle,
+  beide Einstellungsabläufe und sämtliche ausgewählten nativen Windows-Clients.
+  Enthalten sind verzögerte Tastaturbedienung, der erwartete unerreichbare
+  Fokusgegenfall, Schließen/Wiederöffnen, Textfelder, Lesetext und Links samt
+  zehnfacher Fokus-/Fensterbewegung.
+- Die nachfolgende Erweiterung um den gefüllten Dichtecache besteht in
+  `run-scefp_ru` **1/1**. Die neue gemeinsame Prüfung von PNG-CRC, Dimensionen,
+  Scanlines und tatsächlichen Textpixeln besteht in `run-trrn7fj7` **2/2** für
+  Bedarf und bisherigen Dichtefall. Fehler-, Einstellungs- und Dichtebilder
+  wurden unmittelbar geprüft.
+- Alpine 3.24.2 / GCC 15.2 ASan/UBSan / X11/Openbox / Software-GL:
+  `run-zaz1o0wk` **10/10**, einschließlich Atlasbesitz, vollständiger
+  Zeicheninventur, gefülltem Dichtecache, Zoom, Navigation, Seitenleiste und
+  unabhängigen AT-SPI-Lese-, Feld- und Linkclients. Die Fehleransicht und das
+  tatsächliche 1520 × 1080-Dichtebild wurden geöffnet und geprüft.
+- Die gemeinsame PNG-Prüfung besteht zusätzlich für vier Originalbilder aus
+  beiden Plattformläufen und weist eine absichtlich beschädigte CRC ab;
+  Bericht `build/native/font-demand-pixel-proof.json`.
+- Plattform-Katalog und absichtliche Fehlergegenproben bestehen in
+  `build/native/font-demand-final-runner-proof`.
+
+Drei serielle unabhängige Windows-Linkläufe ohne parallelen Produkt-Build
+bestehen anschließend vollständig in `build/native/font-demand-links-01` bis
+`-03`. Bereitschaft: **5,093 / 7,266 / 5,609 Sekunden**; F1-Bake:
+**0,555714 / 0,708286 / 0,572180 Sekunden**. Alle drei bauen fünf Anfangsvarianten
+auf und behalten die 20-/25-Sekunden-Grenzen. Der vollständige Bericht liegt in
+`build/native/font-demand-link-series.json`. Dies sind gemessene Läufe auf der
+genannten Umgebung, keine Garantie unter beliebiger Rechnerlast.
+
+Die frühere Windows-Fokussporadik wird durch erfolgreiche Wiederholungen
+nicht als behoben erklärt. Die neue macOS-Ausführung und insbesondere die
+unterscheidbare Schriftschnittwahl bleiben eigene offene Abnahmen.

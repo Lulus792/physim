@@ -388,6 +388,36 @@ Titelzeilen liegen im sichtbaren Fokusrahmen. Die Ubuntu-Nachprüfung dieser
 Korrektur steht noch aus. Praktische Screenreader-, macOS- und echte
 DPI-/Monitorwechsel-Abnahme werden durch diese Reflow-Korrektur nicht behauptet.
 
+### F1-Schriften nach Bedarf, 15. Oktober 2026
+
+Die [Architekturentscheidung 005](005-f1-font-demand.md) ist jetzt mit der
+Größenwahl verbunden. F1 berechnet zunächst fünf benötigte Varianten und
+ergänzt neue Größen beim Zoom oder bei getrennten UI-/Code-Einstellungen.
+Bestehende Atlanten bleiben dabei gültig. Ein Dichtewechsel ersetzt den Cache
+erst nach vollständigem Erfolg. Alle bisherigen Zeichen und 38 möglichen
+Varianten bleiben erhalten; die vollständige Inventur baut sie weiterhin mit
+System- und mitgelieferten Schriften auf.
+
+Der App-Test prüft abgebrochene Zoom-/Einstellungsänderungen, erhaltene Handles,
+GL-Kontext, unveränderte Einstellungsdatei, erfolgreichen neuen Versuch,
+Cachewiederverwendung und den Dichtewechsel eines bereits gefüllten Caches.
+Fehler-, Einstellungs- und Dichteaufnahmen wurden tatsächlich geprüft.
+Windows MSVC ASan besteht **29/29** F1-/Einstellungs-/native GUI-Fälle in
+`run-17g6yjzd`; die Erweiterung des gefüllten Dichtefalls besteht danach
+**1/1** in `run-scefp_ru`. Beide Fälle mit gemeinsamer PNG-/Textpixelprüfung
+bestehen **2/2** in `run-trrn7fj7`. Linux GCC 15.2 ASan/UBSan mit X11/Openbox
+und Software-GL besteht **10/10** in `run-zaz1o0wk`, einschließlich unabhängiger
+AT-SPI-Lese-, Feld- und Linkbedienung.
+
+Drei folgende vollständige unabhängige Windows-Linkläufe erreichen F1 nach
+**5,093 / 7,266 / 5,609 Sekunden**. Der F1-Bake liegt bei
+**0,555714 / 0,708286 / 0,572180 Sekunden**. Die bisherigen Zeitgrenzen und
+Zeichenprüfungen bleiben erhalten. Originalberichte und Fehlergegenproben
+sind in 005 aufgeführt. Die neue macOS-Ausführung sowie die unterscheidbare
+Fettschrift auf macOS bleiben offen; erfolgreiche Windows-Wiederholungen
+beweisen keine Behebung der historischen Fokussporadik. Die vollständige
+F1-Abnahme und die Gesamtaufgabe bleiben unvollständig.
+
 ### Windows-Bereitschaft und kompakter Schriftatlas, 15. Oktober 2026
 
 Die Untersuchung verwendet die zentralen Debugging-, Windows-, Performance-,

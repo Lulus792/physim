@@ -62,6 +62,43 @@ for name, fixture in (("unicode", "unicode_identifiers"), ("multiline", "multili
         "{root}/tests/fixtures/language/" + fixture + ".phys"], 30, False)
 
 
+def documentation_density_pixels(path):
+    raw=path.read_bytes()
+    require(raw[:8]==b'\x89PNG\r\n\x1a\n','Invalid high-resolution PNG')
+    offset=8;compressed=bytearray();size=None
+    while offset<len(raw):
+        length=struct.unpack_from('>I',raw,offset)[0];kind=raw[offset+4:offset+8]
+        data=raw[offset+8:offset+8+length]
+        require(offset+12+length<=len(raw),'Truncated PNG chunk')
+        require(zlib.crc32(kind+data)&0xffffffff==struct.unpack_from('>I',raw,offset+8+length)[0],'PNG CRC mismatch')
+        if kind==b'IHDR':size=struct.unpack_from('>II',data)
+        if kind==b'IDAT':compressed.extend(data)
+        offset+=12+length
+    require(size==(1520,1080),'Wrong high-resolution target dimensions')
+    pixels=zlib.decompress(compressed);stride=1520*3+1
+    require(len(pixels)==stride*1080 and all(pixels[y*stride]==0 for y in range(1080)),
+            'Unexpected source PNG scanline representation')
+    ink=sum(min(pixels[y*stride+1+x*3:y*stride+4+x*3])>100
+            for y in range(440,960) for x in range(520,1450))
+    require(ink>1000,'Doubled reader target contains no readable text pixels')
+
+
+def documentation_font_demand(flow,directory):
+    directory.mkdir(parents=True)
+    flow.run('--workspace-state-test',directory,'docs-keyboard-font-demand',timeout=60,
+             marker='DOCUMENTATION FONT DEMAND SELF-TEST: PASSED')
+    output=flow.steps[-1]['stdout']
+    require('FONT DEMAND: initial variants=5' in output,'Initial F1 fonts were not limited to the needed sizes')
+    require('failed zoom/settings preserve fonts, context, values and preference file' in output,'Missing actual failed font transaction')
+    require('FONT DEMAND: independent sizes ui=22 code=18 variants=13' in output,'Independent UI/code sizes or cache reuse missing')
+    require('FONT DEMAND: populated bank retired at density 2 and rebuilt at density 1' in output,'Populated font bank did not survive density replacement')
+    require('DOCUMENTATION RASTER TARGET: logical=760x540 pixels=1520x1080 density=2.000' in output,'Missing doubled framebuffer after populated-bank replacement')
+    documentation_density_pixels(directory/'docs-font-demand-density.png')
+    for name in ('ready','failed','retry','settings','reset'):
+        path=directory/f'docs-font-demand-{name}.bmp'
+        require(path.is_file() and path.stat().st_size>54,'Font demand capture missing: '+name)
+
+
 def documentation_math(flow, directory):
     registry=(flow.root/'app/documentation_ui.inc').read_text(encoding='utf-8')
     paths=re.findall(r'\{"[^"\n]+",\s*"([^"\n]+)",\s*(?:true|false)\}',registry)
@@ -161,24 +198,7 @@ def documentation_density(flow,directory):
         require(density==expected and abs(baked-16*expected)<.01 and logical==16,'Raster and logical sizes diverge')
     require('DOCUMENTATION RASTER TARGET: logical=760x540 pixels=1520x1080 density=2.000' in output,
             'No actual doubled framebuffer was rendered')
-    raw=(directory/'docs-density-200.png').read_bytes()
-    require(raw[:8]==b'\x89PNG\r\n\x1a\n','Invalid high-resolution PNG')
-    offset=8;compressed=bytearray();size=None
-    while offset<len(raw):
-        length=struct.unpack_from('>I',raw,offset)[0];kind=raw[offset+4:offset+8]
-        data=raw[offset+8:offset+8+length]
-        require(offset+12+length<=len(raw),'Truncated PNG chunk')
-        require(zlib.crc32(kind+data)&0xffffffff==struct.unpack_from('>I',raw,offset+8+length)[0],'PNG CRC mismatch')
-        if kind==b'IHDR':size=struct.unpack_from('>II',data)
-        if kind==b'IDAT':compressed.extend(data)
-        offset+=12+length
-    require(size==(1520,1080),'Wrong high-resolution target dimensions')
-    pixels=zlib.decompress(compressed);stride=1520*3+1
-    require(len(pixels)==stride*1080 and all(pixels[y*stride]==0 for y in range(1080)),
-            'Unexpected source PNG scanline representation')
-    ink=sum(min(pixels[y*stride+1+x*3:y*stride+4+x*3])>100
-            for y in range(440,960) for x in range(520,1450))
-    require(ink>1000,'Doubled reader target contains no readable text pixels')
+    documentation_density_pixels(directory/'docs-density-200.png')
     for name in ('docs-density-125.bmp','docs-density-150.bmp','docs-density-reset.bmp'):
         require((directory/name).is_file(),'Missing density roundtrip image')
 
@@ -1506,6 +1526,7 @@ SPECIAL = {"scene_visibility_16": lambda flow,directory: scene_visibility(flow,d
 
 
 SPECIAL["documentation_math"]=documentation_math
+SPECIAL["documentation_font_demand"]=documentation_font_demand
 SPECIAL["documentation_density"]=documentation_density
 SPECIAL["documentation_navigation"]=documentation_navigation
 SPECIAL["documentation_sidebar"]=documentation_sidebar

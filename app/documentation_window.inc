@@ -16,48 +16,77 @@ static void documentation_window_destroy(app *a) {
     a->doc_ui = NULL;
     a->doc_visible = false;
     a->doc_raster_density=a->doc_failed_density=0;
+    a->doc_font_ui=a->doc_font_title=a->doc_font_code=NULL;
+    memset(a->doc_ui_fonts,0,sizeof a->doc_ui_fonts);memset(a->doc_title_fonts,0,sizeof a->doc_title_fonts);
+    memset(a->doc_bold_fonts,0,sizeof a->doc_bold_fonts);memset(a->doc_code_fonts,0,sizeof a->doc_code_fonts);
     ps_graphics_make_current(a->graphics);
 }
 
-static bool documentation_window_fonts(app *a,float density) {
+/* Missing sizes are appended; an actual density change replaces the bank. */
+static bool documentation_fonts_load(app *a,float density,unsigned size,unsigned code_size) {
+    if(!isfinite(density) || density<1 || density>4 || size<16 || size>32 || (size&1) ||
+       code_size<16 || code_size>32 || (code_size&1))return false;
+    unsigned index=(size-16)/2,code_index=(code_size-16)/2;
+    bool replace=!a->doc_font_ui || fabsf(density-a->doc_raster_density)>.01f;
+    const struct nk_user_font *regular[9]={0},*titles[9]={0},*bold[11]={0},*code[9]={0};
+    if(!replace) {
+        memcpy(regular,a->doc_ui_fonts,sizeof regular);memcpy(titles,a->doc_title_fonts,sizeof titles);
+        memcpy(bold,a->doc_bold_fonts,sizeof bold);memcpy(code,a->doc_code_fonts,sizeof code);
+    }
+    struct nk_font_atlas candidate;
+    if(a->doc_test_font_allocator)nk_font_atlas_init(&candidate,a->doc_test_font_allocator);
+    else nk_font_atlas_init_default(&candidate);
+    nk_font_atlas_begin(&candidate);
+    struct nk_font *default_font=NULL;
+    unsigned added=0;
     if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: F1 fonts begin %.6f\n",ps_clock());
-    if(!isfinite(density) || density<1 || density>4)return false;
-    struct nk_font_atlas candidate;nk_font_atlas_init_default(&candidate);nk_font_atlas_begin(&candidate);
-    struct nk_font *ui_fonts[9],*titles[9],*bold[11],*code[9];
-    for(int i=0;i<9;i++) {
-        ui_fonts[i]=system_font_sampling(&candidate,a->root,(16+i*2)*density,false,false,2,1);
-        titles[i]=system_font_sampling(&candidate,a->root,(23+i*2)*density,false,true,2,1);
-        if(!ui_fonts[i] || !titles[i])goto fail;
+    for(unsigned role=0;role<4;role++)for(unsigned i=0;i<(role==2?11u:9u);i++) {
+        bool needed=a->doc_full_font_inventory || (role==3?i==code_index:role==2?(i==index || i==index+2):i==index);
+        const struct nk_user_font **slot=role==0?&regular[i]:role==1?&titles[i]:role==2?&bold[i]:&code[i];
+        if(!needed || *slot)continue;
+        float pixels=(float)((role==1?23:16)+i*2)*density;
+        struct nk_font *font=system_font_sampling(&candidate,a->root,pixels,role==3,role==1 || role==2,2,1);
+        if(!font)goto fail;
+        if(role==0 && i==index)default_font=font;
+        *slot=&font->handle;added++;
     }
-    for(int i=0;i<11;i++) {
-        bold[i]=system_font_sampling(&candidate,a->root,(16+i*2)*density,false,true,2,1);
-        if(!bold[i])goto fail;
-    }
-    for(int i=0;i<9;i++) {
-        code[i]=system_font_sampling(&candidate,a->root,(16+i*2)*density,true,false,2,1);
-        if(!code[i])goto fail;
-    }
+    if(!added){nk_font_atlas_clear(&candidate);return true;}
     if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: F1 font sources ready %.6f\n",ps_clock());
-    if(!nk_sdl_font_stash_replace(a->doc_ui,&candidate,density,ui_fonts[(documentation_font_size(a)-16)/2]))goto fail;
-    for(int i=0;i<9;i++) {
-        a->doc_ui_fonts[i]=&ui_fonts[i]->handle;a->doc_title_fonts[i]=&titles[i]->handle;
-        a->doc_code_fonts[i]=&code[i]->handle;
-    }
-    for(int i=0;i<11;i++)a->doc_bold_fonts[i]=&bold[i]->handle;
-    a->doc_font_ui=a->doc_ui_fonts[(documentation_font_size(a)-16)/2];
-    a->doc_font_title=a->doc_title_fonts[(documentation_font_size(a)-16)/2];
+    bool ok=replace?nk_sdl_font_stash_replace(a->doc_ui,&candidate,density,default_font):
+                    nk_sdl_font_stash_append(a->doc_ui,&candidate,density);
+    if(!ok)goto fail;
+    memcpy(a->doc_ui_fonts,regular,sizeof regular);memcpy(a->doc_title_fonts,titles,sizeof titles);
+    memcpy(a->doc_bold_fonts,bold,sizeof bold);memcpy(a->doc_code_fonts,code,sizeof code);
+    a->doc_raster_density=density;a->doc_failed_density=0;
+    printf("F1 font demand: %s %u variants, density %.3f\n",replace?"replace":"append",added,density);
+    if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: F1 fonts ready %.6f\n",ps_clock());
+    return true;
+fail:
+    nk_font_atlas_clear(&candidate);return false;
+}
+static bool documentation_window_fonts(app *a,float density) {
+    if(!documentation_fonts_load(a,density,documentation_font_size(a),documentation_code_size(a)))return false;
+    unsigned index=(documentation_font_size(a)-16)/2;
+    a->doc_font_ui=a->doc_ui_fonts[index];a->doc_font_title=a->doc_title_fonts[index];
     a->doc_font_code=a->doc_code_fonts[(documentation_code_size(a)-16)/2];
     if(a->documentation) {
         nk_sdl_accessibility_document_preserve_position(a->doc_ui,a->doc_reading_version);
         a->documentation->layout_width=0;
     }
-    a->doc_raster_density=density;a->doc_failed_density=0;
-    if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: F1 fonts ready %.6f\n",ps_clock());
-    printf("F1 font density: %.3f, logical %.1f, raster %.1f\n",density,
-        a->doc_font_ui->height,ui_fonts[(documentation_font_size(a)-16)/2]->info.height);
+    const struct nk_font *font=a->doc_font_ui->userdata.ptr;
+    printf("F1 font density: %.3f, logical %.1f, raster %.1f\n",density,a->doc_font_ui->height,font->info.height);
     return true;
-fail:
-    nk_font_atlas_clear(&candidate);return false;
+}
+/* Keyboard and settings calls can arrive with the main context current. */
+static bool documentation_fonts_prepare(app *a,unsigned size,unsigned code_size) {
+    if(!a->doc_ui)return true;
+    SDL_Window *previous_window=SDL_GL_GetCurrentWindow();SDL_GLContext previous=SDL_GL_GetCurrentContext();
+    if(!ps_graphics_make_current(a->doc_graphics))return false;
+    bool ok=documentation_fonts_load(a,a->doc_raster_density,size,code_size);
+    if(!SDL_GL_MakeCurrent(previous_window,previous)){a->quitting=true;return false;}
+    if(!ok)snprintf(a->doc_error,sizeof a->doc_error,"Schriftgröße konnte nicht geladen werden.");
+    else if(!strcmp(a->doc_error,"Schriftgröße konnte nicht geladen werden."))a->doc_error[0]=0;
+    return ok;
 }
 
 static bool documentation_window_open(app *a) {

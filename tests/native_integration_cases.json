@@ -12213,6 +12213,18 @@
       ]
     },
     {
+      "name": "documentation_font_demand",
+      "app": true,
+      "display": true,
+      "targets": ["python", "physim"],
+      "steps": [{
+        "program": "python",
+        "arguments": ["{root}/tests/check_display_workflow.py", "documentation_font_demand", "--app", "{physim}", "--work", "{work}", "--root", "{root}", "--cc", "{cc}"],
+        "timeout": 75,
+        "files": ["app-steps.json"]
+      }]
+    },
+    {
       "name": "documentation_inline",
       "app": true,
       "display": true,
