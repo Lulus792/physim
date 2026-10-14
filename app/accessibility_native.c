@@ -197,11 +197,14 @@ ps_a11y_native *ps_a11y_native_create(SDL_Window *window,ps_a11y_model *model,SD
 void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
  if(!b)return;
  /* Window suspension still changes native availability without a new frame. */
- if(!changed && !b->document)return;
+ SDL_LockMutex(b->mutex);
+ bool viewable=!b->model->suspended && !(SDL_GetWindowFlags(b->window)&(SDL_WINDOW_HIDDEN|SDL_WINDOW_MINIMIZED));
+ bool availability_changed=b->document_viewable!=viewable;b->document_viewable=viewable;
+ SDL_UnlockMutex(b->mutex);
+ if(!changed && !availability_changed)return;
  id pool=send0(send0((id)objc_getClass("NSAutoreleasePool"),"alloc"),"init");
  id children=send0((id)objc_getClass("NSMutableArray"),"new");bool value_changed[PS_A11Y_MAX_NODES]={0};bool selection_changed[PS_A11Y_MAX_NODES]={0};
  SDL_LockMutex(b->mutex);
- b->document_viewable=!(SDL_GetWindowFlags(b->window)&(SDL_WINDOW_HIDDEN|SDL_WINDOW_MINIMIZED));
  uint64_t previous_focus=b->focused_id,new_focus=0;
  for(size_t i=0;i<b->model->count;i++)if(b->model->nodes[i].focused)new_focus=b->model->nodes[i].id;
  for(size_t i=0;i<b->model->count;i++) {
