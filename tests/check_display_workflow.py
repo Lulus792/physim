@@ -1559,6 +1559,9 @@ def main():
             documentation_zoom_bitmaps(directory,flow.steps[-1]['stdout'])
         elif args.case == "documentation_inline":
             documentation_inline_ink(directory, flow.steps[-1]["stdout"])
+        elif args.case == "accessibility_edit_macos":
+            require((directory / "docs-macos-edit-end.bmp").is_file(), "Native field end capture missing")
+            require("MAC F1 EDIT: actual fields" in flow.steps[-1]["stdout"], "Native AppKit field interaction missing")
         if args.case == "sphere_collision_workflow":
             description=read(directory / "physim.project")
             require("parameter.friction=0.29999999999999999\n" in description and

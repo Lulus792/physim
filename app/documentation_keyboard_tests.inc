@@ -1009,11 +1009,13 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
             SDL_SetWindowSize(a->doc_window,760,540);a->doc_contents=false;a->doc_reset_sidebar=true;++*stage;break;
         case 2:case 3:case 4:case 5:case 6:case 7:case 8:case 9:case 10:case 11:
             ok=nk_sdl_accessibility_native_edit_test_step(a->doc_ui,*stage-2);
-            if(*stage==11){*capture="docs-macos-edit-end.bmp";SDL_HideWindow(a->doc_window);}
+            if(*stage==11)*capture="docs-macos-edit-end.bmp";
             ++*stage;break;
         case 12:
-            ok=nk_sdl_accessibility_native_edit_test_step(a->doc_ui,10);SDL_ShowWindow(a->doc_window);++*stage;break;
+            SDL_HideWindow(a->doc_window);++*stage;break;
         case 13:
+            ok=nk_sdl_accessibility_native_edit_test_step(a->doc_ui,10);SDL_ShowWindow(a->doc_window);++*stage;break;
+        case 14:
             ok=nk_sdl_accessibility_native_edit_test_step(a->doc_ui,11) &&
                a->experiment.string.len==experiment_length && a->analysis.string.len==analysis_length;
             a->quitting=true;puts("MAC F1 EDIT: actual fields, Unicode selection/replacement, caret, end reveal, hidden rejection and editor isolation passed");
