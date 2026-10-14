@@ -77,7 +77,10 @@ Dies bestätigt noch keine vollständige Narrator-/NVDA-Bedienung. Native
 Tabellensemantik, weitere Editoren und Widgettypen sowie die vollständige
 DPI-/Monitorwechselmatrix bleiben offen. Ein Suchfeld kann Unicode unverändert
 speichern und nativ liefern, obwohl die Schrift ein Ersatzzeichen zeichnet;
-Schriftfallback benötigt deshalb eine eigene visuelle Prüfung.
+Die offline gebündelten Schriftquellen decken inzwischen alle druckbaren Zeichen
+der registrierten Hilfeseiten ab, einschließlich des Globus. Die reale App-Probe
+prüft 16/32 Pixel auch mit umgangenen Systemschriften. Weitere Schriftsysteme,
+komplexe Textformung und der vollständige optische Plattformabgleich bleiben offen.
 
 ## Modell und Prüfumfang
 

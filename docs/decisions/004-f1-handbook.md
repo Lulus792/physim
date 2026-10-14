@@ -81,6 +81,85 @@ Nutzeraufgaben, Tabellensemantik und die native Desktop-Abnahmematrix.
 Nach den Inhaltskorrekturen bestehen Parser, Lernwege, Offline-Abschnittslinks
 und API-Referenz erneut 4/4 mit Exitcode 0 in `run-9e2tghw0`.
 
+### Offline-Schriftquellen und vollständige Zeicheninventur
+
+Die nächste Korrektur erweitert die Gegenprobe auf alle **167 druckbaren Zeichen
+der 183 registrierten Originalseiten**. Die vorherige Beschränkung auf 43
+mathematische Zeichen genügte nicht. Leerzeichen benötigen einen vorhandenen
+Quellglyph und positiven Vorschub, aber keine sichtbare Tinte. U+0378 bleibt
+ein negativer Fall: Die rohen Atlas-Metadaten kennen seinen Codepunkt, der
+Quellfont besitzt jedoch keinen Glyphenindex dafür.
+
+Fünf unveränderte Noto-Schriften werden offline mit ihren SIL-OFL-1.1-Lizenzen
+ausgeliefert. Quelle ist Google Fonts, Revision
+`66928797f271fed5ee428544e7229685e2d90127`; Herkunft, Bytegrößen und SHA-256
+stehen in `third_party/fonts/manifest.json`. Noto Sans, Sans Mono, Sans Math,
+Sans Symbols 2 und Emoji ergänzen nur Zeichen, die in vorherigen deklarierten
+Quellbereichen fehlen. Die gebackenen Glyphen speichern ihre tatsächliche
+Quellpräsenz; der Leser überspringt `.notdef` auch bei überlappenden Bereichen.
+Diese Information bleibt nach Freigabe der TTF-Quelldaten gültig. Eigene
+Fallback-Bereiche bleiben bis zur Atlasfreigabe erhalten.
+
+Die neue native Gegenprobe entdeckt zunächst einen Nuklear-Fehler:
+Zusatzschriften wurden an den ersten statt den zuletzt angelegten Handle
+gehängt (`run-yzktc5r5`). Nach dieser Korrektur findet sie den weiterhin
+verwendeten fehlenden Originalglyph (`run-wx8p5re3`). Die Quellpräsenz und
+Lookup-Korrektur beheben beide Ursachen. Fehlgeschlagene Adds verändern keine
+Listen oder Besitzverträge; die Tests prüfen Allokationsausfälle, Retry,
+Rastertinte und vollständige Freigabe. Der erfolgreiche Merge liefert den
+tatsächlich erweiterten letzten Handle zurück.
+
+Die erste komplette GUI-Gegenprobe findet noch die neun Rahmenzeichen
+(`run-plv4gkwn`); die Monospace-Quelle ergänzt sie. Die Bildprüfung entdeckt
+anschließend verschiedene Vorschübe für Rahmen und Leerzeichen. Rahmen gehören
+jetzt auch zum deklarierten Bereich der primären Codeschrift; alle neun
+Codevarianten müssen gleiche Zellbreiten liefern. Ist die Systemcodeschrift
+nicht verfügbar, wird Noto Sans Mono als primäre Codeschrift geladen.
+Die zusätzlichen Bilder prüfen Globus, Gesicht, Schneemann, Modifikator,
+tiefgestellten Buchstaben und Rahmencode bei 16/32 Pixeln.
+
+Ein zweiter echter App-Lauf setzt `PHYSIM_TEST_BUNDLED_FONTS=1` und umgeht alle
+Systemschriften. Er bestätigt 50 tatsächlich geladene primäre Handles im
+Hauptfenster und in F1 sowie erneut alle 167 Zeichen in 38 F1-Varianten.
+Diese strengere Gegenprobe findet das fehlende Integralzeichen U+222B
+(`run-6am85uut`); Noto Sans Math behebt es. Der finale ASan-Lauf besteht
+beide Modi. Dies beweist den geprüften Zeichenbestand ohne Systemschrift;
+weitere Schriftsysteme oder komplexe Textformung folgen daraus nicht.
+
+Abschließende tatsächlich ausgeführte Windows-Belege, jeweils Exitcode 0:
+
+- `run-efjeijrr`: 8/8 native Font-, Parser-, Lernweg-, API- und Abschnittsfälle.
+- `run-28qo4u86` unter MSVC ASan: 4/4 Fontfälle mit Quellfonts, Rastertinte,
+  Fehlereigentum und Cleanup. Die Quelle ohne Integral wurde zusätzlich durch
+  die reale App-Gegenprobe erkannt.
+- `run-2ciy1267` unter MSVC ASan: 5/5 GUI-/UIA-Fälle für Zeichen einschließlich
+  rein gebündelter primärer Fonts, Zoom, Suchfelder, Links und Lebenszyklus.
+  Die neuen 32-Pixel-Bilder mit Integral und Rahmen wurden visuell geprüft.
+- `build/native/F1-review/font-installed-proof`: der echte Release-SDK wurde
+  nach `build/native/font installed ä/Physim` verschoben und von einem anderen
+  Arbeitsverzeichnis ausgeführt. Beide primären Fontmodi bestehen dieselbe
+  App-Zeichenprobe. Alle 536 Paketdateien und zehn Font-/Lizenzdateien stimmen
+  mit ihren Manifest-Hashes überein; die primären Fontpfade liegen im SDK.
+
+Damit sind die belegten fehlenden Quellzeichen und falschen Merge-/Besitzpfade
+behoben. Eine universelle Schriftabdeckung oder vollständige UI-Abnahme wird
+nicht erteilt. Bei rein gebündelten primären Fonts bleiben Hervorhebungsgewichte
+und die vertikalen Abstände einzelner Rahmendarstellungen optischer Feinschliff.
+Die tatsächliche DPI-/Monitor-, assistive und native Plattformabnahme bleibt
+ebenfalls offen. Die Linux-Workflowauswahl enthält jetzt beide neuen nativen
+Fontfälle und die erweiterte Zwei-Modi-Zeichenprobe.
+
+Der vorherige Linux-Stand `38efa9d` ist inzwischen tatsächlich erfolgreich:
+Clang besteht 20/20 native und 25/25 GUI-Fälle (`run-ri29r7wd`, `run-uyccp8ik`),
+GCC ebenso (`run-1r6uzz3_`, `run-16qahise`), Workflow `38497490053`.
+Dies ist ein Nachweis für den vorherigen Stand und ersetzt keine Ausführung
+der neuen Schriftkorrektur unter Linux oder macOS.
+Nach den Dokumentationskorrekturen bestehen API, Parser, Lernwege und
+Abschnittslinks erneut 4/4 in `run-2b5685yy`. Der Testläufer erkennt seine
+gezielten Fehlermuster in `build/native/F1-review/font-runner-proof`;
+die Gesamtprüfung dieses Läufers endet mit Exitcode 0. `.gitattributes` erhält
+die gepinnten Font-/Lizenzbytes auch bei Windows-Checkouts unverändert.
+
 ## Nutzeraufgaben
 
 - Eine Vorlage anlegen, bauen, aufzeichnen und auswerten, mit sichtbaren

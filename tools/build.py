@@ -499,6 +499,7 @@ class Builder:
         shutil.copy2(ROOT / "src/run_index_internal.h", staging / "src/run_index_internal.h")
         shutil.copy2(ROOT / "src/student_interval.h", staging / "src/student_interval.h")
         (staging / "licenses").mkdir()
+        shutil.copytree(ROOT / "third_party/fonts",staging / "third_party/fonts")
         for source, name in (("third_party/Nuklear-LICENSE", "Nuklear-LICENSE"),
                              ("third_party/zlib-1.3.2/LICENSE", "zlib-LICENSE.txt"),
                              ("third_party/SDL3-LICENSE.txt", "SDL3-LICENSE.txt"),

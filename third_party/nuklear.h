@@ -4299,7 +4299,8 @@ struct nk_font_config {
     unsigned char merge_mode;                 /**!< merges this font into the last font */
     unsigned char pixel_snap;                 /**!< align every character to pixel boundary (if true set oversample (1,1)) */
     unsigned char oversample_v, oversample_h; /**!< rasterize at high quality for sub-pixel position */
-    unsigned char padding[3];
+    unsigned char range_owned_by_atlas; /**!< transfer range ownership only on successful add */
+    unsigned char padding[2];
 
     float size;                         /**!< baked pixel height of the font */
     enum nk_font_coord_type coord_type; /**!< texture coordinate format with either pixel or UV coordinates */
@@ -4313,6 +4314,7 @@ struct nk_font_config {
 
 struct nk_font_glyph {
     nk_rune codepoint;
+    nk_bool source_present; /**!< source cmap contains this codepoint, not .notdef */
     float xadvance;
     float x0, y0, x1, y1, w, h;
     float u0, v0, u1, v1;
@@ -7884,7 +7886,6 @@ nk_file_load(const char* path, nk_size* siz, const struct nk_allocator *alloc)
     *siz = (nk_size)ret;
     fseek(fd, 0, SEEK_SET);
     buf = (char*)alloc->alloc(alloc->userdata,0, *siz);
-    NK_ASSERT(buf);
     if (!buf) {
         fclose(fd);
         return 0;
@@ -17275,6 +17276,7 @@ nk_font_bake(struct nk_font_baker *baker, void *image_memory, int width, int hei
                     /* fill own glyph type with data */
                     glyph = &glyphs[dst_font->glyph_offset + dst_font->glyph_count + (unsigned int)glyph_count];
                     glyph->codepoint = codepoint;
+                    glyph->source_present = stbtt_FindGlyphIndex(&tmp->info, (int)codepoint) != 0;
                     glyph->x0 = q.x0; glyph->y0 = q.y0;
                     glyph->x1 = q.x1; glyph->y1 = q.y1;
                     glyph->y0 += (dst_font->ascent + 0.5f);
@@ -17438,8 +17440,11 @@ nk_font_find_glyph(const struct nk_font *font, nk_rune unicode)
             nk_rune f = iter->range[(i*2)+0];
             nk_rune t = iter->range[(i*2)+1];
             int diff = (int)((t - f) + 1);
-            if (unicode >= f && unicode <= t)
-                return &font->glyphs[((nk_rune)total_glyphs + (unicode - f))];
+            if (unicode >= f && unicode <= t) {
+                const struct nk_font_glyph *candidate =
+                    &font->glyphs[((nk_rune)total_glyphs + (unicode - f))];
+                if (candidate->source_present) return candidate;
+            }
             total_glyphs += diff;
         }
     } while ((iter = iter->n) != font->config);
@@ -17866,68 +17871,68 @@ nk_font_atlas_add(struct nk_font_atlas *atlas, const struct nk_font_config *conf
         !atlas->permanent.alloc || !atlas->permanent.free ||
         !atlas->temporary.alloc || !atlas->temporary.free)
         return 0;
+    if (config->merge_mode && !atlas->fonts) return 0;
 
     /* allocate font config  */
     cfg = (struct nk_font_config*)
         atlas->permanent.alloc(atlas->permanent.userdata,0, sizeof(struct nk_font_config));
+    if (!cfg) return 0;
     NK_MEMCPY(cfg, config, sizeof(*config));
     cfg->n = cfg;
     cfg->p = cfg;
 
     if (!config->merge_mode) {
-        /* insert font config into list */
-        if (!atlas->config) {
-            atlas->config = cfg;
-            cfg->next = 0;
-        } else {
-            struct nk_font_config *i = atlas->config;
-            while (i->next) i = i->next;
-            i->next = cfg;
-            cfg->next = 0;
-        }
         /* allocate new font */
         font = (struct nk_font*)
             atlas->permanent.alloc(atlas->permanent.userdata,0, sizeof(struct nk_font));
-        NK_ASSERT(font);
-        nk_zero(font, sizeof(*font));
-        if (!font) return 0;
-        font->config = cfg;
-
-        /* insert font into list */
-        if (!atlas->fonts) {
-            atlas->fonts = font;
-            font->next = 0;
-        } else {
-            struct nk_font *i = atlas->fonts;
-            while (i->next) i = i->next;
-            i->next = font;
-            font->next = 0;
+        if (!font) {
+            atlas->permanent.free(atlas->permanent.userdata, cfg);
+            return 0;
         }
+        nk_zero(font, sizeof(*font));
+        font->config = cfg;
         cfg->font = &font->info;
     } else {
         /* extend previously added font */
         struct nk_font *f = 0;
-        struct nk_font_config *c = 0;
         NK_ASSERT(atlas->font_num);
         f = atlas->fonts;
-        c = f->config;
+        if (!f) {
+            atlas->permanent.free(atlas->permanent.userdata, cfg);
+            return 0;
+        }
+        while (f->next) f = f->next;
         cfg->font = &f->info;
 
-        cfg->n = c;
-        cfg->p = c->p;
-        c->p->n = cfg;
-        c->p = cfg;
+        font = f;
     }
     /* create own copy of .TTF font blob */
     if (!config->ttf_data_owned_by_atlas) {
         cfg->ttf_blob = atlas->permanent.alloc(atlas->permanent.userdata,0, cfg->ttf_size);
-        NK_ASSERT(cfg->ttf_blob);
         if (!cfg->ttf_blob) {
-            atlas->font_num++;
+            if (!config->merge_mode)
+                atlas->permanent.free(atlas->permanent.userdata, font);
+            atlas->permanent.free(atlas->permanent.userdata, cfg);
             return 0;
         }
         NK_MEMCPY(cfg->ttf_blob, config->ttf_blob, cfg->ttf_size);
         cfg->ttf_data_owned_by_atlas = 1;
+    }
+    /* Publish only a complete add; failure leaves lists and ownership unchanged. */
+    if (!config->merge_mode) {
+        struct nk_font_config **c = &atlas->config;
+        struct nk_font **f = &atlas->fonts;
+        while (*c) c = &(*c)->next;
+        while (*f) f = &(*f)->next;
+        cfg->next = 0;
+        *c = cfg;
+        *f = font;
+    } else {
+        struct nk_font_config *c = font->config;
+        cfg->n = c;
+        cfg->p = c->p;
+        c->p->n = cfg;
+        c->p = cfg;
     }
     atlas->font_num++;
     return font;
@@ -17980,7 +17985,11 @@ nk_font_atlas_add_from_file(struct nk_font_atlas *atlas, const char *file_path,
     cfg.ttf_size = size;
     cfg.size = height;
     cfg.ttf_data_owned_by_atlas = 1;
-    return nk_font_atlas_add(atlas, &cfg);
+    {
+        struct nk_font *font = nk_font_atlas_add(atlas, &cfg);
+        if (!font) atlas->permanent.free(atlas->permanent.userdata, memory);
+        return font;
+    }
 }
 #endif
 NK_API struct nk_font*
@@ -18016,7 +18025,11 @@ nk_font_atlas_add_compressed(struct nk_font_atlas *atlas,
     cfg.ttf_size = decompressed_size;
     cfg.size = height;
     cfg.ttf_data_owned_by_atlas = 1;
-    return nk_font_atlas_add(atlas, &cfg);
+    {
+        struct nk_font *font = nk_font_atlas_add(atlas, &cfg);
+        if (!font) atlas->permanent.free(atlas->permanent.userdata, decompressed_data);
+        return font;
+    }
 }
 NK_API struct nk_font*
 nk_font_atlas_add_compressed_base85(struct nk_font_atlas *atlas,
@@ -18303,11 +18316,15 @@ nk_font_atlas_clear(struct nk_font_atlas *atlas)
                 n = i->n;
                 if (i->ttf_blob)
                     atlas->permanent.free(atlas->permanent.userdata, i->ttf_blob);
+                if (i->range_owned_by_atlas)
+                    atlas->permanent.free(atlas->permanent.userdata, (void*)i->range);
                 atlas->permanent.free(atlas->permanent.userdata, i);
             }
             next = iter->next;
             if (i->ttf_blob)
                 atlas->permanent.free(atlas->permanent.userdata, iter->ttf_blob);
+            if (iter->range_owned_by_atlas)
+                atlas->permanent.free(atlas->permanent.userdata, (void*)iter->range);
             atlas->permanent.free(atlas->permanent.userdata, iter);
         }
         atlas->config = 0;

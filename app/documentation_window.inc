@@ -40,20 +40,20 @@ static bool documentation_window_open(app *a) {
         /* All 16–32 px reading variants share one atlas. Two horizontal samples
          * preserve subpixel smoothing without exhausting Nuklear's packer. */
         for(int i=0;i<9;i++) {
-            struct nk_font *font=system_font_sampling(atlas,(float)(16+i*2),false,false,2,1);
-            struct nk_font *title=system_font_sampling(atlas,(float)(23+i*2),false,true,2,1);
+            struct nk_font *font=system_font_sampling(atlas,a->root,(float)(16+i*2),false,false,2,1);
+            struct nk_font *title=system_font_sampling(atlas,a->root,(float)(23+i*2),false,true,2,1);
             if(!font || !title)goto fail;
             a->doc_ui_fonts[i]=&font->handle;a->doc_title_fonts[i]=&title->handle;
         }
         a->doc_font_ui=a->doc_ui_fonts[(documentation_font_size(a)-16)/2];
         a->doc_font_title=a->doc_title_fonts[(documentation_font_size(a)-16)/2];
         for(int i=0;i<11;i++) {
-            struct nk_font *bold=system_font_sampling(atlas,(float)(16+i*2),false,true,2,1);
+            struct nk_font *bold=system_font_sampling(atlas,a->root,(float)(16+i*2),false,true,2,1);
             if(!bold)goto fail;
             a->doc_bold_fonts[i]=&bold->handle;
         }
         for (int i = 0; i < 9; i++) {
-            struct nk_font *code = system_font_sampling(atlas, (float)(16 + i * 2), true, false,2,1);
+            struct nk_font *code = system_font_sampling(atlas,a->root,(float)(16+i*2),true,false,2,1);
             if (!code)
                 goto fail;
             a->doc_code_fonts[i] = &code->handle;

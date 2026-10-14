@@ -509,17 +509,27 @@ static bool documentation_math_fonts(app *a) {
  char path[4096];join(path,sizeof path,a->project,"required-glyphs.txt");FILE *input=fopen(path,"rb");if(!input)return false;
  unsigned value,count=0;bool ok=true;
  /* U+0378 is in the declared Greek range but absent from these platform fonts.
-  * A baked entry bearing its codepoint alone would accept the .notdef glyph. */
- const struct nk_font_glyph *missing=nk_font_find_glyph(a->doc_ui_fonts[0]->userdata.ptr,0x0378);
- if(!missing || missing->codepoint!=0x0378 || ps_ui_font_has_glyph(a->doc_ui_fonts[0],0x0378))ok=false;
+  * Raw atlas metadata must identify the missing source; lookup must skip .notdef. */
+ const struct nk_font *first=a->doc_ui_fonts[0]->userdata.ptr;bool declared_missing=false;
+ for(nk_rune i=0;i<first->info.glyph_count;i++)
+  if(first->glyphs[i].codepoint==0x0378 && !first->glyphs[i].source_present)declared_missing=true;
+ const struct nk_font_glyph *missing=nk_font_find_glyph(first,0x0378);
+ if(!declared_missing || !missing || missing->codepoint==0x0378 || ps_ui_font_has_glyph(a->doc_ui_fonts[0],0x0378))ok=false;
  while(fscanf(input,"%x",&value)==1) {
   ++count;
   for(unsigned role=0;role<4;role++) {
    const struct nk_user_font **fonts=role==0?a->doc_ui_fonts:role==1?a->doc_title_fonts:role==2?a->doc_bold_fonts:a->doc_code_fonts;
    for(unsigned i=0;i<(role==2?11u:9u);i++) {
     const struct nk_font_glyph *glyph=nk_font_find_glyph(fonts[i]->userdata.ptr,(nk_rune)value);
-    if(!ps_ui_font_has_glyph(fonts[i],(nk_rune)value) || !glyph || glyph->x1<=glyph->x0 || glyph->y1<=glyph->y0) {
+    if(!ps_ui_font_has_glyph(fonts[i],(nk_rune)value) || !glyph ||
+       (value==0x20 ? glyph->xadvance<=0 : (glyph->x1<=glyph->x0 || glyph->y1<=glyph->y0))) {
      fprintf(stderr,"Documentation math missing U+%04X role=%u size=%.0f\n",value,role,fonts[i]->height);ok=false;
+    }
+    if(role==3 && value>=0x2500 && value<=0x257f) {
+     const struct nk_font_glyph *space=nk_font_find_glyph(fonts[i]->userdata.ptr,32);
+     if(!glyph || !space || fabsf(glyph->xadvance-space->xadvance)>.05f) {
+      fprintf(stderr,"Documentation box advance differs from code space U+%04X size=%.0f\n",value,fonts[i]->height);ok=false;
+     }
     }
    }
   }
@@ -573,7 +583,40 @@ static void documentation_math_test_frame(app *a,int *stage,int *code,const char
   if(zoom_frames++<2 || a->doc_scroll_pending){--*stage;return;}
   const char *r=strstr(a->documentation->reading,"ᵣ");ok=!a->doc_query[0] && documentation_font_size(a)==16 && r &&
    nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(r-a->documentation->reading));
-  *capture="docs-reading-reset.bmp";a->quitting=true;break;
+  *capture="docs-reading-reset.bmp";break;
+ }
+ case 11: {
+  const char *source="# Zeichenprobe\n\nθ 🌍 😀 ☃ ᵀ eᵣ ∫\n\n```text\n┌──┬──┐\n│  │  │\n├──┼──┤\n└──┴──┘\n```\n";
+  ps_document *document=NULL;ok=ps_document_parse(source,strlen(source),false,&document)==PS_OK;
+  if(ok) {
+   free(a->documentation);a->documentation=document;++a->doc_reading_version;
+   a->doc_query[0]=a->doc_last_query[0]=0;a->doc_scroll_x=a->doc_scroll_y=0;
+   a->doc_scroll_adjustment=0;a->doc_history_restore=0;a->doc_jump_block=-1;
+   a->doc_focus=DOC_BODY;zoom_frames=0;
+  }
+  break;
+ }
+ case 12: {
+  if(zoom_frames++<2 || a->doc_scroll_pending){--*stage;return;}
+  const char *r=strstr(a->documentation->reading,"🌍");
+  ok=documentation_font_size(a)==16 && r &&
+   nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(r-a->documentation->reading));
+  *capture="docs-unicode-16.bmp";for(int i=0;i<8;i++)test_window_key_mod(a->doc_window,SDLK_PLUS,PS_UI_COMMAND_MOD);
+  zoom_frames=0;break;
+ }
+ case 13: {
+  if(zoom_frames++<2 || a->doc_scroll_pending){--*stage;return;}
+  const char *r=strstr(a->documentation->reading,"🌍");
+  ok=documentation_font_size(a)==32 && r &&
+   nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(r-a->documentation->reading));
+  *capture="docs-unicode-32.bmp";a->doc_jump_block=2;zoom_frames=0;break;
+ }
+ case 14: {
+  if(zoom_frames++<2 || a->doc_scroll_pending){--*stage;return;}
+  const char *r=strstr(a->documentation->reading,"┴");
+  ok=documentation_font_size(a)==32 && r &&
+   nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(r-a->documentation->reading));
+  *capture="docs-unicode-boxes-32.bmp";a->quitting=true;break;
  }
  }
  if(!ok){fprintf(stderr,"Documentation math stage %d failed\n",*stage-1);*code=1;a->quitting=true;}

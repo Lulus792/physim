@@ -2789,12 +2789,12 @@ static void layouts_start(app *a);
 static void channel_units_start(app *a);
 #include "design_ui.inc"
 // clang-format on
-static struct nk_font *system_font_sampling(struct nk_font_atlas *atlas, float size, bool code, bool title,
+static struct nk_font *system_font_sampling(struct nk_font_atlas *atlas,const char *root,float size,bool code,bool title,
                                            unsigned char horizontal,unsigned char vertical) {
-    static const nk_rune ui_ranges[] = {0x20, 0x17f, 0x300, 0x4ff, 0x1d63, 0x1d63, 0x1e00, 0x1eff,
-                                      0x2000, 0x22ff, 0};
-    static const nk_rune code_ranges[] = {0x20, 0x17f, 0x300, 0x4ff, 0x1d63, 0x1d63,
-                                          0x1e00, 0x1eff, 0x2000, 0x22ff, 0};
+    static const nk_rune ui_ranges[] = {0x20,0x17f,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,
+                                      0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0};
+    static const nk_rune code_ranges[] = {0x20,0x17f,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,
+                                        0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0};
     struct nk_font_config config = nk_font_config(size);
     config.range = code ? code_ranges : ui_ranges;
     config.oversample_h = horizontal;
@@ -2814,12 +2814,31 @@ static struct nk_font *system_font_sampling(struct nk_font_atlas *atlas, float s
              : title ? "DejaVuSans-Bold.ttf"
                      : "DejaVuSans.ttf");
 #endif
+    const char *bundled=SDL_getenv("PHYSIM_TEST_BUNDLED_FONTS");
+    bool force_bundled=bundled && !strcmp(bundled,"1");
     struct nk_font *font =
-        exists(path) ? nk_font_atlas_add_from_file(atlas, path, size, &config) : NULL;
-    return font ? font : nk_font_atlas_add_default(atlas, size, NULL);
+        !force_bundled && exists(path) ? nk_font_atlas_add_from_file(atlas,path,size,&config) : NULL;
+    if(!font) {
+        int n=snprintf(path,sizeof path,"%s/third_party/fonts/%s",root,code?"NotoSansMono.ttf":"NotoSans.ttf");
+        if(n>=0 && (size_t)n<sizeof path)font=nk_font_atlas_add_from_file(atlas,path,size,&config);
+        if(force_bundled && font)printf("Bundled primary font: %s\n",path);
+    }
+    if(!font)return NULL;
+    /* Offline fallback covers our text ranges, phonetic modifiers, diagrams and
+     * emoji. Add only glyphs absent from earlier sources, keeping the atlas small. */
+    static const nk_rune fallback_ranges[]={0x20,0x17f,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,
+        0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x2603,0x2603,0x1f30d,0x1f30d,0x1f600,0x1f600,0};
+    static const char *const files[]={"NotoSans.ttf","NotoSansMono.ttf","NotoSansMath-Regular.ttf","NotoSansSymbols2-Regular.ttf","NotoEmoji.ttf"};
+    for(size_t i=0;i<sizeof files/sizeof files[0];i++) {
+        int n=snprintf(path,sizeof path,"%s/third_party/fonts/%s",root,files[i]);
+        if(n<0 || (size_t)n>=sizeof path || !ps_ui_font_add_fallback(atlas,font,path,fallback_ranges)) {
+            SDL_SetError("Offline fallback font unavailable: %s",files[i]);return NULL;
+        }
+    }
+    return font;
 }
-static struct nk_font *system_font(struct nk_font_atlas *atlas,float size,bool code,bool title) {
-    return system_font_sampling(atlas,size,code,title,3,2);
+static struct nk_font *system_font(struct nk_font_atlas *atlas,const char *root,float size,bool code,bool title) {
+    return system_font_sampling(atlas,root,size,code,title,3,2);
 }
 #include "documentation_window.inc"
 static void test_window_key_mod(SDL_Window *window, SDL_Keycode key, SDL_Keymod mod) {
@@ -3382,19 +3401,39 @@ int main(int argc, char **argv) {
         SDL_Quit();
         return 1;
     }
+    char executable[4096];
+    if (!ps_executable_path(executable, sizeof executable))
+        snprintf(executable, sizeof executable, "%s", argv[0]);
+    char *slash = strrchr(executable, '/'), *back = strrchr(executable, '\\');
+    if (back && (!slash || back > slash))
+        slash = back;
+    if (slash)
+        *slash = 0;
+    snprintf(a->bin, sizeof a->bin, "%s", executable);
+    snprintf(a->root, sizeof a->root, "%s/..", a->bin);
+    char check[4096];
+    join(check, sizeof check, a->root, "include/physim/core.h");
+#ifdef __APPLE__
+    if (!exists(check)) {
+        snprintf(a->root, sizeof a->root, "%s/../Resources", a->bin);
+        join(check, sizeof check, a->root, "include/physim/core.h");
+    }
+#endif
+    if (!exists(check))
+        snprintf(a->root, sizeof a->root, "%s", PS_SOURCE_DIR);
     struct nk_font_atlas *atlas = nk_sdl_font_stash_begin(a->ui);
     struct nk_font *ui_fonts[4], *title_fonts[4];
     bool ui_fonts_ok=true;
     for(int i=0;i<4;i++) {
-        ui_fonts[i]=system_font(atlas,(float)(16+i*2),false,false);
-        title_fonts[i]=system_font(atlas,(float)(23+i*2),false,true);
+        ui_fonts[i]=system_font(atlas,a->root,(float)(16+i*2),false,false);
+        title_fonts[i]=system_font(atlas,a->root,(float)(23+i*2),false,true);
         ui_fonts_ok &= ui_fonts[i]!=NULL && title_fonts[i]!=NULL;
     }
     struct nk_font *font=ui_fonts[0];
     struct nk_font *code_fonts[4];
     bool code_fonts_ok = true;
     for (int i = 0; i < 4; i++) {
-        code_fonts[i] = system_font(atlas, (float)(16 + i * 2), true, false);
+        code_fonts[i] = system_font(atlas,a->root,(float)(16 + i * 2),true,false);
         code_fonts_ok &= code_fonts[i] != NULL;
     }
     struct nk_font *title_font = title_fonts[0];
@@ -3417,26 +3456,6 @@ int main(int argc, char **argv) {
     nk_style_set_font(a->ui, &font->handle);
     nk_textedit_init_default(&a->experiment);
     nk_textedit_init_default(&a->analysis);
-    char executable[4096];
-    if (!ps_executable_path(executable, sizeof executable))
-        snprintf(executable, sizeof executable, "%s", argv[0]);
-    char *slash = strrchr(executable, '/'), *back = strrchr(executable, '\\');
-    if (back && (!slash || back > slash))
-        slash = back;
-    if (slash)
-        *slash = 0;
-    snprintf(a->bin, sizeof a->bin, "%s", executable);
-    snprintf(a->root, sizeof a->root, "%s/..", a->bin);
-    char check[4096];
-    join(check, sizeof check, a->root, "include/physim/core.h");
-#ifdef __APPLE__
-    if (!exists(check)) {
-        snprintf(a->root, sizeof a->root, "%s/../Resources", a->bin);
-        join(check, sizeof check, a->root, "include/physim/core.h");
-    }
-#endif
-    if (!exists(check))
-        snprintf(a->root, sizeof a->root, "%s", PS_SOURCE_DIR);
     char projects[4096];
 #ifdef __APPLE__
     const char *documents = SDL_GetUserFolder(SDL_FOLDER_DOCUMENTS);

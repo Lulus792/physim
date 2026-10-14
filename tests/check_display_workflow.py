@@ -64,8 +64,7 @@ def documentation_math(flow, directory):
     for name in paths:
         source=(flow.root/name).read_text(encoding='utf-8')
         for char in source:
-            label=unicodedata.name(char,'')
-            if unicodedata.category(char)=='Sm' or any(word in label for word in ('GREEK','SUBSCRIPT','SUPERSCRIPT')):
+            if char.isprintable():
                 characters.add(char)
     require('ᵣ' in characters, 'Pendel source no longer exercises the missing subscript')
     directory.mkdir(parents=True)
@@ -74,8 +73,23 @@ def documentation_math(flow, directory):
     flow.run('--workspace-state-test',directory,'docs-keyboard-math',timeout=45,marker='DOCUMENTATION MATH SELF-TEST: PASSED')
     require(f'DOCUMENTATION MATH GLYPHS: {len(characters)} characters in 38 font variants' in flow.steps[-1]['stdout'], 'Incomplete real font coverage')
     require(f'DOCUMENTATION LINK INVENTORY: {len(paths)} pages, ' in flow.steps[-1]['stdout'], 'Incomplete parsed link-range inventory')
-    for name in ('docs-math-16.bmp','docs-math-32.bmp','docs-reading-16.bmp','docs-reading-32.bmp','docs-reading-reset.bmp'):
+    for name in ('docs-math-16.bmp','docs-math-32.bmp','docs-reading-16.bmp','docs-reading-32.bmp','docs-reading-reset.bmp','docs-unicode-16.bmp','docs-unicode-32.bmp','docs-unicode-boxes-32.bmp'):
         require((directory/name).is_file() and (directory/name).stat().st_size>54, 'Missing mathematics image: '+name)
+    # Exercise the real viewer with all platform fonts bypassed, not just an
+    # isolated fallback object that never draws a full document.
+    bundled=directory/'bundled-fonts';bundled.mkdir()
+    shutil.copy2(directory/'required-glyphs.txt',bundled/'required-glyphs.txt')
+    previous=flow.env.get('PHYSIM_TEST_BUNDLED_FONTS')
+    flow.env['PHYSIM_TEST_BUNDLED_FONTS']='1'
+    try:
+        flow.run('--workspace-state-test',bundled,'docs-keyboard-math',timeout=45,marker='DOCUMENTATION MATH SELF-TEST: PASSED')
+        output=flow.steps[-1]['stdout']
+        require(output.count('Bundled primary font: ')==50,'Incomplete bypass of main/F1 platform font handles')
+        require(f'DOCUMENTATION MATH GLYPHS: {len(characters)} characters in 38 font variants' in output,'Incomplete bundled primary glyph coverage')
+        require((bundled/'docs-unicode-boxes-32.bmp').is_file(),'Missing bundled-primary diagram image')
+    finally:
+        if previous is None:flow.env.pop('PHYSIM_TEST_BUNDLED_FONTS',None)
+        else:flow.env['PHYSIM_TEST_BUNDLED_FONTS']=previous
 
 def documentation_zoom_bitmaps(directory, stdout=None):
     if stdout is not None:

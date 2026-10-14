@@ -30,6 +30,10 @@ struct nk_font_atlas *nk_sdl_font_stash_begin(struct nk_context *ctx);
 /* Loaded Nuklear font contains a real source glyph and a matching baked entry,
  * rather than the fallback glyph. Available while its source blob is retained. */
 bool ps_ui_font_has_glyph(const struct nk_user_font *font,nk_rune codepoint);
+/* Before baking: add only supplied codepoints absent from the target's sources.
+ * Target must be the atlas's last font; all allocated ranges belong to the atlas. */
+bool ps_ui_font_add_fallback(struct nk_font_atlas *atlas,struct nk_font *target,
+                             const char *path,const nk_rune *ranges);
 bool nk_sdl_font_stash_end(struct nk_context *ctx);
 int nk_sdl_handle_event(struct nk_context *ctx, SDL_Event *event);
 bool nk_sdl_render(struct nk_context *ctx);

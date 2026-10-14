@@ -400,6 +400,9 @@ bool nk_sdl_font_stash_end(struct nk_context *ctx) {
     if (!sdl->font_texture)
         return false;
     nk_font_atlas_end(&sdl->atlas, nk_handle_id((int)sdl->font_texture), &sdl->null_texture);
+    /* Source presence is baked into each glyph; source blobs can now be released.
+     * The merged codepoint ranges survive until atlas_clear. */
+    nk_font_atlas_cleanup(&sdl->atlas);
     return true;
 }
 bool nk_sdl_render(struct nk_context *ctx) {

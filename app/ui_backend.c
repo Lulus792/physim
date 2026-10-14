@@ -7,13 +7,64 @@
 #include "ui.h"
 bool ps_ui_font_has_glyph(const struct nk_user_font *handle,nk_rune codepoint) {
  if(!handle || !handle->userdata.ptr || codepoint>0x10ffffu)return false;
- const struct nk_font *font=handle->userdata.ptr;const struct nk_font_config *config=font->config;
- if(!config || !config->ttf_blob)return false;
+ const struct nk_font *font=handle->userdata.ptr;
  const struct nk_font_glyph *glyph=nk_font_find_glyph(font,codepoint);
- if(!glyph || glyph->codepoint!=codepoint)return false;
- stbtt_fontinfo info={0};const unsigned char *bytes=config->ttf_blob;
- int offset=stbtt_GetFontOffsetForIndex(bytes,0);
- return offset>=0 && stbtt_InitFont(&info,bytes,offset) && stbtt_FindGlyphIndex(&info,(int)codepoint)!=0;
+ return glyph && glyph->codepoint==codepoint && glyph->source_present;
+}
+static bool font_source_contains(const struct nk_font_config *config,nk_rune codepoint) {
+ const struct nk_font_config *source=config;
+ do {
+  bool declared=false;
+  for(const nk_rune *r=source->range;r && *r;r+=2)
+   if(codepoint>=r[0] && codepoint<=r[1]){declared=true;break;}
+  if(declared && source->ttf_blob) {
+   stbtt_fontinfo info={0};int offset=stbtt_GetFontOffsetForIndex(source->ttf_blob,0);
+   if(offset>=0 && stbtt_InitFont(&info,source->ttf_blob,offset) &&
+      stbtt_FindGlyphIndex(&info,(int)codepoint)!=0)return true;
+  }
+ }while((source=source->n)!=config);
+ return false;
+}
+bool ps_ui_font_add_fallback(struct nk_font_atlas *atlas,struct nk_font *target,
+                             const char *path,const nk_rune *ranges) {
+ if(!atlas || !target || !path || !ranges || !target->config || target->glyphs)return false;
+ struct nk_font *last=atlas->fonts;while(last && last->next)last=last->next;
+ if(last!=target)return false;
+ size_t count=0;
+ for(const nk_rune *r=ranges;*r;r+=2) {
+  if(r[0]>r[1] || r[1]>0x10ffffu)return false;
+  size_t n=(size_t)r[1]-r[0]+1;
+  if(n>SIZE_MAX-count)return false;count+=n;
+ }
+ if(count>(SIZE_MAX/sizeof(nk_rune)-1)/2)return false;
+ nk_size length=0;void *bytes=nk_file_load(path,&length,&atlas->permanent);
+ if(!bytes)return false;
+ stbtt_fontinfo info={0};int offset=stbtt_GetFontOffsetForIndex(bytes,0);
+ if(offset<0 || !stbtt_InitFont(&info,bytes,offset)) {
+  atlas->permanent.free(atlas->permanent.userdata,bytes);return false;
+ }
+ nk_rune *missing=atlas->permanent.alloc(atlas->permanent.userdata,NULL,(count*2+1)*sizeof *missing);
+ if(!missing){atlas->permanent.free(atlas->permanent.userdata,bytes);return false;}
+ size_t used=0;
+ for(const nk_rune *r=ranges;*r;r+=2)for(nk_rune c=r[0];c<=r[1];c++) {
+  if(stbtt_FindGlyphIndex(&info,(int)c)==0 || font_source_contains(target->config,c))continue;
+  if(used && missing[used-1]+1==c)missing[used-1]=c;
+  else {missing[used++]=c;missing[used++]=c;}
+ }
+ missing[used]=0;
+ if(!used) {
+  atlas->permanent.free(atlas->permanent.userdata,missing);
+  atlas->permanent.free(atlas->permanent.userdata,bytes);return true;
+ }
+ struct nk_font_config config=nk_font_config(target->config->size);
+ config.ttf_blob=bytes;config.ttf_size=length;config.ttf_data_owned_by_atlas=1;
+ config.range=missing;config.range_owned_by_atlas=1;config.merge_mode=1;
+ config.oversample_h=target->config->oversample_h;config.oversample_v=target->config->oversample_v;
+ if(nk_font_atlas_add(atlas,&config)!=target) {
+  atlas->permanent.free(atlas->permanent.userdata,missing);
+  atlas->permanent.free(atlas->permanent.userdata,bytes);return false;
+ }
+ return true;
 }
 #include <math.h>
 #undef nk_checkbox_label

@@ -1,0 +1,3 @@
+# Preserve pinned upstream font and license bytes across Windows/Linux checkouts.
+third_party/fonts/*.ttf binary
+third_party/fonts/*-OFL.txt -text

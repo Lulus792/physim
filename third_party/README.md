@@ -23,6 +23,15 @@ included as `licenses/zlib-LICENSE.txt` in the portable package.
 
 ## Nuklear snapshot
 
+Local patch (2026-10-14): merged fonts extend the last handle and return that
+handle. Each baked glyph records whether its source cmap contains the codepoint;
+lookup skips `.notdef` entries in overlapping ranges. This remains valid after
+source-blob cleanup. Adds publish lists only after all allocations succeed,
+and owned fallback ranges survive blob cleanup until atlas clear.
+`font_fallback` reproduces the original wrong-handle and overlapping-source
+failures. `font_sources` covers missing source glyphs, actual raster ink,
+allocation failures, retry and complete release at 16/32 pixels.
+
 Local patch (2026-10-14): `nk_edit_string_scrolled` accepts an optional persistent
 horizontal offset for an unfocused string field. Its caller owns that offset;
 the widget preserves the active field's focus, selection, cursor and value.
@@ -99,7 +108,7 @@ requiring an installed font. The affected routine is also present in the
 Local patch (2026-09-28): undo/redo collapses the current selection to the restored
 cursor. A selection into removed text previously reached the renderer with invalid
 bounds. `editor_clipboard` and the SDL editor regression cover this case.
-Patched header SHA-256 (LF): 76efcdc927695736fa22fd4aa56cc52f73ee3e66c207465316b2d7e451c3bc09.
+Patched header SHA-256 (LF): 82eeb71bde3c0d5fd999ad0d58c02b4b81a627e9eaa5cf051d06ec6beca7b75a.
 
 `nuklear_sdl3_renderer.h` is retained as the upstream `demo/sdl3_renderer` reference;
 it is no longer compiled into Physim. Input and clipboard handling in `app/ui_sdl.c`
@@ -118,3 +127,10 @@ The Linux app links dynamically against the system `libdbus-1.so.3` for its
 AT-SPI provider. Development builds use the distribution’s `dbus-1` pkg-config
 metadata; Linux packages declare `libdbus-1-3` as a runtime dependency.
 The library is not vendored, copied into the SDK, or linked into the core.
+
+## Offline fonts
+
+Five unmodified Noto fallback fonts and their SIL OFL 1.1 notices are tracked in
+`fonts/`. See `fonts/README.md` and `fonts/manifest.json` for pinned source and
+byte hashes. They are distributed with the app and SDK; no system font or network
+download is required for these fallback sources.
