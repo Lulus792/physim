@@ -67,5 +67,26 @@ int main(int argc,char **argv) {
   CHECK(ps_ui_font_has_glyph(&target->handle,0x1f30d));
   nk_font_atlas_clear(&atlas);CHECK(state.live==0);
  }
- puts("Offline font sources: original missing glyphs at 16/32, pixel ink, failed-add ownership, retry and cleanup passed");return 0;
+ /* Strong emphasis needs distinct real raster coverage, not merely a second handle. */
+ memory_state state={0};struct nk_allocator allocator={nk_handle_ptr(&state),allocate,release};
+ struct nk_font_atlas atlas;nk_font_atlas_init(&atlas,&allocator);nk_font_atlas_begin(&atlas);
+ static const nk_rune latin[]={32,126,0};struct nk_font_config config=nk_font_config(32);config.range=latin;
+ const char *styles[]={"NotoSans.ttf","NotoSans-Bold.ttf"};struct nk_font *style_fonts[2];char path[4096];
+ for(int i=0;i<2;i++) {
+  CHECK(snprintf(path,sizeof path,"%s/third_party/fonts/%s",argv[1],styles[i])<(int)sizeof path);
+  style_fonts[i]=nk_font_atlas_add_from_file(&atlas,path,32,&config);CHECK(style_fonts[i]);
+ }
+ int w=0,h=0;const unsigned char *pixels=nk_font_atlas_bake_limited(&atlas,&w,&h,NK_FONT_ATLAS_ALPHA8,2048);CHECK(pixels);
+ size_t coverage[2]={0};
+ for(int i=0;i<2;i++)for(nk_rune c='A';c<='Z';c++) {
+  const struct nk_font_glyph *g=nk_font_find_glyph(style_fonts[i],c);CHECK(g && g->codepoint==c && g->source_present);
+  for(int y=(int)(g->v0*h);y<(int)(g->v1*h) && y<h;y++)
+   for(int x=(int)(g->u0*w);x<(int)(g->u1*w) && x<w;x++)coverage[i]+=pixels[(size_t)y*w+x];
+ }
+ fprintf(stderr,"Actual Latin raster coverage: regular=%zu strong=%zu\n",coverage[0],coverage[1]);
+ CHECK(coverage[0]>0 && (double)coverage[1]>(double)coverage[0]*1.2);
+ nk_font_atlas_end(&atlas,nk_handle_id(0),NULL);nk_font_atlas_cleanup(&atlas);
+ CHECK(ps_ui_font_has_glyph(&style_fonts[1]->handle,'B'));
+ nk_font_atlas_clear(&atlas);CHECK(state.live==0);
+ puts("Offline font sources: missing glyphs, 16/32 raster ink, real strong coverage, failed-add ownership, retry and cleanup passed");return 0;
 }

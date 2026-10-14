@@ -39,6 +39,7 @@ typedef struct {
     size_t first_span, span_count, inline_parent;
     size_t reading_begin, reading_length;
     float height;
+    float code_line_height; /* renderer cache: native box-cell pitch, zero for ordinary text */
     float hit[4];
 } ps_doc_block;
 enum { PS_DOC_BOLD=1, PS_DOC_INLINE_CODE=2, PS_DOC_INLINE_LINK=4 };

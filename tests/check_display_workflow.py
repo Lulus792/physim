@@ -73,6 +73,7 @@ def documentation_math(flow, directory):
     flow.run('--workspace-state-test',directory,'docs-keyboard-math',timeout=45,marker='DOCUMENTATION MATH SELF-TEST: PASSED')
     require(f'DOCUMENTATION MATH GLYPHS: {len(characters)} characters in 38 font variants' in flow.steps[-1]['stdout'], 'Incomplete real font coverage')
     require(f'DOCUMENTATION LINK INVENTORY: {len(paths)} pages, ' in flow.steps[-1]['stdout'], 'Incomplete parsed link-range inventory')
+    documentation_grid_ink(directory,flow.steps[-1]['stdout'])
     for name in ('docs-math-16.bmp','docs-math-32.bmp','docs-reading-16.bmp','docs-reading-32.bmp','docs-reading-reset.bmp','docs-unicode-16.bmp','docs-unicode-32.bmp','docs-unicode-boxes-32.bmp'):
         require((directory/name).is_file() and (directory/name).stat().st_size>54, 'Missing mathematics image: '+name)
     # Exercise the real viewer with all platform fonts bypassed, not just an
@@ -85,11 +86,55 @@ def documentation_math(flow, directory):
         flow.run('--workspace-state-test',bundled,'docs-keyboard-math',timeout=45,marker='DOCUMENTATION MATH SELF-TEST: PASSED')
         output=flow.steps[-1]['stdout']
         require(output.count('Bundled primary font: ')==50,'Incomplete bypass of main/F1 platform font handles')
+        primaries=[line for line in output.splitlines() if line.startswith('Bundled primary font: ')]
+        require(sum(line.endswith('/NotoSans-Bold.ttf') for line in primaries)==24,'Main/F1 strong roles did not load the real bold face')
         require(f'DOCUMENTATION MATH GLYPHS: {len(characters)} characters in 38 font variants' in output,'Incomplete bundled primary glyph coverage')
         require((bundled/'docs-unicode-boxes-32.bmp').is_file(),'Missing bundled-primary diagram image')
+        documentation_grid_ink(bundled,output)
     finally:
         if previous is None:flow.env.pop('PHYSIM_TEST_BUNDLED_FONTS',None)
         else:flow.env['PHYSIM_TEST_BUNDLED_FONTS']=previous
+
+
+def documentation_grid_ink(directory,stdout):
+    match=re.search(r'DOCUMENTATION GRID: ([0-9. ]+)',stdout)
+    require(match,'Missing actual grid draw geometry')
+    left,top,width,pitch,span,clip=map(float,match.group(1).split())
+    require(width>0 and pitch>0 and abs(pitch-span)<.1 and top+3.5*pitch<clip,'Invalid or clipped grid cells')
+    raw=(directory/'docs-unicode-boxes-32.bmp').read_bytes()
+    require(raw[:2]==b'BM' and len(raw)>=54,'Missing grid bitmap')
+    offset=struct.unpack_from('<I',raw,10)[0]
+    w,h=struct.unpack_from('<ii',raw,18);depth=struct.unpack_from('<H',raw,28)[0]
+    require(depth in (24,32) and w>=760 and abs(h)>=540,'Invalid grid bitmap dimensions')
+    scale=w/760
+    require(abs(abs(h)/540-scale)<.01,'Nonuniform grid pixel scale')
+    stride=((w*depth+31)//32)*4
+    def bright(x,y):
+        require(0<=x<w and 0<=y<abs(h),'Grid ink coordinate outside capture')
+        row=abs(h)-1-y if h>0 else y
+        begin=offset+row*stride+x*(depth//8)
+        rgb=raw[begin:begin+3];require(len(rgb)==3,'Truncated grid capture')
+        return min(rgb)>80
+    first=math.ceil((top+.6*pitch)*scale);last=math.floor((top+3.4*pitch)*scale)
+    radius=max(2,math.ceil(2*scale))
+    def continuous(pixel):
+        for column in (left,left+width/2,left+width):
+            center=round(column*scale)
+            for row in range(first,last):
+                require(any(pixel(x,row) for x in range(center-radius,center+radius+1)),
+                        f'Grid vertical stroke interrupted at {column:.1f}/{row}')
+    continuous(bright)
+    closing=round((top+3.5*pitch)*scale)
+    columns=range(math.ceil(left*scale),math.floor((left+width)*scale))
+    count=sum(any(bright(x,y) for y in range(closing-radius,closing+radius+1)) for x in columns)
+    require(count>=len(columns)*.8,'Grid closing stroke is missing')
+    # The oracle must reject a gap, even when geometry and source glyphs pass.
+    rejected=False;gap=(first+last)//2
+    try:
+        continuous(lambda x,y: False if y==gap else bright(x,y))
+    except RuntimeError:
+        rejected=True
+    require(rejected,'Grid pixel oracle accepted a missing stroke')
 
 def documentation_zoom_bitmaps(directory, stdout=None):
     if stdout is not None:

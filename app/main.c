@@ -262,6 +262,7 @@ typedef struct {
     float doc_theta,doc_length,doc_omega,doc_yaw,doc_pitch,doc_zoom;
     bool doc_model_initialized,doc_orthographic;
     struct nk_rect doc_visual_bounds[11];
+    float doc_grid_probe[6]; /* actual draw origin, width, cell advance, source span and clip */
     ps_scene doc_visual_scene;
     struct nk_rect doc_diagram_bounds;
     struct nk_rect documentation_bounds;
@@ -2819,7 +2820,8 @@ static struct nk_font *system_font_sampling(struct nk_font_atlas *atlas,const ch
     struct nk_font *font =
         !force_bundled && exists(path) ? nk_font_atlas_add_from_file(atlas,path,size,&config) : NULL;
     if(!font) {
-        int n=snprintf(path,sizeof path,"%s/third_party/fonts/%s",root,code?"NotoSansMono.ttf":"NotoSans.ttf");
+        int n=snprintf(path,sizeof path,"%s/third_party/fonts/%s",root,
+                       code?"NotoSansMono.ttf":title?"NotoSans-Bold.ttf":"NotoSans.ttf");
         if(n>=0 && (size_t)n<sizeof path)font=nk_font_atlas_add_from_file(atlas,path,size,&config);
         if(force_bundled && font)printf("Bundled primary font: %s\n",path);
     }
@@ -2828,8 +2830,9 @@ static struct nk_font *system_font_sampling(struct nk_font_atlas *atlas,const ch
      * emoji. Add only glyphs absent from earlier sources, keeping the atlas small. */
     static const nk_rune fallback_ranges[]={0x20,0x17f,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,
         0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x2603,0x2603,0x1f30d,0x1f30d,0x1f600,0x1f600,0};
-    static const char *const files[]={"NotoSans.ttf","NotoSansMono.ttf","NotoSansMath-Regular.ttf","NotoSansSymbols2-Regular.ttf","NotoEmoji.ttf"};
+    static const char *const files[]={"NotoSans-Bold.ttf","NotoSans.ttf","NotoSansMono.ttf","NotoSansMath-Regular.ttf","NotoSansSymbols2-Regular.ttf","NotoEmoji.ttf"};
     for(size_t i=0;i<sizeof files/sizeof files[0];i++) {
+        if(i==0 && !title)continue;
         int n=snprintf(path,sizeof path,"%s/third_party/fonts/%s",root,files[i]);
         if(n<0 || (size_t)n>=sizeof path || !ps_ui_font_add_fallback(atlas,font,path,fallback_ranges)) {
             SDL_SetError("Offline fallback font unavailable: %s",files[i]);return NULL;

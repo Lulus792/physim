@@ -130,7 +130,7 @@ The library is not vendored, copied into the SDK, or linked into the core.
 
 ## Offline fonts
 
-Five unmodified Noto fallback fonts and their SIL OFL 1.1 notices are tracked in
+Six unmodified Noto fallback fonts and their SIL OFL 1.1 notices are tracked in
 `fonts/`. See `fonts/README.md` and `fonts/manifest.json` for pinned source and
 byte hashes. They are distributed with the app and SDK; no system font or network
 download is required for these fallback sources.

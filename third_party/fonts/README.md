@@ -3,24 +3,31 @@
 Unmodified TrueType binaries from the official Google Fonts repository at commit
 `66928797f271fed5ee428544e7229685e2d90127`, retrieved 2026-10-14.
 The shorter local filenames preserve the font bytes and internal family names.
+The static bold face also comes from the official archived Noto distribution,
+revision `ffebf8c1ee449e544955a7e813c54f9b73848eac` of `notofonts/noto-fonts`.
 No font download occurs during a build or at runtime.
 
 | Local file | Pinned upstream file | License |
 | --- | --- | --- |
 | NotoSans.ttf | ofl/notosans/NotoSans[wdth,wght].ttf | notosans-OFL.txt |
+| NotoSans-Bold.ttf | hinted/ttf/NotoSans/NotoSans-Bold.ttf (Noto distribution) | notosansbold-OFL.txt |
 | NotoSansMono.ttf | ofl/notosansmono/NotoSansMono[wdth,wght].ttf | notosansmono-OFL.txt |
 | NotoSansMath-Regular.ttf | ofl/notosansmath/NotoSansMath-Regular.ttf | notosansmath-OFL.txt |
 | NotoSansSymbols2-Regular.ttf | ofl/notosanssymbols2/NotoSansSymbols2-Regular.ttf | notosanssymbols2-OFL.txt |
 | NotoEmoji.ttf | ofl/notoemoji/NotoEmoji[wght].ttf | notoemoji-OFL.txt |
 
 Source: [Google Fonts snapshot](https://github.com/google/fonts/tree/66928797f271fed5ee428544e7229685e2d90127/ofl).
+Static bold source: [pinned Noto distribution](https://github.com/notofonts/noto-fonts/tree/ffebf8c1ee449e544955a7e813c54f9b73848eac).
 Each font retains its accompanying copyright and SIL Open Font License 1.1.
 `manifest.json` records the exact source paths, byte lengths and SHA-256 hashes
-for both binaries and licenses. The installed SDK and macOS Resources include
+for both binaries and licenses. Entries without a repository override use the
+Google Fonts source; the bold binary/license specify the Noto repository and
+revision explicitly. The installed SDK and macOS Resources include
 this directory; the package manifest also hashes its files.
 
-Physim uses the default outlines of these variable fonts, without variation-axis
-selection. Emoji use monochrome outlines supported by the existing rasterizer.
+Physim uses the default outlines of variable fonts, without variation-axis
+selection, and the actual static bold face for strong roles when needed.
+Emoji use monochrome outlines supported by the existing rasterizer.
 Fallback ranges cover the application's Latin/Greek text, its phonetic modifiers,
 mathematics, box drawing, U+2603, U+1F30D and U+1F600. This is a
 bounded character repertoire, not a claim of universal Unicode or shaping support.

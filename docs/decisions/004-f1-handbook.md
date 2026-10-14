@@ -160,6 +160,74 @@ gezielten Fehlermuster in `build/native/F1-review/font-runner-proof`;
 die Gesamtprüfung dieses Läufers endet mit Exitcode 0. `.gitattributes` erhält
 die gepinnten Font-/Lizenzbytes auch bei Windows-Checkouts unverändert.
 
+### Hervorhebung, Rahmenzellen und tatsächlich sichtbarer Leserabschluss
+
+Die Gegenprobe `run-d8kr410o` bestätigt identische normale und starke Schrift
+in allen neun rein gebündelten Leseschriftgrößen. Die normale Standardachse
+eines variablen Fonts ersetzt keinen Bold-Schnitt. Eine unveränderte statische
+Noto-Sans-Bold-Datei aus dem offiziellen archivierten Noto-Repository,
+Revision `ffebf8c1ee449e544955a7e813c54f9b73848eac`, wird jetzt für starke Rollen
+geladen. Der Font und seine SIL-OFL-1.1-Lizenz besitzen eigene gepinnte Quelle
+und Hashes. Der Fontbestand umfasst damit sechs Dateien plus sechs Lizenzen.
+
+Die native Rasterprüfung misst für A–Z bei 32 Pixeln eine Alpha-Summe von
+526290 für Regular und 821164 für Bold. Die Strichfläche ist tatsächlich
+verschieden. Die reale App fordert außerdem unterscheidbare AaBb-Metriken
+in allen neun Lesegrößen und 24 tatsächlich geladene Bold-Handles innerhalb
+ihrer 50 primären Hauptfenster-/F1-Handles. Normal und stark stehen im neuen
+Prüftext nebeneinander; beide Schriftgrößen und Fontmodi werden gezeichnet.
+
+`run-94p1ztw2` erkennt eine Codezeilenhöhe von 38 gegenüber einer vertikalen
+Quellzelle von 39. Für Codeblöcke mit Rahmenzeichen wird die natürliche Zellhöhe
+einmal pro Layout berechnet und gecacht. Messung, Zeichnung und native
+Zeichenrahmen verwenden dieselbe Zellverschiebung. Gewöhnlicher Code und
+Absätze behalten ihre bisherige Zeilenhöhe; Fontatlas-Glyphen werden dafür
+nicht global verändert.
+
+Die strengere Schlusslinienprobe findet zusätzlich abgeschnittene Abschlüsse.
+Ein direkt gesetzter Fokuswert und der echte Tab-/Ende-Ablauf beseitigen die
+Ursache nicht (`run-ltd3cj00`, `run-8jhuq64b`). Die Diagnose `run-l3uvjvhd`
+zeigt, dass ein großer Scrollauftrag vom Scrollbalken anschließend auf 78
+zurückgesetzt wird. Eine ungenutzte Layoutzeile zwischen Messung und Anlage
+des Lesergruppenrahmens verschob dessen Ursprung, während seine Höhe noch
+von der früheren Position aus berechnet wurde. Ihr Entfernen richtet
+Gruppenrahmen und tatsächliche Clipfläche aus. Der echte Tab-/Ende-Ablauf
+zeigt danach den vollständigen Diagrammabschluss.
+
+Die unabhängige BMP-Prüfung liest echte Pixel aller drei vertikalen Linien
+und der Schlusslinie. Sie berücksichtigt das Verhältnis zwischen 760 × 540
+logischen Koordinaten und den Bildpixeln, verlangt durchgehende Striche und
+lehnt eine injizierte Lücke ab. Sie besteht mit Systemfonts und rein gebündelten
+Fonts. Die neuen Bilder mit sichtbarer Hervorhebung und geschlossenem Rahmen
+wurden visuell geprüft.
+
+Abschließende Windows-Belege mit Exitcode 0:
+
+- `run-hxqhkbmu`: 9/9 GUI-/UIA-Fälle für Tastatur, Verlauf, Inline-Inhalt,
+  Schrift/Pixel, Zoom, Suchfelder, vollständiges Lesen, Links und Lebenszyklus.
+- `run-kbrw86jp` unter MSVC ASan: 6/6 native Font-, Parser- und Abschnittsfälle.
+- `run-bdgenm68` unter MSVC ASan: 4/4 GUI-/UIA-Fälle einschließlich vollständigem
+  Lesen, Links, Zoom und beiden Fontmodi mit Rastergegenprobe.
+- `build/native/F1-review/typography-installed-proof`: beide echten App-Fontmodi
+  bestehen aus dem verschobenen Release-SDK unter
+  `build/native/typography installed ä/Physim`, von einem anderen Arbeitsordner.
+  Alle 538 Paketdateien und zwölf Font-/Lizenzdateien entsprechen ihren Hashes.
+  Die tatsächlichen Bold-Handles und geschlossenen Rahmen werden mitgeprüft.
+
+Der vorige Stand `2d88eb3` ist auch unter Linux tatsächlich erfolgreich:
+Workflow `38504376167`, Clang 22/22 native (`run-w9fa1arb`) und 25/25 GUI
+(`run-zg7hwyie`), GCC 22/22 native (`run-mjoimclz`) und 25/25 GUI
+(`run-ium9fqh7`). Die neuen Typografie-/Leserhöhenänderungen benötigen eigene
+Linux- und macOS-Nachweise; die vorherigen Läufe ersetzen sie nicht.
+
+Die beiden optischen Font-Restpunkte sind damit in den geprüften Windows-Modi
+behoben. Tatsächliche DPI-/Monitorwechsel, praktische Screenreader-Aufgaben,
+native Tabellen- und vollständige Text-/Feld-/Linkanbindung auf macOS/Linux
+und weitere F1-Abnahmekriterien bleiben offen. Eine vollständige Produktfreigabe
+wird weiterhin nicht behauptet.
+Nach der Dokumentation dieser Korrektur bestehen Parser, API-Referenz, Lernwege
+und Abschnittslinks erneut 4/4 mit Exitcode 0 in `run-rt8xha9i`.
+
 ## Nutzeraufgaben
 
 - Eine Vorlage anlegen, bauen, aufzeichnen und auswerten, mit sichtbaren

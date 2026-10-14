@@ -515,6 +515,14 @@ static bool documentation_math_fonts(app *a) {
   if(first->glyphs[i].codepoint==0x0378 && !first->glyphs[i].source_present)declared_missing=true;
  const struct nk_font_glyph *missing=nk_font_find_glyph(first,0x0378);
  if(!declared_missing || !missing || missing->codepoint==0x0378 || ps_ui_font_has_glyph(a->doc_ui_fonts[0],0x0378))ok=false;
+ for(unsigned i=0;i<9;i++) {
+  const struct nk_user_font *regular=a->doc_ui_fonts[i],*bold=a->doc_bold_fonts[i];
+  float normal=regular->width(regular->userdata,regular->height,"AaBb",4);
+  float strong=bold->width(bold->userdata,bold->height,"AaBb",4);
+  if(fabsf(normal-strong)<.2f) {
+   fprintf(stderr,"Documentation strong font indistinguishable at %.0f px\n",regular->height);ok=false;
+  }
+ }
  while(fscanf(input,"%x",&value)==1) {
   ++count;
   for(unsigned role=0;role<4;role++) {
@@ -586,7 +594,7 @@ static void documentation_math_test_frame(app *a,int *stage,int *code,const char
   *capture="docs-reading-reset.bmp";break;
  }
  case 11: {
-  const char *source="# Zeichenprobe\n\nθ 🌍 😀 ☃ ᵀ eᵣ ∫\n\n```text\n┌──┬──┐\n│  │  │\n├──┼──┤\n└──┴──┘\n```\n";
+  const char *source="# Zeichenprobe\n\nθ 🌍 😀 ☃ ᵀ eᵣ ∫\nAaBb **AaBb**\n\n```text\n┌──┬──┐\n│  │  │\n├──┼──┤\n└──┴──┘\n```\n";
   ps_document *document=NULL;ok=ps_document_parse(source,strlen(source),false,&document)==PS_OK;
   if(ok) {
    free(a->documentation);a->documentation=document;++a->doc_reading_version;
@@ -613,10 +621,23 @@ static void documentation_math_test_frame(app *a,int *stage,int *code,const char
  }
  case 14: {
   if(zoom_frames++<2 || a->doc_scroll_pending){--*stage;return;}
+  if(!documentation_test_seek(a,DOC_BODY,stage,code))return;
+  test_window_key_mod(a->doc_window,SDLK_END,0);zoom_frames=0;break;
+ }
+ case 15: {
+  if(zoom_frames++<2 || a->doc_scroll_pending){--*stage;return;}
   const char *r=strstr(a->documentation->reading,"┴");
   ok=documentation_font_size(a)==32 && r &&
    nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(r-a->documentation->reading));
-  *capture="docs-unicode-boxes-32.bmp";a->quitting=true;break;
+  *capture="docs-unicode-boxes-32.bmp";
+  printf("DOCUMENTATION GRID: %.3f %.3f %.3f %.3f %.3f %.3f\n",a->doc_grid_probe[0],a->doc_grid_probe[1],a->doc_grid_probe[2],a->doc_grid_probe[3],a->doc_grid_probe[4],a->doc_grid_probe[5]);
+  if(fabsf(a->doc_grid_probe[3]-a->doc_grid_probe[4])>.1f) {
+   fprintf(stderr,"Documentation grid row %.3f does not meet source vertical span %.3f\n",a->doc_grid_probe[3],a->doc_grid_probe[4]);ok=false;
+  }
+  if(a->doc_grid_probe[1]+3.5f*a->doc_grid_probe[3]>a->doc_grid_probe[5]-1) {
+   fprintf(stderr,"Documentation grid closing stroke clipped\n");ok=false;
+  }
+  a->quitting=true;break;
  }
  }
  if(!ok){fprintf(stderr,"Documentation math stage %d failed\n",*stage-1);*code=1;a->quitting=true;}

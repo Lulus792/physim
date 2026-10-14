@@ -62,6 +62,22 @@
       "source": "ofl/notosansmath/OFL.txt",
       "bytes": 4380,
       "sha256": "403a95275b469061b7d4371c328e0ada3bc7d63328abe2e88aad5cd243b2fe21"
+    },
+    {
+      "file": "NotoSans-Bold.ttf",
+      "source": "hinted/ttf/NotoSans/NotoSans-Bold.ttf",
+      "repository": "https://github.com/notofonts/noto-fonts",
+      "revision": "ffebf8c1ee449e544955a7e813c54f9b73848eac",
+      "bytes": 575740,
+      "sha256": "c976e4b1b99edc88775377fcc21692ca4bfa46b6d6ca6522bfda505b28ff9d6a"
+    },
+    {
+      "file": "notosansbold-OFL.txt",
+      "source": "LICENSE",
+      "repository": "https://github.com/notofonts/noto-fonts",
+      "revision": "ffebf8c1ee449e544955a7e813c54f9b73848eac",
+      "bytes": 4377,
+      "sha256": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
     }
   ]
 }

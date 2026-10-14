@@ -421,10 +421,23 @@ static float documentation_text_width(const struct nk_user_font *font,const char
         width+=documentation_glyph_width(font,text+at,used);at+=(size_t)used;}
     return width;
 }
+static float documentation_grid_pitch(const app *a,const ps_document *d,const ps_doc_block *b) {
+    if(b->kind!=PS_DOC_CODE)return 0;
+    bool grid=false;const char *text=d->text+b->text;
+    for(size_t at=0;at<b->length;) {
+        nk_rune rune;int n=nk_utf_decode(text+at,&rune,(int)(b->length-at));if(n<=0)return 0;
+        if(rune>=0x2500 && rune<=0x257f){grid=true;break;}at+=(size_t)n;
+    }
+    if(!grid)return 0;
+    const struct nk_user_font *font=documentation_block_font(a,b);
+    const struct nk_font_glyph *vertical=nk_font_find_glyph(font->userdata.ptr,0x2502);
+    return vertical && vertical->codepoint==0x2502 && vertical->source_present && vertical->y1>vertical->y0
+        ? vertical->y1-vertical->y0 : 0;
+}
 static size_t documentation_rich_line(const app *a,const ps_document *d,const ps_doc_block *b,
     size_t at,float width,size_t *length,float *height) {
     const char *text=d->text+b->text;size_t begin=at,space=SIZE_MAX;
-    float used=0,h=documentation_block_font(a,b)->height+6,space_height=h;
+    float used=0,h=b->code_line_height>0?b->code_line_height:documentation_block_font(a,b)->height+6,space_height=h;
     while(at<b->length) {
         if(text[at]=='\r'){*length=at-begin;*height=h;return at-begin+(at+1<b->length && text[at+1]=='\n'?2:1);}
         if(text[at]=='\n'){*length=at-begin;*height=h;return at-begin+1;}
@@ -436,7 +449,7 @@ static size_t documentation_rich_line(const app *a,const ps_document *d,const ps
             if(space!=SIZE_MAX && space>begin){*length=space-begin;*height=space_height;return space-begin+1;}
             *length=at-begin;*height=h;return at-begin;
         }
-        h=fmaxf(h,font->height+6);
+        if(b->code_line_height<=0)h=fmaxf(h,font->height+6);
         if(text[at]==' ' || text[at]=='\t'){space=at;space_height=h;}
         used+=glyph;at+=(size_t)bytes;
     }
@@ -452,6 +465,24 @@ static void documentation_rich_draw(app *a,ps_document *d,const ps_doc_block *b,
     struct nk_context *ui=a->doc_ui;struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
     const char *text=d->text+b->text;size_t at=0;float y=bounds.y;
     const char *match=NULL;bool searched=false;
+    float grid_offset=0;
+    if(b->code_line_height>0) {
+        const struct nk_user_font *font=documentation_block_font(a,b);
+        struct nk_user_font_glyph cell={0};font->query(font->userdata,font->height,&cell,0x2502,0);
+        grid_offset=-cell.offset.y;
+    }
+    if(b->kind==PS_DOC_CODE && !strncmp(text,"┌──┬──┐",strlen("┌──┬──┐"))) {
+        const struct nk_user_font *font=documentation_block_font(a,b);
+        const struct nk_font_glyph *g=nk_font_find_glyph(font->userdata.ptr,0x2502);
+        size_t length;float height;documentation_rich_line(a,d,b,0,bounds.w,&length,&height);
+        if(g) {
+            a->doc_grid_probe[0]=bounds.x+g->x0+(g->x1-g->x0)/2;
+            a->doc_grid_probe[1]=floorf(bounds.y+grid_offset)+g->y0;
+            a->doc_grid_probe[2]=documentation_glyph_width(font," ",1)*6;
+            a->doc_grid_probe[3]=height;a->doc_grid_probe[4]=g->y1-g->y0;
+            a->doc_grid_probe[5]=canvas->clip.y+canvas->clip.h;
+        }
+    }
     do {
         size_t length;float height;size_t used=documentation_rich_line(a,d,b,at,bounds.w,&length,&height);
         size_t end=at+length,pos=at;float x=bounds.x;
@@ -462,7 +493,8 @@ static void documentation_rich_draw(app *a,ps_document *d,const ps_doc_block *b,
             const struct nk_user_font *font=documentation_span_font(a,b,span);
             size_t next=span?span->text+span->length-b->text:end;if(next>end)next=end;
             float width=documentation_text_width(font,text+pos,next-pos);
-            struct nk_rect part=nk_rect(x,y,width,font->height+6);
+            float draw_y=y+grid_offset;
+            struct nk_rect part=nk_rect(x,y,width,b->code_line_height>0?height:font->height+6);
             bool link=span && (span->style&PS_DOC_INLINE_LINK) && span->link<d->count;
             if(link) {
                 ps_doc_block *action=&d->blocks[span->link];float *hit=action->hit;
@@ -479,8 +511,14 @@ static void documentation_rich_draw(app *a,ps_document *d,const ps_doc_block *b,
                     for(size_t glyph=pos;glyph<next;) {
                         nk_rune rune;int bytes=nk_utf_decode(text+glyph,&rune,(int)(next-glyph));if(bytes<=0)bytes=1;
                         float glyph_width=documentation_glyph_width(font,text+glyph,bytes);
-                        nk_sdl_accessibility_text_box(ui,b->reading_begin+glyph,b->reading_begin+glyph+(size_t)bytes,
-                            nk_rect(glyph_x,y,glyph_width,font->height+6));
+                        struct nk_rect box=nk_rect(glyph_x,y,glyph_width,font->height+6);
+                        if(b->code_line_height>0) {
+                            struct nk_user_font_glyph ink={0};font->query(font->userdata,font->height,&ink,rune,0);
+                            box=ink.width>0 && ink.height>0
+                                ? nk_rect(floorf(glyph_x)+ink.offset.x,floorf(draw_y)+ink.offset.y,ink.width,ink.height)
+                                : nk_rect(glyph_x,y,glyph_width,height);
+                        }
+                        nk_sdl_accessibility_text_box(ui,b->reading_begin+glyph,b->reading_begin+glyph+(size_t)bytes,box);
                         glyph_x+=glyph_width;glyph+=(size_t)bytes;
                     }
                 }
@@ -494,7 +532,7 @@ static void documentation_rich_draw(app *a,ps_document *d,const ps_doc_block *b,
                 while(chunk<next) {
                     const char *tab=memchr(text+chunk,'\t',next-chunk);size_t last=tab?(size_t)(tab-text):next;
                     float run_width=documentation_text_width(font,text+chunk,last-chunk);
-                    if(last>chunk)nk_draw_text(canvas,nk_rect(draw_x,y,run_width+1,font->height+6),text+chunk,(int)(last-chunk),font,nk_rgba(0,0,0,0),color);
+                    if(last>chunk)nk_draw_text(canvas,nk_rect(draw_x,draw_y,run_width+1,font->height+6),text+chunk,(int)(last-chunk),font,nk_rgba(0,0,0,0),color);
                     draw_x+=run_width;if(tab)draw_x+=documentation_glyph_width(font,"\t",1);chunk=last+(tab?1:0);
                 }
                 if(link)nk_stroke_line(canvas,x,y+font->height+2,x+width,y+font->height+2,1,color);
@@ -1061,7 +1099,9 @@ static void documentation_view(app *a, float height) {
         fmaxf(40,nk_window_get_content_region(ui).w-8))+8,1);
     nk_style_push_color(ui,&ui->style.text.color,a->doc_error[0]?UI_COLOR(error):UI_COLOR(muted));
     nk_label_wrap(ui,detail);nk_style_pop_color(ui);
-    nk_layout_row_dynamic(ui,16,1);
+    /* Peek the next row after the consumed detail row. An unused placeholder
+     * row would be advanced by the following layout call and shift the group
+     * below this measurement, making its scrollbar taller than its real clip. */
     struct nk_rect remaining=nk_widget_bounds(ui),clip=nk_window_get_content_region(ui);
     nk_layout_row_dynamic(ui,fmaxf(20,fminf(height,clip.y+clip.h-remaining.y)),1);
     struct nk_rect body_bounds=nk_widget_bounds(ui);
@@ -1076,6 +1116,7 @@ static void documentation_view(app *a, float height) {
             if (d->layout_width != width) {
                 for (size_t i = 0; i < d->count; i++) {
                     ps_doc_block *b = &d->blocks[i];
+                    b->code_line_height=documentation_grid_pitch(a,d,b);
                     b->height =
                         b->kind == PS_DOC_TABLE_ROW
                             ? documentation_table(a, b, d->text + b->text, width, NULL)
