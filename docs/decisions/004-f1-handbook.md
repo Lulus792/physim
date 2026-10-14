@@ -23,6 +23,64 @@ Die Hilfe ist in den geprüften Windows-Abläufen gut nutzbar. Eine vollständig
 Bewertung mit Höchstpunktzahl ist wegen dieser offenen Abnahmefälle noch nicht
 begründet. Die folgenden Nachweise nennen jeweils ihre Revision und Umgebung.
 
+### Erneuter Skill-Review des lokalen Stands
+
+Geprüft am 14. Oktober 2026 auf Windows 10.0.26200 mit dem Debug-Build unter
+`build/native/F1-review`, Ausgangsrevision `38efa9d`. Die Auswahl erfolgte über
+`D:/Skills/skills/scripts/skill_system.py select`; gelesen und angewendet wurden
+`documentation-engineer`, `ui-ux-designer`, `accessibility-engineer` und
+`test-engineer` aus diesem zentralen Bestand einschließlich ihrer Einstiegsdateien
+und der Desktop-Abnahmematrix. Die Wertung ist ein fachliches Urteil über die
+vorliegenden Belege, keine normierte Messung oder Produktzertifizierung.
+10/10 setzt vollständige Erfüllung und Prüfung der relevanten Abnahmekriterien
+voraus; fehlende Umgebungen und Prüfungen erhalten keine Erfolgspunkte.
+
+| Gegenstand | Bewertung | Begründung und Grenze |
+| --- | --- | --- |
+| UI und Nutzerführung | 8/10 | Getrennte Lernwege, lokale/globale Suche, Verlauf, Codekopieren und Tastaturführung funktionieren in den geprüften Windows-Aufgaben. 32-Pixel-Text bleibt bei 760 × 540 bedienbar; Dunkel, Hell und hoher Kontrast besitzen geprüfte Bilder. Die kompakte Ansicht lässt allerdings wenig Lesefläche. Vollständige Schriftabdeckung, tatsächliche DPI-/Monitorwechsel und sämtliche Plattformzustände fehlen. |
+| Aufgabe als Dokumentation | 8/10 | Einstieg führt zu einem gespeicherten Versuch und einer prüfbaren Erwartung. Sieben Kapitel je Lernweg, acht gemeinsame Modellaufgaben, vollständige Beispielquellen, API-Verträge und symptomorientierte Fehlerhilfe unterstützen Lernen und Nachschlagen. 183 Seiten und 214 Abschnittslinks sind erreichbar. Der Gesamtabgleich aller Texte mit der Umsetzung ist offen; der Review findet konkrete veraltete Aussagen. |
+| Barrierefreiheit | 5/10 | Externe Windows-UIA-Clients lesen Dokumenttext, bedienen Suchfelder und Links und prüfen den Fensterlebenszyklus. Das ist ein belastbarer Teilnachweis. Echte Narrator-/NVDA-/VoiceOver-/Orca-Aufgaben, native Tabellensemantik und vollständige Text-/Feld-/Linkanbindung auf macOS/Linux bleiben offen. |
+
+Für die Inhaltsaufgabe wurden User Guide, beide Lernwege, C-Experimenttutorial,
+API-Einstieg und Fehlerbehebung gegen ihre Quellen und vorhandenen Prüfungen
+betrachtet. Der User Guide nennt Voraussetzungen, konkrete Bedienaktionen,
+erwartete Dateien/Kurven und eine anschließende kontrollierte Änderung. Die
+Referenz ergänzt Signaturen, Einheiten, Lebensdauer und Fehlerverträge.
+Planung und implementierter Stand werden im Handbuchstart ausdrücklich getrennt.
+Der Quellenvergleich bestätigt identische veröffentlichte Beispiele; er bedeutet
+nicht, dass jedes Modell in diesem Review vollständig ausgeführt wurde.
+
+Aktuell tatsächlich ausgeführte Belege, jeweils Exitcode 0:
+
+- `run-o7656q5r`: 27/27 native Inhalts-/Referenzfälle. Darunter 1.264 aufgelöste
+  API-Symbole, 31 Referenzdokumente, beide Lernwege, Beispielquellenabgleich,
+  ausgeführte C-/Physim-Bewegungsbeispiele sowie 183 Seiten und 214 Abschnittslinks.
+- `run-8eh1g5p7`: 5/5 GUI-Fälle für Tastatur, Verlauf, Zoom, Inline-Inhalte und
+  den echten Windows-F1-Fensterlebenszyklus. Die neuen Bilder des kleinen
+  32-Pixel-Lesers, der hellen Suche und der Wiederöffnung wurden visuell geprüft.
+- `run-u5xoqydr`: 3/3 externe Windows-UIA-Appfälle für Suchfelder,
+  interne Links und vollständigen Dokumenttext.
+
+Die erweiterte Zeichen-Gegenprobe `run-m3m9o5rx` scheitert mit Exitcode 1.
+Sie findet U+1D40, neun Rahmenzeichen, U+2603 sowie U+1F30D und U+1F600 in
+allen 38 Fontvarianten ohne verwendbare Glyphen. Die geladenen Bereiche
+schließen diese Codepunkte aus; das Wiederöffnungsbild zeigt `θ?` statt `θ🌍`.
+Die experimentelle Probe meldet außerdem U+0020, weil sie für jedes druckbare
+Zeichen sichtbare Tinte verlangt. Dieser Leerzeichenbefund ist ein Prüferfehler
+und zählt nicht als fehlende Schriftglyph. Die bestehende mathematische
+43-Zeichen-Prüfung belegt folglich keine vollständige Zeichendarstellung.
+
+Zwei konkrete Inhaltskorrekturen folgen aus dem Review: `docs/accessibility.md`
+behauptete noch, Windows/UIA sei nicht angebunden, und führte es nochmals pauschal
+als offene Aufgabe. Der Text beschreibt jetzt den tatsächlich geprüften Umfang
+und dessen Grenzen. Der Einstieg von `docs/physim-guide.md` nennt nun den
+Entwicklungsstand `0.1.0-dev`, passend zu README und Sprach-SDK, statt einer
+historischen Versionsangabe. Weitere historische Nachweise bleiben als solche
+erhalten. Priorität haben anschließend Schriftfallback, praktische assistive
+Nutzeraufgaben, Tabellensemantik und die native Desktop-Abnahmematrix.
+Nach den Inhaltskorrekturen bestehen Parser, Lernwege, Offline-Abschnittslinks
+und API-Referenz erneut 4/4 mit Exitcode 0 in `run-9e2tghw0`.
+
 ## Nutzeraufgaben
 
 - Eine Vorlage anlegen, bauen, aufzeichnen und auswerten, mit sichtbaren

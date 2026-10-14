@@ -1,6 +1,6 @@
 # Teil II – Physim mit der eigenen Sprache
 
-Dieser Lernweg führt mit Physim 0.182.0 von der Einrichtung bis zum gespeicherten
+Dieser Lernweg führt mit Physim 0.1.0-dev von der Einrichtung bis zum gespeicherten
 Ergebnis. Experiment und Analyse können vollständig Physim bleiben; du brauchst
 für die unterstützten Aufgaben keinen C-Code nachzuschreiben. Die Sprache ist
 weiter ein Entwicklungsvertrag. Dieselben Modelle und Archive verwendet

@@ -52,9 +52,32 @@ Fokusführung für weitere Widgettypen benötigen zusätzliche semantische Anbin
 Die bestehende Sichtbarkeits-/Deaktivierungslogik wird berücksichtigt, sodass
 dieser Einstieg keine Aktivierung gesperrter oder momentan schreibgeschützter
 UI-Bereiche ermöglicht. Eine vollständige praktische VoiceOver-Abnahme steht
-noch aus. Windows/UI Automation ist noch nicht angebunden. Linux besitzt jetzt den
-unten beschriebenen AT-SPI-Einstieg.
+noch aus. Windows besitzt die im folgenden Abschnitt beschriebene
+UI-Automation-Anbindung. Linux besitzt den unten beschriebenen AT-SPI-Einstieg.
 Die portable Modellprüfung allein beweist keinen praktischen Screenreader-Zugang.
+
+## Windows UI Automation und F1
+
+Windows veröffentlicht benannte einfache Controls, Auswahlgruppen und Regler
+über UI Automation. F1 stellt zusätzlich seinen vollständigen Lesetext über
+TextPattern bereit. Native Textbereiche unterstützen Unicode-Suche, sichtbare
+Zeichenrahmen und ScrollIntoView. Die beiden Suchfelder veröffentlichen Wert,
+Textauswahl und Caret; native Eingaben werden im tatsächlichen Feld verarbeitet.
+Interne Links besitzen Textbereiche, Fokus und Aktivierung. Externe Quellenadressen
+werden weiterhin kopiert, wie in der Hilfe beschrieben.
+
+Unabhängige Clientprozesse prüfen Lesen, Feldbedienung und Linkaktivierung an der
+laufenden App. Beim Schließen oder Minimieren bleiben gehaltene Inhalte lesbar;
+verborgene Elemente veröffentlichen keine sichtbaren Zeichenrahmen, keinen
+aktiven Feldfokus und nehmen keine Bedienaufträge an. Wiederöffnen und
+Wiederherstellen erhalten Inhalt und Elementidentitäten. Die jeweiligen
+Revisions-, Lauf- und Bildbelege stehen in der F1-Abnahmeentscheidung im Repository.
+
+Dies bestätigt noch keine vollständige Narrator-/NVDA-Bedienung. Native
+Tabellensemantik, weitere Editoren und Widgettypen sowie die vollständige
+DPI-/Monitorwechselmatrix bleiben offen. Ein Suchfeld kann Unicode unverändert
+speichern und nativ liefern, obwohl die Schrift ein Ersatzzeichen zeichnet;
+Schriftfallback benötigt deshalb eine eigene visuelle Prüfung.
 
 ## Modell und Prüfumfang
 
@@ -259,7 +282,8 @@ aktiviert es mit Leertaste und wechselt mit Tab/Pfeiltaste zur Darstellung.
 Entwürfe ändern sich, die angewandte Konfiguration bleibt erhalten. Ein
 Fokus-Screenshot gehört zu den lokalen Testausgaben.
 
-Dieser Dienst deckt einfache Controls ab. Text-/Editorfokus, Menüs, Dropdowns,
-virtuelle Listen, Scroll-to-Reveal, Windows/UIA, Wayland und praktische
-VoiceOver-/Orca-Abnahme bleiben offen. Eine vollständige Barrierefreiheitsabnahme
-wird dadurch nicht behauptet.
+Dieser Dienst deckt einfache Controls ab. Vollständiger Text-/Editorfokus,
+Menüs, Dropdowns, virtuelle Listen, allgemeines Scroll-to-Reveal, Wayland und
+praktische Screenreader-Abnahme bleiben offen. Die oben beschriebene
+Windows-F1-Anbindung ergänzt diesen Umfang. Eine vollständige
+Barrierefreiheitsabnahme wird dadurch nicht behauptet.
