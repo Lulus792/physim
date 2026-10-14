@@ -73,6 +73,7 @@ void nk_sdl_accessibility_suspend(struct nk_context *ctx);
 bool nk_sdl_accessibility_document_visible(struct nk_context *ctx,uint64_t version,size_t byte);
 bool nk_sdl_accessibility_document_native_read_test(struct nk_context *ctx);
 bool nk_sdl_accessibility_native_edit_test_step(struct nk_context *ctx,int step);
+bool nk_sdl_accessibility_native_links_test_step(struct nk_context *ctx,int step);
 nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flags,char *text,int capacity,nk_plugin_filter filter);
 enum {PS_UI_EDIT_NATIVE_FOCUS=1u<<24};
 void nk_sdl_set_ui_size(struct nk_context *ctx, unsigned size);

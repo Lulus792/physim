@@ -20,13 +20,14 @@ struct ps_a11y_native {
  double values[PS_A11Y_MAX_NODES];
  uint64_t edit_versions[PS_A11Y_MAX_NODES];size_t edit_starts[PS_A11Y_MAX_NODES],edit_ends[PS_A11Y_MAX_NODES],edit_carets[PS_A11Y_MAX_NODES];
  id document;uint64_t document_identity,document_version;ps_a11y_utf16_index document_index;bool document_viewable;
+ id links_probe;uint64_t completed_link_id,completed_link_serial,links_probe_serial;
 };
 #if OBJC_BOOL_IS_BOOL
 #define PS_AX_BOOL "B"
 #else
 #define PS_AX_BOOL "c"
 #endif
-static Class element_class,document_class,edit_class;static Ivar owner_ivar,id_ivar;static IMP base_dealloc,base_frame;
+static Class element_class,document_class,edit_class,link_class;static Ivar owner_ivar,id_ivar;static IMP base_dealloc,base_frame;
 static id send0(id object,const char *selector) {
  return ((id(*)(id,SEL))objc_msgSend)(object,sel_registerName(selector));
 }
@@ -184,8 +185,9 @@ static bool make_class(void) {
 }
 #include "accessibility_macos_text.inc"
 #include "accessibility_macos_edit.inc"
+#include "accessibility_macos_links.inc"
 ps_a11y_native *ps_a11y_native_create(SDL_Window *window,ps_a11y_model *model,SDL_Mutex *mutex) {
- if(!window || !model || !mutex || !make_class() || !make_document_class() || !make_edit_class())return NULL;
+ if(!window || !model || !mutex || !make_class() || !make_document_class() || !make_edit_class() || !make_link_class())return NULL;
  id native=SDL_GetPointerProperty(SDL_GetWindowProperties(window),SDL_PROP_WINDOW_COCOA_WINDOW_POINTER,NULL);
  if(!native)return NULL;
  ps_a11y_native *b=calloc(1,sizeof *b);if(!b)return NULL;
@@ -222,7 +224,7 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
    value_changed[i]=(node->role==PS_A11Y_EDIT && node->text_version!=b->edit_versions[j]) || ((node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) && node->checked!=b->checked[j]) || (node->role==PS_A11Y_SLIDER && node->value!=b->values[j]);
   }
   if(!element) {
-   element=send0((id)(node->role==PS_A11Y_EDIT?edit_class:element_class),"new");SDL_AddAtomicInt(&b->references,1);
+   element=send0((id)(node->role==PS_A11Y_EDIT?edit_class:node->role==PS_A11Y_LINK?link_class:element_class),"new");SDL_AddAtomicInt(&b->references,1);
    memcpy((char*)element+ivar_getOffset(owner_ivar),&b,sizeof b);memcpy((char*)element+ivar_getOffset(id_ivar),&node->id,sizeof node->id);
    send1(children,"addObject:",element);send0(element,"release");
   } else send1(children,"addObject:",element);
@@ -254,6 +256,7 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
 void ps_a11y_native_destroy(ps_a11y_native *b) {
  if(!b)return;
  SDL_LockMutex(b->mutex);b->model=NULL;SDL_UnlockMutex(b->mutex);
+ if(b->links_probe){send0(b->links_probe,"release");b->links_probe=nil;}
  for(size_t i=0;i<b->count;i++) {
   id element=((id(*)(id,SEL,unsigned long))objc_msgSend)(b->children,sel_registerName("objectAtIndex:"),(unsigned long)i);
   send1(element,"setAccessibilityParent:",nil);
@@ -299,6 +302,7 @@ bool ps_a11y_native_press_choice(ps_a11y_native *b,const char *group,const char 
 }
 #include "accessibility_macos_text_tests.inc"
 #include "accessibility_macos_edit_tests.inc"
+#include "accessibility_macos_links_tests.inc"
 bool ps_a11y_native_test(SDL_Window *window) {
  ps_a11y_model *model=malloc(sizeof *model);SDL_Mutex *mutex=SDL_CreateMutex();
  if(!model || !mutex){free(model);if(mutex)SDL_DestroyMutex(mutex);return false;}
@@ -395,7 +399,7 @@ bool ps_a11y_native_test(SDL_Window *window) {
  okay &= !((BOOL(*)(id,SEL))objc_msgSend)(radio,sel_registerName("accessibilityPerformPress"));
  okay &= !((BOOL(*)(id,SEL))objc_msgSend)(slider,sel_registerName("accessibilityPerformIncrement"));
  send0(slider,"release");send0(radio,"release");send0(checkbox,"release");send0(element,"release");free(model);
- return mac_document_test(window) && mac_edit_test(window) && okay;
+ return mac_document_test(window) && mac_edit_test(window) && mac_links_test(window) && okay;
 }
 #elif !defined(__linux__)
 struct ps_a11y_native {int unused;};
@@ -407,7 +411,7 @@ bool ps_a11y_native_press_label(ps_a11y_native *bridge,const char *label) {(void
 bool ps_a11y_native_press_choice(ps_a11y_native *bridge,const char *group,const char *label) {(void)bridge;(void)group;(void)label;return false;}
 bool ps_a11y_native_focus_label(ps_a11y_native *bridge,const char *group,const char *label) {(void)bridge;(void)group;(void)label;return false;}
 #endif
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(__APPLE__)
 bool ps_a11y_native_document_link_invoked(ps_a11y_native *bridge,uint64_t version,size_t begin,size_t end) {
  (void)bridge;(void)version;(void)begin;(void)end;return false;
 }
@@ -415,4 +419,5 @@ bool ps_a11y_native_document_link_invoked(ps_a11y_native *bridge,uint64_t versio
 #ifndef __APPLE__
 bool ps_a11y_native_document_read_test(ps_a11y_native *bridge){(void)bridge;return false;}
 bool ps_a11y_native_edit_test_step(ps_a11y_native *bridge,int step){(void)bridge;(void)step;return false;}
+bool ps_a11y_native_links_test_step(ps_a11y_native *bridge,int step){(void)bridge;(void)step;return false;}
 #endif

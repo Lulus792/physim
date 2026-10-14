@@ -901,6 +901,37 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
         if(!ok){fprintf(stderr,"Native lifecycle stage %d failed\n",*stage-1);*code=1;a->quitting=true;}
         if(a->quitting)printf("DOCUMENTATION LIFECYCLE SELF-TEST: %s\n",*code?"FAILED":"PASSED");return;
     }
+    if(!strcmp(mode,"docs-keyboard-links-native")) {
+        static int experiment_length,analysis_length,source_topic;static uint64_t source_version;
+        static double simulation_time;static unsigned settle;bool ok=true;
+        switch(*stage) {
+        case 0:
+            experiment_length=a->experiment.string.len;analysis_length=a->analysis.string.len;simulation_time=a->simulation_time;
+            test_window_key_mod(a->window,SDLK_F1,0);++*stage;break;
+        case 1:
+            ok=documentation_link_inventory(a) && documentation_inline_fixture_variant(a,a->doc_topic,true);
+            source_topic=a->doc_topic;source_version=a->doc_reading_version;SDL_SetWindowSize(a->doc_window,760,540);++*stage;break;
+        case 2:ok=nk_sdl_accessibility_native_links_test_step(a->doc_ui,0);settle=0;++*stage;break;
+        case 3:
+            if(settle++<2)return;ok=nk_sdl_accessibility_native_links_test_step(a->doc_ui,1);
+            *capture="docs-macos-link-focus.bmp";++*stage;break;
+        case 4:ok=nk_sdl_accessibility_native_links_test_step(a->doc_ui,2);settle=0;++*stage;break;
+        case 5:
+            if(settle++<2)return;
+            ok=a->doc_topic==source_topic && a->doc_reading_version==source_version && strstr(a->doc_error,"nicht in der mitgelieferten") && nk_sdl_accessibility_native_links_test_step(a->doc_ui,3);
+            *capture="docs-macos-link-failed.bmp";++*stage;break;
+        case 6:ok=nk_sdl_accessibility_native_links_test_step(a->doc_ui,4);settle=0;++*stage;break;
+        case 7:
+            if(settle++<2)return;
+            ok=!strcmp(documentation_topics[a->doc_topic].path,"docs/c-guide.md") && !a->doc_error[0] && nk_sdl_accessibility_native_links_test_step(a->doc_ui,5);
+            *capture="docs-macos-link-open.bmp";test_window_key_mod(a->doc_window,SDLK_ESCAPE,0);++*stage;break;
+        case 8:
+            ok=!a->doc_visible && a->experiment.string.len==experiment_length && a->analysis.string.len==analysis_length && a->simulation_time==simulation_time;
+            a->quitting=true;if(ok)puts("MAC F1 LINKS: native attributed text, URL, focused glyphs, failed target feedback, completed activation, stale reference and editor isolation passed");break;
+        }
+        if(!ok){fprintf(stderr,"Native macOS links stage %d failed\n",*stage-1);*code=1;a->quitting=true;}
+        if(a->quitting)printf("DOCUMENTATION LINKS SELF-TEST: %s\n",*code?"FAILED":"PASSED");return;
+    }
     if(!strcmp(mode,"docs-keyboard-links-remote")) {
         static int experiment_length,analysis_length,source_topic;static double simulation_time;static uint64_t source_version;bool ok=true;
         char path[4096];FILE *done;switch(*stage) {

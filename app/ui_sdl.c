@@ -277,6 +277,10 @@ bool nk_sdl_accessibility_native_edit_test_step(struct nk_context *ctx,int step)
  if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;
  return ps_a11y_native_edit_test_step(sdl->accessibility_native,step);
 }
+bool nk_sdl_accessibility_native_links_test_step(struct nk_context *ctx,int step) {
+ if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;
+ return ps_a11y_native_links_test_step(sdl->accessibility_native,step);
+}
 bool nk_sdl_accessibility_document_link_target(struct nk_context *ctx,const char *name,const char *target,uint64_t version,
                                         size_t begin,size_t end,struct nk_rect bounds) {
  if(!ctx || !ctx->userdata.ptr || !ctx->current || !ctx->current->layout)return false;

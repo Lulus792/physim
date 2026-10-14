@@ -112,7 +112,7 @@ def main():
                      *(f"language_{mode}_workflow" for mode in display_checker.LANGUAGE_MODES)}
     # AppKit-only workflow wrappers exist on every host, but their integration
     # entries must be selected only when an actual Darwin runtime is available.
-    macos_display = {"accessibility_document_macos", "accessibility_edit_macos"}
+    macos_display = {"accessibility_document_macos", "accessibility_edit_macos", "accessibility_links_macos"}
     assert macos_display <= display_names
     if sys.platform != "darwin":
         display_names -= macos_display

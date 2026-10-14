@@ -17,7 +17,7 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 | Dokumentationszugang | 183 registrierte Seiten und 214 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
 | Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
-| Barrierefreiheit | Windows UIA und Linux AT-SPI ergänzen Lesetext, Suchfelder und interne Linkbereiche; macOS liefert vollständigen AppKit-Lesetext und native Suchfelder mit UTF-16-Bereichen und Zeichenrahmen; die jeweiligen Client-/Laufzeitprüfungen bestehen | Native Linktextbereiche auf macOS, Tabellensemantik, externe macOS-AX-Clientprüfung und echte Screenreader-Aufgaben |
+| Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche mit den jeweils dokumentierten Laufzeit- und Bildnachweisen | Tabellensemantik, externe macOS-AX-Clientprüfung, echte Screenreader-Aufgaben und die unten beschriebene sporadische Windows-Linkprüfung |
 
 Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
 Bewertung mit Höchstpunktzahl ist wegen dieser offenen Abnahmefälle noch nicht
@@ -387,6 +387,77 @@ Die finale Linux-Kontrastaufnahme wurde unmittelbar geprüft; alle drei
 Titelzeilen liegen im sichtbaren Fokusrahmen. Die Ubuntu-Nachprüfung dieser
 Korrektur steht noch aus. Praktische Screenreader-, macOS- und echte
 DPI-/Monitorwechsel-Abnahme werden durch diese Reflow-Korrektur nicht behauptet.
+
+### Native macOS-Linkattribute, Ziele und Aktivierung
+
+Die Erweiterung auf Quellrevision `589d7d4` verbindet interne F1-Linkbereiche
+mit nativen AppKit-Linkobjekten. Verwendet wurden die zentralen macOS-,
+Accessibility- und Test-Skills unter `D:/Skills/skills`. Der native
+`NSAccessibilityLinkTextAttribute` verweist innerhalb des attributierten
+Lesetextes auf denselben Link, der als Kind des Dokuments erreichbar ist.
+Grundlage ist Apples [Linktextattribut](https://developer.apple.com/documentation/appkit/nsaccessibilitylinktextattribute).
+Die Nativelemente liefern den vollständigen Beschriftungstext, relative URLs,
+geteilte UTF-16-Textbereiche und sichtbare Glyphenrahmen. Die Kinder folgen
+der Textreihenfolge; Dokumentlinks erscheinen nicht doppelt als Wurzelelemente.
+
+Die tatsächliche AppKit-Gegenprobe prüft `θ🌍` als drei UTF-16-Einheiten,
+Teilbereiche, unverlinkten Text, Surrogat-Innenpositionen, umgekehrte
+Registrierungsreihenfolge und eine Beschriftung mit 1.536 Zeichen außerhalb
+des begrenzten Controllabels. Offscreen-Fokus, sichtbare Zeichenrahmen,
+Verbergen, Deaktivierung, Versionswechsel und gehaltene Referenzen nach
+Zerstörung werden mit echten AppKit-Objekten geprüft.
+
+Die reale F1-Probe liest Linkattribute, URL und Dokumentzugehörigkeit, fokussiert
+einen Tabellenlink, aktiviert ein absichtlich ungültiges Ziel und navigiert
+anschließend erfolgreich zum C-Lernweg. Die normale UI-Navigation bestätigt
+nur die abgeschlossene gültige Aktion; nach dem Wechsel bleibt die gehaltene
+alte Linkreferenz ungültig. Editorinhalt und Simulationszeit bleiben unverändert.
+Die Linkinventur prüft **183 Seiten, 1.060 interne Links und höchstens 119 Links
+pro Seite** mit Platz für die weiteren Controls.
+
+Der [tatsächlich abgeschlossene macOS-Lauf](https://github.com/Lulus792/physim/actions/runs/38637540938)
+auf `589d7d4` besteht mit LLVM 20 ASan/UBSan und SDL 3.2.30 unter Darwin 24.6.0:
+
+- Intel: **4/4** Modellfälle in `run-hg_7_ct1`, **7/7** GUI-/AppKit-Fälle
+  in `run-_f0uc4wt`; Job `116104427088`.
+- ARM64: **4/4** Modellfälle in `run-wwabg475`, **7/7** GUI-/AppKit-Fälle
+  in `run-ei3673d3`; Job `116104427496`.
+- Beide vollständigen Joblogs und Originalarchive wurden gelesen. Auf beiden
+  Architekturen wurden alle drei tatsächlichen Bilder für Fokus, fehlerhaftes
+  Ziel und geöffnete Seite unmittelbar geprüft. Archive und Bildkonvertierungen
+  liegen unter `build/native/F1-review/mac-links-intel.zip`, `mac-links-arm.zip`
+  und den entsprechenden `-images`-Verzeichnissen.
+
+Lokale Nachbarn, jeweils mit den ursprünglichen Prüfkriterien:
+
+- MSVC ASan besteht die drei Modellfälle in `run-qmpteyi7`. Der GUI-Lauf
+  `run-gvp32iph` besteht **2/3** Fälle: gezeichnete Accessibility und Navigation;
+  der Windows-Linkclient erreicht seinen Bereitschaftsmarker innerhalb seiner
+  20 Sekunden nicht. Seine leeren App-Ausgänge bleiben als Originalbeleg erhalten.
+- Derselbe unveränderte Windows-Build besteht den vollständigen unabhängigen
+  Linkclient separat in `build/native/mac-links-windows-isolated`. Der nächste
+  Kataloglauf `run-w03vm1w3` scheitert jedoch innerhalb der Linkprüfung mit
+  `E_FAIL`. Die beobachteten Ereignisse lauten zwei Geometrieänderungen und eine
+  Sichtbarkeitsänderung; vor diesem Fehler fehlen Disable-/Enable-Ereignisse.
+  Aus diesen Daten allein lässt sich der genaue fehlgeschlagene Schritt nicht
+  bestimmen. Eine Ursache oder Fehlerbehebung wird nicht behauptet.
+- Der Windows-Prüfer nennt jetzt den konkreten Prüfabschnitt und bei einem
+  Fokus-Timeout die beobachteten Fokus-/Sichtbarkeitswerte. Werte, Zeitgrenzen
+  und sämtliche Erfolgskriterien sind erhalten. Danach bestehen die vollständigen
+  Linkläufe `run-7vf1hwvt` und `run-j8cygacu` jeweils **1/1**. Diese erfolgreichen
+  Wiederholungen beseitigen die offene Sporadik nicht rückwirkend.
+- Alpine 3.24.2 / GCC 15.2 / X11 mit Openbox und ASan/UBSan besteht **3/3**
+  Modellfälle in `run-b8gex1n2` sowie **3/3** GUI-Fälle in `run-jsqoxafn`:
+  Navigation und die unabhängigen AT-SPI-Feld- und Linkclients.
+- Die Plattform-Katalog- und Fehlergegenproben bestehen unter Windows und in
+  beiden ausgeführten macOS-Jobs. Spätere Windows-Diagnose- und
+  Berichtergänzungen ändern die geprüfte macOS-Implementierung nicht.
+
+Diese Nachweise schließen den bisher offenen nativen macOS-Linktextzugang.
+Sie ersetzen keine externe AX- oder praktische VoiceOver-Abnahme. Semantische
+Tabellen, praktische Screenreader-Aufgaben, vollständige Display-/Theme-Matrix,
+Inhaltsabgleich und die Untersuchung der sporadischen Windows-Linkprobe bleiben
+offen. Die Gesamtaufgabe erhält weiterhin keine 10/10.
 
 ### Native macOS-Suchfelder mit Auswahl und Caret
 

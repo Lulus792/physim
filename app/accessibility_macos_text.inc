@@ -1,6 +1,10 @@
 typedef struct {unsigned long location,length;} ax_range;
 #define AX_NOT_FOUND ((unsigned long)LONG_MAX)
 #define AX_RANGE "{_NSRange=QQ}"
+static id document_link_children(id object,bool visible);
+static id document_visible_links(id object,SEL selector);
+static id document_link_attributed(id object,ax_range range);
+static void document_link_publish_locked(ps_a11y_native *b,id roots);
 /* Each document has its own element generation. Numeric control IDs never
  * participate in document lookup, and held elements remain defunct after removal. */
 static const ps_a11y_document *document_live_locked(id object,ps_a11y_native *b) {
@@ -38,7 +42,8 @@ static id document_parent(id object,SEL selector) {
  SDL_LockMutex(b->mutex);id view=document_live_locked(object,b)?send0(b->view,"retain"):nil;SDL_UnlockMutex(b->mutex);
  return view?send0(view,"autorelease"):nil;
 }
-static id document_children(id object,SEL selector){(void)object;(void)selector;return send0((id)objc_getClass("NSArray"),"array");}
+static id document_children(id object,SEL selector){(void)selector;return document_link_children(object,false);}
+static id document_empty_children(id object,SEL selector){(void)object;(void)selector;return send0((id)objc_getClass("NSArray"),"array");}
 static BOOL document_no_action(id object,SEL selector){(void)object;(void)selector;return NO;}
 static void document_no_value(id object,SEL selector,id value){(void)object;(void)selector;(void)value;}
 static void document_no_focus(id object,SEL selector,BOOL value){(void)object;(void)selector;(void)value;}
@@ -61,9 +66,7 @@ static id document_string_range(id object,SEL selector,ax_range range) {
  SDL_UnlockMutex(b->mutex);return result;
 }
 static id document_attributed_range(id object,SEL selector,ax_range range) {
- id value=document_string_range(object,selector,range);if(!value)return nil;
- id result=((id(*)(id,SEL,id))objc_msgSend)(send0((id)objc_getClass("NSAttributedString"),"alloc"),sel_registerName("initWithString:"),value);
- return send0(result,"autorelease");
+ (void)selector;return document_link_attributed(object,range);
 }
 static ax_range document_selected_range(id object,SEL selector){(void)object;(void)selector;return (ax_range){AX_NOT_FOUND,0};}
 static ax_range document_visible_range(id object,SEL selector) {
@@ -135,7 +138,8 @@ static bool make_document_class(void) {
  class_addMethod(document_class,sel_registerName("accessibilityIdentifier"),(IMP)document_identifier,"@@:");
  class_addMethod(document_class,sel_registerName("accessibilityParent"),(IMP)document_parent,"@@:");
  class_addMethod(document_class,sel_registerName("accessibilityChildren"),(IMP)document_children,"@@:");
- class_addMethod(document_class,sel_registerName("accessibilitySelectedChildren"),(IMP)document_children,"@@:");
+ class_addMethod(document_class,sel_registerName("accessibilitySelectedChildren"),(IMP)document_empty_children,"@@:");
+ class_addMethod(document_class,sel_registerName("accessibilityVisibleChildren"),(IMP)document_visible_links,"@@:");
  class_addMethod(document_class,sel_registerName("isAccessibilityFocused"),(IMP)document_no_action,PS_AX_BOOL "@:");
  class_addMethod(document_class,sel_registerName("setAccessibilityFocused:"),(IMP)document_no_focus,"v@:" PS_AX_BOOL);
  class_addMethod(document_class,sel_registerName("setAccessibilityValue:"),(IMP)document_no_value,"v@:@");
@@ -170,6 +174,7 @@ static bool document_publish_locked(ps_a11y_native *b,id roots) {
   memcpy((char*)b->document+ivar_getOffset(id_ivar),&b->document_identity,sizeof b->document_identity);
  }
  send1(b->document,"setAccessibilityParent:",b->view);send1(roots,"addObject:",b->document);
+ document_link_publish_locked(b,roots);
  int height;SDL_GetWindowSize(b->window,NULL,&height);BOOL flipped=((BOOL(*)(id,SEL))objc_msgSend)(b->view,sel_registerName("isFlipped"));
  CGRect frame=CGRectMake(d->viewport[0],flipped?d->viewport[1]:height-d->viewport[1]-d->viewport[3],d->viewport[2],d->viewport[3]);
  ((void(*)(id,SEL,CGRect))objc_msgSend)(b->document,sel_registerName("setAccessibilityFrameInParentSpace:"),frame);

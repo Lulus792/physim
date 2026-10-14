@@ -72,6 +72,16 @@ Kapazitätsüberschreitungen werden verworfen. Verborgene und deaktivierte Felde
 nehmen keine Schreibaufträge an; entfernte oder zerstörte Referenzen bleiben
 ungültig. Die jeweils ausgeführten Prüfungen stehen in der F1-Abnahmeentscheidung.
 
+Interne F1-Links sind außerdem mit ihren UTF-16-Bereichen im nativen Lesetext
+verbunden. AppKit liefert die zugehörigen Linkobjekte, ihren vollständigen
+Beschriftungstext, das relative Dokumentziel und sichtbare Glyphenrahmen. Die
+Linkliste folgt der Textreihenfolge und enthält auch Ziele außerhalb des
+aktuellen Ausschnitts. Native Fokussierung macht den Textbereich sichtbar;
+Aktivierung läuft durch die normale F1-Navigation. Ein ungültiges Ziel zeigt
+die Fehlermeldung in der Hilfe. Verborgene und deaktivierte Links nehmen keine
+Aktionen an; nach einem Seitenwechsel bleiben gehaltene alte Linkreferenzen
+ungültig. Das Kopieren externer Quellenadressen bleibt der dokumentierte Ablauf.
+
 Weitere Textfelder, Editoren, Menüs, Dropdowns, weitere Regler, Szenen, Diagramme und
 Fokusführung für weitere Widgettypen benötigen zusätzliche semantische Anbindungen.
 Die bestehende Sichtbarkeits-/Deaktivierungslogik wird berücksichtigt, sodass
