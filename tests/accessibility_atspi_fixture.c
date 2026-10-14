@@ -11,6 +11,7 @@ typedef struct {
     unsigned presses,toggles,options[2];
     float scalar;
     unsigned document_state;uint64_t document_version;
+    bool edit_visible,edit_disabled;char edit_value[128];
 } fixture_window;
 static bool fallback;
 static bool create(fixture_window *f, const char *title) {
@@ -72,6 +73,12 @@ static bool draw(fixture_window *f, char name) {
                 printf("PRESS %c %u\n", name, f->presses);
                 fflush(stdout);
             }
+        }
+        if(f->edit_visible && f->visible) {
+            nk_layout_row_dynamic(f->ui,24,1);
+            if(f->edit_disabled)nk_widget_disable_begin(f->ui);
+            nk_sdl_edit_named(f->ui,"Suchfeld θ",NK_EDIT_FIELD,f->edit_value,sizeof f->edit_value,nk_filter_default);
+            if(f->edit_disabled)nk_widget_disable_end(f->ui);
         }
         if(f->document_state) {
             const char *source=f->document_state==1?"A θ🌍 é. Next!\nLast\n":"Neu β😀\n";
@@ -160,6 +167,10 @@ int main(int argc, char **argv) {
                 close_window(&b);
             if(command=='d' || command=='u'){a.document_state=command=='d'?1:2;++a.document_version;}
             if(command=='x')a.document_state=0;
+            if(command=='f'){a.edit_visible=b.edit_visible=true;}
+            if(command=='j')a.edit_disabled=true;
+            if(command=='l')a.edit_disabled=false;
+            if(command=='z')a.edit_visible=false;
         }
         if (!draw(&a, 'A') || !draw(&b, 'B'))
             goto done;

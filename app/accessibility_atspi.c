@@ -30,6 +30,7 @@ struct ps_a11y_native {
     ps_a11y_node previous_document;
     uint64_t document_identity;
     char *previous_document_text;size_t previous_character_count;uint64_t previous_text_version;
+    unsigned clipboard_action;uint64_t clipboard_id,clipboard_version;size_t clipboard_begin,clipboard_end;
 };
 struct ax_server {
     DBusConnection *connection;
@@ -186,10 +187,12 @@ static bool find_object(ax_server *s, const char *path, ps_a11y_native **window,
 }
 static unsigned role(ps_a11y_native *w, const ps_a11y_node *node) {
     if(node->role==AX_DOCUMENT_ROLE)return 94;
+    if(node->role==PS_A11Y_EDIT)return 79;
     return !w ? 75 : !node->id ? 23 : node->role == PS_A11Y_LINK ? 88 : node->role == PS_A11Y_BUTTON ? 43 : node->role == PS_A11Y_CHECKBOX ? 7 : node->role == PS_A11Y_RADIO ? 44 : node->role == PS_A11Y_RADIO_GROUP ? 99 : node->role == PS_A11Y_SLIDER ? 51 : 29;
 }
 static const char *role_name(unsigned r, bool localized) {
     switch (r) {
+    case 79:return localized ? "Eingabefeld" : "entry";
     case 94:return localized ? "Textdokument" : "document text";
     case 88:return localized ? "Link" : "link";
     case 51:return localized ? "Regler" : "slider";
@@ -225,10 +228,13 @@ static void states(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
      * visible=30, checkable=41.
      * Focus is published only after the UI frame owns keyboard input. */
     unsigned first = 0;
-    if (!node->id || node->enabled)
+    bool available=!w || w->visible;
+    if(w){SDL_LockMutex(w->mutex);available=available && !w->model->suspended;SDL_UnlockMutex(w->mutex);}
+    if(available && (!node->id || node->enabled))
         first |= (1u << 8) | (1u << 24);
     if(node->focusable)first |= 1u << 11;
-    if(node->focused)first |= 1u << 12;
+    if(available && node->focused)first |= 1u << 12;
+    if(node->role==PS_A11Y_EDIT){first|=1u<<26;if(available && node->enabled)first|=1u<<7;}
     if(node->role==PS_A11Y_SLIDER && node->enabled)first |= 1u << 7;
     if (!w || w->visible)
         first |= (node->offscreen?0:(1u << 25)) | (1u << 30);
@@ -236,7 +242,9 @@ static void states(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
     DBusMessageIter a;
     open_container(r, iter, DBUS_TYPE_ARRAY, "u", &a);
     unsigned_number(r, &a, first);
-    unsigned_number(r, &a, (node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) ? 1u << (41-32) : 0);
+    unsigned second=(node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO)?1u<<(41-32):0;
+    if(node->role==PS_A11Y_EDIT)second|=1u<<(38-32);
+    unsigned_number(r,&a,second);
     close_container(r, iter, &a);
 }
 static void interfaces(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
@@ -251,7 +259,8 @@ static void interfaces(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
     if (node->id && ps_a11y_actionable(node->role))
         text(r, &a, AX_PREFIX "Action");
     if(node->id && node->role==PS_A11Y_SLIDER)text(r,&a,AX_PREFIX "Value");
-    if(node->role==AX_DOCUMENT_ROLE)text(r,&a,AX_PREFIX "Text");
+    if(node->role==AX_DOCUMENT_ROLE || node->role==PS_A11Y_EDIT)text(r,&a,AX_PREFIX "Text");
+    if(node->role==PS_A11Y_EDIT)text(r,&a,AX_PREFIX "EditableText");
     close_container(r, iter, &a);
 }
 static void parent_reference(ax_reply *r, DBusMessageIter *iter, ax_server *s, ps_a11y_native *w,
@@ -350,6 +359,16 @@ static void event_document_name(ax_server *s,const char *path,const char *name) 
     if(r.okay)dbus_connection_send(s->connection,r.message,NULL);
     dbus_message_unref(r.message);
 }
+static void event_text_position(ax_server *s,const char *path,const char *kind,int offset) {
+    ax_reply r={.message=dbus_message_new_signal(path,AX_PREFIX "Event.Object",kind),.okay=true};
+    if(!r.message)return;
+    dbus_message_iter_init_append(r.message,&r.root);text(&r,&r.root,"");
+    number(&r,&r.root,offset);number(&r,&r.root,0);
+    DBusMessageIter value;open_container(&r,&r.root,DBUS_TYPE_VARIANT,"i",&value);
+    number(&r,&value,0);close_container(&r,&r.root,&value);empty_properties(&r,&r.root);
+    if(r.okay)dbus_connection_send(s->connection,r.message,NULL);
+    dbus_message_unref(r.message);
+}
 static DBusHandlerResult error_reply(DBusConnection *connection, DBusMessage *message,
                                      const char *name, const char *detail) {
     DBusMessage *reply = dbus_message_new_error(message, name, detail);
@@ -391,7 +410,12 @@ static void property_value(ax_reply *r, DBusMessageIter *iter, ax_server *s, ps_
                            const ps_a11y_node *node, const char *iface, const char *name) {
     if(!strcmp(iface,AX_PREFIX "Text") && strcmp(name,"version")) {
         SDL_LockMutex(w->mutex);
-        if(!document_index(w))r->okay=false;
+        if(node->role==PS_A11Y_EDIT) {
+            const ps_a11y_node *live=ps_a11y_find(w->model,node->id);ps_a11y_text_index index={0};int caret=-1;
+            if(!live || !ps_a11y_text_index_build(&index,live->text_value,strlen(live->text_value),live->text_version))r->okay=false;
+            else {ps_a11y_text_byte_offset(&index,live->text_caret,&caret);number(r,iter,!strcmp(name,"CaretOffset")?caret:(int)index.count);}
+            ps_a11y_text_index_clear(&index);
+        } else if(!document_index(w))r->okay=false;
         else number(r,iter,!strcmp(name,"CaretOffset")?-1:(int)w->document_index.count);
         SDL_UnlockMutex(w->mutex);return;
     }
@@ -453,7 +477,8 @@ static bool interface_supported(ps_a11y_native *w, const ps_a11y_node *node, con
     if (!strcmp(iface, AX_PREFIX "Action"))
         return node->id && ps_a11y_actionable(node->role);
     if(!strcmp(iface,AX_PREFIX "Value"))return node->id && node->role==PS_A11Y_SLIDER;
-    if(!strcmp(iface,AX_PREFIX "Text"))return node->role==AX_DOCUMENT_ROLE;
+    if(!strcmp(iface,AX_PREFIX "Text"))return node->role==AX_DOCUMENT_ROLE || node->role==PS_A11Y_EDIT;
+    if(!strcmp(iface,AX_PREFIX "EditableText"))return node->role==PS_A11Y_EDIT;
     return false;
 }
 static bool bounds(ps_a11y_native *w, const ps_a11y_node *node, unsigned coordinate, int out[4]) {
@@ -626,7 +651,7 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
         dbus_message_has_signature(message, "")) {
         char xml[16384];
         int length = snprintf(
-            xml, sizeof xml, "<node>%s%s%s%s%s%s%s</node>",
+            xml, sizeof xml, "<node>%s%s%s%s%s%s%s%s</node>",
             cache ? "<interface name='org.a11y.atspi.Cache'><property name='version' type='u' "
                     "access='read'/><method name='GetItems'><arg type='a((so)(so)(so)iiassusau)' "
                     "direction='out'/></method></interface>"
@@ -636,7 +661,8 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
                   : component_xml,
             cache || !node.id || !ps_a11y_actionable(node.role) ? "" : action_xml,
             cache || !node.id || node.role!=PS_A11Y_SLIDER ? "" : value_xml,
-            !cache && node.role==AX_DOCUMENT_ROLE?text_xml:"",properties_xml,
+            !cache && (node.role==AX_DOCUMENT_ROLE || node.role==PS_A11Y_EDIT)?text_xml:"",
+            !cache && node.role==PS_A11Y_EDIT?editable_text_xml:"",properties_xml,
             "<interface name='org.freedesktop.DBus.Introspectable'><method name='Introspect'><arg "
             "type='s' direction='out'/></method></interface>");
         if (length < 0 || (size_t)length >= sizeof xml)
@@ -705,6 +731,7 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
                                  : !strcmp(property_iface, AX_PREFIX "Component") ? component
                                  : !strcmp(property_iface, AX_PREFIX "Value") ? scalar
                                  : !strcmp(property_iface, AX_PREFIX "Text") ? reading
+                                 : !strcmp(property_iface, AX_PREFIX "EditableText") ? component
                                                                                   : accessible;
             if (cache && !strcmp(property_iface, AX_PREFIX "Cache")) {
                 DBusMessageIter array, entry, value;
@@ -811,8 +838,10 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             close_container(&r, &r.root, &array);
         } else
             failure = DBUS_ERROR_UNKNOWN_METHOD;
-    } else if(!cache && w && node.role==AX_DOCUMENT_ROLE && !strcmp(iface,AX_PREFIX "Text")) {
-        failure=document_text_method(w,message,method,&r);
+    } else if(!cache && w && (node.role==AX_DOCUMENT_ROLE || node.role==PS_A11Y_EDIT) && !strcmp(iface,AX_PREFIX "Text")) {
+        failure=native_text_method(w,&node,message,method,&r);
+    } else if(!cache && w && node.role==PS_A11Y_EDIT && !strcmp(iface,AX_PREFIX "EditableText")) {
+        failure=editable_text_method(w,&node,message,method,&r);
     } else if (!cache && !w && !strcmp(iface, AX_PREFIX "Application")) {
         if (!strcmp(method, "GetLocale") && dbus_message_has_signature(message, "u"))
             text(&r, &r.root, "de_DE.UTF-8");
@@ -1145,6 +1174,7 @@ void ps_a11y_native_publish(ps_a11y_native *b, bool changed) {
     bool old_visible = b->visible;
     int old_x = b->x, old_y = b->y, old_width = b->width, old_height = b->height;
     update_window(b);
+    clipboard_deliver(b);
     bool moved = old_x != b->x || old_y != b->y || old_width != b->width || old_height != b->height;
     SDL_LockMutex(b->mutex);
     uint64_t text_version=b->model->document && b->model->document->active?b->model->document->version:0;
@@ -1233,6 +1263,21 @@ void ps_a11y_native_publish(ps_a11y_native *b, bool changed) {
             if(old && (node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) && old->checked!=node->checked)
                 event_state(s,node_path,"checked",node->checked);
             if(old && node->role==PS_A11Y_SLIDER && old->value!=node->value)event_value(s,node_path,node->value);
+            if(old && node->role==PS_A11Y_EDIT) {
+                ps_a11y_text_index prior={0},current={0};
+                bool indexed=ps_a11y_text_index_build(&current,node->text_value,strlen(node->text_value),node->text_version);
+                if(indexed && strcmp(old->text_value,node->text_value) &&
+                   ps_a11y_text_index_build(&prior,old->text_value,strlen(old->text_value),old->text_version)) {
+                    event_document_text(s,node_path,"delete",&prior);event_document_text(s,node_path,"insert",&current);
+                }
+                if(old->text_start!=node->text_start || old->text_end!=node->text_end)
+                    event_text_position(s,node_path,"TextSelectionChanged",0);
+                if(indexed && old->text_caret!=node->text_caret) {
+                    int caret;if(ps_a11y_text_byte_offset(&current,node->text_caret,&caret))
+                        event_text_position(s,node_path,"TextCaretMoved",caret);
+                }
+                ps_a11y_text_index_clear(&prior);ps_a11y_text_index_clear(&current);
+            }
             if (moved || (old && memcmp(old->bounds, node->bounds, sizeof node->bounds)))
                 event_bounds(s, node_path, b, node);
             if (old_visible != b->visible) {

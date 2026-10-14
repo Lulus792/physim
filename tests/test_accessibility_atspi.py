@@ -227,6 +227,58 @@ try:
     except dbus.exceptions.DBusException as error:
         assert error.get_dbus_name()=='org.a11y.atspi.Error.Defunct'
     document=reader.queryText()
+    process.stdin.write(b'f');process.stdin.flush()
+    entry=wait(lambda:named(wa,'Suchfeld θ'),'first native entry')
+    entry_b=wait(lambda:named(wb,'Suchfeld θ'),'independent native entry')
+    assert entry.getRole()==pyatspi.ROLE_ENTRY and entry.getState().contains(pyatspi.STATE_EDITABLE)
+    editable=entry.queryEditableText();edit_text=entry.queryText()
+    assert editable.setTextContents('A θ🌍 B')
+    wait(lambda:edit_text.getText(0,-1)=='A θ🌍 B','entry value delivery')
+    assert entry_b.queryText().getText(0,-1)=='' and edit_text.characterCount==6
+    assert edit_text.addSelection(2,4)
+    wait(lambda:edit_text.getNSelections()==1 and tuple(edit_text.getSelection(0))==(2,4),'native scalar selection')
+    assert edit_text.caretOffset==4
+    assert edit_text.removeSelection(0)
+    wait(lambda:edit_text.getNSelections()==0,'selection removal')
+    assert edit_text.setCaretOffset(2)
+    wait(lambda:edit_text.caretOffset==2,'scalar caret movement')
+    assert editable.insertText(2,'β',len('β'.encode('utf-8')))
+    wait(lambda:edit_text.getText(0,-1)=='A βθ🌍 B','UTF-8 insertion at a scalar position')
+    assert editable.deleteText(2,3)
+    wait(lambda:edit_text.getText(0,-1)=='A θ🌍 B','scalar deletion')
+    edit_cache=dbus.Interface(raw_bus.get_object(provider,'/org/a11y/atspi/cache'),'org.a11y.atspi.Cache').GetItems()
+    entry_path=next(str(item[0][1]) for item in edit_cache if str(item[6])=='Suchfeld θ' and tuple(item[2])==tuple(
+        next(item[0] for item in edit_cache if str(item[6])=='Physim AT-SPI A')))
+    edit_proxy=dbus.Interface(raw_bus.get_object(provider,entry_path),'org.a11y.atspi.EditableText')
+    text_proxy_edit=dbus.Interface(raw_bus.get_object(provider,entry_path),'org.a11y.atspi.Text')
+    assert text_proxy_edit.ScrollSubstringTo(dbus.Int32(2),dbus.Int32(2),dbus.UInt32(6))
+    edit_proxy.CopyText(dbus.Int32(2),dbus.Int32(4))
+    wait(lambda:editable.pasteText(6),'copy delivered before accepting paste')
+    wait(lambda:edit_text.getText(0,-1)=='A θ🌍 Bθ🌍','UI-thread clipboard copy/paste')
+    assert editable.cutText(6,8)
+    wait(lambda:edit_text.getText(0,-1)=='A θ🌍 B','UI-thread clipboard cut')
+    assert editable.pasteText(0)
+    wait(lambda:edit_text.getText(0,-1)=='θ🌍A θ🌍 B','cut content preserved in clipboard')
+    assert not editable.setTextContents('x'*128)
+    for method,signature,arguments in [
+        ('InsertText','isi',(dbus.Int32(0),dbus.String('🌍'),dbus.Int32(1))),
+        ('DeleteText','ii',(dbus.Int32(3),dbus.Int32(2))),
+    ]:
+        try:
+            raw_bus.call_blocking(provider,entry_path,'org.a11y.atspi.EditableText',method,signature,arguments,timeout=5)
+            raise AssertionError('invalid editable RPC accepted')
+        except dbus.exceptions.DBusException as error:
+            assert error.get_dbus_name()=='org.freedesktop.DBus.Error.InvalidArgs'
+    process.stdin.write(b'j');process.stdin.flush()
+    wait(lambda:not enabled(entry),'disabled entry')
+    assert not editable.setTextContents('blocked') and not edit_text.setCaretOffset(0)
+    process.stdin.write(b'l');process.stdin.flush();wait(lambda:enabled(entry),'reenabled entry')
+    process.stdin.write(b'z');process.stdin.flush();wait(lambda:named(wa,'Suchfeld θ') is None,'removed entry')
+    try:
+        editable.setTextContents('stale')
+        raise AssertionError('removed entry accepted a write')
+    except GLib.Error:
+        pass
     proxy = raw_bus.get_object(provider, object_path)
     for iface, method, signature, args, expected in [
         (
@@ -485,6 +537,7 @@ try:
     wait(lambda: app.childCount == 1, "window unregister notification")
     assert "PRESS A 2" not in (a.work / "fixture.stdout").read_text()
     checks = [
+        "entry/Text/EditableText roles, two independent values, scalar caret/selection, byte-count insertion, deletion, clipboard UI delivery and invalid/disabled/removed write rejection",
         "document role and full Unicode text, scalar offsets/ranges, native glyph geometry and reveal, read-only caret/selection, text/name events, removed/replacement identities and invalid RPC rejection",
         "checkbox role, actual two-way toggle, checked events and independent windows",
         "slider role, finite bounds/increment/current value, actual value delivery and notification, independent windows and invalid/disabled requests",

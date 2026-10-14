@@ -17,9 +17,9 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 | Dokumentationszugang | 183 registrierte Seiten und 214 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
 | Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
-| Barrierefreiheit | Windows UIA liest vollständigen Text, bedient Suchfelder und veröffentlicht interne Links mit Textbereichen, Fokus und Aktivierung; unabhängige Clientprüfungen bestehen | Native Text-/Feld-/Linkbereiche auf macOS/Linux, Tabellensemantik und echte Screenreader-Aufgaben |
+| Barrierefreiheit | Windows UIA liest vollständigen Text, bedient Suchfelder und veröffentlicht interne Links; Linux AT-SPI liest vollständigen Text und bedient beide Suchfelder mit Unicode-Auswahl und Caret; unabhängige Clientprüfungen bestehen | Native Text-/Feldbereiche auf macOS, Linktextbereiche auf macOS/Linux, Tabellensemantik und echte Screenreader-Aufgaben |
 
-Die Hilfe ist in den geprüften Windows-Abläufen gut nutzbar. Eine vollständige
+Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
 Bewertung mit Höchstpunktzahl ist wegen dieser offenen Abnahmefälle noch nicht
 begründet. Die folgenden Nachweise nennen jeweils ihre Revision und Umgebung.
 
@@ -114,6 +114,67 @@ native Text-/Feld-/Linkbereiche und Tabellen auf allen Zielplattformen sowie
 praktische Screenreader-Aufgaben. Der Linux-Lauf für `efe152c` wurde unter
 Workflow `38511888866` gestartet und war bei dieser Bewertung noch in Arbeit;
 für diese Revision wird hier kein Linux-Erfolg behauptet. macOS bleibt offen.
+
+### Linux-Suchfelder mit Unicode-Auswahl und Zwischenablage
+
+Der nächste geprüfte Stand ergänzt auf Grundlage von `004c408` die beiden
+F1-Suchfelder als native AT-SPI-Entries. Die zentralen Skills
+`linux-specialist`, `accessibility-engineer` und `test-engineer` bestimmen
+Protokollumfang, Gegenproben und Plattformgrenzen; der Dokumentationsreview
+verwendet zusätzlich `documentation-engineer` und `ui-ux-designer`.
+
+Der bestehende gemeinsame Feldweg übernimmt native Werte, Auswahl, Caret,
+Fokus und horizontales Sichtbarmachen auch unter Linux. `Text` verwendet
+Unicode-Skalarpositionen. `EditableText.InsertText` verwendet eine Skalarposition
+und eine UTF-8-Bytelänge; ein Präfix innerhalb eines Mehrbyte-Codepunkts wird
+abgewiesen. Die sechs Änderungs- und Zwischenablageoperationen folgen dem
+[offiziellen EditableText-Vertrag](https://gnome.pages.gitlab.gnome.org/at-spi2-core/devel-docs/doc-org.a11y.atspi.EditableText.html).
+Versionierte Aufträge werden beim Besuch des weiterhin gültigen Felds
+übernommen. SDL-Zwischenablageaufrufe erfolgen im UI-Thread ohne gehaltene
+Provider-/Modellmutexe; anschließend wird das Ziel erneut geprüft.
+
+Die unabhängige Zwei-Fenster-Probe prüft `A θ🌍 B`, Skalaranzahl, Auswahl,
+Caret, Einfügen/Löschen, Kopieren/Ausschneiden/Einfügen, einen degenerierten
+Caret-Bereich beim Sichtbarmachen, Kapazitätsgrenzen sowie gesperrte und
+entfernte Ziele. Die tatsächliche F1-Probe setzt beide Suchwerte nativ,
+markiert `θ🌍`, ersetzt diese Auswahl durch echte Tastatureingabe und verlässt
+das Feld per Tab. Editorinhalt und Simulationszeit bleiben erhalten.
+
+Die erste Testfassung setzte die zusätzliche Feldprobe zu früh vor einer
+bestehenden Cache-Gegenprobe ein; außerdem wählte der F1-Client bei einem
+gleichlautenden Namen die statische Beschriftung statt des Eingabefelds.
+Die Prüfungen berücksichtigen jetzt Phase sowie Namen und Rolle. Eine feste
+Zwischenablage-Wartezeit wurde durch Warten auf die beobachtete Annahme des
+nächsten Auftrags ersetzt. Diese Prüferkorrekturen sind keine Produktfehler.
+
+Tatsächlich ausgeführte abschließende Belege, jeweils Exitcode 0:
+
+- Alpine 3.24.2/WSL2, GCC 15.2.0, SDL 3.2.30, X11/Xvfb/Openbox,
+  ASan/UBSan: **4/4** in `run-t6_3pm5r` unter
+  `build/native/F1-linux/Debug-sanitized/test-results`. Fälle:
+  `accessibility_atspi`, `documentation_navigation`,
+  `accessibility_document_atspi`, `accessibility_edit_atspi`.
+- Windows 10.0.26200, MSVC ASan: **5/5** in `run-634jnjyo` unter
+  `build/native/F1-uia-sanitized/test-results`. Geprüft wurden F1-Tastatur,
+  native Suchfelder, Fensterlebenszyklus, vollständiger Lesetext und Navigation.
+- Testkatalog, erwartete Gegenfehler und Timeout-/Reportverhalten bestehen
+  unter `build/native/F1-review/atspi-edit-runner-proof`.
+
+Die drei tatsächlichen Linux-F1-Bilder aus dem vorherigen ebenfalls bestandenen
+Lauf `run-h8wgw4_k` wurden visuell betrachtet: gesetzter Dokument-Suchwert,
+markierte Unicode-Auswahl und fokussierte globale Suche sind sichtbar.
+Die zusätzliche Fensterfixture bestätigt Textsemantik, keine vollständige
+Schriftabdeckung. Der Ubuntu-Lauf für den vorherigen Lesetext-Commit `004c408`
+ist ebenfalls abgeschlossen: Workflow `38521829659`, Clang und GCC jeweils
+**24/24 native und 28/28 GUI-Fälle**. Das belegt diese vorherige Revision;
+für die neue Feldanbindung wird daraus kein Ubuntu-Erfolg abgeleitet.
+
+Die bisherigen fachlichen Wertungen **8/10 UI, 8/10 Dokumentationsaufgabe und
+5/10 Barrierefreiheit** bleiben eine konservative Bewertung der Gesamtaufgabe.
+Linux-Suchfelder und vollständiges Linux-Lesen zählen jetzt als geprüfter
+Fortschritt. Native macOS-Text-/Feldanbindung, Linux-/macOS-Linktextbereiche,
+Tabellensemantik, praktische Screenreader-Aufgaben, tatsächliche
+DPI-/Monitorwechsel und der vollständige Inhaltsabgleich bleiben offen.
 
 ### Offline-Schriftquellen und vollständige Zeicheninventur
 

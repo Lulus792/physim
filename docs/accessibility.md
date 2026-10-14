@@ -148,10 +148,22 @@ prüft Unicode-Bereiche, Zeichenrahmen, Änderungsmitteilungen, Verbergen,
 Entfernen und neue Dokumentidentitäten. Die aktuellen Ausführungsbelege stehen
 in der [F1-Abnahmeentscheidung](decisions/004-f1-handbook.md).
 
+Die beiden benannten F1-Suchfelder veröffentlichen die Rolle `entry` sowie
+`Text` und `EditableText`. Native Clients können ihren Wert lesen und setzen,
+Unicode-Auswahl und Caret verändern sowie Text einfügen, löschen, kopieren,
+ausschneiden und einfügen. Zeichenpositionen zählen Unicode-Skalarwerte;
+die Längenangabe von `InsertText` zählt dagegen UTF-8-Bytes. Ein abgeschnittener
+Mehrbyte-Codepunkt wird abgewiesen. Die Zwischenablage wird im UI-Thread
+verarbeitet; danach werden Besitzer, Inhaltsversion und Bedienbarkeit erneut
+geprüft. Veraltete, deaktivierte und verborgene Ziele übernehmen keine Änderung.
+Der unabhängige F1-Client bestätigt die tatsächlichen Suchwerte, eine markierte
+Unicode-Auswahl, deren Ersetzung durch Tastatureingabe und den Tab-Ausstieg.
+Eine zusätzliche Zwei-Fenster-Probe prüft Zwischenablage und ungültige Anfragen.
+
 Es gibt höchstens acht native Fenster pro Prozess und die bestehenden 256
 Controls/1023 Label-Byte je Modell. Der zusätzliche Dokumentknoten verwendet
 den separaten vollständigen Lesetext mit dessen dokumentierten Größenlimits.
-Assistive Eingabefelder/Editoren, native Linktextbereiche, Tabellensemantik,
+Weitere assistive Eingabefelder/Editoren, native Linktextbereiche, Tabellensemantik,
 visuelle statt logischer Zeilengrenzen, sprachabhängige Textsegmentierung,
 begrenzte Bereichsabfragen und Scrollen zu einer bestimmten Bildschirmposition
 bleiben offen. Bildschirmkoordinaten werden nur

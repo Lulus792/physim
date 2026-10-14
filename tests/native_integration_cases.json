@@ -12330,6 +12330,31 @@
           "timeout": 120
         }
       ]
+    },
+    {
+      "name": "accessibility_edit_atspi",
+      "platforms": [
+        "linux"
+      ],
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_accessibility_edit_atspi.py",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 120
+        }
+      ]
     }
   ]
 }
