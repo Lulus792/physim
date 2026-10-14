@@ -23,6 +23,52 @@ Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine v
 Bewertung mit Höchstpunktzahl ist wegen dieser offenen Abnahmefälle noch nicht
 begründet. Die folgenden Nachweise nennen jeweils ihre Revision und Umgebung.
 
+### Aktueller zentraler Skill-Review auf Revision 2ccd520
+
+Am 14. Oktober 2026 wurden die Skills erneut unter `D:/Skills/skills`
+ausgewählt und angewendet: `documentation-engineer`, `ui-ux-designer`,
+`accessibility-engineer` und `test-engineer`. Grundlage sind deren Fachabläufe
+und die verbindliche Desktop-Abnahmematrix. Dieser Review trennt die Qualität
+der Anleitung von der Bedienoberfläche und der assistiven Bedienbarkeit.
+
+| Gegenstand | Fachliche Wertung | Aktueller Befund |
+| --- | --- | --- |
+| UI und Nutzerführung | 8/10 | Lernwege, Inhaltsnavigation, Verlauf, Suche und reine Leseansicht sind nachvollziehbar. Die aktuelle Windows-Prüfung bestätigt Zoom, Navigation und umbrochene Inhaltsaktionen. Bei 760 × 540 und 32-Pixel-Text nimmt die Navigation viel Lesefläche ein; echte DPI-/Monitorwechsel und die vollständige Plattform-Zustandsmatrix bleiben offen. |
+| Aufgabe als Dokumentation | 8/10 | Der User Guide führt zu einem gespeicherten Pendellauf mit Ergebnisprüfung und kontrollierter Änderung. Beide Sprachwege bieten sieben Kapitel, vollständige Beispielquellen und Referenz-/Fehlerhilfe. Der aktuelle Test bestätigt 183 erreichbare Seiten, 214 Abschnittslinks und 1.264 aufgelöste API-Symbole. Ein vollständiger inhaltlicher Abgleich sämtlicher Anleitungen mit der Umsetzung ist weiterhin nicht nachgewiesen. |
+| Barrierefreiheit | 5/10 | Windows und Linux besitzen geprüfte native Lese-, Feld- und Linkzugänge; macOS besitzt jetzt auch geprüftes vollständiges AppKit-Lesen. Native macOS-Feld-/Linktextbereiche, Tabellensemantik, externe macOS-AX-Clientprüfung und praktische Screenreader-Aufgaben bleiben offen. Deshalb wird noch keine vollständige assistive Abnahme erteilt. |
+
+Die Zahlen bleiben ein konservatives fachliches Urteil über die gesamte
+Abnahme, keine normierte Messung. Die früher festgestellten Font- und
+Inhaltsaktionsfehler sowie der fehlende macOS-Lesetext sind inzwischen durch
+die unten dokumentierten Änderungen und ihre begrenzten Prüfungen bearbeitet.
+Die historischen Tabellen beschreiben jeweils ihren damaligen Stand.
+
+Für diesen erneuten Review tatsächlich ausgeführt, jeweils Exitcode 0:
+
+- Windows 10.0.26200, MSVC ASan, SDL 3.2.30:
+  `run-3k0yru_1` besteht **26/26** ausgewählte Dokumentations-/API-Fälle.
+  Enthalten sind Parser, veröffentlichte C-/Physim-Quellen, ausgeführte
+  Beispielmodule, Lernwege, Referenz und native Abschnittsprüfung.
+- Derselbe aktuelle Windows-Build: `run-2t_vy0bx` besteht **3/3** GUI-Fälle
+  `documentation_zoom`, `documentation_navigation` und `documentation_sidebar`.
+  Die neuen Bilder der Inhaltsnavigation bei 16 Pixeln, des hohen Kontrasts
+  bei 32 Pixeln und der reinen Leseansicht wurden visuell geprüft. Der Fokus
+  und die mehrzeilige aktive Inhaltsaktion sind vollständig sichtbar.
+- Der [ausgeführte macOS-Hauptzweiglauf](https://github.com/Lulus792/physim/actions/runs/38620637921)
+  auf derselben Quellrevision besteht auf Intel und ARM64 jeweils **3/3**
+  Modell- und **5/5** GUI-/AppKit-Fälle. Die vollständigen Joblogs wurden
+  eingesehen: Intel `run-iqr2n3zc` / `run-j22xsx17`, ARM64
+  `run-1oxnxay5` / `run-nz38ynye`. Dies bestätigt die ausgewählten Fälle auf
+  Darwin 24.6.0 und ersetzt keine externe AX- oder VoiceOver-Abnahme.
+
+Die lokalen Ergebnisdateien und neuen Bilder liegen im ignorierten Verzeichnis
+`build/native/F1-uia-sanitized/test-results`; die Bildkonvertierungen für den
+Review unter `build/native/F1-review/current-review-images`. Geprüft wurde die
+Quellrevision vor dieser reinen Berichtergänzung. Priorität für die weitere
+Umsetzung haben native macOS-Suchfelder und Linktextbereiche, Tabellensemantik,
+praktische Screenreader-Aufgaben, echte DPI-/Monitorwechsel und der verbleibende
+Inhaltsabgleich. Die Gesamtaufgabe erhält noch keine 10/10.
+
 ### Erneuter Skill-Review des lokalen Stands
 
 Geprüft am 14. Oktober 2026 auf Windows 10.0.26200 mit dem Debug-Build unter
