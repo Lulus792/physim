@@ -10,6 +10,7 @@ parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--app',type=Path,required=True)
 parser.add_argument('--probe',type=Path,required=True)
 parser.add_argument('--work',type=Path,required=True)
+parser.add_argument('--stress-focus',action='store_true',help='Repeat the host disable/enable and movement checks ten times')
 args=parser.parse_args()
 args.work.mkdir(parents=True,exist_ok=True)
 reader=args.work/'reader'
@@ -36,7 +37,8 @@ try:
     for action,marker,flag in (('links','LINKS READY FOCUS','link-focus-done'),('invoke-link-invalid','LINKS READY INVALID','link-invalid-done'),('invoke-link','LINKS READY INVOKE','link-invoke-done')):
         phase=action
         wait_for(marker)
-        result=subprocess.run([str(args.probe),str(process.pid),action,'Physim | Dokumentation','C-Lernweg' if action=='invoke-link-invalid' else 'C'],capture_output=True,timeout=25)
+        probe_action='links-stress' if args.stress_focus and action=='links' else action
+        result=subprocess.run([str(args.probe),str(process.pid),probe_action,'Physim | Dokumentation','C-Lernweg' if action=='invoke-link-invalid' else 'C'],capture_output=True,timeout=25)
         (args.work/(action+'.stdout')).write_bytes(result.stdout)
         (args.work/(action+'.stderr')).write_bytes(result.stderr)
         assert result.returncode==0,(action,result.returncode,result.stderr)
@@ -44,6 +46,9 @@ try:
         assert b'WINDOWS LINK EVENTS:' in result.stdout
         if action=='links':
             assert b'quiet idle passed' in result.stdout
+            if args.stress_focus:
+                assert result.stderr.count(b'WINDOWS LINK FOCUS CYCLE: ')==10
+                assert b'WINDOWS LINK FOCUS CYCLE: 10/10 result=0x00000000' in result.stderr
         elif action=='invoke-link':
             assert b'invoked=1 bad=0' in result.stdout
         else:
@@ -54,7 +59,7 @@ try:
     wait_for('DOCUMENTATION LINKS SELF-TEST: PASSED')
     for name in ('docs-native-link-focus.bmp','docs-native-link-failed.bmp','docs-native-link-open.bmp'):
         assert (reader/name).is_file()
-    (args.work/'results.json').write_text(json.dumps(dict(independent_client=True,ordered_links=2,exact_text_ranges=True,offscreen_focus=True,visible_glyphs=True,native_navigation=True,stale_ranges_rejected=True,editor_unchanged=True,property_events=True,invoked_event=True,cached_event_identity=True,disabled_host_rejection=True,screen_position_event=True,quiet_idle=True),indent=2)+'\n',encoding='utf-8')
+    (args.work/'results.json').write_text(json.dumps(dict(independent_client=True,focus_cycles=10 if args.stress_focus else 1,ordered_links=2,exact_text_ranges=True,offscreen_focus=True,visible_glyphs=True,native_navigation=True,stale_ranges_rejected=True,editor_unchanged=True,property_events=True,invoked_event=True,cached_event_identity=True,disabled_host_rejection=True,screen_position_event=True,quiet_idle=True),indent=2)+'\n',encoding='utf-8')
 except BaseException as error:
     failure=type(error).__name__+': '+str(error)
     raise
@@ -69,5 +74,6 @@ finally:
         phase=phase,failure=failure,seconds=round(time.monotonic()-started,6),
         markers=observations,app_exit_before_cleanup=app_exit_before_cleanup,
         app_killed_by_cleanup=app_exit_before_cleanup is None,
-        startup_trace='app.stderr',readiness_timeout_seconds=20,probe_timeout_seconds=25),indent=2)+'\n',encoding='utf-8')
+        startup_trace='app.stderr',focus_cycles=10 if args.stress_focus else 1,
+        readiness_timeout_seconds=20,probe_timeout_seconds=25),indent=2)+'\n',encoding='utf-8')
 print('Actual F1 UIA links: role, embedded ranges, offscreen focus, navigation, stale ranges and input isolation passed')

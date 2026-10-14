@@ -299,7 +299,9 @@ bool nk_sdl_accessibility_document_link_target(struct nk_context *ctx,const char
  }
  SDL_LockMutex(sdl->accessibility_mutex);ps_a11y_model *m=sdl->accessibility;
  uint64_t pending=m->pending_focus;size_t before=m->draft_count;
+ uint64_t prior_focus=m->focused_id;
  bool pressed=ps_a11y_document_link(m,ctx->current->name_string,name,version,begin,end,visible,enabled);
+ if(prior_focus && !m->focused_id && SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: link record cleared focus id=%llu enabled=%d window=%u ticks=%llu\n",(unsigned long long)prior_focus,enabled,SDL_GetWindowID(sdl->win),(unsigned long long)SDL_GetTicksNS());
  if(target && m->draft_count>before)ps_a11y_document_link_target(m,before,target);
  bool granted=m->draft_count>before && pending && !m->pending_focus && m->focused_id==pending && m->draft[before].id==pending;
  bool focused=m->draft_count>before && m->draft[before].id==m->focused_id && m->keyboard_focus;
@@ -405,12 +407,15 @@ struct nk_font_atlas *nk_sdl_font_stash_begin(struct nk_context *ctx) {
 }
 bool nk_sdl_font_stash_end(struct nk_context *ctx) {
     struct nk_sdl *sdl = ctx->userdata.ptr;
+    Uint64 start=SDL_GetTicksNS();
     int w=0,h=0,limit=ps_graphics_texture_limit(sdl->graphics);
     const void *pixels = nk_font_atlas_bake_limited(&sdl->atlas, &w, &h, NK_FONT_ATLAS_ALPHA8,limit);
     if (!pixels) {
         SDL_SetError("Complete font atlas cannot fit or allocate within GPU limit %d",limit);
         return false;
     }
+    if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: main atlas bake seconds=%.6f\n",(double)(SDL_GetTicksNS()-start)/1e9);
+    start=SDL_GetTicksNS();
     printf("Font atlas: %dx%d, %d fonts, GPU limit %d\n",w,h,sdl->atlas.font_num,limit);
     /* Nuklear may bake a partial atlas when its packing space is exhausted.
      * Successful texture allocation alone does not prove that text can render. */
@@ -425,6 +430,7 @@ bool nk_sdl_font_stash_end(struct nk_context *ctx) {
     sdl->font_texture = ps_graphics_alpha_texture(sdl->graphics, pixels, w, h);
     if (!sdl->font_texture)
         return false;
+    if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: main atlas validation/upload seconds=%.6f\n",(double)(SDL_GetTicksNS()-start)/1e9);
     nk_font_atlas_end(&sdl->atlas, nk_handle_id((int)sdl->font_texture), &sdl->null_texture);
     /* Source presence is baked into each glyph; source blobs can now be released.
      * The merged codepoint ranges survive until atlas_clear. */
@@ -439,14 +445,18 @@ bool nk_sdl_font_stash_replace(struct nk_context *ctx,struct nk_font_atlas *cand
     bool contained=false;for(struct nk_font *f=candidate->fonts;f;f=f->next)if(f==default_font)contained=true;
     if(!contained || candidate==&sdl->atlas)return false;
     int w=0,h=0,limit=ps_graphics_texture_limit(sdl->graphics);
+    Uint64 start=SDL_GetTicksNS();
     const void *pixels=nk_font_atlas_bake_limited(candidate,&w,&h,NK_FONT_ATLAS_ALPHA8,limit);
     if(!pixels)return false;
+    if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: F1 atlas bake seconds=%.6f\n",(double)(SDL_GetTicksNS()-start)/1e9);
+    start=SDL_GetTicksNS();
     for(struct nk_font *f=candidate->fonts;f;f=f->next)for(nk_rune c=33;c<=126;c++) {
         const struct nk_font_glyph *g=nk_font_find_glyph(f,c);
         if(!g || !g->source_present || g->codepoint!=c || g->x1<=g->x0 || g->y1<=g->y0)return false;
     }
     unsigned texture=ps_graphics_alpha_texture(sdl->graphics,pixels,w,h);
     if(!texture)return false;
+    if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: F1 atlas validation/upload seconds=%.6f\n",(double)(SDL_GetTicksNS()-start)/1e9);
     struct nk_draw_null_texture null_texture;
     nk_font_atlas_end(candidate,nk_handle_id((int)texture),&null_texture);
     if(!ps_ui_font_logical_scale(candidate,raster_scale)) {
@@ -488,8 +498,12 @@ bool nk_sdl_render(struct nk_context *ctx) {
                 }
             }
         }
-        sdl->accessibility->keyboard_focus=SDL_GetKeyboardFocus()==sdl->win;
+        bool keyboard=SDL_GetKeyboardFocus()==sdl->win;
+        uint64_t prior_focus=sdl->accessibility->focused_id;
+        if(sdl->accessibility->keyboard_focus!=keyboard && SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: keyboard focus changed window=%u keyboard=%d id=%llu ticks=%llu\n",SDL_GetWindowID(sdl->win),keyboard,(unsigned long long)prior_focus,(unsigned long long)SDL_GetTicksNS());
+        sdl->accessibility->keyboard_focus=keyboard;
         bool changed=ps_a11y_publish(sdl->accessibility);
+        if(prior_focus && !sdl->accessibility->focused_id && SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: publication cleared focus id=%llu window=%u ticks=%llu\n",(unsigned long long)prior_focus,SDL_GetWindowID(sdl->win),(unsigned long long)SDL_GetTicksNS());
         SDL_UnlockMutex(sdl->accessibility_mutex);
         ps_a11y_native_publish(sdl->accessibility_native,changed);
         SDL_LockMutex(sdl->accessibility_mutex);ps_a11y_begin(sdl->accessibility);

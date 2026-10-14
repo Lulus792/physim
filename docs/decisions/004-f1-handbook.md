@@ -456,6 +456,60 @@ Prüfung auf Intel/ARM64 ist als
 beauftragt, zum Zeitpunkt dieses Eintrags aber noch in der Runner-Warteschlange.
 Die Windows-Sporadik und die vollständige F1-Abnahme bleiben offen.
 
+#### Engere Atlas- und Fokusdiagnose
+
+Die folgende Untersuchung erweitert ausschließlich die bedingte Diagnose und
+den unabhängigen Prüfer. `run-pk_uwcx8` trennt jetzt die Atlasberechnung vom
+anschließenden Prüfen und GPU-Upload: Hauptfenster **2,665310 / 0,013465**
+Sekunden, F1 **6,324942 / 0,012661** Sekunden. Der dominante Rest liegt in der
+CPU-Atlasberechnung. Ein weiterer R8-Lauf
+`build/native/focus-state-03` scheitert nach 20,141 Sekunden erneut an der
+Bereitschaft; die Schriften sind dort fertig, die Linkinventur endet erst
+unmittelbar vor Ablauf der Grenze. R8 allein behebt die Startzeit-Sporadik
+folglich nicht. Schriftumfang oder Prüffristen werden dafür nicht vermindert.
+
+Die Fokusspur unterscheidet native Tastaturfokuswechsel, gewährte Linkaufträge,
+beim Registrieren deaktivierte Links und bei der Publikation entfernte Ziele.
+Ein erneuter Fokusfehler meldet zusätzlich, ob das Hostfenster tatsächlich im
+Vordergrund, aktiviert und sichtbar ist. Die bisherigen neuen Spuren zeigen
+noch keinen weiteren Fokusfehler; erfolgreiche Läufe allein bestätigen keine
+Ursache des historischen Abbruchs.
+
+`--stress-focus` lässt denselben unabhängigen UIA-Client zehn vollständige
+Disable-/Enable-, Fokus-, Verschiebe- und Ruhezyklen im geöffneten F1-Fenster
+ausführen. Jeder Zyklus verlangt neue Zustandsereignisse, verweigert Invoke
+während der Deaktivierung, prüft die genaue 13/7-Pixel-Verschiebung und
+abschließend weiterhin gesetzten Fokus. Der Wrapper verlangt alle zehn
+erfolgreichen Zyklen und führt anschließend die ungültige und gültige
+Navigation mit ihren bisherigen Kriterien aus. Die 20-/25-Sekunden-Grenzen
+bleiben gleich. Der neue Windows-Katalogfall heißt
+`accessibility_links_stress_windows`.
+
+Tatsächlich ausgeführt:
+
+- MSVC ASan: ursprüngliche Linkprobe `run-mn8mh97w`, `run-pk_uwcx8` und
+  `run-yxfklw6y` jeweils **1/1**; zwei direkte vollständige Zehnfachläufe in
+  `build/native/focus-stress-01` und `-02` bestanden.
+- Gezeichnete Accessibility plus Katalog-Stresstest: `run-bheksqbs` **2/2**.
+  Nach Ergänzung der Zykluszahl im Ergebnisbericht bestehen ursprüngliche
+  Linkprobe und Stresstest erneut in `run-5on64pga` **2/2**.
+- Plattform-Katalog und absichtliche Fehlergegenproben bestehen in
+  `build/native/focus-stress-runner-proof`.
+- Aktueller Linux-Nachbar mit GCC 15.2 ASan/UBSan, X11/Openbox und Software-GL:
+  Grafik und unabhängige AT-SPI-Links in `run-xqlmqxlt` **2/2** bestanden.
+- Zusätzlich wurden die beiden Joblogs des breiteren
+  [Linux-CI-Laufs auf 5c361d5](https://github.com/Lulus792/physim/actions/runs/38645225859)
+  ausgewertet: GCC **24/24** native und **31/31** GUI-Fälle
+  (`run-_76dwsvg`, `run-0ftqfj6b`); Clang ebenfalls **24/24** und **31/31**
+  (`run-lmmy1zch`, `run-rjy6pmkp`). Enthalten sind die F1-Zeichen-, Dichte-,
+  Navigations-, Seitenleisten- und externen AT-SPI-Lese-/Feld-/Linkprüfungen.
+
+Nächster belegbarer Leistungsansatz ist eine Änderung des CPU-Schriftaufbaus.
+Sie muss alle Zeichen und Schriftvarianten, echte Rasterdichte, stabile
+logische Metriken und den atomaren Fehlerfall erhalten. Weder diese Diagnose
+noch die bestandenen Stresszyklen schließen die offene Windows-Sporadik oder
+die übrigen F1-Abnahmen.
+
 ### Native macOS-Linkattribute, Ziele und Aktivierung
 
 Die Erweiterung auf Quellrevision `589d7d4` verbindet interne F1-Linkbereiche

@@ -9322,6 +9322,24 @@
       ]
     },
     {
+      "name": "accessibility_links_stress_windows",
+      "app": true,
+      "display": true,
+      "platforms": ["win32"],
+      "targets": ["python", "physim", "accessibility-windows-probe"],
+      "steps": [{
+        "program": "python",
+        "arguments": [
+          "{root}/tests/test_accessibility_links_app.py",
+          "--app", "{physim}",
+          "--probe", "{accessibility-windows-probe}",
+          "--work", "{work}", "--stress-focus"
+        ],
+        "timeout": 90,
+        "files": ["app.stdout", "app.stderr", "links.stdout", "links.stderr", "invoke-link-invalid.stdout", "invoke-link-invalid.stderr", "invoke-link.stdout", "invoke-link.stderr", "results.json", "diagnostics.json"]
+      }]
+    },
+    {
       "name": "accessibility_document_windows",
       "app": true,
       "display": true,
