@@ -150,6 +150,11 @@ bool ps_a11y_document_link(ps_a11y_model *m,const char *window,const char *name,
     !text_boundary(d->text,d->length,begin) || !text_boundary(d->text,d->length,end))return false;
  return record(m,window,name,PS_A11Y_LINK,bounds,enabled,false,0,version,begin,end);
 }
+bool ps_a11y_document_link_target(ps_a11y_model *m,size_t index,const char *target) {
+ if(!m || !m->building || index>=m->draft_count || m->draft[index].role!=PS_A11Y_LINK ||
+    !target || !ps_text_valid(target,PS_A11Y_LABEL_BYTES,false))return false;
+ memcpy(m->draft[index].document_target,target,strlen(target)+1);return true;
+}
 bool ps_a11y_record_option(ps_a11y_model *m,const char *window,const char *group,
                      const char *label,const float bounds[4],bool enabled,bool selected,bool activated) {
  if(!m->building || !window || !group || !label || !bounds || !*group || !*label ||

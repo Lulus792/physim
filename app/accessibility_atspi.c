@@ -14,6 +14,7 @@
 #define AX_PREFIX "org.a11y.atspi."
 #define AX_WINDOWS 8u
 #define AX_DOCUMENT_ROLE ((ps_a11y_role)100)
+#define AX_HYPERLINK_ROLE ((ps_a11y_role)101)
 typedef struct ax_server ax_server;
 struct ps_a11y_native {
     ax_server *server;
@@ -101,6 +102,10 @@ static void document_path(char path[128],unsigned window,uint64_t identity) {
 static void document_reference(ax_reply *r,DBusMessageIter *iter,ax_server *s,unsigned window,uint64_t identity) {
     char path[128];document_path(path,window,identity);reference(r,iter,bus_name(s),path);
 }
+static void hyperlink_reference(ax_reply *r,DBusMessageIter *iter,ax_server *s,unsigned window,uint64_t identity) {
+    char path[128];snprintf(path,sizeof path,"/org/a11y/atspi/accessible/w%u/hyperlink%llu",window,(unsigned long long)identity);
+    reference(r,iter,bus_name(s),path);
+}
 /* Caller owns the model mutex. The document is a separate synthetic child,
  * outside the bounded control label catalogue and its numeric object paths. */
 static bool document_snapshot(ps_a11y_native *w,ps_a11y_node *node) {
@@ -119,6 +124,24 @@ static bool document_index(ps_a11y_native *w) {
     const ps_a11y_document *d=w->model->document;
     return d && d->active && (w->document_index.version==d->version ||
         ps_a11y_text_index_build(&w->document_index,d->text,d->length,d->version));
+}
+/* Links refer to scalar ranges in the current immutable document. Model order
+ * follows reading order; offscreen links remain part of that inventory. */
+static bool document_link_valid(ps_a11y_native *w,const ps_a11y_node *node) {
+    const ps_a11y_document *d=w->model->document;
+    return node && node->role==PS_A11Y_LINK && d && d->active &&
+        node->document_version==d->version && node->document_begin<node->document_end &&
+        node->document_end<=d->length;
+}
+static const ps_a11y_node *document_link_at(ps_a11y_native *w,size_t index) {
+    for(size_t i=0;i<w->model->count;i++)if(document_link_valid(w,&w->model->nodes[i])) {
+        if(!index--)return &w->model->nodes[i];
+    }
+    return NULL;
+}
+static size_t document_link_count(ps_a11y_native *w) {
+    size_t count=0;for(size_t i=0;i<w->model->count;i++)if(document_link_valid(w,&w->model->nodes[i]))count++;
+    return count;
 }
 static void local_reference(ax_reply *r, DBusMessageIter *iter, ax_server *s, unsigned window,
                             uint64_t node) {
@@ -140,7 +163,7 @@ static bool find_object(ax_server *s, const char *path, ps_a11y_native **window,
     if (strncmp(path, prefix, sizeof prefix - 1))
         return false;
     const char *cursor = path + sizeof prefix - 1;
-    uint64_t values[2] = {0, 0};bool reading=false;
+    uint64_t values[2] = {0, 0};bool reading=false,hyperlink=false;
     for (size_t part = 0; part < 2; part++) {
         if (*cursor < '1' || *cursor > '9')
             return false;
@@ -155,6 +178,7 @@ static bool find_object(ax_server *s, const char *path, ps_a11y_native **window,
         if (!*cursor)
             break;
         if(!part && !strncmp(cursor,"/document",9)){reading=true;cursor+=9;continue;}
+        if(!part && !strncmp(cursor,"/hyperlink",10)){hyperlink=true;cursor+=10;continue;}
         if (part || strncmp(cursor, "/n", 2))
             return false;
         cursor += 2;
@@ -179,9 +203,10 @@ static bool find_object(ax_server *s, const char *path, ps_a11y_native **window,
             if (live) {
                 *node = *live;
                 *index = ps_a11y_index((*window)->model,live->id);
+                if(hyperlink && document_link_valid(*window,live))node->role=AX_HYPERLINK_ROLE;
             }
             SDL_UnlockMutex((*window)->mutex);
-            return live != NULL;
+            return live != NULL && (!hyperlink || node->role==AX_HYPERLINK_ROLE);
         }
     return false;
 }
@@ -261,6 +286,8 @@ static void interfaces(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
     if(node->id && node->role==PS_A11Y_SLIDER)text(r,&a,AX_PREFIX "Value");
     if(node->role==AX_DOCUMENT_ROLE || node->role==PS_A11Y_EDIT)text(r,&a,AX_PREFIX "Text");
     if(node->role==PS_A11Y_EDIT)text(r,&a,AX_PREFIX "EditableText");
+    if(node->role==AX_DOCUMENT_ROLE)text(r,&a,AX_PREFIX "Hypertext");
+    if(node->role==PS_A11Y_LINK)text(r,&a,AX_PREFIX "Hyperlink");
     close_container(r, iter, &a);
 }
 static void parent_reference(ax_reply *r, DBusMessageIter *iter, ax_server *s, ps_a11y_native *w,
@@ -402,12 +429,26 @@ static const char *property_signature(const char *iface, const char *name) {
         if(!strcmp(name,"MinimumValue") || !strcmp(name,"MaximumValue") || !strcmp(name,"CurrentValue") || !strcmp(name,"MinimumIncrement"))return "d";
     } else if(!strcmp(iface,AX_PREFIX "Text")) {
         if(!strcmp(name,"CharacterCount") || !strcmp(name,"CaretOffset"))return "i";
+    } else if(!strcmp(iface,AX_PREFIX "Hyperlink")) {
+        /* libatspi queries i although the upstream XML says n. Match the
+         * executed client and our introspection rather than losing anchors. */
+        if(!strcmp(name,"NAnchors"))return "i";
+        if(!strcmp(name,"StartIndex") || !strcmp(name,"EndIndex"))return "i";
     } else if (!strcmp(iface, AX_PREFIX "Action") && !strcmp(name, "NActions"))
         return "i";
     return NULL;
 }
 static void property_value(ax_reply *r, DBusMessageIter *iter, ax_server *s, ps_a11y_native *w,
                            const ps_a11y_node *node, const char *iface, const char *name) {
+    if(!strcmp(iface,AX_PREFIX "Hyperlink") && strcmp(name,"version")) {
+        SDL_LockMutex(w->mutex);const ps_a11y_node *live=ps_a11y_find(w->model,node->id);int position=0;
+        if(!document_link_valid(w,live))r->okay=false;
+        else if(!strcmp(name,"NAnchors"))number(r,iter,1);
+        else if(!document_index(w) || !ps_a11y_text_byte_offset(&w->document_index,
+                !strcmp(name,"StartIndex")?live->document_begin:live->document_end,&position))r->okay=false;
+        else number(r,iter,position);
+        SDL_UnlockMutex(w->mutex);return;
+    }
     if(!strcmp(iface,AX_PREFIX "Text") && strcmp(name,"version")) {
         SDL_LockMutex(w->mutex);
         if(node->role==PS_A11Y_EDIT) {
@@ -468,6 +509,7 @@ static void property_value(ax_reply *r, DBusMessageIter *iter, ax_server *s, ps_
     text(r, iter, value);
 }
 static bool interface_supported(ps_a11y_native *w, const ps_a11y_node *node, const char *iface) {
+    if(node->role==AX_HYPERLINK_ROLE)return !strcmp(iface,AX_PREFIX "Hyperlink");
     if (!strcmp(iface, AX_PREFIX "Accessible"))
         return true;
     if (!strcmp(iface, AX_PREFIX "Application"))
@@ -479,6 +521,8 @@ static bool interface_supported(ps_a11y_native *w, const ps_a11y_node *node, con
     if(!strcmp(iface,AX_PREFIX "Value"))return node->id && node->role==PS_A11Y_SLIDER;
     if(!strcmp(iface,AX_PREFIX "Text"))return node->role==AX_DOCUMENT_ROLE || node->role==PS_A11Y_EDIT;
     if(!strcmp(iface,AX_PREFIX "EditableText"))return node->role==PS_A11Y_EDIT;
+    if(!strcmp(iface,AX_PREFIX "Hypertext"))return node->role==AX_DOCUMENT_ROLE;
+    if(!strcmp(iface,AX_PREFIX "Hyperlink"))return node->role==PS_A11Y_LINK;
     return false;
 }
 static bool bounds(ps_a11y_native *w, const ps_a11y_node *node, unsigned coordinate, int out[4]) {
@@ -620,6 +664,7 @@ static const char *properties_xml =
     "direction='in'/><arg type='v' direction='in'/></method></interface>";
 
 #include "accessibility_atspi_text.inc"
+#include "accessibility_atspi_links.inc"
 static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage *message,
                                          void *data) {
     if (dbus_message_get_type(message) != DBUS_MESSAGE_TYPE_METHOD_CALL)
@@ -651,18 +696,20 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
         dbus_message_has_signature(message, "")) {
         char xml[16384];
         int length = snprintf(
-            xml, sizeof xml, "<node>%s%s%s%s%s%s%s%s</node>",
+            xml, sizeof xml, "<node>%s%s%s%s%s%s%s%s%s%s</node>",
             cache ? "<interface name='org.a11y.atspi.Cache'><property name='version' type='u' "
                     "access='read'/><method name='GetItems'><arg type='a((so)(so)(so)iiassusau)' "
                     "direction='out'/></method></interface>"
-                  : accessible_xml,
+                  : node.role==AX_HYPERLINK_ROLE?"":accessible_xml,
             cache ? ""
             : !w  ? application_xml
-                  : component_xml,
+                  : node.role==AX_HYPERLINK_ROLE?"":component_xml,
             cache || !node.id || !ps_a11y_actionable(node.role) ? "" : action_xml,
             cache || !node.id || node.role!=PS_A11Y_SLIDER ? "" : value_xml,
             !cache && (node.role==AX_DOCUMENT_ROLE || node.role==PS_A11Y_EDIT)?text_xml:"",
-            !cache && node.role==PS_A11Y_EDIT?editable_text_xml:"",properties_xml,
+            !cache && node.role==PS_A11Y_EDIT?editable_text_xml:"",
+            !cache && node.role==AX_DOCUMENT_ROLE?hypertext_xml:"",
+            !cache && (node.role==AX_HYPERLINK_ROLE || node.role==PS_A11Y_LINK)?hyperlink_xml:"",properties_xml,
             "<interface name='org.freedesktop.DBus.Introspectable'><method name='Introspect'><arg "
             "type='s' direction='out'/></method></interface>");
         if (length < 0 || (size_t)length >= sizeof xml)
@@ -726,12 +773,15 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             const char *component[] = {"version", NULL};
             const char *scalar[] = {"version","MinimumValue","MaximumValue","MinimumIncrement","CurrentValue","Text",NULL};
             const char *reading[] = {"version","CharacterCount","CaretOffset",NULL};
+            const char *linking[] = {"version","NAnchors","StartIndex","EndIndex",NULL};
             const char **names = !strcmp(property_iface, AX_PREFIX "Application") ? application
                                  : !strcmp(property_iface, AX_PREFIX "Action")    ? action
                                  : !strcmp(property_iface, AX_PREFIX "Component") ? component
                                  : !strcmp(property_iface, AX_PREFIX "Value") ? scalar
                                  : !strcmp(property_iface, AX_PREFIX "Text") ? reading
                                  : !strcmp(property_iface, AX_PREFIX "EditableText") ? component
+                                 : !strcmp(property_iface, AX_PREFIX "Hypertext") ? component
+                                 : !strcmp(property_iface, AX_PREFIX "Hyperlink") ? linking
                                                                                   : accessible;
             if (cache && !strcmp(property_iface, AX_PREFIX "Cache")) {
                 DBusMessageIter array, entry, value;
@@ -842,6 +892,10 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
         failure=native_text_method(w,&node,message,method,&r);
     } else if(!cache && w && node.role==PS_A11Y_EDIT && !strcmp(iface,AX_PREFIX "EditableText")) {
         failure=editable_text_method(w,&node,message,method,&r);
+    } else if(!cache && w && node.role==AX_DOCUMENT_ROLE && !strcmp(iface,AX_PREFIX "Hypertext")) {
+        failure=hypertext_method(w,message,method,&r);
+    } else if(!cache && w && (node.role==AX_HYPERLINK_ROLE || node.role==PS_A11Y_LINK) && !strcmp(iface,AX_PREFIX "Hyperlink")) {
+        failure=hyperlink_method(w,&node,message,method,&r);
     } else if (!cache && !w && !strcmp(iface, AX_PREFIX "Application")) {
         if (!strcmp(method, "GetLocale") && dbus_message_has_signature(message, "u"))
             text(&r, &r.root, "de_DE.UTF-8");
@@ -1260,6 +1314,7 @@ void ps_a11y_native_publish(ps_a11y_native *b, bool changed) {
                 event_state(s, node_path, "sensitive", node->enabled);
             }
             if(old && old->focused!=node->focused)event_state(s,node_path,"focused",node->focused);
+            if(old && old->offscreen!=node->offscreen)event_state(s,node_path,"showing",b->visible && !node->offscreen);
             if(old && (node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) && old->checked!=node->checked)
                 event_state(s,node_path,"checked",node->checked);
             if(old && node->role==PS_A11Y_SLIDER && old->value!=node->value)event_value(s,node_path,node->value);

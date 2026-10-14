@@ -26,6 +26,7 @@ typedef struct {
  float caret_bounds[4];bool text_active;
  float text_scroll;
  uint64_t document_version;size_t document_begin,document_end;bool offscreen;
+ char document_target[PS_A11Y_LABEL_BYTES];
 } ps_a11y_node;
 /* UI thread owns the draft; callers serialize all operations. Published nodes
  * are immutable until publish. IDs persist across geometry changes, expire when
@@ -66,6 +67,8 @@ bool ps_a11y_document_take_scroll(ps_a11y_model *model,uint64_t version,size_t *
  * Zero width and height mean offscreen. Returns one queued native activation. */
 bool ps_a11y_document_link(ps_a11y_model *model,const char *window,const char *name,
                           uint64_t version,size_t begin,size_t end,const float bounds[4],bool enabled);
+/* Bind the URI of the most recently recorded link without truncation. */
+bool ps_a11y_document_link_target(ps_a11y_model *model,size_t index,const char *target);
 void ps_a11y_begin(ps_a11y_model *model);
 /* Preserve published content/IDs while unavailable. Cancel queued input;
  * only a completed new publication resumes native actions. */

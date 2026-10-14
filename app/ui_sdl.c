@@ -266,7 +266,7 @@ bool nk_sdl_accessibility_document_preserve_position(struct nk_context *ctx,uint
  bool ok=ps_a11y_document_preserve_position(sdl->accessibility,version);
  SDL_UnlockMutex(sdl->accessibility_mutex);return ok;
 }
-bool nk_sdl_accessibility_document_link(struct nk_context *ctx,const char *name,uint64_t version,
+bool nk_sdl_accessibility_document_link_target(struct nk_context *ctx,const char *name,const char *target,uint64_t version,
                                         size_t begin,size_t end,struct nk_rect bounds) {
  if(!ctx || !ctx->userdata.ptr || !ctx->current || !ctx->current->layout)return false;
  struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
@@ -285,6 +285,7 @@ bool nk_sdl_accessibility_document_link(struct nk_context *ctx,const char *name,
  SDL_LockMutex(sdl->accessibility_mutex);ps_a11y_model *m=sdl->accessibility;
  uint64_t pending=m->pending_focus;size_t before=m->draft_count;
  bool pressed=ps_a11y_document_link(m,ctx->current->name_string,name,version,begin,end,visible,enabled);
+ if(target && m->draft_count>before)ps_a11y_document_link_target(m,before,target);
  bool granted=m->draft_count>before && pending && !m->pending_focus && m->focused_id==pending && m->draft[before].id==pending;
  bool focused=m->draft_count>before && m->draft[before].id==m->focused_id && m->keyboard_focus;
  if(granted)ps_a11y_document_scroll_align(m,version,begin,true);
@@ -293,6 +294,10 @@ bool nk_sdl_accessibility_document_link(struct nk_context *ctx,const char *name,
  if(focused && visible[2]>0 && visible[3]>0)nk_stroke_rect(nk_window_get_canvas(ctx),
      nk_rect(left-3,top-2,right-left+6,bottom-top+4),3,1,ctx->style.button.text_normal);
  return pressed;
+}
+bool nk_sdl_accessibility_document_link(struct nk_context *ctx,const char *name,uint64_t version,
+                                        size_t begin,size_t end,struct nk_rect bounds) {
+ return nk_sdl_accessibility_document_link_target(ctx,name,NULL,version,begin,end,bounds);
 }
 void nk_sdl_accessibility_document_link_invoked(struct nk_context *ctx,uint64_t version,size_t begin,size_t end) {
  if(!ctx || !ctx->userdata.ptr)return;struct nk_sdl *sdl=ctx->userdata.ptr;

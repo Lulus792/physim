@@ -56,6 +56,12 @@ int main(void) {
  CHECK(!ps_a11y_document_link(m,"main","θ",4,8,6,hidden,true) && !m->draft_count);
  CHECK(!ps_a11y_document_link(m,"main","θ",4,6,8,hidden,true) && m->draft_count==1);
  uint64_t link=m->draft[0].id;CHECK(m->draft[0].role==PS_A11Y_LINK && m->draft[0].offscreen && m->draft[0].focusable);
+ char target[]="docs/θ.md#Abschnitt";
+ CHECK(ps_a11y_document_link_target(m,0,target));target[0]='x';
+ CHECK(!strcmp(m->draft[0].document_target,"docs/θ.md#Abschnitt"));
+ CHECK(!ps_a11y_document_link_target(m,1,"bad") && !ps_a11y_document_link_target(m,0,"\xc0\xaf"));
+ char oversized[PS_A11Y_LABEL_BYTES+1];memset(oversized,'x',sizeof oversized);oversized[sizeof oversized-1]=0;
+ CHECK(!ps_a11y_document_link_target(m,0,oversized));
  CHECK(ps_a11y_publish(m));CHECK(ps_a11y_press(m,link));
  ps_a11y_begin(m);CHECK(ps_a11y_document_begin(m,4,"Links",text,view));
  CHECK(ps_a11y_document_link(m,"main","θ",4,6,8,box,true));CHECK(m->draft[0].id==link && !m->draft[0].offscreen);

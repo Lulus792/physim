@@ -160,10 +160,18 @@ Der unabhängige F1-Client bestätigt die tatsächlichen Suchwerte, eine markier
 Unicode-Auswahl, deren Ersetzung durch Tastatureingabe und den Tab-Ausstieg.
 Eine zusätzliche Zwei-Fenster-Probe prüft Zwischenablage und ungültige Anfragen.
 
+Interne F1-Links sind dem Lesetext über `Hypertext` zugeordnet. Der Client
+kann die Links in Lesereihenfolge, ihre Unicode-Textbereiche, Zieladressen und
+zugehörigen Link-Controls abfragen. Ein nativ fokussierter Link außerhalb des
+sichtbaren Ausschnitts wird zum Lesen sichtbar gemacht. Seine Aktion folgt
+demselben Navigationsweg wie Maus und Tastatur. Alte Linkobjekte werden nach
+einem Inhaltswechsel ungültig. Quellenadressen bleiben die dokumentierte
+Kopieraktion und gehören nicht zu dieser internen Linknavigation.
+
 Es gibt höchstens acht native Fenster pro Prozess und die bestehenden 256
 Controls/1023 Label-Byte je Modell. Der zusätzliche Dokumentknoten verwendet
 den separaten vollständigen Lesetext mit dessen dokumentierten Größenlimits.
-Weitere assistive Eingabefelder/Editoren, native Linktextbereiche, Tabellensemantik,
+Weitere assistive Eingabefelder/Editoren, Tabellensemantik,
 visuelle statt logischer Zeilengrenzen, sprachabhängige Textsegmentierung,
 begrenzte Bereichsabfragen und Scrollen zu einer bestimmten Bildschirmposition
 bleiben offen. Bildschirmkoordinaten werden nur

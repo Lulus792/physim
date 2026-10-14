@@ -66,6 +66,8 @@ bool nk_sdl_accessibility_document_scroll(struct nk_context *ctx,uint64_t versio
 bool nk_sdl_accessibility_document_preserve_position(struct nk_context *ctx,uint64_t version);
 bool nk_sdl_accessibility_document_link(struct nk_context *ctx,const char *name,uint64_t version,
                                         size_t begin,size_t end,struct nk_rect bounds);
+bool nk_sdl_accessibility_document_link_target(struct nk_context *ctx,const char *name,const char *target,
+                                        uint64_t version,size_t begin,size_t end,struct nk_rect bounds);
 void nk_sdl_accessibility_document_link_invoked(struct nk_context *ctx,uint64_t version,size_t begin,size_t end);
 void nk_sdl_accessibility_suspend(struct nk_context *ctx);
 bool nk_sdl_accessibility_document_visible(struct nk_context *ctx,uint64_t version,size_t byte);

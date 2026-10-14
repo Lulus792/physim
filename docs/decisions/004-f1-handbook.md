@@ -17,7 +17,7 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 | Dokumentationszugang | 183 registrierte Seiten und 214 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
 | Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
-| Barrierefreiheit | Windows UIA liest vollständigen Text, bedient Suchfelder und veröffentlicht interne Links; Linux AT-SPI liest vollständigen Text und bedient beide Suchfelder mit Unicode-Auswahl und Caret; unabhängige Clientprüfungen bestehen | Native Text-/Feldbereiche auf macOS, Linktextbereiche auf macOS/Linux, Tabellensemantik und echte Screenreader-Aufgaben |
+| Barrierefreiheit | Windows UIA liest vollständigen Text, bedient Suchfelder und veröffentlicht interne Links; Linux AT-SPI ergänzt Lesetext, Suchfelder und interne Hypertext-Linkbereiche; unabhängige Clientprüfungen bestehen | Native Text-/Feld-/Linkbereiche auf macOS, Tabellensemantik und echte Screenreader-Aufgaben |
 
 Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
 Bewertung mit Höchstpunktzahl ist wegen dieser offenen Abnahmefälle noch nicht
@@ -169,12 +169,86 @@ ist ebenfalls abgeschlossen: Workflow `38521829659`, Clang und GCC jeweils
 **24/24 native und 28/28 GUI-Fälle**. Das belegt diese vorherige Revision;
 für die neue Feldanbindung wird daraus kein Ubuntu-Erfolg abgeleitet.
 
+Der anschließende Ubuntu-Lauf für den Suchfeld-Commit `e4a7bbf` ist inzwischen
+ebenfalls tatsächlich abgeschlossen: Workflow `38596181683`, GCC-Job
+`115963388120` mit **24/24 native und 29/29 GUI-Fällen** (`run-coinkji_`,
+`run-yprdpcua`), Clang-Job `115963388839` mit ebenfalls **24/24 und 29/29**
+(`run-ykddijmi`, `run-wulbufgf`). Die Originalprotokolle beider abgeschlossenen
+Jobs wurden eingesehen; `accessibility_edit_atspi` besteht in beiden.
+
 Die bisherigen fachlichen Wertungen **8/10 UI, 8/10 Dokumentationsaufgabe und
 5/10 Barrierefreiheit** bleiben eine konservative Bewertung der Gesamtaufgabe.
 Linux-Suchfelder und vollständiges Linux-Lesen zählen jetzt als geprüfter
 Fortschritt. Native macOS-Text-/Feldanbindung, Linux-/macOS-Linktextbereiche,
 Tabellensemantik, praktische Screenreader-Aufgaben, tatsächliche
 DPI-/Monitorwechsel und der vollständige Inhaltsabgleich bleiben offen.
+
+### Linux-Links im vollständigen Lesetext
+
+Die nächste Erweiterung verbindet interne F1-Links mit dem vollständigen
+AT-SPI-Lesetext. `Hypertext` liefert Linkanzahl, Links in Lesereihenfolge und
+den Linkindex an einer Unicode-Position. Ein separates `Hyperlink` liefert
+Zieladresse, Start-/Endposition, Gültigkeit und das bedienbare Link-Control.
+Offscreen-Links bleiben im Inventar; Fokus macht ihren tatsächlichen Textbereich
+sichtbar. Link-Controls nutzen die bereits geprüften gemeinsamen Fokus- und
+Aktivierungsaufträge. Die URI wird ohne Kürzung in den kopierten Snapshot
+übernommen. Ungültige UTF-8-Ziele und übergroße Ziele werden abgewiesen.
+
+Grundlage sind die offiziellen Verträge für
+[Hypertext](https://gnome.pages.gitlab.gnome.org/at-spi2-core/devel-docs/doc-org.a11y.atspi.Hypertext.html)
+und [Hyperlink](https://gnome.pages.gitlab.gnome.org/at-spi2-core/devel-docs/doc-org.a11y.atspi.Hyperlink.html).
+Die native Gegenprobe findet zwei Integrationsfehler: Ein gemeinsamer Objektpfad
+für Accessible und Hyperlink liefert aus dem libatspi-Cache den falschen Objekttyp
+(`run-bf3e4jsb`). Separate Hyperlink-Objektpfade beheben dies. Die XML-Dokumentation
+nennt für `NAnchors` den Typ `n`; libatspi fordert tatsächlich `i`
+(`run-rhp252mc`). Die Anbindung veröffentlicht deshalb den wirksamen 32-Bit-Typ,
+auch in ihrer eigenen Introspektion. Dieser Unterschied wurde am
+[offiziellen libatspi-Quelltext](https://raw.githubusercontent.com/GNOME/at-spi2-core/main/atspi/atspi-hyperlink.c)
+und am tatsächlich ausgeführten Client überprüft. Das zwischenzeitlich versuchte
+`HyperlinkImpl` ist kein von diesem Client unterstütztes AT-SPI-Interface und
+wurde entfernt.
+
+Die unabhängige F1-Probe bestätigt zwei interne Links einschließlich eines
+Tabellenlinks nach Unicode-Text. Sie prüft exakte Textbereiche und URIs,
+ungültige Link-/Ankerindizes, Offscreen-Fokus und Glyphengeometrie,
+fehlgeschlagene Navigation mit erhaltenem Quelltext, erfolgreiche Navigation
+und danach ungültige alte Hyperlinkobjekte. Quellenadressen bleiben die
+dokumentierte Kopieraktion. Der negative Lauf mit dem vorherigen App-Build
+scheitert bereits an der fehlenden Hypertext-Schnittstelle
+(`build/native/F1-linux/link-before.log`).
+
+Die negativen D-Bus-Anfragen werden ausdrücklich direkt geprüft, weil der
+Python-Wrapper bei einzelnen nativen Fehlern einen leeren Rückgabewert liefert.
+`run-k7h37ltc` findet diese falsche Prüferannahme bei ungültigen Indizes;
+`run-ajd6pxw7` erreicht alle positiven Linkaufgaben, scheitert aber noch an
+derselben Annahme bei einem alten Hyperlink. Der abschließende unabhängige
+Client verwendet für beide Gegenproben native D-Bus-Fehlernamen. Er besteht
+mit demselben App-Build und Exitcode 0 unter
+`build/native/F1-linux/links-final-client`; `results.json` und das echte
+App-Endsignal bestätigen erfolgreiche Navigation und unveränderten Editor/
+Simulationszustand. Die gehaltene Hyperlinkreferenz liefert nach Navigation
+`org.a11y.atspi.Error.Defunct`.
+
+Die finale Produktion besteht zusätzlich vier benachbarte GCC-ASan/UBSan-
+GUI-Fälle in `run-ajd6pxw7`: allgemeines AT-SPI, F1-Navigation, vollständiger
+Lesetext und native Suchfelder. Der historische Gesamtlauf bleibt korrekt
+als 4/5 erhalten; der anschließend korrigierte Linkclient ist ein eigener
+erfolgreicher Ausführungsbeleg. Die drei Windows-GUI-Nachbarn für Links,
+Lebenszyklus und Suchfelder bestehen mit MSVC ASan in `run-br9upxjo`.
+Die drei Modellfälle für Dokument, Fensterpause und Editieren bestehen
+dort in `run-2kyziyfi`; der ergänzte Linkziel-/Besitzfall besteht auch direkt
+mit GCC ASan/UBSan einschließlich Leakprüfung
+(`build/native/F1-linux/atspi-links-model.log`). Der Provider besteht GCC
+`-Wall -Wextra -Werror -fsyntax-only`; Testläufer und Kataloggegenproben
+bestehen in `build/native/F1-review/atspi-links-runner-proof`.
+
+Die drei finalen Linux-Aufnahmen wurden unmittelbar geprüft: Der zuvor
+verborgene Tabellenlink trägt sichtbaren Fokus, die ungültige Navigation
+zeigt eine lesbare Fehlermeldung im Handbuch und die erfolgreiche Navigation
+öffnet den tatsächlichen C-Lernweg. Diese Erweiterung ersetzt keine praktische
+Orca-Abnahme oder native Tabellensemantik. macOS-Text-/Feld-/Linkbereiche,
+Screenreader-Aufgaben, echte DPI-/Monitorwechsel und vollständiger
+Inhaltsabgleich bleiben offen; eine Gesamtwertung mit 10/10 wird nicht erteilt.
 
 ### Offline-Schriftquellen und vollständige Zeicheninventur
 

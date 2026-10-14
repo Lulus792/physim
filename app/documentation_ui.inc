@@ -1263,7 +1263,7 @@ static void documentation_view(app *a, float height) {
             if(a->documentation==d)for(size_t i=0;i<d->count;i++) {
                 ps_doc_block *b=&d->blocks[i];
                 if(b->kind!=PS_DOC_LINK || !strncmp(d->text+b->target,"http",4) || b->reading_begin==SIZE_MAX || !b->reading_length)continue;
-                if(nk_sdl_accessibility_document_link(ui,d->text+b->text,a->doc_reading_version,
+                if(nk_sdl_accessibility_document_link_target(ui,d->text+b->text,d->text+b->target,a->doc_reading_version,
                     b->reading_begin,b->reading_begin+b->reading_length,nk_rect(b->hit[0],b->hit[1],b->hit[2],b->hit[3])))a->doc_inline_clicked=(int)i;
             }
         }
