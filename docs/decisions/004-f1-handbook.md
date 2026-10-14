@@ -17,7 +17,7 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 | Dokumentationszugang | 183 registrierte Seiten und 214 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
 | Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
-| Barrierefreiheit | Windows UIA und Linux AT-SPI ergänzen Lesetext, Suchfelder und interne Linkbereiche; macOS ergänzt einen vollständigen AppKit-Leseknoten mit UTF-16-Bereichen und nativer Geometrie; die jeweiligen Client-/Laufzeitprüfungen bestehen | Native Feld-/Linkbereiche auf macOS, Tabellensemantik, externe macOS-AX-Clientprüfung und echte Screenreader-Aufgaben |
+| Barrierefreiheit | Windows UIA und Linux AT-SPI ergänzen Lesetext, Suchfelder und interne Linkbereiche; macOS liefert vollständigen AppKit-Lesetext und native Suchfelder mit UTF-16-Bereichen und Zeichenrahmen; die jeweiligen Client-/Laufzeitprüfungen bestehen | Native Linktextbereiche auf macOS, Tabellensemantik, externe macOS-AX-Clientprüfung und echte Screenreader-Aufgaben |
 
 Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
 Bewertung mit Höchstpunktzahl ist wegen dieser offenen Abnahmefälle noch nicht
@@ -341,6 +341,79 @@ Die finale Linux-Kontrastaufnahme wurde unmittelbar geprüft; alle drei
 Titelzeilen liegen im sichtbaren Fokusrahmen. Die Ubuntu-Nachprüfung dieser
 Korrektur steht noch aus. Praktische Screenreader-, macOS- und echte
 DPI-/Monitorwechsel-Abnahme werden durch diese Reflow-Korrektur nicht behauptet.
+
+### Native macOS-Suchfelder mit Auswahl und Caret
+
+Die Erweiterung auf dem Zweig `codex/mac-f1-fields` verbindet beide benannten
+F1-Suchfelder mit AppKit. Die zentralen Skills `macos-specialist`,
+`accessibility-engineer` und `test-engineer` wurden dafür aus `D:/Skills/skills`
+angewendet. Der Feldknoten liefert Wert, Zeichenanzahl, Auswahltext, einfache
+und als `NSValue` verpackte UTF-16-Auswahlbereiche, Einzelzeilenbereiche,
+sichtbaren Text und Bildschirmrahmen einschließlich des Carets. Grundlage sind
+Apples Verträge für [Auswahlbereiche](https://developer.apple.com/documentation/appkit/nsaccessibilityprotocol/setaccessibilityselectedtextranges%28_%3A%29)
+und [Zeilenbereiche](https://developer.apple.com/documentation/appkit/nsaccessibilityprotocol/accessibilityrange%28forline%3A%29).
+
+Die Schreibmethoden prüfen den lebenden Feldknoten, aktivierte
+Darstellung, Kapazität und gültige UTF-16-Grenzen. Eingebettete Nullzeichen,
+falsche Objekttypen, Surrogat-Innenpositionen und mehrzeilige Eingaben gelangen
+nicht in das UI-Modell. Das normale Setzen des Gesamtwerts und das Ersetzen einer
+Auswahl besitzen unterschiedliche Caret-Verträge: Ersetzen erhält den Text vor
+und nach der Auswahl und liefert den Caret direkt hinter der Einfügung gemeinsam
+mit dem neuen Wert. Das gilt auch bei einer identischen Ersetzung. Eine inzwischen
+geänderte Quelle verwirft die Ersetzung. Die Bildprobe verlangt nach einem nativen
+Sprung zum Textanfang zunächst unsichtbare Endglyphen und macht erst dann das
+Ende mit einer nativen Bereichsanforderung wieder sichtbar.
+
+Tatsächlich ausgeführte lokale Prüfungen des gemeinsamen Modells und der
+Plattformnachbarn, jeweils Exitcode 0:
+
+- MSVC ASan: **4/4** Modellfälle in `run-r2nh0hrv` für UTF-16, Lesedokument,
+  Suspension und editierbare Felder; **3/3** GUI-Fälle in `run-gkqf444w` für
+  gezeichnete Accessibility, den externen Windows-Feldclient und Navigation.
+- Alpine 3.24.2 / GCC 15.2 / X11 mit Openbox und ASan/UBSan: **4/4** Modellfälle
+  in `run-o7jzt6f4`; **3/3** GUI-Fälle in `run-20y28hl_` für Navigation,
+  Inhaltsaktionen und den unabhängigen AT-SPI-Feldclient.
+- Eine gezielt defekte Modellkopie ohne Übernahme des Einfüge-Carets scheitert
+  an der neuen Wert-/Auswahl-/Caret-Prüfung mit Exitcode 1. Die unveränderte
+  finale Modellquelle besteht separat mit GCC ASan/UBSan und Leakprüfung.
+  Originalprotokolle: `build/native/F1-review/mac-fields-caret-negative.log`
+  und `mac-fields-caret-final.log`.
+- Der Testläufer erkennt die nur auf Darwin ausführbaren AppKit-Fälle und die
+  separaten Linux-AT-SPI-Clients korrekt. Die Fehler-, Timeout- und
+  Kataloggegenproben bestehen unter Windows und Linux; ihre absichtlich
+  fehlschlagenden simulierten Fälle zählen nicht als Produktfehler.
+
+Der erste [tatsächlich ausgeführte macOS-Lauf](https://github.com/Lulus792/physim/actions/runs/38627140037)
+für `8be7ca0` besteht auf Intel und ARM64 jeweils **4/4** Modell- und **6/6**
+GUI-/AppKit-Fälle, einschließlich echter F1-Wertänderung, Unicode-Auswahl,
+Ersetzung, Caret, verdecktem Textende, Verbergen und Editorisolation. Die
+ursprüngliche Probe nahm wegen Verbergen vor dem Rendern kein Endbild auf;
+die finale Probe verlangt diese Bilddatei ausdrücklich.
+
+Der [finale ausgeführte macOS-Lauf](https://github.com/Lulus792/physim/actions/runs/38630367316)
+auf Quellrevision `197f112` besteht auf beiden Architekturen mit LLVM 20
+ASan/UBSan und SDL 3.2.30 unter Darwin 24.6.0:
+
+- Intel: **4/4** Modellfälle in `run-wa1mmz6l`, **6/6** GUI-/AppKit-Fälle
+  in `run-li1fhofh`; Job `116081789003`.
+- ARM64: **4/4** Modellfälle in `run-z0_cr1nm`, **6/6** GUI-/AppKit-Fälle
+  in `run-wb7u02mc`; Job `116081789315`.
+- Die Plattform-Katalog- und Fehlergegenproben bestehen zusätzlich auf beiden
+  Hosts. Beide vollständigen Joblogs und Originalartefakte wurden gelesen.
+  Die neue reale Endaufnahme wurde auf beiden Architekturen unmittelbar
+  geprüft: Im fokussierten Suchfeld bleibt das native Ziel `θ🌍` sichtbar.
+  Die originale F1-Probe bestätigt auch den Caret direkt hinter der Ersetzung
+  und den unveränderten Editorinhalt.
+
+Die Originalarchive liegen unter `build/native/F1-review/mac-fields-final-intel.zip`
+und `mac-fields-final-arm.zip`, die Bildkonvertierungen in den gleichnamigen
+`-images`-Verzeichnissen. Diese Belege gelten für den getesteten Quellstand;
+spätere Berichtergänzungen ändern die geprüfte Implementierung nicht.
+
+Native macOS-Linktextbereiche, Tabellensemantik, externe AX-Clientprüfung und
+praktische Screenreader-Aufgaben bleiben separate Abnahmepunkte. Diese
+In-Prozess-AppKit-Prüfungen erteilen keine VoiceOver-Freigabe und keine 10/10
+für die Gesamtaufgabe.
 
 ### Vollständiger AppKit-Lesetext auf macOS
 
