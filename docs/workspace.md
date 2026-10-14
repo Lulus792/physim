@@ -636,6 +636,15 @@ Navigation und den Aktionen im Text. Enter oder Leertaste öffnet einen Link ode
 kopiert einen Codeblock. Im Lesebereich scrollen Pfeiltasten und PageUp/PageDown;
 Home führt zum Anfang. Der Rahmen zeigt den Tastaturfokus.
 
+Der Schalter **Navigation einblenden / ausblenden** oben im Leser oder
+**Ctrl+Shift+B** (macOS **Cmd+Shift+B**) schaltet die linke Navigation um.
+Ohne Navigation nutzt der Artikel die volle Fensterbreite; bei großer Schrift
+werden zusätzlich die Werkzeuge in einer Zeile zusammengefasst. Suchbegriffe
+und die sichtbare Textstelle bleiben beim Umbruch erhalten. Ausgeblendete
+Lernwege, Themen und die globale Suche werden beim Tab-Wechsel übersprungen;
+der Navigationsschalter bleibt erreichbar. Erneutes Öffnen von F1 erhält diese
+Ansicht während derselben Sitzung.
+
 **Zurück / Alt+Pfeil links** und **Vorwärts / Alt+Pfeil rechts** folgen dem
 Verlauf mit bis zu 64 besuchten Seiten und Abschnittszielen. Dabei bleiben
 Leseposition, Suchbegriff, Inhaltsansicht und Sprachweg erhalten. Eine neue

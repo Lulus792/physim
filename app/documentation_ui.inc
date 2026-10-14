@@ -661,7 +661,7 @@ static bool documentation_activate_link(app *a,size_t index) {
     return completed;
 }
 /* Stable semantic IDs are rebuilt from current content for each key event. */
-enum { DOC_C=1,DOC_PHYSIM,DOC_TOPICS,DOC_CONTENTS,DOC_FILTER,DOC_GROUP,DOC_BACK,DOC_HOME,DOC_WORKSPACE,DOC_SEARCH,DOC_PREVIOUS,DOC_NEXT,DOC_BODY,DOC_FORWARD,DOC_ZOOM_OUT,DOC_ZOOM_RESET,DOC_ZOOM_IN,
+enum { DOC_C=1,DOC_PHYSIM,DOC_TOPICS,DOC_CONTENTS,DOC_FILTER,DOC_GROUP,DOC_BACK,DOC_HOME,DOC_WORKSPACE,DOC_SEARCH,DOC_PREVIOUS,DOC_NEXT,DOC_BODY,DOC_FORWARD,DOC_ZOOM_OUT,DOC_ZOOM_RESET,DOC_ZOOM_IN,DOC_NAVIGATION,
        DOC_TOPIC=10000,DOC_HEADING=20000,DOC_COPY=30000,DOC_LINK=40000,DOC_VISUAL=50000 };
 static int documentation_media_kind(const char *target) {
     if(!strcmp(target,"visuals/workflow.svg"))return 1;
@@ -697,16 +697,36 @@ static unsigned documentation_topic_order(const app *a,int *order) {
     }
     return found;
 }
-static unsigned documentation_focus_list(app *a,int *entries) {
-    unsigned count=0;entries[count++]=DOC_C;entries[count++]=DOC_PHYSIM;
-    entries[count++]=DOC_TOPICS;entries[count++]=DOC_CONTENTS;
-    if(a->doc_contents && a->documentation) {
-        for(size_t i=0;i<a->documentation->count;i++)if(documentation_contents_heading(a,&a->documentation->blocks[i]))entries[count++]=DOC_HEADING+(int)i;
-    } else {
-        entries[count++]=DOC_FILTER;entries[count++]=DOC_GROUP;
-        int order[DOCUMENTATION_TOPIC_COUNT];unsigned topics=documentation_topic_order(a,order);
-        for(unsigned n=0;n<topics;n++)entries[count++]=DOC_TOPIC+order[n];
+static void documentation_navigation_toggle(app *a) {
+    if(a->doc_filter_active)
+        ps_ui_flush_edit(a->doc_ui,"topics",a->doc_filter,sizeof a->doc_filter,a->doc_focus_bounds);
+    if(a->doc_search_active)
+        ps_ui_flush_edit(a->doc_ui,"document",a->doc_query,sizeof a->doc_query,a->doc_focus_bounds);
+    if(strcmp(a->doc_filter,a->doc_last_filter))documentation_filter(a);
+    for(struct nk_window *window=a->doc_ui->begin;window;window=window->next) {
+        window->edit.active=nk_false;window->edit.name=0;
     }
+    a->doc_ui->text_edit.active=nk_false;
+    nk_sdl_accessibility_document_preserve_position(a->doc_ui,a->doc_reading_version);
+    a->doc_navigation_hidden=!a->doc_navigation_hidden;
+    a->doc_filter_active=a->doc_filter_focus=a->doc_search_active=a->doc_search_focus=false;
+    a->doc_keyboard=true;a->doc_focus=DOC_NAVIGATION;a->doc_focus_reveal=true;
+    if(a->documentation)a->documentation->layout_width=0;
+}
+static unsigned documentation_focus_list(app *a,int *entries) {
+    unsigned count=0;
+    if(!a->doc_navigation_hidden) {
+        entries[count++]=DOC_C;entries[count++]=DOC_PHYSIM;
+        entries[count++]=DOC_TOPICS;entries[count++]=DOC_CONTENTS;
+        if(a->doc_contents && a->documentation) {
+            for(size_t i=0;i<a->documentation->count;i++)if(documentation_contents_heading(a,&a->documentation->blocks[i]))entries[count++]=DOC_HEADING+(int)i;
+        } else {
+            entries[count++]=DOC_FILTER;entries[count++]=DOC_GROUP;
+            int order[DOCUMENTATION_TOPIC_COUNT];unsigned topics=documentation_topic_order(a,order);
+            for(unsigned n=0;n<topics;n++)entries[count++]=DOC_TOPIC+order[n];
+        }
+    }
+    entries[count++]=DOC_NAVIGATION;
     if(ps_doc_history_peek(&a->doc_history,-1))entries[count++]=DOC_BACK;
     if(ps_doc_history_peek(&a->doc_history,1))entries[count++]=DOC_FORWARD;
     entries[count++]=DOC_HOME;entries[count++]=DOC_WORKSPACE;
@@ -724,6 +744,9 @@ static unsigned documentation_focus_list(app *a,int *entries) {
     return count;
 }
 static bool documentation_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
+    if((key->mod&PS_UI_COMMAND_MOD) && (key->mod&SDL_KMOD_SHIFT) && key->key==SDLK_B) {
+        if(!key->repeat)documentation_navigation_toggle(a);return true;
+    }
     if(key->mod&PS_UI_COMMAND_MOD) {
         int zoom=key->key==SDLK_PLUS || key->key==SDLK_EQUALS || key->key==SDLK_KP_PLUS?1:
             key->key==SDLK_MINUS || key->key==SDLK_KP_MINUS?-1:0;
@@ -802,7 +825,8 @@ static bool documentation_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
     if(focus==DOC_C || focus==DOC_PHYSIM) {
         open_documentation(a,focus==DOC_C?DOCUMENTATION_C_GUIDE_TOPIC:DOCUMENTATION_PHYSIM_GUIDE_TOPIC);
         a->doc_query[0]=a->doc_filter[0]=0;documentation_filter(a);a->doc_contents=false;
-    } else if(focus==DOC_TOPICS || focus==DOC_CONTENTS)a->doc_contents=focus==DOC_CONTENTS;
+    } else if(focus==DOC_NAVIGATION)documentation_navigation_toggle(a);
+    else if(focus==DOC_TOPICS || focus==DOC_CONTENTS)a->doc_contents=focus==DOC_CONTENTS;
     else if(focus==DOC_BACK)documentation_history_go(a,-1);
     else if(focus==DOC_FORWARD)documentation_history_go(a,1);
     else if(focus==DOC_HOME)open_documentation(a,a->doc_track==1?DOCUMENTATION_C_GUIDE_TOPIC:a->doc_track==2?DOCUMENTATION_PHYSIM_GUIDE_TOPIC:1);
@@ -996,7 +1020,13 @@ static void documentation_view(app *a, float height) {
     bool large=documentation_font_size(a)>=20;
     bool compact=documentation_font_size(a)>=24;
     bool narrow=!compact && (large || nk_window_get_content_region(ui).w<600);
-    nk_layout_row_dynamic(ui, documentation_control_height(a), narrow?2:4);
+    bool combined=compact && nk_window_get_content_region(ui).w>=620;
+    nk_layout_row_dynamic(ui, documentation_control_height(a), combined?8:narrow?3:5);
+    struct nk_rect navigation_bounds=nk_widget_bounds(ui);
+    a->doc_navigation_bounds=navigation_bounds;
+    if(ps_ui_icon_button(ui,PS_ICON_SIDEBAR,a->doc_navigation_hidden?"Navigation einblenden":"Navigation ausblenden"))
+        documentation_navigation_toggle(a);
+    documentation_focus_draw(a,DOC_NAVIGATION,navigation_bounds,false);
     struct nk_rect back_bounds=nk_widget_bounds(ui);
     nk_begin_disabled(ui, !ps_doc_history_peek(&a->doc_history,-1));
     if (compact?ps_ui_icon_button(ui,PS_ICON_LEFT,"Zurück"):nk_button_label(ui, "Zurück"))
@@ -1017,7 +1047,7 @@ static void documentation_view(app *a, float height) {
     if (compact?ps_ui_icon_button(ui,PS_ICON_WINDOW,"Arbeitsbereich"):nk_button_label(ui, "Arbeitsbereich"))
         SDL_RaiseWindow(a->window);
     documentation_focus_draw(a,DOC_WORKSPACE,workspace_bounds,false);
-    nk_layout_row_dynamic(ui,documentation_control_height(a),3);
+    if(!combined)nk_layout_row_dynamic(ui,documentation_control_height(a),3);
     struct nk_rect zoom_out=nk_widget_bounds(ui);
     nk_begin_disabled(ui,documentation_font_size(a)<=16);
     if(documentation_zoom_button(a,-1))documentation_zoom(a,-1);

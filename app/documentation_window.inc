@@ -150,20 +150,24 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     float side = (w < 1000 ? 220.0f : 270.0f)*(documentation_font_size(a)/16.f);
     side=fminf(side,(float)w*.4f);
     nk_style_push_vec2(ui, &ui->style.window.padding, nk_vec2(14, 14));
-    if (nk_begin(ui, "topics", nk_rect(8, 8, side, (float)h - 16), 0)) {
-        if (a->doc_reset_sidebar) {
-            nk_window_set_scroll(ui, 0, 0);
-            a->doc_reset_sidebar = false;
+    nk_window_show(ui,"topics",a->doc_navigation_hidden?NK_HIDDEN:NK_SHOWN);
+    if(!a->doc_navigation_hidden) {
+        if (nk_begin(ui, "topics", nk_rect(8, 8, side, (float)h - 16), 0)) {
+            if (a->doc_reset_sidebar) {
+                nk_window_set_scroll(ui, 0, 0);
+                a->doc_reset_sidebar = false;
+            }
+            ps_ui_accessibility_route(ui,true);
+            documentation_sidebar(a);
         }
-        ps_ui_accessibility_route(ui,true);
-        documentation_sidebar(a);
+        nk_end(ui);
     }
-    nk_end(ui);
+    float document_x=a->doc_navigation_hidden?8:side+16;
     if (a->doc_search_focus || a->doc_search_active)
         nk_window_set_focus(ui, "document");
     else if (a->doc_filter_active)
         nk_window_set_focus(ui, "topics");
-    if (nk_begin(ui, "document", nk_rect(side + 16, 8, (float)w - side - 24, (float)h - 16),
+    if (nk_begin(ui, "document", nk_rect(document_x, 8, (float)w - document_x - 8, (float)h - 16),
                  NK_WINDOW_NO_SCROLLBAR)) {
         ps_ui_accessibility_route(ui,true);
         documentation_view(a, (float)h - 16);

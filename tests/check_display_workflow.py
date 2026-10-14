@@ -42,6 +42,7 @@ SIMPLE["documentation_keyboard"] = (["--workspace-state-test", "{directory}", "d
 SIMPLE["documentation_history"] = (["--workspace-state-test", "{directory}", "docs-keyboard-history"], 90, True)
 SIMPLE["documentation_zoom"] = (["--workspace-state-test", "{directory}", "docs-keyboard-zoom"], 90, True)
 SIMPLE["documentation_density"] = (["--workspace-state-test", "{directory}", "docs-keyboard-density"], 120, True)
+SIMPLE["documentation_navigation"] = (["--workspace-state-test", "{directory}", "docs-keyboard-navigation"], 90, True)
 SIMPLE["documentation_inline"] = (["--workspace-state-test", "{directory}", "docs-keyboard-inline"], 90, True)
 SIMPLE["documentation_media_16"] = (["--workspace-state-test", "{directory}", "docs-keyboard-media"], 90, True)
 SIMPLE["documentation_media_22"] = (["--workspace-state-test", "{directory}", "docs-keyboard-media-22"], 90, True)
@@ -95,6 +96,35 @@ def documentation_math(flow, directory):
     finally:
         if previous is None:flow.env.pop('PHYSIM_TEST_BUNDLED_FONTS',None)
         else:flow.env['PHYSIM_TEST_BUNDLED_FONTS']=previous
+
+
+def documentation_navigation(flow,directory):
+    directory.mkdir(parents=True)
+    flow.run('--workspace-state-test',directory,'docs-keyboard-navigation',timeout=90,
+             marker='DOCUMENTATION NAVIGATION SELF-TEST: PASSED')
+    output=flow.steps[-1]['stdout']
+    match=re.search(r'DOCUMENTATION NAVIGATION: before=([0-9.]+)x([0-9.]+) reader=([0-9.]+)x([0-9.]+) anchor=(\d+)',output)
+    require(match,'Missing actual reader/navigation layout comparison')
+    bw,bh,rw,rh,anchor=map(float,match.groups())
+    require(rw>=bw+250 and rh>=bh+40 and anchor>0,'Reading mode did not gain usable space or preserve a scrolled text position')
+    captures={name:tuple(map(float,values)) for name,*values in re.findall(
+        r'DOCUMENTATION CAPTURE: (\S+) logical=(\d+)x(\d+) pixels=(\d+)x(\d+) font=(\d+) body=([0-9.]+)',output)}
+    for name in ('before','reader','restored','light','contrast'):
+        file='docs-navigation-'+name+'.bmp'
+        require(file in captures,'Missing completed navigation image: '+file)
+        w,h,pw,ph,font,body=captures[file]
+        require((w,h)==(760,540) and font==32 and body>=120,'Wrong navigation layout: '+file)
+        raw=(directory/file).read_bytes()
+        require(raw[:2]==b'BM' and len(raw)>=54,'Missing navigation bitmap: '+file)
+        width,height=struct.unpack_from('<ii',raw,18)
+        require((width,abs(height))==(pw,ph),'Navigation bitmap differs from actual drawable: '+file)
+        if name in ('light','contrast'):
+            offset=struct.unpack_from('<I',raw,10)[0];depth=struct.unpack_from('<H',raw,28)[0]
+            require(depth in (24,32),'Unexpected navigation bitmap depth')
+            stride=((width*depth+31)//32)*4
+            row=abs(height)-13 if height>0 else 12
+            start=offset+row*stride+12*(depth//8);rgb=raw[start:start+3]
+            require(len(rgb)==3 and (min(rgb)>=220 if name=='light' else max(rgb)<=10),'Wrong rendered navigation theme: '+name)
 
 
 def documentation_density(flow,directory):
@@ -1455,6 +1485,7 @@ SPECIAL = {"scene_visibility_16": lambda flow,directory: scene_visibility(flow,d
 
 SPECIAL["documentation_math"]=documentation_math
 SPECIAL["documentation_density"]=documentation_density
+SPECIAL["documentation_navigation"]=documentation_navigation
 
 def main():
     # App diagnostics and paths can contain Unicode even when Python inherits a

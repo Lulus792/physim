@@ -251,9 +251,9 @@ typedef struct {
     float doc_scroll_adjustment;
     char doc_query[128], doc_last_query[128], doc_error[160];
     bool doc_search_focus, doc_search_active, doc_move_match, doc_reset_sidebar,doc_scroll_pending;
-    bool doc_keyboard,doc_focus_reveal,doc_filter_focus;
+    bool doc_keyboard,doc_focus_reveal,doc_filter_focus,doc_navigation_hidden;
     int doc_focus;
-    struct nk_rect doc_focus_bounds,doc_anchor_bounds,doc_body_bounds;
+    struct nk_rect doc_focus_bounds,doc_anchor_bounds,doc_body_bounds,doc_navigation_bounds;
     char doc_filter[128], doc_last_filter[128];
     bool doc_filter_active, doc_contents;
     int doc_group, doc_track;

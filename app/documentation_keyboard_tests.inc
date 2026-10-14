@@ -651,7 +651,117 @@ static void documentation_math_test_frame(app *a,int *stage,int *code,const char
  if(!ok){fprintf(stderr,"Documentation math stage %d failed\n",*stage-1);*code=1;a->quitting=true;}
  if(a->quitting)printf("DOCUMENTATION MATH SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 }
+static void documentation_navigation_test_frame(app *a,int *stage,int *code,const char **capture) {
+    static unsigned frames,tabs;static struct nk_rect before;
+    static uint64_t version;static size_t anchor;
+    static int experiment_length,analysis_length;static double simulation_time;
+    bool ok=true;
+#define NAV_KEY(key) test_window_key_mod(a->doc_window,key,0)
+#define NAV_TOGGLE() test_window_key_mod(a->doc_window,SDLK_B,PS_UI_COMMAND_MOD|SDL_KMOD_SHIFT)
+    switch((*stage)++) {
+    case 0:
+        experiment_length=a->experiment.string.len;analysis_length=a->analysis.string.len;simulation_time=a->simulation_time;
+        test_window_key_mod(a->window,SDLK_F1,0);break;
+    case 1:
+        ok=documentation_inline_fixture(a,a->doc_topic);
+        version=a->doc_reading_version;
+        ok=ok && SDL_SetWindowSize(a->doc_window,760,540) && SDL_SyncWindow(a->doc_window);
+        for(int i=0;i<8;i++)test_window_key_mod(a->doc_window,SDLK_PLUS,PS_UI_COMMAND_MOD);
+        frames=0;break;
+    case 2:
+        if(frames++<2 || a->doc_scroll_pending){--*stage;return;}
+        ok=documentation_font_size(a)==32 && !a->doc_navigation_hidden;
+        before=a->doc_body_bounds;*capture="docs-navigation-before.bmp";break;
+    case 3:
+        if(!documentation_test_seek(a,DOC_BODY,stage,code))return;
+        NAV_KEY(SDLK_PAGEDOWN);frames=0;break;
+    case 4:
+        if(frames++<2 || a->doc_scroll_pending){--*stage;return;}
+        anchor=SIZE_MAX;
+        for(size_t at=0;at<strlen(a->documentation->reading);) {
+            if(nk_sdl_accessibility_document_visible(a->doc_ui,version,at)){anchor=at;break;}
+            nk_rune rune;int n=nk_utf_decode(a->documentation->reading+at,&rune,(int)strlen(a->documentation->reading+at));if(n<=0)break;at+=(size_t)n;
+        }
+        ok=anchor!=SIZE_MAX && a->doc_scroll_y>0;NAV_TOGGLE();frames=0;break;
+    case 5:
+        if(frames++<2 || a->doc_scroll_pending){--*stage;return;}
+        ok=a->doc_navigation_hidden && a->doc_body_bounds.w>=before.w+250 && a->doc_body_bounds.h>=before.h+40 &&
+           a->doc_reading_version==version && nk_sdl_accessibility_document_visible(a->doc_ui,version,anchor);
+        printf("DOCUMENTATION NAVIGATION: before=%.1fx%.1f reader=%.1fx%.1f anchor=%zu\n",before.w,before.h,a->doc_body_bounds.w,a->doc_body_bounds.h,anchor);
+        *capture="docs-navigation-reader.bmp";tabs=0;NAV_KEY(SDLK_TAB);break;
+    case 6:
+        ok=a->doc_focus!=DOC_C && a->doc_focus!=DOC_PHYSIM && a->doc_focus!=DOC_TOPICS &&
+           a->doc_focus!=DOC_CONTENTS && a->doc_focus!=DOC_FILTER && a->doc_focus!=DOC_GROUP &&
+           !(a->doc_focus>=DOC_TOPIC && a->doc_focus<DOC_COPY);
+        if(a->doc_focus!=DOC_NAVIGATION && tabs++<64){NAV_KEY(SDLK_TAB);--*stage;break;}
+        ok=ok && a->doc_focus==DOC_NAVIGATION && tabs>3;
+        test_window_key_mod(a->doc_window,SDLK_F,PS_UI_COMMAND_MOD);break;
+    case 7: {
+        if(a->doc_focus_reveal){--*stage;return;}
+        ok=a->doc_search_active;SDL_Event e={0};e.type=SDL_EVENT_TEXT_INPUT;e.text.windowID=SDL_GetWindowID(a->doc_window);e.text.text="θ";SDL_PushEvent(&e);
+        NAV_TOGGLE();frames=0;break;
+    }
+    case 8:
+        if(frames++<2 || a->doc_scroll_pending){--*stage;return;}
+        ok=!a->doc_navigation_hidden && !strcmp(a->doc_query,"θ") && !a->doc_search_active &&
+           fabsf(a->doc_body_bounds.w-before.w)<1 && a->doc_reading_version==version;
+        if(!documentation_test_seek(a,DOC_TOPICS,stage,code))return;
+        NAV_KEY(SDLK_RETURN);break;
+    case 9:
+        if(!documentation_test_seek(a,DOC_FILTER,stage,code))return;
+        break;
+    case 10: {
+        ok=a->doc_filter_active;SDL_Event e={0};e.type=SDL_EVENT_TEXT_INPUT;e.text.windowID=SDL_GetWindowID(a->doc_window);e.text.text="Pendel";SDL_PushEvent(&e);
+        NAV_TOGGLE();frames=0;break;
+    }
+    case 11:
+        if(frames++<2 || a->doc_scroll_pending){--*stage;return;}
+        ok=a->doc_navigation_hidden && !strcmp(a->doc_filter,"Pendel") && !a->doc_filter_active && !a->doc_search_active;
+        {SDL_Event e={0};e.type=SDL_EVENT_KEY_DOWN;e.key.windowID=SDL_GetWindowID(a->doc_window);e.key.key=SDLK_B;e.key.mod=PS_UI_COMMAND_MOD|SDL_KMOD_SHIFT;e.key.repeat=true;SDL_PushEvent(&e);}
+        break;
+    case 12:
+        ok=a->doc_navigation_hidden;
+#ifdef _WIN32
+        ok=ok && !nk_sdl_accessibility_focus(a->doc_ui,NULL,"Alle Inhalte durchsuchen") &&
+           nk_sdl_accessibility_press(a->doc_ui,"Navigation einblenden");
+#else
+        if(!documentation_test_seek(a,DOC_NAVIGATION,stage,code))return;
+        NAV_KEY(SDLK_SPACE);
+#endif
+        frames=0;break;
+    case 13:
+        if(frames++<2 || a->doc_scroll_pending){--*stage;return;}
+        ok=!a->doc_navigation_hidden && !a->doc_filter_active && !strcmp(a->doc_filter,"Pendel");
+        *capture="docs-navigation-restored.bmp";test_window_mouse(a->doc_window,a->doc_navigation_bounds,true);break;
+    case 14:
+        test_window_mouse(a->doc_window,a->doc_navigation_bounds,false);frames=0;break;
+    case 15:
+        if(frames++<2 || a->doc_scroll_pending){--*stage;return;}
+        ok=a->doc_navigation_hidden;
+        {ps_preferences p=a->preferences;p.theme=PS_THEME_LIGHT;preferences_apply(a,&p);}frames=0;break;
+    case 16:
+        if(frames++<2){--*stage;return;}
+        *capture="docs-navigation-light.bmp";break;
+    case 17:
+        {ps_preferences p=a->preferences;p.theme=PS_THEME_HIGH_CONTRAST;preferences_apply(a,&p);}frames=0;break;
+    case 18:
+        if(frames++<2){--*stage;return;}
+        *capture="docs-navigation-contrast.bmp";NAV_KEY(SDLK_ESCAPE);break;
+    case 19:ok=!a->doc_visible;test_window_key_mod(a->window,SDLK_F1,0);frames=0;break;
+    case 20:
+        if(frames++<2){--*stage;return;}
+        ok=a->doc_visible && a->doc_navigation_hidden && documentation_font_size(a)==32 &&
+           a->doc_reading_version==version && !strcmp(a->doc_query,"θ") && !strcmp(a->doc_filter,"Pendel") &&
+           a->experiment.string.len==experiment_length && a->analysis.string.len==analysis_length && a->simulation_time==simulation_time;
+        a->quitting=true;break;
+    }
+    if(!ok){fprintf(stderr,"Documentation navigation stage %d failed: hidden=%d focus=%d body=%.1fx%.1f query=%s filter=%s\n",*stage-1,a->doc_navigation_hidden,a->doc_focus,a->doc_body_bounds.w,a->doc_body_bounds.h,a->doc_query,a->doc_filter);*code=1;a->quitting=true;}
+    if(a->quitting)printf("DOCUMENTATION NAVIGATION SELF-TEST: %s\n",*code?"FAILED":"PASSED");
+#undef NAV_KEY
+#undef NAV_TOGGLE
+}
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strcmp(mode,"docs-keyboard-navigation")){documentation_navigation_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-density")) {
         static unsigned frames,index;static uint64_t version;static float reference;static int editor_length;
         static const float densities[]={1.25f,1.5f,2,1};bool ok=true;

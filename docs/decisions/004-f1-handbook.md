@@ -324,9 +324,61 @@ Der vorherige Typografie-Stand `9e172e4` ist unter Linux inzwischen ausgeführt:
 Workflow `38508599005`, Clang 22/22 native (`run-ewmhvafp`) und 25/25 GUI
 (`run-srggasan`), GCC 22/22 native (`run-1qg4r9pk`) und 25/25 GUI
 (`run-olowylup`). Der neue Rasterwechsel benötigt einen eigenen Linux-/macOS-Nachweis.
+Der Rasterstand `efe152c` besteht inzwischen ebenfalls unter Ubuntu 24.04/X11/Xvfb
+mit ASan/UBSan: Clang 23/23 native (`run-g6ir94u1`) und 26/26 GUI
+(`run-27_up4e4`), GCC 23/23 native (`run-rptj2xn6`) und 26/26 GUI
+(`run-57dgly_y`). Beide prüfen den tatsächlichen Raster-Rundlauf.
+[Clang-Lauf](https://github.com/Lulus792/physim/actions/runs/38511888866/job/115682024030),
+[GCC-Lauf](https://github.com/Lulus792/physim/actions/runs/38511888866/job/115682024274).
+Dies ersetzt weiterhin keine echte Windows-DPI- oder macOS-Abnahme.
+
 Die abschließenden Parser-/API-/Abschnitts-/Dichtefälle bestehen nach der
 Dokumentation erneut 4/4 mit Exitcode 0 in `run-2qbh1dw6`. Der Testläufer
 bestätigt seine gezielten Fehlermuster in `build/native/F1-review/density-runner-proof`.
+
+### Lesemodus mit erreichbarer Navigation
+
+Die Navigation lässt sich jetzt über einen benannten Schalter sowie
+Ctrl+Shift+B bzw. Cmd+Shift+B ein- und ausblenden. Der Artikel erhält dadurch
+die volle Fensterbreite. Bei mindestens 24-Pixel-Leseschrift und ausreichender
+Breite teilen sich Navigation, Verlauf, Start, Arbeitsbereich und Schriftgröße
+eine Werkzeugzeile. Die Dokumentensuche bleibt direkt sichtbar.
+
+Der Wechsel erhält Inhalt und Inhaltsversion, Suchbegriffe und eine Textstelle
+aus dem veröffentlichten sichtbaren Bereich. Wartende Texteingaben werden vor
+dem Verlassen ihres Felds verarbeitet; der alte Editierfokus wird zurückgesetzt.
+Ausgeblendete Seiten- und Suchcontrols entfallen aus der Tab-Reihenfolge und dem
+neuen nativen Frame-Snapshot. Der Navigationsschalter bleibt im Leser erreichbar.
+Die Auswahl bleibt über Schließen/Wiederöffnen innerhalb der Sitzung erhalten.
+
+Die echte Windows-Probe misst bei 760 × 540 und 32-Pixel-Schrift eine
+Lesefläche von **404 × 288** mit Navigation und **716 × 344** im Lesemodus.
+Eine gescrollte Textstelle (Byte 212 der Prüffassung) bleibt nach dem Umbruch
+sichtbar. Die Probe durchläuft die tatsächliche Tab-Reihenfolge, verarbeitet
+Unicode-Eingabe unmittelbar vor dem Umschalten, ignoriert Tastenwiederholung,
+bedient den Schalter über Windows UIA und Maus und prüft Wiederöffnen,
+erhaltene Editorinhalte und unveränderte Simulationszeit. Dunkle, helle und
+Kontrastbilder stammen aus abgeschlossenen Frames; kleine Ansichten und die
+helle Suche wurden direkt betrachtet.
+
+Ausgeführte Prüfungen unter Windows 10.0.26200/MSVC, jeweils Exitcode 0:
+
+- `run-j9za539b`: 9/9 reale Fälle für Tastatur, Verlauf, Zoom, Inline-Inhalte,
+  Lesemodus sowie externe UIA-Felder, Lesetext, Links und Fensterlebenszyklus.
+- `run-hzn8c7b7` unter MSVC ASan: 4/4 Fälle für Lesemodus, Zoom,
+  Inline-Inhalte und extern geprüften Fensterlebenszyklus.
+- `run-hyy3ijtt` im Release-Build: 1/1 vollständiger Lesemodus-Ablauf.
+- Der native Abschnitts-/Seitenprüfer bestätigt 214 Abschnittslinks und
+  183 parsbare, intern erreichbare Seiten nach der Anleitungsergänzung.
+  Testkatalog und erwartete Fehlerfälle bestehen in
+  `build/native/F1-review/navigation-runner-proof`.
+
+Die Linux-Regression enthält den neuen Lesemodus, wurde aber an diesem
+Zwischenschritt noch nicht ausgeführt. macOS-UI, echte DPI-/Monitorwechsel,
+native Text-/Feld-/Linkbereiche und Tabellensemantik auf allen Plattformen sowie
+praktische Screenreader-Aufgaben bleiben Teil der vollständigen Abnahme.
+Der frühere Mangel der engen Lesefläche besitzt nun einen geprüften Bedienweg;
+das allein begründet weiterhin keine volle Gesamtpunktzahl.
 
 ## Nutzeraufgaben
 
