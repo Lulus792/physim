@@ -130,12 +130,36 @@ werden seine Objekte entfernt. Die letzte Fensterfreigabe beendet Dispatcher
 und Busverbindung. Ohne passenden Accessibility-Bus bleibt die normale GUI
 verfügbar. `NO_AT_BRIDGE=1` deaktiviert diese Desktop-Anbindung ausdrücklich.
 
+F1 veröffentlicht zusätzlich ein eigenes Textdokument mit vollständigem
+Lesetext über das AT-SPI-Text-Interface. Zeichenpositionen zählen Unicode-Zeichen
+und werden von UTF-8-Bytepositionen getrennt. Der Client kann den gesamten Text,
+Teilbereiche, Zeichen und logische Wort-/Zeilenbereiche lesen, sichtbare
+Glyphenrahmen abfragen und eine Textstelle zum Lesen sichtbar machen.
+Das Dokument besitzt keinen editierbaren Caret und keine Textauswahl.
+Verborgene Fenster behalten ihren Lesetext, liefern aber keine sichtbare
+Textgeometrie und nehmen keine Scrollanforderungen an. Ein entferntes Dokument
+erhält bei erneutem Erscheinen eine neue Objektkennung; alte Referenzen bleiben
+ungültig. Inhalts- und Namensänderungen erzeugen native Mitteilungen.
+
+Der unabhängige Client liest in der tatsächlichen F1-App die vollständige
+Quellseite mit 498.605 Bytes und 493.143 Unicode-Zeichen und erreicht das sichtbare
+Dokumentende über eine native Scrollanforderung. Die erweiterte Fensterprobe
+prüft Unicode-Bereiche, Zeichenrahmen, Änderungsmitteilungen, Verbergen,
+Entfernen und neue Dokumentidentitäten. Die aktuellen Ausführungsbelege stehen
+in der [F1-Abnahmeentscheidung](decisions/004-f1-handbook.md).
+
 Es gibt höchstens acht native Fenster pro Prozess und die bestehenden 256
-Elemente/1023 Label-Byte je Modell. Fokus für weitere Widgettypen, komplexe Widgets und vollständige
-Text-/Editorinterfaces bleiben offen. Bildschirmkoordinaten werden nur
+Controls/1023 Label-Byte je Modell. Der zusätzliche Dokumentknoten verwendet
+den separaten vollständigen Lesetext mit dessen dokumentierten Größenlimits.
+Assistive Eingabefelder/Editoren, native Linktextbereiche, Tabellensemantik,
+visuelle statt logischer Zeilengrenzen, sprachabhängige Textsegmentierung,
+begrenzte Bereichsabfragen und Scrollen zu einer bestimmten Bildschirmposition
+bleiben offen. Bildschirmkoordinaten werden nur
 geliefert, wenn SDL die Fensterposition kennt; anderenfalls folgt ein
 `NotSupported`-Fehler statt einer erfundenen Position. Der bisher ausgeführte
-Clientnachweis verwendet X11/Xvfb unter Debian. Wayland und praktische Orca-
+Clientnachweis verwendet X11/Xvfb unter Debian; die neue Textprüfung wurde
+zusätzlich unter Alpine 3.24.2/WSL2 mit SDL 3.2.30 tatsächlich ausgeführt.
+Wayland und praktische Orca-
 Bedienung sind dadurch noch nicht abgenommen. Ein unterbrochener Bus wird
 nicht automatisch neu verbunden; ein Neustart stellt die Anbindung wieder her.
 

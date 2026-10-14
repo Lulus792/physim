@@ -380,6 +380,89 @@ praktische Screenreader-Aufgaben bleiben Teil der vollständigen Abnahme.
 Der frühere Mangel der engen Lesefläche besitzt nun einen geprüften Bedienweg;
 das allein begründet weiterhin keine volle Gesamtpunktzahl.
 
+### Vollständiger nativer Lesetext unter Linux
+
+Die Linux-Anbindung ergänzt F1 um einen eigenen `document text`-Knoten mit
+AT-SPI-Text-Interface. Er gehört zum richtigen Fenster, benötigt keinen Platz
+im begrenzten Control-Katalog und besitzt eine eigene Objektadresse. Solange
+das Dokument vorhanden ist, bleiben Objektkennung und Lesetext beim Verbergen
+erhalten. Nach Entfernen und erneutem Publizieren wird die Kennung nicht
+wiederverwendet. Alte Referenzen können das neue Dokument nicht lesen oder
+bewegen.
+
+Der separate Index hält eine eigene UTF-8-Kopie sowie Zeichen- und Bytepositionen.
+Teilbereiche und Zeichenanzahl zählen Unicode-Skalarwerte, einschließlich
+mehrbyteiger Zeichen und Zeichen außerhalb der BMP. Vor dem Wechsel werden
+neue Speicherblöcke vollständig angelegt; ungültige Eingaben erhalten den
+vorherigen Index. Native Geometrie stammt aus den tatsächlichen veröffentlichten
+Glyphenrahmen. Verborgene Ansichten liefern leere Geometrie und weisen
+Scrollanforderungen ab, behalten aber den lesbaren Gesamttext.
+
+Inhaltsmitteilungen verwenden eine separate Kopie des zuletzt angekündigten
+Texts. Eine Clientabfrage zwischen Modellpublikation und nativer Mitteilung
+darf den Index bereits auf den neuen Inhalt umstellen; die Delete-Mitteilung
+muss weiterhin den alten Text und dessen Zeichenanzahl beschreiben. Der
+unabhängige Client bestätigt Delete-/Insert-Inhalt und Zeichenanzahl sowie
+Namenswechsel und das Auslaufen alter Objektkennungen.
+
+Die tatsächliche F1-App liefert dem unabhängigen AT-SPI-Client alle **498.605
+Bytes / 493.143 Zeichen** der Quellseite einschließlich ihrer Abschlusszeilen.
+Der Client prüft einen sichtbaren Anfangsglyphen und löst das native Scrollen
+bis zum Ende aus. Der App-Prüfer bestätigt den sichtbaren letzten Inhaltsglyphen
+und erzeugt ein Endbild. Dieses Linux-Bild wurde direkt betrachtet.
+Grundlage sind die offiziellen [Text-Verträge](https://gnome.pages.gitlab.gnome.org/at-spi2-core/devel-docs/doc-org.a11y.atspi.Text.html)
+und die [Dokumentrolle](https://docs.gtk.org/atspi2/enum.Role.html).
+
+Die lokale Umgebung wurde tatsächlich neu erhoben: Alpine **3.24.2 unter WSL2**,
+GCC **15.2.0**, X11/Xvfb/Openbox, Mesa **26.1.6/llvmpipe**, D-Bus **1.16.2**,
+AT-SPI **2.60.5** mit PyAT-SPI **2.58.2**. SDL **3.2.30** wurde aus dem
+festgelegten Release-Quellstand `f5e5f6588921eed3d7d048ce43d9eb1ff0da0ffc`
+gebaut und installiert. Der erste GUI-Anlauf scheitert vor den neuen
+Anwendungstests an fehlenden GSettings-Schemata und GLX-Laufzeitpaketen
+(`run-97uenk_1`); diese Voraussetzungen sind anschließend eingerichtet.
+Die Tests besitzen einen eigenen Accessibility-Bus und XDG-Laufzeitordner,
+statt den anders besessenen WSLg-Laufzeitordner zu verwenden.
+
+Der folgende normale Lauf `run-a9_rvrvd` besteht beide nativen Textfälle,
+scheitert aber einmal am Lesemodus. Die Sanitizergegenprobe `run-1nuffmei`
+und die Ereignisdiagnose `run-bw68fx59` belegen einen ungültigen Bool-Wert
+im künstlichen Tastaturereignis bereits vor den App-Callbacks. Der geprüfte
+GCC-Code des gemeinsamen Testhelfers initialisiert mit `SDL_Event e = {0}`
+nur die ersten vier Bytes; `repeat` liegt an Byte 37. Der Helfer verwendet
+jetzt `SDL_zero(e)` für die vollständige Ereignisstruktur. Die gleiche
+Korrektur gilt für den künstlichen Tastaturimpuls der AT-SPI-Fensterprobe.
+Der erfolgreiche Ablauf `run-840du_wy` folgt unmittelbar auf diese Korrektur.
+
+Abschließende ausgeführte Nachweise, jeweils Exitcode 0:
+
+- `run-x05sqnwd` unter lokalem GCC ASan/UBSan: **3/3** für den unabhängigen
+  AT-SPI-Fenster-/Dokumentclient, den vollständigen realen F1-Leser und den
+  Lesemodus; Diagnoseausgaben wurden vorher wieder entfernt.
+- `run-a0kkfmxc`: **3/3** derselben normalen Linux-Fälle mit exakt geprüften
+  Textänderungsmitteilungen. Dieser Lauf liegt noch vor der expliziten
+  vollständigen Tastaturereignisinitialisierung.
+- `run-nxl6ilvu` unter MSVC ASan: **4/4** für Windows-Felder, vollständigen
+  Lesetext, Lebenszyklus und Lesemodus nach der gemeinsamen Helferkorrektur.
+- Unicode-Index nativ unter GCC sowie GCC ASan/UBSan bestanden;
+  unter MSVC **1/1** in `run-b1slqtp3`, unter MSVC ASan **1/1** in
+  `run-6m10t0br`. Testkatalog und erwartete Fehlerfälle bestehen in
+  `build/native/F1-review/atspi-runner-proof`.
+
+Der vorherige Lesemodus-Stand `64b9bd5` besteht inzwischen auch unter Ubuntu
+24.04/X11/Xvfb: Clang 23/23 native (`run-wocb32z4`) und 27/27 GUI
+(`run-7cl66m41`), GCC 23/23 native (`run-l6d6kqvr`) und 27/27 GUI
+(`run-zu2laq9b`).
+[Clang-Lauf](https://github.com/Lulus792/physim/actions/runs/38514071351/job/115688803175),
+[GCC-Lauf](https://github.com/Lulus792/physim/actions/runs/38514071351/job/115688802981).
+Dies ist ein Nachweis dieser früheren Revision; der neue Textpfad besitzt
+hier zunächst die ausgeführten lokalen Alpine-Nachweise.
+
+Offen bleiben native Linux-Felder/Editoren, Linktextbereiche und Tabellen,
+visuelle Zeilengrenzen und sprachabhängige Segmentierung, begrenzte
+Bereichsabfragen und Scrollen zu einer bestimmten Bildschirmposition,
+macOS-Textzugang, reale DPI-/Monitorwechsel und praktische Screenreader-Aufgaben.
+Die vollständige F1- und Projektabnahme ist damit weiterhin nicht abgeschlossen.
+
 ## Nutzeraufgaben
 
 - Eine Vorlage anlegen, bauen, aufzeichnen und auswerten, mit sichtbaren

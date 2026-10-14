@@ -10,6 +10,7 @@ typedef struct {
     bool visible, disabled, checked;
     unsigned presses,toggles,options[2];
     float scalar;
+    unsigned document_state;uint64_t document_version;
 } fixture_window;
 static bool fallback;
 static bool create(fixture_window *f, const char *title) {
@@ -72,6 +73,29 @@ static bool draw(fixture_window *f, char name) {
                 fflush(stdout);
             }
         }
+        if(f->document_state) {
+            const char *source=f->document_state==1?"A θ🌍 é. Next!\nLast\n":"Neu β😀\n";
+            const char *title=f->document_state==1?"Lesetext θ🌍":"Neuer Lesetext β😀";
+            nk_layout_row_dynamic(f->ui,40,1);struct nk_rect view;
+            if(nk_widget(&view,f->ui)!=NK_WIDGET_INVALID) {
+                size_t byte;bool top;
+                if(nk_sdl_accessibility_document_scroll(f->ui,f->document_version,&byte,&top)) {
+                    printf("TEXT SCROLL %c %zu\n",name,byte);fflush(stdout);
+                }
+                if(!nk_sdl_accessibility_document(f->ui,f->document_version,title,source,view))return false;
+                float x=view.x,y=view.y;const struct nk_user_font *font=f->ui->style.font;
+                for(size_t at=0;source[at];) {
+                    nk_rune rune;int n=nk_utf_decode(source+at,&rune,(int)strlen(source+at));if(n<=0)return false;
+                    if(rune=='\n'){x=view.x;y+=font->height;at+=(size_t)n;continue;}
+                    float width=font->width(font->userdata,font->height,source+at,n);
+                    struct nk_rect box=nk_rect(x,y,width,font->height);
+                    nk_draw_text(nk_window_get_canvas(f->ui),box,source+at,n,font,nk_rgba(0,0,0,0),nk_rgb(230,230,230));
+                    if(box.x>=view.x && box.y>=view.y && box.x+box.w<=view.x+view.w && box.y+box.h<=view.y+view.h)
+                        nk_sdl_accessibility_text_box(f->ui,at,at+(size_t)n,box);
+                    x+=width;at+=(size_t)n;
+                }
+            }
+        }
     }
     nk_end(f->ui);
     return nk_sdl_render(f->ui) && ps_graphics_present(f->graphics);
@@ -129,11 +153,13 @@ int main(int argc, char **argv) {
             if (command == 's')
                 SDL_ShowWindow(a.window);
             if(command=='k') {
-                SDL_Window *focused=SDL_GetKeyboardFocus();SDL_Event key={0};key.type=SDL_EVENT_KEY_DOWN;
+                SDL_Window *focused=SDL_GetKeyboardFocus();SDL_Event key;SDL_zero(key);key.type=SDL_EVENT_KEY_DOWN;
                 key.key.windowID=focused?SDL_GetWindowID(focused):0;key.key.key=SDLK_SPACE;SDL_PushEvent(&key);
             }
             if (command == 'c')
                 close_window(&b);
+            if(command=='d' || command=='u'){a.document_state=command=='d'?1:2;++a.document_version;}
+            if(command=='x')a.document_state=0;
         }
         if (!draw(&a, 'A') || !draw(&b, 'B'))
             goto done;

@@ -2847,7 +2847,7 @@ static struct nk_font *system_font(struct nk_font_atlas *atlas,const char *root,
 }
 #include "documentation_window.inc"
 static void test_window_key_mod(SDL_Window *window, SDL_Keycode key, SDL_Keymod mod) {
-    SDL_Event e = {0};
+    SDL_Event e; SDL_zero(e);
     e.type = SDL_EVENT_KEY_DOWN;
     e.key.windowID = SDL_GetWindowID(window);
     e.key.key = key;

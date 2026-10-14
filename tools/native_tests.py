@@ -43,6 +43,7 @@ class Case:
 
 def catalog():
     cases = []
+    cases.append(Case("accessibility_text_index", ("tests/test_accessibility_text_index.c",),libraries=()))
     cases.append(Case("project_display",("tests/test_project_display.c","app/project_file.c","app/text_document.c","app/autosave.c","app/parameter_catalog.c"),app=True,arguments=("{work}",)))
     cases.append(Case("utf8_string_bounds", ("tests/test_utf8_string_bounds.c",), libraries=()))
     cases.append(Case("dataset_channel_index", ("tests/test_dataset_channel_index.c",)))

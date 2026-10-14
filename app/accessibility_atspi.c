@@ -1,6 +1,7 @@
 #include "accessibility_native.h"
 #ifdef __linux__
 #include "text_validation.h"
+#include "accessibility_text.h"
 #include <dbus/dbus.h>
 #include <limits.h>
 #include <math.h>
@@ -12,6 +13,7 @@
 #define AX_NULL "/org/a11y/atspi/null"
 #define AX_PREFIX "org.a11y.atspi."
 #define AX_WINDOWS 8u
+#define AX_DOCUMENT_ROLE ((ps_a11y_role)100)
 typedef struct ax_server ax_server;
 struct ps_a11y_native {
     ax_server *server;
@@ -24,6 +26,10 @@ struct ps_a11y_native {
     char title[256];
     ps_a11y_node previous[PS_A11Y_MAX_NODES];
     size_t previous_count;
+    ps_a11y_text_index document_index;
+    ps_a11y_node previous_document;
+    uint64_t document_identity;
+    char *previous_document_text;size_t previous_character_count;uint64_t previous_text_version;
 };
 struct ax_server {
     DBusConnection *connection;
@@ -88,6 +94,31 @@ static void path_for(char path[128], unsigned window, uint64_t node) {
     else
         snprintf(path, 128, "/org/a11y/atspi/accessible/w%u", window);
 }
+static void document_path(char path[128],unsigned window,uint64_t identity) {
+    snprintf(path,128,"/org/a11y/atspi/accessible/w%u/document%llu",window,(unsigned long long)identity);
+}
+static void document_reference(ax_reply *r,DBusMessageIter *iter,ax_server *s,unsigned window,uint64_t identity) {
+    char path[128];document_path(path,window,identity);reference(r,iter,bus_name(s),path);
+}
+/* Caller owns the model mutex. The document is a separate synthetic child,
+ * outside the bounded control label catalogue and its numeric object paths. */
+static bool document_snapshot(ps_a11y_native *w,ps_a11y_node *node) {
+    const ps_a11y_document *d=w->model->document;
+    if(!d || !d->active)return false;
+    if(!w->document_identity || (!w->previous_document.document_version && w->document_identity==UINT64_MAX))return false;
+    memset(node,0,sizeof *node);node->role=AX_DOCUMENT_ROLE;node->id=w->document_identity;
+    node->document_version=d->version;node->enabled=w->visible && !w->model->suspended;
+    node->offscreen=!node->enabled;memcpy(node->bounds,d->viewport,sizeof node->bounds);
+    snprintf(node->label,sizeof node->label,"%s",d->name);return true;
+}
+static bool document_node(ps_a11y_native *w,ps_a11y_node *node) {
+    return w->previous_document.document_version && document_snapshot(w,node);
+}
+static bool document_index(ps_a11y_native *w) {
+    const ps_a11y_document *d=w->model->document;
+    return d && d->active && (w->document_index.version==d->version ||
+        ps_a11y_text_index_build(&w->document_index,d->text,d->length,d->version));
+}
 static void local_reference(ax_reply *r, DBusMessageIter *iter, ax_server *s, unsigned window,
                             uint64_t node) {
     char path[128];
@@ -108,7 +139,7 @@ static bool find_object(ax_server *s, const char *path, ps_a11y_native **window,
     if (strncmp(path, prefix, sizeof prefix - 1))
         return false;
     const char *cursor = path + sizeof prefix - 1;
-    uint64_t values[2] = {0, 0};
+    uint64_t values[2] = {0, 0};bool reading=false;
     for (size_t part = 0; part < 2; part++) {
         if (*cursor < '1' || *cursor > '9')
             return false;
@@ -122,6 +153,7 @@ static bool find_object(ax_server *s, const char *path, ps_a11y_native **window,
         } while (*cursor >= '0' && *cursor <= '9');
         if (!*cursor)
             break;
+        if(!part && !strncmp(cursor,"/document",9)){reading=true;cursor+=9;continue;}
         if (part || strncmp(cursor, "/n", 2))
             return false;
         cursor += 2;
@@ -134,9 +166,14 @@ static bool find_object(ax_server *s, const char *path, ps_a11y_native **window,
         if (s->windows[i]->window_id == id) {
             *window = s->windows[i];
             *index = i;
-            if (!key)
+            if (!key && !reading)
                 return true;
             SDL_LockMutex((*window)->mutex);
+            if(reading) {
+                bool found=key==(*window)->document_identity && document_node(*window,node);
+                *index=ps_a11y_child_count((*window)->model,0);
+                SDL_UnlockMutex((*window)->mutex);return found;
+            }
             const ps_a11y_node *live = ps_a11y_find((*window)->model, key);
             if (live) {
                 *node = *live;
@@ -148,10 +185,12 @@ static bool find_object(ax_server *s, const char *path, ps_a11y_native **window,
     return false;
 }
 static unsigned role(ps_a11y_native *w, const ps_a11y_node *node) {
+    if(node->role==AX_DOCUMENT_ROLE)return 94;
     return !w ? 75 : !node->id ? 23 : node->role == PS_A11Y_LINK ? 88 : node->role == PS_A11Y_BUTTON ? 43 : node->role == PS_A11Y_CHECKBOX ? 7 : node->role == PS_A11Y_RADIO ? 44 : node->role == PS_A11Y_RADIO_GROUP ? 99 : node->role == PS_A11Y_SLIDER ? 51 : 29;
 }
 static const char *role_name(unsigned r, bool localized) {
     switch (r) {
+    case 94:return localized ? "Textdokument" : "document text";
     case 88:return localized ? "Link" : "link";
     case 51:return localized ? "Regler" : "slider";
     case 75:
@@ -175,6 +214,8 @@ static size_t child_count(ax_server *s, ps_a11y_native *w, const ps_a11y_node *n
         return s->count;
     SDL_LockMutex(w->mutex);
     size_t count = ps_a11y_child_count(w->model,node->id);
+    if(node->role==AX_DOCUMENT_ROLE)count=0;
+    else if(!node->id) {ps_a11y_node document;if(document_node(w,&document))count++;}
     SDL_UnlockMutex(w->mutex);
     return count;
 }
@@ -210,6 +251,7 @@ static void interfaces(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
     if (node->id && ps_a11y_actionable(node->role))
         text(r, &a, AX_PREFIX "Action");
     if(node->id && node->role==PS_A11Y_SLIDER)text(r,&a,AX_PREFIX "Value");
+    if(node->role==AX_DOCUMENT_ROLE)text(r,&a,AX_PREFIX "Text");
     close_container(r, iter, &a);
 }
 static void parent_reference(ax_reply *r, DBusMessageIter *iter, ax_server *s, ps_a11y_native *w,
@@ -223,7 +265,8 @@ static void cache_item(ax_reply *r, DBusMessageIter *iter, ax_server *s, ps_a11y
                        const ps_a11y_node *node, int index) {
     DBusMessageIter c;
     open_container(r, iter, DBUS_TYPE_STRUCT, NULL, &c);
-    local_reference(r, &c, s, w ? w->window_id : 0, node->id);
+    if(node->role==AX_DOCUMENT_ROLE)document_reference(r,&c,s,w->window_id,node->id);
+    else local_reference(r, &c, s, w ? w->window_id : 0, node->id);
     local_reference(r, &c, s, 0, 0);
     parent_reference(r, &c, s, w, node);
     number(r, &c, index);
@@ -269,10 +312,42 @@ static void cache_signal(ax_server *s, ps_a11y_native *w, const ps_a11y_node *no
     dbus_message_iter_init_append(r.message, &r.root);
     if (added)
         cache_item(&r, &r.root, s, w, node, index);
+    else if(node->role==AX_DOCUMENT_ROLE)
+        document_reference(&r,&r.root,s,w->window_id,node->id);
     else
         local_reference(&r, &r.root, s, w->window_id, node->id);
     if (r.okay)
         dbus_connection_send(s->connection, r.message, NULL);
+    dbus_message_unref(r.message);
+}
+static void event_document_text(ax_server *s,const char *path,const char *operation,const ps_a11y_text_index *index) {
+    ax_reply r={.message=dbus_message_new_signal(path,AX_PREFIX "Event.Object","TextChanged"),.okay=true};
+    if(!r.message)return;
+    dbus_message_iter_init_append(r.message,&r.root);
+    text(&r,&r.root,operation);number(&r,&r.root,0);number(&r,&r.root,(int)index->count);
+    DBusMessageIter value;open_container(&r,&r.root,DBUS_TYPE_VARIANT,"s",&value);
+    text(&r,&value,index->text?index->text:"");close_container(&r,&r.root,&value);empty_properties(&r,&r.root);
+    if(r.okay)dbus_connection_send(s->connection,r.message,NULL);
+    dbus_message_unref(r.message);
+}
+static void event_document_child(ax_server *s,const char *parent,const char *operation,int index,unsigned window,uint64_t identity) {
+    ax_reply r={.message=dbus_message_new_signal(parent,AX_PREFIX "Event.Object","ChildrenChanged"),.okay=true};
+    if(!r.message)return;
+    dbus_message_iter_init_append(r.message,&r.root);text(&r,&r.root,operation);
+    number(&r,&r.root,index);number(&r,&r.root,0);
+    DBusMessageIter value;open_container(&r,&r.root,DBUS_TYPE_VARIANT,"(so)",&value);
+    document_reference(&r,&value,s,window,identity);close_container(&r,&r.root,&value);empty_properties(&r,&r.root);
+    if(r.okay)dbus_connection_send(s->connection,r.message,NULL);
+    dbus_message_unref(r.message);
+}
+static void event_document_name(ax_server *s,const char *path,const char *name) {
+    ax_reply r={.message=dbus_message_new_signal(path,AX_PREFIX "Event.Object","PropertyChange"),.okay=true};
+    if(!r.message)return;
+    dbus_message_iter_init_append(r.message,&r.root);text(&r,&r.root,"accessible-name");
+    number(&r,&r.root,0);number(&r,&r.root,0);
+    DBusMessageIter value;open_container(&r,&r.root,DBUS_TYPE_VARIANT,"s",&value);
+    text(&r,&value,name);close_container(&r,&r.root,&value);empty_properties(&r,&r.root);
+    if(r.okay)dbus_connection_send(s->connection,r.message,NULL);
     dbus_message_unref(r.message);
 }
 static DBusHandlerResult error_reply(DBusConnection *connection, DBusMessage *message,
@@ -306,12 +381,20 @@ static const char *property_signature(const char *iface, const char *name) {
     } else if(!strcmp(iface,AX_PREFIX "Value")) {
         if(!strcmp(name,"Text"))return "s";
         if(!strcmp(name,"MinimumValue") || !strcmp(name,"MaximumValue") || !strcmp(name,"CurrentValue") || !strcmp(name,"MinimumIncrement"))return "d";
+    } else if(!strcmp(iface,AX_PREFIX "Text")) {
+        if(!strcmp(name,"CharacterCount") || !strcmp(name,"CaretOffset"))return "i";
     } else if (!strcmp(iface, AX_PREFIX "Action") && !strcmp(name, "NActions"))
         return "i";
     return NULL;
 }
 static void property_value(ax_reply *r, DBusMessageIter *iter, ax_server *s, ps_a11y_native *w,
                            const ps_a11y_node *node, const char *iface, const char *name) {
+    if(!strcmp(iface,AX_PREFIX "Text") && strcmp(name,"version")) {
+        SDL_LockMutex(w->mutex);
+        if(!document_index(w))r->okay=false;
+        else number(r,iter,!strcmp(name,"CaretOffset")?-1:(int)w->document_index.count);
+        SDL_UnlockMutex(w->mutex);return;
+    }
     if(!strcmp(iface,AX_PREFIX "Value") && strcmp(name,"version")) {
         if(!strcmp(name,"Text")){text(r,iter,"");return;}
         double value=!strcmp(name,"MinimumValue")?node->minimum:!strcmp(name,"MaximumValue")?node->maximum:!strcmp(name,"MinimumIncrement")?node->increment:node->value;
@@ -338,7 +421,8 @@ static void property_value(ax_reply *r, DBusMessageIter *iter, ax_server *s, ps_
         return;
     }
     char id[128];
-    if (w)
+    if(node->role==AX_DOCUMENT_ROLE)document_path(id,w->window_id,node->id);
+    else if (w)
         path_for(id, w->window_id, node->id);
     else
         strcpy(id, AX_ROOT);
@@ -369,6 +453,7 @@ static bool interface_supported(ps_a11y_native *w, const ps_a11y_node *node, con
     if (!strcmp(iface, AX_PREFIX "Action"))
         return node->id && ps_a11y_actionable(node->role);
     if(!strcmp(iface,AX_PREFIX "Value"))return node->id && node->role==PS_A11Y_SLIDER;
+    if(!strcmp(iface,AX_PREFIX "Text"))return node->role==AX_DOCUMENT_ROLE;
     return false;
 }
 static bool bounds(ps_a11y_native *w, const ps_a11y_node *node, unsigned coordinate, int out[4]) {
@@ -509,6 +594,7 @@ static const char *properties_xml =
     "direction='out'/></method><method name='Set'><arg type='s' direction='in'/><arg type='s' "
     "direction='in'/><arg type='v' direction='in'/></method></interface>";
 
+#include "accessibility_atspi_text.inc"
 static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage *message,
                                          void *data) {
     if (dbus_message_get_type(message) != DBUS_MESSAGE_TYPE_METHOD_CALL)
@@ -538,9 +624,9 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
     const char *detail = "Unsupported method or invalid argument signature";
     if (!strcmp(iface, "org.freedesktop.DBus.Introspectable") && !strcmp(method, "Introspect") &&
         dbus_message_has_signature(message, "")) {
-        char xml[8192];
+        char xml[16384];
         int length = snprintf(
-            xml, sizeof xml, "<node>%s%s%s%s%s%s</node>",
+            xml, sizeof xml, "<node>%s%s%s%s%s%s%s</node>",
             cache ? "<interface name='org.a11y.atspi.Cache'><property name='version' type='u' "
                     "access='read'/><method name='GetItems'><arg type='a((so)(so)(so)iiassusau)' "
                     "direction='out'/></method></interface>"
@@ -549,7 +635,8 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             : !w  ? application_xml
                   : component_xml,
             cache || !node.id || !ps_a11y_actionable(node.role) ? "" : action_xml,
-            cache || !node.id || node.role!=PS_A11Y_SLIDER ? "" : value_xml,properties_xml,
+            cache || !node.id || node.role!=PS_A11Y_SLIDER ? "" : value_xml,
+            !cache && node.role==AX_DOCUMENT_ROLE?text_xml:"",properties_xml,
             "<interface name='org.freedesktop.DBus.Introspectable'><method name='Introspect'><arg "
             "type='s' direction='out'/></method></interface>");
         if (length < 0 || (size_t)length >= sizeof xml)
@@ -569,6 +656,8 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             for (size_t j = 0; j < window->model->count; j++)
                 cache_item(&r, &array, s, window, &window->model->nodes[j],
                            (int)ps_a11y_index(window->model,window->model->nodes[j].id));
+            ps_a11y_node document;if(document_node(window,&document))
+                cache_item(&r,&array,s,window,&document,(int)ps_a11y_child_count(window->model,0));
             SDL_UnlockMutex(window->mutex);
         }
         close_container(&r, &r.root, &array);
@@ -610,10 +699,12 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             const char *action[] = {"version", "NActions", NULL};
             const char *component[] = {"version", NULL};
             const char *scalar[] = {"version","MinimumValue","MaximumValue","MinimumIncrement","CurrentValue","Text",NULL};
+            const char *reading[] = {"version","CharacterCount","CaretOffset",NULL};
             const char **names = !strcmp(property_iface, AX_PREFIX "Application") ? application
                                  : !strcmp(property_iface, AX_PREFIX "Action")    ? action
                                  : !strcmp(property_iface, AX_PREFIX "Component") ? component
                                  : !strcmp(property_iface, AX_PREFIX "Value") ? scalar
+                                 : !strcmp(property_iface, AX_PREFIX "Text") ? reading
                                                                                   : accessible;
             if (cache && !strcmp(property_iface, AX_PREFIX "Cache")) {
                 DBusMessageIter array, entry, value;
@@ -677,6 +768,8 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
                 const ps_a11y_node *found=ps_a11y_child_at(w->model,node.id,(size_t)child);
                 if (found)
                     local_reference(&r, &r.root, s, w->window_id, found->id);
+                else if(!node.id && (size_t)child==ps_a11y_child_count(w->model,0) && w->previous_document.document_version && w->model->document && w->model->document->active)
+                    document_reference(&r,&r.root,s,w->window_id,w->document_identity);
                 else
                     failure = DBUS_ERROR_INVALID_ARGS;
                 SDL_UnlockMutex(w->mutex);
@@ -691,9 +784,11 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
                     local_reference(&r, &array, s, s->windows[i]->window_id, 0);
             else {
                 SDL_LockMutex(w->mutex);
-                for (size_t i = 0; i < w->model->count; i++)
+                for (size_t i = 0; node.role!=AX_DOCUMENT_ROLE && i < w->model->count; i++)
                     if(w->model->nodes[i].parent==node.id)
                         local_reference(&r, &array, s, w->window_id, w->model->nodes[i].id);
+                if(!node.id && w->previous_document.document_version && w->model->document && w->model->document->active)
+                    document_reference(&r,&array,s,w->window_id,w->document_identity);
                 SDL_UnlockMutex(w->mutex);
             }
             close_container(&r, &r.root, &array);
@@ -716,6 +811,8 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             close_container(&r, &r.root, &array);
         } else
             failure = DBUS_ERROR_UNKNOWN_METHOD;
+    } else if(!cache && w && node.role==AX_DOCUMENT_ROLE && !strcmp(iface,AX_PREFIX "Text")) {
+        failure=document_text_method(w,message,method,&r);
     } else if (!cache && !w && !strcmp(iface, AX_PREFIX "Application")) {
         if (!strcmp(method, "GetLocale") && dbus_message_has_signature(message, "u"))
             text(&r, &r.root, "de_DE.UTF-8");
@@ -770,11 +867,22 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
                      (int64_t)x >= (int64_t)rectangle[0] + rectangle[2] ||
                      (int64_t)y >= (int64_t)rectangle[1] + rectangle[3])
                 reference(&r, &r.root, "", AX_NULL);
+            else if(node.role==AX_DOCUMENT_ROLE)
+                document_reference(&r,&r.root,s,w->window_id,node.id);
             else if (node.id && node.role!=PS_A11Y_RADIO_GROUP)
                 local_reference(&r, &r.root, s, w->window_id, node.id);
             else {
                 uint64_t hit = node.id;
                 SDL_LockMutex(w->mutex);
+                ps_a11y_node document;
+                bool document_hit=false;
+                if(!node.id && document_node(w,&document)) {
+                    int document_bounds[4];unsigned doc_coordinate=coordinate==2?0:coordinate;
+                    document_hit=bounds(w,&document,doc_coordinate,document_bounds) &&
+                        (int64_t)x>=document_bounds[0] && (int64_t)y>=document_bounds[1] &&
+                        (int64_t)x<(int64_t)document_bounds[0]+document_bounds[2] &&
+                        (int64_t)y<(int64_t)document_bounds[1]+document_bounds[3];
+                }
                 for (size_t i = w->model->count; i > 0; i--) {
                     int child_bounds[4];
                     const ps_a11y_node *child = &w->model->nodes[i - 1];
@@ -791,7 +899,8 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
                     }
                 }
                 SDL_UnlockMutex(w->mutex);
-                local_reference(&r, &r.root, s, w->window_id, hit);
+                if(document_hit && !hit)document_reference(&r,&r.root,s,w->window_id,document.id);
+                else local_reference(&r, &r.root, s, w->window_id, hit);
             }
         } else if (!dbus_message_has_signature(message, ""))
             failure = DBUS_ERROR_INVALID_ARGS;
@@ -811,6 +920,7 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             double alpha = w->visible ? 1 : 0;
             basic(&r, &r.root, DBUS_TYPE_DOUBLE, &alpha);
         } else if (!strcmp(method,"GrabFocus")) {
+            if(node.role==AX_DOCUMENT_ROLE){boolean(&r,&r.root,false);goto reply_ready;}
             SDL_LockMutex(w->mutex);bool queued=w->visible && ps_a11y_focus(w->model,node.id);SDL_UnlockMutex(w->mutex);
             unsigned window_id=w->window_id;bool completed=false;
             if(queued) {
@@ -873,6 +983,7 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
         /* The registry owns the parent; no application data can be changed here. */
     } else
         failure = DBUS_ERROR_UNKNOWN_METHOD;
+reply_ready:
     SDL_UnlockMutex(s->mutex);
     if (failure) {
         dbus_message_unref(r.message);
@@ -1035,10 +1146,60 @@ void ps_a11y_native_publish(ps_a11y_native *b, bool changed) {
     int old_x = b->x, old_y = b->y, old_width = b->width, old_height = b->height;
     update_window(b);
     bool moved = old_x != b->x || old_y != b->y || old_width != b->width || old_height != b->height;
-    if (changed || moved || old_visible != b->visible) {
+    SDL_LockMutex(b->mutex);
+    uint64_t text_version=b->model->document && b->model->document->active?b->model->document->version:0;
+    bool text_changed=text_version!=b->previous_text_version;
+    SDL_UnlockMutex(b->mutex);
+    if (changed || moved || old_visible != b->visible || text_changed) {
         SDL_LockMutex(b->mutex);
         char window_path[128];
         path_for(window_path, b->window_id, 0);
+        if(b->model->document && b->model->document->active && !b->previous_document.document_version && b->document_identity<UINT64_MAX)
+            ++b->document_identity;
+        ps_a11y_node document={0};bool reading=document_snapshot(b,&document);
+        char reading_path[128];document_path(reading_path,b->window_id,b->document_identity);
+        int reading_index=(int)ps_a11y_child_count(b->model,0);
+        if(reading && !b->previous_document.document_version) {
+            cache_signal(s,b,&document,reading_index,true);
+            event_document_child(s,window_path,"add",reading_index,b->window_id,document.id);
+        } else if(!reading && b->previous_document.document_version) {
+            cache_signal(s,b,&b->previous_document,reading_index,false);
+            event_document_child(s,window_path,"remove",reading_index,b->window_id,b->previous_document.id);
+            if(b->previous_text_version) {
+                ps_a11y_text_index old={.text=b->previous_document_text,.count=b->previous_character_count};
+                event_document_text(s,reading_path,"delete",&old);
+            }
+            free(b->previous_document_text);b->previous_document_text=NULL;
+            b->previous_text_version=0;b->previous_character_count=0;
+            ps_a11y_text_index_clear(&b->document_index);
+        }
+        if(reading && document.document_version!=b->previous_text_version && document_index(b)) {
+            /* A client may rebuild the query index between model publication
+             * and this notification. Keep the last announced text separately;
+             * deletion payloads must describe that text, never the new page. */
+            size_t length=strlen(b->document_index.text);
+            char *copy=malloc(length+1);
+            if(copy) {
+                memcpy(copy,b->document_index.text,length+1);
+                if(b->previous_text_version) {
+                    ps_a11y_text_index old={.text=b->previous_document_text,.count=b->previous_character_count};
+                    event_document_text(s,reading_path,"delete",&old);
+                }
+                event_document_text(s,reading_path,"insert",&b->document_index);
+                free(b->previous_document_text);b->previous_document_text=copy;
+                b->previous_character_count=b->document_index.count;b->previous_text_version=document.document_version;
+            }
+        }
+        if(reading && b->previous_document.document_version &&
+           (moved || memcmp(document.bounds,b->previous_document.bounds,sizeof document.bounds)))
+            event_bounds(s,reading_path,b,&document);
+        if(reading && b->previous_document.document_version && document.enabled!=b->previous_document.enabled) {
+            event_state(s,reading_path,"enabled",document.enabled);event_state(s,reading_path,"showing",document.enabled);
+            event_state(s,reading_path,"visible",b->visible);
+        }
+        if(reading && b->previous_document.document_version && strcmp(document.label,b->previous_document.label))
+            event_document_name(s,reading_path,document.label);
+        b->previous_document=document;
         for (size_t i = 0; i < b->previous_count; i++)
             if (!ps_a11y_find(b->model, b->previous[i].id)) {
                 cache_signal(s, b, &b->previous[i], (int)i, false);
@@ -1101,6 +1262,7 @@ void ps_a11y_native_destroy(ps_a11y_native *b) {
     path_for(window_path, b->window_id, 0);
     for (size_t i = 0; i < b->previous_count; i++)
         cache_signal(s, b, &b->previous[i], (int)i, false);
+    if(b->previous_document.document_version)cache_signal(s,b,&b->previous_document,0,false);
     size_t index = 0;
     while (index < s->count && s->windows[index] != b)
         index++;
@@ -1114,6 +1276,8 @@ void ps_a11y_native_destroy(ps_a11y_native *b) {
     }
     SDL_UnlockMutex(s->mutex);
     SDL_DestroyMutex(b->mutex);
+    ps_a11y_text_index_clear(&b->document_index);
+    free(b->previous_document_text);
     free(b);
     if (!s->count) {
         SDL_SetAtomicInt(&s->stopping, 1);

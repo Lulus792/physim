@@ -755,7 +755,7 @@ static void documentation_navigation_test_frame(app *a,int *stage,int *code,cons
            a->experiment.string.len==experiment_length && a->analysis.string.len==analysis_length && a->simulation_time==simulation_time;
         a->quitting=true;break;
     }
-    if(!ok){fprintf(stderr,"Documentation navigation stage %d failed: hidden=%d focus=%d body=%.1fx%.1f query=%s filter=%s\n",*stage-1,a->doc_navigation_hidden,a->doc_focus,a->doc_body_bounds.w,a->doc_body_bounds.h,a->doc_query,a->doc_filter);*code=1;a->quitting=true;}
+    if(!ok){fprintf(stderr,"Documentation navigation stage %d failed: hidden=%d focus=%d keyboard=%d native=%d body=%.1fx%.1f query=%s filter=%s\n",*stage-1,a->doc_navigation_hidden,a->doc_focus,a->doc_keyboard,nk_sdl_accessibility_has_focus(a->doc_ui),a->doc_body_bounds.w,a->doc_body_bounds.h,a->doc_query,a->doc_filter);*code=1;a->quitting=true;}
     if(a->quitting)printf("DOCUMENTATION NAVIGATION SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 #undef NAV_KEY
 #undef NAV_TOGGLE

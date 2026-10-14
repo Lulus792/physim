@@ -124,11 +124,13 @@ def enabled(node):
 
 
 def event(e):
-    events.append({"type": e.type, "detail1": e.detail1})
+    record={"type":e.type,"detail1":e.detail1,"detail2":e.detail2}
+    if e.type.startswith('object:text-changed'):record['text']=str(e.any_data)
+    events.append(record)
 
 
 pyatspi.Registry.registerEventListener(
-    event, "object:children-changed", "object:state-changed", "object:bounds-changed", "object:property-change"
+    event, "object:children-changed", "object:state-changed", "object:bounds-changed", "object:property-change", "object:text-changed"
 )
 try:
     app = wait(app_find, "registered application")
@@ -166,6 +168,65 @@ try:
     ).GetItems()
     assert len(cache) == 23 and sum(int(item[7]) == 43 for item in cache) == 2
     object_path = next(str(item[0][1]) for item in cache if str(item[6]) == "Öffnen …")
+    process.stdin.write(b'd');process.stdin.flush()
+    reader=wait(lambda:named(wa,'Lesetext θ🌍'),'native document child')
+    assert reader.getRole()==pyatspi.ROLE_DOCUMENT_TEXT and reader.parent==wa and reader.childCount==0
+    source='A θ🌍 é. Next!\nLast\n'
+    document=reader.queryText()
+    assert document.characterCount==len(source) and document.getText(0,-1)==source
+    assert document.getText(2,4)=='θ🌍' and document.getCharacterAtOffset(3)==ord('🌍')
+    assert document.caretOffset==-1 and document.getNSelections()==0 and not document.setCaretOffset(0)
+    cache_with_text=dbus.Interface(raw_bus.get_object(provider,'/org/a11y/atspi/cache'),'org.a11y.atspi.Cache').GetItems()
+    document_path=next(str(item[0][1]) for item in cache_with_text if int(item[7])==94)
+    assert len(cache_with_text)==24
+    text_proxy=dbus.Interface(raw_bus.get_object(provider,document_path),'org.a11y.atspi.Text')
+    chars,start,end=text_proxy.GetStringAtOffset(dbus.Int32(3),dbus.UInt32(0))
+    assert str(chars)=='🌍' and (start,end)==(3,4)
+    assert tuple(text_proxy.GetTextAtOffset(dbus.Int32(2),dbus.UInt32(1)))==('θ🌍 ',2,5)
+    assert tuple(text_proxy.GetTextBeforeOffset(dbus.Int32(0),dbus.UInt32(5)))==('',0,0)
+    rectangle=tuple(map(int,text_proxy.GetCharacterExtents(dbus.Int32(3),dbus.UInt32(1))))
+    x,y,width,height=rectangle
+    assert width>0 and height==16 and int(text_proxy.GetOffsetAtPoint(dbus.Int32(x+width//2),dbus.Int32(y+height//2),dbus.UInt32(1)))==3
+    assert text_proxy.ScrollSubstringTo(dbus.Int32(3),dbus.Int32(4),dbus.UInt32(0))
+    wait(lambda:'TEXT SCROLL A 4' in (a.work/'fixture.stdout').read_text(),'native scalar-to-byte reveal delivery')
+    assert dict(text_proxy.GetDefaultAttributeSet())=={}
+    for method,signature,arguments in [
+        ('GetText','ii',(dbus.Int32(-1),dbus.Int32(3))),
+        ('GetText','ii',(dbus.Int32(5),dbus.Int32(2))),
+        ('GetText','ii',(dbus.Int32(0),dbus.Int32(len(source)+1))),
+        ('GetText','ss',(dbus.String('0'),dbus.String('1'))),
+        ('GetStringAtOffset','iu',(dbus.Int32(2),dbus.UInt32(99))),
+    ]:
+        try:
+            raw_bus.call_blocking(provider,document_path,'org.a11y.atspi.Text',method,signature,arguments,timeout=5)
+            raise AssertionError('invalid text RPC accepted: '+method)
+        except dbus.exceptions.DBusException as error:
+            assert error.get_dbus_name()=='org.freedesktop.DBus.Error.InvalidArgs'
+    process.stdin.write(b'u');process.stdin.flush()
+    wait(lambda:reader.name=='Neuer Lesetext β😀' and document.getText(0,-1)=='Neu β😀\n','document text/name update')
+    wait(lambda:any(e['type'].startswith('object:text-changed:insert') for e in events),'text changed event')
+    wait(lambda:any(e['type'].startswith('object:text-changed:delete') and e.get('text')==source and
+                    e['detail1']==0 and e['detail2']==len(source) for e in events),'exact previous-text deletion event')
+    wait(lambda:any(e['type'].startswith('object:text-changed:insert') and e.get('text')=='Neu β😀\n' and
+                    e['detail1']==0 and e['detail2']==len('Neu β😀\n') for e in events),'exact new-text insertion event')
+    process.stdin.write(b'x');process.stdin.flush()
+    wait(lambda:named(wa,'Neuer Lesetext β😀') is None,'removed document cache')
+    try:
+        document.getText(0,-1)
+        raise AssertionError('removed document remained readable')
+    except (GLib.Error,dbus.exceptions.DBusException):
+        pass
+    process.stdin.write(b'd');process.stdin.flush()
+    reader=wait(lambda:named(wa,'Lesetext θ🌍'),'replacement document child')
+    cache_with_text=dbus.Interface(raw_bus.get_object(provider,'/org/a11y/atspi/cache'),'org.a11y.atspi.Cache').GetItems()
+    replacement_path=next(str(item[0][1]) for item in cache_with_text if int(item[7])==94)
+    assert replacement_path!=document_path
+    try:
+        raw_bus.call_blocking(provider,document_path,'org.a11y.atspi.Text','GetText','ii',(dbus.Int32(0),dbus.Int32(-1)),timeout=5)
+        raise AssertionError('old document identity revived')
+    except dbus.exceptions.DBusException as error:
+        assert error.get_dbus_name()=='org.a11y.atspi.Error.Defunct'
+    document=reader.queryText()
     proxy = raw_bus.get_object(provider, object_path)
     for iface, method, signature, args, expected in [
         (
@@ -382,12 +443,18 @@ try:
     process.stdin.write(b"h")
     process.stdin.flush()
     wait(lambda: not showing(button), "hidden window state notification")
+    wait(lambda:not showing(reader),'hidden document state')
+    assert document.getText(0,-1)==source
+    hidden_proxy=dbus.Interface(raw_bus.get_object(provider,replacement_path),'org.a11y.atspi.Text')
+    assert tuple(map(int,hidden_proxy.GetCharacterExtents(dbus.Int32(3),dbus.UInt32(1))))==(0,0,0,0)
+    assert not hidden_proxy.ScrollSubstringTo(dbus.Int32(3),dbus.Int32(4),dbus.UInt32(0))
     assert not button.queryAction().doAction(0)
     assert not checkbox.queryAction().doAction(0)
     assert not radio.queryAction().doAction(0)
     process.stdin.write(b"s")
     process.stdin.flush()
     wait(lambda: showing(button), "shown window state notification")
+    wait(lambda:showing(reader) and document.getText(0,-1)==source,'restored document content')
     screen = button.queryComponent().getExtents(pyatspi.DESKTOP_COORDS)
     process.stdin.write(b"m")
     process.stdin.flush()
@@ -418,6 +485,7 @@ try:
     wait(lambda: app.childCount == 1, "window unregister notification")
     assert "PRESS A 2" not in (a.work / "fixture.stdout").read_text()
     checks = [
+        "document role and full Unicode text, scalar offsets/ranges, native glyph geometry and reveal, read-only caret/selection, text/name events, removed/replacement identities and invalid RPC rejection",
         "checkbox role, actual two-way toggle, checked events and independent windows",
         "slider role, finite bounds/increment/current value, actual value delivery and notification, independent windows and invalid/disabled requests",
         "radio hierarchy, sibling indices, parent geometry, exclusive/idempotent selection and independent groups",
