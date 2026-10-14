@@ -9289,6 +9289,19 @@
       ]
     },
     {
+      "name": "accessibility_lifecycle_windows",
+      "app": true,
+      "display": true,
+      "platforms": ["win32"],
+      "targets": ["python", "physim", "accessibility-windows-probe"],
+      "steps": [{
+        "program": "python",
+        "arguments": ["{root}/tests/test_accessibility_lifecycle_app.py", "--app", "{physim}", "--probe", "{accessibility-windows-probe}", "--work", "{work}"],
+        "timeout": 100,
+        "files": ["app.stdout", "app.stderr", "probe.stdout", "probe.stderr", "results.json"]
+      }]
+    },
+    {
       "name": "accessibility_links_windows",
       "app": true,
       "display": true,

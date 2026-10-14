@@ -580,6 +580,44 @@ static void documentation_math_test_frame(app *a,int *stage,int *code,const char
  if(a->quitting)printf("DOCUMENTATION MATH SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 }
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strcmp(mode,"docs-keyboard-lifecycle-remote")) {
+        static int experiment_length,analysis_length;static double simulation_time;static uint64_t version;
+        bool ok=true;char path[4096];FILE *marker;switch(*stage) {
+        case 0:
+            experiment_length=a->experiment.string.len;analysis_length=a->analysis.string.len;simulation_time=a->simulation_time;
+            test_window_key_mod(a->window,SDLK_F1,0);++*stage;break;
+        case 1:
+            ok=documentation_inline_fixture(a,a->doc_topic);version=a->doc_reading_version;
+            ok=ok && SDL_SetWindowSize(a->doc_window,760,540) && SDL_SyncWindow(a->doc_window);++*stage;break;
+        case 2:puts("LIFECYCLE READY");fflush(stdout);++*stage;break;
+        case 3:
+            join(path,sizeof path,a->project,"close-request");marker=fopen(path,"rb");if(!marker)return;fclose(marker);
+            test_window_key_mod(a->doc_window,SDLK_ESCAPE,0);++*stage;break;
+        case 4:
+            join(path,sizeof path,a->project,"hidden-checked");marker=fopen(path,"rb");if(!marker)return;fclose(marker);
+            ok=!a->doc_visible && !a->doc_search_active && !a->doc_filter_active;
+            ok=ok && a->doc_reading_version==version && !strcmp(a->doc_query,"θ🌍");open_documentation(a,a->doc_topic);++*stage;break;
+        case 5:
+            join(path,sizeof path,a->project,"reopen-checked");marker=fopen(path,"rb");if(!marker)return;fclose(marker);
+            ok=a->doc_visible && a->doc_reading_version==version && !strcmp(a->doc_query,"θ🌍");
+            *capture="docs-lifecycle-reopened.bmp";++*stage;break;
+        case 6:
+            join(path,sizeof path,a->project,"reopen-app-captured");marker=fopen(path,"wb");if(marker){fputs("verified\n",marker);fclose(marker);}else ok=false;
+            join(path,sizeof path,a->project,"minimized-checked");marker=fopen(path,"rb");if(!marker)return;fclose(marker);
+            ok=(SDL_GetWindowFlags(a->doc_window)&SDL_WINDOW_MINIMIZED)!=0;
+            join(path,sizeof path,a->project,"minimized-app-checked");marker=fopen(path,"wb");if(marker){fputs("verified\n",marker);fclose(marker);}else ok=false;
+            ++*stage;break;
+        case 7:
+            join(path,sizeof path,a->project,"restored-checked");marker=fopen(path,"rb");if(!marker)return;fclose(marker);
+            ok=!(SDL_GetWindowFlags(a->doc_window)&SDL_WINDOW_MINIMIZED) && a->doc_reading_version==version && !strcmp(a->doc_query,"θ🌍");
+            *capture="docs-lifecycle-restored.bmp";++*stage;break;
+        case 8:
+            ok=a->experiment.string.len==experiment_length && a->analysis.string.len==analysis_length && a->simulation_time==simulation_time;
+            a->quitting=true;break;
+        }
+        if(!ok){fprintf(stderr,"Native lifecycle stage %d failed\n",*stage-1);*code=1;a->quitting=true;}
+        if(a->quitting)printf("DOCUMENTATION LIFECYCLE SELF-TEST: %s\n",*code?"FAILED":"PASSED");return;
+    }
     if(!strcmp(mode,"docs-keyboard-links-remote")) {
         static int experiment_length,analysis_length,source_topic;static double simulation_time;static uint64_t source_version;bool ok=true;
         char path[4096];FILE *done;switch(*stage) {
@@ -607,7 +645,8 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
             ok=!a->doc_visible && a->experiment.string.len==experiment_length && a->analysis.string.len==analysis_length && a->simulation_time==simulation_time;
             a->quitting=true;break;
         }
-        if(!ok){fprintf(stderr,"Native links stage %d failed\n",*stage-1);*code=1;a->quitting=true;}
+        if(!ok){fprintf(stderr,"Native links stage %d failed (keyboard=%d flags=0x%llx focus=%d)\n",*stage-1,
+            SDL_GetKeyboardFocus()==a->doc_window,(unsigned long long)SDL_GetWindowFlags(a->doc_window),nk_sdl_accessibility_has_focus(a->doc_ui));*code=1;a->quitting=true;}
         if(a->quitting)printf("DOCUMENTATION LINKS SELF-TEST: %s\n",*code?"FAILED":"PASSED");return;
     }
     if(!strcmp(mode,"docs-keyboard-edit-scroll-remote")) {

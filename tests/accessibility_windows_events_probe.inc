@@ -5,7 +5,7 @@
 typedef struct {
  IUIAutomationPropertyChangedEventHandler properties;
  IUIAutomationEventHandler automation;
- LONG references,bounds,offscreen,disabled,enabled,invoked,bad;BSTR id;
+ LONG references,bounds,offscreen,hidden,disabled,enabled,invoked,bad;BSTR id;
 } link_events;
 #define EVENTS_OWNER(member,p) ((link_events*)((char*)(p)-offsetof(link_events,member)))
 static ULONG events_addref(link_events *e){return (ULONG)InterlockedIncrement(&e->references);}
@@ -34,7 +34,7 @@ static HRESULT STDMETHODCALLTYPE events_property_changed(IUIAutomationPropertyCh
       SUCCEEDED(SafeArrayGetUBound(value.parray,1,&high)) && low==0 && high==3;
   for(LONG i=0;ok && i<4;i++){double number=0;ok=SUCCEEDED(SafeArrayGetElement(value.parray,&i,&number)) && isfinite(number) && (i<2 || number>=0);}
   if(ok)InterlockedIncrement(&e->bounds);
- } else if(property==UIA_IsOffscreenPropertyId && value.vt==VT_BOOL) {ok=value.boolVal==VARIANT_FALSE; if(ok)InterlockedIncrement(&e->offscreen);}
+ } else if(property==UIA_IsOffscreenPropertyId && value.vt==VT_BOOL) {ok=value.boolVal==VARIANT_FALSE || value.boolVal==VARIANT_TRUE; if(ok)InterlockedIncrement(value.boolVal?&e->hidden:&e->offscreen);}
  else if(property==UIA_IsEnabledPropertyId && value.vt==VT_BOOL) {ok=true;InterlockedIncrement(value.boolVal?&e->enabled:&e->disabled);}
  if(!ok)InterlockedIncrement(&e->bad);return S_OK;
 }

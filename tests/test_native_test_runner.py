@@ -136,6 +136,7 @@ def main():
             "accessibility_focus_windows": ("tests/test_accessibility_checkbox_app.py", ("--probe", "--focus")),
             "accessibility_document_windows": ("tests/test_accessibility_document_app.py", ("--probe", "--root")),
               "accessibility_links_windows": ("tests/test_accessibility_links_app.py", ("--probe",)),
+              "accessibility_lifecycle_windows": ("tests/test_accessibility_lifecycle_app.py", ("--probe",)),
             "accessibility_edit_windows": ("tests/test_accessibility_edit_app.py", ("--probe",)),
             "accessibility_edit_scroll_windows": ("tests/test_accessibility_edit_scroll_app.py", ("--probe",)),
         })

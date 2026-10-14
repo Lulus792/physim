@@ -94,10 +94,14 @@ static HRESULT uia_string(const char *text,VARIANT *out) {
  if(!MultiByteToWideChar(CP_UTF8,MB_ERR_INVALID_CHARS,text,-1,value,n)){SysFreeString(value);return E_INVALIDARG;}
  out->vt=VT_BSTR;out->bstrVal=value;return S_OK;
 }
+static bool uia_window_viewable_locked(ps_a11y_native *b) {
+ return b->model && !b->model->suspended && b->hwnd && IsWindowVisible(b->hwnd) && !IsIconic(b->hwnd);
+}
 static HRESULT uia_bounds(uia_element *e,struct UiaRect *out) {
  if(!out)return E_POINTER;ps_a11y_native *b=e->bridge;SDL_LockMutex(b->mutex);
  const ps_a11y_node *node=b->model && e->id?ps_a11y_find(b->model,e->id):NULL;
  if(!b->model || !b->hwnd || (e->id && !node)){SDL_UnlockMutex(b->mutex);return UIA_E_ELEMENTNOTAVAILABLE;}
+ if(!uia_window_viewable_locked(b)){*out=(struct UiaRect){0};SDL_UnlockMutex(b->mutex);return S_OK;}
  POINT origin={0};RECT client={0};bool valid=ClientToScreen(b->hwnd,&origin) && GetClientRect(b->hwnd,&client);
  if(valid)*out=node?(struct UiaRect){origin.x+node->bounds[0]*b->scale_x,origin.y+node->bounds[1]*b->scale_y,node->bounds[2]*b->scale_x,node->bounds[3]*b->scale_y}:
                   (struct UiaRect){origin.x,origin.y,client.right-client.left,client.bottom-client.top};
@@ -108,6 +112,7 @@ static HRESULT uia_bounds(uia_element *e,struct UiaRect *out) {
 static bool uia_link_state_locked(uia_element *e,uia_link_state *out) {
  ps_a11y_native *b=e->bridge;const ps_a11y_node *node=b->model?ps_a11y_find(b->model,e->id):NULL;
  POINT origin={0};if(!node || node->role!=PS_A11Y_LINK || !b->hwnd || !ClientToScreen(b->hwnd,&origin))return false;
+ if(!uia_window_viewable_locked(b)){*out=(uia_link_state){{0},false,true};return true;}
  *out=(uia_link_state){{origin.x+node->bounds[0]*b->scale_x,origin.y+node->bounds[1]*b->scale_y,
       node->bounds[2]*b->scale_x,node->bounds[3]*b->scale_y},
       node->enabled && IsWindowEnabled(b->hwnd),node->offscreen || !IsWindowVisible(b->hwnd) || IsIconic(b->hwnd)};
@@ -156,6 +161,7 @@ static HRESULT STDMETHODCALLTYPE uia_property(IRawElementProviderSimple *p,PROPE
  const ps_a11y_node *current=b->model && e->id?ps_a11y_find(b->model,e->id):NULL;
  bool live=b->model && (!e->id || current);HWND hwnd=b->hwnd;if(current)node=*current;
  bool reading=b->model && b->model->document && b->model->document->active;
+ bool viewable=uia_window_viewable_locked(b);
  SDL_UnlockMutex(b->mutex);if(!live)return UIA_E_ELEMENTNOTAVAILABLE;
  /* SDK property IDs are extern const values, not C integer constants. */
  if(property==UIA_NamePropertyId)return uia_string(e->id?node.label:b->title,out);
@@ -168,11 +174,11 @@ static HRESULT STDMETHODCALLTYPE uia_property(IRawElementProviderSimple *p,PROPE
   out->vt=VT_I4;out->lVal=!e->id?(reading?UIA_DocumentControlTypeId:UIA_PaneControlTypeId):node.role==PS_A11Y_BUTTON?UIA_ButtonControlTypeId:
    node.role==PS_A11Y_LINK?UIA_HyperlinkControlTypeId:node.role==PS_A11Y_CHECKBOX?UIA_CheckBoxControlTypeId:node.role==PS_A11Y_RADIO?UIA_RadioButtonControlTypeId:
    node.role==PS_A11Y_RADIO_GROUP?UIA_GroupControlTypeId:node.role==PS_A11Y_SLIDER?UIA_SliderControlTypeId:node.role==PS_A11Y_EDIT?UIA_EditControlTypeId:UIA_TextControlTypeId;
- } else if(property==UIA_IsEnabledPropertyId){out->vt=VT_BOOL;out->boolVal=(!e->id || node.enabled) && IsWindowEnabled(hwnd)?VARIANT_TRUE:VARIANT_FALSE;}
- else if(property==UIA_IsKeyboardFocusablePropertyId){out->vt=VT_BOOL;out->boolVal=e->id && node.focusable?VARIANT_TRUE:VARIANT_FALSE;}
- else if(property==UIA_HasKeyboardFocusPropertyId){out->vt=VT_BOOL;out->boolVal=e->id && node.focused?VARIANT_TRUE:VARIANT_FALSE;}
+ } else if(property==UIA_IsEnabledPropertyId){out->vt=VT_BOOL;out->boolVal=viewable && (!e->id || node.enabled) && IsWindowEnabled(hwnd)?VARIANT_TRUE:VARIANT_FALSE;}
+ else if(property==UIA_IsKeyboardFocusablePropertyId){out->vt=VT_BOOL;out->boolVal=viewable && e->id && node.focusable?VARIANT_TRUE:VARIANT_FALSE;}
+ else if(property==UIA_HasKeyboardFocusPropertyId){out->vt=VT_BOOL;out->boolVal=viewable && e->id && node.focused?VARIANT_TRUE:VARIANT_FALSE;}
  else if(property==UIA_IsControlElementPropertyId || property==UIA_IsContentElementPropertyId){out->vt=VT_BOOL;out->boolVal=VARIANT_TRUE;}
- else if(property==UIA_IsOffscreenPropertyId){out->vt=VT_BOOL;out->boolVal=!node.offscreen && IsWindowVisible(hwnd) && !IsIconic(hwnd)?VARIANT_FALSE:VARIANT_TRUE;}
+ else if(property==UIA_IsOffscreenPropertyId){out->vt=VT_BOOL;out->boolVal=viewable && !node.offscreen?VARIANT_FALSE:VARIANT_TRUE;}
  return S_OK;
 }
 static HRESULT STDMETHODCALLTYPE uia_host(IRawElementProviderSimple *p,IRawElementProviderSimple **out) {
@@ -212,7 +218,7 @@ static HRESULT STDMETHODCALLTYPE uia_embedded(IRawElementProviderFragment *p,SAF
 static HRESULT STDMETHODCALLTYPE uia_set_focus(IRawElementProviderFragment *p) {
  uia_element *e=UIA_OWNER(IRawElementProviderFragment,fragment,p);ps_a11y_native *b=e->bridge;SDL_LockMutex(b->mutex);
  const ps_a11y_node *node=b->model?ps_a11y_find(b->model,e->id):NULL;
- HRESULT result=!node || !b->hwnd?UIA_E_ELEMENTNOTAVAILABLE:!node->enabled || !IsWindowEnabled(b->hwnd)?UIA_E_ELEMENTNOTENABLED:
+ HRESULT result=!node || !b->hwnd?UIA_E_ELEMENTNOTAVAILABLE:!node->enabled || !uia_window_viewable_locked(b) || !IsWindowEnabled(b->hwnd)?UIA_E_ELEMENTNOTENABLED:
   ps_a11y_focus(b->model,e->id)?S_OK:UIA_E_INVALIDOPERATION;SDL_UnlockMutex(b->mutex);return result;
 }
 static HRESULT STDMETHODCALLTYPE uia_fragment_root(IRawElementProviderFragment *p,IRawElementProviderFragmentRoot **out) {
@@ -236,12 +242,12 @@ static HRESULT STDMETHODCALLTYPE uia_point(IRawElementProviderFragmentRoot *p,do
 static HRESULT STDMETHODCALLTYPE uia_focus(IRawElementProviderFragmentRoot *p,IRawElementProviderFragment **out) {
  if(!out)return E_POINTER;*out=NULL;uia_element *e=UIA_OWNER(IRawElementProviderFragmentRoot,root,p);ps_a11y_native *b=e->bridge;
  SDL_LockMutex(b->mutex);if(!b->model){SDL_UnlockMutex(b->mutex);return UIA_E_ELEMENTNOTAVAILABLE;}
- uia_element *target=b->model->focused_id?uia_for_locked(b,b->model->focused_id):NULL;SDL_UnlockMutex(b->mutex);
+ uia_element *target=uia_window_viewable_locked(b) && b->model->focused_id?uia_for_locked(b,b->model->focused_id):NULL;SDL_UnlockMutex(b->mutex);
  if(target)*out=&target->fragment;return S_OK;
 }
 static HRESULT uia_press(uia_element *e) {
  ps_a11y_native *b=e->bridge;SDL_LockMutex(b->mutex);const ps_a11y_node *node=b->model?ps_a11y_find(b->model,e->id):NULL;
- HRESULT result=!node || !b->hwnd?UIA_E_ELEMENTNOTAVAILABLE:!node->enabled || !IsWindowEnabled(b->hwnd)?UIA_E_ELEMENTNOTENABLED:
+ HRESULT result=!node || !b->hwnd?UIA_E_ELEMENTNOTAVAILABLE:!node->enabled || !uia_window_viewable_locked(b) || !IsWindowEnabled(b->hwnd)?UIA_E_ELEMENTNOTENABLED:
   ps_a11y_press(b->model,e->id)?S_OK:UIA_E_INVALIDOPERATION;SDL_UnlockMutex(b->mutex);return result;
 }
 static HRESULT STDMETHODCALLTYPE uia_do_invoke(IInvokeProvider *p){return uia_press(UIA_OWNER(IInvokeProvider,invoke,p));}
@@ -280,7 +286,7 @@ static HRESULT STDMETHODCALLTYPE uia_required(ISelectionProvider *p,BOOL *out){i
 static HRESULT STDMETHODCALLTYPE uia_set_value(IRangeValueProvider *p,double value) {
  uia_element *e=UIA_OWNER(IRangeValueProvider,range,p);ps_a11y_native *b=e->bridge;SDL_LockMutex(b->mutex);
  const ps_a11y_node *node=b->model?ps_a11y_find(b->model,e->id):NULL;
- HRESULT result=!node || !b->hwnd?UIA_E_ELEMENTNOTAVAILABLE:!node->enabled || !IsWindowEnabled(b->hwnd)?UIA_E_ELEMENTNOTENABLED:
+ HRESULT result=!node || !b->hwnd?UIA_E_ELEMENTNOTAVAILABLE:!node->enabled || !uia_window_viewable_locked(b) || !IsWindowEnabled(b->hwnd)?UIA_E_ELEMENTNOTENABLED:
   !isfinite(value) || value<node->minimum || value>node->maximum?E_INVALIDARG:
   ps_a11y_set_value(b->model,e->id,value)?S_OK:UIA_E_INVALIDOPERATION;SDL_UnlockMutex(b->mutex);return result;
 }
@@ -307,7 +313,7 @@ static HRESULT STDMETHODCALLTYPE uia_edit_set(IValueProvider *p,LPCWSTR value) {
  if(units && !bytes)return E_INVALIDARG;text[bytes]=0;
  uia_element *e=UIA_OWNER(IValueProvider,value,p);ps_a11y_native *b=e->bridge;SDL_LockMutex(b->mutex);
  const ps_a11y_node *node=b->model?ps_a11y_find(b->model,e->id):NULL;
- HRESULT result=!node || !b->hwnd?UIA_E_ELEMENTNOTAVAILABLE:!node->enabled || !IsWindowEnabled(b->hwnd) || !IsWindowVisible(b->hwnd) || IsIconic(b->hwnd)?UIA_E_ELEMENTNOTENABLED:
+ HRESULT result=!node || !b->hwnd?UIA_E_ELEMENTNOTAVAILABLE:!node->enabled || !uia_window_viewable_locked(b) || !IsWindowEnabled(b->hwnd)?UIA_E_ELEMENTNOTENABLED:
   !ps_text_valid(text,node->text_capacity,false)?E_INVALIDARG:ps_a11y_set_text(b->model,e->id,text)?S_OK:UIA_E_INVALIDOPERATION;
  SDL_UnlockMutex(b->mutex);return result;
 }

@@ -33,7 +33,7 @@ typedef struct {
 typedef struct {
  ps_a11y_node nodes[PS_A11Y_MAX_NODES],draft[PS_A11Y_MAX_NODES];
  size_t count,draft_count;uint64_t next_id,pending_press,selection_parent,selection_id,pending_focus,focused_id;unsigned dropped;
- bool building,keyboard_focus;
+ bool building,keyboard_focus,suspended;
  uint64_t pending_value_id;double pending_value;
  uint64_t pending_text_id;char pending_text[PS_A11Y_LABEL_BYTES];
  uint64_t next_text_version,pending_selection_id,pending_selection_version;
@@ -67,6 +67,9 @@ bool ps_a11y_document_take_scroll(ps_a11y_model *model,uint64_t version,size_t *
 bool ps_a11y_document_link(ps_a11y_model *model,const char *window,const char *name,
                           uint64_t version,size_t begin,size_t end,const float bounds[4],bool enabled);
 void ps_a11y_begin(ps_a11y_model *model);
+/* Preserve published content/IDs while unavailable. Cancel queued input;
+ * only a completed new publication resumes native actions. */
+void ps_a11y_suspend(ps_a11y_model *model);
 /* Visible, clipped bounds in SDL logical window coordinates; positive sizes.
  * Copies UTF-8, clipping long labels at scalar boundaries. Invalid names/bounds
  * are omitted. A true return consumes an enabled queued button activation. */

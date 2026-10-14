@@ -26,7 +26,8 @@ static HRESULT uia_reading_locked(uia_element *owner) {
  b->reading_length=unit;b->reading_version=version;b->reading_owner=owner->id;return S_OK;
 }
 static const ps_a11y_text_box *uia_boxes_locked(uia_element *owner,size_t *count) {
- ps_a11y_native *b=owner->bridge;if(!owner->id){*count=b->model->document->count;return b->model->document->boxes;}
+ ps_a11y_native *b=owner->bridge;if(!uia_window_viewable_locked(b)){*count=0;return NULL;}
+ if(!owner->id){*count=b->model->document->count;return b->model->document->boxes;}
  const ps_a11y_node *node=ps_a11y_find(b->model,owner->id);*count=node->box_count;return b->model->edit_boxes+node->box_offset;
 }
 static size_t uia_utf16_locked(ps_a11y_native *b,size_t byte) {
@@ -261,7 +262,7 @@ static HRESULT STDMETHODCALLTYPE uia_tr_rectangles(ITextRangeProvider *p,SAFEARR
  if(SUCCEEDED(result)) {
   size_t box_count;const ps_a11y_text_box *boxes=uia_boxes_locked(r->owner,&box_count);size_t begin=b->reading_bytes[r->start],end=b->reading_bytes[r->end];
   const ps_a11y_node *node=ps_a11y_find(b->model,r->owner->id);
-  if(node && begin==end && begin==node->text_caret && node->caret_bounds[2]>0 && node->caret_bounds[3]>0) {
+  if(node && uia_window_viewable_locked(b) && begin==end && begin==node->text_caret && node->caret_bounds[2]>0 && node->caret_bounds[3]>0) {
    const float *box=node->caret_bounds;double values[]={origin.x+box[0]*b->scale_x,origin.y+box[1]*b->scale_y,box[2]*b->scale_x,box[3]*b->scale_y};
    memcpy(rectangles,values,sizeof values);count=1;
   }
@@ -320,6 +321,7 @@ static HRESULT STDMETHODCALLTYPE uia_text_visible(ITextProvider *p,SAFEARRAY **o
    if(count && begin<=ends[count-1]){if(end>ends[count-1])ends[count-1]=end;}
    else {starts[count]=begin;ends[count++]=end;}
   }
+  if(!count){starts[0]=ends[0]=0;count=1;} /* No visible text: a degenerate range. */
   *out=SafeArrayCreateVector(VT_UNKNOWN,0,(ULONG)count);if(!*out)result=E_OUTOFMEMORY;
   for(LONG i=0;SUCCEEDED(result) && i<(LONG)count;i++) {
    uia_text_range *r=uia_text_range_new(e,b->reading_version,starts[i],ends[i]);
@@ -376,7 +378,7 @@ static HRESULT STDMETHODCALLTYPE uia_text2_caret(ITextProvider2 *p,BOOL *active,
  if(!out || !active)return E_POINTER;*out=NULL;*active=FALSE;uia_element *e=UIA_OWNER(ITextProvider2,text2,p);ps_a11y_native *b=e->bridge;
  SDL_LockMutex(b->mutex);HRESULT result=uia_reading_locked(e);uia_text_range *r=NULL;
  if(SUCCEEDED(result)){const ps_a11y_node *node=ps_a11y_find(b->model,e->id);size_t at=uia_utf16_locked(b,node->text_caret);
-  r=uia_text_range_new(e,b->reading_version,at,at);*active=node->focused && node->text_active && b->hwnd && IsWindowVisible(b->hwnd) && !IsIconic(b->hwnd);
+  r=uia_text_range_new(e,b->reading_version,at,at);*active=node->focused && node->text_active && uia_window_viewable_locked(b);
  }
  SDL_UnlockMutex(b->mutex);if(FAILED(result))return result;if(!r)return E_OUTOFMEMORY;*out=&r->range_iface;return S_OK;
 }

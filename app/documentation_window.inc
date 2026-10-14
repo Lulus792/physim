@@ -104,13 +104,15 @@ static void documentation_window_hide(app *a) {
     nk_sdl_handle_event(a->doc_ui, &focus_lost);
     SDL_StopTextInput(a->doc_window);
     SDL_HideWindow(a->doc_window);
+    nk_sdl_accessibility_suspend(a->doc_ui);
     a->doc_visible = false;
     a->doc_keyboard=a->doc_search_active=a->doc_filter_active=false;
 }
 
 static bool documentation_window_render(app *a, const char *capture_path) {
-    if (!a->doc_visible)
-        return true;
+    if (!a->doc_visible || (a->doc_window && SDL_GetWindowFlags(a->doc_window)&(SDL_WINDOW_HIDDEN|SDL_WINDOW_MINIMIZED))) {
+        nk_sdl_accessibility_suspend(a->doc_ui);return true;
+    }
     if (!ps_graphics_make_current(a->doc_graphics))
         return false;
     struct nk_context *ui = a->doc_ui;

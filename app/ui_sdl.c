@@ -298,6 +298,18 @@ void nk_sdl_accessibility_document_link_invoked(struct nk_context *ctx,uint64_t 
  if(!ctx || !ctx->userdata.ptr)return;struct nk_sdl *sdl=ctx->userdata.ptr;
  ps_a11y_native_document_link_invoked(sdl->accessibility_native,version,begin,end);
 }
+void nk_sdl_accessibility_suspend(struct nk_context *ctx) {
+ if(!ctx || !ctx->userdata.ptr)return;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return;
+ SDL_LockMutex(sdl->accessibility_mutex);bool first=!sdl->accessibility->suspended;
+ ps_a11y_suspend(sdl->accessibility);SDL_UnlockMutex(sdl->accessibility_mutex);
+ if(first) {
+  /* No current Nuklear window exists between frames; clear every window's edit
+   * cache explicitly, otherwise it reacquires native focus after reopening. */
+  for(struct nk_window *window=ctx->begin;window;window=window->next){window->edit.active=nk_false;window->edit.name=0;}
+  ctx->text_edit.active=nk_false;SDL_StopTextInput(sdl->win);
+ }
+ ps_a11y_native_publish(sdl->accessibility_native,false);
+}
 bool nk_sdl_accessibility_press(struct nk_context *ctx,const char *label) {
     if(!ctx || !ctx->userdata.ptr)return false;
     struct nk_sdl *sdl=ctx->userdata.ptr;

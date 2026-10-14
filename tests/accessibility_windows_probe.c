@@ -112,6 +112,8 @@ static HRESULT document_links(IUIAutomation *automation,IUIAutomationElement *co
    Sleep(200);
    if(SUCCEEDED(result) && (events_count(&events->bounds)!=stable_bounds || events_count(&events->offscreen)!=stable_offscreen ||
       events_count(&events->disabled)!=stable_disabled || events_count(&events->enabled)!=stable_enabled || events_count(&events->invoked)))result=E_FAIL;
+   if(SUCCEEDED(result))result=IUIAutomationElement_get_CurrentHasKeyboardFocus(selected,&focused);
+   if(SUCCEEDED(result) && !focused){fputs("Link lost focus after window movement\n",stderr);result=E_FAIL;}
    if(SUCCEEDED(result))puts("WINDOWS LINK EVENTS: host disable/enable, rejected invocation, screen-position geometry and quiet idle passed");
   }
  } else if(SUCCEEDED(result)) {
@@ -287,6 +289,7 @@ static HRESULT scroll_text(IUIAutomationElement *control,const wchar_t *query,BO
  if(value)IUIAutomationValuePattern_Release(value);if(base)IUIAutomationTextPattern_Release(base);if(pattern)IUIAutomationTextPattern2_Release(pattern);if(unknown)IUnknown_Release(unknown);
  return result;
 }
+#include "accessibility_windows_lifecycle_probe.inc"
 int wmain(int argc,wchar_t **argv) {
  if(argc!=4 && argc!=5)return 2;
  wchar_t *end=NULL;unsigned long pid=wcstoul(argv[1],&end,10);if(!pid || *end)return 2;
@@ -294,8 +297,9 @@ int wmain(int argc,wchar_t **argv) {
  bool scroll_start=!wcscmp(argv[2],L"scroll-text-start"),scroll_end=!wcscmp(argv[2],L"scroll-text-end");
  bool links=!wcscmp(argv[2],L"links"),invoke_link=!wcscmp(argv[2],L"invoke-link");
  bool invalid_link=!wcscmp(argv[2],L"invoke-link-invalid");
- if(!focus && !toggle && !select && !read && !edit && !text_select && !scroll_start && !scroll_end && !links && !invoke_link && !invalid_link)return 2;
- if((read || edit || text_select || scroll_start || scroll_end || links || invoke_link || invalid_link) && argc!=5)return 2;
+ bool lifecycle=!wcscmp(argv[2],L"lifecycle");
+ if(!focus && !toggle && !select && !read && !edit && !text_select && !scroll_start && !scroll_end && !links && !invoke_link && !invalid_link && !lifecycle)return 2;
+ if((read || edit || text_select || scroll_start || scroll_end || links || invoke_link || invalid_link || lifecycle) && argc!=5)return 2;
  HRESULT initialized=CoInitializeEx(NULL,COINIT_MULTITHREADED);if(FAILED(initialized))return 1;
  IUIAutomation *automation=NULL;IUIAutomationElement *desktop=NULL,*window=NULL,*group=NULL,*control=NULL;
  IUnknown *unknown=NULL;bool ok=SUCCEEDED(CoCreateInstance(&CLSID_CUIAutomation,NULL,CLSCTX_INPROC_SERVER,&IID_IUIAutomation,(void**)&automation));
@@ -303,7 +307,7 @@ int wmain(int argc,wchar_t **argv) {
  VARIANT process;VariantInit(&process);process.vt=VT_I4;process.lVal=(LONG)pid;
  if(ok)ok=SUCCEEDED(find(automation,desktop,TreeScope_Children,UIA_ProcessIdPropertyId,process,&window)) && window;
  if(ok && (edit || text_select || scroll_start || scroll_end))ok=SUCCEEDED(find_edit(automation,desktop,(LONG)pid,argv[3],&control)) && control;
- else if(ok && (read || links || invoke_link || invalid_link)) {
+ else if(ok && (read || links || invoke_link || invalid_link || lifecycle)) {
   IUIAutomationCondition *pid_condition=NULL,*title_condition=NULL,*both=NULL;VARIANT title;VariantInit(&title);title.vt=VT_BSTR;title.bstrVal=SysAllocString(argv[3]);
   ok=title.bstrVal && SUCCEEDED(IUIAutomation_CreatePropertyCondition(automation,UIA_ProcessIdPropertyId,process,&pid_condition)) &&
    SUCCEEDED(IUIAutomation_CreatePropertyCondition(automation,UIA_NamePropertyId,title,&title_condition)) &&
@@ -329,6 +333,7 @@ int wmain(int argc,wchar_t **argv) {
  else if(ok && text_select)action=select_text(control,argv[4]);
  else if(ok && read)action=read_document(control,argv[4]);
  else if(ok && (links || invoke_link || invalid_link))action=document_links(automation,control,argv[4],invoke_link || invalid_link,invalid_link);
+ else if(ok && lifecycle)action=document_lifecycle(automation,control,argv[4]);
  else if(ok && focus) {
   ok=SUCCEEDED(IUIAutomationElement_get_CurrentIsKeyboardFocusable(control,&focusable)) && focusable;
   if(ok)action=IUIAutomationElement_SetFocus(control);

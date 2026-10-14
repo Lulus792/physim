@@ -454,7 +454,15 @@ und wartet abgeschlossene Layout-Frames ab. Sie senkt keinen Geometrie-Grenzwert
 Jedes Zoom-Bild wird jetzt gegen die protokollierte tatsächliche logische Größe,
 Drawable-Pixelgröße, Schriftgröße und Leseflächenhöhe geprüft. Das entspricht
 dem [SDL-Vertrag für Größenänderungen](https://wiki.libsdl.org/SDL3/SDL_SetWindowSize).
-Die korrigierte Linux-Ausführung steht noch aus.
+Die korrigierte Linux-Ausführung stand an diesem Zwischenschritt noch aus.
+
+Der korrigierte Stand `fa3e8ac` besteht inzwischen unter Ubuntu 24.04/X11/Xvfb
+mit ASan/UBSan: GCC **19/19 native und 25/25 GUI-Fälle** (`run-ex_l712d`,
+`run-r0gu5ywa`), Clang ebenfalls **19/19 und 25/25** (`run-0bqee4bo`,
+`run-hrzfzoz5`).
+[GCC-Lauf](https://github.com/Lulus792/physim/actions/runs/38493455260/job/115623771433),
+[Clang-Lauf](https://github.com/Lulus792/physim/actions/runs/38493455260/job/115623771688).
+Beide bestehen den strengeren Zoomfall einschließlich tatsächlicher Bildgrößen.
 
 Windows meldet jetzt Änderungen der Linkgeometrie, Sichtbarkeit und Bedienbarkeit
 mit typisierten UIA-Property-Ereignissen. Die Geometrie berücksichtigt auch eine
@@ -492,9 +500,61 @@ Ereignis-/Zoomfälle bestehen mit MSVC ASan in
 Der Testläufer samt erwarteten Gegenfehlern besteht in
 `build/native/F1-review/link-events-runner-proof`.
 
+Beim Verbergen oder Minimieren bleibt der veröffentlichte Lesetext erhalten,
+aber das Modell setzt native Aufträge und Fokus aus. Wartende Text-, Wert-,
+Auswahl-, Scroll-, Fokus- und Aktivierungsaufträge werden verworfen. Erst eine
+vollständig gezeichnete neue Publikation gibt die Aktionen wieder frei.
+Inhalte, Inhaltsversionen und Elementidentitäten bleiben über diese Pause
+erhalten. Das Fenster benötigt für diese Zustandsmeldung keinen neuen GPU-Frame.
+
+Windows liefert in diesem Zustand keine sichtbare Glyphengeometrie und nur
+einen leeren, degenerierten sichtbaren Textbereich. Fokus und aktiver Caret
+sind aus; Fokus- und Aktivierungsanforderungen werden abgewiesen. Dies folgt
+den Verträgen für [GetVisibleRanges](https://learn.microsoft.com/en-us/windows/win32/api/uiautomationcore/nf-uiautomationcore-itextprovider-getvisibleranges)
+und [GetBoundingRectangles](https://learn.microsoft.com/en-us/windows/win32/api/uiautomationcore/nf-uiautomationcore-itextrangeprovider-getboundingrectangles).
+Das Lesen des erhaltenen Gesamttexts ist weiterhin möglich.
+
+Der unabhängige Client hält dieselben Dokument-, Feld-, Link- und Textbereichs-
+objekte über Escape/Schließen, Wiederöffnen, echtes Win32-Minimieren und
+Wiederherstellen. Die Gegenprobe `run-v0zb0uxy` findet nach Schließen noch
+aktiven Feldfokus; `run-hh37coiv` zeigt fehlende Sichtbarkeitsereignisse.
+Die erste Korrektur besteht in `run-gztif0t0`. Die strengere Prüfung der
+Wiederöffnung entdeckt anschließend einen alten Nuklear-Editierzustand
+(`run-60i5pyfg`). Dessen ausdrückliche Rücksetzung verhindert erneuten Fokus
+aus dem vorherigen Fensterzustand.
+
+Die finale Probe bestätigt zwei Hidden- und zwei Shown-Ereignisse, keinen
+Invoked-Event, unveränderten Gesamttext, Unicode-Feldwert und Inhaltsversion,
+leere verborgene Textgeometrie, abgewiesene verborgene Aktionen und erhaltene
+Elementidentitäten. Editor und Simulation bleiben gleich. Die Bildprüfung
+entdeckte zunächst eine zu frühe Minimierung vor der Wiederöffnungsaufnahme;
+der Client wartet nun auf die bestätigte Aufnahme. Beide finalen Bilder wurden
+geprüft. Der ergänzte Modellfall prüft rückgenommene Aufträge, Aktionen während
+der Pause, erhaltene Werte/IDs und Wiederfreigabe erst nach der Publikation.
+
+Lebenszyklus und Linkereignisse bestehen 2/2 in `run-ysg64uez`; fünf betroffene
+Modellfälle bestehen in `run-cgltr8ud`. Die drei Modell-/Feld-/Lesefälle bestehen
+mit MSVC ASan in `run-v_fnovl6`; die abschließenden vier Provider-/Render-/
+Lebenszyklus-/Linkfälle bestehen dort in `run-h32gapm8`. Die ASan-Ergebnisse
+liegen unter `build/native/F1-uia-sanitized/test-results`. Vier weitere
+Tastatur-/native Feld-/Lese-/Zoomfälle bestehen in `run-b824u53x`. Testkatalog
+und erwartete Gegenfehler bestehen in `build/native/F1-review/lifecycle-runner-proof`.
+Ein vorheriger ASan-Lauf verlor nach dem externen Fensterverschieben den
+Linkfokus (`run-ke7exiiw`); der Client bestätigt den Fokus jetzt auch am Ende
+seiner Bewegungs-/Idle-Prüfung. Der abschließende vollständige Fallverbund
+und das Paar `run-tlbbydis` bestehen. Dies ersetzt keine vollständige
+Fenster-/Monitor-/DPI-Matrix oder echte Screenreader-Abnahme.
+
+Die Lebenszyklusbilder zeigen zusätzlich ein Ersatzzeichen für `🌍` im
+Suchfeld, obwohl der native UTF-8-/UTF-16-Wert erhalten bleibt. Der Codepunkt
+U+1F30D gehört nicht zu den aktuell geladenen Fontbereichen. Die mathematische
+Inventur bleibt gültig, bestätigt aber keine solche Zeichenabdeckung.
+Schriftfallback und eine umfassendere visuelle Zeichenprüfung bleiben offen.
+
 Offen sind vollständige assistive Feldbedienung und ihre native
 macOS-/Linux-Anbindung, native Linktextbereiche auf macOS/Linux, native
-vollständige Ereignisprüfung des Fensterlebenszyklus, Tabellensemantik, vollständiges natives
+vollständige Fenster-/Monitor-Ereignismatrix auf allen Zielplattformen,
+Schriftfallback für weitere Unicode-Zeichen, Tabellensemantik, vollständiges natives
 Lesen auf macOS/Linux, praktische Screenreader-Abnahme
 und die Abnahmematrix für Dichte, Themes sowie Linux und macOS. Diese Liste
 beschreibt Restarbeit und erteilt keine Produktfreigabe.
