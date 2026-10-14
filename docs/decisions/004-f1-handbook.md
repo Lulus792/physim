@@ -306,6 +306,42 @@ Clang-Job `115976192069` mit ebenfalls **24/24 und 30/30** (`run-3nfsp5ui`,
 `accessibility_links_atspi` besteht in beiden. Das ist ein Nachweis dieser
 vorherigen Revision, keine vorweggenommene Ubuntu-Abnahme der neuen Sidebar.
 
+### Fokus nach Theme-Reflow mit breiterer Systemschrift
+
+Die Ubuntu-Gegenprobe zu `36a12ef` besteht zwar alle 24 nativen Fälle,
+scheitert aber mit GCC und Clang im letzten High-Contrast-Schritt der neuen
+Sidebar-Probe: **30/31 GUI-Fälle**, Workflow `38602604785`, Jobs `115985346834`
+und `115985346665` (`run-e6a1jatk`, `run-5b4b1fnf`). Die Originalprotokolle und
+das GCC-Artefakt wurden eingesehen. Mit der dort verwendeten breiteren
+DejaVu-Schrift besitzt der Kapiteltitel drei Zeilen auf 130 Pixel Höhe.
+Beim Kontrastwechsel bricht zusätzlich der Button `Themen` um; dadurch wandert
+die bereits fokussierte Kapitelaktion unter die Clipgrenze. Die Aufnahme
+bestätigt tatsächlich abgeschnittenen Text, keinen bloßen Prüferfehler.
+
+Eine lokale Gegenprobe installiert DejaVu 2.37-r6 unter Alpine und macht die
+unveränderten Paketfonts an der bereits vorgesehenen Systemfont-Adresse
+verfügbar. Der vorhandene App-Build reproduziert denselben Fehler im letzten
+Theme-Schritt (`build/native/F1-linux/sidebar-dejavu-before.log`). Das erklärt,
+warum die vorherige lokale Probe mit Noto-Fallback bestanden hatte; ihre Belege
+bleiben auf diese Umgebung begrenzt.
+
+Nach Anwenden neuer Darstellungseinstellungen wird das Sichtbarmachen des
+aktiven F1-Tastaturziels erneut angefordert. Die vorhandene Fokusprüfung
+berechnet den nötigen Scrollversatz erst am neuen Layout. Sie erhält das Ziel
+und senkt keine Clip-/Vollständigkeitsanforderung. Der erste Schritt mit dem
+breiteren Font bleibt jetzt auch nach dem Themewechsel vollständig sichtbar.
+
+Abschließend tatsächlich ausgeführt, jeweils Exitcode 0:
+
+- Alpine/DejaVu, GCC ASan/UBSan: **3/3** in `run-jebn_meu` für Zoom,
+  Lesemodus-Navigation und die strengere Sidebar-/Abschnittsprobe.
+- Windows, MSVC ASan: **3/3** in `run-u9dmvnrf` für dieselben Fälle.
+
+Die finale Linux-Kontrastaufnahme wurde unmittelbar geprüft; alle drei
+Titelzeilen liegen im sichtbaren Fokusrahmen. Die Ubuntu-Nachprüfung dieser
+Korrektur steht noch aus. Praktische Screenreader-, macOS- und echte
+DPI-/Monitorwechsel-Abnahme werden durch diese Reflow-Korrektur nicht behauptet.
+
 ### Offline-Schriftquellen und vollständige Zeicheninventur
 
 Die nächste Korrektur erweitert die Gegenprobe auf alle **167 druckbaren Zeichen
