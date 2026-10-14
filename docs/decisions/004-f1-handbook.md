@@ -17,7 +17,7 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 | Dokumentationszugang | 183 registrierte Seiten und 214 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
 | Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
-| Barrierefreiheit | Windows UIA liest vollständigen Text, bedient Suchfelder und veröffentlicht interne Links; Linux AT-SPI ergänzt Lesetext, Suchfelder und interne Hypertext-Linkbereiche; unabhängige Clientprüfungen bestehen | Native Text-/Feld-/Linkbereiche auf macOS, Tabellensemantik und echte Screenreader-Aufgaben |
+| Barrierefreiheit | Windows UIA und Linux AT-SPI ergänzen Lesetext, Suchfelder und interne Linkbereiche; macOS ergänzt einen vollständigen AppKit-Leseknoten mit UTF-16-Bereichen und nativer Geometrie; die jeweiligen Client-/Laufzeitprüfungen bestehen | Native Feld-/Linkbereiche auf macOS, Tabellensemantik, externe macOS-AX-Clientprüfung und echte Screenreader-Aufgaben |
 
 Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
 Bewertung mit Höchstpunktzahl ist wegen dieser offenen Abnahmefälle noch nicht
@@ -341,6 +341,84 @@ Die finale Linux-Kontrastaufnahme wurde unmittelbar geprüft; alle drei
 Titelzeilen liegen im sichtbaren Fokusrahmen. Die Ubuntu-Nachprüfung dieser
 Korrektur steht noch aus. Praktische Screenreader-, macOS- und echte
 DPI-/Monitorwechsel-Abnahme werden durch diese Reflow-Korrektur nicht behauptet.
+
+### Vollständiger AppKit-Lesetext auf macOS
+
+Die zentralen Skills `macos-specialist`, `accessibility-engineer` und
+`test-engineer` bestimmen den nächsten Plattformschritt. Ein eigener
+`NSAccessibilityNavigableStaticText`-Knoten ergänzt F1 außerhalb des begrenzten
+Control-Katalogs. Seine Wert- und Bereichsabfragen liefern den vollständigen
+UTF-8-Lesetext über NSString; Zeichenpositionen zählen UTF-16-Einheiten gemäß
+[Apples NSString-Vertrag](https://developer.apple.com/documentation/foundation/nsstring).
+Der portable Index besitzt eigene UTF-8-/Bytekopien, behandelt zusätzliche
+Surrogateinheiten und verwirft Teilbereiche innerhalb eines Surrogatpaars sowie
+überlaufende Bereiche. Fehlgeschlagener Ersatz erhält den alten Index.
+
+Der Knoten liefert Zeichenanzahl, reine und attributierte Teilstrings,
+logische Newline-Bereiche, sichtbaren Textbereich und sichtbare Zeichenrahmen
+in Bildschirmkoordinaten. Die Geometrie stammt aus dem tatsächlichen Layout;
+unsichtbare Bereiche liefern keinen erfundenen Rahmen. Die Getter und die
+native Anforderung zum Sichtbarmachen folgen
+[NSAccessibilityProtocol](https://developer.apple.com/documentation/appkit/nsaccessibilityprotocol).
+Dies ergänzt vollständiges Lesen, keine editierbare Auswahl, semantische
+Tabellen, sprachabhängige Textformung oder native macOS-Linktextbereiche.
+
+Ein eigenes Objective-C-Element besitzt eine Dokumentgeneration unabhängig
+von numerischen Control-IDs. Der Gegenfall verwendet absichtlich dieselbe
+Nummer für Dokument und Button. Direkte Press-/Fokus-/Wertaktionen des
+Dokuments werden ausdrücklich abgefangen; sie können kein Control adressieren.
+Zurückbehaltene Referenzen bleiben nach Entfernen und Wiedererscheinen ungültig.
+Verbergen erhält den Lesetext, sperrt Geometrie und Scrollen. Native
+Suspensionspublikationen werden bei unveränderter Verfügbarkeit ausgelassen.
+
+Die tatsächliche F1-Probe fragt AppKit-Wert, Gesamtbereich und Zeichenanzahl
+am laufenden Dokument ab, bestätigt initiale Glyphengeometrie und fordert
+das Dokumentende über den nativen Bereichssetter an. Die vorhandene F1-Prüfung
+fordert danach das sichtbare letzte Inhaltszeichen und eine echte Aufnahme.
+Der erste Intel-Artefaktbeleg enthält **486.670 Bytes und 481.208 UTF-16-Einheiten**,
+übereinstimmenden Gesamtwert/-bereich sowie Geometrie; die Endaufnahme zeigt
+den tatsächlichen JSON-Abschluss. Die abweichende Größe gegenüber Windows-
+Quellbelegen erklärt sich durch LF statt CRLF im Checkout, nicht durch Kürzung.
+
+Die erste tatsächliche Ausführung, Workflow `38610393267` für `864ffa3`,
+besteht unter macOS 15 auf beiden Architekturen mit ASan/UBSan:
+
+- Intel, Job `116011918835`: **3/3 native** (`run-kvrblgrr`) und
+  **5/5 GUI** (`run-qrkzfl6m`). Das vollständige Originalartefakt wurde gelesen;
+  AppKit-Primitive und F1-Wert/Bereich/Geometrie bestätigen ihre Ausführung.
+- ARM64, Job `116011919525`: **3/3 native** (`run-xvkmuf0n`) und
+  **5/5 GUI** (`run-12sfaluo`). Die Originalprotokolle wurden eingesehen.
+
+Die lokale UTF-16-/Dokumentgruppe besteht mit MSVC ASan **2/2** in
+`run-3as_tnuh`; drei Windows-UI-Nachbarn bestehen dort in `run-bq9hqzu4`.
+Der portable UTF-16-Grenzprüfer besteht zusätzlich unter GCC ASan/UBSan mit
+Leakprüfung. Die macOS-Prüfung nutzt tatsächliche AppKit-Objekte im Prozess
+und beide Plattform-ABIs; sie ist keine externe AXUIElement-Clientprüfung
+und keine praktische VoiceOver-Abnahme. Diese Grenzen bleiben ausdrücklich offen.
+
+Der abschließende Implementierungsstand `23c0495` besteht ebenfalls tatsächlich
+auf beiden Architekturen, Workflow `38616701014`:
+
+- Intel, Job `116034845271`: **3/3 native** (`run-_3ukzd28`) und
+  **5/5 GUI** (`run-p2m61wr6`).
+- ARM64, Job `116034845684`: **3/3 native** (`run-_o0hryh0`) und
+  **5/5 GUI** (`run-u0c14epg`).
+
+Die Originalprotokolle und das vollständige finale ARM64-Artefakt wurden
+eingesehen. Es bestätigt den absichtlich kollidierenden Button-/Dokumentfall,
+die gehaltenen Referenzen, vollständige native F1-Wert-/Bereichsabfragen mit
+486.670 Bytes/481.208 UTF-16-Einheiten und reale Glyphengeometrie. Die finale
+ARM64-Endaufnahme zeigt ebenfalls die schließende JSON-Klammer und wurde
+unmittelbar betrachtet. Das Prüfsystem erfasst beide tatsächlichen Images
+`macos-15`/`macos-15-arm64` und Darwin 24.6.0.
+
+Die vorherige Theme-Reflow-Korrektur `17367e6` besteht inzwischen auch unter
+Ubuntu: Workflow `38613571494`, Clang-Job `116022808125` und GCC-Job
+`116022808828`, jeweils **24/24 native und 31/31 GUI-Fälle**. Die eingesehenen
+Originalprotokolle enthalten die erfolgreiche strengere Sidebar-Probe;
+Clang: `run-ds9pr0wu`/`run-7u8vx_5z`, GCC:
+`run-_cuszih9`/`run-gkgpojxg`. Die vorherigen fehlgeschlagenen Theme-Läufe
+bleiben als begrenzte Gegenbelege erhalten.
 
 ### Offline-Schriftquellen und vollständige Zeicheninventur
 

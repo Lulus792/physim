@@ -9,6 +9,8 @@
 #include <objc/runtime.h>
 #include <objc/message.h>
 #include <CoreGraphics/CoreGraphics.h>
+#include <limits.h>
+#include "accessibility_utf16.h"
 /* AppKit is linked, but this bridge remains C17. Typed runtime calls preserve
  * Objective-C's platform ABI without exposing Objective-C in the application. */
 extern void NSAccessibilityPostNotification(id element,id notification);
@@ -16,13 +18,14 @@ struct ps_a11y_native {
  SDL_Window *window;ps_a11y_model *model;SDL_Mutex *mutex;SDL_AtomicInt references;
  id view,children;uint64_t ids[PS_A11Y_MAX_NODES],parents[PS_A11Y_MAX_NODES];bool checked[PS_A11Y_MAX_NODES];uint64_t focused_id;size_t count;
  double values[PS_A11Y_MAX_NODES];
+ id document;uint64_t document_identity,document_version;ps_a11y_utf16_index document_index;bool document_viewable;
 };
 #if OBJC_BOOL_IS_BOOL
 #define PS_AX_BOOL "B"
 #else
 #define PS_AX_BOOL "c"
 #endif
-static Class element_class;static Ivar owner_ivar,id_ivar;static IMP base_dealloc,base_frame;
+static Class element_class,document_class;static Ivar owner_ivar,id_ivar;static IMP base_dealloc,base_frame;
 static id send0(id object,const char *selector) {
  return ((id(*)(id,SEL))objc_msgSend)(object,sel_registerName(selector));
 }
@@ -39,6 +42,7 @@ static uint64_t identifier(id object) {
  uint64_t value;memcpy(&value,(char*)object+ivar_getOffset(id_ivar),sizeof value);return value;
 }
 static bool node_copy(id object,ps_a11y_node *copy) {
+ if(document_class && object_getClass(object)==document_class)return false;
  ps_a11y_native *b=owner(object);if(!b)return false;
  SDL_LockMutex(b->mutex);const ps_a11y_node *node=b->model?ps_a11y_find(b->model,identifier(object)):NULL;
  if(node)*copy=*node;
@@ -177,19 +181,27 @@ static bool make_class(void) {
  objc_registerClassPair(element_class);owner_ivar=class_getInstanceVariable(element_class,"physimOwner");id_ivar=class_getInstanceVariable(element_class,"physimID");
  return base_dealloc && base_frame && owner_ivar && id_ivar;
 }
+#include "accessibility_macos_text.inc"
 ps_a11y_native *ps_a11y_native_create(SDL_Window *window,ps_a11y_model *model,SDL_Mutex *mutex) {
- if(!window || !model || !mutex || !make_class())return NULL;
+ if(!window || !model || !mutex || !make_class() || !make_document_class())return NULL;
  id native=SDL_GetPointerProperty(SDL_GetWindowProperties(window),SDL_PROP_WINDOW_COCOA_WINDOW_POINTER,NULL);
  if(!native)return NULL;
  ps_a11y_native *b=calloc(1,sizeof *b);if(!b)return NULL;
  b->window=window;b->model=model;b->mutex=mutex;SDL_SetAtomicInt(&b->references,1);
  b->view=send0(send0(native,"contentView"),"retain");
+ b->document_viewable=!(SDL_GetWindowFlags(window)&(SDL_WINDOW_HIDDEN|SDL_WINDOW_MINIMIZED));
  send1(b->view,"setAccessibilityRole:",string("AXGroup"));send1(b->view,"setAccessibilityLabel:",string("Physim"));
  ((void(*)(id,SEL,BOOL))objc_msgSend)(b->view,sel_registerName("setAccessibilityElement:"),YES);
  return b;
 }
 void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
- if(!b || !changed)return;
+ if(!b)return;
+ /* Window suspension still changes native availability without a new frame. */
+ SDL_LockMutex(b->mutex);
+ bool viewable=!b->model->suspended && !(SDL_GetWindowFlags(b->window)&(SDL_WINDOW_HIDDEN|SDL_WINDOW_MINIMIZED));
+ bool availability_changed=b->document_viewable!=viewable;b->document_viewable=viewable;
+ SDL_UnlockMutex(b->mutex);
+ if(!changed && !availability_changed)return;
  id pool=send0(send0((id)objc_getClass("NSAutoreleasePool"),"alloc"),"init");
  id children=send0((id)objc_getClass("NSMutableArray"),"new");bool value_changed[PS_A11Y_MAX_NODES]={0};bool selection_changed[PS_A11Y_MAX_NODES]={0};
  SDL_LockMutex(b->mutex);
@@ -225,7 +237,9 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
        :CGRectMake(node->bounds[0],flipped?node->bounds[1]:height-node->bounds[1]-node->bounds[3],node->bounds[2],node->bounds[3]);
   ((void(*)(id,SEL,CGRect))objc_msgSend)(element,sel_registerName("setAccessibilityFrameInParentSpace:"),bounds);
  }
+ bool document_changed=document_publish_locked(b,roots);
  send1(b->view,"setAccessibilityChildren:",roots);SDL_UnlockMutex(b->mutex);
+ if(document_changed && b->document)NSAccessibilityPostNotification(b->document,string("AXValueChanged"));
  for(size_t i=0;i<b->count;i++)if(value_changed[i])NSAccessibilityPostNotification(element_for(b,b->ids[i]),string("AXValueChanged"));
  for(size_t i=0;i<b->count;i++)if(selection_changed[i])NSAccessibilityPostNotification(element_for(b,b->ids[i]),string("AXSelectedChildrenChanged"));
  b->focused_id=new_focus;
@@ -240,6 +254,8 @@ void ps_a11y_native_destroy(ps_a11y_native *b) {
   send1(element,"setAccessibilityParent:",nil);
  }
  id empty=send0((id)objc_getClass("NSArray"),"array");send1(b->view,"setAccessibilityChildren:",empty);
+ if(b->document){send1(b->document,"setAccessibilityParent:",nil);send0(b->document,"release");b->document=nil;}
+ ps_a11y_utf16_clear(&b->document_index);
  if(b->children)send0(b->children,"release");send0(b->view,"release");b->view=nil;release_bridge(b);
 }
 bool ps_a11y_native_press_label(ps_a11y_native *b,const char *label) {
@@ -276,6 +292,7 @@ bool ps_a11y_native_press_choice(ps_a11y_native *b,const char *group,const char 
  }
  return false;
 }
+#include "accessibility_macos_text_tests.inc"
 bool ps_a11y_native_test(SDL_Window *window) {
  ps_a11y_model *model=malloc(sizeof *model);SDL_Mutex *mutex=SDL_CreateMutex();
  if(!model || !mutex){free(model);if(mutex)SDL_DestroyMutex(mutex);return false;}
@@ -371,7 +388,8 @@ bool ps_a11y_native_test(SDL_Window *window) {
  okay &= !((BOOL(*)(id,SEL))objc_msgSend)(checkbox,sel_registerName("accessibilityPerformPress"));
  okay &= !((BOOL(*)(id,SEL))objc_msgSend)(radio,sel_registerName("accessibilityPerformPress"));
  okay &= !((BOOL(*)(id,SEL))objc_msgSend)(slider,sel_registerName("accessibilityPerformIncrement"));
- send0(slider,"release");send0(radio,"release");send0(checkbox,"release");send0(element,"release");free(model);return okay;
+ send0(slider,"release");send0(radio,"release");send0(checkbox,"release");send0(element,"release");free(model);
+ return mac_document_test(window) && okay;
 }
 #elif !defined(__linux__)
 struct ps_a11y_native {int unused;};
@@ -387,4 +405,7 @@ bool ps_a11y_native_focus_label(ps_a11y_native *bridge,const char *group,const c
 bool ps_a11y_native_document_link_invoked(ps_a11y_native *bridge,uint64_t version,size_t begin,size_t end) {
  (void)bridge;(void)version;(void)begin;(void)end;return false;
 }
+#endif
+#ifndef __APPLE__
+bool ps_a11y_native_document_read_test(ps_a11y_native *bridge){(void)bridge;return false;}
 #endif

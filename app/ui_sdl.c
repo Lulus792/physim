@@ -266,6 +266,10 @@ bool nk_sdl_accessibility_document_preserve_position(struct nk_context *ctx,uint
  bool ok=ps_a11y_document_preserve_position(sdl->accessibility,version);
  SDL_UnlockMutex(sdl->accessibility_mutex);return ok;
 }
+bool nk_sdl_accessibility_document_native_read_test(struct nk_context *ctx) {
+ if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;
+ return ps_a11y_native_document_read_test(sdl->accessibility_native);
+}
 bool nk_sdl_accessibility_document_link_target(struct nk_context *ctx,const char *name,const char *target,uint64_t version,
                                         size_t begin,size_t end,struct nk_rect bounds) {
  if(!ctx || !ctx->userdata.ptr || !ctx->current || !ctx->current->layout)return false;

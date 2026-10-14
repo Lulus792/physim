@@ -47,6 +47,18 @@ veraltete Elemente lösen keine Aktion aus. Eine angenommene Aktion wird genau
 einmal im nächsten UI-Frame an den passenden Control übergeben.
 
 Dieser Einstieg deckt noch keine vollständige VoiceOver-Bedienung ab.
+F1 ergänzt jetzt ein eigenes navigierbares statisches Textelement mit seinem
+vollständigen Lesetext. AppKit liefert Wert, Zeichenanzahl, UTF-16-Textbereiche,
+logische Zeilenbereiche und sichtbare Glyphenrahmen. Eine native Anforderung
+für den sichtbaren Bereich wird im normalen UI-Frame zum passenden Dokument
+übernommen. Verborgene Dokumente bleiben lesbar, liefern aber keine sichtbare
+Geometrie und nehmen keine Scrollanforderungen an. Entfernen und Wiedererscheinen
+erzeugen eine neue Dokumentidentität; alte Referenzen bleiben ungültig. Das
+Dokument besitzt keine editierbare Auswahl und kann keine Control-Aktion
+auslösen, auch wenn seine lokale Nummer einem Control entspricht.
+Die ausgeführten ARM64-/Intel-Prüfungen und tatsächlichen F1-Aufnahmen stehen
+in der [F1-Abnahmeentscheidung](decisions/004-f1-handbook.md).
+
 Textfelder, Editoren, Menüs, Dropdowns, weitere Regler, Szenen, Diagramme und
 Fokusführung für weitere Widgettypen benötigen zusätzliche semantische Anbindungen.
 Die bestehende Sichtbarkeits-/Deaktivierungslogik wird berücksichtigt, sodass
