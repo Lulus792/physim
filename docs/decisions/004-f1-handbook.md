@@ -5,7 +5,7 @@ Versuch ermöglichen als auch beim Arbeiten präzise Antworten liefern. Die
 Abnahme betrachtet Inhalt, Bedienung, Darstellung und zugängliches Lesen.
 Ein grüner Parsertest allein ist keine vollständige Abnahme.
 
-## Aktuelle Bewertung vom 14. Oktober 2026
+## Aktuelle Bewertung vom 15. Oktober 2026
 
 Bewertungsgrundlage sind die zentralen Skills unter `D:/Skills/skills`:
 `documentation-engineer`, `ui-ux-designer`, `accessibility-engineer`,
@@ -22,6 +22,38 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
 Bewertung mit Höchstpunktzahl ist wegen dieser offenen Abnahmefälle noch nicht
 begründet. Die folgenden Nachweise nennen jeweils ihre Revision und Umgebung.
+
+### Zentraler Skill-Review auf Revision 56a59ed
+
+Die erneute Auswahl mit `D:/Skills/skills/scripts/skill_system.py select` liefert
+`documentation-engineer`, `ui-ux-designer` und `accessibility-engineer`.
+Angewendet wurden deren Einstiegsdateien, Fachabläufe und relevante Wissensdateien,
+insbesondere die Desktop-Abnahmematrix. Die Wertung bleibt ein konservatives
+fachliches Urteil über die Gesamtaufgabe, keine normierte Messung.
+
+| Gegenstand | Wertung | Befund und verbleibende Abnahme |
+| --- | --- | --- |
+| UI und Nutzerführung | 8/10 | Überschriften, Hervorhebungen und umbrochene Links sind in den aktuellen Linux-Dichtebildern lesbar. Der Bedarfstest und der Dichterundlauf erhalten Inhalt und logische Schriftgröße. Die Navigation beansprucht bei kleinen Fenstern weiterhin viel Lesefläche; tatsächliche Monitorwechsel und die vollständige Plattform-Zustandsmatrix sind offen. |
+| Aufgabe als Dokumentation | 8/10 | Der User Guide nennt Voraussetzungen, einen abgeschlossenen Pendelversuch und prüfbare Ergebnisse. Lernwege, Referenz und symptomorientierte Fehlerhilfe unterstützen unterschiedliche Aufgaben. Die aktuellen Schrift-/GUI-Tests ersetzen den weiterhin offenen vollständigen Abgleich aller Anleitungen mit der Implementierung nicht. |
+| Barrierefreiheit | 5/10 | Native Lese-, Feld- und Linknachweise sind für die jeweils unten genannten Revisionen vorhanden. Der aktuelle unabhängige Linux-Linkclient besteht erneut. Tabellensemantik, externe macOS-AX-Clientprüfung, praktische Screenreader-Aufgaben und die zuvor beobachtete Windows-Fokussporadik bleiben offen. |
+
+Nachweise der Schriftschnittkorrektur: MSVC ASan besteht **6/6** native Schriftfälle
+(`run-mcsyv9gx`), die finale Collection-Probe **1/1** (`run-ecnofoaj`) und
+**5/5** benachbarte GUI-Fälle (`run-ihvg_vqi`): Atlasbesitz, zehnfacher
+Windows-Linkstress, Zeicheninventur, Schriftbedarf und Dichte.
+Der abschließende Stand `56a59ed` unter Alpine 3.24 / GCC 15.2 mit
+ASan/UBSan, X11/Openbox und Mesa 26.1.6 llvmpipe
+besteht **6/6** native Schriftfälle (`run-1btunwdm`) und **6/6** GUI-Fälle
+(`run-1fm1nn8e`): Atlasbesitz, Grafik, Zeicheninventur, Schriftbedarf, Dichte
+und unabhängige AT-SPI-Linkbedienung. Beide 1520 × 1080-Pixel-Dichtebilder
+dieses Linux-Laufs wurden geöffnet und visuell geprüft.
+Die Ergebnisse liegen unter `build/native/Debug-sanitized/test-results`
+beziehungsweise `build/native/Mac-fields-linux/test-results`.
+
+Der [macOS-Lauf für 56a59ed](https://github.com/Lulus792/physim/actions/runs/38654071994)
+wartet noch auf Runner für Intel und ARM64. Damit ist die neue Auswahl der
+tatsächlichen System-Schriftschnitte auf macOS noch nicht abgenommen.
+Die folgenden älteren Reviews und Zwischenstände behalten ihre jeweilige Revision.
 
 ### Aktueller zentraler Skill-Review auf Revision 2ccd520
 
@@ -415,6 +447,13 @@ Unter macOS prüft derselbe Fall zusätzlich die tatsächlichen Helvetica- und
 Menlo-Collections, verschiedene Helvetica-Indizes und unterscheidbare
 Latein-Rasterdeckung. Diese macOS-Ausführung steht noch aus.
 
+Die finale Linux-Ausführung besteht unter GCC 15.2 ASan/UBSan **6/6** native
+Schriftfälle (`run-1btunwdm`) und **6/6** GUI-Fälle (`run-1fm1nn8e`), einschließlich
+vollständiger Zeicheninventur, Dichte, Bedarf und unabhängigem AT-SPI-Linkclient.
+Die benachbarte Windows-GUI-Prüfung besteht **5/5** (`run-ihvg_vqi`). Der
+Testläufer mit Katalog- und erwarteten Fehlergegenproben besteht in
+`build/native/font-faces-runner-proof`.
+
 ### F1-Schriften nach Bedarf, 15. Oktober 2026
 
 Die [Architekturentscheidung 005](005-f1-font-demand.md) ist jetzt mit der
@@ -590,8 +629,13 @@ Collection-Index 0. Die neu ausgeführte Prüfung bestätigt damit keine echte
 fette Schriftschnittwahl auf macOS. Dieser eigenständige Fehler bleibt zu beheben.
 Der Dichtetest überschreitet nach mehreren vollständigen Atlasaufbauten sein
 internes Zeitlimit nach 61,240 Sekunden. Auch dieser Fall bleibt offen.
-Der ARM64-Job ist noch nicht abgeschlossen. Aus dem Intel-Teilergebnis wird
-keine plattformübergreifende Freigabe abgeleitet.
+Der ARM64-Job `116130296671` ist inzwischen ebenfalls abgeschlossen und sein
+Originalprotokoll wurde geprüft: **4/4** native Fälle (`run-ivgiwdal`) und
+**8/10** GUI-Fälle (`run-o6kl4hf9`). Auch dort scheitert die Zeicheninventur an
+normaler/fetter Schrift; der Dichtefall überschreitet sein internes Zeitlimit
+nach **64,053 Sekunden**. Die übrigen acht Fälle bestehen. Diese Ergebnisse
+gelten für `5c361d5`, vor Schriftbedarf und expliziter Collection-Auswahl.
+Sie bestätigen keine Abnahme der neueren Korrekturen.
 
 ### Native macOS-Linkattribute, Ziele und Aktivierung
 
