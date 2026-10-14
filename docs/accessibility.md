@@ -47,7 +47,7 @@ veraltete Elemente lösen keine Aktion aus. Eine angenommene Aktion wird genau
 einmal im nächsten UI-Frame an den passenden Control übergeben.
 
 Dieser Einstieg deckt noch keine vollständige VoiceOver-Bedienung ab.
-Textfelder, Editoren, Menüs, Dropdowns, Regler, Szenen, Diagramme und
+Textfelder, Editoren, Menüs, Dropdowns, weitere Regler, Szenen, Diagramme und
 Fokusführung für weitere Widgettypen benötigen zusätzliche semantische Anbindungen.
 Die bestehende Sichtbarkeits-/Deaktivierungslogik wird berücksichtigt, sodass
 dieser Einstieg keine Aktivierung gesperrter oder momentan schreibgeschützter

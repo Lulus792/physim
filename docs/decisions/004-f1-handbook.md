@@ -81,6 +81,40 @@ Nutzeraufgaben, Tabellensemantik und die native Desktop-Abnahmematrix.
 Nach den Inhaltskorrekturen bestehen Parser, Lernwege, Offline-Abschnittslinks
 und API-Referenz erneut 4/4 mit Exitcode 0 in `run-9e2tghw0`.
 
+### Bewertung nach Schrift- und Rasterkorrekturen
+
+Der erneute Review betrachtet den lokalen Stand `efe152c` mit denselben vier
+zentralen Fachskills. Die frühere Wertung bleibt nachvollziehbar bei **8/10 für
+UI/Nutzerführung, 8/10 für die Dokumentationsaufgabe und 5/10 für
+Barrierefreiheit**. Das ist ein fachliches Urteil, keine standardisierte
+Punkteskala. Die damalige fehlende Zeichenabdeckung ist inzwischen für alle
+167 druckbaren Zeichen der registrierten Seiten behoben; sie zählt nicht mehr
+als aktueller Mangel. Weitere Schriftsysteme bleiben außerhalb dieses Nachweises.
+
+Direkt betrachtet wurden die tatsächliche 2×-Aufnahme aus `run-4qsmr6yd` sowie
+die kleine 32-Pixel-Ansicht, die helle Suche und das offline gezeichnete
+Unicode-/Rahmenzeichenbild aus `run-vylai6qc`. Überschriften, starke Hervorhebung,
+Code, Links und Suchfokus sind unterscheidbar. Bei 760 × 540 und doppelter
+Textgröße bleibt die Oberfläche bedienbar, doch Navigation und Werkzeugzeilen
+lassen wenig Lesefläche. Eine kompaktere Navigation ist deshalb weiter ein
+konkreter Gestaltungsbedarf. Die 2×-Aufnahme bestätigt den getesteten
+Rasterpfad; sie ersetzt keine tatsächliche Windows-Inhaltsskalierung.
+
+Die vorhandenen Ergebnisdateien wurden erneut geprüft: `run-au995z_a` enthält
+7/7 bestandene native MSVC-ASan-Fälle, `run-vylai6qc` 6/6 bestandene reale
+F1-/UIA-Fälle und `run-2qbh1dw6` 4/4 bestandene Dokumentations-/API-/Fontfälle.
+Das verschobene Release-Paket bestätigt 538 Dateien einschließlich zwölf
+Font-/Lizenzdateien und den tatsächlichen Dichte-Rundlauf. Diese Kontrolle
+ist eine Sichtung vorhandener Ausführungsbelege, kein neuer Testlauf.
+
+Die Inhaltsstichprobe am User Guide und an der Fehlerhilfe zeigt weiterhin
+Voraussetzungen, konkrete Aktionen, überprüfbare Ergebnisse und nächste Schritte.
+Offen bleiben der Gesamtabgleich aller Anleitungen, echte DPI-/Monitorwechsel,
+native Text-/Feld-/Linkbereiche und Tabellen auf allen Zielplattformen sowie
+praktische Screenreader-Aufgaben. Der Linux-Lauf für `efe152c` wurde unter
+Workflow `38511888866` gestartet und war bei dieser Bewertung noch in Arbeit;
+für diese Revision wird hier kein Linux-Erfolg behauptet. macOS bleibt offen.
+
 ### Offline-Schriftquellen und vollständige Zeicheninventur
 
 Die nächste Korrektur erweitert die Gegenprobe auf alle **167 druckbaren Zeichen
