@@ -96,6 +96,7 @@ static bool append(ps_document *d, ps_doc_kind kind, unsigned level, const char 
     b->length = n;
     b->inline_parent=SIZE_MAX;
     b->reading_begin=SIZE_MAX;
+    b->table_first=SIZE_MAX;b->table_row=SIZE_MAX;
     memcpy(d->text + d->used, s, n);
     d->used += n;
     d->text[d->used++] = 0;
@@ -110,6 +111,7 @@ typedef struct {const char *target;size_t target_length,text,length;bool image;}
 typedef struct {
     ps_document *document;char *plain;size_t used,base,first_span,parent;
     inline_link *links;size_t link_count,link_capacity;
+    bool table;
 } inline_parser;
 static bool inline_emit(inline_parser *p,const char *s,size_t n,unsigned style,size_t link) {
     if(!n)return true;
@@ -137,7 +139,7 @@ static size_t inline_close(const char *s,size_t start,size_t n,const char *token
 static bool inline_parse(inline_parser *p,const char *s,size_t n,unsigned style,size_t link,unsigned depth) {
     if(depth>8)return inline_emit(p,s,n,style,link);
     for(size_t i=0;i<n;) {
-        if(s[i]=='\\' && i+1<n && strchr("\\`*[]()!",s[i+1])) {
+        if(s[i]=='\\' && i+1<n && strchr("\\`*[]()!|",s[i+1])) {
             if(!inline_emit(p,s+i+1,1,style,link))return false;
             i+=2;continue;
         }
@@ -176,22 +178,50 @@ static bool inline_parse(inline_parser *p,const char *s,size_t n,unsigned style,
                 }
             }
         }
-        if(!inline_emit(p,s+i,1,style,link))return false;
+        unsigned emitted_style=style;
+        if(p->table && !depth && s[i]=='|')emitted_style|=PS_DOC_TABLE_SEPARATOR;
+        if(!inline_emit(p,s+i,1,emitted_style,link))return false;
         ++i;
     }
     return true;
+}
+static bool table_cell(ps_document *d,ps_doc_block *row,size_t start,size_t end) {
+    while(start<end && (d->text[start]==' ' || d->text[start]=='\t'))++start;
+    while(end>start && (d->text[end-1]==' ' || d->text[end-1]=='\t'))--end;
+    if(d->cell_count==PS_DOC_MAX_CELLS)return false;
+    d->cells[d->cell_count++]=(ps_doc_cell){start,end-start};
+    ++row->cell_count;
+    return true;
+}
+static bool table_cells(ps_document *d,ps_doc_block *row) {
+    row->first_cell=d->cell_count;
+    size_t start=row->text+1,end=row->text+row->length;
+    for(size_t i=0;i<row->span_count;i++) {
+        const ps_doc_span *span=&d->spans[row->first_span+i];
+        if(!(span->style&PS_DOC_TABLE_SEPARATOR))continue;
+        for(size_t j=0;j<span->length;j++) {
+            size_t at=span->text+j;
+            if(at<start)continue;
+            if(!table_cell(d,row,start,at))return false;
+            start=at+1;
+        }
+    }
+    size_t tail=start;
+    while(tail<end && (d->text[tail]==' ' || d->text[tail]=='\t'))++tail;
+    return tail==end || table_cell(d,row,start,end);
 }
 static bool paragraph(ps_document *d,const char *s,size_t n,ps_doc_kind kind,unsigned level) {
     size_t capacity=n/4+1;if(capacity>PS_DOC_MAX_BLOCKS)capacity=PS_DOC_MAX_BLOCKS;
     char *plain=malloc(n+1);inline_link *links=malloc(capacity*sizeof *links);
     if(!plain || !links){free(plain);free(links);return false;}
     inline_parser p={.document=d,.plain=plain,.base=d->used,.first_span=d->span_count,
-        .parent=d->count,.links=links,.link_capacity=capacity};
+        .parent=d->count,.links=links,.link_capacity=capacity,.table=kind==PS_DOC_TABLE_ROW};
     bool ok=inline_parse(&p,s,n,0,SIZE_MAX,0);
     if(ok)ok=append(d,kind,level,plain,p.used,NULL,0);
     if(ok) {
         d->blocks[p.parent].first_span=p.first_span;
         d->blocks[p.parent].span_count=d->span_count-p.first_span;
+        if(kind==PS_DOC_TABLE_ROW)ok=table_cells(d,&d->blocks[p.parent]);
         for(size_t i=0;ok && i<p.link_count;i++) {
             inline_link *l=&links[i];
             ok=append(d,l->image?PS_DOC_IMAGE:PS_DOC_LINK,0,plain+l->text,l->length,l->target,l->target_length);
@@ -215,6 +245,7 @@ ps_result ps_document_parse(const char *source, size_t size, bool code, ps_docum
             goto limit;
     } else {
         size_t at = 0, length = 0;
+        size_t table_first=SIZE_MAX,table_row=0,last_table_row=SIZE_MAX;
         bool fenced = false;
         while (at < size) {
             size_t begin = at;
@@ -227,6 +258,7 @@ ps_result ps_document_parse(const char *source, size_t size, bool code, ps_docum
                 end--;
             const char *line = source + begin;
             size_t n = end - begin;
+            if(!n || line[0]!='|')table_first=last_table_row=SIZE_MAX;
             bool fence = n >= 3 && !memcmp(line, "```", 3);
             if (fence) {
                 if (length && !(fenced ? append(d, PS_DOC_CODE, 0, pending, length, NULL, 0)
@@ -270,15 +302,19 @@ ps_result ps_document_parse(const char *source, size_t size, bool code, ps_docum
                         line[i] != '\t')
                         separator = false;
                 if (separator) {
-                    for (size_t i = d->count; i > 0; i--)
-                        if (d->blocks[i - 1].kind == PS_DOC_TABLE_ROW) {
-                            d->blocks[i - 1].level = 1;
-                            break;
-                        }
+                    if(last_table_row!=SIZE_MAX && d->blocks[last_table_row].table_row==0)
+                        d->blocks[last_table_row].level=1;
                     continue;
                 }
+                size_t row_block=d->count;
                 if (!paragraph(d, line, n, line[0] == '|' ? PS_DOC_TABLE_ROW : PS_DOC_TEXT, 0))
                     goto limit;
+                if(line[0]=='|') {
+                    if(table_first==SIZE_MAX){table_first=row_block;table_row=0;}
+                    d->blocks[row_block].table_first=table_first;
+                    d->blocks[row_block].table_row=table_row++;
+                    last_table_row=row_block;
+                }
             } else {
                 if (length)
                     pending[length++] = ' ';

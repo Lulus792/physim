@@ -11,6 +11,9 @@ on:
       - app/settings_ui.inc
       - third_party/nuklear.h
       - tests/test_font_*.c
+      - tests/test_documentation.c
+      - tests/check_documentation_anchors.py
+      - tests/documentation_anchor_probe.c
       - tests/test_accessibility*
       - tests/test_native_test_runner.py
       - tests/check_display_workflow.py
@@ -49,9 +52,9 @@ jobs:
       - name: Platform catalog and failure reporting
         run: python3 tests/test_native_test_runner.py --work build/native
       - name: Portable UTF-16 and document contracts
-        run: python3 tools/build.py --compiler clang --sanitizers --test --test-filter accessibility_utf16 --test-filter accessibility_document --test-filter accessibility_suspend --test-filter accessibility_edit --test-filter font_atlas_limits --test-filter font_faces --test-filter font_sources --test-filter font_density
+        run: python3 tools/build.py --compiler clang --sanitizers --test --test-filter accessibility_utf16 --test-filter accessibility_document --test-filter accessibility_suspend --test-filter accessibility_edit --test-filter font_atlas_limits --test-filter font_faces --test-filter font_sources --test-filter font_density --test-filter documentation --test-filter documentation_anchors
       - name: Actual AppKit and rendered F1
-        run: python3 tools/build.py --compiler clang --sanitizers --test-display --test-filter accessibility_native --test-filter accessibility_ui --test-filter font_bank_ui --test-filter accessibility_document_macos --test-filter accessibility_edit_macos --test-filter accessibility_links_macos --test-filter documentation_navigation --test-filter documentation_sidebar --test-filter graphics --test-filter documentation_font_demand --test-filter documentation_density --test-filter documentation_math
+        run: python3 tools/build.py --compiler clang --sanitizers --test-display --test-filter accessibility_native --test-filter accessibility_ui --test-filter font_bank_ui --test-filter accessibility_document_macos --test-filter accessibility_edit_macos --test-filter accessibility_links_macos --test-filter documentation_navigation --test-filter documentation_sidebar --test-filter graphics --test-filter documentation_font_demand --test-filter documentation_density --test-filter documentation_math --test-filter documentation_inline
       - name: Archive focused evidence
         if: always()
         uses: actions/upload-artifact@v4

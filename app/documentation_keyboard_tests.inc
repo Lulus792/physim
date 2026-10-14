@@ -398,7 +398,7 @@ static bool documentation_inline_fixture_variant(app *a,int topic,bool invalid_l
         "## Bedeutung und Einheiten\n\n"
         "Die Formel `x = l * sin(θ)` erhält ihre Zeichen. Escaped \\* bleibt sichtbar; `**literal**` bleibt Code.\n\n"
         "| Begriff | Bedeutung |\n| --- | --- |\n"
-        "| **Länge** | `l` in Metern; [C](c-guide.md) |\n\n"
+        "| **Länge** | `l|r` in Metern; [C](c-guide.md) |\n\n"
         "```c\n// unverändert kopieren: θ\n  double x = length * sin(theta);\n```\n\n"
         "### Prüfung\n\nDie gespeicherten Werte bestätigen das Ergebnis.\n";
     ps_document *d=NULL;
@@ -445,6 +445,13 @@ static void documentation_inline_test_frame(app *a,int *stage,int *code,const ch
         }
         ok &= link>=0 && external>=0 && table_link>=0 && copy>=0 && h1 && h2 && h3 && h1->height>h2->height && h2->height>h3->height;
         if(!ok)break;
+        {
+            const ps_doc_block *row=&d->blocks[d->blocks[table_link].inline_parent];
+            const char *pipe=strstr(d->reading+row->reading_begin,"l|r");
+            ok &= row->cell_count==2 && pipe &&
+                nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,
+                    (size_t)(pipe-d->reading)+1);
+        }
         ps_doc_block *b=&d->blocks[link];clicked=nk_rect(b->hit[0],b->hit[1],b->hit[2],b->hit[3]);
         ok &= clicked.w>20 && clicked.w<150 && clicked.y>=a->doc_body_bounds.y;
         b=&d->blocks[copy];

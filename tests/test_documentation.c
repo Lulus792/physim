@@ -147,7 +147,48 @@ int main(int argc, char **argv) {
     CHECK(d->count == 2 && d->blocks[0].kind == PS_DOC_TABLE_ROW && d->blocks[0].level == 1);
     CHECK(d->blocks[1].kind == PS_DOC_TABLE_ROW && d->blocks[1].level == 0);
     CHECK(strstr(d->text + d->blocks[1].text, "Radius") != NULL);
+    CHECK(d->cell_count==4 && d->blocks[0].cell_count==2 && d->blocks[1].first_cell==2);
+    CHECK(d->blocks[0].table_first==0 && d->blocks[1].table_first==0 && d->blocks[1].table_row==1);
     free(d);
+    const char *separate_tables="| first |\n\nordinary text\n\n| --- |\n| second |\n| --- |\n";
+    CHECK(ps_document_parse(separate_tables,strlen(separate_tables),false,&d)==PS_OK);
+    CHECK(d->count==3 && d->blocks[0].level==0 && d->blocks[0].table_first==0 &&
+        d->blocks[1].table_first==SIZE_MAX && d->blocks[2].table_first==2 &&
+        d->blocks[2].table_row==0 && d->blocks[2].level==1);
+    free(d);
+    const char *rich_table="| Form | Meaning | Empty |\n| --- | --- | --- |\n"
+        "| `x|y` | [θ|🌍](units.md) | |\n"
+        "| a\\|b | **bold|text** | tail\n"
+        "| ||\n";
+    CHECK(ps_document_parse(rich_table,strlen(rich_table),false,&d)==PS_OK);
+    const char *expected_cells[]={"Form","Meaning","Empty","x|y","θ|🌍","",
+        "a|b","bold|text","tail","",""};
+    CHECK(d->cell_count==sizeof expected_cells/sizeof expected_cells[0]);
+    for(size_t i=0;i<d->cell_count;i++) {
+        const ps_doc_cell *cell=&d->cells[i];size_t length=strlen(expected_cells[i]);
+        CHECK(cell->length==length && !memcmp(d->text+cell->text,expected_cells[i],length));
+    }
+    CHECK(d->blocks[1].cell_count==3 && d->blocks[1].reading_begin!=SIZE_MAX);
+    const ps_doc_block *link=&d->blocks[2],*row=&d->blocks[1];
+    const ps_doc_cell *linked_cell=&d->cells[row->first_cell+1];
+    CHECK(link->kind==PS_DOC_LINK && link->reading_length==linked_cell->length &&
+        link->reading_begin==row->reading_begin+linked_cell->text-row->text);
+    free(d);
+    /* No silent renderer truncation after column 16. */
+    char wide[256]="|";
+    for(unsigned i=0;i<20;i++)strcat(wide,"x|");
+    CHECK(ps_document_parse(wide,strlen(wide),false,&d)==PS_OK && d->blocks[0].cell_count==20);
+    free(d);
+    /* Capacity failure preserves the caller's existing document. */
+    char *many_cells=malloc(PS_DOC_MAX_CELLS+3);CHECK(many_cells);
+    memset(many_cells,'|',PS_DOC_MAX_CELLS+2);many_cells[PS_DOC_MAX_CELLS+2]=0;
+    CHECK(ps_document_parse(many_cells,PS_DOC_MAX_CELLS+1,false,&d)==PS_OK &&
+        d->cell_count==PS_DOC_MAX_CELLS);
+    free(d);
+    CHECK(ps_document_parse("preserved",9,false,&d)==PS_OK);
+    ps_document *before_cells=d;
+    CHECK(ps_document_parse(many_cells,PS_DOC_MAX_CELLS+2,false,&d)==PS_LIMIT && d==before_cells);
+    free(many_cells);free(d);
     puts("Documentation parser: prose, code, tables, links, search and bounds passed");
     return 0;
 }

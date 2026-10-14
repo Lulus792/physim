@@ -186,6 +186,8 @@ static const documentation_topic documentation_topics[] = {
     {"Befehlsmenüs und Zustände", "docs/decisions/003-command-menus.md", false},
     {"F1 Handbuch und Abnahme", "docs/decisions/004-f1-handbook.md", false},
     {"Historische Plattformnachweise: Band 3", "docs/platform-validation-history-3.md", false},
+    {"F1-Schriften nach Bedarf", "docs/decisions/005-f1-font-demand.md", false},
+    {"F1-Tabellen und native Semantik", "docs/decisions/006-f1-table-semantics.md", false},
 };
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27
@@ -544,37 +546,16 @@ static void documentation_rich_draw(app *a,ps_document *d,const ps_doc_block *b,
         at+=used;y+=height;
     } while(at<b->length);
 }
-/* Table columns remain real wrapped cells instead of exposing Markdown pipes. */
-static int documentation_cells(const char *text, const char **cells, size_t *lengths) {
-    int count = 0;
-    const char *p = text;
-    if (*p == '|')
-        p++;
-    while (*p && count < 16) {
-        const char *end = strchr(p, '|');
-        if (!end)
-            end = p + strlen(p);
-        const char *trim = end;
-        while (p < trim && (*p == ' ' || *p == '\t'))
-            p++;
-        while (trim > p && (trim[-1] == ' ' || trim[-1] == '\t'))
-            trim--;
-        cells[count] = p;
-        lengths[count++] = (size_t)(trim - p);
-        p = *end ? end + 1 : end;
-    }
-    return count;
-}
-static float documentation_table(app *a, const ps_doc_block *block, const char *text, float width,
+/* Layout and native text geometry use the parser's identical cell boundaries. */
+static float documentation_table(app *a, const ps_doc_block *block, float width,
                                  const struct nk_rect *bounds) {
-    const char *cells[16];
-    size_t lengths[16];
-    int count = documentation_cells(text, cells, lengths);
+    size_t count=block->cell_count;
     if (!count)
         return 24;
-    float cell_width = width / count, height = 24;
-    for (int i = 0; i < count; i++) {
-        ps_doc_block cell=*block;cell.text=block->text+(size_t)(cells[i]-text);cell.length=lengths[i];
+    float cell_width = width / (float)count, height = 24;
+    for (size_t i = 0; i < count; i++) {
+        const ps_doc_cell *range=&a->documentation->cells[block->first_cell+i];
+        ps_doc_block cell=*block;cell.text=range->text;cell.length=range->length;
         height =
             fmaxf(height,
                   documentation_rich_height(a,a->documentation,&cell,fmaxf(1,cell_width-20))+16);
@@ -583,10 +564,11 @@ static float documentation_table(app *a, const ps_doc_block *block, const char *
         return height;
     struct nk_command_buffer *canvas = nk_window_get_canvas(a->doc_ui);
     nk_fill_rect(canvas, *bounds, 4, block->level ? UI_COLOR(doc_header) : UI_COLOR(doc_body));
-    for (int i = 0; i < count; i++) {
-        ps_doc_block cell=*block;cell.text=block->text+(size_t)(cells[i]-text);cell.length=lengths[i];
-        if(cell.reading_begin!=SIZE_MAX)cell.reading_begin+=(size_t)(cells[i]-text);
-        documentation_rich_draw(a,a->documentation,&cell,nk_rect(bounds->x+i*cell_width+10,
+    for (size_t i = 0; i < count; i++) {
+        const ps_doc_cell *range=&a->documentation->cells[block->first_cell+i];
+        ps_doc_block cell=*block;cell.text=range->text;cell.length=range->length;
+        if(cell.reading_begin!=SIZE_MAX)cell.reading_begin+=cell.text-block->text;
+        documentation_rich_draw(a,a->documentation,&cell,nk_rect(bounds->x+(float)i*cell_width+10,
             bounds->y+8,fmaxf(1,cell_width-20),bounds->h-16));
     }
     return height;
@@ -1189,7 +1171,7 @@ static void documentation_view(app *a, float height) {
                     b->code_line_height=documentation_grid_pitch(a,d,b);
                     b->height =
                         b->kind == PS_DOC_TABLE_ROW
-                            ? documentation_table(a, b, d->text + b->text, width, NULL)
+                            ? documentation_table(a, b, width, NULL)
                         : b->kind == PS_DOC_IMAGE && documentation_media_kind(d->text+b->target)==3 ? 900
                         : b->kind == PS_DOC_IMAGE && documentation_media_kind(d->text+b->target) ? (documentation_media_kind(d->text+b->target)==1?320:480)
                         : b->kind == PS_DOC_RULE ? 14
@@ -1283,7 +1265,7 @@ static void documentation_view(app *a, float height) {
                         if(b->kind==PS_DOC_IMAGE && documentation_media_kind(d->text+b->target))
                             documentation_diagram(a,documentation_media_kind(d->text+b->target),rect);
                         else if (b->kind == PS_DOC_TABLE_ROW)
-                            documentation_table(a, b, text, width, &rect);
+                            documentation_table(a, b, width, &rect);
                         else if (b->kind == PS_DOC_RULE)
                             nk_stroke_line(canvas, rect.x, rect.y + 7, rect.x + rect.w, rect.y + 7,
                                            1, UI_COLOR(border));

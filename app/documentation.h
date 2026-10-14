@@ -5,6 +5,7 @@
 #define PS_DOC_MAX_BYTES (256u * 1024u)
 #define PS_DOC_MAX_CODE_BYTES (2u * PS_DOC_MAX_BYTES - 2u)
 #define PS_DOC_MAX_SPANS 16384u
+#define PS_DOC_MAX_CELLS 16384u
 #define PS_DOC_MAX_READING_BYTES (PS_DOC_MAX_CODE_BYTES+2u*PS_DOC_MAX_BLOCKS)
 #define PS_DOC_HISTORY_LIMIT 64u
 typedef struct {
@@ -38,20 +39,29 @@ typedef struct {
     size_t text, length, target;
     size_t first_span, span_count, inline_parent;
     size_t reading_begin, reading_length;
+    size_t first_cell, cell_count;
+    size_t table_first, table_row; /* first row block and zero-based row; SIZE_MAX outside tables */
     float height;
     float code_line_height; /* renderer cache: native box-cell pitch, zero for ordinary text */
     float hit[4];
 } ps_doc_block;
-enum { PS_DOC_BOLD=1, PS_DOC_INLINE_CODE=2, PS_DOC_INLINE_LINK=4 };
+enum { PS_DOC_BOLD=1, PS_DOC_INLINE_CODE=2, PS_DOC_INLINE_LINK=4,
+       PS_DOC_TABLE_SEPARATOR=8 };
+/* Trimmed cell ranges in document.text, in row-major order. Delimiters are
+ * recognized before inline decoration is removed, never in code/link labels.
+ * Empty cells retain a zero-length range. Reading offsets are obtained from
+ * their row's reading_begin + cell.text - row.text. */
+typedef struct {size_t text,length;} ps_doc_cell;
 typedef struct {
     size_t text, length, link;
     unsigned style;
 } ps_doc_span;
 typedef struct {
-    size_t count, used, span_count;
+    size_t count, used, span_count, cell_count;
     float layout_width;
     ps_doc_block blocks[PS_DOC_MAX_BLOCKS];
     ps_doc_span spans[PS_DOC_MAX_SPANS];
+    ps_doc_cell cells[PS_DOC_MAX_CELLS];
     char text[PS_DOC_MAX_BYTES * 2];
     size_t reading_length;
     char reading[PS_DOC_MAX_READING_BYTES+1];
