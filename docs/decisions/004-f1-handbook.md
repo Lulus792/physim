@@ -388,6 +388,74 @@ Titelzeilen liegen im sichtbaren Fokusrahmen. Die Ubuntu-Nachprüfung dieser
 Korrektur steht noch aus. Praktische Screenreader-, macOS- und echte
 DPI-/Monitorwechsel-Abnahme werden durch diese Reflow-Korrektur nicht behauptet.
 
+### Windows-Bereitschaft und kompakter Schriftatlas, 15. Oktober 2026
+
+Die Untersuchung verwendet die zentralen Debugging-, Windows-, Performance-,
+Grafik- und Test-Skills unter `D:/Skills/skills`. Die Linkprobe schreibt jetzt
+auch im Fehlerfall `diagnostics.json`: letzter Abschnitt, beobachtete Marker,
+Laufzeit, ursprünglicher Prozessstatus und eine etwaige Beendigung durch den
+Prüfer. Die vorhandene App-Spur enthält zusätzlich Schriftquellen-, Atlas- und
+Linkinventur-Zeitpunkte. Die Bereitschaftsgrenze bleibt 20 Sekunden, die Grenze
+jedes externen UIA-Aufrufs bleibt 25 Sekunden.
+
+`build/native/windows-link-diagnosis-07` reproduziert einen Bereitschaftsfehler:
+Die Hauptschriften benötigen 8,274 Sekunden; beim Ablauf der Grenze ist der
+F1-Schriftaufbau noch nicht abgeschlossen. Linkinventur und externer UIA-Client
+sind noch nicht gestartet. Dieser konkrete Fehler liegt damit vor der nativen
+Linkprüfung. Er erklärt nicht den früheren separaten UIA-Abbruch mit `E_FAIL`.
+Ein kontrollierter früher Prozessabbruch bestätigt die neue Fehlerdiagnostik
+in `build/native/windows-link-diagnostics-negative`.
+
+Auf dem bisherigen RGBA-Pfad misst `run-8_f1g2at` 0,237/0,798 Sekunden für
+Haupt-/F1-Schriftquellen und anschließend 4,472/6,857 Sekunden für Atlasaufbau,
+Prüfung, Upload und Freigaben. Die größte gemessene Phase folgt dem Laden.
+Revision `5c361d5` verwendet deshalb Nuklears vorhandenen Alpha8-Atlas direkt
+als `GL_R8`-Textur. Der Textur-Swizzle liefert weißes RGB und die gespeicherte
+Deckung als Alpha. Dies entspricht der bisherigen Nuklear-RGBA-Konvertierung;
+Khronos dokumentiert genau diese
+[Abbildung für Deckungstexturen](https://registry.khronos.org/OpenGL/extensions/ARB/ARB_texture_swizzle.txt).
+Zeichenvorrat, Größen, Oversampling und atomarer Atlaswechsel bleiben erhalten.
+Ein Atlas mit 1024 × 32768 Pixeln benötigt dadurch 32 statt 128 MiB Pixeldaten;
+die zusätzliche RGBA-Konvertierung entfällt.
+
+Der GPU-Gegenvergleich rendert beide Formate mit demselben UI-Shader und
+vergleicht alle Bildpunkte. Ungerade Zeilenbreite, Teildeckung und lineare
+Filterung sind enthalten; unabhängige Sollwerte an Texelzentren verhindern,
+dass zwei leere Ausgaben als Erfolg gelten. MSVC ASan besteht Grafik,
+unabhängige UIA-Links und vollständige Zeicheninventur mit System- und
+mitgelieferten Schriften in `run-ngr6so76` (**3/4**). Alle 167 benötigten Zeichen
+in 38 F1-Varianten sind abgedeckt; die Unicode-/Rahmenaufnahme wurde geprüft.
+Fünf native Schriftfälle bestehen separat in `run-duj0esy6` (**5/5**).
+
+Die Linkbereitschaft liegt in diesem R8-Lauf bei 12,704 Sekunden gegenüber
+14,984 Sekunden im unmittelbar vorherigen RGBA-Lauf. Wegen der gemessenen
+Schwankungen ist dies kein allgemeiner Beschleunigungsnachweis. Der vierte
+GUI-Fall, Dichtewechsel, überschreitet während eines parallelen Linux-Builds
+sein internes Zeitlimit. Die isolierte Wiederholung `run-yq6xxrs6` besteht
+**1/1**, einschließlich 1,25/1,5/2/1-Rundlauf und fehlerhaftem Atlaswechsel. Der
+Plattform-Katalog samt absichtlichen Fehlergegenproben besteht in
+`build/native/alpha-atlas-runner-proof`. Weitere Plattform- und
+Wiederholungsnachweise werden erst nach tatsächlichem Abschluss ergänzt.
+Alpine 3.24.2 / GCC 15.2 / ASan/UBSan besteht die fünf nativen Schriftfälle
+in `run-s9jgztzu` (**5/5**) und unter X11/Openbox mit Software-GL Grafik,
+Zeicheninventur, Dichtewechsel und unabhängige AT-SPI-Links in `run-6idpji8p`
+(**4/4**). Das tatsächliche 1520 × 1080-Bild bei Dichte 2 wurde direkt geprüft.
+Die entsprechende Windows-Aufnahme aus `run-yq6xxrs6` wurde ebenfalls geprüft.
+
+Die isolierte Dreierserie in `build/native/alpha-atlas-link-series.json` erreicht
+F1 nach 13,609/11,688/11,969 Sekunden. Zwei vollständige Linkläufe bestehen;
+der dritte scheitert mit `Link lost focus after window movement` im Abschnitt
+`window movement and quiet events`. Dabei sind Disable-/Enable-Ereignisse
+bereits vorhanden. Dieser Befund ist genauer als der frühere ungeklärte
+`E_FAIL`, beweist aber noch keine gemeinsame Ursache. Zusätzliche bedingte
+Spuren erfassen gewährten Linkfokus und Blur-Eingaben. Damit bestehen
+`run-ld8tgt_b` sowie drei Läufe in `build/native/focus-diagnosis-01` bis `-03`.
+Das ist keine bestätigte Behebung des Fokusfehlers. Die tatsächliche macOS-
+Prüfung auf Intel/ARM64 ist als
+[Workflow 38645225826](https://github.com/Lulus792/physim/actions/runs/38645225826)
+beauftragt, zum Zeitpunkt dieses Eintrags aber noch in der Runner-Warteschlange.
+Die Windows-Sporadik und die vollständige F1-Abnahme bleiben offen.
+
 ### Native macOS-Linkattribute, Ziele und Aktivierung
 
 Die Erweiterung auf Quellrevision `589d7d4` verbindet interne F1-Linkbereiche

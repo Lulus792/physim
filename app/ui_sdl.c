@@ -305,7 +305,10 @@ bool nk_sdl_accessibility_document_link_target(struct nk_context *ctx,const char
  bool focused=m->draft_count>before && m->draft[before].id==m->focused_id && m->keyboard_focus;
  if(granted)ps_a11y_document_scroll_align(m,version,begin,true);
  SDL_UnlockMutex(sdl->accessibility_mutex);
- if(granted){SDL_RaiseWindow(sdl->win);nk_window_set_focus(ctx,ctx->current->name_string);nk_edit_unfocus(ctx);}
+ if(granted){
+  if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: link focus granted id=%llu window=%u keyboard=%u ticks=%llu\n",(unsigned long long)pending,SDL_GetWindowID(sdl->win),SDL_GetKeyboardFocus()?SDL_GetWindowID(SDL_GetKeyboardFocus()):0,(unsigned long long)SDL_GetTicksNS());
+  SDL_RaiseWindow(sdl->win);nk_window_set_focus(ctx,ctx->current->name_string);nk_edit_unfocus(ctx);
+ }
  if(focused && visible[2]>0 && visible[3]>0)nk_stroke_rect(nk_window_get_canvas(ctx),
      nk_rect(left-3,top-2,right-left+6,bottom-top+4),3,1,ctx->style.button.text_normal);
  return pressed;
@@ -367,7 +370,10 @@ bool nk_sdl_accessibility_event(struct nk_context *ctx,const SDL_Event *event) {
  struct nk_sdl *sdl=ctx->userdata.ptr;
  if(!sdl->accessibility || SDL_GetWindowFromEvent(event)!=sdl->win)return false;
  SDL_LockMutex(sdl->accessibility_mutex);ps_a11y_model *m=sdl->accessibility;bool handled=false;
- if(event->type==SDL_EVENT_WINDOW_FOCUS_LOST || event->type==SDL_EVENT_MOUSE_BUTTON_DOWN)ps_a11y_blur(m,0);
+ if(event->type==SDL_EVENT_WINDOW_FOCUS_LOST || event->type==SDL_EVENT_MOUSE_BUTTON_DOWN) {
+  if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: accessibility blur event=%u focused=%llu pending=%llu window=%u keyboard=%u ticks=%llu\n",event->type,(unsigned long long)m->focused_id,(unsigned long long)m->pending_focus,SDL_GetWindowID(sdl->win),SDL_GetKeyboardFocus()?SDL_GetWindowID(SDL_GetKeyboardFocus()):0,(unsigned long long)SDL_GetTicksNS());
+  ps_a11y_blur(m,0);
+ }
  else if(m->focused_id && event->type==SDL_EVENT_TEXT_INPUT){const ps_a11y_node *node=ps_a11y_find(m,m->focused_id);handled=!node || node->role!=PS_A11Y_EDIT;}
  else if(m->focused_id && (event->type==SDL_EVENT_KEY_DOWN || event->type==SDL_EVENT_KEY_UP) &&
          !(event->key.mod&(SDL_KMOD_CTRL|SDL_KMOD_GUI|SDL_KMOD_ALT))) {
