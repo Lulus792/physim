@@ -12443,6 +12443,39 @@
           ]
         }
       ]
+    },
+    {
+      "name": "accessibility_edit_macos",
+      "platforms": [
+        "darwin"
+      ],
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "accessibility_edit_macos",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 120,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
     }
   ]
 }

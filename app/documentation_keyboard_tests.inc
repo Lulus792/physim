@@ -999,6 +999,30 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
         if(!ok){fprintf(stderr,"Native documentation edit stage %d failed: focus=%d query=%s filter=%s\n",*stage,a->doc_focus,a->doc_query,a->doc_filter);*code=1;a->quitting=true;}
         return;
     }
+    if(!strcmp(mode,"docs-keyboard-edit-native")) {
+        static int experiment_length,analysis_length;bool ok=true;
+        switch(*stage) {
+        case 0:
+            experiment_length=a->experiment.string.len;analysis_length=a->analysis.string.len;
+            test_window_key_mod(a->window,SDLK_F1,0);++*stage;break;
+        case 1:
+            SDL_SetWindowSize(a->doc_window,760,540);a->doc_contents=false;a->doc_reset_sidebar=true;++*stage;break;
+        case 2:case 3:case 4:case 5:case 6:case 7:case 8:case 9:case 10:case 11:
+            ok=nk_sdl_accessibility_native_edit_test_step(a->doc_ui,*stage-2);
+            if(*stage==11){*capture="docs-macos-edit-end.bmp";SDL_HideWindow(a->doc_window);}
+            ++*stage;break;
+        case 12:
+            ok=nk_sdl_accessibility_native_edit_test_step(a->doc_ui,10);SDL_ShowWindow(a->doc_window);++*stage;break;
+        case 13:
+            ok=nk_sdl_accessibility_native_edit_test_step(a->doc_ui,11) &&
+               a->experiment.string.len==experiment_length && a->analysis.string.len==analysis_length;
+            a->quitting=true;puts("MAC F1 EDIT: actual fields, Unicode selection/replacement, caret, end reveal, hidden rejection and editor isolation passed");
+            break;
+        }
+        if(!ok){fprintf(stderr,"Native macOS F1 field stage %d failed\n",*stage-1);*code=1;a->quitting=true;}
+        if(a->quitting)printf("DOCUMENTATION EDIT SELF-TEST: %s\n",*code?"FAILED":"PASSED");
+        return;
+    }
     if(!strcmp(mode,"docs-keyboard-reading-remote") || !strcmp(mode,"docs-keyboard-reading-native")) {
         switch(*stage) {
         case 0:test_window_key_mod(a->window,SDLK_F1,0);++*stage;break;
