@@ -107,7 +107,8 @@ bool ps_a11y_native_edit_test_step(ps_a11y_native *b,int step) {
   send1(field,"setAccessibilitySelectedText:",string("β"));break;
  }
  case 5:
-  ok=value && !strcmp(value,"A β end");
+  {ax_range range=((ax_range(*)(id,SEL))objc_msgSend)(field,sel_registerName("accessibilitySelectedTextRange"));
+   ok=value && !strcmp(value,"A β end") && range.location==3 && !range.length;}
   ((void(*)(id,SEL,ax_range))objc_msgSend)(field,sel_registerName("setAccessibilitySelectedTextRange:"),(ax_range){3,0});break;
  case 6: {
   ax_range range=((ax_range(*)(id,SEL))objc_msgSend)(field,sel_registerName("accessibilitySelectedTextRange"));

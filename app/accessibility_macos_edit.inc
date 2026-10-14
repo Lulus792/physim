@@ -99,13 +99,9 @@ static id edit_attributed_range(id object,SEL selector,ax_range range) {
 }
 static void edit_set_selected_text(id object,SEL selector,id value) {
  (void)selector;ps_a11y_native *b=owner(object);const char *bytes=edit_string_bytes(value);if(!b || !bytes)return;
- size_t added=strlen(bytes);SDL_LockMutex(b->mutex);const ps_a11y_node *n=edit_live_locked(object,b);
- if(edit_available_locked(b,n)) {size_t tail=strlen(n->text_value+n->text_end),start=n->text_start;
-  if(added<n->text_capacity && start+tail<n->text_capacity-added) {
-   char result[PS_A11Y_LABEL_BYTES];memcpy(result,n->text_value,start);memcpy(result+start,bytes,added);
-   memcpy(result+start+added,n->text_value+n->text_end,tail+1);ps_a11y_set_text(b->model,n->id,result);
-  }
- }SDL_UnlockMutex(b->mutex);
+ SDL_LockMutex(b->mutex);const ps_a11y_node *n=edit_live_locked(object,b);
+ if(edit_available_locked(b,n))ps_a11y_edit_replace(b->model,n->id,n->text_version,bytes);
+ SDL_UnlockMutex(b->mutex);
 }
 static void edit_reveal(id object,SEL selector,ax_range range) {
  (void)selector;ps_a11y_native *b=owner(object);if(!b)return;ps_a11y_utf16_index index={0};size_t begin,end;

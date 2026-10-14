@@ -171,7 +171,10 @@ nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flag
    scrolled=ps_a11y_edit_take_scroll(m,index,&scroll_start,&scroll_end,&scroll_top);}
   SDL_UnlockMutex(sdl->accessibility_mutex);
   if(granted){SDL_RaiseWindow(sdl->win);nk_window_set_focus(ctx,ctx->current->name_string);nk_edit_unfocus(ctx);nk_edit_focus(ctx,NK_EDIT_ALWAYS_INSERT_MODE);}
-  if(changed && ctx->current->edit.active){ctx->current->edit.cursor=nk_utf_len(text,(int)strlen(text));ctx->current->edit.sel_start=ctx->current->edit.sel_end=ctx->current->edit.cursor;}
+  if(changed && ctx->current->edit.active){
+   SDL_LockMutex(sdl->accessibility_mutex);size_t caret=index!=SIZE_MAX?sdl->accessibility->draft[index].text_caret:strlen(text);SDL_UnlockMutex(sdl->accessibility_mutex);
+   ctx->current->edit.cursor=nk_utf_len(text,(int)caret);ctx->current->edit.sel_start=ctx->current->edit.sel_end=ctx->current->edit.cursor;
+  }
   if(selected){
    ctx->current->edit.sel_start=nk_utf_len(text,(int)select_start);ctx->current->edit.sel_end=nk_utf_len(text,(int)select_end);
    ctx->current->edit.cursor=ctx->current->edit.sel_end;

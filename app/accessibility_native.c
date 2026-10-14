@@ -218,7 +218,7 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
    selection_changed[i]=old_selected!=new_selected;
   }
   for(size_t j=0;j<b->count;j++)if(b->ids[j]==node->id) {
-   text_selection_changed[i]=node->role==PS_A11Y_EDIT && (node->text_start!=b->edit_starts[j] || node->text_end!=b->edit_ends[j] || node->text_caret!=b->edit_carets[j]);
+   text_selection_changed[i]=node->role==PS_A11Y_EDIT && (node->text_version!=b->edit_versions[j] || node->text_start!=b->edit_starts[j] || node->text_end!=b->edit_ends[j] || node->text_caret!=b->edit_carets[j]);
    value_changed[i]=(node->role==PS_A11Y_EDIT && node->text_version!=b->edit_versions[j]) || ((node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) && node->checked!=b->checked[j]) || (node->role==PS_A11Y_SLIDER && node->value!=b->values[j]);
   }
   if(!element) {

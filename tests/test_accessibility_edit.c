@@ -51,5 +51,19 @@ int main(void) {
  char small[4]="old";ps_a11y_begin(m);CHECK(!ps_a11y_record_edit(m,"help","Suche",bounds,true,small,sizeof small));ps_a11y_publish(m);CHECK(!strcmp(small,"old") && !m->pending_text_id);
  ps_a11y_begin(m);ps_a11y_publish(m);CHECK(!ps_a11y_set_text(m,id,"stale"));
  ps_a11y_begin(m);CHECK(!ps_a11y_record_edit(m,"help","Suche",bounds,true,text,sizeof text));ps_a11y_publish(m);CHECK(m->nodes[0].id!=id);
- ps_a11y_destroy(m);free(m);puts("Editable accessibility: Unicode value, immutable snapshot, delivery once, no truncation, disabled/stale targets and capacity changes passed");return 0;
+ id=m->nodes[0].id;strcpy(text,"A θ🌍 end");ps_a11y_begin(m);
+ ps_a11y_record_edit(m,"help","Suche",bounds,true,text,sizeof text);CHECK(ps_a11y_edit_update(m,0,text,2,8));ps_a11y_publish(m);
+ version=m->nodes[0].text_version;CHECK(!ps_a11y_edit_replace(m,id,version+1,"β"));
+ CHECK(ps_a11y_edit_replace(m,id,version,"β"));CHECK(!strcmp(text,"A θ🌍 end"));CHECK(!ps_a11y_set_text(m,id,"conflict"));
+ ps_a11y_begin(m);CHECK(ps_a11y_record_edit(m,"help","Suche",bounds,true,text,sizeof text));ps_a11y_publish(m);
+ CHECK(!strcmp(text,"A β end") && m->nodes[0].text_start==4 && m->nodes[0].text_end==4 && m->nodes[0].text_caret==4 && !m->pending_text_has_caret);
+ ps_a11y_begin(m);ps_a11y_record_edit(m,"help","Suche",bounds,true,text,sizeof text);CHECK(ps_a11y_edit_update(m,0,text,2,4));ps_a11y_publish(m);
+ version=m->nodes[0].text_version;CHECK(ps_a11y_edit_replace(m,id,version,"β"));
+ ps_a11y_begin(m);CHECK(ps_a11y_record_edit(m,"help","Suche",bounds,true,text,sizeof text));ps_a11y_publish(m);
+ CHECK(m->nodes[0].text_version==version && m->nodes[0].text_start==4 && m->nodes[0].text_end==4);
+ CHECK(ps_a11y_edit_replace(m,id,version,""));strcpy(text,"user change");ps_a11y_begin(m);
+ CHECK(!ps_a11y_record_edit(m,"help","Suche",bounds,true,text,sizeof text));ps_a11y_publish(m);CHECK(!strcmp(text,"user change") && !m->pending_text_id);
+ version=m->nodes[0].text_version;CHECK(ps_a11y_edit_replace(m,id,version,"x"));ps_a11y_suspend(m);
+ CHECK(!m->pending_text_has_caret && !m->pending_text_id && !ps_a11y_edit_replace(m,id,version,"x"));
+ ps_a11y_destroy(m);free(m);puts("Editable accessibility: Unicode value, selection replacement caret, immutable snapshot, delivery once, no truncation, disabled/stale targets and capacity changes passed");return 0;
 }
