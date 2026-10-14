@@ -339,7 +339,7 @@ void ps_graphics_destroy(ps_graphics *g) {
     free(g);
 }
 int ps_graphics_texture_limit(const ps_graphics *g) {return g?g->max_texture:0;}
-unsigned ps_graphics_texture(ps_graphics *g, const void *rgba, int w, int h) {
+static unsigned texture_create(ps_graphics *g, const void *pixels, int w, int h, bool alpha) {
     if (w < 1 || h < 1 || w > g->max_texture || h > g->max_texture) {
         SDL_SetError("Invalid texture size %dx%d (GPU limit %d)",w,h,g->max_texture);
         return 0;
@@ -356,12 +356,27 @@ unsigned ps_graphics_texture(ps_graphics *g, const void *rgba, int w, int h) {
     g->TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     g->TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     g->PixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    g->TexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgba);
+    if (alpha) {
+        /* Nuklear's RGBA atlas is white RGB plus coverage. Keep coverage in
+         * one channel and reconstruct the same shader sample (OpenGL 3.3). */
+        g->TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_R, GL_ONE);
+        g->TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_G, GL_ONE);
+        g->TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_B, GL_ONE);
+        g->TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_A, GL_RED);
+    }
+    g->TexImage2D(GL_TEXTURE_2D, 0, alpha ? GL_R8 : GL_RGBA8, w, h, 0,
+                  alpha ? GL_RED : GL_RGBA, GL_UNSIGNED_BYTE, pixels);
     if (!gl_ok(g, "texture")) {
         g->DeleteTextures(1, &id);
         return 0;
     }
     return id;
+}
+unsigned ps_graphics_texture(ps_graphics *g, const void *rgba, int w, int h) {
+    return texture_create(g, rgba, w, h, false);
+}
+unsigned ps_graphics_alpha_texture(ps_graphics *g, const void *coverage, int w, int h) {
+    return texture_create(g, coverage, w, h, true);
 }
 void ps_graphics_delete_texture(ps_graphics *g, unsigned texture) {
     g->DeleteTextures(1, &texture);
@@ -1037,7 +1052,56 @@ static bool test_transparency(ps_graphics *g) {
     }
     return true;
 }
+static bool test_alpha_texture(ps_graphics *g) {
+    enum { W = 15, H = 6 };
+    const unsigned char coverage[10] = {0, 32, 128, 224, 255, 255, 192, 96, 16, 0};
+    unsigned char rgba[40], samples[2][W * H * 4];
+    for (size_t i = 0; i < sizeof coverage; i++) {
+        rgba[4*i] = rgba[4*i+1] = rgba[4*i+2] = 255;
+        rgba[4*i+3] = coverage[i];
+    }
+    GLuint textures[2] = {ps_graphics_texture(g, rgba, 5, 2),
+                          ps_graphics_alpha_texture(g, coverage, 5, 2)};
+    bool ok = textures[0] && textures[1] && target(g, W, H);
+    if (ok) {
+        const ui_vertex vertices[] = {
+            {{-1,-1},{0,0},{51,153,221,255}}, {{1,-1},{1,0},{51,153,221,255}},
+            {{-1,1},{0,1},{51,153,221,255}}, {{1,1},{1,1},{51,153,221,255}}
+        };
+        const float identity[16] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
+        g->BindFramebuffer(GL_FRAMEBUFFER, g->resolve_framebuffer);
+        g->Viewport(0,0,W,H);
+        g->Disable(GL_BLEND);g->Disable(GL_DEPTH_TEST);g->Disable(GL_CULL_FACE);
+        g->Disable(GL_SCISSOR_TEST);
+        g->UseProgram(g->ui_program);g->BindVertexArray(g->ui_vao);
+        g->UniformMatrix4fv(g->ui_projection,1,GL_FALSE,identity);
+        g->Uniform1i(g->ui_flip,0);g->ActiveTexture(GL_TEXTURE0);
+        g->BindBuffer(GL_ARRAY_BUFFER,g->ui_vbo);
+        g->BufferData(GL_ARRAY_BUFFER,sizeof vertices,vertices,GL_STREAM_DRAW);
+        for (unsigned i=0;i<2;i++) {
+            g->BindTexture(GL_TEXTURE_2D,textures[i]);
+            g->ClearColor(1,0,1,1);g->Clear(GL_COLOR_BUFFER_BIT);
+            g->DrawArrays(GL_TRIANGLE_STRIP,0,4);
+            g->ReadPixels(0,0,W,H,GL_RGBA,GL_UNSIGNED_BYTE,samples[i]);
+        }
+        ok = gl_ok(g,"alpha texture equivalence") &&
+             !memcmp(samples[0],samples[1],sizeof samples[0]);
+        /* Texel centers at 3x scale: also reject two equally blank/broken draws.
+         * Other pixels exercise bilinear filtering of fractional coverage. */
+        for (unsigned y=0;y<2 && ok;y++)for(unsigned x=0;x<5;x++) {
+            size_t p=((3*y+1)*W+3*x+1)*4;
+            if(samples[1][p]!=51 || samples[1][p+1]!=153 ||
+               samples[1][p+2]!=221 || abs((int)samples[1][p+3]-coverage[y*5+x])>1)ok=false;
+        }
+    }
+    g->DeleteTextures(2,textures);
+    if(!ok)SDL_SetError("Coverage atlas differs from RGBA atlas samples");
+    else printf("Coverage atlas: RGBA/R8 GPU samples identical, odd rows and linear filtering\n");
+    return ok;
+}
 bool ps_graphics_test(ps_graphics *g, const char *capture_path) {
+    if (!test_alpha_texture(g))
+        return false;
     if (!test_transparency(g))
         return false;
     /* Picking follows rendered geometry for all seven mesh primitives. */

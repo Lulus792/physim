@@ -1,11 +1,12 @@
 name: Focused macOS F1 accessibility
 on:
   push:
-    branches: [main, codex/mac-f1-reading, codex/mac-f1-fields, codex/mac-f1-links]
+    branches: [main, codex/mac-f1-reading, codex/mac-f1-fields, codex/mac-f1-links, codex/windows-link-stability]
     paths:
       - app/accessibility*
       - app/documentation*
       - app/ui*
+      - app/graphics.*
       - app/main.c
       - app/settings_ui.inc
       - tests/test_accessibility*
@@ -48,7 +49,7 @@ jobs:
       - name: Portable UTF-16 and document contracts
         run: python3 tools/build.py --compiler clang --sanitizers --test --test-filter accessibility_utf16 --test-filter accessibility_document --test-filter accessibility_suspend --test-filter accessibility_edit
       - name: Actual AppKit and rendered F1
-        run: python3 tools/build.py --compiler clang --sanitizers --test-display --test-filter accessibility_native --test-filter accessibility_ui --test-filter accessibility_document_macos --test-filter accessibility_edit_macos --test-filter accessibility_links_macos --test-filter documentation_navigation --test-filter documentation_sidebar
+        run: python3 tools/build.py --compiler clang --sanitizers --test-display --test-filter accessibility_native --test-filter accessibility_ui --test-filter accessibility_document_macos --test-filter accessibility_edit_macos --test-filter accessibility_links_macos --test-filter documentation_navigation --test-filter documentation_sidebar --test-filter graphics --test-filter documentation_density --test-filter documentation_math
       - name: Archive focused evidence
         if: always()
         uses: actions/upload-artifact@v4

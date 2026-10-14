@@ -20,6 +20,7 @@ static void documentation_window_destroy(app *a) {
 }
 
 static bool documentation_window_fonts(app *a,float density) {
+    if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: F1 fonts begin %.6f\n",ps_clock());
     if(!isfinite(density) || density<1 || density>4)return false;
     struct nk_font_atlas candidate;nk_font_atlas_init_default(&candidate);nk_font_atlas_begin(&candidate);
     struct nk_font *ui_fonts[9],*titles[9],*bold[11],*code[9];
@@ -36,6 +37,7 @@ static bool documentation_window_fonts(app *a,float density) {
         code[i]=system_font_sampling(&candidate,a->root,(16+i*2)*density,true,false,2,1);
         if(!code[i])goto fail;
     }
+    if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: F1 font sources ready %.6f\n",ps_clock());
     if(!nk_sdl_font_stash_replace(a->doc_ui,&candidate,density,ui_fonts[(documentation_font_size(a)-16)/2]))goto fail;
     for(int i=0;i<9;i++) {
         a->doc_ui_fonts[i]=&ui_fonts[i]->handle;a->doc_title_fonts[i]=&titles[i]->handle;
@@ -50,6 +52,7 @@ static bool documentation_window_fonts(app *a,float density) {
         a->documentation->layout_width=0;
     }
     a->doc_raster_density=density;a->doc_failed_density=0;
+    if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: F1 fonts ready %.6f\n",ps_clock());
     printf("F1 font density: %.3f, logical %.1f, raster %.1f\n",density,
         a->doc_font_ui->height,ui_fonts[(documentation_font_size(a)-16)/2]->info.height);
     return true;

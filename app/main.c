@@ -3428,6 +3428,7 @@ int main(int argc, char **argv) {
     if (!exists(check))
         snprintf(a->root, sizeof a->root, "%s", PS_SOURCE_DIR);
     struct nk_font_atlas *atlas = nk_sdl_font_stash_begin(a->ui);
+    if(trace_test)fprintf(stderr,"APP TEST TRACE: main fonts begin %.6f\n",ps_clock());
     struct nk_font *ui_fonts[4], *title_fonts[4];
     bool ui_fonts_ok=true;
     for(int i=0;i<4;i++) {
@@ -3443,6 +3444,7 @@ int main(int argc, char **argv) {
         code_fonts_ok &= code_fonts[i] != NULL;
     }
     struct nk_font *title_font = title_fonts[0];
+    if(trace_test)fprintf(stderr,"APP TEST TRACE: main font sources ready %.6f\n",ps_clock());
     if (!ui_fonts_ok || !code_fonts_ok || !title_font || !nk_sdl_font_stash_end(a->ui)) {
         fprintf(stderr, "Font initialization: %s\n", SDL_GetError());
         nk_sdl_shutdown(a->ui);
@@ -3453,6 +3455,7 @@ int main(int argc, char **argv) {
         return 1;
     }
     style(a->ui);
+    if(trace_test)fprintf(stderr,"APP TEST TRACE: main fonts ready %.6f\n",ps_clock());
     a->font_ui = &font->handle;
     for(int i=0;i<4;i++){a->ui_fonts[i]=&ui_fonts[i]->handle;a->title_fonts[i]=&title_fonts[i]->handle;}
     for (int i = 0; i < 4; i++)

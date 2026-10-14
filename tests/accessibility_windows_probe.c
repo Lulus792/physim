@@ -86,7 +86,7 @@ static HRESULT document_links(IUIAutomation *automation,IUIAutomationElement *co
   UIA_HWND native=NULL;HWND host=NULL;
   if(SUCCEEDED(result))phase="host window handle";
   if(SUCCEEDED(result))result=IUIAutomationElement_get_CurrentNativeWindowHandle(control,&native);
-  host=(HWND)native;if(SUCCEEDED(result) && !IsWindow(host))result=E_FAIL;
+  host=(HWND)native;if(SUCCEEDED(result) && !IsWindow(host)){fprintf(stderr,"Link host handle invalid: %p\n",(void*)host);result=E_FAIL;}
   if(SUCCEEDED(result)) {
    if(SUCCEEDED(result))phase="host disable and disabled event";
    EnableWindow(host,FALSE);BOOL enabled=TRUE;

@@ -37,6 +37,8 @@ void ps_graphics_background(ps_graphics *g, uint8_t red, uint8_t green, uint8_t 
 bool ps_graphics_make_current(ps_graphics *g);
 void ps_graphics_destroy(ps_graphics *g);
 unsigned ps_graphics_texture(ps_graphics *g, const void *rgba, int w, int h);
+/* One coverage byte per pixel; sampling returns white RGB and that alpha. */
+unsigned ps_graphics_alpha_texture(ps_graphics *g, const void *coverage, int w, int h);
 /* Recorded GL_MAX_TEXTURE_SIZE for this context, zero for a null renderer. */
 int ps_graphics_texture_limit(const ps_graphics *g);
 void ps_graphics_delete_texture(ps_graphics *g, unsigned texture);

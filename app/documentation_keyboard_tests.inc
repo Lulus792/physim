@@ -484,9 +484,12 @@ static void documentation_inline_test_frame(app *a,int *stage,int *code,const ch
 #undef INLINE_KEY
 }
 static bool documentation_link_inventory(app *a) {
+    bool trace=SDL_getenv("PHYSIM_TEST_TRACE")!=NULL;
+    if(trace)fprintf(stderr,"APP TEST TRACE: link inventory begin %.6f\n",ps_clock());
     ps_a11y_model *model=malloc(sizeof *model);if(!model)return false;ps_a11y_init(model);
     size_t total=0,maximum=0;bool ok=true;float viewport[]={0,0,760,540},hidden[]={0,0,0,0};
     for(int i=0;ok && i<DOCUMENTATION_TOPIC_COUNT;i++) {
+        if(trace && !(i%32))fprintf(stderr,"APP TEST TRACE: link inventory page %d %.6f\n",i,ps_clock());
         char path[4096];join(path,sizeof path,a->root,documentation_topics[i].path);size_t length=0;
         char *source=load_utf8_text_limit(path,&length,documentation_topics[i].code?PS_DOC_MAX_CODE_BYTES:PS_DOC_MAX_BYTES);
         ps_document *document=NULL;ok=source && ps_document_parse(source,length,documentation_topics[i].code,&document)==PS_OK;free(source);
@@ -510,6 +513,7 @@ static bool documentation_link_inventory(app *a) {
         ps_a11y_publish(model);free(document);
     }
     ps_a11y_destroy(model);free(model);
+    if(trace)fprintf(stderr,"APP TEST TRACE: link inventory end %.6f\n",ps_clock());
     if(ok)printf("DOCUMENTATION LINK INVENTORY: %d pages, %zu links, %zu maximum per page\n",DOCUMENTATION_TOPIC_COUNT,total,maximum);
     return ok;
 }
