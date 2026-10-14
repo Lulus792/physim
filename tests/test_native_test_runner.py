@@ -129,6 +129,12 @@ def main():
         "project_identity_app": ("tests/test_project_migration_app.py", ("--identities",)),
         "app_profiling_workflow": ("tests/test_app_profiling_workflow.py", ()),
     }
+    if sys.platform == "linux":
+        specialized_display.update({
+            "accessibility_document_atspi": ("tests/test_accessibility_document_atspi.py", ("--root",)),
+            "accessibility_edit_atspi": ("tests/test_accessibility_edit_atspi.py", ()),
+            "accessibility_links_atspi": ("tests/test_accessibility_links_atspi.py", ()),
+        })
     if sys.platform in ("darwin", "linux"):
         specialized_display.update({
             "accessibility_checkbox_app": ("tests/test_accessibility_checkbox_app.py", ()),
