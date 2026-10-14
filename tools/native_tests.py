@@ -149,6 +149,7 @@ def catalog():
         Case("font_atlas_limits", ("tests/test_font_atlas_limits.c",), app=True),
         Case("font_fallback", ("tests/test_font_fallback.c",), arguments=("{source}",), app=True),
         Case("font_sources", ("tests/test_font_sources.c", "app/ui_backend.c"), arguments=("{source}",), app=True),
+        Case("font_faces", ("tests/test_font_faces.c", "app/ui_backend.c"), arguments=("{source}", "{work}"), app=True),
         Case("font_density", ("tests/test_font_density.c", "app/ui_backend.c"), app=True),
         Case("library", ("tests/test_library.c", "app/library.c"), app=True),
         Case("autosave", ("tests/test_autosave.c", "app/autosave.c"), app=True),

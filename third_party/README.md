@@ -23,6 +23,13 @@ included as `licenses/zlib-LICENSE.txt` in the portable package.
 
 ## Nuklear snapshot
 
+Local patch (2026-10-15): `nk_font_config.ttf_index` selects a collection face
+through baking. The default remains zero. Invalid negative/out-of-range indices
+fail the bounded bake. Physim's face loader matches non-italic OpenType `head`
+bold metadata, and fallback source lookup uses the selected index too.
+`font_faces` generates a TTC from tracked fonts, checks index 2 against the
+standalone bold raster, rejects an italic entry, and checks ownership failures.
+
 Local patch (2026-10-15): `nk_font_atlas_clear` also releases pixel memory when
 an atlas is discarded after a successful bake and before `nk_font_atlas_end`,
 including a failed GPU upload. `font_atlas_limits` abandons both Alpha8 and

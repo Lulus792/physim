@@ -30,6 +30,10 @@ struct nk_font_atlas *nk_sdl_font_stash_begin(struct nk_context *ctx);
 /* Loaded Nuklear font contains a real source glyph and a matching baked entry,
  * rather than the fallback glyph. Baked source presence survives blob cleanup. */
 bool ps_ui_font_has_glyph(const struct nk_user_font *font,nk_rune codepoint);
+/* Load the first non-italic face matching the OpenType bold flag. A missing
+ * match leaves the atlas unchanged, allowing the caller's offline fallback. */
+struct nk_font *ps_ui_font_add_file_face(struct nk_font_atlas *atlas,const char *path,
+                                        float height,const struct nk_font_config *config,bool bold);
 /* Before baking: add only supplied codepoints absent from the target's sources.
  * Target must be the atlas's last font; all allocated ranges belong to the atlas. */
 bool ps_ui_font_add_fallback(struct nk_font_atlas *atlas,struct nk_font *target,

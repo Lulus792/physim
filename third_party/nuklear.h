@@ -4294,6 +4294,7 @@ struct nk_font_config {
     struct nk_font_config *next; /**!< NOTE: only used internally */
     void *ttf_blob;              /**!< pointer to loaded TTF file memory block.  * \note not needed for nk_font_atlas_add_from_memory and nk_font_atlas_add_from_file. */
     nk_size ttf_size;            /**!< size of the loaded TTF file memory block * \note not needed for nk_font_atlas_add_from_memory and nk_font_atlas_add_from_file. */
+    int ttf_index;               /**!< zero-based face in a font collection; default 0 */
 
     unsigned char ttf_data_owned_by_atlas;    /**!< used inside font atlas: default to: 0*/
     unsigned char merge_mode;                 /**!< merges this font into the last font */
@@ -17102,7 +17103,8 @@ nk_font_bake_pack(struct nk_font_baker *baker,
             struct stbtt_fontinfo *font_info = &baker->build[i++].info;
             font_info->userdata = (void*)alloc;
 
-            if (!stbtt_InitFont(font_info, (const unsigned char*)it->ttf_blob, stbtt_GetFontOffsetForIndex((const unsigned char*)it->ttf_blob, 0)))
+            int offset = it->ttf_index < 0 ? -1 : stbtt_GetFontOffsetForIndex((const unsigned char*)it->ttf_blob, it->ttf_index);
+            if (offset < 0 || !stbtt_InitFont(font_info, (const unsigned char*)it->ttf_blob, offset))
                 return nk_false;
         } while ((it = it->n) != config_iter);
     }

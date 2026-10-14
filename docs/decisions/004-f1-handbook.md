@@ -388,6 +388,33 @@ Titelzeilen liegen im sichtbaren Fokusrahmen. Die Ubuntu-Nachprüfung dieser
 Korrektur steht noch aus. Praktische Screenreader-, macOS- und echte
 DPI-/Monitorwechsel-Abnahme werden durch diese Reflow-Korrektur nicht behauptet.
 
+### Explizite Schriftschnittwahl in macOS-Collections, 15. Oktober 2026
+
+Die Ursache der auf Intel beobachteten identischen normalen und fetten Schrift
+ist eingegrenzt: Beide Rollen laden `Helvetica.ttc`; der bisherige Bake wählt
+stets Collection-Index 0. Die Konfiguration trägt jetzt einen expliziten
+Collection-Index, den Bake und Quell-Cmap-Prüfung verwenden. Der macOS-Loader
+wählt einen nicht kursiven Schnitt anhand des OpenType-`head`-Bold-Bits;
+Microsoft dokumentiert die [Bold-/Italic-Bits](https://learn.microsoft.com/en-us/typography/opentype/spec/head).
+Fehlt ein passender System-Schnitt, bleibt der bisherige Offline-Fallback
+verfügbar. Windows und Linux behalten ihre vorhandenen primären Fontdateien.
+
+Der neue native Fall `font_faces` erzeugt eine Collection aus bereits verfolgten
+Schriftdateien. Index 0 enthält keine lateinischen Buchstaben, Index 1 ist als
+fett/kursiv markiert, Index 2 enthält den echten fetten Schnitt. Die Auswahl
+muss Index 2 liefern, dessen Glyphen, Metriken und Rasterdeckung der separat
+geladenen Bold-Datei entsprechen. Die Fallback-Prüfung muss dabei die Cmap des
+ausgewählten Schnitts verwenden. Ungültige Indizes, drei Allokationsfehler,
+fehlende Stiltreffer und vollständige Freigabe werden zusätzlich geprüft.
+
+MSVC ASan besteht `run-mcsyv9gx` **6/6** native Schriftfälle und anschließend
+`run-ecnofoaj` **1/1** für die finale Collection-Probe. Der absichtliche Modus
+`--wrong-face` erzwingt Index 0 und wird mit Exit 1 an der tatsächlichen
+Glyphenprüfung abgewiesen; Originale in `build/native/font-faces-wrong`.
+Unter macOS prüft derselbe Fall zusätzlich die tatsächlichen Helvetica- und
+Menlo-Collections, verschiedene Helvetica-Indizes und unterscheidbare
+Latein-Rasterdeckung. Diese macOS-Ausführung steht noch aus.
+
 ### F1-Schriften nach Bedarf, 15. Oktober 2026
 
 Die [Architekturentscheidung 005](005-f1-font-demand.md) ist jetzt mit der

@@ -2823,8 +2823,15 @@ static struct nk_font *system_font_sampling(struct nk_font_atlas *atlas,const ch
 #endif
     const char *bundled=SDL_getenv("PHYSIM_TEST_BUNDLED_FONTS");
     bool force_bundled=bundled && !strcmp(bundled,"1");
-    struct nk_font *font =
-        !force_bundled && exists(path) ? nk_font_atlas_add_from_file(atlas,path,size,&config) : NULL;
+    struct nk_font *font = NULL;
+    if(!force_bundled && exists(path)) {
+#ifdef __APPLE__
+        font=ps_ui_font_add_file_face(atlas,path,size,&config,title);
+        if(font)printf("Platform font face: %s index=%d bold=%d\n",path,font->config->ttf_index,title);
+#else
+        font=nk_font_atlas_add_from_file(atlas,path,size,&config);
+#endif
+    }
     if(!font) {
         int n=snprintf(path,sizeof path,"%s/third_party/fonts/%s",root,
                        code?"NotoSansMono.ttf":title?"NotoSans-Bold.ttf":"NotoSans.ttf");

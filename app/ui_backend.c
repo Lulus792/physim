@@ -6,6 +6,40 @@
 #define NK_IMPLEMENTATION
 #include "ui.h"
 #include <math.h>
+static unsigned font_be32(const unsigned char *p) {
+ return ((unsigned)p[0]<<24)|((unsigned)p[1]<<16)|((unsigned)p[2]<<8)|p[3];
+}
+struct nk_font *ps_ui_font_add_file_face(struct nk_font_atlas *atlas,const char *path,
+                                        float height,const struct nk_font_config *config,bool bold) {
+ if(!atlas || !path || !atlas->permanent.alloc || !atlas->permanent.free)return NULL;
+ nk_size length=0;unsigned char *bytes=nk_file_load(path,&length,&atlas->permanent);
+ if(!bytes)return NULL;
+ int selected=-1;
+ int count=length>=12?stbtt_GetNumberOfFonts(bytes):0;
+ if(length>=12 && !memcmp(bytes,"ttcf",4) && (count<0 || (nk_size)count>(length-12)/4))count=0;
+ for(int i=0;i<count;i++) {
+  int offset=stbtt_GetFontOffsetForIndex(bytes,i);stbtt_fontinfo info={0};
+  if(offset<0 || (nk_size)offset>length || length-(nk_size)offset<12)continue;
+  unsigned tables=((unsigned)bytes[offset+4]<<8)|bytes[offset+5];
+  if(tables>(length-(nk_size)offset-12)/16)continue;
+  bool bounded=true;
+  for(unsigned t=0;t<tables;t++) {
+   const unsigned char *record=bytes+offset+12+t*16;
+   unsigned begin=font_be32(record+8),size=font_be32(record+12);
+   if((nk_size)begin>length || size>length-(nk_size)begin){bounded=false;break;}
+  }
+  if(!bounded || !stbtt_InitFont(&info,bytes,offset) ||
+     info.head<0 || (nk_size)info.head>length || length-(nk_size)info.head<46)continue;
+  unsigned style=((unsigned)bytes[info.head+44]<<8)|bytes[info.head+45];
+  if((style&3u)==(bold?1u:0u)){selected=i;break;}
+ }
+ if(selected<0){atlas->permanent.free(atlas->permanent.userdata,bytes);return NULL;}
+ struct nk_font_config cfg=config?*config:nk_font_config(height);
+ cfg.ttf_blob=bytes;cfg.ttf_size=length;cfg.ttf_index=selected;cfg.size=height;cfg.ttf_data_owned_by_atlas=1;
+ struct nk_font *font=nk_font_atlas_add(atlas,&cfg);
+ if(!font)atlas->permanent.free(atlas->permanent.userdata,bytes);
+ return font;
+}
 bool ps_ui_font_has_glyph(const struct nk_user_font *handle,nk_rune codepoint) {
  if(!handle || !handle->userdata.ptr || codepoint>0x10ffffu)return false;
  const struct nk_font *font=handle->userdata.ptr;
@@ -28,7 +62,7 @@ static bool font_source_contains(const struct nk_font_config *config,nk_rune cod
   for(const nk_rune *r=source->range;r && *r;r+=2)
    if(codepoint>=r[0] && codepoint<=r[1]){declared=true;break;}
   if(declared && source->ttf_blob) {
-   stbtt_fontinfo info={0};int offset=stbtt_GetFontOffsetForIndex(source->ttf_blob,0);
+   stbtt_fontinfo info={0};int offset=source->ttf_index<0?-1:stbtt_GetFontOffsetForIndex(source->ttf_blob,source->ttf_index);
    if(offset>=0 && stbtt_InitFont(&info,source->ttf_blob,offset) &&
       stbtt_FindGlyphIndex(&info,(int)codepoint)!=0)return true;
   }
