@@ -1,5 +1,6 @@
 /* Independent UI Automation client: no renderer, SDL, bridge or model linkage. */
 #define COBJMACROS
+#define CONST_VTABLE
 #include <windows.h>
 #include <uiautomation.h>
 #include <stdio.h>
@@ -27,7 +28,8 @@ static HRESULT named(IUIAutomation *a,IUIAutomationElement *root,const wchar_t *
  if(both)IUIAutomationCondition_Release(both);if(type)IUIAutomationCondition_Release(type);if(name)IUIAutomationCondition_Release(name);
  VariantClear(&value);return result;
 }
-static HRESULT document_links(IUIAutomation *automation,IUIAutomationElement *control,const wchar_t *label,bool invoke) {
+#include "accessibility_windows_events_probe.inc"
+static HRESULT document_links(IUIAutomation *automation,IUIAutomationElement *control,const wchar_t *label,bool invoke,bool invalid) {
  IUnknown *unknown=NULL;IUIAutomationTextPattern *pattern=NULL;IUIAutomationTextRange *whole=NULL,*selected_range=NULL;
  IUIAutomationElementArray *children=NULL;IUIAutomationElement *selected=NULL;
  HRESULT result=IUIAutomationElement_GetCurrentPattern(control,UIA_TextPatternId,&unknown);
@@ -57,6 +59,7 @@ static HRESULT document_links(IUIAutomation *automation,IUIAutomationElement *co
   if(enclosing)IUIAutomationElement_Release(enclosing);if(range)IUIAutomationTextRange_Release(range);if(child)IUIAutomationElement_Release(child);
  }
  if(SUCCEEDED(result) && !selected)result=E_FAIL;
+ link_events *events=NULL;if(SUCCEEDED(result))result=events_start(automation,selected,&events);
  if(SUCCEEDED(result) && !invoke) {
   BOOL offscreen=FALSE;result=IUIAutomationElement_get_CurrentIsOffscreen(selected,&offscreen);
   if(SUCCEEDED(result) && !offscreen)result=E_FAIL;
@@ -72,23 +75,77 @@ static HRESULT document_links(IUIAutomation *automation,IUIAutomationElement *co
   SAFEARRAY *bounds=NULL;if(SUCCEEDED(result))result=IUIAutomationTextRange_GetBoundingRectangles(selected_range,&bounds);
   if(SUCCEEDED(result)){LONG high=-1;SafeArrayGetUBound(bounds,1,&high);if(high<3)result=E_FAIL;}
   if(bounds)SafeArrayDestroy(bounds);
+  if(SUCCEEDED(result))result=events_wait(&events->offscreen,1);
+  if(SUCCEEDED(result))result=events_wait(&events->bounds,1);
+  if(SUCCEEDED(result) && events_count(&events->invoked))result=E_FAIL;
+  UIA_HWND native=NULL;HWND host=NULL;
+  if(SUCCEEDED(result))result=IUIAutomationElement_get_CurrentNativeWindowHandle(control,&native);
+  host=(HWND)native;if(SUCCEEDED(result) && !IsWindow(host))result=E_FAIL;
+  if(SUCCEEDED(result)) {
+   EnableWindow(host,FALSE);BOOL enabled=TRUE;
+   result=IUIAutomationElement_get_CurrentIsEnabled(selected,&enabled);
+   if(SUCCEEDED(result) && enabled)result=E_FAIL;
+   if(SUCCEEDED(result))result=events_wait(&events->disabled,1);
+   IUnknown *action=NULL;IUIAutomationInvokePattern *press=NULL;
+   if(SUCCEEDED(result))result=IUIAutomationElement_GetCurrentPattern(selected,UIA_InvokePatternId,&action);
+   if(SUCCEEDED(result) && action)result=IUnknown_QueryInterface(action,&IID_IUIAutomationInvokePattern,(void**)&press);
+   if(SUCCEEDED(result) && (!press || IUIAutomationInvokePattern_Invoke(press)!=UIA_E_ELEMENTNOTENABLED))result=E_FAIL;
+   if(press)IUIAutomationInvokePattern_Release(press);if(action)IUnknown_Release(action);
+   EnableWindow(host,TRUE); /* Always restore the host, including failure paths. */
+   if(SUCCEEDED(result))result=events_wait(&events->enabled,1);
+   if(SUCCEEDED(result))result=IUIAutomationElement_SetFocus(selected);
+   deadline=GetTickCount64()+10000;focused=FALSE;
+   while(SUCCEEDED(result) && !focused) {
+    result=IUIAutomationElement_get_CurrentHasKeyboardFocus(selected,&focused);
+    if(FAILED(result) || focused)break;if(GetTickCount64()>=deadline){result=E_FAIL;break;}Sleep(20);
+   }
+  }
+  if(SUCCEEDED(result)) {
+   Sleep(200);LONG before=events_count(&events->bounds);RECT host_bounds={0},old_rect={0};
+   if(!GetWindowRect(host,&host_bounds))result=E_FAIL;
+   if(SUCCEEDED(result))result=IUIAutomationElement_get_CurrentBoundingRectangle(selected,&old_rect);
+   if(SUCCEEDED(result) && !SetWindowPos(host,NULL,host_bounds.left+13,host_bounds.top+7,0,0,SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE))result=E_FAIL;
+   if(SUCCEEDED(result))result=events_wait(&events->bounds,before+1);
+   RECT moved={0};if(SUCCEEDED(result))result=IUIAutomationElement_get_CurrentBoundingRectangle(selected,&moved);
+   if(SUCCEEDED(result) && (moved.left!=old_rect.left+13 || moved.top!=old_rect.top+7))result=E_FAIL;
+   Sleep(100);LONG stable_bounds=events_count(&events->bounds),stable_offscreen=events_count(&events->offscreen),stable_disabled=events_count(&events->disabled),stable_enabled=events_count(&events->enabled);
+   Sleep(200);
+   if(SUCCEEDED(result) && (events_count(&events->bounds)!=stable_bounds || events_count(&events->offscreen)!=stable_offscreen ||
+      events_count(&events->disabled)!=stable_disabled || events_count(&events->enabled)!=stable_enabled || events_count(&events->invoked)))result=E_FAIL;
+   if(SUCCEEDED(result))puts("WINDOWS LINK EVENTS: host disable/enable, rejected invocation, screen-position geometry and quiet idle passed");
+  }
  } else if(SUCCEEDED(result)) {
   IUnknown *action=NULL;IUIAutomationInvokePattern *press=NULL;
   result=IUIAutomationElement_GetCurrentPattern(selected,UIA_InvokePatternId,&action);
   if(SUCCEEDED(result) && action)result=IUnknown_QueryInterface(action,&IID_IUIAutomationInvokePattern,(void**)&press);else result=E_FAIL;
   if(SUCCEEDED(result))result=IUIAutomationInvokePattern_Invoke(press);
   ULONGLONG deadline=GetTickCount64()+10000;
-  while(SUCCEEDED(result)) {
+  while(SUCCEEDED(result) && !invalid) {
    BSTR old=NULL;HRESULT stale=IUIAutomationTextRange_GetText(selected_range,-1,&old);SysFreeString(old);
    if(stale==UIA_E_ELEMENTNOTAVAILABLE)break;
    if(FAILED(stale) || GetTickCount64()>=deadline){result=E_FAIL;break;}Sleep(20);
   }
   if(press)IUIAutomationInvokePattern_Release(press);if(action)IUnknown_Release(action);
+  if(SUCCEEDED(result) && invalid) {
+   IUIAutomationElement *error=NULL;
+   while(SUCCEEDED(result) && !error) {
+    result=named(automation,control,L"Dieses Linkziel ist nicht in der mitgelieferten Dokumentation enthalten.",UIA_TextControlTypeId,&error);
+    if(FAILED(result) || error)break;if(GetTickCount64()>=deadline){result=E_FAIL;break;}Sleep(20);
+   }
+   if(error)IUIAutomationElement_Release(error);
+   BSTR original=NULL;if(SUCCEEDED(result))result=IUIAutomationTextRange_GetText(selected_range,-1,&original);
+   if(SUCCEEDED(result) && (!original || wcscmp(original,label)))result=E_FAIL;SysFreeString(original);
+   Sleep(250);if(SUCCEEDED(result) && events_count(&events->invoked))result=E_FAIL;
+  } else {
+   if(SUCCEEDED(result))result=events_wait(&events->invoked,1);
+   if(SUCCEEDED(result) && events_count(&events->invoked)!=1)result=E_FAIL;
+  }
  }
+ if(events){printf("WINDOWS LINK EVENTS: bounds=%ld offscreen=%ld disabled=%ld enabled=%ld invoked=%ld bad=%ld\n",events_count(&events->bounds),events_count(&events->offscreen),events_count(&events->disabled),events_count(&events->enabled),events_count(&events->invoked),events_count(&events->bad));if(events_count(&events->bad))result=E_FAIL;events_stop(automation,selected,events);}
  if(selected_range)IUIAutomationTextRange_Release(selected_range);if(selected)IUIAutomationElement_Release(selected);
  if(children)IUIAutomationElementArray_Release(children);if(whole)IUIAutomationTextRange_Release(whole);
  if(pattern)IUIAutomationTextPattern_Release(pattern);if(unknown)IUnknown_Release(unknown);
- if(SUCCEEDED(result))puts(invoke?"DOCUMENT LINKS: navigation and stale range passed":"DOCUMENT LINKS: two ordered hyperlinks, exact text ranges, offscreen focus and visible glyphs passed");
+ if(SUCCEEDED(result))puts(invalid?"DOCUMENT LINKS: rejected target stays readable without invoked event":invoke?"DOCUMENT LINKS: navigation and stale range passed":"DOCUMENT LINKS: two ordered hyperlinks, exact text ranges, offscreen focus and visible glyphs passed");
  return result;
 }
 static HRESULT read_document(IUIAutomationElement *control,const wchar_t *path) {
@@ -236,8 +293,9 @@ int wmain(int argc,wchar_t **argv) {
  bool focus=!wcscmp(argv[2],L"focus"),toggle=!wcscmp(argv[2],L"toggle"),select=!wcscmp(argv[2],L"select"),read=!wcscmp(argv[2],L"read"),edit=!wcscmp(argv[2],L"edit"),text_select=!wcscmp(argv[2],L"select-text");
  bool scroll_start=!wcscmp(argv[2],L"scroll-text-start"),scroll_end=!wcscmp(argv[2],L"scroll-text-end");
  bool links=!wcscmp(argv[2],L"links"),invoke_link=!wcscmp(argv[2],L"invoke-link");
- if(!focus && !toggle && !select && !read && !edit && !text_select && !scroll_start && !scroll_end && !links && !invoke_link)return 2;
- if((read || edit || text_select || scroll_start || scroll_end || links || invoke_link) && argc!=5)return 2;
+ bool invalid_link=!wcscmp(argv[2],L"invoke-link-invalid");
+ if(!focus && !toggle && !select && !read && !edit && !text_select && !scroll_start && !scroll_end && !links && !invoke_link && !invalid_link)return 2;
+ if((read || edit || text_select || scroll_start || scroll_end || links || invoke_link || invalid_link) && argc!=5)return 2;
  HRESULT initialized=CoInitializeEx(NULL,COINIT_MULTITHREADED);if(FAILED(initialized))return 1;
  IUIAutomation *automation=NULL;IUIAutomationElement *desktop=NULL,*window=NULL,*group=NULL,*control=NULL;
  IUnknown *unknown=NULL;bool ok=SUCCEEDED(CoCreateInstance(&CLSID_CUIAutomation,NULL,CLSCTX_INPROC_SERVER,&IID_IUIAutomation,(void**)&automation));
@@ -245,7 +303,7 @@ int wmain(int argc,wchar_t **argv) {
  VARIANT process;VariantInit(&process);process.vt=VT_I4;process.lVal=(LONG)pid;
  if(ok)ok=SUCCEEDED(find(automation,desktop,TreeScope_Children,UIA_ProcessIdPropertyId,process,&window)) && window;
  if(ok && (edit || text_select || scroll_start || scroll_end))ok=SUCCEEDED(find_edit(automation,desktop,(LONG)pid,argv[3],&control)) && control;
- else if(ok && (read || links || invoke_link)) {
+ else if(ok && (read || links || invoke_link || invalid_link)) {
   IUIAutomationCondition *pid_condition=NULL,*title_condition=NULL,*both=NULL;VARIANT title;VariantInit(&title);title.vt=VT_BSTR;title.bstrVal=SysAllocString(argv[3]);
   ok=title.bstrVal && SUCCEEDED(IUIAutomation_CreatePropertyCondition(automation,UIA_ProcessIdPropertyId,process,&pid_condition)) &&
    SUCCEEDED(IUIAutomation_CreatePropertyCondition(automation,UIA_NamePropertyId,title,&title_condition)) &&
@@ -270,7 +328,7 @@ int wmain(int argc,wchar_t **argv) {
  } else if(ok && (scroll_start || scroll_end))action=scroll_text(control,argv[4],scroll_start);
  else if(ok && text_select)action=select_text(control,argv[4]);
  else if(ok && read)action=read_document(control,argv[4]);
- else if(ok && (links || invoke_link))action=document_links(automation,control,argv[4],invoke_link);
+ else if(ok && (links || invoke_link || invalid_link))action=document_links(automation,control,argv[4],invoke_link || invalid_link,invalid_link);
  else if(ok && focus) {
   ok=SUCCEEDED(IUIAutomationElement_get_CurrentIsKeyboardFocusable(control,&focusable)) && focusable;
   if(ok)action=IUIAutomationElement_SetFocus(control);

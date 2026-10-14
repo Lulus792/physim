@@ -15,4 +15,7 @@ bool ps_a11y_native_test(SDL_Window *window);
 bool ps_a11y_native_press_label(ps_a11y_native *bridge,const char *label);
 bool ps_a11y_native_press_choice(ps_a11y_native *bridge,const char *group,const char *label);
 bool ps_a11y_native_focus_label(ps_a11y_native *bridge,const char *group,const char *label);
+/* Acknowledge a completed document action while its published source is still
+ * alive. This is distinct from accepting a queued Invoke request. */
+bool ps_a11y_native_document_link_invoked(ps_a11y_native *bridge,uint64_t version,size_t begin,size_t end);
 #endif

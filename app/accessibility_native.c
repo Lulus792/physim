@@ -383,3 +383,8 @@ bool ps_a11y_native_press_label(ps_a11y_native *bridge,const char *label) {(void
 bool ps_a11y_native_press_choice(ps_a11y_native *bridge,const char *group,const char *label) {(void)bridge;(void)group;(void)label;return false;}
 bool ps_a11y_native_focus_label(ps_a11y_native *bridge,const char *group,const char *label) {(void)bridge;(void)group;(void)label;return false;}
 #endif
+#ifndef _WIN32
+bool ps_a11y_native_document_link_invoked(ps_a11y_native *bridge,uint64_t version,size_t begin,size_t end) {
+ (void)bridge;(void)version;(void)begin;(void)end;return false;
+}
+#endif

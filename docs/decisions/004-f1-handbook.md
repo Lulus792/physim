@@ -439,9 +439,62 @@ MSVC ASan in `run-uvy0j5b0`.
 Die erweiterte Linux-Prüfung enthält die neuen Modelle sowie Inline-Links,
 Verlauf und Zoom; eine Workflowdefinition bestätigt deren Ausführung noch nicht.
 
+Der Stand `38dde0b` wurde unter Ubuntu 24.04/X11/Xvfb tatsächlich mit ASan/UBSan
+ausgeführt: GCC besteht **19/19 native und 24/25 GUI-Fälle** (`run-63n96l08`,
+`run-vvzfn_n2`); Clang ebenfalls **19/19 und 24/25** (`run-hcesvfom`,
+`run-k0fed1p5`).
+[GCC-Lauf](https://github.com/Lulus792/physim/actions/runs/38489455686/job/115610946220),
+[Clang-Lauf](https://github.com/Lulus792/physim/actions/runs/38489455686/job/115610946434).
+Der zusätzliche Zoomfall prüfte unmittelbar nach der asynchronen Größenänderung
+noch die Leseflächenhöhe des vorigen Bildes (250 Pixel). Das archivierte
+1080 × 780-Pixel-Bild zeigt bereits das korrekt vergrößerte Layout. Die kleine
+Zoomansicht und die Formel ohne Suchbegriff wurden ebenfalls visuell geprüft.
+Die Korrektur synchronisiert beide Größenanforderungen mit `SDL_SyncWindow`
+und wartet abgeschlossene Layout-Frames ab. Sie senkt keinen Geometrie-Grenzwert.
+Jedes Zoom-Bild wird jetzt gegen die protokollierte tatsächliche logische Größe,
+Drawable-Pixelgröße, Schriftgröße und Leseflächenhöhe geprüft. Das entspricht
+dem [SDL-Vertrag für Größenänderungen](https://wiki.libsdl.org/SDL3/SDL_SetWindowSize).
+Die korrigierte Linux-Ausführung steht noch aus.
+
+Windows meldet jetzt Änderungen der Linkgeometrie, Sichtbarkeit und Bedienbarkeit
+mit typisierten UIA-Property-Ereignissen. Die Geometrie berücksichtigt auch eine
+Verschiebung des nativen Fensters bei unverändertem Dokumentlayout. Ein nativ
+deaktiviertes Fenster sperrt Fokus, Aktivierung und die Übernahme von
+Widget-Aufträgen. Die Ereigniserzeugung hält Providerreferenzen, gibt den
+Modellmutex vor nativen Aufrufen frei und meldet keine unveränderten Werte.
+
+Maus, Tastatur und native Linkaktivierung verwenden denselben Abschlussweg.
+`Invoked` wird nach erfolgreicher Navigation gesendet, während der veröffentlichte
+Quelllink noch verfügbar ist. Annahme eines Auftrags, deaktivierte Ziele und
+fehlgeschlagene Navigation erzeugen keine erfolgreiche Aktivierungsmeldung.
+Der Client registriert seine Ereignisse mit gecachter Automation-ID, sodass er
+den nach der Navigation verschwindenden Quelllink zuordnen kann. Dieser Ablauf
+folgt den [Microsoft-Invoke-Konventionen](https://learn.microsoft.com/en-us/windows/win32/winauto/uiauto-implementinginvoke).
+
+Die unabhängige Ereignisprobe scheitert am vorherigen Stand (`run-r9fl1j38`):
+Der Link wird sichtbar, aber Geometrie- und Sichtbarkeitsereignisse fehlen.
+Die Korrektur besteht zunächst in `run-pyylvgh5`. Die erweiterte Probe deaktiviert
+und reaktiviert das tatsächliche Hostfenster, verlangt beide Zustandsereignisse,
+weist eine Aktivierung während der Deaktivierung ab und verschiebt das Fenster
+um 13/7 Pixel. Native Geometrie und Ereignis bestätigen die Verschiebung;
+unveränderte Folgeframes erzeugen keine zusätzlichen Meldungen (`run-8xmxztfz`).
+
+Ein zusätzlicher ungültiger Link zeigt den Fehler jetzt im F1-Fenster selbst.
+Der Client wartet auf diesen nativen Fehlertext und bestätigt einen weiterhin
+gültigen Quellbereich ohne Invoked-Ereignis; die App bestätigt unveränderte
+Seite und Inhaltsversion. Die anschließende erfolgreiche Navigation meldet
+genau eine Aktivierung und invalidiert den alten Bereich. Die Fehleransicht
+wurde visuell geprüft. Ereignisse, strenger Zoom und Inline-Links bestehen
+3/3 in `run-59gvjw_h`; die fünf betroffenen nativen Feld-/Scroll-/Lese-/Verlauf-/
+Mathematikfälle bestehen in `run-7eu3zujr`. Die vier Provider-/Render-/externen
+Ereignis-/Zoomfälle bestehen mit MSVC ASan in
+`build/native/F1-uia-sanitized/test-results/run-1b5w42va`.
+Der Testläufer samt erwarteten Gegenfehlern besteht in
+`build/native/F1-review/link-events-runner-proof`.
+
 Offen sind vollständige assistive Feldbedienung und ihre native
 macOS-/Linux-Anbindung, native Linktextbereiche auf macOS/Linux, native
-Änderungs-/Aktivierungsereignisse der Links, Tabellensemantik, vollständiges natives
+vollständige Ereignisprüfung des Fensterlebenszyklus, Tabellensemantik, vollständiges natives
 Lesen auf macOS/Linux, praktische Screenreader-Abnahme
 und die Abnahmematrix für Dichte, Themes sowie Linux und macOS. Diese Liste
 beschreibt Restarbeit und erteilt keine Produktfreigabe.

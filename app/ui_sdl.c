@@ -31,6 +31,15 @@ static void window_chrome(SDL_Window *window) {
     (void)window;
 #endif
 }
+static bool accessibility_window_enabled(SDL_Window *window) {
+ if(SDL_GetWindowFlags(window)&(SDL_WINDOW_HIDDEN|SDL_WINDOW_MINIMIZED))return false;
+#ifdef _WIN32
+ HWND hwnd=(HWND)SDL_GetPointerProperty(SDL_GetWindowProperties(window),SDL_PROP_WINDOW_WIN32_HWND_POINTER,NULL);
+ return hwnd && IsWindowEnabled(hwnd);
+#else
+ return true;
+#endif
+}
 struct nk_sdl {
     ps_ui_font_layout font_layout; /* First: shared layout lookup without SDL linkage. */
     SDL_Window *win;
@@ -50,7 +59,7 @@ struct nk_sdl {
 static unsigned accessibility_widget(void *user,const char *window,const char *label,
                                  int role,const float bounds[4],bool enabled,bool checked,const char *group,bool activated) {
     struct nk_sdl *sdl=user;if(!sdl->accessibility)return false;
-    enabled=enabled && !(SDL_GetWindowFlags(sdl->win)&(SDL_WINDOW_HIDDEN|SDL_WINDOW_MINIMIZED));
+    enabled=enabled && accessibility_window_enabled(sdl->win);
     SDL_LockMutex(sdl->accessibility_mutex);
     uint64_t pending=sdl->accessibility->pending_focus;
     bool pressed=group?ps_a11y_record_option(sdl->accessibility,window,group,label,bounds,enabled,checked,activated)
@@ -64,6 +73,7 @@ static unsigned accessibility_widget(void *user,const char *window,const char *l
 }
 static unsigned accessibility_range_widget(void *user,const char *window,const char *label,const float bounds[4],bool enabled,double values[4]) {
     struct nk_sdl *sdl=user;SDL_LockMutex(sdl->accessibility_mutex);
+    enabled=enabled && accessibility_window_enabled(sdl->win);
     ps_a11y_model *model=sdl->accessibility;uint64_t pending=model->pending_focus;size_t before=model->draft_count;
     bool changed=ps_a11y_record_range(model,window,label,bounds,enabled,values[1],values[2],values[3],&values[0]);
     bool recorded=model->draft_count>before;
@@ -147,7 +157,7 @@ nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flag
   float box[]={left,top,right-left,bottom-top};
   bool routed=sdl->font_layout.accessibility_route_window==ctx->current;
   bool enabled=!ctx->current->widgets_disabled && (routed?sdl->font_layout.accessibility_route_allowed:!(ctx->current->flags&NK_WINDOW_ROM)) &&
-   !(SDL_GetWindowFlags(sdl->win)&(SDL_WINDOW_HIDDEN|SDL_WINDOW_MINIMIZED));
+   accessibility_window_enabled(sdl->win);
   for(const struct nk_window *above=ctx->current->next;above && enabled;above=above->next)
    if(!(above->flags&(NK_WINDOW_HIDDEN|NK_WINDOW_MINIMIZED|NK_WINDOW_CLOSED)) &&
       above->bounds.x<right && above->bounds.x+above->bounds.w>left &&
@@ -266,7 +276,7 @@ bool nk_sdl_accessibility_document_link(struct nk_context *ctx,const char *name,
  float visible[4]={0};if(right>left && bottom>top){visible[0]=left;visible[1]=top;visible[2]=right-left;visible[3]=bottom-top;}
  bool routed=sdl->font_layout.accessibility_route_window==ctx->current;
  bool enabled=!ctx->current->widgets_disabled && (routed?sdl->font_layout.accessibility_route_allowed:!(ctx->current->flags&NK_WINDOW_ROM)) &&
-     !(SDL_GetWindowFlags(sdl->win)&(SDL_WINDOW_HIDDEN|SDL_WINDOW_MINIMIZED));
+     accessibility_window_enabled(sdl->win);
  for(const struct nk_window *above=ctx->current->next;above && enabled;above=above->next) {
   if(above->flags&(NK_WINDOW_HIDDEN|NK_WINDOW_MINIMIZED|NK_WINDOW_CLOSED))continue;
   struct nk_rect cover=above->bounds;
@@ -283,6 +293,10 @@ bool nk_sdl_accessibility_document_link(struct nk_context *ctx,const char *name,
  if(focused && visible[2]>0 && visible[3]>0)nk_stroke_rect(nk_window_get_canvas(ctx),
      nk_rect(left-3,top-2,right-left+6,bottom-top+4),3,1,ctx->style.button.text_normal);
  return pressed;
+}
+void nk_sdl_accessibility_document_link_invoked(struct nk_context *ctx,uint64_t version,size_t begin,size_t end) {
+ if(!ctx || !ctx->userdata.ptr)return;struct nk_sdl *sdl=ctx->userdata.ptr;
+ ps_a11y_native_document_link_invoked(sdl->accessibility_native,version,begin,end);
 }
 bool nk_sdl_accessibility_press(struct nk_context *ctx,const char *label) {
     if(!ctx || !ctx->userdata.ptr)return false;

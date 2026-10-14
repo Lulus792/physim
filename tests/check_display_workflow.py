@@ -77,7 +77,20 @@ def documentation_math(flow, directory):
     for name in ('docs-math-16.bmp','docs-math-32.bmp','docs-reading-16.bmp','docs-reading-32.bmp','docs-reading-reset.bmp'):
         require((directory/name).is_file() and (directory/name).stat().st_size>54, 'Missing mathematics image: '+name)
 
-def documentation_zoom_bitmaps(directory):
+def documentation_zoom_bitmaps(directory, stdout=None):
+    if stdout is not None:
+        captures=re.findall(r'DOCUMENTATION CAPTURE: (\S+) logical=(\d+)x(\d+) pixels=(\d+)x(\d+) font=(\d+) body=([0-9.]+)',stdout)
+        records={name:tuple(map(float,values)) for name,*values in captures}
+        names=('docs-200-percent-small.bmp','docs-200-percent-search.bmp','docs-zoom-reset.bmp','docs-200-percent-light.bmp','docs-200-percent-contrast.bmp','docs-200-percent-large.bmp')
+        for name in names:
+            require(name in records,'Missing rendered zoom geometry: '+name)
+            w,h,pw,ph,font,body=records[name]
+            large=name.endswith('large.bmp')
+            require((w,h)==((1080,780) if large else (760,540)) and font==(16 if name=='docs-zoom-reset.bmp' else 32) and body>=(300 if large else 120),'Wrong rendered zoom layout: '+name)
+            raw=(directory/name).read_bytes()
+            require(raw[:2]==b'BM' and len(raw)>=54,'Missing zoom bitmap: '+name)
+            actual_w,actual_h=struct.unpack_from('<ii',raw,18)
+            require((actual_w,abs(actual_h))==(pw,ph),'Zoom pixels differ from the actual drawable: '+name)
     # Check the rendered result after the observed theme transition. A palette
     # variable alone would accept captures taken after switching to another theme.
     for name, light in (("docs-200-percent-light.bmp", True),
@@ -1395,7 +1408,7 @@ def main():
         paths = dict(directory=str(directory), root=str(flow.root))
         flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)
         if args.case == "documentation_zoom":
-            documentation_zoom_bitmaps(directory)
+            documentation_zoom_bitmaps(directory,flow.steps[-1]['stdout'])
         elif args.case == "documentation_inline":
             documentation_inline_ink(directory, flow.steps[-1]["stdout"])
         if args.case == "sphere_collision_workflow":

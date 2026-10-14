@@ -551,23 +551,23 @@ static float documentation_table(app *a, const ps_doc_block *block, const char *
     }
     return height;
 }
-static void documentation_link(app *a, const char *target) {
+static bool documentation_link(app *a, const char *target) {
     if (!strncmp(target, "https://", 8) || !strncmp(target, "http://", 7)) {
-        SDL_SetClipboardText(target);
+        if(!SDL_SetClipboardText(target)){status(a,"Quellenadresse konnte nicht kopiert werden.");return false;}
         status(a,"Quellenadresse kopiert. Das Handbuch bleibt in Physim geöffnet.");
-        return;
+        return true;
     }
     char resolved[4096],fragment[4096];
     const char *hash=strchr(target,'#');
     size_t path_length=hash?(size_t)(hash-target):strlen(target);
     if(path_length>=sizeof resolved || (hash && strlen(hash+1)>=sizeof fragment)) {
-        status(a,"Dieses Linkziel ist zu lang.");return;
+        status(a,"Dieses Linkziel ist zu lang.");return false;
     }
     if(hash)snprintf(fragment,sizeof fragment,"%s",hash+1);
     const char *base = documentation_topics[a->doc_topic].path;
     const char *slash = strrchr(base, '/');
     int written=path_length?snprintf(resolved,sizeof resolved,"%.*s%.*s",slash?(int)(slash-base+1):0,base,(int)path_length,target):snprintf(resolved,sizeof resolved,"%s",base);
-    if(written<0 || (size_t)written>=sizeof resolved){status(a,"Dieses Linkziel ist zu lang.");return;}
+    if(written<0 || (size_t)written>=sizeof resolved){status(a,"Dieses Linkziel ist zu lang.");return false;}
     /* Resolve the few relative parent components without consulting the filesystem. */
     char *parent;
     while ((parent = strstr(resolved, "/../")) != NULL) {
@@ -594,7 +594,7 @@ static void documentation_link(app *a, const char *target) {
                 if(temporary)free(destination);
                 if(result!=PS_OK) {
                     snprintf(a->doc_error,sizeof a->doc_error,"Abschnitt konnte nicht geöffnet werden: %s",ps_result_string(result));
-                    status(a,a->doc_error);return;
+                    status(a,a->doc_error);return false;
                 }
             }
             bool same=a->documentation && a->doc_topic==i;
@@ -605,10 +605,23 @@ static void documentation_link(app *a, const char *target) {
                 a->doc_jump_block=(int)block;a->doc_move_match=false;
                 a->doc_scroll_adjustment=0;
             }
-            return;
+            return a->documentation && !a->doc_error[0];
         }
     }
-    status(a, "Dieses Linkziel ist nicht in der mitgelieferten Dokumentation enthalten.");
+    snprintf(a->doc_error,sizeof a->doc_error,"Dieses Linkziel ist nicht in der mitgelieferten Dokumentation enthalten.");
+    status(a,a->doc_error);
+    return false;
+}
+static bool documentation_activate_link(app *a,size_t index) {
+    ps_document *d=a->documentation;if(!d || index>=d->count || d->blocks[index].kind!=PS_DOC_LINK)return false;
+    const ps_doc_block *link=&d->blocks[index];uint64_t version=a->doc_reading_version;
+    size_t begin=link->reading_begin,end=begin==SIZE_MAX?SIZE_MAX:begin+link->reading_length;
+    bool internal=strncmp(d->text+link->target,"http",4)!=0;
+    char *target=SDL_strdup(d->text+link->target);if(!target){snprintf(a->doc_error,sizeof a->doc_error,"Link konnte nicht geöffnet werden: %s",SDL_GetError());return false;}
+    bool completed=documentation_link(a,target);SDL_free(target);
+    if(completed && internal && begin!=SIZE_MAX && end>begin)
+        nk_sdl_accessibility_document_link_invoked(a->doc_ui,version,begin,end);
+    return completed;
 }
 /* Stable semantic IDs are rebuilt from current content for each key event. */
 enum { DOC_C=1,DOC_PHYSIM,DOC_TOPICS,DOC_CONTENTS,DOC_FILTER,DOC_GROUP,DOC_BACK,DOC_HOME,DOC_WORKSPACE,DOC_SEARCH,DOC_PREVIOUS,DOC_NEXT,DOC_BODY,DOC_FORWARD,DOC_ZOOM_OUT,DOC_ZOOM_RESET,DOC_ZOOM_IN,
@@ -763,8 +776,7 @@ static bool documentation_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
     else if(focus>=DOC_LINK) {
         unsigned i=(unsigned)(focus-DOC_LINK);
         if(a->documentation && i<a->documentation->count && a->documentation->blocks[i].kind==PS_DOC_LINK) {
-            char target[4096];snprintf(target,sizeof target,"%s",a->documentation->text+a->documentation->blocks[i].target);
-            documentation_link(a,target);a->doc_focus=DOC_BODY;a->doc_focus_reveal=true;
+            documentation_activate_link(a,i);a->doc_focus=DOC_BODY;a->doc_focus_reveal=true;
         }
     } else if(focus>=DOC_COPY) {
         unsigned i=(unsigned)(focus-DOC_COPY);
@@ -1145,7 +1157,7 @@ static void documentation_view(app *a, float height) {
                     struct nk_rect link_bounds=nk_widget_bounds(ui);
                     if (nk_button_label(ui, label)) {
                         /* Loading another document frees d; stop traversal immediately. */
-                        documentation_link(a, d->text + b->target);
+                        documentation_activate_link(a,i);
                         break;
                     }
                     documentation_focus_draw(a,DOC_LINK+(int)i,link_bounds,true);
@@ -1188,9 +1200,7 @@ static void documentation_view(app *a, float height) {
         nk_group_scrolled_end(ui);
     }
     if(a->doc_inline_clicked>=0 && a->documentation==d) {
-        char *target=SDL_strdup(d->text+d->blocks[a->doc_inline_clicked].target);
-        if(target){documentation_link(a,target);SDL_free(target);}
-        else snprintf(a->doc_error,sizeof a->doc_error,"Link konnte nicht geöffnet werden: %s",SDL_GetError());
+        documentation_activate_link(a,(size_t)a->doc_inline_clicked);
     }
     if(section_scroll>=0 && a->documentation==section_document && a->doc_jump_block<0) {
         a->doc_scroll_y=(nk_uint)section_scroll;a->doc_scroll_adjustment=0;a->doc_scroll_pending=true;

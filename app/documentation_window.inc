@@ -150,8 +150,13 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     nk_style_pop_vec2(ui);
     nk_sdl_update_TextInput(ui);
     bool ok = nk_sdl_render(ui);
-    if (ok && capture_path)
-        ok = ps_graphics_capture(a->doc_graphics, capture_path);
+    if (ok && capture_path) {
+        int pixels_w=0,pixels_h=0;ok=SDL_GetWindowSizeInPixels(a->doc_window,&pixels_w,&pixels_h);
+        const char *name=capture_path,*slash=strrchr(capture_path,'/'),*backslash=strrchr(capture_path,'\\');
+        if(slash)name=slash+1;if(backslash && backslash+1>name)name=backslash+1;
+        if(ok)printf("DOCUMENTATION CAPTURE: %s logical=%dx%d pixels=%dx%d font=%u body=%.1f\n",name,w,h,pixels_w,pixels_h,documentation_font_size(a),a->doc_body_bounds.h);
+        if(ok)ok = ps_graphics_capture(a->doc_graphics, capture_path);
+    }
     if (ok)
         ok = ps_graphics_present(a->doc_graphics);
     return ps_graphics_make_current(a->graphics) && ok;

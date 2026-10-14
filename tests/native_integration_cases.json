@@ -9304,7 +9304,7 @@
             "--work", "{work}"
           ],
           "timeout": 90,
-          "files": ["app.stdout", "app.stderr", "links.stdout", "links.stderr", "invoke-link.stdout", "invoke-link.stderr", "results.json"]
+          "files": ["app.stdout", "app.stderr", "links.stdout", "links.stderr", "invoke-link-invalid.stdout", "invoke-link-invalid.stderr", "invoke-link.stdout", "invoke-link.stderr", "results.json"]
         }
       ]
     },

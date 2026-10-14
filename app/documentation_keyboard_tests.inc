@@ -323,14 +323,15 @@ static void documentation_history_test_frame(app *a,int *stage,int *code,const c
 #undef HISTORY_FORWARD
 }
 static void documentation_zoom_test_frame(app *a,int *stage,int *code,const char **capture) {
-    bool ok=true;
+    static unsigned layout_frames;bool ok=true;
     switch((*stage)++) {
     case 0:test_window_key_mod(a->window,SDLK_F1,0);break;
     case 1:
-        SDL_SetWindowSize(a->doc_window,760,540);
+        ok=SDL_SetWindowSize(a->doc_window,760,540) && SDL_SyncWindow(a->doc_window);layout_frames=0;
         for(int i=0;i<8;i++)test_window_key_mod(a->doc_window,SDLK_PLUS,PS_UI_COMMAND_MOD);
         break;
     case 2:
+        if(layout_frames++<2){--*stage;return;}
         ok=documentation_font_size(a)==32 && documentation_code_size(a)==32 &&
            a->doc_font_ui->height==32 && a->doc_body_bounds.h>=120 && a->preferences.ui_size==16;
         {const nk_rune symbols[]={0x2192,0x221a,0x222b,0x2212,0x2080,0x2264};
@@ -365,8 +366,9 @@ static void documentation_zoom_test_frame(app *a,int *stage,int *code,const char
         *capture="docs-200-percent-contrast.bmp";break;
     case 10:
         {ps_preferences p=a->preferences;p.theme=PS_THEME_DARK;preferences_apply(a,&p);}
-        SDL_SetWindowSize(a->doc_window,1080,780);break;
+        ok=SDL_SetWindowSize(a->doc_window,1080,780) && SDL_SyncWindow(a->doc_window);layout_frames=0;break;
     case 11:
+        if(layout_frames++<2){--*stage;return;}
         ok=documentation_font_size(a)==32 && a->doc_body_bounds.h>=300;
         *capture="docs-200-percent-large.bmp";test_window_key_mod(a->doc_window,SDLK_ESCAPE,0);break;
     case 12:ok=!a->doc_visible;test_window_key_mod(a->window,SDLK_F1,0);break;
@@ -378,7 +380,7 @@ static void documentation_zoom_test_frame(app *a,int *stage,int *code,const char
     if(!ok){fprintf(stderr,"Documentation zoom stage %d failed: size=%u body=%.1f\n",*stage-1,documentation_font_size(a),a->doc_body_bounds.h);*code=1;a->quitting=true;}
     if(a->quitting)printf("DOCUMENTATION ZOOM SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 }
-static bool documentation_inline_fixture(app *a,int topic) {
+static bool documentation_inline_fixture_variant(app *a,int topic,bool invalid_link) {
     const char *source=
         "# Lesen und Navigation\n\n"
         "Normaler Text mit **deutlicher Hervorhebung**, `ps_vec3` und einem [C-Lernweg](c-guide.md). "
@@ -391,7 +393,9 @@ static bool documentation_inline_fixture(app *a,int topic) {
         "```c\n// unverändert kopieren: θ\n  double x = length * sin(theta);\n```\n\n"
         "### Prüfung\n\nDie gespeicherten Werte bestätigen das Ergebnis.\n";
     ps_document *d=NULL;
-    if(ps_document_parse(source,strlen(source),false,&d)!=PS_OK)return false;
+    char *input=SDL_strdup(source);if(!input)return false;
+    if(invalid_link){char *target=strstr(input,"(c-guide.md)");if(target)target[1]='x';else{SDL_free(input);return false;}}
+    ps_result parsed=ps_document_parse(input,strlen(input),false,&d);SDL_free(input);if(parsed!=PS_OK)return false;
     free(a->documentation);a->documentation=d;a->doc_topic=topic;
     ++a->doc_reading_version;
     a->doc_query[0]=a->doc_last_query[0]=a->doc_error[0]=0;
@@ -400,6 +404,7 @@ static bool documentation_inline_fixture(app *a,int topic) {
     a->doc_contents=true;a->doc_keyboard=false;a->doc_focus=DOC_BODY;
     return true;
 }
+static bool documentation_inline_fixture(app *a,int topic){return documentation_inline_fixture_variant(a,topic,false);}
 static void documentation_inline_test_frame(app *a,int *stage,int *code,const char **capture) {
     static int guide,cguide,link,external,table_link,copy;static struct nk_rect clicked;
     bool ok=true;
@@ -576,23 +581,29 @@ static void documentation_math_test_frame(app *a,int *stage,int *code,const char
 }
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
     if(!strcmp(mode,"docs-keyboard-links-remote")) {
-        static int experiment_length,analysis_length;static double simulation_time;bool ok=true;
+        static int experiment_length,analysis_length,source_topic;static double simulation_time;static uint64_t source_version;bool ok=true;
         char path[4096];FILE *done;switch(*stage) {
         case 0:
             experiment_length=a->experiment.string.len;analysis_length=a->analysis.string.len;simulation_time=a->simulation_time;
             test_window_key_mod(a->window,SDLK_F1,0);++*stage;break;
         case 1:
-            ok=documentation_link_inventory(a) && documentation_inline_fixture(a,a->doc_topic);SDL_SetWindowSize(a->doc_window,760,540);++*stage;break;
+            ok=documentation_link_inventory(a) && documentation_inline_fixture_variant(a,a->doc_topic,true);
+            source_topic=a->doc_topic;source_version=a->doc_reading_version;SDL_SetWindowSize(a->doc_window,760,540);++*stage;break;
         case 2:puts("LINKS READY FOCUS");fflush(stdout);++*stage;break;
         case 3:
             join(path,sizeof path,a->project,"link-focus-done");done=fopen(path,"rb");if(!done)return;fclose(done);
             ok=nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"C");*capture="docs-native-link-focus.bmp";++*stage;break;
-        case 4:puts("LINKS READY INVOKE");fflush(stdout);++*stage;break;
+        case 4:puts("LINKS READY INVALID");fflush(stdout);++*stage;break;
         case 5:
+            join(path,sizeof path,a->project,"link-invalid-done");done=fopen(path,"rb");if(!done)return;fclose(done);
+            ok=a->doc_topic==source_topic && a->doc_reading_version==source_version && strstr(a->doc_error,"nicht in der mitgelieferten")!=NULL;
+            *capture="docs-native-link-failed.bmp";++*stage;break;
+        case 6:puts("LINKS READY INVOKE");fflush(stdout);++*stage;break;
+        case 7:
             join(path,sizeof path,a->project,"link-invoke-done");done=fopen(path,"rb");if(!done)return;fclose(done);
             ok=!strcmp(documentation_topics[a->doc_topic].path,"docs/c-guide.md") && !a->doc_error[0];
             *capture="docs-native-link-open.bmp";test_window_key_mod(a->doc_window,SDLK_ESCAPE,0);++*stage;break;
-        case 6:
+        case 8:
             ok=!a->doc_visible && a->experiment.string.len==experiment_length && a->analysis.string.len==analysis_length && a->simulation_time==simulation_time;
             a->quitting=true;break;
         }

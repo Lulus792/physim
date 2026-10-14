@@ -56,6 +56,7 @@ bool nk_sdl_accessibility_document_scroll(struct nk_context *ctx,uint64_t versio
 bool nk_sdl_accessibility_document_preserve_position(struct nk_context *ctx,uint64_t version);
 bool nk_sdl_accessibility_document_link(struct nk_context *ctx,const char *name,uint64_t version,
                                         size_t begin,size_t end,struct nk_rect bounds);
+void nk_sdl_accessibility_document_link_invoked(struct nk_context *ctx,uint64_t version,size_t begin,size_t end);
 bool nk_sdl_accessibility_document_visible(struct nk_context *ctx,uint64_t version,size_t byte);
 nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flags,char *text,int capacity,nk_plugin_filter filter);
 enum {PS_UI_EDIT_NATIVE_FOCUS=1u<<24};
