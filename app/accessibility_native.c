@@ -57,7 +57,7 @@ static BOOL element_valid(id object,SEL selector) {(void)selector;ps_a11y_node n
 static BOOL element_enabled(id object,SEL selector) {(void)selector;ps_a11y_node node;return node_copy(object,&node)&&node.enabled;}
 static id element_role(id object,SEL selector) {
  (void)selector;ps_a11y_node node;if(!node_copy(object,&node))return nil;
- return string(node.role==PS_A11Y_BUTTON?"AXButton":node.role==PS_A11Y_CHECKBOX?"AXCheckBox":node.role==PS_A11Y_RADIO?"AXRadioButton":node.role==PS_A11Y_RADIO_GROUP?"AXRadioGroup":node.role==PS_A11Y_SLIDER?"AXSlider":"AXStaticText");
+ return string(node.role==PS_A11Y_BUTTON?"AXButton":node.role==PS_A11Y_LINK?"AXLink":node.role==PS_A11Y_CHECKBOX?"AXCheckBox":node.role==PS_A11Y_RADIO?"AXRadioButton":node.role==PS_A11Y_RADIO_GROUP?"AXRadioGroup":node.role==PS_A11Y_SLIDER?"AXSlider":"AXStaticText");
 }
 static id element_label(id object,SEL selector) {
  (void)selector;ps_a11y_node node;return node_copy(object,&node)?string(node.label):nil;

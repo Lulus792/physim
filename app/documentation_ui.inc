@@ -1022,7 +1022,7 @@ static void documentation_view(app *a, float height) {
     }
     ps_document *d = a->documentation;
     if(d && nk_sdl_accessibility_document_scroll(ui,a->doc_reading_version,&reading_byte,&reading_top)) {
-        for(size_t i=0;i<d->count;i++)if(d->blocks[i].reading_begin!=SIZE_MAX && d->blocks[i].reading_begin<=reading_byte)
+        for(size_t i=0;i<d->count;i++)if(d->blocks[i].inline_parent==SIZE_MAX && d->blocks[i].reading_begin!=SIZE_MAX && d->blocks[i].reading_begin<=reading_byte)
             a->doc_jump_block=(int)i;
     }
     int matches[PS_DOC_MAX_BLOCKS], match_count = 0;
@@ -1099,7 +1099,7 @@ static void documentation_view(app *a, float height) {
                     if(link_bounds.w>0) {
                         bool external=!strncmp(d->text+b->target,"http",4);char label[1024];
                         snprintf(label,sizeof label,"%s%s",external?"Quellenadresse kopieren: ":"Öffnen: ",text);
-                        if(ps_ui_accessibility_button(ui,link_bounds,label))a->doc_inline_clicked=(int)i;
+                        if(external && ps_ui_accessibility_button(ui,link_bounds,label))a->doc_inline_clicked=(int)i;
                         documentation_focus_draw(a,DOC_LINK+(int)i,link_bounds,true);
                         if((int)i==target)section_scroll=fmaxf(0,link_bounds.y+(float)submitted_scroll-body_origin);
                     }
@@ -1175,6 +1175,14 @@ static void documentation_view(app *a, float height) {
                         }
                     }
                 }
+            }
+            /* Native links retain their document identity outside the viewport.
+             * Pointer actions still use the renderer's individual fragments. */
+            if(a->documentation==d)for(size_t i=0;i<d->count;i++) {
+                ps_doc_block *b=&d->blocks[i];
+                if(b->kind!=PS_DOC_LINK || !strncmp(d->text+b->target,"http",4) || b->reading_begin==SIZE_MAX || !b->reading_length)continue;
+                if(nk_sdl_accessibility_document_link(ui,d->text+b->text,a->doc_reading_version,
+                    b->reading_begin,b->reading_begin+b->reading_length,nk_rect(b->hit[0],b->hit[1],b->hit[2],b->hit[3])))a->doc_inline_clicked=(int)i;
             }
         }
         nk_group_scrolled_end(ui);

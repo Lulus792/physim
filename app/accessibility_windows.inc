@@ -46,7 +46,7 @@ static HRESULT uia_query(uia_element *e,REFIID iid,void **out) {
  else if(!e->id && IsEqualIID(iid,&IID_IRawElementProviderFragmentRoot))*out=&e->root;
  else if((!e->id || e->role==PS_A11Y_EDIT) && IsEqualIID(iid,&IID_ITextProvider))*out=&e->text;
  else if(e->id && e->role==PS_A11Y_EDIT && IsEqualIID(iid,&IID_ITextProvider2))*out=&e->text2;
- else if(e->id && e->role==PS_A11Y_BUTTON && IsEqualIID(iid,&IID_IInvokeProvider))*out=&e->invoke;
+ else if(e->id && (e->role==PS_A11Y_BUTTON || e->role==PS_A11Y_LINK) && IsEqualIID(iid,&IID_IInvokeProvider))*out=&e->invoke;
  else if(e->id && e->role==PS_A11Y_CHECKBOX && IsEqualIID(iid,&IID_IToggleProvider))*out=&e->toggle;
  else if(e->id && e->role==PS_A11Y_RADIO && IsEqualIID(iid,&IID_ISelectionItemProvider))*out=&e->item;
  else if(e->id && e->role==PS_A11Y_RADIO_GROUP && IsEqualIID(iid,&IID_ISelectionProvider))*out=&e->selection;
@@ -128,16 +128,20 @@ static HRESULT STDMETHODCALLTYPE uia_property(IRawElementProviderSimple *p,PROPE
  SDL_UnlockMutex(b->mutex);if(!live)return UIA_E_ELEMENTNOTAVAILABLE;
  /* SDK property IDs are extern const values, not C integer constants. */
  if(property==UIA_NamePropertyId)return uia_string(e->id?node.label:b->title,out);
+ if(property==UIA_AutomationIdPropertyId) {
+  char id[96];snprintf(id,sizeof id,"physim-%llu-%llu",(unsigned long long)(uintptr_t)hwnd,(unsigned long long)e->id);
+  return uia_string(id,out);
+ }
  if(property==UIA_FrameworkIdPropertyId)return uia_string("Physim",out);
  if(property==UIA_ControlTypePropertyId) {
   out->vt=VT_I4;out->lVal=!e->id?(reading?UIA_DocumentControlTypeId:UIA_PaneControlTypeId):node.role==PS_A11Y_BUTTON?UIA_ButtonControlTypeId:
-   node.role==PS_A11Y_CHECKBOX?UIA_CheckBoxControlTypeId:node.role==PS_A11Y_RADIO?UIA_RadioButtonControlTypeId:
+   node.role==PS_A11Y_LINK?UIA_HyperlinkControlTypeId:node.role==PS_A11Y_CHECKBOX?UIA_CheckBoxControlTypeId:node.role==PS_A11Y_RADIO?UIA_RadioButtonControlTypeId:
    node.role==PS_A11Y_RADIO_GROUP?UIA_GroupControlTypeId:node.role==PS_A11Y_SLIDER?UIA_SliderControlTypeId:node.role==PS_A11Y_EDIT?UIA_EditControlTypeId:UIA_TextControlTypeId;
  } else if(property==UIA_IsEnabledPropertyId){out->vt=VT_BOOL;out->boolVal=!e->id || node.enabled?VARIANT_TRUE:VARIANT_FALSE;}
  else if(property==UIA_IsKeyboardFocusablePropertyId){out->vt=VT_BOOL;out->boolVal=e->id && node.focusable?VARIANT_TRUE:VARIANT_FALSE;}
  else if(property==UIA_HasKeyboardFocusPropertyId){out->vt=VT_BOOL;out->boolVal=e->id && node.focused?VARIANT_TRUE:VARIANT_FALSE;}
  else if(property==UIA_IsControlElementPropertyId || property==UIA_IsContentElementPropertyId){out->vt=VT_BOOL;out->boolVal=VARIANT_TRUE;}
- else if(property==UIA_IsOffscreenPropertyId){out->vt=VT_BOOL;out->boolVal=IsWindowVisible(hwnd) && !IsIconic(hwnd)?VARIANT_FALSE:VARIANT_TRUE;}
+ else if(property==UIA_IsOffscreenPropertyId){out->vt=VT_BOOL;out->boolVal=!node.offscreen && IsWindowVisible(hwnd) && !IsIconic(hwnd)?VARIANT_FALSE:VARIANT_TRUE;}
  return S_OK;
 }
 static HRESULT STDMETHODCALLTYPE uia_host(IRawElementProviderSimple *p,IRawElementProviderSimple **out) {
@@ -370,7 +374,7 @@ static uia_element *uia_named(ps_a11y_native *b,const char *group,const char *la
 }
 bool ps_a11y_native_press_label(ps_a11y_native *b,const char *label) {
  uia_element *e=uia_named(b,NULL,label);if(!e)return false;
- HRESULT result=e->role==PS_A11Y_BUTTON?IInvokeProvider_Invoke(&e->invoke):e->role==PS_A11Y_CHECKBOX?IToggleProvider_Toggle(&e->toggle):UIA_E_INVALIDOPERATION;
+ HRESULT result=e->role==PS_A11Y_BUTTON || e->role==PS_A11Y_LINK?IInvokeProvider_Invoke(&e->invoke):e->role==PS_A11Y_CHECKBOX?IToggleProvider_Toggle(&e->toggle):UIA_E_INVALIDOPERATION;
  uia_release(e);return SUCCEEDED(result);
 }
 bool ps_a11y_native_press_choice(ps_a11y_native *b,const char *group,const char *label) {

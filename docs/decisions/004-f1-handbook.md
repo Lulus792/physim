@@ -17,7 +17,7 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 | Dokumentationszugang | 183 registrierte Seiten und 214 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
 | Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
-| Barrierefreiheit | Windows UIA liest vollständigen Text und bedient Suchfelder; Bereiche und Fokus werden unabhängig geprüft | Native Text-/Feldbedienung auf macOS/Linux, Link-/Tabellensemantik und echte Screenreader-Aufgaben |
+| Barrierefreiheit | Windows UIA liest vollständigen Text, bedient Suchfelder und veröffentlicht interne Links mit Textbereichen, Fokus und Aktivierung; unabhängige Clientprüfungen bestehen | Native Text-/Feld-/Linkbereiche auf macOS/Linux, Tabellensemantik und echte Screenreader-Aufgaben |
 
 Die Hilfe ist in den geprüften Windows-Abläufen gut nutzbar. Eine vollständige
 Bewertung mit Höchstpunktzahl ist wegen dieser offenen Abnahmefälle noch nicht
@@ -380,10 +380,68 @@ Mathematik-/Zoomfälle** (`run-1_js51y5`) unter
 `build/native/F1-uia-sanitized/test-results`. Die Prüfung des Testläufers mit
 erwarteten Gegenfehlern besteht in
 `build/native/F1-review/reading-anchor-runner-proof`.
-Linux und macOS sind für diese neue Ankerkorrektur noch nicht ausgeführt.
+Der Stand `e676b92` besteht inzwischen unter Ubuntu 24.04/X11/Xvfb mit
+ASan/UBSan: Clang **15/15 native und 22/22 GUI-Fälle** (`run-sygycws1`,
+`run-h3lzuif4`), GCC ebenfalls **15/15 und 22/22** (`run-m5mr0erm`,
+`run-yhfoibhp`).
+[Clang-Lauf](https://github.com/Lulus792/physim/actions/runs/38487336229/job/115604045409),
+[GCC-Lauf](https://github.com/Lulus792/physim/actions/runs/38487336229/job/115604045648).
+Die neue Lesepositionsprobe gehört zu beiden GUI-Läufen. macOS bleibt offen.
+
+Interne F1-Links besitzen jetzt eine eigene native Rolle und einen versionierten
+Bereich im vollständigen Lesetext. Ihr Name entspricht dem Linktext. Die
+Publikation enthält auch Links außerhalb des sichtbaren Ausschnitts; ihre
+Identität bleibt beim Scrollen erhalten. Native Fokusanforderungen machen die
+zugehörige Textstelle sichtbar. Ein anderes Dokument erhält neue Linkidentitäten.
+Verdeckte oder deaktivierte Ziele nehmen keine native Fokus-/Aktivierungsaktion
+an. Die Aktion „Quellenadresse kopieren“ bleibt als Button veröffentlicht.
+
+Windows `TextPattern` liefert die eingebetteten Links über `GetChildren` in
+Lesereihenfolge, auch bei teilweise überlappenden Bereichen. `RangeFromChild`
+liefert ihre exakten UTF-16-Grenzen; `GetEnclosingElement` erkennt den Link auch
+innerhalb seines Textbereichs. Ein Linkbereich enthält keine weiteren Kinder.
+Fremde Controls, nicht zugeordnete Elemente und veraltete Bereiche werden
+abgewiesen. Diese Zuordnung folgt den Microsoft-Verträgen für
+[Hyperlink](https://learn.microsoft.com/en-us/windows/win32/winauto/uiauto-supporthyperlinkcontroltype),
+[RangeFromChild](https://learn.microsoft.com/en-us/windows/win32/api/uiautomationcore/nf-uiautomationcore-itextprovider-rangefromchild)
+und [GetChildren](https://learn.microsoft.com/en-us/windows/win32/api/uiautomationcore/nf-uiautomationcore-itextrangeprovider-getchildren).
+
+Die Inventur parst alle **183 registrierten Originalseiten** und veröffentlicht
+ihre **1.058 internen Links**, höchstens **119 pro Seite**, in einem separaten
+Modell. Linkname und Linkbereich entsprechen exakt dem Text der Leserfassung; das Modell
+behält mindestens 64 Plätze für andere Bedienelemente. Die Inventur läuft auch
+im plattformübergreifenden Mathematikfall. AXLink und AT-SPI-Linkrolle sind
+zugeordnet; native Textbereichszuordnung auf diesen Plattformen bleibt offen.
+
+Der unabhängige Windows-UIA-Prozess prüft im echten F1-Fenster zwei Links in
+Absatz und Tabelle, ihre Rolle, Reihenfolge, exakten Textbereiche und
+umschließenden Elemente. Er bestätigt zunächst den verdeckten Tabellenlink,
+fokussiert ihn, verlangt sichtbare Glyphen und öffnet darüber den C-Lernweg.
+Danach ist der alte Textbereich ungültig. Die App bestätigt den Zielartikel,
+Rückkehr zum Arbeitsbereich sowie unveränderte Editorinhalte und Simulationszeit.
+Die Bildprüfung korrigierte einen zunächst zu engen Fokusrahmen um „C“; das
+abschließende Bild zeigt das Zeichen lesbar im eigenen Rahmen.
+
+Modell und Parser bestehen 2/2 in `run-horbig68`; die fünf Provider-/externen
+Link-/nativen Lese-/Mathematik-/Inline-Fälle bestehen in `run-guf9qwrb`.
+Vier betroffene Modellfälle bestehen nach der abschließenden Identitätsprüfung
+in `run-3mgmcufa`. MSVC ASan besteht **2/2 Modell-/Parserfälle**
+(`run-6fjr53xr`), **3/3 Provider-/Render-/echte Linkfälle** (`run-e54z9n9s`),
+die zusätzliche reale Renderprüfung verdeckter offscreen Links
+(`run-x44glzgj`) und die abschließende vollständige Inventur mit Mathematik/Zoom
+(`run-xe4xlwwk`). Diese ASan-Läufe liegen unter
+`build/native/F1-uia-sanitized/test-results`. Testkatalog und erwartete
+Fehlerfälle bestehen in `build/native/F1-review/link-runner-proof`.
+Die abschließende Provider-/Clientprüfung einschließlich verschiedener nichtleerer
+Automation-IDs besteht unter MSVC ASan zusätzlich 2/2 (`run-5zghefgs`).
+Die strengere Inventur einschließlich vollständiger Linknamen besteht unter
+MSVC ASan in `run-uvy0j5b0`.
+Die erweiterte Linux-Prüfung enthält die neuen Modelle sowie Inline-Links,
+Verlauf und Zoom; eine Workflowdefinition bestätigt deren Ausführung noch nicht.
 
 Offen sind vollständige assistive Feldbedienung und ihre native
-macOS-/Linux-Anbindung, eingebettete Link-/Tabellensemantik, vollständiges natives
+macOS-/Linux-Anbindung, native Linktextbereiche auf macOS/Linux, native
+Änderungs-/Aktivierungsereignisse der Links, Tabellensemantik, vollständiges natives
 Lesen auf macOS/Linux, praktische Screenreader-Abnahme
 und die Abnahmematrix für Dichte, Themes sowie Linux und macOS. Diese Liste
 beschreibt Restarbeit und erteilt keine Produktfreigabe.

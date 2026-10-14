@@ -48,6 +48,24 @@ int main(void) {
  CHECK(ps_a11y_document_begin(m,3,"Lesen",text,view));
  for(size_t i=0;i<PS_A11Y_TEXT_BOXES;i++)CHECK(ps_a11y_document_box(m,0,1,box));
  CHECK(!ps_a11y_document_box(m,0,1,box) && m->document_draft->dropped==1);CHECK(ps_a11y_publish(m));
+ float hidden[]={0,0,0,0};ps_a11y_begin(m);
+ CHECK(ps_a11y_document_begin(m,4,"Links",text,view));
+ CHECK(!ps_a11y_document_link(m,"main","θ",3,6,8,hidden,true) && !m->draft_count);
+ CHECK(!ps_a11y_document_link(m,"main","θ",4,7,8,hidden,true) && !m->draft_count);
+ CHECK(!ps_a11y_document_link(m,"main","θ",4,6,7,hidden,true) && !m->draft_count);
+ CHECK(!ps_a11y_document_link(m,"main","θ",4,8,6,hidden,true) && !m->draft_count);
+ CHECK(!ps_a11y_document_link(m,"main","θ",4,6,8,hidden,true) && m->draft_count==1);
+ uint64_t link=m->draft[0].id;CHECK(m->draft[0].role==PS_A11Y_LINK && m->draft[0].offscreen && m->draft[0].focusable);
+ CHECK(ps_a11y_publish(m));CHECK(ps_a11y_press(m,link));
+ ps_a11y_begin(m);CHECK(ps_a11y_document_begin(m,4,"Links",text,view));
+ CHECK(ps_a11y_document_link(m,"main","θ",4,6,8,box,true));CHECK(m->draft[0].id==link && !m->draft[0].offscreen);
+ CHECK(!ps_a11y_document_link(m,"main","θ",4,6,8,box,true));CHECK(ps_a11y_publish(m));
+ CHECK(ps_a11y_press(m,link));
+ ps_a11y_begin(m);CHECK(ps_a11y_document_begin(m,5,"Other links",text,view));
+ CHECK(!ps_a11y_document_link(m,"main","θ",5,6,8,hidden,true));
+ CHECK(m->draft[0].id!=link);ps_a11y_publish(m);CHECK(!m->pending_press && !ps_a11y_press(m,link));
+ link=m->nodes[0].id;ps_a11y_begin(m);CHECK(ps_a11y_document_begin(m,5,"Other links",text,view));
+ CHECK(!ps_a11y_document_link(m,"main","θ",5,6,8,hidden,false));ps_a11y_publish(m);CHECK(!ps_a11y_press(m,link));
  ps_a11y_destroy(m);CHECK(!m->document && !m->document_draft);ps_a11y_destroy(m);free(m);
  puts("Accessible document: complete text, immutable publication, geometry, Unicode boundaries, stale scroll and cleanup passed");return 0;
 }

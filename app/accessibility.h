@@ -15,7 +15,7 @@ typedef struct {
  float viewport[4];ps_a11y_text_box boxes[PS_A11Y_TEXT_BOXES];size_t count;unsigned dropped;
  bool active;
 } ps_a11y_document;
-typedef enum {PS_A11Y_TEXT,PS_A11Y_BUTTON,PS_A11Y_CHECKBOX,PS_A11Y_RADIO,PS_A11Y_RADIO_GROUP,PS_A11Y_SLIDER,PS_A11Y_EDIT} ps_a11y_role;
+typedef enum {PS_A11Y_TEXT,PS_A11Y_BUTTON,PS_A11Y_CHECKBOX,PS_A11Y_RADIO,PS_A11Y_RADIO_GROUP,PS_A11Y_SLIDER,PS_A11Y_EDIT,PS_A11Y_LINK} ps_a11y_role;
 typedef struct {
  uint64_t id,key,parent;unsigned occurrence;ps_a11y_role role;
  char window[PS_A11Y_WINDOW_BYTES],label[PS_A11Y_LABEL_BYTES];
@@ -25,6 +25,7 @@ typedef struct {
  uint64_t text_version;size_t text_start,text_end,text_caret,box_offset,box_count;
  float caret_bounds[4];bool text_active;
  float text_scroll;
+ uint64_t document_version;size_t document_begin,document_end;bool offscreen;
 } ps_a11y_node;
 /* UI thread owns the draft; callers serialize all operations. Published nodes
  * are immutable until publish. IDs persist across geometry changes, expire when
@@ -46,7 +47,7 @@ typedef struct {
  bool document_scroll_top;
 } ps_a11y_model;
 static inline bool ps_a11y_actionable(ps_a11y_role role) {
- return role==PS_A11Y_BUTTON || role==PS_A11Y_CHECKBOX || role==PS_A11Y_RADIO;
+ return role==PS_A11Y_BUTTON || role==PS_A11Y_CHECKBOX || role==PS_A11Y_RADIO || role==PS_A11Y_LINK;
 }
 void ps_a11y_init(ps_a11y_model *model);
 void ps_a11y_destroy(ps_a11y_model *model);
@@ -61,6 +62,10 @@ bool ps_a11y_document_scroll_align(ps_a11y_model *model,uint64_t version,size_t 
 /* Queue the earliest visible text byte before layout reflow. Existing requests win. */
 bool ps_a11y_document_preserve_position(ps_a11y_model *model,uint64_t version);
 bool ps_a11y_document_take_scroll(ps_a11y_model *model,uint64_t version,size_t *byte);
+/* All document links, including offscreen ones, bind to immutable UTF-8 ranges.
+ * Zero width and height mean offscreen. Returns one queued native activation. */
+bool ps_a11y_document_link(ps_a11y_model *model,const char *window,const char *name,
+                          uint64_t version,size_t begin,size_t end,const float bounds[4],bool enabled);
 void ps_a11y_begin(ps_a11y_model *model);
 /* Visible, clipped bounds in SDL logical window coordinates; positive sizes.
  * Copies UTF-8, clipping long labels at scalar boundaries. Invalid names/bounds

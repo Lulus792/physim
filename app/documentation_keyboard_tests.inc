@@ -1,3 +1,4 @@
+#include "accessibility.h"
 /* SDL 3.2.30 writes CF_UNICODETEXT with CRLF under Windows. Only that
  * representation change is equivalent; indentation and every other byte matter. */
 static bool documentation_test_same_text(const char *actual,const char *expected) {
@@ -469,6 +470,36 @@ static void documentation_inline_test_frame(app *a,int *stage,int *code,const ch
     if(a->quitting)printf("DOCUMENTATION INLINE SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 #undef INLINE_KEY
 }
+static bool documentation_link_inventory(app *a) {
+    ps_a11y_model *model=malloc(sizeof *model);if(!model)return false;ps_a11y_init(model);
+    size_t total=0,maximum=0;bool ok=true;float viewport[]={0,0,760,540},hidden[]={0,0,0,0};
+    for(int i=0;ok && i<DOCUMENTATION_TOPIC_COUNT;i++) {
+        char path[4096];join(path,sizeof path,a->root,documentation_topics[i].path);size_t length=0;
+        char *source=load_utf8_text_limit(path,&length,documentation_topics[i].code?PS_DOC_MAX_CODE_BYTES:PS_DOC_MAX_BYTES);
+        ps_document *document=NULL;ok=source && ps_document_parse(source,length,documentation_topics[i].code,&document)==PS_OK;free(source);
+        if(!ok){fprintf(stderr,"Link inventory could not parse %s\n",path);break;}
+        ps_a11y_begin(model);ok=ps_a11y_document_begin(model,(uint64_t)i+1,documentation_topics[i].title,document->reading,viewport);
+        size_t count=0;
+        for(size_t j=0;ok && j<document->count;j++) {
+            const ps_doc_block *b=&document->blocks[j];
+            if(b->kind!=PS_DOC_LINK || !strncmp(document->text+b->target,"http",4) || !b->length)continue;
+            ok=b->reading_begin!=SIZE_MAX && b->reading_length==b->length &&
+                !memcmp(document->reading+b->reading_begin,document->text+b->text,b->length);
+            size_t before=model->draft_count;
+            if(ok)ps_a11y_document_link(model,"document",document->text+b->text,(uint64_t)i+1,
+                b->reading_begin,b->reading_begin+b->reading_length,hidden,true);
+            ok=ok && model->draft_count==before+1 && !strcmp(model->draft[before].label,document->text+b->text);count++;
+        }
+        /* Reserve the toolbar/sidebar's bounded controls in the shared model. */
+        ok=ok && count+64<=PS_A11Y_MAX_NODES && !model->dropped;
+        total+=count;if(count>maximum)maximum=count;
+        if(!ok)fprintf(stderr,"Link inventory failed for %s (%zu links)\n",path,count);
+        ps_a11y_publish(model);free(document);
+    }
+    ps_a11y_destroy(model);free(model);
+    if(ok)printf("DOCUMENTATION LINK INVENTORY: %d pages, %zu links, %zu maximum per page\n",DOCUMENTATION_TOPIC_COUNT,total,maximum);
+    return ok;
+}
 static bool documentation_math_fonts(app *a) {
  char path[4096];join(path,sizeof path,a->project,"required-glyphs.txt");FILE *input=fopen(path,"rb");if(!input)return false;
  unsigned value,count=0;bool ok=true;
@@ -498,7 +529,7 @@ static void documentation_math_test_frame(app *a,int *stage,int *code,const char
   int topic=-1;for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(!strcmp(documentation_topics[i].path,"docs/pendulum-tutorial.md"))topic=i;
   ok=topic>=0;open_documentation(a,topic);SDL_SetWindowSize(a->doc_window,760,540);break;
  }
- case 2:ok=documentation_math_fonts(a);test_window_key_mod(a->doc_window,SDLK_F,PS_UI_COMMAND_MOD);break;
+ case 2:ok=documentation_link_inventory(a) && documentation_math_fonts(a);test_window_key_mod(a->doc_window,SDLK_F,PS_UI_COMMAND_MOD);break;
  case 3: {
   if(!a->doc_search_active){--*stage;return;}
   SDL_Event input={0};input.type=SDL_EVENT_TEXT_INPUT;input.text.windowID=SDL_GetWindowID(a->doc_window);input.text.text="eᵣ";SDL_PushEvent(&input);break;
@@ -544,6 +575,30 @@ static void documentation_math_test_frame(app *a,int *stage,int *code,const char
  if(a->quitting)printf("DOCUMENTATION MATH SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 }
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strcmp(mode,"docs-keyboard-links-remote")) {
+        static int experiment_length,analysis_length;static double simulation_time;bool ok=true;
+        char path[4096];FILE *done;switch(*stage) {
+        case 0:
+            experiment_length=a->experiment.string.len;analysis_length=a->analysis.string.len;simulation_time=a->simulation_time;
+            test_window_key_mod(a->window,SDLK_F1,0);++*stage;break;
+        case 1:
+            ok=documentation_link_inventory(a) && documentation_inline_fixture(a,a->doc_topic);SDL_SetWindowSize(a->doc_window,760,540);++*stage;break;
+        case 2:puts("LINKS READY FOCUS");fflush(stdout);++*stage;break;
+        case 3:
+            join(path,sizeof path,a->project,"link-focus-done");done=fopen(path,"rb");if(!done)return;fclose(done);
+            ok=nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"C");*capture="docs-native-link-focus.bmp";++*stage;break;
+        case 4:puts("LINKS READY INVOKE");fflush(stdout);++*stage;break;
+        case 5:
+            join(path,sizeof path,a->project,"link-invoke-done");done=fopen(path,"rb");if(!done)return;fclose(done);
+            ok=!strcmp(documentation_topics[a->doc_topic].path,"docs/c-guide.md") && !a->doc_error[0];
+            *capture="docs-native-link-open.bmp";test_window_key_mod(a->doc_window,SDLK_ESCAPE,0);++*stage;break;
+        case 6:
+            ok=!a->doc_visible && a->experiment.string.len==experiment_length && a->analysis.string.len==analysis_length && a->simulation_time==simulation_time;
+            a->quitting=true;break;
+        }
+        if(!ok){fprintf(stderr,"Native links stage %d failed\n",*stage-1);*code=1;a->quitting=true;}
+        if(a->quitting)printf("DOCUMENTATION LINKS SELF-TEST: %s\n",*code?"FAILED":"PASSED");return;
+    }
     if(!strcmp(mode,"docs-keyboard-edit-scroll-remote")) {
         static unsigned settle;bool ok=true;char path[4096];FILE *ready;
         switch(*stage) {

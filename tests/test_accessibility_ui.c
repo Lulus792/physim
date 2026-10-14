@@ -1,7 +1,7 @@
 #include "ui.h"
 #include <stdio.h>
 #define CHECK(x) do {if(!(x)){fprintf(stderr,"a11y UI %d: %s (%s)\n",__LINE__,#x,SDL_GetError());return 1;}}while(0)
-static bool checked,selected,overlay;
+static bool checked,selected,overlay,links;
 static unsigned option;
 static float scalar=.5f;
 static int draw(struct nk_context *ui,bool button,bool disabled) {
@@ -18,6 +18,10 @@ static int draw(struct nk_context *ui,bool button,bool disabled) {
    if(ps_ui_option_label(ui,"Theme","Dark",option==0))option=0;
    if(ps_ui_option_label(ui,"Theme","Light",option==1))option=1;
    if(disabled)nk_widget_disable_end(ui);
+  }
+  if(links) {
+   CHECK(nk_sdl_accessibility_document(ui,1,"Document","θ",nk_rect(0,0,400,220)));
+   if(nk_sdl_accessibility_document_link(ui,"Verborgen θ",1,0,2,nk_rect(0,0,0,0)))pressed|=16;
   }
  }
  nk_end(ui);
@@ -59,7 +63,9 @@ int main(void) {
  CHECK(draw(ui,true,false)==0);CHECK(nk_sdl_accessibility_press(ui,"Öffnen …"));
  CHECK(draw(ui,false,false)==0);CHECK(!nk_sdl_accessibility_press(ui,"Öffnen …"));
  CHECK(draw(ui,true,false)==0);CHECK(!nk_sdl_accessibility_press(ui,"missing"));
+ links=true;CHECK(draw(ui,true,false)==0);CHECK(nk_sdl_accessibility_press(ui,"Verborgen θ"));CHECK(draw(ui,true,false)==16);CHECK(draw(ui,true,false)==0);
  overlay=true;CHECK(draw(ui,true,false)==0);CHECK(!nk_sdl_accessibility_focus(ui,NULL,"Vektoren"));CHECK(!nk_sdl_accessibility_press(ui,"Öffnen …"));
+ CHECK(!nk_sdl_accessibility_focus(ui,NULL,"Verborgen θ") && !nk_sdl_accessibility_press(ui,"Verborgen θ"));
  nk_sdl_shutdown(ui);ps_graphics_destroy(graphics);SDL_DestroyWindow(window);SDL_Quit();
  puts("Native UI accessibility: actual rendered Nuklear labels/buttons, native press delivery once, disabled/removed controls and teardown passed");return 0;
 }

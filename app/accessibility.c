@@ -84,16 +84,20 @@ bool ps_a11y_press(ps_a11y_model *m,uint64_t id) {
  m->pending_press=id;m->pending_focus=id;return true;
 }
 static bool record(ps_a11y_model *m,const char *window,const char *label,
-                     ps_a11y_role role,const float bounds[4],bool enabled,bool checked,uint64_t parent) {
+                     ps_a11y_role role,const float bounds[4],bool enabled,bool checked,uint64_t parent,
+                     uint64_t version,size_t begin,size_t end) {
  if(!m->building || !window || !label || !bounds || !*window || !*label ||
     (role!=PS_A11Y_TEXT && role!=PS_A11Y_RADIO_GROUP && role!=PS_A11Y_SLIDER && role!=PS_A11Y_EDIT && !ps_a11y_actionable(role)))return false;
  for(size_t i=0;i<4;i++)if(!isfinite(bounds[i]))return false;
- if(bounds[2]<=0 || bounds[3]<=0 || !ps_text_valid(window,PS_A11Y_WINDOW_BYTES,false))return false;
+ bool offscreen=role==PS_A11Y_LINK && bounds[2]==0 && bounds[3]==0;
+ if((!offscreen && (bounds[2]<=0 || bounds[3]<=0)) || !ps_text_valid(window,PS_A11Y_WINDOW_BYTES,false))return false;
  /* The UI's longest supported text payload is bounded; do not scan unbounded
   * foreign memory or publish malformed UTF-8 to platform accessibility APIs. */
  if(!ps_text_valid(label,262145,true))return false;
  if(m->draft_count==PS_A11Y_MAX_NODES || !m->next_id){m->dropped++;return false;}
  ps_a11y_node node={0};node.key=text_hash(text_hash(UINT64_C(14695981039346656037),window),label);
+ node.document_version=version;node.document_begin=begin;node.document_end=end;node.offscreen=offscreen;
+ if(version){node.key=(node.key^version)*UINT64_C(1099511628211);node.key=(node.key^begin)*UINT64_C(1099511628211);node.key=(node.key^end)*UINT64_C(1099511628211);}
  node.role=role;node.parent=parent;node.enabled=enabled;node.focusable=enabled && (ps_a11y_actionable(role) || role==PS_A11Y_SLIDER || role==PS_A11Y_EDIT);node.checked=(role==PS_A11Y_CHECKBOX || role==PS_A11Y_RADIO) && checked;memcpy(node.bounds,bounds,sizeof node.bounds);
  strcpy(node.window,window);
  size_t bytes=strlen(label);if(bytes>=sizeof node.label) {
@@ -103,12 +107,14 @@ static bool record(ps_a11y_model *m,const char *window,const char *label,
  memcpy(node.label,label,bytes);node.label[bytes]=0;
  for(size_t i=0;i<m->draft_count;i++) {
   const ps_a11y_node *other=&m->draft[i];
-  if(other->key==node.key && other->role==role && other->parent==parent && !strcmp(other->window,window) &&
+  if(other->key==node.key && other->role==role && other->parent==parent &&
+     other->document_version==version && other->document_begin==begin && other->document_end==end && !strcmp(other->window,window) &&
      !strcmp(other->label,node.label))node.occurrence++;
  }
  for(size_t i=0;i<m->count;i++) {
   const ps_a11y_node *old=&m->nodes[i];
   if(old->key==node.key && old->role==role && old->parent==parent && old->occurrence==node.occurrence &&
+     old->document_version==version && old->document_begin==begin && old->document_end==end &&
      !strcmp(old->window,window) && !strcmp(old->label,node.label)) {node.id=old->id;break;}
  }
  if(!node.id)node.id=m->next_id++;
@@ -129,7 +135,15 @@ bool ps_a11y_record_state(ps_a11y_model *m,const char *window,const char *label,
                      ps_a11y_role role,const float bounds[4],bool enabled,bool checked) {
  /* Radio nodes need a named parent; only record_option creates these. */
  if(role==PS_A11Y_RADIO || role==PS_A11Y_RADIO_GROUP || role==PS_A11Y_SLIDER || role==PS_A11Y_EDIT)return false;
- return record(m,window,label,role,bounds,enabled,checked,0);
+ if(role==PS_A11Y_LINK)return false; /* Must bind to a document range. */
+ return record(m,window,label,role,bounds,enabled,checked,0,0,0,0);
+}
+bool ps_a11y_document_link(ps_a11y_model *m,const char *window,const char *name,
+                          uint64_t version,size_t begin,size_t end,const float bounds[4],bool enabled) {
+ const ps_a11y_document *d=m && m->building?m->document_draft:NULL;
+ if(!d || !d->active || d->version!=version || begin>=end ||
+    !text_boundary(d->text,d->length,begin) || !text_boundary(d->text,d->length,end))return false;
+ return record(m,window,name,PS_A11Y_LINK,bounds,enabled,false,0,version,begin,end);
 }
 bool ps_a11y_record_option(ps_a11y_model *m,const char *window,const char *group,
                      const char *label,const float bounds[4],bool enabled,bool selected,bool activated) {
@@ -142,7 +156,7 @@ bool ps_a11y_record_option(ps_a11y_model *m,const char *window,const char *group
      !strcmp(m->draft[i].window,window) && !strcmp(m->draft[i].label,group)){group_index=i;break;}
  if(m->draft_count+(group_index==m->draft_count?2:1)>PS_A11Y_MAX_NODES ||
     !m->next_id || (group_index==m->draft_count && m->next_id==UINT64_MAX)){m->dropped++;return false;}
- if(group_index==m->draft_count)record(m,window,group,PS_A11Y_RADIO_GROUP,bounds,enabled,false,0);
+ if(group_index==m->draft_count)record(m,window,group,PS_A11Y_RADIO_GROUP,bounds,enabled,false,0,0,0,0);
  else {
   ps_a11y_node *g=&m->draft[group_index];
   double left=fmin(g->bounds[0],bounds[0]),top=fmin(g->bounds[1],bounds[1]);
@@ -153,7 +167,7 @@ bool ps_a11y_record_option(ps_a11y_model *m,const char *window,const char *group
  }
  uint64_t parent=m->draft[group_index].id;
  size_t before=m->draft_count;
- bool pressed=record(m,window,label,PS_A11Y_RADIO,bounds,enabled,selected,parent);
+ bool pressed=record(m,window,label,PS_A11Y_RADIO,bounds,enabled,selected,parent,0,0,0);
  if(m->draft_count==before)return false;
  ps_a11y_node *node=&m->draft[m->draft_count-1];
  if(pressed || (activated && enabled && selected)){m->selection_parent=parent;m->selection_id=node->id;}
@@ -168,7 +182,7 @@ bool ps_a11y_record_range(ps_a11y_model *m,const char *window,const char *label,
  if(!value || !isfinite(*value) || !isfinite(minimum) || !isfinite(maximum) ||
     !isfinite(increment) || increment<=0 || maximum<minimum || *value<minimum || *value>maximum)return false;
  size_t before=m->draft_count;
- record(m,window,label,PS_A11Y_SLIDER,bounds,enabled,false,0);
+ record(m,window,label,PS_A11Y_SLIDER,bounds,enabled,false,0,0,0,0);
  if(m->draft_count==before)return false;
  ps_a11y_node *node=&m->draft[before];bool changed=false;
  if(node->id==m->pending_value_id) {
@@ -196,7 +210,7 @@ bool ps_a11y_adjust(ps_a11y_model *m,uint64_t id,int direction) {
 bool ps_a11y_record_edit(ps_a11y_model *m,const char *window,const char *name,
                        const float bounds[4],bool enabled,char *text,size_t capacity) {
  if(!m || !text || capacity<2 || capacity>PS_A11Y_LABEL_BYTES || !ps_text_valid(text,capacity,false))return false;
- size_t before=m->draft_count;record(m,window,name,PS_A11Y_EDIT,bounds,enabled,false,0);
+ size_t before=m->draft_count;record(m,window,name,PS_A11Y_EDIT,bounds,enabled,false,0,0,0,0);
  if(m->draft_count==before)return false;ps_a11y_node *node=&m->draft[before];bool changed=false;
  if(node->id==m->pending_text_id) {
   if(enabled && ps_text_valid(m->pending_text,capacity,false)) {
@@ -329,7 +343,9 @@ bool ps_a11y_publish(ps_a11y_model *m) {
  changed=a->id!=b->id || a->enabled!=b->enabled || a->checked!=b->checked || a->focused!=b->focused ||
      a->value!=b->value || a->minimum!=b->minimum || a->maximum!=b->maximum || a->increment!=b->increment ||
      a->text_capacity!=b->text_capacity || a->text_version!=b->text_version || a->text_start!=b->text_start || a->text_end!=b->text_end || a->text_caret!=b->text_caret || a->text_active!=b->text_active ||
-     a->box_count!=b->box_count || a->text_scroll!=b->text_scroll || strcmp(a->text_value,b->text_value) || memcmp(a->bounds,b->bounds,sizeof a->bounds)!=0;
+     a->box_count!=b->box_count || a->text_scroll!=b->text_scroll || a->offscreen!=b->offscreen ||
+     a->document_version!=b->document_version || a->document_begin!=b->document_begin || a->document_end!=b->document_end ||
+     strcmp(a->text_value,b->text_value) || memcmp(a->bounds,b->bounds,sizeof a->bounds)!=0;
  }
  memcpy(m->nodes,m->draft,m->draft_count*sizeof *m->nodes);m->count=m->draft_count;
  if(m->edit_box_count!=m->edit_box_draft_count || memcmp(m->edit_boxes,m->edit_boxes_draft,m->edit_box_draft_count*sizeof *m->edit_boxes))changed=true;

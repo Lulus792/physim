@@ -202,15 +202,45 @@ static HRESULT STDMETHODCALLTYPE uia_tr_select(ITextRangeProvider *p) {
     !ps_a11y_edit_select(b->model,r->owner->id,r->version,b->reading_bytes[r->start],b->reading_bytes[r->end])))result=UIA_E_INVALIDOPERATION;
  SDL_UnlockMutex(b->mutex);return result;
 }
+static const ps_a11y_node *uia_enclosing_link_locked(uia_text_range *r) {
+ if(r->owner->id)return NULL;ps_a11y_native *b=r->owner->bridge;
+ size_t begin=b->reading_bytes[r->start],end=b->reading_bytes[r->end];const ps_a11y_node *best=NULL;
+ for(size_t i=0;i<b->model->count;i++) {
+  const ps_a11y_node *node=&b->model->nodes[i];
+  if(node->role!=PS_A11Y_LINK || node->document_version!=r->version || node->document_begin>begin || node->document_end<end ||
+     (begin==end && begin==node->document_end))continue;
+  if(!best || node->document_end-node->document_begin<best->document_end-best->document_begin)best=node;
+ }
+ return best;
+}
 static HRESULT STDMETHODCALLTYPE uia_tr_enclosing(ITextRangeProvider *p,IRawElementProviderSimple **out) {
  if(!out)return E_POINTER;*out=NULL;uia_text_range *r=uia_range_owner(p);ps_a11y_native *b=r->owner->bridge;
- SDL_LockMutex(b->mutex);HRESULT result=uia_text_range_live_locked(r);if(SUCCEEDED(result)){uia_addref(r->owner);*out=&r->owner->simple;}
+ SDL_LockMutex(b->mutex);HRESULT result=uia_text_range_live_locked(r);
+ if(SUCCEEDED(result)) {
+  const ps_a11y_node *link=uia_enclosing_link_locked(r);
+  uia_element *e=link?uia_for_locked(b,link->id):r->owner;if(!link)uia_addref(e);
+  if(e)*out=&e->simple;else result=E_OUTOFMEMORY;
+ }
  SDL_UnlockMutex(b->mutex);return result;
 }
 static HRESULT STDMETHODCALLTYPE uia_tr_children(ITextRangeProvider *p,SAFEARRAY **out) {
  if(!out)return E_POINTER;*out=NULL;uia_text_range *r=uia_range_owner(p);ps_a11y_native *b=r->owner->bridge;
- SDL_LockMutex(b->mutex);HRESULT result=uia_text_range_live_locked(r);SDL_UnlockMutex(b->mutex);if(FAILED(result))return result;
- *out=SafeArrayCreateVector(VT_UNKNOWN,0,0);return *out?S_OK:E_OUTOFMEMORY;
+ SDL_LockMutex(b->mutex);HRESULT result=uia_text_range_live_locked(r);
+ const ps_a11y_node *links[PS_A11Y_MAX_NODES];size_t count=0;
+ if(SUCCEEDED(result) && !r->owner->id && !uia_enclosing_link_locked(r)) {
+  size_t begin=b->reading_bytes[r->start],end=b->reading_bytes[r->end];
+  for(size_t i=0;i<b->model->count;i++) {
+   const ps_a11y_node *node=&b->model->nodes[i];
+   if(node->role!=PS_A11Y_LINK || node->document_version!=r->version || node->document_begin>=end || node->document_end<=begin)continue;
+   size_t at=count++;while(at && links[at-1]->document_begin>node->document_begin){links[at]=links[at-1];--at;}links[at]=node;
+  }
+ }
+ if(SUCCEEDED(result)) {*out=SafeArrayCreateVector(VT_UNKNOWN,0,(ULONG)count);if(!*out)result=E_OUTOFMEMORY;}
+ for(LONG i=0;SUCCEEDED(result) && i<(LONG)count;i++) {
+  uia_element *e=uia_for_locked(b,links[i]->id);if(!e){result=E_OUTOFMEMORY;break;}
+  result=SafeArrayPutElement(*out,&i,&e->simple);uia_release(e);
+ }
+ SDL_UnlockMutex(b->mutex);if(FAILED(result) && *out){SafeArrayDestroy(*out);*out=NULL;}return result;
 }
 static HRESULT STDMETHODCALLTYPE uia_tr_scroll(ITextRangeProvider *p,BOOL top) {
  uia_text_range *r=uia_range_owner(p);ps_a11y_native *b=r->owner->bridge;SDL_LockMutex(b->mutex);HRESULT result=uia_text_range_live_locked(r);
@@ -299,7 +329,19 @@ static HRESULT STDMETHODCALLTYPE uia_text_visible(ITextProvider *p,SAFEARRAY **o
  SDL_UnlockMutex(b->mutex);if(FAILED(result) && *out){SafeArrayDestroy(*out);*out=NULL;}return result;
 }
 static HRESULT STDMETHODCALLTYPE uia_text_child(ITextProvider *p,IRawElementProviderSimple *child,ITextRangeProvider **out) {
- (void)p;(void)child;if(!out)return E_POINTER;*out=NULL;return E_INVALIDARG;
+ if(!out)return E_POINTER;*out=NULL;
+ uia_element *e=UIA_OWNER(ITextProvider,text,p);
+ if(e->id || !child || child->lpVtbl!=&uia_simple_vtable)return E_INVALIDARG;
+ uia_element *target=UIA_OWNER(IRawElementProviderSimple,simple,child);
+ if(target->bridge!=e->bridge || !target->id)return E_INVALIDARG;
+ ps_a11y_native *b=e->bridge;SDL_LockMutex(b->mutex);HRESULT result=uia_reading_locked(e);
+ const ps_a11y_node *node=b->model?ps_a11y_find(b->model,target->id):NULL;
+ if(SUCCEEDED(result) && !node)result=UIA_E_ELEMENTNOTAVAILABLE;
+ if(SUCCEEDED(result) && (node->role!=PS_A11Y_LINK || node->document_version!=b->reading_version))result=E_INVALIDARG;
+ uia_text_range *r=SUCCEEDED(result)?uia_text_range_new(e,b->reading_version,
+     uia_utf16_locked(b,node->document_begin),uia_utf16_locked(b,node->document_end)):NULL;
+ if(SUCCEEDED(result)){if(r)*out=&r->range_iface;else result=E_OUTOFMEMORY;}
+ SDL_UnlockMutex(b->mutex);return result;
 }
 static HRESULT STDMETHODCALLTYPE uia_text_point(ITextProvider *p,struct UiaPoint point,ITextRangeProvider **out) {
  if(!out)return E_POINTER;*out=NULL;if(!isfinite(point.x) || !isfinite(point.y))return E_INVALIDARG;

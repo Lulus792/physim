@@ -148,10 +148,11 @@ static bool find_object(ax_server *s, const char *path, ps_a11y_native **window,
     return false;
 }
 static unsigned role(ps_a11y_native *w, const ps_a11y_node *node) {
-    return !w ? 75 : !node->id ? 23 : node->role == PS_A11Y_BUTTON ? 43 : node->role == PS_A11Y_CHECKBOX ? 7 : node->role == PS_A11Y_RADIO ? 44 : node->role == PS_A11Y_RADIO_GROUP ? 99 : node->role == PS_A11Y_SLIDER ? 51 : 29;
+    return !w ? 75 : !node->id ? 23 : node->role == PS_A11Y_LINK ? 88 : node->role == PS_A11Y_BUTTON ? 43 : node->role == PS_A11Y_CHECKBOX ? 7 : node->role == PS_A11Y_RADIO ? 44 : node->role == PS_A11Y_RADIO_GROUP ? 99 : node->role == PS_A11Y_SLIDER ? 51 : 29;
 }
 static const char *role_name(unsigned r, bool localized) {
     switch (r) {
+    case 88:return localized ? "Link" : "link";
     case 51:return localized ? "Regler" : "slider";
     case 75:
         return localized ? "Anwendung" : "application";
@@ -189,7 +190,7 @@ static void states(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
     if(node->focused)first |= 1u << 12;
     if(node->role==PS_A11Y_SLIDER && node->enabled)first |= 1u << 7;
     if (!w || w->visible)
-        first |= (1u << 25) | (1u << 30);
+        first |= (node->offscreen?0:(1u << 25)) | (1u << 30);
     if((node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) && node->checked)first |= 1u << 4;
     DBusMessageIter a;
     open_container(r, iter, DBUS_TYPE_ARRAY, "u", &a);

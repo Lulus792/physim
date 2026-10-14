@@ -73,6 +73,7 @@ def documentation_math(flow, directory):
     (flow.work/'math-inventory.json').write_text(json.dumps(dict(pages=paths,characters=[dict(codepoint=f'U+{ord(c):04X}',char=c,name=unicodedata.name(c,'')) for c in sorted(characters)]),ensure_ascii=False,indent=2),encoding='utf-8')
     flow.run('--workspace-state-test',directory,'docs-keyboard-math',timeout=45,marker='DOCUMENTATION MATH SELF-TEST: PASSED')
     require(f'DOCUMENTATION MATH GLYPHS: {len(characters)} characters in 38 font variants' in flow.steps[-1]['stdout'], 'Incomplete real font coverage')
+    require(f'DOCUMENTATION LINK INVENTORY: {len(paths)} pages, ' in flow.steps[-1]['stdout'], 'Incomplete parsed link-range inventory')
     for name in ('docs-math-16.bmp','docs-math-32.bmp','docs-reading-16.bmp','docs-reading-32.bmp','docs-reading-reset.bmp'):
         require((directory/name).is_file() and (directory/name).stat().st_size>54, 'Missing mathematics image: '+name)
 

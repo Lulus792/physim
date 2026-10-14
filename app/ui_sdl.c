@@ -256,6 +256,34 @@ bool nk_sdl_accessibility_document_preserve_position(struct nk_context *ctx,uint
  bool ok=ps_a11y_document_preserve_position(sdl->accessibility,version);
  SDL_UnlockMutex(sdl->accessibility_mutex);return ok;
 }
+bool nk_sdl_accessibility_document_link(struct nk_context *ctx,const char *name,uint64_t version,
+                                        size_t begin,size_t end,struct nk_rect bounds) {
+ if(!ctx || !ctx->userdata.ptr || !ctx->current || !ctx->current->layout)return false;
+ struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
+ struct nk_rect clip=ctx->current->layout->clip;
+ float left=fmaxf(bounds.x,clip.x),top=fmaxf(bounds.y,clip.y);
+ float right=fminf(bounds.x+bounds.w,clip.x+clip.w),bottom=fminf(bounds.y+bounds.h,clip.y+clip.h);
+ float visible[4]={0};if(right>left && bottom>top){visible[0]=left;visible[1]=top;visible[2]=right-left;visible[3]=bottom-top;}
+ bool routed=sdl->font_layout.accessibility_route_window==ctx->current;
+ bool enabled=!ctx->current->widgets_disabled && (routed?sdl->font_layout.accessibility_route_allowed:!(ctx->current->flags&NK_WINDOW_ROM)) &&
+     !(SDL_GetWindowFlags(sdl->win)&(SDL_WINDOW_HIDDEN|SDL_WINDOW_MINIMIZED));
+ for(const struct nk_window *above=ctx->current->next;above && enabled;above=above->next) {
+  if(above->flags&(NK_WINDOW_HIDDEN|NK_WINDOW_MINIMIZED|NK_WINDOW_CLOSED))continue;
+  struct nk_rect cover=above->bounds;
+  if(cover.x<clip.x+clip.w && cover.x+cover.w>clip.x && cover.y<clip.y+clip.h && cover.y+cover.h>clip.y)enabled=false;
+ }
+ SDL_LockMutex(sdl->accessibility_mutex);ps_a11y_model *m=sdl->accessibility;
+ uint64_t pending=m->pending_focus;size_t before=m->draft_count;
+ bool pressed=ps_a11y_document_link(m,ctx->current->name_string,name,version,begin,end,visible,enabled);
+ bool granted=m->draft_count>before && pending && !m->pending_focus && m->focused_id==pending && m->draft[before].id==pending;
+ bool focused=m->draft_count>before && m->draft[before].id==m->focused_id && m->keyboard_focus;
+ if(granted)ps_a11y_document_scroll_align(m,version,begin,true);
+ SDL_UnlockMutex(sdl->accessibility_mutex);
+ if(granted){SDL_RaiseWindow(sdl->win);nk_window_set_focus(ctx,ctx->current->name_string);nk_edit_unfocus(ctx);}
+ if(focused && visible[2]>0 && visible[3]>0)nk_stroke_rect(nk_window_get_canvas(ctx),
+     nk_rect(left-3,top-2,right-left+6,bottom-top+4),3,1,ctx->style.button.text_normal);
+ return pressed;
+}
 bool nk_sdl_accessibility_press(struct nk_context *ctx,const char *label) {
     if(!ctx || !ctx->userdata.ptr)return false;
     struct nk_sdl *sdl=ctx->userdata.ptr;
@@ -362,11 +390,14 @@ bool nk_sdl_render(struct nk_context *ctx) {
             ps_a11y_node *node=&sdl->accessibility->draft[i];if(!node->focusable)continue;
             struct nk_window *window=nk_window_find(ctx,node->window);
             if(!window){node->enabled=false;node->focusable=false;continue;}
+            const float *target=node->bounds;
+            const ps_a11y_document *document=sdl->accessibility->document_draft;
+            if(node->offscreen && document && document->active && document->version==node->document_version)target=document->viewport;
             for(struct nk_window *above=window->next;above;above=above->next) {
                 if(above->flags&(NK_WINDOW_HIDDEN|NK_WINDOW_MINIMIZED|NK_WINDOW_CLOSED))continue;
                 struct nk_rect cover=above->bounds;
-                if(cover.x<node->bounds[0]+node->bounds[2] && cover.x+cover.w>node->bounds[0] &&
-                   cover.y<node->bounds[1]+node->bounds[3] && cover.y+cover.h>node->bounds[1]) {
+                if(cover.x<target[0]+target[2] && cover.x+cover.w>target[0] &&
+                   cover.y<target[1]+target[3] && cover.y+cover.h>target[1]) {
                     node->enabled=false;node->focusable=false;break;
                 }
             }

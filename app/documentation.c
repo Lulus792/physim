@@ -301,6 +301,18 @@ ps_result ps_document_parse(const char *source, size_t size, bool code, ps_docum
         d->reading[d->reading_length++]='\n';d->reading[d->reading_length++]='\n';
     }
     d->reading[d->reading_length]=0;
+    /* Embedded actions share their parent text; never append duplicate labels. */
+    for(size_t i=0;i<d->count;i++) {
+        ps_doc_block *link=&d->blocks[i];if(link->kind!=PS_DOC_LINK || link->inline_parent==SIZE_MAX)continue;
+        const ps_doc_block *parent=&d->blocks[link->inline_parent];size_t first=SIZE_MAX,last=0;
+        for(size_t j=0;j<parent->span_count;j++) {
+            const ps_doc_span *span=&d->spans[parent->first_span+j];if(span->link!=i)continue;
+            if(span->text<first)first=span->text;if(span->text+span->length>last)last=span->text+span->length;
+        }
+        if(first!=SIZE_MAX && parent->reading_begin!=SIZE_MAX) {
+            link->reading_begin=parent->reading_begin+first-parent->text;link->reading_length=last-first;
+        }
+    }
     free(pending);
     *out = d;
     return PS_OK;

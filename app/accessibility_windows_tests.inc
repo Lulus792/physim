@@ -99,13 +99,60 @@ bool ps_a11y_native_test(SDL_Window *window) {
  UIA_CHECK(ps_a11y_document_begin(m,document_version,"Dokument",reading,bounds));
  ps_a11y_record_edit(m,"main","Suche",bounds,true,field,sizeof field);
  UIA_CHECK(ps_a11y_document_box(m,6,8,bounds));
+ float hidden_link[]={0,0,0,0};
+ ps_a11y_document_link(m,"main","Code",document_version,9,13,hidden_link,true);
+ uint64_t code_link_id=m->draft[m->draft_count-1].id;
+ ps_a11y_document_link(m,"main","θ",document_version,6,8,bounds,true);
+ uint64_t theta_link_id=m->draft[m->draft_count-1].id;
  ps_a11y_publish(m);ps_a11y_native_publish(b,true);
+ uia_element *code_link=uia_for_locked(b,code_link_id),*theta_link=uia_for_locked(b,theta_link_id);
+ UIA_CHECK(code_link && theta_link);
+ if(code_link && theta_link) {
+  VARIANT first_id,second_id;VariantInit(&first_id);VariantInit(&second_id);
+  UIA_CHECK(SUCCEEDED(IRawElementProviderSimple_GetPropertyValue(&code_link->simple,UIA_AutomationIdPropertyId,&first_id)) && first_id.vt==VT_BSTR && SysStringLen(first_id.bstrVal));
+  UIA_CHECK(SUCCEEDED(IRawElementProviderSimple_GetPropertyValue(&theta_link->simple,UIA_AutomationIdPropertyId,&second_id)) && second_id.vt==VT_BSTR && SysStringLen(second_id.bstrVal));
+  UIA_CHECK(first_id.vt==VT_BSTR && second_id.vt==VT_BSTR && wcscmp(first_id.bstrVal,second_id.bstrVal));
+  VariantClear(&first_id);VariantClear(&second_id);
+ }
  ITextRangeProvider *whole=NULL,*clone=NULL,*found=NULL;BSTR read=NULL;
  UIA_CHECK(SUCCEEDED(ITextProvider_get_DocumentRange(&b->root->text,&whole)) && whole);
  if(whole)UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetText(whole,-1,&read)) && read && !wcscmp(read,L"Intro θ\nCode\n  x = 1; 🌍\nEnd"));
  if(field_range){field_value=NULL;UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetText(field_range,-1,&field_value)) && !wcscmp(field_value,L"Größe 🌍"));SysFreeString(field_value);}
  if(whole){BSTR again=NULL;UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetText(whole,-1,&again)) && !wcscmp(again,L"Intro θ\nCode\n  x = 1; 🌍\nEnd"));SysFreeString(again);}
  SysFreeString(read);read=NULL;
+ SAFEARRAY *embedded=NULL;ITextRangeProvider *link_range=NULL;
+ UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetChildren(whole,&embedded)) && embedded);
+ if(embedded) {
+  LONG high=-1;SafeArrayGetUBound(embedded,1,&high);UIA_CHECK(high==1);
+  for(LONG i=0;i<=high;i++) {
+   IRawElementProviderSimple *child=NULL;UIA_CHECK(SUCCEEDED(SafeArrayGetElement(embedded,&i,&child)) && child);
+   if(child){VARIANT role;VariantInit(&role);UIA_CHECK(SUCCEEDED(IRawElementProviderSimple_GetPropertyValue(child,UIA_ControlTypePropertyId,&role)) && role.vt==VT_I4 && role.lVal==UIA_HyperlinkControlTypeId);VariantClear(&role);
+    UIA_CHECK(SUCCEEDED(ITextProvider_RangeFromChild(&b->root->text,child,&link_range)) && link_range);
+    if(link_range){UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetText(link_range,-1,&read)) && !wcscmp(read,i?L"Code":L"θ"));SysFreeString(read);read=NULL;
+     IRawElementProviderSimple *enclosing=NULL;UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetEnclosingElement(link_range,&enclosing)) && enclosing==child);if(enclosing)IRawElementProviderSimple_Release(enclosing);
+     SAFEARRAY *nested=NULL;UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetChildren(link_range,&nested)) && nested);if(nested){LONG last=-1;SafeArrayGetUBound(nested,1,&last);UIA_CHECK(last==-1);SafeArrayDestroy(nested);}
+     ITextRangeProvider_Release(link_range);link_range=NULL;}
+    IRawElementProviderSimple_Release(child);
+   }
+  }
+  SafeArrayDestroy(embedded);
+ }
+ if(code_link){VARIANT off;VariantInit(&off);UIA_CHECK(SUCCEEDED(IRawElementProviderSimple_GetPropertyValue(&code_link->simple,UIA_IsOffscreenPropertyId,&off)) && off.boolVal==VARIANT_TRUE);VariantClear(&off);}
+ if(edit)UIA_CHECK(ITextProvider_RangeFromChild(&b->root->text,&edit->simple,&link_range)==E_INVALIDARG && !link_range);
+ if(edit && theta_link)UIA_CHECK(ITextProvider_RangeFromChild(&edit->text,&theta_link->simple,&link_range)==E_INVALIDARG && !link_range);
+ UIA_CHECK(ITextProvider_RangeFromChild(&b->root->text,NULL,&link_range)==E_INVALIDARG && !link_range);
+ UIA_CHECK(ITextProvider_RangeFromChild(&b->root->text,&b->root->simple,&link_range)==E_INVALIDARG && !link_range);
+ if(code_link && whole) {
+  ITextRangeProvider *prefix=NULL;int moved=0;
+  UIA_CHECK(SUCCEEDED(ITextProvider_RangeFromChild(&b->root->text,&code_link->simple,&link_range)) && link_range);
+  UIA_CHECK(SUCCEEDED(ITextRangeProvider_Clone(whole,&prefix)) && prefix);
+  if(prefix && link_range){UIA_CHECK(SUCCEEDED(ITextRangeProvider_MoveEndpointByRange(prefix,TextPatternRangeEndpoint_End,link_range,TextPatternRangeEndpoint_Start)));
+   UIA_CHECK(SUCCEEDED(ITextRangeProvider_MoveEndpointByUnit(prefix,TextPatternRangeEndpoint_End,TextUnit_Character,1,&moved)) && moved==1);
+   embedded=NULL;UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetChildren(prefix,&embedded)) && embedded);
+   if(embedded){LONG last=-1;SafeArrayGetUBound(embedded,1,&last);UIA_CHECK(last==1);SafeArrayDestroy(embedded);}
+  }
+  if(prefix)ITextRangeProvider_Release(prefix);if(link_range){ITextRangeProvider_Release(link_range);link_range=NULL;}
+ }
  if(whole)UIA_CHECK(SUCCEEDED(ITextRangeProvider_Clone(whole,&clone)) && clone);
  BOOL equal=FALSE;if(clone)UIA_CHECK(SUCCEEDED(ITextRangeProvider_Compare(whole,clone,&equal)) && equal);
  if(clone){UIA_CHECK(SUCCEEDED(ITextRangeProvider_ExpandToEnclosingUnit(clone,TextUnit_Format)));
@@ -129,6 +176,8 @@ bool ps_a11y_native_test(SDL_Window *window) {
   UIA_CHECK(SUCCEEDED(ITextRangeProvider_GetText(found,-1,&read)) && read && !SysStringLen(read));SysFreeString(read);read=NULL;ITextRangeProvider_Release(found);found=NULL;}
  SAFEARRAY *visible=NULL;UIA_CHECK(SUCCEEDED(ITextProvider_GetVisibleRanges(&b->root->text,&visible)) && visible);if(visible)SafeArrayDestroy(visible);
  ps_a11y_begin(m);UIA_CHECK(ps_a11y_document_begin(m,43,"Anders","New content",bounds));ps_a11y_publish(m);ps_a11y_native_publish(b,true);
+ if(code_link){UIA_CHECK(IInvokeProvider_Invoke(&code_link->invoke)==UIA_E_ELEMENTNOTAVAILABLE);uia_release(code_link);}
+ if(theta_link){UIA_CHECK(ITextProvider_RangeFromChild(&b->root->text,&theta_link->simple,&link_range)==UIA_E_ELEMENTNOTAVAILABLE && !link_range);uia_release(theta_link);}
  if(whole)UIA_CHECK(ITextRangeProvider_GetText(whole,-1,&read)==UIA_E_ELEMENTNOTAVAILABLE && !read);
  if(field_range){field_value=NULL;UIA_CHECK(ITextRangeProvider_GetText(field_range,-1,&field_value)==UIA_E_ELEMENTNOTAVAILABLE && !field_value);ITextRangeProvider_Release(field_range);}
  if(field_match)ITextRangeProvider_Release(field_match);

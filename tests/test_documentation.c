@@ -62,7 +62,10 @@ int main(int argc, char **argv) {
     CHECK(d->blocks[4].inline_parent==3 && d->blocks[5].inline_parent==3);
     CHECK(d->spans[d->blocks[3].first_span].link==4);
     CHECK(!strcmp(d->reading,"API\n\nA clear paragraph continued with code.\n\nif (x < 4) {\n    x++;\n}\n\n\nUnits and Source.\n\n"));
-    CHECK(d->blocks[4].reading_begin==SIZE_MAX && d->blocks[2].reading_length==d->blocks[2].length);
+    CHECK(d->blocks[4].reading_begin==d->blocks[3].reading_begin && d->blocks[4].reading_length==5);
+    CHECK(!memcmp(d->reading+d->blocks[4].reading_begin,"Units",5));
+    CHECK(d->blocks[5].reading_begin==d->blocks[3].reading_begin+10 && d->blocks[5].reading_length==6);
+    CHECK(d->blocks[2].reading_length==d->blocks[2].length);
     CHECK(!memcmp(d->reading+d->blocks[2].reading_begin,d->text+d->blocks[2].text,d->blocks[2].length));
     CHECK(ps_document_find(d->text + d->blocks[1].text, "CLEAR") != NULL);
     CHECK(ps_document_find("Überblick für Größen", "überblick") != NULL);
