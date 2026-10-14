@@ -43,6 +43,7 @@ SIMPLE["documentation_history"] = (["--workspace-state-test", "{directory}", "do
 SIMPLE["documentation_zoom"] = (["--workspace-state-test", "{directory}", "docs-keyboard-zoom"], 90, True)
 SIMPLE["documentation_density"] = (["--workspace-state-test", "{directory}", "docs-keyboard-density"], 120, True)
 SIMPLE["documentation_navigation"] = (["--workspace-state-test", "{directory}", "docs-keyboard-navigation"], 90, True)
+SIMPLE["documentation_sidebar"] = (["--workspace-state-test", "{directory}", "docs-keyboard-sidebar"], 90, True)
 SIMPLE["documentation_inline"] = (["--workspace-state-test", "{directory}", "docs-keyboard-inline"], 90, True)
 SIMPLE["documentation_media_16"] = (["--workspace-state-test", "{directory}", "docs-keyboard-media"], 90, True)
 SIMPLE["documentation_media_22"] = (["--workspace-state-test", "{directory}", "docs-keyboard-media-22"], 90, True)
@@ -96,6 +97,24 @@ def documentation_math(flow, directory):
     finally:
         if previous is None:flow.env.pop('PHYSIM_TEST_BUNDLED_FONTS',None)
         else:flow.env['PHYSIM_TEST_BUNDLED_FONTS']=previous
+
+
+def documentation_sidebar(flow,directory):
+    directory.mkdir(parents=True)
+    flow.run('--workspace-state-test',directory,'docs-keyboard-sidebar',timeout=90,
+             marker='DOCUMENTATION SIDEBAR SELF-TEST: PASSED')
+    output=flow.steps[-1]['stdout']
+    records=re.findall(r'DOCUMENTATION SIDEBAR DRAW: font=(\d+) lines=(\d+) complete=(\d+) width=([0-9.]+) height=([0-9.]+)',output)
+    require(len(records)==4,'Missing actual sidebar draw checks')
+    require([int(r[0]) for r in records]==[16,32,32,32],'Wrong sidebar text sizes')
+    require(all(int(r[1])>=2 and r[2]=='1' and float(r[3])>100 and float(r[4])>36 for r in records),
+            'Incomplete or clipped sidebar heading')
+    for name in ('docs-sidebar-16.bmp','docs-sidebar-32.bmp','docs-sidebar-32-light.bmp','docs-sidebar-32-contrast.bmp',
+                 'docs-sidebar-jump-16.bmp','docs-sidebar-jump-32.bmp'):
+        raw=(directory/name).read_bytes()
+        require(raw[:2]==b'BM' and len(raw)>54,'Missing sidebar capture: '+name)
+        width,height=struct.unpack_from('<ii',raw,18)
+        require(width>=760 and abs(height)>=540,'Invalid sidebar capture dimensions')
 
 
 def documentation_navigation(flow,directory):
@@ -1486,6 +1505,7 @@ SPECIAL = {"scene_visibility_16": lambda flow,directory: scene_visibility(flow,d
 SPECIAL["documentation_math"]=documentation_math
 SPECIAL["documentation_density"]=documentation_density
 SPECIAL["documentation_navigation"]=documentation_navigation
+SPECIAL["documentation_sidebar"]=documentation_sidebar
 
 def main():
     # App diagnostics and paths can contain Unicode even when Python inherits a

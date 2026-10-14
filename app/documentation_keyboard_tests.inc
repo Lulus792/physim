@@ -761,6 +761,61 @@ static void documentation_navigation_test_frame(app *a,int *stage,int *code,cons
 #undef NAV_TOGGLE
 }
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strcmp(mode,"docs-keyboard-sidebar")) {
+        static int heading,experiment_length,analysis_length;static double simulation_time;static unsigned frames;
+        bool ok=true;switch((*stage)++) {
+        case 0:
+            experiment_length=a->experiment.string.len;analysis_length=a->analysis.string.len;simulation_time=a->simulation_time;
+            test_window_key_mod(a->window,SDLK_F1,0);break;
+        case 1:
+            open_documentation(a,DOCUMENTATION_C_GUIDE_TOPIC);a->doc_contents=true;
+            ok=SDL_SetWindowSize(a->doc_window,760,540) && SDL_SyncWindow(a->doc_window);heading=-1;
+            for(size_t i=0;i<a->documentation->count;i++)if(a->documentation->blocks[i].kind==PS_DOC_HEADING &&
+                !strcmp(a->documentation->text+a->documentation->blocks[i].text,"1. Einrichten und das erste Projekt öffnen"))heading=(int)i;
+            ok=ok && heading>=0;break;
+        case 2:
+            if(!documentation_test_seek(a,DOC_HEADING+heading,stage,code))return;
+            a->doc_sidebar_test_requested=true;*capture="docs-sidebar-16.bmp";break;
+        case 3:
+            ok=a->doc_sidebar_test_ok;test_window_key_mod(a->doc_window,SDLK_RETURN,0);frames=0;break;
+        case 4:
+            if(frames++<2 || a->doc_scroll_pending || a->doc_jump_block>=0){--*stage;return;}
+            {const ps_doc_block *b=&a->documentation->blocks[heading];
+            ok=nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,b->reading_begin) &&
+               nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,b->reading_begin+b->reading_length-1);}
+            *capture="docs-sidebar-jump-16.bmp";for(int i=0;i<8;i++)test_window_key_mod(a->doc_window,SDLK_PLUS,PS_UI_COMMAND_MOD);frames=0;break;
+        case 5:
+            if(frames++<2 || a->doc_scroll_pending){--*stage;return;}
+            a->doc_focus_reveal=true;frames=0;break;
+        case 6:
+            if(!documentation_test_seek(a,DOC_HEADING+heading,stage,code))return;
+            a->doc_sidebar_test_requested=true;*capture="docs-sidebar-32.bmp";break;
+        case 7:
+            ok=documentation_font_size(a)==32 && a->doc_sidebar_test_ok;
+            {ps_preferences p=a->preferences;p.theme=PS_THEME_LIGHT;preferences_apply(a,&p);}frames=0;break;
+        case 8:
+            if(frames++<2){--*stage;return;}
+            a->doc_sidebar_test_requested=true;*capture="docs-sidebar-32-light.bmp";break;
+        case 9:
+            ok=a->doc_sidebar_test_ok;{ps_preferences p=a->preferences;p.theme=PS_THEME_HIGH_CONTRAST;preferences_apply(a,&p);}frames=0;break;
+        case 10:
+            if(frames++<2){--*stage;return;}
+            a->doc_sidebar_test_requested=true;*capture="docs-sidebar-32-contrast.bmp";break;
+        case 11:
+            ok=a->doc_sidebar_test_ok;test_window_mouse(a->doc_window,a->doc_focus_bounds,true);break;
+        case 12:test_window_mouse(a->doc_window,a->doc_focus_bounds,false);frames=0;break;
+        case 13:
+            if(frames++<2 || a->doc_scroll_pending || a->doc_jump_block>=0){--*stage;return;}
+            {const ps_doc_block *b=&a->documentation->blocks[heading];
+            ok=nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,b->reading_begin) &&
+               nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,b->reading_begin+b->reading_length-1);}
+            ok=ok && a->experiment.string.len==experiment_length && a->analysis.string.len==analysis_length && a->simulation_time==simulation_time;
+            *capture="docs-sidebar-jump-32.bmp";
+            a->quitting=true;break;
+        }
+        if(!ok){fprintf(stderr,"Sidebar stage %d failed\n",*stage-1);*code=1;a->quitting=true;}
+        if(a->quitting)printf("DOCUMENTATION SIDEBAR SELF-TEST: %s\n",*code?"FAILED":"PASSED");return;
+    }
     if(!strcmp(mode,"docs-keyboard-navigation")){documentation_navigation_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-density")) {
         static unsigned frames,index;static uint64_t version;static float reference;static int editor_length;

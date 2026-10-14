@@ -887,6 +887,40 @@ static bool documentation_topic_button(app *a,const char *label,bool selected) {
     } while(at<n);
     return pressed;
 }
+/* Diagnostic counterprobe reads the actual queued draw payload, independently
+ * of the wrapping/height calculation, before the renderer clears the buffer. */
+static void documentation_sidebar_draw_probe(app *a) {
+    if(!a->doc_sidebar_test_requested)return;
+    a->doc_sidebar_test_requested=false;a->doc_sidebar_test_ok=false;a->doc_sidebar_test_lines=0;
+    if(!a->documentation || a->doc_focus<DOC_HEADING || a->doc_focus>=DOC_COPY)return;
+    size_t block=(size_t)(a->doc_focus-DOC_HEADING);if(block>=a->documentation->count)return;
+    const char *expected=a->documentation->text+a->documentation->blocks[block].text;
+    char actual[4096];size_t used=0;struct nk_rect bounds=a->doc_focus_bounds,clip={0};bool fits=true;
+    const struct nk_command *command;
+    nk_foreach(command,a->doc_ui) {
+        if(command->type==NK_COMMAND_SCISSOR) {
+            const struct nk_command_scissor *s=(const struct nk_command_scissor *)command;
+            clip=nk_rect(s->x,s->y,s->w,s->h);
+        } else if(command->type==NK_COMMAND_TEXT) {
+            const struct nk_command_text *t=(const struct nk_command_text *)command;
+            if(t->x<bounds.x || t->x>=bounds.x+bounds.w || t->y<bounds.y || t->y>=bounds.y+bounds.h)continue;
+            float width=t->font->width(t->font->userdata,t->height,t->string,t->length);
+            fits &= t->x>=clip.x && t->y>=clip.y && t->x+width<=clip.x+clip.w+1 &&
+                t->y+t->height<=clip.y+clip.h+1 && t->x+width<=bounds.x+bounds.w+1 && t->y+t->height<=bounds.y+bounds.h+1;
+            for(int i=0;i<t->length;i++)if(t->string[i]!=' ' && t->string[i]!='\n') {
+                if(used+1<sizeof actual)actual[used++]=t->string[i];else fits=false;
+            }
+            a->doc_sidebar_test_lines++;
+        }
+    }
+    actual[used]=0;size_t at=0;
+    for(size_t i=0;expected[i];i++)if(expected[i]!=' ' && expected[i]!='\n') {
+        if(at>=used || expected[i]!=actual[at++])fits=false;
+    }
+    a->doc_sidebar_test_ok=fits && at==used && a->doc_sidebar_test_lines>=2;
+    printf("DOCUMENTATION SIDEBAR DRAW: font=%u lines=%u complete=%d width=%.1f height=%.1f\n",
+        documentation_font_size(a),a->doc_sidebar_test_lines,a->doc_sidebar_test_ok,bounds.w,bounds.h);
+}
 static bool documentation_zoom_button(app *a,int direction) {
     struct nk_context *ui=a->doc_ui;struct nk_rect bounds;
     if(nk_widget(&bounds,ui)==NK_WIDGET_INVALID)return false;
@@ -943,15 +977,19 @@ static void documentation_sidebar(app *a) {
     documentation_focus_draw(a,DOC_CONTENTS,contents_bounds,false);
     if (a->doc_contents && a->documentation) {
         a->doc_filter_active = false;
-        nk_layout_row_dynamic(ui, 44, 1);
-        nk_label_wrap(ui, documentation_topics[a->doc_topic].title);
+        const char *title=documentation_topics[a->doc_topic].title;
+        nk_layout_row_dynamic(ui,documentation_height(a->doc_font_ui,title,strlen(title),
+            nk_window_get_content_region(ui).w-8)+8,1);
+        nk_label_wrap(ui,title);
         for (size_t i = 0; i < a->documentation->count; i++) {
             ps_doc_block *b = &a->documentation->blocks[i];
             if (!documentation_contents_heading(a,b))
                 continue;
-            nk_layout_row_dynamic(ui, 36, 1);
+            const char *label=a->documentation->text+b->text;
+            nk_layout_row_dynamic(ui,documentation_height(a->doc_font_ui,label,strlen(label),
+                nk_window_get_content_region(ui).w-20)+16,1);
             struct nk_rect bounds=nk_widget_bounds(ui);
-            if (nk_button_label(ui, a->documentation->text + b->text))
+            if (documentation_topic_button(a,label,false))
                 a->doc_jump_block = (int)i;
             documentation_focus_draw(a,DOC_HEADING+(int)i,bounds,false);
         }

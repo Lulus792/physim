@@ -250,6 +250,62 @@ Orca-Abnahme oder native Tabellensemantik. macOS-Text-/Feld-/Linkbereiche,
 Screenreader-Aufgaben, echte DPI-/Monitorwechsel und vollständiger
 Inhaltsabgleich bleiben offen; eine Gesamtwertung mit 10/10 wird nicht erteilt.
 
+### Vollständige Kapitelüberschriften im Inhaltsverzeichnis
+
+Die Inhaltsnavigation verwendete noch feste 44-/36-Pixel-Zeilen und einzeilige
+Buttons. Die zuletzt geprüfte F1-Aufnahme des C-Lernwegs zeigt abgeschnittene
+Kapitelüberschriften. Die tatsächliche Gegenprobe am unveränderten Zeichenweg
+bestätigt bei 760 × 540 und 16-Pixel-Schrift: ein Textkommando, unvollständiger
+Titel, 185 Pixel Breite und 36 Pixel Höhe. Dieser Lauf endet bewusst mit
+Exitcode 1 (`build/native/F1-review/sidebar-before.log`).
+
+Der Titel des Inhaltsverzeichnisses erhält jetzt seine gemessene Umbruchhöhe.
+Abschnittsaktionen verwenden denselben mehrzeiligen Zeichenweg wie die bereits
+umgebrochene Themenliste. Ihre Höhe folgt Text, Schrift und verfügbarer Breite.
+Die Schaltfläche behält ihren vollständigen nativen Namen und die vorhandenen
+Tastatur-/Mausaktionen. Der tatsächliche erste Kapiteltitel wird bei 16 Pixeln
+in zwei Zeilen auf 60 Pixel Höhe, bei 32 Pixeln auf 92 Pixel Höhe gezeichnet.
+
+Der Prüfer liest vor der Rendererfreigabe die tatsächlichen Textkommandos und
+ihre Cliprechtecke. Er vergleicht den vollständigen Titel und prüft die
+gezeichneten Zeilen unabhängig von der Höhenberechnung. Durch Umbruch entfallene
+Leerzeichen werden für diesen Vergleich ausgelassen; alle übrigen UTF-8-Bytes
+bleiben verbindlich. Die reale App-Probe erreicht den Abschnitt mit Tab/Enter
+und später mit einem Pointerklick, erhält Editor und Simulationszeit und prüft
+16/32 Pixel, Dunkel, Hell und hohen Kontrast. Die anschließende strengere Probe
+fordert zusätzlich sichtbare Glyphen des ersten und letzten Titelzeichens im
+Zielabschnitt statt lediglich einer veränderten Scrollposition.
+
+Tatsächlich ausgeführte Belege mit Exitcode 0:
+
+- Windows 10.0.26200, MSVC ASan: **4/4** in `run-jrk9l21l` für F1-Tastatur,
+  native Links, Lesemodus-Navigation und die neue Inhaltsnavigation.
+- Alpine 3.24.2/WSL2, GCC 15.2.0, SDL 3.2.30, X11/Xvfb/Openbox,
+  ASan/UBSan: **4/4** in `run-__qmt9_z` für Lesemodus-Navigation, native
+  Suchfelder, native Links und die neue Inhaltsnavigation.
+- Die strengere Abschnittsprobe besteht unter Windows mit MSVC ASan
+  **1/1** in `run-mble_6g9` und unter Linux mit GCC ASan/UBSan
+  **1/1** in `run-ncohyi1h`.
+- Testkatalog und erwartete Gegenfehler bestehen unter
+  `build/native/F1-review/sidebar-runner-proof`.
+
+Die vier Windows-Aufnahmen und die Linux-Aufnahmen bei 16 Pixeln sowie
+32 Pixeln in Hell/hohem Kontrast wurden unmittelbar betrachtet. Der fokussierte
+Kapiteltitel ist vollständig lesbar; seine Aktion bleibt innerhalb der
+scrollbaren Navigation erreichbar. Diese Prüfung bestätigt keine echte
+DPI-/Monitorwechselmatrix oder praktische Screenreader-Bedienung.
+Die zusätzlichen Abschnittsbilder beider Plattformen zeigen außerdem die
+vollständige Zielüberschrift nach Enter bei 16 Pixeln und nach dem Pointerklick
+bei 32 Pixeln; sie wurden ebenfalls unmittelbar geprüft.
+
+Auch die vorherige Linux-Linkrevision `fd38710` besitzt inzwischen tatsächlich
+abgeschlossene Ubuntu-Belege: Workflow `38599913386`, GCC-Job `115976191559`
+mit **24/24 nativen und 30/30 GUI-Fällen** (`run-5p6vnm6e`, `run-jqijs7j2`),
+Clang-Job `115976192069` mit ebenfalls **24/24 und 30/30** (`run-3nfsp5ui`,
+`run-ijkr4dx2`). Die Originalprotokolle beider Jobs wurden eingesehen;
+`accessibility_links_atspi` besteht in beiden. Das ist ein Nachweis dieser
+vorherigen Revision, keine vorweggenommene Ubuntu-Abnahme der neuen Sidebar.
+
 ### Offline-Schriftquellen und vollständige Zeicheninventur
 
 Die nächste Korrektur erweitert die Gegenprobe auf alle **167 druckbaren Zeichen

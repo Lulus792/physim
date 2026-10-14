@@ -265,6 +265,7 @@ typedef struct {
     bool doc_model_initialized,doc_orthographic;
     struct nk_rect doc_visual_bounds[11];
     float doc_grid_probe[6]; /* actual draw origin, width, cell advance, source span and clip */
+    bool doc_sidebar_test_requested,doc_sidebar_test_ok;unsigned doc_sidebar_test_lines;
     ps_scene doc_visual_scene;
     struct nk_rect doc_diagram_bounds;
     struct nk_rect documentation_bounds;
