@@ -110,6 +110,12 @@ def main():
     display_spec.loader.exec_module(display_checker)
     display_names = {*display_checker.SIMPLE, *display_checker.SPECIAL,
                      *(f"language_{mode}_workflow" for mode in display_checker.LANGUAGE_MODES)}
+    # AppKit-only workflow wrappers exist on every host, but their integration
+    # entries must be selected only when an actual Darwin runtime is available.
+    macos_display = {"accessibility_document_macos", "accessibility_edit_macos"}
+    assert macos_display <= display_names
+    if sys.platform != "darwin":
+        display_names -= macos_display
     # This negative case invokes the app directly; it deliberately expects a
     # failed focus lookup instead of using the success-only workflow wrapper.
     direct_display = {"documentation_keyboard_unreachable"}
