@@ -39,6 +39,9 @@ static id document_parent(id object,SEL selector) {
  return view?send0(view,"autorelease"):nil;
 }
 static id document_children(id object,SEL selector){(void)object;(void)selector;return send0((id)objc_getClass("NSArray"),"array");}
+static BOOL document_no_action(id object,SEL selector){(void)object;(void)selector;return NO;}
+static void document_no_value(id object,SEL selector,id value){(void)object;(void)selector;(void)value;}
+static void document_no_focus(id object,SEL selector,BOOL value){(void)object;(void)selector;(void)value;}
 static CGRect document_frame(id object,SEL selector) {
  if(!document_enabled(object,selector))return CGRectZero;
  return ((CGRect(*)(id,SEL))base_frame)(object,sel_registerName("accessibilityFrame"));
@@ -132,6 +135,13 @@ static bool make_document_class(void) {
  class_addMethod(document_class,sel_registerName("accessibilityIdentifier"),(IMP)document_identifier,"@@:");
  class_addMethod(document_class,sel_registerName("accessibilityParent"),(IMP)document_parent,"@@:");
  class_addMethod(document_class,sel_registerName("accessibilityChildren"),(IMP)document_children,"@@:");
+ class_addMethod(document_class,sel_registerName("accessibilitySelectedChildren"),(IMP)document_children,"@@:");
+ class_addMethod(document_class,sel_registerName("isAccessibilityFocused"),(IMP)document_no_action,PS_AX_BOOL "@:");
+ class_addMethod(document_class,sel_registerName("setAccessibilityFocused:"),(IMP)document_no_focus,"v@:" PS_AX_BOOL);
+ class_addMethod(document_class,sel_registerName("setAccessibilityValue:"),(IMP)document_no_value,"v@:@");
+ class_addMethod(document_class,sel_registerName("accessibilityPerformPress"),(IMP)document_no_action,PS_AX_BOOL "@:");
+ class_addMethod(document_class,sel_registerName("accessibilityPerformIncrement"),(IMP)document_no_action,PS_AX_BOOL "@:");
+ class_addMethod(document_class,sel_registerName("accessibilityPerformDecrement"),(IMP)document_no_action,PS_AX_BOOL "@:");
  class_addMethod(document_class,sel_registerName("accessibilityFrame"),(IMP)document_frame,"{CGRect={CGPoint=dd}{CGSize=dd}}@:");
  class_addMethod(document_class,sel_registerName("accessibilityNumberOfCharacters"),(IMP)document_count,"q@:");
  class_addMethod(document_class,sel_registerName("accessibilityStringForRange:"),(IMP)document_string_range,"@@:" AX_RANGE);
