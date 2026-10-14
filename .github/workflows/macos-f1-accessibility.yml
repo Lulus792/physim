@@ -4,7 +4,13 @@ on:
     branches: [main, codex/mac-f1-reading]
     paths:
       - app/accessibility*
+      - app/documentation*
+      - app/ui*
+      - app/main.c
+      - app/settings_ui.inc
       - tests/test_accessibility*
+      - tests/check_display_workflow.py
+      - tests/native_integration_cases.json
       - tools/native_tests.py
       - .github/workflows/macos-f1-accessibility.yml
   workflow_dispatch:
