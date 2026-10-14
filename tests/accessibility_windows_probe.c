@@ -30,6 +30,7 @@ static HRESULT named(IUIAutomation *a,IUIAutomationElement *root,const wchar_t *
 }
 #include "accessibility_windows_events_probe.inc"
 static HRESULT document_links(IUIAutomation *automation,IUIAutomationElement *control,const wchar_t *label,bool invoke,bool invalid) {
+ const char *phase="text and child ranges";
  IUnknown *unknown=NULL;IUIAutomationTextPattern *pattern=NULL;IUIAutomationTextRange *whole=NULL,*selected_range=NULL;
  IUIAutomationElementArray *children=NULL;IUIAutomationElement *selected=NULL;
  HRESULT result=IUIAutomationElement_GetCurrentPattern(control,UIA_TextPatternId,&unknown);
@@ -61,27 +62,33 @@ static HRESULT document_links(IUIAutomation *automation,IUIAutomationElement *co
  if(SUCCEEDED(result) && !selected)result=E_FAIL;
  link_events *events=NULL;if(SUCCEEDED(result))result=events_start(automation,selected,&events);
  if(SUCCEEDED(result) && !invoke) {
+  if(SUCCEEDED(result))phase="initial offscreen state";
   BOOL offscreen=FALSE;result=IUIAutomationElement_get_CurrentIsOffscreen(selected,&offscreen);
   if(SUCCEEDED(result) && !offscreen)result=E_FAIL;
   if(SUCCEEDED(result))result=IUIAutomationElement_SetFocus(selected);
+  if(SUCCEEDED(result))phase="focus and visibility convergence";
   ULONGLONG deadline=GetTickCount64()+10000;BOOL focused=FALSE;
   while(SUCCEEDED(result)) {
    result=IUIAutomationElement_get_CurrentIsOffscreen(selected,&offscreen);
    if(SUCCEEDED(result))result=IUIAutomationElement_get_CurrentHasKeyboardFocus(selected,&focused);
    if(FAILED(result) || (!offscreen && focused))break;
-   if(GetTickCount64()>=deadline){result=E_FAIL;break;}Sleep(20);
+   if(GetTickCount64()>=deadline){fprintf(stderr,"Link focus timeout: offscreen=%d focused=%d\n",offscreen,focused);result=E_FAIL;break;}Sleep(20);
   }
   /* The same marshalled text range survives scrolling; its glyphs become real. */
+  if(SUCCEEDED(result))phase="visible glyph rectangles";
   SAFEARRAY *bounds=NULL;if(SUCCEEDED(result))result=IUIAutomationTextRange_GetBoundingRectangles(selected_range,&bounds);
   if(SUCCEEDED(result)){LONG high=-1;SafeArrayGetUBound(bounds,1,&high);if(high<3)result=E_FAIL;}
   if(bounds)SafeArrayDestroy(bounds);
+  if(SUCCEEDED(result))phase="visibility and geometry events";
   if(SUCCEEDED(result))result=events_wait(&events->offscreen,1);
   if(SUCCEEDED(result))result=events_wait(&events->bounds,1);
   if(SUCCEEDED(result) && events_count(&events->invoked))result=E_FAIL;
   UIA_HWND native=NULL;HWND host=NULL;
+  if(SUCCEEDED(result))phase="host window handle";
   if(SUCCEEDED(result))result=IUIAutomationElement_get_CurrentNativeWindowHandle(control,&native);
   host=(HWND)native;if(SUCCEEDED(result) && !IsWindow(host))result=E_FAIL;
   if(SUCCEEDED(result)) {
+   if(SUCCEEDED(result))phase="host disable and disabled event";
    EnableWindow(host,FALSE);BOOL enabled=TRUE;
    result=IUIAutomationElement_get_CurrentIsEnabled(selected,&enabled);
    if(SUCCEEDED(result) && enabled)result=E_FAIL;
@@ -101,6 +108,7 @@ static HRESULT document_links(IUIAutomation *automation,IUIAutomationElement *co
    }
   }
   if(SUCCEEDED(result)) {
+   if(SUCCEEDED(result))phase="window movement and quiet events";
    Sleep(200);LONG before=events_count(&events->bounds);RECT host_bounds={0},old_rect={0};
    if(!GetWindowRect(host,&host_bounds))result=E_FAIL;
    if(SUCCEEDED(result))result=IUIAutomationElement_get_CurrentBoundingRectangle(selected,&old_rect);
@@ -143,6 +151,7 @@ static HRESULT document_links(IUIAutomation *automation,IUIAutomationElement *co
    if(SUCCEEDED(result) && events_count(&events->invoked)!=1)result=E_FAIL;
   }
  }
+ if(FAILED(result))fprintf(stderr,"WINDOWS LINK CHECK FAILED: %s (0x%08lx)\n",phase,(unsigned long)result);
  if(events){printf("WINDOWS LINK EVENTS: bounds=%ld offscreen=%ld disabled=%ld enabled=%ld invoked=%ld bad=%ld\n",events_count(&events->bounds),events_count(&events->offscreen),events_count(&events->disabled),events_count(&events->enabled),events_count(&events->invoked),events_count(&events->bad));if(events_count(&events->bad))result=E_FAIL;events_stop(automation,selected,events);}
  if(selected_range)IUIAutomationTextRange_Release(selected_range);if(selected)IUIAutomationElement_Release(selected);
  if(children)IUIAutomationElementArray_Release(children);if(whole)IUIAutomationTextRange_Release(whole);
