@@ -46,6 +46,7 @@ SIMPLE["documentation_navigation"] = (["--workspace-state-test", "{directory}", 
 SIMPLE["documentation_sidebar"] = (["--workspace-state-test", "{directory}", "docs-keyboard-sidebar"], 90, True)
 SIMPLE["accessibility_document_macos"] = (["--workspace-state-test", "{directory}", "docs-keyboard-reading-native"], 90, True)
 SIMPLE["accessibility_edit_macos"] = (["--workspace-state-test", "{directory}", "docs-keyboard-edit-native"], 90, True)
+SIMPLE["accessibility_links_macos"] = (["--workspace-state-test", "{directory}", "docs-keyboard-links-native"], 120, True)
 SIMPLE["documentation_inline"] = (["--workspace-state-test", "{directory}", "docs-keyboard-inline"], 90, True)
 SIMPLE["documentation_media_16"] = (["--workspace-state-test", "{directory}", "docs-keyboard-media"], 90, True)
 SIMPLE["documentation_media_22"] = (["--workspace-state-test", "{directory}", "docs-keyboard-media-22"], 90, True)
@@ -1559,6 +1560,10 @@ def main():
             documentation_zoom_bitmaps(directory,flow.steps[-1]['stdout'])
         elif args.case == "documentation_inline":
             documentation_inline_ink(directory, flow.steps[-1]["stdout"])
+        elif args.case == "accessibility_links_macos":
+            for name in ("docs-macos-link-focus.bmp", "docs-macos-link-failed.bmp", "docs-macos-link-open.bmp"):
+                require((directory / name).is_file(), "Native link capture missing: " + name)
+            require("MAC F1 LINKS: native attributed text" in flow.steps[-1]["stdout"], "Native AppKit link interaction missing")
         elif args.case == "accessibility_edit_macos":
             require((directory / "docs-macos-edit-end.bmp").is_file(), "Native field end capture missing")
             require("MAC F1 EDIT: actual fields" in flow.steps[-1]["stdout"], "Native AppKit field interaction missing")
