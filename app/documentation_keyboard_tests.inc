@@ -11,6 +11,14 @@ static bool documentation_test_same_text(const char *actual,const char *expected
     }
     return true;
 }
+typedef struct {size_t live;bool fail;} documentation_font_failure;
+static void *documentation_font_allocate(nk_handle user,void *old,nk_size size) {
+ (void)old;documentation_font_failure *state=user.ptr;if(state->fail)return NULL;
+ void *memory=malloc(size);if(memory)++state->live;return memory;
+}
+static void documentation_font_release(nk_handle user,void *memory) {
+ if(memory){documentation_font_failure *state=user.ptr;--state->live;free(memory);}
+}
 static bool documentation_test_clipboard(const char *expected) {
     char *actual=SDL_GetClipboardText();
     bool equal=documentation_test_same_text(actual,expected);
@@ -644,6 +652,52 @@ static void documentation_math_test_frame(app *a,int *stage,int *code,const char
  if(a->quitting)printf("DOCUMENTATION MATH SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 }
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strcmp(mode,"docs-keyboard-density")) {
+        static unsigned frames,index;static uint64_t version;static float reference;static int editor_length;
+        static const float densities[]={1.25f,1.5f,2,1};bool ok=true;
+        switch(*stage) {
+        case 0:editor_length=a->experiment.string.len;test_window_key_mod(a->window,SDLK_F1,0);++*stage;break;
+        case 1:
+            ok=documentation_inline_fixture(a,a->doc_topic);version=a->doc_reading_version;
+            ok=ok && SDL_SetWindowSize(a->doc_window,760,540) && SDL_SyncWindow(a->doc_window);
+            reference=a->doc_font_ui->width(a->doc_font_ui->userdata,16,"AaBb 0123",9);
+            index=frames=0;a->doc_test_density=densities[index];++*stage;break;
+        case 2: {
+            if(frames++<2 || a->doc_scroll_pending)return;
+            const struct nk_font *font=a->doc_font_ui->userdata.ptr;
+            float width=a->doc_font_ui->width(a->doc_font_ui->userdata,16,"AaBb 0123",9);
+            ok=fabsf(a->doc_raster_density-densities[index])<.01f &&
+               fabsf(font->info.height-16*densities[index])<.01f && a->doc_font_ui->height==16 &&
+               fabsf(width-reference)<.02f && a->doc_reading_version==version && a->experiment.string.len==editor_length;
+            printf("DOCUMENTATION DENSITY: %.2f baked=%.2f logical=%.2f width=%.3f\n",densities[index],font->info.height,a->doc_font_ui->height,width);
+            static const char *names[]={"docs-density-125.bmp","docs-density-150.bmp","docs-density-200.png","docs-density-reset.bmp"};
+            *capture=names[index];frames=0;++index;*stage=3;
+            break;
+        }
+        case 3:
+            if(index<4){a->doc_test_density=densities[index];*stage=2;}
+            else *stage=4;
+            break;
+        case 4: {
+            /* Invalid replacement leaves live fonts and the current text intact. */
+            const struct nk_user_font *before=a->doc_font_ui;
+            ok=!documentation_window_fonts(a,NAN) && a->doc_font_ui==before && a->doc_reading_version==version;
+            struct nk_font_atlas invalid;nk_font_atlas_init_default(&invalid);nk_font_atlas_begin(&invalid);
+            struct nk_font *foreign=a->doc_font_ui->userdata.ptr;
+            ok=ok && !nk_sdl_font_stash_replace(a->doc_ui,&invalid,2,foreign);
+            nk_font_atlas_clear(&invalid);
+            documentation_font_failure failure={0};struct nk_allocator allocator={nk_handle_ptr(&failure),documentation_font_allocate,documentation_font_release};
+            nk_font_atlas_init(&invalid,&allocator);nk_font_atlas_begin(&invalid);
+            struct nk_font *candidate=nk_font_atlas_add_default(&invalid,32,NULL);ok=ok && candidate;
+            failure.fail=true;
+            ok=ok && !nk_sdl_font_stash_replace(a->doc_ui,&invalid,2,candidate) && a->doc_ui->style.font==before;
+            failure.fail=false;nk_font_atlas_clear(&invalid);ok=ok && failure.live==0;
+            a->doc_test_density=0;a->quitting=true;break;
+        }
+        }
+        if(!ok){fprintf(stderr,"Documentation density stage %d failed\n",*stage);*code=1;a->quitting=true;}
+        if(a->quitting)printf("DOCUMENTATION DENSITY SELF-TEST: %s\n",*code?"FAILED":"PASSED");return;
+    }
     if(!strcmp(mode,"docs-keyboard-lifecycle-remote")) {
         static int experiment_length,analysis_length;static double simulation_time;static uint64_t version;
         bool ok=true;char path[4096];FILE *marker;switch(*stage) {

@@ -228,6 +228,72 @@ wird weiterhin nicht behauptet.
 Nach der Dokumentation dieser Korrektur bestehen Parser, API-Referenz, Lernwege
 und Abschnittslinks erneut 4/4 mit Exitcode 0 in `run-rt8xha9i`.
 
+### Pixeldichte, logische Fontgrößen und atomarer Atlaswechsel
+
+Der nächste Schritt trennt die Rasterauflösung eines Fonts von seiner logischen
+Höhe. Nach dem Bake werden die Handles und Query-Metriken auf die gewünschte
+logische Größe abgebildet. Die native Probe bestätigt die Rasterdichten
+1/1,25/1,5/2 mit unveränderten Textbreiten; erneute Abbildung ist idempotent,
+ungültige Werte verändern den vorhandenen Stand nicht. Rahmenzellen lesen
+ebenfalls die logischen Query-Metriken statt unskalierter Atlasrechtecke.
+
+F1 fragt bei Erstellung und vor dem Zeichnen `SDL_GetWindowPixelDensity` ab.
+Seine 38 Größen-/Stilvarianten werden mit entsprechend höherer Rasterauflösung
+angelegt. Ein Ersatzatlas wird getrennt aufgebaut, vollständig gebacken und
+hochgeladen. Erst bei Erfolg werden Textur, Nulltextur und Font-Handles
+übernommen; der neue Defaultfont wird vor Freigabe des alten Atlasses installiert.
+Die Dokumentposition wird anhand der veröffentlichten Leseposition erhalten
+und der Layoutcache invalidiert. Fehlgeschlagene Versuche behalten die lebenden
+Fonts; dieselbe fehlgeschlagene Dichte wird nicht in jedem Frame neu gebacken.
+
+Die wirkliche App-Probe `run-bhggy_1m` wechselt die Rasterdichte
+1→1,25→1,5→2→1. Bei 16 logischen Pixeln liegen 20/24/32/16 Rasterpixel vor;
+die gemessene AaBb-Textbreite bleibt 57,081. Textversion und Editorinhalt bleiben
+gleich. Die anschließende Fehler-Gegenprobe `run-5610x6n2` deckt einen Debug-Assert
+bei absichtlich fehlender Bake-Allokation auf. Nur der betreffende Prüfprozess
+wurde beendet. Temporäre, Glyph-, Pixel- und RGBA-Allokationsfehler kehren jetzt
+auch im Debug-Build durch die bereits vorhandenen Freigabepfade zurück. Die
+reale Probe bestätigt den erhaltenen Defaultfont und vollständige Freigabe des
+fehlgeschlagenen Kandidaten.
+
+Eine weitere Gegenprobe erkennt eine zu frühe Umschaltung im Prüfer
+(`run-unzsj6g6`): Der Zahlenbeleg stammte noch von Dichte 2, die PNG-Aufnahme
+entstand nach dem Wechsel auf Dichte 1. Der folgende Wechsel erfolgt jetzt
+erst im nächsten Frame. Der finale Beleg `run-4qsmr6yd` zeichnet den echten
+1520 × 1080-Framebuffer aus 760 × 540 logischen Koordinaten mit dem tatsächlich
+32 Pixel hoch gerasterten 16-Pixel-Font. PNG-CRC, Dimensionen, Scanlines und
+lesbare Textpixel werden unabhängig geprüft; das Bild wurde visuell angesehen.
+
+Abschließende Windows-Belege, jeweils Exitcode 0:
+
+- `run-au995z_a`: 7/7 native Font-, Parser- und Abschnittsfälle mit MSVC ASan.
+- `run-vylai6qc`: 6/6 reale F1-/UIA-Fälle unter MSVC ASan für Rasterwechsel,
+  Zeichen, Zoom, vollständiges Lesen, Links und Fensterlebenszyklus.
+- `build/native/F1-review/density-installed-proof`: der verschobene Release-SDK
+  unter `build/native/density installed ä/Physim` besteht Raster-Rundlauf,
+  Fehlererhalt und doppelte Framebuffer-Ausgabe von einem anderen Arbeitsordner.
+  Alle 538 Paketdateien und zwölf Font-/Lizenzdateien entsprechen ihren Hashes.
+
+Diese Rasterprüfungen sind keine echte Windows-DPI- oder Monitorwechselabnahme.
+Der verfügbare Windows-Monitor liefert 96 DPI. SDL unterscheidet Pixeldichte
+und Inhaltsskalierung: Windows/X11 verwenden typischerweise physische
+Fensterkoordinaten mit Inhaltsskalierung, macOS/Wayland zusätzlich Fenster- zu
+Pixelverhältnisse. Grundlage sind die offiziellen
+[SDL-HiDPI-Verträge](https://wiki.libsdl.org/SDL3/README-highdpi) und
+[DisplayScale](https://wiki.libsdl.org/SDL3/SDL_GetWindowDisplayScale).
+Der nun geprüfte Font-Rasterpfad behandelt die Pixeldichte; Windows-Inhaltsskalierung,
+die Hauptfenster-DPI-Integration, reale Monitorwechsel und native Plattformbilder
+bleiben weitere Aufgaben. Die Diagnose überschreibt in der Probe die Rasterdichte
+und erzeugt tatsächliche Renderziele; sie täuscht kein anderes Betriebssystem-DPI vor.
+
+Der vorherige Typografie-Stand `9e172e4` ist unter Linux inzwischen ausgeführt:
+Workflow `38508599005`, Clang 22/22 native (`run-ewmhvafp`) und 25/25 GUI
+(`run-srggasan`), GCC 22/22 native (`run-1qg4r9pk`) und 25/25 GUI
+(`run-olowylup`). Der neue Rasterwechsel benötigt einen eigenen Linux-/macOS-Nachweis.
+Die abschließenden Parser-/API-/Abschnitts-/Dichtefälle bestehen nach der
+Dokumentation erneut 4/4 mit Exitcode 0 in `run-2qbh1dw6`. Der Testläufer
+bestätigt seine gezielten Fehlermuster in `build/native/F1-review/density-runner-proof`.
+
 ## Nutzeraufgaben
 
 - Eine Vorlage anlegen, bauen, aufzeichnen und auswerten, mit sichtbaren

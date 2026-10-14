@@ -108,7 +108,7 @@ requiring an installed font. The affected routine is also present in the
 Local patch (2026-09-28): undo/redo collapses the current selection to the restored
 cursor. A selection into removed text previously reached the renderer with invalid
 bounds. `editor_clipboard` and the SDL editor regression cover this case.
-Patched header SHA-256 (LF): 82eeb71bde3c0d5fd999ad0d58c02b4b81a627e9eaa5cf051d06ec6beca7b75a.
+Patched header SHA-256 (LF): 885260fb4e1d93d3d8a5c3e08e969ece37ab12de6b645a10e581cdca974d525c.
 
 `nuklear_sdl3_renderer.h` is retained as the upstream `demo/sdl3_renderer` reference;
 it is no longer compiled into Physim. Input and clipboard handling in `app/ui_sdl.c`
@@ -134,3 +134,9 @@ Six unmodified Noto fallback fonts and their SIL OFL 1.1 notices are tracked in
 `fonts/`. See `fonts/README.md` and `fonts/manifest.json` for pinned source and
 byte hashes. They are distributed with the app and SDK; no system font or network
 download is required for these fallback sources.
+
+Local patch (2026-10-14): recoverable temporary, glyph, pixel and RGBA bake
+allocation failures return through the cleanup path in debug builds as well;
+assert dialogs no longer prevent a caller from retaining its prior font atlas.
+The real F1 density workflow injects a failing candidate and continues with
+the live atlas. Invalid API precondition assertions remain separate.

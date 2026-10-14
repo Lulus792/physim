@@ -5,11 +5,21 @@
 #endif
 #define NK_IMPLEMENTATION
 #include "ui.h"
+#include <math.h>
 bool ps_ui_font_has_glyph(const struct nk_user_font *handle,nk_rune codepoint) {
  if(!handle || !handle->userdata.ptr || codepoint>0x10ffffu)return false;
  const struct nk_font *font=handle->userdata.ptr;
  const struct nk_font_glyph *glyph=nk_font_find_glyph(font,codepoint);
  return glyph && glyph->codepoint==codepoint && glyph->source_present;
+}
+bool ps_ui_font_logical_scale(struct nk_font_atlas *atlas,float raster_scale) {
+ if(!atlas || !atlas->glyphs || !isfinite(raster_scale) || raster_scale<1 || raster_scale>4)return false;
+ for(struct nk_font *f=atlas->fonts;f;f=f->next)
+  if(!isfinite(f->info.height) || f->info.height<=0)return false;
+ for(struct nk_font *f=atlas->fonts;f;f=f->next) {
+  f->handle.height=f->info.height/raster_scale;f->scale=1/raster_scale;
+ }
+ return true;
 }
 static bool font_source_contains(const struct nk_font_config *config,nk_rune codepoint) {
  const struct nk_font_config *source=config;

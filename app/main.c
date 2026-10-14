@@ -244,6 +244,8 @@ typedef struct {
     unsigned doc_zoom_size;
     uint64_t doc_reading_version;
     bool doc_visible;
+    float doc_raster_density,doc_failed_density;
+    float doc_test_density; /* diagnostic raster-density override; zero in normal operation */
     int doc_topic, doc_match, doc_jump_block,doc_anchor_heading;
     nk_uint doc_scroll_x, doc_scroll_y;
     float doc_scroll_adjustment;

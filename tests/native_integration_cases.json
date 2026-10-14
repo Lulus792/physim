@@ -12243,6 +12243,36 @@
           "timeout": 180
         }
       ]
+    },
+    {
+      "name": "documentation_density",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "documentation_density",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 150,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
     }
   ]
 }

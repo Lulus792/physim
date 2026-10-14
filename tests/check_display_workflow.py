@@ -41,6 +41,7 @@ SIMPLE["documentation_keyboard_22"] = (["--workspace-state-test", "{directory}",
 SIMPLE["documentation_keyboard"] = (["--workspace-state-test", "{directory}", "docs-keyboard"], 75, True)
 SIMPLE["documentation_history"] = (["--workspace-state-test", "{directory}", "docs-keyboard-history"], 90, True)
 SIMPLE["documentation_zoom"] = (["--workspace-state-test", "{directory}", "docs-keyboard-zoom"], 90, True)
+SIMPLE["documentation_density"] = (["--workspace-state-test", "{directory}", "docs-keyboard-density"], 120, True)
 SIMPLE["documentation_inline"] = (["--workspace-state-test", "{directory}", "docs-keyboard-inline"], 90, True)
 SIMPLE["documentation_media_16"] = (["--workspace-state-test", "{directory}", "docs-keyboard-media"], 90, True)
 SIMPLE["documentation_media_22"] = (["--workspace-state-test", "{directory}", "docs-keyboard-media-22"], 90, True)
@@ -94,6 +95,40 @@ def documentation_math(flow, directory):
     finally:
         if previous is None:flow.env.pop('PHYSIM_TEST_BUNDLED_FONTS',None)
         else:flow.env['PHYSIM_TEST_BUNDLED_FONTS']=previous
+
+
+def documentation_density(flow,directory):
+    directory.mkdir(parents=True)
+    flow.run('--workspace-state-test',directory,'docs-keyboard-density',timeout=120,
+             marker='DOCUMENTATION DENSITY SELF-TEST: PASSED')
+    output=flow.steps[-1]['stdout']
+    records=re.findall(r'DOCUMENTATION DENSITY: ([0-9.]+) baked=([0-9.]+) logical=([0-9.]+) width=([0-9.]+)',output)
+    require(len(records)==4,'Incomplete density roundtrip')
+    for record,expected in zip(records,(1.25,1.5,2,1)):
+        density,baked,logical,width=map(float,record)
+        require(density==expected and abs(baked-16*expected)<.01 and logical==16,'Raster and logical sizes diverge')
+    require('DOCUMENTATION RASTER TARGET: logical=760x540 pixels=1520x1080 density=2.000' in output,
+            'No actual doubled framebuffer was rendered')
+    raw=(directory/'docs-density-200.png').read_bytes()
+    require(raw[:8]==b'\x89PNG\r\n\x1a\n','Invalid high-resolution PNG')
+    offset=8;compressed=bytearray();size=None
+    while offset<len(raw):
+        length=struct.unpack_from('>I',raw,offset)[0];kind=raw[offset+4:offset+8]
+        data=raw[offset+8:offset+8+length]
+        require(offset+12+length<=len(raw),'Truncated PNG chunk')
+        require(zlib.crc32(kind+data)&0xffffffff==struct.unpack_from('>I',raw,offset+8+length)[0],'PNG CRC mismatch')
+        if kind==b'IHDR':size=struct.unpack_from('>II',data)
+        if kind==b'IDAT':compressed.extend(data)
+        offset+=12+length
+    require(size==(1520,1080),'Wrong high-resolution target dimensions')
+    pixels=zlib.decompress(compressed);stride=1520*3+1
+    require(len(pixels)==stride*1080 and all(pixels[y*stride]==0 for y in range(1080)),
+            'Unexpected source PNG scanline representation')
+    ink=sum(min(pixels[y*stride+1+x*3:y*stride+4+x*3])>100
+            for y in range(440,960) for x in range(520,1450))
+    require(ink>1000,'Doubled reader target contains no readable text pixels')
+    for name in ('docs-density-125.bmp','docs-density-150.bmp','docs-density-reset.bmp'):
+        require((directory/name).is_file(),'Missing density roundtrip image')
 
 
 def documentation_grid_ink(directory,stdout):
@@ -1419,6 +1454,7 @@ SPECIAL = {"scene_visibility_16": lambda flow,directory: scene_visibility(flow,d
 
 
 SPECIAL["documentation_math"]=documentation_math
+SPECIAL["documentation_density"]=documentation_density
 
 def main():
     # App diagnostics and paths can contain Unicode even when Python inherits a

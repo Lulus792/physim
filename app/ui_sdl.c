@@ -405,6 +405,37 @@ bool nk_sdl_font_stash_end(struct nk_context *ctx) {
     nk_font_atlas_cleanup(&sdl->atlas);
     return true;
 }
+bool nk_sdl_font_stash_replace(struct nk_context *ctx,struct nk_font_atlas *candidate,
+                               float raster_scale,struct nk_font *default_font) {
+    if(!ctx || !ctx->userdata.ptr || !candidate || !default_font ||
+       !isfinite(raster_scale) || raster_scale<1 || raster_scale>4)return false;
+    struct nk_sdl *sdl=ctx->userdata.ptr;
+    bool contained=false;for(struct nk_font *f=candidate->fonts;f;f=f->next)if(f==default_font)contained=true;
+    if(!contained || candidate==&sdl->atlas)return false;
+    int w=0,h=0,limit=ps_graphics_texture_limit(sdl->graphics);
+    const void *pixels=nk_font_atlas_bake_limited(candidate,&w,&h,NK_FONT_ATLAS_RGBA32,limit);
+    if(!pixels)return false;
+    for(struct nk_font *f=candidate->fonts;f;f=f->next)for(nk_rune c=33;c<=126;c++) {
+        const struct nk_font_glyph *g=nk_font_find_glyph(f,c);
+        if(!g || !g->source_present || g->codepoint!=c || g->x1<=g->x0 || g->y1<=g->y0)return false;
+    }
+    unsigned texture=ps_graphics_texture(sdl->graphics,pixels,w,h);
+    if(!texture)return false;
+    struct nk_draw_null_texture null_texture;
+    nk_font_atlas_end(candidate,nk_handle_id((int)texture),&null_texture);
+    if(!ps_ui_font_logical_scale(candidate,raster_scale)) {
+        ps_graphics_delete_texture(sdl->graphics,texture);return false;
+    }
+    nk_font_atlas_cleanup(candidate);
+    nk_style_set_font(ctx,&default_font->handle);
+    struct nk_font_atlas previous=sdl->atlas;unsigned old_texture=sdl->font_texture;
+    sdl->atlas=*candidate;memset(candidate,0,sizeof *candidate);
+    sdl->font_texture=texture;sdl->null_texture=null_texture;
+    if(previous.temporary.alloc)nk_font_atlas_clear(&previous);
+    ps_graphics_delete_texture(sdl->graphics,old_texture);
+    printf("Font replacement: %dx%d, raster %.3f, GPU limit %d\n",w,h,raster_scale,limit);
+    return true;
+}
 bool nk_sdl_render(struct nk_context *ctx) {
     struct nk_sdl *sdl = ctx->userdata.ptr;
     Uint64 now = SDL_GetTicksNS();

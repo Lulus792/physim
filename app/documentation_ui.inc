@@ -430,9 +430,8 @@ static float documentation_grid_pitch(const app *a,const ps_document *d,const ps
     }
     if(!grid)return 0;
     const struct nk_user_font *font=documentation_block_font(a,b);
-    const struct nk_font_glyph *vertical=nk_font_find_glyph(font->userdata.ptr,0x2502);
-    return vertical && vertical->codepoint==0x2502 && vertical->source_present && vertical->y1>vertical->y0
-        ? vertical->y1-vertical->y0 : 0;
+    struct nk_user_font_glyph vertical={0};font->query(font->userdata,font->height,&vertical,0x2502,0);
+    return ps_ui_font_has_glyph(font,0x2502) && vertical.height>0?vertical.height:0;
 }
 static size_t documentation_rich_line(const app *a,const ps_document *d,const ps_doc_block *b,
     size_t at,float width,size_t *length,float *height) {
@@ -473,13 +472,13 @@ static void documentation_rich_draw(app *a,ps_document *d,const ps_doc_block *b,
     }
     if(b->kind==PS_DOC_CODE && !strncmp(text,"┌──┬──┐",strlen("┌──┬──┐"))) {
         const struct nk_user_font *font=documentation_block_font(a,b);
-        const struct nk_font_glyph *g=nk_font_find_glyph(font->userdata.ptr,0x2502);
+        struct nk_user_font_glyph cell={0};font->query(font->userdata,font->height,&cell,0x2502,0);
         size_t length;float height;documentation_rich_line(a,d,b,0,bounds.w,&length,&height);
-        if(g) {
-            a->doc_grid_probe[0]=bounds.x+g->x0+(g->x1-g->x0)/2;
-            a->doc_grid_probe[1]=floorf(bounds.y+grid_offset)+g->y0;
+        if(cell.height>0) {
+            a->doc_grid_probe[0]=bounds.x+cell.offset.x+cell.width/2;
+            a->doc_grid_probe[1]=floorf(bounds.y+grid_offset)+cell.offset.y;
             a->doc_grid_probe[2]=documentation_glyph_width(font," ",1)*6;
-            a->doc_grid_probe[3]=height;a->doc_grid_probe[4]=g->y1-g->y0;
+            a->doc_grid_probe[3]=height;a->doc_grid_probe[4]=cell.height;
             a->doc_grid_probe[5]=canvas->clip.y+canvas->clip.h;
         }
     }

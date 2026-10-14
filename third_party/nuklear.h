@@ -18146,7 +18146,6 @@ nk_font_atlas_bake_limited(struct nk_font_atlas *atlas, int *width, int *height,
     /* allocate temporary baker memory required for the baking process */
     nk_font_baker_memory(&tmp_size, &atlas->glyph_count, atlas->config, atlas->font_num);
     tmp = atlas->temporary.alloc(atlas->temporary.userdata,0, tmp_size);
-    NK_ASSERT(tmp);
     if (!tmp) goto failed;
     NK_MEMSET(tmp,0,tmp_size);
 
@@ -18154,7 +18153,6 @@ nk_font_atlas_bake_limited(struct nk_font_atlas *atlas, int *width, int *height,
     baker = nk_font_baker(tmp, atlas->glyph_count, atlas->font_num, &baking_allocator);
     atlas->glyphs = (struct nk_font_glyph*)atlas->permanent.alloc(
         atlas->permanent.userdata,0, sizeof(struct nk_font_glyph)*(nk_size)atlas->glyph_count);
-    NK_ASSERT(atlas->glyphs);
     if (!atlas->glyphs)
         goto failed;
 
@@ -18168,7 +18166,6 @@ nk_font_atlas_bake_limited(struct nk_font_atlas *atlas, int *width, int *height,
 
     /* allocate memory for the baked image font atlas */
     atlas->pixel = atlas->temporary.alloc(atlas->temporary.userdata,0, img_size);
-    NK_ASSERT(atlas->pixel);
     if (!atlas->pixel)
         goto failed;
 
@@ -18184,7 +18181,6 @@ nk_font_atlas_bake_limited(struct nk_font_atlas *atlas, int *width, int *height,
         /* convert alpha8 image into rgba32 image */
         void *img_rgba = atlas->temporary.alloc(atlas->temporary.userdata,0,
                             (nk_size)*width * (nk_size)*height * 4);
-        NK_ASSERT(img_rgba);
         if (!img_rgba) goto failed;
         nk_font_bake_convert(img_rgba, *width, *height, atlas->pixel);
         atlas->temporary.free(atlas->temporary.userdata, atlas->pixel);
