@@ -1,7 +1,7 @@
 name: Focused macOS F1 accessibility
 on:
   push:
-    branches: [main, codex/mac-f1-reading]
+    branches: [main, codex/mac-f1-reading, codex/mac-f1-fields]
     paths:
       - app/accessibility*
       - app/documentation*
@@ -9,6 +9,7 @@ on:
       - app/main.c
       - app/settings_ui.inc
       - tests/test_accessibility*
+      - tests/test_native_test_runner.py
       - tests/check_display_workflow.py
       - tests/native_integration_cases.json
       - tools/native_tests.py
@@ -42,10 +43,12 @@ jobs:
           cmake -S build-sdl-source -B build-sdl -G Ninja -DCMAKE_BUILD_TYPE=Release -DSDL_TESTS=OFF -DCMAKE_INSTALL_PREFIX="$PWD/build-sdl-install"
           cmake --build build-sdl --parallel 4
           cmake --install build-sdl
+      - name: Platform catalog and failure reporting
+        run: python3 tests/test_native_test_runner.py --work build/native
       - name: Portable UTF-16 and document contracts
-        run: python3 tools/build.py --compiler clang --sanitizers --test --test-filter accessibility_utf16 --test-filter accessibility_document --test-filter accessibility_suspend
+        run: python3 tools/build.py --compiler clang --sanitizers --test --test-filter accessibility_utf16 --test-filter accessibility_document --test-filter accessibility_suspend --test-filter accessibility_edit
       - name: Actual AppKit and rendered F1
-        run: python3 tools/build.py --compiler clang --sanitizers --test-display --test-filter accessibility_native --test-filter accessibility_ui --test-filter accessibility_document_macos --test-filter documentation_navigation --test-filter documentation_sidebar
+        run: python3 tools/build.py --compiler clang --sanitizers --test-display --test-filter accessibility_native --test-filter accessibility_ui --test-filter accessibility_document_macos --test-filter accessibility_edit_macos --test-filter documentation_navigation --test-filter documentation_sidebar
       - name: Archive focused evidence
         if: always()
         uses: actions/upload-artifact@v4

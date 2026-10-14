@@ -37,6 +37,7 @@ typedef struct {
  bool building,keyboard_focus,suspended;
  uint64_t pending_value_id;double pending_value;
  uint64_t pending_text_id;char pending_text[PS_A11Y_LABEL_BYTES];
+ size_t pending_text_caret;uint64_t pending_text_version;bool pending_text_has_caret;
  uint64_t next_text_version,pending_selection_id,pending_selection_version;
  size_t pending_selection_start,pending_selection_end;
  uint64_t pending_edit_scroll_id,pending_edit_scroll_version;
@@ -96,6 +97,9 @@ bool ps_a11y_adjust(ps_a11y_model *model,uint64_t id,int direction);
 bool ps_a11y_record_edit(ps_a11y_model *model,const char *window,const char *name,
                        const float bounds[4],bool enabled,char *text,size_t capacity);
 bool ps_a11y_set_text(ps_a11y_model *model,uint64_t id,const char *text);
+/* Replace the current version's selection and deliver its collapsed caret
+ * atomically with the new value, including an identical-text replacement. */
+bool ps_a11y_edit_replace(ps_a11y_model *model,uint64_t id,uint64_t version,const char *text);
 /* Selection offsets are UTF-8 scalar boundaries. Requests expire on content
  * changes and never run against a replacement control. */
 bool ps_a11y_edit_update(ps_a11y_model *model,size_t index,const char *text,size_t start,size_t end);

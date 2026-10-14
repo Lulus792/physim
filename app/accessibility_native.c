@@ -18,6 +18,7 @@ struct ps_a11y_native {
  SDL_Window *window;ps_a11y_model *model;SDL_Mutex *mutex;SDL_AtomicInt references;
  id view,children;uint64_t ids[PS_A11Y_MAX_NODES],parents[PS_A11Y_MAX_NODES];bool checked[PS_A11Y_MAX_NODES];uint64_t focused_id;size_t count;
  double values[PS_A11Y_MAX_NODES];
+ uint64_t edit_versions[PS_A11Y_MAX_NODES];size_t edit_starts[PS_A11Y_MAX_NODES],edit_ends[PS_A11Y_MAX_NODES],edit_carets[PS_A11Y_MAX_NODES];
  id document;uint64_t document_identity,document_version;ps_a11y_utf16_index document_index;bool document_viewable;
 };
 #if OBJC_BOOL_IS_BOOL
@@ -25,7 +26,7 @@ struct ps_a11y_native {
 #else
 #define PS_AX_BOOL "c"
 #endif
-static Class element_class,document_class;static Ivar owner_ivar,id_ivar;static IMP base_dealloc,base_frame;
+static Class element_class,document_class,edit_class;static Ivar owner_ivar,id_ivar;static IMP base_dealloc,base_frame;
 static id send0(id object,const char *selector) {
  return ((id(*)(id,SEL))objc_msgSend)(object,sel_registerName(selector));
 }
@@ -182,8 +183,9 @@ static bool make_class(void) {
  return base_dealloc && base_frame && owner_ivar && id_ivar;
 }
 #include "accessibility_macos_text.inc"
+#include "accessibility_macos_edit.inc"
 ps_a11y_native *ps_a11y_native_create(SDL_Window *window,ps_a11y_model *model,SDL_Mutex *mutex) {
- if(!window || !model || !mutex || !make_class() || !make_document_class())return NULL;
+ if(!window || !model || !mutex || !make_class() || !make_document_class() || !make_edit_class())return NULL;
  id native=SDL_GetPointerProperty(SDL_GetWindowProperties(window),SDL_PROP_WINDOW_COCOA_WINDOW_POINTER,NULL);
  if(!native)return NULL;
  ps_a11y_native *b=calloc(1,sizeof *b);if(!b)return NULL;
@@ -203,7 +205,7 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
  SDL_UnlockMutex(b->mutex);
  if(!changed && !availability_changed)return;
  id pool=send0(send0((id)objc_getClass("NSAutoreleasePool"),"alloc"),"init");
- id children=send0((id)objc_getClass("NSMutableArray"),"new");bool value_changed[PS_A11Y_MAX_NODES]={0};bool selection_changed[PS_A11Y_MAX_NODES]={0};
+ id children=send0((id)objc_getClass("NSMutableArray"),"new");bool value_changed[PS_A11Y_MAX_NODES]={0};bool selection_changed[PS_A11Y_MAX_NODES]={0};bool text_selection_changed[PS_A11Y_MAX_NODES]={0};
  SDL_LockMutex(b->mutex);
  uint64_t previous_focus=b->focused_id,new_focus=0;
  for(size_t i=0;i<b->model->count;i++)if(b->model->nodes[i].focused)new_focus=b->model->nodes[i].id;
@@ -215,16 +217,18 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
    for(size_t j=0;j<b->model->count;j++)if(b->model->nodes[j].parent==node->id && b->model->nodes[j].checked)new_selected=b->model->nodes[j].id;
    selection_changed[i]=old_selected!=new_selected;
   }
-  for(size_t j=0;j<b->count;j++)if(b->ids[j]==node->id)
-   value_changed[i]=((node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) && node->checked!=b->checked[j]) || (node->role==PS_A11Y_SLIDER && node->value!=b->values[j]);
+  for(size_t j=0;j<b->count;j++)if(b->ids[j]==node->id) {
+   text_selection_changed[i]=node->role==PS_A11Y_EDIT && (node->text_version!=b->edit_versions[j] || node->text_start!=b->edit_starts[j] || node->text_end!=b->edit_ends[j] || node->text_caret!=b->edit_carets[j]);
+   value_changed[i]=(node->role==PS_A11Y_EDIT && node->text_version!=b->edit_versions[j]) || ((node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) && node->checked!=b->checked[j]) || (node->role==PS_A11Y_SLIDER && node->value!=b->values[j]);
+  }
   if(!element) {
-   element=send0((id)element_class,"new");SDL_AddAtomicInt(&b->references,1);
+   element=send0((id)(node->role==PS_A11Y_EDIT?edit_class:element_class),"new");SDL_AddAtomicInt(&b->references,1);
    memcpy((char*)element+ivar_getOffset(owner_ivar),&b,sizeof b);memcpy((char*)element+ivar_getOffset(id_ivar),&node->id,sizeof node->id);
    send1(children,"addObject:",element);send0(element,"release");
   } else send1(children,"addObject:",element);
  }
  if(b->children)send0(b->children,"release");b->children=children;
- b->count=b->model->count;for(size_t i=0;i<b->count;i++){b->ids[i]=b->model->nodes[i].id;b->checked[i]=b->model->nodes[i].checked;b->parents[i]=b->model->nodes[i].parent;b->values[i]=b->model->nodes[i].value;}
+ b->count=b->model->count;for(size_t i=0;i<b->count;i++){b->ids[i]=b->model->nodes[i].id;b->checked[i]=b->model->nodes[i].checked;b->parents[i]=b->model->nodes[i].parent;b->values[i]=b->model->nodes[i].value;b->edit_versions[i]=b->model->nodes[i].text_version;b->edit_starts[i]=b->model->nodes[i].text_start;b->edit_ends[i]=b->model->nodes[i].text_end;b->edit_carets[i]=b->model->nodes[i].text_caret;}
  id roots=send0((id)objc_getClass("NSMutableArray"),"array");int height;SDL_GetWindowSize(b->window,NULL,&height);
  BOOL flipped=((BOOL(*)(id,SEL))objc_msgSend)(b->view,sel_registerName("isFlipped"));
  for(size_t i=0;i<b->count;i++) {
@@ -242,6 +246,7 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
  if(document_changed && b->document)NSAccessibilityPostNotification(b->document,string("AXValueChanged"));
  for(size_t i=0;i<b->count;i++)if(value_changed[i])NSAccessibilityPostNotification(element_for(b,b->ids[i]),string("AXValueChanged"));
  for(size_t i=0;i<b->count;i++)if(selection_changed[i])NSAccessibilityPostNotification(element_for(b,b->ids[i]),string("AXSelectedChildrenChanged"));
+ for(size_t i=0;i<b->count;i++)if(text_selection_changed[i])NSAccessibilityPostNotification(element_for(b,b->ids[i]),string("AXSelectedTextChanged"));
  b->focused_id=new_focus;
  if(previous_focus!=new_focus)NSAccessibilityPostNotification(new_focus?element_for(b,new_focus):b->view,string("AXFocusedUIElementChanged"));
  NSAccessibilityPostNotification(b->view,string("AXLayoutChanged"));send0(pool,"drain");
@@ -293,6 +298,7 @@ bool ps_a11y_native_press_choice(ps_a11y_native *b,const char *group,const char 
  return false;
 }
 #include "accessibility_macos_text_tests.inc"
+#include "accessibility_macos_edit_tests.inc"
 bool ps_a11y_native_test(SDL_Window *window) {
  ps_a11y_model *model=malloc(sizeof *model);SDL_Mutex *mutex=SDL_CreateMutex();
  if(!model || !mutex){free(model);if(mutex)SDL_DestroyMutex(mutex);return false;}
@@ -389,7 +395,7 @@ bool ps_a11y_native_test(SDL_Window *window) {
  okay &= !((BOOL(*)(id,SEL))objc_msgSend)(radio,sel_registerName("accessibilityPerformPress"));
  okay &= !((BOOL(*)(id,SEL))objc_msgSend)(slider,sel_registerName("accessibilityPerformIncrement"));
  send0(slider,"release");send0(radio,"release");send0(checkbox,"release");send0(element,"release");free(model);
- return mac_document_test(window) && okay;
+ return mac_document_test(window) && mac_edit_test(window) && okay;
 }
 #elif !defined(__linux__)
 struct ps_a11y_native {int unused;};
@@ -408,4 +414,5 @@ bool ps_a11y_native_document_link_invoked(ps_a11y_native *bridge,uint64_t versio
 #endif
 #ifndef __APPLE__
 bool ps_a11y_native_document_read_test(ps_a11y_native *bridge){(void)bridge;return false;}
+bool ps_a11y_native_edit_test_step(ps_a11y_native *bridge,int step){(void)bridge;(void)step;return false;}
 #endif

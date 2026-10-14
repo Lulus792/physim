@@ -59,7 +59,20 @@ auslösen, auch wenn seine lokale Nummer einem Control entspricht.
 Die ausgeführten ARM64-/Intel-Prüfungen und tatsächlichen F1-Aufnahmen stehen
 in der [F1-Abnahmeentscheidung](decisions/004-f1-handbook.md).
 
-Textfelder, Editoren, Menüs, Dropdowns, weitere Regler, Szenen, Diagramme und
+Die beiden F1-Suchfelder veröffentlichen jetzt die Rolle `AXTextField`, ihren
+vollständigen Wert, UTF-16-Auswahlbereiche und die ausgewählten Zeichen. Ein
+zusammengefallener Bereich beschreibt den Caret. AppKit liefert außerdem
+Einzelzeilenbereiche, sichtbare Zeichenbereiche und tatsächliche Zeichenrahmen.
+Die einfachen und die als `NSValue` gelieferten Auswahlbereiche beschreiben
+denselben Zustand. Wertsetzen, Auswahl und Bereichsanforderungen werden durch
+den normalen UI-Frame verarbeitet. Ersetzen einer Auswahl liefert Wert und
+Caret gemeinsam; eine inzwischen geänderte Textfassung wird nicht überschrieben.
+Ungültige Surrogatgrenzen, eingebettete Nullzeichen, mehrzeilige Eingaben und
+Kapazitätsüberschreitungen werden verworfen. Verborgene und deaktivierte Felder
+nehmen keine Schreibaufträge an; entfernte oder zerstörte Referenzen bleiben
+ungültig. Die jeweils ausgeführten Prüfungen stehen in der F1-Abnahmeentscheidung.
+
+Weitere Textfelder, Editoren, Menüs, Dropdowns, weitere Regler, Szenen, Diagramme und
 Fokusführung für weitere Widgettypen benötigen zusätzliche semantische Anbindungen.
 Die bestehende Sichtbarkeits-/Deaktivierungslogik wird berücksichtigt, sodass
 dieser Einstieg keine Aktivierung gesperrter oder momentan schreibgeschützter
