@@ -50,6 +50,12 @@ struct nk_sdl {
     struct nk_draw_null_texture null_texture;
     struct nk_allocator allocator;
     unsigned font_texture;
+    float font_raster_scale;
+    struct {
+        struct nk_font_atlas atlas;
+        unsigned texture;
+    } font_additions[PS_UI_FONT_APPEND_LIMIT];
+    unsigned font_addition_count;
     Uint64 last_render;
     bool insert_toggle;
     ps_a11y_model *accessibility;
@@ -435,15 +441,15 @@ bool nk_sdl_font_stash_end(struct nk_context *ctx) {
     /* Source presence is baked into each glyph; source blobs can now be released.
      * The merged codepoint ranges survive until atlas_clear. */
     nk_font_atlas_cleanup(&sdl->atlas);
+    sdl->font_raster_scale=1;
     return true;
 }
-bool nk_sdl_font_stash_replace(struct nk_context *ctx,struct nk_font_atlas *candidate,
-                               float raster_scale,struct nk_font *default_font) {
-    if(!ctx || !ctx->userdata.ptr || !candidate || !default_font ||
+static bool font_candidate_upload(struct nk_sdl *sdl,struct nk_font_atlas *candidate,
+                                   float raster_scale,unsigned *texture,
+                                   struct nk_draw_null_texture *null_texture) {
+    if(!candidate || candidate==&sdl->atlas || !candidate->fonts ||
+       candidate->pixel || candidate->glyphs ||
        !isfinite(raster_scale) || raster_scale<1 || raster_scale>4)return false;
-    struct nk_sdl *sdl=ctx->userdata.ptr;
-    bool contained=false;for(struct nk_font *f=candidate->fonts;f;f=f->next)if(f==default_font)contained=true;
-    if(!contained || candidate==&sdl->atlas)return false;
     int w=0,h=0,limit=ps_graphics_texture_limit(sdl->graphics);
     Uint64 start=SDL_GetTicksNS();
     const void *pixels=nk_font_atlas_bake_limited(candidate,&w,&h,NK_FONT_ATLAS_ALPHA8,limit);
@@ -454,22 +460,55 @@ bool nk_sdl_font_stash_replace(struct nk_context *ctx,struct nk_font_atlas *cand
         const struct nk_font_glyph *g=nk_font_find_glyph(f,c);
         if(!g || !g->source_present || g->codepoint!=c || g->x1<=g->x0 || g->y1<=g->y0)return false;
     }
-    unsigned texture=ps_graphics_alpha_texture(sdl->graphics,pixels,w,h);
-    if(!texture)return false;
+    *texture=ps_graphics_alpha_texture(sdl->graphics,pixels,w,h);
+    if(!*texture)return false;
     if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: F1 atlas validation/upload seconds=%.6f\n",(double)(SDL_GetTicksNS()-start)/1e9);
-    struct nk_draw_null_texture null_texture;
-    nk_font_atlas_end(candidate,nk_handle_id((int)texture),&null_texture);
+    nk_font_atlas_end(candidate,nk_handle_id((int)*texture),null_texture);
     if(!ps_ui_font_logical_scale(candidate,raster_scale)) {
-        ps_graphics_delete_texture(sdl->graphics,texture);return false;
+        ps_graphics_delete_texture(sdl->graphics,*texture);*texture=0;return false;
     }
     nk_font_atlas_cleanup(candidate);
+    printf("Font candidate: %dx%d, raster %.3f, GPU limit %d\n",w,h,raster_scale,limit);
+    return true;
+}
+static void font_additions_clear(struct nk_sdl *sdl) {
+    for(unsigned i=0;i<sdl->font_addition_count;i++) {
+        ps_graphics_delete_texture(sdl->graphics,sdl->font_additions[i].texture);
+        nk_font_atlas_clear(&sdl->font_additions[i].atlas);
+    }
+    memset(sdl->font_additions,0,sizeof sdl->font_additions);
+    sdl->font_addition_count=0;
+}
+bool nk_sdl_font_stash_append(struct nk_context *ctx,struct nk_font_atlas *candidate,
+                              float raster_scale) {
+    if(!ctx || !ctx->userdata.ptr)return false;
+    struct nk_sdl *sdl=ctx->userdata.ptr;
+    if(!sdl->font_texture || raster_scale!=sdl->font_raster_scale ||
+       sdl->font_addition_count==PS_UI_FONT_APPEND_LIMIT)return false;
+    unsigned texture=0;struct nk_draw_null_texture unused;
+    if(!font_candidate_upload(sdl,candidate,raster_scale,&texture,&unused))return false;
+    unsigned index=sdl->font_addition_count++;
+    sdl->font_additions[index].atlas=*candidate;
+    sdl->font_additions[index].texture=texture;
+    memset(candidate,0,sizeof *candidate);
+    return true;
+}
+bool nk_sdl_font_stash_replace(struct nk_context *ctx,struct nk_font_atlas *candidate,
+                               float raster_scale,struct nk_font *default_font) {
+    if(!ctx || !ctx->userdata.ptr || !candidate || !default_font)return false;
+    bool contained=false;for(struct nk_font *f=candidate->fonts;f;f=f->next)if(f==default_font)contained=true;
+    if(!contained)return false;
+    struct nk_sdl *sdl=ctx->userdata.ptr;
+    unsigned texture=0;struct nk_draw_null_texture null_texture;
+    if(!font_candidate_upload(sdl,candidate,raster_scale,&texture,&null_texture))return false;
     nk_style_set_font(ctx,&default_font->handle);
     struct nk_font_atlas previous=sdl->atlas;unsigned old_texture=sdl->font_texture;
     sdl->atlas=*candidate;memset(candidate,0,sizeof *candidate);
     sdl->font_texture=texture;sdl->null_texture=null_texture;
+    sdl->font_raster_scale=raster_scale;
+    font_additions_clear(sdl);
     if(previous.temporary.alloc)nk_font_atlas_clear(&previous);
     ps_graphics_delete_texture(sdl->graphics,old_texture);
-    printf("Font replacement: %dx%d, raster %.3f, GPU limit %d\n",w,h,raster_scale,limit);
     return true;
 }
 bool nk_sdl_render(struct nk_context *ctx) {
@@ -539,6 +578,7 @@ void nk_sdl_shutdown(struct nk_context *ctx) {
     ps_a11y_native_destroy(sdl->accessibility_native);
     ps_a11y_destroy(sdl->accessibility);
     free(sdl->accessibility);
+    font_additions_clear(sdl);
     ps_graphics_delete_texture(sdl->graphics, sdl->font_texture);
     if (sdl->atlas.temporary.alloc)
         nk_font_atlas_clear(&sdl->atlas);

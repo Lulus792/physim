@@ -18335,6 +18335,9 @@ nk_font_atlas_clear(struct nk_font_atlas *atlas)
     }
     if (atlas->glyphs)
         atlas->permanent.free(atlas->permanent.userdata, atlas->glyphs);
+    /* Upload can fail after bake and before atlas_end releases the pixels. */
+    if (atlas->pixel)
+        atlas->temporary.free(atlas->temporary.userdata, atlas->pixel);
     nk_zero_struct(*atlas);
 }
 #endif

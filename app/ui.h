@@ -37,10 +37,20 @@ bool ps_ui_font_add_fallback(struct nk_font_atlas *atlas,struct nk_font *target,
 bool nk_sdl_font_stash_end(struct nk_context *ctx);
 /* Normalize a completed atlas baked in device pixels to logical font heights. */
 bool ps_ui_font_logical_scale(struct nk_font_atlas *atlas,float raster_scale);
-/* Bake/upload a candidate, preserving the old atlas on failure. Success takes
- * ownership of candidate and installs default_font before releasing old data. */
+/* Bake/upload an unbaked candidate, preserving the old atlas on failure. Success takes
+ * ownership of candidate and installs default_font before releasing old data.
+ * Replace before recording a frame; successful replacement retires old handles.
+ * If failure leaves baked pixels/glyphs, clear it before rebuilding/retrying. */
 bool nk_sdl_font_stash_replace(struct nk_context *ctx,struct nk_font_atlas *candidate,
                                float raster_scale,struct nk_font *default_font);
+/* Same current GL context as the renderer. Append an unbaked candidate at the installed raster
+ * scale without changing the style or invalidating existing text commands.
+ * Success takes candidate ownership. Failure leaves ownership with the caller;
+ * if baked pixels/glyphs remain, clear it before rebuilding/retrying.
+ * A successful replacement or shutdown releases all appended atlases. */
+#define PS_UI_FONT_APPEND_LIMIT 38
+bool nk_sdl_font_stash_append(struct nk_context *ctx,struct nk_font_atlas *candidate,
+                              float raster_scale);
 int nk_sdl_handle_event(struct nk_context *ctx, SDL_Event *event);
 bool nk_sdl_render(struct nk_context *ctx);
 ps_result nk_sdl_export_png(struct nk_context *ctx, struct nk_context *drawing, int width,

@@ -122,7 +122,7 @@ def main():
     actual_display = {case.name for case in runner.catalog()
                       if case.display and case.integration and not case.integration.get("benchmark")}
     native_display = {case.name for case in runner.catalog() if case.display and not case.integration}
-    assert native_display <= {"accessibility_native", "accessibility_ui"}, native_display
+    assert native_display <= {"accessibility_native", "accessibility_ui", "font_bank_ui"}, native_display
     provider_display = {"accessibility_atspi"} if sys.platform == "linux" else set()
     specialized_display = {
         "project_migration_app": ("tests/test_project_migration_app.py", ()),

@@ -505,10 +505,36 @@ Tatsächlich ausgeführt:
   Navigations-, Seitenleisten- und externen AT-SPI-Lese-/Feld-/Linkprüfungen.
 
 Nächster belegbarer Leistungsansatz ist eine Änderung des CPU-Schriftaufbaus.
+Die [Architekturentscheidung 005](005-f1-font-demand.md) vergleicht zwei
+Besitzmodelle und legt die Anforderungen an den Aufbau nach Bedarf und dessen
+Fehlerfälle fest. Der zusätzliche Atlasbesitz ist im Backend vorbereitet;
+F1s Größenwahl wird erst im nächsten Schritt damit verbunden.
 Sie muss alle Zeichen und Schriftvarianten, echte Rasterdichte, stabile
 logische Metriken und den atomaren Fehlerfall erhalten. Weder diese Diagnose
 noch die bestandenen Stresszyklen schließen die offene Windows-Sporadik oder
 die übrigen F1-Abnahmen.
+
+#### Zusätzliche macOS-Intel-Abnahme des R8-Pfads
+
+Job `116130296964` aus dem oben verlinkten Workflow auf `5c361d5` ist inzwischen
+tatsächlich abgeschlossen: LLVM 20 ASan/UBSan, SDL 3.2.30, OpenGL 4.1
+APPLE-21.1.1 mit Apple Software Renderer. Der Modellverbund `run-c2latp21`
+besteht **4/4**; der GUI-Verbund `run-65o9coyv` besteht **8/10**.
+RGBA/R8-Bildpunkte sind auch auf diesem Renderer identisch. Gezeichnete
+Accessibility, Navigation, Seitenleiste und native AppKit-Lese-/Feld-/Linkfälle
+bestehen. Die tatsächlichen Linkfokus- und 32-Pixel-Lesemodusbilder wurden
+geprüft. Das Originalarchiv liegt unter
+`build/native/F1-review/alpha-atlas-mac-intel.zip`.
+
+Die neu mitgeprüfte Zeicheninventur scheitert an nicht unterscheidbarer normaler
+und fetter Schrift bei sämtlichen Größen. Der aktuelle macOS-Pfad wählt für
+beide Rollen `Helvetica.ttc`; Nuklears aktueller Loader verwendet jeweils
+Collection-Index 0. Die neu ausgeführte Prüfung bestätigt damit keine echte
+fette Schriftschnittwahl auf macOS. Dieser eigenständige Fehler bleibt zu beheben.
+Der Dichtetest überschreitet nach mehreren vollständigen Atlasaufbauten sein
+internes Zeitlimit nach 61,240 Sekunden. Auch dieser Fall bleibt offen.
+Der ARM64-Job ist noch nicht abgeschlossen. Aus dem Intel-Teilergebnis wird
+keine plattformübergreifende Freigabe abgeleitet.
 
 ### Native macOS-Linkattribute, Ziele und Aktivierung
 

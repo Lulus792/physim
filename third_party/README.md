@@ -23,6 +23,12 @@ included as `licenses/zlib-LICENSE.txt` in the portable package.
 
 ## Nuklear snapshot
 
+Local patch (2026-10-15): `nk_font_atlas_clear` also releases pixel memory when
+an atlas is discarded after a successful bake and before `nk_font_atlas_end`,
+including a failed GPU upload. `font_atlas_limits` abandons both Alpha8 and
+RGBA32 output before atlas end and checks complete allocator balance.
+`font_bank_ui` exercises the real GL error path and retained older textures.
+
 Local patch (2026-10-14): merged fonts extend the last handle and return that
 handle. Each baked glyph records whether its source cmap contains the codepoint;
 lookup skips `.notdef` entries in overlapping ranges. This remains valid after

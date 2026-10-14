@@ -62,5 +62,13 @@ int main(void) {
  nk_font_atlas_init(&atlas,&allocator);nk_font_atlas_begin(&atlas);CHECK(nk_font_atlas_add_default(&atlas,16,NULL));
  CHECK(nk_font_atlas_bake_limited(&atlas,&w,&h,NK_FONT_ATLAS_ALPHA8,700) && w<=700 && h<=700);
  nk_font_atlas_end(&atlas,nk_handle_id(0),NULL);nk_font_atlas_clear(&atlas);CHECK(a.live==0);
+ /* Abandon either completed format before atlas_end, as after upload failure. */
+ for(unsigned format=0;format<2;format++) {
+  nk_font_atlas_init(&atlas,&allocator);nk_font_atlas_begin(&atlas);
+  CHECK(nk_font_atlas_add_default(&atlas,16,NULL));
+  CHECK(nk_font_atlas_bake_limited(&atlas,&w,&h,format?NK_FONT_ATLAS_RGBA32:NK_FONT_ATLAS_ALPHA8,1024));
+  CHECK(atlas.pixel && atlas.glyphs && a.live>0);
+  nk_font_atlas_clear(&atlas);CHECK(a.live==0);
+ }
  return 0;
 }
