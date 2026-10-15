@@ -58,6 +58,8 @@ SIMPLE["documentation_zoom"] = (["--workspace-state-test", "{directory}", "docs-
 SIMPLE["documentation_density"] = (["--workspace-state-test", "{directory}", "docs-keyboard-density"], 120, True)
 SIMPLE["documentation_navigation"] = (["--workspace-state-test", "{directory}", "docs-keyboard-navigation"], 90, True)
 SIMPLE["documentation_sidebar"] = (["--workspace-state-test", "{directory}", "docs-keyboard-sidebar"], 90, True)
+SIMPLE["documentation_formula_narrow"] = (["--workspace-state-test", "{directory}", "docs-keyboard-formula-narrow"], 90, True)
+SIMPLE["documentation_formula_physics"] = (["--workspace-state-test", "{directory}", "docs-keyboard-formula-physics"], 90, True)
 SIMPLE["documentation_formula_catalog"] = (["--workspace-state-test", "{directory}", "docs-keyboard-formula-catalog"], 90, True)
 SIMPLE["documentation_typeset"] = (["--workspace-state-test", "{directory}", "docs-keyboard-typeset"], 90, True)
 SIMPLE["accessibility_document_macos"] = (["--workspace-state-test", "{directory}", "docs-keyboard-reading-native"], 90, True)
@@ -1613,13 +1615,19 @@ def main():
                 require(font==(16 if index<18 else 32) and theme==(index//6)%3 and complete==1 and w>0 and h>0,
                         'Incomplete, clipped or incorrect formula state')
                 documentation_formula_ink(directory/f'docs-typeset-{index:02}.bmp',x,y,w,h)
-        elif args.case == "documentation_formula_catalog":
+        elif args.case in ("documentation_formula_catalog","documentation_formula_physics","documentation_formula_narrow"):
             output=flow.steps[-1]['stdout']
-            registry={f['tex']:f['reading'] for f in json.loads((flow.root/'docs/formulas/sources.json').read_text(encoding='utf-8'))['formulas']}
+            formulas=json.loads((flow.root/'docs/formulas/sources.json').read_text(encoding='utf-8'))['formulas']
+            registry={f['tex']:f['reading'] for f in formulas}
+            narrow=args.case=='documentation_formula_narrow'
+            selected={f['tex'] for f in formulas if f['id'] in ('string-kinetic-term','string-gradient-term','string-staggered-velocity','string-wave-grid-step')}
             expected=[]
-            for name in ('user-guide','pendulum-tutorial','projectile-tutorial','projectile-drag-tutorial','material-tutorial','spring','collision-tutorial'):
+            names=('thermodynamics','electromagnetism','waves-optics','fluid') if args.case=='documentation_formula_physics' else ('user-guide','pendulum-tutorial','projectile-tutorial','projectile-drag-tutorial','material-tutorial','spring','collision-tutorial')
+            if narrow:names=('waves-optics',)
+            for name in names:
                 text=(flow.root/f'docs/{name}.md').read_text(encoding='utf-8')
-                expected.extend((f'docs/{name}.md',registry[tex.strip()]) for tex in re.findall(r'^\$\$\n(.*?)^\$\$$',text,re.M|re.S))
+                expected.extend((f'docs/{name}.md',registry[tex.strip()]) for tex in re.findall(r'^\$\$\n(.*?)^\$\$$',text,re.M|re.S) if not narrow or tex.strip() in selected)
+            require(not narrow or len(expected)==4,'Missing narrow formula selection')
             records=re.findall(r'FORMULA CATALOG: case=(\d+) page=(\S+) block=(\d+) complete=1 reading=([^\r\n]+)',output)
             require(len(records)==len(expected) and [(r[1],r[3]) for r in records]==expected,'Published formula reading order differs')
             require([int(r[0]) for r in records]==list(range(len(expected))),'Missing formula catalog states')
@@ -1628,7 +1636,7 @@ def main():
             require(len(draws)==len(expected),'Missing native formula catalog draws')
             for index,record in enumerate(draws):
                 case,font,theme,complete,x,y,w,h=map(int,record)
-                require(case==index and font==16 and theme==1 and complete==1,'Incomplete formula catalog image')
+                require(case==index and font==(32 if narrow else 16) and theme==1 and complete==1,'Incomplete formula catalog image')
                 documentation_formula_ink(directory/f'docs-formula-catalog-{index:03}.bmp',x,y,w,h)
         elif args.case == "documentation_inline":
             documentation_inline_ink(directory, flow.steps[-1]["stdout"])

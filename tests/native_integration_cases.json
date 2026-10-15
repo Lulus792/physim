@@ -12638,6 +12638,80 @@
           ]
         }
       ]
+    },
+    {
+      "name": "documentation_formula_physics",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tools/math/check.py",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 30
+        },
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "documentation_formula_physics",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 120,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "documentation_formula_narrow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tools/math/check.py",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 30
+        },
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "documentation_formula_narrow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 120,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
     }
   ]
 }

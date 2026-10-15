@@ -11,7 +11,19 @@ Dies sind ausdrücklich Lehrmodelle. Die eigenständigen
 
 Für ein starres gerades kreiszylindrisches Rohr mit Radius r, Länge L und
 dynamischer Viskosität μ gilt Hagen-Poiseuille:
-G=πr⁴/(8μL), Q=G(pa-pb), P_loss=G(pa-pb)².
+
+$$
+G=\frac{\pi r^4}{8\mu L}
+$$
+
+$$
+Q=G(p_a-p_b)
+$$
+
+$$
+P_{\mathrm{loss}}=G(p_a-p_b)^2
+$$
+
 G ist in m³/(s Pa), Q in m³/s und Leistung in W. Drücke dürfen signierte
 Relativdrücke sein; positive Q fließt von A nach B. Radius, Länge und Viskosität
 sind positiv und endlich; G=0 schließt eine Kante. Das Modell setzt vollständig
@@ -19,16 +31,33 @@ entwickelte laminare inkompressible Newtonsche Strömung voraus. Eintritt,
 Bögen, Turbulenz, elastische Wände und Kompressibilität fehlen.
 [MIT: Rohrwiderstand und Poiseuille](https://ocw.mit.edu/courses/hst-542j-quantitative-physiology-organ-transport-systems-spring-2004/5384df8b0795c292af407d5cfb4a3106_fluid_mechanics.pdf).
 
-Re=ρ|v|d/μ prüft Dichte in kg/m³, Geschwindigkeit in m/s, Durchmesser in m und
-Viskosität in Pa s. Die Bibliothek wählt keinen universellen Übergangswert;
+Die Reynolds-Zahl
+
+$$
+\mathrm{Re}=\frac{\rho\lvert v\rvert d}{\mu}
+$$
+
+prüft Dichte in kg/m³, Geschwindigkeit in m/s, Durchmesser in m und Viskosität
+in Pa s. Die Bibliothek wählt keinen universellen Übergangswert;
 das Tutorial verlangt konservativ Re≤1000. Stoffwerte sind ausdrücklich
-Modelldaten. Hydrostatik p=p0+ρgh verwendet positive Dichte, g≥0 und signierte
-Tiefe nach unten. Das Rohrnetz berücksichtigt keine Höhenenergie automatisch.
+Modelldaten. Die Hydrostatik
+
+$$
+p=p_0+\rho gh
+$$
+
+verwendet positive Dichte, g ≥ 0 und signierte Tiefe nach unten. Das Rohrnetz berücksichtigt keine Höhenenergie automatisch.
 
 ## Passives Netz und Erhaltung
 
 `pipeNetwork` löst bis zu 16 Knoten und 32 Kanten. Jede freie Knotengleichung
-verlangt Σ Q_out=0; feste Knoten liefern Drücke. Int64-Arrays beschreiben
+verlangt
+
+$$
+\sum Q_{\mathrm{out}}=0
+$$
+
+Feste Knoten liefern Drücke. Int64-Arrays beschreiben
 Start-/Endknoten, ein Float64-Array Leitwerte, ein Int64-Array 0/1-Fixflags und
 ein Float64-Array Druckwerte. Rückgabe: zuerst N Knotendrücke, danach E
 A→B-Flüsse in Eingabereihenfolge. Alle Rückgabearrays besitzen ihren Speicher.
@@ -48,10 +77,21 @@ Trägheit, kompressible Speicher oder automatische Drucktransienten.
 ## Konservativer periodischer Transport
 
 `transportStep` berechnet einen passiven Tracer c in kg/m³ auf 3–4096 gleich
-breiten periodischen Zellen: c_t+v c_x=D c_xx. v ist konstant und signiert,
+breiten periodischen Zellen:
+
+$$
+\frac{\partial c}{\partial t}+v\frac{\partial c}{\partial x}=D\frac{\partial^2c}{\partial x^2}
+$$
+
+v ist konstant und signiert,
 D≥0 in m²/s, dx>0 in m und dt≥0 in s. Upwind-Advektion erster Ordnung und
 zentrierte explizite Diffusion verwenden die gemeinsame Grenze
-|v|dt/dx+2Ddt/dx²≤1. Dann ist der Schritt konvex: nichtnegative Konzentrationen,
+
+$$
+\frac{\lvert v\rvert\Delta t}{\Delta x}+\frac{2D\Delta t}{\Delta x^2}\leq1
+$$
+
+Dann ist der Schritt konvex: nichtnegative Konzentrationen,
 Masse und Maximumprinzip bleiben bis auf Rundung erhalten. Konstante Profile
 werden exakt erhalten; dt=0 kopiert den Zustand. Numerische Upwind-Diffusion
 wird nicht als physikalische Diffusivität ausgegeben.
@@ -76,9 +116,20 @@ Mit ρ=1000 kg/m³ ist Re≈20,8333.
 Diese mittlere Geschwindigkeit wird als vorgegebene Geschwindigkeit für einen
 **separaten periodischen Tracer** über 1 m benutzt. Das ist kein Tracerabfluss
 im verzweigten Rohrnetz. 64 Zellen beginnen bei 0,2+0,1 cos(2πx) kg/m³;
-D=0,0001 m²/s. Die Kontinuumsreferenz ist
-0,2+0,1 cos(2π(x-vt)) exp(-D(2π)²t).
-Der Integrationswert ∫c dx ist Masse pro Querschnittsfläche in kg/m² und bleibt
+D=0,0001 m²/s. Die Kontinuumsreferenz verwendet die Zahlenwerte von x, v, D
+und t in SI-Einheiten und liefert die Konzentration in kg/m³:
+
+$$
+c(x,t)=0{,}2+0{,}1\cos\left(2\pi(x-vt)\right)e^{-D(2\pi)^2t}
+$$
+
+Der Integrationswert
+
+$$
+\int c\,\mathrm{d}x
+$$
+
+ist Masse pro Querschnittsfläche in kg/m² und bleibt
 0,2 kg/m². Ein unabhängiger Fourierfaktor beschreibt den diskreten Schritt;
 Abweichung zur Kontinuumskurve zeigt seine numerische Diffusion.
 

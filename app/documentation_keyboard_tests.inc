@@ -950,18 +950,25 @@ static void documentation_typeset_test_frame(app *a,int *stage,int *code,const c
     if(!okay){fprintf(stderr,"Formula typeset stage %d case %u failed\n",*stage-1,sample);*code=1;a->quitting=true;}
     if(a->quitting)printf("FORMULA TYPESET SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 }
-static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code,const char **capture) {
-    static const char *paths[]={"docs/user-guide.md","docs/pendulum-tutorial.md","docs/projectile-tutorial.md",
+static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code,const char **capture,bool physics,bool narrow) {
+    static const char *learning_paths[]={"docs/user-guide.md","docs/pendulum-tutorial.md","docs/projectile-tutorial.md",
         "docs/projectile-drag-tutorial.md","docs/material-tutorial.md","docs/spring.md","docs/collision-tutorial.md"};
+    static const char *physics_paths[]={"docs/thermodynamics.md","docs/electromagnetism.md","docs/waves-optics.md","docs/fluid.md"};
+    const char *const *paths=physics?physics_paths:learning_paths;
+    size_t path_count=physics?sizeof physics_paths/sizeof physics_paths[0]:sizeof learning_paths/sizeof learning_paths[0];
+    static const char *narrow_paths[]={"docs/waves-optics.md"};
+    if(narrow){paths=narrow_paths;path_count=sizeof narrow_paths/sizeof narrow_paths[0];}
     static size_t page,block;static unsigned sample,frames;static char image[80];
     static int editor,analysis;static double simulation;bool okay=true;
     switch((*stage)++) {
     case 0:editor=a->experiment.string.len;analysis=a->analysis.string.len;simulation=a->simulation_time;
         test_window_key_mod(a->window,SDLK_F1,0);break;
     case 1: {
-        okay=SDL_SetWindowSize(a->doc_window,1100,800) && SDL_SyncWindow(a->doc_window);
+        okay=SDL_SetWindowSize(a->doc_window,narrow?760:1100,narrow?540:800) && SDL_SyncWindow(a->doc_window);
         ps_preferences p=a->preferences;p.theme=PS_THEME_LIGHT;preferences_apply(a,&p);
-        documentation_zoom(a,0);page=block=sample=0;break;
+        documentation_zoom(a,0);
+        if(narrow)for(int i=0;i<8;i++)documentation_zoom(a,1);
+        page=block=sample=0;break;
     }
     case 2: {
         int topic=-1;for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(!strcmp(documentation_topics[i].path,paths[page]))topic=i;
@@ -970,11 +977,17 @@ static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code
     case 3:
         if(frames++<3 || a->doc_scroll_pending){--*stage;return;}break;
     case 4:
-        while(a->documentation && block<a->documentation->count && a->documentation->blocks[block].kind!=PS_DOC_MATH)++block;
+        while(a->documentation && block<a->documentation->count) {
+            const ps_doc_block *candidate=&a->documentation->blocks[block];const char *text=a->documentation->text+candidate->text;
+            bool selected=!narrow || !strncmp(text,"E_K = ",6) || !strncmp(text,"E_G = ",6) ||
+                !strncmp(text,"vⱼ^(n−½)",strlen("vⱼ^(n−½)")) || !strncmp(text,"uⱼⁿ⁺¹",strlen("uⱼⁿ⁺¹"));
+            if(candidate->kind==PS_DOC_MATH && selected)break;
+            ++block;
+        }
         if(!a->documentation){okay=false;break;}
         if(block==a->documentation->count) {
-            if(++page<sizeof paths/sizeof paths[0])*stage=2;
-            else {okay=sample>0;a->quitting=true;}
+            if(++page<path_count)*stage=2;
+            else {okay=narrow?sample==4:sample>0;a->quitting=true;}
             break;
         }
         a->doc_jump_block=(int)block;frames=0;break;
@@ -984,7 +997,7 @@ static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code
         snprintf(image,sizeof image,"docs-formula-catalog-%03u.bmp",sample);*capture=image;break;
     case 6: {
         const ps_doc_block *b=&a->documentation->blocks[block];
-        okay=a->doc_math_test_ok && documentation_font_size(a)==16 &&
+        okay=a->doc_math_test_ok && documentation_font_size(a)==(narrow?32:16) &&
             nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,b->reading_begin) &&
             nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,b->reading_begin+b->reading_length-1) &&
             a->experiment.string.len==editor && a->analysis.string.len==analysis && a->simulation_time==simulation;
@@ -996,7 +1009,9 @@ static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code
     if(a->quitting)printf("FORMULA CATALOG SELF-TEST: %s count=%u\n",*code?"FAILED":"PASSED",sample);
 }
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
-    if(!strcmp(mode,"docs-keyboard-formula-catalog")){documentation_formula_catalog_test_frame(a,stage,code,capture);return;}
+    if(!strcmp(mode,"docs-keyboard-formula-narrow")){documentation_formula_catalog_test_frame(a,stage,code,capture,true,true);return;}
+    if(!strcmp(mode,"docs-keyboard-formula-physics")){documentation_formula_catalog_test_frame(a,stage,code,capture,true,false);return;}
+    if(!strcmp(mode,"docs-keyboard-formula-catalog")){documentation_formula_catalog_test_frame(a,stage,code,capture,false,false);return;}
     if(!strcmp(mode,"docs-keyboard-typeset")){documentation_typeset_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-font-demand")){documentation_font_demand_test(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-sidebar")) {

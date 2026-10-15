@@ -17,7 +17,7 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 | Dokumentationszugang | 185 registrierte Seiten und 214 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
 | Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
-| Formelsatz | 66 TeX-Ausdrücke in 67 Displayblöcken auf sieben Lernseiten; echte Formelbilder unter Windows und Linux geprüft | Weitere Fachseiten, Inline-TeX, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
+| Formelsatz | 118 TeX-Ausdrücke in 119 Displayblöcken auf elf Lern-/Fachseiten; echte Formelbilder unter Windows und Linux geprüft | Weitere Fachseiten, Inline-TeX, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
 | Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; alle drei Plattformen besitzen zusätzlich geprüfte native Tabellen-, Zell- und Headerbeziehungen | Externe macOS-AX-Clientprüfung, echte Screenreader-Aufgaben und die unten beschriebene sporadische Windows-Linkprüfung |
 
 Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
@@ -1978,7 +1978,7 @@ kompakte Kraft-/Energiesymbole im Materialmodell werden ausdrücklich erklärt.
 
 `documentation_formula_catalog` öffnet jede dieser sieben Seiten im echten
 F1-Fenster bei 1100 × 800 und 16 px, steuert jeden Formelblock an und prüft
-vollständige native Zeichengeometrie, die echte Reihenfolge der 67 linearen
+vollständig sichtbare Formelbilder und native Lesebereiche, die echte Reihenfolge der 67 linearen
 Lesealternativen, sichtbare Formelzeichen in allen 67 Aufnahmen sowie erhaltenen
 Editor-/Simulationszustand. Die getrennte 36-Bilder-Matrix bleibt bei 760 × 540,
 16/32 px und allen drei Themes erhalten. Der Pixelprüfer akzeptiert das reale
@@ -2012,3 +2012,60 @@ Intel und die vollständige neue 67-Blöcke-Matrix werden hiermit noch nicht
 als bestanden behauptet. Die übrigen Fachseiten, Inline-Formeln, reale
 Dichte-/Monitorwechsel und praktische mathematische Screenreader-Aufgaben
 bleiben offen; die konservative Gesamtbewertung bleibt bestehen.
+
+## Fachseiten und schmale Gitterformeln vom 15. Oktober 2026
+
+Thermodynamik, Elektromagnetismus, Wellen/Optik und Strömung verwenden ebenfalls
+registrierte TeX-Displays. Insgesamt sind 118 Ausdrücke mit 826 Breitenvarianten
+in 119 Blöcken auf elf Seiten enthalten. Verwendet wurden zusätzlich die
+Abgleichregeln des zentralen `physics-engineer`: tatsächliche C-Implementierung,
+Einheiten, Grenzen und Referenztests statt einer Genauigkeitsbehauptung aus dem
+Schriftbild. Alle 20 Codeblöcke der vier Fachseiten sind gegenüber `05b1d79`
+unverändert. Die numerische Tracerreferenz bezeichnet ausdrücklich SI-Zahlenwerte.
+
+Die diskrete Saitenenergie wurde direkt gegen `examples/documentation/string_main.c`
+geprüft: Geschwindigkeiten für j = 1 bis N−2, Kantenterme für j = 0 bis N−2.
+Die Formel erklärt jetzt beide Summengrenzen, die Kantendifferenz und die
+Geschwindigkeit zwischen den Zeitlagen n−1 und n. Die lange Gesamtsumme hätte
+in schmalen Varianten bei 32 px bis zu 386 Pixel Höhe beansprucht. Ihre
+algebraisch gleichwertige Aufteilung in E_K und E_G erhält das Modell und passt
+in die kleine Ansicht. Diese Terme sind ausdrücklich eine diskrete Invariante,
+keine beliebig abgetastete kontinuierliche Energie.
+
+Die native Zusatzprobe `documentation_formula_physics` öffnet die vier neuen
+Seiten bei 1100 × 800 und prüft alle 52 Formelblöcke samt echten Bildern und
+exakter linearer Lesereihenfolge. `documentation_formula_narrow` prüft den
+Gitterzeitschritt, beide Energieterme und die Zwischengeschwindigkeit bei
+760 × 540 und 32 px. Alle vier Bilder müssen vollständig im realen Clip liegen
+und sichtbare Formelzeichen enthalten. Die bisherigen 67-Blöcke- und
+36-Zoom-/Theme-Prüfungen bleiben erhalten. Die Grenzwerte bleiben 90 Sekunden
+für die App und 120 Sekunden für den umgebenden Fall.
+
+MSVC mit ASan besteht Thermodynamik, Elektromagnetismus, Wellen/Optik, Strömung,
+alle vier vollständigen Tutorials sowie Parser/Links 10/10 in `run-adnoq2hf`.
+Nach der Energieaufteilung bestehen alle vier GUI-Fälle in `run-oc5xp64i`:
+36 + 67 + 52 + 4 tatsächliche Aufnahmen. Linux GCC mit ASan/UBSan besteht
+Parser/Links und die vier Core-Domänen 6/6 in `run-lb0rqxqw`; alle vier GUI-Fälle
+bestehen in `run-vv3tcbgp` (SDL 3.2.30, Mesa-Software-GL, X11/Xvfb, Openbox).
+Alle vier Windows-Formelübersichten vor der Aufteilung, die vier finalen
+Windows-Bilder der kleinen Ansicht und die finalen Linux-Bilder für Gitter-
+und Gradiententerm wurden visuell geprüft. Der Testläufer mit seinen erwarteten
+Fehlerfällen besteht in `build/native/formula-narrow-runner-proof`.
+
+Die erste Renderer-Revision `cd88250` ist nun auch auf macOS Intel tatsächlich
+bestätigt: `run-tbxaqu2c` besteht 11/11 native Verträge, `run-51nffbp4` besteht
+14/14 GUI-Fälle einschließlich aller 36 Formelansichten. Joblog und vollständiges
+Archiv aus Lauf 38798322026 wurden gelesen; Integral- und Energiebild bei 32 px
+wurden geprüft. Archiv-SHA256:
+`275d73f7a1f53f4f83e99384fc9e9540b15200d13ec6853e54524e9610748184`.
+Damit ist der erste Renderer auf Intel und ARM belegt. Die aktuelle Erweiterung
+auf 119 Blöcke und die neue kleine Gitterprobe benötigen weiterhin ihre eigenen
+macOS-Läufe; der historische Nachweis wird dafür nicht umgedeutet.
+
+Die Mac-Aufnahmen der ersten Renderer-Revision zeigen zudem eine teilweise
+abgeschnittene Metazeile im Kopf des Dokumentbereichs. Ein eigener Abgleich
+von Messbreite, Padding und tatsächlichen Textzeichenbefehlen steht dafür aus.
+Die neue Formelprobe bestätigt die Formelbilder, nicht die gesamte Kopfzeile.
+Weitere mathematische Fachseiten, Inline-TeX, echte Monitor-/Dichtewechsel,
+praktische Screenreader-Aufgaben und die vollständige Inhaltsprüfung bleiben
+Bestandteil der F1-Abnahme. Die Gesamtbewertung wird deshalb nicht aufgewertet.

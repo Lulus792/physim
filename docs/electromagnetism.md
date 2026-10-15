@@ -11,26 +11,70 @@ dies ist eine gemessene Größe, keine exakte Konstante.
 ## SI-Vertrag und Grenzen
 
 Punktladung q in C, Position in m und positive Permittivität ε in F/m ergeben
-E=q(r-r0)/(4π ε |r-r0|³) in V/m und Potential φ=q/(4π ε |r-r0|) in V, mit
-Nullpunkt im Unendlichen. Der Quellpunkt ist singulär, auch bei q=0. Es gibt
+das elektrische Feld in V/m:
+
+$$
+\mathbf{E}=\frac{q(\mathbf{r}-\mathbf{r}_0)}{4\pi\varepsilon\lvert\mathbf{r}-\mathbf{r}_0\rvert^3}
+$$
+
+Das Potential in V mit Nullpunkt im Unendlichen ist:
+
+$$
+\varphi=\frac{q}{4\pi\varepsilon\lvert\mathbf{r}-\mathbf{r}_0\rvert}
+$$
+
+Der Quellpunkt ist singulär, auch bei q = 0. Es gibt
 kein verborgenes Softening. Mehrere Ladungen werden ausdrücklich superponiert.
 Gültig ist ein homogenes, isotropes, unendliches Medium im elektrostatischen
 Modell. Grenzflächen, Abschirmung, retardierte Felder und räumliche Maxwell-
 Integration sind keine Eigenschaften dieses Modells.
 
-Die Lorentzkraft F=q(E+v×B) verwendet vorgegebene elektrische Felder in V/m,
-magnetische Felder in T und nichtrelativistische Geschwindigkeit in m/s.
-Das magnetische Glied verrichtet an der idealen Punktladung keine Arbeit:
-v·(v×B)=0. Die Funktion erzeugt keine Felder und integriert keine Bewegung.
+Die Lorentzkraft lautet:
+
+$$
+\mathbf{F}=q\left(\mathbf{E}+\mathbf{v}\times\mathbf{B}\right)
+$$
+
+Sie verwendet vorgegebene elektrische Felder in V/m, magnetische Felder in T
+und nichtrelativistische Geschwindigkeit in m/s. Das magnetische Glied
+verrichtet an der idealen Punktladung keine Arbeit:
+
+$$
+\mathbf{v}\cdot(\mathbf{v}\times\mathbf{B})=0
+$$
+
+Die Funktion erzeugt keine Felder und integriert keine Bewegung.
 Strahlung, Selbstkraft und relativistische Dynamik benötigen eigene Modelle.
 
-Ideale lineare Widerstände verwenden I=V/R, V=IR und P=V²/R. R in ohm ist
-strikt positiv. Zwei Widerstände lassen sich in Serie oder parallel kombinieren.
-Es gibt keinen impliziten Solver beliebiger Netze. Ein idealer Kondensator
-mit positiver Kapazität C in F speichert U=½CV² in J. Spannung und Strom sind
-signiert. Für eine konstante Quelle Vs im Serienkreis gilt
-Vc(t+dt)=Vs+(Vc(t)-Vs)exp(-dt/(RC)). Dieser exakte Schritt hat keine
-Stabilitätsgrenze; dt≥0 und dt=0 erhält den Zustand. Induktivität, parasitäre
+Ideale lineare Widerstände verwenden:
+
+$$
+I=\frac{V}{R}
+$$
+
+$$
+V=IR
+$$
+
+$$
+P=\frac{V^2}{R}
+$$
+
+R in ohm ist strikt positiv. Zwei Widerstände lassen sich in Serie oder
+parallel kombinieren. Es gibt keinen impliziten Solver beliebiger Netze.
+Ein idealer Kondensator mit positiver Kapazität C in F speichert Energie in J:
+
+$$
+U=\frac{1}{2}CV^2
+$$
+
+Spannung und Strom sind signiert. Für eine konstante Quelle Vₛ im Serienkreis gilt:
+
+$$
+V_c(t+\Delta t)=V_s+\left(V_c(t)-V_s\right)e^{-\Delta t/(RC)}
+$$
+
+Dieser exakte Schritt hat keine Stabilitätsgrenze; Δt ≥ 0 und Δt = 0 erhält den Zustand. Induktivität, parasitäre
 Elemente, nichtlineare Bauteile und Quellenwechsel innerhalb eines Schritts
 sind ausgeschlossen. Der Offline-Runner begrenzt dt gesondert auf 1 s.
 
@@ -47,8 +91,19 @@ Der Serienkreis verwendet R=1000 ohm, C=0,002 F, Vs=12 V und V0=0 V.
 Die Zeitkonstante ist 2 s. Nach einer Zeitkonstante erwarten wir
 Vc=7,585446705942692 V. Bei vollständigem Laden enthält der Kondensator
 0,144 J; weitere 0,144 J werden im Widerstand dissipiert. Die Quelle liefert
-insgesamt 0,288 J. W_source=Vs*C*(Vc-V0) ist positiv für Energie in den Kreis.
-U+Q-W_source bleibt gleich der Anfangsenergie. Eine absorbierende Quelle kann
+insgesamt 0,288 J. Die Quellarbeit
+
+$$
+W_{\mathrm{source}}=V_sC(V_c-V_0)
+$$
+
+ist positiv für Energie in den Kreis. Die Bilanz lautet:
+
+$$
+U+Q-W_{\mathrm{source}}=U(0)
+$$
+
+Sie bleibt gleich der Anfangsenergie. Eine absorbierende Quelle kann
 negative Arbeit liefern; Widerstandsverluste bleiben physikalisch nichtnegativ.
 Die Wärme folgt dem exakten Integral von I²R; expm1 erhält dabei kleine
 Zeitintervalle ohne Auslöschung. Ein unabhängiger Prüfer kontrolliert sämtliche

@@ -6,22 +6,71 @@ Laufwellen, diskrete Saiten und geometrische Optik. [Wellenreferenz](reference/w
 
 ## Oszillator und Laufwelle
 
-`harmonicStep` löst x''=-ω²x exakt für konstantes ω>0. Vec2.x ist Position in m,
-y Geschwindigkeit in m/s. Die Größe v²+ω²x² bleibt bis auf Rundung erhalten.
-Es gibt weder Dämpfung noch Anregung. Für eine ideale Saite gilt c=sqrt(T/μ)
-aus positiver Spannungskraft T in N und linearer Dichte μ in kg/m.
+`harmonicStep` löst für konstantes ω > 0 die Gleichung
 
-`travelingWave` liefert A sin(kx-ωt+φ): Verschiebung in m, Geschwindigkeit
--ωA cos(...) in m/s und Steigung kA cos(...). Positive k,ω bewegen die Phase
-nach +x. Das Modell setzt nicht selbst ω=c k; diese Dispersion wählt der Aufrufer.
+$$
+\ddot{x}=-\omega^2x
+$$
+
+exakt. Vec2.x ist Position in m, y Geschwindigkeit in m/s. Die Größe
+
+$$
+v^2+\omega^2x^2=\mathrm{const.}
+$$
+
+bleibt bis auf Rundung erhalten. Es gibt weder Dämpfung noch Anregung.
+Für eine ideale Saite mit positiver Spannungskraft T in N und linearer
+Dichte μ in kg/m gilt:
+
+$$
+c=\sqrt{\frac{T}{\mu}}
+$$
+
+`travelingWave` liefert die Verschiebung in m:
+
+$$
+u(x,t)=A\sin(kx-\omega t+\varphi)
+$$
+
+Geschwindigkeit in m/s und Steigung sind:
+
+$$
+\frac{\partial u}{\partial t}=-\omega A\cos(kx-\omega t+\varphi)
+$$
+
+$$
+\frac{\partial u}{\partial x}=kA\cos(kx-\omega t+\varphi)
+$$
+
+Positive k und ω bewegen die Phase nach +x. Die Dispersion
+
+$$
+\omega=ck
+$$
+
+wählt der Aufrufer; das Modell setzt sie nicht selbst.
 Sehr große Phasen begrenzen die Genauigkeit der trigonometrischen Funktionen.
 
 ## Diskrete Ausbreitung und Stabilität
 
-Die lineare Saite erfüllt u_tt=c²u_xx. `stringWaveStep` verwendet zentrierte
-Differenzen zweiter Ordnung in Raum und Zeit:
+Die lineare Saite erfüllt die Wellengleichung:
 
-u_j^(n+1)=2(1-λ²)u_j^n+λ²(u_(j-1)^n+u_(j+1)^n)-u_j^(n-1), λ=c dt/dx.
+$$
+\frac{\partial^2u}{\partial t^2}=c^2\frac{\partial^2u}{\partial x^2}
+$$
+
+`stringWaveStep` verwendet zentrierte Differenzen zweiter Ordnung in Raum
+und Zeit:
+
+$$
+u_j^{n+1}=2(1-\lambda^2)u_j^n+\lambda^2\left(u_{j-1}^n+u_{j+1}^n\right)-u_j^{n-1}
+$$
+
+Die Courant-Zahl lautet:
+
+$$
+\lambda=\frac{c\Delta t}{\Delta x}
+$$
 
 Die Eingaben sind zwei Zeitlagen mit demselben konstanten dt. Es gibt 3–4096
 endliche Knoten in m; beide Endpunkte jeder Lage sind exakt null. c,dx,dt sind
@@ -35,13 +84,54 @@ Der Core unterstützt 4096 Rechenknoten. Das vollständige grafische Beispiel
 verwendet höchstens 65, damit alle Knoten in den bestehenden 96-Punkte-Szenenpool
 passen. Diese Darstellungsgrenze verändert nicht den Core-Gitterschritt.
 Die vorherige Lage wird nicht aus einem einzelnen Zustand erfunden. Für einen
-anfangs ruhenden Modus u_j^0=A sin(mπj/(N-1)) wählen wir
-u_j^-1=u_j^0 cos θ, θ=2 asin(λ sin(mπ/(2(N-1)))). Damit ist die zentrale
-Anfangsgeschwindigkeit null. Die zeitlich versetzte Energie
+anfangs ruhenden Modus
 
-E=½ μ dx Σ((u_j^n-u_j^(n-1))/dt)² + ½ T/dx Σ Δu_j^n Δu_j^(n-1)
+$$
+u_j^0=A\sin\frac{m\pi j}{N-1}
+$$
 
-ist die diskrete Invariante; sie ist nicht identisch mit einer beliebig
+wählen wir
+
+$$
+u_j^{-1}=u_j^0\cos\theta
+$$
+
+mit
+
+$$
+\theta=2\arcsin\left(\lambda\sin\frac{m\pi}{2(N-1)}\right)
+$$
+
+Damit ist die zentrale Anfangsgeschwindigkeit null. N bezeichnet die Knotenzahl.
+Die zeitlich versetzte Energie
+
+$$
+E=E_{\mathrm{K}}+E_{\mathrm{G}}
+$$
+
+setzt sich aus einem Geschwindigkeits- und einem Gradiententerm zusammen:
+
+$$
+E_{\mathrm{K}}=\frac{\mu\Delta x}{2}\sum_{j=1}^{N-2}\left(v_j^{n-1/2}\right)^2
+$$
+
+$$
+E_{\mathrm{G}}=\frac{T}{2\Delta x}\sum_{j=0}^{N-2}\Delta u_j^n\Delta u_j^{n-1}
+$$
+
+Dabei verwenden wir die diskrete Geschwindigkeit zwischen den beiden Zeitlagen
+
+$$
+v_j^{n-1/2}=\frac{u_j^n-u_j^{n-1}}{\Delta t}
+$$
+
+und die Kantendifferenzen
+
+$$
+\Delta u_j^n=u_{j+1}^n-u_j^n
+$$
+
+Diese Gesamtenergie ist die diskrete Invariante; sie ist nicht identisch mit einer beliebig
 zeitlich abgetasteten Kontinuumsenergie. Keine variable Dichte, Anregung,
 Dämpfung, nichtlineare Dehnung oder mehrdimensionale PDE wird vorausgesetzt.
 Die Initialisierung liest das konfigurierte Hostintervall über `simulationTimeStep()`;
@@ -51,14 +141,28 @@ Die Initialisierung liest das konfigurierte Hostintervall über `simulationTimeS
 
 `reflectRay` und `refractRay` erwarten Unit-Richtungen und Unit-Normalen innerhalb
 1e-10 und normalisieren akzeptierte Werte. Die Normale zeigt ins Einfallsmedium;
-incident·normal≤1e-10. Positive Indizes n1,n2 definieren Snell n1 sin θ1=n2 sin θ2.
+incident·normal ≤ 1e-10. Positive Indizes n₁ und n₂ definieren das Snelliussche Gesetz:
+
+$$
+n_1\sin\theta_1=n_2\sin\theta_2
+$$
+
 Totalreflexion liefert in C PS_SINGULAR ohne Änderung der Ausgabe; Physim erzeugt
 eine abfangbare Diagnose. Reflexion ist ein ausdrücklich gewählter anderer Pfad.
 Ein kritischer Sinus bis 32 DBL_EPSILON über eins wird auf eins begrenzt.
 [MIT: Reflexion und Brechung](https://ocw.mit.edu/courses/2-71-optics-spring-2009/pages/lecture-slides/).
 
 `thinLensImage` verwendet eine signierte nonzero Brennweite f und positive
-Objektweite d in m: Bildweite b=f d/(d-f), Vergrößerung M=-f/(d-f).
+Objektweite d in m. Bildweite und Vergrößerung sind:
+
+$$
+b=\frac{fd}{d-f}
+$$
+
+$$
+M=-\frac{f}{d-f}
+$$
+
 Negative Bildweite bedeutet virtuell, negatives M ein invertiertes Bild.
 Bei d=f liegt das Bild im Unendlichen; dieser Fall ist PS_SINGULAR bzw. eine
 abfangbare Diagnose. Es gilt die paraxiale dünne Linse; keine dicken Linsen,

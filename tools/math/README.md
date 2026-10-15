@@ -38,8 +38,12 @@ keine strukturierte mathematische Screenreader-Navigation; diese bleibt offen.
 User Guide, Pendel-, Wurf-, Widerstands-, Material-, Feder- und Stoßlernpfad
 verwenden diesen Formelsatz. `documentation_formula_catalog` zeichnet jeden
 veröffentlichten Displayblock dieser Seiten und prüft Formelbild und native
-Lesereihenfolge. Weitere mathematische Fachseiten müssen noch einzeln übertragen
-werden.
+Lesereihenfolge. Thermodynamik, Elektromagnetismus, Wellen/Optik und Strömung
+werden zusätzlich durch `documentation_formula_physics` geprüft.
+`documentation_formula_narrow` verlangt vollständig sichtbare Gitter-/
+Energieformeln im 760 × 540-Fenster bei 32 px. Die diskrete Saitenenergie
+ist dafür in gleichwertige, einzeln erklärte Terme aufgeteilt. Weitere
+mathematische Fachseiten müssen noch einzeln übertragen werden.
 
 Quellen: [MathJax Node-Schnittstelle](https://docs.mathjax.org/en/v4.1/server/direct.html),
 [Herkunft und Lizenzen](../../docs/formulas/NOTICE.txt).

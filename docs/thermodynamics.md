@@ -14,23 +14,79 @@ und gesamte Wärmekapazität sind endlich und strikt positiv. Leitwert G in W/K
 und Zeitintervall dt in s sind endlich und nichtnegativ. SI-Einheiten werden
 an Kanälen und Parametern gespeichert; nackte Zahlen tragen keine Dimension.
 
-Für ein ideales Gas gilt pV=nRT. Bei konstantem molarem cv gilt U=n cv T mit
-gewählter Referenz U=0 bei T=0. Zwischen zwei Gleichgewichtszuständen derselben
-Stoffmenge ist ΔS=n[cv ln(T1/T0)+R ln(V1/V0)] in J/K. Dies ist eine Zustandsdifferenz,
+Für ein ideales Gas gilt:
+
+$$
+pV=nRT
+$$
+
+Bei konstantem molarem cᵥ gilt:
+
+$$
+U=nc_vT
+$$
+
+Die Referenz ist U = 0 bei T = 0. Zwischen zwei Gleichgewichtszuständen
+derselben Stoffmenge ist die Entropiedifferenz in J/K:
+
+$$
+\Delta S=n\left[c_v\ln\frac{T_1}{T_0}+R\ln\frac{V_1}{V_0}\right]
+$$
+
+Dies ist eine Zustandsdifferenz,
 keine Schätzung irreversibler Entropieproduktion und kein Wärmepfadintegral.
 Gültig ist das verdünnte ideale Gas mit konstantem cv, ohne Phasenübergang.
 Ein [begrenztes Van-der-Waals-Modell](real-gas.md) ergänzt reale Gase.
 [Materialtabellen](properties.md) sind explizite SI-Daten; Phasengleichgewichte
 und Strahlung bleiben offen.
 
-Ein homogener Körper mit konstanter spezifischer Wärmekapazität c hat C=mc und
-benötigt Q=C(T1-T0). Für lineare Wärmeleitung von A nach B gilt P=G(Ta-Tb).
-Bei einer homogenen Platte setzt das Modell ausdrücklich G=kA/L aus seinen
-Materialdaten. Die Bibliothek erfindet keinen Stoff und keinen Leitwert.
+Ein homogener Körper mit konstanter spezifischer Wärmekapazität c hat die
+Wärmekapazität
 
-Ein gut durchmischter Körper an einem Reservoir fester Temperatur Tr folgt
-T(t+dt)=Tr+(T(t)-Tr)exp(-Gdt/C). Zwei isolierte Körper mit konstanten Kapazitäten
-nähern sich Teq=(Ca Ta0+Cb Tb0)/(Ca+Cb) mit Rate G(1/Ca+1/Cb).
+$$
+C=mc
+$$
+
+und benötigt die Wärme
+
+$$
+Q=C(T_1-T_0)
+$$
+
+Für lineare Wärmeleitung von A nach B gilt:
+
+$$
+P=G(T_a-T_b)
+$$
+
+Bei einer homogenen Platte setzt das Modell den Leitwert ausdrücklich aus
+seinen Materialdaten an:
+
+$$
+G=\frac{kA}{L}
+$$
+
+Die Bibliothek erfindet keinen Stoff und keinen Leitwert.
+
+Ein gut durchmischter Körper an einem Reservoir fester Temperatur Tᵣ folgt:
+
+$$
+T(t+\Delta t)=T_r+\left(T(t)-T_r\right)e^{-G\Delta t/C}
+$$
+
+Zwei isolierte Körper mit konstanten Kapazitäten nähern sich der
+Gleichgewichtstemperatur
+
+$$
+T_{\mathrm{eq}}=\frac{C_aT_{a,0}+C_bT_{b,0}}{C_a+C_b}
+$$
+
+mit der Rate in s⁻¹
+
+$$
+\gamma=G\left(\frac{1}{C_a}+\frac{1}{C_b}\right)
+$$
+
 `thermalPairStep` liefert beide Endtemperaturen als Vec2; x ist A, y ist B.
 Die exakte Exponentiallösung hat keine Zeitschritt-Stabilitätsgrenze.
 Räumliche Temperaturgradienten benötigen ein anderes Modell; CFD/FEM bleiben
