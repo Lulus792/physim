@@ -546,13 +546,15 @@ static void documentation_rich_draw(app *a,ps_document *d,const ps_doc_block *b,
         at+=used;y+=height;
     } while(at<b->length);
 }
+#include "documentation_tables.inc"
 /* Layout and native text geometry use the parser's identical cell boundaries. */
 static float documentation_table(app *a, const ps_doc_block *block, float width,
                                  const struct nk_rect *bounds) {
     size_t count=block->cell_count;
     if (!count)
         return 24;
-    float cell_width = width / (float)count, height = 24;
+    size_t columns=a->documentation->blocks[block->table_first].table_columns;
+    float cell_width = width / (float)columns, height = 24;
     for (size_t i = 0; i < count; i++) {
         const ps_doc_cell *range=&a->documentation->cells[block->first_cell+i];
         ps_doc_block cell=*block;cell.text=range->text;cell.length=range->length;
@@ -1283,6 +1285,8 @@ static void documentation_view(app *a, float height) {
             }
             /* Native links retain their document identity outside the viewport.
              * Pointer actions still use the renderer's individual fragments. */
+            if(a->documentation==d && !documentation_publish_tables(a,d))
+                nk_sdl_accessibility_document_abort(ui);
             if(a->documentation==d)for(size_t i=0;i<d->count;i++) {
                 ps_doc_block *b=&d->blocks[i];
                 if(b->kind!=PS_DOC_LINK || !strncmp(d->text+b->target,"http",4) || b->reading_begin==SIZE_MAX || !b->reading_length)continue;

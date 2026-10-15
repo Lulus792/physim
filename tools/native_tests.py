@@ -85,6 +85,7 @@ def catalog():
         Case("convex_example_c", ("examples/convex_contacts/main.c",), stdout="Convex tetrahedron geometry passed\n"),
         Case("accessibility", ("tests/test_accessibility.c", "app/accessibility.c")),
         Case("accessibility_document", ("tests/test_accessibility_document.c", "app/accessibility.c")),
+        Case("accessibility_tables", ("tests/test_accessibility_tables.c", "app/accessibility.c")),
         Case("accessibility_suspend", ("tests/test_accessibility_suspend.c", "app/accessibility.c")),
         Case("accessibility_edit", ("tests/test_accessibility_edit.c", "app/accessibility.c")),
         Case("accessibility_options", ("tests/test_accessibility_options.c", "app/accessibility.c")),

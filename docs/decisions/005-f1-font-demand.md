@@ -185,5 +185,8 @@ auf und behalten die 20-/25-Sekunden-Grenzen. Der vollständige Bericht liegt in
 genannten Umgebung, keine Garantie unter beliebiger Rechnerlast.
 
 Die frühere Windows-Fokussporadik wird durch erfolgreiche Wiederholungen
-nicht als behoben erklärt. Die neue macOS-Ausführung und insbesondere die
-unterscheidbare Schriftschnittwahl bleiben eigene offene Abnahmen.
+nicht als behoben erklärt. Die nachfolgende Ausführung auf `188a411` besteht
+inzwischen auf macOS Intel und ARM64 jeweils **10/10 native und 13/13 GUI-Fälle**,
+einschließlich tatsächlicher Schriftschnittwahl, Bedarf und Dichte.
+[Lauf und begrenzte Abnahme](004-f1-handbook.md). Dies ist keine Abnahme der
+danach ergänzten Tabellenadapter oder praktischer Screenreader-Aufgaben.

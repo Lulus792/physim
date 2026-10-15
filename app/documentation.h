@@ -41,6 +41,7 @@ typedef struct {
     size_t reading_begin, reading_length;
     size_t first_cell, cell_count;
     size_t table_first, table_row; /* first row block and zero-based row; SIZE_MAX outside tables */
+    size_t table_rows, table_columns; /* full shape, stored on table_first only */
     float height;
     float code_line_height; /* renderer cache: native box-cell pitch, zero for ordinary text */
     float hit[4];

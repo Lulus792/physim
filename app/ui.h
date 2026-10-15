@@ -75,6 +75,15 @@ void ps_ui_accessibility_route(struct nk_context *ctx,bool allowed);
 bool nk_sdl_accessibility_press(struct nk_context *ctx,const char *label);
 bool nk_sdl_accessibility_available(struct nk_context *ctx);
 bool nk_sdl_accessibility_document(struct nk_context *ctx,uint64_t version,const char *name,const char *text,struct nk_rect viewport);
+struct ps_a11y_table_row_input;
+struct ps_a11y_table;
+struct ps_a11y_table_cell;
+bool nk_sdl_accessibility_document_table(struct nk_context *ctx,size_t begin,size_t end,
+    size_t rows,size_t columns,bool headers,const struct ps_a11y_table_row_input *input);
+void nk_sdl_accessibility_document_abort(struct nk_context *ctx);
+/* Atomically copy published table/cell metadata under the accessibility mutex. */
+bool nk_sdl_accessibility_document_table_cell(struct nk_context *ctx,size_t index,size_t row,
+    size_t column,struct ps_a11y_table *table,struct ps_a11y_table_cell *cell);
 void nk_sdl_accessibility_text_box(struct nk_context *ctx,size_t begin,size_t end,struct nk_rect bounds);
 bool nk_sdl_accessibility_document_scroll(struct nk_context *ctx,uint64_t version,size_t *byte,bool *top);
 bool nk_sdl_accessibility_document_preserve_position(struct nk_context *ctx,uint64_t version);

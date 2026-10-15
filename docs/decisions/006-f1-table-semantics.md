@@ -38,12 +38,39 @@ Eine Leerzeile oder anderer Inhalt beendet die Tabellenzugehörigkeit. Eine
 Trennzeile darf nur die erste unmittelbar zugehörige Tabellenzeile als
 Spaltenüberschrift kennzeichnen.
 
+## Veröffentlichtes gemeinsames Tabelleninventar
+
+Das Accessibility-Modell besitzt jetzt ein eigenes, bei Bedarf angelegtes
+Tabelleninventar neben den 256 interaktiven Controls. Es übernimmt sämtliche
+Zeilen und vorhandenen Zellbereiche eines Dokuments, auch außerhalb des
+sichtbaren Ausschnitts. Seine Grenzen entsprechen dem Parser: 4.096 Tabellen/
+Zeilen und 16.384 tatsächlich gespeicherte Zellen. Fehlende Zellen am Ende
+kürzerer Zeilen sind leere virtuelle Zellen am Ende des Zeilentextes; sie
+benötigen keinen dicht aufgefüllten Speicher. Alle Zeilen werden anhand der
+maximalen Spaltenzahl ihrer Tabelle ausgerichtet.
+
+Jede Tabelle reserviert einen eindeutigen ID-Bereich für sich und ihre Zellen.
+Geometrieänderungen derselben Inhaltsversion erhalten diese IDs. Andere
+Zeilen-/Spaltenzahlen, Zellbereiche oder Headerbeziehungen benötigen eine neue
+Inhaltsversion. Dokumentwechsel und Entfernung lassen alte IDs auslaufen.
+Zellnamen bleiben vollständige Bereiche im UTF-8-Lesetext. Die erste markierte
+Zeile liefert Spaltenüberschriften; unmarkierte Tabellen besitzen keine solche
+Zuordnung. Native Adapter können die Zellen nach Koordinaten oder ID abfragen.
+
+Zell- und Tabellenrahmen werden gegen den tatsächlichen Viewport beschnitten.
+Während Suspend bleiben Text und IDs lesbar, alle Rahmen sind leer und
+Scrollaufträge werden abgewiesen. Eine unvollständige Tabellenregistrierung
+derselben Generation oder ein ausdrücklich abgebrochener UI-Entwurf ersetzt
+keine veröffentlichte Momentaufnahme. Erst die vollständige Veröffentlichung
+gibt einen neuen Entwurf frei. Die bestehende Mutex-Grenze gilt auch für das
+neue Inventar; die UI gibt ihre temporären Kopierbereiche nach der Übernahme frei.
+
 ## Noch umzusetzende native Verträge
 
-- Ein eigenes Dokument-Tabelleninventar muss die begrenzte Zahl bisheriger
-  interaktiver Controls ergänzen, damit Tabellen keine Links oder Suchfelder
-  verdrängen. Es muss Zeilen-/Spaltenkoordinaten, vollständige Zellnamen,
-  Headerbeziehungen und ursprüngliche Lesetextbereiche bereitstellen.
+- Das gemeinsame Inventar ist mit dem tatsächlichen F1-Layout verbunden.
+  Seine Veröffentlichung allein stellt noch keine Table-/Grid-/AX-/AT-SPI-
+  Schnittstellen für externe Clients bereit. Diese Adapter und ihre Prüfungen
+  bleiben die nächsten verbindlichen Schritte.
 - Windows benötigt Table/Grid sowie TableItem/GridItem mit vollständigen
   Headerbeziehungen. Nur ein neuer ControlType ist kein ausreichender Adapter.
   Grundlage: [Microsoft Table Control Type](https://learn.microsoft.com/en-us/windows/win32/winauto/uiauto-supporttablecontroltype).
@@ -91,3 +118,39 @@ wurden unmittelbar geprüft. Testkatalog und erwartete Läuferfehler bestehen
 in `build/native/table-cells-runner-proof`. Der macOS-Workflow enthält jetzt
 zusätzlich Parser, Themen-/Abschnittsinventur und den tatsächlichen Inline-Fall;
 seine Definition allein ist kein macOS-Ausführungsnachweis.
+
+## Prüfungen des veröffentlichten Tabelleninventars
+
+Die neue gemeinsame Modell-/UI-Anbindung besteht unter Windows MSVC ASan
+**10/10** native Accessibility-/Dokumentfälle (`run-phwh4rq2`) und
+**7/7** GUI-Fälle (`run-ag2ji7pn`): Zeicheninventur, Inline-Inhalte, Dichte,
+Navigation sowie unabhängige UIA-Lese-, Feld- und Linkclients. Linux GCC 15.2
+ASan/UBSan mit X11/Openbox besteht **11/11** native Fälle einschließlich
+Themen-/Abschnittsinventur (`run-eyuuwhql`) und **7/7** entsprechende GUI-Fälle
+mit unabhängigen AT-SPI-Clients (`run-baz5hkit`).
+
+Der erweiterte tatsächliche Inline-Fall liest die veröffentlichte Tabelle und
+ihre Zell-/Headerbereiche. Er hält dieselbe Zelle über einen echten
+16-/32-/16-Pixel-Reflow und anschließendes Scrollen; ein Dokumentwechsel
+liefert neue IDs. Windows besteht die Ergänzung zusammen mit Schriftbedarf
+und externem Fenster-Lebenszyklus **3/3** (`run-wzn_9h15`), Linux mit
+Schriftbedarf **2/2** (`run-4sjdvprt`). Nach der ausdrücklichen Initialisierung
+der kopierten UI-Ausgaben bestehen die finalen Inline-Fälle nochmals **1/1**
+auf Windows (`run-b_nat9lw`) und Linux (`run-r8lfpf20`); der native Linux-
+Tabellenfall besteht dabei zusätzlich **1/1** (`run-q6lui_gl`). Beide finalen
+16-Pixel-Aufnahmen wurden geöffnet und geprüft.
+
+Die separate GCC-Probe besteht mit ASan, UBSan und eingeschaltetem
+LeakSanitizer. Die gezielte Gegenfassung entfernt nur die Suspend-Sperre der
+Zellrahmen und wird mit Exit 1 an der weiterhin sichtbaren verborgenen Zelle
+abgewiesen. Quellenkopien, Originalausgaben und Bericht liegen unter
+`build/native/table-model-counter`. Der erste Aufbau dieser separaten Probe
+benötigte zusätzlich den vorhandenen `src`-Include-Pfad; nach dessen Ergänzung
+wurde die tatsächliche positive und negative Ausführung bestätigt.
+
+Der Modellfall prüft außerdem vollständige Unicode-Bereiche, virtuelle leere
+Zellen, Headerbeziehungen, Clipgeometrie, stale IDs, den verworfenen UI-Entwurf,
+unvollständige Veröffentlichungen derselben Version, alle 16.384 gespeicherten
+Zellen mit abgewiesener zusätzlicher Zelle, ID-Überlauf und die unabhängige
+Nutzung aller 256 interaktiven Controlplätze. Diese Nachweise bestätigen den
+gemeinsamen Unterbau. Die externen nativen Tabelleninterfaces fehlen weiterhin.

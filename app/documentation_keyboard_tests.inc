@@ -416,6 +416,8 @@ static bool documentation_inline_fixture_variant(app *a,int topic,bool invalid_l
 static bool documentation_inline_fixture(app *a,int topic){return documentation_inline_fixture_variant(a,topic,false);}
 static void documentation_inline_test_frame(app *a,int *stage,int *code,const char **capture) {
     static int guide,cguide,link,external,table_link,copy;static struct nk_rect clicked;
+    static uint64_t first_cell,zoom_cell;
+    static unsigned table_phase,table_frames;
     bool ok=true;
 #define INLINE_KEY(key) test_window_key_mod(a->doc_window,key,0)
     switch((*stage)++) {
@@ -427,8 +429,24 @@ static void documentation_inline_test_frame(app *a,int *stage,int *code,const ch
             if(!strcmp(documentation_topics[i].path,"docs/c-guide.md"))cguide=i;
         }
         ok=guide>=0 && cguide>=0 && documentation_inline_fixture(a,guide);
+        table_phase=table_frames=0;
         SDL_SetWindowSize(a->doc_window,1080,780);break;
     case 2: {
+        /* The same document/cell must survive real 16 -> 32 -> 16 text reflow.
+         * Wait for completed publication instead of accepting the prior frame. */
+        if(table_phase==1 || table_phase==2) {
+            if(table_frames++<2 || a->doc_scroll_pending){--*stage;return;}
+            ps_a11y_table table;ps_a11y_table_cell cell;
+            ok=nk_sdl_accessibility_document_table_cell(a->doc_ui,0,1,1,&table,&cell) &&
+                cell.id==first_cell && cell.version==a->doc_reading_version &&
+                documentation_font_size(a)==(table_phase==1?32:16);
+            if(!ok)break;
+            if(table_phase==1) {
+                test_window_key_mod(a->doc_window,SDLK_0,PS_UI_COMMAND_MOD);
+                table_phase=2;table_frames=0;--*stage;return;
+            }
+            table_phase=3;
+        }
         ps_document *d=a->documentation;link=external=table_link=copy=-1;
         const struct nk_user_font *h1=NULL,*h2=NULL,*h3=NULL;
         for(size_t i=0;i<d->count;i++) {
@@ -451,6 +469,16 @@ static void documentation_inline_test_frame(app *a,int *stage,int *code,const ch
             ok &= row->cell_count==2 && pipe &&
                 nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,
                     (size_t)(pipe-d->reading)+1);
+            ps_a11y_table table;ps_a11y_table_cell cell;
+            bool published=nk_sdl_accessibility_document_table_cell(a->doc_ui,0,1,1,&table,&cell);
+            ok &= published && table.rows==2 && table.columns==2 && table.column_headers &&
+                cell.version==a->doc_reading_version && pipe && cell.begin<=(size_t)(pipe-d->reading) &&
+                cell.end>=(size_t)(pipe-d->reading)+3 && cell.bounds[2]>0;
+            first_cell=published?cell.id:0;
+        }
+        if(ok && !table_phase) {
+            for(int i=0;i<8;i++)test_window_key_mod(a->doc_window,SDLK_PLUS,PS_UI_COMMAND_MOD);
+            table_phase=1;table_frames=0;--*stage;return;
         }
         ps_doc_block *b=&d->blocks[link];clicked=nk_rect(b->hit[0],b->hit[1],b->hit[2],b->hit[3]);
         ok &= clicked.w>20 && clicked.w<150 && clicked.y>=a->doc_body_bounds.y;
@@ -466,6 +494,15 @@ static void documentation_inline_test_frame(app *a,int *stage,int *code,const ch
         for(int i=0;i<8;i++)test_window_key_mod(a->doc_window,SDLK_PLUS,PS_UI_COMMAND_MOD);break;
     case 5:
         ok=documentation_font_size(a)==32;
+        {
+            ps_a11y_table table;ps_a11y_table_cell cell;
+            bool published=nk_sdl_accessibility_document_table_cell(a->doc_ui,0,0,1,&table,&cell);
+            ok &= published && cell.column_header && cell.end-cell.begin==strlen("Bedeutung") &&
+                !memcmp(a->documentation->reading+cell.begin,"Bedeutung",cell.end-cell.begin);
+            published=nk_sdl_accessibility_document_table_cell(a->doc_ui,0,1,1,&table,&cell);
+            ok &= published && cell.id!=first_cell && cell.version==a->doc_reading_version;
+            zoom_cell=published?cell.id:0;
+        }
         *capture="docs-inline-32-light.bmp";break;
     case 6:
         if(!documentation_test_seek(a,DOC_LINK+external,stage,code))return;
@@ -475,6 +512,11 @@ static void documentation_inline_test_frame(app *a,int *stage,int *code,const ch
     case 7:
         ok=a->doc_topic==guide && documentation_test_clipboard("https://example.org/physim#proof");
         if(!documentation_test_seek(a,DOC_LINK+table_link,stage,code))return;
+        {
+            ps_a11y_table table;ps_a11y_table_cell cell;
+            ok &= nk_sdl_accessibility_document_table_cell(a->doc_ui,0,1,1,&table,&cell) &&
+                cell.id==zoom_cell && cell.bounds[2]>0;
+        }
         *capture="docs-inline-table.bmp";INLINE_KEY(SDLK_RETURN);break;
     case 8:
         ok=a->doc_topic==cguide && documentation_inline_fixture(a,guide);

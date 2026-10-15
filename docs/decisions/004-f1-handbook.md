@@ -58,9 +58,24 @@ dieses Linux-Laufs wurden geöffnet und visuell geprüft.
 Die Ergebnisse liegen unter `build/native/Debug-sanitized/test-results`
 beziehungsweise `build/native/Mac-fields-linux/test-results`.
 
-Der [macOS-Lauf für 56a59ed](https://github.com/Lulus792/physim/actions/runs/38654071994)
-wartet noch auf Runner für Intel und ARM64. Damit ist die neue Auswahl der
-tatsächlichen System-Schriftschnitte auf macOS noch nicht abgenommen.
+Der zunächst wartende macOS-Lauf für `56a59ed` wurde nach der geprüften
+Tabellenkorrektur durch die umfassendere Revision `188a411` ersetzt. Deren
+[tatsächlich abgeschlossener macOS-Lauf](https://github.com/Lulus792/physim/actions/runs/38656494042)
+besteht mit LLVM 20 ASan/UBSan und SDL 3.2.30 auf Darwin 24.6.0:
+Intel **10/10 native und 13/13 GUI-/AppKit-Fälle** (`run-cnzci5pl`,
+`run-31ypm8tz`), ARM64 ebenfalls **10/10 und 13/13** (`run-140_le02`,
+`run-cpzf2jd5`). Beide Originalarchive und Joblogs wurden gelesen.
+Die tatsächlichen System-Collections liefern auf beiden Architekturen
+Helvetica normal **Index 0**, fett **Index 1**, Menlo **Index 0**. Zeicheninventur,
+Bedarf, Dichte, Inline-Inhalte und native Lese-/Feld-/Linkfälle bestehen.
+Je Architektur wurden die tatsächlichen Inline-, Mathematik- und Dichtebilder
+geöffnet und geprüft. Originale und Bildkonvertierungen liegen unter
+`build/native/F1-review/mac-font-faces-{arm,intel}.zip` und
+`build/native/F1-review/mac-font-faces-images` im Hauptcheckout.
+Dieser Nachweis bestätigt die Schriftschnitt- und Bedarfs-/Dichtekorrektur auf
+`188a411`; das danach ergänzte gemeinsame Tabelleninventar benötigt seine
+eigene macOS-Prüfung. Externe AX-, Screenreader- und vollständige
+Monitor-/DPI-Abnahmen bleiben ebenfalls offen.
 Die folgenden älteren Reviews und Zwischenstände behalten ihre jeweilige Revision.
 
 ### Aktueller zentraler Skill-Review auf Revision 2ccd520
@@ -453,7 +468,8 @@ MSVC ASan besteht `run-mcsyv9gx` **6/6** native Schriftfälle und anschließend
 Glyphenprüfung abgewiesen; Originale in `build/native/font-faces-wrong`.
 Unter macOS prüft derselbe Fall zusätzlich die tatsächlichen Helvetica- und
 Menlo-Collections, verschiedene Helvetica-Indizes und unterscheidbare
-Latein-Rasterdeckung. Diese macOS-Ausführung steht noch aus.
+Latein-Rasterdeckung. Die oben dokumentierte Ausführung auf `188a411` besteht
+inzwischen auf Intel und ARM64 mit den tatsächlichen Helvetica-/Menlo-Collections.
 
 Die finale Linux-Ausführung besteht unter GCC 15.2 ASan/UBSan **6/6** native
 Schriftfälle (`run-1btunwdm`) und **6/6** GUI-Fälle (`run-1fm1nn8e`), einschließlich

@@ -11,8 +11,8 @@ static uint64_t text_hash(uint64_t hash,const char *text) {
 void ps_a11y_init(ps_a11y_model *m) {memset(m,0,sizeof *m);m->next_id=1;m->next_text_version=1;m->keyboard_focus=true;}
 void ps_a11y_destroy(ps_a11y_model *m) {
  if(!m)return;
- if(m->document){free(m->document->text);free(m->document);}
- if(m->document_draft){free(m->document_draft->text);free(m->document_draft);}
+ if(m->document){free(m->document->tables);free(m->document->text);free(m->document);}
+ if(m->document_draft){free(m->document_draft->tables);free(m->document_draft->text);free(m->document_draft);}
  m->document=m->document_draft=NULL;m->document_scroll_version=0;
 }
 void ps_a11y_begin(ps_a11y_model *m) {
@@ -28,6 +28,7 @@ void ps_a11y_suspend(ps_a11y_model *m) {
 static bool text_boundary(const char *text,size_t length,size_t at) {
  return at<=length && (at==length || ((unsigned char)text[at]&0xc0)!=0x80);
 }
+#include "accessibility_tables.inc"
 bool ps_a11y_document_begin(ps_a11y_model *m,uint64_t version,const char *name,const char *text,const float viewport[4]) {
  if(!m || !m->building || !version || !name || !*name || !text || !viewport ||
     !ps_text_valid(name,256,false) || !ps_text_valid(text,PS_A11Y_DOCUMENT_BYTES+1,true))return false;
@@ -43,7 +44,12 @@ bool ps_a11y_document_begin(ps_a11y_model *m,uint64_t version,const char *name,c
  if(new_text){size_t length=strlen(text);copy=malloc(length+1);if(!copy)return false;memcpy(copy,text,length+1);}
  if(!draft){draft=calloc(1,sizeof *draft);if(!draft){free(copy);return false;}m->document_draft=draft;}
  if(new_text){free(draft->text);draft->text=copy;draft->length=strlen(text);draft->version=version;strcpy(draft->name,name);}
- memcpy(draft->viewport,viewport,sizeof draft->viewport);draft->count=0;draft->dropped=0;draft->active=true;return true;
+ memcpy(draft->viewport,viewport,sizeof draft->viewport);draft->count=0;draft->dropped=0;draft->active=true;draft->complete=true;
+ if(draft->tables)draft->tables->count=draft->tables->row_count=draft->tables->cell_count=0;
+ return true;
+}
+void ps_a11y_document_abort(ps_a11y_model *m) {
+ if(m && m->building && m->document_draft)m->document_draft->complete=false;
 }
 bool ps_a11y_document_box(ps_a11y_model *m,size_t begin,size_t end,const float bounds[4]) {
  ps_a11y_document *d=m && m->building?m->document_draft:NULL;
@@ -354,11 +360,16 @@ bool ps_a11y_focus_move(ps_a11y_model *m,int direction,bool radio_only) {
 bool ps_a11y_publish(ps_a11y_model *m) {
  bool changed=m->suspended || m->count!=m->draft_count;
  if(!m->building)return false;
- m->suspended=false;
  ps_a11y_document *old=m->document,*next=m->document_draft;
  bool old_active=old && old->active,next_active=next && next->active;
+ if(next_active && !next->complete)return false;
+ /* A partial table rebuild must not retire published cells in the same content
+  * generation. The caller can finish this draft or start another frame. */
+ if(old_active && next_active && old->version==next->version && !table_inventories_equal(old,next,false))return false;
+ m->suspended=false;
  if(old_active!=next_active || (next_active && (old->version!=next->version || old->count!=next->count ||
     memcmp(old->viewport,next->viewport,sizeof next->viewport) || memcmp(old->boxes,next->boxes,next->count*sizeof *next->boxes))))changed=true;
+ if(next_active && !table_inventories_equal(old_active?old:NULL,next,true))changed=true;
  m->document=next;m->document_draft=old;
  if(!next_active || next->version!=m->document_scroll_version)m->document_scroll_version=0;
  bool found=false;

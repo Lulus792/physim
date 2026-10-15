@@ -256,6 +256,30 @@ void nk_sdl_accessibility_text_box(struct nk_context *ctx,size_t begin,size_t en
  float box[]={bounds.x,bounds.y,bounds.w,bounds.h};SDL_LockMutex(sdl->accessibility_mutex);
  ps_a11y_document_box(sdl->accessibility,begin,end,box);SDL_UnlockMutex(sdl->accessibility_mutex);
 }
+bool nk_sdl_accessibility_document_table(struct nk_context *ctx,size_t begin,size_t end,
+ size_t rows,size_t columns,bool headers,const ps_a11y_table_row_input *input) {
+ if(!ctx || !ctx->userdata.ptr)return false;
+ struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
+ SDL_LockMutex(sdl->accessibility_mutex);
+ bool ok=ps_a11y_document_table(sdl->accessibility,begin,end,rows,columns,headers,input);
+ SDL_UnlockMutex(sdl->accessibility_mutex);return ok;
+}
+void nk_sdl_accessibility_document_abort(struct nk_context *ctx) {
+ if(!ctx || !ctx->userdata.ptr)return;
+ struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return;
+ SDL_LockMutex(sdl->accessibility_mutex);ps_a11y_document_abort(sdl->accessibility);
+ SDL_UnlockMutex(sdl->accessibility_mutex);
+}
+bool nk_sdl_accessibility_document_table_cell(struct nk_context *ctx,size_t index,size_t row,
+ size_t column,ps_a11y_table *table,ps_a11y_table_cell *cell) {
+ if(!ctx || !ctx->userdata.ptr || !table || !cell)return false;
+ struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
+ ps_a11y_table t={0};ps_a11y_table_cell c={0};SDL_LockMutex(sdl->accessibility_mutex);
+ bool ok=ps_a11y_table_at(sdl->accessibility,index,&t) &&
+     ps_a11y_table_cell_get(sdl->accessibility,t.id,row,column,&c);
+ if(ok){*table=t;*cell=c;}
+ SDL_UnlockMutex(sdl->accessibility_mutex);return ok;
+}
 bool nk_sdl_accessibility_document_scroll(struct nk_context *ctx,uint64_t version,size_t *byte,bool *top) {
  if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
  SDL_LockMutex(sdl->accessibility_mutex);bool ok=ps_a11y_document_take_scroll(sdl->accessibility,version,byte);

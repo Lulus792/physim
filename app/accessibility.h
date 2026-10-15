@@ -9,11 +9,27 @@
 #define PS_A11Y_DOCUMENT_BYTES (512u*1024u+8192u)
 #define PS_A11Y_TEXT_BOXES 8192u
 #define PS_A11Y_EDIT_BOXES 2048u
+#define PS_A11Y_TABLE_LIMIT 4096u
+#define PS_A11Y_TABLE_ROWS 4096u
+#define PS_A11Y_TABLE_CELLS 16384u
+typedef struct {size_t begin,end;} ps_a11y_cell_range;
+typedef struct ps_a11y_table_row_input {
+ size_t begin,end,count;const ps_a11y_cell_range *cells;float bounds[4];
+} ps_a11y_table_row_input;
+typedef struct ps_a11y_table {
+ uint64_t id;size_t begin,end,rows,columns,first_row;bool column_headers;
+} ps_a11y_table;
+typedef struct ps_a11y_table_cell {
+ uint64_t id,table,version;size_t row,column,begin,end;bool column_header;
+ float bounds[4];
+} ps_a11y_table_cell;
+typedef struct ps_a11y_table_inventory ps_a11y_table_inventory;
 typedef struct {size_t begin,end;float bounds[4];} ps_a11y_text_box;
 typedef struct {
  uint64_t version;char name[256];char *text;size_t length;
  float viewport[4];ps_a11y_text_box boxes[PS_A11Y_TEXT_BOXES];size_t count;unsigned dropped;
- bool active;
+ bool active,complete;
+ ps_a11y_table_inventory *tables;
 } ps_a11y_document;
 typedef enum {PS_A11Y_TEXT,PS_A11Y_BUTTON,PS_A11Y_CHECKBOX,PS_A11Y_RADIO,PS_A11Y_RADIO_GROUP,PS_A11Y_SLIDER,PS_A11Y_EDIT,PS_A11Y_LINK} ps_a11y_role;
 typedef struct {
@@ -59,6 +75,29 @@ void ps_a11y_destroy(ps_a11y_model *model);
 bool ps_a11y_document_begin(ps_a11y_model *model,uint64_t version,const char *name,
                            const char *text,const float viewport[4]);
 bool ps_a11y_document_box(ps_a11y_model *model,size_t begin,size_t end,const float bounds[4]);
+/* Reject this incomplete frame without replacing any published snapshot. */
+void ps_a11y_document_abort(ps_a11y_model *model);
+/* Whole-table transaction, independent of the 256 interactive controls. Rows
+ * and ranges follow reading order, with empty cells allowed. Missing trailing
+ * cells are virtual empty cells at the row end. Geometry is clipped on read.
+ * Same document version requires the same structure and ranges; geometry may
+ * change. A successful publication exposes the new inventory atomically. */
+bool ps_a11y_document_table(ps_a11y_model *model,size_t begin,size_t end,
+                           size_t rows,size_t columns,bool column_headers,
+                           const ps_a11y_table_row_input *input);
+size_t ps_a11y_table_count(const ps_a11y_model *model);
+bool ps_a11y_table_at(const ps_a11y_model *model,size_t index,ps_a11y_table *table);
+bool ps_a11y_table_get(const ps_a11y_model *model,uint64_t id,ps_a11y_table *table);
+bool ps_a11y_table_bounds(const ps_a11y_model *model,uint64_t id,float bounds[4]);
+/* Full names are slices of model.document.text, not truncated control labels.
+ * Cells have stable unique IDs across reflow and suspend, expiring on removal
+ * or content changes. Read access survives suspend; bounds become empty. */
+bool ps_a11y_table_cell_get(const ps_a11y_model *model,uint64_t table,size_t row,
+                           size_t column,ps_a11y_table_cell *cell);
+bool ps_a11y_table_cell_find(const ps_a11y_model *model,uint64_t id,ps_a11y_table_cell *cell);
+bool ps_a11y_table_column_header(const ps_a11y_model *model,uint64_t table,size_t column,
+                                ps_a11y_table_cell *header);
+bool ps_a11y_table_cell_scroll(ps_a11y_model *model,uint64_t id);
 bool ps_a11y_document_scroll(ps_a11y_model *model,uint64_t version,size_t byte);
 bool ps_a11y_document_scroll_align(ps_a11y_model *model,uint64_t version,size_t byte,bool top);
 /* Queue the earliest visible text byte before layout reflow. Existing requests win. */

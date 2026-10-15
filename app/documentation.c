@@ -313,6 +313,9 @@ ps_result ps_document_parse(const char *source, size_t size, bool code, ps_docum
                     if(table_first==SIZE_MAX){table_first=row_block;table_row=0;}
                     d->blocks[row_block].table_first=table_first;
                     d->blocks[row_block].table_row=table_row++;
+                    ++d->blocks[table_first].table_rows;
+                    if(d->blocks[row_block].cell_count>d->blocks[table_first].table_columns)
+                        d->blocks[table_first].table_columns=d->blocks[row_block].cell_count;
                     last_table_row=row_block;
                 }
             } else {

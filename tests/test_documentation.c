@@ -149,6 +149,7 @@ int main(int argc, char **argv) {
     CHECK(strstr(d->text + d->blocks[1].text, "Radius") != NULL);
     CHECK(d->cell_count==4 && d->blocks[0].cell_count==2 && d->blocks[1].first_cell==2);
     CHECK(d->blocks[0].table_first==0 && d->blocks[1].table_first==0 && d->blocks[1].table_row==1);
+    CHECK(d->blocks[0].table_rows==2 && d->blocks[0].table_columns==2);
     free(d);
     const char *separate_tables="| first |\n\nordinary text\n\n| --- |\n| second |\n| --- |\n";
     CHECK(ps_document_parse(separate_tables,strlen(separate_tables),false,&d)==PS_OK);
@@ -164,6 +165,7 @@ int main(int argc, char **argv) {
     const char *expected_cells[]={"Form","Meaning","Empty","x|y","θ|🌍","",
         "a|b","bold|text","tail","",""};
     CHECK(d->cell_count==sizeof expected_cells/sizeof expected_cells[0]);
+    CHECK(d->blocks[0].table_rows==4 && d->blocks[0].table_columns==3);
     for(size_t i=0;i<d->cell_count;i++) {
         const ps_doc_cell *cell=&d->cells[i];size_t length=strlen(expected_cells[i]);
         CHECK(cell->length==length && !memcmp(d->text+cell->text,expected_cells[i],length));
