@@ -294,3 +294,52 @@ Quelle, Hash, Binärdatei, stdout/stderr und Bericht liegen unter
 `build/native/Mac-fields-linux/table-before` und
 `build/native/atspi-table-before-counter`. Dies ist ein abgegrenzter
 Provider-Gegennachweis; praktische Orca-Aufgaben und Wayland-Abnahme fehlen weiter.
+
+## Gemeinsame Rahmen für native Zeilen und Spalten
+
+Als Vorbereitung der AX-Anbindung können native Adapter zusätzlich die
+beschnittenen Zeilen- und Spaltenrahmen abfragen. Eine Zeile verwendet ihren
+vollständigen Layoutbereich, eine Spalte die Vereinigung ihrer sichtbaren
+Zellbereiche. Virtuelle Leerzellen benötigen dabei weiterhin keinen dichten
+Speicher. Suspend liefert leere Rahmen; ungültige Indizes verändern die
+Ausgabe des Aufrufers nicht.
+
+Die erweiterte gemeinsame Tabellenprobe wurde direkt mit den normalen
+Builder-Compilerflags aus `tests/test_accessibility_tables.c` und
+`app/accessibility.c` gebaut und tatsächlich ausgeführt: Windows MSVC ASan
+besteht mit Exit 0. Linux GCC 15.2 ASan/UBSan mit eingeschaltetem LeakSanitizer
+besteht ebenfalls mit Exit 0.
+Sie prüft Clipping, eine anfangs unsichtbare Zeile, die Spaltenvereinigung
+nach einer Geometrieänderung, Indexfehler und Suspend. Originalausgaben und
+Quellhashes stehen unter `build/native/table-axis-windows` beziehungsweise
+`build/native/table-axis-linux`. Das ist ein gemeinsamer Modellnachweis;
+ein AX-Tabellenprovider ist damit weiterhin nicht implementiert oder abgenommen.
+
+## Entwurf des nächsten AX-Schritts
+
+Der noch umzusetzende AppKit-Baum soll Dokument → Tabelle → Zeilen → Zellen →
+Links abbilden. Tabellen liefern zusätzlich Spaltenobjekte, Koordinatenzugriff
+und Überschriftenbeziehungen. Grundlage sind die öffentlichen Verträge für
+[NSAccessibilityTable](https://developer.apple.com/documentation/appkit/nsaccessibilitytable),
+[NSAccessibilityRow](https://developer.apple.com/documentation/appkit/nsaccessibilityrow?changes=_2)
+und [Zellindexbereiche](https://developer.apple.com/de/documentation/appkit/nsaccessibility-c.protocol/accessibilitycolumnindexrange).
+Zellen verwenden die Modell-ID; native Zeilen/Spalten benötigen eine davon
+unterschiedene Identität aus Tabelle und Index. Die neuen gemeinsamen Rahmen
+vermeiden eine zweite, abweichende Geometrieberechnung im Adapter.
+
+Geplant sind nur bei Abfrage angelegte, pro Inhaltsversion kanonisch gehaltene
+Objekte außerhalb der interaktiven Controls. Dokumentwechsel und Schließen
+müssen alte Objekte ungültig machen und den Bestand freigeben. Direkt geerbte
+Press-/Fokus-/Wertaktionen benötigen ausdrücklich gesperrte Implementierungen;
+eine Selector-Allowlist allein genügt entsprechend dem bestehenden
+Dokumentvertrag nicht. Zellnamen bleiben vollständige Textbereiche. Geteilte
+UTF-16-Bereiche beziehen sich weiterhin auf das Dokument, auch wenn ein Link
+eine Zelle als Parent erhält.
+
+Die Abnahme muss tatsächliche Objective-C-/AppKit-Aufrufe auf Intel und ARM64
+umfassen: Header, Koordinaten, Unicode, lange und virtuelle leere Zellen,
+Parents, native Textbereiche, Reflow, verborgene Rahmen, auslaufende Referenzen
+und vollständiges Schließen. Die reale F1-Tabelle benötigt einen eigenen
+zusätzlichen Laufzeitnachweis. Dieser Entwurf ist kein Implementierungs- oder
+Ausführungsnachweis; externe AX-Clients und praktische VoiceOver-Aufgaben
+bleiben zusätzliche Abnahmen.

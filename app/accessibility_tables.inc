@@ -115,6 +115,27 @@ static void table_clip(const ps_a11y_model *m,const float bounds[4],float out[4]
  float bottom=fminf(bounds[1]+bounds[3],view[1]+view[3]);
  if(right>x && bottom>y){out[0]=x;out[1]=y;out[2]=right-x;out[3]=bottom-y;}
 }
+bool ps_a11y_table_row_bounds(const ps_a11y_model *m,uint64_t id,size_t row,float out[4]) {
+ const ps_a11y_table *t=table_id(m?m->document:NULL,id);
+ if(!out || !t || row>=t->rows)return false;
+ table_clip(m,m->document->tables->rows[t->first_row+row].bounds,out);return true;
+}
+bool ps_a11y_table_column_bounds(const ps_a11y_model *m,uint64_t id,size_t column,float out[4]) {
+ const ps_a11y_table *t=table_id(m?m->document:NULL,id);
+ if(!out || !t || column>=t->columns)return false;
+ float result[4]={0};bool seen=false;
+ for(size_t row=0;row<t->rows;row++) {
+  const a11y_table_row *r=&m->document->tables->rows[t->first_row+row];
+  float width=r->bounds[2]/(float)t->columns;
+  float raw[]={r->bounds[0]+(float)column*width,r->bounds[1],width,r->bounds[3]},b[4];
+  table_clip(m,raw,b);if(b[2]<=0 || b[3]<=0)continue;
+  if(!seen){memcpy(result,b,sizeof result);seen=true;continue;}
+  float x=fminf(result[0],b[0]),y=fminf(result[1],b[1]);
+  float right=fmaxf(result[0]+result[2],b[0]+b[2]),bottom=fmaxf(result[1]+result[3],b[1]+b[3]);
+  result[0]=x;result[1]=y;result[2]=right-x;result[3]=bottom-y;
+ }
+ memcpy(out,result,sizeof result);return true;
+}
 bool ps_a11y_table_cell_get(const ps_a11y_model *m,uint64_t id,size_t row,size_t column,ps_a11y_table_cell *out) {
  const ps_a11y_document *d=m?m->document:NULL;const ps_a11y_table *t=table_id(d,id);
  if(!out || !t || row>=t->rows || column>=t->columns)return false;

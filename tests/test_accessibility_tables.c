@@ -37,6 +37,11 @@ int main(void) {
  CHECK(ps_a11y_table_cell_scroll(m,empty));size_t at=0;
  CHECK(ps_a11y_document_take_scroll(m,1,&at) && at==24);
  float bounds[4];CHECK(ps_a11y_table_bounds(m,id,bounds) && bounds[0]==10 && bounds[1]==20 && bounds[2]==200 && bounds[3]==25);
+ CHECK(ps_a11y_table_row_bounds(m,id,0,bounds) && bounds[0]==10 && bounds[1]==20 && bounds[2]==200 && bounds[3]==25);
+ CHECK(ps_a11y_table_row_bounds(m,id,1,bounds) && bounds[2]==0 && bounds[3]==0);
+ CHECK(ps_a11y_table_column_bounds(m,id,1,bounds) && bounds[0]==115 && bounds[1]==20 && bounds[2]==95 && bounds[3]==25);
+ bounds[0]=999;CHECK(!ps_a11y_table_row_bounds(m,id,2,bounds) && bounds[0]==999);
+ CHECK(!ps_a11y_table_column_bounds(m,id,2,bounds) && bounds[0]==999);
  cell.begin=999;CHECK(!ps_a11y_table_cell_get(m,id,2,0,&cell) && cell.begin==999);
  CHECK(!ps_a11y_table_cell_get(m,id,0,2,&cell) && cell.begin==999);
  CHECK(!ps_a11y_table_cell_find(m,id,&cell) && !ps_a11y_table_at(m,1,&table));
@@ -45,7 +50,10 @@ int main(void) {
  rows[1].bounds[1]=60;
  CHECK(document(m,1) && ps_a11y_document_table(m,0,end,2,2,true,rows) && ps_a11y_publish(m));
  CHECK(ps_a11y_table_cell_find(m,empty,&cell) && cell.bounds[0]==115 && cell.bounds[1]==60 && cell.bounds[2]==95);
+ CHECK(ps_a11y_table_column_bounds(m,id,1,bounds) && bounds[0]==115 && bounds[1]==20 && bounds[2]==95 && bounds[3]==70);
  ps_a11y_suspend(m);CHECK(ps_a11y_table_cell_find(m,empty,&cell) && cell.bounds[2]==0);
+ CHECK(ps_a11y_table_row_bounds(m,id,0,bounds) && bounds[2]==0 && bounds[3]==0);
+ CHECK(ps_a11y_table_column_bounds(m,id,1,bounds) && bounds[2]==0 && bounds[3]==0);
  CHECK(!ps_a11y_table_cell_at_point(m,116,61,&cell));
  CHECK(ps_a11y_table_count(m)==1 && !ps_a11y_table_cell_scroll(m,empty));
  CHECK(document(m,1) && ps_a11y_document_table(m,0,end,2,2,true,rows) && ps_a11y_publish(m));

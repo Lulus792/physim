@@ -79,6 +79,17 @@ Alle vier Joblogs wurden eingesehen. Der geprüfte Tabellenstand ist in beide
 Hauptzweige übernommen; eine danach bearbeitete Schriftoptimierung benötigt
 eigene Nachweise.
 
+Die Schriftoptimierung auf `14cfe8d` besitzt inzwischen diese tatsächlichen
+[macOS-Nachweise](005-f1-font-demand.md): auf Intel und ARM64 jeweils 11/11
+native und 13/13 GUI-/AppKit-Fälle sowie bytegleiche vollständige Atlanten im
+anschließenden Paarvergleich. Die frühere sporadische Bereitschaftsstörung wird
+dadurch weiterhin nicht als ursächlich behoben eingeordnet.
+Der [Linux-Lauf von 14cfe8d](https://github.com/Lulus792/physim/actions/runs/38782921283)
+besteht mit GCC 26/26 native (`run-fq4gfdbb`) und 34/34 GUI-Fälle
+(`run-hraws8y2`), mit Clang 26/26 (`run-8e5gtzid`) und 34/34
+(`run-s7rvzh1o`). Beide vollständigen Joblogs wurden gelesen. Die geprüfte
+Schriftoptimierung ist damit ebenfalls in beide Hauptzweige übernommen.
+
 ### Zentraler Skill-Review auf Revision 56a59ed
 
 Nachtrag: Die [gemeinsamen Tabellen-Zellgrenzen](006-f1-table-semantics.md)

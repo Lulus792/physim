@@ -262,3 +262,19 @@ Kompaktierung bleiben als Zwischenstände in den lokalen Originalausgaben
 erhalten. Die obigen Paarmessungen und 3/3-Verbünde betreffen die finale
 Kompaktierung. Keiner dieser lokalen Nachweise erklärt den sporadischen
 Intel-macOS-Kaltstart oder die frühere Windows-Fokusstörung für behoben.
+
+## Ausgeführte macOS-Paarprüfung auf 14cfe8d
+
+Der [tatsächliche Lauf](https://github.com/Lulus792/physim/actions/runs/38782921553)
+besteht auf Intel **11/11** native Fälle (`run-2xt0o7m8`) und **13/13**
+GUI-/AppKit-Fälle (`run-z1rjdrd5`), auf ARM64 **11/11** (`run-glugwpno`) und
+**13/13** (`run-dgatnyxz`). Beide vollständigen Joblogs wurden gelesen.
+Die anschließende Paarprobe bestätigt auf beiden Architekturen tatsächlich
+identische vollständige Atlasbytes mit 33 Quellen und 13.319 Glypheneinträgen.
+Mediane der Quellenvorbereitung: Intel **0,121199 → 0,070146 Sekunden**,
+ARM64 **0,107589 → 0,074474 Sekunden**. Die drei alten/neuen Paare, Quellhashes
+und vollständigen Rasterdateien werden im jeweiligen Workflow-Artefakt bewahrt.
+
+Die Paarprobe lief ausdrücklich nach den realen Kaltstartfällen. Sie misst
+deren kalte Bereitschaftszeit nicht nachträglich. Der frühere Intel-Timeout
+und die Windows-Fokussporadik bleiben deshalb eigenständige offene Befunde.

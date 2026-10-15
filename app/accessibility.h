@@ -89,6 +89,8 @@ size_t ps_a11y_table_count(const ps_a11y_model *model);
 bool ps_a11y_table_at(const ps_a11y_model *model,size_t index,ps_a11y_table *table);
 bool ps_a11y_table_get(const ps_a11y_model *model,uint64_t id,ps_a11y_table *table);
 bool ps_a11y_table_bounds(const ps_a11y_model *model,uint64_t id,float bounds[4]);
+bool ps_a11y_table_row_bounds(const ps_a11y_model *model,uint64_t id,size_t row,float bounds[4]);
+bool ps_a11y_table_column_bounds(const ps_a11y_model *model,uint64_t id,size_t column,float bounds[4]);
 /* Full names are slices of model.document.text, not truncated control labels.
  * Cells have stable unique IDs across reflow and suspend, expiring on removal
  * or content changes. Read access survives suspend; bounds become empty. */
