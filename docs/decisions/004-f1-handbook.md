@@ -40,8 +40,12 @@ Die 32-Pixel-Bilder zeigen einen konkreten UI-Restbefund: Die Sidebar-Aktion
 „Themen“ bricht bei geringer Breite mitten im Wort um. Die Layoutabnahme bleibt
 deshalb neben den bereits offenen Monitor-/DPI- und assistiven Aufgaben offen.
 Der aktuelle zusätzliche Windows-Inhaltsabgleich besteht 26/26
-Dokumentations-/Referenzfälle (`run-usbfqz70`); die gesonderten Tutorial-Ausführungen
-laufen noch und werden daraus nicht als bestanden abgeleitet.
+Dokumentations-/Referenzfälle (`run-usbfqz70`). Die gesonderten tatsächlich
+ausgeführten Tutorial-/Batch-Fälle bestehen **12/12** (`run-z84kqlpm`),
+einschließlich C-/Physim-Modellen, gemischten Auswertungen, analytischen
+Ergebnisprüfungen, 1.536 Monte-Carlo-Läufen und 1.024 Batch-Archiven. Die Quellen-
+und Ausführungsprüfungen ergänzen den Inhaltsnachweis; sie ersetzen keinen
+vollständigen fachlichen Textabgleich aller 185 Seiten.
 
 ### Fortschritt der Tabellenabnahme
 
