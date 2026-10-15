@@ -55,20 +55,6 @@ bool ps_ui_font_logical_scale(struct nk_font_atlas *atlas,float raster_scale) {
  }
  return true;
 }
-static bool font_source_contains(const struct nk_font_config *config,nk_rune codepoint) {
- const struct nk_font_config *source=config;
- do {
-  bool declared=false;
-  for(const nk_rune *r=source->range;r && *r;r+=2)
-   if(codepoint>=r[0] && codepoint<=r[1]){declared=true;break;}
-  if(declared && source->ttf_blob) {
-   stbtt_fontinfo info={0};int offset=source->ttf_index<0?-1:stbtt_GetFontOffsetForIndex(source->ttf_blob,source->ttf_index);
-   if(offset>=0 && stbtt_InitFont(&info,source->ttf_blob,offset) &&
-      stbtt_FindGlyphIndex(&info,(int)codepoint)!=0)return true;
-  }
- }while((source=source->n)!=config);
- return false;
-}
 bool ps_ui_font_add_fallback(struct nk_font_atlas *atlas,struct nk_font *target,
                              const char *path,const nk_rune *ranges) {
  if(!atlas || !target || !path || !ranges || !target->config || target->glyphs)return false;
@@ -89,9 +75,32 @@ bool ps_ui_font_add_fallback(struct nk_font_atlas *atlas,struct nk_font *target,
  }
  nk_rune *missing=atlas->permanent.alloc(atlas->permanent.userdata,NULL,(count*2+1)*sizeof *missing);
  if(!missing){atlas->permanent.free(atlas->permanent.userdata,bytes);return false;}
- size_t used=0;
+ /* First mark candidate glyphs. Even slots leave room to compress surviving
+  * codepoints into range pairs in place, without another allocation. */
+ size_t candidates=0;
  for(const nk_rune *r=ranges;*r;r+=2)for(nk_rune c=r[0];c<=r[1];c++) {
-  if(stbtt_FindGlyphIndex(&info,(int)c)==0 || font_source_contains(target->config,c))continue;
+  if(stbtt_FindGlyphIndex(&info,(int)c))missing[2*candidates++]=c;
+ }
+ /* Parse each existing source once per addition, rather than once for every
+  * candidate codepoint. Font selection, ranges and glyph priority stay intact. */
+ const struct nk_font_config *source=target->config;
+ do {
+  stbtt_fontinfo prior={0};
+  int source_offset=source->ttf_blob && source->ttf_index>=0?stbtt_GetFontOffsetForIndex(source->ttf_blob,source->ttf_index):-1;
+  if(source_offset<0 || !stbtt_InitFont(&prior,source->ttf_blob,source_offset))continue;
+  size_t remaining=0;
+  for(size_t i=0;i<candidates;i++) {
+   nk_rune c=missing[2*i];
+   bool declared=false;
+   for(const nk_rune *r=source->range;r && *r;r+=2)
+    if(c>=r[0] && c<=r[1]){declared=true;break;}
+   if(!declared || !stbtt_FindGlyphIndex(&prior,(int)c))missing[2*remaining++]=c;
+  }
+  candidates=remaining;
+ }while((source=source->n)!=target->config);
+ size_t used=0;
+ for(size_t i=0;i<candidates;i++) {
+  nk_rune c=missing[2*i];if(!c)continue;
   if(used && missing[used-1]+1==c)missing[used-1]=c;
   else {missing[used++]=c;missing[used++]=c;}
  }

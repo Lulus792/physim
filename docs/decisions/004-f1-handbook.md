@@ -67,6 +67,18 @@ liegt nicht vor. Die übrigen Intel-GUI-/AppKit-Fälle bestehen. Beide Joblogs
 wurden gelesen. Der Fehler bleibt offen; der erfolgreiche frühere Lauf auf
 `d644453` ersetzt diesen fehlgeschlagenen aktuellen Nachweis nicht.
 
+Der [macOS-Lauf auf e8042e4](https://github.com/Lulus792/physim/actions/runs/38779190950)
+besteht danach auf Intel **11/11** native (`run-swyuqlz1`) und **13/13** GUI-Fälle
+(`run-7l_i0mga`), auf ARM64 **11/11** (`run-1x3k2uz_`) und **13/13**
+(`run-sn100w33`). Der vorherige Timeout gilt damit weiterhin als sporadischer
+Befund mit offener Ursache. Der [Linux-CI-Lauf derselben Revision](https://github.com/Lulus792/physim/actions/runs/38779190162)
+besteht mit GCC **26/26** native (`run-rpwdeeai`) und **34/34** GUI-Fälle
+(`run-i3kxedvu`), mit Clang **26/26** (`run-bs28t7f7`) und **34/34**
+(`run-yuqdth8h`). Beide enthalten den unabhängigen TableCell-Client.
+Alle vier Joblogs wurden eingesehen. Der geprüfte Tabellenstand ist in beide
+Hauptzweige übernommen; eine danach bearbeitete Schriftoptimierung benötigt
+eigene Nachweise.
+
 ### Zentraler Skill-Review auf Revision 56a59ed
 
 Nachtrag: Die [gemeinsamen Tabellen-Zellgrenzen](006-f1-table-semantics.md)

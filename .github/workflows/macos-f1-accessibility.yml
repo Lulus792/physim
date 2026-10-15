@@ -19,6 +19,7 @@ on:
       - tests/check_display_workflow.py
       - tests/native_integration_cases.json
       - tools/native_tests.py
+      - tools/profile_font_prepare.py
       - .github/workflows/macos-f1-accessibility.yml
   workflow_dispatch:
 concurrency:
@@ -55,10 +56,28 @@ jobs:
         run: python3 tools/build.py --compiler clang --sanitizers --test --test-filter accessibility_utf16 --test-filter accessibility_document --test-filter accessibility_tables --test-filter accessibility_suspend --test-filter accessibility_edit --test-filter font_atlas_limits --test-filter font_faces --test-filter font_sources --test-filter font_density --test-filter documentation --test-filter documentation_anchors
       - name: Actual AppKit and rendered F1
         run: python3 tools/build.py --compiler clang --sanitizers --test-display --test-filter accessibility_native --test-filter accessibility_ui --test-filter font_bank_ui --test-filter accessibility_document_macos --test-filter accessibility_edit_macos --test-filter accessibility_links_macos --test-filter documentation_navigation --test-filter documentation_sidebar --test-filter graphics --test-filter documentation_font_demand --test-filter documentation_density --test-filter documentation_math --test-filter documentation_inline
+      - name: Paired font preparation comparison after actual cold-start cases
+        run: |
+          mkdir -p build/native/font-prepare-baseline
+          git fetch --no-tags --depth=1 origin e8042e4d4458f79f02acb8394e548613460693cb
+          git show e8042e4d4458f79f02acb8394e548613460693cb:app/ui_backend.c > build/native/font-prepare-baseline/ui_backend.c
+          python3 tools/profile_font_prepare.py --label macos-paired --compiler clang --sdl "$PWD/build-sdl-install" --compare-backend-source build/native/font-prepare-baseline/ui_backend.c
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          report=json.loads(Path('build/native/font-prepare-macos-paired/report.json').read_text())
+          print('Actual complete atlas bytes identical:',report['complete_atlas_bytes_identical'])
+          print('Font source median seconds:',report['paired_before_median_seconds'],'->',report['median_sources_seconds'])
+          PY
       - name: Archive focused evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: macos-f1-${{ matrix.runner }}
-          path: build/native/Debug-sanitized/test-results/**
+          path: |
+            build/native/Debug-sanitized/test-results/**
+            build/native/font-prepare-macos-*/report.json
+            build/native/font-prepare-macos-*/stdout
+            build/native/font-prepare-macos-*/stderr
+            build/native/font-prepare-macos-*/atlas*.a8
           if-no-files-found: error

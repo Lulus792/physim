@@ -2,14 +2,15 @@
 
 Architekturentscheidung vom 15. Oktober 2026. Der zusätzliche Atlasbesitz im
 Backend und F1s Größenwahl verwenden den Aufbau nach Bedarf.
-Die Ausführung ist unter Windows und Linux geprüft; die macOS-Abnahme steht
-noch aus. Die Entscheidung folgt dem zentralen
+Die unten genannten Nachweise gelten jeweils für ihre Revision und Plattform;
+die aktuelle Gesamtbewertung steht in [004](004-f1-handbook.md).
+Die Entscheidung folgt dem zentralen
 `software-architect`-Skill unter `D:/Skills/skills` und den tatsächlich
 ausgeführten Messungen in [004](004-f1-handbook.md).
 
 ## Problem und unveränderte Anforderungen
 
-F1 erzeugt beim Öffnen 38 primäre Schriftvarianten samt ergänzenden Quellen:
+Der frühere F1-Pfad erzeugte beim Öffnen 38 primäre Schriftvarianten samt ergänzenden Quellen:
 neun normale, neun Titel-, elf fette und neun Codegrößen. In der anfänglichen
 Ansicht wird nur ein Teil dieser Größen gebraucht. Im gemessenen ASan-Lauf
 braucht allein die CPU-Berechnung des F1-Atlas 6,325 Sekunden; Prüfung und
@@ -190,3 +191,74 @@ inzwischen auf macOS Intel und ARM64 jeweils **10/10 native und 13/13 GUI-Fälle
 einschließlich tatsächlicher Schriftschnittwahl, Bedarf und Dichte.
 [Lauf und begrenzte Abnahme](004-f1-handbook.md). Dies ist keine Abnahme der
 danach ergänzten Tabellenadapter oder praktischer Screenreader-Aufgaben.
+
+## Wiederholte Quellenanalyse und kontrollierter Vergleich
+
+Der Intel-macOS-Lauf auf `e6773c5` überschritt im ersten Mathematikfall die
+unveränderte 45-Sekunden-Grenze. Seine Spur weist für die ersten fünf F1-
+Varianten 10,595 Sekunden Quellenvorbereitung, 15,679 Sekunden Bake und
+1,619 Sekunden Prüfung/Upload aus. Das Hauptfenster hatte davor weitere
+Schriftarbeit. Der nachfolgende Lauf auf `e8042e4` besteht wieder vollständig;
+damit ist die Ursache der sporadisch hohen Bereitschaftszeit noch nicht behoben.
+Die tatsächlichen Läufe und Grenzen stehen in [004](004-f1-handbook.md).
+
+Der zentrale `performance-engineer` wurde zusätzlich angewendet. Im bisherigen
+Fallbackaufbau initialisiert die Abdeckungsfrage eine bereits vorhandene
+Schriftquelle für viele einzelne Kandidaten erneut. Die begrenzte Änderung
+initialisiert jede vorhandene Quelle einmal pro Ergänzung, entfernt bereits
+abgedeckte Kandidaten und bildet aus den übrigen Codepunkten dieselben
+Bereichspaare. Der vorhandene temporäre Bereichsspeicher reicht dafür aus;
+Allokationszahl, Quelldateien, Schriftschnitte, Glyphenpriorität, Abdeckung,
+Oversampling und Atlasbesitz bleiben erhalten. Dies ist eine Optimierung der
+wiederholten Analyse, keine Verringerung des Schriftangebots.
+
+`tools/profile_font_prepare.py` verwendet die tatsächliche
+`system_font_sampling`-Funktion aus `app/main.c`. Der Workload entspricht den
+fünf Anfangsvarianten bei Dichte 2 mit allen bisherigen Bereichen und derselben
+Abtastung. Die alte Ergänzungsfunktion aus `e8042e4` und die neue laufen in
+einem Prozess abwechselnd je dreimal. Die übrige Nuklear-Implementierung ist
+identisch. Das Werkzeug speichert stdout/stderr, Quellhashes, vollständige
+R8-Atlasbytes und einen JSON-Bericht; vorhandene fertige Berichte benötigen
+ein neues Label und werden nicht überschrieben.
+
+Lokale Paarmessung mit ASan auf Intel Xeon W-2123, vier Kernen/acht Threads:
+
+| Umgebung | Alte Quellenzeiten in Sekunden | Neue Quellenzeiten in Sekunden | Median alt → neu |
+| --- | --- | --- | --- |
+| Windows 10.0.26200 / MSVC | 0,078277 / 0,074531 / 0,077552 | 0,042635 / 0,041721 / 0,039766 | 0,077552 → 0,041721 (−46,2 %) |
+| Alpine 3.24 / WSL / GCC 15.2 ASan/UBSan | 0,321981 / 0,339151 / 0,302665 | 0,310326 / 0,272335 / 0,269662 | 0,321981 → 0,272335 (−15,4 %) |
+
+Während dieser Paarmessungen liefen keine weiteren von diesem Agenten
+gestarteten Builds oder GUI-Fälle. Der Dateisystemcache wurde nicht geleert;
+dies sind keine Kaltstart- oder macOS-Latenzgarantien. Die vollständigen
+Atlasbytes wurden tatsächlich verglichen und sind pro Plattform identisch:
+Windows 30 Quellen/13.134 Glypheneinträge, Linux 29/10.805. Eine Bake-
+Beschleunigung wird der Änderung nicht zugeschrieben.
+
+Die vorherigen getrennten Prozessmessungen schwankten stark und zeigten unter
+Linux auch langsamere Werte. Sie bleiben unter `build/native/font-prepare-*`
+erhalten, tragen aber keine allgemeine Geschwindigkeitszusage. Maßgebliche
+Paarberichte: `build/native/font-prepare-paired-windows/report.json` und
+`build/native/font-prepare-paired-linux/report.json`. Der macOS-Workflow führt
+denselben Vergleich erst nach den realen AppKit-/F1-Fällen aus; deren bisherige
+Bereitschaftsgrenzen werden nicht verändert. Seine Ergänzung allein belegt
+noch keinen erfolgreichen macOS-Lauf dieser Optimierung.
+
+Die finale kompaktierte Kandidatenfassung besteht Windows MSVC ASan **3/3**
+native Fälle (`run-aukq9sfp`: Fallback, Quellenbesitz und TTC-Schriftschnitte)
+und **3/3** GUI-Fälle (`run-v8r8o3d_`: Mathematik-/Zeicheninventur, Fontbedarf
+und zehnfacher unabhängiger UIA-Linkstress). Linux GCC 15.2 ASan/UBSan besteht
+dieselben **3/3** nativen Fälle (`run-b7jmfbu6`) und **3/3** GUI-Fälle
+(`run-gn2_vxh6`: Mathematik, Bedarf und unabhängige AT-SPI-Links).
+Die Mathematikfälle prüfen alle 38 Varianten mit Systemschriften und nochmals
+mit ausdrücklich erzwungenen mitgelieferten Primärschriften. Beide tatsächlichen
+1520 × 1080-Dichtebilder wurden geöffnet und visuell geprüft; Überschriften,
+Hervorhebung und umbrochene Links bleiben lesbar. Der abschließende native
+Dokumenttest bestätigt weiterhin 185 Seiten und 214 Abschnittslinks.
+
+Die erste Markierungsfassung bestand zuvor jeweils 6/6 native und 6/6 GUI-
+Nachbarn auf Windows und Linux. Ihre getrennten Prozesszeiten und die spätere
+Kompaktierung bleiben als Zwischenstände in den lokalen Originalausgaben
+erhalten. Die obigen Paarmessungen und 3/3-Verbünde betreffen die finale
+Kompaktierung. Keiner dieser lokalen Nachweise erklärt den sporadischen
+Intel-macOS-Kaltstart oder die frühere Windows-Fokusstörung für behoben.
