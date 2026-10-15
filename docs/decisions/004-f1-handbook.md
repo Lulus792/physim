@@ -1897,3 +1897,26 @@ Symbole sollen typografisch gesetzt werden. Die bisherige Unicode-/Codezeile
 ist dafür kein ausreichender Nachweis. Der aktuelle App-Renderer besitzt noch
 keinen TeX-Formelsatz; die Umsetzung sowie eigene Lese-, Zoom-, Theme-, Dichte-
 und Zugänglichkeitsprüfungen gehören zur weiteren F1-Abnahme.
+
+## Bestätigte macOS-Seitenleistenkorrektur vom 15. Oktober 2026
+
+Revision `64f302cecb3446fb66850231fe396df6e04d5e2a` wurde im
+[macOS-Lauf 38794037819](https://github.com/Lulus792/physim/actions/runs/38794037819)
+auf Intel und ARM tatsächlich gebaut und geprüft (Darwin 24.6.0,
+LLVM 20, ASan/UBSan, SDL 3.2.30). Intel besteht 11/11 native Prüfungen
+(`run-4bdc4ueu`) und 13/13 GUI-Fälle (`run-be2p4_p1`); ARM besteht
+11/11 (`run-nfsi1se7`) und 13/13 (`run-a3rd00dk`). Die vollständigen Joblogs
+und beide Archive wurden gelesen; die positiven 32-px-Aufnahmen visuell geprüft.
+Die beiden Navigationsschalter stehen dort vollständig auf eigenen Zeilen.
+Alle zwölf Kombinationen aus Schalter, Schriftgröße und Theme bestehen.
+
+Die isolierte Gegenprobe setzt nur die alte zweispaltige Schalteranordnung
+wieder ein und behält den neuen Prüfer bei. Auf beiden echten Mac-Architekturen
+scheitert sie mit `font=32 label=Themen lines=2 complete=0`, Exit 1.
+Die Archive bestätigen `precise_rejection=true`. Dies ist ein Gegenbeispiel
+für das alte Layout, kein vollständiger historischer Programm-Build.
+Die Archiv-SHA256 sind ARM
+`5db028705576161f9de0557ca3127c7fa0b47549b2dd3d673f86fcda0c1648b4` und Intel
+`266bd2680acaba718aa15f56c4b1aafe30cc16d19abd038f9cda1abe9caa63d3`.
+Dies bestätigt diesen Navigationsfehler; externe AX-Clients, VoiceOver,
+Monitorwechsel und die vollständige Dokumentationsabnahme bleiben gesondert offen.
