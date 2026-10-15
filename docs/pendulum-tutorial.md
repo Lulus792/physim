@@ -30,7 +30,7 @@ und Kräfte vor dem ersten Integratorvergleich.
 Eine Punktmasse von 1 kg hängt an einer masselosen starren Stange. Die Länge ist
 standardmäßig 1,5 m, die Anfangsauslenkung 0,45 rad und die Winkelgeschwindigkeit
 anfangs null. Die Schwerkraft beträgt 9,80665 m/s². Der Winkel wird gegenüber der
-Senkrechten gemessen; die positive y-Achse zeigt nach oben. Es gilt
+Senkrechten gemessen; die positive y-Achse zeigt nach oben.
 
 Die Winkelbewegung erfüllt:
 
@@ -104,8 +104,15 @@ Diese Vorlagen speichern elf SI-Kanäle. `energy` enthält mechanische Energie,
 Aus der [NASA-Widerstandsgleichung](https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-equation/)
 und der [mechanischen Leistung](https://ocw.mit.edu/courses/16-07-dynamics-fall-2009/resources/mit16_07f09_lec12/)
 folgt für das ruhende homogene Medium:
-`D′ = −F_drag·v = ½ρ Cd A |Lω|³`, `D(0)=0`.
-Die exakte Modellbilanz ist `E(t)+D(t)=E(0)`.
+$$
+\dot{D}=-\mathbf{F}_{\mathrm{drag}}\cdot\mathbf{v}=\frac{1}{2}\rho C_d A\lvert L\omega\rvert^3
+$$
+
+mit D(0) = 0. Die exakte Modellbilanz ist:
+
+$$
+E(t)+D(t)=E(0)
+$$
 
 Euler, RK4 und RK45 integrieren D als dritte Zustandskomponente; die
 symplektische Variante verwendet für D dieselbe alte Geschwindigkeit wie für
@@ -149,9 +156,24 @@ für diesen Lernpfad nicht erweitert.
 Die Szene zeigt die Gewichtskraft rot und die Stangenkraft grün. Beide Pfeile
 beginnen an der Masse und verwenden denselben beschrifteten Maßstab von
 0,05 m pro Newton. Der gelbe Geschwindigkeitspfeil behält seinen eigenen
-Maßstab von 0,3 s. Mit `eᵣ = (sin θ, −cos θ)` gilt
-`F_G = (0, −mg)` und `F_Stange = −m(g cos θ + Lω²)eᵣ`. Zusammen erzeugen
-sie die tangentiale Pendelbeschleunigung und die radiale Zentripetalbeschleunigung.
+Maßstab von 0,3 s. Mit dem radialen Einheitsvektor
+
+$$
+\mathbf{e}_r=(\sin\theta,-\cos\theta)
+$$
+
+gelten die Kräfte:
+
+$$
+\mathbf{F}_G=(0,-mg)
+$$
+
+$$
+\mathbf{F}_{\mathrm{Stange}}=-m\left(g\cos\theta+L\omega^2\right)\mathbf{e}_r
+$$
+
+Zusammen erzeugen sie die tangentiale Pendelbeschleunigung und die radiale
+Zentripetalbeschleunigung.
 Das Modell besitzt eine starre Stange; die Stangenkraft ist kein Modell eines
 schlaffen Seils. Die Pfeile sind Darstellungen der Modellkräfte und ändern
 weder Integrator noch Messdaten.
@@ -218,8 +240,29 @@ unbekannte Angaben werden nicht durch die feste Auswahl ersetzt.
 Alle Pendelvorlagen und beide Lernpfadmodelle speichern neben Winkel,
 Winkelgeschwindigkeit, Position, Energie und Sensorwinkel drei direkte
 Messkanäle in `m/s`: `velocity.x`, `velocity.y` und `speed`. Bei
-`x = L sin(φ)` und `y = −L cos(φ)` gilt
-`vx = L cos(φ) ω`, `vy = L sin(φ) ω`, `speed = L |ω|`.
+den Positionen
+
+$$
+x=L\sin\varphi
+$$
+
+$$
+y=-L\cos\varphi
+$$
+
+gilt für die Geschwindigkeiten:
+
+$$
+v_x=L\cos\varphi\,\omega
+$$
+
+$$
+v_y=L\sin\varphi\,\omega
+$$
+
+$$
+\lvert\mathbf{v}\rvert=L\lvert\omega\rvert
+$$
 Der Geschwindigkeitsvektor steht damit senkrecht zur Stange; sein Betrag
 ist nichtnegativ, während die Komponenten ihre Richtung behalten.
 Diese Werte stammen aus dem akzeptierten Modellzustand. Eine numerische
@@ -238,7 +281,17 @@ konstante Abschnitte liefern keine Spitze; Messlücken beginnen neue Segmente.
 Die Auswertung verbindet nur Spitzen desselben Segments.
 
 Für zwei erkannte Amplituden A₁ und A₂ bei t₁ und t₂ berechnet sie
-`δ = ln(A₁) - ln(A₂)` und `r = δ / (t₂ - t₁)` in 1/s. Das
+$$
+\delta=\ln A_1-\ln A_2
+$$
+
+und die Rate in 1/s:
+
+$$
+r=\frac{\delta}{t_2-t_1}
+$$
+
+Das
 [logarithmische Dekrement](https://archive.nptel.ac.in/content/storage2/courses/112101096/Mod%2010/Lect3/10.3_2.html)
 beschreibt das Verhältnis aufeinanderfolgender Amplituden. Beim exponentiellen
 Abklingen ist r konstant. Das nichtlineare Pendel mit quadratischem Widerstand

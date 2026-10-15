@@ -14,14 +14,59 @@ inelastischen und e=0 den vollkommen inelastischen zentralen Stoß. Bei e=0 bewe
 sich die Kugeln anschließend mit gleicher Geschwindigkeit; das Modell erstellt
 keinen gemeinsamen Körper und keine zusätzliche Klebeverbindung.
 
-Für Annäherung `g = uA−uB > 0`, Gesamtmasse `M = mA+mB` und reduzierte Masse
-`μ = mA mB/M` gilt:
+Für Annäherung gelten die relative Geschwindigkeit, Gesamtmasse und reduzierte Masse:
 
-- Stoßzeit `tc = (2−2r)/g = 1,6/g`.
-- Positiver Impulsbetrag `J = (1+e) μg`; auf A wirkt `−J`, auf B `+J`.
-- `vA = uA−J/mA`, `vB = uB+J/mB`.
-- Impuls `P = mA vA+mB vB` bleibt erhalten.
-- `K = ½mA vA²+½mB vB²` und `D = ½μ(1−e²)g²`; `K+D` bleibt erhalten.
+$$
+g=u_A-u_B>0
+$$
+
+$$
+M=m_A+m_B
+$$
+
+$$
+\mu=\frac{m_A m_B}{M}
+$$
+
+Die Stoßzeit lautet:
+
+$$
+t_c=\frac{2-2r}{g}=\frac{1{,}6}{g}
+$$
+
+Der positive Impulsbetrag ist:
+
+$$
+J=(1+e)\mu g
+$$
+
+Auf A wirkt −J, auf B +J. Die Geschwindigkeiten danach sind:
+
+$$
+v_A=u_A-\frac{J}{m_A}
+$$
+
+$$
+v_B=u_B+\frac{J}{m_B}
+$$
+
+Der Gesamtimpuls bleibt erhalten:
+
+$$
+P=m_A v_A+m_B v_B
+$$
+
+Kinetische und dissipierte Energie lauten:
+
+$$
+K=\frac{1}{2}m_A v_A^2+\frac{1}{2}m_B v_B^2
+$$
+
+$$
+D=\frac{1}{2}\mu(1-e^2)g^2
+$$
+
+Ihre Summe K + D bleibt erhalten.
 
 Die [MIT-Unterlagen zur Stoßtheorie, Kapitel 15](https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/mit8_01scs22_chapter15.pdf)
 erläutern Restitution und die Erhaltungsgrößen. Der Lernpfad verwendet einen

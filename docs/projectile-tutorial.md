@@ -11,13 +11,25 @@ obwohl das Modell keine Zufallszahlen verwendet.
 
 Für Zeit `t` in Sekunden gelten exakt:
 
-```text
-x(t)  = -2 + 2t
-y(t)  = 5t - 0,5 · 9,80665 · t²
-vx(t) = 2
-vy(t) = 5 - 9,80665t
-E(t)  = 0,5 · (vx² + vy²) + g · y = 14,5 J
-```
+$$
+x(t)=-2+2t
+$$
+
+$$
+y(t)=5t-\frac{1}{2}\cdot 9{,}80665\,t^2
+$$
+
+$$
+v_x(t)=2
+$$
+
+$$
+v_y(t)=5-9{,}80665\,t
+$$
+
+$$
+E(t)=\frac{1}{2}\left(v_x^2+v_y^2\right)+gy=14{,}5\,\mathrm{J}
+$$
 
 Wir verwenden 200 Schritte mit `dt = 0,005 s` und speichern auch den
 Anfangswert: 201 Zeilen bis `t = 1 s`. Dann erwarten wir `x = 0 m`,

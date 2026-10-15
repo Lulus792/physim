@@ -35,8 +35,11 @@ Unbekanntes TeX wird als Quelltext gezeigt. Ein nicht geschlossenes Display wird
 als ungültiges Dokument abgewiesen. Codeblöcke bleiben wörtlich erhalten.
 Inline-TeX ist noch nicht implementiert. Die lineare Lesealternative ersetzt
 keine strukturierte mathematische Screenreader-Navigation; diese bleibt offen.
-Die Umsetzung wird zunächst am User Guide und Pendel-Lernpfad geprüft. Weitere
-mathematische Dokumentationsseiten müssen noch einzeln übertragen werden.
+User Guide, Pendel-, Wurf-, Widerstands-, Material-, Feder- und Stoßlernpfad
+verwenden diesen Formelsatz. `documentation_formula_catalog` zeichnet jeden
+veröffentlichten Displayblock dieser Seiten und prüft Formelbild und native
+Lesereihenfolge. Weitere mathematische Fachseiten müssen noch einzeln übertragen
+werden.
 
 Quellen: [MathJax Node-Schnittstelle](https://docs.mathjax.org/en/v4.1/server/direct.html),
 [Herkunft und Lizenzen](../../docs/formulas/NOTICE.txt).

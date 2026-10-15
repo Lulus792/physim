@@ -908,9 +908,10 @@ static void documentation_typeset_test_frame(app *a,int *stage,int *code,const c
         if(topic>=0)open_documentation(a,topic);
         unsigned count=0;
         for(size_t i=0;a->documentation && i<a->documentation->count;i++)if(a->documentation->blocks[i].kind==PS_DOC_MATH) {
-            if(count<6)blocks[count]=i;count++;
+            if(count<6)blocks[count]=i;
+            count++;
         }
-        okay &= count==6;sample=0;break;
+        okay &= count>=6;sample=0;break;
     }
     case 2: {
         if(!sample)documentation_zoom(a,0);
@@ -949,7 +950,53 @@ static void documentation_typeset_test_frame(app *a,int *stage,int *code,const c
     if(!okay){fprintf(stderr,"Formula typeset stage %d case %u failed\n",*stage-1,sample);*code=1;a->quitting=true;}
     if(a->quitting)printf("FORMULA TYPESET SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 }
+static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code,const char **capture) {
+    static const char *paths[]={"docs/user-guide.md","docs/pendulum-tutorial.md","docs/projectile-tutorial.md",
+        "docs/projectile-drag-tutorial.md","docs/material-tutorial.md","docs/spring.md","docs/collision-tutorial.md"};
+    static size_t page,block;static unsigned sample,frames;static char image[80];
+    static int editor,analysis;static double simulation;bool okay=true;
+    switch((*stage)++) {
+    case 0:editor=a->experiment.string.len;analysis=a->analysis.string.len;simulation=a->simulation_time;
+        test_window_key_mod(a->window,SDLK_F1,0);break;
+    case 1: {
+        okay=SDL_SetWindowSize(a->doc_window,1100,800) && SDL_SyncWindow(a->doc_window);
+        ps_preferences p=a->preferences;p.theme=PS_THEME_LIGHT;preferences_apply(a,&p);
+        documentation_zoom(a,0);page=block=sample=0;break;
+    }
+    case 2: {
+        int topic=-1;for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(!strcmp(documentation_topics[i].path,paths[page]))topic=i;
+        okay=topic>=0;if(topic>=0)open_documentation(a,topic);block=0;frames=0;break;
+    }
+    case 3:
+        if(frames++<3 || a->doc_scroll_pending){--*stage;return;}break;
+    case 4:
+        while(a->documentation && block<a->documentation->count && a->documentation->blocks[block].kind!=PS_DOC_MATH)++block;
+        if(!a->documentation){okay=false;break;}
+        if(block==a->documentation->count) {
+            if(++page<sizeof paths/sizeof paths[0])*stage=2;
+            else {okay=sample>0;a->quitting=true;}
+            break;
+        }
+        a->doc_jump_block=(int)block;frames=0;break;
+    case 5:
+        if(frames++<3 || a->doc_scroll_pending || a->doc_jump_block>=0){--*stage;return;}
+        a->doc_math_test_block=block;a->doc_math_test_case=sample;a->doc_math_test_requested=true;
+        snprintf(image,sizeof image,"docs-formula-catalog-%03u.bmp",sample);*capture=image;break;
+    case 6: {
+        const ps_doc_block *b=&a->documentation->blocks[block];
+        okay=a->doc_math_test_ok && documentation_font_size(a)==16 &&
+            nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,b->reading_begin) &&
+            nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,b->reading_begin+b->reading_length-1) &&
+            a->experiment.string.len==editor && a->analysis.string.len==analysis && a->simulation_time==simulation;
+        printf("FORMULA CATALOG: case=%u page=%s block=%zu complete=%d reading=%s\n",sample,paths[page],block,okay,a->documentation->text+b->text);
+        ++block;++sample;*stage=4;break;
+    }
+    }
+    if(!okay){fprintf(stderr,"Formula catalog stage %d page %zu block %zu failed\n",*stage-1,page,block);*code=1;a->quitting=true;}
+    if(a->quitting)printf("FORMULA CATALOG SELF-TEST: %s count=%u\n",*code?"FAILED":"PASSED",sample);
+}
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strcmp(mode,"docs-keyboard-formula-catalog")){documentation_formula_catalog_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-typeset")){documentation_typeset_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-font-demand")){documentation_font_demand_test(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-sidebar")) {

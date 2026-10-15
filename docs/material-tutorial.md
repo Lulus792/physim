@@ -23,13 +23,41 @@ Materialdichte; Restitution und Reibung des Materialwerts bleiben null und
 wirken ohne Kontakte nicht. Die Namen und Zahlen sind eigene Demonstrationsdaten,
 keine Stoffdatenbank oder gemessene Kennwerte.
 
-```text
-V = 4*pi*r³/3                 m = rho_s*V
-F_weight = -m*g               F_buoyancy = rho_f*V*g
-F_drag = -6*pi*mu*r*v          lambda = 6*pi*mu*r/m
-y' = v                       v' = (F_weight + F_buoyancy + F_drag)/m
-Re = 2*r*rho_f*abs(v)/mu      g = 9.80665 m/s²
-```
+$$
+V=\frac{4}{3}\pi r^3,\qquad m=\rho_s V
+$$
+
+$$
+F_G=-mg
+$$
+
+$$
+F_A=\rho_f Vg
+$$
+
+$$
+F_D=-6\pi\mu rv
+$$
+
+$$
+\lambda=\frac{6\pi\mu r}{m}
+$$
+
+$$
+\dot{y}=v
+$$
+
+$$
+\dot{v}=\frac{F_G+F_A+F_D}{m}
+$$
+
+$$
+\mathrm{Re}=\frac{2r\rho_f\lvert v\rvert}{\mu}
+$$
+
+Dabei ist g = 9,80665 m/s². F_G, F_A und F_D bezeichnen Gewichtskraft,
+Auftrieb und Widerstand. E_kin, E_pot und E_diss stehen unten für kinetische,
+potentielle und dissipierte Energie.
 
 Stokes-Widerstand setzt eine kleine Reynolds-Zahl voraus. Das Beispiel beendet
 Läufe oberhalb `Re=0,1`; das ist eine konservative Lehrgrenze, keine universelle
@@ -43,24 +71,55 @@ definiert die Kennzahl über Dichte, Geschwindigkeit, Länge und Viskosität.
 
 ## Analytische Referenz und Energie
 
-Mit `a = -g*(1-rho_f/rho_s)`, `y0=0,5 m`, `v0=0` ist die Referenz für `lambda>0`:
+Die effektive Beschleunigung lautet:
 
-```text
-v(t) = a/lambda * (1-exp(-lambda*t))
-y(t) = y0 + a/lambda * (t-(1-exp(-lambda*t))/lambda)
-v_terminal = a/lambda
-```
+$$
+a=-g\left(1-\frac{\rho_f}{\rho_s}\right)
+$$
 
-Für Vakuum ist `v=a*t`, `y=y0+a*t²/2`. Der integrierte Zustand besteht aus Ort,
+Mit y₀ = 0,5 m und v₀ = 0 ist die Referenz für λ > 0:
+
+$$
+v(t)=\frac{a}{\lambda}\left(1-e^{-\lambda t}\right)
+$$
+
+$$
+y(t)=y_0+\frac{a}{\lambda}\left(t-\frac{1-e^{-\lambda t}}{\lambda}\right)
+$$
+
+$$
+v_{\infty}=\frac{a}{\lambda}
+$$
+
+Für Vakuum gilt:
+
+$$
+v=at
+$$
+
+$$
+y=y_0+\frac{at^2}{2}
+$$
+
+Der integrierte Zustand besteht aus Ort,
 Geschwindigkeit und dissipierter Arbeit. Die Referenzkanäle steuern die Integration
 nicht. Für das vereinfachte Modell gilt:
 
-```text
-E_kinetic = m*v²/2
-E_potential = -(F_weight+F_buoyancy)*y
-E_dissipated' = -F_drag*v
-E_balance = E_kinetic+E_potential+E_dissipated ≈ E_balance(0)
-```
+$$
+E_{\mathrm{kin}}=\frac{mv^2}{2}
+$$
+
+$$
+E_{\mathrm{pot}}=-\left(F_G+F_A\right)y
+$$
+
+$$
+\dot{E}_{\mathrm{diss}}=-F_Dv
+$$
+
+$$
+E_{\mathrm{Bilanz}}=E_{\mathrm{kin}}+E_{\mathrm{pot}}+E_{\mathrm{diss}}\approx E_{\mathrm{Bilanz}}(0)
+$$
 
 Die potentielle Energie ist die effektive Gewicht-/Auftriebsenergie dieses
 konstanten Fluidmodells. Sie ist nicht nur die gravitative Körperenergie und

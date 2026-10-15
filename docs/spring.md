@@ -30,18 +30,59 @@ masselose lineare Feder und ein linearer viskoser Dämpfer verbinden sie mit ein
 festen Punkt. Die Gleichgewichtslage liegt bei X=0, der Anker bei X=-L. Solange die
 Masse rechts des Ankers bleibt, ist X zugleich die Federdehnung:
 
-```text
-m*x'' + c*x' + k*x = 0
-Federkraft = -k*x       Dämpfungskraft = -c*v
-E_mechanisch = m*v²/2 + k*x²/2
-dE_dissipiert/dt = c*v²
-E_Bilanz = E_mechanisch + E_dissipiert ≈ E_mechanisch(0)
-```
+$$
+m\ddot{x}+c\dot{x}+kx=0
+$$
 
-Die Dämpfungsfälle folgen aus `omega0 = sqrt(k/m)` und `alpha = c/(2*m)`.
-Unterkritisch gilt `x = exp(-alpha*t)*(A*cos(w*t)+B*sin(w*t))` mit
-`w = sqrt(omega0²-alpha²)`. Kritisch gilt `x = (A+B*t)*exp(-alpha*t)`;
-überkritisch ist die Lösung die Summe zweier reeller abklingender Exponentialterme.
+$$
+F_{\mathrm{spring}}=-kx
+$$
+
+$$
+F_{\mathrm{damping}}=-cv
+$$
+
+$$
+E_{\mathrm{mech}}=\frac{mv^2}{2}+\frac{kx^2}{2}
+$$
+
+$$
+\frac{\mathrm{d}E_{\mathrm{diss}}}{\mathrm{d}t}=cv^2
+$$
+
+$$
+E_{\mathrm{Bilanz}}=E_{\mathrm{mech}}+E_{\mathrm{diss}}\approx E_{\mathrm{mech}}(0)
+$$
+
+Die Dämpfungsfälle folgen aus der Eigenkreisfrequenz und Abklingrate:
+
+$$
+\omega_0=\sqrt{\frac{k}{m}}
+$$
+
+$$
+\alpha=\frac{c}{2m}
+$$
+
+Unterkritisch gilt:
+
+$$
+x(t)=e^{-\alpha t}\left(A\cos(\omega t)+B\sin(\omega t)\right)
+$$
+
+mit
+
+$$
+\omega=\sqrt{\omega_0^2-\alpha^2}
+$$
+
+Kritisch gilt:
+
+$$
+x(t)=(A+Bt)e^{-\alpha t}
+$$
+
+Überkritisch ist die Lösung die Summe zweier reeller abklingender Exponentialterme.
 Die Konstanten folgen aus Anfangsort und Anfangsgeschwindigkeit. Gleichung,
 Dämpfungsfälle und Energierate sind in [MIT: Damped Oscillations, Abschnitte 2–3](https://ocw.mit.edu/courses/res-8-009-introduction-to-oscillations-and-waves-summer-2017/mitres_8_009su17_lec4.pdf)
 hergeleitet.

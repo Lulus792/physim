@@ -17,6 +17,7 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 | Dokumentationszugang | 185 registrierte Seiten und 214 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
 | Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
+| Formelsatz | 66 TeX-Ausdrücke in 67 Displayblöcken auf sieben Lernseiten; echte Formelbilder unter Windows und Linux geprüft | Weitere Fachseiten, Inline-TeX, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
 | Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; alle drei Plattformen besitzen zusätzlich geprüfte native Tabellen-, Zell- und Headerbeziehungen | Externe macOS-AX-Clientprüfung, echte Screenreader-Aufgaben und die unten beschriebene sporadische Windows-Linkprüfung |
 
 Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
@@ -1964,3 +1965,50 @@ Katalog; eine tatsächliche neue Paketabnahme steht noch aus. macOS, echte
 Dichte-/Monitorwechsel, Inline-TeX und die übrigen mathematischen Seiten bleiben
 für diesen neuen Formelsatz ausdrücklich offen. Die CI nimmt die neue GUI-Probe
 in ihre echten Linux- und macOS-Läufe auf.
+
+## Erweiterter Formelsatz: sieben Seiten und 67 Displayblöcke
+
+Der Katalog enthält jetzt 66 unterschiedliche mathematische Ausdrücke mit 462
+Breitenvarianten. Die sieben Seiten sind User Guide, Pendel, Vakuumwurf,
+Wurf mit Widerstand, Material/Medium, Feder–Masse–Dämpfer und zentraler Stoß.
+Die 28 nichtmathematischen Codeblöcke der sechs überarbeiteten Lernseiten wurden
+mit Revision `cd8825081d5c6e956f089e4b4ffd8b4bd38956ed` verglichen und sind
+unverändert. Mathematische Symbole und Modellwerte bleiben inhaltlich gleich;
+kompakte Kraft-/Energiesymbole im Materialmodell werden ausdrücklich erklärt.
+
+`documentation_formula_catalog` öffnet jede dieser sieben Seiten im echten
+F1-Fenster bei 1100 × 800 und 16 px, steuert jeden Formelblock an und prüft
+vollständige native Zeichengeometrie, die echte Reihenfolge der 67 linearen
+Lesealternativen, sichtbare Formelzeichen in allen 67 Aufnahmen sowie erhaltenen
+Editor-/Simulationszustand. Die getrennte 36-Bilder-Matrix bleibt bei 760 × 540,
+16/32 px und allen drei Themes erhalten. Der Pixelprüfer akzeptiert das reale
+Integralbild und verwirft eine separat erzeugte gleichförmige Gegenaufnahme.
+Alle sieben Windows-Formelübersichten wurden visuell geprüft.
+
+MSVC mit ASan besteht beide neuen GUI-Fälle in `run-e9hupjak`, Parser/Links/
+API-Referenz 3/3 in `run-tki6yg1_`. Linux GCC mit ASan/UBSan besteht Parser/Links
+2/2 in `run-56alvua1` und Mathematik/Zoom/Formelsatz/Katalog 4/4 in
+`run-crc_7ul9` (SDL 3.2.30, Mesa-Software-GL, X11/Xvfb, Openbox). Ein echtes
+Linux-Bild mit Stokes-Referenz und Energiegleichungen wurde zusätzlich geprüft.
+Die Prüferausführung bleibt innerhalb ihrer vorhandenen 90/120-Sekunden-Grenzen.
+Testkatalog und erwartete Läuferfehler bestehen in
+`build/native/formula-catalog-runner-proof2`.
+
+Die erste Renderer-Revision `cd88250` wurde außerdem als Windows-Release-Paket
+gebaut, in `F1 Formula Paket ä` verschoben und erneut gestartet. Alle 601
+Paketprüfsummen und die 42 Formelvarianten stimmen; die native 36-Bilder-Matrix
+besteht aus diesem verschobenen Paket. Die neue 66-Ausdruck-Erweiterung ist in
+jenem historischen Paket noch nicht enthalten und benötigt eine eigene neue
+Paketabnahme.
+
+Auf macOS ARM wurde dieselbe erste Renderer-Revision im
+[Lauf 38798322026](https://github.com/Lulus792/physim/actions/runs/38798322026)
+tatsächlich mit LLVM 20, ASan/UBSan und SDL 3.2.30 geprüft: native Verträge
+11/11 (`run-lz1zfjd3`), GUI 14/14 (`run-kbmbjvhh`), darunter alle 36 echten
+Formelansichten. Joblog und Archiv wurden gelesen, Integral- und Energiebild
+bei 32 px visuell geprüft. Archiv-SHA256:
+`6f4d0e58ee25ee4b6df236bd42ea846967f1e47881ae4c8e835a48f443aad057`.
+Intel und die vollständige neue 67-Blöcke-Matrix werden hiermit noch nicht
+als bestanden behauptet. Die übrigen Fachseiten, Inline-Formeln, reale
+Dichte-/Monitorwechsel und praktische mathematische Screenreader-Aufgaben
+bleiben offen; die konservative Gesamtbewertung bleibt bestehen.

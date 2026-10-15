@@ -14,12 +14,21 @@ aber vergleichbar.
 Mit Position `r`, Geschwindigkeit `v` und der nach oben positiven Y-Achse
 lautet das Modell:
 
-```text
-dr/dt = v
-Fdrag = -0,5 · ρ · Cd · A · |v| · v
-dv/dt = (0, -g) + Fdrag / m
-E = 0,5 · m · |v|² + m · g · y
-```
+$$
+\frac{\mathrm{d}\mathbf{r}}{\mathrm{d}t}=\mathbf{v}
+$$
+
+$$
+\mathbf{F}_{\mathrm{drag}}=-\frac{1}{2}\rho C_d A\lvert\mathbf{v}\rvert\mathbf{v}
+$$
+
+$$
+\frac{\mathrm{d}\mathbf{v}}{\mathrm{d}t}=(0,-g)+\frac{\mathbf{F}_{\mathrm{drag}}}{m}
+$$
+
+$$
+E=\frac{1}{2}m\lvert\mathbf{v}\rvert^2+mgy
+$$
 
 Beide Fassungen berechnen pro Zeitschritt vier RK4-Stufen aus demselben
 Zustand. Anders als beim Vakuumwurf ist `E` hier nicht konstant: Der
