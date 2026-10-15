@@ -1,0 +1,66 @@
+"""Require the actual macOS viewer to reject its previous two-column sidebar."""
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+import sys
+
+import build
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--compiler', default='clang')
+    parser.add_argument('--sdl', type=Path, required=True)
+    parser.add_argument('--build-dir', type=Path, default=build.ROOT/'build/native/Debug-sanitized')
+    args = parser.parse_args()
+    if sys.platform != 'darwin':
+        parser.error('This counterexample requires the actual macOS system fonts')
+    directory = args.build_dir.resolve()
+    proof = directory.parent/'sidebar-counterexample'
+    proof.mkdir()  # Preserve an earlier result instead of overwriting it.
+    ui = (build.ROOT/'app/documentation_ui.inc').read_text(encoding='utf-8')
+    start = ui.index('    /* Keep these short navigation labels whole;')
+    end = ui.index('    struct nk_rect topic_bounds=', start)
+    previous = ui[:start]+'    nk_layout_row_dynamic(ui, documentation_control_height(a), 2);\n'+ui[end:]
+    (proof/'documentation_ui.inc').write_text(previous, encoding='utf-8')
+    # The generated main lives beside the isolated old layout. All other
+    # includes and objects remain current, including the independent draw probe.
+    original_main = (build.ROOT/'app/main.c').read_text(encoding='utf-8')
+    main_source = proof/'main.c'
+    main_source.write_text('/* isolated sidebar '+hashlib.sha256(previous.encode()).hexdigest()+' */\n'+original_main,
+                           encoding='utf-8')
+    options = argparse.Namespace(build_dir=directory, compiler=args.compiler, sdl=args.sdl,
+        config='Debug', no_app=False, sanitizers=True, jobs=4, rebuild=False)
+    with build.build_lock(directory):
+        builder = build.Builder(options, dict(os.environ))
+        libraries = [builder.lib/('libphysim-'+name+'.a')
+                     for name in ('project','batch','platform','language','zlib','core')]
+        if not all(path.is_file() for path in libraries):
+            raise RuntimeError('Build and run the current macOS viewer before the counterexample')
+        sources = [str(main_source) if name=='main' else f'app/{name}.c' for name in build.APP]
+        binary = builder.executable('physim-sidebar-counterexample', sources, libraries, sdl=True,
+            defines=('Z_PREFIX', f'PS_SOURCE_DIR="{build.ROOT.as_posix()}"'))
+    command = [sys.executable, str(build.ROOT/'tests/check_display_workflow.py'), 'documentation_sidebar',
+               '--app', str(binary), '--root', str(build.ROOT), '--work', str(proof/'workflow')]
+    result = subprocess.run(command, cwd=build.ROOT, capture_output=True, timeout=120)
+    (proof/'stdout').write_bytes(result.stdout)
+    (proof/'stderr').write_bytes(result.stderr)
+    output = result.stdout.decode('utf-8', 'replace')
+    matches = re.findall(r'DOCUMENTATION SIDEBAR TABS: font=32 label=(Themen|Inhalt) theme=\d+ lines=(\d+) complete=0', output)
+    rejected = result.returncode != 0 and any(int(lines)>1 for _,lines in matches)
+    report = dict(command=command, exit_code=result.returncode, precise_rejection=rejected,
+        source_sha256=hashlib.sha256(ui.encode()).hexdigest(),
+        isolated_previous_layout_sha256=hashlib.sha256(previous.encode()).hexdigest(),
+        binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest(), wrapped_labels=matches)
+    (proof/'report.json').write_text(json.dumps(report, indent=2)+'\n', encoding='utf-8')
+    if not rejected:
+        raise RuntimeError('Counterexample did not reach and reject a wrapped 32-pixel sidebar label')
+    print('SIDEBAR COUNTEREXAMPLE: actual previous two-column label wrapping rejected')
+
+
+if __name__ == '__main__':
+    main()

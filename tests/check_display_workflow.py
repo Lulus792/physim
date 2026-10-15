@@ -149,8 +149,17 @@ def documentation_sidebar(flow,directory):
     require([int(r[0]) for r in records]==[16,32,32,32],'Wrong sidebar text sizes')
     require(all(int(r[1])>=2 and r[2]=='1' and float(r[3])>100 and float(r[4])>36 for r in records),
             'Incomplete or clipped sidebar heading')
-    for name in ('docs-sidebar-16.bmp','docs-sidebar-32.bmp','docs-sidebar-32-light.bmp','docs-sidebar-32-contrast.bmp',
-                 'docs-sidebar-jump-16.bmp','docs-sidebar-jump-32.bmp'):
+    tabs=re.findall(r'DOCUMENTATION SIDEBAR TABS: font=(\d+) label=(Themen|Inhalt) theme=(\d+) lines=(\d+) complete=(\d+) width=([0-9.]+) height=([0-9.]+)',output)
+    require(len(tabs)==12 and len({(r[0],r[1],r[2]) for r in tabs})==12,'Missing sidebar control size/theme states')
+    require([int(r[0]) for r in tabs]==[16]*6+[32]*6 and all(r[3]=='1' and r[4]=='1' for r in tabs),
+            'Wrapped or clipped sidebar control label')
+    require('DOCUMENTATION SIDEBAR TABS: keyboard and pointer switching, focus and input isolation passed' in output,
+            'Sidebar controls did not retain actual input behavior')
+    images=['docs-sidebar-16.bmp','docs-sidebar-32.bmp','docs-sidebar-32-light.bmp','docs-sidebar-32-contrast.bmp',
+            'docs-sidebar-jump-16.bmp','docs-sidebar-jump-32.bmp']
+    images += [f'docs-sidebar-tab-{size}-{theme}-{control}.bmp' for size in (16,32)
+               for theme in ('dark','light','contrast') for control in ('topics','contents')]
+    for name in images:
         raw=(directory/name).read_bytes()
         require(raw[:2]==b'BM' and len(raw)>54,'Missing sidebar capture: '+name)
         width,height=struct.unpack_from('<ii',raw,18)

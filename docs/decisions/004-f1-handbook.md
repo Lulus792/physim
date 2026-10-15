@@ -23,6 +23,37 @@ Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine v
 Bewertung mit Höchstpunktzahl ist wegen dieser offenen Abnahmefälle noch nicht
 begründet. Die folgenden Nachweise nennen jeweils ihre Revision und Umgebung.
 
+### Sidebar-Aktionen ohne Wortbruch
+
+Die bisherigen 32-Pixel-Bilder auf macOS Intel und ARM64 zeigen „Themen“ in
+zwei Zeilen. Die neue Anordnung misst beide Beschriftungen mit der tatsächlich
+aktiven Schrift und berücksichtigt Innenabstand, Rand und Rundung des normalen
+Button-Zeichenwegs. Reicht eine halbe Zeile nicht aus, stehen „Themen“ und
+„Inhalt“ untereinander. Die Fokuskennungen und Aktivierungswege bleiben erhalten.
+
+Der erweiterte echte Sidebar-Fall prüft beide Beschriftungen bei 16 und 32 Pixeln
+in Dunkel, Hell und hohem Kontrast. Ein unabhängiger Blick auf die gezeichneten
+Textkommandos verlangt jeweils eine vollständige, ungeclippte Textzeile. Enter
+wechselt zu den Themen, ein tatsächlicher Pointerklick zum Inhalt; Editorquellen
+und Simulationszeit bleiben unverändert. Die bisherigen Prüfungen mehrzeiliger
+Kapitelüberschriften und sichtbarer Abschnittssprünge bleiben zusätzlich erhalten.
+Die Windows-MSVC-ASan-Gruppe besteht **3/3** (`run-nqf4wnzx`): Sidebar,
+Navigation und Inline-Inhalte. Nach der abschließenden Anordnung ohne leere
+Zwischenzeile besteht dieselbe Windows-Gruppe erneut **3/3** (`run-yexqjinq`).
+Linux GCC 15.2 ASan/UBSan mit X11/Xvfb/Openbox besteht **2/2** native Fälle
+(`run-l41lxcbd`) und **3/3** GUI-Fälle (`run-jf46d3n3`). Dort wechseln die
+32-Pixel-Labels tatsächlich in die einspaltige Anordnung und bleiben in allen
+drei Themes vollständig. Alle drei 32-Pixel-Themebilder der Linux-Probe und der neuen
+Sidebar-Aktionsprobe wurden geöffnet und visuell geprüft.
+
+Die vorhandene Windows-Anordnung bestand die neuen Draw-Prüfungen schon mit
+gebündelter Schrift (`run-qf65m_hk`); das ist kein negativer Gegennachweis für
+den auf macOS beobachteten Fehler. Die neue macOS-Gegenprobe baut deshalb nur
+die alte Zweispalten-Anordnung in denselben aktuellen Test ein und verlangt
+die konkrete Ablehnung eines mehrzeiligen 32-Pixel-Labels. Quellen, Hashes,
+Originalausgaben und Bilder werden dafür gesichert. Die tatsächliche
+macOS-Ausführung dieser Korrektur und Gegenprobe steht noch aus.
+
 ### Native macOS-Tabellenabnahme auf Revision 474ccd8
 
 Die [Tabellenentscheidung](006-f1-table-semantics.md) enthält jetzt tatsächliche
@@ -1857,3 +1888,12 @@ Schriftfallback für weitere Unicode-Zeichen, Tabellensemantik, vollständiges n
 Lesen auf macOS/Linux, praktische Screenreader-Abnahme
 und die Abnahmematrix für Dichte, Themes sowie Linux und macOS. Diese Liste
 beschreibt Restarbeit und erteilt keine Produktfreigabe.
+
+## Ergänzter Auftrag zum Formelsatz
+
+Am 15. Oktober 2026 verlangt der Nutzer für F1 einen sauberen Formelsatz wie
+bei LaTeX. Brüche, Wurzeln, Hoch-/Tiefstellungen, Integrale und mathematische
+Symbole sollen typografisch gesetzt werden. Die bisherige Unicode-/Codezeile
+ist dafür kein ausreichender Nachweis. Der aktuelle App-Renderer besitzt noch
+keinen TeX-Formelsatz; die Umsetzung sowie eigene Lese-, Zoom-, Theme-, Dichte-
+und Zugänglichkeitsprüfungen gehören zur weiteren F1-Abnahme.

@@ -879,9 +879,14 @@ static bool documentation_topic_button(app *a,const char *label,bool selected) {
 static void documentation_sidebar_draw_probe(app *a) {
     if(!a->doc_sidebar_test_requested)return;
     a->doc_sidebar_test_requested=false;a->doc_sidebar_test_ok=false;a->doc_sidebar_test_lines=0;
-    if(!a->documentation || a->doc_focus<DOC_HEADING || a->doc_focus>=DOC_COPY)return;
-    size_t block=(size_t)(a->doc_focus-DOC_HEADING);if(block>=a->documentation->count)return;
-    const char *expected=a->documentation->text+a->documentation->blocks[block].text;
+    bool control=a->doc_focus==DOC_TOPICS || a->doc_focus==DOC_CONTENTS;
+    const char *expected;
+    if(control)expected=a->doc_focus==DOC_TOPICS?"Themen":"Inhalt";
+    else {
+        if(!a->documentation || a->doc_focus<DOC_HEADING || a->doc_focus>=DOC_COPY)return;
+        size_t block=(size_t)(a->doc_focus-DOC_HEADING);if(block>=a->documentation->count)return;
+        expected=a->documentation->text+a->documentation->blocks[block].text;
+    }
     char actual[4096];size_t used=0;struct nk_rect bounds=a->doc_focus_bounds,clip={0};bool fits=true;
     const struct nk_command *command;
     nk_foreach(command,a->doc_ui) {
@@ -904,8 +909,10 @@ static void documentation_sidebar_draw_probe(app *a) {
     for(size_t i=0;expected[i];i++)if(expected[i]!=' ' && expected[i]!='\n') {
         if(at>=used || expected[i]!=actual[at++])fits=false;
     }
-    a->doc_sidebar_test_ok=fits && at==used && a->doc_sidebar_test_lines>=2;
-    printf("DOCUMENTATION SIDEBAR DRAW: font=%u lines=%u complete=%d width=%.1f height=%.1f\n",
+    a->doc_sidebar_test_ok=fits && at==used && (control?a->doc_sidebar_test_lines==1:a->doc_sidebar_test_lines>=2);
+    if(control)printf("DOCUMENTATION SIDEBAR TABS: font=%u label=%s theme=%d lines=%u complete=%d width=%.1f height=%.1f\n",
+        documentation_font_size(a),expected,a->preferences.theme,a->doc_sidebar_test_lines,a->doc_sidebar_test_ok,bounds.w,bounds.h);
+    else printf("DOCUMENTATION SIDEBAR DRAW: font=%u lines=%u complete=%d width=%.1f height=%.1f\n",
         documentation_font_size(a),a->doc_sidebar_test_lines,a->doc_sidebar_test_ok,bounds.w,bounds.h);
 }
 static bool documentation_zoom_button(app *a,int direction) {
@@ -953,7 +960,13 @@ static void documentation_sidebar(app *a) {
         a->doc_query[0]=a->doc_filter[0]=0;documentation_filter(a);a->doc_contents=false;
     }
     documentation_focus_draw(a,DOC_PHYSIM,a->doc_track_bounds[1],false);
-    nk_layout_row_dynamic(ui, documentation_control_height(a), 2);
+    /* Keep these short navigation labels whole; other fonts can need more
+     * space than two equally sized controls provide at the same text size. */
+    const struct nk_user_font *font=ui->style.font;
+    float label_width=fmaxf(documentation_text_width(font,"Themen",6),documentation_text_width(font,"Inhalt",6));
+    float inset=ui->style.button.padding.x+ui->style.button.border+ui->style.button.rounding;
+    float available=nk_window_get_panel(ui)->bounds.w-ui->style.window.spacing.x;
+    nk_layout_row_dynamic(ui,documentation_control_height(a),available>=2*ceilf(label_width+2*inset)?2:1);
     struct nk_rect topic_bounds=nk_widget_bounds(ui);
     if (nk_button_label(ui, "Themen"))
         a->doc_contents = false;

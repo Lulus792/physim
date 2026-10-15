@@ -899,7 +899,7 @@ static void documentation_font_demand_test(app *a,int *stage,int *code,const cha
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
     if(!strcmp(mode,"docs-keyboard-font-demand")){documentation_font_demand_test(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-sidebar")) {
-        static int heading,experiment_length,analysis_length;static double simulation_time;static unsigned frames;
+        static int heading,experiment_length,analysis_length;static double simulation_time;static unsigned frames,tab_case;
         bool ok=true;switch((*stage)++) {
         case 0:
             experiment_length=a->experiment.string.len;analysis_length=a->analysis.string.len;simulation_time=a->simulation_time;
@@ -948,7 +948,41 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
                nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,b->reading_begin+b->reading_length-1);}
             ok=ok && a->experiment.string.len==experiment_length && a->analysis.string.len==analysis_length && a->simulation_time==simulation_time;
             *capture="docs-sidebar-jump-32.bmp";
-            a->quitting=true;break;
+            tab_case=0;documentation_zoom(a,0);break;
+        case 14: {
+            if(tab_case==6)for(int i=0;i<8;i++)documentation_zoom(a,1);
+            static const int themes[]={PS_THEME_DARK,PS_THEME_LIGHT,PS_THEME_HIGH_CONTRAST};
+            ps_preferences p=a->preferences;p.theme=themes[(tab_case%6)/2];preferences_apply(a,&p);
+            break;
+        }
+        case 15: {
+            if(!documentation_test_seek(a,tab_case%2?DOC_CONTENTS:DOC_TOPICS,stage,code))return;
+            static const char *names[]={
+                "docs-sidebar-tab-16-dark-topics.bmp","docs-sidebar-tab-16-dark-contents.bmp",
+                "docs-sidebar-tab-16-light-topics.bmp","docs-sidebar-tab-16-light-contents.bmp",
+                "docs-sidebar-tab-16-contrast-topics.bmp","docs-sidebar-tab-16-contrast-contents.bmp",
+                "docs-sidebar-tab-32-dark-topics.bmp","docs-sidebar-tab-32-dark-contents.bmp",
+                "docs-sidebar-tab-32-light-topics.bmp","docs-sidebar-tab-32-light-contents.bmp",
+                "docs-sidebar-tab-32-contrast-topics.bmp","docs-sidebar-tab-32-contrast-contents.bmp"};
+            a->doc_sidebar_test_requested=true;*capture=names[tab_case];break;
+        }
+        case 16:
+            ok=a->doc_sidebar_test_ok && documentation_font_size(a)==(tab_case<6?16:32);
+            if(tab_case%2)test_window_mouse(a->doc_window,a->doc_focus_bounds,true);
+            else test_window_key_mod(a->doc_window,SDLK_RETURN,0);
+            frames=0;break;
+        case 17:
+            if(tab_case%2)test_window_mouse(a->doc_window,a->doc_focus_bounds,false);
+            break;
+        case 18:
+            if(frames++<2){--*stage;return;}
+            ok=a->doc_contents==(tab_case%2!=0) && a->experiment.string.len==experiment_length &&
+               a->analysis.string.len==analysis_length && a->simulation_time==simulation_time;
+            if(++tab_case<12)*stage=14;else {
+                puts("DOCUMENTATION SIDEBAR TABS: keyboard and pointer switching, focus and input isolation passed");
+                a->quitting=true;
+            }
+            break;
         }
         if(!ok){fprintf(stderr,"Sidebar stage %d failed\n",*stage-1);*code=1;a->quitting=true;}
         if(a->quitting)printf("DOCUMENTATION SIDEBAR SELF-TEST: %s\n",*code?"FAILED":"PASSED");return;
