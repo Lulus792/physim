@@ -1,4 +1,5 @@
 #include "ui.h"
+#include "accessibility.h"
 #include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
@@ -11,9 +12,41 @@ typedef struct {
     unsigned presses,toggles,options[2];
     float scalar;
     unsigned document_state;uint64_t document_version;
+    float table_scroll;
     bool edit_visible,edit_disabled;char edit_value[128];
 } fixture_window;
 static bool fallback;
+static const char *table_source(void) {
+    static char value[1800];
+    if(!value[0]) {
+        strcpy(value,"θ🌍\tB\tC\n");size_t start=strlen(value);
+        memset(value+start,'x',1536);strcpy(value+start+1536,"\tx\ntail\n");
+    }
+    return value;
+}
+static bool table_draw(fixture_window *f,const char *source,struct nk_rect view) {
+    ps_a11y_cell_range cells[3][3]={0};ps_a11y_table_row_input rows[3]={0};size_t at=0;
+    for(size_t row=0;row<3;row++) {
+        size_t begin=at,column=0,cell_begin=at;
+        for(;;at++) {
+            if(source[at]=='\t' || source[at]=='\n') {
+                cells[row][column++]=(ps_a11y_cell_range){cell_begin,at};cell_begin=at+1;
+                if(source[at]=='\n')break;
+            }
+        }
+        rows[row]=(ps_a11y_table_row_input){.begin=begin,.end=at,.count=column,.cells=cells[row],
+            .bounds={view.x,view.y+(row==2?80:(float)row*24)-f->table_scroll,view.w,24}};
+        for(size_t c=0;c<column;c++) {
+            size_t length=cells[row][c].end-cells[row][c].begin;
+            const char *label=source+cells[row][c].begin;
+            if(length>64){label="xxxxxxxx…";length=strlen(label);}
+            struct nk_rect box=nk_rect(view.x+(float)c*view.w/3,rows[row].bounds[1],view.w/3,24);
+            nk_draw_text(nk_window_get_canvas(f->ui),box,label,(int)length,f->ui->style.font,nk_rgba(0,0,0,0),nk_rgb(230,230,230));
+        }
+        at++;
+    }
+    return nk_sdl_accessibility_document_table(f->ui,0,rows[2].end,3,3,true,rows);
+}
 static bool create(fixture_window *f, const char *title) {
     f->window = SDL_CreateWindow(title, 400, 260, SDL_WINDOW_OPENGL);
     if (!f->window) {
@@ -83,13 +116,19 @@ static bool draw(fixture_window *f, char name) {
         if(f->document_state) {
             const char *source=f->document_state==1?"A θ🌍 é. Next!\nLast\n":"Neu β😀\n";
             const char *title=f->document_state==1?"Lesetext θ🌍":"Neuer Lesetext β😀";
+            if(f->document_state==3){source=table_source();title="Tabellenprobe θ🌍";}
             nk_layout_row_dynamic(f->ui,40,1);struct nk_rect view;
             if(nk_widget(&view,f->ui)!=NK_WIDGET_INVALID) {
                 size_t byte;bool top;
                 if(nk_sdl_accessibility_document_scroll(f->ui,f->document_version,&byte,&top)) {
                     printf("TEXT SCROLL %c %zu\n",name,byte);fflush(stdout);
+                    if(f->document_state==3 && byte>1536)f->table_scroll=72;
                 }
                 if(!nk_sdl_accessibility_document(f->ui,f->document_version,title,source,view))return false;
+                if(f->document_state==3) {
+                    if(!table_draw(f,source,view))return false;
+                    goto document_drawn;
+                }
                 float x=view.x,y=view.y;const struct nk_user_font *font=f->ui->style.font;
                 for(size_t at=0;source[at];) {
                     nk_rune rune;int n=nk_utf_decode(source+at,&rune,(int)strlen(source+at));if(n<=0)return false;
@@ -101,6 +140,7 @@ static bool draw(fixture_window *f, char name) {
                         nk_sdl_accessibility_text_box(f->ui,at,at+(size_t)n,box);
                     x+=width;at+=(size_t)n;
                 }
+document_drawn:;
             }
         }
     }
@@ -166,6 +206,7 @@ int main(int argc, char **argv) {
             if (command == 'c')
                 close_window(&b);
             if(command=='d' || command=='u'){a.document_state=command=='d'?1:2;++a.document_version;}
+            if(command=='t'){a.document_state=3;a.table_scroll=0;++a.document_version;}
             if(command=='x')a.document_state=0;
             if(command=='f'){a.edit_visible=b.edit_visible=true;}
             if(command=='j')a.edit_disabled=true;

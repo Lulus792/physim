@@ -15,7 +15,14 @@
 #define AX_WINDOWS 8u
 #define AX_DOCUMENT_ROLE ((ps_a11y_role)100)
 #define AX_HYPERLINK_ROLE ((ps_a11y_role)101)
+#define AX_TABLE_ROLE ((ps_a11y_role)102)
+#define AX_CELL_ROLE ((ps_a11y_role)103)
+#define AX_HEADER_ROLE ((ps_a11y_role)104)
 typedef struct ax_server ax_server;
+typedef struct ax_table_watch {
+    uint64_t id,parent,document;ps_a11y_role role;float bounds[4];
+    size_t index;bool enabled,offscreen;struct ax_table_watch *next;
+} ax_table_watch;
 struct ps_a11y_native {
     ax_server *server;
     SDL_Window *window;
@@ -32,6 +39,7 @@ struct ps_a11y_native {
     uint64_t document_identity;
     char *previous_document_text;size_t previous_character_count;uint64_t previous_text_version;
     unsigned clipboard_action;uint64_t clipboard_id,clipboard_version;size_t clipboard_begin,clipboard_end;
+    ax_table_watch *table_watches;
 };
 struct ax_server {
     DBusConnection *connection;
@@ -152,6 +160,8 @@ static void local_reference(ax_reply *r, DBusMessageIter *iter, ax_server *s, un
         strcpy(path, AX_ROOT);
     reference(r, iter, bus_name(s), path);
 }
+#include "accessibility_atspi_tables.inc"
+static void ax_table_watch_query(ps_a11y_native *w,const ps_a11y_node *node);
 static bool find_object(ax_server *s, const char *path, ps_a11y_native **window, ps_a11y_node *node,
                         size_t *index) {
     *window = NULL;
@@ -196,27 +206,38 @@ static bool find_object(ax_server *s, const char *path, ps_a11y_native **window,
             SDL_LockMutex((*window)->mutex);
             if(reading) {
                 bool found=key==(*window)->document_identity && document_node(*window,node);
-                *index=ps_a11y_child_count((*window)->model,0);
+                ps_a11y_node root={0};*index=ax_child_count_locked(*window,&root)-1;
                 SDL_UnlockMutex((*window)->mutex);return found;
             }
             const ps_a11y_node *live = ps_a11y_find((*window)->model, key);
             if (live) {
-                *node = *live;
-                *index = ps_a11y_index((*window)->model,live->id);
+                *node = ax_semantic_node(*window,live);
+                *index = ax_index_locked(*window,node);
                 if(hyperlink && document_link_valid(*window,live))node->role=AX_HYPERLINK_ROLE;
             }
+            bool found=live!=NULL;
+            if(!live && !hyperlink) {
+                found=ax_table_snapshot(*window,key,node);
+                if(found){*index=ax_index_locked(*window,node);ax_table_watch_query(*window,node);}
+            }
             SDL_UnlockMutex((*window)->mutex);
-            return live != NULL && (!hyperlink || node->role==AX_HYPERLINK_ROLE);
+            return found && (!hyperlink || node->role==AX_HYPERLINK_ROLE);
         }
     return false;
 }
 static unsigned role(ps_a11y_native *w, const ps_a11y_node *node) {
+    if(node->role==AX_TABLE_ROLE)return 55;
+    if(node->role==AX_CELL_ROLE)return 56;
+    if(node->role==AX_HEADER_ROLE)return 57;
     if(node->role==AX_DOCUMENT_ROLE)return 94;
     if(node->role==PS_A11Y_EDIT)return 79;
     return !w ? 75 : !node->id ? 23 : node->role == PS_A11Y_LINK ? 88 : node->role == PS_A11Y_BUTTON ? 43 : node->role == PS_A11Y_CHECKBOX ? 7 : node->role == PS_A11Y_RADIO ? 44 : node->role == PS_A11Y_RADIO_GROUP ? 99 : node->role == PS_A11Y_SLIDER ? 51 : 29;
 }
 static const char *role_name(unsigned r, bool localized) {
     switch (r) {
+    case 55:return localized ? "Tabelle" : "table";
+    case 56:return localized ? "Tabellenzelle" : "table cell";
+    case 57:return localized ? "Spaltenüberschrift" : "table column header";
     case 79:return localized ? "Eingabefeld" : "entry";
     case 94:return localized ? "Textdokument" : "document text";
     case 88:return localized ? "Link" : "link";
@@ -241,9 +262,7 @@ static size_t child_count(ax_server *s, ps_a11y_native *w, const ps_a11y_node *n
     if (!w)
         return s->count;
     SDL_LockMutex(w->mutex);
-    size_t count = ps_a11y_child_count(w->model,node->id);
-    if(node->role==AX_DOCUMENT_ROLE)count=0;
-    else if(!node->id) {ps_a11y_node document;if(document_node(w,&document))count++;}
+    size_t count = ax_child_count_locked(w,node);
     SDL_UnlockMutex(w->mutex);
     return count;
 }
@@ -288,12 +307,15 @@ static void interfaces(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
     if(node->role==PS_A11Y_EDIT)text(r,&a,AX_PREFIX "EditableText");
     if(node->role==AX_DOCUMENT_ROLE)text(r,&a,AX_PREFIX "Hypertext");
     if(node->role==PS_A11Y_LINK)text(r,&a,AX_PREFIX "Hyperlink");
+    if(node->role==AX_TABLE_ROLE)text(r,&a,AX_PREFIX "Table");
+    if(node->role==AX_CELL_ROLE || node->role==AX_HEADER_ROLE)text(r,&a,AX_PREFIX "TableCell");
     close_container(r, iter, &a);
 }
 static void parent_reference(ax_reply *r, DBusMessageIter *iter, ax_server *s, ps_a11y_native *w,
                              const ps_a11y_node *node) {
     if (!w)
         reference(r, iter, "org.a11y.atspi.Registry", AX_ROOT);
+    else if(ax_is_document_child(node))document_reference(r,iter,s,w->window_id,w->document_identity);
     else
         local_reference(r, iter, s, node->id ? w->window_id : 0, node->parent);
 }
@@ -308,7 +330,8 @@ static void cache_item(ax_reply *r, DBusMessageIter *iter, ax_server *s, ps_a11y
     number(r, &c, index);
     number(r, &c, (int)child_count(s, w, node));
     interfaces(r, &c, w, node);
-    text(r, &c, !w ? "Physim" : !node->id ? w->title : node->label);
+    if(!w || (node->role!=AX_CELL_ROLE && node->role!=AX_HEADER_ROLE))text(r, &c, !w ? "Physim" : !node->id ? w->title : node->label);
+    else ax_cell_name(r,&c,w,node->id);
     unsigned_number(r, &c, role(w, node));
     text(r, &c, "");
     states(r, &c, w, node);
@@ -436,10 +459,14 @@ static const char *property_signature(const char *iface, const char *name) {
         if(!strcmp(name,"StartIndex") || !strcmp(name,"EndIndex"))return "i";
     } else if (!strcmp(iface, AX_PREFIX "Action") && !strcmp(name, "NActions"))
         return "i";
-    return NULL;
+    return ax_table_signature(iface,name);
 }
 static void property_value(ax_reply *r, DBusMessageIter *iter, ax_server *s, ps_a11y_native *w,
                            const ps_a11y_node *node, const char *iface, const char *name) {
+    if(ax_table_signature(iface,name)) {ax_table_property(r,iter,w,node,name);return;}
+    if(!strcmp(name,"Name") && (node->role==AX_CELL_ROLE || node->role==AX_HEADER_ROLE)) {
+        SDL_LockMutex(w->mutex);if(!ax_cell_name(r,iter,w,node->id))r->okay=false;SDL_UnlockMutex(w->mutex);return;
+    }
     if(!strcmp(iface,AX_PREFIX "Hyperlink") && strcmp(name,"version")) {
         SDL_LockMutex(w->mutex);const ps_a11y_node *live=ps_a11y_find(w->model,node->id);int position=0;
         if(!document_link_valid(w,live))r->okay=false;
@@ -523,6 +550,8 @@ static bool interface_supported(ps_a11y_native *w, const ps_a11y_node *node, con
     if(!strcmp(iface,AX_PREFIX "EditableText"))return node->role==PS_A11Y_EDIT;
     if(!strcmp(iface,AX_PREFIX "Hypertext"))return node->role==AX_DOCUMENT_ROLE;
     if(!strcmp(iface,AX_PREFIX "Hyperlink"))return node->role==PS_A11Y_LINK;
+    if(!strcmp(iface,AX_PREFIX "Table"))return node->role==AX_TABLE_ROLE;
+    if(!strcmp(iface,AX_PREFIX "TableCell"))return node->role==AX_CELL_ROLE || node->role==AX_HEADER_ROLE;
     return false;
 }
 static bool bounds(ps_a11y_native *w, const ps_a11y_node *node, unsigned coordinate, int out[4]) {
@@ -536,8 +565,11 @@ static bool bounds(ps_a11y_native *w, const ps_a11y_node *node, unsigned coordin
         x += w->x;
         y += w->y;
     }
-    if(coordinate==2 && node->parent) {
+    if(coordinate==2 && (node->parent || ax_is_document_child(node))) {
         SDL_LockMutex(w->mutex);const ps_a11y_node *parent=ps_a11y_find(w->model,node->parent);
+        ps_a11y_node synthetic;
+        if(!parent && ax_is_document_child(node) && document_node(w,&synthetic))parent=&synthetic;
+        if(!parent && node->parent && ax_table_snapshot(w,node->parent,&synthetic))parent=&synthetic;
         if(parent){x-=floor(parent->bounds[0]);y-=floor(parent->bounds[1]);}
         SDL_UnlockMutex(w->mutex);if(!parent)return false;
     }
@@ -639,7 +671,7 @@ static const char *component_xml =
     "direction='out'/></method><method name='Contains'><arg type='i' direction='in'/><arg type='i' "
     "direction='in'/><arg type='u' direction='in'/><arg type='b' direction='out'/></method><method "
     "name='GrabFocus'><arg type='b' direction='out'/></method><method name='GetLayer'><arg "
-    "type='u' direction='out'/></method><method name='GetMDIZOrder'><arg type='n' "
+    "type='u' direction='out'/></method><method name='ScrollTo'><arg type='u' direction='in'/><arg type='b' direction='out'/></method><method name='GetMDIZOrder'><arg type='n' "
     "direction='out'/></method><method name='GetAlpha'><arg type='d' "
     "direction='out'/></method></interface>";
 static const char *action_xml =
@@ -665,6 +697,8 @@ static const char *properties_xml =
 
 #include "accessibility_atspi_text.inc"
 #include "accessibility_atspi_links.inc"
+#include "accessibility_atspi_tables_xml.inc"
+#include "accessibility_atspi_table_events.inc"
 static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage *message,
                                          void *data) {
     if (dbus_message_get_type(message) != DBUS_MESSAGE_TYPE_METHOD_CALL)
@@ -694,9 +728,9 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
     const char *detail = "Unsupported method or invalid argument signature";
     if (!strcmp(iface, "org.freedesktop.DBus.Introspectable") && !strcmp(method, "Introspect") &&
         dbus_message_has_signature(message, "")) {
-        char xml[16384];
+        char xml[32768];
         int length = snprintf(
-            xml, sizeof xml, "<node>%s%s%s%s%s%s%s%s%s%s</node>",
+            xml, sizeof xml, "<node>%s%s%s%s%s%s%s%s%s%s%s%s</node>",
             cache ? "<interface name='org.a11y.atspi.Cache'><property name='version' type='u' "
                     "access='read'/><method name='GetItems'><arg type='a((so)(so)(so)iiassusau)' "
                     "direction='out'/></method></interface>"
@@ -709,7 +743,9 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             !cache && (node.role==AX_DOCUMENT_ROLE || node.role==PS_A11Y_EDIT)?text_xml:"",
             !cache && node.role==PS_A11Y_EDIT?editable_text_xml:"",
             !cache && node.role==AX_DOCUMENT_ROLE?hypertext_xml:"",
-            !cache && (node.role==AX_HYPERLINK_ROLE || node.role==PS_A11Y_LINK)?hyperlink_xml:"",properties_xml,
+            !cache && (node.role==AX_HYPERLINK_ROLE || node.role==PS_A11Y_LINK)?hyperlink_xml:"",
+            !cache && node.role==AX_TABLE_ROLE?table_xml:"",
+            !cache && (node.role==AX_CELL_ROLE || node.role==AX_HEADER_ROLE)?tablecell_xml:"",properties_xml,
             "<interface name='org.freedesktop.DBus.Introspectable'><method name='Introspect'><arg "
             "type='s' direction='out'/></method></interface>");
         if (length < 0 || (size_t)length >= sizeof xml)
@@ -726,11 +762,17 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             SDL_LockMutex(window->mutex);
             ps_a11y_node empty = {0};
             cache_item(&r, &array, s, window, &empty, (int)i);
-            for (size_t j = 0; j < window->model->count; j++)
-                cache_item(&r, &array, s, window, &window->model->nodes[j],
-                           (int)ps_a11y_index(window->model,window->model->nodes[j].id));
+            for (size_t j = 0; j < window->model->count; j++) {
+                ps_a11y_node child=ax_semantic_node(window,&window->model->nodes[j]);
+                cache_item(&r,&array,s,window,&child,(int)ax_index_locked(window,&child));
+            }
             ps_a11y_node document;if(document_node(window,&document))
-                cache_item(&r,&array,s,window,&document,(int)ps_a11y_child_count(window->model,0));
+                cache_item(&r,&array,s,window,&document,(int)ax_child_count_locked(window,&empty)-1);
+            for(size_t j=0;j<ps_a11y_table_count(window->model);j++) {
+                ps_a11y_table t;ps_a11y_node table;
+                if(ps_a11y_table_at(window->model,j,&t) && ax_table_snapshot(window,t.id,&table))
+                    cache_item(&r,&array,s,window,&table,(int)ax_index_locked(window,&table));
+            }
             SDL_UnlockMutex(window->mutex);
         }
         close_container(&r, &r.root, &array);
@@ -774,6 +816,8 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             const char *scalar[] = {"version","MinimumValue","MaximumValue","MinimumIncrement","CurrentValue","Text",NULL};
             const char *reading[] = {"version","CharacterCount","CaretOffset",NULL};
             const char *linking[] = {"version","NAnchors","StartIndex","EndIndex",NULL};
+            const char *tables[] = {"version","NRows","NColumns","Caption","Summary","NSelectedRows","NSelectedColumns",NULL};
+            const char *cells[] = {"version","ColumnSpan","Position","RowSpan","Table",NULL};
             const char **names = !strcmp(property_iface, AX_PREFIX "Application") ? application
                                  : !strcmp(property_iface, AX_PREFIX "Action")    ? action
                                  : !strcmp(property_iface, AX_PREFIX "Component") ? component
@@ -782,6 +826,8 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
                                  : !strcmp(property_iface, AX_PREFIX "EditableText") ? component
                                  : !strcmp(property_iface, AX_PREFIX "Hypertext") ? component
                                  : !strcmp(property_iface, AX_PREFIX "Hyperlink") ? linking
+                                 : !strcmp(property_iface, AX_PREFIX "Table") ? tables
+                                 : !strcmp(property_iface, AX_PREFIX "TableCell") ? cells
                                                                                   : accessible;
             if (cache && !strcmp(property_iface, AX_PREFIX "Cache")) {
                 DBusMessageIter array, entry, value;
@@ -842,13 +888,10 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
                 local_reference(&r, &r.root, s, s->windows[child]->window_id, 0);
             else {
                 SDL_LockMutex(w->mutex);
-                const ps_a11y_node *found=ps_a11y_child_at(w->model,node.id,(size_t)child);
-                if (found)
-                    local_reference(&r, &r.root, s, w->window_id, found->id);
-                else if(!node.id && (size_t)child==ps_a11y_child_count(w->model,0) && w->previous_document.document_version && w->model->document && w->model->document->active)
-                    document_reference(&r,&r.root,s,w->window_id,w->document_identity);
-                else
-                    failure = DBUS_ERROR_INVALID_ARGS;
+                uint64_t id;
+                if(!ax_child_id_locked(w,&node,(size_t)child,&id))failure=DBUS_ERROR_INVALID_ARGS;
+                else if(!id)document_reference(&r,&r.root,s,w->window_id,w->document_identity);
+                else local_reference(&r,&r.root,s,w->window_id,id);
                 SDL_UnlockMutex(w->mutex);
             }
         } else if (!dbus_message_has_signature(message, ""))
@@ -861,11 +904,12 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
                     local_reference(&r, &array, s, s->windows[i]->window_id, 0);
             else {
                 SDL_LockMutex(w->mutex);
-                for (size_t i = 0; node.role!=AX_DOCUMENT_ROLE && i < w->model->count; i++)
-                    if(w->model->nodes[i].parent==node.id)
-                        local_reference(&r, &array, s, w->window_id, w->model->nodes[i].id);
-                if(!node.id && w->previous_document.document_version && w->model->document && w->model->document->active)
-                    document_reference(&r,&array,s,w->window_id,w->document_identity);
+                size_t count=ax_child_count_locked(w,&node);
+                for(size_t i=0;i<count;i++) {
+                    uint64_t id;if(!ax_child_id_locked(w,&node,i,&id)){r.okay=false;break;}
+                    if(!id)document_reference(&r,&array,s,w->window_id,w->document_identity);
+                    else local_reference(&r,&array,s,w->window_id,id);
+                }
                 SDL_UnlockMutex(w->mutex);
             }
             close_container(&r, &r.root, &array);
@@ -896,6 +940,9 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
         failure=hypertext_method(w,message,method,&r);
     } else if(!cache && w && (node.role==AX_HYPERLINK_ROLE || node.role==PS_A11Y_LINK) && !strcmp(iface,AX_PREFIX "Hyperlink")) {
         failure=hyperlink_method(w,&node,message,method,&r);
+    } else if(!cache && w && ((node.role==AX_TABLE_ROLE && !strcmp(iface,AX_PREFIX "Table")) ||
+               ((node.role==AX_CELL_ROLE || node.role==AX_HEADER_ROLE) && !strcmp(iface,AX_PREFIX "TableCell")))) {
+        failure=ax_table_method(w,&node,message,method,&r);
     } else if (!cache && !w && !strcmp(iface, AX_PREFIX "Application")) {
         if (!strcmp(method, "GetLocale") && dbus_message_has_signature(message, "u"))
             text(&r, &r.root, "de_DE.UTF-8");
@@ -928,6 +975,12 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
                     close_container(&r, &r.root, &value);
                 }
             }
+        } else if (!strcmp(method,"ScrollTo") && dbus_message_has_signature(message,"u")) {
+            unsigned placement;dbus_message_get_args(message,NULL,DBUS_TYPE_UINT32,&placement,DBUS_TYPE_INVALID);
+            SDL_LockMutex(w->mutex);bool accepted=false;
+            if((node.role==AX_CELL_ROLE || node.role==AX_HEADER_ROLE) && (placement==0 || placement==2 || placement==6))
+                accepted=w->visible && ps_a11y_table_cell_scroll(w->model,node.id);
+            SDL_UnlockMutex(w->mutex);boolean(&r,&r.root,accepted);
         } else if (!strcmp(method, "Contains") && dbus_message_has_signature(message, "iiu")) {
             dbus_int32_t x, y;
             dbus_message_get_args(message, NULL, DBUS_TYPE_INT32, &x, DBUS_TYPE_INT32, &y,
@@ -950,8 +1003,30 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
                      (int64_t)x >= (int64_t)rectangle[0] + rectangle[2] ||
                      (int64_t)y >= (int64_t)rectangle[1] + rectangle[3])
                 reference(&r, &r.root, "", AX_NULL);
-            else if(node.role==AX_DOCUMENT_ROLE)
-                document_reference(&r,&r.root,s,w->window_id,node.id);
+            else if(node.role==AX_DOCUMENT_ROLE || ax_table_role(node.role)) {
+                SDL_LockMutex(w->mutex);float local_x=(float)x,local_y=(float)y;
+                if(coordinate==0){local_x-=w->x;local_y-=w->y;}
+                else if(coordinate==2) {
+                    ps_a11y_node parent={0};
+                    if(node.parent)ax_table_snapshot(w,node.parent,&parent);
+                    else if(ax_is_document_child(&node))document_node(w,&parent);
+                    local_x+=parent.bounds[0];local_y+=parent.bounds[1];
+                }
+                ps_a11y_table_cell cell;uint64_t hit=0;
+                if(ps_a11y_table_cell_at_point(w->model,local_x,local_y,&cell) &&
+                   (node.role==AX_DOCUMENT_ROLE || node.id==cell.table || node.id==cell.id))hit=cell.id;
+                for(size_t i=w->model->count;i>0;i--) {
+                    const ps_a11y_node *link=&w->model->nodes[i-1];
+                    if(!document_link_valid(w,link))continue;
+                    ps_a11y_node semantic=ax_semantic_node(w,link);
+                    if(node.role!=AX_DOCUMENT_ROLE && semantic.parent!=hit)continue;
+                    if(local_x>=link->bounds[0] && local_y>=link->bounds[1] && local_x<link->bounds[0]+link->bounds[2] && local_y<link->bounds[1]+link->bounds[3]){hit=link->id;break;}
+                }
+                if(hit)local_reference(&r,&r.root,s,w->window_id,hit);
+                else if(node.role==AX_DOCUMENT_ROLE)document_reference(&r,&r.root,s,w->window_id,node.id);
+                else local_reference(&r,&r.root,s,w->window_id,node.id);
+                SDL_UnlockMutex(w->mutex);
+            }
             else if (node.id && node.role!=PS_A11Y_RADIO_GROUP)
                 local_reference(&r, &r.root, s, w->window_id, node.id);
             else {
@@ -1003,7 +1078,7 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             double alpha = w->visible ? 1 : 0;
             basic(&r, &r.root, DBUS_TYPE_DOUBLE, &alpha);
         } else if (!strcmp(method,"GrabFocus")) {
-            if(node.role==AX_DOCUMENT_ROLE){boolean(&r,&r.root,false);goto reply_ready;}
+            if(node.role==AX_DOCUMENT_ROLE || ax_table_role(node.role)){boolean(&r,&r.root,false);goto reply_ready;}
             SDL_LockMutex(w->mutex);bool queued=w->visible && ps_a11y_focus(w->model,node.id);SDL_UnlockMutex(w->mutex);
             unsigned window_id=w->window_id;bool completed=false;
             if(queued) {
@@ -1242,7 +1317,7 @@ void ps_a11y_native_publish(ps_a11y_native *b, bool changed) {
             ++b->document_identity;
         ps_a11y_node document={0};bool reading=document_snapshot(b,&document);
         char reading_path[128];document_path(reading_path,b->window_id,b->document_identity);
-        int reading_index=(int)ps_a11y_child_count(b->model,0);
+        int reading_index=(int)ax_index_locked(b,&document);
         if(reading && !b->previous_document.document_version) {
             cache_signal(s,b,&document,reading_index,true);
             event_document_child(s,window_path,"add",reading_index,b->window_id,document.id);
@@ -1287,13 +1362,14 @@ void ps_a11y_native_publish(ps_a11y_native *b, bool changed) {
         for (size_t i = 0; i < b->previous_count; i++)
             if (!ps_a11y_find(b->model, b->previous[i].id)) {
                 cache_signal(s, b, &b->previous[i], (int)i, false);
-                char parent_path[128];path_for(parent_path,b->window_id,b->previous[i].parent);
-                size_t sibling=0;for(size_t j=0;j<i;j++)if(b->previous[j].parent==b->previous[i].parent)sibling++;
+                char parent_path[128];ax_parent_path(b,&b->previous[i],parent_path);
+                size_t sibling=0;for(size_t j=0;j<i;j++)if(b->previous[j].parent==b->previous[i].parent && ax_is_document_child(&b->previous[j])==ax_is_document_child(&b->previous[i]))sibling++;
                 event_reference(s, parent_path, "ChildrenChanged", "remove", (int)sibling, b->window_id,
                                 b->previous[i].id);
             }
         for (size_t i = 0; i < b->model->count; i++) {
-            const ps_a11y_node *node = &b->model->nodes[i];
+            ps_a11y_node semantic=ax_semantic_node(b,&b->model->nodes[i]);
+            const ps_a11y_node *node = &semantic;
             bool added = true;
             const ps_a11y_node *old = NULL;
             for (size_t j = 0; j < b->previous_count; j++)
@@ -1303,8 +1379,8 @@ void ps_a11y_native_publish(ps_a11y_native *b, bool changed) {
                     break;
                 }
             if (added) {
-                int sibling=(int)ps_a11y_index(b->model,node->id);cache_signal(s,b,node,sibling,true);
-                char parent_path[128];path_for(parent_path,b->window_id,node->parent);
+                int sibling=(int)ax_index_locked(b,node);cache_signal(s,b,node,sibling,true);
+                char parent_path[128];ax_parent_path(b,node,parent_path);
                 event_reference(s,parent_path,"ChildrenChanged","add",sibling,b->window_id,node->id);
             }
             char node_path[128];
@@ -1347,7 +1423,8 @@ void ps_a11y_native_publish(ps_a11y_native *b, bool changed) {
             event_state(s, window_path, "showing", b->visible);
             event_state(s, window_path, "visible", b->visible);
         }
-        memcpy(b->previous, b->model->nodes, b->model->count * sizeof *b->previous);
+        ax_table_events(b,false,moved);
+        for(size_t i=0;i<b->model->count;i++)b->previous[i]=ax_semantic_node(b,&b->model->nodes[i]);
         b->previous_count = b->model->count;
         SDL_UnlockMutex(b->mutex);
     }
@@ -1363,6 +1440,7 @@ void ps_a11y_native_destroy(ps_a11y_native *b) {
     for (size_t i = 0; i < b->previous_count; i++)
         cache_signal(s, b, &b->previous[i], (int)i, false);
     if(b->previous_document.document_version)cache_signal(s,b,&b->previous_document,0,false);
+    ax_table_events(b,true,false);
     size_t index = 0;
     while (index < s->count && s->windows[index] != b)
         index++;

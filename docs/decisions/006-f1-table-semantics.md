@@ -70,12 +70,14 @@ neue Inventar; die UI gibt ihre temporären Kopierbereiche nach der Übernahme f
 - Das gemeinsame Inventar ist mit dem tatsächlichen F1-Layout verbunden.
   Seine Veröffentlichung allein stellt noch keine Table-/Grid-/AX-/AT-SPI-
   Schnittstellen für externe Clients bereit. Windows besitzt jetzt den unten
-  beschriebenen Adapter; Linux und macOS benötigen weiterhin eigene Adapter.
+  beschriebenen Adapter; Linux besitzt inzwischen den ebenfalls unten geprüften
+  AT-SPI-Adapter. Der native macOS-Adapter bleibt offen.
 - Windows stellt Table/Grid sowie TableItem/GridItem mit vollständigen
   Spaltenheaderbeziehungen bereit. Die unabhängigen Clientprüfungen stehen unten.
   Grundlage: [Microsoft Table Control Type](https://learn.microsoft.com/en-us/windows/win32/winauto/uiauto-supporttablecontroltype).
-- Linux benötigt AT-SPI Table und Zellbeziehungen einschließlich außerhalb des
-  Viewports liegender Zellen. Grundlage: [AT-SPI Table](https://gnome.pages.gitlab.gnome.org/at-spi2-core/devel-docs/doc-org.a11y.atspi.Table.html).
+- Linux stellt AT-SPI Table und TableCell einschließlich außerhalb des
+  Viewports liegender Zellen bereit. Die tatsächlich ausgeführten Nachweise
+  stehen unten. Grundlage: [AT-SPI Table](https://gnome.pages.gitlab.gnome.org/at-spi2-core/devel-docs/doc-org.a11y.atspi.Table.html).
 - macOS benötigt native AX-Tabellen-, Zeilen- und Zellobjekte und die zugehörigen
   Header-/Textbeziehungen; die genaue AppKit-Anbindung und ihre externen
   Clientnachweise stehen noch aus.
@@ -225,3 +227,70 @@ wurden geprüft: Überschriften und Hervorhebung sind lesbar, `l|r` bleibt in
 einer Zelle. Die vorhandene Reflowprobe erhält die Zellidentität bei 16/32/16
 Pixeln. Dieser Lauf bestätigt das gemeinsame Modell und bestehende AppKit-
 Fälle; ein nativer AX-Tabellenadapter ist weiterhin offen.
+
+## Linux Table/TableCell mit unabhängigen Clients
+
+Der AT-SPI-Baum enthält Tabellen als Dokumentkinder, Zellen als direkte
+Tabellenkinder und eingebettete Links als Zellkinder. Die weiterhin geordneten
+Hypertext-Linkbereiche beziehen sich auf denselben vollständigen Dokumenttext.
+Table liefert Dimensionen, Header, Zellzugriff und die bijektive Zuordnung von
+Zeile/Spalte zu Kindindex. TableCell ergänzt Position, Spannweiten, Tabelle und
+Headerobjekte. Nicht unterstützte Auswahl bleibt leer beziehungsweise false.
+Vollständige Zellnamen werden aus dem unveränderlichen Text gelesen und sind
+nicht auf die Länge interaktiver Controlbeschriftungen begrenzt.
+
+Die sparsamen Modell-IDs bleiben auch bei Scrollen und Aus-/Einblenden stabil.
+`Component.ScrollTo` nimmt für Zellen TOP_LEFT, TOP_EDGE und ANYWHERE an;
+andere Platzierungen werden mit false abgewiesen. Verborgene Fenster behalten
+Namen/Identitäten, liefern leere Rahmen und weisen Scrollen ab. Bildschirm- und
+Elternkoordinaten berücksichtigen Tabellen-/Dokumenteltern. Punktsuche löst
+sichtbare Zellflächen und darin liegende Links auf. Nur Tabellenwurzeln und
+tatsächlich abgefragte Zellen benötigen zusätzliche Ereignissnapshots;
+unveränderte Zustände bleiben ruhig. Dokumentwechsel melden alte abgefragte
+Objekte defunct und machen ihre RPC-Aufrufe ungültig.
+
+Eine konkrete Protokollabweichung ist berücksichtigt: Die aktuelle
+[TableCell-XML](https://raw.githubusercontent.com/GNOME/at-spi2-core/main/xml/TableCell.xml)
+nennt für `GetRowColumnSpan` einen zusätzlichen booleschen Wert, der tatsächlich
+verwendete [libatspi-Client](https://raw.githubusercontent.com/GNOME/at-spi2-core/main/atspi/atspi-table-cell.c)
+liest vier Ganzzahlen (`iiii`). Der reale Lauf `run-yxn462pk` wies `biiii`
+ausdrücklich zurück. Provider und Introspektion liefern deshalb `iiii`;
+PyAT-SPI und der zusätzliche direkte D-Bus-Aufruf prüfen dieselben vier Werte.
+
+Tatsächlich ausgeführt unter Alpine 3.24 / GCC 15.2 ASan/UBSan, SDL 3.2.30,
+X11/Xvfb/Openbox und Software-GL:
+
+- **11/11** native Accessibility-/Dokumentfälle (`run-mzw3j43r`), einschließlich
+  Modell, Unicode-Index, Parser und 185 Seiten/214 Abschnittslinks.
+- Der reale F1-Client besteht **1/1** (`run-klona1c6`) und erneut im Verbund
+  `run-xxht8o3_`: Table/TableCell, Header, Koordinaten, vollständiger Zelltext,
+  verschachtelte Links, tatsächliche Punktsuche und alte Referenzen.
+- Dieser Verbund besteht **5/6** GUI-Fälle: allgemeiner AT-SPI-Fensterclient,
+  Inline-Inhalte, vollständiges F1-Lesen, Suchfeldbedienung und F1-Links.
+  Der neue Tabellenfixture-Fall scheiterte an seiner falschen Endgrenze hinter
+  dem letzten Zeilenumbruch. Die korrigierte Grenze entspricht dem bestehenden
+  Modellvertrag, nicht einer Lockerung der Produktvalidierung.
+- Der korrigierte Fixture-Verbund besteht **2/2** (`run-xrhgh8lx`): bisheriger
+  Fenster-/Text-/Edit-Client und neue 3×3-Tabelle mit Unicode-Header, 1.536 Zeichen
+  langem Zellnamen und zwei verschiedenen virtuellen Leerzellen am selben Offset.
+  Scrollen, verborgene Rahmen, erneutes Anzeigen, Header/Koordinaten und defunct
+  werden unabhängig geprüft. Der vorherige `run-xesmgf_1` bestand 1/2 wegen
+  eines Wrapper-Rückgabetyps im Testvergleich; die Prüfung liest jetzt ausdrücklich
+  Breite/Höhe und bestätigt beide mit null.
+- Die abschließende Clientfassung besteht **1/1** (`run-5b958ln5`) und ergänzt
+  tatsächlichen Fensterumzug, passende Bildschirmrahmen und Ereignisruhe.
+
+Der anfängliche `run-2j5s_g15` fand mit ASan ein zu großes temporäres
+Kindarray auf dem kleinen D-Bus-Threadstack. Die Implementierung führt jetzt
+die bereits geordneten Inventare ohne dieses Array zusammen; die folgenden
+Client- und Sanitizerläufe erreichen die genannten Prüfungen erfolgreich.
+Die tatsächlichen Linux-Inline- und Fokusbilder aus `run-xxht8o3_` wurden
+geöffnet und visuell geprüft.
+
+Die Gegenprobe baut ausschließlich den vorherigen AT-SPI-Provider aus `e6773c5`
+in dieselbe aktuelle Tabellenfixture ein. Der unabhängige Client erreicht das
+Dokument und scheitert mit Exit 1 gezielt an der fehlenden nativen Tabelle.
+Quelle, Hash, Binärdatei, stdout/stderr und Bericht liegen unter
+`build/native/Mac-fields-linux/table-before` und
+`build/native/atspi-table-before-counter`. Dies ist ein abgegrenzter
+Provider-Gegennachweis; praktische Orca-Aufgaben und Wayland-Abnahme fehlen weiter.

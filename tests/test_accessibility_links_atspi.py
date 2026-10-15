@@ -62,6 +62,40 @@ try:
     cache=dbus.Interface(raw.get_object(provider,'/org/a11y/atspi/cache'),'org.a11y.atspi.Cache').GetItems()
     path=next(str(item[0][1]) for item in cache if int(item[7])==94 and str(item[6])==document.name)
     ht=dbus.Interface(raw.get_object(provider,path),'org.a11y.atspi.Hypertext')
+    table_node=next(n for n in document if n.getRole()==pyatspi.ROLE_TABLE)
+    table=table_node.queryTable()
+    assert (table.nRows,table.nColumns)==(2,2)
+    assert table_node.childCount==4 and table_node.parent==document
+    assert [table.getColumnHeader(i).name for i in range(2)]==['Begriff','Bedeutung']
+    assert table.getColumnDescription(1)=='Bedeutung'
+    assert table.getSelectedRows()==[] and table.getSelectedColumns()==[]
+    table_cells=[]
+    for row in range(2):
+        for column in range(2):
+            cell=table.getAccessibleAt(row,column);table_cells.append(cell)
+            assert cell.parent==table_node and cell.getIndexInParent()==row*2+column
+            assert table_node[row*2+column]==cell
+            assert table.getIndexAt(row,column)==row*2+column
+            assert table.getRowAtIndex(row*2+column)==row and table.getColumnAtIndex(row*2+column)==column
+            assert table.getRowExtentAt(row,column)==1 and table.getColumnExtentAt(row,column)==1
+            item=cell.queryTableCell()
+            assert tuple(item.position)==(1,row,column) and item.rowSpan==item.columnSpan==1
+            assert tuple(item.getRowColumnSpan())==(row,column,1,1)
+            assert item.table==table_node and item.columnHeaderCells==[table.getColumnHeader(column)]
+            assert item.rowHeaderCells==[]
+    assert table_cells[3].name=='l|r in Metern; C'
+    assert table_cells[0].getRole()==pyatspi.ROLE_TABLE_COLUMN_HEADER
+    assert table_cells[3].getRole()==pyatspi.ROLE_TABLE_CELL
+    assert links[1].getObject(0).parent==table_cells[3]
+    assert list(table_cells[3])==[links[1].getObject(0)]
+    table_path=str(table_node.path)
+    cell_path=str(table_cells[3].path)
+    native_table=dbus.Interface(raw.get_object(provider,table_path),'org.a11y.atspi.Table')
+    assert str(native_table.GetAccessibleAt(dbus.Int32(-1),dbus.Int32(0))[1])=='/org/a11y/atspi/null'
+    assert int(native_table.GetIndexAt(dbus.Int32(2),dbus.Int32(0)))==-1
+    assert tuple(native_table.GetRowColumnExtentsAtIndex(dbus.Int32(3)))==(True,1,1,1,1,False)
+    native_cell=dbus.Interface(raw.get_object(provider,cell_path),'org.a11y.atspi.TableCell')
+    assert tuple(native_cell.GetRowColumnSpan())==(1,1,1,1)
     link_ref=ht.GetLink(dbus.Int32(0));hl=dbus.Interface(raw.get_object(link_ref[0],link_ref[1]),'org.a11y.atspi.Hyperlink')
     old_ref=ht.GetLink(dbus.Int32(1));old_link=dbus.Interface(raw.get_object(old_ref[0],old_ref[1]),'org.a11y.atspi.Hyperlink')
     properties=dbus.Interface(raw.get_object(link_ref[0],link_ref[1]),'org.freedesktop.DBus.Properties').GetAll('org.a11y.atspi.Hyperlink')
@@ -77,6 +111,11 @@ try:
     assert target.queryComponent().getExtents(pyatspi.WINDOW_COORDS)[2]>0
     rectangle=text.getRangeExtents(links[1].startIndex,links[1].endIndex,pyatspi.WINDOW_COORDS)
     assert rectangle[2]>0 and rectangle[3]>0,'link range has no actual text geometry'
+    assert table.getAccessibleAt(1,1)==table_cells[3],'cell identity changed while scrolling'
+    assert table_cells[3].getState().contains(pyatspi.STATE_SHOWING)
+    assert table_cells[3].queryComponent().getExtents(pyatspi.WINDOW_COORDS)[2]>0
+    box=table_cells[3].queryComponent().getExtents(pyatspi.WINDOW_COORDS)
+    assert document.queryComponent().getAccessibleAtPoint(box[0]+2,box[1]+2,pyatspi.WINDOW_COORDS)==table_cells[3]
     (a.work/'reader/link-focus-done').write_text('verified',encoding='utf-8')
     wait(lambda:marker('LINKS READY INVALID'),'invalid link phase')
     assert links[0].getObject(0).queryAction().doAction(0)
@@ -90,6 +129,11 @@ try:
         old_link.GetObject(dbus.Int32(0))
     except dbus.DBusException as error:assert error.get_dbus_name()=='org.a11y.atspi.Error.Defunct'
     else:raise AssertionError('obsolete hyperlink remained callable')
+    for operation in (lambda:native_table.GetAccessibleAt(dbus.Int32(0),dbus.Int32(0)),
+                      lambda:native_cell.GetRowColumnSpan()):
+        try:operation()
+        except dbus.DBusException as error:assert error.get_dbus_name()=='org.a11y.atspi.Error.Defunct'
+        else:raise AssertionError('obsolete table or cell remained callable')
     (a.work/'reader/link-invoke-done').write_text('verified',encoding='utf-8')
     assert process.wait(timeout=20)==0
     assert marker('DOCUMENTATION LINKS SELF-TEST: PASSED')
@@ -97,7 +141,9 @@ try:
     assert any(e['type'].startswith('object:state-changed:focused') for e in events)
     (a.work/'results.json').write_text(json.dumps(dict(independent_client=True,ordered_links=names,
         scalar_ranges=True,uris=True,offscreen_focus=True,actual_geometry=True,invalid_navigation_rejected=True,
-        native_navigation=True,obsolete_links_rejected=True,events=events),ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+        native_navigation=True,obsolete_links_rejected=True,table_grid=True,table_headers=True,
+        table_cell_coordinates=True,table_nested_links=True,obsolete_tables_rejected=True,
+        events=events),ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     raw.close()
 finally:
     if process.poll() is None:process.kill();process.wait()

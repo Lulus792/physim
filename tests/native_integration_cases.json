@@ -8987,6 +8987,31 @@
       ]
     },
     {
+      "name": "accessibility_tables_atspi",
+      "platforms": [
+        "linux"
+      ],
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "accessibility-atspi-fixture"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/test_accessibility_tables_atspi.py",
+            "--fixture",
+            "{accessibility-atspi-fixture}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 120
+        }
+      ]
+    },
+    {
       "name": "scalar_range_oracle",
       "targets": [
         "python",

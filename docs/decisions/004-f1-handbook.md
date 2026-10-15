@@ -17,7 +17,7 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 | Dokumentationszugang | 185 registrierte Seiten und 214 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
 | Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
-| Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; Windows besitzt zusätzlich geprüfte Table/Grid-Zell- und Headerbeziehungen | Native Tabellenadapter für Linux/macOS, externe macOS-AX-Clientprüfung, echte Screenreader-Aufgaben und die unten beschriebene sporadische Windows-Linkprüfung |
+| Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; Windows und Linux besitzen zusätzlich geprüfte native Tabellen-, Zell- und Headerbeziehungen | Nativer Tabellenadapter für macOS, externe macOS-AX-Clientprüfung, echte Screenreader-Aufgaben und die unten beschriebene sporadische Windows-Linkprüfung |
 
 Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
 Bewertung mit Höchstpunktzahl ist wegen dieser offenen Abnahmefälle noch nicht
@@ -44,10 +44,28 @@ Intel jeweils **11/11** native und **13/13** GUI-Fälle. Beide Joblogs und
 tatsächlichen Inlinebilder wurden geprüft. Die Windows-Erweiterung hat einen
 zusätzlichen Linux-Gegencheck mit **11/11** nativen und **3/3** GUI-Fällen.
 Die jeweiligen Laufkennungen und Plattformgrenzen stehen in ADR 006.
-Native AX-/AT-SPI-Tabellen und praktische Screenreader-Aufgaben fehlen weiter.
+Linux besitzt inzwischen ebenfalls den in ADR 006 beschriebenen AT-SPI-
+Table/TableCell-Adapter. Der aktuelle Sanitizerstand besteht 11/11 native Fälle;
+die fünf bisherigen GUI-Nachbarn sowie der korrigierte spezielle Tabellenclient
+bestehen mit getrennt dokumentierten Laufkennungen. Der Client prüft Unicode,
+vollständige lange Namen, verschiedene virtuelle Leerzellen, Header, Scrollen,
+Fensterumzug, verborgene Rahmen, Ereignisruhe und alte Referenzen. Die Gegenprobe
+weist gezielt den vorherigen Provider ohne native Tabelle ab. Beide tatsächlichen
+Linux-F1-Bilder wurden geprüft. Native AX-Tabellen und praktische Screenreader-
+Aufgaben fehlen weiter.
 Die konservative Gesamtwertung **UI 8/10, Dokumentationsaufgabe 8/10,
 Barrierefreiheit 5/10** bleibt deshalb bestehen; historische Reviews behalten
 ihre unten genannte Revision.
+
+Der [nachfolgende macOS-Lauf auf e6773c5](https://github.com/Lulus792/physim/actions/runs/38776320863)
+besteht auf ARM64 **11/11** native (`run-_nnhtdgr`) und **13/13** GUI-Fälle
+(`run-rykxdim5`). Intel besteht **11/11** native (`run-gy8w2pkb`) und **12/13**
+GUI-Fälle (`run-z8vwe4sf`): `documentation_math` überschreitet die unveränderte
+45-Sekunden-Grenze beim ersten Appstart. Die Teilspur erreicht erst gegen Ende
+dieser Zeit das Linkinventar; eine abgeschlossene Math-Abnahme dieses Laufs
+liegt nicht vor. Die übrigen Intel-GUI-/AppKit-Fälle bestehen. Beide Joblogs
+wurden gelesen. Der Fehler bleibt offen; der erfolgreiche frühere Lauf auf
+`d644453` ersetzt diesen fehlgeschlagenen aktuellen Nachweis nicht.
 
 ### Zentraler Skill-Review auf Revision 56a59ed
 
