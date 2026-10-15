@@ -32,9 +32,25 @@ standardmäßig 1,5 m, die Anfangsauslenkung 0,45 rad und die Winkelgeschwindigk
 anfangs null. Die Schwerkraft beträgt 9,80665 m/s². Der Winkel wird gegenüber der
 Senkrechten gemessen; die positive y-Achse zeigt nach oben. Es gilt
 
-- `θ′ = ω`, `ω′ = −(g/L) sin θ`.
-- `x = L sin θ`, `y = −L cos θ`.
-- `E = ½mL²ω² + mgL(1 − cos θ)`; im Vakuum bleibt E konstant.
+Die Winkelbewegung erfüllt:
+
+$$
+\theta'=\omega,\qquad \omega'=-\frac{g}{L}\sin\theta
+$$
+
+Die Position der Masse ist:
+
+$$
+x=L\sin\theta,\qquad y=-L\cos\theta
+$$
+
+Ihre mechanische Energie lautet:
+
+$$
+E=\frac{1}{2}mL^2\omega^2+mgL\left(1-\cos\theta\right)
+$$
+
+Im Vakuum bleibt diese Energie konstant.
 
 Luftwiderstand, Antrieb, Reibung, Stangenmasse, Kontakte und Messrauschen sind
 hier ausgeschlossen. `sensor.angle` ist deshalb gleich dem tatsächlichen Winkel.
@@ -49,9 +65,25 @@ Widerstands-/Messablauf. Beide Analysen nennen `E - E(0)` Energieänderung:
 im hier verwendeten Vakuummodell entspricht sie dem numerischen Energiefehler,
 bei eingeschaltetem Widerstand enthält sie auch physikalische Dissipation.
 
-Die nichtlineare Periode ist `T = 4√(L/g) K(sin(|θ₀|/2))`, wobei
-`K(k) = ∫₀^(π/2) (1−k² sin²φ)^(-½) dφ`. Die Kleinwinkelnäherung
-`T₀ = 2π√(L/g)` unterschätzt die Periode bei endlicher Auslenkung. Die
+Die nichtlineare Periode lautet:
+
+$$
+T=4\sqrt{\frac{L}{g}}\,K\!\left(\sin\frac{|\theta_0|}{2}\right)
+$$
+
+Dabei bezeichnet K das vollständige elliptische Integral erster Art:
+
+$$
+K(k)=\int_0^{\pi/2}\frac{\mathrm{d}\varphi}{\sqrt{1-k^2\sin^2\varphi}}
+$$
+
+Die Kleinwinkelnäherung
+
+$$
+T_0=2\pi\sqrt{\frac{L}{g}}
+$$
+
+unterschätzt die Periode bei endlicher Auslenkung. Die
 [analytische Pendelreferenz von John Burkardt](https://people.sc.fsu.edu/~jburkardt/m_src/pendulum_nonlinear_exact/pendulum_nonlinear_exact.html)
 erklärt die elliptischen Funktionen; [Reinberger et al.](https://arxiv.org/abs/2108.09395)
 behandeln exakte Reihen für Bewegung und Periode. Der Test dieses Lernpfads

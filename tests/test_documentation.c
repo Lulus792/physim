@@ -191,6 +191,22 @@ int main(int argc, char **argv) {
     ps_document *before_cells=d;
     CHECK(ps_document_parse(many_cells,PS_DOC_MAX_CELLS+2,false,&d)==PS_LIMIT && d==before_cells);
     free(many_cells);free(d);
-    puts("Documentation parser: prose, code, tables, links, search and bounds passed");
+    const char *formula_source="before\n\n$$\r\nT_0=2\\pi\\sqrt{\\frac{L}{g}}\r\n$$\r\n\nafter\n";
+    CHECK(ps_document_parse(formula_source,strlen(formula_source),false,&d)==PS_OK && d->count==3);
+    CHECK(d->blocks[1].kind==PS_DOC_MATH && !strcmp(d->text+d->blocks[1].text,"T₀ = 2π√(L/g)"));
+    CHECK(strstr(d->reading,"T₀ = 2π√(L/g)") && !strstr(d->reading,"\\frac"));
+    const ps_doc_formula *formula=ps_document_formula(d->text+d->blocks[1].target,strlen(d->text+d->blocks[1].target));
+    CHECK(formula && formula->count==7 && formula->variants[0].raster_width && formula->variants[0].packed_size);
+    CHECK(d->blocks[1].reading_begin!=SIZE_MAX && d->blocks[1].reading_length==strlen(formula->reading));
+    free(d);
+    const char *unknown_formula="$$\nx+unknown\n$$\n";
+    CHECK(ps_document_parse(unknown_formula,strlen(unknown_formula),false,&d)==PS_OK && d->count==1 && d->blocks[0].kind==PS_DOC_CODE);
+    CHECK(strstr(d->reading,"x+unknown"));ps_document *before_formula=d;
+    CHECK(ps_document_parse("$$\nx+1",6,false,&d)==PS_INVALID && d==before_formula);
+    free(d);
+    const char *fenced_formula="```c\n$$\nx+1\n$$\n```\n";
+    CHECK(ps_document_parse(fenced_formula,strlen(fenced_formula),false,&d)==PS_OK && d->count==1 && d->blocks[0].kind==PS_DOC_CODE);
+    CHECK(strstr(d->text+d->blocks[0].text,"$$"));free(d);
+    puts("Documentation parser: prose, code, tables, links, TeX formulas, search and bounds passed");
     return 0;
 }

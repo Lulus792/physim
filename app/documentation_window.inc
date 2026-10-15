@@ -6,6 +6,7 @@ static void documentation_window_destroy(app *a) {
     }
     if (a->doc_graphics) {
         ps_graphics_make_current(a->doc_graphics);
+        documentation_math_clear(a);
         nk_sdl_shutdown(a->doc_ui);
         ps_graphics_destroy(a->doc_graphics);
     }
@@ -211,6 +212,7 @@ static bool documentation_window_render(app *a, const char *capture_path) {
         nk_window_set_focus(ui, "topics");
     nk_style_pop_vec2(ui);
     documentation_sidebar_draw_probe(a);
+    documentation_math_draw_probe(a);
     nk_sdl_update_TextInput(ui);
     bool scaled_capture=capture_path && strlen(capture_path)>=4 && !strcmp(capture_path+strlen(capture_path)-4,".png");
     bool ok=!scaled_capture || nk_sdl_export_png_scaled(ui,ui,w,h,2,capture_path)==PS_OK;

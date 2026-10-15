@@ -12564,6 +12564,43 @@
           ]
         }
       ]
+    },
+    {
+      "name": "documentation_typeset",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tools/math/check.py",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 30
+        },
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "documentation_typeset",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 120,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
     }
   ]
 }

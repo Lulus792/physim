@@ -856,6 +856,7 @@ static void documentation_focus_draw(app *a,int id,struct nk_rect bounds,bool bo
     if(!delta)a->doc_focus_reveal=false;
 }
 #include "documentation_media.inc"
+#include "documentation_math.inc"
 static bool documentation_topic_button(app *a,const char *label,bool selected) {
     struct nk_context *ui=a->doc_ui;struct nk_rect bounds;
     enum nk_widget_layout_states visible=nk_widget(&bounds,ui);
@@ -1187,6 +1188,8 @@ static void documentation_view(app *a, float height) {
                     b->height =
                         b->kind == PS_DOC_TABLE_ROW
                             ? documentation_table(a, b, width, NULL)
+                        : b->kind == PS_DOC_MATH && documentation_math_variant(a,d,b,width-24)
+                            ? documentation_math_variant(a,d,b,width-24)->height*(a->doc_font_ui->height/16)+24
                         : b->kind == PS_DOC_IMAGE && documentation_media_kind(d->text+b->target)==3 ? 900
                         : b->kind == PS_DOC_IMAGE && documentation_media_kind(d->text+b->target) ? (documentation_media_kind(d->text+b->target)==1?320:480)
                         : b->kind == PS_DOC_RULE ? 14
@@ -1249,7 +1252,7 @@ static void documentation_view(app *a, float height) {
                         reading_byte-b->reading_begin:0;
                     if(reading_offset>b->length)reading_offset=b->length;
                     const char *match=reading_byte!=SIZE_MAX?text+reading_offset:ps_document_find(text,a->doc_query);
-                    if((!explicit_jump || reading_byte!=SIZE_MAX) && b->kind!=PS_DOC_TABLE_ROW && match && match>text) {
+                    if((!explicit_jump || reading_byte!=SIZE_MAX) && b->kind!=PS_DOC_TABLE_ROW && b->kind!=PS_DOC_MATH && match && match>text) {
                         ps_doc_block preceding=*b;preceding.length=(size_t)(match-text);
                         prefix=fmaxf(0,documentation_rich_height(a,d,&preceding,width-24)-(font->height+6));
                     }
@@ -1277,7 +1280,8 @@ static void documentation_view(app *a, float height) {
                          d->blocks[a->doc_focus-DOC_LINK].inline_parent==i);
                     if (state != NK_WIDGET_INVALID || link_geometry) {
                         struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
-                        if(b->kind==PS_DOC_IMAGE && documentation_media_kind(d->text+b->target))
+                        if(b->kind==PS_DOC_MATH && documentation_math_draw(a,d,b,rect)) {}
+                        else if(b->kind==PS_DOC_IMAGE && documentation_media_kind(d->text+b->target))
                             documentation_diagram(a,documentation_media_kind(d->text+b->target),rect);
                         else if (b->kind == PS_DOC_TABLE_ROW)
                             documentation_table(a, b, width, &rect);

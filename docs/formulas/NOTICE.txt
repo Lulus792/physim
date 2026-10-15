@@ -1,0 +1,23 @@
+F1 mathematical typesetting assets
+
+The SVG outlines and compressed alpha coverage files in this directory are
+generated from sources.json using MathJax 4.1.3 and its MathJax-NewCM font data.
+The original input expressions and their linear reading alternatives belong to
+the Physim documentation. The generated outlines are not independently designed
+Physim letterforms.
+
+Generator: @mathjax/src 4.1.3
+https://www.npmjs.com/package/@mathjax/src/v/4.1.3
+Copyright (c) 2017-2026 The MathJax Consortium
+License: Apache-2.0; preserved in LICENSE-MathJax.txt.
+
+Glyph data: @mathjax/mathjax-newcm-font 4.1.3
+https://www.npmjs.com/package/@mathjax/mathjax-newcm-font/v/4.1.3
+License declared by the distributed package: Apache-2.0.
+The same license text is preserved in LICENSE-MathJax.txt.
+
+The SVGs add a transparent margin and fixed dimensions. The .math files contain
+zlib-compressed, single-channel rasterizations made using sharp 0.35.5.
+The exact dependency versions, registry URLs and integrity values are preserved
+in tools/math/package-lock.json. MathJax, Node and sharp are maintainer tools;
+they are not required by the installed C17 application.

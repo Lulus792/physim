@@ -26,7 +26,7 @@ CORE = "core memory array string_view hashmap math data run_stream run_index sna
 LANGUAGE = "lexer parser checker emitter builtins".split()
 APP = "completion compiler_diagnostic profiling accessibility accessibility_native accessibility_atspi main timeline docking layout_catalog channel_units run_import ui_backend ui_sdl ui_geometry graphics documentation library run_details preferences workspace_state workspace_catalog workspace_tree plot_view report_image png".split()
 PROJECT = "project_file text_document autosave parameter_catalog".split()
-ZLIB = "adler32 crc32 deflate trees zutil".split()
+ZLIB = "adler32 crc32 deflate trees zutil uncompr inflate inftrees inffast".split()
 EXAMPLES = "pendulum projectile collision box_floor spring uncertain_projectile box_collision buoyancy ccd_events".split()
 LANGUAGE_PROGRAMS = "energy motion flight_phases sampling phase_space rotation_path particles rigid_body contacts convex_contacts distance_joints constraint_graph sweeps coordinate_frames optional_values optional_bindings diagnostic_values run_index_values contact_world batch_values thermodynamics electromagnetism waves_optics fluid_values material_properties".split()
 LANGUAGE_EXPERIMENTS = ("pendulum pendulum_rk4 pendulum_integrator pendulum_rk45 pendulum_verlet "
@@ -484,7 +484,7 @@ class Builder:
         shutil.copy2(ROOT / "src/report_mask.inc",staging / "src/report_mask.inc")
         shutil.copy2(ROOT / "src/text_validation.h", staging / "src/text_validation.h")
         (staging / "app").mkdir()
-        for name in ("documentation.c", "documentation.h"):
+        for name in ("documentation.c", "documentation.h", "documentation_math_catalog.inc"):
             shutil.copy2(ROOT / "app" / name, staging / "app" / name)
         shutil.copy2(ROOT / "src/number_parse.h", staging / "src/number_parse.h")
         shutil.copy2(ROOT / "src/run_series.h", staging / "src/run_series.h")

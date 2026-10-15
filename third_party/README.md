@@ -153,3 +153,10 @@ allocation failures return through the cleanup path in debug builds as well;
 assert dialogs no longer prevent a caller from retaining its prior font atlas.
 The real F1 density workflow injects a failing candidate and continues with
 the live atlas. Invalid API precondition assertions remain separate.
+
+## F1-Formelsatz
+
+Die gesetzten Formel-Assets verwenden MathJax und MathJax-NewCM 4.1.3.
+Herkunft und Apache-2.0-Lizenz in `docs/formulas/NOTICE.txt` werden mit den
+Assets ausgeliefert. Der Maintainer-Ablauf in `tools/math/README.md` hält die
+Erzeugungswerkzeuge und ihre festen Versionen fest.

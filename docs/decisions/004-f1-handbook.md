@@ -1894,9 +1894,9 @@ beschreibt Restarbeit und erteilt keine Produktfreigabe.
 Am 15. Oktober 2026 verlangt der Nutzer für F1 einen sauberen Formelsatz wie
 bei LaTeX. Brüche, Wurzeln, Hoch-/Tiefstellungen, Integrale und mathematische
 Symbole sollen typografisch gesetzt werden. Die bisherige Unicode-/Codezeile
-ist dafür kein ausreichender Nachweis. Der aktuelle App-Renderer besitzt noch
-keinen TeX-Formelsatz; die Umsetzung sowie eigene Lese-, Zoom-, Theme-, Dichte-
-und Zugänglichkeitsprüfungen gehören zur weiteren F1-Abnahme.
+ist dafür kein ausreichender Nachweis. Zum Auftragszeitpunkt besaß der App-Renderer noch
+keinen TeX-Formelsatz. Die folgende erste Umsetzung ergänzt ihn; die vollständige
+Seitenübertragung sowie Dichte- und assistive Abnahme gehören zur weiteren Arbeit.
 
 ## Bestätigte macOS-Seitenleistenkorrektur vom 15. Oktober 2026
 
@@ -1920,3 +1920,47 @@ Die Archiv-SHA256 sind ARM
 `266bd2680acaba718aa15f56c4b1aafe30cc16d19abd038f9cda1abe9caa63d3`.
 Dies bestätigt diesen Navigationsfehler; externe AX-Clients, VoiceOver,
 Monitorwechsel und die vollständige Dokumentationsabnahme bleiben gesondert offen.
+
+## Erste native Umsetzung des LaTeX-artigen Formelsatzes
+
+Sechs unterschiedliche Pendelformeln stehen jetzt als echte Displayformeln im
+User Guide und Pendel-Lernpfad (sieben veröffentlichte Blöcke). MathJax 4.1.3
+setzt TeX mit NewCM-Zeichendaten für sieben Breiten. SVG-Originale und begrenzte
+komprimierte Alpharaster sind versioniert; die installierte C17-App braucht kein
+Node, TeX, JavaScript oder Netzwerk. Das Maintainer-Verfahren steht in
+`tools/math/README.md`, Herkunft und Apache-2.0-Lizenz in `docs/formulas`.
+
+Die native Darstellung verwendet den F1-Grafikkontext, einen Cache von maximal
+16 Texturen, flächentreue Verkleinerung und die Textfarbe des aktuellen Themes.
+Die Dateilänge, Entpackgrenzen, vollständiger Streamverbrauch und CRC werden vor
+GPU-Upload geprüft. Der native Dokumenttext enthält eine lineare Unicode-
+Alternative in Lesereihenfolge. Das ist keine strukturierte MathML-Navigation
+und keine praktische Screenreader-Abnahme. Unbekanntes TeX bleibt als Quelltext
+lesbar; Codeblöcke bleiben unverändert und ungeschlossene Displays sind ungültig.
+
+Tatsächlich ausgeführte Prüfungen am Windows-MSVC-ASan-Build: Parser, vollständige
+Dokumentationslinks und API-Referenz 3/3 in `run-wyk_5ozh`; GUI-Mathematik,
+Zoom und neuer Formelsatz 3/3 in `run-4pv1cqnn`. Die neue GUI-Probe verlangt
+36 vollständig sichtbare echte Formelbilder: sechs Formeln, 16/32 px und drei
+Themes, passende native Textbereiche sowie unveränderten Editor/Simulation.
+Die Pixelauswertung verlangt tatsächliche sichtbare Tinte; Korruptions- und
+Größengegenproben sowie eine unabhängige Flächenmittelung sind enthalten.
+
+Linux wurde lokal mit GCC, ASan/UBSan, SDL 3.2.30, Mesa-Software-GL, X11/Xvfb
+und Openbox tatsächlich ausgeführt: Parser/Links 2/2 in `run-dawvrpn8`, GUI
+3/3 in `run-uilfjh8t`. Reale Windows-Bilder aller sechs Formeln in allen drei
+Themes und Linux-Bilder bei 32 px wurden visuell geprüft. Die erste Linux-
+Kompilation erkannte einen überzähligen zlib-Funktionsparameter, den MSVC
+akzeptiert hatte; der korrigierte Aufruf besteht auf beiden Plattformen.
+Die anfängliche Zoom-GUI-Probe prüfte noch die vor dem Umbruch gespeicherte
+Leseposition. Sie wartet nun auf abgeschlossene Positionserhaltung und fordert
+erst danach das jeweilige Formelziel an.
+
+`tools/math/check.py` prüft alle 42 Varianten, die Quell-/SVG-/Asset-Hashes,
+zlib-Abschluss, Abmessungen, CRC, den nativen Katalog und sämtliche publizierten
+Displayblöcke ohne Node oder Netzwerk. Checkout-Attribute erhalten die gehashten
+Bytes. Paketierung enthält die Assets, Lizenzen und den benötigten nativen
+Katalog; eine tatsächliche neue Paketabnahme steht noch aus. macOS, echte
+Dichte-/Monitorwechsel, Inline-TeX und die übrigen mathematischen Seiten bleiben
+für diesen neuen Formelsatz ausdrücklich offen. Die CI nimmt die neue GUI-Probe
+in ihre echten Linux- und macOS-Läufe auf.

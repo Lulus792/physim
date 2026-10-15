@@ -4,6 +4,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "documentation_math_catalog.inc"
+
+const ps_doc_formula *ps_document_formula(const char *tex,size_t length) {
+    if(!tex)return NULL;
+    for(size_t i=0;i<sizeof formula_catalog/sizeof formula_catalog[0];i++)
+        if(strlen(formula_catalog[i].tex)==length && !memcmp(tex,formula_catalog[i].tex,length))return &formula_catalog[i];
+    return NULL;
+}
 
 static bool history_valid(const ps_doc_history *h) {
     return h && h->count<=PS_DOC_HISTORY_LIMIT && (!h->count || h->index<h->count);
@@ -230,6 +238,13 @@ static bool paragraph(ps_document *d,const char *s,size_t n,ps_doc_kind kind,uns
     }
     free(plain);free(links);return ok;
 }
+static bool formula_block(ps_document *d,const char *text,size_t length) {
+    while(length && isspace((unsigned char)*text)){++text;--length;}
+    while(length && isspace((unsigned char)text[length-1]))--length;
+    const ps_doc_formula *formula=ps_document_formula(text,length);
+    return formula?append(d,PS_DOC_MATH,0,formula->reading,strlen(formula->reading),text,length):
+                   append(d,PS_DOC_CODE,0,text,length,NULL,0);
+}
 ps_result ps_document_parse(const char *source, size_t size, bool code, ps_document **out) {
     if (!source || !out || size > (code?PS_DOC_MAX_CODE_BYTES:PS_DOC_MAX_BYTES) || memchr(source, 0, size))
         return PS_INVALID;
@@ -246,7 +261,7 @@ ps_result ps_document_parse(const char *source, size_t size, bool code, ps_docum
     } else {
         size_t at = 0, length = 0;
         size_t table_first=SIZE_MAX,table_row=0,last_table_row=SIZE_MAX;
-        bool fenced = false;
+        bool fenced = false,math=false;
         while (at < size) {
             size_t begin = at;
             while (at < size && source[at] != '\n')
@@ -259,6 +274,12 @@ ps_result ps_document_parse(const char *source, size_t size, bool code, ps_docum
             const char *line = source + begin;
             size_t n = end - begin;
             if(!n || line[0]!='|')table_first=last_table_row=SIZE_MAX;
+            if(!fenced && n==2 && !memcmp(line,"$$",2)) {
+                if(math) {if(!formula_block(d,pending,length))goto limit;}
+                else if(length && !paragraph(d,pending,length,PS_DOC_TEXT,0))goto limit;
+                length=0;math=!math;continue;
+            }
+            if(math) {memcpy(pending+length,line,n);length+=n;pending[length++]='\n';continue;}
             bool fence = n >= 3 && !memcmp(line, "```", 3);
             if (fence) {
                 if (length && !(fenced ? append(d, PS_DOC_CODE, 0, pending, length, NULL, 0)
@@ -325,6 +346,7 @@ ps_result ps_document_parse(const char *source, size_t size, bool code, ps_docum
                 length += n;
             }
         }
+        if(math){free(pending);free(d);return PS_INVALID;}
         if (length && !(fenced ? append(d, PS_DOC_CODE, 0, pending, length, NULL, 0)
                                : paragraph(d, pending, length, PS_DOC_TEXT, 0)))
             goto limit;

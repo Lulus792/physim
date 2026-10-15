@@ -237,6 +237,10 @@ typedef struct {
     SDL_Window *doc_window;
     ps_graphics *doc_graphics;
     struct nk_context *doc_ui;
+    struct documentation_math_cache *doc_math;
+    bool doc_math_test_requested,doc_math_test_ok;
+    unsigned doc_math_test_case;
+    size_t doc_math_test_block;
     const struct nk_user_font *doc_font_ui, *doc_font_title, *doc_font_code, *doc_code_fonts[9];
     const struct nk_user_font *doc_ui_fonts[9], *doc_title_fonts[9];
     const struct nk_user_font *doc_bold_fonts[11];

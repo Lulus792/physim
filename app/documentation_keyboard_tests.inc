@@ -896,7 +896,61 @@ static void documentation_font_demand_test(app *a,int *stage,int *code,const cha
     if(!ok){fprintf(stderr,"Font demand stage %d failed: ui=%u code=%u variants=%u\n",*stage-1,documentation_font_size(a),documentation_code_size(a),documentation_font_variants(a));*code=1;a->quitting=true;}
     if(a->quitting)printf("DOCUMENTATION FONT DEMAND SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 }
+static void documentation_typeset_test_frame(app *a,int *stage,int *code,const char **capture) {
+    static size_t blocks[6];static unsigned sample,frames;static int editor,analysis;static double simulation;
+    static char image[80];bool okay=true;
+    switch((*stage)++) {
+    case 0:editor=a->experiment.string.len;analysis=a->analysis.string.len;simulation=a->simulation_time;
+        test_window_key_mod(a->window,SDLK_F1,0);break;
+    case 1: {
+        int topic=-1;for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(!strcmp(documentation_topics[i].path,"docs/pendulum-tutorial.md"))topic=i;
+        okay=topic>=0 && SDL_SetWindowSize(a->doc_window,760,540) && SDL_SyncWindow(a->doc_window);
+        if(topic>=0)open_documentation(a,topic);
+        unsigned count=0;
+        for(size_t i=0;a->documentation && i<a->documentation->count;i++)if(a->documentation->blocks[i].kind==PS_DOC_MATH) {
+            if(count<6)blocks[count]=i;count++;
+        }
+        okay &= count==6;sample=0;break;
+    }
+    case 2: {
+        if(!sample)documentation_zoom(a,0);
+        if(sample==18)for(int i=0;i<8;i++)documentation_zoom(a,1);
+        static const unsigned themes[]={PS_THEME_DARK,PS_THEME_LIGHT,PS_THEME_HIGH_CONTRAST};
+        ps_preferences p=a->preferences;p.theme=themes[(sample/6)%3];preferences_apply(a,&p);
+        frames=0;break;
+    }
+    case 3:
+        if(frames++<3){--*stage;return;}
+        /* Finish zoom position preservation before requesting a new formula. */
+        a->doc_jump_block=(int)blocks[sample%6];frames=0;break;
+    case 4:
+        if(frames++<3 || a->doc_scroll_pending || a->doc_jump_block>=0){--*stage;return;}
+        a->doc_math_test_block=blocks[sample%6];a->doc_math_test_case=sample;a->doc_math_test_requested=true;
+        snprintf(image,sizeof image,"docs-typeset-%02u.bmp",sample);*capture=image;break;
+    case 5: {
+        const ps_doc_block *b=&a->documentation->blocks[blocks[sample%6]];
+        okay=a->doc_math_test_ok && documentation_font_size(a)==(sample<18?16:32) &&
+            nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,b->reading_begin) &&
+            nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,b->reading_begin+b->reading_length-1) &&
+            a->experiment.string.len==editor && a->analysis.string.len==analysis && a->simulation_time==simulation;
+        if(!sample && okay) {
+            const ps_doc_formula_variant *v=documentation_math_variant(a,a->documentation,b,b->hit[2]-24);
+            ps_doc_formula_variant bad=*v;bad.crc^=1;unsigned char *invalid=documentation_math_coverage(a,&bad);
+            okay &= !invalid;free(invalid);bad=*v;bad.raster_width=8193;
+            invalid=documentation_math_coverage(a,&bad);okay &= !invalid;free(invalid);
+            const unsigned char pixels[]={255,0,0,255,0,0};
+            unsigned char *reduced=documentation_math_reduce(pixels,3,2,2,1);
+            okay &= reduced && reduced[0]==170 && reduced[1]==0;free(reduced);
+        }
+        if(++sample<36)*stage=2;else a->quitting=true;
+        break;
+    }
+    }
+    if(!okay){fprintf(stderr,"Formula typeset stage %d case %u failed\n",*stage-1,sample);*code=1;a->quitting=true;}
+    if(a->quitting)printf("FORMULA TYPESET SELF-TEST: %s\n",*code?"FAILED":"PASSED");
+}
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strcmp(mode,"docs-keyboard-typeset")){documentation_typeset_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-font-demand")){documentation_font_demand_test(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-sidebar")) {
         static int heading,experiment_length,analysis_length;static double simulation_time;static unsigned frames,tab_case;

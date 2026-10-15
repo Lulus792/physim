@@ -1,3 +1,11 @@
 # Preserve pinned upstream font and license bytes across Windows/Linux checkouts.
 third_party/fonts/*.ttf binary
 third_party/fonts/*-OFL.txt -text
+
+# Formula hashes and compressed coverage must survive every checkout unchanged.
+docs/formulas/*.json text eol=lf
+docs/formulas/*.svg -text
+docs/formulas/*.math binary
+docs/formulas/*LICENSE*.txt -text
+docs/formulas/NOTICE.txt text eol=lf
+app/documentation_math_catalog.inc text eol=lf

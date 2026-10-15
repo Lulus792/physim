@@ -44,6 +44,7 @@ SIMPLE["documentation_zoom"] = (["--workspace-state-test", "{directory}", "docs-
 SIMPLE["documentation_density"] = (["--workspace-state-test", "{directory}", "docs-keyboard-density"], 120, True)
 SIMPLE["documentation_navigation"] = (["--workspace-state-test", "{directory}", "docs-keyboard-navigation"], 90, True)
 SIMPLE["documentation_sidebar"] = (["--workspace-state-test", "{directory}", "docs-keyboard-sidebar"], 90, True)
+SIMPLE["documentation_typeset"] = (["--workspace-state-test", "{directory}", "docs-keyboard-typeset"], 90, True)
 SIMPLE["accessibility_document_macos"] = (["--workspace-state-test", "{directory}", "docs-keyboard-reading-native"], 90, True)
 SIMPLE["accessibility_edit_macos"] = (["--workspace-state-test", "{directory}", "docs-keyboard-edit-native"], 90, True)
 SIMPLE["accessibility_links_macos"] = (["--workspace-state-test", "{directory}", "docs-keyboard-links-native"], 120, True)
@@ -1588,6 +1589,25 @@ def main():
         flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)
         if args.case == "documentation_zoom":
             documentation_zoom_bitmaps(directory,flow.steps[-1]['stdout'])
+        elif args.case == "documentation_typeset":
+            require("FORMULA TYPESET SELF-TEST: PASSED" in flow.steps[-1]["stdout"], "Missing formula interaction result")
+            records=re.findall(r'FORMULA DRAW: case=(\d+) font=(\d+) theme=(\d+) complete=(\d+) frame=(\d+),(\d+),(\d+),(\d+)',flow.steps[-1]['stdout'])
+            require(len(records)==36 and [int(r[0]) for r in records]==list(range(36)), 'Missing actual formula draw states')
+            for record in records:
+                index,font,theme,complete,x,y,w,h=map(int,record)
+                require(font==(16 if index<18 else 32) and theme==(index//6)%3 and complete==1 and w>0 and h>0,
+                        'Incomplete, clipped or incorrect formula state')
+                raw=(directory/f'docs-typeset-{index:02}.bmp').read_bytes()
+                require(raw[:2]==b'BM' and len(raw)>54,'Missing formula image')
+                width,height=struct.unpack_from('<ii',raw,18)
+                offset=struct.unpack_from('<I',raw,10)[0];depth=struct.unpack_from('<H',raw,28)[0];stride=((width*depth+31)//32)*4
+                require(depth in (24,32) and x+w<=width and y+h<=abs(height),'Invalid formula capture geometry')
+                samples=[]
+                for py in range(y,y+h):
+                    row=abs(height)-1-py if height>0 else py
+                    for px in range(x,x+w):
+                        start=offset+row*stride+px*(depth//8);samples.append(sum(raw[start:start+3]))
+                require(max(samples)-min(samples)>150,'Formula draw contains no visible ink')
         elif args.case == "documentation_inline":
             documentation_inline_ink(directory, flow.steps[-1]["stdout"])
         elif args.case == "accessibility_links_macos":

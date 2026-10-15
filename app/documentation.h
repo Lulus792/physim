@@ -31,8 +31,24 @@ typedef enum {
     PS_DOC_LINK,
     PS_DOC_RULE,
     PS_DOC_TABLE_ROW,
-    PS_DOC_IMAGE
+    PS_DOC_IMAGE,
+    PS_DOC_MATH
 } ps_doc_kind;
+
+typedef struct {
+    float width,height; /* logical pixels at 16-pixel text size */
+    unsigned raster_width,raster_height;
+    size_t packed_size;
+    uint32_t crc;
+    const char *asset;
+} ps_doc_formula_variant;
+typedef struct {
+    const char *tex,*reading;
+    const ps_doc_formula_variant *variants;
+    size_t count;
+} ps_doc_formula;
+/* Exact bundled TeX catalog. Unknown expressions remain readable source. */
+const ps_doc_formula *ps_document_formula(const char *tex,size_t length);
 typedef struct {
     ps_doc_kind kind;
     unsigned level;

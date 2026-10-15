@@ -1,0 +1,11 @@
+{
+  "format": 1,
+  "formulas": [
+    {"id":"pendulum-small-angle", "tex":"T_0=2\\pi\\sqrt{\\frac{L}{g}}", "reading":"T₀ = 2π√(L/g)"},
+    {"id":"pendulum-energy", "tex":"E=\\frac{1}{2}mL^2\\omega^2+mgL\\left(1-\\cos\\theta\\right)", "reading":"E = ½mL²ω² + mgL(1 − cos θ)"},
+    {"id":"pendulum-period", "tex":"T=4\\sqrt{\\frac{L}{g}}\\,K\\!\\left(\\sin\\frac{|\\theta_0|}{2}\\right)", "reading":"T = 4√(L/g) K(sin(|θ₀|/2))"},
+    {"id":"elliptic-integral", "tex":"K(k)=\\int_0^{\\pi/2}\\frac{\\mathrm{d}\\varphi}{\\sqrt{1-k^2\\sin^2\\varphi}}", "reading":"K(k) = ∫₀^(π/2) 1/√(1 − k² sin² φ) dφ"},
+    {"id":"pendulum-dynamics", "tex":"\\theta'=\\omega,\\qquad \\omega'=-\\frac{g}{L}\\sin\\theta", "reading":"θ′ = ω; ω′ = −(g/L) sin θ"},
+    {"id":"pendulum-position", "tex":"x=L\\sin\\theta,\\qquad y=-L\\cos\\theta", "reading":"x = L sin θ; y = −L cos θ"}
+  ]
+}

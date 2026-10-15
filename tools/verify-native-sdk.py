@@ -107,10 +107,11 @@ def verify_documentation_sections(repo,sdk,consumer,builder,library,checked):
         builder.includes=anchor_includes
         builder.headers=anchor_headers
     checked([sys.executable,repo / "tests/check_documentation_anchors.py","--root",sdk,"--probe",anchor_probe],timeout=180)
+    checked([sys.executable,repo / "tools/math/check.py","--root",sdk],timeout=30)
 
 def native_documentation_headers(sdk):
     return "".join(hashlib.sha256((sdk / name).read_bytes()).hexdigest()
-                   for name in ("app/documentation.h","src/text_validation.h"))
+                   for name in ("app/documentation.h","app/documentation_math_catalog.inc","src/text_validation.h"))
 
 
 def verify_documentation_bounds(sdk, files):
