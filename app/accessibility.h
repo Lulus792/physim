@@ -95,6 +95,8 @@ bool ps_a11y_table_bounds(const ps_a11y_model *model,uint64_t id,float bounds[4]
 bool ps_a11y_table_cell_get(const ps_a11y_model *model,uint64_t table,size_t row,
                            size_t column,ps_a11y_table_cell *cell);
 bool ps_a11y_table_cell_find(const ps_a11y_model *model,uint64_t id,ps_a11y_table_cell *cell);
+bool ps_a11y_table_cell_for_range(const ps_a11y_model *model,size_t begin,size_t end,ps_a11y_table_cell *cell);
+bool ps_a11y_table_cell_at_point(const ps_a11y_model *model,float x,float y,ps_a11y_table_cell *cell);
 bool ps_a11y_table_column_header(const ps_a11y_model *model,uint64_t table,size_t column,
                                 ps_a11y_table_cell *header);
 bool ps_a11y_table_cell_scroll(ps_a11y_model *model,uint64_t id);

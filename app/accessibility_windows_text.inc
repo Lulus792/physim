@@ -2,7 +2,7 @@
  * as the renderer; UTF-16 offsets are translated only at the Windows boundary. */
 typedef struct {
  ITextRangeProvider range_iface;LONG references;uia_element *owner;
- uint64_t version;size_t start,end;
+ uint64_t version,enclosing_hint;size_t start,end;
 } uia_text_range;
 static uia_text_range *uia_text_range_new(uia_element *owner,uint64_t version,size_t start,size_t end);
 static HRESULT uia_reading_locked(uia_element *owner) {
@@ -52,7 +52,8 @@ static ULONG STDMETHODCALLTYPE uia_tr_release(ITextRangeProvider *p) {
 static HRESULT STDMETHODCALLTYPE uia_tr_clone(ITextRangeProvider *p,ITextRangeProvider **out) {
  if(!out)return E_POINTER;*out=NULL;uia_text_range *r=uia_range_owner(p);ps_a11y_native *b=r->owner->bridge;
  SDL_LockMutex(b->mutex);HRESULT result=uia_text_range_live_locked(r);
- uia_text_range *copy=SUCCEEDED(result)?uia_text_range_new(r->owner,r->version,r->start,r->end):NULL;SDL_UnlockMutex(b->mutex);
+ uia_text_range *copy=SUCCEEDED(result)?uia_text_range_new(r->owner,r->version,r->start,r->end):NULL;
+ if(copy)copy->enclosing_hint=r->enclosing_hint;SDL_UnlockMutex(b->mutex);
  if(FAILED(result))return result;if(!copy)return E_OUTOFMEMORY;*out=&copy->range_iface;return S_OK;
 }
 static bool uia_same_text_range(ITextRangeProvider *p,ITextRangeProvider *other) {
@@ -120,7 +121,7 @@ static size_t uia_unit_end(ps_a11y_native *b,size_t at,enum TextUnit unit) {
 static HRESULT STDMETHODCALLTYPE uia_tr_expand(ITextRangeProvider *p,enum TextUnit unit) {
  unit=uia_supported_unit(unit);if((int)unit<0)return E_INVALIDARG;
  uia_text_range *r=uia_range_owner(p);ps_a11y_native *b=r->owner->bridge;SDL_LockMutex(b->mutex);HRESULT result=uia_text_range_live_locked(r);
- if(SUCCEEDED(result)){r->start=uia_unit_start(b,r->start,unit);r->end=uia_unit_end(b,r->start,unit);}SDL_UnlockMutex(b->mutex);return result;
+ if(SUCCEEDED(result)){r->enclosing_hint=0;r->start=uia_unit_start(b,r->start,unit);r->end=uia_unit_end(b,r->start,unit);}SDL_UnlockMutex(b->mutex);return result;
 }
 static HRESULT STDMETHODCALLTYPE uia_tr_get_attribute(ITextRangeProvider *p,TEXTATTRIBUTEID id,VARIANT *out) {
  if(!out)return E_POINTER;VariantInit(out);uia_text_range *r=uia_range_owner(p);ps_a11y_native *b=r->owner->bridge;
@@ -160,6 +161,7 @@ static HRESULT STDMETHODCALLTYPE uia_tr_text(ITextRangeProvider *p,int maximum,B
  SDL_UnlockMutex(b->mutex);return result;
 }
 static void uia_set_endpoint(uia_text_range *r,enum TextPatternRangeEndpoint endpoint,size_t value) {
+ r->enclosing_hint=0;
  if(endpoint==TextPatternRangeEndpoint_Start){r->start=value;if(r->end<value)r->end=value;}
  else {r->end=value;if(r->start>value)r->start=value;}
 }
@@ -184,7 +186,7 @@ static HRESULT STDMETHODCALLTYPE uia_tr_move(ITextRangeProvider *p,enum TextUnit
   if(degenerate)*out=uia_move_position(b,&start,unit,count);
   else {int direction=count<0?-1:1;
    while(*out!=count){size_t candidate=start;if(!uia_move_position(b,&candidate,unit,direction) || candidate>=b->reading_length)break;start=candidate;*out+=direction;}}
-  r->start=start;r->end=degenerate?start:uia_unit_end(b,start,unit);
+  r->enclosing_hint=0;r->start=start;r->end=degenerate?start:uia_unit_end(b,start,unit);
  }
  SDL_UnlockMutex(b->mutex);return result;
 }
@@ -219,28 +221,29 @@ static HRESULT STDMETHODCALLTYPE uia_tr_enclosing(ITextRangeProvider *p,IRawElem
  SDL_LockMutex(b->mutex);HRESULT result=uia_text_range_live_locked(r);
  if(SUCCEEDED(result)) {
   const ps_a11y_node *link=uia_enclosing_link_locked(r);
-  uia_element *e=link?uia_for_locked(b,link->id):r->owner;if(!link)uia_addref(e);
-  if(e)*out=&e->simple;else result=E_OUTOFMEMORY;
+  uint64_t id=link?link->id:r->owner->id?r->owner->id:
+      uia_enclosing_table_locked(b,b->reading_bytes[r->start],b->reading_bytes[r->end]);
+  if(!link && r->enclosing_hint && r->start==r->end) {
+   ps_a11y_table_cell cell;
+   if(ps_a11y_table_cell_find(b->model,r->enclosing_hint,&cell) && cell.begin==cell.end && cell.begin==b->reading_bytes[r->start])id=cell.id;
+  }
+  *out=uia_any_locked(b,id);if(!*out)result=E_OUTOFMEMORY;
  }
  SDL_UnlockMutex(b->mutex);return result;
 }
 static HRESULT STDMETHODCALLTYPE uia_tr_children(ITextRangeProvider *p,SAFEARRAY **out) {
  if(!out)return E_POINTER;*out=NULL;uia_text_range *r=uia_range_owner(p);ps_a11y_native *b=r->owner->bridge;
  SDL_LockMutex(b->mutex);HRESULT result=uia_text_range_live_locked(r);
- const ps_a11y_node *links[PS_A11Y_MAX_NODES];size_t count=0;
- if(SUCCEEDED(result) && !r->owner->id && !uia_enclosing_link_locked(r)) {
+ if(SUCCEEDED(result) && !r->owner->id) {
   size_t begin=b->reading_bytes[r->start],end=b->reading_bytes[r->end];
-  for(size_t i=0;i<b->model->count;i++) {
-   const ps_a11y_node *node=&b->model->nodes[i];
-   if(node->role!=PS_A11Y_LINK || node->document_version!=r->version || node->document_begin>=end || node->document_end<=begin)continue;
-   size_t at=count++;while(at && links[at-1]->document_begin>node->document_begin){links[at]=links[at-1];--at;}links[at]=node;
+  const ps_a11y_node *link=uia_enclosing_link_locked(r);
+  uint64_t parent=link?link->id:uia_enclosing_table_locked(b,begin,end);
+  if(!link && r->enclosing_hint && r->start==r->end) {
+   ps_a11y_table_cell cell;
+   if(ps_a11y_table_cell_find(b->model,r->enclosing_hint,&cell) && cell.begin==cell.end && cell.begin==begin)parent=cell.id;
   }
- }
- if(SUCCEEDED(result)) {*out=SafeArrayCreateVector(VT_UNKNOWN,0,(ULONG)count);if(!*out)result=E_OUTOFMEMORY;}
- for(LONG i=0;SUCCEEDED(result) && i<(LONG)count;i++) {
-  uia_element *e=uia_for_locked(b,links[i]->id);if(!e){result=E_OUTOFMEMORY;break;}
-  result=SafeArrayPutElement(*out,&i,&e->simple);uia_release(e);
- }
+  result=uia_range_children_locked(b,r->version,begin,end,parent,out);
+ } else if(SUCCEEDED(result)){*out=SafeArrayCreateVector(VT_UNKNOWN,0,0);if(!*out)result=E_OUTOFMEMORY;}
  SDL_UnlockMutex(b->mutex);if(FAILED(result) && *out){SafeArrayDestroy(*out);*out=NULL;}return result;
 }
 static HRESULT STDMETHODCALLTYPE uia_tr_scroll(ITextRangeProvider *p,BOOL top) {
@@ -333,15 +336,12 @@ static HRESULT STDMETHODCALLTYPE uia_text_visible(ITextProvider *p,SAFEARRAY **o
 static HRESULT STDMETHODCALLTYPE uia_text_child(ITextProvider *p,IRawElementProviderSimple *child,ITextRangeProvider **out) {
  if(!out)return E_POINTER;*out=NULL;
  uia_element *e=UIA_OWNER(ITextProvider,text,p);
- if(e->id || !child || child->lpVtbl!=&uia_simple_vtable)return E_INVALIDARG;
- uia_element *target=UIA_OWNER(IRawElementProviderSimple,simple,child);
- if(target->bridge!=e->bridge || !target->id)return E_INVALIDARG;
+ if(e->id || !child)return E_INVALIDARG;
  ps_a11y_native *b=e->bridge;SDL_LockMutex(b->mutex);HRESULT result=uia_reading_locked(e);
- const ps_a11y_node *node=b->model?ps_a11y_find(b->model,target->id):NULL;
- if(SUCCEEDED(result) && !node)result=UIA_E_ELEMENTNOTAVAILABLE;
- if(SUCCEEDED(result) && (node->role!=PS_A11Y_LINK || node->document_version!=b->reading_version))result=E_INVALIDARG;
+ size_t begin=0,end=0;uint64_t identity=0;if(SUCCEEDED(result))result=uia_child_range_locked(b,child,&begin,&end,&identity);
  uia_text_range *r=SUCCEEDED(result)?uia_text_range_new(e,b->reading_version,
-     uia_utf16_locked(b,node->document_begin),uia_utf16_locked(b,node->document_end)):NULL;
+     uia_utf16_locked(b,begin),uia_utf16_locked(b,end)):NULL;
+ if(r && begin==end)r->enclosing_hint=identity;
  if(SUCCEEDED(result)){if(r)*out=&r->range_iface;else result=E_OUTOFMEMORY;}
  SDL_UnlockMutex(b->mutex);return result;
 }

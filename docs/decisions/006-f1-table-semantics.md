@@ -65,14 +65,14 @@ keine veröffentlichte Momentaufnahme. Erst die vollständige Veröffentlichung
 gibt einen neuen Entwurf frei. Die bestehende Mutex-Grenze gilt auch für das
 neue Inventar; die UI gibt ihre temporären Kopierbereiche nach der Übernahme frei.
 
-## Noch umzusetzende native Verträge
+## Native Verträge und verbleibende Plattformen
 
 - Das gemeinsame Inventar ist mit dem tatsächlichen F1-Layout verbunden.
   Seine Veröffentlichung allein stellt noch keine Table-/Grid-/AX-/AT-SPI-
-  Schnittstellen für externe Clients bereit. Diese Adapter und ihre Prüfungen
-  bleiben die nächsten verbindlichen Schritte.
-- Windows benötigt Table/Grid sowie TableItem/GridItem mit vollständigen
-  Headerbeziehungen. Nur ein neuer ControlType ist kein ausreichender Adapter.
+  Schnittstellen für externe Clients bereit. Windows besitzt jetzt den unten
+  beschriebenen Adapter; Linux und macOS benötigen weiterhin eigene Adapter.
+- Windows stellt Table/Grid sowie TableItem/GridItem mit vollständigen
+  Spaltenheaderbeziehungen bereit. Die unabhängigen Clientprüfungen stehen unten.
   Grundlage: [Microsoft Table Control Type](https://learn.microsoft.com/en-us/windows/win32/winauto/uiauto-supporttablecontroltype).
 - Linux benötigt AT-SPI Table und Zellbeziehungen einschließlich außerhalb des
   Viewports liegender Zellen. Grundlage: [AT-SPI Table](https://gnome.pages.gitlab.gnome.org/at-spi2-core/devel-docs/doc-org.a11y.atspi.Table.html).
@@ -153,4 +153,75 @@ Zellen, Headerbeziehungen, Clipgeometrie, stale IDs, den verworfenen UI-Entwurf,
 unvollständige Veröffentlichungen derselben Version, alle 16.384 gespeicherten
 Zellen mit abgewiesener zusätzlicher Zelle, ID-Überlauf und die unabhängige
 Nutzung aller 256 interaktiven Controlplätze. Diese Nachweise bestätigen den
-gemeinsamen Unterbau. Die externen nativen Tabelleninterfaces fehlen weiterhin.
+gemeinsamen Unterbau. Externe native Tabelleninterfaces benötigen eigene Nachweise.
+
+## Windows Table/Grid und eingebettete Textbereiche
+
+Der Windows-Adapter stellt Tabellen mit `IGridProvider`/`ITableProvider` und
+Zellen mit `IGridItemProvider`/`ITableItemProvider` bereit. Zellen liefern
+vollständige Unicode-Namen, Koordinaten, Spannweiten, die zugehörige Tabelle
+und Spaltenüberschriften. `IScrollItemProvider` verwendet den vorhandenen
+Scrollauftrag; ausgeblendete oder deaktivierte Fenster weisen ihn ab.
+Tabellen und Zellen beanspruchen keine der 256 interaktiven Controlplätze.
+Ein schwacher Providercache erhält gehaltene COM-Identitäten und entfernt
+unreferenzierte Provider beim letzten Release.
+
+Der Textbaum folgt Dokument → Tabelle → Zellen → eingebettete Links.
+`RangeFromChild` übernimmt die vollständigen Zellgrenzen. Verschiedene leere
+virtuelle Zellen am selben Textoffset behalten ihre jeweilige umschließende
+Identität; ein Link mit genau demselben Textbereich bleibt das innerste Objekt.
+Dies folgt dem [Microsoft-Vertrag für GetChildren](https://learn.microsoft.com/en-us/windows/win32/api/uiautomationcore/nf-uiautomationcore-itextrangeprovider-getchildren).
+Rahmen folgen Viewport, Fensterposition und Skalierung. Gehaltene Provider
+melden typisierte Änderungen für Rahmen, Sichtbarkeit und Aktivierung;
+unveränderte Veröffentlichungen erzeugen keine solchen Ereignisse.
+
+Unter Windows 10.0.26200 / MSVC ASan / SDL 3.2.30 bestehen **2/2** gemeinsame
+Modellfälle (`run-8630dofv`) und **3/3** GUI-Fälle (`run-_6dstox4`), einschließlich
+der direkten COM-Tabellenprobe. Diese prüft Unicode, 1.536 Zeichen lange
+Zellnamen, mehrere virtuelle Leerzellen, Header, Textbaum, Offscreen-Scrollen,
+Reflow, Suspend, deaktivierte Fenster, Providerfreigabe und alte Referenzen.
+Der erweiterte unabhängige Client besteht mit Lese-, Feld- und Lebenszyklusfällen
+**5/5** GUI-Fälle (`run-cg7zdj3y`). Die abschließende Clientfassung ergänzt
+tatsächliche Bildschirm-Punktsuche und die Ruheprüfung der Ereignisse:
+normal **1/1** (`run-ctvz3gmc`), Fokusstress mit zehn Zyklen **1/1** (`run-a5mrovfo`).
+Beide tatsächlichen Fokusbilder wurden geöffnet und visuell geprüft.
+
+Nach Dokumentwechsel liefern der alte Elementname und `GetItem(0,0)` im
+externen Client `UIA_E_ELEMENTNOTAVAILABLE` ohne alte Daten. Der Windows-
+Clientgetter `get_CurrentRowCount` lieferte dagegen reproduzierbar `S_OK` und 0.
+Die Prüfung akzeptiert deshalb dort entweder unavailable oder exakt diesen
+leeren Wert; eine alte Zeilenzahl bleibt unzulässig. Direkte Provideraufrufe
+prüfen weiterhin unavailable. Diese beobachtete Clientbesonderheit ist keine
+allgemeine Zusage für andere UIA-Versionen.
+
+Die Gegenprobe verwendet den bisherigen Hauptzweig `188a411` und denselben
+neuen unabhängigen Client. Nach ausdrücklich dokumentiertem Einlesen der
+185 Quelldokumente erreicht sie innerhalb der unveränderten Bereitschaftsgrenze
+den prüfbaren Zustand und scheitert gezielt an `missing embedded Table/Grid`.
+Nachweis: `build/native/uia-table-before-counter-warm`. Der vorherige kalte
+Lauf überschritt die Bereitschaftsgrenze und ist ausdrücklich kein semantischer
+Gegennachweis. Beide Originalausgaben bleiben erhalten.
+
+**Offen bleibt eine sporadische Windows-Reaktionsstörung:** `run-d2tfasmb`
+scheiterte normal am 25-Sekunden-Timeout des ungültigen Linkaufrufs und im
+Stressfall am nicht rechtzeitig sichtbaren, bereits fokussierten Link.
+Die nachfolgenden erfolgreichen Läufe belegen keine beseitigte Ursache.
+Die Diagnose speichert jetzt Teil-stdout/-stderr bei Subprozess-Timeouts und
+optionale Client-Stufenmarken. Die Zeitgrenzen wurden nicht erhöht.
+
+Der aktuelle Linux-Gegencheck besteht **11/11** native Fälle (`run-xoy6w368`)
+und **3/3** GUI-Fälle (`run-l8apwl85`): Inline-Inhalte, Schriftbedarf und
+unabhängige AT-SPI-Links. Dies ist noch kein AT-SPI-Table-Nachweis.
+Der Testläufer-Selbsttest bestätigt erwartete Fehler, Timeouts und vollständige
+Berichte unter `build/native/uia-tables-runner-proof`.
+
+## Tatsächlich ausgeführte macOS-Modellprüfung
+
+Der [macOS-Lauf auf d644453](https://github.com/Lulus792/physim/actions/runs/38768319618)
+besteht auf ARM64 **11/11** native Fälle (`run-b5ub62vt`) und **13/13** GUI-Fälle
+(`run-cutxpnap`), auf Intel ebenfalls **11/11** (`run-q_g5jt8r`) und **13/13**
+(`run-81q278pc`). Beide Joblogs und beide tatsächlichen 16-Pixel-Inlinebilder
+wurden geprüft: Überschriften und Hervorhebung sind lesbar, `l|r` bleibt in
+einer Zelle. Die vorhandene Reflowprobe erhält die Zellidentität bei 16/32/16
+Pixeln. Dieser Lauf bestätigt das gemeinsame Modell und bestehende AppKit-
+Fälle; ein nativer AX-Tabellenadapter ist weiterhin offen.

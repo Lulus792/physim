@@ -27,6 +27,12 @@ int main(void) {
  CHECK(ps_a11y_table_column_header(m,id,1,&cell) && cell.id==header.id);
  CHECK(ps_a11y_table_cell_get(m,id,1,1,&cell) && cell.begin==24 && cell.end==24 && !cell.column_header);
  uint64_t empty=cell.id;CHECK(cell.bounds[2]==0 && ps_a11y_table_cell_find(m,empty,&cell));
+ CHECK(ps_a11y_table_cell_for_range(m,7,13,&cell) && cell.id==header.id);
+ CHECK(!ps_a11y_table_cell_for_range(m,8,13,&cell));
+ CHECK(!ps_a11y_table_cell_for_range(m,0,13,&cell));
+ CHECK(ps_a11y_table_cell_for_range(m,24,24,&cell) && cell.id==empty);
+ CHECK(ps_a11y_table_cell_at_point(m,116,21,&cell) && cell.id==header.id);
+ CHECK(!ps_a11y_table_cell_at_point(m,116,151,&cell));
  CHECK(!ps_a11y_find(m,empty) && !ps_a11y_press(m,empty));
  CHECK(ps_a11y_table_cell_scroll(m,empty));size_t at=0;
  CHECK(ps_a11y_document_take_scroll(m,1,&at) && at==24);
@@ -40,6 +46,7 @@ int main(void) {
  CHECK(document(m,1) && ps_a11y_document_table(m,0,end,2,2,true,rows) && ps_a11y_publish(m));
  CHECK(ps_a11y_table_cell_find(m,empty,&cell) && cell.bounds[0]==115 && cell.bounds[1]==60 && cell.bounds[2]==95);
  ps_a11y_suspend(m);CHECK(ps_a11y_table_cell_find(m,empty,&cell) && cell.bounds[2]==0);
+ CHECK(!ps_a11y_table_cell_at_point(m,116,61,&cell));
  CHECK(ps_a11y_table_count(m)==1 && !ps_a11y_table_cell_scroll(m,empty));
  CHECK(document(m,1) && ps_a11y_document_table(m,0,end,2,2,true,rows) && ps_a11y_publish(m));
  CHECK(ps_a11y_table_cell_find(m,empty,&cell) && cell.bounds[2]>0);

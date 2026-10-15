@@ -142,6 +142,41 @@ bool ps_a11y_table_column_header(const ps_a11y_model *m,uint64_t id,size_t colum
  const ps_a11y_table *t=table_id(m?m->document:NULL,id);
  return t && t->column_headers && ps_a11y_table_cell_get(m,id,0,column,out);
 }
+bool ps_a11y_table_cell_for_range(const ps_a11y_model *m,size_t begin,size_t end,ps_a11y_table_cell *out) {
+ const ps_a11y_document *d=m?m->document:NULL;
+ if(!out || !d || !d->active || !d->tables || begin>end ||
+    !text_boundary(d->text,d->length,begin) || !text_boundary(d->text,d->length,end))return false;
+ for(size_t i=0;i<d->tables->count;i++) {
+  const ps_a11y_table *t=&d->tables->tables[i];if(begin<t->begin || end>t->end)continue;
+  for(size_t row=0;row<t->rows;row++) {
+   const a11y_table_row *r=&d->tables->rows[t->first_row+row];if(begin<r->begin || end>r->end)continue;
+   for(size_t column=0;column<r->count;column++) {
+    const ps_a11y_cell_range *c=&d->tables->cells[r->first_cell+column];
+    if(begin==end && begin==c->end && begin!=c->begin)continue;
+    if(begin>=c->begin && end<=c->end)return ps_a11y_table_cell_get(m,t->id,row,column,out);
+   }
+   if(begin==r->end && end==begin && r->count<t->columns)return ps_a11y_table_cell_get(m,t->id,row,r->count,out);
+  }
+ }
+ return false;
+}
+bool ps_a11y_table_cell_at_point(const ps_a11y_model *m,float x,float y,ps_a11y_table_cell *out) {
+ const ps_a11y_document *d=m?m->document:NULL;
+ if(!out || !d || !d->active || !d->tables || m->suspended || !isfinite(x) || !isfinite(y))return false;
+ if(x<d->viewport[0] || y<d->viewport[1] || x>=d->viewport[0]+d->viewport[2] || y>=d->viewport[1]+d->viewport[3])return false;
+ for(size_t i=0;i<d->tables->count;i++) {
+  const ps_a11y_table *t=&d->tables->tables[i];
+  for(size_t row=0;row<t->rows;row++) {
+   const a11y_table_row *r=&d->tables->rows[t->first_row+row];
+   if(r->bounds[2]<=0 || r->bounds[3]<=0 || x<r->bounds[0] || y<r->bounds[1] ||
+      x>=r->bounds[0]+r->bounds[2] || y>=r->bounds[1]+r->bounds[3])continue;
+   size_t column=(size_t)((x-r->bounds[0])/(r->bounds[2]/(float)t->columns));
+   if(column>=t->columns)column=t->columns-1;
+   return ps_a11y_table_cell_get(m,t->id,row,column,out);
+  }
+ }
+ return false;
+}
 bool ps_a11y_table_bounds(const ps_a11y_model *m,uint64_t id,float out[4]) {
  const ps_a11y_table *t=table_id(m?m->document:NULL,id);if(!t || !out)return false;
  float result[4]={0};bool seen=false;

@@ -192,5 +192,5 @@ bool ps_a11y_native_test(SDL_Window *window) {
  if(slider){UIA_CHECK(IRangeValueProvider_SetValue(&slider->range,.5)==UIA_E_ELEMENTNOTAVAILABLE);uia_release(slider);}
  ps_a11y_destroy(m);free(m);
 #undef UIA_CHECK
- return ok;
+ return ok && uia_native_tables_probe(window);
 }

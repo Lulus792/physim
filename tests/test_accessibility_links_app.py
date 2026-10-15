@@ -38,13 +38,21 @@ try:
         phase=action
         wait_for(marker)
         probe_action='links-stress' if args.stress_focus and action=='links' else action
-        result=subprocess.run([str(args.probe),str(process.pid),probe_action,'Physim | Dokumentation','C-Lernweg' if action=='invoke-link-invalid' else 'C'],capture_output=True,timeout=25)
+        try:
+            result=subprocess.run([str(args.probe),str(process.pid),probe_action,'Physim | Dokumentation','C-Lernweg' if action=='invoke-link-invalid' else 'C'],capture_output=True,timeout=25,env=environment)
+        except subprocess.TimeoutExpired as timeout:
+            (args.work/(action+'.stdout')).write_bytes(timeout.stdout or b'')
+            (args.work/(action+'.stderr')).write_bytes(timeout.stderr or b'')
+            raise
         (args.work/(action+'.stdout')).write_bytes(result.stdout)
         (args.work/(action+'.stderr')).write_bytes(result.stderr)
         assert result.returncode==0,(action,result.returncode,result.stderr)
         assert b'DOCUMENT LINKS:' in result.stdout
         assert b'WINDOWS LINK EVENTS:' in result.stdout
+        assert b'WINDOWS TABLE CLIENT: 2x2 Grid/Table' in result.stdout
+        assert b'WINDOWS TABLE EVENTS:' in result.stdout
         if action=='links':
+            assert b'WINDOWS TABLE HIT:' in result.stdout
             assert b'quiet idle passed' in result.stdout
             if args.stress_focus:
                 assert result.stderr.count(b'WINDOWS LINK FOCUS CYCLE: ')==10
@@ -59,7 +67,7 @@ try:
     wait_for('DOCUMENTATION LINKS SELF-TEST: PASSED')
     for name in ('docs-native-link-focus.bmp','docs-native-link-failed.bmp','docs-native-link-open.bmp'):
         assert (reader/name).is_file()
-    (args.work/'results.json').write_text(json.dumps(dict(independent_client=True,focus_cycles=10 if args.stress_focus else 1,ordered_links=2,exact_text_ranges=True,offscreen_focus=True,visible_glyphs=True,native_navigation=True,stale_ranges_rejected=True,editor_unchanged=True,property_events=True,invoked_event=True,cached_event_identity=True,disabled_host_rejection=True,screen_position_event=True,quiet_idle=True),indent=2)+'\n',encoding='utf-8')
+    (args.work/'results.json').write_text(json.dumps(dict(independent_client=True,focus_cycles=10 if args.stress_focus else 1,ordered_links=2,exact_text_ranges=True,offscreen_focus=True,visible_glyphs=True,native_navigation=True,stale_ranges_rejected=True,editor_unchanged=True,property_events=True,invoked_event=True,cached_event_identity=True,disabled_host_rejection=True,screen_position_event=True,quiet_idle=True,table_grid=True,table_headers=True,table_cells=True,nested_table_text=True,table_property_events=True,stale_table_rejected=True),indent=2)+'\n',encoding='utf-8')
 except BaseException as error:
     failure=type(error).__name__+': '+str(error)
     raise

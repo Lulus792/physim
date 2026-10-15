@@ -11,6 +11,7 @@
 #include "text_validation.h"
 
 typedef struct uia_element uia_element;
+typedef struct uia_table_element uia_table_element;
 typedef struct {double bounds[4];bool enabled,offscreen;} uia_link_state;
 struct ps_a11y_native {
  SDL_Window *window;HWND hwnd;ps_a11y_model *model;SDL_Mutex *mutex;
@@ -19,6 +20,7 @@ struct ps_a11y_native {
  uint64_t focused_id;char title[256];
  uint64_t reading_owner,reading_version;BSTR reading_text;size_t reading_length;size_t *reading_bytes;
  uint64_t announced_reading_version;
+ uia_table_element *table_elements;
 };
 struct uia_element {
  IRawElementProviderSimple simple;IRawElementProviderFragment fragment;
@@ -33,6 +35,16 @@ struct uia_element {
  uia_link_state previous_link;bool has_link_state;
 };
 static uia_element *uia_new(ps_a11y_native *b,uint64_t id,ps_a11y_role role);
+static IRawElementProviderSimple *uia_any_locked(ps_a11y_native *b,uint64_t id);
+static IRawElementProviderFragment *uia_any_fragment_locked(ps_a11y_native *b,uint64_t id);
+static bool uia_semantic_parent_locked(ps_a11y_native *b,uint64_t id,uint64_t *parent);
+static size_t uia_semantic_count_locked(ps_a11y_native *b,uint64_t parent);
+static bool uia_semantic_child_locked(ps_a11y_native *b,uint64_t parent,size_t index,uint64_t *id);
+static uint64_t uia_enclosing_table_locked(ps_a11y_native *b,size_t begin,size_t end);
+static HRESULT uia_child_range_locked(ps_a11y_native *b,IRawElementProviderSimple *child,size_t *begin,size_t *end,uint64_t *identity);
+static HRESULT uia_range_children_locked(ps_a11y_native *b,uint64_t version,size_t begin,size_t end,uint64_t parent,SAFEARRAY **out);
+static void uia_tables_publish(ps_a11y_native *b);
+static void uia_tables_destroy(ps_a11y_native *b);
 static void uia_bridge_release(ps_a11y_native *b) {
  if(!InterlockedDecrement(&b->references)){SysFreeString(b->reading_text);free(b->reading_bytes);SDL_DestroyMutex(b->mutex);free(b);}
 }
@@ -191,19 +203,19 @@ static HRESULT STDMETHODCALLTYPE uia_navigate(IRawElementProviderFragment *p,enu
  SDL_LockMutex(b->mutex);const ps_a11y_node *node=b->model && e->id?ps_a11y_find(b->model,e->id):NULL;
  if(!b->model || (e->id && !node)){SDL_UnlockMutex(b->mutex);return UIA_E_ELEMENTNOTAVAILABLE;}
  uint64_t id=0;bool found=false;
- if(direction==NavigateDirection_Parent && e->id){id=node->parent;found=true;}
+ if(direction==NavigateDirection_Parent && e->id)found=uia_semantic_parent_locked(b,e->id,&id);
  else if(direction==NavigateDirection_FirstChild || direction==NavigateDirection_LastChild) {
-  size_t count=ps_a11y_child_count(b->model,e->id);
-  const ps_a11y_node *child=count?ps_a11y_child_at(b->model,e->id,direction==NavigateDirection_FirstChild?0:count-1):NULL;
-  if(child){id=child->id;found=true;}
+  size_t count=uia_semantic_count_locked(b,e->id);
+  if(count)found=uia_semantic_child_locked(b,e->id,direction==NavigateDirection_FirstChild?0:count-1,&id);
  } else if(e->id && (direction==NavigateDirection_NextSibling || direction==NavigateDirection_PreviousSibling)) {
-  size_t index=ps_a11y_index(b->model,e->id);
-  const ps_a11y_node *sibling=direction==NavigateDirection_NextSibling?ps_a11y_child_at(b->model,node->parent,index+1):
-   index?ps_a11y_child_at(b->model,node->parent,index-1):NULL;
-  if(sibling){id=sibling->id;found=true;}
+  uint64_t parent=0;uia_semantic_parent_locked(b,e->id,&parent);
+  size_t count=uia_semantic_count_locked(b,parent),index=0;uint64_t current=0;
+  for(;index<count;index++)if(uia_semantic_child_locked(b,parent,index,&current) && current==e->id)break;
+  if(direction==NavigateDirection_NextSibling && index+1<count)found=uia_semantic_child_locked(b,parent,index+1,&id);
+  else if(direction==NavigateDirection_PreviousSibling && index && index<count)found=uia_semantic_child_locked(b,parent,index-1,&id);
  }
- uia_element *target=found?uia_for_locked(b,id):NULL;SDL_UnlockMutex(b->mutex);
- if(found && !target)return E_OUTOFMEMORY;if(target)*out=&target->fragment;return S_OK;
+ IRawElementProviderFragment *target=found?uia_any_fragment_locked(b,id):NULL;SDL_UnlockMutex(b->mutex);
+ if(found && !target)return E_OUTOFMEMORY;*out=target;return S_OK;
 }
 static HRESULT STDMETHODCALLTYPE uia_runtime(IRawElementProviderFragment *p,SAFEARRAY **out) {
  if(!out)return E_POINTER;*out=NULL;uia_element *e=UIA_OWNER(IRawElementProviderFragment,fragment,p);
@@ -237,7 +249,11 @@ static HRESULT STDMETHODCALLTYPE uia_point(IRawElementProviderFragmentRoot *p,do
   const ps_a11y_node *n=&b->model->nodes[i-1];double nx=bounds.left+n->bounds[0]*b->scale_x,ny=bounds.top+n->bounds[1]*b->scale_y;
   if(x>=nx && y>=ny && x<nx+n->bounds[2]*b->scale_x && y<ny+n->bounds[3]*b->scale_y){id=n->id;break;}
  }
- uia_element *target=uia_for_locked(b,id);SDL_UnlockMutex(b->mutex);if(!target)return E_OUTOFMEMORY;*out=&target->fragment;return S_OK;
+ if(!id) {
+  ps_a11y_table_cell cell;
+  if(ps_a11y_table_cell_at_point(b->model,(float)((x-bounds.left)/b->scale_x),(float)((y-bounds.top)/b->scale_y),&cell))id=cell.id;
+ }
+ IRawElementProviderFragment *target=uia_any_fragment_locked(b,id);SDL_UnlockMutex(b->mutex);if(!target)return E_OUTOFMEMORY;*out=target;return S_OK;
 }
 static HRESULT STDMETHODCALLTYPE uia_focus(IRawElementProviderFragmentRoot *p,IRawElementProviderFragment **out) {
  if(!out)return E_POINTER;*out=NULL;uia_element *e=UIA_OWNER(IRawElementProviderFragmentRoot,root,p);ps_a11y_native *b=e->bridge;
@@ -338,6 +354,7 @@ static uia_element *uia_new(ps_a11y_native *b,uint64_t id,ps_a11y_role role) {
  e->references=1;e->bridge=b;e->id=id;e->role=role;InterlockedIncrement(&b->references);
  if(role==PS_A11Y_LINK)e->has_link_state=uia_link_state_locked(e,&e->previous_link);return e;
 }
+#include "accessibility_windows_tables.inc"
 bool ps_a11y_native_document_link_invoked(ps_a11y_native *b,uint64_t version,size_t begin,size_t end) {
  if(!b || !version || begin>=end)return false;SDL_LockMutex(b->mutex);uint64_t id=0;
  for(size_t i=0;b->model && i<b->model->count;i++) {
@@ -415,10 +432,12 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
  }
  for(size_t i=0;i<selection_count;i++){UiaRaiseAutomationEvent(&selections[i]->simple,UIA_Text_TextSelectionChangedEventId);uia_release(selections[i]);}
  for(size_t i=0;i<link_count;i++){uia_link_changed(links[i],&old_links[i],&new_links[i]);uia_release(links[i]);}
+ uia_tables_publish(b);
 }
 void ps_a11y_native_destroy(ps_a11y_native *b) {
  if(!b)return;if(b->hwnd)RemoveWindowSubclass(b->hwnd,uia_window_proc,(UINT_PTR)b);
  SDL_LockMutex(b->mutex);b->model=NULL;b->hwnd=NULL;SDL_UnlockMutex(b->mutex);
+ uia_tables_destroy(b);
  for(size_t i=0;i<PS_A11Y_MAX_NODES;i++)if(b->elements[i]){UiaDisconnectProvider(&b->elements[i]->simple);uia_release(b->elements[i]);}
  UiaDisconnectProvider(&b->root->simple);uia_release(b->root);
  if(b->com_initialized)CoUninitialize();uia_bridge_release(b);
@@ -444,4 +463,5 @@ bool ps_a11y_native_focus_label(ps_a11y_native *b,const char *group,const char *
  uia_element *e=uia_named(b,group,label);if(!e)return false;HRESULT result=IRawElementProviderFragment_SetFocus(&e->fragment);uia_release(e);return SUCCEEDED(result);
 }
 /* Kept beside the bridge so tests exercise COM interfaces and retained providers. */
+#include "accessibility_windows_tables_tests.inc"
 #include "accessibility_windows_tests.inc"

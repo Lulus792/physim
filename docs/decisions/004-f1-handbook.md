@@ -17,11 +17,37 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 | Dokumentationszugang | 185 registrierte Seiten und 214 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
 | Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
-| Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche mit den jeweils dokumentierten Laufzeit- und Bildnachweisen | Tabellensemantik, externe macOS-AX-Clientprüfung, echte Screenreader-Aufgaben und die unten beschriebene sporadische Windows-Linkprüfung |
+| Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; Windows besitzt zusätzlich geprüfte Table/Grid-Zell- und Headerbeziehungen | Native Tabellenadapter für Linux/macOS, externe macOS-AX-Clientprüfung, echte Screenreader-Aufgaben und die unten beschriebene sporadische Windows-Linkprüfung |
 
 Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
 Bewertung mit Höchstpunktzahl ist wegen dieser offenen Abnahmefälle noch nicht
 begründet. Die folgenden Nachweise nennen jeweils ihre Revision und Umgebung.
+
+### Fortschritt der Tabellenabnahme
+
+Die [Tabellenentscheidung](006-f1-table-semantics.md) dokumentiert jetzt den
+Windows-Table/Grid-Adapter mit vollständigen Zellnamen, Spaltenüberschriften,
+Koordinaten und verschachtelten Textbereichen. Der unabhängige Client besteht
+den normalen Lauf und zehn Fokuszyklen einschließlich Bildschirm-Punktsuche,
+Fensterbewegung, Ereignisruhe und abgewiesenen alten Referenzen. Ein separater
+Gegenlauf mit dem bisherigen Hauptzweig erkennt gezielt die fehlende Table/Grid-
+Schnittstelle. Originalausgaben und die Einschränkung des vorherigen kalten
+Gegenlaufs sind in ADR 006 festgehalten.
+
+Die sporadische Windows-Fokus-/Timeoutstörung bleibt ausdrücklich offen:
+`run-d2tfasmb` scheiterte, die abschließenden Läufe `run-ctvz3gmc` und
+`run-a5mrovfo` bestanden. Die Diagnose bewahrt nun auch Teilsausgaben bei
+Timeouts; eine beseitigte Ursache ist damit nicht nachgewiesen.
+
+Das gemeinsame Tabellenmodell auf `d644453` besteht unter macOS ARM64 und
+Intel jeweils **11/11** native und **13/13** GUI-Fälle. Beide Joblogs und
+tatsächlichen Inlinebilder wurden geprüft. Die Windows-Erweiterung hat einen
+zusätzlichen Linux-Gegencheck mit **11/11** nativen und **3/3** GUI-Fällen.
+Die jeweiligen Laufkennungen und Plattformgrenzen stehen in ADR 006.
+Native AX-/AT-SPI-Tabellen und praktische Screenreader-Aufgaben fehlen weiter.
+Die konservative Gesamtwertung **UI 8/10, Dokumentationsaufgabe 8/10,
+Barrierefreiheit 5/10** bleibt deshalb bestehen; historische Reviews behalten
+ihre unten genannte Revision.
 
 ### Zentraler Skill-Review auf Revision 56a59ed
 

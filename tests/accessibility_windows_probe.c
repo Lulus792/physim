@@ -29,20 +29,24 @@ static HRESULT named(IUIAutomation *a,IUIAutomationElement *root,const wchar_t *
  VariantClear(&value);return result;
 }
 #include "accessibility_windows_events_probe.inc"
+#include "accessibility_windows_link_tree.inc"
 static HRESULT document_links(IUIAutomation *automation,IUIAutomationElement *control,const wchar_t *label,bool invoke,bool invalid,unsigned focus_cycles) {
  const char *phase="text and child ranges";
  IUnknown *unknown=NULL;IUIAutomationTextPattern *pattern=NULL;IUIAutomationTextRange *whole=NULL,*selected_range=NULL;
- IUIAutomationElementArray *children=NULL;IUIAutomationElement *selected=NULL;
+ IUIAutomationElementArray *children=NULL;IUIAutomationElement *selected=NULL,*ordered_links[2]={NULL,NULL};
+ IUIAutomationGridPattern *table_grid=NULL;IUIAutomationElement *table_element=NULL;link_events *table_events=NULL;
  HRESULT result=IUIAutomationElement_GetCurrentPattern(control,UIA_TextPatternId,&unknown);
  if(SUCCEEDED(result) && unknown)result=IUnknown_QueryInterface(unknown,&IID_IUIAutomationTextPattern,(void**)&pattern);else result=E_FAIL;
  if(SUCCEEDED(result))result=IUIAutomationTextPattern_get_DocumentRange(pattern,&whole);
- if(SUCCEEDED(result))result=IUIAutomationTextRange_GetChildren(whole,&children);
- int count=0;if(SUCCEEDED(result))result=IUIAutomationElementArray_get_Length(children,&count);
+ int count=0;if(SUCCEEDED(result))result=collect_document_links(automation,pattern,whole,0,ordered_links,&count,&table_grid,&table_element);
+ if(SUCCEEDED(result) && (!table_grid || !table_element)) {
+  fprintf(stderr,"WINDOWS TABLE CLIENT: missing embedded Table/Grid\n");result=E_FAIL;
+ }
  if(SUCCEEDED(result) && count!=2)result=E_FAIL;
  for(int i=0;SUCCEEDED(result) && i<count;i++) {
   IUIAutomationElement *child=NULL,*enclosing=NULL;IUIAutomationTextRange *range=NULL;IUIAutomationElementArray *nested=NULL;
   BSTR name=NULL,text=NULL;CONTROLTYPEID role=0;BOOL same=FALSE;
-  result=IUIAutomationElementArray_GetElement(children,i,&child);
+  child=ordered_links[i];IUIAutomationElement_AddRef(child);
   if(SUCCEEDED(result))result=IUIAutomationElement_get_CurrentName(child,&name);
   if(SUCCEEDED(result))result=IUIAutomationElement_get_CurrentControlType(child,&role);
   if(SUCCEEDED(result) && (role!=UIA_HyperlinkControlTypeId || wcscmp(name,i?L"C":L"C-Lernweg")))result=E_FAIL;
@@ -61,6 +65,7 @@ static HRESULT document_links(IUIAutomation *automation,IUIAutomationElement *co
  }
  if(SUCCEEDED(result) && !selected)result=E_FAIL;
  link_events *events=NULL;if(SUCCEEDED(result))result=events_start(automation,selected,&events);
+ if(SUCCEEDED(result))result=table_element?events_start(automation,table_element,&table_events):E_FAIL;
  if(SUCCEEDED(result) && !invoke) {
   if(SUCCEEDED(result))phase="initial offscreen state";
   BOOL offscreen=FALSE;result=IUIAutomationElement_get_CurrentIsOffscreen(selected,&offscreen);
@@ -79,6 +84,8 @@ static HRESULT document_links(IUIAutomation *automation,IUIAutomationElement *co
   SAFEARRAY *bounds=NULL;if(SUCCEEDED(result))result=IUIAutomationTextRange_GetBoundingRectangles(selected_range,&bounds);
   if(SUCCEEDED(result)){LONG high=-1;SafeArrayGetUBound(bounds,1,&high);if(high<3)result=E_FAIL;}
   if(bounds)SafeArrayDestroy(bounds);
+  if(SUCCEEDED(result))phase="visible table cell hit testing";
+  if(SUCCEEDED(result))result=validate_table_hit(automation,table_grid);
   if(SUCCEEDED(result))phase="visibility and geometry events";
   if(SUCCEEDED(result))result=events_wait(&events->offscreen,1);
   if(SUCCEEDED(result))result=events_wait(&events->bounds,1);
@@ -111,17 +118,26 @@ static HRESULT document_links(IUIAutomation *automation,IUIAutomationElement *co
    }
    if(SUCCEEDED(result)) {
     if(SUCCEEDED(result))phase="window movement and quiet events";
-    Sleep(200);LONG before=events_count(&events->bounds);RECT host_bounds={0},old_rect={0};
+    Sleep(200);LONG before=events_count(&events->bounds),table_before=events_count(&table_events->bounds);
+    RECT host_bounds={0},old_rect={0},old_table_rect={0};
     if(!GetWindowRect(host,&host_bounds))result=E_FAIL;
     if(SUCCEEDED(result))result=IUIAutomationElement_get_CurrentBoundingRectangle(selected,&old_rect);
+    if(SUCCEEDED(result))result=IUIAutomationElement_get_CurrentBoundingRectangle(table_element,&old_table_rect);
     if(SUCCEEDED(result) && !SetWindowPos(host,NULL,host_bounds.left+13,host_bounds.top+7,0,0,SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE))result=E_FAIL;
     if(SUCCEEDED(result))result=events_wait(&events->bounds,before+1);
+    if(SUCCEEDED(result))result=events_wait(&table_events->bounds,table_before+1);
     RECT moved={0};if(SUCCEEDED(result))result=IUIAutomationElement_get_CurrentBoundingRectangle(selected,&moved);
     if(SUCCEEDED(result) && (moved.left!=old_rect.left+13 || moved.top!=old_rect.top+7))result=E_FAIL;
+    RECT moved_table={0};if(SUCCEEDED(result))result=IUIAutomationElement_get_CurrentBoundingRectangle(table_element,&moved_table);
+    if(SUCCEEDED(result) && (moved_table.left!=old_table_rect.left+13 || moved_table.top!=old_table_rect.top+7))result=E_FAIL;
     Sleep(100);LONG stable_bounds=events_count(&events->bounds),stable_offscreen=events_count(&events->offscreen),stable_disabled=events_count(&events->disabled),stable_enabled=events_count(&events->enabled);
+    LONG table_stable_bounds=events_count(&table_events->bounds),table_stable_offscreen=events_count(&table_events->offscreen),
+        table_stable_disabled=events_count(&table_events->disabled),table_stable_enabled=events_count(&table_events->enabled);
     Sleep(200);
     if(SUCCEEDED(result) && (events_count(&events->bounds)!=stable_bounds || events_count(&events->offscreen)!=stable_offscreen ||
        events_count(&events->disabled)!=stable_disabled || events_count(&events->enabled)!=stable_enabled || events_count(&events->invoked)))result=E_FAIL;
+    if(SUCCEEDED(result) && (events_count(&table_events->bounds)!=table_stable_bounds || events_count(&table_events->offscreen)!=table_stable_offscreen ||
+       events_count(&table_events->disabled)!=table_stable_disabled || events_count(&table_events->enabled)!=table_stable_enabled || events_count(&table_events->invoked)))result=E_FAIL;
     if(SUCCEEDED(result))result=IUIAutomationElement_get_CurrentHasKeyboardFocus(selected,&focused);
     if(SUCCEEDED(result) && !focused){fprintf(stderr,"Link lost focus after window movement: foreground_host=%d enabled=%d visible=%d\n",GetForegroundWindow()==host,IsWindowEnabled(host),IsWindowVisible(host));result=E_FAIL;}
     if(SUCCEEDED(result))puts("WINDOWS LINK EVENTS: host disable/enable, rejected invocation, screen-position geometry and quiet idle passed");
@@ -132,7 +148,11 @@ static HRESULT document_links(IUIAutomation *automation,IUIAutomationElement *co
   IUnknown *action=NULL;IUIAutomationInvokePattern *press=NULL;
   result=IUIAutomationElement_GetCurrentPattern(selected,UIA_InvokePatternId,&action);
   if(SUCCEEDED(result) && action)result=IUnknown_QueryInterface(action,&IID_IUIAutomationInvokePattern,(void**)&press);else result=E_FAIL;
-  if(SUCCEEDED(result))result=IUIAutomationInvokePattern_Invoke(press);
+  if(SUCCEEDED(result)) {
+   if(getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"WINDOWS TABLE TRACE: invoke begin\n");
+   result=IUIAutomationInvokePattern_Invoke(press);
+   if(getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"WINDOWS TABLE TRACE: invoke returned 0x%08lx\n",(unsigned long)result);
+  }
   ULONGLONG deadline=GetTickCount64()+10000;
   while(SUCCEEDED(result) && !invalid) {
    BSTR old=NULL;HRESULT stale=IUIAutomationTextRange_GetText(selected_range,-1,&old);SysFreeString(old);
@@ -143,7 +163,9 @@ static HRESULT document_links(IUIAutomation *automation,IUIAutomationElement *co
   if(SUCCEEDED(result) && invalid) {
    IUIAutomationElement *error=NULL;
    while(SUCCEEDED(result) && !error) {
+    if(getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"WINDOWS TABLE TRACE: error lookup begin\n");
     result=named(automation,control,L"Dieses Linkziel ist nicht in der mitgelieferten Dokumentation enthalten.",UIA_TextControlTypeId,&error);
+    if(getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"WINDOWS TABLE TRACE: error lookup returned 0x%08lx found=%d\n",(unsigned long)result,error!=NULL);
     if(FAILED(result) || error)break;if(GetTickCount64()>=deadline){result=E_FAIL;break;}Sleep(20);
    }
    if(error)IUIAutomationElement_Release(error);
@@ -156,9 +178,39 @@ static HRESULT document_links(IUIAutomation *automation,IUIAutomationElement *co
   }
  }
  if(FAILED(result))fprintf(stderr,"WINDOWS LINK CHECK FAILED: %s (0x%08lx)\n",phase,(unsigned long)result);
+ if(SUCCEEDED(result) && table_grid) {
+  int rows=0;HRESULT state=IUIAutomationGridPattern_get_CurrentRowCount(table_grid,&rows);
+  printf("WINDOWS TABLE LIFETIME: result=0x%08lx rows=%d expected_stale=%d\n",(unsigned long)state,rows,invoke && !invalid);
+  if(invoke && !invalid) {
+   BSTR old_name=NULL;IUIAutomationElement *old_cell=NULL;
+   HRESULT old_name_state=IUIAutomationElement_get_CurrentName(table_element,&old_name);
+   HRESULT old_item_state=IUIAutomationGridPattern_GetItem(table_grid,0,0,&old_cell);
+   printf("WINDOWS TABLE RETIRED: name=0x%08lx units=%u item=0x%08lx cell=%d\n",
+       (unsigned long)old_name_state,old_name?SysStringLen(old_name):0,(unsigned long)old_item_state,old_cell!=NULL);
+   /* UIA's client property getter returns S_OK/0 after disconnection on this
+    * Windows build. Require explicit element/method unavailability, no old
+    * cell and no retained row data; direct provider HRESULTs are tested too. */
+   if(old_name_state!=UIA_E_ELEMENTNOTAVAILABLE || old_item_state!=UIA_E_ELEMENTNOTAVAILABLE ||
+      old_cell || (old_name && SysStringLen(old_name)) ||
+      !(state==UIA_E_ELEMENTNOTAVAILABLE || (state==S_OK && rows==0)))result=E_FAIL;
+   SysFreeString(old_name);if(old_cell)IUIAutomationElement_Release(old_cell);
+  }
+  else if(FAILED(state) || rows!=2)result=E_FAIL;
+  if(FAILED(result))fprintf(stderr,"WINDOWS TABLE LIFETIME FAILED: result=0x%08lx rows=%d\n",(unsigned long)state,rows);
+ }
+ if(table_events) {
+  LONG bounds=events_count(&table_events->bounds),disabled=events_count(&table_events->disabled),enabled=events_count(&table_events->enabled);
+  printf("WINDOWS TABLE EVENTS: bounds=%ld disabled=%ld enabled=%ld invoked=%ld bad=%ld\n",bounds,disabled,enabled,events_count(&table_events->invoked),events_count(&table_events->bad));
+  if(events_count(&table_events->bad) || events_count(&table_events->invoked) || (!invoke && (bounds<1 || disabled<1 || enabled<1)))result=E_FAIL;
+  if(getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"WINDOWS TABLE TRACE: table event cleanup begin\n");
+  events_stop(automation,table_element,table_events);
+  if(getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"WINDOWS TABLE TRACE: table event cleanup returned\n");
+ }
  if(events){printf("WINDOWS LINK EVENTS: bounds=%ld offscreen=%ld disabled=%ld enabled=%ld invoked=%ld bad=%ld\n",events_count(&events->bounds),events_count(&events->offscreen),events_count(&events->disabled),events_count(&events->enabled),events_count(&events->invoked),events_count(&events->bad));if(events_count(&events->bad))result=E_FAIL;events_stop(automation,selected,events);}
  if(selected_range)IUIAutomationTextRange_Release(selected_range);if(selected)IUIAutomationElement_Release(selected);
  if(children)IUIAutomationElementArray_Release(children);if(whole)IUIAutomationTextRange_Release(whole);
+ for(int i=0;i<2;i++)if(ordered_links[i])IUIAutomationElement_Release(ordered_links[i]);
+ if(table_grid)IUIAutomationGridPattern_Release(table_grid);if(table_element)IUIAutomationElement_Release(table_element);
  if(pattern)IUIAutomationTextPattern_Release(pattern);if(unknown)IUnknown_Release(unknown);
  if(SUCCEEDED(result))puts(invalid?"DOCUMENT LINKS: rejected target stays readable without invoked event":invoke?"DOCUMENT LINKS: navigation and stale range passed":"DOCUMENT LINKS: two ordered hyperlinks, exact text ranges, offscreen focus and visible glyphs passed");
  return result;
@@ -304,6 +356,7 @@ static HRESULT scroll_text(IUIAutomationElement *control,const wchar_t *query,BO
 }
 #include "accessibility_windows_lifecycle_probe.inc"
 int wmain(int argc,wchar_t **argv) {
+ setvbuf(stdout,NULL,_IONBF,0);setvbuf(stderr,NULL,_IONBF,0);
  if(argc!=4 && argc!=5)return 2;
  wchar_t *end=NULL;unsigned long pid=wcstoul(argv[1],&end,10);if(!pid || *end)return 2;
  bool focus=!wcscmp(argv[2],L"focus"),toggle=!wcscmp(argv[2],L"toggle"),select=!wcscmp(argv[2],L"select"),read=!wcscmp(argv[2],L"read"),edit=!wcscmp(argv[2],L"edit"),text_select=!wcscmp(argv[2],L"select-text");
