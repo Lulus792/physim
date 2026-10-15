@@ -315,7 +315,7 @@ Quellhashes stehen unter `build/native/table-axis-windows` beziehungsweise
 `build/native/table-axis-linux`. Das ist ein gemeinsamer Modellnachweis;
 die neue AX-Implementierung benötigt davon getrennte native Laufzeitnachweise.
 
-## AppKit-Tabellenadapter und ausstehende native Abnahme
+## AppKit-Tabellenadapter und tatsächliche native Abnahme
 
 Der implementierte AppKit-Baum bildet Dokument → Tabelle → Zeilen → Zellen →
 Links ab. Tabellen liefern zusätzlich Spaltenobjekte, Koordinatenzugriff und
@@ -346,10 +346,9 @@ Cocoa-contentView und öffentliche Accessibility-Selectoren. Sie prüft den
 vollständigen Zelltext `l|r in Metern; C`, Header, verschachtelten Link und
 sichtbare Geometrie samt Punktsuche. Der Testläufer verlangt beide F1-Marker.
 
-Diese Implementierung und ihre Prüfdefinitionen sind noch kein erfolgreicher
-macOS-Lauf. Tatsächliche Objective-C-/AppKit-Aufrufe müssen auf Intel und ARM64
-bestehen. Die F1-Probe läuft innerhalb der App; externe AX-Clients und praktische
-VoiceOver-Aufgaben bleiben getrennte offene Abnahmen.
+Die F1-Probe läuft innerhalb der App. Die folgenden tatsächlichen AppKit-Läufe
+belegen diesen Vertrag; externe AX-Clients und praktische VoiceOver-Aufgaben
+bleiben getrennte offene Abnahmen.
 
 Die lokalen Nachbarn bestehen unter Windows MSVC ASan **4/4** native
 Modell-/Dokumentfälle (`run-m9mar7rd`) und **3/3** GUI-Fälle (`run-9abxq7o4`):
@@ -368,3 +367,32 @@ auf ARM64 **11/11** native (`run-ui198hee`) und **13/13** GUI-Fälle
 (`run-n0xtym6r`), auf Intel **11/11** (`run-sw1jbjkp`) und **13/13**
 (`run-rc1tt6pk`). Beide tatsächlichen Joblogs wurden gelesen; auch dieser
 Nachweis gilt ausschließlich für die genannte vorherige Revision.
+
+Die Implementierung `474ccd8` besteht im
+[tatsächlich abgeschlossenen macOS-Lauf](https://github.com/Lulus792/physim/actions/runs/38789867159)
+mit LLVM 20 ASan/UBSan und SDL 3.2.30 auf beiden Architekturen:
+
+| Architektur | Native Verträge | AppKit und F1-GUI |
+| --- | --- | --- |
+| ARM64 | 11/11, `run-kpz05rqg` | 13/13, `run-z1cebhbi` |
+| Intel | 11/11, `run-j5cas5_h` | 13/13, `run-l1g2ikeb` |
+
+Beide Joblogs und Originalarchive wurden gelesen. Der native Provider meldet
+in beiden Archiven die erfolgreiche Tabellenfixture einschließlich Unicode,
+Header, vollständiger Namen, virtueller Leerzellen, Textbereiche, Punktsuche,
+Reveal, Reflow, verborgenem Zustand und gehaltener Referenzen nach Teardown.
+Die reale F1-Probe meldet jeweils die vollständige 2×2-Hierarchie und den
+sichtbaren Zellrahmen mit tatsächlicher Punktsuche. Die Fokus- und Tabellenbilder
+beider Architekturen wurden geöffnet und visuell geprüft. Originale liegen im
+Arbeitscheckout unter `build/native/mac-tables-{arm,intel}.zip`.
+
+Die Bilder zeigen zugleich einen getrennten UI-Restbefund: Bei 32 Pixeln
+Schrift bricht die zweispaltige Sidebar-Aktion „Themen“ mitten im Wort um.
+Die native Tabellenabnahme erklärt diese Darstellung nicht für ausgereift.
+Eine passende Layoutkorrektur und eigene Größen-/Theme-/Plattformnachweise
+stehen noch aus.
+
+Der [Linux-CI-Gegencheck derselben Revision](https://github.com/Lulus792/physim/actions/runs/38789867184)
+besteht mit Clang **26/26** native (`run-e9bpahnm`) und **34/34** GUI-Fälle
+(`run-f4a4yngp`), mit GCC ebenfalls **26/26** (`run-944idlc_`) und **34/34**
+(`run-ifcn28tk`). Beide tatsächlichen Joblogs wurden gelesen.

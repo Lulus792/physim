@@ -17,11 +17,31 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 | Dokumentationszugang | 185 registrierte Seiten und 214 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
 | Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
-| Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; Windows und Linux besitzen zusätzlich geprüfte native Tabellen-, Zell- und Headerbeziehungen | Laufzeitabnahme des neuen macOS-Tabellenadapters, externe macOS-AX-Clientprüfung, echte Screenreader-Aufgaben und die unten beschriebene sporadische Windows-Linkprüfung |
+| Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; alle drei Plattformen besitzen zusätzlich geprüfte native Tabellen-, Zell- und Headerbeziehungen | Externe macOS-AX-Clientprüfung, echte Screenreader-Aufgaben und die unten beschriebene sporadische Windows-Linkprüfung |
 
 Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
 Bewertung mit Höchstpunktzahl ist wegen dieser offenen Abnahmefälle noch nicht
 begründet. Die folgenden Nachweise nennen jeweils ihre Revision und Umgebung.
+
+### Native macOS-Tabellenabnahme auf Revision 474ccd8
+
+Die [Tabellenentscheidung](006-f1-table-semantics.md) enthält jetzt tatsächliche
+AppKit-Nachweise für Tabellen, Zeilen, Spalten, vollständige Zelltexte, Header
+und eingebettete Links. Intel und ARM64 bestehen jeweils **11/11** native und
+**13/13** GUI-Fälle im [macOS-Lauf](https://github.com/Lulus792/physim/actions/runs/38789867159).
+Beide Originalarchive und Joblogs sowie die tatsächlichen Fokus-/Tabellenbilder
+wurden geprüft. Die F1-Probe findet die native Tabelle über das Cocoa-contentView;
+sie ist eine In-Prozess-Prüfung und ersetzt keinen externen AX-Client oder VoiceOver.
+Windows besteht lokal vier native und drei GUI-Nachbarn; Linux-CI besteht mit
+GCC und Clang jeweils 26 native und 34 GUI-Fälle. Die genauen Laufkennungen
+stehen in ADR 006.
+
+Die 32-Pixel-Bilder zeigen einen konkreten UI-Restbefund: Die Sidebar-Aktion
+„Themen“ bricht bei geringer Breite mitten im Wort um. Die Layoutabnahme bleibt
+deshalb neben den bereits offenen Monitor-/DPI- und assistiven Aufgaben offen.
+Der aktuelle zusätzliche Windows-Inhaltsabgleich besteht 26/26
+Dokumentations-/Referenzfälle (`run-usbfqz70`); die gesonderten Tutorial-Ausführungen
+laufen noch und werden daraus nicht als bestanden abgeleitet.
 
 ### Fortschritt der Tabellenabnahme
 
@@ -51,8 +71,8 @@ bestehen mit getrennt dokumentierten Laufkennungen. Der Client prüft Unicode,
 vollständige lange Namen, verschiedene virtuelle Leerzellen, Header, Scrollen,
 Fensterumzug, verborgene Rahmen, Ereignisruhe und alte Referenzen. Die Gegenprobe
 weist gezielt den vorherigen Provider ohne native Tabelle ab. Beide tatsächlichen
-Linux-F1-Bilder wurden geprüft. Native AX-Tabellen und praktische Screenreader-
-Aufgaben fehlen weiter.
+Linux-F1-Bilder wurden geprüft. Die nachfolgend dokumentierte native AX-
+Tabellenabnahme ergänzt diesen Stand; praktische Screenreader-Aufgaben fehlen weiter.
 Die konservative Gesamtwertung **UI 8/10, Dokumentationsaufgabe 8/10,
 Barrierefreiheit 5/10** bleibt deshalb bestehen; historische Reviews behalten
 ihre unten genannte Revision.
