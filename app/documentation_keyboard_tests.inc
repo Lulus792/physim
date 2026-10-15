@@ -1014,9 +1014,9 @@ static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code
     if(a->quitting)printf("FORMULA CATALOG SELF-TEST: %s count=%u elapsed=%.3f\n",*code?"FAILED":"PASSED",sample,ps_clock()-started);
 }
 static void documentation_detail_test_frame(app *a,int *stage,int *code,const char **capture) {
-    static unsigned sample,frames;static int editor,analysis;static double simulation;static char image[64];bool okay=true;
+    static unsigned sample,frames;static int editor,analysis;static double simulation,started;static char image[64];bool okay=true;
     switch((*stage)++) {
-    case 0:editor=a->experiment.string.len;analysis=a->analysis.string.len;simulation=a->simulation_time;
+    case 0:started=ps_clock();editor=a->experiment.string.len;analysis=a->analysis.string.len;simulation=a->simulation_time;
         test_window_key_mod(a->window,SDLK_F1,0);break;
     case 1:sample=0;break;
     case 2: {
@@ -1035,7 +1035,7 @@ static void documentation_detail_test_frame(app *a,int *stage,int *code,const ch
         frames=0;break;
     }
     case 3:
-        if(frames++<3 || a->doc_scroll_pending){--*stage;return;}
+        if(frames++<1 || a->doc_scroll_pending || !a->documentation || a->documentation->layout_width<=0){--*stage;return;}
         a->doc_detail_test_case=sample;a->doc_detail_test_requested=true;
         snprintf(image,sizeof image,"docs-detail-%02u.bmp",sample);*capture=image;break;
     case 4:
@@ -1044,7 +1044,7 @@ static void documentation_detail_test_frame(app *a,int *stage,int *code,const ch
         if(++sample<36)*stage=2;else a->quitting=true;break;
     }
     if(!okay){fprintf(stderr,"Documentation detail stage %d case %u failed\n",*stage-1,sample);*code=1;a->quitting=true;}
-    if(a->quitting)printf("DOCUMENTATION DETAIL SELF-TEST: %s\n",*code?"FAILED":"PASSED");
+    if(a->quitting)printf("DOCUMENTATION DETAIL SELF-TEST: %s elapsed=%.3f\n",*code?"FAILED":"PASSED",ps_clock()-started);
 }
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
     if(!strcmp(mode,"docs-keyboard-detail")){documentation_detail_test_frame(a,stage,code,capture);return;}

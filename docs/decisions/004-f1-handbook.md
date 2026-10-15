@@ -17,7 +17,7 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 | Dokumentationszugang | 185 registrierte Seiten und 214 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
 | Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
-| Formelsatz | 118 TeX-Ausdrücke in 119 Displayblöcken auf elf Lern-/Fachseiten; echte Formelbilder unter Windows und Linux geprüft | Weitere Fachseiten, Inline-TeX, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
+| Formelsatz | 118 TeX-Ausdrücke in 119 Displayblöcken auf elf Lern-/Fachseiten; echte Formelbilder unter Windows, Linux und macOS Intel/ARM geprüft | Weitere Fachseiten, Inline-TeX, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
 | Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; alle drei Plattformen besitzen zusätzlich geprüfte native Tabellen-, Zell- und Headerbeziehungen | Externe macOS-AX-Clientprüfung, echte Screenreader-Aufgaben und die unten beschriebene sporadische Windows-Linkprüfung |
 
 Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
@@ -166,7 +166,7 @@ fachliches Urteil über die Gesamtaufgabe, keine normierte Messung.
 | --- | --- | --- |
 | UI und Nutzerführung | 8/10 | Überschriften, Hervorhebungen und umbrochene Links sind in den aktuellen Linux-Dichtebildern lesbar. Der Bedarfstest und der Dichterundlauf erhalten Inhalt und logische Schriftgröße. Die Navigation beansprucht bei kleinen Fenstern weiterhin viel Lesefläche; tatsächliche Monitorwechsel und die vollständige Plattform-Zustandsmatrix sind offen. |
 | Aufgabe als Dokumentation | 8/10 | Der User Guide nennt Voraussetzungen, einen abgeschlossenen Pendelversuch und prüfbare Ergebnisse. Lernwege, Referenz und symptomorientierte Fehlerhilfe unterstützen unterschiedliche Aufgaben. Die aktuellen Schrift-/GUI-Tests ersetzen den weiterhin offenen vollständigen Abgleich aller Anleitungen mit der Implementierung nicht. |
-| Barrierefreiheit | 5/10 | Native Lese-, Feld- und Linknachweise sind für die jeweils unten genannten Revisionen vorhanden. Der aktuelle unabhängige Linux-Linkclient besteht erneut. Tabellensemantik, externe macOS-AX-Clientprüfung, praktische Screenreader-Aufgaben und die zuvor beobachtete Windows-Fokussporadik bleiben offen. |
+| Barrierefreiheit | 5/10 | Native Lese-, Feld-, Link- und Tabellenbeziehungen sind für die jeweils unten genannten Revisionen geprüft. Der unabhängige Linux-Linkclient besteht erneut. Externe macOS-AX-Clientprüfung, praktische Screenreader-Aufgaben und die zuvor beobachtete Windows-Fokussporadik bleiben offen. |
 
 Nachweise der Schriftschnittkorrektur: MSVC ASan besteht **6/6** native Schriftfälle
 (`run-mcsyv9gx`), die finale Collection-Probe **1/1** (`run-ecnofoaj`) und
@@ -2131,3 +2131,61 @@ Die macOS-CI enthält jetzt die positive 36-Zustände-Probe und die isolierte
 negative Gegenprobe. Für diese Revision steht die reale macOS-Ausführung noch
 aus. Lokale Ergebnisse gelten nicht als bestandene aktuelle Mac-Abnahme.
 Die konservative Gesamtbewertung und die übrigen offenen Abnahmepunkte bleiben.
+
+## Bestätigte Mac-Revision und verschobenes Windows-Paket
+
+Revision `2b31a7d` besteht den tatsächlichen
+[macOS-Lauf 38812185951](https://github.com/Lulus792/physim/actions/runs/38812185951)
+auf beiden Architekturen mit LLVM 20, ASan/UBSan und SDL 3.2.30:
+
+- ARM: native Verträge 11/11 (`run-67d__ns_`), GUI 18/18 (`run-fo9irl60`).
+- Intel: native Verträge 11/11 (`run-u3hj8q3x`), GUI 18/18 (`run-8sgxcx2v`).
+
+Jeweils enthalten sind alle 36 Kopfzeilenansichten, 36 Theme-/Zoom-Formelbilder,
+67 Lernformeln, 52 Fachformeln, vier schmale Gitterformeln und die Inventur von
+166 Zeichen in 38 Schriftvarianten mit normaler und gebündelter Primärschrift.
+Der Lernformelkatalog benötigt 35,309 Sekunden auf ARM und 34,984 Sekunden auf
+Intel; die unveränderte interne Grenze von 60 Sekunden wird eingehalten.
+Beide isolierten Gegenproben verwerfen die alte Metazeile präzise in Fall 9
+bei 32 px. Auch die vorige Sidebar-Anordnung wird auf beiden Macs verworfen.
+
+Beide vollständigen Joblogs und Archive wurden gelesen. Archiv-SHA256:
+ARM `8b7f008f0a13947552e062a07fd66ba0e58ef2d638000dbf12dd487dc2f1a8df`,
+Intel `aa1e57f5b14a441c8c9c033d0493a36e1a40e0c0cb340c7e0367626f7c301f8c`.
+Die neuen Kopfzeilenbilder beider Macs, die ARM-Zeichenprobe mit ᵥ und die
+schmale Intel-Formelansicht wurden visuell geprüft. Dieser Nachweis betrifft
+AppKit und gerenderte Oberflächen, keine praktische Screenreader-Aufgabe.
+
+Ein neuer Windows-Releasebuild erstellt außerdem alle 82 Sprachbeispiele und
+das portable SDK mit allen 119 veröffentlichten Formelblöcken. Nach Verschieben
+in `F1 Formeln 119 Paket ä` stimmen alle 1.578 Paketprüfsummen; die vier
+Formelgruppen bestehen. Der zusätzliche Metazeilentest erreicht 30 vollständige
+Zustände, bevor er nach 61,281 Sekunden an der internen Grenze abbricht.
+Die Zeichen-/Clipprüfung selbst meldet bis dahin keinen Fehler. Dieser Lauf
+wird als fehlgeschlagen erhalten und nicht durch die Formelprüfungen verdeckt.
+
+Der Metazeilentest wartet anschließend wie der Katalog auf eine abgeschlossene
+Veröffentlichung ohne ausstehenden Scrollauftrag, statt zusätzliche identische
+Frames abzuwarten. Alle 36 Zustände, tatsächliche Glyphen-/Clipprüfungen,
+Aufnahmen und Zeitgrenzen bleiben erhalten; der Abschluss nennt die Dauer.
+Diese Änderung betrifft nur den Testablauf. Die oben genannten Mac-Ergebnisse
+beziehen sich weiterhin ausdrücklich auf `2b31a7d` mit dem vorherigen Warteweg.
+
+Die App wird erneut als Release gebaut und mit dem offiziellen Installer unter
+Wiederverwendung der unveränderten eigenständigen Beispielprogramme installiert.
+Im erneut verschobenen Paket `F1 Formeln 119 Bereitschaft ä` stimmen alle
+1.578 Prüfsummen; alle fünf Gruppen bestehen einschließlich der 36 Metazeilen
+(3,470 Sekunden). Binär-SHA256:
+`49c3a19ac0f6e6271b36eb32bdd0b99cd5b084a790ed915abd07993fe26e9dbd`.
+Bericht: `build/native/formula119-package-ready-proof/report.json`.
+Die vollständigen 119 Formelblöcke und ihre 826 Varianten werden zusätzlich
+direkt aus dem Paket durch `tools/math/check.py --root ...` bestätigt.
+Die genaue Ursache der höheren Laufzeit des ersten Paketlaufs ist damit nicht
+isoliert bewiesen; eine generelle Start- oder Laufzeitgarantie wird nicht behauptet.
+
+Der neue Metazeilen-Warteweg besteht unter Linux GCC/ASan/UBSan zusätzlich
+1/1 in `run-9lmie5el`, weiterhin mit allen 36 tatsächlichen Ansichten.
+Die abschließende isolierte Gegenprobe mit diesem Warteweg verwirft erneut
+präzise Fall 2 bei 16 px; Bericht unter `build/native/detail-counterexample`,
+Binär-SHA256 `10f7bddce3aaed74420030677cdc3dc2fa85ca304a060382c7bab4f3a5981751`.
+Der frühere Bericht bleibt unter `detail-counterexample-2b31a7d` erhalten.
