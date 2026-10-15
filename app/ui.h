@@ -116,6 +116,8 @@ typedef struct {
 /* Finish queued field input before a semantic keyboard focus change. */
 void ps_ui_flush_edit(struct nk_context *ctx,const char *window,char *text,size_t capacity,struct nk_rect bounds);
 float nk_sdl_row_height(const struct nk_context *ctx, float requested);
+/* Register a read-only label drawn by a component's own wrapping renderer. */
+void ps_ui_accessibility_label(struct nk_context *ctx,struct nk_rect bounds,const char *text);
 void ps_ui_label_wrap(struct nk_context *ctx,const char *text);
 nk_bool ps_ui_option_label(struct nk_context *ctx,const char *group,const char *text,nk_bool active);
 nk_bool ps_ui_checkbox_named(struct nk_context *ctx,const char *text,const char *name,nk_bool *active);

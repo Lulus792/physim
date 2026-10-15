@@ -278,6 +278,9 @@ nk_bool ps_ui_checkbox_named(struct nk_context *ctx,const char *text,const char 
 nk_bool ps_ui_checkbox_label(struct nk_context *ctx,const char *text,nk_bool *active) {
     return ps_ui_checkbox_named(ctx,text,text,active);
 }
+void ps_ui_accessibility_label(struct nk_context *ctx,struct nk_rect bounds,const char *text) {
+    (void)accessibility_widget(ctx,text,0,bounds,false,NULL,false);
+}
 void ps_ui_label(struct nk_context *ctx,const char *text,nk_flags alignment) {
     accessibility_widget(ctx,text,0,nk_widget_bounds(ctx),false,NULL,false);nk_label(ctx,text,alignment);
 }

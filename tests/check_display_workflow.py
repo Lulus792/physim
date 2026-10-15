@@ -61,6 +61,7 @@ SIMPLE["documentation_sidebar"] = (["--workspace-state-test", "{directory}", "do
 SIMPLE["documentation_formula_narrow"] = (["--workspace-state-test", "{directory}", "docs-keyboard-formula-narrow"], 90, True)
 SIMPLE["documentation_formula_physics"] = (["--workspace-state-test", "{directory}", "docs-keyboard-formula-physics"], 90, True)
 SIMPLE["documentation_formula_catalog"] = (["--workspace-state-test", "{directory}", "docs-keyboard-formula-catalog"], 90, True)
+SIMPLE["documentation_detail"] = (["--workspace-state-test", "{directory}", "docs-keyboard-detail"], 90, True)
 SIMPLE["documentation_typeset"] = (["--workspace-state-test", "{directory}", "docs-keyboard-typeset"], 90, True)
 SIMPLE["accessibility_document_macos"] = (["--workspace-state-test", "{directory}", "docs-keyboard-reading-native"], 90, True)
 SIMPLE["accessibility_edit_macos"] = (["--workspace-state-test", "{directory}", "docs-keyboard-edit-native"], 90, True)
@@ -127,7 +128,7 @@ def documentation_math(flow, directory):
         for char in source:
             if char.isprintable():
                 characters.add(char)
-    require('ᵣ' in characters, 'Pendel source no longer exercises the missing subscript')
+    require('ᵣ' in characters and 'ᵥ' in characters, 'Pendel/thermal sources no longer exercise the missing subscripts')
     directory.mkdir(parents=True)
     (directory/'required-glyphs.txt').write_text(''.join(f'{ord(c):X}\n' for c in sorted(characters)),encoding='ascii')
     (flow.work/'math-inventory.json').write_text(json.dumps(dict(pages=paths,characters=[dict(codepoint=f'U+{ord(c):04X}',char=c,name=unicodedata.name(c,'')) for c in sorted(characters)]),ensure_ascii=False,indent=2),encoding='utf-8')
@@ -1606,6 +1607,15 @@ def main():
         flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)
         if args.case == "documentation_zoom":
             documentation_zoom_bitmaps(directory,flow.steps[-1]['stdout'])
+        elif args.case == "documentation_detail":
+            output=flow.steps[-1]['stdout']
+            require('DOCUMENTATION DETAIL SELF-TEST: PASSED' in output,'Missing header completion')
+            records=re.findall(r'DOCUMENTATION DETAIL DRAW: case=(\d+) font=(\d+) theme=(\d+) lines=(\d+) complete=(\d+) frame=(\d+),(\d+),(\d+),(\d+)',output)
+            require(len(records)==36 and [int(r[0]) for r in records]==list(range(36)),'Missing header states')
+            for r in records:
+                index,font,theme,lines,complete,x,y,w,h=map(int,r)
+                require(font==(32 if (index//9)%2 else 16) and theme==(index//3)%3 and lines>0 and complete==1,'Incomplete header')
+                documentation_formula_ink(directory/f'docs-detail-{index:02}.bmp',x,y,w,h)
         elif args.case == "documentation_typeset":
             require("FORMULA TYPESET SELF-TEST: PASSED" in flow.steps[-1]["stdout"], "Missing formula interaction result")
             records=re.findall(r'FORMULA DRAW: case=(\d+) font=(\d+) theme=(\d+) complete=(\d+) frame=(\d+),(\d+),(\d+),(\d+)',flow.steps[-1]['stdout'])

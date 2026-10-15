@@ -211,6 +211,7 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     else if (a->doc_filter_active)
         nk_window_set_focus(ui, "topics");
     nk_style_pop_vec2(ui);
+    documentation_detail_draw_probe(a);
     documentation_sidebar_draw_probe(a);
     documentation_math_draw_probe(a);
     nk_sdl_update_TextInput(ui);

@@ -916,6 +916,50 @@ static void documentation_sidebar_draw_probe(app *a) {
     else printf("DOCUMENTATION SIDEBAR DRAW: font=%u lines=%u complete=%d width=%.1f height=%.1f\n",
         documentation_font_size(a),a->doc_sidebar_test_lines,a->doc_sidebar_test_ok,bounds.w,bounds.h);
 }
+static void documentation_detail_draw_probe(app *a) {
+    if(!a->doc_detail_test_requested)return;
+    a->doc_detail_test_requested=false;a->doc_detail_test_ok=false;
+    struct nk_rect bounds=a->doc_detail_test_bounds,clip={0};const struct nk_command *command;
+    char actual[384],unit[24];size_t used=0;bool fits=true,unit_seen=false;unsigned lines=0;
+    snprintf(unit,sizeof unit,"%u\xC2\xA0px",documentation_font_size(a));
+    bool unit_needed=strstr(a->doc_detail_test_text,"\xC2\xA0px")!=NULL;
+    nk_foreach(command,a->doc_ui) {
+        if(command->type==NK_COMMAND_SCISSOR) {
+            const struct nk_command_scissor *s=(const struct nk_command_scissor *)command;clip=nk_rect(s->x,s->y,s->w,s->h);
+        } else if(command->type==NK_COMMAND_TEXT) {
+            const struct nk_command_text *t=(const struct nk_command_text *)command;
+            if(t->x<bounds.x || t->x>=bounds.x+bounds.w || t->y<bounds.y || t->y>=bounds.y+bounds.h)continue;
+            fits &= t->x>=clip.x-1 && t->y>=clip.y-1 && t->y+t->height<=fminf(clip.y+clip.h,bounds.y+bounds.h)+1;
+            size_t at=0;float x=t->x;
+            while(at<(size_t)t->length) {
+                nk_rune cp=0,next=0;int bytes=nk_utf_decode(t->string+at,&cp,t->length-(int)at);
+                if(bytes<=0){fits=false;break;}
+                if(at+(size_t)bytes<(size_t)t->length)nk_utf_decode(t->string+at+bytes,&next,t->length-(int)at-bytes);
+                struct nk_user_font_glyph glyph={0};t->font->query(t->font->userdata,t->height,&glyph,cp,next);
+                if(glyph.width>0 && glyph.height>0) {
+                    float left=x+glyph.offset.x,top=t->y+glyph.offset.y;
+                    fits &= left>=fmaxf(bounds.x,clip.x)-1 && top>=fmaxf(bounds.y,clip.y)-1 &&
+                        left+glyph.width<=fminf(bounds.x+bounds.w,clip.x+clip.w)+1 &&
+                        top+glyph.height<=fminf(bounds.y+bounds.h,clip.y+clip.h)+1;
+                }
+                x+=glyph.xadvance;at+=(size_t)bytes;
+            }
+            for(int i=0;i<t->length;i++)if(!isspace((unsigned char)t->string[i])) {
+                if(used<sizeof actual)actual[used++]=t->string[i];else fits=false;
+            }
+            if(strstr(t->string,unit))unit_seen=true;
+            ++lines;
+        }
+    }
+    size_t at=0;for(const char *p=a->doc_detail_test_text;*p;p++)if(!isspace((unsigned char)*p)) {
+        if(at>=used || actual[at]!=*p)fits=false;
+        ++at;
+    }
+    a->doc_detail_test_ok=fits && at==used && lines>0 && (!unit_needed || unit_seen);
+    printf("DOCUMENTATION DETAIL DRAW: case=%u font=%u theme=%u lines=%u complete=%d frame=%.0f,%.0f,%.0f,%.0f\n",
+        a->doc_detail_test_case,documentation_font_size(a),a->preferences.theme,lines,a->doc_detail_test_ok,bounds.x,bounds.y,bounds.w,bounds.h);
+    if(!a->doc_detail_test_ok)printf("DOCUMENTATION DETAIL REJECT: expected=%s bytes=%zu/%zu fits=%d\n",a->doc_detail_test_text,used,at,fits);
+}
 static bool documentation_zoom_button(app *a,int direction) {
     struct nk_context *ui=a->doc_ui;struct nk_rect bounds;
     if(nk_widget(&bounds,ui)==NK_WIDGET_INVALID)return false;
@@ -1048,6 +1092,27 @@ static void documentation_sidebar(app *a) {
                       "Keine Treffer. Suche nach einem Begriff wie Sensor, Export oder ps_scene.");
     }
 }
+/* Detail text uses the same bounded UTF-8 line breaks for measurement and drawing. */
+static struct nk_rect documentation_detail_label(app *a,const char *text) {
+    struct nk_context *ui=a->doc_ui;const struct nk_user_font *font=a->doc_font_ui;
+    /* Configure once: a second layout call would insert an unused row. */
+    nk_layout_row_dynamic(ui,1,1);
+    struct nk_rect bounds=nk_widget_bounds(ui);
+    float width=fmaxf(1,bounds.w-8);
+    float height=documentation_height(font,text,strlen(text),width)+8;
+    ui->current->layout->row.height=height+ui->style.window.spacing.y;
+    enum nk_widget_layout_states visible=nk_widget(&bounds,ui);
+    ps_ui_accessibility_label(ui,bounds,text);
+    if(visible==NK_WIDGET_INVALID)return bounds;
+    size_t at=0,length=strlen(text);float y=bounds.y+4;
+    do {
+        size_t count,used=documentation_line(font,text+at,length-at,width,&count);
+        nk_draw_text(nk_window_get_canvas(ui),nk_rect(bounds.x,y,width+1,font->height),text+at,(int)count,
+            font,nk_rgba(0,0,0,0),a->doc_error[0]?UI_COLOR(error):UI_COLOR(muted));
+        at+=used;y+=font->height+6;
+    } while(at<length);
+    return bounds;
+}
 static void documentation_view(app *a, float height) {
     struct nk_context *ui = a->doc_ui;
     a->doc_inline_clicked=-1;
@@ -1159,14 +1224,15 @@ static void documentation_view(app *a, float height) {
         snprintf(detail, sizeof detail, "%s · Treffer %d/%d Abschnitte",
                  d ? documentation_topics[a->doc_topic].title : "",match_count?a->doc_match+1:0,match_count);
     else if(compact)
-        snprintf(detail,sizeof detail,"%s · %u px",d?documentation_topics[a->doc_topic].title:"Dokument nicht verfügbar",documentation_font_size(a));
+        snprintf(detail,sizeof detail,"%s · %u\xC2\xA0px",d?documentation_topics[a->doc_topic].title:"Dokument nicht verfügbar",documentation_font_size(a));
     else
-        snprintf(detail, sizeof detail, "%s · offline · %u px · " PS_UI_SHORTCUT "F sucht hier",
+        snprintf(detail, sizeof detail, "%s · offline · %u\xC2\xA0px · " PS_UI_SHORTCUT "F sucht hier",
                  d ? documentation_topics[a->doc_topic].title : "Dokument nicht verfügbar",documentation_font_size(a));
-    nk_layout_row_dynamic(ui,documentation_height(a->doc_font_ui,detail,strlen(detail),
-        fmaxf(40,nk_window_get_content_region(ui).w-8))+8,1);
-    nk_style_push_color(ui,&ui->style.text.color,a->doc_error[0]?UI_COLOR(error):UI_COLOR(muted));
-    nk_label_wrap(ui,detail);nk_style_pop_color(ui);
+    struct nk_rect detail_bounds=documentation_detail_label(a,detail);
+    if(a->doc_detail_test_requested) {
+        a->doc_detail_test_bounds=detail_bounds;
+        snprintf(a->doc_detail_test_text,sizeof a->doc_detail_test_text,"%s",detail);
+    }
     /* Peek the next row after the consumed detail row. An unused placeholder
      * row would be advanced by the following layout call and shift the group
      * below this measurement, making its scrollbar taller than its real clip. */

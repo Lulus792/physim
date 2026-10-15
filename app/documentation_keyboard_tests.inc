@@ -656,7 +656,7 @@ static void documentation_math_test_frame(app *a,int *stage,int *code,const char
   *capture="docs-reading-reset.bmp";break;
  }
  case 11: {
-  const char *source="# Zeichenprobe\n\nθ 🌍 😀 ☃ ᵀ eᵣ ∫\nAaBb **AaBb**\n\n```text\n┌──┬──┐\n│  │  │\n├──┼──┤\n└──┴──┘\n```\n";
+  const char *source="# Zeichenprobe\n\nθ 🌍 😀 ☃ ᵀ eᵣ cᵥ ∫\nAaBb **AaBb**\n\n```text\n┌──┬──┐\n│  │  │\n├──┼──┤\n└──┴──┘\n```\n";
   ps_document *document=NULL;ok=ps_document_parse(source,strlen(source),false,&document)==PS_OK;
   if(ok) {
    free(a->documentation);a->documentation=document;++a->doc_reading_version;
@@ -671,6 +671,8 @@ static void documentation_math_test_frame(app *a,int *stage,int *code,const char
   const char *r=strstr(a->documentation->reading,"🌍");
   ok=documentation_font_size(a)==16 && r &&
    nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(r-a->documentation->reading));
+  const char *v=strstr(a->documentation->reading,"ᵥ");
+  ok=ok && v && nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(v-a->documentation->reading));
   *capture="docs-unicode-16.bmp";for(int i=0;i<8;i++)test_window_key_mod(a->doc_window,SDLK_PLUS,PS_UI_COMMAND_MOD);
   zoom_frames=0;break;
  }
@@ -679,6 +681,8 @@ static void documentation_math_test_frame(app *a,int *stage,int *code,const char
   const char *r=strstr(a->documentation->reading,"🌍");
   ok=documentation_font_size(a)==32 && r &&
    nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(r-a->documentation->reading));
+  const char *v=strstr(a->documentation->reading,"ᵥ");
+  ok=ok && v && nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(v-a->documentation->reading));
   *capture="docs-unicode-32.bmp";a->doc_jump_block=2;zoom_frames=0;break;
  }
  case 14: {
@@ -959,9 +963,9 @@ static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code
     static const char *narrow_paths[]={"docs/waves-optics.md"};
     if(narrow){paths=narrow_paths;path_count=sizeof narrow_paths/sizeof narrow_paths[0];}
     static size_t page,block;static unsigned sample,frames;static char image[80];
-    static int editor,analysis;static double simulation;bool okay=true;
+    static int editor,analysis;static double simulation,started;bool okay=true;
     switch((*stage)++) {
-    case 0:editor=a->experiment.string.len;analysis=a->analysis.string.len;simulation=a->simulation_time;
+    case 0:started=ps_clock();editor=a->experiment.string.len;analysis=a->analysis.string.len;simulation=a->simulation_time;
         test_window_key_mod(a->window,SDLK_F1,0);break;
     case 1: {
         okay=SDL_SetWindowSize(a->doc_window,narrow?760:1100,narrow?540:800) && SDL_SyncWindow(a->doc_window);
@@ -974,8 +978,9 @@ static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code
         int topic=-1;for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(!strcmp(documentation_topics[i].path,paths[page]))topic=i;
         okay=topic>=0;if(topic>=0)open_documentation(a,topic);block=0;frames=0;break;
     }
+    /* Wait for a completed publication, not several extra identical frames. */
     case 3:
-        if(frames++<3 || a->doc_scroll_pending){--*stage;return;}break;
+        if(frames++<1 || a->doc_scroll_pending || !a->documentation || a->documentation->layout_width<=0){--*stage;return;}break;
     case 4:
         while(a->documentation && block<a->documentation->count) {
             const ps_doc_block *candidate=&a->documentation->blocks[block];const char *text=a->documentation->text+candidate->text;
@@ -992,7 +997,7 @@ static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code
         }
         a->doc_jump_block=(int)block;frames=0;break;
     case 5:
-        if(frames++<3 || a->doc_scroll_pending || a->doc_jump_block>=0){--*stage;return;}
+        if(frames++<1 || a->doc_scroll_pending || a->doc_jump_block>=0 || a->documentation->layout_width<=0){--*stage;return;}
         a->doc_math_test_block=block;a->doc_math_test_case=sample;a->doc_math_test_requested=true;
         snprintf(image,sizeof image,"docs-formula-catalog-%03u.bmp",sample);*capture=image;break;
     case 6: {
@@ -1006,9 +1011,43 @@ static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code
     }
     }
     if(!okay){fprintf(stderr,"Formula catalog stage %d page %zu block %zu failed\n",*stage-1,page,block);*code=1;a->quitting=true;}
-    if(a->quitting)printf("FORMULA CATALOG SELF-TEST: %s count=%u\n",*code?"FAILED":"PASSED",sample);
+    if(a->quitting)printf("FORMULA CATALOG SELF-TEST: %s count=%u elapsed=%.3f\n",*code?"FAILED":"PASSED",sample,ps_clock()-started);
+}
+static void documentation_detail_test_frame(app *a,int *stage,int *code,const char **capture) {
+    static unsigned sample,frames;static int editor,analysis;static double simulation;static char image[64];bool okay=true;
+    switch((*stage)++) {
+    case 0:editor=a->experiment.string.len;analysis=a->analysis.string.len;simulation=a->simulation_time;
+        test_window_key_mod(a->window,SDLK_F1,0);break;
+    case 1:sample=0;break;
+    case 2: {
+        unsigned size=(sample/9)%2?32:16;bool wide=sample>=18;
+        okay=SDL_SetWindowSize(a->doc_window,wide?1100:760,wide?800:540) && SDL_SyncWindow(a->doc_window);
+        if(documentation_font_size(a)!=size) {
+            documentation_zoom(a,0);if(size==32)for(int i=0;i<8;i++)documentation_zoom(a,1);
+        }
+        static const unsigned themes[]={PS_THEME_DARK,PS_THEME_LIGHT,PS_THEME_HIGH_CONTRAST};
+        ps_preferences p=a->preferences;p.theme=themes[(sample/3)%3];preferences_apply(a,&p);
+        int topic=-1;for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(!strcmp(documentation_topics[i].path,"docs/pendulum-tutorial.md"))topic=i;
+        okay &= topic>=0;if(topic>=0)open_documentation(a,topic);
+        a->doc_query[0]=a->doc_last_query[0]=a->doc_error[0]=0;
+        if(sample%3==1)snprintf(a->doc_query,sizeof a->doc_query,"E");
+        if(sample%3==2)okay &= !documentation_link(a,"missing-detail-target.md") && a->doc_error[0];
+        frames=0;break;
+    }
+    case 3:
+        if(frames++<3 || a->doc_scroll_pending){--*stage;return;}
+        a->doc_detail_test_case=sample;a->doc_detail_test_requested=true;
+        snprintf(image,sizeof image,"docs-detail-%02u.bmp",sample);*capture=image;break;
+    case 4:
+        okay=a->doc_detail_test_ok && documentation_font_size(a)==((sample/9)%2?32:16) && a->doc_body_bounds.h>0 &&
+            a->experiment.string.len==editor && a->analysis.string.len==analysis && a->simulation_time==simulation;
+        if(++sample<36)*stage=2;else a->quitting=true;break;
+    }
+    if(!okay){fprintf(stderr,"Documentation detail stage %d case %u failed\n",*stage-1,sample);*code=1;a->quitting=true;}
+    if(a->quitting)printf("DOCUMENTATION DETAIL SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 }
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strcmp(mode,"docs-keyboard-detail")){documentation_detail_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-formula-narrow")){documentation_formula_catalog_test_frame(a,stage,code,capture,true,true);return;}
     if(!strcmp(mode,"docs-keyboard-formula-physics")){documentation_formula_catalog_test_frame(a,stage,code,capture,true,false);return;}
     if(!strcmp(mode,"docs-keyboard-formula-catalog")){documentation_formula_catalog_test_frame(a,stage,code,capture,false,false);return;}

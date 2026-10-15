@@ -238,6 +238,10 @@ typedef struct {
     ps_graphics *doc_graphics;
     struct nk_context *doc_ui;
     struct documentation_math_cache *doc_math;
+    bool doc_detail_test_requested,doc_detail_test_ok;
+    unsigned doc_detail_test_case;
+    struct nk_rect doc_detail_test_bounds;
+    char doc_detail_test_text[192];
     bool doc_math_test_requested,doc_math_test_ok;
     unsigned doc_math_test_case;
     size_t doc_math_test_block;
@@ -2802,9 +2806,9 @@ static void channel_units_start(app *a);
 // clang-format on
 static struct nk_font *system_font_sampling(struct nk_font_atlas *atlas,const char *root,float size,bool code,bool title,
                                            unsigned char horizontal,unsigned char vertical) {
-    static const nk_rune ui_ranges[] = {0x20,0x17f,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,
+    static const nk_rune ui_ranges[] = {0x20,0x17f,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
                                       0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0};
-    static const nk_rune code_ranges[] = {0x20,0x17f,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,
+    static const nk_rune code_ranges[] = {0x20,0x17f,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
                                         0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0};
     struct nk_font_config config = nk_font_config(size);
     config.range = code ? code_ranges : ui_ranges;
@@ -2845,7 +2849,7 @@ static struct nk_font *system_font_sampling(struct nk_font_atlas *atlas,const ch
     if(!font)return NULL;
     /* Offline fallback covers our text ranges, phonetic modifiers, diagrams and
      * emoji. Add only glyphs absent from earlier sources, keeping the atlas small. */
-    static const nk_rune fallback_ranges[]={0x20,0x17f,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,
+    static const nk_rune fallback_ranges[]={0x20,0x17f,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
         0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x2603,0x2603,0x1f30d,0x1f30d,0x1f600,0x1f600,0};
     static const char *const files[]={"NotoSans-Bold.ttf","NotoSans.ttf","NotoSansMono.ttf","NotoSansMath-Regular.ttf","NotoSansSymbols2-Regular.ttf","NotoEmoji.ttf"};
     for(size_t i=0;i<sizeof files/sizeof files[0];i++) {

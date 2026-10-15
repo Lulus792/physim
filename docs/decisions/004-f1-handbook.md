@@ -2069,3 +2069,65 @@ Die neue Formelprobe bestätigt die Formelbilder, nicht die gesamte Kopfzeile.
 Weitere mathematische Fachseiten, Inline-TeX, echte Monitor-/Dichtewechsel,
 praktische Screenreader-Aufgaben und die vollständige Inhaltsprüfung bleiben
 Bestandteil der F1-Abnahme. Die Gesamtbewertung wird deshalb nicht aufgewertet.
+
+## Vollständige Kopfzeile und Schriftzeichen vom 15. Oktober 2026
+
+Eine unabhängige Zeichen-/Clipprobe bestätigt den Kopfzeilenfehler unter Linux:
+`run-7upviqou` verwirft Fall 2 bei 760 × 540 und 16 px. Alle 64 Textbytes der
+Linkfehlermeldung werden ausgegeben, aber das letzte Zeichen liegt außerhalb
+des tatsächlichen Clips. Die Windows-Ausgangsfassung besteht dieselben 36
+Zustände (`run-giwviyp4`). Ein separater nativer Nuklear-Reproducer mit 10 Pixel
+Zeichenbreite und 15 Pixel Platz liefert für „px“ zwei Zeichen mit tatsächlichen
+20 Pixeln, aber gemeldeten 10 Pixeln. Das erklärt die bisher unzureichende
+Breitenprüfung.
+
+Die Metazeile verwendet jetzt dieselbe begrenzte UTF-8-Zeilenaufteilung für
+Messung und Ausgabe auf der tatsächlichen Widgetbreite. Zahl und Einheit
+bleiben durch ein geschütztes Leerzeichen zusammen. Eine eigene API erhält
+die semantische Nur-Lese-Beschriftung auch bei manuellem Zeichnen. Die Probe
+kontrolliert tatsächliche Glyphenpositionen, vollständige Textbytes und die
+zusammenhängende Einheit. Sie prüft Normaltext, Suche und echten ungültigen
+internen Link bei zwei Fenstergrößen, zwei Schriftgrößen und drei Themes:
+insgesamt 36 Zustände.
+
+Die isolierte Gegenprobe ersetzt ausschließlich die neue Metazeilenausgabe
+durch die vorige Ausgabe und erhält den unabhängigen Prüfer. Unter Linux
+wird erneut Fall 2 präzise verworfen; ein beliebiger Programmfehler genügt
+dem Gegenprüfer nicht. Bericht: `build/native/detail-counterexample/report.json`,
+Quell-SHA256 `6be9c1e2fa5b247aad15d762d9ce2d560366cc60ea91b58aeb2ddd03c8d0c5eb`,
+Binär-SHA256 `ceb79720114518c4762674df251b96914e7e2cecd374ce04fad05ce8d0ff58b5`.
+
+Der tatsächliche macOS-Lauf von `b23aff1`
+([38804963034](https://github.com/Lulus792/physim/actions/runs/38804963034))
+hat zusätzlich U+1D65 „ᵥ“ im neuen Thermodynamik-Fließtext als fehlend auf
+beiden Architekturen erkannt. Native Verträge bestehen jeweils 11/11;
+GUI besteht ARM 16/17 und Intel 15/17. Auf Intel erreicht der 67-Formel-Test
+52 vollständige Zustände vor der unveränderten internen 60-Sekunden-Grenze.
+Das ist kein Beleg für einen Hänger. Das Intel-Archiv wurde gelesen und mit
+SHA256 `9c41f65886faf824c2828fd56a9295dfa964e5a3b023a4baead8e40f099f162f`
+abgeglichen.
+
+U+1D65 ist jetzt ausdrücklich in allen drei relevanten Schriftbereichen
+enthalten. Die Quellinventur verlangt weiterhin beide tiefgestellten Zeichen
+ᵣ und ᵥ; Fontquellen-Test und sichtbare Zeichenprobe decken ᵥ zusätzlich ab.
+Der Formelkatalog wartet auf eine abgeschlossene Veröffentlichung und einen
+verbrauchten Sprung statt auf drei zusätzliche identische Frames. Alle
+67 + 52 + 4 Formelzustände, Zeichen-/Clipprüfungen und Zeitgrenzen bleiben
+erhalten. Die Dauer wird im Abschlussmarker aufgezeichnet.
+
+Mit finalem Quellstand bestehen unter MSVC/ASan Fontquellen/-faces 2/2
+(`run-3yhog087`) sowie Mathematik, Katalog, Fachformeln, kleine Gitteransicht
+und Metazeile 5/5 (`run-otmpw978`). Unter Linux GCC/ASan/UBSan bestehen
+dieselben nativen Fälle 2/2 (`run-1sftfrx9`) und GUI-Fälle 5/5
+(`run-2vskm3as`). Die Mathematikinventur prüft 166 druckbare Zeichen in
+38 Schriftvarianten mit normaler und gebündelter Primärschrift. Die
+Windows-Katalogprüfung benötigt 14,118 Sekunden. Navigation, Seitenleiste,
+Metazeile, schmale Formeln und externe native Links bestehen zusätzlich
+5/5 unter Windows (`run-q4l1zcte`) und Linux (`run-4buziqln`);
+Windows-Accessibility besteht 2/2 (`run-ci4s8r5q`). Finale Kopfzeilen- und
+Zeichenbilder beider Plattformen wurden visuell geprüft.
+
+Die macOS-CI enthält jetzt die positive 36-Zustände-Probe und die isolierte
+negative Gegenprobe. Für diese Revision steht die reale macOS-Ausführung noch
+aus. Lokale Ergebnisse gelten nicht als bestandene aktuelle Mac-Abnahme.
+Die konservative Gesamtbewertung und die übrigen offenen Abnahmepunkte bleiben.
