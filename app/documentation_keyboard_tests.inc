@@ -656,7 +656,7 @@ static void documentation_math_test_frame(app *a,int *stage,int *code,const char
   *capture="docs-reading-reset.bmp";break;
  }
  case 11: {
-  const char *source="# Zeichenprobe\n\nθ 🌍 😀 ☃ ᵀ eᵣ cᵥ ∫\nAaBb **AaBb**\n\n```text\n┌──┬──┐\n│  │  │\n├──┼──┤\n└──┴──┘\n```\n";
+  const char *source="# Zeichenprobe\n\nθ 🌍 😀 ☃ ᵀ eᵣ cᵥ uⱼ ∫\nAaBb **AaBb**\n\n```text\n┌──┬──┐\n│  │  │\n├──┼──┤\n└──┴──┘\n```\n";
   ps_document *document=NULL;ok=ps_document_parse(source,strlen(source),false,&document)==PS_OK;
   if(ok) {
    free(a->documentation);a->documentation=document;++a->doc_reading_version;
@@ -673,6 +673,8 @@ static void documentation_math_test_frame(app *a,int *stage,int *code,const char
    nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(r-a->documentation->reading));
   const char *v=strstr(a->documentation->reading,"ᵥ");
   ok=ok && v && nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(v-a->documentation->reading));
+  const char *j=strstr(a->documentation->reading,"ⱼ");
+  ok=ok && j && nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(j-a->documentation->reading));
   *capture="docs-unicode-16.bmp";for(int i=0;i<8;i++)test_window_key_mod(a->doc_window,SDLK_PLUS,PS_UI_COMMAND_MOD);
   zoom_frames=0;break;
  }
@@ -683,6 +685,8 @@ static void documentation_math_test_frame(app *a,int *stage,int *code,const char
    nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(r-a->documentation->reading));
   const char *v=strstr(a->documentation->reading,"ᵥ");
   ok=ok && v && nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(v-a->documentation->reading));
+  const char *j=strstr(a->documentation->reading,"ⱼ");
+  ok=ok && j && nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(j-a->documentation->reading));
   *capture="docs-unicode-32.bmp";a->doc_jump_block=2;zoom_frames=0;break;
  }
  case 14: {
@@ -954,14 +958,16 @@ static void documentation_typeset_test_frame(app *a,int *stage,int *code,const c
     if(!okay){fprintf(stderr,"Formula typeset stage %d case %u failed\n",*stage-1,sample);*code=1;a->quitting=true;}
     if(a->quitting)printf("FORMULA TYPESET SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 }
-static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code,const char **capture,bool physics,bool narrow) {
+static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code,const char **capture,unsigned group,bool narrow) {
     static const char *learning_paths[]={"docs/user-guide.md","docs/pendulum-tutorial.md","docs/projectile-tutorial.md",
         "docs/projectile-drag-tutorial.md","docs/material-tutorial.md","docs/spring.md","docs/collision-tutorial.md"};
     static const char *physics_paths[]={"docs/thermodynamics.md","docs/electromagnetism.md","docs/waves-optics.md","docs/fluid.md"};
-    const char *const *paths=physics?physics_paths:learning_paths;
-    size_t path_count=physics?sizeof physics_paths/sizeof physics_paths[0]:sizeof learning_paths/sizeof learning_paths[0];
+    static const char *model_paths[]={"docs/real-gas.md","docs/measurement.md","docs/monte-carlo-tutorial.md"};
+    const char *const *paths=group==2?model_paths:group==1?physics_paths:learning_paths;
+    size_t path_count=group==2?sizeof model_paths/sizeof model_paths[0]:
+        group==1?sizeof physics_paths/sizeof physics_paths[0]:sizeof learning_paths/sizeof learning_paths[0];
     static const char *narrow_paths[]={"docs/waves-optics.md"};
-    if(narrow){paths=narrow_paths;path_count=sizeof narrow_paths/sizeof narrow_paths[0];}
+    if(narrow && group!=2){paths=narrow_paths;path_count=sizeof narrow_paths/sizeof narrow_paths[0];}
     static size_t page,block;static unsigned sample,frames;static char image[80];
     static int editor,analysis;static double simulation,started;bool okay=true;
     switch((*stage)++) {
@@ -984,7 +990,7 @@ static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code
     case 4:
         while(a->documentation && block<a->documentation->count) {
             const ps_doc_block *candidate=&a->documentation->blocks[block];const char *text=a->documentation->text+candidate->text;
-            bool selected=!narrow || !strncmp(text,"E_K = ",6) || !strncmp(text,"E_G = ",6) ||
+            bool selected=!narrow || group==2 || !strncmp(text,"E_K = ",6) || !strncmp(text,"E_G = ",6) ||
                 !strncmp(text,"vⱼ^(n−½)",strlen("vⱼ^(n−½)")) || !strncmp(text,"uⱼⁿ⁺¹",strlen("uⱼⁿ⁺¹"));
             if(candidate->kind==PS_DOC_MATH && selected)break;
             ++block;
@@ -992,7 +998,7 @@ static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code
         if(!a->documentation){okay=false;break;}
         if(block==a->documentation->count) {
             if(++page<path_count)*stage=2;
-            else {okay=narrow?sample==4:sample>0;a->quitting=true;}
+            else {okay=narrow && group!=2?sample==4:sample>0;a->quitting=true;}
             break;
         }
         a->doc_jump_block=(int)block;frames=0;break;
@@ -1048,9 +1054,11 @@ static void documentation_detail_test_frame(app *a,int *stage,int *code,const ch
 }
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
     if(!strcmp(mode,"docs-keyboard-detail")){documentation_detail_test_frame(a,stage,code,capture);return;}
-    if(!strcmp(mode,"docs-keyboard-formula-narrow")){documentation_formula_catalog_test_frame(a,stage,code,capture,true,true);return;}
-    if(!strcmp(mode,"docs-keyboard-formula-physics")){documentation_formula_catalog_test_frame(a,stage,code,capture,true,false);return;}
-    if(!strcmp(mode,"docs-keyboard-formula-catalog")){documentation_formula_catalog_test_frame(a,stage,code,capture,false,false);return;}
+    if(!strcmp(mode,"docs-keyboard-models-narrow")){documentation_formula_catalog_test_frame(a,stage,code,capture,2,true);return;}
+    if(!strcmp(mode,"docs-keyboard-models")){documentation_formula_catalog_test_frame(a,stage,code,capture,2,false);return;}
+    if(!strcmp(mode,"docs-keyboard-formula-narrow")){documentation_formula_catalog_test_frame(a,stage,code,capture,1,true);return;}
+    if(!strcmp(mode,"docs-keyboard-formula-physics")){documentation_formula_catalog_test_frame(a,stage,code,capture,1,false);return;}
+    if(!strcmp(mode,"docs-keyboard-formula-catalog")){documentation_formula_catalog_test_frame(a,stage,code,capture,0,false);return;}
     if(!strcmp(mode,"docs-keyboard-typeset")){documentation_typeset_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-font-demand")){documentation_font_demand_test(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-sidebar")) {

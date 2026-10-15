@@ -10,10 +10,29 @@ explizit angegebene molare Koeffizienten; kein Stoffkatalog ist eingebaut.
 Für n in mol, T in K, V in m³, a in Pa·m⁶/mol², b in m³/mol und konstantes
 cv in J/(mol K) gelten:
 
-- p = nRT/(V−nb) − an²/V².
-- (∂p/∂V) bei festem n,T = −nRT/(V−nb)² + 2an²/V³, in Pa/m³.
-- U = n cv T − an²/V, in J. Die gewählte Referenz nähert sich null für T→0,V→∞.
-- ΔS = n[cv ln(T1/T0) + R ln((V1−nb)/(V0−nb))], in J/K.
+Der Druck in Pa lautet:
+
+$$
+p=\frac{nRT}{V-nb}-\frac{an^2}{V^2}
+$$
+
+Seine Volumenableitung bei festem n und T hat die Einheit Pa/m³:
+
+$$
+\left(\frac{\partial p}{\partial V}\right)_{n,T}=-\frac{nRT}{(V-nb)^2}+\frac{2an^2}{V^3}
+$$
+
+Die innere Energie in J verwendet die Referenz U → 0 für T → 0 und V → ∞:
+
+$$
+U=nc_vT-\frac{an^2}{V}
+$$
+
+Die Entropiedifferenz zwischen Zustand 0 und 1 in J/K ist:
+
+$$
+\Delta S=n\left[c_v\ln\frac{T_1}{T_0}+R\ln\frac{V_1-nb}{V_0-nb}\right]
+$$
 
 Die Gleichungen folgen aus den [Oxford-Vorlesungsunterlagen zur Thermodynamik](https://www.physics.ox.ac.uk/system/files/file_attachments/all_thermo_notes.pdf),
 Abschnitten 14–15. Dort werden Teilchenzahl N und kB verwendet. Hier sind sie

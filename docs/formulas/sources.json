@@ -49,12 +49,12 @@
     {
       "id": "projectile-vy",
       "tex": "v_y(t)=5-9{,}80665\\,t",
-      "reading": "vᵧ(t) = 5 − 9,80665 t"
+      "reading": "v_y(t) = 5 − 9,80665 t"
     },
     {
       "id": "projectile-energy",
       "tex": "E(t)=\\frac{1}{2}\\left(v_x^2+v_y^2\\right)+gy=14{,}5\\,\\mathrm{J}",
-      "reading": "E(t) = ½(vₓ² + vᵧ²) + gy = 14,5 J"
+      "reading": "E(t) = ½(vₓ² + v_y²) + gy = 14,5 J"
     },
     {
       "id": "projectile-motion",
@@ -264,7 +264,7 @@
     {
       "id": "pendulum-velocity-y",
       "tex": "v_y=L\\sin\\varphi\\,\\omega",
-      "reading": "vᵧ = L sin φ · ω"
+      "reading": "v_y = L sin φ · ω"
     },
     {
       "id": "pendulum-speed",
@@ -590,6 +590,101 @@
       "id": "string-gradient-term",
       "tex": "E_{\\mathrm{G}}=\\frac{T}{2\\Delta x}\\sum_{j=0}^{N-2}\\Delta u_j^n\\Delta u_j^{n-1}",
       "reading": "E_G = (T/(2Δx)) Σ(j=0..N−2) Δuⱼⁿ Δuⱼⁿ⁻¹"
+    },
+    {
+      "id": "vdw-pressure",
+      "tex": "p=\\frac{nRT}{V-nb}-\\frac{an^2}{V^2}",
+      "reading": "p = nRT/(V − nb) − an²/V²"
+    },
+    {
+      "id": "vdw-pressure-derivative",
+      "tex": "\\left(\\frac{\\partial p}{\\partial V}\\right)_{n,T}=-\\frac{nRT}{(V-nb)^2}+\\frac{2an^2}{V^3}",
+      "reading": "(∂p/∂V) bei n,T konstant = −nRT/(V − nb)² + 2an²/V³"
+    },
+    {
+      "id": "vdw-energy",
+      "tex": "U=nc_vT-\\frac{an^2}{V}",
+      "reading": "U = n cᵥ T − an²/V"
+    },
+    {
+      "id": "vdw-entropy",
+      "tex": "\\Delta S=n\\left[c_v\\ln\\frac{T_1}{T_0}+R\\ln\\frac{V_1-nb}{V_0-nb}\\right]",
+      "reading": "ΔS = n[cᵥ ln(T₁/T₀) + R ln((V₁ − nb)/(V₀ − nb))]"
+    },
+    {
+      "id": "sensor-reading",
+      "tex": "y=Q_\\delta\\!\\left(x+b+d(t-t_0)+\\eta\\right)",
+      "reading": "y = Qδ(x + b + d(t − t₀) + η)"
+    },
+    {
+      "id": "sensor-relative-uncertainty",
+      "tex": "u_r=|x|u_{\\mathrm{rel}}",
+      "reading": "uᵣ = |x| u_rel"
+    },
+    {
+      "id": "sensor-quantization-uncertainty",
+      "tex": "u_q=\\frac{\\delta}{\\sqrt{12}}",
+      "reading": "u_q = δ/√12"
+    },
+    {
+      "id": "sensor-combined-uncertainty",
+      "tex": "\\begin{aligned}u^2&=u_{\\mathrm{abs}}^2+u_r^2\\\\&\\quad+\\sigma_\\eta^2+u_q^2\\end{aligned}",
+      "reading": "u² = u_abs² + uᵣ² + σ(η)² + u_q²; u ≥ 0"
+    },
+    {
+      "id": "student-mean-halfwidth",
+      "tex": "h=t_{n-1,\\,(1+C)/2}\\,\\frac{s}{\\sqrt n}",
+      "reading": "h = t(n − 1, (1 + C)/2) s/√n"
+    },
+    {
+      "id": "student-mean-interval",
+      "tex": "I_C=[\\bar x-h,\\,\\bar x+h]",
+      "reading": "I_C = [Mittelwert − h, Mittelwert + h]"
+    },
+    {
+      "id": "monte-carlo-position-x",
+      "tex": "x(t)=x_0+v_{x,0}t",
+      "reading": "x(t) = x₀ + vₓ,₀ t"
+    },
+    {
+      "id": "monte-carlo-position-y",
+      "tex": "y(t)=v_{y,0}t-\\frac12gt^2",
+      "reading": "y(t) = v_y,₀ t − ½gt²"
+    },
+    {
+      "id": "monte-carlo-velocity-x",
+      "tex": "v_x(t)=v_{x,0}",
+      "reading": "vₓ(t) = vₓ,₀"
+    },
+    {
+      "id": "monte-carlo-velocity-y",
+      "tex": "v_y(t)=v_{y,0}-gt",
+      "reading": "v_y(t) = v_y,₀ − gt"
+    },
+    {
+      "id": "monte-carlo-energy",
+      "tex": "E(t)=\\frac m2\\left[v_x(t)^2+v_y(t)^2\\right]+mgy(t)",
+      "reading": "E(t) = ½m[vₓ(t)² + v_y(t)²] + mgy(t)"
+    },
+    {
+      "id": "monte-carlo-expectation-x",
+      "tex": "\\operatorname E[x(t)]=x_0+\\mu_xt",
+      "reading": "E[x(t)] = x₀ + μₓ t"
+    },
+    {
+      "id": "monte-carlo-expectation-y",
+      "tex": "\\operatorname E[y(t)]=\\mu_yt-\\frac12gt^2",
+      "reading": "E[y(t)] = μ_y t − ½gt²"
+    },
+    {
+      "id": "monte-carlo-deviation-x",
+      "tex": "\\sigma_x(t)=\\sigma_{v_x}t",
+      "reading": "σₓ(t) = σ(vₓ,₀) t"
+    },
+    {
+      "id": "monte-carlo-deviation-y",
+      "tex": "\\sigma_y(t)=\\sigma_{v_y}t",
+      "reading": "σ_y(t) = σ(v_y,₀) t"
     }
   ]
 }

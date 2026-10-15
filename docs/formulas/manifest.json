@@ -2,7 +2,7 @@
   "format": 1,
   "engine": "4.1.3",
   "sharp": "0.35.5",
-  "sourceSha256": "9de19d6a60b39f7a3e2cfd55e797aee29d807c9f73bebe1dfae9edd0fb2319ef",
+  "sourceSha256": "2e6478000f302b15799d5955889f17646f62706cbe471da7608bd2c3b675123a",
   "rasterEm": 128,
   "formulas": [
     {
@@ -827,7 +827,7 @@
     {
       "id": "projectile-vy",
       "tex": "v_y(t)=5-9{,}80665\\,t",
-      "reading": "vᵧ(t) = 5 − 9,80665 t",
+      "reading": "v_y(t) = 5 − 9,80665 t",
       "variants": [
         {
           "container": 128,
@@ -918,7 +918,7 @@
     {
       "id": "projectile-energy",
       "tex": "E(t)=\\frac{1}{2}\\left(v_x^2+v_y^2\\right)+gy=14{,}5\\,\\mathrm{J}",
-      "reading": "E(t) = ½(vₓ² + vᵧ²) + gy = 14,5 J",
+      "reading": "E(t) = ½(vₓ² + v_y²) + gy = 14,5 J",
       "variants": [
         {
           "container": 128,
@@ -4740,7 +4740,7 @@
     {
       "id": "pendulum-velocity-y",
       "tex": "v_y=L\\sin\\varphi\\,\\omega",
-      "reading": "vᵧ = L sin φ · ω",
+      "reading": "v_y = L sin φ · ω",
       "variants": [
         {
           "container": 128,
@@ -10740,6 +10740,1735 @@
           "crc": 3630921316,
           "sha256": "e6abd5a68bc0fb686cd867e79ca867ca8d40275160f1f337d50307d53805840f",
           "svgSha256": "9ae7e5b049c39534ae3c56081a121fac243b8d9244a4736f1634fbb82fcf4a40"
+        }
+      ]
+    },
+    {
+      "id": "vdw-pressure",
+      "tex": "p=\\frac{nRT}{V-nb}-\\frac{an^2}{V^2}",
+      "reading": "p = nRT/(V − nb) − an²/V²",
+      "variants": [
+        {
+          "container": 128,
+          "width": 85.792,
+          "height": 74.30239999999999,
+          "rasterWidth": 687,
+          "rasterHeight": 595,
+          "asset": "docs/formulas/3d434226e81d2b6b26dba553.math",
+          "bytes": 13896,
+          "crc": 4283090030,
+          "sha256": "024b9cf2080a129a1fb6e4dc96b47db5509ca7bfa69036901a544f13a263947a",
+          "svgSha256": "6f8238c09480e7c1e5df24ecbaadd8d4ae9d36cab433aac9f17a037c69ac4f9b"
+        },
+        {
+          "container": 160,
+          "width": 137.44,
+          "height": 37.4864,
+          "rasterWidth": 1100,
+          "rasterHeight": 300,
+          "asset": "docs/formulas/758c2b2f2feee4476c4a4e77.math",
+          "bytes": 13533,
+          "crc": 3725611881,
+          "sha256": "c2b031be8ad2be9906be484d5fd55e1aa097c38d9b71bc262991d15fe2bef6cc",
+          "svgSha256": "155ee52ddc7ceda8df834915cb95c1f0a561b4321d9a32399e40a4ef19a05901"
+        },
+        {
+          "container": 192,
+          "width": 137.44,
+          "height": 37.4864,
+          "rasterWidth": 1100,
+          "rasterHeight": 300,
+          "asset": "docs/formulas/758c2b2f2feee4476c4a4e77.math",
+          "bytes": 13533,
+          "crc": 3725611881,
+          "sha256": "c2b031be8ad2be9906be484d5fd55e1aa097c38d9b71bc262991d15fe2bef6cc",
+          "svgSha256": "155ee52ddc7ceda8df834915cb95c1f0a561b4321d9a32399e40a4ef19a05901"
+        },
+        {
+          "container": 256,
+          "width": 137.44,
+          "height": 37.4864,
+          "rasterWidth": 1100,
+          "rasterHeight": 300,
+          "asset": "docs/formulas/758c2b2f2feee4476c4a4e77.math",
+          "bytes": 13533,
+          "crc": 3725611881,
+          "sha256": "c2b031be8ad2be9906be484d5fd55e1aa097c38d9b71bc262991d15fe2bef6cc",
+          "svgSha256": "155ee52ddc7ceda8df834915cb95c1f0a561b4321d9a32399e40a4ef19a05901"
+        },
+        {
+          "container": 384,
+          "width": 137.44,
+          "height": 37.4864,
+          "rasterWidth": 1100,
+          "rasterHeight": 300,
+          "asset": "docs/formulas/758c2b2f2feee4476c4a4e77.math",
+          "bytes": 13533,
+          "crc": 3725611881,
+          "sha256": "c2b031be8ad2be9906be484d5fd55e1aa097c38d9b71bc262991d15fe2bef6cc",
+          "svgSha256": "155ee52ddc7ceda8df834915cb95c1f0a561b4321d9a32399e40a4ef19a05901"
+        },
+        {
+          "container": 512,
+          "width": 137.44,
+          "height": 37.4864,
+          "rasterWidth": 1100,
+          "rasterHeight": 300,
+          "asset": "docs/formulas/758c2b2f2feee4476c4a4e77.math",
+          "bytes": 13533,
+          "crc": 3725611881,
+          "sha256": "c2b031be8ad2be9906be484d5fd55e1aa097c38d9b71bc262991d15fe2bef6cc",
+          "svgSha256": "155ee52ddc7ceda8df834915cb95c1f0a561b4321d9a32399e40a4ef19a05901"
+        },
+        {
+          "container": 768,
+          "width": 137.44,
+          "height": 37.4864,
+          "rasterWidth": 1100,
+          "rasterHeight": 300,
+          "asset": "docs/formulas/758c2b2f2feee4476c4a4e77.math",
+          "bytes": 13533,
+          "crc": 3725611881,
+          "sha256": "c2b031be8ad2be9906be484d5fd55e1aa097c38d9b71bc262991d15fe2bef6cc",
+          "svgSha256": "155ee52ddc7ceda8df834915cb95c1f0a561b4321d9a32399e40a4ef19a05901"
+        }
+      ]
+    },
+    {
+      "id": "vdw-pressure-derivative",
+      "tex": "\\left(\\frac{\\partial p}{\\partial V}\\right)_{n,T}=-\\frac{nRT}{(V-nb)^2}+\\frac{2an^2}{V^3}",
+      "reading": "(∂p/∂V) bei n,T konstant = −nRT/(V − nb)² + 2an²/V³",
+      "variants": [
+        {
+          "container": 128,
+          "width": 105.1808,
+          "height": 118.44160000000001,
+          "rasterWidth": 842,
+          "rasterHeight": 948,
+          "asset": "docs/formulas/a30707cd6153295d2270bee1.math",
+          "bytes": 27214,
+          "crc": 1467042349,
+          "sha256": "52758c5fd348e3a58d017d0c36f5b9a6ff87b48065edbf04b820564aa387773e",
+          "svgSha256": "254f3ff1447d148b8cb895f0446de6c2bfb26be839e26c15ba26bc34d5d98139"
+        },
+        {
+          "container": 160,
+          "width": 88.288,
+          "height": 118.44160000000001,
+          "rasterWidth": 707,
+          "rasterHeight": 948,
+          "asset": "docs/formulas/11ffc9cecf40694a4c6b720f.math",
+          "bytes": 26553,
+          "crc": 1718520117,
+          "sha256": "08abc79a0ae335b731b91a01c27bfb6bbc37fb433414bb3a73ff5dd7d8d26458",
+          "svgSha256": "4d59b0e0ca15bc48b5f97d162c70d6ce390214023ec56ab8fcb09df150242516"
+        },
+        {
+          "container": 192,
+          "width": 164.8288,
+          "height": 81.6272,
+          "rasterWidth": 1319,
+          "rasterHeight": 654,
+          "asset": "docs/formulas/2db410c3526538901c5c5549.math",
+          "bytes": 27397,
+          "crc": 3305583302,
+          "sha256": "88b4d307048d66d03f31ae0111d390b0237141c7dd8ee2c74142961c51e22938",
+          "svgSha256": "1e1a641daca431d3033f38c06b4d85477f90b56087eafe96a6059f9ff4409f3f"
+        },
+        {
+          "container": 256,
+          "width": 164.8288,
+          "height": 81.6272,
+          "rasterWidth": 1319,
+          "rasterHeight": 654,
+          "asset": "docs/formulas/2db410c3526538901c5c5549.math",
+          "bytes": 27397,
+          "crc": 3305583302,
+          "sha256": "88b4d307048d66d03f31ae0111d390b0237141c7dd8ee2c74142961c51e22938",
+          "svgSha256": "1e1a641daca431d3033f38c06b4d85477f90b56087eafe96a6059f9ff4409f3f"
+        },
+        {
+          "container": 384,
+          "width": 238.1312,
+          "height": 40.6704,
+          "rasterWidth": 1906,
+          "rasterHeight": 326,
+          "asset": "docs/formulas/307988e9629aff63c0e49ec4.math",
+          "bytes": 26352,
+          "crc": 1342515874,
+          "sha256": "cf5430cf203689c9f4c53e0ef4c7a09d61809d6843868431cfc97828fd995736",
+          "svgSha256": "93872622b518bdc5d29f5e2996240431ea5e4f50489d65cdf6206e8f6e3e8378"
+        },
+        {
+          "container": 512,
+          "width": 238.1312,
+          "height": 40.6704,
+          "rasterWidth": 1906,
+          "rasterHeight": 326,
+          "asset": "docs/formulas/307988e9629aff63c0e49ec4.math",
+          "bytes": 26352,
+          "crc": 1342515874,
+          "sha256": "cf5430cf203689c9f4c53e0ef4c7a09d61809d6843868431cfc97828fd995736",
+          "svgSha256": "93872622b518bdc5d29f5e2996240431ea5e4f50489d65cdf6206e8f6e3e8378"
+        },
+        {
+          "container": 768,
+          "width": 238.1312,
+          "height": 40.6704,
+          "rasterWidth": 1906,
+          "rasterHeight": 326,
+          "asset": "docs/formulas/307988e9629aff63c0e49ec4.math",
+          "bytes": 26352,
+          "crc": 1342515874,
+          "sha256": "cf5430cf203689c9f4c53e0ef4c7a09d61809d6843868431cfc97828fd995736",
+          "svgSha256": "93872622b518bdc5d29f5e2996240431ea5e4f50489d65cdf6206e8f6e3e8378"
+        }
+      ]
+    },
+    {
+      "id": "vdw-energy",
+      "tex": "U=nc_vT-\\frac{an^2}{V}",
+      "reading": "U = n cᵥ T − an²/V",
+      "variants": [
+        {
+          "container": 128,
+          "width": 69.128,
+          "height": 55.7104,
+          "rasterWidth": 554,
+          "rasterHeight": 446,
+          "asset": "docs/formulas/fc060c063502131164fa43f4.math",
+          "bytes": 9261,
+          "crc": 3208085423,
+          "sha256": "1fbf851e303bd1915791632a63d45e93b12bfbbe6ae19036bebe9d6d01ea7200",
+          "svgSha256": "731b4c68bc3cc19a8fbd33cd3163f77d6bb5e8174a01c2f5a8239b8e0ca93dfa"
+        },
+        {
+          "container": 160,
+          "width": 120.776,
+          "height": 36.510400000000004,
+          "rasterWidth": 967,
+          "rasterHeight": 293,
+          "asset": "docs/formulas/acfbf15b39e7676fd55f58b7.math",
+          "bytes": 9466,
+          "crc": 175287337,
+          "sha256": "4b6ecd73775dfbb0c044f1f73dad6cc5ea786def91827832a14988f7d7c7c2e9",
+          "svgSha256": "0b778c770f510664793a62ed7a0724753cb7574242865705eeb50c7116816b8a"
+        },
+        {
+          "container": 192,
+          "width": 120.776,
+          "height": 36.510400000000004,
+          "rasterWidth": 967,
+          "rasterHeight": 293,
+          "asset": "docs/formulas/acfbf15b39e7676fd55f58b7.math",
+          "bytes": 9466,
+          "crc": 175287337,
+          "sha256": "4b6ecd73775dfbb0c044f1f73dad6cc5ea786def91827832a14988f7d7c7c2e9",
+          "svgSha256": "0b778c770f510664793a62ed7a0724753cb7574242865705eeb50c7116816b8a"
+        },
+        {
+          "container": 256,
+          "width": 120.776,
+          "height": 36.510400000000004,
+          "rasterWidth": 967,
+          "rasterHeight": 293,
+          "asset": "docs/formulas/acfbf15b39e7676fd55f58b7.math",
+          "bytes": 9466,
+          "crc": 175287337,
+          "sha256": "4b6ecd73775dfbb0c044f1f73dad6cc5ea786def91827832a14988f7d7c7c2e9",
+          "svgSha256": "0b778c770f510664793a62ed7a0724753cb7574242865705eeb50c7116816b8a"
+        },
+        {
+          "container": 384,
+          "width": 120.776,
+          "height": 36.510400000000004,
+          "rasterWidth": 967,
+          "rasterHeight": 293,
+          "asset": "docs/formulas/acfbf15b39e7676fd55f58b7.math",
+          "bytes": 9466,
+          "crc": 175287337,
+          "sha256": "4b6ecd73775dfbb0c044f1f73dad6cc5ea786def91827832a14988f7d7c7c2e9",
+          "svgSha256": "0b778c770f510664793a62ed7a0724753cb7574242865705eeb50c7116816b8a"
+        },
+        {
+          "container": 512,
+          "width": 120.776,
+          "height": 36.510400000000004,
+          "rasterWidth": 967,
+          "rasterHeight": 293,
+          "asset": "docs/formulas/acfbf15b39e7676fd55f58b7.math",
+          "bytes": 9466,
+          "crc": 175287337,
+          "sha256": "4b6ecd73775dfbb0c044f1f73dad6cc5ea786def91827832a14988f7d7c7c2e9",
+          "svgSha256": "0b778c770f510664793a62ed7a0724753cb7574242865705eeb50c7116816b8a"
+        },
+        {
+          "container": 768,
+          "width": 120.776,
+          "height": 36.510400000000004,
+          "rasterWidth": 967,
+          "rasterHeight": 293,
+          "asset": "docs/formulas/acfbf15b39e7676fd55f58b7.math",
+          "bytes": 9466,
+          "crc": 175287337,
+          "sha256": "4b6ecd73775dfbb0c044f1f73dad6cc5ea786def91827832a14988f7d7c7c2e9",
+          "svgSha256": "0b778c770f510664793a62ed7a0724753cb7574242865705eeb50c7116816b8a"
+        }
+      ]
+    },
+    {
+      "id": "vdw-entropy",
+      "tex": "\\Delta S=n\\left[c_v\\ln\\frac{T_1}{T_0}+R\\ln\\frac{V_1-nb}{V_0-nb}\\right]",
+      "reading": "ΔS = n[cᵥ ln(T₁/T₀) + R ln((V₁ − nb)/(V₀ − nb))]",
+      "variants": [
+        {
+          "container": 128,
+          "width": 115.20960000000001,
+          "height": 94.2416,
+          "rasterWidth": 922,
+          "rasterHeight": 754,
+          "asset": "docs/formulas/2691e8e282e559ef73a1daa5.math",
+          "bytes": 20924,
+          "crc": 346527131,
+          "sha256": "9540a921bc1a09eedf2aa67e3c6779c9a52c54836d094e3fbf18d7aed0b726cb",
+          "svgSha256": "bec38bfaa47056335e30868bf9b51d043cd10954655ce86eb5036d502a7fee90"
+        },
+        {
+          "container": 160,
+          "width": 122.04960000000001,
+          "height": 75.0416,
+          "rasterWidth": 977,
+          "rasterHeight": 601,
+          "asset": "docs/formulas/7eb3fae4ad878fceac45cc1a.math",
+          "bytes": 20611,
+          "crc": 4021195560,
+          "sha256": "9e443d3b3815e0cfcf95ee260ec36311a3c8b97c49b33dfe8fcad37ec507e46f",
+          "svgSha256": "6a62ea3840fcf3c695adcf6014b0449cd249d2c3b28bac278fa2bad9d40ff51a"
+        },
+        {
+          "container": 192,
+          "width": 122.04960000000001,
+          "height": 75.0416,
+          "rasterWidth": 977,
+          "rasterHeight": 601,
+          "asset": "docs/formulas/7eb3fae4ad878fceac45cc1a.math",
+          "bytes": 20611,
+          "crc": 4021195560,
+          "sha256": "9e443d3b3815e0cfcf95ee260ec36311a3c8b97c49b33dfe8fcad37ec507e46f",
+          "svgSha256": "6a62ea3840fcf3c695adcf6014b0449cd249d2c3b28bac278fa2bad9d40ff51a"
+        },
+        {
+          "container": 256,
+          "width": 211.6976,
+          "height": 55.7696,
+          "rasterWidth": 1694,
+          "rasterHeight": 447,
+          "asset": "docs/formulas/4239d24e14042e3a7e9fb2eb.math",
+          "bytes": 21687,
+          "crc": 3160157027,
+          "sha256": "4ac4db88747cb4097db0285f5c181e9020d55b5318059ef89a7201079c88c884",
+          "svgSha256": "9abec384f0424ca60e2989cd58917d284d7c472efc5bd5739ca344f3aa379f4b"
+        },
+        {
+          "container": 384,
+          "width": 239.78879999999998,
+          "height": 36.5696,
+          "rasterWidth": 1919,
+          "rasterHeight": 293,
+          "asset": "docs/formulas/04d105d622ab3da08e0ec2ff.math",
+          "bytes": 21224,
+          "crc": 3056890461,
+          "sha256": "b768bab36c881b5fda3cb6a14af584473ae5cd1f56185f106b34b83754e5c0e2",
+          "svgSha256": "41268a6b8df47fed633eba3adbcfce3331cb75c0c2bdecde50f0397e3916fc06"
+        },
+        {
+          "container": 512,
+          "width": 239.78879999999998,
+          "height": 36.5696,
+          "rasterWidth": 1919,
+          "rasterHeight": 293,
+          "asset": "docs/formulas/04d105d622ab3da08e0ec2ff.math",
+          "bytes": 21224,
+          "crc": 3056890461,
+          "sha256": "b768bab36c881b5fda3cb6a14af584473ae5cd1f56185f106b34b83754e5c0e2",
+          "svgSha256": "41268a6b8df47fed633eba3adbcfce3331cb75c0c2bdecde50f0397e3916fc06"
+        },
+        {
+          "container": 768,
+          "width": 239.78879999999998,
+          "height": 36.5696,
+          "rasterWidth": 1919,
+          "rasterHeight": 293,
+          "asset": "docs/formulas/04d105d622ab3da08e0ec2ff.math",
+          "bytes": 21224,
+          "crc": 3056890461,
+          "sha256": "b768bab36c881b5fda3cb6a14af584473ae5cd1f56185f106b34b83754e5c0e2",
+          "svgSha256": "41268a6b8df47fed633eba3adbcfce3331cb75c0c2bdecde50f0397e3916fc06"
+        }
+      ]
+    },
+    {
+      "id": "sensor-reading",
+      "tex": "y=Q_\\delta\\!\\left(x+b+d(t-t_0)+\\eta\\right)",
+      "reading": "y = Qδ(x + b + d(t − t₀) + η)",
+      "variants": [
+        {
+          "container": 128,
+          "width": 109.6272,
+          "height": 36.224,
+          "rasterWidth": 878,
+          "rasterHeight": 290,
+          "asset": "docs/formulas/f4099ad792860fa72242f484.math",
+          "bytes": 14503,
+          "crc": 779462597,
+          "sha256": "9a7eac754b8c911db81a8e5402f0b666dac92a2cb1b5284cb6c82dfe420debc4",
+          "svgSha256": "fdd19ee526fcbfbc1941d826b78ed4476102871f2e9ac45b0a4ae0e0dc475a8e"
+        },
+        {
+          "container": 160,
+          "width": 109.6272,
+          "height": 36.224,
+          "rasterWidth": 878,
+          "rasterHeight": 290,
+          "asset": "docs/formulas/f4099ad792860fa72242f484.math",
+          "bytes": 14503,
+          "crc": 779462597,
+          "sha256": "9a7eac754b8c911db81a8e5402f0b666dac92a2cb1b5284cb6c82dfe420debc4",
+          "svgSha256": "fdd19ee526fcbfbc1941d826b78ed4476102871f2e9ac45b0a4ae0e0dc475a8e"
+        },
+        {
+          "container": 192,
+          "width": 109.6272,
+          "height": 36.224,
+          "rasterWidth": 878,
+          "rasterHeight": 290,
+          "asset": "docs/formulas/f4099ad792860fa72242f484.math",
+          "bytes": 14503,
+          "crc": 779462597,
+          "sha256": "9a7eac754b8c911db81a8e5402f0b666dac92a2cb1b5284cb6c82dfe420debc4",
+          "svgSha256": "fdd19ee526fcbfbc1941d826b78ed4476102871f2e9ac45b0a4ae0e0dc475a8e"
+        },
+        {
+          "container": 256,
+          "width": 203.2512,
+          "height": 16.96,
+          "rasterWidth": 1627,
+          "rasterHeight": 136,
+          "asset": "docs/formulas/59666d1ecac78523a3a88e81.math",
+          "bytes": 14477,
+          "crc": 3847964572,
+          "sha256": "c3437c4fc607fd73caa0a39cc7ff609661507798404d0f000ec342e2e67f6966",
+          "svgSha256": "adf2e0d6fe0ff748c58db6c575293462efc5145c19aef2649d6bee6948bdfe01"
+        },
+        {
+          "container": 384,
+          "width": 203.2512,
+          "height": 16.96,
+          "rasterWidth": 1627,
+          "rasterHeight": 136,
+          "asset": "docs/formulas/59666d1ecac78523a3a88e81.math",
+          "bytes": 14477,
+          "crc": 3847964572,
+          "sha256": "c3437c4fc607fd73caa0a39cc7ff609661507798404d0f000ec342e2e67f6966",
+          "svgSha256": "adf2e0d6fe0ff748c58db6c575293462efc5145c19aef2649d6bee6948bdfe01"
+        },
+        {
+          "container": 512,
+          "width": 203.2512,
+          "height": 16.96,
+          "rasterWidth": 1627,
+          "rasterHeight": 136,
+          "asset": "docs/formulas/59666d1ecac78523a3a88e81.math",
+          "bytes": 14477,
+          "crc": 3847964572,
+          "sha256": "c3437c4fc607fd73caa0a39cc7ff609661507798404d0f000ec342e2e67f6966",
+          "svgSha256": "adf2e0d6fe0ff748c58db6c575293462efc5145c19aef2649d6bee6948bdfe01"
+        },
+        {
+          "container": 768,
+          "width": 203.2512,
+          "height": 16.96,
+          "rasterWidth": 1627,
+          "rasterHeight": 136,
+          "asset": "docs/formulas/59666d1ecac78523a3a88e81.math",
+          "bytes": 14477,
+          "crc": 3847964572,
+          "sha256": "c3437c4fc607fd73caa0a39cc7ff609661507798404d0f000ec342e2e67f6966",
+          "svgSha256": "adf2e0d6fe0ff748c58db6c575293462efc5145c19aef2649d6bee6948bdfe01"
+        }
+      ]
+    },
+    {
+      "id": "sensor-relative-uncertainty",
+      "tex": "u_r=|x|u_{\\mathrm{rel}}",
+      "reading": "uᵣ = |x| u_rel",
+      "variants": [
+        {
+          "container": 128,
+          "width": 79.0752,
+          "height": 17.024,
+          "rasterWidth": 633,
+          "rasterHeight": 137,
+          "asset": "docs/formulas/e4ce10267faa3f8618af75c3.math",
+          "bytes": 5080,
+          "crc": 19741330,
+          "sha256": "8efb6281b008a27e5c0026f38e514c02582c16ceb1f4150a0b5335024e34fd2f",
+          "svgSha256": "bd71bb6235088340b951607006f8844090fe98e39094485fd1306bb487517863"
+        },
+        {
+          "container": 160,
+          "width": 79.0752,
+          "height": 17.024,
+          "rasterWidth": 633,
+          "rasterHeight": 137,
+          "asset": "docs/formulas/e4ce10267faa3f8618af75c3.math",
+          "bytes": 5080,
+          "crc": 19741330,
+          "sha256": "8efb6281b008a27e5c0026f38e514c02582c16ceb1f4150a0b5335024e34fd2f",
+          "svgSha256": "bd71bb6235088340b951607006f8844090fe98e39094485fd1306bb487517863"
+        },
+        {
+          "container": 192,
+          "width": 79.0752,
+          "height": 17.024,
+          "rasterWidth": 633,
+          "rasterHeight": 137,
+          "asset": "docs/formulas/e4ce10267faa3f8618af75c3.math",
+          "bytes": 5080,
+          "crc": 19741330,
+          "sha256": "8efb6281b008a27e5c0026f38e514c02582c16ceb1f4150a0b5335024e34fd2f",
+          "svgSha256": "bd71bb6235088340b951607006f8844090fe98e39094485fd1306bb487517863"
+        },
+        {
+          "container": 256,
+          "width": 79.0752,
+          "height": 17.024,
+          "rasterWidth": 633,
+          "rasterHeight": 137,
+          "asset": "docs/formulas/e4ce10267faa3f8618af75c3.math",
+          "bytes": 5080,
+          "crc": 19741330,
+          "sha256": "8efb6281b008a27e5c0026f38e514c02582c16ceb1f4150a0b5335024e34fd2f",
+          "svgSha256": "bd71bb6235088340b951607006f8844090fe98e39094485fd1306bb487517863"
+        },
+        {
+          "container": 384,
+          "width": 79.0752,
+          "height": 17.024,
+          "rasterWidth": 633,
+          "rasterHeight": 137,
+          "asset": "docs/formulas/e4ce10267faa3f8618af75c3.math",
+          "bytes": 5080,
+          "crc": 19741330,
+          "sha256": "8efb6281b008a27e5c0026f38e514c02582c16ceb1f4150a0b5335024e34fd2f",
+          "svgSha256": "bd71bb6235088340b951607006f8844090fe98e39094485fd1306bb487517863"
+        },
+        {
+          "container": 512,
+          "width": 79.0752,
+          "height": 17.024,
+          "rasterWidth": 633,
+          "rasterHeight": 137,
+          "asset": "docs/formulas/e4ce10267faa3f8618af75c3.math",
+          "bytes": 5080,
+          "crc": 19741330,
+          "sha256": "8efb6281b008a27e5c0026f38e514c02582c16ceb1f4150a0b5335024e34fd2f",
+          "svgSha256": "bd71bb6235088340b951607006f8844090fe98e39094485fd1306bb487517863"
+        },
+        {
+          "container": 768,
+          "width": 79.0752,
+          "height": 17.024,
+          "rasterWidth": 633,
+          "rasterHeight": 137,
+          "asset": "docs/formulas/e4ce10267faa3f8618af75c3.math",
+          "bytes": 5080,
+          "crc": 19741330,
+          "sha256": "8efb6281b008a27e5c0026f38e514c02582c16ceb1f4150a0b5335024e34fd2f",
+          "svgSha256": "bd71bb6235088340b951607006f8844090fe98e39094485fd1306bb487517863"
+        }
+      ]
+    },
+    {
+      "id": "sensor-quantization-uncertainty",
+      "tex": "u_q=\\frac{\\delta}{\\sqrt{12}}",
+      "reading": "u_q = δ/√12",
+      "variants": [
+        {
+          "container": 128,
+          "width": 74.6432,
+          "height": 39.552,
+          "rasterWidth": 598,
+          "rasterHeight": 317,
+          "asset": "docs/formulas/6098cf31742614f7e23fc7a8.math",
+          "bytes": 6143,
+          "crc": 1149439400,
+          "sha256": "7e8435d3f708f9237ff4290322cfaada1e953820fda7b42fc1c170ad0588dd18",
+          "svgSha256": "464404f0770194b34078f551477d17ef42e37d0985bd094df74f05ffe56116a3"
+        },
+        {
+          "container": 160,
+          "width": 74.6432,
+          "height": 39.552,
+          "rasterWidth": 598,
+          "rasterHeight": 317,
+          "asset": "docs/formulas/6098cf31742614f7e23fc7a8.math",
+          "bytes": 6143,
+          "crc": 1149439400,
+          "sha256": "7e8435d3f708f9237ff4290322cfaada1e953820fda7b42fc1c170ad0588dd18",
+          "svgSha256": "464404f0770194b34078f551477d17ef42e37d0985bd094df74f05ffe56116a3"
+        },
+        {
+          "container": 192,
+          "width": 74.6432,
+          "height": 39.552,
+          "rasterWidth": 598,
+          "rasterHeight": 317,
+          "asset": "docs/formulas/6098cf31742614f7e23fc7a8.math",
+          "bytes": 6143,
+          "crc": 1149439400,
+          "sha256": "7e8435d3f708f9237ff4290322cfaada1e953820fda7b42fc1c170ad0588dd18",
+          "svgSha256": "464404f0770194b34078f551477d17ef42e37d0985bd094df74f05ffe56116a3"
+        },
+        {
+          "container": 256,
+          "width": 74.6432,
+          "height": 39.552,
+          "rasterWidth": 598,
+          "rasterHeight": 317,
+          "asset": "docs/formulas/6098cf31742614f7e23fc7a8.math",
+          "bytes": 6143,
+          "crc": 1149439400,
+          "sha256": "7e8435d3f708f9237ff4290322cfaada1e953820fda7b42fc1c170ad0588dd18",
+          "svgSha256": "464404f0770194b34078f551477d17ef42e37d0985bd094df74f05ffe56116a3"
+        },
+        {
+          "container": 384,
+          "width": 74.6432,
+          "height": 39.552,
+          "rasterWidth": 598,
+          "rasterHeight": 317,
+          "asset": "docs/formulas/6098cf31742614f7e23fc7a8.math",
+          "bytes": 6143,
+          "crc": 1149439400,
+          "sha256": "7e8435d3f708f9237ff4290322cfaada1e953820fda7b42fc1c170ad0588dd18",
+          "svgSha256": "464404f0770194b34078f551477d17ef42e37d0985bd094df74f05ffe56116a3"
+        },
+        {
+          "container": 512,
+          "width": 74.6432,
+          "height": 39.552,
+          "rasterWidth": 598,
+          "rasterHeight": 317,
+          "asset": "docs/formulas/6098cf31742614f7e23fc7a8.math",
+          "bytes": 6143,
+          "crc": 1149439400,
+          "sha256": "7e8435d3f708f9237ff4290322cfaada1e953820fda7b42fc1c170ad0588dd18",
+          "svgSha256": "464404f0770194b34078f551477d17ef42e37d0985bd094df74f05ffe56116a3"
+        },
+        {
+          "container": 768,
+          "width": 74.6432,
+          "height": 39.552,
+          "rasterWidth": 598,
+          "rasterHeight": 317,
+          "asset": "docs/formulas/6098cf31742614f7e23fc7a8.math",
+          "bytes": 6143,
+          "crc": 1149439400,
+          "sha256": "7e8435d3f708f9237ff4290322cfaada1e953820fda7b42fc1c170ad0588dd18",
+          "svgSha256": "464404f0770194b34078f551477d17ef42e37d0985bd094df74f05ffe56116a3"
+        }
+      ]
+    },
+    {
+      "id": "sensor-combined-uncertainty",
+      "tex": "\\begin{aligned}u^2&=u_{\\mathrm{abs}}^2+u_r^2\\\\&\\quad+\\sigma_\\eta^2+u_q^2\\end{aligned}",
+      "reading": "u² = u_abs² + uᵣ² + σ(η)² + u_q²; u ≥ 0",
+      "variants": [
+        {
+          "container": 128,
+          "width": 101.07839999999999,
+          "height": 44.7536,
+          "rasterWidth": 809,
+          "rasterHeight": 359,
+          "asset": "docs/formulas/da1592ceda2f8949b949327f.math",
+          "bytes": 13043,
+          "crc": 2337222318,
+          "sha256": "ceabde5cca97ea3fce2ea16e76f5c383e79d6a5b64252af17d319dfb76ee970f",
+          "svgSha256": "1951d8e09bb6a0f849444d78cd87a7210e884184f103253ac26ec6fe5a884f81"
+        },
+        {
+          "container": 160,
+          "width": 101.07839999999999,
+          "height": 44.7536,
+          "rasterWidth": 809,
+          "rasterHeight": 359,
+          "asset": "docs/formulas/da1592ceda2f8949b949327f.math",
+          "bytes": 13043,
+          "crc": 2337222318,
+          "sha256": "ceabde5cca97ea3fce2ea16e76f5c383e79d6a5b64252af17d319dfb76ee970f",
+          "svgSha256": "1951d8e09bb6a0f849444d78cd87a7210e884184f103253ac26ec6fe5a884f81"
+        },
+        {
+          "container": 192,
+          "width": 101.07839999999999,
+          "height": 44.7536,
+          "rasterWidth": 809,
+          "rasterHeight": 359,
+          "asset": "docs/formulas/da1592ceda2f8949b949327f.math",
+          "bytes": 13043,
+          "crc": 2337222318,
+          "sha256": "ceabde5cca97ea3fce2ea16e76f5c383e79d6a5b64252af17d319dfb76ee970f",
+          "svgSha256": "1951d8e09bb6a0f849444d78cd87a7210e884184f103253ac26ec6fe5a884f81"
+        },
+        {
+          "container": 256,
+          "width": 101.07839999999999,
+          "height": 44.7536,
+          "rasterWidth": 809,
+          "rasterHeight": 359,
+          "asset": "docs/formulas/da1592ceda2f8949b949327f.math",
+          "bytes": 13043,
+          "crc": 2337222318,
+          "sha256": "ceabde5cca97ea3fce2ea16e76f5c383e79d6a5b64252af17d319dfb76ee970f",
+          "svgSha256": "1951d8e09bb6a0f849444d78cd87a7210e884184f103253ac26ec6fe5a884f81"
+        },
+        {
+          "container": 384,
+          "width": 101.07839999999999,
+          "height": 44.7536,
+          "rasterWidth": 809,
+          "rasterHeight": 359,
+          "asset": "docs/formulas/da1592ceda2f8949b949327f.math",
+          "bytes": 13043,
+          "crc": 2337222318,
+          "sha256": "ceabde5cca97ea3fce2ea16e76f5c383e79d6a5b64252af17d319dfb76ee970f",
+          "svgSha256": "1951d8e09bb6a0f849444d78cd87a7210e884184f103253ac26ec6fe5a884f81"
+        },
+        {
+          "container": 512,
+          "width": 101.07839999999999,
+          "height": 44.7536,
+          "rasterWidth": 809,
+          "rasterHeight": 359,
+          "asset": "docs/formulas/da1592ceda2f8949b949327f.math",
+          "bytes": 13043,
+          "crc": 2337222318,
+          "sha256": "ceabde5cca97ea3fce2ea16e76f5c383e79d6a5b64252af17d319dfb76ee970f",
+          "svgSha256": "1951d8e09bb6a0f849444d78cd87a7210e884184f103253ac26ec6fe5a884f81"
+        },
+        {
+          "container": 768,
+          "width": 101.07839999999999,
+          "height": 44.7536,
+          "rasterWidth": 809,
+          "rasterHeight": 359,
+          "asset": "docs/formulas/da1592ceda2f8949b949327f.math",
+          "bytes": 13043,
+          "crc": 2337222318,
+          "sha256": "ceabde5cca97ea3fce2ea16e76f5c383e79d6a5b64252af17d319dfb76ee970f",
+          "svgSha256": "1951d8e09bb6a0f849444d78cd87a7210e884184f103253ac26ec6fe5a884f81"
+        }
+      ]
+    },
+    {
+      "id": "student-mean-halfwidth",
+      "tex": "h=t_{n-1,\\,(1+C)/2}\\,\\frac{s}{\\sqrt n}",
+      "reading": "h = t(n − 1, (1 + C)/2) s/√n",
+      "variants": [
+        {
+          "container": 128,
+          "width": 108.91839999999999,
+          "height": 56.088,
+          "rasterWidth": 872,
+          "rasterHeight": 449,
+          "asset": "docs/formulas/b8cdf9517caede958d25bf99.math",
+          "bytes": 10885,
+          "crc": 1505842342,
+          "sha256": "f78542fd37bfefc3b691b3ce97cf6daf878609b9d30fe6091bdcf9d4297b4378",
+          "svgSha256": "cfff8c1a5c8dd91807f5f615f2a016433ef79180f5ee7b704a89a368aafa23fb"
+        },
+        {
+          "container": 160,
+          "width": 141.8784,
+          "height": 35.232,
+          "rasterWidth": 1136,
+          "rasterHeight": 282,
+          "asset": "docs/formulas/e7dda289d425c6abfd0fcdd7.math",
+          "bytes": 10799,
+          "crc": 90022510,
+          "sha256": "88b7cf0202e8fcc355a4bfd26dbf31335587cce9f0156bc6c063cf3e07ae66e2",
+          "svgSha256": "f51f6820234c2aef876ad202ea0d9f1409b1ff75213fccbf4f0ed7b84c109074"
+        },
+        {
+          "container": 192,
+          "width": 141.8784,
+          "height": 35.232,
+          "rasterWidth": 1136,
+          "rasterHeight": 282,
+          "asset": "docs/formulas/e7dda289d425c6abfd0fcdd7.math",
+          "bytes": 10799,
+          "crc": 90022510,
+          "sha256": "88b7cf0202e8fcc355a4bfd26dbf31335587cce9f0156bc6c063cf3e07ae66e2",
+          "svgSha256": "f51f6820234c2aef876ad202ea0d9f1409b1ff75213fccbf4f0ed7b84c109074"
+        },
+        {
+          "container": 256,
+          "width": 141.8784,
+          "height": 35.232,
+          "rasterWidth": 1136,
+          "rasterHeight": 282,
+          "asset": "docs/formulas/e7dda289d425c6abfd0fcdd7.math",
+          "bytes": 10799,
+          "crc": 90022510,
+          "sha256": "88b7cf0202e8fcc355a4bfd26dbf31335587cce9f0156bc6c063cf3e07ae66e2",
+          "svgSha256": "f51f6820234c2aef876ad202ea0d9f1409b1ff75213fccbf4f0ed7b84c109074"
+        },
+        {
+          "container": 384,
+          "width": 141.8784,
+          "height": 35.232,
+          "rasterWidth": 1136,
+          "rasterHeight": 282,
+          "asset": "docs/formulas/e7dda289d425c6abfd0fcdd7.math",
+          "bytes": 10799,
+          "crc": 90022510,
+          "sha256": "88b7cf0202e8fcc355a4bfd26dbf31335587cce9f0156bc6c063cf3e07ae66e2",
+          "svgSha256": "f51f6820234c2aef876ad202ea0d9f1409b1ff75213fccbf4f0ed7b84c109074"
+        },
+        {
+          "container": 512,
+          "width": 141.8784,
+          "height": 35.232,
+          "rasterWidth": 1136,
+          "rasterHeight": 282,
+          "asset": "docs/formulas/e7dda289d425c6abfd0fcdd7.math",
+          "bytes": 10799,
+          "crc": 90022510,
+          "sha256": "88b7cf0202e8fcc355a4bfd26dbf31335587cce9f0156bc6c063cf3e07ae66e2",
+          "svgSha256": "f51f6820234c2aef876ad202ea0d9f1409b1ff75213fccbf4f0ed7b84c109074"
+        },
+        {
+          "container": 768,
+          "width": 141.8784,
+          "height": 35.232,
+          "rasterWidth": 1136,
+          "rasterHeight": 282,
+          "asset": "docs/formulas/e7dda289d425c6abfd0fcdd7.math",
+          "bytes": 10799,
+          "crc": 90022510,
+          "sha256": "88b7cf0202e8fcc355a4bfd26dbf31335587cce9f0156bc6c063cf3e07ae66e2",
+          "svgSha256": "f51f6820234c2aef876ad202ea0d9f1409b1ff75213fccbf4f0ed7b84c109074"
+        }
+      ]
+    },
+    {
+      "id": "student-mean-interval",
+      "tex": "I_C=[\\bar x-h,\\,\\bar x+h]",
+      "reading": "I_C = [Mittelwert − h, Mittelwert + h]",
+      "variants": [
+        {
+          "container": 128,
+          "width": 112.4528,
+          "height": 36.224,
+          "rasterWidth": 900,
+          "rasterHeight": 290,
+          "asset": "docs/formulas/9fce7d4620cb5fddaadcf331.math",
+          "bytes": 7600,
+          "crc": 2832581576,
+          "sha256": "f2ee36e12db975c03cdd2477b83a357f7c0e5850e10330bba747fa77da6f7b3c",
+          "svgSha256": "2620d50897c53eb7db952cfcc14379389013b97f67484b36218503abe3a133f0"
+        },
+        {
+          "container": 160,
+          "width": 133.864,
+          "height": 17.024,
+          "rasterWidth": 1071,
+          "rasterHeight": 137,
+          "asset": "docs/formulas/bcbc56d0e91c2c3cfb4b656c.math",
+          "bytes": 7361,
+          "crc": 2362201723,
+          "sha256": "97f4ca10994dce8f8467ae97790bf5983e8c651e6d5a7eb77db0c37b22928bfa",
+          "svgSha256": "18b8dec89b71313f3ee822be473d45b88e9ab0e348cb4e3cd50bc844c882dc00"
+        },
+        {
+          "container": 192,
+          "width": 133.864,
+          "height": 17.024,
+          "rasterWidth": 1071,
+          "rasterHeight": 137,
+          "asset": "docs/formulas/bcbc56d0e91c2c3cfb4b656c.math",
+          "bytes": 7361,
+          "crc": 2362201723,
+          "sha256": "97f4ca10994dce8f8467ae97790bf5983e8c651e6d5a7eb77db0c37b22928bfa",
+          "svgSha256": "18b8dec89b71313f3ee822be473d45b88e9ab0e348cb4e3cd50bc844c882dc00"
+        },
+        {
+          "container": 256,
+          "width": 133.864,
+          "height": 17.024,
+          "rasterWidth": 1071,
+          "rasterHeight": 137,
+          "asset": "docs/formulas/bcbc56d0e91c2c3cfb4b656c.math",
+          "bytes": 7361,
+          "crc": 2362201723,
+          "sha256": "97f4ca10994dce8f8467ae97790bf5983e8c651e6d5a7eb77db0c37b22928bfa",
+          "svgSha256": "18b8dec89b71313f3ee822be473d45b88e9ab0e348cb4e3cd50bc844c882dc00"
+        },
+        {
+          "container": 384,
+          "width": 133.864,
+          "height": 17.024,
+          "rasterWidth": 1071,
+          "rasterHeight": 137,
+          "asset": "docs/formulas/bcbc56d0e91c2c3cfb4b656c.math",
+          "bytes": 7361,
+          "crc": 2362201723,
+          "sha256": "97f4ca10994dce8f8467ae97790bf5983e8c651e6d5a7eb77db0c37b22928bfa",
+          "svgSha256": "18b8dec89b71313f3ee822be473d45b88e9ab0e348cb4e3cd50bc844c882dc00"
+        },
+        {
+          "container": 512,
+          "width": 133.864,
+          "height": 17.024,
+          "rasterWidth": 1071,
+          "rasterHeight": 137,
+          "asset": "docs/formulas/bcbc56d0e91c2c3cfb4b656c.math",
+          "bytes": 7361,
+          "crc": 2362201723,
+          "sha256": "97f4ca10994dce8f8467ae97790bf5983e8c651e6d5a7eb77db0c37b22928bfa",
+          "svgSha256": "18b8dec89b71313f3ee822be473d45b88e9ab0e348cb4e3cd50bc844c882dc00"
+        },
+        {
+          "container": 768,
+          "width": 133.864,
+          "height": 17.024,
+          "rasterWidth": 1071,
+          "rasterHeight": 137,
+          "asset": "docs/formulas/bcbc56d0e91c2c3cfb4b656c.math",
+          "bytes": 7361,
+          "crc": 2362201723,
+          "sha256": "97f4ca10994dce8f8467ae97790bf5983e8c651e6d5a7eb77db0c37b22928bfa",
+          "svgSha256": "18b8dec89b71313f3ee822be473d45b88e9ab0e348cb4e3cd50bc844c882dc00"
+        }
+      ]
+    },
+    {
+      "id": "monte-carlo-position-x",
+      "tex": "x(t)=x_0+v_{x,0}t",
+      "reading": "x(t) = x₀ + vₓ,₀ t",
+      "variants": [
+        {
+          "container": 128,
+          "width": 65.87360000000001,
+          "height": 36.808,
+          "rasterWidth": 527,
+          "rasterHeight": 295,
+          "asset": "docs/formulas/5e7bb3d9b58e884db13cd2b2.math",
+          "bytes": 8989,
+          "crc": 1772983760,
+          "sha256": "f09116c92e3c9b1c91e1d48653476527f817168287af58f705ad1ddffb661d24",
+          "svgSha256": "59884687a495bb23b6d167fc298ac18af61382d24f83b61b5b723c360666475e"
+        },
+        {
+          "container": 160,
+          "width": 115.56960000000001,
+          "height": 17.576,
+          "rasterWidth": 925,
+          "rasterHeight": 141,
+          "asset": "docs/formulas/b6476148d23c18dd624faf8d.math",
+          "bytes": 8679,
+          "crc": 4102958531,
+          "sha256": "28c16b7e276fb2dc3e226afcb2aff83b4a2257d577396aa9b8eab362a762fa69",
+          "svgSha256": "d51f5b762deb0ccd5bc378255b422a0ae70e6586d691f95fe0f577636146b036"
+        },
+        {
+          "container": 192,
+          "width": 115.56960000000001,
+          "height": 17.576,
+          "rasterWidth": 925,
+          "rasterHeight": 141,
+          "asset": "docs/formulas/b6476148d23c18dd624faf8d.math",
+          "bytes": 8679,
+          "crc": 4102958531,
+          "sha256": "28c16b7e276fb2dc3e226afcb2aff83b4a2257d577396aa9b8eab362a762fa69",
+          "svgSha256": "d51f5b762deb0ccd5bc378255b422a0ae70e6586d691f95fe0f577636146b036"
+        },
+        {
+          "container": 256,
+          "width": 115.56960000000001,
+          "height": 17.576,
+          "rasterWidth": 925,
+          "rasterHeight": 141,
+          "asset": "docs/formulas/b6476148d23c18dd624faf8d.math",
+          "bytes": 8679,
+          "crc": 4102958531,
+          "sha256": "28c16b7e276fb2dc3e226afcb2aff83b4a2257d577396aa9b8eab362a762fa69",
+          "svgSha256": "d51f5b762deb0ccd5bc378255b422a0ae70e6586d691f95fe0f577636146b036"
+        },
+        {
+          "container": 384,
+          "width": 115.56960000000001,
+          "height": 17.576,
+          "rasterWidth": 925,
+          "rasterHeight": 141,
+          "asset": "docs/formulas/b6476148d23c18dd624faf8d.math",
+          "bytes": 8679,
+          "crc": 4102958531,
+          "sha256": "28c16b7e276fb2dc3e226afcb2aff83b4a2257d577396aa9b8eab362a762fa69",
+          "svgSha256": "d51f5b762deb0ccd5bc378255b422a0ae70e6586d691f95fe0f577636146b036"
+        },
+        {
+          "container": 512,
+          "width": 115.56960000000001,
+          "height": 17.576,
+          "rasterWidth": 925,
+          "rasterHeight": 141,
+          "asset": "docs/formulas/b6476148d23c18dd624faf8d.math",
+          "bytes": 8679,
+          "crc": 4102958531,
+          "sha256": "28c16b7e276fb2dc3e226afcb2aff83b4a2257d577396aa9b8eab362a762fa69",
+          "svgSha256": "d51f5b762deb0ccd5bc378255b422a0ae70e6586d691f95fe0f577636146b036"
+        },
+        {
+          "container": 768,
+          "width": 115.56960000000001,
+          "height": 17.576,
+          "rasterWidth": 925,
+          "rasterHeight": 141,
+          "asset": "docs/formulas/b6476148d23c18dd624faf8d.math",
+          "bytes": 8679,
+          "crc": 4102958531,
+          "sha256": "28c16b7e276fb2dc3e226afcb2aff83b4a2257d577396aa9b8eab362a762fa69",
+          "svgSha256": "d51f5b762deb0ccd5bc378255b422a0ae70e6586d691f95fe0f577636146b036"
+        }
+      ]
+    },
+    {
+      "id": "monte-carlo-position-y",
+      "tex": "y(t)=v_{y,0}t-\\frac12gt^2",
+      "reading": "y(t) = v_y,₀ t − ½gt²",
+      "variants": [
+        {
+          "container": 128,
+          "width": 77.6352,
+          "height": 53.392,
+          "rasterWidth": 622,
+          "rasterHeight": 428,
+          "asset": "docs/formulas/2c25e89f3ef9ace86dd1b7f9.math",
+          "bytes": 11337,
+          "crc": 3139730482,
+          "sha256": "a763a666faae31cc21c2938c49982a2f0b14c498b7bbf6af32bde70fa4dcc0c3",
+          "svgSha256": "e31018adb231b0ce6dcd09bed96ee7b70496f048d73258f81ce509a5bc8c6be7"
+        },
+        {
+          "container": 160,
+          "width": 132.62720000000002,
+          "height": 33.472,
+          "rasterWidth": 1062,
+          "rasterHeight": 268,
+          "asset": "docs/formulas/bad63029506cc4fd024f0101.math",
+          "bytes": 11283,
+          "crc": 3924750751,
+          "sha256": "86d53f88ac9a6dde6450d4c972f824c5933122b997ba4f75fabd375ec983e997",
+          "svgSha256": "99ca3e2a471fd55d89d6bb9a35cfe64a42747363beea86de9e6aefd0c9d08729"
+        },
+        {
+          "container": 192,
+          "width": 132.62720000000002,
+          "height": 33.472,
+          "rasterWidth": 1062,
+          "rasterHeight": 268,
+          "asset": "docs/formulas/bad63029506cc4fd024f0101.math",
+          "bytes": 11283,
+          "crc": 3924750751,
+          "sha256": "86d53f88ac9a6dde6450d4c972f824c5933122b997ba4f75fabd375ec983e997",
+          "svgSha256": "99ca3e2a471fd55d89d6bb9a35cfe64a42747363beea86de9e6aefd0c9d08729"
+        },
+        {
+          "container": 256,
+          "width": 132.62720000000002,
+          "height": 33.472,
+          "rasterWidth": 1062,
+          "rasterHeight": 268,
+          "asset": "docs/formulas/bad63029506cc4fd024f0101.math",
+          "bytes": 11283,
+          "crc": 3924750751,
+          "sha256": "86d53f88ac9a6dde6450d4c972f824c5933122b997ba4f75fabd375ec983e997",
+          "svgSha256": "99ca3e2a471fd55d89d6bb9a35cfe64a42747363beea86de9e6aefd0c9d08729"
+        },
+        {
+          "container": 384,
+          "width": 132.62720000000002,
+          "height": 33.472,
+          "rasterWidth": 1062,
+          "rasterHeight": 268,
+          "asset": "docs/formulas/bad63029506cc4fd024f0101.math",
+          "bytes": 11283,
+          "crc": 3924750751,
+          "sha256": "86d53f88ac9a6dde6450d4c972f824c5933122b997ba4f75fabd375ec983e997",
+          "svgSha256": "99ca3e2a471fd55d89d6bb9a35cfe64a42747363beea86de9e6aefd0c9d08729"
+        },
+        {
+          "container": 512,
+          "width": 132.62720000000002,
+          "height": 33.472,
+          "rasterWidth": 1062,
+          "rasterHeight": 268,
+          "asset": "docs/formulas/bad63029506cc4fd024f0101.math",
+          "bytes": 11283,
+          "crc": 3924750751,
+          "sha256": "86d53f88ac9a6dde6450d4c972f824c5933122b997ba4f75fabd375ec983e997",
+          "svgSha256": "99ca3e2a471fd55d89d6bb9a35cfe64a42747363beea86de9e6aefd0c9d08729"
+        },
+        {
+          "container": 768,
+          "width": 132.62720000000002,
+          "height": 33.472,
+          "rasterWidth": 1062,
+          "rasterHeight": 268,
+          "asset": "docs/formulas/bad63029506cc4fd024f0101.math",
+          "bytes": 11283,
+          "crc": 3924750751,
+          "sha256": "86d53f88ac9a6dde6450d4c972f824c5933122b997ba4f75fabd375ec983e997",
+          "svgSha256": "99ca3e2a471fd55d89d6bb9a35cfe64a42747363beea86de9e6aefd0c9d08729"
+        }
+      ]
+    },
+    {
+      "id": "monte-carlo-velocity-x",
+      "tex": "v_x(t)=v_{x,0}",
+      "reading": "vₓ(t) = vₓ,₀",
+      "variants": [
+        {
+          "container": 128,
+          "width": 80.5056,
+          "height": 17.576,
+          "rasterWidth": 645,
+          "rasterHeight": 141,
+          "asset": "docs/formulas/d23739d2a8b36c6484d646fa.math",
+          "bytes": 6585,
+          "crc": 1447030776,
+          "sha256": "1ecc908797bb2685454fc9fe67491675d34e2c2433fed4e9e5223f48f38f6591",
+          "svgSha256": "3f0fdba76f96aba41e0f0a48303081407a01980d041c53203d61091ddf6a9869"
+        },
+        {
+          "container": 160,
+          "width": 80.5056,
+          "height": 17.576,
+          "rasterWidth": 645,
+          "rasterHeight": 141,
+          "asset": "docs/formulas/d23739d2a8b36c6484d646fa.math",
+          "bytes": 6585,
+          "crc": 1447030776,
+          "sha256": "1ecc908797bb2685454fc9fe67491675d34e2c2433fed4e9e5223f48f38f6591",
+          "svgSha256": "3f0fdba76f96aba41e0f0a48303081407a01980d041c53203d61091ddf6a9869"
+        },
+        {
+          "container": 192,
+          "width": 80.5056,
+          "height": 17.576,
+          "rasterWidth": 645,
+          "rasterHeight": 141,
+          "asset": "docs/formulas/d23739d2a8b36c6484d646fa.math",
+          "bytes": 6585,
+          "crc": 1447030776,
+          "sha256": "1ecc908797bb2685454fc9fe67491675d34e2c2433fed4e9e5223f48f38f6591",
+          "svgSha256": "3f0fdba76f96aba41e0f0a48303081407a01980d041c53203d61091ddf6a9869"
+        },
+        {
+          "container": 256,
+          "width": 80.5056,
+          "height": 17.576,
+          "rasterWidth": 645,
+          "rasterHeight": 141,
+          "asset": "docs/formulas/d23739d2a8b36c6484d646fa.math",
+          "bytes": 6585,
+          "crc": 1447030776,
+          "sha256": "1ecc908797bb2685454fc9fe67491675d34e2c2433fed4e9e5223f48f38f6591",
+          "svgSha256": "3f0fdba76f96aba41e0f0a48303081407a01980d041c53203d61091ddf6a9869"
+        },
+        {
+          "container": 384,
+          "width": 80.5056,
+          "height": 17.576,
+          "rasterWidth": 645,
+          "rasterHeight": 141,
+          "asset": "docs/formulas/d23739d2a8b36c6484d646fa.math",
+          "bytes": 6585,
+          "crc": 1447030776,
+          "sha256": "1ecc908797bb2685454fc9fe67491675d34e2c2433fed4e9e5223f48f38f6591",
+          "svgSha256": "3f0fdba76f96aba41e0f0a48303081407a01980d041c53203d61091ddf6a9869"
+        },
+        {
+          "container": 512,
+          "width": 80.5056,
+          "height": 17.576,
+          "rasterWidth": 645,
+          "rasterHeight": 141,
+          "asset": "docs/formulas/d23739d2a8b36c6484d646fa.math",
+          "bytes": 6585,
+          "crc": 1447030776,
+          "sha256": "1ecc908797bb2685454fc9fe67491675d34e2c2433fed4e9e5223f48f38f6591",
+          "svgSha256": "3f0fdba76f96aba41e0f0a48303081407a01980d041c53203d61091ddf6a9869"
+        },
+        {
+          "container": 768,
+          "width": 80.5056,
+          "height": 17.576,
+          "rasterWidth": 645,
+          "rasterHeight": 141,
+          "asset": "docs/formulas/d23739d2a8b36c6484d646fa.math",
+          "bytes": 6585,
+          "crc": 1447030776,
+          "sha256": "1ecc908797bb2685454fc9fe67491675d34e2c2433fed4e9e5223f48f38f6591",
+          "svgSha256": "3f0fdba76f96aba41e0f0a48303081407a01980d041c53203d61091ddf6a9869"
+        }
+      ]
+    },
+    {
+      "id": "monte-carlo-velocity-y",
+      "tex": "v_y(t)=v_{y,0}-gt",
+      "reading": "v_y(t) = v_y,₀ − gt",
+      "variants": [
+        {
+          "container": 128,
+          "width": 111.61760000000001,
+          "height": 17.712,
+          "rasterWidth": 893,
+          "rasterHeight": 142,
+          "asset": "docs/formulas/6c456b53f2cea02f3e6a4eb7.math",
+          "bytes": 8582,
+          "crc": 550704072,
+          "sha256": "ab8fa7677d040afe6df0a9f1f8b20042ff2e352736aa6eb81a7e04ff32f343c8",
+          "svgSha256": "da3651fa75446b554f169930b90dfbaa097a4e5ff2b8c5350c57029e67b6bac9"
+        },
+        {
+          "container": 160,
+          "width": 111.61760000000001,
+          "height": 17.712,
+          "rasterWidth": 893,
+          "rasterHeight": 142,
+          "asset": "docs/formulas/6c456b53f2cea02f3e6a4eb7.math",
+          "bytes": 8582,
+          "crc": 550704072,
+          "sha256": "ab8fa7677d040afe6df0a9f1f8b20042ff2e352736aa6eb81a7e04ff32f343c8",
+          "svgSha256": "da3651fa75446b554f169930b90dfbaa097a4e5ff2b8c5350c57029e67b6bac9"
+        },
+        {
+          "container": 192,
+          "width": 111.61760000000001,
+          "height": 17.712,
+          "rasterWidth": 893,
+          "rasterHeight": 142,
+          "asset": "docs/formulas/6c456b53f2cea02f3e6a4eb7.math",
+          "bytes": 8582,
+          "crc": 550704072,
+          "sha256": "ab8fa7677d040afe6df0a9f1f8b20042ff2e352736aa6eb81a7e04ff32f343c8",
+          "svgSha256": "da3651fa75446b554f169930b90dfbaa097a4e5ff2b8c5350c57029e67b6bac9"
+        },
+        {
+          "container": 256,
+          "width": 111.61760000000001,
+          "height": 17.712,
+          "rasterWidth": 893,
+          "rasterHeight": 142,
+          "asset": "docs/formulas/6c456b53f2cea02f3e6a4eb7.math",
+          "bytes": 8582,
+          "crc": 550704072,
+          "sha256": "ab8fa7677d040afe6df0a9f1f8b20042ff2e352736aa6eb81a7e04ff32f343c8",
+          "svgSha256": "da3651fa75446b554f169930b90dfbaa097a4e5ff2b8c5350c57029e67b6bac9"
+        },
+        {
+          "container": 384,
+          "width": 111.61760000000001,
+          "height": 17.712,
+          "rasterWidth": 893,
+          "rasterHeight": 142,
+          "asset": "docs/formulas/6c456b53f2cea02f3e6a4eb7.math",
+          "bytes": 8582,
+          "crc": 550704072,
+          "sha256": "ab8fa7677d040afe6df0a9f1f8b20042ff2e352736aa6eb81a7e04ff32f343c8",
+          "svgSha256": "da3651fa75446b554f169930b90dfbaa097a4e5ff2b8c5350c57029e67b6bac9"
+        },
+        {
+          "container": 512,
+          "width": 111.61760000000001,
+          "height": 17.712,
+          "rasterWidth": 893,
+          "rasterHeight": 142,
+          "asset": "docs/formulas/6c456b53f2cea02f3e6a4eb7.math",
+          "bytes": 8582,
+          "crc": 550704072,
+          "sha256": "ab8fa7677d040afe6df0a9f1f8b20042ff2e352736aa6eb81a7e04ff32f343c8",
+          "svgSha256": "da3651fa75446b554f169930b90dfbaa097a4e5ff2b8c5350c57029e67b6bac9"
+        },
+        {
+          "container": 768,
+          "width": 111.61760000000001,
+          "height": 17.712,
+          "rasterWidth": 893,
+          "rasterHeight": 142,
+          "asset": "docs/formulas/6c456b53f2cea02f3e6a4eb7.math",
+          "bytes": 8582,
+          "crc": 550704072,
+          "sha256": "ab8fa7677d040afe6df0a9f1f8b20042ff2e352736aa6eb81a7e04ff32f343c8",
+          "svgSha256": "da3651fa75446b554f169930b90dfbaa097a4e5ff2b8c5350c57029e67b6bac9"
+        }
+      ]
+    },
+    {
+      "id": "monte-carlo-energy",
+      "tex": "E(t)=\\frac m2\\left[v_x(t)^2+v_y(t)^2\\right]+mgy(t)",
+      "reading": "E(t) = ½m[vₓ(t)² + v_y(t)²] + mgy(t)",
+      "variants": [
+        {
+          "container": 128,
+          "width": 114.536,
+          "height": 72.0304,
+          "rasterWidth": 917,
+          "rasterHeight": 577,
+          "asset": "docs/formulas/6a8f5999d8ba816837dfcb81.math",
+          "bytes": 22747,
+          "crc": 1181589668,
+          "sha256": "bc1e2fea878c2733899e1db31fdb14b6c7bdab6f348e38e3d604896434d1b228",
+          "svgSha256": "a8e91628caad0005582fe44b3111bd8629ea04c5e40e95196a312f8123c2a6cf"
+        },
+        {
+          "container": 160,
+          "width": 130.8432,
+          "height": 52.830400000000004,
+          "rasterWidth": 1047,
+          "rasterHeight": 423,
+          "asset": "docs/formulas/8d5634dd0aad9cba29609b50.math",
+          "bytes": 22736,
+          "crc": 2368390303,
+          "sha256": "4e72d6742a56a784546baf17f876e06a4406c390ec45490d11f474c0f1d96815",
+          "svgSha256": "938529444f2978de32f2ff75e7c8438e3c263bfd84ae6736a7fe1b485afc9f8a"
+        },
+        {
+          "container": 192,
+          "width": 152.5168,
+          "height": 68.288,
+          "rasterWidth": 1221,
+          "rasterHeight": 547,
+          "asset": "docs/formulas/f42ec01fd2e79dbb8a393c90.math",
+          "bytes": 24153,
+          "crc": 442317149,
+          "sha256": "74a336d151b1056b7efd171f18577b4712e26bb20de691ca28d8584b94609ea7",
+          "svgSha256": "6f29f8e748aef253c59f6b4eb41f2bed6fddc87c9e44c3a6f8dc44fcd7daeffd"
+        },
+        {
+          "container": 256,
+          "width": 187.4416,
+          "height": 49.088,
+          "rasterWidth": 1500,
+          "rasterHeight": 393,
+          "asset": "docs/formulas/d6ee345536484c0bb5b482b2.math",
+          "bytes": 23883,
+          "crc": 3109800739,
+          "sha256": "779d308d7ba37c0bcf0eb8a7b925b67207a0cda801a46460885fe3af8fd37102",
+          "svgSha256": "ebcec253f387b9e521ff53e0a94531fb2d4b12d158f3c6b4817ece75ad9e378c"
+        },
+        {
+          "container": 384,
+          "width": 254.744,
+          "height": 29.888,
+          "rasterWidth": 2038,
+          "rasterHeight": 240,
+          "asset": "docs/formulas/5348870d7cc9184eeda1b2a4.math",
+          "bytes": 23128,
+          "crc": 3408108108,
+          "sha256": "156a967d634858db1ebbf4ba72ba08fac060455f1ec08966fc5a6029a43e3342",
+          "svgSha256": "88723cdb4c0fb03c2933a050f1576c19b86722500838100119c6cf1fe18ed7b2"
+        },
+        {
+          "container": 512,
+          "width": 254.744,
+          "height": 29.888,
+          "rasterWidth": 2038,
+          "rasterHeight": 240,
+          "asset": "docs/formulas/5348870d7cc9184eeda1b2a4.math",
+          "bytes": 23128,
+          "crc": 3408108108,
+          "sha256": "156a967d634858db1ebbf4ba72ba08fac060455f1ec08966fc5a6029a43e3342",
+          "svgSha256": "88723cdb4c0fb03c2933a050f1576c19b86722500838100119c6cf1fe18ed7b2"
+        },
+        {
+          "container": 768,
+          "width": 254.744,
+          "height": 29.888,
+          "rasterWidth": 2038,
+          "rasterHeight": 240,
+          "asset": "docs/formulas/5348870d7cc9184eeda1b2a4.math",
+          "bytes": 23128,
+          "crc": 3408108108,
+          "sha256": "156a967d634858db1ebbf4ba72ba08fac060455f1ec08966fc5a6029a43e3342",
+          "svgSha256": "88723cdb4c0fb03c2933a050f1576c19b86722500838100119c6cf1fe18ed7b2"
+        }
+      ]
+    },
+    {
+      "id": "monte-carlo-expectation-x",
+      "tex": "\\operatorname E[x(t)]=x_0+\\mu_xt",
+      "reading": "E[x(t)] = x₀ + μₓ t",
+      "variants": [
+        {
+          "container": 128,
+          "width": 76.8352,
+          "height": 36.224,
+          "rasterWidth": 615,
+          "rasterHeight": 290,
+          "asset": "docs/formulas/8bff13398bc0f5d3ec8c850c.math",
+          "bytes": 9423,
+          "crc": 687519021,
+          "sha256": "2a322ff1a0f2babf330abfcd9cd84ad26407e5998cf771a43256096b2bf17511",
+          "svgSha256": "192b6fead37e3995a7da4c5862b2c09225e9ea246f17b16078fac2901ff8d747"
+        },
+        {
+          "container": 160,
+          "width": 128.448,
+          "height": 17.024,
+          "rasterWidth": 1028,
+          "rasterHeight": 137,
+          "asset": "docs/formulas/764d7c55edf50931c1a03c86.math",
+          "bytes": 9201,
+          "crc": 4278655643,
+          "sha256": "204c491b35407b24e651433256bea14b1be178c8d5cab4a1ff272bdb98e19cac",
+          "svgSha256": "fb034a7663573bbd046d811bd8c241aa9b8a6b4080a3069dbaefcb6e1dc7dcb6"
+        },
+        {
+          "container": 192,
+          "width": 128.448,
+          "height": 17.024,
+          "rasterWidth": 1028,
+          "rasterHeight": 137,
+          "asset": "docs/formulas/764d7c55edf50931c1a03c86.math",
+          "bytes": 9201,
+          "crc": 4278655643,
+          "sha256": "204c491b35407b24e651433256bea14b1be178c8d5cab4a1ff272bdb98e19cac",
+          "svgSha256": "fb034a7663573bbd046d811bd8c241aa9b8a6b4080a3069dbaefcb6e1dc7dcb6"
+        },
+        {
+          "container": 256,
+          "width": 128.448,
+          "height": 17.024,
+          "rasterWidth": 1028,
+          "rasterHeight": 137,
+          "asset": "docs/formulas/764d7c55edf50931c1a03c86.math",
+          "bytes": 9201,
+          "crc": 4278655643,
+          "sha256": "204c491b35407b24e651433256bea14b1be178c8d5cab4a1ff272bdb98e19cac",
+          "svgSha256": "fb034a7663573bbd046d811bd8c241aa9b8a6b4080a3069dbaefcb6e1dc7dcb6"
+        },
+        {
+          "container": 384,
+          "width": 128.448,
+          "height": 17.024,
+          "rasterWidth": 1028,
+          "rasterHeight": 137,
+          "asset": "docs/formulas/764d7c55edf50931c1a03c86.math",
+          "bytes": 9201,
+          "crc": 4278655643,
+          "sha256": "204c491b35407b24e651433256bea14b1be178c8d5cab4a1ff272bdb98e19cac",
+          "svgSha256": "fb034a7663573bbd046d811bd8c241aa9b8a6b4080a3069dbaefcb6e1dc7dcb6"
+        },
+        {
+          "container": 512,
+          "width": 128.448,
+          "height": 17.024,
+          "rasterWidth": 1028,
+          "rasterHeight": 137,
+          "asset": "docs/formulas/764d7c55edf50931c1a03c86.math",
+          "bytes": 9201,
+          "crc": 4278655643,
+          "sha256": "204c491b35407b24e651433256bea14b1be178c8d5cab4a1ff272bdb98e19cac",
+          "svgSha256": "fb034a7663573bbd046d811bd8c241aa9b8a6b4080a3069dbaefcb6e1dc7dcb6"
+        },
+        {
+          "container": 768,
+          "width": 128.448,
+          "height": 17.024,
+          "rasterWidth": 1028,
+          "rasterHeight": 137,
+          "asset": "docs/formulas/764d7c55edf50931c1a03c86.math",
+          "bytes": 9201,
+          "crc": 4278655643,
+          "sha256": "204c491b35407b24e651433256bea14b1be178c8d5cab4a1ff272bdb98e19cac",
+          "svgSha256": "fb034a7663573bbd046d811bd8c241aa9b8a6b4080a3069dbaefcb6e1dc7dcb6"
+        }
+      ]
+    },
+    {
+      "id": "monte-carlo-expectation-y",
+      "tex": "\\operatorname E[y(t)]=\\mu_yt-\\frac12gt^2",
+      "reading": "E[y(t)] = μ_y t − ½gt²",
+      "variants": [
+        {
+          "container": 128,
+          "width": 90.512,
+          "height": 53.392,
+          "rasterWidth": 725,
+          "rasterHeight": 428,
+          "asset": "docs/formulas/885f539028c06c2c146c36f8.math",
+          "bytes": 11933,
+          "crc": 291754610,
+          "sha256": "93dd99c4fff778168d8607ed8bba9843d2cbf9e89c4d40cf8a7e72bab1facec6",
+          "svgSha256": "13ff4fa63736837ebaf237e88285da1020fe0e9eba8b237e1aad735956085e2a"
+        },
+        {
+          "container": 160,
+          "width": 95.2048,
+          "height": 52.672,
+          "rasterWidth": 762,
+          "rasterHeight": 422,
+          "asset": "docs/formulas/2158f575648c3b186c1356d2.math",
+          "bytes": 11949,
+          "crc": 157233106,
+          "sha256": "dea85d515ea845096e5e05799f6a6175fb1bd5213e2edff02846d044124d8fba",
+          "svgSha256": "a0c21423d149b413fc6f2858084159fbaf6727c983f16b2dc1c3c2339793021f"
+        },
+        {
+          "container": 192,
+          "width": 145.504,
+          "height": 33.472,
+          "rasterWidth": 1165,
+          "rasterHeight": 268,
+          "asset": "docs/formulas/b70cc6fa4bee0707dcb743bb.math",
+          "bytes": 11913,
+          "crc": 644627481,
+          "sha256": "1073f17e757c66267a3e3b214181860b25ffd66ce846f67b63bd216200065e21",
+          "svgSha256": "e60a79163d69b3428ba949d7d4899101305c7df5a390269b6e755ddd00a774ac"
+        },
+        {
+          "container": 256,
+          "width": 145.504,
+          "height": 33.472,
+          "rasterWidth": 1165,
+          "rasterHeight": 268,
+          "asset": "docs/formulas/b70cc6fa4bee0707dcb743bb.math",
+          "bytes": 11913,
+          "crc": 644627481,
+          "sha256": "1073f17e757c66267a3e3b214181860b25ffd66ce846f67b63bd216200065e21",
+          "svgSha256": "e60a79163d69b3428ba949d7d4899101305c7df5a390269b6e755ddd00a774ac"
+        },
+        {
+          "container": 384,
+          "width": 145.504,
+          "height": 33.472,
+          "rasterWidth": 1165,
+          "rasterHeight": 268,
+          "asset": "docs/formulas/b70cc6fa4bee0707dcb743bb.math",
+          "bytes": 11913,
+          "crc": 644627481,
+          "sha256": "1073f17e757c66267a3e3b214181860b25ffd66ce846f67b63bd216200065e21",
+          "svgSha256": "e60a79163d69b3428ba949d7d4899101305c7df5a390269b6e755ddd00a774ac"
+        },
+        {
+          "container": 512,
+          "width": 145.504,
+          "height": 33.472,
+          "rasterWidth": 1165,
+          "rasterHeight": 268,
+          "asset": "docs/formulas/b70cc6fa4bee0707dcb743bb.math",
+          "bytes": 11913,
+          "crc": 644627481,
+          "sha256": "1073f17e757c66267a3e3b214181860b25ffd66ce846f67b63bd216200065e21",
+          "svgSha256": "e60a79163d69b3428ba949d7d4899101305c7df5a390269b6e755ddd00a774ac"
+        },
+        {
+          "container": 768,
+          "width": 145.504,
+          "height": 33.472,
+          "rasterWidth": 1165,
+          "rasterHeight": 268,
+          "asset": "docs/formulas/b70cc6fa4bee0707dcb743bb.math",
+          "bytes": 11913,
+          "crc": 644627481,
+          "sha256": "1073f17e757c66267a3e3b214181860b25ffd66ce846f67b63bd216200065e21",
+          "svgSha256": "e60a79163d69b3428ba949d7d4899101305c7df5a390269b6e755ddd00a774ac"
+        }
+      ]
+    },
+    {
+      "id": "monte-carlo-deviation-x",
+      "tex": "\\sigma_x(t)=\\sigma_{v_x}t",
+      "reading": "σₓ(t) = σ(vₓ,₀) t",
+      "variants": [
+        {
+          "container": 128,
+          "width": 84.7632,
+          "height": 17.177599999999998,
+          "rasterWidth": 679,
+          "rasterHeight": 138,
+          "asset": "docs/formulas/2c51343505cb9f2afd77bcc6.math",
+          "bytes": 6357,
+          "crc": 937507872,
+          "sha256": "787c93316467538b2072947970844fc81240292537725719021c4bbbd7b59761",
+          "svgSha256": "f6894c9b5f90e676101a368cf78f47680de1da66d8d59ec96b2edeb03cc906ee"
+        },
+        {
+          "container": 160,
+          "width": 84.7632,
+          "height": 17.177599999999998,
+          "rasterWidth": 679,
+          "rasterHeight": 138,
+          "asset": "docs/formulas/2c51343505cb9f2afd77bcc6.math",
+          "bytes": 6357,
+          "crc": 937507872,
+          "sha256": "787c93316467538b2072947970844fc81240292537725719021c4bbbd7b59761",
+          "svgSha256": "f6894c9b5f90e676101a368cf78f47680de1da66d8d59ec96b2edeb03cc906ee"
+        },
+        {
+          "container": 192,
+          "width": 84.7632,
+          "height": 17.177599999999998,
+          "rasterWidth": 679,
+          "rasterHeight": 138,
+          "asset": "docs/formulas/2c51343505cb9f2afd77bcc6.math",
+          "bytes": 6357,
+          "crc": 937507872,
+          "sha256": "787c93316467538b2072947970844fc81240292537725719021c4bbbd7b59761",
+          "svgSha256": "f6894c9b5f90e676101a368cf78f47680de1da66d8d59ec96b2edeb03cc906ee"
+        },
+        {
+          "container": 256,
+          "width": 84.7632,
+          "height": 17.177599999999998,
+          "rasterWidth": 679,
+          "rasterHeight": 138,
+          "asset": "docs/formulas/2c51343505cb9f2afd77bcc6.math",
+          "bytes": 6357,
+          "crc": 937507872,
+          "sha256": "787c93316467538b2072947970844fc81240292537725719021c4bbbd7b59761",
+          "svgSha256": "f6894c9b5f90e676101a368cf78f47680de1da66d8d59ec96b2edeb03cc906ee"
+        },
+        {
+          "container": 384,
+          "width": 84.7632,
+          "height": 17.177599999999998,
+          "rasterWidth": 679,
+          "rasterHeight": 138,
+          "asset": "docs/formulas/2c51343505cb9f2afd77bcc6.math",
+          "bytes": 6357,
+          "crc": 937507872,
+          "sha256": "787c93316467538b2072947970844fc81240292537725719021c4bbbd7b59761",
+          "svgSha256": "f6894c9b5f90e676101a368cf78f47680de1da66d8d59ec96b2edeb03cc906ee"
+        },
+        {
+          "container": 512,
+          "width": 84.7632,
+          "height": 17.177599999999998,
+          "rasterWidth": 679,
+          "rasterHeight": 138,
+          "asset": "docs/formulas/2c51343505cb9f2afd77bcc6.math",
+          "bytes": 6357,
+          "crc": 937507872,
+          "sha256": "787c93316467538b2072947970844fc81240292537725719021c4bbbd7b59761",
+          "svgSha256": "f6894c9b5f90e676101a368cf78f47680de1da66d8d59ec96b2edeb03cc906ee"
+        },
+        {
+          "container": 768,
+          "width": 84.7632,
+          "height": 17.177599999999998,
+          "rasterWidth": 679,
+          "rasterHeight": 138,
+          "asset": "docs/formulas/2c51343505cb9f2afd77bcc6.math",
+          "bytes": 6357,
+          "crc": 937507872,
+          "sha256": "787c93316467538b2072947970844fc81240292537725719021c4bbbd7b59761",
+          "svgSha256": "f6894c9b5f90e676101a368cf78f47680de1da66d8d59ec96b2edeb03cc906ee"
+        }
+      ]
+    },
+    {
+      "id": "monte-carlo-deviation-y",
+      "tex": "\\sigma_y(t)=\\sigma_{v_y}t",
+      "reading": "σ_y(t) = σ(v_y,₀) t",
+      "variants": [
+        {
+          "container": 128,
+          "width": 83.1792,
+          "height": 18.729599999999998,
+          "rasterWidth": 666,
+          "rasterHeight": 150,
+          "asset": "docs/formulas/f21108fd0c98ef3d1071fa84.math",
+          "bytes": 6650,
+          "crc": 3976018265,
+          "sha256": "cb8486228f6fd834e11b282c70067e066c5d31d926f1ea432ddda9a7eb1dc447",
+          "svgSha256": "dab62dd075a7264312fe59b07294c3b59ba70ae92be283e7b1904caad0c934a2"
+        },
+        {
+          "container": 160,
+          "width": 83.1792,
+          "height": 18.729599999999998,
+          "rasterWidth": 666,
+          "rasterHeight": 150,
+          "asset": "docs/formulas/f21108fd0c98ef3d1071fa84.math",
+          "bytes": 6650,
+          "crc": 3976018265,
+          "sha256": "cb8486228f6fd834e11b282c70067e066c5d31d926f1ea432ddda9a7eb1dc447",
+          "svgSha256": "dab62dd075a7264312fe59b07294c3b59ba70ae92be283e7b1904caad0c934a2"
+        },
+        {
+          "container": 192,
+          "width": 83.1792,
+          "height": 18.729599999999998,
+          "rasterWidth": 666,
+          "rasterHeight": 150,
+          "asset": "docs/formulas/f21108fd0c98ef3d1071fa84.math",
+          "bytes": 6650,
+          "crc": 3976018265,
+          "sha256": "cb8486228f6fd834e11b282c70067e066c5d31d926f1ea432ddda9a7eb1dc447",
+          "svgSha256": "dab62dd075a7264312fe59b07294c3b59ba70ae92be283e7b1904caad0c934a2"
+        },
+        {
+          "container": 256,
+          "width": 83.1792,
+          "height": 18.729599999999998,
+          "rasterWidth": 666,
+          "rasterHeight": 150,
+          "asset": "docs/formulas/f21108fd0c98ef3d1071fa84.math",
+          "bytes": 6650,
+          "crc": 3976018265,
+          "sha256": "cb8486228f6fd834e11b282c70067e066c5d31d926f1ea432ddda9a7eb1dc447",
+          "svgSha256": "dab62dd075a7264312fe59b07294c3b59ba70ae92be283e7b1904caad0c934a2"
+        },
+        {
+          "container": 384,
+          "width": 83.1792,
+          "height": 18.729599999999998,
+          "rasterWidth": 666,
+          "rasterHeight": 150,
+          "asset": "docs/formulas/f21108fd0c98ef3d1071fa84.math",
+          "bytes": 6650,
+          "crc": 3976018265,
+          "sha256": "cb8486228f6fd834e11b282c70067e066c5d31d926f1ea432ddda9a7eb1dc447",
+          "svgSha256": "dab62dd075a7264312fe59b07294c3b59ba70ae92be283e7b1904caad0c934a2"
+        },
+        {
+          "container": 512,
+          "width": 83.1792,
+          "height": 18.729599999999998,
+          "rasterWidth": 666,
+          "rasterHeight": 150,
+          "asset": "docs/formulas/f21108fd0c98ef3d1071fa84.math",
+          "bytes": 6650,
+          "crc": 3976018265,
+          "sha256": "cb8486228f6fd834e11b282c70067e066c5d31d926f1ea432ddda9a7eb1dc447",
+          "svgSha256": "dab62dd075a7264312fe59b07294c3b59ba70ae92be283e7b1904caad0c934a2"
+        },
+        {
+          "container": 768,
+          "width": 83.1792,
+          "height": 18.729599999999998,
+          "rasterWidth": 666,
+          "rasterHeight": 150,
+          "asset": "docs/formulas/f21108fd0c98ef3d1071fa84.math",
+          "bytes": 6650,
+          "crc": 3976018265,
+          "sha256": "cb8486228f6fd834e11b282c70067e066c5d31d926f1ea432ddda9a7eb1dc447",
+          "svgSha256": "dab62dd075a7264312fe59b07294c3b59ba70ae92be283e7b1904caad0c934a2"
         }
       ]
     }

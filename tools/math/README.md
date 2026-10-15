@@ -40,10 +40,21 @@ verwenden diesen Formelsatz. `documentation_formula_catalog` zeichnet jeden
 veröffentlichten Displayblock dieser Seiten und prüft Formelbild und native
 Lesereihenfolge. Thermodynamik, Elektromagnetismus, Wellen/Optik und Strömung
 werden zusätzlich durch `documentation_formula_physics` geprüft.
+Reale Gase, Messunsicherheit und der Monte-Carlo-Lernweg verwenden ebenfalls
+registrierte Displayformeln. `documentation_formula_models` prüft alle ihre
+Formelblöcke bei 16 px; `documentation_formula_models_narrow` verlangt dieselben
+Blöcke vollständig sichtbar bei 32 px im 760 × 540-Fenster. Der Katalog umfasst
+137 Ausdrücke in 138 veröffentlichten Blöcken auf 14 Seiten.
 `documentation_formula_narrow` verlangt vollständig sichtbare Gitter-/
 Energieformeln im 760 × 540-Fenster bei 32 px. Die diskrete Saitenenergie
 ist dafür in gleichwertige, einzeln erklärte Terme aufgeteilt. Weitere
 mathematische Fachseiten müssen noch einzeln übertragen werden.
+
+`documentation_math` inventarisiert sowohl registrierte Quelldokumente als auch
+die linearen Lesealternativen des Formelkatalogs. TeX-Quellzeichen allein decken
+die tatsächlich gezeichneten nativen Lesetexte nicht ab. Ein sichtbarer y-Index
+bleibt im TeX gesetzt; die lineare Fassung verwendet bei Bedarf `_y`, anstatt
+ein ähnlich aussehendes griechisches tiefgestelltes Gamma als y auszugeben.
 
 Quellen: [MathJax Node-Schnittstelle](https://docs.mathjax.org/en/v4.1/server/direct.html),
 [Herkunft und Lizenzen](../../docs/formulas/NOTICE.txt).

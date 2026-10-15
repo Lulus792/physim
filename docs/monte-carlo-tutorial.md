@@ -12,11 +12,51 @@ Fallbeschleunigung beträgt g=9,80665 m/s². Es gibt keinen Boden, Luftwiderstan
 Sensorfehler oder Parameterdrift. Zu Beginn jedes Laufs werden vx und vy einmal
 unabhängig normalverteilt gezogen. Danach wird die Bewegung exakt berechnet:
 
-- x(t)=−2+vx·t; y(t)=vy·t−½g·t².
-- vx(t)=vx; vy(t)=vy−g·t.
-- E=½(vx²+vy(t)²)+g·y(t) bleibt erhalten.
-- E[x(t)]=−2+μx·t, E[y(t)]=μy·t−½g·t².
-- σx(t)=σvx·t und σy(t)=σvy·t für t≥0.
+Die einmal gezogenen Anfangsgeschwindigkeiten tragen in den Formeln die
+Indizes x,0 beziehungsweise y,0. Mit x₀ = −2 m und y₀ = 0 m gilt:
+
+$$
+x(t)=x_0+v_{x,0}t
+$$
+
+$$
+y(t)=v_{y,0}t-\frac12gt^2
+$$
+
+$$
+v_x(t)=v_{x,0}
+$$
+
+$$
+v_y(t)=v_{y,0}-gt
+$$
+
+Für die hier feste Masse m = 1 kg bleibt die mechanische Energie erhalten:
+
+$$
+E(t)=\frac m2\left[v_x(t)^2+v_y(t)^2\right]+mgy(t)
+$$
+
+Eckige Klammern hinter E kennzeichnen dagegen einen Erwartungswert. Mit den
+Mittelwerten der Anfangsgeschwindigkeiten in x- und y-Richtung gilt:
+
+$$
+\operatorname E[x(t)]=x_0+\mu_xt
+$$
+
+$$
+\operatorname E[y(t)]=\mu_yt-\frac12gt^2
+$$
+
+Die Populationsstandardabweichungen der Position sind für t ≥ 0:
+
+$$
+\sigma_x(t)=\sigma_{v_x}t
+$$
+
+$$
+\sigma_y(t)=\sigma_{v_y}t
+$$
 
 Dadurch überlagert kein Integrationsfehler die Anfangswertunsicherheit.
 Die Zufallszahlen sind deterministische Pseudozufallszahlen aus dem protokollierten

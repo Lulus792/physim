@@ -2807,9 +2807,9 @@ static void channel_units_start(app *a);
 static struct nk_font *system_font_sampling(struct nk_font_atlas *atlas,const char *root,float size,bool code,bool title,
                                            unsigned char horizontal,unsigned char vertical) {
     static const nk_rune ui_ranges[] = {0x20,0x17f,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
-                                      0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0};
+                                      0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x2c7c,0x2c7c,0};
     static const nk_rune code_ranges[] = {0x20,0x17f,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
-                                        0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0};
+                                        0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x2c7c,0x2c7c,0};
     struct nk_font_config config = nk_font_config(size);
     config.range = code ? code_ranges : ui_ranges;
     config.oversample_h = horizontal;
@@ -2850,7 +2850,7 @@ static struct nk_font *system_font_sampling(struct nk_font_atlas *atlas,const ch
     /* Offline fallback covers our text ranges, phonetic modifiers, diagrams and
      * emoji. Add only glyphs absent from earlier sources, keeping the atlas small. */
     static const nk_rune fallback_ranges[]={0x20,0x17f,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
-        0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x2603,0x2603,0x1f30d,0x1f30d,0x1f600,0x1f600,0};
+        0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x2603,0x2603,0x2c7c,0x2c7c,0x1f30d,0x1f30d,0x1f600,0x1f600,0};
     static const char *const files[]={"NotoSans-Bold.ttf","NotoSans.ttf","NotoSansMono.ttf","NotoSansMath-Regular.ttf","NotoSansSymbols2-Regular.ttf","NotoEmoji.ttf"};
     for(size_t i=0;i<sizeof files/sizeof files[0];i++) {
         if(i==0 && !title)continue;

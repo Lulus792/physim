@@ -134,16 +134,40 @@ verspätete Aufrufe; sie erwartet tatsächliche Zeiten statt erfundener vergange
 
 Der Sensor konvertiert das ideale Signal in seine konfigurierte Einheit und bildet:
 
-`Messung = quantisieren(ideal + offset + drift_per_s * (time - start) + Rauschen)`
+$$
+y=Q_\delta\!\left(x+b+d(t-t_0)+\eta\right)
+$$
+
+Dabei bezeichnet x das ideale Signal nach Umrechnung in die Sensoreinheit,
+b den `offset`, d `drift_per_s`, t die tatsächliche Aufrufzeit, t₀ den
+`start_time_s` und η die gezogene Rauschgröße. Qδ quantisiert mit der
+Auflösung δ = `resolution`; Q₀ lässt den Zahlenwert unverändert.
 
 Auflösung null schaltet Quantisierung ab. Sonst wird auf das nächste Vielfache der
 Auflösung gerundet, bei exakt halbem Abstand zum geraden Vielfachen. Offset und Drift
 modellieren unkompensierte systematische Effekte. Sie verändern das physikalische
 Modell nicht. Das Rauschen wird additiv in der Sensoreinheit angegeben.
 
-Die ausgegebene **Standardunsicherheit** ist:
+Für die ausgegebene **Standardunsicherheit** bezeichnen uᵣ und u_q den relativen
+beziehungsweise den Quantisierungsbeitrag:
 
-`u = sqrt(u_abs² + (abs(ideal) * u_rel)² + noise_stddev² + resolution² / 12)`
+$$
+u_r=|x|u_{\mathrm{rel}}
+$$
+
+$$
+u_q=\frac{\delta}{\sqrt{12}}
+$$
+
+Die nichtnegative Standardunsicherheit u erfüllt:
+
+$$
+\begin{aligned}u^2&=u_{\mathrm{abs}}^2+u_r^2\\&\quad+\sigma_\eta^2+u_q^2\end{aligned}
+$$
+
+u_abs und u_rel sind `uncertainty_absolute` und `uncertainty_relative`.
+ση ist die Standardabweichung der konfigurierten Rauschverteilung,
+η dagegen deren tatsächlich gezogener Wert.
 
 Die Komponenten werden als unabhängig angenommen. Die Auflösungskomponente setzt
 gleichverteilten Quantisierungsfehler innerhalb eines Quantisierungsintervalls voraus.
@@ -253,8 +277,21 @@ von `2e-14`. Die bisherige statistische Momentenprüfung bleibt daneben erhalten
 
 ## Student-t-Intervall für den Mittelwert
 
-Ein zweiseitiges Mittelwertintervall verwendet `mean ± t * s / sqrt(n)` mit
-`n-1` Freiheitsgraden. Das explizite Konfidenzniveau liegt zwischen 0 und 1;
+Für den Stichprobenmittelwert, die Stichprobenstandardabweichung s und n Werte
+lautet die Halbbreite eines zweiseitigen Mittelwertintervalls:
+
+$$
+h=t_{n-1,\,(1+C)/2}\,\frac{s}{\sqrt n}
+$$
+
+Mit dem Stichprobenmittelwert ergibt sich das Intervall:
+
+$$
+I_C=[\bar x-h,\,\bar x+h]
+$$
+
+t mit den Indizes n−1 und (1+C)/2 ist das entsprechende Student-t-Quantil.
+Das explizite Konfidenzniveau C liegt zwischen 0 und 1;
 `n >= 2`, endliche Mittelwerte und nichtnegative Stichprobenstreuung sind nötig.
 Die Zahlen besitzen dieselbe Einheit wie die Eingabewerte. Der Vertrag setzt
 unabhängige normalverteilte Beobachtungen voraus. Er ist kein Vorhersageintervall,

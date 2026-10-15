@@ -5,7 +5,7 @@ Versuch ermöglichen als auch beim Arbeiten präzise Antworten liefern. Die
 Abnahme betrachtet Inhalt, Bedienung, Darstellung und zugängliches Lesen.
 Ein grüner Parsertest allein ist keine vollständige Abnahme.
 
-## Aktuelle Bewertung vom 15. Oktober 2026
+## Aktuelle Bewertung vom 16. Oktober 2026
 
 Bewertungsgrundlage sind die zentralen Skills unter `D:/Skills/skills`:
 `documentation-engineer`, `ui-ux-designer`, `accessibility-engineer`,
@@ -17,7 +17,7 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 | Dokumentationszugang | 185 registrierte Seiten und 214 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
 | Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
-| Formelsatz | 118 TeX-Ausdrücke in 119 Displayblöcken auf elf Lern-/Fachseiten; echte Formelbilder unter Windows, Linux und macOS Intel/ARM geprüft | Weitere Fachseiten, Inline-TeX, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
+| Formelsatz | 137 TeX-Ausdrücke in 138 Displayblöcken auf 14 Seiten; aktuelle Erweiterung unter Windows/Linux geprüft, bisherige 119 Blöcke auch auf macOS Intel/ARM | Mac-Abnahme der neuen 19 Blöcke, weitere Fachseiten, Inline-TeX, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
 | Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; alle drei Plattformen besitzen zusätzlich geprüfte native Tabellen-, Zell- und Headerbeziehungen | Externe macOS-AX-Clientprüfung, echte Screenreader-Aufgaben und die unten beschriebene sporadische Windows-Linkprüfung |
 
 Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
@@ -2189,3 +2189,70 @@ Die abschließende isolierte Gegenprobe mit diesem Warteweg verwirft erneut
 präzise Fall 2 bei 16 px; Bericht unter `build/native/detail-counterexample`,
 Binär-SHA256 `10f7bddce3aaed74420030677cdc3dc2fa85ca304a060382c7bab4f3a5981751`.
 Der frühere Bericht bleibt unter `detail-counterexample-2b31a7d` erhalten.
+
+## Reale Gase, Messunsicherheit und Monte Carlo vom 16. Oktober 2026
+
+Weitere 19 Ausdrücke werden als Displayformeln gesetzt: vier im begrenzten
+Van-der-Waals-Modell, sechs bei Messmodell und Standardunsicherheit einschließlich
+Student-t-Intervall sowie neun im Monte-Carlo-Lernweg. Insgesamt sind 137
+Ausdrücke, 959 Breitenvarianten und 138 veröffentlichte Blöcke auf 14 Seiten
+vorhanden. Alle 16 ausführbaren Codeblöcke dieser drei Seiten sind gegenüber
+`cc125f0` unverändert; beide vollständigen Tutorialquellen stimmen zusätzlich
+mit den tatsächlich verwendeten Beispieldateien überein.
+
+Die Gleichungen wurden gegen `src/thermodynamics.c`, `src/measurement.c`,
+`src/student_interval.h` und `examples/documentation/monte_carlo_main.c`
+abgeglichen. Die Druckableitung hält Stoffmenge und Temperatur fest. Die
+RSS-Unsicherheit ist algebraisch in relative und Quantisierungsbeiträge
+aufgeteilt, mit ausdrücklich nichtnegativem Ergebnis. Gezogener Rauschwert und
+Standardabweichung der Rauschverteilung bleiben verschieden. Das t-Quantil
+bezeichnet die kumulierte Wahrscheinlichkeit (1+C)/2 bei n-1 Freiheitsgraden.
+Die Monte-Carlo-Energie nennt die feste Masse von 1 kg explizit; Erwartungswerte
+und Populationsstreuungen bleiben von einer einzelnen Zufallsbahn unterschieden.
+
+Die neue GUI-Gruppe `documentation_formula_models` prüft alle 19 Formeln bei
+1100 x 800 und 16 px, `documentation_formula_models_narrow` dieselben 19 bei
+760 x 540 und 32 px. Beide verlangen wirkliche Formelbilder im Clip, sichtbare
+native Lesebereiche, genaue Lesereihenfolge und unveränderten Editor-/Simulations-
+zustand. Die bisherigen 67 Lernformeln und vier schmalen Gitterformeln bleiben
+in der gemeinsamen Katalogprobe erhalten. Zeitgrenzen wurden nicht erhöht.
+
+Dabei wurde eine Lücke der bisherigen Schriftinventur nachgewiesen: TeX wird
+beim Parsen durch den nativen Lesetext des Katalogs ersetzt. Allein das Alphabet
+der Markdown-Quelldateien erfasst diesen Text nicht. Die erweiterte Gegenprobe
+`build/native/formula-alt-before.log` verwirft tatsächlich U+2C7C, den lateinischen
+tiefgestellten Buchstaben j, in allen 38 Schriftvarianten. UI-, Code- und
+Fallbackbereiche enthalten ihn jetzt; Fontquellentest und sichtbare 16-/32-Pixel-
+Zeichenprobe decken ihn zusätzlich ab.
+
+Ein ähnliches Zeichen für y war tatsächlich U+1D67, ein griechisches
+tiefgestelltes Gamma. Acht lineare Lesealternativen verwenden deshalb jetzt
+eindeutig `_y`. Der sichtbare TeX-Formelsatz behält den korrekten y-Index.
+Die finale Inventur umfasst Quelldokumente und sämtliche Katalog-Lesealternativen:
+180 druckbare Zeichen in 38 Schriftvarianten, jeweils mit normaler und
+gebündelter Primärschrift. Eine vollständige Unicode-Abdeckung folgt daraus nicht.
+
+MSVC/ASan besteht sechs native Fälle in `run-u4o8sjvm`: reale Gase, Messmodell,
+Dokumentparser, Fontquellen und die beiden Tutorialquellen. Alle fünf GUI-Fälle
+bestehen in `run-36figaca`. Linux GCC/ASan/UBSan besteht dieselben sechs Fälle
+in `run-zf_5y8vq` und alle fünf GUI-Fälle in `run-19tclqo1`, mit SDL 3.2.30,
+X11/Xvfb, Openbox und Mesa-Software-GL. Alle 19 kleinen Formelbilder beider
+Plattformen wurden als beschriftete Übersichten visuell geprüft; zusätzlich
+wurden die ganze Windows-Ableitungsansicht und Linux-Unsicherheitsansicht geöffnet.
+Der Testläufer samt erwarteten Fehlerfällen besteht unter
+`build/native/formula-models-runner-proof`; Asset- und nativer Katalogabgleich
+bestätigen alle 137 Ausdrücke.
+
+Die ersten lokalen Läufe werden als Vorbefunde erhalten. Windows
+`run-nis4yh39` besteht die vier Formelgruppen, verwirft die Zeicheninventur
+wegen U+1D67. Im ersten Linux-Lauf `run-vj6vyaad` wurden die Lesetextquellen
+noch während des laufenden Tests geändert; seine Vergleichsdaten sind deshalb
+nicht für eine Abnahme geeignet. Erst der vollständig abgeschlossene finale
+Quellstand dient als positiver Nachweis.
+
+Die Mac-CI enthält beide neuen 19-Formel-Gruppen und die erweiterte Inventur.
+Für diese Erweiterung steht die tatsächliche Mac-Ausführung noch aus. Die
+vorherigen 119 Blöcke und früheren 166-Zeichen-Proben werden dafür nicht als
+vollständiger Nachweis ausgegeben. Weitere mathematische Seiten, Inline-TeX,
+reale Dichte-/Monitorwechsel, externe Mac-AX-Prüfung und praktische Screenreader-
+Aufgaben bleiben offen; die Gesamtbewertung bleibt konservativ.
