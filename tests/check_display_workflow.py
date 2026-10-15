@@ -1585,6 +1585,8 @@ def main():
             for name in ("docs-macos-link-focus.bmp", "docs-macos-link-failed.bmp", "docs-macos-link-open.bmp"):
                 require((directory / name).is_file(), "Native link capture missing: " + name)
             require("MAC F1 LINKS: native attributed text" in flow.steps[-1]["stdout"], "Native AppKit link interaction missing")
+            require("MAC F1 TABLE: 2x2 rows/columns, headers, full text and nested link passed" in flow.steps[-1]["stdout"], "Native AppKit table hierarchy missing")
+            require("MAC F1 TABLE: visible cell and actual point hit passed" in flow.steps[-1]["stdout"], "Actual AppKit table geometry missing")
         elif args.case == "accessibility_edit_macos":
             require((directory / "docs-macos-edit-end.bmp").is_file(), "Native field end capture missing")
             require("MAC F1 EDIT: actual fields" in flow.steps[-1]["stdout"], "Native AppKit field interaction missing")

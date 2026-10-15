@@ -313,33 +313,58 @@ Sie prüft Clipping, eine anfangs unsichtbare Zeile, die Spaltenvereinigung
 nach einer Geometrieänderung, Indexfehler und Suspend. Originalausgaben und
 Quellhashes stehen unter `build/native/table-axis-windows` beziehungsweise
 `build/native/table-axis-linux`. Das ist ein gemeinsamer Modellnachweis;
-ein AX-Tabellenprovider ist damit weiterhin nicht implementiert oder abgenommen.
+die neue AX-Implementierung benötigt davon getrennte native Laufzeitnachweise.
 
-## Entwurf des nächsten AX-Schritts
+## AppKit-Tabellenadapter und ausstehende native Abnahme
 
-Der noch umzusetzende AppKit-Baum soll Dokument → Tabelle → Zeilen → Zellen →
-Links abbilden. Tabellen liefern zusätzlich Spaltenobjekte, Koordinatenzugriff
-und Überschriftenbeziehungen. Grundlage sind die öffentlichen Verträge für
+Der implementierte AppKit-Baum bildet Dokument → Tabelle → Zeilen → Zellen →
+Links ab. Tabellen liefern zusätzlich Spaltenobjekte, Koordinatenzugriff und
+Überschriftenbeziehungen. Grundlage sind die öffentlichen Verträge für
 [NSAccessibilityTable](https://developer.apple.com/documentation/appkit/nsaccessibilitytable),
 [NSAccessibilityRow](https://developer.apple.com/documentation/appkit/nsaccessibilityrow?changes=_2)
 und [Zellindexbereiche](https://developer.apple.com/de/documentation/appkit/nsaccessibility-c.protocol/accessibilitycolumnindexrange).
-Zellen verwenden die Modell-ID; native Zeilen/Spalten benötigen eine davon
-unterschiedene Identität aus Tabelle und Index. Die neuen gemeinsamen Rahmen
-vermeiden eine zweite, abweichende Geometrieberechnung im Adapter.
+Zellen verwenden die Modell-ID; native Zeilen/Spalten haben eine davon
+unterschiedene Identität aus Tabelle und Index. Die gemeinsamen Rahmen
+vermeiden eine zweite Geometrieberechnung im Adapter.
 
-Geplant sind nur bei Abfrage angelegte, pro Inhaltsversion kanonisch gehaltene
-Objekte außerhalb der interaktiven Controls. Dokumentwechsel und Schließen
-müssen alte Objekte ungültig machen und den Bestand freigeben. Direkt geerbte
-Press-/Fokus-/Wertaktionen benötigen ausdrücklich gesperrte Implementierungen;
-eine Selector-Allowlist allein genügt entsprechend dem bestehenden
-Dokumentvertrag nicht. Zellnamen bleiben vollständige Textbereiche. Geteilte
-UTF-16-Bereiche beziehen sich weiterhin auf das Dokument, auch wenn ein Link
-eine Zelle als Parent erhält.
+Objekte entstehen bei Abfrage und bleiben pro Inhaltsversion kanonisch,
+außerhalb der interaktiven Controls. Dokumentwechsel und Schließen lösen den
+Bestand und die Parent-Beziehungen auf; gehaltene alte Objekte werden ungültig.
+Direkt geerbte Press-/Fokus-/Wertaktionen sind ausdrücklich gesperrt. Zellnamen
+bleiben vollständige Textbereiche, auch jenseits der Controllabel-Kapazität.
+Geteilte UTF-16-Bereiche beziehen sich weiterhin auf das Dokument, auch wenn
+ein Link eine Zelle als Parent erhält. Die öffentliche Text-Reveal-Anforderung
+verwendet den normalen versionierten Scrollauftrag. Verborgene Dokumente
+bleiben lesbar, liefern aber keine sichtbare Zellgeometrie oder Bedienaktion.
 
-Die Abnahme muss tatsächliche Objective-C-/AppKit-Aufrufe auf Intel und ARM64
-umfassen: Header, Koordinaten, Unicode, lange und virtuelle leere Zellen,
-Parents, native Textbereiche, Reflow, verborgene Rahmen, auslaufende Referenzen
-und vollständiges Schließen. Die reale F1-Tabelle benötigt einen eigenen
-zusätzlichen Laufzeitnachweis. Dieser Entwurf ist kein Implementierungs- oder
-Ausführungsnachweis; externe AX-Clients und praktische VoiceOver-Aufgaben
-bleiben zusätzliche Abnahmen.
+Die neue native Fixture prüft eine dünn besetzte 3×3-Tabelle: Header,
+Koordinaten, Unicode samt Surrogatgrenzen, 1.536 Zeichen lange Zellen,
+verschiedene virtuelle Leerzellen, Parents, Textbereiche, Glyphenrahmen,
+Punktsuche, Reveal, Reflow, Verbergen und gehaltene Referenzen nach Versionswechsel
+und Schließen. Die zusätzliche reale F1-Probe sucht die 2×2-Tabelle über das
+Cocoa-contentView und öffentliche Accessibility-Selectoren. Sie prüft den
+vollständigen Zelltext `l|r in Metern; C`, Header, verschachtelten Link und
+sichtbare Geometrie samt Punktsuche. Der Testläufer verlangt beide F1-Marker.
+
+Diese Implementierung und ihre Prüfdefinitionen sind noch kein erfolgreicher
+macOS-Lauf. Tatsächliche Objective-C-/AppKit-Aufrufe müssen auf Intel und ARM64
+bestehen. Die F1-Probe läuft innerhalb der App; externe AX-Clients und praktische
+VoiceOver-Aufgaben bleiben getrennte offene Abnahmen.
+
+Die lokalen Nachbarn bestehen unter Windows MSVC ASan **4/4** native
+Modell-/Dokumentfälle (`run-m9mar7rd`) und **3/3** GUI-Fälle (`run-9abxq7o4`):
+nativer Provider, unabhängiger UIA-Linkclient und Inline-Inhalte. Linux GCC 15.2
+ASan/UBSan mit SDL 3.2.30, X11/Xvfb/Openbox besteht **4/4** native
+(`run-vmv_25d7`) und **2/2** GUI-Fälle (`run-m14rjkp7`): Inline-Inhalte und
+unabhängiger AT-SPI-Linkclient. Der Testläufer besteht seine erwarteten
+Fehler-/Timeoutfälle unter `build/native/mac-tables-runner-proof`.
+Die abschließende native Linkprüfung bestätigt 185 Seiten und 214 Abschnittslinks.
+Diese Nachbarn kompilieren den neuen Apple-Zweig nicht und ersetzen daher
+keinen tatsächlichen macOS-Nachweis.
+
+Der vorherige gemeinsame Rahmenstand `717fbae` besteht im
+[macOS-Lauf](https://github.com/Lulus792/physim/actions/runs/38786156143)
+auf ARM64 **11/11** native (`run-ui198hee`) und **13/13** GUI-Fälle
+(`run-n0xtym6r`), auf Intel **11/11** (`run-sw1jbjkp`) und **13/13**
+(`run-rc1tt6pk`). Beide tatsächlichen Joblogs wurden gelesen; auch dieser
+Nachweis gilt ausschließlich für die genannte vorherige Revision.

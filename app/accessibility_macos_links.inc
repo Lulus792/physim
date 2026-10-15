@@ -41,12 +41,13 @@ static id link_url(id object,SEL selector) {
 }
 static id link_parent(id object,SEL selector) {
  (void)selector;ps_a11y_native *b=owner(object);if(!b)return nil;
- SDL_LockMutex(b->mutex);id document=link_live_locked(object,b) && b->document?send0(b->document,"retain"):nil;SDL_UnlockMutex(b->mutex);
- return document?send0(document,"autorelease"):nil;
+ SDL_LockMutex(b->mutex);const ps_a11y_node *node=link_live_locked(object,b);
+ id parent=node?mac_table_parent_for_link_locked(b,node):nil;if(parent)send0(parent,"retain");SDL_UnlockMutex(b->mutex);
+ return parent?send0(parent,"autorelease"):nil;
 }
 static id link_shared_elements(id object,SEL selector) {
- id array=send0((id)objc_getClass("NSMutableArray"),"array"),document=link_parent(object,selector);
- if(document)send1(array,"addObject:",document);return array;
+ (void)selector;id array=send0((id)objc_getClass("NSMutableArray"),"array");ps_a11y_native *b=owner(object);if(!b)return array;
+ SDL_LockMutex(b->mutex);if(link_live_locked(object,b) && b->document)send1(array,"addObject:",b->document);SDL_UnlockMutex(b->mutex);return array;
 }
 static CGRect link_frame(id object,SEL selector) {
  (void)selector;ps_a11y_native *b=owner(object);if(!b)return CGRectZero;ax_range range;id document=nil;
@@ -104,7 +105,7 @@ static id document_link_children(id object,bool visible) {
   for(size_t i=0;i<count;i++){id link=element_for(b,b->model->nodes[order[i]].id);if(link)send1(array,"addObject:",link);}
  }SDL_UnlockMutex(b->mutex);return array;
 }
-static id document_visible_links(id object,SEL selector){(void)selector;return document_link_children(object,true);}
+static id document_visible_links(id object,SEL selector){(void)selector;return mac_document_children(object,true);}
 static id document_link_attributed(id object,ax_range range) {
  ps_a11y_native *b=owner(object);if(!b)return nil;id result=nil;size_t begin,end;
  SDL_LockMutex(b->mutex);const ps_a11y_document *d=document_live_locked(object,b);
@@ -123,7 +124,7 @@ static id document_link_attributed(id object,ax_range range) {
 static void document_link_publish_locked(ps_a11y_native *b,id roots) {
  const ps_a11y_document *d=b->model->document;if(!b->document || !d || !d->active)return;
  for(size_t i=0;i<b->count;i++){const ps_a11y_node *n=&b->model->nodes[i];if(n->role!=PS_A11Y_LINK || n->document_version!=d->version)continue;
-  id link=element_for(b,n->id);send1(roots,"removeObjectIdenticalTo:",link);send1(link,"setAccessibilityParent:",b->document);
+  id link=element_for(b,n->id);send1(roots,"removeObjectIdenticalTo:",link);send1(link,"setAccessibilityParent:",mac_table_parent_for_link_locked(b,n));
   CGRect frame=CGRectMake(n->bounds[0]-d->viewport[0],d->viewport[3]-(n->bounds[1]-d->viewport[1])-n->bounds[3],n->bounds[2],n->bounds[3]);
   ((void(*)(id,SEL,CGRect))objc_msgSend)(link,sel_registerName("setAccessibilityFrameInParentSpace:"),frame);
  }

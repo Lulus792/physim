@@ -78,7 +78,7 @@ bool ps_a11y_native_links_test_step(ps_a11y_native *b,int step) {
  }SDL_UnlockMutex(b->mutex);
  if(step==0) {
   ok=link && b->document && expected>=2;
-  id children=ok?send0(b->document,"accessibilityChildren"):nil;
+  id children=ok?document_link_children(b->document,false):nil;
   ok &= children && ((unsigned long(*)(id,SEL))objc_msgSend)(children,sel_registerName("count"))==expected;
   unsigned long previous=0;
   for(size_t i=0;i<expected && ok;i++) {
@@ -87,15 +87,18 @@ bool ps_a11y_native_links_test_step(ps_a11y_native *b,int step) {
    id attributed=((id(*)(id,SEL,ax_range))objc_msgSend)(b->document,sel_registerName("accessibilityAttributedStringForRange:"),range);
    id attribute=attributed?((id(*)(id,SEL,id,unsigned long,ax_range*))objc_msgSend)(attributed,sel_registerName("attribute:atIndex:effectiveRange:"),NSAccessibilityLinkTextAttribute,0,NULL):nil;
    const char *plain=attributed?edit_string_bytes(send0(attributed,"string")):NULL,*value=edit_string_bytes(send0(child,"accessibilityValue"));
-   ok=range.location!=AX_NOT_FOUND && range.length && (!i || range.location>=previous) && attribute==child && plain && value && !strcmp(plain,value) && send0(child,"accessibilityParent")==b->document && send0(child,"accessibilityURL");
+   SDL_LockMutex(b->mutex);const ps_a11y_node *node=ps_a11y_find(b->model,identifier(child));id parent=node?mac_table_parent_for_link_locked(b,node):nil;SDL_UnlockMutex(b->mutex);
+   ok=range.location!=AX_NOT_FOUND && range.length && (!i || range.location>=previous) && attribute==child && plain && value && !strcmp(plain,value) && send0(child,"accessibilityParent")==parent && send0(child,"accessibilityURL");
    previous=range.location+range.length;
   }
+  ok &= mac_f1_table_check(b,false);
   if(ok){if(b->links_probe)send0(b->links_probe,"release");b->links_probe=send0(link,"retain");b->links_probe_serial=b->completed_link_serial;
    ((void(*)(id,SEL,BOOL))objc_msgSend)(link,sel_registerName("setAccessibilityFocused:"),YES);}
  }else if(step==1) {
   SEL selector=sel_registerName("accessibilityFrame");IMP method=link?method_getImplementation(class_getInstanceMethod(object_getClass(link),selector)):NULL;
   CGRect frame=method?((CGRect(*)(id,SEL))method)(link,selector):CGRectZero;
   ok=link && ((BOOL(*)(id,SEL))objc_msgSend)(link,sel_registerName("isAccessibilityFocused")) && !CGRectIsEmpty(frame);
+  ok &= mac_f1_table_check(b,true);
  }else if(step==2 || step==4) {
   ok=link && ((BOOL(*)(id,SEL))objc_msgSend)(link,sel_registerName("accessibilityPerformPress"));
  }else if(step==3)ok=b->completed_link_serial==b->links_probe_serial;

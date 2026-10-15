@@ -17,7 +17,7 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 | Dokumentationszugang | 185 registrierte Seiten und 214 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
 | Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
-| Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; Windows und Linux besitzen zusätzlich geprüfte native Tabellen-, Zell- und Headerbeziehungen | Nativer Tabellenadapter für macOS, externe macOS-AX-Clientprüfung, echte Screenreader-Aufgaben und die unten beschriebene sporadische Windows-Linkprüfung |
+| Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; Windows und Linux besitzen zusätzlich geprüfte native Tabellen-, Zell- und Headerbeziehungen | Laufzeitabnahme des neuen macOS-Tabellenadapters, externe macOS-AX-Clientprüfung, echte Screenreader-Aufgaben und die unten beschriebene sporadische Windows-Linkprüfung |
 
 Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
 Bewertung mit Höchstpunktzahl ist wegen dieser offenen Abnahmefälle noch nicht

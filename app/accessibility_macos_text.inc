@@ -42,7 +42,7 @@ static id document_parent(id object,SEL selector) {
  SDL_LockMutex(b->mutex);id view=document_live_locked(object,b)?send0(b->view,"retain"):nil;SDL_UnlockMutex(b->mutex);
  return view?send0(view,"autorelease"):nil;
 }
-static id document_children(id object,SEL selector){(void)selector;return document_link_children(object,false);}
+static id document_children(id object,SEL selector){(void)selector;return mac_document_children(object,false);}
 static id document_empty_children(id object,SEL selector){(void)object;(void)selector;return send0((id)objc_getClass("NSArray"),"array");}
 static BOOL document_no_action(id object,SEL selector){(void)object;(void)selector;return NO;}
 static void document_no_value(id object,SEL selector,id value){(void)object;(void)selector;(void)value;}
@@ -138,6 +138,7 @@ static bool make_document_class(void) {
  class_addMethod(document_class,sel_registerName("accessibilityIdentifier"),(IMP)document_identifier,"@@:");
  class_addMethod(document_class,sel_registerName("accessibilityParent"),(IMP)document_parent,"@@:");
  class_addMethod(document_class,sel_registerName("accessibilityChildren"),(IMP)document_children,"@@:");
+ class_addMethod(document_class,sel_registerName("accessibilityHitTest:"),(IMP)mac_document_hit,"@@:{CGPoint=dd}");
  class_addMethod(document_class,sel_registerName("accessibilitySelectedChildren"),(IMP)document_empty_children,"@@:");
  class_addMethod(document_class,sel_registerName("accessibilityVisibleChildren"),(IMP)document_visible_links,"@@:");
  class_addMethod(document_class,sel_registerName("isAccessibilityFocused"),(IMP)document_no_action,PS_AX_BOOL "@:");
