@@ -192,7 +192,7 @@ def documentation_h_chrome_pixels(path, bounds, dark, right_visible, scale=1, pi
             'Language choices are separate buttons instead of one joined segmented control')
     button=(53,54,60) if dark else (229,232,238)
     edit=(27,28,32) if dark else (255,255,255)
-    panel=(30,31,35) if dark else (246,247,250)
+    panel=(32,33,37) if dark else (242,243,246)
     accent=(100,170,255) if dark else (0,73,163)
     hover=(67,69,77) if dark else (218,222,230)
     if high_contrast:

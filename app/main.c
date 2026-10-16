@@ -238,9 +238,10 @@ typedef struct {
     ps_graphics *doc_graphics;
     struct nk_context *doc_ui;
     struct documentation_math_cache *doc_math;
-    bool doc_detail_test_requested,doc_detail_test_ok;
+    bool doc_detail_test_requested,doc_detail_test_ok,doc_context_caption_test;
     unsigned doc_detail_test_case;
     struct nk_rect doc_detail_test_bounds;
+    struct nk_rect doc_context_caption_bounds;
     char doc_detail_test_text[192];
     bool doc_math_test_requested,doc_math_test_ok;
     unsigned doc_math_test_case;

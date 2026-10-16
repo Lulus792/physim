@@ -7,6 +7,7 @@ static void documentation_h_test_frame(app *a,int *stage,int *code,const char **
     bool ok=true;
     switch((*stage)++) {
     case 0:
+        a->doc_context_caption_test=true;
         experiment=a->experiment.string.len;analysis=a->analysis.string.len;simulation=a->simulation_time;
         frame=0;test_window_key_mod(a->window,SDLK_F1,0);break;
     case 1:
@@ -27,6 +28,7 @@ static void documentation_h_test_frame(app *a,int *stage,int *code,const char **
             nk_sdl_accessibility_choice_state(a->doc_ui,"Kontextansicht","Beispiel",&selected) && !selected;}
         index=0;break;
     case 2: {
+        a->doc_detail_test_ok=false;a->doc_detail_test_case=index;
         unsigned size=index>=48?1:(index/4)%2,window=index>=48?1:(index/8)%2,theme=index>=48?(index-48)/4:index/16;
         ps_preferences p=a->preferences;p.theme=theme==0?PS_THEME_DARK:theme==1?PS_THEME_LIGHT:PS_THEME_HIGH_CONTRAST;
         /* Workspace preferences support 16..22 px; the reader supports 32 px. */
@@ -78,6 +80,7 @@ static void documentation_h_test_frame(app *a,int *stage,int *code,const char **
         if(!a->doc_navigation_hidden)ok=ok && a->doc_left_slot.x==left.x && a->doc_left_slot.w==left.w;
         if(!a->doc_context_hidden)ok=ok && a->doc_right_slot.x==right.x && a->doc_right_slot.w==right.w;
         ok=ok && a->doc_article_slot.w>=320 && a->doc_body_bounds.w>220 && a->doc_body_bounds.h>=120;
+        ok=ok && (a->doc_context_hidden || a->doc_detail_test_ok);
         snprintf(name,sizeof name,"docs-h-%02u.bmp",index);*capture=name;
         printf("DOCUMENTATION H GEOMETRY: case=%u left=%.0f,%.0f article=%.0f,%.0f right=%.0f,%.0f body=%.0f,%.0f ok=%d\n",
             index,a->doc_left_slot.x,a->doc_left_slot.w,a->doc_article_slot.x,a->doc_article_slot.w,
@@ -86,7 +89,7 @@ static void documentation_h_test_frame(app *a,int *stage,int *code,const char **
         printf("DOCUMENTATION H CHROME: case=%u c=%.2f,%.2f,%.2f,%.2f physim=%.2f,%.2f,%.2f,%.2f model=%.2f,%.2f,%.2f,%.2f\n",
             index,a->doc_track_bounds[0].x,a->doc_track_bounds[0].y,a->doc_track_bounds[0].w,a->doc_track_bounds[0].h,
             a->doc_track_bounds[1].x,a->doc_track_bounds[1].y,a->doc_track_bounds[1].w,a->doc_track_bounds[1].h,
-            a->doc_right_slot.x+12,a->doc_right_slot.y,documentation_text_width(chrome,"Modell",6)+2,fmaxf(46,chrome->height+16));
+            a->doc_right_slot.x+12,a->doc_right_slot.y,documentation_tab_width(a,"Modell"),fmaxf(46,chrome->height+16));
         if(!a->doc_navigation_hidden)printf("DOCUMENTATION H NAV: case=%u topic=%.2f,%.2f,%.2f,%.2f section=%.2f,%.2f,%.2f,%.2f\n",
             index,a->doc_active_topic_bounds.x,a->doc_active_topic_bounds.y,a->doc_active_topic_bounds.w,a->doc_active_topic_bounds.h,
             a->doc_first_section_bounds.x,a->doc_first_section_bounds.y,a->doc_first_section_bounds.w,a->doc_first_section_bounds.h);
@@ -94,6 +97,7 @@ static void documentation_h_test_frame(app *a,int *stage,int *code,const char **
     case 4:
         if(++index<56)*stage=2;
         else {
+            a->doc_context_caption_test=false;
             a->doc_navigation_hidden=false;a->doc_context_hidden=false;
             SDL_SetWindowSize(a->doc_window,wide_width,wide_height);SDL_SyncWindow(a->doc_window);
             ps_preferences p=a->preferences;p.theme=PS_THEME_DARK;p.ui_size=16;preferences_apply(a,&p);documentation_zoom(a,0);

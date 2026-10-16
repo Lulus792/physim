@@ -4,6 +4,18 @@ static const struct nk_user_font *documentation_chrome_font(app *a) {
     const struct nk_user_font *font=a->doc_chrome_fonts[(a->preferences.ui_size-16)/2];
     return font?font:a->doc_font_ui;
 }
+/* Captions use compact chrome; actionable labels match H's larger text and
+ * genuine selected weight. Both roles follow UI size, never reader zoom. */
+static const struct nk_user_font *documentation_control_font(app *a,bool selected) {
+    unsigned i=(a->preferences.ui_size-16)/2;
+    const struct nk_user_font *font=selected?a->doc_bold_fonts[i]:a->doc_ui_fonts[i];
+    return font?font:documentation_chrome_font(a);
+}
+static float documentation_tab_width(app *a,const char *label) {
+    size_t n=strlen(label);
+    return fmaxf(documentation_text_width(documentation_control_font(a,false),label,n),
+        documentation_text_width(documentation_control_font(a,true),label,n))+2;
+}
 static void documentation_h_label(app *a,const char *text,bool muted) {
     struct nk_context *ui=a->doc_ui;const struct nk_user_font *font=ui->style.font;
     nk_layout_row_dynamic(ui,documentation_height(font,text,strlen(text),nk_window_get_content_region(ui).w-8)+8,1);
@@ -48,7 +60,7 @@ static bool documentation_segment(app *a,struct nk_rect r,const char *group,cons
     if((selected && !tab) || hover)nk_fill_rect(canvas,r,tab?3:4,hover?UI_COLOR(button_hover):UI_COLOR(button));
     if(selected && !tab && a->preferences.theme==PS_THEME_HIGH_CONTRAST)
         nk_stroke_rect(canvas,nk_rect(r.x+1,r.y+1,r.w-2,r.h-2),3,2,UI_COLOR(accent));
-    const struct nk_user_font *font=ui->style.font;
+    const struct nk_user_font *font=documentation_control_font(a,selected);
     float width=documentation_text_width(font,label,strlen(label));
     nk_draw_text(canvas,nk_rect(r.x+(r.w-width)/2,r.y+(r.h-font->height)/2,width+1,font->height),
         label,(int)strlen(label),font,nk_rgba(0,0,0,0),selected?UI_COLOR(text):UI_COLOR(muted));
@@ -62,8 +74,8 @@ static void documentation_header(app *a) {
     const char *brand_text="PHYSIM Handbuch";
     const struct nk_user_font *brand_font=a->doc_ui_fonts[(a->preferences.ui_size-16)/2];
     float brand=documentation_text_width(brand_font,brand_text,strlen(brand_text))+12;
-    float physim=documentation_text_width(ui->style.font,"Physim",6)+20;
-    float cwidth=documentation_text_width(ui->style.font,"C",1)+20;
+    float physim=documentation_tab_width(a,"Physim")+18;
+    float cwidth=documentation_tab_width(a,"C")+18;
     float language=cwidth+physim+8;
     float available=width-brand-language-64-5*ui->style.window.spacing.x;
     float search=fminf(310,fmaxf(100,available)),spacer=fmaxf(0,available-search);
@@ -86,7 +98,11 @@ static void documentation_header(app *a) {
         nk_edit_focus(ui,NK_EDIT_ALWAYS_INSERT_MODE);a->doc_filter_focus=false;
     }
     struct nk_rect bounds=nk_widget_bounds(ui);a->doc_filter_bounds=bounds;
+    nk_style_push_font(ui,documentation_control_font(a,false));
+    nk_style_push_float(ui,&ui->style.edit.border,1);
+    nk_style_push_color(ui,&ui->style.edit.border_color,UI_COLOR(divider));
     nk_flags edit=nk_sdl_edit_named(ui,"Alle Inhalte durchsuchen",NK_EDIT_FIELD,a->doc_filter,sizeof a->doc_filter,nk_filter_default);
+    nk_style_pop_color(ui);nk_style_pop_float(ui);nk_style_pop_font(ui);
     if(edit&PS_UI_EDIT_NATIVE_FOCUS){a->doc_focus=DOC_FILTER;a->doc_keyboard=true;}
     a->doc_filter_active=(edit&NK_EDIT_ACTIVE)!=0;
     if(a->doc_filter_active)a->doc_search_active=false;
@@ -94,7 +110,7 @@ static void documentation_header(app *a) {
     if(!a->doc_filter[0] && !a->doc_filter_active) {
         const char *placeholder=a->doc_track==2?"Physim-Handbuch durchsuchen …":"C-Handbuch durchsuchen …";
         nk_draw_text(nk_window_get_canvas(ui),nk_rect(bounds.x+8,bounds.y+6,bounds.w-16,bounds.h-12),placeholder,
-            (int)strlen(placeholder),ui->style.font,nk_rgba(0,0,0,0),UI_COLOR(muted));
+            (int)strlen(placeholder),documentation_control_font(a,false),nk_rgba(0,0,0,0),UI_COLOR(muted));
     }
     if(strcmp(a->doc_filter,a->doc_last_filter)) {
         documentation_filter(a);a->doc_navigation_hidden=false;a->doc_reset_sidebar=true;
@@ -123,22 +139,23 @@ static void documentation_sections(app *a) {
         if(!documentation_contents_heading(a,b) || b->level==1)continue;
         const char *label=a->documentation->text+b->text;
         float extra=b->level>2?8:0;
-        nk_layout_row_begin(ui,NK_STATIC,documentation_height(ui->style.font,label,strlen(label),content.w-indent-extra-20)+10,2);
+        bool selected=current==(int)i;
+        const struct nk_user_font *font=documentation_control_font(a,selected);
+        nk_layout_row_begin(ui,NK_STATIC,documentation_height(font,label,strlen(label),content.w-indent-extra-12)+10,2);
         nk_layout_row_push(ui,indent+extra-ui->style.window.spacing.x);nk_spacing(ui,1);
         nk_layout_row_push(ui,content.w-indent-extra);struct nk_rect bounds=nk_widget_bounds(ui);
         if(first){a->doc_first_section_bounds=bounds;first=false;}
         struct nk_rect hit;enum nk_widget_layout_states visible=nk_widget(&hit,ui);
-        bool selected=current==(int)i;
         if(ps_ui_button_at(ui,hit,label,selected))a->doc_jump_block=(int)i;
         if(visible!=NK_WIDGET_INVALID) {
             struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
             if(selected || nk_input_is_mouse_hovering_rect(&ui->input,hit))nk_fill_rect(canvas,hit,0,selected?UI_COLOR(selection_active):UI_COLOR(button_hover));
             if(selected)nk_fill_rect(canvas,nk_rect(hit.x,hit.y,2,hit.h),0,UI_COLOR(accent));
             size_t at=0,n=strlen(label);float y=hit.y+5;
-            do {size_t length,used=documentation_line(ui->style.font,label+at,n-at,hit.w-12,&length);
-                nk_draw_text(canvas,nk_rect(hit.x+6,y,hit.w-12,ui->style.font->height+6),label+at,(int)length,ui->style.font,
+            do {size_t length,used=documentation_line(font,label+at,n-at,hit.w-12,&length);
+                nk_draw_text(canvas,nk_rect(hit.x+6,y,hit.w-12,font->height+6),label+at,(int)length,font,
                     nk_rgba(0,0,0,0),selected?UI_COLOR(text):UI_COLOR(muted));
-                at+=used;y+=ui->style.font->height+6;
+                at+=used;y+=font->height+6;
             }while(at<n);
         }
         documentation_focus_draw(a,DOC_HEADING+(int)i,bounds,false);
@@ -164,9 +181,11 @@ static void documentation_sidebar_content(app *a) {
                 documentation_h_label(a,groups[group],true);previous=group;
             }
             const char *title=documentation_topics[topic].title;
+            nk_style_push_font(ui,documentation_control_font(a,topic==a->doc_topic));
             nk_layout_row_dynamic(ui,documentation_height(ui->style.font,title,strlen(title),nk_window_get_content_region(ui).w-20)+14,1);
             struct nk_rect bounds;
             bool pressed=documentation_topic_button(a,title,topic==a->doc_topic,&bounds);
+            nk_style_pop_font(ui);
             if(topic==a->doc_topic)a->doc_active_topic_bounds=bounds;
             if(a->doc_filter[0] && n==0)a->doc_first_result_bounds=bounds;
             if(pressed) {
@@ -236,7 +255,10 @@ static void documentation_context_figure(app *a,int kind,struct nk_rect r) {
     float x=r.x+r.w*.25f,y=r.y+24,w=r.w*.6f,h=r.h-48;
     if(kind==1) {
         /* Same logical vector geometry as the selected H model.svg. */
-        float s=fminf(r.w/220,r.h/210),ox=r.x+(r.w-220*s)/2,oy=r.y;
+        const char *caption="Ideales Pendel · Vakuum";
+        const struct nk_user_font *caption_font=a->doc_ui->style.font;
+        float caption_height=documentation_height(caption_font,caption,strlen(caption),r.w-8);
+        float s=fminf(r.w/220,fmaxf(1,r.h-caption_height-8)/182),ox=r.x+(r.w-220*s)/2,oy=r.y;
         nk_stroke_line(c,ox+44*s,oy+22*s,ox+146*s,oy+22*s,1.5f,UI_COLOR(muted));
         for(int i=0;i<6;i++)nk_stroke_line(c,ox+(54+i*14)*s,oy+22*s,ox+(62+i*14)*s,oy+13*s,1,UI_COLOR(muted));
         for(int i=0;i<17;i++)nk_stroke_line(c,ox+92*s,oy+(24+i*9)*s,ox+92*s,oy+(28+i*9)*s,1,UI_COLOR(muted));
@@ -249,14 +271,22 @@ static void documentation_context_figure(app *a,int kind,struct nk_rect r) {
             nk_stroke_line(c,ox+(92+sinf(a)*49)*s,oy+(24+cosf(a)*49)*s,
                 ox+(92+sinf(b)*49)*s,oy+(24+cosf(b)*49)*s,1,UI_COLOR(muted));
         }
-        const struct nk_user_font *font=a->doc_font_ui;
+        const struct nk_user_font *font=documentation_control_font(a,false);
         const char *labels[]={"θ","L","m"};float lx[]={99,136,176},ly[]={95,95,168};
         for(unsigned i=0;i<3;i++)nk_draw_text(c,nk_rect(ox+lx[i]*s,oy+ly[i]*s-font->height,30,font->height),
             labels[i],(int)strlen(labels[i]),font,nk_rgba(0,0,0,0),ink);
-        const char *caption="Ideales Pendel · Vakuum";
-        float caption_width=documentation_text_width(a->doc_ui->style.font,caption,strlen(caption));
-        nk_draw_text(c,nk_rect(r.x+(r.w-caption_width)/2,oy+203*s-a->doc_ui->style.font->height,caption_width+1,a->doc_ui->style.font->height),
-            caption,(int)strlen(caption),a->doc_ui->style.font,nk_rgba(0,0,0,0),UI_COLOR(muted));
+        struct nk_rect caption_bounds=nk_rect(r.x+4,floorf(r.y+r.h-caption_height),r.w-8,ceilf(caption_height));
+        size_t at=0,n=strlen(caption);float cy=caption_bounds.y;
+        do {
+            size_t length,used=documentation_line(caption_font,caption+at,n-at,caption_bounds.w,&length);
+            float width=documentation_text_width(caption_font,caption+at,length);
+            nk_draw_text(c,nk_rect(caption_bounds.x+(caption_bounds.w-width)/2,cy,width+1,caption_font->height+6),
+                caption+at,(int)length,caption_font,nk_rgba(0,0,0,0),UI_COLOR(muted));
+            at+=used;cy+=caption_font->height+6;
+        }while(at<n);
+        if(a->doc_context_caption_test) {
+            a->doc_context_caption_bounds=caption_bounds;
+        }
     } else if(kind==2) {
         nk_stroke_line(c,x,y+h,x+w,y+h,1,UI_COLOR(muted));
         nk_stroke_line(c,x,y+h,x,y,1,UI_COLOR(muted));
@@ -277,8 +307,9 @@ static void documentation_context_figure(app *a,int kind,struct nk_rect r) {
 static void documentation_context_content(app *a);
 static void documentation_context_view(app *a) {
     struct nk_context *ui=a->doc_ui;float row=fmaxf(46,ui->style.font->height+16);
-    float model=documentation_text_width(ui->style.font,"Modell",6)+2;
-    float example=documentation_text_width(ui->style.font,"Beispiel",8)+2;
+    float model=documentation_tab_width(a,"Modell");
+    float example=documentation_tab_width(a,"Beispiel");
+    nk_fill_rect(nk_window_get_canvas(ui),nk_rect(a->doc_right_slot.x,a->doc_right_slot.y,a->doc_right_slot.w,row),0,UI_COLOR(header));
     nk_layout_row_begin(ui,NK_STATIC,row,3);nk_layout_row_push(ui,model);
     struct nk_rect r;nk_widget(&r,ui);
     if(documentation_segment(a,r,"Kontextansicht","Modell",!a->doc_context_example,true))a->doc_context_example=false;

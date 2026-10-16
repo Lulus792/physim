@@ -4,6 +4,104 @@ Nach dem Nutzervergleich vom 16. Oktober 2026 wurde die native Umsetzung erneut
 direkt mit `h-dark.png`, `h-light.png` und den zugehörigen CSS-Regeln verglichen.
 Dieser Bericht ergänzt die historische Abnahme in [NATIVE-H.md](NATIVE-H.md).
 
+## Weiterer Detailabgleich der Navigation und Umschalter (17. Oktober 2026)
+
+Der erneute Vergleich mit H trennt jetzt kleine Gruppenbeschriftungen von
+Bedienbeschriftungen. Themen, Abschnittssprünge, C/Physim, Modell/Beispiel und
+das globale Suchfeld verwenden die vorhandene reguläre UI-Schrift. Aktive Themen,
+Abschnitte und ausgewählte Sprach-/Kontextreiter verwenden die echte Fettschrift
+derselben Größe. Bei UI 16 sind dies 16 logische Pixel; die kleinen Beschriftungen
+bleiben bei 14. Damit entsprechen Textgewicht und Größenhierarchie der Vorlage
+enger. Der Leserzoom verändert weiterhin ausschließlich die Leseschrift.
+
+Die Breite jedes Sprachsegments und Kontextreiters berücksichtigt beide
+Schriftgewichte, damit ein Wechsel die Positionen nicht verschiebt. Die
+Abschnittshöhe wird mit derselben Schrift und nutzbaren Breite wie der gezeichnete
+Text gemessen. Lange echte Abschnittsnamen brechen um. Der Suchfeldrahmen und
+der Hintergrund des rechten Paneelkopfs entsprechen jetzt ebenfalls den
+semantischen H-Rollen `divider` und `header`.
+
+Neue unveränderte native Aufnahmen, lediglich von BMP nach PNG konvertiert:
+[Dunkel](native-h-controls-dark.png), [Hell](native-h-controls-light.png),
+[Mindestfenster](native-h-controls-minimum.png) und
+[UI 22 / Leseschrift 32](native-h-controls-large.png).
+Die weiter unten aufgeführten früheren Bilder bleiben als historische Abnahme erhalten.
+
+Der Windows-Lauf `run-56umm8n9` besteht zunächst 8/8: native Accessibility, Tastatur,
+Schriftbedarf einschließlich Allokationsfehler/Dichtewechsel, Inline-Formeln,
+lange Sidebartexte, Display-Formelsatz, F6-Bereichsnavigation und H.
+H prüft alle 56 realen Zustände einschließlich unabhängiger Seiten, Lesezoom,
+UI 22 sowie Hell/Dunkel/hohem Kontrast und echter Bildpixel. Die vier neuen
+Bilder wurden zusätzlich direkt mit der Vorlage verglichen.
+Die entsprechende Linux-Gruppe besteht 7/7 (`run-k9fuo9pr`, Alpine 3.24.2,
+GCC 15.2, ASan/UBSan, X11/Xvfb/Openbox). Der zusätzliche native COM-Fall der
+Windows-Gruppe gehört nicht zum Linux-Testkatalog.
+
+Die tatsächliche Linux-Bildprüfung zeigt bei UI 22 noch eine abgeschnittene
+Pendelbeschriftung. Die Korrektur reserviert die gemessene Captionhöhe innerhalb
+des Grafikrechtecks, bricht den Text um und zentriert jede Zeile einzeln.
+Die Grafikzeichen folgen jetzt der UI-Schrift statt dem Leserzoom.
+Der bestehende unabhängige Metazeilenprüfer kontrolliert in H zusätzlich die
+tatsächlich gezeichneten Captionbytes und Glyphen gegen Rechteck und Clip.
+Windows besteht danach H und Bereichsnavigation erneut 2/2 (`run-52linhe9`).
+Eine Kontrolle der Messdaten zeigt, dass der erste Caption-Prüfaufbau durch die
+später gebaute Artikel-Metazeile überschrieben wurde. Dieser Lauf zählt deshalb
+ausdrücklich nicht als Caption-Glyphennachweis. Die Captionmessstelle wird nun
+erst nach dem vollständigen Fensteraufbau gesetzt. Der abschließende H-Lauf
+`run-l3dht5dp` besteht 1/1 und prüft tatsächlich die Beschriftung in allen 28
+sichtbaren Matrixzuständen. Von 143 Probeaufrufen sind 141 vollständige
+Captionmessungen; zwei frühe Aufrufe vor dem Pendelaufbau besitzen noch kein
+Zielrechteck und gehören nicht zur Abnahmematrix.
+Die vier neuen PNGs stammen aus diesem abschließenden Lauf.
+Linux bestätigt nach derselben Messstellenkorrektur ebenfalls H 1/1
+(`run-johu7rnp`), einschließlich vollständiger zweizeiliger Caption bei UI 22
+in Hell und Dunkel. Auch dort sind 141 Captionmessungen vollständig; die zwei
+Startaufrufe ohne Modellziel zählen nicht zur Abnahmematrix.
+Linux-Binary-SHA256:
+`c9f0b6aed8fc78c2031cd9ecb8ede91b68d9a7b5f7d9e0adeda62e83322ccb13`.
+Aktuelles Windows-Binary (MSVC/ASan), SHA256:
+`1aff5f591d5ac062c94c05900c194fdb2b9210a7784ac16cfcd7daa6c6aa01fc`.
+Dieses geprüfte Programm und seine passende PDB liegen auch unter
+`build/native/Debug-sanitized/bin/physim.exe`; SDL und beide ASan-Runtimes wurden
+vor der Übernahme per Hash verglichen. Das vorherige EXE-/PDB-Paar bleibt lokal gesichert.
+
+Die isolierte Sidebar-Gegenprobe verwendet jetzt ebenfalls die aktuelle
+Schrift-/Breitenmesszeile. Ihr Fehler bleibt die absichtlich wieder eingesetzte
+einzeilige Höhe; der unabhängige Zeichen-/Clipprüfer bleibt unverändert.
+Der tatsächliche Linux-Gegenlauf gegen den Typografiestand vor der
+anschließenden Captionkorrektur verwirft genau den abgeschnittenen Abschnitt
+(`build/native/h-detail-sidebar-counterexample/report.json`, `precise_rejection=true`).
+Der native Parser bestätigt abschließend 185 Seiten und 220 Abschnittslinks
+(`build/native/h-detail-anchors-native.log`). Für diese Detailänderungen liegt
+noch keine eigene macOS-Abnahme vor.
+
+Die zusätzliche normale Linux-App-Prüfung
+`build/native/h-detail-normal-pointer/results.json` bestätigt reale Mausklicks
+auf beide Sprachen, beide Kontextreiter und beide Seitenicons einschließlich
+exklusiver Zustände und unabhängiger Rechtecke. Die anschließende lokale
+Texteingabe im unveränderten 40-ms-Burst scheitert: Statt `theta` steht `a` im
+Suchfeld. Dieser Eingabebefund wird nicht als behoben ausgegeben. Der Prüfer
+behält den bisherigen Burst als Standard und bietet für die Ursachenabgrenzung
+zusätzlich `--acknowledge-text`: einzelne echte X11-Zeichen mit unabhängiger
+AT-SPI-Bestätigung jedes Präfixes und ohne unnötiges Strg+A im leeren Feld.
+Auch der tatsächliche abschließende Diagnose-Lauf
+`build/native/h-detail-normal-pointer-paced/results.json` bestätigt die beiden
+Maus-/Geometrieaufgaben, scheitert aber bei der Bestätigung der lokalen
+Texteingabe. Damit ist ein bloß zu schneller Zeichenburst als alleinige
+Erklärung nicht belegt; weder diese Eingabeaufgabe noch die danach liegenden
+normalen F6-/Filteraufgaben werden als bestanden gewertet. Die unabhängigen
+nativen Tastatur-/Bereichstests oben bleiben separat ausgewiesen.
+
+Die 61 doppelten BMPs des ersten erfolgreichen Windows-H-Einzellaufs wurden nach
+der vollständigen Abnahme entfernt (150.258.018 Byte); finale Gruppenbilder,
+Ergebnisdateien und die vier versionierten PNGs bleiben erhalten.
+
+Die restlichen Unterschiede sind im letzten Abschnitt begründet. Insbesondere
+sind ein anderer Fensterrahmen und unterschiedliche Schriftglättung konkrete
+Plattformunterschiede. Die zusätzliche Artikelwerkzeugleiste und der vollständige
+Inhaltsbestand sind bewusste funktionale Abweichungen; sie sind technisch
+veränderbar und werden nicht als Unmöglichkeit des nativen Renderers ausgegeben.
+
 ## Übernommene Gestaltung
 
 - Die linke Leiste besitzt einen festen, durch eine Linie getrennten Kopf und

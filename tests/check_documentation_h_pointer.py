@@ -19,6 +19,8 @@ from gi.repository import GLib
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--app',required=True,type=Path)
 parser.add_argument('--work',required=True,type=Path)
+parser.add_argument('--acknowledge-text',action='store_true',
+                    help='Diagnostic paced input; retain the default 40 ms burst as a separate check')
 args=parser.parse_args()
 root=Path(__file__).resolve().parents[1]
 work=args.work.resolve();work.mkdir(parents=True,exist_ok=False)
@@ -78,10 +80,22 @@ def focused(name,group=None,role=None):
 
 def select_all(name):
     length=find(name).queryText().characterCount
+    if not length and args.acknowledge_text:return
     xrun('key','--clearmodifiers','ctrl+a')
     if length:
         wait(lambda:find(name).queryText().getNSelections()>0 and
              tuple(find(name).queryText().getSelection(0))==(0,length),'actual selection in '+name)
+
+def type_text(name,value):
+    if not args.acknowledge_text:
+        xrun('type','--clearmodifiers','--delay','40',value)
+        return
+    # Acknowledge each real OS text input through the independent native
+    # provider before issuing the next one; do not guess the ASan frame time.
+    for index,character in enumerate(value):
+        xrun('type','--clearmodifiers','--delay','40',character)
+        wait(lambda:find(name).queryText().getText(0,-1)==value[:index+1],
+             'actual text prefix in '+name)
 
 def click(name,group=None,role=None):
     def synchronized():
@@ -147,7 +161,7 @@ try:
     xrun('key','--clearmodifiers','ctrl+f')
     wait(lambda:focused('Aktuelles Dokument durchsuchen'),'local search before pane navigation')
     select_all('Aktuelles Dokument durchsuchen')
-    xrun('type','--clearmodifiers','--delay','40','theta')
+    type_text('Aktuelles Dokument durchsuchen','theta')
     wait(lambda:find('Aktuelles Dokument durchsuchen').queryText().getText(0,-1)=='theta','actual local query edit')
     xrun('key','--clearmodifiers','F6')
     wait(lambda:focused('Modell','Kontextansicht'),'F6 moves from article to context')
@@ -161,7 +175,7 @@ try:
     xrun('key','--clearmodifiers','F6')
     wait(lambda:focused('Alle Inhalte durchsuchen'),'header before empty results')
     select_all('Alle Inhalte durchsuchen')
-    xrun('type','--clearmodifiers','--delay','40','qzx987654')
+    type_text('Alle Inhalte durchsuchen','qzx987654')
     wait(lambda:find('Alle Inhalte durchsuchen').queryText().getText(0,-1)=='qzx987654','actual global filter edit')
     xrun('key','--clearmodifiers','F6')
     wait(lambda:focused('Pendel & Integratoren',role=pyatspi.ROLE_DOCUMENT_TEXT),'empty results skip directly to article')

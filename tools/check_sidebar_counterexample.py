@@ -25,12 +25,12 @@ def main():
     proof.mkdir()  # Preserve an earlier result instead of overwriting it.
     ui = (build.ROOT/'app/documentation_ui.inc').read_text(encoding='utf-8')
     current = (build.ROOT/'app/documentation_h.inc').read_text(encoding='utf-8')
-    source = 'documentation_height(ui->style.font,label,strlen(label),content.w-indent-extra-20)+10'
+    source = 'documentation_height(font,label,strlen(label),content.w-indent-extra-12)+10'
     if current.count(source)!=1:
         raise RuntimeError('Direct section measurement changed; review this counterexample')
     # Reintroduce the original fault (one-line height for wrapped section text)
     # in H's current indented section renderer. Its draw probe stays unchanged.
-    previous = current.replace(source,'ui->style.font->height+10')
+    previous = current.replace(source,'font->height+10')
     (proof/'documentation_h.inc').write_text(previous, encoding='utf-8')
     (proof/'documentation_ui.inc').write_text(ui, encoding='utf-8')
     # The generated main lives beside the isolated old layout. All other

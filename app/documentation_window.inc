@@ -48,7 +48,7 @@ static bool documentation_fonts_load(app *a,float density,unsigned size,unsigned
     unsigned added=0;
     if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: F1 fonts begin %.6f\n",ps_clock());
     for(unsigned role=0;role<5;role++)for(unsigned i=0;i<(role==4?4u:role==2?11u:9u);i++) {
-        bool needed=a->doc_full_font_inventory || (role==4?i==(ui_size-16)/2:role==3?(i==code_index || i==(editor_size-16)/2):role==2?(i==index || i==index+2):
+        bool needed=a->doc_full_font_inventory || (role==4?i==(ui_size-16)/2:role==3?(i==code_index || i==(editor_size-16)/2):role==2?(i==index || i==index+2 || i==(ui_size-16)/2):
             (i==index || (role==0 && i==(ui_size-16)/2)));
         const struct nk_user_font **slot=role==0?&regular[i]:role==1?&titles[i]:role==2?&bold[i]:role==3?&code[i]:&chrome[i];
         if(!needed || *slot)continue;
@@ -249,6 +249,13 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     nk_style_pop_float(ui);
     if(a->doc_search_active)nk_window_set_focus(ui,"document");
     else if(a->doc_filter_active)nk_window_set_focus(ui,"documentation-header");
+    /* The article records its own metadata bounds while it is built. Select
+     * the independent caption target only after all windows have been built. */
+    if(a->doc_context_caption_test && !a->doc_context_hidden) {
+        a->doc_detail_test_bounds=a->doc_context_caption_bounds;
+        snprintf(a->doc_detail_test_text,sizeof a->doc_detail_test_text,"Ideales Pendel · Vakuum");
+        a->doc_detail_test_requested=true;
+    }
     documentation_detail_draw_probe(a);
     documentation_sidebar_draw_probe(a);
     documentation_math_draw_probe(a);

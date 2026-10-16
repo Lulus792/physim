@@ -1,6 +1,8 @@
 Stand: Design H ist nativ umgesetzt; der anschließende engere Abgleich mit der
 Vorlage verbessert Navigation, Sprachsegmente und Modell-/Beispielreiter.
-Aktuelle Windows-/Linux-Nachweise, zwölf neue native Fensterbilder und begründete
+Der weitere Detailabgleich trennt kleine Beschriftungen von größeren
+Bedienlabels mit echter aktiver Fettschrift und gleicht Suchfeld-/Paneelkopfkonturen an.
+Aktuelle Windows-/Linux-Nachweise, native Fensterbilder und begründete
 Abweichungen: [H-FIDELITY.md](H-FIDELITY.md).
 Nachfolgende Fokusarbeiten und ihre abgegrenzten Plattformnachweise:
 [READING-FOCUS.md](READING-FOCUS.md), [PANE-NAVIGATION.md](PANE-NAVIGATION.md).
