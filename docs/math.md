@@ -32,8 +32,14 @@ als `DBL_MAX` bleibt unendlich. Normalisierung skaliert vor der Längenberechnun
 Auch ein Vektor aus `DBL_MAX`-Komponenten oder subnormalen Zahlen wird normiert.
 Der Nullvektor bleibt Null; eine nichtendliche Komponente liefert ausschließlich NaN.
 
-`ps_close(a,b,absolute,relative)` prüft die symmetrische Bedingung
-`abs(a-b) <= absolute + relative * max(abs(a),abs(b))`, für die exakten binären Eingabewerte.
+`ps_close(a,b,absolute,relative)` prüft für die exakten binären Eingabewerte
+die symmetrische Bedingung:
+
+$$
+|a-b|\le\varepsilon_{\mathrm{abs}}+\varepsilon_{\mathrm{rel}}\cdot\max(|a|,|b|)
+$$
+
+Die Indizes abs und rel bezeichnen die Argumente `absolute` und `relative`.
 Beide Toleranzen müssen endlich und nichtnegativ sein. Nichtendliche
 Vergleichswerte liefern immer `false`, auch zwei gleiche Unendlichkeiten. Die absolute
 Toleranz hat die Einheit der Werte, die relative ist dimensionslos. Beide null verlangen
@@ -160,9 +166,16 @@ Ergebnisse unterhalb einer Zwischenstufenauflösung. Weder Heapallokation noch
 breitere Fließkommapräzision sind erforderlich. Endpunkte werden direkt kopiert.
 
 Die Ausgabe enthält Position und `dPosition/dt`. Die Tangente ist weder normiert
-noch eine physikalische Geschwindigkeit. Bei gleichmäßigem Durchlaufen in einer
-Dauer `T` ist die Geschwindigkeit `Tangente/T`. Gleiche Parameterabstände sind
-keine gleichen Wegabstände; es gibt keine automatische Bogenlängenparametrisierung.
+noch eine physikalische Geschwindigkeit. Bei gleichmäßigem Durchlaufen der
+Kurve B in einer positiven Dauer T ist der dimensionslose Parameter t = τ/T.
+Zur tatsächlichen Zeit τ zwischen null und T gilt:
+
+$$
+\mathbf v(\tau)=\frac{\mathbf B'(\tau/T)}{T}
+$$
+
+Gleiche Parameterabstände sind keine gleichen Wegabstände; es gibt keine
+automatische Bogenlängenparametrisierung.
 
 ```c
 #include "physim/math.h"
@@ -181,11 +194,29 @@ ps_result add_path(ps_scene *scene) {
 }
 ```
 
-`ps_bezier3_split` teilt eine Kurve bei `t` in zwei kubische Kurven. Beide neuen
-Parameter laufen wieder von 0 bis 1: `links(u)=original(t*u)` und
-`rechts(u)=original(t+(1-t)*u)`, bis auf Rundungsfehler. Daher skalieren ihre
-Tangenten mit `t` beziehungsweise `1-t`; sie sind am gemeinsamen Punkt parallel,
-aber im Allgemeinen unterschiedlich lang. Bei Unterteilung an einem Endpunkt
+`ps_bezier3_split` teilt eine Kurve B bei t in zwei kubische Kurven B_L und B_R.
+Beide neuen Parameter u laufen wieder von 0 bis 1. Bis auf Rundungsfehler gilt:
+
+$$
+\mathbf B_L(u)=\mathbf B(tu)
+$$
+
+$$
+\mathbf B_R(u)=\mathbf B\!\left(t+(1-t)u\right)
+$$
+
+Die Ableitungen nach u folgen aus der Kettenregel:
+
+$$
+\mathbf B_L'(u)=t\mathbf B'(tu)
+$$
+
+$$
+\mathbf B_R'(u)=(1-t)\cdot\mathbf B'\!\left(t+(1-t)u\right)
+$$
+
+Nichtverschwindende Tangenten sind im exakten Modell am gemeinsamen Punkt
+parallel, aber im Allgemeinen unterschiedlich lang. Bei Unterteilung an einem Endpunkt
 wird eine Hälfte konstant. Beide Ausgabeobjekte müssen verschieden sein;
 eines darf das Eingabeobjekt ersetzen.
 

@@ -3,7 +3,11 @@
 Eine `ps_unit` beschreibt sieben ganzzahlige Exponenten, eine positive endliche
 Skala und ein Symbol. Die Reihenfolge der Exponenten ist immer
 **Länge, Masse, Zeit, Strom, Temperatur, Stoffmenge, Lichtstärke**.
-`value * unit.scale` ist der Wert in der entsprechenden SI-Dimension.
+Für den Zahlenwert x und die Einheitenskala s ist der SI-Zahlenwert:
+
+$$
+x_{\mathrm{SI}}=xs
+$$
 Symbole sind Beschriftungen; die Bibliothek leitet daraus keine Dimension oder
 Skala ab. Zwei Einheiten sind kompatibel, wenn ihre sieben Exponenten gleich sind.
 
@@ -70,8 +74,14 @@ double metres;
 ps_result status = ps_convert(125, centimetre, PS_METRE, &metres);
 ```
 
-`ps_convert` und `ps_quantity_convert` berechnen das exakte binäre Verhältnis
-`value * from.scale / to.scale` und runden das Endergebnis einmal zur nächsten
+`ps_convert` und `ps_quantity_convert` berechnen bei gleichen Dimensionen das
+exakte binäre Verhältnis zwischen Eingabewert x_A, Eingabeskala s_A und Zielskala s_B:
+
+$$
+x_B=x_A\frac{s_A}{s_B}
+$$
+
+Sie runden das Endergebnis einmal zur nächsten
 Double-Zahl, bei Gleichstand mit gerader Mantisse. Der normale Floating-
 Environment-Modus wird vorausgesetzt. Identische Skalen erhalten jedes Bit des
 Eingabewerts; dies gilt auch für signierte Null. SI-Normalisierung und Umrechnung

@@ -29,7 +29,20 @@ Mit der rechten Maustaste kannst du die Szene ebenfalls drehen.
 
 Eine Punktmasse hängt an einer masselosen Stange mit Länge L. Der
 Aufhängepunkt ist der Ursprung. Der Winkel θ wird von der nach unten zeigenden
-Senkrechten gemessen. Daraus folgen `x = L sin θ`, `y = −L cos θ`, `z = 0`.
+Senkrechten gemessen. Daraus folgen die Weltkoordinaten:
+
+$$
+x=L\sin\theta
+$$
+
+$$
+y=-L\cos\theta
+$$
+
+$$
+z=0
+$$
+
 Für θ = 0 liegt die Masse also bei `(0, −L, 0)`.
 
 Die räumliche Kamera kann die gleiche Ebene schräg zeigen. Ändert sich dabei
@@ -41,9 +54,18 @@ mit der Tiefe. In der Physim-App wählst du Kamera und Projektion unter
 ## Kräfte und Geschwindigkeit unterscheiden
 
 Bei m = 1 kg und g = 9,80665 m/s² zeigt die Gewichtskraft nach unten.
-Die Stangenkraft zeigt zum Aufhängepunkt und hat den Betrag
-`m(g cos θ + Lω²)`. Die Geschwindigkeit ist tangential:
-`v = Lω(cos θ, sin θ, 0)`.
+Im Winkelbereich der Ansicht von −1,2 bis +1,2 rad zeigt die Stangenkraft
+zum Aufhängepunkt und hat den positiven Betrag:
+
+$$
+F_S=m(g\cos\theta+L\omega^2)
+$$
+
+Die Geschwindigkeit ist tangential; ihr Vorzeichen folgt aus dem Winkeltempo:
+
+$$
+\mathbf v=L\omega\begin{pmatrix}\cos\theta\\\sin\theta\\0\end{pmatrix}
+$$
 
 In der räumlichen Erklärung verwenden die Kraftpfeile 0,05 m/N und der
 Geschwindigkeitspfeil 0,3 s. Ein längerer gelber Pfeil bedeutet deshalb nicht,
@@ -56,8 +78,8 @@ gleicher Dimension und beachte den jeweiligen Maßstab.
    die ausgegebenen Koordinaten.
 2. Verdopple L bei gleichem θ. Prüfe, wie x und y reagieren. Drehe anschließend
    nur die Kamera und erkläre, weshalb die Zahlen gleich bleiben.
-3. Erhöhe ω bei gleichem Winkel. Erkläre den zusätzlichen Anteil `Lω²` in der
-   Stangenkraft. Prüfe, weshalb auch die kinetische Energie zunimmt.
+3. Halte L und θ fest und vergrößere den Betrag von ω. Erkläre den zusätzlichen
+   Anteil `Lω²` in der Stangenkraft. Prüfe, weshalb auch die kinetische Energie zunimmt.
 
 Die Ansicht stellt von dir gewählte momentane Zustände dar. Sie integriert
 keine Bewegung, besitzt keinen Sensor und berechnet keinen numerischen Fehler.

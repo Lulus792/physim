@@ -2343,3 +2343,77 @@ der tatsächliche Mac-Lauf noch aus; der vorherige 138-Blöcke-Nachweis wird daf
 nicht umgedeutet. Weitere Fachseiten, Inline-TeX, reale Dichte-/Monitorwechsel,
 externe Mac-AX-Prüfung und praktische Screenreader-Aufgaben bleiben offen.
 Die Gesamtbewertung wird dadurch nicht als vollständig ausgegeben.
+
+## Bestätigte Mechanikrevision auf beiden Macs
+
+Revision `6cf85ac` besteht den tatsächlichen
+[Mac-Lauf 38868123489](https://github.com/Lulus792/physim/actions/runs/38868123489):
+ARM native Verträge 11/11 (`run-5dlvknb2`), GUI 22/22 (`run-pygyrlx0`);
+Intel native Verträge 11/11 (`run-64she4j_`), GUI 22/22 (`run-s42h39n0`).
+Die vollständigen Joblogs bestätigen beide 39-Formel-Gruppen, 182 Zeichen in
+38 Schriftvarianten mit normaler und gebündelter Primärschrift sowie die
+präzise Zurückweisung beider alten Layouts. Dies bestätigt 177 veröffentlichte
+Blöcke; die folgende Erweiterung benötigt eine eigene Mac-Abnahme.
+
+Die vollständigen Archive sind anhand der veröffentlichten SHA256 geprüft:
+ARM `26bc4fa4641fb37822c1995823cce92b5a9e73fd270838c6e5a690d10631507b`,
+Intel `f5ed811e1ee07354b74b7b40cb7ef7b830a5437adf9a92bbc42cc1ffc6344d68`.
+Alle 11 nativen und 22 GUI-Ergebnisse beider Archive melden Erfolg. Die
+Spinformel bei 32 px auf beiden Macs und die ARM-Zeichenprobe wurden aus den
+Archivbildern visuell geprüft. Die ersten unvollständigen Übertragungen bleiben
+als Vorbefund erhalten; erst die vollständig zusammengesetzten, geprüften
+Archive dienen als Nachweis.
+
+## Grundlagenformeln vom 16. Oktober 2026
+
+22 zusätzliche Ausdrücke erweitern den Katalog auf 193 Ausdrücke, 1.351
+Breitenvarianten und 199 veröffentlichte Blöcke auf 22 Seiten. Die fünf Seiten
+Mathematik, Einheiten, Eigenschaftstabellen, räumliche Erklärungen und C-Einstieg
+behalten alle zwölf ausführbaren Codeblöcke gegenüber `6cf85ac` unverändert.
+Die Gleichungen wurden gegen die tatsächlichen Mathematik-, Einheiten- und
+Eigenschaftsquellen sowie `app/documentation_media.inc` abgeglichen.
+
+Die symmetrische Vergleichsbedingung bezieht sich weiterhin auf exakte binäre
+Eingaben. Kurventangente und physikalische Geschwindigkeit unterscheiden sich
+durch die positive Durchlaufdauer; die Teilkurvenableitungen berücksichtigen
+die Kettenregel. Die Interpolationsgewichte setzen zwei mehrpunktige Achsen
+voraus; Einpunktachsen behalten ihre gesonderten Regeln. Die synthetische
+Dichteformel nennt Kelvin, Pascal und kg/m³ ausdrücklich. Beim räumlichen Pendel
+ist die positive Stangenkraft auf den tatsächlich einstellbaren Winkelbereich
+von -1,2 bis +1,2 rad bezogen. Die Lernaufgabe erhöht den Betrag des Winkeltempos
+bei festem Winkel und fester Länge, damit die Aussage zur Energie auch bei
+negativem Winkeltempo stimmt.
+
+Die neue GUI-Gruppe `documentation_formula_basics` prüft alle 22 Blöcke bei
+1100 x 800 und 16 px, `documentation_formula_basics_narrow` dieselben Blöcke
+bei 760 x 540 und 32 px. Beide verlangen wirkliche Formelbilder im Clip,
+sichtbare native Lesebereiche, genaue Lesereihenfolge und unveränderten
+Editor-/Simulationszustand. Die bestehenden Zeitgrenzen bleiben erhalten.
+
+MSVC/ASan besteht zehn native Fälle in `run-g77b4azi`, Linux GCC/ASan/UBSan
+dieselben zehn in `run-jj404zi8`: Kern, Mathematik, Eigenschaften, Dokumentparser,
+unabhängige Vergleichs- und Kurvenreferenzen, beide Tutorialquellen sowie
+ausgeführte C-/Physim-Eigenschaftsbeispiele. Die ersten sechs GUI-Fälle bestehen
+unter Windows in `run-bvvcdkmz` und unter Linux in `run-yvyqujwt`, einschließlich
+beider räumlicher Medienproben. Die beschrifteten Formelübersichten zeigen bei
+den ersten Umbrüchen eine schwerer erkennbare implizite Multiplikation.
+
+Drei Produkte verwenden deshalb jetzt einen ausdrücklichen Multiplikationspunkt:
+Vergleichstoleranz, rechte Teilkurvenableitung und die bisherige RK45-Skala.
+Nach dieser reinen Darstellungsänderung bestehen Zeicheninventur, beide neuen
+Formelgruppen und die 39 schmalen Mechanikformeln unter Windows 4/4 in
+`run-dv5ym1le`, unter Linux 4/4 in `run-chzzfvmk`. Alle 22 finalen kleinen
+Formelbilder beider Systeme wurden als beschriftete Übersichten visuell geprüft;
+die ganze Windows-Ansicht der rechten Teilkurvenableitung wurde zusätzlich
+geöffnet. Die Zeicheninventur umfasst 183 Zeichen in 38 Schriftvarianten mit
+normaler und gebündelter Primärschrift. Von den bisherigen Ausdrücken bleiben
+170 mit allen 1.190 SVG-/Rastervarianten unverändert; die sieben Varianten
+der RK45-Skala enthalten den bewusst ergänzten Multiplikationspunkt.
+
+Die Assetprüfung bestätigt alle 193 Ausdrücke einschließlich XML, Prüfsummen,
+nativer Deklarationen und veröffentlichter Blöcke. Beide neuen Gruppen sind in
+Linux- und Mac-CI aufgenommen. Für den aktuellen Stand mit 199 Blöcken steht
+die tatsächliche Mac-Ausführung noch aus. Inline-TeX, weitere Fachseiten,
+reale Monitor-/Dichtewechsel, externe Mac-AX-Prüfung und praktische Screenreader-
+Aufgaben bleiben offen. Die Gesamtbewertung bleibt bei UI 8/10, Dokumentation
+8/10 und Barrierefreiheit 5/10; vollständige Abnahme wird nicht behauptet.

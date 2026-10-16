@@ -959,7 +959,7 @@ static void documentation_typeset_test_frame(app *a,int *stage,int *code,const c
     if(a->quitting)printf("FORMULA TYPESET SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 }
 typedef enum {
-    DOC_FORMULAS_LEARNING,DOC_FORMULAS_PHYSICS,DOC_FORMULAS_MODELS,DOC_FORMULAS_MECHANICS
+    DOC_FORMULAS_LEARNING,DOC_FORMULAS_PHYSICS,DOC_FORMULAS_MODELS,DOC_FORMULAS_MECHANICS,DOC_FORMULAS_BASICS
 } documentation_formula_group;
 static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code,const char **capture,documentation_formula_group group,bool narrow) {
     static const char *learning_paths[]={"docs/user-guide.md","docs/pendulum-tutorial.md","docs/projectile-tutorial.md",
@@ -967,11 +967,13 @@ static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code
     static const char *physics_paths[]={"docs/thermodynamics.md","docs/electromagnetism.md","docs/waves-optics.md","docs/fluid.md"};
     static const char *model_paths[]={"docs/real-gas.md","docs/measurement.md","docs/monte-carlo-tutorial.md"};
     static const char *mechanics_paths[]={"docs/mechanics.md","docs/buoyancy.md","docs/numerics.md"};
+    static const char *basic_paths[]={"docs/math.md","docs/units.md","docs/properties.md","docs/spatial-explanations.md","docs/c-workflow.md"};
     static const struct {const char *const *paths;size_t count;} groups[]={
         {learning_paths,sizeof learning_paths/sizeof learning_paths[0]},
         {physics_paths,sizeof physics_paths/sizeof physics_paths[0]},
         {model_paths,sizeof model_paths/sizeof model_paths[0]},
-        {mechanics_paths,sizeof mechanics_paths/sizeof mechanics_paths[0]}
+        {mechanics_paths,sizeof mechanics_paths/sizeof mechanics_paths[0]},
+        {basic_paths,sizeof basic_paths/sizeof basic_paths[0]}
     };
     const char *const *paths=groups[group].paths;size_t path_count=groups[group].count;
     static const char *narrow_paths[]={"docs/waves-optics.md"};
@@ -1061,6 +1063,8 @@ static void documentation_detail_test_frame(app *a,int *stage,int *code,const ch
     if(a->quitting)printf("DOCUMENTATION DETAIL SELF-TEST: %s elapsed=%.3f\n",*code?"FAILED":"PASSED",ps_clock()-started);
 }
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strcmp(mode,"docs-keyboard-basics-narrow")){documentation_formula_catalog_test_frame(a,stage,code,capture,DOC_FORMULAS_BASICS,true);return;}
+    if(!strcmp(mode,"docs-keyboard-basics")){documentation_formula_catalog_test_frame(a,stage,code,capture,DOC_FORMULAS_BASICS,false);return;}
     if(!strcmp(mode,"docs-keyboard-detail")){documentation_detail_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-mechanics-narrow")){documentation_formula_catalog_test_frame(a,stage,code,capture,DOC_FORMULAS_MECHANICS,true);return;}
     if(!strcmp(mode,"docs-keyboard-mechanics")){documentation_formula_catalog_test_frame(a,stage,code,capture,DOC_FORMULAS_MECHANICS,false);return;}

@@ -1521,13 +1521,13 @@ static const ps_doc_formula_variant formula_168[] = {
  {76.067200f,16.992000f,609u,136u,5489u,2157646863u,"docs/formulas/44069d3408a903cf83245cb1.math"},
 };
 static const ps_doc_formula_variant formula_169[] = {
- {109.724800f,56.590400f,878u,453u,18331u,3554581173u,"docs/formulas/e88cf4520f4a1160d8b9c97c.math"},
- {131.395200f,36.808000f,1052u,295u,17730u,3630226924u,"docs/formulas/3feda7ff2f5309f30f34b0e0.math"},
- {131.395200f,36.808000f,1052u,295u,17730u,3630226924u,"docs/formulas/3feda7ff2f5309f30f34b0e0.math"},
- {131.395200f,36.808000f,1052u,295u,17730u,3630226924u,"docs/formulas/3feda7ff2f5309f30f34b0e0.math"},
- {242.761600f,17.608000f,1943u,141u,17916u,427586323u,"docs/formulas/8f3fdadfcc050e1464aacf11.math"},
- {242.761600f,17.608000f,1943u,141u,17916u,427586323u,"docs/formulas/8f3fdadfcc050e1464aacf11.math"},
- {242.761600f,17.608000f,1943u,141u,17916u,427586323u,"docs/formulas/8f3fdadfcc050e1464aacf11.math"},
+ {109.724800f,56.590400f,878u,453u,18464u,519553179u,"docs/formulas/1c386dd0f4115b9303d09139.math"},
+ {131.395200f,36.808000f,1052u,295u,17842u,2539852078u,"docs/formulas/8855e58f61efdd9a35bd5cd3.math"},
+ {131.395200f,36.808000f,1052u,295u,17842u,2539852078u,"docs/formulas/8855e58f61efdd9a35bd5cd3.math"},
+ {131.395200f,36.808000f,1052u,295u,17842u,2539852078u,"docs/formulas/8855e58f61efdd9a35bd5cd3.math"},
+ {249.876800f,17.608000f,2000u,141u,18007u,3960566649u,"docs/formulas/bd5346d53a7c503a9e9a1d31.math"},
+ {249.876800f,17.608000f,2000u,141u,18007u,3960566649u,"docs/formulas/bd5346d53a7c503a9e9a1d31.math"},
+ {249.876800f,17.608000f,2000u,141u,18007u,3960566649u,"docs/formulas/bd5346d53a7c503a9e9a1d31.math"},
 };
 static const ps_doc_formula_variant formula_170[] = {
  {95.603200f,37.884800f,765u,304u,10067u,2139545279u,"docs/formulas/afb0e02e2fedc9517070ce00.math"},
@@ -1537,6 +1537,204 @@ static const ps_doc_formula_variant formula_170[] = {
  {95.603200f,37.884800f,765u,304u,10067u,2139545279u,"docs/formulas/afb0e02e2fedc9517070ce00.math"},
  {95.603200f,37.884800f,765u,304u,10067u,2139545279u,"docs/formulas/afb0e02e2fedc9517070ce00.math"},
  {95.603200f,37.884800f,765u,304u,10067u,2139545279u,"docs/formulas/afb0e02e2fedc9517070ce00.math"},
+};
+static const ps_doc_formula_variant formula_171[] = {
+ {91.486400f,55.424000f,732u,444u,15163u,2755457533u,"docs/formulas/00ca16ada94c96173b2f9044.math"},
+ {132.280000f,36.224000f,1059u,290u,15207u,3916042114u,"docs/formulas/447d429ba1fe5d2def7a7cfb.math"},
+ {132.280000f,36.224000f,1059u,290u,15207u,3916042114u,"docs/formulas/447d429ba1fe5d2def7a7cfb.math"},
+ {226.297600f,17.024000f,1811u,137u,15058u,1698541393u,"docs/formulas/3b6d50944ba7b6f04d754331.math"},
+ {226.297600f,17.024000f,1811u,137u,15058u,1698541393u,"docs/formulas/3b6d50944ba7b6f04d754331.math"},
+ {226.297600f,17.024000f,1811u,137u,15058u,1698541393u,"docs/formulas/3b6d50944ba7b6f04d754331.math"},
+ {226.297600f,17.024000f,1811u,137u,15058u,1698541393u,"docs/formulas/3b6d50944ba7b6f04d754331.math"},
+};
+static const ps_doc_formula_variant formula_172[] = {
+ {83.865600f,54.579200f,671u,437u,9667u,1273714027u,"docs/formulas/edc678d2ff85901d20950399.math"},
+ {118.644800f,35.379200f,950u,284u,9771u,2934144038u,"docs/formulas/b5cf9aa76595562dad1b0f7f.math"},
+ {118.644800f,35.379200f,950u,284u,9771u,2934144038u,"docs/formulas/b5cf9aa76595562dad1b0f7f.math"},
+ {118.644800f,35.379200f,950u,284u,9771u,2934144038u,"docs/formulas/b5cf9aa76595562dad1b0f7f.math"},
+ {118.644800f,35.379200f,950u,284u,9771u,2934144038u,"docs/formulas/b5cf9aa76595562dad1b0f7f.math"},
+ {118.644800f,35.379200f,950u,284u,9771u,2934144038u,"docs/formulas/b5cf9aa76595562dad1b0f7f.math"},
+ {118.644800f,35.379200f,950u,284u,9771u,2934144038u,"docs/formulas/b5cf9aa76595562dad1b0f7f.math"},
+};
+static const ps_doc_formula_variant formula_173[] = {
+ {106.545600f,16.960000f,853u,136u,8120u,241516399u,"docs/formulas/bde16021be050ddf90b6c638.math"},
+ {106.545600f,16.960000f,853u,136u,8120u,241516399u,"docs/formulas/bde16021be050ddf90b6c638.math"},
+ {106.545600f,16.960000f,853u,136u,8120u,241516399u,"docs/formulas/bde16021be050ddf90b6c638.math"},
+ {106.545600f,16.960000f,853u,136u,8120u,241516399u,"docs/formulas/bde16021be050ddf90b6c638.math"},
+ {106.545600f,16.960000f,853u,136u,8120u,241516399u,"docs/formulas/bde16021be050ddf90b6c638.math"},
+ {106.545600f,16.960000f,853u,136u,8120u,241516399u,"docs/formulas/bde16021be050ddf90b6c638.math"},
+ {106.545600f,16.960000f,853u,136u,8120u,241516399u,"docs/formulas/bde16021be050ddf90b6c638.math"},
+};
+static const ps_doc_formula_variant formula_174[] = {
+ {93.742400f,36.224000f,750u,290u,11654u,2536913279u,"docs/formulas/7546b7f8be2e627ac950fc19.math"},
+ {123.716800f,36.224000f,990u,290u,12120u,1941307315u,"docs/formulas/26215ca995dc8e9bbd1db00a.math"},
+ {123.716800f,36.224000f,990u,290u,12120u,1941307315u,"docs/formulas/26215ca995dc8e9bbd1db00a.math"},
+ {172.764800f,16.960000f,1383u,136u,11495u,2859426613u,"docs/formulas/f560a425e003a1aba13109a6.math"},
+ {172.764800f,16.960000f,1383u,136u,11495u,2859426613u,"docs/formulas/f560a425e003a1aba13109a6.math"},
+ {172.764800f,16.960000f,1383u,136u,11495u,2859426613u,"docs/formulas/f560a425e003a1aba13109a6.math"},
+ {172.764800f,16.960000f,1383u,136u,11495u,2859426613u,"docs/formulas/f560a425e003a1aba13109a6.math"},
+};
+static const ps_doc_formula_variant formula_175[] = {
+ {70.089600f,37.862400f,561u,303u,9777u,916490849u,"docs/formulas/4bd9ddee783427d96aa59d20.math"},
+ {118.254400f,17.811200f,947u,143u,9485u,75472047u,"docs/formulas/041c41daf16ee0715379863a.math"},
+ {118.254400f,17.811200f,947u,143u,9485u,75472047u,"docs/formulas/041c41daf16ee0715379863a.math"},
+ {118.254400f,17.811200f,947u,143u,9485u,75472047u,"docs/formulas/041c41daf16ee0715379863a.math"},
+ {118.254400f,17.811200f,947u,143u,9485u,75472047u,"docs/formulas/041c41daf16ee0715379863a.math"},
+ {118.254400f,17.811200f,947u,143u,9485u,75472047u,"docs/formulas/041c41daf16ee0715379863a.math"},
+ {118.254400f,17.811200f,947u,143u,9485u,75472047u,"docs/formulas/041c41daf16ee0715379863a.math"},
+};
+static const ps_doc_formula_variant formula_176[] = {
+ {112.747200f,57.264000f,902u,459u,15572u,3879489463u,"docs/formulas/3d93a237ed208844b708af59.math"},
+ {120.761600f,38.064000f,967u,305u,15207u,674590355u,"docs/formulas/b110fe55186abcaa7bd1a3dc.math"},
+ {120.761600f,38.064000f,967u,305u,15207u,674590355u,"docs/formulas/b110fe55186abcaa7bd1a3dc.math"},
+ {120.761600f,38.064000f,967u,305u,15207u,674590355u,"docs/formulas/b110fe55186abcaa7bd1a3dc.math"},
+ {236.040000f,18.044800f,1889u,145u,15257u,2882296253u,"docs/formulas/0bed09b61fcbf3a711bd8d1a.math"},
+ {236.040000f,18.044800f,1889u,145u,15257u,2882296253u,"docs/formulas/0bed09b61fcbf3a711bd8d1a.math"},
+ {236.040000f,18.044800f,1889u,145u,15257u,2882296253u,"docs/formulas/0bed09b61fcbf3a711bd8d1a.math"},
+};
+static const ps_doc_formula_variant formula_177[] = {
+ {59.872000f,10.745600f,479u,86u,4004u,3325399595u,"docs/formulas/908ab0719adfc30faf00d35c.math"},
+ {59.872000f,10.745600f,479u,86u,4004u,3325399595u,"docs/formulas/908ab0719adfc30faf00d35c.math"},
+ {59.872000f,10.745600f,479u,86u,4004u,3325399595u,"docs/formulas/908ab0719adfc30faf00d35c.math"},
+ {59.872000f,10.745600f,479u,86u,4004u,3325399595u,"docs/formulas/908ab0719adfc30faf00d35c.math"},
+ {59.872000f,10.745600f,479u,86u,4004u,3325399595u,"docs/formulas/908ab0719adfc30faf00d35c.math"},
+ {59.872000f,10.745600f,479u,86u,4004u,3325399595u,"docs/formulas/908ab0719adfc30faf00d35c.math"},
+ {59.872000f,10.745600f,479u,86u,4004u,3325399595u,"docs/formulas/908ab0719adfc30faf00d35c.math"},
+};
+static const ps_doc_formula_variant formula_178[] = {
+ {84.852800f,32.288000f,679u,259u,7553u,1113984504u,"docs/formulas/22d192654fc991da4d154dc8.math"},
+ {84.852800f,32.288000f,679u,259u,7553u,1113984504u,"docs/formulas/22d192654fc991da4d154dc8.math"},
+ {84.852800f,32.288000f,679u,259u,7553u,1113984504u,"docs/formulas/22d192654fc991da4d154dc8.math"},
+ {84.852800f,32.288000f,679u,259u,7553u,1113984504u,"docs/formulas/22d192654fc991da4d154dc8.math"},
+ {84.852800f,32.288000f,679u,259u,7553u,1113984504u,"docs/formulas/22d192654fc991da4d154dc8.math"},
+ {84.852800f,32.288000f,679u,259u,7553u,1113984504u,"docs/formulas/22d192654fc991da4d154dc8.math"},
+ {84.852800f,32.288000f,679u,259u,7553u,1113984504u,"docs/formulas/22d192654fc991da4d154dc8.math"},
+};
+static const ps_doc_formula_variant formula_179[] = {
+ {91.857600f,36.297600f,735u,291u,7450u,4116008021u,"docs/formulas/a85aaac177311f40482efd95.math"},
+ {91.857600f,36.297600f,735u,291u,7450u,4116008021u,"docs/formulas/a85aaac177311f40482efd95.math"},
+ {91.857600f,36.297600f,735u,291u,7450u,4116008021u,"docs/formulas/a85aaac177311f40482efd95.math"},
+ {91.857600f,36.297600f,735u,291u,7450u,4116008021u,"docs/formulas/a85aaac177311f40482efd95.math"},
+ {91.857600f,36.297600f,735u,291u,7450u,4116008021u,"docs/formulas/a85aaac177311f40482efd95.math"},
+ {91.857600f,36.297600f,735u,291u,7450u,4116008021u,"docs/formulas/a85aaac177311f40482efd95.math"},
+ {91.857600f,36.297600f,735u,291u,7450u,4116008021u,"docs/formulas/a85aaac177311f40482efd95.math"},
+};
+static const ps_doc_formula_variant formula_180[] = {
+ {92.657600f,36.393600f,742u,292u,7991u,3522096865u,"docs/formulas/3176f3220ba6b349d086efd6.math"},
+ {92.657600f,36.393600f,742u,292u,7991u,3522096865u,"docs/formulas/3176f3220ba6b349d086efd6.math"},
+ {92.657600f,36.393600f,742u,292u,7991u,3522096865u,"docs/formulas/3176f3220ba6b349d086efd6.math"},
+ {92.657600f,36.393600f,742u,292u,7991u,3522096865u,"docs/formulas/3176f3220ba6b349d086efd6.math"},
+ {92.657600f,36.393600f,742u,292u,7991u,3522096865u,"docs/formulas/3176f3220ba6b349d086efd6.math"},
+ {92.657600f,36.393600f,742u,292u,7991u,3522096865u,"docs/formulas/3176f3220ba6b349d086efd6.math"},
+ {92.657600f,36.393600f,742u,292u,7991u,3522096865u,"docs/formulas/3176f3220ba6b349d086efd6.math"},
+};
+static const ps_doc_formula_variant formula_181[] = {
+ {106.651200f,36.224000f,854u,290u,12240u,138470169u,"docs/formulas/0393be91b50687713576594f.math"},
+ {106.651200f,36.224000f,854u,290u,12240u,138470169u,"docs/formulas/0393be91b50687713576594f.math"},
+ {155.875200f,16.960000f,1248u,136u,11795u,2578195682u,"docs/formulas/4afedda8f13fbb73e9e5ea58.math"},
+ {155.875200f,16.960000f,1248u,136u,11795u,2578195682u,"docs/formulas/4afedda8f13fbb73e9e5ea58.math"},
+ {155.875200f,16.960000f,1248u,136u,11795u,2578195682u,"docs/formulas/4afedda8f13fbb73e9e5ea58.math"},
+ {155.875200f,16.960000f,1248u,136u,11795u,2578195682u,"docs/formulas/4afedda8f13fbb73e9e5ea58.math"},
+ {155.875200f,16.960000f,1248u,136u,11795u,2578195682u,"docs/formulas/4afedda8f13fbb73e9e5ea58.math"},
+};
+static const ps_doc_formula_variant formula_182[] = {
+ {106.651200f,36.224000f,854u,290u,10675u,2544950786u,"docs/formulas/43e35f07945a0f120e4388fc.math"},
+ {106.651200f,36.224000f,854u,290u,10675u,2544950786u,"docs/formulas/43e35f07945a0f120e4388fc.math"},
+ {155.875200f,16.960000f,1248u,136u,10412u,4286996152u,"docs/formulas/c946637826495e7cbfdd1135.math"},
+ {155.875200f,16.960000f,1248u,136u,10412u,4286996152u,"docs/formulas/c946637826495e7cbfdd1135.math"},
+ {155.875200f,16.960000f,1248u,136u,10412u,4286996152u,"docs/formulas/c946637826495e7cbfdd1135.math"},
+ {155.875200f,16.960000f,1248u,136u,10412u,4286996152u,"docs/formulas/c946637826495e7cbfdd1135.math"},
+ {155.875200f,16.960000f,1248u,136u,10412u,4286996152u,"docs/formulas/c946637826495e7cbfdd1135.math"},
+};
+static const ps_doc_formula_variant formula_183[] = {
+ {82.780800f,55.424000f,663u,444u,13132u,2996922242u,"docs/formulas/810b589305a0da2b82a21fe5.math"},
+ {138.947200f,36.224000f,1112u,290u,13311u,3841298077u,"docs/formulas/cccdff62c867b3f59c9f8a91.math"},
+ {127.196800f,36.224000f,1018u,290u,13161u,1850262841u,"docs/formulas/7275ee95ac8dc49f9fd7dbd9.math"},
+ {183.363200f,16.960000f,1467u,136u,12653u,626022927u,"docs/formulas/d9b5158e6b97f0efa4612160.math"},
+ {183.363200f,16.960000f,1467u,136u,12653u,626022927u,"docs/formulas/d9b5158e6b97f0efa4612160.math"},
+ {183.363200f,16.960000f,1467u,136u,12653u,626022927u,"docs/formulas/d9b5158e6b97f0efa4612160.math"},
+ {183.363200f,16.960000f,1467u,136u,12653u,626022927u,"docs/formulas/d9b5158e6b97f0efa4612160.math"},
+};
+static const ps_doc_formula_variant formula_184[] = {
+ {47.433600f,33.344000f,380u,267u,3362u,3952666434u,"docs/formulas/a01de918db17081846e9080c.math"},
+ {47.433600f,33.344000f,380u,267u,3362u,3952666434u,"docs/formulas/a01de918db17081846e9080c.math"},
+ {47.433600f,33.344000f,380u,267u,3362u,3952666434u,"docs/formulas/a01de918db17081846e9080c.math"},
+ {47.433600f,33.344000f,380u,267u,3362u,3952666434u,"docs/formulas/a01de918db17081846e9080c.math"},
+ {47.433600f,33.344000f,380u,267u,3362u,3952666434u,"docs/formulas/a01de918db17081846e9080c.math"},
+ {47.433600f,33.344000f,380u,267u,3362u,3952666434u,"docs/formulas/a01de918db17081846e9080c.math"},
+ {47.433600f,33.344000f,380u,267u,3362u,3952666434u,"docs/formulas/a01de918db17081846e9080c.math"},
+};
+static const ps_doc_formula_variant formula_185[] = {
+ {112.148800f,38.366400f,898u,307u,15393u,3613820027u,"docs/formulas/fbd0a629dc572c1bf5b12e62.math"},
+ {137.531200f,38.366400f,1101u,307u,15635u,549257587u,"docs/formulas/3f32f10a0f2718425e0aca0f.math"},
+ {156.795200f,38.366400f,1255u,307u,15796u,1189623678u,"docs/formulas/8dc14b8098851ebd3a36cb6a.math"},
+ {220.204800f,19.134400f,1762u,154u,15381u,1971277347u,"docs/formulas/e2932fcd204ee974483211db.math"},
+ {220.204800f,19.134400f,1762u,154u,15381u,1971277347u,"docs/formulas/e2932fcd204ee974483211db.math"},
+ {220.204800f,19.134400f,1762u,154u,15381u,1971277347u,"docs/formulas/e2932fcd204ee974483211db.math"},
+ {220.204800f,19.134400f,1762u,154u,15381u,1971277347u,"docs/formulas/e2932fcd204ee974483211db.math"},
+};
+static const ps_doc_formula_variant formula_186[] = {
+ {74.894400f,12.480000f,600u,100u,4883u,2894734528u,"docs/formulas/ff5bae5ae0b48069dc659190.math"},
+ {74.894400f,12.480000f,600u,100u,4883u,2894734528u,"docs/formulas/ff5bae5ae0b48069dc659190.math"},
+ {74.894400f,12.480000f,600u,100u,4883u,2894734528u,"docs/formulas/ff5bae5ae0b48069dc659190.math"},
+ {74.894400f,12.480000f,600u,100u,4883u,2894734528u,"docs/formulas/ff5bae5ae0b48069dc659190.math"},
+ {74.894400f,12.480000f,600u,100u,4883u,2894734528u,"docs/formulas/ff5bae5ae0b48069dc659190.math"},
+ {74.894400f,12.480000f,600u,100u,4883u,2894734528u,"docs/formulas/ff5bae5ae0b48069dc659190.math"},
+ {74.894400f,12.480000f,600u,100u,4883u,2894734528u,"docs/formulas/ff5bae5ae0b48069dc659190.math"},
+};
+static const ps_doc_formula_variant formula_187[] = {
+ {87.790400f,15.584000f,703u,125u,5734u,320557923u,"docs/formulas/d3024af8f234aab842128e26.math"},
+ {87.790400f,15.584000f,703u,125u,5734u,320557923u,"docs/formulas/d3024af8f234aab842128e26.math"},
+ {87.790400f,15.584000f,703u,125u,5734u,320557923u,"docs/formulas/d3024af8f234aab842128e26.math"},
+ {87.790400f,15.584000f,703u,125u,5734u,320557923u,"docs/formulas/d3024af8f234aab842128e26.math"},
+ {87.790400f,15.584000f,703u,125u,5734u,320557923u,"docs/formulas/d3024af8f234aab842128e26.math"},
+ {87.790400f,15.584000f,703u,125u,5734u,320557923u,"docs/formulas/d3024af8f234aab842128e26.math"},
+ {87.790400f,15.584000f,703u,125u,5734u,320557923u,"docs/formulas/d3024af8f234aab842128e26.math"},
+};
+static const ps_doc_formula_variant formula_188[] = {
+ {37.833600f,12.032000f,303u,97u,2187u,1037187808u,"docs/formulas/8d052645264da77fb7a40f6e.math"},
+ {37.833600f,12.032000f,303u,97u,2187u,1037187808u,"docs/formulas/8d052645264da77fb7a40f6e.math"},
+ {37.833600f,12.032000f,303u,97u,2187u,1037187808u,"docs/formulas/8d052645264da77fb7a40f6e.math"},
+ {37.833600f,12.032000f,303u,97u,2187u,1037187808u,"docs/formulas/8d052645264da77fb7a40f6e.math"},
+ {37.833600f,12.032000f,303u,97u,2187u,1037187808u,"docs/formulas/8d052645264da77fb7a40f6e.math"},
+ {37.833600f,12.032000f,303u,97u,2187u,1037187808u,"docs/formulas/8d052645264da77fb7a40f6e.math"},
+ {37.833600f,12.032000f,303u,97u,2187u,1037187808u,"docs/formulas/8d052645264da77fb7a40f6e.math"},
+};
+static const ps_doc_formula_variant formula_189[] = {
+ {103.424000f,38.366400f,828u,307u,12833u,2290062814u,"docs/formulas/a8439fa5e416450a096053de.math"},
+ {133.681600f,38.366400f,1070u,307u,13046u,2291072651u,"docs/formulas/b33043a238310080923706c0.math"},
+ {157.040000f,19.134400f,1257u,154u,12498u,3363612725u,"docs/formulas/b6f3345ae6098743b47e08b2.math"},
+ {157.040000f,19.134400f,1257u,154u,12498u,3363612725u,"docs/formulas/b6f3345ae6098743b47e08b2.math"},
+ {157.040000f,19.134400f,1257u,154u,12498u,3363612725u,"docs/formulas/b6f3345ae6098743b47e08b2.math"},
+ {157.040000f,19.134400f,1257u,154u,12498u,3363612725u,"docs/formulas/b6f3345ae6098743b47e08b2.math"},
+ {157.040000f,19.134400f,1257u,154u,12498u,3363612725u,"docs/formulas/b6f3345ae6098743b47e08b2.math"},
+};
+static const ps_doc_formula_variant formula_190[] = {
+ {101.009600f,81.024000f,809u,649u,16126u,972404515u,"docs/formulas/af35bfe8bedca0cce1fd6768.math"},
+ {115.166400f,61.824000f,922u,495u,16010u,3537209499u,"docs/formulas/3d6f27d6c130712ece29c5fe.math"},
+ {115.166400f,61.824000f,922u,495u,16010u,3537209499u,"docs/formulas/3d6f27d6c130712ece29c5fe.math"},
+ {115.166400f,61.824000f,922u,495u,16010u,3537209499u,"docs/formulas/3d6f27d6c130712ece29c5fe.math"},
+ {115.166400f,61.824000f,922u,495u,16010u,3537209499u,"docs/formulas/3d6f27d6c130712ece29c5fe.math"},
+ {115.166400f,61.824000f,922u,495u,16010u,3537209499u,"docs/formulas/3d6f27d6c130712ece29c5fe.math"},
+ {115.166400f,61.824000f,922u,495u,16010u,3537209499u,"docs/formulas/3d6f27d6c130712ece29c5fe.math"},
+};
+static const ps_doc_formula_variant formula_191[] = {
+ {78.449600f,33.472000f,628u,268u,6099u,38704411u,"docs/formulas/fedb0d966d24983d87d1c3ca.math"},
+ {78.449600f,33.472000f,628u,268u,6099u,38704411u,"docs/formulas/fedb0d966d24983d87d1c3ca.math"},
+ {78.449600f,33.472000f,628u,268u,6099u,38704411u,"docs/formulas/fedb0d966d24983d87d1c3ca.math"},
+ {78.449600f,33.472000f,628u,268u,6099u,38704411u,"docs/formulas/fedb0d966d24983d87d1c3ca.math"},
+ {78.449600f,33.472000f,628u,268u,6099u,38704411u,"docs/formulas/fedb0d966d24983d87d1c3ca.math"},
+ {78.449600f,33.472000f,628u,268u,6099u,38704411u,"docs/formulas/fedb0d966d24983d87d1c3ca.math"},
+ {78.449600f,33.472000f,628u,268u,6099u,38704411u,"docs/formulas/fedb0d966d24983d87d1c3ca.math"},
+};
+static const ps_doc_formula_variant formula_192[] = {
+ {123.412800f,76.352000f,988u,611u,15211u,3551432220u,"docs/formulas/9e8b8eb0743a35bacd42fb29.math"},
+ {140.113600f,54.496000f,1121u,436u,15281u,487338868u,"docs/formulas/85e07b3447630597696a6a51.math"},
+ {140.113600f,54.496000f,1121u,436u,15281u,487338868u,"docs/formulas/85e07b3447630597696a6a51.math"},
+ {200.795200f,35.296000f,1607u,283u,15267u,3582131633u,"docs/formulas/01373cd7ad3973b28ffc7db8.math"},
+ {200.795200f,35.296000f,1607u,283u,15267u,3582131633u,"docs/formulas/01373cd7ad3973b28ffc7db8.math"},
+ {200.795200f,35.296000f,1607u,283u,15267u,3582131633u,"docs/formulas/01373cd7ad3973b28ffc7db8.math"},
+ {200.795200f,35.296000f,1607u,283u,15267u,3582131633u,"docs/formulas/01373cd7ad3973b28ffc7db8.math"},
 };
 static const ps_doc_formula formula_catalog[] = {
  {"T_0=2\\pi\\sqrt{\\frac{L}{g}}","T₀ = 2π√(L/g)",formula_0,7u},
@@ -1708,6 +1906,28 @@ static const ps_doc_formula formula_catalog[] = {
  {"\\dot D=cfv^2\\ge0","D′ = c f v² ≥ 0",formula_166,7u},
  {"E_{\\mathrm{balance}}=E_{\\mathrm{mech}}+D","E_balance = E_mech + D",formula_167,7u},
  {"\\ddot{\\mathbf q}=\\mathbf a(t,\\mathbf q)","q″ = a(t, q)",formula_168,7u},
- {"s_i=\\operatorname{atol}_i+\\operatorname{rtol}\\max(|y_{i,\\mathrm{alt}}|,|y_{i,\\mathrm{neu}}|)","s_i = atol_i + rtol max(|y(i,alt)|, |y(i,neu)|)",formula_169,7u},
+ {"s_i=\\operatorname{atol}_i+\\operatorname{rtol}\\cdot\\max(|y_{i,\\mathrm{alt}}|,|y_{i,\\mathrm{neu}}|)","s_i = atol_i + rtol · max(|y(i,alt)|, |y(i,neu)|)",formula_169,7u},
  {"\\max_{0\\le i<n}\\frac{|e_i|}{s_i}\\le1","max(0 ≤ i < n) |e_i|/s_i ≤ 1",formula_170,7u},
+ {"|a-b|\\le\\varepsilon_{\\mathrm{abs}}+\\varepsilon_{\\mathrm{rel}}\\cdot\\max(|a|,|b|)","|a − b| ≤ epsilon_abs + epsilon_rel · max(|a|, |b|)",formula_171,7u},
+ {"\\mathbf v(\\tau)=\\frac{\\mathbf B'(\\tau/T)}{T}","v(tau) = B′(tau/T)/T",formula_172,7u},
+ {"\\mathbf B_L(u)=\\mathbf B(tu)","B_L(u) = B(t u)",formula_173,7u},
+ {"\\mathbf B_R(u)=\\mathbf B\\!\\left(t+(1-t)u\\right)","B_R(u) = B(t + (1 − t)u)",formula_174,7u},
+ {"\\mathbf B_L'(u)=t\\mathbf B'(tu)","B_L′(u) = t B′(t u)",formula_175,7u},
+ {"\\mathbf B_R'(u)=(1-t)\\cdot\\mathbf B'\\!\\left(t+(1-t)u\\right)","B_R′(u) = (1 − t) · B′(t + (1 − t)u)",formula_176,7u},
+ {"x_{\\mathrm{SI}}=xs","x_SI = x s",formula_177,7u},
+ {"x_B=x_A\\frac{s_A}{s_B}","x_B = x_A s_A/s_B",formula_178,7u},
+ {"\\alpha=\\frac{T-T_0}{T_1-T_0}","α = (T − T₀)/(T₁ − T₀)",formula_179,7u},
+ {"\\beta=\\frac{P-P_0}{P_1-P_0}","β = (P − P₀)/(P₁ − P₀)",formula_180,7u},
+ {"g_0=(1-\\beta)f_{00}+\\beta f_{01}","g₀ = (1 − β) f_00 + β f_01",formula_181,7u},
+ {"g_1=(1-\\beta)f_{10}+\\beta f_{11}","g₁ = (1 − β) f_10 + β f_11",formula_182,7u},
+ {"f(T,P)=(1-\\alpha)g_0+\\alpha g_1","f(T,P) = (1 − α)g₀ + α g₁",formula_183,7u},
+ {"\\nu=\\frac\\mu\\rho","ν = μ/ρ",formula_184,7u},
+ {"\\rho(T,P)=1200-0{,}2T+10^{-6}P","ρ(T,P) = 1200 − 0,2 T + 10^−6 P",formula_185,7u},
+ {"x=L\\sin\\theta","x = L sin θ",formula_186,7u},
+ {"y=-L\\cos\\theta","y = −L cos θ",formula_187,7u},
+ {"z=0","z = 0",formula_188,7u},
+ {"F_S=m(g\\cos\\theta+L\\omega^2)","F_S = m(g cos θ + Lω²)",formula_189,7u},
+ {"\\mathbf v=L\\omega\\begin{pmatrix}\\cos\\theta\\\\\\sin\\theta\\\\0\\end{pmatrix}","v = Lω(cos θ, sin θ, 0)",formula_190,7u},
+ {"E=\\frac12mv^2","E = ½mv²",formula_191,7u},
+ {"\\bar E=\\frac{E(v_1)+E(v_2)}2=12{,}5\\,\\mathrm J","Mittelwert E = [E(v₁) + E(v₂)]/2 = 12,5 J",formula_192,7u},
 };

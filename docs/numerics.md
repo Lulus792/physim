@@ -28,7 +28,7 @@ Für jeden RK45-Versuch werden sieben Ableitungen berechnet. Mit der
 komponentenweisen geschätzten Abweichung e_i und der positiven Skala s_i gilt:
 
 $$
-s_i=\operatorname{atol}_i+\operatorname{rtol}\max(|y_{i,\mathrm{alt}}|,|y_{i,\mathrm{neu}}|)
+s_i=\operatorname{atol}_i+\operatorname{rtol}\cdot\max(|y_{i,\mathrm{alt}}|,|y_{i,\mathrm{neu}}|)
 $$
 
 Ein Schritt mit n Komponenten wird akzeptiert, wenn:

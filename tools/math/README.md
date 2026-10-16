@@ -46,7 +46,10 @@ Formelblöcke bei 16 px; `documentation_formula_models_narrow` verlangt dieselbe
 Blöcke vollständig sichtbar bei 32 px im 760 × 540-Fenster. Mechanik, Auftrieb
 und Numerik werden entsprechend durch `documentation_formula_mechanics` und
 `documentation_formula_mechanics_narrow` geprüft. Der Katalog umfasst
-171 Ausdrücke in 177 veröffentlichten Blöcken auf 17 Seiten.
+193 Ausdrücke in 199 veröffentlichten Blöcken auf 22 Seiten.
+Mathematikgrundlagen, Einheiten, Eigenschaftstabellen, räumliche Erklärungen und
+der C-Einstieg sind durch `documentation_formula_basics` und
+`documentation_formula_basics_narrow` mit 22 weiteren Blöcken abgedeckt.
 `documentation_formula_narrow` verlangt vollständig sichtbare Gitter-/
 Energieformeln im 760 × 540-Fenster bei 32 px. Die diskrete Saitenenergie
 ist dafür in gleichwertige, einzeln erklärte Terme aufgeteilt. Weitere

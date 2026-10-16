@@ -2,11 +2,22 @@
 
 [Teil I – C](c-guide.md) · [Nächster Schritt: Experiment und Analyse](experiment-tutorial.md)
 
-Dieser Einstieg benötigt nur C17. Er berechnet E = m v² / 2 in SI und zeigt die
-Konzepte, die du danach in einem Physim-Modul verwendest. Für m=2 kg und v=3 m/s
-sind es 9 J; für die beiden Geschwindigkeiten 3 und 4 m/s liegt der Mittelwert
-bei 12,5 J. Es gibt hier keine Simulation, Sensoren oder Rundungsannahmen über
-unbekannte Messdaten.
+Dieser Einstieg benötigt nur C17. Er berechnet die kinetische Energie in SI:
+
+$$
+E=\frac12mv^2
+$$
+
+Die verwendeten Konzepte nutzt du danach in einem Physim-Modul. Für m = 2 kg
+und v = 3 m/s sind es 9 J. Für die beiden Geschwindigkeiten v₁ = 3 m/s und
+v₂ = 4 m/s bei derselben Masse liefert das Programm den Mittelwert:
+
+$$
+\bar E=\frac{E(v_1)+E(v_2)}2=12{,}5\,\mathrm J
+$$
+
+Es gibt hier keine Simulation, Sensoren oder Rundungsannahmen über unbekannte
+Messdaten.
 
 ## Vollständiges Programm
 

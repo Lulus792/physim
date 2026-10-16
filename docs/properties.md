@@ -24,7 +24,36 @@ Referenzpunkt muss darin liegen. Eine reine Temperaturabhängigkeit benötigt
 beispielsweise nur einen Druckpunkt.
 
 Die Auswertung ist bilinear, linear bei nur einer veränderlichen Achse und
-konstant bei zwei Einpunktachsen. Eckwerte bleiben erhalten. Skalenfreie
+konstant bei zwei Einpunktachsen. Bei zwei Achsen mit jeweils mindestens zwei
+Punkten bezeichnen T₀, T₁ sowie P₀, P₁ die Ränder der umschließenden Tabellenzelle.
+Die dimensionslosen Intervallgewichte lauten:
+
+$$
+\alpha=\frac{T-T_0}{T_1-T_0}
+$$
+
+$$
+\beta=\frac{P-P_0}{P_1-P_0}
+$$
+
+Die Indizes der Tabellenwerte f bezeichnen zuerst den Temperatur-, dann den
+Druckrand der Zelle: 0 ist der untere, 1 der obere Rand. Zuerst wird entlang
+der Druckachse interpoliert, dann entlang der Temperaturachse:
+
+$$
+g_0=(1-\beta)f_{00}+\beta f_{01}
+$$
+
+$$
+g_1=(1-\beta)f_{10}+\beta f_{11}
+$$
+
+$$
+f(T,P)=(1-\alpha)g_0+\alpha g_1
+$$
+
+Beide Gewichte liegen in der Zelle zwischen null und eins. Die folgenden
+numerischen Regeln gelten auch an den Zellenrändern. Eckwerte bleiben erhalten. Skalenfreie
 Intervallgewichte und eine beschränkte konvexe Kombination vermeiden einen
 unnötigen Überlauf bei entgegengesetzten Extremwerten. Der interpolierte Wert
 liegt im Bereich der vier verwendeten Eckwerte. Das ist kein Beweis, dass ein
@@ -73,8 +102,15 @@ und eine SI-Einheit. Die Programme fragen beide Bereichsränder und einen
 inneren Punkt ab und weisen eine ungültige Temperatur zurück. Der konsumierende
 Beispielcode prüft positive Dichte/Kapazität/Permittivität, nichtnegative
 Verlustkoeffizienten und Restitution zwischen 0 und 1. Zusätzlich wird
-`ν = μ/ρ` einschließlich ihrer Dimension geprüft. Die allgemeine Daten-API
-leitet diese physikalischen Regeln nicht aus einem Eigenschaftsnamen ab.
+die Beziehung zwischen kinematischer Viskosität ν, dynamischer Viskosität μ
+und positiver Dichte ρ einschließlich ihrer Dimension geprüft:
+
+$$
+\nu=\frac\mu\rho
+$$
+
+Die Einheit von ν ist m²/s. Die allgemeine Daten-API leitet diese physikalischen
+Regeln nicht aus einem Eigenschaftsnamen ab.
 
 `tools/build.py --examples` und jede SDK-Installation liefern
 `bin/material-properties` und `bin/language-material_properties`
@@ -85,8 +121,14 @@ zurückgegebenen Quantity-Dimensionen gegen separate kanonische SI-Einheiten.
 
 ## Vollständiger C-/Physim-Ablauf
 
-Dieses Beispiel verwendet **synthetische** Eigenschaftsdaten. Die Dichte folgt
-`ρ(T,P) = 1200 - 0.2 T + 10^-6 P` in kg/m³. Es sind keine Messwerte für Wasser
+Dieses Beispiel verwendet **synthetische** Eigenschaftsdaten. Für Zahlenwerte
+T in Kelvin und P in Pascal folgt die Dichte in kg/m³:
+
+$$
+\rho(T,P)=1200-0{,}2T+10^{-6}P
+$$
+
+Es sind keine Messwerte für Wasser
 oder ein anderes benanntes Material. Eine kontrollierte T/P-Fahrt durchläuft
 273–373 K und 0–500000 Pa in einer Simulationssekunde; danach bleiben die
 Eingaben am Bereichsrand. Es wird kein zusätzliches Bewegungsmodell behauptet.
