@@ -12,6 +12,13 @@ on:
       - third_party/nuklear.h
       - tests/test_font_*.c
       - tests/test_documentation.c
+      - tests/documentation_*_example.c
+      - tests/documentation_*_prefix.c
+      - docs/array.md
+      - docs/string-view.md
+      - docs/hashmap.md
+      - docs/memory.md
+      - docs/logging.md
       - tests/check_documentation_anchors.py
       - tests/documentation_anchor_probe.c
       - tests/test_accessibility*
@@ -59,7 +66,7 @@ jobs:
       - name: Platform catalog and failure reporting
         run: python3 tests/test_native_test_runner.py --work build/native
       - name: Portable UTF-16 and document contracts
-        run: python3 tools/build.py --compiler clang --sanitizers --test --test-filter accessibility_utf16 --test-filter accessibility_document --test-filter accessibility_tables --test-filter accessibility_suspend --test-filter accessibility_edit --test-filter font_atlas_limits --test-filter font_faces --test-filter font_sources --test-filter font_density --test-filter documentation --test-filter documentation_anchors --test-filter documentation_array_example --test-filter documentation_string_view_example --test-filter documentation_hashmap_example
+        run: python3 tools/build.py --compiler clang --sanitizers --test --test-filter accessibility_utf16 --test-filter accessibility_document --test-filter accessibility_tables --test-filter accessibility_suspend --test-filter accessibility_edit --test-filter font_atlas_limits --test-filter font_faces --test-filter font_sources --test-filter font_density --test-filter documentation --test-filter documentation_anchors --test-filter documentation_array_example --test-filter documentation_string_view_example --test-filter documentation_hashmap_example --test-filter documentation_memory_example --test-filter documentation_logging_example
       - name: Actual AppKit and rendered F1
         run: python3 tools/build.py --compiler clang --sanitizers --test-display --test-filter accessibility_native --test-filter accessibility_ui --test-filter font_bank_ui --test-filter accessibility_document_macos --test-filter accessibility_edit_macos --test-filter accessibility_links_macos --test-filter documentation_detail --test-filter documentation_navigation --test-filter documentation_sidebar --test-filter graphics --test-filter documentation_font_demand --test-filter documentation_density --test-filter documentation_formula_narrow --test-filter documentation_formula_physics --test-filter documentation_formula_models --test-filter documentation_formula_models_narrow --test-filter documentation_formula_mechanics --test-filter documentation_formula_mechanics_narrow --test-filter documentation_formula_basics --test-filter documentation_formula_basics_narrow --test-filter documentation_inline_math --test-filter documentation_formula_catalog --test-filter documentation_typeset --test-filter documentation_math --test-filter documentation_inline
       - name: Actual previous detail wrapping is rejected

@@ -2751,3 +2751,56 @@ Der fokussierte Mac-Workflow nimmt die drei Beispielprüfungen in seine native
 Gruppe auf; ihre tatsächliche Mac-Ausführung steht noch aus. Dieser Abgleich
 schließt diese drei Fachanleitungen ein, keinen vollständigen semantischen
 Review aller 185 registrierten Dateien.
+
+## Speicher- und Logging-Anleitungen mit ausgeführten Fragmenten
+
+`docs/memory.md` und `docs/logging.md` nennen jetzt ausdrücklich den Kontext
+ihrer C-Ausschnitte: Funktionsrumpf mit öffentlichem Report-Header beziehungsweise
+Experimentcallback mit gültigem `ps_context` und Experiment-Header. Der
+Sprachausschnitt zum Logging trägt die Kennzeichnung `physim`.
+Speicherbesitz, Arena-Rücksetzung, Freigabereihenfolge, Fehlererhaltung und die
+8-MiB-Serialisierung wurden gegen `include/physim/memory.h`, `src/memory.c`,
+`src/report.c` und `src/series.c` abgeglichen. Logger-Lebensdauer, UTF-8-Grenzen,
+Zeitbezug, Rückgabewerte, Wire-Version und Archivierung stimmen mit
+`include/physim/log.h`, `include/physim/experiment.h`, `src/core.c`,
+`src/protocol.h` und `runners/logging.inc` überein.
+
+Der native Beispielprüfer kann nun einen ausdrücklich gespeicherten
+Funktionskontext vor den unveränderten veröffentlichten Codeblock setzen.
+Die beiden neuen Fälle verwenden ausschließlich die genannten öffentlichen
+Header. Der Speicherausschnitt erstellt und zerstört acht Arena-Berichte.
+Der Logging-Ausschnitt prüft Nachricht, Level, tatsächliche Context-Zeit,
+unveränderten Context, Sinkfehler, ungültige Zeit und alte Context-Größe.
+Die drei bisherigen vollständigen C-Beispiele bleiben aktiv.
+
+Windows MSVC/ASan besteht die fünf Beispiele, Memory, Memory Owners, Logging
+und Abschnittslinks 9/9 in `run-e3q_lsc1`; Linux GCC/ASan/UBSan dieselben neun
+in `run-mklb7n94`. Echte C- und Physim-Runnerläufe bestehen zusätzlich 2/2
+unter Windows in `run-u8redolz` und unter Linux in `run-q6e50xt_`. Sie prüfen
+unter anderem identische JSONL-/Archivmeldungen, CRC-Blöcke, Zeitpunkte,
+exklusive Begleitdateien, Volumenlimit und den optierten Wire-Datenstrom.
+
+Für das alleinstehende Speicherbeispiel aktiviert der native Testläufer in
+Linux-ASan-Builds ausdrücklich LeakSanitizer. Vorhandene ASan-Optionen bleiben
+erhalten; die Option wird nur in die Umgebung dieses Testprozesses übernommen.
+Der Bericht nennt, ob diese Prüfung aktiv war. Die finale Beispielgruppe
+besteht 2/2 unter Windows in `run-2vyj9lan` und 2/2 unter Linux mit aktivem
+Speicher-Leakcheck in `run-eek52xlw`. Die aktuellen Markdown- und Codeblock-Hashes
+beider Gruppen wurden abgeglichen. Daraus wird keine allgemeine Leakfreiheit
+der App oder der übrigen Plattformen abgeleitet.
+
+Eine isolierte, tatsächlich übersetzte Variante ohne Pufferfreigabe erzeugt
+8.388.608 verlorene Bytes in acht Allokationen. Der native Testläufer selbst
+weist diese Variante mit Exit 23 und LeakSanitizer-Bericht ab, obwohl seine
+übergeordnete Umgebung `detect_leaks=0` enthält; die übergeordnete Option bleibt
+unverändert. `build/native/memory-runner-leak-counterexample/report.json`
+bewahrt den erwarteten fehlgeschlagenen Fall `run-425ry99g`. Der separate
+Vorläufer unter `build/native/memory-leak-counterexample/report.json` bestätigt
+denselben tatsächlichen Leak und das saubere Original. Der allgemeine
+Testläufer besteht seine Fehler-/Timeout-/Berichtsfälle unter
+`build/native/memory-log-final-runner-proof`.
+
+Die Mac-Gruppe nimmt beide Beispiele und ihre Kontextdateien auf; die
+Workflow-Pfade erfassen auch spätere Änderungen der fünf Beispielseiten und
+Prüfdateien. Die tatsächliche Mac-Ausführung bleibt offen. Der Inhaltsnachweis
+dieses Abschnitts bezieht sich auf Speicherverwaltung und Logging.
