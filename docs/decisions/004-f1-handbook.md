@@ -2504,10 +2504,38 @@ Gegenabnahme. Der endgültige Hauptquell-Fingerprint umfasst die isolierte
 Cachequelle, und der abschließende Bericht bestätigt den tatsächlichen Fehler.
 
 Die Mac-CI enthält den neuen Inline-Fall und die isolierte Cachegegenprobe.
-Für die Inline-Erweiterung steht die tatsächliche Mac-Ausführung noch aus.
+Der anschließende Lauf wird im folgenden Abschnitt getrennt nach Plattform
+bewertet.
 Strukturierte mathematische Screenreader-Navigation, praktische Screenreader-
 Aufgaben, reale Monitor-/Dichtewechsel und der vollständige inhaltliche Abgleich
 aller Hilfeseiten bleiben offen. Die Gesamtwertung bleibt konservativ.
+
+## Inline-Abnahme auf Mac und begrenzte Testübergänge
+
+Workflow `38879251192` für `f79ab793` besteht auf macOS ARM die elf nativen
+Fälle in `run-qyl8ohzb` und alle 25 GUI-Fälle in `run-se6rcoff`, einschließlich
+der Inline-Formeln. Alle drei Layout-/Cachegegenproben werden zurückgewiesen.
+Intel besteht elf native Fälle in `run-4jjmwi0y`, aber nur 24/25 GUI-Fälle in
+`run-np1_rtmr`: `documentation_inline_math` endet nach 60,068 Sekunden am
+unveränderten inneren Zeitlimit. Das Archiv enthält 46 Ansichten; die letzten
+vollständigen Formelprüfungen betreffen Fall 45. Das ist keine vollständige
+Intel-Abnahme. Die Ansichten 34 und 40 wurden zusätzlich visuell geprüft:
+Matrix, Brüche, Fließtext und hoher Kontrast sind darin korrekt gesetzt.
+
+Der Test wiederholte bisher Größen- und Themewechsel auch bei unverändertem
+Zustand. Er führt nun genau zwei Fenstergrößenwechsel und sechs Themewechsel
+aus. Jeder der weiterhin 48 Fälle kontrolliert die tatsächliche Fenstergröße
+und das aktive Theme; alle 162 Bildprüfungen, Grundlinien-, Cache-, Link- und
+Isolationsprüfungen bleiben erhalten. Das Abschlussprotokoll nennt die Anzahl
+der Übergänge und die Laufzeit; der unabhängige Testclient verlangt diese
+Anzahlen. Weder die innere noch die äußere Zeitgrenze wurde erhöht.
+
+Diese Änderung besteht unter Windows MSVC/ASan die beiden betroffenen
+GUI-Fälle in `run-aeu0a4fq` und unter Linux GCC/ASan/UBSan alle sieben
+Formel-/Darstellungsfälle in `run-vhn6ttu4`. Formelassets und alle 31 erzeugten
+Referenzdokumente sind erneut statisch geprüft. Ob die verringerten Übergänge
+das Intel-Zeitlimit beheben, bleibt bis zu einer tatsächlichen Mac-Ausführung
+offen; aus den lokalen Erfolgen wird das nicht abgeleitet.
 
 ## Unabhängiger externer macOS-AX-Prüfweg
 

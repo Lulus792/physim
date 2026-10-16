@@ -4,8 +4,10 @@ static const char documentation_inline_math_fixture[]=
 static void documentation_inline_math_test_frame(app *a,int *stage,int *code,const char **capture) {
     static size_t blocks[8];static unsigned sample,frames;static int editor,analysis;
     static double simulation;static char image[80];bool okay=true;
+    static unsigned resizes,themes;static double started;
     switch((*stage)++) {
     case 0:editor=a->experiment.string.len;analysis=a->analysis.string.len;simulation=a->simulation_time;
+        resizes=themes=0;started=ps_clock();
         test_window_key_mod(a->window,SDLK_F1,0);break;
     case 1: {
         ps_document *document=NULL;
@@ -25,8 +27,14 @@ static void documentation_inline_math_test_frame(app *a,int *stage,int *code,con
     case 2: {
         if(!sample)documentation_zoom(a,0);
         if(sample==24)for(int i=0;i<8;i++)documentation_zoom(a,1);
-        okay=SDL_SetWindowSize(a->doc_window,sample<24?1100:760,sample<24?800:540) && SDL_SyncWindow(a->doc_window);
-        ps_preferences p=a->preferences;p.theme=(sample/8)%3;preferences_apply(a,&p);
+        int width=sample<24?1100:760,height=sample<24?800:540;
+        if(!sample || sample==24) {
+            okay=SDL_SetWindowSize(a->doc_window,width,height) && SDL_SyncWindow(a->doc_window);++resizes;
+        }
+        int actual_width=0,actual_height=0;
+        okay &= SDL_GetWindowSize(a->doc_window,&actual_width,&actual_height) && actual_width==width && actual_height==height;
+        if(sample%8==0){ps_preferences p=a->preferences;p.theme=(sample/8)%3;preferences_apply(a,&p);++themes;}
+        okay &= a->preferences.theme==(sample/8)%3;
         a->doc_navigation_hidden=sample%8==6;frames=0;break;
     }
     case 3:
@@ -55,5 +63,8 @@ static void documentation_inline_math_test_frame(app *a,int *stage,int *code,con
         *capture="docs-inline-math-link.bmp";a->quitting=true;break;
     }
     if(!okay){fprintf(stderr,"Inline math stage %d case %u failed\n",*stage-1,sample);*code=1;a->quitting=true;}
-    if(a->quitting)printf("INLINE MATH SELF-TEST: %s count=%u\n",*code?"FAILED":"PASSED",sample);
+    if(a->quitting) {
+        printf("INLINE MATH TRANSITIONS: resizes=%u themes=%u elapsed=%.3f\n",resizes,themes,ps_clock()-started);
+        printf("INLINE MATH SELF-TEST: %s count=%u\n",*code?"FAILED":"PASSED",sample);
+    }
 }

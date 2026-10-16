@@ -1669,6 +1669,7 @@ def main():
         elif args.case == "documentation_inline_math":
             output=flow.steps[-1]['stdout']
             require('INLINE MATH SELF-TEST: PASSED count=48' in output,'Missing inline math completion')
+            require('INLINE MATH TRANSITIONS: resizes=2 themes=6 ' in output,'Unexpected inline window/theme transition coverage')
             records=re.findall(r'INLINE MATH DRAW: case=(\d+) item=(\d+) font=(\d+) theme=(\d+) complete=(\d+) frame=(\d+),(\d+),(\d+),(\d+)',output)
             require(len(records)==162,'Missing inline formula draws')
             for case in range(48):
