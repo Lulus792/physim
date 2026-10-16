@@ -4,6 +4,63 @@ Nach dem Nutzervergleich vom 16. Oktober 2026 wurde die native Umsetzung erneut
 direkt mit `h-dark.png`, `h-light.png` und den zugehörigen CSS-Regeln verglichen.
 Dieser Bericht ergänzt die historische Abnahme in [NATIVE-H.md](NATIVE-H.md).
 
+## Weitere Annäherung an die Referenz (17. Oktober 2026)
+
+Die Paneel-Icons verwenden jetzt unmittelbar die Geometrie von `panelIcon()` aus
+`refinements.js`: dieselben 24 Vektoreinheiten, auf die 20-Pixel-Iconbox skaliert,
+einschließlich Kontur, Teilung und transparenter Seitenfüllung. Zuvor wurde die
+Außenkontur selbst 20 Pixel breit gezeichnet und wirkte dadurch deutlich größer.
+Die ganze Bedienfläche bleibt anklickbar und per Tastatur erreichbar.
+
+Der gemeinsame C/Physim-Schalter ist jetzt 34 Pixel hoch, entsprechend den
+28-Pixel-Segmenten mit Innenabstand und Rahmen der Vorlage. Die Kopfleiste erhält
+den passenden Einzug. „PHYSIM“ verwendet echte Fettschrift, „Handbuch“ daneben
+reguläre, gedämpfte Schrift. Die linken Gruppenbeschriftungen beginnen wie in H
+mit sieben Pixeln Innenabstand. Modell/Beispiel bleiben auch unter dem Mauszeiger
+ungefüllte Text-Tabs; nur das aktive Sprachsegment erhält seine dezente Fläche.
+Die aktive Beschriftung verwendet die H-Textrolle `doc_text`.
+
+Die Kopfleiste verwendet außerdem den 12-Pixel-Abstand zwischen den Elementen
+aus `refinements.css`, anstelle des allgemeinen nativen 8-Pixel-Abstands.
+Neue native Aufnahmen derselben geprüften Ausgabe: [Dunkel](native-h-reference-dark.png),
+[Hell](native-h-reference-light.png), [Mindestfenster](native-h-reference-minimum.png)
+und [UI 22 / Leseschrift 32](native-h-reference-large.png). Alle vier Bilder wurden
+direkt geöffnet und mit der H-Vorlage verglichen; sie sind unveränderte
+Formatkonvertierungen der nativen BMP-Aufnahmen.
+
+Die abschließende Windows-Gruppe `run-fe9laksh` besteht 4/4: Tastatur, lange
+Sidebartexte, F6-Bereichsnavigation und H. H umfasst alle 56 tatsächlichen
+Fensterzustände einschließlich Hell/Dunkel/hohem Kontrast, großen Schriften,
+unabhängigen Seiten, Bildpixeln und Navigationsgeometrie.
+Windows-Binary-SHA256:
+`ec03923d9967c8cffecdf14cd33792e44a785cc818cc3cc372ec1f5402227382`.
+Der direkte Aufruf war `tools/build.py --build-dir
+build/native/F1-reading-focus/Debug-sanitized --sanitizers --jobs 4 --test-display
+--test-filter documentation_h --test-filter documentation_sidebar --test-filter
+documentation_keyboard --test-filter documentation_panes`.
+
+Die entsprechende Linux-Gruppe besteht ebenfalls 4/4 (`run-qgh_6l1h`, Alpine
+3.24.2, GCC 15.2, ASan/UBSan, privates X11/Xvfb/DBus). Dunkel und große Schrift
+wurden auch anhand ihrer tatsächlichen Linux-Bilder angesehen. Der zusätzliche
+normale X11-/AT-SPI-Bedienlauf `build/native/h-reference-normal-pointer` besteht
+alle vier Aufgaben: Sprach-/Kontextwechsel, unabhängige Paneele sowie lokale und
+globale Tastatursuche mit F6. Er verwendet die ursprünglichen Eingabezeiten ohne
+Diagnosemodus. Linux-Binary-SHA256:
+`a13c23b1303a1e08fcb0db94b1820ba575cd8a375e80693ffb1229caaa321200`.
+Für diesen jüngsten Detailpatch liegt noch keine neue macOS-Ausführung vor.
+Die älteren revisionsbezogenen Mac-Nachweise unten bleiben davon getrennt.
+
+Die geprüfte Windows-EXE liegt zusammen mit ihren passenden Debugsymbolen wieder
+unter `build/native/Debug-sanitized/bin/physim.exe`. Vor der Übernahme wurden ein
+laufendes Programm an diesem Zielpfad ausgeschlossen und die SDL-/ASan-DLLs
+abgeglichen. Nach finaler Abnahme wurden 93 ersetzte BMPs des erfolgreichen
+Windows-Zwischenlaufs entfernt (202.793.634 Byte); Ergebnisdateien, finale Bilder
+und alle Referenzen bleiben erhalten.
+
+Diese Details sind im vorhandenen Renderer möglich. Die am Ende dieses Berichts
+beschriebenen Unterschiede durch Fensterrahmen, Textmetriken, vollständige Inhalte
+und zusätzliche Handbuchfunktionen bleiben davon getrennt.
+
 ## Weiterer Detailabgleich der Navigation und Umschalter (17. Oktober 2026)
 
 Der erneute Vergleich mit H trennt jetzt kleine Gruppenbeschriftungen von

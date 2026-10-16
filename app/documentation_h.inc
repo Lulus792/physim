@@ -16,19 +16,22 @@ static float documentation_tab_width(app *a,const char *label) {
     return fmaxf(documentation_text_width(documentation_control_font(a,false),label,n),
         documentation_text_width(documentation_control_font(a,true),label,n))+2;
 }
-static void documentation_h_label(app *a,const char *text,bool muted) {
+static void documentation_h_label_inset(app *a,const char *text,bool muted,float inset) {
     struct nk_context *ui=a->doc_ui;const struct nk_user_font *font=ui->style.font;
-    nk_layout_row_dynamic(ui,documentation_height(font,text,strlen(text),nk_window_get_content_region(ui).w-8)+8,1);
+    nk_layout_row_dynamic(ui,documentation_height(font,text,strlen(text),nk_window_get_content_region(ui).w-2*inset)+8,1);
     struct nk_rect r;enum nk_widget_layout_states visible=nk_widget(&r,ui);
     ps_ui_accessibility_label(ui,r,text);
     if(visible==NK_WIDGET_INVALID)return;
     size_t at=0,n=strlen(text);float y=r.y+4;
     do {
-        size_t length,used=documentation_line(font,text+at,n-at,r.w-8,&length);
-        nk_draw_text(nk_window_get_canvas(ui),nk_rect(r.x+4,y,r.w-8,font->height+6),text+at,(int)length,
+        size_t length,used=documentation_line(font,text+at,n-at,r.w-2*inset,&length);
+        nk_draw_text(nk_window_get_canvas(ui),nk_rect(r.x+inset,y,r.w-2*inset,font->height+6),text+at,(int)length,
             font,nk_rgba(0,0,0,0),muted?UI_COLOR(muted):UI_COLOR(text));
         at+=used;y+=font->height+6;
     }while(at<n);
+}
+static void documentation_h_label(app *a,const char *text,bool muted) {
+    documentation_h_label_inset(a,text,muted,4);
 }
 static bool documentation_pane_button(app *a,bool right) {
     struct nk_context *ui=a->doc_ui;struct nk_rect r;
@@ -41,11 +44,16 @@ static bool documentation_pane_button(app *a,bool right) {
     if(nk_input_is_mouse_hovering_rect(&ui->input,r)) {
         nk_fill_rect(c,r,5,UI_COLOR(button_hover));nk_tooltip(ui,name);
     }
-    float x=r.x+(r.w-20)/2,y=r.y+(r.h-18)/2;
-    nk_stroke_rect(c,nk_rect(x,y,20,18),2,1.5f,UI_COLOR(text));
-    float line=x+(right?14:6);
-    nk_stroke_line(c,line,y,line,y+18,1.5f,UI_COLOR(text));
-    if(!hidden){struct nk_color fill=UI_COLOR(text);fill.a=44;nk_fill_rect(c,nk_rect(right?line+2:x+2,y+3,3,12),0,fill);}
+    /* Same 24-unit SVG geometry as panelIcon() in the H reference, displayed
+     * in a 20 px icon box. Keep the entire widget as the input target. */
+    const float scale=20.f/24;
+    float x=r.x+(r.w-20)/2,y=r.y+(r.h-20)/2;
+    struct nk_color ink=hidden?UI_COLOR(muted):UI_COLOR(doc_text);
+    if(!hidden){struct nk_color fill=ink;fill.a=43;
+        nk_fill_rect(c,nk_rect(x+(right?15:3)*scale,y+4*scale,6*scale,16*scale),0,fill);}
+    nk_stroke_rect(c,nk_rect(x+3*scale,y+4*scale,18*scale,16*scale),2*scale,1.5f*scale,ink);
+    float line=x+(right?15:9)*scale;
+    nk_stroke_line(c,line,y+4*scale,line,y+20*scale,1.5f*scale,ink);
     if(right)a->doc_context_toggle_bounds=r;else a->doc_navigation_bounds=r;
     documentation_focus_draw(a,right?DOC_CONTEXT:DOC_NAVIGATION,r,false);
     return pressed;
@@ -55,25 +63,27 @@ static bool documentation_pane_button(app *a,bool right) {
 static bool documentation_segment(app *a,struct nk_rect r,const char *group,const char *label,bool selected,bool tab) {
     struct nk_context *ui=a->doc_ui;
     bool pressed=ps_ui_option_at(ui,r,group,label,selected);
-    bool hover=nk_input_is_mouse_hovering_rect(&ui->input,r);
     struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
-    if((selected && !tab) || hover)nk_fill_rect(canvas,r,tab?3:4,hover?UI_COLOR(button_hover):UI_COLOR(button));
+    /* H keeps text tabs transparent, including on hover. Only the selected
+     * language segment has a surface; keyboard focus has its own outline. */
+    if(selected && !tab)nk_fill_rect(canvas,r,4,UI_COLOR(button));
     if(selected && !tab && a->preferences.theme==PS_THEME_HIGH_CONTRAST)
         nk_stroke_rect(canvas,nk_rect(r.x+1,r.y+1,r.w-2,r.h-2),3,2,UI_COLOR(accent));
     const struct nk_user_font *font=documentation_control_font(a,selected);
     float width=documentation_text_width(font,label,strlen(label));
     nk_draw_text(canvas,nk_rect(r.x+(r.w-width)/2,r.y+(r.h-font->height)/2,width+1,font->height),
-        label,(int)strlen(label),font,nk_rgba(0,0,0,0),selected?UI_COLOR(text):UI_COLOR(muted));
+        label,(int)strlen(label),font,nk_rgba(0,0,0,0),selected?UI_COLOR(doc_text):UI_COLOR(muted));
     if(tab && selected)nk_stroke_line(canvas,r.x,r.y+r.h-1,r.x+r.w,r.y+r.h-1,2,UI_COLOR(accent));
     if(nk_sdl_accessibility_is_focused(ui,group,label))nk_stroke_rect(canvas,nk_rect(r.x+1,r.y+1,r.w-2,r.h-2),3,2,UI_COLOR(accent));
     return pressed;
 }
 static void documentation_header(app *a) {
-    struct nk_context *ui=a->doc_ui;float h=fmaxf(32,ui->style.font->height+12);
+    struct nk_context *ui=a->doc_ui;float h=fmaxf(34,ui->style.font->height+12);
     float width=nk_window_get_content_region(ui).w;
-    const char *brand_text="PHYSIM Handbuch";
-    const struct nk_user_font *brand_font=a->doc_ui_fonts[(a->preferences.ui_size-16)/2];
-    float brand=documentation_text_width(brand_font,brand_text,strlen(brand_text))+12;
+    const struct nk_user_font *brand_font=documentation_control_font(a,true);
+    const struct nk_user_font *handbook_font=documentation_control_font(a,false);
+    float brand_name=documentation_text_width(brand_font,"PHYSIM",6);
+    float brand=brand_name+8+documentation_text_width(handbook_font,"Handbuch",8)+2;
     float physim=documentation_tab_width(a,"Physim")+18;
     float cwidth=documentation_tab_width(a,"C")+18;
     float language=cwidth+physim+8;
@@ -81,7 +91,12 @@ static void documentation_header(app *a) {
     float search=fminf(310,fmaxf(100,available)),spacer=fmaxf(0,available-search);
     nk_layout_row_begin(ui,NK_STATIC,h,6);
     nk_layout_row_push(ui,32);if(documentation_pane_button(a,false))documentation_navigation_toggle(a);
-    nk_layout_row_push(ui,brand);nk_style_push_font(ui,brand_font);nk_label(ui,brand_text,NK_TEXT_LEFT);nk_style_pop_font(ui);
+    nk_layout_row_push(ui,brand);struct nk_rect brand_bounds;nk_widget(&brand_bounds,ui);
+    ps_ui_accessibility_label(ui,brand_bounds,"PHYSIM Handbuch");
+    nk_draw_text(nk_window_get_canvas(ui),nk_rect(brand_bounds.x,brand_bounds.y+(brand_bounds.h-brand_font->height)/2,brand_name+1,brand_font->height),
+        "PHYSIM",6,brand_font,nk_rgba(0,0,0,0),UI_COLOR(doc_text));
+    nk_draw_text(nk_window_get_canvas(ui),nk_rect(brand_bounds.x+brand_name+8,brand_bounds.y+(brand_bounds.h-handbook_font->height)/2,brand-brand_name-8,handbook_font->height),
+        "Handbuch",8,handbook_font,nk_rgba(0,0,0,0),UI_COLOR(muted));
     nk_layout_row_push(ui,language);struct nk_rect segment;nk_widget(&segment,ui);
     nk_fill_rect(nk_window_get_canvas(ui),segment,5,UI_COLOR(edit));
     nk_stroke_rect(nk_window_get_canvas(ui),segment,5,1,UI_COLOR(divider));
@@ -178,7 +193,7 @@ static void documentation_sidebar_content(app *a) {
             int group=documentation_h_group(topic);
             if(!a->doc_filter[0] && group!=previous) {
                 if(previous>=0){nk_layout_row_dynamic(ui,8,1);nk_spacing(ui,1);}
-                documentation_h_label(a,groups[group],true);previous=group;
+                documentation_h_label_inset(a,groups[group],true,7);previous=group;
             }
             const char *title=documentation_topics[topic].title;
             nk_style_push_font(ui,documentation_control_font(a,topic==a->doc_topic));

@@ -200,12 +200,14 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     const struct nk_user_font *chrome=documentation_chrome_font(a);
     nk_style_push_float(ui,&ui->style.window.rounding,0);
     nk_style_push_font(ui,chrome);
-    nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(12,12));
+    nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(13,13));
+    nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(12,ui->style.window.spacing.y));
     nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(header)));
     if(a->doc_filter_focus || a->doc_filter_active)nk_window_set_focus(ui,"documentation-header");
     if(nk_begin(ui,"documentation-header",nk_rect(0,0,(float)w,layout.header.h),NK_WINDOW_NO_SCROLLBAR)) {
         ps_ui_accessibility_route(ui,true);documentation_header(a);
     }nk_end(ui);
+    nk_style_pop_vec2(ui);
     nk_style_pop_style_item(ui);
     nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(window)));
     nk_window_show(ui,"topics",a->doc_navigation_hidden?NK_HIDDEN:NK_SHOWN);
