@@ -46,6 +46,10 @@ static void documentation_h_test_frame(app *a,int *stage,int *code,const char **
         int wanted_width=window?760:1080,wanted_height=window?540:780;
         int width=wanted_width<available_width?wanted_width:available_width;
         int height=wanted_height<available_height?wanted_height:available_height;
+        /* A frame filling the small Cocoa desktop can be considered zoomed.
+         * SDL 3.2.30 ignores SetWindowSize in that state: restore first. */
+        printf("DOCUMENTATION H RESTORE: case=%u flags=%llu\n",index,(unsigned long long)SDL_GetWindowFlags(a->doc_window));
+        ok=ok && SDL_RestoreWindow(a->doc_window);
         ok=ok && available_width>=760 && available_height>=540 && SDL_SetWindowSize(a->doc_window,width,height);
         /* Cocoa can time out its synchronous resize wait. Acceptance is the
          * actual size and pane geometry after the rendered frames below. */
