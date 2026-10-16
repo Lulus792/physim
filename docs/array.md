@@ -36,6 +36,8 @@ Danach sind `((ps_vec3 *)array.data)[0..array.count)` gültige Werte. Die Felder
 direkt verändert werden. Einen besitzenden Array-Descriptor nicht kopieren; vor
 erneuter Initialisierung zuerst `ps_array_destroy` aufrufen. Der Allocator und
 sein Benutzerzustand müssen bis zur Zerstörung gültig bleiben.
+Für gemeinsamen Zugriff ist externe Synchronisation nötig; das Array setzt
+selbst keine Sperren, auch nicht für gleichzeitiges Lesen während einer Änderung.
 
 ## Operationen und Lebensdauer
 

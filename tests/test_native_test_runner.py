@@ -27,6 +27,24 @@ def main():
     sys.dont_write_bytecode = True
     spec.loader.exec_module(runner)
 
+    # A missing or additional published example must never silently pass.
+    snippets=directory / "snippet source"
+    snippets.mkdir()
+    page=snippets / "example.md";harness=snippets / "check.c"
+    harness.write_text("int main(void) { return documented()!=7; }\n",encoding="utf-8")
+    published="# Example\n\n```c\nint documented(void) { return 7; }\n```\n"
+    page.write_text(published,encoding="utf-8")
+    example_case=runner.Case("published_example",("check.c",),documentation_source="example.md")
+    example_builder=SimpleNamespace(directory=directory / "snippet build")
+    generated,proof=runner.documentation_example(example_case,example_builder,snippets)
+    assert '#line 4 ' in generated.read_text(encoding="utf-8")
+    assert 'int documented(void) { return 7; }' in generated.read_text(encoding="utf-8")
+    for invalid in ("No C example\n",published+"\n```c\nint uncovered;\n```\n"):
+        page.write_text(invalid,encoding="utf-8")
+        try:runner.documentation_example(example_case,example_builder,snippets)
+        except RuntimeError as error:assert 'expected exactly one C example' in str(error)
+        else:raise AssertionError("Uncovered documentation example accepted")
+
     wm_spec = importlib.util.spec_from_file_location("wait_window_manager", source / "tools/wait-window-manager.py")
     wm = importlib.util.module_from_spec(wm_spec)
     wm_spec.loader.exec_module(wm)

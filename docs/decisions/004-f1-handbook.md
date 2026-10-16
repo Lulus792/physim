@@ -2711,3 +2711,43 @@ Diese Korrektur benötigt noch ihre tatsächliche Mac-Ausführung. Der erfolgrei
 GUI-Vorlauf ist weiterhin ein Nachweis der früheren Revision und keine Abnahme
 des neuen Setterschutzes. Der erste externe Lauf bleibt als Fehler erhalten;
 eine praktische VoiceOver-Abnahme wird daraus nicht abgeleitet.
+
+## Vollständiger Inhaltsabgleich: Arrays, String-Views und Hashmaps
+
+Die drei Anleitungen `docs/array.md`, `docs/string-view.md` und `docs/hashmap.md`
+sind gegen ihre öffentlichen Header und Implementierungen abgeglichen:
+Speicherbesitz, Grenzen, Allokationen, Selbstkopien beziehungsweise Aliasing,
+Fehlerausgaben, Traversierung und Zeigerlebensdauer. Der Array-Text nennt nun
+ausdrücklich die nötige externe Synchronisation. String-Views unterscheiden
+überlappende Daten von einem überschriebenen, weiter benötigten Descriptor.
+Die Hashmap-Anleitung erklärt den Besitz einer zuvor über den Ausgabezeiger
+referenzierten Map beim erneuten Aufruf ihres Beispielhelpers.
+
+Die drei veröffentlichten C-Beispiele werden jetzt unmittelbar aus ihrem
+jeweiligen Markdown-Codeblock übernommen und mit einer separaten Ergebnisprobe
+übersetzt. Es gibt keine gepflegte zweite Kopie des Beispielcodes. Der native
+Testkatalog führt `documentation_array_example`,
+`documentation_string_view_example` und `documentation_hashmap_example` aus.
+Die Proben prüfen 100 Positionen und Koordinaten, geliehene getrimmte Textbereiche,
+unveränderte Fehlerausgaben sowie den gespeicherten und wiedergefundenen
+Map-Parameter. Codepfade verweisen mittels `#line` auf die veröffentlichte Seite.
+Der Bericht hält die Hashes der mit LF normalisierten Seite, des tatsächlich
+verwendeten Codeblocks und der erzeugten C-Quelle fest. Fehlende oder zusätzliche
+C-Blöcke werden abgewiesen, damit neuer Beispielcode nicht unbemerkt ungeprüft bleibt.
+
+MSVC/ASan besteht alle drei Beispiele, die drei bestehenden Bibliothekstests und
+die Abschnittslinks 7/7 in `run-dbg30_ct`; Linux GCC/ASan/UBSan dieselben sieben
+in `run-8j9zvq0_`. Die abschließende Hashprüfung vergleicht beide Berichte mit
+den aktuellen veröffentlichten Codeblöcken. Die Vorläufe mit jeweils sechs
+Fällen bestehen ebenfalls: `run-phrramcn` und `run-_j2g5uir`.
+Eine isolierte, tatsächlich übersetzte Variante mit nur 99 Positionen statt 100
+wird von derselben Ergebnisprobe abgewiesen. Auch ein zusätzlicher ungetesteter
+Codeblock wird erkannt; `build/native/foundation-counterexample/report.json`
+enthält die Originalergebnisse. Der unabhängige Testläufer besteht zusätzlich
+seine Fehler-, Timeout- und Berichtsfälle unter
+`build/native/foundation-final-runner-proof`.
+
+Der fokussierte Mac-Workflow nimmt die drei Beispielprüfungen in seine native
+Gruppe auf; ihre tatsächliche Mac-Ausführung steht noch aus. Dieser Abgleich
+schließt diese drei Fachanleitungen ein, keinen vollständigen semantischen
+Review aller 185 registrierten Dateien.

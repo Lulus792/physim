@@ -39,10 +39,14 @@ class Case:
     language_native: dict | None = None
     language_probe: str | None = None
     integration: dict | None = None
+    documentation_source: str | None = None
 
 
 def catalog():
     cases = []
+    for name,page in (("array","array"),("string_view","string-view"),("hashmap","hashmap")):
+        cases.append(Case("documentation_"+name+"_example",(f"tests/documentation_{name}_example.c",),
+                          documentation_source=f"docs/{page}.md"))
     cases.append(Case("accessibility_text_index", ("tests/test_accessibility_text_index.c",),libraries=()))
     cases.append(Case("accessibility_utf16", ("tests/test_accessibility_utf16.c",),libraries=()))
     cases.append(Case("project_display",("tests/test_project_display.c","app/project_file.c","app/text_document.c","app/autosave.c","app/parameter_catalog.c"),app=True,arguments=("{work}",)))
@@ -547,6 +551,28 @@ def execute_case(command, *, work: Path, env, timeout: float, exit_code=0,
     return result
 
 
+def documentation_example(case, builder, source):
+    """Compile the published block itself; hashes use UTF-8 with LF newlines."""
+    page=source / case.documentation_source
+    text=page.read_text(encoding="utf-8")
+    blocks=list(re.finditer(r"^```c[ \t]*\n(.*?)^```[ \t]*$",text,re.M|re.S))
+    if len(blocks)!=1:
+        raise RuntimeError(f"{case.documentation_source}: expected exactly one C example, found {len(blocks)}")
+    block=blocks[0];code=block[1];line=text.count("\n",0,block.start(1))+1
+    generated=builder.directory / "generated" / case.name / "example.c"
+    generated.parent.mkdir(parents=True,exist_ok=True)
+    content=f"#line {line} {json.dumps(page.as_posix())}\n"+code
+    for name in case.sources:
+        path=source / name
+        content+=f"\n#line 1 {json.dumps(path.as_posix())}\n"+path.read_text(encoding="utf-8")
+    data=content.encode("utf-8")
+    if not generated.is_file() or generated.read_bytes()!=data:
+        generated.write_bytes(data)
+    return generated,dict(page=case.documentation_source,normalized_page_sha256=hashlib.sha256(text.encode("utf-8")).hexdigest(),
+                          code_sha256=hashlib.sha256(code.encode("utf-8")).hexdigest(),
+                          generated_sha256=hashlib.sha256(data).hexdigest())
+
+
 def run_suite(builder, libraries, source: Path, pattern="*", *, display=False):
     patterns = [pattern] if isinstance(pattern, str) else pattern or ["*"]
     cases = [case for case in catalog() if (not case.app or not builder.args.no_app)
@@ -565,13 +591,17 @@ def run_suite(builder, libraries, source: Path, pattern="*", *, display=False):
             if case.language_source or case.language_checks or case.language_workflow or case.language_native or case.language_probe or case.integration:
                 result = language_case(case, builder, libraries, source, work)
             else:
-                program = builder.executable("physim-test-" + case.name, list(case.sources),
+                paths=list(case.sources);proof=None
+                if case.documentation_source:
+                    generated,proof=documentation_example(case,builder,source);paths=[str(generated)]
+                program = builder.executable("physim-test-" + case.name, paths,
                                              [libraries[name] for name in case.libraries],
                                              sdl=case.app, defines=case.defines)
                 arguments = [arg.format(work=work.as_posix(), source=source.as_posix()) for arg in case.arguments]
                 result = execute_case([str(program), *arguments], work=work, env=builder.env,
                                       timeout=case.timeout, exit_code=case.exit_code,
                                       stdout=case.stdout, stderr_pattern=case.stderr_pattern)
+                if proof:result["documentation_example"]=proof
         except (OSError, RuntimeError) as error:
             result = {"status": "build_failed", "reason": str(error)}
         result["name"] = case.name
