@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Physim · Entwurf Analysebereich</title>
+  <link rel="stylesheet" href="analysis.css">
+  <script src="analysis.js" defer></script>
+</head>
+<body>
+  <main class="gallery">
+    <header class="presentation">
+      <div><p class="eyebrow">PHYSIM <span>/ Oberflächenentwurf 01</span></p><h1>Vom Messlauf zur Erkenntnis.</h1><p class="intro">Läufe auswählen, Kurven untersuchen, Ergebnisse nachvollziehen.</p></div>
+      <div class="preview-controls">
+        <div class="segmented" role="group" aria-label="Erscheinungsbild"><button data-theme="dark" aria-pressed="true">Dunkel</button><button data-theme="light" aria-pressed="false">Hell</button></div>
+        <label class="scenario-label">Vorschauzustand<select id="scenario"><option value="ready">Messdaten</option><option value="compare">Laufvergleich</option><option value="empty">Ohne Messlauf</option><option value="loading">Laden</option><option value="error">Ladefehler</option></select></label>
+      </div>
+    </header>
+
+    <section class="app-window" id="app" aria-label="Designvorschau des Analysebereichs">
+      <header class="menubar"><strong class="wordmark">Physim</strong><div class="menu-labels" aria-label="Globale Menüleiste, Darstellung im Entwurf"><span>Datei</span><span>Bearbeiten</span><span>Ansicht</span><span>Build</span><span>Hilfe</span><span>Einstellungen</span></div><span class="window-title">Gedämpftes Pendel</span><span class="window-controls" aria-hidden="true">−　□　×</span></header>
+      <nav class="workspace-tabs" aria-label="Arbeitsbereiche, Vorschau Auswerten"><span>Entwickeln</span><span>Simulieren</span><span class="active" aria-current="page">Auswerten</span></nav>
+      <div class="workspace-heading"><div class="heading-left"><button class="icon-button" id="toggle-left" aria-label="Laufliste ausblenden" aria-expanded="true" aria-controls="run-panel"><span aria-hidden="true">◧</span></button><div><h2>Auswertung</h2><p id="selection-label">Gedämpftes Pendel / Lauf 024</p></div></div><div class="heading-actions"><button id="code-open">Analysecode</button><button class="primary" id="analyze">Analyse starten</button><button class="icon-button" id="toggle-right" aria-label="Details ausblenden" aria-expanded="true" aria-controls="inspector"><span aria-hidden="true">◨</span></button></div></div>
+
+      <div class="workspace" id="workspace">
+        <aside class="runs" id="run-panel" aria-label="Gespeicherte Messläufe">
+          <div class="panel-heading"><h3>Messläufe</h3><span class="count">3</span></div>
+          <label class="search-label"><span class="sr-only">Läufe durchsuchen</span><input type="search" id="search-runs" placeholder="Läufe durchsuchen …"></label>
+          <div class="list-caption">HEUTE <span>16. Oktober 2026</span></div>
+          <div id="run-list"></div>
+          <p class="small selection-hint" id="selection-hint">Weitere Läufe zum Vergleichen auswählen.</p>
+          <div class="run-bottom"><button class="full" id="import">+ Beispielmesslauf laden</button><p class="small">Entwurf mit synthetischen Messdaten</p></div>
+        </aside>
+
+        <section class="analysis-pane" aria-label="Messdaten und Analyseergebnis">
+          <div class="content-bar"><div class="content-tabs" role="tablist" aria-label="Auswertungsansicht"><button id="tab-data" role="tab" aria-selected="true" aria-controls="data-panel" tabindex="0">Messdaten</button><button id="tab-report" role="tab" aria-selected="false" aria-controls="report-panel" tabindex="-1">Analyseergebnis <span class="report-dot" hidden></span></button></div><span class="data-quality" id="data-quality">Vollständig · 1.001 Messpunkte</span></div>
+          <div id="data-panel" role="tabpanel" aria-labelledby="tab-data">
+            <div class="chart-heading"><div><p class="overline">MESSKURVE</p><h3 id="chart-title">Auslenkung</h3></div><div class="chart-tools" role="group" aria-label="Diagrammausschnitt"><button id="zoom-in" aria-label="Zeitachse vergrößern">+</button><button id="zoom-out" aria-label="Zeitachse verkleinern">−</button><button id="zoom-reset">Alles zeigen</button></div></div>
+            <div class="legend" id="legend"></div>
+            <div class="chart-wrap"><svg id="chart" viewBox="0 0 800 326" role="img" aria-labelledby="plot-title plot-description"><title id="plot-title">Auslenkung über der Zeit</title><desc id="plot-description">Synthetische Messkurve eines gedämpften Pendels.</desc></svg></div>
+            <div class="chart-readout"><span id="cursor-readout">Zeitachse 0–20 s</span><span>Vorschau · 50 Hz</span></div>
+            <div class="statistics-heading"><h3>Statistik</h3><span>Gesamter Lauf · unabhängig vom Zoom</span></div>
+            <div class="table-scroll"><table><caption class="sr-only">Statistik aller Messpunkte des ausgewählten Kanals pro Lauf</caption><thead><tr><th scope="col">Messlauf</th><th scope="col">Mittelwert</th><th scope="col">Std.-Abw.</th><th scope="col">Minimum</th><th scope="col">Maximum</th></tr></thead><tbody id="statistics"></tbody></table></div>
+            <div class="data-footer"><span id="statistics-unit">Auslenkung in rad · Stichprobenstandardabweichung</span><button class="text-button" id="export-csv">CSV · Alle Daten ↗</button></div>
+          </div>
+          <div id="report-panel" role="tabpanel" aria-labelledby="tab-report" hidden></div>
+          <div id="state-panel" hidden></div>
+        </section>
+
+        <aside class="inspector" id="inspector" aria-label="Kanal und Laufdetails">
+          <div class="panel-heading"><h3>Details</h3><span class="small">Auswahl</span></div>
+          <section class="inspector-section"><p class="overline">DARSTELLUNG</p><label for="channel">Messkanal</label><select id="channel"><option value="theta">Auslenkung · θ</option><option value="omega">Winkelgeschwindigkeit · ω</option><option value="energy">Mechanische Energie · E</option></select><label for="unit">Anzeigeeinheit</label><select id="unit"><option value="rad">Radiant (rad)</option><option value="deg">Grad (°)</option></select><p class="small">Die Anzeigeeinheit gilt für Kurve, Statistik und CSV-Vorschau.</p></section>
+          <section class="inspector-section"><p class="overline">AKTIVER LAUF</p><h4 id="detail-title">Lauf 024</h4><dl id="run-details"></dl></section>
+          <section class="inspector-section"><p class="overline">HERKUNFT</p><dl><div><dt>Modell</dt><dd>Gedämpftes Pendel</dd></div><div><dt>Analysesprache</dt><dd>Physim</dd></div><div><dt>Analysecode</dt><dd>analysis.phys</dd></div></dl><details><summary>Quelldatei</summary><code id="source-file">runs/pendel-024.psrun</code></details></section>
+          <div class="inspector-note"><span class="note-symbol" aria-hidden="true">i</span><p>Messdaten bleiben erhalten. Ein Analyseergebnis wird als eigener Bericht abgelegt.</p></div>
+        </aside>
+      </div>
+      <footer class="statusbar"><span id="status" role="status" aria-live="polite">Bereit · Lauf 024 geladen</span><span>Designvorschau · Beispieldaten</span></footer>
+    </section>
+    <footer class="design-note"><span><b>01 / Analyse als Arbeitsfläche</b><br>Die Kurve steht im Mittelpunkt. Laufwahl und Details lassen sich unabhängig einklappen.</span><a href="DESIGN.md">Design und Übergabe ↗</a></footer>
+  </main>
+  <dialog id="code-dialog" aria-labelledby="code-title"><div class="dialog-head"><div><p class="overline">ANALYSECODE</p><h2 id="code-title">analysis.phys</h2></div><button id="code-close" aria-label="Analysecode schließen">Schließen</button></div><p>In der App öffnet sich hier der vorhandene Analyseeditor.</p><div class="code-preview"><span>01</span> <b>// Analyse der ausgewählten Messläufe</b><br><span>02</span> <b>// Eigene Kurven, Tabellen und Exporte</b><br><span>03</span> <b>// werden als .psreport gespeichert.</b></div><p class="small">Diese Vorschau zeigt den Einstieg in den Editor; sie führt keinen Analysecode aus.</p></dialog>
+</body>
+</html>
