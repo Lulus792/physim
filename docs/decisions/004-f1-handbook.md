@@ -15,7 +15,7 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 | Bereich | Belegter Stand | Rest zur vollständigen Abnahme |
 | --- | --- | --- |
 | Dokumentationszugang | 185 registrierte Seiten und 219 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
-| Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt; PCHIP und RK45 abgeglichen; fünf veröffentlichte C-Fragmente sowie Laufidentitäts-, Ereignis- und Startzeitbeispiele unter Windows/Linux tatsächlich ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
+| Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt; PCHIP und RK45 abgeglichen; sechs veröffentlichte C-Fragmente sowie Laufidentitäts-, Ereignis- und Startzeitbeispiele unter Windows/Linux tatsächlich ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
 | Formelsatz | 193 TeX-Ausdrücke auf 22 Seiten; 197 Displayblöcke und zwei Inlinepassagen unter Windows/Linux geprüft; aktueller Inline-Prüfablauf besteht auf beiden Plattformen mit 48 bytegleichen Bildern und 162 Formelrahmen gegenüber seinem jeweiligen Vorlauf; frühere Mac-Nachweise sind unten revisionsbezogen dokumentiert | Abnahme der aktuellen Mac-Revision einschließlich externer AX-Prüfung und offener Intel-Zeitlimits, weitere Fachseiten, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
 | Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; native Tabellen-/Headerbeziehungen sind geprüft; ein tatsächlicher Narrator-Sprachverlauf bestätigt den lokalen F1-Suchfeldnamen, die Rolle und den Wert nach Ctrl+F | Externe macOS-AX-Clientprüfung, vollständige Screenreader-Aufgaben und die unten beschriebenen Windows-Fokusbefunde |
@@ -3131,3 +3131,29 @@ Diese Läufe prüfen die jeweiligen Plattformzweige und gemeinsame Nachbarn.
 Die neue AppKit-Rahmenabfrage, Klassenlebensdauer und externe Readonly-Angabe
 benötigen ihre tatsächliche nächste Mac-Ausführung. Es wird keine erfolgreiche
 Mac-Korrektur oder höhere Gesamtwertung vorweggenommen.
+
+### Veröffentlichtes Diagramm-Beispiel tatsächlich ausführen
+
+Die Report-Anleitung benennt jetzt die nötige Samplezuordnung, bereits
+berechnete Geschwindigkeitswerte und den vollständigen Pfad des Analysemoduls.
+Der exakte veröffentlichte C-Block wird durch den bestehenden Extraktor gebaut;
+der ergänzende Test schreibt einen Bericht, zerstört den Analysekontext und
+liest Titel, Herkunft, Achseneinheiten und sämtliche gespeicherten Punkte wieder.
+Gleich lange unabhängig angelegte Reihen sowie falsche Dimensionen werden
+abgewiesen. Ein zweiter Schreibversuch mit anderen Werten liefert `PS_IO`;
+die ursprünglichen Punkte bleiben erhalten. Einheiten werden feldweise geprüft,
+ohne undefinierte Paddingbytes zu vergleichen.
+
+Windows MSVC/ASan besteht Beispiel, Report-Regression und Abschnittslinks **3/3**
+in `run-lcsgmz8m`; Linux GCC/ASan/UBSan besteht dieselben Fälle **3/3** in
+`run-er3lzd09`, das Beispiel zusätzlich mit aktivierter Leakprüfung. Beide
+Ergebnisse erfassen denselben Codehash
+`6cf7bdbda3e5e2448b2272ec6550f8335dc2d94cd34ddcb397fa72f0bf46b210`.
+Das belegt die C-Anleitung und gespeicherten Berichtsdaten; eine zusätzliche
+visuelle Diagramm- oder Exportabnahme folgt daraus nicht. Der Mac-Workflow
+nimmt den neuen Fall auf; seine Ausführung ist noch offen.
+
+Die Laufübersicht unterscheidet außerdem die weiterhin lineare
+Vergleichsvorlage von der bereits verfügbaren Reihen-API mit Previous,
+Nearest, Linear und PCHIP. Eine zusätzliche Interpolationsauswahl in der
+Vorlage wird weiterhin als offen beschrieben.

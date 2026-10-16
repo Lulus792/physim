@@ -46,9 +46,9 @@ class Case:
 
 def catalog():
     cases = []
-    for name,page in (("array","array"),("string_view","string-view"),("hashmap","hashmap")):
+    for name,page in (("array","array"),("string_view","string-view"),("hashmap","hashmap"),("report","reports")):
         cases.append(Case("documentation_"+name+"_example",(f"tests/documentation_{name}_example.c",),
-                          documentation_source=f"docs/{page}.md"))
+                          documentation_source=f"docs/{page}.md",leak_check=name=="report"))
     for name in ("memory","logging"):
         cases.append(Case("documentation_"+name+"_example",(f"tests/documentation_{name}_example.c",),
                           documentation_source=f"docs/{name}.md",documentation_prefix=f"tests/documentation_{name}_prefix.c",
