@@ -1,3 +1,9 @@
+Stand: Design H ist nativ umgesetzt und unter Windows/Linux geprüft.
+Ergebnis, native Fensterbilder und Plattformgrenzen: [NATIVE-H.md](NATIVE-H.md).
+Der folgende ursprüngliche Umsetzungsauftrag bleibt als historische Abnahmegrundlage erhalten.
+
+---
+
 Setze in D:\Physim das ausgewählte F1-Layout/Design H nativ in der bestehenden
 Dokumentationsoberfläche um.
 

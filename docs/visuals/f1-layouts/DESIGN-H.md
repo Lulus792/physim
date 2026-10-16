@@ -1,8 +1,8 @@
 # Verbindliches Zielbild: F1-Design H
 
-Vom Nutzer am 16. Oktober 2026 ausgewählt. Diese Datei ist der Einstieg für die
-spätere native Umsetzung. Der aktuelle Auftrag liefert einen geprüften
-Designprototyp und die Übergabe; die native App ist noch nicht umgestellt.
+Vom Nutzer am 16. Oktober 2026 ausgewählt. Diese Datei beschreibt das verbindliche
+Zielbild. Die native Umsetzung und ihre ausgeführte Abnahme stehen in
+[NATIVE-H.md](NATIVE-H.md), einschließlich echter Fensterbilder und Plattformgrenzen.
 
 ## Maßgebliche Artefakte
 
@@ -176,7 +176,7 @@ eines endgültigen neuen Feldnamens. Die Topic-Registry und alle bestehenden
 Seiten müssen erhalten bleiben. Kein HTML-WebView als Ersatz für den nativen
 Renderer, keine Vollmigration auf einen neuen UI-Stack.
 
-## Abnahme im nächsten Chat
+## Native Abnahmekriterien
 
 1. Beide Themes mit allen vier Zuständen tatsächlich anzeigen; Rechtsanker nach
    linkem Klick und Linksanker nach rechtem Klick messen. Artikelbreite positiv
@@ -210,5 +210,6 @@ Der genaue alte Fehler ist durch den Vorherlauf unter
 rechter Kontext 250 → 828 px bei linkem Klick. Temporäre Ausgaben sind ignoriert.
 Der dauerhafte Prüfer verlangt nun positive Geometrie und unveränderte Anker.
 
-Dies ist Browserabnahme des Zielbilds. Native Umsetzung, echte Screenreader-
-Aufgaben, DPI-/Monitorwechsel und neue Linux-/macOS-Abnahme sind noch offen.
+Diese Ergebnisse betreffen den Browserprototyp. Die inzwischen ausgeführte native
+Abnahme wird getrennt in [NATIVE-H.md](NATIVE-H.md) dokumentiert. Gerätewechsel und
+Screenreader-Aufgaben gelten nur im dort ausdrücklich belegten Umfang als geprüft.
