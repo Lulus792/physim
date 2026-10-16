@@ -4,6 +4,8 @@ Aktuelle Windows-/Linux-Nachweise, zwölf neue native Fensterbilder und begründ
 Abweichungen: [H-FIDELITY.md](H-FIDELITY.md).
 Nachfolgende Fokusarbeiten und ihre abgegrenzten Plattformnachweise:
 [READING-FOCUS.md](READING-FOCUS.md), [PANE-NAVIGATION.md](PANE-NAVIGATION.md).
+[Windows-Fokuszustände](WINDOWS-FOCUS-STATE.md) ergänzt die aktuelle COM-Gegenprobe
+und den unabhängigen Win32-Beobachter; sporadische Aktivierung bleibt offen.
 Historische Abnahme und Plattformbefunde: [NATIVE-H.md](NATIVE-H.md).
 Der folgende ursprüngliche Umsetzungsauftrag bleibt als historische Abnahmegrundlage erhalten.
 

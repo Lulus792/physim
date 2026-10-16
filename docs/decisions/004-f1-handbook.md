@@ -8,7 +8,9 @@ Ein grüner Parsertest allein ist keine vollständige Abnahme.
 Aktuelle Ergänzungen zum H-Stand: native Lesefokusanbindung mit Mac-Abnahme in
 `docs/visuals/f1-layouts/READING-FOCUS.md` und direkte F6-Bereichswechsel in
 `docs/visuals/f1-layouts/PANE-NAVIGATION.md`. Die Berichte nennen die tatsächlich
-geprüften Revisionen und verbleibende Grenzen.
+geprüften Revisionen und verbleibende Grenzen. Die nachgewiesene Windows-
+Fokuszustandskorrektur mit nativer Gegenprobe und Win32-Beobachter steht in
+`docs/visuals/f1-layouts/WINDOWS-FOCUS-STATE.md`.
 
 ## Aktuelle Bewertung vom 16. Oktober 2026
 

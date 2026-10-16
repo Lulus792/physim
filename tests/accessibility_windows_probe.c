@@ -257,9 +257,18 @@ static HRESULT find_edit(IUIAutomation *a,IUIAutomationElement *desktop,LONG pid
  if(windows)IUIAutomationElementArray_Release(windows);if(condition)IUIAutomationCondition_Release(condition);return result;
 }
 /* Query desktop focus independently of the expected field's own property. */
+static void trace_field_host(IUIAutomationElement *expected,const char *phase) {
+ if(!getenv("PHYSIM_UIA_FOCUS_TRACE"))return;
+ int target=0;DWORD foreground_pid=0;HWND foreground=GetForegroundWindow(),console=GetConsoleWindow();
+ bool available=SUCCEEDED(IUIAutomationElement_get_CurrentProcessId(expected,&target)) && target>0;
+ GetWindowThreadProcessId(foreground,&foreground_pid);
+ fprintf(stderr,"WINDOWS FIELD HOST: phase=%s target_available=%d foreground_target=%d console_visible=%d foreground_console=%d\n",
+  phase,available,available && foreground_pid==(DWORD)target,console && IsWindowVisible(console),console && foreground==console);
+}
 static HRESULT current_field_focus(IUIAutomation *a,IUIAutomationElement *expected) {
  ULONGLONG deadline=GetTickCount64()+5000;unsigned stable=0;HRESULT result=S_OK;
  BOOL focused=FALSE,same=FALSE;
+ trace_field_host(expected,"begin");
  do {
   IUIAutomationElement *actual=NULL;focused=same=FALSE;
   result=IUIAutomationElement_get_CurrentHasKeyboardFocus(expected,&focused);
@@ -269,11 +278,12 @@ static HRESULT current_field_focus(IUIAutomation *a,IUIAutomationElement *expect
   }
   if(actual)IUIAutomationElement_Release(actual);
   if(SUCCEEDED(result) && focused && same)++stable;else stable=0;
-  if(stable==3){puts("WINDOWS FIELD FOCUS: property and GetFocusedElement agree");return S_OK;}
+  if(stable==3){trace_field_host(expected,"passed");puts("WINDOWS FIELD FOCUS: property and GetFocusedElement agree");return S_OK;}
   if(FAILED(result) && result!=UIA_E_ELEMENTNOTAVAILABLE)break;
   Sleep(20);
  } while(GetTickCount64()<deadline);
  fprintf(stderr,"WINDOWS FIELD FOCUS: mismatch property=%d same=%d status=0x%08lx\n",focused,same,(unsigned long)result);
+ trace_field_host(expected,"failed");
  return FAILED(result)?result:HRESULT_FROM_WIN32(WAIT_TIMEOUT);
 }
 static HRESULT select_text(IUIAutomationElement *control,const wchar_t *query) {

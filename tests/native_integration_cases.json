@@ -13106,6 +13106,21 @@
       ]
     },
     {
+      "name": "documentation_panes_windows_host",
+      "app": true,
+      "display": true,
+      "platforms": ["win32"],
+      "targets": ["python", "physim"],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": ["{root}/tests/check_documentation_windows_host.py", "--app", "{physim}", "--work", "{work}"],
+          "timeout": 110,
+          "files": ["host-audit/results.json", "host-audit/app.stdout", "host-audit/app.stderr"]
+        }
+      ]
+    },
+    {
       "name": "documentation_panes",
       "app": true,
       "display": true,

@@ -83,9 +83,20 @@ Das aktuelle dunkle H-Fenster `docs-h-00.bmp` ist nach verlustfreier Dekodierung
 pixelidentisch mit `native-h-fidelity-dark.png`; die Fokuskorrekturen verändern
 dieses visuelle Zielbild nicht (`h-panes-visual-comparison.json`).
 
-Die vollständige Mac-Abnahme von 4b04b2c in [READING-FOCUS.md](READING-FOCUS.md)
-belegt den vorherigen Stand. Die F6-/Tooltip-Erweiterung benötigt einen eigenen
-Mac-Lauf. Vollständige Screenreader-Aufgaben und physische DPI-Wechsel bleiben
+Der [tatsächliche Mac-Lauf von c01ac79](https://github.com/Lulus792/physim/actions/runs/38950207861)
+belegt die Erweiterung auf ARM: **19/19 portable, 27/27 GUI**, alle Gegenproben
+und externe AX; Gesamtjob bestanden. Portable `run-fa7dqkcr`, GUI `run-_jdmfz4u`.
+Intel besteht **19/19 portable, 24/27 GUI** und externe AX
+(`run-iuyrw0u1`, `run-_xbdyne4`). Typeset, Bereiche und H erreichen die interne
+60-s-Grenze bei Stage 5, 4 beziehungsweise 16. Die nachfolgenden Gegenproben
+werden dort nicht ausgeführt. Diese tatsächlichen Zeitlimits bleiben offen;
+die Grenze wurde nicht angehoben. Geschützte Jobauszüge liegen unter
+`build/native/mac-c01-117139390326-excerpt.log` und dem entsprechenden ARM-Auszug.
+
+Die anschließende [Windows-Fokuszustandskorrektur](WINDOWS-FOCUS-STATE.md)
+hat eigene Gegenproben und neue reale Win32-Nachweise. Sie erklärt nicht
+rückwirkend sämtliche älteren Aktivierungsfehler.
+Vollständige Screenreader-Aufgaben und physische DPI-Wechsel bleiben
 weiter offen; aus diesen begrenzten Prüfungen folgt keine Höchstwertung.
 
 Der abschließende native Markdown-Parserlauf bestätigt alle 185 registrierten

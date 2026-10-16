@@ -91,6 +91,26 @@ bool ps_a11y_native_test(SDL_Window *window) {
   ps_a11y_publish(m);ps_a11y_native_publish(b,true);
   UIA_CHECK(m->focused_id==focus && m->nodes[0].text_start==8 && m->nodes[0].text_end==12 && !strcmp(field,"Größe 🌍"));
  }
+ /* A queued/logical target is retained across host deactivation, but COM
+  * GetFocus must agree with HasKeyboardFocus and return no element meanwhile. */
+ if(edit) {
+  for(unsigned cycle=0;cycle<4;cycle++) {
+   bool host=(cycle%2)==0;m->keyboard_focus=host;
+   UIA_CHECK(ps_a11y_focus(m,edit->id));ps_a11y_begin(m);
+   ps_a11y_record_edit(m,"main","Suche",bounds,true,field,sizeof field);
+   ps_a11y_publish(m);ps_a11y_native_publish(b,true);
+   UIA_CHECK(m->focused_id==edit->id);
+   VARIANT focused;VariantInit(&focused);
+   UIA_CHECK(SUCCEEDED(IRawElementProviderSimple_GetPropertyValue(&edit->simple,UIA_HasKeyboardFocusPropertyId,&focused)) &&
+    focused.vt==VT_BOOL && focused.boolVal==(host?VARIANT_TRUE:VARIANT_FALSE));VariantClear(&focused);
+   IRawElementProviderFragment *actual_focus=NULL;
+   UIA_CHECK(SUCCEEDED(IRawElementProviderFragmentRoot_GetFocus(&b->root->root,&actual_focus)) &&
+    actual_focus==(host?&edit->fragment:NULL));
+   if(actual_focus)IRawElementProviderFragment_Release(actual_focus);
+  }
+  m->keyboard_focus=true;ps_a11y_begin(m);
+  ps_a11y_record_edit(m,"main","Suche",bounds,true,field,sizeof field);ps_a11y_publish(m);ps_a11y_native_publish(b,true);
+ }
  /* Read the whole document through COM ranges, independently of control labels. */
  const char *reading="Intro θ\nCode\n  x = 1; 🌍\nEnd";
  ps_a11y_begin(m);bounds[0]=10;bounds[1]=20;

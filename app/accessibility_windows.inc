@@ -262,10 +262,18 @@ static HRESULT STDMETHODCALLTYPE uia_point(IRawElementProviderFragmentRoot *p,do
  }
  IRawElementProviderFragment *target=uia_any_fragment_locked(b,id);SDL_UnlockMutex(b->mutex);if(!target)return E_OUTOFMEMORY;*out=target;return S_OK;
 }
+/* focused_id is the retained logical target. Native focus and announcements
+ * must describe the currently focused, visible host instead. */
+static uint64_t uia_focused_control_locked(ps_a11y_native *b) {
+ if(!uia_window_viewable_locked(b) || !b->model->keyboard_focus)return 0;
+ const ps_a11y_node *node=ps_a11y_find(b->model,b->model->focused_id);
+ return node && node->focused?node->id:0;
+}
 static HRESULT STDMETHODCALLTYPE uia_focus(IRawElementProviderFragmentRoot *p,IRawElementProviderFragment **out) {
  if(!out)return E_POINTER;*out=NULL;uia_element *e=UIA_OWNER(IRawElementProviderFragmentRoot,root,p);ps_a11y_native *b=e->bridge;
  SDL_LockMutex(b->mutex);if(!b->model){SDL_UnlockMutex(b->mutex);return UIA_E_ELEMENTNOTAVAILABLE;}
- uia_element *target=uia_window_viewable_locked(b) && (b->model->focused_id || ps_a11y_document_focused(b->model))?uia_for_locked(b,b->model->focused_id):NULL;SDL_UnlockMutex(b->mutex);
+ uint64_t control=uia_focused_control_locked(b);
+ uia_element *target=uia_window_viewable_locked(b) && (control || ps_a11y_document_focused(b->model))?uia_for_locked(b,control):NULL;SDL_UnlockMutex(b->mutex);
  if(target)*out=&target->fragment;return S_OK;
 }
 static HRESULT uia_press(uia_element *e) {
@@ -399,7 +407,7 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
  int w=0,h=0;SDL_GetWindowSize(b->window,&w,&h);RECT client={0};if(b->hwnd)GetClientRect(b->hwnd,&client);
  SDL_LockMutex(b->mutex);
  if(w>0 && h>0){b->scale_x=(double)(client.right-client.left)/w;b->scale_y=(double)(client.bottom-client.top)/h;}
- uint64_t focused=b->model?b->model->focused_id:0,previous=b->focused_id;b->focused_id=focused;
+ uint64_t focused=uia_focused_control_locked(b),previous=b->focused_id;b->focused_id=focused;
  bool document_focused=ps_a11y_document_focused(b->model),previous_document_focus=b->document_focused;b->document_focused=document_focused;
  uint64_t reading=b->model && b->model->document && b->model->document->active?b->model->document->version:0;
  bool reading_changed=reading!=b->announced_reading_version;b->announced_reading_version=reading;
