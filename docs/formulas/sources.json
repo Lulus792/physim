@@ -18,7 +18,7 @@
     },
     {
       "id": "elliptic-integral",
-      "tex": "K(k)=\\int_0^{\\pi/2}\\frac{\\mathrm{d}\\varphi}{\\sqrt{1-k^2\\sin^2\\varphi}}",
+      "tex": "K(k)=\\int\\limits_0^{\\pi/2}\\frac{\\mathrm{d}\\varphi}{\\sqrt{1-k^2\\sin^2\\varphi}}",
       "reading": "K(k) = ∫₀^(π/2) 1/√(1 − k² sin² φ) dφ"
     },
     {

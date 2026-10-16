@@ -1300,6 +1300,10 @@ static void documentation_view(app *a, float height) {
             nk_sdl_accessibility_document(ui,a->doc_reading_version,documentation_topics[a->doc_topic].title,d->reading,nk_window_get_content_region(ui));
             for(size_t i=0;i<d->count;i++)d->blocks[i].hit[2]=0;
             float width = fmaxf(40, nk_window_get_content_region(ui).w - 8);
+            /* A dynamic single-column widget uses the panel bounds, while
+             * content_region is its clip. Select the same formula variant for
+             * measurement and drawing, including near a wrapping threshold. */
+            float math_width=ui->current->layout->bounds.w;
             if (d->layout_width != width) {
                 for (size_t i = 0; i < d->count; i++) {
                     ps_doc_block *b = &d->blocks[i];
@@ -1307,8 +1311,8 @@ static void documentation_view(app *a, float height) {
                     b->height =
                         b->kind == PS_DOC_TABLE_ROW
                             ? documentation_table(a, b, width, NULL)
-                        : b->kind == PS_DOC_MATH && documentation_math_variant(a,d,b,width-24)
-                            ? documentation_math_variant(a,d,b,width-24)->height*(a->doc_font_ui->height/16)+24
+                        : b->kind == PS_DOC_MATH && documentation_math_variant(a,d,b,math_width-24)
+                            ? documentation_math_variant(a,d,b,math_width-24)->height*(a->doc_font_ui->height/16)+24
                         : b->kind == PS_DOC_IMAGE && documentation_media_kind(d->text+b->target)==3 ? 900
                         : b->kind == PS_DOC_IMAGE && documentation_media_kind(d->text+b->target) ? (documentation_media_kind(d->text+b->target)==1?320:480)
                         : b->kind == PS_DOC_RULE ? 14

@@ -30,14 +30,14 @@ static const ps_doc_formula_variant formula_2[] = {
  {152.206400f,30.800000f,1218u,247u,13693u,4114422993u,"docs/formulas/3d9c17adee4bba8bf0de1e19.math",20.062400f},
 };
 static const ps_doc_formula_variant formula_3[] = {
- {148.499200f,75.254400f,1188u,603u,21474u,2922161981u,"docs/formulas/f4913f8225b5a9596396f943.math",12.512000f},
- {148.499200f,75.254400f,1188u,603u,21474u,2922161981u,"docs/formulas/f4913f8225b5a9596396f943.math",12.512000f},
- {165.392000f,75.254400f,1324u,603u,21875u,3816125441u,"docs/formulas/004d111e96d2e4b6db9baedb.math",12.512000f},
- {204.844800f,56.054400f,1639u,449u,21771u,1504379262u,"docs/formulas/dddb7dfec3101b285cdbca6e.math",26.406400f},
- {204.844800f,56.054400f,1639u,449u,21771u,1504379262u,"docs/formulas/dddb7dfec3101b285cdbca6e.math",26.406400f},
- {204.844800f,56.054400f,1639u,449u,21771u,1504379262u,"docs/formulas/dddb7dfec3101b285cdbca6e.math",26.406400f},
- {204.844800f,56.054400f,1639u,449u,21771u,1504379262u,"docs/formulas/dddb7dfec3101b285cdbca6e.math",26.406400f},
- {164.537600f,36.524800f,1317u,293u,16302u,833103015u,"docs/formulas/a7ab7da75f11de15897ac8d7.math",17.518400f},
+ {134.083200f,85.825600f,1073u,687u,21402u,3677017437u,"docs/formulas/c9f7a149c3753bce6d74cb19.math",12.512000f},
+ {134.083200f,85.825600f,1073u,687u,21402u,3677017437u,"docs/formulas/c9f7a149c3753bce6d74cb19.math",12.512000f},
+ {150.976000f,85.825600f,1208u,687u,21818u,761171570u,"docs/formulas/6d83ccda82736432795de16a.math",12.512000f},
+ {190.428800f,66.625600f,1524u,534u,21879u,491503677u,"docs/formulas/9ef1bf6c6088397e85d93dce.math",36.977600f},
+ {190.428800f,66.625600f,1524u,534u,21879u,491503677u,"docs/formulas/9ef1bf6c6088397e85d93dce.math",36.977600f},
+ {190.428800f,66.625600f,1524u,534u,21879u,491503677u,"docs/formulas/9ef1bf6c6088397e85d93dce.math",36.977600f},
+ {190.428800f,66.625600f,1524u,534u,21879u,491503677u,"docs/formulas/9ef1bf6c6088397e85d93dce.math",36.977600f},
+ {153.113600f,47.096000f,1225u,377u,16612u,3050675920u,"docs/formulas/eac473d724c0c1416fefe688.math",28.089600f},
 };
 static const ps_doc_formula_variant formula_4[] = {
  {100.748800f,49.907200f,806u,400u,10230u,3969980296u,"docs/formulas/3acfdd1ab367d4d7c673f2e2.math",13.331200f},
@@ -1933,7 +1933,7 @@ static const ps_doc_formula formula_catalog[] = {
  {"T_0=2\\pi\\sqrt{\\frac{L}{g}}","T₀ = 2π√(L/g)",formula_0,7u,&formula_0[7]},
  {"E=\\frac{1}{2}mL^2\\omega^2+mgL\\left(1-\\cos\\theta\\right)","E = ½mL²ω² + mgL(1 − cos θ)",formula_1,7u,&formula_1[7]},
  {"T=4\\sqrt{\\frac{L}{g}}\\,K\\!\\left(\\sin\\frac{|\\theta_0|}{2}\\right)","T = 4√(L/g) K(sin(|θ₀|/2))",formula_2,7u,&formula_2[7]},
- {"K(k)=\\int_0^{\\pi/2}\\frac{\\mathrm{d}\\varphi}{\\sqrt{1-k^2\\sin^2\\varphi}}","K(k) = ∫₀^(π/2) 1/√(1 − k² sin² φ) dφ",formula_3,7u,&formula_3[7]},
+ {"K(k)=\\int\\limits_0^{\\pi/2}\\frac{\\mathrm{d}\\varphi}{\\sqrt{1-k^2\\sin^2\\varphi}}","K(k) = ∫₀^(π/2) 1/√(1 − k² sin² φ) dφ",formula_3,7u,&formula_3[7]},
  {"\\theta'=\\omega,\\qquad \\omega'=-\\frac{g}{L}\\sin\\theta","θ′ = ω; ω′ = −(g/L) sin θ",formula_4,7u,&formula_4[7]},
  {"x=L\\sin\\theta,\\qquad y=-L\\cos\\theta","x = L sin θ; y = −L cos θ",formula_5,7u,&formula_5[7]},
  {"x(t)=-2+2t","x(t) = −2 + 2t",formula_6,7u,&formula_6[7]},

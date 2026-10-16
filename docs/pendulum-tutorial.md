@@ -74,7 +74,7 @@ $$
 Dabei bezeichnet K das vollständige elliptische Integral erster Art:
 
 $$
-K(k)=\int_0^{\pi/2}\frac{\mathrm{d}\varphi}{\sqrt{1-k^2\sin^2\varphi}}
+K(k)=\int\limits_0^{\pi/2}\frac{\mathrm{d}\varphi}{\sqrt{1-k^2\sin^2\varphi}}
 $$
 
 Die Kleinwinkelnäherung

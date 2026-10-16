@@ -119,9 +119,12 @@ static void documentation_math_draw_probe(app *a) {
             frame=nk_rect(image->x,image->y,image->w,image->h);
             a->doc_math_test_ok=texture && frame.w>0 && frame.h>0 &&
                 fabsf(frame.w-v->width*zoom)<=1 && fabsf(frame.h-v->height*zoom)<=1 &&
+                frame.x>=b->hit[0]-1 && frame.y>=b->hit[1]-1 &&
+                frame.x+frame.w<=b->hit[0]+b->hit[2]+1 && frame.y+frame.h<=b->hit[1]+b->hit[3]+1 &&
                 frame.x>=clip.x-1 && frame.y>=clip.y-1 && frame.x+frame.w<=clip.x+clip.w+1 && frame.y+frame.h<=clip.y+clip.h+1;
         }
     }
-    printf("FORMULA DRAW: case=%u font=%.0f theme=%u complete=%d frame=%.0f,%.0f,%.0f,%.0f\n",
-        a->doc_math_test_case,a->doc_font_ui->height,a->preferences.theme,a->doc_math_test_ok,frame.x,frame.y,frame.w,frame.h);
+    printf("FORMULA DRAW: case=%u font=%.0f theme=%u complete=%d frame=%.0f,%.0f,%.0f,%.0f block=%.0f,%.0f,%.0f,%.0f\n",
+        a->doc_math_test_case,a->doc_font_ui->height,a->preferences.theme,a->doc_math_test_ok,frame.x,frame.y,frame.w,frame.h,
+        b->hit[0],b->hit[1],b->hit[2],b->hit[3]);
 }

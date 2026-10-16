@@ -3,6 +3,7 @@ static void documentation_h_test_frame(app *a,int *stage,int *code,const char **
     static unsigned frame,index;static int experiment,analysis;static double simulation;
     static struct nk_rect left,right;static char name[80];
     static int wide_width=1080,wide_height=780;
+    static int requested_width,requested_height;
     bool ok=true;
     switch((*stage)++) {
     case 0:
@@ -45,9 +46,14 @@ static void documentation_h_test_frame(app *a,int *stage,int *code,const char **
         int wanted_width=window?760:1080,wanted_height=window?540:780;
         int width=wanted_width<available_width?wanted_width:available_width;
         int height=wanted_height<available_height?wanted_height:available_height;
-        ok=ok && available_width>=760 && available_height>=540 && SDL_SetWindowSize(a->doc_window,width,height) && SDL_SyncWindow(a->doc_window);
-        int actual_width=0,actual_height=0;
-        ok=ok && SDL_GetWindowSize(a->doc_window,&actual_width,&actual_height) && actual_width==width && actual_height==height;
+        ok=ok && available_width>=760 && available_height>=540 && SDL_SetWindowSize(a->doc_window,width,height);
+        /* Cocoa can time out its synchronous resize wait. Acceptance is the
+         * actual size and pane geometry after the rendered frames below. */
+        if(ok && !SDL_SyncWindow(a->doc_window))
+            fprintf(stderr,"Design H resize wait: case=%u SDL=%s; verifying rendered size\n",index,SDL_GetError());
+        if(!ok)fprintf(stderr,"Design H preparation: case=%u ui=%u font=%.3f available=%dx%d target=%dx%d SDL=%s\n",
+            index,a->preferences.ui_size,documentation_chrome_font(a)->height,available_width,available_height,width,height,SDL_GetError());
+        requested_width=width;requested_height=height;
         if(!window){wide_width=width;wide_height=height;}
         if(index%4==0)printf("DOCUMENTATION H WINDOW: group=%u wanted=%dx%d available=%dx%d target=%dx%d\n",
             index/4,wanted_width,wanted_height,available_width,available_height,width,height);
@@ -59,6 +65,10 @@ static void documentation_h_test_frame(app *a,int *stage,int *code,const char **
     }
     case 3:
         if(frame++<2 || a->doc_scroll_pending){--*stage;return;}
+        {int width=0,height=0;
+         ok=SDL_GetWindowSize(a->doc_window,&width,&height) && width==requested_width && height==requested_height;
+         if(!ok)fprintf(stderr,"Design H settled window: case=%u wanted=%dx%d actual=%dx%d SDL=%s\n",
+             index,requested_width,requested_height,width,height,SDL_GetError());}
         if(index%4==0){left=a->doc_left_slot;right=a->doc_right_slot;}
         if(!a->doc_navigation_hidden)ok=ok && a->doc_left_slot.x==left.x && a->doc_left_slot.w==left.w;
         if(!a->doc_context_hidden)ok=ok && a->doc_right_slot.x==right.x && a->doc_right_slot.w==right.w;
