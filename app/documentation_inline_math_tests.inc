@@ -5,6 +5,7 @@ static void documentation_inline_math_test_frame(app *a,int *stage,int *code,con
     static size_t blocks[8];static unsigned sample,frames;static int editor,analysis;
     static double simulation;static char image[80];bool okay=true;
     static unsigned resizes,themes;static double started;
+    static int requested_width,requested_height;
     switch((*stage)++) {
     case 0:editor=a->experiment.string.len;analysis=a->analysis.string.len;simulation=a->simulation_time;
         resizes=themes=0;started=ps_clock();
@@ -27,12 +28,23 @@ static void documentation_inline_math_test_frame(app *a,int *stage,int *code,con
     case 2: {
         if(!sample)documentation_zoom(a,0);
         if(sample==24)for(int i=0;i<8;i++)documentation_zoom(a,1);
-        int width=sample<24?1100:760,height=sample<24?800:540;
         if(!sample || sample==24) {
-            okay=SDL_SetWindowSize(a->doc_window,width,height) && SDL_SyncWindow(a->doc_window);++resizes;
+            SDL_Rect usable={0};int top=0,left=0,bottom=0,right=0;
+            int width=sample<24?1100:760,height=sample<24?800:540;
+            okay=SDL_GetDisplayUsableBounds(SDL_GetDisplayForWindow(a->doc_window),&usable) &&
+                 SDL_GetWindowBordersSize(a->doc_window,&top,&left,&bottom,&right);
+            int available_width=usable.w-left-right,available_height=usable.h-top-bottom;
+            okay &= available_width>=760 && available_height>=540;
+            requested_width=width<available_width?width:available_width;
+            requested_height=height<available_height?height:available_height;
+            printf("INLINE MATH WINDOW: case=%u wanted=%dx%d usable=%dx%d borders=%d,%d,%d,%d target=%dx%d\n",
+                sample,width,height,usable.w,usable.h,top,left,bottom,right,requested_width,requested_height);
+            okay=okay && SDL_SetWindowSize(a->doc_window,requested_width,requested_height) && SDL_SyncWindow(a->doc_window);++resizes;
         }
         int actual_width=0,actual_height=0;
-        okay &= SDL_GetWindowSize(a->doc_window,&actual_width,&actual_height) && actual_width==width && actual_height==height;
+        okay &= SDL_GetWindowSize(a->doc_window,&actual_width,&actual_height) && actual_width==requested_width && actual_height==requested_height;
+        if(!okay)fprintf(stderr,"INLINE MATH WINDOW FAILED: case=%u expected=%dx%d actual=%dx%d SDL=%s\n",
+            sample,requested_width,requested_height,actual_width,actual_height,SDL_GetError());
         if(sample%8==0){ps_preferences p=a->preferences;p.theme=(sample/8)%3;preferences_apply(a,&p);++themes;}
         okay &= a->preferences.theme==(sample/8)%3;
         a->doc_navigation_hidden=sample%8==6;frames=0;break;

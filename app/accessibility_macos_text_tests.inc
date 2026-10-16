@@ -20,7 +20,8 @@ static bool mac_document_test(SDL_Window *window,bool range_control) {
  id number=((id(*)(id,SEL,double))objc_msgSend)((id)objc_getClass("NSNumber"),sel_registerName("numberWithDouble:"),7.0);
  send1(document,"setAccessibilityValue:",number);
  ok &= !model->pending_value_id && collision_value==5;
- ok &= !((BOOL(*)(id,SEL,id))objc_msgSend)(document,sel_registerName("accessibilityIsAttributeSettable:"),string("AXValue"));
+ /* AXValue writability is verified by the independent AXUIElement client.
+  * NSAccessibilityElement does not implement the deprecated attribute selector. */
  const char *role=((const char*(*)(id,SEL))objc_msgSend)(send0(document,"accessibilityRole"),sel_registerName("UTF8String"));
  id value=send0(document,"accessibilityValue");
  ok &= role && !strcmp(role,"AXStaticText") &&

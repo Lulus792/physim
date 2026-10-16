@@ -2704,8 +2704,9 @@ ein überschriebener Setter veröffentlicht Schreibzugriff. Der geerbte
 Control-Setter weist Dokumentobjekte nun vor der Auflösung numerischer IDs ab.
 Die In-Prozess-Probe läuft mit einem gleich nummerierten Button und zusätzlich
 mit einem Slider; ein direkter numerischer Setteraufruf darf weder einen
-Wertauftrag erzeugen noch den Modellwert ändern. Die native Readonly-Angabe
-wird zusätzlich abgefragt. Der unabhängige AX-Client bleibt unverändert streng.
+  Wertauftrag erzeugen noch den Modellwert ändern. Die native Readonly-Angabe
+  prüft der unabhängige AX-Client unverändert streng; die zunächst ergänzte
+  veraltete In-Prozess-Abfrage wird wie unten beschrieben entfernt.
 
 Diese Korrektur benötigt noch ihre tatsächliche Mac-Ausführung. Der erfolgreiche
 GUI-Vorlauf ist weiterhin ein Nachweis der früheren Revision und keine Abnahme
@@ -2834,3 +2835,61 @@ und Abschnittslinktests bestehen MSVC/ASan unter Windows 4/4 in
 Die Mac-Gruppe erhält denselben Fall; ihre tatsächliche Ausführung steht aus.
 Dieser Nachweis betrifft das Identitätsbeispiel, keinen vollständigen Review
 aller weiteren Run-Stream-Ausschnitte.
+
+## Native Fenstergrenzen und zweite Mac-Prüfrevision
+
+Der erste Mac-Lauf der Readonly-Korrektur, Workflow `38886433661` zur Revision
+`17abb5e`, besteht auf ARM 14/14 native Fälle (`run-cz3yqp68`) und 23/25
+GUI-Fälle (`run-amomed0w`). Das vollständig heruntergeladene ARM-Artefakt
+`12040912398` wurde gegen den veröffentlichten SHA-256 geprüft. Die native
+Probe bricht mit einer `NSInvalidArgumentException` ab: Das moderne
+`NSAccessibilityElement` implementiert den aufgerufenen veralteten Selector
+`accessibilityIsAttributeSettable:` nicht. Diese zusätzliche Testabfrage wird
+entfernt; direkter Setter-Missbrauch mit kollidierenden Button-/Slider-IDs
+bleibt geprüft. Der unabhängige öffentliche AX-Client prüft Readonly weiterhin.
+Das Ergebnis belegt noch keine erfolgreiche externe Readonly-Korrektur.
+
+Der ARM-Inline-Test scheitert an seiner ersten festen Fensterhöhenannahme.
+Bereits ein zuvor erfolgreicher ARM-Lauf zur Revision `4fd04ba` zeichnete das
+große Fenster mit 1100 × 656 statt 1100 × 800 logischen Pixeln auf. SDL 3.2.30
+beschreibt diese native Begrenzung ausdrücklich bei `SDL_SetWindowSize`.
+Der Test bestimmt jetzt vor beiden Größenwechseln die nutzbare Desktopfläche
+und die nativen Fensterrahmen. Er fordert die jeweils kleinere zulässige
+Clientgröße an; mindestens 760 × 540 müssen verfügbar sein. Jede Ansicht muss
+die so berechnete Größe tatsächlich erreichen. Der Python-Prüfer gleicht
+Größenpläne und alle 48 Aufnahmen ab. Zwei Größenwechsel, sechs Themewechsel,
+48 Ansichten und 162 vollständige Formelzeichnungen bleiben vorgeschrieben;
+die Zeitlimits bleiben unverändert.
+
+Windows MSVC/ASan besteht Inline-Text, Navigation und Inline-Formeln 3/3 in
+`run-p1_0xp6j`; Linux GCC/ASan/UBSan besteht dieselben Fälle 3/3 in
+`run-cra0r790`. Ein zusätzlicher Linux-Lauf mit Xvfb/Openbox bei 1100 × 700
+besteht den vollständigen Inline-Formelfall in `run-zkrfk4o2`: Aus 1100 × 800
+werden nach Abzug der Rahmen 1098 × 675, die zweite Größe bleibt 760 × 540.
+Eine Wiedergabe der tatsächlichen Windows-Ausgabe akzeptiert das Original
+und weist sowohl einen manipulierten Zielplan als auch eine falsche tatsächliche
+Aufnahmegröße ab (`build/native/feasible-inline-verifier-proof.json`).
+Die Windows-Aufnahmen 26 und 46 wurden visuell geprüft: Matrix sowie mehrere
+Brüche, Integrale, Indizes und Wurzeln bei 32 px im schmalen Fenster.
+Der Asset-Prüfer bestätigt 193 Ausdrücke, 1351 Displayvarianten, 193
+Inlinevarianten und 197 veröffentlichte Displayblöcke; 31 generierte Referenzen
+sind aktuell. Die Testläufer-Fehlerfälle bestehen unter
+`build/native/feasible-inline-runner-proof`.
+
+Der bisherige Intel-Mac-Lauf ist ebenfalls beendet: 14/14 native Fälle
+(`run-i73a399d`) und 22/25 GUI-Fälle (`run-yl8s2us7`). Neben der veralteten
+Accessibility-Abfrage und dem Inline-Fall erreicht `documentation_math` sein
+45-Sekunden-Limit; seine aufgezeichnete F1-Atlaserstellung dauert etwa 15,35 s.
+Die genaue Inline-Abbruchstelle und der zusätzliche Zeitbefund benötigen noch
+die Auswertung des Intel-Artefakts `12042210634`. Daraus wird kein Beleg für
+einen identischen Höhenfehler oder eine bereits gelöste Zeitursache abgeleitet.
+
+Die externe AX-Prüfung läuft künftig auch nach einem anderen fehlgeschlagenen
+GUI-Fall, sofern die App gebaut wurde und der Workflow nicht abgebrochen ist.
+Ein früherer Fehler bleibt dadurch ein Fehler. Fehlender Zugriff bleibt
+`unavailable`; die Prüfung fordert keine neue Berechtigung an. Clientfehler
+erscheinen zusätzlich mit höchstens 2000 Zeichen ihrer Diagnose im Joblog.
+Die Mac-Gruppe erfasst auch das neue Laufidentitätsbeispiel und dessen
+Quellgleichheitsprüfung. Die tatsächliche Mac-Abnahme dieser Revision sowie
+praktische Screenreader-, DPI-/Monitor- und weitere externe AX-Fälle bleiben
+offen; die Gesamtwertung wird dadurch nicht erhöht.

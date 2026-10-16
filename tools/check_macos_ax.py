@@ -51,7 +51,9 @@ def check(args):
         transcript=work/'ax-document.txt'
         probe=subprocess.run([str(client),str(process.pid),str(transcript)],capture_output=True,timeout=30)
         (work/'client.stdout').write_bytes(probe.stdout);(work/'client.stderr').write_bytes(probe.stderr)
-        if probe.returncode:raise RuntimeError(f'External AX client failed: exit {probe.returncode}')
+        if probe.returncode:
+            detail=probe.stderr.decode('utf-8',errors='replace').strip()[:2000]
+            raise RuntimeError(f'External AX client failed: exit {probe.returncode}; {detail}')
         expected=(build.ROOT/'docs/project-audit.json').read_bytes()+b'\n\n'
         actual=transcript.read_bytes();assert len(expected)>256*1024 and actual==expected,'External AX text differs from the complete source'
         utf16=len(expected.decode('utf-8').encode('utf-16-le'))//2
