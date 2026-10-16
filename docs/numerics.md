@@ -1,5 +1,6 @@
 # Numerische Verfahren und Einheiten
 
+Zur Numerik gehören Integration, lineare Systeme, Nullstellensuche und Minimierung.
 `physim/numerics.h` und `physim/units.h` ergänzen die öffentliche C-API.
 Die Verfahren arbeiten ohne Heap-Allokation mit höchstens 32 Komponenten.
 `PS_SINGULAR`, `PS_LIMIT` und `PS_NUMERIC` ergänzen die bisherigen Fehlercodes.
@@ -54,6 +55,40 @@ Schritt oder fehlendem Zeitfortschritt folgt `PS_LIMIT`. Nichtendliche Stufen od
 fehlende Ableitungskomponenten ergeben `PS_NUMERIC`. Der optionale Bericht enthält
 auch bei solchen Abbrüchen den intern erreichten Zeitpunkt; der übergebene Zustand
 wird erst bei vollständig erfolgreicher Integration geändert.
+
+### Genau einen akzeptierten RK45-Schritt ausführen
+
+`ps_ode_step_diagnosed` verwendet dieselben Optionen, Toleranzen und Diagnosen
+wie `ps_ode_integrate_diagnosed`, kehrt aber nach genau einem akzeptierten
+Schritt zurück. Start und Ende müssen verschieden sein. Das übergebene Ende
+begrenzt die Bewegung in Integrationsrichtung; Erfolg bedeutet hier nicht,
+dass es bereits erreicht wurde. Der neue Zustand gehört zu
+`report.reached_time`. Nur diese tatsächlich erreichte Zeit darf der Aufrufer
+für den nächsten Schritt übernehmen.
+
+Vor dem akzeptierten Schritt können mehrere Versuche verworfen werden.
+`accepted_steps` ist bei Erfolg eins; `rejected_steps` zählt die Verwerfungen,
+und jeder vollständige Versuch benötigt sieben Ableitungsaufrufe.
+`maximum_steps` begrenzt alle Versuche dieses Aufrufs zusammen. Ein erschöpftes
+Budget oder eine bei minimaler Schrittweite verfehlte Toleranz liefert
+`PS_LIMIT`; der Zustand des Aufrufers bleibt dann unverändert. Auch bei
+numerischen Fehlern wird kein Teilzustand übernommen. Der Bericht bleibt bei
+ungültigen Argumenten unverändert, die Diagnose wird dagegen immer gesetzt.
+
+`report.next_step` ist der nächste vorzeichenbehaftete Vorschlag. Für eine
+Rückwärtsintegration ist er negativ; `options.initial_step` verlangt beim
+Folgeaufruf weiterhin seinen positiven Betrag. `reached_time` und `next_step`
+ersetzen weder eine Ereignissuche noch eine globale Fehlerabschätzung.
+
+Physim bietet denselben Einzelschritt als `rk45StepReported`. Sein `OdeResult`
+enthält `state`, `reachedTime`, `nextStep`, `acceptedSteps`, `rejectedSteps`,
+`evaluations` und `errorNorm`; das Eingabearray bleibt erhalten und der
+Ergebniszustand besitzt eigenen Speicher. Fehler werden mit Quellposition
+gemeldet und sind mit `attempt` abfangbar.
+Die [Sprachreferenz](reference/language-library.md#rk45stepreported) beschreibt
+die Parameter. Der [adaptive Modellcallback](experiment-tutorial.md#ein-adaptiver-modellschritt)
+zeigt, wie die akzeptierte Dauer an den Runner zurückgegeben wird. Reine
+Ableitungen dürfen auch dort keine Messungen oder Zufallsziehungen auslösen.
 
 ### Gewichtete Zustände ohne unnötigen Zwischenüberlauf
 

@@ -2599,3 +2599,18 @@ bestätigt zusätzlich alle 31 erzeugten Referenzdokumente, eingebettete
 Tutorialquellen, Seitenlimits und ihre Offline-Erreichbarkeit.
 Das belegt diesen Inhaltsabgleich, weiterhin keinen semantischen Gesamtabgleich
 aller 185 registrierten Dateien.
+
+## Numerik-Handbuch: ein akzeptierter Schritt
+
+`docs/numerics.md` erklärt jetzt den Unterschied zwischen vollständiger
+Integration und `ps_ode_step_diagnosed`: genau ein akzeptierter Schritt,
+mögliche Verwerfungen, tatsächlicher Endzeitpunkt, vorzeichenbehafteter
+Folgevorschlag und transaktionaler Zustand bei Fehlern. Der Physim-Weg
+`rk45StepReported` und der adaptive Modellcallback sind direkt verlinkt.
+Der einleitende Überblick nennt auch den gebräuchlichen Suchbegriff Numerik.
+Die Verträge wurden gegen `src/numerics.c`, `include/physim/numerics.h`,
+`include/physim/language_sdk.h` und `tests/test_adaptive.c` abgeglichen.
+Windows MSVC/ASan besteht Adaptive, Numerik, Dokumentparser und Abschnittslinks
+4/4 in `run-xe4ri0zs`, Linux GCC/ASan/UBSan dieselben vier in `run-0zvemu7n`.
+Alle 31 erzeugten Referenzdokumente bestehen zusätzlich die Aktualitätsprüfung.
+Das belegt diesen Teil des Inhaltsabgleichs, keinen vollständigen Review.
