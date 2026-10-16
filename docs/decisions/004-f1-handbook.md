@@ -67,8 +67,8 @@ Die historische Umgebung wird jetzt vollständig für die Metazeile rekonstruier
 Unter Linux verwirft der unveränderte Glyphen-/Clipprüfer die alte Ausgabe in
 Fall 2; der korrigierte Umbruch besteht bei gleicher Schrift, Breite und
 Formatierung alle 36 Zustände. Die Mac-CI verlangt nun beide Prüfungen.
-Der ausgeführte ARM-Lauf von `77dec3a` besteht bereits 19/19 portable und 26/26
-GUI-Fälle plus externe AX-Prüfung; die neue Gegenprobe benötigt eigene Mac-Belege.
+Die ausgeführten ARM- und Intel-Läufe von `77dec3a` bestehen jeweils 19/19 portable
+und 26/26 GUI-Fälle plus externe AX-Prüfung; die neue Gegenprobe benötigt eigene Mac-Belege.
 Details und Grenzen stehen im Repositorybericht `docs/visuals/f1-layouts/H-FIDELITY.md`.
 
 ### Orca: aktives Fenster und Control-Ansagen

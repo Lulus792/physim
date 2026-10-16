@@ -162,10 +162,11 @@ aktuellen Metadaten- und Sidebar-Prüfungen bestehen danach unverändert beide
 es ändert weder den ausgelieferten H-Renderer noch die konservative Gesamtwertung.
 
 Der [tatsächliche Mac-Lauf von 77dec3a](https://github.com/Lulus792/physim/actions/runs/38933979388)
-bestätigt auf ARM **19/19 portable und 26/26 GUI-Fälle** einschließlich H und
-Metadaten, dazu die unabhängige externe AX-Prüfung. Die GUI-Gruppe heißt
-`run-6r0dk5t5`, die portable Gruppe `run-5wdlq4lh`. Der Gesamtjob scheitert noch
-an der dort enthaltenen alten Metadaten-Gegenprobe. Die nachgeführten Prüfer
+bestätigt auf ARM und Intel jeweils **19/19 portable und 26/26 GUI-Fälle**
+einschließlich H und Metadaten, dazu jeweils die unabhängige externe AX-Prüfung.
+ARM: GUI `run-6r0dk5t5`, portable `run-5wdlq4lh`; Intel: GUI `run-2xm5zkov`,
+portable `run-0wgm6uxx`. Beide Gesamtjobs scheitern noch an der dort enthaltenen
+alten Metadaten-Gegenprobe. Die nachgeführten Prüfer
 benötigen einen eigenen tatsächlichen Mac-Lauf; die ARM-GUI-Ergebnisse ersetzen
 ihn nicht.
 
