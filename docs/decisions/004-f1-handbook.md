@@ -18,7 +18,7 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 | Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt; PCHIP und RK45 abgeglichen; fünf veröffentlichte C-Fragmente sowie Laufidentitäts-, Ereignis- und Startzeitbeispiele unter Windows/Linux tatsächlich ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
 | Formelsatz | 193 TeX-Ausdrücke auf 22 Seiten; 197 Displayblöcke und zwei Inlinepassagen unter Windows/Linux geprüft; aktueller Inline-Prüfablauf besteht auf beiden Plattformen mit 48 bytegleichen Bildern und 162 Formelrahmen gegenüber seinem jeweiligen Vorlauf; frühere Mac-Nachweise sind unten revisionsbezogen dokumentiert | Abnahme der aktuellen Mac-Revision einschließlich externer AX-Prüfung und offener Intel-Zeitlimits, weitere Fachseiten, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
-| Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; alle drei Plattformen besitzen zusätzlich geprüfte native Tabellen-, Zell- und Headerbeziehungen | Externe macOS-AX-Clientprüfung, echte Screenreader-Aufgaben und die unten beschriebene sporadische Windows-Linkprüfung |
+| Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; native Tabellen-/Headerbeziehungen sind geprüft; ein tatsächlicher Narrator-Sprachverlauf bestätigt den lokalen F1-Suchfeldnamen, die Rolle und den Wert nach Ctrl+F | Externe macOS-AX-Clientprüfung, vollständige Screenreader-Aufgaben und die unten beschriebenen Windows-Fokusbefunde |
 
 Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
 Bewertung mit Höchstpunktzahl ist wegen dieser offenen Abnahmefälle noch nicht
@@ -2966,3 +2966,43 @@ in `run-gxc38ady`. Der native Parser bestätigt 219 Abschnittslinks auf
 185 Seiten. Die Mac-Gruppe erfasst den zusätzlichen Fall und beide Quellen;
 ihre tatsächliche Ausführung bleibt offen. Der Nachweis betrifft diese
 Anleitungen und ersetzt keinen vollständigen Review der übrigen Seiten.
+
+## Tatsächliche manuelle F1-Prüfung und begrenzter Narrator-Nachweis
+
+Nach der ausdrücklichen erneuten Freigabe der Desktop-Prüfung wurde die lokale
+Windows-App auf dem Stand `18958b1` über den Computer-Use-Skill bedient. Der
+geprüfte Viewer hat SHA-256
+`e83da634131bf7236d299db5d3d7a6ca8dd9be51cef9e7e338fe0d1b91a137fa`.
+F1 öffnet aus dem leeren Workspace ein eigenes Hilfefenster. Die globale Suche
+nach Numerik erreicht die Anleitung; die zuvor getrennten Listenfortsetzungen
+stehen jetzt beim jeweiligen Integrationsverfahren. Bewegungsgleichung und
+Toleranzformel sind sichtbar gesetzt. Ctrl+Plus wechselt von 16 auf 18 px;
+Ctrl+F wählt sichtbar das Suchfeld des aktuellen Dokuments.
+
+Die vorhandene Windows-Sprachausgabe wurde gestartet. Nach Schließen ihrer
+reinen Neuigkeitenanzeige wurde der tatsächliche Speech-recap-Verlauf gelesen.
+Er bestätigt nach Ctrl+F: `Physim | Dokumentation document, Aktuelles Dokument
+durchsuchen, edit, Numerik`. Dies ist eine echte assistive Beobachtung des
+Fenstertitels sowie des Feldnamens, der Rolle und des Werts. Die Screenshots
+und ihr Bericht liegen unter `build/native/manual-f1-18958b1`:
+`narrator-search-recap.jpg`, `rk45-search.jpg` und `report.json`.
+Die nativen JPEG-Captures wurden unverändert und mit Hashes gesichert.
+
+Microsoft beschreibt den verwendeten Sprachverlauf mit Narrator+Alt+X im
+[aktuellen Narrator-Grundlagenkapitel](https://support.microsoft.com/en-us/accessibility/windows/narrator/chapter-2-narrator-basics).
+Es wurden keine Windows-Taste, keine neuen Programme und keine Berechtigungs-
+oder Sicherheitseinstellungen verwendet. Die vollständige Dokumentleseaufgabe,
+Link-/Tabellenbedienung und mathematische Navigation sind damit noch nicht
+abgenommen. Der beobachtete Suchfeldfall allein begründet keine höhere
+Gesamtwertung.
+
+Der Desktop-Prüfer meldet zeitweise das globale Feld als fokussiert, obwohl
+sichtbar das lokale Feld aktiv ist. Seine native lokale SetValue-Aktion meldet
+ein Zeitlimit; die anschließende neue Beobachtung bestätigt jedoch den gesetzten
+Wert `akzeptierten` und drei Treffer samt RK45-Einzelschrittabschnitt. Es wurde
+kein blinder Wiederholungsaufruf ausgeführt. Die Ursache dieses Fokus-/Werkzeug-
+Befunds ist offen. Vor einem abschließenden Eingabeversuch sind beide App-
+Fenster und die Narrator-Fenster verschwunden; eine neue Fensterauswahl und die
+Prozessabfrage bestätigen ihre Abwesenheit. Passende Application-Fehlerereignisse
+wurden im abgefragten 30-Minuten-Intervall nicht gefunden. Das beweist keine
+bestimmte Beendigungsursache. Die Apps wurden danach nicht neu gestartet.
