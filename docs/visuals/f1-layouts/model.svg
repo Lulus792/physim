@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="210" viewBox="0 0 220 210" role="img" aria-labelledby="title desc">
+  <title id="title">Pendelmodell</title>
+  <desc id="desc">Eine Masse m hängt an einer starren Stange der Länge L. Der Winkel Theta wird gegenüber der Senkrechten gemessen.</desc>
+  <g fill="none" stroke="#62625d" stroke-width="1.5">
+    <path d="M44 22H146"/>
+    <path d="M54 22l8-9m6 9 8-9m6 9 8-9m6 9 8-9m6 9 8-9m6 9 8-9" stroke-width="1"/>
+    <path d="M92 24V178" stroke="#a3a39c" stroke-dasharray="4 5"/>
+    <path d="M92 24L155 161" stroke="#32322e" stroke-width="2.5"/>
+    <path d="M92 73A49 49 0 0 0 112 68"/>
+  </g>
+  <circle cx="92" cy="24" r="3" fill="#32322e"/>
+  <circle cx="155" cy="161" r="13" fill="#b4b4ab" stroke="#32322e" stroke-width="1.5"/>
+  <g fill="#32322e" font-family="Georgia,serif" font-size="20" font-style="italic">
+    <text x="99" y="95">θ</text>
+    <text x="136" y="95">L</text>
+    <text x="176" y="168">m</text>
+  </g>
+  <text x="110" y="203" text-anchor="middle" fill="#656560" font-family="Segoe UI,Arial,sans-serif" font-size="13">Ideales Pendel · Vakuum</text>
+</svg>
