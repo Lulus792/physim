@@ -27,3 +27,24 @@
   verbleibenden Zweck nicht unbegrenzt aufbewahren.
 - Build- und ignorierte Verzeichnisse nicht pauschal leeren. Größere Bereinigungen
   kurz mit Umfang, Begründung und freigegebenem Speicher dokumentieren.
+
+## Gemeinsame lokale Linux-Entwicklungsumgebung
+
+- Auf diesem Windows-Rechner verwenden Physim, NexaUI und NexaCloud gemeinsam
+  die vorhandene WSL-2-Distribution `Alpine-Dev` (Alpine Linux 3.24).
+- Start: `wsl -d Alpine-Dev`; direkte Werkzeugaufrufe:
+  `wsl -d Alpine-Dev --exec <Programm> <Argumente>`.
+- Der Linux-Datenträger liegt außerhalb der Projekte unter
+  `D:\WSL\Alpine-Dev\ext4.vhdx`. Er enthält Linux, installierte Werkzeuge,
+  Bibliotheken und Linux-Dateien; er ist kein entbehrliches Build-Artefakt.
+- Seit 2026-10-16 ersetzt dies `NexaUI-Alpine-3.24` und den früheren Speicherort
+  `D:\NexaUI\build-linux-wsl\instance\ext4.vhdx`. Bei Wiederholung alter
+  Anleitungen nur den Distributionsnamen anpassen; historische/festgeschriebene
+  Prüfnachweise nicht nachträglich umschreiben. Die alte Registrierung existiert
+  nicht mehr; keine zweite projektbezogene Distribution dafür importieren.
+- Windows-Projektpfade bleiben `D:\Physim`, `D:\NexaUI`, `D:\NexaCloud`,
+  unter Linux entsprechend `/mnt/d/Physim`, `/mnt/d/NexaUI`, `/mnt/d/NexaCloud`.
+  Gemeinsame Pakete oder WSL-Einstellungen nur mit Blick auf alle drei Projekte
+  ändern; diesen Datenträger bei Projektbereinigungen erhalten.
+- Lokale Betriebs-/Umzugsnotiz: `D:\WSL\README.md`. Diese Angaben beschreiben
+  die lokale Entwicklungsmaschine, keine Voraussetzung für andere Rechner/CI.
