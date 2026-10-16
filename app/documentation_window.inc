@@ -206,6 +206,7 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     nk_window_show(ui,"topics",a->doc_navigation_hidden?NK_HIDDEN:NK_SHOWN);
     if(!a->doc_navigation_hidden) {
         if(nk_begin(ui,"topics",a->doc_left_slot,0)) {
+            a->doc_left_slot=nk_window_get_bounds(ui);
             if(a->doc_reset_sidebar){nk_window_set_scroll(ui,0,0);a->doc_reset_sidebar=false;}
             ps_ui_accessibility_route(ui,true);documentation_sidebar(a);
         }nk_end(ui);
@@ -213,6 +214,7 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     nk_window_show(ui,"documentation-context",a->doc_context_hidden?NK_HIDDEN:NK_SHOWN);
     if(!a->doc_context_hidden) {
         if(nk_begin(ui,"documentation-context",a->doc_right_slot,NK_WINDOW_NO_SCROLLBAR)) {
+            a->doc_right_slot=nk_window_get_bounds(ui);
             ps_ui_accessibility_route(ui,true);documentation_context_view(a);
         }nk_end(ui);
     }
@@ -230,6 +232,7 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(doc_body)));
     if(a->doc_search_focus || a->doc_search_active)nk_window_set_focus(ui,"document");
     if(nk_begin(ui,"document",nk_rect(article_x,layout.article.y,article_width,layout.article.h),NK_WINDOW_NO_SCROLLBAR)) {
+        a->doc_article_slot=nk_window_get_bounds(ui);
         ps_ui_accessibility_route(ui,true);documentation_view(a,layout.article.h);
     }nk_end(ui);
     nk_style_pop_style_item(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);

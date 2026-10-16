@@ -175,6 +175,11 @@ def documentation_h(flow,directory):
     flow.run('--workspace-state-test',directory,'docs-keyboard-h',timeout=120,
              marker='DOCUMENTATION H SELF-TEST: PASSED')
     output=flow.steps[-1]['stdout']
+    windows={int(group):tuple(map(int,values)) for group,*values in re.findall(
+        r'DOCUMENTATION H WINDOW: group=(\d+) wanted=(\d+)x(\d+) available=(\d+)x(\d+) target=(\d+)x(\d+)',output)}
+    require(len(windows)==14,'Missing actual usable window bounds')
+    captures={name:tuple(map(int,values)) for name,*values in re.findall(
+        r'DOCUMENTATION CAPTURE: (\S+) logical=(\d+)x(\d+) pixels=(\d+)x(\d+) font=\d+ body=[\d.]+',output)}
     rows=re.findall(r'DOCUMENTATION H GEOMETRY: case=(\d+) left=([\d.]+),([\d.]+) article=([\d.]+),([\d.]+) right=([\d.]+),([\d.]+) body=([\d.]+),([\d.]+) ok=(\d)',output)
     require(len(rows)==56,'Missing real native Design H states')
     for i,row in enumerate(rows):
@@ -185,10 +190,16 @@ def documentation_h(flow,directory):
         if state==0: left=(lx,lw);right=(rx,rw)
         if lw: require((lx,lw)==left,'Right toggle moved left side')
         if rw: require((rx,rw)==right,'Left toggle moved right side')
-        raw=(directory/f'docs-h-{i:02}.bmp').read_bytes()
+        name=f'docs-h-{i:02}.bmp'
+        wanted_w,wanted_h,available_w,available_h,target_w,target_h=windows[i//4]
+        require((wanted_w,wanted_h)==((760,540) if i>=48 or (i//8)%2 else (1080,780)),'Wrong requested native size')
+        require((target_w,target_h)==(min(wanted_w,available_w),min(wanted_h,available_h)) and target_w>=760 and target_h>=540,'Invalid native usable bounds')
+        logical_w,logical_h,pixels_w,pixels_h=captures[name]
+        require((logical_w,logical_h)==(target_w,target_h),'Native window did not reach measured target size')
+        raw=(directory/name).read_bytes()
         require(raw[:2]==b'BM' and len(raw)>54,'Missing native capture')
         width,height=struct.unpack_from('<ii',raw,18)
-        require((width,abs(height))==((760,540) if i>=48 or (i//8)%2 else (1080,780)),'Wrong native capture size')
+        require((width,abs(height))==(pixels_w,pixels_h),'Native capture differs from actual drawable size')
     for name in ('example-c','example-physim','empty-search','no-context','pointer-search'):
         require((directory/f'docs-h-{name}.bmp').is_file(),'Missing Design H task capture')
 

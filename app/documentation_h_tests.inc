@@ -2,6 +2,7 @@
 static void documentation_h_test_frame(app *a,int *stage,int *code,const char **capture) {
     static unsigned frame,index;static int experiment,analysis;static double simulation;
     static struct nk_rect left,right;static char name[80];
+    static int wide_width=1080,wide_height=780;
     bool ok=true;
     switch((*stage)++) {
     case 0:
@@ -37,7 +38,19 @@ static void documentation_h_test_frame(app *a,int *stage,int *code,const char **
         a->doc_font_ui=a->doc_ui_fonts[(a->doc_zoom_size-16)/2];
         a->doc_font_title=a->doc_title_fonts[(a->doc_zoom_size-16)/2];
         if(a->documentation)a->documentation->layout_width=0;
-        ok=ok && SDL_SetWindowSize(a->doc_window,window?760:1080,window?540:780) && SDL_SyncWindow(a->doc_window);
+        SDL_Rect usable={0};int top=0,edge_left=0,bottom=0,edge_right=0;
+        ok=ok && SDL_GetDisplayUsableBounds(SDL_GetDisplayForWindow(a->doc_window),&usable) &&
+            documentation_inline_math_borders(a->doc_window,&top,&edge_left,&bottom,&edge_right);
+        int available_width=usable.w-edge_left-edge_right,available_height=usable.h-top-bottom;
+        int wanted_width=window?760:1080,wanted_height=window?540:780;
+        int width=wanted_width<available_width?wanted_width:available_width;
+        int height=wanted_height<available_height?wanted_height:available_height;
+        ok=ok && available_width>=760 && available_height>=540 && SDL_SetWindowSize(a->doc_window,width,height) && SDL_SyncWindow(a->doc_window);
+        int actual_width=0,actual_height=0;
+        ok=ok && SDL_GetWindowSize(a->doc_window,&actual_width,&actual_height) && actual_width==width && actual_height==height;
+        if(!window){wide_width=width;wide_height=height;}
+        if(index%4==0)printf("DOCUMENTATION H WINDOW: group=%u wanted=%dx%d available=%dx%d target=%dx%d\n",
+            index/4,wanted_width,wanted_height,available_width,available_height,width,height);
         /* Gray order changes only one side at each transition. */
         unsigned state=index%4;bool hidden_left=state==1 || state==2,hidden_right=state==2 || state==3;
         if(a->doc_navigation_hidden!=hidden_left)documentation_navigation_toggle(a);
@@ -59,7 +72,7 @@ static void documentation_h_test_frame(app *a,int *stage,int *code,const char **
         if(++index<56)*stage=2;
         else {
             a->doc_navigation_hidden=false;a->doc_context_hidden=false;
-            SDL_SetWindowSize(a->doc_window,1080,780);SDL_SyncWindow(a->doc_window);
+            SDL_SetWindowSize(a->doc_window,wide_width,wide_height);SDL_SyncWindow(a->doc_window);
             ps_preferences p=a->preferences;p.theme=PS_THEME_DARK;p.ui_size=16;preferences_apply(a,&p);documentation_zoom(a,0);
             a->doc_context_example=true;frame=0;
         }break;
