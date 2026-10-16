@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Physim · F1 Layoutstudien · Runde 2</title>
+  <link rel="stylesheet" href="layouts.css">
+  <script src="content.js" defer></script>
+  <script src="layouts.js" defer></script>
+</head>
+<body>
+<main class="gallery">
+  <div class="eyebrow"><span><b>Physim</b> / F1-Dokumentation</span><span>Runde 2 · Navigation an der Seite</span></div>
+  <div class="intro"><div><h1>Die Navigation bleibt an deiner Seite.</h1><p>Drei neue Aufteilungen. Direkte Sprungziele, eine einklappbare Seitenleiste.</p></div><span class="revision-note">B ist ausgeschieden.</span></div>
+  <nav class="variants" aria-label="Layoutvarianten">
+    <button class="variant" data-mode="outline" aria-pressed="true"><span class="mini outline" aria-hidden="true"><i></i><i></i></span><span><strong>E · Alles links <em>Neu</em></strong><small>Themen und Abschnitte vereint</small></span></button>
+    <button class="variant" data-mode="navigator" aria-pressed="false"><span class="mini navigator" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>F · Doppelte Navigation <em>Neu</em></strong><small>Bereich · Kapitel · Artikel</small></span></button>
+    <button class="variant" data-mode="reference" aria-pressed="false"><span class="mini reference" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>G · Text & Beispiel <em>Neu</em></strong><small>Lesen und Code nebeneinander</small></span></button>
+    <button class="variant previous" data-mode="classic" aria-pressed="false"><span class="mini classic" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>A · Das Handbuch</strong><small>Themen · Artikel · Inhalt</small></span></button>
+    <button class="variant previous" data-mode="learn" aria-pressed="false"><span class="mini reference" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>C · Der Lernpfad</strong><small>Schritte mit Modellbezug</small></span></button>
+    <button class="variant previous" data-mode="find" aria-pressed="false"><span class="mini classic" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>D · Die Antwortsuche</strong><small>Treffer · Vorschau · Abschnitte</small></span></button>
+  </nav>
+  <div class="reviewbar"><span>Layoutstudie · direkte Seitenlinks · keine verschachtelten Menüs</span><div class="settings"><div role="group" aria-label="Fensterbreite"><span>Fenster</span><button data-width="1080" aria-pressed="true">1080 px</button><button data-width="760" aria-pressed="false">760 px</button></div><div role="group" aria-label="Artikel und Navigation vergrößern"><span>Text</span><button data-font="16" aria-pressed="true">16 px</button><button data-font="32" aria-pressed="false">32 px</button></div></div></div>
+  <div class="stage"><section class="window mode-outline" id="window" aria-label="Vorschau des F1-Fensters">
+    <div class="titlebar"><span><b>Physim</b> | Dokumentation</span><span aria-hidden="true">−　□　×</span></div>
+    <header class="appbar"><button id="toggle-nav" aria-controls="navigation" aria-expanded="true"><span aria-hidden="true">◧</span> <span id="toggle-label">Seitenleiste ausblenden</span></button><span class="brand">PHYSIM <span>Handbuch</span></span><form role="search" id="search-form"><label class="sr-only" for="search">In der Beispielsammlung suchen</label><input id="search" type="search" placeholder="Handbuch durchsuchen …" autocomplete="off"></form><button id="focus-article">Zum Artikel ↓</button></header>
+    <div class="workspace">
+      <nav class="navigation" id="navigation" aria-label="Seitennavigation"><div class="nav-primary" id="nav-primary"></div><div class="nav-secondary" id="nav-secondary"></div></nav>
+      <div class="reading-pane"><div class="article-scroll" id="article-scroll"><article class="article" id="article"><p class="crumb">Handbuch / Lernpfade / Mechanik</p><p class="lesson-heading" id="lesson-heading" hidden></p><h1 id="article-title"></h1><p class="lead" id="article-lead"></p><div id="article-content"></div></article></div><div class="step-controls" hidden><button id="previous-step">← Zurück</button><span id="step-position"></span><button id="next-step">Weiter →</button></div></div>
+      <nav class="toc" id="toc" aria-label="Abschnitte im Artikel"></nav>
+      <aside class="context-pane" id="context-pane" aria-label="Beispiel und Modell"></aside>
+    </div>
+    <footer class="statusbar"><span>F1 · Offline-Handbuch</span><span id="footer-label">E · Themen und Abschnitte an einem Ort</span></footer>
+  </section></div>
+  <p class="scroll-hint">Desktopvorschau ab 760 px · Bei schmalem Browser horizontal durch die Vorschau scrollen.</p>
+  <p class="state-message" id="state-message" role="status" aria-live="polite"></p>
+  <section class="layout-note" aria-label="Einordnung des Entwurfs"><div><p class="number" id="concept-number"></p><h2 id="concept-title"></h2><p id="concept-description"></p></div><div><h2>Was du direkt siehst</h2><p id="concept-use"></p></div><div><h2>Platzgewinn auf Knopfdruck</h2><p id="concept-tradeoff"></p></div></section>
+</main>
+</body>
+</html>

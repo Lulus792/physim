@@ -1,0 +1,88 @@
+.refinement { --left: 250px; --right: 250px; --reading-size: 16px; }
+.refinement .workspace { grid-template-columns: var(--left) minmax(0,1fr) var(--right); font-size: 16px; height: 680px; }
+.refinement .appbar { min-height: 60px; flex-wrap: nowrap; gap: 12px; padding: 10px 13px; }
+.refinement .brand { display: inline; font-size: 12px; }
+.refinement .appbar form { width: 270px; min-width: 160px; flex: 0 1 310px; }
+.refinement .appbar input { min-height: 32px; font-size: 12px; }
+.icon-button { display: inline-grid; place-items: center; width: 32px; min-width: 32px; height: 32px; min-height: 32px; padding: 5px; border-color: transparent; background: transparent; border-radius: 4px; position: relative; flex: 0 0 32px; }
+.icon-button svg { width: 20px; height: 20px; display: block; }
+.icon-button .panel-fill { opacity: 0; }
+.icon-button[aria-expanded="true"] .panel-fill { opacity: .17; }
+.icon-button:hover { background: var(--selection); border-color: var(--line); }
+.global-language { display: inline-flex; gap: 2px; background: #eeeee9; border: 1px solid var(--line); border-radius: 5px; padding: 2px; flex: 0 0 auto; }
+.global-language button { border: 0; min-height: 28px; padding: 4px 10px; background: transparent; font-size: 12px; }
+.global-language button[aria-pressed="true"] { background: var(--paper); color: var(--ink); box-shadow: 0 1px 3px #0002; font-weight: 600; }
+.layout-actions { display: flex; gap: 3px; }
+.grouped-left { display: none; }
+.refinement .navigation { display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+.panel-head { min-height: 46px; flex: 0 0 46px; display: flex; align-items: center; justify-content: space-between; gap: 5px; padding: 7px 12px; border-bottom: 1px solid var(--line); }
+.panel-caption { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); }
+.panel-toggle { display: none; }
+.nav-content { padding: 20px 15px; overflow: auto; min-height: 0; flex: 1; }
+.refinement .nav-group { margin-bottom: 21px; }
+.refinement .section-links { margin-left: 11px; padding-left: 7px; }
+.refinement .nav-label { font-size: 10px; }
+.refinement .nav-row { font-size: 13px; }
+.refinement .section-link { font-size: 12px; padding-top: 7px; padding-bottom: 7px; }
+.refinement .article { font-size: var(--reading-size); padding: 25px 28px 40px; max-width: 810px; }
+.refinement .article h1 { font-size: 1.65em; letter-spacing: -.55px; }
+.refinement .article .crumb { margin-bottom: 21px; font-size: .7em; }
+.refinement .article .lead { font-size: .94em; }
+.refinement .model { display: block; }
+.refinement .model .diagram { display: none; }
+.context-panel { display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden; border-left: 1px solid var(--line); background: #fafaf7; }
+.context-tabs { display: flex; gap: 16px; height: 100%; align-items: center; min-width: 0; }
+.context-tabs button { border: 0; border-radius: 0; background: transparent; padding: 4px 0; min-height: 28px; font-size: 12px; color: var(--muted); position: relative; }
+.context-tabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; }
+.context-tabs button[aria-selected="true"]::after { content: ''; height: 2px; background: var(--ink); position: absolute; bottom: -9px; left: 0; right: 0; }
+.context-content { overflow: auto; padding: 21px 18px 30px; min-height: 0; flex: 1; font-size: 14px; }
+.context-content h2 { font-size: 15px; margin-bottom: 14px; font-weight: 600; line-height: 1.5; }
+.context-content .diagram { width: 100%; height: 205px; margin: 5px 0 14px; }
+.context-content .notice { font-size: 12px; margin-top: 22px; padding-left: 13px; }
+.context-content p { font-size: 12px; line-height: 1.7; margin: 10px 0; }
+.context-content table { font-size: 12px; }
+.context-content td,.context-content th { padding: 10px 5px; }
+.context-content caption { text-align: left; font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+.context-content pre { font-size: 12px; padding: 14px 10px; line-height: 1.75; }
+.context-content .code-head { font-size: 11px; }
+.context-content .source { color: var(--muted); font-size: 11px; overflow-wrap: anywhere; }
+.refinement .search-count { font-size: 12px; color: var(--muted); margin: 0 7px 15px; }
+.refinement .result { font-size: 16px; }
+.refinement.left-closed { --left: 0px; }
+.refinement.right-closed { --right: 0px; }
+.refinement.left-closed .navigation,.refinement.right-closed .context-panel { display: none; }
+.refinement.mode-rails { --left: 260px; --right: 270px; }
+.mode-rails .toolbar-left,.mode-rails .layout-actions { display: none; }
+.mode-rails .panel-toggle { display: inline-grid; }
+.mode-rails .panel-head { padding-left: 13px; padding-right: 7px; }
+.refinement.mode-rails.left-closed { --left: 40px; }
+.refinement.mode-rails.right-closed { --right: 40px; }
+.mode-rails.left-closed .navigation,.mode-rails.right-closed .context-panel { display: flex; }
+.mode-rails.left-closed .nav-head,.mode-rails.right-closed .context-head { padding: 7px 3px; justify-content: center; }
+.mode-rails.left-closed .panel-caption,.mode-rails.right-closed .context-tabs { display: none; }
+.refinement.mode-controls { --left: 230px; --right: 238px; }
+.mode-controls .toolbar-left { display: none; }
+.mode-controls .grouped-left { display: inline-grid; }
+.mode-controls .layout-actions { padding-left: 9px; border-left: 1px solid var(--line); }
+.mode-controls .context-content { padding: 18px 16px; }
+.mode-controls .context-content .diagram { height: 175px; }
+.refinement.large-text .article h1 { font-size: 1.3em; }
+.refinement .statusbar { font-size: 11px; }
+.refinement.left-closed.mode-controls { --left: 0px; }
+.refinement.right-closed.mode-controls { --right: 0px; }
+@container (max-width: 900px) {
+  .refinement .appbar { gap: 9px; }
+  .refinement .brand span { display: none; }
+  .refinement .appbar form { width: 230px; }
+  .refinement .workspace { --left: 220px; --right: 220px; grid-template-columns: var(--left) minmax(0,1fr) var(--right); }
+  .refinement.mode-rails .workspace { --left: 224px; --right: 230px; }
+  .refinement.mode-controls .workspace { --left: 210px; --right: 216px; }
+  .refinement .article { padding: 23px 20px 36px; }
+  .refinement .context-content { padding-left: 13px; padding-right: 13px; }
+  .refinement .context-content .diagram { height: 180px; }
+  .refinement.left-closed .workspace,.refinement.left-closed.mode-controls .workspace { --left: 0px; }
+  .refinement.right-closed .workspace,.refinement.right-closed.mode-controls .workspace { --right: 0px; }
+  .refinement.mode-rails.left-closed .workspace { --left: 40px; }
+  .refinement.mode-rails.right-closed .workspace { --right: 40px; }
+}
+@media (pointer: coarse) { .icon-button { width: 40px; height: 40px; min-width: 40px; min-height: 40px; } }

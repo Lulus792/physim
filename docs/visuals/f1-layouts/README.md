@@ -1,104 +1,122 @@
-# F1: Layoutstudien, Runde 2
+# F1: Layoutstudien, Runde 3
 
-Stand: 16. Oktober 2026. Grundlage: bisherige Layoutstudien auf `108d5f6` und der
-lokale Physim-Projektstand. Die native F1-App wurde nicht verändert.
+Stand: 16. Oktober 2026. Ausgangspunkt: Runde 2 auf `0089185`.
+Die native F1-App ist unverändert. Es handelt sich um klickbare Designstudien.
 
-## Verbindliches Feedback für diese Studien
+## Übernommene Nutzerentscheidungen
 
-- B (Lesefläche mit aufklappbaren Navigationsmenüs) ist ausgeschieden.
-- Themen und Abschnittssprünge gehören an die Seite und sind direkt anwählbar.
-- Die **gesamte Seitenleiste** darf ein- und ausgeklappt werden. Das bedeutet
-  keine aufklappbaren Untermenüs für einzelne Themen oder Abschnitte.
-- Der Schwerpunkt bleibt auf Aufteilung und Bedienung, mit einer gemeinsamen
-  zurückhaltenden Graustufenpalette.
+- Die gemeinsame linke Themen-/Abschnittsnavigation aus E/G ist die Grundlage.
+- Rechts wird der Modellbereich aus Entwurf C verwendet: Grafik, Ausgangswerte
+  und Hinweise zum Versuch. Modell und Beispiel sind direkt wählbare Tabs.
+- Beide Seiten sind **unabhängig** ein- und ausklappbar, über kompakte Icons.
+  Es gibt keine breiten Ein-/Ausblenden-Beschriftungen in der Oberfläche.
+- C und Physim werden **einmal global für das Dokument** gewählt. Das betrifft
+  Lernweg, Anleitungen, Navigation, Suche, Beispielcode und Quellenangabe.
+  Im rechten Bereich gibt es keine zusätzliche lokale Sprachwahl.
+- Gemeinsame Physikerklärungen werden einmal verwendet. Sprachabhängige
+  Arbeitsabläufe unterscheiden sich inhaltlich, nicht nur im Codeausschnitt.
+- B und aufklappbare Untermenüs für Themen-/Abschnittssprünge bleiben verworfen.
 
-## Vorschau und Bilder
+## Vorschau
 
-[`index.html`](index.html) direkt im Browser öffnen oder den bereits gestarteten
-lokalen Vorschau-Server nutzen. Alle Quellen und Assets sind lokal; keine
-Installation, Netzwerkanfragen, externen Schriften oder Buildschritte nötig.
+[`index.html`](index.html) direkt im Browser öffnen. Alle benötigten Quellen
+und Assets sind lokal vorhanden. Keine Installation oder Netzwerkzugriffe nötig.
+Die aktuelle Galerie zeigt drei Verfeinerungen derselben akzeptierten Struktur:
 
-- [`overview-new.png`](overview-new.png): E, F, G und E mit eingeklappter Leiste.
-- [`overview.png`](overview.png): alle sechs aktuellen Varianten.
-- Neue Einzelansichten: [E](outline.png), [F](navigator.png), [G](reference.png).
-- Überarbeitete Einzelansichten: [A](classic.png), [C](learn.png), [D](find.png).
-- [E ohne Seitenleiste](outline-collapsed.png).
-
-B ist aus Auswahl und aktueller Bildübersicht entfernt. Ein alter Link mit
-`?layout=read` zeigt nun E. Die frühere Fassung bleibt in der Git-Historie.
-Die Bedien- und Erläuterungsflächen außerhalb des Fensterrahmens gehören nur zur
-Studie und sind kein vorgeschlagener Bestandteil der nativen F1-Oberfläche.
-
-## Sechs Aufteilungen
-
-| Variante | 1080 px, 16 px Text | Schwerpunkt |
+| Entwurf | Position der Schalter | Eingeklappter Zustand |
 | --- | --- | --- |
-| **E · Alles links, neu** | 280 px gemeinsame Themen-/Abschnittsleiste, Artikel daneben | Alle Sprungziele an einem Ort; Abschnitte direkt unter dem aktiven Artikel |
-| **F · Doppelte Navigation, neu** | 160 px Bereiche, 230 px Artikel/Abschnitte, Lesefläche daneben | Zwei sichtbare Navigationsebenen ohne verschachtelte Menüs |
-| **G · Text & Beispiel, neu** | 224 px Seitennavigation, Artikel, 330 px Code-/Beispielbereich | Erklärung und umschaltbare C-/Physim-Ausschnitte parallel lesen |
-| A · Das Handbuch | 220 px Themen, Artikel, 190 px Abschnittsnavigation | Klassische Aufteilung mit beiden Navigationsflächen |
-| C · Der Lernpfad | 210 px Lernschritte, Aufgabe, 260 px Modellkontext | Vier direkt wählbare Lernschritte und feste Vor-/Zurück-Aktionen |
-| D · Die Antwortsuche | 292 px Trefferliste, Artikelvorschau, 178 px Abschnitte | Fundstelle im Artikelkontext lesen |
+| **H · Schalter an den Enden** | Je ein 32-px-Icon links und rechts im Fensterkopf | Beide Seiten verschwinden vollständig; Icons bleiben im Fensterkopf |
+| **I · Schmale Seitenstreifen** | Icons direkt im Kopf des jeweiligen Paneels | Je ein 40-px-Streifen bleibt mit dem Wiederöffnen-Icon sichtbar |
+| **J · Layout-Schalter rechts** | Zwei 32-px-Icons gemeinsam oben rechts | Beide Seiten verschwinden vollständig; die zwei Icons bleiben sichtbar |
 
-**Ein- und Ausklappen:** Der beschriftete Knopf bleibt im Fensterkopf erreichbar.
-Er blendet die seitliche Navigation als Ganzes aus oder ein; in A und D betrifft
-das auch die rechte Abschnittsleiste. Modell-/Codeflächen sind eigenständige
-Inhalte und bleiben davon getrennt. Artikelauswahl und Lesestelle werden erhalten.
-Eine Lesemarke gleicht die geänderten Zeilenumbrüche aus. Ein anschließender
-Scroll- oder Navigationsvorgang aktualisiert den Bezug für das Wiedereinblenden.
-Die Wahl bleibt beim Wechsel der Layoutvariante erhalten. Suche blendet ihre
-Trefferleiste wieder ein, damit neue Treffer direkt erreichbar sind.
+Bilder: [gemeinsame Übersicht](overview-round3.png), [H](balanced.png),
+[I](rails.png), [J](controls.png), [I mit geschlossenen Seiten](rails-closed.png),
+[globale Physim-Wahl](global-language.png).
+Die vorherige Galerie ist unter [`round2.html`](round2.html) weiter verfügbar.
+Deren Bilder und Quellen bleiben als frühere Entwürfe erhalten.
 
-**760 px / großer Text:** Die Navigation bleibt seitlich und direkt zugänglich.
-A und D integrieren die Abschnittslinks links. F ordnet die beiden Navigationsebenen
-innerhalb der linken Leiste untereinander an. G zeigt das Beispiel unter dem
-Artikel als separat scrollbareren Inhaltsbereich. C erhält die Modellinformation
-im Artikel statt in einer zusätzlichen rechten Spalte. Bei 32 px Text gelten die
-entsprechenden platzsparenden Anordnungen auch im breiten Fenster. Es entstehen
-keine aufklappbaren Inhaltsmenüs.
+Die äußeren Erläuterungen und Größenumschalter gehören nur zur Studie.
+Der Fensterrahmen ist eine Darstellung; die Fensterknöpfe sind dekorativ.
+Die Galerie verkleinert kein echtes Desktopfenster: Bei Browserbreiten unter
+760 px kann man innerhalb der Vorschau horizontal scrollen. Die umgebende
+Galerie selbst passt sich an die Browserbreite an.
 
-Die Desktopvorschau beginnt passend zum nativen Mindestfenster bei 760 px. In
-schmaleren Browserfenstern kann man innerhalb des Vorschau-Rahmens horizontal
-scrollen; die umgebende Galerie passt sich weiterhin an die Browserbreite an.
-Das ist kein Entwurf für eine mobile F1-App.
+## Verhalten
 
-## Interaktionen und Inhaltsgrenzen
+Linkes und rechtes Icon steuern nur ihre jeweilige Seite. Alle vier Kombinationen
+sind möglich. Lesestelle, aktueller Artikel, globale Sprache und gewählter rechter
+Tab bleiben erhalten. Die rechte Scrollposition wird beim Wiederöffnen restauriert.
+Die Auswahl der globalen Sprache bleibt beim Wechsel von H/I/J bestehen.
+Suche öffnet nur die linke Trefferleiste wieder, falls diese geschlossen ist.
 
-Themenwechsel und Abschnittssprünge, aktive Markierungen beim Scrollen,
-Bereichswechsel in F, C-/Physim-Wechsel und Kopieren in G, alle vier Lernschritte
-in C einschließlich deaktivierter Randaktionen und Suche in D sind bedienbar.
-Die Schaltflächen funktionieren mit der Tastatur. Die Seitenleistenaktion trägt
-`aria-expanded` und verweist auf die Navigationsflächen. Eingeklappte Bereiche
-sind aus Fokus- und Lesefolge entfernt. Abschnittssprünge setzen den Fokus auf
-die Zielüberschrift. Statusmeldungen werden über eine höfliche Live-Region gemeldet.
+Die Icons sind eigene einfache SVG-Fensterkonturen mit einem linken bzw. rechten
+Paneelstreifen. Sie besitzen dynamische zugängliche Namen, `aria-controls`,
+`aria-expanded`, Browser-Tooltips und sichtbaren Tastaturfokus. Die Grafik ist
+20 px groß, die normale Schaltfläche 32 px. Auf groben Zeigegeräten wird die
+Schaltfläche auf 40 px vergrößert. Eingeklappte Inhalte verschwinden aus Fokus-
+und Lesefolge; das jeweilige Wiederöffnen-Icon bleibt erreichbar.
 
-Die Suche filtert Titel und Kurztexte einer kleinen lokalen Beispielsammlung,
-keinen Volltextindex aller 185 nativen Handbuchseiten. Leere Eingabe zeigt drei
-Vorschläge; erfolglose Suche zeigt einen Hinweis und erhält die Artikelvorschau.
-Einige weitere Themen sind ausdrücklich als verkürzte Layoutplatzhalter markiert.
+Die rechten Tabs unterstützen Pfeiltasten und Home/End. Abschnittssprünge setzen
+den Fokus auf ihre Überschrift. Meldungen nutzen eine höfliche Live-Region.
+Es gibt keine verschachtelten Navigationsmenüs oder Hover-Pflichtaktionen.
 
-Pendelannahmen, Gleichungen, Ausgangswerte und Vergleichsaufgaben stammen aus
-`docs/pendulum-tutorial.md`; C-/Physim-Ausschnitte aus diesem Lernpfad bzw.
-`examples/language/pendulum_integrator.phys`. Es sind keine vollständigen
-Programme. Die Modellgrafik ist ein vereinfachtes Designasset.
+**Globaler Sprachwechsel:** C und Physim im Dokumentkopf steuern den gesamten
+Beispielbestand. Die Seitenleiste zeigt jeweils nur den gewählten Lernweg.
+Im Pendelartikel ändern sich Einordnung, Einführung und der Abschnitt zur
+Versuchsvorbereitung. C erklärt Funktionen und Ausgabepuffer, Physim typisierte
+Funktionen, Rückgabewerte und das Bearbeiten der `.phys`-Quelle. Der Beispiel-Tab
+übernimmt dieselbe Sprache einschließlich Quellenangabe. Die Modellgleichungen
+bleiben gemeinsamer Inhalt. Die Suchvorschläge stammen aus dem gewählten Lernweg.
 
-## Prüfung
+Die Größenwahl 16/32 px betrifft den **Lesetext**. Seitennavigation, Kopf und
+Modellkontext behalten ihre kompakte UI-Schrift. Bei 760 px bleiben die beiden
+Seitenbereiche seitlich; über die Icons lässt sich mehr Lesebreite schaffen.
 
-Windows, Microsoft Edge 155.0.4283.45, echte Browserbedienung mit Playwright:
-48 Kombinationen aus sechs Layouts, zwei Fensterbreiten (1080/760 px), zwei
-Textgrößen (16/32 px) und ein-/ausgeblendeter Navigation auf internen horizontalen
-Überlauf geprüft. Ein-/Ausklappen einschließlich Artikelauswahl und Rückkehr zur
-Lesestelle, direkte Sprünge, Themen-/Bereichswechsel, Sprachen, Lernschrittgrenzen,
-Suchtreffer, leere Suche, erfolglose Suche, Wiederöffnen der Trefferleiste und
-Tastaturbedienung der Seitenleistenaktion ausgeführt. Alte B-Links und die
-Galerie samt horizontalem Vorschau-Scrollen bei 390/320 px Browserbreite geprüft.
-Keine JavaScript-Laufzeitfehler. Neue Einzelansichten, Übersicht und Ansichten mit
-großem Text visuell geprüft.
+## Beispiele und Quellen
 
-Quellen: `index.html`, `layouts.css`, `layouts.js`, `content.js`, `model.svg`.
-PNG-Dateien sind gelieferte Designassets; Prüfausgaben und temporäre Bilder liegen
-ignoriert unter `build/f1-layout-review/`.
+Tatsächlich eingesehene offizielle Vorbilder am 16. Oktober 2026:
 
-Keine Änderung an Renderer, Parser oder registrierten Handbuchseiten; kein
-nativer Build erforderlich. Keine native Plattform-, Screenreader-, DPI- oder
-Linux-/macOS-Abnahme aus diesen Browserstudien ableiten.
+- [VS Code: Custom Layout](https://code.visualstudio.com/docs/configure/custom-layout),
+  Abschnitte Secondary Side Bar und Customize Layout control: getrennte
+  Layout-Icons für die Sichtbarkeit der Seitenleisten. Die verlinkten offiziellen
+  UI-Abbildungen wurden als Referenzen geöffnet.
+- [Windows NavigationView](https://learn.microsoft.com/en-us/windows/apps/develop/ui/controls/navigationview),
+  Abschnitte LeftCompact, LeftMinimal und Pane: Navigation kann zu Icons bzw.
+  einem einzelnen Paneelknopf reduziert werden.
+
+H/I/J sind eigene Ableitungen dieser Bedienmuster. Es werden weder offizielle
+Screenshots noch fremde Icon-Assets mitgeliefert. Die Apple-Sidebars-Webseite
+lieferte über das verfügbare Webwerkzeug nur eine JavaScript-Hülle; daraus wird
+kein neuer inhaltlicher Nachweis abgeleitet.
+
+Pendelmodell und Ausgangswerte basieren auf `docs/pendulum-tutorial.md`.
+Die knappen Sprachanleitungen sind Designbeispiele auf Grundlage von
+`docs/c-workflow.md` und `docs/physim-workflow.md`. Die Ausschnitte stammen aus dem
+Pendel-Lernpfad bzw. `examples/language/pendulum_integrator.phys`; es sind keine
+vollständigen Programme. Die Suche bildet nur die lokale Beispielsammlung ab,
+keinen Volltextindex aller nativen F1-Seiten. Einige weitere Themen bleiben
+explizit verkürzte Layoutplatzhalter und zeigen keinen erfundenen Modellkontext.
+
+## Tatsächlich ausgeführte Prüfung
+
+Windows, Microsoft Edge 155.0.4283.45, Playwright mit echter Browserbedienung.
+48 Kombinationen: drei Entwürfe, zwei Fensterbreiten (1080/760 px), zwei
+Lesetextgrößen (16/32 px), vier unabhängige Seitenzustände. Geprüft wurden
+interner horizontaler Überlauf, erreichbare Wiederöffnen-Icons und Iconmaße.
+Zusätzlich je Entwurf: Lesestelle nach Schließen beider Seiten und erneutem
+Öffnen; globale C-/Physim-Wirkung auf Artikel, Anleitung, Lernweg, Beispiel und
+Suche; Fortbestand beim Layoutwechsel; rechter Tab beim Schließen/Wiederöffnen;
+keine lokalen Sprachschalter; Enter/Leertaste für Icons und Pfeiltasten für Tabs;
+leere und erfolglose Suche. Galerie/Vorschau-Scroll bei 390/320 px geprüft.
+Keine JavaScript-Laufzeitfehler. Neue Einzelansichten, Übersicht, geschlossene
+Seiten und globale Physim-Ansicht visuell geprüft.
+
+Aktuelle Quellen: `index.html`, `refinements.js`, `refinements.css`, gemeinsam
+mit `content.js`, `layouts.css` und `model.svg`. Die archivierte Runde 2 verwendet
+`round2.html` und `layouts.js`. PNGs sind gelieferte Designassets; temporäre
+Prüfskripte, Ergebnisse und zusätzliche Bilder liegen ignoriert in
+`build/f1-layout-review/`.
+
+Kein nativer Build nötig: Renderer, Parser und registrierte F1-Seiten wurden
+nicht verändert. Keine native Plattform-, Screenreader-, DPI-, Linux- oder
+macOS-Abnahme aus der Browserprüfung ableiten.
