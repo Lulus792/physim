@@ -3157,3 +3157,39 @@ Die Laufübersicht unterscheidet außerdem die weiterhin lineare
 Vergleichsvorlage von der bereits verfügbaren Reihen-API mit Previous,
 Nearest, Linear und PCHIP. Eine zusätzliche Interpolationsauswahl in der
 Vorlage wird weiterhin als offen beschrieben.
+
+### Fortgesetzte tatsächliche Windows-/Narrator-Prüfung
+
+Nach ausdrücklicher Wiederaufnahme der Desktop-Prüfung wurde das normale
+Physim-Binary der Revision `e27ea16` gestartet (SHA-256
+`f775abac7d2ff893b584e1db16d6657a9b8c96f5cd54a96743480231225e3c09`).
+Der Menüweg Hilfe → Handbuch öffnet das getrennte Fenster. Die globale Suche
+führt zur Numerikseite. Die Listen, Bewegungsgleichung, Toleranz mit Indizes
+und der RK45-Akzeptanzbruch wurden bei 16 beziehungsweise 18 px tatsächlich
+betrachtet; die vergrößerte Ansicht bleibt lesbar. Das ist kein neuer
+DPI-/Monitorwechsel- oder vollständiger Seitenkatalognachweis.
+
+Der Sprachverlauf des vorhandenen Windows Narrator bestätigt die globale
+Suchfeldansage und anschließend „Aktuelles Dokument durchsuchen, edit,
+Numerik“. Nach Ctrl+F besteht der unveränderte unabhängige UIA-Feldclient:
+`HasKeyboardFocus` und `GetFocusedElement` stimmen überein. Tab bewegt den
+sichtbaren Rahmen zu „Vorheriger“ und weiter zu „Nächster“.
+
+Für diese Buttons erscheint im beobachteten Sprachverlauf keine entsprechende
+Ansage. Eine isoliert gebaute Kopie des vorhandenen lesenden Feldclients
+verwendet deshalb ausschließlich den Button-Typfilter und den Befehlsnamen
+`focused-button`; der Fokusvergleich bleibt identisch. Bei sichtbar fokussiertem
+„Vorheriger“ findet sie den aktivierten Button (Rolle 50000), scheitert aber
+mit `property=0 same=0`, Exitcode 1. Der Client setzt dabei weder Fokus noch
+Werte. Damit ist eine zusätzliche Abweichung zwischen sichtbarer F1-Tabfolge
+und nativer Fokussemantik belegt. `documentation_focus_draw` zeichnet den
+Rahmen, veröffentlicht selbst aber keinen semantischen Fokus. Die vorhandene
+Scroll-Regression verlangt nach Tab sogar ausdrücklich fehlenden nativen
+Fokus; die weitere Korrektur muss daher Navigation, native Eingaberouten und
+diese Erwartungen gemeinsam betrachten. Eine abgeschlossene Ursache oder
+bereits behobene Screenreader-Lücke wird hier nicht behauptet.
+
+`build/native/manual-f1-resumed/report.json` hält Bild-/Clienthashes und den
+begrenzten Befund fest. Vollständiges Lesen, Link-/Tabellenaufgaben und
+mathematische Screenreader-Navigation bleiben offen; die Gesamtwertung steigt
+nicht aufgrund der bestätigten Suchfeldansage.
