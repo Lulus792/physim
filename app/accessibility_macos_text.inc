@@ -46,6 +46,9 @@ static id document_children(id object,SEL selector){(void)selector;return mac_do
 static id document_empty_children(id object,SEL selector){(void)object;(void)selector;return send0((id)objc_getClass("NSArray"),"array");}
 static BOOL document_no_action(id object,SEL selector){(void)object;(void)selector;return NO;}
 static void document_no_value(id object,SEL selector,id value){(void)object;(void)selector;(void)value;}
+/* Non-focusable table elements still use this BOOL setter. The document has
+ * its own versioned request handler below. */
+static void document_no_focus(id object,SEL selector,BOOL value){(void)object;(void)selector;(void)value;}
 static BOOL document_focused(id object,SEL selector) {
  (void)selector;ps_a11y_native *b=owner(object);if(!b)return NO;
  SDL_LockMutex(b->mutex);bool focused=document_live_locked(object,b) && document_viewable_locked(b) && ps_a11y_document_focused(b->model);
