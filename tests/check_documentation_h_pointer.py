@@ -70,13 +70,25 @@ def checked(name,group):
     node.clearCache()
     return node.getRole()==pyatspi.ROLE_RADIO_BUTTON and node.getState().contains(pyatspi.STATE_CHECKED)
 
-def focused(name):
-    node=find(name)
+def focused(name,group=None,role=None):
+    node=find(name,group,role)
     if node is None:return False
     node.clearCache()
     return node.getState().contains(pyatspi.STATE_FOCUSED)
 
+def select_all(name):
+    length=find(name).queryText().characterCount
+    xrun('key','--clearmodifiers','ctrl+a')
+    if length:
+        wait(lambda:find(name).queryText().getNSelections()>0 and
+             tuple(find(name).queryText().getSelection(0))==(0,length),'actual selection in '+name)
+
 def click(name,group=None,role=None):
+    def synchronized():
+        geometry=dict(line.split('=',1) for line in xrun('getwindowgeometry','--shell',document_window).splitlines())
+        native=frame().queryComponent().getExtents(pyatspi.DESKTOP_COORDS)
+        return tuple(native)==tuple(int(geometry[key]) for key in ('X','Y','WIDTH','HEIGHT'))
+    wait(synchronized,'native screen bounds match the actual X11 window after placement')
     node=wait(lambda:find(name,group,role),'native target '+name)
     rectangle=node.queryComponent().getExtents(pyatspi.DESKTOP_COORDS)
     assert rectangle.width>0 and rectangle.height>0,(name,rectangle)
@@ -132,6 +144,35 @@ try:
     click('Modellbereich einblenden (geschlossen)')
     wait(lambda:checked('Modell','Kontextansicht') and checked('C','Dokumentationssprache'),'both sides reopen with retained choices')
     report['checks'].append('independent pointer toggles preserve opposite native bounds, usable article and selected tabs')
+    xrun('key','--clearmodifiers','ctrl+f')
+    wait(lambda:focused('Aktuelles Dokument durchsuchen'),'local search before pane navigation')
+    select_all('Aktuelles Dokument durchsuchen')
+    xrun('type','--clearmodifiers','--delay','40','theta')
+    wait(lambda:find('Aktuelles Dokument durchsuchen').queryText().getText(0,-1)=='theta','actual local query edit')
+    xrun('key','--clearmodifiers','F6')
+    wait(lambda:focused('Modell','Kontextansicht'),'F6 moves from article to context')
+    xrun('key','--clearmodifiers','shift+F6')
+    wait(lambda:focused('Pendel & Integratoren',role=pyatspi.ROLE_DOCUMENT_TEXT),
+         'Shift+F6 returns to native article')
+    assert find('Aktuelles Dokument durchsuchen').queryText().getText(0,-1)=='theta'
+    report['checks'].append('real F6/Shift+F6 skips the topic catalogue and preserves the local query')
+    xrun('key','--clearmodifiers','F6')
+    wait(lambda:focused('Modell','Kontextansicht'),'context before global filter')
+    xrun('key','--clearmodifiers','F6')
+    wait(lambda:focused('Alle Inhalte durchsuchen'),'header before empty results')
+    select_all('Alle Inhalte durchsuchen')
+    xrun('type','--clearmodifiers','--delay','40','qzx987654')
+    wait(lambda:find('Alle Inhalte durchsuchen').queryText().getText(0,-1)=='qzx987654','actual global filter edit')
+    xrun('key','--clearmodifiers','F6')
+    wait(lambda:focused('Pendel & Integratoren',role=pyatspi.ROLE_DOCUMENT_TEXT),'empty results skip directly to article')
+    assert find('Pendel & Integratoren',role=pyatspi.ROLE_PUSH_BUTTON) is None
+    xrun('key','--clearmodifiers','shift+F6')
+    wait(lambda:focused('Alle Inhalte durchsuchen'),'reverse skips empty results')
+    select_all('Alle Inhalte durchsuchen')
+    xrun('key','--clearmodifiers','BackSpace')
+    xrun('key','--clearmodifiers','F6')
+    wait(lambda:focused('Pendel & Integratoren',role=pyatspi.ROLE_PUSH_BUTTON),'restored results select current article')
+    report['checks'].append('real filter edits are committed before F6; empty results are skipped in both directions')
     report['status']='passed'
 except Exception:
     report['error']=traceback.format_exc()
@@ -140,6 +181,7 @@ except Exception:
         report['geometry']=[xrun('getwindowgeometry','--shell',window) for window in report['windows'].splitlines()]
         report['pointer']=xrun('getmouselocation','--shell')
         report['foreground']=xrun('getwindowfocus')
+        report['native_root']=list(frame().queryComponent().getExtents(pyatspi.DESKTOP_COORDS))
         report['tree']=[dict(name=node.name,role=node.getRoleName(),bounds=list(node.queryComponent().getExtents(pyatspi.DESKTOP_COORDS)),
                              text=node.queryText().getText(0,-1) if node.getRole()==pyatspi.ROLE_ENTRY else None) for node in frame()]
     except Exception as error:report['diagnostic_error']=repr(error)

@@ -937,7 +937,41 @@ static unsigned documentation_focus_list(app *a,int *entries) {
     }
     return count;
 }
+/* Pane navigation stays independent of the number of topics/sections. Tab
+ * still traverses the complete catalogue and all actions within each pane. */
+static int documentation_focus_region(int focus) {
+    if(focus==DOC_NAVIGATION || focus==DOC_C || focus==DOC_PHYSIM || focus==DOC_FILTER || focus==DOC_CONTEXT)return 0;
+    if(focus>=DOC_TOPIC && focus<DOC_COPY)return 1;
+    if(focus==DOC_MODEL_TAB || focus==DOC_EXAMPLE_TAB || focus==DOC_CONTEXT_COPY)return 3;
+    return 2;
+}
+static void documentation_focus_pane(app *a,int direction) {
+    documentation_finish_edits(a);
+    int targets[4],regions[4];unsigned count=0;
+    targets[count]=DOC_FILTER;regions[count++]=0;
+    if(!a->doc_navigation_hidden) {
+        int order[DOCUMENTATION_TOPIC_COUNT];unsigned topics=documentation_topic_order(a,order);
+        if(topics) {
+            int topic=order[0];for(unsigned i=0;i<topics;i++)if(order[i]==a->doc_topic){topic=a->doc_topic;break;}
+            targets[count]=DOC_TOPIC+topic;regions[count++]=1;
+        }
+    }
+    targets[count]=a->documentation?DOC_BODY:DOC_SEARCH;regions[count++]=2;
+    if(!a->doc_context_hidden) {
+        targets[count]=a->doc_context_example?DOC_EXAMPLE_TAB:DOC_MODEL_TAB;regions[count++]=3;
+    }
+    unsigned current=count;
+    if(a->doc_keyboard)for(unsigned i=0;i<count;i++)if(regions[i]==documentation_focus_region(a->doc_focus)){current=i;break;}
+    unsigned next=current==count?(direction>0?0:count-1):(current+count+direction)%count;
+    a->doc_keyboard=true;a->doc_focus=targets[next];a->doc_focus_reveal=true;
+    a->doc_filter_focus=a->doc_focus==DOC_FILTER;a->doc_search_focus=a->doc_focus==DOC_SEARCH;
+    nk_sdl_accessibility_keyboard_begin(a->doc_ui);
+}
 static bool documentation_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
+    if(key->key==SDLK_F6 && !(key->mod&(SDL_KMOD_CTRL|SDL_KMOD_GUI|SDL_KMOD_ALT))) {
+        if(!key->repeat)documentation_focus_pane(a,key->mod&SDL_KMOD_SHIFT?-1:1);
+        return true;
+    }
     if((key->mod&PS_UI_COMMAND_MOD) && (key->mod&SDL_KMOD_SHIFT) && key->key==SDLK_R) {
         if(!key->repeat)documentation_context_toggle(a);return true;
     }
@@ -1077,9 +1111,12 @@ static void documentation_focus_draw(app *a,int id,struct nk_rect bounds,bool bo
     if(!delta)a->doc_focus_reveal=false;
 }
 #include "documentation_media.inc"
-static bool documentation_topic_button(app *a,const char *label,bool selected) {
+static bool documentation_topic_button(app *a,const char *label,bool selected,struct nk_rect *actual) {
     struct nk_context *ui=a->doc_ui;struct nk_rect bounds;
     enum nk_widget_layout_states visible=nk_widget(&bounds,ui);
+    /* nk_widget snaps fractional chrome metrics to integer bounds. Use that
+     * same rectangle for native focus, rather than the preceding layout peek. */
+    *actual=bounds;
     if(visible==NK_WIDGET_INVALID)return false;
     bool pressed=ps_ui_button_at(ui,bounds,label,selected);
     struct nk_command_buffer *canvas=nk_window_get_canvas(ui);

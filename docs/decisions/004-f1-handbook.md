@@ -5,6 +5,11 @@ Versuch ermöglichen als auch beim Arbeiten präzise Antworten liefern. Die
 Abnahme betrachtet Inhalt, Bedienung, Darstellung und zugängliches Lesen.
 Ein grüner Parsertest allein ist keine vollständige Abnahme.
 
+Aktuelle Ergänzungen zum H-Stand: native Lesefokusanbindung mit Mac-Abnahme in
+`docs/visuals/f1-layouts/READING-FOCUS.md` und direkte F6-Bereichswechsel in
+`docs/visuals/f1-layouts/PANE-NAVIGATION.md`. Die Berichte nennen die tatsächlich
+geprüften Revisionen und verbleibende Grenzen.
+
 ## Aktuelle Bewertung vom 16. Oktober 2026
 
 Bewertungsgrundlage sind die zentralen Skills unter `D:/Skills/skills`:

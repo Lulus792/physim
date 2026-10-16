@@ -27,12 +27,12 @@ static bool documentation_test_clipboard(const char *expected) {
 }
 /* Traverse actual SDL focus events; no pointer input or direct focus assignment. */
 static bool documentation_test_seek(app *a,int id,int *stage,int *code) {
-    static unsigned seeks,attempts;
+    static unsigned seeks,attempts,tabs,panes;static double started;
     static int target,last_topic=-1,last_stage=-1;
     int entries[12*PS_DOC_MAX_BLOCKS+DOCUMENTATION_TOPIC_COUNT+16];
     unsigned count=documentation_focus_list(a,entries);
     if(target!=id || last_topic!=a->doc_topic || last_stage!=*stage) {
-        attempts=0;target=id;last_topic=a->doc_topic;last_stage=*stage;
+        attempts=tabs=panes=0;started=ps_clock();target=id;last_topic=a->doc_topic;last_stage=*stage;
     }
     bool present=false;for(unsigned i=0;i<count;i++)if(entries[i]==id)present=true;
     if(!present || ++attempts>4*count+32) {
@@ -47,9 +47,16 @@ static bool documentation_test_seek(app *a,int id,int *stage,int *code) {
     }
     if(a->doc_keyboard && a->doc_focus==id) {
         if(a->doc_focus_reveal){--*stage;return false;}
+        printf("DOCUMENTATION SEEK: target=%d tabs=%u panes=%u elapsed=%.3f\n",id,tabs,panes,ps_clock()-started);
         return true;
     }
-    test_window_key_mod(a->doc_window,SDLK_TAB,0);--*stage;return false;
+    unsigned current=count,wanted=count;
+    for(unsigned i=0;i<count;i++){if(entries[i]==a->doc_focus)current=i;if(entries[i]==id)wanted=i;}
+    if((id==DOC_BODY || id>=DOC_COPY) && (!a->doc_keyboard ||
+       (a->doc_focus!=DOC_BODY && (a->doc_focus<DOC_COPY || current>wanted)))) {
+        ++panes;test_window_key_mod(a->doc_window,SDLK_F6,0);
+    } else {++tabs;test_window_key_mod(a->doc_window,SDLK_TAB,0);}
+    --*stage;return false;
 }
 static void documentation_api_test_frame(app *a,int *stage,int *code,const char **capture) {
     static int core,units,guide,type,function,unit_type,example;
@@ -1056,7 +1063,9 @@ static void documentation_detail_test_frame(app *a,int *stage,int *code,const ch
 }
 #include "documentation_inline_math_tests.inc"
 #include "documentation_h_tests.inc"
+#include "documentation_pane_tests.inc"
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strcmp(mode,"docs-keyboard-panes")){documentation_pane_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-h")){documentation_h_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-inline-math")){documentation_inline_math_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-basics-narrow")){documentation_formula_catalog_test_frame(a,stage,code,capture,DOC_FORMULAS_BASICS,true);return;}

@@ -637,6 +637,11 @@ gilt auch für Anleitungen und den Beispielcode rechts. Gemeinsame Physikerklär
 bleiben erhalten. Ein Sprachwechsel ordnet passende Anleitungen einander zu;
 ohne Gegenstück führt er zum Einstieg des gewählten Lernwegs.
 
+Mit **F6** wechselst du zwischen Kopfleiste, Themenliste, Artikel und rechtem
+Kontextbereich; **Shift+F6** wechselt zurück. Ausgeblendete Seiten und eine leere
+Trefferliste werden übersprungen. Innerhalb eines Bereichs bleiben **Tab** und
+**Shift+Tab** verfügbar.
+
 Links stehen Themen in Gruppen. Die Abschnittssprünge sind unter dem aktiven
 Artikel eingerückt; der Kopf „Themen & Abschnitte“ bleibt beim Scrollen stehen.
 Die globale Wahl **C/Physim** ist ein gemeinsamer Segmentschalter. Rechts zeigen

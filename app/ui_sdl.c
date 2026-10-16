@@ -638,7 +638,9 @@ bool nk_sdl_render(struct nk_context *ctx) {
 }
 void nk_sdl_update_TextInput(struct nk_context *ctx) {
     struct nk_sdl *sdl = ctx->userdata.ptr;
-    bool active = ctx->active && (ctx->active->popup.win ? ctx->active->popup.win->edit.active
+    /* Nuklear keeps a tooltip's popup window after closing it. Only a live
+     * popup owns text input; a cached one must not mask the focused editor. */
+    bool active = ctx->active && (ctx->active->popup.active && ctx->active->popup.win ? ctx->active->popup.win->edit.active
                                                          : ctx->active->edit.active);
     if (active && !SDL_TextInputActive(sdl->win))
         SDL_StartTextInput(sdl->win);

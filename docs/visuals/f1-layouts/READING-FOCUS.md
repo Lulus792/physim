@@ -31,6 +31,14 @@ Der native Ausgangslauf scheitert gezielt am Dokument-`GrabFocus`
 | Windows, MSVC/ASan | 4/4, `run-hxe9pzle` | 7/7, `run-osto59fy` |
 | Alpine/X11, GCC 15.2/ASan/UBSan | 4/4, `run-uk25wntu` | 7/7, `run-rbvkf_c3` |
 
+Die anschließende tatsächliche [Mac-Abnahme von 4b04b2c](https://github.com/Lulus792/physim/actions/runs/38943129520)
+besteht auf ARM und Intel vollständig: jeweils 19/19 portable und 26/26 GUI-Fälle,
+die drei Rendergegenproben sowie externe AX. ARM: `run-0gk5aq6r` / `run-v3mkm1e6`;
+Intel: `run-gfjblt7n` / `run-7241v0c8`. Der vorherige Build von c36eaf7 scheiterte
+an einem entfernten, weiterhin von Tabellenzellen benötigten No-op-Setter. 4b04b2c
+stellt diesen Setter wieder her; der neue Dokumentsetter bleibt eigenständig.
+Diese Abnahme umfasst noch keine spätere F6-Erweiterung und keine VoiceOver-Aufgabe.
+
 Die Modelltests umfassen Dokument, Fokus, Suspendierung und Eingabefelder. Die
 UI-Gruppen erfassen native Dokument-/Edit-/Linkadapter, Tastatur, H und
 Inline-Formelsatz. AT-SPI prüft zusätzlich zwei echte Fenster, tatsächlichen

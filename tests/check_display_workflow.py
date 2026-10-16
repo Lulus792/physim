@@ -53,6 +53,7 @@ SIMPLE["documentation_pointer_isolation"] = (["--docs-test-noise", "{directory}"
 SIMPLE["documentation_keyboard_delayed"] = (["--workspace-state-test", "{directory}", "docs-keyboard-delayed"], 135, True)
 SIMPLE["documentation_keyboard_22"] = (["--workspace-state-test", "{directory}", "docs-keyboard-22"], 75, True)
 SIMPLE["documentation_keyboard"] = (["--workspace-state-test", "{directory}", "docs-keyboard"], 75, True)
+SIMPLE["documentation_panes"] = (["--workspace-state-test", "{directory}", "docs-keyboard-panes"], 75, True)
 SIMPLE["documentation_history"] = (["--workspace-state-test", "{directory}", "docs-keyboard-history"], 90, True)
 SIMPLE["documentation_zoom"] = (["--workspace-state-test", "{directory}", "docs-keyboard-zoom"], 90, True)
 SIMPLE["documentation_density"] = (["--workspace-state-test", "{directory}", "docs-keyboard-density"], 120, True)
@@ -1708,7 +1709,18 @@ def main():
         arguments, timeout, _ = SIMPLE[args.case]
         paths = dict(directory=str(directory), root=str(flow.root))
         flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)
-        if args.case == "documentation_zoom":
+        if args.case == "documentation_panes":
+            output=flow.steps[-1]['stdout']
+            require('DOCUMENTATION PANES SELF-TEST: PASSED' in output,'Missing actual pane navigation result')
+            records=re.findall(r'DOCUMENTATION PANES: case=(\d+) groups=(\d+) track=(\d+) size=(\d+) ui=(\d+) theme=(\d+) scroll=(\d+) complete=(\d+)',output)
+            require(len(records)==24 and [int(r[0]) for r in records]==list(range(24)),'Missing pane navigation matrix')
+            for record in records:
+                index,groups,track,size,ui,theme,scroll,complete=map(int,record)
+                require(groups==(4,3,2,3)[index%4] and track==index%2+1 and
+                        size==(32 if (index//4)%2 else 16) and ui==(22 if (index//4)%2 else 16) and
+                        theme==index//8 and scroll>0 and complete==1,'Pane focus/state was lost')
+                require((directory/f'docs-panes-{index:02}.bmp').is_file(),'Missing actual pane focus capture')
+        elif args.case == "documentation_zoom":
             documentation_zoom_bitmaps(directory,flow.steps[-1]['stdout'])
         elif args.case == "documentation_detail":
             output=flow.steps[-1]['stdout']
@@ -1793,7 +1805,12 @@ def main():
                     documentation_formula_ink(directory/f'docs-inline-math-{case:02}.bmp',x,y,w,h)
             require(len(re.findall(r'INLINE MATH CACHE: case=\d+ twenty simultaneous textures retained=1',output))==6,'Missing simultaneous texture coverage')
         elif args.case == "documentation_inline":
-            documentation_inline_ink(directory, flow.steps[-1]["stdout"])
+            output=flow.steps[-1]["stdout"]
+            documentation_inline_ink(directory, output)
+            seeks=re.findall(r'DOCUMENTATION SEEK: target=(\d+) tabs=(\d+) panes=(\d+) elapsed=([\d.]+)',output)
+            require({int(row[0]) for row in seeks}=={40003,40008,30009},'Missing actual inline key traversal')
+            require(all(int(tabs)<=12 and int(panes)<=4 for _,tabs,panes,_ in seeks),
+                    'Inline actions traversed the full topic catalogue instead of using pane navigation')
         elif args.case == "accessibility_links_macos":
             for name in ("docs-macos-link-focus.bmp", "docs-macos-link-failed.bmp", "docs-macos-link-open.bmp"):
                 require((directory / name).is_file(), "Native link capture missing: " + name)

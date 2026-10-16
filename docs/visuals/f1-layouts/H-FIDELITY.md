@@ -179,7 +179,10 @@ anschließenden Gegenproben werden dort nicht ausgeführt. Dieser Befund bleibt
 gesondert zu untersuchen, ohne die Zeitgrenze einfach anzuheben.
 
 Die anschließende [native Lesefokuserweiterung](READING-FOCUS.md) besitzt eigene
-Windows-/Linux- und Orca-Nachweise. Diese ältere Mac-H-Abnahme belegt sie nicht.
+Windows-/Linux-, Orca- und revisionsbezogene Mac-Nachweise. Die ältere
+Mac-H-Abnahme allein belegt diese Erweiterung nicht.
+Die danach ergänzte [F6-Bereichsnavigation](PANE-NAVIGATION.md) prüft zusätzlich
+native Fokusrechtecke bei großer Schrift und tatsächliche Eingabe nach Tooltips.
 
 ## Verbleibende Unterschiede und ihre Gründe
 
@@ -205,7 +208,6 @@ bleibt erhalten. Dieser zusätzliche Funktionsumfang ist eine bewusste Abweichun
 von der reduzierten Vorschau, keine technische Unmöglichkeit des Renderers.
 Die neue Gestaltung behauptet deshalb keine vollständige Pixelidentität des gesamten Handbuchinhalts.
 
-Vollständige Screenreader-Aufgaben, echte Monitor-/DPI-Wechsel und die gesamte
-aktuelle macOS-Abnahme bleiben gesonderte offene Prüfpunkte. Die bereits belegte
-Orca-Korrektur für aktive Fenster bleibt erhalten; die noch nicht fertig geprüfte
-Erweiterung für Dokumentfokus gehört nicht zu diesem visuellen Stand.
+Vollständige Screenreader-Aufgaben und echte Monitor-/DPI-Wechsel bleiben
+gesonderte offene Prüfpunkte. Die anschließend geprüfte Erweiterung für
+Dokumentfokus und deren Mac-Abnahme sind im eigenen Bericht oben abgegrenzt.

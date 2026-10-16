@@ -13106,6 +13106,20 @@
       ]
     },
     {
+      "name": "documentation_panes",
+      "app": true,
+      "display": true,
+      "targets": ["python", "physim"],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": ["{root}/tests/check_display_workflow.py", "documentation_panes", "--app", "{physim}", "--work", "{work}", "--root", "{root}"],
+          "timeout": 90,
+          "files": ["app-steps.json"]
+        }
+      ]
+    },
+    {
       "name": "documentation_h",
       "app": true,
       "display": true,

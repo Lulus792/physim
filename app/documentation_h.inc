@@ -165,10 +165,11 @@ static void documentation_sidebar_content(app *a) {
             }
             const char *title=documentation_topics[topic].title;
             nk_layout_row_dynamic(ui,documentation_height(ui->style.font,title,strlen(title),nk_window_get_content_region(ui).w-20)+14,1);
-            struct nk_rect bounds=nk_widget_bounds(ui);
+            struct nk_rect bounds;
+            bool pressed=documentation_topic_button(a,title,topic==a->doc_topic,&bounds);
             if(topic==a->doc_topic)a->doc_active_topic_bounds=bounds;
             if(a->doc_filter[0] && n==0)a->doc_first_result_bounds=bounds;
-            if(documentation_topic_button(a,title,topic==a->doc_topic)) {
+            if(pressed) {
                 open_documentation(a,topic);
                 if(a->doc_filter[0]){snprintf(a->doc_query,sizeof a->doc_query,"%s",a->doc_filter);a->doc_move_match=true;}
             }
