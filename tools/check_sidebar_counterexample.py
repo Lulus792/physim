@@ -16,18 +16,21 @@ def main():
     parser.add_argument('--compiler', default='clang')
     parser.add_argument('--sdl', type=Path, required=True)
     parser.add_argument('--build-dir', type=Path, default=build.ROOT/'build/native/Debug-sanitized')
+    parser.add_argument('--proof-dir', type=Path, help='Fresh evidence directory; never overwritten')
     args = parser.parse_args()
     if sys.platform not in ('linux','darwin'):
         parser.error('Use an actual Linux or macOS native font environment')
     directory = args.build_dir.resolve()
-    proof = directory.parent/'sidebar-counterexample'
+    proof = args.proof_dir.resolve() if args.proof_dir else directory.parent/'sidebar-counterexample'
     proof.mkdir()  # Preserve an earlier result instead of overwriting it.
     ui = (build.ROOT/'app/documentation_ui.inc').read_text(encoding='utf-8')
     current = (build.ROOT/'app/documentation_h.inc').read_text(encoding='utf-8')
-    source = 'documentation_height(a->doc_ui->style.font,label,strlen(label),\n            nk_window_get_content_region(a->doc_ui).w-20)+12'
+    source = 'documentation_height(ui->style.font,label,strlen(label),content.w-indent-extra-20)+10'
     if current.count(source)!=1:
         raise RuntimeError('Direct section measurement changed; review this counterexample')
-    previous = current.replace(source,'a->doc_ui->style.font->height+12')
+    # Reintroduce the original fault (one-line height for wrapped section text)
+    # in H's current indented section renderer. Its draw probe stays unchanged.
+    previous = current.replace(source,'ui->style.font->height+10')
     (proof/'documentation_h.inc').write_text(previous, encoding='utf-8')
     (proof/'documentation_ui.inc').write_text(ui, encoding='utf-8')
     # The generated main lives beside the isolated old layout. All other

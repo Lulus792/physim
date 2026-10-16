@@ -77,8 +77,10 @@ jobs:
       - name: Actual AppKit and rendered F1
         run: python3 tools/build.py --compiler clang --sanitizers --test-display --test-filter accessibility_native --test-filter accessibility_ui --test-filter font_bank_ui --test-filter accessibility_document_macos --test-filter accessibility_edit_macos --test-filter accessibility_links_macos --test-filter documentation_detail --test-filter documentation_h --test-filter documentation_navigation --test-filter documentation_sidebar --test-filter graphics --test-filter documentation_font_demand --test-filter documentation_density --test-filter documentation_formula_narrow --test-filter documentation_formula_physics --test-filter documentation_formula_models --test-filter documentation_formula_models_narrow --test-filter documentation_formula_mechanics --test-filter documentation_formula_mechanics_narrow --test-filter documentation_formula_basics --test-filter documentation_formula_basics_narrow --test-filter documentation_inline_math --test-filter documentation_formula_catalog --test-filter documentation_typeset --test-filter documentation_math --test-filter documentation_inline
       - name: Actual previous detail wrapping is rejected
-        run: python3 tools/check_detail_counterexample.py --compiler clang --sdl "$PWD/build-sdl-install"
-      - name: Actual previous sidebar layout is rejected
+        run: |
+          python3 tools/check_detail_counterexample.py --compiler clang --sdl "$PWD/build-sdl-install"
+          python3 tools/check_detail_counterexample.py --compiler clang --sdl "$PWD/build-sdl-install" --bounded-control
+      - name: Fixed-height direct section labels are rejected
         run: python3 tools/check_sidebar_counterexample.py --compiler clang --sdl "$PWD/build-sdl-install"
       - name: Immediate inline formula texture eviction is rejected
         run: python3 tools/check_inline_math_counterexample.py --compiler clang --sdl "$PWD/build-sdl-install"
@@ -120,6 +122,7 @@ jobs:
             build/native/Debug-sanitized/test-results/**
             build/native/sidebar-counterexample/**
             build/native/detail-counterexample/**
+            build/native/detail-bounded-control/**
             build/native/inline-math-counterexample/**
             build/native/external-ax/**
             build/native/font-prepare-macos-*/report.json

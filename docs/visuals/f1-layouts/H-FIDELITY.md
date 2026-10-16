@@ -122,6 +122,53 @@ Durchlaufen jedes großen Rasters im Minimum-Iterator. Die unveränderten
 193 Ausdrücke, 1351 Displayvarianten, 193 Inlinevarianten und 197 Displayblöcke
 bestehen den vollständigen Prüfer.
 
+## Nachgeführte Gegenproben
+
+Der alte Metadaten-Gegenprüfer stellte nach der Umstellung auf H nur den früheren
+Umbruch wieder her. Die neue Bedienschrift, Artikelbreite und kurze Formatierung
+blieben aktiv. Das tatsächlich heruntergeladene ARM-Artefakt von `bda1d89`
+(`38924682884`, ZIP-SHA256
+`b5b34f62e70ef1573ee954a0e46181da1b826bbba6378008d0660a747db6e175`)
+bestätigt: Die vermeintlich fehlerhafte Ausgabe bestand alle 36 Zustände.
+Ein neuer lokaler Lauf von `77dec3a` bestätigt dasselbe. Das war ein fehlender
+Fehlernachweis, kein fehlgeschlagener aktueller F1-Umbruch.
+
+Der isolierte Prüfer rekonstruiert jetzt Leseschrift, Artikelrechteck und
+Innenabstand sowie die damalige kurze/lange Metadatenformatierung anhand von
+`2b31a7d^`. Der damalige Artikel besaß keinen rechten Modellbereich; dessen
+H-Reiter werden deshalb in dieser Rekonstruktion ausgeblendet. Ein vorgeschalteter
+Kontrolllauf hatte nachgewiesen, dass ihre sonst überlappenden Zeichenbefehle den
+Probeinhalt verunreinigen. Der unabhängige Glyphen-/Clipprüfer bleibt unverändert.
+
+Unter Alpine/GCC 15.2 ASan/UBSan verwirft die abschließende Gegenprobe
+`build/native/F1-linux/detail-counterexample-final/report.json` gezielt Fall 2:
+alle 64 Textbytes sind gezeichnet, ihre tatsächlichen Glyphen passen aber nicht
+in das Rechteck (`complete=0`, `fits=0`). Der korrigierte Umbruch besteht unter
+derselben historischen Schrift, Breite und Formatierung alle 36 Zustände
+(`build/native/F1-linux/detail-bounded-control-isolated/report.json`,
+`bounded_control_passed=true`). Beide Berichte nennen denselben Hash der
+isolierten Fenstergeometrie. Der Kontrollmodus `--bounded-control` gehört nun
+auch zur Mac-CI; beide Varianten bewahren ihre Bilder und Quellkopien getrennt.
+`--proof-dir` erlaubt frische lokale Belege, ohne ältere Ergebnisse zu überschreiben.
+
+Die alte Sidebar-Gegenprobe brach dagegen bereits vor dem Fensteraufbau ab, weil
+sie die inzwischen ersetzte Messzeile suchte. Sie setzt nun im tatsächlichen
+eingerückten H-Abschnittsrenderer wieder eine feste einzeilige Höhe ein. Die
+native Probe verwirft diesen Mutanten gezielt: eine Textzeile bei unvollständigem
+Abschnitt (`font=16 lines=1 complete=0 width=165 height=24`,
+`build/native/F1-linux/sidebar-counterexample-final/report.json`). Die echten
+aktuellen Metadaten- und Sidebar-Prüfungen bestehen danach unverändert beide
+(`build/native/h-proof-positive-final.log`). Das erweitert die Fehlererkennung;
+es ändert weder den ausgelieferten H-Renderer noch die konservative Gesamtwertung.
+
+Der [tatsächliche Mac-Lauf von 77dec3a](https://github.com/Lulus792/physim/actions/runs/38933979388)
+bestätigt auf ARM **19/19 portable und 26/26 GUI-Fälle** einschließlich H und
+Metadaten, dazu die unabhängige externe AX-Prüfung. Die GUI-Gruppe heißt
+`run-6r0dk5t5`, die portable Gruppe `run-5wdlq4lh`. Der Gesamtjob scheitert noch
+an der dort enthaltenen alten Metadaten-Gegenprobe. Die nachgeführten Prüfer
+benötigen einen eigenen tatsächlichen Mac-Lauf; die ARM-GUI-Ergebnisse ersetzen
+ihn nicht.
+
 ## Verbleibende Unterschiede und ihre Gründe
 
 Die genannten Schalterformen, Einrückungen und Paneelköpfe sind im bestehenden
