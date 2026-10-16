@@ -2540,3 +2540,24 @@ mit GCC C17 und strengen Warnungen sowie der unabhängige Testläufer unter
 `build/native/mac-ax-runner-proof` geprüft. Windows meldet im Bericht korrekt
 `unavailable` und Exit 77. Diese Prüfungen ersetzen weder das Übersetzen der
 ApplicationServices-Aufrufe mit dem Mac-SDK noch ihren tatsächlichen AX-Aufruf.
+
+## Inhaltlicher Abgleich der Datenreihen-Hilfe
+
+`docs/series.md` nannte weiterhin drei Resamplingverfahren, obwohl die C-API und
+die Physim-Bindung PCHIP als viertes Verfahren anbieten. Die Übersicht enthält
+jetzt `PS_RESAMPLE_PCHIP`, erklärt stückweise Formerhaltung, stetige erste und
+möglicherweise unstetige zweite Ableitung, innere Extrema, Randsteigungen sowie
+die Ein-/Zweipunktfälle. Das Zahlenbeispiel mit X = 0, 1, 2 und Y = 0, 1, 4
+stimmt mit dem ausgeführten PCHIP-Referenztest überein: bei 0,5 entsteht 0,3125
+statt des linearen Werts 0,5. Die fünf bisherigen Codeblöcke bleiben unverändert.
+
+Geprüfte Quellen sind `include/physim/series.h`, `src/series.c`, `src/pchip.h`,
+`tests/test_pchip.c`, `tests/test_resample.c` und die veröffentlichte Physim-
+Bindung `Series.resampledPchip`. MSVC/ASan besteht acht Fälle in `run-2glhqoc1`,
+Linux GCC/ASan/UBSan dieselben acht in `run-eh96o1wv`: Series, Resampling,
+SI-Konvertierung, numerische Extremwerte, Masken, PCHIP, Dokumentparser und
+alle registrierten Abschnittslinks. `tools/generate-reference.py --check`
+bestätigt zusätzlich alle 31 erzeugten Referenzdokumente, eingebettete
+Tutorialquellen, Seitenlimits und ihre Offline-Erreichbarkeit.
+Das belegt diesen Inhaltsabgleich, weiterhin keinen semantischen Gesamtabgleich
+aller 185 registrierten Dateien.

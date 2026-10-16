@@ -214,7 +214,7 @@ Ergebnisreihe besitzt Einheit und Skalierung von `y`, aber Samplezuordnung und
 Lebensdauer des Zieldatensatzes. Der Quelldatensatz darf danach geschlossen werden.
 Beim Schließen des Zieldatensatzes wird auch das Interpolationsergebnis ungültig.
 
-`ps_series_resample(ctx, y, x, target_x, method, &out)` bietet drei Verfahren mit
+`ps_series_resample(ctx, y, x, target_x, method, &out)` bietet vier Verfahren mit
 demselben Vertrag für Einheiten, Zeitraster und Lebensdauer:
 
 | Verfahren | Ergebnis zwischen zwei Quellpunkten |
@@ -222,12 +222,25 @@ demselben Vertrag für Einheiten, Zeitraster und Lebensdauer:
 | `PS_RESAMPLE_LINEAR` | Lineare Verbindung der Werte; entspricht `ps_series_resample_linear`. |
 | `PS_RESAMPLE_NEAREST` | Wert des näheren Quellpunkts; bei gleichem Abstand der frühere. |
 | `PS_RESAMPLE_PREVIOUS` | Letzter Wert bei oder vor der Zielkoordinate, etwa für gehaltene Stellgrößen. |
+| `PS_RESAMPLE_PCHIP` | Formerhaltende stückweise kubische Hermite-Interpolation mit stetiger erster Ableitung. |
 
 An exakten Quellkoordinaten liefern alle Verfahren den dortigen Wert. Auch das
 Halten des letzten Werts endet am letzten Quellpunkt; eine Fortschreibung über
 den aufgezeichneten Bereich hinaus ist nicht erlaubt. Die Verfahrenswahl muss
 zum Signal passen: Nearest oder Previous erzeugen keine Zwischenwerte für
 diskrete Zustände, können aber keine fehlende Messinformation rekonstruieren.
+
+PCHIP erhält die Monotonie jedes Stützintervalls und überschwingt dessen
+Wertebereich nicht. An inneren Extrema und flachen Abschnitten werden die Knotensteigungen
+null; an den Rändern gelten begrenzte einseitige Steigungen. Die zweite Ableitung
+muss an einem Knoten nicht stetig sein. Zwei Stützpunkte ergeben die lineare
+Verbindung, ein einzelner erlaubt weiterhin nur seine genaue Koordinate.
+In Physim verwendet `position.resampledPchip(x, targetX)` denselben Vertrag.
+
+Ein prüfbares Beispiel: Zu den X-Werten 0, 1, 2 gehören die Y-Werte 0, 1, 4.
+An der Zielkoordinate 0,5 liefert PCHIP den Wert 0,3125; die lineare Verbindung
+liefert dort 0,5. Beide treffen die Stützwerte exakt. Eine glattere Kurve ist
+dadurch noch kein Nachweis für einen kleineren Mess- oder Modellfehler.
 
 ```c
 ps_series reference_on_target = {0}, difference = {0};
