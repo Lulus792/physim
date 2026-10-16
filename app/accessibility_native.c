@@ -28,7 +28,7 @@ struct ps_a11y_native {
 #else
 #define PS_AX_BOOL "c"
 #endif
-static Class element_class,document_class,edit_class,link_class;static Ivar owner_ivar,id_ivar;static IMP base_dealloc,base_frame;
+static Class owned_class,element_class,document_class,edit_class,link_class;static Ivar owner_ivar,id_ivar;static IMP base_dealloc,base_frame;
 static id send0(id object,const char *selector) {
  return ((id(*)(id,SEL))objc_msgSend)(object,sel_registerName(selector));
 }
@@ -157,12 +157,21 @@ static BOOL element_allowed(id object,SEL selector,SEL requested) {
 static bool make_class(void) {
  if(element_class)return true;
  Class base=objc_getClass("NSAccessibilityElement");if(!base)return false;
- element_class=objc_allocateClassPair(base,"PhysimAccessibilityElement",0);if(!element_class)return false;
- if(!class_addIvar(element_class,"physimOwner",sizeof(void*),3,"^v") ||
-    !class_addIvar(element_class,"physimID",sizeof(uint64_t),3,"Q"))return false;
  base_dealloc=method_getImplementation(class_getInstanceMethod(base,sel_registerName("dealloc")));
  base_frame=method_getImplementation(class_getInstanceMethod(base,sel_registerName("accessibilityFrame")));
- class_addMethod(element_class,sel_registerName("dealloc"),(IMP)element_dealloc,"v@:");
+ /* Documents share storage/lifetime with controls, never their value setter. */
+ if(!owned_class) {
+  owned_class=objc_allocateClassPair(base,"PhysimAccessibilityOwnedElement",0);if(!owned_class)return false;
+  if(!class_addIvar(owned_class,"physimOwner",sizeof(void*),3,"^v") ||
+     !class_addIvar(owned_class,"physimID",sizeof(uint64_t),3,"Q") ||
+     !class_addMethod(owned_class,sel_registerName("dealloc"),(IMP)element_dealloc,"v@:")) {
+   objc_disposeClassPair(owned_class);owned_class=Nil;return false;
+  }
+  objc_registerClassPair(owned_class);
+ }
+ owner_ivar=class_getInstanceVariable(owned_class,"physimOwner");id_ivar=class_getInstanceVariable(owned_class,"physimID");
+ if(!base_dealloc || !base_frame || !owner_ivar || !id_ivar)return false;
+ element_class=objc_allocateClassPair(owned_class,"PhysimAccessibilityElement",0);if(!element_class)return false;
  class_addMethod(element_class,sel_registerName("isAccessibilityElement"),(IMP)element_valid,PS_AX_BOOL "@:");
  class_addMethod(element_class,sel_registerName("isAccessibilityEnabled"),(IMP)element_enabled,PS_AX_BOOL "@:");
  class_addMethod(element_class,sel_registerName("isAccessibilityFocused"),(IMP)element_focused,PS_AX_BOOL "@:");
@@ -182,7 +191,7 @@ static bool make_class(void) {
  class_addMethod(element_class,sel_registerName("accessibilityFrame"),(IMP)element_frame,"{CGRect={CGPoint=dd}{CGSize=dd}}@:");
  class_addMethod(element_class,sel_registerName("accessibilityPerformPress"),(IMP)element_press,PS_AX_BOOL "@:");
  class_addMethod(element_class,sel_registerName("isAccessibilitySelectorAllowed:"),(IMP)element_allowed,PS_AX_BOOL "@::");
- objc_registerClassPair(element_class);owner_ivar=class_getInstanceVariable(element_class,"physimOwner");id_ivar=class_getInstanceVariable(element_class,"physimID");
+ objc_registerClassPair(element_class);
  return base_dealloc && base_frame && owner_ivar && id_ivar;
 }
 static id mac_document_children(id object,bool visible);

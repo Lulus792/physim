@@ -18,8 +18,11 @@ static bool mac_document_test(SDL_Window *window,bool range_control) {
  ((void(*)(id,SEL,BOOL))objc_msgSend)(document,sel_registerName("setAccessibilityFocused:"),YES);
  ok &= !model->pending_press && !model->pending_focus;
  id number=((id(*)(id,SEL,double))objc_msgSend)((id)objc_getClass("NSNumber"),sel_registerName("numberWithDouble:"),7.0);
- send1(document,"setAccessibilityValue:",number);
+ element_set_value(document,sel_registerName("setAccessibilityValue:"),number);
  ok &= !model->pending_value_id && collision_value==5;
+ ok &= class_getSuperclass(document_class)==owned_class && class_getSuperclass(element_class)==owned_class;
+ ok &= class_getInstanceMethod(document_class,sel_registerName("setAccessibilityValue:"))==
+       class_getInstanceMethod(owned_class,sel_registerName("setAccessibilityValue:"));
  /* AXValue writability is verified by the independent AXUIElement client.
   * NSAccessibilityElement does not implement the deprecated attribute selector. */
  const char *role=((const char*(*)(id,SEL))objc_msgSend)(send0(document,"accessibilityRole"),sel_registerName("UTF8String"));

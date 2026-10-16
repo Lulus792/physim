@@ -1,4 +1,31 @@
 /* Mixed prose, math, Unicode and link fixture; executable UI checks below. */
+#ifdef __APPLE__
+#include <objc/runtime.h>
+#include <CoreGraphics/CoreGraphics.h>
+#endif
+static bool documentation_inline_math_borders(SDL_Window *window,int *top,int *left,int *bottom,int *right) {
+#ifdef __APPLE__
+    /* SDL 3.2.30 Cocoa has no GetWindowBordersSize backend. Use the actual
+     * NSWindow's conversion; typed IMP calls handle CGRect returns on Intel. */
+    id native=SDL_GetPointerProperty(SDL_GetWindowProperties(window),SDL_PROP_WINDOW_COCOA_WINDOW_POINTER,NULL);
+    if(!native)return false;
+    SEL frame_selector=sel_registerName("frame"),content_selector=sel_registerName("contentRectForFrameRect:");
+    Method frame_method=class_getInstanceMethod(object_getClass(native),frame_selector);
+    Method content_method=class_getInstanceMethod(object_getClass(native),content_selector);
+    if(!frame_method || !content_method)return false;
+    CGRect frame=((CGRect(*)(id,SEL))method_getImplementation(frame_method))(native,frame_selector);
+    CGRect content=((CGRect(*)(id,SEL,CGRect))method_getImplementation(content_method))(native,content_selector,frame);
+    double edges[]={frame.origin.y+frame.size.height-content.origin.y-content.size.height,
+        content.origin.x-frame.origin.x,content.origin.y-frame.origin.y,
+        frame.origin.x+frame.size.width-content.origin.x-content.size.width};
+    int *out[]={top,left,bottom,right};
+    for(size_t i=0;i<4;i++)if(!isfinite(edges[i]) || edges[i]<0 || edges[i]>INT_MAX)return false;
+    for(size_t i=0;i<4;i++)*out[i]=(int)ceil(edges[i]);
+    return true;
+#else
+    return SDL_GetWindowBordersSize(window,top,left,bottom,right);
+#endif
+}
 static const char documentation_inline_math_fixture[]=
 "# Inline-Formeln\n\nVor θ🌍 $\\nu=\\frac\\mu\\rho$ danach.\n\nVor θ🌍 **$E=\\frac12mv^2$** danach.\n\nVor θ🌍 $\\mathbf v=L\\omega\\begin{pmatrix}\\cos\\theta\\\\\\sin\\theta\\\\0\\end{pmatrix}$ danach.\n\nVor θ🌍 $|a-b|\\le\\varepsilon_{\\mathrm{abs}}+\\varepsilon_{\\mathrm{rel}}\\cdot\\max(|a|,|b|)$ danach.\n\nVor θ🌍 $\\mathbf v(\\tau)=\\frac{\\mathbf B'(\\tau/T)}{T}$ danach.\n\nVor θ🌍 $T_0=2\\pi\\sqrt{\\frac{L}{g}}$ danach.\n\n$z=0$ $\\dot{y}=v$ $\\int c\\,\\mathrm{d}x$ $v=at$ $\\nu=\\frac\\mu\\rho$ $I=\\frac{V}{R}$ $\\omega=ck$ $\\frac{\\mathrm{d}\\mathbf{r}}{\\mathrm{d}t}=\\mathbf{v}$ $V=IR$ $\\alpha=\\frac{c}{2m}$ $C=mc$ $P=\\frac{V^2}{R}$ $\\mathbf p=m\\mathbf v$ $G=\\frac{kA}{L}$ $v_{\\infty}=\\frac{a}{\\lambda}$ $\\lambda=\\frac{c\\Delta t}{\\Delta x}$ $b=\\frac{fd}{d-f}$ $f=\\frac{V_{\\mathrm{sub}}}{V_K}$ $x_{\\mathrm{SI}}=xs$ $c=\\sqrt{\\frac{T}{\\mu}}$\n\nVor [$x=L\\sin\\theta$](units.md) danach.\n";
 static void documentation_inline_math_test_frame(app *a,int *stage,int *code,const char **capture) {
@@ -32,7 +59,7 @@ static void documentation_inline_math_test_frame(app *a,int *stage,int *code,con
             SDL_Rect usable={0};int top=0,left=0,bottom=0,right=0;
             int width=sample<24?1100:760,height=sample<24?800:540;
             okay=SDL_GetDisplayUsableBounds(SDL_GetDisplayForWindow(a->doc_window),&usable) &&
-                 SDL_GetWindowBordersSize(a->doc_window,&top,&left,&bottom,&right);
+                 documentation_inline_math_borders(a->doc_window,&top,&left,&bottom,&right);
             int available_width=usable.w-left-right,available_height=usable.h-top-bottom;
             okay &= available_width>=760 && available_height>=540;
             requested_width=width<available_width?width:available_width;

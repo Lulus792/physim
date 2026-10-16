@@ -128,7 +128,7 @@ static BOOL document_allowed(id object,SEL selector,SEL requested) {
  return strncmp(name,"setAccessibility",16) && strncmp(name,"accessibilityPerform",20);
 }
 static bool make_document_class(void) {
- if(document_class)return true;document_class=objc_allocateClassPair(element_class,"PhysimAccessibilityDocument",0);if(!document_class)return false;
+ if(document_class)return true;document_class=objc_allocateClassPair(owned_class,"PhysimAccessibilityDocument",0);if(!document_class)return false;
  Protocol *protocol=objc_getProtocol("NSAccessibilityNavigableStaticText");if(protocol)class_addProtocol(document_class,protocol);
  class_addMethod(document_class,sel_registerName("isAccessibilityElement"),(IMP)document_valid,PS_AX_BOOL "@:");
  class_addMethod(document_class,sel_registerName("isAccessibilityEnabled"),(IMP)document_enabled,PS_AX_BOOL "@:");
@@ -143,8 +143,7 @@ static bool make_document_class(void) {
  class_addMethod(document_class,sel_registerName("accessibilityVisibleChildren"),(IMP)document_visible_links,"@@:");
  class_addMethod(document_class,sel_registerName("isAccessibilityFocused"),(IMP)document_no_action,PS_AX_BOOL "@:");
  class_addMethod(document_class,sel_registerName("setAccessibilityFocused:"),(IMP)document_no_focus,"v@:" PS_AX_BOOL);
- /* Getter-only override lets AppKit advertise AXValue as read-only. The
-  * inherited control setter rejects document objects before resolving IDs. */
+ /* Getter-only document class has no custom control setter in its ancestry. */
  class_addMethod(document_class,sel_registerName("accessibilityPerformPress"),(IMP)document_no_action,PS_AX_BOOL "@:");
  class_addMethod(document_class,sel_registerName("accessibilityPerformIncrement"),(IMP)document_no_action,PS_AX_BOOL "@:");
  class_addMethod(document_class,sel_registerName("accessibilityPerformDecrement"),(IMP)document_no_action,PS_AX_BOOL "@:");

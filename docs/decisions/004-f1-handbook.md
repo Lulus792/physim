@@ -3073,3 +3073,61 @@ abgewiesen. Die bestehenden nativen Abschnittsprüfer bestätigen unter Windows
 und Linux jeweils 219 Abschnittslinks und 185 Seiten. Die Ausgaben liegen unter
 `build/native/catalog-doc-anchors-{windows,linux}.log`. Für die redaktionelle
 Änderung wurden keine neuen spiegelnden Tests eingeführt.
+
+## Zweite Ursache der Mac-Readonly-Metadaten und native Rahmenabfrage
+
+Der Mac-Lauf `38892172245` zur Revision `18958b1` ist auf beiden Architekturen
+beendet. Intel besteht 18/18 native Fälle in `run-k6l1ojmo` und 24/25 GUI-Fälle
+in `run-2myw1bup`; ARM besteht 18/18 in `run-20qy2vsq` und 24/25 in
+`run-o8s_aqnz`. Beide Joblogs wurden gelesen. Die neue In-Prozess-Probe stürzt
+nicht mehr an der entfernten veralteten Methode ab. Damit besitzen auch die
+fünf veröffentlichten C-Beispiele sowie die Laufidentitäts-, Ereignis- und
+Startzeitprogramme tatsächliche Mac-Ausführungen auf beiden Architekturen.
+
+Der Inline-Fall scheitert auf beiden Macs vor dem ersten Größenwechsel an
+`SDL_GetWindowBordersSize`: Die verwendete Cocoa-Implementierung unterstützt
+diese Abfrage nicht. Intel zeigt nutzbare 1920 × 970, Rahmenwerte null und ein
+unverändert 1080 × 780 großes Fenster; ARM ein unverändert 1024 × 656 großes
+Fenster. Das ist keine Abnahme der Zielgrößen. Der
+[SDL-3.2.30-Dispatcher](https://raw.githubusercontent.com/libsdl-org/SDL/release-3.2.30/src/video/SDL_video.c)
+initialisiert die Ränder mit null und liefert bei fehlendem Backend
+`SDL_Unsupported`. Der Korrekturkandidat benutzt auf macOS den von SDL
+veröffentlichten NSWindow-Zeiger und dessen
+[contentRectForFrameRect-Konvertierung](https://developer.apple.com/documentation/appkit/nswindow/contentrect(forframerect:)).
+Typisierte direkte IMP-Aufrufe berücksichtigen die CGRect-Rückgabe auf Intel
+und ARM. Endliche nichtnegative Rahmen werden vor der Größenplanung ermittelt;
+alle 48 Ansichten, 162 Formelzeichnungen und bisherigen Zeitlimits bleiben
+vorgeschrieben. Windows und Linux verwenden weiterhin ihre SDL-Abfrage.
+
+Die externe AX-Prüfung läuft jetzt trotz des gesonderten GUI-Fehlers. Auf
+beiden Macs besitzt der unabhängige Client bereits Zugriff, meldet den
+Dokumentwert aber weiterhin als schreibbar und scheitert strikt an Zeile 97.
+Der vollständig geladene Intel-Download `12043097638` wurde gegen SHA-256
+`b3a0f597c2f1b256b83a5826a9fae6080ce064e96636d8e6136a2bc784c0df1a`
+geprüft. Sein extern gelesener Text stimmt mit der Git-Quelle von `18958b1`
+samt zwei Schluss-LF überein: 486.670 UTF-8-Bytes und 481.208 UTF-16-Einheiten.
+Der Ende-Reveal wird wegen des Readonly-Fehlers noch nicht angefordert.
+`build/native/mac189-intel-review.json` hält diese Teilabnahme fest; das
+ARM-Artefakt `12043313733` wurde hier nicht zusätzlich heruntergeladen.
+
+Die erste Getter-Korrektur hatte zwar den eigenen Dokumentsetter entfernt,
+aber den schreibenden Control-Setter weiterhin als Vorfahrenmethode behalten.
+Der neue Kandidat teilt nur Speicherung und Lebensdauer über eine gemeinsame
+NSAccessibilityElement-Basisklasse. Lesedokument und Controlklasse sind nun
+Geschwister. Die Dokumentklasse überschreibt ihren Getter und erbt keinen
+custom Control-Wertsetter; ihre erlaubte Sichtbarmach-Anforderung bleibt
+vorhanden. Die native Probe prüft diese Vererbung sowie den Schutz gegen einen
+ausdrücklich direkt aufgerufenen Control-Handler mit kollidierender Button-
+oder Slider-ID. Die vorherige Annahme, Getter-Override allein reiche in der
+alten Control-Vererbung, ist durch den externen Lauf widerlegt.
+[Apples Getter-/Setter-Vertrag](https://developer.apple.com/documentation/appkit/nsaccessibilityprotocol)
+begründet den neuen Ansatz, bestätigt aber noch nicht dessen tatsächliche
+AX-Metadaten. Der unabhängige Client bleibt unverändert streng.
+
+Windows MSVC/ASan besteht native Accessibility, den unabhängigen Feldclient
+und Inline-Formeln 3/3 in `run-gopggh3c`; Linux GCC/ASan/UBSan besteht den
+unabhängigen AT-SPI-Feldclient und Inline-Formeln 2/2 in `run-jwid7el9`.
+Diese Läufe prüfen die jeweiligen Plattformzweige und gemeinsame Nachbarn.
+Die neue AppKit-Rahmenabfrage, Klassenlebensdauer und externe Readonly-Angabe
+benötigen ihre tatsächliche nächste Mac-Ausführung. Es wird keine erfolgreiche
+Mac-Korrektur oder höhere Gesamtwertung vorweggenommen.
