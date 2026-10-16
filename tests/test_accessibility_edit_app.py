@@ -42,7 +42,7 @@ try:
     probes.append(dict(action='keyboard-return-focus',field=name,exit_code=result.returncode,stdout=result.stdout.decode('utf-8'),stderr=result.stderr.decode('utf-8')))
     assert result.returncode==0,probes[-1]
     (args.work/'reader'/'return-focus-checked').write_text('ready',encoding='utf-8')
-    for phase,name,marker in [('PREVIOUS','Vorheriger','previous-focus-checked'),('NEXT','Nächster','next-focus-checked'),('PREVIOUS RETURN','Vorheriger','previous-return-focus-checked')]:
+    for phase,name,marker in [('PREVIOUS','Vorheriger Treffer','previous-focus-checked'),('NEXT','Nächster Treffer','next-focus-checked'),('PREVIOUS RETURN','Vorheriger Treffer','previous-return-focus-checked')]:
         wait('EDIT READY '+phase)
         result=subprocess.run([str(args.probe),str(process.pid),'focused-button',name],capture_output=True,timeout=10)
         probes.append(dict(action='keyboard-button-focus',phase=phase,button=name,exit_code=result.returncode,stdout=result.stdout.decode('utf-8'),stderr=result.stderr.decode('utf-8')))

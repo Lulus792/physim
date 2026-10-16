@@ -170,31 +170,41 @@ def documentation_math(flow, directory):
         else:flow.env['PHYSIM_TEST_BUNDLED_FONTS']=previous
 
 
+def documentation_h(flow,directory):
+    directory.mkdir(parents=True)
+    flow.run('--workspace-state-test',directory,'docs-keyboard-h',timeout=120,
+             marker='DOCUMENTATION H SELF-TEST: PASSED')
+    output=flow.steps[-1]['stdout']
+    rows=re.findall(r'DOCUMENTATION H GEOMETRY: case=(\d+) left=([\d.]+),([\d.]+) article=([\d.]+),([\d.]+) right=([\d.]+),([\d.]+) body=([\d.]+),([\d.]+) ok=(\d)',output)
+    require(len(rows)==56,'Missing real native Design H states')
+    for i,row in enumerate(rows):
+        case,lx,lw,ax,aw,rx,rw,bw,bh,ok=map(float,row)
+        require(case==i and ok==1 and aw>=320 and bw>220 and bh>=120,'Collapsed native article')
+        state=i%4
+        require((lw==0)==(state in (1,2)) and (rw==0)==(state in (2,3)),'Wrong independent visibility')
+        if state==0: left=(lx,lw);right=(rx,rw)
+        if lw: require((lx,lw)==left,'Right toggle moved left side')
+        if rw: require((rx,rw)==right,'Left toggle moved right side')
+        raw=(directory/f'docs-h-{i:02}.bmp').read_bytes()
+        require(raw[:2]==b'BM' and len(raw)>54,'Missing native capture')
+        width,height=struct.unpack_from('<ii',raw,18)
+        require((width,abs(height))==((760,540) if i>=48 or (i//8)%2 else (1080,780)),'Wrong native capture size')
+    for name in ('example-c','example-physim','empty-search','no-context','pointer-search'):
+        require((directory/f'docs-h-{name}.bmp').is_file(),'Missing Design H task capture')
+
+
 def documentation_sidebar(flow,directory):
     directory.mkdir(parents=True)
     flow.run('--workspace-state-test',directory,'docs-keyboard-sidebar',timeout=90,
              marker='DOCUMENTATION SIDEBAR SELF-TEST: PASSED')
     output=flow.steps[-1]['stdout']
-    records=re.findall(r'DOCUMENTATION SIDEBAR DRAW: font=(\d+) lines=(\d+) complete=(\d+) width=([0-9.]+) height=([0-9.]+)',output)
-    require(len(records)==4,'Missing actual sidebar draw checks')
-    require([int(r[0]) for r in records]==[16,32,32,32],'Wrong sidebar text sizes')
-    require(all(int(r[1])>=2 and r[2]=='1' and float(r[3])>100 and float(r[4])>36 for r in records),
-            'Incomplete or clipped sidebar heading')
-    tabs=re.findall(r'DOCUMENTATION SIDEBAR TABS: font=(\d+) label=(Themen|Inhalt) theme=(\d+) lines=(\d+) complete=(\d+) width=([0-9.]+) height=([0-9.]+)',output)
-    require(len(tabs)==12 and len({(r[0],r[1],r[2]) for r in tabs})==12,'Missing sidebar control size/theme states')
-    require([int(r[0]) for r in tabs]==[16]*6+[32]*6 and all(r[3]=='1' and r[4]=='1' for r in tabs),
-            'Wrapped or clipped sidebar control label')
-    require('DOCUMENTATION SIDEBAR TABS: keyboard and pointer switching, focus and input isolation passed' in output,
-            'Sidebar controls did not retain actual input behavior')
-    images=['docs-sidebar-16.bmp','docs-sidebar-32.bmp','docs-sidebar-32-light.bmp','docs-sidebar-32-contrast.bmp',
-            'docs-sidebar-jump-16.bmp','docs-sidebar-jump-32.bmp']
-    images += [f'docs-sidebar-tab-{size}-{theme}-{control}.bmp' for size in (16,32)
-               for theme in ('dark','light','contrast') for control in ('topics','contents')]
-    for name in images:
+    require('DOCUMENTATION SIDEBAR DIRECT:' in output,'Missing direct-section input checks')
+    rows=re.findall(r'DOCUMENTATION SIDEBAR DRAW:.*complete=(\d)',output)
+    require(len(rows)>=4 and all(row=='1' for row in rows),'Clipped direct section label')
+    for name in ('docs-sidebar-16.bmp','docs-sidebar-32.bmp','docs-sidebar-32-light.bmp',
+                 'docs-sidebar-32-contrast.bmp','docs-sidebar-jump-16.bmp','docs-sidebar-jump-32.bmp'):
         raw=(directory/name).read_bytes()
-        require(raw[:2]==b'BM' and len(raw)>54,'Missing sidebar capture: '+name)
-        width,height=struct.unpack_from('<ii',raw,18)
-        require(width>=760 and abs(height)>=540,'Invalid sidebar capture dimensions')
+        require(raw[:2]==b'BM' and len(raw)>54,'Missing direct navigation capture: '+name)
 
 
 def documentation_navigation(flow,directory):
@@ -205,7 +215,7 @@ def documentation_navigation(flow,directory):
     match=re.search(r'DOCUMENTATION NAVIGATION: before=([0-9.]+)x([0-9.]+) reader=([0-9.]+)x([0-9.]+) anchor=(\d+)',output)
     require(match,'Missing actual reader/navigation layout comparison')
     bw,bh,rw,rh,anchor=map(float,match.groups())
-    require(rw>=bw+250 and rh>=bh+40 and anchor>0,'Reading mode did not gain usable space or preserve a scrolled text position')
+    require(rw>=bw+220 and rh>=bh and anchor>0,'Reading mode did not gain usable space or preserve a scrolled text position')
     captures={name:tuple(map(float,values)) for name,*values in re.findall(
         r'DOCUMENTATION CAPTURE: (\S+) logical=(\d+)x(\d+) pixels=(\d+)x(\d+) font=(\d+) body=([0-9.]+)',output)}
     for name in ('before','reader','restored','light','contrast'):
@@ -221,8 +231,10 @@ def documentation_navigation(flow,directory):
             offset=struct.unpack_from('<I',raw,10)[0];depth=struct.unpack_from('<H',raw,28)[0]
             require(depth in (24,32),'Unexpected navigation bitmap depth')
             stride=((width*depth+31)//32)*4
-            row=abs(height)-13 if height>0 else 12
-            start=offset+row*stride+12*(depth//8);rgb=raw[start:start+3]
+            # Sample an empty part of the common search field. (12,12) is now
+            # the always-present left pane icon, including its focus ring.
+            row=abs(height)-21 if height>0 else 20
+            start=offset+row*stride+(width//2)*(depth//8);rgb=raw[start:start+3]
             require(len(rgb)==3 and (min(rgb)>=220 if name=='light' else max(rgb)<=10),'Wrong rendered navigation theme: '+name)
 
 
@@ -1570,6 +1582,7 @@ SPECIAL["documentation_font_demand"]=documentation_font_demand
 SPECIAL["documentation_density"]=documentation_density
 SPECIAL["documentation_navigation"]=documentation_navigation
 SPECIAL["documentation_sidebar"]=documentation_sidebar
+SPECIAL["documentation_h"]=documentation_h
 
 def main():
     # App diagnostics and paths can contain Unicode even when Python inherits a

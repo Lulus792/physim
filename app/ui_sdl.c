@@ -393,6 +393,20 @@ bool nk_sdl_accessibility_is_focused(struct nk_context *ctx,const char *group,co
  bool focused=node && node->focused && !strcmp(node->label,label) && (!group || (parent && !strcmp(parent->label,group)));
  SDL_UnlockMutex(sdl->accessibility_mutex);return focused;
 }
+bool nk_sdl_accessibility_choice_state(struct nk_context *ctx,const char *group,const char *label,bool *selected) {
+ if(!ctx || !ctx->userdata.ptr || !group || !label || !selected)return false;
+ struct nk_sdl *sdl=ctx->userdata.ptr;bool found=false;*selected=false;
+ if(!sdl->accessibility)return false;
+ SDL_LockMutex(sdl->accessibility_mutex);const ps_a11y_model *model=sdl->accessibility;
+ if(!model->suspended)for(size_t i=0;i<model->count;i++) {
+  const ps_a11y_node *node=&model->nodes[i],*parent=ps_a11y_find(model,node->parent);
+  if(node->role==PS_A11Y_RADIO && node->enabled && node->focusable && parent &&
+     parent->role==PS_A11Y_RADIO_GROUP && !strcmp(parent->label,group) && !strcmp(node->label,label)) {
+   *selected=node->checked;found=true;break;
+  }
+ }
+ SDL_UnlockMutex(sdl->accessibility_mutex);return found;
+}
 bool nk_sdl_accessibility_has_focus(struct nk_context *ctx) {
  if(!ctx || !ctx->userdata.ptr)return false;
  struct nk_sdl *sdl=ctx->userdata.ptr;

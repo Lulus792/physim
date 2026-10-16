@@ -260,14 +260,20 @@ typedef struct {
     float doc_test_density; /* diagnostic raster-density override; zero in normal operation */
     bool doc_full_font_inventory; /* Actual all-size coverage probe, not normal startup. */
     struct nk_allocator *doc_test_font_allocator; /* Fault probe; null in normal operation. */
-    int doc_topic, doc_match, doc_jump_block,doc_anchor_heading;
+    int doc_topic, doc_loaded_track, doc_match, doc_jump_block,doc_anchor_heading;
     nk_uint doc_scroll_x, doc_scroll_y;
     float doc_scroll_adjustment;
     char doc_query[128], doc_last_query[128], doc_error[160];
     bool doc_search_focus, doc_search_active, doc_move_match, doc_reset_sidebar,doc_scroll_pending;
     bool doc_keyboard,doc_focus_reveal,doc_filter_focus,doc_navigation_hidden;
+    bool doc_context_hidden,doc_context_example;
+    nk_uint doc_context_scroll_x[2],doc_context_scroll_y[2];
+    struct nk_rect doc_left_slot,doc_article_slot,doc_right_slot,doc_context_toggle_bounds;
+    char *doc_context_source;
+    int doc_context_source_topic,doc_context_source_track;
     int doc_focus;
     struct nk_rect doc_focus_bounds,doc_anchor_bounds,doc_body_bounds,doc_navigation_bounds;
+    struct nk_rect doc_filter_bounds,doc_search_bounds,doc_first_result_bounds;
     char doc_filter[128], doc_last_filter[128];
     bool doc_filter_active, doc_contents;
     int doc_group, doc_track;
@@ -2800,6 +2806,7 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
 // clang-format off
 static bool documentation_window_open(app *a);
 static bool documentation_fonts_prepare(app *a,unsigned size,unsigned code_size);
+static bool documentation_fonts_prepare_sizes(app *a,unsigned size,unsigned code_size,unsigned ui_size,unsigned editor_size);
 #include "documentation_ui.inc"
 #include "api_reference_ui.inc"
 #include "report_ui.inc"
@@ -3718,6 +3725,15 @@ int main(int argc, char **argv) {
                 if (e.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED)
                     documentation_window_hide(a);
                 else if (a->doc_visible) {
+                    if(e.type==SDL_EVENT_MOUSE_BUTTON_DOWN) {
+                        float x=e.button.x,y=e.button.y;
+                        struct nk_rect f=a->doc_filter_bounds,s=a->doc_search_bounds;
+                        bool filter_hit=x>=f.x && x<f.x+f.w && y>=f.y && y<f.y+f.h;
+                        bool search_hit=x>=s.x && x<s.x+s.w && y>=s.y && y<s.y+s.h;
+                        if((a->doc_filter_active && !filter_hit) || (a->doc_search_active && !search_hit))
+                            documentation_finish_edits(a);
+                        a->doc_keyboard=a->doc_focus_reveal=a->doc_filter_focus=a->doc_search_focus=false;
+                    }
                     if (e.type == SDL_EVENT_KEY_DOWN && documentation_keyboard_key(a,&e.key))continue;
                     if (e.type == SDL_EVENT_KEY_DOWN && !e.key.repeat) {
                         if (e.key.key == SDLK_F && (e.key.mod & PS_UI_COMMAND_MOD)) {
@@ -4583,6 +4599,7 @@ int main(int argc, char **argv) {
                     exit_code = 1;
                 documentation_link(a, "../math.md");
                 if (a->doc_topic != 30) exit_code = 1;
+                documentation_language(a,1);
                 snprintf(a->doc_filter, sizeof a->doc_filter, "ps_sweep_spheres");
                 documentation_filter(a);
                 int mechanics_topic = -1, collision_reference = -1;
@@ -5036,6 +5053,9 @@ int main(int argc, char **argv) {
                 test_stage, a->status, a->tab, a->batch_sweep, a->batch_sweep_ready,
                 a->built, idle(a), a->batch_options.runs, a->batch_start_bounds.x,
                 a->batch_start_bounds.y, a->batch_start_bounds.w, a->batch_start_bounds.h);
+    /* Publish completed diagnostics before native UI/driver teardown. In
+     * particular, independent clients must receive the final workflow marker. */
+    fflush(stdout);fflush(stderr);
     ps_text_document_destroy(&a->project_manifest_snapshot);
     nk_textedit_free(&a->experiment);
     nk_textedit_free(&a->analysis);

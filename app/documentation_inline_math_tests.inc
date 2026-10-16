@@ -74,7 +74,9 @@ static void documentation_inline_math_test_frame(app *a,int *stage,int *code,con
             sample,requested_width,requested_height,actual_width,actual_height,SDL_GetError());
         if(sample%8==0){ps_preferences p=a->preferences;p.theme=(sample/8)%3;preferences_apply(a,&p);++themes;}
         okay &= a->preferences.theme==(sample/8)%3;
-        a->doc_navigation_hidden=sample%8==6;frames=0;break;
+        /* The twenty-formula simultaneous-cache sample needs the full reading
+         * width. Design H has two independent sides, so close both for it. */
+        a->doc_navigation_hidden=a->doc_context_hidden=sample%8==6;frames=0;break;
     }
     case 3:
         /* A completed layout is the prerequisite, not a fixed number of

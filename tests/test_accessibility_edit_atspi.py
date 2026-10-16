@@ -62,7 +62,7 @@ try:
     node=wait(lambda:field('Aktuelles Dokument durchsuchen'),'local field after Ctrl+F')
     wait(lambda:node.getState().contains(pyatspi.STATE_FOCUSED),'native focus after Ctrl+F')
     (a.work/'reader/return-focus-checked').write_text('ready',encoding='utf-8')
-    for phase,name,marker in [('PREVIOUS','Vorheriger','previous-focus-checked'),('NEXT','Nächster','next-focus-checked'),('PREVIOUS RETURN','Vorheriger','previous-return-focus-checked')]:
+    for phase,name,marker in [('PREVIOUS','Vorheriger Treffer','previous-focus-checked'),('NEXT','Nächster Treffer','next-focus-checked'),('PREVIOUS RETURN','Vorheriger Treffer','previous-return-focus-checked')]:
         wait(lambda:'EDIT READY '+phase in (a.work/'app.stdout').read_text(),'keyboard button '+phase)
         node=wait(lambda:field(name,pyatspi.ROLE_PUSH_BUTTON),'native button '+name)
         wait(lambda:node.getState().contains(pyatspi.STATE_FOCUSED),'button focus '+phase)

@@ -630,24 +630,33 @@ Im Texteditor gelten außerdem die plattformüblichen Sprungbefehle:
 
 Mit zusätzlichem **Shift** wird der Text bis zum Ziel ausgewählt.
 
-Im Hilfefenster sucht Ctrl+F nur im Dokument, die linke Suche in allen Inhalten.
-Tab/Shift+Tab wechseln zwischen Lernwegen, Themen, Inhaltsverzeichnis, Suche,
-Navigation und den Aktionen im Text. Enter oder Leertaste öffnet einen Link oder
-kopiert einen Codeblock. Im Lesebereich scrollen Pfeiltasten und PageUp/PageDown;
-Home führt zum Anfang. Der Rahmen zeigt den Tastaturfokus.
+Im Hilfefenster sucht **Ctrl+F** (macOS **Cmd+F**) nur im Artikel. Die Suche
+im gemeinsamen Kopf durchsucht den gewählten C- oder Physim-Lernweg, seine
+Artikel, Referenzen und registrierten Quellen. Die einmalige Sprachwahl im Kopf
+gilt auch für Anleitungen und den Beispielcode rechts. Gemeinsame Physikerklärungen
+bleiben erhalten. Ein Sprachwechsel ordnet passende Anleitungen einander zu;
+ohne Gegenstück führt er zum Einstieg des gewählten Lernwegs.
 
-Der Schalter **Navigation einblenden / ausblenden** oben im Leser oder
-**Ctrl+Shift+B** (macOS **Cmd+Shift+B**) schaltet die linke Navigation um.
-Ohne Navigation nutzt der Artikel die volle Fensterbreite; bei großer Schrift
-werden zusätzlich die Werkzeuge in einer Zeile zusammengefasst. Suchbegriffe
-und die sichtbare Textstelle bleiben beim Umbruch erhalten. Ausgeblendete
-Lernwege, Themen und die globale Suche werden beim Tab-Wechsel übersprungen;
-der Navigationsschalter bleibt erreichbar. Erneutes Öffnen von F1 erhält diese
-Ansicht während derselben Sitzung.
+Links stehen Themen und die Abschnittssprünge des aktuellen Artikels direkt
+zusammen. Rechts zeigen **Modell** und **Beispiel** den passenden Kontext mit
+Ausgangswerten, Einheiten beziehungsweise vollständigem kopierbarem Quellcode.
+Artikel ohne hinterlegte Kontextdaten zeigen einen Leerzustand. Die rechten
+Tabs bleiben beim Scrollen erreichbar; beide Tabs besitzen eigene Scrollpositionen.
+
+Das kleine linke Icon **Themennavigation einblenden / ausblenden** oder
+**Ctrl+Shift+B** (macOS **Cmd+Shift+B**) schaltet ausschließlich die linke Seite.
+Das rechte Icon **Modellbereich einblenden / ausblenden** oder **Ctrl+Shift+R**
+(macOS **Cmd+Shift+R**) schaltet ausschließlich die rechte Seite. Der jeweils
+andere Bereich behält seine Position und Breite. Beide geschlossenen Seiten
+geben dem Artikel die volle verfügbare Lesefläche mit begrenzter Zeilenlänge.
+Suchbegriffe, Lesestelle, seitliche Scrollpositionen und der rechte Tab bleiben
+beim Schließen erhalten. Die beiden Icons, die Sprachwahl und die globale Suche
+bleiben im Kopf erreichbar. Ausgeblendete Seiteninhalte werden bei Tastatur und
+nativer Accessibility ausgelassen. F1 erhält die Ansicht innerhalb derselben Sitzung.
 
 **Zurück / Alt+Pfeil links** und **Vorwärts / Alt+Pfeil rechts** folgen dem
 Verlauf mit bis zu 64 besuchten Seiten und Abschnittszielen. Dabei bleiben
-Leseposition, Suchbegriff, Inhaltsansicht und Sprachweg erhalten. Eine neue
+Leseposition, Suchbegriff und Sprachweg erhalten. Eine neue
 Navigation nach Zurück verwirft nur den bisherigen Vorwärtszweig.
 Die Schaltflächen **Minus** und **Plus** oder **Ctrl/Cmd + Plus/Minus** ändern
 die Leseschrift zwischen 16 und 32 Pixeln. Ein Klick auf die angezeigte
@@ -726,13 +735,14 @@ hier nicht geprüft.
 
 ### Handbuch per Tastatur
 
-Im Handbuch beginnt Tab beim C-Lernweg; Shift+Tab führt rückwärts. Der Fokuspfad
-umfasst beide Lernwege, Themen/Inhalt, globale Suche und Kategorie, die
-angezeigten Themen oder Überschriften, Zurück/Start/Arbeitsbereich, Dokumentensuche,
-Treffersteuerung, Lesebereich sowie Links und Codekopieren. Der sichtbare Rahmen
-scrollt zum fokussierten Eintrag. Enter oder Leertaste aktiviert eine Auswahl;
-Pfeile wechseln die Kategorie. In Suchfeldern funktionieren die üblichen
-Texttasten; Tab schließt die Eingabe ab, ohne das letzte Zeichen zu verlieren.
+Im Handbuch beginnt Tab beim linken Paneel-Icon; Shift+Tab führt rückwärts.
+Es folgen die globale C-/Physim-Wahl, die globale Suche, das rechte Paneel-Icon,
+die sichtbaren Abschnittssprünge und Themen, Verlauf/Start/Arbeitsbereich,
+Schriftgröße, Artikelsuche, Treffersteuerung, Lesebereich und Textaktionen sowie
+die sichtbaren rechten Tabs und Codekopieren. Der Rahmen scrollt zum fokussierten
+Eintrag. Enter oder Leertaste aktiviert eine Auswahl; in den rechten Tabs wechseln
+auch Links/Rechts den Tab. Suchfelder unterstützen die üblichen Texttasten.
+Tab schließt die Eingabe ab, ohne das letzte Zeichen zu verlieren.
 Im Lesebereich scrollen Pfeile und Bild auf/ab; Home und End springen zum Anfang
 und Ende. Ctrl+F (macOS Cmd+F) fokussiert die Dokumentensuche. Escape schließt
 das Handbuch. Ein Mausklick setzt die Zeigerbedienung fort.

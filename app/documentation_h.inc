@@ -1,0 +1,294 @@
+/* Design H: common header, direct navigation and article-specific context.
+ * This file uses the viewer's fonts/GL resources and semantic palette only. */
+static const struct nk_user_font *documentation_chrome_font(app *a) {
+    const struct nk_user_font *font=a->doc_ui_fonts[(a->preferences.ui_size-16)/2];
+    return font?font:a->doc_font_ui;
+}
+static void documentation_h_label(app *a,const char *text,bool muted) {
+    struct nk_context *ui=a->doc_ui;const struct nk_user_font *font=ui->style.font;
+    nk_layout_row_dynamic(ui,documentation_height(font,text,strlen(text),nk_window_get_content_region(ui).w-8)+8,1);
+    struct nk_rect r;enum nk_widget_layout_states visible=nk_widget(&r,ui);
+    ps_ui_accessibility_label(ui,r,text);
+    if(visible==NK_WIDGET_INVALID)return;
+    size_t at=0,n=strlen(text);float y=r.y+4;
+    do {
+        size_t length,used=documentation_line(font,text+at,n-at,r.w-8,&length);
+        nk_draw_text(nk_window_get_canvas(ui),nk_rect(r.x+4,y,r.w-8,font->height+6),text+at,(int)length,
+            font,nk_rgba(0,0,0,0),muted?UI_COLOR(muted):UI_COLOR(text));
+        at+=used;y+=font->height+6;
+    }while(at<n);
+}
+static bool documentation_pane_button(app *a,bool right) {
+    struct nk_context *ui=a->doc_ui;struct nk_rect r;
+    if(nk_widget(&r,ui)==NK_WIDGET_INVALID)return false;
+    bool hidden=right?a->doc_context_hidden:a->doc_navigation_hidden;
+    const char *name=right?(hidden?"Modellbereich einblenden (geschlossen)":"Modellbereich ausblenden (geöffnet)"):
+        (hidden?"Themennavigation einblenden (geschlossen)":"Themennavigation ausblenden (geöffnet)");
+    bool pressed=ps_ui_button_at(ui,r,name,!hidden);
+    struct nk_command_buffer *c=nk_window_get_canvas(ui);
+    if(nk_input_is_mouse_hovering_rect(&ui->input,r)) {
+        nk_fill_rect(c,r,5,UI_COLOR(button_hover));nk_tooltip(ui,name);
+    }
+    float x=r.x+(r.w-20)/2,y=r.y+(r.h-18)/2;
+    nk_stroke_rect(c,nk_rect(x,y,20,18),2,1.5f,UI_COLOR(text));
+    float line=x+(right?14:6);
+    nk_stroke_line(c,line,y,line,y+18,1.5f,UI_COLOR(text));
+    if(!hidden)nk_fill_rect(c,nk_rect(right?line+2:x+2,y+3,3,12),0,UI_COLOR(accent));
+    if(right)a->doc_context_toggle_bounds=r;else a->doc_navigation_bounds=r;
+    documentation_focus_draw(a,right?DOC_CONTEXT:DOC_NAVIGATION,r,false);
+    return pressed;
+}
+/* Keep the segmented appearance while publishing the existing native radio
+ * group contract (plain Nuklear selectables have no accessibility adapter). */
+static bool documentation_segment(app *a,const char *group,const char *label,bool selected) {
+    struct nk_context *ui=a->doc_ui;struct nk_rect r=nk_widget_bounds(ui);
+    bool value=ps_ui_option_label(ui,group,label,selected);
+    bool hover=nk_input_is_mouse_hovering_rect(&ui->input,r);
+    struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+    nk_fill_rect(canvas,r,0,selected?UI_COLOR(selection_active):hover?UI_COLOR(button_hover):UI_COLOR(button));
+    const struct nk_user_font *font=ui->style.font;
+    float width=documentation_text_width(font,label,strlen(label));
+    nk_draw_text(canvas,nk_rect(r.x+(r.w-width)/2,r.y+(r.h-font->height)/2,width+1,font->height),
+        label,(int)strlen(label),font,nk_rgba(0,0,0,0),UI_COLOR(text));
+    bool pressed=!ui->current->widgets_disabled && !(ui->current->layout->flags&NK_WINDOW_ROM) &&
+        hover && nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT);
+    return (!selected && value) || pressed;
+}
+static void documentation_header(app *a) {
+    struct nk_context *ui=a->doc_ui;float h=fmaxf(32,ui->style.font->height+12);
+    float width=nk_window_get_content_region(ui).w;
+    const char *brand_text=width<850?"PHYSIM":"PHYSIM Handbuch";
+    float brand=documentation_text_width(ui->style.font,brand_text,strlen(brand_text))+12;
+    float physim=fmaxf(76,documentation_text_width(ui->style.font,"Physim",6)+20);
+    float cwidth=fmaxf(38,documentation_text_width(ui->style.font,"C",1)+20);
+    float search=fmaxf(100,width-brand-physim-cwidth-64-5*ui->style.window.spacing.x);
+    nk_layout_row_begin(ui,NK_STATIC,h,6);
+    nk_layout_row_push(ui,32);if(documentation_pane_button(a,false))documentation_navigation_toggle(a);
+    nk_layout_row_push(ui,brand);nk_label(ui,brand_text,NK_TEXT_LEFT);
+    nk_layout_row_push(ui,cwidth);a->doc_track_bounds[0]=nk_widget_bounds(ui);
+    if(documentation_segment(a,"Dokumentationssprache","C",a->doc_track!=2))documentation_language(a,1);
+    documentation_focus_draw(a,DOC_C,a->doc_track_bounds[0],false);
+    if(a->doc_track!=2)nk_stroke_line(nk_window_get_canvas(ui),a->doc_track_bounds[0].x,a->doc_track_bounds[0].y+h-2,
+        a->doc_track_bounds[0].x+cwidth,a->doc_track_bounds[0].y+h-2,2,UI_COLOR(accent));
+    nk_layout_row_push(ui,physim);a->doc_track_bounds[1]=nk_widget_bounds(ui);
+    if(documentation_segment(a,"Dokumentationssprache","Physim",a->doc_track==2))documentation_language(a,2);
+    documentation_focus_draw(a,DOC_PHYSIM,a->doc_track_bounds[1],false);
+    if(a->doc_track==2)nk_stroke_line(nk_window_get_canvas(ui),a->doc_track_bounds[1].x,a->doc_track_bounds[1].y+h-2,
+        a->doc_track_bounds[1].x+physim,a->doc_track_bounds[1].y+h-2,2,UI_COLOR(accent));
+    nk_layout_row_push(ui,search);
+    if(a->doc_keyboard && a->doc_focus!=DOC_FILTER)nk_edit_unfocus(ui);
+    if(a->doc_filter_focus || (a->doc_keyboard && a->doc_focus==DOC_FILTER && !ui->current->edit.active)) {
+        nk_edit_focus(ui,NK_EDIT_ALWAYS_INSERT_MODE);a->doc_filter_focus=false;
+    }
+    struct nk_rect bounds=nk_widget_bounds(ui);a->doc_filter_bounds=bounds;
+    nk_flags edit=nk_sdl_edit_named(ui,"Alle Inhalte durchsuchen",NK_EDIT_FIELD,a->doc_filter,sizeof a->doc_filter,nk_filter_default);
+    if(edit&PS_UI_EDIT_NATIVE_FOCUS){a->doc_focus=DOC_FILTER;a->doc_keyboard=true;}
+    a->doc_filter_active=(edit&NK_EDIT_ACTIVE)!=0;
+    if(a->doc_filter_active)a->doc_search_active=false;
+    documentation_focus_draw(a,DOC_FILTER,bounds,false);
+    if(!a->doc_filter[0] && !a->doc_filter_active) {
+        const char *placeholder=a->doc_track==2?"Physim-Handbuch durchsuchen …":"C-Handbuch durchsuchen …";
+        nk_draw_text(nk_window_get_canvas(ui),nk_rect(bounds.x+8,bounds.y+6,bounds.w-16,bounds.h-12),placeholder,
+            (int)strlen(placeholder),ui->style.font,nk_rgba(0,0,0,0),UI_COLOR(muted));
+    }
+    if(strcmp(a->doc_filter,a->doc_last_filter)) {
+        documentation_filter(a);a->doc_navigation_hidden=false;a->doc_reset_sidebar=true;
+    }
+    nk_layout_row_push(ui,32);if(documentation_pane_button(a,true))documentation_context_toggle(a);
+    nk_layout_row_end(ui);
+}
+static void documentation_sections(app *a) {
+    if(!a->documentation)return;
+    int current=-1;
+    for(size_t i=0;i<a->documentation->count;i++) {
+        const ps_doc_block *b=&a->documentation->blocks[i];
+        if(documentation_contents_heading(a,b) && b->level>1 && b->hit[2]>0 && b->hit[1]<=a->doc_body_bounds.y+16)current=(int)i;
+    }
+    documentation_h_label(a,"IN DIESEM ARTIKEL",true);
+    for(size_t i=0;i<a->documentation->count;i++) {
+        ps_doc_block *b=&a->documentation->blocks[i];
+        if(!documentation_contents_heading(a,b) || b->level==1)continue;
+        const char *label=a->documentation->text+b->text;
+        nk_layout_row_dynamic(a->doc_ui,documentation_height(a->doc_ui->style.font,label,strlen(label),
+            nk_window_get_content_region(a->doc_ui).w-20)+12,1);
+        struct nk_rect bounds=nk_widget_bounds(a->doc_ui);
+        if(documentation_topic_button(a,label,current==(int)i))a->doc_jump_block=(int)i;
+        documentation_focus_draw(a,DOC_HEADING+(int)i,bounds,false);
+    }
+}
+static void documentation_sidebar(app *a) {
+    struct nk_context *ui=a->doc_ui;
+    a->doc_first_result_bounds=nk_rect(0,0,0,0);
+    documentation_h_label(a,"THEMEN & ABSCHNITTE",true);
+    if(a->doc_filter[0])documentation_h_label(a,"SUCHERGEBNISSE",true);
+    else {
+        /* Current article and all its direct jumps precede the complete catalogue. */
+        const char *title=documentation_topics[a->doc_topic].title;
+        nk_layout_row_dynamic(ui,documentation_height(ui->style.font,title,strlen(title),nk_window_get_content_region(ui).w-20)+14,1);
+        struct nk_rect bounds=nk_widget_bounds(ui);
+        if(documentation_topic_button(a,title,true))open_documentation(a,a->doc_topic);
+        documentation_focus_draw(a,DOC_TOPIC+a->doc_topic,bounds,false);
+        documentation_sections(a);
+    }
+    const char *groups[]={"APP & LERNEN","FACHTHEMEN","REFERENZ","PROJEKTTECHNIK","QUELLEN"};
+    int order[DOCUMENTATION_TOPIC_COUNT];unsigned count=documentation_topic_order(a,order);
+    for(int group=0;group<(a->doc_filter[0]?1:5);group++) {
+        bool labeled=false;
+        for(unsigned n=0;n<count;n++) {
+            int topic=order[n];
+            if(!a->doc_filter[0] && topic==a->doc_topic)continue;
+            if(!a->doc_filter[0] && documentation_group(topic)!=group)continue;
+            if(!labeled && !a->doc_filter[0]){documentation_h_label(a,groups[group],true);labeled=true;}
+            const char *title=documentation_topics[topic].title;
+            nk_layout_row_dynamic(ui,documentation_height(ui->style.font,title,strlen(title),nk_window_get_content_region(ui).w-20)+14,1);
+            struct nk_rect bounds=nk_widget_bounds(ui);
+            if(a->doc_filter[0] && n==0)a->doc_first_result_bounds=bounds;
+            if(documentation_topic_button(a,title,topic==a->doc_topic)) {
+                open_documentation(a,topic);
+                if(a->doc_filter[0]){snprintf(a->doc_query,sizeof a->doc_query,"%s",a->doc_filter);a->doc_move_match=true;}
+            }
+            documentation_focus_draw(a,DOC_TOPIC+topic,bounds,false);
+        }
+    }
+    if(!count)documentation_h_label(a,"Keine Treffer in diesem Sprachlernweg. Anderen Begriff suchen oder die Suche leeren.",true);
+}
+typedef struct {const char *article,*title,*values,*hint,*source[2];int diagram;} documentation_context;
+static const documentation_context documentation_contexts[]={
+    {"docs/pendulum-tutorial.md","Ideales Pendel · Vakuum",
+     "Masse: 1 kg\nLänge: 1,5 m\nStartwinkel: 0,45 rad\nWinkeltempo: 0 rad/s\nSchwerkraft: 9,80665 m/s²",
+     "Ohne Widerstand bleibt die mechanische Energie konstant. Vergleiche den Energiefehler der Integratoren.",
+     {"examples/documentation/pendulum_main.c","examples/documentation/pendulum_main.phys"},1},
+    {"docs/projectile-tutorial.md","Wurfparabel · Vakuum",
+     "Masse: 1 kg\nStart: (−2; 0) m\nGeschwindigkeit: (2; 5) m/s\nSchwerkraft: 9,80665 m/s²",
+     "Kein Boden und kein Luftwiderstand. Die mechanische Energie bleibt 14,5 J.",
+     {"examples/documentation/vacuum_main.c","examples/language/projectile.phys"},2},
+    {"docs/projectile-drag-tutorial.md","Wurf · ruhende Luft",
+     "Masse: 1 kg\nStart: (−2; 0) m\nGeschwindigkeit: (2; 5) m/s\nDichte: 1,225 kg/m³\nCd: 0,47 · Fläche: 0,01 m²",
+     "Quadratischer Widerstand führt Energie ab. Kein Bodenkontakt, Wind oder Auftrieb.",
+     {"examples/projectile/main.c","examples/language/projectile_drag.phys"},2},
+    {"docs/spring.md","Feder–Masse–Dämpfer",
+     "Masse: 1 kg\nFedersteifigkeit: 16 N/m\nDämpfung: 1,2 N·s/m\nRuhelänge: 1 m\nStartdehnung: 0,35 m\nStarttempo: 0 m/s",
+     "Dämpfung variiert zwischen 0 und 64 N·s/m. Vergleiche mechanische und dissipierte Energie.",
+     {"examples/spring/main.c","examples/language/spring.phys"},3}
+};
+static const documentation_context *documentation_context_for(app *a) {
+    const char *path=documentation_topics[a->doc_topic].path;
+    for(unsigned i=0;i<sizeof documentation_contexts/sizeof documentation_contexts[0];i++)
+        if(!strcmp(path,documentation_contexts[i].article))return &documentation_contexts[i];
+    return NULL;
+}
+static const char *documentation_context_code(app *a) {
+    const documentation_context *context=documentation_context_for(a);
+    if(!context)return NULL;
+    if(!a->doc_context_source || a->doc_context_source_topic!=a->doc_topic || a->doc_context_source_track!=a->doc_track) {
+        free(a->doc_context_source);char path[4096];size_t size;
+        join(path,sizeof path,a->root,context->source[a->doc_track==2]);
+        a->doc_context_source=load_utf8_text_limit(path,&size,PS_DOC_MAX_CODE_BYTES);
+        a->doc_context_source_topic=a->doc_topic;a->doc_context_source_track=a->doc_track;
+    }
+    return a->doc_context_source;
+}
+static void documentation_context_figure(app *a,int kind,struct nk_rect r) {
+    struct nk_command_buffer *c=nk_window_get_canvas(a->doc_ui);struct nk_color ink=UI_COLOR(doc_text);
+    float x=r.x+r.w*.25f,y=r.y+24,w=r.w*.6f,h=r.h-48;
+    if(kind==1) {
+        float endx=x+sinf(.45f)*h,endy=y+cosf(.45f)*h;
+        nk_stroke_line(c,x-28,y,x+42,y,2,ink);
+        for(int i=0;i<9;i++)nk_stroke_line(c,x-28+i*9,y,x-22+i*9,y-8,1,UI_COLOR(muted));
+        for(int i=0;i<10;i++)nk_stroke_line(c,x,y+i*h/10,x,y+(i+.5f)*h/10,1,UI_COLOR(muted));
+        nk_stroke_line(c,x,y,endx,endy,3,ink);
+        nk_fill_circle(c,nk_rect(endx-10,endy-10,20,20),UI_COLOR(muted));
+    } else if(kind==2) {
+        nk_stroke_line(c,x,y+h,x+w,y+h,1,UI_COLOR(muted));
+        nk_stroke_line(c,x,y+h,x,y,1,UI_COLOR(muted));
+        for(int i=0;i<40;i++) {
+            float t=i/40.f,u=(i+1)/40.f;
+            nk_stroke_line(c,x+w*t,y+h-(4*t*(1-t))*.8f*h,x+w*u,y+h-(4*u*(1-u))*.8f*h,2,UI_COLOR(accent));
+        }
+    } else {
+        nk_stroke_line(c,x,y,x,y+h,2,ink);
+        float prevx=x,prevy=y+h/2;
+        for(int i=1;i<=12;i++) {
+            float nextx=x+i*w/16,nexty=y+h/2+(i==12?0:(i%2?12:-12));
+            nk_stroke_line(c,prevx,prevy,nextx,nexty,2,ink);prevx=nextx;prevy=nexty;
+        }
+        nk_stroke_rect(c,nk_rect(prevx,prevy-20,w/4,40),3,2,ink);
+    }
+}
+static void documentation_context_content(app *a);
+static void documentation_context_view(app *a) {
+    struct nk_context *ui=a->doc_ui;float row=fmaxf(34,ui->style.font->height+16);
+    float label=fmaxf(documentation_text_width(ui->style.font,"Modell",6),documentation_text_width(ui->style.font,"Beispiel",8))+20;
+    nk_layout_row_dynamic(ui,row,nk_window_get_content_region(ui).w>=label*2+ui->style.window.spacing.x?2:1);
+    struct nk_rect r=nk_widget_bounds(ui);
+    if(documentation_segment(a,"Kontextansicht","Modell",!a->doc_context_example))a->doc_context_example=false;
+    documentation_focus_draw(a,DOC_MODEL_TAB,r,false);
+    if(!a->doc_context_example)nk_stroke_line(nk_window_get_canvas(ui),r.x,r.y+r.h-2,r.x+r.w,r.y+r.h-2,2,UI_COLOR(accent));
+    r=nk_widget_bounds(ui);
+    if(documentation_segment(a,"Kontextansicht","Beispiel",a->doc_context_example))a->doc_context_example=true;
+    documentation_focus_draw(a,DOC_EXAMPLE_TAB,r,false);
+    if(a->doc_context_example)nk_stroke_line(nk_window_get_canvas(ui),r.x,r.y+r.h-2,r.x+r.w,r.y+r.h-2,2,UI_COLOR(accent));
+    struct nk_rect next=nk_widget_bounds(ui),clip=nk_window_get_content_region(ui);
+    nk_layout_row_dynamic(ui,fmaxf(20,clip.y+clip.h-next.y),1);
+    unsigned tab=a->doc_context_example?1:0;
+    nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(0,4));
+    if(nk_group_scrolled_offset_begin(ui,&a->doc_context_scroll_x[tab],&a->doc_context_scroll_y[tab],"context-content",0)) {
+        documentation_context_content(a);nk_group_scrolled_end(ui);
+    }
+    nk_style_pop_vec2(ui);
+}
+static void documentation_context_content(app *a) {
+    struct nk_context *ui=a->doc_ui;float row=fmaxf(34,ui->style.font->height+16);struct nk_rect r;
+    const documentation_context *context=documentation_context_for(a);
+    if(!context) {
+        documentation_h_label(a,a->doc_context_example?"Kein Beispiel zu diesem Artikel":"Kein Modell zu diesem Artikel",false);
+        documentation_h_label(a,"Der vollständige Artikel und seine verknüpften Quellen stehen im Lesebereich.",true);return;
+    }
+    documentation_h_label(a,context->title,false);
+    if(a->doc_context_example) {
+        const char *code=documentation_context_code(a);
+        documentation_h_label(a,context->source[a->doc_track==2],true);
+        if(!code){documentation_h_label(a,"Beispielquelle konnte nicht geladen werden.",true);return;}
+        nk_layout_row_dynamic(ui,row,1);r=nk_widget_bounds(ui);
+        if(nk_button_label(ui,"Code kopieren"))SDL_SetClipboardText(code);
+        documentation_focus_draw(a,DOC_CONTEXT_COPY,r,false);
+        /* Complete source: wrap at measured UTF-8 boundaries in the side pane. */
+        const struct nk_user_font *font=a->doc_code_fonts[(a->preferences.editor_size-16)/2];
+        if(!font)font=ui->style.font;
+        nk_style_push_font(ui,font);
+        const char *line=code;
+        while(*line) {
+            const char *end=strchr(line,'\n');size_t n=end?(size_t)(end-line):strlen(line);
+            if(n && line[n-1]=='\r')--n; /* Display LF; copy retains the complete source. */
+            char text[4096];if(n>=sizeof text)n=sizeof text-1;
+            memcpy(text,line,n);text[n]=0;documentation_h_label(a,text,false);
+            line=end?end+1:line+strlen(line);
+        }
+        nk_style_pop_font(ui);
+    } else {
+        nk_layout_row_dynamic(ui,220,1);r=nk_widget_bounds(ui);nk_widget(&r,ui);
+        ps_ui_accessibility_label(ui,r,context->title);
+        documentation_context_figure(a,context->diagram,r);
+        documentation_h_label(a,"AUSGANGSWERTE",true);
+        documentation_h_label(a,context->values,false);
+        documentation_h_label(a,"WORAUF ACHTEN?",true);
+        documentation_h_label(a,context->hint,false);
+        documentation_h_label(a,context->article,true);
+    }
+}
+static void documentation_footer(app *a) {
+    struct nk_context *ui=a->doc_ui;float h=ui->style.font->height+8;
+    float width=nk_window_get_content_region(ui).w;
+    float reset=fmaxf(72,documentation_text_width(ui->style.font,"32 px",5)+16);
+    nk_layout_row_begin(ui,NK_STATIC,h,4);nk_layout_row_push(ui,fmaxf(100,width-reset-64-3*ui->style.window.spacing.x));
+    const char *status=a->preferences.ui_size>=24?(a->doc_track==2?"Physim · Offline-Handbuch":"C · Offline-Handbuch"):
+        (a->doc_track==2?"Teil II · Physim · Offline-Handbuch":"Teil I · C · Offline-Handbuch");
+    nk_label(ui,status,NK_TEXT_LEFT);
+    const int ids[]={DOC_ZOOM_OUT,DOC_ZOOM_RESET,DOC_ZOOM_IN};
+    for(int i=0;i<3;i++) {
+        nk_layout_row_push(ui,i==1?reset:32);struct nk_rect r=nk_widget_bounds(ui);
+        if(documentation_zoom_button(a,i-1))documentation_zoom(a,i-1);
+        documentation_focus_draw(a,ids[i],r,false);
+    }
+    nk_layout_row_end(ui);
+}

@@ -51,8 +51,10 @@ weiterhin der [Status](status.md).
 
 ## Offline nachschlagen und Projektwissen pflegen
 
-F1 öffnet das Handbuch neben dem Editor. Themen, Inhalt und Suche führen zu
-passenden Abschnitten; Code kopieren übernimmt vollständige Beispielblöcke.
+F1 öffnet das Handbuch neben dem Editor. Themen und Abschnittssprünge stehen
+links gemeinsam, Modell und Beispiel rechts. Beide Seiten lassen sich mit ihrem
+eigenen Icon im Kopf unabhängig schalten. Die globale C-/Physim-Wahl gilt für
+Lernweg, Suche, Anleitung und Beispielcode. Die Suche führt zu passenden Abschnitten; Code kopieren übernimmt vollständige Beispielblöcke.
 Die C- und Physim-Lernwege bleiben als getrennte Wege erreichbar.
 Diagramme erscheinen nativ im Lesebereich. Die
 [räumliche Pendelerklärung](spatial-explanations.md) ergänzt Regler und eine

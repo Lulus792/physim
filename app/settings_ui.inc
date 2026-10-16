@@ -1,7 +1,7 @@
 /* App-owned presentation state, separate from project sources and run metadata. */
 static void preferences_apply(app *a, const ps_preferences *p) {
-    if(!documentation_fonts_prepare(a,a->doc_zoom_size?a->doc_zoom_size:p->ui_size,
-                                     a->doc_zoom_size?a->doc_zoom_size:p->editor_size))return;
+    if(!documentation_fonts_prepare_sizes(a,a->doc_zoom_size?a->doc_zoom_size:p->ui_size,
+        a->doc_zoom_size?a->doc_zoom_size:p->editor_size,p->ui_size,p->editor_size))return;
     a->preferences = *p;
     a->font_ui=a->ui_fonts[(p->ui_size-16)/2];
     a->font_title=a->title_fonts[(p->ui_size-16)/2];
@@ -112,8 +112,8 @@ static void settings_commit(app *a) {
     next.dock = a->preferences.dock;
     if((next.view_flags&PS_VIEW_LOG) && (next.dock.hidden&(1u<<PS_DOCK_LOG)))
         ps_dock_reveal(&next.dock,PS_DOCK_LOG,PS_DOCK_BOTTOM);
-    if(!documentation_fonts_prepare(a,a->doc_zoom_size?a->doc_zoom_size:next.ui_size,
-                                     a->doc_zoom_size?a->doc_zoom_size:next.editor_size)) {
+    if(!documentation_fonts_prepare_sizes(a,a->doc_zoom_size?a->doc_zoom_size:next.ui_size,
+        a->doc_zoom_size?a->doc_zoom_size:next.editor_size,next.ui_size,next.editor_size)) {
         snprintf(a->preferences_error,sizeof a->preferences_error,"Schriftgröße konnte nicht geladen werden. Einstellungen bleiben erhalten.");
         return;
     }

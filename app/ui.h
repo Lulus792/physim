@@ -70,6 +70,8 @@ bool nk_sdl_accessibility_choose(struct nk_context *ctx,const char *group,const 
 bool nk_sdl_accessibility_focus(struct nk_context *ctx,const char *group,const char *label);
 bool nk_sdl_accessibility_event(struct nk_context *ctx,const SDL_Event *event);
 bool nk_sdl_accessibility_is_focused(struct nk_context *ctx,const char *group,const char *label);
+/* Read the published, grouped choice state without scheduling an action. */
+bool nk_sdl_accessibility_choice_state(struct nk_context *ctx,const char *group,const char *label,bool *selected);
 bool nk_sdl_accessibility_has_focus(struct nk_context *ctx);
 /* Publish the custom keyboard route's visible target without queuing an
  * assistive action. A granted native focus request takes ownership back. */

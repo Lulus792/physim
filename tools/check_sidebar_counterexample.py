@@ -1,4 +1,4 @@
-"""Require the actual macOS viewer to reject its previous two-column sidebar."""
+"""Require the native viewer to reject clipped Design H section labels."""
 import argparse
 import hashlib
 import json
@@ -17,16 +17,19 @@ def main():
     parser.add_argument('--sdl', type=Path, required=True)
     parser.add_argument('--build-dir', type=Path, default=build.ROOT/'build/native/Debug-sanitized')
     args = parser.parse_args()
-    if sys.platform != 'darwin':
-        parser.error('This counterexample requires the actual macOS system fonts')
+    if sys.platform not in ('linux','darwin'):
+        parser.error('Use an actual Linux or macOS native font environment')
     directory = args.build_dir.resolve()
     proof = directory.parent/'sidebar-counterexample'
     proof.mkdir()  # Preserve an earlier result instead of overwriting it.
     ui = (build.ROOT/'app/documentation_ui.inc').read_text(encoding='utf-8')
-    start = ui.index('    /* Keep these short navigation labels whole;')
-    end = ui.index('    struct nk_rect topic_bounds=', start)
-    previous = ui[:start]+'    nk_layout_row_dynamic(ui, documentation_control_height(a), 2);\n'+ui[end:]
-    (proof/'documentation_ui.inc').write_text(previous, encoding='utf-8')
+    current = (build.ROOT/'app/documentation_h.inc').read_text(encoding='utf-8')
+    source = 'documentation_height(a->doc_ui->style.font,label,strlen(label),\n            nk_window_get_content_region(a->doc_ui).w-20)+12'
+    if current.count(source)!=1:
+        raise RuntimeError('Direct section measurement changed; review this counterexample')
+    previous = current.replace(source,'a->doc_ui->style.font->height+12')
+    (proof/'documentation_h.inc').write_text(previous, encoding='utf-8')
+    (proof/'documentation_ui.inc').write_text(ui, encoding='utf-8')
     # The generated main lives beside the isolated old layout. All other
     # includes and objects remain current, including the independent draw probe.
     original_main = (build.ROOT/'app/main.c').read_text(encoding='utf-8')
@@ -50,16 +53,16 @@ def main():
     (proof/'stdout').write_bytes(result.stdout)
     (proof/'stderr').write_bytes(result.stderr)
     output = result.stdout.decode('utf-8', 'replace')
-    matches = re.findall(r'DOCUMENTATION SIDEBAR TABS: font=32 label=(Themen|Inhalt) theme=\d+ lines=(\d+) complete=0', output)
-    rejected = result.returncode != 0 and any(int(lines)>1 for _,lines in matches)
+    matches = re.findall(r'DOCUMENTATION SIDEBAR DRAW: font=\d+ lines=(\d+) complete=0', output)
+    rejected = result.returncode != 0 and any(int(lines)>=1 for lines in matches)
     report = dict(command=command, exit_code=result.returncode, precise_rejection=rejected,
         source_sha256=hashlib.sha256(ui.encode()).hexdigest(),
         isolated_previous_layout_sha256=hashlib.sha256(previous.encode()).hexdigest(),
-        binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest(), wrapped_labels=matches)
+        binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest(), clipped_sections=matches)
     (proof/'report.json').write_text(json.dumps(report, indent=2)+'\n', encoding='utf-8')
     if not rejected:
-        raise RuntimeError('Counterexample did not reach and reject a wrapped 32-pixel sidebar label')
-    print('SIDEBAR COUNTEREXAMPLE: actual previous two-column label wrapping rejected')
+        raise RuntimeError('Counterexample did not reach and reject a clipped direct section label')
+    print('SIDEBAR COUNTEREXAMPLE: actual clipped direct section label rejected')
 
 
 if __name__ == '__main__':

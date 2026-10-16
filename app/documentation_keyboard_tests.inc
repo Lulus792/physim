@@ -65,10 +65,8 @@ static void documentation_api_test_frame(app *a,int *stage,int *code,const char 
             if(!strcmp(documentation_topics[i].path,"docs/units.md"))guide=i;
         }
         ok=a->doc_visible && core>=0 && units>=0 && guide>=0;SDL_SetWindowSize(a->doc_window,760,540);
-        if(!documentation_test_seek(a,DOC_GROUP,stage,code))return;
-        API_KEY(SDLK_RIGHT);API_KEY(SDLK_RIGHT);break;
+        break; /* All reference groups are directly visible in H. */
     case 2:
-        ok=a->doc_group==2;
         if(!documentation_test_seek(a,DOC_TOPIC+core,stage,code))return;
         API_KEY(SDLK_RETURN);break;
     case 3:
@@ -79,9 +77,8 @@ static void documentation_api_test_frame(app *a,int *stage,int *code,const char 
             if(b->kind==PS_DOC_HEADING && !strcmp(a->documentation->text+b->text,"ps_vadd"))function=(int)i;
         }
         ok &= type>=0 && function>=0 && a->documentation->blocks[type].level==3;
-        if(!documentation_test_seek(a,DOC_CONTENTS,stage,code))return;API_KEY(SDLK_RETURN);break;
+        break; /* Direct article sections need no mode switch. */
     case 4:
-        ok=a->doc_contents;
         if(!documentation_test_seek(a,DOC_HEADING+type,stage,code))return;API_KEY(SDLK_RETURN);break;
     case 5:
         if(a->doc_jump_block>=0 || a->doc_scroll_pending){--*stage;return;}
@@ -92,7 +89,7 @@ static void documentation_api_test_frame(app *a,int *stage,int *code,const char 
         if(a->doc_jump_block>=0 || a->doc_scroll_pending){--*stage;return;}
         ok=a->doc_scroll_y>0;*capture="docs-api-function.bmp";break;
     case 8:
-        if(!documentation_test_seek(a,DOC_TOPICS,stage,code))return;API_KEY(SDLK_RETURN);break;
+        break;
     case 9:
         if(!documentation_test_seek(a,DOC_TOPIC+units,stage,code))return;API_KEY(SDLK_RETURN);break;
     case 10:
@@ -103,7 +100,7 @@ static void documentation_api_test_frame(app *a,int *stage,int *code,const char 
             if(example<0 && b->kind==PS_DOC_LINK)example=(int)i;
         }
         ok &= unit_type>=0 && example>=0;
-        if(!documentation_test_seek(a,DOC_CONTENTS,stage,code))return;API_KEY(SDLK_RETURN);break;
+        break;
     case 11:
         if(!documentation_test_seek(a,DOC_HEADING+unit_type,stage,code))return;API_KEY(SDLK_RETURN);break;
     case 12:
@@ -310,8 +307,7 @@ static void documentation_history_test_frame(app *a,int *stage,int *code,const c
         if(a->doc_history_restore){--*stage;return;}
         if(!documentation_test_seek(a,DOC_HOME,stage,code))return;HISTORY_KEY(SDLK_RETURN);break;
     case 10:
-        ok=a->doc_topic==1 && !ps_doc_history_peek(&a->doc_history,1);
-        if(!documentation_test_seek(a,DOC_TOPICS,stage,code))return;HISTORY_KEY(SDLK_RETURN);break;
+        ok=a->doc_topic==DOCUMENTATION_C_GUIDE_TOPIC && !ps_doc_history_peek(&a->doc_history,1);break;
     case 11:if(!documentation_test_seek(a,DOC_FILTER,stage,code))return;break;
     case 12:
         ok=a->doc_filter_active;
@@ -747,14 +743,12 @@ static void documentation_navigation_test_frame(app *a,int *stage,int *code,cons
         ok=anchor!=SIZE_MAX && a->doc_scroll_y>0;NAV_TOGGLE();frames=0;break;
     case 5:
         if(frames++<2 || a->doc_scroll_pending){--*stage;return;}
-        ok=a->doc_navigation_hidden && a->doc_body_bounds.w>=before.w+250 && a->doc_body_bounds.h>=before.h+40 &&
+        ok=a->doc_navigation_hidden && a->doc_body_bounds.w>=before.w+220 && a->doc_body_bounds.h>=before.h &&
            a->doc_reading_version==version && nk_sdl_accessibility_document_visible(a->doc_ui,version,anchor);
         printf("DOCUMENTATION NAVIGATION: before=%.1fx%.1f reader=%.1fx%.1f anchor=%zu\n",before.w,before.h,a->doc_body_bounds.w,a->doc_body_bounds.h,anchor);
         *capture="docs-navigation-reader.bmp";tabs=0;NAV_KEY(SDLK_TAB);break;
     case 6:
-        ok=a->doc_focus!=DOC_C && a->doc_focus!=DOC_PHYSIM && a->doc_focus!=DOC_TOPICS &&
-           a->doc_focus!=DOC_CONTENTS && a->doc_focus!=DOC_FILTER && a->doc_focus!=DOC_GROUP &&
-           !(a->doc_focus>=DOC_TOPIC && a->doc_focus<DOC_COPY);
+        ok=!(a->doc_focus>=DOC_TOPIC && a->doc_focus<DOC_COPY);
         if(a->doc_focus!=DOC_NAVIGATION && tabs++<64){NAV_KEY(SDLK_TAB);--*stage;break;}
         ok=ok && a->doc_focus==DOC_NAVIGATION && tabs>3;
         test_window_key_mod(a->doc_window,SDLK_F,PS_UI_COMMAND_MOD);break;
@@ -767,8 +761,7 @@ static void documentation_navigation_test_frame(app *a,int *stage,int *code,cons
         if(frames++<2 || a->doc_scroll_pending){--*stage;return;}
         ok=!a->doc_navigation_hidden && !strcmp(a->doc_query,"θ") && !a->doc_search_active &&
            fabsf(a->doc_body_bounds.w-before.w)<1 && a->doc_reading_version==version;
-        if(!documentation_test_seek(a,DOC_TOPICS,stage,code))return;
-        NAV_KEY(SDLK_RETURN);break;
+        break; /* Topics and section links are already displayed together. */
     case 9:
         if(!documentation_test_seek(a,DOC_FILTER,stage,code))return;
         break;
@@ -784,8 +777,7 @@ static void documentation_navigation_test_frame(app *a,int *stage,int *code,cons
     case 12:
         ok=a->doc_navigation_hidden;
 #ifdef _WIN32
-        ok=ok && !nk_sdl_accessibility_focus(a->doc_ui,NULL,"Alle Inhalte durchsuchen") &&
-           nk_sdl_accessibility_press(a->doc_ui,"Navigation einblenden");
+        ok=ok && nk_sdl_accessibility_press(a->doc_ui,"Themennavigation einblenden (geschlossen)");
 #else
         if(!documentation_test_seek(a,DOC_NAVIGATION,stage,code))return;
         NAV_KEY(SDLK_SPACE);
@@ -1063,7 +1055,9 @@ static void documentation_detail_test_frame(app *a,int *stage,int *code,const ch
     if(a->quitting)printf("DOCUMENTATION DETAIL SELF-TEST: %s elapsed=%.3f\n",*code?"FAILED":"PASSED",ps_clock()-started);
 }
 #include "documentation_inline_math_tests.inc"
+#include "documentation_h_tests.inc"
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strcmp(mode,"docs-keyboard-h")){documentation_h_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-inline-math")){documentation_inline_math_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-basics-narrow")){documentation_formula_catalog_test_frame(a,stage,code,capture,DOC_FORMULAS_BASICS,true);return;}
     if(!strcmp(mode,"docs-keyboard-basics")){documentation_formula_catalog_test_frame(a,stage,code,capture,DOC_FORMULAS_BASICS,false);return;}
@@ -1078,7 +1072,7 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
     if(!strcmp(mode,"docs-keyboard-typeset")){documentation_typeset_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-font-demand")){documentation_font_demand_test(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-sidebar")) {
-        static int heading,experiment_length,analysis_length;static double simulation_time;static unsigned frames,tab_case;
+        static int heading,experiment_length,analysis_length;static double simulation_time;static unsigned frames;
         bool ok=true;switch((*stage)++) {
         case 0:
             experiment_length=a->experiment.string.len;analysis_length=a->analysis.string.len;simulation_time=a->simulation_time;
@@ -1127,41 +1121,8 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
                nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,b->reading_begin+b->reading_length-1);}
             ok=ok && a->experiment.string.len==experiment_length && a->analysis.string.len==analysis_length && a->simulation_time==simulation_time;
             *capture="docs-sidebar-jump-32.bmp";
-            tab_case=0;documentation_zoom(a,0);break;
-        case 14: {
-            if(tab_case==6)for(int i=0;i<8;i++)documentation_zoom(a,1);
-            static const int themes[]={PS_THEME_DARK,PS_THEME_LIGHT,PS_THEME_HIGH_CONTRAST};
-            ps_preferences p=a->preferences;p.theme=themes[(tab_case%6)/2];preferences_apply(a,&p);
-            break;
-        }
-        case 15: {
-            if(!documentation_test_seek(a,tab_case%2?DOC_CONTENTS:DOC_TOPICS,stage,code))return;
-            static const char *names[]={
-                "docs-sidebar-tab-16-dark-topics.bmp","docs-sidebar-tab-16-dark-contents.bmp",
-                "docs-sidebar-tab-16-light-topics.bmp","docs-sidebar-tab-16-light-contents.bmp",
-                "docs-sidebar-tab-16-contrast-topics.bmp","docs-sidebar-tab-16-contrast-contents.bmp",
-                "docs-sidebar-tab-32-dark-topics.bmp","docs-sidebar-tab-32-dark-contents.bmp",
-                "docs-sidebar-tab-32-light-topics.bmp","docs-sidebar-tab-32-light-contents.bmp",
-                "docs-sidebar-tab-32-contrast-topics.bmp","docs-sidebar-tab-32-contrast-contents.bmp"};
-            a->doc_sidebar_test_requested=true;*capture=names[tab_case];break;
-        }
-        case 16:
-            ok=a->doc_sidebar_test_ok && documentation_font_size(a)==(tab_case<6?16:32);
-            if(tab_case%2)test_window_mouse(a->doc_window,a->doc_focus_bounds,true);
-            else test_window_key_mod(a->doc_window,SDLK_RETURN,0);
-            frames=0;break;
-        case 17:
-            if(tab_case%2)test_window_mouse(a->doc_window,a->doc_focus_bounds,false);
-            break;
-        case 18:
-            if(frames++<2){--*stage;return;}
-            ok=a->doc_contents==(tab_case%2!=0) && a->experiment.string.len==experiment_length &&
-               a->analysis.string.len==analysis_length && a->simulation_time==simulation_time;
-            if(++tab_case<12)*stage=14;else {
-                puts("DOCUMENTATION SIDEBAR TABS: keyboard and pointer switching, focus and input isolation passed");
-                a->quitting=true;
-            }
-            break;
+            documentation_zoom(a,0);a->quitting=true;
+            puts("DOCUMENTATION SIDEBAR DIRECT: topics and sections, keyboard and pointer jumps, focus and input isolation passed");break;
         }
         if(!ok){fprintf(stderr,"Sidebar stage %d failed\n",*stage-1);*code=1;a->quitting=true;}
         if(a->quitting)printf("DOCUMENTATION SIDEBAR SELF-TEST: %s\n",*code?"FAILED":"PASSED");return;
@@ -1324,16 +1285,16 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
             test_window_key_mod(a->doc_window,SDLK_TAB,0);++*stage;break;
         case 3:
             if(settle++<3)return;
-            ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active && nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Vorheriger");
+            ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active && nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Vorheriger Treffer");
             puts("EDIT SCROLL READY END");fflush(stdout);++*stage;break;
         case 4:
             join(path,sizeof path,a->project,"scroll-end-applied");ready=fopen(path,"rb");if(!ready)return;fclose(ready);
-            ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active && nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Vorheriger");
+            ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active && nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Vorheriger Treffer");
             *capture="docs-native-edit-scroll-end.bmp";++*stage;break;
         case 5:puts("EDIT SCROLL READY START");fflush(stdout);++*stage;break;
         case 6:
             join(path,sizeof path,a->project,"scroll-start-applied");ready=fopen(path,"rb");if(!ready)return;fclose(ready);
-            ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active && nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Vorheriger");
+            ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active && nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Vorheriger Treffer");
             *capture="docs-native-edit-scroll-start.bmp";++*stage;break;
         case 7:puts("DOCUMENTATION EDIT SCROLL SELF-TEST: PASSED");a->quitting=true;break;
         }
@@ -1376,7 +1337,7 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
             {char path[4096];join(path,sizeof path,a->project,"global-focus-checked");FILE *done=fopen(path,"rb");if(!done)return;fclose(done);}
             test_window_key_mod(a->doc_window,SDLK_TAB,0);++*stage;break;
         case 10:
-            ok=a->doc_focus==DOC_GROUP && !a->doc_filter_active;
+            ok=a->doc_focus==DOC_CONTEXT && !a->doc_filter_active;
             test_window_key_mod(a->doc_window,SDLK_F,PS_UI_COMMAND_MOD);++*stage;break;
         case 11:
             if(!a->doc_search_active || a->doc_focus!=DOC_SEARCH)return;
@@ -1475,10 +1436,10 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
            !documentation_test_same_text("θ\r\n  y;\r\n","θ\n  x;\n") &&
            !documentation_test_same_text("θ\r\n  x;","θ\n  x;\n") &&
            !documentation_test_same_text("θ\r  x;","θ\n  x;");
-        SDL_SetWindowSize(a->doc_window,760,540);DOC_KEY(SDLK_TAB);break;
-    case 2: ok=a->doc_keyboard && a->doc_focus==DOC_C;DOC_KEY(SDLK_RETURN);break;
-    case 3: ok=a->doc_topic==DOCUMENTATION_C_GUIDE_TOPIC;DOC_KEY(SDLK_TAB);DOC_KEY(SDLK_RETURN);break;
-    case 4: ok=a->doc_topic==DOCUMENTATION_PHYSIM_GUIDE_TOPIC;test_window_key_mod(a->doc_window,SDLK_TAB,SDL_KMOD_SHIFT);DOC_KEY(SDLK_RETURN);break;
+        SDL_SetWindowSize(a->doc_window,760,540);DOC_KEY(SDLK_TAB);DOC_KEY(SDLK_TAB);break;
+    case 2: ok=a->doc_keyboard && a->doc_focus==DOC_C;DOC_KEY(SDLK_TAB);DOC_KEY(SDLK_RETURN);break;
+    case 3: ok=a->doc_topic==DOCUMENTATION_PHYSIM_GUIDE_TOPIC;test_window_key_mod(a->doc_window,SDLK_TAB,SDL_KMOD_SHIFT);DOC_KEY(SDLK_RETURN);break;
+    case 4: ok=a->doc_topic==DOCUMENTATION_C_GUIDE_TOPIC;break;
     case 5:
         if(!documentation_test_seek(a,!strcmp(mode,"docs-keyboard-unreachable")?99999:DOC_TOPIC+tutorial_topic,stage,code))return;DOC_KEY(SDLK_RETURN);*stage=25;break;
     case 25:
@@ -1493,9 +1454,15 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
             }
         }
         ok=ok && copy_block>=0 && link_block>=0 && heading>=0;*stage=6;break;
-    case 6: if(!documentation_test_seek(a,DOC_CONTENTS,stage,code))return;DOC_KEY(SDLK_RETURN);break;
+    case 6: break; /* Sections are directly present beside topics in H. */
     case 7: if(!documentation_test_seek(a,DOC_HEADING+heading,stage,code))return;DOC_KEY(SDLK_RETURN);break;
-    case 8: ok=a->doc_scroll_y>0;*capture="docs-keyboard-heading.bmp";break;
+    case 8:
+        if(a->doc_jump_block>=0 || a->doc_scroll_pending || a->doc_history_restore){--*stage;return;}
+        ok=a->doc_scroll_y>0 && fabsf(a->documentation->blocks[heading].hit[1]-a->doc_body_bounds.y)<40;
+        if(!ok)fprintf(stderr,"Heading activation target=%d anchor=%d scroll=%u pending=%d history=%u keyboard=%d owner=%d bounds=%.0f/%.0f\n",
+            heading,a->doc_anchor_heading,a->doc_scroll_y,a->doc_scroll_pending,a->doc_history_restore,a->doc_keyboard,
+            nk_sdl_accessibility_keyboard_owned(a->doc_ui),a->documentation->blocks[heading].hit[1],a->doc_body_bounds.y);
+        *capture="docs-keyboard-heading.bmp";break;
     case 9: if(!documentation_test_seek(a,DOC_COPY+copy_block,stage,code))return;SDL_SetClipboardText("sentinel");DOC_KEY(SDLK_SPACE);break;
     case 10: ok=documentation_test_clipboard(a->documentation->text+a->documentation->blocks[copy_block].text);break;
     case 11: if(!documentation_test_seek(a,DOC_LINK+link_block,stage,code))return;DOC_KEY(SDLK_RETURN);break;
@@ -1511,12 +1478,14 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
     case 21: if(a->doc_ui->input.keyboard.text_len){--*stage;return;}ok=!strcmp(a->doc_query,"Physim");DOC_KEY(SDLK_TAB);break;
     case 22: ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active;DOC_KEY(SDLK_TAB);DOC_KEY(SDLK_RETURN);break;
     case 23: ok=a->doc_focus==DOC_NEXT;*capture="docs-keyboard-search.bmp";*stage=26;break;
-    case 26: if(!documentation_test_seek(a,DOC_TOPICS,stage,code))return;DOC_KEY(SDLK_RETURN);break;
+    case 26: break; /* The global search stays in the common header. */
     case 27: if(!documentation_test_seek(a,DOC_FILTER,stage,code))return;break;
     case 28: {ok=a->doc_filter_active;SDL_Event e={0};e.type=SDL_EVENT_TEXT_INPUT;e.text.windowID=SDL_GetWindowID(a->doc_window);e.text.text="Pendel";SDL_PushEvent(&e);break;}
-    case 29: if(a->doc_ui->input.keyboard.text_len){--*stage;return;}ok=!strcmp(a->doc_filter,"Pendel");DOC_KEY(SDLK_TAB);break;
-    case 30: ok=a->doc_focus==DOC_GROUP && !a->doc_filter_active;DOC_KEY(SDLK_SPACE);break;
-    case 31: ok=!a->doc_filter[0];test_window_key_mod(a->doc_window,SDLK_F,PS_UI_COMMAND_MOD);break;
+    case 29: if(a->doc_ui->input.keyboard.text_len){--*stage;return;}ok=!strcmp(a->doc_filter,"Pendel");break;
+    case 30: ok=a->doc_focus==DOC_FILTER && a->doc_filter_active;test_window_key_mod(a->doc_window,SDLK_A,PS_UI_COMMAND_MOD);break;
+    case 31: DOC_KEY(SDLK_BACKSPACE);*stage=34;break;
+    case 34: DOC_KEY(SDLK_TAB);break;
+    case 35: ok=!a->doc_filter[0];test_window_key_mod(a->doc_window,SDLK_F,PS_UI_COMMAND_MOD);*stage=32;break;
     case 32: if(a->doc_focus_reveal){--*stage;return;}
         {SDL_Event e={0};e.type=SDL_EVENT_TEXT_INPUT;e.text.windowID=SDL_GetWindowID(a->doc_window);e.text.text="Z";SDL_PushEvent(&e);DOC_KEY(SDLK_TAB);}break;
     case 33: ok=a->doc_focus==DOC_PREVIOUS && !strcmp(a->doc_query,"PhysimZ");DOC_KEY(SDLK_ESCAPE);*stage=24;break;

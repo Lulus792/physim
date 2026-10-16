@@ -1,5 +1,7 @@
+#include "documentation_layout.h"
 /* Independent native window: its input, fonts and GL resources belong to this viewer. */
 static void documentation_window_destroy(app *a) {
+    free(a->doc_context_source);a->doc_context_source=NULL;
     for (int i = 0; i < DOCUMENTATION_TOPIC_COUNT; i++) {
         free(documentation_index[i]);
         documentation_index[i] = NULL;
@@ -24,9 +26,10 @@ static void documentation_window_destroy(app *a) {
 }
 
 /* Missing sizes are appended; an actual density change replaces the bank. */
-static bool documentation_fonts_load(app *a,float density,unsigned size,unsigned code_size) {
+static bool documentation_fonts_load(app *a,float density,unsigned size,unsigned code_size,unsigned ui_size,unsigned editor_size) {
     if(!isfinite(density) || density<1 || density>4 || size<16 || size>32 || (size&1) ||
-       code_size<16 || code_size>32 || (code_size&1))return false;
+       code_size<16 || code_size>32 || (code_size&1) || ui_size<16 || ui_size>32 || (ui_size&1) ||
+       editor_size<16 || editor_size>32 || (editor_size&1))return false;
     unsigned index=(size-16)/2,code_index=(code_size-16)/2;
     bool replace=!a->doc_font_ui || fabsf(density-a->doc_raster_density)>.01f;
     const struct nk_user_font *regular[9]={0},*titles[9]={0},*bold[11]={0},*code[9]={0};
@@ -42,7 +45,8 @@ static bool documentation_fonts_load(app *a,float density,unsigned size,unsigned
     unsigned added=0;
     if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: F1 fonts begin %.6f\n",ps_clock());
     for(unsigned role=0;role<4;role++)for(unsigned i=0;i<(role==2?11u:9u);i++) {
-        bool needed=a->doc_full_font_inventory || (role==3?i==code_index:role==2?(i==index || i==index+2):i==index);
+        bool needed=a->doc_full_font_inventory || (role==3?(i==code_index || i==(editor_size-16)/2):role==2?(i==index || i==index+2):
+            (i==index || (role==0 && i==(ui_size-16)/2)));
         const struct nk_user_font **slot=role==0?&regular[i]:role==1?&titles[i]:role==2?&bold[i]:&code[i];
         if(!needed || *slot)continue;
         float pixels=(float)((role==1?23:16)+i*2)*density;
@@ -66,7 +70,7 @@ fail:
     nk_font_atlas_clear(&candidate);return false;
 }
 static bool documentation_window_fonts(app *a,float density) {
-    if(!documentation_fonts_load(a,density,documentation_font_size(a),documentation_code_size(a)))return false;
+    if(!documentation_fonts_load(a,density,documentation_font_size(a),documentation_code_size(a),a->preferences.ui_size,a->preferences.editor_size))return false;
     unsigned index=(documentation_font_size(a)-16)/2;
     a->doc_font_ui=a->doc_ui_fonts[index];a->doc_font_title=a->doc_title_fonts[index];
     a->doc_font_code=a->doc_code_fonts[(documentation_code_size(a)-16)/2];
@@ -79,15 +83,18 @@ static bool documentation_window_fonts(app *a,float density) {
     return true;
 }
 /* Keyboard and settings calls can arrive with the main context current. */
-static bool documentation_fonts_prepare(app *a,unsigned size,unsigned code_size) {
+static bool documentation_fonts_prepare_sizes(app *a,unsigned size,unsigned code_size,unsigned ui_size,unsigned editor_size) {
     if(!a->doc_ui)return true;
     SDL_Window *previous_window=SDL_GL_GetCurrentWindow();SDL_GLContext previous=SDL_GL_GetCurrentContext();
     if(!ps_graphics_make_current(a->doc_graphics))return false;
-    bool ok=documentation_fonts_load(a,a->doc_raster_density,size,code_size);
+    bool ok=documentation_fonts_load(a,a->doc_raster_density,size,code_size,ui_size,editor_size);
     if(!SDL_GL_MakeCurrent(previous_window,previous)){a->quitting=true;return false;}
     if(!ok)snprintf(a->doc_error,sizeof a->doc_error,"Schriftgröße konnte nicht geladen werden.");
     else if(!strcmp(a->doc_error,"Schriftgröße konnte nicht geladen werden."))a->doc_error[0]=0;
     return ok;
+}
+static bool documentation_fonts_prepare(app *a,unsigned size,unsigned code_size) {
+    return documentation_fonts_prepare_sizes(a,size,code_size,a->preferences.ui_size,a->preferences.editor_size);
 }
 
 static bool documentation_window_open(app *a) {
@@ -181,37 +188,53 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     if (a->documentation && a->doc_font_code != code)
         a->documentation->layout_width = 0;
     a->doc_font_code = code;
-    float side = (w < 1000 ? 220.0f : 270.0f)*(documentation_font_size(a)/16.f);
-    side=fminf(side,(float)w*.4f);
-    nk_style_push_vec2(ui, &ui->style.window.padding, nk_vec2(14, 14));
+    ps_doc_layout layout=ps_documentation_layout((float)w,(float)h,(float)a->preferences.ui_size,
+        a->doc_navigation_hidden,a->doc_context_hidden);
+    a->doc_left_slot=nk_rect(layout.left.x,layout.left.y,layout.left.w,layout.left.h);
+    a->doc_article_slot=nk_rect(layout.article.x,layout.article.y,layout.article.w,layout.article.h);
+    a->doc_right_slot=nk_rect(layout.right.x,layout.right.y,layout.right.w,layout.right.h);
+    const struct nk_user_font *chrome=documentation_chrome_font(a);
+    nk_style_push_font(ui,chrome);
+    nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(12,12));
+    nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(header)));
+    if(a->doc_filter_focus || a->doc_filter_active)nk_window_set_focus(ui,"documentation-header");
+    if(nk_begin(ui,"documentation-header",nk_rect(0,0,(float)w,layout.header.h),NK_WINDOW_NO_SCROLLBAR)) {
+        ps_ui_accessibility_route(ui,true);documentation_header(a);
+    }nk_end(ui);
+    nk_style_pop_style_item(ui);
+    nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(window)));
     nk_window_show(ui,"topics",a->doc_navigation_hidden?NK_HIDDEN:NK_SHOWN);
     if(!a->doc_navigation_hidden) {
-        if (nk_begin(ui, "topics", nk_rect(8, 8, side, (float)h - 16), 0)) {
-            if (a->doc_reset_sidebar) {
-                nk_window_set_scroll(ui, 0, 0);
-                a->doc_reset_sidebar = false;
-            }
-            ps_ui_accessibility_route(ui,true);
-            documentation_sidebar(a);
-        }
-        nk_end(ui);
+        if(nk_begin(ui,"topics",a->doc_left_slot,0)) {
+            if(a->doc_reset_sidebar){nk_window_set_scroll(ui,0,0);a->doc_reset_sidebar=false;}
+            ps_ui_accessibility_route(ui,true);documentation_sidebar(a);
+        }nk_end(ui);
     }
-    float document_x=a->doc_navigation_hidden?8:side+16;
-    if (a->doc_search_focus || a->doc_search_active)
-        nk_window_set_focus(ui, "document");
-    else if (a->doc_filter_active)
-        nk_window_set_focus(ui, "topics");
-    if (nk_begin(ui, "document", nk_rect(document_x, 8, (float)w - document_x - 8, (float)h - 16),
-                 NK_WINDOW_NO_SCROLLBAR)) {
-        ps_ui_accessibility_route(ui,true);
-        documentation_view(a, (float)h - 16);
+    nk_window_show(ui,"documentation-context",a->doc_context_hidden?NK_HIDDEN:NK_SHOWN);
+    if(!a->doc_context_hidden) {
+        if(nk_begin(ui,"documentation-context",a->doc_right_slot,NK_WINDOW_NO_SCROLLBAR)) {
+            ps_ui_accessibility_route(ui,true);documentation_context_view(a);
+        }nk_end(ui);
     }
-    nk_end(ui);
-    if (a->doc_search_active)
-        nk_window_set_focus(ui, "document");
-    else if (a->doc_filter_active)
-        nk_window_set_focus(ui, "topics");
-    nk_style_pop_vec2(ui);
+    nk_style_pop_style_item(ui);
+    nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(header)));
+    nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(12,4));
+    if(nk_begin(ui,"documentation-footer",nk_rect(0,layout.footer.y,(float)w,layout.footer.h),NK_WINDOW_NO_SCROLLBAR)) {
+        ps_ui_accessibility_route(ui,true);documentation_footer(a);
+    }nk_end(ui);nk_style_pop_vec2(ui);nk_style_pop_style_item(ui);
+    nk_style_pop_font(ui);
+    float article_width=fminf(810,layout.article.w);
+    float article_x=layout.article.x+(layout.article.w-article_width)/2;
+    /* The body group contributes another 16 px: total reader inset 20 / 28. */
+    nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(w<1000?4:12,12));
+    nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(doc_body)));
+    if(a->doc_search_focus || a->doc_search_active)nk_window_set_focus(ui,"document");
+    if(nk_begin(ui,"document",nk_rect(article_x,layout.article.y,article_width,layout.article.h),NK_WINDOW_NO_SCROLLBAR)) {
+        ps_ui_accessibility_route(ui,true);documentation_view(a,layout.article.h);
+    }nk_end(ui);
+    nk_style_pop_style_item(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
+    if(a->doc_search_active)nk_window_set_focus(ui,"document");
+    else if(a->doc_filter_active)nk_window_set_focus(ui,"documentation-header");
     documentation_detail_draw_probe(a);
     documentation_sidebar_draw_probe(a);
     documentation_math_draw_probe(a);
