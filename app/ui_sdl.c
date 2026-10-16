@@ -724,6 +724,30 @@ static bool nk_sdl_edit_key(struct nk_context *ctx, SDL_Keycode key, SDL_Keymod 
     enum nk_keys keys[3], selected = NK_KEY_NONE;
     unsigned count = 0;
     switch (key) {
+    case SDLK_A:
+        keys[count++] = NK_KEY_TEXT_SELECT_ALL;
+        if (command) selected = keys[0];
+        break;
+    case SDLK_C:
+        keys[count++] = NK_KEY_COPY;
+        if (command) selected = keys[0];
+        break;
+    case SDLK_V:
+        keys[count++] = NK_KEY_PASTE;
+        if (command) selected = keys[0];
+        break;
+    case SDLK_X:
+        keys[count++] = NK_KEY_CUT;
+        if (command) selected = keys[0];
+        break;
+    case SDLK_B:
+        keys[count++] = NK_KEY_TEXT_LINE_START;
+        if (command) selected = keys[0];
+        break;
+    case SDLK_E:
+        keys[count++] = NK_KEY_TEXT_LINE_END;
+        if (command) selected = keys[0];
+        break;
     case SDLK_Z:
         keys[count++] = NK_KEY_TEXT_UNDO;
         keys[count++] = NK_KEY_TEXT_REDO;
@@ -806,7 +830,6 @@ NK_API int nk_sdl_handle_event(struct nk_context *ctx, SDL_Event *evt) {
     case SDL_EVENT_KEY_UP: /* KEYUP & KEYDOWN share same routine */
     case SDL_EVENT_KEY_DOWN: {
         int down = evt->type == SDL_EVENT_KEY_DOWN;
-        int ctrl_down = evt->key.mod & PS_UI_COMMAND_MOD;
 #ifdef __APPLE__
         const bool mac = true;
 #else
@@ -878,24 +901,6 @@ NK_API int nk_sdl_handle_event(struct nk_context *ctx, SDL_Event *evt) {
             break;
         case SDLK_F12:
             nk_input_key(ctx, NK_KEY_F12, down);
-            break;
-        case SDLK_A:
-            nk_input_key(ctx, NK_KEY_TEXT_SELECT_ALL, down && ctrl_down);
-            break;
-        case SDLK_C:
-            nk_input_key(ctx, NK_KEY_COPY, down && ctrl_down);
-            break;
-        case SDLK_V:
-            nk_input_key(ctx, NK_KEY_PASTE, down && ctrl_down);
-            break;
-        case SDLK_X:
-            nk_input_key(ctx, NK_KEY_CUT, down && ctrl_down);
-            break;
-        case SDLK_B:
-            nk_input_key(ctx, NK_KEY_TEXT_LINE_START, down && ctrl_down);
-            break;
-        case SDLK_E:
-            nk_input_key(ctx, NK_KEY_TEXT_LINE_END, down && ctrl_down);
             break;
         case SDLK_ESCAPE:
             nk_input_key(ctx, NK_KEY_TEXT_RESET_MODE, down);
@@ -987,6 +992,81 @@ static void test_edit_frame(struct nk_context *ctx, struct nk_text_edit *edit) {
     }
     nk_end(ctx);
     nk_clear(ctx);
+}
+typedef struct { unsigned copies,pastes;char copied[16]; } input_test_clipboard;
+static void test_input_copy(nk_handle user,const char *text,int length) {
+    input_test_clipboard *clipboard=user.ptr;clipboard->copies++;
+    size_t bytes=(size_t)length;if(bytes>=sizeof clipboard->copied)bytes=sizeof clipboard->copied-1;
+    memcpy(clipboard->copied,text,bytes);clipboard->copied[bytes]=0;
+}
+static void test_input_paste(nk_handle user,struct nk_text_edit *edit) {
+    ((input_test_clipboard *)user.ptr)->pastes++;nk_sdl_paste_text(edit,"CLIP");
+}
+static bool test_plain_editor_letters(struct nk_context *ctx,SDL_WindowID window) {
+    const struct { SDL_Keycode key; const char *seed,*text,*expected; int begin,end; } cases[]={
+        {SDLK_A,"thet","a","theta",4,4},
+        {SDLK_C,"seed","c","scd",1,3},
+        {SDLK_V,"seed","v","seved",2,2},
+        {SDLK_X,"seed","x","sxd",1,3},
+        {SDLK_B,"seed","b","sebed",2,2},
+        {SDLK_E,"seed","e","seeed",2,2}
+    };
+    const struct nk_user_font *saved_font=ctx->style.font;struct nk_user_font font={0};
+    font.height=16;font.width=test_text_width;nk_style_set_font(ctx,&font);
+    struct nk_clipboard saved=ctx->clip;input_test_clipboard clipboard={0};
+    ctx->clip.userdata=nk_handle_ptr(&clipboard);ctx->clip.copy=test_input_copy;ctx->clip.paste=test_input_paste;
+    bool ok=true;
+    for(unsigned i=0;i<sizeof cases/sizeof cases[0];i++) {
+        char buffer[128];struct nk_text_edit edit;nk_textedit_init_fixed(&edit,buffer,sizeof buffer);
+        edit.mode=NK_TEXT_EDIT_MODE_INSERT;nk_sdl_paste_text(&edit,cases[i].seed);
+        nk_input_begin(ctx);nk_input_end(ctx);test_edit_frame(ctx,&edit);
+        edit.cursor=cases[i].end;edit.select_start=cases[i].begin;edit.select_end=cases[i].end;
+        clipboard.copies=clipboard.pastes=0;
+        SDL_Event event={0};event.key.windowID=window;event.key.key=cases[i].key;
+        nk_input_begin(ctx);
+        event.type=SDL_EVENT_KEY_DOWN;event.key.down=true;nk_sdl_handle_event(ctx,&event);
+        event.type=SDL_EVENT_TEXT_INPUT;event.text.windowID=window;event.text.text=cases[i].text;nk_sdl_handle_event(ctx,&event);
+        event=(SDL_Event){0};event.type=SDL_EVENT_KEY_UP;event.key.windowID=window;event.key.key=cases[i].key;nk_sdl_handle_event(ctx,&event);
+        nk_input_end(ctx);test_edit_frame(ctx,&edit);
+        int bytes=nk_str_len_char(&edit.string);const char *actual=nk_str_get_const(&edit.string);
+        bool passed=bytes==(int)strlen(cases[i].expected) && !memcmp(actual,cases[i].expected,(size_t)bytes) &&
+            !clipboard.copies && !clipboard.pastes;
+        fprintf(passed?stdout:stderr,"PLAIN LETTER INPUT: key=%c expected=%s actual=%.*s copy=%u paste=%u passed=%d\n",
+            (char)cases[i].key,cases[i].expected,bytes,actual,clipboard.copies,clipboard.pastes,passed);
+        ok=passed && ok;
+    }
+    const char *expected[]={"seed","seed","sCLIPd","sd","seed","seed"};
+    const unsigned copies[]={0,1,0,1,0,0},pastes[]={0,0,1,0,0,0};
+    const int cursors[]={3,3,5,1,0,4};
+#ifdef __APPLE__
+    const unsigned mac=1;
+#else
+    const unsigned mac=0;
+#endif
+    for(unsigned i=0;i<sizeof cases/sizeof cases[0];i++) {
+        char buffer[128];struct nk_text_edit edit;nk_textedit_init_fixed(&edit,buffer,sizeof buffer);
+        edit.mode=NK_TEXT_EDIT_MODE_INSERT;nk_sdl_paste_text(&edit,"seed");
+        nk_input_begin(ctx);nk_input_end(ctx);test_edit_frame(ctx,&edit);
+        edit.cursor=3;edit.select_start=1;edit.select_end=3;clipboard=(input_test_clipboard){0};
+        nk_input_begin(ctx);
+        SDL_Event event={0};event.type=SDL_EVENT_KEY_DOWN;event.key.windowID=window;
+        event.key.key=cases[i].key;event.key.mod=PS_UI_COMMAND_MOD;event.key.down=true;
+        nk_sdl_handle_event(ctx,&event);
+        /* A modifier can be released before its letter. The action must
+         * still run once, and no shortcut may replay in the next frame. */
+        event.type=SDL_EVENT_KEY_UP;event.key.mod=0;event.key.down=false;nk_sdl_handle_event(ctx,&event);
+        nk_input_end(ctx);test_edit_frame(ctx,&edit);
+        bool released=true;for(int key=0;key<NK_KEY_MAX;key++)released=released && !ctx->input.keyboard.keys[key].down;
+        nk_input_begin(ctx);nk_input_end(ctx);test_edit_frame(ctx,&edit);
+        int bytes=nk_str_len_char(&edit.string);
+        bool passed=bytes==(int)strlen(expected[i]) && !memcmp(nk_str_get_const(&edit.string),expected[i],(size_t)bytes) &&
+            clipboard.copies==copies[i] && clipboard.pastes==pastes[i] && edit.cursor==cursors[i] && released &&
+            (!copies[i] || !strcmp(clipboard.copied,"ee")) && (i!=0 || (edit.select_start==0 && edit.select_end==4));
+        fprintf(passed?stdout:stderr,"COMMAND LETTER INPUT: mac=%u key=%c copy=%u paste=%u passed=%d\n",
+            mac,(char)cases[i].key,clipboard.copies,clipboard.pastes,passed);
+        ok=passed && ok;
+    }
+    ctx->clip=saved;ctx->style.font=saved_font;return ok;
 }
 static bool test_editor_navigation(bool mac) {
     struct nk_user_font font = {0};
@@ -1124,6 +1204,7 @@ bool nk_sdl_test_input(SDL_Window *window, ps_graphics *graphics) {
         ok = false;
     ok = test_editor_navigation(false) && ok;
     ok = test_editor_navigation(true) && ok;
+    ok = test_plain_editor_letters(ctx,id) && ok;
     nk_sdl_shutdown(ctx);
     if (!ok)
         SDL_SetError("SDL input test: Unicode, clipboard, editor navigation or focus reset failed");

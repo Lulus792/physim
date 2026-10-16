@@ -8,6 +8,8 @@ Nachfolgende Fokusarbeiten und ihre abgegrenzten Plattformnachweise:
 [READING-FOCUS.md](READING-FOCUS.md), [PANE-NAVIGATION.md](PANE-NAVIGATION.md).
 [Windows-Fokuszustände](WINDOWS-FOCUS-STATE.md) ergänzt die aktuelle COM-Gegenprobe
 und den unabhängigen Win32-Beobachter; sporadische Aktivierung bleibt offen.
+[Normale Buchstaben und Tastenkürzel](PLAIN-LETTER-INPUT.md) dokumentiert die
+nachfolgende Korrektur der lokalen Suche mit sechs gezielten Fehlergegenfällen.
 Historische Abnahme und Plattformbefunde: [NATIVE-H.md](NATIVE-H.md).
 Der folgende ursprüngliche Umsetzungsauftrag bleibt als historische Abnahmegrundlage erhalten.
 

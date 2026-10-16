@@ -93,9 +93,12 @@ def type_text(name,value):
     # Acknowledge each real OS text input through the independent native
     # provider before issuing the next one; do not guess the ASan frame time.
     for index,character in enumerate(value):
+        record=dict(name=name,expected=value[:index+1],before=find(name).queryText().getText(0,-1))
+        report.setdefault('text_inputs',[]).append(record)
         xrun('type','--clearmodifiers','--delay','40',character)
         wait(lambda:find(name).queryText().getText(0,-1)==value[:index+1],
-             'actual text prefix in '+name)
+             'actual text prefix '+repr(value[:index+1])+' in '+name)
+        record['observed']=find(name).queryText().getText(0,-1)
 
 def click(name,group=None,role=None):
     def synchronized():

@@ -72,8 +72,17 @@ Der tatsächliche Linux-Gegenlauf gegen den Typografiestand vor der
 anschließenden Captionkorrektur verwirft genau den abgeschnittenen Abschnitt
 (`build/native/h-detail-sidebar-counterexample/report.json`, `precise_rejection=true`).
 Der native Parser bestätigt abschließend 185 Seiten und 220 Abschnittslinks
-(`build/native/h-detail-anchors-native.log`). Für diese Detailänderungen liegt
-noch keine eigene macOS-Abnahme vor.
+(`build/native/h-detail-anchors-native.log`).
+
+Der inzwischen abgeschlossene [Mac-Lauf von 3d89897](https://github.com/Lulus792/physim/actions/runs/38974783249)
+bestätigt diese Detailrevision auf ARM und Intel: jeweils 19/19 portable und
+27/27 GUI-Fälle einschließlich H, Bereiche und Formelsatz. Beide bestehen auch
+die Metadaten-/Sidebar-/Textur-Gegenproben, die 36 historischen Kontrollzustände
+und die unabhängige externe AX-Prüfung. ARM: `run-lo1yu45e` / `run-07gjp7bm`;
+Intel: `run-l8s__scq` / `run-lb4v2tks`. Die tatsächlichen Jobauszüge liegen unter
+`build/native/mac3d-117221484706-verified.log` beziehungsweise
+`mac3d-117221484344-verified.log`. Das belegt die H-Detailänderung; die danach
+entstandene Buchstabenkorrektur besitzt eine getrennte Abnahme.
 
 Die zusätzliche normale Linux-App-Prüfung
 `build/native/h-detail-normal-pointer/results.json` bestätigt reale Mausklicks
@@ -91,6 +100,11 @@ Texteingabe. Damit ist ein bloß zu schneller Zeichenburst als alleinige
 Erklärung nicht belegt; weder diese Eingabeaufgabe noch die danach liegenden
 normalen F6-/Filteraufgaben werden als bestanden gewertet. Die unabhängigen
 nativen Tastatur-/Bereichstests oben bleiben separat ausgewiesen.
+
+Die anschließende [gezielte Eingabekorrektur](PLAIN-LETTER-INPUT.md) belegt
+inzwischen die Ursache: normale Buchstaben konnten fälschlich Tastenkürzel
+auslösen. Der ursprüngliche normale Linux-Ablauf besteht nach dieser Korrektur
+ohne zusätzliche Wartezeiten. Die obigen Fehlbelege bleiben als Vorherzustand erhalten.
 
 Die 61 doppelten BMPs des ersten erfolgreichen Windows-H-Einzellaufs wurden nach
 der vollständigen Abnahme entfernt (150.258.018 Byte); finale Gruppenbilder,

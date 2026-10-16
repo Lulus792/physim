@@ -93,6 +93,16 @@ werden dort nicht ausgeführt. Diese tatsächlichen Zeitlimits bleiben offen;
 die Grenze wurde nicht angehoben. Geschützte Jobauszüge liegen unter
 `build/native/mac-c01-117139390326-excerpt.log` und dem entsprechenden ARM-Auszug.
 
+Der nachfolgende tatsächliche [Lauf von 10e318a](https://github.com/Lulus792/physim/actions/runs/38971626070)
+besteht auf beiden Architekturen 19/19 portable und 27/27 GUI-Fälle samt
+Gegenproben und externer AX-Prüfung. ARM: `run-xlf391t7` / `run-h7zbrac9`;
+Intel: `run-vdzvhwxj` / `run-4ll3_mp_`. Die Auszüge liegen unter
+`build/native/mac10e-117211115929-verified.log` beziehungsweise
+`mac10e-117211115686-verified.log`. Die anschließende H-Detailrevision `3d89897`
+besitzt ebenfalls zwei vollständig erfolgreiche Mac-Jobs; Details in
+[H-FIDELITY.md](H-FIDELITY.md). Diese Grünläufe belegen die jeweilige Ausführung;
+sie erklären nicht rückwirkend die sporadischen älteren Zeitlimits.
+
 Die anschließende [Windows-Fokuszustandskorrektur](WINDOWS-FOCUS-STATE.md)
 hat eigene Gegenproben und neue reale Win32-Nachweise. Sie erklärt nicht
 rückwirkend sämtliche älteren Aktivierungsfehler.
