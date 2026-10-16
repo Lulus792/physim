@@ -22,20 +22,23 @@ static void documentation_window_destroy(app *a) {
     a->doc_font_ui=a->doc_font_title=a->doc_font_code=NULL;
     memset(a->doc_ui_fonts,0,sizeof a->doc_ui_fonts);memset(a->doc_title_fonts,0,sizeof a->doc_title_fonts);
     memset(a->doc_bold_fonts,0,sizeof a->doc_bold_fonts);memset(a->doc_code_fonts,0,sizeof a->doc_code_fonts);
+    memset(a->doc_chrome_fonts,0,sizeof a->doc_chrome_fonts);
     ps_graphics_make_current(a->graphics);
 }
 
 /* Missing sizes are appended; an actual density change replaces the bank. */
 static bool documentation_fonts_load(app *a,float density,unsigned size,unsigned code_size,unsigned ui_size,unsigned editor_size) {
     if(!isfinite(density) || density<1 || density>4 || size<16 || size>32 || (size&1) ||
-       code_size<16 || code_size>32 || (code_size&1) || ui_size<16 || ui_size>32 || (ui_size&1) ||
+       code_size<16 || code_size>32 || (code_size&1) || ui_size<16 || ui_size>22 || (ui_size&1) ||
        editor_size<16 || editor_size>32 || (editor_size&1))return false;
     unsigned index=(size-16)/2,code_index=(code_size-16)/2;
     bool replace=!a->doc_font_ui || fabsf(density-a->doc_raster_density)>.01f;
     const struct nk_user_font *regular[9]={0},*titles[9]={0},*bold[11]={0},*code[9]={0};
+    const struct nk_user_font *chrome[4]={0};
     if(!replace) {
         memcpy(regular,a->doc_ui_fonts,sizeof regular);memcpy(titles,a->doc_title_fonts,sizeof titles);
         memcpy(bold,a->doc_bold_fonts,sizeof bold);memcpy(code,a->doc_code_fonts,sizeof code);
+        memcpy(chrome,a->doc_chrome_fonts,sizeof chrome);
     }
     struct nk_font_atlas candidate;
     if(a->doc_test_font_allocator)nk_font_atlas_init(&candidate,a->doc_test_font_allocator);
@@ -44,12 +47,12 @@ static bool documentation_fonts_load(app *a,float density,unsigned size,unsigned
     struct nk_font *default_font=NULL;
     unsigned added=0;
     if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: F1 fonts begin %.6f\n",ps_clock());
-    for(unsigned role=0;role<4;role++)for(unsigned i=0;i<(role==2?11u:9u);i++) {
-        bool needed=a->doc_full_font_inventory || (role==3?(i==code_index || i==(editor_size-16)/2):role==2?(i==index || i==index+2):
+    for(unsigned role=0;role<5;role++)for(unsigned i=0;i<(role==4?4u:role==2?11u:9u);i++) {
+        bool needed=a->doc_full_font_inventory || (role==4?i==(ui_size-16)/2:role==3?(i==code_index || i==(editor_size-16)/2):role==2?(i==index || i==index+2):
             (i==index || (role==0 && i==(ui_size-16)/2)));
-        const struct nk_user_font **slot=role==0?&regular[i]:role==1?&titles[i]:role==2?&bold[i]:&code[i];
+        const struct nk_user_font **slot=role==0?&regular[i]:role==1?&titles[i]:role==2?&bold[i]:role==3?&code[i]:&chrome[i];
         if(!needed || *slot)continue;
-        float pixels=(float)((role==1?23:16)+i*2)*density;
+        float pixels=(role==4?(16.f+i*2)*.875f:(float)((role==1?26:16)+i*2))*density;
         struct nk_font *font=system_font_sampling(&candidate,a->root,pixels,role==3,role==1 || role==2,2,1);
         if(!font)goto fail;
         if(role==0 && i==index)default_font=font;
@@ -62,6 +65,7 @@ static bool documentation_fonts_load(app *a,float density,unsigned size,unsigned
     if(!ok)goto fail;
     memcpy(a->doc_ui_fonts,regular,sizeof regular);memcpy(a->doc_title_fonts,titles,sizeof titles);
     memcpy(a->doc_bold_fonts,bold,sizeof bold);memcpy(a->doc_code_fonts,code,sizeof code);
+    memcpy(a->doc_chrome_fonts,chrome,sizeof chrome);
     a->doc_raster_density=density;a->doc_failed_density=0;
     printf("F1 font demand: %s %u variants, density %.3f\n",replace?"replace":"append",added,density);
     if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: F1 fonts ready %.6f\n",ps_clock());
@@ -119,7 +123,7 @@ static bool documentation_window_open(app *a) {
         if(!documentation_window_fonts(a,density>0?density:1))goto fail;
         style(a->doc_ui);
         nk_style_set_font(a->doc_ui, a->doc_font_ui);
-        nk_sdl_set_ui_size(a->doc_ui,documentation_font_size(a));
+        nk_sdl_set_ui_size(a->doc_ui,a->preferences.ui_size);
         a->doc_reset_sidebar = true;
         int x, y, w, h;
         SDL_Rect usable;
@@ -194,6 +198,7 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     a->doc_article_slot=nk_rect(layout.article.x,layout.article.y,layout.article.w,layout.article.h);
     a->doc_right_slot=nk_rect(layout.right.x,layout.right.y,layout.right.w,layout.right.h);
     const struct nk_user_font *chrome=documentation_chrome_font(a);
+    nk_style_push_float(ui,&ui->style.window.rounding,0);
     nk_style_push_font(ui,chrome);
     nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(12,12));
     nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(header)));
@@ -205,18 +210,23 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(window)));
     nk_window_show(ui,"topics",a->doc_navigation_hidden?NK_HIDDEN:NK_SHOWN);
     if(!a->doc_navigation_hidden) {
-        if(nk_begin(ui,"topics",a->doc_left_slot,0)) {
+        nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(0,0));
+        nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(8,2));
+        if(nk_begin(ui,"topics",a->doc_left_slot,NK_WINDOW_NO_SCROLLBAR)) {
             a->doc_left_slot=nk_window_get_bounds(ui);
-            if(a->doc_reset_sidebar){nk_window_set_scroll(ui,0,0);a->doc_reset_sidebar=false;}
+            if(a->doc_reset_sidebar){a->doc_navigation_scroll_x=a->doc_navigation_scroll_y=0;a->doc_reset_sidebar=false;}
             ps_ui_accessibility_route(ui,true);documentation_sidebar(a);
         }nk_end(ui);
+        nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
     }
     nk_window_show(ui,"documentation-context",a->doc_context_hidden?NK_HIDDEN:NK_SHOWN);
     if(!a->doc_context_hidden) {
+        nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(12,0));
         if(nk_begin(ui,"documentation-context",a->doc_right_slot,NK_WINDOW_NO_SCROLLBAR)) {
             a->doc_right_slot=nk_window_get_bounds(ui);
             ps_ui_accessibility_route(ui,true);documentation_context_view(a);
         }nk_end(ui);
+        nk_style_pop_vec2(ui);
     }
     nk_style_pop_style_item(ui);
     nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(header)));
@@ -236,6 +246,7 @@ static bool documentation_window_render(app *a, const char *capture_path) {
         ps_ui_accessibility_route(ui,true);documentation_view(a,layout.article.h);
     }nk_end(ui);
     nk_style_pop_style_item(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
+    nk_style_pop_float(ui);
     if(a->doc_search_active)nk_window_set_focus(ui,"document");
     else if(a->doc_filter_active)nk_window_set_focus(ui,"documentation-header");
     documentation_detail_draw_probe(a);

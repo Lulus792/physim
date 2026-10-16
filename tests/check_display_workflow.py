@@ -114,9 +114,9 @@ def documentation_font_demand(flow,directory):
     flow.run('--workspace-state-test',directory,'docs-keyboard-font-demand',timeout=60,
              marker='DOCUMENTATION FONT DEMAND SELF-TEST: PASSED')
     output=flow.steps[-1]['stdout']
-    require('FONT DEMAND: initial variants=5' in output,'Initial F1 fonts were not limited to the needed sizes')
+    require('FONT DEMAND: initial variants=6' in output,'Initial F1 fonts were not limited to the needed sizes')
     require('failed zoom/settings preserve fonts, context, values and preference file' in output,'Missing actual failed font transaction')
-    require('FONT DEMAND: independent sizes ui=22 code=18 variants=13' in output,'Independent UI/code sizes or cache reuse missing')
+    require('FONT DEMAND: independent sizes ui=22 code=18 variants=15' in output,'Independent UI/code sizes or cache reuse missing')
     require('FONT DEMAND: populated bank retired at density 2 and rebuilt at density 1' in output,'Populated font bank did not survive density replacement')
     require('DOCUMENTATION RASTER TARGET: logical=760x540 pixels=1520x1080 density=2.000' in output,'Missing doubled framebuffer after populated-bank replacement')
     documentation_density_pixels(directory/'docs-font-demand-density.png')
@@ -145,7 +145,7 @@ def documentation_math(flow, directory):
     (directory/'required-glyphs.txt').write_text(''.join(f'{ord(c):X}\n' for c in sorted(characters)),encoding='ascii')
     (flow.work/'math-inventory.json').write_text(json.dumps(dict(pages=paths,characters=[dict(codepoint=f'U+{ord(c):04X}',char=c,name=unicodedata.name(c,'')) for c in sorted(characters)]),ensure_ascii=False,indent=2),encoding='utf-8')
     flow.run('--workspace-state-test',directory,'docs-keyboard-math',timeout=45,marker='DOCUMENTATION MATH SELF-TEST: PASSED')
-    require(f'DOCUMENTATION MATH GLYPHS: {len(characters)} characters in 38 font variants' in flow.steps[-1]['stdout'], 'Incomplete real font coverage')
+    require(f'DOCUMENTATION MATH GLYPHS: {len(characters)} characters in 42 font variants' in flow.steps[-1]['stdout'], 'Incomplete real font coverage')
     require(f'DOCUMENTATION LINK INVENTORY: {len(paths)} pages, ' in flow.steps[-1]['stdout'], 'Incomplete parsed link-range inventory')
     documentation_grid_ink(directory,flow.steps[-1]['stdout'])
     for name in ('docs-math-16.bmp','docs-math-32.bmp','docs-reading-16.bmp','docs-reading-32.bmp','docs-reading-reset.bmp','docs-unicode-16.bmp','docs-unicode-32.bmp','docs-unicode-boxes-32.bmp'):
@@ -159,15 +159,55 @@ def documentation_math(flow, directory):
     try:
         flow.run('--workspace-state-test',bundled,'docs-keyboard-math',timeout=45,marker='DOCUMENTATION MATH SELF-TEST: PASSED')
         output=flow.steps[-1]['stdout']
-        require(output.count('Bundled primary font: ')==50,'Incomplete bypass of main/F1 platform font handles')
+        require(output.count('Bundled primary font: ')==54,'Incomplete bypass of main/F1 platform font handles')
         primaries=[line for line in output.splitlines() if line.startswith('Bundled primary font: ')]
         require(sum(line.endswith('/NotoSans-Bold.ttf') for line in primaries)==24,'Main/F1 strong roles did not load the real bold face')
-        require(f'DOCUMENTATION MATH GLYPHS: {len(characters)} characters in 38 font variants' in output,'Incomplete bundled primary glyph coverage')
+        require(f'DOCUMENTATION MATH GLYPHS: {len(characters)} characters in 42 font variants' in output,'Incomplete bundled primary glyph coverage')
         require((bundled/'docs-unicode-boxes-32.bmp').is_file(),'Missing bundled-primary diagram image')
         documentation_grid_ink(bundled,output)
     finally:
         if previous is None:flow.env.pop('PHYSIM_TEST_BUNDLED_FONTS',None)
         else:flow.env['PHYSIM_TEST_BUNDLED_FONTS']=previous
+
+
+def documentation_h_chrome_pixels(path, bounds, dark, right_visible, scale=1, pixel_override=None, high_contrast=False):
+    raw=path.read_bytes()
+    require(raw[:2]==b'BM' and len(raw)>54,'Missing H chrome capture')
+    width,height=struct.unpack_from('<ii',raw,18);depth=struct.unpack_from('<H',raw,28)[0]
+    offset=struct.unpack_from('<I',raw,10)[0];stride=((width*depth+31)//32)*4
+    require(depth in (24,32),'Unsupported H chrome capture format')
+    def pixel(x,y):
+        if pixel_override is not None:
+            replacement=pixel_override(x,y)
+            if replacement is not None:return replacement
+        px,py=round(x*scale),round(y*scale)
+        require(0<=px<width and 0<=py<abs(height),'H chrome sample outside actual window')
+        row=abs(height)-1-py if height>0 else py
+        begin=offset+row*stride+px*(depth//8)
+        return tuple(reversed(raw[begin:begin+3]))
+    def equal(actual,expected):return len(actual)==3 and max(abs(a-b) for a,b in zip(actual,expected))<=3
+    c,physim,model=bounds[:4],bounds[4:8],bounds[8:12]
+    require(abs(physim[0]-c[0]-c[2]-2)<.1 and abs(c[1]-physim[1])<.1,
+            'Language choices are separate buttons instead of one joined segmented control')
+    button=(53,54,60) if dark else (229,232,238)
+    edit=(27,28,32) if dark else (255,255,255)
+    panel=(30,31,35) if dark else (246,247,250)
+    accent=(100,170,255) if dark else (0,73,163)
+    hover=(67,69,77) if dark else (218,222,230)
+    if high_contrast:
+        button=(24,24,24);edit=panel=(0,0,0);accent=(255,225,0);hover=(48,48,48)
+    require(any(equal(pixel(c[0]+5,c[1]+3),color) for color in (button,hover)),'Selected language uses the old blue/tab appearance')
+    require(any(equal(pixel(physim[0]+5,physim[1]+3),color) for color in (edit,hover)),'Unselected language is a separate filled button')
+    if high_contrast:
+        require(any(equal(pixel(c[0]+c[2]/2,c[1]+offset),accent) for offset in (0,1,2,3)),
+                'High-contrast language selection has no strong outline')
+    if right_visible:
+        x,y,w,h=model
+        require(w<90 and any(equal(pixel(x+4,y+4),color) for color in (panel,hover)),'Context tab is a filled/full-width button')
+        # The adjacent one-pixel divider blends the edge of the two-pixel
+        # underline. Require its solid accent core within that narrow band.
+        require(any(equal(pixel(x+w/2,y+h-offset),accent) for offset in (1,2,3)),
+                'Selected context tab has no thin accent underline')
 
 
 def documentation_h(flow,directory):
@@ -182,6 +222,14 @@ def documentation_h(flow,directory):
         r'DOCUMENTATION CAPTURE: (\S+) logical=(\d+)x(\d+) pixels=(\d+)x(\d+) font=\d+ body=[\d.]+',output)}
     rows=re.findall(r'DOCUMENTATION H GEOMETRY: case=(\d+) left=([\d.]+),([\d.]+) article=([\d.]+),([\d.]+) right=([\d.]+),([\d.]+) body=([\d.]+),([\d.]+) ok=(\d)',output)
     require(len(rows)==56,'Missing real native Design H states')
+    chrome={}
+    for match in re.finditer(r'DOCUMENTATION H CHROME: case=(\d+) c=([\d.,]+) physim=([\d.,]+) model=([\d.,]+)',output):
+        chrome[int(match[1])]=tuple(map(float,','.join(match.group(i) for i in (2,3,4)).split(',')))
+    require(len(chrome)==56,'Missing H control geometry for pixel validation')
+    navigation={}
+    for match in re.finditer(r'DOCUMENTATION H NAV: case=(\d+) topic=([\d.,]+) section=([\d.,]+)',output):
+        navigation[int(match[1])]=tuple(map(float,(match[2]+','+match[3]).split(',')))
+    require(len(navigation)==28,'Missing actual topic/section geometry')
     for i,row in enumerate(rows):
         case,lx,lw,ax,aw,rx,rw,bw,bh,ok=map(float,row)
         require(case==i and ok==1 and aw>=320 and bw>220 and bh>=120,'Collapsed native article')
@@ -190,6 +238,14 @@ def documentation_h(flow,directory):
         if state==0: left=(lx,lw);right=(rx,rw)
         if lw: require((lx,lw)==left,'Right toggle moved left side')
         if rw: require((rx,rw)==right,'Left toggle moved right side')
+        if lw:
+            nav=navigation[i];tx,ty,tw,th,sx,sy,sw,sh=nav
+            require(sx>=tx+17 and sw<tw and sy>=ty+th+20 and sh>0,
+                    'Article sections are not visibly nested beneath the active topic')
+            # Read size and theme must not alter compact navigation geometry.
+            baseline=48 if i>=48 else (8 if i%16>=8 else 0)
+            require(all(abs(a-b)<.1 for a,b in zip(nav,navigation[baseline])),
+                    'Theme or reader zoom changed navigation geometry')
         name=f'docs-h-{i:02}.bmp'
         wanted_w,wanted_h,available_w,available_h,target_w,target_h=windows[i//4]
         require((wanted_w,wanted_h)==((760,540) if i>=48 or (i//8)%2 else (1080,780)),'Wrong requested native size')
@@ -200,6 +256,17 @@ def documentation_h(flow,directory):
         require(raw[:2]==b'BM' and len(raw)>54,'Missing native capture')
         width,height=struct.unpack_from('<ii',raw,18)
         require((width,abs(height))==(pixels_w,pixels_h),'Native capture differs from actual drawable size')
+        theme=(i-48)//4 if i>=48 else i//16
+        documentation_h_chrome_pixels(directory/name,chrome[i],theme==0,bool(rw),pixels_w/logical_w,high_contrast=theme==2)
+    # A filled blue language selector must fail even when geometry is valid.
+    rejected=False
+    try:
+        documentation_h_chrome_pixels(directory/'docs-h-00.bmp',chrome[0],True,True,
+                                      captures['docs-h-00.bmp'][2]/captures['docs-h-00.bmp'][0],
+                                      lambda x,y:(38,86,153))
+    except RuntimeError:
+        rejected=True
+    require(rejected,'H pixel oracle accepted the previous filled blue controls')
     for name in ('example-c','example-physim','empty-search','no-context','pointer-search'):
         require((directory/f'docs-h-{name}.bmp').is_file(),'Missing Design H task capture')
 

@@ -637,8 +637,10 @@ gilt auch für Anleitungen und den Beispielcode rechts. Gemeinsame Physikerklär
 bleiben erhalten. Ein Sprachwechsel ordnet passende Anleitungen einander zu;
 ohne Gegenstück führt er zum Einstieg des gewählten Lernwegs.
 
-Links stehen Themen und die Abschnittssprünge des aktuellen Artikels direkt
-zusammen. Rechts zeigen **Modell** und **Beispiel** den passenden Kontext mit
+Links stehen Themen in Gruppen. Die Abschnittssprünge sind unter dem aktiven
+Artikel eingerückt; der Kopf „Themen & Abschnitte“ bleibt beim Scrollen stehen.
+Die globale Wahl **C/Physim** ist ein gemeinsamer Segmentschalter. Rechts zeigen
+die unterstrichenen Text-Tabs **Modell** und **Beispiel** den passenden Kontext mit
 Ausgangswerten, Einheiten beziehungsweise vollständigem kopierbarem Quellcode.
 Artikel ohne hinterlegte Kontextdaten zeigen einen Leerzustand. Die rechten
 Tabs bleiben beim Scrollen erreichbar; beide Tabs besitzen eigene Scrollpositionen.

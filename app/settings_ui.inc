@@ -18,7 +18,7 @@ static void preferences_apply(app *a, const ps_preferences *p) {
         if(a->documentation)a->documentation->layout_width=0;
         style(a->doc_ui);
         nk_style_set_font(a->doc_ui, a->doc_font_ui);
-        nk_sdl_set_ui_size(a->doc_ui,documentation_font_size(a));
+        nk_sdl_set_ui_size(a->doc_ui,p->ui_size);
         /* Theme padding and text reflow can move the focused action below the
          * viewport. Re-evaluate its reveal after the new layout is drawn. */
         if(a->doc_visible && a->doc_keyboard)a->doc_focus_reveal=true;

@@ -32,7 +32,8 @@ static void documentation_h_test_frame(app *a,int *stage,int *code,const char **
         /* Workspace preferences support 16..22 px; the reader supports 32 px. */
         p.ui_size=index>=48?22:16;p.editor_size=16;
         preferences_apply(a,&p);
-        ok=a->preferences.ui_size==p.ui_size && documentation_chrome_font(a)->height==(float)p.ui_size &&
+        ok=a->preferences.ui_size==p.ui_size && documentation_chrome_font(a)->height==(float)p.ui_size*.875f &&
+            nk_sdl_row_height(a->doc_ui,16)==(p.ui_size>16?(float)p.ui_size+4:16.f) &&
             a->doc_code_fonts[(p.editor_size-16)/2]!=NULL;
         a->doc_zoom_size=size?32:16;
         ok=ok && documentation_fonts_prepare(a,a->doc_zoom_size,documentation_code_size(a));
@@ -81,6 +82,14 @@ static void documentation_h_test_frame(app *a,int *stage,int *code,const char **
         printf("DOCUMENTATION H GEOMETRY: case=%u left=%.0f,%.0f article=%.0f,%.0f right=%.0f,%.0f body=%.0f,%.0f ok=%d\n",
             index,a->doc_left_slot.x,a->doc_left_slot.w,a->doc_article_slot.x,a->doc_article_slot.w,
             a->doc_right_slot.x,a->doc_right_slot.w,a->doc_body_bounds.w,a->doc_body_bounds.h,ok);
+        const struct nk_user_font *chrome=documentation_chrome_font(a);
+        printf("DOCUMENTATION H CHROME: case=%u c=%.2f,%.2f,%.2f,%.2f physim=%.2f,%.2f,%.2f,%.2f model=%.2f,%.2f,%.2f,%.2f\n",
+            index,a->doc_track_bounds[0].x,a->doc_track_bounds[0].y,a->doc_track_bounds[0].w,a->doc_track_bounds[0].h,
+            a->doc_track_bounds[1].x,a->doc_track_bounds[1].y,a->doc_track_bounds[1].w,a->doc_track_bounds[1].h,
+            a->doc_right_slot.x+12,a->doc_right_slot.y,documentation_text_width(chrome,"Modell",6)+2,fmaxf(46,chrome->height+16));
+        if(!a->doc_navigation_hidden)printf("DOCUMENTATION H NAV: case=%u topic=%.2f,%.2f,%.2f,%.2f section=%.2f,%.2f,%.2f,%.2f\n",
+            index,a->doc_active_topic_bounds.x,a->doc_active_topic_bounds.y,a->doc_active_topic_bounds.w,a->doc_active_topic_bounds.h,
+            a->doc_first_section_bounds.x,a->doc_first_section_bounds.y,a->doc_first_section_bounds.w,a->doc_first_section_bounds.h);
         break;
     case 4:
         if(++index<56)*stage=2;

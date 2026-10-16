@@ -252,6 +252,7 @@ typedef struct {
     const struct nk_user_font *doc_font_ui, *doc_font_title, *doc_font_code, *doc_code_fonts[9];
     const struct nk_user_font *doc_ui_fonts[9], *doc_title_fonts[9];
     const struct nk_user_font *doc_bold_fonts[11];
+    const struct nk_user_font *doc_chrome_fonts[4];
     int doc_inline_clicked;
     unsigned doc_zoom_size;
     uint64_t doc_reading_version;
@@ -268,6 +269,8 @@ typedef struct {
     bool doc_keyboard,doc_focus_reveal,doc_filter_focus,doc_navigation_hidden;
     bool doc_context_hidden,doc_context_example;
     nk_uint doc_context_scroll_x[2],doc_context_scroll_y[2];
+    nk_uint doc_navigation_scroll_x,doc_navigation_scroll_y;
+    struct nk_rect doc_active_topic_bounds,doc_first_section_bounds;
     struct nk_rect doc_left_slot,doc_article_slot,doc_right_slot,doc_context_toggle_bounds;
     char *doc_context_source;
     int doc_context_source_topic,doc_context_source_track;

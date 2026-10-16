@@ -30,16 +30,28 @@ seine technische Abnahme ersetzt die offenen Nutzeraufgaben nicht.
 
 ### Natives Design H
 
+Der nachfolgende visuelle Abgleich übernimmt den festen Navigationskopf,
+Themengruppen und eingerückte Abschnittssprünge mit Führungslinie. C/Physim
+verwendet einen gemeinsamen dezenten Segmentschalter; Modell/Beispiel schmale
+Text-Tabs mit Unterstrich. Kompakte Bedienschrift und Zeilenhöhen folgen der
+UI-Einstellung unabhängig von der Leseschrift. Der Vergleich, echte neue Bilder
+und die Gründe verbleibender Abweichungen stehen im Repository unter
+`docs/visuals/f1-layouts/H-FIDELITY.md`.
+
 Die native H-Oberfläche ist umgesetzt: unabhängige Seitenbereiche, globale
 C-/Physim-Auswahl, direkte Abschnittssprünge und Modell-/Beispielkontext.
 Der Stand `34ac138` besteht unter Windows die drei H-/Formelsatzfälle und zehn
 Formelkatalogfälle, unter Linux dieselben Gruppen. Die Linux-CI mit GCC und
 Clang besteht jeweils 26 native und 47 GUI-Fälle
 ([Lauf](https://github.com/Lulus792/physim/actions/runs/38919952359)).
-Die neue ARM-Mac-Probe besteht alle Formelsatzfälle und die externe AX-Prüfung,
-verfehlt jedoch im H-Test die angeforderte Fenstergröße. Die Korrektur
-`3f008d9` stellt das Fenster vor jeder Größenanforderung wieder her; ihr
-Mac-Nachweis ist noch offen. Eine vollständige Plattformabnahme folgt daraus nicht.
+Die Korrektur `3f008d9` stellt das Fenster vor jeder Größenanforderung wieder her.
+Der tatsächliche Mac-Lauf von `bda1d89` besteht auf ARM und Intel jeweils
+19/19 portable und 26/26 GUI-Fälle einschließlich H sowie die externe AX-Prüfung
+([Lauf](https://github.com/Lulus792/physim/actions/runs/38924682884)).
+Beide Gesamtjobs scheitern anschließend allein an der separaten Gegenprobe des
+alten Metadatenlayouts: Sie erreicht den erwarteten Glyphen-/Clipfehler nicht.
+Dieser Prüferbefund bleibt offen. Der jüngste visuelle Abgleich benötigt außerdem
+einen eigenen Mac-Lauf; die älteren Ergebnisse belegen ihn nicht.
 
 Die echten hellen/dunklen Fensterbilder und der ausführliche, revisionsbezogene
 Bericht liegen im Repository unter `docs/visuals/f1-layouts/NATIVE-H.md`.

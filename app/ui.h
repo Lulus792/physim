@@ -144,6 +144,8 @@ typedef enum {
 void ps_ui_draw_icon(struct nk_command_buffer *canvas,ps_ui_icon icon,struct nk_rect bounds,struct nk_color color);
 nk_bool ps_ui_icon_button(struct nk_context *ctx,ps_ui_icon icon,const char *name);
 nk_bool ps_ui_button_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,bool selected);
+/* Input and native radio semantics for custom painted segmented controls/tabs. */
+nk_bool ps_ui_option_at(struct nk_context *ctx,struct nk_rect bounds,const char *group,const char *name,bool selected);
 /* Publish a single semantic button for a control drawn from multiple fragments.
  * Only queued native activation is returned; pointer hit testing stays with the
  * renderer's actual visible fragments. */

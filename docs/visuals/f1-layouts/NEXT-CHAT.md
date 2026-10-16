@@ -1,5 +1,8 @@
-Stand: Design H ist nativ umgesetzt und unter Windows/Linux geprüft.
-Ergebnis, native Fensterbilder und Plattformgrenzen: [NATIVE-H.md](NATIVE-H.md).
+Stand: Design H ist nativ umgesetzt; der anschließende engere Abgleich mit der
+Vorlage verbessert Navigation, Sprachsegmente und Modell-/Beispielreiter.
+Aktuelle Windows-/Linux-Nachweise, zwölf neue native Fensterbilder und begründete
+Abweichungen: [H-FIDELITY.md](H-FIDELITY.md).
+Historische Abnahme und Plattformbefunde: [NATIVE-H.md](NATIVE-H.md).
 Der folgende ursprüngliche Umsetzungsauftrag bleibt als historische Abnahmegrundlage erhalten.
 
 ---

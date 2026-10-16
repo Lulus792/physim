@@ -1,5 +1,9 @@
 # Native Umsetzung von F1-Design H
 
+Aktueller visueller Folgeabgleich nach Nutzerfeedback:
+[H-FIDELITY.md](H-FIDELITY.md). Die folgenden Bilder und Revisionsangaben
+belegen weiterhin den vorherigen nativen Stand.
+
 Prüfstand: `34ac138faeb438cdb3e855d12829b4e66a5b1fd6` auf `codex/f1-design-h`.
 Die Implementierung geht von `0581915` aus.
 `ec88cf7` ergänzt gemessene native Fensterrechtecke, verfügbare Displaygröße und
@@ -150,9 +154,15 @@ jeweils **26/26 native und 47/47 GUI-Fälle**. Auf
 bestand ARM **19/19 portable und 25/26 GUI-Fälle**, einschließlich sämtlicher
 Formelsatzfälle und externer AX-Prüfung. H verfehlte dort bei Fall 24 die
 angeforderte Fenstergröße (760 × 540 statt tatsächlich 1024 × 656).
-Der Intel-Lauf ist noch nicht abgeschlossen. Der Folgestand `3f008d9` stellt
-das native Testfenster vor einer neuen Größenanforderung wieder her;
-Linux besteht damit H **1/1** (`run-2x_emngx`). Sein Mac-Nachweis ist noch offen.
+Der Folgestand `3f008d9` stellt das native Testfenster vor einer neuen
+Größenanforderung wieder her; Linux besteht damit H **1/1** (`run-2x_emngx`).
+Der spätere tatsächliche [Mac-Lauf von bda1d89](https://github.com/Lulus792/physim/actions/runs/38924682884)
+bestätigt auf ARM und Intel jeweils **19/19 portable und 26/26 GUI-Fälle**,
+einschließlich H, und die externe AX-Prüfung. Die beiden Gesamtjobs bleiben rot,
+weil die anschließende separate Gegenprobe des alten Metadatenlayouts den
+erwarteten Glyphen-/Clipfehler nicht erreicht. Das ist ein offener Befund am
+Gegenprüfer. Der neue visuelle Abgleich in H-FIDELITY braucht einen eigenen
+Mac-Nachweis.
 
 Die Linux-CI von `3f008d9` fand zusätzlich einen nicht innerhalb von F1
 erreichbaren Link der Statusseite auf diesen Repository-Bericht. Die Statusseite

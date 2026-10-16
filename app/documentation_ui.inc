@@ -421,7 +421,7 @@ static void documentation_zoom(app *a,int direction) {
     a->doc_font_ui=a->doc_ui_fonts[(now-16)/2];
     a->doc_font_title=a->doc_title_fonts[(now-16)/2];
     a->doc_font_code=a->doc_code_fonts[(documentation_code_size(a)-16)/2];
-    nk_style_set_font(a->doc_ui,a->doc_font_ui);nk_sdl_set_ui_size(a->doc_ui,now);
+    nk_style_set_font(a->doc_ui,a->doc_font_ui);nk_sdl_set_ui_size(a->doc_ui,a->preferences.ui_size);
     if(a->documentation)a->documentation->layout_width=0;
     a->doc_scroll_y=(nk_uint)((double)a->doc_scroll_y*now/old);
     /* Reflow changes the match's line position, not just its pixel scale. */
@@ -828,6 +828,15 @@ static bool documentation_contents_heading(const app *a,const ps_doc_block *bloc
 }
 /* Visual and keyboard order share the same task-first catalogue. Search puts
  * title matches before text matches without hiding bundled source pages. */
+static int documentation_h_group(int topic) {
+    const char *path=documentation_topics[topic].path;
+    if(!strcmp(path,"docs/c-guide.md") || !strcmp(path,"docs/physim-guide.md"))return 0;
+    if(!strcmp(path,"docs/pendulum-tutorial.md") || !strcmp(path,"docs/spring.md") ||
+       !strcmp(path,"docs/projectile-tutorial.md") || !strcmp(path,"docs/projectile-drag-tutorial.md") ||
+       !strcmp(path,"docs/collision-tutorial.md") || !strcmp(path,"docs/mechanics.md") || !strcmp(path,"docs/buoyancy.md"))return 1;
+    if(!strcmp(path,"docs/numerics.md") || !strcmp(path,"docs/troubleshooting.md"))return 2;
+    return 3+documentation_group(topic);
+}
 static unsigned documentation_topic_order(const app *a,int *order) {
     const char *priority[]={"docs/user-guide.md","docs/examples.md","docs/guide.md",
         "docs/c-guide.md","docs/physim-guide.md","docs/troubleshooting.md",
@@ -848,8 +857,18 @@ static unsigned documentation_topic_order(const app *a,int *order) {
     }
     if(!a->doc_filter[0]) {
         int grouped[DOCUMENTATION_TOPIC_COUNT];unsigned n=0;
-        for(int group=0;group<5;group++)for(unsigned i=0;i<found;i++)
-            if(documentation_group(order[i])==group)grouped[n++]=order[i];
+        int active=documentation_h_group(a->doc_topic),groups[8],group_count=0;
+        groups[group_count++]=0;
+        if(active)groups[group_count++]=active;
+        for(int group=1;group<8;group++)if(group!=active)groups[group_count++]=group;
+        for(int g=0;g<group_count;g++) {
+            int group=groups[g];
+            /* The reference presents the pendulum before related mechanical topics. */
+            if(group==1)for(unsigned i=0;i<found;i++)
+                if(!strcmp(documentation_topics[order[i]].path,"docs/pendulum-tutorial.md"))grouped[n++]=order[i];
+            for(unsigned i=0;i<found;i++)if(documentation_h_group(order[i])==group &&
+                (group!=1 || strcmp(documentation_topics[order[i]].path,"docs/pendulum-tutorial.md")))grouped[n++]=order[i];
+        }
         memcpy(order,grouped,n*sizeof *order);
     }
     return found;
@@ -889,12 +908,14 @@ static unsigned documentation_focus_list(app *a,int *entries) {
     entries[count++]=DOC_NAVIGATION;entries[count++]=DOC_C;entries[count++]=DOC_PHYSIM;
     entries[count++]=DOC_FILTER;entries[count++]=DOC_CONTEXT;
     if(!a->doc_navigation_hidden) {
-        if(!a->doc_filter[0])entries[count++]=DOC_TOPIC+a->doc_topic;
-        if(!a->doc_filter[0] && a->documentation)for(size_t i=0;i<a->documentation->count;i++)
-            if(documentation_contents_heading(a,&a->documentation->blocks[i]) && a->documentation->blocks[i].level>1)
-                entries[count++]=DOC_HEADING+(int)i;
         int order[DOCUMENTATION_TOPIC_COUNT];unsigned topics=documentation_topic_order(a,order);
-        for(unsigned n=0;n<topics;n++)if(a->doc_filter[0] || order[n]!=a->doc_topic)entries[count++]=DOC_TOPIC+order[n];
+        for(unsigned n=0;n<topics;n++) {
+            entries[count++]=DOC_TOPIC+order[n];
+            if(!a->doc_filter[0] && order[n]==a->doc_topic && a->documentation)
+                for(size_t i=0;i<a->documentation->count;i++)
+                    if(documentation_contents_heading(a,&a->documentation->blocks[i]) && a->documentation->blocks[i].level>1)
+                        entries[count++]=DOC_HEADING+(int)i;
+        }
     }
     if(ps_doc_history_peek(&a->doc_history,-1))entries[count++]=DOC_BACK;
     if(ps_doc_history_peek(&a->doc_history,1))entries[count++]=DOC_FORWARD;
@@ -1050,7 +1071,9 @@ static void documentation_focus_draw(app *a,int id,struct nk_rect bounds,bool bo
     if(bounds.y<clip.y)delta=bounds.y-clip.y;
     else if(bounds.y+bounds.h>clip.y+clip.h)delta=bounds.y+bounds.h-clip.y-clip.h;
     if(body) {if(delta)a->doc_scroll_adjustment=delta;}
-    else {nk_uint x,y;nk_window_get_scroll(ui,&x,&y);if(delta)nk_window_set_scroll(ui,x,(nk_uint)fmaxf(0,(float)y+delta));}
+    else if(!strcmp(ui->current->name_string,"topics")) {
+        if(delta)a->doc_navigation_scroll_y=(nk_uint)fmaxf(0,(float)a->doc_navigation_scroll_y+delta);
+    } else {nk_uint x,y;nk_window_get_scroll(ui,&x,&y);if(delta)nk_window_set_scroll(ui,x,(nk_uint)fmaxf(0,(float)y+delta));}
     if(!delta)a->doc_focus_reveal=false;
 }
 #include "documentation_media.inc"
@@ -1062,6 +1085,7 @@ static bool documentation_topic_button(app *a,const char *label,bool selected) {
     struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
     bool hover=nk_input_is_mouse_hovering_rect(&ui->input,bounds);
     if(selected || hover)nk_fill_rect(canvas,bounds,4,selected?UI_COLOR(selection_active):UI_COLOR(button_hover));
+    if(selected)nk_fill_rect(canvas,nk_rect(bounds.x,bounds.y+3,3,bounds.h-6),1,UI_COLOR(accent));
     const struct nk_user_font *font=ui->style.font;
     size_t at=0,n=strlen(label);float y=bounds.y+8;
     do {

@@ -36,7 +36,7 @@ def check(root):
             decoder = zlib.decompressobj()
             pixels = decoder.decompress(packed, w * h + 1)
             assert decoder.eof and not decoder.unused_data and not decoder.unconsumed_tail
-            assert len(pixels) == w * h and any(pixels) and min(pixels) == 0
+            assert len(pixels) == w * h and any(pixels) and 0 in pixels
             assert zlib.crc32(pixels) == variant["crc"]
             svg = (directory / f'{formula["id"]}-{variant["container"]}.svg').read_bytes()
             assert hashlib.sha256(svg).hexdigest() == variant["svgSha256"], "Corrupt formula vector"
