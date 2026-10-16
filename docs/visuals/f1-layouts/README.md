@@ -1,94 +1,104 @@
-# F1: vier Layoutstudien
+# F1: Layoutstudien, Runde 2
 
-Stand: 16. Oktober 2026. Grundlage ist der lokale Physim-Stand `f79ab79`.
-Die Studien zeigen Vorschläge für die Aufteilung des eigenständigen F1-Fensters.
-Sie verändern die native App nicht und legen keine neue verbindliche
-Produktrichtung fest. Alle Entwürfe verwenden eine zurückhaltende Graustufenpalette;
-verglichen werden Informationshierarchie, Navigation und verfügbare Lesefläche.
+Stand: 16. Oktober 2026. Grundlage: bisherige Layoutstudien auf `108d5f6` und der
+lokale Physim-Projektstand. Die native F1-App wurde nicht verändert.
 
-## Ansehen und ausprobieren
+## Verbindliches Feedback für diese Studien
 
-[`index.html`](index.html) lässt sich direkt im Browser öffnen. Es benötigt weder
-Installation noch Netzwerk oder externe Schriften. [`overview.png`](overview.png)
-zeigt alle vier Fenster nebeneinander. Einzelansichten einschließlich der
-Erläuterungen: [A](classic.png), [B](read.png), [C](learn.png), [D](find.png).
+- B (Lesefläche mit aufklappbaren Navigationsmenüs) ist ausgeschieden.
+- Themen und Abschnittssprünge gehören an die Seite und sind direkt anwählbar.
+- Die **gesamte Seitenleiste** darf ein- und ausgeklappt werden. Das bedeutet
+  keine aufklappbaren Untermenüs für einzelne Themen oder Abschnitte.
+- Der Schwerpunkt bleibt auf Aufteilung und Bedienung, mit einer gemeinsamen
+  zurückhaltenden Graustufenpalette.
 
-Oben wählt man das Layout, die maximale Fensterbreite (1080/760 logische Pixel)
-und die Textgröße von Artikel und Navigation (16/32 Pixel). Ist das Browserfenster
-schmaler als die gewählte Breite, passt sich die Vorschau an die verfügbare Fläche
-an. Der äußere Studienrahmen gehört nicht zur vorgeschlagenen F1-Oberfläche.
+## Vorschau und Bilder
 
-| Variante | Aufteilung bei 1080 px und 16 px Text | Zweck | Abwägung |
-| --- | --- | --- | --- |
-| A · Das Handbuch | Themen 224 px / Artikel flexibel / Inhaltsverzeichnis 176 px | Häufiges Nachschlagen und Wechseln zwischen Lernwegen und Referenz | Zwei Navigationsflächen beanspruchen Lesebreite |
-| B · Die Lesefläche | Aufklappbare Themenauswahl oben / zentrierter Artikel bis 760 px einschließlich Innenabstand | Lange Erklärungen, Formeln und paralleles Arbeiten neben der Simulation | Themen sind erst nach Öffnen der Auswahl sichtbar |
-| C · Der Lernpfad | Schritte 205 px / Aufgabe flexibel / Modellkontext 280 px | Geführtes Lernen von Modell über Versuch bis Auswertung | Für freie Referenznavigation weniger geeignet |
-| D · Die Antwortsuche | Suchergebnisse 330 px / Artikelvorschau flexibel | Eine konkrete Antwort im Kontext nachschlagen | Ergebnisliste reduziert die Artikelbreite |
+[`index.html`](index.html) direkt im Browser öffnen oder den bereits gestarteten
+lokalen Vorschau-Server nutzen. Alle Quellen und Assets sind lokal; keine
+Installation, Netzwerkanfragen, externen Schriften oder Buildschritte nötig.
 
-Bei 760 px und normalem Text wandert A's Inhaltsverzeichnis in den Artikel,
-C's zusätzliche Modellspalte entfällt, und D behält eine schmalere Ergebnisliste.
-Bei 32 px Text erhalten A und C eine aufklappbare Navigation über die volle Breite,
-statt ihre schmalen festen Seitenleisten beizubehalten. D stapelt Ergebnisse und
-Artikel. Unter 620 px verfügbarer Vorschaufläche wird auch bei normalem Text
-entsprechend umgeordnet. Artikel und Navigation bleiben separat scrollbar.
+- [`overview-new.png`](overview-new.png): E, F, G und E mit eingeklappter Leiste.
+- [`overview.png`](overview.png): alle sechs aktuellen Varianten.
+- Neue Einzelansichten: [E](outline.png), [F](navigator.png), [G](reference.png).
+- Überarbeitete Einzelansichten: [A](classic.png), [C](learn.png), [D](find.png).
+- [E ohne Seitenleiste](outline-collapsed.png).
 
-## Interaktionen und Zustände
+B ist aus Auswahl und aktueller Bildübersicht entfernt. Ein alter Link mit
+`?layout=read` zeigt nun E. Die frühere Fassung bleibt in der Git-Historie.
+Die Bedien- und Erläuterungsflächen außerhalb des Fensterrahmens gehören nur zur
+Studie und sind kein vorgeschlagener Bestandteil der nativen F1-Oberfläche.
 
-- **A:** Themenwechsel, hervorgehobene Auswahl und Abschnittssprünge. Die Themen
-  sind eine kleine Beispielsammlung. Die weiteren Mechanikseiten sind ausdrücklich
-  als verkürzte Layoutplatzhalter gekennzeichnet.
-- **B:** Themenauswahl öffnen, Abschnitt wählen, zum Artikel springen. Das
-  aufklappbare Verzeichnis im Artikel bietet dieselben Abschnittssprünge.
-- **C:** Alle vier Lernschritte direkt wählen oder mit Zurück/Weiter wechseln.
-  Am ersten bzw. letzten Schritt ist die passende Aktion deaktiviert. Schritt 2
-  zeigt umschaltbare C-/Physim-Ausschnitte und eine Kopieraktion mit Rückmeldung,
-  falls die Browser-Zwischenablage nicht verfügbar ist. Der jeweils vorherige
-  Lernschritt bleibt beim Wechsel zwischen Layoutvarianten erhalten.
-- **D:** Tippen in die Suche wechselt zur Trefferansicht. Die Suche filtert die
-  Titel und Kurztexte der lokalen Beispielsammlung; sie bildet keinen Volltextindex
-  aller 185 nativen F1-Seiten nach. Leere Eingabe zeigt drei Vorschläge; eine
-  erfolglose Suche zeigt einen Hinweis und erhält die letzte Artikelvorschau.
-- **Tastatur:** Native Schaltflächen und Eingaben, sichtbarer Fokus, Sprung zum
-  Artikeltitel. Escape schließt Themenauswahl bzw. kompakte Navigation und setzt
-  den Fokus zurück. Zustandsmeldungen nutzen eine höfliche Live-Region.
+## Sechs Aufteilungen
 
-Es gibt keine Netzwerkanfragen, Ladeanimationen oder tatsächlichen Simulations-
-und Projektaktionen. Die Fensterknöpfe sind als dekorative Rahmendarstellung
-gekennzeichnet. Die Modellgrafik ist ein vereinfachtes Layoutasset; das vorhandene
-Fachdiagramm wird nicht ersetzt.
+| Variante | 1080 px, 16 px Text | Schwerpunkt |
+| --- | --- | --- |
+| **E · Alles links, neu** | 280 px gemeinsame Themen-/Abschnittsleiste, Artikel daneben | Alle Sprungziele an einem Ort; Abschnitte direkt unter dem aktiven Artikel |
+| **F · Doppelte Navigation, neu** | 160 px Bereiche, 230 px Artikel/Abschnitte, Lesefläche daneben | Zwei sichtbare Navigationsebenen ohne verschachtelte Menüs |
+| **G · Text & Beispiel, neu** | 224 px Seitennavigation, Artikel, 330 px Code-/Beispielbereich | Erklärung und umschaltbare C-/Physim-Ausschnitte parallel lesen |
+| A · Das Handbuch | 220 px Themen, Artikel, 190 px Abschnittsnavigation | Klassische Aufteilung mit beiden Navigationsflächen |
+| C · Der Lernpfad | 210 px Lernschritte, Aufgabe, 260 px Modellkontext | Vier direkt wählbare Lernschritte und feste Vor-/Zurück-Aktionen |
+| D · Die Antwortsuche | 292 px Trefferliste, Artikelvorschau, 178 px Abschnitte | Fundstelle im Artikelkontext lesen |
 
-## Inhaltsgrundlage und Entwurfsempfehlung
+**Ein- und Ausklappen:** Der beschriftete Knopf bleibt im Fensterkopf erreichbar.
+Er blendet die seitliche Navigation als Ganzes aus oder ein; in A und D betrifft
+das auch die rechte Abschnittsleiste. Modell-/Codeflächen sind eigenständige
+Inhalte und bleiben davon getrennt. Artikelauswahl und Lesestelle werden erhalten.
+Eine Lesemarke gleicht die geänderten Zeilenumbrüche aus. Ein anschließender
+Scroll- oder Navigationsvorgang aktualisiert den Bezug für das Wiedereinblenden.
+Die Wahl bleibt beim Wechsel der Layoutvariante erhalten. Suche blendet ihre
+Trefferleiste wieder ein, damit neue Treffer direkt erreichbar sind.
 
-Ausgewertet wurden `app/documentation_window.inc`, `app/documentation_ui.inc`,
-`docs/guide.md`, `docs/design-direction.md` sowie `docs/pendulum-tutorial.md`.
-Modellannahmen, Gleichungen, Ausgangswerte und Vergleichsaufgaben stammen aus dem
-Pendel-Lernpfad. Der C-Ausschnitt ist dessen Zustandsableitung; der Physim-Ausschnitt
-ist aus `examples/language/pendulum_integrator.phys` übernommen und für die schmale
-Darstellung umbrochen. Das vollständige Physim-Beispiel enthält auch optionale
-Widerstands-/Energiebilanzfunktionen; im hier gezeigten Vakuumkontext bleibt
-`airDensity=0`. Die Beispiele sind keine vollständigen ausführbaren Programme.
+**760 px / großer Text:** Die Navigation bleibt seitlich und direkt zugänglich.
+A und D integrieren die Abschnittslinks links. F ordnet die beiden Navigationsebenen
+innerhalb der linken Leiste untereinander an. G zeigt das Beispiel unter dem
+Artikel als separat scrollbareren Inhaltsbereich. C erhält die Modellinformation
+im Artikel statt in einer zusätzlichen rechten Spalte. Bei 32 px Text gelten die
+entsprechenden platzsparenden Anordnungen auch im breiten Fenster. Es entstehen
+keine aufklappbaren Inhaltsmenüs.
 
-Als Ausgangspunkt bietet sich **A** an. **B** kann als Lesemodus, **C** als
-Tutorialansicht und **D** als Zustand der globalen Suche ergänzen. Das ist ein
-Entwurfsvorschlag; die vier Varianten sind zum Vergleichen eigenständig dargestellt.
+Die Desktopvorschau beginnt passend zum nativen Mindestfenster bei 760 px. In
+schmaleren Browserfenstern kann man innerhalb des Vorschau-Rahmens horizontal
+scrollen; die umgebende Galerie passt sich weiterhin an die Browserbreite an.
+Das ist kein Entwurf für eine mobile F1-App.
 
-## Tatsächlich ausgeführte Prüfung
+## Interaktionen und Inhaltsgrenzen
 
-Windows, Microsoft Edge 155.0.4283.45, Chromium-Engine, automatisierte echte
-Browserbedienung mit Playwright. 16 Kombinationen aus vier Layouts, zwei
-Fensterbreiten und zwei Textgrößen wurden auf horizontalen Überlauf geprüft.
-Zusätzlich wurden alle vier Varianten bei 390 und 320 px Browserbreite mit
-32 px Artikeltext ausgeführt. Artikelwechsel, Abschnittssprünge, Themenmenü,
-Lernschritte einschließlich der Randzustände, Sprachwechsel, Suche mit Treffern,
-leerer Eingabe und ohne Treffer, Fokusaktion sowie kompakte Navigation mit Escape
-wurden bedient und geprüft. Keine JavaScript-Laufzeitfehler.
+Themenwechsel und Abschnittssprünge, aktive Markierungen beim Scrollen,
+Bereichswechsel in F, C-/Physim-Wechsel und Kopieren in G, alle vier Lernschritte
+in C einschließlich deaktivierter Randaktionen und Suche in D sind bedienbar.
+Die Schaltflächen funktionieren mit der Tastatur. Die Seitenleistenaktion trägt
+`aria-expanded` und verweist auf die Navigationsflächen. Eingeklappte Bereiche
+sind aus Fokus- und Lesefolge entfernt. Abschnittssprünge setzen den Fokus auf
+die Zielüberschrift. Statusmeldungen werden über eine höfliche Live-Region gemeldet.
 
-Die Einzelbilder, die gemeinsame Übersicht sowie die schmalen Ansichten mit
-großem Text wurden visuell geprüft. Die Übersicht verkleinert die Fenster nur
-für den Vergleich; die HTML-Vorschau dient der Beurteilung in Originalgröße.
-Prüfausgaben und temporäre Bilder liegen ignoriert unter
-`build/f1-layout-review/`; die gelieferten PNGs sind bewusste Designassets.
+Die Suche filtert Titel und Kurztexte einer kleinen lokalen Beispielsammlung,
+keinen Volltextindex aller 185 nativen Handbuchseiten. Leere Eingabe zeigt drei
+Vorschläge; erfolglose Suche zeigt einen Hinweis und erhält die Artikelvorschau.
+Einige weitere Themen sind ausdrücklich als verkürzte Layoutplatzhalter markiert.
 
-Keine native UI-, Screenreader-, Monitorwechsel-, Linux- oder macOS-Abnahme.
-Kein nativer Build erforderlich: ausschließlich eigenständige Designartefakte,
-keine Änderung an Renderer, Parser oder registrierten Handbuchseiten.
+Pendelannahmen, Gleichungen, Ausgangswerte und Vergleichsaufgaben stammen aus
+`docs/pendulum-tutorial.md`; C-/Physim-Ausschnitte aus diesem Lernpfad bzw.
+`examples/language/pendulum_integrator.phys`. Es sind keine vollständigen
+Programme. Die Modellgrafik ist ein vereinfachtes Designasset.
+
+## Prüfung
+
+Windows, Microsoft Edge 155.0.4283.45, echte Browserbedienung mit Playwright:
+48 Kombinationen aus sechs Layouts, zwei Fensterbreiten (1080/760 px), zwei
+Textgrößen (16/32 px) und ein-/ausgeblendeter Navigation auf internen horizontalen
+Überlauf geprüft. Ein-/Ausklappen einschließlich Artikelauswahl und Rückkehr zur
+Lesestelle, direkte Sprünge, Themen-/Bereichswechsel, Sprachen, Lernschrittgrenzen,
+Suchtreffer, leere Suche, erfolglose Suche, Wiederöffnen der Trefferleiste und
+Tastaturbedienung der Seitenleistenaktion ausgeführt. Alte B-Links und die
+Galerie samt horizontalem Vorschau-Scrollen bei 390/320 px Browserbreite geprüft.
+Keine JavaScript-Laufzeitfehler. Neue Einzelansichten, Übersicht und Ansichten mit
+großem Text visuell geprüft.
+
+Quellen: `index.html`, `layouts.css`, `layouts.js`, `content.js`, `model.svg`.
+PNG-Dateien sind gelieferte Designassets; Prüfausgaben und temporäre Bilder liegen
+ignoriert unter `build/f1-layout-review/`.
+
+Keine Änderung an Renderer, Parser oder registrierten Handbuchseiten; kein
+nativer Build erforderlich. Keine native Plattform-, Screenreader-, DPI- oder
+Linux-/macOS-Abnahme aus diesen Browserstudien ableiten.
