@@ -1,7 +1,7 @@
 name: Focused macOS F1 accessibility
 on:
   push:
-    branches: [main, codex/mac-f1-reading, codex/mac-f1-fields, codex/mac-f1-links, codex/windows-link-stability]
+    branches: [main, codex/mac-f1-reading, codex/mac-f1-fields, codex/mac-f1-links, codex/windows-link-stability, codex/mac-external-ax]
     paths:
       - app/accessibility*
       - app/documentation*
@@ -15,6 +15,7 @@ on:
       - tests/check_documentation_anchors.py
       - tests/documentation_anchor_probe.c
       - tests/test_accessibility*
+      - tests/accessibility_macos_probe.c
       - tests/test_native_test_runner.py
       - tests/check_display_workflow.py
       - tests/native_integration_cases.json
@@ -23,6 +24,8 @@ on:
       - tools/check_sidebar_counterexample.py
       - tools/check_detail_counterexample.py
       - tools/check_inline_math_counterexample.py
+      - tools/check_macos_ax.py
+      - tools/build.py
       - .github/workflows/macos-f1-accessibility.yml
   workflow_dispatch:
 concurrency:
@@ -65,6 +68,21 @@ jobs:
         run: python3 tools/check_sidebar_counterexample.py --compiler clang --sdl "$PWD/build-sdl-install"
       - name: Immediate inline formula texture eviction is rejected
         run: python3 tools/check_inline_math_counterexample.py --compiler clang --sdl "$PWD/build-sdl-install"
+      - name: Independent external AX reading or explicit missing permission
+        run: |
+          python3 tools/check_macos_ax.py --compiler clang --sdl "$PWD/build-sdl-install" --allow-unavailable
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          report=json.loads(Path('build/native/external-ax/results.json').read_text())
+          status=report['status']
+          assert status in ('passed','unavailable'), report
+          print('External AX acceptance:',status)
+          if status=='unavailable':
+              print('::notice::External AX remains unverified: existing Accessibility permission is unavailable.')
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as summary:
+              summary.write('\nExternal AX: **'+status+'**. '+report.get('reason','Complete F1 source read and native end reveal verified.')+'\n')
+          PY
       - name: Paired font preparation comparison after actual cold-start cases
         run: |
           mkdir -p build/native/font-prepare-baseline
@@ -88,6 +106,7 @@ jobs:
             build/native/sidebar-counterexample/**
             build/native/detail-counterexample/**
             build/native/inline-math-counterexample/**
+            build/native/external-ax/**
             build/native/font-prepare-macos-*/report.json
             build/native/font-prepare-macos-*/stdout
             build/native/font-prepare-macos-*/stderr

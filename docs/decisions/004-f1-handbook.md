@@ -2508,3 +2508,35 @@ Für die Inline-Erweiterung steht die tatsächliche Mac-Ausführung noch aus.
 Strukturierte mathematische Screenreader-Navigation, praktische Screenreader-
 Aufgaben, reale Monitor-/Dichtewechsel und der vollständige inhaltliche Abgleich
 aller Hilfeseiten bleiben offen. Die Gesamtwertung bleibt konservativ.
+
+## Unabhängiger externer macOS-AX-Prüfweg
+
+Der zusätzliche Client `tests/accessibility_macos_probe.c` verwendet ausschließlich
+öffentliche ApplicationServices-/CoreFoundation-Schnittstellen. Er linkt keinen
+Physim-Provider und spricht nur den vom Prüfwerkzeug gestarteten App-Prozess an.
+Über AXWindows, den F1-Fenstertitel und die Dokumentkennung sucht er den echten
+Lesebereich. Geprüft werden vollständiger UTF-8-Inhalt, UTF-16-Anzahl, eine genaue
+Teilzeichenfolge, echte Startgeometrie, Readonly-Status und die native Anforderung
+des letzten Inhaltszeichens. Die App muss daraufhin sichtbare Schlussglyphen
+bestätigen und ihr tatsächliches Endbild sichern.
+
+`tools/check_macos_ax.py` prüft zuerst die vorhandene Clientberechtigung über
+[AXIsProcessTrusted](https://developer.apple.com/documentation/applicationservices/1460720-axisprocesstrusted).
+Es verändert keine Systemeinstellung und öffnet keinen Berechtigungsdialog.
+Ohne vorhandene Berechtigung steht im Bericht ausdrücklich `unavailable`,
+niemals `passed`. Ohne `--allow-unavailable` liefert dieser Fall Exit 77;
+die CI verwendet die Option ausschließlich zum getrennten Erfassen der
+Prüfumgebung. Andere Fehler bleiben Fehler. Dieses Ergebnis zählt nicht zu den
+bisherigen In-Prozess-GUI-Fällen und hebt deren Abnahme nicht auf eine externe
+AX- oder VoiceOver-Abnahme an.
+
+Für den neuen Client steht die tatsächliche Mac-Ausführung noch aus. Felder,
+Linkaktionen, Tabellen, Ereignisse und gehaltene alte Referenzen benötigen
+zusätzliche externe Fälle; der vollständige Readonly-Quelltext ist der erste
+Ausführungsschritt dieses Prüfwegs. Die Gesamtwertung bleibt unverändert.
+
+Lokal sind vorab Python-Syntax, der Nicht-Mac-Plattformschutz des Clients
+mit GCC C17 und strengen Warnungen sowie der unabhängige Testläufer unter
+`build/native/mac-ax-runner-proof` geprüft. Windows meldet im Bericht korrekt
+`unavailable` und Exit 77. Diese Prüfungen ersetzen weder das Übersetzen der
+ApplicationServices-Aufrufe mit dem Mac-SDK noch ihren tatsächlichen AX-Aufruf.
