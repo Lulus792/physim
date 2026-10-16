@@ -9,20 +9,24 @@ Ein grüner Parsertest allein ist keine vollständige Abnahme.
 
 Bewertungsgrundlage sind die zentralen Skills unter `D:/Skills/skills`:
 `documentation-engineer`, `ui-ux-designer`, `accessibility-engineer`,
-`ui-implementation` und `test-engineer`. Volle Punktzahl erfordert die acht
+`ui-implementation`, `graphics-engineer` und `test-engineer`. Volle Punktzahl erfordert die acht
 unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 
 | Bereich | Belegter Stand | Rest zur vollständigen Abnahme |
 | --- | --- | --- |
 | Dokumentationszugang | 185 registrierte Seiten und 214 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
-| Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
+| Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt; vier Resamplingverfahren einschließlich PCHIP mit API, Implementierung und acht Tests je Windows/Linux abgeglichen | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
-| Formelsatz | 193 TeX-Ausdrücke auf 22 Seiten; 197 Displayblöcke und zwei Inlinepassagen unter Windows/Linux geprüft, vorherige 199 Displayblöcke auch auf macOS Intel/ARM | Mac-Abnahme der Inline-Darstellung, weitere Fachseiten, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
+| Formelsatz | 193 TeX-Ausdrücke auf 22 Seiten; 197 Displayblöcke und zwei Inlinepassagen unter Windows/Linux geprüft; macOS ARM besteht alle 25 GUI-Fälle samt 162 Inline-Bildprüfungen, Intel 24/25 mit Zeitlimit nach 46 Inline-Ansichten | Vollständige Intel-Abnahme nach Verringerung redundanter Testübergänge, weitere Fachseiten, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
 | Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; alle drei Plattformen besitzen zusätzlich geprüfte native Tabellen-, Zell- und Headerbeziehungen | Externe macOS-AX-Clientprüfung, echte Screenreader-Aufgaben und die unten beschriebene sporadische Windows-Linkprüfung |
 
 Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
 Bewertung mit Höchstpunktzahl ist wegen dieser offenen Abnahmefälle noch nicht
 begründet. Die folgenden Nachweise nennen jeweils ihre Revision und Umgebung.
+Die konservative Gesamtwertung bleibt **UI 8/10, Dokumentationsaufgabe 8/10
+und Barrierefreiheit 5/10**. Der Formelsatz besitzt jetzt auch Inline-Brüche,
+Wurzeln, Hoch-/Tiefstellungen und Matrizen mit gemeinsamer Textgrundlinie;
+seine technische Abnahme ersetzt die offenen Nutzeraufgaben nicht.
 
 ### Sidebar-Aktionen ohne Wortbruch
 
@@ -2521,6 +2525,12 @@ unveränderten inneren Zeitlimit. Das Archiv enthält 46 Ansichten; die letzten
 vollständigen Formelprüfungen betreffen Fall 45. Das ist keine vollständige
 Intel-Abnahme. Die Ansichten 34 und 40 wurden zusätzlich visuell geprüft:
 Matrix, Brüche, Fließtext und hoher Kontrast sind darin korrekt gesetzt.
+Beide Originalarchive sind vollständig heruntergeladen und gegen ihre
+GitHub-SHA-256-Digests geprüft. Die Auswertung unter
+`build/native/review-inline-mac.py` liest alle nativen und GUI-Ergebnislisten:
+ARM enthält 162 vollständige Formelbilder bis Fall 47, Intel 141 bis Fall 45.
+Auch die ARM-Ansichten 34 und 47 wurden geöffnet und visuell geprüft,
+einschließlich des verlinkten mathematischen Ausdrucks im hohen Kontrast.
 
 Der Test wiederholte bisher Größen- und Themewechsel auch bei unverändertem
 Zustand. Er führt nun genau zwei Fenstergrößenwechsel und sechs Themewechsel
