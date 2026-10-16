@@ -9,18 +9,40 @@ Nebenwirkungen können dagegen nicht zurückgenommen werden.
 ## Integration
 
 - `ps_ode_step`: Euler und klassisches RK4 mit festem positivem Zeitschritt.
-- `ps_verlet_step`: Velocity Verlet, Ordnung 2, für `q'' = a(t,q)`. Position und
+- `ps_verlet_step`: Velocity Verlet, Ordnung 2, für die unten angegebene
+  Bewegungsgleichung. Position und
   Geschwindigkeit dürfen sich nicht überlappen. Geschwindigkeitsabhängige Kräfte
   wie Luftwiderstand sind für diese Schnittstelle nicht zulässig.
 - `ps_ode_integrate`: explizites Dormand–Prince 5(4), vorwärts oder rückwärts bis
   zum gewünschten Endzeitpunkt. Geeignet für nichtsteife ODEs. Keine Ereignissuche
   und keine dichte Ausgabe zwischen Stützstellen.
 
-Für jeden RK45-Versuch werden sieben Ableitungen berechnet. Akzeptiert wird ein
-Schritt, wenn die größte komponentenweise geschätzte Abweichung, geteilt durch
-`atol[i] + rtol * max(abs(y_alt[i]), abs(y_neu[i]))`, höchstens 1 beträgt.
+Die Voraussetzung für Velocity Verlet ist eine von der Geschwindigkeit
+unabhängige Beschleunigung:
+
+$$
+\ddot{\mathbf q}=\mathbf a(t,\mathbf q)
+$$
+
+Für jeden RK45-Versuch werden sieben Ableitungen berechnet. Mit der
+komponentenweisen geschätzten Abweichung e_i und der positiven Skala s_i gilt:
+
+$$
+s_i=\operatorname{atol}_i+\operatorname{rtol}\max(|y_{i,\mathrm{alt}}|,|y_{i,\mathrm{neu}}|)
+$$
+
+Ein Schritt mit n Komponenten wird akzeptiert, wenn:
+
+$$
+\max_{0\le i<n}\frac{|e_i|}{s_i}\le1
+$$
+
 Optional ersetzen komponentenweise absolute Toleranzen den gemeinsamen Wert.
-Die Kontrolle betrifft den lokalen Fehler; sie garantiert keinen globalen Fehler.
+Absolute Toleranzen sind strikt positiv; die relative Toleranz ist mindestens
+null und kleiner als eins.
+Die Skala hat die Einheit der jeweiligen Zustandskomponente, das Verhältnis
+ist dimensionslos. Nicht darstellbare Skalen oder Fehlernormen werden abgewiesen.
+Die Kontrolle betrifft die lokale Fehlerschätzung; sie garantiert keinen globalen Fehler.
 Callbacks müssen alle Ableitungen setzen, deterministisch sein und dürfen keine
 Messungen, Zufallsziehungen oder andere sichtbare Nebenwirkungen auslösen.
 

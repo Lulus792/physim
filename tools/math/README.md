@@ -43,8 +43,10 @@ werden zusätzlich durch `documentation_formula_physics` geprüft.
 Reale Gase, Messunsicherheit und der Monte-Carlo-Lernweg verwenden ebenfalls
 registrierte Displayformeln. `documentation_formula_models` prüft alle ihre
 Formelblöcke bei 16 px; `documentation_formula_models_narrow` verlangt dieselben
-Blöcke vollständig sichtbar bei 32 px im 760 × 540-Fenster. Der Katalog umfasst
-137 Ausdrücke in 138 veröffentlichten Blöcken auf 14 Seiten.
+Blöcke vollständig sichtbar bei 32 px im 760 × 540-Fenster. Mechanik, Auftrieb
+und Numerik werden entsprechend durch `documentation_formula_mechanics` und
+`documentation_formula_mechanics_narrow` geprüft. Der Katalog umfasst
+171 Ausdrücke in 177 veröffentlichten Blöcken auf 17 Seiten.
 `documentation_formula_narrow` verlangt vollständig sichtbare Gitter-/
 Energieformeln im 760 × 540-Fenster bei 32 px. Die diskrete Saitenenergie
 ist dafür in gleichwertige, einzeln erklärte Terme aufgeteilt. Weitere
@@ -55,6 +57,11 @@ die linearen Lesealternativen des Formelkatalogs. TeX-Quellzeichen allein decken
 die tatsächlich gezeichneten nativen Lesetexte nicht ab. Ein sichtbarer y-Index
 bleibt im TeX gesetzt; die lineare Fassung verwendet bei Bedarf `_y`, anstatt
 ein ähnlich aussehendes griechisches tiefgestelltes Gamma als y auszugeben.
+
+Der Generator lädt die TeX-Pakete `base`, `ams` und `boldsymbol`; damit sind
+auch fette griechische Vektoren möglich. SVGs werden mit `serializeXML` erzeugt,
+damit legale TeX-Vergleiche wie `<` in Metadaten XML-konform maskiert sind.
+`check.py` prüft zusätzlich die XML-Struktur aller SVG-Originale.
 
 Quellen: [MathJax Node-Schnittstelle](https://docs.mathjax.org/en/v4.1/server/direct.html),
 [Herkunft und Lizenzen](../../docs/formulas/NOTICE.txt).

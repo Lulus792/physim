@@ -685,6 +685,176 @@
       "id": "monte-carlo-deviation-y",
       "tex": "\\sigma_y(t)=\\sigma_{v_y}t",
       "reading": "σ_y(t) = σ(v_y,₀) t"
+    },
+    {
+      "id": "body-sphere-inertia",
+      "tex": "I=\\frac25mr^2",
+      "reading": "I = (2/5)mr²"
+    },
+    {
+      "id": "body-box-inertia",
+      "tex": "I_x=\\frac{m}{12}(y^2+z^2)",
+      "reading": "I_x = m(y² + z²)/12"
+    },
+    {
+      "id": "body-kinetic-energy",
+      "tex": "E_K=\\frac12m|\\mathbf v|^2+\\frac12\\sum_{i=1}^3I_i\\omega_{B,i}^2",
+      "reading": "E_K = ½m|v|² + ½ sum(i=1..3) I_i ω(B,i)²"
+    },
+    {
+      "id": "body-linear-momentum",
+      "tex": "\\mathbf p=m\\mathbf v",
+      "reading": "p = m v"
+    },
+    {
+      "id": "body-angular-momentum-split",
+      "tex": "\\mathbf L=\\mathbf L_{\\mathrm{Bahn}}+\\mathbf L_{\\mathrm{Spin}}",
+      "reading": "L = L_Bahn + L_Spin"
+    },
+    {
+      "id": "body-orbital-momentum",
+      "tex": "\\mathbf L_{\\mathrm{Bahn}}=(\\mathbf r_c-\\mathbf r_o)\\times\\mathbf p",
+      "reading": "L_Bahn = (r_center − r_origin) × p"
+    },
+    {
+      "id": "body-spin-momentum",
+      "tex": "\\mathbf L_{\\mathrm{Spin}}=\\mathbf R\\mathbf I_B\\mathbf R^T\\boldsymbol\\omega",
+      "reading": "L_Spin = R I_B Rᵀ ω"
+    },
+    {
+      "id": "body-principal-inertia",
+      "tex": "\\mathbf I_B=\\operatorname{diag}(I_x,I_y,I_z)",
+      "reading": "I_B = diag(I_x, I_y, I_z)"
+    },
+    {
+      "id": "body-world-inertia",
+      "tex": "\\mathbf I_W=\\mathbf R\\mathbf I_B\\mathbf R^T",
+      "reading": "I_W = R I_B Rᵀ"
+    },
+    {
+      "id": "axial-spring-length",
+      "tex": "\\ell=|\\mathbf r_B-\\mathbf r_A|",
+      "reading": "ell = |r_B − r_A|"
+    },
+    {
+      "id": "axial-spring-direction",
+      "tex": "\\mathbf n=\\frac{\\mathbf r_B-\\mathbf r_A}{\\ell}",
+      "reading": "n = (r_B − r_A)/ell"
+    },
+    {
+      "id": "axial-spring-relative-rate",
+      "tex": "v_\\parallel=(\\mathbf v_B-\\mathbf v_A)\\cdot\\mathbf n",
+      "reading": "v_parallel = (v_B − v_A) · n"
+    },
+    {
+      "id": "axial-spring-force",
+      "tex": "\\mathbf F_A=[k(\\ell-\\ell_0)+cv_\\parallel]\\mathbf n",
+      "reading": "F_A = [k(ell − ell₀) + c v_parallel] n"
+    },
+    {
+      "id": "sphere-stokes-vector",
+      "tex": "\\mathbf F_D=-6\\pi\\mu r\\mathbf v",
+      "reading": "F_D = −6πμr v"
+    },
+    {
+      "id": "sphere-quadratic-vector",
+      "tex": "\\mathbf F_D=-\\frac12\\rho C_d\\pi r^2|\\mathbf v|\\mathbf v",
+      "reading": "F_D = −½ρ C_d πr² |v| v"
+    },
+    {
+      "id": "buoyancy-vector",
+      "tex": "\\mathbf F_A=-\\rho V_{\\mathrm{sub}}\\mathbf g",
+      "reading": "F_A = −ρ V_sub g"
+    },
+    {
+      "id": "sphere-full-volume",
+      "tex": "V_K=\\frac43\\pi r^3",
+      "reading": "V_K = (4/3)πr³"
+    },
+    {
+      "id": "sphere-cap-height",
+      "tex": "q=\\min\\!\\left(2,\\max\\!\\left(0,1-\\frac hr\\right)\\right)",
+      "reading": "q = min(2, max(0, 1 − h/r))"
+    },
+    {
+      "id": "sphere-submerged-volume",
+      "tex": "V_{\\mathrm{sub}}=\\pi r^3q^2\\left(1-\\frac q3\\right)",
+      "reading": "V_sub = πr³ q²(1 − q/3)"
+    },
+    {
+      "id": "sphere-submerged-centroid",
+      "tex": "d_c=-\\frac{r(2-q)^2}{4(1-q/3)}",
+      "reading": "d_c = −r(2 − q)²/[4(1 − q/3)]"
+    },
+    {
+      "id": "sphere-half-centroid",
+      "tex": "d_c=-\\frac{3r}{8}",
+      "reading": "d_c = −3r/8"
+    },
+    {
+      "id": "joint-stabilization-target",
+      "tex": "v_{\\mathrm{target}}=-\\beta\\frac{\\ell-\\ell_0}{\\Delta t}",
+      "reading": "v_target = −β(ell − ell₀)/Δt"
+    },
+    {
+      "id": "floating-mass",
+      "tex": "m=\\rho_sV_K",
+      "reading": "m = ρₛ V_K"
+    },
+    {
+      "id": "floating-fraction",
+      "tex": "f=\\frac{V_{\\mathrm{sub}}}{V_K}",
+      "reading": "f = V_sub/V_K"
+    },
+    {
+      "id": "floating-buoyancy",
+      "tex": "F_A=\\rho_fV_{\\mathrm{sub}}g",
+      "reading": "F_A = ρ_f V_sub g"
+    },
+    {
+      "id": "floating-damping",
+      "tex": "F_D=-cfv",
+      "reading": "F_D = −c f v"
+    },
+    {
+      "id": "floating-velocity-rate",
+      "tex": "\\dot v=\\frac{F_A+F_G+F_D}{m}",
+      "reading": "v′ = (F_A + F_G + F_D)/m"
+    },
+    {
+      "id": "floating-mechanical-energy",
+      "tex": "E_{\\mathrm{mech}}=\\frac12mv^2+U(y)",
+      "reading": "E_mech = ½mv² + U(y)"
+    },
+    {
+      "id": "floating-potential-gradient",
+      "tex": "\\frac{\\mathrm dU}{\\mathrm dy}=mg-F_A",
+      "reading": "dU/dy = mg − F_A"
+    },
+    {
+      "id": "floating-dissipation",
+      "tex": "\\dot D=cfv^2\\ge0",
+      "reading": "D′ = c f v² ≥ 0"
+    },
+    {
+      "id": "floating-energy-balance",
+      "tex": "E_{\\mathrm{balance}}=E_{\\mathrm{mech}}+D",
+      "reading": "E_balance = E_mech + D"
+    },
+    {
+      "id": "verlet-acceleration-contract",
+      "tex": "\\ddot{\\mathbf q}=\\mathbf a(t,\\mathbf q)",
+      "reading": "q″ = a(t, q)"
+    },
+    {
+      "id": "rk45-error-scale",
+      "tex": "s_i=\\operatorname{atol}_i+\\operatorname{rtol}\\max(|y_{i,\\mathrm{alt}}|,|y_{i,\\mathrm{neu}}|)",
+      "reading": "s_i = atol_i + rtol max(|y(i,alt)|, |y(i,neu)|)"
+    },
+    {
+      "id": "rk45-error-norm",
+      "tex": "\\max_{0\\le i<n}\\frac{|e_i|}{s_i}\\le1",
+      "reading": "max(0 ≤ i < n) |e_i|/s_i ≤ 1"
     }
   ]
 }

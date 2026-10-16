@@ -63,6 +63,8 @@ SIMPLE["documentation_formula_physics"] = (["--workspace-state-test", "{director
 SIMPLE["documentation_formula_catalog"] = (["--workspace-state-test", "{directory}", "docs-keyboard-formula-catalog"], 90, True)
 SIMPLE["documentation_formula_models"] = (["--workspace-state-test", "{directory}", "docs-keyboard-models"], 90, True)
 SIMPLE["documentation_formula_models_narrow"] = (["--workspace-state-test", "{directory}", "docs-keyboard-models-narrow"], 90, True)
+SIMPLE["documentation_formula_mechanics"] = (["--workspace-state-test", "{directory}", "docs-keyboard-mechanics"], 90, True)
+SIMPLE["documentation_formula_mechanics_narrow"] = (["--workspace-state-test", "{directory}", "docs-keyboard-mechanics-narrow"], 90, True)
 SIMPLE["documentation_detail"] = (["--workspace-state-test", "{directory}", "docs-keyboard-detail"], 90, True)
 SIMPLE["documentation_typeset"] = (["--workspace-state-test", "{directory}", "docs-keyboard-typeset"], 90, True)
 SIMPLE["accessibility_document_macos"] = (["--workspace-state-test", "{directory}", "docs-keyboard-reading-native"], 90, True)
@@ -1632,21 +1634,23 @@ def main():
                 require(font==(16 if index<18 else 32) and theme==(index//6)%3 and complete==1 and w>0 and h>0,
                         'Incomplete, clipped or incorrect formula state')
                 documentation_formula_ink(directory/f'docs-typeset-{index:02}.bmp',x,y,w,h)
-        elif args.case in ("documentation_formula_catalog","documentation_formula_physics","documentation_formula_narrow","documentation_formula_models","documentation_formula_models_narrow"):
+        elif args.case in ("documentation_formula_catalog","documentation_formula_physics","documentation_formula_narrow","documentation_formula_models","documentation_formula_models_narrow","documentation_formula_mechanics","documentation_formula_mechanics_narrow"):
             output=flow.steps[-1]['stdout']
             formulas=json.loads((flow.root/'docs/formulas/sources.json').read_text(encoding='utf-8'))['formulas']
             registry={f['tex']:f['reading'] for f in formulas}
             models=args.case in ('documentation_formula_models','documentation_formula_models_narrow')
-            narrow=args.case in ('documentation_formula_narrow','documentation_formula_models_narrow')
+            mechanics=args.case in ('documentation_formula_mechanics','documentation_formula_mechanics_narrow')
+            narrow=args.case in ('documentation_formula_narrow','documentation_formula_models_narrow','documentation_formula_mechanics_narrow')
             selected={f['tex'] for f in formulas if f['id'] in ('string-kinetic-term','string-gradient-term','string-staggered-velocity','string-wave-grid-step')}
             expected=[]
             names=('thermodynamics','electromagnetism','waves-optics','fluid') if args.case=='documentation_formula_physics' else ('user-guide','pendulum-tutorial','projectile-tutorial','projectile-drag-tutorial','material-tutorial','spring','collision-tutorial')
-            if models:names=('real-gas','measurement','monte-carlo-tutorial')
+            if mechanics:names=('mechanics','buoyancy','numerics')
+            elif models:names=('real-gas','measurement','monte-carlo-tutorial')
             elif narrow:names=('waves-optics',)
             for name in names:
                 text=(flow.root/f'docs/{name}.md').read_text(encoding='utf-8')
-                expected.extend((f'docs/{name}.md',registry[tex.strip()]) for tex in re.findall(r'^\$\$\n(.*?)^\$\$$',text,re.M|re.S) if not narrow or models or tex.strip() in selected)
-            require(not narrow or models or len(expected)==4,'Missing narrow formula selection')
+                expected.extend((f'docs/{name}.md',registry[tex.strip()]) for tex in re.findall(r'^\$\$\n(.*?)^\$\$$',text,re.M|re.S) if not narrow or models or mechanics or tex.strip() in selected)
+            require(not narrow or models or mechanics or len(expected)==4,'Missing narrow formula selection')
             records=re.findall(r'FORMULA CATALOG: case=(\d+) page=(\S+) block=(\d+) complete=1 reading=([^\r\n]+)',output)
             require(len(records)==len(expected) and [(r[1],r[3]) for r in records]==expected,'Published formula reading order differs')
             require([int(r[0]) for r in records]==list(range(len(expected))),'Missing formula catalog states')

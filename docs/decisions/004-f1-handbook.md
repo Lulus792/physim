@@ -17,7 +17,7 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 | Dokumentationszugang | 185 registrierte Seiten und 214 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
 | Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
-| Formelsatz | 137 TeX-Ausdrücke in 138 Displayblöcken auf 14 Seiten; aktuelle Erweiterung unter Windows/Linux geprüft, bisherige 119 Blöcke auch auf macOS Intel/ARM | Mac-Abnahme der neuen 19 Blöcke, weitere Fachseiten, Inline-TeX, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
+| Formelsatz | 171 TeX-Ausdrücke in 177 Displayblöcken auf 17 Seiten; aktuelle 39-Block-Erweiterung unter Windows/Linux geprüft, bisherige 138 Blöcke auch auf macOS Intel/ARM | Mac-Abnahme der neuen 39 Blöcke, weitere Fachseiten, Inline-TeX, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
 | Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; alle drei Plattformen besitzen zusätzlich geprüfte native Tabellen-, Zell- und Headerbeziehungen | Externe macOS-AX-Clientprüfung, echte Screenreader-Aufgaben und die unten beschriebene sporadische Windows-Linkprüfung |
 
 Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
@@ -2256,3 +2256,90 @@ vorherigen 119 Blöcke und früheren 166-Zeichen-Proben werden dafür nicht als
 vollständiger Nachweis ausgegeben. Weitere mathematische Seiten, Inline-TeX,
 reale Dichte-/Monitorwechsel, externe Mac-AX-Prüfung und praktische Screenreader-
 Aufgaben bleiben offen; die Gesamtbewertung bleibt konservativ.
+
+## Bestätigte 138-Blöcke-Revision auf beiden Macs
+
+Revision `82e6a23` besteht den tatsächlichen
+[Mac-Lauf 38817543681](https://github.com/Lulus792/physim/actions/runs/38817543681):
+ARM native Verträge 11/11 (`run-6kywvxf8`), GUI 20/20 (`run-oy6qqvi1`);
+Intel native Verträge 11/11 (`run-ut4_ebfz`), GUI 20/20 (`run-no0l8fk5`).
+Beide prüfen die 19 zusätzlichen Modelle bei 16 und 32 px sowie 180 Zeichen
+in 38 Varianten mit normaler und gebündelter Primärschrift. Die neuen Gruppen
+benötigen auf ARM 8,832 und 11,240 Sekunden, auf Intel 14,047 und 14,664 Sekunden.
+Beide bisherigen Layout-Gegenproben werden weiterhin präzise verworfen.
+
+Vollständige Logs und Archive wurden gelesen; Archiv-SHA256:
+ARM `befd31c92f27ec8d1a84cbafcfb39ebe1921e92be38f6fc75d7ac254f7ae36ed`,
+Intel `8784dd36d50d31709df1e2a388cfcd8e59af15da61d0d6c08fff803a99d1f77c`.
+Gasableitungs- und Zeichenbilder auf ARM sowie Gasableitungs- und
+Unsicherheitsbilder auf Intel wurden visuell geprüft. Dies bestätigt die
+138-Block-Erweiterung einschließlich lateinischem j-Index und klaren y-Lesetexten;
+es ersetzt weder praktische Screenreader-Aufgaben noch die folgende neue Abnahme.
+
+## Mechanik, Auftrieb und RK45 vom 16. Oktober 2026
+
+34 zusätzliche Ausdrücke ergeben mit Wiederverwendung vorhandener Formeln 39
+neue Displayblöcke: 24 in Mechanik, zwölf im Auftriebsmodell und drei in Numerik.
+Insgesamt sind 171 Ausdrücke, 1.197 Breitenvarianten und 177 veröffentlichte
+Blöcke auf 17 Seiten vorhanden. Alle sieben ausführbaren Codeblöcke dieser
+drei Seiten sind gegenüber `82e6a23` unverändert. Öffentliche API und
+numerische Modelle werden durch diese Dokumentationsarbeit nicht geändert.
+
+Die Gleichungen sind gegen `src/mechanics.c`, `src/numerics.c` und
+`examples/buoyancy/main.c` abgeglichen. Der Drehimpuls trennt Bahn- und Spinanteil
+mit Körper- und Welttensor. Die axiale Federkraft wirkt auf A entlang A nach B;
+die Gegenseite erhält die entgegengesetzte Kraft. Die Auftriebs-API arbeitet
+vektoriell entgegen dem Gravitationsvektor. Das vertikale Beispiel verwendet
+dagegen die positive y-Richtung nach oben und den positiven Betrag 9,81 m/s².
+Kappenhöhe, eingetauchtes Volumen und Fluidschwerpunkt stimmen mit der
+Kugelgeometrie überein; trocken gelten ausdrücklich Nullausgaben. Dissipation
+und effektives Potential beschreiben Körper plus ideales hydrostatisches Reservoir.
+
+Die RK45-Seite erklärt komponentenweise positive Skalierung, dimensionslose
+Fehlernorm und die lokale eingebettete Schätzung. Absolute Toleranzen sind
+strikt positiv, die relative Toleranz liegt zwischen null einschließlich und
+eins ausschließlich. Nicht darstellbare Skalen oder Normen bleiben Fehler;
+die Formel ist keine globale Genauigkeitsgarantie.
+
+Der Generator benötigt für die fette griechische Winkelgeschwindigkeit das
+bereits mitgelieferte TeX-Paket `boldsymbol`. Die erste Ausführung verwirft den
+noch unbekannten Befehl ausdrücklich; nach Laden der Erweiterung tritt ein
+zweiter, eigenständiger Fehler beim legalen Vergleich im Normindex auf: Der
+HTML-Serializer belässt das Kleinerzeichen in einem SVG-Metadatenattribut.
+Sharp/libvips verwirft das als ungültiges XML. Die Quelltexte werden deshalb
+nicht auf andere Mathematik eingeschränkt. Stattdessen verwendet der Generator
+den vorhandenen `liteAdaptor.serializeXML`-Pfad von MathJax 4.1.3, dessen
+`protectAttribute` im XML-Modus die erforderlichen Zeichen maskiert.
+`tools/math/check.py` prüft nun zusätzlich die XML-Struktur jedes SVGs.
+
+Alle 959 zuvor bestehenden Rastervarianten bleiben in Dimensionen, Bytezahl,
+CRC, Assetpfad und SHA256 identisch. Ihre SVG-Originale werden XML-konform neu
+serialisiert; diese veränderten SVG-Hashes sind im Manifest enthalten. Die
+171-Ausdruck-Prüfung bestätigt Quellkatalog, alle 1.197 SVG-/Rastervarianten,
+native Deklarationen und alle veröffentlichten Blöcke. Fehlerausgaben bleiben
+unter `build/native/formula-mechanics-render.log` und `formula-mechanics-render2.log`
+erhalten, erfolgreiche Generierung unter `formula-mechanics-render3.log`.
+
+Die neue Mechanikgruppe prüft alle 39 Blöcke in der großen Ansicht bei 16 px
+und dieselben 39 bei 760 x 540 und 32 px. Tatsächlicher Clip, Formelbild,
+native Lesebereiche, exakte Lesereihenfolge sowie Editor- und Simulationszustand
+bleiben verpflichtend. Die Gruppenauswahl verwendet benannte Enumwerte und
+eine Pfadtabelle; alle bisherigen Gruppen werden als Regression mit ausgeführt.
+Die vorhandenen Zeitgrenzen werden nicht erhöht.
+
+MSVC/ASan besteht Mechanik, Numerik, Dokumentparser und die tatsächliche
+Auftriebsreferenz 4/4 in `run-_545aqz6`, die acht GUI-Gruppen 8/8 in
+`run-w82iz0p9`. Linux GCC/ASan/UBSan besteht dieselben nativen Fälle 4/4 in
+`run-fgi5ds6k` und GUI 8/8 in `run-kdr97w6_` mit SDL 3.2.30, X11/Xvfb,
+Openbox und Mesa-Software-GL. Die Referenz prüft reale Runnerwerte, Energiebilanz
+und Konvergenz der Kugel. Die erweiterte Zeicheninventur bestätigt auf beiden
+Plattformen jeweils 182 Zeichen in 38 Varianten mit normaler und gebündelter
+Primärschrift. Alle 39 kleinen Formelbilder beider Plattformen wurden anhand
+von je zwei beschrifteten Übersichten visuell geprüft; die vollständige
+Windows-Spinansicht wurde zusätzlich geöffnet.
+
+Die Mac-CI enthält beide neuen 39-Formel-Gruppen. Für diese Erweiterung steht
+der tatsächliche Mac-Lauf noch aus; der vorherige 138-Blöcke-Nachweis wird dafür
+nicht umgedeutet. Weitere Fachseiten, Inline-TeX, reale Dichte-/Monitorwechsel,
+externe Mac-AX-Prüfung und praktische Screenreader-Aufgaben bleiben offen.
+Die Gesamtbewertung wird dadurch nicht als vollständig ausgegeben.

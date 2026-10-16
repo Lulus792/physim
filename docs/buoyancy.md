@@ -20,8 +20,50 @@ Dichte 1000 kg/m³. Die Kugeldichte beträgt zunächst 500 kg/m³, ihre Masse ru
 Der Mittelpunkt startet 0,04 m oberhalb der Oberfläche, ohne Anfangsgeschwindigkeit.
 
 `ps_sphere_submersion` liefert das tatsächlich eingetauchte Volumen und dessen
-Schwerpunkt; `ps_buoyancy_force` berechnet `rho*V*g`. Gewicht und die ausdrücklich
-empirische Dämpfung `-c*Eintauchanteil*v` werden addiert. Der Standardwert ist
+Schwerpunkt. Mit dem Gesamtvolumen V_K, der Kugeldichte ρₛ und dem
+dimensionslosen Eintauchanteil f gilt:
+
+$$
+V_K=\frac43\pi r^3
+$$
+
+$$
+m=\rho_sV_K
+$$
+
+$$
+f=\frac{V_{\mathrm{sub}}}{V_K}
+$$
+
+Die y-Achse zeigt nach oben. ρ_f ist die Fluiddichte und g der positive Betrag
+der Fallbeschleunigung. Hier wird g = 9,81 m/s² verwendet.
+Auftrieb und Gewicht auf dieser Achse lauten:
+
+$$
+F_A=\rho_fV_{\mathrm{sub}}g
+$$
+
+$$
+F_G=-mg
+$$
+
+Die ausdrücklich empirische Dämpfung ist:
+
+$$
+F_D=-cfv
+$$
+
+Mit v als vertikaler Geschwindigkeit wird das Bewegungssystem integriert:
+
+$$
+\dot{y}=v
+$$
+
+$$
+\dot v=\frac{F_A+F_G+F_D}{m}
+$$
+
+Der Standardwert ist
 `c=1,2 N s/m`. Dieses Dämpfungsmodell ist keine Stokes- oder quadratische
 Widerstandsnäherung. Bewegung und dissipierte Arbeit werden mit denselben RK4-Stufen
 integriert. Die Referenzprüfung verwendet `dt=0,005 s`; bei Parameteränderungen
@@ -48,12 +90,34 @@ Auftrieb, Gewicht, Dämpfung, Gesamtkraft, mechanische Energie, dissipierte Arbe
 Gesamtbilanz und Höhe des Auftriebsmittelpunkts relativ zum Kugelzentrum.
 
 `energy` umfasst kinetische Energie und das effektive Potential von Körper und
-idealem hydrostatischem Reservoir, mit `U(0)=0`. Es ist nicht allein die Energie
-der Kugel. Das Potential erfüllt `dU/dy = m*g - F_A`; außerhalb des teilweise
-eingetauchten Bereichs wird es stetig mit der jeweiligen konstanten Kraft fortgesetzt.
-`energy.dissipated` integriert `c*Eintauchanteil*v²` und ist nichtnegativ.
-`energy.balance` addiert beide Größen. Die Analyse bewertet dessen numerische
-Abweichung, statt physikalische Dämpfung als Energiefehler auszugeben.
+idealem hydrostatischem Reservoir. Es ist nicht allein die Energie der Kugel:
+
+$$
+E_{\mathrm{mech}}=\frac12mv^2+U(y)
+$$
+
+Das Potential hat U(0) = 0 und erfüllt:
+
+$$
+\frac{\mathrm dU}{\mathrm dy}=mg-F_A
+$$
+
+Außerhalb des teilweise eingetauchten Bereichs wird es stetig mit der jeweiligen
+konstanten Kraft fortgesetzt. `energy.dissipated` speichert die nichtnegative
+dissipierte Arbeit D mit D(0) = 0:
+
+$$
+\dot D=cfv^2\ge0
+$$
+
+`energy.balance` addiert beide Größen:
+
+$$
+E_{\mathrm{balance}}=E_{\mathrm{mech}}+D
+$$
+
+Die Analyse bewertet dessen numerische Abweichung, statt physikalische Dämpfung
+als Energiefehler auszugeben.
 
 Die gemeinsame Analyse bevorzugt `position.x`, dann `a.position`, schließlich
 `position.y`. Für diese Vorlage wird ausschließlich die vertikale Position verwendet.

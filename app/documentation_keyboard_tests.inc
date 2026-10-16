@@ -958,16 +958,24 @@ static void documentation_typeset_test_frame(app *a,int *stage,int *code,const c
     if(!okay){fprintf(stderr,"Formula typeset stage %d case %u failed\n",*stage-1,sample);*code=1;a->quitting=true;}
     if(a->quitting)printf("FORMULA TYPESET SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 }
-static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code,const char **capture,unsigned group,bool narrow) {
+typedef enum {
+    DOC_FORMULAS_LEARNING,DOC_FORMULAS_PHYSICS,DOC_FORMULAS_MODELS,DOC_FORMULAS_MECHANICS
+} documentation_formula_group;
+static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code,const char **capture,documentation_formula_group group,bool narrow) {
     static const char *learning_paths[]={"docs/user-guide.md","docs/pendulum-tutorial.md","docs/projectile-tutorial.md",
         "docs/projectile-drag-tutorial.md","docs/material-tutorial.md","docs/spring.md","docs/collision-tutorial.md"};
     static const char *physics_paths[]={"docs/thermodynamics.md","docs/electromagnetism.md","docs/waves-optics.md","docs/fluid.md"};
     static const char *model_paths[]={"docs/real-gas.md","docs/measurement.md","docs/monte-carlo-tutorial.md"};
-    const char *const *paths=group==2?model_paths:group==1?physics_paths:learning_paths;
-    size_t path_count=group==2?sizeof model_paths/sizeof model_paths[0]:
-        group==1?sizeof physics_paths/sizeof physics_paths[0]:sizeof learning_paths/sizeof learning_paths[0];
+    static const char *mechanics_paths[]={"docs/mechanics.md","docs/buoyancy.md","docs/numerics.md"};
+    static const struct {const char *const *paths;size_t count;} groups[]={
+        {learning_paths,sizeof learning_paths/sizeof learning_paths[0]},
+        {physics_paths,sizeof physics_paths/sizeof physics_paths[0]},
+        {model_paths,sizeof model_paths/sizeof model_paths[0]},
+        {mechanics_paths,sizeof mechanics_paths/sizeof mechanics_paths[0]}
+    };
+    const char *const *paths=groups[group].paths;size_t path_count=groups[group].count;
     static const char *narrow_paths[]={"docs/waves-optics.md"};
-    if(narrow && group!=2){paths=narrow_paths;path_count=sizeof narrow_paths/sizeof narrow_paths[0];}
+    if(narrow && group==DOC_FORMULAS_PHYSICS){paths=narrow_paths;path_count=sizeof narrow_paths/sizeof narrow_paths[0];}
     static size_t page,block;static unsigned sample,frames;static char image[80];
     static int editor,analysis;static double simulation,started;bool okay=true;
     switch((*stage)++) {
@@ -990,7 +998,7 @@ static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code
     case 4:
         while(a->documentation && block<a->documentation->count) {
             const ps_doc_block *candidate=&a->documentation->blocks[block];const char *text=a->documentation->text+candidate->text;
-            bool selected=!narrow || group==2 || !strncmp(text,"E_K = ",6) || !strncmp(text,"E_G = ",6) ||
+            bool selected=!narrow || group!=DOC_FORMULAS_PHYSICS || !strncmp(text,"E_K = ",6) || !strncmp(text,"E_G = ",6) ||
                 !strncmp(text,"vⱼ^(n−½)",strlen("vⱼ^(n−½)")) || !strncmp(text,"uⱼⁿ⁺¹",strlen("uⱼⁿ⁺¹"));
             if(candidate->kind==PS_DOC_MATH && selected)break;
             ++block;
@@ -998,7 +1006,7 @@ static void documentation_formula_catalog_test_frame(app *a,int *stage,int *code
         if(!a->documentation){okay=false;break;}
         if(block==a->documentation->count) {
             if(++page<path_count)*stage=2;
-            else {okay=narrow && group!=2?sample==4:sample>0;a->quitting=true;}
+            else {okay=narrow && group==DOC_FORMULAS_PHYSICS?sample==4:sample>0;a->quitting=true;}
             break;
         }
         a->doc_jump_block=(int)block;frames=0;break;
@@ -1054,11 +1062,13 @@ static void documentation_detail_test_frame(app *a,int *stage,int *code,const ch
 }
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
     if(!strcmp(mode,"docs-keyboard-detail")){documentation_detail_test_frame(a,stage,code,capture);return;}
-    if(!strcmp(mode,"docs-keyboard-models-narrow")){documentation_formula_catalog_test_frame(a,stage,code,capture,2,true);return;}
-    if(!strcmp(mode,"docs-keyboard-models")){documentation_formula_catalog_test_frame(a,stage,code,capture,2,false);return;}
-    if(!strcmp(mode,"docs-keyboard-formula-narrow")){documentation_formula_catalog_test_frame(a,stage,code,capture,1,true);return;}
-    if(!strcmp(mode,"docs-keyboard-formula-physics")){documentation_formula_catalog_test_frame(a,stage,code,capture,1,false);return;}
-    if(!strcmp(mode,"docs-keyboard-formula-catalog")){documentation_formula_catalog_test_frame(a,stage,code,capture,0,false);return;}
+    if(!strcmp(mode,"docs-keyboard-mechanics-narrow")){documentation_formula_catalog_test_frame(a,stage,code,capture,DOC_FORMULAS_MECHANICS,true);return;}
+    if(!strcmp(mode,"docs-keyboard-mechanics")){documentation_formula_catalog_test_frame(a,stage,code,capture,DOC_FORMULAS_MECHANICS,false);return;}
+    if(!strcmp(mode,"docs-keyboard-models-narrow")){documentation_formula_catalog_test_frame(a,stage,code,capture,DOC_FORMULAS_MODELS,true);return;}
+    if(!strcmp(mode,"docs-keyboard-models")){documentation_formula_catalog_test_frame(a,stage,code,capture,DOC_FORMULAS_MODELS,false);return;}
+    if(!strcmp(mode,"docs-keyboard-formula-narrow")){documentation_formula_catalog_test_frame(a,stage,code,capture,DOC_FORMULAS_PHYSICS,true);return;}
+    if(!strcmp(mode,"docs-keyboard-formula-physics")){documentation_formula_catalog_test_frame(a,stage,code,capture,DOC_FORMULAS_PHYSICS,false);return;}
+    if(!strcmp(mode,"docs-keyboard-formula-catalog")){documentation_formula_catalog_test_frame(a,stage,code,capture,DOC_FORMULAS_LEARNING,false);return;}
     if(!strcmp(mode,"docs-keyboard-typeset")){documentation_typeset_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-font-demand")){documentation_font_demand_test(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-sidebar")) {

@@ -11,8 +11,19 @@ und Restitution sowie vollständigen C-/Physim-Quellen und Analysen.
 
 ## Trägheit und Energiebereich
 
-Die homogene Vollkugel verwendet `I = 2*m*r²/5`, die Box mit vollen
-Kantenlängen beispielsweise `Ix = m*(y²+z²)/12`. Die Konstruktoren summieren
+Die homogene Vollkugel verwendet:
+
+$$
+I=\frac25mr^2
+$$
+
+Für die Box mit vollen Kantenlängen x, y und z gilt beispielsweise:
+
+$$
+I_x=\frac{m}{12}(y^2+z^2)
+$$
+
+Die Konstruktoren summieren
 Produkte der binären Eingaben exakt und runden die rationale Formel einmal
 auf den nächsten Binary64-Wert, bei Gleichstand zum geraden Wert.
 Zwischenprodukte dürfen den Double-Bereich überschreiten. Nur wenn die positive
@@ -20,7 +31,13 @@ Endträgheit zu null rundet oder überläuft, folgt `PS_NUMERIC`; der Ausgabekö
 bleibt unverändert. Masse null erzeugt weiterhin einen ruhenden statischen Körper.
 
 `ps_body_kinetic_energy` summiert Translation und Rotation in den gespeicherten
-Hauptachsen. Bei identischer Orientierung werden die binären Produkte exakt
+Hauptachsen. Mit der Winkelgeschwindigkeit in diesen Körperachsen gilt:
+
+$$
+E_K=\frac12m|\mathbf v|^2+\frac12\sum_{i=1}^3I_i\omega_{B,i}^2
+$$
+
+Bei identischer Orientierung werden die binären Produkte exakt
 summiert und einmal gerundet. Für gedrehte Körper wird die Winkelgeschwindigkeit
 zunächst skaliert und mit dem normalisierten Quaternion in die Hauptachsen
 transformiert. Diese Rotation hat weiterhin Double-Rundungsfehler; ihre
@@ -35,11 +52,30 @@ Zwischenwerte und Genauigkeitsgrenzen.
 
 ## Impuls und Drehimpuls abfragen
 
-`ps_body_linear_momentum` / `body.linearMomentum()` liefert `p = m*v` in
-kg·m/s. `ps_body_angular_momentum` / `body.angularMomentum(origin)` liefert
-den Drehimpuls um einen endlichen Weltpunkt in kg·m²/s:
-`L = (center-origin) × p + R*I*Rᵀ*omega`. Der zweite Term verwendet die
-Hauptträgheiten des Körpers und seine Orientierung. Die zugrunde liegende
+`ps_body_linear_momentum` / `body.linearMomentum()` liefert den Impuls in kg·m/s:
+
+$$
+\mathbf p=m\mathbf v
+$$
+
+`ps_body_angular_momentum` / `body.angularMomentum(origin)` liefert den Drehimpuls
+um einen endlichen Weltpunkt in kg·m²/s. Er besteht aus Bahn- und Eigendrehimpuls:
+
+$$
+\mathbf L=\mathbf L_{\mathrm{Bahn}}+\mathbf L_{\mathrm{Spin}}
+$$
+
+$$
+\mathbf L_{\mathrm{Bahn}}=(\mathbf r_c-\mathbf r_o)\times\mathbf p
+$$
+
+$$
+\mathbf L_{\mathrm{Spin}}=\mathbf R\mathbf I_B\mathbf R^T\boldsymbol\omega
+$$
+
+Dabei sind r_c der Körperschwerpunkt, r_o der Bezugspunkt, I_B der Tensor in den
+Hauptachsen und R die Rotation von den Körper- in die Weltachsen. Die
+Winkelgeschwindigkeit liegt hier im Weltkoordinatensystem. Die zugrunde liegende
 [MIT-Darstellung](https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/pages/week-12-rotations-and-translation-rolling/37-4-summary-of-angular-momentum-and-kinetic-energy/)
 trennt Bahn- und Eigendrehimpuls; in drei Dimensionen ist die Trägheit ein Tensor.
 
@@ -159,12 +195,32 @@ Die Anleitung und `mechanics.h` lassen sich über F1 direkt in der App öffnen.
 
 ## Körper und Trägheit
 
-`ps_body_sphere` erzeugt eine homogene Vollkugel mit `I = 2*m*r*r/5`.
-`ps_body_box` nimmt volle Kantenlängen und berechnet beispielsweise
-`Ix = m*(y*y+z*z)/12`. Die drei gespeicherten Trägheitswerte gehören zu lokalen
-Hauptachsen. Die Quaternion rotiert diese ins Weltkoordinatensystem; der Tensor
-wirkt dort als `R * diag(Ix,Iy,Iz) * R^T`. Eine beliebige positiv definite Trägheit
-kann durch ihre Hauptwerte und Hauptachsen beschrieben werden.
+`ps_body_sphere` erzeugt eine homogene Vollkugel mit:
+
+$$
+I=\frac25mr^2
+$$
+
+`ps_body_box` nimmt volle Kantenlängen und berechnet beispielsweise:
+
+$$
+I_x=\frac{m}{12}(y^2+z^2)
+$$
+
+Die drei gespeicherten Trägheitswerte gehören zu lokalen Hauptachsen:
+
+$$
+\mathbf I_B=\operatorname{diag}(I_x,I_y,I_z)
+$$
+
+Die Quaternion rotiert diese ins Weltkoordinatensystem. Dort wirkt der Tensor:
+
+$$
+\mathbf I_W=\mathbf R\mathbf I_B\mathbf R^T
+$$
+
+Eine beliebige positiv definite Trägheit kann durch ihre Hauptwerte und
+Hauptachsen beschrieben werden.
 
 ```c
 ps_body body;
@@ -276,16 +332,47 @@ Die App-Vorlage **Feder–Masse–Dämpfer** verbindet diese Kraftfunktion mit R
 einer geführten Masse und einer Bilanz der dissipierten Energie. Anleitung,
 Gleichungen und Referenzfälle: [Feder–Masse–Dämpfer](spring.md).
 
-`ps_spring_force` liefert auf A entlang der Verbindung zu B die Kraft
-`k*(Abstand-Ruhelänge) + c*relative axiale Geschwindigkeit`. B erhält die Gegenkraft.
+`ps_spring_force` liefert die Kraft auf A entlang der Verbindung zu B.
+Mit den Weltpositionen und Geschwindigkeiten beider Endpunkte, dem Abstand
+und der Einheitsrichtung von A nach B gilt für einen positiven Abstand:
+
+$$
+\ell=|\mathbf r_B-\mathbf r_A|
+$$
+
+$$
+\mathbf n=\frac{\mathbf r_B-\mathbf r_A}{\ell}
+$$
+
+$$
+v_\parallel=(\mathbf v_B-\mathbf v_A)\cdot\mathbf n
+$$
+
+$$
+\mathbf F_A=[k(\ell-\ell_0)+cv_\parallel]\mathbf n
+$$
+
+Die Ruhelänge ist ℓ₀, k die Steifigkeit und c die Dämpfung.
+B erhält die entgegengesetzte Kraft.
 Das ist eine axiale Feder mit axialer viskoser Dämpfung. Bei zusammenfallenden
 Endpunkten und aktiver Feder/Dämpfung ist die Richtung undefiniert: `PS_SINGULAR`.
 
 `ps_sphere_drag` verwendet die Geschwindigkeit des Körpers relativ zum Fluid:
 
-- Kein Widerstand: null Kraft.
-- Stokes: `-6*pi*Viskosität*Radius*relative Geschwindigkeit`, für schleichende Strömung.
-- Quadratisch: `-0.5*Dichte*Cd*pi*Radius²*Betrag(v)*v`, mit explizitem Cd.
+Ohne Widerstandsmodell ist die Kraft null. Für schleichende Strömung verwendet
+das Stokes-Modell die dynamische Viskosität μ und den Kugelradius r:
+
+$$
+\mathbf F_D=-6\pi\mu r\mathbf v
+$$
+
+Das quadratische Modell verwendet die Fluiddichte ρ und einen expliziten C_d:
+
+$$
+\mathbf F_D=-\frac12\rho C_d\pi r^2|\mathbf v|\mathbf v
+$$
+
+In beiden Gleichungen ist v der Geschwindigkeitsvektor des Körpers relativ zum Fluid.
 
 Die Stokes-Annahme für kleine Reynolds-Zahlen wird in
 [MIT: Classical Mechanics III, Abschnitt 6.8](https://ocw.mit.edu/courses/8-09-classical-mechanics-iii-fall-2014/d9bac33f6c60b304dc0398e99b327102_MIT8_09F14_full.pdf)
@@ -303,8 +390,13 @@ verantwortet Modell und Gültigkeitsbereich.
 Die App-Vorlage **Auftrieb** zeigt eine schwimmende Kugel mit Kräftepfeilen,
 zwölf Messkanälen und Energiebilanz. [Anleitung und Modellgrenzen](buoyancy.md).
 
-`ps_buoyancy_force(rho, volume, gravity, &force)` liefert die archimedische Kraft
-`-rho * volume * gravity`. Dichte und verdrängtes Volumen müssen endlich und
+`ps_buoyancy_force(rho, volume, gravity, &force)` liefert die archimedische Kraft:
+
+$$
+\mathbf F_A=-\rho V_{\mathrm{sub}}\mathbf g
+$$
+
+Dichte und verdrängtes Volumen müssen endlich und
 nichtnegativ sein. Gravitation ist ein beliebig gerichteter endlicher Weltvektor.
 Gewicht und Widerstand werden vom Aufrufer zusätzlich addiert. Die Kraft greift
 am Schwerpunkt des verdrängten Fluids an; `ps_body_force_torque` liefert daraus
@@ -315,9 +407,34 @@ Volumen und den Schwerpunkt einer Kugel unter einer ebenen Fluidoberfläche.
 `center_height` ist der vorzeichenbehaftete Abstand des Kugelmittelpunkts zur
 Ebene, positiv zur trockenen Seite. Der Fluidraum liegt auf der negativen Seite.
 Der Schwerpunktversatz wird entlang dieser Oberflächennormalen angegeben.
-Bei trockenem Kontakt sind beide Ausgaben null; eine vollständig eingetauchte
-Kugel verdrängt `4*pi*r³/3`, mit Schwerpunkt im Kugelzentrum. Eine halb eingetauchte
-Kugel hat den Schwerpunktversatz `-3*r/8`.
+Mit h = `center_height` und der durch den Radius normierten Kappenhöhe q gilt:
+
+$$
+q=\min\!\left(2,\max\!\left(0,1-\frac hr\right)\right)
+$$
+
+$$
+V_{\mathrm{sub}}=\pi r^3q^2\left(1-\frac q3\right)
+$$
+
+Für q > 0 liegt der Schwerpunkt des verdrängten Fluids entlang der Normalen bei:
+
+$$
+d_c=-\frac{r(2-q)^2}{4(1-q/3)}
+$$
+
+Bei trockenem Kontakt sind beide Ausgaben null. Vollständig eingetaucht
+verdrängt die Kugel ihr ganzes Volumen, mit Schwerpunkt im Kugelzentrum:
+
+$$
+V_K=\frac43\pi r^3
+$$
+
+Halb eingetaucht ist der Schwerpunktversatz:
+
+$$
+d_c=-\frac{3r}{8}
+$$
 
 Für horizontales Wasser bei `y=0` und eine homogene Kugel mit Radius `radius`
 kann eine Schrittfunktion so aussehen (alle Größen in SI):
@@ -367,7 +484,13 @@ eindeutige Verbindungsrichtung existiert.
 
 Die Stabilisierung zwischen 0 und 1 gibt den Anteil des aktuellen Längenfehlers
 an, der als zusätzliche Schließgeschwindigkeit pro Zeitschritt angefordert wird:
-`target = -stabilization * (length - length_m) / dt_s`. Bei 0 wird ausschließlich
+$$
+v_{\mathrm{target}}=-\beta\frac{\ell-\ell_0}{\Delta t}
+$$
+
+Dabei ist β der Wert `stabilization`, ℓ der aktuelle Abstand, ℓ₀ die
+positive Solllänge `length_m` und Δt der positive Zeitschritt `dt_s`.
+Bei 0 wird ausschließlich
 die radiale Relativgeschwindigkeit beseitigt. Die Korrektur kann Energie zuführen;
 das Verfahren ist kein energieerhaltender Integrator. Große Zeitschritte oder
 starke Anfangsfehler erfordern besondere Aufmerksamkeit und Verfeinerung.

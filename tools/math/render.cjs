@@ -11,6 +11,7 @@ const {RegisterHTMLHandler} = require('@mathjax/src/js/handlers/html.js');
 require('@mathjax/src/js/util/asyncLoad/node.js');
 require('@mathjax/src/js/input/tex/base/BaseConfiguration.js');
 require('@mathjax/src/js/input/tex/ams/AmsConfiguration.js');
+require('@mathjax/src/js/input/tex/boldsymbol/BoldsymbolConfiguration.js');
 const sharp = require('sharp');
 
 const root = path.resolve(__dirname, '../..');
@@ -23,7 +24,7 @@ const quote = value => JSON.stringify(value);
 const widths = [128, 160, 192, 256, 384, 512, 768];
 const adaptor = liteAdaptor({fontSize:16});
 RegisterHTMLHandler(adaptor);
-const tex = new TeX({packages:['base','ams'], formatError:(jax,error)=>{throw Error(error.message);}});
+const tex = new TeX({packages:['base','ams','boldsymbol'], formatError:(jax,error)=>{throw Error(error.message);}});
 const svg = new SVG({fontCache:'none', displayAlign:'left', displayOverflow:'linebreak'});
 const document = mathjax.document('', {InputJax:tex, OutputJax:svg});
 
@@ -41,7 +42,8 @@ async function main() {
     for (const container of widths) {
       const node = await document.convertPromise(formula.tex,
         {display:true, em:16, ex:8, containerWidth:container});
-      let output = adaptor.outerHTML(adaptor.firstChild(node));
+      // SVG is XML: literal comparisons in TeX metadata need XML attribute escaping.
+      let output = adaptor.serializeXML(adaptor.firstChild(node));
       if (/data-mml-node="merror"/.test(output)) throw Error('Invalid TeX: '+formula.id);
       const box = output.match(/viewBox="([^"]+)"/)[1].split(/\s+/).map(Number);
       // A small transparent margin protects antialiased outlines at the bounds.

@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import xml.etree.ElementTree as ET
 import zlib
 
 
@@ -39,6 +40,7 @@ def check(root):
             svg = (directory / f'{formula["id"]}-{variant["container"]}.svg').read_bytes()
             assert hashlib.sha256(svg).hexdigest() == variant["svgSha256"], "Corrupt formula vector"
             assert b'<svg ' in svg and b'<path ' in svg and b'<script' not in svg
+            assert ET.fromstring(svg).tag == '{http://www.w3.org/2000/svg}svg', 'Malformed formula vector'
             declarations.append(f' {{{variant["width"]:.6f}f,{variant["height"]:.6f}f,{w}u,{h}u,'
                                 f'{len(packed)}u,{variant["crc"]}u,{quote(variant["asset"])}' + "},")
         declarations.append("};")
