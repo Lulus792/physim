@@ -23,7 +23,7 @@ let failure = Diagnostic.here(8, "linearSolve", "matrix", "Matrix ist singulär"
 failure.raise()
 ```
 
-Physim 0.175.0 besitzt den Werttyp `Diagnostic`. `Diagnostic.here` erfasst den
+Die Physim-Sprache besitzt den Werttyp `Diagnostic`. `Diagnostic.here` erfasst den
 Quellpfad, die Zeile und die Spalte dieser Expression. Die vollständige Factory
 ist `Diagnostic(code, operation, argument, source, line, column, message)`.
 `Diagnostic.empty()` besitzt Code 0. Methoden `code()`, `operation()`, `argument()`,

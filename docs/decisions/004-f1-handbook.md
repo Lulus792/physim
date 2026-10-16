@@ -3048,3 +3048,28 @@ Prüffenster des leeren Workspaces wurden anschließend geschlossen und ihre Abw
 beobachtet. Die Ursache des manuellen Werkzeug-/Fokusbefunds bleibt offen;
 daraus wird weder eine behobene Produktionsursache noch eine vollständige
 Narrator-Abnahme abgeleitet. Die Gesamtwertung bleibt unverändert.
+
+## Build-Anleitung ohne veraltete feste Katalogzahlen
+
+`docs/build.md` nannte noch 724 Fälle ohne Fenster, 695 Fälle ohne App und
+75 Grafikabläufe. Die tatsächliche Katalogauswahl des aktuellen Quellstands
+enthält 744 Fälle ohne Fenster und 709 ohne App. Die Enumeration liefert
+146 Grafikfälle für Windows und 143 für Linux/macOS. Diese Zahlen wurden nur
+aus den Definitionen ermittelt, nicht als ausgeführte Plattformtests gewertet;
+`build/native/catalog-doc-before.json` trennt diese Aussage ausdrücklich.
+
+Die Anleitung erklärt jetzt die tatsächlich implementierte Auswahl nach
+Betriebssystem, App-Build und wiederholbaren Filtern sowie die Ausgaben
+`TEST`, `Native tests` und `results.json`. Veraltete Detailzahlen zu Sprach-,
+Runtime-, Integrations- und Quellgleichheitsfällen entfallen. Die beschriebenen
+Prüfbereiche und Befehle bleiben konkret. Die Diagnoseanleitung beschreibt den
+vorhandenen Werttyp ohne eine frühere Produktversion als aktuellen Stand
+erscheinen zu lassen. Header und Implementierung bestätigen weiterhin die
+Grenzen und das Fehlerverhalten von `ps_diagnostic`.
+
+Die reale CLI-Hilfe wurde ausgeführt; die unzulässige Kombination aus
+`--test-display` und `--no-app` wird mit Exit 2 und der beschriebenen Diagnose
+abgewiesen. Die bestehenden nativen Abschnittsprüfer bestätigen unter Windows
+und Linux jeweils 219 Abschnittslinks und 185 Seiten. Die Ausgaben liegen unter
+`build/native/catalog-doc-anchors-{windows,linux}.log`. Für die redaktionelle
+Änderung wurden keine neuen spiegelnden Tests eingeführt.
