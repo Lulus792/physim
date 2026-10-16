@@ -19,11 +19,16 @@ die Hauptmenüs. Ein Mausklick setzt die Bedienung mit dem Zeiger fort.
 ## Schrift und Sicherung
 
 Die Code-Schriftgröße lässt sich zwischen 16, 18, 20 und 22 logischen Pixeln wählen.
-Eine Vorschau zeigt die neue Größe. Sie gilt nach **Übernehmen** für beide C-Editoren,
-Codeblöcke im Dokumentationsbrowser und das Protokoll. Die **Schriftgröße der Oberfläche** ist davon unabhängig wählbar: 16, 18, 20
+Eine Vorschau zeigt die neue Größe. Sie gilt nach **Übernehmen** für die
+Projekteditoren und das Protokoll. Ohne eigenen Lesezoom übernimmt das Handbuch
+diese Größe auch für seine Codeblöcke. Die **Schriftgröße der Oberfläche** ist davon unabhängig wählbar: 16, 18, 20
 oder 22 logische Pixel gelten für Navigation, Menüs, Beschriftungen, Diagramme und den
-normalen Text im Handbuch. Auch ein bereits geöffnetes Handbuch wechselt nach
-Übernehmen zur neuen Größe. Kleine Zeilen und lange Schaltflächenbeschriftungen
+normalen Text im Handbuch. Auch ein bereits geöffnetes Handbuch übernimmt nach
+**Übernehmen** die neuen Größen, solange kein eigener Lesezoom aktiv ist.
+Die Plus-/Minus-Schaltflächen im Handbuch wählen unabhängig davon eine gemeinsame
+Lesegröße für Text und Code bis 32 Pixel. Die mittlere Größenanzeige setzt diesen
+Lesezoom zurück; dann gelten wieder die getrennten UI- und Codeschriftgrößen.
+Kleine Zeilen und lange Schaltflächenbeschriftungen
 passen sich an; umfangreiche Ansichten bleiben scrollbar. Abbrechen erhält die
 bisherige Größe, Standardwerte wählen wieder 16 Pixel.
 
@@ -51,8 +56,11 @@ Unter Windows veröffentlicht die native UI-Automation-Anbindung jetzt
 Schaltflächen, Checkboxen, Auswahlgruppen und Slider mit Namen, Rollen,
 Zuständen und Fokus. Ein unabhängiger Client hat die tatsächlichen
 Einstellungen bedient: Checkbox umschalten, Schrift-/Theme-Auswahl ändern
-und einen Button fokussieren. Das bestätigt diese Bedienabläufe; vollständiges
-Lesen der F1-Dokumentation und die Screenreader-Abnahme bleiben offen.
+und einen Button fokussieren. F1 veröffentlicht außerdem den vollständigen
+Lesetext sowie Suchfelder, Links und Tabellen über die native Anbindung.
+Die [Accessibility-Dokumentation](accessibility.md) nennt die vorhandenen
+Schnittstellen und ihre Prüfgrenzen. Praktische Screenreader-Aufgaben bleiben
+offen; die nativen Schnittstellen allein belegen ihre Bedienbarkeit nicht.
 
 Ein **Linksklick in die Szene** wählt das vorderste sichtbare Objekt unter dem
 Mauszeiger. Der Inspektor zeigt dessen ID beziehungsweise Listenposition und

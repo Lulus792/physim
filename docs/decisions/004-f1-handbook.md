@@ -14,7 +14,7 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 
 | Bereich | Belegter Stand | Rest zur vollständigen Abnahme |
 | --- | --- | --- |
-| Dokumentationszugang | 185 registrierte Seiten und 214 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
+| Dokumentationszugang | 185 registrierte Seiten und 218 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
 | Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt; vier Resamplingverfahren einschließlich PCHIP mit API, Implementierung und acht Tests je Windows/Linux abgeglichen | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
 | Formelsatz | 193 TeX-Ausdrücke auf 22 Seiten; 197 Displayblöcke und zwei Inlinepassagen unter Windows/Linux geprüft; macOS ARM besteht alle 25 GUI-Fälle samt 162 Inline-Bildprüfungen, Intel 24/25 mit Zeitlimit nach 46 Inline-Ansichten | Vollständige Intel-Abnahme nach Verringerung redundanter Testübergänge, weitere Fachseiten, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
@@ -2646,3 +2646,32 @@ Die anschließende manuelle Kontrolle des korrigierten Builds wurde vor dem
 Start durch die physische Escape-Taste beendet. Weitere Desktop-Eingaben
 bleiben gestoppt. Die reale visuelle Nachkontrolle der ursprünglichen Ansicht
 und die Mac-Abnahme dieser Parseränderung bleiben deshalb ausdrücklich offen.
+
+## UI-Handbuch mit dem vorhandenen Verhalten abgeglichen
+
+`docs/ui-states.md` behauptete noch, dass nur die dunkle Palette und eine
+schreibgeschützte Dateivorschau existierten. Die Anleitung beschreibt jetzt
+die drei vorhandenen Paletten sowie Dateibaum und editierbare Textdokumente.
+`docs/settings.md` erklärt die tatsächlich implementierte Priorität des eigenen
+F1-Lesezooms: Solange er aktiv ist, ersetzt er die getrennten UI-/Codegrößen.
+Die mittlere Größenanzeige setzt ihn zurück. Der frühere offene Status des
+vollständigen nativen F1-Lesetextes wurde durch den aktuellen Schnittstellenstand
+mit Verweis auf die weiterhin offene praktische Screenreader-Abnahme ersetzt.
+Quellen sind `app/design_tokens.h`, `app/preferences.h`, `app/settings_ui.inc`,
+`app/document_actions.inc` und die Größenfunktionen in `app/documentation_ui.inc`.
+
+Die ausgeführten Gruppen `run-o51av9di` unter Windows und `run-kqq42p3i` unter
+Linux bestehen jeweils 2/4. Preferences einschließlich Palettenkontrasten
+besteht auf beiden Systemen. Der zusätzliche Windows-Baumtest überschreitet im
+langen Worktree-Testpfad die erreichbare Pfadlänge; derselbe unveränderte Test
+besteht mit seinem vollständigen 64-Ebenen-Fall unter
+`D:/Physim/build/native/ui-tree-review-54344aca`. Unter Linux scheitert der
+Dateimodustest auf dem eingebundenen Windows-Dateisystem; derselbe unveränderte
+Test besteht auf dem nativen Linux-Dateisystem unter `/tmp`. Diese Nachläufe
+belegen keine Windows-Langpfad- oder POSIX-Rechtegarantie für DrvFS.
+
+Die neue Abschnittsverlinkung verwendete zunächst umschriebene statt der
+vorhandenen Unicode-Anker. Nach der Korrektur prüfen die beiden nativen
+Ankerclients alle 218 Abschnittslinks und 185 Seiten erfolgreich. Die
+Originalausgaben stehen unter `build/native/ui-doc-*`; alle 31 erzeugten
+Referenzdokumente bestehen ebenfalls die Aktualitätsprüfung.
