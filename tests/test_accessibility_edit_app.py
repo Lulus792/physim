@@ -26,15 +26,26 @@ try:
         probes.append(dict(field=name,exit_code=result.returncode,stdout=result.stdout.decode('utf-8'),stderr=result.stderr.decode('utf-8')))
         assert result.returncode==0,probes[-1]
         wait('EDIT APPLIED '+phase)
+        result=subprocess.run([str(args.probe),str(process.pid),'focused-field',name],capture_output=True,timeout=10)
+        probes.append(dict(action='focused-field',field=name,exit_code=result.returncode,stdout=result.stdout.decode('utf-8'),stderr=result.stderr.decode('utf-8')))
+        assert result.returncode==0,probes[-1]
         if phase=='SEARCH':
             result=subprocess.run([str(args.probe),str(process.pid),'select-text',name,'θ🌍'],capture_output=True,timeout=15)
             probes.append(dict(action='select-text',field=name,exit_code=result.returncode,stdout=result.stdout.decode('utf-8'),stderr=result.stderr.decode('utf-8')))
             assert result.returncode==0,probes[-1]
             (args.work/'reader'/'selection-applied').write_text('ready',encoding='utf-8')
+        else:
+            (args.work/'reader'/'global-focus-checked').write_text('ready',encoding='utf-8')
+    wait('EDIT READY RETURN')
+    name='Aktuelles Dokument durchsuchen'
+    result=subprocess.run([str(args.probe),str(process.pid),'focused-field',name],capture_output=True,timeout=10)
+    probes.append(dict(action='keyboard-return-focus',field=name,exit_code=result.returncode,stdout=result.stdout.decode('utf-8'),stderr=result.stderr.decode('utf-8')))
+    assert result.returncode==0,probes[-1]
+    (args.work/'reader'/'return-focus-checked').write_text('ready',encoding='utf-8')
     assert process.wait(timeout=15)==0
     assert 'DOCUMENTATION EDIT SELF-TEST: PASSED' in (args.work/'app.stdout').read_text(encoding='utf-8')
 finally:
     if process.poll() is None:process.kill();process.wait()
     out.close();err.close()
     (args.work/'results.json').write_text(json.dumps(dict(probes=probes,exit_code=process.returncode),ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-print('Actual F1 native search: named edit values, focus, text input, search results and Tab exit passed')
+print('Actual F1 native search: values, global UIA focus identity, Ctrl+F return, text input, search results and Tab exit passed')

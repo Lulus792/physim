@@ -3006,3 +3006,45 @@ Fenster und die Narrator-Fenster verschwunden; eine neue Fensterauswahl und die
 Prozessabfrage bestätigen ihre Abwesenheit. Passende Application-Fehlerereignisse
 wurden im abgefragten 30-Minuten-Intervall nicht gefunden. Das beweist keine
 bestimmte Beendigungsursache. Die Apps wurden danach nicht neu gestartet.
+
+## Unabhängige Prüfung der tatsächlich gemeldeten Windows-Fokusidentität
+
+Der bisherige Windows-Feldclient setzte Werte und Fokus, fragte aber nicht
+`IUIAutomation::GetFocusedElement` gegen das erwartete Feld ab. Der ergänzte
+Befehl `focused-field` verändert den Fokus nicht. Er vergleicht das globale
+Fokuselement mit dem zuvor über Name, Rolle und Prozess gefundenen Feld und
+verlangt zusätzlich dessen `HasKeyboardFocus`. Drei aufeinanderfolgende
+Beobachtungen müssen übereinstimmen. Ein vorübergehend entferntes Element darf
+bis zur begrenzten Frist erneut abgefragt werden; andere API-Fehler bleiben
+Fehler. Das entspricht dem
+[Microsoft-Vertrag von GetFocusedElement](https://learn.microsoft.com/en-us/windows/win32/api/uiautomationclient/nf-uiautomationclient-iuiautomation-getfocusedelement).
+
+Der wirkliche App-Ablauf hält die beiden Felder für die externe Abfrage bereit.
+Nach lokaler Suche, Unicode-Auswahl und Textersetzung folgt die globale Suche;
+danach prüfen Tab und Ctrl+F die Rückkehr zum lokalen Feld, ohne dass der
+Client diesen Rückkehrfokus selbst setzt. Der Linux-AT-SPI-Client benutzt
+dieselben Abschlussmarker und prüft die zurückgekehrte native Fokus-Eigenschaft.
+Editorinhalte und Simulation bleiben unverändert.
+
+Windows MSVC/ASan besteht die erweiterte Feldprüfung zunächst in `run-dhyavoiq`
+und abschließend zusammen mit dem nativen Textscroll-Nachbarn 2/2 in
+`run-jcsh9nhl`. Linux GCC/ASan/UBSan besteht den erweiterten AT-SPI-Ablauf in
+`run-rhh4cv5z`. Die Testläufer-Fehlerfälle bestehen unter
+`build/native/field-focus-runner-proof`. Der Produktionsprovider wurde dafür
+nicht verändert. Die isolierte Gegenprobe unter
+`build/native/wrong-root-focus-counterexample/final-report.json` ersetzt nur
+dessen Root-Fokusantwort durch das erste Eingabefeld. Der finale Client weist
+dies mit `property=1 same=0` ab: Die erwartete eigene Fokus-Eigenschaft allein
+würde diesen Widerspruch nicht erkennen. Aktuelle normalisierte Providerquellen, positive
+Ergebnisse und Gegenprobe wurden in `build/native/field-focus-review.json`
+zusammen abgeglichen.
+
+Ein erneuter manueller Vergleich mit dem Desktop-Werkzeug reproduziert dagegen
+keine erfolgreiche Texteingabe: Das Werkzeug nennt das globale Feld als
+fokussiert, während der direkte unabhängige Client weder dessen Fokus-Eigenschaft
+noch dessen globale Fokusidentität bestätigt (`property=0 same=0`). Die App
+reagiert weiter. Die Eingaben wurden nicht blind wiederholt. Beide eigenen
+Prüffenster des leeren Workspaces wurden anschließend geschlossen und ihre Abwesenheit erneut
+beobachtet. Die Ursache des manuellen Werkzeug-/Fokusbefunds bleibt offen;
+daraus wird weder eine behobene Produktionsursache noch eine vollständige
+Narrator-Abnahme abgeleitet. Die Gesamtwertung bleibt unverändert.

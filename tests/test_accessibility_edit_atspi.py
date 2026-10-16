@@ -56,6 +56,12 @@ try:
             wait(lambda:text.getNSelections()==1 and tuple(text.getSelection(0))==(start,len(value)), 'actual Unicode selection')
             assert text.caretOffset==len(value)
             (a.work/'reader/selection-applied').write_text('ready',encoding='utf-8')
+        else:
+            (a.work/'reader/global-focus-checked').write_text('ready',encoding='utf-8')
+    wait(lambda:'EDIT READY RETURN' in (a.work/'app.stdout').read_text(),'keyboard return to local search')
+    node=wait(lambda:field('Aktuelles Dokument durchsuchen'),'local field after Ctrl+F')
+    wait(lambda:node.getState().contains(pyatspi.STATE_FOCUSED),'native focus after Ctrl+F')
+    (a.work/'reader/return-focus-checked').write_text('ready',encoding='utf-8')
     assert process.wait(timeout=20)==0
     output=(a.work/'app.stdout').read_text()
     assert 'DOCUMENTATION EDIT SELF-TEST: PASSED' in output
@@ -63,7 +69,7 @@ try:
     assert any(e['type'].startswith('object:text-changed:insert') for e in events)
     assert any(e['type'].startswith('object:text-selection-changed') for e in events)
     (a.work/'results.json').write_text(json.dumps(dict(independent_client=True,actual_fields=True,unicode_selection=True,
-        actual_replacement=True,tab_exit=True,events=events),ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+        actual_replacement=True,tab_exit=True,keyboard_return_focus=True,events=events),ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 finally:
     if process.poll() is None:process.kill();process.wait()
     out.close();err.close()

@@ -1371,9 +1371,21 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
         case 8:
             if(strcmp(a->doc_filter,"ps_rng_seed") || !a->doc_filter_active || !nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Alle Inhalte durchsuchen"))return;
             ok=documentation_hits[header];*capture="docs-native-global-search.bmp";
-            puts("EDIT APPLIED GLOBAL");fflush(stdout);test_window_key_mod(a->doc_window,SDLK_TAB,0);++*stage;break;
+            puts("EDIT APPLIED GLOBAL");fflush(stdout);++*stage;break;
         case 9:
+            {char path[4096];join(path,sizeof path,a->project,"global-focus-checked");FILE *done=fopen(path,"rb");if(!done)return;fclose(done);}
+            test_window_key_mod(a->doc_window,SDLK_TAB,0);++*stage;break;
+        case 10:
             ok=a->doc_focus==DOC_GROUP && !a->doc_filter_active;
+            test_window_key_mod(a->doc_window,SDLK_F,PS_UI_COMMAND_MOD);++*stage;break;
+        case 11:
+            if(!a->doc_search_active || a->doc_focus!=DOC_SEARCH)return;
+            puts("EDIT READY RETURN");fflush(stdout);++*stage;break;
+        case 12:
+            {char path[4096];join(path,sizeof path,a->project,"return-focus-checked");FILE *done=fopen(path,"rb");if(!done)return;fclose(done);}
+            test_window_key_mod(a->doc_window,SDLK_TAB,0);++*stage;break;
+        case 13:
+            ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active;
             ok &= a->experiment.string.len==experiment_length && a->analysis.string.len==analysis_length && a->simulation_time==simulation_time;
             a->quitting=true;puts("DOCUMENTATION EDIT SELF-TEST: PASSED");break;
         }

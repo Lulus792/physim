@@ -256,6 +256,26 @@ static HRESULT find_edit(IUIAutomation *a,IUIAutomationElement *desktop,LONG pid
  }
  if(windows)IUIAutomationElementArray_Release(windows);if(condition)IUIAutomationCondition_Release(condition);return result;
 }
+/* Query desktop focus independently of the expected field's own property. */
+static HRESULT current_field_focus(IUIAutomation *a,IUIAutomationElement *expected) {
+ ULONGLONG deadline=GetTickCount64()+5000;unsigned stable=0;HRESULT result=S_OK;
+ BOOL focused=FALSE,same=FALSE;
+ do {
+  IUIAutomationElement *actual=NULL;focused=same=FALSE;
+  result=IUIAutomationElement_get_CurrentHasKeyboardFocus(expected,&focused);
+  if(SUCCEEDED(result))result=IUIAutomation_GetFocusedElement(a,&actual);
+  if(SUCCEEDED(result) && actual) {
+   result=IUIAutomation_CompareElements(a,expected,actual,&same);
+  }
+  if(actual)IUIAutomationElement_Release(actual);
+  if(SUCCEEDED(result) && focused && same)++stable;else stable=0;
+  if(stable==3){puts("WINDOWS FIELD FOCUS: property and GetFocusedElement agree");return S_OK;}
+  if(FAILED(result) && result!=UIA_E_ELEMENTNOTAVAILABLE)break;
+  Sleep(20);
+ } while(GetTickCount64()<deadline);
+ fprintf(stderr,"WINDOWS FIELD FOCUS: mismatch property=%d same=%d status=0x%08lx\n",focused,same,(unsigned long)result);
+ return FAILED(result)?result:HRESULT_FROM_WIN32(WAIT_TIMEOUT);
+}
 static HRESULT select_text(IUIAutomationElement *control,const wchar_t *query) {
  IUnknown *unknown=NULL;IUIAutomationTextPattern *pattern=NULL;IUIAutomationTextRange *whole=NULL,*match=NULL;
  BSTR text=SysAllocString(query);SAFEARRAY *rectangles=NULL;enum SupportedTextSelection supported=SupportedTextSelection_None;
@@ -365,7 +385,8 @@ int wmain(int argc,wchar_t **argv) {
  bool links=!wcscmp(argv[2],L"links") || stress_links,invoke_link=!wcscmp(argv[2],L"invoke-link");
  bool invalid_link=!wcscmp(argv[2],L"invoke-link-invalid");
  bool lifecycle=!wcscmp(argv[2],L"lifecycle");
- if(!focus && !toggle && !select && !read && !edit && !text_select && !scroll_start && !scroll_end && !links && !invoke_link && !invalid_link && !lifecycle)return 2;
+ bool focused_field=!wcscmp(argv[2],L"focused-field");
+ if(!focus && !toggle && !select && !read && !edit && !text_select && !scroll_start && !scroll_end && !links && !invoke_link && !invalid_link && !lifecycle && !focused_field)return 2;
  if((read || edit || text_select || scroll_start || scroll_end || links || invoke_link || invalid_link || lifecycle) && argc!=5)return 2;
  HRESULT initialized=CoInitializeEx(NULL,COINIT_MULTITHREADED);if(FAILED(initialized))return 1;
  IUIAutomation *automation=NULL;IUIAutomationElement *desktop=NULL,*window=NULL,*group=NULL,*control=NULL;
@@ -373,7 +394,7 @@ int wmain(int argc,wchar_t **argv) {
  if(ok)ok=SUCCEEDED(IUIAutomation_GetRootElement(automation,&desktop));
  VARIANT process;VariantInit(&process);process.vt=VT_I4;process.lVal=(LONG)pid;
  if(ok)ok=SUCCEEDED(find(automation,desktop,TreeScope_Children,UIA_ProcessIdPropertyId,process,&window)) && window;
- if(ok && (edit || text_select || scroll_start || scroll_end))ok=SUCCEEDED(find_edit(automation,desktop,(LONG)pid,argv[3],&control)) && control;
+ if(ok && (edit || focused_field || text_select || scroll_start || scroll_end))ok=SUCCEEDED(find_edit(automation,desktop,(LONG)pid,argv[3],&control)) && control;
  else if(ok && (read || links || invoke_link || invalid_link || lifecycle)) {
   IUIAutomationCondition *pid_condition=NULL,*title_condition=NULL,*both=NULL;VARIANT title;VariantInit(&title);title.vt=VT_BSTR;title.bstrVal=SysAllocString(argv[3]);
   ok=title.bstrVal && SUCCEEDED(IUIAutomation_CreatePropertyCondition(automation,UIA_ProcessIdPropertyId,process,&pid_condition)) &&
@@ -388,7 +409,8 @@ int wmain(int argc,wchar_t **argv) {
  CONTROLTYPEID role=0;BOOL enabled=FALSE,focusable=FALSE;HRESULT action=E_FAIL;
  if(ok)ok=SUCCEEDED(IUIAutomationElement_get_CurrentControlType(control,&role)) &&
   SUCCEEDED(IUIAutomationElement_get_CurrentIsEnabled(control,&enabled)) && enabled;
- if(ok && edit) {
+ if(ok && focused_field)action=current_field_focus(automation,control);
+ else if(ok && edit) {
   IUIAutomationValuePattern *pattern=NULL;BOOL readonly=TRUE;
   ok=role==UIA_EditControlTypeId && SUCCEEDED(IUIAutomationElement_GetCurrentPattern(control,UIA_ValuePatternId,&unknown)) && unknown &&
    SUCCEEDED(IUnknown_QueryInterface(unknown,&IID_IUIAutomationValuePattern,(void**)&pattern)) &&
