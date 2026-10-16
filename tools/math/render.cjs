@@ -25,7 +25,7 @@ const widths = [128, 160, 192, 256, 384, 512, 768];
 const adaptor = liteAdaptor({fontSize:16});
 RegisterHTMLHandler(adaptor);
 const tex = new TeX({packages:['base','ams','boldsymbol'], formatError:(jax,error)=>{throw Error(error.message);}});
-const svg = new SVG({fontCache:'none', displayAlign:'left', displayOverflow:'linebreak'});
+const svg = new SVG({fontCache:'none', displayAlign:'left', displayOverflow:'linebreak', linebreaks:{inline:false}});
 const document = mathjax.document('', {InputJax:tex, OutputJax:svg});
 
 async function main() {
@@ -39,16 +39,19 @@ async function main() {
     ids.add(formula.id); expressions.add(formula.tex);
     const variants = [];
     declarations.push(`static const ps_doc_formula_variant formula_${catalog.length}[] = {`);
-    for (const container of widths) {
+    for (const container of [...widths, 'inline']) {
       const node = await document.convertPromise(formula.tex,
-        {display:true, em:16, ex:8, containerWidth:container});
+        {display:container!=='inline', em:16, ex:8, containerWidth:container==='inline'?768:container});
       // SVG is XML: literal comparisons in TeX metadata need XML attribute escaping.
-      let output = adaptor.serializeXML(adaptor.firstChild(node));
+      const images = adaptor.childNodes(node).filter(child=>adaptor.kind(child)==='svg');
+      if (images.length!==1) throw Error('Formula must be one complete SVG: '+formula.id);
+      let output = adaptor.serializeXML(images[0]);
       if (/data-mml-node="merror"/.test(output)) throw Error('Invalid TeX: '+formula.id);
       const box = output.match(/viewBox="([^"]+)"/)[1].split(/\s+/).map(Number);
       // A small transparent margin protects antialiased outlines at the bounds.
       box[0]-=32; box[1]-=32; box[2]+=64; box[3]+=64;
       const width = box[2]*16/1000, height = box[3]*16/1000;
+      const baseline = -box[1]*16/1000;
       if (![width,height].every(v=>Number.isFinite(v) && v>0 && v<1024)) throw Error('Formula bounds exceed limit');
       output = output.replace(/viewBox="[^"]+"/, `viewBox="${box.join(' ')}"`)
         .replace(/width="[^"]*"/, `width="${width}"`).replace(/height="[^"]*"/, `height="${height}"`);
@@ -63,20 +66,20 @@ async function main() {
       const asset = `docs/formulas/${key}.math`;
       fs.writeFileSync(path.join(root,asset), packed);
       fs.writeFileSync(path.join(directory,`${formula.id}-${container}.svg`), output);
-      const record = {container, width, height, rasterWidth, rasterHeight, asset,
+      const record = {container, width, height, baseline, rasterWidth, rasterHeight, asset,
         bytes:packed.length, crc:zlib.crc32(alpha), sha256:hash(packed), svgSha256:hash(output)};
       variants.push(record);
-      declarations.push(` {${width.toFixed(6)}f,${height.toFixed(6)}f,${rasterWidth}u,${rasterHeight}u,${packed.length}u,${record.crc}u,${quote(asset)}},`);
+      declarations.push(` {${width.toFixed(6)}f,${height.toFixed(6)}f,${rasterWidth}u,${rasterHeight}u,${packed.length}u,${record.crc}u,${quote(asset)},${baseline.toFixed(6)}f},`);
     }
     declarations.push('};');
     catalog.push({...formula,variants});
   }
   declarations.push('static const ps_doc_formula formula_catalog[] = {');
-  catalog.forEach((entry,i)=>declarations.push(` {${quote(entry.tex)},${quote(entry.reading)},formula_${i},${widths.length}u},`));
+  catalog.forEach((entry,i)=>declarations.push(` {${quote(entry.tex)},${quote(entry.reading)},formula_${i},${widths.length}u,&formula_${i}[7]},`));
   declarations.push('};','');
   fs.writeFileSync(path.join(root,'app/documentation_math_catalog.inc'), declarations.join('\n'));
-  fs.writeFileSync(path.join(directory,'manifest.json'), JSON.stringify({format:1, engine:mathjax.version,
+  fs.writeFileSync(path.join(directory,'manifest.json'), JSON.stringify({format:2, engine:mathjax.version,
     sharp:sharp.versions.sharp, sourceSha256:hash(sourceBytes), rasterEm:128, formulas:catalog},null,2)+'\n');
-  console.log(`Typeset ${catalog.length} formulas at ${widths.length} responsive widths; SVG and alpha assets written`);
+  console.log(`Typeset ${catalog.length} formulas at ${widths.length} display widths and in inline style; SVG and alpha assets written`);
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});

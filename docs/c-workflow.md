@@ -2,11 +2,8 @@
 
 [Teil I – C](c-guide.md) · [Nächster Schritt: Experiment und Analyse](experiment-tutorial.md)
 
-Dieser Einstieg benötigt nur C17. Er berechnet die kinetische Energie in SI:
-
-$$
-E=\frac12mv^2
-$$
+Dieser Einstieg benötigt nur C17. Er berechnet die kinetische Energie
+$E=\frac12mv^2$ in SI.
 
 Die verwendeten Konzepte nutzt du danach in einem Physim-Modul. Für m = 2 kg
 und v = 3 m/s sind es 9 J. Für die beiden Geschwindigkeiten v₁ = 3 m/s und

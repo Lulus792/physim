@@ -22,6 +22,7 @@ on:
       - tools/profile_font_prepare.py
       - tools/check_sidebar_counterexample.py
       - tools/check_detail_counterexample.py
+      - tools/check_inline_math_counterexample.py
       - .github/workflows/macos-f1-accessibility.yml
   workflow_dispatch:
 concurrency:
@@ -57,11 +58,13 @@ jobs:
       - name: Portable UTF-16 and document contracts
         run: python3 tools/build.py --compiler clang --sanitizers --test --test-filter accessibility_utf16 --test-filter accessibility_document --test-filter accessibility_tables --test-filter accessibility_suspend --test-filter accessibility_edit --test-filter font_atlas_limits --test-filter font_faces --test-filter font_sources --test-filter font_density --test-filter documentation --test-filter documentation_anchors
       - name: Actual AppKit and rendered F1
-        run: python3 tools/build.py --compiler clang --sanitizers --test-display --test-filter accessibility_native --test-filter accessibility_ui --test-filter font_bank_ui --test-filter accessibility_document_macos --test-filter accessibility_edit_macos --test-filter accessibility_links_macos --test-filter documentation_detail --test-filter documentation_navigation --test-filter documentation_sidebar --test-filter graphics --test-filter documentation_font_demand --test-filter documentation_density --test-filter documentation_formula_narrow --test-filter documentation_formula_physics --test-filter documentation_formula_models --test-filter documentation_formula_models_narrow --test-filter documentation_formula_mechanics --test-filter documentation_formula_mechanics_narrow --test-filter documentation_formula_basics --test-filter documentation_formula_basics_narrow --test-filter documentation_formula_catalog --test-filter documentation_typeset --test-filter documentation_math --test-filter documentation_inline
+        run: python3 tools/build.py --compiler clang --sanitizers --test-display --test-filter accessibility_native --test-filter accessibility_ui --test-filter font_bank_ui --test-filter accessibility_document_macos --test-filter accessibility_edit_macos --test-filter accessibility_links_macos --test-filter documentation_detail --test-filter documentation_navigation --test-filter documentation_sidebar --test-filter graphics --test-filter documentation_font_demand --test-filter documentation_density --test-filter documentation_formula_narrow --test-filter documentation_formula_physics --test-filter documentation_formula_models --test-filter documentation_formula_models_narrow --test-filter documentation_formula_mechanics --test-filter documentation_formula_mechanics_narrow --test-filter documentation_formula_basics --test-filter documentation_formula_basics_narrow --test-filter documentation_inline_math --test-filter documentation_formula_catalog --test-filter documentation_typeset --test-filter documentation_math --test-filter documentation_inline
       - name: Actual previous detail wrapping is rejected
         run: python3 tools/check_detail_counterexample.py --compiler clang --sdl "$PWD/build-sdl-install"
       - name: Actual previous sidebar layout is rejected
         run: python3 tools/check_sidebar_counterexample.py --compiler clang --sdl "$PWD/build-sdl-install"
+      - name: Immediate inline formula texture eviction is rejected
+        run: python3 tools/check_inline_math_counterexample.py --compiler clang --sdl "$PWD/build-sdl-install"
       - name: Paired font preparation comparison after actual cold-start cases
         run: |
           mkdir -p build/native/font-prepare-baseline
@@ -84,6 +87,7 @@ jobs:
             build/native/Debug-sanitized/test-results/**
             build/native/sidebar-counterexample/**
             build/native/detail-counterexample/**
+            build/native/inline-math-counterexample/**
             build/native/font-prepare-macos-*/report.json
             build/native/font-prepare-macos-*/stdout
             build/native/font-prepare-macos-*/stderr

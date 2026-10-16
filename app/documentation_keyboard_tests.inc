@@ -1062,7 +1062,9 @@ static void documentation_detail_test_frame(app *a,int *stage,int *code,const ch
     if(!okay){fprintf(stderr,"Documentation detail stage %d case %u failed\n",*stage-1,sample);*code=1;a->quitting=true;}
     if(a->quitting)printf("DOCUMENTATION DETAIL SELF-TEST: %s elapsed=%.3f\n",*code?"FAILED":"PASSED",ps_clock()-started);
 }
+#include "documentation_inline_math_tests.inc"
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strcmp(mode,"docs-keyboard-inline-math")){documentation_inline_math_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-basics-narrow")){documentation_formula_catalog_test_frame(a,stage,code,capture,DOC_FORMULAS_BASICS,true);return;}
     if(!strcmp(mode,"docs-keyboard-basics")){documentation_formula_catalog_test_frame(a,stage,code,capture,DOC_FORMULAS_BASICS,false);return;}
     if(!strcmp(mode,"docs-keyboard-detail")){documentation_detail_test_frame(a,stage,code,capture);return;}

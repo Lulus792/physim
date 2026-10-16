@@ -67,6 +67,7 @@ SIMPLE["documentation_formula_mechanics"] = (["--workspace-state-test", "{direct
 SIMPLE["documentation_formula_mechanics_narrow"] = (["--workspace-state-test", "{directory}", "docs-keyboard-mechanics-narrow"], 90, True)
 SIMPLE["documentation_formula_basics"] = (["--workspace-state-test", "{directory}", "docs-keyboard-basics"], 90, True)
 SIMPLE["documentation_formula_basics_narrow"] = (["--workspace-state-test", "{directory}", "docs-keyboard-basics-narrow"], 90, True)
+SIMPLE["documentation_inline_math"] = (["--workspace-state-test", "{directory}", "docs-keyboard-inline-math"], 90, True)
 SIMPLE["documentation_detail"] = (["--workspace-state-test", "{directory}", "docs-keyboard-detail"], 90, True)
 SIMPLE["documentation_typeset"] = (["--workspace-state-test", "{directory}", "docs-keyboard-typeset"], 90, True)
 SIMPLE["accessibility_document_macos"] = (["--workspace-state-test", "{directory}", "docs-keyboard-reading-native"], 90, True)
@@ -1665,6 +1666,19 @@ def main():
                 case,font,theme,complete,x,y,w,h=map(int,record)
                 require(case==index and font==(32 if narrow else 16) and theme==1 and complete==1,'Incomplete formula catalog image')
                 documentation_formula_ink(directory/f'docs-formula-catalog-{index:03}.bmp',x,y,w,h)
+        elif args.case == "documentation_inline_math":
+            output=flow.steps[-1]['stdout']
+            require('INLINE MATH SELF-TEST: PASSED count=48' in output,'Missing inline math completion')
+            records=re.findall(r'INLINE MATH DRAW: case=(\d+) item=(\d+) font=(\d+) theme=(\d+) complete=(\d+) frame=(\d+),(\d+),(\d+),(\d+)',output)
+            require(len(records)==162,'Missing inline formula draws')
+            for case in range(48):
+                selected=[tuple(map(int,r)) for r in records if int(r[0])==case]
+                expected=20 if case%8==6 else 1
+                require(len(selected)==expected and [r[1] for r in selected]==list(range(expected)),'Incomplete inline case')
+                for _,item,font,theme,complete,x,y,w,h in selected:
+                    require(font==(16 if case<24 else 32) and theme==(case//8)%3 and complete==1,'Clipped or incorrect inline formula')
+                    documentation_formula_ink(directory/f'docs-inline-math-{case:02}.bmp',x,y,w,h)
+            require(len(re.findall(r'INLINE MATH CACHE: case=\d+ twenty simultaneous textures retained=1',output))==6,'Missing simultaneous texture coverage')
         elif args.case == "documentation_inline":
             documentation_inline_ink(directory, flow.steps[-1]["stdout"])
         elif args.case == "accessibility_links_macos":

@@ -165,6 +165,7 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     }
     if (!ps_graphics_make_current(a->doc_graphics))
         return false;
+    documentation_math_begin_frame(a);
     float density=a->doc_test_density>0?a->doc_test_density:SDL_GetWindowPixelDensity(a->doc_window);
     if(density>0 && fabsf(density-a->doc_raster_density)>.01f && fabsf(density-a->doc_failed_density)>.01f) {
         if(!documentation_window_fonts(a,density)) {
@@ -214,6 +215,7 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     documentation_detail_draw_probe(a);
     documentation_sidebar_draw_probe(a);
     documentation_math_draw_probe(a);
+    documentation_inline_math_draw_probe(a);
     nk_sdl_update_TextInput(ui);
     bool scaled_capture=capture_path && strlen(capture_path)>=4 && !strcmp(capture_path+strlen(capture_path)-4,".png");
     bool ok=!scaled_capture || nk_sdl_export_png_scaled(ui,ui,w,h,2,capture_path)==PS_OK;

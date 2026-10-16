@@ -13,7 +13,7 @@ def check(root):
     source = (directory / "sources.json").read_bytes()
     formulas = json.loads(source)["formulas"]
     manifest = json.loads((directory / "manifest.json").read_text(encoding="utf-8"))
-    assert manifest["format"] == 1 and manifest["rasterEm"] == 128
+    assert manifest["format"] == 2 and manifest["rasterEm"] == 128
     assert manifest["sourceSha256"] == hashlib.sha256(source).hexdigest(), "Stale formula sources"
     assert len(formulas) == len(manifest["formulas"])
     expressions = set()
@@ -23,10 +23,11 @@ def check(root):
         assert all(formula[key] == source_formula[key] for key in ("id", "tex", "reading"))
         assert formula["tex"] not in expressions and formula["reading"].strip()
         expressions.add(formula["tex"])
-        assert [v["container"] for v in formula["variants"]] == [128, 160, 192, 256, 384, 512, 768]
+        assert [v["container"] for v in formula["variants"]] == [128, 160, 192, 256, 384, 512, 768, "inline"]
         declarations.append(f"static const ps_doc_formula_variant formula_{index}[] = {{")
         for variant in formula["variants"]:
             w, h = variant["rasterWidth"], variant["rasterHeight"]
+            assert 0 <= variant["baseline"] <= variant["height"]
             assert 0 < w <= 8192 and 0 < h <= 8192 and w * h <= 16 * 1024 * 1024
             assert re.fullmatch(r"docs/formulas/[0-9a-f]{24}\.math", variant["asset"])
             packed = (root / variant["asset"]).read_bytes()
@@ -40,13 +41,16 @@ def check(root):
             svg = (directory / f'{formula["id"]}-{variant["container"]}.svg').read_bytes()
             assert hashlib.sha256(svg).hexdigest() == variant["svgSha256"], "Corrupt formula vector"
             assert b'<svg ' in svg and b'<path ' in svg and b'<script' not in svg
-            assert ET.fromstring(svg).tag == '{http://www.w3.org/2000/svg}svg', 'Malformed formula vector'
+            vector = ET.fromstring(svg)
+            assert vector.tag == '{http://www.w3.org/2000/svg}svg', 'Malformed formula vector'
+            box = [float(v) for v in vector.attrib['viewBox'].split()]
+            assert abs(variant['baseline'] + box[1] * 16 / 1000) < 1e-6, 'Incorrect mathematical baseline'
             declarations.append(f' {{{variant["width"]:.6f}f,{variant["height"]:.6f}f,{w}u,{h}u,'
-                                f'{len(packed)}u,{variant["crc"]}u,{quote(variant["asset"])}' + "},")
+                                f'{len(packed)}u,{variant["crc"]}u,{quote(variant["asset"])},{variant["baseline"]:.6f}f' + "},")
         declarations.append("};")
     declarations.append("static const ps_doc_formula formula_catalog[] = {")
     for index, formula in enumerate(formulas):
-        declarations.append(f' {{{quote(formula["tex"])},{quote(formula["reading"])},formula_{index},7u' + "},")
+        declarations.append(f' {{{quote(formula["tex"])},{quote(formula["reading"])},formula_{index},7u,&formula_{index}[7]' + "},")
     declarations.extend(["};", ""])
     assert (root / "app/documentation_math_catalog.inc").read_text(encoding="utf-8") == "\n".join(declarations), "Stale native formula catalog"
     blocks = 0
@@ -65,7 +69,7 @@ def check(root):
             elif math:
                 pending.append(line)
         assert not math, f"Unclosed formula: {page}"
-    print(f"Formula assets verified: {len(formulas)} expressions, {len(formulas) * 7} variants, {blocks} published blocks")
+    print(f"Formula assets verified: {len(formulas)} expressions, {len(formulas) * 7} display variants, {len(formulas)} inline variants, {blocks} published blocks")
 
 
 if __name__ == "__main__":

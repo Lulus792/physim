@@ -197,6 +197,7 @@ int main(int argc, char **argv) {
     CHECK(strstr(d->reading,"T₀ = 2π√(L/g)") && !strstr(d->reading,"\\frac"));
     const ps_doc_formula *formula=ps_document_formula(d->text+d->blocks[1].target,strlen(d->text+d->blocks[1].target));
     CHECK(formula && formula->count==7 && formula->variants[0].raster_width && formula->variants[0].packed_size);
+    CHECK(formula->inline_variant && formula->inline_variant->width>50); /* Entire equation, not just T_0. */
     CHECK(d->blocks[1].reading_begin!=SIZE_MAX && d->blocks[1].reading_length==strlen(formula->reading));
     free(d);
     const char *unknown_formula="$$\nx+unknown\n$$\n";
@@ -207,6 +208,25 @@ int main(int argc, char **argv) {
     const char *fenced_formula="```c\n$$\nx+1\n$$\n```\n";
     CHECK(ps_document_parse(fenced_formula,strlen(fenced_formula),false,&d)==PS_OK && d->count==1 && d->blocks[0].kind==PS_DOC_CODE);
     CHECK(strstr(d->text+d->blocks[0].text,"$$"));free(d);
-    puts("Documentation parser: prose, code, tables, links, TeX formulas, search and bounds passed");
+    const char *inline_math="Before $\\nu=\\frac\\mu\\rho$ after **$E=\\frac12mv^2$** "
+        "[$x=L\\sin\\theta$](units.md). Code `$E=\\frac12mv^2$`, escaped \\$ and unknown $x+unknown$.";
+    CHECK(ps_document_parse(inline_math,strlen(inline_math),false,&d)==PS_OK && d->count==2);
+    CHECK(strstr(d->reading,"Before ν = μ/ρ after E = ½mv² x = L sin θ."));
+    CHECK(strstr(d->reading,"Code $E=\\frac12mv^2$, escaped $ and unknown $x+unknown$."));
+    unsigned inline_count=0;
+    for(size_t i=0;i<d->span_count;i++)if(d->spans[i].formula) {
+        const ps_doc_span *s=&d->spans[i];++inline_count;
+        CHECK((s->style&PS_DOC_INLINE_MATH) && s->length==strlen(s->formula->reading));
+        CHECK(!memcmp(d->text+s->text,s->formula->reading,s->length));
+        CHECK(s->formula->inline_variant->baseline>0);
+    }
+    CHECK(inline_count==3 && !strcmp(d->text+d->blocks[1].text,"x = L sin θ"));free(d);
+    const char *adjacent_math="$z=0$$z=0$";
+    CHECK(ps_document_parse(adjacent_math,strlen(adjacent_math),false,&d)==PS_OK && d->span_count==2);
+    CHECK(d->spans[0].formula && d->spans[1].formula && !strcmp(d->reading,"z = 0z = 0\n\n"));free(d);
+    const char *table_math="| Quantity | Formula |\n| --- | --- |\n| viscosity | $\\nu=\\frac\\mu\\rho$ |\n";
+    CHECK(ps_document_parse(table_math,strlen(table_math),false,&d)==PS_OK && d->cell_count==4);
+    CHECK(d->cells[3].length==strlen("ν = μ/ρ") && !memcmp(d->text+d->cells[3].text,"ν = μ/ρ",d->cells[3].length));free(d);
+    puts("Documentation parser: prose, code, tables, links, TeX formulas, inline math, search and bounds passed");
     return 0;
 }

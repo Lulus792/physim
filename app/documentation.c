@@ -117,15 +117,17 @@ static bool append(ps_document *d, ps_doc_kind kind, unsigned level, const char 
 }
 typedef struct {const char *target;size_t target_length,text,length;bool image;} inline_link;
 typedef struct {
-    ps_document *document;char *plain;size_t used,base,first_span,parent;
+    ps_document *document;char *plain;size_t used,capacity,base,first_span,parent;
     inline_link *links;size_t link_count,link_capacity;
     bool table;
 } inline_parser;
 static bool inline_emit(inline_parser *p,const char *s,size_t n,unsigned style,size_t link) {
     if(!n)return true;
+    if(n>p->capacity-p->used)return false;
     ps_document *d=p->document;
     ps_doc_span *span=d->span_count>p->first_span?&d->spans[d->span_count-1]:NULL;
-    if(!span || span->style!=style || span->link!=link || span->text+span->length!=p->base+p->used) {
+    if(!span || (span->style&PS_DOC_INLINE_MATH) || (style&PS_DOC_INLINE_MATH) ||
+        span->style!=style || span->link!=link || span->text+span->length!=p->base+p->used) {
         if(d->span_count==PS_DOC_MAX_SPANS)return false;
         span=&d->spans[d->span_count++];
         *span=(ps_doc_span){.text=p->base+p->used,.link=link,.style=style};
@@ -147,7 +149,7 @@ static size_t inline_close(const char *s,size_t start,size_t n,const char *token
 static bool inline_parse(inline_parser *p,const char *s,size_t n,unsigned style,size_t link,unsigned depth) {
     if(depth>8)return inline_emit(p,s,n,style,link);
     for(size_t i=0;i<n;) {
-        if(s[i]=='\\' && i+1<n && strchr("\\`*[]()!|",s[i+1])) {
+        if(s[i]=='\\' && i+1<n && strchr("\\`*[]()!|$",s[i+1])) {
             if(!inline_emit(p,s+i+1,1,style,link))return false;
             i+=2;continue;
         }
@@ -163,6 +165,24 @@ static bool inline_parse(inline_parser *p,const char *s,size_t n,unsigned style,
             if(end!=SIZE_MAX) {
                 if(!inline_parse(p,s+i+2,end-i-2,style|PS_DOC_BOLD,link,depth+1))return false;
                 i=end+2;continue;
+            }
+        }
+        if(s[i]=='$') {
+            if(i+1<n && s[i+1]=='$') {
+                if(!inline_emit(p,s+i,2,style,link))return false;
+                i+=2;continue;
+            }
+            size_t end=inline_close(s,i+1,n,"$",1);
+            if(end!=SIZE_MAX) {
+                const char *tex=s+i+1;size_t length=end-i-1;
+                while(length && isspace((unsigned char)*tex)){++tex;--length;}
+                while(length && isspace((unsigned char)tex[length-1]))--length;
+                const ps_doc_formula *formula=ps_document_formula(tex,length);
+                if(formula && formula->inline_variant) {
+                    if(!inline_emit(p,formula->reading,strlen(formula->reading),style|PS_DOC_INLINE_MATH,link))return false;
+                    p->document->spans[p->document->span_count-1].formula=formula;
+                    i=end+1;continue;
+                }
             }
         }
         bool image=s[i]=='!' && i+1<n && s[i+1]=='[';
@@ -220,9 +240,10 @@ static bool table_cells(ps_document *d,ps_doc_block *row) {
 }
 static bool paragraph(ps_document *d,const char *s,size_t n,ps_doc_kind kind,unsigned level) {
     size_t capacity=n/4+1;if(capacity>PS_DOC_MAX_BLOCKS)capacity=PS_DOC_MAX_BLOCKS;
-    char *plain=malloc(n+1);inline_link *links=malloc(capacity*sizeof *links);
+    size_t plain_capacity=sizeof d->text-d->used;
+    char *plain=malloc(plain_capacity);inline_link *links=malloc(capacity*sizeof *links);
     if(!plain || !links){free(plain);free(links);return false;}
-    inline_parser p={.document=d,.plain=plain,.base=d->used,.first_span=d->span_count,
+    inline_parser p={.document=d,.plain=plain,.capacity=plain_capacity,.base=d->used,.first_span=d->span_count,
         .parent=d->count,.links=links,.link_capacity=capacity,.table=kind==PS_DOC_TABLE_ROW};
     bool ok=inline_parse(&p,s,n,0,SIZE_MAX,0);
     if(ok)ok=append(d,kind,level,plain,p.used,NULL,0);

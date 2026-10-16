@@ -63,11 +63,7 @@ Vergleiche die Pendellänge:
 3. Vergrößere nur `length`, starte einen weiteren Lauf und stoppe ihn.
 4. Wähle beide Läufe in **Läufe und Berichte** aus und vergleiche ihre Kurven.
 
-Für kleine Winkel lautet die Näherung:
-
-$$
-T_0=2\pi\sqrt{\frac{L}{g}}
-$$
+Für kleine Winkel lautet die Näherung $T_0=2\pi\sqrt{\frac{L}{g}}$.
 
 Vierfache Länge bedeutet
 in diesem Modell ungefähr doppelte Schwingungsdauer. Bei großen Winkeln reicht

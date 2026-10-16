@@ -404,6 +404,7 @@ static const struct nk_user_font *documentation_block_font(const app *a,const ps
     if(b->kind==PS_DOC_TABLE_ROW && b->level)return a->doc_bold_fonts[(size-16)/2];
     return a->doc_font_ui;
 }
+#include "documentation_math.inc"
 static const ps_doc_span *documentation_span_at(const ps_document *d,const ps_doc_block *b,size_t at) {
     size_t lo=b->first_span,hi=lo+b->span_count;
     while(lo<hi){size_t mid=lo+(hi-lo)/2;if(d->spans[mid].text<=at)lo=mid+1;else hi=mid;}
@@ -438,26 +439,50 @@ static float documentation_grid_pitch(const app *a,const ps_document *d,const ps
     struct nk_user_font_glyph vertical={0};font->query(font->userdata,font->height,&vertical,0x2502,0);
     return ps_ui_font_has_glyph(font,0x2502) && vertical.height>0?vertical.height:0;
 }
-static size_t documentation_rich_line(const app *a,const ps_document *d,const ps_doc_block *b,
-    size_t at,float width,size_t *length,float *height) {
+static float documentation_font_baseline(const struct nk_user_font *font) {
+    const struct nk_font *native=font->userdata.ptr;
+    return native->info.ascent*font->height/native->info.height;
+}
+static const ps_doc_formula_variant *documentation_inline_variant(const app *a,const ps_doc_span *span,float width) {
+    if(!span || !span->formula)return NULL;
+    const ps_doc_formula *f=span->formula;float zoom=a->doc_font_ui->height/16;
+    if(f->inline_variant->width*zoom<=width)return f->inline_variant;
+    for(size_t i=f->count;i>0;i--)if(f->variants[i-1].width*zoom<=width)return &f->variants[i-1];
+    return NULL;
+}
+static size_t documentation_rich_line_metrics(const app *a,const ps_document *d,const ps_doc_block *b,
+    size_t at,float width,size_t *length,float *height,float *baseline) {
     const char *text=d->text+b->text;size_t begin=at,space=SIZE_MAX;
     float used=0,h=b->code_line_height>0?b->code_line_height:documentation_block_font(a,b)->height+6,space_height=h;
+    float above=documentation_font_baseline(documentation_block_font(a,b)),below=h-above,space_above=above;
+    bool has_math=false,space_math=false;
     while(at<b->length) {
-        if(text[at]=='\r'){*length=at-begin;*height=h;return at-begin+(at+1<b->length && text[at+1]=='\n'?2:1);}
-        if(text[at]=='\n'){*length=at-begin;*height=h;return at-begin+1;}
+        if(text[at]=='\r'){*length=at-begin;*height=h;*baseline=has_math?above:-1;return at-begin+(at+1<b->length && text[at+1]=='\n'?2:1);}
+        if(text[at]=='\n'){*length=at-begin;*height=h;*baseline=has_math?above:-1;return at-begin+1;}
         const ps_doc_span *span=documentation_span_at(d,b,b->text+at);
         const struct nk_user_font *font=documentation_span_font(a,b,span);
         nk_rune rune;int bytes=nk_utf_decode(text+at,&rune,(int)(b->length-at));if(bytes<=0)bytes=1;
         float glyph=documentation_glyph_width(font,text+at,bytes);
+        const ps_doc_formula_variant *math=documentation_inline_variant(a,span,width);
+        if(math) {bytes=(int)span->length;glyph=math->width*a->doc_font_ui->height/16;}
         if(at>begin && used+glyph>width) {
-            if(space!=SIZE_MAX && space>begin){*length=space-begin;*height=space_height;return space-begin+1;}
-            *length=at-begin;*height=h;return at-begin;
+            if(space!=SIZE_MAX && space>begin){*length=space-begin;*height=space_height;*baseline=space_math?space_above:-1;return space-begin+1;}
+            *length=at-begin;*height=h;*baseline=has_math?above:-1;return at-begin;
         }
-        if(b->code_line_height<=0)h=fmaxf(h,font->height+6);
-        if(text[at]==' ' || text[at]=='\t'){space=at;space_height=h;}
+        if(b->code_line_height<=0) {
+            float ascent=math?math->baseline*a->doc_font_ui->height/16+3:documentation_font_baseline(font);
+            float descent=math?(math->height-math->baseline)*a->doc_font_ui->height/16+3:font->height+6-ascent;
+            above=fmaxf(above,ascent);below=fmaxf(below,descent);has_math |= math!=NULL;
+            h=has_math?ceilf(above+below):fmaxf(h,font->height+6);
+        }
+        if(!math && (text[at]==' ' || text[at]=='\t')){space=at;space_height=h;space_above=above;space_math=has_math;}
         used+=glyph;at+=(size_t)bytes;
     }
-    *length=at-begin;*height=h;return at-begin;
+    *length=at-begin;*height=h;*baseline=has_math?above:-1;return at-begin;
+}
+static size_t documentation_rich_line(const app *a,const ps_document *d,const ps_doc_block *b,
+    size_t at,float width,size_t *length,float *height) {
+    float baseline;return documentation_rich_line_metrics(a,d,b,at,width,length,height,&baseline);
 }
 static float documentation_rich_height(const app *a,const ps_document *d,const ps_doc_block *b,float width) {
     size_t at=0;float total=0;
@@ -488,7 +513,7 @@ static void documentation_rich_draw(app *a,ps_document *d,const ps_doc_block *b,
         }
     }
     do {
-        size_t length;float height;size_t used=documentation_rich_line(a,d,b,at,bounds.w,&length,&height);
+        size_t length;float height,baseline;size_t used=documentation_rich_line_metrics(a,d,b,at,bounds.w,&length,&height,&baseline);
         size_t end=at+length,pos=at;float x=bounds.x;
         bool visible=y<canvas->clip.y+canvas->clip.h && y+height>canvas->clip.y;
         if(b->kind==PS_DOC_CODE && y>canvas->clip.y+canvas->clip.h)break;
@@ -496,9 +521,12 @@ static void documentation_rich_draw(app *a,ps_document *d,const ps_doc_block *b,
             const ps_doc_span *span=documentation_span_at(d,b,b->text+pos);
             const struct nk_user_font *font=documentation_span_font(a,b,span);
             size_t next=span?span->text+span->length-b->text:end;if(next>end)next=end;
-            float width=documentation_text_width(font,text+pos,next-pos);
-            float draw_y=y+grid_offset;
-            struct nk_rect part=nk_rect(x,y,width,b->code_line_height>0?height:font->height+6);
+            const ps_doc_formula_variant *math=documentation_inline_variant(a,span,bounds.w);
+            float zoom=a->doc_font_ui->height/16;
+            float width=math?math->width*zoom:documentation_text_width(font,text+pos,next-pos);
+            float draw_y=b->code_line_height>0?y+grid_offset:baseline<0?y:y+baseline-documentation_font_baseline(font);
+            struct nk_rect part=math?nk_rect(x,y+baseline-math->baseline*zoom,width,math->height*zoom):
+                nk_rect(x,draw_y,width,b->code_line_height>0?height:font->height+6);
             bool link=span && (span->style&PS_DOC_INLINE_LINK) && span->link<d->count;
             if(link) {
                 ps_doc_block *action=&d->blocks[span->link];float *hit=action->hit;
@@ -512,10 +540,11 @@ static void documentation_rich_draw(app *a,ps_document *d,const ps_doc_block *b,
             if(visible) {
                 if(b->reading_begin!=SIZE_MAX) {
                     float glyph_x=x;
-                    for(size_t glyph=pos;glyph<next;) {
+                    if(math)nk_sdl_accessibility_text_box(ui,b->reading_begin+pos,b->reading_begin+next,part);
+                    for(size_t glyph=pos;!math && glyph<next;) {
                         nk_rune rune;int bytes=nk_utf_decode(text+glyph,&rune,(int)(next-glyph));if(bytes<=0)bytes=1;
                         float glyph_width=documentation_glyph_width(font,text+glyph,bytes);
-                        struct nk_rect box=nk_rect(glyph_x,y,glyph_width,font->height+6);
+                        struct nk_rect box=nk_rect(glyph_x,draw_y,glyph_width,font->height+6);
                         if(b->code_line_height>0) {
                             struct nk_user_font_glyph ink={0};font->query(font->userdata,font->height,&ink,rune,0);
                             box=ink.width>0 && ink.height>0
@@ -532,19 +561,78 @@ static void documentation_rich_draw(app *a,ps_document *d,const ps_doc_block *b,
                     nk_fill_rect(canvas,nk_rect(x-2,y-2,width+4,font->height+4),3,UI_COLOR(edit));
                 if(found)nk_stroke_rect(canvas,part,2,1,UI_COLOR(accent));
                 struct nk_color color=link || found?UI_COLOR(accent):UI_COLOR(doc_text);
+                if(math) {
+                    unsigned texture=documentation_math_texture_for(a,math);
+                    if(texture){struct nk_image image=nk_image_id((int)texture);nk_draw_image(canvas,part,&image,color);}
+                    else nk_draw_text(canvas,nk_rect(x,draw_y,width+1,font->height+6),text+pos,(int)(next-pos),font,nk_rgba(0,0,0,0),color);
+                }
                 size_t chunk=pos;float draw_x=x;
-                while(chunk<next) {
+                while(!math && chunk<next) {
                     const char *tab=memchr(text+chunk,'\t',next-chunk);size_t last=tab?(size_t)(tab-text):next;
                     float run_width=documentation_text_width(font,text+chunk,last-chunk);
                     if(last>chunk)nk_draw_text(canvas,nk_rect(draw_x,draw_y,run_width+1,font->height+6),text+chunk,(int)(last-chunk),font,nk_rgba(0,0,0,0),color);
                     draw_x+=run_width;if(tab)draw_x+=documentation_glyph_width(font,"\t",1);chunk=last+(tab?1:0);
                 }
-                if(link)nk_stroke_line(canvas,x,y+font->height+2,x+width,y+font->height+2,1,color);
+                if(link) {
+                    float underline=math?part.y+part.h-2:draw_y+font->height+2;
+                    nk_stroke_line(canvas,x,underline,x+width,underline,1,color);
+                }
             }
             x+=width;pos=next;
         }
         at+=used;y+=height;
     } while(at<b->length);
+}
+static void documentation_inline_math_draw_probe(app *a) {
+    if(!a->doc_inline_math_test_requested)return;
+    a->doc_inline_math_test_requested=false;a->doc_inline_math_test_ok=false;
+    ps_document *d=a->documentation;if(!d || a->doc_inline_math_test_block>=d->count || !a->doc_math)return;
+    const ps_doc_block *b=&d->blocks[a->doc_inline_math_test_block];unsigned count=0;bool okay=true;
+    for(size_t i=0;i<b->span_count;i++) {
+        const ps_doc_span *span=&d->spans[b->first_span+i];if(!span->formula)continue;
+        const ps_doc_formula_variant *v=documentation_inline_variant(a,span,b->hit[2]-24);unsigned texture=0;
+        float zoom=a->doc_font_ui->height/16;
+        if(v) {
+            float scale=zoom*a->doc_raster_density;
+            unsigned width=(unsigned)fmin(v->raster_width,ceil(v->width*scale));
+            unsigned height=(unsigned)fmin(v->raster_height,ceil(v->height*scale));
+            for(size_t j=0;j<a->doc_math->count;j++) {
+                const documentation_math_texture *item=&a->doc_math->items[j];
+                if(item->variant==v && item->width==width && item->height==height)texture=item->texture;
+            }
+        }
+        const struct nk_command *command;struct nk_rect clip={0},frame={0};unsigned images=0;
+        nk_foreach(command,a->doc_ui) {
+            if(command->type==NK_COMMAND_SCISSOR) {
+                const struct nk_command_scissor *s=(const struct nk_command_scissor *)command;clip=nk_rect(s->x,s->y,s->w,s->h);
+            } else if(command->type==NK_COMMAND_IMAGE) {
+                const struct nk_command_image *image=(const struct nk_command_image *)command;
+                if((unsigned)image->img.handle.id!=texture || image->y<b->hit[1]-1 || image->y>=b->hit[1]+b->hit[3])continue;
+                frame=nk_rect(image->x,image->y,image->w,image->h);++images;
+                okay &= v && fabsf(frame.w-v->width*zoom)<=1 && fabsf(frame.h-v->height*zoom)<=1 &&
+                    frame.x>=clip.x-1 && frame.y>=clip.y-1 && frame.x+frame.w<=clip.x+clip.w+1 && frame.y+frame.h<=clip.y+clip.h+1;
+            }
+        }
+        okay &= images==1 && texture!=0;
+        /* The short fixture places prose on the same baseline as its equation. */
+        if(v && v->width*zoom<(b->hit[2]-24)*.5f && b->span_count<10) {
+            bool aligned=false;
+            nk_foreach(command,a->doc_ui)if(command->type==NK_COMMAND_TEXT) {
+                const struct nk_command_text *text=(const struct nk_command_text *)command;
+                if(text->y<b->hit[1]-1 || text->y>=b->hit[1]+b->hit[3])continue;
+                float base=text->y+documentation_font_baseline(text->font);
+                if(fabsf(base-(frame.y+v->baseline*zoom))<=1.5f)aligned=true;
+            }
+            okay &= aligned;
+        }
+        size_t begin=b->reading_begin+span->text-b->text;
+        okay &= nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,begin) &&
+            nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,begin+span->length-1);
+        if(span->style&PS_DOC_INLINE_LINK)a->doc_inline_math_test_link=frame;
+        printf("INLINE MATH DRAW: case=%u item=%u font=%.0f theme=%u complete=%d frame=%.0f,%.0f,%.0f,%.0f\n",
+            a->doc_inline_math_test_case,count++,a->doc_font_ui->height,a->preferences.theme,okay,frame.x,frame.y,frame.w,frame.h);
+    }
+    a->doc_inline_math_test_ok=okay && count>0;
 }
 #include "documentation_tables.inc"
 /* Layout and native text geometry use the parser's identical cell boundaries. */
@@ -856,7 +944,6 @@ static void documentation_focus_draw(app *a,int id,struct nk_rect bounds,bool bo
     if(!delta)a->doc_focus_reveal=false;
 }
 #include "documentation_media.inc"
-#include "documentation_math.inc"
 static bool documentation_topic_button(app *a,const char *label,bool selected) {
     struct nk_context *ui=a->doc_ui;struct nk_rect bounds;
     enum nk_widget_layout_states visible=nk_widget(&bounds,ui);

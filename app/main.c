@@ -245,6 +245,10 @@ typedef struct {
     bool doc_math_test_requested,doc_math_test_ok;
     unsigned doc_math_test_case;
     size_t doc_math_test_block;
+    bool doc_inline_math_test_requested,doc_inline_math_test_ok;
+    unsigned doc_inline_math_test_case;
+    size_t doc_inline_math_test_block;
+    struct nk_rect doc_inline_math_test_link;
     const struct nk_user_font *doc_font_ui, *doc_font_title, *doc_font_code, *doc_code_fonts[9];
     const struct nk_user_font *doc_ui_fonts[9], *doc_title_fonts[9];
     const struct nk_user_font *doc_bold_fonts[11];

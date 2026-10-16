@@ -5,9 +5,12 @@
 typedef struct {
     const ps_doc_formula_variant *variant;
     unsigned texture,width,height;
-    uint64_t used;
+    uint64_t used,frame;
 } documentation_math_texture;
-struct documentation_math_cache {documentation_math_texture items[16];uint64_t clock;};
+struct documentation_math_cache {documentation_math_texture *items;size_t count;uint64_t clock,frame;};
+static void documentation_math_begin_frame(app *a) {
+    if(a->doc_math)++a->doc_math->frame;
+}
 static const ps_doc_formula_variant *documentation_math_variant(app *a,const ps_document *d,const ps_doc_block *b,float width) {
     const char *tex=d->text+b->target;const ps_doc_formula *formula=ps_document_formula(tex,strlen(tex));
     if(!formula)return NULL;
@@ -53,22 +56,32 @@ static unsigned documentation_math_texture_for(app *a,const ps_doc_formula_varia
     if(!isfinite(scale) || scale<=0 || scale>8)return 0;
     unsigned w=(unsigned)fmin(v->raster_width,ceil(v->width*scale));
     unsigned h=(unsigned)fmin(v->raster_height,ceil(v->height*scale));
-    documentation_math_texture *slot=&cache->items[0];
-    for(size_t i=0;i<16;i++) {
+    documentation_math_texture *slot=NULL;
+    for(size_t i=0;i<cache->count;i++) {
         documentation_math_texture *item=&cache->items[i];
-        if(item->variant==v && item->width==w && item->height==h){item->used=++cache->clock;return item->texture;}
-        if(item->used<slot->used)slot=item;
+        if(item->variant==v && item->width==w && item->height==h){item->used=++cache->clock;item->frame=cache->frame;return item->texture;}
+        if((!item->texture || item->frame!=cache->frame) && (!slot || item->used<slot->used))slot=item;
+    }
+    /* Submitted commands retain their texture handles until this frame is drawn. */
+    if(!slot) {
+        if(cache->count>=PS_DOC_MAX_SPANS+PS_DOC_MAX_BLOCKS)return 0;
+        size_t count=cache->count+16;
+        documentation_math_texture *items=realloc(cache->items,count*sizeof *items);
+        if(!items)return 0;
+        memset(items+cache->count,0,16*sizeof *items);
+        slot=&items[cache->count];cache->items=items;cache->count=count;
     }
     unsigned char *source=documentation_math_coverage(a,v);
     unsigned char *pixels=source?documentation_math_reduce(source,v->raster_width,v->raster_height,w,h):NULL;
     unsigned texture=pixels?ps_graphics_alpha_texture(a->doc_graphics,pixels,(int)w,(int)h):0;
     free(source);free(pixels);
     if(slot->texture)ps_graphics_delete_texture(a->doc_graphics,slot->texture);
-    *slot=(documentation_math_texture){v,texture,w,h,++cache->clock};return texture;
+    *slot=(documentation_math_texture){v,texture,w,h,++cache->clock,cache->frame};return texture;
 }
 static void documentation_math_clear(app *a) {
     if(!a->doc_math)return;
-    for(size_t i=0;i<16;i++)if(a->doc_math->items[i].texture)ps_graphics_delete_texture(a->doc_graphics,a->doc_math->items[i].texture);
+    for(size_t i=0;i<a->doc_math->count;i++)if(a->doc_math->items[i].texture)ps_graphics_delete_texture(a->doc_graphics,a->doc_math->items[i].texture);
+    free(a->doc_math->items);
     free(a->doc_math);a->doc_math=NULL;
 }
 static bool documentation_math_draw(app *a,const ps_document *d,const ps_doc_block *b,struct nk_rect bounds) {
@@ -92,7 +105,7 @@ static void documentation_math_draw_probe(app *a) {
     float scale=zoom*a->doc_raster_density;
     unsigned width=(unsigned)fmin(v->raster_width,ceil(v->width*scale));
     unsigned height=(unsigned)fmin(v->raster_height,ceil(v->height*scale));
-    for(size_t i=0;i<16;i++) {
+    for(size_t i=0;i<a->doc_math->count;i++) {
         const documentation_math_texture *item=&a->doc_math->items[i];
         if(item->variant==v && item->width==width && item->height==height)texture=item->texture;
     }

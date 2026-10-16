@@ -41,11 +41,13 @@ typedef struct {
     size_t packed_size;
     uint32_t crc;
     const char *asset;
+    float baseline; /* distance from image top to mathematical baseline */
 } ps_doc_formula_variant;
 typedef struct {
     const char *tex,*reading;
     const ps_doc_formula_variant *variants;
     size_t count;
+    const ps_doc_formula_variant *inline_variant;
 } ps_doc_formula;
 /* Exact bundled TeX catalog. Unknown expressions remain readable source. */
 const ps_doc_formula *ps_document_formula(const char *tex,size_t length);
@@ -63,7 +65,7 @@ typedef struct {
     float hit[4];
 } ps_doc_block;
 enum { PS_DOC_BOLD=1, PS_DOC_INLINE_CODE=2, PS_DOC_INLINE_LINK=4,
-       PS_DOC_TABLE_SEPARATOR=8 };
+       PS_DOC_TABLE_SEPARATOR=8, PS_DOC_INLINE_MATH=16 };
 /* Trimmed cell ranges in document.text, in row-major order. Delimiters are
  * recognized before inline decoration is removed, never in code/link labels.
  * Empty cells retain a zero-length range. Reading offsets are obtained from
@@ -72,6 +74,7 @@ typedef struct {size_t text,length;} ps_doc_cell;
 typedef struct {
     size_t text, length, link;
     unsigned style;
+    const ps_doc_formula *formula; /* static bundled catalog; never owned */
 } ps_doc_span;
 typedef struct {
     size_t count, used, span_count, cell_count;

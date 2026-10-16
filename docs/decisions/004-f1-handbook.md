@@ -17,7 +17,7 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 | Dokumentationszugang | 185 registrierte Seiten und 214 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
 | Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
-| Formelsatz | 193 TeX-Ausdrücke in 199 Displayblöcken auf 22 Seiten; aktuelle 22-Block-Erweiterung unter Windows/Linux geprüft, bisherige 177 Blöcke auch auf macOS Intel/ARM | Mac-Abnahme der neuen 22 Blöcke und des Multiplikationspunkts in der RK45-Skala, weitere Fachseiten, Inline-TeX, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
+| Formelsatz | 193 TeX-Ausdrücke auf 22 Seiten; 197 Displayblöcke und zwei Inlinepassagen unter Windows/Linux geprüft, vorherige 199 Displayblöcke auch auf macOS Intel/ARM | Mac-Abnahme der Inline-Darstellung, weitere Fachseiten, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
 | Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; alle drei Plattformen besitzen zusätzlich geprüfte native Tabellen-, Zell- und Headerbeziehungen | Externe macOS-AX-Clientprüfung, echte Screenreader-Aufgaben und die unten beschriebene sporadische Windows-Linkprüfung |
 
 Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
@@ -2417,3 +2417,94 @@ die tatsächliche Mac-Ausführung noch aus. Inline-TeX, weitere Fachseiten,
 reale Monitor-/Dichtewechsel, externe Mac-AX-Prüfung und praktische Screenreader-
 Aufgaben bleiben offen. Die Gesamtbewertung bleibt bei UI 8/10, Dokumentation
 8/10 und Barrierefreiheit 5/10; vollständige Abnahme wird nicht behauptet.
+
+## Bestätigte Grundlagenrevision auf beiden Macs
+
+Revision `bff571c` besteht den tatsächlichen
+[Mac-Lauf 38874970904](https://github.com/Lulus792/physim/actions/runs/38874970904):
+ARM native Verträge 11/11 (`run-9_ugygqm`), GUI 24/24 (`run-rco5uta5`);
+Intel native Verträge 11/11 (`run-gdd8l64h`), GUI 24/24 (`run-b1emn24i`).
+Beide vollständigen Joblogs und Archive sind geprüft. Archiv-SHA256:
+ARM `1889674d1900f76b1288417eadde6c92d1869cc76ed35cc574356ba88d0606c8`,
+Intel `6ef252d784733fc5c70b7e3dc701d423f9390b8535f2cac9b665754a1078db8c`.
+Die Ergebnisdateien bestätigen alle Fälle und die Inventur mit 185 Seiten und
+183 Zeichen. Beide vorherigen Layouts werden weiterhin präzise verworfen.
+Die 32-Pixel-Spaltenvektoren beider Macs wurden aus den Archivbildern visuell
+geprüft. Das bestätigt die bisherigen 199 Displayblöcke einschließlich RK45-Punkt;
+die folgende Inline-Erweiterung besitzt einen eigenen Abnahmeumfang.
+
+## Inline-Formelsatz vom 16. Oktober 2026
+
+Registrierte Ausdrücke zwischen einzelnen Dollarzeichen werden im laufenden
+Text gesetzt. Für alle 193 Katalogeinträge gibt es eine zusätzliche MathJax-
+Inlinevariante. Die Kleinwinkelperiode im User Guide und die kinetische Energie
+im C-Einstieg nutzen diese Darstellung. Damit sind 197 Displayblöcke und zwei
+Inlinepassagen auf weiterhin 22 Seiten veröffentlicht. Alle 1.351 bisherigen
+Displayvarianten bleiben als SVG und Raster unverändert; Manifestformat 2
+ergänzt die Grundlinie und 193 Inlinevarianten. Ausführbare Codeblöcke bleiben
+unverändert.
+
+MathJax 4.1.3 zerlegt Inline-Ausgaben standardmäßig in mehrere SVGs. Ein Zugriff
+auf das erste Kind allein würde den Ausdruck abschneiden. Die tatsächliche
+Gegenprobe zur Kleinwinkelperiode erzeugt zwei SVGs mit nur 16,3296 Pixeln im
+ersten Fragment; mit `linebreaks.inline=false` entsteht ein vollständiges SVG
+mit 85,8496 Pixeln. Der Generator verlangt genau ein SVG; der native Test
+verlangt für diesen Ausdruck zusätzlich mehr als 50 Pixel Breite. Bericht:
+`build/native/inline-fragment-counterexample.json`. Die XML-Prüfung bestätigt
+auch die aus dem ViewBox abgeleitete Grundlinie sämtlicher Varianten.
+
+Inline-Mathematik bleibt beim Umbruch ein zusammenhängender Ausdruck. Ist die
+Inlinefassung zu breit, wird eine passende umbrochene Displayfassung verwendet;
+passt auch diese nicht, bleibt die lineare Alternative im normalen Textumbruch.
+Formel und umgebende Schrift teilen sich eine Grundlinie. Nur Zeilen mit
+Mathematik erhalten angepasste Höhen; gewöhnlicher Text und Rahmencode behalten
+ihre bisherigen Maße. Code, maskierte Dollarzeichen und unbekanntes TeX bleiben
+wörtlich. Der Parser begrenzt auch expandierte Lesealternativen auf den
+verfügbaren Textpuffer. Suche, native Lesereihenfolge und verlinkte Formeln
+verwenden dieselben vollständigen Lesealternativen.
+
+Die neue GUI-Gruppe `documentation_inline_math` prüft 48 tatsächliche Ansichten
+bei 16/32 px und drei Themes: sechs repräsentative Ausdrücke, Unicode im
+umgebenden Text, einen Absatz mit 20 verschiedenen Formeln und eine tatsächlich
+angeklickte Formelverknüpfung. 162 Formelbilder müssen vollständig im Clip
+liegen und sichtbare native Lesebereiche besitzen. Kurze Formeln werden gegen
+die Grundlinie der tatsächlichen gezeichneten Textkommandos geprüft. Für alle
+Bilder prüft der Python-Client sichtbare Pixel. Editor und Simulation bleiben
+unverändert. Die bestehenden Zeitgrenzen bleiben erhalten.
+
+Der Grafikcache schützt in diesem Frame verwendete Texturen vor Verdrängung
+und wächst bei Bedarf begrenzt. Der Gegenlauf
+`tools/check_inline_math_counterexample.py` stellt die frühere sofortige
+Verdrängung isoliert wieder her. Unter Linux werden tatsächliche Verdrängungen
+bereits referenzierter Texturhandles und der folgende OpenGL-Fehler 0x502
+erkannt; dies geschieht schon beim ersten Zeichnen der vollständigen Fixture.
+Der Bericht liegt unter `build/native/inline-math-counterexample/report.json`.
+Die alte Variante erreicht deshalb nicht erst den späteren Einzelbildtest.
+
+MSVC/ASan besteht Parser, natives Lesemodell und alle Abschnittslinks 3/3 in
+`run-uqqeldyh`; Linux GCC/ASan/UBSan dieselben drei in `run-j8ooeft0`.
+Windows besteht beide gezielten GUI-Fälle 2/2 in `run-m2jxpqxl` und die fünf
+übrigen Regressionen 5/5 in `run-h8ge23et`. Linux besteht alle sieben GUI-Fälle
+7/7 in `run-izccrh9z`, mit SDL 3.2.30, X11/Xvfb/Openbox und Mesa-Software-GL.
+Die Zeicheninventur bleibt bei 183 Zeichen in 38 Varianten mit normaler und
+gebündelter Primärschrift. Beschriftete Übersichten für 16 px dunkel und 32 px
+hell wurden auf beiden Systemen visuell geprüft, zusätzlich 32 px mit hohem
+Kontrast unter Windows sowie zwei ganze Windows-Ansichten. Der Testläufer
+besteht seine unabhängigen Fehler-/Timeoutfälle unter `build/native/inline-runner-proof`.
+
+Die Vorläufe bleiben erhalten: Windows `run-x4xe81oh` besteht 5/7, Linux
+`run-11uj1u_9` 6/7. Windows zeigt einen durch neue Bruchteil-Zeilenmaße
+unvollständig abgeschlossenen Fokus-Reveal. Die Korrektur beschränkt die neue
+Grundliniengeometrie auf Mathematikzeilen. Die erste Inline-Bildprobe unterscheidet
+zudem die 16-/32-Pixel-Cacheeinträge noch nicht und verwirft sichtbare Bilder;
+die finale Probe prüft Variante und tatsächliche Rastergröße gemeinsam.
+Die ersten isolierten Gegenläufe sind wegen fehlendem Arbeitsordner bzw.
+unverändertem Binärfingerprint bei geändertem lokalen Include keine gültige
+Gegenabnahme. Der endgültige Hauptquell-Fingerprint umfasst die isolierte
+Cachequelle, und der abschließende Bericht bestätigt den tatsächlichen Fehler.
+
+Die Mac-CI enthält den neuen Inline-Fall und die isolierte Cachegegenprobe.
+Für die Inline-Erweiterung steht die tatsächliche Mac-Ausführung noch aus.
+Strukturierte mathematische Screenreader-Navigation, praktische Screenreader-
+Aufgaben, reale Monitor-/Dichtewechsel und der vollständige inhaltliche Abgleich
+aller Hilfeseiten bleiben offen. Die Gesamtwertung bleibt konservativ.
