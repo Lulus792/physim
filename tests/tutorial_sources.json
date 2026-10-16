@@ -1,4 +1,13 @@
 {
+  "documentation_run_identity_example": {
+    "document": "docs/run-streams.md",
+    "sources": [
+      {
+        "path": "examples/documentation/run_identity.phys",
+        "language": "physim"
+      }
+    ]
+  },
   "documentation_language_source": {
     "document": "docs/language-tutorial.md",
     "sources": [

@@ -2804,3 +2804,33 @@ Die Mac-Gruppe nimmt beide Beispiele und ihre Kontextdateien auf; die
 Workflow-Pfade erfassen auch spätere Änderungen der fünf Beispielseiten und
 Prüfdateien. Die tatsächliche Mac-Ausführung bleibt offen. Der Inhaltsnachweis
 dieses Abschnitts bezieht sich auf Speicherverwaltung und Logging.
+
+## Eigenständig ausführbares Beispiel zur Laufidentität
+
+Der Identitätsausschnitt in `docs/run-streams.md` verwendete den zuvor
+konfigurierten Store aus dem Schreibabschnitt. Die nötigen Voraussetzungen
+blieben beim isolierten Kopieren des Ausschnitts unsichtbar. Ein tatsächlicher
+Linux-Vorlauf mit einem frisch erzeugten Store weist die Writer-Erstellung
+entsprechend dem API-Vertrag mit Exit 70 ab: Konfiguration und Kanalplan fehlen.
+`build/native/identity-doc-before/report.json` hält diesen Kontextfall fest;
+das ist kein Fehler des Writers und keine Aussage über den vollständig
+vorbereiteten Store im vorherigen Abschnitt.
+
+Das Beispiel konfiguriert jetzt selbst Zeitschritt, Seed, Metadaten und einen
+SI-Kanal, schreibt eine Messzeile und schließt den Writer ausdrücklich vor dem
+Lesen. Es prüft beide IDs, die gelesene Zeile und den finalisierten Abschluss.
+Die kopierte Identität wird auch nach Reader-/Store-Close weiterverwendet.
+`experiment.psrun` muss neu angelegt werden können; diese Voraussetzung steht
+direkt über dem Beispiel. Die identische Quelle liegt unter
+`examples/documentation/run_identity.phys`.
+
+Der neue native Integrationsfall `documentation_run_identity_example` prüft
+zuerst die Gleichheit des veröffentlichten Codeblocks mit dieser Quelle und
+führt dann das tatsächlich kompilierte Programm aus. Beide ID-Zeilen müssen
+exakt erscheinen; der zusätzliche Runtime-Speicherprüfer verlangt am Ende null
+lebende Sprachallokationen. Zusammen mit Run-Stream-, Generationsstilllegungs-
+und Abschnittslinktests bestehen MSVC/ASan unter Windows 4/4 in
+`run-vwltniet` und GCC/ASan/UBSan unter Linux 4/4 in `run-yrr9hj6j`.
+Die Mac-Gruppe erhält denselben Fall; ihre tatsächliche Ausführung steht aus.
+Dieser Nachweis betrifft das Identitätsbeispiel, keinen vollständigen Review
+aller weiteren Run-Stream-Ausschnitte.

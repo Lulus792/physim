@@ -243,16 +243,42 @@ if (result == PS_OK)
                                                 "Experiment", &identity, &writer);
 ```
 
-```text
-let identity = RunIdentity("0123456789abcdef0123456789abcdef",
-                           "fedcba9876543210fedcba9876543210")
-store.setIdentity(identity)
-let writer = store.createWriter("experiment.psrun","Experiment")
+Das folgende Physim-Beispiel ist eigenständig ausführbar. Es konfiguriert den
+Store und sein SI-Kanalschema ausdrücklich und finalisiert den Writer vor dem
+Lesen. `experiment.psrun` darf im Arbeitsordner noch nicht existieren.
+
+```physim
+let projectId = "0123456789abcdef0123456789abcdef"
+let experimentId = "fedcba9876543210fedcba9876543210"
+let store = RunStore()
+store.configure(0.01, 42, "model=identity-example")
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+let channel = store.addChannel("position.x", metres, "Measured position")
+assert(channel == 0)
+store.setIdentity(RunIdentity(projectId, experimentId))
+let writer = store.createWriter("experiment.psrun", "Experiment")
+writer.append(0, [1.0])
+writer.close()
 let reader = store.openReader("experiment.psrun")
-if reader.hasIdentity():
-    let saved = reader.identity()
-    print(saved.projectId())
+assert(reader.hasIdentity())
+let saved = reader.identity()
+assert(saved.projectId() == projectId)
+assert(saved.experimentId() == experimentId)
+assert(reader.next())
+assert(reader.row().value(0,0) == 1.0)
+assert(!reader.next())
+assert(reader.isComplete())
+reader.close()
+store.close()
+assert(saved.isValid())
+print(saved.projectId())
+print(saved.experimentId())
 ```
+
+Die Ausgabe enthält die beiden IDs in derselben Reihenfolge. Die Prüfungen
+bestätigen außerdem die Messzeile und den vollständigen Dateiabschluss.
+`saved` bleibt nach dem Schließen von Reader und Store gültig. Die vollständige
+Quelle liegt im SDK unter `examples/documentation/run_identity.phys`.
 
 `RunIdentity.fromMetadata(text)` dekodiert den gesamten String-Bytebereich
 unabhängig von einem Reader. `isValid()` prüft beide Felder des Werts.
