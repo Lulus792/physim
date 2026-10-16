@@ -1,0 +1,56 @@
+:root {
+  --paper: #f3f5f8; --panel: #f6f7fa; --ink: #252a33; --muted: #4e5764;
+  --line: #b4bcc8; --frame-line: #858f9d; --soft: #f2f3f6; --selection: #c0d6f7;
+  --selection-text: #191e26; --canvas: #e8ebf1; --edit: #fff; --button: #e5e8ee;
+  --hover: #dadee6; --accent: #0049a3; --focus: #0049a3; --on-accent: #fff;
+  --doc-code: #191e26; color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --paper: #191a1e; --panel: #1e1f23; --ink: #e1e3e9; --muted: #a6a9b1;
+  --line: #37393f; --frame-line: #53555d; --soft: #202125; --selection: #265699;
+  --selection-text: #edeef2; --canvas: #141518; --edit: #1b1c20; --button: #35363c;
+  --hover: #43454d; --accent: #64aaff; --focus: #64aaff; --on-accent: #141518;
+  --doc-code: #d3e0ed; color-scheme: dark;
+}
+html { background: var(--canvas); color: var(--ink); }
+body { background: var(--canvas); }
+.gallery { padding-top: 30px; }
+.intro h1 { font-size: 30px; }
+.theme-choices { display: flex; gap: 5px; }
+.theme-choices button { min-height: 32px; padding: 6px 15px; }
+button { background: var(--button); border-color: var(--line); }
+button:hover { background: var(--hover); }
+button[aria-pressed="true"] { background: var(--selection); color: var(--selection-text); }
+button:focus-visible,a:focus-visible,input:focus-visible { outline-color: var(--focus); }
+.theme-choices button[aria-pressed="true"] { border-color: var(--accent); }
+.window { background: var(--paper); border-color: var(--frame-line); }
+.titlebar,.statusbar { background: var(--soft); }
+.final-design .appbar { background: var(--panel); }
+.final-design .navigation,.context-panel { background: var(--panel); }
+.final-design .panel-head { background: var(--soft); }
+.final-design .reading-pane { background: var(--paper); }
+.final-design .article { color: var(--ink); }
+.final-design .article .lead { color: var(--ink); }
+.final-design .article .crumb { color: var(--muted); }
+.final-design .appbar input { background: var(--edit); color: var(--ink); border-color: var(--line); }
+.final-design .appbar input::placeholder { color: var(--muted); opacity: 1; }
+.final-design .global-language { background: var(--edit); border-color: var(--line); }
+.final-design .global-language button { background: transparent; color: var(--muted); }
+.final-design .global-language button[aria-pressed="true"] { background: var(--button); color: var(--ink); box-shadow: none; }
+.icon-button { color: var(--muted); background: transparent; }
+.icon-button:hover { background: var(--hover); color: var(--ink); }
+.icon-button[aria-expanded="true"] { color: var(--ink); }
+.final-design .nav-row { background: transparent; color: var(--ink); }
+.final-design .nav-row:hover,.final-design .section-link:hover { background: var(--hover); }
+.final-design .nav-row[aria-current],.final-design .section-link[aria-current="location"] { background: var(--selection); color: var(--selection-text); border-left-color: var(--accent); }
+.final-design .section-link { color: var(--muted); }
+.final-design .context-tabs button { background: transparent; color: var(--muted); }
+.final-design .context-tabs button[aria-selected="true"] { color: var(--ink); }
+.final-design .context-tabs button[aria-selected="true"]::after { background: var(--accent); }
+.final-design .notice { border-left-color: var(--accent); }
+.final-design th { background: var(--soft); }
+.final-design pre,.final-design .code-head { background: var(--edit); color: var(--doc-code); }
+.final-design .code-head button { background: var(--button); color: var(--ink); }
+.final-design .context-content pre { white-space: pre-wrap; overflow-wrap: normal; overflow-x: auto; }
+.layout-note a,.revision-note { color: var(--accent); }
+:root[data-theme="dark"] .diagram { filter: invert(.88); }

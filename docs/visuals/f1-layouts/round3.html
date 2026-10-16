@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Physim · F1 Layoutstudien · Runde 3</title>
+  <link rel="stylesheet" href="layouts.css">
+  <link rel="stylesheet" href="refinements.css">
+  <script src="content.js" defer></script>
+  <script src="refinements.js" defer></script>
+</head>
+<body>
+<main class="gallery">
+  <div class="eyebrow"><span><b>Physim</b> / F1-Dokumentation</span><span>Runde 3 · E/G + Modellbereich aus C</span></div>
+  <div class="intro"><div><h1>Zwei Seiten. Zwei kleine Schalter.</h1><p>Die Navigation von E/G, der Modellkontext von C. C oder Physim gilt für das ganze Dokument.</p></div><a class="revision-note" href="round2.html">Vorige Entwürfe ↗</a></div>
+  <nav class="variants" aria-label="Layoutvarianten">
+    <button class="variant" data-mode="balanced" aria-pressed="true"><span class="mini classic" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>H · Schalter an den Enden</strong><small>Links und rechts in der Kopfleiste</small></span></button>
+    <button class="variant" data-mode="rails" aria-pressed="false"><span class="mini reference" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>I · Schmale Seitenstreifen</strong><small>Icons direkt an den Paneelen</small></span></button>
+    <button class="variant" data-mode="controls" aria-pressed="false"><span class="mini classic" aria-hidden="true"><i></i><i></i><i></i></span><span><strong>J · Layout-Schalter rechts</strong><small>Beide Icons kompakt nebeneinander</small></span></button>
+  </nav>
+  <div class="reviewbar"><span>Unabhängig einklappbare Seiten · globale Dokumentationssprache</span><div class="settings"><div role="group" aria-label="Fensterbreite"><span>Fenster</span><button data-width="1080" aria-pressed="true">1080 px</button><button data-width="760" aria-pressed="false">760 px</button></div><div role="group" aria-label="Lesetextgröße"><span>Lesetext</span><button data-font="16" aria-pressed="true">16 px</button><button data-font="32" aria-pressed="false">32 px</button></div></div></div>
+  <div class="stage"><section class="window refinement mode-balanced" id="window" aria-label="Vorschau des F1-Fensters">
+    <div class="titlebar"><span><b>Physim</b> | Dokumentation</span><span aria-hidden="true">−　□　×</span></div>
+    <header class="appbar">
+      <button class="icon-button toolbar-left" data-panel="left" aria-label="Themennavigation ausblenden" aria-controls="nav-content" aria-expanded="true"></button>
+      <span class="brand">PHYSIM <span>Handbuch</span></span>
+      <div class="global-language" role="group" aria-label="Sprache für die gesamte Dokumentation"><button data-language="c" aria-pressed="true">C</button><button data-language="physim" aria-pressed="false">Physim</button></div>
+      <form role="search" id="search-form"><label class="sr-only" for="search">Im gewählten Sprachlernweg suchen</label><input id="search" type="search" placeholder="C-Handbuch durchsuchen …" autocomplete="off"></form>
+      <div class="layout-actions"><button class="icon-button grouped-left" data-panel="left" aria-label="Themennavigation ausblenden" aria-controls="nav-content" aria-expanded="true"></button><button class="icon-button toolbar-right" data-panel="right" aria-label="Modellbereich ausblenden" aria-controls="context-content" aria-expanded="true"></button></div>
+    </header>
+    <div class="workspace">
+      <nav class="navigation" id="navigation" aria-label="Themen und Abschnitte">
+        <div class="panel-head nav-head"><span class="panel-caption">Themen & Abschnitte</span><button class="icon-button panel-toggle" data-panel="left" aria-label="Themennavigation ausblenden" aria-controls="nav-content" aria-expanded="true"></button></div>
+        <div class="nav-content" id="nav-content"></div>
+      </nav>
+      <div class="reading-pane"><div class="article-scroll" id="article-scroll"><article class="article"><p class="crumb" id="article-path"></p><h1 id="article-title"></h1><p class="lead" id="article-lead"></p><div id="article-content"></div></article></div></div>
+      <aside class="context-panel" id="context-panel" aria-label="Modell und Beispiel">
+        <div class="panel-head context-head"><div class="context-tabs" role="tablist" aria-label="Rechter Informationsbereich"><button role="tab" id="tab-model" data-tab="model" aria-selected="true" aria-controls="context-content">Modell</button><button role="tab" id="tab-example" data-tab="example" aria-selected="false" aria-controls="context-content">Beispiel</button></div><button class="icon-button panel-toggle" data-panel="right" aria-label="Modellbereich ausblenden" aria-controls="context-content" aria-expanded="true"></button></div>
+        <div class="context-content" id="context-content" role="tabpanel" aria-labelledby="tab-model"></div>
+      </aside>
+    </div>
+    <footer class="statusbar"><span id="footer-language">Teil I · C</span><span id="footer-label"></span></footer>
+  </section></div>
+  <p class="scroll-hint">Desktopvorschau ab 760 px · Bei schmalem Browser horizontal scrollen.</p>
+  <p class="state-message" id="state-message" role="status" aria-live="polite"></p>
+  <section class="layout-note" aria-label="Einordnung"><div><p class="number" id="concept-number"></p><h2 id="concept-title"></h2><p id="concept-description"></p></div><div><h2>Ein-/Ausklappen</h2><p id="concept-controls"></p></div><div><h2>Gemeinsame Grundlage</h2><p>Themen und Abschnittssprünge wie E/G. Modellgrafik und Ausgangswerte wie C. Die Sprache wird einmal oben für alle Inhalte gewählt.</p></div></section>
+</main>
+</body>
+</html>

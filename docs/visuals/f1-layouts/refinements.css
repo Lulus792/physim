@@ -1,5 +1,8 @@
 .refinement { --left: 250px; --right: 250px; --reading-size: 16px; }
 .refinement .workspace { grid-template-columns: var(--left) minmax(0,1fr) var(--right); font-size: 16px; height: 680px; }
+.refinement .navigation { grid-column: 1; grid-row: 1; }
+.refinement .reading-pane { grid-column: 2; grid-row: 1; }
+.refinement .context-panel { grid-column: 3; grid-row: 1; }
 .refinement .appbar { min-height: 60px; flex-wrap: nowrap; gap: 12px; padding: 10px 13px; }
 .refinement .brand { display: inline; font-size: 12px; }
 .refinement .appbar form { width: 270px; min-width: 160px; flex: 0 1 310px; }

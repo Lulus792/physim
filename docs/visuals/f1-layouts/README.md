@@ -1,122 +1,62 @@
-# F1: Layoutstudien, Runde 3
+# F1: ausgewähltes finales Design H
 
-Stand: 16. Oktober 2026. Ausgangspunkt: Runde 2 auf `0089185`.
-Die native F1-App ist unverändert. Es handelt sich um klickbare Designstudien.
+Der Nutzer hat H am 16. Oktober 2026 als Zielbild ausgewählt. Die helle und dunkle
+Variante sind fertig, beide Seitenleisten schalten unabhängig. Die native App
+wird in einem späteren Chat umgestellt.
 
-## Übernommene Nutzerentscheidungen
+- [Interaktive Vorlage](index.html): standardmäßig Dunkel, Hell umschaltbar.
+- [Hell](h-light.png) · [Dunkel](h-dark.png) · [Vergleich und Seitenzustände](h-final-overview.png).
+- [Verbindliche Designspezifikation](DESIGN-H.md).
+- **[Kopierfertiger Auftrag für den anderen Chat](NEXT-CHAT.md)**.
+- [Projektentscheidung ADR 007](../../decisions/007-f1-layout-h.md).
 
-- Die gemeinsame linke Themen-/Abschnittsnavigation aus E/G ist die Grundlage.
-- Rechts wird der Modellbereich aus Entwurf C verwendet: Grafik, Ausgangswerte
-  und Hinweise zum Versuch. Modell und Beispiel sind direkt wählbare Tabs.
-- Beide Seiten sind **unabhängig** ein- und ausklappbar, über kompakte Icons.
-  Es gibt keine breiten Ein-/Ausblenden-Beschriftungen in der Oberfläche.
-- C und Physim werden **einmal global für das Dokument** gewählt. Das betrifft
-  Lernweg, Anleitungen, Navigation, Suche, Beispielcode und Quellenangabe.
-  Im rechten Bereich gibt es keine zusätzliche lokale Sprachwahl.
-- Gemeinsame Physikerklärungen werden einmal verwendet. Sprachabhängige
-  Arbeitsabläufe unterscheiden sich inhaltlich, nicht nur im Codeausschnitt.
-- B und aufklappbare Untermenüs für Themen-/Abschnittssprünge bleiben verworfen.
+Die Vorlage nutzt lokale Dateien und funktioniert ohne Installation oder Server.
+Ein bereits laufender lokaler Vorschau-Server kann ebenfalls verwendet werden.
+Über die Größenwahl lassen sich 1080/760 px und 16/32 px Lesetext ausprobieren.
+Die äußere Galerie gehört nicht zur vorgeschlagenen F1-Appoberfläche.
 
-## Vorschau
+## Fehlerkorrektur
 
-[`index.html`](index.html) direkt im Browser öffnen. Alle benötigten Quellen
-und Assets sind lokal vorhanden. Keine Installation oder Netzwerkzugriffe nötig.
-Die aktuelle Galerie zeigt drei Verfeinerungen derselben akzeptierten Struktur:
+Die gemeldete Kopplung beim Schließen links war reproduzierbar: Durch automatische
+Rasterplatzierung bekam der Artikel null Breite; der rechte Bereich rückte in
+die falsche Spalte. Navigation, Artikel und Kontext sind jetzt ausdrücklich den
+Spalten 1, 2 und 3 zugeordnet. Die linke Aktion ändert nur die linke Sichtbarkeit,
+die rechte nur die rechte. Diese geometrische Eigenschaft wird geprüft.
 
-| Entwurf | Position der Schalter | Eingeklappter Zustand |
-| --- | --- | --- |
-| **H · Schalter an den Enden** | Je ein 32-px-Icon links und rechts im Fensterkopf | Beide Seiten verschwinden vollständig; Icons bleiben im Fensterkopf |
-| **I · Schmale Seitenstreifen** | Icons direkt im Kopf des jeweiligen Paneels | Je ein 40-px-Streifen bleibt mit dem Wiederöffnen-Icon sichtbar |
-| **J · Layout-Schalter rechts** | Zwei 32-px-Icons gemeinsam oben rechts | Beide Seiten verschwinden vollständig; die zwei Icons bleiben sichtbar |
+Der rechte Modell-/Beispiel-Tab, globale C-/Physim-Wahl, Suchumfang und Lesestelle
+bleiben erhalten. Themewechsel ändern Farben, keine Seitenzustände. Die Farben
+leiten sich aus den vorhandenen Rollen in `app/design_tokens.h` ab.
 
-Bilder: [gemeinsame Übersicht](overview-round3.png), [H](balanced.png),
-[I](rails.png), [J](controls.png), [I mit geschlossenen Seiten](rails-closed.png),
-[globale Physim-Wahl](global-language.png).
-Die vorherige Galerie ist unter [`round2.html`](round2.html) weiter verfügbar.
-Deren Bilder und Quellen bleiben als frühere Entwürfe erhalten.
+## Prüfer erneut ausführen
 
-Die äußeren Erläuterungen und Größenumschalter gehören nur zur Studie.
-Der Fensterrahmen ist eine Darstellung; die Fensterknöpfe sind dekorativ.
-Die Galerie verkleinert kein echtes Desktopfenster: Bei Browserbreiten unter
-760 px kann man innerhalb der Vorschau horizontal scrollen. Die umgebende
-Galerie selbst passt sich an die Browserbreite an.
+`tools/check_f1_design_h.cjs` verwendet Playwright und Sharp. Über das Desktoptool
+`load_workspace_dependencies` die gebündelten Node-/Modulpfade ermitteln, den
+Modulpfad als `NODE_PATH` setzen und mit dem gebündelten Node ausführen:
 
-## Verhalten
+```text
+node tools/check_f1_design_h.cjs
+node tools/check_f1_design_h.cjs --export
+```
 
-Linkes und rechtes Icon steuern nur ihre jeweilige Seite. Alle vier Kombinationen
-sind möglich. Lesestelle, aktueller Artikel, globale Sprache und gewählter rechter
-Tab bleiben erhalten. Die rechte Scrollposition wird beim Wiederöffnen restauriert.
-Die Auswahl der globalen Sprache bleibt beim Wechsel von H/I/J bestehen.
-Suche öffnet nur die linke Trefferleiste wieder, falls diese geschlossen ist.
+Ohne `--export` bleiben Ausgaben unter `build/f1-h-review/`. Mit `--export` werden
+zusätzlich die acht gelieferten Hell-/Dunkel-Zustandsbilder und die Übersicht im
+Designordner erneuert. Unter Windows wird der installierte Edge genutzt; optional
+wählt `PHYSIM_BROWSER` einen konkreten Browserpfad. Unter anderen Betriebssystemen
+muss ein Playwright-Chromium verfügbar sein. Diese Anleitung ist keine Behauptung,
+dass die Prüfung dort bereits ausgeführt wurde.
 
-Die Icons sind eigene einfache SVG-Fensterkonturen mit einem linken bzw. rechten
-Paneelstreifen. Sie besitzen dynamische zugängliche Namen, `aria-controls`,
-`aria-expanded`, Browser-Tooltips und sichtbaren Tastaturfokus. Die Grafik ist
-20 px groß, die normale Schaltfläche 32 px. Auf groben Zeigegeräten wird die
-Schaltfläche auf 40 px vergrößert. Eingeklappte Inhalte verschwinden aus Fokus-
-und Lesefolge; das jeweilige Wiederöffnen-Icon bleibt erreichbar.
+Ausgeführt unter Windows mit Edge 155.0.4283.45: 32 Layoutzustände sowie
+Geometrie-/Sprach-/Theme-/Tastatur-/Suchfälle bestanden; keine JavaScriptfehler.
+Zehn berechnete Text-/Flächenkontraste: 6,30:1 bis 13,55:1. Bilder visuell geprüft.
+Es gibt noch keine native Implementierungs-, Screenreader-, Monitorwechsel- oder
+neue Linux-/macOS-Abnahme. Details und die spätere Abnahme stehen in DESIGN-H.md.
 
-Die rechten Tabs unterstützen Pfeiltasten und Home/End. Abschnittssprünge setzen
-den Fokus auf ihre Überschrift. Meldungen nutzen eine höfliche Live-Region.
-Es gibt keine verschachtelten Navigationsmenüs oder Hover-Pflichtaktionen.
+## Quellen und Archive
 
-**Globaler Sprachwechsel:** C und Physim im Dokumentkopf steuern den gesamten
-Beispielbestand. Die Seitenleiste zeigt jeweils nur den gewählten Lernweg.
-Im Pendelartikel ändern sich Einordnung, Einführung und der Abschnitt zur
-Versuchsvorbereitung. C erklärt Funktionen und Ausgabepuffer, Physim typisierte
-Funktionen, Rückgabewerte und das Bearbeiten der `.phys`-Quelle. Der Beispiel-Tab
-übernimmt dieselbe Sprache einschließlich Quellenangabe. Die Modellgleichungen
-bleiben gemeinsamer Inhalt. Die Suchvorschläge stammen aus dem gewählten Lernweg.
+Aktiv: `index.html`, `final-h.css`, `final-h.js`, `refinements.css`,
+`refinements.js`, `layouts.css`, `content.js`, `model.svg`.
 
-Die Größenwahl 16/32 px betrifft den **Lesetext**. Seitennavigation, Kopf und
-Modellkontext behalten ihre kompakte UI-Schrift. Bei 760 px bleiben die beiden
-Seitenbereiche seitlich; über die Icons lässt sich mehr Lesebreite schaffen.
-
-## Beispiele und Quellen
-
-Tatsächlich eingesehene offizielle Vorbilder am 16. Oktober 2026:
-
-- [VS Code: Custom Layout](https://code.visualstudio.com/docs/configure/custom-layout),
-  Abschnitte Secondary Side Bar und Customize Layout control: getrennte
-  Layout-Icons für die Sichtbarkeit der Seitenleisten. Die verlinkten offiziellen
-  UI-Abbildungen wurden als Referenzen geöffnet.
-- [Windows NavigationView](https://learn.microsoft.com/en-us/windows/apps/develop/ui/controls/navigationview),
-  Abschnitte LeftCompact, LeftMinimal und Pane: Navigation kann zu Icons bzw.
-  einem einzelnen Paneelknopf reduziert werden.
-
-H/I/J sind eigene Ableitungen dieser Bedienmuster. Es werden weder offizielle
-Screenshots noch fremde Icon-Assets mitgeliefert. Die Apple-Sidebars-Webseite
-lieferte über das verfügbare Webwerkzeug nur eine JavaScript-Hülle; daraus wird
-kein neuer inhaltlicher Nachweis abgeleitet.
-
-Pendelmodell und Ausgangswerte basieren auf `docs/pendulum-tutorial.md`.
-Die knappen Sprachanleitungen sind Designbeispiele auf Grundlage von
-`docs/c-workflow.md` und `docs/physim-workflow.md`. Die Ausschnitte stammen aus dem
-Pendel-Lernpfad bzw. `examples/language/pendulum_integrator.phys`; es sind keine
-vollständigen Programme. Die Suche bildet nur die lokale Beispielsammlung ab,
-keinen Volltextindex aller nativen F1-Seiten. Einige weitere Themen bleiben
-explizit verkürzte Layoutplatzhalter und zeigen keinen erfundenen Modellkontext.
-
-## Tatsächlich ausgeführte Prüfung
-
-Windows, Microsoft Edge 155.0.4283.45, Playwright mit echter Browserbedienung.
-48 Kombinationen: drei Entwürfe, zwei Fensterbreiten (1080/760 px), zwei
-Lesetextgrößen (16/32 px), vier unabhängige Seitenzustände. Geprüft wurden
-interner horizontaler Überlauf, erreichbare Wiederöffnen-Icons und Iconmaße.
-Zusätzlich je Entwurf: Lesestelle nach Schließen beider Seiten und erneutem
-Öffnen; globale C-/Physim-Wirkung auf Artikel, Anleitung, Lernweg, Beispiel und
-Suche; Fortbestand beim Layoutwechsel; rechter Tab beim Schließen/Wiederöffnen;
-keine lokalen Sprachschalter; Enter/Leertaste für Icons und Pfeiltasten für Tabs;
-leere und erfolglose Suche. Galerie/Vorschau-Scroll bei 390/320 px geprüft.
-Keine JavaScript-Laufzeitfehler. Neue Einzelansichten, Übersicht, geschlossene
-Seiten und globale Physim-Ansicht visuell geprüft.
-
-Aktuelle Quellen: `index.html`, `refinements.js`, `refinements.css`, gemeinsam
-mit `content.js`, `layouts.css` und `model.svg`. Die archivierte Runde 2 verwendet
-`round2.html` und `layouts.js`. PNGs sind gelieferte Designassets; temporäre
-Prüfskripte, Ergebnisse und zusätzliche Bilder liegen ignoriert in
-`build/f1-layout-review/`.
-
-Kein nativer Build nötig: Renderer, Parser und registrierte F1-Seiten wurden
-nicht verändert. Keine native Plattform-, Screenreader-, DPI-, Linux- oder
-macOS-Abnahme aus der Browserprüfung ableiten.
+[Frühere Runde 3](round3.html) mit H/I/J und [Runde 2](round2.html) mit E/F/G/A/C/D
+bleiben als Archiv erhalten. Maßgeblich für die neue Umsetzung sind ausschließlich
+DESIGN-H.md, die finalen H-Bilder und ADR 007. Die alten Beispielgalerien sind
+keine zusätzlichen Produktanforderungen.
