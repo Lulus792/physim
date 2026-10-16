@@ -1324,16 +1324,16 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
             test_window_key_mod(a->doc_window,SDLK_TAB,0);++*stage;break;
         case 3:
             if(settle++<3)return;
-            ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active && !nk_sdl_accessibility_has_focus(a->doc_ui);
+            ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active && nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Vorheriger");
             puts("EDIT SCROLL READY END");fflush(stdout);++*stage;break;
         case 4:
             join(path,sizeof path,a->project,"scroll-end-applied");ready=fopen(path,"rb");if(!ready)return;fclose(ready);
-            ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active && !nk_sdl_accessibility_has_focus(a->doc_ui);
+            ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active && nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Vorheriger");
             *capture="docs-native-edit-scroll-end.bmp";++*stage;break;
         case 5:puts("EDIT SCROLL READY START");fflush(stdout);++*stage;break;
         case 6:
             join(path,sizeof path,a->project,"scroll-start-applied");ready=fopen(path,"rb");if(!ready)return;fclose(ready);
-            ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active && !nk_sdl_accessibility_has_focus(a->doc_ui);
+            ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active && nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Vorheriger");
             *capture="docs-native-edit-scroll-start.bmp";++*stage;break;
         case 7:puts("DOCUMENTATION EDIT SCROLL SELF-TEST: PASSED");a->quitting=true;break;
         }
@@ -1386,7 +1386,22 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
             test_window_key_mod(a->doc_window,SDLK_TAB,0);++*stage;break;
         case 13:
             ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active;
-            ok &= a->experiment.string.len==experiment_length && a->analysis.string.len==analysis_length && a->simulation_time==simulation_time;
+            puts("EDIT READY PREVIOUS");fflush(stdout);++*stage;break;
+        case 14:
+            {char path[4096];join(path,sizeof path,a->project,"previous-focus-checked");FILE *done=fopen(path,"rb");if(!done)return;fclose(done);}
+            test_window_key_mod(a->doc_window,SDLK_TAB,0);++*stage;break;
+        case 15:
+            ok=a->doc_focus==DOC_NEXT && !a->doc_search_active;
+            puts("EDIT READY NEXT");fflush(stdout);++*stage;break;
+        case 16:
+            {char path[4096];join(path,sizeof path,a->project,"next-focus-checked");FILE *done=fopen(path,"rb");if(!done)return;fclose(done);}
+            test_window_key_mod(a->doc_window,SDLK_TAB,SDL_KMOD_SHIFT);++*stage;break;
+        case 17:
+            ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active;
+            puts("EDIT READY PREVIOUS RETURN");fflush(stdout);++*stage;break;
+        case 18:
+            {char path[4096];join(path,sizeof path,a->project,"previous-return-focus-checked");FILE *done=fopen(path,"rb");if(!done)return;fclose(done);}
+            ok=a->experiment.string.len==experiment_length && a->analysis.string.len==analysis_length && a->simulation_time==simulation_time;
             a->quitting=true;puts("DOCUMENTATION EDIT SELF-TEST: PASSED");break;
         }
         if(!ok){fprintf(stderr,"Native documentation edit stage %d failed: focus=%d query=%s filter=%s\n",*stage,a->doc_focus,a->doc_query,a->doc_filter);*code=1;a->quitting=true;}

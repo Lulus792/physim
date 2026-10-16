@@ -61,6 +61,7 @@ struct nk_sdl {
     ps_a11y_model *accessibility;
     SDL_Mutex *accessibility_mutex;
     ps_a11y_native *accessibility_native;
+    bool accessibility_custom_keyboard;
 };
 static unsigned accessibility_widget(void *user,const char *window,const char *label,
                                  int role,const float bounds[4],bool enabled,bool checked,const char *group,bool activated) {
@@ -74,8 +75,8 @@ static unsigned accessibility_widget(void *user,const char *window,const char *l
     bool granted=pending && !model->pending_focus && model->focused_id==pending && model->draft_count && model->draft[model->draft_count-1].focusable;
     bool focused=model->draft_count && model->draft[model->draft_count-1].id==model->focused_id && model->draft[model->draft_count-1].focusable && model->keyboard_focus && (!pending || pending==model->focused_id);
     SDL_UnlockMutex(sdl->accessibility_mutex);
-    if(granted){SDL_RaiseWindow(sdl->win);nk_edit_unfocus(&sdl->ctx);}
-    return (pressed?1u:0u)|(granted?2u:0u)|(focused?4u:0u);
+    if(granted){sdl->accessibility_custom_keyboard=false;SDL_RaiseWindow(sdl->win);nk_edit_unfocus(&sdl->ctx);}
+    return (pressed?1u:0u)|(granted?2u:0u)|(focused && !sdl->accessibility_custom_keyboard?4u:0u);
 }
 static unsigned accessibility_range_widget(void *user,const char *window,const char *label,const float bounds[4],bool enabled,double values[4]) {
     struct nk_sdl *sdl=user;SDL_LockMutex(sdl->accessibility_mutex);
@@ -88,8 +89,8 @@ static unsigned accessibility_range_widget(void *user,const char *window,const c
     bool granted=recorded && pending && !model->pending_focus && model->focused_id==pending && model->draft[before].id==pending;
     bool focused=recorded && model->draft[before].id==model->focused_id && model->draft[before].focusable && model->keyboard_focus;
     SDL_UnlockMutex(sdl->accessibility_mutex);
-    if(granted){SDL_RaiseWindow(sdl->win);nk_edit_unfocus(&sdl->ctx);}
-    return (changed?1u:0u)|(granted?2u:0u)|(focused?4u:0u);
+    if(granted){sdl->accessibility_custom_keyboard=false;SDL_RaiseWindow(sdl->win);nk_edit_unfocus(&sdl->ctx);}
+    return (changed?1u:0u)|(granted?2u:0u)|(focused && !sdl->accessibility_custom_keyboard?4u:0u);
 }
 static void *ui_alloc(nk_handle user, void *old, nk_size size) {
     (void)user;
@@ -176,7 +177,7 @@ nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flag
    selected=ps_a11y_edit_take_selection(m,index,&select_start,&select_end);
    scrolled=ps_a11y_edit_take_scroll(m,index,&scroll_start,&scroll_end,&scroll_top);}
   SDL_UnlockMutex(sdl->accessibility_mutex);
-  if(granted){SDL_RaiseWindow(sdl->win);nk_window_set_focus(ctx,ctx->current->name_string);nk_edit_unfocus(ctx);nk_edit_focus(ctx,NK_EDIT_ALWAYS_INSERT_MODE);}
+  if(granted){sdl->accessibility_custom_keyboard=false;SDL_RaiseWindow(sdl->win);nk_window_set_focus(ctx,ctx->current->name_string);nk_edit_unfocus(ctx);nk_edit_focus(ctx,NK_EDIT_ALWAYS_INSERT_MODE);}
   if(changed && ctx->current->edit.active){
    SDL_LockMutex(sdl->accessibility_mutex);size_t caret=index!=SIZE_MAX?sdl->accessibility->draft[index].text_caret:strlen(text);SDL_UnlockMutex(sdl->accessibility_mutex);
    ctx->current->edit.cursor=nk_utf_len(text,(int)caret);ctx->current->edit.sel_start=ctx->current->edit.sel_end=ctx->current->edit.cursor;
@@ -338,10 +339,11 @@ bool nk_sdl_accessibility_document_link_target(struct nk_context *ctx,const char
  if(granted)ps_a11y_document_scroll_align(m,version,begin,true);
  SDL_UnlockMutex(sdl->accessibility_mutex);
  if(granted){
+  sdl->accessibility_custom_keyboard=false;
   if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: link focus granted id=%llu window=%u keyboard=%u ticks=%llu\n",(unsigned long long)pending,SDL_GetWindowID(sdl->win),SDL_GetKeyboardFocus()?SDL_GetWindowID(SDL_GetKeyboardFocus()):0,(unsigned long long)SDL_GetTicksNS());
   SDL_RaiseWindow(sdl->win);nk_window_set_focus(ctx,ctx->current->name_string);nk_edit_unfocus(ctx);
  }
- if(focused && visible[2]>0 && visible[3]>0)nk_stroke_rect(nk_window_get_canvas(ctx),
+ if(focused && !sdl->accessibility_custom_keyboard && visible[2]>0 && visible[3]>0)nk_stroke_rect(nk_window_get_canvas(ctx),
      nk_rect(left-3,top-2,right-left+6,bottom-top+4),3,1,ctx->style.button.text_normal);
  return pressed;
 }
@@ -357,6 +359,7 @@ void nk_sdl_accessibility_suspend(struct nk_context *ctx) {
  if(!ctx || !ctx->userdata.ptr)return;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return;
  SDL_LockMutex(sdl->accessibility_mutex);bool first=!sdl->accessibility->suspended;
  ps_a11y_suspend(sdl->accessibility);SDL_UnlockMutex(sdl->accessibility_mutex);
+ sdl->accessibility_custom_keyboard=false;
  if(first) {
   /* No current Nuklear window exists between frames; clear every window's edit
    * cache explicitly, otherwise it reacquires native focus after reopening. */
@@ -397,6 +400,33 @@ bool nk_sdl_accessibility_has_focus(struct nk_context *ctx) {
  SDL_LockMutex(sdl->accessibility_mutex);
  bool focused=sdl->accessibility->focused_id!=0;SDL_UnlockMutex(sdl->accessibility_mutex);return focused;
 }
+void nk_sdl_accessibility_keyboard_begin(struct nk_context *ctx) {
+ if(!ctx || !ctx->userdata.ptr)return;
+ struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return;
+ SDL_LockMutex(sdl->accessibility_mutex);
+ ps_a11y_blur(sdl->accessibility,0);sdl->accessibility_custom_keyboard=true;
+ SDL_UnlockMutex(sdl->accessibility_mutex);
+}
+bool nk_sdl_accessibility_keyboard_owned(struct nk_context *ctx) {
+ return ctx && ctx->userdata.ptr && ((struct nk_sdl *)ctx->userdata.ptr)->accessibility_custom_keyboard;
+}
+bool nk_sdl_accessibility_keyboard_target(struct nk_context *ctx,struct nk_rect bounds) {
+ if(!ctx || !ctx->userdata.ptr || !ctx->current || !ctx->current->layout)return false;
+ struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility || !sdl->accessibility_custom_keyboard)return false;
+ struct nk_rect clip=ctx->current->layout->clip;
+ float left=fmaxf(bounds.x,clip.x),top=fmaxf(bounds.y,clip.y);
+ float right=fminf(bounds.x+bounds.w,clip.x+clip.w),bottom=fminf(bounds.y+bounds.h,clip.y+clip.h);
+ bool found=false;SDL_LockMutex(sdl->accessibility_mutex);ps_a11y_model *m=sdl->accessibility;
+ if(right>left && bottom>top)for(size_t i=m->draft_count;i>0;i--) {
+  const ps_a11y_node *node=&m->draft[i-1];
+  if(node->focusable && node->enabled && !strcmp(node->window,ctx->current->name_string) &&
+     fabsf(node->bounds[0]-left)<.01f && fabsf(node->bounds[1]-top)<.01f &&
+     fabsf(node->bounds[2]-(right-left))<.01f && fabsf(node->bounds[3]-(bottom-top))<.01f) {
+   m->focused_id=node->id;found=true;break;
+  }
+ }
+ SDL_UnlockMutex(sdl->accessibility_mutex);return found;
+}
 bool nk_sdl_accessibility_event(struct nk_context *ctx,const SDL_Event *event) {
  if(!ctx || !ctx->userdata.ptr || !event)return false;
  struct nk_sdl *sdl=ctx->userdata.ptr;
@@ -405,7 +435,10 @@ bool nk_sdl_accessibility_event(struct nk_context *ctx,const SDL_Event *event) {
  if(event->type==SDL_EVENT_WINDOW_FOCUS_LOST || event->type==SDL_EVENT_MOUSE_BUTTON_DOWN) {
   if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: accessibility blur event=%u focused=%llu pending=%llu window=%u keyboard=%u ticks=%llu\n",event->type,(unsigned long long)m->focused_id,(unsigned long long)m->pending_focus,SDL_GetWindowID(sdl->win),SDL_GetKeyboardFocus()?SDL_GetWindowID(SDL_GetKeyboardFocus()):0,(unsigned long long)SDL_GetTicksNS());
   ps_a11y_blur(m,0);
+  sdl->accessibility_custom_keyboard=false;
  }
+ else if(sdl->accessibility_custom_keyboard && (event->type==SDL_EVENT_KEY_DOWN ||
+          event->type==SDL_EVENT_KEY_UP || event->type==SDL_EVENT_TEXT_INPUT)) { /* Custom route owns these keys. */ }
  else if(m->focused_id && event->type==SDL_EVENT_TEXT_INPUT){const ps_a11y_node *node=ps_a11y_find(m,m->focused_id);handled=!node || node->role!=PS_A11Y_EDIT;}
  else if(m->focused_id && (event->type==SDL_EVENT_KEY_DOWN || event->type==SDL_EVENT_KEY_UP) &&
          !(event->key.mod&(SDL_KMOD_CTRL|SDL_KMOD_GUI|SDL_KMOD_ALT))) {

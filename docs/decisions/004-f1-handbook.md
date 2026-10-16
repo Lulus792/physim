@@ -3193,3 +3193,55 @@ bereits behobene Screenreader-Lücke wird hier nicht behauptet.
 begrenzten Befund fest. Vollständiges Lesen, Link-/Tabellenaufgaben und
 mathematische Screenreader-Navigation bleiben offen; die Gesamtwertung steigt
 nicht aufgrund der bestätigten Suchfeldansage.
+
+### F1-Tastaturfokus und native Semantik verbinden
+
+Die gemeinsame SDL-Schicht kann jetzt einen vom F1-Tastaturweg gezeichneten,
+aktivierten Control aus dem aktuellen Semantikentwurf übernehmen. Der Abgleich
+berücksichtigt Nuklear-Fenster, sichtbaren Clip und Geometrie. Die bisherige
+F1-Reihenfolge steuert weiterhin die Tasten; der native Adapter veröffentlicht
+denselben Fokus. Ein zweiter generischer Tastenweg wird dabei nicht ausgeführt.
+Gewährte externe Fokusanforderungen übernehmen die Steuerung zurück, ebenso
+Pointer-/Fensterfokuswechsel. Der zusätzliche generische Controlrahmen wird für
+die eigene Tastaturroute unterdrückt, damit deren vorhandener Rahmen genügt.
+Interne Links werden nach ihrer semantischen Registrierung nochmals zugeordnet.
+
+Die erweiterte vorhandene externe Feldprobe verlangt nun auch nativen Fokus nach
+Tab auf „Vorheriger“, weiter auf „Nächster“ und zurück mit Shift+Tab. Der lesende
+Windows-Client besitzt dafür `focused-button` mit derselben strikten Prüfung aus
+Property und globalem `GetFocusedElement`. Er setzt keinen Fokus. Die bisherige
+Scroll-Probe verlangt jetzt tatsächlich den fokussierten Button statt ausdrücklich
+fehlenden nativen Fokus.
+
+Die unveränderte Produktfassung vor dieser Korrektur scheitert unter Linux exakt
+an `button focus PREVIOUS` (`run-y11742yd`), nachdem Suchfelder, Unicode-Auswahl
+und Ctrl+F-Rückkehr bestanden haben. Die Korrektur besteht unter Linux
+GCC/ASan/UBSan **4/4** in `run-zto7nomt`: Tastatur, Navigation, externe AT-SPI-
+Feld-/Buttonprobe und externe Links. Alle drei Buttonphasen wurden ausgeführt;
+der externe Fokuswechsel zurück zur globalen Suche bleibt erhalten.
+
+Windows MSVC/ASan besteht **4/6** in `run-lt1egx9v`: native Accessibility,
+F1-Tastatur, Feldscrollen und Navigation. Externe Felder und Links scheitern
+zunächst bei nativen Fokusprüfungen. Der gezielte Wiederlauf `run-ls2oj_b6`
+besteht Links, scheitert aber bereits beim lokalen Suchfeldfokus. Frühere
+Vorläufe scheiterten außerdem vor den neuen Buttonphasen an einem Suchfeld-
+Zeitlimit beziehungsweise einer nicht verfügbaren Textauswahl. Diese Ergebnisse
+werden nicht zu einer vollständig grünen Windows-Gruppe zusammengefasst.
+Das Linkprotokoll belegt OS-Tastaturfokusverlust; eine alleinige Produktionsursache
+für sämtliche Windows-Abweichungen ist damit nicht bewiesen.
+
+Die normale korrigierte Windows-App wurde deshalb tatsächlich mit dem vorhandenen
+Narrator bedient: F1, Ctrl+F, Tab, Tab und Shift+Tab. Der unabhängige Client
+bestätigt für alle drei Buttons Property und globales Fokusobjekt (Rolle 50000).
+Der tatsächliche Narrator-Sprachverlauf nennt nacheinander „Vorheriger, button“,
+„Nächster, button“ und „Vorheriger, button“. Das Binary besitzt SHA-256
+`a804180a70fe0a92f98829c40aca53f29bd3d224c6b21dba84c268a9a5243304`.
+`build/native/button-focus-manual/report.json` bindet diese Belege an Quellen-
+und Bildhashes; der Runner-Selbsttest in `button-focus-runner-proof` besteht.
+
+Damit ist die konkrete zuvor beobachtete Tab-Button-Lücke auf Windows und Linux
+belegt korrigiert. Der vollständige Windows-Feldablauf bleibt instabil und offen.
+Ein Lesebereich ohne interaktiven Control besitzt durch diese Änderung noch keine
+neue native Fokusrolle. Vollständige Lesereihenfolge, Links-/Tabellenaufgaben mit
+Screenreader, strukturierte Mathematik und die aktuelle Mac-Ausführung bleiben
+weiter erforderlich. Aus dieser begrenzten Korrektur folgt keine Höchstwertung.

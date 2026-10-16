@@ -786,6 +786,7 @@ static void documentation_navigation_toggle(app *a) {
     a->doc_navigation_hidden=!a->doc_navigation_hidden;
     a->doc_filter_active=a->doc_filter_focus=a->doc_search_active=a->doc_search_focus=false;
     a->doc_keyboard=true;a->doc_focus=DOC_NAVIGATION;a->doc_focus_reveal=true;
+    nk_sdl_accessibility_keyboard_begin(a->doc_ui);
     if(a->documentation)a->documentation->layout_width=0;
 }
 static unsigned documentation_focus_list(app *a,int *entries) {
@@ -833,6 +834,7 @@ static bool documentation_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
     }
     if(key->mod&(SDL_KMOD_CTRL|SDL_KMOD_GUI|SDL_KMOD_ALT)) {
         if(key->key==SDLK_F && (key->mod&PS_UI_COMMAND_MOD)) {
+            nk_sdl_accessibility_keyboard_begin(a->doc_ui);
             a->doc_keyboard=true;a->doc_focus=DOC_SEARCH;a->doc_focus_reveal=true;
             a->doc_search_focus=true;a->doc_filter_active=false;return true;
         }
@@ -850,6 +852,7 @@ static bool documentation_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
         int direction=key->mod&SDL_KMOD_SHIFT?-1:1;
         selected=!a->doc_keyboard || selected==count?(direction>0?0:count-1):(selected+count+direction)%count;
         a->doc_keyboard=true;a->doc_focus=entries[selected];a->doc_focus_reveal=true;
+        nk_sdl_accessibility_keyboard_begin(a->doc_ui);
         a->doc_search_active=a->doc_filter_active=false;
         a->doc_search_focus=a->doc_focus==DOC_SEARCH;a->doc_filter_focus=a->doc_focus==DOC_FILTER;
         if(a->doc_focus>=DOC_VISUAL)a->doc_jump_block=(a->doc_focus-DOC_VISUAL)/16;
@@ -931,6 +934,7 @@ static void documentation_focus_draw(app *a,int id,struct nk_rect bounds,bool bo
     struct nk_context *ui=a->doc_ui;
     if(nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ui->input,bounds)){a->doc_keyboard=false;a->doc_focus=id;}
     if(!a->doc_keyboard || a->doc_focus!=id)return;
+    if(id!=DOC_BODY)nk_sdl_accessibility_keyboard_target(ui,bounds);
     if(body)bounds.h=fminf(bounds.h,nk_window_get_content_region(ui).h);
     if(id==DOC_BODY){struct nk_rect clip=nk_window_get_content_region(ui);bounds.h=fmaxf(0,fminf(bounds.h,clip.y+clip.h-bounds.y));}
     a->doc_focus_bounds=bounds;
@@ -1462,6 +1466,8 @@ static void documentation_view(app *a, float height) {
                 if(b->kind!=PS_DOC_LINK || !strncmp(d->text+b->target,"http",4) || b->reading_begin==SIZE_MAX || !b->reading_length)continue;
                 if(nk_sdl_accessibility_document_link_target(ui,d->text+b->text,d->text+b->target,a->doc_reading_version,
                     b->reading_begin,b->reading_begin+b->reading_length,nk_rect(b->hit[0],b->hit[1],b->hit[2],b->hit[3])))a->doc_inline_clicked=(int)i;
+                if(a->doc_keyboard && a->doc_focus==DOC_LINK+(int)i)
+                    nk_sdl_accessibility_keyboard_target(ui,nk_rect(b->hit[0],b->hit[1],b->hit[2],b->hit[3]));
             }
         }
         nk_group_scrolled_end(ui);
