@@ -90,7 +90,7 @@ C/Physim gilt global für Lernweg, Artikel, Suche und Code. Tab erreicht Sprache
 Suchfelder, Navigation, Links und Codekopieren. Sichtbarer Fokus scrollt mit;
 Lesetasten bedienen den Text. Gleichzeitige Texteingabe und Tab erhalten das
 letzte Zeichen. [Bedienung](workspace.md) und
-[native Abnahme mit Plattformgrenzen](visuals/f1-layouts/NATIVE-H.md).
+[F1-Abnahme mit Plattformgrenzen](decisions/004-f1-handbook.md#natives-design-h).
 
 **Einstellungen per Tastatur:** Tab und Shift+Tab führen durch sämtliche
 Einstellungsgruppen mit sichtbarem, automatisch gescrolltem Fokus. Pfeiltasten

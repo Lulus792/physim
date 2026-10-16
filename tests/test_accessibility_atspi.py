@@ -125,12 +125,14 @@ def enabled(node):
 
 def event(e):
     record={"type":e.type,"detail1":e.detail1,"detail2":e.detail2}
+    if e.type.startswith('window:') or e.type.startswith('object:state-changed:active'):
+        record['source']=e.source.name
     if e.type.startswith('object:text-changed'):record['text']=str(e.any_data)
     events.append(record)
 
 
 pyatspi.Registry.registerEventListener(
-    event, "object:children-changed", "object:state-changed", "object:bounds-changed", "object:property-change", "object:text-changed"
+    event, "object:children-changed", "object:state-changed", "object:bounds-changed", "object:property-change", "object:text-changed", "window:activate", "window:deactivate"
 )
 try:
     app = wait(app_find, "registered application")
@@ -147,6 +149,24 @@ try:
     assert before.width > 0 and before.height == 24
     assert showing(button) and enabled(button) and enabled(other)
     assert button.queryAction().nActions == 1 and button.queryAction().getName(0) == "click"
+    def active(node):
+        node.clearCache()
+        return node.getState().contains(pyatspi.STATE_ACTIVE)
+
+    # Use the public native focus operation to switch actual SDL windows. Orca
+    # rejects control focus from a frame which does not publish ACTIVE.
+    for target, previous, control in [(wb, wa, other), (wa, wb, button), (wb, wa, other)]:
+        assert control.queryComponent().grabFocus()
+        wait(lambda: active(target) and not active(previous), 'exclusive active native frame')
+        assert not active(control) and not active(app)
+        wait(lambda: any(e['type']=='window:activate' and e.get('source')==target.name for e in events),
+             'window activation announcement')
+    for window in (wa, wb):
+        wait(lambda: any(e['type']=='window:deactivate' and e.get('source')==window.name for e in events),
+             'window deactivation announcement')
+        wait(lambda: any(e['type']=='object:state-changed:active' and e['detail1']==0 and
+                         e.get('source')==window.name for e in events), 'active state loss announcement')
+    checks.append('exclusive active window states and activation/deactivation events through native focus')
     address = dbus.Interface(
         bus.get_object("org.a11y.Bus", "/org/a11y/bus"), "org.a11y.Bus"
     ).GetAddress()
@@ -495,6 +515,7 @@ try:
     process.stdin.write(b"h")
     process.stdin.flush()
     wait(lambda: not showing(button), "hidden window state notification")
+    wait(lambda: not active(wa), "hidden window loses active state")
     wait(lambda:not showing(reader),'hidden document state')
     assert document.getText(0,-1)==source
     hidden_proxy=dbus.Interface(raw_bus.get_object(provider,replacement_path),'org.a11y.atspi.Text')

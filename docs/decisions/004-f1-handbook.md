@@ -14,11 +14,11 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 
 | Bereich | Belegter Stand | Rest zur vollständigen Abnahme |
 | --- | --- | --- |
-| Dokumentationszugang | 185 registrierte Seiten und 219 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
+| Dokumentationszugang | 185 registrierte Seiten und 220 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
 | Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt; PCHIP und RK45 abgeglichen; sechs veröffentlichte C-Fragmente sowie Laufidentitäts-, Ereignis- und Startzeitbeispiele unter Windows/Linux tatsächlich ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
-| Formelsatz | 193 TeX-Ausdrücke auf 22 Seiten; 197 Displayblöcke und zwei Inlinepassagen unter Windows/Linux geprüft; aktueller Inline-Prüfablauf besteht auf beiden Plattformen mit 48 bytegleichen Bildern und 162 Formelrahmen gegenüber seinem jeweiligen Vorlauf; frühere Mac-Nachweise sind unten revisionsbezogen dokumentiert | Abnahme der aktuellen Mac-Revision einschließlich externer AX-Prüfung und offener Intel-Zeitlimits, weitere Fachseiten, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
-| Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; native Tabellen-/Headerbeziehungen sind geprüft; ein tatsächlicher Narrator-Sprachverlauf bestätigt den lokalen F1-Suchfeldnamen, die Rolle und den Wert nach Ctrl+F | Externe macOS-AX-Clientprüfung, vollständige Screenreader-Aufgaben und die unten beschriebenen Windows-Fokusbefunde |
+| Formelsatz | 193 TeX-Ausdrücke auf 22 Seiten; 197 Displayblöcke und zwei Inlinepassagen unter Windows/Linux geprüft; aktueller Inline-Prüfablauf besteht auf beiden Plattformen mit 48 bytegleichen Bildern und 162 Formelrahmen gegenüber seinem jeweiligen Vorlauf; frühere Mac-Nachweise sind unten revisionsbezogen dokumentiert | Vollständige GUI-Abnahme der aktuellen Mac-Revision und offene Intel-Zeitlimits, weitere Fachseiten, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
+| Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; native Tabellen-/Headerbeziehungen sind geprüft; ein tatsächlicher Narrator-Sprachverlauf bestätigt den lokalen F1-Suchfeldnamen, die Rolle und den Wert nach Ctrl+F | Vollständige Screenreader-Aufgaben und die unten beschriebenen Fokusbefunde; externe AX-Prüfung für den H-Stand 34ac138 auf ARM bereits bestanden |
 
 Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
 Bewertung mit Höchstpunktzahl ist wegen dieser offenen Abnahmefälle noch nicht
@@ -27,6 +27,50 @@ Die konservative Gesamtwertung bleibt **UI 8/10, Dokumentationsaufgabe 8/10
 und Barrierefreiheit 5/10**. Der Formelsatz besitzt jetzt auch Inline-Brüche,
 Wurzeln, Hoch-/Tiefstellungen und Matrizen mit gemeinsamer Textgrundlinie;
 seine technische Abnahme ersetzt die offenen Nutzeraufgaben nicht.
+
+### Natives Design H
+
+Die native H-Oberfläche ist umgesetzt: unabhängige Seitenbereiche, globale
+C-/Physim-Auswahl, direkte Abschnittssprünge und Modell-/Beispielkontext.
+Der Stand `34ac138` besteht unter Windows die drei H-/Formelsatzfälle und zehn
+Formelkatalogfälle, unter Linux dieselben Gruppen. Die Linux-CI mit GCC und
+Clang besteht jeweils 26 native und 47 GUI-Fälle
+([Lauf](https://github.com/Lulus792/physim/actions/runs/38919952359)).
+Die neue ARM-Mac-Probe besteht alle Formelsatzfälle und die externe AX-Prüfung,
+verfehlt jedoch im H-Test die angeforderte Fenstergröße. Die Korrektur
+`3f008d9` stellt das Fenster vor jeder Größenanforderung wieder her; ihr
+Mac-Nachweis ist noch offen. Eine vollständige Plattformabnahme folgt daraus nicht.
+
+Die echten hellen/dunklen Fensterbilder und der ausführliche, revisionsbezogene
+Bericht liegen im Repository unter `docs/visuals/f1-layouts/NATIVE-H.md`.
+Dieser Bericht ist keine registrierte Handbuchseite. Die Statusseite verweist
+deshalb auf diese innerhalb von F1 erreichbare Zusammenfassung.
+
+### Orca: aktives Fenster und Control-Ansagen
+
+Die tatsächliche Orca-50.2-Probe unter Alpine/X11 konnte F1-Controls zunächst
+erreichen, gab ihre Namen aber nicht aus. Orca verwarf den Fensterrahmen mit
+`lacks active state`. Der Linux-Adapter veröffentlicht jetzt den tatsächlichen
+aktiven Fensterzustand und Aktivierungs-/Deaktivierungsereignisse. ACTIVE ist
+ein Fensterzustand; fokussierte Controls erhalten weiterhin FOCUSED.
+
+Die unabhängige Zwei-Fenster-Regression scheitert am alten Binary und besteht
+mit der Korrektur (`run-egh0a1rj`, zusammen mit H **2/2**). Der neue Prüfer
+`tests/check_documentation_orca.py` bedient die normale App über echte X11-Tasten
+und prüft zusätzliche native Fokuszustände, Suchwerte und Orca-Sprachausgaben.
+`build/native/orca-controls-final/results.json` meldet **passed**, das echte
+Speech-Dispatcher-Backend und alle sieben erforderlichen Ansagen: Fenster,
+beide Suchfelder, Kontextschalter, Pendel-Treffer und Treffer-Navigation.
+Die Synthese benutzt einen ALSA-Nullausgang; es wurde kein Ton angehört.
+Die abschließenden AT-SPI-Nachbarfälle bestehen **4/4** (`run-o1n0uodx`):
+Fensterzustände/-ereignisse, Dokumenttext, editierbare Suchfelder und Links.
+Der finale native Parser-/Linkcheck bestätigt 185 Seiten und 220 Abschnittslinks
+(`build/native/h-anchor-link-final.log`).
+
+Der Lesebereich erhält weiterhin keinen nativen Fokus. Vollständiges Vorlesen,
+Linkaktivierung, Workspace-Rückkehr und strukturierte Mathematik sind damit
+weiter offen. Die konservative Gesamtwertung wird durch diese Teilprüfung
+nicht auf volle Punktzahl angehoben.
 
 ### Sidebar-Aktionen ohne Wortbruch
 

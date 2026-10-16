@@ -30,7 +30,7 @@ struct ps_a11y_native {
     SDL_Mutex *mutex;
     unsigned window_id;
     int x, y, width, height;
-    bool screen_position, visible;
+    bool screen_position, visible, active;
     char title[256];
     ps_a11y_node previous[PS_A11Y_MAX_NODES];
     size_t previous_count;
@@ -268,7 +268,7 @@ static size_t child_count(ax_server *s, ps_a11y_native *w, const ps_a11y_node *n
 }
 static void states(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
                    const ps_a11y_node *node) {
-    /* AtspiStateType: checked=4, enabled=8, sensitive=24, showing=25,
+    /* AtspiStateType: active=1 (window frames only), checked=4, enabled=8, sensitive=24, showing=25,
      * visible=30, checkable=41.
      * Focus is published only after the UI frame owns keyboard input. */
     unsigned first = 0;
@@ -276,6 +276,7 @@ static void states(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
     if(w){SDL_LockMutex(w->mutex);available=available && !w->model->suspended;SDL_UnlockMutex(w->mutex);}
     if(available && (!node->id || node->enabled))
         first |= (1u << 8) | (1u << 24);
+    if(available && w && !node->id && w->active)first |= 1u << 1;
     if(node->focusable)first |= 1u << 11;
     if(available && node->focused)first |= 1u << 12;
     if(node->role==PS_A11Y_EDIT){first|=1u<<26;if(available && node->enabled)first|=1u<<7;}
@@ -590,6 +591,25 @@ static void event_state(ax_server *s, const char *path, const char *state, bool 
     dbus_message_iter_init_append(r.message, &r.root);
     text(&r, &r.root, state);
     number(&r, &r.root, enabled ? 1 : 0);
+    number(&r, &r.root, 0);
+    DBusMessageIter v;
+    open_container(&r, &r.root, DBUS_TYPE_VARIANT, "i", &v);
+    number(&r, &v, 0);
+    close_container(&r, &r.root, &v);
+    empty_properties(&r, &r.root);
+    if (r.okay)
+        dbus_connection_send(s->connection, r.message, NULL);
+    dbus_message_unref(r.message);
+}
+static void event_window_active(ax_server *s, const char *path, bool active) {
+    ax_reply r = {.message = dbus_message_new_signal(path, AX_PREFIX "Event.Window",
+                                                    active ? "Activate" : "Deactivate"),
+                  .okay = true};
+    if (!r.message)
+        return;
+    dbus_message_iter_init_append(r.message, &r.root);
+    text(&r, &r.root, "");
+    number(&r, &r.root, 0);
     number(&r, &r.root, 0);
     DBusMessageIter v;
     open_container(&r, &r.root, DBUS_TYPE_VARIANT, "i", &v);
@@ -1251,6 +1271,10 @@ static void update_window(ps_a11y_native *b) {
     b->screen_position = SDL_GetWindowPosition(b->window, &b->x, &b->y);
     SDL_GetWindowSize(b->window, &b->width, &b->height);
     b->visible = !(SDL_GetWindowFlags(b->window) & (SDL_WINDOW_HIDDEN | SDL_WINDOW_MINIMIZED));
+    /* SDL is queried only by the UI thread. D-Bus clients read this snapshot. */
+    SDL_LockMutex(b->mutex);
+    b->active = b->visible && SDL_GetKeyboardFocus() == b->window && !b->model->suspended;
+    SDL_UnlockMutex(b->mutex);
     const char *title = SDL_GetWindowTitle(b->window);
     size_t bytes = strlen(title);
     if (bytes >= sizeof b->title) {
@@ -1292,6 +1316,10 @@ ps_a11y_native *ps_a11y_native_create(SDL_Window *window, ps_a11y_model *model, 
     ps_a11y_node empty = {0};
     cache_signal(server, b, &empty, (int)index, true);
     event_reference(server, AX_ROOT, "ChildrenChanged", "add", (int)index, b->window_id, 0);
+    if (b->active) {
+        char window_path[128];path_for(window_path,b->window_id,0);
+        event_window_active(server,window_path,true);
+    }
     SDL_UnlockMutex(server->mutex);
     return b;
 }
@@ -1301,6 +1329,7 @@ void ps_a11y_native_publish(ps_a11y_native *b, bool changed) {
     ax_server *s = b->server;
     SDL_LockMutex(s->mutex);
     bool old_visible = b->visible;
+    bool old_active = b->active;
     int old_x = b->x, old_y = b->y, old_width = b->width, old_height = b->height;
     update_window(b);
     clipboard_deliver(b);
@@ -1309,10 +1338,14 @@ void ps_a11y_native_publish(ps_a11y_native *b, bool changed) {
     uint64_t text_version=b->model->document && b->model->document->active?b->model->document->version:0;
     bool text_changed=text_version!=b->previous_text_version;
     SDL_UnlockMutex(b->mutex);
-    if (changed || moved || old_visible != b->visible || text_changed) {
+    if (changed || moved || old_visible != b->visible || old_active != b->active || text_changed) {
         SDL_LockMutex(b->mutex);
         char window_path[128];
         path_for(window_path, b->window_id, 0);
+        if (old_active != b->active) {
+            event_state(s,window_path,"active",b->active);
+            event_window_active(s,window_path,b->active);
+        }
         if(b->model->document && b->model->document->active && !b->previous_document.document_version && b->document_identity<UINT64_MAX)
             ++b->document_identity;
         ps_a11y_node document={0};bool reading=document_snapshot(b,&document);
@@ -1437,6 +1470,10 @@ void ps_a11y_native_destroy(ps_a11y_native *b) {
     SDL_LockMutex(s->mutex);
     char window_path[128];
     path_for(window_path, b->window_id, 0);
+    if (b->active) {
+        event_state(s,window_path,"active",false);
+        event_window_active(s,window_path,false);
+    }
     for (size_t i = 0; i < b->previous_count; i++)
         cache_signal(s, b, &b->previous[i], (int)i, false);
     if(b->previous_document.document_version)cache_signal(s,b,&b->previous_document,0,false);

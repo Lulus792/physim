@@ -143,9 +143,67 @@ Renderframes und protokolliert eine abgelaufene synchrone Resize-Wartezeit.
 Eine vollständige erfolgreiche macOS-Abnahme des Endstands ist daraus noch
 nicht abzuleiten.
 
-Die Nachprüfung von `34ac138` wird separat ausgeführt:
-[macOS ARM/Intel](https://github.com/Lulus792/physim/actions/runs/38919952426) und
-[Linux GCC/Clang](https://github.com/Lulus792/physim/actions/runs/38919952359).
+Die Nachprüfung von `34ac138` besteht in der
+[Linux-CI mit GCC/Clang](https://github.com/Lulus792/physim/actions/runs/38919952359)
+jeweils **26/26 native und 47/47 GUI-Fälle**. Auf
+[macOS ARM/Intel](https://github.com/Lulus792/physim/actions/runs/38919952426)
+bestand ARM **19/19 portable und 25/26 GUI-Fälle**, einschließlich sämtlicher
+Formelsatzfälle und externer AX-Prüfung. H verfehlte dort bei Fall 24 die
+angeforderte Fenstergröße (760 × 540 statt tatsächlich 1024 × 656).
+Der Intel-Lauf ist noch nicht abgeschlossen. Der Folgestand `3f008d9` stellt
+das native Testfenster vor einer neuen Größenanforderung wieder her;
+Linux besteht damit H **1/1** (`run-2x_emngx`). Sein Mac-Nachweis ist noch offen.
+
+Die Linux-CI von `3f008d9` fand zusätzlich einen nicht innerhalb von F1
+erreichbaren Link der Statusseite auf diesen Repository-Bericht. Die Statusseite
+verweist jetzt auf die registrierte H-Zusammenfassung der F1-Abnahme. Der native
+Parser-/Linktest besteht mit der Korrektur (`run-zn8cv2wo`).
+
+### Tatsächliche Orca-Bedienprobe auf Linux
+
+Orca 50.2, Speech Dispatcher 0.12.1 und espeak-ng 1.52.0 laufen in einer privaten
+X11-/D-Bus-Sitzung unter Alpine. Die normale App wird ohne Selbsttestschalter
+über F1, globale Suche nach „Pendel“, Trefferöffnung und lokale Suche bedient.
+Der erste korrekt adressierte Lauf `orca-f1-tkerq7c2` erreichte die nativen
+Controls, Orca sprach jedoch nur seine eigenen Start-/Endmeldungen. Sein Debuglog
+meldete am Dokumentationsfenster ausdrücklich `lacks active state`.
+
+Der AT-SPI-Adapter veröffentlicht jetzt ACTIVE ausschließlich am tatsächlich
+fokussierten sichtbaren Fenster, dazu Aktivierungs-/Deaktivierungsereignisse.
+SDL-Abfragen bleiben im UI-Thread, native Abfragen lesen den gesperrten Snapshot.
+Die unabhängige Zwei-Fenster-Regression scheitert am alten Binary mit
+`exclusive active native frame` und besteht nach der Korrektur.
+Die abschließende GCC-ASan-/UBSan-Gruppe besteht **4/4** (`run-o1n0uodx`):
+Fensterzustände/-ereignisse, vollständiger Dokumenttext, Edit- und Linkadapter.
+H besteht zusätzlich mit der Korrektur (`run-egh0a1rj`). Der abschließende
+native Dokumentationscheck erfasst **185 Seiten und 220 Abschnittslinks**
+(`build/native/h-anchor-link-final.log`).
+
+Der eigenständige Prüfer `tests/check_documentation_orca.py` besteht im Lauf
+`build/native/orca-controls-final`: echtes Speech-Dispatcher-Backend vorhanden,
+alle sieben geforderten Ansagen im tatsächlichen Orca-Sprachlog. Angesagt werden
+das F1-Fenster, globale Suche, Kontextschalter, Pendel-Treffer, lokale Suche sowie
+vorheriger/nächster Treffer. Native Fokuszustände und Suchwerte werden zusätzlich
+geprüft. Binary-SHA256:
+`63e3a23da790028bc7725dff7e2b6127331a09d75b0ff1262b0cfa6a90672261`.
+
+Die Synthese verwendet einen ALSA-Nullausgang; eine akustische Hörprüfung ist
+damit nicht belegt. Die separate Probe `orca-f1-w7907x0_` zeigt außerdem weiterhin
+fehlenden nativen Fokus beim Wechsel in den Lesebereich. Vollständiges Vorlesen,
+Linkaktivierung, Rückkehr zum Workspace und strukturierte Mathematik bleiben
+offene Screenreader-Aufgaben. Die Control-Ansagen schließen diese Lücken nicht.
+
+Reproduktion (neuer Ausgabeordner, oben genannte Pakete und gebaute Linux-App):
+
+```sh
+xvfb-run -a dbus-run-session -- python3 tests/check_documentation_orca.py \
+  --app build/native/F1-linux/Debug-sanitized/bin/physim \
+  --work build/native/orca-controls-new
+```
+
+Zustände und Ereignisschema folgen den AT-SPI-Primärquellen
+[StateType](https://docs.gtk.org/atspi2/enum.StateType.html) und
+[Event.Window](https://github.com/GNOME/at-spi2-core/blob/main/xml/Event.xml).
 Ein noch laufender oder wartender CI-Lauf zählt nicht als bestandene Abnahme.
 
 Die breitere Linux-CI ergänzt die bestandenen lokalen Tests:
