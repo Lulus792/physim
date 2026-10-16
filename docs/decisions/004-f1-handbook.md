@@ -2675,3 +2675,39 @@ vorhandenen Unicode-Anker. Nach der Korrektur prüfen die beiden nativen
 Ankerclients alle 218 Abschnittslinks und 185 Seiten erfolgreich. Die
 Originalausgaben stehen unter `build/native/ui-doc-*`; alle 31 erzeugten
 Referenzdokumente bestehen ebenfalls die Aktualitätsprüfung.
+
+## Erster externer Mac-AX-Lauf: falsche Schreibbarkeitsangabe
+
+Workflow `38880365090`, Intel-Job `116905360795` für `4fd04ba`, übersetzt den
+unabhängigen C17-Client mit dem tatsächlichen Mac-SDK. Der Client besitzt bereits
+AX-Zugriff; es wird keine Berechtigung geändert. Elf native Fälle bestehen in
+`run-jvmbc1dw`, alle 25 GUI-Fälle in `run-08d1d7fd`, und die drei Gegenproben
+erkennen ihre früheren Fehler. Der externe Fall scheitert danach an der
+Schreibbarkeitsangabe des Dokumentwerts: `AXUIElementIsAttributeSettable` liefert
+Erfolg und meldet `AXValue` als schreibbar. Die bisherige In-Prozess-Prüfung der
+Selector-Allowlist hatte diese falsche externe Angabe nicht erkannt.
+
+Das Originalarchiv `12038414515` ist vollständig gegen SHA-256
+`8c96b7d9c9de426ac87162477948db24d16783b63aaa705115820084449965c3`
+geprüft. Seine externe Abschrift stimmt bytegenau mit dem Git-Quellstand
+`4fd04ba:docs/project-audit.json` plus zwei abschließenden LF überein:
+486.670 UTF-8-Bytes und 481.208 UTF-16-Einheiten. Die lokalen CRLF-Dateibytes
+sind dafür kein geeigneter Vergleich. Vor der fehlgeschlagenen
+Readonly-Prüfung bestätigt der Client Teilzeichenfolge und positive
+Zeichenrahmen. Der native Ende-Reveal wird noch nicht angefordert und ist
+somit in diesem externen Lauf nicht abgenommen.
+
+Die Korrektur entfernt den ausdrücklich registrierten wirkungslosen Wertsetter
+der Dokumentklasse. Nach Apples [AppKit-Vertrag](https://developer.apple.com/documentation/appkit/nsaccessibilityprotocol)
+kennzeichnet ein allein überschriebener Getter die Eigenschaft als readonly;
+ein überschriebener Setter veröffentlicht Schreibzugriff. Der geerbte
+Control-Setter weist Dokumentobjekte nun vor der Auflösung numerischer IDs ab.
+Die In-Prozess-Probe läuft mit einem gleich nummerierten Button und zusätzlich
+mit einem Slider; ein direkter numerischer Setteraufruf darf weder einen
+Wertauftrag erzeugen noch den Modellwert ändern. Die native Readonly-Angabe
+wird zusätzlich abgefragt. Der unabhängige AX-Client bleibt unverändert streng.
+
+Diese Korrektur benötigt noch ihre tatsächliche Mac-Ausführung. Der erfolgreiche
+GUI-Vorlauf ist weiterhin ein Nachweis der früheren Revision und keine Abnahme
+des neuen Setterschutzes. Der erste externe Lauf bleibt als Fehler erhalten;
+eine praktische VoiceOver-Abnahme wird daraus nicht abgeleitet.

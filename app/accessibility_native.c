@@ -124,6 +124,7 @@ static BOOL element_adjust(id object,SEL selector) {
  SDL_UnlockMutex(b->mutex);return accepted;
 }
 static void element_set_value(id object,SEL selector,id value) {
+ if(document_class && object_getClass(object)==document_class)return;
  (void)selector;ps_a11y_native *b=owner(object);if(!b || !value ||
      !((BOOL(*)(id,SEL,Class))objc_msgSend)(value,sel_registerName("isKindOfClass:"),objc_getClass("NSNumber")))return;
  double scalar=((double(*)(id,SEL))objc_msgSend)(value,sel_registerName("doubleValue"));
@@ -410,7 +411,7 @@ bool ps_a11y_native_test(SDL_Window *window) {
  okay &= !((BOOL(*)(id,SEL))objc_msgSend)(radio,sel_registerName("accessibilityPerformPress"));
  okay &= !((BOOL(*)(id,SEL))objc_msgSend)(slider,sel_registerName("accessibilityPerformIncrement"));
  send0(slider,"release");send0(radio,"release");send0(checkbox,"release");send0(element,"release");free(model);
- return mac_document_test(window) && mac_edit_test(window) && mac_links_test(window) && mac_tables_test(window) && okay;
+ return mac_document_test(window,false) && mac_document_test(window,true) && mac_edit_test(window) && mac_links_test(window) && mac_tables_test(window) && okay;
 }
 #elif !defined(__linux__)
 struct ps_a11y_native {int unused;};

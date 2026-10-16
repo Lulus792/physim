@@ -1,12 +1,15 @@
 /* Actual AppKit objects, including NSRange/CGRect ABI on Intel and ARM64. */
-static bool mac_document_test(SDL_Window *window) {
+static bool mac_document_test(SDL_Window *window,bool range_control) {
  id pool=send0(send0((id)objc_getClass("NSAutoreleasePool"),"alloc"),"init");
  ps_a11y_model *model=malloc(sizeof *model);SDL_Mutex *mutex=SDL_CreateMutex();
  if(!model || !mutex){free(model);if(mutex)SDL_DestroyMutex(mutex);send0(pool,"drain");return false;}
  ps_a11y_init(model);ps_a11y_native *b=ps_a11y_native_create(window,model,mutex);
  if(!b){SDL_DestroyMutex(mutex);free(model);send0(pool,"drain");return false;}
  const char *source="A θ🌍\nLast\n";float view[]={10,20,200,70},box[]={34,20,12,17};
- ps_a11y_begin(model);ps_a11y_record(model,"controls","Collision guard",PS_A11Y_BUTTON,box,true);
+ double collision_value=5;
+ ps_a11y_begin(model);
+ if(range_control)ps_a11y_record_range(model,"controls","Collision guard",box,true,0,10,1,&collision_value);
+ else ps_a11y_record(model,"controls","Collision guard",PS_A11Y_BUTTON,box,true);
  bool ok=ps_a11y_document_begin(model,1,"Lesetext θ🌍",source,view);
  ok &= ps_a11y_document_box(model,4,8,box) && ps_a11y_publish(model);ps_a11y_native_publish(b,true);
  id document=send0(b->document,"retain");
@@ -14,6 +17,10 @@ static bool mac_document_test(SDL_Window *window) {
  ok &= !((BOOL(*)(id,SEL))objc_msgSend)(document,sel_registerName("accessibilityPerformPress"));
  ((void(*)(id,SEL,BOOL))objc_msgSend)(document,sel_registerName("setAccessibilityFocused:"),YES);
  ok &= !model->pending_press && !model->pending_focus;
+ id number=((id(*)(id,SEL,double))objc_msgSend)((id)objc_getClass("NSNumber"),sel_registerName("numberWithDouble:"),7.0);
+ send1(document,"setAccessibilityValue:",number);
+ ok &= !model->pending_value_id && collision_value==5;
+ ok &= !((BOOL(*)(id,SEL,id))objc_msgSend)(document,sel_registerName("accessibilityIsAttributeSettable:"),string("AXValue"));
  const char *role=((const char*(*)(id,SEL))objc_msgSend)(send0(document,"accessibilityRole"),sel_registerName("UTF8String"));
  id value=send0(document,"accessibilityValue");
  ok &= role && !strcmp(role,"AXStaticText") &&

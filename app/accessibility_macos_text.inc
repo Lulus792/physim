@@ -143,7 +143,8 @@ static bool make_document_class(void) {
  class_addMethod(document_class,sel_registerName("accessibilityVisibleChildren"),(IMP)document_visible_links,"@@:");
  class_addMethod(document_class,sel_registerName("isAccessibilityFocused"),(IMP)document_no_action,PS_AX_BOOL "@:");
  class_addMethod(document_class,sel_registerName("setAccessibilityFocused:"),(IMP)document_no_focus,"v@:" PS_AX_BOOL);
- class_addMethod(document_class,sel_registerName("setAccessibilityValue:"),(IMP)document_no_value,"v@:@");
+ /* Getter-only override lets AppKit advertise AXValue as read-only. The
+  * inherited control setter rejects document objects before resolving IDs. */
  class_addMethod(document_class,sel_registerName("accessibilityPerformPress"),(IMP)document_no_action,PS_AX_BOOL "@:");
  class_addMethod(document_class,sel_registerName("accessibilityPerformIncrement"),(IMP)document_no_action,PS_AX_BOOL "@:");
  class_addMethod(document_class,sel_registerName("accessibilityPerformDecrement"),(IMP)document_no_action,PS_AX_BOOL "@:");
