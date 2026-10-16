@@ -15,9 +15,9 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 | Bereich | Belegter Stand | Rest zur vollständigen Abnahme |
 | --- | --- | --- |
 | Dokumentationszugang | 185 registrierte Seiten und 218 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
-| Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt; vier Resamplingverfahren einschließlich PCHIP mit API, Implementierung und acht Tests je Windows/Linux abgeglichen | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
+| Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt; PCHIP und RK45 abgeglichen; fünf veröffentlichte C-Fragmente und das eigenständige Laufidentitätsbeispiel unter Windows/Linux tatsächlich ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
-| Formelsatz | 193 TeX-Ausdrücke auf 22 Seiten; 197 Displayblöcke und zwei Inlinepassagen unter Windows/Linux geprüft; macOS ARM besteht alle 25 GUI-Fälle samt 162 Inline-Bildprüfungen, Intel 24/25 mit Zeitlimit nach 46 Inline-Ansichten | Vollständige Intel-Abnahme nach Verringerung redundanter Testübergänge, weitere Fachseiten, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
+| Formelsatz | 193 TeX-Ausdrücke auf 22 Seiten; 197 Displayblöcke und zwei Inlinepassagen unter Windows/Linux geprüft; aktueller Inline-Prüfablauf besteht auf beiden Plattformen mit 48 bytegleichen Bildern und 162 Formelrahmen gegenüber seinem jeweiligen Vorlauf; frühere Mac-Nachweise sind unten revisionsbezogen dokumentiert | Abnahme der aktuellen Mac-Revision einschließlich externer AX-Prüfung und offener Intel-Zeitlimits, weitere Fachseiten, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
 | Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; alle drei Plattformen besitzen zusätzlich geprüfte native Tabellen-, Zell- und Headerbeziehungen | Externe macOS-AX-Clientprüfung, echte Screenreader-Aufgaben und die unten beschriebene sporadische Windows-Linkprüfung |
 
 Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
@@ -2893,3 +2893,38 @@ Die Mac-Gruppe erfasst auch das neue Laufidentitätsbeispiel und dessen
 Quellgleichheitsprüfung. Die tatsächliche Mac-Abnahme dieser Revision sowie
 praktische Screenreader-, DPI-/Monitor- und weitere externe AX-Fälle bleiben
 offen; die Gesamtwertung wird dadurch nicht erhöht.
+
+## Inline-Prüfung nach abgeschlossenem Layout statt festen Warteframes
+
+Das Intel-Artefakt `12042210634` des ersten Korrekturlaufs wurde vollständig
+heruntergeladen und gegen SHA-256
+`be42cf2aa98f116155818cdaf992b0c1442819e54577e3cc41f87d637356fc83`
+geprüft. Der Inline-Fall scheitert dort am internen 60-Sekunden-Zeitlimit
+(60,048 s), nachdem Ansicht 42 aufgenommen wurde. Alle bis dahin berichteten
+Formelzeichnungen sind vollständig. Es ist in diesem Lauf kein früher
+Fensterhöhenfehler wie auf ARM. Die getrennte Math-Probe erreicht vor ihrem
+45-Sekunden-Limit Stufe 10; Hauptschriftvorbereitung, vollständiger F1-Fontbank-
+Aufbau und Linkinventar beanspruchen einen großen Teil ihres Budgets. Dieser
+zusätzliche Kaltstartbefund bleibt offen. Die Vollausgaben liegen unter
+`build/native/mac-readonly-intel-documentation_math-steps.json` und
+`build/native/mac-readonly-intel-documentation_inline_math-steps.json`.
+
+Der Inline-Test wartet jetzt auf ein vorhandenes Layout sowie abgeschlossene
+Sprung-/Scrollaufträge. Zuvor vorgeschriebene zusätzliche Warteframes werden
+entfernt. Die tatsächlichen Zeichenkommandos, Baselines, sichtbaren nativen
+Textbereiche, Fenstergrößen und Rasterbilder bleiben Voraussetzung; die Zahl
+der Ansichten und Formelzeichnungen sowie sämtliche Zeitlimits bleiben gleich.
+Der geänderte Ablauf besteht unter Windows MSVC/ASan in `run-ckktvfhd` und
+unter Linux GCC/ASan/UBSan auf dem kleinen Xvfb/Openbox-Desktop in
+`run-qeaxsi19`. Je Plattform sind alle 48 vollständigen BMP-Dateien bytegleich
+zum jeweiligen Vorlauf (`run-p1_0xp6j` bzw. `run-zkrfk4o2`); sämtliche 162
+Formelrahmen sind ebenfalls identisch. Die Vergleichsberichte liegen unter
+`build/native/observed-inline-{windows,linux}-comparison.json`.
+
+Die einzelnen ungepaarten Laufzeiten betragen unter Windows 26,851 → 17,955 s,
+unter Linux 33,422 → 33,994 s. Daraus wird keine allgemeine Beschleunigung
+abgeleitet. Die gezielt wieder eingebaute sofortige Texturfreigabe wird auch
+mit diesem Ablauf beim tatsächlichen Zeichnen durch OpenGL-Fehler `0x502`
+abgewiesen. Die neue Gegenprobe liegt separat unter
+`build/native/inline-math-observed-counterexample`; frühere Berichte bleiben
+erhalten. Die tatsächliche neue Mac-Ausführung ist weiter erforderlich.

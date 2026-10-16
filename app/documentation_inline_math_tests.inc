@@ -50,10 +50,14 @@ static void documentation_inline_math_test_frame(app *a,int *stage,int *code,con
         a->doc_navigation_hidden=sample%8==6;frames=0;break;
     }
     case 3:
-        if(frames++<3){--*stage;return;}
+        /* A completed layout is the prerequisite, not a fixed number of
+         * redundant presentations. The jump itself is drawn on this frame. */
+        if(a->doc_scroll_pending || !a->documentation || a->documentation->layout_width<=0){--*stage;return;}
         a->doc_jump_block=(int)blocks[sample%8];frames=0;break;
     case 4:
-        if(frames++<3 || a->doc_scroll_pending || a->doc_jump_block>=0){--*stage;return;}
+        /* A jump submits its scroll after drawing. Wait for the subsequent
+         * scrolled layout before inspecting actual commands and glyph bounds. */
+        if(a->doc_scroll_pending || a->doc_jump_block>=0 || a->documentation->layout_width<=0){--*stage;return;}
         a->doc_inline_math_test_block=blocks[sample%8];a->doc_inline_math_test_case=sample;
         a->doc_inline_math_test_requested=true;
         snprintf(image,sizeof image,"docs-inline-math-%02u.bmp",sample);*capture=image;break;
