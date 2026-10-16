@@ -86,16 +86,37 @@ und prüft zusätzliche native Fokuszustände, Suchwerte und Orca-Sprachausgaben
 `build/native/orca-controls-final/results.json` meldet **passed**, das echte
 Speech-Dispatcher-Backend und alle sieben erforderlichen Ansagen: Fenster,
 beide Suchfelder, Kontextschalter, Pendel-Treffer und Treffer-Navigation.
-Die Synthese benutzt einen ALSA-Nullausgang; es wurde kein Ton angehört.
+ALSA-null war konfiguriert; die spätere Nachprüfung fand jedoch das fehlende
+ALSA-Ausgabemodul. Die Ansagen im Orca-Log sind belegt, erfolgreiche Synthese
+folgt aus diesem historischen Lauf nicht. Es wurde kein Ton angehört.
 Die abschließenden AT-SPI-Nachbarfälle bestehen **4/4** (`run-o1n0uodx`):
 Fensterzustände/-ereignisse, Dokumenttext, editierbare Suchfelder und Links.
 Der finale native Parser-/Linkcheck bestätigt 185 Seiten und 220 Abschnittslinks
 (`build/native/h-anchor-link-final.log`).
 
-Der Lesebereich erhält weiterhin keinen nativen Fokus. Vollständiges Vorlesen,
-Linkaktivierung, Workspace-Rückkehr und strukturierte Mathematik sind damit
-weiter offen. Die konservative Gesamtwertung wird durch diese Teilprüfung
-nicht auf volle Punktzahl angehoben.
+Der damalige Stand besaß noch keinen nativen Lesefokus. Die folgende Erweiterung
+prüft ihn gesondert. Vollständiges Vorlesen, Linkaktivierung, Workspace-Rückkehr
+und strukturierte Mathematik bleiben offen; die konservative Gesamtwertung bleibt erhalten.
+
+### Nativer Lesefokus und Orca-Leseabsatz
+
+Versionierte Dokument-Fokusaufträge werden jetzt vom UI-Thread übernommen.
+Das logische Ziel überlebt den asynchronen Fensterwechsel; nach außen wird Fokus
+weiterhin nur bei tatsächlichem Tastaturfokus des Hostfensters gemeldet.
+Ein später angenommener Control-Auftrag verwirft einen älteren Dokumentauftrag.
+Der native Ausgangslauf scheitert gezielt am Dokument-GrabFocus, die korrigierte
+Zwei-Fenster-Probe bestätigt Dokumentfokus und exklusive Rückgabe an Controls.
+Windows und Linux bestehen jeweils vier Modell- und sieben native/UI-Prüfungen.
+
+Die normale App wird außerdem mit tatsächlichen X11-Tasten und Orca bedient.
+Ein eigener PulseAudio-Server besitzt ausschließlich eine Nullsenke; reale
+Synthese muss vorab `begin` und `end` liefern. Orca startet über `KP_Add` den
+Leselauf aus dem nativen Dokument mit 36.389 Zeichen. Der vollständig synthetisierte
+Einleitungsabsatz umfasst Zeichen 39 bis 211; sein Text stimmt mit der nativen
+Dokumentabfrage überein. Das beweist noch kein vollständiges Vorlesen des Artikels.
+Details, Binärhashes und Plattformgrenzen stehen im Repository unter
+`docs/visuals/f1-layouts/READING-FOCUS.md`. Die neue AppKit-Fokuserweiterung benötigt
+noch eigene tatsächliche Mac-Belege.
 
 ### Sidebar-Aktionen ohne Wortbruch
 

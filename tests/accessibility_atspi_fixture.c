@@ -8,7 +8,7 @@ typedef struct {
     SDL_Window *window;
     ps_graphics *graphics;
     struct nk_context *ui;
-    bool visible, disabled, checked;
+    bool visible, disabled, checked, document_focused;
     unsigned presses,toggles,options[2];
     float scalar;
     unsigned document_state;uint64_t document_version;
@@ -125,6 +125,7 @@ static bool draw(fixture_window *f, char name) {
                     if(f->document_state==3 && byte>1536)f->table_scroll=72;
                 }
                 if(!nk_sdl_accessibility_document(f->ui,f->document_version,title,source,view))return false;
+                if(nk_sdl_accessibility_document_focus(f->ui,f->document_version,f->document_focused))f->document_focused=true;
                 if(f->document_state==3) {
                     if(!table_draw(f,source,view))return false;
                     goto document_drawn;

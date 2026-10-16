@@ -46,7 +46,17 @@ static id document_children(id object,SEL selector){(void)selector;return mac_do
 static id document_empty_children(id object,SEL selector){(void)object;(void)selector;return send0((id)objc_getClass("NSArray"),"array");}
 static BOOL document_no_action(id object,SEL selector){(void)object;(void)selector;return NO;}
 static void document_no_value(id object,SEL selector,id value){(void)object;(void)selector;(void)value;}
-static void document_no_focus(id object,SEL selector,BOOL value){(void)object;(void)selector;(void)value;}
+static BOOL document_focused(id object,SEL selector) {
+ (void)selector;ps_a11y_native *b=owner(object);if(!b)return NO;
+ SDL_LockMutex(b->mutex);bool focused=document_live_locked(object,b) && document_viewable_locked(b) && ps_a11y_document_focused(b->model);
+ SDL_UnlockMutex(b->mutex);return focused;
+}
+static void document_set_focus(id object,SEL selector,BOOL value) {
+ (void)selector;ps_a11y_native *b=owner(object);if(!b)return;
+ SDL_LockMutex(b->mutex);const ps_a11y_document *d=document_live_locked(object,b);
+ if(value && d && document_viewable_locked(b))ps_a11y_document_focus(b->model,d->version);
+ SDL_UnlockMutex(b->mutex);
+}
 static CGRect document_frame(id object,SEL selector) {
  if(!document_enabled(object,selector))return CGRectZero;
  return ((CGRect(*)(id,SEL))base_frame)(object,sel_registerName("accessibilityFrame"));
@@ -125,6 +135,7 @@ static ax_range document_line_range(id object,SEL selector,long line) {
 static BOOL document_allowed(id object,SEL selector,SEL requested) {
  (void)selector;const char *name=sel_getName(requested);
  if(!strcmp(name,"setAccessibilityVisibleCharacterRange:"))return document_enabled(object,selector);
+ if(!strcmp(name,"setAccessibilityFocused:"))return document_enabled(object,selector);
  return strncmp(name,"setAccessibility",16) && strncmp(name,"accessibilityPerform",20);
 }
 static bool make_document_class(void) {
@@ -141,8 +152,8 @@ static bool make_document_class(void) {
  class_addMethod(document_class,sel_registerName("accessibilityHitTest:"),(IMP)mac_document_hit,"@@:{CGPoint=dd}");
  class_addMethod(document_class,sel_registerName("accessibilitySelectedChildren"),(IMP)document_empty_children,"@@:");
  class_addMethod(document_class,sel_registerName("accessibilityVisibleChildren"),(IMP)document_visible_links,"@@:");
- class_addMethod(document_class,sel_registerName("isAccessibilityFocused"),(IMP)document_no_action,PS_AX_BOOL "@:");
- class_addMethod(document_class,sel_registerName("setAccessibilityFocused:"),(IMP)document_no_focus,"v@:" PS_AX_BOOL);
+ class_addMethod(document_class,sel_registerName("isAccessibilityFocused"),(IMP)document_focused,PS_AX_BOOL "@:");
+ class_addMethod(document_class,sel_registerName("setAccessibilityFocused:"),(IMP)document_set_focus,"v@:" PS_AX_BOOL);
  /* Getter-only document class has no custom control setter in its ancestry. */
  class_addMethod(document_class,sel_registerName("accessibilityPerformPress"),(IMP)document_no_action,PS_AX_BOOL "@:");
  class_addMethod(document_class,sel_registerName("accessibilityPerformIncrement"),(IMP)document_no_action,PS_AX_BOOL "@:");

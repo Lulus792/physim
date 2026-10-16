@@ -166,9 +166,20 @@ bestätigt auf ARM und Intel jeweils **19/19 portable und 26/26 GUI-Fälle**
 einschließlich H und Metadaten, dazu jeweils die unabhängige externe AX-Prüfung.
 ARM: GUI `run-6r0dk5t5`, portable `run-5wdlq4lh`; Intel: GUI `run-2xm5zkov`,
 portable `run-0wgm6uxx`. Beide Gesamtjobs scheitern noch an der dort enthaltenen
-alten Metadaten-Gegenprobe. Die nachgeführten Prüfer
-benötigen einen eigenen tatsächlichen Mac-Lauf; die ARM-GUI-Ergebnisse ersetzen
-ihn nicht.
+alten Metadaten-Gegenprobe.
+
+Der [nachfolgende tatsächliche Lauf von 123d8ad](https://github.com/Lulus792/physim/actions/runs/38936635632)
+bestätigt auf ARM die nachgeführten Prüfer: 19/19 portable (`run-297_op67`),
+26/26 GUI (`run-dc0p5xs6`), gezielte Metadaten-Ablehnung, alle 36 korrigierten
+historischen Kontrollzustände, gezielte Sidebar-Ablehnung und externe AX-Prüfung.
+Der Gesamtjob besteht. Intel besteht 19/19 portable (`run-ndw4h218`), 25/26 GUI
+(`run-oiuzcvb_`) und externe AX. Sein Inline-Selbsttest läuft bei Stage 9 während
+der Tastatursuche nach Kopierziel `30009` nach 60,064 Sekunden ab; die
+anschließenden Gegenproben werden dort nicht ausgeführt. Dieser Befund bleibt
+gesondert zu untersuchen, ohne die Zeitgrenze einfach anzuheben.
+
+Die anschließende [native Lesefokuserweiterung](READING-FOCUS.md) besitzt eigene
+Windows-/Linux- und Orca-Nachweise. Diese ältere Mac-H-Abnahme belegt sie nicht.
 
 ## Verbleibende Unterschiede und ihre Gründe
 

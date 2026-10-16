@@ -72,6 +72,51 @@ int main(void) {
  CHECK(m->draft[0].id!=link);ps_a11y_publish(m);CHECK(!m->pending_press && !ps_a11y_press(m,link));
  link=m->nodes[0].id;ps_a11y_begin(m);CHECK(ps_a11y_document_begin(m,5,"Other links",text,view));
  CHECK(!ps_a11y_document_link(m,"main","θ",5,6,8,hidden,false));ps_a11y_publish(m);CHECK(!ps_a11y_press(m,link));
+ /* Document focus is versioned, published atomically, and exclusive of controls. */
+ ps_a11y_destroy(m);ps_a11y_init(m);ps_a11y_begin(m);
+ CHECK(ps_a11y_document_begin(m,10,"Focus",text,view));CHECK(ps_a11y_publish(m));
+ CHECK(!ps_a11y_document_focused(m));CHECK(!ps_a11y_document_focus(m,9));
+ m->keyboard_focus=false;
+ CHECK(ps_a11y_document_focus(m,10));CHECK(!ps_a11y_document_focused(m));
+ ps_a11y_begin(m);CHECK(ps_a11y_document_begin(m,10,"Focus",text,view));
+ CHECK(ps_a11y_document_focus_update(m,10,false));CHECK(!ps_a11y_document_focused(m));
+ CHECK(ps_a11y_publish(m));CHECK(m->document->focused && !ps_a11y_document_focused(m));
+ /* The consumed target survives a frame before SDL grants host focus. It must
+  * not advertise actual focus during that gap, and must become effective when
+  * the host later grants focus without a second native request. */
+ CHECK(!m->pending_document_focus);m->keyboard_focus=true;CHECK(ps_a11y_document_focused(m));
+ m->keyboard_focus=false;CHECK(!ps_a11y_document_focused(m));m->keyboard_focus=true;
+ CHECK(ps_a11y_document_focus(m,10));ps_a11y_begin(m);
+ CHECK(ps_a11y_document_begin(m,11,"Replacement",text,view));
+ CHECK(!ps_a11y_document_focus_update(m,11,false));CHECK(ps_a11y_publish(m));
+ CHECK(!ps_a11y_document_focused(m) && !m->pending_document_focus);
+ CHECK(ps_a11y_document_focus(m,11));ps_a11y_suspend(m);
+ CHECK(!m->pending_document_focus && !ps_a11y_document_focused(m) && !ps_a11y_document_focus(m,11));
+ ps_a11y_begin(m);CHECK(ps_a11y_document_begin(m,11,"Replacement",text,view));
+ CHECK(!ps_a11y_document_focus_update(m,11,false));CHECK(ps_a11y_publish(m));
+ CHECK(!ps_a11y_document_focused(m));
+ /* Resuming publication does not itself restore OS keyboard focus. */
+ m->keyboard_focus=true;
+ ps_a11y_begin(m);CHECK(ps_a11y_document_begin(m,11,"Replacement",text,view));
+ CHECK(!ps_a11y_document_focus_update(m,11,true));
+ ps_a11y_record(m,"main","Control",PS_A11Y_BUTTON,view,true);CHECK(ps_a11y_publish(m));
+ CHECK(ps_a11y_document_focused(m));CHECK(ps_a11y_focus(m,m->nodes[0].id));
+ CHECK(!ps_a11y_document_focus(m,11));ps_a11y_begin(m);
+ ps_a11y_record(m,"main","Control",PS_A11Y_BUTTON,view,true);
+ CHECK(ps_a11y_document_begin(m,11,"Replacement",text,view));
+ CHECK(!ps_a11y_document_focus_update(m,11,false));CHECK(ps_a11y_publish(m));
+ CHECK(m->nodes[0].focused && !ps_a11y_document_focused(m));
+ /* A later explicit control focus cancels a queued lower-priority reading
+  * request; consuming both in one frame must not steal focus back. */
+ for(int activation=0;activation<2;activation++) {
+  CHECK(ps_a11y_document_focus(m,11));
+  CHECK(activation?ps_a11y_press(m,m->nodes[0].id):ps_a11y_focus(m,m->nodes[0].id));
+  CHECK(!m->pending_document_focus);
+  ps_a11y_begin(m);ps_a11y_record(m,"main","Control",PS_A11Y_BUTTON,view,true);
+  CHECK(ps_a11y_document_begin(m,11,"Replacement",text,view));
+  CHECK(!ps_a11y_document_focus_update(m,11,false));ps_a11y_publish(m);
+  CHECK(m->nodes[0].focused && !ps_a11y_document_focused(m));
+ }
  ps_a11y_destroy(m);CHECK(!m->document && !m->document_draft);ps_a11y_destroy(m);free(m);
  puts("Accessible document: complete text, immutable publication, geometry, Unicode boundaries, stale scroll and cleanup passed");return 0;
 }

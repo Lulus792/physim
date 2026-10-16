@@ -17,13 +17,14 @@ void ps_a11y_destroy(ps_a11y_model *m) {
 }
 void ps_a11y_begin(ps_a11y_model *m) {
  m->draft_count=0;m->edit_box_draft_count=0;m->dropped=0;m->selection_parent=0;m->selection_id=0;m->building=true;
- if(m->document_draft){m->document_draft->active=false;m->document_draft->count=0;m->document_draft->dropped=0;}
+ if(m->document_draft){m->document_draft->active=false;m->document_draft->focused=false;m->document_draft->count=0;m->document_draft->dropped=0;}
 }
 void ps_a11y_suspend(ps_a11y_model *m) {
  if(!m)return;m->suspended=true;m->keyboard_focus=false;m->focused_id=0;
  m->pending_press=m->pending_focus=m->pending_value_id=m->pending_text_id=0;
  m->pending_text_has_caret=false;
  m->pending_selection_id=m->pending_edit_scroll_id=m->document_scroll_version=0;
+ m->pending_document_focus=0;
 }
 static bool text_boundary(const char *text,size_t length,size_t at) {
  return at<=length && (at==length || ((unsigned char)text[at]&0xc0)!=0x80);
@@ -50,6 +51,26 @@ bool ps_a11y_document_begin(ps_a11y_model *m,uint64_t version,const char *name,c
 }
 void ps_a11y_document_abort(ps_a11y_model *m) {
  if(m && m->building && m->document_draft)m->document_draft->complete=false;
+}
+bool ps_a11y_document_focus(ps_a11y_model *m,uint64_t version) {
+ const ps_a11y_document *d=m?m->document:NULL;
+ if(!d || !d->active || !version || d->version!=version || m->suspended ||
+    m->pending_focus || m->pending_press || m->pending_value_id || m->pending_text_id ||
+    m->pending_selection_id || m->pending_edit_scroll_id)return false;
+ m->pending_document_focus=version;return true;
+}
+bool ps_a11y_document_focus_update(ps_a11y_model *m,uint64_t version,bool focused) {
+ ps_a11y_document *d=m && m->building?m->document_draft:NULL;
+ if(!d || !d->active || !d->complete || d->version!=version)return false;
+ bool requested=m->pending_document_focus==version;
+ if(requested)m->pending_document_focus=0;
+ d->focused=(focused && !m->pending_focus) || requested;
+ if(d->focused)m->focused_id=0;
+ return requested;
+}
+bool ps_a11y_document_focused(const ps_a11y_model *m) {
+ return m && !m->suspended && m->keyboard_focus && !m->focused_id &&
+     m->document && m->document->active && m->document->focused;
 }
 bool ps_a11y_document_box(ps_a11y_model *m,size_t begin,size_t end,const float bounds[4]) {
  ps_a11y_document *d=m && m->building?m->document_draft:NULL;
@@ -93,7 +114,7 @@ bool ps_a11y_press(ps_a11y_model *m,uint64_t id) {
  const ps_a11y_node *node=ps_a11y_find(m,id);
  if(!node || m->suspended || !ps_a11y_actionable(node->role) || !node->enabled || m->pending_press ||
     (m->pending_focus && m->pending_focus!=id) || m->pending_value_id || m->pending_text_id || m->pending_selection_id)return false;
- m->pending_press=id;m->pending_focus=id;return true;
+ m->pending_document_focus=0;m->pending_press=id;m->pending_focus=id;return true;
 }
 static bool record(ps_a11y_model *m,const char *window,const char *label,
                      ps_a11y_role role,const float bounds[4],bool enabled,bool checked,uint64_t parent,
@@ -216,7 +237,7 @@ bool ps_a11y_set_value(ps_a11y_model *m,uint64_t id,double value) {
  if(!node || m->suspended || node->role!=PS_A11Y_SLIDER || !node->enabled || !isfinite(value) ||
     value<node->minimum || value>node->maximum || m->pending_value_id || m->pending_press || m->pending_text_id || m->pending_selection_id ||
     (m->pending_focus && m->pending_focus!=id))return false;
- m->pending_value_id=id;m->pending_value=value;m->pending_focus=id;return true;
+ m->pending_document_focus=0;m->pending_value_id=id;m->pending_value=value;m->pending_focus=id;return true;
 }
 bool ps_a11y_adjust(ps_a11y_model *m,uint64_t id,int direction) {
  const ps_a11y_node *node=ps_a11y_find(m,id);
@@ -261,7 +282,7 @@ bool ps_a11y_edit_replace(ps_a11y_model *m,uint64_t id,uint64_t version,const ch
  char result[PS_A11Y_LABEL_BYTES];memcpy(result,node->text_value,start);memcpy(result+start,text,added);
  memcpy(result+start+added,node->text_value+node->text_end,tail+1);
  if(!ps_a11y_set_text(m,id,result))return false;
- m->pending_text_caret=start+added;m->pending_text_version=version;m->pending_text_has_caret=true;m->pending_focus=id;return true;
+ m->pending_document_focus=0;m->pending_text_caret=start+added;m->pending_text_version=version;m->pending_text_has_caret=true;m->pending_focus=id;return true;
 }
 bool ps_a11y_edit_update(ps_a11y_model *m,size_t index,const char *text,size_t start,size_t end) {
  if(!m || !m->building || index>=m->draft_count)return false;ps_a11y_node *node=&m->draft[index];
@@ -278,7 +299,7 @@ bool ps_a11y_edit_select(ps_a11y_model *m,uint64_t id,uint64_t version,size_t st
     (m->pending_focus && m->pending_focus!=id) || !text_boundary(node->text_value,strlen(node->text_value),start) ||
     !text_boundary(node->text_value,strlen(node->text_value),end))return false;
  m->pending_selection_id=id;m->pending_selection_version=version;m->pending_selection_start=start;m->pending_selection_end=end;
- m->pending_focus=id;return true;
+ m->pending_document_focus=0;m->pending_focus=id;return true;
 }
 bool ps_a11y_edit_take_selection(ps_a11y_model *m,size_t index,size_t *start,size_t *end) {
  if(!m || !m->building || index>=m->draft_count || !start || !end)return false;
@@ -335,9 +356,10 @@ bool ps_a11y_focus(ps_a11y_model *m,uint64_t id) {
     (m->pending_value_id && m->pending_value_id!=id) ||
     (m->pending_text_id && m->pending_text_id!=id) || (m->pending_selection_id && m->pending_selection_id!=id) ||
     (m->pending_focus && m->pending_focus!=id))return false;
- m->pending_focus=id;return true;
+ m->pending_document_focus=0;m->pending_focus=id;return true;
 }
 void ps_a11y_blur(ps_a11y_model *m,uint64_t id) {
+ if(!id){m->pending_document_focus=0;if(m->document_draft)m->document_draft->focused=false;}
  if(!id || m->focused_id==id)m->focused_id=0;
  if(!id || m->pending_focus==id)m->pending_focus=0;
 }
@@ -367,11 +389,15 @@ bool ps_a11y_publish(ps_a11y_model *m) {
   * generation. The caller can finish this draft or start another frame. */
  if(old_active && next_active && old->version==next->version && !table_inventories_equal(old,next,false))return false;
  m->suspended=false;
+ /* Retain the logical target while SDL_RaiseWindow is still asynchronous.
+  * The public getter separately requires actual host keyboard focus. */
+ if(next_active)next->focused=next->focused && !m->focused_id;
  if(old_active!=next_active || (next_active && (old->version!=next->version || old->count!=next->count ||
-    memcmp(old->viewport,next->viewport,sizeof next->viewport) || memcmp(old->boxes,next->boxes,next->count*sizeof *next->boxes))))changed=true;
+    old->focused!=next->focused || memcmp(old->viewport,next->viewport,sizeof next->viewport) || memcmp(old->boxes,next->boxes,next->count*sizeof *next->boxes))))changed=true;
  if(next_active && !table_inventories_equal(old_active?old:NULL,next,true))changed=true;
  m->document=next;m->document_draft=old;
  if(!next_active || next->version!=m->document_scroll_version)m->document_scroll_version=0;
+ if(!next_active || next->version!=m->pending_document_focus)m->pending_document_focus=0;
  bool found=false;
  for(size_t i=0;i<m->draft_count;i++)if(m->draft[i].id==m->focused_id && m->draft[i].focusable)found=true;
  if(!found)m->focused_id=0;

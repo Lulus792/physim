@@ -196,6 +196,13 @@ try:
     assert document.characterCount==len(source) and document.getText(0,-1)==source
     assert document.getText(2,4)=='θ🌍' and document.getCharacterAtOffset(3)==ord('🌍')
     assert document.caretOffset==-1 and document.getNSelections()==0 and not document.setCaretOffset(0)
+    assert reader.getState().contains(pyatspi.STATE_FOCUSABLE)
+    assert reader.queryComponent().grabFocus()
+    wait(lambda: reader.getState().contains(pyatspi.STATE_FOCUSED), 'native reading document focus')
+    assert not button.getState().contains(pyatspi.STATE_FOCUSED)
+    assert button.queryComponent().grabFocus()
+    wait(lambda: not reader.getState().contains(pyatspi.STATE_FOCUSED), 'document yields focus to control')
+    checks.append('native document focus request and exclusive transfer back to control')
     cache_with_text=dbus.Interface(raw_bus.get_object(provider,'/org/a11y/atspi/cache'),'org.a11y.atspi.Cache').GetItems()
     document_path=next(str(item[0][1]) for item in cache_with_text if int(item[7])==94)
     assert len(cache_with_text)==24

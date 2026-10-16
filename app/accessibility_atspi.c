@@ -122,6 +122,7 @@ static bool document_snapshot(ps_a11y_native *w,ps_a11y_node *node) {
     if(!w->document_identity || (!w->previous_document.document_version && w->document_identity==UINT64_MAX))return false;
     memset(node,0,sizeof *node);node->role=AX_DOCUMENT_ROLE;node->id=w->document_identity;
     node->document_version=d->version;node->enabled=w->visible && !w->model->suspended;
+    node->focusable=node->enabled;node->focused=node->enabled && ps_a11y_document_focused(w->model);
     node->offscreen=!node->enabled;memcpy(node->bounds,d->viewport,sizeof node->bounds);
     snprintf(node->label,sizeof node->label,"%s",d->name);return true;
 }
@@ -1098,8 +1099,10 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             double alpha = w->visible ? 1 : 0;
             basic(&r, &r.root, DBUS_TYPE_DOUBLE, &alpha);
         } else if (!strcmp(method,"GrabFocus")) {
-            if(node.role==AX_DOCUMENT_ROLE || ax_table_role(node.role)){boolean(&r,&r.root,false);goto reply_ready;}
-            SDL_LockMutex(w->mutex);bool queued=w->visible && ps_a11y_focus(w->model,node.id);SDL_UnlockMutex(w->mutex);
+            if(ax_table_role(node.role)){boolean(&r,&r.root,false);goto reply_ready;}
+            bool reading_focus=node.role==AX_DOCUMENT_ROLE;
+            SDL_LockMutex(w->mutex);bool queued=w->visible && (reading_focus?
+                ps_a11y_document_focus(w->model,node.document_version):ps_a11y_focus(w->model,node.id));SDL_UnlockMutex(w->mutex);
             unsigned window_id=w->window_id;bool completed=false;
             if(queued) {
                 SDL_UnlockMutex(s->mutex);Uint64 start=SDL_GetTicks();
@@ -1107,10 +1110,16 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
                     SDL_LockMutex(s->mutex);bool waiting=false;
                     for(size_t i=0;i<s->count;i++)if(s->windows[i]->window_id==window_id) {
                         ps_a11y_native *live_window=s->windows[i];SDL_LockMutex(live_window->mutex);
-                        const ps_a11y_node *live=ps_a11y_find(live_window->model,node.id);
-                        completed=live_window->visible && live && live->focused;
-                        waiting=live_window->visible && live && live->focusable &&
-                            (live_window->model->pending_focus==node.id || live_window->model->focused_id==node.id);
+                        const ps_a11y_node *live=reading_focus?NULL:ps_a11y_find(live_window->model,node.id);
+                        const ps_a11y_document *d=live_window->model->document;
+                        bool same=reading_focus && d && d->active && d->version==node.document_version && live_window->document_identity==node.id;
+                        completed=live_window->visible && (reading_focus?(same && ps_a11y_document_focused(live_window->model)):(live && live->focused));
+                        waiting=live_window->visible && (reading_focus?(same && (live_window->model->pending_document_focus==node.document_version || d->focused)):
+                            (live && live->focusable && (live_window->model->pending_focus==node.id || live_window->model->focused_id==node.id)));
+                        if(reading_focus && !waiting && !completed && getenv("PHYSIM_A11Y_TRACE"))
+                            fprintf(stderr,"AT-SPI document focus stopped: same=%d pending=%llu published=%d keyboard=%d control=%llu visible=%d\n",
+                                same,(unsigned long long)live_window->model->pending_document_focus,d?d->focused:0,
+                                live_window->model->keyboard_focus,(unsigned long long)live_window->model->focused_id,live_window->visible);
                         SDL_UnlockMutex(live_window->mutex);break;
                     }
                     SDL_UnlockMutex(s->mutex);if(completed || !waiting)break;SDL_Delay(5);
@@ -1118,7 +1127,9 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
                 SDL_LockMutex(s->mutex);
                 if(!completed)for(size_t i=0;i<s->count;i++)if(s->windows[i]->window_id==window_id) {
                     ps_a11y_native *live=s->windows[i];SDL_LockMutex(live->mutex);
-                    ps_a11y_blur(live->model,node.id);SDL_UnlockMutex(live->mutex);break;
+                    if(reading_focus){if(live->model->pending_document_focus==node.document_version)live->model->pending_document_focus=0;}
+                    else ps_a11y_blur(live->model,node.id);
+                    SDL_UnlockMutex(live->mutex);break;
                 }
             }
             boolean(&r,&r.root,completed);
@@ -1391,6 +1402,8 @@ void ps_a11y_native_publish(ps_a11y_native *b, bool changed) {
         }
         if(reading && b->previous_document.document_version && strcmp(document.label,b->previous_document.label))
             event_document_name(s,reading_path,document.label);
+        if(reading && document.focused!=b->previous_document.focused)
+            event_state(s,reading_path,"focused",document.focused);
         b->previous_document=document;
         for (size_t i = 0; i < b->previous_count; i++)
             if (!ps_a11y_find(b->model, b->previous[i].id)) {

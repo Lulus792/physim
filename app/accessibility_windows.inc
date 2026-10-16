@@ -17,7 +17,7 @@ struct ps_a11y_native {
  SDL_Window *window;HWND hwnd;ps_a11y_model *model;SDL_Mutex *mutex;
  LONG references;bool com_initialized;double scale_x,scale_y;
  uia_element *root,*elements[PS_A11Y_MAX_NODES];
- uint64_t focused_id;char title[256];
+ uint64_t focused_id;bool document_focused;char title[256];
  uint64_t reading_owner,reading_version;BSTR reading_text;size_t reading_length;size_t *reading_bytes;
  uint64_t announced_reading_version;
  uia_table_element *table_elements;
@@ -187,8 +187,8 @@ static HRESULT STDMETHODCALLTYPE uia_property(IRawElementProviderSimple *p,PROPE
    node.role==PS_A11Y_LINK?UIA_HyperlinkControlTypeId:node.role==PS_A11Y_CHECKBOX?UIA_CheckBoxControlTypeId:node.role==PS_A11Y_RADIO?UIA_RadioButtonControlTypeId:
    node.role==PS_A11Y_RADIO_GROUP?UIA_GroupControlTypeId:node.role==PS_A11Y_SLIDER?UIA_SliderControlTypeId:node.role==PS_A11Y_EDIT?UIA_EditControlTypeId:UIA_TextControlTypeId;
  } else if(property==UIA_IsEnabledPropertyId){out->vt=VT_BOOL;out->boolVal=viewable && (!e->id || node.enabled) && IsWindowEnabled(hwnd)?VARIANT_TRUE:VARIANT_FALSE;}
- else if(property==UIA_IsKeyboardFocusablePropertyId){out->vt=VT_BOOL;out->boolVal=viewable && e->id && node.focusable?VARIANT_TRUE:VARIANT_FALSE;}
- else if(property==UIA_HasKeyboardFocusPropertyId){out->vt=VT_BOOL;out->boolVal=viewable && e->id && node.focused?VARIANT_TRUE:VARIANT_FALSE;}
+ else if(property==UIA_IsKeyboardFocusablePropertyId){out->vt=VT_BOOL;out->boolVal=viewable && (e->id?node.focusable:(b->model->document && b->model->document->active))?VARIANT_TRUE:VARIANT_FALSE;}
+ else if(property==UIA_HasKeyboardFocusPropertyId){out->vt=VT_BOOL;out->boolVal=viewable && (e->id?node.focused:ps_a11y_document_focused(b->model))?VARIANT_TRUE:VARIANT_FALSE;}
  else if(property==UIA_IsControlElementPropertyId || property==UIA_IsContentElementPropertyId){out->vt=VT_BOOL;out->boolVal=VARIANT_TRUE;}
  else if(property==UIA_IsOffscreenPropertyId){out->vt=VT_BOOL;out->boolVal=viewable && !node.offscreen?VARIANT_FALSE:VARIANT_TRUE;}
  return S_OK;
@@ -230,6 +230,13 @@ static HRESULT STDMETHODCALLTYPE uia_embedded(IRawElementProviderFragment *p,SAF
 static HRESULT STDMETHODCALLTYPE uia_set_focus(IRawElementProviderFragment *p) {
  uia_element *e=UIA_OWNER(IRawElementProviderFragment,fragment,p);ps_a11y_native *b=e->bridge;SDL_LockMutex(b->mutex);
  const ps_a11y_node *node=b->model?ps_a11y_find(b->model,e->id):NULL;
+ if(!e->id){
+  const ps_a11y_document *d=b->model?b->model->document:NULL;
+  HRESULT result=!d || !d->active || !b->hwnd?UIA_E_ELEMENTNOTAVAILABLE:
+   !uia_window_viewable_locked(b) || !IsWindowEnabled(b->hwnd)?UIA_E_ELEMENTNOTENABLED:
+   ps_a11y_document_focus(b->model,d->version)?S_OK:UIA_E_INVALIDOPERATION;
+  SDL_UnlockMutex(b->mutex);return result;
+ }
  HRESULT result=!node || !b->hwnd?UIA_E_ELEMENTNOTAVAILABLE:!node->enabled || !uia_window_viewable_locked(b) || !IsWindowEnabled(b->hwnd)?UIA_E_ELEMENTNOTENABLED:
   ps_a11y_focus(b->model,e->id)?S_OK:UIA_E_INVALIDOPERATION;SDL_UnlockMutex(b->mutex);return result;
 }
@@ -258,7 +265,7 @@ static HRESULT STDMETHODCALLTYPE uia_point(IRawElementProviderFragmentRoot *p,do
 static HRESULT STDMETHODCALLTYPE uia_focus(IRawElementProviderFragmentRoot *p,IRawElementProviderFragment **out) {
  if(!out)return E_POINTER;*out=NULL;uia_element *e=UIA_OWNER(IRawElementProviderFragmentRoot,root,p);ps_a11y_native *b=e->bridge;
  SDL_LockMutex(b->mutex);if(!b->model){SDL_UnlockMutex(b->mutex);return UIA_E_ELEMENTNOTAVAILABLE;}
- uia_element *target=uia_window_viewable_locked(b) && b->model->focused_id?uia_for_locked(b,b->model->focused_id):NULL;SDL_UnlockMutex(b->mutex);
+ uia_element *target=uia_window_viewable_locked(b) && (b->model->focused_id || ps_a11y_document_focused(b->model))?uia_for_locked(b,b->model->focused_id):NULL;SDL_UnlockMutex(b->mutex);
  if(target)*out=&target->fragment;return S_OK;
 }
 static HRESULT uia_press(uia_element *e) {
@@ -393,6 +400,7 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
  SDL_LockMutex(b->mutex);
  if(w>0 && h>0){b->scale_x=(double)(client.right-client.left)/w;b->scale_y=(double)(client.bottom-client.top)/h;}
  uint64_t focused=b->model?b->model->focused_id:0,previous=b->focused_id;b->focused_id=focused;
+ bool document_focused=ps_a11y_document_focused(b->model),previous_document_focus=b->document_focused;b->document_focused=document_focused;
  uint64_t reading=b->model && b->model->document && b->model->document->active?b->model->document->version:0;
  bool reading_changed=reading!=b->announced_reading_version;b->announced_reading_version=reading;
  for(size_t i=0;i<PS_A11Y_MAX_NODES;i++)if(b->elements[i] && (!b->model || !ps_a11y_find(b->model,b->elements[i]->id))) {
@@ -420,7 +428,7 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
    link->previous_link=next;link->has_link_state=true;
   }
  }
- uia_element *focus=focused && focused!=previous?uia_for_locked(b,focused):NULL;SDL_UnlockMutex(b->mutex);
+ uia_element *focus=(focused && focused!=previous) || (document_focused && !previous_document_focus)?uia_for_locked(b,focused):NULL;SDL_UnlockMutex(b->mutex);
  for(size_t i=0;i<count;i++){UiaDisconnectProvider(&retired[i]->simple);uia_release(retired[i]);}
  if(changed)UiaRaiseStructureChangedEvent(&b->root->simple,StructureChangeType_ChildrenInvalidated,NULL,0);
  if(reading && reading_changed)UiaRaiseAutomationEvent(&b->root->simple,UIA_Text_TextChangedEventId);

@@ -197,9 +197,12 @@ vorheriger/nächster Treffer. Native Fokuszustände und Suchwerte werden zusätz
 geprüft. Binary-SHA256:
 `63e3a23da790028bc7725dff7e2b6127331a09d75b0ff1262b0cfa6a90672261`.
 
-Die Synthese verwendet einen ALSA-Nullausgang; eine akustische Hörprüfung ist
-damit nicht belegt. Die separate Probe `orca-f1-w7907x0_` zeigt außerdem weiterhin
-fehlenden nativen Fokus beim Wechsel in den Lesebereich. Vollständiges Vorlesen,
+ALSA-null war konfiguriert. Die spätere Audio-Nachprüfung fand jedoch das fehlende
+ALSA-Ausgabemodul; dieser historische Lauf belegt Control-Ansagen im Orca-Log,
+keine erfolgreiche Synthese. Eine Hörprüfung fand nicht statt. Die damalige Probe
+`orca-f1-w7907x0_` zeigte zudem fehlenden Dokumentfokus. Die anschließende
+[native Fokuskorrektur und reale Syntheseprobe](READING-FOCUS.md) prüfen dies getrennt.
+Vollständiges Vorlesen,
 Linkaktivierung, Rückkehr zum Workspace und strukturierte Mathematik bleiben
 offene Screenreader-Aufgaben. Die Control-Ansagen schließen diese Lücken nicht.
 

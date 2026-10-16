@@ -257,6 +257,19 @@ void nk_sdl_accessibility_text_box(struct nk_context *ctx,size_t begin,size_t en
  float box[]={bounds.x,bounds.y,bounds.w,bounds.h};SDL_LockMutex(sdl->accessibility_mutex);
  ps_a11y_document_box(sdl->accessibility,begin,end,box);SDL_UnlockMutex(sdl->accessibility_mutex);
 }
+bool nk_sdl_accessibility_document_focus(struct nk_context *ctx,uint64_t version,bool focused) {
+ if(!ctx || !ctx->userdata.ptr)return false;
+ struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
+ SDL_LockMutex(sdl->accessibility_mutex);
+ bool granted=ps_a11y_document_focus_update(sdl->accessibility,version,focused && sdl->accessibility_custom_keyboard);
+ SDL_UnlockMutex(sdl->accessibility_mutex);
+ if(granted){
+  if(SDL_getenv("PHYSIM_A11Y_TRACE"))fprintf(stderr,"AT-SPI document focus consumed: window=%u keyboard=%u version=%llu\n",
+      SDL_GetWindowID(sdl->win),SDL_GetKeyboardFocus()?SDL_GetWindowID(SDL_GetKeyboardFocus()):0,(unsigned long long)version);
+  sdl->accessibility_custom_keyboard=true;SDL_RaiseWindow(sdl->win);nk_edit_unfocus(ctx);
+ }
+ return granted;
+}
 bool nk_sdl_accessibility_document_table(struct nk_context *ctx,size_t begin,size_t end,
  size_t rows,size_t columns,bool headers,const ps_a11y_table_row_input *input) {
  if(!ctx || !ctx->userdata.ptr)return false;

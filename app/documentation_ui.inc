@@ -1322,6 +1322,11 @@ static void documentation_view(app *a, float height) {
                                        0)) {
         if (d) {
             nk_sdl_accessibility_document(ui,a->doc_reading_version,documentation_topics[a->doc_topic].title,d->reading,nk_window_get_content_region(ui));
+            if(nk_sdl_accessibility_document_focus(ui,a->doc_reading_version,a->doc_keyboard && a->doc_focus==DOC_BODY)) {
+                a->doc_keyboard=true;a->doc_focus=DOC_BODY;a->doc_focus_reveal=true;
+                a->doc_search_active=a->doc_filter_active=false;
+                a->doc_search_focus=a->doc_filter_focus=false;
+            }
             for(size_t i=0;i<d->count;i++)d->blocks[i].hit[2]=0;
             float width = fmaxf(40, nk_window_get_content_region(ui).w - 8);
             /* A dynamic single-column widget uses the panel bounds, while

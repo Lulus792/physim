@@ -82,6 +82,7 @@ void ps_ui_accessibility_route(struct nk_context *ctx,bool allowed);
 bool nk_sdl_accessibility_press(struct nk_context *ctx,const char *label);
 bool nk_sdl_accessibility_available(struct nk_context *ctx);
 bool nk_sdl_accessibility_document(struct nk_context *ctx,uint64_t version,const char *name,const char *text,struct nk_rect viewport);
+bool nk_sdl_accessibility_document_focus(struct nk_context *ctx,uint64_t version,bool focused);
 struct ps_a11y_table_row_input;
 struct ps_a11y_table;
 struct ps_a11y_table_cell;

@@ -28,7 +28,7 @@ typedef struct {size_t begin,end;float bounds[4];} ps_a11y_text_box;
 typedef struct {
  uint64_t version;char name[256];char *text;size_t length;
  float viewport[4];ps_a11y_text_box boxes[PS_A11Y_TEXT_BOXES];size_t count;unsigned dropped;
- bool active,complete;
+ bool active,complete,focused; /* Logical document focus target; getter also requires host focus. */
  ps_a11y_table_inventory *tables;
 } ps_a11y_document;
 typedef enum {PS_A11Y_TEXT,PS_A11Y_BUTTON,PS_A11Y_CHECKBOX,PS_A11Y_RADIO,PS_A11Y_RADIO_GROUP,PS_A11Y_SLIDER,PS_A11Y_EDIT,PS_A11Y_LINK} ps_a11y_role;
@@ -62,6 +62,7 @@ typedef struct {
  size_t edit_box_count,edit_box_draft_count;
  ps_a11y_document *document,*document_draft;
  uint64_t document_scroll_version;size_t document_scroll_byte;
+ uint64_t pending_document_focus;
  bool document_scroll_top;
 } ps_a11y_model;
 static inline bool ps_a11y_actionable(ps_a11y_role role) {
@@ -77,6 +78,12 @@ bool ps_a11y_document_begin(ps_a11y_model *model,uint64_t version,const char *na
 bool ps_a11y_document_box(ps_a11y_model *model,size_t begin,size_t end,const float bounds[4]);
 /* Reject this incomplete frame without replacing any published snapshot. */
 void ps_a11y_document_abort(ps_a11y_model *model);
+/* Native focus requests bind to the published content version. The UI consumes
+ * them only while rebuilding that same document; removed/replaced/suspended
+ * documents cannot receive a delayed focus request. */
+bool ps_a11y_document_focus(ps_a11y_model *model,uint64_t version);
+bool ps_a11y_document_focus_update(ps_a11y_model *model,uint64_t version,bool focused);
+bool ps_a11y_document_focused(const ps_a11y_model *model);
 /* Whole-table transaction, independent of the 256 interactive controls. Rows
  * and ranges follow reading order, with empty cells allowed. Missing trailing
  * cells are virtual empty cells at the row end. Geometry is clipped on read.

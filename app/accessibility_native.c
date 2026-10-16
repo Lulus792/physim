@@ -19,7 +19,7 @@ struct ps_a11y_native {
  id view,children;uint64_t ids[PS_A11Y_MAX_NODES],parents[PS_A11Y_MAX_NODES];bool checked[PS_A11Y_MAX_NODES];uint64_t focused_id;size_t count;
  double values[PS_A11Y_MAX_NODES];
  uint64_t edit_versions[PS_A11Y_MAX_NODES];size_t edit_starts[PS_A11Y_MAX_NODES],edit_ends[PS_A11Y_MAX_NODES],edit_carets[PS_A11Y_MAX_NODES];
- id document;uint64_t document_identity,document_version;ps_a11y_utf16_index document_index;bool document_viewable;
+ id document;uint64_t document_identity,document_version;ps_a11y_utf16_index document_index;bool document_viewable,document_focused;
  id links_probe;uint64_t completed_link_id,completed_link_serial,links_probe_serial;
  id table_objects;uint64_t table_object_version;
 };
@@ -226,6 +226,8 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
  SDL_LockMutex(b->mutex);
  id retired_tables=mac_tables_prepare_locked(b);
  uint64_t previous_focus=b->focused_id,new_focus=0;
+ bool previous_document_focus=b->document_focused;
+ b->document_focused=ps_a11y_document_focused(b->model);
  for(size_t i=0;i<b->model->count;i++)if(b->model->nodes[i].focused)new_focus=b->model->nodes[i].id;
  for(size_t i=0;i<b->model->count;i++) {
   const ps_a11y_node *node=&b->model->nodes[i];id element=element_for(b,node->id);
@@ -267,7 +269,8 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
  for(size_t i=0;i<b->count;i++)if(selection_changed[i])NSAccessibilityPostNotification(element_for(b,b->ids[i]),string("AXSelectedChildrenChanged"));
  for(size_t i=0;i<b->count;i++)if(text_selection_changed[i])NSAccessibilityPostNotification(element_for(b,b->ids[i]),string("AXSelectedTextChanged"));
  b->focused_id=new_focus;
- if(previous_focus!=new_focus)NSAccessibilityPostNotification(new_focus?element_for(b,new_focus):b->view,string("AXFocusedUIElementChanged"));
+ if(previous_focus!=new_focus || previous_document_focus!=b->document_focused)
+  NSAccessibilityPostNotification(new_focus?element_for(b,new_focus):b->document_focused?b->document:b->view,string("AXFocusedUIElementChanged"));
  NSAccessibilityPostNotification(b->view,string("AXLayoutChanged"));send0(pool,"drain");
 }
 void ps_a11y_native_destroy(ps_a11y_native *b) {

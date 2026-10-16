@@ -16,7 +16,16 @@ static bool mac_document_test(SDL_Window *window,bool range_control) {
  ok &= identifier(document)==model->nodes[0].id;
  ok &= !((BOOL(*)(id,SEL))objc_msgSend)(document,sel_registerName("accessibilityPerformPress"));
  ((void(*)(id,SEL,BOOL))objc_msgSend)(document,sel_registerName("setAccessibilityFocused:"),YES);
- ok &= !model->pending_press && !model->pending_focus;
+ ok &= !model->pending_press && !model->pending_focus && model->pending_document_focus==1;
+ ps_a11y_begin(model);
+ if(range_control)ps_a11y_record_range(model,"controls","Collision guard",box,true,0,10,1,&collision_value);
+ else ps_a11y_record(model,"controls","Collision guard",PS_A11Y_BUTTON,box,true);
+ ok &= ps_a11y_document_begin(model,1,"Lesetext θ🌍",source,view);
+ ok &= ps_a11y_document_box(model,4,8,box);
+ ok &= ps_a11y_document_focus_update(model,1,false) && ps_a11y_publish(model);
+ ps_a11y_native_publish(b,true);
+ ok &= ((BOOL(*)(id,SEL))objc_msgSend)(document,sel_registerName("isAccessibilityFocused"));
+ ok &= !model->nodes[0].focused && !model->pending_document_focus;
  id number=((id(*)(id,SEL,double))objc_msgSend)((id)objc_getClass("NSNumber"),sel_registerName("numberWithDouble:"),7.0);
  element_set_value(document,sel_registerName("setAccessibilityValue:"),number);
  ok &= !model->pending_value_id && collision_value==5;

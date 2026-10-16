@@ -181,6 +181,19 @@ bool ps_a11y_native_test(SDL_Window *window) {
  if(whole)UIA_CHECK(ITextRangeProvider_GetText(whole,-1,&read)==UIA_E_ELEMENTNOTAVAILABLE && !read);
  if(field_range){field_value=NULL;UIA_CHECK(ITextRangeProvider_GetText(field_range,-1,&field_value)==UIA_E_ELEMENTNOTAVAILABLE && !field_value);ITextRangeProvider_Release(field_range);}
  if(field_match)ITextRangeProvider_Release(field_match);
+ VARIANT focus_property;VariantInit(&focus_property);
+ UIA_CHECK(SUCCEEDED(IRawElementProviderSimple_GetPropertyValue(&b->root->simple,UIA_IsKeyboardFocusablePropertyId,&focus_property)) && focus_property.boolVal==VARIANT_TRUE);
+ VariantClear(&focus_property);
+ UIA_CHECK(SUCCEEDED(IRawElementProviderFragment_SetFocus(&b->root->fragment)) && m->pending_document_focus==43);
+ ps_a11y_begin(m);UIA_CHECK(ps_a11y_document_begin(m,43,"Anders","New content",bounds));
+ UIA_CHECK(ps_a11y_document_focus_update(m,43,false));ps_a11y_publish(m);ps_a11y_native_publish(b,true);
+ UIA_CHECK(SUCCEEDED(IRawElementProviderSimple_GetPropertyValue(&b->root->simple,UIA_HasKeyboardFocusPropertyId,&focus_property)) && focus_property.boolVal==VARIANT_TRUE);
+ VariantClear(&focus_property);IRawElementProviderFragment *document_focus=NULL;
+ UIA_CHECK(SUCCEEDED(IRawElementProviderFragmentRoot_GetFocus(&b->root->root,&document_focus)) && document_focus==&b->root->fragment);
+ if(document_focus)IRawElementProviderFragment_Release(document_focus);
+ ps_a11y_suspend(m);ps_a11y_native_publish(b,false);document_focus=NULL;
+ UIA_CHECK(SUCCEEDED(IRawElementProviderFragmentRoot_GetFocus(&b->root->root,&document_focus)) && !document_focus);
+ UIA_CHECK(IRawElementProviderFragment_SetFocus(&b->root->fragment)==UIA_E_ELEMENTNOTENABLED);
  ps_a11y_native_destroy(b);
  if(edit){UIA_CHECK(IValueProvider_SetValue(&edit->value,L"stale")==UIA_E_ELEMENTNOTAVAILABLE);uia_release(edit);}
  if(clone){UIA_CHECK(ITextRangeProvider_GetText(clone,-1,&read)==UIA_E_ELEMENTNOTAVAILABLE && !read);ITextRangeProvider_Release(clone);}
