@@ -74,6 +74,29 @@ int main(int argc, char **argv) {
     ps_document *unchanged = d;
     CHECK(ps_document_parse("x\0y", 3, false, &unchanged) == PS_INVALID && unchanged == d);
     free(d);
+    const char *wrapped_list="- First **bold** [guide](guide.md)\r\n"
+        "  continued with `code`.\r\n- Second item\n  same item\n\nAfter.\n\n"
+        "10. Third item\n    continuation\n";
+    CHECK(ps_document_parse(wrapped_list,strlen(wrapped_list),false,&d)==PS_OK);
+    CHECK(d->count==5 && !strcmp(d->text+d->blocks[0].text,"- First bold guide continued with code."));
+    CHECK(d->blocks[1].kind==PS_DOC_LINK && d->blocks[1].inline_parent==0);
+    CHECK(!strcmp(d->text+d->blocks[2].text,"- Second item same item"));
+    CHECK(!strcmp(d->text+d->blocks[3].text,"After."));
+    CHECK(!strcmp(d->text+d->blocks[4].text,"10. Third item continuation"));
+    CHECK(strstr(d->reading,"- First bold guide continued with code.\n\n- Second item same item\n\nAfter."));
+    CHECK(d->blocks[1].reading_begin==d->blocks[0].reading_begin+13);
+    free(d);
+    const char *list_boundaries="- Parent\n  - Child\n    child continuation\n+ Plus\n* Star\n12) Ordered\n"
+        " \t \n1.5 remains prose\n2.5 continues prose\n\n- Before code\n```c\n  x++;\n```\n"
+        "- Before formula\n$$\nz=0\n$$\n- Before table\n| A | B |\n| --- | --- |\n| C | D |\n# End\n";
+    CHECK(ps_document_parse(list_boundaries,strlen(list_boundaries),false,&d)==PS_OK && d->count==14);
+    CHECK(!strcmp(d->text+d->blocks[1].text,"  - Child child continuation"));
+    CHECK(!strcmp(d->text+d->blocks[4].text,"12) Ordered"));
+    CHECK(!strcmp(d->text+d->blocks[5].text,"1.5 remains prose 2.5 continues prose"));
+    CHECK(d->blocks[7].kind==PS_DOC_CODE && !strcmp(d->text+d->blocks[7].text,"  x++;\n"));
+    CHECK(d->blocks[9].kind==PS_DOC_MATH && d->blocks[11].kind==PS_DOC_TABLE_ROW);
+    CHECK(d->blocks[11].table_rows==2 && d->blocks[13].kind==PS_DOC_HEADING);
+    free(d);
     const char *rich="Escaped \\* and \\` remain; **bold `x[0]`** [**go**](guide.md#part) and `a **literal**`.\n";
     CHECK(ps_document_parse(rich,strlen(rich),false,&d)==PS_OK);
     CHECK(d->count==2 && !strcmp(d->text+d->blocks[0].text,"Escaped * and ` remain; bold x[0] go and a **literal**."));

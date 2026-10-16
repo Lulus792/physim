@@ -2614,3 +2614,35 @@ Windows MSVC/ASan besteht Adaptive, Numerik, Dokumentparser und Abschnittslinks
 4/4 in `run-xe4ri0zs`, Linux GCC/ASan/UBSan dieselben vier in `run-0zvemu7n`.
 Alle 31 erzeugten Referenzdokumente bestehen zusätzlich die Aktualitätsprüfung.
 Das belegt diesen Teil des Inhaltsabgleichs, keinen vollständigen Review.
+
+## Zusammenhängende Listenabsätze
+
+Die direkte Windows-Bedienprüfung mit `computer-use` öffnet F1 aus einem leeren
+Workspace, verwendet die globale Suche und folgt dem Link von der C-Referenz
+zur Numerik-Anleitung. Dort zerlegte der Parser einen im Markdown umgebrochenen
+Listenpunkt in mehrere Textblöcke. Die Fortsetzung erschien mit zusätzlichem
+Absatzabstand außerhalb des zugehörigen Punktes. Ursache war die sofortige
+Ausgabe jeder Zeile mit Listenmarker; die Fortsetzung wurde erst danach gesammelt.
+
+Der Parser sammelt nun den ganzen Listenabsatz, bevor er Inline-Auszeichnung,
+Links und native Lesebereiche erzeugt. Ein neuer Marker oder eine Blockgrenze
+schließt ihn ab. Einrückung der Fortsetzungszeile erzeugt keinen zusätzlichen
+Abstand. Marker benötigen abschließenden Leerraum; Dezimalzahlen werden dadurch
+nicht mehr als nummerierte Listen zerlegt. Die Probe deckt CRLF/LF, mehrere
+Marker, eingerückte Unterpunkte, Links sowie Grenzen zu Code, Formeln, Tabellen,
+Überschriften und mit Leerraum gefüllten Leerzeilen ab. Das ergänzt keine
+vollständige verschachtelte Markdown-Listen- oder native Listensemantik.
+
+Der neue Regressionstest verwirft den bisherigen Parser in `run-fi2eux05`
+gezielt an der zusammenhängenden ersten Listenzeile. Nach der Korrektur
+bestehen Dokumentparser, natives Lesemodell und Abschnittslinks unter Windows
+MSVC/ASan 3/3 in `run-oxw0rlni`, unter Linux GCC/ASan/UBSan 3/3 in `run-1qoiobhm`.
+Die fünf GUI-Fälle Tastatur, Navigation, Inline-Inhalte, Zeicheninventur und
+Inline-Formeln bestehen auf Windows in `run-5zxizwdg` und auf Linux in
+`run-v7g6isqx` jeweils vollständig. Formelassets und alle 31 erzeugten
+Referenzdokumente bestehen die statischen Prüfungen.
+
+Die anschließende manuelle Kontrolle des korrigierten Builds wurde vor dem
+Start durch die physische Escape-Taste beendet. Weitere Desktop-Eingaben
+bleiben gestoppt. Die reale visuelle Nachkontrolle der ursprünglichen Ansicht
+und die Mac-Abnahme dieser Parseränderung bleiben deshalb ausdrücklich offen.

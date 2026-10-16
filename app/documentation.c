@@ -266,6 +266,19 @@ static bool formula_block(ps_document *d,const char *text,size_t length) {
     return formula?append(d,PS_DOC_MATH,0,formula->reading,strlen(formula->reading),text,length):
                    append(d,PS_DOC_CODE,0,text,length,NULL,0);
 }
+static bool list_marker(const char *line,size_t n) {
+    size_t at=0;
+    while(at<n && at<3 && line[at]==' ')++at;
+    if(at==n)return false;
+    if(line[at]=='-' || line[at]=='+' || line[at]=='*')++at;
+    else {
+        size_t begin=at;
+        while(at<n && at-begin<9 && isdigit((unsigned char)line[at]))++at;
+        if(at==begin || at==n || (line[at]!='.' && line[at]!=')'))return false;
+        ++at;
+    }
+    return at<n && (line[at]==' ' || line[at]=='\t');
+}
 ps_result ps_document_parse(const char *source, size_t size, bool code, ps_document **out) {
     if (!source || !out || size > (code?PS_DOC_MAX_CODE_BYTES:PS_DOC_MAX_BYTES) || memchr(source, 0, size))
         return PS_INVALID;
@@ -282,7 +295,7 @@ ps_result ps_document_parse(const char *source, size_t size, bool code, ps_docum
     } else {
         size_t at = 0, length = 0;
         size_t table_first=SIZE_MAX,table_row=0,last_table_row=SIZE_MAX;
-        bool fenced = false,math=false;
+        bool fenced = false,math=false,pending_list=false;
         while (at < size) {
             size_t begin = at;
             while (at < size && source[at] != '\n')
@@ -298,7 +311,7 @@ ps_result ps_document_parse(const char *source, size_t size, bool code, ps_docum
             if(!fenced && n==2 && !memcmp(line,"$$",2)) {
                 if(math) {if(!formula_block(d,pending,length))goto limit;}
                 else if(length && !paragraph(d,pending,length,PS_DOC_TEXT,0))goto limit;
-                length=0;math=!math;continue;
+                length=0;pending_list=false;math=!math;continue;
             }
             if(math) {memcpy(pending+length,line,n);length+=n;pending[length++]='\n';continue;}
             bool fence = n >= 3 && !memcmp(line, "```", 3);
@@ -307,6 +320,7 @@ ps_result ps_document_parse(const char *source, size_t size, bool code, ps_docum
                                        : paragraph(d, pending, length, PS_DOC_TEXT, 0)))
                     goto limit;
                 length = 0;
+                pending_list=false;
                 fenced = !fenced;
                 continue;
             }
@@ -316,18 +330,20 @@ ps_result ps_document_parse(const char *source, size_t size, bool code, ps_docum
                 pending[length++] = '\n';
                 continue;
             }
+            size_t whitespace=0;
+            while(whitespace<n && (line[whitespace]==' ' || line[whitespace]=='\t'))++whitespace;
+            if(whitespace==n)n=0;
             unsigned heading = 0;
             while (heading < n && line[heading] == '#')
                 heading++;
-            bool list =
-                n >= 2 && ((line[0] == '-' && line[1] == ' ') ||
-                           (isdigit((unsigned char)line[0]) && memchr(line, '.', n < 4 ? n : 4)));
+            bool list = list_marker(line,n);
             bool special =
                 !n || heading || list || line[0] == '|' || (n == 3 && !memcmp(line, "---", 3));
             if (special && length) {
                 if (!paragraph(d, pending, length, PS_DOC_TEXT, 0))
                     goto limit;
                 length = 0;
+                pending_list=false;
             }
             if (!n)
                 continue;
@@ -337,7 +353,9 @@ ps_result ps_document_parse(const char *source, size_t size, bool code, ps_docum
             } else if (n == 3 && !memcmp(line, "---", 3)) {
                 if (!append(d, PS_DOC_RULE, 0, "", 0, NULL, 0))
                     goto limit;
-            } else if (list || line[0] == '|') {
+            } else if(list) {
+                memcpy(pending,line,n);length=n;pending_list=true;
+            } else if (line[0] == '|') {
                 bool separator = line[0] == '|' && memchr(line, '-', n);
                 for (size_t i = 0; separator && i < n; i++)
                     if (line[i] != '|' && line[i] != '-' && line[i] != ':' && line[i] != ' ' &&
@@ -361,6 +379,7 @@ ps_result ps_document_parse(const char *source, size_t size, bool code, ps_docum
                     last_table_row=row_block;
                 }
             } else {
+                if(pending_list){line+=whitespace;n-=whitespace;}
                 if (length)
                     pending[length++] = ' ';
                 memcpy(pending + length, line, n);
