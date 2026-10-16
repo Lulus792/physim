@@ -210,13 +210,42 @@ eine begrenzte UTF-8-Nachricht. Fehler bewahren die Leseausgabe; ungültige
 Schreibangaben schreiben keine Bytes. EOF/Recovery bleiben für das Handle
 terminal. Messpunkte und Szenen werden durch Ereignisse nicht hinzugefügt.
 
-```text
-writer.appendEvent(3,0.25,"Warnung: α")
-let events = store.openReader("experiment.psrun")
-while events.nextEvent():
-    print(events.eventMessage())
+Das folgende vollständige Beispiel schreibt eine Messzeile und eine Warnung.
+Der Writer bleibt bis nach `appendEvent()` offen und wird vor dem Lesen
+finalisiert. `events.psrun` darf im Arbeitsordner noch nicht existieren.
+Messzeilen und Ereignisse werden mit getrennten Readern geprüft.
+
+```physim
+let store = RunStore()
+store.configure(0.01, 42, "model=event-example")
+let metres = Unit(1,0,0,0,0,0,0,1,"m")
+assert(store.addChannel("position.x", metres, "Measured position") == 0)
+let writer = store.createWriter("events.psrun", "Recorded events")
+writer.append(0, [7.0])
+writer.appendEvent(3, 0.25, "Warnung: α")
+assert(writer.sampleCount() == 1)
+writer.close()
+let events = store.openReader("events.psrun")
+assert(events.nextEvent())
+assert(events.eventLevel() == 3 && events.eventTime() == 0.25)
+let message = events.eventMessage()
+assert(message == "Warnung: α")
+assert(!events.nextEvent() && events.isComplete())
+assert(events.sampleCount() == 1)
 events.close()
+let samples = store.openReader("events.psrun")
+assert(samples.next())
+assert(samples.row().time(0) == 0 && samples.row().value(0,0) == 7.0)
+assert(!samples.next() && samples.isComplete())
+samples.close()
+store.close()
+print(message)
 ```
+
+Die Ausgabe ist `Warnung: α`. Das Ereignis erzeugt keine zusätzliche Messzeile;
+beide Reader erreichen den vollständigen Dateiabschluss. Der kopierte String
+`message` bleibt nach dem Schließen gültig. Die Quelle liegt im SDK unter
+`examples/documentation/run_events.phys`.
 
 Physim-Cursor erlauben jeweils nur Mess-, Szenen- oder Ereignistraversierung.
 Kopien teilen den Cursor und den letzten akzeptierten Record. Die Getters
@@ -309,13 +338,30 @@ ohne den Lesecursor zu verbrauchen. `ps_run_start_time_read` dekodiert einen
 explizit begrenzten Metadatenbereich. Fehler erhalten die Ausgabe; alte
 Dateien ohne Startzeit liefern `PS_EOF`.
 
-```text
+Das folgende Leseprogramm setzt die Datei `events.psrun` aus dem
+[Ereignisbeispiel](#ereignisse-und-warnungen) im selben Arbeitsordner voraus.
+`now` ist die aktuelle Abfragezeit; `saved` ist die archivierte Startzeit des
+früher erzeugten Writers. Beide Zeitpunkte dürfen verschieden sein.
+
+```physim
 let now = RunStartTime.now()
+assert(now.isValid())
+let store = RunStore()
+let reader = store.openReader("events.psrun")
+assert(reader.hasStartTime())
 let saved = reader.startTime()
 let decoded = RunStartTime.fromMetadata(reader.metadata())
 assert(saved.unixSeconds() == decoded.unixSeconds())
 assert(saved.nanoseconds() == decoded.nanoseconds())
+reader.close()
+store.close()
+assert(saved.isValid() && decoded.isValid())
+print("Startzeit geprüft")
 ```
+
+Die Ausgabe ist `Startzeit geprüft`. Beide dekodierten Kopien bleiben nach dem
+Schließen gültig. Die Quelle liegt im SDK unter
+`examples/documentation/run_start_time.phys`.
 
 `RunStartTime(seconds,nanoseconds)` erzeugt einen unabhängigen Wert.
 `isValid()`, `unixSeconds()` und `nanoseconds()` prüfen/lesen seine Felder.

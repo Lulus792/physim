@@ -14,8 +14,8 @@ unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 
 | Bereich | Belegter Stand | Rest zur vollständigen Abnahme |
 | --- | --- | --- |
-| Dokumentationszugang | 185 registrierte Seiten und 218 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
-| Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt; PCHIP und RK45 abgeglichen; fünf veröffentlichte C-Fragmente und das eigenständige Laufidentitätsbeispiel unter Windows/Linux tatsächlich ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
+| Dokumentationszugang | 185 registrierte Seiten und 219 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
+| Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt; PCHIP und RK45 abgeglichen; fünf veröffentlichte C-Fragmente sowie Laufidentitäts-, Ereignis- und Startzeitbeispiele unter Windows/Linux tatsächlich ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
 | Formelsatz | 193 TeX-Ausdrücke auf 22 Seiten; 197 Displayblöcke und zwei Inlinepassagen unter Windows/Linux geprüft; aktueller Inline-Prüfablauf besteht auf beiden Plattformen mit 48 bytegleichen Bildern und 162 Formelrahmen gegenüber seinem jeweiligen Vorlauf; frühere Mac-Nachweise sind unten revisionsbezogen dokumentiert | Abnahme der aktuellen Mac-Revision einschließlich externer AX-Prüfung und offener Intel-Zeitlimits, weitere Fachseiten, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
 | Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; alle drei Plattformen besitzen zusätzlich geprüfte native Tabellen-, Zell- und Headerbeziehungen | Externe macOS-AX-Clientprüfung, echte Screenreader-Aufgaben und die unten beschriebene sporadische Windows-Linkprüfung |
@@ -2928,3 +2928,41 @@ mit diesem Ablauf beim tatsächlichen Zeichnen durch OpenGL-Fehler `0x502`
 abgewiesen. Die neue Gegenprobe liegt separat unter
 `build/native/inline-math-observed-counterexample`; frühere Berichte bleiben
 erhalten. Die tatsächliche neue Mac-Ausführung ist weiter erforderlich.
+
+## Ausführbare Ereignis- und Startzeitbeispiele im Run-Stream-Kapitel
+
+Der Ereignisausschnitt in `docs/run-streams.md` setzte einen lebenden Writer
+voraus, ohne seinen Lebenszyklus und den passenden Dateinamen anzugeben.
+Direkt hinter dem vorherigen vollständigen Schreibbeispiel sind Writer und
+Store bereits geschlossen. Eine tatsächlich übersetzte Linux-Ausführung dieser
+beiden unveränderten veröffentlichten Blöcke endet an `appendEvent()` mit
+Exit 70 und `RunWriter is closed`. `build/native/events-doc-before/report.json`
+hält diesen belegten Kontextfehler fest; er ist kein Fehler des Writer-Vertrags.
+
+Das Ereignisbeispiel ist jetzt vollständig: neuer konfigurierter Store,
+SI-Kanal, eine Messzeile, eine Warnung und expliziter Writer-Abschluss vor dem
+Lesen. Separate Reader prüfen Ereignis und Messzeile sowie jeweils den
+vollständigen Dateischluss. Level, Ereigniszeit, Unicode-Nachricht und
+Messzeilenanzahl sind ausdrücklich geprüft. Der kopierte Nachrichtenstring
+wird nach dem Schließen weiterverwendet. Der Dateiname und die Voraussetzung,
+dass die Datei noch nicht existiert, stehen direkt am Beispiel.
+
+Das Startzeitprogramm öffnet anschließend genau diese Datei. Seine
+Voraussetzung ist mit dem Ereignisabschnitt verlinkt. Es vergleicht die
+archivierte Startzeit mit der vollständigen Metadaten-Dekodierung und prüft die
+unabhängigen Werte nach Reader-/Store-Close. Die Anleitung unterscheidet die
+aktuelle Abfragezeit von der archivierten Writer-Startzeit und verlangt keine
+anfällige Gleichheit mit der laufenden Wanduhr. Beide vollständigen Quellen
+liegen unter `examples/documentation/run_events.phys` und
+`examples/documentation/run_start_time.phys`.
+
+`documentation_run_events_example` prüft die Quellgleichheit beider
+veröffentlichten Blöcke, führt beide tatsächlich kompilierten Programme in
+der nötigen Reihenfolge aus und verlangt ihre exakten Ausgaben. Beide
+Sprachprogramme müssen ohne lebende Runtime-Allokationen enden. Zusammen
+mit den vorhandenen Ereignis-, Startzeit-/Codec- und Abschnittslinkfällen
+besteht Windows MSVC/ASan 4/4 in `run-s6thfauo`, Linux GCC/ASan/UBSan 4/4
+in `run-gxc38ady`. Der native Parser bestätigt 219 Abschnittslinks auf
+185 Seiten. Die Mac-Gruppe erfasst den zusätzlichen Fall und beide Quellen;
+ihre tatsächliche Ausführung bleibt offen. Der Nachweis betrifft diese
+Anleitungen und ersetzt keinen vollständigen Review der übrigen Seiten.
