@@ -3814,7 +3814,7 @@ int main(int argc, char **argv) {
         if (a->doc_ui)
             nk_input_end(a->doc_ui);
         if(nk_sdl_accessibility_has_focus(a->ui)){a->settings_keyboard=false;toolbar_keyboard_close(a);}
-        if(a->doc_ui && nk_sdl_accessibility_has_focus(a->doc_ui))a->doc_keyboard=false;
+        if(a->doc_ui && nk_sdl_accessibility_has_focus(a->doc_ui) && !nk_sdl_accessibility_keyboard_owned(a->doc_ui))a->doc_keyboard=false;
         if (a->profiler) {
             Uint64 now = SDL_GetTicksNS();
             a->profile_frame.event_seconds = (double)(now - profile_phase) / 1e9;

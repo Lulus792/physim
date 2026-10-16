@@ -30,7 +30,10 @@ ps_result store_parameters(ps_hashmap **out) {
 }
 ```
 
-Der Aufrufer zerstört die erfolgreiche Map mit `ps_hashmap_destroy`. Der Allocator
+Der Aufrufer zerstört die erfolgreiche Map mit `ps_hashmap_destroy`.
+Bei Erfolg überschreibt das Beispiel `store_parameters` den Ausgabezeiger.
+Eine dort zuvor referenzierte Map wird dabei nicht freigegeben; ihre Lebensdauer
+verwaltet weiterhin der Aufrufer. Der Allocator
 und sein Benutzerzustand müssen bis dahin verfügbar bleiben. Die Map führt keine
 Destruktoren oder tiefen Kopien aus; Zeiger innerhalb eines Wertes behalten ihre
 ursprünglichen Eigentumsregeln. Werte sind bis `PS_MEMORY_ALIGNMENT` ausgerichtet.

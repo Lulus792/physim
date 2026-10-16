@@ -1,4 +1,26 @@
 {
+  "documentation_run_events_example": {
+    "document": "docs/run-streams.md",
+    "sources": [
+      {
+        "path": "examples/documentation/run_events.phys",
+        "language": "physim"
+      },
+      {
+        "path": "examples/documentation/run_start_time.phys",
+        "language": "physim"
+      }
+    ]
+  },
+  "documentation_run_identity_example": {
+    "document": "docs/run-streams.md",
+    "sources": [
+      {
+        "path": "examples/documentation/run_identity.phys",
+        "language": "physim"
+      }
+    ]
+  },
   "documentation_language_source": {
     "document": "docs/language-tutorial.md",
     "sources": [

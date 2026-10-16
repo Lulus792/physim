@@ -32,13 +32,13 @@ def wait(fn,label):
         assert time.monotonic()<deadline,label+': '+str(last)
         time.sleep(.02)
     raise AssertionError(label+': '+str(last))
-def field(name):
+def field(name,role=pyatspi.ROLE_ENTRY):
     for app in pyatspi.Registry.getDesktop(0):
         if app.name!='Physim' or app.get_process_id()!=process.pid:continue
         for window in app:
             if window.name=='Physim | Dokumentation':
                 for node in window:
-                    if node.name==name and node.getRole()==pyatspi.ROLE_ENTRY:return node
+                    if node.name==name and node.getRole()==role:return node
     return None
 try:
     for phase,name,value in [('SEARCH','Aktuelles Dokument durchsuchen','ps_rng_seed θ🌍'),('GLOBAL','Alle Inhalte durchsuchen','ps_rng_seed')]:
@@ -56,6 +56,17 @@ try:
             wait(lambda:text.getNSelections()==1 and tuple(text.getSelection(0))==(start,len(value)), 'actual Unicode selection')
             assert text.caretOffset==len(value)
             (a.work/'reader/selection-applied').write_text('ready',encoding='utf-8')
+        else:
+            (a.work/'reader/global-focus-checked').write_text('ready',encoding='utf-8')
+    wait(lambda:'EDIT READY RETURN' in (a.work/'app.stdout').read_text(),'keyboard return to local search')
+    node=wait(lambda:field('Aktuelles Dokument durchsuchen'),'local field after Ctrl+F')
+    wait(lambda:node.getState().contains(pyatspi.STATE_FOCUSED),'native focus after Ctrl+F')
+    (a.work/'reader/return-focus-checked').write_text('ready',encoding='utf-8')
+    for phase,name,marker in [('PREVIOUS','Vorheriger','previous-focus-checked'),('NEXT','Nächster','next-focus-checked'),('PREVIOUS RETURN','Vorheriger','previous-return-focus-checked')]:
+        wait(lambda:'EDIT READY '+phase in (a.work/'app.stdout').read_text(),'keyboard button '+phase)
+        node=wait(lambda:field(name,pyatspi.ROLE_PUSH_BUTTON),'native button '+name)
+        wait(lambda:node.getState().contains(pyatspi.STATE_FOCUSED),'button focus '+phase)
+        (a.work/'reader'/marker).write_text('ready',encoding='utf-8')
     assert process.wait(timeout=20)==0
     output=(a.work/'app.stdout').read_text()
     assert 'DOCUMENTATION EDIT SELF-TEST: PASSED' in output
@@ -63,7 +74,7 @@ try:
     assert any(e['type'].startswith('object:text-changed:insert') for e in events)
     assert any(e['type'].startswith('object:text-selection-changed') for e in events)
     (a.work/'results.json').write_text(json.dumps(dict(independent_client=True,actual_fields=True,unicode_selection=True,
-        actual_replacement=True,tab_exit=True,events=events),ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+        actual_replacement=True,tab_exit=True,keyboard_return_focus=True,events=events),ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 finally:
     if process.poll() is None:process.kill();process.wait()
     out.close();err.close()

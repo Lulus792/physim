@@ -9,20 +9,24 @@ Ein grüner Parsertest allein ist keine vollständige Abnahme.
 
 Bewertungsgrundlage sind die zentralen Skills unter `D:/Skills/skills`:
 `documentation-engineer`, `ui-ux-designer`, `accessibility-engineer`,
-`ui-implementation` und `test-engineer`. Volle Punktzahl erfordert die acht
+`ui-implementation`, `graphics-engineer` und `test-engineer`. Volle Punktzahl erfordert die acht
 unten beschriebenen Abnahmekriterien; fehlende Prüfungen gelten als offen.
 
 | Bereich | Belegter Stand | Rest zur vollständigen Abnahme |
 | --- | --- | --- |
-| Dokumentationszugang | 185 registrierte Seiten und 214 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
-| Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
+| Dokumentationszugang | 185 registrierte Seiten und 219 interne Abschnittslinks geprüft; Navigation, Verlauf und Suche mit realen F1-Abläufen geprüft | Vollständige Plattformabnahme derselben Revision |
+| Inhalt und Aufgabe | Lernwege, Beispiele, Referenz und Fehlerbehebung vorhanden; ausgewählte Quellen-/CLI-Abläufe ausgeführt; PCHIP und RK45 abgeglichen; sechs veröffentlichte C-Fragmente sowie Laufidentitäts-, Ereignis- und Startzeitbeispiele unter Windows/Linux tatsächlich ausgeführt | Gesamtabgleich sämtlicher Anleitungen mit dem Projektstand |
 | Lesbarkeit und Bedienung | 16/32-Pixel-Schrift, kleines Fenster, drei Themes, Codekopieren, Links und Tastaturführung durch Laufzeitbilder und Verhalten belegt | Tatsächliche DPI-/Monitorwechsel und vollständige Zustandsmatrix |
-| Formelsatz | 193 TeX-Ausdrücke auf 22 Seiten; 197 Displayblöcke und zwei Inlinepassagen unter Windows/Linux geprüft, vorherige 199 Displayblöcke auch auf macOS Intel/ARM | Mac-Abnahme der Inline-Darstellung, weitere Fachseiten, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
-| Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; alle drei Plattformen besitzen zusätzlich geprüfte native Tabellen-, Zell- und Headerbeziehungen | Externe macOS-AX-Clientprüfung, echte Screenreader-Aufgaben und die unten beschriebene sporadische Windows-Linkprüfung |
+| Formelsatz | 193 TeX-Ausdrücke auf 22 Seiten; 197 Displayblöcke und zwei Inlinepassagen unter Windows/Linux geprüft; aktueller Inline-Prüfablauf besteht auf beiden Plattformen mit 48 bytegleichen Bildern und 162 Formelrahmen gegenüber seinem jeweiligen Vorlauf; frühere Mac-Nachweise sind unten revisionsbezogen dokumentiert | Abnahme der aktuellen Mac-Revision einschließlich externer AX-Prüfung und offener Intel-Zeitlimits, weitere Fachseiten, echte Dichtewechsel und strukturierte mathematische Screenreader-Navigation |
+| Barrierefreiheit | Windows UIA, Linux AT-SPI und macOS AppKit ergänzen vollständigen Lesetext, Suchfelder und interne Linkbereiche; native Tabellen-/Headerbeziehungen sind geprüft; ein tatsächlicher Narrator-Sprachverlauf bestätigt den lokalen F1-Suchfeldnamen, die Rolle und den Wert nach Ctrl+F | Externe macOS-AX-Clientprüfung, vollständige Screenreader-Aufgaben und die unten beschriebenen Windows-Fokusbefunde |
 
 Die Hilfe ist in den geprüften Windows- und Linux-Abläufen gut nutzbar. Eine vollständige
 Bewertung mit Höchstpunktzahl ist wegen dieser offenen Abnahmefälle noch nicht
 begründet. Die folgenden Nachweise nennen jeweils ihre Revision und Umgebung.
+Die konservative Gesamtwertung bleibt **UI 8/10, Dokumentationsaufgabe 8/10
+und Barrierefreiheit 5/10**. Der Formelsatz besitzt jetzt auch Inline-Brüche,
+Wurzeln, Hoch-/Tiefstellungen und Matrizen mit gemeinsamer Textgrundlinie;
+seine technische Abnahme ersetzt die offenen Nutzeraufgaben nicht.
 
 ### Sidebar-Aktionen ohne Wortbruch
 
@@ -2504,7 +2508,740 @@ Gegenabnahme. Der endgültige Hauptquell-Fingerprint umfasst die isolierte
 Cachequelle, und der abschließende Bericht bestätigt den tatsächlichen Fehler.
 
 Die Mac-CI enthält den neuen Inline-Fall und die isolierte Cachegegenprobe.
-Für die Inline-Erweiterung steht die tatsächliche Mac-Ausführung noch aus.
+Der anschließende Lauf wird im folgenden Abschnitt getrennt nach Plattform
+bewertet.
 Strukturierte mathematische Screenreader-Navigation, praktische Screenreader-
 Aufgaben, reale Monitor-/Dichtewechsel und der vollständige inhaltliche Abgleich
 aller Hilfeseiten bleiben offen. Die Gesamtwertung bleibt konservativ.
+
+## Inline-Abnahme auf Mac und begrenzte Testübergänge
+
+Workflow `38879251192` für `f79ab793` besteht auf macOS ARM die elf nativen
+Fälle in `run-qyl8ohzb` und alle 25 GUI-Fälle in `run-se6rcoff`, einschließlich
+der Inline-Formeln. Alle drei Layout-/Cachegegenproben werden zurückgewiesen.
+Intel besteht elf native Fälle in `run-4jjmwi0y`, aber nur 24/25 GUI-Fälle in
+`run-np1_rtmr`: `documentation_inline_math` endet nach 60,068 Sekunden am
+unveränderten inneren Zeitlimit. Das Archiv enthält 46 Ansichten; die letzten
+vollständigen Formelprüfungen betreffen Fall 45. Das ist keine vollständige
+Intel-Abnahme. Die Ansichten 34 und 40 wurden zusätzlich visuell geprüft:
+Matrix, Brüche, Fließtext und hoher Kontrast sind darin korrekt gesetzt.
+Beide Originalarchive sind vollständig heruntergeladen und gegen ihre
+GitHub-SHA-256-Digests geprüft. Die Auswertung unter
+`build/native/review-inline-mac.py` liest alle nativen und GUI-Ergebnislisten:
+ARM enthält 162 vollständige Formelbilder bis Fall 47, Intel 141 bis Fall 45.
+Auch die ARM-Ansichten 34 und 47 wurden geöffnet und visuell geprüft,
+einschließlich des verlinkten mathematischen Ausdrucks im hohen Kontrast.
+
+Der Test wiederholte bisher Größen- und Themewechsel auch bei unverändertem
+Zustand. Er führt nun genau zwei Fenstergrößenwechsel und sechs Themewechsel
+aus. Jeder der weiterhin 48 Fälle kontrolliert die tatsächliche Fenstergröße
+und das aktive Theme; alle 162 Bildprüfungen, Grundlinien-, Cache-, Link- und
+Isolationsprüfungen bleiben erhalten. Das Abschlussprotokoll nennt die Anzahl
+der Übergänge und die Laufzeit; der unabhängige Testclient verlangt diese
+Anzahlen. Weder die innere noch die äußere Zeitgrenze wurde erhöht.
+
+Diese Änderung besteht unter Windows MSVC/ASan die beiden betroffenen
+GUI-Fälle in `run-aeu0a4fq` und unter Linux GCC/ASan/UBSan alle sieben
+Formel-/Darstellungsfälle in `run-vhn6ttu4`. Formelassets und alle 31 erzeugten
+Referenzdokumente sind erneut statisch geprüft. Ob die verringerten Übergänge
+das Intel-Zeitlimit beheben, bleibt bis zu einer tatsächlichen Mac-Ausführung
+offen; aus den lokalen Erfolgen wird das nicht abgeleitet.
+
+## Unabhängiger externer macOS-AX-Prüfweg
+
+Der zusätzliche Client `tests/accessibility_macos_probe.c` verwendet ausschließlich
+öffentliche ApplicationServices-/CoreFoundation-Schnittstellen. Er linkt keinen
+Physim-Provider und spricht nur den vom Prüfwerkzeug gestarteten App-Prozess an.
+Über AXWindows, den F1-Fenstertitel und die Dokumentkennung sucht er den echten
+Lesebereich. Geprüft werden vollständiger UTF-8-Inhalt, UTF-16-Anzahl, eine genaue
+Teilzeichenfolge, echte Startgeometrie, Readonly-Status und die native Anforderung
+des letzten Inhaltszeichens. Die App muss daraufhin sichtbare Schlussglyphen
+bestätigen und ihr tatsächliches Endbild sichern.
+
+`tools/check_macos_ax.py` prüft zuerst die vorhandene Clientberechtigung über
+[AXIsProcessTrusted](https://developer.apple.com/documentation/applicationservices/1460720-axisprocesstrusted).
+Es verändert keine Systemeinstellung und öffnet keinen Berechtigungsdialog.
+Ohne vorhandene Berechtigung steht im Bericht ausdrücklich `unavailable`,
+niemals `passed`. Ohne `--allow-unavailable` liefert dieser Fall Exit 77;
+die CI verwendet die Option ausschließlich zum getrennten Erfassen der
+Prüfumgebung. Andere Fehler bleiben Fehler. Dieses Ergebnis zählt nicht zu den
+bisherigen In-Prozess-GUI-Fällen und hebt deren Abnahme nicht auf eine externe
+AX- oder VoiceOver-Abnahme an.
+
+Für den neuen Client steht die tatsächliche Mac-Ausführung noch aus. Felder,
+Linkaktionen, Tabellen, Ereignisse und gehaltene alte Referenzen benötigen
+zusätzliche externe Fälle; der vollständige Readonly-Quelltext ist der erste
+Ausführungsschritt dieses Prüfwegs. Die Gesamtwertung bleibt unverändert.
+
+Lokal sind vorab Python-Syntax, der Nicht-Mac-Plattformschutz des Clients
+mit GCC C17 und strengen Warnungen sowie der unabhängige Testläufer unter
+`build/native/mac-ax-runner-proof` geprüft. Windows meldet im Bericht korrekt
+`unavailable` und Exit 77. Diese Prüfungen ersetzen weder das Übersetzen der
+ApplicationServices-Aufrufe mit dem Mac-SDK noch ihren tatsächlichen AX-Aufruf.
+
+## Inhaltlicher Abgleich der Datenreihen-Hilfe
+
+`docs/series.md` nannte weiterhin drei Resamplingverfahren, obwohl die C-API und
+die Physim-Bindung PCHIP als viertes Verfahren anbieten. Die Übersicht enthält
+jetzt `PS_RESAMPLE_PCHIP`, erklärt stückweise Formerhaltung, stetige erste und
+möglicherweise unstetige zweite Ableitung, innere Extrema, Randsteigungen sowie
+die Ein-/Zweipunktfälle. Das Zahlenbeispiel mit X = 0, 1, 2 und Y = 0, 1, 4
+stimmt mit dem ausgeführten PCHIP-Referenztest überein: bei 0,5 entsteht 0,3125
+statt des linearen Werts 0,5. Die fünf bisherigen Codeblöcke bleiben unverändert.
+
+Geprüfte Quellen sind `include/physim/series.h`, `src/series.c`, `src/pchip.h`,
+`tests/test_pchip.c`, `tests/test_resample.c` und die veröffentlichte Physim-
+Bindung `Series.resampledPchip`. MSVC/ASan besteht acht Fälle in `run-2glhqoc1`,
+Linux GCC/ASan/UBSan dieselben acht in `run-eh96o1wv`: Series, Resampling,
+SI-Konvertierung, numerische Extremwerte, Masken, PCHIP, Dokumentparser und
+alle registrierten Abschnittslinks. `tools/generate-reference.py --check`
+bestätigt zusätzlich alle 31 erzeugten Referenzdokumente, eingebettete
+Tutorialquellen, Seitenlimits und ihre Offline-Erreichbarkeit.
+Das belegt diesen Inhaltsabgleich, weiterhin keinen semantischen Gesamtabgleich
+aller 185 registrierten Dateien.
+
+## Numerik-Handbuch: ein akzeptierter Schritt
+
+`docs/numerics.md` erklärt jetzt den Unterschied zwischen vollständiger
+Integration und `ps_ode_step_diagnosed`: genau ein akzeptierter Schritt,
+mögliche Verwerfungen, tatsächlicher Endzeitpunkt, vorzeichenbehafteter
+Folgevorschlag und transaktionaler Zustand bei Fehlern. Der Physim-Weg
+`rk45StepReported` und der adaptive Modellcallback sind direkt verlinkt.
+Der einleitende Überblick nennt auch den gebräuchlichen Suchbegriff Numerik.
+Die Verträge wurden gegen `src/numerics.c`, `include/physim/numerics.h`,
+`include/physim/language_sdk.h` und `tests/test_adaptive.c` abgeglichen.
+Windows MSVC/ASan besteht Adaptive, Numerik, Dokumentparser und Abschnittslinks
+4/4 in `run-xe4ri0zs`, Linux GCC/ASan/UBSan dieselben vier in `run-0zvemu7n`.
+Alle 31 erzeugten Referenzdokumente bestehen zusätzlich die Aktualitätsprüfung.
+Das belegt diesen Teil des Inhaltsabgleichs, keinen vollständigen Review.
+
+## Zusammenhängende Listenabsätze
+
+Die direkte Windows-Bedienprüfung mit `computer-use` öffnet F1 aus einem leeren
+Workspace, verwendet die globale Suche und folgt dem Link von der C-Referenz
+zur Numerik-Anleitung. Dort zerlegte der Parser einen im Markdown umgebrochenen
+Listenpunkt in mehrere Textblöcke. Die Fortsetzung erschien mit zusätzlichem
+Absatzabstand außerhalb des zugehörigen Punktes. Ursache war die sofortige
+Ausgabe jeder Zeile mit Listenmarker; die Fortsetzung wurde erst danach gesammelt.
+
+Der Parser sammelt nun den ganzen Listenabsatz, bevor er Inline-Auszeichnung,
+Links und native Lesebereiche erzeugt. Ein neuer Marker oder eine Blockgrenze
+schließt ihn ab. Einrückung der Fortsetzungszeile erzeugt keinen zusätzlichen
+Abstand. Marker benötigen abschließenden Leerraum; Dezimalzahlen werden dadurch
+nicht mehr als nummerierte Listen zerlegt. Die Probe deckt CRLF/LF, mehrere
+Marker, eingerückte Unterpunkte, Links sowie Grenzen zu Code, Formeln, Tabellen,
+Überschriften und mit Leerraum gefüllten Leerzeilen ab. Das ergänzt keine
+vollständige verschachtelte Markdown-Listen- oder native Listensemantik.
+
+Der neue Regressionstest verwirft den bisherigen Parser in `run-fi2eux05`
+gezielt an der zusammenhängenden ersten Listenzeile. Nach der Korrektur
+bestehen Dokumentparser, natives Lesemodell und Abschnittslinks unter Windows
+MSVC/ASan 3/3 in `run-oxw0rlni`, unter Linux GCC/ASan/UBSan 3/3 in `run-1qoiobhm`.
+Die fünf GUI-Fälle Tastatur, Navigation, Inline-Inhalte, Zeicheninventur und
+Inline-Formeln bestehen auf Windows in `run-5zxizwdg` und auf Linux in
+`run-v7g6isqx` jeweils vollständig. Formelassets und alle 31 erzeugten
+Referenzdokumente bestehen die statischen Prüfungen.
+
+Die anschließende manuelle Kontrolle des korrigierten Builds wurde vor dem
+Start durch die physische Escape-Taste beendet. Weitere Desktop-Eingaben
+bleiben gestoppt. Die reale visuelle Nachkontrolle der ursprünglichen Ansicht
+und die Mac-Abnahme dieser Parseränderung bleiben deshalb ausdrücklich offen.
+
+## UI-Handbuch mit dem vorhandenen Verhalten abgeglichen
+
+`docs/ui-states.md` behauptete noch, dass nur die dunkle Palette und eine
+schreibgeschützte Dateivorschau existierten. Die Anleitung beschreibt jetzt
+die drei vorhandenen Paletten sowie Dateibaum und editierbare Textdokumente.
+`docs/settings.md` erklärt die tatsächlich implementierte Priorität des eigenen
+F1-Lesezooms: Solange er aktiv ist, ersetzt er die getrennten UI-/Codegrößen.
+Die mittlere Größenanzeige setzt ihn zurück. Der frühere offene Status des
+vollständigen nativen F1-Lesetextes wurde durch den aktuellen Schnittstellenstand
+mit Verweis auf die weiterhin offene praktische Screenreader-Abnahme ersetzt.
+Quellen sind `app/design_tokens.h`, `app/preferences.h`, `app/settings_ui.inc`,
+`app/document_actions.inc` und die Größenfunktionen in `app/documentation_ui.inc`.
+
+Die ausgeführten Gruppen `run-o51av9di` unter Windows und `run-kqq42p3i` unter
+Linux bestehen jeweils 2/4. Preferences einschließlich Palettenkontrasten
+besteht auf beiden Systemen. Der zusätzliche Windows-Baumtest überschreitet im
+langen Worktree-Testpfad die erreichbare Pfadlänge; derselbe unveränderte Test
+besteht mit seinem vollständigen 64-Ebenen-Fall unter
+`D:/Physim/build/native/ui-tree-review-54344aca`. Unter Linux scheitert der
+Dateimodustest auf dem eingebundenen Windows-Dateisystem; derselbe unveränderte
+Test besteht auf dem nativen Linux-Dateisystem unter `/tmp`. Diese Nachläufe
+belegen keine Windows-Langpfad- oder POSIX-Rechtegarantie für DrvFS.
+
+Die neue Abschnittsverlinkung verwendete zunächst umschriebene statt der
+vorhandenen Unicode-Anker. Nach der Korrektur prüfen die beiden nativen
+Ankerclients alle 218 Abschnittslinks und 185 Seiten erfolgreich. Die
+Originalausgaben stehen unter `build/native/ui-doc-*`; alle 31 erzeugten
+Referenzdokumente bestehen ebenfalls die Aktualitätsprüfung.
+
+## Erster externer Mac-AX-Lauf: falsche Schreibbarkeitsangabe
+
+Workflow `38880365090`, Intel-Job `116905360795` für `4fd04ba`, übersetzt den
+unabhängigen C17-Client mit dem tatsächlichen Mac-SDK. Der Client besitzt bereits
+AX-Zugriff; es wird keine Berechtigung geändert. Elf native Fälle bestehen in
+`run-jvmbc1dw`, alle 25 GUI-Fälle in `run-08d1d7fd`, und die drei Gegenproben
+erkennen ihre früheren Fehler. Der externe Fall scheitert danach an der
+Schreibbarkeitsangabe des Dokumentwerts: `AXUIElementIsAttributeSettable` liefert
+Erfolg und meldet `AXValue` als schreibbar. Die bisherige In-Prozess-Prüfung der
+Selector-Allowlist hatte diese falsche externe Angabe nicht erkannt.
+
+Das Originalarchiv `12038414515` ist vollständig gegen SHA-256
+`8c96b7d9c9de426ac87162477948db24d16783b63aaa705115820084449965c3`
+geprüft. Seine externe Abschrift stimmt bytegenau mit dem Git-Quellstand
+`4fd04ba:docs/project-audit.json` plus zwei abschließenden LF überein:
+486.670 UTF-8-Bytes und 481.208 UTF-16-Einheiten. Die lokalen CRLF-Dateibytes
+sind dafür kein geeigneter Vergleich. Vor der fehlgeschlagenen
+Readonly-Prüfung bestätigt der Client Teilzeichenfolge und positive
+Zeichenrahmen. Der native Ende-Reveal wird noch nicht angefordert und ist
+somit in diesem externen Lauf nicht abgenommen.
+
+Die Korrektur entfernt den ausdrücklich registrierten wirkungslosen Wertsetter
+der Dokumentklasse. Nach Apples [AppKit-Vertrag](https://developer.apple.com/documentation/appkit/nsaccessibilityprotocol)
+kennzeichnet ein allein überschriebener Getter die Eigenschaft als readonly;
+ein überschriebener Setter veröffentlicht Schreibzugriff. Der geerbte
+Control-Setter weist Dokumentobjekte nun vor der Auflösung numerischer IDs ab.
+Die In-Prozess-Probe läuft mit einem gleich nummerierten Button und zusätzlich
+mit einem Slider; ein direkter numerischer Setteraufruf darf weder einen
+  Wertauftrag erzeugen noch den Modellwert ändern. Die native Readonly-Angabe
+  prüft der unabhängige AX-Client unverändert streng; die zunächst ergänzte
+  veraltete In-Prozess-Abfrage wird wie unten beschrieben entfernt.
+
+Diese Korrektur benötigt noch ihre tatsächliche Mac-Ausführung. Der erfolgreiche
+GUI-Vorlauf ist weiterhin ein Nachweis der früheren Revision und keine Abnahme
+des neuen Setterschutzes. Der erste externe Lauf bleibt als Fehler erhalten;
+eine praktische VoiceOver-Abnahme wird daraus nicht abgeleitet.
+
+## Vollständiger Inhaltsabgleich: Arrays, String-Views und Hashmaps
+
+Die drei Anleitungen `docs/array.md`, `docs/string-view.md` und `docs/hashmap.md`
+sind gegen ihre öffentlichen Header und Implementierungen abgeglichen:
+Speicherbesitz, Grenzen, Allokationen, Selbstkopien beziehungsweise Aliasing,
+Fehlerausgaben, Traversierung und Zeigerlebensdauer. Der Array-Text nennt nun
+ausdrücklich die nötige externe Synchronisation. String-Views unterscheiden
+überlappende Daten von einem überschriebenen, weiter benötigten Descriptor.
+Die Hashmap-Anleitung erklärt den Besitz einer zuvor über den Ausgabezeiger
+referenzierten Map beim erneuten Aufruf ihres Beispielhelpers.
+
+Die drei veröffentlichten C-Beispiele werden jetzt unmittelbar aus ihrem
+jeweiligen Markdown-Codeblock übernommen und mit einer separaten Ergebnisprobe
+übersetzt. Es gibt keine gepflegte zweite Kopie des Beispielcodes. Der native
+Testkatalog führt `documentation_array_example`,
+`documentation_string_view_example` und `documentation_hashmap_example` aus.
+Die Proben prüfen 100 Positionen und Koordinaten, geliehene getrimmte Textbereiche,
+unveränderte Fehlerausgaben sowie den gespeicherten und wiedergefundenen
+Map-Parameter. Codepfade verweisen mittels `#line` auf die veröffentlichte Seite.
+Der Bericht hält die Hashes der mit LF normalisierten Seite, des tatsächlich
+verwendeten Codeblocks und der erzeugten C-Quelle fest. Fehlende oder zusätzliche
+C-Blöcke werden abgewiesen, damit neuer Beispielcode nicht unbemerkt ungeprüft bleibt.
+
+MSVC/ASan besteht alle drei Beispiele, die drei bestehenden Bibliothekstests und
+die Abschnittslinks 7/7 in `run-dbg30_ct`; Linux GCC/ASan/UBSan dieselben sieben
+in `run-8j9zvq0_`. Die abschließende Hashprüfung vergleicht beide Berichte mit
+den aktuellen veröffentlichten Codeblöcken. Die Vorläufe mit jeweils sechs
+Fällen bestehen ebenfalls: `run-phrramcn` und `run-_j2g5uir`.
+Eine isolierte, tatsächlich übersetzte Variante mit nur 99 Positionen statt 100
+wird von derselben Ergebnisprobe abgewiesen. Auch ein zusätzlicher ungetesteter
+Codeblock wird erkannt; `build/native/foundation-counterexample/report.json`
+enthält die Originalergebnisse. Der unabhängige Testläufer besteht zusätzlich
+seine Fehler-, Timeout- und Berichtsfälle unter
+`build/native/foundation-final-runner-proof`.
+
+Der fokussierte Mac-Workflow nimmt die drei Beispielprüfungen in seine native
+Gruppe auf; ihre tatsächliche Mac-Ausführung steht noch aus. Dieser Abgleich
+schließt diese drei Fachanleitungen ein, keinen vollständigen semantischen
+Review aller 185 registrierten Dateien.
+
+## Speicher- und Logging-Anleitungen mit ausgeführten Fragmenten
+
+`docs/memory.md` und `docs/logging.md` nennen jetzt ausdrücklich den Kontext
+ihrer C-Ausschnitte: Funktionsrumpf mit öffentlichem Report-Header beziehungsweise
+Experimentcallback mit gültigem `ps_context` und Experiment-Header. Der
+Sprachausschnitt zum Logging trägt die Kennzeichnung `physim`.
+Speicherbesitz, Arena-Rücksetzung, Freigabereihenfolge, Fehlererhaltung und die
+8-MiB-Serialisierung wurden gegen `include/physim/memory.h`, `src/memory.c`,
+`src/report.c` und `src/series.c` abgeglichen. Logger-Lebensdauer, UTF-8-Grenzen,
+Zeitbezug, Rückgabewerte, Wire-Version und Archivierung stimmen mit
+`include/physim/log.h`, `include/physim/experiment.h`, `src/core.c`,
+`src/protocol.h` und `runners/logging.inc` überein.
+
+Der native Beispielprüfer kann nun einen ausdrücklich gespeicherten
+Funktionskontext vor den unveränderten veröffentlichten Codeblock setzen.
+Die beiden neuen Fälle verwenden ausschließlich die genannten öffentlichen
+Header. Der Speicherausschnitt erstellt und zerstört acht Arena-Berichte.
+Der Logging-Ausschnitt prüft Nachricht, Level, tatsächliche Context-Zeit,
+unveränderten Context, Sinkfehler, ungültige Zeit und alte Context-Größe.
+Die drei bisherigen vollständigen C-Beispiele bleiben aktiv.
+
+Windows MSVC/ASan besteht die fünf Beispiele, Memory, Memory Owners, Logging
+und Abschnittslinks 9/9 in `run-e3q_lsc1`; Linux GCC/ASan/UBSan dieselben neun
+in `run-mklb7n94`. Echte C- und Physim-Runnerläufe bestehen zusätzlich 2/2
+unter Windows in `run-u8redolz` und unter Linux in `run-q6e50xt_`. Sie prüfen
+unter anderem identische JSONL-/Archivmeldungen, CRC-Blöcke, Zeitpunkte,
+exklusive Begleitdateien, Volumenlimit und den optierten Wire-Datenstrom.
+
+Für das alleinstehende Speicherbeispiel aktiviert der native Testläufer in
+Linux-ASan-Builds ausdrücklich LeakSanitizer. Vorhandene ASan-Optionen bleiben
+erhalten; die Option wird nur in die Umgebung dieses Testprozesses übernommen.
+Der Bericht nennt, ob diese Prüfung aktiv war. Die finale Beispielgruppe
+besteht 2/2 unter Windows in `run-2vyj9lan` und 2/2 unter Linux mit aktivem
+Speicher-Leakcheck in `run-eek52xlw`. Die aktuellen Markdown- und Codeblock-Hashes
+beider Gruppen wurden abgeglichen. Daraus wird keine allgemeine Leakfreiheit
+der App oder der übrigen Plattformen abgeleitet.
+
+Eine isolierte, tatsächlich übersetzte Variante ohne Pufferfreigabe erzeugt
+8.388.608 verlorene Bytes in acht Allokationen. Der native Testläufer selbst
+weist diese Variante mit Exit 23 und LeakSanitizer-Bericht ab, obwohl seine
+übergeordnete Umgebung `detect_leaks=0` enthält; die übergeordnete Option bleibt
+unverändert. `build/native/memory-runner-leak-counterexample/report.json`
+bewahrt den erwarteten fehlgeschlagenen Fall `run-425ry99g`. Der separate
+Vorläufer unter `build/native/memory-leak-counterexample/report.json` bestätigt
+denselben tatsächlichen Leak und das saubere Original. Der allgemeine
+Testläufer besteht seine Fehler-/Timeout-/Berichtsfälle unter
+`build/native/memory-log-final-runner-proof`.
+
+Die Mac-Gruppe nimmt beide Beispiele und ihre Kontextdateien auf; die
+Workflow-Pfade erfassen auch spätere Änderungen der fünf Beispielseiten und
+Prüfdateien. Die tatsächliche Mac-Ausführung bleibt offen. Der Inhaltsnachweis
+dieses Abschnitts bezieht sich auf Speicherverwaltung und Logging.
+
+## Eigenständig ausführbares Beispiel zur Laufidentität
+
+Der Identitätsausschnitt in `docs/run-streams.md` verwendete den zuvor
+konfigurierten Store aus dem Schreibabschnitt. Die nötigen Voraussetzungen
+blieben beim isolierten Kopieren des Ausschnitts unsichtbar. Ein tatsächlicher
+Linux-Vorlauf mit einem frisch erzeugten Store weist die Writer-Erstellung
+entsprechend dem API-Vertrag mit Exit 70 ab: Konfiguration und Kanalplan fehlen.
+`build/native/identity-doc-before/report.json` hält diesen Kontextfall fest;
+das ist kein Fehler des Writers und keine Aussage über den vollständig
+vorbereiteten Store im vorherigen Abschnitt.
+
+Das Beispiel konfiguriert jetzt selbst Zeitschritt, Seed, Metadaten und einen
+SI-Kanal, schreibt eine Messzeile und schließt den Writer ausdrücklich vor dem
+Lesen. Es prüft beide IDs, die gelesene Zeile und den finalisierten Abschluss.
+Die kopierte Identität wird auch nach Reader-/Store-Close weiterverwendet.
+`experiment.psrun` muss neu angelegt werden können; diese Voraussetzung steht
+direkt über dem Beispiel. Die identische Quelle liegt unter
+`examples/documentation/run_identity.phys`.
+
+Der neue native Integrationsfall `documentation_run_identity_example` prüft
+zuerst die Gleichheit des veröffentlichten Codeblocks mit dieser Quelle und
+führt dann das tatsächlich kompilierte Programm aus. Beide ID-Zeilen müssen
+exakt erscheinen; der zusätzliche Runtime-Speicherprüfer verlangt am Ende null
+lebende Sprachallokationen. Zusammen mit Run-Stream-, Generationsstilllegungs-
+und Abschnittslinktests bestehen MSVC/ASan unter Windows 4/4 in
+`run-vwltniet` und GCC/ASan/UBSan unter Linux 4/4 in `run-yrr9hj6j`.
+Die Mac-Gruppe erhält denselben Fall; ihre tatsächliche Ausführung steht aus.
+Dieser Nachweis betrifft das Identitätsbeispiel, keinen vollständigen Review
+aller weiteren Run-Stream-Ausschnitte.
+
+## Native Fenstergrenzen und zweite Mac-Prüfrevision
+
+Der erste Mac-Lauf der Readonly-Korrektur, Workflow `38886433661` zur Revision
+`17abb5e`, besteht auf ARM 14/14 native Fälle (`run-cz3yqp68`) und 23/25
+GUI-Fälle (`run-amomed0w`). Das vollständig heruntergeladene ARM-Artefakt
+`12040912398` wurde gegen den veröffentlichten SHA-256 geprüft. Die native
+Probe bricht mit einer `NSInvalidArgumentException` ab: Das moderne
+`NSAccessibilityElement` implementiert den aufgerufenen veralteten Selector
+`accessibilityIsAttributeSettable:` nicht. Diese zusätzliche Testabfrage wird
+entfernt; direkter Setter-Missbrauch mit kollidierenden Button-/Slider-IDs
+bleibt geprüft. Der unabhängige öffentliche AX-Client prüft Readonly weiterhin.
+Das Ergebnis belegt noch keine erfolgreiche externe Readonly-Korrektur.
+
+Der ARM-Inline-Test scheitert an seiner ersten festen Fensterhöhenannahme.
+Bereits ein zuvor erfolgreicher ARM-Lauf zur Revision `4fd04ba` zeichnete das
+große Fenster mit 1100 × 656 statt 1100 × 800 logischen Pixeln auf. SDL 3.2.30
+beschreibt diese native Begrenzung ausdrücklich bei `SDL_SetWindowSize`.
+Der Test bestimmt jetzt vor beiden Größenwechseln die nutzbare Desktopfläche
+und die nativen Fensterrahmen. Er fordert die jeweils kleinere zulässige
+Clientgröße an; mindestens 760 × 540 müssen verfügbar sein. Jede Ansicht muss
+die so berechnete Größe tatsächlich erreichen. Der Python-Prüfer gleicht
+Größenpläne und alle 48 Aufnahmen ab. Zwei Größenwechsel, sechs Themewechsel,
+48 Ansichten und 162 vollständige Formelzeichnungen bleiben vorgeschrieben;
+die Zeitlimits bleiben unverändert.
+
+Windows MSVC/ASan besteht Inline-Text, Navigation und Inline-Formeln 3/3 in
+`run-p1_0xp6j`; Linux GCC/ASan/UBSan besteht dieselben Fälle 3/3 in
+`run-cra0r790`. Ein zusätzlicher Linux-Lauf mit Xvfb/Openbox bei 1100 × 700
+besteht den vollständigen Inline-Formelfall in `run-zkrfk4o2`: Aus 1100 × 800
+werden nach Abzug der Rahmen 1098 × 675, die zweite Größe bleibt 760 × 540.
+Eine Wiedergabe der tatsächlichen Windows-Ausgabe akzeptiert das Original
+und weist sowohl einen manipulierten Zielplan als auch eine falsche tatsächliche
+Aufnahmegröße ab (`build/native/feasible-inline-verifier-proof.json`).
+Die Windows-Aufnahmen 26 und 46 wurden visuell geprüft: Matrix sowie mehrere
+Brüche, Integrale, Indizes und Wurzeln bei 32 px im schmalen Fenster.
+Der Asset-Prüfer bestätigt 193 Ausdrücke, 1351 Displayvarianten, 193
+Inlinevarianten und 197 veröffentlichte Displayblöcke; 31 generierte Referenzen
+sind aktuell. Die Testläufer-Fehlerfälle bestehen unter
+`build/native/feasible-inline-runner-proof`.
+
+Der bisherige Intel-Mac-Lauf ist ebenfalls beendet: 14/14 native Fälle
+(`run-i73a399d`) und 22/25 GUI-Fälle (`run-yl8s2us7`). Neben der veralteten
+Accessibility-Abfrage und dem Inline-Fall erreicht `documentation_math` sein
+45-Sekunden-Limit; seine aufgezeichnete F1-Atlaserstellung dauert etwa 15,35 s.
+Die genaue Inline-Abbruchstelle und der zusätzliche Zeitbefund benötigen noch
+die Auswertung des Intel-Artefakts `12042210634`. Daraus wird kein Beleg für
+einen identischen Höhenfehler oder eine bereits gelöste Zeitursache abgeleitet.
+
+Die externe AX-Prüfung läuft künftig auch nach einem anderen fehlgeschlagenen
+GUI-Fall, sofern die App gebaut wurde und der Workflow nicht abgebrochen ist.
+Ein früherer Fehler bleibt dadurch ein Fehler. Fehlender Zugriff bleibt
+`unavailable`; die Prüfung fordert keine neue Berechtigung an. Clientfehler
+erscheinen zusätzlich mit höchstens 2000 Zeichen ihrer Diagnose im Joblog.
+Die Mac-Gruppe erfasst auch das neue Laufidentitätsbeispiel und dessen
+Quellgleichheitsprüfung. Die tatsächliche Mac-Abnahme dieser Revision sowie
+praktische Screenreader-, DPI-/Monitor- und weitere externe AX-Fälle bleiben
+offen; die Gesamtwertung wird dadurch nicht erhöht.
+
+## Inline-Prüfung nach abgeschlossenem Layout statt festen Warteframes
+
+Das Intel-Artefakt `12042210634` des ersten Korrekturlaufs wurde vollständig
+heruntergeladen und gegen SHA-256
+`be42cf2aa98f116155818cdaf992b0c1442819e54577e3cc41f87d637356fc83`
+geprüft. Der Inline-Fall scheitert dort am internen 60-Sekunden-Zeitlimit
+(60,048 s), nachdem Ansicht 42 aufgenommen wurde. Alle bis dahin berichteten
+Formelzeichnungen sind vollständig. Es ist in diesem Lauf kein früher
+Fensterhöhenfehler wie auf ARM. Die getrennte Math-Probe erreicht vor ihrem
+45-Sekunden-Limit Stufe 10; Hauptschriftvorbereitung, vollständiger F1-Fontbank-
+Aufbau und Linkinventar beanspruchen einen großen Teil ihres Budgets. Dieser
+zusätzliche Kaltstartbefund bleibt offen. Die Vollausgaben liegen unter
+`build/native/mac-readonly-intel-documentation_math-steps.json` und
+`build/native/mac-readonly-intel-documentation_inline_math-steps.json`.
+
+Der Inline-Test wartet jetzt auf ein vorhandenes Layout sowie abgeschlossene
+Sprung-/Scrollaufträge. Zuvor vorgeschriebene zusätzliche Warteframes werden
+entfernt. Die tatsächlichen Zeichenkommandos, Baselines, sichtbaren nativen
+Textbereiche, Fenstergrößen und Rasterbilder bleiben Voraussetzung; die Zahl
+der Ansichten und Formelzeichnungen sowie sämtliche Zeitlimits bleiben gleich.
+Der geänderte Ablauf besteht unter Windows MSVC/ASan in `run-ckktvfhd` und
+unter Linux GCC/ASan/UBSan auf dem kleinen Xvfb/Openbox-Desktop in
+`run-qeaxsi19`. Je Plattform sind alle 48 vollständigen BMP-Dateien bytegleich
+zum jeweiligen Vorlauf (`run-p1_0xp6j` bzw. `run-zkrfk4o2`); sämtliche 162
+Formelrahmen sind ebenfalls identisch. Die Vergleichsberichte liegen unter
+`build/native/observed-inline-{windows,linux}-comparison.json`.
+
+Die einzelnen ungepaarten Laufzeiten betragen unter Windows 26,851 → 17,955 s,
+unter Linux 33,422 → 33,994 s. Daraus wird keine allgemeine Beschleunigung
+abgeleitet. Die gezielt wieder eingebaute sofortige Texturfreigabe wird auch
+mit diesem Ablauf beim tatsächlichen Zeichnen durch OpenGL-Fehler `0x502`
+abgewiesen. Die neue Gegenprobe liegt separat unter
+`build/native/inline-math-observed-counterexample`; frühere Berichte bleiben
+erhalten. Die tatsächliche neue Mac-Ausführung ist weiter erforderlich.
+
+## Ausführbare Ereignis- und Startzeitbeispiele im Run-Stream-Kapitel
+
+Der Ereignisausschnitt in `docs/run-streams.md` setzte einen lebenden Writer
+voraus, ohne seinen Lebenszyklus und den passenden Dateinamen anzugeben.
+Direkt hinter dem vorherigen vollständigen Schreibbeispiel sind Writer und
+Store bereits geschlossen. Eine tatsächlich übersetzte Linux-Ausführung dieser
+beiden unveränderten veröffentlichten Blöcke endet an `appendEvent()` mit
+Exit 70 und `RunWriter is closed`. `build/native/events-doc-before/report.json`
+hält diesen belegten Kontextfehler fest; er ist kein Fehler des Writer-Vertrags.
+
+Das Ereignisbeispiel ist jetzt vollständig: neuer konfigurierter Store,
+SI-Kanal, eine Messzeile, eine Warnung und expliziter Writer-Abschluss vor dem
+Lesen. Separate Reader prüfen Ereignis und Messzeile sowie jeweils den
+vollständigen Dateischluss. Level, Ereigniszeit, Unicode-Nachricht und
+Messzeilenanzahl sind ausdrücklich geprüft. Der kopierte Nachrichtenstring
+wird nach dem Schließen weiterverwendet. Der Dateiname und die Voraussetzung,
+dass die Datei noch nicht existiert, stehen direkt am Beispiel.
+
+Das Startzeitprogramm öffnet anschließend genau diese Datei. Seine
+Voraussetzung ist mit dem Ereignisabschnitt verlinkt. Es vergleicht die
+archivierte Startzeit mit der vollständigen Metadaten-Dekodierung und prüft die
+unabhängigen Werte nach Reader-/Store-Close. Die Anleitung unterscheidet die
+aktuelle Abfragezeit von der archivierten Writer-Startzeit und verlangt keine
+anfällige Gleichheit mit der laufenden Wanduhr. Beide vollständigen Quellen
+liegen unter `examples/documentation/run_events.phys` und
+`examples/documentation/run_start_time.phys`.
+
+`documentation_run_events_example` prüft die Quellgleichheit beider
+veröffentlichten Blöcke, führt beide tatsächlich kompilierten Programme in
+der nötigen Reihenfolge aus und verlangt ihre exakten Ausgaben. Beide
+Sprachprogramme müssen ohne lebende Runtime-Allokationen enden. Zusammen
+mit den vorhandenen Ereignis-, Startzeit-/Codec- und Abschnittslinkfällen
+besteht Windows MSVC/ASan 4/4 in `run-s6thfauo`, Linux GCC/ASan/UBSan 4/4
+in `run-gxc38ady`. Der native Parser bestätigt 219 Abschnittslinks auf
+185 Seiten. Die Mac-Gruppe erfasst den zusätzlichen Fall und beide Quellen;
+ihre tatsächliche Ausführung bleibt offen. Der Nachweis betrifft diese
+Anleitungen und ersetzt keinen vollständigen Review der übrigen Seiten.
+
+## Tatsächliche manuelle F1-Prüfung und begrenzter Narrator-Nachweis
+
+Nach der ausdrücklichen erneuten Freigabe der Desktop-Prüfung wurde die lokale
+Windows-App auf dem Stand `18958b1` über den Computer-Use-Skill bedient. Der
+geprüfte Viewer hat SHA-256
+`e83da634131bf7236d299db5d3d7a6ca8dd9be51cef9e7e338fe0d1b91a137fa`.
+F1 öffnet aus dem leeren Workspace ein eigenes Hilfefenster. Die globale Suche
+nach Numerik erreicht die Anleitung; die zuvor getrennten Listenfortsetzungen
+stehen jetzt beim jeweiligen Integrationsverfahren. Bewegungsgleichung und
+Toleranzformel sind sichtbar gesetzt. Ctrl+Plus wechselt von 16 auf 18 px;
+Ctrl+F wählt sichtbar das Suchfeld des aktuellen Dokuments.
+
+Die vorhandene Windows-Sprachausgabe wurde gestartet. Nach Schließen ihrer
+reinen Neuigkeitenanzeige wurde der tatsächliche Speech-recap-Verlauf gelesen.
+Er bestätigt nach Ctrl+F: `Physim | Dokumentation document, Aktuelles Dokument
+durchsuchen, edit, Numerik`. Dies ist eine echte assistive Beobachtung des
+Fenstertitels sowie des Feldnamens, der Rolle und des Werts. Die Screenshots
+und ihr Bericht liegen unter `build/native/manual-f1-18958b1`:
+`narrator-search-recap.jpg`, `rk45-search.jpg` und `report.json`.
+Die nativen JPEG-Captures wurden unverändert und mit Hashes gesichert.
+
+Microsoft beschreibt den verwendeten Sprachverlauf mit Narrator+Alt+X im
+[aktuellen Narrator-Grundlagenkapitel](https://support.microsoft.com/en-us/accessibility/windows/narrator/chapter-2-narrator-basics).
+Es wurden keine Windows-Taste, keine neuen Programme und keine Berechtigungs-
+oder Sicherheitseinstellungen verwendet. Die vollständige Dokumentleseaufgabe,
+Link-/Tabellenbedienung und mathematische Navigation sind damit noch nicht
+abgenommen. Der beobachtete Suchfeldfall allein begründet keine höhere
+Gesamtwertung.
+
+Der Desktop-Prüfer meldet zeitweise das globale Feld als fokussiert, obwohl
+sichtbar das lokale Feld aktiv ist. Seine native lokale SetValue-Aktion meldet
+ein Zeitlimit; die anschließende neue Beobachtung bestätigt jedoch den gesetzten
+Wert `akzeptierten` und drei Treffer samt RK45-Einzelschrittabschnitt. Es wurde
+kein blinder Wiederholungsaufruf ausgeführt. Die Ursache dieses Fokus-/Werkzeug-
+Befunds ist offen. Vor einem abschließenden Eingabeversuch sind beide App-
+Fenster und die Narrator-Fenster verschwunden; eine neue Fensterauswahl und die
+Prozessabfrage bestätigen ihre Abwesenheit. Passende Application-Fehlerereignisse
+wurden im abgefragten 30-Minuten-Intervall nicht gefunden. Das beweist keine
+bestimmte Beendigungsursache. Die Apps wurden danach nicht neu gestartet.
+
+## Unabhängige Prüfung der tatsächlich gemeldeten Windows-Fokusidentität
+
+Der bisherige Windows-Feldclient setzte Werte und Fokus, fragte aber nicht
+`IUIAutomation::GetFocusedElement` gegen das erwartete Feld ab. Der ergänzte
+Befehl `focused-field` verändert den Fokus nicht. Er vergleicht das globale
+Fokuselement mit dem zuvor über Name, Rolle und Prozess gefundenen Feld und
+verlangt zusätzlich dessen `HasKeyboardFocus`. Drei aufeinanderfolgende
+Beobachtungen müssen übereinstimmen. Ein vorübergehend entferntes Element darf
+bis zur begrenzten Frist erneut abgefragt werden; andere API-Fehler bleiben
+Fehler. Das entspricht dem
+[Microsoft-Vertrag von GetFocusedElement](https://learn.microsoft.com/en-us/windows/win32/api/uiautomationclient/nf-uiautomationclient-iuiautomation-getfocusedelement).
+
+Der wirkliche App-Ablauf hält die beiden Felder für die externe Abfrage bereit.
+Nach lokaler Suche, Unicode-Auswahl und Textersetzung folgt die globale Suche;
+danach prüfen Tab und Ctrl+F die Rückkehr zum lokalen Feld, ohne dass der
+Client diesen Rückkehrfokus selbst setzt. Der Linux-AT-SPI-Client benutzt
+dieselben Abschlussmarker und prüft die zurückgekehrte native Fokus-Eigenschaft.
+Editorinhalte und Simulation bleiben unverändert.
+
+Windows MSVC/ASan besteht die erweiterte Feldprüfung zunächst in `run-dhyavoiq`
+und abschließend zusammen mit dem nativen Textscroll-Nachbarn 2/2 in
+`run-jcsh9nhl`. Linux GCC/ASan/UBSan besteht den erweiterten AT-SPI-Ablauf in
+`run-rhh4cv5z`. Die Testläufer-Fehlerfälle bestehen unter
+`build/native/field-focus-runner-proof`. Der Produktionsprovider wurde dafür
+nicht verändert. Die isolierte Gegenprobe unter
+`build/native/wrong-root-focus-counterexample/final-report.json` ersetzt nur
+dessen Root-Fokusantwort durch das erste Eingabefeld. Der finale Client weist
+dies mit `property=1 same=0` ab: Die erwartete eigene Fokus-Eigenschaft allein
+würde diesen Widerspruch nicht erkennen. Aktuelle normalisierte Providerquellen, positive
+Ergebnisse und Gegenprobe wurden in `build/native/field-focus-review.json`
+zusammen abgeglichen.
+
+Ein erneuter manueller Vergleich mit dem Desktop-Werkzeug reproduziert dagegen
+keine erfolgreiche Texteingabe: Das Werkzeug nennt das globale Feld als
+fokussiert, während der direkte unabhängige Client weder dessen Fokus-Eigenschaft
+noch dessen globale Fokusidentität bestätigt (`property=0 same=0`). Die App
+reagiert weiter. Die Eingaben wurden nicht blind wiederholt. Beide eigenen
+Prüffenster des leeren Workspaces wurden anschließend geschlossen und ihre Abwesenheit erneut
+beobachtet. Die Ursache des manuellen Werkzeug-/Fokusbefunds bleibt offen;
+daraus wird weder eine behobene Produktionsursache noch eine vollständige
+Narrator-Abnahme abgeleitet. Die Gesamtwertung bleibt unverändert.
+
+## Build-Anleitung ohne veraltete feste Katalogzahlen
+
+`docs/build.md` nannte noch 724 Fälle ohne Fenster, 695 Fälle ohne App und
+75 Grafikabläufe. Die tatsächliche Katalogauswahl des aktuellen Quellstands
+enthält 744 Fälle ohne Fenster und 709 ohne App. Die Enumeration liefert
+146 Grafikfälle für Windows und 143 für Linux/macOS. Diese Zahlen wurden nur
+aus den Definitionen ermittelt, nicht als ausgeführte Plattformtests gewertet;
+`build/native/catalog-doc-before.json` trennt diese Aussage ausdrücklich.
+
+Die Anleitung erklärt jetzt die tatsächlich implementierte Auswahl nach
+Betriebssystem, App-Build und wiederholbaren Filtern sowie die Ausgaben
+`TEST`, `Native tests` und `results.json`. Veraltete Detailzahlen zu Sprach-,
+Runtime-, Integrations- und Quellgleichheitsfällen entfallen. Die beschriebenen
+Prüfbereiche und Befehle bleiben konkret. Die Diagnoseanleitung beschreibt den
+vorhandenen Werttyp ohne eine frühere Produktversion als aktuellen Stand
+erscheinen zu lassen. Header und Implementierung bestätigen weiterhin die
+Grenzen und das Fehlerverhalten von `ps_diagnostic`.
+
+Die reale CLI-Hilfe wurde ausgeführt; die unzulässige Kombination aus
+`--test-display` und `--no-app` wird mit Exit 2 und der beschriebenen Diagnose
+abgewiesen. Die bestehenden nativen Abschnittsprüfer bestätigen unter Windows
+und Linux jeweils 219 Abschnittslinks und 185 Seiten. Die Ausgaben liegen unter
+`build/native/catalog-doc-anchors-{windows,linux}.log`. Für die redaktionelle
+Änderung wurden keine neuen spiegelnden Tests eingeführt.
+
+## Zweite Ursache der Mac-Readonly-Metadaten und native Rahmenabfrage
+
+Der Mac-Lauf `38892172245` zur Revision `18958b1` ist auf beiden Architekturen
+beendet. Intel besteht 18/18 native Fälle in `run-k6l1ojmo` und 24/25 GUI-Fälle
+in `run-2myw1bup`; ARM besteht 18/18 in `run-20qy2vsq` und 24/25 in
+`run-o8s_aqnz`. Beide Joblogs wurden gelesen. Die neue In-Prozess-Probe stürzt
+nicht mehr an der entfernten veralteten Methode ab. Damit besitzen auch die
+fünf veröffentlichten C-Beispiele sowie die Laufidentitäts-, Ereignis- und
+Startzeitprogramme tatsächliche Mac-Ausführungen auf beiden Architekturen.
+
+Der Inline-Fall scheitert auf beiden Macs vor dem ersten Größenwechsel an
+`SDL_GetWindowBordersSize`: Die verwendete Cocoa-Implementierung unterstützt
+diese Abfrage nicht. Intel zeigt nutzbare 1920 × 970, Rahmenwerte null und ein
+unverändert 1080 × 780 großes Fenster; ARM ein unverändert 1024 × 656 großes
+Fenster. Das ist keine Abnahme der Zielgrößen. Der
+[SDL-3.2.30-Dispatcher](https://raw.githubusercontent.com/libsdl-org/SDL/release-3.2.30/src/video/SDL_video.c)
+initialisiert die Ränder mit null und liefert bei fehlendem Backend
+`SDL_Unsupported`. Der Korrekturkandidat benutzt auf macOS den von SDL
+veröffentlichten NSWindow-Zeiger und dessen
+[contentRectForFrameRect-Konvertierung](https://developer.apple.com/documentation/appkit/nswindow/contentrect(forframerect:)).
+Typisierte direkte IMP-Aufrufe berücksichtigen die CGRect-Rückgabe auf Intel
+und ARM. Endliche nichtnegative Rahmen werden vor der Größenplanung ermittelt;
+alle 48 Ansichten, 162 Formelzeichnungen und bisherigen Zeitlimits bleiben
+vorgeschrieben. Windows und Linux verwenden weiterhin ihre SDL-Abfrage.
+
+Die externe AX-Prüfung läuft jetzt trotz des gesonderten GUI-Fehlers. Auf
+beiden Macs besitzt der unabhängige Client bereits Zugriff, meldet den
+Dokumentwert aber weiterhin als schreibbar und scheitert strikt an Zeile 97.
+Der vollständig geladene Intel-Download `12043097638` wurde gegen SHA-256
+`b3a0f597c2f1b256b83a5826a9fae6080ce064e96636d8e6136a2bc784c0df1a`
+geprüft. Sein extern gelesener Text stimmt mit der Git-Quelle von `18958b1`
+samt zwei Schluss-LF überein: 486.670 UTF-8-Bytes und 481.208 UTF-16-Einheiten.
+Der Ende-Reveal wird wegen des Readonly-Fehlers noch nicht angefordert.
+`build/native/mac189-intel-review.json` hält diese Teilabnahme fest; das
+ARM-Artefakt `12043313733` wurde hier nicht zusätzlich heruntergeladen.
+
+Die erste Getter-Korrektur hatte zwar den eigenen Dokumentsetter entfernt,
+aber den schreibenden Control-Setter weiterhin als Vorfahrenmethode behalten.
+Der neue Kandidat teilt nur Speicherung und Lebensdauer über eine gemeinsame
+NSAccessibilityElement-Basisklasse. Lesedokument und Controlklasse sind nun
+Geschwister. Die Dokumentklasse überschreibt ihren Getter und erbt keinen
+custom Control-Wertsetter; ihre erlaubte Sichtbarmach-Anforderung bleibt
+vorhanden. Die native Probe prüft diese Vererbung sowie den Schutz gegen einen
+ausdrücklich direkt aufgerufenen Control-Handler mit kollidierender Button-
+oder Slider-ID. Die vorherige Annahme, Getter-Override allein reiche in der
+alten Control-Vererbung, ist durch den externen Lauf widerlegt.
+[Apples Getter-/Setter-Vertrag](https://developer.apple.com/documentation/appkit/nsaccessibilityprotocol)
+begründet den neuen Ansatz, bestätigt aber noch nicht dessen tatsächliche
+AX-Metadaten. Der unabhängige Client bleibt unverändert streng.
+
+Windows MSVC/ASan besteht native Accessibility, den unabhängigen Feldclient
+und Inline-Formeln 3/3 in `run-gopggh3c`; Linux GCC/ASan/UBSan besteht den
+unabhängigen AT-SPI-Feldclient und Inline-Formeln 2/2 in `run-jwid7el9`.
+Diese Läufe prüfen die jeweiligen Plattformzweige und gemeinsame Nachbarn.
+Die neue AppKit-Rahmenabfrage, Klassenlebensdauer und externe Readonly-Angabe
+benötigen ihre tatsächliche nächste Mac-Ausführung. Es wird keine erfolgreiche
+Mac-Korrektur oder höhere Gesamtwertung vorweggenommen.
+
+### Veröffentlichtes Diagramm-Beispiel tatsächlich ausführen
+
+Die Report-Anleitung benennt jetzt die nötige Samplezuordnung, bereits
+berechnete Geschwindigkeitswerte und den vollständigen Pfad des Analysemoduls.
+Der exakte veröffentlichte C-Block wird durch den bestehenden Extraktor gebaut;
+der ergänzende Test schreibt einen Bericht, zerstört den Analysekontext und
+liest Titel, Herkunft, Achseneinheiten und sämtliche gespeicherten Punkte wieder.
+Gleich lange unabhängig angelegte Reihen sowie falsche Dimensionen werden
+abgewiesen. Ein zweiter Schreibversuch mit anderen Werten liefert `PS_IO`;
+die ursprünglichen Punkte bleiben erhalten. Einheiten werden feldweise geprüft,
+ohne undefinierte Paddingbytes zu vergleichen.
+
+Windows MSVC/ASan besteht Beispiel, Report-Regression und Abschnittslinks **3/3**
+in `run-lcsgmz8m`; Linux GCC/ASan/UBSan besteht dieselben Fälle **3/3** in
+`run-er3lzd09`, das Beispiel zusätzlich mit aktivierter Leakprüfung. Beide
+Ergebnisse erfassen denselben Codehash
+`6cf7bdbda3e5e2448b2272ec6550f8335dc2d94cd34ddcb397fa72f0bf46b210`.
+Das belegt die C-Anleitung und gespeicherten Berichtsdaten; eine zusätzliche
+visuelle Diagramm- oder Exportabnahme folgt daraus nicht. Der Mac-Workflow
+nimmt den neuen Fall auf; seine Ausführung ist noch offen.
+
+Die Laufübersicht unterscheidet außerdem die weiterhin lineare
+Vergleichsvorlage von der bereits verfügbaren Reihen-API mit Previous,
+Nearest, Linear und PCHIP. Eine zusätzliche Interpolationsauswahl in der
+Vorlage wird weiterhin als offen beschrieben.
+
+### Fortgesetzte tatsächliche Windows-/Narrator-Prüfung
+
+Nach ausdrücklicher Wiederaufnahme der Desktop-Prüfung wurde das normale
+Physim-Binary der Revision `e27ea16` gestartet (SHA-256
+`f775abac7d2ff893b584e1db16d6657a9b8c96f5cd54a96743480231225e3c09`).
+Der Menüweg Hilfe → Handbuch öffnet das getrennte Fenster. Die globale Suche
+führt zur Numerikseite. Die Listen, Bewegungsgleichung, Toleranz mit Indizes
+und der RK45-Akzeptanzbruch wurden bei 16 beziehungsweise 18 px tatsächlich
+betrachtet; die vergrößerte Ansicht bleibt lesbar. Das ist kein neuer
+DPI-/Monitorwechsel- oder vollständiger Seitenkatalognachweis.
+
+Der Sprachverlauf des vorhandenen Windows Narrator bestätigt die globale
+Suchfeldansage und anschließend „Aktuelles Dokument durchsuchen, edit,
+Numerik“. Nach Ctrl+F besteht der unveränderte unabhängige UIA-Feldclient:
+`HasKeyboardFocus` und `GetFocusedElement` stimmen überein. Tab bewegt den
+sichtbaren Rahmen zu „Vorheriger“ und weiter zu „Nächster“.
+
+Für diese Buttons erscheint im beobachteten Sprachverlauf keine entsprechende
+Ansage. Eine isoliert gebaute Kopie des vorhandenen lesenden Feldclients
+verwendet deshalb ausschließlich den Button-Typfilter und den Befehlsnamen
+`focused-button`; der Fokusvergleich bleibt identisch. Bei sichtbar fokussiertem
+„Vorheriger“ findet sie den aktivierten Button (Rolle 50000), scheitert aber
+mit `property=0 same=0`, Exitcode 1. Der Client setzt dabei weder Fokus noch
+Werte. Damit ist eine zusätzliche Abweichung zwischen sichtbarer F1-Tabfolge
+und nativer Fokussemantik belegt. `documentation_focus_draw` zeichnet den
+Rahmen, veröffentlicht selbst aber keinen semantischen Fokus. Die vorhandene
+Scroll-Regression verlangt nach Tab sogar ausdrücklich fehlenden nativen
+Fokus; die weitere Korrektur muss daher Navigation, native Eingaberouten und
+diese Erwartungen gemeinsam betrachten. Eine abgeschlossene Ursache oder
+bereits behobene Screenreader-Lücke wird hier nicht behauptet.
+
+`build/native/manual-f1-resumed/report.json` hält Bild-/Clienthashes und den
+begrenzten Befund fest. Vollständiges Lesen, Link-/Tabellenaufgaben und
+mathematische Screenreader-Navigation bleiben offen; die Gesamtwertung steigt
+nicht aufgrund der bestätigten Suchfeldansage.
+
+### F1-Tastaturfokus und native Semantik verbinden
+
+Die gemeinsame SDL-Schicht kann jetzt einen vom F1-Tastaturweg gezeichneten,
+aktivierten Control aus dem aktuellen Semantikentwurf übernehmen. Der Abgleich
+berücksichtigt Nuklear-Fenster, sichtbaren Clip und Geometrie. Die bisherige
+F1-Reihenfolge steuert weiterhin die Tasten; der native Adapter veröffentlicht
+denselben Fokus. Ein zweiter generischer Tastenweg wird dabei nicht ausgeführt.
+Gewährte externe Fokusanforderungen übernehmen die Steuerung zurück, ebenso
+Pointer-/Fensterfokuswechsel. Der zusätzliche generische Controlrahmen wird für
+die eigene Tastaturroute unterdrückt, damit deren vorhandener Rahmen genügt.
+Interne Links werden nach ihrer semantischen Registrierung nochmals zugeordnet.
+
+Die erweiterte vorhandene externe Feldprobe verlangt nun auch nativen Fokus nach
+Tab auf „Vorheriger“, weiter auf „Nächster“ und zurück mit Shift+Tab. Der lesende
+Windows-Client besitzt dafür `focused-button` mit derselben strikten Prüfung aus
+Property und globalem `GetFocusedElement`. Er setzt keinen Fokus. Die bisherige
+Scroll-Probe verlangt jetzt tatsächlich den fokussierten Button statt ausdrücklich
+fehlenden nativen Fokus.
+
+Die unveränderte Produktfassung vor dieser Korrektur scheitert unter Linux exakt
+an `button focus PREVIOUS` (`run-y11742yd`), nachdem Suchfelder, Unicode-Auswahl
+und Ctrl+F-Rückkehr bestanden haben. Die Korrektur besteht unter Linux
+GCC/ASan/UBSan **4/4** in `run-zto7nomt`: Tastatur, Navigation, externe AT-SPI-
+Feld-/Buttonprobe und externe Links. Alle drei Buttonphasen wurden ausgeführt;
+der externe Fokuswechsel zurück zur globalen Suche bleibt erhalten.
+
+Windows MSVC/ASan besteht **4/6** in `run-lt1egx9v`: native Accessibility,
+F1-Tastatur, Feldscrollen und Navigation. Externe Felder und Links scheitern
+zunächst bei nativen Fokusprüfungen. Der gezielte Wiederlauf `run-ls2oj_b6`
+besteht Links, scheitert aber bereits beim lokalen Suchfeldfokus. Frühere
+Vorläufe scheiterten außerdem vor den neuen Buttonphasen an einem Suchfeld-
+Zeitlimit beziehungsweise einer nicht verfügbaren Textauswahl. Diese Ergebnisse
+werden nicht zu einer vollständig grünen Windows-Gruppe zusammengefasst.
+Das Linkprotokoll belegt OS-Tastaturfokusverlust; eine alleinige Produktionsursache
+für sämtliche Windows-Abweichungen ist damit nicht bewiesen.
+
+Die normale korrigierte Windows-App wurde deshalb tatsächlich mit dem vorhandenen
+Narrator bedient: F1, Ctrl+F, Tab, Tab und Shift+Tab. Der unabhängige Client
+bestätigt für alle drei Buttons Property und globales Fokusobjekt (Rolle 50000).
+Der tatsächliche Narrator-Sprachverlauf nennt nacheinander „Vorheriger, button“,
+„Nächster, button“ und „Vorheriger, button“. Das Binary besitzt SHA-256
+`a804180a70fe0a92f98829c40aca53f29bd3d224c6b21dba84c268a9a5243304`.
+`build/native/button-focus-manual/report.json` bindet diese Belege an Quellen-
+und Bildhashes; der Runner-Selbsttest in `button-focus-runner-proof` besteht.
+
+Damit ist die konkrete zuvor beobachtete Tab-Button-Lücke auf Windows und Linux
+belegt korrigiert. Der vollständige Windows-Feldablauf bleibt instabil und offen.
+Ein Lesebereich ohne interaktiven Control besitzt durch diese Änderung noch keine
+neue native Fokusrolle. Vollständige Lesereihenfolge, Links-/Tabellenaufgaben mit
+Screenreader, strukturierte Mathematik und die aktuelle Mac-Ausführung bleiben
+weiter erforderlich. Aus dieser begrenzten Korrektur folgt keine Höchstwertung.

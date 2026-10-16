@@ -159,21 +159,22 @@ gleichzeitig laufender Compiler. Ein exklusives Betriebssystem-Lock verhindert,
 dass zwei Builds denselben Ausgabeordner verändern. Ein Compiler-/Linkerfehler
 erhält das zuvor veröffentlichte Programm; der nächste Aufruf holt fehlende Schritte nach.
 
-Der aktuelle Katalog enthält unter macOS **724** Tests ohne Fenster für
-`--test`, darunter **695** Prüfungen ohne SDL-Abhängigkeit mit `--no-app`. Die C-Prüfungen decken Mathematik, Numerik,
+Der direkte Katalog wählt die für das laufende Betriebssystem registrierten
+Tests aus. `--test` führt die Fälle ohne Fenster aus; mit `--no-app` entfallen
+zusätzlich die Fälle mit SDL-Abhängigkeit. Die C-Prüfungen decken Mathematik, Numerik,
 Mechanik, Messung, Datenreihen, Speicher, Sprachkern, Protokoll, Berichte und
 App-Modelle ab. Auch die bestehenden Mutationsprüfungen und die erwartete
 Laufzeitfehler-Diagnose der Sprachspeicherverwaltung bleiben enthalten.
-Hinzu kommen 217 übersetzte Sprachprogramme und 74 Gruppen mit insgesamt 714
+Hinzu kommen übersetzte Sprachprogramme und gruppierte
 Compilerprüfungen für Sequenzen, Generics, Überladungen, Strukturinitialisierer,
 Kontrollfluss, optionale Werte, Unicode, physikalische Einheiten, Compileraufrufe
-und Modulimporte. Diese prüfen 687 erwartete Fehlerfälle sowie gültige Quellen,
+und Modulimporte. Diese prüfen erwartete Fehlerfälle sowie gültige Quellen,
 erzeugten C-Code, Version, Größenbegrenzung und Abhängigkeitslisten. Die
-ausführbaren Fälle schließen 187 erwartete Laufzeitfehler und zwei geladene
+ausführbaren Fälle schließen erwartete Laufzeitfehler und geladene
 Experimentmodule mit Create-/Reset-/Step-/Scene-/Destroy-Prüfung ein. Das
 `attempt`-Modul prüft auch die Erholung nach einem Fehler. Der Katalog
 `tests/native_language_cases.json` enthält die Erwartungen für den direkten Läufer.
-Vier weitere Abläufe bauen Experiment-/Analysemodule und führen sie mit den
+Weitere Abläufe bauen Experiment-/Analysemodule und führen sie mit den
 separaten Runnern aus. Neben Generics prüfen sie das Lesen von Datenreihen,
 Quantile und den Export mehrerer CSV-Spalten. Geprüft werden Rückgabecodes,
 Diagnosen, erzeugte Dateien, exakter CSV-Inhalt und das Ausbleiben abgelehnter
@@ -185,22 +186,22 @@ Zusätzliche Modulsuchpfade werden auch beim Übersetzen ausführbarer Programme
 übergeben. Die Importprüfungen kontrollieren lokale Priorität, die Reihenfolge
 der Suchpfade, doppelte Abhängigkeiten und zyklische Imports.
 
-Der Katalog `tests/native_runtime_cases.json` übernimmt außerdem alle 203 Programme
-des bisherigen nativen Sprachtests: 29 erfolgreiche Läufe und 174 erwartete
-Laufzeitfehler. Bei 56 Programmen kontrolliert derselbe C-Prüfzusatz in beiden
+Der Katalog `tests/native_runtime_cases.json` beschreibt außerdem erfolgreiche
+Läufe und erwartete Laufzeitfehler des nativen Sprachtests.
+Bei den mit Speicherbilanzprüfung markierten Programmen kontrolliert derselbe C-Prüfzusatz in beiden
 Buildwegen, dass keine belegten Bytes nach Programmende oder Fehlerabbruch bleiben.
-Vier weitere C-Tests prüfen diesen Zusatz mit normalen Rückgaben, Fehlerabbrüchen
+Eigene C-Tests prüfen diesen Zusatz mit normalen Rückgaben, Fehlerabbrüchen
 und absichtlich gesetzten Restbytes. Änderungen an Testheadern bauen die betroffenen
 Testprogramme neu.
-Zwei zusätzliche Prüfungen verlangen die richtige Physim-Zeile in einem absichtlich
+Zusätzliche Prüfungen verlangen die richtige Physim-Zeile in einem absichtlich
 ausgelösten C-Compilerfehler sowie unveränderte C-Quellen und Programme nach
 abgelehnter Quellübersetzung. Der letzte vollständige Programmstand muss weiterhin
 ausführbar sein; Prüfsummen vor und nach dem Fehler stehen im Ergebnisbericht.
 
-`tests/native_integration_cases.json` beschreibt weitere 56 Prüfungen ohne Fenster mit 86
-Ausführungsschritten. Sie bauen 63 Physim-Programme/-Module und 72 C-Module/-Prüfer
-und verwenden 14 bereits gebaute Programme und Beispielmodule sowie den aktuellen
-Python-Interpreter. Die vorhandenen
+`tests/native_integration_cases.json` beschreibt weitere Abläufe mit einzelnen
+Ausführungsschritten und den dafür benötigten Programmen. Je nach Fall werden
+Physim-Programme/-Module und C-Module/-Prüfer gebaut oder bereits gebaute
+Programme, Beispielmodule und der aktuelle Python-Interpreter verwendet. Die vorhandenen
 C-Prüfer vergleichen unter anderem Pendelintegratoren, Kollisionen, Auftrieb,
 Sensoren, Kontakte, Gelenke, gekoppelte Körper und schnelle Kugeln mit den
 Physim-Modellen. Sie prüfen Messdateien, Szenen, Analyseberichte, Einheiten,
@@ -218,12 +219,21 @@ jeweilige Ablauf seine Messdaten im eigenen Arbeitsordner. Gemeinsam genutzte
 Messdateien und ein gesonderter Bereinigungsschritt entfallen damit.
 Auch die C- und Physim-Beispiele aus der Dokumentation werden ausgeführt.
 
-Vier zusätzliche Prüfungen vergleichen elf Codeblöcke der Tutorials mit den
-getesteten Quelldateien. Eine weitere kontrolliert die erzeugte API-Referenz.
+Quellgleichheitsprüfungen vergleichen die veröffentlichten Codeblöcke der
+Tutorials und Anleitungen mit den getesteten Quelldateien. Dazu gehören auch
+die Laufidentitäts-, Ereignis- und Startzeitbeispiele im Run-Stream-Kapitel.
+Weitere Prüfungen kontrollieren die erzeugte API-Referenz.
 Der PNG-Ablauf erzeugt seine Bilder selbst und prüft deren dekodierte Pixel.
 Der Projektbuild-Test baut und startet C- und Physim-Projekte und prüft unveränderte
 Builds, Headeränderungen, Fehlererholung, die Buildsperre und verschobene Ordner.
 Diese Prüfungen verwenden denselben direkten Katalog und benötigen Python ab 3.10.
+
+Die genaue Fallzahl hängt vom Projektstand, Betriebssystem, App-Build und den
+gewählten Filtern ab. `TEST <Name>: <Status>` zeigt die ausgeführten Fälle;
+am Ende nennt `Native tests: <bestanden>/<gesamt>` ihre tatsächliche Anzahl und
+den Ergebnisordner. Dessen `results.json` enthält die einzelnen Resultate.
+Eine Katalogdefinition oder eine frühere Fallzahl belegt keine erfolgreiche
+Ausführung der aktuellen Auswahl.
 
 ```sh
 # Nur die direkt unterstützten Sprachtests ausführen:
@@ -243,7 +253,8 @@ und das erneute Öffnen einschließlich beschädigter Katalogdateien.
 
 ### Fenster- und Grafiktests direkt ausführen
 
-`--test-display` führt zusätzlich 75 Fenster- und Grafikabläufe aus. Dafür sind
+`--test-display` führt die für das laufende Betriebssystem registrierten
+Fenster- und Grafikabläufe aus. Dafür sind
 eine grafische Sitzung, SDL und ein geeigneter OpenGL-Treiber erforderlich.
 Die beiden Testgruppen werden getrennt gestartet; `--test-display` lässt sich
 nicht mit `--no-app` oder `--test` kombinieren.

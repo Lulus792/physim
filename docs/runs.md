@@ -110,8 +110,11 @@ Die App kopiert außerdem den Analysequellcode nach `<präfix>.source.c` beziehu
 Die Liste durchsucht nur den direkten `runs`-Ordner und zeigt höchstens 4096 Dateien.
 Bei Überschreitung erscheint eine Warnung; die enthaltene Teilmenge ist nicht
 garantiert die neueste. Ungültige oder unlesbare Einträge werden übersprungen und
-gezählt. Projektübergreifende Auswahl und weitere Interpolationsverfahren sind
-offen. [Plotzoom und Diagrammexport](reports.md) verändern die gespeicherten
+gezählt. Projektübergreifende Auswahl und die Wahl eines anderen
+Interpolationsverfahrens in der Vergleichsvorlage sind offen. Die
+[Reihen-API](series.md) bietet bereits Previous, Nearest, Linear und PCHIP;
+die oben beschriebene Vorlage verwendet weiterhin Linear.
+[Plotzoom und Diagrammexport](reports.md) verändern die gespeicherten
 Messwerte nicht.
 
 

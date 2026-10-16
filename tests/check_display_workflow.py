@@ -1669,6 +1669,28 @@ def main():
         elif args.case == "documentation_inline_math":
             output=flow.steps[-1]['stdout']
             require('INLINE MATH SELF-TEST: PASSED count=48' in output,'Missing inline math completion')
+            require('INLINE MATH TRANSITIONS: resizes=2 themes=6 ' in output,'Unexpected inline window/theme transition coverage')
+            windows=re.findall(r'INLINE MATH WINDOW: case=(\d+) wanted=(\d+)x(\d+) usable=(\d+)x(\d+) borders=(\d+),(\d+),(\d+),(\d+) target=(\d+)x(\d+)',output)
+            require(len(windows)==2,'Missing native inline window plans')
+            targets=[]
+            for index,record in enumerate(windows):
+                case,want_w,want_h,usable_w,usable_h,top,left,bottom,right,width,height=map(int,record)
+                available_w,available_h=usable_w-left-right,usable_h-top-bottom
+                require((case,want_w,want_h)==((0,1100,800) if index==0 else (24,760,540)),
+                        'Unexpected inline window plan')
+                require(available_w>=760 and available_h>=540 and
+                        (width,height)==(min(want_w,available_w),min(want_h,available_h)),
+                        'Inline window target does not match native usable desktop')
+                targets.append((width,height))
+            captures=re.findall(r'DOCUMENTATION CAPTURE: docs-inline-math-(\d+)\.bmp logical=(\d+)x(\d+) pixels=(\d+)x(\d+) font=(\d+) body=([0-9.]+)',output)
+            require(len(captures)==48 and [int(r[0]) for r in captures]==list(range(48)),
+                    'Missing actual inline window captures')
+            for case,width,height,pixel_w,pixel_h,font,body in captures:
+                case=int(case)
+                require((int(width),int(height))==targets[case//24] and
+                        int(font)==(16 if case<24 else 32) and
+                        int(pixel_w)>0 and int(pixel_h)>0 and float(body)>0,
+                        'Inline capture differs from planned native size or font')
             records=re.findall(r'INLINE MATH DRAW: case=(\d+) item=(\d+) font=(\d+) theme=(\d+) complete=(\d+) frame=(\d+),(\d+),(\d+),(\d+)',output)
             require(len(records)==162,'Missing inline formula draws')
             for case in range(48):

@@ -1,6 +1,21 @@
 {
   "format": 1,
   "artifacts": {
+    "documentation-run-events": {
+      "source": "examples/documentation/run_events.phys",
+      "mode": "--emit-c",
+      "memory_balance": true
+    },
+    "documentation-run-start-time": {
+      "source": "examples/documentation/run_start_time.phys",
+      "mode": "--emit-c",
+      "memory_balance": true
+    },
+    "documentation-run-identity": {
+      "source": "examples/documentation/run_identity.phys",
+      "mode": "--emit-c",
+      "memory_balance": true
+    },
     "accessibility-windows-probe": {
       "sources": [
         "tests/accessibility_windows_probe.c"
@@ -4528,6 +4543,59 @@
             "{physim-analysis-runner}",
             "{pendulum_analysis}"
           ],
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "documentation_run_events_example",
+      "targets": [
+        "python",
+        "documentation-run-events",
+        "documentation-run-start-time"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tutorial_sources.py",
+            "documentation_run_events_example"
+          ],
+          "timeout": 30
+        },
+        {
+          "program": "documentation-run-events",
+          "arguments": [],
+          "stdout": "Warnung: α\n",
+          "timeout": 30
+        },
+        {
+          "program": "documentation-run-start-time",
+          "arguments": [],
+          "stdout": "Startzeit geprüft\n",
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "name": "documentation_run_identity_example",
+      "targets": [
+        "python",
+        "documentation-run-identity"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tutorial_sources.py",
+            "documentation_run_identity_example"
+          ],
+          "timeout": 30
+        },
+        {
+          "program": "documentation-run-identity",
+          "arguments": [],
+          "stdout": "0123456789abcdef0123456789abcdef\nfedcba9876543210fedcba9876543210\n",
           "timeout": 30
         }
       ]

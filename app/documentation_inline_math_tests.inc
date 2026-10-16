@@ -1,11 +1,41 @@
 /* Mixed prose, math, Unicode and link fixture; executable UI checks below. */
+#ifdef __APPLE__
+#include <objc/runtime.h>
+#include <CoreGraphics/CoreGraphics.h>
+#endif
+static bool documentation_inline_math_borders(SDL_Window *window,int *top,int *left,int *bottom,int *right) {
+#ifdef __APPLE__
+    /* SDL 3.2.30 Cocoa has no GetWindowBordersSize backend. Use the actual
+     * NSWindow's conversion; typed IMP calls handle CGRect returns on Intel. */
+    id native=SDL_GetPointerProperty(SDL_GetWindowProperties(window),SDL_PROP_WINDOW_COCOA_WINDOW_POINTER,NULL);
+    if(!native)return false;
+    SEL frame_selector=sel_registerName("frame"),content_selector=sel_registerName("contentRectForFrameRect:");
+    Method frame_method=class_getInstanceMethod(object_getClass(native),frame_selector);
+    Method content_method=class_getInstanceMethod(object_getClass(native),content_selector);
+    if(!frame_method || !content_method)return false;
+    CGRect frame=((CGRect(*)(id,SEL))method_getImplementation(frame_method))(native,frame_selector);
+    CGRect content=((CGRect(*)(id,SEL,CGRect))method_getImplementation(content_method))(native,content_selector,frame);
+    double edges[]={frame.origin.y+frame.size.height-content.origin.y-content.size.height,
+        content.origin.x-frame.origin.x,content.origin.y-frame.origin.y,
+        frame.origin.x+frame.size.width-content.origin.x-content.size.width};
+    int *out[]={top,left,bottom,right};
+    for(size_t i=0;i<4;i++)if(!isfinite(edges[i]) || edges[i]<0 || edges[i]>INT_MAX)return false;
+    for(size_t i=0;i<4;i++)*out[i]=(int)ceil(edges[i]);
+    return true;
+#else
+    return SDL_GetWindowBordersSize(window,top,left,bottom,right);
+#endif
+}
 static const char documentation_inline_math_fixture[]=
 "# Inline-Formeln\n\nVor θ🌍 $\\nu=\\frac\\mu\\rho$ danach.\n\nVor θ🌍 **$E=\\frac12mv^2$** danach.\n\nVor θ🌍 $\\mathbf v=L\\omega\\begin{pmatrix}\\cos\\theta\\\\\\sin\\theta\\\\0\\end{pmatrix}$ danach.\n\nVor θ🌍 $|a-b|\\le\\varepsilon_{\\mathrm{abs}}+\\varepsilon_{\\mathrm{rel}}\\cdot\\max(|a|,|b|)$ danach.\n\nVor θ🌍 $\\mathbf v(\\tau)=\\frac{\\mathbf B'(\\tau/T)}{T}$ danach.\n\nVor θ🌍 $T_0=2\\pi\\sqrt{\\frac{L}{g}}$ danach.\n\n$z=0$ $\\dot{y}=v$ $\\int c\\,\\mathrm{d}x$ $v=at$ $\\nu=\\frac\\mu\\rho$ $I=\\frac{V}{R}$ $\\omega=ck$ $\\frac{\\mathrm{d}\\mathbf{r}}{\\mathrm{d}t}=\\mathbf{v}$ $V=IR$ $\\alpha=\\frac{c}{2m}$ $C=mc$ $P=\\frac{V^2}{R}$ $\\mathbf p=m\\mathbf v$ $G=\\frac{kA}{L}$ $v_{\\infty}=\\frac{a}{\\lambda}$ $\\lambda=\\frac{c\\Delta t}{\\Delta x}$ $b=\\frac{fd}{d-f}$ $f=\\frac{V_{\\mathrm{sub}}}{V_K}$ $x_{\\mathrm{SI}}=xs$ $c=\\sqrt{\\frac{T}{\\mu}}$\n\nVor [$x=L\\sin\\theta$](units.md) danach.\n";
 static void documentation_inline_math_test_frame(app *a,int *stage,int *code,const char **capture) {
     static size_t blocks[8];static unsigned sample,frames;static int editor,analysis;
     static double simulation;static char image[80];bool okay=true;
+    static unsigned resizes,themes;static double started;
+    static int requested_width,requested_height;
     switch((*stage)++) {
     case 0:editor=a->experiment.string.len;analysis=a->analysis.string.len;simulation=a->simulation_time;
+        resizes=themes=0;started=ps_clock();
         test_window_key_mod(a->window,SDLK_F1,0);break;
     case 1: {
         ps_document *document=NULL;
@@ -25,15 +55,36 @@ static void documentation_inline_math_test_frame(app *a,int *stage,int *code,con
     case 2: {
         if(!sample)documentation_zoom(a,0);
         if(sample==24)for(int i=0;i<8;i++)documentation_zoom(a,1);
-        okay=SDL_SetWindowSize(a->doc_window,sample<24?1100:760,sample<24?800:540) && SDL_SyncWindow(a->doc_window);
-        ps_preferences p=a->preferences;p.theme=(sample/8)%3;preferences_apply(a,&p);
+        if(!sample || sample==24) {
+            SDL_Rect usable={0};int top=0,left=0,bottom=0,right=0;
+            int width=sample<24?1100:760,height=sample<24?800:540;
+            okay=SDL_GetDisplayUsableBounds(SDL_GetDisplayForWindow(a->doc_window),&usable) &&
+                 documentation_inline_math_borders(a->doc_window,&top,&left,&bottom,&right);
+            int available_width=usable.w-left-right,available_height=usable.h-top-bottom;
+            okay &= available_width>=760 && available_height>=540;
+            requested_width=width<available_width?width:available_width;
+            requested_height=height<available_height?height:available_height;
+            printf("INLINE MATH WINDOW: case=%u wanted=%dx%d usable=%dx%d borders=%d,%d,%d,%d target=%dx%d\n",
+                sample,width,height,usable.w,usable.h,top,left,bottom,right,requested_width,requested_height);
+            okay=okay && SDL_SetWindowSize(a->doc_window,requested_width,requested_height) && SDL_SyncWindow(a->doc_window);++resizes;
+        }
+        int actual_width=0,actual_height=0;
+        okay &= SDL_GetWindowSize(a->doc_window,&actual_width,&actual_height) && actual_width==requested_width && actual_height==requested_height;
+        if(!okay)fprintf(stderr,"INLINE MATH WINDOW FAILED: case=%u expected=%dx%d actual=%dx%d SDL=%s\n",
+            sample,requested_width,requested_height,actual_width,actual_height,SDL_GetError());
+        if(sample%8==0){ps_preferences p=a->preferences;p.theme=(sample/8)%3;preferences_apply(a,&p);++themes;}
+        okay &= a->preferences.theme==(sample/8)%3;
         a->doc_navigation_hidden=sample%8==6;frames=0;break;
     }
     case 3:
-        if(frames++<3){--*stage;return;}
+        /* A completed layout is the prerequisite, not a fixed number of
+         * redundant presentations. The jump itself is drawn on this frame. */
+        if(a->doc_scroll_pending || !a->documentation || a->documentation->layout_width<=0){--*stage;return;}
         a->doc_jump_block=(int)blocks[sample%8];frames=0;break;
     case 4:
-        if(frames++<3 || a->doc_scroll_pending || a->doc_jump_block>=0){--*stage;return;}
+        /* A jump submits its scroll after drawing. Wait for the subsequent
+         * scrolled layout before inspecting actual commands and glyph bounds. */
+        if(a->doc_scroll_pending || a->doc_jump_block>=0 || a->documentation->layout_width<=0){--*stage;return;}
         a->doc_inline_math_test_block=blocks[sample%8];a->doc_inline_math_test_case=sample;
         a->doc_inline_math_test_requested=true;
         snprintf(image,sizeof image,"docs-inline-math-%02u.bmp",sample);*capture=image;break;
@@ -55,5 +106,8 @@ static void documentation_inline_math_test_frame(app *a,int *stage,int *code,con
         *capture="docs-inline-math-link.bmp";a->quitting=true;break;
     }
     if(!okay){fprintf(stderr,"Inline math stage %d case %u failed\n",*stage-1,sample);*code=1;a->quitting=true;}
-    if(a->quitting)printf("INLINE MATH SELF-TEST: %s count=%u\n",*code?"FAILED":"PASSED",sample);
+    if(a->quitting) {
+        printf("INLINE MATH TRANSITIONS: resizes=%u themes=%u elapsed=%.3f\n",resizes,themes,ps_clock()-started);
+        printf("INLINE MATH SELF-TEST: %s count=%u\n",*code?"FAILED":"PASSED",sample);
+    }
 }

@@ -4,12 +4,15 @@ Experimente schreiben Meldungen über einen vom Host gehaltenen Logger. Die App
 zeigt Schweregrad und Simulationszeit im Logbereich. C und Physim verwenden
 denselben Kanal; die Messwerte und Snapshots enthalten keine Logtexte.
 
+Der C-Ausschnitt gehört in einen Experimentcallback mit gültigem
+`ps_context *context`. Binde `<physim/experiment.h>` am Dateianfang ein.
+
 ```c
 ps_result result = ps_experiment_log(context, PS_LOG_INFO, "Experiment bereit");
 /* Der Aufrufer entscheidet, ob ein Logfehler die Simulation beenden soll. */
 ```
 
-```text
+```physim
 let accepted = logInfo("Experiment bereit")
 logWarning("Schritt mit kleiner Zeitschrittweite")
 ```

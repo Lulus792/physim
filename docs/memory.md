@@ -75,9 +75,11 @@ ein freigebender Allocator besser. Eine Arena passt zu einer zusammenhängenden
 Berechnungsphase, nach der alle Objekte gemeinsam verschwinden. Das Fehlschlagen
 einer Objektoperation rollt bereits verbrauchte Arenablöcke nicht automatisch zurück.
 
-```c
-#include <physim/report.h>
+Das folgende Beispiel gehört in einen Funktionsrumpf. Binde zuvor
+`<physim/report.h>` am Dateianfang ein. `result` enthält anschließend den
+Rückgabewert der Speicheranforderung beziehungsweise des Berichtaufbaus.
 
+```c
 ps_allocator heap = ps_allocator_default();
 void *storage = NULL;
 size_t bytes = 1024 * 1024;

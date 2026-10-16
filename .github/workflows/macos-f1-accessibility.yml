@@ -1,7 +1,7 @@
 name: Focused macOS F1 accessibility
 on:
   push:
-    branches: [main, codex/mac-f1-reading, codex/mac-f1-fields, codex/mac-f1-links, codex/windows-link-stability]
+    branches: [main, codex/mac-f1-reading, codex/mac-f1-fields, codex/mac-f1-links, codex/windows-link-stability, codex/mac-external-ax]
     paths:
       - app/accessibility*
       - app/documentation*
@@ -12,9 +12,24 @@ on:
       - third_party/nuklear.h
       - tests/test_font_*.c
       - tests/test_documentation.c
+      - tests/documentation_*_example.c
+      - tests/documentation_*_prefix.c
+      - docs/array.md
+      - docs/string-view.md
+      - docs/hashmap.md
+      - docs/memory.md
+      - docs/logging.md
+      - docs/run-streams.md
+      - docs/reports.md
+      - examples/documentation/run_identity.phys
+      - examples/documentation/run_events.phys
+      - examples/documentation/run_start_time.phys
+      - tests/check_tutorial_sources.py
+      - tests/tutorial_sources.json
       - tests/check_documentation_anchors.py
       - tests/documentation_anchor_probe.c
       - tests/test_accessibility*
+      - tests/accessibility_macos_probe.c
       - tests/test_native_test_runner.py
       - tests/check_display_workflow.py
       - tests/native_integration_cases.json
@@ -23,6 +38,8 @@ on:
       - tools/check_sidebar_counterexample.py
       - tools/check_detail_counterexample.py
       - tools/check_inline_math_counterexample.py
+      - tools/check_macos_ax.py
+      - tools/build.py
       - .github/workflows/macos-f1-accessibility.yml
   workflow_dispatch:
 concurrency:
@@ -56,7 +73,7 @@ jobs:
       - name: Platform catalog and failure reporting
         run: python3 tests/test_native_test_runner.py --work build/native
       - name: Portable UTF-16 and document contracts
-        run: python3 tools/build.py --compiler clang --sanitizers --test --test-filter accessibility_utf16 --test-filter accessibility_document --test-filter accessibility_tables --test-filter accessibility_suspend --test-filter accessibility_edit --test-filter font_atlas_limits --test-filter font_faces --test-filter font_sources --test-filter font_density --test-filter documentation --test-filter documentation_anchors
+        run: python3 tools/build.py --compiler clang --sanitizers --test --test-filter accessibility_utf16 --test-filter accessibility_document --test-filter accessibility_tables --test-filter accessibility_suspend --test-filter accessibility_edit --test-filter font_atlas_limits --test-filter font_faces --test-filter font_sources --test-filter font_density --test-filter documentation --test-filter documentation_anchors --test-filter documentation_array_example --test-filter documentation_string_view_example --test-filter documentation_hashmap_example --test-filter documentation_memory_example --test-filter documentation_logging_example --test-filter documentation_run_identity_example --test-filter documentation_run_events_example --test-filter documentation_report_example
       - name: Actual AppKit and rendered F1
         run: python3 tools/build.py --compiler clang --sanitizers --test-display --test-filter accessibility_native --test-filter accessibility_ui --test-filter font_bank_ui --test-filter accessibility_document_macos --test-filter accessibility_edit_macos --test-filter accessibility_links_macos --test-filter documentation_detail --test-filter documentation_navigation --test-filter documentation_sidebar --test-filter graphics --test-filter documentation_font_demand --test-filter documentation_density --test-filter documentation_formula_narrow --test-filter documentation_formula_physics --test-filter documentation_formula_models --test-filter documentation_formula_models_narrow --test-filter documentation_formula_mechanics --test-filter documentation_formula_mechanics_narrow --test-filter documentation_formula_basics --test-filter documentation_formula_basics_narrow --test-filter documentation_inline_math --test-filter documentation_formula_catalog --test-filter documentation_typeset --test-filter documentation_math --test-filter documentation_inline
       - name: Actual previous detail wrapping is rejected
@@ -65,6 +82,22 @@ jobs:
         run: python3 tools/check_sidebar_counterexample.py --compiler clang --sdl "$PWD/build-sdl-install"
       - name: Immediate inline formula texture eviction is rejected
         run: python3 tools/check_inline_math_counterexample.py --compiler clang --sdl "$PWD/build-sdl-install"
+      - name: Independent external AX reading or explicit missing permission
+        if: ${{ !cancelled() && hashFiles('build/native/Debug-sanitized/bin/physim') != '' }}
+        run: |
+          python3 tools/check_macos_ax.py --compiler clang --sdl "$PWD/build-sdl-install" --allow-unavailable
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          report=json.loads(Path('build/native/external-ax/results.json').read_text())
+          status=report['status']
+          assert status in ('passed','unavailable'), report
+          print('External AX acceptance:',status)
+          if status=='unavailable':
+              print('::notice::External AX remains unverified: existing Accessibility permission is unavailable.')
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as summary:
+              summary.write('\nExternal AX: **'+status+'**. '+report.get('reason','Complete F1 source read and native end reveal verified.')+'\n')
+          PY
       - name: Paired font preparation comparison after actual cold-start cases
         run: |
           mkdir -p build/native/font-prepare-baseline
@@ -88,6 +121,7 @@ jobs:
             build/native/sidebar-counterexample/**
             build/native/detail-counterexample/**
             build/native/inline-math-counterexample/**
+            build/native/external-ax/**
             build/native/font-prepare-macos-*/report.json
             build/native/font-prepare-macos-*/stdout
             build/native/font-prepare-macos-*/stderr

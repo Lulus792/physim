@@ -71,6 +71,11 @@ bool nk_sdl_accessibility_focus(struct nk_context *ctx,const char *group,const c
 bool nk_sdl_accessibility_event(struct nk_context *ctx,const SDL_Event *event);
 bool nk_sdl_accessibility_is_focused(struct nk_context *ctx,const char *group,const char *label);
 bool nk_sdl_accessibility_has_focus(struct nk_context *ctx);
+/* Publish the custom keyboard route's visible target without queuing an
+ * assistive action. A granted native focus request takes ownership back. */
+void nk_sdl_accessibility_keyboard_begin(struct nk_context *ctx);
+bool nk_sdl_accessibility_keyboard_owned(struct nk_context *ctx);
+bool nk_sdl_accessibility_keyboard_target(struct nk_context *ctx,struct nk_rect bounds);
 void ps_ui_accessibility_route(struct nk_context *ctx,bool allowed);
 bool nk_sdl_accessibility_press(struct nk_context *ctx,const char *label);
 bool nk_sdl_accessibility_available(struct nk_context *ctx);

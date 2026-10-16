@@ -354,6 +354,8 @@ class Builder:
                 command += ["-Wl,-rpath,@executable_path" if MAC else "-Wl,-rpath,$ORIGIN"]
             if MAC and (name in ("physim","physim-ui-benchmark","physim-scene-benchmark") or any(str(p).endswith("accessibility_native.c") for p in sources)):
                 command += ["-framework","AppKit","-framework","CoreGraphics","-lobjc"]
+            if MAC and any(str(p).endswith("accessibility_macos_probe.c") for p in sources):
+                command += ["-framework","ApplicationServices","-framework","CoreFoundation"]
             if not MAC and any(str(p).endswith("accessibility_atspi.c") for p in sources):
                 command += run(["pkg-config", "--libs", "dbus-1"], self.env, capture=True).split()
             if module:

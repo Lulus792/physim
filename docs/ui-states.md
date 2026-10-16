@@ -1,10 +1,13 @@
 # Arbeitsbereiche: Farben und Aktionszustände
 
-Der aktuelle dunkle Farbsatz liegt zentral in `app/design_tokens.h`. Farben
+Die drei Paletten Dunkel, Hell und Hoher Kontrast liegen zentral in
+`app/design_tokens.h`. Farben
 benennen ihre Aufgabe (Text, Fläche, Auswahl, Primäraktion, Fehler), nicht den
 Ort einer einzelnen Schaltfläche. Abstände und Radien sind ebenfalls dort
-benannt. Das ist die Grundlage für spätere helle und kontrastreiche Varianten;
-derzeit ist nur der dunkle Satz implementiert.
+benannt. Unter [Einstellungen](settings.md#darstellung-und-panelgrößen)
+wird die gewünschte Palette ausgewählt und mit **Übernehmen** angewendet.
+Navigation, Editor, Protokoll, Diagramme und ein bereits geöffnetes
+Dokumentationsfenster verwenden danach dieselbe Darstellung.
 
 Eine Primäraktion ist die unmittelbar ausführbare nächste Handlung im jeweiligen
 Arbeitsbereich. Ein deaktivierter Knopf erhält keine Primärfarbe. Status wird
@@ -24,6 +27,11 @@ zusätzlich als Text angezeigt, damit Farbe allein keine Information trägt.
 | Auswerten | Lauf vorhanden, Leerlauf | Analyse starten | Anzahl der Läufe und Messpunkte |
 | Auswerten | Analyse läuft oder keine Daten vorhanden | keine | Verarbeitungsstatus oder leerer Zustand |
 
-Die Workspace-Struktur aus [Designrichtung](design-direction.md) ist teilweise
-angebunden. Die Dateivorschau ist schreibgeschützt; vollständige Dateibaum- und
-Dokumentverwaltung sind noch ausstehend.
+Der [Workspace](workspace.md#projekt-anlegen-oder-öffnen) besitzt einen
+aufklappbaren Dateibaum. Experiment- und Analysequellen öffnen den zugehörigen
+Projekteditor; andere unterstützte Textdateien öffnen einen eigenen Editor.
+Sie können bearbeitet und mit **Ctrl+S** gespeichert werden. Die
+[Dokumentverwaltung](workspace.md) beschreibt zusätzliche Dateien und Ordner,
+externe Änderungen und den Schutz ungespeicherter Inhalte. Eine vollständige
+Tastatur- und Screenreader-Abnahme bleibt ein eigenes Ziel; vorhandene
+Editorfunktionen bedeuten noch keine vollständige assistive Bedienbarkeit.

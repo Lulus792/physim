@@ -10,10 +10,11 @@ erhalten die erweiterte Vorlage.
 ## Ein Diagramm erzeugen
 
 Im folgenden Beispiel sind `time` und `velocity` bereits ausgerichtete
-Series-Handles desselben Contexts und Laufs.
+Series-Handles desselben Contexts mit übereinstimmender Samplezuordnung.
 
 ```c
 #include "physim/report.h"
+#include <stdio.h>
 
 static ps_result velocity_plot(ps_analysis_context *ctx, ps_series time,
                                ps_series velocity, const char *path) {
@@ -37,8 +38,12 @@ static ps_result velocity_plot(ps_analysis_context *ctx, ps_series time,
 ```
 
 Der Aufrufer bildet `path` aus seinem Ausgabepräfix plus `.psreport` und prüft die
-Pfadlänge. Vorhandene Dateien werden nicht überschrieben. Das vollständige Beispiel
-steht in der mitgelieferten `analysis.c`.
+Pfadlänge. Vorhandene Dateien werden nicht überschrieben. Gleich lange Reihen
+sind noch nicht automatisch ausgerichtet: Nutze zusammengehörige Kanäle oder
+eine mit `ps_series_aligned_values` an die Zeitreihe gebundene Reihe.
+Die übergebenen Werte von `velocity` müssen bereits Geschwindigkeiten sein;
+der Helfer berechnet keine Ableitung. Das vollständige Analysemodul liegt im
+SDK unter `examples/pendulum/analysis.c`.
 
 ## Linien, Punkte und Histogramme
 

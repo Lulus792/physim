@@ -43,6 +43,8 @@ Die einfache Suchimplementierung benötigt im ungünstigsten Fall O(n*m) Verglei
 mindestens `size+1` Bytes. Bei zu geringer Kapazität folgt `PS_LIMIT` ohne
 Teilkopie. Enthält der View bereits Nullbytes, bleiben diese erhalten: Der Puffer
 enthält dann nicht einen einzigen konventionellen C-Textstring.
+Der Zielpuffer darf den Descriptor eines anschließend weiterverwendeten Views
+nicht überschreiben.
 
 ## Beispiel: Schlüssel und Wert aus einem begrenzten Bereich
 
