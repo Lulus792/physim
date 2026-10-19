@@ -116,6 +116,37 @@ const report={platform:process.platform,browser:await browser.version(),layouts:
    await page.locator('#show-vectors').uncheck();assert.equal(await page.locator('#velocity').evaluate(e=>getComputedStyle(e).visibility),'hidden');
    await page.locator('#camera').selectOption('front');assert((await page.locator('#view-label').textContent()).includes('Vorne'));
    await page.locator('#camera-reset').click();assert.equal(await page.locator('#camera').inputValue(),'perspective');
+   if(variant==='labor'){
+    if(await page.locator('#inspector-toggle').getAttribute('aria-expanded')==='false')await page.locator('#inspector-toggle').click();
+    assert(await page.locator('#run-dt').isDisabled());
+    await page.locator('#stop-button').click();assert(await page.locator('#run-dt').isEnabled());
+    await page.locator('#parameter-group > summary').click();
+    await page.locator('#parameter-length').fill('9');assert.equal(await page.locator('#parameter-length').getAttribute('aria-invalid'),'true');
+    await page.locator('[data-default-for="parameter-length"]').click();assert.equal(await page.locator('#parameter-length').inputValue(),'1.5');
+    await page.locator('#adaptive-steps').check();assert(await page.locator('#adaptive-fields').isVisible());
+    await page.locator('#minimum-dt').fill('0.5');assert.equal(await page.locator('#run-dt').getAttribute('aria-invalid'),'true');
+    await page.locator('#run-button').click();assert.equal(await page.locator('.app-window').getAttribute('data-state'),'ready');
+    await page.locator('#adaptive-steps').uncheck();assert(await page.locator('#adaptive-fields').isHidden());assert.equal(await page.locator('#minimum-dt').getAttribute('aria-invalid'),'false');
+    await page.locator('#adaptive-steps').check();
+    await page.locator('#minimum-dt').fill('0.0001');
+    await page.locator('#run-seed').fill('18446744073709551616');assert.equal(await page.locator('#run-seed').getAttribute('aria-invalid'),'true');
+    await page.locator('#run-seed').fill('42');
+    await page.locator('#step-breakpoints').fill('10,10');assert.equal(await page.locator('#step-breakpoints').getAttribute('aria-invalid'),'true');
+    await page.locator('#step-breakpoints').fill('10,100,500');
+    await page.locator('#limits-group > summary').click();await page.locator('#memory-limit').fill('20000');assert.equal(await page.locator('#memory-limit').getAttribute('aria-invalid'),'true');await page.locator('#memory-limit').fill('1024');
+    await page.locator('#measurement-group > summary').click();await page.locator('#inspector-channel').selectOption('velocity');await page.locator('#inspector-unit').selectOption('cmps');assert((await page.locator('#inspector-measurement').textContent()).endsWith('cm/s'));
+    await page.locator('#time').fill('1.25');assert(await page.locator('#inspector-measurement').isVisible());
+    assert.equal(await page.locator('#world-position').textContent(),await page.locator('#local-position').textContent());
+    await page.locator('#events-group > summary').click();await page.locator('#open-log').click();assert(await page.locator('#inspector-log').isVisible());await page.keyboard.press('Escape');assert(await page.locator('#open-log').evaluate(e=>e===document.activeElement));
+    await page.locator('#camera-group > summary').click();await page.locator('[data-mirror="show-grid"]').uncheck();assert.equal(await page.locator('#floor-grid').count(),0);assert.equal(await page.locator('.floor-grid').evaluate(e=>getComputedStyle(e).visibility),'hidden');
+    await page.locator('#camera-2d').check();assert(await page.locator('#camera-plane').isEnabled());assert(await page.locator('#camera-yaw').isDisabled());
+    await page.locator('#camera-reset').click();assert(await page.locator('#camera-yaw').isEnabled());
+    await page.locator('#save-display').click();assert((await page.locator('#display-feedback').textContent()).includes('keine Projektdatei'));
+    // Show all available groups in a dedicated reference, with details reachable by scrolling.
+    await page.locator('#inspector details').evaluateAll(es=>es.forEach(e=>e.open=false));
+    await page.locator('.inspector-body').evaluate(e=>e.scrollTop=0);
+    if(exporting)await page.locator('#inspector').screenshot({path:path.join(design,`inspector-${theme}-overview.png`)});
+   }
    report.interactions.push({theme,variant,result:'panels, keyboard, history/live, run/pause, step/reset, restart, empty/error, theme, selection, visibility, camera passed'});
   }
   const css=await page.evaluate(()=>{const s=getComputedStyle(document.documentElement);return Object.fromEntries(['text','muted','window','panel','canvas','selected','accent','primary','on-primary'].map(k=>[k,s.getPropertyValue('--'+k).trim()]));});

@@ -5,6 +5,9 @@ Erstellt am 16. Oktober 2026 auf Grundlage des lokalen Physim-Stands und der
 **Messlabor** ausgewählt: Szenenbaum zu, Inspektor offen, Kurven zu. Die native Anwendung
 wurde durch diese Studien nicht verändert.
 
+**Native Umarbeitung vorbereitet:** [Kopierfertiger Auftrag](NEXT-CHAT.md) ·
+[Funktionsabgleich, vollständiger Inspektor und Abnahme](IMPLEMENTATION.md).
+
 - [Interaktive Vorschau](index.html) lokal im Browser öffnen, ohne Installation,
   Server oder externe Ressourcen. Start: Messlabor, dunkel, pausiert.
 - [Vergleich: Dunkel links, Hell rechts; Studio / Messlabor / Fokus von oben nach unten](overview.png).
@@ -12,6 +15,9 @@ wurde durch diese Studien nicht verändert.
 - Messlabor: [Dunkel](labor-dark.png), [Hell](labor-light.png).
 - Fokus: [Dunkel](focus-dark.png), [Hell](focus-light.png).
 - [Designvertrag und Prüfbericht](DESIGN.md).
+- Vollständiger Inspektor: [Dunkel](inspector-dark-overview.png),
+  [Hell](inspector-light-overview.png). Die acht Gruppen sind aufklappbar und
+  unabhängig von der Szene scrollbar.
 
 Die Galerie außerhalb des App-Fensters gehört nur zum Variantenvergleich.
 Die Auswahl oben schaltet das Layout, daneben lassen sich Theme und Laufzustand

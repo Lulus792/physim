@@ -68,6 +68,7 @@
     if($('position-y'))$('position-y').innerHTML=fmt(-1.5*Math.cos(a))+' <span>m</span>';
     $('measurement-time').textContent='bei t = '+fmt(time)+' s';$('time-value').innerHTML=fmt(time)+' <span>/ 6,00 s</span>';$('time').value=time;
     document.querySelectorAll('.chart-cursor').forEach(e=>{e.setAttribute('x1',32+time/6*416);e.setAttribute('x2',32+time/6*416);});
+    document.dispatchEvent(new CustomEvent('physim-demo-values',{detail:{angle:deg,velocity:v,height:h}}));
   }
   document.querySelectorAll('.variants [data-design]').forEach(b=>b.addEventListener('click',()=>design(b.dataset.design)));
   document.querySelectorAll('.segmented [data-theme]').forEach(b=>b.addEventListener('click',()=>{document.documentElement.dataset.theme=b.dataset.theme;document.querySelectorAll('.segmented [data-theme]').forEach(c=>c.setAttribute('aria-pressed',String(c===b)));}));

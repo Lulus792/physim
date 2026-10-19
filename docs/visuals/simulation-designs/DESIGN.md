@@ -5,6 +5,10 @@ mit geschlossenem Szenenbaum, offenem Inspektor und zunächst zugeklappten Kurve
 Siehe [Produktentscheidung ADR 008](../../decisions/008-simulation-messlabor.md).
 Studio und Fokus bleiben Vergleichsentwürfe. Verantwortlich: UI/UX-Design.
 
+Die [native Übergabe](IMPLEMENTATION.md) gleicht sämtliche Inspektorfunktionen
+mit dem Code ab. [NEXT-CHAT.md](NEXT-CHAT.md) enthält den kopierfertigen Auftrag.
+Der Nutzer hat ausdrücklich Simulieren als Ziel bestätigt.
+
 ## Gemeinsamer Rahmen
 
 Die kompakte gemeinsame Menü-/Fensterleiste und die drei gleich breiten Tabs
@@ -86,6 +90,23 @@ Galerie bildet nur ihren Ort ab. Auch F5/F7 und vorhandene Shortcuts werden
 hier nicht neu definiert. Keine globalen Browser-Tastenkürzel abfangen.
 
 ## Prüfung und Grenzen
+
+Erweiterung um den vollständigen Inspektor am 19. Oktober: Die rechte Seite hat
+acht aufklappbare Gruppen und einen eigenen Scrollbereich; Szene, Kopf und
+Schließzugang bleiben nutzbar. `inspector.css` und `inspector.js` ergänzen die
+Vorlage. Alle Felder sind illustrative Bedienelemente; der Beispielkatalog
+enthält zwei Parameter, drei Messkanäle und drei Protokolleinträge. Es wird
+keine Modell- oder Projektdatei geschrieben. Native Einstellungen und kanalspezifische
+Metadaten sind nach IMPLEMENTATION.md anzubinden.
+
+`node tools/check_simulation_designs.cjs --export` bestand mit Exitcode 0 auf
+Windows/Edge 155.0.4283.62: 24 Layoutfälle, 16 Kurvenfälle und sechs bisherige
+Interaktionsdurchläufe. Ergänzend wurden in Hell/Dunkel Eingabesperren, Parameter-
+Standardaktion, ungültige adaptive Grenzen, Seed-Überlauf, doppelte Haltepunkte,
+Laufgrenzen, Messkanal/Einheit, Protokolldialog mit Escape/Fokuskehr,
+Darstellungsfilter, 2D-Sperren, Kamerareset und die illustrative Speicheraktion
+geprüft. Keine JavaScriptfehler. Die neuen Fenster- und Inspektorbilder wurden
+visuell geprüft. Die folgende frühere Abnahme bleibt erhalten.
 
 Nach der Auswahl von Messlabor am 19. Oktober wurde derselbe Prüfer erneut mit
 Exitcode 0 ausgeführt (Edge 155.0.4283.62): 24 Layoutfälle, 16 Kurvenfälle und
