@@ -1,7 +1,9 @@
 # Entwürfe für den Arbeitsbereich Simulieren
 
-Stand 19. Oktober 2026; erste Entwürfe vom 16. Oktober. Vorschläge zur Auswahl, keine neue verbindliche
-Produktentscheidung. Verantwortlich für diesen Entwurf: UI/UX-Design.
+Stand 19. Oktober 2026; erste Entwürfe vom 16. Oktober. **Messlabor ist ausgewählt**,
+mit geschlossenem Szenenbaum, offenem Inspektor und zunächst zugeklappten Kurven.
+Siehe [Produktentscheidung ADR 008](../../decisions/008-simulation-messlabor.md).
+Studio und Fokus bleiben Vergleichsentwürfe. Verantwortlich: UI/UX-Design.
 
 ## Gemeinsamer Rahmen
 
@@ -32,7 +34,7 @@ bei den tatsächlich gewählten Schriftgrößen.
 | Variante | Aufbau bei 1440 px Browserbreite | Zweck und Abwägung |
 | --- | --- | --- |
 | 01 Studio | Szenenbaum 204 px, flexible Szene, Inspektor 238 px; drei Messwerte und Zeitleiste unten; Kurven zunächst zugeklappt | Allgemeiner Arbeitsraum. Die beiden Signalverläufe können direkt unter den Messwerten aufgeklappt werden. |
-| 02 Messlabor | Baum 178 px, kompaktere Szene, Inspektor 238 px; Messwerte und zunächst aufgeklappte Signalverläufe unter der Szene | Zusammenhänge von Bewegung und Signalen beobachten. Kurven zuklappen vergrößert die Szene. |
+| 02 Messlabor (ausgewählt) | Szenenbaum zunächst geschlossen (geöffnet 178 px), flexible Szene, Inspektor 238 px offen; Messwerte sichtbar, Kurven zunächst zugeklappt | Große Szene mit Objektdetails; bei Bedarf zwei Signalverläufe einblenden. |
 | 03 Fokus | Beide Seiten zunächst geschlossen; große Szene, Auswahlkontext oben links; kompakte Messwerte unten | Bewegung und räumliche Orientierung priorisieren. Struktur und Details benötigen bei Bedarf einen Klick. |
 
 Alle Varianten zeigen dasselbe Beispiel und dieselbe Zeitbasis. Die separaten
@@ -51,10 +53,11 @@ ihre native gemeinsame Darstellung ist hier nicht implementiert.
 
 ## Interaktions- und Zustandsvertrag
 
-Ergänzung vom 19. Oktober auf Nutzerwunsch: In der Messwertleiste sitzt dauerhaft
-eine beschriftete Schaltfläche **Kurven aufklappen / Kurven zuklappen** mit
-Richtungspfeil. Sie steuert beide Diagramme gemeinsam, ist per Enter/Leertaste
-bedienbar und meldet ihren Zustand über `aria-expanded` und `aria-controls`.
+Aktualisierung vom 19. Oktober nach Auswahl: In der Messwertleiste sitzt dauerhaft
+ein beschrifteter Schalter **Kurven anzeigen**, ohne Richtungspfeil. Er steuert
+beide Diagramme gemeinsam und ist per Enter/Leertaste bedienbar. `role=switch`
+und `aria-checked` melden Ein/Aus; `aria-expanded` und `aria-controls` den
+zugehörigen Diagrammbereich. Die Beschriftung bleibt in beiden Zuständen gleich.
 Messwerte und Zeitleiste bleiben sichtbar. Beim Zuklappen erhält die Szene in
 Studio und Messlabor mehr Höhe. Die Auswahl pro Variante bleibt während dieser
 Vorschau beim Varianten- und Themewechsel erhalten; eine Speicherung über einen
@@ -83,6 +86,13 @@ Galerie bildet nur ihren Ort ab. Auch F5/F7 und vorhandene Shortcuts werden
 hier nicht neu definiert. Keine globalen Browser-Tastenkürzel abfangen.
 
 ## Prüfung und Grenzen
+
+Nach der Auswahl von Messlabor am 19. Oktober wurde derselbe Prüfer erneut mit
+Exitcode 0 ausgeführt (Edge 155.0.4283.62): 24 Layoutfälle, 16 Kurvenfälle und
+sechs Interaktionsdurchläufe bestanden. Zusätzlich sind Messlabor als Standard,
+die anfänglichen Seitenzustände, `role=switch`, der konsistente Ein-/Auszustand
+und die unveränderte Beschriftung des Kurvenschalters geprüft. Aktuelle
+Messlabor-Bilder mit ein- und ausgeblendeten Kurven in Hell/Dunkel visuell geprüft.
 
 Ergänzungsprüfung am 19. Oktober 2026 mit Edge 155.0.4283.62:
 `node tools/check_simulation_designs.cjs --export`, Exitcode 0. Die bisherigen
@@ -119,7 +129,7 @@ der Vorschau. Es gibt keine dekorative Daueranimation oder Übergangssperre.
 
 ## Übergabe nach Auswahl
 
-Die gewählte Variante zuerst als Produktentscheidung festhalten. Anschließend
+Die gewählte Variante ist in ADR 008 festgehalten. Anschließend
 UI-Umsetzung und Designsystem mit Accessibility- und Plattformprüfung verbinden:
 vorhandene Layout-/Toolbar-/Szenenbaum-/Zeitleistenfunktionen in `app/` verwenden,
 keine Browserdemo als Runner übernehmen. Fenster, Plattformmenüs, native

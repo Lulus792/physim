@@ -5,12 +5,12 @@
   const app = document.querySelector('.app-window');
   const descriptions = {
     studio: ['01 / Studio','Ein vertrauter Arbeitsraum für Modell und Bewegung.','Alles an seinem Platz.','Links die Szenenstruktur, rechts der ausgewählte Körper. Kurven lassen sich bei Bedarf direkt unter den Messwerten aufklappen; zugeklappt erhält die Szene mehr Platz.'],
-    labor: ['02 / Messlabor','Bewegung und Messwerte in einem gemeinsamen Blick.','Sehen, was die Bewegung bedeutet.','Zwei Signalverläufe verbinden Messwerte und Szene über einen gemeinsamen Zeitzeiger. Die Kurven lassen sich zuklappen, um der Szene mehr Raum zu geben.'],
+    labor: ['02 / Messlabor · Ausgewählt','Dein Arbeitsraum: große Szene, Inspektor und optionale Kurven.','Mehr Szene. Details im Blick.','Der Szenenbaum startet geschlossen, der Inspektor bleibt offen. Mit „Kurven anzeigen“ blendest du die beiden Signalverläufe bei Bedarf ein.'],
     focus: ['03 / Fokus','Mehr Raum für die Szene, Details genau bei Bedarf.','Das Experiment im Mittelpunkt.','Beide Seiten sind zunächst eingeklappt. Auswahl, Messwerte und Zeit bleiben sichtbar; Szenenbaum und Inspektor lassen sich unabhängig wieder einblenden.']
   };
   const objects = {mass:['Pendelkörper','Kugel · ID 3'],support:['Aufhängung','Box · ID 1'],rod:['Pendelstange','Linie · ID 2'],velocity:['Geschwindigkeit','Vektor · ID 4'],trail:['Bahnkurve','Pfad · ID 5']};
   let mode='paused', time=2.4, liveTime=2.4, browsing=false, replay=false, selected='mass', last=0;
-  const curvesByDesign={studio:false,labor:true,focus:false};
+  const curvesByDesign={studio:false,labor:false,focus:false};
   const fmt = (n,d=2) => n.toLocaleString('de-DE',{minimumFractionDigits:d,maximumFractionDigits:d});
   const angle = t => .5*Math.cos(Math.sqrt(9.81/1.5)*t);
   const speed = t => -1.5*.5*Math.sqrt(9.81/1.5)*Math.sin(Math.sqrt(9.81/1.5)*t);
@@ -22,13 +22,13 @@
     $('curves').hidden=!open;
     app.classList.toggle('curves-open',open);
     $('curves-toggle').setAttribute('aria-expanded',String(open));
-    $('curves-toggle').textContent=open?'⌃ Kurven zuklappen':'⌄ Kurven aufklappen';
+    $('curves-toggle').setAttribute('aria-checked',String(open));
   }
   function design(value) {
     app.dataset.design=value;
     curves();
     document.querySelectorAll('.variants [data-design]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.design===value)));
-    app.classList.toggle('tree-closed',value==='focus');app.classList.toggle('inspector-closed',value==='focus');panels();
+    app.classList.toggle('tree-closed',value!=='studio');app.classList.toggle('inspector-closed',value==='focus');panels();
     const [caption,description,title,note]=descriptions[value];
     $('design-caption').textContent=caption;$('design-description').textContent=description;$('note-number').textContent=caption.slice(0,2);$('note-title').textContent=title;$('note-text').textContent=note;
   }
@@ -101,5 +101,5 @@
     requestAnimationFrame(tick);
   }
   const params=new URLSearchParams(location.search);if(params.get('theme')==='light')document.querySelector('[data-theme="light"]').click();
-  design(descriptions[params.get('design')]?params.get('design'):'studio');object('mass');status();render();requestAnimationFrame(tick);
+  design(descriptions[params.get('design')]?params.get('design'):'labor');object('mass');status();render();requestAnimationFrame(tick);
 })();

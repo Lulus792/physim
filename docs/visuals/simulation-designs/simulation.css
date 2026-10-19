@@ -5,6 +5,10 @@
 .tree-row{overflow-wrap:anywhere;white-space:normal}.object-icon{flex-shrink:0}
 .app-window .charts:not([hidden]){display:grid}
 .measure-heading{flex-wrap:wrap}.measure-heading #curves-toggle{font-size:11px;padding:5px 9px;margin-left:auto;white-space:normal}.measure-heading .sample-badge{margin-left:auto}.measure-heading .sample-badge + #curves-toggle{margin-left:0}
+.measure-heading #curves-toggle{display:inline-flex;align-items:center;gap:10px;background:transparent;padding:6px 4px;border-radius:5px;text-align:left;min-height:32px}.measure-heading #curves-toggle:hover{background:var(--surface)}
+.switch-track{display:block;flex:0 0 36px;width:36px;height:22px;border-radius:12px;background:var(--surface);border:1px solid var(--axis);padding:3px}.switch-thumb{display:block;width:14px;height:14px;border-radius:50%;background:var(--muted)}
+#curves-toggle[aria-checked=true] .switch-track{background:var(--primary);border-color:var(--primary)}#curves-toggle[aria-checked=true] .switch-thumb{transform:translateX(14px);background:var(--on-primary)}
+@media(forced-colors:active){.switch-track{border-color:ButtonText}#curves-toggle[aria-checked=true] .switch-track{background:Highlight;border-color:Highlight}.switch-thumb,#curves-toggle[aria-checked=true] .switch-thumb{background:ButtonText}}
 .app-window[data-design=studio].curves-open .scene{min-height:270px}.app-window[data-design=studio].curves-open .physics-scene{min-height:250px;max-height:320px}
 .app-window[data-design=labor]:not(.curves-open) .scene{min-height:365px}.app-window[data-design=labor]:not(.curves-open) .physics-scene{min-height:320px;max-height:480px}
 @media(min-width:651px){.app-window[data-design=studio] .scene-column,.app-window[data-design=labor] .scene-column{min-height:634px}}

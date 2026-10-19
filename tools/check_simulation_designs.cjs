@@ -26,6 +26,10 @@ const report={platform:process.platform,browser:await browser.version(),layouts:
    await page.goto(url+`?theme=${theme}&design=${variant}`);
    assert.equal(await page.locator('.app-window').getAttribute('data-design'),variant);
    assert.equal(await page.locator('html').getAttribute('data-theme'),theme);
+   assert.equal(await page.locator('#tree-toggle').getAttribute('aria-expanded'),String(variant==='studio'));
+   assert.equal(await page.locator('#inspector-toggle').getAttribute('aria-expanded'),String(variant!=='focus'));
+   assert.equal(await page.locator('#curves-toggle').getAttribute('role'),'switch');
+   assert.equal(await page.locator('#curves-toggle').getAttribute('aria-checked'),'false');
    for(const width of [1440,1080,760,390]){
     await page.setViewportSize({width,height:1250});
     const geometry=await page.evaluate(()=>{
@@ -41,7 +45,7 @@ const report={platform:process.platform,browser:await browser.version(),layouts:
     report.layouts.push({theme,variant,width,...geometry});
     if(variant!=='focus'){
      const open=await page.locator('#curves-toggle').getAttribute('aria-expanded')==='true';
-     assert.equal(open,variant==='labor');
+     assert.equal(open,false);
      const before=await page.locator('#scene').evaluate(e=>e.getBoundingClientRect().height);
      const time=await page.locator('#time').inputValue();
      const tree=await page.locator('#tree-toggle').getAttribute('aria-expanded');
@@ -49,6 +53,8 @@ const report={platform:process.platform,browser:await browser.version(),layouts:
      await page.locator('#curves-toggle').focus();await page.keyboard.press('Enter');
      assert.equal(await page.locator('#curves').isVisible(),!open);
      assert.equal(await page.locator('#curves-toggle').getAttribute('aria-expanded'),String(!open));
+     assert.equal(await page.locator('#curves-toggle').getAttribute('aria-checked'),String(!open));
+     assert.equal((await page.locator('#curves-toggle').innerText()).trim(),'Kurven anzeigen');
      assert.equal(await page.locator('#time').inputValue(),time);
      assert.equal(await page.locator('#tree-toggle').getAttribute('aria-expanded'),tree);
      assert.equal(await page.locator('#inspector-toggle').getAttribute('aria-expanded'),inspector);
@@ -62,16 +68,19 @@ const report={platform:process.platform,browser:await browser.version(),layouts:
    }
    await page.setViewportSize({width:1440,height:1250});
    await page.screenshot({path:path.join(output,`${variant}-${theme}.png`),fullPage:true});
-   if(exporting)await page.locator('.app-window').screenshot({path:path.join(design,`${variant}-${theme}.png`)});
+   if(exporting){
+    await page.locator('.app-window').screenshot({path:path.join(design,`${variant}-${theme}.png`)});
+    if(variant==='labor')await page.locator('.app-window').screenshot({path:path.join(design,`${variant}-${theme}-curves-closed.png`)});
+   }
    if(exporting&&variant!=='focus'){
     await page.locator('#curves-toggle').click();
-    await page.locator('.app-window').screenshot({path:path.join(design,`${variant}-${theme}-curves-${variant==='studio'?'open':'closed'}.png`)});
+    await page.locator('.app-window').screenshot({path:path.join(design,`${variant}-${theme}-curves-open.png`)});
     // Keep independent disclosure choices while switching designs and themes.
     await page.locator('.variants [data-design="focus"]').click();
     await page.locator(`.variants [data-design="${variant}"]`).click();
-    assert.equal(await page.locator('#curves').isVisible(),variant==='studio');
+    assert.equal(await page.locator('#curves').isVisible(),true);
     await page.locator(`.segmented [data-theme="${theme==='dark'?'light':'dark'}"]`).click();
-    assert.equal(await page.locator('#curves').isVisible(),variant==='studio');
+    assert.equal(await page.locator('#curves').isVisible(),true);
     await page.locator(`.segmented [data-theme="${theme}"]`).click();
     await page.locator('#curves-toggle').click();
    }
@@ -116,12 +125,13 @@ const report={platform:process.platform,browser:await browser.version(),layouts:
  }
  // Browser text scaling and 2x rasterization; no physical monitor/DPI claim.
  await page.setViewportSize({width:1080,height:1250});await page.goto(url);
+ assert.equal(await page.locator('.app-window').getAttribute('data-design'),'labor');
  await page.addStyleTag({content:'body{font-size:28px}button,select{font-size:inherit!important}'});
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
  for(const s of ['.scene-tree','.inspector','.transport','.timeline'])assert(await page.locator(s).evaluate(e=>e.scrollWidth<=e.clientWidth+1),`200% controls: overflow in ${s}`);
  await page.screenshot({path:path.join(output,'text-scale-200.png'),fullPage:true});
  const hidpi=await browser.newPage({viewport:{width:1440,height:1250},deviceScaleFactor:2,reducedMotion:'reduce'});
- await hidpi.goto(url);await hidpi.screenshot({path:path.join(output,'studio-dark-2x.png'),fullPage:true});await hidpi.close();
+ await hidpi.goto(url);await hidpi.screenshot({path:path.join(output,'labor-dark-2x.png'),fullPage:true});await hidpi.close();
  assert.deepEqual(report.errors,[]);
  if(exporting){
   const tiles=[];for(const theme of ['dark','light'])for(const variant of ['studio','labor','focus'])tiles.push(await sharp(path.join(design,`${variant}-${theme}.png`)).resize({width:680}).png().toBuffer());
