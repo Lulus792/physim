@@ -2,10 +2,12 @@
 
 Erstellt am 19. Oktober 2026 auf Grundlage des lokalen Projektstands und der
 [verbindlichen Designrichtung](../../design-direction.md). **Werkbank ist vom
-Nutzer ausgewählt.** Die neue Runde vergleicht Details für Schalter, Tabs und
-Workspace; eine Detailvariante ist noch nicht ausgewählt. Verantwortlich: UI/UX-Design.
+Nutzer ausgewählt.** Festgelegt sind **Schalter im Panelkopf, kompakte Tabs aus
+Statusdock und Pfadlinien im Workspace**. Diese Kombination ist die Startansicht.
+Verantwortlich: UI/UX-Design.
 
 - [Aktuelle interaktive Vorschau](index.html): drei Werkbankvarianten, ohne zusätzliche Werkzeugleiste.
+- Ausgewählte Kombination: [Dunkel](selected-workbench-dark.png), [Hell](selected-workbench-light.png).
 - [Detailvergleich](detail-overview.png): Randgriffe / Panelköpfe / Statusdock, jeweils dunkel links und hell rechts.
 - **Randgriffe**: [Dunkel](detail-edges-dark.png), [Hell](detail-edges-light.png).
 - **Panelköpfe**: [Dunkel](detail-headers-dark.png), [Hell](detail-headers-light.png).
@@ -13,6 +15,7 @@ Workspace; eine Detailvariante ist noch nicht ausgewählt. Verantwortlich: UI/UX
 - [Detailvertrag und aktuelle Prüfung](DETAILS.md).
 
 Oben lassen sich Schalterposition, Tabstil und Workspace unabhängig kombinieren.
+**Ausgewählte Werkbank** stellt die festgelegte Kombination wieder her.
 Die Unterordner bleiben in derselben Reihenfolge und Ebene. Der Code beginnt
 bei der geprüften Desktopbreite rund 122 px weiter oben als im ursprünglichen Entwurf.
 Suche und Speichern sitzen an den Dateitabs; Profil und Buildstatus in der

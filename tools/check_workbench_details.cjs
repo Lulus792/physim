@@ -21,6 +21,20 @@ const exporting=process.argv.includes('--export');fs.mkdirSync(output,{recursive
   });
   await open('original.html');const baseline=await geometry();
   await open();
+  assert.equal(await page.locator('#detail-controls').inputValue(),'headers');
+  assert.equal(await page.locator('#detail-tabs').inputValue(),'pills');
+  assert.equal(await page.locator('#detail-tree').inputValue(),'guides');
+  assert.equal(await page.locator('#selected-workbench').getAttribute('aria-pressed'),'true');
+  await page.locator('[data-detail="edges"]').click();
+  await page.locator('#selected-workbench').click();
+  assert.equal(await page.locator('.app-window').getAttribute('data-controls'),'headers');
+  assert.equal(await page.locator('.app-window').getAttribute('data-tabs'),'pills');
+  assert.equal(await page.locator('.app-window').getAttribute('data-tree'),'guides');
+  for(const theme of ['dark','light']){
+   await page.locator(`button[data-theme="${theme}"]`).click();
+   await page.locator('.app-window').screenshot({path:path.join(exporting?design:output,`selected-workbench-${theme}.png`)});
+  }
+  report.interactions.push('selected workbench defaults and restore action: panel headers, compact tabs, path guides');
   for(const width of [1440,1080,760,500])for(const theme of ['dark','light'])for(const preset of ['edges','headers','dock']){
    await page.setViewportSize({width,height:1100});
    await page.locator(`button[data-theme="${theme}"]`).click();await page.locator(`[data-detail="${preset}"]`).click();

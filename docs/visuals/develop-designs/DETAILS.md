@@ -5,6 +5,13 @@ wünscht Varianten für Auf-/Zuklappen, Tabs und Workspace und empfindet die
 zusätzliche Werkzeugzeile als Platzverlust. Die Unterordnerposition bleibt erhalten.
 Verantwortlich: UI/UX-Design. Native Anwendung unverändert.
 
+**Ausgewählte Kombination:** Schalter im **Panelkopf**, **kompakte Tabs aus
+Statusdock** und **Pfadlinien** im Workspace. Diese Nutzerentscheidung ist die
+Startansicht der Vorschau und lässt sich über „Ausgewählte Werkbank“ jederzeit
+wiederherstellen. Die Schalter stehen damit nicht im Statusdock. Die drei
+ursprünglichen Vorbelegungen bleiben zum Vergleichen erreichbar.
+Referenz: [Dunkel](selected-workbench-dark.png), [Hell](selected-workbench-light.png).
+
 ## Gemeinsame Änderung
 
 Projektkopf und separate Werkzeugleiste entfallen. Der Projektname bleibt im
@@ -32,7 +39,8 @@ A kostet etwas horizontale Breite, hält die Schalter jedoch unabhängig von den
 Panels an festen Rändern. B platziert die Aktion nahe am Inhalt und gibt die
 Randbreite frei; die Schalter wechseln beim Schließen an die Dateitabs. C bündelt
 die Aktionen unten und lässt mehr Platz an den Tabs; die Mauswege werden länger.
-Keine dieser Detailvarianten ist bereits ausgewählt. Start ist A zum Vergleich.
+Die ausgewählte Kombination verbindet die Panelköpfe und Pfadlinien aus B mit
+den kompakten Tabs aus C.
 
 Die drei Auswahlfelder außerhalb des App-Fensters erlauben **27 Kombinationen**
 aus Schalterposition, Tabstil und Workspace. Die Variantenknöpfe setzen jeweils
@@ -85,6 +93,11 @@ Windows, Edge 155.0.4283.62, 19. Oktober 2026:
   Browser-DPI 1,5×/2× mit begrenzten Layout-Smokechecks geprüft.
 - Keine JavaScriptfehler. Übersicht und alle sechs Referenzzustände visuell
   gesichtet; kein sichtbarer Überlauf, weiterhin dominante Codefläche.
+
+Nach der Nutzerwahl erneut mit demselben Prüfer ausgeführt: 24 Layoutfälle,
+54 Kombinationen und zusätzlich Startbelegung sowie Wiederherstellung der
+Auswahl geprüft. Die gewählte Kombination in Hell und Dunkel separat exportiert
+und visuell gesichtet. Keine JavaScriptfehler, Exitcode 0.
 
 Die vorhandenen semantischen Farben bleiben erhalten. Die erste Galerie wurde
 mit `node tools/check_develop_designs.cjs` erneut geprüft: Exitcode 0,

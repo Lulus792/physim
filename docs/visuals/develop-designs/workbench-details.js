@@ -16,6 +16,7 @@
     dock:{title:'C / Statusdock',tabs:'pills',tree:'surfaces',description:'Beschriftete Schalter unten. Oben gehört der Platz den Dateien.',note:'Projekt und Kontext werden über die vorhandene Statuszeile geschaltet. Kompakte Tabflächen und sanfte Zeilenflächen im Workspace schaffen Orientierung ohne eigene Werkzeugzeile.'},
   };
   const states = {};
+  const selected={controls:'headers',tabs:'pills',tree:'guides'};
   let current='edges';
   app.classList.add('detail-study');
   // The project is identified in the window title and tree. Build status/profile use the existing footer.
@@ -62,7 +63,7 @@
       (api.getAttribute('aria-expanded')==='true'?contextTitle:reopenRight).append(api);
     }
     labelButtons();
-    $('#design-subtitle').textContent=presets[current].description;
+    $('#design-subtitle').textContent=Object.entries(selected).every(([key,value])=>$('#detail-'+key).value===value)?'Panelköpfe · kompakte Tabs · Pfadlinien':presets[current].description;
   }
   function measure() {
     $('#space-saved').textContent='2 Leisten weniger über dem Code';
@@ -78,9 +79,12 @@
     });
     const exact=presets[$('#detail-controls').value];
     const mixed=exact.tabs!==$('#detail-tabs').value||exact.tree!==$('#detail-tree').value;
-    $('#design-title').textContent=mixed?'Werkbank / Eigene Kombination':presets[current].title;
-    $('#note-kicker').textContent=mixed?'WERKBANK / DETAILS KOMBINIERT':presets[current].title.toUpperCase();
-    $('#design-note').textContent=mixed?'Schalter, Tabs und Workspace sind unabhängig kombiniert. Die Dateireihenfolge und Einrückung der Unterordner bleiben erhalten.':presets[current].note;
+    const isSelected=Object.entries(selected).every(([key,value])=>$('#detail-'+key).value===value);
+    $('#selected-workbench').setAttribute('aria-pressed',String(isSelected));
+    $('#design-title').textContent=isSelected?'Werkbank / Ausgewählt':mixed?'Werkbank / Eigene Kombination':presets[current].title;
+    $('#note-kicker').textContent=isSelected?'WERKBANK / AUSGEWÄHLT':mixed?'WERKBANK / DETAILS KOMBINIERT':presets[current].title.toUpperCase();
+    $('#design-note').textContent=isSelected?'Ausgewählt: Schalter im Panelkopf, kompakte Tabs aus dem Statusdock-Entwurf und Pfadlinien im Workspace. Die zusätzliche Werkzeugleiste entfällt.':mixed?'Schalter, Tabs und Workspace sind unabhängig kombiniert. Die Dateireihenfolge und Einrückung der Unterordner bleiben erhalten.':presets[current].note;
+    if(isSelected)$('#design-subtitle').textContent='Panelköpfe · kompakte Tabs · Pfadlinien';
   }
   function choose(name) {
     states[current]={tree:$('#toggle-tree').getAttribute('aria-expanded')==='true',api:$('#toggle-api').getAttribute('aria-expanded')==='true'};
@@ -90,6 +94,11 @@
     setPanel('tree',state.tree);setPanel('api',state.api);mix();
   }
   $$('[data-detail]').forEach(button=>button.addEventListener('click',()=>choose(button.dataset.detail)));
+  function restoreSelection() {
+    choose(selected.controls);
+    $('#detail-tabs').value=selected.tabs;$('#detail-tree').value=selected.tree;mix();
+  }
+  $('#selected-workbench').addEventListener('click',restoreSelection);
   for(const id of ['detail-controls','detail-tabs','detail-tree'])$('#'+id).addEventListener('change',()=>{
     current=$('#detail-controls').value;mix();
   });
@@ -99,5 +108,5 @@
   });
   const note=$('.design-note > p');note.innerHTML='Werkbank bleibt die Grundlage. Die Unterordner behalten ihre Position.<br><a href="original.html">Frühere Gesamtentwürfe</a> · <a href="DETAILS.md">Details und Prüfbericht</a> · lokale Demo ohne Dateizugriff.';
   window.addEventListener('resize',measure);
-  choose('edges');
+  restoreSelection();
 })();
