@@ -7,7 +7,7 @@ typedef enum {
     TOOLBAR_OPEN, TOOLBAR_ADD_FILE, TOOLBAR_ADD_FOLDER, TOOLBAR_NEW, TOOLBAR_SAVE,
     TOOLBAR_WORKSPACES, TOOLBAR_LOG, TOOLBAR_REFRESH, TOOLBAR_LIBRARY, TOOLBAR_BATCH,
     TOOLBAR_SIDEBAR, TOOLBAR_WORKSPACE, TOOLBAR_RESET_LAYOUT, TOOLBAR_INSPECTOR, TOOLBAR_LAYOUTS,
-    TOOLBAR_RELOAD, TOOLBAR_SEARCH, TOOLBAR_BUILD, TOOLBAR_HELP, TOOLBAR_REFERENCE, TOOLBAR_COMPLETION
+    TOOLBAR_RELOAD, TOOLBAR_SEARCH, TOOLBAR_BUILD, TOOLBAR_HELP, TOOLBAR_REFERENCE, TOOLBAR_COMPLETION, TOOLBAR_BUILD_SETTINGS
 } toolbar_action;
 typedef struct { const char *text; toolbar_action action; bool enabled; } toolbar_entry;
 /* Bounds keep stable semantic slots; presentation follows the familiar IDE order. */
@@ -68,7 +68,8 @@ static unsigned toolbar_entries(app *a, int menu, toolbar_entry entries[9]) {
         entries[0]=(toolbar_entry){"Suchen / Ersetzen\t" PS_UI_SHORTCUT "F",TOOLBAR_SEARCH,editor};return 1;
     }
     if(menu==6) {
-        entries[0]=(toolbar_entry){"Projekt bauen\tF5",TOOLBAR_BUILD,a->loaded && idle(a)};return 1;
+        entries[0]=(toolbar_entry){"Projekt bauen\tF5",TOOLBAR_BUILD,a->loaded && idle(a)};
+        entries[1]=(toolbar_entry){"Build-Einstellungen",TOOLBAR_BUILD_SETTINGS,a->loaded};return 2;
     }
     return 0;
 }
@@ -94,11 +95,12 @@ static void toolbar_dispatch(app *a, toolbar_action action) {
         else ps_dock_hide(&a->preferences.dock,PS_DOCK_INSPECTOR);break;
     case TOOLBAR_LAYOUTS: a->layout_manager=true;break;
     case TOOLBAR_RELOAD: document_request(a,2);break;
-    case TOOLBAR_SEARCH: a->show_search=!a->show_search;break;
+    case TOOLBAR_SEARCH: editor_search_open(a);break;
     case TOOLBAR_BUILD: build_project(a);break;
     case TOOLBAR_HELP: open_documentation(a,1);break;
     case TOOLBAR_REFERENCE: {struct nk_text_edit *edit=completion_target(a);if(edit)api_reference_from_editor(a,edit);break;}
     case TOOLBAR_COMPLETION: {struct nk_text_edit *edit=completion_target(a);if(edit)completion_open(a,edit);break;}
+    case TOOLBAR_BUILD_SETTINGS: a->project_build_disclosure=NK_MAXIMIZED;dock_show(a,PS_DOCK_SIDEBAR);break;
     }
 }
 static void toolbar_keyboard_close(app *a) {
@@ -349,16 +351,16 @@ static void toolbar_view(app *a) {
                      menus[i], (int)strlen(menus[i]), font, nk_rgba(0, 0, 0, 0), UI_COLOR(text));
     }
     float menu_extent=(58+72+54+116+90+54)*factor;
-    float status_width=fminf(175,fmaxf(96,available-72-menu_extent-138-36));
+    float status_width=workbench_visible(a)?0:fminf(175,fmaxf(96,available-72-menu_extent-138-36));
     nk_layout_row_push(ui, fmaxf(20, available - 72 - menu_extent - 138 - status_width));
     struct nk_rect path_bounds = nk_widget_bounds(ui);
-    nk_label_colored(ui, a->workspace_open ? a->workspace : "Kein Ordner geöffnet", NK_TEXT_LEFT,
-                     muted());
+    char caption[256];snprintf(caption,sizeof caption,"%s — Physim",a->loaded?project_name(a):a->workspace_open?workspace_name(a->workspace):"Workspace");
+    nk_label_colored(ui, workbench_visible(a)?caption:a->workspace_open ? a->workspace : "Kein Ordner geöffnet", workbench_visible(a)?NK_TEXT_RIGHT:NK_TEXT_LEFT, muted());
     if (a->workspace_open && !ui->current->popup.active && !a->toolbar_menu &&
         nk_input_is_mouse_hovering_rect(&ui->input, path_bounds))
         nk_tooltip(ui, a->workspace);
     nk_layout_row_push(ui, status_width);
-    nk_label_colored(ui,
+    if(workbench_visible(a))nk_spacer(ui);else nk_label_colored(ui,
                      a->runner.running ? (a->paused ? "Pausiert" : "Simulation läuft")
                      : a->batch_thread ? "Laufserie läuft"
                      : a->job.running  ? "Wird verarbeitet …"

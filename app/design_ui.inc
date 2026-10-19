@@ -464,7 +464,14 @@ static void camera_inspector(app *a) {
 #include "toolbar_ui.inc"
 static void sidebar_panel(app *a) {
     struct nk_context *ui=a->ui;
+    bool compact=workbench_visible(a);
+    if(compact)nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(8,8));
     if (dock_begin(a, PS_DOCK_SIDEBAR)) {
+        if(workbench_visible(a) && a->project_build_disclosure!=NK_MAXIMIZED) {
+            if(a->workspace_open)workspace_tree_view(a);
+            else {nk_layout_row_dynamic(ui,56,1);nk_label_wrap(ui,"Öffne einen Ordner, um seine Dateien hier zu sehen.");}
+            nk_end(ui);nk_style_pop_vec2(ui);return;
+        }
         if(a->loaded && a->tab==1 && !a->project_manager)scene_controls_view(a);
         {
             if (nk_tree_state_push(ui, NK_TREE_TAB, "Workspace", &a->workspace_disclosure)) {
@@ -574,13 +581,19 @@ static void sidebar_panel(app *a) {
         }
     }
     nk_end(ui);
+    if(compact)nk_style_pop_vec2(ui);
 }
 static void inspector_panel(app *a) {
     struct nk_context *ui=a->ui;
     if(dock_begin(a,PS_DOCK_INSPECTOR)) {
         if(a->api_reference && !a->project_manager && (a->tab==0 || (a->tab==2 && a->analysis_tab==1) || a->tab==8))
             api_reference_view(a);
-        else if(a->loaded) {
+        else if(workbench_visible(a)) {
+            nk_layout_row_dynamic(ui,22,1);nk_label_colored(ui,"IM DOKUMENT",NK_TEXT_LEFT,muted());
+            nk_layout_row_dynamic(ui,72,1);nk_label_wrap(ui,"Wähle einen API-Bezeichner im Code und öffne seine Referenz mit Umschalt+F1.");
+            nk_layout_row_dynamic(ui,32,1);
+            if(nk_button_label(ui,"API-Referenz öffnen")){struct nk_text_edit *edit=editor_search_target(a);if(edit)api_reference_from_editor(a,edit);}
+        } else if(a->loaded) {
             camera_inspector(a);
             if (nk_tree_state_push(ui, NK_TREE_TAB, "Laufgrenzen", &a->limits_disclosure)) {
                 nk_begin_disabled(ui, !idle(a));
@@ -609,7 +622,13 @@ static void inspector_panel(app *a) {
 }
 static void workspace_panel(app *a) {
     struct nk_context *ui=a->ui;
-    float content=fmaxf(100,a->dock_panels[PS_DOCK_WORKSPACE].h-DOCK_HEADER_HEIGHT);
+    bool compact=editor_search_target(a)!=NULL;
+    if(compact) {
+        nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(6,0));
+        nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(0,0));
+        nk_style_push_vec2(ui,&ui->style.edit.padding,nk_vec2(6,6));
+    }
+    float content=fmaxf(100,a->dock_panels[PS_DOCK_WORKSPACE].h-dock_header_height(a));
     if (a->dock_visible[PS_DOCK_WORKSPACE] && a->tab==4 && (a->library_search_focus || a->library_search_active))
         nk_window_set_focus(ui,"workspace");
     if(a->project_manager && a->manager_keyboard && !a->toolbar_keyboard && !a->toolbar_menu)
@@ -743,20 +762,7 @@ static void workspace_panel(app *a) {
         } else if (a->tab == 0 || (a->tab == 2 && a->analysis_tab == 1)) {
             bool analysis = a->tab == 2 || a->analysis_only;
             struct nk_text_edit *edit = analysis ? &a->analysis : &a->experiment;
-            if (a->show_search) {
-                nk_layout_row_dynamic(ui, 30, 4);
-                nk_edit_string_zero_terminated(ui, NK_EDIT_FIELD, a->find, sizeof a->find,
-                                               nk_filter_default);
-                a->search_bounds=nk_widget_bounds(ui);
-                if (nk_button_label(ui, "Suchen"))
-                    find_text(a, edit, false);
-                nk_edit_string_zero_terminated(ui, NK_EDIT_FIELD, a->replace, sizeof a->replace,
-                                               nk_filter_default);
-                a->replace_bounds=nk_widget_bounds(ui);
-                if (nk_button_label(ui, "Ersetzen"))
-                    find_text(a, edit, true);
-            }
-            editor(a, edit, nk_window_get_content_region(ui).h - 2*ui->style.window.padding.y - (a->show_search?38:0));
+            editor(a, edit, nk_window_get_content_region(ui).h - 2*ui->style.window.padding.y);
         } else if (a->tab == 1 && a->analysis_only) {
             nk_layout_row_dynamic(ui,44,1);nk_label_wrap(ui,"Gespeicherte Szene · Die Wiedergabe verändert den importierten Lauf nicht.");
             viewport(a,fmaxf(180,content-170));timeline_controls(a);
@@ -982,6 +988,7 @@ static void workspace_panel(app *a) {
         }
     }
     nk_end(ui);
+    if(compact){nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}
 }
 static void log_panel(app *a) {
     struct nk_context *ui=a->ui;
@@ -1035,8 +1042,71 @@ static void log_panel(app *a) {
     nk_end(ui);
     nk_style_pop_vec2(ui);
 }
+static void workbench_status_view(app *a,float w,float h) {
+    struct nk_context *ui=a->ui;bool visible=workbench_visible(a);
+    nk_window_show(ui,"workbench-status",visible?NK_SHOWN:NK_HIDDEN);if(!visible)return;
+    nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(8,2));
+    nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(8,0));
+    nk_style_push_float(ui,&ui->style.window.rounding,0);
+    struct nk_window *previous=ui->active;
+    if(nk_begin(ui,"workbench-status",nk_rect(0,h-32,w,32),NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BACKGROUND)) {
+        bool blocked=a->toolbar_menu || a->toolbar_pointer_consumed;
+        bool pointer=nk_input_is_mouse_hovering_rect(&ui->input,nk_rect(0,h-32,w,32));
+        bool owns=!blocked && (pointer || previous==ui->current || ui->current->popup.active);
+        ui->active=owns?ui->current:previous;
+        if(owns){ui->current->flags&=~(nk_flags)NK_WINDOW_ROM;ui->current->layout->flags&=~(nk_flags)NK_WINDOW_ROM;}
+        else {ui->current->flags|=NK_WINDOW_ROM;ui->current->layout->flags|=NK_WINDOW_ROM;}
+        ps_ui_accessibility_route(ui,!blocked);
+        char location[512]="";
+        struct nk_text_edit *edit=editor_search_target(a);
+        if(edit) {
+            const char *text=nk_str_get_const(&edit->string);size_t cursor=editor_search_byte(edit,edit->cursor),line_start=0;unsigned line=1;
+            for(size_t i=0;i<cursor;i++)if(text[i]=='\n'){++line;line_start=i+1;}
+            unsigned column=text?(unsigned)nk_utf_len(text+line_start,(int)(cursor-line_start))+1:1;
+            workspace_document *doc=active_document(a);
+            const char *name=a->tab==8 && doc?workspace_name(doc->path):a->analysis_only?analysis_source(a):experiment_source(a);
+            snprintf(location,sizeof location,"%s · Z %u S %u · UTF-8",name,line,column);
+        }
+        float location_width=edit?fminf(330,w*.30f):0;
+        const struct nk_user_font *font=ui->style.font;
+        float profile_label=fmaxf(42,font->width(font->userdata,font->height,"Profil",6)+2);
+        float profile_width=fmaxf(92,font->width(font->userdata,font->height,"Release",7)+42);
+        float build_width=fmaxf(160,font->width(font->userdata,font->height,"Build erforderlich",18)+4);
+        const char *action=a->job.running?"Abbrechen":"Bauen";
+        float action_width=fmaxf(96,font->width(font->userdata,font->height,action,(int)strlen(action))+24);
+        nk_layout_row_begin(ui,NK_STATIC,28,6);
+        nk_layout_row_push(ui,profile_label);nk_label_colored(ui,"Profil",NK_TEXT_LEFT,muted());
+        nk_layout_row_push(ui,profile_width);const char *profiles[]={"Debug","Release"};
+        a->project_profile_bounds=nk_widget_bounds(ui);
+        if(nk_combo_begin_label(ui,profiles[a->profile],nk_vec2(160,92))) {
+            nk_layout_row_dynamic(ui,28,1);
+            for(int p=0;p<2;p++){a->project_profile_choices[p]=nk_widget_bounds(ui);if(nk_combo_item_label(ui,profiles[p],NK_TEXT_LEFT))select_build_profile(a,p);}
+            nk_combo_end(ui);
+        }
+        nk_layout_row_push(ui,build_width);
+        const char *build=a->job.running?"Build läuft …":a->built?"Build erfolgreich":"Build erforderlich";
+        nk_label_colored(ui,build,NK_TEXT_LEFT,a->built?UI_COLOR(accent):muted());
+        nk_layout_row_push(ui,fmaxf(40,w-profile_label-profile_width-build_width-action_width-location_width-56));
+        struct nk_rect message=nk_widget_bounds(ui);nk_label_colored(ui,a->status,NK_TEXT_LEFT,muted());
+        if(nk_input_is_mouse_hovering_rect(&ui->input,message))nk_tooltip(ui,a->status);
+        nk_layout_row_push(ui,location_width);
+        struct nk_rect position=nk_widget_bounds(ui);nk_label_colored(ui,location,NK_TEXT_RIGHT,muted());
+        if(edit){ps_ui_accessibility_label(ui,position,location);if(nk_input_is_mouse_hovering_rect(&ui->input,position))nk_tooltip(ui,location);}
+        nk_layout_row_push(ui,action_width);a->editor_build_bounds=nk_widget_bounds(ui);
+        if(a->job.running) {
+            if(nk_button_label(ui,"Abbrechen")){ps_process_kill(&a->job);ps_process_close(&a->job);status(a,"Hintergrundjob abgebrochen.");}
+        } else {
+            nk_begin_disabled(ui,!a->loaded || !idle(a));
+            if(action_button(ui,"Bauen",true))build_project(a);
+            nk_end_disabled(ui);
+        }
+        nk_layout_row_end(ui);
+    }
+    nk_end(ui);nk_style_pop_float(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
+}
 static void draw_ui(app *a, int width, int height) {
     struct nk_context *ui = a->ui;
+    ps_graphics_backdrop(a->graphics,NULL);
     if(a->run_details_manager) {run_details_view(a,width,height);return;}
     if(a->channel_unit_manager) { channel_unit_manager_view(a,width,height);return; }
     if(a->layout_manager) { layout_manager_view(a,width,height);return; }
@@ -1098,6 +1168,7 @@ static void draw_ui(app *a, int width, int height) {
         return;
     }
     float w=(float)width,h=(float)height;
+    a->search_edit=NULL;
     a->toolbar_pointer_consumed=false;
     dock_prepare(a,w,h);
     dock_order(a);
@@ -1124,8 +1195,11 @@ static void draw_ui(app *a, int width, int height) {
         }
     }
     dock_headers(a);
+    workbench_status_view(a,w,h);
     if(a->tab==4 && a->library_search_active && a->dock_visible[PS_DOCK_WORKSPACE])
         nk_window_set_focus(ui,"workspace");
     dock_order(a);
+    dock_separator_views(a);
+    editor_search_view(a);
     completion_view(a,width,height);
 }

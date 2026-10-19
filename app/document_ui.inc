@@ -86,20 +86,6 @@ static void document_view(app *a, float content) {
             used += 34;
         }
     }
-    if (a->show_search && !doc->recovery) {
-        nk_layout_row_dynamic(ui, 28, 4);
-        nk_edit_string_zero_terminated(ui, NK_EDIT_FIELD, a->find, sizeof a->find,
-                                       nk_filter_default);
-        a->search_bounds=nk_widget_bounds(ui);
-        if (nk_button_label(ui, "Suchen"))
-            find_text(a, &doc->edit, false);
-        nk_edit_string_zero_terminated(ui, NK_EDIT_FIELD, a->replace, sizeof a->replace,
-                                       nk_filter_default);
-        a->replace_bounds=nk_widget_bounds(ui);
-        if (nk_button_label(ui, "Ersetzen"))
-            find_text(a, &doc->edit, true);
-        used += 34;
-    }
     nk_begin_disabled(ui, a->document_pending != 0 || doc->recovery != NULL);
     editor(a, &doc->edit, fmaxf(100, content - used));
     nk_end_disabled(ui);

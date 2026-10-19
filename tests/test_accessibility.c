@@ -63,5 +63,11 @@ int main(void) {
  CHECK(!memcmp(snapshot,m,sizeof *m) && value==1);free(snapshot);
  ps_a11y_begin(m);ps_a11y_publish(m);CHECK(!ps_a11y_set_value(m,slider,0));
  ps_a11y_begin(m);CHECK(!ps_a11y_record_range(m,"help","Winkel θ",box,true,-1,1,.25,&value));ps_a11y_publish(m);CHECK(m->nodes[0].id!=slider);
- free(m);puts("Accessibility model: immutable publication, stable/expired IDs, disabled/stale activation, duplicate scoping, UTF-8 and capacity passed");return 0;
+ double size=248;float divider[]={248,72,9,600};
+ ps_a11y_begin(m);CHECK(!ps_a11y_record_separator(m,"dock-splitter","Workspace-Breite",divider,true,208,360,10,&size));CHECK(ps_a11y_publish(m));
+ uint64_t separator=m->nodes[0].id;CHECK(m->nodes[0].role==PS_A11Y_SEPARATOR && m->nodes[0].focusable && m->nodes[0].value==248);
+ CHECK(!ps_a11y_press(m,separator) && !ps_a11y_set_value(m,separator,400));CHECK(ps_a11y_adjust(m,separator,1));
+ ps_a11y_begin(m);CHECK(ps_a11y_record_separator(m,"dock-splitter","Workspace-Breite",divider,true,208,360,10,&size));CHECK(ps_a11y_publish(m) && size==258 && m->nodes[0].id==separator);
+ CHECK(ps_a11y_set_value(m,separator,300));ps_a11y_begin(m);ps_a11y_publish(m);CHECK(!m->pending_value_id && !ps_a11y_adjust(m,separator,1));
+ free(m);puts("Accessibility model: immutable publication, stable/expired IDs, disabled/stale activation, duplicate scoping, UTF-8, separator range and capacity passed");return 0;
 }

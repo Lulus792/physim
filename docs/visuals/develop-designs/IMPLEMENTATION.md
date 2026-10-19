@@ -4,6 +4,10 @@ Stand: 19. Oktober 2026. Zuständigkeit des nächsten Chats: native UI-Umsetzung
 mit passenden UI-, Grafik-, Plattform- und Accessibility-Skills aus dem zentralen
 Bestand. [NEXT-CHAT.md](NEXT-CHAT.md) enthält den vollständigen Auftrag.
 
+Die folgende Übergabe beschreibt den Ausgangsstand. Die danach ausgeführte
+native Umsetzung, Bilder und Abnahmegrenzen stehen in
+[NATIVE-STATUS.md](NATIVE-STATUS.md).
+
 ## Ausgangspunkt und Umfang
 
 Die Gestaltung ist final gewählt. [DESIGN.md](DESIGN.md) und die beiden

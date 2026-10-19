@@ -28,8 +28,9 @@ an ihren Trennlinien per Maus und Tastatur größenverstellbar. Doppelklick oder
 Enter setzt eine Größe zurück. Bei schmalen Fenstern verändern gestapelte
 Nebenbereiche ihre Höhe.
 
-Die native Anwendung ist noch nicht umgebaut. Speichern/Build und Dateiinhalte
-in der Vorschau sind Demoabläufe; Änderungen gehen beim Neuladen verloren.
+Die native Umsetzung und ihre tatsächlichen Prüfbelege stehen in
+[NATIVE-STATUS.md](NATIVE-STATUS.md). Speichern/Build und Dateiinhalte in der
+HTML-Vorschau bleiben Demoabläufe; Änderungen gehen dort beim Neuladen verloren.
 
 ## Referenzprüfung
 

@@ -31,7 +31,8 @@ typedef struct {
  bool active,complete,focused; /* Logical document focus target; getter also requires host focus. */
  ps_a11y_table_inventory *tables;
 } ps_a11y_document;
-typedef enum {PS_A11Y_TEXT,PS_A11Y_BUTTON,PS_A11Y_CHECKBOX,PS_A11Y_RADIO,PS_A11Y_RADIO_GROUP,PS_A11Y_SLIDER,PS_A11Y_EDIT,PS_A11Y_LINK} ps_a11y_role;
+typedef enum {PS_A11Y_TEXT,PS_A11Y_BUTTON,PS_A11Y_CHECKBOX,PS_A11Y_RADIO,PS_A11Y_RADIO_GROUP,PS_A11Y_SLIDER,PS_A11Y_EDIT,PS_A11Y_LINK,PS_A11Y_SEPARATOR} ps_a11y_role;
+static inline bool ps_a11y_range_role(ps_a11y_role role) {return role==PS_A11Y_SLIDER || role==PS_A11Y_SEPARATOR;}
 typedef struct {
  uint64_t id,key,parent;unsigned occurrence;ps_a11y_role role;
  char window[PS_A11Y_WINDOW_BYTES],label[PS_A11Y_LABEL_BYTES];
@@ -138,6 +139,9 @@ bool ps_a11y_record_option(ps_a11y_model *model,const char *window,const char *g
  * Queued changes are applied only when the same visible enabled control is
  * recorded again. Invalid declarations preserve model and caller value. */
 bool ps_a11y_record_range(ps_a11y_model *model,const char *window,const char *label,
+                         const float bounds[4],bool enabled,double minimum,double maximum,
+                         double increment,double *value);
+bool ps_a11y_record_separator(ps_a11y_model *model,const char *window,const char *label,
                          const float bounds[4],bool enabled,double minimum,double maximum,
                          double increment,double *value);
 bool ps_a11y_set_value(ps_a11y_model *model,uint64_t id,double value);

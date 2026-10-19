@@ -11,6 +11,9 @@ ps_a11y_native *ps_a11y_native_create(SDL_Window *window,ps_a11y_model *model,SD
 void ps_a11y_native_publish(ps_a11y_native *bridge,bool changed);
 void ps_a11y_native_destroy(ps_a11y_native *bridge);
 bool ps_a11y_native_test(SDL_Window *window);
+/* User-requested opaque UI. Platform display preferences where available;
+ * PHYSIM_REDUCE_TRANSPARENCY=1 is a portable explicit override. */
+bool ps_a11y_native_reduce_transparency(void);
 /* Diagnostic: read the full real F1 source via AppKit and request native reveal. */
 bool ps_a11y_native_document_read_test(ps_a11y_native *bridge);
 bool ps_a11y_native_edit_test_step(ps_a11y_native *bridge,int step);

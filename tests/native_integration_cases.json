@@ -10577,6 +10577,18 @@
       ]
     },
     {
+      "name": "workbench_workflow",
+      "app": true,
+      "display": true,
+      "targets": ["python", "physim"],
+      "steps": [{
+        "program": "python",
+        "arguments": ["{root}/tests/check_display_workflow.py", "workbench_workflow", "--app", "{physim}", "--work", "{work}", "--root", "{root}", "--cc", "{cc}"],
+        "timeout": 120,
+        "files": ["app-steps.json"]
+      }]
+    },
+    {
       "name": "editor_replace_workflow",
       "app": true,
       "display": true,

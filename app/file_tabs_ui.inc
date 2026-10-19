@@ -95,7 +95,6 @@ static void file_tabs_view(app *a,struct nk_rect bounds) {
     if(nk_input_is_mouse_hovering_rect(in,bounds))a->file_tab_scroll-=in->mouse.scroll_delta.y*50;
     a->file_tab_scroll=fmaxf(0,fminf(fmaxf(0,total-strip_width),a->file_tab_scroll));
     /* Selecting via the tree or a shortcut always reveals the active file. */
-    static const float margin=1;
     float active_x=0;
     for(unsigned i=0;i<FILE_TABS;i++){unsigned key=a->file_tab_order[i];if(key==active)break;active_x+=widths[key];}
     if(!a->file_tab_drag && a->file_tab_last_active!=active && active<FILE_TABS) {
@@ -111,9 +110,11 @@ static void file_tabs_view(app *a,struct nk_rect bounds) {
         struct nk_rect full=nk_rect(bounds.x+x,bounds.y,width,bounds.h);
         struct nk_rect visible=nk_rect(fmaxf(strip.x,full.x),full.y,fmaxf(0,fminf(strip.x+strip.w,full.x+width)-fmaxf(strip.x,full.x)),full.h);
         a->file_tab_bounds[key]=visible;
-        if(key==active)nk_fill_rect(canvas,full,0,UI_COLOR(window));
-        else if(visible.w>0 && nk_input_is_mouse_hovering_rect(in,visible) && !(ui->current->layout->flags&NK_WINDOW_ROM))nk_fill_rect(canvas,full,0,UI_COLOR(button_hover));
-        if(key==active)nk_stroke_line(canvas,full.x+margin,full.y+full.h-1,full.x+width-margin,full.y+full.h-1,1,UI_COLOR(accent));
+        struct nk_rect pill=nk_rect(full.x+4,full.y+4,fmaxf(1,full.w-8),fmaxf(1,full.h-8));
+        bool compact=!a->project_manager && (a->tab==0 || a->tab==8);
+        if(key==active)nk_fill_rect(canvas,compact?pill:full,compact?6:0,compact?UI_COLOR(selection_active):UI_COLOR(window));
+        else if(visible.w>0 && nk_input_is_mouse_hovering_rect(in,visible) && !(ui->current->layout->flags&NK_WINDOW_ROM))nk_fill_rect(canvas,compact?pill:full,compact?6:0,UI_COLOR(button_hover));
+        if(!compact && key==active)nk_stroke_line(canvas,full.x+1,full.y+full.h-1,full.x+width-1,full.y+full.h-1,1,UI_COLOR(accent));
         ps_ui_draw_icon(canvas,PS_ICON_FILE,nk_rect(full.x+6,full.y,20,full.h),UI_COLOR(muted));
         nk_draw_text(canvas,nk_rect(full.x+28,full.y+(full.h-ui->style.font->height)/2,width-52,ui->style.font->height),labels[key],(int)strlen(labels[key]),ui->style.font,nk_rgba(0,0,0,0),key==active?UI_COLOR(text):UI_COLOR(muted));
         struct nk_rect cb=nk_rect(full.x+width-24,full.y,24,full.h);

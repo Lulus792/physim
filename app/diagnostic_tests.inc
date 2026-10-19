@@ -23,7 +23,7 @@ static bool diagnostic_test_start(app *a,const char *root,const char *mode) {
 static void diagnostic_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
     bool analysis=strstr(mode,"analysis")!=NULL,ok=true;
     if(!strcmp(mode,"diagnostic-build-helper")) {
-        static int selected=-1,reported=-1;
+        static int selected=-1,reported=-1;static unsigned scroll_settle;
         if(reported!=*stage){fprintf(stderr,"Compiler helper stage %d: %s\n",*stage,a->status);reported=*stage;}
         char path[4096];join(path,sizeof path,a->project,"include/helper α.h");
         switch(*stage) {
@@ -36,7 +36,15 @@ static void diagnostic_test_frame(app *a,const char *mode,int *stage,int *code,c
             ok &= selected>=0;
             test_window_key_mod(a->window,SDLK_F6,0);break;
         case 2:
+            if(scroll_settle){--scroll_settle;return;}
             ok=!a->runner.running && !a->last_run[0] && selected>=0 && a->diagnostic_bounds[selected].w>0;
+            if(ok) {
+                struct nk_rect panel=a->dock_panels[PS_DOCK_LOG],row=a->diagnostic_bounds[selected];
+                if(row.y+row.h>panel.y+panel.h-12 || row.y<panel.y+dock_header_height(a)+50) {
+                    test_plot_wheel(a,panel.x+panel.w*.5f,panel.y+panel.h-35,row.y+row.h>panel.y+panel.h-12?-1:1);
+                    scroll_settle=2;return;
+                }
+            }
             if(ok)test_mouse(a,a->diagnostic_bounds[selected],true);break;
         case 3:test_mouse(a,a->diagnostic_bounds[selected],false);break;
         case 4: {
@@ -123,11 +131,14 @@ static void diagnostic_test_frame(app *a,const char *mode,int *stage,int *code,c
         break;
     case 3: {
         if(a->runner.running || !idle(a))return;
-        ok=a->diagnostic_count==1 && a->diagnostics[0].structured && a->diagnostics[0].code==(analysis?PS_INVALID:PS_SINGULAR) &&
-            a->diagnostics[0].line>0 && !a->diagnostics[0].foreign && strstr(a->diagnostics[0].text,"α");
+        int selected=-1;unsigned structured=0;
+        for(int i=0;i<a->diagnostic_count;i++)if(a->diagnostics[i].structured){selected=i;++structured;}
+        ok=structured==1 && selected>=0;
+        diagnostic *item=ok?&a->diagnostics[selected]:NULL;
+        ok=ok && item->code==(analysis?PS_INVALID:PS_SINGULAR) && item->line>0 && !item->foreign && strstr(item->text,"α");
         char path[4096];snprintf(path,sizeof path,"%s.psdiag",analysis?a->report:a->last_run);ps_diagnostic record;
-        ok &= ps_diagnostic_load(path,&record)==PS_OK && record.line==(uint32_t)a->diagnostics[0].line;
-        if(ok)jump_to_diagnostic(a,&a->diagnostics[0]);break;
+        ok=ok && ps_diagnostic_load(path,&record)==PS_OK && record.line==(uint32_t)item->line;
+        if(ok)jump_to_diagnostic(a,item);break;
     }
     case 4: {
         struct nk_text_edit *edit=analysis?&a->analysis:&a->experiment;

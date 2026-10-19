@@ -68,6 +68,9 @@ void nk_sdl_shutdown(struct nk_context *ctx);
 bool nk_sdl_test_input(SDL_Window *window, ps_graphics *graphics);
 bool nk_sdl_accessibility_choose(struct nk_context *ctx,const char *group,const char *label);
 bool nk_sdl_accessibility_focus(struct nk_context *ctx,const char *group,const char *label);
+/* Application focus routing through the common published model. The method
+ * above deliberately exercises native adapters for platform regression tests. */
+bool nk_sdl_accessibility_request_focus(struct nk_context *ctx,const char *group,const char *label);
 bool nk_sdl_accessibility_event(struct nk_context *ctx,const SDL_Event *event);
 bool nk_sdl_accessibility_is_focused(struct nk_context *ctx,const char *group,const char *label);
 /* Read the published, grouped choice state without scheduling an action. */
@@ -108,11 +111,15 @@ bool nk_sdl_accessibility_native_links_test_step(struct nk_context *ctx,int step
 nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flags,char *text,int capacity,nk_plugin_filter filter);
 enum {PS_UI_EDIT_NATIVE_FOCUS=1u<<24};
 void nk_sdl_set_ui_size(struct nk_context *ctx, unsigned size);
+bool nk_sdl_reduce_transparency(struct nk_context *ctx);
+/* Force conversion boundaries around a backdrop marker; Nuklear can otherwise
+ * merge consecutive solid shapes despite their different command userdata. */
+void ps_ui_draw_backdrop(struct nk_context *ctx,const ps_ui_backdrop *material);
 enum { PS_UI_LAYOUT_MAGIC = 0x50534C59u };
 typedef unsigned (*ps_ui_a11y_hook)(void *user,const char *window,const char *label,
                                 int role,const float bounds[4],bool enabled,bool checked,const char *group,bool activated);
 typedef unsigned (*ps_ui_a11y_range_hook)(void *user,const char *window,const char *label,
-                                const float bounds[4],bool enabled,double values[4]);
+                                int role,const float bounds[4],bool enabled,double values[4]);
 typedef struct {
     unsigned magic,ui_size;
     ps_ui_a11y_hook accessibility;
@@ -132,6 +139,7 @@ nk_bool ps_ui_checkbox_named(struct nk_context *ctx,const char *text,const char 
 nk_bool ps_ui_checkbox_label(struct nk_context *ctx,const char *text,nk_bool *active);
 nk_bool ps_ui_button_label(struct nk_context *ctx,const char *text);
 nk_bool ps_ui_slider_named(struct nk_context *ctx,const char *name,float minimum,float *value,float maximum,float increment);
+nk_bool ps_ui_separator_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,float minimum,float *value,float maximum);
 void ps_ui_label(struct nk_context *ctx,const char *text,nk_flags alignment);
 void ps_ui_label_colored(struct nk_context *ctx,const char *text,nk_flags alignment,struct nk_color color);
 typedef enum {

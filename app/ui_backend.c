@@ -228,6 +228,16 @@ void ps_ui_accessibility_route(struct nk_context *ctx,bool allowed) {
  ps_ui_font_layout *layout=ctx->userdata.ptr;if(layout->magic!=PS_UI_LAYOUT_MAGIC)return;
  layout->accessibility_route_window=ctx->current;layout->accessibility_route_allowed=allowed;
 }
+void ps_ui_draw_backdrop(struct nk_context *ctx,const ps_ui_backdrop *material) {
+    if(!ctx || !ctx->current || !material)return;
+    struct nk_command_buffer *canvas=nk_window_get_canvas(ctx);struct nk_rect clip=canvas->clip;
+    nk_handle userdata=ctx->userdata;
+    /* Solid shapes do not split conversion batches on userdata alone. The
+     * scissor commands isolate this material from the ordinary UI shader. */
+    nk_set_user_data(ctx,nk_handle_ptr((void*)material));nk_push_scissor(canvas,clip);
+    nk_fill_rect(canvas,nk_rect(material->x,material->y,material->w,material->h),16,nk_rgb(255,255,255));
+    nk_set_user_data(ctx,userdata);nk_push_scissor(canvas,clip);
+}
 static bool accessibility_emit(struct nk_context *ctx,const char *text,int role,struct nk_rect bounds,bool checked,const char *group,bool activated,double *range) {
     if(!ctx || !ctx->userdata.ptr || !ctx->current || !ctx->current->layout || !text)return false;
     const ps_ui_font_layout *layout=ctx->userdata.ptr;
@@ -242,10 +252,11 @@ static bool accessibility_emit(struct nk_context *ctx,const char *text,int role,
     /* A native target must not activate a control underneath a higher window. */
     for(const struct nk_window *above=ctx->current->next;above && enabled;above=above->next) {
         if(above->flags&(NK_WINDOW_HIDDEN|NK_WINDOW_MINIMIZED|NK_WINDOW_CLOSED))continue;
+        if(role==8 && !strncmp(above->name_string,"dock-splitter-",14))continue;
         struct nk_rect cover=above->bounds;
         if(cover.x<right && cover.x+cover.w>left && cover.y<bottom && cover.y+cover.h>top)enabled=false;
     }
-    unsigned result=range?(layout->accessibility_range?layout->accessibility_range(layout->accessibility_user,ctx->current->name_string,text,visible,enabled,range):0)
+    unsigned result=range?(layout->accessibility_range?layout->accessibility_range(layout->accessibility_user,ctx->current->name_string,text,role,visible,enabled,range):0)
         :layout->accessibility(layout->accessibility_user,ctx->current->name_string,text,role,visible,enabled,checked,group,activated);
     if(result&2u)nk_window_set_focus(ctx,ctx->current->name_string);
     if((result&4u) && right-left>3 && bottom-top>3)nk_stroke_rect(nk_window_get_canvas(ctx),nk_rect(left+1,top+1,right-left-2,bottom-top-2),3,2,ctx->style.button.text_normal);
@@ -267,6 +278,11 @@ nk_bool ps_ui_option_label(struct nk_context *ctx,const char *group,const char *
     struct nk_rect bounds=nk_widget_bounds(ctx);
     nk_bool selected=nk_option_label(ctx,text,active);
     return accessibility_widget(ctx,text,3,bounds,selected,group,selected&&!active) || selected;
+}
+nk_bool ps_ui_separator_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,float minimum,float *value,float maximum) {
+    double range[]={*value,minimum,maximum,10};
+    if(accessibility_emit(ctx,name,8,bounds,false,NULL,false,range)){*value=(float)range[0];return nk_true;}
+    return nk_false;
 }
 nk_bool ps_ui_checkbox_named(struct nk_context *ctx,const char *text,const char *name,nk_bool *active) {
     if(!ctx || !active)return nk_false;

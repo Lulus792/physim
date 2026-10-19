@@ -155,10 +155,10 @@ static void document_test_frame(app *a, const char *root, int *stage, int *code,
         document_select(a, 0);
         break;
     case 15:
-        test_mouse(a, a->document_list_bounds[1], true);
+        test_mouse(a, a->file_tab_bounds[3], true);
         break;
     case 16:
-        test_mouse(a, a->document_list_bounds[1], false);
+        test_mouse(a, a->file_tab_bounds[3], false);
         break;
     case 18:
         ok = a->document_active == 1 && doc && doc->dirty;

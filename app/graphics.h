@@ -6,12 +6,24 @@ struct nk_context;
 struct nk_buffer;
 struct nk_draw_null_texture;
 typedef struct ps_graphics ps_graphics;
+/* A frame-local command marker for one bounded UI backdrop. Register before
+ * submission; ps_ui_draw_backdrop records its isolated rounded command. No CPU
+ * pixels are read; unsupported filtering is opaque. */
+typedef struct {
+    float x,y,w,h;
+    uint8_t red,green,blue;
+    bool light,opaque;
+    uint8_t fallback[3];
+} ps_ui_backdrop;
+void ps_graphics_backdrop(ps_graphics *g,const ps_ui_backdrop *backdrop);
 /* Last UI submission, including PNG drawing. CPU timings exclude swap/vsync and
  * do not measure GPU completion. Allocation count covers conversion VBO/EBO data. */
 typedef struct {
     double conversion_seconds, upload_seconds;
     uint64_t allocations;
     size_t vertex_bytes, index_bytes, retained_bytes;
+    unsigned backdrop_passes;
+    size_t backdrop_pixels;
 } ps_ui_render_stats;
 bool ps_graphics_ui_stats(const ps_graphics *g, ps_ui_render_stats *out);
 /* Last successful scene call. CPU wall times: validation/target setup,

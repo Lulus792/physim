@@ -9,7 +9,8 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
     if (a->workspace_open || a->loaded || a->project_input[0])
         return false;
     if(!strcmp(mode,"file-tabs"))return file_tabs_test_start(a,root);
-    if(!strcmp(mode,"editor-replace"))return editor_replace_start(a,root);
+    if(!strncmp(mode,"workbench-",10))return workbench_test_start(a,root,mode);
+    if(!strncmp(mode,"editor-replace",14))return editor_replace_start(a,root,mode);
     if(!strcmp(mode,"completion-c") || !strcmp(mode,"completion-phys"))return completion_test_start(a,root,mode);
     if(!strcmp(mode,"api-reference-c") || !strcmp(mode,"api-reference-phys"))return api_reference_test_start(a,root,mode);
     if(!strncmp(mode,"parameter-form-",15))return parameter_form_test_start(a,root,mode);
@@ -137,7 +138,8 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
 static void workspace_test_frame(app *a, const char *mode, int *stage, int *code,
                                 const char **capture) {
     if(!strcmp(mode,"file-tabs")){file_tabs_test_frame(a,stage,code,capture);return;}
-    if(!strcmp(mode,"editor-replace")){editor_replace_frame(a,stage,code,capture);return;}
+    if(!strncmp(mode,"workbench-",10)){workbench_test_frame(a,mode,stage,code,capture);return;}
+    if(!strncmp(mode,"editor-replace",14)){editor_replace_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"completion-c") || !strcmp(mode,"completion-phys")){completion_test_frame(a,mode,stage,code,capture);return;}
     if(!strcmp(mode,"api-reference-c") || !strcmp(mode,"api-reference-phys")){api_reference_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"parameter-form-",15)){parameter_form_test_frame(a,mode,stage,code,capture);return;}

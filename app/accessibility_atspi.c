@@ -232,6 +232,7 @@ static unsigned role(ps_a11y_native *w, const ps_a11y_node *node) {
     if(node->role==AX_HEADER_ROLE)return 57;
     if(node->role==AX_DOCUMENT_ROLE)return 94;
     if(node->role==PS_A11Y_EDIT)return 79;
+    if(node->role==PS_A11Y_SEPARATOR)return 50;
     return !w ? 75 : !node->id ? 23 : node->role == PS_A11Y_LINK ? 88 : node->role == PS_A11Y_BUTTON ? 43 : node->role == PS_A11Y_CHECKBOX ? 7 : node->role == PS_A11Y_RADIO ? 44 : node->role == PS_A11Y_RADIO_GROUP ? 99 : node->role == PS_A11Y_SLIDER ? 51 : 29;
 }
 static const char *role_name(unsigned r, bool localized) {
@@ -243,6 +244,7 @@ static const char *role_name(unsigned r, bool localized) {
     case 94:return localized ? "Textdokument" : "document text";
     case 88:return localized ? "Link" : "link";
     case 51:return localized ? "Regler" : "slider";
+    case 50:return localized ? "Trennlinie" : "separator";
     case 75:
         return localized ? "Anwendung" : "application";
     case 23:
@@ -281,7 +283,8 @@ static void states(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
     if(node->focusable)first |= 1u << 11;
     if(available && node->focused)first |= 1u << 12;
     if(node->role==PS_A11Y_EDIT){first|=1u<<26;if(available && node->enabled)first|=1u<<7;}
-    if(node->role==PS_A11Y_SLIDER && node->enabled)first |= 1u << 7;
+    if(ps_a11y_range_role(node->role) && node->enabled)first |= 1u << 7;
+    if(node->role==PS_A11Y_SEPARATOR)first|=1u<<(node->bounds[2]<node->bounds[3]?29:14);
     if (!w || w->visible)
         first |= (node->offscreen?0:(1u << 25)) | (1u << 30);
     if((node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) && node->checked)first |= 1u << 4;
@@ -304,7 +307,7 @@ static void interfaces(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
         text(r, &a, AX_PREFIX "Component");
     if (node->id && ps_a11y_actionable(node->role))
         text(r, &a, AX_PREFIX "Action");
-    if(node->id && node->role==PS_A11Y_SLIDER)text(r,&a,AX_PREFIX "Value");
+    if(node->id && ps_a11y_range_role(node->role))text(r,&a,AX_PREFIX "Value");
     if(node->role==AX_DOCUMENT_ROLE || node->role==PS_A11Y_EDIT)text(r,&a,AX_PREFIX "Text");
     if(node->role==PS_A11Y_EDIT)text(r,&a,AX_PREFIX "EditableText");
     if(node->role==AX_DOCUMENT_ROLE)text(r,&a,AX_PREFIX "Hypertext");
@@ -547,7 +550,7 @@ static bool interface_supported(ps_a11y_native *w, const ps_a11y_node *node, con
         return w != NULL;
     if (!strcmp(iface, AX_PREFIX "Action"))
         return node->id && ps_a11y_actionable(node->role);
-    if(!strcmp(iface,AX_PREFIX "Value"))return node->id && node->role==PS_A11Y_SLIDER;
+    if(!strcmp(iface,AX_PREFIX "Value"))return node->id && ps_a11y_range_role(node->role);
     if(!strcmp(iface,AX_PREFIX "Text"))return node->role==AX_DOCUMENT_ROLE || node->role==PS_A11Y_EDIT;
     if(!strcmp(iface,AX_PREFIX "EditableText"))return node->role==PS_A11Y_EDIT;
     if(!strcmp(iface,AX_PREFIX "Hypertext"))return node->role==AX_DOCUMENT_ROLE;
@@ -760,7 +763,7 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             : !w  ? application_xml
                   : node.role==AX_HYPERLINK_ROLE?"":component_xml,
             cache || !node.id || !ps_a11y_actionable(node.role) ? "" : action_xml,
-            cache || !node.id || node.role!=PS_A11Y_SLIDER ? "" : value_xml,
+            cache || !node.id || !ps_a11y_range_role(node.role) ? "" : value_xml,
             !cache && (node.role==AX_DOCUMENT_ROLE || node.role==PS_A11Y_EDIT)?text_xml:"",
             !cache && node.role==PS_A11Y_EDIT?editable_text_xml:"",
             !cache && node.role==AX_DOCUMENT_ROLE?hypertext_xml:"",
@@ -888,7 +891,7 @@ static DBusHandlerResult message_handler(DBusConnection *connection, DBusMessage
             if (!cache && !w && !strcmp(property_iface, AX_PREFIX "Application") &&
                 !strcmp(name, "Id") && dbus_message_iter_get_arg_type(&value) == DBUS_TYPE_INT32)
                 dbus_message_iter_get_basic(&value, &s->application_id);
-            else if(!cache && w && node.id && node.role==PS_A11Y_SLIDER && !strcmp(property_iface,AX_PREFIX "Value") && !strcmp(name,"CurrentValue")) {
+            else if(!cache && w && node.id && ps_a11y_range_role(node.role) && !strcmp(property_iface,AX_PREFIX "Value") && !strcmp(name,"CurrentValue")) {
                 if(dbus_message_iter_get_arg_type(&value)!=DBUS_TYPE_DOUBLE)failure=DBUS_ERROR_INVALID_ARGS;
                 else {
                     double scalar;dbus_message_iter_get_basic(&value,&scalar);SDL_LockMutex(w->mutex);
@@ -1439,7 +1442,7 @@ void ps_a11y_native_publish(ps_a11y_native *b, bool changed) {
             if(old && old->offscreen!=node->offscreen)event_state(s,node_path,"showing",b->visible && !node->offscreen);
             if(old && (node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) && old->checked!=node->checked)
                 event_state(s,node_path,"checked",node->checked);
-            if(old && node->role==PS_A11Y_SLIDER && old->value!=node->value)event_value(s,node_path,node->value);
+            if(old && ps_a11y_range_role(node->role) && old->value!=node->value)event_value(s,node_path,node->value);
             if(old && node->role==PS_A11Y_EDIT) {
                 ps_a11y_text_index prior={0},current={0};
                 bool indexed=ps_a11y_text_index_build(&current,node->text_value,strlen(node->text_value),node->text_version);

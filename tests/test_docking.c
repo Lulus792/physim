@@ -35,6 +35,20 @@ int main(void) {
         if(i%7==0) CHECK(ps_dock_float_panel(&d,panel,(ps_dock_float){i%400,90,720,580}));
         if(i%11==0) CHECK(ps_dock_hide(&d,panel));
     }
+    for(unsigned panel=0;panel<PS_DOCK_PANELS;panel++)for(unsigned side=PS_DOCK_LEFT;side<=PS_DOCK_BOTTOM;side++) {
+        d=PS_DOCK_DEFAULT;CHECK(ps_dock_hide(&d,panel));
+        CHECK(ps_dock_reveal_outer(&d,panel,side) && ps_dock_valid(&d));
+        unsigned leaf=ps_dock_group(&d,panel);CHECK(leaf!=PS_DOCK_NONE);
+        CHECK(d.nodes[d.root].kind==(side<=PS_DOCK_RIGHT?PS_DOCK_X:PS_DOCK_Y));
+        CHECK((side==PS_DOCK_LEFT || side==PS_DOCK_TOP?d.nodes[d.root].first:d.nodes[d.root].second)==leaf);
+        unsigned char encoded[PS_DOCK_WIRE_BYTES];ps_dock_layout decoded;
+        CHECK(ps_dock_encode(&d,encoded,sizeof encoded) && ps_dock_decode(encoded,sizeof encoded,&decoded) && !memcmp(&d,&decoded,sizeof d));
+        before=d;CHECK(!ps_dock_reveal_outer(&d,PS_DOCK_PANELS,side) && !memcmp(&d,&before,sizeof d));
+    }
+    d=PS_DOCK_DEFAULT;CHECK(ps_dock_float_panel(&d,PS_DOCK_INSPECTOR,(ps_dock_float){100,100,400,500}));before=d;
+    CHECK(ps_dock_reveal_outer(&d,PS_DOCK_INSPECTOR,PS_DOCK_RIGHT) && !memcmp(&d,&before,sizeof d));
+    for(unsigned p=0;p<PS_DOCK_PANELS;p++)CHECK(ps_dock_hide(&d,p));
+    CHECK(ps_dock_reveal_outer(&d,PS_DOCK_WORKSPACE,PS_DOCK_RIGHT) && ps_dock_valid(&d));
     d=PS_DOCK_DEFAULT;d.nodes[5].first=5;CHECK(!ps_dock_valid(&d));
     d=PS_DOCK_DEFAULT;d.nodes[1].panels=1;CHECK(!ps_dock_valid(&d));
     d=PS_DOCK_DEFAULT;d.floating=1;CHECK(!ps_dock_valid(&d));

@@ -1,0 +1,756 @@
+{
+  "date": "2026-10-19",
+  "base_commit": "e5c3144020e4109e8d2dabf3dc59102092ec259e",
+  "source_sha256": {
+    "app/accessibility.c": "bda619b6bb407e7ffc3c223d5b5ae32c651cfd4cd119ee3cf51e2002f234ae9c",
+    "app/accessibility.h": "44b79ada2d6699f5f30b8b49770d40b766d882fffec101b1d566a066b1c23205",
+    "app/accessibility_atspi.c": "5604124b5ab0ea7c1b401199916141ab36e97b1641ce9c641a0d14b17d264e7d",
+    "app/accessibility_native.c": "2efbcfd1b49a9495c0be8dff0eae768cbc6fd4c1fd4843ab09e994371b46a6c8",
+    "app/accessibility_native.h": "a36db66714e36d8d1c520c19c4018ddcec5d0d2f7aaec05c5c4f2e4ba2004a7d",
+    "app/accessibility_windows.inc": "63fd81f0073778fac00a7cf7a0d57d8610bae4cbc0084a2a2d65b40134b80a82",
+    "app/completion_tests.inc": "bc8e7701e53d4342a426fd01b81ab6ca749dac297060b7ce2f077781faa7ccda",
+    "app/design_ui.inc": "1d39eb7b512c58b835dc4d7ea5b5c77497777f2eb368056b9036fa013c85456c",
+    "app/diagnostic_tests.inc": "2e3f625e27767c8ecb80310c5675c5c5f69cfd643ecb8a2b8951d45a8a961671",
+    "app/docking.c": "dd95b135659639caf448d84c43cf0328ddbbac9909cb1b081f3750cc1198708b",
+    "app/docking.h": "c1dfd06b87f6c5383709ae25f1b68061754c408ad3d453fa4f92270f7ca564a4",
+    "app/docking_ui.inc": "44fff6517c0bbacb422e0211d59cc9f0ef9bf31580dd673cc68e61c1c21b19c3",
+    "app/document_tests.inc": "b05a01221eda4115bc333d6243b256bdf7cfa5bbd14101a31640523bacf2cf5f",
+    "app/document_ui.inc": "2847a873536d69d4920daaadd157dd3fa926ebea816543d61cbd4d398789d157",
+    "app/editor_replace_tests.inc": "227790624f8a93a1f781fbe1bed5d4c3d6027cc8459c719f64a5865c6b087533",
+    "app/editor_search.h": "7aa45a0fc7e64f49dab6365075b0f95209db9bd5d90374b775196cb09cc63f55",
+    "app/editor_search_ui.inc": "3f8321f63e4048cb96971422caa223c33b638ec7a625b5ed000957425bbb85cd",
+    "app/file_tabs_tests.inc": "d411875ab26c6907a4831e92672ed5ca8a68307bb3d9e6a435624a9678f6563b",
+    "app/file_tabs_ui.inc": "3e4e9b41a996cfd356a185a5b2ffd4bfe310c5aed6f6a11f57d8a30c7391c750",
+    "app/graphics.c": "8003689807f315891589c7c3004bf70a8c30777806ce1a4e98e0054099b37cf9",
+    "app/graphics.h": "f1c48a58caca30d6496a978d9d003980735da2543bffd5e93191f04bccf77a57",
+    "app/main.c": "6355781a45f7268b5edc9ee5976e7aa4e1cedd7c4e31e4bc5a0f05a587260169",
+    "app/toolbar_ui.inc": "1616e18299270863620c1b037ba2ae56c312c2697378554f3b6fb6454b3abdc6",
+    "app/ui.h": "9025ccc24c0acf983ec395ccf5526db21bdd927ee2ae010237cd35c75ac42e48",
+    "app/ui_backend.c": "e1bfc2583a6120eec451912ab6410b89b02677f2f8c86045a344ac9fc6648152",
+    "app/ui_sdl.c": "d88e30d2ae15f511a6e9a2bc5c861f8e19af44d5bc3c319cdce677f8a0165527",
+    "app/workbench_tests.inc": "5ae9bf483ae825cfa9ba530de7dc609fdd75b40c89c090dcda3ee3665eeb8bed",
+    "app/workspace_tests.inc": "978dc73e91f178cb73ac1742ccae56ae4391549fce3e3412e78d4619b8fe74a5",
+    "app/workspace_tree_ui.inc": "9f329ec3f0a2583d6f1d5c5fa1f1317af15b9b126fdfa3d9fa6c25c90fd942ae",
+    "tests/check_display_workflow.py": "f1e91f069a7362390669c25d5f1caa358127835c66ed43dda1dd07049b7df49a",
+    "tests/check_documentation_windows_host.py": "b3792e77a93e1f46ca5f560d2710341212d1f55e8bfa62abbdb68bd2c410d1e0",
+    "tests/native_integration_cases.json": "5987cae2b9955305ba6fbe9b896d080307e6ac7ed5e1811959f1ad0a6813e5dc",
+    "tests/test_accessibility.c": "687b080da0d61bb676bfa336515663e77f897c68c844daa2e27c3a6b184f9aea",
+    "tests/test_backdrop_ui.c": "e3a52b421c5ccd4ce1673112db8c5ecbacee55c9f6e95ae05db01f991ad6e179",
+    "tests/test_docking.c": "e60ceea2b3f4591decbeb58041da23661760add332c9b8c920a772a005a6c6f5",
+    "tests/test_editor_search.c": "b203484c286d5549833947a678b568bf46077b216cff4e3beefb9240197eafd4",
+    "tools/native_tests.py": "93a91d7c2901f1fd70e9353849aa3e78c73ca8e235e930574c8e7e9c0feb928c"
+  },
+  "preserved_f1_changes": {
+    ".github/workflows/linux-ui-sanitizers.yml": "517c7d628b9d496a0422d145f747a0427da24a4a304a218294f857ac9f6aaa24",
+    ".github/workflows/macos-f1-accessibility.yml": "54c64dc5b9a5ddc478d704fbd6eccae4548155216130c25778466ab60a48a9af",
+    "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+    "tests/check_documentation_orca.py": "ef3298800cfa8032cf6333b6b7ee902fc75d17fc3200b0f5ec6e801b2eba37ac",
+    "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+    "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+    "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+  },
+  "binaries": {
+    "build/native/F1-reading-focus/Debug-sanitized/bin/physim.exe": "7c9790494268ac29c8543573491a98d04213ffdfe51675e02b277557bb516e65",
+    "build/native/F1-linux/Debug-sanitized/bin/physim": "ff6f35503030e27f31e53384aa9c7de673c6df40096cdacd039d3f86fad4502e"
+  },
+  "passed_cases": [
+    {
+      "platform": "Windows",
+      "run": "run-5u54fb7n",
+      "case": "accessibility_text_index",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-5u54fb7n/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-5u54fb7n",
+      "case": "accessibility_utf16",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-5u54fb7n/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-5u54fb7n",
+      "case": "editor_search",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-5u54fb7n/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-5u54fb7n",
+      "case": "accessibility",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-5u54fb7n/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-5u54fb7n",
+      "case": "accessibility_document",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-5u54fb7n/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-5u54fb7n",
+      "case": "accessibility_tables",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-5u54fb7n/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-5u54fb7n",
+      "case": "accessibility_suspend",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-5u54fb7n/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-5u54fb7n",
+      "case": "accessibility_edit",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-5u54fb7n/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-5u54fb7n",
+      "case": "accessibility_options",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-5u54fb7n/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-5u54fb7n",
+      "case": "accessibility_focus",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-5u54fb7n/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-5u54fb7n",
+      "case": "docking",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-5u54fb7n/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-5u54fb7n",
+      "case": "ui_geometry",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-5u54fb7n/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-5u54fb7n",
+      "case": "preferences",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-5u54fb7n/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-81zm3lsd",
+      "case": "accessibility_text_index",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-81zm3lsd/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-81zm3lsd",
+      "case": "accessibility_utf16",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-81zm3lsd/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-81zm3lsd",
+      "case": "editor_search",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-81zm3lsd/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-81zm3lsd",
+      "case": "accessibility",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-81zm3lsd/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-81zm3lsd",
+      "case": "accessibility_document",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-81zm3lsd/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-81zm3lsd",
+      "case": "accessibility_tables",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-81zm3lsd/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-81zm3lsd",
+      "case": "accessibility_suspend",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-81zm3lsd/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-81zm3lsd",
+      "case": "accessibility_edit",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-81zm3lsd/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-81zm3lsd",
+      "case": "accessibility_options",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-81zm3lsd/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-81zm3lsd",
+      "case": "accessibility_focus",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-81zm3lsd/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-81zm3lsd",
+      "case": "docking",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-81zm3lsd/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-81zm3lsd",
+      "case": "ui_geometry",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-81zm3lsd/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-81zm3lsd",
+      "case": "preferences",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-81zm3lsd/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-5ltoaw5c",
+      "case": "backdrop_ui",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-5ltoaw5c/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-5ltoaw5c",
+      "case": "editor_replace_workflow",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "7c9790494268ac29c8543573491a98d04213ffdfe51675e02b277557bb516e65"
+        }
+      ],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-5ltoaw5c/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-5ltoaw5c",
+      "case": "completion_workflow",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "7c9790494268ac29c8543573491a98d04213ffdfe51675e02b277557bb516e65"
+        }
+      ],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-5ltoaw5c/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-8klzpoj1",
+      "case": "workbench_workflow",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "82da9c95396d07f572db08658da514563eecdc05249e2b95dcb5c35d23c519ec"
+        }
+      ],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-8klzpoj1/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-8klzpoj1",
+      "case": "editor_replace_workflow",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "82da9c95396d07f572db08658da514563eecdc05249e2b95dcb5c35d23c519ec"
+        }
+      ],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-8klzpoj1/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-8klzpoj1",
+      "case": "completion_workflow",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "82da9c95396d07f572db08658da514563eecdc05249e2b95dcb5c35d23c519ec"
+        }
+      ],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-8klzpoj1/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-1r7b0qf6",
+      "case": "workbench_workflow",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "ff6f35503030e27f31e53384aa9c7de673c6df40096cdacd039d3f86fad4502e"
+        }
+      ],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-1r7b0qf6/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-fmcga_dl",
+      "case": "backdrop_ui",
+      "status": "passed",
+      "artifact": [],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-fmcga_dl/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-fmcga_dl",
+      "case": "documents_input_isolation",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "a797678da84f2eef4975c9c5f1875cb6388981083e3da4cce656a4d2948e593b"
+        }
+      ],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-fmcga_dl/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-5d79u7yu",
+      "case": "diagnostic_workflow",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "06c55ab29b0eb85df05ef0597a5d2d65718bc68531e607c60cde7ad34ab19ada"
+        }
+      ],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-5d79u7yu/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-8auixksg",
+      "case": "workspace_tree_workflow",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "d54e52c4b7c89de2473aeaeae49dd1189f9cac0a593870af7befd7395a48eb5c"
+        }
+      ],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-8auixksg/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-8auixksg",
+      "case": "themes_workflow",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "d54e52c4b7c89de2473aeaeae49dd1189f9cac0a593870af7befd7395a48eb5c"
+        }
+      ],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-8auixksg/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-8auixksg",
+      "case": "documents_recovery",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "d54e52c4b7c89de2473aeaeae49dd1189f9cac0a593870af7befd7395a48eb5c"
+        }
+      ],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-8auixksg/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-8auixksg",
+      "case": "docking_workflow",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "d54e52c4b7c89de2473aeaeae49dd1189f9cac0a593870af7befd7395a48eb5c"
+        }
+      ],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-8auixksg/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-8auixksg",
+      "case": "layouts_workflow",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "d54e52c4b7c89de2473aeaeae49dd1189f9cac0a593870af7befd7395a48eb5c"
+        }
+      ],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-8auixksg/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-8auixksg",
+      "case": "api_browser_workflow",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "d54e52c4b7c89de2473aeaeae49dd1189f9cac0a593870af7befd7395a48eb5c"
+        }
+      ],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-8auixksg/results.json"
+    },
+    {
+      "platform": "Windows",
+      "run": "run-8auixksg",
+      "case": "build_controls_workflow",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "d54e52c4b7c89de2473aeaeae49dd1189f9cac0a593870af7befd7395a48eb5c"
+        }
+      ],
+      "result_file": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-8auixksg/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-z4auxtyl",
+      "case": "file_tabs_workflow",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "fede9bb57f3a0db84aba17849c176e3cd7933db1c2c4e31857e97f61fe357fdc"
+        }
+      ],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-z4auxtyl/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-z4auxtyl",
+      "case": "themes_workflow",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "fede9bb57f3a0db84aba17849c176e3cd7933db1c2c4e31857e97f61fe357fdc"
+        }
+      ],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-z4auxtyl/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-z4auxtyl",
+      "case": "documents_recovery",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "fede9bb57f3a0db84aba17849c176e3cd7933db1c2c4e31857e97f61fe357fdc"
+        }
+      ],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-z4auxtyl/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-z4auxtyl",
+      "case": "docking_workflow",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "fede9bb57f3a0db84aba17849c176e3cd7933db1c2c4e31857e97f61fe357fdc"
+        }
+      ],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-z4auxtyl/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-z4auxtyl",
+      "case": "layouts_workflow",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "fede9bb57f3a0db84aba17849c176e3cd7933db1c2c4e31857e97f61fe357fdc"
+        }
+      ],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-z4auxtyl/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-z4auxtyl",
+      "case": "diagnostic_workflow",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "fede9bb57f3a0db84aba17849c176e3cd7933db1c2c4e31857e97f61fe357fdc"
+        }
+      ],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-z4auxtyl/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-z4auxtyl",
+      "case": "api_browser_workflow",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "fede9bb57f3a0db84aba17849c176e3cd7933db1c2c4e31857e97f61fe357fdc"
+        }
+      ],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-z4auxtyl/results.json"
+    },
+    {
+      "platform": "Linux",
+      "run": "run-z4auxtyl",
+      "case": "build_controls_workflow",
+      "status": "passed",
+      "artifact": [
+        {
+          "target": "physim",
+          "sha256": "fede9bb57f3a0db84aba17849c176e3cd7933db1c2c4e31857e97f61fe357fdc"
+        }
+      ],
+      "result_file": "build/native/F1-linux/Debug-sanitized/test-results/run-z4auxtyl/results.json"
+    }
+  ],
+  "images": [
+    {
+      "file": "linux-high-contrast-expanded.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/F1-linux/Debug-sanitized/test-results/run-1r7b0qf6/workbench_workflow/files ä/workflow ä/contrast-visual/workbench-dark-expanded.bmp",
+      "sha256": "48ab19c275b7aa0eb3d2d47098ef06209646d324e05e21f9479d0da644d121ad"
+    },
+    {
+      "file": "linux-high-contrast.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/F1-linux/Debug-sanitized/test-results/run-1r7b0qf6/workbench_workflow/files ä/workflow ä/contrast-visual/workbench-dark.bmp",
+      "sha256": "53813ce1b7790c3d6ad409fed32a20c925aefb2c135a9619494a3a8ffe00e7d4"
+    },
+    {
+      "file": "linux-dark-both-hidden.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/F1-linux/Debug-sanitized/test-results/run-1r7b0qf6/workbench_workflow/files ä/workflow ä/dark/workbench-dark-both-hidden.bmp",
+      "sha256": "23b806747be382852f5dc0f0b19d8fde1d9884a0ef4ae2b82239d931e955f022"
+    },
+    {
+      "file": "linux-dark-expanded.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/F1-linux/Debug-sanitized/test-results/run-1r7b0qf6/workbench_workflow/files ä/workflow ä/dark/workbench-dark-expanded.bmp",
+      "sha256": "c4fa6e6d1a95c4b89c94fe52792599a9f891f2d9512e155a1277ff6d29b34cbf"
+    },
+    {
+      "file": "linux-dark-right-hidden.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/F1-linux/Debug-sanitized/test-results/run-1r7b0qf6/workbench_workflow/files ä/workflow ä/dark/workbench-dark-right-hidden.bmp",
+      "sha256": "9979146f816428b86e11aa6a190df1ad12b6aac024b73a6ae9ed248eed61da48"
+    },
+    {
+      "file": "linux-dark-left-hidden.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/F1-linux/Debug-sanitized/test-results/run-1r7b0qf6/workbench_workflow/files ä/workflow ä/dark/workbench-dark-sides-hidden.bmp",
+      "sha256": "5e0342e71c7390b6f6647d4057f4e2689609fe48e2ee6fe280ab60bf30899be8"
+    },
+    {
+      "file": "linux-dark.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/F1-linux/Debug-sanitized/test-results/run-1r7b0qf6/workbench_workflow/files ä/workflow ä/dark/workbench-dark.bmp",
+      "sha256": "2ed8e4af4b534340f23375d26774c2a913b7674f41c6d68467cdbe7aa1c374af"
+    },
+    {
+      "file": "linux-dark-narrow-expanded.png",
+      "size": [
+        1080,
+        740
+      ],
+      "source": "build/native/F1-linux/Debug-sanitized/test-results/run-1r7b0qf6/workbench_workflow/files ä/workflow ä/dark-narrow-visual/workbench-dark-expanded.bmp",
+      "sha256": "a77d21dbd6815f9ae5ee022fa8dd3bb3eed8bcac0f040ddab2c217bb4e04e674"
+    },
+    {
+      "file": "linux-dark-narrow.png",
+      "size": [
+        1080,
+        740
+      ],
+      "source": "build/native/F1-linux/Debug-sanitized/test-results/run-1r7b0qf6/workbench_workflow/files ä/workflow ä/dark-narrow-visual/workbench-dark.bmp",
+      "sha256": "f1f7ce5f094b503f6f9e4f1d9670d063bde7a7288fe4280cd153813e27af42e3"
+    },
+    {
+      "file": "linux-dark-opaque-expanded.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/F1-linux/Debug-sanitized/test-results/run-1r7b0qf6/workbench_workflow/files ä/workflow ä/dark-opaque-visual/workbench-dark-expanded.bmp",
+      "sha256": "57d41225b435c357174825b92e2a436c69cb5d13b81086c053fdcc7f96f93ac4"
+    },
+    {
+      "file": "linux-dark-opaque.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/F1-linux/Debug-sanitized/test-results/run-1r7b0qf6/workbench_workflow/files ä/workflow ä/dark-opaque-visual/workbench-dark.bmp",
+      "sha256": "525e30abafae282f3c9045d8130e109a48fe3ca5700a71c32827a2c1fac3a70e"
+    },
+    {
+      "file": "linux-light-both-hidden.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/F1-linux/Debug-sanitized/test-results/run-1r7b0qf6/workbench_workflow/files ä/workflow ä/light/workbench-light-both-hidden.bmp",
+      "sha256": "8cc46c2db5bc195e657b991db240f2644a5fc8473de5d3983d1e30d88020c2a4"
+    },
+    {
+      "file": "linux-light-expanded.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/F1-linux/Debug-sanitized/test-results/run-1r7b0qf6/workbench_workflow/files ä/workflow ä/light/workbench-light-expanded.bmp",
+      "sha256": "2c801603ba6e46c97000d521624911e3d682440fb2c1cdf4533d52f0a2eaffe2"
+    },
+    {
+      "file": "linux-light-right-hidden.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/F1-linux/Debug-sanitized/test-results/run-1r7b0qf6/workbench_workflow/files ä/workflow ä/light/workbench-light-right-hidden.bmp",
+      "sha256": "0d324bf0e41ba7cc9ceda733949bcd2126a8b4bf5dc06ff5b450fed817470317"
+    },
+    {
+      "file": "linux-light-left-hidden.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/F1-linux/Debug-sanitized/test-results/run-1r7b0qf6/workbench_workflow/files ä/workflow ä/light/workbench-light-sides-hidden.bmp",
+      "sha256": "cd29177b411746ee9cd27593aee8f0815ca976c9e80111ecd6c6f289cd584849"
+    },
+    {
+      "file": "linux-light.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/F1-linux/Debug-sanitized/test-results/run-1r7b0qf6/workbench_workflow/files ä/workflow ä/light/workbench-light.bmp",
+      "sha256": "96e9640b254bde88b083c40b6eef5c71ee570b6f03ed027bdddc401b3a501606"
+    },
+    {
+      "file": "linux-light-large-expanded.png",
+      "size": [
+        1600,
+        1000
+      ],
+      "source": "build/native/F1-linux/Debug-sanitized/test-results/run-1r7b0qf6/workbench_workflow/files ä/workflow ä/light-large-visual/workbench-light-expanded.bmp",
+      "sha256": "7f5437872ebd5a17e95505286c45bdf156d9335a44b622082de16dd5cc08c83e"
+    },
+    {
+      "file": "linux-light-large.png",
+      "size": [
+        1600,
+        1000
+      ],
+      "source": "build/native/F1-linux/Debug-sanitized/test-results/run-1r7b0qf6/workbench_workflow/files ä/workflow ä/light-large-visual/workbench-light.bmp",
+      "sha256": "e63d2e77ac8b0721a9552395052de1d91cbfe324c00c8e76c22df4ad80dece86"
+    }
+  ],
+  "open": [
+    "Current Windows foreground/focus matrix awaits the requested coordinated interval. Earlier independent foreground proof passed on its recorded binary.",
+    "New macOS execution, actual screen-reader operation, physical monitor/DPI changes and Windows system text scale remain unverified."
+  ],
+  "primary_windows_smoke": {
+    "status": "passed",
+    "exit_code": 0,
+    "app_sha256": "7c9790494268ac29c8543573491a98d04213ffdfe51675e02b277557bb516e65"
+  },
+  "cleanup_bytes": 1184742051,
+  "cleanup_images": 388
+}

@@ -875,11 +875,40 @@ def project_tree(flow,directory):
 
 
 def editor_replace(flow,directory):
-    directory.mkdir(parents=True)
-    flow.run("--workspace-state-test",directory,"editor-replace",timeout=40,
-             marker="EDITOR REPLACE SELF-TEST: PASSED")
-    for name in ("replace-experiment.bmp","replace-analysis.bmp","replace-document.bmp"):
-        require((directory/name).is_file(),"Missing actual editor replacement view: "+name)
+    for language in ("c","phys"):
+        target=directory/language;target.mkdir(parents=True)
+        flow.run("--workspace-state-test",target,"editor-replace-"+language,timeout=40,
+                 marker="EDITOR REPLACE SELF-TEST: PASSED")
+        for name in ("replace-experiment.bmp","replace-analysis.bmp","replace-document.bmp"):
+            require((target/name).is_file(),"Missing actual editor replacement view: "+language+"/"+name)
+        for name in ("main."+language,"analysis."+language,"notes α.txt"):
+            exact(target/"project"/name,'// Präfix α 😀\nconst char *label = "ä😀LONG";\n// \n')
+
+def workbench(flow,directory):
+    # This workflow asserts real host keyboard focus. SDL's documented test-only
+    # override requests activation while preserving product policy. Actual host
+    # focus is still required; another foreground app can prevent this probe.
+    previous=flow.env.get("SDL_FORCE_RAISEWINDOW")
+    if sys.platform=="win32":flow.env["SDL_FORCE_RAISEWINDOW"]="1"
+    try:
+        for theme in ("dark","light"):
+            target=directory/theme;target.mkdir(parents=True)
+            flow.run("--workspace-state-test",target,"workbench-"+theme,timeout=45,
+                     marker="WORKBENCH SELF-TEST: PASSED")
+            for suffix in ("","-expanded","-sides-hidden","-right-hidden","-both-hidden"):
+                require((target/("workbench-"+theme+suffix+".bmp")).is_file(),"Missing actual native workbench view: "+theme+suffix)
+        for mode in ("dark-narrow-visual","light-large-visual","dark-opaque-visual","contrast-visual"):
+            target=directory/mode;target.mkdir(parents=True)
+            previous_transparency=flow.env.get("PHYSIM_REDUCE_TRANSPARENCY")
+            if "opaque" in mode:flow.env["PHYSIM_REDUCE_TRANSPARENCY"]="1"
+            try:
+                flow.run("--workspace-state-test",target,"workbench-"+mode,timeout=45,marker="WORKBENCH SELF-TEST: PASSED")
+            finally:
+                if previous_transparency is None:flow.env.pop("PHYSIM_REDUCE_TRANSPARENCY",None)
+                else:flow.env["PHYSIM_REDUCE_TRANSPARENCY"]=previous_transparency
+    finally:
+        if previous is None:flow.env.pop("SDL_FORCE_RAISEWINDOW",None)
+        else:flow.env["SDL_FORCE_RAISEWINDOW"]=previous
 
 
 def diagnostics(flow,directory):
@@ -1662,6 +1691,7 @@ SPECIAL["documentation_density"]=documentation_density
 SPECIAL["documentation_navigation"]=documentation_navigation
 SPECIAL["documentation_sidebar"]=documentation_sidebar
 SPECIAL["documentation_h"]=documentation_h
+SPECIAL["workbench_workflow"]=workbench
 
 def main():
     # App diagnostics and paths can contain Unicode even when Python inherits a

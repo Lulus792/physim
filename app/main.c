@@ -15,6 +15,7 @@
 #include "compiler_diagnostic.h"
 #include "physim/detail/run_identity.h"
 #include "completion.h"
+#include "editor_search.h"
 #include "report_image.h"
 #include "scene_view.h"
 #include "preferences.h"
@@ -125,9 +126,11 @@ typedef struct {
     struct nk_rect dock_targets[5], dock_preview;
     bool dock_visible[PS_DOCK_PANELS], dock_dragging, dock_started;
     unsigned dock_front;
-    int dock_resize, dock_float_resize, dock_drag, dock_last_tab;
+    int dock_resize, dock_float_resize, dock_drag, dock_last_tab, dock_resize_last_click;
     struct nk_vec2 dock_origin, dock_grab, dock_resize_mouse;
     ps_dock_float dock_resize_start;
+    ps_preferences dock_resize_original;
+    bool dock_resize_transaction;
     struct nk_rect dock_menu_bounds[5];
     ps_layout_catalog layouts;
     char layouts_path[4096], layouts_error[192], layout_name[PS_LAYOUT_NAME_BYTES];
@@ -211,6 +214,13 @@ typedef struct {
     int template_analysis_language;
     bool show_paths, show_points, show_labels;
     bool show_log, show_search, diagnostic_raw;
+    bool search_focus, search_keyboard, search_replace_open, search_icon_focus;
+    int search_field;
+    struct nk_rect search_replace_field_bounds;
+    struct nk_rect search_island_bounds, search_query_bounds, search_previous_bounds, search_expand_bounds, search_close_bounds;
+    struct nk_text_edit *search_edit;
+    ps_ui_backdrop search_material;
+    struct nk_rect workbench_search_bounds,workbench_save_bounds,workbench_context_bounds,workbench_sidebar_bounds;
     char *saved_source[2];
     ps_autosave *recovery;
     bool recovery_conflict, autosave_blocked, autosave_current;
@@ -399,6 +409,7 @@ typedef struct {
     struct nk_rect diagnostic_bounds[64];
     struct nk_rect diagnostic_mode_bounds;
     struct nk_rect search_bounds,replace_bounds,source_editor_bounds;
+    struct nk_rect source_editor_frame;
     struct nk_text_edit *completion_edit,*completion_focus_edit;
     ps_completion_query completion_query;
     size_t *completion_indices,completion_count,completion_selected;
@@ -2471,7 +2482,29 @@ static void plot(app *a, const double *times, const double *values, int count, f
                      (int)strlen(text), ui->style.font, UI_COLOR(edit), UI_COLOR(muted));
     }
 }
-static void find_text(app *a, struct nk_text_edit *edit, bool replace) {
+static struct nk_text_edit *editor_search_target(app *a) {
+    if(a->recovery || a->document_pending || a->dialog_pending || a->project_manager ||
+       a->layout_manager || a->workspace_manager || a->channel_unit_manager || a->run_details_manager) return NULL;
+    workspace_document *doc=active_document(a);
+    if(a->tab==8 && doc) return doc->recovery?NULL:&doc->edit;
+    if(a->loaded && a->tab==0) return a->analysis_only?&a->analysis:&a->experiment;
+    if(a->loaded && a->tab==2 && a->analysis_tab==1) return &a->analysis;
+    return NULL;
+}
+static size_t editor_search_byte(struct nk_text_edit *edit,int position) {
+    int bytes=nk_str_len_char(&edit->string),len=0;nk_rune rune;
+    const char *text=nk_str_get_const(&edit->string);
+    if(bytes<=0 || !text || position<=0)return 0;
+    if(position>=nk_str_len(&edit->string))return (size_t)bytes;
+    const char *at=nk_str_at_const(&edit->string,position,&rune,&len);
+    return at?(size_t)(at-text):(size_t)bytes;
+}
+static void editor_search_open(app *a) {
+    if(!editor_search_target(a))return;
+    completion_close(a);
+    a->show_search=true;a->search_focus=true;a->search_keyboard=true;
+}
+static void find_text_direction(app *a, struct nk_text_edit *edit, bool replace, bool backward) {
     const char *text = nk_str_get_const(&edit->string);
     int bytes = nk_str_len_char(&edit->string);
     if (!a->find[0] || !text)
@@ -2481,12 +2514,10 @@ static void find_text(app *a, struct nk_text_edit *edit, bool replace) {
         return;
     memcpy(copy, text, (size_t)bytes);
     copy[bytes] = 0;
-    const char *start = copy;
+    int first_selection=edit->select_start<edit->select_end?edit->select_start:edit->select_end;
+    size_t cursor=editor_search_byte(edit,backward?first_selection:edit->cursor);
     int len = 0;
     nk_rune rune;
-    const char *cur = nk_str_at_const(&edit->string, edit->cursor, &rune, &len);
-    if (cur)
-        start = copy + (cur - text);
     char *found = NULL;
     if(replace) {
         int first=edit->select_start<edit->select_end?edit->select_start:edit->select_end;
@@ -2499,8 +2530,9 @@ static void find_text(app *a, struct nk_text_edit *edit, bool replace) {
         }
     }
     if(!found) {
-        found=strstr(start,a->find);
-        if(!found)found=strstr(copy,a->find);
+        ps_editor_search_result result;
+        if(ps_editor_search(copy,(size_t)bytes,a->find,strlen(a->find),cursor,backward,&result) && result.found)
+            found=copy+result.begin;
     }
     if (found) {
         int at = nk_utf_len(copy, (int)(found - copy)),
@@ -2513,7 +2545,12 @@ static void find_text(app *a, struct nk_text_edit *edit, bool replace) {
             if (*c == '\n')
                 line++;
         edit->scrollbar.y = (float)line * (a->font_code->height + a->ui->style.edit.row_padding);
-        edit->scrollbar.x = 0;
+        const char *line_begin=found;
+        while(line_begin>copy && line_begin[-1]!='\n')--line_begin;
+        float hit_x=a->font_code->width(a->font_code->userdata,a->font_code->height,line_begin,(int)(found-line_begin));
+        float hit_width=a->font_code->width(a->font_code->userdata,a->font_code->height,a->find,(int)strlen(a->find));
+        float visible_width=fmaxf(24,a->source_editor_bounds.w-2*a->ui->style.edit.padding.x-10);
+        edit->scrollbar.x=fmaxf(0,hit_x+hit_width-visible_width);
         if (replace) {
             edit->mode = NK_TEXT_EDIT_MODE_INSERT;
             int replacement_bytes=(int)strlen(a->replace);
@@ -2533,6 +2570,9 @@ static void find_text(app *a, struct nk_text_edit *edit, bool replace) {
     } else
         status(a, "Suchtext nicht gefunden.");
     free(copy);
+}
+static void find_text(app *a,struct nk_text_edit *edit,bool replace) {
+    find_text_direction(a,edit,replace,false);
 }
 static bool c_keyword(const char *word, size_t length) {
     static const char *keywords[] = {
@@ -2737,6 +2777,10 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
         ps_crc32((const unsigned char *)nk_str_get_const(&edit->string), (size_t)before);
     struct nk_rect editor_bounds = nk_widget_bounds(ui);
     a->source_editor_bounds=editor_bounds;
+    /* The overlay belongs to the complete code pane, including its gutter and
+     * scroll rail; text-input padding must not become an extra right margin. */
+    a->source_editor_frame=nk_rect(ui->current->bounds.x,gutter.y,ui->current->bounds.w,editor_bounds.h);
+    a->search_edit=edit;
     if (active_document(a) && edit == &active_document(a)->edit)
         a->document_bounds[6] = editor_bounds;
     struct nk_color transparent = nk_rgba(0, 0, 0, 0);
@@ -2755,12 +2799,32 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
     /* The suggestion list owns pointer input, while the editor keeps its
      * keyboard focus and processes typed text before accepting a suggestion. */
     struct nk_mouse pointer=ui->input.mouse;
-    bool covered=a->completion_active && nk_input_is_mouse_hovering_rect(&ui->input,a->completion_list_bounds);
+    bool search_pointer=a->show_search && nk_input_is_mouse_hovering_rect(&ui->input,a->search_island_bounds);
+    if(search_pointer && nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT))a->search_keyboard=true;
+    if(a->show_search && nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) && !search_pointer &&
+       nk_input_is_mouse_hovering_rect(&ui->input,editor_bounds))a->search_keyboard=false;
+    bool covered=search_pointer || (a->completion_active && nk_input_is_mouse_hovering_rect(&ui->input,a->completion_list_bounds));
+    struct nk_keyboard keyboard=ui->input.keyboard;
+    int saved_start=edit->select_start,saved_end=edit->select_end,saved_cursor=edit->cursor;
+    struct nk_vec2 saved_scroll=edit->scrollbar;
+    bool searching=a->show_search && (a->search_keyboard || a->search_focus);
+    bool search_scroll=searching && !search_pointer && nk_input_is_mouse_hovering_rect(&ui->input,editor_bounds) &&
+        (ui->input.mouse.scroll_delta.x!=0 || ui->input.mouse.scroll_delta.y!=0);
+    /* Nuklear exposes the text scrollbar only for an active edit. Route this
+     * wheel frame with keyboard input masked, then restore the search owner. */
+    if(search_scroll)nk_edit_focus(ui,NK_EDIT_ALWAYS_INSERT_MODE);
+    if(searching)memset(&ui->input.keyboard,0,sizeof ui->input.keyboard);
     if(covered) {
         for(unsigned i=0;i<NK_BUTTON_MAX;i++){ui->input.mouse.buttons[i].clicked=0;ui->input.mouse.buttons[i].down=0;}
         ui->input.mouse.pos=nk_vec2(-1,-1);ui->input.mouse.scroll_delta=nk_vec2(0,0);
     }
     nk_edit_buffer(ui, NK_EDIT_BOX | NK_EDIT_ALLOW_TAB | NK_EDIT_PRESERVE_UNDO | NK_EDIT_ALWAYS_INSERT_MODE, edit, nk_filter_default);
+    if(searching) {
+        ui->input.keyboard=keyboard;
+        edit->select_start=saved_start;edit->select_end=saved_end;edit->cursor=saved_cursor;
+        if(!search_scroll)edit->scrollbar=saved_scroll;
+        edit->active=false;
+    }
     if(covered)ui->input.mouse=pointer;
     bool accepted=a->completion_accept_pending;
     if(a->completion_active) {
@@ -2797,9 +2861,10 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
     for (int i = first; i < first + (int)(height / line_h) + 2; i++) {
         char number[20];
         snprintf(number, sizeof number, "%d", i + 1);
+        float number_width=ui->style.font->width(ui->style.font->userdata,ui->style.font->height,number,(int)strlen(number));
         nk_draw_text(
             canvas,
-            nk_rect(gutter.x,
+            nk_rect(gutter.x+fmaxf(0,35-number_width),
                     gutter.y + (float)i * line_h - edit->scrollbar.y + ui->style.edit.padding.y, 42,
                     line_h),
             number, (int)strlen(number), ui->style.font, UI_COLOR(gutter), UI_COLOR(gutter_text));
@@ -2809,6 +2874,7 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
 }
 // clang-format off
 static bool documentation_window_open(app *a);
+#include "editor_search_ui.inc"
 static bool documentation_fonts_prepare(app *a,unsigned size,unsigned code_size);
 static bool documentation_fonts_prepare_sizes(app *a,unsigned size,unsigned code_size,unsigned ui_size,unsigned editor_size);
 #include "documentation_ui.inc"
@@ -3068,7 +3134,7 @@ static bool test_scripted_external_input(const SDL_Event *e) {
     default: return false;
     }
 }
-static void test_window_mouse(SDL_Window *window,struct nk_rect rect,bool down) {
+static void test_window_mouse_count(SDL_Window *window,struct nk_rect rect,bool down,Uint8 clicks) {
     float x = rect.x + rect.w * .5f, y = rect.y + rect.h * .5f;
     SDL_Event e = {0};
     e.type = SDL_EVENT_MOUSE_MOTION;
@@ -3077,6 +3143,7 @@ static void test_window_mouse(SDL_Window *window,struct nk_rect rect,bool down) 
     e.motion.x = x;
     e.motion.y = y;
     SDL_PushEvent(&e);
+    SDL_zero(e);
     e.type = down ? SDL_EVENT_MOUSE_BUTTON_DOWN : SDL_EVENT_MOUSE_BUTTON_UP;
     e.button.windowID = SDL_GetWindowID(window);
     e.button.which = PS_TEST_MOUSE_ID;
@@ -3084,7 +3151,11 @@ static void test_window_mouse(SDL_Window *window,struct nk_rect rect,bool down) 
     e.button.y = y;
     e.button.button = SDL_BUTTON_LEFT;
     e.button.down = down;
+    e.button.clicks = clicks;
     SDL_PushEvent(&e);
+}
+static void test_window_mouse(SDL_Window *window,struct nk_rect rect,bool down) {
+    test_window_mouse_count(window,rect,down,1);
 }
 static void test_mouse(app *a,struct nk_rect rect,bool down) {
     test_window_mouse(a->window,rect,down);
@@ -3137,6 +3208,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "editor_replace_tests.inc"
 #include "completion_tests.inc"
 #include "file_tabs_tests.inc"
+#include "workbench_tests.inc"
 #include "api_reference_tests.inc"
 #include "parameter_form_tests.inc"
 #include "adaptive_tests.inc"
@@ -3720,6 +3792,8 @@ int main(int argc, char **argv) {
             }
             SDL_Window *event_window = SDL_GetWindowFromEvent(&e);
             if(event_window==a->window && e.type==SDL_EVENT_TEXT_INPUT)a->completion_typed=true;
+            if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && dock_resize_key(a,&e.key))continue;
+            if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && editor_search_key(a,&e.key))continue;
             if(event_window==a->window && nk_sdl_accessibility_event(a->ui,&e))continue;
             if(event_window==a->doc_window && a->doc_ui && nk_sdl_accessibility_event(a->doc_ui,&e))continue;
             if (event_window == a->window && e.type == SDL_EVENT_WINDOW_FOCUS_LOST)
@@ -3800,7 +3874,7 @@ int main(int argc, char **argv) {
                         if (a->tab == 4)
                             a->library_search_focus = true;
                         else
-                            a->show_search = !a->show_search;
+                            editor_search_open(a);
                     }
                     if (e.key.key == SDLK_L) {
                         a->show_log = !a->show_log;
@@ -3860,7 +3934,7 @@ int main(int argc, char **argv) {
             /* The deliberate 80 ms frame delay also runs on hosted software GL.
              * Keep its bounded keyboard assertions; allow their extra wall time. */
             if (ps_clock() - test_started >
-                (!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
+                (!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
                   !strncmp(argv[3], "isolation-", 10) || !strncmp(argv[3], "breakpoints-", 12) || !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || (!strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"pendulum-medium-",16)) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strncmp(argv[3],"logging-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15))) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",

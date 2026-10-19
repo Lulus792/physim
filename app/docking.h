@@ -30,6 +30,9 @@ bool ps_dock_float_panel(ps_dock_layout *layout, uint32_t panel, ps_dock_float r
 bool ps_dock_hide(ps_dock_layout *layout, uint32_t panel);
 /* Restore a hidden panel beside the first docked panel, then select it. */
 bool ps_dock_reveal(ps_dock_layout *layout, uint32_t panel, uint32_t side);
+/* Workbench edge toggles wrap the actual persisted root, including its log,
+ * rather than splitting only the first leaf. Visible groups/floats stay put. */
+bool ps_dock_reveal_outer(ps_dock_layout *layout,uint32_t panel,uint32_t side);
 bool ps_dock_select(ps_dock_layout *layout, uint32_t panel);
 /* Private fixed-width encoding used by preferences and named layouts.
  * Decode is transactional; both functions require exactly WIRE_BYTES. */

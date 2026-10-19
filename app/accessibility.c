@@ -120,7 +120,7 @@ static bool record(ps_a11y_model *m,const char *window,const char *label,
                      ps_a11y_role role,const float bounds[4],bool enabled,bool checked,uint64_t parent,
                      uint64_t version,size_t begin,size_t end) {
  if(!m->building || !window || !label || !bounds || !*window || !*label ||
-    (role!=PS_A11Y_TEXT && role!=PS_A11Y_RADIO_GROUP && role!=PS_A11Y_SLIDER && role!=PS_A11Y_EDIT && !ps_a11y_actionable(role)))return false;
+    (role!=PS_A11Y_TEXT && role!=PS_A11Y_RADIO_GROUP && !ps_a11y_range_role(role) && role!=PS_A11Y_EDIT && !ps_a11y_actionable(role)))return false;
  for(size_t i=0;i<4;i++)if(!isfinite(bounds[i]))return false;
  bool offscreen=role==PS_A11Y_LINK && bounds[2]==0 && bounds[3]==0;
  if((!offscreen && (bounds[2]<=0 || bounds[3]<=0)) || !ps_text_valid(window,PS_A11Y_WINDOW_BYTES,false))return false;
@@ -131,7 +131,7 @@ static bool record(ps_a11y_model *m,const char *window,const char *label,
  ps_a11y_node node={0};node.key=text_hash(text_hash(UINT64_C(14695981039346656037),window),label);
  node.document_version=version;node.document_begin=begin;node.document_end=end;node.offscreen=offscreen;
  if(version){node.key=(node.key^version)*UINT64_C(1099511628211);node.key=(node.key^begin)*UINT64_C(1099511628211);node.key=(node.key^end)*UINT64_C(1099511628211);}
- node.role=role;node.parent=parent;node.enabled=enabled;node.focusable=enabled && (ps_a11y_actionable(role) || role==PS_A11Y_SLIDER || role==PS_A11Y_EDIT);node.checked=(role==PS_A11Y_CHECKBOX || role==PS_A11Y_RADIO) && checked;memcpy(node.bounds,bounds,sizeof node.bounds);
+ node.role=role;node.parent=parent;node.enabled=enabled;node.focusable=enabled && (ps_a11y_actionable(role) || ps_a11y_range_role(role) || role==PS_A11Y_EDIT);node.checked=(role==PS_A11Y_CHECKBOX || role==PS_A11Y_RADIO) && checked;memcpy(node.bounds,bounds,sizeof node.bounds);
  strcpy(node.window,window);
  size_t bytes=strlen(label);if(bytes>=sizeof node.label) {
   bytes=sizeof node.label-1;
@@ -167,7 +167,7 @@ static bool record(ps_a11y_model *m,const char *window,const char *label,
 bool ps_a11y_record_state(ps_a11y_model *m,const char *window,const char *label,
                      ps_a11y_role role,const float bounds[4],bool enabled,bool checked) {
  /* Radio nodes need a named parent; only record_option creates these. */
- if(role==PS_A11Y_RADIO || role==PS_A11Y_RADIO_GROUP || role==PS_A11Y_SLIDER || role==PS_A11Y_EDIT)return false;
+ if(role==PS_A11Y_RADIO || role==PS_A11Y_RADIO_GROUP || ps_a11y_range_role(role) || role==PS_A11Y_EDIT)return false;
  if(role==PS_A11Y_LINK)return false; /* Must bind to a document range. */
  return record(m,window,label,role,bounds,enabled,checked,0,0,0,0);
 }
@@ -214,13 +214,13 @@ bool ps_a11y_record_option(ps_a11y_model *m,const char *window,const char *group
      if(m->draft[i].parent==parent)m->draft[i].checked=false;
  return pressed;
 }
-bool ps_a11y_record_range(ps_a11y_model *m,const char *window,const char *label,
+static bool record_range(ps_a11y_model *m,const char *window,const char *label,
                          const float bounds[4],bool enabled,double minimum,double maximum,
-                         double increment,double *value) {
+                         double increment,double *value,ps_a11y_role role) {
  if(!value || !isfinite(*value) || !isfinite(minimum) || !isfinite(maximum) ||
     !isfinite(increment) || increment<=0 || maximum<minimum || *value<minimum || *value>maximum)return false;
  size_t before=m->draft_count;
- record(m,window,label,PS_A11Y_SLIDER,bounds,enabled,false,0,0,0,0);
+ record(m,window,label,role,bounds,enabled,false,0,0,0,0);
  if(m->draft_count==before)return false;
  ps_a11y_node *node=&m->draft[before];bool changed=false;
  if(node->id==m->pending_value_id) {
@@ -232,16 +232,26 @@ bool ps_a11y_record_range(ps_a11y_model *m,const char *window,const char *label,
  node->value=*value;node->minimum=minimum;node->maximum=maximum;node->increment=increment;
  return changed;
 }
+bool ps_a11y_record_range(ps_a11y_model *m,const char *window,const char *label,
+                         const float bounds[4],bool enabled,double minimum,double maximum,
+                         double increment,double *value) {
+ return record_range(m,window,label,bounds,enabled,minimum,maximum,increment,value,PS_A11Y_SLIDER);
+}
+bool ps_a11y_record_separator(ps_a11y_model *m,const char *window,const char *label,
+                         const float bounds[4],bool enabled,double minimum,double maximum,
+                         double increment,double *value) {
+ return record_range(m,window,label,bounds,enabled,minimum,maximum,increment,value,PS_A11Y_SEPARATOR);
+}
 bool ps_a11y_set_value(ps_a11y_model *m,uint64_t id,double value) {
  const ps_a11y_node *node=ps_a11y_find(m,id);
- if(!node || m->suspended || node->role!=PS_A11Y_SLIDER || !node->enabled || !isfinite(value) ||
+ if(!node || m->suspended || !ps_a11y_range_role(node->role) || !node->enabled || !isfinite(value) ||
     value<node->minimum || value>node->maximum || m->pending_value_id || m->pending_press || m->pending_text_id || m->pending_selection_id ||
     (m->pending_focus && m->pending_focus!=id))return false;
  m->pending_document_focus=0;m->pending_value_id=id;m->pending_value=value;m->pending_focus=id;return true;
 }
 bool ps_a11y_adjust(ps_a11y_model *m,uint64_t id,int direction) {
  const ps_a11y_node *node=ps_a11y_find(m,id);
- if(!node || node->role!=PS_A11Y_SLIDER || (direction!=-1 && direction!=1))return false;
+ if(!node || !ps_a11y_range_role(node->role) || (direction!=-1 && direction!=1))return false;
  double value=direction>0?fmin(node->maximum,node->value+node->increment):fmax(node->minimum,node->value-node->increment);
  return ps_a11y_set_value(m,id,value);
 }
@@ -422,7 +432,7 @@ bool ps_a11y_publish(ps_a11y_model *m) {
  const ps_a11y_node *focus=ps_a11y_find(m,m->pending_focus);
  if(!focus || !focus->focusable)m->pending_focus=0;
  const ps_a11y_node *range=ps_a11y_find(m,m->pending_value_id);
- if(!range || range->role!=PS_A11Y_SLIDER || !range->enabled || m->pending_value<range->minimum || m->pending_value>range->maximum)m->pending_value_id=0;
+ if(!range || !ps_a11y_range_role(range->role) || !range->enabled || m->pending_value<range->minimum || m->pending_value>range->maximum)m->pending_value_id=0;
  const ps_a11y_node *edit=ps_a11y_find(m,m->pending_text_id);
  if(!edit || edit->role!=PS_A11Y_EDIT || !edit->enabled || !ps_text_valid(m->pending_text,edit->text_capacity,false))m->pending_text_id=0;
  if(!m->pending_text_id)m->pending_text_has_caret=false;

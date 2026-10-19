@@ -48,6 +48,8 @@
     X(void, UseProgram, (GLuint id)) \
     X(GLint, GetUniformLocation, (GLuint id, const GLchar *name)) \
     X(void, Uniform1i, (GLint loc, GLint value)) \
+    X(void, Uniform2f, (GLint loc, GLfloat x, GLfloat y)) \
+    X(void, Uniform4f, (GLint loc, GLfloat x, GLfloat y, GLfloat z, GLfloat w)) \
     X( void, UniformMatrix4fv, (GLint loc, GLsizei n, GLboolean transpose, const GLfloat *matrix)) \
     X(void, GenVertexArrays, (GLsizei n, GLuint * ids)) \
     X(void, BindVertexArray, (GLuint id)) \
@@ -120,7 +122,12 @@ struct ps_graphics {
     ps_scene_render_stats scene_stats;
     bool scene_stats_valid;
     ps_ui_geometry ui_geometry;
+    const ps_ui_backdrop *backdrop;
+    GLuint glass_program,blur_program,glass_textures[2],glass_framebuffers[2];
+    int glass_width,glass_height;
+    bool glass_failed;
 };
+void ps_graphics_backdrop(ps_graphics *g,const ps_ui_backdrop *backdrop) {if(g)g->backdrop=backdrop;}
 void ps_graphics_background(ps_graphics *g, uint8_t red, uint8_t green, uint8_t blue) {
     if (g) {
         g->background[0] = red / 255.f;
@@ -235,9 +242,9 @@ ps_graphics *ps_graphics_create(SDL_Window *window) {
         "#version 330 core\nlayout(location=0) in vec2 p; layout(location=1) in vec2 uv;"
         "layout(location=2) in vec4 c; uniform mat4 projection; out vec2 vuv; out vec4 col;"
         "void main(){vuv=uv;col=c;gl_Position=projection*vec4(p,0,1);}",
-        "#version 330 core\nuniform sampler2D image; uniform int flip; in vec2 vuv; in vec4 col;"
+        "#version 330 core\nuniform sampler2D image; uniform int flip; uniform int fallback; uniform vec4 tint; in vec2 vuv; in vec4 col;"
         "out vec4 result;void main(){vec2 "
-        "t=vuv;if(flip!=0)t.y=1-t.y;result=col*texture(image,t);}");
+        "t=vuv;if(flip!=0)t.y=1-t.y;result=col*texture(image,t);if(fallback!=0)result=vec4(tint.rgb,col.a);}");
     g->scene_program = program(
         g,
         "#version 330 core\nlayout(location=0) in vec3 p; layout(location=1) in vec3 n;"
@@ -331,6 +338,10 @@ void ps_graphics_destroy(ps_graphics *g) {
     g->DeleteVertexArrays(1, &g->scene_vao);
     g->DeleteProgram(g->ui_program);
     g->DeleteProgram(g->scene_program);
+    g->DeleteTextures(2,g->glass_textures);
+    g->DeleteFramebuffers(2,g->glass_framebuffers);
+    if(g->glass_program)g->DeleteProgram(g->glass_program);
+    if(g->blur_program)g->DeleteProgram(g->blur_program);
     SDL_GL_DestroyContext(g->context);
     ps_ui_geometry_destroy(&g->ui_geometry);
     free(g->vertices);
@@ -381,6 +392,89 @@ unsigned ps_graphics_alpha_texture(ps_graphics *g, const void *coverage, int w, 
 void ps_graphics_delete_texture(ps_graphics *g, unsigned texture) {
     g->DeleteTextures(1, &texture);
 }
+static void backdrop_release(ps_graphics *g) {
+    g->DeleteTextures(2,g->glass_textures);g->DeleteFramebuffers(2,g->glass_framebuffers);
+    memset(g->glass_textures,0,sizeof g->glass_textures);memset(g->glass_framebuffers,0,sizeof g->glass_framebuffers);
+    g->glass_width=g->glass_height=0;
+}
+static bool backdrop_allocate(ps_graphics *g,int w,int h) {
+    if(g->glass_failed || w<1 || h<1 || w>g->max_texture || h>g->max_texture)return false;
+    if(!g->blur_program) {
+        const char *filter=
+            "vec4 blur(vec2 uv,vec2 step){vec4 v=texture(image,uv)*.204164;"
+            "v+=(texture(image,uv-step)+texture(image,uv+step))*.180174;"
+            "v+=(texture(image,uv-2*step)+texture(image,uv+2*step))*.123832;"
+            "v+=(texture(image,uv-3*step)+texture(image,uv+3*step))*.066282;"
+            "v+=(texture(image,uv-4*step)+texture(image,uv+4*step))*.027630;return v;}";
+        char fragment[4096];
+        snprintf(fragment,sizeof fragment,"#version 330 core\nuniform sampler2D image;uniform vec2 step;in vec2 uv;out vec4 result;%svoid main(){result=blur(uv,step);}",filter);
+        g->blur_program=program(g,
+            "#version 330 core\nout vec2 uv;void main(){vec2 p=vec2((gl_VertexID<<1)&2,gl_VertexID&2);uv=p;gl_Position=vec4(p*2-1,0,1);}",fragment);
+        snprintf(fragment,sizeof fragment,
+            "#version 330 core\nuniform sampler2D image;uniform vec2 step;uniform vec4 capture;uniform vec4 material;uniform vec4 rect;uniform int light;in vec4 col;out vec4 result;%s"
+            "void main(){vec2 uv=(gl_FragCoord.xy-capture.xy)/capture.zw;vec3 bg=blur(uv,step).rgb;"
+            "float l=dot(bg,vec3(.2126,.7152,.0722));bg=mix(vec3(l),bg,1.15);"
+            "vec2 local=(gl_FragCoord.xy-rect.xy)/rect.zw;vec2 direction=light!=0?vec2(.7071068,.7071068):vec2(.3420201,.9396926);"
+            "float position=dot(vec2(local.x-.5,.5-local.y)*rect.zw,direction)/dot(rect.zw,abs(direction))+.5;"
+            "float g=1-clamp(position/(light!=0?.65:.5),0,1);"
+            "vec3 tint=mix(bg,material.rgb,.24);tint=mix(tint,vec3(1),g*(light!=0?.25:.04));result=vec4(tint,col.a);}",filter);
+        g->glass_program=program(g,
+            "#version 330 core\nlayout(location=0)in vec2 p;layout(location=2)in vec4 c;uniform mat4 projection;out vec4 col;void main(){col=c;gl_Position=projection*vec4(p,0,1);}",fragment);
+        if(!g->blur_program || !g->glass_program){g->glass_failed=true;while(g->GetError()!=GL_NO_ERROR){}return false;}
+    }
+    if(g->glass_width==w && g->glass_height==h)return true;
+    backdrop_release(g);
+    g->GenTextures(2,g->glass_textures);g->GenFramebuffers(2,g->glass_framebuffers);
+    for(unsigned i=0;i<2;i++) {
+        g->BindTexture(GL_TEXTURE_2D,g->glass_textures[i]);
+        g->TexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);g->TexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+        g->TexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);g->TexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+        g->TexImage2D(GL_TEXTURE_2D,0,GL_RGBA8,w,h,0,GL_RGBA,GL_UNSIGNED_BYTE,NULL);
+        g->BindFramebuffer(GL_FRAMEBUFFER,g->glass_framebuffers[i]);
+        g->FramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,g->glass_textures[i],0);
+        if(g->CheckFramebufferStatus(GL_FRAMEBUFFER)!=GL_FRAMEBUFFER_COMPLETE || !gl_ok(g,"backdrop allocation")) {
+            backdrop_release(g);g->glass_failed=true;while(g->GetError()!=GL_NO_ERROR){}return false;
+        }
+    }
+    g->glass_width=w;g->glass_height=h;return true;
+}
+/* Captures only the island and a four-logical-pixel filter halo. The horizontal
+ * pass uses a separate attachment; the final vertical pass is clipped by the
+ * original rounded Nuklear mesh. Never sample the framebuffer being written. */
+static bool backdrop_draw_prepare(ps_graphics *g,GLuint framebuffer,int pw,int ph,float sx,float sy,const float matrix[16]) {
+    const ps_ui_backdrop *b=g->backdrop;
+    int left=(int)fmaxf(0,floorf((b->x-4)*sx)),bottom=(int)fmaxf(0,floorf(ph-(b->y+b->h+4)*sy));
+    int right=(int)fminf(pw,ceilf((b->x+b->w+4)*sx)),top=(int)fminf(ph,ceilf(ph-(b->y-4)*sy));
+    int width=right-left,height=top-bottom;
+    bool filtered=!b->opaque && backdrop_allocate(g,width,height);
+    if(filtered) {
+        g->ui_stats.backdrop_passes+=2;g->ui_stats.backdrop_pixels+=(size_t)width*(size_t)height;
+        g->Disable(GL_SCISSOR_TEST);g->Disable(GL_BLEND);
+        g->BindFramebuffer(GL_READ_FRAMEBUFFER,framebuffer);g->BindFramebuffer(GL_DRAW_FRAMEBUFFER,g->glass_framebuffers[0]);
+        g->BlitFramebuffer(left,bottom,right,top,0,0,width,height,GL_COLOR_BUFFER_BIT,GL_NEAREST);
+        g->BindFramebuffer(GL_FRAMEBUFFER,g->glass_framebuffers[1]);g->Viewport(0,0,width,height);
+        g->UseProgram(g->blur_program);g->BindTexture(GL_TEXTURE_2D,g->glass_textures[0]);
+        g->Uniform1i(g->GetUniformLocation(g->blur_program,"image"),0);
+        g->Uniform2f(g->GetUniformLocation(g->blur_program,"step"),sx/width,0);
+        g->DrawArrays(GL_TRIANGLES,0,3);
+        g->BindFramebuffer(GL_FRAMEBUFFER,framebuffer);g->Viewport(0,0,pw,ph);
+        g->Enable(GL_SCISSOR_TEST);g->Enable(GL_BLEND);
+        g->UseProgram(g->glass_program);g->BindTexture(GL_TEXTURE_2D,g->glass_textures[1]);
+        g->UniformMatrix4fv(g->GetUniformLocation(g->glass_program,"projection"),1,GL_FALSE,matrix);
+        g->Uniform1i(g->GetUniformLocation(g->glass_program,"image"),0);
+        g->Uniform2f(g->GetUniformLocation(g->glass_program,"step"),0,sy/height);
+        g->Uniform4f(g->GetUniformLocation(g->glass_program,"capture"),(float)left,(float)bottom,(float)width,(float)height);
+        g->Uniform4f(g->GetUniformLocation(g->glass_program,"rect"),b->x*sx,ph-(b->y+b->h)*sy,b->w*sx,b->h*sy);
+        g->Uniform4f(g->GetUniformLocation(g->glass_program,"material"),b->red/255.f,b->green/255.f,b->blue/255.f,.24f);
+        g->Uniform1i(g->GetUniformLocation(g->glass_program,"light"),b->light);
+    } else {
+        g->BindFramebuffer(GL_FRAMEBUFFER,framebuffer);g->Viewport(0,0,pw,ph);
+        g->UseProgram(g->ui_program);
+        g->Uniform1i(g->GetUniformLocation(g->ui_program,"fallback"),1);
+        g->Uniform4f(g->GetUniformLocation(g->ui_program,"tint"),b->fallback[0]/255.f,b->fallback[1]/255.f,b->fallback[2]/255.f,1);
+    }
+    return filtered;
+}
 static bool ui_target(ps_graphics *g, struct nk_context *ui, struct nk_buffer *commands,
                       const struct nk_draw_null_texture *null_texture, GLuint framebuffer, int w,
                       int h, int pw, int ph) {
@@ -388,6 +482,7 @@ static bool ui_target(ps_graphics *g, struct nk_context *ui, struct nk_buffer *c
         return true;
     Uint64 convert_start = SDL_GetTicksNS();
     g->ui_stats.upload_seconds = 0;
+    g->ui_stats.backdrop_passes=0;g->ui_stats.backdrop_pixels=0;
     ps_result converted = ps_ui_geometry_convert(&g->ui_geometry, ui, commands, null_texture);
     struct nk_buffer *vertices = &g->ui_geometry.vertices, *indices = &g->ui_geometry.indices;
     g->ui_stats.conversion_seconds = (double)(SDL_GetTicksNS() - convert_start) / 1e9;
@@ -413,6 +508,8 @@ static bool ui_target(ps_graphics *g, struct nk_context *ui, struct nk_buffer *c
     g->BindVertexArray(g->ui_vao);
     float matrix[16] = {2.f / w, 0, 0, 0, 0, -2.f / h, 0, 0, 0, 0, -1, 0, -1, 1, 0, 1};
     g->UniformMatrix4fv(g->ui_projection, 1, GL_FALSE, matrix);
+    g->Uniform1i(g->GetUniformLocation(g->ui_program,"fallback"),0);
+    if((!g->backdrop || g->backdrop->opaque) && g->glass_width)backdrop_release(g);
     Uint64 upload_start = SDL_GetTicksNS();
     g->BindBuffer(GL_ARRAY_BUFFER, g->ui_vbo);
     /* Orphan the old store so queued draws can finish without overwriting it.
@@ -440,12 +537,17 @@ static bool ui_target(ps_graphics *g, struct nk_context *ui, struct nk_buffer *c
             y = (int)floorf((h - cmd->clip_rect.y - cmd->clip_rect.h) * sy);
         int cw = (int)ceilf(cmd->clip_rect.w * sx), ch = (int)ceilf(cmd->clip_rect.h * sy);
         if (cw > 0 && ch > 0) {
+            bool glass=g->backdrop && cmd->userdata.ptr==g->backdrop;
+            bool filtered=glass && backdrop_draw_prepare(g,framebuffer,pw,ph,sx,sy,matrix);
             g->Scissor(x, y, cw, ch);
-            g->BindTexture(GL_TEXTURE_2D, (GLuint)cmd->texture.id);
-            g->Uniform1i(g->ui_flip, (GLuint)cmd->texture.id == g->scene_texture);
+            if(!filtered) {
+                g->BindTexture(GL_TEXTURE_2D, (GLuint)cmd->texture.id);
+                g->Uniform1i(g->ui_flip, (GLuint)cmd->texture.id == g->scene_texture);
+            }
             g->DrawElements(GL_TRIANGLES, (GLsizei)cmd->elem_count,
                             sizeof(nk_draw_index) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT,
                             (void *)offset);
+            if(glass){g->UseProgram(g->ui_program);g->Uniform1i(g->GetUniformLocation(g->ui_program,"fallback"),0);}
         }
         offset += cmd->elem_count * sizeof(nk_draw_index);
     }

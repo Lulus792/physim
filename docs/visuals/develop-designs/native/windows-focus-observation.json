@@ -1,0 +1,31 @@
+{
+  "status": "passed",
+  "app_sha256": "b778cdc2edae0e9810c4802ece7ddce54ff7044ba01f7f88cc648f4536524303",
+  "observations": [
+    {
+      "seconds": 0.015,
+      "windows": []
+    },
+    {
+      "seconds": 1.0,
+      "windows": [
+        {
+          "title": "Physim | Experiment Studio",
+          "window": 3479146,
+          "foreground": true,
+          "active": true,
+          "focus": true,
+          "focus_present": true,
+          "thread_info": true,
+          "foreground_pid": 7404,
+          "process_id": 7404
+        }
+      ]
+    },
+    {
+      "seconds": 4.718,
+      "windows": []
+    }
+  ],
+  "exit_code": 0
+}

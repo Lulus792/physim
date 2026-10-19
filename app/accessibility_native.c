@@ -28,6 +28,7 @@ struct ps_a11y_native {
 #else
 #define PS_AX_BOOL "c"
 #endif
+
 static Class owned_class,element_class,document_class,edit_class,link_class;static Ivar owner_ivar,id_ivar;static IMP base_dealloc,base_frame;
 static id send0(id object,const char *selector) {
  return ((id(*)(id,SEL))objc_msgSend)(object,sel_registerName(selector));
@@ -64,7 +65,12 @@ static BOOL element_valid(id object,SEL selector) {(void)selector;ps_a11y_node n
 static BOOL element_enabled(id object,SEL selector) {(void)selector;ps_a11y_node node;return node_copy(object,&node)&&node.enabled;}
 static id element_role(id object,SEL selector) {
  (void)selector;ps_a11y_node node;if(!node_copy(object,&node))return nil;
- return string(node.role==PS_A11Y_BUTTON?"AXButton":node.role==PS_A11Y_LINK?"AXLink":node.role==PS_A11Y_CHECKBOX?"AXCheckBox":node.role==PS_A11Y_RADIO?"AXRadioButton":node.role==PS_A11Y_RADIO_GROUP?"AXRadioGroup":node.role==PS_A11Y_SLIDER?"AXSlider":"AXStaticText");
+ return string(node.role==PS_A11Y_BUTTON?"AXButton":node.role==PS_A11Y_LINK?"AXLink":node.role==PS_A11Y_CHECKBOX?"AXCheckBox":node.role==PS_A11Y_RADIO?"AXRadioButton":node.role==PS_A11Y_RADIO_GROUP?"AXRadioGroup":node.role==PS_A11Y_SEPARATOR?"AXSplitter":node.role==PS_A11Y_SLIDER?"AXSlider":"AXStaticText");
+}
+static long element_orientation(id object,SEL selector) {
+ (void)selector;ps_a11y_node node;if(!node_copy(object,&node) || node.role!=PS_A11Y_SEPARATOR)return 0;
+ /* NSAccessibilityOrientation is NSInteger, not an AX string constant. */
+ return node.bounds[2]<node.bounds[3]?1:2;
 }
 static id element_label(id object,SEL selector) {
  (void)selector;ps_a11y_node node;return node_copy(object,&node)?string(node.label):nil;
@@ -73,7 +79,7 @@ static id element_value(id object,SEL selector) {
  (void)selector;ps_a11y_node node;if(!node_copy(object,&node))return nil;
  if(node.role==PS_A11Y_CHECKBOX || node.role==PS_A11Y_RADIO)
   return ((id(*)(id,SEL,BOOL))objc_msgSend)((id)objc_getClass("NSNumber"),sel_registerName("numberWithBool:"),node.checked);
- if(node.role==PS_A11Y_SLIDER)return ((id(*)(id,SEL,double))objc_msgSend)((id)objc_getClass("NSNumber"),sel_registerName("numberWithDouble:"),node.value);
+ if(ps_a11y_range_role(node.role))return ((id(*)(id,SEL,double))objc_msgSend)((id)objc_getClass("NSNumber"),sel_registerName("numberWithDouble:"),node.value);
  return node.role==PS_A11Y_TEXT?string(node.label):nil;
 }
 static id element_identifier(id object,SEL selector) {
@@ -113,7 +119,7 @@ static BOOL element_press(id object,SEL selector) {
  bool accepted=b->model && ps_a11y_press(b->model,identifier(object));SDL_UnlockMutex(b->mutex);return accepted;
 }
 static id element_range_bound(id object,SEL selector) {
- ps_a11y_node node;if(!node_copy(object,&node) || node.role!=PS_A11Y_SLIDER)return nil;
+ ps_a11y_node node;if(!node_copy(object,&node) || !ps_a11y_range_role(node.role))return nil;
  double value=selector==sel_registerName("accessibilityMinValue")?node.minimum:node.maximum;
  return ((id(*)(id,SEL,double))objc_msgSend)((id)objc_getClass("NSNumber"),sel_registerName("numberWithDouble:"),value);
 }
@@ -148,7 +154,7 @@ static BOOL element_allowed(id object,SEL selector,SEL requested) {
  }
  if(requested==sel_registerName("setAccessibilityFocused:")){ps_a11y_node node;return node_copy(object,&node)&&node.focusable;}
  if(requested==sel_registerName("setAccessibilityValue:") || requested==sel_registerName("accessibilityPerformIncrement") || requested==sel_registerName("accessibilityPerformDecrement")) {
-  ps_a11y_node node;return node_copy(object,&node)&&node.role==PS_A11Y_SLIDER&&node.enabled;
+  ps_a11y_node node;return node_copy(object,&node)&&ps_a11y_range_role(node.role)&&node.enabled;
  }
  const char *name=sel_getName(requested);
  if(!strncmp(name,"setAccessibility",16) || !strncmp(name,"accessibilityPerform",20))return NO;
@@ -189,6 +195,7 @@ static bool make_class(void) {
  class_addMethod(element_class,sel_registerName("accessibilityChildren"),(IMP)element_children,"@@:");
  class_addMethod(element_class,sel_registerName("accessibilitySelectedChildren"),(IMP)element_selected_children,"@@:");
  class_addMethod(element_class,sel_registerName("accessibilityFrame"),(IMP)element_frame,"{CGRect={CGPoint=dd}{CGSize=dd}}@:");
+ class_addMethod(element_class,sel_registerName("accessibilityOrientation"),(IMP)element_orientation,"q@:");
  class_addMethod(element_class,sel_registerName("accessibilityPerformPress"),(IMP)element_press,PS_AX_BOOL "@:");
  class_addMethod(element_class,sel_registerName("isAccessibilitySelectorAllowed:"),(IMP)element_allowed,PS_AX_BOOL "@::");
  objc_registerClassPair(element_class);
@@ -239,7 +246,7 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
   }
   for(size_t j=0;j<b->count;j++)if(b->ids[j]==node->id) {
    text_selection_changed[i]=node->role==PS_A11Y_EDIT && (node->text_version!=b->edit_versions[j] || node->text_start!=b->edit_starts[j] || node->text_end!=b->edit_ends[j] || node->text_caret!=b->edit_carets[j]);
-   value_changed[i]=(node->role==PS_A11Y_EDIT && node->text_version!=b->edit_versions[j]) || ((node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) && node->checked!=b->checked[j]) || (node->role==PS_A11Y_SLIDER && node->value!=b->values[j]);
+   value_changed[i]=(node->role==PS_A11Y_EDIT && node->text_version!=b->edit_versions[j]) || ((node->role==PS_A11Y_CHECKBOX || node->role==PS_A11Y_RADIO) && node->checked!=b->checked[j]) || (ps_a11y_range_role(node->role) && node->value!=b->values[j]);
   }
   if(!element) {
    element=send0((id)(node->role==PS_A11Y_EDIT?edit_class:node->role==PS_A11Y_LINK?link_class:element_class),"new");SDL_AddAtomicInt(&b->references,1);
@@ -445,3 +452,21 @@ bool ps_a11y_native_document_read_test(ps_a11y_native *bridge){(void)bridge;retu
 bool ps_a11y_native_edit_test_step(ps_a11y_native *bridge,int step){(void)bridge;(void)step;return false;}
 bool ps_a11y_native_links_test_step(ps_a11y_native *bridge,int step){(void)bridge;(void)step;return false;}
 #endif
+bool ps_a11y_native_reduce_transparency(void) {
+ const char *override=SDL_getenv("PHYSIM_REDUCE_TRANSPARENCY");
+ if(override && !strcmp(override,"1"))return true;
+#ifdef _WIN32
+ HIGHCONTRASTW contrast={0};contrast.cbSize=sizeof contrast;
+ if(SystemParametersInfoW(SPI_GETHIGHCONTRAST,sizeof contrast,&contrast,0) && (contrast.dwFlags&HCF_HIGHCONTRASTON))return true;
+ /* Best-effort Windows personalization preference. Missing/changed registry
+  * schema keeps normal material; high contrast above uses the public API. */
+ DWORD enabled=1,bytes=sizeof enabled;
+ return RegGetValueW(HKEY_CURRENT_USER,L"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",L"EnableTransparency",RRF_RT_REG_DWORD,NULL,&enabled,&bytes)==ERROR_SUCCESS && !enabled;
+#elif defined(__APPLE__)
+ id workspace=((id(*)(id,SEL))objc_msgSend)((id)objc_getClass("NSWorkspace"),sel_registerName("sharedWorkspace"));
+ return workspace && (((BOOL(*)(id,SEL))objc_msgSend)(workspace,sel_registerName("accessibilityDisplayShouldReduceTransparency")) ||
+                      ((BOOL(*)(id,SEL))objc_msgSend)(workspace,sel_registerName("accessibilityDisplayShouldIncreaseContrast")));
+#else
+ return false;
+#endif
+}

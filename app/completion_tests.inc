@@ -102,6 +102,6 @@ static void completion_test_frame(app *a,const char *mode,int *stage,int *code,c
     case 38:ok=a->completion_active && a->completion_count>0;test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
     case 39:ok=!a->completion_active && completion_test_equal(edit,"");a->quitting=true;break;
     }
-    if(!ok){fprintf(stderr,"Completion UI target=%u stage=%d active=%u cursor=%d text=%s\n",target,*stage-1,a->completion_active,edit?edit->cursor:-1,edit?nk_str_get_const(&edit->string):"missing");*code=1;a->quitting=true;}
+    if(!ok){fprintf(stderr,"Completion UI target=%u stage=%d active=%u cursor=%d text=%.*s\n",target,*stage-1,a->completion_active,edit?edit->cursor:-1,edit?nk_str_len_char(&edit->string):7,edit?nk_str_get_const(&edit->string):"missing");*code=1;a->quitting=true;}
     if(a->quitting)printf("COMPLETION SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 }

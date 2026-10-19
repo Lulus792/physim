@@ -103,7 +103,12 @@ static void file_tabs_test_frame(app *a,int *stage,int *code,const char **captur
     case 47:
         ok=a->toolbar_menu==6 && a->editor_build_bounds.w>0;
         *capture="editor-build-menu.bmp";test_window_key_mod(a->window,SDLK_UP,0);break;
-    case 48:ok=a->toolbar_keyboard && a->toolbar_keyboard_item==0;test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
+    case 48:
+        ok=a->toolbar_keyboard && a->toolbar_keyboard_item==1;
+        test_window_key_mod(a->window,SDLK_UP,0);*stage=148;break;
+    case 148:
+        ok=a->toolbar_keyboard && a->toolbar_keyboard_item==0;
+        test_window_key_mod(a->window,SDLK_ESCAPE,0);*stage=49;break;
     case 49:test_mouse(a,a->toolbar_bounds[0],true);break;
     case 50:test_mouse(a,a->toolbar_bounds[0],false);break;
     case 51:ok=a->toolbar_menu==1;*capture="editor-file-menu.bmp";test_key(a,SDLK_S);break;

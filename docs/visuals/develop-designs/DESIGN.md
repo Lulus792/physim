@@ -2,8 +2,9 @@
 
 Stand: 19. Oktober 2026. Die Nutzerwahl ist abgeschlossen: **Werkbank mit
 Panelköpfen, kompakten Tabs, Workspace-Pfadlinien und Suchinsel in Klarglas Kühl**.
-Die native Anwendung ist noch nicht umgebaut. Für den nächsten Chat gelten
-[Auftrag](NEXT-CHAT.md) und [technische Übergabe](IMPLEMENTATION.md).
+Die native Umsetzung und ihre Prüfgrenzen stehen in
+[NATIVE-STATUS.md](NATIVE-STATUS.md). [Auftrag](NEXT-CHAT.md) und
+[technische Übergabe](IMPLEMENTATION.md) dokumentieren die Ausgangsanforderungen.
 
 ## Aufbau
 

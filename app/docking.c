@@ -146,3 +146,19 @@ bool ps_dock_reveal(ps_dock_layout *d, uint32_t panel, uint32_t side) {
     }
     return ps_dock_select(d,panel);
 }
+bool ps_dock_reveal_outer(ps_dock_layout *d,uint32_t panel,uint32_t side) {
+    if(!ps_dock_valid(d) || panel>=PS_DOCK_PANELS || side<PS_DOCK_LEFT || side>PS_DOCK_BOTTOM)return false;
+    if(!(d->hidden&(1u<<panel)))return ps_dock_select(d,panel);
+    if(d->root==PS_DOCK_NONE)return ps_dock_reveal(d,panel,side);
+    ps_dock_layout next=*d;uint32_t root=next.root,old=unused(&next);
+    if(old==PS_DOCK_NONE)return false;
+    next.nodes[old]=next.nodes[root];uint32_t added=unused(&next);
+    if(added==PS_DOCK_NONE)return false;
+    next.nodes[added]=(ps_dock_node){.kind=PS_DOCK_GROUP,.panels=1u<<panel,.active=panel};
+    bool before=side==PS_DOCK_LEFT || side==PS_DOCK_TOP;
+    next.nodes[root]=(ps_dock_node){.kind=side<=PS_DOCK_RIGHT?PS_DOCK_X:PS_DOCK_Y,
+        .first=before?added:old,.second=before?old:added,.ratio=before?190:768};
+    next.hidden&=~(1u<<panel);
+    if(!ps_dock_valid(&next))return false;
+    *d=next;return true;
+}

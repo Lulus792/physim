@@ -62,7 +62,17 @@ struct nk_sdl {
     SDL_Mutex *accessibility_mutex;
     ps_a11y_native *accessibility_native;
     bool accessibility_custom_keyboard;
+    Uint64 transparency_checked;
+    bool transparency_reduced;
 };
+bool nk_sdl_reduce_transparency(struct nk_context *ctx) {
+    if(!ctx || !ctx->userdata.ptr)return false;
+    struct nk_sdl *sdl=ctx->userdata.ptr;Uint64 now=SDL_GetTicks();
+    if(!sdl->transparency_checked || now-sdl->transparency_checked>=500) {
+        sdl->transparency_checked=now;sdl->transparency_reduced=ps_a11y_native_reduce_transparency();
+    }
+    return sdl->transparency_reduced;
+}
 static unsigned accessibility_widget(void *user,const char *window,const char *label,
                                  int role,const float bounds[4],bool enabled,bool checked,const char *group,bool activated) {
     struct nk_sdl *sdl=user;if(!sdl->accessibility)return false;
@@ -78,11 +88,13 @@ static unsigned accessibility_widget(void *user,const char *window,const char *l
     if(granted){sdl->accessibility_custom_keyboard=false;SDL_RaiseWindow(sdl->win);nk_edit_unfocus(&sdl->ctx);}
     return (pressed?1u:0u)|(granted?2u:0u)|(focused && !sdl->accessibility_custom_keyboard?4u:0u);
 }
-static unsigned accessibility_range_widget(void *user,const char *window,const char *label,const float bounds[4],bool enabled,double values[4]) {
+static unsigned accessibility_range_widget(void *user,const char *window,const char *label,int role,const float bounds[4],bool enabled,double values[4]) {
     struct nk_sdl *sdl=user;SDL_LockMutex(sdl->accessibility_mutex);
     enabled=enabled && accessibility_window_enabled(sdl->win);
     ps_a11y_model *model=sdl->accessibility;uint64_t pending=model->pending_focus;size_t before=model->draft_count;
-    bool changed=ps_a11y_record_range(model,window,label,bounds,enabled,values[1],values[2],values[3],&values[0]);
+    bool changed=role==PS_A11Y_SEPARATOR?
+        ps_a11y_record_separator(model,window,label,bounds,enabled,values[1],values[2],values[3],&values[0]):
+        ps_a11y_record_range(model,window,label,bounds,enabled,values[1],values[2],values[3],&values[0]);
     bool recorded=model->draft_count>before;
     /* The rendered slider owns a float; publish its actual rounded value. */
     values[0]=(double)(float)values[0];if(recorded)model->draft[before].value=values[0];
@@ -396,6 +408,18 @@ bool nk_sdl_accessibility_choose(struct nk_context *ctx,const char *group,const 
     struct nk_sdl *sdl=ctx->userdata.ptr;
     return ps_a11y_native_press_choice(sdl->accessibility_native,group,label);
 }
+bool nk_sdl_accessibility_request_focus(struct nk_context *ctx,const char *group,const char *label) {
+    if(!ctx || !ctx->userdata.ptr || !label)return false;
+    struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
+    bool requested=false;SDL_LockMutex(sdl->accessibility_mutex);ps_a11y_model *model=sdl->accessibility;
+    for(size_t i=0;i<model->count;i++) {
+        const ps_a11y_node *node=&model->nodes[i],*parent=ps_a11y_find(model,node->parent);
+        if(!strcmp(node->label,label) && (!group || (parent && !strcmp(parent->label,group)))) {
+            requested=ps_a11y_focus(model,node->id);break;
+        }
+    }
+    SDL_UnlockMutex(sdl->accessibility_mutex);return requested;
+}
 bool nk_sdl_accessibility_is_focused(struct nk_context *ctx,const char *group,const char *label) {
  if(!ctx || !ctx->userdata.ptr || !label)return false;
  struct nk_sdl *sdl=ctx->userdata.ptr;
@@ -480,7 +504,7 @@ bool nk_sdl_accessibility_event(struct nk_context *ctx,const SDL_Event *event) {
   else if(key==SDLK_LEFT || key==SDLK_RIGHT || key==SDLK_UP || key==SDLK_DOWN) {
    const ps_a11y_node *node=ps_a11y_find(m,m->focused_id);
    if(node && node->role==PS_A11Y_RADIO){handled=true;if(down)ps_a11y_focus_move(m,key==SDLK_LEFT || key==SDLK_UP?-1:1,true);}
-   if(node && node->role==PS_A11Y_SLIDER){handled=true;if(down)ps_a11y_adjust(m,node->id,key==SDLK_LEFT || key==SDLK_DOWN?-1:1);}
+   if(node && ps_a11y_range_role(node->role)){handled=true;if(down)ps_a11y_adjust(m,node->id,key==SDLK_LEFT || key==SDLK_DOWN?-1:1);}
   }
  }
  SDL_UnlockMutex(sdl->accessibility_mutex);return handled;
@@ -614,6 +638,7 @@ bool nk_sdl_render(struct nk_context *ctx) {
             if(node->offscreen && document && document->active && document->version==node->document_version)target=document->viewport;
             for(struct nk_window *above=window->next;above;above=above->next) {
                 if(above->flags&(NK_WINDOW_HIDDEN|NK_WINDOW_MINIMIZED|NK_WINDOW_CLOSED))continue;
+                if(node->role==PS_A11Y_SEPARATOR && !strncmp(above->name_string,"dock-splitter-",14))continue;
                 struct nk_rect cover=above->bounds;
                 if(cover.x<target[0]+target[2] && cover.x+cover.w>target[0] &&
                    cover.y<target[1]+target[3] && cover.y+cover.h>target[1]) {
@@ -926,8 +951,7 @@ NK_API int nk_sdl_handle_event(struct nk_context *ctx, SDL_Event *evt) {
         const int down = evt->button.down;
         switch (evt->button.button) {
         case SDL_BUTTON_LEFT:
-            if (evt->button.clicks > 1)
-                nk_input_button(ctx, NK_BUTTON_DOUBLE, x, y, down);
+            nk_input_button(ctx,NK_BUTTON_DOUBLE,x,y,down && evt->button.clicks>1);
             nk_input_button(ctx, NK_BUTTON_LEFT, x, y, down);
             break;
         case SDL_BUTTON_MIDDLE:

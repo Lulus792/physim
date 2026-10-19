@@ -64,7 +64,7 @@ static HRESULT uia_query(uia_element *e,REFIID iid,void **out) {
  else if(e->id && e->role==PS_A11Y_CHECKBOX && IsEqualIID(iid,&IID_IToggleProvider))*out=&e->toggle;
  else if(e->id && e->role==PS_A11Y_RADIO && IsEqualIID(iid,&IID_ISelectionItemProvider))*out=&e->item;
  else if(e->id && e->role==PS_A11Y_RADIO_GROUP && IsEqualIID(iid,&IID_ISelectionProvider))*out=&e->selection;
- else if(e->id && e->role==PS_A11Y_SLIDER && IsEqualIID(iid,&IID_IRangeValueProvider))*out=&e->range;
+ else if(e->id && ps_a11y_range_role(e->role) && IsEqualIID(iid,&IID_IRangeValueProvider))*out=&e->range;
  else if(e->id && e->role==PS_A11Y_EDIT && IsEqualIID(iid,&IID_IValueProvider))*out=&e->value;
  if(!*out)return E_NOINTERFACE;uia_addref(e);return S_OK;
 }
@@ -185,7 +185,9 @@ static HRESULT STDMETHODCALLTYPE uia_property(IRawElementProviderSimple *p,PROPE
  if(property==UIA_ControlTypePropertyId) {
   out->vt=VT_I4;out->lVal=!e->id?(reading?UIA_DocumentControlTypeId:UIA_PaneControlTypeId):node.role==PS_A11Y_BUTTON?UIA_ButtonControlTypeId:
    node.role==PS_A11Y_LINK?UIA_HyperlinkControlTypeId:node.role==PS_A11Y_CHECKBOX?UIA_CheckBoxControlTypeId:node.role==PS_A11Y_RADIO?UIA_RadioButtonControlTypeId:
-   node.role==PS_A11Y_RADIO_GROUP?UIA_GroupControlTypeId:node.role==PS_A11Y_SLIDER?UIA_SliderControlTypeId:node.role==PS_A11Y_EDIT?UIA_EditControlTypeId:UIA_TextControlTypeId;
+   node.role==PS_A11Y_RADIO_GROUP?UIA_GroupControlTypeId:node.role==PS_A11Y_SEPARATOR?UIA_SeparatorControlTypeId:node.role==PS_A11Y_SLIDER?UIA_SliderControlTypeId:node.role==PS_A11Y_EDIT?UIA_EditControlTypeId:UIA_TextControlTypeId;
+ } else if(property==UIA_OrientationPropertyId && node.role==PS_A11Y_SEPARATOR) {
+  out->vt=VT_I4;out->lVal=node.bounds[2]<node.bounds[3]?OrientationType_Vertical:OrientationType_Horizontal;
  } else if(property==UIA_IsEnabledPropertyId){out->vt=VT_BOOL;out->boolVal=viewable && (!e->id || node.enabled) && IsWindowEnabled(hwnd)?VARIANT_TRUE:VARIANT_FALSE;}
  else if(property==UIA_IsKeyboardFocusablePropertyId){out->vt=VT_BOOL;out->boolVal=viewable && (e->id?node.focusable:(b->model->document && b->model->document->active))?VARIANT_TRUE:VARIANT_FALSE;}
  else if(property==UIA_HasKeyboardFocusPropertyId){out->vt=VT_BOOL;out->boolVal=viewable && (e->id?node.focused:ps_a11y_document_focused(b->model))?VARIANT_TRUE:VARIANT_FALSE;}
