@@ -2,13 +2,14 @@
 
 Festgelegt: **Panelköpfe**, **kompakte Tabs**, **Workspace-Pfadlinien** und die
 **schwebende Suchinsel**. Verworfenes wurde aus diesem Ordner entfernt.
-Nur die Glasoberfläche steht noch zum Vergleich.
+**Klarglas mit der 16-px-Rundung von Kristallkante ist gewählt.** Zum Vergleich
+stehen nur noch drei dezente Farbabstimmungen von Glas, Iconflächen und Eingabefeld.
 
 - [Interaktive Vorschau](index.html), lokal ohne Server oder externe Ressourcen.
 - [Glasvergleich](glass-overview.png): Detailansichten, dunkel links / hell rechts.
-- Seidenglas: [Dunkel](glass-satin-dark.png), [Hell](glass-satin-light.png).
-- Klarglas: [Dunkel](glass-clear-dark.png), [Hell](glass-clear-light.png).
-- Kristallkante: [Dunkel](glass-crystal-dark.png), [Hell](glass-crystal-light.png).
+- Neutral: [Dunkel](glass-neutral-dark.png), [Hell](glass-neutral-light.png).
+- Kühl: [Dunkel](glass-cool-dark.png), [Hell](glass-cool-light.png).
+- Warm: [Dunkel](glass-warm-dark.png), [Hell](glass-warm-light.png).
 - [Designvertrag, Prüfung und Bereinigung](DESIGN.md).
 
 Die Suchinsel sitzt 4 px unter der Oberkante der Codefläche; die separate
@@ -16,6 +17,11 @@ Pfadzeile entfällt. Sie verschiebt den Code auch mit geöffnetem Ersetzen nicht
 Für den Materialvergleich ist die Suche beim Start offen. Escape schließt sie;
 Ctrl/Command+F oder das Suchicon öffnet sie wieder. Die Materialknöpfe öffnen
 sie ebenfalls. „Transparenz reduzieren“ zeigt eine deckende Fläche.
+
+Neue SVG-Suchicons ersetzen die Schriftzeichen. Die Treffernavigation teilt
+eine gemeinsame, ruhige Iconfläche. Der rechte Kontextschalter bleibt beim
+Schließen und Öffnen ganz rechts an derselben Position, stets rechts von Suche
+und Speichern. Die Farbauswahl verändert diese Anordnung nicht.
 
 Workspace, Kontext und Protokoll bleiben an ihren Trennlinien größenverstellbar,
 auch per Tab und Pfeiltasten. Doppelklick oder Enter setzt eine Größe zurück.

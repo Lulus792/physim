@@ -1,13 +1,13 @@
 /* Search-island materials and resizable docked regions, for the browser study only. */
 (() => {
   app.classList.add('resizable');
-  const materials={satin:{title:'01 / Seidenglas',subtitle:'Weich gefiltert, ruhig und gut lesbar.'},clear:{title:'02 / Klarglas',subtitle:'Mehr Durchsicht, dezente Unschärfe.'},crystal:{title:'03 / Kristallkante',subtitle:'Klarer Rand, sanfter Glanz und sichtbare Tiefe.'}};
+  const materials={neutral:{title:'01 / Klarglas · Neutral',subtitle:'Neutrale Glas-, Icon- und Eingabeflächen.'},cool:{title:'02 / Klarglas · Kühl',subtitle:'Ein Hauch Blau in Glas, Icons und Eingabe.'},warm:{title:'03 / Klarglas · Warm',subtitle:'Sanft wärmere Flächen mit einem Hauch Perlmutt.'}};
   const studies=document.createElement('nav');studies.className='glass-studies';studies.setAttribute('aria-label','Glasvarianten der gewählten Suchinsel');
-  studies.innerHTML='<button data-glass="satin" aria-pressed="true"><span>01</span><strong>Seidenglas<small>Weich und ruhig</small></strong></button><button data-glass="clear" aria-pressed="false"><span>02</span><strong>Klarglas<small>Mehr Durchsicht</small></strong></button><button data-glass="crystal" aria-pressed="false"><span>03</span><strong>Kristallkante<small>Glanz und Lichtkante</small></strong></button>';
+  studies.innerHTML='<button data-glass="neutral" aria-pressed="true"><span>01</span><strong>Neutral<small>Ruhiges Graphit / Weiß</small></strong></button><button data-glass="cool" aria-pressed="false"><span>02</span><strong>Kühl<small>Dezent bläuliche Flächen</small></strong></button><button data-glass="warm" aria-pressed="false"><span>03</span><strong>Warm<small>Sanftes Graphit / Perlmutt</small></strong></button>';
   $('.preview-heading').before(studies);
   const options=document.createElement('div');options.className='material-options';options.innerHTML='<label><input type="checkbox" id="reduce-transparency"> Transparenz reduzieren</label><button id="reset-panels">Panelgrößen zurücksetzen</button>';
   studies.after(options);
-  app.dataset.glass='satin';
+  app.dataset.glass='neutral';
   const help=document.createElement('p');help.className='resize-help';help.id='resize-help';help.textContent='Trennlinien ziehen oder mit Tab fokussieren und Pfeiltasten nutzen. Umschalt = größere Schritte · Doppelklick oder Enter = Standardgröße.';
   options.after(help);
   const bar=$('#search-bar'),code=$('#code-area');code.append(bar);
@@ -16,19 +16,27 @@
   queryLabel.firstChild.textContent='';replaceLabel.firstChild.textContent='';
   $('#query').setAttribute('aria-label','Suchtext');$('#query').placeholder='Im Dokument suchen';
   $('#replacement').setAttribute('aria-label','Ersetzung');$('#replacement').placeholder='Ersetzen durch';
+  const icon=name=>{
+    const paths={search:'<circle cx="7" cy="7" r="4.5"/><path d="m10.4 10.4 3.6 3.6"/>',expand:'<path d="m6 4 4 4-4 4"/>',collapse:'<path d="m4 6 4 4 4-4"/>',previous:'<path d="m4 10 4-4 4 4"/>',next:'<path d="m4 6 4 4 4-4"/>',close:'<path d="m4.5 4.5 7 7m0-7-7 7"/>',replace:'<path d="M3 5h9l-2-2m2 2-2 2M13 11H4l2 2m-2-2 2-2"/>'};
+    return `<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${paths[name]}</svg>`;
+  };
+  queryLabel.classList.add('search-field');const magnifier=document.createElement('span');magnifier.className='search-field-icon';magnifier.innerHTML=icon('search');queryLabel.prepend(magnifier);
   const row=document.createElement('div');row.className='floating-search-row';
   const replacement=document.createElement('div');replacement.className='floating-search-row floating-search-replace';replacement.id='floating-replacement';replacement.hidden=true;
-  const disclose=document.createElement('button');disclose.id='replace-toggle';disclose.textContent='›';disclose.setAttribute('aria-label','Ersetzen einblenden');disclose.setAttribute('aria-expanded','false');disclose.setAttribute('aria-controls',replacement.id);
-  const previous=document.createElement('button');previous.id='find-previous';previous.textContent='↑';previous.title='Vorheriger Treffer · Umschalt Enter';previous.setAttribute('aria-label','Vorheriger Treffer');
-  $('#find-next').textContent='↓';$('#find-next').title='Nächster Treffer · Enter';$('#find-next').setAttribute('aria-label','Nächster Treffer');
+  const disclose=document.createElement('button');disclose.id='replace-toggle';disclose.innerHTML=icon('expand');disclose.setAttribute('aria-label','Ersetzen einblenden');disclose.title='Ersetzen einblenden';disclose.setAttribute('aria-expanded','false');disclose.setAttribute('aria-controls',replacement.id);
+  const previous=document.createElement('button');previous.id='find-previous';previous.innerHTML=icon('previous');previous.title='Vorheriger Treffer · Umschalt Enter';previous.setAttribute('aria-label','Vorheriger Treffer');
+  $('#find-next').innerHTML=icon('next');$('#find-next').title='Nächster Treffer · Enter';$('#find-next').setAttribute('aria-label','Nächster Treffer');
+  $('#search-close').innerHTML=icon('close');$('#search-close').title='Suche schließen · Escape';
+  $('#replace').innerHTML=icon('replace')+'<span>Ersetzen</span>';
+  const navigation=document.createElement('div');navigation.className='search-navigation';navigation.setAttribute('role','group');navigation.setAttribute('aria-label','Treffernavigation');navigation.append(previous,$('#find-next'));
   const footer=document.createElement('div');footer.className='floating-search-footer';footer.append($('#search-result'));const scope=document.createElement('small');scope.textContent='Aktuelle Datei · Escape schließt';footer.append(scope);
-  row.append(disclose,queryLabel,previous,$('#find-next'),$('#search-close'));replacement.append(replaceLabel,$('#replace'));
+  row.append(disclose,queryLabel,navigation,$('#search-close'));replacement.append(replaceLabel,$('#replace'));
   bar.replaceChildren(row,replacement,footer);
   function counts() {
     const q=$('#query').value,n=q?editor.value.split(q).length-1:0;
     $('#search-result').textContent=q?`${n} Treffer`:'Suchtext eingeben';
   }
-  disclose.addEventListener('click',()=>{replacement.hidden=!replacement.hidden;disclose.setAttribute('aria-expanded',String(!replacement.hidden));disclose.textContent=replacement.hidden?'›':'⌄';disclose.setAttribute('aria-label',replacement.hidden?'Ersetzen einblenden':'Ersetzen ausblenden');});
+  disclose.addEventListener('click',()=>{replacement.hidden=!replacement.hidden;disclose.setAttribute('aria-expanded',String(!replacement.hidden));disclose.innerHTML=icon(replacement.hidden?'expand':'collapse');disclose.setAttribute('aria-label',replacement.hidden?'Ersetzen einblenden':'Ersetzen ausblenden');disclose.title=disclose.getAttribute('aria-label');});
   previous.addEventListener('click',()=>{
     const q=$('#query').value;if(!q){counts();return;}
     const start=editor.selectionStart-1;let at=start>=0?editor.value.lastIndexOf(q,start):-1;if(at<0)at=editor.value.lastIndexOf(q);

@@ -8,16 +8,16 @@
   const tabs=$('.file-tabs'),top=document.createElement('div');top.className='editor-topline';tabs.before(top);top.append(tabs);
   const reopenLeft=document.createElement('div');reopenLeft.className='reopen-left';top.prepend(reopenLeft);
   const tools=document.createElement('div');tools.className='editor-tools';top.append(tools);
-  const reopenRight=document.createElement('div');reopenRight.className='reopen-right';tools.append(reopenRight);
   for(const [id,name,label] of [['search-open','search','Im Dokument suchen · Ctrl/Command F'],['save','save','Demodateien speichern · Ctrl/Command S']]){
     const button=$('#'+id);button.innerHTML=icon(name);button.setAttribute('aria-label',label);button.title=label;tools.append(button);
   }
+  const fixedContext=document.createElement('div');fixedContext.className='context-control';fixedContext.append($('#toggle-api'));tools.append(fixedContext);
   // The temporary action holder is no longer needed after moving its controls.
-  const treeTitle=$('#explorer > .pane-title'),contextTitle=$('#inspector > .pane-title');
+  const treeTitle=$('#explorer > .pane-title');
   treeTitle.innerHTML='<span>Workspace</span>';
   $$('.file-tree details > summary').forEach(summary=>{const name=summary.textContent;summary.innerHTML=`${icon('folder')}<span>${name}</span>`;});
   function placeControls(){
-    for(const [key,name,text,openTarget,closedTarget]of [['tree','left','Projekt',treeTitle,reopenLeft],['api','right','Kontext',contextTitle,reopenRight]]){
+    for(const [key,name,text,openTarget,closedTarget]of [['tree','left','Projekt',treeTitle,reopenLeft],['api','right','Kontext',fixedContext,fixedContext]]){
       const button=$('#toggle-'+key),open=button.getAttribute('aria-expanded')==='true';
       (open?openTarget:closedTarget).append(button);button.innerHTML=icon(name);
       button.setAttribute('aria-label',`${text} ${open?'zuklappen':'aufklappen'}`);button.title=`${text} ${open?'zuklappen':'aufklappen'}`;

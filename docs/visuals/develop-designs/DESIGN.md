@@ -2,11 +2,15 @@
 
 Stand: 19. Oktober 2026. Verantwortlich: UI/UX-Design. Die native App bleibt
 unverändert. Dieser Ordner enthält die aktuelle Browserreferenz der gewählten
-Werkbank und ausschließlich die noch offenen Glasvarianten.
+Werkbank und ausschließlich die noch offenen Farbabstimmungen. Gewählt ist
+Klarglas mit der 16-px-Rundung von Kristallkante.
 
 ## Festgelegter Aufbau
 
-- Schalter im Panelkopf; geschlossen erscheinen dieselben Schalter an den Dateitabs.
+- Linker Schalter im Panelkopf; geschlossen erscheint er an den Dateitabs.
+- Rechter Kontextschalter fest am äußersten rechten Rand der Kopfzeile. Er
+  verschiebt sich beim Öffnen/Schließen nicht und bleibt rechts von Suche und
+  Speichern. Bei schmalen Fenstern bleibt er oben, auch wenn der Kontext unten liegt.
 - Kompakte Dateitabs und drei gleich breite Arbeitsbereich-Tabs.
 - Workspace mit Pfadlinien; `assets`, `runs`, `build` behalten Reihenfolge und Ebene.
 - Profil und Buildstatus unten; Suche und Speichern direkt an den Dateitabs.
@@ -27,13 +31,25 @@ Umschalt+Enter/↑ navigieren vor- bzw. rückwärts mit Umbruch. Escape schließ
 Suche und stellt den Fokus am Suchicon wieder her. Die Galerie startet bewusst
 mit geöffneter Suchinsel, damit das Material sofort vergleichbar ist.
 
-## Drei noch offene Materialvarianten
+## Drei dezente Farbabstimmungen
 
-| Entwurf | Transparente Grundfläche dunkel / hell | Unschärfe | Wirkung |
+| Entwurf | Glasfläche | Iconflächen | Eingabefeld |
 | --- | --- | --- | --- |
-| Seidenglas | 74 % / 73 % Deckung | 14 px | Ruhig gefilterter Hintergrund, zurückhaltende Lichtkante |
-| Klarglas | 24 % / 24 % Deckung | 2 px | Deutlichere Durchsicht auf Code und Syntaxfarben |
-| Kristallkante | 45 % / 45 % Deckung | 7 px | Stärkere Lichtkante, sanfter Glanz, rundere Form |
+| Neutral | Neutrales Grau / Weiß | Ruhiges Graphit / kühles Weiß | Graphit / Weiß |
+| Kühl | Leicht bläuliche Tönung | Blaugrau / sehr helles Blau | Zurückhaltendes Nachtblau / Eisweiß |
+| Warm | Dezente warme Tönung | Warmes Graphit / Perlmutt | Dunkles Taupe / warmes Weiß |
+
+Alle drei verwenden 24 % Deckung der Grundfläche, 2 px Blur und 16 px Außenradius.
+Eingabefelder haben 68 % Deckung und 9 px Innenradius; die Iconflächen bleiben
+für Kontrast stärker gedeckt. Form, Position und Bedienung sind identisch.
+Neutral ist als Vergleichsstart vorbelegt, die endgültige Farbwahl bleibt offen.
+
+Die neuen Icons sind eigene SVG-Pfade mit einheitlicher 1,5-px-Strichstärke und
+runden Abschlüssen: Lupe im Eingabefeld, geometrische Aufklapppfeile, Chevronpaar
+für vorherigen/nächsten Treffer, ein ruhiges Schließenkreuz und ein Ersetzen-Symbol
+neben der Textaktion. Die Navigation nutzt eine gemeinsame Fläche; Aufklappen
+und Schließen haben im Ruhezustand keinen eigenen Rahmen. Tooltips und zugängliche
+Namen bleiben vorhanden, dekorative SVGs sind im Accessibility-Baum ausgeblendet.
 
 Die Sättigung wird leicht angehoben. Nur die vorübergehende Suchinsel erhält
 diesen Effekt; Code, Workspace und Kontext bleiben feste Leseflächen. Eingaben,
@@ -43,8 +59,8 @@ Die zusammengesetzte Farbe hängt vom Code darunter ab.
 Dies sind eigene CSS-Studien mit `backdrop-filter`, keine native Apple-Material-
 Implementierung. Apples Materialrichtlinie ordnet Liquid Glass der funktionalen
 Bedienebene zu und empfiehlt bei textreichen Kontrollen einen stärker gefilterten
-Hintergrund. Daraus wird hier die ruhigere Seidenglasvariante als Startvergleich
-abgeleitet; Klarglas ist eine bewusst transparentere Vergleichsstudie.
+Hintergrund. Die Nutzerwahl priorisiert hier ausdrücklich die transparentere
+Klarglasdarstellung; stärker gedeckte Bedienflächen sichern deren Lesbarkeit.
 Quelle: [Apple HIG Materials](https://developer.apple.com/design/human-interface-guidelines/materials),
 am 19. Oktober über das offizielle
 [DocC-Dokument](https://developer.apple.com/tutorials/data/design/human-interface-guidelines/materials.json)
@@ -93,12 +109,16 @@ Such-/Resize-Logik bleibt erhalten; ein konsolidierter Prüfer deckt die Oberfl�
 ab. Frühere Dateien bleiben über die Git-Historie wiederherstellbar.
 Andere Projektstudien, fremde lokale Arbeiten und Plattformbelege wurden nicht angefasst.
 
+In der Farbrunde wurden die sechs überholten Materialbilder (621.475 Bytes)
+durch sechs aktuelle Farbvarianten ersetzt. Alte Materialregeln und der nicht
+mehr benötigte rechte Wiederöffnungsplatz links von Suche/Speichern entfallen.
+
 ## Tatsächlich ausgeführte Prüfung
 
 Windows/Edge 155.0.4283.62, 19. Oktober 2026:
 `node tools/check_develop_designs.cjs --export`, Exitcode 0.
 
-- 24 Layoutfälle: 1440/1080/760/500 px × drei Glasvarianten × hell/dunkel.
+- 24 Layoutfälle: 1440/1080/760/500 px × drei Farbabstimmungen × hell/dunkel.
   Kein Seitenüberlauf, Editor mindestens 200 px breit. Kein zusätzlicher Abstand
   unter den Dateitabs; Suchinsel 4 px unter dem Codebeginn.
 - Öffnen und Erweitern der Suche erhalten Codegeometrie und Scrollposition.
@@ -108,6 +128,9 @@ Windows/Edge 155.0.4283.62, 19. Oktober 2026:
   Kontrastabnahme aller möglichen Codehintergründe.
 - Transparente Hintergrundfarbe und aktiver Blur für alle Materialien;
   deckender Fallback ohne Geometrieänderung für jede Variante geprüft.
+- 16 px Rundung, 2 px Blur und SVG-Icons geprüft. Für alle 24 Layoutfälle bleibt
+  die Position des rechten Kontextschalters beim Schließen/Öffnen exakt gleich;
+  er liegt auch geschlossen rechts von Suche und Speichern und behält den Fokus.
 - Vor-/Rückwärtssuche, Ersetzen, Escape/Fokus, erhaltene Dateiänderungen, sichere
   Syntaxdarstellung, Speichern, Demo-Build und Diagnosesprung bedient.
 - Maus-/Tastaturgrößenänderung, Wiederöffnen, Abbruch, Reset, Scrollgleichlauf,
@@ -117,6 +140,6 @@ Windows/Edge 155.0.4283.62, 19. Oktober 2026:
 
 Prüfer: [check_develop_designs.cjs](../../../tools/check_develop_designs.cjs).
 [Glasvergleich](glass-overview.png),
-[Seidenglas dunkel](glass-satin-dark.png), [Seidenglas hell](glass-satin-light.png),
-[Klarglas dunkel](glass-clear-dark.png), [Klarglas hell](glass-clear-light.png),
-[Kristallkante dunkel](glass-crystal-dark.png), [Kristallkante hell](glass-crystal-light.png).
+[Neutral dunkel](glass-neutral-dark.png), [Neutral hell](glass-neutral-light.png),
+[Kühl dunkel](glass-cool-dark.png), [Kühl hell](glass-cool-light.png),
+[Warm dunkel](glass-warm-dark.png), [Warm hell](glass-warm-light.png).

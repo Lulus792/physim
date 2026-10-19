@@ -15,25 +15,28 @@ const contrast=(a,b)=>(Math.max(lum(a),lum(b))+.05)/(Math.min(lum(a),lum(b))+.05
   const open=()=>page.goto(pathToFileURL(path.join(design,'index.html')).href);
   const box=id=>page.locator(id).boundingBox();
   const same=(a,b)=>{for(const key of ['x','y','width','height'])assert(Math.abs(a[key]-b[key])<.1,`Code shifted: ${JSON.stringify({a,b})}`);};
-  await open();assert.equal(await page.locator('[data-detail],[data-search-design],[data-design]:is(button),.breadcrumbs,#action-source').count(),0);
-  for(const width of [1440,1080,760,500])for(const theme of ['dark','light'])for(const glass of ['satin','clear','crystal']){
+  await open();for(const id of ['replace-toggle','find-previous','find-next','search-close','replace'])assert.equal(await page.locator('#'+id+' svg[aria-hidden=\"true\"]').count(),1);assert.equal(await page.locator('.search-field-icon svg').count(),1);assert.equal(await page.locator('[data-detail],[data-search-design],[data-design]:is(button),.breadcrumbs,#action-source').count(),0);
+  for(const width of [1440,1080,760,500])for(const theme of ['dark','light'])for(const glass of ['neutral','cool','warm']){
    await page.setViewportSize({width,height:1200});await page.locator(`button[data-theme="${theme}"]`).click();await page.keyboard.press('Escape');
    const before=await box('#code-area'),scroll=await page.locator('#editor').evaluate(el=>el.scrollTop);
    await page.locator(`button[data-glass="${glass}"]`).click();same(before,await box('#code-area'));assert.equal(await page.locator('#editor').evaluate(el=>el.scrollTop),scroll);
+   const contextBefore=await box('#toggle-api'),openSave=await box('#save');assert(contextBefore.x>=openSave.x+openSave.width,'Context toggle overlaps editor actions while open');await page.locator('#toggle-api').click();const contextClosed=await box('#toggle-api');same(contextBefore,contextClosed);
+   const save=await box('#save'),search=await box('#search-open');assert(contextClosed.x>=save.x+save.width&&contextClosed.x>=search.x+search.width,'Context toggle moved left of editor actions');
+   assert.equal(await page.locator('#toggle-api').getAttribute('aria-expanded'),'false');assert(await page.locator('#toggle-api').evaluate(el=>el===document.activeElement));await page.locator('#toggle-api').press('Enter');same(contextBefore,await box('#toggle-api'));
    const popup=await box('#search-bar'),code=await box('#code-area'),tabs=await box('.editor-topline');
    assert(code.y-tabs.y-tabs.height<1);assert(popup.y-code.y<=5);assert(popup.x>=code.x&&popup.x+popup.width<=code.x+code.width+1);
    if(await page.locator('#replace-toggle').getAttribute('aria-expanded')==='false')await page.locator('#replace-toggle').click();same(before,await box('#code-area'));
    assert(await page.locator('#replacement').isVisible());assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));assert((await box('#editor')).width>=200);
    const material=await page.locator('#search-bar').evaluate(el=>({fill:getComputedStyle(el).backgroundColor,filter:getComputedStyle(el).backdropFilter}));
-   assert(rgba(material.fill)[3]<1);assert.match(material.filter,/blur/);
+   assert(rgba(material.fill)[3]<1);assert.match(material.filter,/blur\(2px\)/);assert.equal(await page.locator('#search-bar').evaluate(el=>getComputedStyle(el).borderRadius),'16px');
    if(width===1440)for(const selector of ['#query','#find-next','#search-result']){
-    const c=await page.locator(selector).evaluate(el=>({fg:getComputedStyle(el).color,bg:getComputedStyle(el).backgroundColor}));const fg=rgba(c.fg).slice(0,3),bg=rgba(c.bg),alpha=bg[3]??1;
+    const c=await page.locator(selector).evaluate(el=>({fg:getComputedStyle(el).color,bg:getComputedStyle(el.closest('.search-navigation')||el).backgroundColor}));const fg=rgba(c.fg).slice(0,3),bg=rgba(c.bg),alpha=bg[3]??1;
     const minimum=Math.min(...[0,255].map(base=>contrast(fg,bg.slice(0,3).map(v=>v*alpha+base*(1-alpha)))));assert(minimum>=4.5,`Contrast ${theme}/${glass}/${selector}: ${minimum}`);report.contrasts.push({theme,glass,selector,minimum});
    }
    report.layouts.push({width,theme,glass,codeGap:code.y-tabs.y-tabs.height,searchInset:popup.y-code.y});
   }
   await page.setViewportSize({width:1440,height:1200});await open();
-  for(const glass of ['satin','clear','crystal']){
+  for(const glass of ['neutral','cool','warm']){
    await page.locator(`button[data-glass="${glass}"]`).click();const g=await box('#code-area');await page.locator('#reduce-transparency').check();same(g,await box('#code-area'));
    assert.equal(await page.locator('#search-bar').evaluate(el=>getComputedStyle(el).backdropFilter),'none');assert.equal(rgba(await page.locator('#search-bar').evaluate(el=>getComputedStyle(el).backgroundColor))[3]??1,1);await page.locator('#reduce-transparency').uncheck();
   }
@@ -58,9 +61,9 @@ const contrast=(a,b)=>(Math.max(lum(a),lum(b))+.05)/(Math.min(lum(a),lum(b))+.05
   for(const [width,key,panel]of [[760,'api','#inspector'],[500,'tree','#explorer']]){await page.setViewportSize({width,height:1200});const b=await box(panel);await page.locator('#resize-'+key).focus();await page.keyboard.press('ArrowDown');assert((await box(panel)).height>b.height);}
   await page.setViewportSize({width:1440,height:1200});await open();await page.emulateMedia({forcedColors:'active',reducedMotion:'reduce'});assert.equal(await page.locator('#search-bar').evaluate(el=>getComputedStyle(el).backdropFilter),'none');assert.equal(await page.locator('#highlight').evaluate(el=>getComputedStyle(el).visibility),'hidden');await page.emulateMedia({forcedColors:'none'});
   await page.locator('#scenario').selectOption('empty');assert.equal(await page.locator('.workspace').isVisible(),false);await page.keyboard.press('F5');assert(await page.locator('#empty-state').isVisible());
-  report.interactions.push('compact top edge; no code shift on search or replacement','transparent material; conservative control contrast over black/white','opaque fallback without layout change','forward/backward search, replace and Escape focus','file edits, safe highlighting, save, build and diagnostic jump','mouse/keyboard resizing, retained sizes, cancel and reset','scroll sync, narrow panels, forced colors and empty state');
+  report.interactions.push('compact top edge; no code shift on search or replacement','context toggle keeps identical position and remains rightmost when closed/open','transparent material; conservative control contrast over black/white','consistent 16px radius, 2px blur and SVG search icons','opaque fallback without layout change','forward/backward search, replace and Escape focus','file edits, safe highlighting, save, build and diagnostic jump','mouse/keyboard resizing, retained sizes, cancel and reset','scroll sync, narrow panels, forced colors and empty state');
   await page.setViewportSize({width:1280,height:1100});await open();const tiles=[];let row=0;
-  for(const [glass,label]of [['satin','01 / Seidenglas'],['clear','02 / Klarglas'],['crystal','03 / Kristallkante']]){
+  for(const [glass,label]of [['neutral','01 / Klarglas · Neutral'],['cool','02 / Klarglas · Kühl'],['warm','03 / Klarglas · Warm']]){
    if(exporting)tiles.push({input:Buffer.from(`<svg width="1440" height="36"><rect width="100%" height="100%" fill="#141518"/><text x="10" y="26" fill="#edeef2" font-family="Segoe UI,sans-serif" font-size="18">${label}</text><text x="1270" y="26" fill="#a6a9b1" font-family="Segoe UI,sans-serif" font-size="12">Dunkel / Hell</text></svg>`),left:0,top:row*280});
    let col=0;for(const theme of ['dark','light']){
     await page.locator(`button[data-theme="${theme}"]`).click();await page.locator(`button[data-glass="${glass}"]`).click();await page.locator('#query').fill('length_m');await page.locator('#query').evaluate(el=>el.blur());
