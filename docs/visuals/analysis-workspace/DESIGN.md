@@ -1,7 +1,12 @@
 # Analysebereich · Entwurf 01
 
-Stand: 16. Oktober 2026. Vorschlag zur Gestaltung, noch keine vom Nutzer ausgewählte
-Produktentscheidung und keine native Implementierung.
+Entwurf vom 16. Oktober 2026. Am 19. Oktober 2026 hat der Nutzer die Vorbereitung
+der nativen Umarbeitung auf diese Vorlage beauftragt. Die native Implementierung
+steht noch aus. Die nachfolgenden Browser-Prüfbelege bleiben auf ihren damaligen
+Prüfstand datiert.
+
+**Umsetzungsübergabe:** [Kopierfertiger Auftrag](NEXT-CHAT.md) ·
+[Technischer Abgleich und Abnahme](IMPLEMENTATION.md) · [Einstieg](README.md).
 
 [Interaktive Vorschau](index.html) · [Dunkel](analysis-dark.png) ·
 [Hell](analysis-light.png) · [Laufvergleich](analysis-comparison.png) ·
@@ -57,6 +62,9 @@ Ein Themewechsel verändert die Auswahl und Seitenzustände nicht.
 - Der CSV-Download der Vorschau enthält alle 1001 synthetischen Messpunkte pro
   gewähltem Lauf. Die native Umsetzung muss vollständige Laufdaten verwenden und
   eine etwaige reduzierte Bildschirmvorschau weiterhin kennzeichnen.
+  Der vorhandene native Rohdatenexport behält seine Spalten- und Einheitenverträge;
+  die Umrechnung des Browserdownloads ist keine Vorgabe, bestehende Exporte still
+  zu ändern. Näheres regelt die [native Übergabe](IMPLEMENTATION.md).
 - Analyse starten öffnet das Ergebnis und zeigt einen abbrechbaren Arbeitszustand.
   Die Vorschau berechnet nach kurzer Wartezeit eine Beispielstatistik; sie startet
   weder Compiler noch Analyseprozess und erzeugt keine `.psreport`-Datei.
@@ -88,6 +96,10 @@ Kontext ab. Die Vorschau greift nicht auf Projekte oder das Dateisystem zu.
 | Ergebnis bereit | Kennzahlen, Ergebnistabelle und dokumentierte Herkunft. |
 | Auswahl nach Bericht geändert | Bericht bleibt an seine Eingaben gebunden; neue Analyse wird angeboten. |
 | Suche ohne Treffer | Eigene Rückmeldung, Auswahl bleibt erhalten. |
+
+Die deaktivierte Analyse ohne Auswahl beschreibt den normalen messlaufgebundenen
+Fall. Native Analyseprojekte, deren Modul selbst Daten erzeugt und null Eingaben
+verarbeitet, müssen weiterhin ohne importierten Lauf ausführbar sein.
 
 ## Native Übergabe
 
