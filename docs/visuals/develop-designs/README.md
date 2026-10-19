@@ -1,10 +1,26 @@
-# Entwickeln: drei Designstudien
+# Entwickeln: Werkbank und Detailstudien
 
 Erstellt am 19. Oktober 2026 auf Grundlage des lokalen Projektstands und der
-[verbindlichen Designrichtung](../../design-direction.md). Es wurde noch keine
-Variante zur nativen Umsetzung ausgewählt. Verantwortlich: UI/UX-Design.
+[verbindlichen Designrichtung](../../design-direction.md). **Werkbank ist vom
+Nutzer ausgewählt.** Die neue Runde vergleicht Details für Schalter, Tabs und
+Workspace; eine Detailvariante ist noch nicht ausgewählt. Verantwortlich: UI/UX-Design.
 
-- [Interaktive Vorschau](index.html): lokal ohne Server, Installation oder externe Ressourcen öffnen.
+- [Aktuelle interaktive Vorschau](index.html): drei Werkbankvarianten, ohne zusätzliche Werkzeugleiste.
+- [Detailvergleich](detail-overview.png): Randgriffe / Panelköpfe / Statusdock, jeweils dunkel links und hell rechts.
+- **Randgriffe**: [Dunkel](detail-edges-dark.png), [Hell](detail-edges-light.png).
+- **Panelköpfe**: [Dunkel](detail-headers-dark.png), [Hell](detail-headers-light.png).
+- **Statusdock**: [Dunkel](detail-dock-dark.png), [Hell](detail-dock-light.png).
+- [Detailvertrag und aktuelle Prüfung](DETAILS.md).
+
+Oben lassen sich Schalterposition, Tabstil und Workspace unabhängig kombinieren.
+Die Unterordner bleiben in derselben Reihenfolge und Ebene. Der Code beginnt
+bei der geprüften Desktopbreite rund 122 px weiter oben als im ursprünglichen Entwurf.
+Suche und Speichern sitzen an den Dateitabs; Profil und Buildstatus in der
+vorhandenen Statuszeile. Keine native Umsetzung erfolgt.
+
+## Erste Vergleichsrunde
+
+- [Ursprüngliche interaktive Vorschau](original.html): als Vergleich erhalten.
 - [Alle drei Varianten im Vergleich](overview.png): Dunkel links, Hell rechts.
 - **Werkbank**: [Dunkel](workbench-dark.png), [Hell](workbench-light.png).
 - **API-Atelier**: [Dunkel](atelier-dark.png), [Hell](atelier-light.png).
@@ -12,7 +28,7 @@ Variante zur nativen Umsetzung ausgewählt. Verantwortlich: UI/UX-Design.
 - [Compilerfehler mit Sprung zur Codestelle](compiler-error.png).
 - [Designvertrag, Zustände und Abnahme](DESIGN.md).
 
-Die Galerie startet mit Werkbank und einem erfolgreichen Demo-Build. Designs,
+Die ursprüngliche Galerie startet mit Werkbank und einem erfolgreichen Demo-Build. Designs,
 Theme und Vorschauzustände lassen sich oben umschalten. Im App-Fenster sind
 Dateien, Code, Suche/Ersetzen, Speichern, Panels und das Buildmenü bedienbar.
 F5 startet einen Demo-Build; Ctrl/Command+F öffnet die Suche und Ctrl/Command+S
@@ -25,17 +41,20 @@ API-Karte ist eine manuelle Designreferenz, keine vollständige API-Dokumentatio
 
 ## Prüfung wiederholen
 
-`tools/check_develop_designs.cjs` benötigt Playwright und Sharp. Die gebündelten
+Die Browserprüfer benötigen Playwright und Sharp. Die gebündelten
 Node- und Modulpfade über `load_workspace_dependencies` bestimmen, `NODE_PATH`
 auf den Modulordner setzen und den Prüfer aus dem Projekt aufrufen:
 
 ```text
 node tools/check_develop_designs.cjs
 node tools/check_develop_designs.cjs --export
+node tools/check_workbench_details.cjs
+node tools/check_workbench_details.cjs --export
 ```
 
 Ohne `--export` werden Ergebnisse ausschließlich unter
-`build/develop-design-review/` geschrieben. Mit `--export` werden zusätzlich die
+`build/develop-design-review/` beziehungsweise `build/workbench-detail-review/`
+geschrieben. Mit `--export` werden zusätzlich die jeweiligen
 Designreferenzen hier erneuert. Windows verwendet Edge; `PHYSIM_BROWSER` erlaubt
 einen expliziten Chromium-Browserpfad. Dies belegt keine Linux-/macOS-Ausführung.
 Referenzbilder bleiben versioniert; erfolgreiche temporäre Prüfdateien unter

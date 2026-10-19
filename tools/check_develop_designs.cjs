@@ -19,7 +19,7 @@ const contrast=(a,b)=>{const x=luminance(a),y=luminance(b);return(Math.max(x,y)+
     page.setDefaultTimeout(8000);
     const errors=[];page.on('pageerror',e=>errors.push(e.message));
     const result={browser:await browser.version(),platform:process.platform,layouts:[],contrast:[],interactions:[],errors};
-    const open=()=>page.goto(pathToFileURL(path.join(design,'index.html')).href);
+    const open=()=>page.goto(pathToFileURL(path.join(design,'original.html')).href);
     await open();
     for(const width of [1440,1080,760,500]) for(const theme of ['dark','light']) for(const variant of ['workbench','atelier','focus']) {
       await page.setViewportSize({width,height:1100});
@@ -101,7 +101,7 @@ const contrast=(a,b)=>{const x=luminance(a),y=luminance(b);return(Math.max(x,y)+
     result.interactions.push('forced-colors editable text fallback; reduced-motion; enlarged control/text smoke check');
     for(const scale of [1.5,2]) {
       const context=await browser.newContext({viewport:{width:1440,height:1100},deviceScaleFactor:scale});const scaled=await context.newPage();
-      await scaled.goto(pathToFileURL(path.join(design,'index.html')).href);
+      await scaled.goto(pathToFileURL(path.join(design,'original.html')).href);
       assert((await scaled.locator('#editor').boundingBox()).width>400);
       await context.close();
     }

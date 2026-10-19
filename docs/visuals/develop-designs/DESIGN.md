@@ -1,7 +1,9 @@
 # Designvertrag: Arbeitsbereich Entwickeln
 
-Stand 19. Oktober 2026. Verantwortlich: UI/UX-Design. Drei Vergleichsentwürfe,
-noch keine Produktentscheidung. Die [Galerie](index.html) ist ein eigenständiger
+Stand 19. Oktober 2026. Verantwortlich: UI/UX-Design. **Werkbank ist ausgewählt.**
+Die ursprünglichen drei Gesamtentwürfe sind als [erste Galerie](original.html)
+erhalten. Die aktuelle [Detailrunde](DETAILS.md) vergleicht Schalter, Tabs und
+Workspace innerhalb der Werkbank. Die [Galerie](index.html) ist ein eigenständiger
 Browserprototyp; die native C-/SDL-/Nuklear-Oberfläche bleibt unverändert.
 
 ## Aufgabe und gemeinsamer Rahmen
