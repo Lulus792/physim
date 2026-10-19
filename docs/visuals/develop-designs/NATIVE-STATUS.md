@@ -1,9 +1,9 @@
 # Native Werkbank – Prüfbericht
 
 Stand: 19. Oktober 2026, Ausgangsrevision `e5c3144`, Zweig `codex/f1-design-h`.
-Die native Umsetzung ist implementiert und lokal geprüft. Die vollständige
-aktuelle Windows-Fokusmatrix sowie die unten genannten Plattform-/Assistive-
-Nachweise bleiben offen. Dieser Bericht behauptet dafür keine Freigabe.
+Die native Umsetzung ist implementiert und unter Windows und Linux lokal geprüft.
+Auch die vollständige aktuelle Windows-Fokusmatrix ist bestanden. Die unten
+genannten Plattform-/Assistive-Nachweise bleiben offen.
 
 ## Umsetzung
 
@@ -71,6 +71,14 @@ vorhandene API-Daten oder einen verständlichen Leerzustand.
   zusätzliche UTF-8-Textdatei geprüft: Ersetzen, leere Ersetzung, Undo/Redo,
   Dirty, echtes Speichern und genaue Dateiinhalte. Source-Undo funktioniert
   auch, wenn die Maus danach über der Suchinsel steht.
+- Die abschließende aktuelle Windows-Werkbankmatrix bestand **6/6 App-Läufe**
+  im koordinierten Vordergrund-Zeitfenster: dunkel/hell mit allen vier
+  Seitenzuständen und vollständigem Maus-/Tastaturablauf, schmales Fenster,
+  große Schrift, deckender Fallback und hoher Kontrast. Alle sechs bestätigen
+  die tatsächliche Fokus-Rückgabe; die beiden vollständigen Läufe zusätzlich
+  Separatorfokus, Resize/Abbruch/Reset, Mausrad außerhalb der Suchinsel und
+  Vorrang des Layoutdialogs. [Nachweis](native/windows-matrix.json), geprüfte
+  Programm-SHA-256 `7c9790494268ac29c8543573491a98d04213ffdfe51675e02b277557bb516e65`.
 - Linux: **5/5** native Gruppen in `run-fmcga_dl`, danach **3/3** mit den
   zusätzlichen nichtmodalen Fällen in `run-8klzpoj1`. Abschließende vollständige
   Werkbankmatrix **1/1** in `run-1r7b0qf6`: beide Erscheinungen, alle vier
@@ -91,11 +99,11 @@ vorhandene API-Daten oder einen verständlichen Leerzustand.
   mit dieser Werkbankänderung committet. Geprüft wurde der gemeinsame lokale Stand.
 
 Die automatisierte Windows-Werkbankmatrix verlangt echten veröffentlichten
-Hostfokus. Ohne das koordinierte Zeitfenster konnte sie zuletzt den Fokus am
-Suchicon nicht bestätigen; Auswahl und Scrollstand blieben dabei nachweislich
-unverändert. Der separate frühere Win32-Nachweis bleibt unter seiner eigenen
-Binär-Prüfsumme gültig. Eine Wiederholung der erweiterten aktuellen Matrix ist
-angefragt; das ist kein behaupteter bestandener Test.
+Hostfokus. Frühere Läufe ohne koordinierten Vordergrund konnten den Fokus am
+Suchicon nicht bestätigen; Auswahl und Scrollstand blieben dabei unverändert.
+Die abschließende koordinierte Matrix bestand mit unveränderter Fokusprüfung.
+Der separate frühere Win32-Beobachterlauf bleibt unter seiner eigenen
+Binär-Prüfsumme dokumentiert; die beiden Nachweise werden nicht gleichgesetzt.
 
 Reproduzierbare Einstiegskommandos (PowerShell, vom Projektverzeichnis):
 
@@ -103,6 +111,7 @@ Reproduzierbare Einstiegskommandos (PowerShell, vom Projektverzeichnis):
 python tools/build.py --build-dir build/native/F1-reading-focus/Debug-sanitized --sanitizers --jobs 4 --test --test-filter "accessibility*" --test-filter docking --test-filter editor_search --test-filter ui_geometry --test-filter preferences
 python tools/build.py --build-dir build/native/F1-reading-focus/Debug-sanitized --sanitizers --jobs 4 --test-display --test-filter backdrop_ui --test-filter editor_replace_workflow --test-filter completion_workflow
 python tests/check_documentation_windows_host.py --mode workbench-dark --force-raise --deadline 20 --app build/native/F1-reading-focus/Debug-sanitized/bin/physim.exe --work build/native/workbench-focus-new
+python tests/check_display_workflow.py workbench_workflow --app build/native/F1-reading-focus/Debug-sanitized/bin/physim.exe --work build/native/workbench-matrix-new --root D:/Physim
 ```
 
 Linux wurde tatsächlich in `Alpine-Dev` mit GCC, SDL3 3.2.30, Xvfb/Openbox und
@@ -134,6 +143,22 @@ Geräteskalierung 1×. Normal 1204×866 bei UI-/Codeschrift 16; große Ansicht m
 | Hoher Kontrast | [Suche](native/linux-high-contrast.png), [Ersetzung](native/linux-high-contrast-expanded.png) |
 
 [Unabhängige Windows-Fokusbeobachtung](native/windows-focus-observation.json).
+
+Die abschließende Windows-Matrix enthält dieselben 18 nativen Aufnahmezustände
+mit gleicher Fenster-/Schriftkonfiguration und ohne Bildretusche:
+
+| Fall | Windows-Aufnahme |
+| --- | --- |
+| Normal dunkel/hell | [Dunkel](native/windows-dark.png), [Hell](native/windows-light.png) |
+| Ersetzung erweitert | [Dunkel](native/windows-dark-expanded.png), [Hell](native/windows-light-expanded.png) |
+| Rechter Kontext verborgen | [Dunkel](native/windows-dark-right-hidden.png), [Hell](native/windows-light-right-hidden.png) |
+| Linker Workspace verborgen | [Dunkel](native/windows-dark-left-hidden.png), [Hell](native/windows-light-left-hidden.png) |
+| Beide Seiten verborgen | [Dunkel](native/windows-dark-both-hidden.png), [Hell](native/windows-light-both-hidden.png) |
+| Schmales Fenster 1080×740 | [Suche](native/windows-dark-narrow.png), [Ersetzung](native/windows-dark-narrow-expanded.png) |
+| Groß 1600×1000, Schrift 22 | [Suche](native/windows-light-large.png), [Ersetzung](native/windows-light-large-expanded.png) |
+| Transparenz reduziert | [Suche](native/windows-dark-opaque.png), [Ersetzung](native/windows-dark-opaque-expanded.png) |
+| Hoher Kontrast | [Suche](native/windows-high-contrast.png), [Ersetzung](native/windows-high-contrast-expanded.png) |
+
 Der Bildvergleich bestätigte die gewählte kühle Suchinsel, klare Trennung von
 normalem/expandiertem Zustand, feste Schalter und durchgehende Codegeometrie.
 Die oben begrenzte Plattformabnahme bleibt davon getrennt.

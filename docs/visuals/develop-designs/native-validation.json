@@ -740,10 +740,171 @@
       ],
       "source": "build/native/F1-linux/Debug-sanitized/test-results/run-1r7b0qf6/workbench_workflow/files ä/workflow ä/light-large-visual/workbench-light.bmp",
       "sha256": "e63d2e77ac8b0721a9552395052de1d91cbfe324c00c8e76c22df4ad80dece86"
+    },
+    {
+      "file": "windows-dark-both-hidden.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/develop-windows-coordinated-final/workflow ä/dark/workbench-dark-both-hidden.bmp",
+      "sha256": "f16ea00b30c3d5c5f89bc7e6e3d31f6020b97c8f2939fd3fc0a191bb4adbefd9"
+    },
+    {
+      "file": "windows-dark-expanded.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/develop-windows-coordinated-final/workflow ä/dark/workbench-dark-expanded.bmp",
+      "sha256": "faac993e52218d63701db0fe2a9ac997e8c28dca5eaabf4ccc100497e5872d8a"
+    },
+    {
+      "file": "windows-dark-right-hidden.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/develop-windows-coordinated-final/workflow ä/dark/workbench-dark-right-hidden.bmp",
+      "sha256": "548995a4ff9fa886ee8b81e1222472a57e75b196aa892d3ca85a769a548ca511"
+    },
+    {
+      "file": "windows-dark-left-hidden.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/develop-windows-coordinated-final/workflow ä/dark/workbench-dark-sides-hidden.bmp",
+      "sha256": "293e3c56f72d4dfac0a64bbe1c030a4ef67ccdc2bec4a1399850e1a34a0fcf5d"
+    },
+    {
+      "file": "windows-dark.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/develop-windows-coordinated-final/workflow ä/dark/workbench-dark.bmp",
+      "sha256": "3b891540e8f8df3bc2c5fb5d38b4919fdd1b13e6413a6be53269962513523851"
+    },
+    {
+      "file": "windows-light-both-hidden.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/develop-windows-coordinated-final/workflow ä/light/workbench-light-both-hidden.bmp",
+      "sha256": "d825c6583c8978f46d1a0c2a483445993ca87fe92df0a992fd5bc03073cd9bae"
+    },
+    {
+      "file": "windows-light-expanded.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/develop-windows-coordinated-final/workflow ä/light/workbench-light-expanded.bmp",
+      "sha256": "92f10d2644b39bd21837856629c1e837178921bc8eef7dcaf747713b210afded"
+    },
+    {
+      "file": "windows-light-right-hidden.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/develop-windows-coordinated-final/workflow ä/light/workbench-light-right-hidden.bmp",
+      "sha256": "f9a8b20f816a88eae1a43cf745925de4fb82631763f9cdd49efe31e1e98ac111"
+    },
+    {
+      "file": "windows-light-left-hidden.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/develop-windows-coordinated-final/workflow ä/light/workbench-light-sides-hidden.bmp",
+      "sha256": "36785a858a1a8d79e1df3331afd3da65e83e7cc5deb81865d51c670a86e562c3"
+    },
+    {
+      "file": "windows-light.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/develop-windows-coordinated-final/workflow ä/light/workbench-light.bmp",
+      "sha256": "643380b4d3aecccdc3647510e057c950aabbf16b1441c5af96c4be36d3a962a4"
+    },
+    {
+      "file": "windows-dark-narrow-expanded.png",
+      "size": [
+        1080,
+        740
+      ],
+      "source": "build/native/develop-windows-coordinated-final/workflow ä/dark-narrow-visual/workbench-dark-expanded.bmp",
+      "sha256": "56eccecbd07ff8ece0a7c5e59a831cb854ed501114634c4ea35ca69058c5732d"
+    },
+    {
+      "file": "windows-dark-narrow.png",
+      "size": [
+        1080,
+        740
+      ],
+      "source": "build/native/develop-windows-coordinated-final/workflow ä/dark-narrow-visual/workbench-dark.bmp",
+      "sha256": "9c346da2e0808cace08861b5f51a4914e09c31044128ab5f0a1246d2e043fe5c"
+    },
+    {
+      "file": "windows-light-large-expanded.png",
+      "size": [
+        1600,
+        1000
+      ],
+      "source": "build/native/develop-windows-coordinated-final/workflow ä/light-large-visual/workbench-light-expanded.bmp",
+      "sha256": "6f528580fc120ff93b41221155b7ee901b85e2d2157f268ce8c4491ceed73d23"
+    },
+    {
+      "file": "windows-light-large.png",
+      "size": [
+        1600,
+        1000
+      ],
+      "source": "build/native/develop-windows-coordinated-final/workflow ä/light-large-visual/workbench-light.bmp",
+      "sha256": "d7d408434b279c4dd3b9c8aa9783f93a328e048fca035d406f63cc8fd6a1132f"
+    },
+    {
+      "file": "windows-dark-opaque-expanded.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/develop-windows-coordinated-final/workflow ä/dark-opaque-visual/workbench-dark-expanded.bmp",
+      "sha256": "2be38e425b65840cb325e251787a6f1310506685d79c8960ff8b32c0dfefe3dd"
+    },
+    {
+      "file": "windows-dark-opaque.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/develop-windows-coordinated-final/workflow ä/dark-opaque-visual/workbench-dark.bmp",
+      "sha256": "272fa265f8ca307770c41bfb3756292494858d86c69295a729c00cd7b7a939d2"
+    },
+    {
+      "file": "windows-high-contrast-expanded.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/develop-windows-coordinated-final/workflow ä/contrast-visual/workbench-dark-expanded.bmp",
+      "sha256": "eee54101572bd879ce86611ee58f73b2aa3990605a94199ad929f567dbce0910"
+    },
+    {
+      "file": "windows-high-contrast.png",
+      "size": [
+        1204,
+        866
+      ],
+      "source": "build/native/develop-windows-coordinated-final/workflow ä/contrast-visual/workbench-dark.bmp",
+      "sha256": "7567b7d88b06661aa0550e8bca163a2c3da1aa8fc2c36cfb5eb852c42a30d034"
     }
   ],
   "open": [
-    "Current Windows foreground/focus matrix awaits the requested coordinated interval. Earlier independent foreground proof passed on its recorded binary.",
     "New macOS execution, actual screen-reader operation, physical monitor/DPI changes and Windows system text scale remain unverified."
   ],
   "primary_windows_smoke": {
@@ -752,5 +913,12 @@
     "app_sha256": "7c9790494268ac29c8543573491a98d04213ffdfe51675e02b277557bb516e65"
   },
   "cleanup_bytes": 1184742051,
-  "cleanup_images": 388
+  "cleanup_images": 388,
+  "windows_final_matrix": {
+    "status": "passed",
+    "modes": 6,
+    "app_sha256": "7c9790494268ac29c8543573491a98d04213ffdfe51675e02b277557bb516e65",
+    "proof": "docs/visuals/develop-designs/native/windows-matrix.json",
+    "proof_sha256": "419fa3ecf3d9c1a4c28d3d981d642c95c0f7cd6980675f1d4663139a5ae2fe71"
+  }
 }
