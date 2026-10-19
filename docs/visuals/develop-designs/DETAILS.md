@@ -12,6 +12,10 @@ wiederherstellen. Die Schalter stehen damit nicht im Statusdock. Die drei
 ursprünglichen Vorbelegungen bleiben zum Vergleichen erreichbar.
 Referenz: [Dunkel](selected-workbench-dark.png), [Hell](selected-workbench-light.png).
 
+Ergänzung: [Zwei schwebende Suchentwürfe und größenverstellbare Bereiche](SEARCH-RESIZE.md)
+erweitern diese Auswahl. Die Suche überlagert jetzt den Code ohne Layoutverschiebung;
+Workspace, Codekontext und Protokoll besitzen ziehbare Trennlinien.
+
 ## Gemeinsame Änderung
 
 Projektkopf und separate Werkzeugleiste entfallen. Der Projektname bleibt im
