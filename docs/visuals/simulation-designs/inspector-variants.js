@@ -16,7 +16,7 @@
     document.querySelectorAll('[data-inspector-style]').forEach(b=>{if(b.tagName==='BUTTON')b.setAttribute('aria-pressed',String(b.dataset.inspectorStyle===style));});
   }
   document.querySelectorAll('button[data-inspector-style]').forEach(b=>b.addEventListener('click',()=>inspectorStyle(b.dataset.inspectorStyle)));
-  const requested=new URLSearchParams(location.search).get('inspectorStyle');inspectorStyle(['rows','fields','compact'].includes(requested)?requested:'rows');
+  const requested=new URLSearchParams(location.search).get('inspectorStyle');inspectorStyle(['rows','fields','compact'].includes(requested)?requested:'fields');
 
   let builtModel={length:1.5,mass:1},building=false,compiled=false;
   for(const id of ['model-length','model-mass']){const e=$(id);e.type='text';e.inputMode='decimal';e.value=fmt(Number(e.value));}

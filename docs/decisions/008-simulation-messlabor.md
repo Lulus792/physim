@@ -29,8 +29,9 @@ Windows-, Linux- oder macOS-Abnahme.
 ## Ergänzung vom 19. Oktober: Daten, Größen und Modellwerte
 
 Die Aufteilung und Abschnitte sind vom Nutzer bestätigt. Für die Informationen
-innerhalb der Abschnitte werden neue Varianten A/B/C verglichen; keine davon ist
-bereits final ausgewählt. Alle Inhaltsbereiche sollen resizable sein. Modellwerte
+innerhalb der Abschnitte hat der Nutzer **B · Wertefelder** ausgewählt: Bezeichnung
+über größerem Wert, dezente einzelne Flächen und klar zugeordnete Einheiten.
+Die Vorschau startet mit B; A/C bleiben nur Vergleich. Alle Inhaltsbereiche sollen resizable sein. Modellwerte
 wie Fadenlänge sollen im Inspektor bearbeitbar sein und anschließend eine sichtbare
 Neukompilierung anbieten. Laufende Daten bleiben bis zu einem neuen Build und
 neuen Lauf an ihren bisherigen Stand gebunden. Der konkrete native Bindungs-,

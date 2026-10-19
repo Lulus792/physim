@@ -12,6 +12,13 @@ Arbeite in D:\Physim den bestehenden nativen Arbeitsbereich **Simulieren** auf
 das ausgewählte Design **Messlabor** um. Implementiere es im vorhandenen
 C-/SDL-/Nuklear-/OpenGL-Aufbau bis zur geprüften Fertigstellung.
 
+Für die Informationen im Inspektor ist **B · Wertefelder** verbindlich ausgewählt:
+Bezeichnung oberhalb eines größeren Werts, dezente Werteflächen und klar
+zugeordnete Einheiten. Eigenschaften bei passender Breite zweispaltig, Eingaben
+als gut lesbare Wertefelder. Nutze `inspector-fields-dark.png` und
+`inspector-fields-light.png` als Detailreferenzen. Die Abschnittsstruktur bleibt
+erhalten. A/C sind lediglich Vergleichsentwürfe, kein Auftrag für drei native Modi.
+
 Lies zuerst AGENTS.md und D:/Skills/skills/AGENTS.md. Lies danach:
 
 - docs/decisions/008-simulation-messlabor.md
@@ -53,9 +60,9 @@ anpassbar sein. Breiten von Szenenbaum und Inspektor, Aufteilung von Szene und
 Messbereich, Zeitleistenhöhe und Verhältnis der beiden Kurven über sichtbare
 Trenner bedienen können. Vorhandenes Docking verwenden; Mindestgrößen und
 Textskalierung berücksichtigen. Pointerdrag sowie passende Pfeiltasten und
-Rücksetzen anbieten. Reale neue Rechtecke an Szene/Plots übergeben. Die drei
-neuen Vorschläge A/B/C ändern nur die Darstellung innerhalb der Abschnitte;
-eine endgültige Typografiewahl steht noch aus, A ist vorläufiger Vergleichsstandard.
+Rücksetzen anbieten. Reale neue Rechtecke an Szene/Plots übergeben. Innerhalb der
+Abschnitte das gewählte Wertefelder-Design B umsetzen; Schrift-/DPI-Einstellungen,
+Einheiten, Validierung, Fokus und Bearbeitbarkeit erhalten.
 
 Modellwerte wie Fadenlänge sollen im Inspektor bearbeitbar sein. Ergänze dafür
 die Gruppe Modellwerte und den vollständigen Vertrag aus MODEL-EDITING.md:

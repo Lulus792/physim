@@ -8,11 +8,11 @@ wurde durch diese Studien nicht verändert.
 **Native Umarbeitung vorbereitet:** [Kopierfertiger Auftrag](NEXT-CHAT.md) ·
 [Funktionsabgleich, vollständiger Inspektor und Abnahme](IMPLEMENTATION.md).
 
-**Neue Runde:** Drei Darstellungen innerhalb derselben Abschnitte:
-**A · Ruhige Zeilen**, **B · Wertefelder**, **C · Kompakt**.
-Oben in der Vorschau umschalten. [Dunkler Vergleich](inspector-styles-dark.png) ·
-[Heller Vergleich](inspector-styles-light.png). A ist der vorläufige Startwert,
-eine Auswahl durch den Nutzer steht noch aus.
+**Ausgewählt: B · Wertefelder.** Die Vorschau startet mit diesem Stil:
+Bezeichnungen über größeren Werten, dezente einzelne Flächen und klare Einheiten.
+[Dunkel](inspector-fields-dark.png) · [Hell](inspector-fields-light.png).
+A · Ruhige Zeilen und C · Kompakt bleiben oben als Vergleich umschaltbar.
+[Dunkler Vergleich](inspector-styles-dark.png) · [Heller Vergleich](inspector-styles-light.png).
 
 Die Desktop-Bereichsgrenzen sind ziehbar und per Pfeiltasten bedienbar:
 Seitenbreiten, Messbereich, Zeitleiste, Kurvenverhältnis und Arbeitsflächenhöhe.
@@ -22,7 +22,7 @@ keinen Compiler aus; sie demonstriert Vormerken, Verwerfen und Übernahme erst
 im neuen Beispiellauf. [Bindungs- und Buildvertrag](MODEL-EDITING.md).
 
 - [Interaktive Vorschau](index.html) lokal im Browser öffnen, ohne Installation,
-  Server oder externe Ressourcen. Start: Messlabor, dunkel, pausiert.
+  Server oder externe Ressourcen. Start: Messlabor mit Wertefeldern, dunkel, pausiert.
 - [Vergleich: Dunkel links, Hell rechts; Studio / Messlabor / Fokus von oben nach unten](overview.png).
 - Studio: [Dunkel](studio-dark.png), [Hell](studio-light.png).
 - Messlabor: [Dunkel](labor-dark.png), [Hell](labor-light.png).

@@ -14,7 +14,11 @@ Inhaltsbereiche in der Größe verstellbar machen und Modellwerte mit anschließ
 Neukompilieren bearbeiten können. Die neue Gruppe **Modellwerte** ergänzt die acht
 bisherigen Funktionsgruppen; deklarierte **Laufparameter** bleiben getrennt.
 [MODEL-EDITING.md](MODEL-EDITING.md) beschreibt die drei Datenstile, sechs Trenner
-und den neuen Bearbeitungs-/Buildvertrag. Die Wahl zwischen A/B/C steht offen.
+und den neuen Bearbeitungs-/Buildvertrag. **B · Wertefelder ist vom Nutzer ausgewählt**
+und gilt für die Umsetzung; A/C bleiben Vergleichsentwürfe. Bezeichnungen stehen
+über größeren Zahlen in dezenten Werteflächen. Eigenschaften können bei
+ausreichender Breite zweispaltig erscheinen. Einheiten, Fokus, Validierung und
+Bearbeitbarkeit bleiben klar erkennbar. Die Vorschau startet mit B.
 
 ## Gemeinsamer Rahmen
 
@@ -44,8 +48,8 @@ bei den tatsächlich gewählten Schriftgrößen.
 
 | Variante | Aufbau bei 1440 px Browserbreite | Zweck und Abwägung |
 | --- | --- | --- |
-| 01 Studio | Szenenbaum 204 px, flexible Szene, Inspektor 238 px; drei Messwerte und Zeitleiste unten; Kurven zunächst zugeklappt | Allgemeiner Arbeitsraum. Die beiden Signalverläufe können direkt unter den Messwerten aufgeklappt werden. |
-| 02 Messlabor (ausgewählt) | Szenenbaum zunächst geschlossen (geöffnet 178 px), flexible Szene, Inspektor 238 px offen; Messwerte sichtbar, Kurven zunächst zugeklappt | Große Szene mit Objektdetails; bei Bedarf zwei Signalverläufe einblenden. |
+| 01 Studio | Anpassbarer Szenenbaum (Vorgabe 190 px), flexible Szene, anpassbarer Inspektor (320 px); drei Messwerte und Zeitleiste unten; Kurven zunächst zugeklappt | Allgemeiner Arbeitsraum. Die beiden Signalverläufe können direkt unter den Messwerten aufgeklappt werden. |
+| 02 Messlabor (ausgewählt) | Szenenbaum zunächst geschlossen (geöffnet 190 px), flexible Szene, Inspektor offen (Vorgabe 320 px) mit Wertefeldern; Messwerte sichtbar, Kurven zunächst zugeklappt | Große Szene mit Objektdetails; bei Bedarf zwei Signalverläufe einblenden. Alle Inhaltsbereiche bleiben in der Größe verstellbar. |
 | 03 Fokus | Beide Seiten zunächst geschlossen; große Szene, Auswahlkontext oben links; kompakte Messwerte unten | Bewegung und räumliche Orientierung priorisieren. Struktur und Details benötigen bei Bedarf einen Klick. |
 
 Alle Varianten zeigen dasselbe Beispiel und dieselbe Zeitbasis. Die separaten
@@ -97,6 +101,13 @@ Galerie bildet nur ihren Ort ab. Auch F5/F7 und vorhandene Shortcuts werden
 hier nicht neu definiert. Keine globalen Browser-Tastenkürzel abfangen.
 
 ## Prüfung und Grenzen
+
+Nach Auswahl von B · Wertefelder wurden beide Browserprüfer erneut erfolgreich
+ausgeführt (19. Oktober, Windows/Edge 155.0.4283.62). Die Voreinstellung B und der
+Erhalt von Auswahl/Zeit beim Wechsel zu C und zurück sind ausdrücklich geprüft;
+aktuelle Messlabor-Referenzen zeigen B. Die bisherigen 24 Varianten-Layoutfälle,
+Trenner-/Buildfälle sowie 24 Simulationslayout- und 16 Kurvenfälle bestehen.
+46 lokale Dokumentationsverweise und `git diff --check` wurden geprüft.
 
 Neue Varianten-/Größen-/Buildrunde, 19. Oktober, Windows/Edge 155.0.4283.62:
 `node tools/check_inspector_variants.cjs --export`, Exitcode 0. 24 Layoutfälle

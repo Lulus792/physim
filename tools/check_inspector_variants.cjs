@@ -29,6 +29,7 @@ const url=pathToFileURL(path.join(design,'index.html')).href;
   }
   for(const theme of ['dark','light']){
    await page.goto(url+`?design=labor&theme=${theme}`);
+   assert.equal(await page.locator('.app-window').getAttribute('data-inspector-style'),'fields');
    const elementWidth=selector=>page.locator(selector).evaluate(e=>e.getBoundingClientRect().width);
    const elementHeight=selector=>page.locator(selector).evaluate(e=>e.getBoundingClientRect().height);
    const initialWidth=await elementWidth('#inspector');
@@ -43,7 +44,7 @@ const url=pathToFileURL(path.join(design,'index.html')).href;
    const beforeWorkspace=await elementHeight('.workspace');await page.locator('#workspace-resize').focus();await page.keyboard.press('ArrowDown');assert((await elementHeight('.workspace'))>beforeWorkspace);
    await page.locator('#curves-toggle').click();const firstCurve=await elementWidth('#curves .chart:first-child');await page.locator('#plot-resize').focus();await page.keyboard.press('ArrowRight');assert((await elementWidth('#curves .chart:first-child'))>firstCurve);
    const time=await page.locator('#time').inputValue(),selection=await page.locator('#selected-type').textContent();
-   await page.locator('[data-inspector-style="fields"]').click();assert.equal(await page.locator('#time').inputValue(),time);assert.equal(await page.locator('#selected-type').textContent(),selection);assert.equal(await page.locator('#curves-toggle').getAttribute('aria-expanded'),'true');
+   await page.locator('button[data-inspector-style="compact"]').click();await page.locator('button[data-inspector-style="fields"]').click();assert.equal(await page.locator('#time').inputValue(),time);assert.equal(await page.locator('#selected-type').textContent(),selection);assert.equal(await page.locator('#curves-toggle').getAttribute('aria-expanded'),'true');
    await page.locator('.app-window').screenshot({path:path.join(exporting?design:out,`messlabor-resizable-${theme}.png`)});
    report.splitters.push({theme,result:'all six splitters, pointer capture, keyboard, reset and state retention passed'});
    // Staged editing must not change the paused model before a build and new run.

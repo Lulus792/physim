@@ -5,16 +5,24 @@ bleiben bestehen. Gewünscht sind mehrere ruhigere Datendarstellungen, veränder
 Größen der Inhaltsbereiche sowie editierbare Modellwerte wie Fadenlänge mit
 sichtbar angebotenem Neukompilieren. Dies ergänzt ADR 008 und die native Übergabe.
 
-## Drei Vorschläge für dieselben Informationen
+## Ausgewählt: B · Wertefelder
+
+Der Nutzer hat am 19. Oktober 2026 **B · Wertefelder** ausgewählt. Dieser Stil ist
+der Standard der Vorschau und das Zielbild für die native Umsetzung. A und C
+bleiben ausschließlich als Vergleich erreichbar. Maßgebliche Detailreferenzen:
+[Wertefelder dunkel](inspector-fields-dark.png), [Wertefelder hell](inspector-fields-light.png).
 
 | Variante | Darstellung innerhalb der unveränderten Abschnitte |
 | --- | --- |
-| A · Ruhige Zeilen | Bezeichnung links, bündiger Wert rechts, dezente Trenner. Nähe zur früheren Informationsdarstellung; vorläufiger Standard für den Vergleich. |
-| B · Wertefelder | Label über größerem Wert, ruhige einzelne Flächen; stärkere Betonung der Zahlen. |
+| A · Ruhige Zeilen (Vergleich) | Bezeichnung links, bündiger Wert rechts, dezente Trenner. |
+| B · Wertefelder (ausgewählt) | Label über größerem Wert, ruhige einzelne Flächen; stärkere Betonung der Zahlen. |
 | C · Kompakt | Engere, durchgehende Zeilen und kleinere Abstände; mehr Werte gleichzeitig sichtbar. |
 
-Die drei Varianten sind neue Vorschläge, noch keine Nutzerentscheidung für eine
-bestimmte Typografie. Auswahl, Feldwerte, aufgeklappte Gruppen, Lauf, Zeit und
+Für die Umsetzung gilt B: dezente Flächen pro Wert, kleine sekundäre Bezeichnungen,
+größere gut lesbare Zahlen und klar zugeordnete Einheiten. Eigenschaften nutzen
+bei ausreichender Breite zwei Spalten, Eingaben eigene ruhige Wertefelder.
+Schmale Breiten und große Schrift dürfen mehr Zeilen benötigen; keine abgeschnittenen
+Werte oder Einheiten. Auswahl, Feldwerte, aufgeklappte Gruppen, Lauf, Zeit und
 Bereichsgrößen bleiben beim Darstellungswechsel erhalten. Hell/Dunkel verwenden
 dieselben Rollen. Fadenlänge und Masse zeigen deutsche Zahlen wie **1,50**; die
 Beispieleingabe akzeptiert Dezimalkomma und Punkt. Einheiten bleiben am Feld sichtbar.

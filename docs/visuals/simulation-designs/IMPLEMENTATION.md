@@ -9,7 +9,11 @@ vor. Die native Anwendung ist durch diese Übergabe nicht umgestellt.
 
 Neue Anforderungen: [Datendarstellungen, Größenänderung und Modellbearbeitung](MODEL-EDITING.md).
 Die Abschnittsstruktur bleibt erhalten; neun Gruppen einschließlich der neuen
-quellen-/buildgebundenen **Modellwerte**. A/B/C sind noch offene Gestaltungsalternativen.
+quellen-/buildgebundenen **Modellwerte**. **B · Wertefelder ist ausgewählt**:
+Label über größerem Wert, dezente Flächen, eindeutige Einheiten; Eigenschaften
+bei geeigneter Breite zweispaltig. A/C sind nur Vergleich, keine zusätzlichen
+nativen Darstellungsmodi. Referenzen: `inspector-fields-dark.png` und
+`inspector-fields-light.png` sowie die aktuellen `labor-*.png`-Fensterbilder.
 
 - [Auswahl ADR 008](../../decisions/008-simulation-messlabor.md), [Design](DESIGN.md).
 - [Lokale Vorlage](index.html), ohne Server; Standard Messlabor.
