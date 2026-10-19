@@ -18,6 +18,15 @@ Die Auswahl oben schaltet das Layout, daneben lassen sich Theme und Laufzustand
 wechseln. Innerhalb der Vorschau sind Seitenbereiche, Objektauswahl, Sichtbarkeit,
 Laufsteuerung, Tempo, Kameraansichten und Zeitleiste bedienbar.
 
+**Ergänzt am 19. Oktober:** Über **Kurven aufklappen / Kurven zuklappen** in der
+Messwertleiste sind die beiden Signalverläufe ein- und ausblendbar. Studio startet
+zugeklappt, Messlabor aufgeklappt. Beim Zuklappen wächst die Szene; die Messwerte
+und Zeitleiste bleiben sichtbar. Der Zustand wird pro Variante für diese Sitzung
+behalten. Vergleichszustände: Studio aufgeklappt
+([Dunkel](studio-dark-curves-open.png), [Hell](studio-light-curves-open.png)) und
+Messlabor zugeklappt ([Dunkel](labor-dark-curves-closed.png),
+[Hell](labor-light-curves-closed.png)).
+
 Die Pendelbewegung und Kurven sind illustrative Beispieldaten aus einer
 Kleinwinkelnäherung mit l = 1,50 m, m = 1,00 kg und θ₀ = 0,50 rad. Die Zeit läuft
 in der Vorschau von 0 bis 6 s. Der native Runner, echte Laufdateien, Kamerainteraktion
@@ -42,6 +51,6 @@ erneuert. Unter Windows verwendet der Prüfer Edge; `PHYSIM_BROWSER` kann einen
 anderen Browserpfad angeben. Andere Systeme benötigen ein verfügbares Chromium.
 Das ist keine Aussage über bereits ausgeführte Linux-/macOS-Prüfungen.
 
-Die sechs gelieferten Screenshots und die Übersicht bleiben als Designreferenzen
+Die zehn gelieferten Screenshots und die Übersicht bleiben als Designreferenzen
 versioniert. Temporäre erfolgreiche Browserbilder unter `build/` werden nach
 visueller Abnahme entfernt; offene Fehlerbelege würden erhalten bleiben.

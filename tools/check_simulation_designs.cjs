@@ -17,7 +17,7 @@ function contrast(a,b){
 }
 (async()=>{
  const browser=await chromium.launch({headless:true,...(process.env.PHYSIM_BROWSER?{executablePath:process.env.PHYSIM_BROWSER}:process.platform==='win32'?{channel:'msedge'}:{})});
- const report={platform:process.platform,browser:await browser.version(),layouts:[],contrast:[],interactions:[],errors:[]};
+const report={platform:process.platform,browser:await browser.version(),layouts:[],curves:[],contrast:[],interactions:[],errors:[]};
  try{
  const page=await browser.newPage({viewport:{width:1440,height:1250},deviceScaleFactor:1});
  page.on('pageerror',e=>report.errors.push(e.message));
@@ -39,10 +39,42 @@ function contrast(a,b){
      const e=page.locator(s);if(await e.isVisible())assert(await e.evaluate(e=>e.scrollWidth<=e.clientWidth+1),`${theme}/${variant}/${width}: overflow in ${s}`);
     }
     report.layouts.push({theme,variant,width,...geometry});
+    if(variant!=='focus'){
+     const open=await page.locator('#curves-toggle').getAttribute('aria-expanded')==='true';
+     assert.equal(open,variant==='labor');
+     const before=await page.locator('#scene').evaluate(e=>e.getBoundingClientRect().height);
+     const time=await page.locator('#time').inputValue();
+     const tree=await page.locator('#tree-toggle').getAttribute('aria-expanded');
+     const inspector=await page.locator('#inspector-toggle').getAttribute('aria-expanded');
+     await page.locator('#curves-toggle').focus();await page.keyboard.press('Enter');
+     assert.equal(await page.locator('#curves').isVisible(),!open);
+     assert.equal(await page.locator('#curves-toggle').getAttribute('aria-expanded'),String(!open));
+     assert.equal(await page.locator('#time').inputValue(),time);
+     assert.equal(await page.locator('#tree-toggle').getAttribute('aria-expanded'),tree);
+     assert.equal(await page.locator('#inspector-toggle').getAttribute('aria-expanded'),inspector);
+     const after=await page.locator('#scene').evaluate(e=>e.getBoundingClientRect().height);
+     if(width>=760)assert(open?after>before:after<before,`${variant}/${width}: scene should receive curve space when collapsed (${before}/${after})`);
+     assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+     await page.locator('#curves-toggle').focus();await page.keyboard.press('Space');
+     assert.equal(await page.locator('#curves').isVisible(),open);
+     report.curves.push({theme,variant,width,sceneBefore:before,sceneAfter:after});
+    }
    }
    await page.setViewportSize({width:1440,height:1250});
    await page.screenshot({path:path.join(output,`${variant}-${theme}.png`),fullPage:true});
    if(exporting)await page.locator('.app-window').screenshot({path:path.join(design,`${variant}-${theme}.png`)});
+   if(exporting&&variant!=='focus'){
+    await page.locator('#curves-toggle').click();
+    await page.locator('.app-window').screenshot({path:path.join(design,`${variant}-${theme}-curves-${variant==='studio'?'open':'closed'}.png`)});
+    // Keep independent disclosure choices while switching designs and themes.
+    await page.locator('.variants [data-design="focus"]').click();
+    await page.locator(`.variants [data-design="${variant}"]`).click();
+    assert.equal(await page.locator('#curves').isVisible(),variant==='studio');
+    await page.locator(`.segmented [data-theme="${theme==='dark'?'light':'dark'}"]`).click();
+    assert.equal(await page.locator('#curves').isVisible(),variant==='studio');
+    await page.locator(`.segmented [data-theme="${theme}"]`).click();
+    await page.locator('#curves-toggle').click();
+   }
    // Each side is independent, including its fixed grid column.
    const initial=await page.locator('#inspector-toggle').getAttribute('aria-expanded');
    await page.locator('#tree-toggle').click();assert.equal(await page.locator('#inspector-toggle').getAttribute('aria-expanded'),initial);
@@ -97,6 +129,6 @@ function contrast(a,b){
   await sharp({create:{width:1384,height:rowHeight*3+18,channels:4,background:'#17181b'}}).composite(tiles.map((input,i)=>({input,left:12+Math.floor(i/3)*692,top:12+(i%3)*rowHeight}))).png().toFile(path.join(design,'overview.png'));
  }
  fs.writeFileSync(path.join(output,'review.json'),JSON.stringify(report,null,2));
- console.log(JSON.stringify({browser:report.browser,layouts:report.layouts.length,interactions:report.interactions.length,contrast:report.contrast,errors:report.errors,output},null,2));
+ console.log(JSON.stringify({browser:report.browser,layouts:report.layouts.length,curveLayouts:report.curves.length,interactions:report.interactions.length,contrast:report.contrast,errors:report.errors,output},null,2));
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

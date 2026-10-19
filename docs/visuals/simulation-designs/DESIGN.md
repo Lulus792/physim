@@ -1,6 +1,6 @@
 # Entwürfe für den Arbeitsbereich Simulieren
 
-Stand 16. Oktober 2026. Vorschläge zur Auswahl, keine neue verbindliche
+Stand 19. Oktober 2026; erste Entwürfe vom 16. Oktober. Vorschläge zur Auswahl, keine neue verbindliche
 Produktentscheidung. Verantwortlich für diesen Entwurf: UI/UX-Design.
 
 ## Gemeinsamer Rahmen
@@ -31,8 +31,8 @@ bei den tatsächlich gewählten Schriftgrößen.
 
 | Variante | Aufbau bei 1440 px Browserbreite | Zweck und Abwägung |
 | --- | --- | --- |
-| 01 Studio | Szenenbaum 204 px, flexible Szene, Inspektor 238 px; drei Messwerte und Zeitleiste unten | Allgemeiner Arbeitsraum. Direkter Objektzugriff und Eigenschaften; Signalverläufe bleiben der Auswertung bzw. Messlabor vorbehalten. |
-| 02 Messlabor | Baum 178 px, kompaktere Szene, Inspektor 238 px; Messwerte und zwei Signalverläufe unter der Szene | Zusammenhänge von Bewegung und Signalen beobachten. Weniger Höhe für die Szene. |
+| 01 Studio | Szenenbaum 204 px, flexible Szene, Inspektor 238 px; drei Messwerte und Zeitleiste unten; Kurven zunächst zugeklappt | Allgemeiner Arbeitsraum. Die beiden Signalverläufe können direkt unter den Messwerten aufgeklappt werden. |
+| 02 Messlabor | Baum 178 px, kompaktere Szene, Inspektor 238 px; Messwerte und zunächst aufgeklappte Signalverläufe unter der Szene | Zusammenhänge von Bewegung und Signalen beobachten. Kurven zuklappen vergrößert die Szene. |
 | 03 Fokus | Beide Seiten zunächst geschlossen; große Szene, Auswahlkontext oben links; kompakte Messwerte unten | Bewegung und räumliche Orientierung priorisieren. Struktur und Details benötigen bei Bedarf einen Klick. |
 
 Alle Varianten zeigen dasselbe Beispiel und dieselbe Zeitbasis. Die separaten
@@ -50,6 +50,17 @@ Messlabor-Zusammenstellung aus Szene und zwei Kurven ist ein Layoutvorschlag;
 ihre native gemeinsame Darstellung ist hier nicht implementiert.
 
 ## Interaktions- und Zustandsvertrag
+
+Ergänzung vom 19. Oktober auf Nutzerwunsch: In der Messwertleiste sitzt dauerhaft
+eine beschriftete Schaltfläche **Kurven aufklappen / Kurven zuklappen** mit
+Richtungspfeil. Sie steuert beide Diagramme gemeinsam, ist per Enter/Leertaste
+bedienbar und meldet ihren Zustand über `aria-expanded` und `aria-controls`.
+Messwerte und Zeitleiste bleiben sichtbar. Beim Zuklappen erhält die Szene in
+Studio und Messlabor mehr Höhe. Die Auswahl pro Variante bleibt während dieser
+Vorschau beim Varianten- und Themewechsel erhalten; eine Speicherung über einen
+Neustart ist nicht vorgesehen. Die gemeinsame Leiste bietet dieselbe Aktion
+auch in Fokus, dort zunächst zugeklappt. Zeit, Lauf, Objektwahl und Seitenzustände
+werden durch das Auf-/Zuklappen nicht verändert.
 
 | Zustand / Aktion | Sichtbare Rückmeldung und Verhalten |
 | --- | --- |
@@ -72,6 +83,16 @@ Galerie bildet nur ihren Ort ab. Auch F5/F7 und vorhandene Shortcuts werden
 hier nicht neu definiert. Keine globalen Browser-Tastenkürzel abfangen.
 
 ## Prüfung und Grenzen
+
+Ergänzungsprüfung am 19. Oktober 2026 mit Edge 155.0.4283.62:
+`node tools/check_simulation_designs.cjs --export`, Exitcode 0. Die bisherigen
+24 Layoutfälle und sechs Interaktionsdurchläufe bestehen weiterhin. Zusätzlich
+16 Kurvenfälle für Studio/Messlabor × Hell/Dunkel × vier Fensterbreiten:
+Enter/Leertaste, sichtbarer und zugänglicher Aufklappzustand, unveränderte Zeit
+und Seitenzustände sowie Erhalt beim Varianten-/Themewechsel bestanden.
+Bei Desktopbreiten ist die Szene mit geschlossenen Kurven nachweislich höher.
+Keine JavaScriptfehler; die neuen offenen/geschlossenen Referenzbilder wurden
+visuell geprüft. Die folgende ursprüngliche Abnahme bleibt datiert erhalten.
 
 Ausgeführt auf Windows mit Edge 155.0.4283.45, Node/Playwright/Sharp, lokaler
 `file:`-Vorschau; Referenzbilder bei 1440 px Browserbreite und Geräteskalierung 1.

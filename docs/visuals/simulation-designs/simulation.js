@@ -4,20 +4,29 @@
   const $ = id => document.getElementById(id);
   const app = document.querySelector('.app-window');
   const descriptions = {
-    studio: ['01 / Studio','Ein vertrauter Arbeitsraum für Modell und Bewegung.','Alles an seinem Platz.','Links die Szenenstruktur, rechts der ausgewählte Körper. Die große Mitte gehört dem Experiment; Messwerte und Zeitleiste bleiben direkt darunter.'],
-    labor: ['02 / Messlabor','Bewegung und Messwerte in einem gemeinsamen Blick.','Sehen, was die Bewegung bedeutet.','Die kompaktere Szene schafft Platz für zwei direkte Signalverläufe. Ein gemeinsamer Zeitzeiger verbindet Auslenkung, Geschwindigkeit und den betrachteten Szenenzustand.'],
+    studio: ['01 / Studio','Ein vertrauter Arbeitsraum für Modell und Bewegung.','Alles an seinem Platz.','Links die Szenenstruktur, rechts der ausgewählte Körper. Kurven lassen sich bei Bedarf direkt unter den Messwerten aufklappen; zugeklappt erhält die Szene mehr Platz.'],
+    labor: ['02 / Messlabor','Bewegung und Messwerte in einem gemeinsamen Blick.','Sehen, was die Bewegung bedeutet.','Zwei Signalverläufe verbinden Messwerte und Szene über einen gemeinsamen Zeitzeiger. Die Kurven lassen sich zuklappen, um der Szene mehr Raum zu geben.'],
     focus: ['03 / Fokus','Mehr Raum für die Szene, Details genau bei Bedarf.','Das Experiment im Mittelpunkt.','Beide Seiten sind zunächst eingeklappt. Auswahl, Messwerte und Zeit bleiben sichtbar; Szenenbaum und Inspektor lassen sich unabhängig wieder einblenden.']
   };
   const objects = {mass:['Pendelkörper','Kugel · ID 3'],support:['Aufhängung','Box · ID 1'],rod:['Pendelstange','Linie · ID 2'],velocity:['Geschwindigkeit','Vektor · ID 4'],trail:['Bahnkurve','Pfad · ID 5']};
   let mode='paused', time=2.4, liveTime=2.4, browsing=false, replay=false, selected='mass', last=0;
+  const curvesByDesign={studio:false,labor:true,focus:false};
   const fmt = (n,d=2) => n.toLocaleString('de-DE',{minimumFractionDigits:d,maximumFractionDigits:d});
   const angle = t => .5*Math.cos(Math.sqrt(9.81/1.5)*t);
   const speed = t => -1.5*.5*Math.sqrt(9.81/1.5)*Math.sin(Math.sqrt(9.81/1.5)*t);
   function panels() {
     for(const [id,cls] of [['tree','tree-closed'],['inspector','inspector-closed']]) $(id+'-toggle').setAttribute('aria-expanded',String(!app.classList.contains(cls)));
   }
+  function curves() {
+    const open=curvesByDesign[app.dataset.design];
+    $('curves').hidden=!open;
+    app.classList.toggle('curves-open',open);
+    $('curves-toggle').setAttribute('aria-expanded',String(open));
+    $('curves-toggle').textContent=open?'⌃ Kurven zuklappen':'⌄ Kurven aufklappen';
+  }
   function design(value) {
     app.dataset.design=value;
+    curves();
     document.querySelectorAll('.variants [data-design]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.design===value)));
     app.classList.toggle('tree-closed',value==='focus');app.classList.toggle('inspector-closed',value==='focus');panels();
     const [caption,description,title,note]=descriptions[value];
@@ -63,6 +72,7 @@
   document.querySelectorAll('.variants [data-design]').forEach(b=>b.addEventListener('click',()=>design(b.dataset.design)));
   document.querySelectorAll('.segmented [data-theme]').forEach(b=>b.addEventListener('click',()=>{document.documentElement.dataset.theme=b.dataset.theme;document.querySelectorAll('.segmented [data-theme]').forEach(c=>c.setAttribute('aria-pressed',String(c===b)));}));
   $('tree-toggle').addEventListener('click',()=>{app.classList.toggle('tree-closed');panels();});$('inspector-toggle').addEventListener('click',()=>{app.classList.toggle('inspector-closed');panels();});
+  $('curves-toggle').addEventListener('click',()=>{curvesByDesign[app.dataset.design]=!curvesByDesign[app.dataset.design];curves();});
   document.querySelectorAll('[data-object]').forEach(b=>b.addEventListener('click',()=>object(b.dataset.object)));
   for(const [id,target] of [['show-trail','trail'],['show-vectors','velocity'],['show-grid','floor-grid']]) $(id).addEventListener('change',()=>{(target==='floor-grid'?document.querySelector('.floor-grid'):$(target)).style.visibility=$(id).checked?'visible':'hidden';});
   $('state-select').addEventListener('change',()=>{mode=$('state-select').value;replay=false;browsing=false;if(mode==='ready'){time=0;liveTime=0;}status();render();});
