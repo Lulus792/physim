@@ -1,165 +1,122 @@
-# Designvertrag: Arbeitsbereich Entwickeln
+# Gewählte Werkbank und Suchinsel aus Glas
 
-Stand 19. Oktober 2026. Verantwortlich: UI/UX-Design. **Werkbank ist ausgewählt.**
-Die ursprünglichen drei Gesamtentwürfe sind als [erste Galerie](original.html)
-erhalten. Die aktuelle [Detailrunde](DETAILS.md) vergleicht Schalter, Tabs und
-Workspace innerhalb der Werkbank. Die [Galerie](index.html) ist ein eigenständiger
-Browserprototyp; die native C-/SDL-/Nuklear-Oberfläche bleibt unverändert.
+Stand: 19. Oktober 2026. Verantwortlich: UI/UX-Design. Die native App bleibt
+unverändert. Dieser Ordner enthält die aktuelle Browserreferenz der gewählten
+Werkbank und ausschließlich die noch offenen Glasvarianten.
 
-## Aufgabe und gemeinsamer Rahmen
+## Festgelegter Aufbau
 
-Der Nutzer öffnet einen Ordner, bearbeitet Experimentquellen, schlägt die Physim-API
-nach, baut das Projekt und löst Compilerdiagnosen auf. Ein erfolgreicher Build
-ermöglicht anschließend den Wechsel nach Simulieren. Die Informationsarchitektur
-bleibt auf Physim-Experimente ausgerichtet.
+- Schalter im Panelkopf; geschlossen erscheinen dieselben Schalter an den Dateitabs.
+- Kompakte Dateitabs und drei gleich breite Arbeitsbereich-Tabs.
+- Workspace mit Pfadlinien; `assets`, `runs`, `build` behalten Reihenfolge und Ebene.
+- Profil und Buildstatus unten; Suche und Speichern direkt an den Dateitabs.
+- Schwebende Suchinsel. Die Suchkarte und die verworfenen Layoutvarianten entfallen.
 
-Die [bestehende Shell](../../design-direction.md) bestimmt den kompakten
-Fensterkopf und die drei gleich breiten Arbeitsbereich-Tabs. Das Buildmenü ist
-der gemeinsame Einstieg in den Build; F5 bleibt erhalten. Die darunterliegende
-Projektzeile zeigt Projekt, Quellsprache, Profil und Buildstatus. Panelaktionen
-gehören zum Editor und sind von den globalen Aktionen getrennt.
+Die separate Pfadzeile ist entfernt. Der aktive Dateiname steht in der
+Editorstatuszeile. Die Codefläche beginnt direkt unter der Dateileiste, ohne
+zusätzlichen Zwischenraum. Code und Zeilennummern haben 6 px oberen Innenabstand;
+die Suchinsel sitzt mit 4 px Abstand an der Oberkante der Codefläche statt zuvor
+10 px unterhalb der zusätzlichen 28-px-Pfadzeile. Das bringt Suchinsel und
+Dateiinhalt jeweils 34 px näher an die Dateileiste. Dies sind Browsermaße der
+Gestaltung, keine native Plattformabnahme.
 
-Die äußere Galerie, Variantenwahl und Zustandswahl gehören ausschließlich zur
-Präsentation. Der native Start bleibt leer. Im Prototyp dient ein geladenes
-Pendelbeispiel zum Vergleichen der Layouts. Globale Menüpunkte außer Build sowie
-die Arbeitsbereich-Tabs sind bewusst statische Beschriftungen. Fensterknöpfe
-sind dekorativ und nicht bedienbar.
+Öffnen, Schließen und Aufklappen der Ersetzung verändern Position und Größe des
+Codes nicht. Die Suche ist nichtmodal, verwendet das aktive Dokument, sucht
+Groß-/Kleinschreibung beachtend und ersetzt jeweils einen Treffer. Enter/↓ und
+Umschalt+Enter/↑ navigieren vor- bzw. rückwärts mit Umbruch. Escape schließt die
+Suche und stellt den Fokus am Suchicon wieder her. Die Galerie startet bewusst
+mit geöffneter Suchinsel, damit das Material sofort vergleichbar ist.
 
-## Varianten
+## Drei noch offene Materialvarianten
 
-| Variante | Anordnung bei 1440 px Browserbreite | Schwerpunkt |
-| --- | --- | --- |
-| Werkbank | Projekt 218 px, flexibler Editor, Kontext 255 px; Protokoll offen | Orientierung und schnelles Wechseln zwischen Dateien, Symbolen und Diagnose |
-| API-Atelier | Projekt 185 px, flexibler Editor, API 330 px; Protokoll offen | Lesbare Referenz mit Signatur, Einheiten und einfügbarem Beispiel |
-| Fokus | Projekt und Kontext geschlossen, Protokoll reduziert; größere Codeschrift | Zusammenhängende Arbeit am Code mit jederzeit erreichbaren Nebenbereichen |
+| Entwurf | Transparente Grundfläche dunkel / hell | Unschärfe | Wirkung |
+| --- | --- | --- | --- |
+| Seidenglas | 74 % / 73 % Deckung | 14 px | Ruhig gefilterter Hintergrund, zurückhaltende Lichtkante |
+| Klarglas | 24 % / 24 % Deckung | 2 px | Deutlichere Durchsicht auf Code und Syntaxfarben |
+| Kristallkante | 45 % / 45 % Deckung | 7 px | Stärkere Lichtkante, sanfter Glanz, rundere Form |
 
-Die Panelzustände bleiben pro Variante für die Sitzung erhalten. Dateiinhalt,
-aktives Dokument, Erscheinung und Demo-Buildstatus werden gemeinsam beibehalten.
-Die Kontextflächen enthalten einen manuell zusammengestellten Pendelkontext;
-sie analysieren den bearbeiteten Code nicht dynamisch. Das API-Atelier verbirgt
-die Symbolübersicht zugunsten der größeren Referenzkarte.
+Die Sättigung wird leicht angehoben. Nur die vorübergehende Suchinsel erhält
+diesen Effekt; Code, Workspace und Kontext bleiben feste Leseflächen. Eingaben,
+Pfeilaktionen und Trefferzahl haben stärkere eigene Flächen für lesbare Inhalte.
+Die zusammengesetzte Farbe hängt vom Code darunter ab.
 
-## Inhalt und visuelle Regeln
+Dies sind eigene CSS-Studien mit `backdrop-filter`, keine native Apple-Material-
+Implementierung. Apples Materialrichtlinie ordnet Liquid Glass der funktionalen
+Bedienebene zu und empfiehlt bei textreichen Kontrollen einen stärker gefilterten
+Hintergrund. Daraus wird hier die ruhigere Seidenglasvariante als Startvergleich
+abgeleitet; Klarglas ist eine bewusst transparentere Vergleichsstudie.
+Quelle: [Apple HIG Materials](https://developer.apple.com/design/human-interface-guidelines/materials),
+am 19. Oktober über das offizielle
+[DocC-Dokument](https://developer.apple.com/tutorials/data/design/human-interface-guidelines/materials.json)
+eingesehen. Es wird keine exakte optische Gleichheit mit Apple behauptet.
 
-- Ruhige, geschlossene Flächen; keine Abhängigkeit von Blur oder Transparenz.
-- Semantische Rollen für Text, Sekundärtext, Hintergrund, Editor, Auswahl, Akzent,
-  Erfolg, Fehler und Syntax. Dunkle Grundfarben folgen der vorhandenen
-  [Palette](../../../app/design_tokens.h); helle Farben werden separat abgestimmt.
-- Raster überwiegend 4/8/12/16 px, Kontrollradien 5–7 px, Fensterradius 10 px.
-- Systemschrift für Navigation; Consolas/Liberation Mono mit generischem
-  Monospace-Fallback für Quelltext. Keine externen Fonts, Iconfonts oder Assets.
-- Code 12 px mit 23 px Zeilenhöhe, im Fokus 14/26 px. Sekundäre Referenzlabels
-  liegen bei 9–11 px. Diese kompakten Studienmaße sind keine native Mindestgröße:
-  Textskalierung und persönliche Schriftgröße müssen in der nativen Umsetzung
-  berücksichtigt und mit realen Lesetests geprüft werden.
-- Zustände verwenden verständlichen Text und ergänzende Zeichen. Erfolg und
-  Fehler bleiben ohne Farbwahrnehmung unterscheidbar.
-- Editierbarer Text und Syntaxdarstellung teilen exakt Schrift, Abstände und
-  Scrollposition. Im erzwungenen Kontrastmodus erscheint der native Text des
-  Eingabefelds ohne die überlagerte Syntaxdarstellung.
+Ohne `backdrop-filter`, bei erhöhter Kontrastanforderung, erzwungenen
+Kontrastfarben oder reduzierter Transparenz wird eine deckende Fläche verwendet.
+„Transparenz reduzieren“ erlaubt den direkten Vergleich. Größe, Suchablauf und
+Fokusführung bleiben dabei gleich. Es gibt keine Animation.
 
-Unter 950 px werden Kontext und API unterhalb des Editors angeordnet; unter
-620 px folgt auch der Projektbaum darunter. Keine Panelaktion verschwindet.
-Lange Codezeilen scrollen innerhalb des Editors. Das responsive Verhalten dient
-der Vorschau; die native Dockinglogik muss separat mit den tatsächlichen
-Fenstergrößen und Schriftmetriken abgestimmt werden.
+## Größenverstellung
 
-## Zustände und Interaktionen
+Workspace und Codekontext werden horizontal an den Trennlinien verändert.
+Das Protokoll erhält seine Höhe aus dem Editorraum; die Codefläche passt sich an.
+Unter 951 px wird der Kontext nach unten gestapelt und in der Höhe verändert;
+unter 621 px gilt dies auch für den Workspace. Alle Inhaltsbereiche scrollen intern.
 
-| Zustand | Rückmeldung / nächste Aktion |
-| --- | --- |
-| Leerer Workspace | Ordner öffnen oder neues Projekt; Build nicht verfügbar |
-| Ordner ohne Projekt | Datei innerhalb der Demo bearbeiten; Build bleibt gesperrt |
-| Physim-Projekt, ungebaut | Projekt bauen über Menü oder F5 |
-| Ungespeichert | Kennzeichnung am Dokument, in Fensterkopf und Statuszeile; Speichern markiert nur den Demostand |
-| Build läuft | Klarer Status und Protokoll; Profilwechsel, Speichern und Codeeingabe gesperrt; Abbrechen im Buildmenü |
-| Build erfolgreich | Erfolg mit Demozeit und Hinweis auf Simulieren; keine automatische Navigation |
-| Compilerfehler | Fehleranzahl und anklickbare Datei-/Zeilenmeldung; Fokus und Auswahl springen zum fehlerhaften Bezeichner |
-| Build abgebrochen | Explizite Rückmeldung; letzter gültiger Stand beziehungsweise ungebauter Zustand |
-| Profil gewechselt | Vorheriger Build gilt als veraltet; erneuter Build erforderlich |
+Standardbreiten 218/255 px, Mindestbreiten 140/180 px, Höchstbreiten 480 px;
+mindestens 300 px bleiben für die mittlere Editorspalte reserviert. Der
+Desktop-Arbeitsraum ist 760 px hoch, der Protokollinhalt zunächst 86 px.
+Trennlinien haben 9 px Trefferfläche, Separatorrolle, Namen und Größenwerte.
+Pfeiltasten ändern 10 px, mit Umschalt 40 px; Home/End setzen Grenzen, Enter oder
+Doppelklick den Standard. Escape verwirft eine laufende Ziehbewegung.
+Größen bleiben beim Ein-/Ausklappen für die Sitzung erhalten; Neuladen setzt sie zurück.
 
-Die Zustandswahl pinnt den gewählten Zustand; insbesondere endet ein dort gewählter
-laufender Build nicht automatisch. Ein über F5 oder Menü gestarteter Demo-Build
-endet nach einer Sekunde. Nur der bekannte Beispielbezeichner `gravity_m_s`
-erzeugt die Demo-Fehlerantwort; beliebiger Text wird nicht kompiliert oder validiert.
-Die 0,84 s sind eine illustrative Angabe, keine gemessene Compilerleistung.
+## Demo und spätere native Umsetzung
 
-Dateiwechsel bewahren ungespeicherte Inhalte. Die Suche arbeitet im aktiven
-Dokument, unterscheidet Groß-/Kleinschreibung und ersetzt jeweils einen Treffer.
-Escape schließt Suche oder Buildpopup und stellt den Fokus zur auslösenden
-Schaltfläche zurück. Alle tatsächlichen Aktionen sind über Tab und native
-Schaltflächenaktivierung erreichbar. F5, Ctrl/Command+F und Ctrl/Command+S werden
-in der Vorschau behandelt. Die globale Menüzeile ist kein vollständig
-implementiertes natives Menüsystem.
+Der Code ist ein gekürzter Pendelausschnitt, keine vollständige Experimentdatei.
+Die Projektdatei ist illustrativ. Speichern markiert nur den Demostand; der
+Demo-Build simuliert Erfolg bzw. den bekannten Bezeichnerfehler. Dateisystem,
+Compiler und Projektmanager sind nicht angebunden. Globale Menübeschriftungen
+außer Build und die Arbeitsbereich-Tabs sind statische Shellreferenzen.
 
-„Beispiel einfügen“ ergänzt einen Messkanalaufruf im Experimentausschnitt. Die
-Bezeichner und die Signatur von `ps_channel_add` sind mit
-[`experiment.h`](../../../include/physim/experiment.h) und dem
-[`Pendelbeispiel`](../../../examples/pendulum/main.c) abgeglichen. Die drei
-Demodateien sind gekürzt, insbesondere `physim.project` ist eine illustrative
-Zusammenfassung und keine parsebare Referenz des nativen Formats.
-Die Projektmanager-Aktion öffnet in dieser begrenzten Vorschau das Demoprojekt
-und benennt den Unterschied im Protokoll; es wird kein Ordner angelegt.
+Für die native Umsetzung bestehende Editor-, Docking-, Build-, Such- und
+Sicherungsfunktionen verwenden; CSS-Geometrie und Glaseffekt nicht als bereits
+plattformgeprüft übernehmen. Native Accessibility, Systemtextskalierung,
+Monitorwechsel sowie Linux-/macOS-Builds sind separat offen.
 
-## Zuordnung zur späteren nativen Umsetzung
+## Bereinigung
 
-| Bestandteil | Bestehender Einstieg |
-| --- | --- |
-| Menüzeile und Arbeitsbereichauswahl | [`toolbar_ui.inc`](../../../app/toolbar_ui.inc) |
-| Projekt-/Editorinhalte und Builddiagnosen | [`design_ui.inc`](../../../app/design_ui.inc) |
-| Dokumenttabs und Wechsel | [`file_tabs_ui.inc`](../../../app/file_tabs_ui.inc) |
-| Panelgrößen und Sichtbarkeit | [`docking_ui.inc`](../../../app/docking_ui.inc) |
-| Farben und Größenrollen | [`design_tokens.h`](../../../app/design_tokens.h) |
+Auf ausdrücklichen Nutzerwunsch wurden 33 ersetzte Artefakte entfernt:
+verworfene Gesamt-/Detailstudien, Suchkarte, alte Referenzbilder, alte
+Vergleichsoberflächen, nicht mehr benötigte Stile/Skripte und zwei alte Prüfer.
+Die entfernten Dateien belegten 3.709.179 Bytes (rund 3,54 MiB). Aktuelle
+Such-/Resize-Logik bleibt erhalten; ein konsolidierter Prüfer deckt die Oberfläche
+ab. Frühere Dateien bleiben über die Git-Historie wiederherstellbar.
+Andere Projektstudien, fremde lokale Arbeiten und Plattformbelege wurden nicht angefasst.
 
-Bestehende echte Build-, Dateisicherungs-, Wiederherstellungs-, Such- und
-Dokumentfunktionen weiterverwenden. Neue visuelle Anordnung darf keine
-Demoimplementierungen in die Anwendung übernehmen. Den Codekontext erst mit
-echten Symbolen und Dokumentation verbinden; Compiler- und SDK-Angaben aus der
-tatsächlich verwendeten Umgebung anzeigen. Fehlerpfade müssen echte
-Compilerpositionen verwenden. Die bestehende manuelle Arbeitsbereichauswahl
-bleibt maßgeblich.
+## Tatsächlich ausgeführte Prüfung
 
-Plattformadapter behalten native Fenstersteuerung, Dateidialoge, Menüs und
-Tastenkürzel. Unter macOS Command-Zuordnung und AX, unter Windows UIA und unter
-Linux AT-SPI real prüfen. Die Windows-Anordnung der Referenzbilder ist keine
-Vorgabe für native macOS-Fensterknöpfe.
+Windows/Edge 155.0.4283.62, 19. Oktober 2026:
+`node tools/check_develop_designs.cjs --export`, Exitcode 0.
 
-## Abnahme und Grenzen
+- 24 Layoutfälle: 1440/1080/760/500 px × drei Glasvarianten × hell/dunkel.
+  Kein Seitenüberlauf, Editor mindestens 200 px breit. Kein zusätzlicher Abstand
+  unter den Dateitabs; Suchinsel 4 px unter dem Codebeginn.
+- Öffnen und Erweitern der Suche erhalten Codegeometrie und Scrollposition.
+- 18 Kontrolltext-Kombinationen auf Eingaben, Pfeilaktionen und Trefferanzeige: konservativ
+  über vollständig schwarzem und weißem Untergrund jeweils mindestens 4,5:1.
+  Das ist eine begrenzte Kontrastprüfung der Bedienflächen, keine vollständige
+  Kontrastabnahme aller möglichen Codehintergründe.
+- Transparente Hintergrundfarbe und aktiver Blur für alle Materialien;
+  deckender Fallback ohne Geometrieänderung für jede Variante geprüft.
+- Vor-/Rückwärtssuche, Ersetzen, Escape/Fokus, erhaltene Dateiänderungen, sichere
+  Syntaxdarstellung, Speichern, Demo-Build und Diagnosesprung bedient.
+- Maus-/Tastaturgrößenänderung, Wiederöffnen, Abbruch, Reset, Scrollgleichlauf,
+  gestapelte Bereiche bei 760/500 px, erzwungene Farben und Leerzustand geprüft.
+- Keine JavaScriptfehler. Alle sechs Referenzzustände und die Übersicht visuell
+  gesichtet. Ein Screenshot belegt keine native Material- oder Screenreaderqualität.
 
-Der reproduzierbare Browserprüfer liegt unter
-[`check_develop_designs.cjs`](../../../tools/check_develop_designs.cjs).
-Er prüft Layout, Tokenkontraste und konkrete Bedienabläufe. Ein Browsercheck
-bestätigt keine vollständige Tastatur-/Screenreader-Abnahme der nativen App.
-
-Am 19. Oktober 2026 unter Windows mit Edge 155.0.4283.62 tatsächlich ausgeführt:
-`node tools/check_develop_designs.cjs --export`, Exitcode 0. Alle 24 Layoutfälle
-(1440/1080/760/500 px × hell/dunkel × drei Varianten) ohne horizontalen
-Seitenüberlauf, Editorbreite jeweils mindestens 200 px. 24 geprüfte
-Text-/Hintergrundkombinationen erreichen mindestens 4,5:1. Keine JavaScriptfehler.
-Konkrete Abläufe: dateiweise Änderungen erhalten, sichere Syntaxdarstellung von
-HTML-Text, Speichern, Tastatursuche mit Ersetzen/Fokusrückkehr, unabhängige
-Panelzustände, Beispiel einfügen, Fehlernavigation, Korrektur und Demo-Build,
-Abbrechen, Profilwechsel sowie allgemeine Ordner ohne Buildfreigabe.
-
-Zusätzlich ausgeführt: Layout-Smokechecks bei Browser-DPI 1,5×/2× und vergrößerten
-Kontroll-/Begleittexten, erzwungene Kontrastfarben und Reduced Motion. Diese
-begrenzten Checks sind keine vollständige 200-%-Systemtext- oder Displayabnahme.
-Alle sechs Designbilder und die Übersicht visuell gesichtet: klare Gewichtung
-zwischen Projekt, Code und Hilfe; kein sichtbarer Überlauf in den Referenzzuständen.
-Die Bilder wurden bei 1440 px Browserbreite, DPR 1 und erfolgreichem Demo-Build
-aufgenommen. Der zusätzliche Fehlerbeleg zeigt Fokus/Hell mit Compilerfehler.
-Die nativen App-Builds wurden für diese reinen Designartefakte nicht ausgeführt.
-
-Offen für eine native Umsetzung: reale Systemtextskalierung bis 200 %, native
-Screenreader, IME, Mehrfachauswahl, Undo-Verhalten nach programmgesteuerter
-Einfügung, sehr große Quellen, reale Docklayout-Persistenz, Monitorwechsel,
-vollständige Menübedienung und echte Linux-/macOS-Builds. Die Textarea verwendet
-Browserbearbeitung; programmatische Einfügungen haben keinen eigenen Undo-Stack.
-Der vereinfachte Syntaxlexer ist kein C-Parser und keine Codevervollständigung.
-
-Die Desktop-Prüfmatrix des UI/UX-Skills dient der Abgrenzung. Die lokalen
-Wissensnotizen zu Hierarchie, Interaktion und Plattformkonventionen wurden gelesen.
-Ein erneuter Abruf der offiziellen Apple-HIG-Kapitel Layout/Sidebars am 19. Oktober
-lieferte nur JavaScript-Platzhalter; die verlinkten Markdown-Abrufe waren über
-das Webwerkzeug nicht lesbar. Es werden daraus keine neuen oder versionsabhängigen
-Richtlinienbehauptungen abgeleitet.
+Prüfer: [check_develop_designs.cjs](../../../tools/check_develop_designs.cjs).
+[Glasvergleich](glass-overview.png),
+[Seidenglas dunkel](glass-satin-dark.png), [Seidenglas hell](glass-satin-light.png),
+[Klarglas dunkel](glass-clear-dark.png), [Klarglas hell](glass-clear-light.png),
+[Kristallkante dunkel](glass-crystal-dark.png), [Kristallkante hell](glass-crystal-light.png).

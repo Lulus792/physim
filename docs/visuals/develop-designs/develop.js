@@ -44,15 +44,9 @@ profile = Debug
 # Kein Parser für das native Projektformat angebunden.`
 };
 const saved = {...files};
-const layouts = {
-  workbench: {title:'01 / Werkbank', subtitle:'Ein ruhiger, vollständiger Arbeitsplatz.', tree:true, api:true, log:true, note:'Vertraute Orientierung: Dateien links, Code in der Mitte, Struktur und API rechts. Builddiagnosen bleiben unmittelbar unter dem Editor.'},
-  atelier: {title:'02 / API-Atelier', subtitle:'Das Modell verstehen, während der Code entsteht.', tree:true, api:true, log:true, note:'Die API-Hilfe bekommt eine eigene Lesefläche. Einheiten, Funktionsaufruf und ein einfügbares Beispiel begleiten die Arbeit am Modell.'},
-  focus: {title:'03 / Fokus', subtitle:'Ein Dokument. Ein Gedanke. Viel Platz.', tree:false, api:false, log:false, note:'Projekt und Kontext starten eingeklappt. Größere Codeschrift und ein kompaktes Protokoll schaffen Ruhe. Alle Bereiche lassen sich jederzeit zurückholen.'}
-};
-let active = 'main.c', design = 'workbench', scenario = 'ready', timer, buildRevision = 0;
+let active = 'main.c', scenario = 'ready', timer, buildRevision = 0;
 let revision = 0, builtRevision = 0;
 let folderEditing = false;
-const panelState = {};
 const esc = s => s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
 function highlight(s) {
   // Tokenize before escaping to prevent user-entered HTML becoming markup.
@@ -88,8 +82,6 @@ function openFile(name, focus=false) {
   active=name; editor.value=files[name]; editor.setSelectionRange(0,0);editor.scrollTop=0; editor.scrollLeft=0;
   editor.setAttribute('aria-label',`Quellcode der Demodatei ${name}`);
   $('#active-file').textContent=name;
-  $('#symbol-label').textContent=name==='main.c'?'derivative':name==='analysis.c'?'Analyse':'Projekteinstellungen';
-  $('#language').textContent=name.endsWith('.c')?'C':'Projekt';
   $$('[data-file]').forEach(el=>{const selected=el.dataset.file===name;el.classList.toggle('selected',selected);el.setAttribute('aria-pressed',String(selected));});
   renderCode(); dirtyUI(); if(focus)editor.focus();
 }
@@ -99,16 +91,6 @@ function setPanel(key, visible) {
   $('#'+toggle).setAttribute('aria-expanded',String(visible));
   if(cls)app.classList.toggle(cls,!visible);
   if(key==='log')$('#toggle-log').textContent=`${visible?'⌄':'›'} Protokoll`;
-  panelState[design] ||= {...layouts[design]}; panelState[design][key]=visible;
-}
-function setDesign(name) {
-  design=name;app.dataset.design=name;const info=layouts[name];
-  $('#design-title').textContent=info.title;$('#design-subtitle').textContent=info.subtitle;
-  $('#note-kicker').textContent=info.title.toUpperCase();$('#design-note').textContent=info.note;
-  $('#context-title').textContent=name==='atelier'?'API-ASSISTENZ':'CODEKONTEXT';
-  $$('[data-design]').filter(el=>el.tagName==='BUTTON').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.design===name)));
-  const prefs=panelState[name]||info; for(const key of ['tree','api','log'])setPanel(key,prefs[key]);
-  syncScroll();
 }
 function menu(open, restore=false) {
   $('#build-popup').hidden=!open;$('#menu-build').setAttribute('aria-expanded',String(open));
@@ -118,8 +100,6 @@ function updateBuildUI() {
   const noProject=['empty','folder'].includes(scenario), running=scenario==='building', failed=scenario==='error';
   $('#scenario').value=scenario;
   $('.workspace').hidden=noProject&&!folderEditing;$('#empty-state').hidden=!noProject||folderEditing;
-  $('#project-name').textContent=scenario==='empty'?'Kein Workspace':scenario==='folder'?'Geöffneter Ordner':'Pendelstudie';
-  $('#project-detail').textContent=noProject?'Workspace bereit zum Öffnen':'Experiment in C · physim.project';
   $('#empty-title').textContent=scenario==='folder'?'Dein Ordner ist geöffnet.':'Raum für eine neue Idee.';
   $('#empty-detail').textContent=scenario==='folder'?'Kein physim.project gefunden. Dateien lassen sich unabhängig bearbeiten.':'Öffne einen Ordner oder lege ein Physim-Projekt an.';
   $('#open-folder').textContent=scenario==='folder'?'Datei im Editor öffnen':'Ordner öffnen';
@@ -138,7 +118,6 @@ function updateBuildUI() {
   $('#diagnostic-link').hidden=!failed;$('#raw-log').hidden=!running;
   $('#raw-log').textContent=`[Demo] ${$('#profile').value} · main.c\n[1/2] Quelltext kompilieren …\n[2/2] Experimentmodul prüfen …`;
   $('#log-profile').textContent=$('#profile').value;
-  $('#footer-status').textContent=`${noProject?'Kein Projekt':'Pendelstudie'} · ${$('#profile').value}`;
   if(failed||running)setPanel('log',true);
 }
 function setScenario(value) {
@@ -180,7 +159,6 @@ function findNext() {
   $('#search-result').textContent=`${editor.value.split(query).length-1} Treffer`;return true;
 }
 $$('button[data-theme]').forEach(el=>el.addEventListener('click',()=>{document.documentElement.dataset.theme=el.dataset.theme;$$('button[data-theme]').forEach(b=>b.setAttribute('aria-pressed',String(b===el)));}));
-$$('button[data-design]').forEach(el=>el.addEventListener('click',()=>setDesign(el.dataset.design)));
 $$('[data-file]').forEach(el=>el.addEventListener('click',()=>openFile(el.dataset.file)));
 for(const key of ['tree','api','log'])$('#toggle-'+key).addEventListener('click',()=>setPanel(key,$('#toggle-'+key).getAttribute('aria-expanded')!=='true'));
 $('#menu-build').addEventListener('click',()=>menu($('#build-popup').hidden));
@@ -214,7 +192,7 @@ $('#insert-example').addEventListener('click',()=>{
   const end=at<0?editor.value.length:at;editor.setRangeText('    ps_channel_add(ctx, "angle.demo", PS_RADIAN, "Demokanal");\n',end,end,'end');edited();
 });
 $('#open-folder').addEventListener('click',()=>{
-  if(scenario==='folder'){folderEditing=true;updateBuildUI();$('#project-detail').textContent='Allgemeine Textdatei · kein Physim-Projekt';openFile('main.c',true);return;}
+  if(scenario==='folder'){folderEditing=true;updateBuildUI();openFile('main.c',true);return;}
   setScenario('folder');
 });
 $('#new-project').addEventListener('click',()=>{setScenario('unbuilt');$('#result-detail').textContent='Vorhandenes Demo-Projekt geöffnet. Die native App verwendet hier den separaten Projektmanager.';});
@@ -224,4 +202,4 @@ document.addEventListener('keydown',e=>{
   if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();save();}
   if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='f'&&!$('#search-open').disabled){e.preventDefault();search(true);}
 });
-openFile(active);setDesign(design);updateBuildUI();
+openFile(active);updateBuildUI();

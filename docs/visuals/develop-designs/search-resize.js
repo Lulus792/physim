@@ -1,18 +1,21 @@
-/* Floating search alternatives and resizable docked regions, for the browser study only. */
+/* Search-island materials and resizable docked regions, for the browser study only. */
 (() => {
-  app.classList.add('resizable');app.dataset.search='island';
-  const studies=document.createElement('nav');studies.className='search-studies';studies.setAttribute('aria-label','Schwebende Suchvarianten');
-  studies.innerHTML='<button data-search-design="island" aria-pressed="true"><span class="study-number">01</span><span><strong>Suchinsel</strong><small>Flach oben rechts · zum Öffnen anklicken</small></span></button><button data-search-design="card" aria-pressed="false"><span class="study-number">02</span><span><strong>Suchkarte</strong><small>Schmale Karte am Rand · zum Öffnen anklicken</small></span></button><button id="reset-panels">Panelgrößen zurücksetzen</button>';
+  app.classList.add('resizable');
+  const materials={satin:{title:'01 / Seidenglas',subtitle:'Weich gefiltert, ruhig und gut lesbar.'},clear:{title:'02 / Klarglas',subtitle:'Mehr Durchsicht, dezente Unschärfe.'},crystal:{title:'03 / Kristallkante',subtitle:'Klarer Rand, sanfter Glanz und sichtbare Tiefe.'}};
+  const studies=document.createElement('nav');studies.className='glass-studies';studies.setAttribute('aria-label','Glasvarianten der gewählten Suchinsel');
+  studies.innerHTML='<button data-glass="satin" aria-pressed="true"><span>01</span><strong>Seidenglas<small>Weich und ruhig</small></strong></button><button data-glass="clear" aria-pressed="false"><span>02</span><strong>Klarglas<small>Mehr Durchsicht</small></strong></button><button data-glass="crystal" aria-pressed="false"><span>03</span><strong>Kristallkante<small>Glanz und Lichtkante</small></strong></button>';
   $('.preview-heading').before(studies);
+  const options=document.createElement('div');options.className='material-options';options.innerHTML='<label><input type="checkbox" id="reduce-transparency"> Transparenz reduzieren</label><button id="reset-panels">Panelgrößen zurücksetzen</button>';
+  studies.after(options);
+  app.dataset.glass='satin';
   const help=document.createElement('p');help.className='resize-help';help.id='resize-help';help.textContent='Trennlinien ziehen oder mit Tab fokussieren und Pfeiltasten nutzen. Umschalt = größere Schritte · Doppelklick oder Enter = Standardgröße.';
-  studies.after(help);
+  options.after(help);
   const bar=$('#search-bar'),code=$('#code-area');code.append(bar);
   bar.setAttribute('role','search');bar.setAttribute('aria-label','Suche im aktiven Dokument');
   const queryLabel=$('#query').closest('label'),replaceLabel=$('#replacement').closest('label');
   queryLabel.firstChild.textContent='';replaceLabel.firstChild.textContent='';
   $('#query').setAttribute('aria-label','Suchtext');$('#query').placeholder='Im Dokument suchen';
   $('#replacement').setAttribute('aria-label','Ersetzung');$('#replacement').placeholder='Ersetzen durch';
-  const heading=document.createElement('div');heading.className='floating-search-head';heading.innerHTML='<span>Im Dokument suchen</span><small>Ctrl / ⌘ F</small>';
   const row=document.createElement('div');row.className='floating-search-row';
   const replacement=document.createElement('div');replacement.className='floating-search-row floating-search-replace';replacement.id='floating-replacement';replacement.hidden=true;
   const disclose=document.createElement('button');disclose.id='replace-toggle';disclose.textContent='›';disclose.setAttribute('aria-label','Ersetzen einblenden');disclose.setAttribute('aria-expanded','false');disclose.setAttribute('aria-controls',replacement.id);
@@ -20,7 +23,7 @@
   $('#find-next').textContent='↓';$('#find-next').title='Nächster Treffer · Enter';$('#find-next').setAttribute('aria-label','Nächster Treffer');
   const footer=document.createElement('div');footer.className='floating-search-footer';footer.append($('#search-result'));const scope=document.createElement('small');scope.textContent='Aktuelle Datei · Escape schließt';footer.append(scope);
   row.append(disclose,queryLabel,previous,$('#find-next'),$('#search-close'));replacement.append(replaceLabel,$('#replace'));
-  bar.replaceChildren(heading,row,replacement,footer);
+  bar.replaceChildren(row,replacement,footer);
   function counts() {
     const q=$('#query').value,n=q?editor.value.split(q).length-1:0;
     $('#search-result').textContent=q?`${n} Treffer`:'Suchtext eingeben';
@@ -37,10 +40,14 @@
   editor.addEventListener('input',counts);$('#replace').addEventListener('click',counts);$('#search-open').addEventListener('click',counts);
   $('#query').addEventListener('focus',counts);$('#insert-example').addEventListener('click',counts);
   new MutationObserver(counts).observe($('#active-file'),{childList:true,subtree:true,characterData:true});
-  $$('[data-search-design]').forEach(button=>button.addEventListener('click',()=>{
-    app.dataset.search=button.dataset.searchDesign;$$('[data-search-design]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+  $$('button[data-glass]').forEach(button=>button.addEventListener('click',()=>{
+    const name=button.dataset.glass;app.dataset.glass=name;
+    $$('button[data-glass]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+    $('#design-title').textContent=materials[name].title;$('#design-subtitle').textContent=materials[name].subtitle;
+    $('#note-kicker').textContent='SUCHINSEL / '+button.querySelector('strong').firstChild.textContent.toUpperCase();
     if(!$('#search-open').disabled){search(true);counts();}
   }));
+  $('#reduce-transparency').addEventListener('change',event=>app.classList.toggle('reduced-transparency',event.target.checked));
   counts();
 
   const workspace=$('.workspace'),panes={tree:$('#explorer'),api:$('#inspector'),log:$('#diagnostics')};
@@ -122,5 +129,5 @@
   const observer=new ResizeObserver(position);for(const pane of [workspace,...Object.values(panes),$('#log-body')])observer.observe(pane);
   window.addEventListener('resize',()=>{finish();position();});
   new MutationObserver(position).observe(workspace,{attributes:true,subtree:true,attributeFilter:['hidden']});
-  position();
+  position();search(true,false);
 })();
