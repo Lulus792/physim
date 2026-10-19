@@ -17,6 +17,7 @@ Lies zuerst AGENTS.md und D:/Skills/skills/AGENTS.md. Lies danach:
 - docs/decisions/008-simulation-messlabor.md
 - docs/visuals/simulation-designs/DESIGN.md
 - docs/visuals/simulation-designs/IMPLEMENTATION.md
+- docs/visuals/simulation-designs/MODEL-EDITING.md
 - docs/design-direction.md
 - docs/workspace.md
 
@@ -46,6 +47,28 @@ Bewahre manuell gewählte Zustände beim Wechsel der Arbeitsbereiche. Wende den
 Anfangszustand nicht in jedem Frame neu an und überschreibe keine gespeicherten
 benutzerdefinierten Docking-Anordnungen stillschweigend. Eine neue Speicherung
 dieser drei Sichtbarkeiten über Appstarts ist nicht beauftragt.
+
+Zusätzliche Nutzeranforderung: Alle Inhaltsbereiche müssen in ihrer Größe
+anpassbar sein. Breiten von Szenenbaum und Inspektor, Aufteilung von Szene und
+Messbereich, Zeitleistenhöhe und Verhältnis der beiden Kurven über sichtbare
+Trenner bedienen können. Vorhandenes Docking verwenden; Mindestgrößen und
+Textskalierung berücksichtigen. Pointerdrag sowie passende Pfeiltasten und
+Rücksetzen anbieten. Reale neue Rechtecke an Szene/Plots übergeben. Die drei
+neuen Vorschläge A/B/C ändern nur die Darstellung innerhalb der Abschnitte;
+eine endgültige Typografiewahl steht noch aus, A ist vorläufiger Vergleichsstandard.
+
+Modellwerte wie Fadenlänge sollen im Inspektor bearbeitbar sein. Ergänze dafür
+die Gruppe Modellwerte und den vollständigen Vertrag aus MODEL-EDITING.md:
+Änderungen vormerken, Hinweis **Modellwerte geändert**, **Neu kompilieren** und
+**Verwerfen** dauerhaft erreichbar. Bei aktivem/pausiertem Lauf ausdrücklich
+**Stoppen & neu kompilieren** anbieten. Tippen verändert keinen laufenden Versuch.
+Nach erfolgreichem Build einen neuen Lauf anbieten; erst dieser verwendet die
+neuen Artefakte. Fehler und neuere Eingaben behalten, alte Workerabschlüsse nicht
+auf neue Änderungen anwenden. Benutze eine explizite typisierte Bindung zum
+Modell/Build bzw. zur unterstützten Quellendefinition; keine pauschalen
+Textersetzungen in C-/Physim-Code. Gegebenenfalls einen eng begrenzten,
+versionierten deklarativen Bindungsweg ergänzen. Die vorhandenen deklarierten
+Laufparameter bleiben ein separater Vertrag und brauchen nicht pauschal einen Build.
 
 Der Inspektor muss alle bestehenden fachlichen Funktionen behalten. Ordne sie in
 aufklappbare Gruppen mit unabhängigem Scrollbereich; Kopf und Schließzugang bleiben

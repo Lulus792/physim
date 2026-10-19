@@ -122,7 +122,8 @@ const report={platform:process.platform,browser:await browser.version(),layouts:
     await page.locator('#stop-button').click();assert(await page.locator('#run-dt').isEnabled());
     await page.locator('#parameter-group > summary').click();
     await page.locator('#parameter-length').fill('9');assert.equal(await page.locator('#parameter-length').getAttribute('aria-invalid'),'true');
-    await page.locator('[data-default-for="parameter-length"]').click();assert.equal(await page.locator('#parameter-length').inputValue(),'1.5');
+    await page.locator('[data-default-for="parameter-length"]').click();assert.equal(await page.locator('#parameter-length').inputValue(),'0.5');
+    if(!await page.locator('#run-dt').isVisible())await page.locator('#run-group > summary').click();
     await page.locator('#adaptive-steps').check();assert(await page.locator('#adaptive-fields').isVisible());
     await page.locator('#minimum-dt').fill('0.5');assert.equal(await page.locator('#run-dt').getAttribute('aria-invalid'),'true');
     await page.locator('#run-button').click();assert.equal(await page.locator('.app-window').getAttribute('data-state'),'ready');

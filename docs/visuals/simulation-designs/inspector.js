@@ -51,7 +51,7 @@
     $('inspector-measurement').textContent=(values[k]*u[2]).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:3})+' '+u[1];
     const selected=document.querySelector('.tree-row.active')?.dataset.object||'mass';
     const a=values.angle*Math.PI/180,moving=selected==='mass'||selected==='velocity';
-    const xyz=moving?[1.5*Math.sin(a),-1.5*Math.cos(a),0]:[0,0,0];
+    const length=values.length||1.5,xyz=moving?[length*Math.sin(a),-length*Math.cos(a),0]:[0,0,0];
     const coordinates=xyz.map(v=>v.toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2})).join(' / ');
     $('world-position').textContent=coordinates;$('local-position').textContent=coordinates;
   }

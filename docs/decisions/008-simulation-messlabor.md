@@ -25,3 +25,13 @@ den gewünschten Ersatz des Pfeils und kann weiter verfeinert werden.
 Diese Entscheidung betrifft den Entwurf. Die native C-/SDL-/Nuklear-Anwendung
 ist noch nicht umgestellt; die Vorlage ist kein Nachweis einer nativen
 Windows-, Linux- oder macOS-Abnahme.
+
+## Ergänzung vom 19. Oktober: Daten, Größen und Modellwerte
+
+Die Aufteilung und Abschnitte sind vom Nutzer bestätigt. Für die Informationen
+innerhalb der Abschnitte werden neue Varianten A/B/C verglichen; keine davon ist
+bereits final ausgewählt. Alle Inhaltsbereiche sollen resizable sein. Modellwerte
+wie Fadenlänge sollen im Inspektor bearbeitbar sein und anschließend eine sichtbare
+Neukompilierung anbieten. Laufende Daten bleiben bis zu einem neuen Build und
+neuen Lauf an ihren bisherigen Stand gebunden. Der konkrete native Bindungs-,
+Build- und Größenvertrag steht in [MODEL-EDITING.md](../visuals/simulation-designs/MODEL-EDITING.md).

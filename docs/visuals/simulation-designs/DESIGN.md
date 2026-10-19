@@ -9,6 +9,13 @@ Die [native Übergabe](IMPLEMENTATION.md) gleicht sämtliche Inspektorfunktionen
 mit dem Code ab. [NEXT-CHAT.md](NEXT-CHAT.md) enthält den kopierfertigen Auftrag.
 Der Nutzer hat ausdrücklich Simulieren als Ziel bestätigt.
 
+Zusatzauftrag: Informationen innerhalb der Abschnitte ruhiger gestalten,
+Inhaltsbereiche in der Größe verstellbar machen und Modellwerte mit anschließendem
+Neukompilieren bearbeiten können. Die neue Gruppe **Modellwerte** ergänzt die acht
+bisherigen Funktionsgruppen; deklarierte **Laufparameter** bleiben getrennt.
+[MODEL-EDITING.md](MODEL-EDITING.md) beschreibt die drei Datenstile, sechs Trenner
+und den neuen Bearbeitungs-/Buildvertrag. Die Wahl zwischen A/B/C steht offen.
+
 ## Gemeinsamer Rahmen
 
 Die kompakte gemeinsame Menü-/Fensterleiste und die drei gleich breiten Tabs
@@ -90,6 +97,17 @@ Galerie bildet nur ihren Ort ab. Auch F5/F7 und vorhandene Shortcuts werden
 hier nicht neu definiert. Keine globalen Browser-Tastenkürzel abfangen.
 
 ## Prüfung und Grenzen
+
+Neue Varianten-/Größen-/Buildrunde, 19. Oktober, Windows/Edge 155.0.4283.62:
+`node tools/check_inspector_variants.cjs --export`, Exitcode 0. 24 Layoutfälle
+aus A/B/C × Hell/Dunkel × 1440/1080/760/390 px bestanden. Alle sechs Trenner per
+Tastatur, ein Pointerdrag mit Capture, Rücksetzen und Fachzustandserhalt geprüft.
+Modelländerungen mit Dezimalkomma, unveränderter pausierter Ansicht, explizitem
+Stop/Build, Übernahme erst beim neuen Lauf, Verwerfen und ungültigen Werten
+bestanden. Keine JavaScriptfehler. Vergleichsbilder und Änderungszustände
+visuell geprüft. Die bestehende Simulationsprüfung mit 24 Layout-, 16 Kurven-
+und sechs Interaktionsfällen wurde nach Integration ebenfalls erfolgreich
+ausgeführt. Dies bleibt Browserabnahme; native Quellen-/Compilerpfade sind offen.
 
 Erweiterung um den vollständigen Inspektor am 19. Oktober: Die rechte Seite hat
 acht aufklappbare Gruppen und einen eigenen Scrollbereich; Szene, Kopf und

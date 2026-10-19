@@ -8,6 +8,19 @@ wurde durch diese Studien nicht verändert.
 **Native Umarbeitung vorbereitet:** [Kopierfertiger Auftrag](NEXT-CHAT.md) ·
 [Funktionsabgleich, vollständiger Inspektor und Abnahme](IMPLEMENTATION.md).
 
+**Neue Runde:** Drei Darstellungen innerhalb derselben Abschnitte:
+**A · Ruhige Zeilen**, **B · Wertefelder**, **C · Kompakt**.
+Oben in der Vorschau umschalten. [Dunkler Vergleich](inspector-styles-dark.png) ·
+[Heller Vergleich](inspector-styles-light.png). A ist der vorläufige Startwert,
+eine Auswahl durch den Nutzer steht noch aus.
+
+Die Desktop-Bereichsgrenzen sind ziehbar und per Pfeiltasten bedienbar:
+Seitenbreiten, Messbereich, Zeitleiste, Kurvenverhältnis und Arbeitsflächenhöhe.
+**Modellwerte** wie Fadenlänge sind editierbar und bieten anschließend
+**Neu kompilieren** bzw. **Stoppen & neu kompilieren** an. Die Browserdemo führt
+keinen Compiler aus; sie demonstriert Vormerken, Verwerfen und Übernahme erst
+im neuen Beispiellauf. [Bindungs- und Buildvertrag](MODEL-EDITING.md).
+
 - [Interaktive Vorschau](index.html) lokal im Browser öffnen, ohne Installation,
   Server oder externe Ressourcen. Start: Messlabor, dunkel, pausiert.
 - [Vergleich: Dunkel links, Hell rechts; Studio / Messlabor / Fokus von oben nach unten](overview.png).
@@ -16,7 +29,7 @@ wurde durch diese Studien nicht verändert.
 - Fokus: [Dunkel](focus-dark.png), [Hell](focus-light.png).
 - [Designvertrag und Prüfbericht](DESIGN.md).
 - Vollständiger Inspektor: [Dunkel](inspector-dark-overview.png),
-  [Hell](inspector-light-overview.png). Die acht Gruppen sind aufklappbar und
+  [Hell](inspector-light-overview.png). Die neun Gruppen sind aufklappbar und
   unabhängig von der Szene scrollbar.
 
 Die Galerie außerhalb des App-Fensters gehört nur zum Variantenvergleich.
@@ -50,6 +63,7 @@ Laufzeitpfade über `load_workspace_dependencies` bestimmen, den Modulordner als
 ```text
 node tools/check_simulation_designs.cjs
 node tools/check_simulation_designs.cjs --export
+node tools/check_inspector_variants.cjs --export
 ```
 
 Ohne `--export` liegen Prüfausgaben nur unter `build/simulation-design-review/`.

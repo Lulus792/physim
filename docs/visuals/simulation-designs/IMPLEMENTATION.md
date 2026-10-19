@@ -7,6 +7,10 @@ vor. Die native Anwendung ist durch diese Übergabe nicht umgestellt.
 
 ## Maßgebliche Artefakte
 
+Neue Anforderungen: [Datendarstellungen, Größenänderung und Modellbearbeitung](MODEL-EDITING.md).
+Die Abschnittsstruktur bleibt erhalten; neun Gruppen einschließlich der neuen
+quellen-/buildgebundenen **Modellwerte**. A/B/C sind noch offene Gestaltungsalternativen.
+
 - [Auswahl ADR 008](../../decisions/008-simulation-messlabor.md), [Design](DESIGN.md).
 - [Lokale Vorlage](index.html), ohne Server; Standard Messlabor.
 - Start: [Dunkel](labor-dark.png), [Hell](labor-light.png).
@@ -26,6 +30,7 @@ sind Suchanker; vor Umsetzung aktuellen Stand und lokale Änderungen erneut prü
 | Rendern und betrachteter Zustand | `app/main.c`: `viewport`, `display_scene`, `display_time`, `display_values` | Reale OpenGL-Fläche; Live und historischen Snapshot durchgängig unterscheiden. |
 | Rechte Seite | `app/design_ui.inc`: `inspector_panel`, `camera_inspector` | Bestehende Funktionen in unabhängig scrollbare Gruppen ordnen; API-Referenzkontext anderer Arbeitsbereiche erhalten. |
 | Modellparameter | `parameter_form_view`, `app/parameter_catalog.c/.h` | Modellabhängige Definitionen, Einheiten, Bereiche, Standardaktionen, Dirty- und Laufzeitsperren erhalten. |
+| Buildgebundene Modellwerte (neu) | Bestehende Editor-/Dokument-, Projekt- und Buildpfade; bislang keine universelle schreibbare Bindung im Parameterkatalog | Typisierte Bindung ergänzen, Änderungen vormerken, Quellenkonflikte erkennen, kontrolliert bauen und erst im neuen Lauf anwenden; MODEL-EDITING.md ist verbindlich für diesen Zusatz. |
 | Live-Daten und Meldungen | `live_measurements_view`, `live_events_view`, `live_event_text`; `history_t`, `history_v`, `history_count` in `app/main.c` | Aktuelle Einzelkurve vom Messwertzugang trennen. Zwei optionale Kurven mit echten, begrenzten Daten versorgen. Warnungen/Protokollzugang behalten. |
 | Laufeinstellungen | `camera_inspector`; `simulation_settings_valid`, `save_project_settings` in `app/main.c` | dt, Seed, Adaptivität und Schritt-Haltepunkte weiter validieren/speichern. Keine neue Parallelvalidierung mit abweichenden Grenzen. |
 | Laufgrenzen | `inspector_panel`: `runner_memory_mib`, `runner_wall_seconds` | 0 = unbegrenzt; Speicher bis 16384 MiB, Zeit bis 86400 s; vorhandene Sperre bei nicht untätiger App erhalten. |
@@ -62,6 +67,14 @@ vom jeweiligen Modell bestimmt; das RK4-Label der Demo erzeugt keinen universell
 Integratorwahlschalter.
 
 ## Daten, Zustände und Geometrie
+
+Alle Inhaltsbereiche skalierbar gestalten: Seitenbreiten, Szene/Messbereich,
+Zeitleiste und Kurvenverhältnis. Die neue Browservorlage demonstriert sechs
+Trenner einschließlich ihrer freien Gesamthöhe. Native Größen aus Dock-Rechtecken
+und Schrift ableiten; verfügbare Mitte begrenzen, Pointer-Capture sauber lösen,
+Tastatur und Rücksetzen anbieten. Bereichsänderungen erhalten Feldwerte,
+Staging-/Buildzustand, Zeit, Kamera und Objektauswahl. Zusätzliche Tests für
+Extremgrößen, abgebrochenen Drag, Fensterverkleinerung und gespeicherte Layouts.
 
 Anfang: Baum zu, Inspektor auf, Kurven zu. Drei getrennte Sichtbarkeitszustände
 führen; nicht für die neue Ansicht die globalen Docking-Voreinstellungen anderer
@@ -123,6 +136,8 @@ für die Dokumentationsvorbereitung nicht als native Tests ausgeführt.
 | Echte Modelle | Mindestens Pendel und anderes Modell, C/Physim, keine festen Demo-Kanäle/Objekte/Parameter. |
 | Inspektor | Jede obige Funktion erreichbar, korrekte Sperren/Validierung, keine Funktionsverluste durch Scrollen oder Schließen. |
 | Eingabegrenzen | Gültige/ungültige Parameter, adaptive Grenzen, Seed 0/uint64-Maximum/Überlauf, doppelte/zu viele Haltepunkte, Limits. |
+| Modell bearbeiten und bauen | Typisierte Quellen-/Buildbindung, Einheiten, gültige/ungültige Änderung, Verwerfen, externe/Dirty-Konflikte, Buildfehler/Abbruch, neuere Eingaben während Build; Übernahme erst im neuen Lauf. |
+| Größen ändern | Alle Inhaltsbereiche per Pointer/Tastatur, Mindest-/Maximalgrößen, sichtbare Fokusmarke, Capture-Ende, Rechtecke von Szene/Plots und Erhalt aller Fachzustände. |
 | Runner | Build/Initialisierung, Run/Pause/Schritt/Stop/Reset, alle Tempi/Offline, Timeout, Fehler, Abbruch, neue Messdatei ohne Verlust bisheriger Läufe. |
 | Historie | Rückblick und Wiedergabe während Live-Lauf, Live-Rückkehr, fehlende Szene, ungültige Messwerte, begrenzte Vorschau. |
 | Darstellung | Beide Themes/Hochkontrast, Mindestfenster, Größenwechsel, große Schrift und tatsächliche DPI-Konstellationen soweit verfügbar. |
