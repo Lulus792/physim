@@ -1,13 +1,9 @@
-/* Search-island materials and resizable docked regions, for the browser study only. */
+/* Final cool glass search island and resizable regions. Browser reference only. */
 (() => {
   app.classList.add('resizable');
-  const materials={neutral:{title:'01 / Klarglas · Neutral',subtitle:'Neutrale Glas-, Icon- und Eingabeflächen.'},cool:{title:'02 / Klarglas · Kühl',subtitle:'Ein Hauch Blau in Glas, Icons und Eingabe.'},warm:{title:'03 / Klarglas · Warm',subtitle:'Sanft wärmere Flächen mit einem Hauch Perlmutt.'}};
-  const studies=document.createElement('nav');studies.className='glass-studies';studies.setAttribute('aria-label','Glasvarianten der gewählten Suchinsel');
-  studies.innerHTML='<button data-glass="neutral" aria-pressed="true"><span>01</span><strong>Neutral<small>Ruhiges Graphit / Weiß</small></strong></button><button data-glass="cool" aria-pressed="false"><span>02</span><strong>Kühl<small>Dezent bläuliche Flächen</small></strong></button><button data-glass="warm" aria-pressed="false"><span>03</span><strong>Warm<small>Sanftes Graphit / Perlmutt</small></strong></button>';
-  $('.preview-heading').before(studies);
   const options=document.createElement('div');options.className='material-options';options.innerHTML='<label><input type="checkbox" id="reduce-transparency"> Transparenz reduzieren</label><button id="reset-panels">Panelgrößen zurücksetzen</button>';
-  studies.after(options);
-  app.dataset.glass='neutral';
+  $('.preview-heading').before(options);
+  app.dataset.glass='cool';
   const help=document.createElement('p');help.className='resize-help';help.id='resize-help';help.textContent='Trennlinien ziehen oder mit Tab fokussieren und Pfeiltasten nutzen. Umschalt = größere Schritte · Doppelklick oder Enter = Standardgröße.';
   options.after(help);
   const bar=$('#search-bar'),code=$('#code-area');code.append(bar);
@@ -48,13 +44,6 @@
   editor.addEventListener('input',counts);$('#replace').addEventListener('click',counts);$('#search-open').addEventListener('click',counts);
   $('#query').addEventListener('focus',counts);$('#insert-example').addEventListener('click',counts);
   new MutationObserver(counts).observe($('#active-file'),{childList:true,subtree:true,characterData:true});
-  $$('button[data-glass]').forEach(button=>button.addEventListener('click',()=>{
-    const name=button.dataset.glass;app.dataset.glass=name;
-    $$('button[data-glass]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
-    $('#design-title').textContent=materials[name].title;$('#design-subtitle').textContent=materials[name].subtitle;
-    $('#note-kicker').textContent='SUCHINSEL / '+button.querySelector('strong').firstChild.textContent.toUpperCase();
-    if(!$('#search-open').disabled){search(true);counts();}
-  }));
   $('#reduce-transparency').addEventListener('change',event=>app.classList.toggle('reduced-transparency',event.target.checked));
   counts();
 

@@ -15,11 +15,11 @@ const contrast=(a,b)=>(Math.max(lum(a),lum(b))+.05)/(Math.min(lum(a),lum(b))+.05
   const open=()=>page.goto(pathToFileURL(path.join(design,'index.html')).href);
   const box=id=>page.locator(id).boundingBox();
   const same=(a,b)=>{for(const key of ['x','y','width','height'])assert(Math.abs(a[key]-b[key])<.1,`Code shifted: ${JSON.stringify({a,b})}`);};
-  await open();for(const id of ['replace-toggle','find-previous','find-next','search-close','replace'])assert.equal(await page.locator('#'+id+' svg[aria-hidden=\"true\"]').count(),1);assert.equal(await page.locator('.search-field-icon svg').count(),1);assert.equal(await page.locator('[data-detail],[data-search-design],[data-design]:is(button),.breadcrumbs,#action-source').count(),0);
-  for(const width of [1440,1080,760,500])for(const theme of ['dark','light'])for(const glass of ['neutral','cool','warm']){
+  await open();assert.equal(await page.locator('.app-window').getAttribute('data-glass'),'cool');assert.equal(await page.locator('button[data-glass],.glass-studies').count(),0);for(const id of ['replace-toggle','find-previous','find-next','search-close','replace'])assert.equal(await page.locator('#'+id+' svg[aria-hidden=\"true\"]').count(),1);assert.equal(await page.locator('.search-field-icon svg').count(),1);assert.equal(await page.locator('[data-detail],[data-search-design],[data-design]:is(button),.breadcrumbs,#action-source').count(),0);
+  for(const width of [1440,1080,760,500])for(const theme of ['dark','light'])for(const glass of ['cool']){
    await page.setViewportSize({width,height:1200});await page.locator(`button[data-theme="${theme}"]`).click();await page.keyboard.press('Escape');
    const before=await box('#code-area'),scroll=await page.locator('#editor').evaluate(el=>el.scrollTop);
-   await page.locator(`button[data-glass="${glass}"]`).click();same(before,await box('#code-area'));assert.equal(await page.locator('#editor').evaluate(el=>el.scrollTop),scroll);
+   await page.keyboard.press('Control+f');same(before,await box('#code-area'));assert.equal(await page.locator('#editor').evaluate(el=>el.scrollTop),scroll);
    const contextBefore=await box('#toggle-api'),openSave=await box('#save');assert(contextBefore.x>=openSave.x+openSave.width,'Context toggle overlaps editor actions while open');await page.locator('#toggle-api').click();const contextClosed=await box('#toggle-api');same(contextBefore,contextClosed);
    const save=await box('#save'),search=await box('#search-open');assert(contextClosed.x>=save.x+save.width&&contextClosed.x>=search.x+search.width,'Context toggle moved left of editor actions');
    assert.equal(await page.locator('#toggle-api').getAttribute('aria-expanded'),'false');assert(await page.locator('#toggle-api').evaluate(el=>el===document.activeElement));await page.locator('#toggle-api').press('Enter');same(contextBefore,await box('#toggle-api'));
@@ -36,8 +36,8 @@ const contrast=(a,b)=>(Math.max(lum(a),lum(b))+.05)/(Math.min(lum(a),lum(b))+.05
    report.layouts.push({width,theme,glass,codeGap:code.y-tabs.y-tabs.height,searchInset:popup.y-code.y});
   }
   await page.setViewportSize({width:1440,height:1200});await open();
-  for(const glass of ['neutral','cool','warm']){
-   await page.locator(`button[data-glass="${glass}"]`).click();const g=await box('#code-area');await page.locator('#reduce-transparency').check();same(g,await box('#code-area'));
+  for(const glass of ['cool']){
+   await page.keyboard.press('Control+f');const g=await box('#code-area');await page.locator('#reduce-transparency').check();same(g,await box('#code-area'));
    assert.equal(await page.locator('#search-bar').evaluate(el=>getComputedStyle(el).backdropFilter),'none');assert.equal(rgba(await page.locator('#search-bar').evaluate(el=>getComputedStyle(el).backgroundColor))[3]??1,1);await page.locator('#reduce-transparency').uncheck();
   }
   await page.locator('#query').fill('length_m');await page.locator('#find-next').click();const first=await page.locator('#editor').evaluate(el=>el.selectionStart);
@@ -63,15 +63,15 @@ const contrast=(a,b)=>(Math.max(lum(a),lum(b))+.05)/(Math.min(lum(a),lum(b))+.05
   await page.locator('#scenario').selectOption('empty');assert.equal(await page.locator('.workspace').isVisible(),false);await page.keyboard.press('F5');assert(await page.locator('#empty-state').isVisible());
   report.interactions.push('compact top edge; no code shift on search or replacement','context toggle keeps identical position and remains rightmost when closed/open','transparent material; conservative control contrast over black/white','consistent 16px radius, 2px blur and SVG search icons','opaque fallback without layout change','forward/backward search, replace and Escape focus','file edits, safe highlighting, save, build and diagnostic jump','mouse/keyboard resizing, retained sizes, cancel and reset','scroll sync, narrow panels, forced colors and empty state');
   await page.setViewportSize({width:1280,height:1100});await open();const tiles=[];let row=0;
-  for(const [glass,label]of [['neutral','01 / Klarglas · Neutral'],['cool','02 / Klarglas · Kühl'],['warm','03 / Klarglas · Warm']]){
+  for(const [glass,label]of [['cool','Final / Klarglas · Kühl']]){
    if(exporting)tiles.push({input:Buffer.from(`<svg width="1440" height="36"><rect width="100%" height="100%" fill="#141518"/><text x="10" y="26" fill="#edeef2" font-family="Segoe UI,sans-serif" font-size="18">${label}</text><text x="1270" y="26" fill="#a6a9b1" font-family="Segoe UI,sans-serif" font-size="12">Dunkel / Hell</text></svg>`),left:0,top:row*280});
    let col=0;for(const theme of ['dark','light']){
-    await page.locator(`button[data-theme="${theme}"]`).click();await page.locator(`button[data-glass="${glass}"]`).click();await page.locator('#query').fill('length_m');await page.locator('#query').evaluate(el=>el.blur());
+    await page.locator(`button[data-theme="${theme}"]`).click();await page.keyboard.press('Control+f');await page.locator('#query').fill('length_m');await page.locator('#query').evaluate(el=>el.blur());
     await page.locator('.app-window').screenshot({path:path.join(exporting?design:output,`glass-${glass}-${theme}.png`)});
     if(exporting){const r=await box('.editor-pane'),crop=await page.screenshot({clip:{x:r.x,y:r.y,width:r.width,height:236}});tiles.push({input:await sharp(crop).resize({width:710,height:236,fit:'contain',background:'#141518'}).png().toBuffer(),left:col*730,top:row*280+40});}col++;
    }row++;
   }
-  if(exporting)await sharp({create:{width:1440,height:840,channels:4,background:'#141518'}}).composite(tiles).png().toFile(path.join(design,'glass-overview.png'));
+  if(exporting)await sharp({create:{width:1440,height:280,channels:4,background:'#141518'}}).composite(tiles).png().toFile(path.join(design,'glass-overview.png'));
   assert.deepEqual(errors,[]);fs.writeFileSync(path.join(output,'review.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({...report,layouts:report.layouts.length,contrasts:report.contrasts.length},null,2));
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

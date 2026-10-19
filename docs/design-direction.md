@@ -110,6 +110,23 @@ Die Oberfläche muss mindestens zwischen diesen Zuständen unterscheiden:
 Der aktuelle Ordner bzw. Workspace, ungespeicherte Änderungen und laufende
 Aktionen müssen in der oberen Leiste verständlich sichtbar sein.
 
+## Finale Bereichsreferenz Entwickeln
+
+Ergänzende Nutzerentscheidung vom 2026-10-19: Für **Entwickeln** gilt die
+[Werkbank mit Klarglas Kühl](visuals/develop-designs/DESIGN.md). Panelköpfe,
+kompakte Dateitabs, Workspace-Pfadlinien, verstellbare Panels und die schwebende
+Suchinsel sind entschieden. Der rechte Kontextschalter bleibt beim Ein-/Ausklappen
+an derselben äußersten rechten Position. Dokumentbezogene Suche und Speichern
+sitzen an den Dateitabs; Profil und Buildstatus unten. Der Code beginnt direkt
+unter der Dateileiste, ohne zusätzlichen Projekt-/Suchabschnitt.
+
+Diese Bereichsentscheidung konkretisiert die oben beschriebene Rückmeldung:
+Datei-/Cursorstatus steht an der Editorstatuszeile, Build-/Profilstatus unten.
+Globale Menüs und der leere Workspace-Start bleiben erhalten. Die Browserreferenz
+ist fertig, ihre native Übertragung steht aus. Der kopierfertige Auftrag liegt in
+[NEXT-CHAT.md](visuals/develop-designs/NEXT-CHAT.md), die Codezuordnung und native
+Abnahme in [IMPLEMENTATION.md](visuals/develop-designs/IMPLEMENTATION.md).
+
 ## Abnahmekriterien
 
 Die neue Designrichtung gilt als umgesetzt, wenn:

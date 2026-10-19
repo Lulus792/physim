@@ -1,145 +1,157 @@
-# Gewählte Werkbank und Suchinsel aus Glas
+# Designvertrag: Werkbank / Klarglas Kühl
 
-Stand: 19. Oktober 2026. Verantwortlich: UI/UX-Design. Die native App bleibt
-unverändert. Dieser Ordner enthält die aktuelle Browserreferenz der gewählten
-Werkbank und ausschließlich die noch offenen Farbabstimmungen. Gewählt ist
-Klarglas mit der 16-px-Rundung von Kristallkante.
+Stand: 19. Oktober 2026. Die Nutzerwahl ist abgeschlossen: **Werkbank mit
+Panelköpfen, kompakten Tabs, Workspace-Pfadlinien und Suchinsel in Klarglas Kühl**.
+Die native Anwendung ist noch nicht umgebaut. Für den nächsten Chat gelten
+[Auftrag](NEXT-CHAT.md) und [technische Übergabe](IMPLEMENTATION.md).
 
-## Festgelegter Aufbau
+## Aufbau
 
-- Linker Schalter im Panelkopf; geschlossen erscheint er an den Dateitabs.
-- Rechter Kontextschalter fest am äußersten rechten Rand der Kopfzeile. Er
-  verschiebt sich beim Öffnen/Schließen nicht und bleibt rechts von Suche und
-  Speichern. Bei schmalen Fenstern bleibt er oben, auch wenn der Kontext unten liegt.
-- Kompakte Dateitabs und drei gleich breite Arbeitsbereich-Tabs.
-- Workspace mit Pfadlinien; `assets`, `runs`, `build` behalten Reihenfolge und Ebene.
-- Profil und Buildstatus unten; Suche und Speichern direkt an den Dateitabs.
-- Schwebende Suchinsel. Die Suchkarte und die verworfenen Layoutvarianten entfallen.
+- Linker Workspace-Schalter im Panelkopf; geschlossen erscheint er links der Dateitabs.
+- Rechter Kontextschalter fest am äußersten rechten Rand der oberen Panelzeile.
+  Er bleibt beim Öffnen/Schließen an exakt derselben Stelle, immer rechts von
+  Suche und Speichern. Bei schmalen Fenstern bleibt er oben erreichbar.
+- Kompakte Dateitabs mit markierter aktiver Datei und Dirty-Anzeige. Drei gleich
+  breite Hauptbereich-Tabs für Entwickeln, Simulieren, Auswerten in der Referenz.
+- Workspace mit Pfadlinien. `assets`, `runs`, `build` behalten Reihenfolge und
+  Ebene der Referenz; reale Namen/Inhalte kommen aus dem geöffneten Workspace.
+- Profil und tatsächlicher Buildstatus unten, Suche und Speichern an den Dateitabs.
+- Kein großes Projektbanner, keine zusätzliche Toolbar-/Pfadzeile vor dem Code.
+  Aktiver Dateiname und Cursorinformationen stehen in der Editorstatuszeile.
 
-Die separate Pfadzeile ist entfernt. Der aktive Dateiname steht in der
-Editorstatuszeile. Die Codefläche beginnt direkt unter der Dateileiste, ohne
-zusätzlichen Zwischenraum. Code und Zeilennummern haben 6 px oberen Innenabstand;
-die Suchinsel sitzt mit 4 px Abstand an der Oberkante der Codefläche statt zuvor
-10 px unterhalb der zusätzlichen 28-px-Pfadzeile. Das bringt Suchinsel und
-Dateiinhalt jeweils 34 px näher an die Dateileiste. Dies sind Browsermaße der
-Gestaltung, keine native Plattformabnahme.
+Codefläche und Zeilennummern beginnen direkt unter der Dateileiste, ohne weiteren
+Zwischenraum, mit 6 px oberem Innenabstand. Die Suchinsel sitzt innerhalb der
+Codefläche bei `top:4px; right:8px`, Breite 540 px, maximal `100% - 16px`.
+Sie darf Code überlagern und besitzt ihren eigenen begrenzten Eingabebereich.
+Die Zahlen sind logische Maße der Browserreferenz bei 100 %; native Schrift-/DPI-
+Skalierung und Inhaltsminima müssen berücksichtigt werden.
 
-Öffnen, Schließen und Aufklappen der Ersetzung verändern Position und Größe des
-Codes nicht. Die Suche ist nichtmodal, verwendet das aktive Dokument, sucht
-Groß-/Kleinschreibung beachtend und ersetzt jeweils einen Treffer. Enter/↓ und
-Umschalt+Enter/↑ navigieren vor- bzw. rückwärts mit Umbruch. Escape schließt die
-Suche und stellt den Fokus am Suchicon wieder her. Die Galerie startet bewusst
-mit geöffneter Suchinsel, damit das Material sofort vergleichbar ist.
+## Suche und Icons
 
-## Drei dezente Farbabstimmungen
+Öffnen, Schließen und Aufklappen der Ersetzung ändern weder Position noch Größe
+noch den bisherigen Scrollstand des Editors. Es wird keine Suchzeile im normalen
+Layout reserviert. Erst Treffernavigation scrollt zur Auswahl. Die Suche ist
+nichtmodal und verwendet die aktive Datei, beachtet Groß-/Kleinschreibung und
+ersetzt jeweils einen Treffer. Keine zusätzliche Regex-/Glob-Oberfläche beauftragt.
 
-| Entwurf | Glasfläche | Iconflächen | Eingabefeld |
-| --- | --- | --- | --- |
-| Neutral | Neutrales Grau / Weiß | Ruhiges Graphit / kühles Weiß | Graphit / Weiß |
-| Kühl | Leicht bläuliche Tönung | Blaugrau / sehr helles Blau | Zurückhaltendes Nachtblau / Eisweiß |
-| Warm | Dezente warme Tönung | Warmes Graphit / Perlmutt | Dunkles Taupe / warmes Weiß |
+Ctrl/Command+F öffnet/fokussiert die Suche. Enter oder der Abwärtsbutton sucht
+vorwärts; Umschalt+Enter oder der Aufwärtsbutton rückwärts, jeweils mit Umbruch.
+Die Chevron-Aktion links blendet die Ersetzungszeile ein/aus. Escape bzw. das
+Schließenkreuz schließt die Suche und gibt den Fokus an das Suchicon zurück.
+Trefferzahl und Leerzustand geben eine verständliche Rückmeldung.
 
-Alle drei verwenden 24 % Deckung der Grundfläche, 2 px Blur und 16 px Außenradius.
-Eingabefelder haben 68 % Deckung und 9 px Innenradius; die Iconflächen bleiben
-für Kontrast stärker gedeckt. Form, Position und Bedienung sind identisch.
-Neutral ist als Vergleichsstart vorbelegt, die endgültige Farbwahl bleibt offen.
+Die Icons aus [search-resize.js](search-resize.js) sind eigene SVG-Pfade mit
+16 × 16 Viewbox, 1,5 px Strichstärke und runden Linienabschlüssen/-verbindungen:
+Lupe in der Eingabe, Chevron für Aufklappen, Vor-/Zurück-Chevrons, Schließenkreuz,
+Ersetzen-Symbol neben der Textaktion. Treffernavigation teilt eine gemeinsame
+Fläche; Aufklappen und Schließen besitzen im Ruhezustand keinen eigenen Rahmen.
+Tooltips, zugängliche Namen und sichtbare Fokusindikatoren gehören zum Design.
+Dekorative Iconpfade sind keine eigenständigen Accessibility-Ziele.
 
-Die neuen Icons sind eigene SVG-Pfade mit einheitlicher 1,5-px-Strichstärke und
-runden Abschlüssen: Lupe im Eingabefeld, geometrische Aufklapppfeile, Chevronpaar
-für vorherigen/nächsten Treffer, ein ruhiges Schließenkreuz und ein Ersetzen-Symbol
-neben der Textaktion. Die Navigation nutzt eine gemeinsame Fläche; Aufklappen
-und Schließen haben im Ruhezustand keinen eigenen Rahmen. Tooltips und zugängliche
-Namen bleiben vorhanden, dekorative SVGs sind im Accessibility-Baum ausgeblendet.
+Die Vorschau startet bewusst mit offener Suche, um das Material zu zeigen.
+Das ist kein Auftrag, die native App bei jedem Start mit offener Suche zu laden.
 
-Die Sättigung wird leicht angehoben. Nur die vorübergehende Suchinsel erhält
-diesen Effekt; Code, Workspace und Kontext bleiben feste Leseflächen. Eingaben,
-Pfeilaktionen und Trefferzahl haben stärkere eigene Flächen für lesbare Inhalte.
-Die zusammengesetzte Farbe hängt vom Code darunter ab.
+## Material und Farben
 
-Dies sind eigene CSS-Studien mit `backdrop-filter`, keine native Apple-Material-
-Implementierung. Apples Materialrichtlinie ordnet Liquid Glass der funktionalen
-Bedienebene zu und empfiehlt bei textreichen Kontrollen einen stärker gefilterten
-Hintergrund. Die Nutzerwahl priorisiert hier ausdrücklich die transparentere
-Klarglasdarstellung; stärker gedeckte Bedienflächen sichern deren Lesbarkeit.
-Quelle: [Apple HIG Materials](https://developer.apple.com/design/human-interface-guidelines/materials),
-am 19. Oktober über das offizielle
-[DocC-Dokument](https://developer.apple.com/tutorials/data/design/human-interface-guidelines/materials.json)
-eingesehen. Es wird keine exakte optische Gleichheit mit Apple behauptet.
+Nur die vorübergehende Suchinsel erhält den Glaseffekt. Editor, Workspace und
+Kontext bleiben feste Leseflächen. Gewählt ist Klarglas mit der 16-px-Rundung
+der früheren Kristallkante, **Farbgebung Kühl**. Neutral und Warm sind verworfen.
 
-Ohne `backdrop-filter`, bei erhöhter Kontrastanforderung, erzwungenen
-Kontrastfarben oder reduzierter Transparenz wird eine deckende Fläche verwendet.
-„Transparenz reduzieren“ erlaubt den direkten Vergleich. Größe, Suchablauf und
-Fokusführung bleiben dabei gleich. Es gibt keine Animation.
+Verbindliche Werte aus [glass.css](glass.css):
 
-## Größenverstellung
+| Eigenschaft | Dunkel | Hell |
+| --- | --- | --- |
+| Haupttext/Icons | `#edf4fc` | `#182a39` |
+| Sekundärtext | `#cfdfef` | `#344b60` |
+| Glasgrundfläche | `rgba(36,53,73,.24)` | `rgba(232,243,255,.24)` |
+| Eingabe | `rgba(21,31,46,.68)` | `rgba(244,250,255,.68)` |
+| Icon-/Buttonfläche | `rgba(31,45,61,.90)` | `rgba(239,247,255,.86)` |
+| Treffer-/Hinweisfläche | `rgba(18,28,41,.90)` | `rgba(245,250,255,.92)` |
+| Glaskante | `rgba(196,220,247,.40)` | `rgba(141,171,204,.60)` |
 
-Workspace und Codekontext werden horizontal an den Trennlinien verändert.
-Das Protokoll erhält seine Höhe aus dem Editorraum; die Codefläche passt sich an.
-Unter 951 px wird der Kontext nach unten gestapelt und in der Höhe verändert;
-unter 621 px gilt dies auch für den Workspace. Alle Inhaltsbereiche scrollen intern.
+Gemeinsam: Hintergrundblur 2 px, Sättigung 1,15, Außenradius 16 px,
+Innenradius 9 px, Insel-Innenabstand 7 px, Reihenabstand 5 px, Eingabehöhe 30 px.
+Die Navigation verwendet zwei 27 px breite Buttons; Schließen/Aufklappen sind
+28 px breit. Kleine Fenster dürfen diese auf 25 px reduzieren.
 
-Standardbreiten 218/255 px, Mindestbreiten 140/180 px, Höchstbreiten 480 px;
-mindestens 300 px bleiben für die mittlere Editorspalte reserviert. Der
-Desktop-Arbeitsraum ist 760 px hoch, der Protokollinhalt zunächst 86 px.
-Trennlinien haben 9 px Trefferfläche, Separatorrolle, Namen und Größenwerte.
-Pfeiltasten ändern 10 px, mit Umschalt 40 px; Home/End setzen Grenzen, Enter oder
-Doppelklick den Standard. Escape verwirft eine laufende Ziehbewegung.
-Größen bleiben beim Ein-/Ausklappen für die Sitzung erhalten; Neuladen setzt sie zurück.
+Ein schwacher weißer Verlauf erzeugt die Lichtkante: dunkel 160° mit 4 % Weiß
+bis transparent bei 50 %, hell 135° mit 25 % Weiß bis transparent bei 65 %.
+Rahmen 1 px, Schatten `0 7px 22px #0003`, innerer Lichtsaum
+`inset 0 1px 0 #ffffff18`. Die endgültige zusammengesetzte Farbe hängt vom
+Inhalt darunter ab; die stärkeren Bedienflächen sichern Lesbarkeit.
 
-## Demo und spätere native Umsetzung
+Die Vorschau ist eine eigene CSS-Annäherung mit `backdrop-filter`, kein nativer
+Apple-Materialbaustein. Die native Umsetzung braucht einen echten Filter des
+darunterliegenden Codeinhalts. Die gewählte transparente Normaldarstellung darf
+nicht still durch eine deckende Fläche ersetzt werden.
 
-Der Code ist ein gekürzter Pendelausschnitt, keine vollständige Experimentdatei.
-Die Projektdatei ist illustrativ. Speichern markiert nur den Demostand; der
-Demo-Build simuliert Erfolg bzw. den bekannten Bezeichnerfehler. Dateisystem,
-Compiler und Projektmanager sind nicht angebunden. Globale Menübeschriftungen
-außer Build und die Arbeitsbereich-Tabs sind statische Shellreferenzen.
+Ohne Filterunterstützung, bei reduziertem Transparenzbedarf, erhöhtem Kontrast
+oder erzwungenen Kontrastfarben gilt eine deckende Fläche mit den semantischen
+App-Farben. Größe, Position, Fokus und Bedienung bleiben gleich. Die manuelle
+Prüfoption „Transparenz reduzieren“ in der HTML-Seite dient dem direkten Vergleich.
+Es gibt keine Animation.
 
-Für die native Umsetzung bestehende Editor-, Docking-, Build-, Such- und
-Sicherungsfunktionen verwenden; CSS-Geometrie und Glaseffekt nicht als bereits
-plattformgeprüft übernehmen. Native Accessibility, Systemtextskalierung,
-Monitorwechsel sowie Linux-/macOS-Builds sind separat offen.
+## Panelgrößen und Bedienung
 
-## Bereinigung
+Workspace und Kontext werden horizontal an ihren Trennlinien verändert. Das
+Protokoll erhält seine Höhe aus dem Editorraum; der Code erhält den Rest.
+Alle Inhaltsbereiche scrollen intern. „Tabs resizen“ meint hier die Panelbereiche,
+nicht eine frei veränderliche Breite einzelner Dateireiter.
 
-Auf ausdrücklichen Nutzerwunsch wurden 33 ersetzte Artefakte entfernt:
-verworfene Gesamt-/Detailstudien, Suchkarte, alte Referenzbilder, alte
-Vergleichsoberflächen, nicht mehr benötigte Stile/Skripte und zwei alte Prüfer.
-Die entfernten Dateien belegten 3.709.179 Bytes (rund 3,54 MiB). Aktuelle
-Such-/Resize-Logik bleibt erhalten; ein konsolidierter Prüfer deckt die Oberfläche
-ab. Frühere Dateien bleiben über die Git-Historie wiederherstellbar.
-Andere Projektstudien, fremde lokale Arbeiten und Plattformbelege wurden nicht angefasst.
+Browserreferenz: Breiten 218/255 px, Minima 140/180 px, Maxima jeweils 480 px,
+mindestens 300 px für die Editorspalte reserviert. Desktop-Arbeitsraum 760 px
+hoch; Protokollinhalt zunächst 86 px, mindestens 60 und höchstens 300 px.
+Unter 951 px wird der Kontext nach unten gestapelt, unter 621 px auch der
+Workspace. Gestapelte Nebenbereiche sind in der Höhe von 140–540 px verstellbar.
+Diese Demo-Defaults ersetzen keine bestehenden nativen Nutzereinstellungen.
 
-In der Farbrunde wurden die sechs überholten Materialbilder (621.475 Bytes)
-durch sechs aktuelle Farbvarianten ersetzt. Alte Materialregeln und der nicht
-mehr benötigte rechte Wiederöffnungsplatz links von Suche/Speichern entfallen.
+Trennlinien haben 9 px Trefferfläche, Separatorrolle, Namen, Orientierung und
+Größenwerte. Pfeiltasten ändern 10 px, Umschalt 40 px; Home/End setzen Grenzen,
+Enter oder Doppelklick den Standard. Escape bricht die laufende Ziehbewegung ab
+und stellt deren Ausgangsgröße wieder her. Ein-/Ausklappen erhält die Größen.
+Die Demo speichert sie nur während der Sitzung, nativ ist vorhandene persistente
+Dockingverwaltung zu verwenden. Die separate Reset-Prüfaktion der HTML-Seite
+gehört nicht als zusätzliche Demo-Toolbar in die native App.
 
-## Tatsächlich ausgeführte Prüfung
+## Grenzen der Referenz
 
-Windows/Edge 155.0.4283.62, 19. Oktober 2026:
-`node tools/check_develop_designs.cjs --export`, Exitcode 0.
+Gekürzter Pendelcode, Projektdatei, Symbolgliederung, Modellnotiz und Buildumgebung
+sind illustrativ. Speichern markiert nur Demostatus; Build simuliert Erfolg bzw.
+einen bekannten Bezeichnerfehler. Dateisystem, Compiler und Projektverwaltung
+sind nicht angebunden. Globale Menülabels außer Build und die Hauptbereich-Tabs
+sind statische Shellreferenzen. Die nächste Umsetzung erhält die echten Funktionen.
 
-- 24 Layoutfälle: 1440/1080/760/500 px × drei Farbabstimmungen × hell/dunkel.
-  Kein Seitenüberlauf, Editor mindestens 200 px breit. Kein zusätzlicher Abstand
-  unter den Dateitabs; Suchinsel 4 px unter dem Codebeginn.
-- Öffnen und Erweitern der Suche erhalten Codegeometrie und Scrollposition.
-- 18 Kontrolltext-Kombinationen auf Eingaben, Pfeilaktionen und Trefferanzeige: konservativ
-  über vollständig schwarzem und weißem Untergrund jeweils mindestens 4,5:1.
-  Das ist eine begrenzte Kontrastprüfung der Bedienflächen, keine vollständige
-  Kontrastabnahme aller möglichen Codehintergründe.
-- Transparente Hintergrundfarbe und aktiver Blur für alle Materialien;
-  deckender Fallback ohne Geometrieänderung für jede Variante geprüft.
-- 16 px Rundung, 2 px Blur und SVG-Icons geprüft. Für alle 24 Layoutfälle bleibt
-  die Position des rechten Kontextschalters beim Schließen/Öffnen exakt gleich;
-  er liegt auch geschlossen rechts von Suche und Speichern und behält den Fokus.
-- Vor-/Rückwärtssuche, Ersetzen, Escape/Fokus, erhaltene Dateiänderungen, sichere
-  Syntaxdarstellung, Speichern, Demo-Build und Diagnosesprung bedient.
-- Maus-/Tastaturgrößenänderung, Wiederöffnen, Abbruch, Reset, Scrollgleichlauf,
-  gestapelte Bereiche bei 760/500 px, erzwungene Farben und Leerzustand geprüft.
-- Keine JavaScriptfehler. Alle sechs Referenzzustände und die Übersicht visuell
-  gesichtet. Ein Screenshot belegt keine native Material- oder Screenreaderqualität.
+## Bereinigung und tatsächlich ausgeführte Prüfung
+
+Verworfene Layout-/Materialstudien und ihre Prüfer wurden in den vorangegangenen
+Designrunden entfernt. Nach der Farbwahl sind zusätzlich die vier Neutral-/Warm-
+Bilder mit zusammen 414.708 Bytes (rund 405 KiB), deren Auswahl und Materialregeln
+entfernt. Die Übersicht enthält jetzt ausschließlich Kühl in Hell/Dunkel.
+Git-Historie und andere Projektstudien bleiben erhalten.
+
+Am 19. Oktober 2026 auf Windows/Edge **155.0.4283.62** ausgeführt:
+`node tools/check_develop_designs.cjs --export`, Exitcode **0**.
+
+- 8 Layoutfälle: 1440/1080/760/500 px × Hell/Dunkel. Kein Seitenüberlauf;
+  Editor mindestens 200 px breit; 0 px Zusatzabstand unter den Dateitabs,
+  Suchinsel 4 px unter dem Codebeginn.
+- Kühl als einzige und voreingestellte Variante geprüft. Öffnen und Erweitern
+  der Suche erhalten Codegeometrie und Scrollstand. Der rechte Kontextschalter
+  bleibt in allen 8 Fällen beim Schließen/Öffnen an identischer Position, rechts
+  von Suche/Speichern, und behält den Fokus.
+- 6 Kontrolltext-Kombinationen auf Eingabe, Pfeilfläche und Trefferzahl:
+  konservativ über schwarzem/weißem Untergrund jeweils mindestens 4,5:1.
+  Dies ist keine vollständige Kontrastabnahme beliebiger Inhalte.
+- Transparenz, 2 px Blur, 16 px Radius, SVGs und deckender Fallback ohne
+  Geometrieänderung geprüft. Vor-/Rückwärtssuche, Ersetzen, Escape/Fokus,
+  Dateiänderungen, sichere Syntaxdarstellung, Save, Demo-Build und Diagnosesprung bedient.
+- Maus-/Tastaturresizen, Größen nach Wiederöffnen, Abbruch, Reset, Scrollgleichlauf,
+  gestapelte Panels, erzwungene Farben, Reduced Motion und Leerzustand geprüft.
+- Keine JavaScriptfehler. Beide finalen Bilder und die Detailübersicht visuell geprüft.
 
 Prüfer: [check_develop_designs.cjs](../../../tools/check_develop_designs.cjs).
-[Glasvergleich](glass-overview.png),
-[Neutral dunkel](glass-neutral-dark.png), [Neutral hell](glass-neutral-light.png),
-[Kühl dunkel](glass-cool-dark.png), [Kühl hell](glass-cool-light.png),
-[Warm dunkel](glass-warm-dark.png), [Warm hell](glass-warm-light.png).
+Referenzen: [Dunkel](glass-cool-dark.png), [Hell](glass-cool-light.png),
+[Suchdetail](glass-overview.png). Generierte Prüfausgaben werden nach Abnahme
+aus dem ignorierten Buildbereich entfernt; die drei Referenzen bleiben versioniert.
+Native Materialqualität, Accessibility, DPI und Linux/macOS sind damit noch
+nicht geprüft. Die separate native Abnahmeliste steht in IMPLEMENTATION.md.

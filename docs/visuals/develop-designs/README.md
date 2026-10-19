@@ -1,46 +1,48 @@
-# Werkbank mit Suchinsel
+# Finale Werkbank: Klarglas Kühl
 
-Festgelegt: **Panelköpfe**, **kompakte Tabs**, **Workspace-Pfadlinien** und die
-**schwebende Suchinsel**. Verworfenes wurde aus diesem Ordner entfernt.
-**Klarglas mit der 16-px-Rundung von Kristallkante ist gewählt.** Zum Vergleich
-stehen nur noch drei dezente Farbabstimmungen von Glas, Iconflächen und Eingabefeld.
+**Kühl ist gewählt.** Panelköpfe, kompakte Tabs, Workspace-Pfadlinien,
+schwebende Suchinsel und verstellbare Panels sind festgelegt. Veraltete
+Farbvarianten und ihre Auswahl wurden entfernt.
+
+Für die Umsetzung in einem anderen Chat:
+
+1. [NEXT-CHAT.md](NEXT-CHAT.md): kopierfertiger Umsetzungsauftrag.
+2. [IMPLEMENTATION.md](IMPLEMENTATION.md): Zuordnung zum nativen Code,
+   Unterschiede zur Demo und Abnahmeliste.
+3. [DESIGN.md](DESIGN.md): verbindliche Gestaltung, Materialwerte und Bedienung.
+
+Visuelle Referenzen:
 
 - [Interaktive Vorschau](index.html), lokal ohne Server oder externe Ressourcen.
-- [Glasvergleich](glass-overview.png): Detailansichten, dunkel links / hell rechts.
-- Neutral: [Dunkel](glass-neutral-dark.png), [Hell](glass-neutral-light.png).
-- Kühl: [Dunkel](glass-cool-dark.png), [Hell](glass-cool-light.png).
-- Warm: [Dunkel](glass-warm-dark.png), [Hell](glass-warm-light.png).
-- [Designvertrag, Prüfung und Bereinigung](DESIGN.md).
+- [Kühl dunkel](glass-cool-dark.png) und [Kühl hell](glass-cool-light.png).
+- [Suchdetail dunkel/hell](glass-overview.png).
 
-Die Suchinsel sitzt 4 px unter der Oberkante der Codefläche; die separate
-Pfadzeile entfällt. Sie verschiebt den Code auch mit geöffnetem Ersetzen nicht.
-Für den Materialvergleich ist die Suche beim Start offen. Escape schließt sie;
-Ctrl/Command+F oder das Suchicon öffnet sie wieder. Die Materialknöpfe öffnen
-sie ebenfalls. „Transparenz reduzieren“ zeigt eine deckende Fläche.
+Die Suchinsel sitzt 4 px unter der Oberkante der Codefläche. Sie verschiebt
+den Text auch mit geöffneter Ersetzung nicht. Die Vorschau startet zur Ansicht
+des Materials mit offener Suche; Escape schließt sie, Ctrl/Command+F oder das
+Suchicon öffnet sie. „Transparenz reduzieren“ zeigt den deckenden Fallback.
 
-Neue SVG-Suchicons ersetzen die Schriftzeichen. Die Treffernavigation teilt
-eine gemeinsame, ruhige Iconfläche. Der rechte Kontextschalter bleibt beim
-Schließen und Öffnen ganz rechts an derselben Position, stets rechts von Suche
-und Speichern. Die Farbauswahl verändert diese Anordnung nicht.
+Der rechte Kontextschalter bleibt beim Schließen/Öffnen ganz rechts an derselben
+Position, rechts von Suche und Speichern. Workspace, Kontext und Protokoll sind
+an ihren Trennlinien per Maus und Tastatur größenverstellbar. Doppelklick oder
+Enter setzt eine Größe zurück. Bei schmalen Fenstern verändern gestapelte
+Nebenbereiche ihre Höhe.
 
-Workspace, Kontext und Protokoll bleiben an ihren Trennlinien größenverstellbar,
-auch per Tab und Pfeiltasten. Doppelklick oder Enter setzt eine Größe zurück.
-Bei schmalen Fenstern verändern die gestapelten Nebenbereiche ihre Höhe.
+Die native Anwendung ist noch nicht umgebaut. Speichern/Build und Dateiinhalte
+in der Vorschau sind Demoabläufe; Änderungen gehen beim Neuladen verloren.
 
-Die native Anwendung wurde nicht verändert. Dateiinhalte, Speichern und Build
-sind lokale Demoabläufe; Änderungen gehen beim Neuladen verloren.
+## Referenzprüfung
 
-## Prüfung
-
-Playwright und Sharp über die gebündelten Laufzeitpfade verwenden; `NODE_PATH`
-auf deren Modulordner setzen. Ein konsolidierter Prüfer ersetzt die alten Studienprüfer:
+Playwright und Sharp über die verfügbaren Node-Laufzeitpfade verwenden;
+`NODE_PATH` gegebenenfalls auf deren Modulordner setzen.
 
 ```text
 node tools/check_develop_designs.cjs
 node tools/check_develop_designs.cjs --export
 ```
 
-Mit `--export` werden die sieben aktuellen Glasreferenzen hier erneuert.
-Andere Prüfausgaben liegen unter `build/develop-design-review/` und werden nach
-Abnahme entfernt. Windows verwendet Edge; `PHYSIM_BROWSER` kann einen anderen
-Chromium-Browser angeben. Linux-/macOS-Ausführung wird damit nicht behauptet.
+`--export` erneuert die drei finalen Referenzbilder. Weitere Ausgaben landen
+ignoriert unter `build/develop-design-review/` und werden nach Abnahme entfernt.
+Windows verwendet Edge; `PHYSIM_BROWSER` kann einen anderen Chromium-Browser
+angeben. Die tatsächlich ausgeführte Browserprüfung steht in DESIGN.md;
+native und andere Plattformprüfungen sind separat erforderlich.
