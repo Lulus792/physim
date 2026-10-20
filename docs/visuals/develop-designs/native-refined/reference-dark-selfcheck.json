@@ -1,0 +1,151 @@
+{
+  "reference": "D:\\Physim\\docs\\visuals\\develop-designs\\glass-cool-dark.png",
+  "native": "D:\\Physim\\docs\\visuals\\develop-designs\\glass-cool-dark.png",
+  "theme": "dark",
+  "sha256": [
+    "4f65c22ea182fc154e9c202d1c1d4d04af803dedaa41cd60eeea84cbbe4d5e56",
+    "4f65c22ea182fc154e9c202d1c1d4d04af803dedaa41cd60eeea84cbbe4d5e56"
+  ],
+  "scope": "Default 1204x866 chrome: menu text ink, surfaces, selection and panel dividers",
+  "checks": [
+    {
+      "name": "actual client size 1204x866",
+      "passed": true
+    },
+    {
+      "name": "menu ink has reference scale; no miniature labels",
+      "passed": true
+    },
+    {
+      "name": "workspace surface",
+      "passed": true
+    },
+    {
+      "name": "code surface",
+      "passed": true
+    },
+    {
+      "name": "active source selection",
+      "passed": true
+    },
+    {
+      "name": "workspace divider",
+      "passed": true
+    },
+    {
+      "name": "context divider",
+      "passed": true
+    },
+    {
+      "name": "protocol top",
+      "passed": true
+    },
+    {
+      "name": "protocol header rule",
+      "passed": true
+    },
+    {
+      "name": "editor status rule",
+      "passed": true
+    }
+  ],
+  "metrics": {
+    "Datei_ink_width_height": [
+      [
+        25,
+        8
+      ],
+      [
+        25,
+        8
+      ]
+    ],
+    "workspace surface": [
+      [
+        30,
+        31,
+        35
+      ],
+      [
+        30,
+        31,
+        35
+      ]
+    ],
+    "code surface": [
+      [
+        25,
+        26,
+        30
+      ],
+      [
+        25,
+        26,
+        30
+      ]
+    ],
+    "active source selection": [
+      [
+        43,
+        61,
+        89
+      ],
+      [
+        43,
+        61,
+        89
+      ]
+    ],
+    "workspace divider": [
+      [
+        218,
+        1.0
+      ],
+      [
+        218,
+        1.0
+      ]
+    ],
+    "context divider": [
+      [
+        948,
+        1.0
+      ],
+      [
+        948,
+        1.0
+      ]
+    ],
+    "protocol top": [
+      [
+        680,
+        1.0
+      ],
+      [
+        680,
+        1.0
+      ]
+    ],
+    "protocol header rule": [
+      [
+        721,
+        1.0
+      ],
+      [
+        721,
+        1.0
+      ]
+    ],
+    "editor status rule": [
+      [
+        808,
+        1.0
+      ],
+      [
+        808,
+        1.0
+      ]
+    ]
+  },
+  "passed": true
+}

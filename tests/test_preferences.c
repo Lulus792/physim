@@ -83,6 +83,11 @@ int main(int argc, char **argv) {
         CHECK(!memcmp(&p,&out,sizeof p));
     }
     p.ui_size=16;
+    for(unsigned size=12;size<=22;size+=2) {
+        p.editor_size=size;
+        CHECK(ps_preferences_write(path,&p)==PS_OK && ps_preferences_read(path,&out)==PS_OK);
+        CHECK(!memcmp(&p,&out,sizeof p));
+    }
     CHECK(ps_preferences_write(path,&p)==PS_OK);
     ps_preferences bad_size=p;bad_size.ui_size=17;
     CHECK(ps_preferences_write(path,&bad_size)==PS_INVALID);

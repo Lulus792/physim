@@ -5,12 +5,12 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
-const ps_preferences PS_PREFERENCES_DEFAULT = {1440, 940, 0, 248, 178, 16, 30, 31, 0, 0,
+const ps_preferences PS_PREFERENCES_DEFAULT = {1440, 940, 0, 248, 178, 12, 30, 31, 0, 0,
                                                PS_THEME_DARK, 280, PS_DOCK_DEFAULT_INITIALIZER, 16};
 bool ps_preferences_valid(const ps_preferences *p) {
     return p && p->width >= 1080 && p->width <= 8192 && p->height >= 740 && p->height <= 8192 &&
            p->maximized <= 1 && p->sidebar_width >= 208 && p->sidebar_width <= 360 &&
-           p->log_height >= 150 && p->log_height <= 340 && p->editor_size >= 16 &&
+           p->log_height >= 150 && p->log_height <= 340 && p->editor_size >= 12 &&
            p->editor_size <= 22 && p->editor_size % 2 == 0 &&
            (p->autosave_seconds == 10 || p->autosave_seconds == 30 || p->autosave_seconds == 60 ||
             p->autosave_seconds == 120) &&

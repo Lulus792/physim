@@ -1490,7 +1490,10 @@ def themes(flow, directory):
             bits = struct.unpack_from("<H", data, 28)[0]
             require(bits in (24, 32) and width > 0 and height != 0, "Unsupported capture layout")
             stride = ((width * bits + 31) // 32) * 4
-            pixel = bytes(reversed(expected))
+            # The selected workbench has its own fixed reading-surface token;
+            # settings, handbook and plots retain the general app palette.
+            surface=(246,247,249) if mode=="light" and prefix=="theme-" else expected
+            pixel = bytes(reversed(surface))
             count = sum(data[at:at + 3] == pixel
                         for row in range(abs(height))
                         for at in range(offset + row * stride, offset + row * stride + width * (bits // 8), bits // 8))

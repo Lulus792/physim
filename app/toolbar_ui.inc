@@ -281,17 +281,23 @@ static void toolbar_popup(app *a, int previous) {
 }
 static void toolbar_view(app *a) {
     struct nk_context *ui = a->ui;
-    nk_fill_rect(nk_window_get_canvas(ui), nk_rect(0, 0, nk_window_get_bounds(ui).w, 32), 0,
+    bool compact=workbench_visible(a);
+    nk_fill_rect(nk_window_get_canvas(ui), nk_rect(0, 0, nk_window_get_bounds(ui).w, compact?72:32), 0,
                  UI_COLOR(header));
     nk_style_push_vec2(ui, &ui->style.button.padding, nk_vec2(7, 2));
     nk_style_push_style_item(ui, &ui->style.button.normal, nk_style_item_color(UI_COLOR(header)));
     nk_menubar_begin(ui);
     float available = nk_window_get_content_region(ui).w;
-    nk_layout_row_begin(ui, NK_STATIC, 32, 12);
-    nk_layout_row_push(ui, 72);
-    nk_label(ui, "Physim", NK_TEXT_CENTERED);
+    nk_layout_row_begin(ui, NK_STATIC, compact?36:32, 12);
+    nk_layout_row_push(ui, compact?42:72);
+    if(compact) {
+        struct nk_rect mark;nk_widget(&mark,ui);struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+        const struct nk_user_font *font=&a->workbench_fonts[4];
+        nk_draw_text(canvas,nk_rect(mark.x+12,mark.y+(mark.h-font->height)/2,22,font->height),"p",1,font,nk_rgba(0,0,0,0),UI_COLOR(text));
+        nk_fill_circle(canvas,nk_rect(mark.x+27,mark.y+16,3,3),UI_COLOR(accent));
+    } else nk_label(ui, "Physim", NK_TEXT_CENTERED);
     const char *menus[] = {"Datei", "Ansicht", "Hilfe", "Einstellungen", "Bearbeiten", "Build"};
-    float factor=a->preferences.ui_size/16.f;
+    float factor=a->preferences.ui_size/16.f*(compact?.75f:1.f);
     const float menu_width[] = {58*factor,72*factor,54*factor,116*factor,90*factor,54*factor};
     int previous = a->toolbar_popup_menu;
     /* Header actions remain responsive while the popup makes its parent read-only. */
@@ -352,7 +358,7 @@ static void toolbar_view(app *a) {
     }
     float menu_extent=(58+72+54+116+90+54)*factor;
     float status_width=workbench_visible(a)?0:fminf(175,fmaxf(96,available-72-menu_extent-138-36));
-    nk_layout_row_push(ui, fmaxf(20, available - 72 - menu_extent - 138 - status_width));
+    nk_layout_row_push(ui, fmaxf(20, available - (compact?42:72) - menu_extent - 138 - status_width));
     struct nk_rect path_bounds = nk_widget_bounds(ui);
     char caption[256];snprintf(caption,sizeof caption,"%s — Physim",a->loaded?project_name(a):a->workspace_open?workspace_name(a->workspace):"Workspace");
     nk_label_colored(ui, workbench_visible(a)?caption:a->workspace_open ? a->workspace : "Kein Ordner geöffnet", workbench_visible(a)?NK_TEXT_RIGHT:NK_TEXT_LEFT, muted());
@@ -380,7 +386,8 @@ static void toolbar_view(app *a) {
     a->toolbar_popup_menu = a->toolbar_menu;
     nk_menubar_end(ui);
     nk_style_pop_style_item(ui);
-    nk_layout_row_dynamic(ui, 30, 3);
+    if(compact)nk_style_push_font(ui,&a->workbench_fonts[2]);
+    nk_layout_row_dynamic(ui, compact?36:30, 3);
     const char *tabs[] = {"Entwickeln", "Simulieren", "Auswerten"};
     for (int i = 0; i < 3; i++) {
         bool selected = !a->project_manager && (a->tab == i || (a->tab == 8 && i == 0));
@@ -392,10 +399,10 @@ static void toolbar_view(app *a) {
             nk_input_is_mouse_pressed(&ui->input, NK_BUTTON_LEFT))
             select_workspace_tab(a, i);
         struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
-        struct nk_rect surface = nk_rect(bounds.x + 5, bounds.y + 3, bounds.w - 10, bounds.h - 6);
+        struct nk_rect surface = nk_rect(bounds.x + (compact?8:5), bounds.y + 4, bounds.w - (compact?16:10), bounds.h - 8);
         if (selected || hovered)
-            nk_fill_rect(canvas, surface, 8,
-                         selected ? UI_COLOR(button_hover) : UI_COLOR(button));
+            nk_fill_rect(canvas, surface, compact?5:8,
+                         selected ? (compact?UI_COLOR(button):UI_COLOR(button_hover)) : UI_COLOR(button));
         const struct nk_user_font *font = ui->style.font;
         float text_width = font->width(font->userdata, font->height, tabs[i], (int)strlen(tabs[i]));
         nk_draw_text(canvas,
@@ -405,5 +412,6 @@ static void toolbar_view(app *a) {
                      tabs[i], (int)strlen(tabs[i]), font, nk_rgba(0, 0, 0, 0),
                      selected ? UI_COLOR(text) : UI_COLOR(muted));
     }
+    if(compact)nk_style_pop_font(ui);
     nk_style_pop_vec2(ui);
 }

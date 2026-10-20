@@ -25,7 +25,7 @@ static void preferences_apply(app *a, const ps_preferences *p) {
         ps_graphics_background(a->doc_graphics, UI_COLOR(canvas).r, UI_COLOR(canvas).g,
                                UI_COLOR(canvas).b);
     }
-    a->font_code = a->code_fonts[(p->editor_size - 16) / 2];
+    a->font_code = a->code_fonts[(p->editor_size - 12) / 2];
     a->show_vectors = (p->view_flags & PS_VIEW_VECTORS) != 0;
     a->show_paths = (p->view_flags & PS_VIEW_PATHS) != 0;
     a->show_points = (p->view_flags & PS_VIEW_POINTS) != 0;
@@ -153,7 +153,8 @@ static bool settings_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
     else if(focus==3 && activate && !key->repeat){*p=PS_PREFERENCES_DEFAULT;p->width=a->preferences.width;p->height=a->preferences.height;}
     else if(focus==0 || focus==5) {
         uint32_t *size=focus==0?&p->ui_size:&p->editor_size;
-        *size=16+2*(((*size-16)/2+(direction<0?3:1))%4);
+        unsigned minimum=focus==0?16:12,count=focus==0?4:6;
+        *size=minimum+2*(((*size-minimum)/2+(direction<0?count-1:1))%count);
     } else if(focus==4)p->theme=(p->theme+(direction<0?PS_THEME_COUNT-1:1))%PS_THEME_COUNT;
     else if(focus==6) {
         const uint32_t seconds[]={10,30,60,120};unsigned selected=0;
@@ -239,17 +240,17 @@ static void settings_view(app *a) {
     }
     nk_layout_row_dynamic(ui, 22, 1);
     nk_label_colored(ui, "Schriftgröße im Code-Editor", NK_TEXT_LEFT, muted());
-    nk_layout_row_dynamic(ui, 28, 4);
-    const char *sizes[] = {"16 px", "18 px", "20 px", "22 px"};
-    for (unsigned i = 0; i < 4; i++) {
-        if (i == 2)
+    nk_layout_row_dynamic(ui, 28, 6);
+    const char *sizes[] = {"12 px", "14 px", "16 px", "18 px", "20 px", "22 px"};
+    for (unsigned i = 0; i < 6; i++) {
+        if (i == 4)
             a->settings_bounds[1] = nk_widget_bounds(ui);
         struct nk_rect bounds=nk_widget_bounds(ui);
-        if (ps_ui_option_label(ui,"Schriftgröße im Code-Editor", sizes[i], p->editor_size == 16 + i * 2))
-            p->editor_size = 16 + i * 2;
-        if(p->editor_size==16+i*2)settings_focus_draw(a,5,bounds);
+        if (ps_ui_option_label(ui,"Schriftgröße im Code-Editor", sizes[i], p->editor_size == 12 + i * 2))
+            p->editor_size = 12 + i * 2;
+        if(p->editor_size==12+i*2)settings_focus_draw(a,5,bounds);
     }
-    nk_style_push_font(ui, a->code_fonts[(p->editor_size - 16) / 2]);
+    nk_style_push_font(ui, a->code_fonts[(p->editor_size - 12) / 2]);
     nk_layout_row_dynamic(ui, 30, 1);
     nk_label(ui, "double energy = 0.5 * mass * speed * speed;", NK_TEXT_LEFT);
     nk_style_pop_font(ui);

@@ -44,11 +44,16 @@ static void api_reference_from_editor(app *a,struct nk_text_edit *edit) {
 }
 static void api_reference_view(app *a) {
     struct nk_context *ui=a->ui;
+    bool compact=!a->project_manager && (a->tab==0 || a->tab==8);
+    const struct nk_user_font *heading=compact?&a->workbench_fonts[2]:a->font_title;
+    const struct nk_user_font *body=compact?&a->workbench_fonts[0]:a->font_ui;
     nk_layout_row_dynamic(ui,24,1);nk_label_colored(ui,"API-Referenz",NK_TEXT_LEFT,UI_COLOR(muted));
     float width=fmaxf(40,nk_window_get_content_region(ui).w-16);
-    nk_layout_row_dynamic(ui,documentation_height(a->font_title,a->api_reference_name,strlen(a->api_reference_name),width)+12,1);
-    nk_style_push_font(ui,a->font_title);nk_label_wrap(ui,a->api_reference_name);nk_style_pop_font(ui);
-    nk_layout_row_dynamic(ui,28,2);a->api_reference_handbook_bounds=nk_widget_bounds(ui);
+    nk_layout_row_dynamic(ui,documentation_height(heading,a->api_reference_name,strlen(a->api_reference_name),width)+12,1);
+    nk_style_push_font(ui,heading);nk_label_wrap(ui,a->api_reference_name);nk_style_pop_font(ui);
+    const char *close_label="Schließen";
+    float button_width=ui->style.font->width(ui->style.font->userdata,ui->style.font->height,close_label,(int)strlen(close_label))+2*ui->style.button.padding.x+2*ui->style.button.border;
+    nk_layout_row_dynamic(ui,28,compact && nk_window_get_content_region(ui).w<2*button_width+ui->style.window.spacing.x?1:2);a->api_reference_handbook_bounds=nk_widget_bounds(ui);
     if(nk_button_label(ui,"Handbuch")) {
         int topic=-1;for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(!strcmp(documentation_topics[i].path,a->api_reference_path)){topic=i;break;}
         if(topic>=0){open_documentation(a,topic);if(a->documentation && a->doc_topic==topic)a->doc_jump_block=(int)a->api_reference_first;}
@@ -61,7 +66,7 @@ static void api_reference_view(app *a) {
         ps_document *d=a->api_reference;width=fmaxf(40,nk_window_get_content_region(ui).w-16);
         for(size_t i=a->api_reference_first;i<a->api_reference_end;i++) {
             const ps_doc_block *block=&d->blocks[i];const char *text=d->text+block->text;
-            const struct nk_user_font *font=block->kind==PS_DOC_CODE?a->font_code:block->kind==PS_DOC_HEADING?a->font_title:a->font_ui;
+            const struct nk_user_font *font=block->kind==PS_DOC_CODE?a->font_code:block->kind==PS_DOC_HEADING?heading:body;
             float height=documentation_height(font,text,block->length,width)+16;
             nk_layout_row_dynamic(ui,height,1);struct nk_rect bounds;
             if(nk_widget(&bounds,ui)!=NK_WIDGET_INVALID) {

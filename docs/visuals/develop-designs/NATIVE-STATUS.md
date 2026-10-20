@@ -1,5 +1,12 @@
 # Native Werkbank – Prüfbericht
 
+**Überarbeitung seit 20. Oktober 2026:** Die Rückmeldung des Nutzers bestätigt,
+dass die bisherige Gestaltung die gewählte Werkbank nicht ausreichend trifft.
+Die folgenden Nachweise vom 19. Oktober belegen Funktionen und damalige Bilder;
+sie sind keine Abnahme der visuellen Übereinstimmung. Der engere native Abgleich
+steht mit aktuellen Bildern, konkreten Korrekturen und verbleibenden Unterschieden
+in [FIDELITY.md](FIDELITY.md). Die folgenden Ergebnisse bleiben historisch.
+
 Stand: 19. Oktober 2026, Ausgangsrevision `e5c3144`, Zweig `codex/f1-design-h`.
 Die native Umsetzung ist implementiert und unter Windows und Linux lokal geprüft.
 Auch die vollständige aktuelle Windows-Fokusmatrix ist bestanden. Die unten

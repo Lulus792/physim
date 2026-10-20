@@ -4,6 +4,9 @@
 schwebende Suchinsel und verstellbare Panels sind festgelegt. Veraltete
 Farbvarianten und ihre Auswahl wurden entfernt.
 
+Aktueller nativer Designabgleich, echte Windows-/Linux-Bilder und verbleibende
+Unterschiede: [FIDELITY.md](FIDELITY.md).
+
 Für die Umsetzung in einem anderen Chat:
 
 1. [NEXT-CHAT.md](NEXT-CHAT.md): kopierfertiger Umsetzungsauftrag.

@@ -857,7 +857,7 @@ static void documentation_font_demand_test(app *a,int *stage,int *code,const cha
         a->doc_test_font_allocator=&allocator;settings_commit(a);a->doc_test_font_allocator=NULL;
         ps_result after=ps_preferences_read(a->preferences_path,&disk_after);
         ok=before==after && (before!=PS_OK || !memcmp(&disk_before,&disk_after,sizeof disk_before)) &&
-           a->preferences.ui_size==16 && a->preferences.editor_size==16 && a->doc_font_ui==original &&
+           a->preferences.ui_size==initial.ui_size && a->preferences.editor_size==initial.editor_size && a->doc_font_ui==original &&
            documentation_font_variants(a)==6 && !failure.live && a->preferences_error[0];
         puts("FONT DEMAND: failed zoom/settings preserve fonts, context, values and preference file");
         break;

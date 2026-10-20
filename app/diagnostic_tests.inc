@@ -39,9 +39,9 @@ static void diagnostic_test_frame(app *a,const char *mode,int *stage,int *code,c
             if(scroll_settle){--scroll_settle;return;}
             ok=!a->runner.running && !a->last_run[0] && selected>=0 && a->diagnostic_bounds[selected].w>0;
             if(ok) {
-                struct nk_rect panel=a->dock_panels[PS_DOCK_LOG],row=a->diagnostic_bounds[selected];
-                if(row.y+row.h>panel.y+panel.h-12 || row.y<panel.y+dock_header_height(a)+50) {
-                    test_plot_wheel(a,panel.x+panel.w*.5f,panel.y+panel.h-35,row.y+row.h>panel.y+panel.h-12?-1:1);
+                struct nk_rect view=workbench_visible(a)?a->diagnostic_view_bounds:a->dock_panels[PS_DOCK_LOG],row=a->diagnostic_bounds[selected];
+                if(row.y+row.h>view.y+view.h || row.y<view.y) {
+                    test_plot_wheel(a,view.x+view.w*.5f,view.y+view.h*.5f,row.y+row.h>view.y+view.h?-1:1);
                     scroll_settle=2;return;
                 }
             }

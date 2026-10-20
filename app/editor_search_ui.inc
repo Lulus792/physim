@@ -83,12 +83,14 @@ static void editor_search_view(app *a) {
     ps_graphics_backdrop(a->graphics,NULL);
     nk_window_show(ui,"editor-search",visible?NK_SHOWN:NK_HIDDEN);
     if(!visible){a->search_island_bounds=nk_rect(0,0,0,0);return;}
+    nk_style_push_font(ui,&a->workbench_fonts[0]);
+    const struct nk_user_font *badge=&a->workbench_fonts[1];
     /* Hover routing may temporarily make the code pane current. Keyboard
      * ownership changes on an explicit click/focus action, not mouse motion. */
     a->search_keyboard=a->search_keyboard || a->search_focus;
     struct nk_rect source=a->source_editor_frame;
     float row=fmaxf(30,ui->style.font->height+10),width=fminf(540,source.w-16);
-    float footer_height=fmaxf(17,ui->style.font->height+2);
+    float footer_height=fmaxf(17,badge->height+2);
     float height=14+row+5+footer_height+(a->search_replace_open?row+5:0);
     struct nk_rect island=nk_rect(source.x+source.w-8-width,source.y+4,width,height);
     a->search_island_bounds=island;
@@ -198,13 +200,13 @@ static void editor_search_view(app *a) {
         char count[96];snprintf(count,sizeof count,a->find[0]?"%zu von %zu Treffern":"Dokument durchsuchen",result.count?result.ordinal:0,result.count);
         struct nk_rect status_rect=nk_rect(island.x+7,island.y+height-7-footer_height,inner,footer_height);
         const char *hint="Aktuelle Datei · Escape schließt";
-        float hint_width=ui->style.font->width(ui->style.font->userdata,ui->style.font->height,hint,(int)strlen(hint));
-        float count_width=ui->style.font->width(ui->style.font->userdata,ui->style.font->height,count,(int)strlen(count));
+        float hint_width=badge->width(badge->userdata,badge->height,hint,(int)strlen(hint));
+        float count_width=badge->width(badge->userdata,badge->height,count,(int)strlen(count));
         nk_fill_rect(c,nk_rect(status_rect.x,status_rect.y,fminf(inner,count_width+10),status_rect.h),6,footer);
-        nk_draw_text(c,nk_rect(status_rect.x+5,status_rect.y,fminf(inner-10,count_width),status_rect.h),count,(int)strlen(count),ui->style.font,nk_rgba(0,0,0,0),muted_color);
+        nk_draw_text(c,nk_rect(status_rect.x+5,status_rect.y,fminf(inner-10,count_width),status_rect.h),count,(int)strlen(count),badge,nk_rgba(0,0,0,0),muted_color);
         if(hint_width+count_width+24<inner) {
             nk_fill_rect(c,nk_rect(status_rect.x+inner-hint_width-10,status_rect.y,hint_width+10,status_rect.h),6,footer);
-            nk_draw_text(c,nk_rect(status_rect.x+inner-hint_width-5,status_rect.y,hint_width,status_rect.h),hint,(int)strlen(hint),ui->style.font,nk_rgba(0,0,0,0),muted_color);
+            nk_draw_text(c,nk_rect(status_rect.x+inner-hint_width-5,status_rect.y,hint_width,status_rect.h),hint,(int)strlen(hint),badge,nk_rgba(0,0,0,0),muted_color);
         }
         ps_ui_accessibility_label(ui,status_rect,count);
     }
@@ -213,5 +215,6 @@ static void editor_search_view(app *a) {
     for(int i=0;i<4;i++)nk_style_pop_style_item(ui);
     for(int i=0;i<2;i++)nk_style_pop_float(ui);
     for(int i=0;i<3;i++)nk_style_pop_vec2(ui);
+    nk_style_pop_font(ui);
     nk_sdl_window_raise(ui,"editor-search");
 }

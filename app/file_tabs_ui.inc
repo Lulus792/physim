@@ -79,6 +79,7 @@ static void file_tabs_view(app *a,struct nk_rect bounds) {
     struct nk_context *ui=a->ui;struct nk_input *in=&ui->input;
     struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
     unsigned active=file_tab_active(a),chosen=FILE_TABS,close=FILE_TABS;
+    bool compact=workbench_visible(a);
     memset(a->file_tab_bounds,0,sizeof a->file_tab_bounds);memset(a->file_tab_closes,0,sizeof a->file_tab_closes);
     a->file_tab_strip=bounds;
     float widths[FILE_TABS]={0},total=0;
@@ -88,7 +89,7 @@ static void file_tabs_view(app *a,struct nk_rect bounds) {
         const char *name=key<2?(key?analysis_source(a):experiment_source(a)):workspace_name(a->documents[key-2].path);
         bool dirty=key<2?(key?a->analysis_dirty:a->dirty):a->documents[key-2].dirty;
         snprintf(labels[key],sizeof labels[key],"%s%s",name,dirty?" •":"");
-        widths[key]=fminf(220,fmaxf(110,ui->style.font->width(ui->style.font->userdata,ui->style.font->height,labels[key],(int)strlen(labels[key]))+52));
+        widths[key]=fminf(220,fmaxf(compact?76:110,ui->style.font->width(ui->style.font->userdata,ui->style.font->height,labels[key],(int)strlen(labels[key]))+(compact?44:52)));
         total+=widths[key];
     }
     bool overflow=total>bounds.w;float strip_width=fmaxf(1,bounds.w-(overflow?48:0));
@@ -110,18 +111,23 @@ static void file_tabs_view(app *a,struct nk_rect bounds) {
         struct nk_rect full=nk_rect(bounds.x+x,bounds.y,width,bounds.h);
         struct nk_rect visible=nk_rect(fmaxf(strip.x,full.x),full.y,fmaxf(0,fminf(strip.x+strip.w,full.x+width)-fmaxf(strip.x,full.x)),full.h);
         a->file_tab_bounds[key]=visible;
-        struct nk_rect pill=nk_rect(full.x+4,full.y+4,fmaxf(1,full.w-8),fmaxf(1,full.h-8));
-        bool compact=!a->project_manager && (a->tab==0 || a->tab==8);
-        if(key==active)nk_fill_rect(canvas,compact?pill:full,compact?6:0,compact?UI_COLOR(selection_active):UI_COLOR(window));
-        else if(visible.w>0 && nk_input_is_mouse_hovering_rect(in,visible) && !(ui->current->layout->flags&NK_WINDOW_ROM))nk_fill_rect(canvas,compact?pill:full,compact?6:0,UI_COLOR(button_hover));
+        struct nk_rect pill=nk_rect(full.x+5,full.y+6,fmaxf(1,full.w-10),fmaxf(1,full.h-12));
+        if(key==active)nk_fill_rect(canvas,compact?pill:full,compact?5:0,compact?UI_COLOR(selection_active):UI_COLOR(window));
+        else if(visible.w>0 && nk_input_is_mouse_hovering_rect(in,visible) && !(ui->current->layout->flags&NK_WINDOW_ROM))nk_fill_rect(canvas,compact?pill:full,compact?5:0,UI_COLOR(button_hover));
         if(!compact && key==active)nk_stroke_line(canvas,full.x+1,full.y+full.h-1,full.x+width-1,full.y+full.h-1,1,UI_COLOR(accent));
-        ps_ui_draw_icon(canvas,PS_ICON_FILE,nk_rect(full.x+6,full.y,20,full.h),UI_COLOR(muted));
-        nk_draw_text(canvas,nk_rect(full.x+28,full.y+(full.h-ui->style.font->height)/2,width-52,ui->style.font->height),labels[key],(int)strlen(labels[key]),ui->style.font,nk_rgba(0,0,0,0),key==active?UI_COLOR(text):UI_COLOR(muted));
-        struct nk_rect cb=nk_rect(full.x+width-24,full.y,24,full.h);
+        const char *icon_name=key<2?(key?analysis_source(a):experiment_source(a)):workspace_name(a->documents[key-2].path);
+        if(compact)workbench_file_icon(a,canvas,icon_name,nk_rect(full.x+13,full.y,15,full.h),UI_COLOR(accent));
+        else ps_ui_draw_icon(canvas,PS_ICON_FILE,nk_rect(full.x+6,full.y,20,full.h),UI_COLOR(muted));
+        nk_draw_text(canvas,nk_rect(full.x+25,full.y+(full.h-ui->style.font->height)/2,width-(compact?29:49),ui->style.font->height),labels[key],(int)strlen(labels[key]),ui->style.font,nk_rgba(0,0,0,0),key==active?UI_COLOR(text):UI_COLOR(muted));
+        float close_width=compact?18:24;
+        struct nk_rect cb=nk_rect(full.x+width-close_width,full.y,close_width,full.h);
+        struct nk_rect close_surface=compact?nk_rect(cb.x,cb.y+6,cb.w,cb.h-12):cb;
         a->file_tab_closes[key]=nk_rect(fmaxf(strip.x,cb.x),cb.y,fmaxf(0,fminf(strip.x+strip.w,cb.x+cb.w)-fmaxf(strip.x,cb.x)),cb.h);
-        if(a->file_tab_closes[key].w>0 && nk_input_is_mouse_hovering_rect(in,a->file_tab_closes[key]))nk_fill_rect(canvas,cb,3,UI_COLOR(button_hover));
-        ps_ui_draw_icon(canvas,PS_ICON_CLOSE,cb,UI_COLOR(muted));
+        if(a->file_tab_closes[key].w>0 && nk_input_is_mouse_hovering_rect(in,a->file_tab_closes[key]))nk_fill_rect(canvas,close_surface,3,UI_COLOR(button_hover));
         char close_label[300];snprintf(close_label,sizeof close_label,"%s schließen",labels[key]);
+        bool close_focus=nk_sdl_accessibility_is_focused(ui,NULL,close_label);
+        if(!compact || close_focus || nk_input_is_mouse_hovering_rect(in,visible))ps_ui_draw_icon(canvas,PS_ICON_CLOSE,cb,UI_COLOR(muted));
+        if(close_focus)nk_stroke_rect(canvas,close_surface,4,2,UI_COLOR(accent));
         if(ps_ui_button_at(ui,a->file_tab_closes[key],close_label,false))close=key;
         struct nk_rect select=visible;select.w=fmaxf(0,fminf(select.x+select.w,cb.x)-select.x);
         if(ps_ui_button_at(ui,select,labels[key],key==active)) {

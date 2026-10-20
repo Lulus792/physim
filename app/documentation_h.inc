@@ -363,7 +363,8 @@ static void documentation_context_content(app *a) {
         if(nk_button_label(ui,"Code kopieren"))SDL_SetClipboardText(code);
         documentation_focus_draw(a,DOC_CONTEXT_COPY,r,false);
         /* Complete source: wrap at measured UTF-8 boundaries in the side pane. */
-        const struct nk_user_font *font=a->doc_code_fonts[(a->preferences.editor_size-16)/2];
+        unsigned size=a->preferences.editor_size<16?16:a->preferences.editor_size;
+        const struct nk_user_font *font=a->doc_code_fonts[(size-16)/2];
         if(!font)font=ui->style.font;
         nk_style_push_font(ui,font);
         const char *line=code;

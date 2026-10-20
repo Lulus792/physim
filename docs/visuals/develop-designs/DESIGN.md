@@ -3,6 +3,7 @@
 Stand: 19. Oktober 2026. Die Nutzerwahl ist abgeschlossen: **Werkbank mit
 Panelköpfen, kompakten Tabs, Workspace-Pfadlinien und Suchinsel in Klarglas Kühl**.
 Die native Umsetzung und ihre Prüfgrenzen stehen in
+[FIDELITY.md](FIDELITY.md); frühere Funktionsnachweise bleiben in
 [NATIVE-STATUS.md](NATIVE-STATUS.md). [Auftrag](NEXT-CHAT.md) und
 [technische Übergabe](IMPLEMENTATION.md) dokumentieren die Ausgangsanforderungen.
 

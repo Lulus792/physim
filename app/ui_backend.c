@@ -46,6 +46,15 @@ bool ps_ui_font_has_glyph(const struct nk_user_font *handle,nk_rune codepoint) {
  const struct nk_font_glyph *glyph=nk_font_find_glyph(font,codepoint);
  return glyph && glyph->codepoint==codepoint && glyph->source_present;
 }
+float ps_ui_font_em_ratio(const struct nk_font *font) {
+ if(!font || !font->config || !font->config->ttf_blob || font->config->ttf_size<12)return 1;
+ const unsigned char *bytes=font->config->ttf_blob;stbtt_fontinfo info={0};
+ int offset=stbtt_GetFontOffsetForIndex(bytes,font->config->ttf_index);
+ if(offset<0 || !stbtt_InitFont(&info,bytes,offset))return 1;
+ float pixel=stbtt_ScaleForPixelHeight(&info,1),em=stbtt_ScaleForMappingEmToPixels(&info,1);
+ float ratio=em/pixel;
+ return isfinite(ratio) && ratio>=.5f && ratio<=3?ratio:1;
+}
 bool ps_ui_font_logical_scale(struct nk_font_atlas *atlas,float raster_scale) {
  if(!atlas || !atlas->glyphs || !isfinite(raster_scale) || raster_scale<1 || raster_scale>4)return false;
  for(struct nk_font *f=atlas->fonts;f;f=f->next)

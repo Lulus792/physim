@@ -118,6 +118,73 @@ static const char *workspace_name(const char *path) {
             name = p + 1;
     return name;
 }
+static void workbench_file_icon(app *a,struct nk_command_buffer *canvas,const char *path,struct nk_rect r,struct nk_color color) {
+    const char *ext=strrchr(path,'.');
+    if(ext && (!strcmp(ext,".c") || !strcmp(ext,".h") || !strcmp(ext,".phys"))) {
+        const struct nk_user_font *font=&a->workbench_fonts[3];
+        nk_draw_text(canvas,nk_rect(r.x+(r.w-8)/2,r.y+(r.h-font->height)/2,10,font->height),!strcmp(ext,".phys")?"P":"C",1,font,nk_rgba(0,0,0,0),color);
+    } else if(ext && !strcmp(ext,".project")) {
+        float x=r.x+r.w/2,y=r.y+r.h/2;
+        nk_stroke_line(canvas,x-1,y-3,x-5,y,1.2f,color);nk_stroke_line(canvas,x-5,y,x-1,y+3,1.2f,color);
+        nk_stroke_line(canvas,x+1,y-3,x+5,y,1.2f,color);nk_stroke_line(canvas,x+5,y,x+1,y+3,1.2f,color);
+    } else ps_ui_draw_icon(canvas,PS_ICON_FILE,r,color);
+}
+static void workbench_card_text(struct nk_command_buffer *canvas,const struct nk_user_font *font,struct nk_rect r,const char *text,struct nk_color color) {
+    size_t at=0,bytes=strlen(text);float y=r.y;
+    while(at<bytes && y+font->height<=r.y+r.h) {
+        size_t length=0,used=documentation_line(font,text+at,bytes-at,fmaxf(1,r.w),&length);
+        if(!used)break;
+        nk_draw_text(canvas,nk_rect(r.x,y,r.w,font->height),text+at,(int)length,font,nk_rgba(0,0,0,0),color);
+        at+=used;y+=font->height+5;
+    }
+}
+static struct nk_rect workbench_section_label(app *a,const char *text,float height) {
+    struct nk_context *ui=a->ui;const struct nk_user_font *font=&a->workbench_fonts[6];
+    nk_layout_row_dynamic(ui,fmaxf(height,font->height+2),1);struct nk_rect r;nk_widget(&r,ui);
+    float x=r.x,y=r.y+(r.h-font->height)/2;size_t at=0,bytes=strlen(text);
+    while(at<bytes) {
+        nk_rune rune;int n=nk_utf_decode(text+at,&rune,(int)(bytes-at));if(n<=0)break;
+        float width=font->width(font->userdata,font->height,text+at,n);
+        nk_draw_text(nk_window_get_canvas(ui),nk_rect(x,y,width+1,font->height),text+at,n,font,nk_rgba(0,0,0,0),muted());
+        at+=(size_t)n;x+=width+1.6f*a->preferences.ui_size/16.f;
+    }
+    ps_ui_accessibility_label(ui,r,text);return r;
+}
+static void workbench_icon_line(struct nk_command_buffer *canvas,float x,float y,float scale,float ax,float ay,float bx,float by,struct nk_color color) {
+    float t=1.2f*scale;ax=x+ax*scale;ay=y+ay*scale;bx=x+bx*scale;by=y+by*scale;
+    nk_stroke_line(canvas,ax,ay,bx,by,t,color);nk_fill_circle(canvas,nk_rect(ax-t/2,ay-t/2,t,t),color);nk_fill_circle(canvas,nk_rect(bx-t/2,by-t/2,t,t),color);
+}
+/* Direct vector translation of workbench.js: 17x17 viewbox, 1.2px round
+ * strokes. These are separate from the app's generic window/folder icons. */
+static void workbench_icon(struct nk_command_buffer *canvas,ps_ui_icon icon,struct nk_rect r,struct nk_color color) {
+    float size=icon==PS_ICON_FOLDER?14:icon==PS_ICON_SIDEBAR || icon==PS_ICON_INSPECTOR?16:15;
+    float s=size/17,x=r.x+(r.w-size)/2,y=r.y+(r.h-size)/2;
+#define WB_LINE(ax,ay,bx,by) workbench_icon_line(canvas,x,y,s,ax,ay,bx,by,color)
+    if(icon==PS_ICON_SIDEBAR || icon==PS_ICON_INSPECTOR) {
+        nk_stroke_rect(canvas,nk_rect(x+1.5f*s,y+2.5f*s,14*s,12*s),2*s,1.2f*s,color);
+        float divider=icon==PS_ICON_SIDEBAR?6:11;WB_LINE(divider,3,divider,14);
+        if(icon==PS_ICON_SIDEBAR){WB_LINE(11,6,9,8.5f);WB_LINE(9,8.5f,11,11);}
+        else {WB_LINE(6,6,8,8.5f);WB_LINE(8,8.5f,6,11);}
+    } else if(icon==PS_ICON_SEARCH) {
+        nk_stroke_circle(canvas,nk_rect(x+2.5f*s,y+2.5f*s,9*s,9*s),1.2f*s,color);WB_LINE(10.5f,10.5f,14.5f,14.5f);
+    } else if(icon==PS_ICON_SAVE) {
+        WB_LINE(3,2,12,2);WB_LINE(12,2,15,5);WB_LINE(15,5,15,15);WB_LINE(15,15,2,15);WB_LINE(2,15,2,2);WB_LINE(2,2,3,2);
+        WB_LINE(5,2,5,7);WB_LINE(5,7,11,7);WB_LINE(11,7,11,2);WB_LINE(5,15,5,9);WB_LINE(5,9,12,9);WB_LINE(12,9,12,15);
+    } else if(icon==PS_ICON_FOLDER) {
+        WB_LINE(1.5f,5,1.5f,3);WB_LINE(1.5f,3,6.5f,3);WB_LINE(6.5f,3,8.5f,5);WB_LINE(8.5f,5,15.5f,5);
+        WB_LINE(15.5f,5,15.5f,14);WB_LINE(15.5f,14,1.5f,14);WB_LINE(1.5f,14,1.5f,5);
+    }
+#undef WB_LINE
+}
+static bool workbench_side_button(app *a,struct nk_rect r,bool right,bool open,const char *name) {
+    struct nk_context *ui=a->ui;struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+    if(!(ui->current->layout->flags&NK_WINDOW_ROM) && nk_input_is_mouse_hovering_rect(&ui->input,r))nk_fill_rect(canvas,r,4,UI_COLOR(button_hover));
+    workbench_icon(canvas,right?PS_ICON_INSPECTOR:PS_ICON_SIDEBAR,r,accent());
+    bool pressed=ps_ui_button_at(ui,r,name,open);
+    if(nk_sdl_accessibility_is_focused(ui,NULL,name))nk_stroke_rect(canvas,r,4,2,accent());
+    return pressed;
+}
+static bool workbench_visible(const app *a);
 // clang-format off
 #include "batch_ui.inc"
 #include "settings_ui.inc"
@@ -465,12 +532,12 @@ static void camera_inspector(app *a) {
 static void sidebar_panel(app *a) {
     struct nk_context *ui=a->ui;
     bool compact=workbench_visible(a);
-    if(compact)nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(8,8));
+    if(compact){nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(8,0));nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(0,0));}
     if (dock_begin(a, PS_DOCK_SIDEBAR)) {
         if(workbench_visible(a) && a->project_build_disclosure!=NK_MAXIMIZED) {
             if(a->workspace_open)workspace_tree_view(a);
             else {nk_layout_row_dynamic(ui,56,1);nk_label_wrap(ui,"Öffne einen Ordner, um seine Dateien hier zu sehen.");}
-            nk_end(ui);nk_style_pop_vec2(ui);return;
+            nk_end(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);return;
         }
         if(a->loaded && a->tab==1 && !a->project_manager)scene_controls_view(a);
         {
@@ -581,18 +648,76 @@ static void sidebar_panel(app *a) {
         }
     }
     nk_end(ui);
-    if(compact)nk_style_pop_vec2(ui);
+    if(compact){nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}
 }
 static void inspector_panel(app *a) {
     struct nk_context *ui=a->ui;
+    bool compact=workbench_visible(a);
+    if(compact)nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(16,4));
     if(dock_begin(a,PS_DOCK_INSPECTOR)) {
-        if(a->api_reference && !a->project_manager && (a->tab==0 || (a->tab==2 && a->analysis_tab==1) || a->tab==8))
+        if(a->api_reference && !compact && !a->project_manager && (a->tab==0 || (a->tab==2 && a->analysis_tab==1) || a->tab==8))
             api_reference_view(a);
         else if(workbench_visible(a)) {
-            nk_layout_row_dynamic(ui,22,1);nk_label_colored(ui,"IM DOKUMENT",NK_TEXT_LEFT,muted());
-            nk_layout_row_dynamic(ui,72,1);nk_label_wrap(ui,"Wähle einen API-Bezeichner im Code und öffne seine Referenz mit Umschalt+F1.");
-            nk_layout_row_dynamic(ui,32,1);
-            if(nk_button_label(ui,"API-Referenz öffnen")){struct nk_text_edit *edit=editor_search_target(a);if(edit)api_reference_from_editor(a,edit);}
+            workbench_section_label(a,"IM DOKUMENT",22);
+            nk_style_push_font(ui,&a->workbench_fonts[5]);
+            const char *title=a->loaded?project_name(a):"Textdokument";
+            nk_layout_row_dynamic(ui,fmaxf(26,documentation_height(ui->style.font,title,strlen(title),nk_window_get_content_region(ui).w)+4),1);nk_label_wrap(ui,title);
+            nk_style_pop_font(ui);
+            const char *intro="Aktiver Code und zugehörige API-Referenz";
+            nk_layout_row_dynamic(ui,fmaxf(35,documentation_height(ui->style.font,intro,strlen(intro),nk_window_get_content_region(ui).w)+8),1);
+            nk_style_push_color(ui,&ui->style.text.color,muted());nk_label_wrap(ui,intro);nk_style_pop_color(ui);
+            const char *file=a->loaded?(a->analysis_only?analysis_source(a):experiment_source(a)):"Textdatei";
+            workspace_document *active=active_document(a);if(a->tab==8 && active)file=workspace_name(active->path);
+            struct nk_text_edit *active_edit=editor_search_target(a);
+            int kind=active_edit?document_language(a,active_edit):-1;
+            const char *language=kind<0?"Textdokument":kind?"Physim":"C";
+            nk_layout_row_dynamic(ui,31,2);nk_label_colored(ui,"Aktive Datei",NK_TEXT_LEFT,muted());nk_label(ui,file,NK_TEXT_RIGHT);
+            nk_layout_row_dynamic(ui,31,2);nk_label_colored(ui,"Sprache",NK_TEXT_LEFT,muted());nk_label(ui,language,NK_TEXT_RIGHT);
+            char format[32];snprintf(format,sizeof format,"Version %u",a->project_format_version);
+            nk_layout_row_dynamic(ui,31,2);nk_label_colored(ui,"Projektformat",NK_TEXT_LEFT,muted());nk_label(ui,a->loaded?format:"Kein Projekt",NK_TEXT_RIGHT);
+            nk_layout_row_dynamic(ui,20,1);nk_spacer(ui);
+            float width=nk_window_get_content_region(ui).w;
+            const struct nk_user_font *small=&a->workbench_fonts[1];
+            nk_layout_row_dynamic(ui,235,1);
+            if(a->api_reference) {
+                nk_style_push_float(ui,&ui->style.window.rounding,7);
+                nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(13,13));
+                nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(edit)));
+                nk_style_push_style_item(ui,&ui->style.button.normal,nk_style_item_color(UI_COLOR(edit)));
+                nk_style_push_float(ui,&ui->style.button.border,1);
+                if(nk_group_begin(ui,"workbench-api-card",NK_WINDOW_BORDER)) {api_reference_view(a);nk_group_end(ui);}
+                nk_style_pop_float(ui);nk_style_pop_style_item(ui);nk_style_pop_style_item(ui);nk_style_pop_vec2(ui);nk_style_pop_float(ui);
+            } else {
+            struct nk_rect card=nk_widget_bounds(ui);
+            struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+            nk_fill_rect(canvas,card,7,UI_COLOR(edit));nk_stroke_rect(canvas,card,7,1,UI_COLOR(border));
+            nk_draw_text(canvas,nk_rect(card.x+13,card.y+13,width-26,small->height),"PHYSIM API / REFERENZ",21,small,nk_rgba(0,0,0,0),muted());
+            const char *empty="Kein API-Bezeichner ausgewählt.";
+            workbench_card_text(canvas,ui->style.font,nk_rect(card.x+13,card.y+39,width-26,56),empty,UI_COLOR(text));
+            const char *hint="Bezeichner im Code wählen; Umschalt+F1.";
+            workbench_card_text(canvas,small,nk_rect(card.x+13,card.y+99,width-26,65),hint,muted());
+            struct nk_rect action=nk_rect(card.x+13,card.y+card.h-43,width-26,30);
+            nk_stroke_rect(canvas,action,6,1,UI_COLOR(border));
+            const char *label="API-Referenz öffnen";
+            nk_draw_text(canvas,nk_rect(action.x+8,action.y+(action.h-small->height)/2,action.w-16,small->height),label,(int)strlen(label),small,nk_rgba(0,0,0,0),UI_COLOR(text));
+            if(ps_ui_button_at(ui,action,"API-Referenz öffnen",false)){struct nk_text_edit *edit=editor_search_target(a);if(edit)api_reference_from_editor(a,edit);}
+            nk_widget(&card,ui);
+            }
+            nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(8,4));
+            nk_layout_row_dynamic(ui,22,1);nk_spacer(ui);
+            nk_style_push_font(ui,small);
+            workbench_section_label(a,"MODELLNOTIZ",16);
+            const char *note="Für dieses Dokument ist keine Modellnotiz hinterlegt.";
+            nk_layout_row_dynamic(ui,fmaxf(32,documentation_height(small,note,strlen(note),width)),1);nk_label_wrap(ui,note);
+            nk_layout_row_dynamic(ui,14,1);nk_spacer(ui);
+            struct nk_rect environment=workbench_section_label(a,"BUILDUMGEBUNG",18);
+            nk_layout_row_dynamic(ui,18,2);nk_label_colored(ui,"Profil",NK_TEXT_LEFT,muted());nk_label(ui,a->profile?"Release":"Debug",NK_TEXT_RIGHT);
+            nk_layout_row_dynamic(ui,18,2);nk_label_colored(ui,"API",NK_TEXT_LEFT,muted());char api[40];snprintf(api,sizeof api,"Version %u",PS_API_VERSION);nk_label(ui,api,NK_TEXT_RIGHT);
+            nk_layout_row_dynamic(ui,18,2);nk_label_colored(ui,"Compiler",NK_TEXT_LEFT,muted());struct nk_rect compiler_bounds=nk_widget_bounds(ui);nk_label(ui,a->build_info_valid?a->build_info.compiler:"Noch kein Build",NK_TEXT_RIGHT);
+            a->workbench_environment_bounds=nk_rect(environment.x,environment.y,environment.w,compiler_bounds.y+compiler_bounds.h-environment.y);
+            if(a->build_info_valid && nk_input_is_mouse_hovering_rect(&ui->input,compiler_bounds))nk_tooltip(ui,a->build_info.compiler);
+            nk_style_pop_font(ui);
+            nk_style_pop_vec2(ui);
         } else if(a->loaded) {
             camera_inspector(a);
             if (nk_tree_state_push(ui, NK_TREE_TAB, "Laufgrenzen", &a->limits_disclosure)) {
@@ -619,6 +744,7 @@ static void inspector_panel(app *a) {
         }
     }
     nk_end(ui);
+    if(compact)nk_style_pop_vec2(ui);
 }
 static void workspace_panel(app *a) {
     struct nk_context *ui=a->ui;
@@ -627,8 +753,14 @@ static void workspace_panel(app *a) {
         nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(6,0));
         nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(0,0));
         nk_style_push_vec2(ui,&ui->style.edit.padding,nk_vec2(6,6));
+        nk_style_push_float(ui,&ui->style.edit.rounding,0);
+        nk_style_push_float(ui,&ui->style.edit.row_padding,11);
+        nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(edit)));
     }
     float content=fmaxf(100,a->dock_panels[PS_DOCK_WORKSPACE].h-dock_header_height(a));
+    float status_space=workbench_visible(a) && (!a->dock_visible[PS_DOCK_LOG] ||
+        fabsf(a->dock_panels[PS_DOCK_WORKSPACE].x-a->dock_panels[PS_DOCK_LOG].x)>=2 ||
+        (a->preferences.dock.floating&((1u<<PS_DOCK_LOG)|(1u<<PS_DOCK_WORKSPACE))))?26:0;
     if (a->dock_visible[PS_DOCK_WORKSPACE] && a->tab==4 && (a->library_search_focus || a->library_search_active))
         nk_window_set_focus(ui,"workspace");
     if(a->project_manager && a->manager_keyboard && !a->toolbar_keyboard && !a->toolbar_menu)
@@ -716,7 +848,7 @@ static void workspace_panel(app *a) {
                 }
             }
         } else if (a->tab == 8 && active_document(a)) {
-            document_view(a, content);
+            document_view(a, content-status_space);
         } else if (a->tab == 6)
             settings_view(a);
         else if (a->tab == 4 && a->loaded)
@@ -762,7 +894,7 @@ static void workspace_panel(app *a) {
         } else if (a->tab == 0 || (a->tab == 2 && a->analysis_tab == 1)) {
             bool analysis = a->tab == 2 || a->analysis_only;
             struct nk_text_edit *edit = analysis ? &a->analysis : &a->experiment;
-            editor(a, edit, nk_window_get_content_region(ui).h - 2*ui->style.window.padding.y);
+            editor(a, edit, nk_window_get_content_region(ui).h - 2*ui->style.window.padding.y-status_space);
         } else if (a->tab == 1 && a->analysis_only) {
             nk_layout_row_dynamic(ui,44,1);nk_label_wrap(ui,"Gespeicherte Szene · Die Wiedergabe verändert den importierten Lauf nicht.");
             viewport(a,fmaxf(180,content-170));timeline_controls(a);
@@ -988,9 +1120,63 @@ static void workspace_panel(app *a) {
         }
     }
     nk_end(ui);
-    if(compact){nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}
+    if(compact){nk_style_pop_style_item(ui);nk_style_pop_float(ui);nk_style_pop_float(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}
+}
+static void workbench_log_panel(app *a) {
+    struct nk_context *ui=a->ui;
+    bool detailed=a->show_log && (a->diagnostic_count || a->diagnostic_raw);
+    nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(18,detailed?8:18));
+    nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(6,5));
+    if(dock_begin(a,PS_DOCK_LOG)) {
+        const struct nk_user_font *font=ui->style.font;
+        float body=fmaxf(24,nk_window_get_content_region(ui).h-26);
+        float action_width=fmaxf(82,font->width(font->userdata,font->height,"Diagnosen",9)+2*ui->style.button.padding.x+16);
+        nk_layout_row_begin(ui,NK_STATIC,fmaxf(24,font->height+2*ui->style.button.padding.y),2);
+        nk_layout_row_push(ui,fmaxf(40,nk_window_get_content_region(ui).w-action_width-6));
+        const char *title=detailed?(a->diagnostic_raw?"Build-Ausgabe":"Diagnosen"):a->job.running?"Hintergrundjob läuft …":a->built?"Experiment bereit.":"Bereit zum Bauen.";
+        if(detailed)nk_label_colored(ui,title,NK_TEXT_LEFT,UI_COLOR(text));
+        else {
+            struct nk_rect bounds;nk_widget(&bounds,ui);struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+            struct nk_rect circle=nk_rect(bounds.x,bounds.y,24,24);
+            nk_stroke_circle(canvas,circle,1,UI_COLOR(border));
+            struct nk_color good=a->preferences.theme==PS_THEME_HIGH_CONTRAST?UI_COLOR(accent):a->preferences.theme==PS_THEME_LIGHT?nk_rgb(40,98,64):nk_rgb(139,204,165);
+            if(a->built){nk_stroke_line(canvas,circle.x+7,circle.y+12,circle.x+10,circle.y+16,1.5f,good);nk_stroke_line(canvas,circle.x+10,circle.y+16,circle.x+18,circle.y+7,1.5f,good);}
+            const struct nk_user_font *bold=&a->workbench_fonts[3];
+            nk_draw_text(canvas,nk_rect(bounds.x+40,bounds.y+(bounds.h-bold->height)/2,bounds.w-40,bold->height),title,(int)strlen(title),bold,nk_rgba(0,0,0,0),UI_COLOR(text));
+        }
+        nk_layout_row_push(ui,action_width);a->diagnostic_mode_bounds=nk_widget_bounds(ui);
+        nk_style_push_style_item(ui,&ui->style.button.normal,nk_style_item_color(UI_COLOR(window)));
+        if(nk_button_label(ui,a->diagnostic_raw?"Diagnosen":"Ausgabe"))a->diagnostic_raw=!a->diagnostic_raw;
+        nk_style_pop_style_item(ui);nk_layout_row_end(ui);
+        if(!detailed) {
+            nk_style_push_font(ui,&a->workbench_fonts[1]);
+            nk_layout_row_begin(ui,NK_STATIC,16,2);nk_layout_row_push(ui,40);nk_spacer(ui);
+            nk_layout_row_push(ui,fmaxf(1,nk_window_get_content_region(ui).w-46));nk_label_colored(ui,a->status,NK_TEXT_LEFT,muted());nk_layout_row_end(ui);
+            nk_style_pop_font(ui);
+        }
+        if(detailed) {
+            nk_layout_row_dynamic(ui,fmaxf(20,body-29),1);
+            if(a->diagnostic_count && !a->diagnostic_raw) {
+                if(nk_group_begin(ui,"Compilerdiagnosen",0)) {
+                    a->diagnostic_view_bounds=ui->current->layout->clip;
+                    nk_layout_row_dynamic(ui,30,1);
+                    for(int i=0;i<a->diagnostic_count;i++) {
+                        a->diagnostic_bounds[i]=nk_widget_bounds(ui);
+                        if(nk_button_label(ui,a->diagnostics[i].text))jump_to_diagnostic(a,&a->diagnostics[i]);
+                    }
+                    nk_group_end(ui);
+                }
+            } else {
+                nk_style_push_font(ui,font);
+                nk_edit_string_zero_terminated(ui,NK_EDIT_BOX|NK_EDIT_READ_ONLY|NK_EDIT_GOTO_END_ON_ACTIVATE,a->log,sizeof a->log,nk_filter_default);
+                nk_style_pop_font(ui);
+            }
+        }
+    }
+    nk_end(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
 }
 static void log_panel(app *a) {
+    if(workbench_visible(a)){workbench_log_panel(a);return;}
     struct nk_context *ui=a->ui;
     bool expanded_log=a->show_log && a->tab!=6;
     float footer=fmaxf(68,a->dock_panels[PS_DOCK_LOG].h-16);
@@ -1048,6 +1234,8 @@ static void workbench_status_view(app *a,float w,float h) {
     nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(8,2));
     nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(8,0));
     nk_style_push_float(ui,&ui->style.window.rounding,0);
+    nk_style_push_font(ui,&a->workbench_fonts[1]);
+    nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(header)));
     struct nk_window *previous=ui->active;
     if(nk_begin(ui,"workbench-status",nk_rect(0,h-32,w,32),NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BACKGROUND)) {
         bool blocked=a->toolbar_menu || a->toolbar_pointer_consumed;
@@ -1057,52 +1245,76 @@ static void workbench_status_view(app *a,float w,float h) {
         if(owns){ui->current->flags&=~(nk_flags)NK_WINDOW_ROM;ui->current->layout->flags&=~(nk_flags)NK_WINDOW_ROM;}
         else {ui->current->flags|=NK_WINDOW_ROM;ui->current->layout->flags|=NK_WINDOW_ROM;}
         ps_ui_accessibility_route(ui,!blocked);
-        char location[512]="";
-        struct nk_text_edit *edit=editor_search_target(a);
-        if(edit) {
-            const char *text=nk_str_get_const(&edit->string);size_t cursor=editor_search_byte(edit,edit->cursor),line_start=0;unsigned line=1;
-            for(size_t i=0;i<cursor;i++)if(text[i]=='\n'){++line;line_start=i+1;}
-            unsigned column=text?(unsigned)nk_utf_len(text+line_start,(int)(cursor-line_start))+1:1;
-            workspace_document *doc=active_document(a);
-            const char *name=a->tab==8 && doc?workspace_name(doc->path):a->analysis_only?analysis_source(a):experiment_source(a);
-            snprintf(location,sizeof location,"%s · Z %u S %u · UTF-8",name,line,column);
-        }
-        float location_width=edit?fminf(330,w*.30f):0;
+        /* The editor's own status belongs below its protocol, not in the app
+         * footer. It spans exactly the current editor/log column. */
+        float location_width=0;
         const struct nk_user_font *font=ui->style.font;
-        float profile_label=fmaxf(42,font->width(font->userdata,font->height,"Profil",6)+2);
-        float profile_width=fmaxf(92,font->width(font->userdata,font->height,"Release",7)+42);
-        float build_width=fmaxf(160,font->width(font->userdata,font->height,"Build erforderlich",18)+4);
-        const char *action=a->job.running?"Abbrechen":"Bauen";
-        float action_width=fmaxf(96,font->width(font->userdata,font->height,action,(int)strlen(action))+24);
-        nk_layout_row_begin(ui,NK_STATIC,28,6);
+        float profile_label=fmaxf(32,font->width(font->userdata,font->height,"Profil",6)+2);
+        float profile_width=fmaxf(70,font->width(font->userdata,font->height,"Release",7)+24);
+        float build_width=fmaxf(130,font->width(font->userdata,font->height,"Build erforderlich",18)+4);
+        float action_width=a->job.running?80:0;
+        struct nk_command_buffer *canvas=nk_window_get_canvas(ui);nk_stroke_line(canvas,0,h-32,w,h-32,1,UI_COLOR(border));
+        nk_layout_row_begin(ui,NK_STATIC,25,6);
         nk_layout_row_push(ui,profile_label);nk_label_colored(ui,"Profil",NK_TEXT_LEFT,muted());
         nk_layout_row_push(ui,profile_width);const char *profiles[]={"Debug","Release"};
         a->project_profile_bounds=nk_widget_bounds(ui);
+        enum nk_symbol_type old_normal=ui->style.combo.sym_normal,old_hover=ui->style.combo.sym_hover,old_active=ui->style.combo.sym_active;
+        ui->style.combo.sym_normal=ui->style.combo.sym_hover=ui->style.combo.sym_active=NK_SYMBOL_CHEVRON_DOWN;
+        nk_style_push_style_item(ui,&ui->style.combo.normal,nk_style_item_color(UI_COLOR(header)));
+        nk_style_push_vec2(ui,&ui->style.combo.button_padding,nk_vec2(6,6));
         if(nk_combo_begin_label(ui,profiles[a->profile],nk_vec2(160,92))) {
             nk_layout_row_dynamic(ui,28,1);
             for(int p=0;p<2;p++){a->project_profile_choices[p]=nk_widget_bounds(ui);if(nk_combo_item_label(ui,profiles[p],NK_TEXT_LEFT))select_build_profile(a,p);}
             nk_combo_end(ui);
         }
+        nk_style_pop_vec2(ui);nk_style_pop_style_item(ui);
+        ui->style.combo.sym_normal=old_normal;ui->style.combo.sym_hover=old_hover;ui->style.combo.sym_active=old_active;
         nk_layout_row_push(ui,build_width);
         const char *build=a->job.running?"Build läuft …":a->built?"Build erfolgreich":"Build erforderlich";
-        nk_label_colored(ui,build,NK_TEXT_LEFT,a->built?UI_COLOR(accent):muted());
+        struct nk_color good=a->preferences.theme==PS_THEME_HIGH_CONTRAST?UI_COLOR(accent):a->preferences.theme==PS_THEME_LIGHT?nk_rgb(40,98,64):nk_rgb(139,204,165);
+        nk_label_colored(ui,build,NK_TEXT_LEFT,a->built?good:muted());
         nk_layout_row_push(ui,fmaxf(40,w-profile_label-profile_width-build_width-action_width-location_width-56));
         struct nk_rect message=nk_widget_bounds(ui);nk_label_colored(ui,a->status,NK_TEXT_LEFT,muted());
         if(nk_input_is_mouse_hovering_rect(&ui->input,message))nk_tooltip(ui,a->status);
-        nk_layout_row_push(ui,location_width);
-        struct nk_rect position=nk_widget_bounds(ui);nk_label_colored(ui,location,NK_TEXT_RIGHT,muted());
-        if(edit){ps_ui_accessibility_label(ui,position,location);if(nk_input_is_mouse_hovering_rect(&ui->input,position))nk_tooltip(ui,location);}
-        nk_layout_row_push(ui,action_width);a->editor_build_bounds=nk_widget_bounds(ui);
+        nk_layout_row_push(ui,location_width);nk_spacer(ui);
+        nk_layout_row_push(ui,action_width);
         if(a->job.running) {
             if(nk_button_label(ui,"Abbrechen")){ps_process_kill(&a->job);ps_process_close(&a->job);status(a,"Hintergrundjob abgebrochen.");}
-        } else {
-            nk_begin_disabled(ui,!a->loaded || !idle(a));
-            if(action_button(ui,"Bauen",true))build_project(a);
-            nk_end_disabled(ui);
-        }
+        } else nk_spacer(ui);
         nk_layout_row_end(ui);
     }
-    nk_end(ui);nk_style_pop_float(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
+    nk_end(ui);nk_style_pop_style_item(ui);nk_style_pop_font(ui);nk_style_pop_float(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
+}
+static void workbench_editor_status(app *a) {
+    struct nk_context *ui=a->ui;struct nk_text_edit *edit=editor_search_target(a);
+    bool visible=workbench_visible(a) && edit && a->dock_visible[PS_DOCK_WORKSPACE];
+    nk_window_show(ui,"workbench-editor-status",visible?NK_SHOWN:NK_HIDDEN);if(!visible)return;
+    struct nk_rect pane=a->dock_panels[PS_DOCK_WORKSPACE];
+    if(a->dock_visible[PS_DOCK_LOG] && fabsf(pane.x-a->dock_panels[PS_DOCK_LOG].x)<2 &&
+       !(a->preferences.dock.floating&((1u<<PS_DOCK_LOG)|(1u<<PS_DOCK_WORKSPACE))))
+        pane.h=a->dock_panels[PS_DOCK_LOG].y+a->dock_panels[PS_DOCK_LOG].h-pane.y;
+    struct nk_rect bar=nk_rect(pane.x,pane.y+pane.h-26,pane.w,26);
+    nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(12,0));
+    nk_style_push_float(ui,&ui->style.window.rounding,0);
+    struct nk_window *previous=ui->active;
+    if(nk_begin(ui,"workbench-editor-status",bar,NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BACKGROUND)) {
+        ui->active=previous;ui->current->flags|=NK_WINDOW_ROM;ui->current->layout->flags|=NK_WINDOW_ROM;
+        struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+        nk_stroke_line(canvas,bar.x,bar.y,bar.x+bar.w,bar.y,1,UI_COLOR(border));
+        const char *text=nk_str_get_const(&edit->string);size_t cursor=editor_search_byte(edit,edit->cursor),start=0;unsigned line=1;
+        for(size_t i=0;i<cursor;i++)if(text[i]=='\n'){line++;start=i+1;}
+        unsigned column=text?(unsigned)nk_utf_len(text+start,(int)(cursor-start))+1:1;
+        workspace_document *doc=active_document(a);
+        const char *name=a->tab==8 && doc?workspace_name(doc->path):a->analysis_only?analysis_source(a):experiment_source(a);
+        char location[512];snprintf(location,sizeof location,"%s    Zeile %u, Spalte %u    UTF-8",name,line,column);
+        const struct nk_user_font *small=&a->workbench_fonts[1];float y=bar.y+(bar.h-small->height)/2;
+        const char *saved=a->dirty || a->analysis_dirty || documents_dirty(a)?"Ungespeicherte Änderungen":"Alle Änderungen gespeichert";
+        nk_draw_text(canvas,nk_rect(bar.x+12,y,fmaxf(1,bar.w*.40f-12),small->height),saved,(int)strlen(saved),small,nk_rgba(0,0,0,0),muted());
+        float text_width=small->width(small->userdata,small->height,location,(int)strlen(location));
+        nk_draw_text(canvas,nk_rect(fmaxf(bar.x+bar.w*.42f,bar.x+bar.w-text_width-12),y,fminf(bar.w*.58f-12,text_width),small->height),location,(int)strlen(location),small,nk_rgba(0,0,0,0),muted());
+        ps_ui_accessibility_label(ui,bar,location);
+    }
+    nk_end(ui);nk_style_pop_float(ui);nk_style_pop_vec2(ui);
 }
 static void draw_ui(app *a, int width, int height) {
     struct nk_context *ui = a->ui;
@@ -1167,6 +1379,19 @@ static void draw_ui(app *a, int width, int height) {
         nk_end(ui);
         return;
     }
+    const ps_ui_palette *previous_palette=ui_palette;
+    const struct nk_user_font *previous_font=ui->style.font;
+    bool workbench=workbench_visible(a);
+    const float sizes[]={11,9,12,11,20,16,10};
+    for(unsigned i=0;i<7;i++) {
+        a->workbench_fonts[i]=*(i>=3?a->font_title:a->font_ui);
+        float em=i>=3?a->workbench_bold_em:a->workbench_regular_em;
+        a->workbench_fonts[i].height=sizes[i]*em*a->preferences.ui_size/16.f;
+    }
+    if(workbench) {
+        ui_palette=ps_workbench_palette(ui_palette);style(ui);
+        nk_style_set_font(ui,&a->workbench_fonts[0]);
+    }
     float w=(float)width,h=(float)height;
     a->search_edit=NULL;
     a->toolbar_pointer_consumed=false;
@@ -1175,7 +1400,7 @@ static void draw_ui(app *a, int width, int height) {
     nk_style_push_vec2(ui, &ui->style.window.padding, nk_vec2(0, 0));
     nk_style_push_vec2(ui, &ui->style.window.spacing, nk_vec2(0, 0));
     nk_style_push_float(ui, &ui->style.window.rounding, 0);
-    if (nk_begin(ui, "header", nk_rect(0, 0, w, 64), NK_WINDOW_NO_SCROLLBAR)) {
+    if (nk_begin(ui, "header", nk_rect(0, 0, w, workbench?72:64), NK_WINDOW_NO_SCROLLBAR)) {
         toolbar_view(a);
         dock_overlay(a,w,h);
     }
@@ -1195,6 +1420,7 @@ static void draw_ui(app *a, int width, int height) {
         }
     }
     dock_headers(a);
+    workbench_editor_status(a);
     workbench_status_view(a,w,h);
     if(a->tab==4 && a->library_search_active && a->dock_visible[PS_DOCK_WORKSPACE])
         nk_window_set_focus(ui,"workspace");
@@ -1202,4 +1428,5 @@ static void draw_ui(app *a, int width, int height) {
     dock_separator_views(a);
     editor_search_view(a);
     completion_view(a,width,height);
+    if(workbench){ui_palette=previous_palette;style(ui);nk_style_set_font(ui,previous_font);}
 }

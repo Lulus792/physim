@@ -28,6 +28,10 @@ static void documentation_window_destroy(app *a) {
 
 /* Missing sizes are appended; an actual density change replaces the bank. */
 static bool documentation_fonts_load(app *a,float density,unsigned size,unsigned code_size,unsigned ui_size,unsigned editor_size) {
+    /* The handbook retains its readable 16px minimum independently of the
+     * compact source editor's additional 12/14px choices. */
+    if(code_size==12 || code_size==14)code_size=16;
+    if(editor_size==12 || editor_size==14)editor_size=16;
     if(!isfinite(density) || density<1 || density>4 || size<16 || size>32 || (size&1) ||
        code_size<16 || code_size>32 || (code_size&1) || ui_size<16 || ui_size>22 || (ui_size&1) ||
        editor_size<16 || editor_size>32 || (editor_size&1))return false;
@@ -121,7 +125,9 @@ static bool documentation_window_open(app *a) {
             goto fail;
         float density=SDL_GetWindowPixelDensity(a->doc_window);
         if(!documentation_window_fonts(a,density>0?density:1))goto fail;
-        style(a->doc_ui);
+        const ps_ui_palette *previous_palette=ui_palette;
+        ui_palette=a->preferences.theme==PS_THEME_LIGHT?&PS_UI_LIGHT:a->preferences.theme==PS_THEME_HIGH_CONTRAST?&PS_UI_HIGH_CONTRAST:&PS_UI_DARK;
+        style(a->doc_ui);ui_palette=previous_palette;
         nk_style_set_font(a->doc_ui, a->doc_font_ui);
         nk_sdl_set_ui_size(a->doc_ui,a->preferences.ui_size);
         a->doc_reset_sidebar = true;

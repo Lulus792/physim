@@ -127,7 +127,7 @@ static void test_settings_keyboard_frame(app *a,bool reading,int *stage,int *cod
         SETTINGS_KEY(SDLK_LEFT);break;
     case 3: ok=a->settings_draft.ui_size==22;for(int i=0;i<4;i++)SETTINGS_KEY(SDLK_TAB);break;
     case 4: ok=a->settings_focus==4;SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_TAB);break;
-    case 5: ok=a->settings_draft.theme==PS_THEME_LIGHT && a->settings_focus==5;SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_TAB);break;
+    case 5: ok=a->settings_draft.theme==PS_THEME_LIGHT && a->settings_focus==5;for(unsigned i=0;i<4;i++)SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_TAB);break;
     case 6: ok=a->settings_draft.editor_size==20 && a->settings_focus==6;SETTINGS_KEY(SDLK_END);SETTINGS_KEY(SDLK_LEFT);SETTINGS_KEY(SDLK_LEFT);break;
     case 7: ok=a->settings_draft.autosave_seconds==120;SETTINGS_KEY(SDLK_TAB);break;
     case 8: case 9: case 10: case 11: case 12: case 13: case 14:
@@ -140,7 +140,7 @@ static void test_settings_keyboard_frame(app *a,bool reading,int *stage,int *cod
     case 19: ok=a->tab!=6 && a->preferences.ui_size==22;
         SETTINGS_KEY(SDLK_F10);test_window_key_mod(a->window,SDLK_TAB,SDL_KMOD_SHIFT);SETTINGS_KEY(SDLK_RETURN);
         for(int i=0;i<4;i++)SETTINGS_KEY(SDLK_TAB);SETTINGS_KEY(SDLK_SPACE);*stage=23;break;
-    case 23: ok=a->settings_draft.ui_size==16 && a->settings_draft.editor_size==16 && a->settings_draft.theme==PS_THEME_DARK && a->preferences.ui_size==22;
+    case 23: ok=a->settings_draft.ui_size==16 && a->settings_draft.editor_size==PS_PREFERENCES_DEFAULT.editor_size && a->settings_draft.theme==PS_THEME_DARK && a->preferences.ui_size==22;
         test_window_key_mod(a->window,SDLK_TAB,SDL_KMOD_SHIFT);SETTINGS_KEY(SDLK_RETURN);*stage=20;break;
     case 21: if(a->settings_focus_scroll){--*stage;return;}
         ok=a->settings_focus==13;
@@ -195,7 +195,7 @@ static void test_settings_options_frame(app *a,bool remote,int *stage,int *code)
     switch(*stage) {
     case 0:
         SDL_SetWindowSize(a->window,1080,740);open_settings(a);choice=0;
-        ok=a->preferences.ui_size==16 && a->preferences.editor_size==16 && a->preferences.theme==PS_THEME_DARK;
+        ok=a->preferences.ui_size==16 && a->preferences.editor_size==PS_PREFERENCES_DEFAULT.editor_size && a->preferences.theme==PS_THEME_DARK;
         (*stage)++;break;
     case 1:nk_window_set_focus(a->ui,"workspace");(*stage)++;break;
     case 2:
@@ -209,7 +209,7 @@ static void test_settings_options_frame(app *a,bool remote,int *stage,int *code)
                       :choice<4?a->settings_draft.theme==(choice==2?PS_THEME_LIGHT:PS_THEME_DARK)
                                :a->settings_draft.editor_size==(choice==4?20u:16u);
         if(!arrived)return;
-        ok=a->preferences.ui_size==16 && a->preferences.editor_size==16 && a->preferences.theme==PS_THEME_DARK;
+        ok=a->preferences.ui_size==16 && a->preferences.editor_size==PS_PREFERENCES_DEFAULT.editor_size && a->preferences.theme==PS_THEME_DARK;
         printf("RADIO SELECTED %u\n",choice);fflush(stdout);choice++;
         if(choice==6){a->quitting=true;puts("SETTINGS RADIO SELF-TEST: PASSED");}else *stage=2;
         break;
@@ -239,7 +239,7 @@ static void test_settings_focus_frame(app *a,bool remote,int *stage,int *code,co
   test_window_key_mod(a->window,SDLK_RIGHT,0);(*stage)++;break;
  case 5:
   if(a->settings_draft.theme!=PS_THEME_LIGHT)return;
-  ok=a->preferences.theme==PS_THEME_DARK && a->preferences.ui_size==16 && a->preferences.editor_size==16;
+  ok=a->preferences.theme==PS_THEME_DARK && a->preferences.ui_size==16 && a->preferences.editor_size==PS_PREFERENCES_DEFAULT.editor_size;
   if(ok)puts("SETTINGS FOCUS SELF-TEST: PASSED");a->quitting=true;break;
  }
  if(!ok){fprintf(stderr,"Settings focus failed stage %d\n",*stage);*code=1;a->quitting=true;}
@@ -284,14 +284,14 @@ static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
     } else if (!strcmp(mode, "corrupt")) {
         if (*stage == 0) {
             ok = !a->preferences_writable && a->preferences_error[0] &&
-                 a->preferences.editor_size == 16;
+                 a->preferences.editor_size == PS_PREFERENCES_DEFAULT.editor_size;
             test_key(a, SDLK_COMMA);
         } else if (*stage == 3) {
             *capture = "settings-corrupt.bmp";
         } else if (*stage == 4)
             a->quitting = true;
     } else if (!strcmp(mode, "defaults")) {
-        ok = a->preferences.editor_size == 16 && a->preferences.autosave_seconds == 30 &&
+        ok = a->preferences.editor_size == PS_PREFERENCES_DEFAULT.editor_size && a->preferences.autosave_seconds == 30 &&
              a->preferences.sidebar_width == 248 && a->preferences.log_height == 178 &&
              a->preferences.view_flags == 31;
         if (*stage == 3)
@@ -320,14 +320,14 @@ static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
             test_mouse(a, a->settings_bounds[5], false);
             break;
         case 5:
-            ok = a->settings_draft.editor_size == 16 && a->preferences.editor_size == 20;
+            ok = a->settings_draft.editor_size == PS_PREFERENCES_DEFAULT.editor_size && a->preferences.editor_size == 20;
             test_mouse(a, a->settings_bounds[resetting ? 0 : 4], true);
             break;
         case 6:
             test_mouse(a, a->settings_bounds[resetting ? 0 : 4], false);
             break;
         case 8:
-            ok = a->tab == 1 && a->preferences.editor_size == (resetting ? 16u : 20u);
+            ok = a->tab == 1 && a->preferences.editor_size == (resetting ? PS_PREFERENCES_DEFAULT.editor_size : 20u);
             break;
         case 9:
             a->quitting = true;
@@ -348,7 +348,7 @@ static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
             break;
         case 5:
             if(!settings_test_reveal(a,a->settings_bounds[2]))return;
-            ok = a->settings_draft.editor_size == 20 && a->preferences.editor_size == 16;
+            ok = a->settings_draft.editor_size == 20 && a->preferences.editor_size == PS_PREFERENCES_DEFAULT.editor_size;
             a->settings_draft.autosave_seconds = 60;
             test_mouse(a, a->settings_bounds[2], true);
             break;

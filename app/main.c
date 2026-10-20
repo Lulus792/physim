@@ -112,8 +112,14 @@ typedef struct {
 typedef struct {
     struct nk_context *ui;
     const struct nk_user_font *font_ui, *font_code, *font_title;
+    struct nk_user_font workbench_fonts[7]; /* Role sizes share the DPI-aware atlas. */
+    unsigned workbench_sidebar_focus;
+    struct nk_rect workbench_environment_bounds;
+    float workbench_regular_em,workbench_bold_em;
+    struct nk_rect diagnostic_view_bounds;
+    uint16_t workbench_tree_order[PS_WORKSPACE_TREE_LIMIT];
     const struct nk_user_font *ui_fonts[4], *title_fonts[4];
-    const struct nk_user_font *code_fonts[4];
+    const struct nk_user_font *code_fonts[6];
     ps_preferences preferences, settings_draft;
     char preferences_path[4096], preferences_error[192];
     bool preferences_writable, show_grid;
@@ -542,6 +548,9 @@ static const char *experiment_source(const app *a) {
 static const char *analysis_source(const app *a) {
     return a->language_analysis ? "analysis.phys" : "analysis.c";
 }
+static float editor_row_padding(const app *a) {
+    return !a->project_manager && (a->tab==0 || a->tab==8)?11.f:a->ui->style.edit.row_padding;
+}
 static void preview_workspace_path(app *a,const char *path);
 static void join(char *out, size_t n, const char *base, const char *leaf);
 static const char *diagnostic_basename(const char *path) {
@@ -637,7 +646,7 @@ static void jump_to_diagnostic(app *a, const diagnostic *d) {
     edit->select_end = nk_utf_len(text, at);
     edit->cursor = edit->select_start;
     edit->scrollbar.y =
-        (float)(line > 3 ? line - 3 : 0) * (a->font_code->height + a->ui->style.edit.row_padding);
+        (float)(line > 3 ? line - 3 : 0) * (a->font_code->height + editor_row_padding(a));
     edit->scrollbar.x = 0;
     if(d->foreign)return;
     a->tab = d->analysis ? 2 : 0;
@@ -2544,7 +2553,7 @@ static void find_text_direction(app *a, struct nk_text_edit *edit, bool replace,
         for (const char *c = copy; c < found; c++)
             if (*c == '\n')
                 line++;
-        edit->scrollbar.y = (float)line * (a->font_code->height + a->ui->style.edit.row_padding);
+        edit->scrollbar.y = (float)line * (a->font_code->height + editor_row_padding(a));
         const char *line_begin=found;
         while(line_begin>copy && line_begin[-1]!='\n')--line_begin;
         float hit_x=a->font_code->width(a->font_code->userdata,a->font_code->height,line_begin,(int)(found-line_begin));
@@ -3542,13 +3551,15 @@ int main(int argc, char **argv) {
         ui_fonts_ok &= ui_fonts[i]!=NULL && title_fonts[i]!=NULL;
     }
     struct nk_font *font=ui_fonts[0];
-    struct nk_font *code_fonts[4];
+    struct nk_font *code_fonts[6];
     bool code_fonts_ok = true;
-    for (int i = 0; i < 4; i++) {
-        code_fonts[i] = system_font(atlas,a->root,(float)(16 + i * 2),true,false);
+    for (int i = 0; i < 6; i++) {
+        code_fonts[i] = system_font(atlas,a->root,(float)(12 + i * 2),true,false);
         code_fonts_ok &= code_fonts[i] != NULL;
     }
     struct nk_font *title_font = title_fonts[0];
+    a->workbench_regular_em=ps_ui_font_em_ratio(font);
+    a->workbench_bold_em=ps_ui_font_em_ratio(title_font);
     if(trace_test)fprintf(stderr,"APP TEST TRACE: main font sources ready %.6f\n",ps_clock());
     if (!ui_fonts_ok || !code_fonts_ok || !title_font || !nk_sdl_font_stash_end(a->ui)) {
         fprintf(stderr, "Font initialization: %s\n", SDL_GetError());
@@ -3563,7 +3574,7 @@ int main(int argc, char **argv) {
     if(trace_test)fprintf(stderr,"APP TEST TRACE: main fonts ready %.6f\n",ps_clock());
     a->font_ui = &font->handle;
     for(int i=0;i<4;i++){a->ui_fonts[i]=&ui_fonts[i]->handle;a->title_fonts[i]=&title_fonts[i]->handle;}
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 6; i++)
         a->code_fonts[i] = &code_fonts[i]->handle;
     a->font_code = a->code_fonts[0];
     a->font_title = &title_font->handle;
@@ -3834,6 +3845,7 @@ int main(int argc, char **argv) {
                 if (!a->dirty && !a->analysis_dirty && !a->project_settings_dirty && !a->project_definitions_dirty && documents_save_all(a))
                     a->quitting = true;
             }
+            if(e.type==SDL_EVENT_KEY_DOWN && event_window==a->window)a->workbench_sidebar_focus=0;
             if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && (a->layout_manager || a->workspace_manager || a->channel_unit_manager || a->run_details_manager) && e.key.key == SDLK_ESCAPE) {
                 a->layout_manager = false;
                 a->workspace_manager = false;

@@ -3,6 +3,7 @@ static bool workbench_test_start(app *a,const char *root,const char *mode) {
     if(!a->loaded)return false;
     ps_preferences p=a->preferences;p.theme=strstr(mode,"light")?PS_THEME_LIGHT:PS_THEME_DARK;
     p.sidebar_width=218;p.inspector_width=255;
+    p.log_height=154; /* Reference header/body/status geometry at 1204x866. */
     if(strstr(mode,"contrast"))p.theme=PS_THEME_HIGH_CONTRAST;
     if(strstr(mode,"large")){p.ui_size=22;p.editor_size=22;}
     preferences_apply(a,&p);
@@ -21,6 +22,10 @@ static void workbench_test_frame(app *a,const char *mode,int *stage,int *code,co
     switch(*stage) {
     case 0:
         if(a->library_thread || a->source_editor_bounds.w<=0)return;
+        if(!warmup) {
+            const struct nk_user_font *font=&a->workbench_fonts[0];
+            printf("WORKBENCH TYPOGRAPHY: ui=%.3f em=%.6f role=%.3f Datei-width=%.3f code=%.3f\n",a->font_ui->height,a->workbench_regular_em,font->height,font->width(font->userdata,font->height,"Datei",5),a->font_code->height);
+        }
         if(warmup++<3)return;
         editor_rect=a->source_editor_bounds;context_rect=a->workbench_context_bounds;
         edit->select_start=2;edit->select_end=6;edit->cursor=6;
@@ -61,7 +66,13 @@ static void workbench_test_frame(app *a,const char *mode,int *stage,int *code,co
         edit->scrollbar=nk_vec2(0,0);edit->cursor=edit->select_start=edit->select_end=0;
         editor_search_open(a);a->search_replace_open=false;break;
     case 8:
+        if(a->preferences.ui_size==16 && !strstr(mode,"narrow")) {
+            struct nk_rect pane=a->dock_panels[PS_DOCK_INSPECTOR],environment=a->workbench_environment_bounds;
+            ok=environment.h>0 && environment.y>=pane.y && environment.y+environment.h<=pane.y+pane.h-4;
+            printf("WORKBENCH ENVIRONMENT: %.1f/%.1f within %.1f/%.1f visible=%d\n",environment.y,environment.y+environment.h,pane.y,pane.y+pane.h,ok);
+        }
         *capture=strstr(mode,"light")?"workbench-light.bmp":"workbench-dark.bmp";
+        if(!ok)break;
         if(strstr(mode,"visual"))a->quitting=true;
         else {wheel_wait=0;test_plot_wheel(a,a->source_editor_bounds.x+20,a->source_editor_bounds.y+200,-2);*stage=50;return;}
         break;
@@ -80,14 +91,16 @@ static void workbench_test_frame(app *a,const char *mode,int *stage,int *code,co
         ok=ok && ((a->preferences.dock.hidden&(1u<<PS_DOCK_INSPECTOR))!=0)==((side%2)==0);
         if(side==0)*capture=strstr(mode,"light")?"workbench-light-right-hidden.bmp":"workbench-dark-right-hidden.bmp";
         if(side==2)*capture=strstr(mode,"light")?"workbench-light-both-hidden.bmp":"workbench-dark-both-hidden.bmp";
-        if(++side==2)ps_dock_hide(&a->preferences.dock,PS_DOCK_SIDEBAR);
+        if(++side==2){test_mouse(a,a->workbench_sidebar_bounds,true);*stage=51;return;}
         break;
+    case 51:test_mouse(a,a->workbench_sidebar_bounds,false);*stage=15;return;
     case 21:
         *capture=strstr(mode,"light")?"workbench-light-sides-hidden.bmp":"workbench-dark-sides-hidden.bmp";
         test_mouse(a,a->workbench_sidebar_bounds,true);break;
     case 22:test_mouse(a,a->workbench_sidebar_bounds,false);break;
     case 23:
         ok=!(a->preferences.dock.hidden&(1u<<PS_DOCK_SIDEBAR)) && a->preferences.sidebar_width==218;
+        if(ok && (a->workbench_sidebar_focus || !nk_sdl_accessibility_is_focused(a->ui,NULL,"Workspace ein-/ausblenden")))return;
         if(ok && !nk_sdl_accessibility_request_focus(a->ui,NULL,"Workspace-Breite"))return;
         break;
     case 24:

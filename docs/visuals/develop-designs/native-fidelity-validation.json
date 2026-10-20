@@ -1,0 +1,1057 @@
+{
+  "date": "2026-10-20",
+  "base_commit": "154c61b89ce94ec3ef3e556e131049a02384437c",
+  "scope": "Develop / Werkbank fidelity; no full UI or screenreader rating",
+  "images": [
+    {
+      "source": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-_7b1wl_d\\workbench_workflow\\files ä\\workflow ä\\contrast-visual\\workbench-dark-expanded.bmp",
+      "source_sha256": "56dd1cccb700c49d08587518759f95b8e279cc80f98763e76d5a3615882aebe9",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\linux-contrast-visual-workbench-dark-expanded.png",
+      "sha256": "e1e5d10681e3303c70b8a819b2d6597bcbea421b80a99cd3d8dd1b53910c7644",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-_7b1wl_d\\workbench_workflow\\files ä\\workflow ä\\contrast-visual\\workbench-dark.bmp",
+      "source_sha256": "70381c290103a7d81bddaee91634eb8a812eb9c002678e84dab5667b18b0e4fe",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\linux-contrast-visual-workbench-dark.png",
+      "sha256": "a6eaae5d26f96c3ede9cd910e2599c0364df1ac67e9257d9825013617e2502f7",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-_7b1wl_d\\workbench_workflow\\files ä\\workflow ä\\dark\\workbench-dark-both-hidden.bmp",
+      "source_sha256": "ddd6d25a859ee4177acd93bb78f9f5b0754fab796638dc67312500edb1f5834d",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\linux-dark-workbench-dark-both-hidden.png",
+      "sha256": "124404864cc856221e227a06549d582115938b48172ff2ead79a81d66b51aed1",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-_7b1wl_d\\workbench_workflow\\files ä\\workflow ä\\dark\\workbench-dark-expanded.bmp",
+      "source_sha256": "b0744ba6995cbdcdd10701f0ce9e7a4fbbfcdb329562e8f0ca682d8d3ee8e241",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\linux-dark-workbench-dark-expanded.png",
+      "sha256": "58cbc8987ccb9ce6e5353c088b96c8eefe8192f446989e500f30615b7b02c04f",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-_7b1wl_d\\workbench_workflow\\files ä\\workflow ä\\dark\\workbench-dark-right-hidden.bmp",
+      "source_sha256": "0712833f1a437382cb6bc0b44b70ee141b61acb46600ebc043c63ca9c76a13ac",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\linux-dark-workbench-dark-right-hidden.png",
+      "sha256": "fef4cab111ad881612c04845e6c2100ddacf28a14ca0d86cbf04038ba31483c8",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-_7b1wl_d\\workbench_workflow\\files ä\\workflow ä\\dark\\workbench-dark-sides-hidden.bmp",
+      "source_sha256": "194ebaf3df963e44853e90a8290c4c1c33ed201356d985c7664afbebd42e0b6b",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\linux-dark-workbench-dark-sides-hidden.png",
+      "sha256": "5878085d6c842938c12be1506af65bb0bd8ae25bf3b2b1a757c4c5bee589a4c9",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-_7b1wl_d\\workbench_workflow\\files ä\\workflow ä\\dark\\workbench-dark.bmp",
+      "source_sha256": "3a5e645e010fcb69c19d61fbc8a0251cd4622a822b6cb55ef01e18ce1f418f20",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\linux-dark-workbench-dark.png",
+      "sha256": "0058c03dfd78f9c7c6b370f1759c5130309b4927487932ff209b66ac7e1eb5b9",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-_7b1wl_d\\workbench_workflow\\files ä\\workflow ä\\dark-narrow-visual\\workbench-dark-expanded.bmp",
+      "source_sha256": "5a2b0213900a0deae21a96885a32dd09f597a84768df54534fc30015e0eb3bd7",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\linux-dark-narrow-visual-workbench-dark-expanded.png",
+      "sha256": "040b978624cc04d60c6a4ddc05dcd19e1de52537bdd66602b49f83c7b00afcf2",
+      "size": [
+        1080,
+        740
+      ]
+    },
+    {
+      "source": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-_7b1wl_d\\workbench_workflow\\files ä\\workflow ä\\dark-narrow-visual\\workbench-dark.bmp",
+      "source_sha256": "cb5f4cb8591646ef4764b78bf239c0332d9ac2f7e87a0f4ec9cb0b91411035aa",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\linux-dark-narrow-visual-workbench-dark.png",
+      "sha256": "d23d7446be44ef88c889086d06fd1d40d43f2df29a47d75d2165518eb5bf9abe",
+      "size": [
+        1080,
+        740
+      ]
+    },
+    {
+      "source": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-_7b1wl_d\\workbench_workflow\\files ä\\workflow ä\\dark-opaque-visual\\workbench-dark-expanded.bmp",
+      "source_sha256": "6069b8bf6a7d6049e08f50f8354554d57cfcf409ca507c1907cae51bab7bf662",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\linux-dark-opaque-visual-workbench-dark-expanded.png",
+      "sha256": "91d3e7686c759c8ead1c06be555faf0957b229a3fa03f829e64e90f19890b773",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-_7b1wl_d\\workbench_workflow\\files ä\\workflow ä\\dark-opaque-visual\\workbench-dark.bmp",
+      "source_sha256": "a21aedb7b1f29ca1f8a5b85b38b6a1f6a216d1da21eb65b655a88a77393ad288",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\linux-dark-opaque-visual-workbench-dark.png",
+      "sha256": "b353d5c9c80ac5c0a90287fbc124b10725a3d54b4f4e681c7d2e37a6c0a403b6",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-_7b1wl_d\\workbench_workflow\\files ä\\workflow ä\\light\\workbench-light-both-hidden.bmp",
+      "source_sha256": "dd2b992a4719f196109013e001f83596567b2bedd2ec65e5839c0fb165f92569",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\linux-light-workbench-light-both-hidden.png",
+      "sha256": "a0ba1b08b835d13213c052e8ed458d14c61b8261ea47e7f34a66ec822db5cf58",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-_7b1wl_d\\workbench_workflow\\files ä\\workflow ä\\light\\workbench-light-expanded.bmp",
+      "source_sha256": "50d177ac127291dc740f58ab9e992ddef1868359fd274527bd3c0b22e0fd1cdc",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\linux-light-workbench-light-expanded.png",
+      "sha256": "a2612b06aca371e9be7f5909843705418e7ae430b8965a43f6295f16e6340024",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-_7b1wl_d\\workbench_workflow\\files ä\\workflow ä\\light\\workbench-light-right-hidden.bmp",
+      "source_sha256": "77b0009432fe06965f5ba296c9099e7dadcad793d41ba36262ff63268a3f1c68",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\linux-light-workbench-light-right-hidden.png",
+      "sha256": "57fc1118ac317d0104aa848758b8d622edc75a063c13688c3ec7098cd5592e5f",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-_7b1wl_d\\workbench_workflow\\files ä\\workflow ä\\light\\workbench-light-sides-hidden.bmp",
+      "source_sha256": "91de89d6231caa68977b6227611554012b8386eedc9884ce3a179dc13be9f580",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\linux-light-workbench-light-sides-hidden.png",
+      "sha256": "7e4aad3ff774b3ce49a63cda6b9fecce4b2ebffa41c72cde055a86f3e785fdb5",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-_7b1wl_d\\workbench_workflow\\files ä\\workflow ä\\light\\workbench-light.bmp",
+      "source_sha256": "7755a65ee0a67db94ef48360a10e11b8223faea9bc2b18ef6063e6c70abd903f",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\linux-light-workbench-light.png",
+      "sha256": "477d3f3e7a0b34e5b74b8682546b5382862107a15f85467eb144699b849aaf23",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-_7b1wl_d\\workbench_workflow\\files ä\\workflow ä\\light-large-visual\\workbench-light-expanded.bmp",
+      "source_sha256": "f2d40d04ce2cf1382abbbf34f36057aa6e6a66694c9106c74e60acc91cc427d9",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\linux-light-large-visual-workbench-light-expanded.png",
+      "sha256": "73e34dcc4bcf5e98b6906771307ba490491c78be9a792e397364fdbd6dc1dd00",
+      "size": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "source": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-_7b1wl_d\\workbench_workflow\\files ä\\workflow ä\\light-large-visual\\workbench-light.bmp",
+      "source_sha256": "84bacfcb893eaf0a1466d2860a31a6e7ec180b02475e30625489dbf837a5e997",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\linux-light-large-visual-workbench-light.png",
+      "sha256": "811aeafdd601ba3ef3c9eecd16da05ed8e67ddf6e502ba795c7d1365168078c4",
+      "size": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "source": "build\\native\\workbench-fidelity-windows-current\\workflow ä\\contrast-visual\\workbench-dark-expanded.bmp",
+      "source_sha256": "0e7d457ac2803ffbb166035fe6c5e3e8077df53180d1f35d8aad64769411a45e",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\windows-contrast-visual-workbench-dark-expanded.png",
+      "sha256": "d33c81f21065583258fd9eb5c922944935c552624d19ec0f21ee09e4d2e32c54",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\workbench-fidelity-windows-current\\workflow ä\\contrast-visual\\workbench-dark.bmp",
+      "source_sha256": "a7d24d8804ed27b432c1ff9a364964bc8c80993d4e18e72096de30113cb67e6a",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\windows-contrast-visual-workbench-dark.png",
+      "sha256": "4145c435c31da3b5966405e49ecf34851441cf14e8b9234ba15b1bb30c78e023",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\workbench-fidelity-windows-current\\workflow ä\\dark\\workbench-dark-both-hidden.bmp",
+      "source_sha256": "e39a3635816edd3898eb2e7e330a536f52c8b9df23ffea720ef2380babbe3fa3",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\windows-dark-workbench-dark-both-hidden.png",
+      "sha256": "8d5ba266ca9828edd4e63389de214f08549c6c9bea462653349793c93d84dc4a",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\workbench-fidelity-windows-current\\workflow ä\\dark\\workbench-dark-expanded.bmp",
+      "source_sha256": "357645913fe001acae3ae2f45104ac51398cc90cbd3fc6c8df56d50b48e0e92f",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\windows-dark-workbench-dark-expanded.png",
+      "sha256": "ba24568575c59fe3ad04e3db338507edbd58fc67494d341473e55a0526799fc9",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\workbench-fidelity-windows-current\\workflow ä\\dark\\workbench-dark-right-hidden.bmp",
+      "source_sha256": "cbba1032c90fa94a30abf005b27fcb116d29fd67da586f6bd3aa86f58a7ac1bd",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\windows-dark-workbench-dark-right-hidden.png",
+      "sha256": "776fa8f87da7ea87c716230ebcc69562c3081f9a41b4cb1745b90088c6225075",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\workbench-fidelity-windows-current\\workflow ä\\dark\\workbench-dark-sides-hidden.bmp",
+      "source_sha256": "68113439bd4b3f1ee2e6f1978131014b3a4819cc0a9920ffac484508e0a02cfd",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\windows-dark-workbench-dark-sides-hidden.png",
+      "sha256": "c273604a69b204260df38424dad71a3371dea884c56f852b3f8217932cc7f438",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\workbench-fidelity-windows-current\\workflow ä\\dark\\workbench-dark.bmp",
+      "source_sha256": "46f6721151896a6c58233054650e17af9904aaf6619249b9b12fae5cbcfdb001",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\windows-dark-workbench-dark.png",
+      "sha256": "a472b52a66e50fdbd1ab7867aab640292e201c785f939fbfe8408fcc632f278b",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\workbench-fidelity-windows-current\\workflow ä\\dark-narrow-visual\\workbench-dark-expanded.bmp",
+      "source_sha256": "35d64492da23b515f626547b95e0ea1569ce08e8551c5ac55536b2a418b8cfc7",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\windows-dark-narrow-visual-workbench-dark-expanded.png",
+      "sha256": "f0a0ab08b74e0a33844860341ccf90d8654ced7be18a404e616b9f553f8a4eac",
+      "size": [
+        1080,
+        740
+      ]
+    },
+    {
+      "source": "build\\native\\workbench-fidelity-windows-current\\workflow ä\\dark-narrow-visual\\workbench-dark.bmp",
+      "source_sha256": "d19f27a99a5a562aafb1501d3db618f666812f7ef5ec440181dd0fc0c1e0c9df",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\windows-dark-narrow-visual-workbench-dark.png",
+      "sha256": "89ab22ff31df4d4e12883ceba99ce4fdc9668b50c5602d1466bceb711cf09ab2",
+      "size": [
+        1080,
+        740
+      ]
+    },
+    {
+      "source": "build\\native\\workbench-fidelity-windows-current\\workflow ä\\dark-opaque-visual\\workbench-dark-expanded.bmp",
+      "source_sha256": "1c094d806f33f7c5474d48fbae9de7105981ab57273f1904f250ea56aa8c9c98",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\windows-dark-opaque-visual-workbench-dark-expanded.png",
+      "sha256": "2ed56a550aa6e80db154bb15cf4539ac715884c0a67d521cc2b7d57ffc8c877c",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\workbench-fidelity-windows-current\\workflow ä\\dark-opaque-visual\\workbench-dark.bmp",
+      "source_sha256": "0479b175c63d0b631cfc359195621bc3c996b8ec375af2aa5165299034639cc5",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\windows-dark-opaque-visual-workbench-dark.png",
+      "sha256": "b7bdcdccc15d21fe975a3077412bfc6705b6f423e3a7b01bd6778d2aae2e71b6",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\workbench-fidelity-windows-current\\workflow ä\\light\\workbench-light-both-hidden.bmp",
+      "source_sha256": "3c76dbcbe1c52af9f34bafdd94b6a3119a1f1d77c242b93198eb1230e8c35fff",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\windows-light-workbench-light-both-hidden.png",
+      "sha256": "f2aa0788ef16645b796ca5c00b0e5c63566ddcf857e76149cfaf41a172470651",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\workbench-fidelity-windows-current\\workflow ä\\light\\workbench-light-expanded.bmp",
+      "source_sha256": "3ae354920b92198a46cb2cde9c1109ea1fb4d4a65a203699cd9009580f8d0466",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\windows-light-workbench-light-expanded.png",
+      "sha256": "5d8cc4cb4d297b6fde585f26f608266c9d64653ca86a8d791618f04ef2287f6f",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\workbench-fidelity-windows-current\\workflow ä\\light\\workbench-light-right-hidden.bmp",
+      "source_sha256": "d0e3c61a23065f267d2484b1333d2a446bed73319c5a41c878821c11dd4b6898",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\windows-light-workbench-light-right-hidden.png",
+      "sha256": "6b44b837f1be6076ff61c23e10a0505e0054152dbaec64c1c66ad6cb5dd38933",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\workbench-fidelity-windows-current\\workflow ä\\light\\workbench-light-sides-hidden.bmp",
+      "source_sha256": "cf41487d7dcfab428190bb97df1d667b960609298ae777465a708dd6bcf26367",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\windows-light-workbench-light-sides-hidden.png",
+      "sha256": "85bf89834fd63057987e20cfa70d4d6b9c7c53f142738ab14d6875c1e2c4564c",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\workbench-fidelity-windows-current\\workflow ä\\light\\workbench-light.bmp",
+      "source_sha256": "b8d87a7dba7100c4640faf28f785cbec9e1f6b433361c2e3aa6eb8726d7cede3",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\windows-light-workbench-light.png",
+      "sha256": "31e109e52362748b987952340878257b7cbbc0f406009628db0e898b6483f611",
+      "size": [
+        1204,
+        866
+      ]
+    },
+    {
+      "source": "build\\native\\workbench-fidelity-windows-current\\workflow ä\\light-large-visual\\workbench-light-expanded.bmp",
+      "source_sha256": "92c7dd5ee20d3d9b62fbd3fe12ab156eaab68009fc48823d62baf687eeaa7dfb",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\windows-light-large-visual-workbench-light-expanded.png",
+      "sha256": "a7b8d3e03c32a974f04eba393de0e6d9cdeb348ea297a31449450b6944cf8d79",
+      "size": [
+        1600,
+        1000
+      ]
+    },
+    {
+      "source": "build\\native\\workbench-fidelity-windows-current\\workflow ä\\light-large-visual\\workbench-light.bmp",
+      "source_sha256": "fd13989822add2cbedea3964a480eb18ab46f8d3cea3ae1d55922a746684e113",
+      "png": "docs\\visuals\\develop-designs\\native-refined\\windows-light-large-visual-workbench-light.png",
+      "sha256": "fcf5413955a3f5d2293544638ab26c71b268a9d3c174d11c48a70a6579e94df7",
+      "size": [
+        1600,
+        1000
+      ]
+    }
+  ],
+  "visual_checks": [
+    {
+      "reference": "D:\\Physim\\docs\\visuals\\develop-designs\\glass-cool-dark.png",
+      "native": "D:\\Physim\\docs\\visuals\\develop-designs\\native-refined\\linux-dark-workbench-dark.png",
+      "theme": "dark",
+      "sha256": [
+        "4f65c22ea182fc154e9c202d1c1d4d04af803dedaa41cd60eeea84cbbe4d5e56",
+        "0058c03dfd78f9c7c6b370f1759c5130309b4927487932ff209b66ac7e1eb5b9"
+      ],
+      "scope": "Default 1204x866 chrome: menu text ink, surfaces, selection and panel dividers",
+      "checks": [
+        {
+          "name": "actual client size 1204x866",
+          "passed": true
+        },
+        {
+          "name": "menu ink has reference scale; no miniature labels",
+          "passed": true
+        },
+        {
+          "name": "workspace surface",
+          "passed": true
+        },
+        {
+          "name": "code surface",
+          "passed": true
+        },
+        {
+          "name": "active source selection",
+          "passed": true
+        },
+        {
+          "name": "workspace divider",
+          "passed": true
+        },
+        {
+          "name": "context divider",
+          "passed": true
+        },
+        {
+          "name": "protocol top",
+          "passed": true
+        },
+        {
+          "name": "protocol header rule",
+          "passed": true
+        },
+        {
+          "name": "editor status rule",
+          "passed": true
+        }
+      ],
+      "metrics": {
+        "Datei_ink_width_height": [
+          [
+            25,
+            8
+          ],
+          [
+            28,
+            9
+          ]
+        ],
+        "workspace surface": [
+          [
+            30,
+            31,
+            35
+          ],
+          [
+            30,
+            31,
+            35
+          ]
+        ],
+        "code surface": [
+          [
+            25,
+            26,
+            30
+          ],
+          [
+            25,
+            26,
+            30
+          ]
+        ],
+        "active source selection": [
+          [
+            43,
+            61,
+            89
+          ],
+          [
+            43,
+            61,
+            89
+          ]
+        ],
+        "workspace divider": [
+          [
+            218,
+            1.0
+          ],
+          [
+            217,
+            1.0
+          ]
+        ],
+        "context divider": [
+          [
+            948,
+            1.0
+          ],
+          [
+            947,
+            1.0
+          ]
+        ],
+        "protocol top": [
+          [
+            680,
+            1.0
+          ],
+          [
+            679,
+            1.0
+          ]
+        ],
+        "protocol header rule": [
+          [
+            721,
+            1.0
+          ],
+          [
+            721,
+            1.0
+          ]
+        ],
+        "editor status rule": [
+          [
+            808,
+            1.0
+          ],
+          [
+            808,
+            0.986013986013986
+          ]
+        ]
+      },
+      "passed": true
+    },
+    {
+      "reference": "D:\\Physim\\docs\\visuals\\develop-designs\\glass-cool-light.png",
+      "native": "D:\\Physim\\docs\\visuals\\develop-designs\\native-refined\\linux-light-workbench-light.png",
+      "theme": "light",
+      "sha256": [
+        "fe4c7387b06ad00a6153c755ab65ec2bde98198271b1b72dd0bd77e354c58b18",
+        "477d3f3e7a0b34e5b74b8682546b5382862107a15f85467eb144699b849aaf23"
+      ],
+      "scope": "Default 1204x866 chrome: menu text ink, surfaces, selection and panel dividers",
+      "checks": [
+        {
+          "name": "actual client size 1204x866",
+          "passed": true
+        },
+        {
+          "name": "menu ink has reference scale; no miniature labels",
+          "passed": true
+        },
+        {
+          "name": "workspace surface",
+          "passed": true
+        },
+        {
+          "name": "code surface",
+          "passed": true
+        },
+        {
+          "name": "active source selection",
+          "passed": true
+        },
+        {
+          "name": "workspace divider",
+          "passed": true
+        },
+        {
+          "name": "context divider",
+          "passed": true
+        },
+        {
+          "name": "protocol top",
+          "passed": true
+        },
+        {
+          "name": "protocol header rule",
+          "passed": true
+        },
+        {
+          "name": "editor status rule",
+          "passed": true
+        }
+      ],
+      "metrics": {
+        "Datei_ink_width_height": [
+          [
+            25,
+            8
+          ],
+          [
+            28,
+            9
+          ]
+        ],
+        "workspace surface": [
+          [
+            246,
+            247,
+            249
+          ],
+          [
+            246,
+            247,
+            249
+          ]
+        ],
+        "code surface": [
+          [
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255
+          ]
+        ],
+        "active source selection": [
+          [
+            217,
+            230,
+            248
+          ],
+          [
+            217,
+            230,
+            248
+          ]
+        ],
+        "workspace divider": [
+          [
+            218,
+            1.0
+          ],
+          [
+            217,
+            1.0
+          ]
+        ],
+        "context divider": [
+          [
+            948,
+            1.0
+          ],
+          [
+            947,
+            1.0
+          ]
+        ],
+        "protocol top": [
+          [
+            680,
+            1.0
+          ],
+          [
+            679,
+            1.0
+          ]
+        ],
+        "protocol header rule": [
+          [
+            721,
+            1.0
+          ],
+          [
+            721,
+            1.0
+          ]
+        ],
+        "editor status rule": [
+          [
+            808,
+            1.0
+          ],
+          [
+            808,
+            0.986013986013986
+          ]
+        ]
+      },
+      "passed": true
+    },
+    {
+      "reference": "D:\\Physim\\docs\\visuals\\develop-designs\\glass-cool-dark.png",
+      "native": "D:\\Physim\\docs\\visuals\\develop-designs\\native-refined\\windows-dark-workbench-dark.png",
+      "theme": "dark",
+      "sha256": [
+        "4f65c22ea182fc154e9c202d1c1d4d04af803dedaa41cd60eeea84cbbe4d5e56",
+        "a472b52a66e50fdbd1ab7867aab640292e201c785f939fbfe8408fcc632f278b"
+      ],
+      "scope": "Default 1204x866 chrome: menu text ink, surfaces, selection and panel dividers",
+      "checks": [
+        {
+          "name": "actual client size 1204x866",
+          "passed": true
+        },
+        {
+          "name": "menu ink has reference scale; no miniature labels",
+          "passed": true
+        },
+        {
+          "name": "workspace surface",
+          "passed": true
+        },
+        {
+          "name": "code surface",
+          "passed": true
+        },
+        {
+          "name": "active source selection",
+          "passed": true
+        },
+        {
+          "name": "workspace divider",
+          "passed": true
+        },
+        {
+          "name": "context divider",
+          "passed": true
+        },
+        {
+          "name": "protocol top",
+          "passed": true
+        },
+        {
+          "name": "protocol header rule",
+          "passed": true
+        },
+        {
+          "name": "editor status rule",
+          "passed": true
+        }
+      ],
+      "metrics": {
+        "Datei_ink_width_height": [
+          [
+            25,
+            8
+          ],
+          [
+            24,
+            9
+          ]
+        ],
+        "workspace surface": [
+          [
+            30,
+            31,
+            35
+          ],
+          [
+            30,
+            31,
+            35
+          ]
+        ],
+        "code surface": [
+          [
+            25,
+            26,
+            30
+          ],
+          [
+            25,
+            26,
+            30
+          ]
+        ],
+        "active source selection": [
+          [
+            43,
+            61,
+            89
+          ],
+          [
+            43,
+            61,
+            89
+          ]
+        ],
+        "workspace divider": [
+          [
+            218,
+            1.0
+          ],
+          [
+            217,
+            1.0
+          ]
+        ],
+        "context divider": [
+          [
+            948,
+            1.0
+          ],
+          [
+            947,
+            1.0
+          ]
+        ],
+        "protocol top": [
+          [
+            680,
+            1.0
+          ],
+          [
+            679,
+            1.0
+          ]
+        ],
+        "protocol header rule": [
+          [
+            721,
+            1.0
+          ],
+          [
+            721,
+            1.0
+          ]
+        ],
+        "editor status rule": [
+          [
+            808,
+            1.0
+          ],
+          [
+            808,
+            0.986013986013986
+          ]
+        ]
+      },
+      "passed": true
+    },
+    {
+      "reference": "D:\\Physim\\docs\\visuals\\develop-designs\\glass-cool-light.png",
+      "native": "D:\\Physim\\docs\\visuals\\develop-designs\\native-refined\\windows-light-workbench-light.png",
+      "theme": "light",
+      "sha256": [
+        "fe4c7387b06ad00a6153c755ab65ec2bde98198271b1b72dd0bd77e354c58b18",
+        "31e109e52362748b987952340878257b7cbbc0f406009628db0e898b6483f611"
+      ],
+      "scope": "Default 1204x866 chrome: menu text ink, surfaces, selection and panel dividers",
+      "checks": [
+        {
+          "name": "actual client size 1204x866",
+          "passed": true
+        },
+        {
+          "name": "menu ink has reference scale; no miniature labels",
+          "passed": true
+        },
+        {
+          "name": "workspace surface",
+          "passed": true
+        },
+        {
+          "name": "code surface",
+          "passed": true
+        },
+        {
+          "name": "active source selection",
+          "passed": true
+        },
+        {
+          "name": "workspace divider",
+          "passed": true
+        },
+        {
+          "name": "context divider",
+          "passed": true
+        },
+        {
+          "name": "protocol top",
+          "passed": true
+        },
+        {
+          "name": "protocol header rule",
+          "passed": true
+        },
+        {
+          "name": "editor status rule",
+          "passed": true
+        }
+      ],
+      "metrics": {
+        "Datei_ink_width_height": [
+          [
+            25,
+            8
+          ],
+          [
+            24,
+            9
+          ]
+        ],
+        "workspace surface": [
+          [
+            246,
+            247,
+            249
+          ],
+          [
+            246,
+            247,
+            249
+          ]
+        ],
+        "code surface": [
+          [
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            255
+          ]
+        ],
+        "active source selection": [
+          [
+            217,
+            230,
+            248
+          ],
+          [
+            217,
+            230,
+            248
+          ]
+        ],
+        "workspace divider": [
+          [
+            218,
+            1.0
+          ],
+          [
+            217,
+            1.0
+          ]
+        ],
+        "context divider": [
+          [
+            948,
+            1.0
+          ],
+          [
+            947,
+            1.0
+          ]
+        ],
+        "protocol top": [
+          [
+            680,
+            1.0
+          ],
+          [
+            679,
+            1.0
+          ]
+        ],
+        "protocol header rule": [
+          [
+            721,
+            1.0
+          ],
+          [
+            721,
+            1.0
+          ]
+        ],
+        "editor status rule": [
+          [
+            808,
+            1.0
+          ],
+          [
+            808,
+            0.986013986013986
+          ]
+        ]
+      },
+      "passed": true
+    }
+  ],
+  "working_tree_source_sha256": {
+    ".github/workflows/linux-ui-sanitizers.yml": "517c7d628b9d496a0422d145f747a0427da24a4a304a218294f857ac9f6aaa24",
+    ".github/workflows/macos-f1-accessibility.yml": "54c64dc5b9a5ddc478d704fbd6eccae4548155216130c25778466ab60a48a9af",
+    "app/accessibility_atspi.c": "cb7570a937751358f3de0c1c9c18df15c6f00680843a58d1ed05a8ef6cd13ff0",
+    "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+    "app/api_reference_ui.inc": "5d89a2d70e690711b9a079e8deb992578958954c2ab739250117d3a2e3535ebb",
+    "app/design_tokens.h": "eeea33e78f6c67e082daba75b276717fdab2c60cc561af43e868e5bf24a617a0",
+    "app/design_ui.inc": "cfd3b0e643c3e51cc06d2e5bf95436cebffa21439b19b5e8f1dfd11d1c0e03e8",
+    "app/diagnostic_tests.inc": "3d03391c694444a0091f0e9bad9455b1720f3811a804dd633ad80c824d101579",
+    "app/docking_ui.inc": "366d87d770b2372806fbce674f93160a6b27e42d4e611e3f4ed7561fc238e364",
+    "app/documentation_h.inc": "59816a57fcb7be7f2b6a29e7494009dca1ba290048fb7f04ed7b308daa15ff1b",
+    "app/documentation_keyboard_tests.inc": "53fd48d51c402f8cfa8e82eeca6c117ef82f13fc55e9aeaa062f02084f2f9ad5",
+    "app/documentation_ui.inc": "f9be5067c70d3641d7402262367665f349fd3016b84bdb1ddd5e6cb876fd744d",
+    "app/documentation_window.inc": "8688f0aba6361ce53f7fd5739fa0bf94b12564646946b538c27702d7d021779a",
+    "app/editor_search_ui.inc": "01407187947207ee971841b0023883d06b9eeb15e9f8c7fabbb6b27597d63dc9",
+    "app/file_tabs_ui.inc": "9c2f47f22b52fed3c8c70df10e5fd10e5d1afc470898b5286c01e2490d2c3f0f",
+    "app/main.c": "709becc5770db9028ade8f6a64e6748e5594996445b95b8cd843ad94222a99f1",
+    "app/preferences.c": "ba2da71324e97c138ae1316d2c5deaed0d0c24fae9e8442faacf0e062ab117b0",
+    "app/settings_tests.inc": "d77682b871b924889bcc21e45afe3143afc5596f9a78b73fc7770435abd3d5f9",
+    "app/settings_ui.inc": "3648b346bb018d44840a21f240dbc7cc9a197a607b3b96f5528eadc785a9f2aa",
+    "app/toolbar_ui.inc": "0beaa0eb5bdcfe7c9169bff7afd6c3b23b8464f072454810d04312595e32d6dd",
+    "app/ui.h": "72f9416a6f4b5d0e7ac88dbcc2ec5f9491fcd040d7fdba28bdcd61332c3e795f",
+    "app/ui_backend.c": "1c46945c11c9503229c184548effb9b749abc0046c130cd4ba55e503bee19a4d",
+    "app/workbench_tests.inc": "ef76b5e024faa14b6e1432b5f65cdf383e304353fbdaf0414fb2bf81aa729e74",
+    "app/workspace_tree_ui.inc": "662384ead23ee0d72d134938b1d332ae9513f3e8f6758ca05fa1fe4c6884ad82",
+    "tests/check_display_workflow.py": "54200812cb665e0bd283ec92b72f1cd29ad7d196a46627ae551228d956a5f93c",
+    "tests/check_documentation_orca.py": "ef3298800cfa8032cf6333b6b7ee902fc75d17fc3200b0f5ec6e801b2eba37ac",
+    "tests/test_accessibility_tables_atspi.py": "ef47a57f9c6a5d2073d19b22807aa5998bb7c0401ee0189504152cf62a900a53",
+    "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+    "tests/test_preferences.c": "4a37f69b26b45d9fde22e1c00b9eaf413d9ddc44008a54c9e1d1688e52f943ce"
+  },
+  "additional_source_sha256": {
+    "tests/check_workbench_visual.py": "242e5071659873788621ba644d99943e1f242b5ca217b0361fdd09eab98fe5ce",
+    "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+    "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+    "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+  },
+  "binaries": {
+    "build/native/F1-reading-focus/Debug-sanitized/bin/physim.exe": "d66c0ccc842654f37679a27a715f1e079ea48be9f1282926d3e86629d9e18a16",
+    "build/native/F1-linux/Debug-sanitized/bin/physim": "cbc6063332d87b5a623d5358a1604af7056e6c46162b4418f6056f5a2d4a4ff5"
+  },
+  "tests": {
+    "windows_workbench": {
+      "results": "build\\native\\workbench-fidelity-windows-current\\app-steps.json",
+      "runs": 6,
+      "passed": true
+    },
+    "linux_final": "run-_7b1wl_d: 2/2 workbench and diagnostic",
+    "linux_before_final_log_button_width": "run-4_0pdkq3: 4/4 workbench, file tabs, editor replace, API reference",
+    "linux_broader_before_last_visual_refinements": "run-_uvd9ncw: 13/13",
+    "windows_models": "run-mv4p93am: 13/13"
+  },
+  "primary": {
+    "path": "build/native/Debug-sanitized/bin/physim.exe",
+    "sha256": "d66c0ccc842654f37679a27a715f1e079ea48be9f1282926d3e86629d9e18a16",
+    "smoke_exit_code": 0,
+    "log": "build/native/workbench-fidelity-primary-smoke.log",
+    "runtime_dlls_match_private_build": [
+      "SDL3.dll",
+      "clang_rt.asan_dynamic-x86_64.dll",
+      "clang_rt.asan_dbg_dynamic-x86_64.dll"
+    ]
+  },
+  "references": {
+    "glass-cool-dark.png": "4f65c22ea182fc154e9c202d1c1d4d04af803dedaa41cd60eeea84cbbe4d5e56",
+    "glass-cool-light.png": "fe4c7387b06ad00a6153c755ab65ec2bde98198271b1b72dd0bd77e354c58b18",
+    "workbench.css": "4f0a1d2ef71313e265d61590a344536ccc39aad715762d6d3355b7e3378e9743",
+    "glass.css": "3aa9861bf2210a24d7bbcbc341a86320c1d32743e0b42656a599c6be29747688",
+    "workbench.js": "5f7a005a7f82439df3805f4f960f439b57e2bf40a95b905436f5bd3aab322baa"
+  },
+  "preserved_uncommitted_f1": {
+    ".github/workflows/linux-ui-sanitizers.yml": "517c7d628b9d496a0422d145f747a0427da24a4a304a218294f857ac9f6aaa24",
+    ".github/workflows/macos-f1-accessibility.yml": "54c64dc5b9a5ddc478d704fbd6eccae4548155216130c25778466ab60a48a9af",
+    "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+    "tests/check_documentation_orca.py": "ef3298800cfa8032cf6333b6b7ee902fc75d17fc3200b0f5ec6e801b2eba37ac",
+    "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+    "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+    "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+  },
+  "uncommitted_collection_scope": [
+    "app/accessibility_atspi.c",
+    "app/accessibility_atspi_collection.inc",
+    "tests/test_accessibility_tables_atspi.py"
+  ]
+}

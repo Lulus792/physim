@@ -404,7 +404,7 @@ static unsigned documentation_font_size(const app *a) {
     return a->doc_zoom_size?a->doc_zoom_size:a->preferences.ui_size;
 }
 static unsigned documentation_code_size(const app *a) {
-    return a->doc_zoom_size?a->doc_zoom_size:a->preferences.editor_size;
+    return a->doc_zoom_size?a->doc_zoom_size:a->preferences.editor_size<16?16:a->preferences.editor_size;
 }
 static float documentation_control_height(const app *a) {
     return (float)documentation_font_size(a)+16;

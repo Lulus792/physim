@@ -134,4 +134,30 @@ static const ps_ui_palette PS_UI_HIGH_CONTRAST = {
 };
 #undef PS_RGB
 
+/* Selected workbench reference. Keep its fixed reading surfaces and muted
+ * selection separate from the larger general-purpose app controls. */
+static inline const ps_ui_palette *ps_workbench_palette(const ps_ui_palette *base) {
+    static ps_ui_palette dark,light;
+    if(base==&PS_UI_HIGH_CONTRAST)return base;
+    ps_ui_palette *p=base==&PS_UI_LIGHT?&light:&dark;*p=*base;
+    bool is_light=base==&PS_UI_LIGHT;
+    p->text=is_light?nk_rgb(32,36,44):nk_rgb(237,238,242);
+    p->muted=is_light?nk_rgb(85,94,108):nk_rgb(166,169,177);
+    p->window=is_light?nk_rgb(246,247,249):nk_rgb(30,31,35);
+    p->header=is_light?nk_rgb(237,239,243):nk_rgb(37,38,43);
+    p->border=is_light?nk_rgb(190,195,206):nk_rgb(59,61,69);
+    p->divider=p->border;p->gutter=p->edit=is_light?nk_rgb(255,255,255):nk_rgb(25,26,30);
+    p->button=is_light?nk_rgb(224,227,234):nk_rgb(53,54,62);
+    p->button_hover=is_light?nk_rgb(213,218,228):nk_rgb(66,68,78);
+    p->selection_active=is_light?nk_rgb(217,230,248):nk_rgb(43,61,89);
+    p->accent=is_light?nk_rgb(23,86,158):nk_rgb(138,186,255);
+    p->gutter_text=p->muted;p->code_text=p->text;
+    p->code_keyword=is_light?nk_rgb(120,68,160):nk_rgb(201,166,232);
+    p->code_preprocessor=p->code_keyword;p->code_type=p->accent;
+    p->code_string=is_light?nk_rgb(68,101,30):nk_rgb(184,205,142);
+    p->code_number=is_light?nk_rgb(139,74,25):nk_rgb(232,186,145);
+    p->code_comment=is_light?nk_rgb(98,107,120):nk_rgb(150,157,168);
+    return p;
+}
+
 #endif

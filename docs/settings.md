@@ -18,10 +18,12 @@ die Hauptmenüs. Ein Mausklick setzt die Bedienung mit dem Zeiger fort.
 
 ## Schrift und Sicherung
 
-Die Code-Schriftgröße lässt sich zwischen 16, 18, 20 und 22 logischen Pixeln wählen.
+Die Code-Schriftgröße lässt sich zwischen 12, 14, 16, 18, 20 und 22 logischen Pixeln wählen.
 Eine Vorschau zeigt die neue Größe. Sie gilt nach **Übernehmen** für die
 Projekteditoren und das Protokoll. Ohne eigenen Lesezoom übernimmt das Handbuch
-diese Größe auch für seine Codeblöcke. Die **Schriftgröße der Oberfläche** ist davon unabhängig wählbar: 16, 18, 20
+diese Größe ab 16 Pixeln auch für seine Codeblöcke; 12/14 Pixel im Editor verkleinern
+das Handbuch nicht unter seine Mindestlesegröße von 16 Pixeln.
+Die **Schriftgröße der Oberfläche** ist davon unabhängig wählbar: 16, 18, 20
 oder 22 logische Pixel gelten für Navigation, Menüs, Beschriftungen, Diagramme und den
 normalen Text im Handbuch. Auch ein bereits geöffnetes Handbuch übernimmt nach
 **Übernehmen** die neuen Größen, solange kein eigener Lesezoom aktiv ist.
@@ -30,7 +32,10 @@ Lesegröße für Text und Code bis 32 Pixel. Die mittlere Größenanzeige setzt 
 Lesezoom zurück; dann gelten wieder die getrennten UI- und Codeschriftgrößen.
 Kleine Zeilen und lange Schaltflächenbeschriftungen
 passen sich an; umfangreiche Ansichten bleiben scrollbar. Abbrechen erhält die
-bisherige Größe, Standardwerte wählen wieder 16 Pixel.
+bisherige Größe. Standardwerte wählen 12 Pixel für Code und 16 Pixel für die
+Oberfläche. Die Werkbank verwendet für ihre kompakten Menüs, Panelköpfe und
+Statusangaben abgestufte Schriftrollen; größere UI-Einstellungen skalieren sie
+entsprechend. Bereits gespeicherte Schriftgrößen werden nicht zurückgesetzt.
 
 Automatische Sicherungen lassen sich alle 10, 30, 60 oder 120 Sekunden erstellen.
 Standard sind 30 Sekunden. Nach dem Übernehmen beginnt das neue Intervall;
