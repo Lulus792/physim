@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="analysis.css">
   <link rel="stylesheet" href="../shared/resize.css"><script src="../shared/resize.js" defer></script>
   <script src="analysis.js" defer></script><script src="resize.js" defer></script>
+  <link rel="stylesheet" href="graphic-export.css"><script src="graphic-export.js" defer></script>
   <script src="../unified-workspace/bridge.js" defer></script>
 </head>
 <body>
@@ -37,7 +38,7 @@
         <section class="analysis-pane" aria-label="Messdaten und Analyseergebnis">
           <div class="content-bar"><div class="content-tabs" role="tablist" aria-label="Auswertungsansicht"><button id="tab-data" role="tab" aria-selected="true" aria-controls="data-panel" tabindex="0">Messdaten</button><button id="tab-report" role="tab" aria-selected="false" aria-controls="report-panel" tabindex="-1">Analyseergebnis <span class="report-dot" hidden></span></button></div><span class="data-quality" id="data-quality">Vollständig · 1.001 Messpunkte</span></div>
           <div id="data-panel" role="tabpanel" aria-labelledby="tab-data">
-            <div class="chart-heading"><div><p class="overline">MESSKURVE</p><h3 id="chart-title">Auslenkung</h3></div><div class="chart-tools" role="group" aria-label="Diagrammausschnitt"><button id="zoom-in" aria-label="Zeitachse vergrößern">+</button><button id="zoom-out" aria-label="Zeitachse verkleinern">−</button><button id="zoom-reset">Alles zeigen</button></div></div>
+            <div class="chart-heading"><div><p class="overline">MESSKURVE</p><h3 id="chart-title">Auslenkung</h3></div><div class="chart-tools" role="group" aria-label="Diagrammwerkzeuge"><button id="zoom-in" aria-label="Zeitachse vergrößern">+</button><button id="zoom-out" aria-label="Zeitachse verkleinern">−</button><button id="zoom-reset">Alles zeigen</button><button id="graphic-export" aria-haspopup="dialog"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 13V2m-4 4 4-4 4 4M4 11v6h12v-6"/></svg>Grafik exportieren…</button></div></div>
             <div class="legend" id="legend"></div>
             <div class="chart-wrap"><svg id="chart" viewBox="0 0 800 326" role="img" aria-labelledby="plot-title plot-description"><title id="plot-title">Auslenkung über der Zeit</title><desc id="plot-description">Synthetische Messkurve eines gedämpften Pendels.</desc></svg></div>
             <div class="chart-readout"><span id="cursor-readout">Zeitachse 0–20 s</span><span>Vorschau · 50 Hz</span></div>
@@ -62,5 +63,19 @@
     <footer class="design-note"><span><b>01 / Analyse als Arbeitsfläche</b><br>Die Kurve steht im Mittelpunkt. Laufwahl und Details lassen sich unabhängig einklappen.</span><a href="DESIGN.md">Design und Übergabe ↗</a></footer>
   </main>
   <dialog id="code-dialog" aria-labelledby="code-title"><div class="dialog-head"><div><p class="overline">ANALYSECODE</p><h2 id="code-title">analysis.phys</h2></div><button id="code-close" aria-label="Analysecode schließen">Schließen</button></div><p>In der App öffnet sich hier der vorhandene Analyseeditor.</p><div class="code-preview"><span>01</span> <b>// Analyse der ausgewählten Messläufe</b><br><span>02</span> <b>// Eigene Kurven, Tabellen und Exporte</b><br><span>03</span> <b>// werden als .psreport gespeichert.</b></div><p class="small">Diese Vorschau zeigt den Einstieg in den Editor; sie führt keinen Analysecode aus.</p></dialog>
+  <dialog id="graphic-dialog" aria-labelledby="graphic-title" aria-describedby="graphic-description">
+    <header class="export-header"><div><p class="overline">PHYSIM / AUSWERTUNG</p><h2 id="graphic-title">Grafik exportieren</h2><p id="graphic-description">Titel, Einheiten und Legende werden übernommen.</p></div><button id="graphic-close" aria-label="Grafikexport schließen">×</button></header>
+    <div class="export-body">
+      <section class="export-preview" aria-label="Vorschau der exportierten Grafik"><div class="export-preview-label"><span>EXPORTVORSCHAU</span><span id="graphic-dimensions"></span></div><div class="export-paper" id="graphic-preview"></div><p id="graphic-summary"></p><p class="export-snapshot-note">Interaktive Designvorschau · synthetische Messdaten</p></section>
+      <form class="export-settings" id="graphic-form">
+        <fieldset><legend>Dateiformat</legend><div class="export-formats"><label><input type="radio" name="format" value="png" checked><span><b>PNG</b><small>Dokumente & Präsentationen</small></span></label><label><input type="radio" name="format" value="svg"><span><b>SVG</b><small>Skalierbare Vektorgrafik</small></span></label></div></fieldset>
+        <label class="export-field" for="graphic-scope">Zeitbereich<select id="graphic-scope"><option value="full">Gesamtes Diagramm</option><option value="visible">Sichtbarer Ausschnitt</option></select></label>
+        <label class="export-field" for="graphic-appearance">Darstellung<select id="graphic-appearance"><option value="light">Hell auf Weiß</option><option value="current">Wie in der Auswertung</option></select></label>
+        <label class="export-field" for="graphic-size">PNG-Größe<select id="graphic-size"><option value="1200">1200 × 850 px</option><option value="2400" selected>2400 × 1700 px</option><option value="3600">3600 × 2550 px</option><option value="4800">4800 × 3400 px</option></select><small id="graphic-size-hint">Mehr Bildpixel, dieselben Messdaten.</small></label>
+        <div class="export-file"><span>DATEINAME</span><output id="graphic-filename"></output></div>
+      </form>
+    </div>
+    <footer class="export-footer"><p id="graphic-feedback" role="status" aria-live="polite">PNG oder SVG direkt aus dieser Vorschau speichern.</p><div><button id="graphic-copy" type="button">Bild kopieren</button><button id="graphic-save" class="primary" type="button">PNG speichern…</button></div></footer>
+  </dialog>
 </body>
 </html>

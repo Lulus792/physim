@@ -1,0 +1,133 @@
+{
+  "date": "2026-10-20T19:23:01.937622+00:00",
+  "base_commit": "4d2a487822181092d86b07f8896575ac4c7c5e16",
+  "scope": "Interactive browser design example only. Real PNG/SVG browser downloads; no native app changes. OS clipboard write not exercised; PNG payload/error paths verified through isolated adapter.",
+  "passed": true,
+  "export": {
+    "date": "2026-10-20T19:21:24.887Z",
+    "platform": "win32",
+    "browser": "155.0.4283.62",
+    "checks": [
+      "Real PNG downloads at 1200x850, 2400x1700 and 4800x3400; default white background",
+      "SVG preserves units, comparison legend, explicit full/crop range; open export snapshot survives source changes",
+      "Clipboard receives generated PNG / denial fallback tested with isolated adapter; actual OS clipboard untouched; empty state disabled; Escape focus return and four widths",
+      "Export dialog integrated with actual transferred simulation samples in unified workspace"
+    ],
+    "layouts": [
+      {
+        "width": 1440,
+        "height": 1000
+      },
+      {
+        "width": 900,
+        "height": 1000
+      },
+      {
+        "width": 500,
+        "height": 1000
+      },
+      {
+        "width": 390,
+        "height": 1000
+      }
+    ],
+    "errors": [],
+    "passed": true
+  },
+  "regressions": {
+    "analysis": {
+      "exit_code": 0,
+      "layouts": 8,
+      "errors": []
+    },
+    "unified": {
+      "exit_code": 0,
+      "checks": [
+        "Edited/saved source → build → simulation → exact observed samples → CSV with matching model",
+        "Analysis code opens editor; pane/search state retained; inspector uses same source; historical snapshots and stale report provenance preserved",
+        "24 layouts, shared palette, 8 simulation/4 analysis panel states, short-run zoom/ticks, 2x density, forced colors, reduced motion/transparency, keyboard tabs/menus, dialog focus return"
+      ],
+      "layouts": 24,
+      "errors": []
+    }
+  },
+  "source_sha256": {
+    "docs/visuals/analysis-workspace/graphic-export.js": "0ebba605c1cf4679ea963a4c78adf9b0c342f45650a2a802f700c680a8e251c6",
+    "docs/visuals/analysis-workspace/graphic-export.css": "ac23662545872c7d7522179bfa5eda63cb0416c0283a50037f65bcd56517d7e6",
+    "docs/visuals/analysis-workspace/analysis.js": "5042c3cd4b5762d68500e66eda6cd430c29062aaf6cc513ba86b3868e7d14666",
+    "docs/visuals/analysis-workspace/index.html": "294b0c27d7619dddb32f76da7e33a4219252d83a694e36e359c69aacebb5efa2",
+    "tools/check_graphic_export.cjs": "5ca4d57b5c120cb39414f7922ecee595bea86c9af931a65cf426b8a344fcbde8",
+    "docs/visuals/unified-workspace/EXPORT-EXAMPLE.md": "0120ad60bae9b1d724f76c34408a67b114e2f6c2227917ac74582f87f84014d4"
+  },
+  "artifact_sha256": {
+    "export-dialog-dark.png": "7a1124a87508e1e69ca76f7b241187316ecc56c207314ed5345b7208ef43b5fd",
+    "export-dialog-light.png": "ff6eeb42ee6f946116a338df26e0b55d54833f0c6af5345b7b98672abb0a1752",
+    "export-example.png": "74e702edf79a733680baa38c1dbceaac6d7a3127c30a2d298ed74bcaeb75669e",
+    "export-example.svg": "63354075cf641fe854640e914762ee35ef5f0685ab4d2ad8029310ff10f22417"
+  },
+  "visual_review": "Dark and light dialogs and real 2400x1700 output inspected. Title/axes/units/legend, white paper and current appearance, no app controls inside export.",
+  "links_checked": 44,
+  "cleanup": {
+    "reason": "Successful generated browser captures and duplicate sample exports after verification. Four versioned example assets and JSON/logs retained. Sources, active native work, user data and WSL storage untouched.",
+    "files": 14,
+    "bytes": 2309784,
+    "removed": [
+      {
+        "path": "build/graphic-export-review/dialog-dark.png",
+        "bytes": 230145
+      },
+      {
+        "path": "build/graphic-export-review/dialog-light.png",
+        "bytes": 239998
+      },
+      {
+        "path": "build/graphic-export-review/example.png",
+        "bytes": 363859
+      },
+      {
+        "path": "build/graphic-export-review/example.svg",
+        "bytes": 38096
+      },
+      {
+        "path": "build/analysis-design-review/analysis-comparison.png",
+        "bytes": 139253
+      },
+      {
+        "path": "build/analysis-design-review/analysis-dark.png",
+        "bytes": 118571
+      },
+      {
+        "path": "build/analysis-design-review/analysis-light.png",
+        "bytes": 117820
+      },
+      {
+        "path": "build/analysis-design-review/analysis-report.png",
+        "bytes": 110171
+      },
+      {
+        "path": "build/unified-workspace-review/analyze-dark.png",
+        "bytes": 126181
+      },
+      {
+        "path": "build/unified-workspace-review/analyze-light.png",
+        "bytes": 125268
+      },
+      {
+        "path": "build/unified-workspace-review/develop-dark.png",
+        "bytes": 109714
+      },
+      {
+        "path": "build/unified-workspace-review/develop-light.png",
+        "bytes": 113278
+      },
+      {
+        "path": "build/unified-workspace-review/simulate-dark.png",
+        "bytes": 228465
+      },
+      {
+        "path": "build/unified-workspace-review/simulate-light.png",
+        "bytes": 248965
+      }
+    ]
+  }
+}

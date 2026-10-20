@@ -12,6 +12,10 @@ Eine Browserprüfung ist weiterhin keine vollständige native Abnahme.
 [kopierfertiger Auftrag](NEXT-CHAT.md) · [Bestand und Abnahmeliste](IMPLEMENTATION.md)
 · [gemeinsamer Resizing-Vertrag](RESIZING.md).
 
+**Neu als bedienbares Beispiel:** [Grafikexport-Vorschau](../analysis-workspace/index.html?example=export)
+mit PNG/SVG, Gesamt-/Ausschnittswahl, Darstellung und Bildgröße.
+[Exportentwurf und Grenzen](EXPORT-EXAMPLE.md).
+
 **Ergänzung vom 20. Oktober:** Entwickeln, Simulieren und Auswerten verwenden
 denselben Resizing-Baustein. Auswerten erhält verstellbare Lauflisten-/Detailbreiten
 und die Diagrammhöhe gegenüber Statistik. Simulieren verwendet die durchgehenden

@@ -32,6 +32,7 @@ Lies anschließend:
 - `docs/visuals/unified-workspace/README.md`
 - `docs/visuals/unified-workspace/RESIZING.md`
 - `docs/visuals/unified-workspace/IMPLEMENTATION.md`
+- `docs/visuals/unified-workspace/EXPORT-EXAMPLE.md` als zusätzlichen Exportentwurf
 - `docs/design-direction.md` und `docs/workspace.md`
 - `docs/visuals/develop-designs/DESIGN.md` und `FIDELITY.md`
 - `docs/visuals/simulation-designs/IMPLEMENTATION.md` und `MODEL-EDITING.md`

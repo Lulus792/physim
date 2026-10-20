@@ -12,6 +12,7 @@ auflösen. Nicht auf einen historischen nativen Zwischenstand zurücksetzen.
 | --- | --- |
 | Zusammenhängende Oberfläche | [index.html](index.html), [README.md](README.md), sechs PNGs im selben Ordner |
 | Gemeinsame Trenner | [RESIZING.md](RESIZING.md), [gemeinsamer Interaktionskern](../shared/resize.js), [Darstellung](../shared/resize.css) |
+| Zusätzliches Exportbeispiel | [Exportentwurf](EXPORT-EXAMPLE.md), [direkt bedienbare Vorschau](../analysis-workspace/index.html?example=export); noch keine native Umsetzung |
 | Entwickeln | [Design](../develop-designs/DESIGN.md), [aktueller nativer Abgleich](../develop-designs/FIDELITY.md) |
 | Simulieren | [Funktionsabgleich](../simulation-designs/IMPLEMENTATION.md), [Modellwertevertrag](../simulation-designs/MODEL-EDITING.md) |
 | Auswerten | [Funktions-/Datenvertrag](../analysis-workspace/IMPLEMENTATION.md), [Design](../analysis-workspace/DESIGN.md) |

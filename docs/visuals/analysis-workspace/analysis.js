@@ -121,6 +121,7 @@
     const list=selected(),ready=available(),c=channels[state.channel];
     $('selection-label').textContent=modelName+' / '+(list.length>1?`${list.length} Läufe im Vergleich`:list.length?`Lauf ${list[0].id}`:'Keine Auswahl');
     $('analyze').disabled=!ready&&!state.timer;
+    $('graphic-export').disabled=!ready;
     $('analyze').textContent=state.timer?'Abbrechen':list.length>1?`${list.length} Läufe vergleichen`:'Analyse starten';
     $('data-quality').textContent=ready?(list.length>1?`${list.length} Läufe · ${list.reduce((n,r)=>n+r.data.length,0).toLocaleString('de-DE')} Punkte`:`${unified?'Simulation':'Vollständig'} · ${pointCount(list[0])} Messpunkte`):'Keine Datenansicht';
     $('data-panel').hidden=state.tab!=='data'||!ready;$('report-panel').hidden=state.tab!=='report'||!ready;
@@ -225,5 +226,13 @@
     document.querySelector('.chart-readout>span:last-child').textContent='Vorschau · übernommene Messpunkte';
   }
   document.addEventListener('physim-preview-plot-resize',()=>{if(available())renderPlot();});
+  document.addEventListener('physim-export-request',event=>{
+    if(!available())return;
+    const list=selected(),total=Math.max(...list.map(duration));
+    event.detail.respond({title:modelName,channel:channels[state.channel].name,symbol:channels[state.channel].symbol,unit:state.unit,
+      total,visible:[total/2-total/2/state.zoom,total/2+total/2/state.zoom],theme:document.documentElement.dataset.theme,
+      runs:list.map(run=>({id:run.id,points:run.data.map(point=>({t:point.t,value:value(point)}))}))});
+  });
+  if(!unified&&new URLSearchParams(location.search).get('example')==='export')scenario('compare');
   render();syncPanels();
 })();

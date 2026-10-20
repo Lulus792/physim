@@ -6,6 +6,10 @@ Auswertung mit Werkbank und Messlabor; sie verwendet dort erzeugte Beispielmessd
 Laufliste, Details und Diagrammhöhe sind mit demselben Resizing wie in Entwickeln
 verstellbar. [Bedienvertrag und native Übergabe](../unified-workspace/RESIZING.md).
 
+[Grafikexport als bedienbares Beispiel](index.html?example=export): PNG/SVG,
+Gesamtdiagramm oder Ausschnitt und konfigurierbare Bildgröße.
+[Entwurf und Prüfgrenzen](../unified-workspace/EXPORT-EXAMPLE.md).
+
 Stand: 19. Oktober 2026. Vorbereitet sind Design, interaktive Referenz,
 Referenzbilder, ein kopierfertiger Auftrag und eine technische Abnahmeliste.
 Die native Auswertungsseite wurde mit dieser Übergabe noch nicht umgebaut.
