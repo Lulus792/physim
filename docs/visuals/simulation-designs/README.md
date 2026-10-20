@@ -3,6 +3,10 @@
 Die [gemeinsame Designvorschau](../unified-workspace/index.html) verbindet das
 gewählte Messlabor mit Werkbank und Auswertung einschließlich Datenübergabe.
 
+Aktuell gilt das [gemeinsame Resizing wie in Entwickeln](../unified-workspace/RESIZING.md):
+dünne durchgehende Trenner, Pfeile 10 px, Umschalt 40 px, Home/End für Grenzen,
+Enter/Doppelklick zum Standard und Escape zum Abbruch.
+
 Erstellt am 16. Oktober 2026 auf Grundlage des lokalen Physim-Stands und der
 [bestehenden Designrichtung](../../design-direction.md). Am 19. Oktober wurde
 **Messlabor** ausgewählt: Szenenbaum zu, Inspektor offen, Kurven zu. Die native Anwendung

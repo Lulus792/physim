@@ -4,6 +4,16 @@ Stand: 20. Oktober 2026. [Vorschau öffnen](index.html).
 Die Datei lässt sich direkt lokal im Browser öffnen, ohne Installation, Server
 oder externe Ressourcen.
 
+**Für die native Umsetzung in einem anderen Chat:**
+[kopierfertiger Auftrag](NEXT-CHAT.md) · [Bestand und Abnahmeliste](IMPLEMENTATION.md)
+· [gemeinsamer Resizing-Vertrag](RESIZING.md).
+
+**Ergänzung vom 20. Oktober:** Entwickeln, Simulieren und Auswerten verwenden
+denselben Resizing-Baustein. Auswerten erhält verstellbare Lauflisten-/Detailbreiten
+und die Diagrammhöhe gegenüber Statistik. Simulieren verwendet die durchgehenden
+Werkbank-Trennlinien und dieselben 10/40-Schritte, Home/End-Grenzen,
+Enter/Doppelklick und Escape-Abbruch. [Aktueller Nachweis](resizing-validation.json).
+
 Die drei gewählten Entwürfe bilden einen Arbeitsraum: [Werkbank Klarglas Kühl](../develop-designs/README.md),
 [Messlabor mit Wertefeldern B](../simulation-designs/README.md) und
 [Auswertungsfläche](../analysis-workspace/README.md). Eine Menüzeile, drei gleich
@@ -81,7 +91,9 @@ Windows / Edge 155.0.4283.62, Playwright, 20. Oktober 2026:
   Werkbank acht Layouts, Simulation 24 Layout-/16 Kurvenfälle, Auswertung acht
   Layouts; jeweils ohne JavaScriptfehler.
 
-[Maschinenlesbarer Nachweis](validation.json). Die sechs echten Browseraufnahmen
+[Historischer Nachweis der ersten Zusammenführung](validation.json),
+[aktueller Nachweis einschließlich Resizing](resizing-validation.json).
+Die sechs echten Browseraufnahmen
 unten zeigen die geprüfte gemeinsame Oberfläche mit bearbeiteten Beispielwerten.
 Linux/macOS, echte Screenreader und physische DPI-/Monitorwechsel wurden für
 diese Vorschau nicht ausgeführt. Die vorhandene native App wurde hier nicht umgebaut.
@@ -97,7 +109,9 @@ Wiederholen mit Node und den gebündelten Playwright-Abhängigkeiten (`NODE_PATH
 ```text
 node tools/check_unified_workspace.cjs
 node tools/check_unified_workspace.cjs --export
+node tools/check_workspace_resizing.cjs
 node tools/check_develop_designs.cjs
+node tools/check_inspector_variants.cjs
 node tools/check_simulation_designs.cjs
 node tools/check_analysis_design.cjs
 ```

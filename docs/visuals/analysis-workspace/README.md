@@ -3,6 +3,9 @@
 Die [gemeinsame Designvorschau](../unified-workspace/index.html) verbindet diese
 Auswertung mit Werkbank und Messlabor; sie verwendet dort erzeugte Beispielmessdaten.
 
+Laufliste, Details und Diagrammhöhe sind mit demselben Resizing wie in Entwickeln
+verstellbar. [Bedienvertrag und native Übergabe](../unified-workspace/RESIZING.md).
+
 Stand: 19. Oktober 2026. Vorbereitet sind Design, interaktive Referenz,
 Referenzbilder, ein kopierfertiger Auftrag und eine technische Abnahmeliste.
 Die native Auswertungsseite wurde mit dieser Übergabe noch nicht umgebaut.

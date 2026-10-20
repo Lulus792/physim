@@ -1,5 +1,10 @@
 # Entwürfe für den Arbeitsbereich Simulieren
 
+**Aktualisierung vom 20. Oktober 2026:** Für alle Trenner gilt nun der
+[gemeinsame Werkbank-Vertrag](../unified-workspace/RESIZING.md). Darstellung und
+Bedienung sind mit Entwickeln und Auswerten vereinheitlicht. Die folgenden
+älteren Prüfberichte bleiben datierte Nachweise ihres damaligen Stands.
+
 Stand 19. Oktober 2026; erste Entwürfe vom 16. Oktober. **Messlabor ist ausgewählt**,
 mit geschlossenem Szenenbaum, offenem Inspektor und zunächst zugeklappten Kurven.
 Siehe [Produktentscheidung ADR 008](../../decisions/008-simulation-messlabor.md).

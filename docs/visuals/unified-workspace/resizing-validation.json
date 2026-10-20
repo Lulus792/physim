@@ -1,0 +1,858 @@
+{
+  "date": "2026-10-20T13:35:12.270813+00:00",
+  "base_commit": "1c303c838dcf7f91a7d62a60071e6b343b2a5e6e",
+  "scope": "Shared browser splitter implementation and complete native handoff; no native app implementation or native/platform test claim.",
+  "passed": true,
+  "resizing": {
+    "date": "2026-10-20T13:34:11.908Z",
+    "platform": "win32",
+    "browser": "155.0.4283.62",
+    "handles": [
+      {
+        "area": "develop",
+        "id": "resize-tree",
+        "orientation": "vertical",
+        "baseline": 218,
+        "reset": 218,
+        "keyboard": "10/40, Home/End, Enter",
+        "pointer": "drag, Escape rollback, double-click reset"
+      },
+      {
+        "area": "develop",
+        "id": "resize-api",
+        "orientation": "vertical",
+        "baseline": 255,
+        "reset": 255,
+        "keyboard": "10/40, Home/End, Enter",
+        "pointer": "drag, Escape rollback, double-click reset"
+      },
+      {
+        "area": "develop",
+        "id": "resize-log",
+        "orientation": "horizontal",
+        "baseline": 86,
+        "reset": 86,
+        "keyboard": "10/40, Home/End, Enter",
+        "pointer": "drag, Escape rollback, double-click reset"
+      },
+      {
+        "area": "simulate",
+        "id": "tree-resize",
+        "orientation": "vertical",
+        "baseline": 190,
+        "reset": 190,
+        "keyboard": "10/40, Home/End, Enter",
+        "pointer": "drag, Escape rollback, double-click reset"
+      },
+      {
+        "area": "simulate",
+        "id": "inspector-resize",
+        "orientation": "vertical",
+        "baseline": 320,
+        "reset": 320,
+        "keyboard": "10/40, Home/End, Enter",
+        "pointer": "drag, Escape rollback, double-click reset"
+      },
+      {
+        "area": "simulate",
+        "id": "measure-resize",
+        "orientation": "horizontal",
+        "baseline": 330,
+        "reset": 330,
+        "keyboard": "10/40, Home/End, Enter",
+        "pointer": "drag, Escape rollback, double-click reset"
+      },
+      {
+        "area": "simulate",
+        "id": "timeline-resize",
+        "orientation": "horizontal",
+        "baseline": 120,
+        "reset": 120,
+        "keyboard": "10/40, Home/End, Enter",
+        "pointer": "drag, Escape rollback, double-click reset"
+      },
+      {
+        "area": "simulate",
+        "id": "plot-resize",
+        "orientation": "vertical",
+        "baseline": 435,
+        "reset": 435,
+        "keyboard": "10/40, Home/End, Enter",
+        "pointer": "drag, Escape rollback, double-click reset"
+      },
+      {
+        "area": "analyze",
+        "id": "resize-analysis-left",
+        "orientation": "vertical",
+        "baseline": 232,
+        "reset": 232,
+        "keyboard": "10/40, Home/End, Enter",
+        "pointer": "drag, Escape rollback, double-click reset"
+      },
+      {
+        "area": "analyze",
+        "id": "resize-analysis-right",
+        "orientation": "vertical",
+        "baseline": 242,
+        "reset": 242,
+        "keyboard": "10/40, Home/End, Enter",
+        "pointer": "drag, Escape rollback, double-click reset"
+      },
+      {
+        "area": "analyze",
+        "id": "resize-analysis-chart",
+        "orientation": "horizontal",
+        "baseline": 374,
+        "reset": 374,
+        "keyboard": "10/40, Home/End, Enter",
+        "pointer": "drag, Escape rollback, double-click reset"
+      }
+    ],
+    "layouts": [
+      {
+        "area": "develop",
+        "width": 1440,
+        "theme": "dark"
+      },
+      {
+        "area": "simulate",
+        "width": 1440,
+        "theme": "dark"
+      },
+      {
+        "area": "analyze",
+        "width": 1440,
+        "theme": "dark"
+      },
+      {
+        "area": "develop",
+        "width": 1080,
+        "theme": "dark"
+      },
+      {
+        "area": "simulate",
+        "width": 1080,
+        "theme": "dark"
+      },
+      {
+        "area": "analyze",
+        "width": 1080,
+        "theme": "dark"
+      },
+      {
+        "area": "develop",
+        "width": 760,
+        "theme": "dark"
+      },
+      {
+        "area": "simulate",
+        "width": 760,
+        "theme": "dark"
+      },
+      {
+        "area": "analyze",
+        "width": 760,
+        "theme": "dark"
+      },
+      {
+        "area": "develop",
+        "width": 500,
+        "theme": "dark"
+      },
+      {
+        "area": "simulate",
+        "width": 500,
+        "theme": "dark"
+      },
+      {
+        "area": "analyze",
+        "width": 500,
+        "theme": "dark"
+      },
+      {
+        "area": "develop",
+        "width": 1440,
+        "theme": "light"
+      },
+      {
+        "area": "simulate",
+        "width": 1440,
+        "theme": "light"
+      },
+      {
+        "area": "analyze",
+        "width": 1440,
+        "theme": "light"
+      },
+      {
+        "area": "develop",
+        "width": 1080,
+        "theme": "light"
+      },
+      {
+        "area": "simulate",
+        "width": 1080,
+        "theme": "light"
+      },
+      {
+        "area": "analyze",
+        "width": 1080,
+        "theme": "light"
+      },
+      {
+        "area": "develop",
+        "width": 760,
+        "theme": "light"
+      },
+      {
+        "area": "simulate",
+        "width": 760,
+        "theme": "light"
+      },
+      {
+        "area": "analyze",
+        "width": 760,
+        "theme": "light"
+      },
+      {
+        "area": "develop",
+        "width": 500,
+        "theme": "light"
+      },
+      {
+        "area": "simulate",
+        "width": 500,
+        "theme": "light"
+      },
+      {
+        "area": "analyze",
+        "width": 500,
+        "theme": "light"
+      }
+    ],
+    "errors": [],
+    "passed": true
+  },
+  "workflow": {
+    "date": "2026-10-20T13:28:06.476Z",
+    "platform": "win32",
+    "browser": "155.0.4283.62",
+    "checks": [
+      "Edited/saved source → build → simulation → exact observed samples → CSV with matching model",
+      "Analysis code opens editor; pane/search state retained; inspector uses same source; historical snapshots and stale report provenance preserved",
+      "24 layouts, shared palette, 8 simulation/4 analysis panel states, short-run zoom/ticks, 2x density, forced colors, reduced motion/transparency, keyboard tabs/menus, dialog focus return"
+    ],
+    "layouts": [
+      {
+        "area": "develop",
+        "width": 1440,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "simulate",
+        "width": 1440,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "analyze",
+        "width": 1440,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "develop",
+        "width": 1440,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "simulate",
+        "width": 1440,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "analyze",
+        "width": 1440,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "develop",
+        "width": 1080,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "simulate",
+        "width": 1080,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "analyze",
+        "width": 1080,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "develop",
+        "width": 1080,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "simulate",
+        "width": 1080,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "analyze",
+        "width": 1080,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "develop",
+        "width": 760,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "simulate",
+        "width": 760,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "analyze",
+        "width": 760,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "develop",
+        "width": 760,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "simulate",
+        "width": 760,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "analyze",
+        "width": 760,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "develop",
+        "width": 500,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "simulate",
+        "width": 500,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "analyze",
+        "width": 500,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "develop",
+        "width": 500,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "simulate",
+        "width": 500,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "analyze",
+        "width": 500,
+        "height": 1000,
+        "theme": "light"
+      }
+    ],
+    "errors": [],
+    "passed": true
+  },
+  "standalone_checks": {
+    "check_develop_designs": {
+      "exit_code": 0,
+      "browser": "155.0.4283.62",
+      "platform": "win32",
+      "layouts": 8
+    },
+    "check_inspector_variants": {
+      "exit_code": 0,
+      "browser": "155.0.4283.62",
+      "platform": "win32",
+      "layouts": 24
+    },
+    "check_analysis_design": {
+      "exit_code": 0,
+      "browser": "155.0.4283.62",
+      "platform": "win32",
+      "layouts": 8
+    }
+  },
+  "handoff": {
+    "passed": true,
+    "documents": 4,
+    "localLinks": 35,
+    "localAssets": 32,
+    "links": [
+      {
+        "document": "README.md",
+        "target": "index.html"
+      },
+      {
+        "document": "README.md",
+        "target": "NEXT-CHAT.md"
+      },
+      {
+        "document": "README.md",
+        "target": "IMPLEMENTATION.md"
+      },
+      {
+        "document": "README.md",
+        "target": "RESIZING.md"
+      },
+      {
+        "document": "README.md",
+        "target": "resizing-validation.json"
+      },
+      {
+        "document": "README.md",
+        "target": "../develop-designs/README.md"
+      },
+      {
+        "document": "README.md",
+        "target": "../simulation-designs/README.md"
+      },
+      {
+        "document": "README.md",
+        "target": "../analysis-workspace/README.md"
+      },
+      {
+        "document": "README.md",
+        "target": "validation.json"
+      },
+      {
+        "document": "README.md",
+        "target": "resizing-validation.json"
+      },
+      {
+        "document": "README.md",
+        "target": "develop-dark.png"
+      },
+      {
+        "document": "README.md",
+        "target": "develop-light.png"
+      },
+      {
+        "document": "README.md",
+        "target": "simulate-dark.png"
+      },
+      {
+        "document": "README.md",
+        "target": "simulate-light.png"
+      },
+      {
+        "document": "README.md",
+        "target": "analyze-dark.png"
+      },
+      {
+        "document": "README.md",
+        "target": "analyze-light.png"
+      },
+      {
+        "document": "RESIZING.md",
+        "target": "../shared/resize.js"
+      },
+      {
+        "document": "RESIZING.md",
+        "target": "../shared/resize.css"
+      },
+      {
+        "document": "RESIZING.md",
+        "target": "resizing-validation.json"
+      },
+      {
+        "document": "IMPLEMENTATION.md",
+        "target": "NEXT-CHAT.md"
+      },
+      {
+        "document": "IMPLEMENTATION.md",
+        "target": "index.html"
+      },
+      {
+        "document": "IMPLEMENTATION.md",
+        "target": "README.md"
+      },
+      {
+        "document": "IMPLEMENTATION.md",
+        "target": "RESIZING.md"
+      },
+      {
+        "document": "IMPLEMENTATION.md",
+        "target": "../shared/resize.js"
+      },
+      {
+        "document": "IMPLEMENTATION.md",
+        "target": "../shared/resize.css"
+      },
+      {
+        "document": "IMPLEMENTATION.md",
+        "target": "../develop-designs/DESIGN.md"
+      },
+      {
+        "document": "IMPLEMENTATION.md",
+        "target": "../develop-designs/FIDELITY.md"
+      },
+      {
+        "document": "IMPLEMENTATION.md",
+        "target": "../simulation-designs/IMPLEMENTATION.md"
+      },
+      {
+        "document": "IMPLEMENTATION.md",
+        "target": "../simulation-designs/MODEL-EDITING.md"
+      },
+      {
+        "document": "IMPLEMENTATION.md",
+        "target": "../analysis-workspace/IMPLEMENTATION.md"
+      },
+      {
+        "document": "IMPLEMENTATION.md",
+        "target": "../analysis-workspace/DESIGN.md"
+      },
+      {
+        "document": "IMPLEMENTATION.md",
+        "target": "../../design-direction.md"
+      },
+      {
+        "document": "IMPLEMENTATION.md",
+        "target": "../../workspace.md"
+      },
+      {
+        "document": "IMPLEMENTATION.md",
+        "target": "validation.json"
+      },
+      {
+        "document": "IMPLEMENTATION.md",
+        "target": "resizing-validation.json"
+      }
+    ],
+    "assets": [
+      {
+        "document": "unified-workspace/index.html",
+        "target": "workspace.css"
+      },
+      {
+        "document": "unified-workspace/index.html",
+        "target": "workspace.js"
+      },
+      {
+        "document": "unified-workspace/index.html",
+        "target": "../develop-designs/index.html"
+      },
+      {
+        "document": "unified-workspace/index.html",
+        "target": "../simulation-designs/index.html"
+      },
+      {
+        "document": "unified-workspace/index.html",
+        "target": "../analysis-workspace/index.html"
+      },
+      {
+        "document": "develop-designs/index.html",
+        "target": "workbench.css"
+      },
+      {
+        "document": "develop-designs/index.html",
+        "target": "../shared/resize.css"
+      },
+      {
+        "document": "develop-designs/index.html",
+        "target": "../shared/resize.js"
+      },
+      {
+        "document": "develop-designs/index.html",
+        "target": "develop.js"
+      },
+      {
+        "document": "develop-designs/index.html",
+        "target": "workbench.js"
+      },
+      {
+        "document": "develop-designs/index.html",
+        "target": "glass.css"
+      },
+      {
+        "document": "develop-designs/index.html",
+        "target": "search-resize.js"
+      },
+      {
+        "document": "develop-designs/index.html",
+        "target": "../unified-workspace/bridge.js"
+      },
+      {
+        "document": "develop-designs/index.html",
+        "target": "NEXT-CHAT.md"
+      },
+      {
+        "document": "develop-designs/index.html",
+        "target": "IMPLEMENTATION.md"
+      },
+      {
+        "document": "develop-designs/index.html",
+        "target": "DESIGN.md"
+      },
+      {
+        "document": "simulation-designs/index.html",
+        "target": "simulation.css"
+      },
+      {
+        "document": "simulation-designs/index.html",
+        "target": "../shared/resize.css"
+      },
+      {
+        "document": "simulation-designs/index.html",
+        "target": "../shared/resize.js"
+      },
+      {
+        "document": "simulation-designs/index.html",
+        "target": "simulation.js"
+      },
+      {
+        "document": "simulation-designs/index.html",
+        "target": "inspector.css"
+      },
+      {
+        "document": "simulation-designs/index.html",
+        "target": "inspector.js"
+      },
+      {
+        "document": "simulation-designs/index.html",
+        "target": "inspector-variants.css"
+      },
+      {
+        "document": "simulation-designs/index.html",
+        "target": "inspector-variants.js"
+      },
+      {
+        "document": "simulation-designs/index.html",
+        "target": "../unified-workspace/bridge.js"
+      },
+      {
+        "document": "analysis-workspace/index.html",
+        "target": "analysis.css"
+      },
+      {
+        "document": "analysis-workspace/index.html",
+        "target": "../shared/resize.css"
+      },
+      {
+        "document": "analysis-workspace/index.html",
+        "target": "../shared/resize.js"
+      },
+      {
+        "document": "analysis-workspace/index.html",
+        "target": "analysis.js"
+      },
+      {
+        "document": "analysis-workspace/index.html",
+        "target": "resize.js"
+      },
+      {
+        "document": "analysis-workspace/index.html",
+        "target": "../unified-workspace/bridge.js"
+      },
+      {
+        "document": "analysis-workspace/index.html",
+        "target": "DESIGN.md"
+      }
+    ]
+  },
+  "source_sha256": {
+    "docs/visuals/shared/resize.css": "9e61e27a075528a99fef573728a3ce9873253dcca19f492999479e35c368be3b",
+    "docs/visuals/shared/resize.js": "012185c2b1959ff99821e8252befc7cddc92cded07a46865d9679bb9d596f277",
+    "docs/visuals/develop-designs/develop.js": "2d5ff7115bc73cc9c9b77245c8a9c3cd815a7e15b6f8cf81f2643ff21f454418",
+    "docs/visuals/develop-designs/glass.css": "3aa9861bf2210a24d7bbcbc341a86320c1d32743e0b42656a599c6be29747688",
+    "docs/visuals/develop-designs/index.html": "a86ce3ad0af6b5d1b286dd1db3f7dc8d3116e68c227f59e63765240777a75dae",
+    "docs/visuals/develop-designs/search-resize.js": "ac2ae9479da2ac03f2a7713d3e8a6954359e10de36e9beb1426e652614d57d89",
+    "docs/visuals/develop-designs/workbench.css": "4f0a1d2ef71313e265d61590a344536ccc39aad715762d6d3355b7e3378e9743",
+    "docs/visuals/develop-designs/workbench.js": "5f7a005a7f82439df3805f4f960f439b57e2bf40a95b905436f5bd3aab322baa",
+    "docs/visuals/simulation-designs/index.html": "44d1714545ca1b5cf93aa612f3c5f1b5dfc08c1c7edad10a8cccc424e1972b95",
+    "docs/visuals/simulation-designs/inspector-variants.css": "faca644c60b608ebb9ccf31f379fd8c423fd90f5d2bb5699e77b689fa20e051c",
+    "docs/visuals/simulation-designs/inspector-variants.js": "f69d2c1ddc52a088375be8cb3d08523944511137037e73f890149404e9b30c36",
+    "docs/visuals/simulation-designs/inspector.css": "71674b6b610229b88e76cf5668ee981c05906d9ecfc50b2890ab3861c1c7c026",
+    "docs/visuals/simulation-designs/inspector.js": "95f15b84d69f92ef01a1632e040143ea1ae16ed3cf9ea878678b24221df2e219",
+    "docs/visuals/simulation-designs/simulation.css": "0a9c2225e4a5dcd8040f6a9553118183d4f46f923d2528a9e8fb13058b30e650",
+    "docs/visuals/simulation-designs/simulation.js": "6cbd8026f866fcbde2a51e5374ab65f0d8e5c35e716d2ed1fbf77262448411fa",
+    "docs/visuals/analysis-workspace/analysis.css": "7a697a70a835ea4b9e16ffa171ef1e7da1aae9ff4dbb53fbe94b51ea1d0948cb",
+    "docs/visuals/analysis-workspace/analysis.js": "1a1e585764d3524cc69d1b3f3c5919f9c5dd689ec104d362100a393ca5db7dff",
+    "docs/visuals/analysis-workspace/index.html": "e56682ca1b6a916b7de74ed506d746894956426cd69de7ce7f92d8fa974e4662",
+    "docs/visuals/analysis-workspace/resize.js": "e2a3f4f73140925b010dba3e3acb04554997dee926f92a7f97bb58e9c20fd45b",
+    "docs/visuals/unified-workspace/bridge.js": "4e1ffb37ee7c41928a13e5ebd30738f3f882e2e000469616dd105eedd91deb76",
+    "docs/visuals/unified-workspace/embed.css": "e64901b8f951c2d47262748f630b060377ed224b2085604db3c0da18cc32a0d2",
+    "docs/visuals/unified-workspace/index.html": "58962c0ebe2172c78678e8556c902607fe48551612b5ac775535714d8220af62",
+    "docs/visuals/unified-workspace/workspace.css": "de7f9025c1b3665932ae9bd41307540bfbd0c0c655a7280df941a50099040214",
+    "docs/visuals/unified-workspace/workspace.js": "68fdae8b7d38b119886941dfcfb79ba48131d0b0cc5fbe2933baeee549b51433",
+    "tools/check_workspace_resizing.cjs": "912aa6f81b7701671ec30805295d91c59f8700882b41152d5d87fd86e5f46256",
+    "tools/check_inspector_variants.cjs": "099ebfc28bb9049070c8db49fe9e6adfea79edb1226faa7e8e6a41b15ac85fab",
+    "tools/check_unified_workspace.cjs": "56fce14434ded8070bed492fb5fe3809a648d75c2547ed17efa5ba2d4b45516c",
+    "docs/visuals/unified-workspace/NEXT-CHAT.md": "3e10ed22faeddbab5eb08072e9eeb153a6aa17515c1ac67bf3a0626bf9f2cede",
+    "docs/visuals/unified-workspace/IMPLEMENTATION.md": "81718e3b52495e7a93e30c7f33109a759a78a593725886654aad30cb916d1125",
+    "docs/visuals/unified-workspace/RESIZING.md": "9f9245d865dab7e6d5ebac8402d68a33530e24941bd8204916e45687254cadd1"
+  },
+  "images_sha256": {
+    "analyze-dark.png": "19574832c52aff19b3b13e4b204cc7f6132117b5af052d8a53c70ce4043cc01d",
+    "analyze-light.png": "f9fe041150631c5b36f35f49462a0701f9e617b80254de835ad3232f17395a95",
+    "develop-dark.png": "b4554a1b09689798c21a8fe771d5c706a03a711bd963c1b3d00b5d2fe270ec52",
+    "develop-light.png": "7a3e95e92f1e59dd61d0b0cff58e0787ab805996bcd2a88846200e1511441d0f",
+    "simulate-dark.png": "77168a7f8ee9273dde347a657e8119657c307466a706ebfaa8da331b8a9d1534",
+    "simulate-light.png": "d72aaab6813e8434fe3c4fcbe3f88571c4a4a5f4bfa7e53fdf3e179dc7c638b3"
+  },
+  "visual_review": "Actual dark analysis and light simulation captures inspected; no pill handles; same workbench separators. Full common-workflow captures re-exported.",
+  "open_checks": [
+    "Native app implementation and validation",
+    "Linux/macOS browser execution",
+    "Real screenreader",
+    "Physical DPI/monitor transitions"
+  ],
+  "cleanup": {
+    "reason": "Only successful raw browser captures generated during this resizing task; current versioned screenshots and logs/JSON retained. No native build, user data, references or shared WSL storage touched.",
+    "files": 28,
+    "bytes": 3415069,
+    "removed": [
+      {
+        "path": "build/unified-workspace-review/analyze-dark.png",
+        "bytes": 125032
+      },
+      {
+        "path": "build/unified-workspace-review/analyze-light.png",
+        "bytes": 124106
+      },
+      {
+        "path": "build/unified-workspace-review/develop-dark.png",
+        "bytes": 109714
+      },
+      {
+        "path": "build/unified-workspace-review/develop-light.png",
+        "bytes": 113278
+      },
+      {
+        "path": "build/unified-workspace-review/simulate-dark.png",
+        "bytes": 228465
+      },
+      {
+        "path": "build/unified-workspace-review/simulate-light.png",
+        "bytes": 248965
+      },
+      {
+        "path": "build/unified-workspace-review/resizing/analyze-dark.png",
+        "bytes": 95866
+      },
+      {
+        "path": "build/unified-workspace-review/resizing/analyze-light.png",
+        "bytes": 94267
+      },
+      {
+        "path": "build/unified-workspace-review/resizing/develop-dark.png",
+        "bytes": 109335
+      },
+      {
+        "path": "build/unified-workspace-review/resizing/develop-light.png",
+        "bytes": 112930
+      },
+      {
+        "path": "build/unified-workspace-review/resizing/simulate-dark.png",
+        "bytes": 161844
+      },
+      {
+        "path": "build/unified-workspace-review/resizing/simulate-light.png",
+        "bytes": 170149
+      },
+      {
+        "path": "build/develop-design-review/glass-cool-dark.png",
+        "bytes": 102154
+      },
+      {
+        "path": "build/develop-design-review/glass-cool-light.png",
+        "bytes": 105191
+      },
+      {
+        "path": "build/inspector-variants-review/inspector-compact-dark.png",
+        "bytes": 26650
+      },
+      {
+        "path": "build/inspector-variants-review/inspector-compact-light.png",
+        "bytes": 26307
+      },
+      {
+        "path": "build/inspector-variants-review/inspector-fields-dark.png",
+        "bytes": 22324
+      },
+      {
+        "path": "build/inspector-variants-review/inspector-fields-light.png",
+        "bytes": 22219
+      },
+      {
+        "path": "build/inspector-variants-review/inspector-rows-dark.png",
+        "bytes": 24247
+      },
+      {
+        "path": "build/inspector-variants-review/inspector-rows-light.png",
+        "bytes": 24233
+      },
+      {
+        "path": "build/inspector-variants-review/messlabor-resizable-dark.png",
+        "bytes": 175996
+      },
+      {
+        "path": "build/inspector-variants-review/messlabor-resizable-light.png",
+        "bytes": 185594
+      },
+      {
+        "path": "build/inspector-variants-review/model-change-dark.png",
+        "bytes": 251966
+      },
+      {
+        "path": "build/inspector-variants-review/model-change-light.png",
+        "bytes": 272284
+      },
+      {
+        "path": "build/analysis-design-review/analysis-comparison.png",
+        "bytes": 137871
+      },
+      {
+        "path": "build/analysis-design-review/analysis-dark.png",
+        "bytes": 117313
+      },
+      {
+        "path": "build/analysis-design-review/analysis-light.png",
+        "bytes": 116598
+      },
+      {
+        "path": "build/analysis-design-review/analysis-report.png",
+        "bytes": 110171
+      }
+    ]
+  }
+}

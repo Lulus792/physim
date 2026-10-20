@@ -1,0 +1,12 @@
+/* Identical workbench separators in all three design areas. */
+.resize-handle{position:absolute;z-index:5;touch-action:none;user-select:none;outline-offset:-2px;background:transparent;border:0;padding:0}
+.resize-handle:before{content:'';position:absolute;background:transparent;pointer-events:none}
+.resize-handle[aria-orientation=vertical]{cursor:col-resize}
+.resize-handle[aria-orientation=vertical]:before{top:0;bottom:0;left:4px;width:1px}
+.resize-handle[aria-orientation=horizontal]{cursor:row-resize}
+.resize-handle[aria-orientation=horizontal]:before{top:4px;left:0;right:0;height:1px}
+.resize-handle:hover:before,.resize-handle:focus-visible:before{background:var(--accent)}
+.resize-handle:focus-visible{outline:2px solid var(--accent)}
+.resizing,.resizing *{user-select:none!important}
+.resize-log{height:9px;left:0;right:0;top:-5px}.diagnostics:has(#log-body[hidden]) .resize-log{display:none}
+@media(forced-colors:active){.resize-handle:before{background:ButtonText}.resize-handle:focus-visible{outline-color:Highlight}}

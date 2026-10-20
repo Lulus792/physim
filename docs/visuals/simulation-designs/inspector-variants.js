@@ -68,46 +68,53 @@
 
   const sizes={left:190,right:320,workspace:660,timeline:120,measureClosed:150,measureOpen:330,plot:50};
   const initial={...sizes};
-  const desktop=()=>innerWidth>650;
+  const desktop=()=>innerWidth>650,unified=new URLSearchParams(location.search).get('unified')==='simulate';
   const workspace=document.querySelector('.workspace'),measure=$('measurements'),timeline=document.querySelector('.timeline');
+  const handles={},splitters={};
   function geometry(){
     const w=workspace.clientWidth,leftVisible=!app.classList.contains('tree-closed'),rightVisible=!app.classList.contains('inspector-closed');
     let left=leftVisible?Math.min(sizes.left,Math.max(150,w-480)):0;
     let right=rightVisible?Math.min(sizes.right,Math.max(210,w-left-230)):0;
     if(w-left-right<210)left=Math.max(0,w-right-210);
-    return{left,right,w,measure:Math.min(app.classList.contains('curves-open')?sizes.measureOpen:sizes.measureClosed,sizes.workspace-200)};
+    const height=unified&&workspace.clientHeight?workspace.clientHeight:sizes.workspace;
+    return{left,right,w,height,measure:Math.min(app.classList.contains('curves-open')?sizes.measureOpen:sizes.measureClosed,Math.max(130,height-180))};
   }
   function update(){
     const g=geometry();app.style.setProperty('--left-size',g.left+'px');app.style.setProperty('--right-size',g.right+'px');
     app.style.setProperty('--workspace-height',sizes.workspace+'px');app.style.setProperty('--timeline-size',sizes.timeline+'px');app.style.setProperty('--measure-size',g.measure+'px');app.style.setProperty('--plot-split',sizes.plot+'%');
     $('tree-resize').hidden=app.classList.contains('tree-closed');$('inspector-resize').hidden=app.classList.contains('inspector-closed');$('plot-resize').hidden=!app.classList.contains('curves-open');
-    for(const [id,value] of [['tree-resize',g.left],['inspector-resize',g.right],['measure-resize',g.measure],['timeline-resize',sizes.timeline],['workspace-resize',sizes.workspace],['plot-resize',sizes.plot]])$(id).setAttribute('aria-valuenow',String(Math.round(value)));
+    for(const splitter of Object.values(splitters))splitter.sync();
   }
   const clamp=(v,min,max)=>Math.min(Math.max(v,min),Math.max(min,max));
-  function change(id,delta,start){
-    const g=geometry();
-    if(id==='tree-resize')sizes.left=clamp(start.left+delta,150,Math.min(420,g.w-g.right-230));
-    if(id==='inspector-resize')sizes.right=clamp(start.right-delta,240,Math.min(540,g.w-g.left-230));
-    if(id==='measure-resize')sizes[app.classList.contains('curves-open')?'measureOpen':'measureClosed']=clamp(start.measure-delta,130,sizes.workspace-200);
-    if(id==='timeline-resize'){const total=start.workspace+start.timeline;sizes.timeline=clamp(start.timeline-delta,95,Math.min(280,total-450));sizes.workspace=total-sizes.timeline;}
-    if(id==='workspace-resize')sizes.workspace=clamp(start.workspace+delta,450,1100);
-    if(id==='plot-resize')sizes.plot=clamp(start.plot+delta/Math.max(1,$('curves').clientWidth)*100,25,75);
-    update();
-  }
-  function grip(id,parent,orientation,min,max,label){
-    const e=document.createElement('div');e.id=id;e.className='panel-resize '+(orientation==='vertical'?'vertical':'horizontal');e.tabIndex=0;e.role='separator';e.setAttribute('aria-orientation',orientation);e.setAttribute('aria-label',label);e.setAttribute('aria-valuemin',String(min));e.setAttribute('aria-valuemax',String(max));e.setAttribute('title',label+' · Ziehen oder Pfeiltasten · Doppelklick zum Zurücksetzen');
+  function grip(id,parent,axis,label,target){
+    const e=document.createElement('div');e.id=id;handles[id]=e;e.setAttribute('aria-label',label);e.setAttribute('aria-controls',target.id);
     if(id==='measure-resize'||id==='timeline-resize')parent.prepend(e);else parent.append(e);
-    let drag=null;
-    const start=()=>({...sizes,...geometry()});
-    e.addEventListener('pointerdown',event=>{if(!desktop()||event.button!==0)return;drag={x:event.clientX,y:event.clientY,...start()};e.setPointerCapture(event.pointerId);e.focus();event.preventDefault();app.classList.add('resizing');});
-    e.addEventListener('pointermove',event=>{if(drag)change(id,orientation==='vertical'?event.clientX-drag.x:event.clientY-drag.y,drag);});
-    const end=()=>{drag=null;app.classList.remove('resizing');};e.addEventListener('pointerup',end);e.addEventListener('lostpointercapture',end);e.addEventListener('pointercancel',end);
-    e.addEventListener('keydown',event=>{const keys=orientation==='vertical'?['ArrowLeft','ArrowRight']:['ArrowUp','ArrowDown'];if(keys.includes(event.key)){event.preventDefault();change(id,(event.key===keys[0]?-1:1)*(event.shiftKey?1:10),start());}if(event.key==='Home'){event.preventDefault();reset();}});
     function reset(){if(id==='tree-resize')sizes.left=initial.left;if(id==='inspector-resize')sizes.right=initial.right;if(id==='measure-resize'){sizes.measureClosed=initial.measureClosed;sizes.measureOpen=initial.measureOpen;}if(id==='timeline-resize'){sizes.workspace=initial.workspace;sizes.timeline=initial.timeline;}if(id==='workspace-resize')sizes.workspace=initial.workspace;if(id==='plot-resize')sizes.plot=initial.plot;update();}
-    e.addEventListener('dblclick',reset);
+    function limits(){
+      const g=geometry(),plotWidth=Math.max(1,$('curves').clientWidth);
+      const ranges={'tree-resize':[150,Math.min(420,g.w-g.right-230)],'inspector-resize':[210,Math.min(540,g.w-g.left-230)],'measure-resize':[130,Math.max(130,g.height-180)],'timeline-resize':[95,Math.min(280,Math.max(95,g.height+timeline.clientHeight-360))],'workspace-resize':[450,1100],'plot-resize':[plotWidth*.25-13,plotWidth*.75-13]};
+      const [min,max]=ranges[id];return[min,Math.max(min,max)];
+    }
+    function value(){return id==='workspace-resize'?sizes.workspace:id==='plot-resize'?$('curves').clientWidth*sizes.plot/100-13:axis==='x'?target.getBoundingClientRect().width:target.getBoundingClientRect().height;}
+    function set(requested){
+      const [min,max]=limits(),v=clamp(requested,min,max);
+      if(id==='tree-resize')sizes.left=v;if(id==='inspector-resize')sizes.right=v;
+      if(id==='measure-resize')sizes[app.classList.contains('curves-open')?'measureOpen':'measureClosed']=v;
+      if(id==='timeline-resize'){const total=geometry().height+timeline.clientHeight;sizes.timeline=v;sizes.workspace=total-v;}
+      if(id==='workspace-resize')sizes.workspace=v;
+      if(id==='plot-resize')sizes.plot=(v+13)/Math.max(1,$('curves').clientWidth)*100;
+      update();
+    }
+    splitters[id]=PhysimResize.attach(e,{axis:()=>axis,limits,value,set,reset,enabled:desktop,
+      sign:()=>['inspector-resize','measure-resize','timeline-resize'].includes(id)?-1:1,
+      snapshot:()=>({...sizes}),restore:snapshot=>{Object.assign(sizes,snapshot);update();}});
   }
-  grip('tree-resize',workspace,'vertical',150,420,'Breite des Szenenbaums');grip('inspector-resize',workspace,'vertical',210,540,'Breite des Inspektors');
-  grip('measure-resize',measure,'horizontal',130,900,'Höhe des Messwert- und Kurvenbereichs');grip('timeline-resize',timeline,'horizontal',95,280,'Höhe der Zeitleiste');grip('plot-resize',$('curves'),'vertical',25,75,'Breitenverhältnis der beiden Kurven');grip('workspace-resize',app,'horizontal',450,1100,'Höhe der Arbeitsfläche');
-  const note=document.createElement('p');note.className='resize-note';note.textContent='Bereichsgrenzen ziehen · Pfeiltasten am Trenner · Doppelklick setzt die Größe zurück';app.after(note);
-  new MutationObserver(update).observe(app,{attributes:true,attributeFilter:['class','data-design']});addEventListener('resize',update);update();
+  timeline.id='timeline';workspace.id='simulation-workspace';
+  $('curves').querySelector('.chart').id='simulation-first-curve';
+  grip('tree-resize',workspace,'x','Szenenbaumbreite ändern',$('scene-tree'));grip('inspector-resize',workspace,'x','Inspektorbreite ändern',$('inspector'));
+  grip('measure-resize',measure,'y','Messbereichshöhe ändern',measure);grip('timeline-resize',timeline,'y','Zeitleistenhöhe ändern',timeline);grip('plot-resize',$('curves'),'x','Breite der ersten Kurve ändern',$('curves').querySelector('.chart'));grip('workspace-resize',app,'y','Arbeitsflächenhöhe ändern',workspace);
+  const note=document.createElement('p');note.className='resize-note';note.textContent='Trennlinien ziehen · Pfeile: 10 px · Umschalt: 40 px · Pos1/Ende: Grenzen · Enter/Doppelklick: Standard · Escape: Abbrechen';app.after(note);
+  new MutationObserver(update).observe(app,{attributes:true,attributeFilter:['class','data-design']});
+  const observer=new ResizeObserver(update);for(const pane of [workspace,measure,timeline,$('curves')])observer.observe(pane);
+  addEventListener('resize',update);update();
 })();

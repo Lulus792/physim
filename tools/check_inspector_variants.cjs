@@ -34,7 +34,7 @@ const url=pathToFileURL(path.join(design,'index.html')).href;
    const elementHeight=selector=>page.locator(selector).evaluate(e=>e.getBoundingClientRect().height);
    const initialWidth=await elementWidth('#inspector');
    await page.locator('#inspector-resize').focus();await page.keyboard.press('ArrowLeft');assert((await elementWidth('#inspector'))>initialWidth);
-   await page.keyboard.press('Home');assert.equal(await elementWidth('#inspector'),initialWidth);
+   await page.keyboard.press('Home');assert.equal(await elementWidth('#inspector'),210);await page.keyboard.press('Enter');assert.equal(await elementWidth('#inspector'),initialWidth);
    // Pointer drag, including capture outside the narrow grip.
    const box=await page.locator('#inspector-resize').boundingBox();await page.mouse.move(box.x+box.width/2,box.y+100);await page.mouse.down();await page.mouse.move(box.x-60,box.y+100,{steps:6});await page.mouse.up();
    assert((await elementWidth('#inspector'))>initialWidth+50);assert(!(await page.locator('.app-window').getAttribute('class')).includes('resizing'));

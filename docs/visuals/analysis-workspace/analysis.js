@@ -47,29 +47,31 @@
   }
   function renderPlot() {
     const list=selected(),svg=$('chart'),total=Math.max(...list.map(duration)),start=total/2-total/2/state.zoom,end=total/2+total/2/state.zoom;
+    const height=Number(svg.dataset.previewHeight)?Math.max(240,Number(svg.dataset.previewHeight)*800/(svg.clientWidth||800)):326,bottom=height-52,plotHeight=height-92;
+    svg.setAttribute('viewBox',`0 0 800 ${height}`);
     const step=(end-start)/5,precision=step>=1?(Number.isInteger(step)?0:1):Math.min(6,Math.ceil(-Math.log10(step)));
     let points=list.flatMap(r=>r.data.filter(p=>p.t>=start&&p.t<=end).map(value));
     if(!points.length)points=list.flatMap(r=>r.data.map(value));
     let low=Math.min(...points),high=Math.max(...points),pad=(high-low)*.12||1; low-=pad;high+=pad;
-    const x=t=>58+(t-start)/(end-start)*718, y=v=>274-(v-low)/(high-low)*234;
+    const x=t=>58+(t-start)/(end-start)*718, y=v=>bottom-(v-low)/(high-low)*plotHeight;
     const c=channels[state.channel];
-    let markup=`<title id="plot-title">${c.name} über der Zeit</title><desc id="plot-description">${list.map(r=>'Lauf '+r.id).join(', ')}. Zeitbereich ${fmt(start,1)} bis ${fmt(end,1)} Sekunden. Einheit ${state.unit}. Synthetische Beispieldaten. Die zugehörige Tabelle enthält die Statistik des gesamten Laufs.</desc><defs><clipPath id="plot-clip"><rect x="58" y="40" width="718" height="234"/></clipPath></defs>`;
+    let markup=`<title id="plot-title">${c.name} über der Zeit</title><desc id="plot-description">${list.map(r=>'Lauf '+r.id).join(', ')}. Zeitbereich ${fmt(start,1)} bis ${fmt(end,1)} Sekunden. Einheit ${state.unit}. Synthetische Beispieldaten. Die zugehörige Tabelle enthält die Statistik des gesamten Laufs.</desc><defs><clipPath id="plot-clip"><rect x="58" y="40" width="718" height="${plotHeight}"/></clipPath></defs>`;
     for(let i=0;i<=4;i++) {
-      const yy=40+i*234/4,v=high-i*(high-low)/4;
+      const yy=40+i*plotHeight/4,v=high-i*(high-low)/4;
       markup+=`<line class="grid" x1="58" x2="776" y1="${yy}" y2="${yy}"/><text x="48" y="${yy+4}" text-anchor="end">${fmt(v,2)}</text>`;
     }
     for(let i=0;i<=5;i++) {
       const t=start+i*(end-start)/5,xx=x(t);
-      markup+=`<line class="grid" x1="${xx}" x2="${xx}" y1="40" y2="274"/><text x="${xx}" y="296" text-anchor="middle">${fmt(t,precision)}</text>`;
+      markup+=`<line class="grid" x1="${xx}" x2="${xx}" y1="40" y2="${bottom}"/><text x="${xx}" y="${height-30}" text-anchor="middle">${fmt(t,precision)}</text>`;
     }
     if(low<0&&high>0) markup+=`<line class="zero" x1="58" x2="776" y1="${y(0)}" y2="${y(0)}"/>`;
-    markup+=`<text x="58" y="20">${c.symbol} [${state.unit}]</text><text x="776" y="320" text-anchor="end">Zeit [s]</text>`;
+    markup+=`<text x="58" y="20">${c.symbol} [${state.unit}]</text><text x="776" y="${height-6}" text-anchor="end">Zeit [s]</text>`;
     list.forEach((r,i)=>{
       const data=r.data;
       const d=data.map((p,j)=>`${j?'L':'M'}${x(p.t).toFixed(2)},${y(value(p)).toFixed(2)}`).join(' ');
       markup+=`<path class="curve series-${i+1}" clip-path="url(#plot-clip)" ${i?`stroke-dasharray="${i===1?'7 4':'2 4'}"`:''} d="${d}"/>`;
     });
-    markup+='<line id="crosshair" class="crosshair" x1="0" x2="0" y1="40" y2="274" visibility="hidden"/>';
+    markup+=`<line id="crosshair" class="crosshair" x1="0" x2="0" y1="40" y2="${bottom}" visibility="hidden"/>`;
     svg.innerHTML=markup;
     const resetReadout=()=>{$('cursor-readout').textContent=`Zeitachse ${fmt(start,total<1?3:1)}–${fmt(end,total<1?3:1)} s`;$('crosshair').setAttribute('visibility','hidden');};
     resetReadout();
@@ -222,5 +224,6 @@
     });
     document.querySelector('.chart-readout>span:last-child').textContent='Vorschau · übernommene Messpunkte';
   }
+  document.addEventListener('physim-preview-plot-resize',()=>{if(available())renderPlot();});
   render();syncPanels();
 })();

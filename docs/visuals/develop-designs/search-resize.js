@@ -50,7 +50,7 @@
   const workspace=$('.workspace'),panes={tree:$('#explorer'),api:$('#inspector'),log:$('#diagnostics')};
   const defaults={tree:218,api:255,treeHeight:230,apiHeight:320,log:86},sizes={...defaults};
   const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
-  const handles={};let drag=null;
+  const handles={},splitters={};
   function axis(key){return key==='log'||(key==='api'&&innerWidth<=950)||(key==='tree'&&innerWidth<=620)?'y':'x';}
   function sizeKey(key){return axis(key)==='y'&&key!=='log'?key+'Height':key;}
   function limits(key){
@@ -87,44 +87,25 @@
       const r=panes[key].getBoundingClientRect(),value=key==='log'?$('#log-body').clientHeight:a==='x'?r.width:r.height;
       h.setAttribute('aria-valuenow',String(Math.round(value)));h.setAttribute('aria-valuetext',Math.round(value)+' Pixel');
       h.setAttribute('aria-label',`${key==='tree'?'Workspace':key==='api'?'Codekontext':'Protokoll'}${a==='x'?'breite':'höhe'} ändern`);
+      splitters[key]?.sync();
     }
     syncScroll();
   }
   function setSize(key,value){const [min,max]=limits(key);sizes[sizeKey(key)]=clamp(value,min,max);position();}
   function reset(key){setSize(key,defaults[sizeKey(key)]);}
-  function finish(cancel=false){
-    if(!drag)return;const d=drag;drag=null;
-    if(cancel){sizes[d.property]=d.startSize;position();}
-    if(d.handle.hasPointerCapture(d.pointer))d.handle.releasePointerCapture(d.pointer);
-    document.body.classList.remove('resizing');document.body.style.cursor='';
-  }
   for(const key of ['tree','api','log']){
     const h=document.createElement('div');handles[key]=h;h.id='resize-'+key;h.className='resize-handle resize-'+key;h.tabIndex=0;
     h.setAttribute('role','separator');h.setAttribute('aria-controls',key==='log'?'log-body':panes[key].id);h.setAttribute('aria-describedby','resize-help');
     (key==='log'?panes.log:workspace).append(h);
-    h.addEventListener('dblclick',()=>reset(key));
-    h.addEventListener('pointerdown',event=>{
-      if(event.button!==0)return;event.preventDefault();h.focus();const a=axis(key),r=panes[key].getBoundingClientRect();
-      drag={key,handle:h,pointer:event.pointerId,axis:a,property:sizeKey(key),startSize:sizes[sizeKey(key)],start:a==='x'?event.clientX:event.clientY,current:key==='log'?$('#log-body').clientHeight:a==='x'?r.width:r.height};
-      h.setPointerCapture(event.pointerId);document.body.classList.add('resizing');document.body.style.cursor=a==='x'?'col-resize':'row-resize';
-    });
-    h.addEventListener('pointermove',event=>{
-      if(!drag||drag.handle!==h)return;const sign=key==='api'&&drag.axis==='x'||key==='log'?-1:1;
-      setSize(key,drag.current+sign*((drag.axis==='x'?event.clientX:event.clientY)-drag.start));
-    });
-    h.addEventListener('pointerup',()=>finish());h.addEventListener('pointercancel',()=>finish(true));h.addEventListener('lostpointercapture',()=>finish());
-    h.addEventListener('keydown',event=>{
-      const a=axis(key),increase=key==='api'&&a==='x'||key==='log'?-1:1,step=event.shiftKey?40:10;
-      const negative=a==='x'?'ArrowLeft':'ArrowUp',positive=a==='x'?'ArrowRight':'ArrowDown';
-      if(event.key===negative||event.key===positive){event.preventDefault();const value=Number(h.getAttribute('aria-valuenow'));setSize(key,value+(event.key===positive?1:-1)*increase*step);}
-      else if(event.key==='Home'||event.key==='End'){event.preventDefault();setSize(key,limits(key)[event.key==='Home'?0:1]);}
-      else if(event.key==='Enter'){event.preventDefault();reset(key);}
+    splitters[key]=PhysimResize.attach(h,{
+      axis:()=>axis(key),limits:()=>limits(key),value:()=>{const r=panes[key].getBoundingClientRect();return key==='log'?$('#log-body').clientHeight:axis(key)==='x'?r.width:r.height;},
+      sign:()=>key==='api'&&axis(key)==='x'||key==='log'?-1:1,
+      set:value=>setSize(key,value),reset:()=>reset(key),snapshot:()=>({...sizes}),restore:snapshot=>{Object.assign(sizes,snapshot);position();}
     });
   }
-  document.addEventListener('keydown',event=>{if(drag&&event.key==='Escape'){event.preventDefault();event.stopImmediatePropagation();finish(true);}},true);
   $('#reset-panels').addEventListener('click',()=>{Object.assign(sizes,defaults);position();});
   const observer=new ResizeObserver(position);for(const pane of [workspace,...Object.values(panes),$('#log-body')])observer.observe(pane);
-  window.addEventListener('resize',()=>{finish();position();});
+  window.addEventListener('resize',position);
   new MutationObserver(position).observe(workspace,{attributes:true,subtree:true,attributeFilter:['hidden']});
   position();search(true,false);
 })();
