@@ -60,16 +60,16 @@ static bool channel_units_save(app *a,const ps_channel_units *next) {
     }
     a->channel_units=*next;a->channel_units_writable=true;a->channel_units_error[0]=0;return true;
 }
-static bool channel_unit_fits(app *a,const ps_display_unit *u) {
+static bool channel_unit_fits(app *a,const ps_channel *channel,const ps_display_unit *u) {
     double converted;
-    for(uint32_t i=0;i<a->channel_count;i++)if(!strcmp(a->live_channels[i].name,a->unit_channel.name) &&
-        !memcmp(a->live_channels[i].dimension,a->unit_channel.dimension,7)) {
+    for(uint32_t i=0;i<a->channel_count;i++)if(!strcmp(a->live_channels[i].name,channel->name) &&
+        !memcmp(a->live_channels[i].dimension,channel->dimension,7)) {
         const double *shown=display_values(a);int mask=a->channel_status[i];
         if((mask<0 || shown[mask]==1) && isfinite(shown[i]) && ps_display_unit_value(u,shown[i],&converted)!=PS_OK)return false;
         for(int j=0;j<a->history_count;j++)if(isfinite(a->history_v[i][j]) && ps_display_unit_value(u,a->history_v[i][j],&converted)!=PS_OK)return false;
     }
-    if(!a->data.thread)for(uint32_t i=0;i<a->data.channel_count;i++)if(!strcmp(a->data.channels[i].name,a->unit_channel.name) &&
-        !memcmp(a->data.channels[i].dimension,a->unit_channel.dimension,7)) {
+    if(!a->data.thread)for(uint32_t i=0;i<a->data.channel_count;i++)if(!strcmp(a->data.channels[i].name,channel->name) &&
+        !memcmp(a->data.channels[i].dimension,channel->dimension,7)) {
         for(int j=0;j<a->data.count;j++)if(isfinite(a->data.values[i][j]) && ps_display_unit_value(u,a->data.values[i][j],&converted)!=PS_OK)return false;
         if(a->data.stats[i].count) {
             double values[]={a->data.stats[i].mean,a->data.stats[i].min,a->data.stats[i].max};
@@ -79,17 +79,21 @@ static bool channel_unit_fits(app *a,const ps_display_unit *u) {
     }
     return true;
 }
+static bool channel_unit_commit(app *a,const ps_channel *channel,const ps_display_unit *unit) {
+    if(!a->channel_units_writable)return false;
+    if(!channel_unit_fits(a,channel,unit)) {
+        snprintf(a->channel_units_error,sizeof a->channel_units_error,"Dieser Faktor kann die vorhandenen Messwerte oder Statistiken nicht darstellen.");return false;
+    }
+    ps_channel_units next=a->channel_units;ps_result r=ps_channel_units_put(&next,channel,unit);
+    if(r!=PS_OK){snprintf(a->channel_units_error,sizeof a->channel_units_error,"Einheit ungültig oder alle 64 Plätze belegt (%s).",ps_result_string(r));return false;}
+    return channel_units_save(a,&next);
+}
 static void channel_unit_apply(app *a) {
     ps_display_unit u=a->unit_draft;
     if(!ps_parse_finite_number(a->channel_unit_scale,NULL,&u.scale) || !ps_display_unit_valid(&u)) {
         snprintf(a->channel_units_error,sizeof a->channel_units_error,"Symbol und einen endlichen Faktor größer als null eingeben.");return;
     }
-    if(!channel_unit_fits(a,&u)) {
-        snprintf(a->channel_units_error,sizeof a->channel_units_error,"Dieser Faktor kann die vorhandenen Messwerte oder Statistiken nicht darstellen.");return;
-    }
-    ps_channel_units next=a->channel_units;ps_result r=ps_channel_units_put(&next,&a->unit_channel,&u);
-    if(r!=PS_OK){snprintf(a->channel_units_error,sizeof a->channel_units_error,"Einheit ungültig oder alle 64 Plätze belegt (%s).",ps_result_string(r));return;}
-    if(channel_units_save(a,&next))a->channel_unit_manager=false;
+    if(channel_unit_commit(a,&a->unit_channel,&u))a->channel_unit_manager=false;
 }
 typedef struct {const char *symbol;double scale;int8_t dimension[7];} channel_unit_preset;
 static const channel_unit_preset channel_unit_presets[]={

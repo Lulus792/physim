@@ -3,6 +3,8 @@
 Dieser Schritt führt den [nativen Auswertungsstand](ANALYSIS-NATIVE.md) näher an
 die unveränderten Referenzen heran. Er ersetzt weder deren offene Fachfunktionen
 noch den vollständigen Abgleich aller Arbeitsbereiche.
+Die anschließende [kompakte Einheitenwahl und Textkorrekturen](ANALYSIS-UNITS.md)
+führen diesen eingefrorenen Quellstand weiter.
 
 ## Sichtbare Änderungen
 

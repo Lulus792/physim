@@ -73,7 +73,15 @@ static void channel_units_test_frame(app *a,const char *mode,int *stage,int *cod
         *capture="units-statistics.bmp";test_mouse(a,a->channel_unit_buttons[1],true);break;
     }
     case 24:test_mouse(a,a->channel_unit_buttons[1],false);break;
-    case 25:ok=a->channel_unit_manager;ps_plot_view_zoom(&a->data_views[selected],.5,.5,.5);view=a->data_views[selected];test_mouse(a,a->channel_unit_bounds[4],true);break;
+    case 25:
+        if(!a->channel_unit_manager) {
+            ok=a->analysis_unit_custom.w>0;
+            if(!ok)break;
+            test_mouse(a,a->analysis_unit_custom,true);*stage=40;return;
+        }
+        ps_plot_view_zoom(&a->data_views[selected],.5,.5,.5);view=a->data_views[selected];test_mouse(a,a->channel_unit_bounds[4],true);break;
+    case 40:test_mouse(a,a->analysis_unit_custom,false);*stage=41;return;
+    case 41:ok=a->channel_unit_manager;if(ok){*stage=25;return;}break;
     case 26:test_mouse(a,a->channel_unit_bounds[4],false);break;
     case 27:
         ok=!a->channel_unit_manager && !a->channel_units.count && !memcmp(&view,&a->data_views[selected],sizeof view);

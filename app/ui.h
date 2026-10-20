@@ -144,6 +144,9 @@ nk_bool ps_ui_option_label(struct nk_context *ctx,const char *group,const char *
 nk_bool ps_ui_checkbox_named(struct nk_context *ctx,const char *text,const char *name,nk_bool *active);
 nk_bool ps_ui_checkbox_label(struct nk_context *ctx,const char *text,nk_bool *active);
 nk_bool ps_ui_button_label(struct nk_context *ctx,const char *text);
+/* Named menu button using Nuklear's ordinary nonblocking combo lifecycle.
+ * The caller draws the field background before reserving its layout slot. */
+nk_bool ps_ui_combo_begin_named(struct nk_context *ctx,const char *name,const char *label,struct nk_vec2 size);
 nk_bool ps_ui_slider_named(struct nk_context *ctx,const char *name,float minimum,float *value,float maximum,float increment);
 nk_bool ps_ui_separator_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,float minimum,float *value,float maximum);
 nk_bool ps_ui_separator_step_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,float minimum,float *value,float maximum,float step);

@@ -637,6 +637,23 @@ bool nk_sdl_font_stash_replace(struct nk_context *ctx,struct nk_font_atlas *cand
     ps_graphics_delete_texture(sdl->graphics,old_texture);
     return true;
 }
+static struct nk_window *accessibility_stack_owner(struct nk_context *ctx,const char *name) {
+    struct nk_window *window=nk_window_find(ctx,name);if(window)return window;
+    /* A nonblocking combo is owned by a normal window, rather than linked
+     * into the top-level list. Closed or stale popups are never valid owners. */
+    for(struct nk_window *root=ctx->begin;root;root=root->next) {
+        if(root->flags&(NK_WINDOW_HIDDEN|NK_WINDOW_MINIMIZED|NK_WINDOW_CLOSED))continue;
+        struct nk_window *parent=root;
+        for(unsigned depth=0;depth<32 && parent->popup.active;depth++) {
+            struct nk_window *popup=parent->popup.win;
+            if(!popup || popup->parent!=parent || popup->seq!=ctx->seq ||
+               popup->flags&(NK_WINDOW_HIDDEN|NK_WINDOW_MINIMIZED|NK_WINDOW_CLOSED))break;
+            if(!strcmp(popup->name_string,name))return root;
+            parent=popup;
+        }
+    }
+    return NULL;
+}
 bool nk_sdl_render(struct nk_context *ctx) {
     struct nk_sdl *sdl = ctx->userdata.ptr;
     Uint64 now = SDL_GetTicksNS();
@@ -649,7 +666,7 @@ bool nk_sdl_render(struct nk_context *ctx) {
          * this frame. Their presence must invalidate a covered native target. */
         for(size_t i=0;i<sdl->accessibility->draft_count;i++) {
             ps_a11y_node *node=&sdl->accessibility->draft[i];if(!node->focusable)continue;
-            struct nk_window *window=nk_window_find(ctx,node->window);
+            struct nk_window *window=accessibility_stack_owner(ctx,node->window);
             if(!window){node->enabled=false;node->focusable=false;continue;}
             const float *target=node->bounds;
             const ps_a11y_document *document=sdl->accessibility->document_draft;

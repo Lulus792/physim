@@ -15,9 +15,108 @@ static void analysis_rule(app *a) {
 static void analysis_field_background(app *a,struct nk_rect r,bool focused) {
     /* A filled outer contour keeps the straight edges one solid pixel wide;
      * a stroked Nuklear rectangle spreads that edge across adjacent pixels. */
-    float inset=focused?2:1;
+    float inset=focused?2.f:1.f;
     nk_fill_rect(nk_window_get_canvas(a->ui),r,6,focused?UI_COLOR(accent):UI_COLOR(border));
     nk_fill_rect(nk_window_get_canvas(a->ui),nk_rect(r.x+inset,r.y+inset,r.w-2*inset,r.h-2*inset),6-inset,UI_COLOR(edit));
+}
+static void analysis_combo_style(app *a,const char *name) {
+    struct nk_style_combo *combo=&a->ui->style.combo;
+    combo->normal=combo->hover=combo->active=nk_style_item_color(nk_rgba(0,0,0,0));
+    combo->border=1;combo->border_color=nk_rgba(0,0,0,0);combo->rounding=6;
+    combo->button.normal=combo->button.hover=combo->button.active=nk_style_item_color(nk_rgba(0,0,0,0));
+    combo->button.border=0;combo->button.padding=nk_vec2(10,10);
+    combo->sym_normal=combo->sym_hover=combo->sym_active=NK_SYMBOL_CHEVRON_DOWN;
+    analysis_field_background(a,nk_widget_bounds(a->ui),nk_sdl_accessibility_is_focused(a->ui,NULL,name));
+    nk_style_push_font(a->ui,&a->workbench_fonts[2]);
+}
+static bool analysis_unit_preset_matches(const ps_channel *channel,const channel_unit_preset *preset) {
+    if(memcmp(channel->dimension,preset->dimension,7))return false;
+    const int8_t dimensionless[7]={0};
+    if(!memcmp(channel->dimension,dimensionless,7)) {
+        bool angle=!strcmp(channel->unit,"rad") || !strcmp(channel->unit,"°") || !strcmp(channel->unit,"deg");
+        bool angle_preset=!strcmp(preset->symbol,"rad") || !strcmp(preset->symbol,"°");
+        return angle==angle_preset;
+    }
+    return true;
+}
+static const char *analysis_unit_label(const char *symbol) {
+    return !strcmp(symbol,"rad")?"Radiant (rad)":!strcmp(symbol,"°")?"Grad (°)":symbol;
+}
+static void analysis_unit_select(app *a,const ps_channel *channel,const ps_display_unit *unit) {
+    if(unit->scale==1 && !strcmp(unit->symbol,channel->unit)) {
+        ps_channel_units next=a->channel_units;
+        if(a->channel_units_writable && ps_channel_units_remove(&next,channel)==PS_OK)(void)channel_units_save(a,&next);
+    } else (void)channel_unit_commit(a,channel,unit);
+}
+static void analysis_unit_menu(app *a,const ps_channel *channel) {
+    struct nk_context *ui=a->ui;ps_display_unit unit=channel_display_unit(a,channel);
+    const char *label=analysis_unit_label(unit.symbol);struct nk_style_combo combo=ui->style.combo;
+    analysis_combo_style(a,"Anzeigeeinheit auswählen");a->analysis_unit_custom=nk_rect(0,0,0,0);
+    a->channel_unit_buttons[1]=nk_widget_bounds(ui);
+    float menu_width=fmaxf(a->channel_unit_buttons[1].w,ui->style.font->width(ui->style.font->userdata,ui->style.font->height,"Benutzerdefiniert …",(int)strlen("Benutzerdefiniert …"))+32);
+    bool menu_open=ps_ui_combo_begin_named(ui,"Anzeigeeinheit auswählen",label,nk_vec2(fmaxf(220,menu_width),260));
+    if(menu_open) {
+        struct nk_style_button button=ui->style.button;
+        ui->style.button.normal=nk_style_item_color(nk_rgba(0,0,0,0));ui->style.button.text_alignment=NK_TEXT_LEFT;
+        bool original_offered=false;nk_layout_row_dynamic(ui,30,1);
+        nk_begin_disabled(ui,!a->channel_units_writable);
+        for(unsigned i=0;i<sizeof channel_unit_presets/sizeof channel_unit_presets[0];i++) {
+            const channel_unit_preset *preset=channel_unit_presets+i;
+            if(!analysis_unit_preset_matches(channel,preset))continue;
+            ps_display_unit choice={.scale=preset->scale};memcpy(choice.dimension,preset->dimension,7);
+            snprintf(choice.symbol,sizeof choice.symbol,"%s",preset->symbol);
+            original_offered|=choice.scale==1 && !strcmp(choice.symbol,channel->unit);
+            if(nk_button_label(ui,analysis_unit_label(choice.symbol))){analysis_unit_select(a,channel,&choice);a->analysis_unit_focus_return=true;nk_combo_close(ui);}
+        }
+        if(!original_offered) {
+            char original[100];snprintf(original,sizeof original,"Gespeicherte Einheit (%s)",channel->unit[0]?channel->unit:"SI");
+            if(nk_button_label(ui,original)) {
+                ps_channel_units next=a->channel_units;
+                if(ps_channel_units_remove(&next,channel)==PS_OK)(void)channel_units_save(a,&next);
+                a->analysis_unit_focus_return=true;
+                nk_combo_close(ui);
+            }
+        }
+        nk_end_disabled(ui);a->analysis_unit_custom=nk_widget_bounds(ui);
+        if(nk_button_label(ui,"Benutzerdefiniert …")){channel_unit_open(a,channel);a->analysis_unit_focus_return=true;nk_combo_close(ui);}
+        ui->style.button=button;
+        nk_combo_end(ui);
+    }
+    nk_style_pop_font(ui);ui->style.combo=combo;
+    if(!menu_open && a->analysis_unit_focus_return && nk_sdl_accessibility_request_focus(ui,NULL,"Anzeigeeinheit auswählen"))a->analysis_unit_focus_return=false;
+}
+static void analysis_text(app *a,struct nk_rect r,const char *text,const struct nk_user_font *font,struct nk_color color) {
+    size_t length=strlen(text);char shown[1200];bool truncated=font->width(font->userdata,font->height,text,(int)length)>r.w;
+    if(truncated) {
+        float dots=font->width(font->userdata,font->height,"…",3);
+        while(length && font->width(font->userdata,font->height,text,(int)length)+dots>r.w) {
+            length--;while(length && ((unsigned char)text[length]&0xc0)==0x80)length--;
+        }
+    }
+    snprintf(shown,sizeof shown,"%.*s%s",(int)length,text,truncated?"…":"");
+    nk_draw_text(nk_window_get_canvas(a->ui),r,shown,(int)strlen(shown),font,nk_rgba(0,0,0,0),color);
+    ps_ui_accessibility_label(a->ui,r,text);
+    if(truncated && !(a->ui->current->layout->flags&NK_WINDOW_ROM) && nk_input_is_mouse_hovering_rect(&a->ui->input,plot_intersection(r,nk_window_get_canvas(a->ui)->clip)))nk_tooltip(a->ui,text);
+}
+static void analysis_wrapped_text(app *a,struct nk_rect r,const char *text,const struct nk_user_font *font,struct nk_color color) {
+    size_t at=0,n=strlen(text);float y=r.y;
+    while(at<n) {
+        size_t length,used=documentation_line(font,text+at,n-at,r.w,&length);
+        nk_draw_text(nk_window_get_canvas(a->ui),nk_rect(r.x,y,r.w,font->height),text+at,(int)length,font,nk_rgba(0,0,0,0),color);
+        at+=used;y+=font->height+6;
+    }
+    ps_ui_accessibility_label(a->ui,r,text);
+}
+static void analysis_run_caption(const app *a,const ps_library_item *item,const char *path,char *meta,size_t size) {
+    if(!a->data.thread && !strcmp(a->data.path,path) && a->data.count)
+        snprintf(meta,size,"%.6g s · %llu Messpunkte",a->data.time[a->data.count-1]-a->data.time[0],(unsigned long long)a->data.total);
+    else snprintf(meta,size,"%llu Byte · Messdatei",(unsigned long long)item->bytes);
+}
+static float analysis_run_card_height(const app *a,const char *meta,float width,float *meta_y,float *state_y) {
+    const struct nk_user_font *font=&a->laboratory_title_font,*small=&a->workbench_fonts[2];
+    *meta_y=fmaxf(40,12+font->height+4);
+    *state_y=fmaxf(62,*meta_y+documentation_height(small,meta,strlen(meta),fmaxf(1,width-44)));
+    return fmaxf(90,*state_y+small->height+8);
 }
 static void analysis_side_toggle(app *a,unsigned side) {
     unsigned panel=side?PS_DOCK_INSPECTOR:PS_DOCK_SIDEBAR;
@@ -103,7 +202,7 @@ static void analysis_runs_view(app *a) {
     nk_style_push_font(ui,&a->workbench_fonts[2]);
     nk_flags edited=nk_sdl_edit_named(ui,"Messläufe durchsuchen",NK_EDIT_FIELD,a->analysis_query,sizeof a->analysis_query,nk_filter_default);
     ui->style.edit=edit;
-    if(!a->analysis_query[0] && !(edited&NK_EDIT_ACTIVE))report_text(a,nk_rect(search.x+9,search.y+8,search.w-18,18),"Läufe durchsuchen …",muted());
+    if(!a->analysis_query[0] && !(edited&NK_EDIT_ACTIVE))analysis_text(a,nk_rect(search.x+9,search.y+8,search.w-18,ui->style.font->height),"Läufe durchsuchen …",ui->style.font,muted());
     nk_style_pop_font(ui);
     nk_layout_row_push(ui,2);nk_spacer(ui);nk_layout_row_end(ui);nk_style_pop_vec2(ui);
     nk_layout_row_dynamic(ui,6,1);nk_spacer(ui);
@@ -113,21 +212,27 @@ static void analysis_runs_view(app *a) {
     nk_uint list_scroll_x,list_scroll_y;nk_window_get_scroll(ui,&list_scroll_x,&list_scroll_y);
     float list_top=ui->current->layout->at_y+ui->current->layout->row.height+ui->style.window.spacing.y+(float)list_scroll_y;
     float list_height=fmaxf(80,ui->current->layout->clip.y+ui->current->layout->clip.h-list_top-hint_height-64-3*ui->style.window.spacing.y);
-    size_t matching=0;
-    if(a->library)for(size_t i=0;i<a->library->count;i++)if(a->library->items[i].kind==PS_LIBRARY_RUN && (!a->analysis_query[0] || ps_document_find(a->library->items[i].name,a->analysis_query)))matching++;
-    float card_pitch=90+ui->style.window.spacing.y;
-    float list_space=list_height;list_height=fminf(list_space,fmaxf(80,(float)matching*card_pitch));
+    float cards_height=0;
+    if(a->library)for(size_t i=0;i<a->library->count;i++) {
+        const ps_library_item *item=&a->library->items[i];char path[4096],meta[160];float meta_y,state_y;
+        if(item->kind!=PS_LIBRARY_RUN || (a->analysis_query[0] && !ps_document_find(item->name,a->analysis_query)) || ps_library_path(a->library,i,path,sizeof path)!=PS_OK)continue;
+        analysis_run_caption(a,item,path,meta,sizeof meta);
+        cards_height+=analysis_run_card_height(a,meta,nk_window_get_content_region(ui).w,&meta_y,&state_y)+ui->style.window.spacing.y;
+    }
+    float list_space=list_height;list_height=fminf(list_space,fmaxf(80,cards_height));
     nk_layout_row_dynamic(ui,list_height,1);
     memset(a->analysis_run_bounds,0,sizeof a->analysis_run_bounds);
     nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(0,0));
-    if(nk_group_begin(ui,"analysis-run-list",matching*card_pitch<=list_height?NK_WINDOW_NO_SCROLLBAR:0)) {
+    if(nk_group_begin(ui,"analysis-run-list",cards_height<=list_height?NK_WINDOW_NO_SCROLLBAR:0)) {
         size_t shown=0;
         if(a->library)for(size_t i=0;i<a->library->count;i++) {
             const ps_library_item *item=&a->library->items[i];
             if(item->kind!=PS_LIBRARY_RUN || (a->analysis_query[0] && !ps_document_find(item->name,a->analysis_query)))continue;
             char path[4096];if(ps_library_path(a->library,i,path,sizeof path)!=PS_OK)continue;
             nk_bool checked=selected_run(a,path)>=0;int selection=selected_run(a,path);
-            nk_layout_row_dynamic(ui,90,1);struct nk_rect card;
+            char meta[160];float meta_y,state_y;analysis_run_caption(a,item,path,meta,sizeof meta);
+            float card_height=analysis_run_card_height(a,meta,nk_window_get_content_region(ui).w,&meta_y,&state_y);
+            nk_layout_row_dynamic(ui,card_height,1);struct nk_rect card;
             if(nk_widget(&card,ui)==NK_WIDGET_INVALID){shown++;continue;}
             if(shown<8)a->analysis_run_bounds[shown]=card;
             struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
@@ -145,20 +250,16 @@ static void analysis_runs_view(app *a) {
             if(ps_ui_switch_at(ui,nk_rect(card.x+4,card.y+5,27,32),select_name,&checked))select_run(a,path,checked);
             if(nk_sdl_accessibility_is_focused(ui,NULL,select_name))nk_stroke_rect(canvas,nk_rect(checkbox.x-3,checkbox.y-3,21,21),3,2,UI_COLOR(accent));
             const struct nk_user_font *font=&a->laboratory_title_font,*small=&a->workbench_fonts[2];
-            struct nk_rect name=nk_rect(card.x+36,card.y+12,card.w-44,22);
-            nk_draw_text(canvas,name,item->name,(int)strlen(item->name),font,nk_rgba(0,0,0,0),UI_COLOR(text));
+            struct nk_rect name=nk_rect(card.x+36,card.y+12,card.w-44,font->height);
+            analysis_text(a,name,item->name,font,UI_COLOR(text));
             char accessible[1200];snprintf(accessible,sizeof accessible,"Messlauf anzeigen: %s",item->name);
             nk_begin_disabled(ui,!idle(a));
             if(ps_ui_button_at(ui,nk_rect(card.x+32,card.y,card.w-32,card.h),accessible,!strcmp(a->data.path,path)))open_run_path(a,path);
             nk_end_disabled(ui);
             if(nk_sdl_accessibility_is_focused(ui,NULL,accessible))nk_stroke_rect(canvas,card,7,2,UI_COLOR(accent));
-            char meta[160];
-            if(!a->data.thread && !strcmp(a->data.path,path) && a->data.count)
-                snprintf(meta,sizeof meta,"%.6g s · %llu Messpunkte",a->data.time[a->data.count-1]-a->data.time[0],(unsigned long long)a->data.total);
-            else snprintf(meta,sizeof meta,"%llu Byte · Messdatei",(unsigned long long)item->bytes);
-            nk_draw_text(canvas,nk_rect(card.x+36,card.y+40,card.w-44,small->height),meta,(int)strlen(meta),small,nk_rgba(0,0,0,0),muted());
+            analysis_wrapped_text(a,nk_rect(card.x+36,card.y+meta_y,card.w-44,state_y-meta_y),meta,small,muted());
             const char *state=selection==0?"Referenz":!strcmp(a->data.path,path)?"Aktiver Lauf":checked?"Für Vergleich ausgewählt":"";
-            nk_draw_text(canvas,nk_rect(card.x+36,card.y+62,card.w-44,small->height),state,(int)strlen(state),small,nk_rgba(0,0,0,0),selection==0?UI_COLOR(accent):muted());
+            analysis_text(a,nk_rect(card.x+36,card.y+state_y,card.w-44,small->height),state,small,selection==0?UI_COLOR(accent):muted());
             shown++;
         }
         if(!shown){nk_layout_row_dynamic(ui,64,1);nk_label_wrap(ui,a->library_thread?"Messläufe werden geladen …":a->analysis_query[0]?"Keine passenden Messläufe. Die Auswahl bleibt erhalten.":"Noch keine Messläufe. Eine Simulation starten oder einen Messlauf importieren.");}
@@ -187,23 +288,17 @@ static void analysis_details_view(app *a) {
         const char *names[PS_MAX_CHANNELS];for(uint32_t i=0;i<a->data.channel_count;i++)names[i]=a->data.channels[i].name;
         analysis_heading(a,"Messkanal",24,false);nk_layout_row_dynamic(ui,34,1);
         struct nk_style_combo combo=ui->style.combo;
-        ui->style.combo.normal=ui->style.combo.hover=ui->style.combo.active=nk_style_item_color(nk_rgba(0,0,0,0));
-        ui->style.combo.border=1;ui->style.combo.border_color=nk_rgba(0,0,0,0);ui->style.combo.rounding=6;
-        ui->style.combo.button.normal=ui->style.combo.button.hover=ui->style.combo.button.active=nk_style_item_color(nk_rgba(0,0,0,0));
-        ui->style.combo.button.border=0;
-        ui->style.combo.sym_normal=ui->style.combo.sym_hover=ui->style.combo.sym_active=NK_SYMBOL_CHEVRON_DOWN;
-        ui->style.combo.button.padding=nk_vec2(10,10);
-        struct nk_rect channel=nk_widget_bounds(ui);
-        analysis_field_background(a,channel,nk_sdl_accessibility_is_focused(ui,NULL,names[a->plot_channel]));
-        nk_style_push_font(ui,&a->workbench_fonts[2]);
+        analysis_combo_style(a,names[a->plot_channel]);
         a->plot_channel=nk_combo(ui,names,(int)a->data.channel_count,a->plot_channel,28,nk_vec2(280,240));
         nk_style_pop_font(ui);
         ui->style.combo=combo;
         analysis_heading(a,"Anzeigeeinheit",24,false);nk_layout_row_dynamic(ui,34,1);
-        ps_display_unit unit=channel_display_unit(a,&a->data.channels[a->plot_channel]);
-        a->channel_unit_buttons[1]=nk_widget_bounds(ui);
-        if(nk_button_label(ui,unit.symbol))channel_unit_open(a,&a->data.channels[a->plot_channel]);
-        nk_layout_row_dynamic(ui,52,1);nk_label_wrap(ui,"Die Anzeigeeinheit gilt für Kurve und Statistik. Rohdatenexport behält seine gespeicherten Einheiten.");
+        analysis_unit_menu(a,&a->data.channels[a->plot_channel]);
+        const char *hint="Die Anzeigeeinheit gilt für Kurve und Statistik. Rohdatenexport behält seine gespeicherten Einheiten.";
+        nk_layout_row_dynamic(ui,fmaxf(52,documentation_height(ui->style.font,hint,strlen(hint),nk_window_get_content_region(ui).w)),1);nk_label_wrap(ui,hint);
+        if(a->channel_units_error[0]) {
+            nk_layout_row_dynamic(ui,documentation_height(ui->style.font,a->channel_units_error,strlen(a->channel_units_error),nk_window_get_content_region(ui).w)+4,1);nk_label_wrap(ui,a->channel_units_error);
+        }
     } else {nk_layout_row_dynamic(ui,68,1);nk_label_wrap(ui,a->data.thread?"Messdaten werden geladen …":"Messlauf öffnen, um Kanal und Einheit zu wählen.");}
     analysis_rule(a);analysis_heading(a,"AKTIVER LAUF",34,false);
     nk_layout_row_dynamic(ui,40,1);nk_label_wrap(ui,a->data.path[0]?diagnostic_basename(a->data.path):"Kein Lauf geöffnet");
@@ -250,7 +345,7 @@ static void analysis_workspace_view(app *a,float content) {
         if(nk_sdl_accessibility_is_focused(ui,NULL,tabs[i]))nk_stroke_rect(nk_window_get_canvas(ui),tab,3,2,UI_COLOR(accent));
     }
     nk_layout_row_push(ui,fmaxf(20,nk_window_get_content_region(ui).w-tab_widths[0]-tab_widths[1]-2*ui->style.window.spacing.x));
-    char total[100];snprintf(total,sizeof total,"%u %s · %llu Punkte im aktiven Lauf",a->selected_count,a->selected_count==1?"Lauf":"Läufe",(unsigned long long)a->data.total);
+    char total[100];snprintf(total,sizeof total,"%llu Punkte · aktiver Lauf",(unsigned long long)a->data.total);
     nk_label_colored(ui,total,NK_TEXT_RIGHT,muted());nk_layout_row_end(ui);nk_style_pop_vec2(ui);
     analysis_rule(a);
     /* The active rule shares the bottom pixel of the full-width border. */
@@ -294,7 +389,15 @@ static void analysis_workspace_view(app *a,float content) {
         plot(a, a->data.time, displayed, a->data.count,
              analysis_plot_dimension(a,content), title, mask >= 0, &a->data_views[a->plot_channel]);
         analysis_plot_separator(a);
-        nk_layout_row_dynamic(ui,44,2);nk_style_push_font(ui,&a->laboratory_title_font);nk_label(ui,"Statistik",NK_TEXT_LEFT);nk_style_pop_font(ui);nk_label_colored(ui,"Gesamter Lauf · unabhängig vom Zoom",NK_TEXT_RIGHT,muted());
+        const char *stat_note="Gesamter Lauf · unabhängig vom Zoom";
+        float heading_width=ceilf(a->laboratory_title_font.width(a->laboratory_title_font.userdata,a->laboratory_title_font.height,"Statistik",9))+4;
+        float note_width=nk_window_get_content_region(ui).w-heading_width-ui->style.window.spacing.x;
+        bool stack_note=ui->style.font->width(ui->style.font->userdata,ui->style.font->height,stat_note,(int)strlen(stat_note))>note_width;
+        nk_layout_row_begin(ui,NK_STATIC,44,stack_note?1:2);nk_layout_row_push(ui,heading_width);
+        nk_style_push_font(ui,&a->laboratory_title_font);nk_label(ui,"Statistik",NK_TEXT_LEFT);nk_style_pop_font(ui);
+        if(!stack_note){nk_layout_row_push(ui,note_width);nk_label_colored(ui,stat_note,NK_TEXT_RIGHT,muted());}
+        nk_layout_row_end(ui);
+        if(stack_note){nk_layout_row_dynamic(ui,documentation_height(ui->style.font,stat_note,strlen(stat_note),nk_window_get_content_region(ui).w),1);nk_style_push_color(ui,&ui->style.text.color,muted());nk_label_wrap(ui,stat_note);nk_style_pop_color(ui);}
         nk_layout_row_dynamic(ui,fminf(280,28+39*(float)a->data.channel_count),1);
         nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(0,0));
         nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(0,0));

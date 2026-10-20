@@ -10580,25 +10580,59 @@
       "name": "source_outline_workflow",
       "app": true,
       "display": true,
-      "targets": ["python", "physim"],
-      "steps": [{
-        "program": "python",
-        "arguments": ["{root}/tests/check_display_workflow.py", "source_outline_workflow", "--app", "{physim}", "--work", "{work}", "--root", "{root}"],
-        "timeout": 180,
-        "files": ["app-steps.json"]
-      }]
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "source_outline_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 180,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
     },
     {
       "name": "workbench_workflow",
       "app": true,
       "display": true,
-      "targets": ["python", "physim"],
-      "steps": [{
-        "program": "python",
-        "arguments": ["{root}/tests/check_display_workflow.py", "workbench_workflow", "--app", "{physim}", "--work", "{work}", "--root", "{root}", "--cc", "{cc}"],
-        "timeout": 120,
-        "files": ["app-steps.json"]
-      }]
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "workbench_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 120,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
     },
     {
       "name": "editor_replace_workflow",
@@ -13133,14 +13167,29 @@
       "name": "documentation_panes_windows_host",
       "app": true,
       "display": true,
-      "platforms": ["win32"],
-      "targets": ["python", "physim"],
+      "platforms": [
+        "win32"
+      ],
+      "targets": [
+        "python",
+        "physim"
+      ],
       "steps": [
         {
           "program": "python",
-          "arguments": ["{root}/tests/check_documentation_windows_host.py", "--app", "{physim}", "--work", "{work}"],
+          "arguments": [
+            "{root}/tests/check_documentation_windows_host.py",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}"
+          ],
           "timeout": 110,
-          "files": ["host-audit/results.json", "host-audit/app.stdout", "host-audit/app.stderr"]
+          "files": [
+            "host-audit/results.json",
+            "host-audit/app.stdout",
+            "host-audit/app.stderr"
+          ]
         }
       ]
     },
@@ -13148,13 +13197,27 @@
       "name": "documentation_panes",
       "app": true,
       "display": true,
-      "targets": ["python", "physim"],
+      "targets": [
+        "python",
+        "physim"
+      ],
       "steps": [
         {
           "program": "python",
-          "arguments": ["{root}/tests/check_display_workflow.py", "documentation_panes", "--app", "{physim}", "--work", "{work}", "--root", "{root}"],
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "documentation_panes",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
           "timeout": 90,
-          "files": ["app-steps.json"]
+          "files": [
+            "app-steps.json"
+          ]
         }
       ]
     },
@@ -13362,6 +13425,56 @@
           "arguments": [
             "{root}/tests/check_display_workflow.py",
             "analysis_layout_light_large_narrow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 95
+        }
+      ]
+    },
+    {
+      "name": "analysis_units_dark",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "analysis_units_dark",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 95
+        }
+      ]
+    },
+    {
+      "name": "analysis_units_light_large_narrow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "analysis_units_light_large_narrow",
             "--app",
             "{physim}",
             "--work",

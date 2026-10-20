@@ -11,6 +11,8 @@ Der [native Auswertungsstand](ANALYSIS-NATIVE.md) trennt den neuen Aufbau von
 den noch offenen Mehrlauf-, Export- und vollständigen Bildabgleich-Aufgaben.
 Der anschließende [Abgleich der Auswertungsfelder](ANALYSIS-CONTROLS.md) enthält
 aktuelle native Aufnahmen und ausdrücklich begrenzte Kontur-/Farbvergleiche.
+Die [kompakte Einheitenwahl und große Schrift](ANALYSIS-UNITS.md) dokumentieren
+den nächsten nativen Teilstand einschließlich echter Speicher-/Abbruchfälle.
 
 **Für die native Umsetzung in einem anderen Chat:**
 [kopierfertiger Auftrag](NEXT-CHAT.md) · [Bestand und Abnahmeliste](IMPLEMENTATION.md)

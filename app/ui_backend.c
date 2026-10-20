@@ -267,7 +267,13 @@ static bool accessibility_emit(struct nk_context *ctx,const char *text,int role,
     }
     unsigned result=range?(layout->accessibility_range?layout->accessibility_range(layout->accessibility_user,ctx->current->name_string,text,role,visible,enabled,range):0)
         :layout->accessibility(layout->accessibility_user,ctx->current->name_string,text,role,visible,enabled,checked,group,activated);
-    if(result&2u)nk_window_set_focus(ctx,ctx->current->name_string);
+    if(result&2u) {
+        struct nk_window *owner=ctx->current;
+        while(owner->parent)owner=owner->parent;
+        /* Internal popup windows are not in Nuklear's top-level list. Asking
+         * set_focus for their name would clear ctx->active instead. */
+        nk_window_set_focus(ctx,owner->name_string);
+    }
     if((result&4u) && right-left>3 && bottom-top>3)nk_stroke_rect(nk_window_get_canvas(ctx),nk_rect(left+1,top+1,right-left-2,bottom-top-2),3,2,ctx->style.button.text_normal);
     return (result&1u)!=0;
 }
@@ -327,6 +333,27 @@ nk_bool ps_ui_button_at(struct nk_context *ctx,struct nk_rect bounds,const char 
     nk_bool pressed=accessibility_widget(ctx,name,1,bounds,selected,NULL,false);
     bool enabled=!(ctx->current->layout->flags&NK_WINDOW_ROM) && !ctx->current->widgets_disabled;
     return pressed || (enabled && nk_input_is_mouse_pressed(&ctx->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ctx->input,bounds));
+}
+nk_bool ps_ui_combo_begin_named(struct nk_context *ctx,const char *name,const char *label,struct nk_vec2 size) {
+    if(!ctx || !ctx->current || !name || !label)return nk_false;
+    struct nk_window *window=ctx->current;struct nk_rect bounds;
+    if(nk_widget(&bounds,ctx)==NK_WIDGET_INVALID)return nk_false;
+    bool expanded=window->popup.win && window->popup.type==NK_PANEL_COMBO && window->popup.name==window->popup.combo_count;
+    nk_bool activated=accessibility_widget(ctx,name,1,bounds,expanded,NULL,false);
+    bool enabled=!window->widgets_disabled && !(window->layout->flags&NK_WINDOW_ROM);
+    bool clicked=enabled && nk_input_is_mouse_pressed(&ctx->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ctx->input,bounds);
+    const struct nk_user_font *font=ctx->style.font;struct nk_color color=ctx->style.combo.label_normal;
+    nk_draw_text(&window->buffer,nk_rect(bounds.x+9,bounds.y+(bounds.h-font->height)/2,fmaxf(1,bounds.w-42),font->height),label,(int)strlen(label),font,nk_rgba(0,0,0,0),color);
+    nk_draw_symbol(&window->buffer,NK_SYMBOL_CHEVRON_DOWN,nk_rect(bounds.x+bounds.w-25,bounds.y+(bounds.h-8)/2,8,8),nk_rgba(0,0,0,0),color,1,font);
+    ps_ui_accessibility_label(ctx,bounds,label);
+    if(nk_sdl_accessibility_is_focused(ctx,NULL,name))nk_stroke_rect(&window->buffer,bounds,6,2,ctx->style.edit.cursor_normal);
+    nk_bool open=nk_combo_begin(ctx,window,size,activated || clicked,bounds);
+    if(open) {
+        /* Nuklear's internal popup has no public name. Stable owner/name
+         * identity lets the native model retain and activate its entries. */
+        snprintf(ctx->current->name_string,sizeof ctx->current->name_string,"%.32s/menu/%08x",window->name_string,(unsigned)nk_murmur_hash(name,nk_strlen(name),0));
+    }
+    return open;
 }
 nk_bool ps_ui_switch_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,nk_bool *checked) {
     if(!ctx || !checked || bounds.w<=0 || bounds.h<=0)return nk_false;

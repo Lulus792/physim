@@ -4,6 +4,7 @@ Stand: 20. Oktober 2026. Dieser Bericht dokumentiert einen Teil der laufenden
 Angleichung der gesamten Oberfläche. Er ist keine vollständige Designabnahme.
 Der anschließende [Abgleich einzelner Felder und Konturen](ANALYSIS-CONTROLS.md)
 ergänzt diesen eingefrorenen Stand mit eigenen Bildern und eigenem Prüfumfang.
+Darauf folgt die [kompakte Einheitenwahl mit Textkorrekturen](ANALYSIS-UNITS.md).
 Maßgeblich bleiben der [Gesamtauftrag](NEXT-CHAT.md), [Resizing](RESIZING.md),
 [Auswertungsvertrag](../analysis-workspace/IMPLEMENTATION.md) und der freigegebene
 [Grafikexport](EXPORT-EXAMPLE.md) mit [ADR 010](../../decisions/010-analysis-graphic-export.md).

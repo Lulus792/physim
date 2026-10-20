@@ -23,6 +23,13 @@ static double plot_tick(double low, double high, double fraction) {
         return 0;
     return value;
 }
+static void plot_axis_label(char *text,size_t capacity,double value,double low,double high) {
+    /* Round only the label at the precision of this axis, not the sample or
+     * tick coordinate. Preserve small values on an equally small axis. */
+    double half_span=fabs(high*.5-low*.5);
+    if(fabs(value)<half_span*1e-4)value=0;
+    snprintf(text,capacity,"%.4g",value);
+}
 static void plot_controls(app *a, ps_plot_view *v, const double full[4]) {
     if (!v->initialized)
         ps_plot_view_reset(v);
