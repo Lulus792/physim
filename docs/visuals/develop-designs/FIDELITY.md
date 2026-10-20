@@ -8,6 +8,22 @@ Abnahme. Diese Überarbeitung gleicht die native Oberfläche mit
 den Vektorpfaden aus `workbench.js` ab. Die alten Bilder bleiben als Gegenbeleg
 erhalten. F1 / Design H ist ein gesonderter Arbeitsbereich.
 
+## Fortsetzung: echte Quelltextgliederung
+
+Der Kontext enthält jetzt eine aus dem aktuellen Editorinhalt erzeugte,
+anklickbare Gliederung für Funktionen, Bindungen und Typen. Physim verwendet
+seinen Compiler-Parser; für C gibt es eine Navigation durch geschriebene
+Deklarationen ohne Makroexpansion. Maus- und Tastaturaktivierung führen zum
+Namen und geben beide Eingabekanäle an den Editor zurück. Ungespeicherte
+Änderungen und Undo aktualisieren die Liste. Grenzen und genaue Bedienung:
+[Quelltextgliederung](../../source-outline.md).
+
+Die Prüfung fand zusätzlich zwei allgemeine Editorfehler: gewöhnliches Einfügen
+mitten im Text besaß keinen Undo-Eintrag, und die native Auswahlfläche konnte
+Syntaxtext auf dunklem Code unsichtbar machen. Beide sind korrigiert und durch
+Gegenfälle sowie native Aufgaben geprüft. Aktuelle Fingerprints und Ergebnisse:
+[source-outline-validation.json](source-outline-validation.json).
+
 ## Sichtbare Korrekturen
 
 - Eigene Werkbankfarben für feste Leseflächen, Auswahl, Rahmen und Syntax;
@@ -35,18 +51,20 @@ erhalten. F1 / Design H ist ein gesonderter Arbeitsbereich.
   folgen der Vorlage. Der Protokollknopf wächst mit der gewählten Schrift.
   Die Suche verwendet passende Schriftrollen und das vorhandene native Glas.
 
-![Aktuelle native Windows-Werkbank, dunkel](native-refined/windows-dark-workbench-dark.png)
+![Aktuelle native Windows-Werkbank, dunkel](native-outline/windows-workbench-dark-workbench-dark.png)
 
-![Aktuelle native Windows-Werkbank, hell](native-refined/windows-light-workbench-light.png)
+![Aktuelle native Windows-Werkbank, hell](native-outline/windows-workbench-light-workbench-light.png)
 
 ## Prüfungen und Aussagegrenzen
 
 Die exakten Binär-, Quellen-, Referenz- und Bildfingerprints sowie konkrete
 Ergebnisdateien stehen in [native-fidelity-validation.json](native-fidelity-validation.json).
-Alle 36 Bilder in [native-refined](native-refined/) sind ausschließlich verlustfrei
+Die ersten 36 Bilder in [native-refined](native-refined/) sind ausschließlich verlustfrei
 aus den tatsächlich aufgenommenen BMPs konvertiert; keine Retusche oder
 Komposition. Die Matrix umfasst je Plattform dunkel/hell und vier Seitenzustände,
 schmal, große Schrift, deckenden Materialfallback und hohen Kontrast.
+Der darauf aufbauende Gliederungsstand besitzt eigene unveränderte native
+Bilder in [native-outline](native-outline/). Frühere Nachweise werden erhalten.
 
 Der unabhängige [Bildprüfer](../../../tests/check_workbench_visual.py) prüft zehn
 begrenzte Eigenschaften der Standardansicht: Clientgröße, Menüschriftmaß,
@@ -91,7 +109,7 @@ sie gehören nicht zum Designcommit.
 | Unterschied zur Browservorlage | Grund / Grenze |
 | --- | --- |
 | Reale Dateinamen, API-Daten und Buildzustände statt der Pendel-Demotexte | Die Vorlage enthält simulierte Inhalte. Die App zeigt das tatsächlich geöffnete Projekt; fehlende Ordner werden nicht erfunden. |
-| Metadaten statt der vorgetäuschten Dokumentgliederung | Eine echte Symbolgliederung benötigt einen geeigneten Parser/Index. Die derzeitige Implementierung zeigt vorhandene Datei-, Sprach- und Formatdaten; eine vollständige Gliederung bleibt offen. |
+| Gliederung aus echten Deklarationen statt der drei Demo-Einträge | Physim nutzt seinen AST; C zeigt geschriebene Deklarationen. Semantische C-Analyse einschließlich Präprozessor und erweiterter Deklaratoren bleibt offen. Die Liste enthält alle erfassten Einträge mit eigenem Scrollbereich. |
 | API-Karte mit Handbuch/Schließen bzw. verständlichem Leerzustand | Es gibt keine allgemein implementierte Aktion „Beispiel einfügen“. Diese Wirkung wird nicht durch einen funktionslosen Demoknopf vorgetäuscht. |
 | Modellnotiz ohne automatische Pendelformel | Für das aktive Dokument existiert derzeit kein Modellnotiz-Datenvertrag. Daher wird keine fremde Formel als zum Code gehörig dargestellt. Eine bearbeitbare Modellnotiz mit mathematischem Satz ist noch offen. |
 | Echte Dateischließaktion und etwas breitere Tabs | Die App erhält Schließen, Reorder, Overflow und ungespeicherte Dateien; die Vorschau zeigt nur vereinfachte Tabs. |
@@ -99,6 +117,6 @@ sie gehören nicht zum Designcommit.
 | Bereits gespeicherte Schrift- und Dockgrößen | Ein Designupdate setzt persönliche Einstellungen nicht zurück. Die Vergleichsfixture verwendet ausdrücklich 218/255/154 px; die bestehenden nativen Standardgrößen bleiben erhalten. |
 | Abweichende Schriftglättung sowie kleine Restabstände | Windows-Schriften und Linux-Noto werden durch den nativen Atlas statt Browser-ClearType/CSS gerastert; identische Pixel sind damit nicht belegt. Die Hauptgeometrie und Schriftmaßstäbe sind separat geprüft. |
 
-Diese Unterschiede sind nicht pauschal „nativ unmöglich“. Insbesondere echte
-Symbolgliederung und Modellnotizen erfordern weitere Daten-/Funktionsarbeit.
+Diese Unterschiede sind nicht pauschal „nativ unmöglich“. Insbesondere
+semantische C-Analyse und Modellnotizen erfordern weitere Daten-/Funktionsarbeit.
 Sie werden nicht als bereits umgesetzt bewertet.

@@ -16,6 +16,7 @@
 #include "physim/detail/run_identity.h"
 #include "completion.h"
 #include "editor_search.h"
+#include "source_outline.h"
 #include "report_image.h"
 #include "scene_view.h"
 #include "preferences.h"
@@ -246,6 +247,13 @@ typedef struct {
     enum nk_collapse_states view_disclosure;
     ps_document *documentation;
     ps_document *api_reference;
+    ps_source_outline outline;
+    char *outline_source;
+    size_t outline_bytes;
+    int outline_language;
+    struct nk_text_edit *outline_editor;
+    bool outline_cached,outline_reset_scroll,outline_keyboard;
+    struct nk_rect outline_bounds[PS_OUTLINE_LIMIT];
     size_t api_reference_first,api_reference_end;
     char api_reference_name[128],api_reference_path[256];
     nk_uint api_reference_scroll_x,api_reference_scroll_y;
@@ -2801,6 +2809,8 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
     nk_style_push_color(ui, &ui->style.edit.text_active, transparent);
     nk_style_push_color(ui, &ui->style.edit.selected_text_normal, transparent);
     nk_style_push_color(ui, &ui->style.edit.selected_text_hover, transparent);
+    nk_style_push_color(ui, &ui->style.edit.selected_normal, UI_COLOR(selection_active));
+    nk_style_push_color(ui, &ui->style.edit.selected_hover, UI_COLOR(selection_active));
     nk_style_push_color(ui, &ui->style.edit.cursor_normal, transparent);
     nk_style_push_color(ui, &ui->style.edit.cursor_hover, transparent);
     nk_style_push_color(ui, &ui->style.edit.cursor_text_normal, transparent);
@@ -2839,7 +2849,7 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
     if(a->completion_active) {
         if(completion_refresh(a) && a->completion_accept_pending)completion_commit(a);
     }
-    for (int i = 0; i < 9; i++)
+    for (int i = 0; i < 11; i++)
         nk_style_pop_color(ui);
     syntax_text(a, edit, editor_bounds);
     int after = nk_str_len_char(&edit->string);
@@ -3216,6 +3226,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "diagnostic_tests.inc"
 #include "editor_replace_tests.inc"
 #include "completion_tests.inc"
+#include "source_outline_tests.inc"
 #include "file_tabs_tests.inc"
 #include "workbench_tests.inc"
 #include "api_reference_tests.inc"
@@ -3803,6 +3814,7 @@ int main(int argc, char **argv) {
             }
             SDL_Window *event_window = SDL_GetWindowFromEvent(&e);
             if(event_window==a->window && e.type==SDL_EVENT_TEXT_INPUT)a->completion_typed=true;
+            if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && e.key.key==SDLK_TAB)a->outline_keyboard=false;
             if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && dock_resize_key(a,&e.key))continue;
             if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && editor_search_key(a,&e.key))continue;
             if(event_window==a->window && nk_sdl_accessibility_event(a->ui,&e))continue;
@@ -5168,6 +5180,7 @@ int main(int argc, char **argv) {
                 profile_result.failed ? 1u : 0u,
                 (unsigned long long)profile_result.process_written,
                 (unsigned long long)profile_result.process_dropped);
+    free(a->outline_source);
     nk_sdl_shutdown(a->ui);
     SDL_SetWindowHitTest(window, NULL, NULL);
     free(a);

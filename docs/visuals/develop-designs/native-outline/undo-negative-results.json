@@ -1,0 +1,14 @@
+[
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\F1-reading-focus\\Debug-sanitized\\bin\\physim-test-editor_typing_undo.exe"
+    ],
+    "status": "failed",
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "Typing undo 21: equals(&edit,seeds[i])\n",
+    "reason": "Exit code 1; expected 0",
+    "seconds": 0.094,
+    "name": "editor_typing_undo"
+  }
+]

@@ -23,6 +23,14 @@ included as `licenses/zlib-LICENSE.txt` in the portable package.
 
 ## Nuklear snapshot
 
+Local patch (2026-10-20): ordinary insertion inside existing text now records
+an undo operation after a successful string insertion, as insertion at the end
+already did. Replace mode keeps its existing replacement record. The independent
+`editor_typing_undo` test rejects the original snapshot and checks ASCII/UTF-8
+insertion plus undo/redo and replacement. Native `source_outline_workflow`
+also types into an actual source editor after declaration navigation and undoes
+the edit while the mouse remains over the context panel.
+
 Local patch (2026-10-15): `nk_font_config.ttf_index` selects a collection face
 through baking. The default remains zero. Invalid negative/out-of-range indices
 fail the bounded bake. Physim's face loader matches non-italic OpenType `head`

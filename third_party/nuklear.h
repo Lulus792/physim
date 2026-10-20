@@ -27867,6 +27867,11 @@ nk_textedit_text(struct nk_text_edit *state, const char *text, int total_len)
             if (nk_str_insert_text_utf8(&state->string, state->cursor,
                                         text+text_len, 1))
             {
+                /* Insertion inside existing text needs its own undo record,
+                 * just like insertion at the end. Replace mode already saved
+                 * the overwritten rune above. */
+                if (state->mode != NK_TEXT_EDIT_MODE_REPLACE)
+                    nk_textedit_makeundo_insert(state, state->cursor, 1);
                 ++state->cursor;
                 state->has_preferred_x = 0;
             }

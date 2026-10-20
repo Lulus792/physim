@@ -856,6 +856,28 @@ def api_reference(flow,directory):
             require((root/name).is_file(),"Missing actual API reference view: "+name)
 
 
+def source_outline(flow,directory):
+    for variant in ("c-dark","phys-light","c-light-large"):
+        root=directory/variant;root.mkdir(parents=True)
+        flow.run("--workspace-state-test",root,"outline-"+variant,timeout=60,marker="OUTLINE SELF-TEST: PASSED")
+        for name in ("outline-experiment.bmp","outline-document.bmp","outline-selected.bmp"):
+            require((root/name).is_file(),"Missing native outline view: "+variant+"/"+name)
+        image=(root/"outline-selected.bmp").read_bytes()
+        offset=struct.unpack_from("<I",image,10)[0];width,height=struct.unpack_from("<ii",image,18)
+        bits=struct.unpack_from("<H",image,28)[0];require(bits in (24,32),"Unsupported native selection capture")
+        stride=((width*bits+31)//32)*4;selection=(43,61,89) if "dark" in variant else (217,230,248)
+        expected=bytes(reversed(selection));pixels=0
+        for y in range(112,min(abs(height),260)):
+            row=offset+(abs(height)-1-y if height>0 else y)*stride
+            for x in range(220,min(width,945)):
+                at=row+x*(bits//8);pixels+=image[at:at+3]==expected
+        require(pixels>100,"Source selection has no readable themed background")
+        language="phys" if variant.startswith("phys") else "c"
+        prefix='// α😀\n'
+        source=prefix+('let länge = 1.5\nfunc derivative() -> Float64:\n    return länge\n' if language=="phys" else 'static const double length_m = 1.5;\nstatic void derivative(void) { int local = 0; }\n')
+        for name in ("main."+language,"outline."+language):
+            require((root/"project"/name).read_text(encoding="utf-8")==source,"Outline navigation changed the saved source: "+name)
+
 def completion(flow,directory):
     for language in ("c","phys"):
         root=directory/language;root.mkdir(parents=True)
@@ -1695,6 +1717,7 @@ SPECIAL["documentation_navigation"]=documentation_navigation
 SPECIAL["documentation_sidebar"]=documentation_sidebar
 SPECIAL["documentation_h"]=documentation_h
 SPECIAL["workbench_workflow"]=workbench
+SPECIAL["source_outline_workflow"]=source_outline
 
 def main():
     # App diagnostics and paths can contain Unicode even when Python inherits a

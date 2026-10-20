@@ -10577,6 +10577,18 @@
       ]
     },
     {
+      "name": "source_outline_workflow",
+      "app": true,
+      "display": true,
+      "targets": ["python", "physim"],
+      "steps": [{
+        "program": "python",
+        "arguments": ["{root}/tests/check_display_workflow.py", "source_outline_workflow", "--app", "{physim}", "--work", "{work}", "--root", "{root}"],
+        "timeout": 180,
+        "files": ["app-steps.json"]
+      }]
+    },
+    {
       "name": "workbench_workflow",
       "app": true,
       "display": true,

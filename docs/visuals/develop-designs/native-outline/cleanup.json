@@ -1,0 +1,259 @@
+{
+  "scope": "Only superseded successful outline/workbench raw captures; all final raw captures, failed-run evidence and frozen PNGs retained",
+  "count": 63,
+  "bytes": 287846070,
+  "removed": [
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-kxlkhgxo\\source_outline_workflow\\files ä\\workflow ä\\c-dark\\outline-document.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-kxlkhgxo\\source_outline_workflow\\files ä\\workflow ä\\c-dark\\outline-experiment.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-kxlkhgxo\\source_outline_workflow\\files ä\\workflow ä\\c-dark\\outline-selected.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-kxlkhgxo\\source_outline_workflow\\files ä\\workflow ä\\c-light-large\\outline-document.bmp",
+      "bytes": 6400138
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-kxlkhgxo\\source_outline_workflow\\files ä\\workflow ä\\c-light-large\\outline-experiment.bmp",
+      "bytes": 6400138
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-kxlkhgxo\\source_outline_workflow\\files ä\\workflow ä\\c-light-large\\outline-selected.bmp",
+      "bytes": 6400138
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-kxlkhgxo\\source_outline_workflow\\files ä\\workflow ä\\phys-light\\outline-document.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-kxlkhgxo\\source_outline_workflow\\files ä\\workflow ä\\phys-light\\outline-experiment.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-kxlkhgxo\\source_outline_workflow\\files ä\\workflow ä\\phys-light\\outline-selected.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\source_outline_workflow\\files ä\\workflow ä\\c-dark\\outline-document.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\source_outline_workflow\\files ä\\workflow ä\\c-dark\\outline-experiment.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\source_outline_workflow\\files ä\\workflow ä\\c-dark\\outline-selected.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\source_outline_workflow\\files ä\\workflow ä\\c-light-large\\outline-document.bmp",
+      "bytes": 6400138
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\source_outline_workflow\\files ä\\workflow ä\\c-light-large\\outline-experiment.bmp",
+      "bytes": 6400138
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\source_outline_workflow\\files ä\\workflow ä\\c-light-large\\outline-selected.bmp",
+      "bytes": 6400138
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\source_outline_workflow\\files ä\\workflow ä\\phys-light\\outline-document.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\source_outline_workflow\\files ä\\workflow ä\\phys-light\\outline-experiment.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\source_outline_workflow\\files ä\\workflow ä\\phys-light\\outline-selected.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\workbench_workflow\\files ä\\workflow ä\\contrast-visual\\workbench-dark-expanded.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\workbench_workflow\\files ä\\workflow ä\\contrast-visual\\workbench-dark.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\workbench_workflow\\files ä\\workflow ä\\dark\\workbench-dark-both-hidden.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\workbench_workflow\\files ä\\workflow ä\\dark\\workbench-dark-expanded.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\workbench_workflow\\files ä\\workflow ä\\dark\\workbench-dark-right-hidden.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\workbench_workflow\\files ä\\workflow ä\\dark\\workbench-dark-sides-hidden.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\workbench_workflow\\files ä\\workflow ä\\dark\\workbench-dark.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\workbench_workflow\\files ä\\workflow ä\\dark-narrow-visual\\workbench-dark-expanded.bmp",
+      "bytes": 3196938
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\workbench_workflow\\files ä\\workflow ä\\dark-narrow-visual\\workbench-dark.bmp",
+      "bytes": 3196938
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\workbench_workflow\\files ä\\workflow ä\\dark-opaque-visual\\workbench-dark-expanded.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\workbench_workflow\\files ä\\workflow ä\\dark-opaque-visual\\workbench-dark.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\workbench_workflow\\files ä\\workflow ä\\light\\workbench-light-both-hidden.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\workbench_workflow\\files ä\\workflow ä\\light\\workbench-light-expanded.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\workbench_workflow\\files ä\\workflow ä\\light\\workbench-light-right-hidden.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\workbench_workflow\\files ä\\workflow ä\\light\\workbench-light-sides-hidden.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\workbench_workflow\\files ä\\workflow ä\\light\\workbench-light.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\workbench_workflow\\files ä\\workflow ä\\light-large-visual\\workbench-light-expanded.bmp",
+      "bytes": 6400138
+    },
+    {
+      "path": "build\\native\\F1-reading-focus\\Debug-sanitized\\test-results\\run-0uwdfd_i\\workbench_workflow\\files ä\\workflow ä\\light-large-visual\\workbench-light.bmp",
+      "bytes": 6400138
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\source_outline_workflow\\files ä\\workflow ä\\c-dark\\outline-document.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\source_outline_workflow\\files ä\\workflow ä\\c-dark\\outline-experiment.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\source_outline_workflow\\files ä\\workflow ä\\c-dark\\outline-selected.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\source_outline_workflow\\files ä\\workflow ä\\c-light-large\\outline-document.bmp",
+      "bytes": 6400138
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\source_outline_workflow\\files ä\\workflow ä\\c-light-large\\outline-experiment.bmp",
+      "bytes": 6400138
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\source_outline_workflow\\files ä\\workflow ä\\c-light-large\\outline-selected.bmp",
+      "bytes": 6400138
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\source_outline_workflow\\files ä\\workflow ä\\phys-light\\outline-document.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\source_outline_workflow\\files ä\\workflow ä\\phys-light\\outline-experiment.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\source_outline_workflow\\files ä\\workflow ä\\phys-light\\outline-selected.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\workbench_workflow\\files ä\\workflow ä\\contrast-visual\\workbench-dark-expanded.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\workbench_workflow\\files ä\\workflow ä\\contrast-visual\\workbench-dark.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\workbench_workflow\\files ä\\workflow ä\\dark\\workbench-dark-both-hidden.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\workbench_workflow\\files ä\\workflow ä\\dark\\workbench-dark-expanded.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\workbench_workflow\\files ä\\workflow ä\\dark\\workbench-dark-right-hidden.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\workbench_workflow\\files ä\\workflow ä\\dark\\workbench-dark-sides-hidden.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\workbench_workflow\\files ä\\workflow ä\\dark\\workbench-dark.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\workbench_workflow\\files ä\\workflow ä\\dark-narrow-visual\\workbench-dark-expanded.bmp",
+      "bytes": 3196938
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\workbench_workflow\\files ä\\workflow ä\\dark-narrow-visual\\workbench-dark.bmp",
+      "bytes": 3196938
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\workbench_workflow\\files ä\\workflow ä\\dark-opaque-visual\\workbench-dark-expanded.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\workbench_workflow\\files ä\\workflow ä\\dark-opaque-visual\\workbench-dark.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\workbench_workflow\\files ä\\workflow ä\\light\\workbench-light-both-hidden.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\workbench_workflow\\files ä\\workflow ä\\light\\workbench-light-expanded.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\workbench_workflow\\files ä\\workflow ä\\light\\workbench-light-right-hidden.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\workbench_workflow\\files ä\\workflow ä\\light\\workbench-light-sides-hidden.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\workbench_workflow\\files ä\\workflow ä\\light\\workbench-light.bmp",
+      "bytes": 4170794
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\workbench_workflow\\files ä\\workflow ä\\light-large-visual\\workbench-light-expanded.bmp",
+      "bytes": 6400138
+    },
+    {
+      "path": "build\\native\\F1-linux\\Debug-sanitized\\test-results\\run-mnbvv6zm\\workbench_workflow\\files ä\\workflow ä\\light-large-visual\\workbench-light.bmp",
+      "bytes": 6400138
+    }
+  ]
+}

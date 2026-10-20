@@ -650,6 +650,7 @@ static void sidebar_panel(app *a) {
     nk_end(ui);
     if(compact){nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}
 }
+#include "source_outline_ui.inc"
 static void inspector_panel(app *a) {
     struct nk_context *ui=a->ui;
     bool compact=workbench_visible(a);
@@ -663,18 +664,12 @@ static void inspector_panel(app *a) {
             const char *title=a->loaded?project_name(a):"Textdokument";
             nk_layout_row_dynamic(ui,fmaxf(26,documentation_height(ui->style.font,title,strlen(title),nk_window_get_content_region(ui).w)+4),1);nk_label_wrap(ui,title);
             nk_style_pop_font(ui);
-            const char *intro="Aktiver Code und zugehörige API-Referenz";
+            const char *intro="Deklarationen der aktiven Datei";
             nk_layout_row_dynamic(ui,fmaxf(35,documentation_height(ui->style.font,intro,strlen(intro),nk_window_get_content_region(ui).w)+8),1);
             nk_style_push_color(ui,&ui->style.text.color,muted());nk_label_wrap(ui,intro);nk_style_pop_color(ui);
-            const char *file=a->loaded?(a->analysis_only?analysis_source(a):experiment_source(a)):"Textdatei";
-            workspace_document *active=active_document(a);if(a->tab==8 && active)file=workspace_name(active->path);
             struct nk_text_edit *active_edit=editor_search_target(a);
             int kind=active_edit?document_language(a,active_edit):-1;
-            const char *language=kind<0?"Textdokument":kind?"Physim":"C";
-            nk_layout_row_dynamic(ui,31,2);nk_label_colored(ui,"Aktive Datei",NK_TEXT_LEFT,muted());nk_label(ui,file,NK_TEXT_RIGHT);
-            nk_layout_row_dynamic(ui,31,2);nk_label_colored(ui,"Sprache",NK_TEXT_LEFT,muted());nk_label(ui,language,NK_TEXT_RIGHT);
-            char format[32];snprintf(format,sizeof format,"Version %u",a->project_format_version);
-            nk_layout_row_dynamic(ui,31,2);nk_label_colored(ui,"Projektformat",NK_TEXT_LEFT,muted());nk_label(ui,a->loaded?format:"Kein Projekt",NK_TEXT_RIGHT);
+            workbench_outline_view(a,active_edit,kind);
             nk_layout_row_dynamic(ui,20,1);nk_spacer(ui);
             float width=nk_window_get_content_region(ui).w;
             const struct nk_user_font *small=&a->workbench_fonts[1];
@@ -1382,6 +1377,8 @@ static void draw_ui(app *a, int width, int height) {
     const ps_ui_palette *previous_palette=ui_palette;
     const struct nk_user_font *previous_font=ui->style.font;
     bool workbench=workbench_visible(a);
+    if(a->outline_keyboard && (editor_search_target(a)!=a->outline_editor || a->toolbar_menu || a->search_keyboard ||
+       nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT)))a->outline_keyboard=false;
     const float sizes[]={11,9,12,11,20,16,10};
     for(unsigned i=0;i<7;i++) {
         a->workbench_fonts[i]=*(i>=3?a->font_title:a->font_ui);
@@ -1428,5 +1425,9 @@ static void draw_ui(app *a, int width, int height) {
     dock_separator_views(a);
     editor_search_view(a);
     completion_view(a,width,height);
+    /* Docking temporarily routes hover/wheel to the panel under the pointer.
+     * A declaration activation returns keyboard ownership to its source until
+     * the user explicitly clicks, tabs, opens a menu or enters another field. */
+    if(a->outline_keyboard)ui->active=nk_window_find(ui,"workspace");
     if(workbench){ui_palette=previous_palette;style(ui);nk_style_set_font(ui,previous_font);}
 }
