@@ -1,7 +1,8 @@
 """Compare shared native chrome with the selected PNG, without altering either image.
 
 This verifies a bounded part of the design: client size, the three tab rectangles,
-the two horizontal boundaries and five semantic surfaces. It is not a whole-app
+the two horizontal boundaries and five semantic surfaces. The optional workbench
+check also compares side and log/status boundaries. It is not a whole-app
 score. Content, fonts, interactions and the rest of each workspace need their own
 proofs. Pillow is required, as for the existing workbench visual checker.
 """
@@ -17,7 +18,10 @@ parser.add_argument('--native', type=Path, required=True)
 parser.add_argument('--area', choices=('develop', 'simulate', 'analyze'), required=True)
 parser.add_argument('--theme', choices=('dark', 'light'), required=True)
 parser.add_argument('--report', type=Path, required=True)
+parser.add_argument('--workbench', action='store_true')
 args = parser.parse_args()
+if args.workbench and args.area != 'develop':
+    parser.error('--workbench requires --area develop')
 reference = Path(__file__).resolve().parents[1] / 'docs/visuals/unified-workspace' / f'{args.area}-{args.theme}.png'
 paths = (reference, args.native)
 images = [Image.open(path).convert('RGB') for path in paths]
@@ -57,6 +61,17 @@ if images[0].size == images[1].size == (1440, 1000):
         check(f'full one-pixel boundary at y={y}',
               sum(images[0].getpixel((x, y)) == border for x in range(1440)),
               sum(images[1].getpixel((x, y)) == border for x in range(1440)))
+    if args.workbench:
+        # Scan continuous empty boundary spans. Text and variable real project
+        # content are outside these spans; do not mask, retouch or rescale pixels.
+        side_boundaries = [[x for x in range(180, 1280)
+                            if all(im.getpixel((x, y)) == border for y in range(200, 790))]
+                           for im in images]
+        check('workspace and code-context boundaries', *side_boundaries)
+        log_boundaries = [[y for y in range(750, 972)
+                           if all(im.getpixel((x, y)) == border for x in range(230, 1150))]
+                          for im in images]
+        check('protocol, body and editor-status boundaries', *log_boundaries)
 report['passed'] = all(item['passed'] for item in report['checks'])
 args.report.parent.mkdir(parents=True, exist_ok=True)
 args.report.write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')

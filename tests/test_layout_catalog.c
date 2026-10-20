@@ -16,6 +16,12 @@ int main(int argc,char **argv) {
     snprintf(directory,sizeof directory,"%s/target",argv[1]);remove(path);
     ps_layout_catalog c={0},out={0};ps_layout_state s={PS_DOCK_DEFAULT,280,320,220,1};
     CHECK(ps_layout_state_valid(&s) && ps_layout_catalog_valid(&c));
+    ps_layout_state boundary=s;boundary.sidebar_width=140;boundary.inspector_width=180;boundary.log_height=126;
+    ps_layout_catalog limits={0},limits_out={0};
+    CHECK(ps_layout_catalog_put(&limits,"Minimum",&boundary)==PS_OK);
+    boundary.sidebar_width=480;boundary.inspector_width=480;boundary.log_height=366;
+    CHECK(ps_layout_catalog_put(&limits,"Maximum",&boundary)==PS_OK);
+    CHECK(ps_layout_catalog_write(bad,&limits)==PS_OK && ps_layout_catalog_read(bad,&limits_out)==PS_OK && !memcmp(&limits,&limits_out,sizeof limits));
     CHECK(ps_layout_catalog_read(path,&out)==PS_EOF && !memcmp(&c,&out,sizeof c));
     CHECK(ps_layout_catalog_write(path,&c)==PS_OK && ps_layout_catalog_read(path,&out)==PS_OK && !memcmp(&c,&out,sizeof c));
     CHECK(ps_layout_catalog_put(&c,"Programmieren ä",&s)==PS_OK);
@@ -58,7 +64,7 @@ int main(int argc,char **argv) {
     CHECK(write_bytes(bad,changed,n) && ps_layout_catalog_read(bad,&out)==PS_VERSION && !memcmp(&out,&saved,sizeof out));
     /* Correct CRC cannot admit invalid count, names, graph, active tab or dimensions. */
     const size_t offsets[]={12,16,16+64+6*24+4,16+64+5*4,16+64+244,16+64+244+4,16+64+244+8,16+64+244+12};
-    const uint32_t values[]={9,0,6,3,207,481,149,2};
+    const uint32_t values[]={9,0,6,3,139,481,125,2};
     for(unsigned i=0;i<sizeof offsets/sizeof offsets[0];i++) {
         memcpy(changed,bytes,n);put32(changed+offsets[i],values[i]);crc(changed,n);
         CHECK(write_bytes(bad,changed,n) && ps_layout_catalog_read(bad,&out)==PS_CORRUPT && !memcmp(&out,&saved,sizeof out));

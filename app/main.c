@@ -304,6 +304,7 @@ typedef struct {
     struct nk_rect navigation_bounds[3];
     struct nk_rect toolbar_bounds[6], toolbar_item_bounds[6];
     struct nk_rect toolbar_theme_bounds,toolbar_settings_bounds;
+    struct nk_rect workbench_api_text_bounds[3]; /* Empty text, hint and action. */
     unsigned theme_request;
     int toolbar_menu; /* 0: closed, 1: File, 2: View. One popup supports direct switching. */
     bool toolbar_keyboard;

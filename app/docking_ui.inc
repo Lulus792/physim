@@ -61,7 +61,17 @@ static float dock_minimum(const app *a,uint32_t id,bool x) {
             if(n->panels&(1u<<PS_DOCK_WORKSPACE))return 440;
             if(n->panels&((1u<<PS_DOCK_SIDEBAR)|(1u<<PS_DOCK_INSPECTOR)))return 208;
         }
-        if((workbench_visible(a) || analysis_visible(a)) && x) {
+        if(workbench_visible(a)) {
+            if(x) {
+                if(n->panels&(1u<<PS_DOCK_WORKSPACE))return 300;
+                if(n->panels&(1u<<PS_DOCK_INSPECTOR))return 180;
+                if(n->panels&(1u<<PS_DOCK_SIDEBAR))return 140;
+            } else {
+                if(n->panels&(1u<<PS_DOCK_WORKSPACE))return 280;
+                if(n->panels&(1u<<PS_DOCK_LOG))return a->show_log?126:66;
+            }
+        }
+        if(analysis_visible(a) && x) {
             if(n->panels&(1u<<PS_DOCK_WORKSPACE))return 300;
             if(n->panels&((1u<<PS_DOCK_SIDEBAR)|(1u<<PS_DOCK_INSPECTOR)))return 208;
         }
@@ -83,9 +93,9 @@ static float dock_resize_value(app *a,unsigned id,float *minimum,float *maximum,
     struct nk_rect r=a->dock_rects[id];bool x=n->kind==PS_DOCK_X;
     float extent=fmaxf(1,(x?r.w:r.h)-dock_gap(a)),min_first=dock_minimum(a,n->first,x),min_second=dock_minimum(a,n->second,x);
     *reverse=false;
-    if(dock_sidebar_split(d,n)) {*minimum=208;*maximum=fminf(analysis_visible(a)?480:360,extent-min_second);*standard=analysis_visible(a)?232:248;return a->dock_rects[n->first].w;}
-    if(dock_context_split(d,n)) {*reverse=true;*minimum=208;*maximum=fminf(480,extent-min_first);*standard=analysis_visible(a)?242:280;return a->dock_rects[n->second].w;}
-    if(dock_log_split(d,n)) {*reverse=true;*minimum=150;*maximum=fminf(340,extent-min_first);*standard=178;return a->dock_rects[n->second].h+dock_gap(a);}
+    if(dock_sidebar_split(d,n)) {*minimum=workbench_visible(a)?140:208;*maximum=fminf(workbench_visible(a) || analysis_visible(a)?480:360,extent-min_second);*standard=analysis_visible(a)?232:workbench_visible(a)?218:248;return a->dock_rects[n->first].w;}
+    if(dock_context_split(d,n)) {*reverse=true;*minimum=workbench_visible(a)?180:208;*maximum=fminf(480,extent-min_first);*standard=analysis_visible(a)?242:workbench_visible(a)?255:280;return a->dock_rects[n->second].w;}
+    if(dock_log_split(d,n)) {*reverse=true;*minimum=workbench_visible(a)?126:150;*maximum=fminf(workbench_visible(a)?366:340,extent-min_first);*standard=workbench_visible(a)?152:178;return a->dock_rects[n->second].h+dock_gap(a);}
     *minimum=fmaxf(min_first,extent/16);*maximum=fminf(extent-min_second,extent*15/16);*standard=extent*.5f;
     return extent*n->ratio/1024.f;
 }
@@ -158,7 +168,7 @@ static void dock_arrange(app *a,uint32_t id,struct nk_rect r) {
     if(dock_context_split(d,n))
         first=extent-(float)a->preferences.inspector_width;
     if(dock_log_split(d,n))
-        first=extent-(a->show_log&&a->tab!=6?(float)a->preferences.log_height-gap:68.f);
+        first=extent-(a->show_log&&a->tab!=6?(float)a->preferences.log_height-gap:workbench_visible(a)?66.f:68.f);
     first=fmaxf(dock_minimum(a,n->first,x),fminf(extent-dock_minimum(a,n->second,x),first));
     struct nk_rect one=r,two=r,split=r;
     if(x) { one.w=first; split.x=r.x+first-(workspace_shell_visible(a)?4:0);split.w=workspace_shell_visible(a)?9:8;two.x=r.x+first+gap;two.w=extent-first; }
@@ -420,7 +430,7 @@ static void dock_headers(app *a) {
                 ps_ui_accessibility_label(ui,badge,label);
             }
             if(workbench_visible(a) && (active==PS_DOCK_WORKSPACE || active==PS_DOCK_LOG))
-                nk_stroke_line(nk_window_get_canvas(ui),r.x,r.y+r.h-1,r.x+r.w,r.y+r.h-1,1,UI_COLOR(border));
+                workspace_rule(nk_window_get_canvas(ui),nk_rect(r.x,r.y+r.h-1,r.w,1));
         }
         nk_end(ui);nk_style_pop_style_item(ui);nk_style_pop_style_item(ui);nk_style_pop_float(ui);nk_style_pop_float(ui);
         nk_style_pop_flags(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);

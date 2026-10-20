@@ -975,7 +975,7 @@ def workbench(flow,directory):
                      marker="WORKBENCH SELF-TEST: PASSED")
             for suffix in ("","-expanded","-sides-hidden","-right-hidden","-both-hidden"):
                 require((target/("workbench-"+theme+suffix+".bmp")).is_file(),"Missing actual native workbench view: "+theme+suffix)
-        for mode in ("dark-narrow-visual","light-large-visual","dark-opaque-visual","contrast-visual"):
+        for mode in ("dark-narrow-visual","light-large-visual","light-large-narrow-visual","dark-opaque-visual","contrast-visual"):
             target=directory/mode;target.mkdir(parents=True)
             previous_transparency=flow.env.get("PHYSIM_REDUCE_TRANSPARENCY")
             if "opaque" in mode:flow.env["PHYSIM_REDUCE_TRANSPARENCY"]="1"
@@ -984,6 +984,10 @@ def workbench(flow,directory):
             finally:
                 if previous_transparency is None:flow.env.pop("PHYSIM_REDUCE_TRANSPARENCY",None)
                 else:flow.env["PHYSIM_REDUCE_TRANSPARENCY"]=previous_transparency
+        for theme in ("dark", "light"):
+            target=directory/(theme+"-unified-visual");target.mkdir(parents=True)
+            flow.run("--workspace-state-test",target,"workbench-"+theme+"-unified-visual",timeout=45,
+                     marker="WORKBENCH SELF-TEST: PASSED")
     finally:
         if previous is None:flow.env.pop("SDL_FORCE_RAISEWINDOW",None)
         else:flow.env["SDL_FORCE_RAISEWINDOW"]=previous
@@ -1517,7 +1521,7 @@ def settings_keyboard(flow, directory):
     require(data[:8]==b"PSPREF05" and len(data)==312, "Keyboard settings format")
     require(int.from_bytes(data[304:308],"little")==22, "Keyboard UI font persistence")
     require(struct.unpack_from("<I",data,32)[0]==20 and struct.unpack_from("<I",data,36)[0]==120, "Keyboard code font and autosave persistence")
-    require(struct.unpack_from("<I",data,40)[0]==96 and struct.unpack_from("<I",data,52)[0]==1, "Keyboard seven toggles and theme persistence")
+    require(struct.unpack_from("<I",data,40)[0]==32 and struct.unpack_from("<I",data,52)[0]==1, "Keyboard seven toggles and theme persistence")
     before=fingerprint(directory / "preferences.bin")
     flow.run("--settings-test", directory, "keyboard-read", timeout=35, marker="SETTINGS KEYBOARD SELF-TEST: PASSED")
     require(fingerprint(directory / "preferences.bin")==before, "Escape changed saved settings")

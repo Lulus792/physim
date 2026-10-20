@@ -117,7 +117,7 @@ static void test_settings_keyboard_frame(app *a,bool reading,int *stage,int *cod
     bool ok=true;
 #define SETTINGS_KEY(key) test_window_key_mod(a->window,key,0)
     switch((*stage)++) {
-    case 0: SDL_SetWindowSize(a->window,1080,740);SETTINGS_KEY(SDLK_F10);test_window_key_mod(a->window,SDLK_TAB,SDL_KMOD_SHIFT);SETTINGS_KEY(SDLK_RETURN);break;
+    case 0: SDL_SetWindowSize(a->window,1080,740);SETTINGS_KEY(SDLK_F10);SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_RETURN);SETTINGS_KEY(SDLK_DOWN);SETTINGS_KEY(SDLK_RETURN);break;
     case 1: ok=a->tab==6;SETTINGS_KEY(SDLK_TAB);break;
     case 2: ok=a->settings_keyboard && a->settings_focus==0;
         if(reading) {
@@ -135,10 +135,10 @@ static void test_settings_keyboard_frame(app *a,bool reading,int *stage,int *cod
     case 15: ok=a->settings_focus==0;SETTINGS_KEY(SDLK_TAB);break;
     case 16: ok=a->settings_focus==1;*capture="keyboard-settings-focus.bmp";SETTINGS_KEY(SDLK_RETURN);break;
     case 17: ok=a->tab!=6 && a->preferences.ui_size==22 && a->preferences.editor_size==20 && a->preferences.theme==PS_THEME_LIGHT && a->preferences.autosave_seconds==120;
-        SETTINGS_KEY(SDLK_F10);test_window_key_mod(a->window,SDLK_TAB,SDL_KMOD_SHIFT);SETTINGS_KEY(SDLK_RETURN);break;
+        SETTINGS_KEY(SDLK_F10);SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_RETURN);SETTINGS_KEY(SDLK_DOWN);SETTINGS_KEY(SDLK_RETURN);break;
     case 18: SETTINGS_KEY(SDLK_TAB);SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_TAB);SETTINGS_KEY(SDLK_TAB);SETTINGS_KEY(SDLK_RETURN);break;
     case 19: ok=a->tab!=6 && a->preferences.ui_size==22;
-        SETTINGS_KEY(SDLK_F10);test_window_key_mod(a->window,SDLK_TAB,SDL_KMOD_SHIFT);SETTINGS_KEY(SDLK_RETURN);
+        SETTINGS_KEY(SDLK_F10);SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_RETURN);SETTINGS_KEY(SDLK_DOWN);SETTINGS_KEY(SDLK_RETURN);
         for(int i=0;i<4;i++)SETTINGS_KEY(SDLK_TAB);SETTINGS_KEY(SDLK_SPACE);*stage=23;break;
     case 23: ok=a->settings_draft.ui_size==16 && a->settings_draft.editor_size==PS_PREFERENCES_DEFAULT.editor_size && a->settings_draft.theme==PS_THEME_DARK && a->preferences.ui_size==22;
         test_window_key_mod(a->window,SDLK_TAB,SDL_KMOD_SHIFT);SETTINGS_KEY(SDLK_RETURN);*stage=20;break;
@@ -291,17 +291,22 @@ static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
         } else if (*stage == 4)
             a->quitting = true;
     } else if (!strcmp(mode, "defaults")) {
+        ps_preferences persisted;
+        bool log_default=a->laboratory_active?a->laboratory_previous.show_log:a->show_log;
+        uint32_t flags=a->laboratory_active?31u:95u;
         ok = a->preferences.editor_size == PS_PREFERENCES_DEFAULT.editor_size && a->preferences.autosave_seconds == 30 &&
-             a->preferences.sidebar_width == 248 && a->preferences.log_height == 178 &&
-             a->preferences.view_flags == 31;
+             a->preferences.sidebar_width == 218 && a->preferences.log_height == 152 &&
+             a->preferences.view_flags == flags && log_default &&
+             ps_preferences_read(a->preferences_path,&persisted)==PS_OK && persisted.view_flags==95 &&
+             persisted.sidebar_width==218 && persisted.inspector_width==255 && persisted.log_height==152;
         if (*stage == 3)
             a->quitting = true;
     } else if (!writing) {
         switch (*stage) {
         case 0:
             ok = a->preferences.editor_size == 20 && a->font_code->height == 20 &&
-                 a->preferences.autosave_seconds == 60 && a->preferences.sidebar_width == 312 &&
-                 a->preferences.log_height == 238 && a->preferences.view_flags == 79 &&
+                 a->preferences.autosave_seconds == 60 && a->preferences.sidebar_width == 282 &&
+                 a->preferences.log_height == 212 && a->preferences.view_flags == 79 &&
                  a->tab == 1 && a->view_disclosure == NK_MAXIMIZED;
             test_key(a, SDLK_COMMA);
             break;
@@ -336,6 +341,9 @@ static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
     } else {
         switch (*stage) {
         case 0:
+            /* Exercise reopening a previously collapsed personal log as well
+             * as the separate new-default assertion above. */
+            a->show_log=false;
             SDL_SetWindowSize(a->window, 1080, 740);
             test_key(a, SDLK_COMMA);
             break;
@@ -381,14 +389,14 @@ static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
             test_mouse(a, drag, true);
             break;
         case 16:
-            ok=a->preferences.sidebar_width==248; /* Press alone cannot jump a half-pixel handle. */
+            ok=a->preferences.sidebar_width==218; /* Press alone cannot jump a half-pixel handle. */
             test_plot_motion(a, drag.x + drag.w * .5f + 64, drag.y + drag.h * .5f);
             break;
         case 17:
             test_mouse(a, drag, false);
             break;
         case 19:
-            ok = a->preferences.sidebar_width == 312;
+            ok = a->preferences.sidebar_width == 282;
             drag = a->panel_bounds[1];
             test_mouse(a, drag, true);
             break;
@@ -399,7 +407,7 @@ static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
             test_mouse(a, drag, false);
             break;
         case 23:
-            ok = a->preferences.log_height == 238;
+            ok = a->preferences.log_height == 212;
             a->view_disclosure = NK_MAXIMIZED;
             test_key(a, SDLK_2);
             break;

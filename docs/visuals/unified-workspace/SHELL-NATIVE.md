@@ -5,6 +5,10 @@ Datei, Bearbeiten, Ansicht, Build und Hilfe. Einstellungen sind über
 Bearbeiten → Einstellungen … erreichbar. Die kompakte Menüfläche verwendet
 die Kontur, Rundung und Texteinzüge der gemeinsamen Vorlage.
 
+Die spätere [Werkbank-Geometrie](WORKBENCH-GEOMETRY.md) korrigiert die unten
+noch als offen dokumentierten Standardmaße und die überlappende API-Hilfszeile.
+Die Stand-33-Aufnahmen und ihre abgegrenzten Aussagen bleiben unverändert.
+
 Der direkte Hell-/Dunkel-Schalter liegt rechts neben der Projektbeschriftung.
 Sein Bereich löst keinen Fensterzug aus. Maus und native Tastaturaktivierung
 funktionieren auch dann, wenn Editor oder Szene den Widgetfokus besitzen.

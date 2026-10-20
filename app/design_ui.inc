@@ -135,6 +135,14 @@ static void workbench_file_icon(app *a,struct nk_command_buffer *canvas,const ch
         nk_stroke_line(canvas,x+1,y-3,x+5,y,1.2f,color);nk_stroke_line(canvas,x+5,y,x+1,y+3,1.2f,color);
     } else ps_ui_draw_icon(canvas,PS_ICON_FILE,r,color);
 }
+static float workbench_card_text_height(const struct nk_user_font *font,const char *text,float width) {
+    size_t at=0,bytes=strlen(text);unsigned lines=0;
+    while(at<bytes) {
+        size_t length=0,used=documentation_line(font,text+at,bytes-at,fmaxf(1,width),&length);
+        if(!used)break;at+=used;lines++;
+    }
+    return lines?lines*(font->height+5)-5:0;
+}
 static void workbench_card_text(struct nk_command_buffer *canvas,const struct nk_user_font *font,struct nk_rect r,const char *text,struct nk_color color) {
     size_t at=0,bytes=strlen(text);float y=r.y;
     while(at<bytes && y+font->height<=r.y+r.h) {
@@ -707,6 +715,7 @@ static void run_limits_view(app *a) {
 }
 static void inspector_panel(app *a) {
     struct nk_context *ui=a->ui;
+    memset(a->workbench_api_text_bounds,0,sizeof a->workbench_api_text_bounds);
     if(analysis_visible(a)) {
         nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(18,18));
         nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(header)));
@@ -733,9 +742,14 @@ static void inspector_panel(app *a) {
             nk_layout_row_dynamic(ui,20,1);nk_spacer(ui);
             float width=nk_window_get_content_region(ui).w;
             const struct nk_user_font *small=&a->workbench_fonts[1];
+            const char *empty="Kein API-Bezeichner ausgewählt.";
+            const char *hint="Bezeichner im Code wählen; Umschalt+F1.";
+            float empty_height=workbench_card_text_height(ui->style.font,empty,width-26);
+            float hint_height=workbench_card_text_height(small,hint,width-26);
             /* Leave the reference's note and environment visible in the shorter
              * native window too; the card keeps its normal 235 px when it fits. */
             float card_height=fminf(235,fmaxf(150,ui->current->layout->clip.y+ui->current->layout->clip.h-ui->current->layout->at_y-220));
+            if(!a->api_reference)card_height=fmaxf(card_height,39+empty_height+14+hint_height+14+30+13);
             nk_layout_row_dynamic(ui,card_height,1);
             if(a->api_reference) {
                 nk_style_push_float(ui,&ui->style.window.rounding,7);
@@ -750,11 +764,13 @@ static void inspector_panel(app *a) {
             struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
             nk_fill_rect(canvas,card,7,UI_COLOR(edit));nk_stroke_rect(canvas,card,7,1,UI_COLOR(border));
             nk_draw_text(canvas,nk_rect(card.x+13,card.y+13,width-26,small->height),"PHYSIM API / REFERENZ",21,small,nk_rgba(0,0,0,0),muted());
-            const char *empty="Kein API-Bezeichner ausgewählt.";
-            workbench_card_text(canvas,ui->style.font,nk_rect(card.x+13,card.y+39,width-26,56),empty,UI_COLOR(text));
-            const char *hint="Bezeichner im Code wählen; Umschalt+F1.";
-            workbench_card_text(canvas,small,nk_rect(card.x+13,card.y+99,width-26,65),hint,muted());
             struct nk_rect action=nk_rect(card.x+13,card.y+card.h-43,width-26,30);
+            struct nk_rect message=nk_rect(card.x+13,card.y+39,width-26,empty_height);
+            float hint_y=fmaxf(message.y+message.h+14,fminf(card.y+99,action.y-14-hint_height));
+            struct nk_rect help=nk_rect(card.x+13,hint_y,width-26,hint_height);
+            a->workbench_api_text_bounds[0]=message;a->workbench_api_text_bounds[1]=help;a->workbench_api_text_bounds[2]=action;
+            workbench_card_text(canvas,ui->style.font,message,empty,UI_COLOR(text));
+            workbench_card_text(canvas,small,help,hint,muted());
             nk_stroke_rect(canvas,action,6,1,UI_COLOR(border));
             const char *label="API-Referenz öffnen";
             nk_draw_text(canvas,nk_rect(action.x+8,action.y+(action.h-small->height)/2,action.w-16,small->height),label,(int)strlen(label),small,nk_rgba(0,0,0,0),UI_COLOR(text));
@@ -839,7 +855,7 @@ static void workspace_panel(app *a) {
     float content=fmaxf(100,a->dock_panels[PS_DOCK_WORKSPACE].h-dock_panel_header_height(a,PS_DOCK_WORKSPACE));
     float status_space=workbench_visible(a) && (!a->dock_visible[PS_DOCK_LOG] ||
         fabsf(a->dock_panels[PS_DOCK_WORKSPACE].x-a->dock_panels[PS_DOCK_LOG].x)>=2 ||
-        (a->preferences.dock.floating&((1u<<PS_DOCK_LOG)|(1u<<PS_DOCK_WORKSPACE))))?26:0;
+        (a->preferences.dock.floating&((1u<<PS_DOCK_LOG)|(1u<<PS_DOCK_WORKSPACE))))?24:0;
     if (a->dock_visible[PS_DOCK_WORKSPACE] && a->tab==4 && (a->library_search_focus || a->library_search_active))
         nk_window_set_focus(ui,"workspace");
     if(a->project_manager && a->manager_keyboard && !a->toolbar_keyboard && !a->toolbar_menu)
@@ -992,7 +1008,7 @@ static void workbench_log_panel(app *a) {
     nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(6,5));
     if(dock_begin(a,PS_DOCK_LOG)) {
         const struct nk_user_font *font=ui->style.font;
-        float body=fmaxf(24,nk_window_get_content_region(ui).h-26);
+        float body=fmaxf(24,nk_window_get_content_region(ui).h-24);
         float action_width=fmaxf(82,font->width(font->userdata,font->height,"Diagnosen",9)+2*ui->style.button.padding.x+16);
         nk_layout_row_begin(ui,NK_STATIC,fmaxf(24,font->height+2*ui->style.button.padding.y),2);
         nk_layout_row_push(ui,fmaxf(40,nk_window_get_content_region(ui).w-action_width-6));
@@ -1156,14 +1172,14 @@ static void workbench_editor_status(app *a) {
     if(a->dock_visible[PS_DOCK_LOG] && fabsf(pane.x-a->dock_panels[PS_DOCK_LOG].x)<2 &&
        !(a->preferences.dock.floating&((1u<<PS_DOCK_LOG)|(1u<<PS_DOCK_WORKSPACE))))
         pane.h=a->dock_panels[PS_DOCK_LOG].y+a->dock_panels[PS_DOCK_LOG].h-pane.y;
-    struct nk_rect bar=nk_rect(pane.x,pane.y+pane.h-26,pane.w,26);
+    struct nk_rect bar=nk_rect(pane.x,pane.y+pane.h-24,pane.w,24);
     nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(12,0));
     nk_style_push_float(ui,&ui->style.window.rounding,0);
     struct nk_window *previous=ui->active;
     if(nk_begin(ui,"workbench-editor-status",bar,NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BACKGROUND)) {
         ui->active=previous;ui->current->flags|=NK_WINDOW_ROM;ui->current->layout->flags|=NK_WINDOW_ROM;
         struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
-        nk_stroke_line(canvas,bar.x,bar.y,bar.x+bar.w,bar.y,1,UI_COLOR(border));
+        workspace_rule(canvas,nk_rect(bar.x,bar.y,bar.w,1));
         const char *text=nk_str_get_const(&edit->string);size_t cursor=editor_search_byte(edit,edit->cursor),start=0;unsigned line=1;
         for(size_t i=0;i<cursor;i++)if(text[i]=='\n'){line++;start=i+1;}
         unsigned column=text?(unsigned)nk_utf_len(text+start,(int)(cursor-start))+1:1;

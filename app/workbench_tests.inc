@@ -2,8 +2,6 @@ static bool workbench_test_start(app *a,const char *root,const char *mode) {
     join(a->project_input,sizeof a->project_input,root,"project");a->example=0;new_project(a);
     if(!a->loaded)return false;
     ps_preferences p=a->preferences;p.theme=strstr(mode,"light")?PS_THEME_LIGHT:PS_THEME_DARK;
-    p.sidebar_width=218;p.inspector_width=255;
-    p.log_height=154; /* Reference header/body/status geometry at 1204x866. */
     if(strstr(mode,"contrast"))p.theme=PS_THEME_HIGH_CONTRAST;
     if(strstr(mode,"large")){p.ui_size=22;p.editor_size=22;}
     preferences_apply(a,&p);
@@ -14,6 +12,23 @@ static bool workbench_test_start(app *a,const char *root,const char *mode) {
 static bool workbench_test_rect(struct nk_rect a,struct nk_rect b) {
     return a.x==b.x && a.y==b.y && a.w==b.w && a.h==b.h;
 }
+static bool workbench_test_separator_focus(app *a,const char *name) {
+    if(nk_sdl_accessibility_request_focus(a->ui,NULL,name))return true;
+    static unsigned logged;
+    if(logged++<2)for(unsigned id=0;id<PS_DOCK_NODES;id++) {
+        if(a->dock_splitters[id].w<=0)continue;
+        char label[48];if(strcmp(dock_resize_label(a,id,label),name))continue;
+        char window[48];snprintf(window,sizeof window,"dock-splitter-%u",id);
+        struct nk_window *owner=nk_window_find(a->ui,window);
+        fprintf(stderr,"WORKBENCH SEPARATOR WAIT: %s owner=%s seq=%u/current=%u\n",name,window,owner?owner->seq:0,a->ui->seq);
+        if(owner)for(struct nk_window *above=owner->next;above;above=above->next) {
+            struct nk_rect cover=plot_intersection(above->bounds,a->dock_splitters[id]);
+            if(!(above->flags&(NK_WINDOW_HIDDEN|NK_WINDOW_MINIMIZED|NK_WINDOW_CLOSED)) && cover.w>0 && cover.h>0)
+                fprintf(stderr,"WORKBENCH SEPARATOR COVER: %s seq=%u rect=%.1f/%.1f/%.1f/%.1f\n",above->name_string,above->seq,above->bounds.x,above->bounds.y,above->bounds.w,above->bounds.h);
+        }
+    }
+    return false;
+}
 static void workbench_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
     static struct nk_rect editor_rect,context_rect;static struct nk_vec2 scroll;
     static unsigned side,warmup,mouse_wait,wheel_wait,close_wait;static int selected_start,selected_end,selected_cursor;
@@ -22,6 +37,8 @@ static void workbench_test_frame(app *a,const char *mode,int *stage,int *code,co
     switch(*stage) {
     case 0:
         if(a->library_thread || a->source_editor_bounds.w<=0)return;
+        ok=a->preferences.sidebar_width==218 && a->preferences.inspector_width==255 && a->preferences.log_height==152;
+        if(!ok)break;
         /* SDL test events do not activate the Windows host. Begin the focus
          * task only after activation is actually observed, as for separators. */
         if(SDL_GetKeyboardFocus()!=a->window) {
@@ -83,9 +100,14 @@ static void workbench_test_frame(app *a,const char *mode,int *stage,int *code,co
         edit->scrollbar=nk_vec2(0,0);edit->cursor=edit->select_start=edit->select_end=0;
         editor_search_open(a);a->search_replace_open=false;break;
     case 8:
+        if(!a->api_reference) {
+            const struct nk_rect *r=a->workbench_api_text_bounds;
+            ok=r[0].h>0 && r[1].h>0 && r[2].h>0 && r[0].y+r[0].h+13<=r[1].y && r[1].y+r[1].h+13<=r[2].y;
+            printf("WORKBENCH API EMPTY: message-bottom=%.3f hint=%.3f/%.3f action-top=%.3f disjoint=%d\n",r[0].y+r[0].h,r[1].y,r[1].y+r[1].h,r[2].y,ok);
+        }
         if(a->preferences.ui_size==16 && !strstr(mode,"narrow")) {
             struct nk_rect pane=a->dock_panels[PS_DOCK_INSPECTOR],environment=a->workbench_environment_bounds;
-            ok=environment.h>0 && environment.y>=pane.y && environment.y+environment.h<=pane.y+pane.h-4;
+            ok=ok && environment.h>0 && environment.y>=pane.y && environment.y+environment.h<=pane.y+pane.h-4;
             printf("WORKBENCH ENVIRONMENT: %.1f/%.1f within %.1f/%.1f visible=%d\n",environment.y,environment.y+environment.h,pane.y,pane.y+pane.h,ok);
         }
         *capture=strstr(mode,"light")?"workbench-light.bmp":"workbench-dark.bmp";
@@ -130,21 +152,21 @@ static void workbench_test_frame(app *a,const char *mode,int *stage,int *code,co
         test_window_key_mod(a->window,SDLK_RIGHT,0);break;
     case 25:ok=a->preferences.sidebar_width==228;test_window_key_mod(a->window,SDLK_RIGHT,SDL_KMOD_SHIFT);break;
     case 26:ok=a->preferences.sidebar_width==268;test_window_key_mod(a->window,SDLK_HOME,0);break;
-    case 27:ok=a->preferences.sidebar_width==208;test_window_key_mod(a->window,SDLK_END,0);break;
-    case 28:ok=a->preferences.sidebar_width==360;test_window_key_mod(a->window,SDLK_RETURN,0);break;
-    case 29:ok=a->preferences.sidebar_width==248;test_window_key_mod(a->window,SDLK_LEFT,0);break;
-    case 30:ok=a->preferences.sidebar_width==238;test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
+    case 27:ok=a->preferences.sidebar_width==140;test_window_key_mod(a->window,SDLK_END,0);break;
+    case 28:ok=a->preferences.sidebar_width==480;test_window_key_mod(a->window,SDLK_RETURN,0);break;
+    case 29:ok=a->preferences.sidebar_width==218;test_window_key_mod(a->window,SDLK_LEFT,0);break;
+    case 30:ok=a->preferences.sidebar_width==208;test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
     case 31:
         /* Escape cancels a pointer transaction; a completed keyboard step stays. */
-        ok=a->preferences.sidebar_width==238 && !a->dock_resize_transaction;
+        ok=a->preferences.sidebar_width==208 && !a->dock_resize_transaction;
         if(ok)ok=nk_sdl_accessibility_request_focus(a->ui,NULL,"Workspace-Breite");
         if(!ok)break;*stage=60;return;
     case 60:
         if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"Workspace-Breite"))return;
         test_window_key_mod(a->window,SDLK_RETURN,0);*stage=61;return;
     case 61:
-        ok=a->preferences.sidebar_width==248;
-        if(ok && a->dock_panels[PS_DOCK_SIDEBAR].w!=248)return;
+        ok=a->preferences.sidebar_width==218;
+        if(ok && a->dock_panels[PS_DOCK_SIDEBAR].w!=218)return;
         if(!ok)break;
         for(unsigned id=0;id<PS_DOCK_NODES;id++)if(dock_sidebar_split(&a->preferences.dock,&a->preferences.dock.nodes[id])) {
             struct nk_rect r=a->dock_splitters[id];fprintf(stderr,"WORKBENCH DRAG: id=%u rect=%.1f/%.1f/%.1f/%.1f width=%u\n",id,r.x,r.y,r.w,r.h,a->preferences.sidebar_width);test_mouse(a,r,true);
@@ -156,7 +178,7 @@ static void workbench_test_frame(app *a,const char *mode,int *stage,int *code,co
         test_plot_motion(a,310,a->source_editor_bounds.y+120);break;
     case 33:test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
     case 34:
-        ok=a->preferences.sidebar_width==248 && !a->dock_resize;
+        ok=a->preferences.sidebar_width==218 && !a->dock_resize;
         test_mouse(a,nk_rect(310,a->source_editor_bounds.y+120,1,1),false);break;
     case 35:
         ok=workbench_test_rect(context_rect,a->workbench_context_bounds);
@@ -169,14 +191,45 @@ static void workbench_test_frame(app *a,const char *mode,int *stage,int *code,co
         break;
     case 37:
         if(!mouse_wait++)return; /* Docking consumes the mouse during drawing. */
-        ok=a->preferences.sidebar_width==248 && !a->dock_resize;
+        ok=a->preferences.sidebar_width==218 && !a->dock_resize;
         for(unsigned id=0;id<PS_DOCK_NODES;id++)if(dock_sidebar_split(&a->preferences.dock,&a->preferences.dock.nodes[id]))test_mouse(a,a->dock_splitters[id],false);
         break;
     case 38:editor_search_open(a);a->layout_manager=true;break;
     case 39:
         ok=editor_search_target(a)==NULL;
         test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
-    case 40:ok=!a->layout_manager && a->show_search;a->quitting=true;break;
+    case 40:ok=!a->layout_manager && a->show_search;test_window_key_mod(a->window,SDLK_ESCAPE,0);*stage=70;return;
+    case 70:
+        if(a->show_search || a->search_icon_focus)return;
+        /* The closed island and modal disappear from the published stack at
+         * frame completion. Wait for the real target, within the native cap. */
+        if(!workbench_test_separator_focus(a,"Codekontext-Breite"))return;
+        break;
+    case 71:
+        if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"Codekontext-Breite"))return;
+        test_window_key_mod(a->window,SDLK_HOME,0);break;
+    case 72:ok=a->preferences.inspector_width==180;test_window_key_mod(a->window,SDLK_LEFT,0);break;
+    case 73:ok=a->preferences.inspector_width==190;test_window_key_mod(a->window,SDLK_LEFT,SDL_KMOD_SHIFT);break;
+    case 74:ok=a->preferences.inspector_width==230;test_window_key_mod(a->window,SDLK_END,0);break;
+    case 75:ok=a->preferences.inspector_width==480;test_window_key_mod(a->window,SDLK_RETURN,0);break;
+    case 76:
+        ok=a->preferences.inspector_width==255;
+        if(ok && a->dock_panels[PS_DOCK_INSPECTOR].w!=255)return;
+        if(!ok)break;
+        if(!workbench_test_separator_focus(a,"Protokoll-Höhe"))return;
+        break;
+    case 77:
+        if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"Protokoll-Höhe"))return;
+        test_window_key_mod(a->window,SDLK_HOME,0);break;
+    case 78:ok=a->preferences.log_height==126;test_window_key_mod(a->window,SDLK_UP,0);break;
+    case 79:ok=a->preferences.log_height==136;test_window_key_mod(a->window,SDLK_UP,SDL_KMOD_SHIFT);break;
+    case 80:ok=a->preferences.log_height==176;test_window_key_mod(a->window,SDLK_END,0);break;
+    case 81:ok=a->preferences.log_height==366;test_window_key_mod(a->window,SDLK_RETURN,0);break;
+    case 82:
+        ok=a->preferences.log_height==152;
+        if(ok && a->dock_panels[PS_DOCK_LOG].h!=152)return;
+        printf("WORKBENCH GEOMETRY: workspace=%.1f context=%.1f log=%.1f body=%.1f editor-height=%.1f\n",a->dock_panels[PS_DOCK_SIDEBAR].w,a->dock_panels[PS_DOCK_INSPECTOR].w,a->dock_panels[PS_DOCK_LOG].h,a->dock_panels[PS_DOCK_LOG].h-42-24,a->dock_panels[PS_DOCK_WORKSPACE].h);
+        *capture="workbench-reset-geometry.bmp";a->quitting=true;break;
     }
     if(!ok){fprintf(stderr,"WORKBENCH TEST failed stage %d: edit %.1f/%.1f/%.1f/%.1f expected %.1f/%.1f/%.1f/%.1f, query %.1f show %d, scroll %.1f/%.1f selection %d..%d\n",*stage,a->source_editor_bounds.x,a->source_editor_bounds.y,a->source_editor_bounds.w,a->source_editor_bounds.h,editor_rect.x,editor_rect.y,editor_rect.w,editor_rect.h,a->search_query_bounds.w,a->show_search,edit->scrollbar.x,edit->scrollbar.y,edit->select_start,edit->select_end);*capture="workbench-failure.bmp";*code=1;a->quitting=true;}
     if(a->quitting)printf("WORKBENCH SELF-TEST: %s\n",*code?"FAILED":"PASSED");

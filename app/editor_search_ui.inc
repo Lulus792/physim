@@ -130,7 +130,12 @@ static void editor_search_view(app *a) {
         if(!blocked && (a->search_keyboard || a->search_focus || (pointer && nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT))))ui->active=ui->current;
         else ui->active=previous;
         struct nk_rect clip=c->clip;
-        nk_push_scissor(c,nk_rect(island.x-22,island.y-15,island.w+44,island.h+44));
+        /* The reference's code viewport clips the island shadow. Keep it off
+         * adjoining context, file tabs, protocol and their one-pixel rules. */
+        struct nk_rect shadow=nk_rect(island.x-22,island.y-15,island.w+44,island.h+44);
+        float sx=fmaxf(source.x,shadow.x),sy=fmaxf(source.y,shadow.y);
+        nk_push_scissor(c,nk_rect(sx,sy,fmaxf(0,fminf(source.x+source.w,shadow.x+shadow.w)-sx),
+                                 fmaxf(0,fminf(source.y+source.h,shadow.y+shadow.h)-sy)));
         for(int ring=22;ring>0;--ring) {
             float spread=(float)ring;
             int alpha=(int)lroundf(26*erfcf(spread/15.55635f));

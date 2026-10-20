@@ -70,7 +70,19 @@ int main(int argc, char **argv) {
     remove(path);
     remove(bad);
     ps_preferences p = PS_PREFERENCES_DEFAULT, out = p;
+    CHECK(p.sidebar_width==218 && p.inspector_width==255 && p.log_height==152 && (p.view_flags&PS_VIEW_LOG));
     CHECK(ps_preferences_valid(&p) && ps_preferences_read(path, &out) == PS_EOF);
+    ps_preferences boundary=p;
+    boundary.sidebar_width=140;boundary.inspector_width=180;boundary.log_height=126;
+    CHECK(ps_preferences_write(path,&boundary)==PS_OK && ps_preferences_read(path,&out)==PS_OK && !memcmp(&boundary,&out,sizeof out));
+    boundary.sidebar_width=480;boundary.inspector_width=480;boundary.log_height=366;
+    CHECK(ps_preferences_write(path,&boundary)==PS_OK && ps_preferences_read(path,&out)==PS_OK && !memcmp(&boundary,&out,sizeof out));
+    boundary.sidebar_width=248;boundary.inspector_width=280;boundary.log_height=178;boundary.view_flags=31;
+    CHECK(ps_preferences_write(path,&boundary)==PS_OK && ps_preferences_read(path,&out)==PS_OK && !memcmp(&boundary,&out,sizeof out));
+    boundary.sidebar_width=139;CHECK(!ps_preferences_valid(&boundary));
+    boundary=p;boundary.inspector_width=179;CHECK(!ps_preferences_valid(&boundary));
+    boundary=p;boundary.log_height=125;CHECK(!ps_preferences_valid(&boundary));
+    boundary=p;boundary.log_height=367;CHECK(!ps_preferences_valid(&boundary));
     CHECK(ps_preferences_write(path, &p) == PS_OK);
     for (unsigned theme = 0; theme < PS_THEME_COUNT; theme++) {
         p.theme = theme;
@@ -170,13 +182,14 @@ int main(int argc, char **argv) {
     memcpy(bytes + 6, "02", 2); put32(bytes + 8, 44);
     put32(bytes + 56, ps_crc32(bytes, 56));
     CHECK(bytes_write(bad, bytes, 60) && ps_preferences_read(bad, &out) == PS_OK);
-    CHECK(!memcmp(&p, &out, sizeof p));
+    ps_preferences legacy=p;
+    legacy.inspector_width=280; /* Versions 1–3 have no stored inspector width. */
+    CHECK(!memcmp(&legacy, &out, sizeof legacy));
     /* Version 1 fixture retains all earlier settings and defaults to the dark theme. */
     memcpy(bytes + 6, "01", 2);
     put32(bytes + 8, 40);
     put32(bytes + 52, ps_crc32(bytes, 52));
     CHECK(bytes_write(bad, bytes, 56) && ps_preferences_read(bad, &out) == PS_OK);
-    ps_preferences legacy = p;
     legacy.theme = PS_THEME_DARK;
     CHECK(!memcmp(&legacy, &out, sizeof out));
     CHECK(ps_preferences_write(bad, &out) == PS_OK && ps_preferences_read(bad, &out) == PS_OK);
